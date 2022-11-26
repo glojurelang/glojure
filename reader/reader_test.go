@@ -19,8 +19,8 @@ func TestRead(t *testing.T) {
 
 	var testCases = []testCase{}
 
-	// read all *.mrat files in testdata/reader as test cases.
-	paths, err := filepath.Glob("testdata/reader/*.mrat")
+	// read all *.glj files in testdata/reader as test cases.
+	paths, err := filepath.Glob("testdata/reader/*.glj")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +30,7 @@ func TestRead(t *testing.T) {
 			t.Fatal(err)
 		}
 		// read corresponding *.out file.
-		outPath := strings.TrimSuffix(path, ".mrat") + ".out"
+		outPath := strings.TrimSuffix(path, ".glj") + ".out"
 		outData, err := ioutil.ReadFile(outPath)
 		if err != nil {
 			t.Fatal(err)
@@ -88,7 +88,7 @@ func TestReadErrors(t *testing.T) {
 	var testCases = []testCase{}
 
 	// read all *.in files in testdata/reader_error as test cases.
-	paths, err := filepath.Glob("testdata/reader_error/*.mrat")
+	paths, err := filepath.Glob("testdata/reader_error/*.glj")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -128,11 +128,11 @@ func TestReadErrors(t *testing.T) {
 }
 
 func FuzzRead(f *testing.F) {
-	paths, err := filepath.Glob("testdata/reader/*.mrat")
+	paths, err := filepath.Glob("testdata/reader/*.glj")
 	if err != nil {
 		f.Fatal(err)
 	}
-	paths2, err := filepath.Glob("testdata/reader_error/*.mrat")
+	paths2, err := filepath.Glob("testdata/reader_error/*.glj")
 	if err != nil {
 		f.Fatal(err)
 	}
