@@ -1,4 +1,4 @@
-(load-file "./functional00.in")
+(load-file "./functional00.glj")
 
 (defn fib [n]
   (if (< n 2)

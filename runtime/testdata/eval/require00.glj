@@ -1,6 +1,6 @@
 ;; todo: implement in terms of lower-level functions. load-file should
 ;; not be able to load arbitrary files from the file system
-(load-file "./functional00.in")
+(load-file "./functional00.glj")
 
 ;; map should now be defined
 (apply print (map (fn [x] (* x 100)) (list 1 2 3)))

@@ -20,7 +20,7 @@ func TestParse(t *testing.T) {
 	var testCases = []testCase{}
 
 	// read all *.in files in testdata/parser as test cases.
-	paths, err := filepath.Glob("testdata/parser/*.in")
+	paths, err := filepath.Glob("testdata/eval/*.glj")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +30,7 @@ func TestParse(t *testing.T) {
 			t.Fatal(err)
 		}
 		// read corresponding *.out file.
-		outPath := strings.TrimSuffix(path, ".in") + ".out"
+		outPath := strings.TrimSuffix(path, ".glj") + ".out"
 		outData, err := ioutil.ReadFile(outPath)
 		if err != nil {
 			t.Fatal(err)
@@ -55,7 +55,7 @@ func TestParse(t *testing.T) {
 			// save stdout to a buffer
 			stdout := &strings.Builder{}
 
-			_, err = prog.Eval(WithStdout(stdout), WithLoadPath([]string{"testdata/parser"}))
+			_, err = prog.Eval(WithStdout(stdout), WithLoadPath([]string{"testdata/eval"}))
 			if err != nil {
 				t.Fatal(err)
 			}

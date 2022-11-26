@@ -1,5 +1,5 @@
 (load-file "./testtab.mrat")
-(load-file "./functional00.in")
+(load-file "./functional00.glj")
 
 (def tbl
   '((true true)
