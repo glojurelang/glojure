@@ -1,0 +1,223 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Basic macros
+
+(defmacro or
+  "Evaluates exprs one at a time, from left to right. If a form
+  returns a logical true value, or returns that value and doesn't
+  evaluate any of the other expressions, otherwise it returns the
+  value of the last expression. (or) returns false."
+  ([] nil)
+  ([x] x)
+  ([x & next]
+   `(let [or# ~x]
+      (if or# or# (or ~@next)))))
+
+(defmacro and
+  "Evaluates exprs one at a time, from left to right. If a form
+  returns a logical false value, and returns that value and doesn't
+  evaluate any of the other expressions, otherwise it returns the
+  value of the last expression. (and) returns true."
+  ([] true)
+  ([x] x)
+  ([x & next]
+   `(let [and# ~x]
+       (if and# (and ~@next) and#))))
+
+(defmacro defn
+  "Defines a function. The first argument is the name of the function,
+  the second is a list of arguments, and the rest of the arguments are
+  the body of the function. The body is evaluated in the context of the
+  function, so (defn foo [x] x) is equivalent to (def foo (fn [x] x))."
+
+  [name & bindings-and-body]
+  (if (string? (first bindings-and-body))
+        (let [docstring (first bindings-and-body)
+              bindings-and-body (rest bindings-and-body)]
+          `(def ~name (fn ~name ~@bindings-and-body)))
+        `(def ~name (fn ~name ~@bindings-and-body))))
+
+(defmacro do
+  "Evaluates exprs in order, and returns the value of the last
+  expression. (do) returns nil."
+  ([] nil)
+  ([x] x)
+  ([& exprs] `(let [] ~@exprs)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Comparisons
+
+(defn = [a b] (eq? a b))
+
+(defn <= [a b]
+  (or (< a b) (= a b)))
+
+(defn >= [a b]
+  (or (> a b) (= a b)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Builtin functions
+
+(def println mrat.core.io/println)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Aliases
+
+(def length count) ;; TODO: remove this
+(defn nil? [x] (eq? x nil))
+
+(def print println) ;; TODO: print should not add a newline
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Math helpers
+
+(defn remap [x min max]
+  ;;; Remap value x from [-1, 1] to [min, max]
+  (+ min
+     (/ (- max min) 2)
+     (* (/ (- max min) 2) x)))
+
+(defn even? [n]
+  (let ((half (/ n 2)))
+    (= half (floor half))))
+(defn odd? [n]
+  (not (even? n)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Sequences
+
+;; TODO
+
+(defn cons [car cdr] (concat (list car) cdr))
+
+(defn sequential? [x]
+  (or (list? x)
+      (vector? x)
+      (seq? x)))
+
+(defn flatten [coll]
+  (let [flat-mapper (fn [el] (if (sequential? el) (flatten el) (list el)))]
+    (if (sequential? coll)
+      (apply concat (map flat-mapper coll))
+      (concat))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Iteration
+(defn range [beg end]
+  (let ((beg (floor beg))
+        (end (floor end)))
+    (let ((range-tail
+           (fn range-tail [suffix beg end]
+             (if (>= beg end)
+               suffix
+               (range-tail (conj suffix (- end 1)) beg (- end 1))))))
+      (if (<= beg end)
+        (range-tail '() beg end)
+        '()))))
+
+(defn repeat [n x]
+  (let ((repeat-tail
+         (fn repeat-tail [suffix n x]
+           (if (<= n 0)
+             suffix
+             (repeat-tail (reduce (fn [acc el] (conj acc el)) suffix x) (- n 1) x)))))
+    (reverse (repeat-tail '() n x)))) ;; TODO: implement with sequences, not lists, so we don't have to reverse
+
+(defn nth [coll index]
+  (if (empty? coll)
+    nil
+    (if (vector? coll)
+      (coll index)
+      (if (eq? index 0)
+        (first coll)
+        (nth (rest coll) (- index 1))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Functional helpers
+
+(defn reverse [l]
+  (let ((reverse-tail
+         (fn reverse-tail [suffix l]
+           (if (empty? l)
+             suffix
+             (reverse-tail (conj suffix (first l)) (rest l))))))
+    (reverse-tail '() l)))
+
+(defn map [func lst]
+  (let ((map-tail (fn map-tail [prefix lst]
+                    (if (empty? lst)
+                      prefix
+                      (map-tail (conj prefix (func (first lst))) (rest lst))))))
+    (reverse (map-tail '() lst)))) ;; TODO: implement with sequences, not lists, so we don't have to reverse
+
+(defn zip [arrs]
+  (if (empty? (first arrs))
+    '()
+    (cons (map first arrs)
+          (zip (map rest arrs)))))
+
+(def maps
+  (fn [func & colls]
+    (let ((map-list (zip colls)))
+      (map (fn [args] (apply func args)) map-list))))
+
+(defn map-idx [func lst]
+  (maps (fn [val idx] (func val idx)) lst (range 0 (length lst))))
+
+(defn reduce
+  "f should be a function of 2 arguments. If val is not supplied,
+  returns the result of applying f to the first 2 items in coll, then
+  applying f to that result and the 3rd item, etc. If coll contains no
+  items, f must accept no arguments as well, and reduce returns the
+  result of calling f with no arguments.  If coll has only 1 item, it
+  is returned and f is not called.  If val is supplied, returns the
+  result of applying f to val and the first item in coll, then
+  applying f to that result and the 2nd item, etc. If coll contains no
+  items, returns val and f is not called."
+  ([f coll]
+   (case (count coll)
+     0 (f)
+     1 (first coll)
+     (reduce f (first coll) (rest coll))))
+  ([f val coll]
+   (if (empty? coll)
+     val
+     (reduce f (f val (first coll)) (rest coll)))))
+
+(defn sum [lst] (apply + lst))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Audio helpers
+
+(defn decibels [db] (pow 10 (/ db 20)))
+
+(def *mixer
+  (fn [& args]
+    (let ((mixerArgs args))
+      (let ((weightSum (reduce + 0
+                               (map-idx (fn [val idx] (if (even? idx) val 0)) mixerArgs))))
+        (sum (map (fn [idx] (let ((weight (nth mixerArgs (* 2 idx)))
+                                  (chan   (nth mixerArgs (+ (* 2 idx) 1))))
+                              (* (/ weight weightSum) chan)))
+                  (range 0 (/ (length mixerArgs) 2))))))))
+
+;;; TODO: move to a library for music theory.
+(defn cents [x] (pow 2 (/ x 1200)))
+(defn semitones [x] (pow 2 (/ x 12)))
+(defn octaves [x] (pow 2 x))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Go Interop
+
+(defmacro ..
+  "form => fieldName-symbol or (instanceMethodName-symbol args*)
+  Expands into a member access (.) of the first member on the first
+  argument, followed by the next member on the result, etc. For
+  instance:
+  (.. System (getProperties) (get \"os.name\"))
+  expands to:
+  (. (. System (getProperties)) (get \"os.name\"))
+  but is easier to write, read, and understand."
+
+  ([x form] `(. ~x ~form))
+  ([x form & more] `(.. (. ~x ~form) ~@more)))

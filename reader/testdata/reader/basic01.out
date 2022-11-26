@@ -1,0 +1,5 @@
+(load-file "./functional00.in")
+(def print mrat.core.io.print)
+(apply print (map (fn (x) (* x 100)) (list 1 2 3)))
+(def numList (list 1 2 3 4 5 6 7 8 9 10))
+(print (eq? (reduce + 0 numList) (sum numList)))

@@ -1,0 +1,12 @@
+(load-file "./testtab.mrat")
+
+(def table
+  (list
+    '()
+    '(1 2 3)
+    '(sym)
+    '("foo" '(1 2 3) sym)
+    )
+  )
+
+(testTable table println)

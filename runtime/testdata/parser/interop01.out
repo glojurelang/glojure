@@ -1,0 +1,5 @@
+true
+["foo----bar" "----"]
+[false nil]
+[true nil]
+[true nil]

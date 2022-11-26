@@ -1,0 +1,9 @@
+(def foo 1)
+(println foo)
+(def foo 2)
+(println foo)
+
+(defn reset-foo [val] (def foo val))
+
+(reset-foo 3)
+(println foo)

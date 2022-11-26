@@ -1,0 +1,17 @@
+;; Define functions with the "def" special form whose first argument
+;; is a list of symbols. The first symbol is the name of the function,
+;; and the rest are the arguments. All expressions that follow define
+;; the function body. The final expression in the function body is the
+;; return value of the function.
+(defn test []
+     (print 1)
+     (print 2))
+(test)
+
+;; The above is a shorthand for defining a symbol whose value is an
+;; anonymous lambda (the "fn" special form).
+(def testFn
+    (fn []
+        (print 3)
+        (print 4)))
+(testFn)

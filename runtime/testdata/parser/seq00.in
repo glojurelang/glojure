@@ -1,0 +1,26 @@
+;; TODO: rename the test. this is actually a tail call test
+
+(defn = [a b] (eq? a b))
+
+(defn <= [a b]
+  (or (< a b) (= a b)))
+
+(defn >= [a b]
+  (or (> a b) (= a b)))
+
+(defn range [beg end]
+  (let ((range-tail
+         (fn range-tail [suffix beg end]
+           (if (>= beg end)
+             suffix
+             (range-tail (conj suffix (- end 1)) beg (- end 1))))))
+    (if (<= beg end)
+      (range-tail '() beg end)
+      '())))
+
+(defn add [a b]
+  (+ a b))
+
+(println (length (range 0 10)))
+;;;; requires tail call optimization
+;; (println (length (range 0 1000000)))

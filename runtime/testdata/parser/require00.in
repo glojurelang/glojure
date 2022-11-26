@@ -1,0 +1,12 @@
+;; todo: implement in terms of lower-level functions. load-file should
+;; not be able to load arbitrary files from the file system
+(load-file "./functional00.in")
+
+;; map should now be defined
+(apply print (map (fn [x] (* x 100)) (list 1 2 3)))
+
+(def numList (list 1 2 3 4 5 6 7 8 9 10))
+
+(print
+ (eq? (reduce + numList 0)
+      (sum numList)))

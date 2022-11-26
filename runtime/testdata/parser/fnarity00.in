@@ -1,0 +1,7 @@
+(def arity-check
+  (fn arity-check
+    ([] 0)
+    ([a] 1)
+    ([a b] 2)))
+
+(map print (map (fn [args] (apply arity-check args)) [[] [1] [1 2]]))

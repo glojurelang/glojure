@@ -1,0 +1,47 @@
+### AND
+eval true
+eval true
+(true true) => true
+eval true
+eval false
+(true false) => false
+eval false
+(false true) => false
+eval false
+(false false) => false
+eval nil
+(nil true) => nil
+eval nil
+(nil false) => nil
+eval true
+eval nil
+(true nil) => nil
+eval false
+(false nil) => false
+
+### OR
+eval true
+(true true) => true
+eval true
+(true false) => true
+eval false
+eval true
+(false true) => true
+eval false
+eval false
+(false false) => false
+eval nil
+eval true
+(nil true) => true
+eval nil
+eval false
+(nil false) => false
+eval true
+(true nil) => true
+eval false
+eval nil
+(false nil) => false
+
+### bool conversion
+2
+1

@@ -1,0 +1,6 @@
+1
+"foobar"
+true
+false
+:key
+(def x '(my quoted list))

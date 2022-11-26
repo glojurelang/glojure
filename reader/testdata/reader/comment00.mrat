@@ -1,0 +1,4 @@
+;;;SKIP_PRINT_TEST
+(print '(mixer dry reverb)
+       ;; reverb
+       )

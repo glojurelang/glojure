@@ -1,0 +1,11 @@
+(defmacro or-macro
+  ;; "Evaluates exprs one at a time, from left to right. If a form
+  ;; returns a logical true value, or returns that value and doesn't
+  ;; evaluate any of the other expressions, otherwise it returns the
+  ;; value of the last expression. (or) returns nil."
+  [x & next]
+  `(let [or# ~x]
+     (if or# or# (or ~@next))))
+
+(print (or-macro 1 (invalid function call)))
+

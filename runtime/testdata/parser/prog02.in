@@ -1,0 +1,24 @@
+(def table
+    ;; condition, ifval, elseval
+    ( list
+     (list 1 1 0)
+     (list true 1 0)
+     (list false 1 0)
+     (list 0 1 0)
+     ))
+
+(defn testTable [tbl]
+    (if (eq? tbl (list))
+        true ;; done
+        (list
+         (runTest (first tbl))
+         (testTable (rest tbl)))))
+
+(defn runTest [test]
+    (print
+     (first test)
+     (if (first test)
+         (first (rest test))
+         (first (rest (rest test))))))
+
+(testTable table)

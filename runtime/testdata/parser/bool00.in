@@ -1,0 +1,50 @@
+(load-file "./testtab.mrat")
+(load-file "./functional00.in")
+
+(def tbl
+  '((true true)
+    (true false)
+    (false true)
+    (false false)
+    (nil true)
+    (nil false)
+    (true nil)
+    (false nil)))
+
+(defn pret [val]
+  ;; print val then return it
+  (println "eval" val)
+  val)
+
+;;; AND
+
+(defn testAnd [bools]
+  (if (empty? bools)
+    true
+    (and (pret (first bools))
+         (testAnd (rest bools)))))
+
+(println "### AND")
+(testTable tbl
+           (fn [bools]
+             (println bools "=>" (testAnd bools))))
+
+;;; OR
+
+(defn testOr [bools]
+  (if (empty? bools)
+    false
+    (or (pret (first bools))
+         (testOr (rest bools)))))
+
+(println)
+(println "### OR")
+(testTable tbl
+           (fn [bools]
+             (println bools "=>" (testOr bools))))
+
+;; bool conversion
+(println)
+(println "### bool conversion")
+(println (and true 2))
+(println (or false 1))

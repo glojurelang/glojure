@@ -1,0 +1,25 @@
+(defmacro expect
+  [test-expr expect]
+  `(let [got ~test-expr]
+     (if (not (= got ~expect))
+       (print "FAIL: " '~test-expr " got " got " expected " ~expect)
+       (print "PASS: " '~test-expr))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Sequential tests
+;; Examples from: https://clojuredocs.org/clojure.core/sequential_q
+(expect (sequential? '(1 2 3)) true)
+(expect (sequential? [1 2 3]) true)
+(expect (sequential? (range 1 5)) true)
+(expect (sequential? '()) true)
+(expect (sequential? []) true)
+(expect (sequential? nil) false)
+(expect (sequential? 1) false)
+(expect (sequential? "abc") false)
+
+;; TODO
+;; (expect (sequential? {:a 2 :b 1}) false)
+
+;; TODO
+;; (expect (sequential? #{1 2 3}) false)

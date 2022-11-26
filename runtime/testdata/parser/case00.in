@@ -1,0 +1,26 @@
+;; simple case
+(print (case (+ 41 1)
+         "foo" "bar"
+         42 "baz"
+         "qux" "quux"))
+
+;; no match
+(print (case (+ 1 2)
+         "foo" "bar"
+         42 "baz"
+         "qux" "quux"))
+
+;; no match with default
+(print (case (+ 1 2)
+         "foo" "bar"
+         42 "baz"
+         "qux" "quux"
+         "default"))
+
+;; list of options
+(print (case (+ 1 2)
+         "foo" "bar"
+         42 "baz"
+         "qux" "quux"
+         (9 8 3 2) "it was one of these"
+         "default"))

@@ -1,0 +1,2 @@
+;;;ERROR=let00.in:2:16: undefined symbol: x
+(let ((x 2) (y x)) (+ x y))

@@ -1,0 +1,1 @@
+(println (go/strings.FieldsFunc "a,b,c" (fn [c] (= (char c) \,))))

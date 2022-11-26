@@ -1,0 +1,8 @@
+PASS:  (sequential? '(1 2 3))
+PASS:  (sequential? [1 2 3])
+PASS:  (sequential? (range 1 5))
+PASS:  (sequential? '())
+PASS:  (sequential? [])
+PASS:  (sequential? nil)
+PASS:  (sequential? 1)
+PASS:  (sequential? "abc")

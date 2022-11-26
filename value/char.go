@@ -1,0 +1,110 @@
+package value
+
+import (
+	"fmt"
+	"strconv"
+	"unicode/utf8"
+)
+
+// Char is a character value.
+type Char struct {
+	Section
+	Value rune
+}
+
+// NewChar creates a new character value.
+func NewChar(value rune, opts ...Option) *Char {
+	var o options
+	for _, opt := range opts {
+		opt(&o)
+	}
+	return &Char{
+		Section: o.section,
+		Value:   value,
+	}
+}
+
+func (c *Char) String() string {
+	return CharLiteralFromRune(c.Value)
+}
+
+func (c *Char) Equal(v Value) bool {
+	switch v := v.(type) {
+	case *Char:
+		return c.Value == v.Value
+	default:
+		return false
+	}
+}
+
+func (c *Char) GoValue() interface{} {
+	return c.Value
+}
+
+// RuneFromCharLiteral returns the rune value from a character
+// literal.
+func RuneFromCharLiteral(lit string) (rune, error) {
+	if len(lit) < 2 || lit[0] != '\\' {
+		return 0, fmt.Errorf("too short or not a char literal: %s", lit)
+	}
+
+	char := lit[1:]
+
+	// Handle special characters
+	// \newline, \space, \tab, \formfeed, \backspace, and \return
+	switch char {
+	case "newline":
+		char = "\n"
+	case "space":
+		char = " "
+	case "tab":
+		char = "\t"
+	case "formfeed":
+		char = "\f"
+	case "backspace":
+		char = "\b"
+	case "return":
+		char = "\r"
+	}
+	// Handle unicode characters
+	if len(char) > 1 && char[0] == 'u' {
+		unquoted, _, _, err := strconv.UnquoteChar("\\"+char, 0)
+		if err != nil {
+			return 0, fmt.Errorf("invalid unicode character: %s", char)
+		}
+		char = string(unquoted)
+	}
+
+	// if the character is more than one rune, it's invalid
+	if utf8.RuneCountInString(char) != 1 {
+		return 0, fmt.Errorf("unexpected rune count")
+	}
+
+	rn, _ := utf8.DecodeRuneInString(char)
+	return rn, nil
+}
+
+// CharLiteralFromRune returns a character literal from a rune.
+func CharLiteralFromRune(rn rune) string {
+	switch rn {
+	case '\n':
+		return `\newline`
+	case ' ':
+		return `\space`
+	case '\t':
+		return `\tab`
+	case '\f':
+		return `\formfeed`
+	case '\b':
+		return `\backspace`
+	case '\r':
+		return `\return`
+	}
+
+	quoted := strconv.QuoteToASCII(string(rn))
+	prefix := "\\"
+	if quoted[1] == '\\' {
+		prefix = ""
+	}
+	return prefix + quoted[1:len(quoted)-1]
+}
