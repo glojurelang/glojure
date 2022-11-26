@@ -1,4 +1,4 @@
-package mratlang
+package runtime
 
 import (
 	"context"
@@ -46,7 +46,7 @@ func withEnv(env value.Environment) EvalOption {
 	}
 }
 
-func (p *Program) Eval(opts ...EvalOption) (value.Value, error) {
+func NewEnvironment(opts ...EvalOption) value.Environment {
 	options := &evalOptions{
 		stdout: os.Stdout,
 	}
@@ -94,6 +94,12 @@ func (p *Program) Eval(opts ...EvalOption) (value.Value, error) {
 			}
 		}
 	}
+
+	return env
+}
+
+func (p *Program) Eval(opts ...EvalOption) (value.Value, error) {
+	env := NewEnvironment(opts...)
 
 	for _, node := range p.nodes {
 		_, err := env.Eval(node)
