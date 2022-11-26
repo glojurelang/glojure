@@ -1,4 +1,4 @@
-(load-file "./testtab.mrat")
+(load-file "./testtab.glj")
 (load-file "./functional00.glj")
 
 (def tbl
