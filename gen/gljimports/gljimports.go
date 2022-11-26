@@ -1,21 +1,41 @@
+// GENERATED FILE. DO NOT EDIT.
 package gljimports
 
 import (
-	bytes "bytes"
+	context "context"
 	fmt "fmt"
-	io "io"
-	io_fs "io/fs"
-	io_ioutil "io/ioutil"
-	net_http "net/http"
-	"reflect"
+	time "time"
 	regexp "regexp"
 	strings "strings"
-	time "time"
-
+	bytes "bytes"
+	net_http "net/http"
+	io "io"
+	io_ioutil "io/ioutil"
+	io_fs "io/fs"
+	"reflect"
 	"github.com/glojurelang/glojure/value"
 )
 
 func RegisterImports(_register func(string, value.Value)) {
+	// package context
+	////////////////////////////////////////
+	_register("go/context.Background", value.NewGoVal(context.Background))
+	{
+		var x context.CancelFunc
+		_register("go/context.CancelFunc", value.NewGoTyp(reflect.TypeOf(x)))
+	}
+	_register("go/context.Canceled", value.NewGoVal(context.Canceled))
+	{
+		var x context.Context
+		_register("go/context.Context", value.NewGoTyp(reflect.TypeOf(x)))
+	}
+	_register("go/context.DeadlineExceeded", value.NewGoVal(context.DeadlineExceeded))
+	_register("go/context.TODO", value.NewGoVal(context.TODO))
+	_register("go/context.WithCancel", value.NewGoVal(context.WithCancel))
+	_register("go/context.WithDeadline", value.NewGoVal(context.WithDeadline))
+	_register("go/context.WithTimeout", value.NewGoVal(context.WithTimeout))
+	_register("go/context.WithValue", value.NewGoVal(context.WithValue))
+
 	// package fmt
 	////////////////////////////////////////
 	_register("go/fmt.Errorf", value.NewGoVal(fmt.Errorf))

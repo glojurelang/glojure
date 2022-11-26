@@ -1,5 +1,7 @@
 package value
 
+import "strconv"
+
 // Str is a string.
 type Str struct {
 	Section
@@ -18,7 +20,7 @@ func NewStr(s string, opts ...Option) *Str {
 }
 
 func (s *Str) String() string {
-	return "\"" + s.Value + "\""
+	return strconv.Quote(s.Value)
 }
 
 func (s *Str) Count() int {

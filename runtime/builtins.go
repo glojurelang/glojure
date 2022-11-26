@@ -597,7 +597,6 @@ func printlnBuiltin(env value.Environment, args []value.Value) (value.Value, err
 			// *value.Nil
 			env.Stdout().Write([]byte("nil"))
 		} else {
-			fmt.Println("converting?", arg)
 			switch arg := value.ConvertFromGo(arg).(type) {
 			case *value.Str:
 				env.Stdout().Write([]byte(arg.Value))
@@ -612,5 +611,5 @@ func printlnBuiltin(env value.Environment, args []value.Value) (value.Value, err
 		}
 	}
 	env.Stdout().Write([]byte("\n"))
-	return nil, nil
+	return value.NilValue, nil
 }

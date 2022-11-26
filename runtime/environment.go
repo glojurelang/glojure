@@ -298,7 +298,7 @@ func (env *environment) evalDef(n *value.List) (value.Value, error) {
 		return nil, err
 	}
 	env.DefVar(v.Value, val)
-	return nil, nil
+	return value.NilValue, nil
 }
 
 func (env *environment) evalFn(n *value.List) (value.Value, error) {

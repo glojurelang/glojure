@@ -9,15 +9,22 @@ import (
 
 var (
 	packages = []string{
+		"context",
 		"fmt",
 		"time",
 		"regexp",
-		"strings", "bytes", "net/http", "io", "io/ioutil", "io/fs",
+		"strings",
+		"bytes",
+		"net/http",
+		"io",
+		"io/ioutil",
+		"io/fs",
 	}
 )
 
 func main() {
 	builder := &strings.Builder{}
+	builder.WriteString("// GENERATED FILE. DO NOT EDIT.\n")
 	builder.WriteString("package gljimports\n\n")
 	builder.WriteString("import (\n")
 	for _, pkg := range packages {
@@ -26,12 +33,12 @@ func main() {
 	}
 	// import reflect
 	builder.WriteString("\t\"reflect\"\n")
-	// import "github.com/jfhamlin/muscrat/internal/pkg/mratlang/value"
-	builder.WriteString("\t\"github.com/jfhamlin/muscrat/internal/pkg/mratlang/value\"\n")
+	// import "github.com/glojurelang/glojure/value"
+	builder.WriteString("\t\"github.com/glojurelang/glojure/value\"\n")
 
 	builder.WriteString(")\n\n")
 
-	builder.WriteString("func RegisterImports(_register func(string, interface{})) {\n")
+	builder.WriteString("func RegisterImports(_register func(string, value.Value)) {\n")
 	for i, pkgName := range packages {
 		if i > 0 {
 			builder.WriteRune('\n')

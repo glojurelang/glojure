@@ -82,7 +82,14 @@ func (gv *GoVal) SetField(name string, val interface{}) error {
 
 	field := gv.val.FieldByName(name)
 	if field.IsValid() {
-		field.Set(reflect.ValueOf(val))
+		if !field.CanSet() {
+			return fmt.Errorf("cannot set field %s", name)
+		}
+		goVal := reflect.ValueOf(val)
+		if !goVal.Type().AssignableTo(field.Type()) {
+			return fmt.Errorf("cannot assign %s to %s", goVal.Type(), field.Type())
+		}
+		field.Set(goVal)
 		return nil
 	}
 
