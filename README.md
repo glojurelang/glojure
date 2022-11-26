@@ -1,5 +1,17 @@
 # Glojure
 
+Glojure is an interpreter for [Clojure](https://clojure.org/), hosted
+in Go. Glojure provides easy access to Go libraries, just as Clojure
+provides easy access to Java frameworks.
+
+## Frequently Asked Questions
+
+(TODO)
+
+- *Why not a compiler?*
+  - ...
+
+
 ## Golang Interop
 
 ### Accessing Exported Go Values
