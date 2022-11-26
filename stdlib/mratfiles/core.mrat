@@ -102,17 +102,19 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Iteration
-(defn range [beg end]
-  (let ((beg (floor beg))
-        (end (floor end)))
-    (let ((range-tail
-           (fn range-tail [suffix beg end]
-             (if (>= beg end)
-               suffix
-               (range-tail (conj suffix (- end 1)) beg (- end 1))))))
-      (if (<= beg end)
-        (range-tail '() beg end)
-        '()))))
+(defn range
+  ([end] (range 0 end))
+  ([beg end]
+   (let ((beg (floor beg))
+         (end (floor end)))
+     (let ((range-tail
+            (fn range-tail [suffix beg end]
+              (if (>= beg end)
+                suffix
+                (range-tail (conj suffix (- end 1)) beg (- end 1))))))
+       (if (<= beg end)
+         (range-tail '() beg end)
+         '())))))
 
 (defn repeat [n x]
   (let ((repeat-tail
