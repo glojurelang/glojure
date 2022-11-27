@@ -1,7 +1,0 @@
-;;;ERROR: <unknown-file>:6:3: reader macros not implemented
-(
- 1
- (2)
- true
- (#what)
- )

@@ -1,3 +1,4 @@
+;;;SKIP_PRINT_TEST
 `foobar
 `(a b c)
 `(a ~(+ 1 2))

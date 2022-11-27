@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/glojurelang/glojure/value"
+	"github.com/kylelemons/godebug/diff"
 )
 
 func TestRead(t *testing.T) {
@@ -60,7 +61,7 @@ func TestRead(t *testing.T) {
 			}
 			output := strings.Join(strs, "\n")
 			if output != tc.output {
-				t.Errorf("output mismatch:\nwant:\n[BEGIN]\n%s[END]\nhave:\n[BEGIN]\n%s[END]\n", tc.output, output)
+				t.Errorf("diff (-want,+got):\n%s", diff.Diff(tc.output, output))
 			}
 
 			if strings.HasPrefix(tc.input, ";;;SKIP_PRINT_TEST") {
@@ -72,7 +73,7 @@ func TestRead(t *testing.T) {
 				printExprAtPosition(&runeArr, expr)
 			}
 			if runeArr.String() != tc.input {
-				t.Errorf("input mismatch:\nwant:\n%s\nhave:\n%s[END]\n", tc.input, runeArr.String())
+				t.Errorf("diff in input and print (-want,+got):\n%s", diff.Diff(tc.input, runeArr.String()))
 			}
 		})
 	}

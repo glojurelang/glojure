@@ -1,4 +1,4 @@
 (quasiquote foobar)
 (quasiquote (a b c))
-(quasiquote (a ~(+ 1 2)))
+(quasiquote (a (clojure.core/unquote (+ 1 2))))
 (quasiquote (a ~@[(+ 1 2)]))

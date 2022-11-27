@@ -1,3 +1,3 @@
-;;;ERROR=invalid_set.in:3:1: invalid set! expression, cannot assign float64 to http.Handler
+;;;ERROR=invalid_set.in:3:1: invalid set! expression, cannot assign int64 to http.Handler
 (def server (new go/net/http.Server :Addr ":8080"))
 (set! (. server Handler) 42)

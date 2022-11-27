@@ -61,7 +61,6 @@ func TestParse(t *testing.T) {
 			}
 
 			if got, want := stdout.String(), tc.output; got != want {
-				t.Errorf("\n=== got ====\n%s============\n=== want ===\n%s============", got, want)
 				t.Errorf("diff (-want,+got):\n%s", diff.Diff(want, got))
 			}
 		})
@@ -121,7 +120,7 @@ func TestEvalErrors(t *testing.T) {
 				t.Fatal("expected error, got nil")
 			}
 			if got, want := err.Error(), tc.errorS; got != want {
-				t.Errorf("\n=== got ====\n%s============\n=== want ===\n%s============", got, want)
+				t.Errorf("diff (-want,+got):\n%s", diff.Diff(want, got))
 			}
 		})
 	}

@@ -1,5 +1,10 @@
 package value
 
+var (
+	True  = NewBool(true)
+	False = NewBool(false)
+)
+
 // Bool is a boolean value.
 type Bool struct {
 	Section

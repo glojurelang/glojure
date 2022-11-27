@@ -1,7 +1,7 @@
 package value
 
 var (
-	SymbolUnquote       = NewSymbol("unquote")
+	SymbolUnquote       = NewSymbol("clojure.core/unquote")
 	SymbolSpliceUnquote = NewSymbol("splice-unquote")
 )
 

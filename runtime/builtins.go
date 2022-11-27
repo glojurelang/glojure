@@ -38,6 +38,7 @@ func init() {
 
 				// math functions
 				funcSymbol("pow", powBuiltin),
+				// TODO: remove this
 				funcSymbol("floor", floorBuiltin),
 				funcSymbol("*", mulBuiltin),
 				funcSymbol("/", divBuiltin),
@@ -164,7 +165,7 @@ func lengthBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 	}
 
 	if c, ok := args[0].(value.Counter); ok {
-		return value.NewNum(float64(c.Count())), nil
+		return value.NewLong(int64(c.Count())), nil
 	}
 
 	enum, ok := args[0].(value.Enumerable)
@@ -179,7 +180,7 @@ func lengthBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 	for range ch {
 		count++
 	}
-	return value.NewNum(float64(count)), nil
+	return value.NewLong(int64(count)), nil
 }
 
 func conjBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -461,25 +462,44 @@ func floorBuiltin(env value.Environment, args []value.Value) (value.Value, error
 	if len(args) != 1 {
 		return nil, fmt.Errorf("floor expects 1 argument, got %v", len(args))
 	}
-	a, ok := args[0].(*value.Num)
-	if !ok {
+	switch arg := args[0].(type) {
+	case *value.Num:
+		return value.NewNum(math.Floor(arg.Value)), nil
+	case *value.Long:
+		return arg, nil
+	default:
 		return nil, fmt.Errorf("floor expects a number, got %v", args[0])
 	}
-	return value.NewNum(math.Floor(a.Value)), nil
 }
 
 func mulBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
-	var res float64 = 1
+	isIntMul := true
+	intProduct := int64(1)
+	floatProduct := float64(1)
+
 	for _, arg := range args {
 		switch arg := arg.(type) {
 		case *value.Num:
-			res *= arg.Value
+			if isIntMul {
+				isIntMul = false
+				floatProduct = float64(intProduct)
+			}
+			floatProduct *= arg.Value
+		case *value.Long:
+			if isIntMul {
+				intProduct *= arg.Value
+			} else {
+				floatProduct *= float64(arg.Value)
+			}
 		default:
 			return nil, fmt.Errorf("invalid type for *: %v", arg)
 		}
 	}
 
-	return value.NewNum(res), nil
+	if isIntMul {
+		return value.NewLong(intProduct), nil
+	}
+	return value.NewNum(floatProduct), nil
 }
 
 func divBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -499,68 +519,171 @@ func divBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 }
 
 func addBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
-	var sum float64 = 0
+	isIntSum := true
+	var intSum int64
+	var floatSum float64
 
 	// sum all number arguments together
 	for _, arg := range args {
 		switch arg := arg.(type) {
 		case *value.Num:
-			sum += arg.Value
+			if isIntSum {
+				isIntSum = false
+				floatSum = float64(intSum)
+			}
+			floatSum += arg.Value
+		case *value.Long:
+			if isIntSum {
+				intSum += arg.Value
+			} else {
+				floatSum += float64(arg.Value)
+			}
 		default:
 			return nil, fmt.Errorf("invalid type for +: %v", arg)
 		}
 	}
 
-	return value.NewNum(sum), nil
+	if isIntSum {
+		return value.NewLong(intSum), nil
+	}
+	return value.NewNum(floatSum), nil
 }
 
 func subBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
-	if len(args) != 2 {
-		return nil, fmt.Errorf("sub expects 2 arguments, got %v", len(args))
-	}
-	a, ok := args[0].(*value.Num)
-	if !ok {
-		return nil, fmt.Errorf("sub expects a number as the first argument, got %v", args[0])
-	}
-	b, ok := args[1].(*value.Num)
-	if !ok {
-		return nil, fmt.Errorf("sub expects a number as the second argument, got %v", args[1])
+	if len(args) == 0 {
+		return nil, fmt.Errorf("Wrong number of arguments (%d) passed to -", len(args))
 	}
 
-	// TODO: handle generators
-	return value.NewNum(a.Value - b.Value), nil
+	isIntDiff := true
+	var intDiff int64
+	var floatDiff float64
+
+	switch arg := args[0].(type) {
+	case *value.Num:
+		isIntDiff = false
+		floatDiff = arg.Value
+	case *value.Long:
+		intDiff = arg.Value
+	default:
+		return nil, fmt.Errorf("invalid type for -: %v", arg)
+	}
+
+	if len(args) == 1 {
+		if isIntDiff {
+			return value.NewLong(-intDiff), nil
+		}
+		return value.NewNum(-floatDiff), nil
+	}
+
+	for _, arg := range args[1:] {
+		switch arg := arg.(type) {
+		case *value.Num:
+			if isIntDiff {
+				isIntDiff = false
+				floatDiff = float64(intDiff)
+			}
+			floatDiff -= arg.Value
+		case *value.Long:
+			if isIntDiff {
+				intDiff -= arg.Value
+			} else {
+				floatDiff -= float64(arg.Value)
+			}
+		default:
+			return nil, fmt.Errorf("invalid type for -: %v", arg)
+		}
+	}
+
+	if isIntDiff {
+		return value.NewLong(intDiff), nil
+	}
+	return value.NewNum(floatDiff), nil
 }
 
 func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
-	if len(args) != 2 {
-		return nil, fmt.Errorf("< expects 2 arguments, got %v", len(args))
-	}
-	a, ok := args[0].(*value.Num)
-	if !ok {
-		return nil, fmt.Errorf("< expects a number as the first argument, got %v", args[0])
-	}
-	b, ok := args[1].(*value.Num)
-	if !ok {
-		return nil, fmt.Errorf("< expects a number as the second argument, got %v", args[1])
+	if len(args) == 0 {
+		return nil, fmt.Errorf("Wrong number of arguments (%d) passed to <", len(args))
 	}
 
-	return value.NewBool(a.Value < b.Value), nil
+	prev := args[0]
+	for _, arg := range args[1:] {
+		switch prev := prev.(type) {
+		case *value.Num:
+			switch arg := arg.(type) {
+			case *value.Num:
+				if prev.Value >= arg.Value {
+					return value.False, nil
+				}
+			case *value.Long:
+				if prev.Value >= float64(arg.Value) {
+					return value.False, nil
+				}
+			default:
+				return nil, fmt.Errorf("invalid type for <: %v", arg)
+			}
+		case *value.Long:
+			switch arg := arg.(type) {
+			case *value.Num:
+				if float64(prev.Value) >= arg.Value {
+					return value.False, nil
+				}
+			case *value.Long:
+				if prev.Value >= arg.Value {
+					return value.False, nil
+				}
+			default:
+				return nil, fmt.Errorf("invalid type for <: %v", arg)
+			}
+		default:
+			return nil, fmt.Errorf("invalid type for <: %v", prev)
+		}
+		prev = arg
+	}
+
+	return value.True, nil
 }
 
 func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
-	if len(args) != 2 {
-		return nil, fmt.Errorf("> expects 2 arguments, got %v", len(args))
-	}
-	a, ok := args[0].(*value.Num)
-	if !ok {
-		return nil, fmt.Errorf("> expects a number as the first argument, got %v", args[0])
-	}
-	b, ok := args[1].(*value.Num)
-	if !ok {
-		return nil, fmt.Errorf("> expects a number as the second argument, got %v", args[1])
+	if len(args) == 0 {
+		return nil, fmt.Errorf("Wrong number of arguments (%d) passed to >", len(args))
 	}
 
-	return value.NewBool(a.Value > b.Value), nil
+	prev := args[0]
+	for _, arg := range args[1:] {
+		switch prev := prev.(type) {
+		case *value.Num:
+			switch arg := arg.(type) {
+			case *value.Num:
+				if prev.Value <= arg.Value {
+					return value.False, nil
+				}
+			case *value.Long:
+				if prev.Value <= float64(arg.Value) {
+					return value.False, nil
+				}
+			default:
+				return nil, fmt.Errorf("invalid type for >: %v", arg)
+			}
+		case *value.Long:
+			switch arg := arg.(type) {
+			case *value.Num:
+				if float64(prev.Value) <= arg.Value {
+					return value.False, nil
+				}
+			case *value.Long:
+				if prev.Value <= arg.Value {
+					return value.False, nil
+				}
+			default:
+				return nil, fmt.Errorf("invalid type for >: %v", arg)
+			}
+		default:
+			return nil, fmt.Errorf("invalid type for >: %v", prev)
+		}
+		prev = arg
+	}
+
+	return value.True, nil
 }
 
 func applyBuiltin(env value.Environment, args []value.Value) (value.Value, error) {

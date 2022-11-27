@@ -117,22 +117,20 @@ func (v *Vector) Equal(v2 Value) bool {
 }
 
 func (v *Vector) Apply(env Environment, args []Value) (Value, error) {
-	if len(args) > 2 {
-		return nil, fmt.Errorf("vector apply takes one or two arguments")
+	if len(args) != 1 {
+		return nil, fmt.Errorf("vector apply expects 1 argument, got %d", len(args))
 	}
 
-	index, ok := args[0].(*Num)
+	index, ok := args[0].(*Long)
 	if !ok {
-		return nil, fmt.Errorf("vector apply takes a number as an argument")
+		return nil, fmt.Errorf("vector apply takes an int as an argument")
 	}
 
 	i := int(index.Value)
-	if i < 0 || i >= v.Count() && len(args) == 1 {
+	if i < 0 || i >= v.Count() {
 		return nil, fmt.Errorf("index out of bounds")
 	}
-	if i >= v.Count() {
-		return args[1], nil
-	}
+
 	return v.ValueAt(i), nil
 }
 

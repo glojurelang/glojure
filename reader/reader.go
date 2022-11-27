@@ -87,7 +87,7 @@ func (r *trackingRuneScanner) pos() value.Pos {
 }
 
 var (
-	syntaxRunes = []rune{'\\', '(', ')', '[', ']', '{', '}', '"', ';', '\'', '`', '~', '^', '@', ','}
+	syntaxRunes = []rune{'\\', '(', ')', '[', ']', '{', '}', '"', ';', '`', '~', '^', '@', ','}
 )
 
 func isSyntaxRune(rn rune) bool {
@@ -253,18 +253,20 @@ func (r *Reader) readExpr() (value.Value, error) {
 		return r.readString()
 	case '\\':
 		return r.readChar()
+	case ':':
+		return r.readKeyword()
+
+		// TODO: implement as reader macros
 	case '\'':
 		return r.readQuote()
 	case '`':
 		return r.readSyntaxQuote()
 	case '~':
 		return r.readUnquote()
-	case ',': // TODO: treat as whitespace, as in Clojure
-		return nil, r.error("unquote not implemented")
+	case '@':
+		return r.readDeref()
 	case '#':
-		return nil, r.error("reader macros not implemented")
-	case ':':
-		return r.readKeyword()
+		return nil, r.error("# reader macro not implemented")
 	default:
 		r.rs.UnreadRune()
 		return r.readSymbol()
@@ -360,8 +362,11 @@ func (r *Reader) readString() (value.Value, error) {
 			sawSlash = false
 		}
 
-		quoted := strconv.Quote(string(rune))
-		str += quoted[1 : len(quoted)-1]
+		if rune == '\n' {
+			str += "\\n"
+		} else {
+			str += string(rune)
+		}
 	}
 
 	str, err := strconv.Unquote(`"` + str + `"`)
@@ -379,8 +384,9 @@ func (r *Reader) readChar() (value.Value, error) {
 		if err != nil {
 			return nil, r.error("error reading character: %w", err)
 		}
+
 		// TODO: helper for non-char/non-symbol runes
-		if isSpace(rn) || isSyntaxRune(rn) {
+		if unicode.IsSpace(rn) || (len(char) > 0 && isSyntaxRune(rn)) {
 			r.rs.UnreadRune()
 			break
 		}
@@ -415,6 +421,12 @@ func (r *Reader) readSyntaxQuote() (value.Value, error) {
 	return r.readQuoteType("quasiquote")
 }
 
+func (r *Reader) readDeref() (value.Value, error) {
+	// TODO: look up 'deref' with the symbol resolver
+	// it should resolve to glojure.core/deref in the go case
+	return r.readQuoteType("clojure.core/deref")
+}
+
 func (r *Reader) readUnquote() (value.Value, error) {
 	rn, _, err := r.rs.ReadRune()
 	if err != nil {
@@ -425,7 +437,7 @@ func (r *Reader) readUnquote() (value.Value, error) {
 	}
 
 	r.rs.UnreadRune()
-	return r.readQuoteType("unquote")
+	return r.readQuoteType("clojure.core/unquote")
 }
 
 var (
@@ -440,7 +452,7 @@ func isValidNumberCharacter(rn rune) bool {
 	}
 	// TODO: look at clojure code to understand this. it seems likely
 	// that these are reader macros, but I'm not sure.
-	return rn != '#' && rn != '%'
+	return rn != '#' && rn != '%' && rn != '\''
 }
 
 func (r *Reader) readNumber(numStr string) (value.Value, error) {

@@ -11,6 +11,7 @@ import (
 	"unicode"
 
 	"github.com/kylelemons/godebug/diff"
+	"github.com/stretchr/testify/assert"
 )
 
 var (
@@ -85,6 +86,7 @@ func FuzzCLJConformance(f *testing.F) {
 		cljExpr = string(cljExprRunes)
 
 		if gljExpr != cljExpr {
+			assert.Equal(t, []rune(cljExpr), []rune(gljExpr))
 			t.Errorf("want len=%d, got len=%d", len(cljExpr), len(gljExpr))
 			t.Errorf("diff (-want,+got):\n%s", diff.Diff(cljExpr, gljExpr))
 			t.Fatalf("expression mismatch: glj=%v clj=%v", gljExpr, cljExpr)

@@ -1,7 +1,0 @@
-;; ;;; 
-
-;; (def ~sin mrat.osc.sin)
-
-;; (vector [])
-
-;; (mrat.core.io.out (* 0 (~sin 440)))
