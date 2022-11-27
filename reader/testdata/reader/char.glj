@@ -1,2 +1,3 @@
+;;;SKIP_PRINT_TEST
 (println \a \b \c \u03a9)
 (println \newline \space \tab)

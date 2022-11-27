@@ -1,6 +1,8 @@
 package value
 
-import "strconv"
+import (
+	"strconv"
+)
 
 // Str is a string.
 type Str struct {
@@ -20,6 +22,10 @@ func NewStr(s string, opts ...Option) *Str {
 }
 
 func (s *Str) String() string {
+	// NB: java does not support \x escape sequences, but go does.  this
+	// results in a difference in the output of the string from Clojure
+	// if such characters make it into the string. We will escape them
+	// but Clojure on the JVM will not.
 	return strconv.Quote(s.Value)
 }
 

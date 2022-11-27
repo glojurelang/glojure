@@ -3,4 +3,4 @@
 true
 false
 :key
-(def x '(my quoted list))
+(def x (quote (my quoted list)))

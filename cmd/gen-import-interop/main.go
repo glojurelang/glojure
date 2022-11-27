@@ -14,6 +14,7 @@ var (
 		"time",
 		"regexp",
 		"strings",
+		"strconv",
 		"bytes",
 		"net/http",
 		"io",

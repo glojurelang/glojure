@@ -139,10 +139,6 @@ func (l *List) String() string {
 		// TODO: only do this if it used quote shorthand when read.
 		if sym, ok := l.item.(*Symbol); ok {
 			switch sym.Value {
-			case "quote":
-				b.WriteString("'")
-			case "quasiquote":
-				b.WriteString("`")
 			case "unquote":
 				b.WriteString("~")
 			case "splice-unquote":

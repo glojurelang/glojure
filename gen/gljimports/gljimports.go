@@ -7,6 +7,7 @@ import (
 	time "time"
 	regexp "regexp"
 	strings "strings"
+	strconv "strconv"
 	bytes "bytes"
 	net_http "net/http"
 	io "io"
@@ -257,6 +258,50 @@ func RegisterImports(_register func(string, value.Value)) {
 	_register("go/strings.TrimRightFunc", value.NewGoVal(strings.TrimRightFunc))
 	_register("go/strings.TrimSpace", value.NewGoVal(strings.TrimSpace))
 	_register("go/strings.TrimSuffix", value.NewGoVal(strings.TrimSuffix))
+
+	// package strconv
+	////////////////////////////////////////
+	_register("go/strconv.AppendBool", value.NewGoVal(strconv.AppendBool))
+	_register("go/strconv.AppendFloat", value.NewGoVal(strconv.AppendFloat))
+	_register("go/strconv.AppendInt", value.NewGoVal(strconv.AppendInt))
+	_register("go/strconv.AppendQuote", value.NewGoVal(strconv.AppendQuote))
+	_register("go/strconv.AppendQuoteRune", value.NewGoVal(strconv.AppendQuoteRune))
+	_register("go/strconv.AppendQuoteRuneToASCII", value.NewGoVal(strconv.AppendQuoteRuneToASCII))
+	_register("go/strconv.AppendQuoteRuneToGraphic", value.NewGoVal(strconv.AppendQuoteRuneToGraphic))
+	_register("go/strconv.AppendQuoteToASCII", value.NewGoVal(strconv.AppendQuoteToASCII))
+	_register("go/strconv.AppendQuoteToGraphic", value.NewGoVal(strconv.AppendQuoteToGraphic))
+	_register("go/strconv.AppendUint", value.NewGoVal(strconv.AppendUint))
+	_register("go/strconv.Atoi", value.NewGoVal(strconv.Atoi))
+	_register("go/strconv.CanBackquote", value.NewGoVal(strconv.CanBackquote))
+	_register("go/strconv.ErrRange", value.NewGoVal(strconv.ErrRange))
+	_register("go/strconv.ErrSyntax", value.NewGoVal(strconv.ErrSyntax))
+	_register("go/strconv.FormatBool", value.NewGoVal(strconv.FormatBool))
+	_register("go/strconv.FormatComplex", value.NewGoVal(strconv.FormatComplex))
+	_register("go/strconv.FormatFloat", value.NewGoVal(strconv.FormatFloat))
+	_register("go/strconv.FormatInt", value.NewGoVal(strconv.FormatInt))
+	_register("go/strconv.FormatUint", value.NewGoVal(strconv.FormatUint))
+	_register("go/strconv.IntSize", value.NewGoVal(strconv.IntSize))
+	_register("go/strconv.IsGraphic", value.NewGoVal(strconv.IsGraphic))
+	_register("go/strconv.IsPrint", value.NewGoVal(strconv.IsPrint))
+	_register("go/strconv.Itoa", value.NewGoVal(strconv.Itoa))
+	{
+		var x strconv.NumError
+		_register("go/strconv.NumError", value.NewGoTyp(reflect.TypeOf(x)))
+	}
+	_register("go/strconv.ParseBool", value.NewGoVal(strconv.ParseBool))
+	_register("go/strconv.ParseComplex", value.NewGoVal(strconv.ParseComplex))
+	_register("go/strconv.ParseFloat", value.NewGoVal(strconv.ParseFloat))
+	_register("go/strconv.ParseInt", value.NewGoVal(strconv.ParseInt))
+	_register("go/strconv.ParseUint", value.NewGoVal(strconv.ParseUint))
+	_register("go/strconv.Quote", value.NewGoVal(strconv.Quote))
+	_register("go/strconv.QuoteRune", value.NewGoVal(strconv.QuoteRune))
+	_register("go/strconv.QuoteRuneToASCII", value.NewGoVal(strconv.QuoteRuneToASCII))
+	_register("go/strconv.QuoteRuneToGraphic", value.NewGoVal(strconv.QuoteRuneToGraphic))
+	_register("go/strconv.QuoteToASCII", value.NewGoVal(strconv.QuoteToASCII))
+	_register("go/strconv.QuoteToGraphic", value.NewGoVal(strconv.QuoteToGraphic))
+	_register("go/strconv.QuotedPrefix", value.NewGoVal(strconv.QuotedPrefix))
+	_register("go/strconv.Unquote", value.NewGoVal(strconv.Unquote))
+	_register("go/strconv.UnquoteChar", value.NewGoVal(strconv.UnquoteChar))
 
 	// package bytes
 	////////////////////////////////////////

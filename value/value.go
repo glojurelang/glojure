@@ -15,6 +15,12 @@ type Value interface {
 	End() Pos
 }
 
+type Sequence interface {
+	First() Value
+	Rest() Sequence
+	IsEmpty() bool
+}
+
 // Enumerable is an interface for compound values that support
 // enumeration.
 type Enumerable interface {

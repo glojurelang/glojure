@@ -1,2 +1,2 @@
-(println \a \b \c \u03a9)
+(println \a \b \c \Ω)
 (println \newline \space \tab)

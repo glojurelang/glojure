@@ -1,0 +1,2 @@
+go test fuzz v1
+string(";;;SKIP_PRINT_TEST\n{ :foo 42, :bar \"hel\x00\x10\" 1 [1 2 3] }\n")

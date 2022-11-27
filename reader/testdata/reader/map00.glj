@@ -1,0 +1,2 @@
+;;;SKIP_PRINT_TEST
+{ :foo 42, :bar "hello" 1 [1 2 3] }

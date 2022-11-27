@@ -84,7 +84,7 @@ func (v *Vector) String() string {
 	for i := 0; i < v.Count(); i++ {
 		el := v.ValueAt(i)
 		if el == nil {
-			b.WriteString("()")
+			b.WriteString("nil")
 		} else {
 			b.WriteString(el.String())
 		}

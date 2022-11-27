@@ -60,7 +60,7 @@ func TestRead(t *testing.T) {
 			}
 			output := strings.Join(strs, "\n")
 			if output != tc.output {
-				t.Errorf("output mismatch:\nwant:\n%s\nhave:\n%s[END]\n", tc.output, output)
+				t.Errorf("output mismatch:\nwant:\n[BEGIN]\n%s[END]\nhave:\n[BEGIN]\n%s[END]\n", tc.output, output)
 			}
 
 			if strings.HasPrefix(tc.input, ";;;SKIP_PRINT_TEST") {
@@ -246,6 +246,8 @@ func printExprAtPosition(ra *runeArray2D, n value.Value) {
 	case *value.Num:
 		// the exact formatting of the number is not retained, so any test
 		// cases that do anything more interesting than integers may fail.
+		ra.SetString(v.Pos().Line-1, v.Pos().Column-1, v.String())
+	case *value.Long:
 		ra.SetString(v.Pos().Line-1, v.Pos().Column-1, v.String())
 	case *value.Nil:
 		ra.SetString(v.Pos().Line-1, v.Pos().Column-1, v.String())

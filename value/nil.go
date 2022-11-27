@@ -33,3 +33,15 @@ func (n *Nil) Equal(other Value) bool {
 func (n *Nil) GoValue() interface{} {
 	return nil
 }
+
+func (n *Nil) First() Value {
+	return n
+}
+
+func (n *Nil) Rest() Sequence {
+	return n
+}
+
+func (n *Nil) IsEmpty() bool {
+	return true
+}

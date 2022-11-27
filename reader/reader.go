@@ -4,7 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"regexp"
 	"strconv"
+	"strings"
 	"unicode"
 
 	"github.com/glojurelang/glojure/value"
@@ -84,14 +86,30 @@ func (r *trackingRuneScanner) pos() value.Pos {
 	return r.history[len(r.history)-1]
 }
 
-type Reader struct {
-	rs *trackingRuneScanner
+var (
+	syntaxRunes = []rune{'\\', '(', ')', '[', ']', '{', '}', '"', ';', '\'', '`', '~', '^', '@', ','}
+)
 
-	posStack []value.Pos
+func isSyntaxRune(rn rune) bool {
+	for _, s := range syntaxRunes {
+		if rn == s {
+			return true
+		}
+	}
+	return false
 }
+
+type (
+	Reader struct {
+		rs *trackingRuneScanner
+
+		posStack []value.Pos
+	}
+)
 
 type options struct {
 	filename string
+	resolver SymbolResolver
 }
 
 // Option represents an option that can be passed to New.
@@ -104,8 +122,18 @@ func WithFilename(filename string) Option {
 	}
 }
 
+// WithSymbolResolver sets the symbol resolver to be used when reading.
+func WithSymbolResolver(resolver SymbolResolver) Option {
+	return func(o *options) {
+		o.resolver = resolver
+	}
+}
+
 func New(r io.RuneScanner, opts ...Option) *Reader {
-	var o options
+	o := options{
+		resolver: defaultSymbolResolver,
+	}
+
 	for _, opt := range opts {
 		opt(&o)
 	}
@@ -135,7 +163,19 @@ func (r *Reader) ReadAll() ([]value.Value, error) {
 		}
 		nodes = append(nodes, node)
 	}
+	if len(nodes) == 0 {
+		return nil, fmt.Errorf("no expressions found in input")
+	}
 	return nodes, nil
+}
+
+func (r *Reader) ReadOne() (value.Value, error) {
+	_, err := r.next()
+	if err != nil {
+		return nil, err
+	}
+	r.rs.UnreadRune()
+	return r.readExpr()
 }
 
 // error returns a formatted error that includes the current position
@@ -170,7 +210,7 @@ func (r *Reader) next() (rune, error) {
 		if err != nil {
 			return 0, r.error("error reading input: %w", err)
 		}
-		if unicode.IsSpace(rn) {
+		if isSpace(rn) {
 			continue
 		}
 		if rn == ';' {
@@ -201,6 +241,10 @@ func (r *Reader) readExpr() (value.Value, error) {
 		return r.readList()
 	case ')':
 		return nil, r.error("unexpected ')'")
+	case '{':
+		return r.readMap()
+	case '}':
+		return nil, r.error("unexpected '}'")
 	case '[':
 		return r.readVector()
 	case ']':
@@ -212,7 +256,7 @@ func (r *Reader) readExpr() (value.Value, error) {
 	case '\'':
 		return r.readQuote()
 	case '`':
-		return r.readQuasiquote()
+		return r.readSyntaxQuote()
 	case '~':
 		return r.readUnquote()
 	case ',': // TODO: treat as whitespace, as in Clojure
@@ -234,7 +278,7 @@ func (r *Reader) readList() (value.Value, error) {
 		if err != nil {
 			return nil, err
 		}
-		if unicode.IsSpace(rune) {
+		if isSpace(rune) {
 			continue
 		}
 		if rune == ')' {
@@ -258,7 +302,7 @@ func (r *Reader) readVector() (value.Value, error) {
 		if err != nil {
 			return nil, err
 		}
-		if unicode.IsSpace(rune) {
+		if isSpace(rune) {
 			continue
 		}
 		if rune == ']' {
@@ -275,38 +319,56 @@ func (r *Reader) readVector() (value.Value, error) {
 	return value.NewVector(nodes, value.WithSection(r.popSection())), nil
 }
 
+func (r *Reader) readMap() (value.Value, error) {
+	var keyVals []value.Value
+	for {
+		rune, err := r.next()
+		if err != nil {
+			return nil, err
+		}
+		if isSpace(rune) {
+			continue
+		}
+		if rune == '}' {
+			break
+		}
+
+		r.rs.UnreadRune()
+		el, err := r.readExpr()
+		if err != nil {
+			return nil, err
+		}
+		keyVals = append(keyVals, el)
+	}
+	return value.NewMap(keyVals, value.WithSection(r.popSection())), nil
+}
+
 func (r *Reader) readString() (value.Value, error) {
 	var str string
+	sawSlash := false
 	for {
 		rune, _, err := r.rs.ReadRune()
 		if err != nil {
 			return nil, r.error("error reading string: %w", err)
 		}
-		// handle escape sequences
+
 		if rune == '\\' {
-			rune, _, err = r.rs.ReadRune()
-			if err != nil {
-				return nil, r.error("error reading string: %w", err)
-			}
-			switch rune {
-			case 'n':
-				rune = '\n'
-			case 't':
-				rune = '\t'
-			case 'r':
-				rune = '\r'
-			case '"':
-				rune = '"'
-			case '\\':
-				rune = '\\'
-			default:
-				return nil, r.error("invalid escape sequence: \\%c", rune)
-			}
-		} else if rune == '"' {
+			sawSlash = true
+		} else if rune == '"' && !sawSlash {
 			break
+		} else {
+			sawSlash = false
 		}
-		str += string(rune)
+
+		quoted := strconv.Quote(string(rune))
+		str += quoted[1 : len(quoted)-1]
 	}
+
+	str, err := strconv.Unquote(`"` + str + `"`)
+	if err != nil {
+		return nil, r.error("invalid string: %w", err)
+	}
+
 	return value.NewStr(str, value.WithSection(r.popSection())), nil
 }
 
@@ -317,7 +379,8 @@ func (r *Reader) readChar() (value.Value, error) {
 		if err != nil {
 			return nil, r.error("error reading character: %w", err)
 		}
-		if unicode.IsSpace(rn) || rn == '(' || rn == ')' || rn == '[' || rn == ']' || rn == '\\' {
+		// TODO: helper for non-char/non-symbol runes
+		if isSpace(rn) || isSyntaxRune(rn) {
 			r.rs.UnreadRune()
 			break
 		}
@@ -348,7 +411,7 @@ func (r *Reader) readQuote() (value.Value, error) {
 	return r.readQuoteType("quote")
 }
 
-func (r *Reader) readQuasiquote() (value.Value, error) {
+func (r *Reader) readSyntaxQuote() (value.Value, error) {
 	return r.readQuoteType("quasiquote")
 }
 
@@ -365,22 +428,112 @@ func (r *Reader) readUnquote() (value.Value, error) {
 	return r.readQuoteType("unquote")
 }
 
-func (r *Reader) readSymbol() (value.Value, error) {
-	var sym string
+var (
+	numPrefixRegex = regexp.MustCompile(`^[-+]?[0-9]+`)
+	intRegex       = regexp.MustCompile(`^[-+]?\d(\d|[a-fA-F])*$`)
+	hexRegex       = regexp.MustCompile(`^[-+]?0[xX]([a-fA-F]|\d)*$`)
+)
+
+func isValidNumberCharacter(rn rune) bool {
+	if isSpace(rn) || isSyntaxRune(rn) {
+		return false
+	}
+	// TODO: look at clojure code to understand this. it seems likely
+	// that these are reader macros, but I'm not sure.
+	return rn != '#' && rn != '%'
+}
+
+func (r *Reader) readNumber(numStr string) (value.Value, error) {
 	for {
 		rn, _, err := r.rs.ReadRune()
+		if errors.Is(err, io.EOF) && numStr != "" {
+			break
+		}
 		if err != nil {
 			return nil, r.error("error reading symbol: %w", err)
 		}
-		if unicode.IsSpace(rn) || rn == '(' || rn == ')' || rn == '[' || rn == ']' {
+		if !isValidNumberCharacter(rn) {
+			r.rs.UnreadRune()
+			break
+		}
+		numStr += string(rn)
+	}
+
+	switch {
+	case intRegex.MatchString(numStr):
+		sign := int64(1)
+		base := 10
+		if numStr[0] == '-' {
+			sign = -1
+			numStr = numStr[1:]
+		} else if numStr[0] == '+' {
+			numStr = numStr[1:]
+		}
+		if strings.HasPrefix(numStr, "0") {
+			base = 8
+		}
+
+		i, err := strconv.ParseInt(numStr, base, 64)
+		if err != nil {
+			return nil, r.error("invalid number: %s", numStr)
+		}
+		// TODO: long type
+		return value.NewLong(sign*i, value.WithSection(r.popSection())), nil
+	case hexRegex.MatchString(numStr):
+		sign := int64(1)
+		if numStr[0] == '-' {
+			sign = -1
+			numStr = numStr[1:]
+		} else if numStr[0] == '+' {
+			numStr = numStr[1:]
+		}
+
+		i, err := strconv.ParseInt(numStr[2:], 16, 64)
+		if err != nil {
+			return nil, r.error("invalid number: %s", numStr)
+		}
+		return value.NewLong(sign*i, value.WithSection(r.popSection())), nil
+	case numStr[0] >= '0' && numStr[0] <= '9':
+		f, err := strconv.ParseFloat(numStr, 64)
+		if err != nil {
+			return nil, r.error("invalid number: %s", numStr)
+		}
+		return value.NewNum(f, value.WithSection(r.popSection())), nil
+	}
+
+	num, err := strconv.ParseFloat(numStr, 64)
+	if err != nil {
+		return nil, r.error("invalid number: %s", numStr)
+	}
+
+	return value.NewNum(num, value.WithSection(r.popSection())), nil
+}
+
+func (r *Reader) readSymbol() (value.Value, error) {
+	// TODO: a cleaner way to do this. adding some hacks while trying to
+	// match clojure's reader's behavior.
+
+	var sym string
+	for {
+		rn, _, err := r.rs.ReadRune()
+		if errors.Is(err, io.EOF) && sym != "" {
+			break
+		}
+		if err != nil {
+			return nil, r.error("error reading symbol: %w", err)
+		}
+		if isSpace(rn) || isSyntaxRune(rn) {
 			r.rs.UnreadRune()
 			break
 		}
 		sym += string(rn)
+
+		if numPrefixRegex.MatchString(sym) {
+			return r.readNumber(sym)
+		}
 	}
-	// check if symbol is a number
-	if num, err := strconv.ParseFloat(sym, 64); err == nil {
-		return value.NewNum(num, value.WithSection(r.popSection())), nil
+	if sym == "" {
+		return nil, r.error("error reading symbol")
 	}
 
 	// check if symbol is a keyword
@@ -403,11 +556,15 @@ func (r *Reader) readKeyword() (value.Value, error) {
 		if err != nil {
 			return nil, r.error("error reading keyword: %w", err)
 		}
-		if unicode.IsSpace(rn) || rn == ')' || rn == ']' {
+		if isSpace(rn) || rn == ')' || rn == ']' || rn == '}' {
 			r.rs.UnreadRune()
 			break
 		}
 		sym += string(rn)
 	}
 	return value.NewKeyword(sym, value.WithSection(r.popSection())), nil
+}
+
+func isSpace(r rune) bool {
+	return r == ',' || unicode.IsSpace(r)
 }

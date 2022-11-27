@@ -101,10 +101,5 @@ func CharLiteralFromRune(rn rune) string {
 		return `\return`
 	}
 
-	quoted := strconv.QuoteToASCII(string(rn))
-	prefix := "\\"
-	if quoted[1] == '\\' {
-		prefix = ""
-	}
-	return prefix + quoted[1:len(quoted)-1]
+	return fmt.Sprintf("\\%c", rn)
 }
