@@ -219,29 +219,29 @@ func fromGo(val interface{}) Value {
 	// - anything else is converted to a GoVal
 	switch val := val.(type) {
 	case int:
-		return NewNum(float64(val))
+		return int64(val)
 	case int8:
-		return NewNum(float64(val))
+		return int64(val)
 	case int16:
-		return NewNum(float64(val))
+		return int64(val)
 	case int32:
-		return NewNum(float64(val))
+		return int64(val)
 	case int64:
-		return NewNum(float64(val))
+		return int64(val)
 	case uint:
-		return NewNum(float64(val))
+		return int64(val)
 	case uint8:
-		return NewNum(float64(val))
+		return int64(val)
 	case uint16:
-		return NewNum(float64(val))
+		return int64(val)
 	case uint32:
-		return NewNum(float64(val))
+		return int64(val)
 	case uint64:
-		return NewNum(float64(val))
+		return int64(val)
 	case float32:
-		return NewNum(float64(val))
+		return float64(val)
 	case float64:
-		return NewNum(val)
+		return val
 	case string:
 		return NewStr(val)
 	case bool:

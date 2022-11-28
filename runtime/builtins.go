@@ -146,12 +146,18 @@ func charBuiltin(env value.Environment, args []value.Value) (value.Value, error)
 	}
 
 	switch arg := args[0].(type) {
-	case *value.Num:
-		return value.NewChar(rune(arg.Value)), nil
+	case float64:
+		return value.NewChar(rune(arg)), nil
+	case uint64:
+		return value.NewChar(rune(arg)), nil
 	case *value.Char:
 		return arg, nil
 	default:
-		return nil, fmt.Errorf("can't convert %v to char", args[0])
+		intVal, ok := asInt(args[0])
+		if !ok {
+			return nil, fmt.Errorf("can't convert %v (%T) to char", args[0], args[0])
+		}
+		return value.NewChar(rune(intVal)), nil
 	}
 }
 
@@ -326,20 +332,18 @@ func subvecBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 		return nil, fmt.Errorf("subvec expects a vector as its first argument, got %v", args[0])
 	}
 
-	start, ok := args[1].(*value.Num)
+	startIdx, ok := asInt(args[1])
 	if !ok {
 		return nil, fmt.Errorf("subvec expects a number as its second argument, got %v", args[1])
 	}
 
-	startIdx := int(start.Value)
 	endIdx := v.Count()
 
 	if len(args) == 3 {
-		end, ok := args[2].(*value.Num)
+		endIdx, ok = asInt(args[2])
 		if !ok {
 			return nil, fmt.Errorf("subvec expects a number as its third argument, got %v", args[2])
 		}
-		endIdx = int(end.Value)
 	}
 
 	if startIdx < 0 || startIdx > v.Count() || endIdx < 0 || endIdx > v.Count() {
@@ -447,15 +451,15 @@ func powBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	if len(args) != 2 {
 		return nil, fmt.Errorf("pow expects 2 arguments, got %v", len(args))
 	}
-	a, ok := args[0].(*value.Num)
+	a, ok := asDouble(args[0])
 	if !ok {
 		return nil, fmt.Errorf("pow expects a number, got %v", args[0])
 	}
-	b, ok := args[1].(*value.Num)
+	b, ok := asDouble(args[1])
 	if !ok {
 		return nil, fmt.Errorf("pow expects a number, got %v", args[1])
 	}
-	return value.NewNum(math.Pow(a.Value, b.Value)), nil
+	return value.NewNum(math.Pow(a, b)), nil
 }
 
 func floorBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -463,8 +467,8 @@ func floorBuiltin(env value.Environment, args []value.Value) (value.Value, error
 		return nil, fmt.Errorf("floor expects 1 argument, got %v", len(args))
 	}
 	switch arg := args[0].(type) {
-	case *value.Num:
-		return value.NewNum(math.Floor(arg.Value)), nil
+	case float64:
+		return math.Floor(arg), nil
 	case *value.Long:
 		return arg, nil
 	default:
@@ -479,12 +483,12 @@ func mulBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 
 	for _, arg := range args {
 		switch arg := arg.(type) {
-		case *value.Num:
+		case float64:
 			if isIntMul {
 				isIntMul = false
 				floatProduct = float64(intProduct)
 			}
-			floatProduct *= arg.Value
+			floatProduct *= arg
 		case *value.Long:
 			if isIntMul {
 				intProduct *= arg.Value
@@ -502,20 +506,21 @@ func mulBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	return value.NewNum(floatProduct), nil
 }
 
+// TODO: match clojure behavior
 func divBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 	if len(args) != 2 {
 		return nil, fmt.Errorf("div expects 2 arguments, got %v", len(args))
 	}
-	num, ok := args[0].(*value.Num)
+	num, ok := asDouble(args[0])
 	if !ok {
 		return nil, fmt.Errorf("div expects a number as the first argument, got %v", args[0])
 	}
-	denom, ok := args[1].(*value.Num)
+	denom, ok := asDouble(args[1])
 	if !ok {
 		return nil, fmt.Errorf("div expects a number as the second argument, got %v", args[1])
 	}
 	// TODO: handle generators
-	return value.NewNum(num.Value / denom.Value), nil
+	return value.NewNum(num / denom), nil
 }
 
 func addBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -526,12 +531,12 @@ func addBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	// sum all number arguments together
 	for _, arg := range args {
 		switch arg := arg.(type) {
-		case *value.Num:
+		case float64:
 			if isIntSum {
 				isIntSum = false
 				floatSum = float64(intSum)
 			}
-			floatSum += arg.Value
+			floatSum += arg
 		case *value.Long:
 			if isIntSum {
 				intSum += arg.Value
@@ -559,9 +564,9 @@ func subBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	var floatDiff float64
 
 	switch arg := args[0].(type) {
-	case *value.Num:
+	case float64:
 		isIntDiff = false
-		floatDiff = arg.Value
+		floatDiff = arg
 	case *value.Long:
 		intDiff = arg.Value
 	default:
@@ -577,12 +582,12 @@ func subBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 
 	for _, arg := range args[1:] {
 		switch arg := arg.(type) {
-		case *value.Num:
+		case float64:
 			if isIntDiff {
 				isIntDiff = false
 				floatDiff = float64(intDiff)
 			}
-			floatDiff -= arg.Value
+			floatDiff -= arg
 		case *value.Long:
 			if isIntDiff {
 				intDiff -= arg.Value
@@ -608,14 +613,14 @@ func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 	prev := args[0]
 	for _, arg := range args[1:] {
 		switch prev := prev.(type) {
-		case *value.Num:
+		case float64:
 			switch arg := arg.(type) {
-			case *value.Num:
-				if prev.Value >= arg.Value {
+			case float64:
+				if prev >= arg {
 					return false, nil
 				}
 			case *value.Long:
-				if prev.Value >= float64(arg.Value) {
+				if prev >= float64(arg.Value) {
 					return false, nil
 				}
 			default:
@@ -623,8 +628,8 @@ func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 			}
 		case *value.Long:
 			switch arg := arg.(type) {
-			case *value.Num:
-				if float64(prev.Value) >= arg.Value {
+			case float64:
+				if float64(prev.Value) >= arg {
 					return false, nil
 				}
 			case *value.Long:
@@ -651,14 +656,14 @@ func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 	prev := args[0]
 	for _, arg := range args[1:] {
 		switch prev := prev.(type) {
-		case *value.Num:
+		case float64:
 			switch arg := arg.(type) {
-			case *value.Num:
-				if prev.Value <= arg.Value {
+			case float64:
+				if prev <= arg {
 					return false, nil
 				}
 			case *value.Long:
-				if prev.Value <= float64(arg.Value) {
+				if prev <= float64(arg.Value) {
 					return false, nil
 				}
 			default:
@@ -666,8 +671,8 @@ func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 			}
 		case *value.Long:
 			switch arg := arg.(type) {
-			case *value.Num:
-				if float64(prev.Value) <= arg.Value {
+			case float64:
+				if float64(prev.Value) <= arg {
 					return false, nil
 				}
 			case *value.Long:
@@ -735,4 +740,66 @@ func printlnBuiltin(env value.Environment, args []value.Value) (value.Value, err
 	}
 	env.Stdout().Write([]byte("\n"))
 	return value.NilValue, nil
+}
+
+func asInt(v interface{}) (int, bool) {
+	switch v := v.(type) {
+	case int:
+		return v, true
+	case int64:
+		return int(v), true
+	case int32:
+		return int(v), true
+	case int16:
+		return int(v), true
+	case int8:
+		return int(v), true
+	case uint:
+		return int(v), true
+	case uint64:
+		return int(v), true
+	case uint32:
+		return int(v), true
+	case uint16:
+		return int(v), true
+	case uint8:
+		return int(v), true
+	case float64:
+		return int(v), true
+	case float32:
+		return int(v), true
+	default:
+		return 0, false
+	}
+}
+
+func asDouble(v interface{}) (float64, bool) {
+	switch v := v.(type) {
+	case int:
+		return float64(v), true
+	case int64:
+		return float64(v), true
+	case int32:
+		return float64(v), true
+	case int16:
+		return float64(v), true
+	case int8:
+		return float64(v), true
+	case uint:
+		return float64(v), true
+	case uint64:
+		return float64(v), true
+	case uint32:
+		return float64(v), true
+	case uint16:
+		return float64(v), true
+	case uint8:
+		return float64(v), true
+	case float64:
+		return v, true
+	case float32:
+		return float64(v), true
+	default:
+		return 0, false
+	}
 }

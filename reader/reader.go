@@ -590,7 +590,8 @@ func (r *Reader) readNumber(numStr string) (value.Value, error) {
 		return nil, r.error("invalid number: %s", numStr)
 	}
 
-	return value.NewNum(num, value.WithSection(r.popSection())), nil
+	r.popSection()
+	return num, nil
 }
 
 func (r *Reader) readSymbol() (value.Value, error) {
