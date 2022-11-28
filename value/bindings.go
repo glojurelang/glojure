@@ -33,7 +33,7 @@ func Bind(pattern Value, val Value) ([]Value, error) {
 		}
 		for i := 0; i < pattern.Count(); i++ {
 			// special case for &
-			if pattern.ValueAt(i).Equal(restSymbol) {
+			if Equal(pattern.ValueAt(i), restSymbol) {
 				if i != pattern.Count()-2 {
 					return nil, fmt.Errorf("& in binding-form must be followed by a single element")
 				}

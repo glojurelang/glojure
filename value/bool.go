@@ -1,8 +1,8 @@
 package value
 
 var (
-	True  = NewBool(true)
-	False = NewBool(false)
+	True  = &Bool{Value: true}
+	False = &Bool{Value: false}
 )
 
 // Bool is a boolean value.
@@ -15,6 +15,12 @@ func NewBool(b bool, opts ...Option) *Bool {
 	var o options
 	for _, opt := range opts {
 		opt(&o)
+	}
+	if o.section == (Section{}) {
+		if b {
+			return True
+		}
+		return False
 	}
 	return &Bool{
 		Section: o.section,
@@ -29,7 +35,7 @@ func (b *Bool) String() string {
 	return "false"
 }
 
-func (b *Bool) Equal(v Value) bool {
+func (b *Bool) Equal(v interface{}) bool {
 	other, ok := v.(*Bool)
 	if !ok {
 		return false

@@ -33,7 +33,7 @@ func (s *Str) Count() int {
 	return len(s.Value)
 }
 
-func (s *Str) Equal(v Value) bool {
+func (s *Str) Equal(v interface{}) bool {
 	other, ok := v.(*Str)
 	if !ok {
 		return false

@@ -365,7 +365,7 @@ func eqBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 	if len(args) != 2 {
 		return nil, fmt.Errorf("eq? expects 2 arguments, got %v", len(args))
 	}
-	return value.NewBool(args[0].Equal(args[1])), nil
+	return value.NewBool(value.Equal(args[0], args[1])), nil
 }
 
 func isStringBuiltin(env value.Environment, args []value.Value) (value.Value, error) {

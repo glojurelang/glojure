@@ -42,7 +42,7 @@ func (k *Keyword) String() string {
 	return ":" + k.Value
 }
 
-func (k *Keyword) Equal(v Value) bool {
+func (k *Keyword) Equal(v interface{}) bool {
 	other, ok := v.(*Keyword)
 	if !ok {
 		return false

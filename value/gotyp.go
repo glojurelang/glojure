@@ -27,7 +27,7 @@ func (gt *GoTyp) String() string {
 	return gt.typ.String()
 }
 
-func (gt *GoTyp) Equal(other Value) bool {
+func (gt *GoTyp) Equal(other interface{}) bool {
 	if other, ok := other.(*GoTyp); ok {
 		return gt.typ == other.typ
 	}

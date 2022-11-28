@@ -107,8 +107,11 @@ type poser interface {
 	Pos() value.Pos
 }
 
-func (env *environment) errorf(n poser, format string, args ...interface{}) error {
-	pos := n.Pos()
+func (env *environment) errorf(n interface{}, format string, args ...interface{}) error {
+	var pos value.Pos
+	if n, ok := n.(poser); ok {
+		pos = n.Pos()
+	}
 	filename := "?"
 	line := "?"
 	col := "?"
@@ -424,7 +427,7 @@ func (env *environment) evalCase(n *value.List) (value.Value, value.Continuation
 		}
 
 		for _, testItem := range testItems {
-			if testItem.Equal(cond) {
+			if value.Equal(testItem, cond) {
 				return nil, func() (value.Value, value.Continuation, error) {
 					return env.eval(result)
 				}, nil
@@ -487,16 +490,16 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 		if item.IsEmpty() {
 			return item, nil
 		}
-		if item.Item().Equal(value.SymbolUnquote) {
+		if value.Equal(item.Item(), value.SymbolUnquote) {
 			return env.Eval(item.Next().Item())
 		}
-		if item.Item().Equal(value.SymbolSpliceUnquote) {
+		if value.Equal(item.Item(), value.SymbolSpliceUnquote) {
 			return nil, env.errorf(item, "splice-unquote not in list")
 		}
 
 		var resultValues []value.Value
 		for cur := item; !cur.IsEmpty(); cur = cur.Next() {
-			if lst, ok := cur.Item().(*value.List); ok && !lst.IsEmpty() && lst.Item().Equal(value.SymbolSpliceUnquote) {
+			if lst, ok := cur.Item().(*value.List); ok && !lst.IsEmpty() && value.Equal(lst.Item(), value.SymbolSpliceUnquote) {
 				res, err := env.Eval(lst.Next().Item())
 				if err != nil {
 					return nil, err
@@ -530,7 +533,7 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 		var resultValues []value.Value
 		for i := 0; i < item.Count(); i++ {
 			cur := item.ValueAt(i)
-			if lst, ok := cur.(*value.List); ok && !lst.IsEmpty() && lst.Item().Equal(value.SymbolSpliceUnquote) {
+			if lst, ok := cur.(*value.List); ok && !lst.IsEmpty() && value.Equal(lst.Item(), value.SymbolSpliceUnquote) {
 				res, err := env.Eval(lst.Next().Item())
 				if err != nil {
 					return nil, err
@@ -897,7 +900,7 @@ func (env *environment) evalDot(n *value.List) (value.Value, error) {
 	} else if gv, ok := target.(value.GoValuer); ok {
 		goValTarget = value.NewGoVal(gv.GoValue())
 	} else {
-		return nil, env.errorf(n, "dot target cannot be converted to a native Go value")
+		goValTarget = value.NewGoVal(target)
 	}
 
 	memberExpr := n.Next().Next().Item()

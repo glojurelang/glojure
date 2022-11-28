@@ -69,7 +69,7 @@ func (s *Symbol) String() string {
 	return s.Value
 }
 
-func (s *Symbol) Equal(v Value) bool {
+func (s *Symbol) Equal(v interface{}) bool {
 	other, ok := v.(*Symbol)
 	if !ok {
 		return false

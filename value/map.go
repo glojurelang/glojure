@@ -76,7 +76,7 @@ func (m *Map) String() string {
 	return b.String()
 }
 
-func (m *Map) Equal(v2 Value) bool {
+func (m *Map) Equal(v2 interface{}) bool {
 	// if v == v2 {
 	// 	return true
 	// }

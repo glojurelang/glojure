@@ -25,7 +25,7 @@ func (n *Nil) String() string {
 	return "nil"
 }
 
-func (n *Nil) Equal(other Value) bool {
+func (n *Nil) Equal(other interface{}) bool {
 	_, ok := other.(*Nil)
 	return ok
 }

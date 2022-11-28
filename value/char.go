@@ -28,7 +28,7 @@ func (c *Char) String() string {
 	return CharLiteralFromRune(c.Value)
 }
 
-func (c *Char) Equal(v Value) bool {
+func (c *Char) Equal(v interface{}) bool {
 	switch v := v.(type) {
 	case *Char:
 		return c.Value == v.Value

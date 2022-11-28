@@ -31,7 +31,7 @@ func (gv *GoVal) String() string {
 	return gv.val.String()
 }
 
-func (gv *GoVal) Equal(other Value) bool {
+func (gv *GoVal) Equal(other interface{}) bool {
 	ogv, ok := other.(*GoVal)
 	if !ok {
 		return false
@@ -282,7 +282,7 @@ func reflectFuncFromApplyer(env Environment, applyer Applyer) func(args []reflec
 		if err != nil {
 			panic(err)
 		}
-		if res == nil || res.Equal(NilValue) {
+		if res == nil || Equal(res, NilValue) {
 			return nil
 		}
 

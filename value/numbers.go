@@ -33,7 +33,7 @@ func (n *Num) String() string {
 	return strconv.FormatFloat(n.Value, 'f', -1, 64)
 }
 
-func (n *Num) Equal(v Value) bool {
+func (n *Num) Equal(v interface{}) bool {
 	other, ok := v.(*Num)
 	if !ok {
 		return false
@@ -66,7 +66,7 @@ func (n *Long) String() string {
 	return strconv.FormatInt(n.Value, 10)
 }
 
-func (n *Long) Equal(v Value) bool {
+func (n *Long) Equal(v interface{}) bool {
 	other, ok := v.(*Long)
 	if !ok {
 		return false
@@ -93,7 +93,7 @@ func (n *BigDecimal) String() string {
 	return n.val.String() + "M"
 }
 
-func (n *BigDecimal) Equal(v Value) bool {
+func (n *BigDecimal) Equal(v interface{}) bool {
 	other, ok := v.(*BigDecimal)
 	if !ok {
 		return false

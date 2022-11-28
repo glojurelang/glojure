@@ -96,7 +96,7 @@ func (v *Vector) String() string {
 	return b.String()
 }
 
-func (v *Vector) Equal(v2 Value) bool {
+func (v *Vector) Equal(v2 interface{}) bool {
 	other, ok := v2.(*Vector)
 	if !ok {
 		return false
@@ -109,7 +109,7 @@ func (v *Vector) Equal(v2 Value) bool {
 		if vVal == nil || oVal == nil {
 			return vVal == oVal
 		}
-		if !vVal.Equal(oVal) {
+		if !Equal(vVal, oVal) {
 			return false
 		}
 	}

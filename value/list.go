@@ -166,7 +166,7 @@ NoQuote:
 	return b.String()
 }
 
-func (l *List) Equal(v Value) bool {
+func (l *List) Equal(v interface{}) bool {
 	other, ok := v.(*List)
 	if !ok {
 		return false
@@ -179,7 +179,7 @@ func (l *List) Equal(v Value) bool {
 		if l.IsEmpty() {
 			return true
 		}
-		if !l.item.Equal(other.item) {
+		if !Equal(l.item, other.item) {
 			return false
 		}
 		l = l.next

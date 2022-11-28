@@ -7,7 +7,7 @@ import (
 // Value is the interface that all values in the language implement.
 type Value interface {
 	String() string
-	Equal(Value) bool
+	//Equal(Value) bool
 }
 
 type Sequence interface {

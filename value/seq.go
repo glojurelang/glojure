@@ -8,7 +8,7 @@ type Seq struct {
 	Enumerable
 }
 
-func (s *Seq) Equal(v Value) bool {
+func (s *Seq) Equal(v interface{}) bool {
 	other, ok := v.(*Seq)
 	if !ok {
 		return false
@@ -26,7 +26,7 @@ func (s *Seq) Equal(v Value) bool {
 		if !ok1 {
 			return true
 		}
-		if !v1.Equal(v2) {
+		if !Equal(v1, v2) {
 			return false
 		}
 	}

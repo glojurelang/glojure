@@ -49,7 +49,7 @@ func (f *Func) String() string {
 	return b.String()
 }
 
-func (f *Func) Equal(v Value) bool {
+func (f *Func) Equal(v interface{}) bool {
 	other, ok := v.(*Func)
 	if !ok {
 		return false
@@ -180,7 +180,7 @@ func (f *BuiltinFunc) String() string {
 	return fmt.Sprintf("*builtin %s*", f.Name)
 }
 
-func (f *BuiltinFunc) Equal(v Value) bool {
+func (f *BuiltinFunc) Equal(v interface{}) bool {
 	other, ok := v.(*BuiltinFunc)
 	if !ok {
 		return false
