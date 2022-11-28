@@ -874,8 +874,28 @@ func (env *environment) evalDot(n *value.List) (value.Value, error) {
 		memberExpr = n.Next().Next()
 	}
 
-	switch v := memberExpr.(type) {
-	case *value.List:
+	if v, ok := memberExpr.(*value.Symbol); ok {
+		field := goValTarget.FieldOrMethod(v.Value)
+		if field == nil {
+			return nil, env.errorf(v, "unknown field or method (%v)", v.Value)
+		}
+
+		fieldVal := field.Value()
+		reflectVal := reflect.ValueOf(fieldVal)
+
+		// if the field is not a function, or it has an arity greater than
+		// zero, return the field value.
+		if reflectVal.Type().Kind() != reflect.Func || reflectVal.Type().NumIn() > 0 {
+			return fieldVal, nil
+		}
+
+		// otherwise, the field is a function with no arguments, so we
+		// drop down to the function call case below. This is a variant of
+		// form 2 above, where the field is a function with no arguments.
+		memberExpr = n.Next().Next()
+	}
+
+	if v, ok := memberExpr.(*value.List); ok {
 		sym, ok := v.Item().(*value.Symbol)
 		if !ok {
 			return nil, env.errorf(v.Item(), "invalid expression, method name must be a symbol")
@@ -891,13 +911,6 @@ func (env *environment) evalDot(n *value.List) (value.Value, error) {
 			args[i] = v
 		}
 		return method.Apply(env, args)
-	case *value.Symbol:
-		field := goValTarget.FieldOrMethod(v.Value)
-		if field == nil {
-			return nil, env.errorf(v, "unknown field or method (%v)", v.Value)
-		}
-
-		return field.Value(), nil
 	}
 
 	return nil, fmt.Errorf("unimplemented")

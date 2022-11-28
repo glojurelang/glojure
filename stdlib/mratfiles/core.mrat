@@ -58,6 +58,19 @@
 ;;; Builtin functions
 
 (def println mrat.core.io/println)
+(def pr mrat.core.io/pr)
+(defn prn [& args]
+  (do (apply pr args)
+      (println)))
+
+(defmacro time
+  "Evaluates expr and prints the time it took.  Returns the value of
+ expr."
+  [expr]
+  `(let [start# (time.Now)
+         ret# ~expr]
+     (prn (str "Elapsed time: " (/ (go/float64 (. (. (time.Now) Sub start#) Nanoseconds)) 1000000.0) " msecs"))
+     ret#))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Aliases

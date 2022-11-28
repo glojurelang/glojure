@@ -27,6 +27,7 @@ func init() {
 				funcSymbol("list", listBuiltin),
 				funcSymbol("vector", vectorBuiltin),
 				funcSymbol("char", charBuiltin),
+				funcSymbol("str", strBuiltin),
 
 				// collection functions
 				funcSymbol("count", lengthBuiltin),
@@ -68,6 +69,7 @@ func init() {
 			Name: "mrat.core.io",
 			Symbols: []*Symbol{
 				funcSymbol("println", printlnBuiltin),
+				funcSymbol("pr", prBuiltin),
 			},
 		},
 	}
@@ -159,6 +161,20 @@ func charBuiltin(env value.Environment, args []value.Value) (value.Value, error)
 		}
 		return value.NewChar(rune(intVal)), nil
 	}
+}
+
+func strBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+	if len(args) == 0 {
+		return "", nil
+	}
+	if len(args) == 1 {
+		return value.ToString(args[0], value.PrintReadably()), nil
+	}
+	builder := strings.Builder{}
+	for _, arg := range args {
+		builder.WriteString(value.ToString(arg, value.PrintReadably()))
+	}
+	return builder.String(), nil
 }
 
 func lengthBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -730,25 +746,31 @@ func applyBuiltin(env value.Environment, args []value.Value) (value.Value, error
 
 func printlnBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 	for i, arg := range args {
-		if arg == nil {
-			// TODO: this should be an error, nil is represented by
-			// *value.Nil
-			env.Stdout().Write([]byte("nil"))
-		} else {
-			switch arg := value.ConvertFromGo(arg).(type) {
-			case string:
-				env.Stdout().Write([]byte(arg))
-			case value.Char:
-				env.Stdout().Write([]byte(string(arg)))
-			default:
-				env.Stdout().Write([]byte(value.ToString(arg)))
-			}
+		switch arg := value.ConvertFromGo(arg).(type) {
+		case string:
+			env.Stdout().Write([]byte(arg))
+		case value.Char:
+			env.Stdout().Write([]byte(string(arg)))
+		default:
+			env.Stdout().Write([]byte(value.ToString(arg)))
 		}
+
 		if i < len(args)-1 {
 			env.Stdout().Write([]byte(" "))
 		}
 	}
 	env.Stdout().Write([]byte("\n"))
+	return nil, nil
+}
+
+func prBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+	for i, arg := range args {
+		env.Stdout().Write([]byte(value.ToString(arg)))
+
+		if i < len(args)-1 {
+			env.Stdout().Write([]byte(" "))
+		}
+	}
 	return nil, nil
 }
 

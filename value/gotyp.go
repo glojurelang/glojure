@@ -53,7 +53,7 @@ func (gt *GoTyp) Type() reflect.Type {
 // one argument, it returns an error.
 func (gt *GoTyp) Apply(env Environment, args []Value) (Value, error) {
 	if len(args) == 0 {
-		return NewGoVal(reflect.Zero(gt.typ).Interface()), nil
+		return reflect.Zero(gt.typ).Interface(), nil
 	}
 
 	if len(args) > 1 {
@@ -64,12 +64,12 @@ func (gt *GoTyp) Apply(env Environment, args []Value) (Value, error) {
 	if arg, ok := arg.(GoValuer); ok {
 		val := reflect.ValueOf(arg.GoValue())
 		if val.Type().ConvertibleTo(gt.typ) {
-			return NewGoVal(val.Convert(gt.typ).Interface()), nil
+			return val.Convert(gt.typ).Interface(), nil
 		}
 	}
 	res, err := ConvertToGo(env, gt.typ, arg)
 	if err != nil {
 		return nil, err
 	}
-	return NewGoVal(res), nil
+	return res, nil
 }

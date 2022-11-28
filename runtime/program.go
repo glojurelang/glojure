@@ -73,6 +73,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		env.Define("go/byte", value.NewGoTyp(reflect.TypeOf(byte(0))))
 		env.Define("go/string", value.NewGoTyp(reflect.TypeOf("")))
 		env.Define("go/int", value.NewGoTyp(reflect.TypeOf(int(0))))
+		env.Define("go/float64", value.NewGoTyp(reflect.TypeOf(float64(0))))
 	}
 
 	{

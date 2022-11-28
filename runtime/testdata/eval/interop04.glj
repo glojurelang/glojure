@@ -1,0 +1,1 @@
+(prn (. (new bytes.Reader) Size))

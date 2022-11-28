@@ -205,6 +205,9 @@ func coerceGoValue(targetType reflect.Type, val interface{}) (interface{}, error
 		}
 		return targetSlice.Interface(), nil
 	default:
+		if reflect.TypeOf(val).ConvertibleTo(targetType) {
+			return reflect.ValueOf(val).Convert(targetType).Interface(), nil
+		}
 		return nil, fmt.Errorf("cannot coerce %s to %s", reflect.TypeOf(val), targetType)
 	}
 }
