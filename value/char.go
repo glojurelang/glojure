@@ -7,38 +7,32 @@ import (
 )
 
 // Char is a character value.
-type Char struct {
-	Section
-	Value rune
-}
+type Char rune
 
 // NewChar creates a new character value.
-func NewChar(value rune, opts ...Option) *Char {
+func NewChar(value rune, opts ...Option) Char {
 	var o options
 	for _, opt := range opts {
 		opt(&o)
 	}
-	return &Char{
-		Section: o.section,
-		Value:   value,
-	}
+	return Char(value)
 }
 
-func (c *Char) String() string {
-	return CharLiteralFromRune(c.Value)
+func (c Char) String() string {
+	return CharLiteralFromRune(rune(c))
 }
 
-func (c *Char) Equal(v interface{}) bool {
+func (c Char) Equal(v interface{}) bool {
 	switch v := v.(type) {
-	case *Char:
-		return c.Value == v.Value
+	case Char:
+		return rune(c) == rune(v)
 	default:
 		return false
 	}
 }
 
-func (c *Char) GoValue() interface{} {
-	return c.Value
+func (c Char) GoValue() interface{} {
+	return rune(c)
 }
 
 // RuneFromCharLiteral returns the rune value from a character

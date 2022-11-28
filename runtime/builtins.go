@@ -150,7 +150,7 @@ func charBuiltin(env value.Environment, args []value.Value) (value.Value, error)
 		return value.NewChar(rune(arg)), nil
 	case uint64:
 		return value.NewChar(rune(arg)), nil
-	case *value.Char:
+	case value.Char:
 		return arg, nil
 	default:
 		intVal, ok := asInt(args[0])
@@ -738,8 +738,8 @@ func printlnBuiltin(env value.Environment, args []value.Value) (value.Value, err
 			switch arg := value.ConvertFromGo(arg).(type) {
 			case string:
 				env.Stdout().Write([]byte(arg))
-			case *value.Char:
-				env.Stdout().Write([]byte(string(arg.Value)))
+			case value.Char:
+				env.Stdout().Write([]byte(string(arg)))
 			default:
 				env.Stdout().Write([]byte(value.ToString(arg)))
 			}
