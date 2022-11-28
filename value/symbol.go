@@ -42,6 +42,29 @@ func (s *Symbol) Name() string {
 	return s.Value
 }
 
+func (s *Symbol) FullName() string {
+	return s.Value
+}
+
+func (s *Symbol) IsValidFormat() bool {
+	// early special case for the division operator /
+	if s.FullName() == "/" {
+		return true
+	}
+
+	ns, name := s.Namespace(), s.Name()
+	if name == "" {
+		// empty name
+		return false
+	}
+	if ns == "" && s.FullName()[0] == '/' {
+		// empty namespace
+		return false
+	}
+
+	return true
+}
+
 func (s *Symbol) String() string {
 	return s.Value
 }

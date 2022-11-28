@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math/big"
 	"regexp"
 	"strconv"
 	"strings"
@@ -378,6 +379,9 @@ func (r *Reader) readChar() (value.Value, error) {
 	var char string
 	for {
 		rn, _, err := r.rs.ReadRune()
+		if errors.Is(err, io.EOF) && char != "" {
+			break
+		}
 		if err != nil {
 			return nil, r.error("error reading character: %w", err)
 		}
@@ -566,12 +570,16 @@ func (r *Reader) readNumber(numStr string) (value.Value, error) {
 			return nil, r.error("invalid number: %s", numStr)
 		}
 		return value.NewLong(sign*i, value.WithSection(r.popSection())), nil
-	case numStr[0] >= '0' && numStr[0] <= '9':
-		f, err := strconv.ParseFloat(numStr, 64)
-		if err != nil {
-			return nil, r.error("invalid number: %s", numStr)
+	}
+
+	// else, it's a float
+	// if the last character is M, it's a big decimal
+	if strings.HasSuffix(numStr, "M") {
+		bd, ok := new(big.Float).SetString(numStr[:len(numStr)-1])
+		if !ok {
+			return nil, r.error("invalid big decimal: %s", numStr)
 		}
-		return value.NewNum(f, value.WithSection(r.popSection())), nil
+		return value.NewBigDecimal(*bd), nil
 	}
 
 	num, err := strconv.ParseFloat(numStr, 64)
@@ -620,7 +628,7 @@ func (r *Reader) readSymbol() (value.Value, error) {
 	}
 
 	symVal := value.NewSymbol(sym, value.WithSection(r.popSection()))
-	if symVal.Name() == "" {
+	if !symVal.IsValidFormat() {
 		return nil, r.error("invalid symbol: %s", sym)
 	}
 	return symVal, nil

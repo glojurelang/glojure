@@ -1,13 +1,11 @@
 package reader
 
 import (
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
 	"testing"
 
-	"github.com/glojurelang/glojure/value"
 	"github.com/kylelemons/godebug/diff"
 )
 
@@ -62,18 +60,6 @@ func TestRead(t *testing.T) {
 			output := strings.Join(strs, "\n")
 			if output != tc.output {
 				t.Errorf("diff (-want,+got):\n%s", diff.Diff(tc.output, output))
-			}
-
-			if strings.HasPrefix(tc.input, ";;;SKIP_PRINT_TEST") {
-				return
-			}
-
-			var runeArr runeArray2D
-			for _, expr := range exprs {
-				printExprAtPosition(&runeArr, expr)
-			}
-			if runeArr.String() != tc.input {
-				t.Errorf("diff in input and print (-want,+got):\n%s", diff.Diff(tc.input, runeArr.String()))
 			}
 		})
 	}
@@ -158,102 +144,4 @@ func FuzzRead(f *testing.F) {
 			expr.String()
 		}
 	})
-}
-
-type runeArray2D struct {
-	lines [][]rune
-}
-
-func (ra *runeArray2D) String() string {
-	var sb strings.Builder
-	for _, line := range ra.lines {
-		sb.WriteString(string(line))
-		sb.WriteRune('\n')
-	}
-	return sb.String()
-}
-
-func (ra *runeArray2D) Set(row, col int, r rune) {
-	for row >= len(ra.lines) {
-		ra.lines = append(ra.lines, nil)
-	}
-	if col >= len(ra.lines[row]) {
-		spaces := make([]rune, col-len(ra.lines[row])+1)
-		for i := range spaces {
-			spaces[i] = ' '
-		}
-		ra.lines[row] = append(ra.lines[row], spaces...)
-	}
-	ra.lines[row][col] = r
-}
-
-func (ra *runeArray2D) SetString(row, col int, s string) {
-	for _, r := range s {
-		ra.Set(row, col, r)
-		col++
-	}
-}
-
-func printExprAtPosition(ra *runeArray2D, n value.Value) {
-	switch v := n.(type) {
-	case *value.List:
-		start, end := v.Pos(), v.End()
-		// special case for quoted values
-		if v.Count() == 2 {
-			if sym, ok := v.Item().(*value.Symbol); ok && v.End() == v.Next().Item().End() {
-				switch sym.Value {
-				case "quote":
-					ra.Set(start.Line-1, start.Column-1, '\'')
-					printExprAtPosition(ra, v.Next().Item())
-				case "quasiquote":
-					ra.Set(start.Line-1, start.Column-1, '`')
-					printExprAtPosition(ra, v.Next().Item())
-				case "unquote":
-					ra.Set(start.Line-1, start.Column-1, '~')
-					printExprAtPosition(ra, v.Next().Item())
-				case "splice-unquote":
-					ra.SetString(start.Line-1, start.Column-1, "~@")
-					printExprAtPosition(ra, v.Next().Item())
-				}
-				return
-			}
-		}
-
-		ra.Set(start.Line-1, start.Column-1, '(')
-		ra.Set(end.Line-1, end.Column-1, ')')
-		ch, cancel := v.Enumerate()
-		defer cancel()
-		for item := range ch {
-			printExprAtPosition(ra, item)
-		}
-	case *value.Vector:
-		start, end := v.Pos(), v.End()
-		ra.Set(start.Line-1, start.Column-1, '[')
-		ra.Set(end.Line-1, end.Column-1, ']')
-		ch, cancel := v.Enumerate()
-		defer cancel()
-		for item := range ch {
-			printExprAtPosition(ra, item)
-		}
-	case *value.Symbol:
-		ra.SetString(v.Pos().Line-1, v.Pos().Column-1, v.String())
-	case *value.Str:
-		ra.SetString(v.Pos().Line-1, v.Pos().Column-1, v.String())
-	case *value.Char:
-		ra.SetString(v.Pos().Line-1, v.Pos().Column-1, v.String())
-	case *value.Bool:
-		ra.SetString(v.Pos().Line-1, v.Pos().Column-1, v.String())
-	case *value.Keyword:
-		ra.SetString(v.Pos().Line-1, v.Pos().Column-1, v.String())
-	case *value.Num:
-		// the exact formatting of the number is not retained, so any test
-		// cases that do anything more interesting than integers may fail.
-		ra.SetString(v.Pos().Line-1, v.Pos().Column-1, v.String())
-	case *value.Long:
-		ra.SetString(v.Pos().Line-1, v.Pos().Column-1, v.String())
-	case *value.Nil:
-		ra.SetString(v.Pos().Line-1, v.Pos().Column-1, v.String())
-	default:
-		panic(fmt.Sprintf("unexpected node type: %T", v))
-	}
 }

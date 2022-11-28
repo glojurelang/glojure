@@ -2,6 +2,7 @@ package value
 
 import (
 	"fmt"
+	"math/big"
 	"strconv"
 )
 
@@ -75,4 +76,35 @@ func (n *Long) Equal(v Value) bool {
 
 func (n *Long) GoValue() interface{} {
 	return n.Value
+}
+
+// BigDec is an arbitrary-precision decimal number. It wraps and has
+// the same semantics as big.Float. big.Float is not used directly
+// because it is mutable, and the core BigDecimal should not be.
+type BigDecimal struct {
+	val big.Float
+}
+
+func NewBigDecimal(n big.Float) *BigDecimal {
+	return &BigDecimal{val: n}
+}
+
+func (n *BigDecimal) String() string {
+	return n.val.String() + "M"
+}
+
+func (n *BigDecimal) Equal(v Value) bool {
+	other, ok := v.(*BigDecimal)
+	if !ok {
+		return false
+	}
+	return n.val.Cmp(&other.val) == 0
+}
+
+func (n *BigDecimal) Pos() Pos {
+	return Pos{}
+}
+
+func (n *BigDecimal) End() Pos {
+	return Pos{}
 }
