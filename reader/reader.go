@@ -627,6 +627,9 @@ func (r *Reader) readKeyword() (interface{}, error) {
 	var sym string
 	for {
 		rn, _, err := r.rs.ReadRune()
+		if errors.Is(err, io.EOF) && sym != "" {
+			break
+		}
 		if err != nil {
 			return nil, r.error("error reading keyword: %w", err)
 		}
