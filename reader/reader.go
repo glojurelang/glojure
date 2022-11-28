@@ -342,6 +342,30 @@ func (r *Reader) readMap() (interface{}, error) {
 	return value.NewMap(keyVals, value.WithSection(r.popSection())), nil
 }
 
+func (r *Reader) readSet() (interface{}, error) {
+	var vals []interface{}
+	for {
+		rune, err := r.next()
+		if err != nil {
+			return nil, err
+		}
+		if isSpace(rune) {
+			continue
+		}
+		if rune == '}' {
+			break
+		}
+
+		r.rs.UnreadRune()
+		el, err := r.readExpr()
+		if err != nil {
+			return nil, err
+		}
+		vals = append(vals, el)
+	}
+	return value.NewSet(vals, value.WithSection(r.popSection())), nil
+}
+
 func (r *Reader) readString() (interface{}, error) {
 	var str string
 	sawSlash := false
@@ -453,6 +477,8 @@ func (r *Reader) readDispatch() (interface{}, error) {
 	switch rn {
 	case ':':
 		return r.readNamespacedMap()
+	case '{':
+		return r.readSet()
 	default:
 		return nil, r.error("invalid dispatch character: %c", rn)
 	}

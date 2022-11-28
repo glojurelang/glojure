@@ -26,14 +26,6 @@ func (m *Map) Count() int {
 	return len(m.keyVals) / 2
 }
 
-// func (v *Vector) Conj(items ...Value) Conjer {
-// 	vec := v.vec
-// 	for _, item := range items {
-// 		vec = vec.Conj(item)
-// 	}
-// 	return &Vector{vec: vec}
-// }
-
 func (m *Map) First() Value {
 	if m.Count() == 0 {
 		return NilValue
@@ -59,6 +51,7 @@ func (m *Map) String() string {
 
 	first := true
 
+	// TODO: factor out common namespace
 	b.WriteString("{")
 	for ; !m.IsEmpty(); m = m.Rest().(*Map) {
 		if !first {
@@ -77,34 +70,6 @@ func (m *Map) String() string {
 }
 
 func (m *Map) Equal(v2 interface{}) bool {
-	// if v == v2 {
-	// 	return true
-	// }
-	// other, ok := v2.(*Map)
-	// if !ok {
-	// 	return false
-	// }
+	// TODO: implement me
 	return false
 }
-
-// func (v *Vector) Apply(env Environment, args []Value) (Value, error) {
-// }
-
-// func (v *Vector) GoValue() interface{} {
-// 	var vals []interface{}
-// 	for i := 0; i < v.Count(); i++ {
-// 		val := v.ValueAt(i)
-// 		if val == nil {
-// 			vals = append(vals, nil)
-// 			continue
-// 		}
-
-// 		if gv, ok := val.(GoValuer); ok {
-// 			vals = append(vals, gv.GoValue())
-// 			continue
-// 		}
-
-// 		vals = append(vals, val)
-// 	}
-// 	return vals
-// }
