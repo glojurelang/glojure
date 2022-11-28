@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"math/rand"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -613,12 +612,10 @@ func (env *environment) evalLet(n *value.List) (value.Value, value.Continuation,
 	var bindingsMap map[string]value.Value
 	var err error
 	switch bindings := items[1].(type) {
-	case *value.List:
-		bindingsMap, err = env.evalListBindings(bindings)
 	case *value.Vector:
 		bindingsMap, err = env.evalVectorBindings(bindings)
 	default:
-		return nil, nil, env.errorf(items[1], "invalid let, bindings must be a list or vector")
+		return nil, nil, env.errorf(n, "invalid let, bindings must be a list or vector")
 	}
 	if err != nil {
 		return nil, nil, err
@@ -643,40 +640,6 @@ func (env *environment) evalLet(n *value.List) (value.Value, value.Continuation,
 	}, nil
 }
 
-func (env *environment) evalListBindings(bindingList *value.List) (map[string]value.Value, error) {
-	bindings := listAsSlice(bindingList)
-
-	// shuffle the bindings to evaluate them in a random order. this
-	// prevents users from relying on the order of evaluation.
-	shuffled := make([]*value.List, len(bindings))
-	for i, j := range rand.Perm(len(bindings)) {
-		item, ok := bindings[i].(*value.List)
-		if !ok || item.Count() != 2 {
-			return nil, env.errorf(bindings[i], "invalid let, bindings must be a list of lists of length 2")
-		}
-		shuffled[j] = item
-	}
-
-	// evaluate the bindings in a random order
-	bindingsMap := make(map[string]value.Value)
-	for _, binding := range shuffled {
-		nameValue := binding.Item()
-		name, ok := nameValue.(*value.Symbol)
-		if !ok {
-			return nil, env.errorf(nameValue, "invalid let, binding name must be a symbol")
-		}
-		if _, ok := bindingsMap[name.Value]; ok {
-			return nil, env.errorf(nameValue, "invalid let, duplicate binding name")
-		}
-		val, err := env.Eval(binding.Next().Item())
-		if err != nil {
-			return nil, err
-		}
-		bindingsMap[name.Value] = val
-	}
-	return bindingsMap, nil
-}
-
 func (env *environment) evalVectorBindings(bindings *value.Vector) (map[string]value.Value, error) {
 	if bindings.Count()%2 != 0 {
 		return nil, env.errorf(bindings, "invalid let, bindings must be a vector of even length")
@@ -688,7 +651,7 @@ func (env *environment) evalVectorBindings(bindings *value.Vector) (map[string]v
 		nameValue := bindings.ValueAt(i)
 		name, ok := nameValue.(*value.Symbol)
 		if !ok {
-			return nil, env.errorf(nameValue, "invalid let, binding name must be a symbol")
+			return nil, env.errorf(bindings, "invalid let, binding name must be a symbol")
 		}
 		if _, ok := bindingsMap[name.Value]; ok {
 			return nil, env.errorf(nameValue, "invalid let, duplicate binding name")
@@ -848,12 +811,16 @@ func (env *environment) evalSet(n *value.List) (value.Value, error) {
 	if err != nil {
 		return nil, err
 	}
-	goVal, ok := expr.(value.GoValuer)
-	if !ok {
-		return nil, env.errorf(value.MustNth(n, 2), "invalid set! expression, expected a go value")
+
+	var goVal interface{}
+
+	if goValuer, ok := expr.(value.GoValuer); ok {
+		goVal = goValuer.GoValue()
+	} else {
+		goVal = expr
 	}
 
-	if err := targetGoVal.SetField(fieldSym.Value, goVal.GoValue()); err != nil {
+	if err := targetGoVal.SetField(fieldSym.Value, goVal); err != nil {
 		return nil, env.errorf(n, "invalid set! expression, %v", err)
 	}
 

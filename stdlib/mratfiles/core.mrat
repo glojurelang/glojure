@@ -77,7 +77,7 @@
      (* (/ (- max min) 2) x)))
 
 (defn even? [n]
-  (let ((half (/ n 2)))
+  (let [half (/ n 2)]
     (= half (floor half))))
 (defn odd? [n]
   (not (even? n)))
@@ -105,23 +105,23 @@
 (defn range
   ([end] (range 0 end))
   ([beg end]
-   (let ((beg (floor beg))
-         (end (floor end)))
-     (let ((range-tail
+   (let [beg (floor beg)
+         end (floor end)]
+     (let [range-tail
             (fn range-tail [suffix beg end]
               (if (>= beg end)
                 suffix
-                (range-tail (conj suffix (- end 1)) beg (- end 1))))))
+                (range-tail (conj suffix (- end 1)) beg (- end 1))))]
        (if (<= beg end)
          (range-tail '() beg end)
          '())))))
 
 (defn repeat [n x]
-  (let ((repeat-tail
+  (let [repeat-tail
          (fn repeat-tail [suffix n x]
            (if (<= n 0)
              suffix
-             (repeat-tail (reduce (fn [acc el] (conj acc el)) suffix x) (- n 1) x)))))
+             (repeat-tail (reduce (fn [acc el] (conj acc el)) suffix x) (- n 1) x)))]
     (reverse (repeat-tail '() n x)))) ;; TODO: implement with sequences, not lists, so we don't have to reverse
 
 (defn nth [coll index]
@@ -137,18 +137,18 @@
 ;;; Functional helpers
 
 (defn reverse [l]
-  (let ((reverse-tail
-         (fn reverse-tail [suffix l]
-           (if (empty? l)
-             suffix
-             (reverse-tail (conj suffix (first l)) (rest l))))))
+  (let [reverse-tail
+        (fn reverse-tail [suffix l]
+          (if (empty? l)
+            suffix
+            (reverse-tail (conj suffix (first l)) (rest l))))]
     (reverse-tail '() l)))
 
 (defn map [func lst]
-  (let ((map-tail (fn map-tail [prefix lst]
+  (let [map-tail (fn map-tail [prefix lst]
                     (if (empty? lst)
                       prefix
-                      (map-tail (conj prefix (func (first lst))) (rest lst))))))
+                      (map-tail (conj prefix (func (first lst))) (rest lst))))]
     (reverse (map-tail '() lst)))) ;; TODO: implement with sequences, not lists, so we don't have to reverse
 
 (defn zip [arrs]
@@ -159,7 +159,7 @@
 
 (def maps
   (fn [func & colls]
-    (let ((map-list (zip colls)))
+    (let [map-list (zip colls)]
       (map (fn [args] (apply func args)) map-list))))
 
 (defn map-idx [func lst]
@@ -194,11 +194,11 @@
 
 (def *mixer
   (fn [& args]
-    (let ((mixerArgs args))
-      (let ((weightSum (reduce + 0
-                               (map-idx (fn [val idx] (if (even? idx) val 0)) mixerArgs))))
-        (sum (map (fn [idx] (let ((weight (nth mixerArgs (* 2 idx)))
-                                  (chan   (nth mixerArgs (+ (* 2 idx) 1))))
+    (let [mixerArgs args]
+      (let [weightSum (reduce + 0
+                              (map-idx (fn [val idx] (if (even? idx) val 0)) mixerArgs))]
+        (sum (map (fn [idx] (let [weight (nth mixerArgs (* 2 idx))
+                                  chan   (nth mixerArgs (+ (* 2 idx) 1))]
                               (* (/ weight weightSum) chan)))
                   (range 0 (/ (length mixerArgs) 2))))))))
 

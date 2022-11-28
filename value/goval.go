@@ -217,6 +217,7 @@ func fromGo(val interface{}) Value {
 	// - strings are converted to strings
 	// - slices are converted to vectors
 	// - anything else is converted to a GoVal
+	// TODO: don't do this... let the user decide what to do with the Go value
 	switch val := val.(type) {
 	case int:
 		return int64(val)

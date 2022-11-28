@@ -1,12 +1,15 @@
 (println
- (let ((x 2) (y 3))
+ (let [x 2
+       y 3]
    (+ x y)))
 
 ;; test nested with the same name
 (println
- (let ((x 2) (y 3))
+ (let [x 2
+       y 3]
    (+ x
       y
-      (let ((x 4) (z x))
+      (let [x 4
+            z (- x 2)]
         (+ x y z)))))
 ;; 2 + 3 + 4 + 3 + 2 = 14

@@ -167,11 +167,11 @@ func lengthBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 	}
 
 	if args[0] == nil {
-		return value.NewNum(0), nil
+		return float64(0), nil
 	}
 
 	if c, ok := args[0].(value.Counter); ok {
-		return value.NewLong(int64(c.Count())), nil
+		return int64(c.Count()), nil
 	}
 
 	enum, ok := args[0].(value.Enumerable)
@@ -186,7 +186,7 @@ func lengthBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 	for range ch {
 		count++
 	}
-	return value.NewLong(int64(count)), nil
+	return int64(count), nil
 }
 
 func conjBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -459,7 +459,7 @@ func powBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	if !ok {
 		return nil, fmt.Errorf("pow expects a number, got %v", args[1])
 	}
-	return value.NewNum(math.Pow(a, b)), nil
+	return float64(math.Pow(a, b)), nil
 }
 
 func floorBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -469,7 +469,7 @@ func floorBuiltin(env value.Environment, args []value.Value) (value.Value, error
 	switch arg := args[0].(type) {
 	case float64:
 		return math.Floor(arg), nil
-	case *value.Long:
+	case int64:
 		return arg, nil
 	default:
 		return nil, fmt.Errorf("floor expects a number, got %v", args[0])
@@ -489,11 +489,11 @@ func mulBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 				floatProduct = float64(intProduct)
 			}
 			floatProduct *= arg
-		case *value.Long:
+		case int64:
 			if isIntMul {
-				intProduct *= arg.Value
+				intProduct *= arg
 			} else {
-				floatProduct *= float64(arg.Value)
+				floatProduct *= float64(arg)
 			}
 		default:
 			return nil, fmt.Errorf("invalid type for *: %v", arg)
@@ -501,9 +501,9 @@ func mulBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	}
 
 	if isIntMul {
-		return value.NewLong(intProduct), nil
+		return int64(intProduct), nil
 	}
-	return value.NewNum(floatProduct), nil
+	return float64(floatProduct), nil
 }
 
 // TODO: match clojure behavior
@@ -520,7 +520,7 @@ func divBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 		return nil, fmt.Errorf("div expects a number as the second argument, got %v", args[1])
 	}
 	// TODO: handle generators
-	return value.NewNum(num / denom), nil
+	return float64(num / denom), nil
 }
 
 func addBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -537,11 +537,11 @@ func addBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 				floatSum = float64(intSum)
 			}
 			floatSum += arg
-		case *value.Long:
+		case int64:
 			if isIntSum {
-				intSum += arg.Value
+				intSum += arg
 			} else {
-				floatSum += float64(arg.Value)
+				floatSum += float64(arg)
 			}
 		default:
 			return nil, fmt.Errorf("invalid type for +: %v", arg)
@@ -549,9 +549,9 @@ func addBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	}
 
 	if isIntSum {
-		return value.NewLong(intSum), nil
+		return int64(intSum), nil
 	}
-	return value.NewNum(floatSum), nil
+	return float64(floatSum), nil
 }
 
 func subBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -567,17 +567,17 @@ func subBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	case float64:
 		isIntDiff = false
 		floatDiff = arg
-	case *value.Long:
-		intDiff = arg.Value
+	case int64:
+		intDiff = arg
 	default:
 		return nil, fmt.Errorf("invalid type for -: %v", arg)
 	}
 
 	if len(args) == 1 {
 		if isIntDiff {
-			return value.NewLong(-intDiff), nil
+			return int64(-intDiff), nil
 		}
-		return value.NewNum(-floatDiff), nil
+		return float64(-floatDiff), nil
 	}
 
 	for _, arg := range args[1:] {
@@ -588,11 +588,11 @@ func subBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 				floatDiff = float64(intDiff)
 			}
 			floatDiff -= arg
-		case *value.Long:
+		case int64:
 			if isIntDiff {
-				intDiff -= arg.Value
+				intDiff -= arg
 			} else {
-				floatDiff -= float64(arg.Value)
+				floatDiff -= float64(arg)
 			}
 		default:
 			return nil, fmt.Errorf("invalid type for -: %v", arg)
@@ -600,9 +600,9 @@ func subBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	}
 
 	if isIntDiff {
-		return value.NewLong(intDiff), nil
+		return int64(intDiff), nil
 	}
-	return value.NewNum(floatDiff), nil
+	return float64(floatDiff), nil
 }
 
 func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -619,21 +619,21 @@ func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 				if prev >= arg {
 					return false, nil
 				}
-			case *value.Long:
-				if prev >= float64(arg.Value) {
+			case int64:
+				if prev >= float64(arg) {
 					return false, nil
 				}
 			default:
 				return nil, fmt.Errorf("invalid type for <: %v", arg)
 			}
-		case *value.Long:
+		case int64:
 			switch arg := arg.(type) {
 			case float64:
-				if float64(prev.Value) >= arg {
+				if float64(prev) >= arg {
 					return false, nil
 				}
-			case *value.Long:
-				if prev.Value >= arg.Value {
+			case int64:
+				if prev >= arg {
 					return false, nil
 				}
 			default:
@@ -662,21 +662,21 @@ func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 				if prev <= arg {
 					return false, nil
 				}
-			case *value.Long:
-				if prev <= float64(arg.Value) {
+			case int64:
+				if prev <= float64(arg) {
 					return false, nil
 				}
 			default:
 				return nil, fmt.Errorf("invalid type for >: %v", arg)
 			}
-		case *value.Long:
+		case int64:
 			switch arg := arg.(type) {
 			case float64:
-				if float64(prev.Value) <= arg {
+				if float64(prev) <= arg {
 					return false, nil
 				}
-			case *value.Long:
-				if prev.Value <= arg.Value {
+			case int64:
+				if prev <= arg {
 					return false, nil
 				}
 			default:
@@ -743,34 +743,7 @@ func printlnBuiltin(env value.Environment, args []value.Value) (value.Value, err
 }
 
 func asInt(v interface{}) (int, bool) {
-	switch v := v.(type) {
-	case int:
-		return v, true
-	case int64:
-		return int(v), true
-	case int32:
-		return int(v), true
-	case int16:
-		return int(v), true
-	case int8:
-		return int(v), true
-	case uint:
-		return int(v), true
-	case uint64:
-		return int(v), true
-	case uint32:
-		return int(v), true
-	case uint16:
-		return int(v), true
-	case uint8:
-		return int(v), true
-	case float64:
-		return int(v), true
-	case float32:
-		return int(v), true
-	default:
-		return 0, false
-	}
+	return value.AsInt(v)
 }
 
 func asDouble(v interface{}) (float64, bool) {

@@ -1,2 +1,2 @@
-;;;ERROR=let01.in:2:8: invalid let, binding name must be a symbol
-(let ((4 2)) true)
+;;;ERROR=let01.in:2:6: invalid let, binding name must be a symbol
+(let [4 2] true)

@@ -9,11 +9,11 @@
   (or (> a b) (= a b)))
 
 (defn range [beg end]
-  (let ((range-tail
+  (let [range-tail
          (fn range-tail [suffix beg end]
            (if (>= beg end)
              suffix
-             (range-tail (conj suffix (- end 1)) beg (- end 1))))))
+             (range-tail (conj suffix (- end 1)) beg (- end 1))))]
     (if (<= beg end)
       (range-tail '() beg end)
       '())))

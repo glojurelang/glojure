@@ -558,7 +558,8 @@ func (r *Reader) readNumber(numStr string) (value.Value, error) {
 			return nil, r.error("invalid number: %s", numStr)
 		}
 		// TODO: long type
-		return value.NewLong(sign*i, value.WithSection(r.popSection())), nil
+		r.popSection()
+		return int64(sign * i), nil
 	case hexRegex.MatchString(numStr):
 		sign := int64(1)
 		if numStr[0] == '-' {
@@ -572,7 +573,8 @@ func (r *Reader) readNumber(numStr string) (value.Value, error) {
 		if err != nil {
 			return nil, r.error("invalid number: %s", numStr)
 		}
-		return value.NewLong(sign*i, value.WithSection(r.popSection())), nil
+		r.popSection()
+		return int64(sign * i), nil
 	}
 
 	// else, it's a float

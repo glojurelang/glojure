@@ -2,47 +2,7 @@ package value
 
 import (
 	"math/big"
-	"strconv"
 )
-
-// NewNum returns a new number value. This function is deprecated. Use
-// floats directly.
-func NewNum(n float64) float64 {
-	return n
-}
-
-// Long is a 64-bit integer.
-type Long struct {
-	Section
-	Value int64
-}
-
-func NewLong(n int64, opts ...Option) *Long {
-	var o options
-	for _, opt := range opts {
-		opt(&o)
-	}
-	return &Long{
-		Section: o.section,
-		Value:   n,
-	}
-}
-
-func (n *Long) String() string {
-	return strconv.FormatInt(n.Value, 10)
-}
-
-func (n *Long) Equal(v interface{}) bool {
-	other, ok := v.(*Long)
-	if !ok {
-		return false
-	}
-	return n.Value == other.Value
-}
-
-func (n *Long) GoValue() interface{} {
-	return n.Value
-}
 
 // BigDec is an arbitrary-precision decimal number. It wraps and has
 // the same semantics as big.Float. big.Float is not used directly
@@ -73,4 +33,35 @@ func (n *BigDecimal) Pos() Pos {
 
 func (n *BigDecimal) End() Pos {
 	return Pos{}
+}
+
+func AsInt(v interface{}) (int, bool) {
+	switch v := v.(type) {
+	case int:
+		return v, true
+	case int64:
+		return int(v), true
+	case int32:
+		return int(v), true
+	case int16:
+		return int(v), true
+	case int8:
+		return int(v), true
+	case uint:
+		return int(v), true
+	case uint64:
+		return int(v), true
+	case uint32:
+		return int(v), true
+	case uint16:
+		return int(v), true
+	case uint8:
+		return int(v), true
+	case float64:
+		return int(v), true
+	case float32:
+		return int(v), true
+	default:
+		return 0, false
+	}
 }

@@ -121,12 +121,11 @@ func (v *Vector) Apply(env Environment, args []Value) (Value, error) {
 		return nil, fmt.Errorf("vector apply expects 1 argument, got %d", len(args))
 	}
 
-	index, ok := args[0].(*Long)
+	i, ok := AsInt(args[0])
 	if !ok {
 		return nil, fmt.Errorf("vector apply takes an int as an argument")
 	}
 
-	i := int(index.Value)
 	if i < 0 || i >= v.Count() {
 		return nil, fmt.Errorf("index out of bounds")
 	}
