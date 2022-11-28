@@ -184,6 +184,11 @@ func coerceGoValue(targetType reflect.Type, val interface{}) (interface{}, error
 	}
 	switch targetType.Kind() {
 	case reflect.Slice:
+		if reflect.TypeOf(val).Kind() == reflect.String {
+			// convert string to []byte
+			val = []byte(val.(string))
+		}
+
 		if reflect.TypeOf(val).Kind() != reflect.Slice {
 			return nil, fmt.Errorf("cannot coerce %s to %s", reflect.TypeOf(val), targetType)
 		}
@@ -244,7 +249,7 @@ func fromGo(val interface{}) Value {
 	case float64:
 		return val
 	case string:
-		return NewStr(val)
+		return val
 	case bool:
 		return val
 	case nil:

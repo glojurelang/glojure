@@ -125,11 +125,11 @@ func loadFileBuiltin(env value.Environment, args []value.Value) (value.Value, er
 	if len(args) != 1 {
 		return nil, fmt.Errorf("load-file expects 1 argument, got %v", len(args))
 	}
-	filename, ok := args[0].(*value.Str)
+	filename, ok := args[0].(string)
 	if !ok {
 		return nil, fmt.Errorf("load-file expects a string, got %v", args[0])
 	}
-	return nil, loadFile(env, filename.Value)
+	return nil, loadFile(env, filename)
 }
 
 func listBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -163,20 +163,22 @@ func charBuiltin(env value.Environment, args []value.Value) (value.Value, error)
 
 func lengthBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 	if len(args) != 1 {
-		return nil, fmt.Errorf("length expects 1 argument, got %v", len(args))
+		return nil, fmt.Errorf("count expects 1 argument, got %v", len(args))
 	}
 
-	if args[0] == nil {
-		return float64(0), nil
+	switch arg := args[0].(type) {
+	case nil:
+		return 0, nil
+	case string:
+		return len(arg), nil
+	case value.Counter:
+		return arg.Count(), nil
 	}
 
-	if c, ok := args[0].(value.Counter); ok {
-		return int64(c.Count()), nil
-	}
-
+	// TODO: kill this interface
 	enum, ok := args[0].(value.Enumerable)
 	if !ok {
-		return nil, fmt.Errorf("length expects an enumerable, got %v", args[0])
+		return nil, fmt.Errorf("count expects an enumerable, got %v", args[0])
 	}
 
 	ch, cancel := enum.Enumerate()
@@ -186,7 +188,7 @@ func lengthBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 	for range ch {
 		count++
 	}
-	return int64(count), nil
+	return count, nil
 }
 
 func conjBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -384,7 +386,7 @@ func isStringBuiltin(env value.Environment, args []value.Value) (value.Value, er
 	if len(args) != 1 {
 		return nil, fmt.Errorf("string? expects 1 argument, got %v", len(args))
 	}
-	_, ok := args[0].(*value.Str)
+	_, ok := args[0].(string)
 	return ok, nil
 }
 
@@ -504,7 +506,7 @@ func mulBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 				floatProduct *= float64(arg)
 			}
 		default:
-			return nil, fmt.Errorf("invalid type for *: %v", arg)
+			return nil, fmt.Errorf("invalid type for *: %v", value.ToString(arg))
 		}
 	}
 
@@ -552,7 +554,7 @@ func addBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 				floatSum += float64(arg)
 			}
 		default:
-			return nil, fmt.Errorf("invalid type for +: %v", arg)
+			return nil, fmt.Errorf("invalid type for +: %v", value.ToString(arg))
 		}
 	}
 
@@ -578,7 +580,7 @@ func subBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	case int64:
 		intDiff = arg
 	default:
-		return nil, fmt.Errorf("invalid type for -: %v", arg)
+		return nil, fmt.Errorf("invalid type for -: %v", value.ToString(arg))
 	}
 
 	if len(args) == 1 {
@@ -603,7 +605,7 @@ func subBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 				floatDiff -= float64(arg)
 			}
 		default:
-			return nil, fmt.Errorf("invalid type for -: %v", arg)
+			return nil, fmt.Errorf("invalid type for -: %v", value.ToString(arg))
 		}
 	}
 
@@ -632,7 +634,7 @@ func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 					return false, nil
 				}
 			default:
-				return nil, fmt.Errorf("invalid type for <: %v", arg)
+				return nil, fmt.Errorf("invalid type for <: %v", value.ToString(arg))
 			}
 		case int64:
 			switch arg := arg.(type) {
@@ -645,10 +647,10 @@ func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 					return false, nil
 				}
 			default:
-				return nil, fmt.Errorf("invalid type for <: %v", arg)
+				return nil, fmt.Errorf("invalid type for <: %v", value.ToString(arg))
 			}
 		default:
-			return nil, fmt.Errorf("invalid type for <: %v", prev)
+			return nil, fmt.Errorf("invalid type for <: %v", value.ToString(prev))
 		}
 		prev = arg
 	}
@@ -675,7 +677,7 @@ func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 					return false, nil
 				}
 			default:
-				return nil, fmt.Errorf("invalid type for >: %v", arg)
+				return nil, fmt.Errorf("invalid type for >: %v", value.ToString(arg))
 			}
 		case int64:
 			switch arg := arg.(type) {
@@ -688,10 +690,10 @@ func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 					return false, nil
 				}
 			default:
-				return nil, fmt.Errorf("invalid type for >: %v", arg)
+				return nil, fmt.Errorf("invalid type for >: %v", value.ToString(arg))
 			}
 		default:
-			return nil, fmt.Errorf("invalid type for >: %v", prev)
+			return nil, fmt.Errorf("invalid type for >: %v", value.ToString(prev))
 		}
 		prev = arg
 	}
@@ -734,8 +736,8 @@ func printlnBuiltin(env value.Environment, args []value.Value) (value.Value, err
 			env.Stdout().Write([]byte("nil"))
 		} else {
 			switch arg := value.ConvertFromGo(arg).(type) {
-			case *value.Str:
-				env.Stdout().Write([]byte(arg.Value))
+			case string:
+				env.Stdout().Write([]byte(arg))
 			case *value.Char:
 				env.Stdout().Write([]byte(string(arg.Value)))
 			default:

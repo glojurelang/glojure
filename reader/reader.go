@@ -395,7 +395,8 @@ func (r *Reader) readString() (interface{}, error) {
 		return nil, r.error("invalid string: %w", err)
 	}
 
-	return value.NewStr(str, value.WithSection(r.popSection())), nil
+	r.popSection()
+	return str, nil
 }
 
 func (r *Reader) readChar() (interface{}, error) {

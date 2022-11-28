@@ -15,7 +15,11 @@ func ToString(v interface{}) string {
 	case nil:
 		return "nil"
 	case string:
-		return v
+		// NB: java does not support \x escape sequences, but go does.  this
+		// results in a difference in the output of the string from Clojure
+		// if such characters make it into the string. We will escape them
+		// but Clojure on the JVM will not.
+		return strconv.Quote(v)
 	case bool:
 		if v {
 			return "true"

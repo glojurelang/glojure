@@ -287,7 +287,7 @@ func (env *environment) evalDef(n *value.List) (value.Value, error) {
 	}
 	valIndex := 2
 	if listLength == 4 {
-		_, ok := value.MustNth(n, 2).(*value.Str)
+		_, ok := value.MustNth(n, 2).(string)
 		if !ok {
 			return nil, env.errorf(n, "too many arguments to def")
 		}
@@ -673,7 +673,7 @@ func (env *environment) evalDefMacro(n *value.List) (value.Value, error) {
 	// the docstring or metadata.
 	fnList := n
 	if n.Count() > 3 {
-		_, ok := value.MustNth(n, 2).(*value.Str)
+		_, ok := value.MustNth(n, 2).(string)
 		if ok {
 			fnList = n.Next().Next().Next().Conj(value.MustNth(n, 1), value.MustNth(n, 0)).(*value.List)
 			// TODO: store the docstring somewhere
