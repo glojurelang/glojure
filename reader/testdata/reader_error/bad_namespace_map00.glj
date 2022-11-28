@@ -1,0 +1,2 @@
+;;;ERROR: <unknown-file>:2:9: namespaced map must specify a valid namespace: :foo/bar
+#:foo/bar{:baz 1}

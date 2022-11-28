@@ -1,4 +1,4 @@
-;;;ERROR: <unknown-file>:6:3: # reader macro not implemented
+;;;ERROR: <unknown-file>:6:4: invalid dispatch character: w
 (
  1
  (2)

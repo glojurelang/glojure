@@ -117,9 +117,10 @@ func TestReadErrors(t *testing.T) {
 			t.Parallel()
 
 			r := New(strings.NewReader(tc.input))
-			_, err := r.ReadAll()
+			res, err := r.ReadAll()
 			if err == nil {
-				t.Fatal("expected error, got nil")
+				t.Errorf("expected error, got nil")
+				t.Fatalf("output:\n%s", res)
 			}
 			if err.Error() != tc.outputErr {
 				t.Errorf("error mismatch:\nwant:\n%s\nhave:\n%s\n", tc.outputErr, err.Error())

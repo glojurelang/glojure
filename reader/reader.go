@@ -163,9 +163,6 @@ func (r *Reader) ReadAll() ([]value.Value, error) {
 		}
 		nodes = append(nodes, node)
 	}
-	if len(nodes) == 0 {
-		return nil, fmt.Errorf("no expressions found in input")
-	}
 	return nodes, nil
 }
 
@@ -266,7 +263,7 @@ func (r *Reader) readExpr() (value.Value, error) {
 	case '@':
 		return r.readDeref()
 	case '#':
-		return nil, r.error("# reader macro not implemented")
+		return r.readDispatch()
 	default:
 		r.rs.UnreadRune()
 		return r.readSymbol()
@@ -440,6 +437,70 @@ func (r *Reader) readUnquote() (value.Value, error) {
 	return r.readQuoteType("clojure.core/unquote")
 }
 
+func (r *Reader) readDispatch() (value.Value, error) {
+	rn, _, err := r.rs.ReadRune()
+	if err != nil {
+		return nil, r.error("error reading input: %w", err)
+	}
+
+	r.pushSection()
+	switch rn {
+	case ':':
+		return r.readNamespacedMap()
+	default:
+		return nil, r.error("invalid dispatch character: %c", rn)
+	}
+}
+
+func (r *Reader) readNamespacedMap() (value.Value, error) {
+	nsKWVal, err := r.readKeyword()
+	if err != nil {
+		return nil, err
+	}
+
+	nsKW := nsKWVal.(*value.Keyword)
+	if strings.Contains(nsKW.Value, "/") {
+		return nil, r.error("namespaced map must specify a valid namespace: %s", nsKW)
+	}
+
+	rn, err := r.next()
+	if err != nil {
+		return nil, r.error("error reading input: %w", err)
+	}
+
+	if rn != '{' {
+		fmt.Printf("rn: %c\n", rn)
+		return nil, r.error("Namespaced map must specify a map")
+	}
+
+	r.pushSection()
+	mapVal, err := r.readMap()
+	if err != nil {
+		return nil, r.error("error reading namespaced map: %w", err)
+	}
+
+	mp := mapVal.(value.Sequence)
+
+	newKeyVals := []value.Value{}
+	for !mp.IsEmpty() {
+		kv := mp.First()
+		mp = mp.Rest()
+
+		key := kv.(*value.Vector).ValueAt(0)
+		val := kv.(*value.Vector).ValueAt(1)
+
+		keyKW, ok := key.(*value.Keyword)
+		if !ok || keyKW.Namespace() != "" {
+			newKeyVals = append(newKeyVals, key, val)
+			continue
+		}
+		newKey := value.NewKeyword(nsKW.Value+"/"+keyKW.Name(), value.WithSection(keyKW.Section))
+		newKeyVals = append(newKeyVals, newKey, val)
+	}
+
+	return value.NewMap(newKeyVals, value.WithSection(r.popSection())), nil
+}
+
 var (
 	numPrefixRegex = regexp.MustCompile(`^[-+]?[0-9]+`)
 	intRegex       = regexp.MustCompile(`^[-+]?\d(\d|[a-fA-F])*$`)
@@ -568,7 +629,7 @@ func (r *Reader) readKeyword() (value.Value, error) {
 		if err != nil {
 			return nil, r.error("error reading keyword: %w", err)
 		}
-		if isSpace(rn) || rn == ')' || rn == ']' || rn == '}' {
+		if isSpace(rn) || isSyntaxRune(rn) {
 			r.rs.UnreadRune()
 			break
 		}

@@ -48,6 +48,7 @@ func Start(opts ...Option) {
 			break
 		}
 		expr += line + "\n"
+
 		rdr := reader.New(strings.NewReader(expr), reader.WithFilename("repl"))
 		vals, err := rdr.ReadAll()
 		if err != nil {
@@ -55,6 +56,7 @@ func Start(opts ...Option) {
 				rl.SetPrompt("... ")
 				continue
 			}
+			fmt.Fprintln(o.stdout, err)
 		}
 		expr = ""
 		rl.SetPrompt(prompt)
