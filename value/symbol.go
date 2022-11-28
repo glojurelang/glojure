@@ -61,6 +61,10 @@ func (s *Symbol) IsValidFormat() bool {
 		// empty namespace
 		return false
 	}
+	if strings.HasSuffix(name, ":") {
+		// name ends with a colon (match clojure)
+		return false
+	}
 
 	return true
 }
