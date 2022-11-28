@@ -366,10 +366,18 @@ func notBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 }
 
 func eqBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
-	if len(args) != 2 {
-		return nil, fmt.Errorf("eq? expects 2 arguments, got %v", len(args))
+	if len(args) == 0 {
+		return nil, fmt.Errorf("Wrong number of arguments (%d) to =", len(args))
 	}
-	return value.Equal(args[0], args[1]), nil
+	if len(args) == 1 {
+		return true, nil
+	}
+	for i := 1; i < len(args); i++ {
+		if !value.Equal(args[0], args[1]) {
+			return false, nil
+		}
+	}
+	return true, nil
 }
 
 func isStringBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
