@@ -4,11 +4,10 @@ import (
 	"context"
 )
 
-// Value is the interface that all values in the language implement.
-type Value interface{}
+type Value = interface{}
 
 type Sequence interface {
-	First() Value
+	First() interface{}
 	Rest() Sequence
 	IsEmpty() bool
 }
@@ -18,24 +17,24 @@ type Sequence interface {
 type Enumerable interface {
 	// Enumerate returns a channel that will yield all of the values
 	// in the compound value.
-	Enumerate() (values <-chan Value, cancel func())
+	Enumerate() (values <-chan interface{}, cancel func())
 }
 
 // EnumerableFunc is a function that implements the Enumerable
 // interface.
-type EnumerableFunc func() (<-chan Value, func())
+type EnumerableFunc func() (<-chan interface{}, func())
 
-func (f EnumerableFunc) Enumerate() (<-chan Value, func()) {
+func (f EnumerableFunc) Enumerate() (<-chan interface{}, func()) {
 	return f()
 }
 
 // EnumerateAll returns all values in the sequence. If the sequence is
 // infinite, this will never return unless the context is cancelled.
-func EnumerateAll(ctx context.Context, e Enumerable) ([]Value, error) {
+func EnumerateAll(ctx context.Context, e Enumerable) ([]interface{}, error) {
 	ch, cancel := e.Enumerate()
 	defer cancel()
 
-	var values []Value
+	var values []interface{}
 	for {
 		select {
 		case v, ok := <-ch:
@@ -51,8 +50,7 @@ func EnumerateAll(ctx context.Context, e Enumerable) ([]Value, error) {
 
 // Conjer is an interface for values that can be conjed onto.
 type Conjer interface {
-	Value
-	Conj(...Value) Conjer
+	Conj(...interface{}) Conjer
 }
 
 // Counter is an interface for compound values whose elements can be
@@ -64,12 +62,12 @@ type Counter interface {
 // Nther is an interface for compound values whose elements can be
 // accessed by index.
 type Nther interface {
-	Nth(int) (v Value, ok bool)
+	Nth(int) (v interface{}, ok bool)
 }
 
 // MustNth returns the nth element of the vector. It panics if the
 // index is out of range.
-func MustNth(nth Nther, i int) Value {
+func MustNth(nth Nther, i int) interface{} {
 	v, ok := nth.Nth(i)
 	if !ok {
 		panic("index out of range")

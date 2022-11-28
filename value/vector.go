@@ -13,7 +13,7 @@ type Vector struct {
 	vec vector.Vector
 }
 
-func NewVector(values []Value, opts ...Option) *Vector {
+func NewVector(values []interface{}, opts ...Option) *Vector {
 	var o options
 	for _, opt := range opts {
 		opt(&o)
@@ -35,7 +35,7 @@ func (v *Vector) Count() int {
 	return v.vec.Len()
 }
 
-func (v *Vector) Conj(items ...Value) Conjer {
+func (v *Vector) Conj(items ...interface{}) Conjer {
 	vec := v.vec
 	for _, item := range items {
 		vec = vec.Conj(item)
@@ -43,7 +43,7 @@ func (v *Vector) Conj(items ...Value) Conjer {
 	return &Vector{vec: vec}
 }
 
-func (v *Vector) ValueAt(i int) Value {
+func (v *Vector) ValueAt(i int) interface{} {
 	val, ok := v.vec.Index(i)
 	if !ok {
 		panic("index out of range")
@@ -51,10 +51,10 @@ func (v *Vector) ValueAt(i int) Value {
 	if val == nil {
 		return nil
 	}
-	return val.(Value)
+	return val
 }
 
-func (v *Vector) Nth(i int) (val Value, ok bool) {
+func (v *Vector) Nth(i int) (val interface{}, ok bool) {
 	if i < 0 || i >= v.Count() {
 		return nil, false
 	}
@@ -65,15 +65,15 @@ func (v *Vector) SubVector(start, end int) *Vector {
 	return &Vector{vec: v.vec.SubVector(start, end)}
 }
 
-func (v *Vector) Enumerate() (<-chan Value, func()) {
+func (v *Vector) Enumerate() (<-chan interface{}, func()) {
 	rest := v.vec
-	return enumerateFunc(func() (Value, bool) {
+	return enumerateFunc(func() (interface{}, bool) {
 		if rest.Len() == 0 {
 			return nil, false
 		}
 		val, _ := rest.Index(0)
 		rest = rest.SubVector(1, rest.Len())
-		return val.(Value), true
+		return val.(interface{}), true
 	})
 }
 
@@ -116,7 +116,7 @@ func (v *Vector) Equal(v2 interface{}) bool {
 	return true
 }
 
-func (v *Vector) Apply(env Environment, args []Value) (Value, error) {
+func (v *Vector) Apply(env Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("vector apply expects 1 argument, got %d", len(args))
 	}

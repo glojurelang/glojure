@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"math/big"
 	"regexp"
 	"strconv"
 	"strings"
@@ -147,8 +146,8 @@ func New(r io.RuneScanner, opts ...Option) *Reader {
 // or io.EOF is reached. A final io.EOF will not be returned if the
 // input ends with a valid expression or if it contains no expressions
 // at all.
-func (r *Reader) ReadAll() ([]value.Value, error) {
-	var nodes []value.Value
+func (r *Reader) ReadAll() ([]interface{}, error) {
+	var nodes []interface{}
 	for {
 		_, err := r.next()
 		if errors.Is(err, io.EOF) {
@@ -167,7 +166,7 @@ func (r *Reader) ReadAll() ([]value.Value, error) {
 	return nodes, nil
 }
 
-func (r *Reader) ReadOne() (value.Value, error) {
+func (r *Reader) ReadOne() (interface{}, error) {
 	_, err := r.next()
 	if err != nil {
 		return nil, err
@@ -227,7 +226,7 @@ func (r *Reader) next() (rune, error) {
 	}
 }
 
-func (r *Reader) readExpr() (value.Value, error) {
+func (r *Reader) readExpr() (interface{}, error) {
 	rune, err := r.next()
 	if err != nil {
 		return nil, err
@@ -271,8 +270,8 @@ func (r *Reader) readExpr() (value.Value, error) {
 	}
 }
 
-func (r *Reader) readList() (value.Value, error) {
-	var nodes []value.Value
+func (r *Reader) readList() (interface{}, error) {
+	var nodes []interface{}
 	for {
 		rune, err := r.next()
 		if err != nil {
@@ -295,8 +294,8 @@ func (r *Reader) readList() (value.Value, error) {
 	return value.NewList(nodes, value.WithSection(r.popSection())), nil
 }
 
-func (r *Reader) readVector() (value.Value, error) {
-	var nodes []value.Value
+func (r *Reader) readVector() (interface{}, error) {
+	var nodes []interface{}
 	for {
 		rune, err := r.next()
 		if err != nil {
@@ -319,8 +318,8 @@ func (r *Reader) readVector() (value.Value, error) {
 	return value.NewVector(nodes, value.WithSection(r.popSection())), nil
 }
 
-func (r *Reader) readMap() (value.Value, error) {
-	var keyVals []value.Value
+func (r *Reader) readMap() (interface{}, error) {
+	var keyVals []interface{}
 	for {
 		rune, err := r.next()
 		if err != nil {
@@ -343,7 +342,7 @@ func (r *Reader) readMap() (value.Value, error) {
 	return value.NewMap(keyVals, value.WithSection(r.popSection())), nil
 }
 
-func (r *Reader) readString() (value.Value, error) {
+func (r *Reader) readString() (interface{}, error) {
 	var str string
 	sawSlash := false
 	for {
@@ -375,7 +374,7 @@ func (r *Reader) readString() (value.Value, error) {
 	return value.NewStr(str, value.WithSection(r.popSection())), nil
 }
 
-func (r *Reader) readChar() (value.Value, error) {
+func (r *Reader) readChar() (interface{}, error) {
 	var char string
 	for {
 		rn, _, err := r.rs.ReadRune()
@@ -401,7 +400,7 @@ func (r *Reader) readChar() (value.Value, error) {
 	return value.NewChar(rn, value.WithSection(r.popSection())), nil
 }
 
-func (r *Reader) readQuoteType(form string) (value.Value, error) {
+func (r *Reader) readQuoteType(form string) (interface{}, error) {
 	node, err := r.readExpr()
 	if err != nil {
 		return nil, err
@@ -410,28 +409,28 @@ func (r *Reader) readQuoteType(form string) (value.Value, error) {
 
 	symbolEndPos := section.StartPos
 	symbolEndPos.Column += len(form)
-	items := []value.Value{
+	items := []interface{}{
 		value.NewSymbol(form, value.WithSection(value.Section{StartPos: section.StartPos, EndPos: symbolEndPos})),
 		node,
 	}
 	return value.NewList(items, value.WithSection(section)), nil
 }
 
-func (r *Reader) readQuote() (value.Value, error) {
+func (r *Reader) readQuote() (interface{}, error) {
 	return r.readQuoteType("quote")
 }
 
-func (r *Reader) readSyntaxQuote() (value.Value, error) {
+func (r *Reader) readSyntaxQuote() (interface{}, error) {
 	return r.readQuoteType("quasiquote")
 }
 
-func (r *Reader) readDeref() (value.Value, error) {
+func (r *Reader) readDeref() (interface{}, error) {
 	// TODO: look up 'deref' with the symbol resolver
 	// it should resolve to glojure.core/deref in the go case
 	return r.readQuoteType("clojure.core/deref")
 }
 
-func (r *Reader) readUnquote() (value.Value, error) {
+func (r *Reader) readUnquote() (interface{}, error) {
 	rn, _, err := r.rs.ReadRune()
 	if err != nil {
 		return nil, r.error("error reading input: %w", err)
@@ -444,7 +443,7 @@ func (r *Reader) readUnquote() (value.Value, error) {
 	return r.readQuoteType("clojure.core/unquote")
 }
 
-func (r *Reader) readDispatch() (value.Value, error) {
+func (r *Reader) readDispatch() (interface{}, error) {
 	rn, _, err := r.rs.ReadRune()
 	if err != nil {
 		return nil, r.error("error reading input: %w", err)
@@ -459,7 +458,7 @@ func (r *Reader) readDispatch() (value.Value, error) {
 	}
 }
 
-func (r *Reader) readNamespacedMap() (value.Value, error) {
+func (r *Reader) readNamespacedMap() (interface{}, error) {
 	nsKWVal, err := r.readKeyword()
 	if err != nil {
 		return nil, err
@@ -488,7 +487,7 @@ func (r *Reader) readNamespacedMap() (value.Value, error) {
 
 	mp := mapVal.(value.Sequence)
 
-	newKeyVals := []value.Value{}
+	newKeyVals := []interface{}{}
 	for !mp.IsEmpty() {
 		kv := mp.First()
 		mp = mp.Rest()
@@ -510,8 +509,8 @@ func (r *Reader) readNamespacedMap() (value.Value, error) {
 
 var (
 	numPrefixRegex = regexp.MustCompile(`^[-+]?[0-9]+`)
-	intRegex       = regexp.MustCompile(`^[-+]?\d(\d|[a-fA-F])*$`)
-	hexRegex       = regexp.MustCompile(`^[-+]?0[xX]([a-fA-F]|\d)*$`)
+	intRegex       = regexp.MustCompile(`^[-+]?\d(\d|[a-fA-F])*N?$`)
+	hexRegex       = regexp.MustCompile(`^[-+]?0[xX]([a-fA-F]|\d)*N?$`)
 )
 
 func isValidNumberCharacter(rn rune) bool {
@@ -523,7 +522,7 @@ func isValidNumberCharacter(rn rune) bool {
 	return rn != '#' && rn != '%' && rn != '\''
 }
 
-func (r *Reader) readNumber(numStr string) (value.Value, error) {
+func (r *Reader) readNumber(numStr string) (interface{}, error) {
 	for {
 		rn, _, err := r.rs.ReadRune()
 		if errors.Is(err, io.EOF) && numStr != "" {
@@ -539,52 +538,35 @@ func (r *Reader) readNumber(numStr string) (value.Value, error) {
 		numStr += string(rn)
 	}
 
-	switch {
-	case intRegex.MatchString(numStr):
-		sign := int64(1)
-		base := 10
-		if numStr[0] == '-' {
-			sign = -1
-			numStr = numStr[1:]
-		} else if numStr[0] == '+' {
-			numStr = numStr[1:]
-		}
-		if strings.HasPrefix(numStr, "0") {
-			base = 8
+	if intRegex.MatchString(numStr) || hexRegex.MatchString(numStr) {
+		if strings.HasSuffix(numStr, "N") {
+			bi, err := value.NewBigInt(numStr[:len(numStr)-1])
+			if err != nil {
+				return nil, r.error("invalid big int: %w", err)
+			}
+
+			r.popSection()
+			return bi, nil
 		}
 
-		i, err := strconv.ParseInt(numStr, base, 64)
+		intVal, err := strconv.ParseInt(numStr, 0, 64)
 		if err != nil {
 			return nil, r.error("invalid number: %s", numStr)
 		}
-		// TODO: long type
-		r.popSection()
-		return int64(sign * i), nil
-	case hexRegex.MatchString(numStr):
-		sign := int64(1)
-		if numStr[0] == '-' {
-			sign = -1
-			numStr = numStr[1:]
-		} else if numStr[0] == '+' {
-			numStr = numStr[1:]
-		}
 
-		i, err := strconv.ParseInt(numStr[2:], 16, 64)
-		if err != nil {
-			return nil, r.error("invalid number: %s", numStr)
-		}
 		r.popSection()
-		return int64(sign * i), nil
+		return int64(intVal), nil
 	}
 
 	// else, it's a float
 	// if the last character is M, it's a big decimal
 	if strings.HasSuffix(numStr, "M") {
-		bd, ok := new(big.Float).SetString(numStr[:len(numStr)-1])
-		if !ok {
-			return nil, r.error("invalid big decimal: %s", numStr)
+		bd, err := value.NewBigDecimal(numStr[:len(numStr)-1])
+		if err != nil {
+			return nil, r.error("invalid big decimal: %w", err)
 		}
-		return value.NewBigDecimal(*bd), nil
+		r.popSection()
+		return bd, nil
 	}
 
 	num, err := strconv.ParseFloat(numStr, 64)
@@ -596,7 +578,7 @@ func (r *Reader) readNumber(numStr string) (value.Value, error) {
 	return num, nil
 }
 
-func (r *Reader) readSymbol() (value.Value, error) {
+func (r *Reader) readSymbol() (interface{}, error) {
 	// TODO: a cleaner way to do this. adding some hacks while trying to
 	// match clojure's reader's behavior.
 
@@ -641,7 +623,7 @@ func (r *Reader) readSymbol() (value.Value, error) {
 	return symVal, nil
 }
 
-func (r *Reader) readKeyword() (value.Value, error) {
+func (r *Reader) readKeyword() (interface{}, error) {
 	var sym string
 	for {
 		rn, _, err := r.rs.ReadRune()

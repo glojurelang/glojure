@@ -8,13 +8,13 @@ type List struct {
 
 	// the empty list is represented by a nil item and a nil next. all
 	// other lists have a non-nil item and a non-nil next.
-	item Value
+	item interface{}
 	next *List
 }
 
 var emptyList = &List{}
 
-func NewList(values []Value, opts ...Option) *List {
+func NewList(values []interface{}, opts ...Option) *List {
 	var o options
 	for _, opt := range opts {
 		opt(&o)
@@ -31,7 +31,7 @@ func NewList(values []Value, opts ...Option) *List {
 	return list
 }
 
-func ConsList(item Value, next *List) *List {
+func ConsList(item interface{}, next *List) *List {
 	if next == nil {
 		next = emptyList
 	}
@@ -42,7 +42,7 @@ func ConsList(item Value, next *List) *List {
 }
 
 // Item returns the data from this list node. AKA car.
-func (l *List) Item() Value {
+func (l *List) Item() interface{} {
 	if l.IsEmpty() {
 		panic("cannot get item of empty list")
 	}
@@ -71,7 +71,7 @@ func (l *List) Count() int {
 	return count
 }
 
-func (l *List) Conj(items ...Value) Conjer {
+func (l *List) Conj(items ...interface{}) Conjer {
 	if len(items) == 0 {
 		return l
 	}
@@ -82,7 +82,7 @@ func (l *List) Conj(items ...Value) Conjer {
 	return l
 }
 
-func (l *List) Nth(i int) (v Value, ok bool) {
+func (l *List) Nth(i int) (v interface{}, ok bool) {
 	if i < 0 {
 		return nil, false
 	}
@@ -96,8 +96,8 @@ func (l *List) Nth(i int) (v Value, ok bool) {
 	return nil, false
 }
 
-func (l *List) Enumerate() (<-chan Value, func()) {
-	return enumerateFunc(func() (v Value, ok bool) {
+func (l *List) Enumerate() (<-chan interface{}, func()) {
+	return enumerateFunc(func() (v interface{}, ok bool) {
 		if l.IsEmpty() {
 			return nil, false
 		}
@@ -107,8 +107,8 @@ func (l *List) Enumerate() (<-chan Value, func()) {
 	})
 }
 
-func enumerateFunc(next func() (v Value, ok bool)) (<-chan Value, func()) {
-	ch := make(chan Value)
+func enumerateFunc(next func() (v interface{}, ok bool)) (<-chan interface{}, func()) {
+	ch := make(chan interface{})
 
 	done := make(chan struct{})
 	cancel := func() {

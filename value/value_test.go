@@ -50,7 +50,7 @@ func TestBind(t *testing.T) {
 		},
 	}
 
-	read := func(t *testing.T, s string) value.Value {
+	read := func(t *testing.T, s string) interface{} {
 		val, err := reader.New(strings.NewReader(s)).ReadAll()
 		if err != nil {
 			t.Fatal(err)
