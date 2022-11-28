@@ -631,11 +631,11 @@ func (r *Reader) readSymbol() (interface{}, error) {
 		return nil, r.error("error reading symbol")
 	}
 
-	// check if symbol is a keyword
 	section := r.popSection()
+	// check if symbol is a keyword
 	switch sym {
 	case "nil":
-		return value.NewNil(value.WithSection(section)), nil
+		return nil, nil
 	case "true":
 		return true, nil
 	case "false":

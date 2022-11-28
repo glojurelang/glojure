@@ -5,7 +5,7 @@ func IsTruthy(v interface{}) bool {
 	switch v := v.(type) {
 	case bool:
 		return v
-	case *Nil, nil:
+	case nil:
 		return false
 	default:
 		return true

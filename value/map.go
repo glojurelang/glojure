@@ -28,7 +28,7 @@ func (m *Map) Count() int {
 
 func (m *Map) First() Value {
 	if m.Count() == 0 {
-		return NilValue
+		return nil
 	}
 
 	return NewVector([]Value{m.keyVals[0], m.keyVals[1]})
@@ -36,7 +36,7 @@ func (m *Map) First() Value {
 
 func (m *Map) Rest() Sequence {
 	if m.Count() == 0 {
-		return NilValue
+		return emptySequence{}
 	}
 
 	return NewMap(m.keyVals[2:])

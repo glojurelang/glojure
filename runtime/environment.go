@@ -300,7 +300,7 @@ func (env *environment) evalDef(n *value.List) (value.Value, error) {
 		return nil, err
 	}
 	env.DefVar(v.Value, val)
-	return value.NilValue, nil
+	return nil, nil
 }
 
 func (env *environment) evalFn(n *value.List) (value.Value, error) {
@@ -754,14 +754,13 @@ func (env *environment) evalNew(n *value.List) (value.Value, error) {
 		if !field.CanSet() {
 			return nil, env.errorf(cur.Item(), "invalid new expression, field is not settable (%v)", fieldName.Value)
 		}
-		goVal, ok := fieldValue.(value.GoValuer)
-		if !ok {
-			return nil, env.errorf(cur.Next().Item(), "invalid new expression, field value must be convertible to a go value")
+		goVal := fieldValue
+		if fieldValue, ok := fieldValue.(value.GoValuer); ok {
+			goVal = fieldValue.GoValue()
 		}
 
-		goValIfc := goVal.GoValue()
-		reflectVal := reflect.ValueOf(goValIfc)
-		if goValIfc == nil && isNilableKind(field.Kind()) {
+		reflectVal := reflect.ValueOf(goVal)
+		if goVal == nil && isNilableKind(field.Kind()) {
 			// reflect.Value.Set panics if the value is an untyped nil
 			reflectVal = reflect.Zero(field.Type())
 		}

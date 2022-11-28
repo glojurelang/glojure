@@ -262,12 +262,12 @@ func firstBuiltin(env value.Environment, args []value.Value) (out value.Value, e
 	switch c := args[0].(type) {
 	case *value.List:
 		if c.IsEmpty() {
-			return value.NilValue, nil
+			return nil, nil
 		}
 		return c.Item(), nil
 	case *value.Vector:
 		if c.Count() == 0 {
-			return value.NilValue, nil
+			return nil, nil
 		}
 		return c.ValueAt(0), nil
 	}
@@ -703,7 +703,7 @@ func applyBuiltin(env value.Environment, args []value.Value) (value.Value, error
 
 	var values []value.Value
 
-	if !value.NilValue.Equal(args[1]) {
+	if !value.Equal(nil, args[1]) {
 		enum, ok := args[1].(value.Enumerable)
 		if !ok {
 			return nil, fmt.Errorf("apply expects an enumerable as the second argument, got %v", args[1])
@@ -739,7 +739,7 @@ func printlnBuiltin(env value.Environment, args []value.Value) (value.Value, err
 		}
 	}
 	env.Stdout().Write([]byte("\n"))
-	return value.NilValue, nil
+	return nil, nil
 }
 
 func asInt(v interface{}) (int, bool) {

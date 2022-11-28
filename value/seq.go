@@ -2,6 +2,8 @@ package value
 
 import "strings"
 
+// TODO: completely rewrite this
+
 // Seq is a lazy sequence of values.
 type Seq struct {
 	Section

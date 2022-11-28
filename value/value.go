@@ -12,6 +12,20 @@ type Sequence interface {
 	IsEmpty() bool
 }
 
+type emptySequence struct{}
+
+func (es emptySequence) First() interface{} {
+	return nil
+}
+
+func (es emptySequence) Rest() Sequence {
+	return es
+}
+
+func (es emptySequence) IsEmpty() bool {
+	return true
+}
+
 // Enumerable is an interface for compound values that support
 // enumeration.
 type Enumerable interface {

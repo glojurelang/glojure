@@ -153,11 +153,7 @@ NoQuote:
 	b.WriteString("(")
 	for cur := l; !cur.IsEmpty(); cur = cur.next {
 		v := cur.item
-		if v == nil {
-			b.WriteString("()")
-		} else {
-			b.WriteString(ToString(v))
-		}
+		b.WriteString(ToString(v))
 		if !cur.next.IsEmpty() {
 			b.WriteString(" ")
 		}

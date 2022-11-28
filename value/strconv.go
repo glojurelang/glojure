@@ -12,6 +12,8 @@ func ToString(v interface{}) string {
 	}
 
 	switch v := v.(type) {
+	case nil:
+		return "nil"
 	case string:
 		return v
 	case bool:

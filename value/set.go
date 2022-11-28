@@ -28,14 +28,14 @@ func (s *Set) Count() int {
 
 func (s *Set) First() interface{} {
 	if s.Count() == 0 {
-		return NilValue
+		return nil
 	}
 	return s.vals[0]
 }
 
 func (s *Set) Rest() Sequence {
 	if s.Count() == 0 {
-		return NilValue
+		return emptySequence{}
 	}
 
 	return NewSet(s.vals[1:])

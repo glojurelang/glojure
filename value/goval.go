@@ -134,7 +134,7 @@ func (gv *GoVal) Apply(env Environment, args []Value) (Value, error) {
 		case Value:
 			res[i] = resVal
 		case nil:
-			res[i] = NilValue
+			res[i] = nil
 		case bool:
 			res[i] = resVal
 		default:
@@ -145,7 +145,7 @@ func (gv *GoVal) Apply(env Environment, args []Value) (Value, error) {
 		}
 	}
 	if len(res) == 0 {
-		return NilValue, nil
+		return nil, nil
 	}
 	if len(res) == 1 {
 		return res[0], nil
@@ -248,7 +248,7 @@ func fromGo(val interface{}) Value {
 	case bool:
 		return val
 	case nil:
-		return NilValue
+		return nil
 	}
 
 	// TODO: support all collection types
@@ -283,7 +283,7 @@ func reflectFuncFromApplyer(env Environment, applyer Applyer) func(args []reflec
 		if err != nil {
 			panic(err)
 		}
-		if res == nil || Equal(res, NilValue) {
+		if res == nil || Equal(res, nil) {
 			return nil
 		}
 
