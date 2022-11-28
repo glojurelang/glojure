@@ -24,8 +24,8 @@ func ToString(v interface{}) string {
 			return fmt.Sprintf("%d.0", int64(v))
 		}
 		return strconv.FormatFloat(v, 'f', -1, 64)
-	case int64:
-		return strconv.FormatInt(v, 10)
+	case uint64, uint32, uint16, uint8, uint, int64, int32, int16, int8, int:
+		return fmt.Sprintf("%d", v)
 	}
 
 	return fmt.Sprintf("%T", v)

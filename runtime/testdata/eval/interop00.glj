@@ -1,36 +1,36 @@
-(print (go/fmt.Sprintf "Hello, %s!" "world"))
-(print (go/fmt.Sprintf "Hello, %s!" ["world"]))
-(print (go/fmt.Sprintf "Hello, %s! This should say \"nil\": %v" "world" "nil"))
-(print (go/fmt.Sprintf
+(print (fmt.Sprintf "Hello, %s!" "world"))
+(print (fmt.Sprintf "Hello, %s!" ["world"]))
+(print (fmt.Sprintf "Hello, %s! This should say \"nil\": %v" "world" "nil"))
+(print (fmt.Sprintf
         "A bunch of types: %v %v %v %v"
         42 '(42 [1 2 3]) [42] "foobar"))
 
-(print (go/strings.HasPrefix "foobar" "foo"))
-(print (go/strings.HasPrefix "what" "no"))
+(print (strings.HasPrefix "foobar" "foo"))
+(print (strings.HasPrefix "what" "no"))
 
-(let [s (go/strings.Split "foo,bar,baz" ",")]
-  (print (go/strings.Join s ", ")))
+(let [s (strings.Split "foo,bar,baz" ",")]
+  (print (strings.Join s ", ")))
 
 ;; dot notation
 
 ;;; Method call forms
-(let [replacer (go/strings.NewReplacer "foo" "bar" "baz" "quux")]
+(let [replacer (strings.NewReplacer "foo" "bar" "baz" "quux")]
   ;; (. instance-expr (method-symbol args*))
   (print (. replacer (Replace "foo baz")))
   ;; (. instance-expr method-symbol args*)
   (print (. replacer Replace "foo baz")))
 
 ;;; new and Field access forms
-(let [http-server (new go/net/http.Server)]
+(let [http-server (new net/http.Server)]
   ;; (. instance-expr member-symbol)
   (print (count (. http-server Addr))))
 
 ;;; new with keyword args
-(let [http-server (new go/net/http.Server :Addr "localhost:8080" :Handler nil)]
+(let [http-server (new net/http.Server :Addr "localhost:8080" :Handler nil)]
   (print (. http-server Addr)))
 
 ;;; set struct fields
-(let [http-server (new go/net/http.Server)]
+(let [http-server (new net/http.Server)]
   (set! (. http-server Addr) ":8080")
   (print (. http-server Addr)))
 

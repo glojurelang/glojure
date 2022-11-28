@@ -11,6 +11,7 @@ import (
 
 	"github.com/glojurelang/glojure/reader"
 	"github.com/glojurelang/glojure/runtime"
+	"github.com/glojurelang/glojure/value"
 )
 
 // Start starts the REPL.
@@ -67,7 +68,7 @@ func Start(opts ...Option) {
 				fmt.Fprintln(o.stdout, err)
 				continue
 			}
-			fmt.Fprintln(o.stdout, val)
+			fmt.Fprintln(o.stdout, value.ToString(val))
 		}
 	}
 }

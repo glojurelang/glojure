@@ -1,7 +1,7 @@
-(def regexp (go/regexp.MustCompile "foo(.*)bar"))
+(def regexp (regexp.MustCompile "foo(.*)bar"))
 (print (. regexp (Match ((go-sliceof go/byte) "foo----bar"))))
 (print (. regexp (FindStringSubmatch "foo----bar")))
 
-(print (go/regexp.Match "foo.*bar" nil))
-(print (go/regexp.Match "foo.*bar" ((go-sliceof go/byte) "foobar")))
-(print (go/regexp.Match "foo(.*)bar" ((go-sliceof go/byte) "foo----bar")))
+(print (regexp.Match "foo.*bar" nil))
+(print (regexp.Match "foo.*bar" ((go-sliceof go/byte) "foobar")))
+(print (regexp.Match "foo(.*)bar" ((go-sliceof go/byte) "foo----bar")))

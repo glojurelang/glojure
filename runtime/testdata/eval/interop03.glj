@@ -1,5 +1,5 @@
 (let [handler (fn [w r] (. w (WriteHeader 200)))
-      http-server (new go/net/http.Server
+      http-server (new net/http.Server
                        :Addr "localhost:8080"
-                       :Handler (go/net/http.HandlerFunc handler))]
+                       :Handler (net/http.HandlerFunc handler))]
   (println (. http-server Handler)))
