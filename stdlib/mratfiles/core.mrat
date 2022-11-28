@@ -69,7 +69,7 @@
   [expr]
   `(let [start# (time.Now)
          ret# ~expr]
-     (prn (str "Elapsed time: " (/ (go/float64 (. (. (time.Now) Sub start#) Nanoseconds)) 1000000.0) " msecs"))
+     (prn (str "Elapsed time: " (/ (float64 (. (. (time.Now) Sub start#) Nanoseconds)) 1000000.0) " msecs"))
      ret#))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

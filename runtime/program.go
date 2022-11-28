@@ -65,15 +65,51 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	})
 	{
 		// go-sliceof returns a slice type with the given element type.
+		// TODO: reader shorthand for this (and pointers, maps, and channels)
 		env.Define("go-sliceof", value.NewGoVal(func(t reflect.Type) *value.GoTyp {
 			return value.NewGoTyp(reflect.SliceOf(t))
 		}))
 
+		////////////////////////////////////////////////////////////////////////////
 		// basic types
-		env.Define("go/byte", value.NewGoTyp(reflect.TypeOf(byte(0))))
-		env.Define("go/string", value.NewGoTyp(reflect.TypeOf("")))
-		env.Define("go/int", value.NewGoTyp(reflect.TypeOf(int(0))))
-		env.Define("go/float64", value.NewGoTyp(reflect.TypeOf(float64(0))))
+
+		// numeric types
+		{
+			// integral types
+			env.Define("int", value.NewGoTyp(reflect.TypeOf(int(0))))
+			env.Define("uint", value.NewGoTyp(reflect.TypeOf(uint(0))))
+			env.Define("uintptr", value.NewGoTyp(reflect.TypeOf(uintptr(0))))
+
+			env.Define("int8", value.NewGoTyp(reflect.TypeOf(int8(0))))
+			env.Define("int16", value.NewGoTyp(reflect.TypeOf(int16(0))))
+			env.Define("int32", value.NewGoTyp(reflect.TypeOf(int32(0))))
+			env.Define("int64", value.NewGoTyp(reflect.TypeOf(int64(0))))
+
+			env.Define("uint8", value.NewGoTyp(reflect.TypeOf(uint8(0))))
+			env.Define("uint16", value.NewGoTyp(reflect.TypeOf(uint16(0))))
+			env.Define("uint32", value.NewGoTyp(reflect.TypeOf(uint32(0))))
+			env.Define("uint64", value.NewGoTyp(reflect.TypeOf(uint64(0))))
+
+			// floating point types
+			env.Define("float32", value.NewGoTyp(reflect.TypeOf(float32(0))))
+			env.Define("float64", value.NewGoTyp(reflect.TypeOf(float64(0))))
+
+			// aliases
+			env.Define("byte", value.NewGoTyp(reflect.TypeOf(byte(0))))
+			env.Define("rune", value.NewGoTyp(reflect.TypeOf(rune(0))))
+		}
+
+		// string
+		{
+			env.Define("string", value.NewGoTyp(reflect.TypeOf("")))
+		}
+
+		// boolean
+		{
+			env.Define("bool", value.NewGoTyp(reflect.TypeOf(true)))
+		}
+
+		env.Define("error", value.NewGoTyp(reflect.TypeOf((*error)(nil)).Elem()))
 	}
 
 	{

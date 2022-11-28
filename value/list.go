@@ -1,6 +1,8 @@
 package value
 
-import "strings"
+import (
+	"strings"
+)
 
 // List is a list of values.
 type List struct {
@@ -10,6 +12,7 @@ type List struct {
 	// other lists have a non-nil item and a non-nil next.
 	item interface{}
 	next *List
+	size int
 }
 
 var emptyList = &List{}
@@ -26,6 +29,7 @@ func NewList(values []interface{}, opts ...Option) *List {
 			Section: o.section,
 			item:    values[i],
 			next:    list,
+			size:    list.size + 1,
 		}
 	}
 	return list
@@ -38,6 +42,7 @@ func ConsList(item interface{}, next *List) *List {
 	return &List{
 		item: item,
 		next: next,
+		size: next.size + 1,
 	}
 }
 
@@ -59,16 +64,11 @@ func (l *List) Next() *List {
 }
 
 func (l *List) IsEmpty() bool {
-	return l.item == nil && l.next == nil
+	return l.size == 0
 }
 
 func (l *List) Count() int {
-	count := 0
-	for !l.IsEmpty() {
-		count++
-		l = l.next
-	}
-	return count
+	return l.size
 }
 
 func (l *List) Conj(items ...interface{}) Conjer {
@@ -163,6 +163,10 @@ NoQuote:
 }
 
 func (l *List) Equal(v interface{}) bool {
+	if l == v {
+		return true
+	}
+
 	other, ok := v.(*List)
 	if !ok {
 		return false

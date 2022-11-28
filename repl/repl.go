@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime/debug"
 	"strings"
 
 	"github.com/chzyer/readline"
@@ -63,12 +64,24 @@ func Start(opts ...Option) {
 		rl.SetPrompt(prompt)
 
 		for _, val := range vals {
-			val, err := o.env.Eval(val)
+			out, err := func() (out string, err error) {
+				defer func() {
+					if panicErr := recover(); panicErr != nil {
+						err = fmt.Errorf("panic: %v\nstacktrace:\n%s", panicErr, string(debug.Stack()))
+					}
+				}()
+
+				val, err := o.env.Eval(val)
+				if err != nil {
+					return "", err
+				}
+				return value.ToString(val), nil
+			}()
 			if err != nil {
 				fmt.Fprintln(o.stdout, err)
 				continue
 			}
-			fmt.Fprintln(o.stdout, value.ToString(val))
+			fmt.Fprintln(o.stdout, out)
 		}
 	}
 }
