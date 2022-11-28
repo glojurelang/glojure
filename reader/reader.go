@@ -619,7 +619,11 @@ func (r *Reader) readSymbol() (value.Value, error) {
 		return value.NewBool(false, value.WithSection(r.popSection())), nil
 	}
 
-	return value.NewSymbol(sym, value.WithSection(r.popSection())), nil
+	symVal := value.NewSymbol(sym, value.WithSection(r.popSection()))
+	if symVal.Name() == "" {
+		return nil, r.error("invalid symbol: %s", sym)
+	}
+	return symVal, nil
 }
 
 func (r *Reader) readKeyword() (value.Value, error) {

@@ -1,0 +1,6 @@
+false
+Execution error (NumberFormatException) at user/eval1 (REPL:1).
+Invalid number: 0X
+
+Full report at:
+/var/folders/0m/y60b85m145lffbfdfk86129r0000gn/T/clojure-15801889601755281512.edn

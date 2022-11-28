@@ -1,8 +1,12 @@
 package reader
 
 import (
+	"crypto/sha256"
+	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strconv"
@@ -45,10 +49,12 @@ func FuzzCLJConformance(f *testing.F) {
 	// defer cljRdr.stop()
 
 	f.Fuzz(func(t *testing.T, program string) {
-		// reject program strings with non-printable characters
+		// reject program strings with non-ascii or non-printable
+		// characters this prevents the fuzzer from generating exotic
+		// unicode while we're still trying to get the basics working.
 		for _, c := range program {
-			if !unicode.IsPrint(c) {
-				t.Skipf("program includes non-printable character: %q", c)
+			if c > unicode.MaxASCII || !unicode.IsPrint(c) {
+				t.Skipf("program includes non-ascii character: %q", c)
 			}
 		}
 
@@ -151,7 +157,58 @@ func (r *cljReader) stop() {
 	close(r.stopCh)
 }
 
+// getFromCache looks for a file in testdata/clj-cache/read with the
+// name <hash>.glj where <hash> is the sha256 hash of the program. If
+// the file exists, its first line contains "true" if clj was able to
+// read the program, and "false" otherwise. The rest of the file
+// contains the output of clj.
+func getFromCache(program string) (bool, string, error) {
+	hash := sha256.Sum256([]byte(program))
+	path := filepath.Join("testdata", "clj-cache", "read", fmt.Sprintf("%x.glj", hash))
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return false, "", nil
+	}
+	lines := strings.SplitN(string(data), "\n", 2)
+	if len(lines) != 2 {
+		return false, "", fmt.Errorf("invalid cache file: %s", path)
+	}
+	switch lines[0] {
+	case "true":
+		err = nil
+	case "false":
+		err = errors.New("clj error")
+	default:
+		return false, "", fmt.Errorf("invalid cache file: %s", path)
+	}
+	return true, lines[1], err
+}
+
+// putToCache writes the result of a clj read to the cache.
+func putToCache(program string, err error, out string) error {
+	hash := sha256.Sum256([]byte(program))
+	path := filepath.Join("testdata", "clj-cache", "read", fmt.Sprintf("%x.glj", hash))
+	// if it already exists, don't overwrite it.
+	if _, err := os.Stat(path); err == nil {
+		return nil
+	}
+
+	var errStr string
+	if err != nil {
+		errStr = "false"
+	} else {
+		errStr = "true"
+	}
+	return ioutil.WriteFile(path, []byte(errStr+"\n"+out), 0644)
+}
+
 func (r *cljReader) readCLJExpr(program string) (string, error) {
+	if ok, out, err := getFromCache(program); ok {
+		return out, err
+	} else if err != nil {
+		panic(err)
+	}
+
 	// Run the equivalent of the following shell command:
 	// clj -M -e '(pr (read *in*))'
 	//
@@ -159,6 +216,13 @@ func (r *cljReader) readCLJExpr(program string) (string, error) {
 	cmd := exec.Command("clj", "-M", "-e", "(pr (read *in*))")
 	cmd.Stdin = strings.NewReader(program)
 	out, err := cmd.CombinedOutput()
+
+	if os.Getenv("WRITE_GLJ_TEST_CACHE") != "" {
+		if err := putToCache(program, err, string(out)); err != nil {
+			panic(err)
+		}
+	}
+
 	return string(out), err
 
 	// rdrCommand := <-r.commands

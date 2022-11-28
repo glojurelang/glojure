@@ -1,5 +1,7 @@
 package value
 
+import "strings"
+
 var (
 	SymbolUnquote       = NewSymbol("clojure.core/unquote")
 	SymbolSpliceUnquote = NewSymbol("splice-unquote")
@@ -20,6 +22,24 @@ func NewSymbol(s string, opts ...Option) *Symbol {
 		Section: o.section,
 		Value:   s,
 	}
+}
+
+func (s *Symbol) Namespace() string {
+	// Return the namespace of the symbol, or the empty string if it
+	// doesn't have one.
+	if i := strings.Index(s.Value, "/"); i != -1 {
+		return s.Value[:i]
+	}
+	return ""
+}
+
+func (s *Symbol) Name() string {
+	// Return the name of the symbol, or the empty string if it doesn't
+	// have one.
+	if i := strings.Index(s.Value, "/"); i != -1 {
+		return s.Value[i+1:]
+	}
+	return s.Value
 }
 
 func (s *Symbol) String() string {
