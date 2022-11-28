@@ -442,10 +442,10 @@ func (env *environment) evalCase(n *value.List) (value.Value, value.Continuation
 	return nil, nil, nil
 }
 
-func toBool(v value.Value) *value.Bool {
-	b, ok := v.(*value.Bool)
+func toBool(v value.Value) bool {
+	b, ok := v.(bool)
 	if !ok {
-		return value.NewBool(false)
+		return false
 	}
 	return b
 }
@@ -873,9 +873,7 @@ func (env *environment) evalDot(n *value.List) (value.Value, error) {
 	// 4. (. instance-expr (method-symbol args*)) or (. instance-expr method-symbol args*)
 	// 5. (. Classname-symbol (method-symbol args*)) or (. Classname-symbol method-symbol args*)
 	//
-	// Form 3 is unnecessary in Go, since in Go fields and methods share
-	// a namespace on structs, so there's no need to disambiguate
-	// between them.
+	// TODO: form 3
 
 	dotCount := n.Count()
 

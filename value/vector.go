@@ -86,7 +86,7 @@ func (v *Vector) String() string {
 		if el == nil {
 			b.WriteString("nil")
 		} else {
-			b.WriteString(el.String())
+			b.WriteString(ToString(el))
 		}
 		if i < v.Count()-1 {
 			b.WriteString(" ")

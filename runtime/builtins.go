@@ -354,8 +354,8 @@ func notBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 		return nil, fmt.Errorf("not expects 1 argument, got %v", len(args))
 	}
 	switch arg := args[0].(type) {
-	case *value.Bool:
-		return value.NewBool(!arg.Value), nil
+	case bool:
+		return !arg, nil
 	default:
 		return nil, fmt.Errorf("not expects a boolean, got %v", arg)
 	}
@@ -365,7 +365,7 @@ func eqBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 	if len(args) != 2 {
 		return nil, fmt.Errorf("eq? expects 2 arguments, got %v", len(args))
 	}
-	return value.NewBool(value.Equal(args[0], args[1])), nil
+	return value.Equal(args[0], args[1]), nil
 }
 
 func isStringBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -373,7 +373,7 @@ func isStringBuiltin(env value.Environment, args []value.Value) (value.Value, er
 		return nil, fmt.Errorf("string? expects 1 argument, got %v", len(args))
 	}
 	_, ok := args[0].(*value.Str)
-	return value.NewBool(ok), nil
+	return ok, nil
 }
 
 func isListBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -381,7 +381,7 @@ func isListBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 		return nil, fmt.Errorf("list? expects 1 argument, got %v", len(args))
 	}
 	_, ok := args[0].(*value.List)
-	return value.NewBool(ok), nil
+	return ok, nil
 }
 
 func isVectorBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -389,7 +389,7 @@ func isVectorBuiltin(env value.Environment, args []value.Value) (value.Value, er
 		return nil, fmt.Errorf("vector? expects 1 argument, got %v", len(args))
 	}
 	_, ok := args[0].(*value.Vector)
-	return value.NewBool(ok), nil
+	return ok, nil
 }
 
 func isSeqBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -397,7 +397,7 @@ func isSeqBuiltin(env value.Environment, args []value.Value) (value.Value, error
 		return nil, fmt.Errorf("seq? expects 1 argument, got %v", len(args))
 	}
 	_, ok := args[0].(*value.Seq)
-	return value.NewBool(ok), nil
+	return ok, nil
 }
 
 func isSeqableBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -405,7 +405,7 @@ func isSeqableBuiltin(env value.Environment, args []value.Value) (value.Value, e
 		return nil, fmt.Errorf("seqable? expects 1 argument, got %v", len(args))
 	}
 	_, ok := args[0].(value.Enumerable)
-	return value.NewBool(ok), nil
+	return ok, nil
 }
 
 func emptyBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -415,13 +415,13 @@ func emptyBuiltin(env value.Environment, args []value.Value) (value.Value, error
 
 	switch c := args[0].(type) {
 	case *value.List:
-		return value.NewBool(c.IsEmpty()), nil
+		return c.IsEmpty(), nil
 	case *value.Vector:
-		return value.NewBool(c.Count() == 0), nil
+		return c.Count() == 0, nil
 	}
 
 	if c, ok := args[0].(value.Counter); ok {
-		return value.NewBool(c.Count() == 0), nil
+		return c.Count() == 0, nil
 	}
 
 	e, ok := args[0].(value.Enumerable)
@@ -432,7 +432,7 @@ func emptyBuiltin(env value.Environment, args []value.Value) (value.Value, error
 	defer cancel()
 	// TODO: take a context.Context to support cancelation/timeout.
 	_, ok = <-ch
-	return value.NewBool(!ok), nil
+	return !ok, nil
 }
 
 func notEmptyBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -612,11 +612,11 @@ func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 			switch arg := arg.(type) {
 			case *value.Num:
 				if prev.Value >= arg.Value {
-					return value.False, nil
+					return false, nil
 				}
 			case *value.Long:
 				if prev.Value >= float64(arg.Value) {
-					return value.False, nil
+					return false, nil
 				}
 			default:
 				return nil, fmt.Errorf("invalid type for <: %v", arg)
@@ -625,11 +625,11 @@ func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 			switch arg := arg.(type) {
 			case *value.Num:
 				if float64(prev.Value) >= arg.Value {
-					return value.False, nil
+					return false, nil
 				}
 			case *value.Long:
 				if prev.Value >= arg.Value {
-					return value.False, nil
+					return false, nil
 				}
 			default:
 				return nil, fmt.Errorf("invalid type for <: %v", arg)
@@ -640,7 +640,7 @@ func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 		prev = arg
 	}
 
-	return value.True, nil
+	return true, nil
 }
 
 func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -655,11 +655,11 @@ func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 			switch arg := arg.(type) {
 			case *value.Num:
 				if prev.Value <= arg.Value {
-					return value.False, nil
+					return false, nil
 				}
 			case *value.Long:
 				if prev.Value <= float64(arg.Value) {
-					return value.False, nil
+					return false, nil
 				}
 			default:
 				return nil, fmt.Errorf("invalid type for >: %v", arg)
@@ -668,11 +668,11 @@ func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 			switch arg := arg.(type) {
 			case *value.Num:
 				if float64(prev.Value) <= arg.Value {
-					return value.False, nil
+					return false, nil
 				}
 			case *value.Long:
 				if prev.Value <= arg.Value {
-					return value.False, nil
+					return false, nil
 				}
 			default:
 				return nil, fmt.Errorf("invalid type for >: %v", arg)
@@ -683,7 +683,7 @@ func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 		prev = arg
 	}
 
-	return value.True, nil
+	return true, nil
 }
 
 func applyBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
@@ -726,7 +726,7 @@ func printlnBuiltin(env value.Environment, args []value.Value) (value.Value, err
 			case *value.Char:
 				env.Stdout().Write([]byte(string(arg.Value)))
 			default:
-				env.Stdout().Write([]byte(arg.String()))
+				env.Stdout().Write([]byte(value.ToString(arg)))
 			}
 		}
 		if i < len(args)-1 {

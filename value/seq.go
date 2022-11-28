@@ -52,7 +52,7 @@ func (s *Seq) String() string {
 			b.WriteString(" ")
 		}
 		first = false
-		b.WriteString(v.String())
+		b.WriteString(ToString(v))
 	}
 	b.WriteString(")")
 	return b.String()

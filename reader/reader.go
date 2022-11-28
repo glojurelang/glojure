@@ -621,16 +621,17 @@ func (r *Reader) readSymbol() (value.Value, error) {
 	}
 
 	// check if symbol is a keyword
+	section := r.popSection()
 	switch sym {
 	case "nil":
-		return value.NewNil(value.WithSection(r.popSection())), nil
+		return value.NewNil(value.WithSection(section)), nil
 	case "true":
-		return value.NewBool(true, value.WithSection(r.popSection())), nil
+		return true, nil
 	case "false":
-		return value.NewBool(false, value.WithSection(r.popSection())), nil
+		return false, nil
 	}
 
-	symVal := value.NewSymbol(sym, value.WithSection(r.popSection()))
+	symVal := value.NewSymbol(sym, value.WithSection(section))
 	if !symVal.IsValidFormat() {
 		return nil, r.error("invalid symbol: %s", sym)
 	}

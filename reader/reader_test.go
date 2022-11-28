@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/glojurelang/glojure/value"
 	"github.com/kylelemons/godebug/diff"
 )
 
@@ -55,7 +56,7 @@ func TestRead(t *testing.T) {
 			strs := make([]string, len(exprs)+1)
 			strs[len(strs)-1] = ""
 			for i, expr := range exprs {
-				strs[i] = expr.String()
+				strs[i] = value.ToString(expr)
 			}
 			output := strings.Join(strs, "\n")
 			if output != tc.output {
@@ -141,7 +142,7 @@ func FuzzRead(f *testing.F) {
 			return
 		}
 		for _, expr := range exprs {
-			expr.String()
+			value.ToString(expr)
 		}
 	})
 }

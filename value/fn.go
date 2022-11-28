@@ -36,7 +36,7 @@ func (f *Func) String() string {
 			if cur != arity.Exprs {
 				b.WriteString(" ")
 			}
-			b.WriteString(cur.Item().String())
+			b.WriteString(ToString(cur.Item()))
 		}
 		if len(f.Arities) > 1 {
 			b.WriteRune(')')

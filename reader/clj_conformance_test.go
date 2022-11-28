@@ -14,6 +14,7 @@ import (
 	"testing"
 	"unicode"
 
+	"github.com/glojurelang/glojure/value"
 	"github.com/kylelemons/godebug/diff"
 	"github.com/stretchr/testify/assert"
 )
@@ -76,7 +77,7 @@ func FuzzCLJConformance(f *testing.F) {
 			return
 		}
 
-		gljExpr := gljValue.String()
+		gljExpr := value.ToString(gljValue)
 
 		// workaround for the fact that Go is able to quote more
 		// unprintable characters than Clojure. e.g. \x00 and \x10.

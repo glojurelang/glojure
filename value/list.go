@@ -144,7 +144,7 @@ func (l *List) String() string {
 			default:
 				goto NoQuote
 			}
-			b.WriteString(l.next.item.String())
+			b.WriteString(ToString(l.next.item))
 			return b.String()
 		}
 	}
@@ -156,7 +156,7 @@ NoQuote:
 		if v == nil {
 			b.WriteString("()")
 		} else {
-			b.WriteString(v.String())
+			b.WriteString(ToString(v))
 		}
 		if !cur.next.IsEmpty() {
 			b.WriteString(" ")

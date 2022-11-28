@@ -32,7 +32,7 @@ func (s *scope) lookup(name string) (value.Value, bool) {
 func (s *scope) printIndented(indent string) string {
 	str := ""
 	for k, v := range s.syms {
-		str += indent + k + ": " + v.String() + "\n"
+		str += indent + k + ": " + value.ToString(v) + "\n"
 	}
 	if s.parent != nil {
 		str += s.parent.printIndented(indent + "  ")

@@ -1,11 +1,11 @@
 package value
 
 // IsTruthy returns true if the value is truthy.
-func IsTruthy(v Value) bool {
+func IsTruthy(v interface{}) bool {
 	switch v := v.(type) {
-	case *Bool:
-		return v.Value
-	case *Nil:
+	case bool:
+		return v
+	case *Nil, nil:
 		return false
 	default:
 		return true

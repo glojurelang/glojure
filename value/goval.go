@@ -136,7 +136,7 @@ func (gv *GoVal) Apply(env Environment, args []Value) (Value, error) {
 		case nil:
 			res[i] = NilValue
 		case bool:
-			res[i] = NewBool(resVal)
+			res[i] = resVal
 		default:
 			// ?? this got a server test working, but we now fail tests next
 			// up, figure out the desired semantics and make them work!
@@ -163,7 +163,7 @@ func ConvertToGo(env Environment, typ reflect.Type, val Value) (interface{}, err
 	case Applyer:
 		goVal = reflect.MakeFunc(typ, reflectFuncFromApplyer(env, val)).Interface()
 	default:
-		return nil, fmt.Errorf("cannot convert to Go value: %s", val)
+		goVal = val
 	}
 
 	return coerceGoValue(typ, goVal)
@@ -245,7 +245,7 @@ func fromGo(val interface{}) Value {
 	case string:
 		return NewStr(val)
 	case bool:
-		return NewBool(val)
+		return val
 	case nil:
 		return NilValue
 	}
@@ -286,10 +286,9 @@ func reflectFuncFromApplyer(env Environment, applyer Applyer) func(args []reflec
 			return nil
 		}
 
-		goValuerRes, ok := res.(GoValuer)
-		if !ok {
-			panic(fmt.Errorf("cannot convert Glojure value %s to Go value", res))
+		if goValuerRes, ok := res.(GoValuer); ok {
+			res = goValuerRes.GoValue()
 		}
-		return []reflect.Value{reflect.ValueOf(goValuerRes.GoValue())}
+		return []reflect.Value{reflect.ValueOf(res)}
 	}
 }

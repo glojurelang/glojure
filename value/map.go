@@ -68,9 +68,9 @@ func (m *Map) String() string {
 
 		el := m.First().(*Vector)
 
-		b.WriteString(el.ValueAt(0).String())
+		b.WriteString(ToString(el.ValueAt(0)))
 		b.WriteRune(' ')
-		b.WriteString(el.ValueAt(1).String())
+		b.WriteString(ToString(el.ValueAt(1)))
 	}
 	b.WriteString("}")
 	return b.String()

@@ -5,10 +5,7 @@ import (
 )
 
 // Value is the interface that all values in the language implement.
-type Value interface {
-	String() string
-	//Equal(Value) bool
-}
+type Value interface{}
 
 type Sequence interface {
 	First() Value
