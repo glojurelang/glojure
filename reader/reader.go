@@ -407,8 +407,11 @@ func (r *Reader) readQuoteType(form string) (value.Value, error) {
 		return nil, err
 	}
 	section := r.popSection()
+
+	symbolEndPos := section.StartPos
+	symbolEndPos.Column += len(form)
 	items := []value.Value{
-		value.NewSymbol(form, value.WithSection(value.Section{StartPos: section.StartPos, EndPos: node.Pos()})),
+		value.NewSymbol(form, value.WithSection(value.Section{StartPos: section.StartPos, EndPos: symbolEndPos})),
 		node,
 	}
 	return value.NewList(items, value.WithSection(section)), nil

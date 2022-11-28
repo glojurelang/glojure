@@ -139,9 +139,13 @@ func (f *Func) ContinuationApply(env Environment, args []Value) (Value, Continua
 	for _, expr := range exprs[:len(exprs)-1] {
 		_, err := fnEnv.Eval(expr)
 		if err != nil {
+			errPos := f.Pos()
+			if expr, ok := expr.(interface{ Pos() Pos }); ok {
+				errPos = expr.Pos()
+			}
 			return nil, nil, errorWithStack(err, StackFrame{
 				FunctionName: fnName,
-				Pos:          expr.Pos(),
+				Pos:          errPos,
 			})
 		}
 	}
@@ -150,9 +154,13 @@ func (f *Func) ContinuationApply(env Environment, args []Value) (Value, Continua
 	return nil, func() (Value, Continuation, error) {
 		v, c, err := fnEnv.ContinuationEval(lastExpr)
 		if err != nil {
+			errPos := f.Pos()
+			if expr, ok := lastExpr.(interface{ Pos() Pos }); ok {
+				errPos = expr.Pos()
+			}
 			return nil, nil, errorWithStack(err, StackFrame{
 				FunctionName: fnName,
-				Pos:          lastExpr.Pos(),
+				Pos:          errPos,
 			})
 		}
 		return v, c, nil

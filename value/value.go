@@ -8,11 +8,6 @@ import (
 type Value interface {
 	String() string
 	Equal(Value) bool
-
-	// Pos returns the position in the source code where the value was
-	// created or defined.
-	Pos() Pos
-	End() Pos
 }
 
 type Sequence interface {
