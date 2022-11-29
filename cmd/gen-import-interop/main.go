@@ -37,9 +37,6 @@ func main() {
 	}
 	// import reflect
 	builder.WriteString("\t\"reflect\"\n")
-	// import "github.com/glojurelang/glojure/value"
-	builder.WriteString("\t\"github.com/glojurelang/glojure/value\"\n")
-
 	builder.WriteString(")\n\n")
 
 	builder.WriteString("func RegisterImports(_register func(string, interface{})) {\n")
@@ -77,12 +74,12 @@ func main() {
 				case "math.MaxUint64":
 					decl = fmt.Sprintf("_register(%q, uint64(%s))", glojureDeclName, qualifiedName)
 				default:
-					decl = fmt.Sprintf("_register(%q, value.NewGoVal(%s))", glojureDeclName, qualifiedName)
+					decl = fmt.Sprintf("_register(%q, %s)", glojureDeclName, qualifiedName)
 				}
 			case *types.TypeName:
 				decl = fmt.Sprintf(`{
 	var x %s
-	_register(%q, value.NewGoTyp(reflect.TypeOf(x)))
+	_register(%q, reflect.TypeOf(x))
 }`, qualifiedName, glojureDeclName)
 			default:
 				panic(fmt.Sprintf("unknown type %T", obj))

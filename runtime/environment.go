@@ -218,6 +218,7 @@ func (env *environment) evalList(n *value.List) (interface{}, value.Continuation
 	}
 
 	return nil, func() (interface{}, value.Continuation, error) {
+		// TODO: construct the error here for better error localization
 		return env.applyFunc(res[0], res[1:])
 	}, nil
 }
@@ -254,23 +255,14 @@ func (env *environment) applyFunc(f interface{}, args []interface{}) (interface{
 		return cfn.ContinuationApply(env, args)
 	}
 
-	fn, ok := f.(value.Applyer)
-	if !ok {
-		// TODO: the error's location should indicate the call site, not
-		// the location at which the function value was defined.
-		return nil, nil, env.errorf(f, "value is not a function: %v", f)
+	res, err := value.Apply(env, f, args)
+	if err != nil {
+		return nil, nil, err
 	}
-	res, err := fn.Apply(env, args)
-	return res, nil, err
+	return res, nil, nil
 }
 
 // Special forms
-
-type nopApplyer struct{}
-
-func (na *nopApplyer) Apply(env *environment, args []interface{}) (interface{}, error) {
-	return nil, nil
-}
 
 func (env *environment) evalDef(n *value.List) (interface{}, error) {
 	listLength := n.Count()
@@ -732,12 +724,12 @@ func (env *environment) evalNew(n *value.List) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	typeValue, ok := typeValIfc.(*value.GoTyp)
+	typeValue, ok := typeValIfc.(reflect.Type)
 	if !ok {
 		return nil, env.errorf(value.MustNth(n, 1), "invalid expression, expected (new <type> <field_value>*)")
 	}
 
-	val := typeValue.New()
+	val := reflect.New(typeValue)
 	for cur := n.Next().Next(); !cur.IsEmpty(); cur = cur.Next().Next() {
 		fieldName, ok := cur.Item().(*value.Keyword)
 		if !ok {
