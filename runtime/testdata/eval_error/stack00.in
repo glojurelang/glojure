@@ -1,8 +1,4 @@
-;;;ERROR=invalid type for +: "hello"\nStack trace (most recent call first):\n* builtin + *\n	<unknown>:?:?\n
-
-;;;TODO: better stack traces for tail calls
-;;; something like:
-;;;ERROR=invalid type for +: "hello"\nStack trace (most recent call first):\n* builtin + *\n	<unknown>:?:?\n<anonymous function>\n	stack00.in:3:13\nbad-use\n	stack00.in:5:3\n
+;;;ERROR=invalid type for +: "hello"\nStack trace (most recent call first):\n* builtin + *\n	<unknown>:?:?\n<anonymous function>\n	stack00.in:4:13\nbad-use\n	stack00.in:6:3\n
 
 (def add
   (fn [a b] (+ a b)))

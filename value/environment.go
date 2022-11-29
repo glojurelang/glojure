@@ -18,10 +18,6 @@ type Environment interface {
 	// environment.
 	Eval(expr interface{}) (interface{}, error)
 
-	// ContinuationEval evaluates a value representing an expression in
-	// this environment, possibly returning a continuation.
-	ContinuationEval(expr interface{}) (interface{}, Continuation, error)
-
 	// ResolveFile looks up a file in the environment. It should expand
 	// relative paths to absolute paths. Relative paths are searched for
 	// in the environments load paths.

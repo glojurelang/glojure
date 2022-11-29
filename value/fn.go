@@ -69,23 +69,6 @@ func errorWithStack(err error, stackFrame StackFrame) error {
 }
 
 func (f *Func) Apply(env Environment, args []interface{}) (interface{}, error) {
-	var res interface{}
-	var err error
-	continuation := func() (interface{}, Continuation, error) {
-		return f.ContinuationApply(env, args)
-	}
-	for {
-		res, continuation, err = continuation()
-		if err != nil {
-			return nil, err
-		}
-		if continuation == nil {
-			return res, nil
-		}
-	}
-}
-
-func (f *Func) ContinuationApply(env Environment, args []interface{}) (interface{}, Continuation, error) {
 	// function name for error messages
 	fnName := f.LambdaName
 	if fnName == "" {
@@ -117,7 +100,7 @@ func (f *Func) ContinuationApply(env Environment, args []interface{}) (interface
 		}
 	}
 	if err != nil {
-		return nil, nil, errorWithStack(err, StackFrame{
+		return nil, errorWithStack(err, StackFrame{
 			FunctionName: fnName,
 			Pos:          f.Pos(),
 		})
@@ -143,28 +126,26 @@ func (f *Func) ContinuationApply(env Environment, args []interface{}) (interface
 			if expr, ok := expr.(interface{ Pos() Pos }); ok {
 				errPos = expr.Pos()
 			}
-			return nil, nil, errorWithStack(err, StackFrame{
+			return nil, errorWithStack(err, StackFrame{
 				FunctionName: fnName,
 				Pos:          errPos,
 			})
 		}
 	}
-	// return the last expression as a continuation
+
 	lastExpr := exprs[len(exprs)-1]
-	return nil, func() (interface{}, Continuation, error) {
-		v, c, err := fnEnv.ContinuationEval(lastExpr)
-		if err != nil {
-			errPos := f.Pos()
-			if expr, ok := lastExpr.(interface{ Pos() Pos }); ok {
-				errPos = expr.Pos()
-			}
-			return nil, nil, errorWithStack(err, StackFrame{
-				FunctionName: fnName,
-				Pos:          errPos,
-			})
+	v, err := fnEnv.Eval(lastExpr)
+	if err != nil {
+		errPos := f.Pos()
+		if expr, ok := lastExpr.(interface{ Pos() Pos }); ok {
+			errPos = expr.Pos()
 		}
-		return v, c, nil
-	}, nil
+		return nil, errorWithStack(err, StackFrame{
+			FunctionName: fnName,
+			Pos:          errPos,
+		})
+	}
+	return v, nil
 }
 
 // BuiltinFunc is a builtin function.

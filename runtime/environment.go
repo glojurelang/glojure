@@ -127,47 +127,19 @@ func (env *environment) errorf(n interface{}, format string, args ...interface{}
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
-	var result interface{}
-	var err error
-	continuation := func() (interface{}, value.Continuation, error) {
-		return env.eval(n)
-	}
-
-	for {
-		result, continuation, err = continuation()
-		if err != nil {
-			return nil, err
-		}
-		if continuation == nil {
-			return result, nil
-		}
-	}
-}
-
-func (env *environment) ContinuationEval(n interface{}) (interface{}, value.Continuation, error) {
-	return env.eval(n)
-}
-
-func (env *environment) eval(n interface{}) (interface{}, value.Continuation, error) {
 	switch v := n.(type) {
 	case *value.List:
 		return env.evalList(v)
 	case *value.Vector:
-		res, err := env.evalVector(v)
-		return res, nil, err
+		return env.evalVector(v)
 	default:
-		res, err := env.evalScalar(n)
-		return res, nil, err
+		return env.evalScalar(n)
 	}
 }
 
-func asContinuationResult(v interface{}, err error) (interface{}, value.Continuation, error) {
-	return v, nil, err
-}
-
-func (env *environment) evalList(n *value.List) (interface{}, value.Continuation, error) {
+func (env *environment) evalList(n *value.List) (interface{}, error) {
 	if n.IsEmpty() {
-		return nil, nil, nil
+		return n, nil
 	}
 
 	first := n.Item()
@@ -175,29 +147,29 @@ func (env *environment) evalList(n *value.List) (interface{}, value.Continuation
 		// handle special forms
 		switch sym.Value {
 		case "def":
-			return asContinuationResult(env.evalDef(n))
+			return env.evalDef(n)
 		case "if":
 			return env.evalIf(n)
 		case "case":
 			return env.evalCase(n)
 		case "fn":
-			return asContinuationResult(env.evalFn(n))
+			return env.evalFn(n)
 		case "quote":
-			return asContinuationResult(env.evalQuote(n))
+			return env.evalQuote(n)
 		case "quasiquote":
-			return asContinuationResult(env.evalQuasiquote(n))
+			return env.evalQuasiquote(n)
 		case "let":
 			return env.evalLet(n)
 		case "defmacro":
-			return asContinuationResult(env.evalDefMacro(n))
+			return env.evalDefMacro(n)
 
 			// Go interop special forms
 		case ".":
-			return asContinuationResult(env.evalDot(n))
+			return env.evalDot(n)
 		case "new":
-			return asContinuationResult(env.evalNew(n))
+			return env.evalNew(n)
 		case "set!":
-			return asContinuationResult(env.evalSet(n))
+			return env.evalSet(n)
 		}
 
 		// handle macros
@@ -212,15 +184,14 @@ func (env *environment) evalList(n *value.List) (interface{}, value.Continuation
 		item := cur.Item()
 		v, err := env.Eval(item)
 		if err != nil {
-			return nil, nil, err
+			return nil, err
 		}
 		res = append(res, v)
 	}
 
-	return nil, func() (interface{}, value.Continuation, error) {
-		// TODO: construct the error here for better error localization
-		return env.applyFunc(res[0], res[1:])
-	}, nil
+	// TODO: construct the error here, or pass metadata, for better
+	// error localization
+	return env.applyFunc(res[0], res[1:])
 }
 
 func (env *environment) evalVector(n *value.Vector) (interface{}, error) {
@@ -249,17 +220,12 @@ func (env *environment) evalScalar(n interface{}) (interface{}, error) {
 	}
 }
 
-func (env *environment) applyFunc(f interface{}, args []interface{}) (interface{}, value.Continuation, error) {
-	cfn, ok := f.(value.ContinuationApplyer)
-	if ok {
-		return cfn.ContinuationApply(env, args)
-	}
-
+func (env *environment) applyFunc(f interface{}, args []interface{}) (interface{}, error) {
 	res, err := value.Apply(env, f, args)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	return res, nil, nil
+	return res, nil
 }
 
 // Special forms
@@ -362,40 +328,36 @@ func (env *environment) evalFn(n *value.List) (interface{}, error) {
 	}, nil
 }
 
-func (env *environment) evalIf(n *value.List) (interface{}, value.Continuation, error) {
+func (env *environment) evalIf(n *value.List) (interface{}, error) {
 	listLength := n.Count()
 	if listLength < 3 || listLength > 4 {
-		return nil, nil, env.errorf(n, "invalid if, need `cond ifExp [elseExp]`")
+		return nil, env.errorf(n, "invalid if, need `cond ifExp [elseExp]`")
 	}
 	cond, err := env.Eval(n.Next().Item())
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	if value.IsTruthy(cond) {
-		return nil, func() (interface{}, value.Continuation, error) {
-			return env.eval(n.Next().Next().Item())
-		}, nil
+		return env.Eval(n.Next().Next().Item())
 	}
 
 	if listLength == 4 {
-		return nil, func() (interface{}, value.Continuation, error) {
-			return env.eval(n.Next().Next().Next().Item())
-		}, nil
+		return env.Eval(n.Next().Next().Next().Item())
 	}
-	return nil, nil, nil
+	return nil, nil
 }
 
 // cases use syntax and most of the semantics of Clojure's case (not Scheme's).
 // see https://clojuredocs.org/clojure.core/case
-func (env *environment) evalCase(n *value.List) (interface{}, value.Continuation, error) {
+func (env *environment) evalCase(n *value.List) (interface{}, error) {
 	listLength := n.Count()
 	if listLength < 4 {
-		return nil, nil, env.errorf(n, "invalid case, need `case caseExp & caseClauses`")
+		return nil, env.errorf(n, "invalid case, need `case caseExp & caseClauses`")
 	}
 	cond, err := env.Eval(n.Next().Item())
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	//cases := n.Items[2:]
@@ -419,18 +381,14 @@ func (env *environment) evalCase(n *value.List) (interface{}, value.Continuation
 
 		for _, testItem := range testItems {
 			if value.Equal(testItem, cond) {
-				return nil, func() (interface{}, value.Continuation, error) {
-					return env.eval(result)
-				}, nil
+				return env.Eval(result)
 			}
 		}
 	}
 	if len(cases) == 1 {
-		return nil, func() (interface{}, value.Continuation, error) {
-			return env.eval(cases[0])
-		}, nil
+		return env.Eval(cases[0])
 	}
-	return nil, nil, nil
+	return nil, nil
 }
 
 func toBool(v interface{}) bool {
@@ -439,18 +397,6 @@ func toBool(v interface{}) bool {
 		return false
 	}
 	return b
-}
-
-func toBoolContinuation(v interface{}, c value.Continuation, err error) (interface{}, value.Continuation, error) {
-	if err != nil {
-		return nil, nil, err
-	}
-	if c == nil {
-		return toBool(v), nil, nil
-	}
-	return nil, func() (interface{}, value.Continuation, error) {
-		return toBoolContinuation(c())
-	}, nil
 }
 
 func (env *environment) evalQuote(n *value.List) (interface{}, error) {
@@ -595,10 +541,10 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 // Semantics: Semantics are as above, except that the <init>s are
 // evaluated in order, and all preceding <init>s are available to
 // subsequent <init>s.
-func (env *environment) evalLet(n *value.List) (interface{}, value.Continuation, error) {
+func (env *environment) evalLet(n *value.List) (interface{}, error) {
 	items := listAsSlice(n)
 	if len(items) < 3 {
-		return nil, nil, env.errorf(n, "invalid let, need bindings and body")
+		return nil, env.errorf(n, "invalid let, need bindings and body")
 	}
 
 	var bindingsMap map[string]interface{}
@@ -607,10 +553,10 @@ func (env *environment) evalLet(n *value.List) (interface{}, value.Continuation,
 	case *value.Vector:
 		bindingsMap, err = env.evalVectorBindings(bindings)
 	default:
-		return nil, nil, env.errorf(n, "invalid let, bindings must be a list or vector")
+		return nil, env.errorf(n, "invalid let, bindings must be a list or vector")
 	}
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	// create a new environment with the bindings
@@ -623,13 +569,10 @@ func (env *environment) evalLet(n *value.List) (interface{}, value.Continuation,
 	for _, item := range items[2 : len(items)-1] {
 		_, err = newEnv.Eval(item)
 		if err != nil {
-			return nil, nil, err
+			return nil, err
 		}
 	}
-	// return a continuation for the last item
-	return nil, func() (interface{}, value.Continuation, error) {
-		return newEnv.eval(items[len(items)-1])
-	}, nil
+	return newEnv.Eval(items[len(items)-1])
 }
 
 func (env *environment) evalVectorBindings(bindings *value.Vector) (map[string]interface{}, error) {
@@ -686,29 +629,13 @@ func (env *environment) evalDefMacro(n *value.List) (interface{}, error) {
 	return nil, nil
 }
 
-func (env *environment) applyMacro(fn *value.Func, argList *value.List) (interface{}, value.Continuation, error) {
+func (env *environment) applyMacro(fn *value.Func, argList *value.List) (interface{}, error) {
 	args := listAsSlice(argList)
-	res, c, err := env.applyFunc(fn, args)
+	res, err := env.applyFunc(fn, args)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	if c == nil {
-		return nil, func() (interface{}, value.Continuation, error) {
-			return env.eval(res)
-		}, nil
-	}
-
-	// continue evaluating until we get a result
-	for c != nil && err == nil {
-		res, c, err = c()
-	}
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return nil, func() (interface{}, value.Continuation, error) {
-		return env.eval(res)
-	}, nil
+	return env.Eval(res)
 }
 
 func (env *environment) evalNew(n *value.List) (interface{}, error) {
