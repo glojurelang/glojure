@@ -20,7 +20,7 @@ import (
 	"github.com/glojurelang/glojure/value"
 )
 
-func RegisterImports(_register func(string, value.Value)) {
+func RegisterImports(_register func(string, interface{})) {
 	// package bytes
 	////////////////////////////////////////
 	{

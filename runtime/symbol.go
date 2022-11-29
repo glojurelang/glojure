@@ -1,7 +1,5 @@
 package runtime
 
-import "github.com/glojurelang/glojure/value"
-
 // TODO: this stuff isn't really used. clean it up.
 
 type Location struct {
@@ -13,7 +11,7 @@ type Symbol struct {
 	// where the symbol is defined
 	// if nil, it is a builtin
 	DefLocation *Location
-	Value       value.Value
+	Value       interface{}
 }
 
 type Package struct {

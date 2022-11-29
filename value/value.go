@@ -4,8 +4,6 @@ import (
 	"context"
 )
 
-type Value = interface{}
-
 type Sequence interface {
 	First() interface{}
 	Rest() Sequence

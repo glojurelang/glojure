@@ -2,8 +2,8 @@ package value
 
 import "fmt"
 
-func restFromNth(nth Nther, i int) Value {
-	var result []Value
+func restFromNth(nth Nther, i int) interface{} {
+	var result []interface{}
 	for {
 		val, ok := nth.Nth(i)
 		if !ok {
@@ -18,12 +18,12 @@ func restFromNth(nth Nther, i int) Value {
 var restSymbol = NewSymbol("&")
 
 // Bind binds the values in val to the symbols in pattern.
-func Bind(pattern Value, val Value) ([]Value, error) {
+func Bind(pattern interface{}, val interface{}) ([]interface{}, error) {
 	// TODO: take a context.Context. This will allow us to cancel the
 	// evaluation if it takes too long. Because a value may be an infinite
 	// sequence, we need to be able to cancel the evaluation.
 
-	var result []Value
+	var result []interface{}
 
 	switch pattern := pattern.(type) {
 	case *Vector:

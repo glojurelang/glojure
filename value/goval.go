@@ -43,7 +43,7 @@ func (gv *GoVal) GoValue() interface{} {
 	return gv.val.Interface()
 }
 
-func (gv *GoVal) Value() Value {
+func (gv *GoVal) Value() interface{} {
 	return fromGo(gv.val.Interface())
 }
 
@@ -96,7 +96,7 @@ func (gv *GoVal) SetField(name string, val interface{}) error {
 	return fmt.Errorf("no such field %s", name)
 }
 
-func (gv *GoVal) Apply(env Environment, args []Value) (Value, error) {
+func (gv *GoVal) Apply(env Environment, args []interface{}) (interface{}, error) {
 	gvKind := gv.val.Kind()
 	gvType := gv.val.Type()
 
@@ -128,10 +128,10 @@ func (gv *GoVal) Apply(env Environment, args []Value) (Value, error) {
 	}
 
 	goRes := gv.val.Call(goArgs)
-	res := make([]Value, len(goRes))
+	res := make([]interface{}, len(goRes))
 	for i, goVal := range goRes {
 		switch resVal := goVal.Interface().(type) {
-		case Value:
+		case interface{}:
 			res[i] = resVal
 		case nil:
 			res[i] = nil
@@ -155,7 +155,7 @@ func (gv *GoVal) Apply(env Environment, args []Value) (Value, error) {
 
 // ConvertToGo converts a Value to a Go value of the given type, if
 // possible.
-func ConvertToGo(env Environment, typ reflect.Type, val Value) (interface{}, error) {
+func ConvertToGo(env Environment, typ reflect.Type, val interface{}) (interface{}, error) {
 	var goVal interface{}
 	switch val := val.(type) {
 	case GoValuer:
@@ -212,11 +212,11 @@ func coerceGoValue(targetType reflect.Type, val interface{}) (interface{}, error
 	}
 }
 
-func ConvertFromGo(val interface{}) Value {
+func ConvertFromGo(val interface{}) interface{} {
 	return fromGo(val)
 }
 
-func fromGo(val interface{}) Value {
+func fromGo(val interface{}) interface{} {
 	if gv, ok := val.(*GoVal); ok {
 		val = gv.val.Interface()
 	}
@@ -261,13 +261,13 @@ func fromGo(val interface{}) Value {
 
 	// TODO: support all collection types
 	if reflect.TypeOf(val).Kind() == reflect.Slice {
-		var vec []Value
+		var vec []interface{}
 		for i := 0; i < reflect.ValueOf(val).Len(); i++ {
 			vec = append(vec, fromGo(reflect.ValueOf(val).Index(i).Interface()))
 		}
 		return NewVector(vec)
 	}
-	if v, ok := val.(Value); ok {
+	if v, ok := val.(interface{}); ok {
 		return v
 	}
 	return NewGoVal(val)
@@ -283,7 +283,7 @@ func isNilableKind(k reflect.Kind) bool {
 
 func reflectFuncFromApplyer(env Environment, applyer Applyer) func(args []reflect.Value) []reflect.Value {
 	return func(args []reflect.Value) []reflect.Value {
-		var glojureArgs []Value
+		var glojureArgs []interface{}
 		for _, arg := range args {
 			glojureArgs = append(glojureArgs, fromGo(arg.Interface()))
 		}

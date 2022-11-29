@@ -4,22 +4,22 @@ import "github.com/glojurelang/glojure/value"
 
 type scope struct {
 	parent *scope
-	syms   map[string]value.Value
+	syms   map[string]interface{}
 }
 
 func newScope() *scope {
-	return &scope{syms: make(map[string]value.Value)}
+	return &scope{syms: make(map[string]interface{})}
 }
 
-func (s *scope) define(name string, val value.Value) {
+func (s *scope) define(name string, val interface{}) {
 	s.syms[name] = val
 }
 
 func (s *scope) push() *scope {
-	return &scope{parent: s, syms: make(map[string]value.Value)}
+	return &scope{parent: s, syms: make(map[string]interface{})}
 }
 
-func (s *scope) lookup(name string) (value.Value, bool) {
+func (s *scope) lookup(name string) (interface{}, bool) {
 	if v, ok := s.syms[name]; ok {
 		return v, true
 	}

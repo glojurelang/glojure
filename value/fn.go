@@ -68,10 +68,10 @@ func errorWithStack(err error, stackFrame StackFrame) error {
 	return valErr.AddStack(stackFrame)
 }
 
-func (f *Func) Apply(env Environment, args []Value) (Value, error) {
-	var res Value
+func (f *Func) Apply(env Environment, args []interface{}) (interface{}, error) {
+	var res interface{}
 	var err error
-	continuation := func() (Value, Continuation, error) {
+	continuation := func() (interface{}, Continuation, error) {
 		return f.ContinuationApply(env, args)
 	}
 	for {
@@ -85,7 +85,7 @@ func (f *Func) Apply(env Environment, args []Value) (Value, error) {
 	}
 }
 
-func (f *Func) ContinuationApply(env Environment, args []Value) (Value, Continuation, error) {
+func (f *Func) ContinuationApply(env Environment, args []interface{}) (interface{}, Continuation, error) {
 	// function name for error messages
 	fnName := f.LambdaName
 	if fnName == "" {
@@ -98,7 +98,7 @@ func (f *Func) ContinuationApply(env Environment, args []Value) (Value, Continua
 		fnEnv.Define(f.LambdaName, f)
 	}
 
-	var bindings []Value
+	var bindings []interface{}
 	var err error
 	var exprList *List
 
@@ -128,7 +128,7 @@ func (f *Func) ContinuationApply(env Environment, args []Value) (Value, Continua
 		fnEnv.Define(sym.Value, bindings[i+1])
 	}
 
-	var exprs []Value
+	var exprs []interface{}
 	for cur := exprList; !cur.IsEmpty(); cur = cur.next {
 		exprs = append(exprs, cur.item)
 	}
@@ -151,7 +151,7 @@ func (f *Func) ContinuationApply(env Environment, args []Value) (Value, Continua
 	}
 	// return the last expression as a continuation
 	lastExpr := exprs[len(exprs)-1]
-	return nil, func() (Value, Continuation, error) {
+	return nil, func() (interface{}, Continuation, error) {
 		v, c, err := fnEnv.ContinuationEval(lastExpr)
 		if err != nil {
 			errPos := f.Pos()
@@ -188,7 +188,7 @@ func (f *BuiltinFunc) Equal(v interface{}) bool {
 	return f == other
 }
 
-func (f *BuiltinFunc) Apply(env Environment, args []Value) (Value, error) {
+func (f *BuiltinFunc) Apply(env Environment, args []interface{}) (interface{}, error) {
 	val, err := f.Applyer.Apply(env, args)
 	if err != nil {
 		return nil, NewError(StackFrame{

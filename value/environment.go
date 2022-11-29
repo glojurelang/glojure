@@ -12,15 +12,15 @@ type Environment interface {
 	PushScope() Environment
 
 	// Define defines a variable in the current scope.
-	Define(name string, v Value)
+	Define(name string, v interface{})
 
 	// Eval evaluates a value representing an expression in this
 	// environment.
-	Eval(expr Value) (Value, error)
+	Eval(expr interface{}) (interface{}, error)
 
 	// ContinuationEval evaluates a value representing an expression in
 	// this environment, possibly returning a continuation.
-	ContinuationEval(expr Value) (Value, Continuation, error)
+	ContinuationEval(expr interface{}) (interface{}, Continuation, error)
 
 	// ResolveFile looks up a file in the environment. It should expand
 	// relative paths to absolute paths. Relative paths are searched for

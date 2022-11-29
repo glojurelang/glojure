@@ -4,7 +4,6 @@ import (
 	"io"
 
 	"github.com/glojurelang/glojure/reader"
-	"github.com/glojurelang/glojure/value"
 )
 
 type parseOptions struct {
@@ -41,7 +40,7 @@ func Parse(r io.RuneScanner, opts ...ParseOption) (*Program, error) {
 	return newProgramFromValue(nodes)
 }
 
-func newProgramFromValue(values []value.Value) (*Program, error) {
+func newProgramFromValue(values []interface{}) (*Program, error) {
 	p := &Program{
 		nodes: values,
 	}

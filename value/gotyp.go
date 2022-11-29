@@ -51,7 +51,7 @@ func (gt *GoTyp) Type() reflect.Type {
 // one argument, it attempts to convert the argument to the type. If
 // the conversion fails, it returns an error. If called with more than
 // one argument, it returns an error.
-func (gt *GoTyp) Apply(env Environment, args []Value) (Value, error) {
+func (gt *GoTyp) Apply(env Environment, args []interface{}) (interface{}, error) {
 	if len(args) == 0 {
 		return reflect.Zero(gt.typ).Interface(), nil
 	}

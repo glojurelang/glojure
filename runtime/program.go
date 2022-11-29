@@ -16,7 +16,7 @@ import (
 )
 
 type Program struct {
-	nodes []value.Value
+	nodes []interface{}
 }
 
 type evalOptions struct {
@@ -60,7 +60,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		env.loadPath = options.loadPath
 	}
 
-	gljimports.RegisterImports(func(name string, val value.Value) {
+	gljimports.RegisterImports(func(name string, val interface{}) {
 		env.Define(name, val)
 	})
 	{
@@ -135,7 +135,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	return env
 }
 
-func (p *Program) Eval(opts ...EvalOption) (value.Value, error) {
+func (p *Program) Eval(opts ...EvalOption) (interface{}, error) {
 	env := NewEnvironment(opts...)
 
 	for _, node := range p.nodes {

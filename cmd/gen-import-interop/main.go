@@ -42,7 +42,7 @@ func main() {
 
 	builder.WriteString(")\n\n")
 
-	builder.WriteString("func RegisterImports(_register func(string, value.Value)) {\n")
+	builder.WriteString("func RegisterImports(_register func(string, interface{})) {\n")
 	for i, pkgName := range packages {
 		if i > 0 {
 			builder.WriteRune('\n')

@@ -7,10 +7,10 @@ import (
 // Map represents a map of glojure values.
 type Map struct {
 	Section
-	keyVals []Value
+	keyVals []interface{}
 }
 
-func NewMap(keyVals []Value, opts ...Option) *Map {
+func NewMap(keyVals []interface{}, opts ...Option) *Map {
 	var o options
 	for _, opt := range opts {
 		opt(&o)
@@ -26,12 +26,12 @@ func (m *Map) Count() int {
 	return len(m.keyVals) / 2
 }
 
-func (m *Map) First() Value {
+func (m *Map) First() interface{} {
 	if m.Count() == 0 {
 		return nil
 	}
 
-	return NewVector([]Value{m.keyVals[0], m.keyVals[1]})
+	return NewVector([]interface{}{m.keyVals[0], m.keyVals[1]})
 }
 
 func (m *Map) Rest() Sequence {

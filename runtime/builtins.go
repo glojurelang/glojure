@@ -88,7 +88,7 @@ func addBuiltins(env *environment) {
 	}
 }
 
-func funcSymbol(name string, fn func(value.Environment, []value.Value) (value.Value, error)) *Symbol {
+func funcSymbol(name string, fn func(value.Environment, []interface{}) (interface{}, error)) *Symbol {
 	return &Symbol{
 		Name: name,
 		Value: &value.BuiltinFunc{
@@ -123,7 +123,7 @@ func loadFile(env value.Environment, filename string) error {
 	return nil
 }
 
-func loadFileBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func loadFileBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("load-file expects 1 argument, got %v", len(args))
 	}
@@ -134,15 +134,15 @@ func loadFileBuiltin(env value.Environment, args []value.Value) (value.Value, er
 	return nil, loadFile(env, filename)
 }
 
-func listBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func listBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	return value.NewList(args), nil
 }
 
-func vectorBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func vectorBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	return value.NewVector(args), nil
 }
 
-func charBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func charBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("char expects 1 argument, got %v", len(args))
 	}
@@ -163,7 +163,7 @@ func charBuiltin(env value.Environment, args []value.Value) (value.Value, error)
 	}
 }
 
-func strBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func strBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) == 0 {
 		return "", nil
 	}
@@ -177,7 +177,7 @@ func strBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	return builder.String(), nil
 }
 
-func lengthBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func lengthBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("count expects 1 argument, got %v", len(args))
 	}
@@ -207,7 +207,7 @@ func lengthBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 	return count, nil
 }
 
-func conjBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func conjBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) < 2 {
 		return nil, fmt.Errorf("conj expects at least 2 arguments, got %v", len(args))
 	}
@@ -220,7 +220,7 @@ func conjBuiltin(env value.Environment, args []value.Value) (value.Value, error)
 	return conjer.Conj(args[1:]...), nil
 }
 
-func concatBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func concatBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	enums := make([]value.Enumerable, len(args))
 	for i, arg := range args {
 		e, ok := arg.(value.Enumerable)
@@ -230,8 +230,8 @@ func concatBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 		enums[i] = e
 	}
 
-	enumerable := func() (<-chan value.Value, func()) {
-		ch := make(chan value.Value)
+	enumerable := func() (<-chan interface{}, func()) {
+		ch := make(chan interface{})
 		done := make(chan struct{})
 		cancel := func() {
 			close(done)
@@ -268,7 +268,7 @@ func concatBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 	}, nil
 }
 
-func firstBuiltin(env value.Environment, args []value.Value) (out value.Value, err error) {
+func firstBuiltin(env value.Environment, args []interface{}) (out interface{}, err error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("first expects 1 argument, got %v", len(args))
 	}
@@ -301,7 +301,7 @@ func firstBuiltin(env value.Environment, args []value.Value) (out value.Value, e
 	return <-itemCh, nil
 }
 
-func restBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func restBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("rest expects 1 argument, got %v", len(args))
 	}
@@ -324,7 +324,7 @@ func restBuiltin(env value.Environment, args []value.Value) (value.Value, error)
 		return nil, fmt.Errorf("rest expects an enumerable, got %v", args[0])
 	}
 
-	items := []value.Value{}
+	items := []interface{}{}
 	itemCh, cancel := enum.Enumerate()
 	defer cancel()
 
@@ -340,7 +340,7 @@ func restBuiltin(env value.Environment, args []value.Value) (value.Value, error)
 	return value.NewList(items), nil
 }
 
-func subvecBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func subvecBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) < 2 || len(args) > 3 {
 		return nil, fmt.Errorf("subvec expects 2 or 3 arguments, got %v", len(args))
 	}
@@ -371,7 +371,7 @@ func subvecBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 	return v.SubVector(startIdx, endIdx), nil
 }
 
-func notBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func notBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("not expects 1 argument, got %v", len(args))
 	}
@@ -383,7 +383,7 @@ func notBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	}
 }
 
-func eqBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func eqBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) == 0 {
 		return nil, fmt.Errorf("Wrong number of arguments (%d) to =", len(args))
 	}
@@ -398,7 +398,7 @@ func eqBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 	return true, nil
 }
 
-func isStringBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func isStringBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("string? expects 1 argument, got %v", len(args))
 	}
@@ -406,7 +406,7 @@ func isStringBuiltin(env value.Environment, args []value.Value) (value.Value, er
 	return ok, nil
 }
 
-func isListBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func isListBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("list? expects 1 argument, got %v", len(args))
 	}
@@ -414,7 +414,7 @@ func isListBuiltin(env value.Environment, args []value.Value) (value.Value, erro
 	return ok, nil
 }
 
-func isVectorBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func isVectorBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("vector? expects 1 argument, got %v", len(args))
 	}
@@ -422,7 +422,7 @@ func isVectorBuiltin(env value.Environment, args []value.Value) (value.Value, er
 	return ok, nil
 }
 
-func isSeqBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func isSeqBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("seq? expects 1 argument, got %v", len(args))
 	}
@@ -430,7 +430,7 @@ func isSeqBuiltin(env value.Environment, args []value.Value) (value.Value, error
 	return ok, nil
 }
 
-func isSeqableBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func isSeqableBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("seqable? expects 1 argument, got %v", len(args))
 	}
@@ -438,7 +438,7 @@ func isSeqableBuiltin(env value.Environment, args []value.Value) (value.Value, e
 	return ok, nil
 }
 
-func emptyBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func emptyBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("empty? expects 1 argument, got %v", len(args))
 	}
@@ -465,15 +465,15 @@ func emptyBuiltin(env value.Environment, args []value.Value) (value.Value, error
 	return !ok, nil
 }
 
-func notEmptyBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func notEmptyBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	v, err := emptyBuiltin(env, args)
 	if err != nil {
 		return nil, err
 	}
-	return notBuiltin(env, []value.Value{v})
+	return notBuiltin(env, []interface{}{v})
 }
 
-func powBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func powBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 2 {
 		return nil, fmt.Errorf("pow expects 2 arguments, got %v", len(args))
 	}
@@ -488,7 +488,7 @@ func powBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	return float64(math.Pow(a, b)), nil
 }
 
-func floorBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func floorBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
 		return nil, fmt.Errorf("floor expects 1 argument, got %v", len(args))
 	}
@@ -502,7 +502,7 @@ func floorBuiltin(env value.Environment, args []value.Value) (value.Value, error
 	}
 }
 
-func mulBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func mulBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	isIntMul := true
 	intProduct := int64(1)
 	floatProduct := float64(1)
@@ -533,7 +533,7 @@ func mulBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 }
 
 // TODO: match clojure behavior
-func divBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func divBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 2 {
 		return nil, fmt.Errorf("div expects 2 arguments, got %v", len(args))
 	}
@@ -549,7 +549,7 @@ func divBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	return float64(num / denom), nil
 }
 
-func addBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func addBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	isIntSum := true
 	var intSum int64
 	var floatSum float64
@@ -580,7 +580,7 @@ func addBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	return float64(floatSum), nil
 }
 
-func subBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func subBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) == 0 {
 		return nil, fmt.Errorf("Wrong number of arguments (%d) passed to -", len(args))
 	}
@@ -631,7 +631,7 @@ func subBuiltin(env value.Environment, args []value.Value) (value.Value, error) 
 	return float64(floatDiff), nil
 }
 
-func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func ltBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) == 0 {
 		return nil, fmt.Errorf("Wrong number of arguments (%d) passed to <", len(args))
 	}
@@ -674,7 +674,7 @@ func ltBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 	return true, nil
 }
 
-func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func gtBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) == 0 {
 		return nil, fmt.Errorf("Wrong number of arguments (%d) passed to >", len(args))
 	}
@@ -717,7 +717,7 @@ func gtBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
 	return true, nil
 }
 
-func applyBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func applyBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 2 {
 		return nil, fmt.Errorf("apply expects 2 arguments, got %v", len(args))
 	}
@@ -727,7 +727,7 @@ func applyBuiltin(env value.Environment, args []value.Value) (value.Value, error
 		return nil, fmt.Errorf("apply expects a function as the first argument, got %v", args[0])
 	}
 
-	var values []value.Value
+	var values []interface{}
 
 	if !value.Equal(nil, args[1]) {
 		enum, ok := args[1].(value.Enumerable)
@@ -744,7 +744,7 @@ func applyBuiltin(env value.Environment, args []value.Value) (value.Value, error
 	return applyer.Apply(env, values)
 }
 
-func printlnBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func printlnBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	for i, arg := range args {
 		switch arg := value.ConvertFromGo(arg).(type) {
 		case string:
@@ -763,7 +763,7 @@ func printlnBuiltin(env value.Environment, args []value.Value) (value.Value, err
 	return nil, nil
 }
 
-func prBuiltin(env value.Environment, args []value.Value) (value.Value, error) {
+func prBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	for i, arg := range args {
 		env.Stdout().Write([]byte(value.ToString(arg)))
 
