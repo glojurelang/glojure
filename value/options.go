@@ -1,5 +1,8 @@
 package value
 
+// TODO: nix this file. If we keep this information, it should be in
+// metadata.
+
 type options struct {
 	// where the value was defined
 	section Section
@@ -28,7 +31,6 @@ func (p Pos) Valid() bool {
 
 type Section struct {
 	StartPos, EndPos Pos
-	// TODO: consider adding information about whitespace and comments.
 }
 
 func (p Section) Pos() Pos { return p.StartPos }
