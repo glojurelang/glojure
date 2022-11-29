@@ -760,7 +760,7 @@ func (env *environment) evalNew(n *value.List) (interface{}, error) {
 		field.Set(reflectVal)
 	}
 
-	return value.NewGoVal(val.Interface()), nil
+	return val.Interface(), nil
 }
 
 func (env *environment) evalSet(n *value.List) (interface{}, error) {
@@ -768,7 +768,7 @@ func (env *environment) evalSet(n *value.List) (interface{}, error) {
 	if argCount != 2 {
 		return nil, env.errorf(n, "invalid expression, expected (set! (. go-value-expr field-symbol) expr)")
 	}
-	// evaluate the go-value-expr, which should be a *value.GoVal.
+	// evaluate the go-value-expr, which should be a go struct.
 	// check that the field-symbol is a symbol
 	// evaluate the expression
 
@@ -789,13 +789,9 @@ func (env *environment) evalSet(n *value.List) (interface{}, error) {
 	if !ok {
 		return nil, env.errorf(value.MustNth(fieldExpr, 2), "invalid set! expression, expected a symbol")
 	}
-	targetExpr, err := env.Eval(value.MustNth(fieldExpr, 1))
+	targetVal, err := env.Eval(value.MustNth(fieldExpr, 1))
 	if err != nil {
 		return nil, err
-	}
-	targetGoVal, ok := targetExpr.(*value.GoVal)
-	if !ok {
-		return nil, env.errorf(value.MustNth(fieldExpr, 1), "invalid set! expression, expected a go value")
 	}
 
 	expr, err := env.Eval(value.MustNth(n, 2))
@@ -803,15 +799,15 @@ func (env *environment) evalSet(n *value.List) (interface{}, error) {
 		return nil, err
 	}
 
+	// TODO: bother with this?
 	var goVal interface{}
-
 	if goValuer, ok := expr.(value.GoValuer); ok {
 		goVal = goValuer.GoValue()
 	} else {
 		goVal = expr
 	}
 
-	if err := targetGoVal.SetField(fieldSym.Value, goVal); err != nil {
+	if err := value.SetField(targetVal, fieldSym.Value, goVal); err != nil {
 		return nil, env.errorf(n, "invalid set! expression, %v", err)
 	}
 
@@ -844,21 +840,6 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 		return nil, err
 	}
 
-	// TODO: how to handle glojure types when treating them as dot
-	// targets? Clojure just exposes them as the underlying Java
-	// classes, e.g. clojure.lang.PersistentVector. if we take that
-	// route, we need to be confident in our representation of
-	// primitives.
-
-	var goValTarget *value.GoVal
-	if gv, ok := target.(*value.GoVal); ok {
-		goValTarget = gv
-	} else if gv, ok := target.(value.GoValuer); ok {
-		goValTarget = value.NewGoVal(gv.GoValue())
-	} else {
-		goValTarget = value.NewGoVal(target)
-	}
-
 	memberExpr := n.Next().Next().Item()
 	if dotCount > 3 {
 		// must be a convenience form for a method call, e.g. (. foo bar baz)
@@ -867,12 +848,11 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 	}
 
 	if v, ok := memberExpr.(*value.Symbol); ok {
-		field := goValTarget.FieldOrMethod(v.Value)
-		if field == nil {
+		fieldVal := value.FieldOrMethod(target, v.Value)
+		if fieldVal == nil {
 			return nil, env.errorf(v, "unknown field or method (%v)", v.Value)
 		}
 
-		fieldVal := field.Value()
 		reflectVal := reflect.ValueOf(fieldVal)
 
 		// if the field is not a function, or it has an arity greater than
@@ -893,7 +873,7 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 			return nil, env.errorf(v.Item(), "invalid expression, method name must be a symbol")
 		}
 
-		method := goValTarget.FieldOrMethod(sym.Value)
+		method := value.FieldOrMethod(target, sym.Value)
 		args := make([]interface{}, v.Next().Count())
 		for i := range args {
 			v, err := env.Eval(value.MustNth(v, i+1))
@@ -902,7 +882,7 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 			}
 			args[i] = v
 		}
-		return method.Apply(env, args)
+		return value.Apply(env, method, args)
 	}
 
 	return nil, fmt.Errorf("unimplemented")

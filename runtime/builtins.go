@@ -746,14 +746,7 @@ func applyBuiltin(env value.Environment, args []interface{}) (interface{}, error
 
 func printlnBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	for i, arg := range args {
-		switch arg := value.ConvertFromGo(arg).(type) {
-		case string:
-			env.Stdout().Write([]byte(arg))
-		case value.Char:
-			env.Stdout().Write([]byte(string(arg)))
-		default:
-			env.Stdout().Write([]byte(value.ToString(arg)))
-		}
+		env.Stdout().Write([]byte(value.ToString(arg, value.PrintReadably())))
 
 		if i < len(args)-1 {
 			env.Stdout().Write([]byte(" "))

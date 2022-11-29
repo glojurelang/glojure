@@ -502,7 +502,6 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 	}
 
 	if rn != '{' {
-		fmt.Printf("rn: %c\n", rn)
 		return nil, r.error("Namespaced map must specify a map")
 	}
 
