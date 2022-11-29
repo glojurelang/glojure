@@ -9,14 +9,20 @@ type printOptions struct {
 	printReadably bool
 }
 
+// PrintOption is a function that configures a print operation.
 type PrintOption func(*printOptions)
 
+// PrintReadably returns a PrintOption that configures the print
+// operation to print in a human-readable format.
 func PrintReadably() PrintOption {
 	return func(o *printOptions) {
 		o.printReadably = true
 	}
 }
 
+// ToString converts a value to a string. By default, any value is
+// printed in a format that can be read back in by the reader. If
+// printReadably is true, the output is more human-readable.
 func ToString(v interface{}, opts ...PrintOption) string {
 	options := printOptions{}
 	for _, opt := range opts {
