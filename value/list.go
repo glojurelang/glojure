@@ -46,6 +46,10 @@ func ConsList(item interface{}, next *List) *List {
 	}
 }
 
+func (l *List) First() interface{} {
+	return l.Item()
+}
+
 // Item returns the data from this list node. AKA car.
 func (l *List) Item() interface{} {
 	if l.IsEmpty() {
@@ -61,6 +65,13 @@ func (l *List) Next() *List {
 		panic("cannot get next of empty list")
 	}
 	return l.next
+}
+
+func (l *List) Rest() ISeq {
+	if l.IsEmpty() {
+		return l
+	}
+	return l.Next()
 }
 
 func (l *List) IsEmpty() bool {

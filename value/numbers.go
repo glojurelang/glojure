@@ -33,6 +33,10 @@ func (n *BigDecimal) Equal(v interface{}) bool {
 	return n.val.Cmp(other.val) == 0
 }
 
+func (n *BigDecimal) AddInt(x int) *BigDecimal {
+	return &BigDecimal{val: new(big.Float).Add(n.val, big.NewFloat(float64(x)))}
+}
+
 // BigInt is an arbitrary-precision integer. It wraps and has the same
 // semantics as big.Int. big.Int is not used directly because it is
 // mutable, and the core BigInt should not be.
@@ -49,6 +53,11 @@ func NewBigInt(s string) (*BigInt, error) {
 	return &BigInt{val: bi}, nil
 }
 
+// NewBigIntFromInt64 creates a new BigInt from an int64.
+func NewBigIntFromInt64(x int64) *BigInt {
+	return &BigInt{val: big.NewInt(x)}
+}
+
 func (n *BigInt) String() string {
 	return n.val.String() + "N"
 }
@@ -59,6 +68,10 @@ func (n *BigInt) Equal(v interface{}) bool {
 		return false
 	}
 	return n.val.Cmp(other.val) == 0
+}
+
+func (n *BigInt) AddInt(x int) *BigInt {
+	return &BigInt{val: new(big.Int).Add(n.val, big.NewInt(int64(x)))}
 }
 
 // AsInt returns any integral value as an int. If the value cannot be
@@ -92,4 +105,91 @@ func AsInt(v interface{}) (int, bool) {
 	default:
 		return 0, false
 	}
+}
+
+// Inc increments a number value by one. If the value is not a number,
+// it returns an error.
+func Inc(v interface{}) interface{} {
+	switch v := v.(type) {
+	case int:
+		return v + 1
+	case int64:
+		return v + 1
+	case int32:
+		return v + 1
+	case int16:
+		return v + 1
+	case int8:
+		return v + 1
+	case uint:
+		return v + 1
+	case uint64:
+		return v + 1
+	case uint32:
+		return v + 1
+	case uint16:
+		return v + 1
+	case uint8:
+		return v + 1
+	case float64:
+		return v + 1
+	case float32:
+		return v + 1
+	case *BigDecimal:
+		return v.AddInt(1)
+	case *BigInt:
+		return v.AddInt(1)
+	default:
+		panic(fmt.Errorf("cannot increment %T", v))
+	}
+}
+
+// IncP increments a number value by one. If incrementing would
+// overflow, it promotes the value to a wider type, or BigInt. If the
+// value is not a number, it returns an error.
+func IncP(v interface{}) interface{} {
+	switch v := v.(type) {
+	case int:
+		return incP(v)
+	case int64:
+		return incP(v)
+	case int32:
+		return incP(v)
+	case int16:
+		return incP(v)
+	case int8:
+		return incP(v)
+	case uint:
+		return incP(v)
+	case uint64:
+		return incP(v)
+	case uint32:
+		return incP(v)
+	case uint16:
+		return incP(v)
+	case uint8:
+		return incP(v)
+	case float64:
+		return v + 1
+	case float32:
+		return v + 1
+	case *BigDecimal:
+		return v.AddInt(1)
+	case *BigInt:
+		return v.AddInt(1)
+	default:
+		panic(fmt.Errorf("cannot increment %T", v))
+	}
+}
+
+type integral interface {
+	int | uint | uint8 | uint16 | uint32 | uint64 | int8 | int16 | int32 | int64
+}
+
+func incP[T integral](x T) interface{} {
+	res := x + 1
+	if res < x {
+		return NewBigIntFromInt64(int64(x)).AddInt(1)
+	}
+	return res
 }

@@ -98,6 +98,19 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			env.Define("byte", reflect.TypeOf(byte(0)))
 			env.Define("rune", reflect.TypeOf(rune(0)))
 		}
+		// numeric functions
+		{
+			env.Define("glojure.lang.numbers/Inc", value.Inc)
+			env.Define("glojure.lang.numbers/IncP", value.IncP)
+		}
+		// iteration functions
+		{
+			env.Define("glojure.lang.iteration/NewIterator", value.NewIterator)
+			env.Define("glojure.lang.iteration/NewRangeIterator", value.NewRangeIterator)
+
+			env.Define("glojure.lang.functional/Reduce", value.Reduce)
+			env.Define("glojure.lang.functional/ReduceInit", value.ReduceInit)
+		}
 
 		// string
 		{

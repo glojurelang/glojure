@@ -34,9 +34,9 @@ func (m *Map) First() interface{} {
 	return NewVector([]interface{}{m.keyVals[0], m.keyVals[1]})
 }
 
-func (m *Map) Rest() Sequence {
+func (m *Map) Rest() ISeq {
 	if m.Count() == 0 {
-		return emptySequence{}
+		return emptyList
 	}
 
 	return NewMap(m.keyVals[2:])

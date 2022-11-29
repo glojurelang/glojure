@@ -33,9 +33,9 @@ func (s *Set) First() interface{} {
 	return s.vals[0]
 }
 
-func (s *Set) Rest() Sequence {
+func (s *Set) Rest() ISeq {
 	if s.Count() == 0 {
-		return emptySequence{}
+		return emptyList
 	}
 
 	return NewSet(s.vals[1:])

@@ -278,6 +278,8 @@ func firstBuiltin(env value.Environment, args []interface{}) (out interface{}, e
 	}
 
 	switch c := args[0].(type) {
+	case value.ISeq:
+		return c.First(), nil
 	case *value.List:
 		if c.IsEmpty() {
 			return nil, nil
@@ -307,6 +309,10 @@ func restBuiltin(env value.Environment, args []interface{}) (interface{}, error)
 	}
 
 	switch c := args[0].(type) {
+	case value.ISeq:
+		return c.Rest(), nil
+	case value.ISeqable:
+		return c.Seq().Rest(), nil
 	case *value.List:
 		if c.IsEmpty() {
 			return c, nil
@@ -426,6 +432,12 @@ func isSeqBuiltin(env value.Environment, args []interface{}) (interface{}, error
 	if len(args) != 1 {
 		return nil, fmt.Errorf("seq? expects 1 argument, got %v", len(args))
 	}
+
+	if _, ok := args[0].(value.ISeq); ok {
+		return true, nil
+	}
+
+	// TODO: this is totally unused, and should be removed.
 	_, ok := args[0].(*value.Seq)
 	return ok, nil
 }
@@ -444,6 +456,8 @@ func emptyBuiltin(env value.Environment, args []interface{}) (interface{}, error
 	}
 
 	switch c := args[0].(type) {
+	case value.ISeq:
+		return c.IsEmpty(), nil
 	case *value.List:
 		return c.IsEmpty(), nil
 	case *value.Vector:

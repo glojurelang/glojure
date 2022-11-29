@@ -115,19 +115,39 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Iteration
+
+(defn inc'
+  "Returns a number one greater than num. Supports arbitrary precision.
+  See also: inc"
+  ;; {:inline (fn [x] `(. clojure.lang.Numbers (incP ~x)))
+  ;;  :added "1.0"}
+  [x] (glojure.lang.numbers/IncP x))
+
+(defn inc
+  "Returns a number one greater than num. Does not auto-promote
+  longs, will throw on overflow. See also: inc'"
+  ;; {:inline (fn [x] `(. clojure.lang.Numbers (~(if *unchecked-math* 'unchecked_inc 'inc) ~x)))
+  ;;  :added "1.2"}
+  [x] (glojure.lang.numbers/Inc x))
+
+(defn iterate
+  "Returns a lazy sequence of x, (f x), (f (f x)) etc. f must be free of side-effects"
+  ;; {:added "1.0"
+  ;;  :static true}
+  [f x] (glojure.lang.iteration/NewIterator f x) )
+
 (defn range
-  ([end] (range 0 end))
-  ([beg end]
-   (let [beg (floor beg)
-         end (floor end)]
-     (let [range-tail
-            (fn range-tail [suffix beg end]
-              (if (>= beg end)
-                suffix
-                (range-tail (conj suffix (- end 1)) beg (- end 1))))]
-       (if (<= beg end)
-         (range-tail '() beg end)
-         '())))))
+  "Returns a lazy seq of nums from start (inclusive) to end
+  (exclusive), by step, where start defaults to 0, step to 1, and end to
+  infinity. When step is equal to 0, returns an infinite sequence of
+  start. When start is equal to end, returns empty list."
+  ;; {:added "1.0"
+  ;;  :static true}
+  ([]
+   (iterate inc' 0))
+  ([end] (glojure.lang.iteration/NewRangeIterator 0 end 1))
+  ([start end] (glojure.lang.iteration/NewRangeIterator start end 1))
+  ([start end step] (glojure.lang.iteration/NewRangeIterator start end step)))
 
 (defn repeat [n x]
   (let [repeat-tail
@@ -189,16 +209,11 @@
   applying f to that result and the 2nd item, etc. If coll contains no
   items, returns val and f is not called."
   ([f coll]
-   (case (count coll)
-     0 (f)
-     1 (first coll)
-     (reduce f (first coll) (rest coll))))
+     (if (empty? coll)
+       (f)
+       (glojure.lang.functional/Reduce f coll)))
   ([f val coll]
-   (if (empty? coll)
-     val
-     (reduce f (f val (first coll)) (rest coll)))))
-
-(defn sum [lst] (apply + lst))
+       (glojure.lang.functional/ReduceInit f val coll)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Audio helpers

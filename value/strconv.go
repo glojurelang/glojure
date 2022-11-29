@@ -26,6 +26,9 @@ func PrintReadably() PrintOption {
 // printed in a format that can be read back in by the reader. If
 // printReadably is true, the output is more human-readable.
 func ToString(v interface{}, opts ...PrintOption) string {
+	// TODO: this function should take an io.Writer and write directly
+	// to it.
+
 	options := printOptions{}
 	for _, opt := range opts {
 		opt(&options)
@@ -86,6 +89,20 @@ func ToString(v interface{}, opts ...PrintOption) string {
 			builder.WriteString(ToString(vv.Index(i).Interface(), opts...))
 		}
 		builder.WriteString("]")
+		return builder.String()
+	}
+
+	if seq, ok := v.(ISeq); ok {
+		builder := strings.Builder{}
+		builder.WriteString("(")
+		for ; !seq.IsEmpty(); seq = seq.Rest() {
+			cur := seq.First()
+			if builder.Len() > 1 {
+				builder.WriteString(" ")
+			}
+			builder.WriteString(ToString(cur, opts...))
+		}
+		builder.WriteString(")")
 		return builder.String()
 	}
 

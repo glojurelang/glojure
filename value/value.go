@@ -4,24 +4,14 @@ import (
 	"context"
 )
 
-type Sequence interface {
+type ISeq interface {
 	First() interface{}
-	Rest() Sequence
+	Rest() ISeq
 	IsEmpty() bool
 }
 
-type emptySequence struct{}
-
-func (es emptySequence) First() interface{} {
-	return nil
-}
-
-func (es emptySequence) Rest() Sequence {
-	return es
-}
-
-func (es emptySequence) IsEmpty() bool {
-	return true
+type ISeqable interface {
+	Seq() ISeq
 }
 
 // Enumerable is an interface for compound values that support

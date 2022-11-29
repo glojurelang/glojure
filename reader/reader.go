@@ -511,7 +511,7 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 		return nil, r.error("error reading namespaced map: %w", err)
 	}
 
-	mp := mapVal.(value.Sequence)
+	mp := mapVal.(value.ISeq)
 
 	newKeyVals := []interface{}{}
 	for !mp.IsEmpty() {
