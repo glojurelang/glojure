@@ -777,7 +777,7 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 	if v, ok := memberExpr.(*value.Symbol); ok {
 		fieldVal := value.FieldOrMethod(target, v.Value)
 		if fieldVal == nil {
-			return nil, env.errorf(v, "unknown field or method (%v)", v.Value)
+			return nil, env.errorf(v, "%T has no such field or method (%v)", target, v.Value)
 		}
 
 		reflectVal := reflect.ValueOf(fieldVal)
