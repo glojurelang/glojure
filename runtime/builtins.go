@@ -222,23 +222,8 @@ func firstBuiltin(env value.Environment, args []interface{}) (out interface{}, e
 		return nil, fmt.Errorf("first expects 1 argument, got %v", len(args))
 	}
 
-	if args[0] == nil {
-		return nil, nil
-	}
-
-	switch c := args[0].(type) {
-	case value.ISeq:
-		return c.First(), nil
-	case *value.List:
-		if c.IsEmpty() {
-			return nil, nil
-		}
-		return c.Item(), nil
-	case *value.Vector:
-		if c.Count() == 0 {
-			return nil, nil
-		}
-		return c.ValueAt(0), nil
+	if seq := value.Seq(args[0]); seq != nil {
+		return seq.First(), nil
 	}
 
 	return nil, fmt.Errorf("first expects a sequence, got %v", args[0])
@@ -249,21 +234,8 @@ func restBuiltin(env value.Environment, args []interface{}) (interface{}, error)
 		return nil, fmt.Errorf("rest expects 1 argument, got %v", len(args))
 	}
 
-	switch c := args[0].(type) {
-	case value.ISeq:
-		return c.Rest(), nil
-	case value.ISeqable:
-		return c.Seq().Rest(), nil
-	case *value.List:
-		if c.IsEmpty() {
-			return c, nil
-		}
-		return c.Next(), nil
-	case *value.Vector:
-		if c.Count() == 0 {
-			return c, nil
-		}
-		return c.SubVector(1, c.Count()), nil
+	if seq := value.Seq(args[0]); seq != nil {
+		return seq.Rest(), nil
 	}
 
 	return nil, fmt.Errorf("rest expects a sequence, got %v", args[0])
@@ -372,13 +344,12 @@ func emptyBuiltin(env value.Environment, args []interface{}) (interface{}, error
 		return nil, fmt.Errorf("empty? expects 1 argument, got %v", len(args))
 	}
 
-	switch c := args[0].(type) {
-	case value.ISeq:
-		return c.IsEmpty(), nil
-	case value.Counter:
+	if c, ok := args[0].(value.Counter); ok {
 		return c.Count() == 0, nil
 	}
-
+	if seq := value.Seq(args[0]); seq != nil {
+		return seq.IsEmpty(), nil
+	}
 	return nil, fmt.Errorf("empty? expects a collection, got %v", args[0])
 }
 

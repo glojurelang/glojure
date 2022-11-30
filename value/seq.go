@@ -20,6 +20,8 @@ func Seq(x interface{}) ISeq {
 		return x.Seq()
 	case string:
 		return newStringSeq(x)
+	case nil:
+		return emptyList
 	}
 
 	// use the reflect package to handle slices and arrays

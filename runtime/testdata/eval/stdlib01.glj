@@ -3,3 +3,4 @@
 (println (concat '(a b c) [1 2 3]))
 (println (concat "hello"))
 (println (concat '(1 2 3) [4 5 6] ((go-sliceof byte) "foobar")))
+(println (map (fn [a] (+ a 1)) ((go-sliceof int64) [1 2])))
