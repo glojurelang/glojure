@@ -102,6 +102,9 @@
 
 (defn cons [car cdr] (concat (list car) cdr))
 
+(defn concat [& seqs]
+  (apply glojure.lang.iteration/NewConcatIterator seqs))
+
 (defn sequential? [x]
   (or (list? x)
       (vector? x)

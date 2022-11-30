@@ -4,18 +4,23 @@ package gljimports
 import (
 	bytes "bytes"
 	context "context"
+	flag "flag"
 	fmt "fmt"
 	io "io"
 	io_fs "io/fs"
 	io_ioutil "io/ioutil"
+	math "math"
+	math_big "math/big"
+	math_rand "math/rand"
 	net_http "net/http"
+	os "os"
+	os_exec "os/exec"
+	os_signal "os/signal"
 	regexp "regexp"
 	strconv "strconv"
 	strings "strings"
 	time "time"
-	math_big "math/big"
-	math_rand "math/rand"
-	math "math"
+	unicode "unicode"
 	"reflect"
 )
 
@@ -103,8 +108,72 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("context.WithTimeout", context.WithTimeout)
 	_register("context.WithValue", context.WithValue)
 
+	// package flag
+	////////////////////////////////////////
+	_register("flag.Arg", flag.Arg)
+	_register("flag.Args", flag.Args)
+	_register("flag.Bool", flag.Bool)
+	_register("flag.BoolVar", flag.BoolVar)
+	_register("flag.CommandLine", flag.CommandLine)
+	_register("flag.ContinueOnError", flag.ContinueOnError)
+	_register("flag.Duration", flag.Duration)
+	_register("flag.DurationVar", flag.DurationVar)
+	_register("flag.ErrHelp", flag.ErrHelp)
+	{
+		var x flag.ErrorHandling
+		_register("flag.ErrorHandling", reflect.TypeOf(x))
+	}
+	_register("flag.ExitOnError", flag.ExitOnError)
+	{
+		var x flag.Flag
+		_register("flag.Flag", reflect.TypeOf(x))
+	}
+	{
+		var x flag.FlagSet
+		_register("flag.FlagSet", reflect.TypeOf(x))
+	}
+	_register("flag.Float64", flag.Float64)
+	_register("flag.Float64Var", flag.Float64Var)
+	_register("flag.Func", flag.Func)
+	{
+		var x flag.Getter
+		_register("flag.Getter", reflect.TypeOf(x))
+	}
+	_register("flag.Int", flag.Int)
+	_register("flag.Int64", flag.Int64)
+	_register("flag.Int64Var", flag.Int64Var)
+	_register("flag.IntVar", flag.IntVar)
+	_register("flag.Lookup", flag.Lookup)
+	_register("flag.NArg", flag.NArg)
+	_register("flag.NFlag", flag.NFlag)
+	_register("flag.NewFlagSet", flag.NewFlagSet)
+	_register("flag.PanicOnError", flag.PanicOnError)
+	_register("flag.Parse", flag.Parse)
+	_register("flag.Parsed", flag.Parsed)
+	_register("flag.PrintDefaults", flag.PrintDefaults)
+	_register("flag.Set", flag.Set)
+	_register("flag.String", flag.String)
+	_register("flag.StringVar", flag.StringVar)
+	_register("flag.TextVar", flag.TextVar)
+	_register("flag.Uint", flag.Uint)
+	_register("flag.Uint64", flag.Uint64)
+	_register("flag.Uint64Var", flag.Uint64Var)
+	_register("flag.UintVar", flag.UintVar)
+	_register("flag.UnquoteUsage", flag.UnquoteUsage)
+	_register("flag.Usage", flag.Usage)
+	{
+		var x flag.Value
+		_register("flag.Value", reflect.TypeOf(x))
+	}
+	_register("flag.Var", flag.Var)
+	_register("flag.Visit", flag.Visit)
+	_register("flag.VisitAll", flag.VisitAll)
+
 	// package fmt
 	////////////////////////////////////////
+	_register("fmt.Append", fmt.Append)
+	_register("fmt.Appendf", fmt.Appendf)
+	_register("fmt.Appendln", fmt.Appendln)
 	_register("fmt.Errorf", fmt.Errorf)
 	{
 		var x fmt.Formatter
@@ -375,6 +444,193 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("io/ioutil.TempFile", io_ioutil.TempFile)
 	_register("io/ioutil.WriteFile", io_ioutil.WriteFile)
 
+	// package math
+	////////////////////////////////////////
+	_register("math.Abs", math.Abs)
+	_register("math.Acos", math.Acos)
+	_register("math.Acosh", math.Acosh)
+	_register("math.Asin", math.Asin)
+	_register("math.Asinh", math.Asinh)
+	_register("math.Atan", math.Atan)
+	_register("math.Atan2", math.Atan2)
+	_register("math.Atanh", math.Atanh)
+	_register("math.Cbrt", math.Cbrt)
+	_register("math.Ceil", math.Ceil)
+	_register("math.Copysign", math.Copysign)
+	_register("math.Cos", math.Cos)
+	_register("math.Cosh", math.Cosh)
+	_register("math.Dim", math.Dim)
+	_register("math.E", math.E)
+	_register("math.Erf", math.Erf)
+	_register("math.Erfc", math.Erfc)
+	_register("math.Erfcinv", math.Erfcinv)
+	_register("math.Erfinv", math.Erfinv)
+	_register("math.Exp", math.Exp)
+	_register("math.Exp2", math.Exp2)
+	_register("math.Expm1", math.Expm1)
+	_register("math.FMA", math.FMA)
+	_register("math.Float32bits", math.Float32bits)
+	_register("math.Float32frombits", math.Float32frombits)
+	_register("math.Float64bits", math.Float64bits)
+	_register("math.Float64frombits", math.Float64frombits)
+	_register("math.Floor", math.Floor)
+	_register("math.Frexp", math.Frexp)
+	_register("math.Gamma", math.Gamma)
+	_register("math.Hypot", math.Hypot)
+	_register("math.Ilogb", math.Ilogb)
+	_register("math.Inf", math.Inf)
+	_register("math.IsInf", math.IsInf)
+	_register("math.IsNaN", math.IsNaN)
+	_register("math.J0", math.J0)
+	_register("math.J1", math.J1)
+	_register("math.Jn", math.Jn)
+	_register("math.Ldexp", math.Ldexp)
+	_register("math.Lgamma", math.Lgamma)
+	_register("math.Ln10", math.Ln10)
+	_register("math.Ln2", math.Ln2)
+	_register("math.Log", math.Log)
+	_register("math.Log10", math.Log10)
+	_register("math.Log10E", math.Log10E)
+	_register("math.Log1p", math.Log1p)
+	_register("math.Log2", math.Log2)
+	_register("math.Log2E", math.Log2E)
+	_register("math.Logb", math.Logb)
+	_register("math.Max", math.Max)
+	_register("math.MaxFloat32", math.MaxFloat32)
+	_register("math.MaxFloat64", math.MaxFloat64)
+	_register("math.MaxInt", math.MaxInt)
+	_register("math.MaxInt16", math.MaxInt16)
+	_register("math.MaxInt32", math.MaxInt32)
+	_register("math.MaxInt64", math.MaxInt64)
+	_register("math.MaxInt8", math.MaxInt8)
+	_register("math.MaxUint", uint(math.MaxUint))
+	_register("math.MaxUint16", math.MaxUint16)
+	_register("math.MaxUint32", math.MaxUint32)
+	_register("math.MaxUint64", uint64(math.MaxUint64))
+	_register("math.MaxUint8", math.MaxUint8)
+	_register("math.Min", math.Min)
+	_register("math.MinInt", math.MinInt)
+	_register("math.MinInt16", math.MinInt16)
+	_register("math.MinInt32", math.MinInt32)
+	_register("math.MinInt64", math.MinInt64)
+	_register("math.MinInt8", math.MinInt8)
+	_register("math.Mod", math.Mod)
+	_register("math.Modf", math.Modf)
+	_register("math.NaN", math.NaN)
+	_register("math.Nextafter", math.Nextafter)
+	_register("math.Nextafter32", math.Nextafter32)
+	_register("math.Phi", math.Phi)
+	_register("math.Pi", math.Pi)
+	_register("math.Pow", math.Pow)
+	_register("math.Pow10", math.Pow10)
+	_register("math.Remainder", math.Remainder)
+	_register("math.Round", math.Round)
+	_register("math.RoundToEven", math.RoundToEven)
+	_register("math.Signbit", math.Signbit)
+	_register("math.Sin", math.Sin)
+	_register("math.Sincos", math.Sincos)
+	_register("math.Sinh", math.Sinh)
+	_register("math.SmallestNonzeroFloat32", math.SmallestNonzeroFloat32)
+	_register("math.SmallestNonzeroFloat64", math.SmallestNonzeroFloat64)
+	_register("math.Sqrt", math.Sqrt)
+	_register("math.Sqrt2", math.Sqrt2)
+	_register("math.SqrtE", math.SqrtE)
+	_register("math.SqrtPhi", math.SqrtPhi)
+	_register("math.SqrtPi", math.SqrtPi)
+	_register("math.Tan", math.Tan)
+	_register("math.Tanh", math.Tanh)
+	_register("math.Trunc", math.Trunc)
+	_register("math.Y0", math.Y0)
+	_register("math.Y1", math.Y1)
+	_register("math.Yn", math.Yn)
+
+	// package math/big
+	////////////////////////////////////////
+	_register("math/big.Above", math_big.Above)
+	{
+		var x math_big.Accuracy
+		_register("math/big.Accuracy", reflect.TypeOf(x))
+	}
+	_register("math/big.AwayFromZero", math_big.AwayFromZero)
+	_register("math/big.Below", math_big.Below)
+	{
+		var x math_big.ErrNaN
+		_register("math/big.ErrNaN", reflect.TypeOf(x))
+	}
+	_register("math/big.Exact", math_big.Exact)
+	{
+		var x math_big.Float
+		_register("math/big.Float", reflect.TypeOf(x))
+	}
+	{
+		var x math_big.Int
+		_register("math/big.Int", reflect.TypeOf(x))
+	}
+	_register("math/big.Jacobi", math_big.Jacobi)
+	_register("math/big.MaxBase", math_big.MaxBase)
+	_register("math/big.MaxExp", math_big.MaxExp)
+	_register("math/big.MaxPrec", math_big.MaxPrec)
+	_register("math/big.MinExp", math_big.MinExp)
+	_register("math/big.NewFloat", math_big.NewFloat)
+	_register("math/big.NewInt", math_big.NewInt)
+	_register("math/big.NewRat", math_big.NewRat)
+	_register("math/big.ParseFloat", math_big.ParseFloat)
+	{
+		var x math_big.Rat
+		_register("math/big.Rat", reflect.TypeOf(x))
+	}
+	{
+		var x math_big.RoundingMode
+		_register("math/big.RoundingMode", reflect.TypeOf(x))
+	}
+	_register("math/big.ToNearestAway", math_big.ToNearestAway)
+	_register("math/big.ToNearestEven", math_big.ToNearestEven)
+	_register("math/big.ToNegativeInf", math_big.ToNegativeInf)
+	_register("math/big.ToPositiveInf", math_big.ToPositiveInf)
+	_register("math/big.ToZero", math_big.ToZero)
+	{
+		var x math_big.Word
+		_register("math/big.Word", reflect.TypeOf(x))
+	}
+
+	// package math/rand
+	////////////////////////////////////////
+	_register("math/rand.ExpFloat64", math_rand.ExpFloat64)
+	_register("math/rand.Float32", math_rand.Float32)
+	_register("math/rand.Float64", math_rand.Float64)
+	_register("math/rand.Int", math_rand.Int)
+	_register("math/rand.Int31", math_rand.Int31)
+	_register("math/rand.Int31n", math_rand.Int31n)
+	_register("math/rand.Int63", math_rand.Int63)
+	_register("math/rand.Int63n", math_rand.Int63n)
+	_register("math/rand.Intn", math_rand.Intn)
+	_register("math/rand.New", math_rand.New)
+	_register("math/rand.NewSource", math_rand.NewSource)
+	_register("math/rand.NewZipf", math_rand.NewZipf)
+	_register("math/rand.NormFloat64", math_rand.NormFloat64)
+	_register("math/rand.Perm", math_rand.Perm)
+	{
+		var x math_rand.Rand
+		_register("math/rand.Rand", reflect.TypeOf(x))
+	}
+	_register("math/rand.Read", math_rand.Read)
+	_register("math/rand.Seed", math_rand.Seed)
+	_register("math/rand.Shuffle", math_rand.Shuffle)
+	{
+		var x math_rand.Source
+		_register("math/rand.Source", reflect.TypeOf(x))
+	}
+	{
+		var x math_rand.Source64
+		_register("math/rand.Source64", reflect.TypeOf(x))
+	}
+	_register("math/rand.Uint32", math_rand.Uint32)
+	_register("math/rand.Uint64", math_rand.Uint64)
+	{
+		var x math_rand.Zipf
+		_register("math/rand.Zipf", reflect.TypeOf(x))
+	}
+
 	// package net/http
 	////////////////////////////////////////
 	_register("net/http.AllowQuerySemicolons", net_http.AllowQuerySemicolons)
@@ -468,6 +724,10 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("net/http.ListenAndServe", net_http.ListenAndServe)
 	_register("net/http.ListenAndServeTLS", net_http.ListenAndServeTLS)
 	_register("net/http.LocalAddrContextKey", net_http.LocalAddrContextKey)
+	{
+		var x net_http.MaxBytesError
+		_register("net/http.MaxBytesError", reflect.TypeOf(x))
+	}
 	_register("net/http.MaxBytesHandler", net_http.MaxBytesHandler)
 	_register("net/http.MaxBytesReader", net_http.MaxBytesReader)
 	_register("net/http.MethodConnect", net_http.MethodConnect)
@@ -622,6 +882,185 @@ func RegisterImports(_register func(string, interface{})) {
 		var x net_http.Transport
 		_register("net/http.Transport", reflect.TypeOf(x))
 	}
+
+	// package os
+	////////////////////////////////////////
+	_register("os.Args", os.Args)
+	_register("os.Chdir", os.Chdir)
+	_register("os.Chmod", os.Chmod)
+	_register("os.Chown", os.Chown)
+	_register("os.Chtimes", os.Chtimes)
+	_register("os.Clearenv", os.Clearenv)
+	_register("os.Create", os.Create)
+	_register("os.CreateTemp", os.CreateTemp)
+	_register("os.DevNull", os.DevNull)
+	{
+		var x os.DirEntry
+		_register("os.DirEntry", reflect.TypeOf(x))
+	}
+	_register("os.DirFS", os.DirFS)
+	_register("os.Environ", os.Environ)
+	_register("os.ErrClosed", os.ErrClosed)
+	_register("os.ErrDeadlineExceeded", os.ErrDeadlineExceeded)
+	_register("os.ErrExist", os.ErrExist)
+	_register("os.ErrInvalid", os.ErrInvalid)
+	_register("os.ErrNoDeadline", os.ErrNoDeadline)
+	_register("os.ErrNotExist", os.ErrNotExist)
+	_register("os.ErrPermission", os.ErrPermission)
+	_register("os.ErrProcessDone", os.ErrProcessDone)
+	_register("os.Executable", os.Executable)
+	_register("os.Exit", os.Exit)
+	_register("os.Expand", os.Expand)
+	_register("os.ExpandEnv", os.ExpandEnv)
+	{
+		var x os.File
+		_register("os.File", reflect.TypeOf(x))
+	}
+	{
+		var x os.FileInfo
+		_register("os.FileInfo", reflect.TypeOf(x))
+	}
+	{
+		var x os.FileMode
+		_register("os.FileMode", reflect.TypeOf(x))
+	}
+	_register("os.FindProcess", os.FindProcess)
+	_register("os.Getegid", os.Getegid)
+	_register("os.Getenv", os.Getenv)
+	_register("os.Geteuid", os.Geteuid)
+	_register("os.Getgid", os.Getgid)
+	_register("os.Getgroups", os.Getgroups)
+	_register("os.Getpagesize", os.Getpagesize)
+	_register("os.Getpid", os.Getpid)
+	_register("os.Getppid", os.Getppid)
+	_register("os.Getuid", os.Getuid)
+	_register("os.Getwd", os.Getwd)
+	_register("os.Hostname", os.Hostname)
+	_register("os.Interrupt", os.Interrupt)
+	_register("os.IsExist", os.IsExist)
+	_register("os.IsNotExist", os.IsNotExist)
+	_register("os.IsPathSeparator", os.IsPathSeparator)
+	_register("os.IsPermission", os.IsPermission)
+	_register("os.IsTimeout", os.IsTimeout)
+	_register("os.Kill", os.Kill)
+	_register("os.Lchown", os.Lchown)
+	_register("os.Link", os.Link)
+	{
+		var x os.LinkError
+		_register("os.LinkError", reflect.TypeOf(x))
+	}
+	_register("os.LookupEnv", os.LookupEnv)
+	_register("os.Lstat", os.Lstat)
+	_register("os.Mkdir", os.Mkdir)
+	_register("os.MkdirAll", os.MkdirAll)
+	_register("os.MkdirTemp", os.MkdirTemp)
+	_register("os.ModeAppend", os.ModeAppend)
+	_register("os.ModeCharDevice", os.ModeCharDevice)
+	_register("os.ModeDevice", os.ModeDevice)
+	_register("os.ModeDir", os.ModeDir)
+	_register("os.ModeExclusive", os.ModeExclusive)
+	_register("os.ModeIrregular", os.ModeIrregular)
+	_register("os.ModeNamedPipe", os.ModeNamedPipe)
+	_register("os.ModePerm", os.ModePerm)
+	_register("os.ModeSetgid", os.ModeSetgid)
+	_register("os.ModeSetuid", os.ModeSetuid)
+	_register("os.ModeSocket", os.ModeSocket)
+	_register("os.ModeSticky", os.ModeSticky)
+	_register("os.ModeSymlink", os.ModeSymlink)
+	_register("os.ModeTemporary", os.ModeTemporary)
+	_register("os.ModeType", os.ModeType)
+	_register("os.NewFile", os.NewFile)
+	_register("os.NewSyscallError", os.NewSyscallError)
+	_register("os.O_APPEND", os.O_APPEND)
+	_register("os.O_CREATE", os.O_CREATE)
+	_register("os.O_EXCL", os.O_EXCL)
+	_register("os.O_RDONLY", os.O_RDONLY)
+	_register("os.O_RDWR", os.O_RDWR)
+	_register("os.O_SYNC", os.O_SYNC)
+	_register("os.O_TRUNC", os.O_TRUNC)
+	_register("os.O_WRONLY", os.O_WRONLY)
+	_register("os.Open", os.Open)
+	_register("os.OpenFile", os.OpenFile)
+	{
+		var x os.PathError
+		_register("os.PathError", reflect.TypeOf(x))
+	}
+	_register("os.PathListSeparator", os.PathListSeparator)
+	_register("os.PathSeparator", os.PathSeparator)
+	_register("os.Pipe", os.Pipe)
+	{
+		var x os.ProcAttr
+		_register("os.ProcAttr", reflect.TypeOf(x))
+	}
+	{
+		var x os.Process
+		_register("os.Process", reflect.TypeOf(x))
+	}
+	{
+		var x os.ProcessState
+		_register("os.ProcessState", reflect.TypeOf(x))
+	}
+	_register("os.ReadDir", os.ReadDir)
+	_register("os.ReadFile", os.ReadFile)
+	_register("os.Readlink", os.Readlink)
+	_register("os.Remove", os.Remove)
+	_register("os.RemoveAll", os.RemoveAll)
+	_register("os.Rename", os.Rename)
+	_register("os.SEEK_CUR", os.SEEK_CUR)
+	_register("os.SEEK_END", os.SEEK_END)
+	_register("os.SEEK_SET", os.SEEK_SET)
+	_register("os.SameFile", os.SameFile)
+	_register("os.Setenv", os.Setenv)
+	{
+		var x os.Signal
+		_register("os.Signal", reflect.TypeOf(x))
+	}
+	_register("os.StartProcess", os.StartProcess)
+	_register("os.Stat", os.Stat)
+	_register("os.Stderr", os.Stderr)
+	_register("os.Stdin", os.Stdin)
+	_register("os.Stdout", os.Stdout)
+	_register("os.Symlink", os.Symlink)
+	{
+		var x os.SyscallError
+		_register("os.SyscallError", reflect.TypeOf(x))
+	}
+	_register("os.TempDir", os.TempDir)
+	_register("os.Truncate", os.Truncate)
+	_register("os.Unsetenv", os.Unsetenv)
+	_register("os.UserCacheDir", os.UserCacheDir)
+	_register("os.UserConfigDir", os.UserConfigDir)
+	_register("os.UserHomeDir", os.UserHomeDir)
+	_register("os.WriteFile", os.WriteFile)
+
+	// package os/exec
+	////////////////////////////////////////
+	{
+		var x os_exec.Cmd
+		_register("os/exec.Cmd", reflect.TypeOf(x))
+	}
+	_register("os/exec.Command", os_exec.Command)
+	_register("os/exec.CommandContext", os_exec.CommandContext)
+	_register("os/exec.ErrDot", os_exec.ErrDot)
+	_register("os/exec.ErrNotFound", os_exec.ErrNotFound)
+	{
+		var x os_exec.Error
+		_register("os/exec.Error", reflect.TypeOf(x))
+	}
+	{
+		var x os_exec.ExitError
+		_register("os/exec.ExitError", reflect.TypeOf(x))
+	}
+	_register("os/exec.LookPath", os_exec.LookPath)
+
+	// package os/signal
+	////////////////////////////////////////
+	_register("os/signal.Ignore", os_signal.Ignore)
+	_register("os/signal.Ignored", os_signal.Ignored)
+	_register("os/signal.Notify", os_signal.Notify)
+	_register("os/signal.NotifyContext", os_signal.NotifyContext)
+	_register("os/signal.Reset", os_signal.Reset)
+	_register("os/signal.Stop", os_signal.Stop)
 
 	// package regexp
 	////////////////////////////////////////
@@ -843,190 +1282,305 @@ func RegisterImports(_register func(string, interface{})) {
 		_register("time.Weekday", reflect.TypeOf(x))
 	}
 
-	// package math/big
+	// package unicode
 	////////////////////////////////////////
-	_register("math/big.Above", math_big.Above)
+	_register("unicode.ASCII_Hex_Digit", unicode.ASCII_Hex_Digit)
+	_register("unicode.Adlam", unicode.Adlam)
+	_register("unicode.Ahom", unicode.Ahom)
+	_register("unicode.Anatolian_Hieroglyphs", unicode.Anatolian_Hieroglyphs)
+	_register("unicode.Arabic", unicode.Arabic)
+	_register("unicode.Armenian", unicode.Armenian)
+	_register("unicode.Avestan", unicode.Avestan)
+	_register("unicode.AzeriCase", unicode.AzeriCase)
+	_register("unicode.Balinese", unicode.Balinese)
+	_register("unicode.Bamum", unicode.Bamum)
+	_register("unicode.Bassa_Vah", unicode.Bassa_Vah)
+	_register("unicode.Batak", unicode.Batak)
+	_register("unicode.Bengali", unicode.Bengali)
+	_register("unicode.Bhaiksuki", unicode.Bhaiksuki)
+	_register("unicode.Bidi_Control", unicode.Bidi_Control)
+	_register("unicode.Bopomofo", unicode.Bopomofo)
+	_register("unicode.Brahmi", unicode.Brahmi)
+	_register("unicode.Braille", unicode.Braille)
+	_register("unicode.Buginese", unicode.Buginese)
+	_register("unicode.Buhid", unicode.Buhid)
+	_register("unicode.C", unicode.C)
+	_register("unicode.Canadian_Aboriginal", unicode.Canadian_Aboriginal)
+	_register("unicode.Carian", unicode.Carian)
 	{
-		var x math_big.Accuracy
-		_register("math/big.Accuracy", reflect.TypeOf(x))
+		var x unicode.CaseRange
+		_register("unicode.CaseRange", reflect.TypeOf(x))
 	}
-	_register("math/big.AwayFromZero", math_big.AwayFromZero)
-	_register("math/big.Below", math_big.Below)
+	_register("unicode.CaseRanges", unicode.CaseRanges)
+	_register("unicode.Categories", unicode.Categories)
+	_register("unicode.Caucasian_Albanian", unicode.Caucasian_Albanian)
+	_register("unicode.Cc", unicode.Cc)
+	_register("unicode.Cf", unicode.Cf)
+	_register("unicode.Chakma", unicode.Chakma)
+	_register("unicode.Cham", unicode.Cham)
+	_register("unicode.Cherokee", unicode.Cherokee)
+	_register("unicode.Chorasmian", unicode.Chorasmian)
+	_register("unicode.Co", unicode.Co)
+	_register("unicode.Common", unicode.Common)
+	_register("unicode.Coptic", unicode.Coptic)
+	_register("unicode.Cs", unicode.Cs)
+	_register("unicode.Cuneiform", unicode.Cuneiform)
+	_register("unicode.Cypriot", unicode.Cypriot)
+	_register("unicode.Cyrillic", unicode.Cyrillic)
+	_register("unicode.Dash", unicode.Dash)
+	_register("unicode.Deprecated", unicode.Deprecated)
+	_register("unicode.Deseret", unicode.Deseret)
+	_register("unicode.Devanagari", unicode.Devanagari)
+	_register("unicode.Diacritic", unicode.Diacritic)
+	_register("unicode.Digit", unicode.Digit)
+	_register("unicode.Dives_Akuru", unicode.Dives_Akuru)
+	_register("unicode.Dogra", unicode.Dogra)
+	_register("unicode.Duployan", unicode.Duployan)
+	_register("unicode.Egyptian_Hieroglyphs", unicode.Egyptian_Hieroglyphs)
+	_register("unicode.Elbasan", unicode.Elbasan)
+	_register("unicode.Elymaic", unicode.Elymaic)
+	_register("unicode.Ethiopic", unicode.Ethiopic)
+	_register("unicode.Extender", unicode.Extender)
+	_register("unicode.FoldCategory", unicode.FoldCategory)
+	_register("unicode.FoldScript", unicode.FoldScript)
+	_register("unicode.Georgian", unicode.Georgian)
+	_register("unicode.Glagolitic", unicode.Glagolitic)
+	_register("unicode.Gothic", unicode.Gothic)
+	_register("unicode.Grantha", unicode.Grantha)
+	_register("unicode.GraphicRanges", unicode.GraphicRanges)
+	_register("unicode.Greek", unicode.Greek)
+	_register("unicode.Gujarati", unicode.Gujarati)
+	_register("unicode.Gunjala_Gondi", unicode.Gunjala_Gondi)
+	_register("unicode.Gurmukhi", unicode.Gurmukhi)
+	_register("unicode.Han", unicode.Han)
+	_register("unicode.Hangul", unicode.Hangul)
+	_register("unicode.Hanifi_Rohingya", unicode.Hanifi_Rohingya)
+	_register("unicode.Hanunoo", unicode.Hanunoo)
+	_register("unicode.Hatran", unicode.Hatran)
+	_register("unicode.Hebrew", unicode.Hebrew)
+	_register("unicode.Hex_Digit", unicode.Hex_Digit)
+	_register("unicode.Hiragana", unicode.Hiragana)
+	_register("unicode.Hyphen", unicode.Hyphen)
+	_register("unicode.IDS_Binary_Operator", unicode.IDS_Binary_Operator)
+	_register("unicode.IDS_Trinary_Operator", unicode.IDS_Trinary_Operator)
+	_register("unicode.Ideographic", unicode.Ideographic)
+	_register("unicode.Imperial_Aramaic", unicode.Imperial_Aramaic)
+	_register("unicode.In", unicode.In)
+	_register("unicode.Inherited", unicode.Inherited)
+	_register("unicode.Inscriptional_Pahlavi", unicode.Inscriptional_Pahlavi)
+	_register("unicode.Inscriptional_Parthian", unicode.Inscriptional_Parthian)
+	_register("unicode.Is", unicode.Is)
+	_register("unicode.IsControl", unicode.IsControl)
+	_register("unicode.IsDigit", unicode.IsDigit)
+	_register("unicode.IsGraphic", unicode.IsGraphic)
+	_register("unicode.IsLetter", unicode.IsLetter)
+	_register("unicode.IsLower", unicode.IsLower)
+	_register("unicode.IsMark", unicode.IsMark)
+	_register("unicode.IsNumber", unicode.IsNumber)
+	_register("unicode.IsOneOf", unicode.IsOneOf)
+	_register("unicode.IsPrint", unicode.IsPrint)
+	_register("unicode.IsPunct", unicode.IsPunct)
+	_register("unicode.IsSpace", unicode.IsSpace)
+	_register("unicode.IsSymbol", unicode.IsSymbol)
+	_register("unicode.IsTitle", unicode.IsTitle)
+	_register("unicode.IsUpper", unicode.IsUpper)
+	_register("unicode.Javanese", unicode.Javanese)
+	_register("unicode.Join_Control", unicode.Join_Control)
+	_register("unicode.Kaithi", unicode.Kaithi)
+	_register("unicode.Kannada", unicode.Kannada)
+	_register("unicode.Katakana", unicode.Katakana)
+	_register("unicode.Kayah_Li", unicode.Kayah_Li)
+	_register("unicode.Kharoshthi", unicode.Kharoshthi)
+	_register("unicode.Khitan_Small_Script", unicode.Khitan_Small_Script)
+	_register("unicode.Khmer", unicode.Khmer)
+	_register("unicode.Khojki", unicode.Khojki)
+	_register("unicode.Khudawadi", unicode.Khudawadi)
+	_register("unicode.L", unicode.L)
+	_register("unicode.Lao", unicode.Lao)
+	_register("unicode.Latin", unicode.Latin)
+	_register("unicode.Lepcha", unicode.Lepcha)
+	_register("unicode.Letter", unicode.Letter)
+	_register("unicode.Limbu", unicode.Limbu)
+	_register("unicode.Linear_A", unicode.Linear_A)
+	_register("unicode.Linear_B", unicode.Linear_B)
+	_register("unicode.Lisu", unicode.Lisu)
+	_register("unicode.Ll", unicode.Ll)
+	_register("unicode.Lm", unicode.Lm)
+	_register("unicode.Lo", unicode.Lo)
+	_register("unicode.Logical_Order_Exception", unicode.Logical_Order_Exception)
+	_register("unicode.Lower", unicode.Lower)
+	_register("unicode.LowerCase", unicode.LowerCase)
+	_register("unicode.Lt", unicode.Lt)
+	_register("unicode.Lu", unicode.Lu)
+	_register("unicode.Lycian", unicode.Lycian)
+	_register("unicode.Lydian", unicode.Lydian)
+	_register("unicode.M", unicode.M)
+	_register("unicode.Mahajani", unicode.Mahajani)
+	_register("unicode.Makasar", unicode.Makasar)
+	_register("unicode.Malayalam", unicode.Malayalam)
+	_register("unicode.Mandaic", unicode.Mandaic)
+	_register("unicode.Manichaean", unicode.Manichaean)
+	_register("unicode.Marchen", unicode.Marchen)
+	_register("unicode.Mark", unicode.Mark)
+	_register("unicode.Masaram_Gondi", unicode.Masaram_Gondi)
+	_register("unicode.MaxASCII", unicode.MaxASCII)
+	_register("unicode.MaxCase", unicode.MaxCase)
+	_register("unicode.MaxLatin1", unicode.MaxLatin1)
+	_register("unicode.MaxRune", unicode.MaxRune)
+	_register("unicode.Mc", unicode.Mc)
+	_register("unicode.Me", unicode.Me)
+	_register("unicode.Medefaidrin", unicode.Medefaidrin)
+	_register("unicode.Meetei_Mayek", unicode.Meetei_Mayek)
+	_register("unicode.Mende_Kikakui", unicode.Mende_Kikakui)
+	_register("unicode.Meroitic_Cursive", unicode.Meroitic_Cursive)
+	_register("unicode.Meroitic_Hieroglyphs", unicode.Meroitic_Hieroglyphs)
+	_register("unicode.Miao", unicode.Miao)
+	_register("unicode.Mn", unicode.Mn)
+	_register("unicode.Modi", unicode.Modi)
+	_register("unicode.Mongolian", unicode.Mongolian)
+	_register("unicode.Mro", unicode.Mro)
+	_register("unicode.Multani", unicode.Multani)
+	_register("unicode.Myanmar", unicode.Myanmar)
+	_register("unicode.N", unicode.N)
+	_register("unicode.Nabataean", unicode.Nabataean)
+	_register("unicode.Nandinagari", unicode.Nandinagari)
+	_register("unicode.Nd", unicode.Nd)
+	_register("unicode.New_Tai_Lue", unicode.New_Tai_Lue)
+	_register("unicode.Newa", unicode.Newa)
+	_register("unicode.Nko", unicode.Nko)
+	_register("unicode.Nl", unicode.Nl)
+	_register("unicode.No", unicode.No)
+	_register("unicode.Noncharacter_Code_Point", unicode.Noncharacter_Code_Point)
+	_register("unicode.Number", unicode.Number)
+	_register("unicode.Nushu", unicode.Nushu)
+	_register("unicode.Nyiakeng_Puachue_Hmong", unicode.Nyiakeng_Puachue_Hmong)
+	_register("unicode.Ogham", unicode.Ogham)
+	_register("unicode.Ol_Chiki", unicode.Ol_Chiki)
+	_register("unicode.Old_Hungarian", unicode.Old_Hungarian)
+	_register("unicode.Old_Italic", unicode.Old_Italic)
+	_register("unicode.Old_North_Arabian", unicode.Old_North_Arabian)
+	_register("unicode.Old_Permic", unicode.Old_Permic)
+	_register("unicode.Old_Persian", unicode.Old_Persian)
+	_register("unicode.Old_Sogdian", unicode.Old_Sogdian)
+	_register("unicode.Old_South_Arabian", unicode.Old_South_Arabian)
+	_register("unicode.Old_Turkic", unicode.Old_Turkic)
+	_register("unicode.Oriya", unicode.Oriya)
+	_register("unicode.Osage", unicode.Osage)
+	_register("unicode.Osmanya", unicode.Osmanya)
+	_register("unicode.Other", unicode.Other)
+	_register("unicode.Other_Alphabetic", unicode.Other_Alphabetic)
+	_register("unicode.Other_Default_Ignorable_Code_Point", unicode.Other_Default_Ignorable_Code_Point)
+	_register("unicode.Other_Grapheme_Extend", unicode.Other_Grapheme_Extend)
+	_register("unicode.Other_ID_Continue", unicode.Other_ID_Continue)
+	_register("unicode.Other_ID_Start", unicode.Other_ID_Start)
+	_register("unicode.Other_Lowercase", unicode.Other_Lowercase)
+	_register("unicode.Other_Math", unicode.Other_Math)
+	_register("unicode.Other_Uppercase", unicode.Other_Uppercase)
+	_register("unicode.P", unicode.P)
+	_register("unicode.Pahawh_Hmong", unicode.Pahawh_Hmong)
+	_register("unicode.Palmyrene", unicode.Palmyrene)
+	_register("unicode.Pattern_Syntax", unicode.Pattern_Syntax)
+	_register("unicode.Pattern_White_Space", unicode.Pattern_White_Space)
+	_register("unicode.Pau_Cin_Hau", unicode.Pau_Cin_Hau)
+	_register("unicode.Pc", unicode.Pc)
+	_register("unicode.Pd", unicode.Pd)
+	_register("unicode.Pe", unicode.Pe)
+	_register("unicode.Pf", unicode.Pf)
+	_register("unicode.Phags_Pa", unicode.Phags_Pa)
+	_register("unicode.Phoenician", unicode.Phoenician)
+	_register("unicode.Pi", unicode.Pi)
+	_register("unicode.Po", unicode.Po)
+	_register("unicode.Prepended_Concatenation_Mark", unicode.Prepended_Concatenation_Mark)
+	_register("unicode.PrintRanges", unicode.PrintRanges)
+	_register("unicode.Properties", unicode.Properties)
+	_register("unicode.Ps", unicode.Ps)
+	_register("unicode.Psalter_Pahlavi", unicode.Psalter_Pahlavi)
+	_register("unicode.Punct", unicode.Punct)
+	_register("unicode.Quotation_Mark", unicode.Quotation_Mark)
+	_register("unicode.Radical", unicode.Radical)
 	{
-		var x math_big.ErrNaN
-		_register("math/big.ErrNaN", reflect.TypeOf(x))
-	}
-	_register("math/big.Exact", math_big.Exact)
-	{
-		var x math_big.Float
-		_register("math/big.Float", reflect.TypeOf(x))
+		var x unicode.Range16
+		_register("unicode.Range16", reflect.TypeOf(x))
 	}
 	{
-		var x math_big.Int
-		_register("math/big.Int", reflect.TypeOf(x))
-	}
-	_register("math/big.Jacobi", math_big.Jacobi)
-	_register("math/big.MaxBase", math_big.MaxBase)
-	_register("math/big.MaxExp", math_big.MaxExp)
-	_register("math/big.MaxPrec", math_big.MaxPrec)
-	_register("math/big.MinExp", math_big.MinExp)
-	_register("math/big.NewFloat", math_big.NewFloat)
-	_register("math/big.NewInt", math_big.NewInt)
-	_register("math/big.NewRat", math_big.NewRat)
-	_register("math/big.ParseFloat", math_big.ParseFloat)
-	{
-		var x math_big.Rat
-		_register("math/big.Rat", reflect.TypeOf(x))
+		var x unicode.Range32
+		_register("unicode.Range32", reflect.TypeOf(x))
 	}
 	{
-		var x math_big.RoundingMode
-		_register("math/big.RoundingMode", reflect.TypeOf(x))
+		var x unicode.RangeTable
+		_register("unicode.RangeTable", reflect.TypeOf(x))
 	}
-	_register("math/big.ToNearestAway", math_big.ToNearestAway)
-	_register("math/big.ToNearestEven", math_big.ToNearestEven)
-	_register("math/big.ToNegativeInf", math_big.ToNegativeInf)
-	_register("math/big.ToPositiveInf", math_big.ToPositiveInf)
-	_register("math/big.ToZero", math_big.ToZero)
+	_register("unicode.Regional_Indicator", unicode.Regional_Indicator)
+	_register("unicode.Rejang", unicode.Rejang)
+	_register("unicode.ReplacementChar", unicode.ReplacementChar)
+	_register("unicode.Runic", unicode.Runic)
+	_register("unicode.S", unicode.S)
+	_register("unicode.STerm", unicode.STerm)
+	_register("unicode.Samaritan", unicode.Samaritan)
+	_register("unicode.Saurashtra", unicode.Saurashtra)
+	_register("unicode.Sc", unicode.Sc)
+	_register("unicode.Scripts", unicode.Scripts)
+	_register("unicode.Sentence_Terminal", unicode.Sentence_Terminal)
+	_register("unicode.Sharada", unicode.Sharada)
+	_register("unicode.Shavian", unicode.Shavian)
+	_register("unicode.Siddham", unicode.Siddham)
+	_register("unicode.SignWriting", unicode.SignWriting)
+	_register("unicode.SimpleFold", unicode.SimpleFold)
+	_register("unicode.Sinhala", unicode.Sinhala)
+	_register("unicode.Sk", unicode.Sk)
+	_register("unicode.Sm", unicode.Sm)
+	_register("unicode.So", unicode.So)
+	_register("unicode.Soft_Dotted", unicode.Soft_Dotted)
+	_register("unicode.Sogdian", unicode.Sogdian)
+	_register("unicode.Sora_Sompeng", unicode.Sora_Sompeng)
+	_register("unicode.Soyombo", unicode.Soyombo)
+	_register("unicode.Space", unicode.Space)
 	{
-		var x math_big.Word
-		_register("math/big.Word", reflect.TypeOf(x))
+		var x unicode.SpecialCase
+		_register("unicode.SpecialCase", reflect.TypeOf(x))
 	}
-
-	// package math/rand
-	////////////////////////////////////////
-	_register("math/rand.ExpFloat64", math_rand.ExpFloat64)
-	_register("math/rand.Float32", math_rand.Float32)
-	_register("math/rand.Float64", math_rand.Float64)
-	_register("math/rand.Int", math_rand.Int)
-	_register("math/rand.Int31", math_rand.Int31)
-	_register("math/rand.Int31n", math_rand.Int31n)
-	_register("math/rand.Int63", math_rand.Int63)
-	_register("math/rand.Int63n", math_rand.Int63n)
-	_register("math/rand.Intn", math_rand.Intn)
-	_register("math/rand.New", math_rand.New)
-	_register("math/rand.NewSource", math_rand.NewSource)
-	_register("math/rand.NewZipf", math_rand.NewZipf)
-	_register("math/rand.NormFloat64", math_rand.NormFloat64)
-	_register("math/rand.Perm", math_rand.Perm)
-	{
-		var x math_rand.Rand
-		_register("math/rand.Rand", reflect.TypeOf(x))
-	}
-	_register("math/rand.Read", math_rand.Read)
-	_register("math/rand.Seed", math_rand.Seed)
-	_register("math/rand.Shuffle", math_rand.Shuffle)
-	{
-		var x math_rand.Source
-		_register("math/rand.Source", reflect.TypeOf(x))
-	}
-	{
-		var x math_rand.Source64
-		_register("math/rand.Source64", reflect.TypeOf(x))
-	}
-	_register("math/rand.Uint32", math_rand.Uint32)
-	_register("math/rand.Uint64", math_rand.Uint64)
-	{
-		var x math_rand.Zipf
-		_register("math/rand.Zipf", reflect.TypeOf(x))
-	}
-
-	// package math
-	////////////////////////////////////////
-	_register("math.Abs", math.Abs)
-	_register("math.Acos", math.Acos)
-	_register("math.Acosh", math.Acosh)
-	_register("math.Asin", math.Asin)
-	_register("math.Asinh", math.Asinh)
-	_register("math.Atan", math.Atan)
-	_register("math.Atan2", math.Atan2)
-	_register("math.Atanh", math.Atanh)
-	_register("math.Cbrt", math.Cbrt)
-	_register("math.Ceil", math.Ceil)
-	_register("math.Copysign", math.Copysign)
-	_register("math.Cos", math.Cos)
-	_register("math.Cosh", math.Cosh)
-	_register("math.Dim", math.Dim)
-	_register("math.E", math.E)
-	_register("math.Erf", math.Erf)
-	_register("math.Erfc", math.Erfc)
-	_register("math.Erfcinv", math.Erfcinv)
-	_register("math.Erfinv", math.Erfinv)
-	_register("math.Exp", math.Exp)
-	_register("math.Exp2", math.Exp2)
-	_register("math.Expm1", math.Expm1)
-	_register("math.FMA", math.FMA)
-	_register("math.Float32bits", math.Float32bits)
-	_register("math.Float32frombits", math.Float32frombits)
-	_register("math.Float64bits", math.Float64bits)
-	_register("math.Float64frombits", math.Float64frombits)
-	_register("math.Floor", math.Floor)
-	_register("math.Frexp", math.Frexp)
-	_register("math.Gamma", math.Gamma)
-	_register("math.Hypot", math.Hypot)
-	_register("math.Ilogb", math.Ilogb)
-	_register("math.Inf", math.Inf)
-	_register("math.IsInf", math.IsInf)
-	_register("math.IsNaN", math.IsNaN)
-	_register("math.J0", math.J0)
-	_register("math.J1", math.J1)
-	_register("math.Jn", math.Jn)
-	_register("math.Ldexp", math.Ldexp)
-	_register("math.Lgamma", math.Lgamma)
-	_register("math.Ln10", math.Ln10)
-	_register("math.Ln2", math.Ln2)
-	_register("math.Log", math.Log)
-	_register("math.Log10", math.Log10)
-	_register("math.Log10E", math.Log10E)
-	_register("math.Log1p", math.Log1p)
-	_register("math.Log2", math.Log2)
-	_register("math.Log2E", math.Log2E)
-	_register("math.Logb", math.Logb)
-	_register("math.Max", math.Max)
-	_register("math.MaxFloat32", math.MaxFloat32)
-	_register("math.MaxFloat64", math.MaxFloat64)
-	_register("math.MaxInt", math.MaxInt)
-	_register("math.MaxInt16", math.MaxInt16)
-	_register("math.MaxInt32", math.MaxInt32)
-	_register("math.MaxInt64", math.MaxInt64)
-	_register("math.MaxInt8", math.MaxInt8)
-	_register("math.MaxUint", uint(math.MaxUint))
-	_register("math.MaxUint16", math.MaxUint16)
-	_register("math.MaxUint32", math.MaxUint32)
-	_register("math.MaxUint64", uint64(math.MaxUint64))
-	_register("math.MaxUint8", math.MaxUint8)
-	_register("math.Min", math.Min)
-	_register("math.MinInt", math.MinInt)
-	_register("math.MinInt16", math.MinInt16)
-	_register("math.MinInt32", math.MinInt32)
-	_register("math.MinInt64", math.MinInt64)
-	_register("math.MinInt8", math.MinInt8)
-	_register("math.Mod", math.Mod)
-	_register("math.Modf", math.Modf)
-	_register("math.NaN", math.NaN)
-	_register("math.Nextafter", math.Nextafter)
-	_register("math.Nextafter32", math.Nextafter32)
-	_register("math.Phi", math.Phi)
-	_register("math.Pi", math.Pi)
-	_register("math.Pow", math.Pow)
-	_register("math.Pow10", math.Pow10)
-	_register("math.Remainder", math.Remainder)
-	_register("math.Round", math.Round)
-	_register("math.RoundToEven", math.RoundToEven)
-	_register("math.Signbit", math.Signbit)
-	_register("math.Sin", math.Sin)
-	_register("math.Sincos", math.Sincos)
-	_register("math.Sinh", math.Sinh)
-	_register("math.SmallestNonzeroFloat32", math.SmallestNonzeroFloat32)
-	_register("math.SmallestNonzeroFloat64", math.SmallestNonzeroFloat64)
-	_register("math.Sqrt", math.Sqrt)
-	_register("math.Sqrt2", math.Sqrt2)
-	_register("math.SqrtE", math.SqrtE)
-	_register("math.SqrtPhi", math.SqrtPhi)
-	_register("math.SqrtPi", math.SqrtPi)
-	_register("math.Tan", math.Tan)
-	_register("math.Tanh", math.Tanh)
-	_register("math.Trunc", math.Trunc)
-	_register("math.Y0", math.Y0)
-	_register("math.Y1", math.Y1)
-	_register("math.Yn", math.Yn)
+	_register("unicode.Sundanese", unicode.Sundanese)
+	_register("unicode.Syloti_Nagri", unicode.Syloti_Nagri)
+	_register("unicode.Symbol", unicode.Symbol)
+	_register("unicode.Syriac", unicode.Syriac)
+	_register("unicode.Tagalog", unicode.Tagalog)
+	_register("unicode.Tagbanwa", unicode.Tagbanwa)
+	_register("unicode.Tai_Le", unicode.Tai_Le)
+	_register("unicode.Tai_Tham", unicode.Tai_Tham)
+	_register("unicode.Tai_Viet", unicode.Tai_Viet)
+	_register("unicode.Takri", unicode.Takri)
+	_register("unicode.Tamil", unicode.Tamil)
+	_register("unicode.Tangut", unicode.Tangut)
+	_register("unicode.Telugu", unicode.Telugu)
+	_register("unicode.Terminal_Punctuation", unicode.Terminal_Punctuation)
+	_register("unicode.Thaana", unicode.Thaana)
+	_register("unicode.Thai", unicode.Thai)
+	_register("unicode.Tibetan", unicode.Tibetan)
+	_register("unicode.Tifinagh", unicode.Tifinagh)
+	_register("unicode.Tirhuta", unicode.Tirhuta)
+	_register("unicode.Title", unicode.Title)
+	_register("unicode.TitleCase", unicode.TitleCase)
+	_register("unicode.To", unicode.To)
+	_register("unicode.ToLower", unicode.ToLower)
+	_register("unicode.ToTitle", unicode.ToTitle)
+	_register("unicode.ToUpper", unicode.ToUpper)
+	_register("unicode.TurkishCase", unicode.TurkishCase)
+	_register("unicode.Ugaritic", unicode.Ugaritic)
+	_register("unicode.Unified_Ideograph", unicode.Unified_Ideograph)
+	_register("unicode.Upper", unicode.Upper)
+	_register("unicode.UpperCase", unicode.UpperCase)
+	_register("unicode.UpperLower", unicode.UpperLower)
+	_register("unicode.Vai", unicode.Vai)
+	_register("unicode.Variation_Selector", unicode.Variation_Selector)
+	_register("unicode.Version", unicode.Version)
+	_register("unicode.Wancho", unicode.Wancho)
+	_register("unicode.Warang_Citi", unicode.Warang_Citi)
+	_register("unicode.White_Space", unicode.White_Space)
+	_register("unicode.Yezidi", unicode.Yezidi)
+	_register("unicode.Yi", unicode.Yi)
+	_register("unicode.Z", unicode.Z)
+	_register("unicode.Zanabazar_Square", unicode.Zanabazar_Square)
+	_register("unicode.Zl", unicode.Zl)
+	_register("unicode.Zp", unicode.Zp)
+	_register("unicode.Zs", unicode.Zs)
 }

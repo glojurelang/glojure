@@ -110,6 +110,8 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 
 			env.Define("glojure.lang.functional/Reduce", value.Reduce)
 			env.Define("glojure.lang.functional/ReduceInit", value.ReduceInit)
+
+			env.Define("glojure.lang.iteration/NewConcatIterator", value.NewConcatIterator)
 		}
 
 		// string

@@ -1,61 +1,90 @@
 package value
 
-import "strings"
+import "reflect"
 
-// TODO: completely rewrite this
-
-// Seq is a lazy sequence of values.
-type Seq struct {
-	Section
-	Enumerable
+type ISeq interface {
+	First() interface{}
+	Rest() ISeq
+	IsEmpty() bool
 }
 
-func (s *Seq) Equal(v interface{}) bool {
-	other, ok := v.(*Seq)
-	if !ok {
-		return false
-	}
-	e1, cancel1 := s.Enumerate()
-	defer cancel1()
-	e2, cancel2 := other.Enumerate()
-	defer cancel2()
-	for {
-		v1, ok1 := <-e1
-		v2, ok2 := <-e2
-		if ok1 != ok2 {
-			return false
-		}
-		if !ok1 {
-			return true
-		}
-		if !Equal(v1, v2) {
-			return false
-		}
-	}
-	return true
+type ISeqable interface {
+	Seq() ISeq
 }
 
-func (s *Seq) Pos() Pos {
-	return Pos{}
+func Seq(x interface{}) ISeq {
+	switch x := x.(type) {
+	case ISeq:
+		return x
+	case ISeqable:
+		return x.Seq()
+	case string:
+		return newStringSeq(x)
+	}
+
+	// use the reflect package to handle slices and arrays
+	v := reflect.ValueOf(x)
+	switch v.Kind() {
+	case reflect.Slice, reflect.Array:
+		return newSliceSeq(v)
+	}
+	return nil
 }
 
-func (s *Seq) String() string {
-	b := strings.Builder{}
-	b.WriteString("(")
-	e, cancel := s.Enumerate()
-	defer cancel()
-	first := true
-	for {
-		v, ok := <-e
-		if !ok {
-			break
-		}
-		if !first {
-			b.WriteString(" ")
-		}
-		first = false
-		b.WriteString(ToString(v))
+func newSliceSeq(x reflect.Value) ISeq {
+	if x.Len() == 0 {
+		return emptyList
 	}
-	b.WriteString(")")
-	return b.String()
+	return sliceSeq{v: x, i: 0}
+}
+
+type sliceSeq struct {
+	v reflect.Value
+	i int
+}
+
+func (s sliceSeq) First() interface{} {
+	return s.v.Index(s.i).Interface()
+}
+
+func (s sliceSeq) Rest() ISeq {
+	if s.i+1 >= s.v.Len() {
+		return emptyList
+	}
+	return sliceSeq{v: s.v, i: s.i + 1}
+}
+
+func (s sliceSeq) IsEmpty() bool {
+	// by construction, s.i is always in range, so we don't need to
+	// check.
+	return false
+}
+
+func newStringSeq(x string) ISeq {
+	if x == "" {
+		return emptyList
+	}
+	return stringSeq{v: x, i: 0}
+}
+
+type stringSeq struct {
+	v string
+	i int
+}
+
+func (s stringSeq) First() interface{} {
+	return NewChar(rune(s.v[s.i]))
+}
+
+func (s stringSeq) Rest() ISeq {
+	if s.i+1 >= len(s.v) {
+		return emptyList
+	}
+	return stringSeq{v: s.v, i: s.i + 1}
+}
+
+func (s stringSeq) IsEmpty() bool {
+	// by construction, s.i is always in range, so we don't need to
+	// check.
+	return false
 }

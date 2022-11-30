@@ -17,6 +17,7 @@
 (expect (sequential? nil) false)
 (expect (sequential? 1) false)
 (expect (sequential? "abc") false)
+(expect (sequential? (concat '(1 2) '(3 4))) true)
 
 ;; TODO
 ;; (expect (sequential? {:a 2 :b 1}) false)

@@ -1,5 +1,54 @@
 package value
 
+import (
+	"fmt"
+	"reflect"
+)
+
+// Nther is an interface for compound values whose elements can be
+// accessed by index.
+type Nther interface {
+	Nth(int) (v interface{}, ok bool)
+}
+
+// MustNth returns the nth element of the vector. It panics if the
+// index is out of range.
+func MustNth(nth Nther, i int) interface{} {
+	v, ok := nth.Nth(i)
+	if !ok {
+		panic("index out of range")
+	}
+	return v
+}
+
+func Nth(x interface{}, n int) (interface{}, bool) {
+	switch x := x.(type) {
+	case Nther:
+		return x.Nth(n)
+	case ISeq:
+		for i := 0; i <= n; i++ {
+			if x.IsEmpty() {
+				return nil, false
+			}
+			if i == n {
+				return x.First(), true
+			}
+			x = x.Rest()
+		}
+	}
+
+	reflectVal := reflect.ValueOf(x)
+	switch reflectVal.Kind() {
+	case reflect.Array, reflect.Slice:
+		if n < 0 || n >= reflectVal.Len() {
+			return nil, false
+		}
+		return reflectVal.Index(n).Interface(), true
+	}
+
+	return nil, false
+}
+
 // NewIterator returns a lazy sequence of x, f(x), f(f(x)), ....
 func NewIterator(f func(interface{}) interface{}, x interface{}) ISeq {
 	return &iterator{f: f, x: x}
@@ -72,4 +121,48 @@ func (i *vectorIterator) Rest() ISeq {
 
 func (i *vectorIterator) IsEmpty() bool {
 	return i.i >= i.v.Count()
+}
+
+// NewConcatIterator returns a lazy sequence of the values of x.
+func NewConcatIterator(colls ...interface{}) ISeq {
+	var it *concatIterator
+	for i := len(colls) - 1; i >= 0; i-- {
+		iseq := Seq(colls[i])
+		if iseq == nil {
+			panic(fmt.Sprintf("not a sequence: %T", colls[i]))
+		}
+		if iseq.IsEmpty() {
+			continue
+		}
+		it = &concatIterator{seq: iseq, next: it}
+	}
+	if it == nil {
+		return emptyList
+	}
+	return it
+}
+
+type concatIterator struct {
+	seq  ISeq
+	next *concatIterator
+}
+
+func (i *concatIterator) First() interface{} {
+	return i.seq.First()
+}
+
+func (i *concatIterator) Rest() ISeq {
+	i = &concatIterator{seq: i.seq.Rest(), next: i.next}
+	for i.seq.IsEmpty() {
+		i = i.next
+		if i == nil {
+			return emptyList
+		}
+	}
+	return i
+}
+
+func (i *concatIterator) IsEmpty() bool {
+	// by definition, a concat iterator is never empty
+	return false
 }

@@ -152,10 +152,6 @@ func (v *Vector) GoValue() interface{} {
 	return vals
 }
 
-func (v *Vector) Rest() ISeq {
-	return NewVectorIterator(v, 1)
-}
-
 func (v *Vector) Seq() ISeq {
 	return NewVectorIterator(v, 0)
 }

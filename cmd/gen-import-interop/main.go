@@ -11,18 +11,23 @@ var (
 	packages = []string{
 		"bytes",
 		"context",
+		"flag",
 		"fmt",
 		"io",
 		"io/fs",
 		"io/ioutil",
+		"math",
+		"math/big",
+		"math/rand",
 		"net/http",
+		"os",
+		"os/exec",
+		"os/signal",
 		"regexp",
 		"strconv",
 		"strings",
 		"time",
-		"math/big",
-		"math/rand",
-		"math",
+		"unicode",
 	}
 )
 

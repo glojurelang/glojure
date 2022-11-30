@@ -1,7 +1,6 @@
 package runtime
 
 import (
-	"context"
 	"fmt"
 	"io/ioutil"
 	"math"
@@ -32,7 +31,6 @@ func init() {
 				// collection functions
 				funcSymbol("count", lengthBuiltin),
 				funcSymbol("conj", conjBuiltin),
-				funcSymbol("concat", concatBuiltin),
 				funcSymbol("first", firstBuiltin),
 				funcSymbol("rest", restBuiltin),
 				funcSymbol("subvec", subvecBuiltin),
@@ -182,27 +180,26 @@ func lengthBuiltin(env value.Environment, args []interface{}) (interface{}, erro
 		return nil, fmt.Errorf("count expects 1 argument, got %v", len(args))
 	}
 
-	switch arg := args[0].(type) {
+	coll := args[0]
+
+	switch arg := coll.(type) {
 	case nil:
 		return 0, nil
 	case string:
 		return len(arg), nil
 	case value.Counter:
 		return arg.Count(), nil
+	case value.ISeqable:
+		coll = arg.Seq()
 	}
-
-	// TODO: kill this interface
-	enum, ok := args[0].(value.Enumerable)
+	seq, ok := coll.(value.ISeq)
 	if !ok {
-		return nil, fmt.Errorf("count expects an enumerable, got %v", args[0])
+		return nil, fmt.Errorf("count expects a collection, got %v", args[0])
 	}
-
-	ch, cancel := enum.Enumerate()
-	defer cancel()
-
-	var count int
-	for range ch {
+	count := 0
+	for !seq.IsEmpty() {
 		count++
+		seq = seq.Rest()
 	}
 	return count, nil
 }
@@ -218,54 +215,6 @@ func conjBuiltin(env value.Environment, args []interface{}) (interface{}, error)
 	}
 
 	return conjer.Conj(args[1:]...), nil
-}
-
-func concatBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
-	enums := make([]value.Enumerable, len(args))
-	for i, arg := range args {
-		e, ok := arg.(value.Enumerable)
-		if !ok {
-			return nil, fmt.Errorf("concat arg %d is not enumerable: %v", i, arg)
-		}
-		enums[i] = e
-	}
-
-	enumerable := func() (<-chan interface{}, func()) {
-		ch := make(chan interface{})
-		done := make(chan struct{})
-		cancel := func() {
-			close(done)
-		}
-
-		go func() {
-			defer close(ch)
-			for _, enum := range enums {
-				select {
-				case <-done:
-					return
-				default:
-				}
-
-				func() { // scope for defer
-					eCh, eCancel := enum.Enumerate()
-					defer eCancel()
-					for v := range eCh {
-						select {
-						case ch <- v:
-						case <-done:
-							return
-						}
-					}
-				}()
-			}
-		}()
-
-		return ch, cancel
-	}
-
-	return &value.Seq{
-		Enumerable: value.EnumerableFunc(enumerable),
-	}, nil
 }
 
 func firstBuiltin(env value.Environment, args []interface{}) (out interface{}, err error) {
@@ -292,15 +241,7 @@ func firstBuiltin(env value.Environment, args []interface{}) (out interface{}, e
 		return c.ValueAt(0), nil
 	}
 
-	enum, ok := args[0].(value.Enumerable)
-	if !ok {
-		return nil, fmt.Errorf("first expects an enumerable, got %v", args[0])
-	}
-
-	itemCh, cancel := enum.Enumerate()
-	defer cancel()
-
-	return <-itemCh, nil
+	return nil, fmt.Errorf("first expects a sequence, got %v", args[0])
 }
 
 func restBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
@@ -325,25 +266,7 @@ func restBuiltin(env value.Environment, args []interface{}) (interface{}, error)
 		return c.SubVector(1, c.Count()), nil
 	}
 
-	enum, ok := args[0].(value.Enumerable)
-	if !ok {
-		return nil, fmt.Errorf("rest expects an enumerable, got %v", args[0])
-	}
-
-	items := []interface{}{}
-	itemCh, cancel := enum.Enumerate()
-	defer cancel()
-
-	// skip the first item
-	<-itemCh
-	for item := range itemCh {
-		items = append(items, item)
-	}
-
-	// TODO: here and elsewhere, use a Sequence/Seq value type to
-	// represent a lazy sequence of values, and use that instead of a
-	// List/Vector.
-	return value.NewList(items), nil
+	return nil, fmt.Errorf("rest expects a sequence, got %v", args[0])
 }
 
 func subvecBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
@@ -430,24 +353,18 @@ func isVectorBuiltin(env value.Environment, args []interface{}) (interface{}, er
 
 func isSeqBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
-		return nil, fmt.Errorf("seq? expects 1 argument, got %v", len(args))
+		fmt.Errorf("wrong number of arguments (%d) to seq?", len(args))
 	}
 
 	if _, ok := args[0].(value.ISeq); ok {
 		return true, nil
 	}
-
-	// TODO: this is totally unused, and should be removed.
-	_, ok := args[0].(*value.Seq)
-	return ok, nil
+	return false, nil
 }
 
 func isSeqableBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
-	if len(args) != 1 {
-		return nil, fmt.Errorf("seqable? expects 1 argument, got %v", len(args))
-	}
-	_, ok := args[0].(value.Enumerable)
-	return ok, nil
+	panic("not implemented")
+	return nil, nil
 }
 
 func emptyBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
@@ -458,25 +375,11 @@ func emptyBuiltin(env value.Environment, args []interface{}) (interface{}, error
 	switch c := args[0].(type) {
 	case value.ISeq:
 		return c.IsEmpty(), nil
-	case *value.List:
-		return c.IsEmpty(), nil
-	case *value.Vector:
+	case value.Counter:
 		return c.Count() == 0, nil
 	}
 
-	if c, ok := args[0].(value.Counter); ok {
-		return c.Count() == 0, nil
-	}
-
-	e, ok := args[0].(value.Enumerable)
-	if !ok {
-		return nil, fmt.Errorf("empty? expects an enumerable, got %v", args[0])
-	}
-	ch, cancel := e.Enumerate()
-	defer cancel()
-	// TODO: take a context.Context to support cancelation/timeout.
-	_, ok = <-ch
-	return !ok, nil
+	return nil, fmt.Errorf("empty? expects a collection, got %v", args[0])
 }
 
 func notEmptyBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
@@ -735,27 +638,20 @@ func applyBuiltin(env value.Environment, args []interface{}) (interface{}, error
 	if len(args) != 2 {
 		return nil, fmt.Errorf("apply expects 2 arguments, got %v", len(args))
 	}
-	// the first argument should be an applyer, the second an enumerable
-	applyer, ok := args[0].(value.Applyer)
-	if !ok {
-		return nil, fmt.Errorf("apply expects a function as the first argument, got %v", args[0])
-	}
 
 	var values []interface{}
-
 	if !value.Equal(nil, args[1]) {
-		enum, ok := args[1].(value.Enumerable)
-		if !ok {
-			return nil, fmt.Errorf("apply expects an enumerable as the second argument, got %v", args[1])
+		seq := value.Seq(args[1])
+		if seq == nil {
+			return nil, fmt.Errorf("apply expects a seqable as the second argument, got %v", args[1])
 		}
-		var err error
-		values, err = value.EnumerateAll(context.Background(), enum)
-		if err != nil {
-			return nil, err
+		for !seq.IsEmpty() {
+			values = append(values, seq.First())
+			seq = seq.Rest()
 		}
 	}
 
-	return applyer.Apply(env, values)
+	return value.Apply(env, args[0], values)
 }
 
 func printlnBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
