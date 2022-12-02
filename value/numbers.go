@@ -182,11 +182,11 @@ func IncP(v interface{}) interface{} {
 	}
 }
 
-type integral interface {
+type basicIntegral interface {
 	int | uint | uint8 | uint16 | uint32 | uint64 | int8 | int16 | int32 | int64
 }
 
-func incP[T integral](x T) interface{} {
+func incP[T basicIntegral](x T) interface{} {
 	res := x + 1
 	if res < x {
 		return NewBigIntFromInt64(int64(x)).AddInt(1)
