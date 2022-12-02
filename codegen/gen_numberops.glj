@@ -1,5 +1,5 @@
 (def go-basic-types
-  '[int8 int16 int32 int64 uint8 uint16 uint32 uint64 float32 float64])
+  '[int uint int8 int16 int32 int64 uint8 uint16 uint32 uint64 float32 float64])
 
 (defn lower-case [r] (unicode.ToLower r))
 (defn lower-first [s]
@@ -42,6 +42,13 @@
     "BigDecimal" (str "value.NewBigDecimalFromFloat64(float64(" var "))")
     (str "As" (upper-first typ) \( var \))))
 
+(defn convert-to [typ var]
+  (case typ
+    "Ratio" (str "value.NewRatio(int64(" var "), 1)")
+    "BigInt" (str "value.NewBigIntFromInt64(int64(" var "))")
+    "BigDecimal" (str "value.NewBigDecimalFromFloat64(float64(" var "))")
+    (str typ \( var \))))
+
 (def binary-ops (map str '[Add AddP]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -70,6 +77,10 @@ type (
 (print
  "func Ops(x interface{}) ops {
 	switch x.(type) {
+	case int:
+                return int64Ops{}
+	case uint:
+                return int64Ops{}
 	case int8:
 		return int64Ops{}
 	case int16:
@@ -122,7 +133,7 @@ type (
         \tab "switch x := x.(type) {" \newline
         (apply str (map (fn [t] (str \tab "case " t ":" \newline
                                      \tab \tab \tab "return "
-                                     (if (eq? typ (str t)) 'x (cast-to typ 'x)) \newline))
+                                     (if (eq? typ (str t)) 'x (convert-to typ 'x)) \newline))
                         go-basic-types))
         \tab \tab "default:" \newline
         \tab \tab \tab "panic(\"cannot convert to " typ "\")" \newline

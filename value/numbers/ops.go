@@ -22,6 +22,10 @@ type (
 
 func Ops(x interface{}) ops {
 	switch x.(type) {
+	case int:
+		return int64Ops{}
+	case uint:
+		return int64Ops{}
 	case int8:
 		return int64Ops{}
 	case int16:
@@ -171,26 +175,30 @@ func (o float64Ops) Combine(y ops) ops {
 }
 func AsInt64(x interface{}) int64 {
 	switch x := x.(type) {
+	case int:
+		return int64(x)
+	case uint:
+		return int64(x)
 	case int8:
-		return AsInt64(x)
+		return int64(x)
 	case int16:
-		return AsInt64(x)
+		return int64(x)
 	case int32:
-		return AsInt64(x)
+		return int64(x)
 	case int64:
 		return x
 	case uint8:
-		return AsInt64(x)
+		return int64(x)
 	case uint16:
-		return AsInt64(x)
+		return int64(x)
 	case uint32:
-		return AsInt64(x)
+		return int64(x)
 	case uint64:
-		return AsInt64(x)
+		return int64(x)
 	case float32:
-		return AsInt64(x)
+		return int64(x)
 	case float64:
-		return AsInt64(x)
+		return int64(x)
 	default:
 		panic("cannot convert to int64")
 	}
@@ -198,6 +206,10 @@ func AsInt64(x interface{}) int64 {
 
 func AsBigInt(x interface{}) *value.BigInt {
 	switch x := x.(type) {
+	case int:
+		return value.NewBigIntFromInt64(int64(x))
+	case uint:
+		return value.NewBigIntFromInt64(int64(x))
 	case int8:
 		return value.NewBigIntFromInt64(int64(x))
 	case int16:
@@ -225,6 +237,10 @@ func AsBigInt(x interface{}) *value.BigInt {
 
 func AsRatio(x interface{}) *value.Ratio {
 	switch x := x.(type) {
+	case int:
+		return value.NewRatio(int64(x), 1)
+	case uint:
+		return value.NewRatio(int64(x), 1)
 	case int8:
 		return value.NewRatio(int64(x), 1)
 	case int16:
@@ -252,6 +268,10 @@ func AsRatio(x interface{}) *value.Ratio {
 
 func AsBigDecimal(x interface{}) *value.BigDecimal {
 	switch x := x.(type) {
+	case int:
+		return value.NewBigDecimalFromFloat64(float64(x))
+	case uint:
+		return value.NewBigDecimalFromFloat64(float64(x))
 	case int8:
 		return value.NewBigDecimalFromFloat64(float64(x))
 	case int16:
@@ -279,24 +299,28 @@ func AsBigDecimal(x interface{}) *value.BigDecimal {
 
 func AsFloat64(x interface{}) float64 {
 	switch x := x.(type) {
+	case int:
+		return float64(x)
+	case uint:
+		return float64(x)
 	case int8:
-		return AsFloat64(x)
+		return float64(x)
 	case int16:
-		return AsFloat64(x)
+		return float64(x)
 	case int32:
-		return AsFloat64(x)
+		return float64(x)
 	case int64:
-		return AsFloat64(x)
+		return float64(x)
 	case uint8:
-		return AsFloat64(x)
+		return float64(x)
 	case uint16:
-		return AsFloat64(x)
+		return float64(x)
 	case uint32:
-		return AsFloat64(x)
+		return float64(x)
 	case uint64:
-		return AsFloat64(x)
+		return float64(x)
 	case float32:
-		return AsFloat64(x)
+		return float64(x)
 	case float64:
 		return x
 	default:
