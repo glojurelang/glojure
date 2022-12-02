@@ -24,6 +24,7 @@ var (
 		"os/exec",
 		"os/signal",
 		"regexp",
+		"reflect",
 		"strconv",
 		"strings",
 		"time",
@@ -36,12 +37,18 @@ func main() {
 	builder.WriteString("// GENERATED FILE. DO NOT EDIT.\n")
 	builder.WriteString("package gljimports\n\n")
 	builder.WriteString("import (\n")
+	importedReflect := false
 	for _, pkg := range packages {
+		if pkg == "reflect" {
+			importedReflect = true
+		}
 		aliasName := strings.NewReplacer(".", "_", "/", "_").Replace(pkg)
 		builder.WriteString(fmt.Sprintf("\t%s \"%s\"\n", aliasName, pkg))
 	}
 	// import reflect
-	builder.WriteString("\t\"reflect\"\n")
+	if !importedReflect {
+		builder.WriteString("\t\"reflect\"\n")
+	}
 	builder.WriteString(")\n\n")
 
 	builder.WriteString("func RegisterImports(_register func(string, interface{})) {\n")

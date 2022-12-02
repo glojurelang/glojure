@@ -17,11 +17,11 @@ import (
 	os_exec "os/exec"
 	os_signal "os/signal"
 	regexp "regexp"
+	reflect "reflect"
 	strconv "strconv"
 	strings "strings"
 	time "time"
 	unicode "unicode"
-	"reflect"
 )
 
 func RegisterImports(_register func(string, interface{})) {
@@ -1076,6 +1076,121 @@ func RegisterImports(_register func(string, interface{})) {
 		var x regexp.Regexp
 		_register("regexp.Regexp", reflect.TypeOf(x))
 	}
+
+	// package reflect
+	////////////////////////////////////////
+	_register("reflect.Append", reflect.Append)
+	_register("reflect.AppendSlice", reflect.AppendSlice)
+	_register("reflect.Array", reflect.Array)
+	_register("reflect.ArrayOf", reflect.ArrayOf)
+	_register("reflect.Bool", reflect.Bool)
+	_register("reflect.BothDir", reflect.BothDir)
+	_register("reflect.Chan", reflect.Chan)
+	{
+		var x reflect.ChanDir
+		_register("reflect.ChanDir", reflect.TypeOf(x))
+	}
+	_register("reflect.ChanOf", reflect.ChanOf)
+	_register("reflect.Complex128", reflect.Complex128)
+	_register("reflect.Complex64", reflect.Complex64)
+	_register("reflect.Copy", reflect.Copy)
+	_register("reflect.DeepEqual", reflect.DeepEqual)
+	_register("reflect.Float32", reflect.Float32)
+	_register("reflect.Float64", reflect.Float64)
+	_register("reflect.Func", reflect.Func)
+	_register("reflect.FuncOf", reflect.FuncOf)
+	_register("reflect.Indirect", reflect.Indirect)
+	_register("reflect.Int", reflect.Int)
+	_register("reflect.Int16", reflect.Int16)
+	_register("reflect.Int32", reflect.Int32)
+	_register("reflect.Int64", reflect.Int64)
+	_register("reflect.Int8", reflect.Int8)
+	_register("reflect.Interface", reflect.Interface)
+	_register("reflect.Invalid", reflect.Invalid)
+	{
+		var x reflect.Kind
+		_register("reflect.Kind", reflect.TypeOf(x))
+	}
+	_register("reflect.MakeChan", reflect.MakeChan)
+	_register("reflect.MakeFunc", reflect.MakeFunc)
+	_register("reflect.MakeMap", reflect.MakeMap)
+	_register("reflect.MakeMapWithSize", reflect.MakeMapWithSize)
+	_register("reflect.MakeSlice", reflect.MakeSlice)
+	_register("reflect.Map", reflect.Map)
+	{
+		var x reflect.MapIter
+		_register("reflect.MapIter", reflect.TypeOf(x))
+	}
+	_register("reflect.MapOf", reflect.MapOf)
+	{
+		var x reflect.Method
+		_register("reflect.Method", reflect.TypeOf(x))
+	}
+	_register("reflect.New", reflect.New)
+	_register("reflect.NewAt", reflect.NewAt)
+	_register("reflect.Pointer", reflect.Pointer)
+	_register("reflect.PointerTo", reflect.PointerTo)
+	_register("reflect.Ptr", reflect.Ptr)
+	_register("reflect.PtrTo", reflect.PtrTo)
+	_register("reflect.RecvDir", reflect.RecvDir)
+	_register("reflect.Select", reflect.Select)
+	{
+		var x reflect.SelectCase
+		_register("reflect.SelectCase", reflect.TypeOf(x))
+	}
+	_register("reflect.SelectDefault", reflect.SelectDefault)
+	{
+		var x reflect.SelectDir
+		_register("reflect.SelectDir", reflect.TypeOf(x))
+	}
+	_register("reflect.SelectRecv", reflect.SelectRecv)
+	_register("reflect.SelectSend", reflect.SelectSend)
+	_register("reflect.SendDir", reflect.SendDir)
+	_register("reflect.Slice", reflect.Slice)
+	{
+		var x reflect.SliceHeader
+		_register("reflect.SliceHeader", reflect.TypeOf(x))
+	}
+	_register("reflect.SliceOf", reflect.SliceOf)
+	_register("reflect.String", reflect.String)
+	{
+		var x reflect.StringHeader
+		_register("reflect.StringHeader", reflect.TypeOf(x))
+	}
+	_register("reflect.Struct", reflect.Struct)
+	{
+		var x reflect.StructField
+		_register("reflect.StructField", reflect.TypeOf(x))
+	}
+	_register("reflect.StructOf", reflect.StructOf)
+	{
+		var x reflect.StructTag
+		_register("reflect.StructTag", reflect.TypeOf(x))
+	}
+	_register("reflect.Swapper", reflect.Swapper)
+	{
+		var x reflect.Type
+		_register("reflect.Type", reflect.TypeOf(x))
+	}
+	_register("reflect.TypeOf", reflect.TypeOf)
+	_register("reflect.Uint", reflect.Uint)
+	_register("reflect.Uint16", reflect.Uint16)
+	_register("reflect.Uint32", reflect.Uint32)
+	_register("reflect.Uint64", reflect.Uint64)
+	_register("reflect.Uint8", reflect.Uint8)
+	_register("reflect.Uintptr", reflect.Uintptr)
+	_register("reflect.UnsafePointer", reflect.UnsafePointer)
+	{
+		var x reflect.Value
+		_register("reflect.Value", reflect.TypeOf(x))
+	}
+	{
+		var x reflect.ValueError
+		_register("reflect.ValueError", reflect.TypeOf(x))
+	}
+	_register("reflect.ValueOf", reflect.ValueOf)
+	_register("reflect.VisibleFields", reflect.VisibleFields)
+	_register("reflect.Zero", reflect.Zero)
 
 	// package strconv
 	////////////////////////////////////////
