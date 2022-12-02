@@ -1,0 +1,1 @@
+(println (reduce str "" ((go-sliceof string) ["a" "b" "c"])))

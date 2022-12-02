@@ -137,6 +137,12 @@ func coerceGoValue(targetType reflect.Type, val interface{}) (interface{}, error
 		}
 		return targetSlice.Interface(), nil
 	default:
+		// if val is a slice and target is ISeq, convert to a slice iterator
+		iseqType := reflect.TypeOf((*ISeq)(nil)).Elem()
+		if reflect.TypeOf(val).Kind() == reflect.Slice && targetType == iseqType {
+			val = NewSliceIterator(val)
+		}
+
 		if reflect.TypeOf(val).ConvertibleTo(targetType) {
 			return reflect.ValueOf(val).Convert(targetType).Interface(), nil
 		}

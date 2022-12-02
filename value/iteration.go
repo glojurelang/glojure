@@ -166,3 +166,37 @@ func (i *concatIterator) IsEmpty() bool {
 	// by definition, a concat iterator is never empty
 	return false
 }
+
+// NewSliceIterator returns a lazy sequence of the values of x.
+func NewSliceIterator(x interface{}) ISeq {
+	reflectVal := reflect.ValueOf(x)
+	switch reflectVal.Kind() {
+	case reflect.Array, reflect.Slice:
+		if reflectVal.Len() == 0 {
+			return emptyList
+		}
+		return sliceIterator{v: reflectVal, i: 0}
+	}
+	panic(fmt.Sprintf("not a slice: %T", x))
+}
+
+type sliceIterator struct {
+	v reflect.Value
+	i int
+}
+
+func (i sliceIterator) First() interface{} {
+	return i.v.Index(i.i).Interface()
+}
+
+func (i sliceIterator) Rest() ISeq {
+	i.i++
+	if i.i >= i.v.Len() {
+		return emptyList
+	}
+	return i
+}
+
+func (i sliceIterator) IsEmpty() bool {
+	return false
+}
