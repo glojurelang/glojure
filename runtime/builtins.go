@@ -41,7 +41,6 @@ func init() {
 				funcSymbol("floor", floorBuiltin),
 				funcSymbol("*", mulBuiltin),
 				funcSymbol("/", divBuiltin),
-				//funcSymbol("+", addBuiltin),
 				funcSymbol("-", subBuiltin),
 				funcSymbol("<", ltBuiltin),
 				funcSymbol(">", gtBuiltin),
@@ -436,38 +435,6 @@ func divBuiltin(env value.Environment, args []interface{}) (interface{}, error) 
 	}
 	// TODO: handle generators
 	return float64(num / denom), nil
-}
-
-func addBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
-
-	isIntSum := true
-	var intSum int64
-	var floatSum float64
-
-	// sum all number arguments together
-	for _, arg := range args {
-		switch arg := arg.(type) {
-		case float64:
-			if isIntSum {
-				isIntSum = false
-				floatSum = float64(intSum)
-			}
-			floatSum += arg
-		case int64:
-			if isIntSum {
-				intSum += arg
-			} else {
-				floatSum += float64(arg)
-			}
-		default:
-			return nil, fmt.Errorf("invalid type for +: %v", value.ToString(arg))
-		}
-	}
-
-	if isIntSum {
-		return int64(intSum), nil
-	}
-	return float64(floatSum), nil
 }
 
 func subBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
