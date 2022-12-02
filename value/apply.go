@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-func Apply(env Environment, fn interface{}, args []interface{}) (interface{}, error) {
+func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, err error) {
 	if applyer, ok := fn.(Applyer); ok {
 		return applyer.Apply(env, args)
 	}
@@ -45,6 +45,12 @@ func Apply(env Environment, fn interface{}, args []interface{}) (interface{}, er
 		}
 		goArgs = append(goArgs, reflect.ValueOf(argGoVal))
 	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("panic: %v", r)
+		}
+	}()
 
 	reflectRes := goVal.Call(goArgs)
 	res := make([]interface{}, len(reflectRes))

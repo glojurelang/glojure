@@ -1,2 +1,2 @@
-;;;ERROR=let01.in:2:6: invalid let, binding name must be a symbol
+;;;ERROR=let01.in:2:6: invalid let: cannot bind to int64
 (let [4 2] true)

@@ -123,7 +123,7 @@ func (env *environment) errorf(n interface{}, format string, args ...interface{}
 	}
 	location := fmt.Sprintf("%s:%s:%s", filename, line, col)
 
-	return fmt.Errorf("%s: %s", location, fmt.Sprintf(format, args...))
+	return fmt.Errorf("%s: "+format, append([]interface{}{location}, args...)...)
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
@@ -162,6 +162,9 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 			return env.evalLet(n)
 		case "defmacro":
 			return env.evalDefMacro(n)
+
+		case "throw":
+			return env.evalThrow(n)
 
 			// Go interop special forms
 		case ".":
@@ -360,7 +363,6 @@ func (env *environment) evalCase(n *value.List) (interface{}, error) {
 		return nil, err
 	}
 
-	//cases := n.Items[2:]
 	cases := make([]interface{}, 0, listLength-2)
 	for cur := n.Next().Next(); !cur.IsEmpty(); cur = cur.Next() {
 		cases = append(cases, cur.Item())
@@ -515,7 +517,7 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 // essential syntax: let <bindings> <body>
 //
 // Two forms are supported. The first is the standard let form:
-//==============================================================================
+// ==============================================================================
 // Syntax: <bindings> should have the form:
 //
 // ((<symbol 1> <init 1>) ...),
@@ -530,7 +532,7 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 // extended environment, and the value of the last expression of
 // <body> is returned. Each binding of a <symbol> has <body> as its
 // region.
-//==============================================================================
+// ==============================================================================
 // The second form is the clojure
 // (https://clojuredocs.org/clojure.core/let) let form:
 //
@@ -551,7 +553,7 @@ func (env *environment) evalLet(n *value.List) (interface{}, error) {
 	var err error
 	switch bindings := items[1].(type) {
 	case *value.Vector:
-		bindingsMap, err = env.evalVectorBindings(bindings)
+		bindingsMap, err = env.evalBindings(bindings)
 	default:
 		return nil, env.errorf(n, "invalid let, bindings must be a list or vector")
 	}
@@ -575,7 +577,7 @@ func (env *environment) evalLet(n *value.List) (interface{}, error) {
 	return newEnv.Eval(items[len(items)-1])
 }
 
-func (env *environment) evalVectorBindings(bindings *value.Vector) (map[string]interface{}, error) {
+func (env *environment) evalBindings(bindings *value.Vector) (map[string]interface{}, error) {
 	if bindings.Count()%2 != 0 {
 		return nil, env.errorf(bindings, "invalid let, bindings must be a vector of even length")
 	}
@@ -583,20 +585,25 @@ func (env *environment) evalVectorBindings(bindings *value.Vector) (map[string]i
 	newEnv := env.PushScope().(*environment)
 	bindingsMap := make(map[string]interface{})
 	for i := 0; i < bindings.Count(); i += 2 {
-		nameValue := bindings.ValueAt(i)
-		name, ok := nameValue.(*value.Symbol)
-		if !ok {
-			return nil, env.errorf(bindings, "invalid let, binding name must be a symbol")
-		}
-		if _, ok := bindingsMap[name.Value]; ok {
-			return nil, env.errorf(nameValue, "invalid let, duplicate binding name")
-		}
+		pattern := bindings.ValueAt(i)
 		val, err := newEnv.Eval(bindings.ValueAt(i + 1))
 		if err != nil {
 			return nil, err
 		}
-		bindingsMap[name.Value] = val
-		newEnv.Define(name.Value, val)
+		// TODO: replace with macro
+		binds, err := value.Bind(pattern, val)
+		if err != nil {
+			return nil, env.errorf(bindings, "invalid let: %w", err)
+		}
+
+		for i := 0; i < len(binds); i += 2 {
+			name, ok := binds[i].(*value.Symbol)
+			if !ok {
+				return nil, env.errorf(bindings, "invalid let, binding name must be a symbol")
+			}
+			newEnv.Define(name.Value, binds[i+1])
+			bindingsMap[name.Value] = binds[i+1]
+		}
 	}
 
 	return bindingsMap, nil
@@ -739,6 +746,22 @@ func (env *environment) evalSet(n *value.List) (interface{}, error) {
 	}
 
 	return expr, nil
+}
+
+func (env *environment) evalThrow(n *value.List) (interface{}, error) {
+	if n.Count() != 2 {
+		return nil, env.errorf(n, "too many arguments to throw")
+	}
+	expr, err := env.Eval(value.MustNth(n, 1))
+	if err != nil {
+		return nil, err
+	}
+
+	if err, ok := expr.(error); ok {
+		return nil, env.errorf(n, "%w", err)
+	}
+
+	return nil, env.errorf(n, "invalid throw expression, expected an error")
 }
 
 func (env *environment) evalDot(n *value.List) (interface{}, error) {

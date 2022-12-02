@@ -37,6 +37,10 @@ func Nth(x interface{}, n int) (interface{}, bool) {
 		}
 	}
 
+	if seq := Seq(x); seq != nil {
+		return Nth(seq, n)
+	}
+
 	reflectVal := reflect.ValueOf(x)
 	switch reflectVal.Kind() {
 	case reflect.Array, reflect.Slice:
@@ -51,7 +55,7 @@ func Nth(x interface{}, n int) (interface{}, bool) {
 
 // NewIterator returns a lazy sequence of x, f(x), f(f(x)), ....
 func NewIterator(f func(interface{}) interface{}, x interface{}) ISeq {
-	return &iterator{f: f, x: x}
+	return iterator{f: f, x: x}
 }
 
 type iterator struct {
@@ -59,15 +63,15 @@ type iterator struct {
 	x interface{}
 }
 
-func (i *iterator) First() interface{} {
+func (i iterator) First() interface{} {
 	return i.x
 }
 
-func (i *iterator) Rest() ISeq {
+func (i iterator) Rest() ISeq {
 	return NewIterator(i.f, i.f(i.x))
 }
 
-func (i *iterator) IsEmpty() bool {
+func (i iterator) IsEmpty() bool {
 	return false
 }
 
@@ -77,7 +81,7 @@ func NewRangeIterator(start, end, step int64) ISeq {
 		return emptyList
 	}
 
-	return &rangeIterator{start: start, end: end, step: step}
+	return rangeIterator{start: start, end: end, step: step}
 }
 
 type rangeIterator struct {
@@ -85,11 +89,11 @@ type rangeIterator struct {
 	start, end, step int64
 }
 
-func (i *rangeIterator) First() interface{} {
+func (i rangeIterator) First() interface{} {
 	return i.start
 }
 
-func (i *rangeIterator) Rest() ISeq {
+func (i rangeIterator) Rest() ISeq {
 	next := i.start + i.step
 	if next >= i.end {
 		return emptyList
@@ -97,13 +101,13 @@ func (i *rangeIterator) Rest() ISeq {
 	return &rangeIterator{start: next, end: i.end, step: i.step}
 }
 
-func (i *rangeIterator) IsEmpty() bool {
+func (i rangeIterator) IsEmpty() bool {
 	return false
 }
 
 // NewValueIterator returns a lazy sequence of the values of x.
 func NewVectorIterator(x *Vector, i int) ISeq {
-	return &vectorIterator{v: x, i: i}
+	return vectorIterator{v: x, i: i}
 }
 
 type vectorIterator struct {
@@ -111,15 +115,15 @@ type vectorIterator struct {
 	i int
 }
 
-func (i *vectorIterator) First() interface{} {
+func (i vectorIterator) First() interface{} {
 	return i.v.ValueAt(i.i)
 }
 
-func (i *vectorIterator) Rest() ISeq {
+func (i vectorIterator) Rest() ISeq {
 	return &vectorIterator{v: i.v, i: i.i + 1}
 }
 
-func (i *vectorIterator) IsEmpty() bool {
+func (i vectorIterator) IsEmpty() bool {
 	return i.i >= i.v.Count()
 }
 

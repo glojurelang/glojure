@@ -44,6 +44,19 @@
   ([& exprs] `(let [] ~@exprs)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Math
+
+(defn +
+  "Returns the sum of nums. (+) returns 0. Does not auto-promote
+  longs, will throw on overflow. See also: +'"
+  ([] 0)
+  ([x] (let [[v ok] (glojure.lang/AsNumber x)]
+         (if ok v (throw (fmt.Errorf "%v is not a number" x)))))
+  ([x y] (glojure.lang.Numbers/Add x y))
+  ([x y & more]
+     (reduce + (+ x y) more)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Comparisons
 
 (def = eq?)

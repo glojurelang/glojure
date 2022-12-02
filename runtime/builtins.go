@@ -41,7 +41,7 @@ func init() {
 				funcSymbol("floor", floorBuiltin),
 				funcSymbol("*", mulBuiltin),
 				funcSymbol("/", divBuiltin),
-				funcSymbol("+", addBuiltin),
+				//funcSymbol("+", addBuiltin),
 				funcSymbol("-", subBuiltin),
 				funcSymbol("<", ltBuiltin),
 				funcSymbol(">", gtBuiltin),
@@ -291,8 +291,9 @@ func eqBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) == 1 {
 		return true, nil
 	}
+
 	for i := 1; i < len(args); i++ {
-		if !value.Equal(args[0], args[1]) {
+		if !value.Equal(args[0], args[i]) {
 			return false, nil
 		}
 	}
@@ -438,6 +439,7 @@ func divBuiltin(env value.Environment, args []interface{}) (interface{}, error) 
 }
 
 func addBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
+
 	isIntSum := true
 	var intSum int64
 	var floatSum float64

@@ -2,10 +2,10 @@ package value
 
 import "fmt"
 
-func restFromNth(nth Nther, i int) interface{} {
+func restFromNth(nth interface{}, i int) interface{} {
 	var result []interface{}
 	for {
-		val, ok := nth.Nth(i)
+		val, ok := Nth(nth, i)
 		if !ok {
 			break
 		}
@@ -27,10 +27,6 @@ func Bind(pattern interface{}, val interface{}) ([]interface{}, error) {
 
 	switch pattern := pattern.(type) {
 	case *Vector:
-		nther, ok := val.(Nther)
-		if !ok {
-			return nil, fmt.Errorf("cannot bind vector to non-nthable value")
-		}
 		for i := 0; i < pattern.Count(); i++ {
 			// special case for &
 			if Equal(pattern.ValueAt(i), restSymbol) {
@@ -38,7 +34,7 @@ func Bind(pattern interface{}, val interface{}) ([]interface{}, error) {
 					return nil, fmt.Errorf("& in binding-form must be followed by a single element")
 				}
 				target := pattern.ValueAt(i + 1)
-				rest := restFromNth(nther, i)
+				rest := restFromNth(val, i)
 				bindings, err := Bind(target, rest)
 				if err != nil {
 					return nil, err
@@ -47,8 +43,9 @@ func Bind(pattern interface{}, val interface{}) ([]interface{}, error) {
 				break
 			}
 
-			src, ok := nther.Nth(i)
+			src, ok := Nth(val, i)
 			if !ok {
+				fmt.Printf("val: %v\n", val)
 				return nil, fmt.Errorf("cannot bind vector to value with fewer elements")
 			}
 			bindings, err := Bind(pattern.ValueAt(i), src)

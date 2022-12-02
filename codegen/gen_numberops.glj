@@ -1,0 +1,204 @@
+(def go-basic-types
+  '[int8 int16 int32 int64 uint8 uint16 uint32 uint64 float32 float64])
+
+(defn lower-case [r] (unicode.ToLower r))
+(defn lower-first [s]
+  (let [[first & rest] s]
+    (str (char (lower-case first)) (apply str rest))))
+
+(defn upper-case [r] (unicode.ToUpper r))
+(defn upper-first [s]
+  (let [[first & rest] s]
+    (str (char (upper-case first)) (apply str rest))))
+
+(defn number-type-struct-name [t] (str (lower-first (str t)) "Ops"))
+
+;; number types in reverse priority order. e.g., if int64 is combined
+;; with BigInt, use BigInt. and so on.
+(def number-types        (map str '[int64 BigInt Ratio BigDecimal float64]))
+(def lower-case-number-types (map number-type-struct-name number-types))
+
+(defn index-of [l v]
+  (if (empty? l) -1
+      (if (= (first l) v) 0
+          (+ 1 (index-of (rest l) v)))))
+(defn compare-pri [a b]
+  (let [a-pri (index-of number-types a)
+        b-pri (index-of number-types b)]
+    (if (= a-pri b-pri) 0
+        (if (> a-pri b-pri) 1 -1))))
+
+(defn return-typ [typ]
+  (case typ
+    "Ratio" "*value.Ratio"
+    "BigInt" "*value.BigInt"
+    "BigDecimal" "*value.BigDecimal"
+    typ))
+
+(defn cast-to [typ var]
+  (case typ
+    "Ratio" (str "value.NewRatio(int64(" var "), 1)")
+    "BigInt" (str "value.NewBigIntFromInt64(int64(" var "))")
+    "BigDecimal" (str "value.NewBigDecimalFromFloat64(float64(" var "))")
+    (str "As" (upper-first typ) \( var \))))
+
+(def binary-ops (map str '[Add AddP]))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; print types
+
+(print
+ (fmt.Sprintf "package numbers
+
+type (
+	ops interface {
+		Combine(y ops) ops
+
+		Add(x, y interface{}) interface{}
+		AddP(x, y interface{}) interface{}
+	}
+%s
+)
+
+" (strings.Join (map (fn [t] (str \tab t " struct" \{ \}))
+                     lower-case-number-types)
+                "\n")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; print Ops constructor
+
+(print
+ "func Ops(x interface{}) ops {
+	switch x.(type) {
+	case int8:
+		return int64Ops{}
+	case int16:
+		return int64Ops{}
+	case int32:
+		return int64Ops{}
+	case int64:
+		return int64Ops{}
+	case uint8:
+		return int64Ops{}
+	case uint16:
+		return int64Ops{}
+	case uint32:
+		return int64Ops{}
+	case uint64:
+		return int64Ops{}
+	case float32:
+		return float64Ops{}
+	case float64:
+		return float64Ops{}
+	case *value.Ratio:
+		return ratioOps{}
+	case *value.BigInt:
+		return bigIntOps{}
+	case *value.BigDecimal:
+		return bigDecimalOps{}
+	default:
+		panic(fmt.Sprintf(\"cannot convert %T to Ops\", x))
+	}
+}
+")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ops
+
+(println
+ (strings.Join
+  (map (fn [op]
+         (str "func " op "(x, y interface{}) interface{} {" \newline
+              \tab "return Ops(x).Combine(Ops(y))." op "(x, y)" \newline
+              "}"))
+       binary-ops)
+  \newline))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; print per-type Ops
+
+(defn conversion [typ]
+  (str "func As" (upper-first (str typ)) "(x interface{}) " (return-typ typ) " {" \newline
+        \tab "switch x := x.(type) {" \newline
+        (apply str (map (fn [t] (str \tab "case " t ":" \newline
+                                     \tab \tab \tab "return "
+                                     (if (eq? typ (str t)) 'x (cast-to typ 'x)) \newline))
+                        go-basic-types))
+        \tab \tab "default:" \newline
+        \tab \tab \tab "panic(\"cannot convert to " typ "\")" \newline
+        \tab "}" \newline
+       "}" \newline))
+
+(defn bin-op [typ op]
+  (str "func (o " (number-type-struct-name typ) ") " op "(x, y interface{}) interface{} {" \newline
+       (case typ
+           "Ratio" (str \tab "return AsRatio(x)." op "(AsRatio(y))")
+           "BigInt" (str \tab "return AsBigInt(x)." op "(AsBigInt(y))")
+           "BigDecimal" (str \tab "return AsBigDecimal(x)." op "(AsBigDecimal(y))")
+           (str \tab "return " (cast-to typ 'x) " + " (cast-to typ 'y)))
+        \newline
+        "}"))
+
+(defn combine [typ]
+  (str "func (o " (number-type-struct-name typ) ") Combine(y ops) ops {" \newline
+       \tab "switch y.(type) {" \newline
+       (apply str (map (fn [t] (str \tab "case " (lower-first t) "Ops:" \newline
+                                    (let [pri (compare-pri typ t)]
+                                      (case pri
+                                        1 (str \tab \tab \tab "return o" \newline)
+                                        0 (str \tab \tab \tab "return o" \newline)
+                                        -1 (str \tab \tab \tab "return y" \newline)))))
+                       number-types))
+       \tab \tab "default:" \newline
+       \tab \tab \tab "panic(\"cannot combine Ops\")" \newline
+       \tab "}" \newline
+       "}"))
+
+(print (strings.Join (map (fn [t] (strings.Join (map (fn [op] (bin-op t op)) binary-ops) \newline))
+                          number-types)
+                     \newline))
+
+(print (strings.Join (map combine number-types) \newline))
+
+(print (strings.Join (map conversion number-types) \newline))
+
+;; FUTURE OPS
+		;; IsZero(x interface{}) bool
+
+		;; IsPos(x interface{}) bool
+
+		;; IsNeg(x interface{}) bool
+
+		;; Add(x, y interface{}) interface{}
+		;; AddP(x, y interface{}) interface{}
+		;; UncheckedAdd(x, y interface{}) interface{}
+
+		;; Multiply(x, y interface{}) interface{}
+		;; MultiplyP(x, y interface{}) interface{}
+		;; UncheckedMultiply(x, y interface{}) interface{}
+
+		;; Divide(x, y interface{}) interface{}
+
+		;; Quotient(x, y interface{}) interface{}
+
+		;; Remainder(x, y interface{}) interface{}
+
+		;; Equiv(x, y interface{}) bool
+
+		;; LT(x, y interface{}) bool
+		;; LTE(x, y interface{}) bool
+		;; GTE(x, y interface{}) bool
+
+		;; Negate(x interface{}) interface{}
+		;; NegateP(x interface{}) interface{}
+		;; UncheckedNegate(x interface{}) interface{}
+
+		;; Inc(x interface{}) interface{}
+		;; IncP(x interface{}) interface{}
+		;; UncheckedInc(x interface{}) interface{}
+
+		;; Dec(x interface{}) interface{}
+		;; DecP(x interface{}) interface{}
+		;; UncheckedDec(x interface{}) interface{}
+
+		;; Abs(x interface{}) interface{}

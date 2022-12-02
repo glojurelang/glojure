@@ -11,6 +11,7 @@ import (
 	"github.com/glojurelang/glojure/reader"
 	"github.com/glojurelang/glojure/stdlib"
 	"github.com/glojurelang/glojure/value"
+	"github.com/glojurelang/glojure/value/numbers"
 
 	"github.com/glojurelang/glojure/gen/gljimports"
 )
@@ -100,8 +101,11 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		}
 		// numeric functions
 		{
+			env.Define("glojure.lang/AsNumber", value.AsNumber)
+
 			env.Define("glojure.lang.numbers/Inc", value.Inc)
 			env.Define("glojure.lang.numbers/IncP", value.IncP)
+			env.Define("glojure.lang.Numbers/Add", numbers.Add)
 		}
 		// iteration functions
 		{
