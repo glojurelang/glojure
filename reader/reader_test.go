@@ -2,6 +2,7 @@ package reader
 
 import (
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -61,6 +62,11 @@ func TestRead(t *testing.T) {
 			output := strings.Join(strs, "\n")
 			if output != tc.output {
 				t.Errorf("diff (-want,+got):\n%s", diff.Diff(tc.output, output))
+				if os.Getenv("GLOJ_READER_TEST_WRITE_OUTPUT") != "" {
+					if err := os.WriteFile("testdata/reader/"+strings.TrimSuffix(tc.name, ".glj")+".out", []byte(output), 0644); err != nil {
+						panic(err)
+					}
+				}
 			}
 		})
 	}

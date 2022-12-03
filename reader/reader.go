@@ -264,6 +264,13 @@ func (r *Reader) readExpr() (interface{}, error) {
 		return r.readDeref()
 	case '#':
 		return r.readDispatch()
+	case '^':
+		// TODO: attach to next form
+		_, err := r.readMeta()
+		if err != nil {
+			return nil, err
+		}
+		return r.readExpr()
 	default:
 		r.rs.UnreadRune()
 		return r.readSymbol()
@@ -399,6 +406,34 @@ func (r *Reader) readString() (interface{}, error) {
 	return str, nil
 }
 
+func (r *Reader) readRegex() (interface{}, error) {
+	var str string
+	sawSlash := false
+	for {
+		rune, _, err := r.rs.ReadRune()
+		if err != nil {
+			return nil, r.error("error reading regex: %w", err)
+		}
+
+		if rune == '\\' {
+			sawSlash = true
+		} else if rune == '"' && !sawSlash {
+			break
+		} else {
+			sawSlash = false
+		}
+
+		if rune == '\n' {
+			str += "\\n"
+		} else {
+			str += string(rune)
+		}
+	}
+
+	r.popSection()
+	return str, nil
+}
+
 func (r *Reader) readChar() (interface{}, error) {
 	var char string
 	for {
@@ -480,6 +515,33 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		return r.readNamespacedMap()
 	case '{':
 		return r.readSet()
+	case '_':
+		// discard form
+		_, err := r.readExpr()
+		if err != nil {
+			return nil, err
+		}
+		r.popSection()
+		// return the next one
+		return r.readExpr()
+	case '(':
+		// function shorthand
+		r.pushSection()
+		return r.readList()
+	case '\'':
+		// var
+		expr, err := r.readExpr()
+		if err != nil {
+			return nil, err
+		}
+		return value.NewList([]interface{}{
+			value.NewSymbol("var"),
+			expr,
+		}, value.WithSection(r.popSection())), nil
+	case '"':
+		// regular expression
+		// TODO: actually build a regex.
+		return r.readRegex()
 	default:
 		return nil, r.error("invalid dispatch character: %c", rn)
 	}
@@ -666,6 +728,15 @@ func (r *Reader) readKeyword() (interface{}, error) {
 		sym += string(rn)
 	}
 	return value.NewKeyword(sym, value.WithSection(r.popSection())), nil
+}
+
+func (r *Reader) readMeta() (interface{}, error) {
+	res, err := r.readExpr()
+	if err != nil {
+		return nil, err
+	}
+	r.popSection()
+	return res, nil
 }
 
 func isSpace(r rune) bool {
