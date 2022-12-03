@@ -1,0 +1,2 @@
+go test fuzz v1
+string("#(str %4 % @ %2 2 %&)\n")
