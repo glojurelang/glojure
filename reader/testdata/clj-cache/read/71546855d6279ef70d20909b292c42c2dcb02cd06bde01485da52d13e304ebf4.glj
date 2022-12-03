@@ -1,0 +1,6 @@
+false
+Execution error at user/eval1 (REPL:1).
+Invalid token: ::
+
+Full report at:
+/var/folders/0m/y60b85m145lffbfdfk86129r0000gn/T/clojure-10759612282868890124.edn

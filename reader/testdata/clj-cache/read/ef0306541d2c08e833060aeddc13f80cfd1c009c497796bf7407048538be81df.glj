@@ -1,0 +1,2 @@
+true
+(def list (. clojure.lang.PersistentList creator))

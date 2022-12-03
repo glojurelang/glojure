@@ -1,0 +1,26 @@
+#_(defn =
+  "Equality. Returns true if x equals y, false if not. Same as Java
+  x.equals(y) except it also works for nil. Boxed numbers must have
+  same type. Clojure's immutable data structures define equals() (and
+  thus =) as a value, not an identity, comparison."
+  {:inline (fn [x y] `(. clojure.lang.Util equals ~x ~y))
+   :inline-arities #{2}
+   :added "1.0"}
+  ([x] true)
+  ([x y] (clojure.lang.Util/equals x y))
+  ([x y & more]
+   (if (= x y)
+     (if (next more)
+       (recur y (first more) (next more))
+       (= y (first more)))
+     false)))
+
+(defn not=
+  "Same as (not (= obj1 obj2))"
+  {:tag Boolean
+   :added "1.0"
+   :static true}
+  ([x] false)
+  ([x y] (not (= x y)))
+  ([x y & more]
+   (not (apply = x y more))))

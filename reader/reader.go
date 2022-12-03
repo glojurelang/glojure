@@ -412,6 +412,82 @@ func (r *Reader) readString() (interface{}, error) {
 	return str, nil
 }
 
+func (r *Reader) readFunctionShorthand() (interface{}, error) {
+	r.pushSection() // for the list
+	lst, err := r.readList()
+	if err != nil {
+		return nil, err
+	}
+	list := lst.(*value.List)
+
+	// TODO: attain through a configured autogen function.
+	//
+	// we're starting at 3 here to match Clojure's behavior, which is
+	// likely determined by some internal behavior. improve this with a
+	// better test harness.
+	counter := 3
+	var restSymbol *value.Symbol
+	argSymbols := make(map[int]*value.Symbol)
+	argCount := 0
+
+	body := make([]interface{}, 0, list.Count())
+	for cur := list; !cur.IsEmpty(); cur = cur.Next() {
+		sym, ok := cur.First().(*value.Symbol)
+		if !ok || !strings.HasPrefix(sym.Name(), "%") {
+			body = append(body, cur.First())
+			continue
+		}
+
+		argSuffix := sym.Name()[1:]
+		switch {
+		case argSuffix == "&":
+			if restSymbol == nil {
+				restSymbol = value.NewSymbol(fmt.Sprintf("rest__%d#", counter))
+			}
+			body = append(body, restSymbol)
+			counter++
+		case argSuffix == "":
+			if argCount == 0 {
+				argCount = 1
+			}
+			if argSymbols[1] == nil {
+				argSymbols[1] = value.NewSymbol(fmt.Sprintf("p1__%d#", counter))
+			}
+			body = append(body, argSymbols[1])
+			counter++
+		default:
+			argIndex, err := strconv.Atoi(argSuffix)
+			if err != nil {
+				return nil, r.error("arg literal must be %, %& or %integer")
+			}
+			if argIndex > argCount {
+				argCount = argIndex
+			}
+			if argSymbols[argIndex] == nil {
+				argSymbols[argIndex] = value.NewSymbol(fmt.Sprintf("p%d__%d#", argIndex, counter))
+			}
+			body = append(body, argSymbols[argIndex])
+			counter++
+		}
+	}
+	var args []interface{}
+	for i := 1; i <= argCount; i++ {
+		if argSymbols[i] == nil {
+			argSymbols[i] = value.NewSymbol(fmt.Sprintf("p%d__%d#", i, counter))
+			counter++
+		}
+		args = append(args, argSymbols[i])
+	}
+	if restSymbol != nil {
+		args = append(args, value.NewSymbol("&"), restSymbol)
+	}
+	return value.NewList([]interface{}{
+		value.NewSymbol("fn*"),
+		value.NewVector(args),
+		value.NewList(body),
+	}, value.WithSection(r.popSection())), nil
+}
+
 func (r *Reader) readRegex() (interface{}, error) {
 	var str string
 	sawSlash := false
@@ -437,7 +513,11 @@ func (r *Reader) readRegex() (interface{}, error) {
 	}
 
 	r.popSection()
-	return str, nil
+	re, err := regexp.Compile(str)
+	if err != nil {
+		return nil, r.error("invalid regex: %w", err)
+	}
+	return re, nil
 }
 
 func (r *Reader) readChar() (interface{}, error) {
@@ -531,7 +611,7 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		return r.readExpr()
 	case '(':
 		// function shorthand
-		return r.readList()
+		return r.readFunctionShorthand()
 	case '\'':
 		// var
 		expr, err := r.readExpr()
@@ -543,8 +623,6 @@ func (r *Reader) readDispatch() (interface{}, error) {
 			expr,
 		}, value.WithSection(r.popSection())), nil
 	case '"':
-		// regular expression
-		// TODO: actually build a regex.
 		return r.readRegex()
 	default:
 		return nil, r.error("invalid dispatch character: %c", rn)
@@ -731,8 +809,8 @@ func (r *Reader) readKeyword() (interface{}, error) {
 		}
 		sym += string(rn)
 	}
-	if sym == "" {
-		return nil, r.error("invalid keyword: :")
+	if sym == "" || sym == ":" {
+		return nil, r.error("invalid keyword: :" + sym)
 	}
 	return value.NewKeyword(sym, value.WithSection(r.popSection())), nil
 }

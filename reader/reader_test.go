@@ -11,6 +11,9 @@ import (
 	"github.com/kylelemons/godebug/diff"
 )
 
+// set GLOJ_READER_TEST_WRITE_OUTPUT=1 to write the output of the
+// reader as the gold output on a failure. This is useful to
+// initialize the output for a new test case.
 func TestRead(t *testing.T) {
 	type testCase struct {
 		name   string

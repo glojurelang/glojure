@@ -28,6 +28,14 @@ var (
 	})
 )
 
+// Running these fuzz tests is slow because clj is very slow to start
+// up. Use GLOJ_WRITE_GLJ_FUZZ_TEST_CACHE=1 to cache the output of
+// clj. DO NOT use this when actually fuzzing, because it will
+// generate many unnecessary files.
+//
+// TODOs:
+// - automatically detect if we're fuzzing, and ignore the env var if so
+// - use a pool of clj processes instead of starting a new one for each test
 func FuzzCLJConformance(f *testing.F) {
 	paths, err := filepath.Glob("testdata/reader/*.glj")
 	if err != nil {

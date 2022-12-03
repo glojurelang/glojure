@@ -3,6 +3,7 @@ package value
 import (
 	"fmt"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -63,6 +64,8 @@ func ToString(v interface{}, opts ...PrintOption) string {
 			return fmt.Sprintf("%d.0", int64(v))
 		}
 		return strconv.FormatFloat(v, 'f', -1, 64)
+	case *regexp.Regexp:
+		return fmt.Sprintf("#\"%s\"", v.String())
 	case uint64, uint32, uint16, uint8, uint, int64, int32, int16, int8, int:
 		return fmt.Sprintf("%d", v)
 	}
