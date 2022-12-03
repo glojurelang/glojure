@@ -349,6 +349,9 @@ func (r *Reader) readMap() (interface{}, error) {
 		}
 		keyVals = append(keyVals, el)
 	}
+	if len(keyVals)%2 != 0 {
+		return nil, r.error("map literal must contain an even number of forms")
+	}
 	return value.NewMap(keyVals, value.WithSection(r.popSection())), nil
 }
 
@@ -727,6 +730,9 @@ func (r *Reader) readKeyword() (interface{}, error) {
 			break
 		}
 		sym += string(rn)
+	}
+	if sym == "" {
+		return nil, r.error("invalid keyword: :")
 	}
 	return value.NewKeyword(sym, value.WithSection(r.popSection())), nil
 }

@@ -218,7 +218,7 @@ func (r *cljReader) readCLJExpr(program string) (string, error) {
 	cmd.Stdin = strings.NewReader(program)
 	out, err := cmd.CombinedOutput()
 
-	if os.Getenv("WRITE_GLJ_TEST_CACHE") != "" {
+	if os.Getenv("GLOJ_WRITE_GLJ_FUZZ_TEST_CACHE") != "" {
 		if err := putToCache(program, err, string(out)); err != nil {
 			panic(err)
 		}

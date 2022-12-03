@@ -15,6 +15,9 @@ func NewMap(keyVals []interface{}, opts ...Option) *Map {
 	for _, opt := range opts {
 		opt(&o)
 	}
+	if len(keyVals)%2 != 0 {
+		panic("invalid map. must have even number of inputs")
+	}
 
 	return &Map{
 		Section: o.section,

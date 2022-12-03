@@ -1,0 +1,6 @@
+false
+Execution error at user/eval1 (REPL:1).
+Map literal must contain an even number of forms
+
+Full report at:
+/var/folders/mm/bhf4r1f11zq3fc1gckc5wt6h0000gn/T/clojure-5905763281008845846.edn
