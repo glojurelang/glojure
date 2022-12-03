@@ -32,9 +32,15 @@ func TestRead(t *testing.T) {
 		}
 		// read corresponding *.out file.
 		outPath := strings.TrimSuffix(path, ".glj") + ".out"
-		outData, err := ioutil.ReadFile(outPath)
-		if err != nil {
-			t.Fatal(err)
+		var outData []byte
+		// if no *.out file exists, use the input as output.
+		if _, err := os.Stat(outPath); os.IsNotExist(err) {
+			outData = data
+		} else {
+			outData, err = ioutil.ReadFile(outPath)
+			if err != nil {
+				t.Fatal(err)
+			}
 		}
 		testCases = append(testCases, testCase{
 			name:   filepath.Base(path),

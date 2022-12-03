@@ -54,7 +54,7 @@ func FuzzCLJConformance(f *testing.F) {
 		// characters this prevents the fuzzer from generating exotic
 		// unicode while we're still trying to get the basics working.
 		for _, c := range program {
-			if c > unicode.MaxASCII || !unicode.IsPrint(c) {
+			if (c > unicode.MaxASCII || !unicode.IsPrint(c)) && !unicode.IsSpace(c) {
 				t.Skipf("program includes non-ascii character: %q", c)
 			}
 		}

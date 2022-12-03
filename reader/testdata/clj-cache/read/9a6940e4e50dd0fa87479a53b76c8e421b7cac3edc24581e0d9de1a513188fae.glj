@@ -1,0 +1,2 @@
+true
+(load-file "./functional00.in")
