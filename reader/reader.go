@@ -163,6 +163,9 @@ func (r *Reader) ReadAll() ([]interface{}, error) {
 		}
 		nodes = append(nodes, node)
 	}
+	if len(r.posStack) != 0 {
+		panic(fmt.Sprintf("position stack not empty: %+v", r.posStack))
+	}
 	return nodes, nil
 }
 
@@ -509,7 +512,6 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		return nil, r.error("error reading input: %w", err)
 	}
 
-	r.pushSection()
 	switch rn {
 	case ':':
 		return r.readNamespacedMap()
@@ -526,7 +528,6 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		return r.readExpr()
 	case '(':
 		// function shorthand
-		r.pushSection()
 		return r.readList()
 	case '\'':
 		// var
@@ -548,6 +549,7 @@ func (r *Reader) readDispatch() (interface{}, error) {
 }
 
 func (r *Reader) readNamespacedMap() (interface{}, error) {
+	r.pushSection()
 	nsKWVal, err := r.readKeyword()
 	if err != nil {
 		return nil, err
@@ -567,7 +569,6 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 		return nil, r.error("Namespaced map must specify a map")
 	}
 
-	r.pushSection()
 	mapVal, err := r.readMap()
 	if err != nil {
 		return nil, r.error("error reading namespaced map: %w", err)
@@ -592,7 +593,7 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 		newKeyVals = append(newKeyVals, newKey, val)
 	}
 
-	return value.NewMap(newKeyVals, value.WithSection(r.popSection())), nil
+	return value.NewMap(newKeyVals, value.WithSection(mapVal.(*value.Map).Section)), nil
 }
 
 var (
