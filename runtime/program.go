@@ -69,6 +69,37 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		env.loadPath = options.loadPath
 	}
 
+	// bootstrap namespace control
+	{
+		// bootstrap implementation of the ns macro
+		env.DefineMacro("ns", value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
+			if len(args) != 1 {
+				return nil, fmt.Errorf("ns: expected namespace name")
+			}
+
+			sym, ok := args[0].(*value.Symbol)
+			if !ok {
+				return nil, fmt.Errorf("ns: expected symbol as namespace name")
+			}
+			ns := env.FindOrCreateNamespace(sym)
+			env.SetCurrentNamespace(ns)
+			return ns, nil
+		}))
+		env.Define(value.NewSymbol("in-ns"), value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
+			if len(args) != 1 {
+				return nil, fmt.Errorf("in-ns: expected namespace name")
+			}
+
+			sym, ok := args[0].(*value.Symbol)
+			if !ok {
+				return nil, fmt.Errorf("in-ns: expected symbol as namespace name")
+			}
+			ns := env.FindOrCreateNamespace(sym)
+			env.SetCurrentNamespace(ns)
+			return ns, nil
+		}))
+	}
+
 	gljimports.RegisterImports(func(name string, val interface{}) {
 		env.Define(value.NewSymbol(name), val)
 	})
@@ -129,6 +160,9 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			define("glojure.lang.functional/ReduceInit", value.ReduceInit)
 
 			define("glojure.lang.iteration/NewConcatIterator", value.NewConcatIterator)
+		}
+		{
+			define("glojure.lang/FindNamespace", value.FindNamespace)
 		}
 
 		// string

@@ -7,6 +7,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/glojurelang/glojure/reader"
+	"github.com/glojurelang/glojure/value"
 	"github.com/kylelemons/godebug/diff"
 )
 
@@ -47,17 +49,30 @@ func TestParse(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			prog, err := Parse(strings.NewReader(tc.input), WithFilename(tc.name))
-			if err != nil {
-				t.Fatal(err)
-			}
-
 			// save stdout to a buffer
 			stdout := &strings.Builder{}
 
-			_, err = prog.Eval(WithStdout(stdout), WithLoadPath([]string{"testdata/eval"}))
+			rdr := reader.New(strings.NewReader(tc.input), reader.WithFilename(tc.name))
+			forms, err := rdr.ReadAll()
 			if err != nil {
 				t.Fatal(err)
+			}
+			env := NewEnvironment(WithStdout(stdout), WithLoadPath([]string{"testdata/eval"}))
+			_, err = env.Eval(value.NewList([]interface{}{
+				value.NewSymbol("ns"),
+				value.UserNamespaceSymbol,
+			}))
+			if err != nil {
+				t.Fatal(err)
+			}
+			// userNS := env.FindOrCreateNamespace(value.NewSymbol("user"))
+			// env.SetCurrentNamespace(userNS)
+
+			for _, form := range forms {
+				_, err := env.Eval(form)
+				if err != nil {
+					t.Fatal(err)
+				}
 			}
 
 			if got, want := stdout.String(), tc.output; got != want {

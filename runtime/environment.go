@@ -9,6 +9,8 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"sync"
+	"sync/atomic"
 
 	"github.com/glojurelang/glojure/value"
 )
@@ -18,9 +20,14 @@ type environment struct {
 
 	scope *scope
 
-	currentNamespace *value.Namespace
+	// TODO: this should be in a well-known var
+	currentNamespace atomic.Value
+	namespaces       map[string]*value.Namespace
+	nsMtx            sync.RWMutex
 
-	macros map[string]*value.Func
+	// TODO: macros should be normal vars, but with a special flag in
+	// metadata
+	macros map[string]value.Applyer
 
 	// counter for gensym (symbol generator)
 	gensymCounter int
@@ -33,13 +40,16 @@ type environment struct {
 
 func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment {
 	e := &environment{
-		ctx:              ctx,
-		scope:            newScope(),
-		currentNamespace: value.NewNamespace(value.NewSymbol("user")),
-		macros:           make(map[string]*value.Func),
-		stdout:           stdout,
-		stderr:           stderr,
+		ctx:        ctx,
+		scope:      newScope(),
+		namespaces: make(map[string]*value.Namespace),
+		macros:     make(map[string]value.Applyer),
+		stdout:     stdout,
+		stderr:     stderr,
 	}
+	coreNS := e.FindOrCreateNamespace(value.CoreNamepaceSymbol)
+	e.SetCurrentNamespace(coreNS)
+
 	addBuiltins(e)
 	return e
 }
@@ -58,10 +68,10 @@ func (env *environment) Define(sym *value.Symbol, val interface{}) {
 }
 
 func (env *environment) DefVar(sym *value.Symbol, val interface{}) *value.Var {
-	return env.currentNamespace.InternWithValue(env, sym, val, true /* replace root */)
+	return env.CurrentNamespace().InternWithValue(env, sym, val, true /* replace root */)
 }
 
-func (env *environment) DefineMacro(name string, fn *value.Func) {
+func (env *environment) DefineMacro(name string, fn value.Applyer) {
 	env.macros[name] = fn
 }
 
@@ -71,7 +81,22 @@ func (env *environment) lookup(sym *value.Symbol) (interface{}, bool) {
 		return v, true
 	}
 
-	vr := env.currentNamespace.FindInternedVar(sym)
+	{ // HACKHACK
+		// TODO: implement *ns* as a normal var
+		if sym.String() == "*ns*" {
+			return env.CurrentNamespace(), true
+		}
+	}
+
+	ns := env.CurrentNamespace()
+	if sym.Namespace() != "" {
+		ns = env.FindNamespace(value.NewSymbol(sym.Namespace()))
+		sym = value.NewSymbol(sym.Name())
+	}
+	if ns == nil {
+		return nil, false
+	}
+	vr := ns.FindInternedVar(sym)
 	if vr == nil {
 		return nil, false
 	}
@@ -93,8 +118,34 @@ func (env *environment) Stderr() io.Writer {
 	return env.stderr
 }
 
-func (env *environment) FindNamespace(name string) *value.Namespace {
-	return nil
+func (env *environment) FindNamespace(sym *value.Symbol) *value.Namespace {
+	env.nsMtx.RLock()
+	defer env.nsMtx.RUnlock()
+	return env.namespaces[sym.String()]
+}
+
+func (env *environment) FindOrCreateNamespace(sym *value.Symbol) *value.Namespace {
+	ns := env.FindNamespace(sym)
+	if ns != nil {
+		return ns
+	}
+	env.nsMtx.Lock()
+	defer env.nsMtx.Unlock()
+	ns = env.namespaces[sym.String()]
+	if ns != nil {
+		return ns
+	}
+	ns = value.NewNamespace(sym)
+	env.namespaces[sym.String()] = ns
+	return ns
+}
+
+func (env *environment) CurrentNamespace() *value.Namespace {
+	return env.currentNamespace.Load().(*value.Namespace)
+}
+
+func (env *environment) SetCurrentNamespace(ns *value.Namespace) {
+	env.currentNamespace.Store(ns)
 }
 
 func (env *environment) PushLoadPaths(paths []string) value.Environment {
@@ -167,7 +218,7 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 			return env.evalIf(n)
 		case "case":
 			return env.evalCase(n)
-		case "fn":
+		case "fn", "fn*":
 			return env.evalFn(n)
 		case "quote":
 			return env.evalQuote(n)
@@ -652,7 +703,7 @@ func (env *environment) evalDefMacro(n *value.List) (interface{}, error) {
 	return nil, nil
 }
 
-func (env *environment) applyMacro(fn *value.Func, argList *value.List) (interface{}, error) {
+func (env *environment) applyMacro(fn value.Applyer, argList *value.List) (interface{}, error) {
 	args := listAsSlice(argList)
 	res, err := env.applyFunc(fn, args)
 	if err != nil {
@@ -840,6 +891,9 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 		}
 
 		method := value.FieldOrMethod(target, sym.String())
+		if method == nil {
+			return nil, env.errorf(sym, "%T has no such method (%s)", target, sym)
+		}
 		args := make([]interface{}, v.Next().Count())
 		for i := range args {
 			v, err := env.Eval(value.MustNth(v, i+1))

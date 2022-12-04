@@ -30,7 +30,11 @@ type Environment interface {
 
 	// FindNamespace looks up a namespace in the environment. If the
 	// namespace is not found, it returns nil.
-	FindNamespace(name string) *Namespace
+	FindNamespace(sym *Symbol) *Namespace
+
+	FindOrCreateNamespace(sym *Symbol) *Namespace
+
+	SetCurrentNamespace(ns *Namespace)
 
 	// Stdout returns the standard output stream for this environment.
 	Stdout() io.Writer

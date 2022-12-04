@@ -5,10 +5,6 @@ import (
 	"sync/atomic"
 )
 
-const (
-	CoreNamepaceName = "glojure.core"
-)
-
 type Namespace struct {
 	name *Symbol
 
@@ -16,6 +12,22 @@ type Namespace struct {
 	mappings atomic.Value
 	aliases  atomic.Value
 }
+
+var (
+	CoreNamepaceSymbol  = NewSymbol("glojure.core")
+	UserNamespaceSymbol = NewSymbol("user")
+
+	FindNamespace = ApplyerFunc(func(env Environment, args []interface{}) (interface{}, error) {
+		if len(args) != 1 {
+			return nil, fmt.Errorf("find-ns expects 1 argument, got %d", len(args))
+		}
+		sym, ok := args[0].(*Symbol)
+		if !ok {
+			return nil, fmt.Errorf("find-ns expects a symbol, got %T", args[0])
+		}
+		return env.FindNamespace(sym), nil
+	})
+)
 
 func NewNamespace(name *Symbol) *Namespace {
 	ns := &Namespace{
@@ -106,7 +118,7 @@ func (ns *Namespace) checkReplacement(env Environment, sym *Symbol, old, neu int
 			nns = neuVar.Namespace()
 		}
 		if ns.isInternedMapping(sym, old) {
-			if nns != env.FindNamespace(CoreNamepaceName) {
+			if nns != env.FindNamespace(CoreNamepaceSymbol) {
 				fmt.Fprintf(errOut, "REJECTED: attempt to replace interned var %s with %s in %s, you must ns-unmap first", old, neu, ns.name)
 			}
 			return false
@@ -139,4 +151,46 @@ func (ns *Namespace) FindInternedVar(sym *Symbol) *Var {
 		return nil
 	}
 	return vr
+}
+
+// Refer adds a reference to an existing Var, possibly in another
+// namespace, to this namespace.
+func (ns *Namespace) Refer(sym *Symbol, v *Var) *Var {
+	return ns.reference(sym, v).(*Var)
+}
+
+func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
+	if sym.Namespace() != "" {
+		panic(fmt.Errorf("can't intern qualified name: %s", sym))
+	}
+
+	m := ns.Mappings()
+	var o interface{}
+	for {
+		var ok bool
+		o, ok = m.ValueAt(sym)
+		if ok {
+			break
+		}
+		newMap := m.Assoc(sym, v)
+		ns.mappings.CompareAndSwap(m, newMap)
+		m = ns.Mappings()
+	}
+	if ns.isInternedMapping(sym, o) {
+		return o.(*Var)
+	}
+	if o == v {
+		return o
+	}
+
+	// TODO: this will panic :). need to plumb through env, live with a
+	// global env, or make the check less strict if env is nil.
+	if ns.checkReplacement(nil, sym, o, v) {
+		for !ns.mappings.CompareAndSwap(m, m.Assoc(sym, v)) {
+			m = ns.Mappings()
+		}
+		return v
+	}
+
+	return o
 }
