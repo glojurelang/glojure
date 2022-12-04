@@ -78,6 +78,9 @@ func FuzzCLJConformance(f *testing.F) {
 		gljValue, gljErr := r.ReadOne()
 
 		if (cljErr == nil) != (gljErr == nil) {
+			if isCLJConformanceErrorException(cljErr, cljExpr) {
+				t.Skipf("clj error: %v", cljErr)
+			}
 			t.Logf("clj out: %v", cljExpr)
 			t.Fatalf("error mismatch: cljErr=%v gljErr=%v", cljErr, gljErr)
 		}
@@ -107,6 +110,23 @@ func FuzzCLJConformance(f *testing.F) {
 			t.Fatalf("expression mismatch: glj=%v clj=%v", gljExpr, cljExpr)
 		}
 	})
+}
+
+// isCLJConformanceErrorException returns true if the error is one that
+// we expect to see in the clj conformance tests.
+func isCLJConformanceErrorException(cljErr error, cljOut string) bool {
+	if cljErr == nil {
+		return false
+	}
+
+	// Java and Go both support regex repetitions in braces (e.g. "a{n,
+	// m}" for multiple "a"s), but Go's regex engine is more permissive
+	// and will interpret braces as literals if they don't match the
+	// regex repetition syntax.
+	if strings.Contains(cljOut, "Execution error (PatternSyntaxException) at java.util.regex.Pattern/error") && strings.Contains(cljOut, "Illegal repetition") {
+		return true
+	}
+	return false
 }
 
 type cljReaderCommand struct {
