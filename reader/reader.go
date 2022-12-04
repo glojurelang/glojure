@@ -845,7 +845,7 @@ func (r *Reader) readKeyword() (interface{}, error) {
 		}
 		sym += string(rn)
 	}
-	if sym == "" || sym == ":" {
+	if sym == "" || sym == ":" || strings.Contains(sym[1:], ":") {
 		return nil, r.error("invalid keyword: :" + sym)
 	}
 	return value.NewKeyword(sym, value.WithSection(r.popSection())), nil
