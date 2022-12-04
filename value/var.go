@@ -40,6 +40,10 @@ func (v *Var) Symbol() *Symbol {
 	return v.sym
 }
 
+func (v *Var) String() string {
+	return "#'" + v.ns.Name().String() + "/" + v.sym.Name()
+}
+
 func (v *Var) HasRoot() bool {
 	box := v.root.Load().(varBox)
 	_, ok := box.val.(UnboundVar)
