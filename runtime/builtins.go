@@ -325,7 +325,7 @@ func isVectorBuiltin(env value.Environment, args []interface{}) (interface{}, er
 
 func isSeqBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
-		fmt.Errorf("wrong number of arguments (%d) to seq?", len(args))
+		return nil, fmt.Errorf("wrong number of arguments (%d) to seq?", len(args))
 	}
 
 	if _, ok := args[0].(value.ISeq); ok {
