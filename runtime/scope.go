@@ -11,8 +11,8 @@ func newScope() *scope {
 	return &scope{syms: make(map[string]interface{})}
 }
 
-func (s *scope) define(name string, val interface{}) {
-	s.syms[name] = val
+func (s *scope) define(sym *value.Symbol, val interface{}) {
+	s.syms[sym.String()] = val
 }
 
 func (s *scope) push() *scope {
@@ -20,7 +20,7 @@ func (s *scope) push() *scope {
 }
 
 func (s *scope) lookup(sym *value.Symbol) (interface{}, bool) {
-	if v, ok := s.syms[sym.Value]; ok {
+	if v, ok := s.syms[sym.String()]; ok {
 		return v, true
 	}
 	if s.parent == nil {

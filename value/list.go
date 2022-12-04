@@ -144,23 +144,6 @@ func enumerateFunc(next func() (v interface{}, ok bool)) (<-chan interface{}, fu
 
 func (l *List) String() string {
 	b := strings.Builder{}
-
-	// special case for quoted values
-	if l.Count() == 2 {
-		// TODO: only do this if it used quote shorthand when read.
-		if sym, ok := l.item.(*Symbol); ok {
-			switch sym.Value {
-			case "splice-unquote":
-				b.WriteString("~@")
-			default:
-				goto NoQuote
-			}
-			b.WriteString(ToString(l.next.item))
-			return b.String()
-		}
-	}
-NoQuote:
-
 	b.WriteString("(")
 	for cur := l; !cur.IsEmpty(); cur = cur.next {
 		v := cur.item

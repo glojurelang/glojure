@@ -9,7 +9,8 @@ var (
 
 type Symbol struct {
 	Section
-	Value string
+	ns   string
+	name string
 }
 
 // NewSymbol creates a new symbol.
@@ -18,32 +19,30 @@ func NewSymbol(s string, opts ...Option) *Symbol {
 	for _, opt := range opts {
 		opt(&o)
 	}
+	ns, name := "", s
+
+	idx := strings.Index(s, "/")
+	if idx != -1 && s != "/" && s[0] != '/' {
+		ns = s[:idx]
+		name = s[idx+1:]
+	}
 	return &Symbol{
 		Section: o.section,
-		Value:   s,
+		ns:      ns,
+		name:    name,
 	}
 }
 
 func (s *Symbol) Namespace() string {
-	// Return the namespace of the symbol, or the empty string if it
-	// doesn't have one.
-	if i := strings.Index(s.Value, "/"); i != -1 {
-		return s.Value[:i]
-	}
-	return ""
+	return s.ns
 }
 
 func (s *Symbol) Name() string {
-	// Return the name of the symbol, or the empty string if it doesn't
-	// have one.
-	if i := strings.Index(s.Value, "/"); i != -1 {
-		return s.Value[i+1:]
-	}
-	return s.Value
+	return s.name
 }
 
 func (s *Symbol) FullName() string {
-	return s.Value
+	return s.String()
 }
 
 func (s *Symbol) IsValidFormat() bool {
@@ -70,13 +69,19 @@ func (s *Symbol) IsValidFormat() bool {
 }
 
 func (s *Symbol) String() string {
-	return s.Value
+	if s.ns == "" {
+		return s.name
+	}
+	return s.ns + "/" + s.name
 }
 
 func (s *Symbol) Equal(v interface{}) bool {
+	if s == v {
+		return true
+	}
 	other, ok := v.(*Symbol)
 	if !ok {
 		return false
 	}
-	return s.Value == other.Value
+	return s.ns == other.ns && s.name == other.name
 }

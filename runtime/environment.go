@@ -52,13 +52,13 @@ func (env *environment) String() string {
 	return fmt.Sprintf("environment:\nScope:\n%v", env.scope.printIndented("  "))
 }
 
-func (env *environment) Define(name string, value interface{}) {
+func (env *environment) Define(sym *value.Symbol, val interface{}) {
 	// TODO: define should define globally!
-	env.scope.define(name, value)
+	env.scope.define(sym, val)
 }
 
-func (env *environment) DefVar(sym *value.Symbol, value interface{}) *value.Var {
-	return env.currentNamespace.InternWithValue(env, sym, value, true /* replace root */)
+func (env *environment) DefVar(sym *value.Symbol, val interface{}) *value.Var {
+	return env.currentNamespace.InternWithValue(env, sym, val, true /* replace root */)
 }
 
 func (env *environment) DefineMacro(name string, fn *value.Func) {
@@ -160,7 +160,7 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 	first := n.Item()
 	if sym, ok := first.(*value.Symbol); ok {
 		// handle special forms
-		switch sym.Value {
+		switch sym.String() {
 		case "def":
 			return env.evalDef(n)
 		case "if":
@@ -191,7 +191,7 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 		}
 
 		// handle macros
-		if macro, ok := env.macros[sym.Value]; ok {
+		if macro, ok := env.macros[sym.String()]; ok {
 			return env.applyMacro(macro, n.Next())
 		}
 	}
@@ -231,7 +231,7 @@ func (env *environment) evalScalar(n interface{}) (interface{}, error) {
 		if val, ok := env.lookup(v); ok {
 			return val, nil
 		}
-		return nil, env.errorf(n, "undefined symbol: %s", v.Value)
+		return nil, env.errorf(n, "undefined symbol: %s", v)
 	default:
 		// else, it's a literal
 		return v, nil
@@ -290,11 +290,11 @@ func (env *environment) evalFn(n *value.List) (interface{}, error) {
 		return nil, env.errorf(n, "invalid fn expression, need args and body")
 	}
 
-	var fnName string
+	var fnName *value.Symbol
 	if sym, ok := items[0].(*value.Symbol); ok {
 		// if the first child is not a list, it's the name of the
 		// function. this can be used for recursion.
-		fnName = sym.Value
+		fnName = sym
 		items = items[1:]
 	}
 
@@ -514,13 +514,14 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 		}
 		return value.NewVector(resultValues), nil
 	case *value.Symbol:
-		if !strings.HasSuffix(item.Value, "#") {
+		if !strings.HasSuffix(item.Name(), "#") {
 			return item, nil
 		}
-		newName, ok := symbolNameMap[item.Value]
+		symStr := item.String()
+		newName, ok := symbolNameMap[symStr]
 		if !ok {
-			newName = item.Value[:len(item.Value)-1] + "__" + strconv.Itoa(env.gensymCounter) + "__auto__"
-			symbolNameMap[item.Value] = newName
+			newName = symStr[:len(symStr)-1] + "__" + strconv.Itoa(env.gensymCounter) + "__auto__"
+			symbolNameMap[symStr] = newName
 			env.gensymCounter++
 		}
 		return value.NewSymbol(newName), nil
@@ -579,7 +580,7 @@ func (env *environment) evalLet(n *value.List) (interface{}, error) {
 	// create a new environment with the bindings
 	newEnv := env.PushScope().(*environment)
 	for name, val := range bindingsMap {
-		newEnv.Define(name, val)
+		newEnv.Define(value.NewSymbol(name), val)
 	}
 
 	// evaluate the body
@@ -616,8 +617,8 @@ func (env *environment) evalBindings(bindings *value.Vector) (map[string]interfa
 			if !ok {
 				return nil, env.errorf(bindings, "invalid let, binding name must be a symbol")
 			}
-			newEnv.Define(name.Value, binds[i+1])
-			bindingsMap[name.Value] = binds[i+1]
+			newEnv.Define(name, binds[i+1])
+			bindingsMap[name.String()] = binds[i+1]
 		}
 	}
 
@@ -647,7 +648,7 @@ func (env *environment) evalDefMacro(n *value.List) (interface{}, error) {
 		return nil, env.errorf(n.Next().Item(), "invalid defmacro, name must be a symbol")
 	}
 
-	env.DefineMacro(sym.Value, fn.(*value.Func))
+	env.DefineMacro(sym.String(), fn.(*value.Func))
 	return nil, nil
 }
 
@@ -729,7 +730,7 @@ func (env *environment) evalSet(n *value.List) (interface{}, error) {
 		if fieldExpr.Count() != 3 {
 			return nil, env.errorf(fieldExpr, "invalid expression, expected (set! (. go-value-expr field-symbol) expr)")
 		}
-		if dotSym, ok := value.MustNth(fieldExpr, 0).(*value.Symbol); !ok || dotSym.Value != "." {
+		if dotSym, ok := value.MustNth(fieldExpr, 0).(*value.Symbol); !ok || dotSym.String() != "." {
 			return nil, env.errorf(fieldExpr, "invalid expression, expected (set! (. go-value-expr field-symbol) expr)")
 		}
 	}
@@ -756,7 +757,7 @@ func (env *environment) evalSet(n *value.List) (interface{}, error) {
 		goVal = expr
 	}
 
-	if err := value.SetField(targetVal, fieldSym.Value, goVal); err != nil {
+	if err := value.SetField(targetVal, fieldSym.String(), goVal); err != nil {
 		return nil, env.errorf(n, "invalid set! expression, %v", err)
 	}
 
@@ -813,9 +814,9 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 	}
 
 	if v, ok := memberExpr.(*value.Symbol); ok {
-		fieldVal := value.FieldOrMethod(target, v.Value)
+		fieldVal := value.FieldOrMethod(target, v.String())
 		if fieldVal == nil {
-			return nil, env.errorf(v, "%T has no such field or method (%v)", target, v.Value)
+			return nil, env.errorf(v, "%T has no such field or method (%s)", target, v)
 		}
 
 		reflectVal := reflect.ValueOf(fieldVal)
@@ -838,7 +839,7 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 			return nil, env.errorf(v.Item(), "invalid expression, method name must be a symbol")
 		}
 
-		method := value.FieldOrMethod(target, sym.Value)
+		method := value.FieldOrMethod(target, sym.String())
 		args := make([]interface{}, v.Next().Count())
 		for i := range args {
 			v, err := env.Eval(value.MustNth(v, i+1))
@@ -863,7 +864,7 @@ func nodeAsStringList(n *value.List) ([]string, error) {
 		if !ok {
 			return nil, fmt.Errorf("invalid argument list: %v", n)
 		}
-		res = append(res, sym.Value)
+		res = append(res, sym.String())
 	}
 	return res, nil
 }

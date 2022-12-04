@@ -12,7 +12,7 @@ type Environment interface {
 	PushScope() Environment
 
 	// Define defines a variable in the current scope.
-	Define(name string, v interface{})
+	Define(sym *Symbol, v interface{})
 
 	// Eval evaluates a value representing an expression in this
 	// environment.
