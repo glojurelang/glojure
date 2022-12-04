@@ -18,11 +18,11 @@ type environment struct {
 
 	scope *scope
 
-	// global vars scope
-	vars *scope
+	currentNamespace *value.Namespace
 
 	macros map[string]*value.Func
 
+	// counter for gensym (symbol generator)
 	gensymCounter int
 
 	stdout io.Writer
@@ -33,12 +33,12 @@ type environment struct {
 
 func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment {
 	e := &environment{
-		ctx:    ctx,
-		scope:  newScope(),
-		vars:   newScope(),
-		macros: make(map[string]*value.Func),
-		stdout: stdout,
-		stderr: stderr,
+		ctx:              ctx,
+		scope:            newScope(),
+		currentNamespace: value.NewNamespace(value.NewSymbol("user")),
+		macros:           make(map[string]*value.Func),
+		stdout:           stdout,
+		stderr:           stderr,
 	}
 	addBuiltins(e)
 	return e
@@ -57,20 +57,25 @@ func (env *environment) Define(name string, value interface{}) {
 	env.scope.define(name, value)
 }
 
-func (env *environment) DefVar(name string, value interface{}) {
-	env.vars.define(name, value)
+func (env *environment) DefVar(sym *value.Symbol, value interface{}) *value.Var {
+	return env.currentNamespace.InternWithValue(env, sym, value, true /* replace root */)
 }
 
 func (env *environment) DefineMacro(name string, fn *value.Func) {
 	env.macros[name] = fn
 }
 
-func (env *environment) lookup(name string) (interface{}, bool) {
-	v, ok := env.scope.lookup(name)
+func (env *environment) lookup(sym *value.Symbol) (interface{}, bool) {
+	v, ok := env.scope.lookup(sym)
 	if ok {
 		return v, true
 	}
-	return env.vars.lookup(name)
+
+	vr := env.currentNamespace.FindInternedVar(sym)
+	if vr == nil {
+		return nil, false
+	}
+	return vr.Get(), true
 }
 
 func (env *environment) PushScope() value.Environment {
@@ -223,7 +228,7 @@ func (env *environment) evalVector(n *value.Vector) (interface{}, error) {
 func (env *environment) evalScalar(n interface{}) (interface{}, error) {
 	switch v := n.(type) {
 	case *value.Symbol:
-		if val, ok := env.lookup(v.Value); ok {
+		if val, ok := env.lookup(v); ok {
 			return val, nil
 		}
 		return nil, env.errorf(n, "undefined symbol: %s", v.Value)
@@ -270,7 +275,7 @@ func (env *environment) evalDef(n *value.List) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	env.DefVar(v.Value, val)
+	env.DefVar(v, val)
 	return nil, nil
 }
 

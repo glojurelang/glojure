@@ -117,10 +117,18 @@ func (ns *Namespace) checkReplacement(env Environment, sym *Symbol, old, neu int
 	return true
 }
 
+func (ns *Namespace) InternWithValue(env Environment, sym *Symbol, value interface{}, replaceRoot bool) *Var {
+	v := ns.Intern(env, sym)
+	if !v.HasRoot() || replaceRoot {
+		v.BindRoot(value)
+	}
+	return v
+}
+
 func (ns *Namespace) FindInternedVar(sym *Symbol) *Var {
 	m := ns.Mappings()
 	v, ok := m.ValueAt(sym)
-	if ok {
+	if !ok {
 		return nil
 	}
 	vr, ok := v.(*Var)
