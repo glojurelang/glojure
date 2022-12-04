@@ -98,11 +98,12 @@ func (env *environment) lookup(sym *value.Symbol) (interface{}, bool) {
 	if ns == nil {
 		return nil, false
 	}
-	vr := ns.FindInternedVar(sym)
-	if vr == nil {
+	vr, ok := ns.Mappings().ValueAt(sym)
+	if !ok {
 		return nil, false
 	}
-	return vr.Get(), true
+	// TODO: can these only be vars?
+	return vr.(*value.Var).Get(), true
 }
 
 func (env *environment) PushScope() value.Environment {

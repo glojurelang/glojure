@@ -119,13 +119,13 @@ func (ns *Namespace) checkReplacement(env Environment, sym *Symbol, old, neu int
 		}
 		if ns.isInternedMapping(sym, old) {
 			if nns != env.FindNamespace(CoreNamepaceSymbol) {
-				fmt.Fprintf(errOut, "REJECTED: attempt to replace interned var %s with %s in %s, you must ns-unmap first", old, neu, ns.name)
+				fmt.Fprintf(errOut, "REJECTED: attempt to replace interned var %s with %s in %s, you must ns-unmap first\n", old, neu, ns.name)
 			}
 			return false
 		}
 	}
 
-	fmt.Fprintf(errOut, "WARNING: %s already refers to %s in namespace: %s, being replaced by: %s", sym, old, ns.name, neu)
+	fmt.Fprintf(errOut, "WARNING: %s already refers to %s in namespace: %s, being replaced by: %s\n", sym, old, ns.name, neu)
 	return true
 }
 

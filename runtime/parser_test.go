@@ -4,6 +4,7 @@ import (
 	"io"
 	"io/ioutil"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -65,8 +66,6 @@ func TestParse(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			// userNS := env.FindOrCreateNamespace(value.NewSymbol("user"))
-			// env.SetCurrentNamespace(userNS)
 
 			for _, form := range forms {
 				_, err := env.Eval(form)
@@ -84,9 +83,10 @@ func TestParse(t *testing.T) {
 
 func TestEvalErrors(t *testing.T) {
 	type testCase struct {
-		name   string
-		input  string
-		errorS string
+		name    string
+		input   string
+		errorS  string
+		errorRE *regexp.Regexp
 	}
 
 	var testCases = []testCase{}
@@ -108,15 +108,20 @@ func TestEvalErrors(t *testing.T) {
 		if len(lines) < 1 {
 			t.Fatalf("no error line in %s", path)
 		}
-		if !strings.HasPrefix(lines[0], ";;;ERROR=") {
+		if !strings.HasPrefix(lines[0], ";;;ERROR=") && !strings.HasPrefix(lines[0], ";;;ERROR_RE=") {
 			t.Fatalf("no error line in %s", path)
 		}
 		errorS := strings.Replace(strings.TrimPrefix(lines[0], ";;;ERROR="), "\\n", "\n", -1)
+		var errorRE *regexp.Regexp
+		if strings.HasPrefix(lines[0], ";;;ERROR_RE=") {
+			errorRE = regexp.MustCompile(strings.TrimPrefix(lines[0], ";;;ERROR_RE="))
+		}
 
 		testCases = append(testCases, testCase{
-			name:   filepath.Base(path),
-			input:  string(data),
-			errorS: errorS,
+			name:    filepath.Base(path),
+			input:   string(data),
+			errorS:  errorS,
+			errorRE: errorRE,
 		})
 	}
 
@@ -134,8 +139,15 @@ func TestEvalErrors(t *testing.T) {
 			if err == nil {
 				t.Fatal("expected error, got nil")
 			}
-			if got, want := err.Error(), tc.errorS; got != want {
-				t.Errorf("diff (-want,+got):\n%s", diff.Diff(want, got))
+			got := err.Error()
+			if tc.errorRE != nil {
+				if !tc.errorRE.MatchString(got) {
+					t.Errorf("error does not match %q\n\n%s", tc.errorRE, got)
+				}
+			} else {
+				if want := tc.errorS; got != want {
+					t.Errorf("diff (-want,+got):\n%s", diff.Diff(want, got))
+				}
 			}
 		})
 	}
