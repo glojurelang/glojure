@@ -1,0 +1,2 @@
+go test fuzz v1
+string("#\"(\\d+)\\.(\\d+)\\.(\\d+)(?:-([a-zA-Z0-9_]{{{{{+)(SNAPSHOT))?\"\n")

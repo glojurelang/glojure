@@ -1,0 +1,8 @@
+false
+Execution error (PatternSyntaxException) at java.util.regex.Pattern/error (Pattern.java:2028).
+Illegal repetition near index 37
+(\d+)\.(\d+)\.(\d+)(?:-([a-zA-Z0-9_]{{{{{+)(SNAPSHOT))?
+                                     ^
+
+Full report at:
+/var/folders/0m/y60b85m145lffbfdfk86129r0000gn/T/clojure-708558860762531557.edn
