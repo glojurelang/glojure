@@ -77,8 +77,6 @@ func Start(opts ...Option) {
 			fmt.Fprintln(o.stdout, err)
 		}
 		expr = ""
-		rl.SetPrompt(defaultPrompt())
-
 		for _, val := range vals {
 			out, err := func() (out string, err error) {
 				defer func() {
@@ -99,6 +97,7 @@ func Start(opts ...Option) {
 			}
 			fmt.Fprintln(o.stdout, out)
 		}
+		rl.SetPrompt(defaultPrompt())
 	}
 }
 

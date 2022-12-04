@@ -21,9 +21,9 @@ type environment struct {
 	scope *scope
 
 	// TODO: this should be in a well-known var
-	currentNamespace atomic.Value
+	currentNamespace *atomic.Value
 	namespaces       map[string]*value.Namespace
-	nsMtx            sync.RWMutex
+	nsMtx            *sync.RWMutex
 
 	// TODO: macros should be normal vars, but with a special flag in
 	// metadata
@@ -40,12 +40,14 @@ type environment struct {
 
 func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment {
 	e := &environment{
-		ctx:        ctx,
-		scope:      newScope(),
-		namespaces: make(map[string]*value.Namespace),
-		macros:     make(map[string]value.Applyer),
-		stdout:     stdout,
-		stderr:     stderr,
+		ctx:              ctx,
+		scope:            newScope(),
+		currentNamespace: &atomic.Value{},
+		namespaces:       make(map[string]*value.Namespace),
+		nsMtx:            &sync.RWMutex{},
+		macros:           make(map[string]value.Applyer),
+		stdout:           stdout,
+		stderr:           stderr,
 	}
 	coreNS := e.FindOrCreateNamespace(value.CoreNamepaceSymbol)
 	e.SetCurrentNamespace(coreNS)
