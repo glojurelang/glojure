@@ -103,6 +103,13 @@ type (
 	Reader struct {
 		rs *trackingRuneScanner
 
+		symbolResolver SymbolResolver
+
+		// map for function shorthand arguments.
+		// non-nil only when reading a function shorthand.
+		fnArgMap   map[int]*value.Symbol
+		argCounter int
+
 		posStack []value.Pos
 	}
 )
@@ -138,7 +145,15 @@ func New(r io.RuneScanner, opts ...Option) *Reader {
 		opt(&o)
 	}
 	return &Reader{
-		rs: newTrackingRuneScanner(r, o.filename),
+		rs:             newTrackingRuneScanner(r, o.filename),
+		symbolResolver: o.resolver,
+
+		// TODO: attain through a configured autogen function.
+		//
+		// we're starting at 3 here to match Clojure's behavior, which is
+		// likely determined by some internal behavior. improve this with a
+		// better test harness.
+		argCounter: 3,
 	}
 }
 
@@ -255,6 +270,8 @@ func (r *Reader) readExpr() (interface{}, error) {
 		return r.readChar()
 	case ':':
 		return r.readKeyword()
+	case '%':
+		return r.readArg()
 
 		// TODO: implement as reader macros
 	case '\'':
@@ -412,79 +429,98 @@ func (r *Reader) readString() (interface{}, error) {
 	return str, nil
 }
 
-func (r *Reader) readFunctionShorthand() (interface{}, error) {
-	r.pushSection() // for the list
-	lst, err := r.readList()
+func (r *Reader) nextID() int {
+	id := r.argCounter
+	r.argCounter++
+	return id
+}
+
+func (r *Reader) genArg(i int) *value.Symbol {
+	prefix := "rest"
+	if i != -1 {
+		prefix = fmt.Sprintf("p%d", i)
+	}
+	return value.NewSymbol(fmt.Sprintf("%s__%d#", prefix, r.nextID()))
+}
+
+func (r *Reader) readArg() (interface{}, error) {
+	r.rs.UnreadRune()
+	sym, err := r.readSymbol()
 	if err != nil {
 		return nil, err
 	}
-	list := lst.(*value.List)
+	// if we're not parsing function shorthand, just return the symbol
+	if r.fnArgMap == nil {
+		return sym, nil
+	}
 
-	// TODO: attain through a configured autogen function.
-	//
-	// we're starting at 3 here to match Clojure's behavior, which is
-	// likely determined by some internal behavior. improve this with a
-	// better test harness.
-	counter := 3
-	var restSymbol *value.Symbol
-	argSymbols := make(map[int]*value.Symbol)
-	argCount := 0
+	argSuffix := sym.(*value.Symbol).Name()[1:]
+	switch {
+	case argSuffix == "&":
+		if r.fnArgMap[-1] == nil {
+			r.fnArgMap[-1] = r.genArg(-1)
+		}
+		return r.fnArgMap[-1], nil
+	case argSuffix == "":
+		if r.fnArgMap[1] == nil {
+			r.fnArgMap[1] = r.genArg(1)
+		}
+		return r.fnArgMap[1], nil
+	default:
+		argIndex, err := strconv.Atoi(argSuffix)
+		if err != nil {
+			return nil, r.error("arg literal must be %, %& or %integer")
+		}
+		if r.fnArgMap[argIndex] == nil {
+			r.fnArgMap[argIndex] = r.genArg(argIndex)
+		}
+		return r.fnArgMap[argIndex], nil
+	}
+}
 
-	body := make([]interface{}, 0, list.Count())
-	for cur := list; !cur.IsEmpty(); cur = cur.Next() {
-		sym, ok := cur.First().(*value.Symbol)
-		if !ok || !strings.HasPrefix(sym.Name(), "%") {
-			body = append(body, cur.First())
+func (r *Reader) readFunctionShorthand() (interface{}, error) {
+	if r.fnArgMap != nil {
+		return nil, r.error("nested #()s are not allowed")
+	}
+	r.fnArgMap = make(map[int]*value.Symbol)
+	defer func() {
+		r.fnArgMap = nil
+	}()
+
+	r.rs.UnreadRune()
+	body, err := r.readExpr()
+	if err != nil {
+		return nil, err
+	}
+
+	args := make([]interface{}, 0, len(r.fnArgMap))
+	var restSym *value.Symbol
+	// NB: arg keys are 1-indexed, -1 represents a "rest" arg
+	for i, sym := range r.fnArgMap {
+		for i > len(args) {
+			args = append(args, nil)
+		}
+		if i == -1 {
+			restSym = sym
 			continue
 		}
+		args[i-1] = sym
+	}
+	if restSym != nil {
+		args = append(args, value.NewSymbol("&"), restSym)
+	}
+	// fill in any missing args with generated args
+	for i, arg := range args {
+		if arg != nil {
+			continue
+		}
+		args[i] = r.genArg(i + 1)
+	}
 
-		argSuffix := sym.Name()[1:]
-		switch {
-		case argSuffix == "&":
-			if restSymbol == nil {
-				restSymbol = value.NewSymbol(fmt.Sprintf("rest__%d#", counter))
-			}
-			body = append(body, restSymbol)
-			counter++
-		case argSuffix == "":
-			if argCount == 0 {
-				argCount = 1
-			}
-			if argSymbols[1] == nil {
-				argSymbols[1] = value.NewSymbol(fmt.Sprintf("p1__%d#", counter))
-			}
-			body = append(body, argSymbols[1])
-			counter++
-		default:
-			argIndex, err := strconv.Atoi(argSuffix)
-			if err != nil {
-				return nil, r.error("arg literal must be %, %& or %integer")
-			}
-			if argIndex > argCount {
-				argCount = argIndex
-			}
-			if argSymbols[argIndex] == nil {
-				argSymbols[argIndex] = value.NewSymbol(fmt.Sprintf("p%d__%d#", argIndex, counter))
-			}
-			body = append(body, argSymbols[argIndex])
-			counter++
-		}
-	}
-	var args []interface{}
-	for i := 1; i <= argCount; i++ {
-		if argSymbols[i] == nil {
-			argSymbols[i] = value.NewSymbol(fmt.Sprintf("p%d__%d#", i, counter))
-			counter++
-		}
-		args = append(args, argSymbols[i])
-	}
-	if restSymbol != nil {
-		args = append(args, value.NewSymbol("&"), restSymbol)
-	}
 	return value.NewList([]interface{}{
 		value.NewSymbol("fn*"),
 		value.NewVector(args),
-		value.NewList(body),
+		body,
 	}, value.WithSection(r.popSection())), nil
 }
 
