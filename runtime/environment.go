@@ -26,17 +26,19 @@ type environment struct {
 	gensymCounter int
 
 	stdout io.Writer
+	stderr io.Writer
 
 	loadPath []string
 }
 
-func newEnvironment(ctx context.Context, stdout io.Writer) *environment {
+func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment {
 	e := &environment{
 		ctx:    ctx,
 		scope:  newScope(),
 		vars:   newScope(),
 		macros: make(map[string]*value.Func),
 		stdout: stdout,
+		stderr: stderr,
 	}
 	addBuiltins(e)
 	return e
@@ -80,6 +82,14 @@ func (env *environment) PushScope() value.Environment {
 
 func (env *environment) Stdout() io.Writer {
 	return env.stdout
+}
+
+func (env *environment) Stderr() io.Writer {
+	return env.stderr
+}
+
+func (env *environment) FindNamespace(name string) *value.Namespace {
+	return nil
 }
 
 func (env *environment) PushLoadPaths(paths []string) value.Environment {

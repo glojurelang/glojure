@@ -22,6 +22,7 @@ type Program struct {
 
 type evalOptions struct {
 	stdout   io.Writer
+	stderr   io.Writer
 	loadPath []string
 	env      *environment
 }
@@ -31,6 +32,12 @@ type EvalOption func(*evalOptions)
 func WithStdout(w io.Writer) EvalOption {
 	return func(opts *evalOptions) {
 		opts.stdout = w
+	}
+}
+
+func WithStderr(w io.Writer) EvalOption {
+	return func(opts *evalOptions) {
+		opts.stderr = w
 	}
 }
 
@@ -50,6 +57,7 @@ func withEnv(env value.Environment) EvalOption {
 func NewEnvironment(opts ...EvalOption) value.Environment {
 	options := &evalOptions{
 		stdout: os.Stdout,
+		stderr: os.Stderr,
 	}
 	for _, opt := range opts {
 		opt(options)
@@ -57,7 +65,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 
 	env := options.env
 	if env == nil {
-		env = newEnvironment(context.Background(), options.stdout)
+		env = newEnvironment(context.Background(), options.stdout, options.stderr)
 		env.loadPath = options.loadPath
 	}
 

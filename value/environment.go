@@ -28,8 +28,15 @@ type Environment interface {
 	// first in the returned environment.
 	PushLoadPaths(paths []string) Environment
 
+	// FindNamespace looks up a namespace in the environment. If the
+	// namespace is not found, it returns nil.
+	FindNamespace(name string) *Namespace
+
 	// Stdout returns the standard output stream for this environment.
 	Stdout() io.Writer
+
+	// Stderr returns the error output stream for this environment.
+	Stderr() io.Writer
 
 	// Context returns the context associated with this environment.
 	Context() context.Context
