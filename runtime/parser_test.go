@@ -4,9 +4,12 @@ import (
 	"io"
 	"io/ioutil"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 
+	"github.com/glojurelang/glojure/reader"
+	"github.com/glojurelang/glojure/value"
 	"github.com/kylelemons/godebug/diff"
 )
 
@@ -47,17 +50,28 @@ func TestParse(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			prog, err := Parse(strings.NewReader(tc.input), WithFilename(tc.name))
+			// save stdout to a buffer
+			stdout := &strings.Builder{}
+
+			rdr := reader.New(strings.NewReader(tc.input), reader.WithFilename(tc.name))
+			forms, err := rdr.ReadAll()
+			if err != nil {
+				t.Fatal(err)
+			}
+			env := NewEnvironment(WithStdout(stdout), WithLoadPath([]string{"testdata/eval"}))
+			_, err = env.Eval(value.NewList([]interface{}{
+				value.NewSymbol("ns"),
+				value.UserNamespaceSymbol,
+			}))
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			// save stdout to a buffer
-			stdout := &strings.Builder{}
-
-			_, err = prog.Eval(WithStdout(stdout), WithLoadPath([]string{"testdata/eval"}))
-			if err != nil {
-				t.Fatal(err)
+			for _, form := range forms {
+				_, err := env.Eval(form)
+				if err != nil {
+					t.Fatal(err)
+				}
 			}
 
 			if got, want := stdout.String(), tc.output; got != want {
@@ -69,9 +83,10 @@ func TestParse(t *testing.T) {
 
 func TestEvalErrors(t *testing.T) {
 	type testCase struct {
-		name   string
-		input  string
-		errorS string
+		name    string
+		input   string
+		errorS  string
+		errorRE *regexp.Regexp
 	}
 
 	var testCases = []testCase{}
@@ -93,15 +108,20 @@ func TestEvalErrors(t *testing.T) {
 		if len(lines) < 1 {
 			t.Fatalf("no error line in %s", path)
 		}
-		if !strings.HasPrefix(lines[0], ";;;ERROR=") {
+		if !strings.HasPrefix(lines[0], ";;;ERROR=") && !strings.HasPrefix(lines[0], ";;;ERROR_RE=") {
 			t.Fatalf("no error line in %s", path)
 		}
 		errorS := strings.Replace(strings.TrimPrefix(lines[0], ";;;ERROR="), "\\n", "\n", -1)
+		var errorRE *regexp.Regexp
+		if strings.HasPrefix(lines[0], ";;;ERROR_RE=") {
+			errorRE = regexp.MustCompile(strings.TrimPrefix(lines[0], ";;;ERROR_RE="))
+		}
 
 		testCases = append(testCases, testCase{
-			name:   filepath.Base(path),
-			input:  string(data),
-			errorS: errorS,
+			name:    filepath.Base(path),
+			input:   string(data),
+			errorS:  errorS,
+			errorRE: errorRE,
 		})
 	}
 
@@ -119,8 +139,15 @@ func TestEvalErrors(t *testing.T) {
 			if err == nil {
 				t.Fatal("expected error, got nil")
 			}
-			if got, want := err.Error(), tc.errorS; got != want {
-				t.Errorf("diff (-want,+got):\n%s", diff.Diff(want, got))
+			got := err.Error()
+			if tc.errorRE != nil {
+				if !tc.errorRE.MatchString(got) {
+					t.Errorf("error does not match %q\n\n%s", tc.errorRE, got)
+				}
+			} else {
+				if want := tc.errorS; got != want {
+					t.Errorf("diff (-want,+got):\n%s", diff.Diff(want, got))
+				}
 			}
 		})
 	}

@@ -12,7 +12,7 @@ type Environment interface {
 	PushScope() Environment
 
 	// Define defines a variable in the current scope.
-	Define(name string, v interface{})
+	Define(sym *Symbol, v interface{})
 
 	// Eval evaluates a value representing an expression in this
 	// environment.
@@ -28,8 +28,19 @@ type Environment interface {
 	// first in the returned environment.
 	PushLoadPaths(paths []string) Environment
 
+	// FindNamespace looks up a namespace in the environment. If the
+	// namespace is not found, it returns nil.
+	FindNamespace(sym *Symbol) *Namespace
+
+	FindOrCreateNamespace(sym *Symbol) *Namespace
+
+	SetCurrentNamespace(ns *Namespace)
+
 	// Stdout returns the standard output stream for this environment.
 	Stdout() io.Writer
+
+	// Stderr returns the error output stream for this environment.
+	Stderr() io.Writer
 
 	// Context returns the context associated with this environment.
 	Context() context.Context

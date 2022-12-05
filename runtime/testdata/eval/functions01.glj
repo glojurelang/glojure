@@ -1,13 +1,6 @@
-(load-file "./functional00.glj")
-
 (defn fib [n]
   (if (< n 2)
     1
     (+ (fib (- n 1)) (fib (- n 2)))))
 
-(defn range [n]
-  (if (eq? n 0)
-    '()
-    (concat (range (- n 1)) (list n))))
-
-(map print (map fib (range 10)))
+(map println (map fib (range 10)))

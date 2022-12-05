@@ -45,7 +45,6 @@ func Bind(pattern interface{}, val interface{}) ([]interface{}, error) {
 
 			src, ok := Nth(val, i)
 			if !ok {
-				fmt.Printf("val: %v\n", val)
 				return nil, fmt.Errorf("cannot bind vector to value with fewer elements")
 			}
 			bindings, err := Bind(pattern.ValueAt(i), src)

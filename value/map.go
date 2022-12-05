@@ -25,6 +25,21 @@ func NewMap(keyVals []interface{}, opts ...Option) *Map {
 	}
 }
 
+func (m *Map) ValueAt(key interface{}) (interface{}, bool) {
+	for i := 0; i < len(m.keyVals); i += 2 {
+		if Equal(m.keyVals[i], key) {
+			return m.keyVals[i+1], true
+		}
+	}
+
+	return nil, false
+}
+
+// TODO: define and amend to implement and return the right interface
+func (m *Map) Assoc(k, v interface{}) *Map {
+	return NewMap(append(m.keyVals, k, v))
+}
+
 func (m *Map) Count() int {
 	return len(m.keyVals) / 2
 }

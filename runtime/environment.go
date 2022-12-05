@@ -9,6 +9,8 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"sync"
+	"sync/atomic"
 
 	"github.com/glojurelang/glojure/value"
 )
@@ -18,26 +20,38 @@ type environment struct {
 
 	scope *scope
 
-	// global vars scope
-	vars *scope
+	// TODO: this should be in a well-known var
+	currentNamespace *atomic.Value
+	namespaces       map[string]*value.Namespace
+	nsMtx            *sync.RWMutex
 
-	macros map[string]*value.Func
+	// TODO: macros should be normal vars, but with a special flag in
+	// metadata
+	macros map[string]value.Applyer
 
+	// counter for gensym (symbol generator)
 	gensymCounter int
 
 	stdout io.Writer
+	stderr io.Writer
 
 	loadPath []string
 }
 
-func newEnvironment(ctx context.Context, stdout io.Writer) *environment {
+func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment {
 	e := &environment{
-		ctx:    ctx,
-		scope:  newScope(),
-		vars:   newScope(),
-		macros: make(map[string]*value.Func),
-		stdout: stdout,
+		ctx:              ctx,
+		scope:            newScope(),
+		currentNamespace: &atomic.Value{},
+		namespaces:       make(map[string]*value.Namespace),
+		nsMtx:            &sync.RWMutex{},
+		macros:           make(map[string]value.Applyer),
+		stdout:           stdout,
+		stderr:           stderr,
 	}
+	coreNS := e.FindOrCreateNamespace(value.CoreNamepaceSymbol)
+	e.SetCurrentNamespace(coreNS)
+
 	addBuiltins(e)
 	return e
 }
@@ -50,25 +64,46 @@ func (env *environment) String() string {
 	return fmt.Sprintf("environment:\nScope:\n%v", env.scope.printIndented("  "))
 }
 
-func (env *environment) Define(name string, value interface{}) {
+func (env *environment) Define(sym *value.Symbol, val interface{}) {
 	// TODO: define should define globally!
-	env.scope.define(name, value)
+	env.scope.define(sym, val)
 }
 
-func (env *environment) DefVar(name string, value interface{}) {
-	env.vars.define(name, value)
+func (env *environment) DefVar(sym *value.Symbol, val interface{}) *value.Var {
+	return env.CurrentNamespace().InternWithValue(env, sym, val, true /* replace root */)
 }
 
-func (env *environment) DefineMacro(name string, fn *value.Func) {
+func (env *environment) DefineMacro(name string, fn value.Applyer) {
 	env.macros[name] = fn
 }
 
-func (env *environment) lookup(name string) (interface{}, bool) {
-	v, ok := env.scope.lookup(name)
+func (env *environment) lookup(sym *value.Symbol) (interface{}, bool) {
+	v, ok := env.scope.lookup(sym)
 	if ok {
 		return v, true
 	}
-	return env.vars.lookup(name)
+
+	{ // HACKHACK
+		// TODO: implement *ns* as a normal var
+		if sym.String() == "*ns*" {
+			return env.CurrentNamespace(), true
+		}
+	}
+
+	ns := env.CurrentNamespace()
+	if sym.Namespace() != "" {
+		ns = env.FindNamespace(value.NewSymbol(sym.Namespace()))
+		sym = value.NewSymbol(sym.Name())
+	}
+	if ns == nil {
+		return nil, false
+	}
+	vr, ok := ns.Mappings().ValueAt(sym)
+	if !ok {
+		return nil, false
+	}
+	// TODO: can these only be vars?
+	return vr.(*value.Var).Get(), true
 }
 
 func (env *environment) PushScope() value.Environment {
@@ -80,6 +115,40 @@ func (env *environment) PushScope() value.Environment {
 
 func (env *environment) Stdout() io.Writer {
 	return env.stdout
+}
+
+func (env *environment) Stderr() io.Writer {
+	return env.stderr
+}
+
+func (env *environment) FindNamespace(sym *value.Symbol) *value.Namespace {
+	env.nsMtx.RLock()
+	defer env.nsMtx.RUnlock()
+	return env.namespaces[sym.String()]
+}
+
+func (env *environment) FindOrCreateNamespace(sym *value.Symbol) *value.Namespace {
+	ns := env.FindNamespace(sym)
+	if ns != nil {
+		return ns
+	}
+	env.nsMtx.Lock()
+	defer env.nsMtx.Unlock()
+	ns = env.namespaces[sym.String()]
+	if ns != nil {
+		return ns
+	}
+	ns = value.NewNamespace(sym)
+	env.namespaces[sym.String()] = ns
+	return ns
+}
+
+func (env *environment) CurrentNamespace() *value.Namespace {
+	return env.currentNamespace.Load().(*value.Namespace)
+}
+
+func (env *environment) SetCurrentNamespace(ns *value.Namespace) {
+	env.currentNamespace.Store(ns)
 }
 
 func (env *environment) PushLoadPaths(paths []string) value.Environment {
@@ -145,14 +214,14 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 	first := n.Item()
 	if sym, ok := first.(*value.Symbol); ok {
 		// handle special forms
-		switch sym.Value {
+		switch sym.String() {
 		case "def":
 			return env.evalDef(n)
 		case "if":
 			return env.evalIf(n)
 		case "case":
 			return env.evalCase(n)
-		case "fn":
+		case "fn", "fn*":
 			return env.evalFn(n)
 		case "quote":
 			return env.evalQuote(n)
@@ -176,7 +245,7 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 		}
 
 		// handle macros
-		if macro, ok := env.macros[sym.Value]; ok {
+		if macro, ok := env.macros[sym.String()]; ok {
 			return env.applyMacro(macro, n.Next())
 		}
 	}
@@ -213,10 +282,10 @@ func (env *environment) evalVector(n *value.Vector) (interface{}, error) {
 func (env *environment) evalScalar(n interface{}) (interface{}, error) {
 	switch v := n.(type) {
 	case *value.Symbol:
-		if val, ok := env.lookup(v.Value); ok {
+		if val, ok := env.lookup(v); ok {
 			return val, nil
 		}
-		return nil, env.errorf(n, "undefined symbol: %s", v.Value)
+		return nil, env.errorf(n, "undefined symbol: %s", v)
 	default:
 		// else, it's a literal
 		return v, nil
@@ -260,8 +329,8 @@ func (env *environment) evalDef(n *value.List) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	env.DefVar(v.Value, val)
-	return nil, nil
+
+	return env.DefVar(v, val), nil
 }
 
 func (env *environment) evalFn(n *value.List) (interface{}, error) {
@@ -275,11 +344,11 @@ func (env *environment) evalFn(n *value.List) (interface{}, error) {
 		return nil, env.errorf(n, "invalid fn expression, need args and body")
 	}
 
-	var fnName string
+	var fnName *value.Symbol
 	if sym, ok := items[0].(*value.Symbol); ok {
 		// if the first child is not a list, it's the name of the
 		// function. this can be used for recursion.
-		fnName = sym.Value
+		fnName = sym
 		items = items[1:]
 	}
 
@@ -499,13 +568,14 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 		}
 		return value.NewVector(resultValues), nil
 	case *value.Symbol:
-		if !strings.HasSuffix(item.Value, "#") {
+		if !strings.HasSuffix(item.Name(), "#") {
 			return item, nil
 		}
-		newName, ok := symbolNameMap[item.Value]
+		symStr := item.String()
+		newName, ok := symbolNameMap[symStr]
 		if !ok {
-			newName = item.Value[:len(item.Value)-1] + "__" + strconv.Itoa(env.gensymCounter) + "__auto__"
-			symbolNameMap[item.Value] = newName
+			newName = symStr[:len(symStr)-1] + "__" + strconv.Itoa(env.gensymCounter) + "__auto__"
+			symbolNameMap[symStr] = newName
 			env.gensymCounter++
 		}
 		return value.NewSymbol(newName), nil
@@ -564,7 +634,7 @@ func (env *environment) evalLet(n *value.List) (interface{}, error) {
 	// create a new environment with the bindings
 	newEnv := env.PushScope().(*environment)
 	for name, val := range bindingsMap {
-		newEnv.Define(name, val)
+		newEnv.Define(value.NewSymbol(name), val)
 	}
 
 	// evaluate the body
@@ -601,8 +671,8 @@ func (env *environment) evalBindings(bindings *value.Vector) (map[string]interfa
 			if !ok {
 				return nil, env.errorf(bindings, "invalid let, binding name must be a symbol")
 			}
-			newEnv.Define(name.Value, binds[i+1])
-			bindingsMap[name.Value] = binds[i+1]
+			newEnv.Define(name, binds[i+1])
+			bindingsMap[name.String()] = binds[i+1]
 		}
 	}
 
@@ -632,11 +702,11 @@ func (env *environment) evalDefMacro(n *value.List) (interface{}, error) {
 		return nil, env.errorf(n.Next().Item(), "invalid defmacro, name must be a symbol")
 	}
 
-	env.DefineMacro(sym.Value, fn.(*value.Func))
+	env.DefineMacro(sym.String(), fn.(*value.Func))
 	return nil, nil
 }
 
-func (env *environment) applyMacro(fn *value.Func, argList *value.List) (interface{}, error) {
+func (env *environment) applyMacro(fn value.Applyer, argList *value.List) (interface{}, error) {
 	args := listAsSlice(argList)
 	res, err := env.applyFunc(fn, args)
 	if err != nil {
@@ -714,7 +784,7 @@ func (env *environment) evalSet(n *value.List) (interface{}, error) {
 		if fieldExpr.Count() != 3 {
 			return nil, env.errorf(fieldExpr, "invalid expression, expected (set! (. go-value-expr field-symbol) expr)")
 		}
-		if dotSym, ok := value.MustNth(fieldExpr, 0).(*value.Symbol); !ok || dotSym.Value != "." {
+		if dotSym, ok := value.MustNth(fieldExpr, 0).(*value.Symbol); !ok || dotSym.String() != "." {
 			return nil, env.errorf(fieldExpr, "invalid expression, expected (set! (. go-value-expr field-symbol) expr)")
 		}
 	}
@@ -741,7 +811,7 @@ func (env *environment) evalSet(n *value.List) (interface{}, error) {
 		goVal = expr
 	}
 
-	if err := value.SetField(targetVal, fieldSym.Value, goVal); err != nil {
+	if err := value.SetField(targetVal, fieldSym.String(), goVal); err != nil {
 		return nil, env.errorf(n, "invalid set! expression, %v", err)
 	}
 
@@ -798,9 +868,9 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 	}
 
 	if v, ok := memberExpr.(*value.Symbol); ok {
-		fieldVal := value.FieldOrMethod(target, v.Value)
+		fieldVal := value.FieldOrMethod(target, v.String())
 		if fieldVal == nil {
-			return nil, env.errorf(v, "%T has no such field or method (%v)", target, v.Value)
+			return nil, env.errorf(v, "%T has no such field or method (%s)", target, v)
 		}
 
 		reflectVal := reflect.ValueOf(fieldVal)
@@ -823,7 +893,10 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 			return nil, env.errorf(v.Item(), "invalid expression, method name must be a symbol")
 		}
 
-		method := value.FieldOrMethod(target, sym.Value)
+		method := value.FieldOrMethod(target, sym.String())
+		if method == nil {
+			return nil, env.errorf(sym, "%T has no such method (%s)", target, sym)
+		}
 		args := make([]interface{}, v.Next().Count())
 		for i := range args {
 			v, err := env.Eval(value.MustNth(v, i+1))
@@ -848,7 +921,7 @@ func nodeAsStringList(n *value.List) ([]string, error) {
 		if !ok {
 			return nil, fmt.Errorf("invalid argument list: %v", n)
 		}
-		res = append(res, sym.Value)
+		res = append(res, sym.String())
 	}
 	return res, nil
 }

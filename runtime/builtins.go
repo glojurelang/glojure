@@ -80,7 +80,7 @@ func addBuiltins(env *environment) {
 				// core symbols are available in the global namespace.
 				name = sym.Name
 			}
-			env.Define(name, sym.Value)
+			env.Define(value.NewSymbol(name), sym.Value)
 		}
 	}
 }

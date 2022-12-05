@@ -22,6 +22,7 @@ type Program struct {
 
 type evalOptions struct {
 	stdout   io.Writer
+	stderr   io.Writer
 	loadPath []string
 	env      *environment
 }
@@ -31,6 +32,12 @@ type EvalOption func(*evalOptions)
 func WithStdout(w io.Writer) EvalOption {
 	return func(opts *evalOptions) {
 		opts.stdout = w
+	}
+}
+
+func WithStderr(w io.Writer) EvalOption {
+	return func(opts *evalOptions) {
+		opts.stderr = w
 	}
 }
 
@@ -50,6 +57,7 @@ func withEnv(env value.Environment) EvalOption {
 func NewEnvironment(opts ...EvalOption) value.Environment {
 	options := &evalOptions{
 		stdout: os.Stdout,
+		stderr: os.Stderr,
 	}
 	for _, opt := range opts {
 		opt(options)
@@ -57,17 +65,53 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 
 	env := options.env
 	if env == nil {
-		env = newEnvironment(context.Background(), options.stdout)
+		env = newEnvironment(context.Background(), options.stdout, options.stderr)
 		env.loadPath = options.loadPath
 	}
 
+	// bootstrap namespace control
+	{
+		// bootstrap implementation of the ns macro
+		env.DefineMacro("ns", value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
+			if len(args) != 1 {
+				return nil, fmt.Errorf("ns: expected namespace name")
+			}
+
+			sym, ok := args[0].(*value.Symbol)
+			if !ok {
+				return nil, fmt.Errorf("ns: expected symbol as namespace name")
+			}
+			ns := env.FindOrCreateNamespace(sym)
+			env.SetCurrentNamespace(ns)
+			return ns, nil
+		}))
+		env.Define(value.NewSymbol("in-ns"), value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
+			if len(args) != 1 {
+				return nil, fmt.Errorf("in-ns: expected namespace name")
+			}
+
+			sym, ok := args[0].(*value.Symbol)
+			if !ok {
+				return nil, fmt.Errorf("in-ns: expected symbol as namespace name")
+			}
+			ns := env.FindOrCreateNamespace(sym)
+			env.SetCurrentNamespace(ns)
+			return ns, nil
+		}))
+	}
+
 	gljimports.RegisterImports(func(name string, val interface{}) {
-		env.Define(name, val)
+		env.Define(value.NewSymbol(name), val)
 	})
+
+	define := func(name string, val interface{}) {
+		env.Define(value.NewSymbol(name), val)
+	}
+
 	{
 		// go-sliceof returns a slice type with the given element type.
 		// TODO: reader shorthand for this (and pointers, maps, and channels)
-		env.Define("go-sliceof", func(t reflect.Type) reflect.Type {
+		define("go-sliceof", func(t reflect.Type) reflect.Type {
 			return reflect.SliceOf(t)
 		})
 
@@ -77,58 +121,61 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		// numeric types
 		{
 			// integral types
-			env.Define("int", reflect.TypeOf(int(0)))
-			env.Define("uint", reflect.TypeOf(uint(0)))
-			env.Define("uintptr", reflect.TypeOf(uintptr(0)))
+			define("int", reflect.TypeOf(int(0)))
+			define("uint", reflect.TypeOf(uint(0)))
+			define("uintptr", reflect.TypeOf(uintptr(0)))
 
-			env.Define("int8", reflect.TypeOf(int8(0)))
-			env.Define("int16", reflect.TypeOf(int16(0)))
-			env.Define("int32", reflect.TypeOf(int32(0)))
-			env.Define("int64", reflect.TypeOf(int64(0)))
+			define("int8", reflect.TypeOf(int8(0)))
+			define("int16", reflect.TypeOf(int16(0)))
+			define("int32", reflect.TypeOf(int32(0)))
+			define("int64", reflect.TypeOf(int64(0)))
 
-			env.Define("uint8", reflect.TypeOf(uint8(0)))
-			env.Define("uint16", reflect.TypeOf(uint16(0)))
-			env.Define("uint32", reflect.TypeOf(uint32(0)))
-			env.Define("uint64", reflect.TypeOf(uint64(0)))
+			define("uint8", reflect.TypeOf(uint8(0)))
+			define("uint16", reflect.TypeOf(uint16(0)))
+			define("uint32", reflect.TypeOf(uint32(0)))
+			define("uint64", reflect.TypeOf(uint64(0)))
 
 			// floating point types
-			env.Define("float32", reflect.TypeOf(float32(0)))
-			env.Define("float64", reflect.TypeOf(float64(0)))
+			define("float32", reflect.TypeOf(float32(0)))
+			define("float64", reflect.TypeOf(float64(0)))
 
 			// aliases
-			env.Define("byte", reflect.TypeOf(byte(0)))
-			env.Define("rune", reflect.TypeOf(rune(0)))
+			define("byte", reflect.TypeOf(byte(0)))
+			define("rune", reflect.TypeOf(rune(0)))
 		}
 		// numeric functions
 		{
-			env.Define("glojure.lang/AsNumber", value.AsNumber)
+			define("glojure.lang/AsNumber", value.AsNumber)
 
-			env.Define("glojure.lang.numbers/Inc", value.Inc)
-			env.Define("glojure.lang.numbers/IncP", value.IncP)
-			env.Define("glojure.lang.Numbers/Add", numbers.Add)
+			define("glojure.lang.numbers/Inc", value.Inc)
+			define("glojure.lang.numbers/IncP", value.IncP)
+			define("glojure.lang.Numbers/Add", numbers.Add)
 		}
 		// iteration functions
 		{
-			env.Define("glojure.lang.iteration/NewIterator", value.NewIterator)
-			env.Define("glojure.lang.iteration/NewRangeIterator", value.NewRangeIterator)
+			define("glojure.lang.iteration/NewIterator", value.NewIterator)
+			define("glojure.lang.iteration/NewRangeIterator", value.NewRangeIterator)
 
-			env.Define("glojure.lang.functional/Reduce", value.Reduce)
-			env.Define("glojure.lang.functional/ReduceInit", value.ReduceInit)
+			define("glojure.lang.functional/Reduce", value.Reduce)
+			define("glojure.lang.functional/ReduceInit", value.ReduceInit)
 
-			env.Define("glojure.lang.iteration/NewConcatIterator", value.NewConcatIterator)
+			define("glojure.lang.iteration/NewConcatIterator", value.NewConcatIterator)
+		}
+		{
+			define("glojure.lang/FindNamespace", value.FindNamespace)
 		}
 
 		// string
 		{
-			env.Define("string", reflect.TypeOf(""))
+			define("string", reflect.TypeOf(""))
 		}
 
 		// boolean
 		{
-			env.Define("bool", reflect.TypeOf(true))
+			define("bool", reflect.TypeOf(true))
 		}
 
-		env.Define("error", reflect.TypeOf((*error)(nil)).Elem())
+		define("error", reflect.TypeOf((*error)(nil)).Elem())
 	}
 
 	{

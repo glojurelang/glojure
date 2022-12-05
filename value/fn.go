@@ -8,7 +8,7 @@ import (
 // Func is a function.
 type Func struct {
 	Section
-	LambdaName string
+	LambdaName *Symbol
 	Env        Environment
 	Arities    []FuncArity
 }
@@ -21,9 +21,9 @@ type FuncArity struct {
 func (f *Func) String() string {
 	b := strings.Builder{}
 	b.WriteString("(fn")
-	if f.LambdaName != "" {
+	if f.LambdaName != nil {
 		b.WriteString(" ")
-		b.WriteString(f.LambdaName)
+		b.WriteString(f.LambdaName.String())
 	}
 	b.WriteRune(' ')
 	for i, arity := range f.Arities {
@@ -70,13 +70,13 @@ func errorWithStack(err error, stackFrame StackFrame) error {
 
 func (f *Func) Apply(env Environment, args []interface{}) (interface{}, error) {
 	// function name for error messages
-	fnName := f.LambdaName
-	if fnName == "" {
-		fnName = "<anonymous function>"
+	fnName := "<anonymous function>"
+	if f.LambdaName != nil {
+		fnName = f.LambdaName.String()
 	}
 
 	fnEnv := f.Env.PushScope()
-	if f.LambdaName != "" {
+	if f.LambdaName != nil {
 		// Define the function name in the environment.
 		fnEnv.Define(f.LambdaName, f)
 	}
@@ -108,7 +108,7 @@ func (f *Func) Apply(env Environment, args []interface{}) (interface{}, error) {
 
 	for i := 0; i < len(bindings); i += 2 {
 		sym := bindings[i].(*Symbol)
-		fnEnv.Define(sym.Value, bindings[i+1])
+		fnEnv.Define(sym, bindings[i+1])
 	}
 
 	var exprs []interface{}

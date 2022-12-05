@@ -1,4 +1,4 @@
-;;;ERROR=panic: cannot convert string to Ops\nStack trace (most recent call first):\n+\n	<unknown-file>:60:10\n<anonymous function>\n	stack00.in:4:13\nbad-use\n	stack00.in:6:3\n
+;;;ERROR_RE=panic: cannot convert string to Ops..*
 
 (def add
   (fn [a b] (+ a b)))

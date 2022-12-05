@@ -28,11 +28,27 @@ func Start(opts ...Option) {
 	if o.env == nil {
 		o.env = runtime.NewEnvironment(runtime.WithStdout(o.stdout))
 	}
+	{ // switch to the namespace
+		_, err := o.env.Eval(value.NewList([]interface{}{
+			value.NewSymbol("ns"),
+			value.NewSymbol(o.namespace),
+		}))
+		if err != nil {
+			panic(err)
+		}
+	}
 
-	prompt := o.namespace + "=> "
+	defaultPrompt := func() string {
+		curNS := "?"
+		ns, err := o.env.Eval(value.NewSymbol("*ns*"))
+		if err == nil {
+			curNS = ns.(*value.Namespace).Name().String()
+		}
+		return curNS + "=> "
+	}
 
 	rl, err := readline.NewEx(&readline.Config{
-		Prompt: prompt,
+		Prompt: defaultPrompt(),
 		//DisableAutoSaveHistory: true,
 		Stdin:  io.NopCloser(o.stdin),
 		Stdout: o.stdout,
@@ -61,8 +77,6 @@ func Start(opts ...Option) {
 			fmt.Fprintln(o.stdout, err)
 		}
 		expr = ""
-		rl.SetPrompt(prompt)
-
 		for _, val := range vals {
 			out, err := func() (out string, err error) {
 				defer func() {
@@ -83,6 +97,7 @@ func Start(opts ...Option) {
 			}
 			fmt.Fprintln(o.stdout, out)
 		}
+		rl.SetPrompt(defaultPrompt())
 	}
 }
 

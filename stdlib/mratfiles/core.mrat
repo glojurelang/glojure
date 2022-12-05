@@ -203,7 +203,7 @@
                     (if (empty? lst)
                       prefix
                       (map-tail (conj prefix (func (first lst))) (rest lst))))]
-    (reverse (map-tail '() lst)))) ;; TODO: implement with sequences, not lists, so we don't have to reverse
+    (glojure.core/reverse (map-tail '() lst)))) ;; TODO: implement with sequences, not lists, so we don't have to reverse
 
 (defn zip [arrs]
   (if (empty? (first arrs))
@@ -272,3 +272,30 @@
 
   ([x form] `(. ~x ~form))
   ([x form & more] `(.. (. ~x ~form) ~@more)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Namespaces
+
+(defmacro ns
+  [name]
+  ;; TODO: use fully qualified name. resolution of namespaced names doesn't work yet.
+  `(do (in-ns '~name)
+       (glojure.core/refer '~'glojure.core)
+       nil))
+
+(defn find-ns
+  "Returns the namespace named by the symbol or nil if it doesn't exist."
+  [sym] (glojure.lang/FindNamespace sym))
+
+(defn ns-map
+  "Returns a map of all the mappings for the namespace."
+  [ns]
+  (if (glojure.core/nil? ns)
+    {}
+    (. ns Mappings)))
+
+(defn refer
+  [ns-sym]
+    (let [ns (or (glojure.core/find-ns ns-sym) (throw (new Exception (str "No namespace: " ns-sym))))
+          nspublics (glojure.core/ns-map ns)]
+      (glojure.core/map #(. *ns* Refer (% 0) (% 1)) nspublics)))
