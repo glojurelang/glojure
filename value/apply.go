@@ -77,12 +77,6 @@ func applyType(env Environment, typ reflect.Type, args []interface{}) (interface
 	}
 
 	arg := args[0]
-	if arg, ok := arg.(GoValuer); ok {
-		val := reflect.ValueOf(arg.GoValue())
-		if val.Type().ConvertibleTo(typ) {
-			return val.Convert(typ).Interface(), nil
-		}
-	}
 	res, err := ConvertToGo(env, typ, arg)
 	if err != nil {
 		return nil, err
@@ -144,7 +138,6 @@ func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (i
 			}
 		}
 	default:
-		// if val is a slice and target is ISeq, convert to a slice iterator
 		iseqType := reflect.TypeOf((*ISeq)(nil)).Elem()
 		if targetType == iseqType {
 			if reflect.TypeOf(val).Kind() == reflect.Slice {

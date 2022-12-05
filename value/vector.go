@@ -150,3 +150,11 @@ func (v *Vector) Pop() IPersistentStack {
 	}
 	return v.SubVector(0, v.Count()-1)
 }
+
+func (v *Vector) GoValue() interface{} {
+	vals := make([]interface{}, v.Count())
+	for i := 0; i < v.Count(); i++ {
+		vals[i] = v.ValueAt(i)
+	}
+	return vals
+}
