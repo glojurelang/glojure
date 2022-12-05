@@ -61,6 +61,20 @@
   ([x y & more]
      (reduce + (+ x y) more)))
 
+(defn max
+  "Returns the greatest of the nums."
+  ([x] x)
+  ([x y] (glojure.lang.Numbers/Max x y))
+  ([x y & more]
+   (reduce max (max x y) more)))
+
+(defn min
+  "Returns the least of the nums."
+  ([x] x)
+  ([x y] (glojure.lang.Numbers/Min x y))
+  ([x y & more]
+   (reduce min (min x y) more)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Comparisons
 
@@ -133,6 +147,12 @@
     (if (sequential? coll)
       (apply concat (map flat-mapper coll))
       (concat))))
+
+(defn pop
+  [coll] (glojure.lang/Pop coll))
+
+(defn peek
+  [coll] (glojure.lang/Peek coll))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Iteration

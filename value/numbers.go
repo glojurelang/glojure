@@ -50,6 +50,10 @@ func (n *BigDecimal) AddP(other *BigDecimal) *BigDecimal {
 	return n.Add(other)
 }
 
+func (n *BigDecimal) Cmp(other *BigDecimal) int {
+	return n.val.Cmp(other.val)
+}
+
 // BigInt is an arbitrary-precision integer. It wraps and has the same
 // semantics as big.Int. big.Int is not used directly because it is
 // mutable, and the core BigInt should not be.
@@ -93,6 +97,10 @@ func (n *BigInt) Add(other *BigInt) *BigInt {
 
 func (n *BigInt) AddP(other *BigInt) *BigInt {
 	return n.Add(other)
+}
+
+func (n *BigInt) Cmp(other *BigInt) int {
+	return n.val.Cmp(other.val)
 }
 
 // AsNumber returns any value as a number. If the value is not a

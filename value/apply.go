@@ -95,22 +95,12 @@ func applyType(env Environment, typ reflect.Type, args []interface{}) (interface
 // ConvertToGo converts a Value to a Go value of the given type, if
 // possible.
 func ConvertToGo(env Environment, typ reflect.Type, val interface{}) (interface{}, error) {
-	var goVal interface{}
-	switch val := val.(type) {
-	case GoValuer:
-		goVal = val.GoValue()
-	case Applyer:
-		goVal = reflect.MakeFunc(typ, reflectFuncFromApplyer(env, val)).Interface()
-	default:
-		goVal = val
-	}
-
-	return coerceGoValue(typ, goVal)
+	return coerceGoValue(env, typ, val)
 }
 
 // coerceGoValue attempts to coerce a Go value to be assignable to a
 // target type. If the value is already assignable, it is returned.
-func coerceGoValue(targetType reflect.Type, val interface{}) (interface{}, error) {
+func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (interface{}, error) {
 	if val == nil {
 		if !isNilableKind(targetType.Kind()) {
 			return nil, fmt.Errorf("cannot assign nil to non-nilable type %s", targetType)
@@ -127,6 +117,9 @@ func coerceGoValue(targetType reflect.Type, val interface{}) (interface{}, error
 			// convert string to []byte
 			val = []byte(val.(string))
 		}
+		if goValuer, ok := val.(GoValuer); ok {
+			val = goValuer.GoValue()
+		}
 
 		if reflect.TypeOf(val).Kind() != reflect.Slice {
 			return nil, fmt.Errorf("cannot coerce %s to %s", reflect.TypeOf(val), targetType)
@@ -136,25 +129,36 @@ func coerceGoValue(targetType reflect.Type, val interface{}) (interface{}, error
 		targetSlice := reflect.MakeSlice(targetType, reflect.ValueOf(val).Len(), reflect.ValueOf(val).Len())
 		for i := 0; i < reflect.ValueOf(val).Len(); i++ {
 			// try to coerce each element of the slice
-			coerced, err := coerceGoValue(targetType.Elem(), reflect.ValueOf(val).Index(i).Interface())
+			coerced, err := coerceGoValue(env, targetType.Elem(), reflect.ValueOf(val).Index(i).Interface())
 			if err != nil {
 				return nil, err
 			}
 			targetSlice.Index(i).Set(reflect.ValueOf(coerced))
 		}
 		return targetSlice.Interface(), nil
+	case reflect.Func:
+		if applyer, ok := val.(Applyer); ok {
+			val = reflect.MakeFunc(targetType, reflectFuncFromApplyer(env, applyer)).Interface()
+			if reflect.TypeOf(val).AssignableTo(targetType) {
+				return val, nil
+			}
+		}
 	default:
 		// if val is a slice and target is ISeq, convert to a slice iterator
 		iseqType := reflect.TypeOf((*ISeq)(nil)).Elem()
-		if reflect.TypeOf(val).Kind() == reflect.Slice && targetType == iseqType {
-			val = NewSliceIterator(val)
+		if targetType == iseqType {
+			if reflect.TypeOf(val).Kind() == reflect.Slice {
+				val = NewSliceIterator(val)
+			} else if seqable, ok := val.(ISeqable); ok {
+				val = seqable.Seq()
+			}
 		}
 
 		if reflect.TypeOf(val).ConvertibleTo(targetType) {
 			return reflect.ValueOf(val).Convert(targetType).Interface(), nil
 		}
-		return nil, fmt.Errorf("cannot coerce %s to %s", reflect.TypeOf(val), targetType)
 	}
+	return nil, fmt.Errorf("cannot coerce %s to %s", reflect.TypeOf(val), targetType)
 }
 
 func ConvertFromGo(val interface{}) interface{} {

@@ -133,25 +133,20 @@ func (v *Vector) Apply(env Environment, args []interface{}) (interface{}, error)
 	return v.ValueAt(i), nil
 }
 
-func (v *Vector) GoValue() interface{} {
-	var vals []interface{}
-	for i := 0; i < v.Count(); i++ {
-		val := v.ValueAt(i)
-		if val == nil {
-			vals = append(vals, nil)
-			continue
-		}
-
-		if gv, ok := val.(GoValuer); ok {
-			vals = append(vals, gv.GoValue())
-			continue
-		}
-
-		vals = append(vals, val)
-	}
-	return vals
-}
-
 func (v *Vector) Seq() ISeq {
 	return NewVectorIterator(v, 0)
+}
+
+func (v *Vector) Peek() interface{} {
+	if v.Count() == 0 {
+		return nil
+	}
+	return v.ValueAt(v.Count() - 1)
+}
+
+func (v *Vector) Pop() IPersistentStack {
+	if v.Count() == 0 {
+		panic("can't pop an empty vector")
+	}
+	return v.SubVector(0, v.Count()-1)
 }

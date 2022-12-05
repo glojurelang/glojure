@@ -34,3 +34,7 @@ func (r *Ratio) Add(other *Ratio) *Ratio {
 func (r *Ratio) AddP(other *Ratio) *Ratio {
 	return r.Add(other)
 }
+
+func (r *Ratio) Cmp(other *Ratio) int {
+	return r.val.Cmp(other.val)
+}

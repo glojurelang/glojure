@@ -12,6 +12,8 @@ type (
 
 		Add(x, y interface{}) interface{}
 		AddP(x, y interface{}) interface{}
+		Max(x, y interface{}) interface{}
+		Min(x, y interface{}) interface{}
 	}
 	int64Ops      struct{}
 	bigIntOps     struct{}
@@ -63,11 +65,31 @@ func Add(x, y interface{}) interface{} {
 func AddP(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).AddP(x, y)
 }
+func Max(x, y interface{}) interface{} {
+	return Ops(x).Combine(Ops(y)).Max(x, y)
+}
+func Min(x, y interface{}) interface{} {
+	return Ops(x).Combine(Ops(y)).Min(x, y)
+}
 func (o int64Ops) Add(x, y interface{}) interface{} {
 	return AsInt64(x) + AsInt64(y)
 }
 func (o int64Ops) AddP(x, y interface{}) interface{} {
 	return AsInt64(x) + AsInt64(y)
+}
+func (o int64Ops) Max(x, y interface{}) interface{} {
+	if AsInt64(x) > AsInt64(y) {
+		return x
+	}
+	return y
+
+}
+func (o int64Ops) Min(x, y interface{}) interface{} {
+	if AsInt64(x) < AsInt64(y) {
+		return x
+	}
+	return y
+
 }
 func (o bigIntOps) Add(x, y interface{}) interface{} {
 	return AsBigInt(x).Add(AsBigInt(y))
@@ -75,11 +97,47 @@ func (o bigIntOps) Add(x, y interface{}) interface{} {
 func (o bigIntOps) AddP(x, y interface{}) interface{} {
 	return AsBigInt(x).AddP(AsBigInt(y))
 }
+func (o bigIntOps) Max(x, y interface{}) interface{} {
+	xx := AsBigInt(x)
+	yy := AsBigInt(y)
+	if xx.Cmp(yy) > 0 {
+		return x
+	}
+	return y
+
+}
+func (o bigIntOps) Min(x, y interface{}) interface{} {
+	xx := AsBigInt(x)
+	yy := AsBigInt(y)
+	if xx.Cmp(yy) < 0 {
+		return x
+	}
+	return y
+
+}
 func (o ratioOps) Add(x, y interface{}) interface{} {
 	return AsRatio(x).Add(AsRatio(y))
 }
 func (o ratioOps) AddP(x, y interface{}) interface{} {
 	return AsRatio(x).AddP(AsRatio(y))
+}
+func (o ratioOps) Max(x, y interface{}) interface{} {
+	xx := AsRatio(x)
+	yy := AsRatio(y)
+	if xx.Cmp(yy) > 0 {
+		return x
+	}
+	return y
+
+}
+func (o ratioOps) Min(x, y interface{}) interface{} {
+	xx := AsRatio(x)
+	yy := AsRatio(y)
+	if xx.Cmp(yy) < 0 {
+		return x
+	}
+	return y
+
 }
 func (o bigDecimalOps) Add(x, y interface{}) interface{} {
 	return AsBigDecimal(x).Add(AsBigDecimal(y))
@@ -87,11 +145,43 @@ func (o bigDecimalOps) Add(x, y interface{}) interface{} {
 func (o bigDecimalOps) AddP(x, y interface{}) interface{} {
 	return AsBigDecimal(x).AddP(AsBigDecimal(y))
 }
+func (o bigDecimalOps) Max(x, y interface{}) interface{} {
+	xx := AsBigDecimal(x)
+	yy := AsBigDecimal(y)
+	if xx.Cmp(yy) > 0 {
+		return x
+	}
+	return y
+
+}
+func (o bigDecimalOps) Min(x, y interface{}) interface{} {
+	xx := AsBigDecimal(x)
+	yy := AsBigDecimal(y)
+	if xx.Cmp(yy) < 0 {
+		return x
+	}
+	return y
+
+}
 func (o float64Ops) Add(x, y interface{}) interface{} {
 	return AsFloat64(x) + AsFloat64(y)
 }
 func (o float64Ops) AddP(x, y interface{}) interface{} {
 	return AsFloat64(x) + AsFloat64(y)
+}
+func (o float64Ops) Max(x, y interface{}) interface{} {
+	if AsFloat64(x) > AsFloat64(y) {
+		return x
+	}
+	return y
+
+}
+func (o float64Ops) Min(x, y interface{}) interface{} {
+	if AsFloat64(x) < AsFloat64(y) {
+		return x
+	}
+	return y
+
 }
 func (o int64Ops) Combine(y ops) ops {
 	switch y.(type) {

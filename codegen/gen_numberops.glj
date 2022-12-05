@@ -49,7 +49,7 @@
     "BigDecimal" (str "value.NewBigDecimalFromFloat64(float64(" var "))")
     (str typ \( var \))))
 
-(def binary-ops (map str '[Add AddP]))
+(def binary-ops (map str '[Add AddP Max Min]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; print types
@@ -63,12 +63,14 @@ type (
 
 		Add(x, y interface{}) interface{}
 		AddP(x, y interface{}) interface{}
+                Max(x, y interface{}) interface{}
+                Min(x, y interface{}) interface{}
 	}
 %s
 )
 
 " (strings.Join (map (fn [t] (str \tab t " struct" \{ \}))
-                     lower-case-number-types)
+                     ((go-sliceof string) lower-case-number-types))
                 "\n")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -141,14 +143,39 @@ type (
        "}" \newline))
 
 (defn bin-op [typ op]
-  (str "func (o " (number-type-struct-name typ) ") " op "(x, y interface{}) interface{} {" \newline
-       (case typ
-           "Ratio" (str \tab "return AsRatio(x)." op "(AsRatio(y))")
-           "BigInt" (str \tab "return AsBigInt(x)." op "(AsBigInt(y))")
-           "BigDecimal" (str \tab "return AsBigDecimal(x)." op "(AsBigDecimal(y))")
-           (str \tab "return " (cast-to typ 'x) " + " (cast-to typ 'y)))
-        \newline
-        "}"))
+  (let [x-as-typ (cast-to typ 'x)
+        y-as-typ (cast-to typ 'y)
+        default-return (case op
+                         "Max" (str \tab "if " x-as-typ " > " y-as-typ " {" \newline
+                                    \tab \tab "return x" \newline
+                                    \tab "}" \newline
+                                    \tab "return y" \newline)
+                         "Min" (str \tab "if " x-as-typ " < " y-as-typ " {" \newline
+                                    \tab \tab "return x" \newline
+                                    \tab "}" \newline
+                                    \tab "return y" \newline)
+                         (str \tab "return " x-as-typ " + " y-as-typ))]
+    (str "func (o " (number-type-struct-name typ) ") " op "(x, y interface{}) interface{} {" \newline
+         (case typ
+           ("Ratio", "BigInt", "BigDecimal") (case op
+                      "Max" (str \tab "xx := As" typ "(x)" \newline
+                                   \tab "yy := As" typ "(y)" \newline
+                                   \tab "if xx.Cmp(yy) > 0 {" \newline
+                                   \tab \tab "return x" \newline
+                                   \tab "}" \newline
+                                   \tab "return y" \newline)
+                      "Min" (str \tab "xx := As" typ "(x)" \newline
+                                 \tab "yy := As" typ "(y)" \newline
+                                 \tab "if xx.Cmp(yy) < 0 {" \newline
+                                 \tab \tab "return x" \newline
+                                 \tab "}" \newline
+                                 \tab "return y" \newline)
+                      (str \tab "return As" typ "(x)." op "(As" typ "(y))"))
+           ;; "BigInt" (str \tab "return AsBigInt(x)." op "(AsBigInt(y))")
+           ;; "BigDecimal" (str \tab "return AsBigDecimal(x)." op "(AsBigDecimal(y))")
+           default-return)
+         \newline
+         "}")))
 
 (defn combine [typ]
   (str "func (o " (number-type-struct-name typ) ") Combine(y ops) ops {" \newline

@@ -1,7 +1,7 @@
 Hello, world!
-Hello, [world]!
+Hello, ["world"]!
 Hello, world! This should say "nil": nil
-A bunch of types: 42 [42 [1 2 3]] [42] foobar
+A bunch of types: 42 (42 [1 2 3]) [42] foobar
 true
 false
 foo, bar, baz
