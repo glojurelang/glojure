@@ -20,6 +20,10 @@ func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, 
 	gvKind := goVal.Kind()
 	gvType := goVal.Type()
 
+	if gvKind == reflect.Slice {
+		return applySlice(goVal, args)
+	}
+
 	if gvKind != reflect.Func {
 		return nil, fmt.Errorf("cannot apply non-function")
 	}
@@ -82,6 +86,20 @@ func applyType(env Environment, typ reflect.Type, args []interface{}) (interface
 		return nil, err
 	}
 	return res, nil
+}
+
+func applySlice(goVal reflect.Value, args []interface{}) (interface{}, error) {
+	if len(args) != 1 {
+		return nil, fmt.Errorf("wrong number of arguments for slice: expected 1, got %d", len(args))
+	}
+	idx, ok := AsInt(args[0])
+	if !ok {
+		return nil, fmt.Errorf("slice index must be an integer")
+	}
+	if idx < 0 || idx >= goVal.Len() {
+		return nil, fmt.Errorf("slice index out of bounds")
+	}
+	return goVal.Index(idx).Interface(), nil
 }
 
 // TODO: reconsider the semantics of the functions below.

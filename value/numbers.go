@@ -50,8 +50,20 @@ func (n *BigDecimal) AddP(other *BigDecimal) *BigDecimal {
 	return n.Add(other)
 }
 
+func (n *BigDecimal) Sub(other *BigDecimal) *BigDecimal {
+	return &BigDecimal{val: new(big.Float).Sub(n.val, other.val)}
+}
+
+func (n *BigDecimal) SubP(other *BigDecimal) *BigDecimal {
+	return n.Sub(other)
+}
+
 func (n *BigDecimal) Cmp(other *BigDecimal) int {
 	return n.val.Cmp(other.val)
+}
+
+func (n *BigDecimal) LT(other *BigDecimal) bool {
+	return n.Cmp(other) < 0
 }
 
 // BigInt is an arbitrary-precision integer. It wraps and has the same
@@ -99,8 +111,20 @@ func (n *BigInt) AddP(other *BigInt) *BigInt {
 	return n.Add(other)
 }
 
+func (n *BigInt) Sub(other *BigInt) *BigInt {
+	return &BigInt{val: new(big.Int).Sub(n.val, other.val)}
+}
+
+func (n *BigInt) SubP(other *BigInt) *BigInt {
+	return n.Sub(other)
+}
+
 func (n *BigInt) Cmp(other *BigInt) int {
 	return n.val.Cmp(other.val)
+}
+
+func (n *BigInt) LT(other *BigInt) bool {
+	return n.Cmp(other) < 0
 }
 
 // AsNumber returns any value as a number. If the value is not a

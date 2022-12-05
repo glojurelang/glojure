@@ -75,10 +75,36 @@
   ([x y & more]
    (reduce min (min x y) more)))
 
+(defn compare
+  "Returns a negative integer, zero, or a positive integer as x is
+  less than, equal to, or greater than y. If either argument is
+  not a number, returns nil."
+  ([x y] (glojure.lang.util/Compare x y)))
+
+(defn sort
+  "Returns a sorted sequence of the items in coll. If no comparator is
+  supplied, uses compare.  comparator must implement
+  glojure.lang.Comparer.  Guaranteed to be stable: equal elements will
+  not be reordered.  If coll is a slice, it will be modified.  To
+  avoid this, sort a copy of the slice."
+  ([coll]
+   (sort compare coll))
+  ([comp coll]
+   (let [sortable (if (or (vector? coll) (list? coll))
+                    (. coll GoValue)
+                    coll)
+         comparer #(< (comp (sortable %1) (sortable %2)) 0)]
+     (sort.SliceStable sortable comparer)
+     (seq sortable))))
+
+(defn seq [coll] (glojure.lang.util/Seq coll))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Comparisons
 
 (def = eq?)
+
+(defn < [x y] (glojure.lang.Numbers/LT x y))
 
 (defn <= [a b]
   (or (< a b) (= a b)))

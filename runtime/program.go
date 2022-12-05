@@ -12,6 +12,7 @@ import (
 	"github.com/glojurelang/glojure/stdlib"
 	"github.com/glojurelang/glojure/value"
 	"github.com/glojurelang/glojure/value/numbers"
+	"github.com/glojurelang/glojure/value/util"
 
 	"github.com/glojurelang/glojure/gen/gljimports"
 )
@@ -152,6 +153,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			define("glojure.lang.Numbers/Add", numbers.Add)
 			define("glojure.lang.Numbers/Max", numbers.Max)
 			define("glojure.lang.Numbers/Min", numbers.Min)
+			define("glojure.lang.Numbers/LT", numbers.LT)
 		}
 		// iteration functions
 		{
@@ -165,6 +167,10 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 
 			define("glojure.lang/Pop", value.Pop)
 			define("glojure.lang/Peek", value.Peek)
+		}
+		{ // random utilities
+			define("glojure.lang.util/Compare", util.Compare)
+			define("glojure.lang.util/Seq", util.Seq)
 		}
 		{
 			define("glojure.lang/FindNamespace", value.FindNamespace)

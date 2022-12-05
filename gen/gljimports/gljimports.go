@@ -18,6 +18,7 @@ import (
 	os_signal "os/signal"
 	regexp "regexp"
 	reflect "reflect"
+	sort "sort"
 	strconv "strconv"
 	strings "strings"
 	time "time"
@@ -1191,6 +1192,43 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("reflect.ValueOf", reflect.ValueOf)
 	_register("reflect.VisibleFields", reflect.VisibleFields)
 	_register("reflect.Zero", reflect.Zero)
+
+	// package sort
+	////////////////////////////////////////
+	_register("sort.Find", sort.Find)
+	{
+		var x sort.Float64Slice
+		_register("sort.Float64Slice", reflect.TypeOf(x))
+	}
+	_register("sort.Float64s", sort.Float64s)
+	_register("sort.Float64sAreSorted", sort.Float64sAreSorted)
+	{
+		var x sort.IntSlice
+		_register("sort.IntSlice", reflect.TypeOf(x))
+	}
+	{
+		var x sort.Interface
+		_register("sort.Interface", reflect.TypeOf(x))
+	}
+	_register("sort.Ints", sort.Ints)
+	_register("sort.IntsAreSorted", sort.IntsAreSorted)
+	_register("sort.IsSorted", sort.IsSorted)
+	_register("sort.Reverse", sort.Reverse)
+	_register("sort.Search", sort.Search)
+	_register("sort.SearchFloat64s", sort.SearchFloat64s)
+	_register("sort.SearchInts", sort.SearchInts)
+	_register("sort.SearchStrings", sort.SearchStrings)
+	_register("sort.Slice", sort.Slice)
+	_register("sort.SliceIsSorted", sort.SliceIsSorted)
+	_register("sort.SliceStable", sort.SliceStable)
+	_register("sort.Sort", sort.Sort)
+	_register("sort.Stable", sort.Stable)
+	{
+		var x sort.StringSlice
+		_register("sort.StringSlice", reflect.TypeOf(x))
+	}
+	_register("sort.Strings", sort.Strings)
+	_register("sort.StringsAreSorted", sort.StringsAreSorted)
 
 	// package strconv
 	////////////////////////////////////////

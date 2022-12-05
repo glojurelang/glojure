@@ -5,4 +5,8 @@ type (
 		Peek() interface{}
 		Pop() IPersistentStack
 	}
+
+	Comparer interface {
+		Compare(other interface{}) int
+	}
 )

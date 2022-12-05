@@ -35,6 +35,20 @@ func (r *Ratio) AddP(other *Ratio) *Ratio {
 	return r.Add(other)
 }
 
+func (r *Ratio) Sub(other *Ratio) *Ratio {
+	return &Ratio{
+		val: new(big.Rat).Sub(r.val, other.val),
+	}
+}
+
+func (r *Ratio) SubP(other *Ratio) *Ratio {
+	return r.Sub(other)
+}
+
 func (r *Ratio) Cmp(other *Ratio) int {
 	return r.val.Cmp(other.val)
+}
+
+func (r *Ratio) LT(other *Ratio) bool {
+	return r.Cmp(other) < 0
 }

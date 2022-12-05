@@ -25,6 +25,7 @@ var (
 		"os/signal",
 		"regexp",
 		"reflect",
+		"sort",
 		"strconv",
 		"strings",
 		"time",

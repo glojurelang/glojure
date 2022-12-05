@@ -42,7 +42,6 @@ func init() {
 				funcSymbol("*", mulBuiltin),
 				funcSymbol("/", divBuiltin),
 				funcSymbol("-", subBuiltin),
-				funcSymbol("<", ltBuiltin),
 				funcSymbol(">", gtBuiltin),
 
 				// function application
@@ -486,49 +485,6 @@ func subBuiltin(env value.Environment, args []interface{}) (interface{}, error) 
 		return int64(intDiff), nil
 	}
 	return float64(floatDiff), nil
-}
-
-func ltBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
-	if len(args) == 0 {
-		return nil, fmt.Errorf("Wrong number of arguments (%d) passed to <", len(args))
-	}
-
-	prev := args[0]
-	for _, arg := range args[1:] {
-		switch prev := prev.(type) {
-		case float64:
-			switch arg := arg.(type) {
-			case float64:
-				if prev >= arg {
-					return false, nil
-				}
-			case int64:
-				if prev >= float64(arg) {
-					return false, nil
-				}
-			default:
-				return nil, fmt.Errorf("invalid type for <: %v", value.ToString(arg))
-			}
-		case int64:
-			switch arg := arg.(type) {
-			case float64:
-				if float64(prev) >= arg {
-					return false, nil
-				}
-			case int64:
-				if prev >= arg {
-					return false, nil
-				}
-			default:
-				return nil, fmt.Errorf("invalid type for <: %v", value.ToString(arg))
-			}
-		default:
-			return nil, fmt.Errorf("invalid type for <: %v", value.ToString(prev))
-		}
-		prev = arg
-	}
-
-	return true, nil
 }
 
 func gtBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
