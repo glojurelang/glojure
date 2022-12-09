@@ -61,6 +61,14 @@
   ([x y & more]
      (reduce + (+ x y) more)))
 
+(defn -
+  ([] 0)
+  ([x] (let [[v ok] (glojure.lang/AsNumber x)]
+         (if ok v (throw (fmt.Errorf "%v is not a number" x)))))
+  ([x y] (glojure.lang.Numbers/Sub x y))
+  ([x y & more]
+     (reduce - (- x y) more)))
+
 (defn max
   "Returns the greatest of the nums."
   ([x] x)
@@ -94,7 +102,7 @@
                     (. coll GoValue)
                     coll)
          comparer #(< (comp (sortable %1) (sortable %2)) 0)]
-     (sort.SliceStable sortable comparer)
+     (sort.Slice sortable comparer) ;; TODO: this is not stable. sort.SliceStable has some issues.
      (seq sortable))))
 
 (defn seq [coll] (glojure.lang.util/Seq coll))
@@ -104,7 +112,8 @@
 
 (def = eq?)
 
-(defn < [x y] (glojure.lang.Numbers/LT x y))
+(defn <
+  [x y] (glojure.lang.Numbers/LT x y))
 
 (defn <= [a b]
   (or (< a b) (= a b)))

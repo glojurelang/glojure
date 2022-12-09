@@ -41,7 +41,6 @@ func init() {
 				funcSymbol("floor", floorBuiltin),
 				funcSymbol("*", mulBuiltin),
 				funcSymbol("/", divBuiltin),
-				funcSymbol("-", subBuiltin),
 				funcSymbol(">", gtBuiltin),
 
 				// function application
@@ -434,57 +433,6 @@ func divBuiltin(env value.Environment, args []interface{}) (interface{}, error) 
 	}
 	// TODO: handle generators
 	return float64(num / denom), nil
-}
-
-func subBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
-	if len(args) == 0 {
-		return nil, fmt.Errorf("Wrong number of arguments (%d) passed to -", len(args))
-	}
-
-	isIntDiff := true
-	var intDiff int64
-	var floatDiff float64
-
-	switch arg := args[0].(type) {
-	case float64:
-		isIntDiff = false
-		floatDiff = arg
-	case int64:
-		intDiff = arg
-	default:
-		return nil, fmt.Errorf("invalid type for -: %v", value.ToString(arg))
-	}
-
-	if len(args) == 1 {
-		if isIntDiff {
-			return int64(-intDiff), nil
-		}
-		return float64(-floatDiff), nil
-	}
-
-	for _, arg := range args[1:] {
-		switch arg := arg.(type) {
-		case float64:
-			if isIntDiff {
-				isIntDiff = false
-				floatDiff = float64(intDiff)
-			}
-			floatDiff -= arg
-		case int64:
-			if isIntDiff {
-				intDiff -= arg
-			} else {
-				floatDiff -= float64(arg)
-			}
-		default:
-			return nil, fmt.Errorf("invalid type for -: %v", value.ToString(arg))
-		}
-	}
-
-	if isIntDiff {
-		return int64(intDiff), nil
-	}
-	return float64(floatDiff), nil
 }
 
 func gtBuiltin(env value.Environment, args []interface{}) (interface{}, error) {

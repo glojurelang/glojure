@@ -151,6 +151,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			define("glojure.lang.numbers/Inc", value.Inc)
 			define("glojure.lang.numbers/IncP", value.IncP)
 			define("glojure.lang.Numbers/Add", numbers.Add)
+			define("glojure.lang.Numbers/Sub", numbers.Sub)
 			define("glojure.lang.Numbers/Max", numbers.Max)
 			define("glojure.lang.Numbers/Min", numbers.Min)
 			define("glojure.lang.Numbers/LT", numbers.LT)

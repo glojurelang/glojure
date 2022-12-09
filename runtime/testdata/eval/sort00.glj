@@ -1,1 +1,16 @@
-(println (sort [1 5 2]))
+(defn check-sorted [xs]
+  (let [sorted (sort xs)
+        ok (reduce #(and %1 %2)
+                   true
+                   (map #(<= (nth sorted %) (nth sorted (+ % 1)))
+                        (range (- (count sorted) 1))))]
+    (if ok
+      (println "OK")
+      (do (println "FAIL")
+          (println "  sorted: " sorted)
+          (println "  xs:     " xs)))))
+
+;;(check-sorted [1 5 2])
+;; This length (261) exposed some odd behavior when using
+;; sort.SliceStable.
+(check-sorted (apply vector (range 261)))
