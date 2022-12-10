@@ -304,6 +304,18 @@ func (env *environment) applyFunc(f interface{}, args []interface{}) (interface{
 
 func (env *environment) evalDef(n *value.List) (interface{}, error) {
 	listLength := n.Count()
+	if listLength < 2 {
+		return nil, env.errorf(n, "too few arguments to def")
+	}
+	v, ok := value.MustNth(n, 1).(*value.Symbol)
+	if !ok {
+		return nil, env.errorf(n, "invalid def, first item is not a symbol")
+	}
+	if listLength == 2 {
+		vr := env.CurrentNamespace().Intern(env, v)
+		return vr, nil
+	}
+
 	if listLength < 3 {
 		return nil, env.errorf(n, "too few arguments to def")
 	}
@@ -311,10 +323,6 @@ func (env *environment) evalDef(n *value.List) (interface{}, error) {
 		return nil, env.errorf(n, "too many arguments to def")
 	}
 
-	v, ok := value.MustNth(n, 1).(*value.Symbol)
-	if !ok {
-		return nil, env.errorf(n, "invalid def, first item is not a symbol")
-	}
 	valIndex := 2
 	if listLength == 4 {
 		_, ok := value.MustNth(n, 2).(string)

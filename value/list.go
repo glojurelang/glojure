@@ -35,6 +35,10 @@ func NewList(values []interface{}, opts ...Option) *List {
 	return list
 }
 
+func CreateList(values ...interface{}) *List {
+	return NewList(values)
+}
+
 func ConsList(item interface{}, next *List) *List {
 	if next == nil {
 		next = emptyList

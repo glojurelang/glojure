@@ -23,7 +23,6 @@ func init() {
 				funcSymbol("load-file", loadFileBuiltin),
 
 				// type constructors
-				funcSymbol("list", listBuiltin),
 				funcSymbol("vector", vectorBuiltin),
 				funcSymbol("char", charBuiltin),
 				funcSymbol("str", strBuiltin),

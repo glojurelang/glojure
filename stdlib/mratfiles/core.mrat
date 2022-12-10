@@ -1,356 +1,74 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Basic macros
-
-(defmacro or
-  "Evaluates exprs one at a time, from left to right. If a form
-  returns a logical true value, or returns that value and doesn't
-  evaluate any of the other expressions, otherwise it returns the
-  value of the last expression. (or) returns false."
-  ([] nil)
-  ([x] x)
-  ([x & next]
-   `(let [or# ~x]
-      (if or# or# (or ~@next)))))
-
-(defmacro and
-  "Evaluates exprs one at a time, from left to right. If a form
-  returns a logical false value, and returns that value and doesn't
-  evaluate any of the other expressions, otherwise it returns the
-  value of the last expression. (and) returns true."
-  ([] true)
-  ([x] x)
-  ([x & next]
-   `(let [and# ~x]
-       (if and# (and ~@next) and#))))
-
-(defmacro defn
-  "Defines a function. The first argument is the name of the function,
-  the second is a list of arguments, and the rest of the arguments are
-  the body of the function. The body is evaluated in the context of the
-  function, so (defn foo [x] x) is equivalent to (def foo (fn [x] x))."
-
-  [name & bindings-and-body]
-  (if (string? (first bindings-and-body))
-        (let [docstring (first bindings-and-body)
-              bindings-and-body (rest bindings-and-body)]
-          `(def ~name (fn ~name ~@bindings-and-body)))
-        `(def ~name (fn ~name ~@bindings-and-body))))
-
-(defmacro do
-  "Evaluates exprs in order, and returns the value of the last
-  expression. (do) returns nil."
-  ([] nil)
-  ([x] x)
-  ([& exprs] `(let [] ~@exprs)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Type
-
-(defn type [x] (reflect.TypeOf x))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Math
-
-(defn +
-  "Returns the sum of nums. (+) returns 0. Does not auto-promote
-  longs, will throw on overflow. See also: +'"
-  ([] 0)
-  ([x] (let [[v ok] (glojure.lang/AsNumber x)]
-         (if ok v (throw (fmt.Errorf "%v is not a number" x)))))
-  ([x y] (glojure.lang.Numbers/Add x y))
-  ([x y & more]
-     (reduce + (+ x y) more)))
-
-(defn -
-  ([] 0)
-  ([x] (let [[v ok] (glojure.lang/AsNumber x)]
-         (if ok v (throw (fmt.Errorf "%v is not a number" x)))))
-  ([x y] (glojure.lang.Numbers/Sub x y))
-  ([x y & more]
-     (reduce - (- x y) more)))
-
-(defn max
-  "Returns the greatest of the nums."
-  ([x] x)
-  ([x y] (glojure.lang.Numbers/Max x y))
-  ([x y & more]
-   (reduce max (max x y) more)))
-
-(defn min
-  "Returns the least of the nums."
-  ([x] x)
-  ([x y] (glojure.lang.Numbers/Min x y))
-  ([x y & more]
-   (reduce min (min x y) more)))
-
-(defn compare
-  "Returns a negative integer, zero, or a positive integer as x is
-  less than, equal to, or greater than y. If either argument is
-  not a number, returns nil."
-  ([x y] (glojure.lang.util/Compare x y)))
-
-(defn sort
-  "Returns a sorted sequence of the items in coll. If no comparator is
-  supplied, uses compare.  comparator must implement
-  glojure.lang.Comparer.  Guaranteed to be stable: equal elements will
-  not be reordered.  If coll is a slice, it will be modified.  To
-  avoid this, sort a copy of the slice."
-  ([coll]
-   (sort compare coll))
-  ([comp coll]
-   (let [sortable (if (or (vector? coll) (list? coll))
-                    (. coll GoValue)
-                    coll)
-         comparer #(< (comp (sortable %1) (sortable %2)) 0)]
-     (sort.Slice sortable comparer) ;; TODO: this is not stable. sort.SliceStable has some issues.
-     (seq sortable))))
-
-(defn seq [coll] (glojure.lang.util/Seq coll))
+;   Copyright (c) Rich Hickey. All rights reserved.
+;   The use and distribution terms for this software are covered by the
+;   Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+;   which can be found in the file epl-v10.html at the root of this distribution.
+;   By using this software in any fashion, you are agreeing to be bound by
+;   the terms of this license.
+;   You must not remove this notice, or any other, from this software.
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Comparisons
-
-(def = eq?)
-
-(defn <
-  [x y] (glojure.lang.Numbers/LT x y))
-
-(defn <= [a b]
-  (or (< a b) (= a b)))
-
-(defn >= [a b]
-  (or (> a b) (= a b)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Builtin functions
-
-(def println mrat.core.io/println)
-(def pr mrat.core.io/pr)
-(defn prn [& args]
-  (do (apply pr args)
-      (println)))
-
-(defmacro time
-  "Evaluates expr and prints the time it took.  Returns the value of
- expr."
-  [expr]
-  `(let [start# (time.Now)
-         ret# ~expr]
-     (prn (str "Elapsed time: " (/ (float64 (. (. (time.Now) Sub start#) Nanoseconds)) 1000000.0) " msecs"))
-     ret#))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Aliases
-
-(def length count) ;; TODO: remove this
-(defn nil? [x] (eq? x nil))
-
-(def print println) ;; TODO: print should not add a newline
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Math helpers
-
-(defn remap [x min max]
-  ;;; Remap value x from [-1, 1] to [min, max]
-  (+ min
-     (/ (- max min) 2)
-     (* (/ (- max min) 2) x)))
-
-(defn even? [n]
-  (let [half (/ n 2)]
-    (= half (floor half))))
-(defn odd? [n]
-  (not (even? n)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Sequences
-
-;; TODO
-
-(defn cons [car cdr] (concat (list car) cdr))
-
-(defn concat [& seqs]
-  (apply glojure.lang.iteration/NewConcatIterator seqs))
-
-(defn sequential? [x]
-  (or (list? x)
-      (vector? x)
-      (seq? x)))
-
-(defn flatten [coll]
-  (let [flat-mapper (fn [el] (if (sequential? el) (flatten el) (list el)))]
-    (if (sequential? coll)
-      (apply concat (map flat-mapper coll))
-      (concat))))
-
-(defn pop
-  [coll] (glojure.lang/Pop coll))
-
-(defn peek
-  [coll] (glojure.lang/Peek coll))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Iteration
-
-(defn inc'
-  "Returns a number one greater than num. Supports arbitrary precision.
-  See also: inc"
-  ;; {:inline (fn [x] `(. clojure.lang.Numbers (incP ~x)))
-  ;;  :added "1.0"}
-  [x] (glojure.lang.numbers/IncP x))
-
-(defn inc
-  "Returns a number one greater than num. Does not auto-promote
-  longs, will throw on overflow. See also: inc'"
-  ;; {:inline (fn [x] `(. clojure.lang.Numbers (~(if *unchecked-math* 'unchecked_inc 'inc) ~x)))
-  ;;  :added "1.2"}
-  [x] (glojure.lang.numbers/Inc x))
-
-(defn iterate
-  "Returns a lazy sequence of x, (f x), (f (f x)) etc. f must be free of side-effects"
-  ;; {:added "1.0"
-  ;;  :static true}
-  [f x] (glojure.lang.iteration/NewIterator f x) )
-
-(defn range
-  "Returns a lazy seq of nums from start (inclusive) to end
-  (exclusive), by step, where start defaults to 0, step to 1, and end to
-  infinity. When step is equal to 0, returns an infinite sequence of
-  start. When start is equal to end, returns empty list."
-  ;; {:added "1.0"
-  ;;  :static true}
-  ([]
-   (iterate inc' 0))
-  ([end] (glojure.lang.iteration/NewRangeIterator 0 end 1))
-  ([start end] (glojure.lang.iteration/NewRangeIterator start end 1))
-  ([start end step] (glojure.lang.iteration/NewRangeIterator start end step)))
-
-(defn repeat [n x]
-  (let [repeat-tail
-         (fn repeat-tail [suffix n x]
-           (if (<= n 0)
-             suffix
-             (repeat-tail (reduce (fn [acc el] (conj acc el)) suffix x) (- n 1) x)))]
-    (reverse (repeat-tail '() n x)))) ;; TODO: implement with sequences, not lists, so we don't have to reverse
-
-(defn nth [coll index]
-  (if (empty? coll)
-    nil
-    (if (vector? coll)
-      (coll index)
-      (if (eq? index 0)
-        (first coll)
-        (nth (rest coll) (- index 1))))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Functional helpers
-
-(defn reverse [l]
-  (let [reverse-tail
-        (fn reverse-tail [suffix l]
-          (if (empty? l)
-            suffix
-            (reverse-tail (conj suffix (first l)) (rest l))))]
-    (reverse-tail '() l)))
-
-(defn map [func lst]
-  (let [map-tail (fn map-tail [prefix lst]
-                    (if (empty? lst)
-                      prefix
-                      (map-tail (conj prefix (func (first lst))) (rest lst))))]
-    (glojure.core/reverse (map-tail '() lst)))) ;; TODO: implement with sequences, not lists, so we don't have to reverse
-
-(defn zip [arrs]
-  (if (empty? (first arrs))
-    '()
-    (cons (map first arrs)
-          (zip (map rest arrs)))))
-
-(def maps
-  (fn [func & colls]
-    (let [map-list (zip colls)]
-      (map (fn [args] (apply func args)) map-list))))
-
-(defn map-idx [func lst]
-  (maps (fn [val idx] (func val idx)) lst (range 0 (length lst))))
-
-(defn reduce
-  "f should be a function of 2 arguments. If val is not supplied,
-  returns the result of applying f to the first 2 items in coll, then
-  applying f to that result and the 3rd item, etc. If coll contains no
-  items, f must accept no arguments as well, and reduce returns the
-  result of calling f with no arguments.  If coll has only 1 item, it
-  is returned and f is not called.  If val is supplied, returns the
-  result of applying f to val and the first item in coll, then
-  applying f to that result and the 2nd item, etc. If coll contains no
-  items, returns val and f is not called."
-  ([f coll]
-     (if (empty? coll)
-       (f)
-       (glojure.lang.functional/Reduce f coll)))
-  ([f val coll]
-       (glojure.lang.functional/ReduceInit f val coll)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Audio helpers
-
-(defn decibels [db] (pow 10 (/ db 20)))
-
-(def *mixer
-  (fn [& args]
-    (let [mixerArgs args]
-      (let [weightSum (reduce + 0
-                              (map-idx (fn [val idx] (if (even? idx) val 0)) mixerArgs))]
-        (sum (map (fn [idx] (let [weight (nth mixerArgs (* 2 idx))
-                                  chan   (nth mixerArgs (+ (* 2 idx) 1))]
-                              (* (/ weight weightSum) chan)))
-                  (range 0 (/ (length mixerArgs) 2))))))))
-
-;;; TODO: move to a library for music theory.
-(defn cents [x] (pow 2 (/ x 1200)))
-(defn semitones [x] (pow 2 (/ x 12)))
-(defn octaves [x] (pow 2 x))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Go Interop
-
-(defmacro ..
-  "form => fieldName-symbol or (instanceMethodName-symbol args*)
-  Expands into a member access (.) of the first member on the first
-  argument, followed by the next member on the result, etc. For
-  instance:
-  (.. System (getProperties) (get \"os.name\"))
-  expands to:
-  (. (. System (getProperties)) (get \"os.name\"))
-  but is easier to write, read, and understand."
-
-  ([x form] `(. ~x ~form))
-  ([x form & more] `(.. (. ~x ~form) ~@more)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Namespaces
-
-(defmacro ns
-  [name]
-  ;; TODO: use fully qualified name. resolution of namespaced names doesn't work yet.
-  `(do (in-ns '~name)
-       (glojure.core/refer '~'glojure.core)
-       nil))
-
-(defn find-ns
-  "Returns the namespace named by the symbol or nil if it doesn't exist."
-  [sym] (glojure.lang/FindNamespace sym))
-
-(defn ns-map
-  "Returns a map of all the mappings for the namespace."
-  [ns]
-  (if (glojure.core/nil? ns)
-    {}
-    (. ns Mappings)))
-
-(defn refer
-  [ns-sym]
-    (let [ns (or (glojure.core/find-ns ns-sym) (throw (new Exception (str "No namespace: " ns-sym))))
-          nspublics (glojure.core/ns-map ns)]
-      (glojure.core/map #(. *ns* Refer (% 0) (% 1)) nspublics)))
+(ns glojure.core)
+
+(def unquote)
+(def unquote-splicing)
+
+(def
+ ^{:arglists '([& items])
+   :doc "Creates a new list containing the items."
+   :added "1.0"}
+  list glojure.lang.CreateList)
+
+;during bootstrap we don't have destructuring let, loop or fn, will redefine later
+;;;;;;;;;;;;;;;;; metadata ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;at this point all the support for syntax-quote exists;;;;;;;;;;;;;;;;;;;;;;
+;equiv-based
+;equals-based
+;;;;;;;;;;;;;;;;;;; sequence fns  ;;;;;;;;;;;;;;;;;;;;;;;
+;; reduce is defined again later after InternalReduce loads
+;;math stuff
+;;Bit ops
+
+;;
+
+;;Collection stuff
+
+;;list stuff
+;;map stuff
+
+;;multimethods
+;;;;;;;;; var stuff
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Refs ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; fn stuff ;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;; sequence fns  ;;;;;;;;;;;;;;;;;;;;;;;
+
+;will be redefed later with arg checks
+;; evaluation
+
+;;;;;;;;;;;;;;;;;;;;; editable collections ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;redef into with batch support
+;(defn export [syms]
+;  (doseq [sym syms]
+;   (.. *ns* (intern sym) (setExported true))))
+
+;;redefine let and loop  with destructuring
+;redefine fn with destructuring and pre/post conditions
+;;;;;;;;;;; require/use/load, contributed by Stephen C. Gilardi ;;;;;;;;;;;;;;;;;;
+
+;; Public
+
+;;;;;;;;;;;;; nested associative ops ;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; var documentation ;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;; case ;;;;;;;;;;;;;
+;; redefine reduce with internal-reduce
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; helper files ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; futures (needs proxy);;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; clojure version number ;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; data readers ;;;;;;;;;;;;;;;;;;
+
