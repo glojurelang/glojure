@@ -14,12 +14,18 @@ type (
 
 	// MapEntry represents a key-value pair in a map.
 	MapEntry struct {
-		Key, Value interface{}
+		Key, Value interface{} // TODO: don't export
 	}
 
 	MapSeq struct {
 		m          *Map
 		entryIndex int
+	}
+	MapKeySeq struct {
+		s ISeq
+	}
+	MapValSeq struct {
+		s ISeq
 	}
 )
 
@@ -27,44 +33,8 @@ var (
 	_ IPersistentMap = (*Map)(nil)
 )
 
-func NewMapSeq(m *Map) ISeq {
-	if m.Count() == 0 {
-		return emptyList
-	}
-	return &MapSeq{
-		m:          m,
-		entryIndex: 0,
-	}
-}
-
-func (s *MapSeq) First() interface{} {
-	return MapEntry{
-		Key:   s.m.keyVals[2*s.entryIndex],
-		Value: s.m.keyVals[2*s.entryIndex+1],
-	}
-}
-
-func (s *MapSeq) Next() ISeq {
-	if s.entryIndex >= s.m.Count() {
-		return nil
-	}
-	return &MapSeq{
-		m:          s.m,
-		entryIndex: s.entryIndex + 1,
-	}
-}
-
-func (s *MapSeq) Rest() ISeq {
-	nxt := s.Next()
-	if nxt == nil {
-		return emptyList
-	}
-	return nxt
-}
-
-func (s *MapSeq) IsEmpty() bool {
-	return s.entryIndex >= s.m.Count()
-}
+////////////////////////////////////////////////////////////////////////////////
+// Map
 
 func NewMap(keyVals []interface{}, opts ...Option) IPersistentMap {
 	var o options
@@ -149,22 +119,6 @@ func (m *Map) Seq() ISeq {
 	return NewMapSeq(m)
 }
 
-// func (m *Map) First() interface{} {
-// 	if m.Count() == 0 {
-// 		return nil
-// 	}
-
-// 	return NewVector([]interface{}{m.keyVals[0], m.keyVals[1]})
-// }
-
-// func (m *Map) Rest() ISeq {
-// 	if m.Count() == 0 {
-// 		return emptyList
-// 	}
-
-// 	return NewMap(m.keyVals[2:])
-// }
-
 func (m *Map) IsEmpty() bool {
 	return m.Count() == 0
 }
@@ -195,4 +149,92 @@ func (m *Map) String() string {
 func (m *Map) Equal(v2 interface{}) bool {
 	// TODO: implement me
 	return false
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Map ISeqs
+
+func NewMapSeq(m *Map) ISeq {
+	if m.Count() == 0 {
+		return emptyList
+	}
+	return &MapSeq{
+		m:          m,
+		entryIndex: 0,
+	}
+}
+
+func (s *MapSeq) First() interface{} {
+	return MapEntry{
+		Key:   s.m.keyVals[2*s.entryIndex],
+		Value: s.m.keyVals[2*s.entryIndex+1],
+	}
+}
+
+func (s *MapSeq) Next() ISeq {
+	if s.entryIndex >= s.m.Count() {
+		return nil
+	}
+	return &MapSeq{
+		m:          s.m,
+		entryIndex: s.entryIndex + 1,
+	}
+}
+
+func (s *MapSeq) Rest() ISeq {
+	nxt := s.Next()
+	if nxt == nil {
+		return emptyList
+	}
+	return nxt
+}
+
+func (s *MapSeq) IsEmpty() bool {
+	return s.entryIndex >= s.m.Count()
+}
+
+func NewMapKeySeq(s ISeq) ISeq {
+	if s == nil {
+		return nil
+	}
+	return &MapKeySeq{s}
+}
+
+func (s *MapKeySeq) First() interface{} {
+	return s.s.First().(MapEntry).Key
+}
+
+func (s *MapKeySeq) Next() ISeq {
+	return NewMapKeySeq(s.s.Next())
+}
+
+func (s *MapKeySeq) Rest() ISeq {
+	return NewMapKeySeq(s.s.Rest())
+}
+
+func (s *MapKeySeq) IsEmpty() bool {
+	return s.s.IsEmpty()
+}
+
+func NewMapValSeq(s ISeq) ISeq {
+	if s == nil {
+		return nil
+	}
+	return &MapValSeq{s}
+}
+
+func (s *MapValSeq) First() interface{} {
+	return s.s.First().(MapEntry).Value
+}
+
+func (s *MapValSeq) Next() ISeq {
+	return NewMapValSeq(s.s.Next())
+}
+
+func (s *MapValSeq) Rest() ISeq {
+	return NewMapValSeq(s.s.Rest())
+}
+
+func (s *MapValSeq) IsEmpty() bool {
+	return s.s.IsEmpty()
 }

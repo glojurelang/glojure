@@ -15,6 +15,10 @@ func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, 
 		return applyType(env, rt, args)
 	}
 
+	if fn == nil {
+		return nil, fmt.Errorf("cannot apply nil")
+	}
+
 	goVal := reflect.ValueOf(fn)
 
 	gvKind := goVal.Kind()

@@ -1535,7 +1535,7 @@
   ([set] set)
   ([^clojure.lang.IPersistentSet set key]
    (when set
-     (. set (disjoin key))))
+     (. set (Disjoin key))))
   ([set key & ks]
    (when set
      (let [ret (disj set key)]
@@ -1568,13 +1568,13 @@
   "Returns a sequence of the map's keys, in the same order as (seq map)."
   {:added "1.0"
    :static true}
-  [map] (. clojure.lang.RT (keys map)))
+  [map] (glojure.lang.Keys map))
 
 (defn vals
   "Returns a sequence of the map's values, in the same order as (seq map)."
   {:added "1.0"
    :static true}
-  [map] (. clojure.lang.RT (vals map)))
+  [map] (glojure.lang.Vals map))
 
 (defn key
   "Returns the key of the map entry."
@@ -3408,9 +3408,9 @@
    :static true}
   ([set] set)
   ([^clojure.lang.ITransientSet set key]
-   (. set (disjoin key)))
+   (. set (Disjoin key)))
   ([^clojure.lang.ITransientSet set key & ks]
-   (let [ret (. set (disjoin key))]
+   (let [ret (. set (Disjoin key))]
      (if ks
        (recur ret (first ks) (next ks))
        ret))))

@@ -69,29 +69,6 @@ func (s *Set) Count() int {
 	return len(s.vals)
 }
 
-func (s *Set) First() interface{} {
-	if s.Count() == 0 {
-		return nil
-	}
-	return s.vals[0]
-}
-
-func (s *Set) Next() ISeq {
-	if s.Count() == 0 {
-		return nil
-	}
-
-	return NewSet(s.vals[1:])
-}
-
-func (s *Set) Rest() ISeq {
-	nxt := s.Next()
-	if nxt == nil {
-		return emptyList
-	}
-	return nxt
-}
-
 func (s *Set) IsEmpty() bool {
 	return s.Count() == 0
 }
@@ -101,12 +78,12 @@ func (s *Set) String() string {
 
 	first := true
 	b.WriteString("#{")
-	for ; !s.IsEmpty(); s = s.Rest().(*Set) {
+	for i := 0; i < s.Count(); i++ {
 		if !first {
 			b.WriteString(" ")
 		}
 		first = false
-		b.WriteString(ToString(s.First()))
+		b.WriteString(ToString(s.vals[i]))
 	}
 	b.WriteString("}")
 	return b.String()

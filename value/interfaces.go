@@ -176,6 +176,7 @@ func Conj(coll Conjer, x interface{}) Conjer {
 
 // WithMeta returns a new value with the given metadata.
 func WithMeta(v interface{}, meta IPersistentMap) (interface{}, error) {
+	// TODO: just take an IObj
 	iobj, ok := v.(IObj)
 	if !ok {
 		return nil, fmt.Errorf("value of type %T can't have metadata", v)
@@ -247,4 +248,12 @@ func Count(coll interface{}) int {
 		count++
 	}
 	return count
+}
+
+func Keys(m Associative) ISeq {
+	return NewMapKeySeq(Seq(m))
+}
+
+func Vals(m Associative) ISeq {
+	return NewMapValSeq(Seq(m))
 }

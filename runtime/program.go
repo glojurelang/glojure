@@ -220,6 +220,8 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Equal", value.Equal)
 		define("glojure.lang.Identical", value.Identical)
 		define("glojure.lang.Get", value.Get)
+		define("glojure.lang.Keys", value.Keys)
+		define("glojure.lang.Vals", value.Vals)
 		define("glojure.lang.GetDefault", value.GetDefault)
 		define("glojure.lang.ConcatStrings", value.ConcatStrings)
 		define("glojure.lang.IPersistentMap", reflect.TypeOf((*value.IPersistentMap)(nil)).Elem())

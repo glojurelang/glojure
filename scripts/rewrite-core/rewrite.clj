@@ -92,6 +92,13 @@
 
    (sexpr-replace '(. clojure.lang.RT (get map key)) '(glojure.lang.Get map key))
    (sexpr-replace '(. clojure.lang.RT (get map key not-found)) '(glojure.lang.GetDefault map key not-found))
+
+   ;; TODO: replace these using the RT-replace function!
+   (sexpr-replace '(. clojure.lang.RT (keys map)) '(glojure.lang.Keys map))
+   (sexpr-replace '(. clojure.lang.RT (vals map)) '(glojure.lang.Vals map))
+   (sexpr-replace '(. clojure.lang.RT (seq map)) '(glojure.lang.Seq map))
+
+   (sexpr-replace '(disjoin key) '(Disjoin key))
    ])
 
 (defn rewrite-core [zloc]

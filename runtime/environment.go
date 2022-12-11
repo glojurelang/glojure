@@ -467,6 +467,7 @@ func (env *environment) evalFn(n *value.List) (interface{}, error) {
 			Exprs:       seqToList(body),
 		}
 	}
+
 	return &value.Func{
 		Section:    n.Section,
 		LambdaName: fnName,

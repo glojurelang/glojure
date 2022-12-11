@@ -33,7 +33,7 @@ func (f *Func) String() string {
 		}
 		b.WriteString(arity.BindingForm.String())
 		b.WriteRune(' ')
-		for cur := ISeq(arity.Exprs); !cur.IsEmpty(); cur = cur.Next() {
+		for cur := ISeq(arity.Exprs); cur != nil; cur = cur.Next() {
 			if cur != arity.Exprs {
 				b.WriteString(" ")
 			}
