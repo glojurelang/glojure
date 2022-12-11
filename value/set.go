@@ -50,7 +50,10 @@ func (s *Set) Conj(v interface{}) Conjer {
 func (s *Set) Disjoin(v interface{}) IPersistentSet {
 	for i, val := range s.vals {
 		if Equal(val, v) {
-			return NewSet(append(s.vals[:i], s.vals[i+1:]...))
+			newItems := make([]interface{}, len(s.vals)-1)
+			copy(newItems, s.vals[:i])
+			copy(newItems[i:], s.vals[i+1:])
+			return NewSet(newItems)
 		}
 	}
 	return s
