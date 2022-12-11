@@ -10,7 +10,8 @@ import (
 // Vector is a vector of values.
 type Vector struct {
 	Section
-	vec vector.Vector
+	meta IPersistentMap
+	vec  vector.Vector
 }
 
 func NewVector(values []interface{}, opts ...Option) *Vector {
@@ -118,6 +119,7 @@ func (v *Vector) Equal(v2 interface{}) bool {
 
 func (v *Vector) Apply(env Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
+		panic(fmt.Sprintf("vector apply expects 1 argument, got %d. vector: %v", len(args), v))
 		return nil, fmt.Errorf("vector apply expects 1 argument, got %d", len(args))
 	}
 
@@ -157,4 +159,14 @@ func (v *Vector) GoValue() interface{} {
 		vals[i] = v.ValueAt(i)
 	}
 	return vals
+}
+
+func (v *Vector) WithMeta(meta IPersistentMap) interface{} {
+	if meta.Equal(v.meta) {
+		return v
+	}
+
+	cpy := *v
+	cpy.meta = meta
+	return &cpy
 }

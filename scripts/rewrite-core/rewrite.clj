@@ -12,28 +12,63 @@
         zloc
         (recur (z/next (z/remove zloc)))))))
 
+(defn sexpr-replace [old new]
+  [(fn select [zloc] (and (z/sexpr-able? zloc) (= old (z/sexpr zloc))))
+   (fn visit [zloc] (z/replace zloc new))])
+
+(defn RT-replace
+  "Replace all instances of a call to a clojure.lang.RT method fsym with
+  the result of calling newfn with the argument forms."
+  [fsym newfn]
+  [(fn select [zloc] (and (z/list? zloc)
+                          (let [sexpr (z/sexpr zloc)]
+                            (and (= '. (first sexpr))
+                                 (= 'clojure.lang.RT (second sexpr))
+                                 (list? (nth sexpr 2))
+                                 (= fsym (first (nth sexpr 2)))))))
+   (fn visit [zloc] (z/replace zloc (newfn (rest (nth (z/sexpr zloc) 2)))))])
+
 (def replacements
-  [;; replace clojure.core with glojure.core
-   [(fn select [zloc] (= 'clojure.core (z/sexpr zloc)))
-    (fn visit [zloc] (z/replace zloc 'glojure.core))]
-   ;; replace (. clojure.lang.PersistentList creator) with glojure.core.CreateList
-   [(fn select [zloc] (= '(. clojure.lang.PersistentList creator) (z/sexpr zloc)))
-    (fn visit [zloc] (z/replace zloc 'glojure.lang.CreateList))]
-   ;; end
+  [
+   (sexpr-replace 'clojure.core 'glojure.core)
+   (sexpr-replace '(. clojure.lang.PersistentList creator) 'glojure.lang.CreateList)
+   (sexpr-replace '(setMacro) '(SetMacro))
+   (sexpr-replace 'clojure.lang.Symbol 'glojure.lang.Symbol)
+   ;; instance? replacements
+   (sexpr-replace "Evaluates x and tests if it is an instance of the class\n    c. Returns true or false"
+                  "Evaluates x and tests if it is an instance of the type\n    t. Returns true or false")
+   (sexpr-replace '(fn instance? [^Class c x] (. c (isInstance x)))
+                  '(fn instance? [t x] (glojure.lang.HasType t x)))
+   ;;
+   (sexpr-replace 'IllegalArgumentException. 'errors.New)
+   ;; replace .withMeta
+   [(fn select [zloc] (and (z/list? zloc) (= '.withMeta (first (z/sexpr zloc)))))
+    (fn visit [zloc] (z/replace zloc
+                                `(let* [~'res (glojure.lang.WithMeta ~@(rest (z/sexpr zloc)))]
+                                   (if (~'res 1)
+                                     (throw (~'res 1))
+                                     (~'res 0)))))]
+
+   (RT-replace 'cons #(cons 'glojure.lang.NewCons %))
+   (RT-replace 'first #(cons 'glojure.lang.First %))
+   (RT-replace 'next #(cons 'glojure.lang.Next %))
+   (RT-replace 'more #(cons 'glojure.lang.Rest %))
+   (sexpr-replace '.meta '.Meta)
    ])
 
 (defn rewrite-core [zloc]
-  (loop [zloc (z/of-node (z/root (skip-n zloc 3)))]
+  (loop [zloc (z/of-node (z/root zloc))]
+    ;; (print "tag" (z/tag zloc))
+    ;; (println (z/sexpr zloc))
     (if (z/end? zloc)
       (z/root-string zloc)
-      (do
-        ;; if one of the selectors in replacements matches, replace the form
-        (let [zloc (reduce (fn [zloc [select visit]]
-                             (if (select zloc)
-                               (visit zloc)
-                               zloc))
-                           zloc
-                           replacements)]
-          (recur (z/next zloc)))))))
+      ;; if one of the selectors in replacements matches, replace the form
+      (let [zloc (reduce (fn [zloc [select visit]]
+                           (if (select zloc)
+                             (visit zloc)
+                             zloc))
+                         zloc
+                         replacements)]
+        (recur (z/next zloc))))))
 
 (print (rewrite-core zloc))

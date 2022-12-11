@@ -11,6 +11,7 @@ var (
 	packages = []string{
 		"bytes",
 		"context",
+		"errors",
 		"flag",
 		"fmt",
 		"io",

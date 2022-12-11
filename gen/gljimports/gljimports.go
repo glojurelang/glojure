@@ -4,6 +4,7 @@ package gljimports
 import (
 	bytes "bytes"
 	context "context"
+	errors "errors"
 	flag "flag"
 	fmt "fmt"
 	io "io"
@@ -108,6 +109,13 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("context.WithDeadline", context.WithDeadline)
 	_register("context.WithTimeout", context.WithTimeout)
 	_register("context.WithValue", context.WithValue)
+
+	// package errors
+	////////////////////////////////////////
+	_register("errors.As", errors.As)
+	_register("errors.Is", errors.Is)
+	_register("errors.New", errors.New)
+	_register("errors.Unwrap", errors.Unwrap)
 
 	// package flag
 	////////////////////////////////////////

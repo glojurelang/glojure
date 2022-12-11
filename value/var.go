@@ -9,6 +9,8 @@ type (
 		ns   *Namespace
 		sym  *Symbol
 		root atomic.Value
+
+		meta atomic.Value
 	}
 
 	UnboundVar struct {
@@ -23,12 +25,23 @@ type (
 	}
 )
 
+var (
+	KeywordMacro = NewKeyword("macro")
+)
+
 func NewVar(ns *Namespace, sym *Symbol) *Var {
 	v := &Var{
 		ns:  ns,
 		sym: sym,
 	}
 	v.root.Store(varBox{val: UnboundVar{v: v}})
+	v.meta.Store(IPersistentMap(NewMap(nil)))
+	return v
+}
+
+func NewVarWithRoot(ns *Namespace, sym *Symbol, root interface{}) *Var {
+	v := NewVar(ns, sym)
+	v.BindRoot(root)
 	return v
 }
 
@@ -59,4 +72,25 @@ func (v *Var) Get() interface{} {
 	// TODO: figure out goroutine-local bindings
 	box := v.root.Load().(varBox)
 	return box.val
+}
+
+func (v *Var) Meta() IPersistentMap {
+	return v.meta.Load().(IPersistentMap)
+}
+
+func (v *Var) SetMeta(meta IPersistentMap) {
+	v.meta.Store(meta)
+}
+
+func (v *Var) IsMacro() bool {
+	meta := v.Meta()
+	b, ok := meta.EntryAt(KeywordMacro)
+	if !ok {
+		return false
+	}
+	return b.(bool)
+}
+
+func (v *Var) SetMacro() {
+	v.SetMeta(v.Meta().Assoc(KeywordMacro, true))
 }

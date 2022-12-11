@@ -7,6 +7,7 @@ import (
 // List is a list of values.
 type List struct {
 	Section
+	meta IPersistentMap
 
 	// the empty list is represented by a nil item and a nil next. all
 	// other lists have a non-nil item and a non-nil next.
@@ -204,4 +205,18 @@ func (l *List) GoValue() interface{} {
 		vals = append(vals, val)
 	}
 	return vals
+}
+
+func (l *List) Meta() IPersistentMap {
+	return l.meta
+}
+
+func (l *List) WithMeta(meta IPersistentMap) interface{} {
+	if meta.Equal(l.meta) {
+		return l
+	}
+
+	cpy := *l
+	cpy.meta = meta
+	return &cpy
 }

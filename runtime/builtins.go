@@ -30,8 +30,6 @@ func init() {
 				// collection functions
 				funcSymbol("count", lengthBuiltin),
 				funcSymbol("conj", conjBuiltin),
-				funcSymbol("first", firstBuiltin),
-				funcSymbol("rest", restBuiltin),
 				funcSymbol("subvec", subvecBuiltin),
 
 				// math functions
@@ -211,18 +209,6 @@ func conjBuiltin(env value.Environment, args []interface{}) (interface{}, error)
 	}
 
 	return conjer.Conj(args[1:]...), nil
-}
-
-func firstBuiltin(env value.Environment, args []interface{}) (out interface{}, err error) {
-	if len(args) != 1 {
-		return nil, fmt.Errorf("first expects 1 argument, got %v", len(args))
-	}
-
-	if seq := value.Seq(args[0]); seq != nil {
-		return seq.First(), nil
-	}
-
-	return nil, fmt.Errorf("first expects a sequence, got %v", args[0])
 }
 
 func restBuiltin(env value.Environment, args []interface{}) (interface{}, error) {

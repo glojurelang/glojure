@@ -1,6 +1,9 @@
 package value
 
-import "reflect"
+import (
+	"fmt"
+	"reflect"
+)
 
 type ISeq interface {
 	First() interface{}
@@ -10,6 +13,31 @@ type ISeq interface {
 
 type ISeqable interface {
 	Seq() ISeq
+}
+
+func First(x interface{}) interface{} {
+	if s := Seq(x); s != nil {
+		return s.First()
+	}
+	panic(fmt.Errorf("%T can't be converted to ISeq", x))
+}
+
+func Rest(x interface{}) interface{} {
+	if s := Seq(x); s != nil {
+		return s.Rest()
+	}
+	panic(fmt.Errorf("%T can't be converted to ISeq", x))
+}
+
+func Next(x interface{}) interface{} {
+	if s := Seq(x); s != nil {
+		rst := s.Rest()
+		if rst.IsEmpty() {
+			return nil
+		}
+		return rst
+	}
+	panic(fmt.Errorf("%T can't be converted to ISeq", x))
 }
 
 func Seq(x interface{}) ISeq {

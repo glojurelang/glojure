@@ -191,8 +191,16 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	}
 	{ // core functions
 		define("glojure.lang.CreateList", value.CreateList)
+		define("glojure.lang.Symbol", reflect.TypeOf(value.NewSymbol("")))
+		define("glojure.lang.HasType", func(t reflect.Type, v interface{}) bool {
+			return reflect.TypeOf(v) == t
+		})
+		define("glojure.lang.WithMeta", value.WithMeta)
+		define("glojure.lang.NewCons", value.NewCons)
+		define("glojure.lang.First", value.First)
+		define("glojure.lang.Next", value.Next)
+		define("glojure.lang.Rest", value.Rest)
 	}
-
 	{
 		// Add stdlib
 

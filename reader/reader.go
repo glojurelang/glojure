@@ -12,6 +12,10 @@ import (
 	"github.com/glojurelang/glojure/value"
 )
 
+var (
+	keywordTag = value.NewKeyword("tag")
+)
+
 type trackingRuneScanner struct {
 	rs io.RuneScanner
 
@@ -286,11 +290,15 @@ func (r *Reader) readExpr() (interface{}, error) {
 		return r.readDispatch()
 	case '^':
 		// TODO: attach to next form
-		_, err := r.readMeta()
+		meta, err := r.readMeta()
 		if err != nil {
 			return nil, err
 		}
-		return r.readExpr()
+		val, err := r.readExpr()
+		if err != nil {
+			return nil, err
+		}
+		return value.WithMeta(val, meta)
 	default:
 		r.rs.UnreadRune()
 		return r.readSymbol()
@@ -851,13 +859,23 @@ func (r *Reader) readKeyword() (interface{}, error) {
 	return value.NewKeyword(sym, value.WithSection(r.popSection())), nil
 }
 
-func (r *Reader) readMeta() (interface{}, error) {
+func (r *Reader) readMeta() (value.IPersistentMap, error) {
 	res, err := r.readExpr()
 	if err != nil {
 		return nil, err
 	}
 	r.popSection()
-	return res, nil
+
+	switch res := res.(type) {
+	case *value.Map:
+		return res, nil
+	case *value.Symbol, string:
+		return value.NewMap([]interface{}{keywordTag, res}), nil
+	case *value.Keyword:
+		return value.NewMap([]interface{}{res, true}), nil
+	default:
+		return nil, r.error("metadata must be a map, symbol, keyword, or string")
+	}
 }
 
 func isSpace(r rune) bool {

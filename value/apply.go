@@ -44,11 +44,11 @@ func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, 
 			targetType = gvType.In(gvType.NumIn() - 1).Elem()
 		}
 
-		argGoVal, err := ConvertToGo(env, targetType, args[i])
+		argGoVal, err := coerceGoValue(env, targetType, args[i])
 		if err != nil {
 			return nil, fmt.Errorf("argument %d: %s", i, err)
 		}
-		goArgs = append(goArgs, reflect.ValueOf(argGoVal))
+		goArgs = append(goArgs, argGoVal)
 	}
 
 	defer func() {
@@ -107,21 +107,25 @@ func applySlice(goVal reflect.Value, args []interface{}) (interface{}, error) {
 // ConvertToGo converts a Value to a Go value of the given type, if
 // possible.
 func ConvertToGo(env Environment, typ reflect.Type, val interface{}) (interface{}, error) {
-	return coerceGoValue(env, typ, val)
+	rval, err := coerceGoValue(env, typ, val)
+	if err != nil {
+		return nil, err
+	}
+	return rval.Interface(), nil
 }
 
 // coerceGoValue attempts to coerce a Go value to be assignable to a
 // target type. If the value is already assignable, it is returned.
-func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (interface{}, error) {
+func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (reflect.Value, error) {
 	if val == nil {
 		if !isNilableKind(targetType.Kind()) {
-			return nil, fmt.Errorf("cannot assign nil to non-nilable type %s", targetType)
+			return reflect.Value{}, fmt.Errorf("cannot assign nil to non-nilable type %s", targetType)
 		}
-		return reflect.Zero(targetType).Interface(), nil
+		return reflect.Zero(targetType), nil
 	}
 
 	if reflect.TypeOf(val).AssignableTo(targetType) {
-		return val, nil
+		return reflect.ValueOf(val), nil
 	}
 	switch targetType.Kind() {
 	case reflect.Slice:
@@ -134,7 +138,7 @@ func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (i
 		}
 
 		if reflect.TypeOf(val).Kind() != reflect.Slice {
-			return nil, fmt.Errorf("cannot coerce %s to %s", reflect.TypeOf(val), targetType)
+			return reflect.Value{}, fmt.Errorf("cannot coerce %s to %s", reflect.TypeOf(val), targetType)
 		}
 		// use reflect.MakeSlice to create a new slice of the target type
 		// and copy the values into it
@@ -143,15 +147,15 @@ func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (i
 			// try to coerce each element of the slice
 			coerced, err := coerceGoValue(env, targetType.Elem(), reflect.ValueOf(val).Index(i).Interface())
 			if err != nil {
-				return nil, err
+				return reflect.Value{}, err
 			}
 			targetSlice.Index(i).Set(reflect.ValueOf(coerced))
 		}
-		return targetSlice.Interface(), nil
+		return targetSlice, nil
 	case reflect.Func:
 		if applyer, ok := val.(Applyer); ok {
-			val = reflect.MakeFunc(targetType, reflectFuncFromApplyer(env, applyer)).Interface()
-			if reflect.TypeOf(val).AssignableTo(targetType) {
+			val := reflect.MakeFunc(targetType, reflectFuncFromApplyer(env, applyer))
+			if val.Type().AssignableTo(targetType) {
 				return val, nil
 			}
 		}
@@ -165,11 +169,12 @@ func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (i
 			}
 		}
 
-		if reflect.TypeOf(val).ConvertibleTo(targetType) {
-			return reflect.ValueOf(val).Convert(targetType).Interface(), nil
+		val := reflect.ValueOf(val)
+		if val.Type().ConvertibleTo(targetType) {
+			return val.Convert(targetType), nil
 		}
 	}
-	return nil, fmt.Errorf("cannot coerce %s to %s", reflect.TypeOf(val), targetType)
+	return reflect.Value{}, fmt.Errorf("cannot coerce %s to %s", reflect.TypeOf(val), targetType)
 }
 
 func ConvertFromGo(val interface{}) interface{} {

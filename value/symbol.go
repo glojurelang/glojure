@@ -2,13 +2,9 @@ package value
 
 import "strings"
 
-var (
-	SymbolUnquote       = NewSymbol("clojure.core/unquote")
-	SymbolSpliceUnquote = NewSymbol("splice-unquote")
-)
-
 type Symbol struct {
 	Section
+	meta IPersistentMap
 	ns   string
 	name string
 }
@@ -84,4 +80,18 @@ func (s *Symbol) Equal(v interface{}) bool {
 		return false
 	}
 	return s.ns == other.ns && s.name == other.name
+}
+
+func (s *Symbol) Meta() IPersistentMap {
+	return s.meta
+}
+
+func (s *Symbol) WithMeta(meta IPersistentMap) interface{} {
+	if meta.Equal(s.meta) {
+		return s
+	}
+
+	symCopy := *s
+	symCopy.meta = meta
+	return &symCopy
 }

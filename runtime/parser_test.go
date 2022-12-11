@@ -61,7 +61,7 @@ func TestParse(t *testing.T) {
 			env := NewEnvironment(WithStdout(stdout), WithLoadPath([]string{"testdata/eval"}))
 			_, err = env.Eval(value.NewList([]interface{}{
 				value.NewSymbol("ns"),
-				value.UserNamespaceSymbol,
+				SymbolUserNamespace,
 			}))
 			if err != nil {
 				t.Fatal(err)

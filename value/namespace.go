@@ -14,8 +14,7 @@ type Namespace struct {
 }
 
 var (
-	CoreNamepaceSymbol  = NewSymbol("glojure.core")
-	UserNamespaceSymbol = NewSymbol("user")
+	SymbolCoreNamespace = NewSymbol("glojure.core")
 
 	FindNamespace = ApplyerFunc(func(env Environment, args []interface{}) (interface{}, error) {
 		if len(args) != 1 {
@@ -118,7 +117,7 @@ func (ns *Namespace) checkReplacement(env Environment, sym *Symbol, old, neu int
 			nns = neuVar.Namespace()
 		}
 		if ns.isInternedMapping(sym, old) {
-			if nns != env.FindNamespace(CoreNamepaceSymbol) {
+			if nns != env.FindNamespace(SymbolCoreNamespace) {
 				fmt.Fprintf(errOut, "REJECTED: attempt to replace interned var %s with %s in %s, you must ns-unmap first\n", old, neu, ns.name)
 			}
 			return false
@@ -137,6 +136,15 @@ func (ns *Namespace) InternWithValue(env Environment, sym *Symbol, value interfa
 	return v
 }
 
+func (ns *Namespace) GetMapping(sym *Symbol) interface{} {
+	m := ns.Mappings()
+	v, ok := m.ValueAt(sym)
+	if !ok {
+		return nil
+	}
+	return v
+}
+
 func (ns *Namespace) FindInternedVar(sym *Symbol) *Var {
 	m := ns.Mappings()
 	v, ok := m.ValueAt(sym)
@@ -151,6 +159,15 @@ func (ns *Namespace) FindInternedVar(sym *Symbol) *Var {
 		return nil
 	}
 	return vr
+}
+
+func (ns *Namespace) LookupAlias(sym *Symbol) *Namespace {
+	m := ns.Aliases()
+	v, ok := m.ValueAt(sym)
+	if !ok {
+		return nil
+	}
+	return v.(*Namespace)
 }
 
 // Refer adds a reference to an existing Var, possibly in another
