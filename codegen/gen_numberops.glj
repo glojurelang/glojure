@@ -49,7 +49,7 @@
     "BigDecimal" (str "value.NewBigDecimalFromFloat64(float64(" var "))")
     (str typ \( var \))))
 
-(def binary-ops (map str '[Add AddP Sub SubP LT Max Min]))
+(def binary-ops (map str '[Add AddP Sub SubP LT Max Min Equal]))
 
 (defn op-ret-typ [op]
   (case op

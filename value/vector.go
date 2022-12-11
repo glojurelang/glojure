@@ -217,7 +217,7 @@ func (v *Vector) Meta() IPersistentMap {
 }
 
 func (v *Vector) WithMeta(meta IPersistentMap) interface{} {
-	if meta.Equal(v.meta) {
+	if Equal(v.meta, meta) {
 		return v
 	}
 

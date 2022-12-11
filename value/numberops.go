@@ -1,9 +1,7 @@
-package numbers
+package value
 
 import (
 	"fmt"
-
-	"github.com/glojurelang/glojure/value"
 )
 
 type (
@@ -21,6 +19,8 @@ type (
 
 		Max(x, y interface{}) interface{}
 		Min(x, y interface{}) interface{}
+
+		Equal(x, y interface{}) bool
 	}
 	int64Ops      struct{}
 	bigIntOps     struct{}
@@ -55,11 +55,11 @@ func Ops(x interface{}) ops {
 		return float64Ops{}
 	case float64:
 		return float64Ops{}
-	case *value.Ratio:
+	case *Ratio:
 		return ratioOps{}
-	case *value.BigInt:
+	case *BigInt:
 		return bigIntOps{}
-	case *value.BigDecimal:
+	case *BigDecimal:
 		return bigDecimalOps{}
 	default:
 		panic(fmt.Sprintf("cannot convert %T to Ops", x))
@@ -87,6 +87,10 @@ func Max(x, y interface{}) interface{} {
 func Min(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).Min(x, y)
 }
+func NumbersEqual(x, y interface{}) bool {
+	return Ops(x).Combine(Ops(y)).Equal(x, y)
+}
+
 func (o int64Ops) Add(x, y interface{}) interface{} {
 	return AsInt64(x) + AsInt64(y)
 }
@@ -114,8 +118,11 @@ func (o int64Ops) Min(x, y interface{}) interface{} {
 		return x
 	}
 	return y
-
 }
+func (o int64Ops) Equal(x, y interface{}) bool {
+	return AsInt64(x) == AsInt64(y)
+}
+
 func (o bigIntOps) Add(x, y interface{}) interface{} {
 	return AsBigInt(x).Add(AsBigInt(y))
 }
@@ -147,8 +154,11 @@ func (o bigIntOps) Min(x, y interface{}) interface{} {
 		return x
 	}
 	return y
-
 }
+func (o bigIntOps) Equal(x, y interface{}) bool {
+	return AsBigInt(x).Cmp(AsBigInt(y)) == 0
+}
+
 func (o ratioOps) Add(x, y interface{}) interface{} {
 	return AsRatio(x).Add(AsRatio(y))
 }
@@ -181,6 +191,9 @@ func (o ratioOps) Min(x, y interface{}) interface{} {
 	}
 	return y
 
+}
+func (o ratioOps) Equal(x, y interface{}) bool {
+	return AsRatio(x).Cmp(AsRatio(y)) == 0
 }
 func (o bigDecimalOps) Add(x, y interface{}) interface{} {
 	return AsBigDecimal(x).Add(AsBigDecimal(y))
@@ -215,6 +228,9 @@ func (o bigDecimalOps) Min(x, y interface{}) interface{} {
 	return y
 
 }
+func (o bigDecimalOps) Equal(x, y interface{}) bool {
+	return AsBigDecimal(x).Cmp(AsBigDecimal(y)) == 0
+}
 func (o float64Ops) Add(x, y interface{}) interface{} {
 	return AsFloat64(x) + AsFloat64(y)
 }
@@ -243,6 +259,9 @@ func (o float64Ops) Min(x, y interface{}) interface{} {
 	}
 	return y
 
+}
+func (o float64Ops) Equal(x, y interface{}) bool {
+	return AsFloat64(x) == AsFloat64(y)
 }
 func (o int64Ops) Combine(y ops) ops {
 	switch y.(type) {
@@ -355,94 +374,94 @@ func AsInt64(x interface{}) int64 {
 	}
 }
 
-func AsBigInt(x interface{}) *value.BigInt {
+func AsBigInt(x interface{}) *BigInt {
 	switch x := x.(type) {
 	case int:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	case uint:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	case int8:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	case int16:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	case int32:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	case int64:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	case uint8:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	case uint16:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	case uint32:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	case uint64:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	case float32:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	case float64:
-		return value.NewBigIntFromInt64(int64(x))
+		return NewBigIntFromInt64(int64(x))
 	default:
 		panic("cannot convert to BigInt")
 	}
 }
 
-func AsRatio(x interface{}) *value.Ratio {
+func AsRatio(x interface{}) *Ratio {
 	switch x := x.(type) {
 	case int:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	case uint:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	case int8:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	case int16:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	case int32:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	case int64:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	case uint8:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	case uint16:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	case uint32:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	case uint64:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	case float32:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	case float64:
-		return value.NewRatio(int64(x), 1)
+		return NewRatio(int64(x), 1)
 	default:
 		panic("cannot convert to Ratio")
 	}
 }
 
-func AsBigDecimal(x interface{}) *value.BigDecimal {
+func AsBigDecimal(x interface{}) *BigDecimal {
 	switch x := x.(type) {
 	case int:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	case uint:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	case int8:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	case int16:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	case int32:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	case int64:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	case uint8:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	case uint16:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	case uint32:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	case uint64:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	case float32:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	case float64:
-		return value.NewBigDecimalFromFloat64(float64(x))
+		return NewBigDecimalFromFloat64(float64(x))
 	default:
 		panic("cannot convert to BigDecimal")
 	}

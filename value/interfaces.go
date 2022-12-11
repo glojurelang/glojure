@@ -1,6 +1,8 @@
 package value
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type (
 	// IMeta is an interface for values that can have metadata.
@@ -27,21 +29,6 @@ type (
 		Conj(interface{}) Conjer
 	}
 
-	ISeq interface {
-		// First returns the first element of the sequence.
-		First() interface{}
-
-		// Next returns the next sequence, or nil if there are no more.
-		Next() ISeq
-
-		// Rest returns the rest of the sequence.
-		// TODO: remove this, match Clojure's ISeq interface
-		Rest() ISeq
-
-		// IsEmpty returns true if the sequence is empty.
-		IsEmpty() bool
-	}
-
 	ISeqable interface {
 		Seq() ISeq
 	}
@@ -65,6 +52,10 @@ type (
 		RSeq() ISeq
 	}
 
+	IPending interface {
+		IsRealized() bool
+	}
+
 	Indexed interface {
 		Nth(int) (interface{}, bool)
 		NthDefault(int, interface{}) interface{}
@@ -80,6 +71,39 @@ type (
 		IsEmpty() bool
 
 		// Equiv(interface{}) bool
+	}
+
+	ISeq interface {
+		// First returns the first element of the sequence.
+		First() interface{}
+
+		// Next returns the next sequence, or nil if there are no more.
+		Next() ISeq
+
+		// TODO: Missing: More, Cons, IPersistentCollection
+		// Remove the below
+
+		// Rest returns the rest of the sequence.
+		// TODO: remove this, match Clojure's ISeq interface
+		Rest() ISeq
+
+		// IsEmpty returns true if the sequence is empty.
+		IsEmpty() bool
+	}
+
+	IChunk interface {
+		Indexed
+
+		DropFirst() IChunk
+		Reduce(fn Applyer, init interface{}) interface{}
+	}
+
+	IChunkedSeq interface {
+		ISeq
+
+		ChunkedFirst() IChunk
+		ChunkedNext() ISeq
+		ChunkedMore() ISeq
 	}
 
 	IPersistentMap interface {
@@ -136,5 +160,28 @@ func WithMeta(v interface{}, meta IPersistentMap) (interface{}, error) {
 }
 
 func Assoc(a Associative, k, v interface{}) Associative {
+	if a == nil {
+		return NewMap([]interface{}{k, v})
+	}
 	return a.Assoc(k, v)
+}
+
+func Count(coll interface{}) int {
+	switch arg := coll.(type) {
+	case nil:
+		return 0
+	case string:
+		return len(arg)
+	case Counter:
+		return arg.Count()
+	}
+	seq, ok := Seq(coll).(ISeq)
+	if !ok {
+		panic(fmt.Errorf("count expects a collection, got %v", coll))
+	}
+	count := 0
+	for ; seq != nil; seq = seq.Next() {
+		count++
+	}
+	return count
 }

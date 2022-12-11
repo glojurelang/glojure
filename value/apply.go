@@ -163,7 +163,7 @@ func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (r
 		return targetSlice, nil
 	case reflect.Func:
 		if applyer, ok := val.(Applyer); ok {
-			val := reflect.MakeFunc(targetType, reflectFuncFromApplyer(env, applyer))
+			val := reflect.MakeFunc(targetType, reflectFuncFromApplyer(env, targetType, applyer))
 			if val.Type().AssignableTo(targetType) {
 				return val, nil
 			}
@@ -252,7 +252,7 @@ func isNilableKind(k reflect.Kind) bool {
 	return false
 }
 
-func reflectFuncFromApplyer(env Environment, applyer Applyer) func(args []reflect.Value) []reflect.Value {
+func reflectFuncFromApplyer(env Environment, targetType reflect.Type, applyer Applyer) func(args []reflect.Value) []reflect.Value {
 	return func(args []reflect.Value) []reflect.Value {
 		var glojureArgs []interface{}
 		for _, arg := range args {
@@ -262,8 +262,18 @@ func reflectFuncFromApplyer(env Environment, applyer Applyer) func(args []reflec
 		if err != nil {
 			panic(err)
 		}
+
 		if res == nil || Equal(res, nil) {
-			return nil
+			// if target type has no return values, return nil
+			if targetType.NumOut() == 0 {
+				return nil
+			}
+			// if target type has return values, return zero values
+			zeroValues := make([]reflect.Value, targetType.NumOut())
+			for i := 0; i < targetType.NumOut(); i++ {
+				zeroValues[i] = reflect.Zero(targetType.Out(i))
+			}
+			return zeroValues
 		}
 
 		if goValuerRes, ok := res.(GoValuer); ok {

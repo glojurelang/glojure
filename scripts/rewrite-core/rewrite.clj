@@ -72,6 +72,23 @@
    (sexpr-replace 'clojure.lang.Util/identical 'glojure.lang.Identical)
    (sexpr-replace 'clojure.lang.LazilyPersistentVector/create 'glojure.lang.NewVector)
    (sexpr-replace '(. clojure.lang.RT (seq coll)) '(glojure.lang.Seq coll))
+   (sexpr-replace '(list 'new 'clojure.lang.LazySeq (list* '^{:once true} fn* [] body))
+                  '(list 'glojure.lang.NewLazySeq (list* '^{:once true} fn* [] body)))
+   (sexpr-replace 'clojure.lang.RT/count 'glojure.lang.Count)
+   (sexpr-replace 'clojure.lang.IChunkedSeq 'glojure.lang.IChunkedSeq)
+
+   ;; replace (. <fn-form> (applyTo <args>)) with (glojure.lang.Apply <fn-form> <args>)
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [sexpr (z/sexpr zloc)]
+                             (and
+                              (= 3 (count sexpr))
+                              (= '. (first sexpr))
+                              (list? (nth sexpr 2))
+                              (= 'applyTo (first (nth sexpr 2)))))))
+    (fn visit [zloc] (z/replace zloc
+                                (let [sexpr (z/sexpr zloc)]
+                                  `(glojure.lang.Apply ~(nth sexpr 1)
+                                                       ~(nth (nth sexpr 2) 1)))))]
    ])
 
 (defn rewrite-core [zloc]
@@ -89,4 +106,5 @@
                          replacements)]
         (recur (z/next zloc))))))
 
+;;(rewrite-core zloc)
 (print (rewrite-core zloc))

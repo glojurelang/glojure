@@ -11,7 +11,6 @@ import (
 	"github.com/glojurelang/glojure/reader"
 	"github.com/glojurelang/glojure/stdlib"
 	"github.com/glojurelang/glojure/value"
-	"github.com/glojurelang/glojure/value/numbers"
 	"github.com/glojurelang/glojure/value/util"
 
 	"github.com/glojurelang/glojure/gen/gljimports"
@@ -150,11 +149,11 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 
 			define("glojure.lang.numbers/Inc", value.Inc)
 			define("glojure.lang.numbers/IncP", value.IncP)
-			define("glojure.lang.Numbers/Add", numbers.Add)
-			define("glojure.lang.Numbers/Sub", numbers.Sub)
-			define("glojure.lang.Numbers/Max", numbers.Max)
-			define("glojure.lang.Numbers/Min", numbers.Min)
-			define("glojure.lang.Numbers/LT", numbers.LT)
+			define("glojure.lang.Numbers/Add", value.Add)
+			define("glojure.lang.Numbers/Sub", value.Sub)
+			define("glojure.lang.Numbers/Max", value.Max)
+			define("glojure.lang.Numbers/Min", value.Min)
+			define("glojure.lang.Numbers/LT", value.LT)
 		}
 		// iteration functions
 		{
@@ -204,6 +203,14 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.NewCons", value.NewCons)
 		define("glojure.lang.NewSymbol", value.NewSymbol)
 		define("glojure.lang.NewVector", value.NewVector)
+		define("glojure.lang.NewLazySeq", value.NewLazySeq)
+		define("glojure.lang.Apply", value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
+			if len(args) != 2 {
+				return nil, fmt.Errorf("wrong number of arguments (%d) to glojure.lang.Apply", len(args))
+			}
+			return value.Apply(env, args[0], seqToSlice(value.Seq(args[1])))
+		}))
+		define("glojure.lang.Count", value.Count)
 		define("glojure.lang.Seq", value.Seq)
 		define("glojure.lang.Conj", value.Conj)
 		define("glojure.lang.Assoc", value.Assoc)
@@ -212,10 +219,11 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Rest", value.Rest)
 		define("glojure.lang.Equal", value.Equal)
 		define("glojure.lang.Identical", value.Identical)
+		define("glojure.lang.ConcatStrings", value.ConcatStrings)
 		define("glojure.lang.IPersistentMap", reflect.TypeOf((*value.IPersistentMap)(nil)).Elem())
 		define("glojure.lang.IPersistentVector", reflect.TypeOf((*value.IPersistentVector)(nil)).Elem())
 		define("glojure.lang.IMeta", reflect.TypeOf((*value.IMeta)(nil)).Elem())
-		define("glojure.lang.ConcatStrings", value.ConcatStrings)
+		define("glojure.lang.IChunkedSeq", reflect.TypeOf((*value.IChunkedSeq)(nil)).Elem())
 	}
 	{
 		// Add stdlib

@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/glojurelang/glojure/value"
-	"github.com/glojurelang/glojure/value/numbers"
 )
 
 func Compare(x, y interface{}) int {
@@ -23,7 +22,7 @@ func Compare(x, y interface{}) int {
 		return strings.Compare(x, y.(string))
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, *value.BigInt, *value.Ratio, *value.BigDecimal:
 		// TODO: add Cmp method to number ops
-		v, ok := value.AsInt(numbers.Sub(x, y))
+		v, ok := value.AsInt(value.Sub(x, y))
 		if !ok {
 			panic(fmt.Sprintf("cannot compare %T and %T", x, y))
 		}

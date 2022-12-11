@@ -9,10 +9,8 @@ func Equal(a, b interface{}) bool {
 	if a == b {
 		return true
 	}
-	if anum, ok := AsNumber(a); ok {
-		_ = anum
-		// numbers.Equal(a, b)
-		panic("TODO")
+	if _, ok := AsNumber(a); ok {
+		return NumbersEqual(a, b)
 	}
 
 	if a, ok := a.(equaler); ok {

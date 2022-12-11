@@ -229,7 +229,7 @@
            (let [arglist (first fdecl)
                  ;elide implicit macro args
                  arglist (if (clojure.lang.Util/equals '&form (first arglist)) 
-                           (clojure.lang.RT/subvec arglist 2 (clojure.lang.RT/count arglist))
+                           (clojure.lang.RT/subvec arglist 2 (glojure.lang.Count arglist))
                            arglist)
                  body (next fdecl)]
              (if (map? (first body))
@@ -661,15 +661,15 @@
   {:added "1.0"
    :static true}
   ([^clojure.lang.IFn f args]
-     (. f (applyTo (seq args))))
+     (glojure.lang.Apply f (seq args)))
   ([^clojure.lang.IFn f x args]
-     (. f (applyTo (list* x args))))
+     (glojure.lang.Apply f (list* x args)))
   ([^clojure.lang.IFn f x y args]
-     (. f (applyTo (list* x y args))))
+     (glojure.lang.Apply f (list* x y args)))
   ([^clojure.lang.IFn f x y z args]
-     (. f (applyTo (list* x y z args))))
+     (glojure.lang.Apply f (list* x y z args)))
   ([^clojure.lang.IFn f a b c d & args]
-     (. f (applyTo (cons a (cons b (cons c (cons d (spread args)))))))))
+     (glojure.lang.Apply f (cons a (cons b (cons c (cons d (spread args))))))))
 
 (defn vary-meta
  "Returns an object of the same type and value as obj, with
@@ -686,7 +686,7 @@
   seq calls. See also - realized?"
   {:added "1.0"}
   [& body]
-  (list 'new 'clojure.lang.LazySeq (list* '^{:once true} fn* [] body)))    
+  (list (quote glojure.lang.NewLazySeq) (list* (quote ^{:once true} fn*) [] body)))    
 
 (defn ^:static ^clojure.lang.ChunkBuffer chunk-buffer ^clojure.lang.ChunkBuffer [capacity]
   (clojure.lang.ChunkBuffer. capacity))
@@ -697,22 +697,22 @@
 (defn ^:static ^clojure.lang.IChunk chunk [^clojure.lang.ChunkBuffer b]
   (.chunk b))
 
-(defn ^:static  ^clojure.lang.IChunk chunk-first ^clojure.lang.IChunk [^clojure.lang.IChunkedSeq s]
+(defn ^:static  ^clojure.lang.IChunk chunk-first ^clojure.lang.IChunk [^glojure.lang.IChunkedSeq s]
   (.chunkedFirst s))
 
-(defn ^:static ^clojure.lang.ISeq chunk-rest ^clojure.lang.ISeq [^clojure.lang.IChunkedSeq s]
+(defn ^:static ^clojure.lang.ISeq chunk-rest ^clojure.lang.ISeq [^glojure.lang.IChunkedSeq s]
   (.chunkedMore s))
 
-(defn ^:static ^clojure.lang.ISeq chunk-next ^clojure.lang.ISeq [^clojure.lang.IChunkedSeq s]
+(defn ^:static ^clojure.lang.ISeq chunk-next ^clojure.lang.ISeq [^glojure.lang.IChunkedSeq s]
   (.chunkedNext s))
 
 (defn ^:static chunk-cons [chunk rest]
-  (if (clojure.lang.Numbers/isZero (clojure.lang.RT/count chunk))
+  (if (clojure.lang.Numbers/isZero (glojure.lang.Count chunk))
     rest
     (clojure.lang.ChunkedCons. chunk rest)))
   
 (defn ^:static chunked-seq? [s]
-  (instance? clojure.lang.IChunkedSeq s))
+  (instance? glojure.lang.IChunkedSeq s))
 
 (defn concat
   "Returns a lazy seq representing the concatenation of the elements in the supplied colls."
@@ -876,7 +876,7 @@
   {
    :inline (fn  [x] `(. clojure.lang.RT (count ~x)))
    :added "1.0"}
-  [coll] (clojure.lang.RT/count coll))
+  [coll] (glojure.lang.Count coll))
 
 (defn int
   "Coerce to int"

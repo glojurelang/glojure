@@ -306,9 +306,9 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 			if err != nil {
 				return nil, env.errorf(n, "error applying macro: %w", err)
 			}
-			if res == nil {
-				panic(fmt.Sprintf("macro %s returned nil", sym))
-			}
+			// if res == nil {
+			// 	panic(fmt.Sprintf("macro %s returned nil", sym))
+			// }
 			return res, nil
 		}
 	}
@@ -599,15 +599,12 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 				if err != nil {
 					return nil, err
 				}
-				vals, ok := res.(value.Nther)
+				vals, ok := res.(value.ISeq)
 				if !ok {
-					return nil, env.errorf(lst, "splice-unquote did not return an enumerable")
+					return nil, env.errorf(lst, "splice-unquote did not return an ISeq")
 				}
-				for i := 0; ; i++ {
-					v, ok := vals.Nth(i)
-					if !ok {
-						break
-					}
+				for ; vals != nil; vals = vals.Next() {
+					v := vals.First()
 					resultValues = append(resultValues, v)
 				}
 				continue

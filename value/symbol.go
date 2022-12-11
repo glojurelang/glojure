@@ -87,7 +87,7 @@ func (s *Symbol) Meta() IPersistentMap {
 }
 
 func (s *Symbol) WithMeta(meta IPersistentMap) interface{} {
-	if meta.Equal(s.meta) {
+	if Equal(s.meta, meta) {
 		return s
 	}
 
