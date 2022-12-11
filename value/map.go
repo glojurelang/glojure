@@ -44,14 +44,22 @@ func (s *MapSeq) First() interface{} {
 	}
 }
 
-func (s *MapSeq) Rest() ISeq {
+func (s *MapSeq) Next() ISeq {
 	if s.entryIndex >= s.m.Count() {
-		return emptyList
+		return nil
 	}
 	return &MapSeq{
 		m:          s.m,
 		entryIndex: s.entryIndex + 1,
 	}
+}
+
+func (s *MapSeq) Rest() ISeq {
+	nxt := s.Next()
+	if nxt == nil {
+		return emptyList
+	}
+	return nxt
 }
 
 func (s *MapSeq) IsEmpty() bool {

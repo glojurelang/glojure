@@ -65,7 +65,7 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 
 	// bootstrap some vars
 	e.namespaceVar = value.NewVarWithRoot(coreNS, SymbolNamespace,
-		value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) { return nil, nil }))
+		value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) { return coreNS, nil }))
 	e.namespaceVar.SetMacro()
 
 	e.inNamespaceVar = value.NewVarWithRoot(coreNS, SymbolInNamespace, false)
@@ -79,8 +79,7 @@ func (env *environment) Context() context.Context {
 }
 
 func (env *environment) String() string {
-	return fmt.Sprintf("Environment{recurTarget=%v}", env.recurTarget)
-	//return fmt.Sprintf("environment:\nScope:\n%v", env.scope.printIndented("  "))
+	return fmt.Sprintf("environment:\nScope:\n%v", env.scope.printIndented("  "))
 }
 
 // TODO: rename to something else; this isn't for `def`s, it's for
@@ -230,16 +229,15 @@ func (env *environment) errorf(n interface{}, format string, args ...interface{}
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
 	switch v := n.(type) {
-	case *value.List:
-		return env.evalList(v)
 	case *value.Vector:
 		return env.evalVector(v)
+	case *value.List: // TODO: should apply to any seq...
+		return env.evalList(v)
 	case value.ISeq:
 		// convert to a list
 		var elements []interface{}
-		for !v.IsEmpty() {
+		for ; v != nil; v = v.Next() {
 			elements = append(elements, v.First())
-			v = v.Rest()
 		}
 		return env.evalList(value.NewList(elements))
 	default:
@@ -258,6 +256,8 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 		switch sym.String() {
 		case "def":
 			return env.evalDef(n)
+		case "do":
+			return env.evalDo(n)
 		case "if":
 			return env.evalIf(n)
 		case "case*":
@@ -306,16 +306,17 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 			if err != nil {
 				return nil, env.errorf(n, "error applying macro: %w", err)
 			}
+			if res == nil {
+				panic(fmt.Sprintf("macro %s returned nil", sym))
+			}
 			return res, nil
 		}
 	}
 
-	//FunctionCallRecurTarget:
-
 	// otherwise, handle a function call
 	var res []interface{}
-	for cur := n; !cur.IsEmpty(); cur = cur.Next() {
-		item := cur.Item()
+	for cur := value.Seq(n); cur != nil; cur = cur.Next() {
+		item := cur.First()
 		v, err := env.Eval(item)
 		if err != nil {
 			return nil, err
@@ -410,8 +411,8 @@ func (env *environment) evalDef(n *value.List) (interface{}, error) {
 func (env *environment) evalFn(n *value.List) (interface{}, error) {
 	listLength := n.Count()
 	items := make([]interface{}, 0, listLength-1)
-	for cur := n.Next(); !cur.IsEmpty(); cur = cur.Next() {
-		items = append(items, cur.Item())
+	for cur := n.Next(); cur != nil; cur = cur.Next() {
+		items = append(items, cur.First())
 	}
 
 	if len(items) < 1 {
@@ -432,7 +433,7 @@ func (env *environment) evalFn(n *value.List) (interface{}, error) {
 
 	const errorString = "invalid fn expression, expected (fn ([bindings0] body0) ([bindings1] body1) ...) or (fn [bindings] body)"
 
-	arities := make([]*value.List, 0, len(items))
+	arities := make([]value.ISeq, 0, len(items))
 	if _, ok := items[0].(*value.Vector); ok {
 		// if the next child is a vector, it's the bindings, and we only
 		// have one arity.
@@ -441,17 +442,17 @@ func (env *environment) evalFn(n *value.List) (interface{}, error) {
 		// otherwise, every remaining child must be a list of function
 		// bindings and bodies for each arity.
 		for _, item := range items {
-			list, ok := item.(*value.List)
+			seq, ok := item.(value.ISeq)
 			if !ok {
 				return nil, env.errorf(n, errorString)
 			}
-			arities = append(arities, list)
+			arities = append(arities, seq)
 		}
 	}
 
 	arityValues := make([]value.FuncArity, len(arities))
 	for i, arity := range arities {
-		bindings, ok := arity.Item().(*value.Vector)
+		bindings, ok := arity.First().(*value.Vector)
 		if !ok {
 			return nil, env.errorf(n, errorString)
 		}
@@ -463,7 +464,7 @@ func (env *environment) evalFn(n *value.List) (interface{}, error) {
 
 		arityValues[i] = value.FuncArity{
 			BindingForm: bindings,
-			Exprs:       body,
+			Exprs:       seqToList(body),
 		}
 	}
 	return &value.Func{
@@ -474,22 +475,34 @@ func (env *environment) evalFn(n *value.List) (interface{}, error) {
 	}, nil
 }
 
+func (env *environment) evalDo(n *value.List) (interface{}, error) {
+	var res interface{}
+	var err error
+	for cur := n.Next(); cur != nil; cur = cur.Next() {
+		res, err = env.Eval(cur.First())
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
 func (env *environment) evalIf(n *value.List) (interface{}, error) {
 	listLength := n.Count()
 	if listLength < 3 || listLength > 4 {
 		return nil, env.errorf(n, "invalid if, need `cond ifExp [elseExp]`")
 	}
-	cond, err := env.Eval(n.Next().Item())
+	cond, err := env.Eval(n.Next().First())
 	if err != nil {
 		return nil, err
 	}
 
 	if value.IsTruthy(cond) {
-		return env.Eval(n.Next().Next().Item())
+		return env.Eval(n.Next().Next().First())
 	}
 
 	if listLength == 4 {
-		return env.Eval(n.Next().Next().Next().Item())
+		return env.Eval(n.Next().Next().Next().First())
 	}
 	return nil, nil
 }
@@ -501,14 +514,14 @@ func (env *environment) evalCase(n *value.List) (interface{}, error) {
 	if listLength < 4 {
 		return nil, env.errorf(n, "invalid case, need `case caseExp & caseClauses`")
 	}
-	cond, err := env.Eval(n.Next().Item())
+	cond, err := env.Eval(n.Next().First())
 	if err != nil {
 		return nil, err
 	}
 
 	cases := make([]interface{}, 0, listLength-2)
-	for cur := n.Next().Next(); !cur.IsEmpty(); cur = cur.Next() {
-		cases = append(cases, cur.Item())
+	for cur := n.Next().Next(); cur != nil; cur = cur.Next() {
+		cases = append(cases, cur.First())
 	}
 
 	for len(cases) >= 2 {
@@ -516,11 +529,11 @@ func (env *environment) evalCase(n *value.List) (interface{}, error) {
 		cases = cases[2:]
 
 		testItems := []interface{}{test}
-		testList, ok := test.(*value.List)
+		testList, ok := test.(value.ISeq)
 		if ok {
-			testItems = make([]interface{}, 0, testList.Count())
-			for cur := testList; !cur.IsEmpty(); cur = cur.Next() {
-				testItems = append(testItems, cur.Item())
+			var testItems []interface{}
+			for cur := testList; cur != nil; cur = cur.Next() {
+				testItems = append(testItems, cur.First())
 			}
 		}
 
@@ -550,7 +563,7 @@ func (env *environment) evalQuote(n *value.List) (interface{}, error) {
 		return nil, env.errorf(n, "invalid quote, need 1 argument")
 	}
 
-	return n.Next().Item(), nil
+	return n.Next().First(), nil
 }
 
 func (env *environment) evalQuasiquote(n *value.List) (interface{}, error) {
@@ -563,26 +576,26 @@ func (env *environment) evalQuasiquote(n *value.List) (interface{}, error) {
 	// symbols that end with a '#' have '#' replaced with a unique
 	// suffix.
 	symbolNameMap := make(map[string]string)
-	return env.evalQuasiquoteItem(symbolNameMap, n.Next().Item())
+	return env.evalQuasiquoteItem(symbolNameMap, n.Next().First())
 }
 
 func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item interface{}) (interface{}, error) {
 	switch item := item.(type) {
-	case *value.List:
+	case value.ISeq:
 		if item.IsEmpty() {
 			return item, nil
 		}
-		if value.Equal(item.Item(), SymbolUnquote) {
-			return env.Eval(item.Next().Item())
+		if value.Equal(item.First(), SymbolUnquote) {
+			return env.Eval(item.Next().First())
 		}
-		if value.Equal(item.Item(), SymbolSpliceUnquote) {
+		if value.Equal(item.First(), SymbolSpliceUnquote) {
 			return nil, env.errorf(item, "splice-unquote not in list")
 		}
 
 		var resultValues []interface{}
-		for cur := item; !cur.IsEmpty(); cur = cur.Next() {
-			if lst, ok := cur.Item().(*value.List); ok && !lst.IsEmpty() && value.Equal(lst.Item(), SymbolSpliceUnquote) {
-				res, err := env.Eval(lst.Next().Item())
+		for cur := item; cur != nil; cur = cur.Next() {
+			if lst, ok := cur.First().(*value.List); ok && !lst.IsEmpty() && value.Equal(lst.First(), SymbolSpliceUnquote) {
+				res, err := env.Eval(lst.Next().First())
 				if err != nil {
 					return nil, err
 				}
@@ -600,7 +613,7 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 				continue
 			}
 
-			result, err := env.evalQuasiquoteItem(symbolNameMap, cur.Item())
+			result, err := env.evalQuasiquoteItem(symbolNameMap, cur.First())
 			if err != nil {
 				return nil, err
 			}
@@ -615,8 +628,8 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 		var resultValues []interface{}
 		for i := 0; i < item.Count(); i++ {
 			cur := item.ValueAt(i)
-			if lst, ok := cur.(*value.List); ok && !lst.IsEmpty() && value.Equal(lst.Item(), SymbolSpliceUnquote) {
-				res, err := env.Eval(lst.Next().Item())
+			if lst, ok := cur.(*value.List); ok && !lst.IsEmpty() && value.Equal(lst.First(), SymbolSpliceUnquote) {
+				res, err := env.Eval(lst.Next().First())
 				if err != nil {
 					return nil, err
 				}
@@ -659,7 +672,7 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 }
 
 func (env *environment) evalLet(n *value.List, isLoop bool) (interface{}, error) {
-	items := listAsSlice(n)
+	items := seqToSlice(n)
 	if len(items) < 3 {
 		return nil, env.errorf(n, "invalid let, need bindings and body")
 	}
@@ -678,6 +691,7 @@ func (env *environment) evalLet(n *value.List, isLoop bool) (interface{}, error)
 	// create a new environment with the bindings
 	newEnv := env.PushScope().(*environment)
 
+	recurCount := 0
 Recur:
 	for i := 0; i < len(bindNameVals); i += 2 {
 		name := bindNameVals[i].(string)
@@ -693,12 +707,13 @@ Recur:
 		}
 	}
 
-	rt := &struct{}{}
+	rt := value.NewRecurTarget()
 	recurEnv := newEnv.WithRecurTarget(rt)
+	recurErr := &value.RecurError{Target: rt}
 
 	res, err := recurEnv.Eval(items[len(items)-1])
-	if errors.Is(err, &value.RecurError{Target: rt}) {
-		newVals := err.(*value.RecurError).Args
+	if isLoop && errors.As(err, &recurErr) {
+		newVals := recurErr.Args
 		for i := 0; i < len(bindNameVals); i += 2 {
 			newValsIndex := i / 2
 			if newValsIndex >= len(newVals) {
@@ -707,6 +722,7 @@ Recur:
 			val := newVals[newValsIndex]
 			bindNameVals[i+1] = val
 		}
+		recurCount++
 		goto Recur
 	}
 	return res, err
@@ -753,7 +769,8 @@ func (env *environment) evalDefMacro(n *value.List) (interface{}, error) {
 		_, ok := value.MustNth(n, 2).(string)
 		if ok {
 			argBody := n.Next().Next().Next()
-			fnList = argBody.Conj(value.MustNth(n, 1)).Conj(value.MustNth(n, 0)).(*value.List)
+			fnList = seqToList(value.NewCons(value.MustNth(n, 0), value.NewCons(value.MustNth(n, 1), argBody)))
+			//fnList = argBody.Conj(value.MustNth(n, 1)).Conj(value.MustNth(n, 0)).(*value.List)
 			// TODO: store the docstring somewhere
 		}
 	}
@@ -765,7 +782,7 @@ func (env *environment) evalDefMacro(n *value.List) (interface{}, error) {
 
 	sym, ok := value.MustNth(n, 1).(*value.Symbol)
 	if !ok {
-		return nil, env.errorf(n.Next().Item(), "invalid defmacro, name must be a symbol")
+		return nil, env.errorf(n.Next().First(), "invalid defmacro, name must be a symbol")
 	}
 
 	env.DefineMacro(sym.String(), fn.(*value.Func))
@@ -779,7 +796,7 @@ func (env *environment) evalVar(n *value.List) (interface{}, error) {
 
 	sym, ok := value.MustNth(n, 1).(*value.Symbol)
 	if !ok {
-		return nil, env.errorf(n.Next().Item(), "invalid var, name must be a symbol")
+		return nil, env.errorf(n.Next().First(), "invalid var, name must be a symbol")
 	}
 
 	return env.lookupVar(sym, false, true)
@@ -790,24 +807,11 @@ func (env *environment) applyMacro(fn value.Applyer, form *value.List) (interfac
 	// two hidden arguments, $form and $env.
 	// $form is the form that was passed to the macro
 	// $env is the environment that the macro was called in
-	args := append([]interface{}{form, nil}, listAsSlice(argList)...)
+	args := append([]interface{}{form, nil}, seqToSlice(argList)...)
 	exp, err := env.applyFunc(fn, args)
 	if err != nil {
 		return nil, err
 	}
-	// res := exp
-	// switch exp := exp.(type) {
-	// case *value.List:
-	// 	// ignore
-	// case value.ISeq:
-	// 	// convert to a list
-	// 	var elements []interface{}
-	// 	for !exp.IsEmpty() {
-	// 		elements = append(elements, exp.First())
-	// 		exp = exp.Rest()
-	// 	}
-	// 	res = value.NewList(elements)
-	// }
 	return env.Eval(exp)
 }
 
@@ -830,21 +834,21 @@ func (env *environment) evalNew(n *value.List) (interface{}, error) {
 	}
 
 	val := reflect.New(typeValue)
-	for cur := n.Next().Next(); !cur.IsEmpty(); cur = cur.Next().Next() {
-		fieldName, ok := cur.Item().(*value.Keyword)
+	for cur := n.Next().Next(); cur != nil; cur = cur.Next().Next() {
+		fieldName, ok := cur.First().(*value.Keyword)
 		if !ok {
-			return nil, env.errorf(cur.Item(), "invalid new expression, field name must be a keyword")
+			return nil, env.errorf(cur.First(), "invalid new expression, field name must be a keyword")
 		}
-		fieldValue, err := env.Eval(cur.Next().Item())
+		fieldValue, err := env.Eval(cur.Next().First())
 		if err != nil {
 			return nil, err
 		}
 		field := val.Elem().FieldByName(fieldName.Value)
 		if !field.IsValid() {
-			return nil, env.errorf(cur.Item(), "invalid new expression, unknown field (%v)", fieldName.Value)
+			return nil, env.errorf(cur.First(), "invalid new expression, unknown field (%v)", fieldName.Value)
 		}
 		if !field.CanSet() {
-			return nil, env.errorf(cur.Item(), "invalid new expression, field is not settable (%v)", fieldName.Value)
+			return nil, env.errorf(cur.First(), "invalid new expression, field is not settable (%v)", fieldName.Value)
 		}
 		goVal := fieldValue
 		if fieldValue, ok := fieldValue.(value.GoValuer); ok {
@@ -923,8 +927,8 @@ func (env *environment) evalRecur(n *value.List) (interface{}, error) {
 
 	var args []interface{}
 	noRecurEnv := env.WithRecurTarget(nil)
-	for cur := n.Next(); !cur.IsEmpty(); cur = cur.Next() {
-		arg, err := noRecurEnv.Eval(cur.Item())
+	for cur := n.Next(); cur != nil; cur = cur.Next() {
+		arg, err := noRecurEnv.Eval(cur.First())
 		if err != nil {
 			return nil, err
 		}
@@ -973,12 +977,12 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 		return nil, env.errorf(n, "invalid expression, expecting (. target member ...)")
 	}
 
-	target, err := env.Eval(n.Next().Item())
+	target, err := env.Eval(n.Next().First())
 	if err != nil {
 		return nil, err
 	}
 
-	memberExpr := n.Next().Next().Item()
+	memberExpr := n.Next().Next().First()
 	if dotCount > 3 {
 		// must be a convenience form for a method call, e.g. (. foo bar baz)
 		// use the tail as the member expression.
@@ -1006,22 +1010,22 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 	}
 
 	if v, ok := memberExpr.(*value.List); ok {
-		sym, ok := v.Item().(*value.Symbol)
+		sym, ok := v.First().(*value.Symbol)
 		if !ok {
-			return nil, env.errorf(v.Item(), "invalid expression, method name must be a symbol")
+			return nil, env.errorf(v.First(), "invalid expression, method name must be a symbol")
 		}
 
 		method := value.FieldOrMethod(target, sym.String())
 		if method == nil {
 			return nil, env.errorf(sym, "%T has no such method (%s)", target, sym)
 		}
-		args := make([]interface{}, v.Next().Count())
-		for i := range args {
-			v, err := env.Eval(value.MustNth(v, i+1))
+		var args []interface{}
+		for cur := v.Next(); cur != nil; cur = cur.Next() {
+			v, err := env.Eval(cur.First())
 			if err != nil {
 				return nil, err
 			}
-			args[i] = v
+			args = append(args, v)
 		}
 		return value.Apply(env, method, args)
 	}
@@ -1030,15 +1034,16 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 }
 
 func (env *environment) evalFieldOrMethod(n *value.List) (interface{}, error) {
-	if n.Next().IsEmpty() {
+	if n.Next() == nil {
 		return nil, env.errorf(n, "invalid expression, expecting (.method target ...)")
 	}
 
-	sym := n.Item().(*value.Symbol)
+	sym := n.First().(*value.Symbol)
 	fieldSym := value.NewSymbol(sym.String()[1:])
 
 	// rewrite the expression to a dot expression
-	newList := n.Next().Next().Conj(fieldSym).Conj(value.MustNth(n, 1)).Conj(SymbolDot).(*value.List)
+	newList := seqToList(value.NewCons(SymbolDot, value.NewCons(n.Next().First(), value.NewCons(fieldSym, n.Next().Next()))))
+	//newList := n.Next().Next().Conj(fieldSym).Conj(value.MustNth(n, 1)).Conj(SymbolDot).(*value.List)
 	return env.evalDot(newList)
 }
 
@@ -1117,27 +1122,19 @@ func (env *environment) asMacro(sym *value.Symbol) *value.Var {
 
 // Misc. helpers
 
-func nodeAsStringList(n *value.List) ([]string, error) {
-	var res []string
-	for cur := n; !cur.IsEmpty(); cur = cur.Next() {
-		item := cur.Item()
-		sym, ok := item.(*value.Symbol)
-		if !ok {
-			return nil, fmt.Errorf("invalid argument list: %v", n)
-		}
-		res = append(res, sym.String())
-	}
-	return res, nil
+func seqToList(seq value.ISeq) *value.List {
+	return value.NewList(seqToSlice(seq))
 }
 
-// TODO: don't use this for function application. avoid copying and
-// just take lists or sequences.
-func listAsSlice(lst *value.List) []interface{} {
-	var res []interface{}
-	for cur := lst; !cur.IsEmpty(); cur = cur.Next() {
-		res = append(res, cur.Item())
+func seqToSlice(seq value.ISeq) []interface{} {
+	if seq == nil {
+		return nil
 	}
-	return res
+	var items []interface{}
+	for ; seq != nil; seq = seq.Next() {
+		items = append(items, seq.First())
+	}
+	return items
 }
 
 func isNilableKind(k reflect.Kind) bool {

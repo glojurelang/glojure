@@ -27,6 +27,25 @@ type (
 		Conj(interface{}) Conjer
 	}
 
+	ISeq interface {
+		// First returns the first element of the sequence.
+		First() interface{}
+
+		// Next returns the next sequence, or nil if there are no more.
+		Next() ISeq
+
+		// Rest returns the rest of the sequence.
+		// TODO: remove this, match Clojure's ISeq interface
+		Rest() ISeq
+
+		// IsEmpty returns true if the sequence is empty.
+		IsEmpty() bool
+	}
+
+	ISeqable interface {
+		Seq() ISeq
+	}
+
 	Associative interface {
 		ContainsKey(interface{}) bool
 		EntryAt(interface{}) (interface{}, bool)
@@ -114,4 +133,8 @@ func WithMeta(v interface{}, meta IPersistentMap) (interface{}, error) {
 		return nil, fmt.Errorf("value of type %T can't have metadata", v)
 	}
 	return iobj.WithMeta(meta), nil
+}
+
+func Assoc(a Associative, k, v interface{}) Associative {
+	return a.Assoc(k, v)
 }

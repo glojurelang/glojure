@@ -25,8 +25,6 @@ func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, 
 	}
 
 	if gvKind != reflect.Func {
-		fmt.Printf("fn: %v (%T)\n", fn, fn)
-		fmt.Printf("first: %v\n", fn.(*Cons).First().(*Symbol).Section)
 		return nil, fmt.Errorf("cannot apply non-function")
 	}
 	if gvType.NumIn() != len(args) && !gvType.IsVariadic() {
@@ -138,6 +136,14 @@ func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (r
 		if goValuer, ok := val.(GoValuer); ok {
 			val = goValuer.GoValue()
 		}
+		if iseq, ok := val.(ISeq); ok {
+			var slc []interface{}
+			for !iseq.IsEmpty() {
+				slc = append(slc, iseq.First())
+				iseq = iseq.Rest()
+			}
+			val = slc
+		}
 
 		if reflect.TypeOf(val).Kind() != reflect.Slice {
 			return reflect.Value{}, fmt.Errorf("cannot coerce %s to %s", reflect.TypeOf(val), targetType)
@@ -145,13 +151,14 @@ func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (r
 		// use reflect.MakeSlice to create a new slice of the target type
 		// and copy the values into it
 		targetSlice := reflect.MakeSlice(targetType, reflect.ValueOf(val).Len(), reflect.ValueOf(val).Len())
-		for i := 0; i < reflect.ValueOf(val).Len(); i++ {
+		sourceSlice := reflect.ValueOf(val)
+		for i := 0; i < sourceSlice.Len(); i++ {
 			// try to coerce each element of the slice
-			coerced, err := coerceGoValue(env, targetType.Elem(), reflect.ValueOf(val).Index(i).Interface())
+			coerced, err := coerceGoValue(env, targetType.Elem(), sourceSlice.Index(i).Interface())
 			if err != nil {
 				return reflect.Value{}, err
 			}
-			targetSlice.Index(i).Set(reflect.ValueOf(coerced))
+			targetSlice.Index(i).Set(coerced)
 		}
 		return targetSlice, nil
 	case reflect.Func:

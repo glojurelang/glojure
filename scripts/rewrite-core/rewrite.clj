@@ -64,6 +64,14 @@
    ;; no need for a special name, as go doesn't have a
    ;; builtin "Equals"
    (sexpr-replace 'clojure.lang.Util/equiv 'glojure.lang.Equal)
+   (sexpr-replace '(. x (meta)) '(.Meta x))
+   (sexpr-replace 'clojure.lang.Symbol/intern 'glojure.lang.NewSymbol)
+   (sexpr-replace '.getName '.Name)
+   (sexpr-replace '.concat 'glojure.lang.ConcatStrings)
+   (sexpr-replace 'clojure.lang.RT/assoc 'glojure.lang.Assoc)
+   (sexpr-replace 'clojure.lang.Util/identical 'glojure.lang.Identical)
+   (sexpr-replace 'clojure.lang.LazilyPersistentVector/create 'glojure.lang.NewVector)
+   (sexpr-replace '(. clojure.lang.RT (seq coll)) '(glojure.lang.Seq coll))
    ])
 
 (defn rewrite-core [zloc]

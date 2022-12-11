@@ -38,12 +38,20 @@ func (s *Set) First() interface{} {
 	return s.vals[0]
 }
 
-func (s *Set) Rest() ISeq {
+func (s *Set) Next() ISeq {
 	if s.Count() == 0 {
-		return emptyList
+		return nil
 	}
 
 	return NewSet(s.vals[1:])
+}
+
+func (s *Set) Rest() ISeq {
+	nxt := s.Next()
+	if nxt == nil {
+		return emptyList
+	}
+	return nxt
 }
 
 func (s *Set) IsEmpty() bool {

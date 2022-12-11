@@ -26,3 +26,7 @@ func Equal(a, b interface{}) bool {
 
 	return false
 }
+
+func Identical(a, b interface{}) bool {
+	return a == b
+}

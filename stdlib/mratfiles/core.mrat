@@ -133,7 +133,7 @@
    :tag clojure.lang.ISeq
    :added "1.0"
    :static true}
- seq (fn ^:static seq ^clojure.lang.ISeq [coll] (. clojure.lang.RT (seq coll))))
+ seq (fn ^:static seq ^clojure.lang.ISeq [coll] (glojure.lang.Seq coll)))
 
 (def
  ^{:arglists '([^Class c x])
@@ -187,9 +187,9 @@
    :static true}
  assoc
  (fn ^:static assoc
-   ([map key val] (clojure.lang.RT/assoc map key val))
+   ([map key val] (glojure.lang.Assoc map key val))
    ([map key val & kvs]
-    (let [ret (clojure.lang.RT/assoc map key val)]
+    (let [ret (glojure.lang.Assoc map key val)]
       (if kvs
         (if (next kvs)
           (recur ret (first kvs) (second kvs) (nnext kvs))
@@ -205,7 +205,7 @@
    :static true}
  meta (fn ^:static meta [x]
         (if (instance? glojure.lang.IMeta x)
-          (. ^glojure.lang.IMeta x (meta)))))
+          (.Meta x))))
 
 (def
  ^{:arglists '([^clojure.lang.IObj obj m])
@@ -241,11 +241,11 @@
                         (let [m (meta argvec)
                               ^glojure.lang.Symbol tag (:tag m)]
                           (if (instance? glojure.lang.Symbol tag)
-                            (if (glojure.lang.Equal (.indexOf (.getName tag) ".") -1)
+                            (if (glojure.lang.Equal (.indexOf (.Name tag) ".") -1)
                               (if (clojure.lang.Util/equals nil (clojure.lang.Compiler$HostExpr/maybeSpecialTag tag))
                                 (let [c (clojure.lang.Compiler$HostExpr/maybeClass tag false)]
                                   (if c
-                                    (with-meta argvec (assoc m :tag (clojure.lang.Symbol/intern (.getName c))))
+                                    (with-meta argvec (assoc m :tag (glojure.lang.NewSymbol (.Name c))))
                                     argvec))
                                 argvec)
                               argvec)
@@ -322,7 +322,7 @@
                   (if (if (glojure.lang.Equal 'fn ifn)
                         (if (instance? glojure.lang.Symbol iname) false true))
                     ;; inserts the same fn name to the inline fn if it does not have one
-                    (assoc m :inline (cons ifn (cons (clojure.lang.Symbol/intern (.concat (.getName ^glojure.lang.Symbol name) "__inliner"))
+                    (assoc m :inline (cons ifn (cons (glojure.lang.NewSymbol (glojure.lang.ConcatStrings (.Name ^glojure.lang.Symbol name) "__inliner"))
                                                      (next inline))))
                     m))
               m (conj (if (meta name) (meta name) {}) m)]
@@ -372,8 +372,8 @@
    (if (vector? coll)
      (if (instance? clojure.lang.IObj coll)
        (with-meta coll nil)
-       (clojure.lang.LazilyPersistentVector/create coll))
-     (clojure.lang.LazilyPersistentVector/create coll))))
+       (glojure.lang.NewVector coll))
+     (glojure.lang.NewVector coll))))
 
 (defn hash-map
   "keyval => key val
@@ -437,8 +437,8 @@
   {:tag Boolean
    :added "1.0"
    :static true
-   :inline (fn [x] (list 'clojure.lang.Util/identical x nil))}
-  [x] (clojure.lang.Util/identical x nil))
+   :inline (fn [x] (list 'glojure.lang.Identical x nil))}
+  [x] (glojure.lang.Identical x nil))
 
 (def
 
@@ -506,14 +506,14 @@
   {:tag Boolean,
    :added "1.0"
    :static true}
-  [x] (clojure.lang.Util/identical x false))
+  [x] (glojure.lang.Identical x false))
 
 (defn true?
   "Returns true if x is the value true, false otherwise."
   {:tag Boolean,
    :added "1.0"
    :static true}
-  [x] (clojure.lang.Util/identical x true))
+  [x] (glojure.lang.Identical x true))
 
 (defn boolean?
   "Return true if x is a Boolean"
@@ -594,11 +594,11 @@
   ([name]
      (cond
       (symbol? name) name
-      (instance? string name) (clojure.lang.Symbol/intern name)
+      (instance? string name) (glojure.lang.NewSymbol name)
       (instance? clojure.lang.Var name) (.toSymbol ^clojure.lang.Var name)
       (instance? clojure.lang.Keyword name) (.sym ^clojure.lang.Keyword name)
       :else (throw (errors.New "no conversion to symbol"))))
-  ([ns name] (clojure.lang.Symbol/intern ns name)))
+  ([ns name] (glojure.lang.NewSymbol ns name)))
 
 (defn gensym
   "Returns a new symbol with a unique name. If a prefix string is
@@ -776,7 +776,7 @@
   {:inline (fn [x y] `(. clojure.lang.Util identical ~x ~y))
    :inline-arities #{2}
    :added "1.0"}
-  ([x y] (clojure.lang.Util/identical x y)))
+  ([x y] (glojure.lang.Identical x y)))
 
 ;equiv-based
 (defn =
@@ -4170,7 +4170,7 @@
   {:added "1.0"
    :static true}
   [ns]
-  (.getName (the-ns ns)))
+  (.Name (the-ns ns)))
 
 (defn ns-map
   "Returns a map of all the mappings for the namespace."
@@ -7142,7 +7142,7 @@ fails, attempts to require sym's namespace and retries."
                        :qualifier   (if (= qualifier "SNAPSHOT") nil qualifier)}]
   (def ^:dynamic *clojure-version*
     (if (.contains version-string "SNAPSHOT")
-      (clojure.lang.RT/assoc clojure-version :interim true)
+      (glojure.lang.Assoc clojure-version :interim true)
       clojure-version)))
 
 (add-doc-and-meta *clojure-version*
@@ -8089,7 +8089,7 @@ fails, attempts to require sym's namespace and retries."
 (defn- parsing-err
   "Construct message for parsing for non-string parsing error"
   ^string [val]
-  (str "Expected string, got " (if (nil? val) "nil" (-> val class .getName))))
+  (str "Expected string, got " (if (nil? val) "nil" (-> val class .Name))))
 
 (defn parse-long
   {:doc "Parse string of decimal digits with optional leading -/+ and return a

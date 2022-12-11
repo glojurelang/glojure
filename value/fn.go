@@ -21,7 +21,7 @@ type FuncArity struct {
 
 func (f *Func) String() string {
 	b := strings.Builder{}
-	b.WriteString("(fn")
+	b.WriteString("(fn*")
 	if f.LambdaName != nil {
 		b.WriteString(" ")
 		b.WriteString(f.LambdaName.String())
@@ -33,11 +33,11 @@ func (f *Func) String() string {
 		}
 		b.WriteString(arity.BindingForm.String())
 		b.WriteRune(' ')
-		for cur := arity.Exprs; !cur.IsEmpty(); cur = cur.Next() {
+		for cur := ISeq(arity.Exprs); !cur.IsEmpty(); cur = cur.Next() {
 			if cur != arity.Exprs {
 				b.WriteString(" ")
 			}
-			b.WriteString(ToString(cur.Item()))
+			b.WriteString(ToString(cur.First()))
 		}
 		if len(f.Arities) > 1 {
 			b.WriteRune(')')
@@ -147,13 +147,14 @@ Recur:
 		}
 	}
 
-	rt := &struct{}{}
+	rt := NewRecurTarget()
 	recurEnv := fnEnv.WithRecurTarget(rt)
+	recurErr := &RecurError{Target: rt}
 
 	lastExpr := exprs[len(exprs)-1]
 	v, err := recurEnv.Eval(lastExpr)
-	if errors.Is(err, &RecurError{Target: rt}) {
-		args = err.(*RecurError).Args
+	if errors.As(err, &recurErr) {
+		args = recurErr.Args
 		goto Recur
 	}
 

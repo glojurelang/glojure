@@ -73,19 +73,19 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	// bootstrap namespace control
 	{
 		// bootstrap implementation of the ns macro
-		env.DefineMacro("ns", value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
-			if len(args) != 1 {
-				return nil, fmt.Errorf("ns: expected namespace name")
-			}
+		// env.DefineMacro("ns", value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
+		// 	if len(args) != 1 {
+		// 		return nil, fmt.Errorf("ns: expected namespace name")
+		// 	}
 
-			sym, ok := args[0].(*value.Symbol)
-			if !ok {
-				return nil, fmt.Errorf("ns: expected symbol as namespace name")
-			}
-			ns := env.FindOrCreateNamespace(sym)
-			env.SetCurrentNamespace(ns)
-			return ns, nil
-		}))
+		// 	sym, ok := args[0].(*value.Symbol)
+		// 	if !ok {
+		// 		return nil, fmt.Errorf("ns: expected symbol as namespace name")
+		// 	}
+		// 	ns := env.FindOrCreateNamespace(sym)
+		// 	env.SetCurrentNamespace(ns)
+		// 	return ns, nil
+		// }))
 		env.Define(value.NewSymbol("in-ns"), value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
 			if len(args) != 1 {
 				return nil, fmt.Errorf("in-ns: expected namespace name")
@@ -193,27 +193,29 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.CreateList", value.CreateList)
 		define("glojure.lang.Symbol", reflect.TypeOf(value.NewSymbol("")))
 		define("glojure.lang.HasType", func(t reflect.Type, v interface{}) bool {
-			return reflect.TypeOf(v) == t
+			switch {
+			case reflect.TypeOf(v) == t, reflect.TypeOf(v).ConvertibleTo(t):
+				return true
+			default:
+				return false
+			}
 		})
 		define("glojure.lang.WithMeta", value.WithMeta)
 		define("glojure.lang.NewCons", value.NewCons)
+		define("glojure.lang.NewSymbol", value.NewSymbol)
+		define("glojure.lang.NewVector", value.NewVector)
+		define("glojure.lang.Seq", value.Seq)
 		define("glojure.lang.Conj", value.Conj)
+		define("glojure.lang.Assoc", value.Assoc)
 		define("glojure.lang.First", value.First)
 		define("glojure.lang.Next", value.Next)
 		define("glojure.lang.Rest", value.Rest)
 		define("glojure.lang.Equal", value.Equal)
-		{
-			var x value.IPersistentMap
-			define("glojure.lang.IPersistentMap", reflect.TypeOf(x))
-		}
-		{
-			var x value.IPersistentVector
-			define("glojure.lang.IPersistentVector", reflect.TypeOf(x))
-		}
-		{
-			var x value.IMeta
-			define("glojure.lang.IMeta", reflect.TypeOf(x))
-		}
+		define("glojure.lang.Identical", value.Identical)
+		define("glojure.lang.IPersistentMap", reflect.TypeOf((*value.IPersistentMap)(nil)).Elem())
+		define("glojure.lang.IPersistentVector", reflect.TypeOf((*value.IPersistentVector)(nil)).Elem())
+		define("glojure.lang.IMeta", reflect.TypeOf((*value.IMeta)(nil)).Elem())
+		define("glojure.lang.ConcatStrings", value.ConcatStrings)
 	}
 	{
 		// Add stdlib

@@ -67,6 +67,10 @@ func (i iterator) First() interface{} {
 	return i.x
 }
 
+func (i iterator) Next() ISeq {
+	return i.Rest()
+}
+
 func (i iterator) Rest() ISeq {
 	return NewIterator(i.f, i.f(i.x))
 }
@@ -93,12 +97,20 @@ func (i rangeIterator) First() interface{} {
 	return i.start
 }
 
-func (i rangeIterator) Rest() ISeq {
+func (i rangeIterator) Next() ISeq {
 	next := i.start + i.step
 	if next >= i.end {
-		return emptyList
+		return nil
 	}
 	return &rangeIterator{start: next, end: i.end, step: i.step}
+}
+
+func (i rangeIterator) Rest() ISeq {
+	nxt := i.Next()
+	if nxt == nil {
+		return emptyList
+	}
+	return nxt
 }
 
 func (i rangeIterator) IsEmpty() bool {
@@ -107,6 +119,9 @@ func (i rangeIterator) IsEmpty() bool {
 
 // NewValueIterator returns a lazy sequence of the values of x.
 func NewVectorIterator(x *Vector, start, step int) ISeq {
+	if x.Count() == 0 {
+		return emptyList
+	}
 	return vectorIterator{v: x, start: start, step: step}
 }
 
@@ -120,12 +135,20 @@ func (it vectorIterator) First() interface{} {
 	return it.v.ValueAt(it.start)
 }
 
-func (it vectorIterator) Rest() ISeq {
+func (it vectorIterator) Next() ISeq {
 	next := it.start + it.step
 	if next >= it.v.Count() || next < 0 {
-		return emptyList
+		return nil
 	}
 	return &vectorIterator{v: it.v, start: next, step: it.step}
+}
+
+func (it vectorIterator) Rest() ISeq {
+	nxt := it.Next()
+	if nxt == nil {
+		return emptyList
+	}
+	return nxt
 }
 
 func (i vectorIterator) IsEmpty() bool {
@@ -160,15 +183,23 @@ func (i *concatIterator) First() interface{} {
 	return i.seq.First()
 }
 
-func (i *concatIterator) Rest() ISeq {
+func (i *concatIterator) Next() ISeq {
 	i = &concatIterator{seq: i.seq.Rest(), next: i.next}
 	for i.seq.IsEmpty() {
 		i = i.next
 		if i == nil {
-			return emptyList
+			return nil
 		}
 	}
 	return i
+}
+
+func (i *concatIterator) Rest() ISeq {
+	nxt := i.Next()
+	if nxt == nil {
+		return emptyList
+	}
+	return nxt
 }
 
 func (i *concatIterator) IsEmpty() bool {
@@ -198,12 +229,20 @@ func (i sliceIterator) First() interface{} {
 	return i.v.Index(i.i).Interface()
 }
 
-func (i sliceIterator) Rest() ISeq {
+func (i sliceIterator) Next() ISeq {
 	i.i++
 	if i.i >= i.v.Len() {
-		return emptyList
+		return nil
 	}
 	return i
+}
+
+func (i sliceIterator) Rest() ISeq {
+	nxt := i.Next()
+	if nxt == nil {
+		return emptyList
+	}
+	return nxt
 }
 
 func (i sliceIterator) IsEmpty() bool {

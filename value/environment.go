@@ -61,7 +61,14 @@ type (
 		Target interface{}
 		Args   []interface{}
 	}
+
+	RecurTarget struct {
+	}
 )
+
+func NewRecurTarget() *RecurTarget {
+	return &RecurTarget{}
+}
 
 func (e *RecurError) Error() string {
 	return "recur error (if you're seeing this, it's a bug)"

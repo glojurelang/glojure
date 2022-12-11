@@ -21,6 +21,10 @@ func (c *Cons) First() interface{} {
 	return c.first
 }
 
+func (c *Cons) Next() ISeq {
+	return c.rest
+}
+
 func (c *Cons) Rest() ISeq {
 	return c.rest
 }

@@ -65,9 +65,9 @@ func (l *List) Item() interface{} {
 
 // Next returns the next list node. AKA cdr, with the requirement that
 // it must be a list.
-func (l *List) Next() *List {
-	if l.IsEmpty() {
-		panic("cannot get next of empty list")
+func (l *List) Next() ISeq {
+	if l.IsEmpty() || l.Count() == 1 {
+		return nil
 	}
 	return l.next
 }

@@ -3,6 +3,7 @@ package value
 import (
 	"fmt"
 	"reflect"
+	"unicode"
 )
 
 // FieldOrMethod returns the field or method of the given name on the
@@ -10,6 +11,11 @@ import (
 // dereferenced. If the value or pointer target is not a struct, or if
 // no such field or method exists, nil is returned.
 func FieldOrMethod(v interface{}, name string) interface{} {
+	if unicode.IsLower(rune(name[0])) {
+		// unexported field or method
+		return nil
+	}
+
 	target := reflect.ValueOf(v)
 
 	val := target.MethodByName(name)
