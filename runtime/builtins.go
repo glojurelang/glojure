@@ -29,7 +29,6 @@ func init() {
 
 				// collection functions
 				funcSymbol("count", lengthBuiltin),
-				funcSymbol("conj", conjBuiltin),
 				funcSymbol("subvec", subvecBuiltin),
 
 				// math functions
@@ -68,16 +67,17 @@ func init() {
 }
 
 func addBuiltins(env *environment) {
-	for _, pkg := range builtinPackages {
-		for _, sym := range pkg.Symbols {
-			name := pkg.Name + "/" + sym.Name
-			if pkg.Name == "mrat.core" {
-				// core symbols are available in the global namespace.
-				name = sym.Name
-			}
-			env.Define(value.NewSymbol(name), sym.Value)
-		}
-	}
+	return
+	// for _, pkg := range builtinPackages {
+	// 	for _, sym := range pkg.Symbols {
+	// 		name := pkg.Name + "/" + sym.Name
+	// 		if pkg.Name == "mrat.core" {
+	// 			// core symbols are available in the global namespace.
+	// 			name = sym.Name
+	// 		}
+	// 		env.Define(value.NewSymbol(name), sym.Value)
+	// 	}
+	// }
 }
 
 func funcSymbol(name string, fn func(value.Environment, []interface{}) (interface{}, error)) *Symbol {
@@ -196,19 +196,6 @@ func lengthBuiltin(env value.Environment, args []interface{}) (interface{}, erro
 		seq = seq.Rest()
 	}
 	return count, nil
-}
-
-func conjBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
-	if len(args) < 2 {
-		return nil, fmt.Errorf("conj expects at least 2 arguments, got %v", len(args))
-	}
-
-	conjer, ok := args[0].(value.Conjer)
-	if !ok {
-		return nil, fmt.Errorf("conj expects a conjer, got %v", args[0])
-	}
-
-	return conjer.Conj(args[1:]...), nil
 }
 
 func restBuiltin(env value.Environment, args []interface{}) (interface{}, error) {

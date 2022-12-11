@@ -92,5 +92,5 @@ func (v *Var) IsMacro() bool {
 }
 
 func (v *Var) SetMacro() {
-	v.SetMeta(v.Meta().Assoc(KeywordMacro, true))
+	v.SetMeta(v.Meta().Assoc(KeywordMacro, true).(IPersistentMap))
 }

@@ -25,6 +25,8 @@ func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, 
 	}
 
 	if gvKind != reflect.Func {
+		fmt.Printf("fn: %v (%T)\n", fn, fn)
+		fmt.Printf("first: %v\n", fn.(*Cons).First().(*Symbol).Section)
 		return nil, fmt.Errorf("cannot apply non-function")
 	}
 	if gvType.NumIn() != len(args) && !gvType.IsVariadic() {

@@ -41,7 +41,7 @@
  ^{:macro true
    :added "1.0"}
  fn (fn* fn [&form &env & decl] 
-         (let* [res (glojure.lang.WithMeta ^{clojure.lang.IObj true} (cons (quote fn*) decl) (.Meta ^{clojure.lang.IMeta true} &form))] (if (res 1) (throw (res 1)) (res 0)))))
+         (let* [res (glojure.lang.WithMeta ^{clojure.lang.IObj true} (cons (quote fn*) decl) (.Meta ^{glojure.lang.IMeta true} &form))] (if (res 1) (throw (res 1)) (res 0)))))
 
 (def
  ^{:arglists '([coll])
@@ -81,11 +81,11 @@
  conj (fn ^:static conj
         ([] [])
         ([coll] coll)
-        ([coll x] (clojure.lang.RT/conj coll x))
+        ([coll x] (glojure.lang.Conj coll x))
         ([coll x & xs]
          (if xs
-           (recur (clojure.lang.RT/conj coll x) (first xs) (next xs))
-           (clojure.lang.RT/conj coll x)))))
+           (recur (glojure.lang.Conj coll x) (first xs) (next xs))
+           (glojure.lang.Conj coll x)))))
 
 (def
  ^{:doc "Same as (first (next x))"
@@ -161,21 +161,21 @@
    :doc "Return true if x is a String"
    :added "1.0"
    :static true}
- string? (fn ^:static string? [x] (instance? String x)))
+ string? (fn ^:static string? [x] (instance? string x)))
 
 (def
  ^{:arglists '([x])
    :doc "Return true if x implements IPersistentMap"
    :added "1.0"
    :static true}
- map? (fn ^:static map? [x] (instance? clojure.lang.IPersistentMap x)))
+ map? (fn ^:static map? [x] (instance? glojure.lang.IPersistentMap x)))
 
 (def
  ^{:arglists '([x])
    :doc "Return true if x implements IPersistentVector"
    :added "1.0"
    :static true}
- vector? (fn ^:static vector? [x] (instance? clojure.lang.IPersistentVector x)))
+ vector? (fn ^:static vector? [x] (instance? glojure.lang.IPersistentVector x)))
 
 (def
  ^{:arglists '([map key val] [map key val & kvs])
@@ -204,8 +204,8 @@
    :added "1.0"
    :static true}
  meta (fn ^:static meta [x]
-        (if (instance? clojure.lang.IMeta x)
-          (. ^clojure.lang.IMeta x (meta)))))
+        (if (instance? glojure.lang.IMeta x)
+          (. ^glojure.lang.IMeta x (meta)))))
 
 (def
  ^{:arglists '([^clojure.lang.IObj obj m])
@@ -214,7 +214,7 @@
    :added "1.0"
    :static true}
  with-meta (fn ^:static with-meta [^clojure.lang.IObj x m]
-             (. x (withMeta m))))
+             (. x (WithMeta m))))
 
 (def ^{:private true :dynamic true}
   assert-valid-fdecl (fn [fdecl]))
@@ -241,7 +241,7 @@
                         (let [m (meta argvec)
                               ^glojure.lang.Symbol tag (:tag m)]
                           (if (instance? glojure.lang.Symbol tag)
-                            (if (clojure.lang.Util/equiv (.indexOf (.getName tag) ".") -1)
+                            (if (glojure.lang.Equal (.indexOf (.getName tag) ".") -1)
                               (if (clojure.lang.Util/equals nil (clojure.lang.Compiler$HostExpr/maybeSpecialTag tag))
                                 (let [c (clojure.lang.Compiler$HostExpr/maybeClass tag false)]
                                   (if c
@@ -319,7 +319,7 @@
                       ifn (first inline)
                       iname (second inline)]
                   ;; same as: (if (and (= 'fn ifn) (not (symbol? iname))) ...)
-                  (if (if (clojure.lang.Util/equiv 'fn ifn)
+                  (if (if (glojure.lang.Equal 'fn ifn)
                         (if (instance? glojure.lang.Symbol iname) false true))
                     ;; inserts the same fn name to the inline fn if it does not have one
                     (assoc m :inline (cons ifn (cons (clojure.lang.Symbol/intern (.concat (.getName ^glojure.lang.Symbol name) "__inliner"))
@@ -544,13 +544,13 @@
   "With no args, returns the empty string. With one arg x, returns
   x.toString().  (str nil) returns the empty string. With more than
   one arg, returns the concatenation of the str values of the args."
-  {:tag String
+  {:tag string
    :added "1.0"
    :static true}
-  (^String [] "")
-  (^String [^Object x]
+  (^string [] "")
+  (^string [^Object x]
    (if (nil? x) "" (. x (toString))))
-  (^String [x & ys]
+  (^string [x & ys]
      ((fn [^StringBuilder sb more]
           (if more
             (recur (. sb  (append (str (first more)))) (next more))
@@ -594,7 +594,7 @@
   ([name]
      (cond
       (symbol? name) name
-      (instance? String name) (clojure.lang.Symbol/intern name)
+      (instance? string name) (clojure.lang.Symbol/intern name)
       (instance? clojure.lang.Var name) (.toSymbol ^clojure.lang.Var name)
       (instance? clojure.lang.Keyword name) (.sym ^clojure.lang.Keyword name)
       :else (throw (errors.New "no conversion to symbol"))))
@@ -618,7 +618,7 @@
    :static true}
   ([name] (cond (keyword? name) name
                 (symbol? name) (clojure.lang.Keyword/intern ^glojure.lang.Symbol name)
-                (string? name) (clojure.lang.Keyword/intern ^String name)))
+                (string? name) (clojure.lang.Keyword/intern ^string name)))
   ([ns name] (clojure.lang.Keyword/intern ns name)))
 
 (defn find-keyword
@@ -631,7 +631,7 @@
    :static true}
   ([name] (cond (keyword? name) name
                 (symbol? name) (clojure.lang.Keyword/find ^glojure.lang.Symbol name)
-                (string? name) (clojure.lang.Keyword/find ^String name)))
+                (string? name) (clojure.lang.Keyword/find ^string name)))
   ([ns name] (clojure.lang.Keyword/find ns name)))
 
 
@@ -789,12 +789,12 @@
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (clojure.lang.Util/equiv x y))
+  ([x y] (glojure.lang.Equal x y))
   ([x y & more]
-   (if (clojure.lang.Util/equiv x y)
+   (if (glojure.lang.Equal x y)
      (if (next more)
        (recur y (first more) (next more))
-       (clojure.lang.Util/equiv y (first more)))
+       (glojure.lang.Equal y (first more)))
      false)))
 
 ;equals-based
@@ -1600,7 +1600,7 @@
 
 (defn name
   "Returns the name String of a string, symbol or keyword."
-  {:tag String
+  {:tag string
    :added "1.0"
    :static true}
   [x]
@@ -1608,7 +1608,7 @@
 
 (defn namespace
   "Returns the namespace String of a symbol or keyword, or nil if not present."
-  {:tag String
+  {:tag string
    :added "1.0"
    :static true}
   [^clojure.lang.Named x]
@@ -2374,10 +2374,10 @@
   multiple times, and thus should be free of side effects.
   Returns [old new], the value of the atom before and after the swap."
   {:added "1.9"}
-  (^clojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f] (.swapVals atom f))
-  (^clojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f x] (.swapVals atom f x))
-  (^clojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f x y] (.swapVals atom f x y))
-  (^clojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f x y & args] (.swapVals atom f x y args)))
+  (^glojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f] (.swapVals atom f))
+  (^glojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f x] (.swapVals atom f x))
+  (^glojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f x y] (.swapVals atom f x y))
+  (^glojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f x y & args] (.swapVals atom f x y args)))
 
 (defn compare-and-set!
   "Atomically sets the value of atom to newval if and only if the
@@ -2398,7 +2398,7 @@
   "Sets the value of atom to newval. Returns [old new], the value of the
    atom before and after the reset."
   {:added "1.9"}
-  ^clojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom newval] (.resetVals atom newval))
+  ^glojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom newval] (.resetVals atom newval))
 
 (defn set-validator!
   "Sets the validator-fn for a var/ref/agent/atom. validator-fn must be nil or a
@@ -3695,7 +3695,7 @@
      (recur (first more) nmore)
      (apply pr more))))
 
-(def ^:private ^String system-newline
+(def ^:private ^string system-newline
      (System/getProperty "line.separator"))
 
 (defn newline
@@ -4669,7 +4669,7 @@
                                 (conj (pop groups) (conj (peek groups) [k v]))
                                 (conj groups [k v])))
                             [] (partition 2 seq-exprs)))
-        err (fn [& msg] (throw (errors.New ^String (apply str msg))))
+        err (fn [& msg] (throw (errors.New ^string (apply str msg))))
         emit-bind (fn emit-bind [[[bind expr & mod-pairs]
                                   & [[_ next-expr] :as next-groups]]]
                     (let [giter (gensym "iter__")
@@ -4762,7 +4762,7 @@
 
 (defn pr-str
   "pr to a string, returning it"
-  {:tag String
+  {:tag string
    :added "1.0"
    :static true}
   [& xs]
@@ -4771,7 +4771,7 @@
 
 (defn prn-str
   "prn to a string, returning it"
-  {:tag String
+  {:tag string
    :added "1.0"
    :static true}
   [& xs]
@@ -4780,7 +4780,7 @@
 
 (defn print-str
   "print to a string, returning it"
-  {:tag String
+  {:tag string
    :added "1.0"
    :static true}
   [& xs]
@@ -4789,7 +4789,7 @@
 
 (defn println-str
   "println to a string, returning it"
-  {:tag String
+  {:tag string
    :added "1.0"
    :static true}
   [& xs]
@@ -5011,8 +5011,8 @@
   at end (defaults to length of string), exclusive."
   {:added "1.0"
    :static true}
-  (^String [^String s start] (. s (substring start)))
-  (^String [^String s start end] (. s (substring start end))))
+  (^string [^string s start] (. s (substring start)))
+  (^string [^string s start end] (. s (substring start end))))
 
 (defn max-key
   "Returns the x for which (k x), a number, is greatest.
@@ -5734,7 +5734,7 @@
   [^java.sql.ResultSet rs]
     (let [rsmeta (. rs (getMetaData))
           idxs (range 1 (inc (. rsmeta (getColumnCount))))
-          keys (map (comp keyword #(.toLowerCase ^String %))
+          keys (map (comp keyword #(.toLowerCase ^string %))
                     (map (fn [i] (. rsmeta (getColumnLabel i))) idxs))
           check-keys
                 (or (apply distinct? keys)
@@ -5768,7 +5768,7 @@
   string syntax"
   {:added "1.0"
    :static true}
-  ^String [fmt & args]
+  ^string [fmt & args]
   (String/format fmt (to-array args)))
 
 (defn printf
@@ -5883,7 +5883,7 @@
   "Throws a CompilerException with a message if pred is true"
   [pred fmt & args]
   (when pred
-    (let [^String message (apply format fmt args)
+    (let [^string message (apply format fmt args)
           exception (Exception. message)
           raw-trace (.getStackTrace exception)
           boring? #(not= (.getMethodName ^StackTraceElement %) "doInvoke")
@@ -5913,7 +5913,7 @@
 
 (defn- root-resource
   "Returns the root directory path for a lib"
-  {:tag String}
+  {:tag string}
   [lib]
   (str \/
        (.. (name lib)
@@ -6151,8 +6151,8 @@ fails, attempts to require sym's namespace and retries."
   {:redef true
    :added "1.0"}
   [& paths]
-  (doseq [^String path paths]
-    (let [^String path (if (.startsWith path "/")
+  (doseq [^string path paths]
+    (let [^string path (if (.startsWith path "/")
                           path
                           (str (root-directory (ns-name *ns*)) \/ path))]
       (when *loading-verbosely*
@@ -6827,7 +6827,7 @@ fails, attempts to require sym's namespace and retries."
 
 (defmacro ^:private when-class [class-name & body]
   `(try
-     (Class/forName ^String ~class-name)
+     (Class/forName ^string ~class-name)
      ~@body
      (catch ClassNotFoundException _#)))
 
@@ -7016,7 +7016,7 @@ fails, attempts to require sym's namespace and retries."
   "Opens a reader on f and reads all its contents, returning a string.
   See clojure.java.io/reader for a complete list of supported arguments."
   {:added "1.0"
-   :tag String}
+   :tag string}
   ([f & opts]
      (let [opts (normalize-slurp-opts opts)
            sw (java.io.StringWriter.)]
@@ -7136,9 +7136,9 @@ fails, attempts to require sym's namespace and retries."
       (re-matches
        #"(\d+)\.(\d+)\.(\d+)(?:-([a-zA-Z0-9_]+))?(?:-(SNAPSHOT))?"
        version-string)
-      clojure-version {:major       (Integer/valueOf ^String major)
-                       :minor       (Integer/valueOf ^String minor)
-                       :incremental (Integer/valueOf ^String incremental)
+      clojure-version {:major       (Integer/valueOf ^string major)
+                       :minor       (Integer/valueOf ^string minor)
+                       :incremental (Integer/valueOf ^string incremental)
                        :qualifier   (if (= qualifier "SNAPSHOT") nil qualifier)}]
   (def ^:dynamic *clojure-version*
     (if (.contains version-string "SNAPSHOT")
@@ -8088,14 +8088,14 @@ fails, attempts to require sym's namespace and retries."
 
 (defn- parsing-err
   "Construct message for parsing for non-string parsing error"
-  ^String [val]
+  ^string [val]
   (str "Expected string, got " (if (nil? val) "nil" (-> val class .getName))))
 
 (defn parse-long
   {:doc "Parse string of decimal digits with optional leading -/+ and return a
   Long value, or nil if parse fails"
    :added "1.11"}
-  ^Long [^String s]
+  ^Long [^string s]
   (if (string? s)
     (try
       (Long/valueOf s)
@@ -8108,7 +8108,7 @@ fails, attempts to require sym's namespace and retries."
 
   Grammar: https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html#valueOf-java.lang.String-"
    :added "1.11"}
-  ^Double [^String s]
+  ^Double [^string s]
   (if (string? s)
     (try
       (Double/valueOf s)
@@ -8121,7 +8121,7 @@ fails, attempts to require sym's namespace and retries."
 
   Grammar: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#toString--"
    :added "1.11"}
-  ^java.util.UUID [^String s]
+  ^java.util.UUID [^string s]
   (try
     (java.util.UUID/fromString s)
     (catch IllegalArgumentException _ nil)))
@@ -8129,7 +8129,7 @@ fails, attempts to require sym's namespace and retries."
 (defn parse-boolean
   {:doc "Parse strings \"true\" or \"false\" and return a boolean, or nil if invalid"
    :added "1.11"}
-  [^String s]
+  [^string s]
   (if (string? s)
     (case s
       "true" true

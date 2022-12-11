@@ -197,9 +197,23 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		})
 		define("glojure.lang.WithMeta", value.WithMeta)
 		define("glojure.lang.NewCons", value.NewCons)
+		define("glojure.lang.Conj", value.Conj)
 		define("glojure.lang.First", value.First)
 		define("glojure.lang.Next", value.Next)
 		define("glojure.lang.Rest", value.Rest)
+		define("glojure.lang.Equal", value.Equal)
+		{
+			var x value.IPersistentMap
+			define("glojure.lang.IPersistentMap", reflect.TypeOf(x))
+		}
+		{
+			var x value.IPersistentVector
+			define("glojure.lang.IPersistentVector", reflect.TypeOf(x))
+		}
+		{
+			var x value.IMeta
+			define("glojure.lang.IMeta", reflect.TypeOf(x))
+		}
 	}
 	{
 		// Add stdlib

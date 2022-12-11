@@ -32,16 +32,55 @@ func NewVector(values []interface{}, opts ...Option) *Vector {
 	}
 }
 
+var (
+	_ IPersistentVector = (*Vector)(nil)
+)
+
 func (v *Vector) Count() int {
 	return v.vec.Len()
 }
 
-func (v *Vector) Conj(items ...interface{}) Conjer {
-	vec := v.vec
-	for _, item := range items {
-		vec = vec.Conj(item)
+func (v *Vector) Length() int {
+	return v.Count()
+}
+
+func (v *Vector) Conj(x interface{}) Conjer {
+	return &Vector{
+		meta: v.meta,
+		vec:  v.vec.Conj(x),
 	}
-	return &Vector{vec: vec}
+}
+
+func (v *Vector) Cons(item interface{}) IPersistentVector {
+	return v.Conj(item).(IPersistentVector)
+}
+
+func (v *Vector) AssocN(i int, val interface{}) IPersistentVector {
+	return &Vector{vec: v.vec.Assoc(i, val)}
+}
+
+func (v *Vector) ContainsKey(key interface{}) bool {
+	kInt, ok := AsInt(key)
+	if !ok {
+		return false
+	}
+	return kInt >= 0 && kInt < v.Count()
+}
+
+func (v *Vector) Assoc(key, val interface{}) Associative {
+	kInt, ok := AsInt(key)
+	if !ok {
+		panic(fmt.Errorf("vector assoc expects an int as a key, got %T", key))
+	}
+	return v.AssocN(kInt, val)
+}
+
+func (v *Vector) EntryAt(key interface{}) (interface{}, bool) {
+	kInt, ok := AsInt(key)
+	if !ok {
+		return nil, false
+	}
+	return v.Nth(kInt)
 }
 
 func (v *Vector) ValueAt(i int) interface{} {
@@ -60,6 +99,14 @@ func (v *Vector) Nth(i int) (val interface{}, ok bool) {
 		return nil, false
 	}
 	return v.ValueAt(i), true
+}
+
+func (v *Vector) NthDefault(i int, def interface{}) interface{} {
+	val, ok := v.Nth(i)
+	if !ok {
+		return def
+	}
+	return val
 }
 
 func (v *Vector) SubVector(start, end int) *Vector {
@@ -136,7 +183,11 @@ func (v *Vector) Apply(env Environment, args []interface{}) (interface{}, error)
 }
 
 func (v *Vector) Seq() ISeq {
-	return NewVectorIterator(v, 0)
+	return NewVectorIterator(v, 0, 1)
+}
+
+func (v *Vector) RSeq() ISeq {
+	return NewVectorIterator(v, v.Count()-1, -1)
 }
 
 func (v *Vector) Peek() interface{} {
@@ -159,6 +210,10 @@ func (v *Vector) GoValue() interface{} {
 		vals[i] = v.ValueAt(i)
 	}
 	return vals
+}
+
+func (v *Vector) Meta() IPersistentMap {
+	return v.meta
 }
 
 func (v *Vector) WithMeta(meta IPersistentMap) interface{} {

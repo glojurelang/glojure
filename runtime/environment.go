@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -23,27 +24,32 @@ var (
 	SymbolDot           = value.NewSymbol(".")
 )
 
-type environment struct {
-	ctx context.Context
+type (
+	environment struct {
+		ctx context.Context
 
-	scope *scope
+		// local bindings
+		scope *scope
 
-	currentNamespaceVar *value.Var
-	namespaces          map[string]*value.Namespace
-	nsMtx               *sync.RWMutex
+		recurTarget interface{}
 
-	// some well-known vars
-	namespaceVar   *value.Var // ns
-	inNamespaceVar *value.Var // in-ns
+		currentNamespaceVar *value.Var
+		namespaces          map[string]*value.Namespace
+		nsMtx               *sync.RWMutex
 
-	// counter for gensym (symbol generator)
-	gensymCounter int
+		// some well-known vars
+		namespaceVar   *value.Var // ns
+		inNamespaceVar *value.Var // in-ns
 
-	stdout io.Writer
-	stderr io.Writer
+		// counter for gensym (symbol generator)
+		gensymCounter int
 
-	loadPath []string
-}
+		stdout io.Writer
+		stderr io.Writer
+
+		loadPath []string
+	}
+)
 
 func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment {
 	e := &environment{
@@ -73,11 +79,13 @@ func (env *environment) Context() context.Context {
 }
 
 func (env *environment) String() string {
-	return fmt.Sprintf("environment:\nScope:\n%v", env.scope.printIndented("  "))
+	return fmt.Sprintf("Environment{recurTarget=%v}", env.recurTarget)
+	//return fmt.Sprintf("environment:\nScope:\n%v", env.scope.printIndented("  "))
 }
 
+// TODO: rename to something else; this isn't for `def`s, it's for
+// local bindings.
 func (env *environment) Define(sym *value.Symbol, val interface{}) {
-	// TODO: define should define globally!
 	env.scope.define(sym, val)
 }
 
@@ -93,8 +101,6 @@ func (env *environment) DefVar(sym *value.Symbol, val interface{}) *value.Var {
 func (env *environment) DefineMacro(name string, fn value.Applyer) {
 	vr := env.DefVar(value.NewSymbol(name), fn)
 	vr.SetMacro()
-	// // TODO: should simply set macro flag on var
-	// env.macros[name] = fn
 }
 
 func (env *environment) lookup(sym *value.Symbol) (interface{}, bool) {
@@ -124,6 +130,13 @@ func (env *environment) lookup(sym *value.Symbol) (interface{}, bool) {
 	}
 	// TODO: can these only be vars?
 	return vr.(*value.Var).Get(), true
+}
+
+func (env *environment) WithRecurTarget(rt interface{}) value.Environment {
+	wrappedEnv := *env
+	newEnv := &wrappedEnv
+	newEnv.recurTarget = rt
+	return newEnv
 }
 
 func (env *environment) PushScope() value.Environment {
@@ -221,6 +234,14 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 		return env.evalList(v)
 	case *value.Vector:
 		return env.evalVector(v)
+	case value.ISeq:
+		// convert to a list
+		var elements []interface{}
+		for !v.IsEmpty() {
+			elements = append(elements, v.First())
+			v = v.Rest()
+		}
+		return env.evalList(value.NewList(elements))
 	default:
 		return env.evalScalar(n)
 	}
@@ -248,10 +269,15 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 		case "quasiquote":
 			return env.evalQuasiquote(n)
 		case "let*":
-			return env.evalLet(n)
+			return env.evalLet(n, false)
+		case "loop*":
+			return env.evalLet(n, true)
 
 		case "var":
 			return env.evalVar(n)
+
+		case "recur":
+			return env.evalRecur(n)
 
 		case "throw":
 			return env.evalThrow(n)
@@ -283,6 +309,8 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 			return res, nil
 		}
 	}
+
+	//FunctionCallRecurTarget:
 
 	// otherwise, handle a function call
 	var res []interface{}
@@ -630,56 +658,30 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 	}
 }
 
-// essential syntax: let <bindings> <body>
-//
-// Two forms are supported. The first is the standard let form:
-// ==============================================================================
-// Syntax: <bindings> should have the form:
-//
-// ((<symbol 1> <init 1>) ...),
-//
-// where each <init> is an expression, and <body> should be a sequence
-// of one or more expressions. It is an error for a <symbol> to
-// appear more than once in the list of symbols being bound.
-//
-// Semantics: The <init>s are evaluated in the current environment (in
-// some unspecified order), the <symbol>s are bound to fresh
-// locations holding the results, the <body> is evaluated in the
-// extended environment, and the value of the last expression of
-// <body> is returned. Each binding of a <symbol> has <body> as its
-// region.
-// ==============================================================================
-// The second form is the clojure
-// (https://clojuredocs.org/clojure.core/let) let form:
-//
-// Syntax: <bindings> should have the form:
-//
-// [<symbol 1> <init 1> ... <symbol n> <init n>]
-//
-// Semantics: Semantics are as above, except that the <init>s are
-// evaluated in order, and all preceding <init>s are available to
-// subsequent <init>s.
-func (env *environment) evalLet(n *value.List) (interface{}, error) {
+func (env *environment) evalLet(n *value.List, isLoop bool) (interface{}, error) {
 	items := listAsSlice(n)
 	if len(items) < 3 {
 		return nil, env.errorf(n, "invalid let, need bindings and body")
 	}
 
-	var bindingsMap map[string]interface{}
+	var bindNameVals []interface{}
 	var err error
-	switch bindings := items[1].(type) {
-	case *value.Vector:
-		bindingsMap, err = env.evalBindings(bindings)
-	default:
-		return nil, env.errorf(n, "invalid let, bindings must be a list or vector")
+	bindings, ok := items[1].(*value.Vector)
+	if !ok {
+		return nil, env.errorf(n, "invalid let, bindings must be a vector")
 	}
+
+	bindNameVals, err = env.evalBindings(bindings)
 	if err != nil {
 		return nil, err
 	}
-
 	// create a new environment with the bindings
 	newEnv := env.PushScope().(*environment)
-	for name, val := range bindingsMap {
+
+Recur:
+	for i := 0; i < len(bindNameVals); i += 2 {
+		name := bindNameVals[i].(string)
+		val := bindNameVals[i+1]
 		newEnv.Define(value.NewSymbol(name), val)
 	}
 
@@ -690,16 +692,33 @@ func (env *environment) evalLet(n *value.List) (interface{}, error) {
 			return nil, err
 		}
 	}
-	return newEnv.Eval(items[len(items)-1])
+
+	rt := &struct{}{}
+	recurEnv := newEnv.WithRecurTarget(rt)
+
+	res, err := recurEnv.Eval(items[len(items)-1])
+	if errors.Is(err, &value.RecurError{Target: rt}) {
+		newVals := err.(*value.RecurError).Args
+		for i := 0; i < len(bindNameVals); i += 2 {
+			newValsIndex := i / 2
+			if newValsIndex >= len(newVals) {
+				return nil, env.errorf(n, "recur called with too few arguments")
+			}
+			val := newVals[newValsIndex]
+			bindNameVals[i+1] = val
+		}
+		goto Recur
+	}
+	return res, err
 }
 
-func (env *environment) evalBindings(bindings *value.Vector) (map[string]interface{}, error) {
+func (env *environment) evalBindings(bindings *value.Vector) ([]interface{}, error) {
 	if bindings.Count()%2 != 0 {
 		return nil, env.errorf(bindings, "invalid let, bindings must be a vector of even length")
 	}
 
 	newEnv := env.PushScope().(*environment)
-	bindingsMap := make(map[string]interface{})
+	var bindingNameVals []interface{}
 	for i := 0; i < bindings.Count(); i += 2 {
 		pattern := bindings.ValueAt(i)
 		val, err := newEnv.Eval(bindings.ValueAt(i + 1))
@@ -718,11 +737,11 @@ func (env *environment) evalBindings(bindings *value.Vector) (map[string]interfa
 				return nil, env.errorf(bindings, "invalid let, binding name must be a symbol")
 			}
 			newEnv.Define(name, binds[i+1])
-			bindingsMap[name.String()] = binds[i+1]
+			bindingNameVals = append(bindingNameVals, name.String(), binds[i+1])
 		}
 	}
 
-	return bindingsMap, nil
+	return bindingNameVals, nil
 }
 
 func (env *environment) evalDefMacro(n *value.List) (interface{}, error) {
@@ -733,7 +752,8 @@ func (env *environment) evalDefMacro(n *value.List) (interface{}, error) {
 	if n.Count() > 3 {
 		_, ok := value.MustNth(n, 2).(string)
 		if ok {
-			fnList = n.Next().Next().Next().Conj(value.MustNth(n, 1), value.MustNth(n, 0)).(*value.List)
+			argBody := n.Next().Next().Next()
+			fnList = argBody.Conj(value.MustNth(n, 1)).Conj(value.MustNth(n, 0)).(*value.List)
 			// TODO: store the docstring somewhere
 		}
 	}
@@ -775,20 +795,20 @@ func (env *environment) applyMacro(fn value.Applyer, form *value.List) (interfac
 	if err != nil {
 		return nil, err
 	}
-	res := exp
-	switch exp := exp.(type) {
-	case *value.List:
-		// ignore
-	case value.ISeq:
-		// convert to a list
-		var elements []interface{}
-		for !exp.IsEmpty() {
-			elements = append(elements, exp.First())
-			exp = exp.Rest()
-		}
-		res = value.NewList(elements)
-	}
-	return env.Eval(res)
+	// res := exp
+	// switch exp := exp.(type) {
+	// case *value.List:
+	// 	// ignore
+	// case value.ISeq:
+	// 	// convert to a list
+	// 	var elements []interface{}
+	// 	for !exp.IsEmpty() {
+	// 		elements = append(elements, exp.First())
+	// 		exp = exp.Rest()
+	// 	}
+	// 	res = value.NewList(elements)
+	// }
+	return env.Eval(exp)
 }
 
 func (env *environment) evalNew(n *value.List) (interface{}, error) {
@@ -879,7 +899,7 @@ func (env *environment) evalSet(n *value.List) (interface{}, error) {
 		return nil, err
 	}
 
-	// TODO: bother with this?
+	// TODO: bother with this? GoValuer interface probably isn't necessary
 	var goVal interface{}
 	if goValuer, ok := expr.(value.GoValuer); ok {
 		goVal = goValuer.GoValue()
@@ -892,6 +912,28 @@ func (env *environment) evalSet(n *value.List) (interface{}, error) {
 	}
 
 	return expr, nil
+}
+
+func (env *environment) evalRecur(n *value.List) (interface{}, error) {
+	if env.recurTarget == nil {
+		return nil, env.errorf(n, "invalid recur expression, not in a recur target")
+	}
+
+	// TODO: ensure that the recur is in a tail position!
+
+	var args []interface{}
+	noRecurEnv := env.WithRecurTarget(nil)
+	for cur := n.Next(); !cur.IsEmpty(); cur = cur.Next() {
+		arg, err := noRecurEnv.Eval(cur.Item())
+		if err != nil {
+			return nil, err
+		}
+		args = append(args, arg)
+	}
+	return nil, &value.RecurError{
+		Target: env.recurTarget,
+		Args:   args,
+	}
 }
 
 func (env *environment) evalThrow(n *value.List) (interface{}, error) {
@@ -996,12 +1038,7 @@ func (env *environment) evalFieldOrMethod(n *value.List) (interface{}, error) {
 	fieldSym := value.NewSymbol(sym.String()[1:])
 
 	// rewrite the expression to a dot expression
-	newList := n.Next().Next().Conj(fieldSym, value.MustNth(n, 1), SymbolDot).(*value.List)
-	// newList := value.NewList([]interface{}{
-	// 	SymbolDot,
-	// 	value.MustNth(n, 1),
-	// 	fieldSym,
-	// })
+	newList := n.Next().Next().Conj(fieldSym).Conj(value.MustNth(n, 1)).Conj(SymbolDot).(*value.List)
 	return env.evalDot(newList)
 }
 

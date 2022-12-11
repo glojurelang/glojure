@@ -106,25 +106,30 @@ func (i rangeIterator) IsEmpty() bool {
 }
 
 // NewValueIterator returns a lazy sequence of the values of x.
-func NewVectorIterator(x *Vector, i int) ISeq {
-	return vectorIterator{v: x, i: i}
+func NewVectorIterator(x *Vector, start, step int) ISeq {
+	return vectorIterator{v: x, start: start, step: step}
 }
 
 type vectorIterator struct {
-	v *Vector
-	i int
+	v     *Vector
+	start int
+	step  int
 }
 
-func (i vectorIterator) First() interface{} {
-	return i.v.ValueAt(i.i)
+func (it vectorIterator) First() interface{} {
+	return it.v.ValueAt(it.start)
 }
 
-func (i vectorIterator) Rest() ISeq {
-	return &vectorIterator{v: i.v, i: i.i + 1}
+func (it vectorIterator) Rest() ISeq {
+	next := it.start + it.step
+	if next >= it.v.Count() || next < 0 {
+		return emptyList
+	}
+	return &vectorIterator{v: it.v, start: next, step: it.step}
 }
 
 func (i vectorIterator) IsEmpty() bool {
-	return i.i >= i.v.Count()
+	return false
 }
 
 // NewConcatIterator returns a lazy sequence of the values of x.

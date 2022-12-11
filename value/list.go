@@ -87,15 +87,8 @@ func (l *List) Count() int {
 	return l.size
 }
 
-func (l *List) Conj(items ...interface{}) Conjer {
-	if len(items) == 0 {
-		return l
-	}
-
-	for _, item := range items {
-		l = ConsList(item, l)
-	}
-	return l
+func (l *List) Conj(x interface{}) Conjer {
+	return ConsList(x, l)
 }
 
 func (l *List) Nth(i int) (v interface{}, ok bool) {

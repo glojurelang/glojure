@@ -6,6 +6,15 @@ type equaler interface {
 
 // Equal returns true if the two values are equal.
 func Equal(a, b interface{}) bool {
+	if a == b {
+		return true
+	}
+	if anum, ok := AsNumber(a); ok {
+		_ = anum
+		// numbers.Equal(a, b)
+		panic("TODO")
+	}
+
 	if a, ok := a.(equaler); ok {
 		return a.Equal(b)
 	}
@@ -13,7 +22,7 @@ func Equal(a, b interface{}) bool {
 		return b.Equal(a)
 	}
 
-	// TODO: equal for numeric types, for sequences, etc.
+	// TODO: match all clojure equality rules
 
-	return a == b
+	return false
 }

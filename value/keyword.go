@@ -1,6 +1,9 @@
 package value
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // Keyword represents a keyword. Syyntactically, a keyword is a symbol
 // that starts with a colon and evaluates to itself.
@@ -48,4 +51,24 @@ func (k *Keyword) Equal(v interface{}) bool {
 		return false
 	}
 	return k.Value == other.Value
+}
+
+func (k *Keyword) Apply(env Environment, args []interface{}) (interface{}, error) {
+	if len(args) == 0 || len(args) > 2 {
+		return nil, fmt.Errorf("wrong number of args (%v) passed to: %v", len(args), k)
+	}
+	var defaultVal interface{} = nil
+	if len(args) == 2 {
+		defaultVal = args[1]
+	}
+
+	assoc, ok := args[0].(Associative)
+	if !ok {
+		return defaultVal, nil
+	}
+	v, ok := assoc.EntryAt(k)
+	if !ok {
+		return defaultVal, nil
+	}
+	return v, nil
 }

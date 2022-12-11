@@ -1,6 +1,7 @@
 package value
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -86,6 +87,7 @@ func (f *Func) Apply(env Environment, args []interface{}) (interface{}, error) {
 	var exprList *List
 
 	// Find the correct arity.
+	var matchedBindingForm *Vector
 	for _, arity := range f.Arities {
 		minArg, maxArg := MinMaxArgumentCount(arity.BindingForm)
 		if len(args) < minArg || (len(args) > maxArg && maxArg != -1) {
@@ -95,10 +97,22 @@ func (f *Func) Apply(env Environment, args []interface{}) (interface{}, error) {
 
 		bindings, err = Bind(arity.BindingForm, NewList(args))
 		if err == nil {
+			matchedBindingForm = arity.BindingForm
 			exprList = arity.Exprs
 			break
 		}
 	}
+	if err != nil {
+		return nil, errorWithStack(err, StackFrame{
+			FunctionName: fnName,
+			Pos:          f.Pos(),
+		})
+	}
+
+Recur:
+	// we rebind to account for recurs. TODO: clean this up and make the
+	// binding helper way dumber.
+	bindings, err = Bind(matchedBindingForm, NewList(args))
 	if err != nil {
 		return nil, errorWithStack(err, StackFrame{
 			FunctionName: fnName,
@@ -133,8 +147,16 @@ func (f *Func) Apply(env Environment, args []interface{}) (interface{}, error) {
 		}
 	}
 
+	rt := &struct{}{}
+	recurEnv := fnEnv.WithRecurTarget(rt)
+
 	lastExpr := exprs[len(exprs)-1]
-	v, err := fnEnv.Eval(lastExpr)
+	v, err := recurEnv.Eval(lastExpr)
+	if errors.Is(err, &RecurError{Target: rt}) {
+		args = err.(*RecurError).Args
+		goto Recur
+	}
+
 	if err != nil {
 		errPos := f.Pos()
 		if expr, ok := lastExpr.(interface{ Pos() Pos }); ok {

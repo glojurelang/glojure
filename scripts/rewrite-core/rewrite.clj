@@ -54,6 +54,16 @@
    (RT-replace 'next #(cons 'glojure.lang.Next %))
    (RT-replace 'more #(cons 'glojure.lang.Rest %))
    (sexpr-replace '.meta '.Meta)
+   (sexpr-replace 'clojure.lang.IPersistentMap 'glojure.lang.IPersistentMap)
+   (sexpr-replace 'clojure.lang.IPersistentVector 'glojure.lang.IPersistentVector)
+   (sexpr-replace 'String 'string)
+   (sexpr-replace 'clojure.lang.IMeta 'glojure.lang.IMeta)
+   (sexpr-replace 'clojure.lang.RT/conj 'glojure.lang.Conj)
+   (sexpr-replace 'withMeta 'WithMeta)
+
+   ;; no need for a special name, as go doesn't have a
+   ;; builtin "Equals"
+   (sexpr-replace 'clojure.lang.Util/equiv 'glojure.lang.Equal)
    ])
 
 (defn rewrite-core [zloc]

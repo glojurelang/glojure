@@ -16,6 +16,9 @@ type ISeqable interface {
 }
 
 func First(x interface{}) interface{} {
+	if x == nil {
+		return nil
+	}
 	if s := Seq(x); s != nil {
 		return s.First()
 	}
@@ -30,6 +33,9 @@ func Rest(x interface{}) interface{} {
 }
 
 func Next(x interface{}) interface{} {
+	if x == nil {
+		return nil
+	}
 	if s := Seq(x); s != nil {
 		rst := s.Rest()
 		if rst.IsEmpty() {
@@ -49,7 +55,7 @@ func Seq(x interface{}) ISeq {
 	case string:
 		return newStringSeq(x)
 	case nil:
-		return emptyList
+		return nil
 	}
 
 	// use the reflect package to handle slices and arrays
@@ -58,9 +64,10 @@ func Seq(x interface{}) ISeq {
 	case reflect.Slice, reflect.Array:
 		return newSliceSeq(v)
 	}
-	return nil
+	panic(fmt.Errorf("can't convert %T to ISeq", v.Interface()))
 }
 
+// TODO: deduplicate this with NewSliceIterator.
 func newSliceSeq(x reflect.Value) ISeq {
 	if x.Len() == 0 {
 		return emptyList
