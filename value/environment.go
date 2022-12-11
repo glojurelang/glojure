@@ -10,6 +10,8 @@ type (
 	Environment interface {
 		// PushScope returns a new Environment with a scope nested inside
 		// this environment's scope.
+		//
+		// TODO: make this work properly for lexical scoping.
 		PushScope() Environment
 
 		// WithRecurTarget returns a new Environment with the given recur

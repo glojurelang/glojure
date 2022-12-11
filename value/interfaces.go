@@ -2,6 +2,7 @@ package value
 
 import (
 	"fmt"
+	"reflect"
 )
 
 type (
@@ -39,9 +40,9 @@ type (
 		Assoc(k, v interface{}) Associative
 	}
 
-	IPersistentStack interface {
-		Peek() interface{}
-		Pop() IPersistentStack
+	ILookup interface {
+		ValAt(interface{}) interface{}
+		ValAtDefault(interface{}, interface{}) interface{}
 	}
 
 	Equaler interface {
@@ -71,6 +72,61 @@ type (
 		IsEmpty() bool
 
 		// Equiv(interface{}) bool
+	}
+
+	IPersistentStack interface {
+		Peek() interface{}
+		Pop() IPersistentStack
+	}
+
+	IPersistentMap interface {
+		Equaler // Note: not in Clojure's interfaces
+
+		//Iterable do we need this?
+		Associative
+		Counter
+
+		// AssocEx is like Assoc, but returns an error if the key already
+		// exists.
+		AssocEx(key, val interface{}) (IPersistentMap, error)
+
+		// Without returns a new map with the given key removed.
+		Without(key interface{}) IPersistentMap
+	}
+
+	// IPersistentVector is a persistent vector.
+	IPersistentVector interface {
+		Equaler // Note: not in Clojure's interfaces
+
+		Associative
+		IPersistentStack
+		Reversible
+		Indexed
+		Counter // Note: not in Clojure's vector interface, oddly
+
+		Length() int
+
+		AssocN(int, interface{}) IPersistentVector
+
+		Cons(interface{}) IPersistentVector
+	}
+
+	IPersistentSet interface {
+		IPersistentCollection
+		Counter
+
+		Disjoin(interface{}) IPersistentSet
+		Contains(interface{}) bool
+		Get(interface{}) interface{}
+	}
+
+	ITransientSet interface {
+		IPersistentCollection
+		Counter
+
+		Disjoin(interface{}) ITransientSet
+		Contains(interface{}) bool
+		Get(interface{}) interface{}
 	}
 
 	ISeq interface {
@@ -106,38 +162,6 @@ type (
 		ChunkedMore() ISeq
 	}
 
-	IPersistentMap interface {
-		Equaler // Note: not in Clojure's interfaces
-
-		//Iterable do we need this?
-		Associative
-		Counter
-
-		// AssocEx is like Assoc, but returns an error if the key already
-		// exists.
-		AssocEx(key, val interface{}) (IPersistentMap, error)
-
-		// Without returns a new map with the given key removed.
-		Without(key interface{}) IPersistentMap
-	}
-
-	// IPersistentVector is a persistent vector.
-	IPersistentVector interface {
-		Equaler // Note: not in Clojure's interfaces
-
-		Associative
-		IPersistentStack
-		Reversible
-		Indexed
-		Counter // Note: not in Clojure's vector interface, oddly
-
-		Length() int
-
-		AssocN(int, interface{}) IPersistentVector
-
-		Cons(interface{}) IPersistentVector
-	}
-
 	Comparer interface {
 		Compare(other interface{}) int
 	}
@@ -164,6 +188,45 @@ func Assoc(a Associative, k, v interface{}) Associative {
 		return NewMap([]interface{}{k, v})
 	}
 	return a.Assoc(k, v)
+}
+
+func Get(coll, key interface{}) interface{} {
+	return GetDefault(coll, key, nil)
+}
+
+func GetDefault(coll, key, def interface{}) interface{} {
+	switch arg := coll.(type) {
+	case ILookup:
+		return arg.ValAt(key)
+	case Associative:
+		if val, ok := arg.EntryAt(key); ok {
+			return val
+		}
+	case IPersistentSet:
+		if arg.Contains(key) {
+			return arg.Get(key)
+		}
+	case ITransientSet:
+		if arg.Contains(key) {
+			return arg.Get(key)
+		}
+	case string:
+		if idx, ok := AsInt(key); ok {
+			res, ok := Nth(arg, idx)
+			if ok {
+				return res
+			}
+		}
+	}
+	if reflect.TypeOf(coll).Kind() == reflect.Slice {
+		if idx, ok := AsInt(key); ok {
+			res, ok := Nth(coll, idx)
+			if ok {
+				return res
+			}
+		}
+	}
+	return def
 }
 
 func Count(coll interface{}) int {

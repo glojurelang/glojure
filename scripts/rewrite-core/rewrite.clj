@@ -89,6 +89,9 @@
                                 (let [sexpr (z/sexpr zloc)]
                                   `(glojure.lang.Apply ~(nth sexpr 1)
                                                        ~(nth (nth sexpr 2) 1)))))]
+
+   (sexpr-replace '(. clojure.lang.RT (get map key)) '(glojure.lang.Get map key))
+   (sexpr-replace '(. clojure.lang.RT (get map key not-found)) '(glojure.lang.GetDefault map key not-found))
    ])
 
 (defn rewrite-core [zloc]

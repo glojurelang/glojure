@@ -219,6 +219,8 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Rest", value.Rest)
 		define("glojure.lang.Equal", value.Equal)
 		define("glojure.lang.Identical", value.Identical)
+		define("glojure.lang.Get", value.Get)
+		define("glojure.lang.GetDefault", value.GetDefault)
 		define("glojure.lang.ConcatStrings", value.ConcatStrings)
 		define("glojure.lang.IPersistentMap", reflect.TypeOf((*value.IPersistentMap)(nil)).Elem())
 		define("glojure.lang.IPersistentVector", reflect.TypeOf((*value.IPersistentVector)(nil)).Elem())

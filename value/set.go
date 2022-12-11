@@ -27,6 +27,44 @@ func NewSet(vals []interface{}, opts ...Option) *Set {
 	}
 }
 
+var (
+	_ IPersistentSet = (*Set)(nil)
+)
+
+func (s *Set) Get(key interface{}) interface{} {
+	for _, v := range s.vals {
+		if Equal(v, key) {
+			return v
+		}
+	}
+	return nil
+}
+
+func (s *Set) Conj(v interface{}) Conjer {
+	if s.Contains(v) {
+		return s
+	}
+	return NewSet(append(s.vals, v))
+}
+
+func (s *Set) Disjoin(v interface{}) IPersistentSet {
+	for i, val := range s.vals {
+		if Equal(val, v) {
+			return NewSet(append(s.vals[:i], s.vals[i+1:]...))
+		}
+	}
+	return s
+}
+
+func (s *Set) Contains(v interface{}) bool {
+	for _, val := range s.vals {
+		if Equal(val, v) {
+			return true
+		}
+	}
+	return false
+}
+
 func (s *Set) Count() int {
 	return len(s.vals)
 }

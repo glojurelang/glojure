@@ -35,6 +35,11 @@ func Nth(x interface{}, n int) (interface{}, bool) {
 			}
 			x = x.Rest()
 		}
+	case string:
+		if n < 0 || n >= len(x) {
+			return nil, false
+		}
+		return NewChar([]rune(x)[n]), true
 	}
 
 	if seq := Seq(x); seq != nil {
