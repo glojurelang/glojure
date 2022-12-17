@@ -99,6 +99,20 @@
    (sexpr-replace '(. clojure.lang.RT (seq map)) '(glojure.lang.Seq map))
 
    (sexpr-replace '(disjoin key) '(Disjoin key))
+   (sexpr-replace
+    '((fn [^StringBuilder sb more]
+        (if more
+          (recur (. sb  (append (str (first more)))) (next more))
+          (str sb)))
+      (new StringBuilder (str x)) ys)
+    '((fn [^strings.Builder sb xs]
+        (if xs
+          (recur (do (. sb  (WriteString (str (first xs))))
+                     sb)
+                 (next xs))
+          (.String sb)))
+      (new strings.Builder) (cons x ys)))
+   (sexpr-replace '(. x (toString)) '(glojure.lang.ToString x))
    ])
 
 (defn rewrite-core [zloc]

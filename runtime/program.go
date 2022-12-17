@@ -190,7 +190,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 
 		define("error", reflect.TypeOf((*error)(nil)).Elem())
 
-		define("debugstr", value.ToString)
+		define("__debugstr", value.ToString)
 	}
 	{ // core functions
 		define("glojure.lang.CreateList", value.CreateList)
@@ -222,6 +222,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Next", value.Next)
 		define("glojure.lang.Rest", value.Rest)
 		define("glojure.lang.Equal", value.Equal)
+		define("glojure.lang.ToString", value.ToString)
 		define("glojure.lang.Identical", value.Identical)
 		define("glojure.lang.Get", value.Get)
 		define("glojure.lang.Keys", value.Keys)
