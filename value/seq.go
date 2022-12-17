@@ -49,18 +49,13 @@ func Seq(x interface{}) ISeq {
 	}
 
 	// use the reflect package to handle slices and arrays
-	v := reflect.ValueOf(x)
-	switch v.Kind() {
+	t := reflect.TypeOf(x)
+	switch t.Kind() {
 	case reflect.Slice, reflect.Array:
-		return newSliceSeq(v)
+		return NewSliceIterator(x)
 	}
 
-	panic(fmt.Errorf("can't convert %T to ISeq", v.Interface()))
-}
-
-// TODO: deduplicate this with NewSliceIterator.
-func newSliceSeq(x reflect.Value) ISeq {
-	return NewSliceIterator(x)
+	panic(fmt.Errorf("can't convert %T to ISeq", x))
 }
 
 func newStringSeq(x string) ISeq {

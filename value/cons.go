@@ -6,6 +6,10 @@ type Cons struct {
 	meta  IPersistentMap
 }
 
+var (
+	_ ISeq = (*Cons)(nil)
+)
+
 func NewCons(x interface{}, xs interface{}) ISeq {
 	switch xs := xs.(type) {
 	case nil:

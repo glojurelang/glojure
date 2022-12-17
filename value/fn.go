@@ -6,44 +6,196 @@ import (
 	"strings"
 )
 
+const (
+	// MaxPositionalArity is the maximum number of positional arguments
+	// that can be passed to a function.
+	MaxPositionalArity = 20
+)
+
 // Func is a function.
 type Func struct {
 	Section
-	LambdaName *Symbol
-	Env        Environment
-	Arities    []FuncArity
+	name           *Symbol
+	env            Environment // TODO: only track closure bindings
+	methods        []*FuncMethod
+	variadicMethod *FuncMethod
 }
 
-type FuncArity struct {
-	BindingForm *Vector
-	Exprs       *List
+type FuncMethod struct {
+	requiredParams []*Symbol
+	restParam      *Symbol
+	body           ISeq
+}
+
+func (f *FuncMethod) recurParamLength() int {
+	if f.restParam == nil {
+		return len(f.requiredParams)
+	}
+	return len(f.requiredParams) + 1
+}
+
+func (f *FuncMethod) String() string {
+	b := strings.Builder{}
+	b.WriteRune('[')
+	for i, sym := range f.requiredParams {
+		if i > 0 {
+			b.WriteString(" ")
+		}
+		b.WriteString(sym.String())
+	}
+	if f.restParam != nil {
+		if len(f.requiredParams) > 0 {
+			b.WriteString(" ")
+		}
+		b.WriteString("& ")
+		b.WriteString(f.restParam.String())
+	}
+	b.WriteString("] ")
+	for cur := f.body; cur != nil; cur = cur.Next() {
+		if cur != f.body {
+			b.WriteString(" ")
+		}
+		b.WriteString(ToString(cur.First()))
+	}
+	return b.String()
+}
+
+func ParseFunc(env Environment, form ISeq) (*Func, error) {
+	if form == nil {
+		return nil, env.Errorf(form, "fn requires a form")
+	}
+	rest := form.Next()
+	name, ok := rest.First().(*Symbol)
+	if ok {
+		rest = rest.Next()
+	}
+	if rest == nil {
+		return nil, env.Errorf(form, "invalid fn expression, expected function definition")
+	}
+
+	// if the first remaining element is a vector, then we have a single
+	// signature. to simplify the code below, we'll just wrap it in a
+	// sequence and proceed to parse a sequence of sequences.
+	if _, ok := rest.First().(*Vector); ok {
+		rest = NewList([]interface{}{rest})
+	} else {
+		//fmt.Printf("rest: %v (%T)\n", rest, rest)
+	}
+
+	fn := &Func{
+		name: name,
+		env:  env,
+	}
+
+	for cur := rest; cur != nil; cur = cur.Next() {
+		seq, ok := cur.First().(ISeq)
+		if !ok {
+			return nil, env.Errorf(cur.First(), "invalid fn expression, expected sequence of parameters and body, got %T", cur.First())
+		}
+		meth, err := parseMethod(env, seq)
+		if err != nil {
+			return nil, err
+		}
+		if meth.restParam != nil {
+			if fn.variadicMethod != nil {
+				return nil, env.Errorf(form, "fn can only have one variadic method")
+			}
+			fn.variadicMethod = meth
+		} else {
+			fn.methods = append(fn.methods, meth)
+		}
+	}
+
+	// validate that all methods have different numbers of required
+	// params and no more than any variadic method.
+	paramCounts := make(map[int]bool)
+	for _, meth := range fn.methods {
+		if fn.variadicMethod != nil && len(meth.requiredParams) > len(fn.variadicMethod.requiredParams) {
+			return nil, env.Errorf(form, "can't have fixed arity function with more params than variadic function")
+		}
+		if paramCounts[len(meth.requiredParams)] {
+			return nil, env.Errorf(form, "fn cannot have multiple methods with the same number of required parameters")
+		}
+		paramCounts[len(meth.requiredParams)] = true
+	}
+
+	return fn, nil
+}
+
+func parseMethod(env Environment, form ISeq) (*FuncMethod, error) {
+	params, ok := form.First().(*Vector)
+	if !ok {
+		return nil, env.Errorf(form.First(), "invalid fn expression, expected vector of parameters")
+	}
+	rest := form.Next()
+	meth := &FuncMethod{
+		body: rest,
+	}
+
+	expectRest := false
+	for i := 0; i < params.Count(); i++ {
+		sym, ok := MustNth(params, i).(*Symbol)
+		if !ok {
+			return nil, env.Errorf(MustNth(params, i), "fn params must be symbols")
+		}
+		if sym.Namespace() != "" {
+			return nil, env.Errorf(sym, "fn params must not be qualified")
+		}
+		if sym.Name() == "&" {
+			if expectRest {
+				return nil, env.Errorf(sym, "invalid parameter list")
+			}
+			expectRest = true
+			continue
+		}
+		if expectRest {
+			if i != params.Count()-1 {
+				return nil, env.Errorf(sym, "unexpected parameter")
+			}
+			meth.restParam = sym
+		} else {
+			meth.requiredParams = append(meth.requiredParams, sym)
+		}
+	}
+
+	if len(meth.requiredParams) > MaxPositionalArity {
+		return nil, env.Errorf(params, "fn cannot have more than %d required parameters", MaxPositionalArity)
+	}
+
+	return meth, nil
 }
 
 func (f *Func) String() string {
 	b := strings.Builder{}
 	b.WriteString("(fn*")
-	if f.LambdaName != nil {
+	if f.name != nil {
 		b.WriteString(" ")
-		b.WriteString(f.LambdaName.String())
+		b.WriteString(f.name.String())
 	}
 	b.WriteRune(' ')
-	for i, arity := range f.Arities {
-		if len(f.Arities) > 1 {
+	numMethods := len(f.methods)
+	if f.variadicMethod != nil {
+		numMethods++
+	}
+	for i, meth := range f.methods {
+		if numMethods > 1 {
 			b.WriteRune('(')
 		}
-		b.WriteString(arity.BindingForm.String())
-		b.WriteRune(' ')
-		for cur := ISeq(arity.Exprs); cur != nil; cur = cur.Next() {
-			if cur != arity.Exprs {
-				b.WriteString(" ")
-			}
-			b.WriteString(ToString(cur.First()))
-		}
-		if len(f.Arities) > 1 {
+		b.WriteString(meth.String())
+		if numMethods > 1 {
 			b.WriteRune(')')
 		}
-		if i < len(f.Arities)-1 {
+		if i < numMethods-1 {
 			b.WriteRune(' ')
+		}
+	}
+	if f.variadicMethod != nil {
+		if numMethods > 1 {
+			b.WriteRune('(')
+		}
+		b.WriteString(f.variadicMethod.String())
+		if numMethods > 1 {
+			b.WriteRune(')')
 		}
 	}
 	b.WriteString(")")
@@ -72,62 +224,50 @@ func errorWithStack(err error, stackFrame StackFrame) error {
 func (f *Func) Apply(env Environment, args []interface{}) (interface{}, error) {
 	// function name for error messages
 	fnName := "<anonymous function>"
-	if f.LambdaName != nil {
-		fnName = f.LambdaName.String()
-	}
-
-	fnEnv := f.Env.PushScope()
-	if f.LambdaName != nil {
+	fnEnv := f.env.PushScope()
+	if f.name != nil {
+		fnName = f.name.String()
 		// Define the function name in the environment.
-		fnEnv.Define(f.LambdaName, f)
+		fnEnv.BindLocal(f.name, f)
 	}
 
-	var bindings []interface{}
-	var err error
-	var exprList *List
-
-	// Find the correct arity.
-	var matchedBindingForm *Vector
-	for _, arity := range f.Arities {
-		minArg, maxArg := MinMaxArgumentCount(arity.BindingForm)
-		if len(args) < minArg || (len(args) > maxArg && maxArg != -1) {
-			err = fmt.Errorf("Wrong number of args (%d) for %s", len(args), fnName)
-			continue
-		}
-
-		bindings, err = Bind(arity.BindingForm, NewList(args))
-		if err == nil {
-			matchedBindingForm = arity.BindingForm
-			exprList = arity.Exprs
+	// Find the correct method
+	var method *FuncMethod
+	for _, m := range f.methods {
+		if len(args) == len(m.requiredParams) {
+			method = m
 			break
 		}
 	}
-	if err != nil {
-		return nil, errorWithStack(err, StackFrame{
+	if method == nil && f.variadicMethod != nil {
+		if len(args) >= len(f.variadicMethod.requiredParams) {
+			method = f.variadicMethod
+		}
+	}
+	if method == nil {
+		return nil, errorWithStack(fmt.Errorf("wrong number of arguments (%d) passed to %s", len(args), fnName), StackFrame{
 			FunctionName: fnName,
 			Pos:          f.Pos(),
 		})
+	}
+
+	bindingValues := args[:len(method.requiredParams)]
+	var bindingRestValue interface{}
+	if len(args) > len(method.requiredParams) {
+		bindingRestValue = NewList(args[len(method.requiredParams):])
 	}
 
 Recur:
-	// we rebind to account for recurs. TODO: clean this up and make the
-	// binding helper way dumber.
-	bindings, err = Bind(matchedBindingForm, NewList(args))
-	if err != nil {
-		return nil, errorWithStack(err, StackFrame{
-			FunctionName: fnName,
-			Pos:          f.Pos(),
-		})
+	for i := 0; i < len(method.requiredParams); i++ {
+		fnEnv.BindLocal(method.requiredParams[i], bindingValues[i])
 	}
-
-	for i := 0; i < len(bindings); i += 2 {
-		sym := bindings[i].(*Symbol)
-		fnEnv.Define(sym, bindings[i+1])
+	if method.restParam != nil {
+		fnEnv.BindLocal(method.restParam, bindingRestValue)
 	}
 
 	var exprs []interface{}
-	for cur := exprList; !cur.IsEmpty(); cur = cur.next {
-		exprs = append(exprs, cur.item)
+	for cur := method.body; cur != nil; cur = cur.Next() {
+		exprs = append(exprs, cur.First())
 	}
 	if len(exprs) == 0 {
 		panic("empty function body")
@@ -154,7 +294,18 @@ Recur:
 	lastExpr := exprs[len(exprs)-1]
 	v, err := recurEnv.Eval(lastExpr)
 	if errors.As(err, &recurErr) {
-		args = recurErr.Args
+		if len(recurErr.Args) != method.recurParamLength() {
+			// error. TODO: check this at compile time
+			return nil, errorWithStack(fmt.Errorf("wrong number of arguments (%d) passed to recur", len(recurErr.Args)), StackFrame{
+				FunctionName: fnName,
+				Pos:          f.Pos(),
+			})
+		}
+		bindingRestValue = nil
+		bindingValues = recurErr.Args[:len(method.requiredParams)]
+		if len(recurErr.Args) > len(method.requiredParams) {
+			bindingRestValue = recurErr.Args[len(method.requiredParams)]
+		}
 		goto Recur
 	}
 

@@ -96,3 +96,7 @@ func (s *Set) Equal(v2 interface{}) bool {
 	// TODO: implement me
 	return false
 }
+
+func (s *Set) Seq() ISeq {
+	return NewSliceIterator(s.vals)
+}

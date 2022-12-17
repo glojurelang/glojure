@@ -84,7 +84,7 @@ func (env *environment) String() string {
 
 // TODO: rename to something else; this isn't for `def`s, it's for
 // local bindings.
-func (env *environment) Define(sym *value.Symbol, val interface{}) {
+func (env *environment) BindLocal(sym *value.Symbol, val interface{}) {
 	env.scope.define(sym, val)
 }
 
@@ -205,6 +205,10 @@ func (env *environment) ResolveFile(filename string) (string, bool) {
 
 type poser interface {
 	Pos() value.Pos
+}
+
+func (env *environment) Errorf(n interface{}, format string, args ...interface{}) error {
+	return env.errorf(n, format, args...)
 }
 
 func (env *environment) errorf(n interface{}, format string, args ...interface{}) error {
@@ -409,71 +413,7 @@ func (env *environment) evalDef(n *value.List) (interface{}, error) {
 }
 
 func (env *environment) evalFn(n *value.List) (interface{}, error) {
-	listLength := n.Count()
-	items := make([]interface{}, 0, listLength-1)
-	for cur := n.Next(); cur != nil; cur = cur.Next() {
-		items = append(items, cur.First())
-	}
-
-	if len(items) < 1 {
-		return nil, env.errorf(n, "invalid fn expression")
-	}
-
-	var fnName *value.Symbol
-	if sym, ok := items[0].(*value.Symbol); ok {
-		// if the first child is not a list, it's the name of the
-		// function. this can be used for recursion.
-		fnName = sym
-		items = items[1:]
-	}
-
-	if len(items) == 0 {
-		return nil, env.errorf(n, "invalid fn expression, need args and body")
-	}
-
-	const errorString = "invalid fn expression, expected (fn ([bindings0] body0) ([bindings1] body1) ...) or (fn [bindings] body)"
-
-	arities := make([]value.ISeq, 0, len(items))
-	if _, ok := items[0].(*value.Vector); ok {
-		// if the next child is a vector, it's the bindings, and we only
-		// have one arity.
-		arities = append(arities, value.NewList(items, value.WithSection(n.Section)))
-	} else {
-		// otherwise, every remaining child must be a list of function
-		// bindings and bodies for each arity.
-		for _, item := range items {
-			seq, ok := item.(value.ISeq)
-			if !ok {
-				return nil, env.errorf(n, errorString)
-			}
-			arities = append(arities, seq)
-		}
-	}
-
-	arityValues := make([]value.FuncArity, len(arities))
-	for i, arity := range arities {
-		bindings, ok := arity.First().(*value.Vector)
-		if !ok {
-			return nil, env.errorf(n, errorString)
-		}
-		if !value.IsValidBinding(bindings) {
-			return nil, env.errorf(n, "invalid fn expression, invalid binding (%v). Parameters must be symbols", bindings)
-		}
-
-		body := arity.Next()
-
-		arityValues[i] = value.FuncArity{
-			BindingForm: bindings,
-			Exprs:       seqToList(body),
-		}
-	}
-
-	return &value.Func{
-		Section:    n.Section,
-		LambdaName: fnName,
-		Env:        env,
-		Arities:    arityValues,
-	}, nil
+	return value.ParseFunc(env, n)
 }
 
 func (env *environment) evalDo(n *value.List) (interface{}, error) {
@@ -689,12 +629,11 @@ func (env *environment) evalLet(n *value.List, isLoop bool) (interface{}, error)
 	// create a new environment with the bindings
 	newEnv := env.PushScope().(*environment)
 
-	recurCount := 0
 Recur:
 	for i := 0; i < len(bindNameVals); i += 2 {
 		name := bindNameVals[i].(string)
 		val := bindNameVals[i+1]
-		newEnv.Define(value.NewSymbol(name), val)
+		newEnv.BindLocal(value.NewSymbol(name), val)
 	}
 
 	// evaluate the body
@@ -720,7 +659,6 @@ Recur:
 			val := newVals[newValsIndex]
 			bindNameVals[i+1] = val
 		}
-		recurCount++
 		goto Recur
 	}
 	return res, err
@@ -750,7 +688,7 @@ func (env *environment) evalBindings(bindings *value.Vector) ([]interface{}, err
 			if !ok {
 				return nil, env.errorf(bindings, "invalid let, binding name must be a symbol")
 			}
-			newEnv.Define(name, binds[i+1])
+			newEnv.BindLocal(name, binds[i+1])
 			bindingNameVals = append(bindingNameVals, name.String(), binds[i+1])
 		}
 	}

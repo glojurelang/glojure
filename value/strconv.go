@@ -95,10 +95,15 @@ func ToString(v interface{}, opts ...PrintOption) string {
 		return builder.String()
 	}
 
+	// TODO: how to handle empty lists properly?
+	if lst, ok := v.(*List); ok && lst.Count() == 0 {
+		return "()"
+	}
+
 	if seq, ok := v.(ISeq); ok {
 		builder := strings.Builder{}
 		builder.WriteString("(")
-		for ; !seq.IsEmpty(); seq = seq.Rest() {
+		for ; seq != nil; seq = seq.Next() {
 			cur := seq.First()
 			if builder.Len() > 1 {
 				builder.WriteString(" ")

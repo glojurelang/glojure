@@ -19,8 +19,12 @@ type (
 		// target.
 		WithRecurTarget(target interface{}) Environment
 
-		// Define defines a variable in the current scope.
-		Define(sym *Symbol, v interface{})
+		// BindLocal binds the given name to the given value in the local
+		// scope.
+		BindLocal(sym *Symbol, v interface{})
+
+		// DefVar defines a new var in the current namespace.
+		DefVar(sym *Symbol, v interface{}) *Var
 
 		// Eval evaluates a value representing an expression in this
 		// environment.
@@ -56,6 +60,8 @@ type (
 
 		// Context returns the context associated with this environment.
 		Context() context.Context
+
+		Errorf(form interface{}, format string, args ...interface{}) error
 	}
 
 	// RecurError is an error returned by a recur form.

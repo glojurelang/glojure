@@ -133,7 +133,8 @@ type (
 		// First returns the first element of the sequence.
 		First() interface{}
 
-		// Next returns the next sequence, or nil if there are no more.
+		// Next returns the rest of the sequence, or nil if there are no
+		// more.
 		Next() ISeq
 
 		// TODO: Missing: More, Cons, IPersistentCollection

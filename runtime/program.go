@@ -85,7 +85,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		// 	env.SetCurrentNamespace(ns)
 		// 	return ns, nil
 		// }))
-		env.Define(value.NewSymbol("in-ns"), value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
+		env.DefVar(value.NewSymbol("in-ns"), value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
 			if len(args) != 1 {
 				return nil, fmt.Errorf("in-ns: expected namespace name")
 			}
@@ -101,11 +101,13 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	}
 
 	gljimports.RegisterImports(func(name string, val interface{}) {
-		env.Define(value.NewSymbol(name), val)
+		// TODO: use DefVar!
+		env.BindLocal(value.NewSymbol(name), val)
 	})
 
 	define := func(name string, val interface{}) {
-		env.Define(value.NewSymbol(name), val)
+		// TODO: use DefVar!
+		env.BindLocal(value.NewSymbol(name), val)
 	}
 
 	{
