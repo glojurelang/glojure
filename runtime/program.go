@@ -232,9 +232,9 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	{
 		// Add stdlib
 
-		core, err := stdlib.StdLib.ReadFile("mratfiles/core.mrat")
+		core, err := stdlib.StdLib.ReadFile("glojure/core.glj")
 		if err != nil {
-			panic(fmt.Sprintf("could not read stdlib core.mrat: %v", err))
+			panic(fmt.Sprintf("could not read stdlib core.glj: %v", err))
 		}
 		r := reader.New(strings.NewReader(string(core)))
 		exprs, err := r.ReadAll()

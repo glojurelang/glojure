@@ -5,5 +5,5 @@ import (
 	"embed"
 )
 
-//go:embed mratfiles
+//go:embed glojure
 var StdLib embed.FS

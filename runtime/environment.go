@@ -457,7 +457,7 @@ func (env *environment) evalFn(n *value.List) (interface{}, error) {
 			return nil, env.errorf(n, errorString)
 		}
 		if !value.IsValidBinding(bindings) {
-			return nil, env.errorf(n, "invalid fn expression, invalid binding (%v). Must be valid destructure form", bindings)
+			return nil, env.errorf(n, "invalid fn expression, invalid binding (%v). Parameters must be symbols", bindings)
 		}
 
 		body := arity.Next()
