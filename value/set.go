@@ -98,5 +98,8 @@ func (s *Set) Equal(v2 interface{}) bool {
 }
 
 func (s *Set) Seq() ISeq {
+	if s.Count() == 0 {
+		return nil
+	}
 	return NewSliceIterator(s.vals)
 }

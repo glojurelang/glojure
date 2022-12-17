@@ -1600,7 +1600,7 @@
    :added "1.0"
    :static true}
   [x]
-  (if (string? x) x (. ^clojure.lang.Named x (getName))))
+  (if (string? x) x (. ^clojure.lang.Named x (Name))))
 
 (defn namespace
   "Returns the namespace String of a symbol or keyword, or nil if not present."
@@ -1608,7 +1608,7 @@
    :added "1.0"
    :static true}
   [^clojure.lang.Named x]
-    (. x (getNamespace)))
+    (. x (Namespace)))
 
 (defn boolean
   "Coerce to boolean"
