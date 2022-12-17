@@ -16,10 +16,11 @@ func First(x interface{}) interface{} {
 }
 
 func Rest(x interface{}) interface{} {
-	if s := Seq(x); s != nil {
-		return s.Rest()
+	s := Seq(x)
+	if s == nil {
+		return emptyList
 	}
-	panic(fmt.Errorf("%T can't be converted to ISeq", x))
+	return s.More()
 }
 
 func Next(x interface{}) interface{} {
@@ -34,10 +35,9 @@ func Next(x interface{}) interface{} {
 
 func Seq(x interface{}) ISeq {
 	switch x := x.(type) {
+	case *EmptyList:
+		return nil
 	case ISeq:
-		if x.IsEmpty() {
-			return nil
-		}
 		return x
 	case ISeqable:
 		return x.Seq()
@@ -70,6 +70,10 @@ type stringSeq struct {
 	i int
 }
 
+func (s stringSeq) Seq() ISeq {
+	return s
+}
+
 func (s stringSeq) First() interface{} {
 	return NewChar(rune(s.v[s.i]))
 }
@@ -81,16 +85,10 @@ func (s stringSeq) Next() ISeq {
 	return stringSeq{v: s.v, i: s.i + 1}
 }
 
-func (s stringSeq) Rest() ISeq {
+func (s stringSeq) More() ISeq {
 	nxt := s.Next()
 	if nxt == nil {
 		return emptyList
 	}
 	return nxt
-}
-
-func (s stringSeq) IsEmpty() bool {
-	// by construction, s.i is always in range, so we don't need to
-	// check.
-	return false
 }

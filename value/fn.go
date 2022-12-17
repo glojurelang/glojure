@@ -78,8 +78,6 @@ func ParseFunc(env Environment, form ISeq) (*Func, error) {
 	// sequence and proceed to parse a sequence of sequences.
 	if _, ok := rest.First().(*Vector); ok {
 		rest = NewList([]interface{}{rest})
-	} else {
-		//fmt.Printf("rest: %v (%T)\n", rest, rest)
 	}
 
 	fn := &Func{

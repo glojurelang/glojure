@@ -39,9 +39,6 @@ func init() {
 				funcSymbol("/", divBuiltin),
 				funcSymbol(">", gtBuiltin),
 
-				// function application
-				funcSymbol("apply", applyBuiltin),
-
 				// test predicates
 				funcSymbol("string?", isStringBuiltin),
 				funcSymbol("list?", isListBuiltin),
@@ -49,8 +46,6 @@ func init() {
 				funcSymbol("seq?", isSeqBuiltin),
 				funcSymbol("seqable?", isSeqableBuiltin),
 				funcSymbol("eq?", eqBuiltin), // TODO: should be =
-				funcSymbol("empty?", emptyBuiltin),
-				funcSymbol("not-empty?", notEmptyBuiltin),
 
 				// boolean functions
 				funcSymbol("not", notBuiltin),
@@ -186,28 +181,12 @@ func lengthBuiltin(env value.Environment, args []interface{}) (interface{}, erro
 	case value.ISeqable:
 		coll = arg.Seq()
 	}
-	seq, ok := coll.(value.ISeq)
-	if !ok {
-		return nil, fmt.Errorf("count expects a collection, got %v", args[0])
-	}
+
 	count := 0
-	for !seq.IsEmpty() {
+	for seq := value.Seq(coll); seq != nil; seq = seq.Next() {
 		count++
-		seq = seq.Rest()
 	}
 	return count, nil
-}
-
-func restBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
-	if len(args) != 1 {
-		return nil, fmt.Errorf("rest expects 1 argument, got %v", len(args))
-	}
-
-	if seq := value.Seq(args[0]); seq != nil {
-		return seq.Rest(), nil
-	}
-
-	return nil, fmt.Errorf("rest expects a sequence, got %v", args[0])
 }
 
 func subvecBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
@@ -307,28 +286,6 @@ func isSeqBuiltin(env value.Environment, args []interface{}) (interface{}, error
 func isSeqableBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	panic("not implemented")
 	return nil, nil
-}
-
-func emptyBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
-	if len(args) != 1 {
-		return nil, fmt.Errorf("empty? expects 1 argument, got %v", len(args))
-	}
-
-	if c, ok := args[0].(value.Counter); ok {
-		return c.Count() == 0, nil
-	}
-	if seq := value.Seq(args[0]); seq != nil {
-		return seq.IsEmpty(), nil
-	}
-	return nil, fmt.Errorf("empty? expects a collection, got %v", args[0])
-}
-
-func notEmptyBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
-	v, err := emptyBuiltin(env, args)
-	if err != nil {
-		return nil, err
-	}
-	return notBuiltin(env, []interface{}{v})
 }
 
 func powBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
@@ -448,26 +405,6 @@ func gtBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
 	}
 
 	return true, nil
-}
-
-func applyBuiltin(env value.Environment, args []interface{}) (interface{}, error) {
-	if len(args) != 2 {
-		return nil, fmt.Errorf("apply expects 2 arguments, got %v", len(args))
-	}
-
-	var values []interface{}
-	if !value.Equal(nil, args[1]) {
-		seq := value.Seq(args[1])
-		if seq == nil {
-			return nil, fmt.Errorf("apply expects a seqable as the second argument, got %v", args[1])
-		}
-		for !seq.IsEmpty() {
-			values = append(values, seq.First())
-			seq = seq.Rest()
-		}
-	}
-
-	return value.Apply(env, args[0], values)
 }
 
 func printlnBuiltin(env value.Environment, args []interface{}) (interface{}, error) {

@@ -63,6 +63,7 @@ type (
 	}
 
 	IPersistentCollection interface {
+		ISeqable
 		Counter
 		// NB: we diverge from Clojure here, which has a cons method,
 		// which is used by the conj runtime method. I expect the cons
@@ -77,6 +78,14 @@ type (
 	IPersistentStack interface {
 		Peek() interface{}
 		Pop() IPersistentStack
+	}
+
+	IPersistentList interface {
+		IPersistentCollection
+		IPersistentStack
+		// Clojure's IPersistentList does not implement this, but it
+		// likely should.
+		ISeq
 	}
 
 	IPersistentMap interface {
@@ -130,6 +139,8 @@ type (
 	}
 
 	ISeq interface {
+		ISeqable
+
 		// First returns the first element of the sequence.
 		First() interface{}
 
@@ -137,15 +148,10 @@ type (
 		// more.
 		Next() ISeq
 
-		// TODO: Missing: More, Cons, IPersistentCollection
-		// Remove the below
+		// More returns true if there are more elements in the sequence.
+		More() ISeq
 
-		// Rest returns the rest of the sequence.
-		// TODO: remove this, match Clojure's ISeq interface
-		Rest() ISeq
-
-		// IsEmpty returns true if the sequence is empty.
-		IsEmpty() bool
+		// TODO: Missing: Cons, IPersistentCollection
 	}
 
 	IChunk interface {

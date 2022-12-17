@@ -2,7 +2,7 @@ package value
 
 type Cons struct {
 	first interface{}
-	rest  ISeq
+	more  ISeq
 	meta  IPersistentMap
 }
 
@@ -15,10 +15,14 @@ func NewCons(x interface{}, xs interface{}) ISeq {
 	case nil:
 		return NewList([]interface{}{x})
 	case ISeq:
-		return &Cons{first: x, rest: xs}
+		return &Cons{first: x, more: xs}
 	default:
 		return NewCons(x, Seq(xs))
 	}
+}
+
+func (c *Cons) Seq() ISeq {
+	return c
 }
 
 func (c *Cons) First() interface{} {
@@ -26,15 +30,14 @@ func (c *Cons) First() interface{} {
 }
 
 func (c *Cons) Next() ISeq {
-	return c.rest
+	return c.More().Seq()
 }
 
-func (c *Cons) Rest() ISeq {
-	return c.rest
-}
-
-func (c *Cons) IsEmpty() bool {
-	return false
+func (c *Cons) More() ISeq {
+	if c.more == nil {
+		return emptyList
+	}
+	return c.more
 }
 
 // TODO: count
@@ -44,5 +47,5 @@ func (c *Cons) Meta() IPersistentMap {
 }
 
 func (c *Cons) WithMeta(meta IPersistentMap) interface{} {
-	return &Cons{first: c.first, rest: c.rest, meta: meta}
+	return &Cons{first: c.first, more: c.more, meta: meta}
 }

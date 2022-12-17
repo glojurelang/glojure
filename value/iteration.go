@@ -26,14 +26,15 @@ func Nth(x interface{}, n int) (interface{}, bool) {
 	case Nther:
 		return x.Nth(n)
 	case ISeq:
+		x = Seq(x)
 		for i := 0; i <= n; i++ {
-			if x.IsEmpty() {
+			if x == nil {
 				return nil, false
 			}
 			if i == n {
 				return x.First(), true
 			}
-			x = x.Rest()
+			x = x.Next()
 		}
 	case string:
 		if n < 0 || n >= len(x) {
@@ -68,20 +69,20 @@ type iterator struct {
 	x interface{}
 }
 
+func (i iterator) Seq() ISeq {
+	return i
+}
+
 func (i iterator) First() interface{} {
 	return i.x
 }
 
 func (i iterator) Next() ISeq {
-	return i.Rest()
-}
-
-func (i iterator) Rest() ISeq {
 	return NewIterator(i.f, i.f(i.x))
 }
 
-func (i iterator) IsEmpty() bool {
-	return false
+func (i iterator) More() ISeq {
+	return i.Next()
 }
 
 // NewRangeIterator returns a lazy sequence of start, start + step, start + 2*step, ...
@@ -98,6 +99,10 @@ type rangeIterator struct {
 	start, end, step int64
 }
 
+func (i rangeIterator) Seq() ISeq {
+	return i
+}
+
 func (i rangeIterator) First() interface{} {
 	return i.start
 }
@@ -110,16 +115,12 @@ func (i rangeIterator) Next() ISeq {
 	return &rangeIterator{start: next, end: i.end, step: i.step}
 }
 
-func (i rangeIterator) Rest() ISeq {
+func (i rangeIterator) More() ISeq {
 	nxt := i.Next()
 	if nxt == nil {
 		return emptyList
 	}
 	return nxt
-}
-
-func (i rangeIterator) IsEmpty() bool {
-	return false
 }
 
 // NewValueIterator returns a lazy sequence of the values of x.
@@ -136,6 +137,10 @@ type vectorIterator struct {
 	step  int
 }
 
+func (it vectorIterator) Seq() ISeq {
+	return it
+}
+
 func (it vectorIterator) First() interface{} {
 	return it.v.ValueAt(it.start)
 }
@@ -148,7 +153,7 @@ func (it vectorIterator) Next() ISeq {
 	return &vectorIterator{v: it.v, start: next, step: it.step}
 }
 
-func (it vectorIterator) Rest() ISeq {
+func (it vectorIterator) More() ISeq {
 	nxt := it.Next()
 	if nxt == nil {
 		return emptyList
@@ -156,19 +161,13 @@ func (it vectorIterator) Rest() ISeq {
 	return nxt
 }
 
-func (i vectorIterator) IsEmpty() bool {
-	return false
-}
-
-// NewConcatIterator returns a lazy sequence of the values of x.
+// NewConcatIterator returns a sequence concatenating the given
+// sequences.
 func NewConcatIterator(colls ...interface{}) ISeq {
 	var it *concatIterator
 	for i := len(colls) - 1; i >= 0; i-- {
 		iseq := Seq(colls[i])
 		if iseq == nil {
-			panic(fmt.Sprintf("not a sequence: %T", colls[i]))
-		}
-		if iseq.IsEmpty() {
 			continue
 		}
 		it = &concatIterator{seq: iseq, next: it}
@@ -184,13 +183,17 @@ type concatIterator struct {
 	next *concatIterator
 }
 
+func (i *concatIterator) Seq() ISeq {
+	return i
+}
+
 func (i *concatIterator) First() interface{} {
 	return i.seq.First()
 }
 
 func (i *concatIterator) Next() ISeq {
-	i = &concatIterator{seq: i.seq.Rest(), next: i.next}
-	for i.seq.IsEmpty() {
+	i = &concatIterator{seq: i.seq.Next(), next: i.next}
+	for i.seq == nil {
 		i = i.next
 		if i == nil {
 			return nil
@@ -199,17 +202,12 @@ func (i *concatIterator) Next() ISeq {
 	return i
 }
 
-func (i *concatIterator) Rest() ISeq {
+func (i *concatIterator) More() ISeq {
 	nxt := i.Next()
 	if nxt == nil {
 		return emptyList
 	}
 	return nxt
-}
-
-func (i *concatIterator) IsEmpty() bool {
-	// by definition, a concat iterator is never empty
-	return false
 }
 
 // NewSliceIterator returns a lazy sequence of the values of x.
@@ -230,6 +228,10 @@ type sliceIterator struct {
 	i int
 }
 
+func (i sliceIterator) Seq() ISeq {
+	return i
+}
+
 func (i sliceIterator) First() interface{} {
 	return i.v.Index(i.i).Interface()
 }
@@ -242,14 +244,10 @@ func (i sliceIterator) Next() ISeq {
 	return i
 }
 
-func (i sliceIterator) Rest() ISeq {
+func (i sliceIterator) More() ISeq {
 	nxt := i.Next()
 	if nxt == nil {
 		return emptyList
 	}
 	return nxt
-}
-
-func (i sliceIterator) IsEmpty() bool {
-	return false
 }

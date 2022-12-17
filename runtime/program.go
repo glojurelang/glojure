@@ -189,6 +189,8 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		}
 
 		define("error", reflect.TypeOf((*error)(nil)).Elem())
+
+		define("debugstr", value.ToString)
 	}
 	{ // core functions
 		define("glojure.lang.CreateList", value.CreateList)

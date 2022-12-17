@@ -50,16 +50,12 @@ func (s *LazySeq) Next() ISeq {
 	return seq.Next()
 }
 
-func (s *LazySeq) Rest() ISeq { // TODO: should be More()
+func (s *LazySeq) More() ISeq {
 	seq := s.Seq()
 	if seq == nil {
-		return nil
+		return emptyList
 	}
-	return seq.Rest()
-}
-
-func (s *LazySeq) IsEmpty() bool {
-	return s.Seq() == nil
+	return seq.More()
 }
 
 func (s *LazySeq) Cons(x interface{}) ISeq {

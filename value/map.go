@@ -82,10 +82,8 @@ func (m *Map) Conj(x interface{}) Conjer {
 	}
 
 	var ret Conjer = m
-	seq := Seq(x)
-	for !seq.IsEmpty() {
+	for seq := Seq(x); seq != nil; seq = seq.Next() {
 		ret = ret.Conj(seq.First().(MapEntry))
-		seq = seq.Rest()
 	}
 	return ret
 }
@@ -117,10 +115,6 @@ func (m *Map) Count() int {
 
 func (m *Map) Seq() ISeq {
 	return NewMapSeq(m)
-}
-
-func (m *Map) IsEmpty() bool {
-	return m.Count() == 0
 }
 
 func (m *Map) String() string {
@@ -156,12 +150,16 @@ func (m *Map) Equal(v2 interface{}) bool {
 
 func NewMapSeq(m *Map) ISeq {
 	if m.Count() == 0 {
-		return emptyList
+		return nil
 	}
 	return &MapSeq{
 		m:          m,
 		entryIndex: 0,
 	}
+}
+
+func (s *MapSeq) Seq() ISeq {
+	return s
 }
 
 func (s *MapSeq) First() interface{} {
@@ -172,7 +170,7 @@ func (s *MapSeq) First() interface{} {
 }
 
 func (s *MapSeq) Next() ISeq {
-	if s.entryIndex >= s.m.Count() {
+	if s.entryIndex+1 >= s.m.Count() {
 		return nil
 	}
 	return &MapSeq{
@@ -181,7 +179,7 @@ func (s *MapSeq) Next() ISeq {
 	}
 }
 
-func (s *MapSeq) Rest() ISeq {
+func (s *MapSeq) More() ISeq {
 	nxt := s.Next()
 	if nxt == nil {
 		return emptyList
@@ -189,15 +187,15 @@ func (s *MapSeq) Rest() ISeq {
 	return nxt
 }
 
-func (s *MapSeq) IsEmpty() bool {
-	return s.entryIndex >= s.m.Count()
-}
-
 func NewMapKeySeq(s ISeq) ISeq {
 	if s == nil {
 		return nil
 	}
 	return &MapKeySeq{s}
+}
+
+func (s *MapKeySeq) Seq() ISeq {
+	return s
 }
 
 func (s *MapKeySeq) First() interface{} {
@@ -208,12 +206,12 @@ func (s *MapKeySeq) Next() ISeq {
 	return NewMapKeySeq(s.s.Next())
 }
 
-func (s *MapKeySeq) Rest() ISeq {
-	return NewMapKeySeq(s.s.Rest())
-}
-
-func (s *MapKeySeq) IsEmpty() bool {
-	return s.s.IsEmpty()
+func (s *MapKeySeq) More() ISeq {
+	nxt := s.Next()
+	if nxt == nil {
+		return emptyList
+	}
+	return nxt
 }
 
 func NewMapValSeq(s ISeq) ISeq {
@@ -221,6 +219,10 @@ func NewMapValSeq(s ISeq) ISeq {
 		return nil
 	}
 	return &MapValSeq{s}
+}
+
+func (s *MapValSeq) Seq() ISeq {
+	return s
 }
 
 func (s *MapValSeq) First() interface{} {
@@ -231,10 +233,10 @@ func (s *MapValSeq) Next() ISeq {
 	return NewMapValSeq(s.s.Next())
 }
 
-func (s *MapValSeq) Rest() ISeq {
-	return NewMapValSeq(s.s.Rest())
-}
-
-func (s *MapValSeq) IsEmpty() bool {
-	return s.s.IsEmpty()
+func (s *MapValSeq) More() ISeq {
+	nxt := s.Next()
+	if nxt == nil {
+		return emptyList
+	}
+	return nxt
 }

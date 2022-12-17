@@ -243,7 +243,12 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 		for ; v != nil; v = v.Next() {
 			elements = append(elements, v.First())
 		}
-		return env.evalList(value.NewList(elements))
+		if len(elements) == 0 {
+			// TODO: eval sequences, not lists. this is a hack now that
+			// EmptyList is different from List
+			return value.NewList(nil), nil
+		}
+		return env.evalList(value.NewList(elements).(*value.List))
 	default:
 		return env.evalScalar(n)
 	}
@@ -412,7 +417,7 @@ func (env *environment) evalDef(n *value.List) (interface{}, error) {
 	return env.DefVar(sym, val), nil
 }
 
-func (env *environment) evalFn(n *value.List) (interface{}, error) {
+func (env *environment) evalFn(n value.ISeq) (interface{}, error) {
 	return value.ParseFunc(env, n)
 }
 
@@ -523,7 +528,7 @@ func (env *environment) evalQuasiquote(n *value.List) (interface{}, error) {
 func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item interface{}) (interface{}, error) {
 	switch item := item.(type) {
 	case value.ISeq:
-		if item.IsEmpty() {
+		if value.Seq(item) == nil {
 			return item, nil
 		}
 		if value.Equal(item.First(), SymbolUnquote) {
@@ -700,7 +705,7 @@ func (env *environment) evalDefMacro(n *value.List) (interface{}, error) {
 	// fnList is a transformed version of the macro that looks like a fn
 	// form, which is nearly the same as the defmacro form but without
 	// the docstring or metadata.
-	fnList := n
+	var fnList value.ISeq = n
 	if n.Count() > 3 {
 		_, ok := value.MustNth(n, 2).(string)
 		if ok {
@@ -892,7 +897,7 @@ func (env *environment) evalThrow(n *value.List) (interface{}, error) {
 	return nil, env.errorf(n, "invalid throw expression, expected an error")
 }
 
-func (env *environment) evalDot(n *value.List) (interface{}, error) {
+func (env *environment) evalDot(n value.ISeq) (interface{}, error) {
 	// the dot form is a port of clojure's dot special form, giving
 	// access to Go host functions and values.
 	//
@@ -907,7 +912,7 @@ func (env *environment) evalDot(n *value.List) (interface{}, error) {
 	//
 	// TODO: form 3
 
-	dotCount := n.Count()
+	dotCount := value.Count(n)
 
 	if dotCount < 3 {
 		return nil, env.errorf(n, "invalid expression, expecting (. target member ...)")
@@ -1058,7 +1063,7 @@ func (env *environment) asMacro(sym *value.Symbol) *value.Var {
 
 // Misc. helpers
 
-func seqToList(seq value.ISeq) *value.List {
+func seqToList(seq value.ISeq) value.IPersistentList {
 	return value.NewList(seqToSlice(seq))
 }
 

@@ -2,17 +2,16 @@ package value
 
 // Reduce applies the given function to each element of the ISeq.
 func Reduce(f func(interface{}, interface{}) interface{}, seq ISeq) interface{} {
-	if seq.IsEmpty() {
+	if Seq(seq) == nil {
 		panic("reduce of empty sequence without initial value")
 	}
-	return ReduceInit(f, seq.First(), seq.Rest())
+	return ReduceInit(f, seq.First(), seq.Next())
 }
 
 func ReduceInit(f func(interface{}, interface{}) interface{}, init interface{}, seq ISeq) interface{} {
 	var res interface{} = init
-	for !seq.IsEmpty() {
+	for ; seq != nil; seq = seq.Next() {
 		res = f(res, seq.First())
-		seq = seq.Rest()
 	}
 	return res
 }

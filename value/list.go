@@ -16,38 +16,129 @@ type List struct {
 	size int
 }
 
-var emptyList = &List{}
+var (
+	_ IObj            = (*List)(nil)
+	_ ISeq            = (*List)(nil)
+	_ IPersistentList = (*List)(nil)
+	_ Counter         = (*List)(nil)
+)
 
-func NewList(values []interface{}, opts ...Option) *List {
+type EmptyList struct {
+	Section
+	meta IPersistentMap
+}
+
+var (
+	_ IObj            = (*EmptyList)(nil)
+	_ ISeq            = (*EmptyList)(nil)
+	_ IPersistentList = (*EmptyList)(nil)
+	_ Counter         = (*EmptyList)(nil)
+)
+
+func (e *EmptyList) Conj(x interface{}) Conjer {
+	return NewList([]interface{}{x})
+}
+
+func (e *EmptyList) Count() int {
+	return 0
+}
+
+func (e *EmptyList) Peek() interface{} {
+	return nil
+}
+
+func (e *EmptyList) Pop() IPersistentStack {
+	panic("cannot pop empty list")
+}
+
+func (e *EmptyList) Seq() ISeq {
+	return nil
+}
+
+func (e *EmptyList) First() interface{} {
+	return nil
+}
+
+func (e *EmptyList) Next() ISeq {
+	return nil
+}
+
+func (e *EmptyList) More() ISeq {
+	return e
+}
+
+func (e *EmptyList) IsEmpty() bool {
+	return true
+}
+
+func (e *EmptyList) Equal(other interface{}) bool {
+	if e == other {
+		return true
+	}
+	if _, ok := other.(*EmptyList); ok {
+		return true
+	}
+	return false
+}
+
+func (e *EmptyList) Meta() IPersistentMap {
+	return e.meta
+}
+
+func (e *EmptyList) WithMeta(meta IPersistentMap) interface{} {
+	if Equal(e.meta, meta) {
+		return e
+	}
+
+	cpy := *e
+	cpy.meta = meta
+	return &cpy
+}
+
+func (e *EmptyList) String() string {
+	return "()"
+}
+
+var emptyList = &EmptyList{}
+
+func NewList(values []interface{}, opts ...Option) IPersistentList {
 	var o options
 	for _, opt := range opts {
 		opt(&o)
 	}
+	if len(values) == 0 {
+		return &EmptyList{
+			Section: o.section,
+		}
+	}
 
-	list := emptyList
+	var list *List
+	size := 0
 	for i := len(values) - 1; i >= 0; i-- {
+		size++
 		list = &List{
 			Section: o.section,
 			item:    values[i],
 			next:    list,
-			size:    list.size + 1,
+			size:    size,
 		}
 	}
 	return list
 }
 
-func CreateList(values ...interface{}) *List {
+func CreateList(values ...interface{}) IPersistentList {
 	return NewList(values)
 }
 
 func ConsList(item interface{}, next *List) *List {
-	if next == nil {
-		next = emptyList
+	size := 1
+	if next != nil {
+		size += next.size
 	}
 	return &List{
 		item: item,
 		next: next,
-		size: next.size + 1,
+		size: size,
 	}
 }
 
@@ -57,10 +148,11 @@ func (l *List) First() interface{} {
 
 // Item returns the data from this list node. AKA car.
 func (l *List) Item() interface{} {
-	if l.IsEmpty() {
-		panic("cannot get item of empty list")
-	}
 	return l.item
+}
+
+func (l *List) Seq() ISeq {
+	return l
 }
 
 // Next returns the next list node. AKA cdr, with the requirement that
@@ -72,11 +164,12 @@ func (l *List) Next() ISeq {
 	return l.next
 }
 
-func (l *List) Rest() ISeq {
-	if l.IsEmpty() {
-		return l
+func (l *List) More() ISeq {
+	s := l.Next()
+	if s == nil {
+		return emptyList
 	}
-	return l.Next()
+	return s
 }
 
 func (l *List) IsEmpty() bool {
@@ -143,10 +236,10 @@ func enumerateFunc(next func() (v interface{}, ok bool)) (<-chan interface{}, fu
 func (l *List) String() string {
 	b := strings.Builder{}
 	b.WriteString("(")
-	for cur := l; !cur.IsEmpty(); cur = cur.next {
-		v := cur.item
+	for cur := Seq(l); cur != nil; cur = cur.Next() {
+		v := cur.First()
 		b.WriteString(ToString(v))
-		if !cur.next.IsEmpty() {
+		if cur.Next() != nil {
 			b.WriteString(" ")
 		}
 	}
@@ -212,4 +305,15 @@ func (l *List) WithMeta(meta IPersistentMap) interface{} {
 	cpy := *l
 	cpy.meta = meta
 	return &cpy
+}
+
+func (l *List) Peek() interface{} {
+	return l.Item()
+}
+
+func (l *List) Pop() IPersistentStack {
+	if l.next == nil {
+		return emptyList
+	}
+	return l.next
 }

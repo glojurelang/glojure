@@ -142,9 +142,8 @@ func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (r
 		}
 		if iseq, ok := val.(ISeq); ok {
 			var slc []interface{}
-			for !iseq.IsEmpty() {
+			for iseq = Seq(iseq); iseq != nil; iseq = iseq.Next() {
 				slc = append(slc, iseq.First())
-				iseq = iseq.Rest()
 			}
 			val = slc
 		}
