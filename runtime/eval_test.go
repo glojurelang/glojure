@@ -13,7 +13,7 @@ import (
 	"github.com/kylelemons/godebug/diff"
 )
 
-func TestParse(t *testing.T) {
+func TestEval(t *testing.T) {
 	type testCase struct {
 		name   string
 		input  string
@@ -22,7 +22,7 @@ func TestParse(t *testing.T) {
 
 	var testCases = []testCase{}
 
-	// read all *.in files in testdata/parser as test cases.
+	// read all *.in files in testdata/eval as test cases.
 	paths, err := filepath.Glob("testdata/eval/*.glj")
 	if err != nil {
 		t.Fatal(err)
@@ -130,12 +130,27 @@ func TestEvalErrors(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			prog, err := Parse(strings.NewReader(tc.input), WithFilename(tc.name))
+			rdr := reader.New(strings.NewReader(tc.input), reader.WithFilename(tc.name))
+			forms, err := rdr.ReadAll()
+			if err != nil {
+				t.Fatal(err)
+			}
+			env := NewEnvironment(WithStdout(io.Discard), WithLoadPath([]string{"testdata/eval_error"}))
+			_, err = env.Eval(value.NewList([]interface{}{
+				value.NewSymbol("ns"),
+				SymbolUserNamespace,
+			}))
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			_, err = prog.Eval(WithStdout(io.Discard), WithLoadPath([]string{"testdata/eval_error"}))
+			err = nil
+			for _, form := range forms {
+				_, err = env.Eval(form)
+				if err != nil {
+					break
+				}
+			}
 			if err == nil {
 				t.Fatal("expected error, got nil")
 			}
