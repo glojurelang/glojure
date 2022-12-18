@@ -72,7 +72,7 @@ func (m *Map) ContainsKey(key interface{}) bool {
 
 func (m *Map) Conj(x interface{}) Conjer {
 	switch x := x.(type) {
-	case MapEntry:
+	case *MapEntry:
 		return m.Assoc(x.Key, x.Value).(Conjer)
 	case IPersistentVector:
 		if x.Count() != 2 {
@@ -83,7 +83,7 @@ func (m *Map) Conj(x interface{}) Conjer {
 
 	var ret Conjer = m
 	for seq := Seq(x); seq != nil; seq = seq.Next() {
-		ret = ret.Conj(seq.First().(MapEntry))
+		ret = ret.Conj(seq.First().(*MapEntry))
 	}
 	return ret
 }
@@ -163,7 +163,7 @@ func (s *MapSeq) Seq() ISeq {
 }
 
 func (s *MapSeq) First() interface{} {
-	return MapEntry{
+	return &MapEntry{
 		Key:   s.m.keyVals[2*s.entryIndex],
 		Value: s.m.keyVals[2*s.entryIndex+1],
 	}
@@ -199,7 +199,7 @@ func (s *MapKeySeq) Seq() ISeq {
 }
 
 func (s *MapKeySeq) First() interface{} {
-	return s.s.First().(MapEntry).Key
+	return s.s.First().(*MapEntry).Key
 }
 
 func (s *MapKeySeq) Next() ISeq {
@@ -226,7 +226,7 @@ func (s *MapValSeq) Seq() ISeq {
 }
 
 func (s *MapValSeq) First() interface{} {
-	return s.s.First().(MapEntry).Value
+	return s.s.First().(*MapEntry).Value
 }
 
 func (s *MapValSeq) Next() ISeq {

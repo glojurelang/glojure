@@ -773,7 +773,7 @@ func (env *environment) evalNew(n *value.List) (interface{}, error) {
 
 	val := reflect.New(typeValue)
 	for cur := n.Next().Next(); cur != nil; cur = cur.Next().Next() {
-		fieldName, ok := cur.First().(*value.Keyword)
+		fieldName, ok := cur.First().(value.Keyword)
 		if !ok {
 			return nil, env.errorf(cur.First(), "invalid new expression, field name must be a keyword")
 		}
@@ -781,12 +781,13 @@ func (env *environment) evalNew(n *value.List) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		field := val.Elem().FieldByName(fieldName.Value)
+		fieldNameStr := fieldName.Name()[1:]
+		field := val.Elem().FieldByName(fieldNameStr)
 		if !field.IsValid() {
-			return nil, env.errorf(cur.First(), "invalid new expression, unknown field (%v)", fieldName.Value)
+			return nil, env.errorf(cur.First(), "invalid new expression, unknown field (%v)", fieldNameStr)
 		}
 		if !field.CanSet() {
-			return nil, env.errorf(cur.First(), "invalid new expression, field is not settable (%v)", fieldName.Value)
+			return nil, env.errorf(cur.First(), "invalid new expression, field is not settable (%v)", fieldNameStr)
 		}
 		goVal := fieldValue
 		if fieldValue, ok := fieldValue.(value.GoValuer); ok {

@@ -680,8 +680,8 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 		return nil, err
 	}
 
-	nsKW := nsKWVal.(*value.Keyword)
-	if strings.Contains(nsKW.Value, "/") {
+	nsKW := nsKWVal.(value.Keyword)
+	if strings.Contains(nsKW.String(), "/") {
 		return nil, r.error("namespaced map must specify a valid namespace: %s", nsKW)
 	}
 
@@ -703,15 +703,15 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 	for mp := value.Seq(mapVal); mp != nil; mp = mp.Next() {
 		kv := mp.First()
 
-		key := kv.(*value.Vector).ValueAt(0)
-		val := kv.(*value.Vector).ValueAt(1)
+		key := kv.(*value.MapEntry).Key
+		val := kv.(*value.MapEntry).Value
 
-		keyKW, ok := key.(*value.Keyword)
+		keyKW, ok := key.(value.Keyword)
 		if !ok || keyKW.Namespace() != "" {
 			newKeyVals = append(newKeyVals, key, val)
 			continue
 		}
-		newKey := value.NewKeyword(nsKW.Value+"/"+keyKW.Name(), value.WithSection(keyKW.Section))
+		newKey := value.NewKeyword(nsKW.Name() + "/" + keyKW.Name())
 		newKeyVals = append(newKeyVals, newKey, val)
 	}
 
@@ -853,7 +853,8 @@ func (r *Reader) readKeyword() (interface{}, error) {
 	if sym == "" || sym == ":" || strings.Contains(sym[1:], ":") {
 		return nil, r.error("invalid keyword: :" + sym)
 	}
-	return value.NewKeyword(sym, value.WithSection(r.popSection())), nil
+	r.popSection()
+	return value.NewKeyword(sym), nil
 }
 
 func (r *Reader) readMeta() (value.IPersistentMap, error) {
@@ -868,7 +869,7 @@ func (r *Reader) readMeta() (value.IPersistentMap, error) {
 		return res, nil
 	case *value.Symbol, string:
 		return value.NewMap([]interface{}{keywordTag, res}), nil
-	case *value.Keyword:
+	case value.Keyword:
 		return value.NewMap([]interface{}{res, true}), nil
 	default:
 		return nil, r.error("metadata must be a map, symbol, keyword, or string")
