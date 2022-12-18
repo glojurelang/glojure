@@ -53,7 +53,7 @@
 
 (def
  ^{:arglists '([coll])
-   :tag clojure.lang.ISeq
+   :tag glojure.lang.ISeq
    :doc "Returns a seq of the items after the first. Calls seq on its
   argument.  If there are no more items, returns nil."
    :added "1.0"
@@ -62,7 +62,7 @@
 
 (def
  ^{:arglists '([coll])
-   :tag clojure.lang.ISeq
+   :tag glojure.lang.ISeq
    :doc "Returns a possibly empty seq of the items after the first. Calls seq on its
   argument."
    :added "1.0"
@@ -123,17 +123,17 @@
  nnext (fn ^:static nnext [x] (next (next x))))
 
 (def
- ^{:arglists '(^clojure.lang.ISeq [coll])
+ ^{:arglists '(^glojure.lang.ISeq [coll])
    :doc "Returns a seq on the collection. If the collection is
     empty, returns nil.  (seq nil) returns nil. seq also works on
     Strings, native Java arrays (of reference types) and any objects
     that implement Iterable. Note that seqs cache values, thus seq
     should not be used on any Iterable whose iterator repeatedly
     returns the same mutable object."
-   :tag clojure.lang.ISeq
+   :tag glojure.lang.ISeq
    :added "1.0"
    :static true}
- seq (fn ^:static seq ^clojure.lang.ISeq [coll] (glojure.lang.Seq coll)))
+ seq (fn ^:static seq ^glojure.lang.ISeq [coll] (glojure.lang.Seq coll)))
 
 (def
  ^{:arglists '([^Class c x])
@@ -147,7 +147,7 @@
    :doc "Return true if x implements ISeq"
    :added "1.0"
    :static true}
- seq? (fn ^:static seq? [x] (instance? clojure.lang.ISeq x)))
+ seq? (fn ^:static seq? [x] (instance? glojure.lang.ISeq x)))
 
 (def
  ^{:arglists '([x])
@@ -696,10 +696,10 @@
 (defn ^:static  ^clojure.lang.IChunk chunk-first ^clojure.lang.IChunk [^glojure.lang.IChunkedSeq s]
   (.chunkedFirst s))
 
-(defn ^:static ^clojure.lang.ISeq chunk-rest ^clojure.lang.ISeq [^glojure.lang.IChunkedSeq s]
+(defn ^:static ^glojure.lang.ISeq chunk-rest ^glojure.lang.ISeq [^glojure.lang.IChunkedSeq s]
   (.chunkedMore s))
 
-(defn ^:static ^clojure.lang.ISeq chunk-next ^clojure.lang.ISeq [^glojure.lang.IChunkedSeq s]
+(defn ^:static ^glojure.lang.ISeq chunk-next ^glojure.lang.ISeq [^glojure.lang.IChunkedSeq s]
   (.chunkedNext s))
 
 (defn ^:static chunk-cons [chunk rest]
@@ -1841,6 +1841,7 @@
 
 (defmacro ^{:private true} assert-args
   [& pairs]
+  (fmt.Println "assert-args pairs" (str pairs))
   `(do (when-not ~(first pairs)
          (throw (errors.New
                   (str (first ~'&form) " requires " ~(second pairs) " in " ~'*ns* ":" (:line (meta ~'&form))))))
@@ -3343,7 +3344,7 @@
   "Returns a new, transient version of the collection, in constant time."
   {:added "1.1"
    :static true}
-  [^clojure.lang.IEditableCollection coll] 
+  [^glojure.lang.IEditableCollection coll] 
   (.asTransient coll))
 
 (defn persistent! 
@@ -3418,7 +3419,7 @@
   {:added "1.0"
    :static true}
   [to from]
-  (if (instance? clojure.lang.IEditableCollection to)
+  (if (instance? glojure.lang.IEditableCollection to)
     (persistent! (reduce1 conj! (transient to) from))
     (reduce1 conj to from)))
 
@@ -3432,7 +3433,7 @@
   [& import-symbols-or-lists]
   (let [specs (map #(if (and (seq? %) (= 'quote (first %))) (second %) %) 
                    import-symbols-or-lists)]
-    `(do ~@(map #(list 'clojure.core/import* %)
+    `(do ~@(map #(list 'glojure.lang.Import %)
                 (reduce1 (fn [v spec] 
                           (if (symbol? spec)
                             (conj v (name spec))
@@ -3692,7 +3693,7 @@
      (apply pr more))))
 
 (def ^:private ^string system-newline
-     (System/getProperty "line.separator"))
+     "\n")
 
 (defn newline
   "Writes a platform-specific newline to *out*"
@@ -4440,7 +4441,7 @@
                    pmap
                    (fn [bvec b v]
                      (let [gmap (gensym "map__")
-                           gmapseq (with-meta gmap {:tag 'clojure.lang.ISeq})
+                           gmapseq (with-meta gmap {:tag 'glojure.lang.ISeq})
                            defaults (:or b)]
                        (loop [ret (-> bvec (conj gmap) (conj v)
                                       (conj gmap) (conj `(if (seq? ~gmap)
@@ -6957,11 +6958,11 @@ fails, attempts to require sym's namespace and retries."
   ([] [])
   ([to] to)
   ([to from]
-     (if (instance? clojure.lang.IEditableCollection to)
+     (if (instance? glojure.lang.IEditableCollection to)
        (with-meta (persistent! (reduce conj! (transient to) from)) (meta to))
        (reduce conj to from)))
   ([to xform from]
-     (if (instance? clojure.lang.IEditableCollection to)
+     (if (instance? glojure.lang.IEditableCollection to)
        (let [tm (meta to)
              rf (fn
                   ([coll] (-> (persistent! coll) (with-meta tm)))
@@ -8061,7 +8062,7 @@ fails, attempts to require sym's namespace and retries."
   (with-meta
     (persistent!
      (reduce-kv (fn [acc k v] (assoc! acc k (f v)))
-                (if (instance? clojure.lang.IEditableCollection m)
+                (if (instance? glojure.lang.IEditableCollection m)
                   (transient m)
                   (transient {}))
                 m))

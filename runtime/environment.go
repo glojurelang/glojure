@@ -315,9 +315,6 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 			if err != nil {
 				return nil, env.errorf(n, "error applying macro: %w", err)
 			}
-			// if res == nil {
-			// 	panic(fmt.Sprintf("macro %s returned nil", sym))
-			// }
 			return res, nil
 		}
 	}

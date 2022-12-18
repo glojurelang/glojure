@@ -130,6 +130,11 @@
                          z/right
                          z/remove))]
    (sexpr-replace 'clojure.lang.MultiFn 'glojure.lang.MultiFn)
+
+   (sexpr-replace '(System/getProperty "line.separator") '"\\n")
+   (sexpr-replace 'clojure.lang.ISeq 'glojure.lang.ISeq)
+   (sexpr-replace 'clojure.lang.IEditableCollection 'glojure.lang.IEditableCollection)
+   (sexpr-replace 'clojure.core/import* 'glojure.lang.Import)
    ])
 
 (defn rewrite-core [zloc]

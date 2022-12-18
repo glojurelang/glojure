@@ -218,6 +218,11 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			}
 			return value.Apply(env, args[0], seqToSlice(value.Seq(args[1])))
 		}))
+
+		define("glojure.lang.Import", func(args ...interface{}) {
+			// TODO: implement me?
+		})
+
 		define("glojure.lang.Count", value.Count)
 		define("glojure.lang.Seq", value.Seq)
 		define("glojure.lang.Conj", value.Conj)
@@ -235,8 +240,10 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.ConcatStrings", value.ConcatStrings)
 		define("glojure.lang.IPersistentMap", reflect.TypeOf((*value.IPersistentMap)(nil)).Elem())
 		define("glojure.lang.IPersistentVector", reflect.TypeOf((*value.IPersistentVector)(nil)).Elem())
+		define("glojure.lang.IEditableCollection", reflect.TypeOf((*value.IEditableCollection)(nil)).Elem())
 		define("glojure.lang.IMeta", reflect.TypeOf((*value.IMeta)(nil)).Elem())
 		define("glojure.lang.IChunkedSeq", reflect.TypeOf((*value.IChunkedSeq)(nil)).Elem())
+		define("glojure.lang.ISeq", reflect.TypeOf((*value.ISeq)(nil)).Elem())
 		define("glojure.lang.MultiFn", reflect.TypeOf(value.MultiFn{}))
 	}
 	{

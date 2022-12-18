@@ -62,6 +62,18 @@ type (
 		NthDefault(int, interface{}) interface{}
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	// Collections
+
+	ITransientCollection interface {
+		Conj(interface{}) ITransientCollection
+		Persistent() IPersistentCollection
+	}
+
+	IEditableCollection interface {
+		AsTransient() ITransientCollection
+	}
+
 	IPersistentCollection interface {
 		ISeqable
 		Counter
