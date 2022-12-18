@@ -270,8 +270,6 @@ func (l *List) Equal(v interface{}) bool {
 		l = l.next
 		other = other.next
 	}
-
-	return true
 }
 
 func (l *List) GoValue() interface{} {

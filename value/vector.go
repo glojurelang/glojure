@@ -166,7 +166,6 @@ func (v *Vector) Equal(v2 interface{}) bool {
 
 func (v *Vector) Apply(env Environment, args []interface{}) (interface{}, error) {
 	if len(args) != 1 {
-		panic(fmt.Sprintf("vector apply expects 1 argument, got %d. vector: %v", len(args), v))
 		return nil, fmt.Errorf("vector apply expects 1 argument, got %d", len(args))
 	}
 
