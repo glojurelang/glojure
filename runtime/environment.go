@@ -653,11 +653,11 @@ Recur:
 	res, err := recurEnv.Eval(items[len(items)-1])
 	if isLoop && errors.As(err, &recurErr) {
 		newVals := recurErr.Args
+		if len(newVals) != len(bindNameVals)/2 {
+			return nil, env.errorf(n, "invalid recur, expected %d arguments, got %d", len(bindNameVals)/2, len(newVals))
+		}
 		for i := 0; i < len(bindNameVals); i += 2 {
 			newValsIndex := i / 2
-			if newValsIndex >= len(newVals) {
-				return nil, env.errorf(n, "recur called with too few arguments")
-			}
 			val := newVals[newValsIndex]
 			bindNameVals[i+1] = val
 		}

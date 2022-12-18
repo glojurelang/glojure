@@ -1,1 +1,1 @@
-clj -M ./rewrite.clj > ../../stdlib/glojure/core.glj
+clj -M ./rewrite.clj

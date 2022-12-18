@@ -1841,7 +1841,6 @@
 
 (defmacro ^{:private true} assert-args
   [& pairs]
-  (fmt.Println "assert-args pairs" (str pairs))
   `(do (when-not ~(first pairs)
          (throw (errors.New
                   (str (first ~'&form) " requires " ~(second pairs) " in " ~'*ns* ":" (:line (meta ~'&form))))))
