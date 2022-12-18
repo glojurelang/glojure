@@ -1786,28 +1786,28 @@
           hierarchy (get options :hierarchy #'global-hierarchy)]
       (check-valid-options options :default :hierarchy)
       `(let [v# (def ~mm-name)]
-         (when-not (and (.hasRoot v#) (instance? clojure.lang.MultiFn (deref v#)))
+         (when-not (and (.HasRoot v#) (instance? glojure.lang.MultiFn (deref v#)))
            (def ~mm-name
-                (new clojure.lang.MultiFn ~(name mm-name) ~dispatch-fn ~default ~hierarchy)))))))
+                (glojure.lang.NewMultiFn ~(name mm-name) ~dispatch-fn ~default ~hierarchy)))))))
 
 (defmacro defmethod
   "Creates and installs a new method of multimethod associated with dispatch-value. "
   {:added "1.0"}
   [multifn dispatch-val & fn-tail]
-  `(. ~(with-meta multifn {:tag 'clojure.lang.MultiFn}) addMethod ~dispatch-val (fn ~@fn-tail)))
+  `(. ~(with-meta multifn {:tag 'glojure.lang.MultiFn}) addMethod ~dispatch-val (fn ~@fn-tail)))
 
 (defn remove-all-methods
   "Removes all of the methods of multimethod."
   {:added "1.2"
    :static true} 
- [^clojure.lang.MultiFn multifn]
+ [^glojure.lang.MultiFn multifn]
  (.reset multifn))
 
 (defn remove-method
   "Removes the method of multimethod associated with dispatch-value."
   {:added "1.0"
    :static true}
- [^clojure.lang.MultiFn multifn dispatch-val]
+ [^glojure.lang.MultiFn multifn dispatch-val]
  (. multifn removeMethod dispatch-val))
 
 (defn prefer-method
@@ -1815,27 +1815,27 @@
    when there is a conflict"
   {:added "1.0"
    :static true}
-  [^clojure.lang.MultiFn multifn dispatch-val-x dispatch-val-y]
+  [^glojure.lang.MultiFn multifn dispatch-val-x dispatch-val-y]
   (. multifn preferMethod dispatch-val-x dispatch-val-y))
 
 (defn methods
   "Given a multimethod, returns a map of dispatch values -> dispatch fns"
   {:added "1.0"
    :static true}
-  [^clojure.lang.MultiFn multifn] (.getMethodTable multifn))
+  [^glojure.lang.MultiFn multifn] (.getMethodTable multifn))
 
 (defn get-method
   "Given a multimethod and a dispatch value, returns the dispatch fn
   that would apply to that value, or nil if none apply and no default"
   {:added "1.0"
    :static true}
-  [^clojure.lang.MultiFn multifn dispatch-val] (.getMethod multifn dispatch-val))
+  [^glojure.lang.MultiFn multifn dispatch-val] (.getMethod multifn dispatch-val))
 
 (defn prefers
   "Given a multimethod, returns a map of preferred value -> set of other values"
   {:added "1.0"
    :static true}
-  [^clojure.lang.MultiFn multifn] (.getPreferTable multifn))
+  [^glojure.lang.MultiFn multifn] (.getPreferTable multifn))
 
 ;;;;;;;;; var stuff
 
@@ -5855,7 +5855,7 @@
   {:added "1.0"}
   [name expr]
   `(let [v# (def ~name)]
-     (when-not (.hasRoot v#)
+     (when-not (.HasRoot v#)
        (def ~name ~expr))))
 
 ;;;;;;;;;;; require/use/load, contributed by Stephen C. Gilardi ;;;;;;;;;;;;;;;;;;

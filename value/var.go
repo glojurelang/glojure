@@ -27,6 +27,8 @@ type (
 
 var (
 	KeywordMacro = NewKeyword("macro")
+
+	_ IRef = (*Var)(nil)
 )
 
 func NewVar(ns *Namespace, sym *Symbol) *Var {
@@ -93,4 +95,36 @@ func (v *Var) IsMacro() bool {
 
 func (v *Var) SetMacro() {
 	v.SetMeta(v.Meta().Assoc(KeywordMacro, true).(IPersistentMap))
+}
+
+func (v *Var) Deref() interface{} {
+	return v.Get()
+}
+
+// SetValidator(vf Applyer)
+// Validator() Applyer
+// Watches() IPersistentMap
+// AddWatch(key interface{}, fn Applyer)
+// RemoveWatch(key interface{})
+
+// implementations of the above methods that panic with "not implemented"
+
+func (v *Var) SetValidator(vf Applyer) {
+	panic("not implemented")
+}
+
+func (v *Var) Validator() Applyer {
+	panic("not implemented")
+}
+
+func (v *Var) Watches() IPersistentMap {
+	panic("not implemented")
+}
+
+func (v *Var) AddWatch(key interface{}, fn Applyer) {
+	panic("not implemented")
+}
+
+func (v *Var) RemoveWatch(key interface{}) {
+	panic("not implemented")
 }

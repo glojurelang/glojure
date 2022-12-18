@@ -115,6 +115,21 @@
    (sexpr-replace '(. x (toString)) '(glojure.lang.ToString x))
    (sexpr-replace 'getName 'Name)
    (sexpr-replace 'getNamespace 'Namespace)
+   (sexpr-replace '.hasRoot '.HasRoot)
+
+
+   ;; Multi-methods
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [sexpr (z/sexpr zloc)]
+                             (and
+                              (= 'new (first sexpr))
+                              (= 'clojure.lang.MultiFn (second sexpr))))))
+    (fn visit [zloc] (-> zloc
+                         z/down
+                         (z/replace 'glojure.lang.NewMultiFn)
+                         z/right
+                         z/remove))]
+   (sexpr-replace 'clojure.lang.MultiFn 'glojure.lang.MultiFn)
    ])
 
 (defn rewrite-core [zloc]

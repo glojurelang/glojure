@@ -172,6 +172,22 @@ type (
 	Comparer interface {
 		Compare(other interface{}) int
 	}
+
+	// References
+
+	IDeref interface {
+		Deref() interface{}
+	}
+
+	IRef interface {
+		IDeref
+
+		SetValidator(vf Applyer)
+		Validator() Applyer
+		Watches() IPersistentMap
+		AddWatch(key interface{}, fn Applyer)
+		RemoveWatch(key interface{})
+	}
 )
 
 func Conj(coll Conjer, x interface{}) Conjer {

@@ -116,6 +116,9 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("go-sliceof", func(t reflect.Type) reflect.Type {
 			return reflect.SliceOf(t)
 		})
+		define("go-pointerto", func(t reflect.Type) reflect.Type {
+			return reflect.PtrTo(t)
+		})
 
 		////////////////////////////////////////////////////////////////////////////
 		// basic types
@@ -208,6 +211,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.NewSymbol", value.NewSymbol)
 		define("glojure.lang.NewVector", value.NewVector)
 		define("glojure.lang.NewLazySeq", value.NewLazySeq)
+		define("glojure.lang.NewMultiFn", value.NewMultiFn)
 		define("glojure.lang.Apply", value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
 			if len(args) != 2 {
 				return nil, fmt.Errorf("wrong number of arguments (%d) to glojure.lang.Apply", len(args))
@@ -233,6 +237,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.IPersistentVector", reflect.TypeOf((*value.IPersistentVector)(nil)).Elem())
 		define("glojure.lang.IMeta", reflect.TypeOf((*value.IMeta)(nil)).Elem())
 		define("glojure.lang.IChunkedSeq", reflect.TypeOf((*value.IChunkedSeq)(nil)).Elem())
+		define("glojure.lang.MultiFn", reflect.TypeOf(value.MultiFn{}))
 	}
 	{
 		// Add stdlib
