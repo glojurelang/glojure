@@ -2,11 +2,6 @@ package vector
 
 // New returns a new Vector with the given elements.
 func New(elems ...interface{}) Vector {
-	// res := Empty
-	// for _, e := range elems {
-	// 	res = res.Conj(e)
-	// }
-	// return res
 	trans := newTransient(&vector{})
 	for _, e := range elems {
 		trans.conj(e)
@@ -64,8 +59,6 @@ func (t *transient) conj(v interface{}) *transient {
 		newroot[1] = newPath(t.height, tailnode)
 		newheight++
 	} else {
-		// fmt.Println("pushing tail")
-		// fmt.Println(t.count, t.height*chunkBits, t.root)
 		newroot = t.pushTail(t.height, t.root, tailnode)
 	}
 

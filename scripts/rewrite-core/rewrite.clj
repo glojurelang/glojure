@@ -70,7 +70,7 @@
    (sexpr-replace '.concat 'glojure.lang.ConcatStrings)
    (sexpr-replace 'clojure.lang.RT/assoc 'glojure.lang.Assoc)
    (sexpr-replace 'clojure.lang.Util/identical 'glojure.lang.Identical)
-   (sexpr-replace 'clojure.lang.LazilyPersistentVector/create 'glojure.lang.NewVector)
+   (sexpr-replace 'clojure.lang.LazilyPersistentVector/create 'glojure.lang.NewVectorFromCollection)
    (sexpr-replace '(. clojure.lang.RT (seq coll)) '(glojure.lang.Seq coll))
    (sexpr-replace '(list 'new 'clojure.lang.LazySeq (list* '^{:once true} fn* [] body))
                   '(list 'glojure.lang.NewLazySeq (list* '^{:once true} fn* [] body)))

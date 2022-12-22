@@ -74,7 +74,7 @@ func (env *environment) Context() context.Context {
 }
 
 func (env *environment) String() string {
-	return fmt.Sprintf("environment:\nScope:\n%v", env.scope.printIndented("  "))
+	return fmt.Sprintf("object[Environment]")
 }
 
 // TODO: rename to something else; this isn't for `def`s, it's for

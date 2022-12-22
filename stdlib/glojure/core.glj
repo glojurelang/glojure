@@ -372,8 +372,8 @@
    (if (vector? coll)
      (if (instance? clojure.lang.IObj coll)
        (with-meta coll nil)
-       (glojure.lang.NewVector coll))
-     (glojure.lang.NewVector coll))))
+       (glojure.lang.NewVectorFromCollection coll))
+     (glojure.lang.NewVectorFromCollection coll))))
 
 (defn hash-map
   "keyval => key val

@@ -210,6 +210,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.NewCons", value.NewCons)
 		define("glojure.lang.NewSymbol", value.NewSymbol)
 		define("glojure.lang.NewVector", value.NewVector)
+		define("glojure.lang.NewVectorFromCollection", value.NewVectorFromCollection)
 		define("glojure.lang.NewLazySeq", value.NewLazySeq)
 		define("glojure.lang.NewMultiFn", value.NewMultiFn)
 		define("glojure.lang.Apply", value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {

@@ -17,7 +17,6 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
 	compiler.Analyze(env, n)
-	fmt.Printf("analyzed: %v\n", n)
 
 	switch v := n.(type) {
 	case *value.Vector:

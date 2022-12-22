@@ -82,8 +82,12 @@ func analyzeSymbol(env Env, form *value.Symbol) (ast.Node, error) {
 		}
 		return withRawForm(n, form), nil
 	}
+	var n ast.Node
 
-	return nil, nil
+	return merge(n, value.NewMap(
+		kw("env"), env,
+		kw("form"), mform,
+	)), nil
 }
 
 // analyzeVector performs semantic analysis on the given vector,
@@ -165,7 +169,6 @@ func analyzeSeq(env Env, form value.ISeq) (ast.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("n: %v, form: %v\n", n, mform)
 
 	// TODO: add resolved-op to meta
 	return withRawForm(n, form), nil
@@ -231,6 +234,7 @@ func classifyType(v interface{}) value.Keyword {
 }
 
 func parse(env Env, _ interface{}) (ast.Node, error) {
+	panic("not implemented")
 	return nil, nil
 }
 

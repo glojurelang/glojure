@@ -188,6 +188,8 @@ func AsInt(v interface{}) (int, bool) {
 		return int(v), true
 	case uint8:
 		return int(v), true
+	case *BigInt:
+		return int(v.val.Int64()), true
 	default:
 		return 0, false
 	}

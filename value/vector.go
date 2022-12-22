@@ -26,6 +26,16 @@ func NewVector(values ...interface{}) *Vector {
 	}
 }
 
+func NewVectorFromCollection(c interface{}) *Vector {
+	// TODO: match clojure's behavior here. for now, just make it work
+	// for seqs.
+	var items []interface{}
+	for seq := Seq(c); seq != nil; seq = seq.Next() {
+		items = append(items, seq.First())
+	}
+	return NewVector(items...)
+}
+
 var (
 	_ IPersistentVector = (*Vector)(nil)
 )
