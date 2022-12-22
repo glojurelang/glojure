@@ -72,7 +72,7 @@ func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, 
 	if len(res) == 1 {
 		return res[0], nil
 	}
-	return NewVector(res), nil
+	return NewVector(res...), nil
 }
 
 func applyType(env Environment, typ reflect.Type, args []interface{}) (interface{}, error) {
@@ -239,7 +239,7 @@ func fromGo(val interface{}) interface{} {
 		for i := 0; i < reflect.ValueOf(val).Len(); i++ {
 			vec = append(vec, fromGo(reflect.ValueOf(val).Index(i).Interface()))
 		}
-		return NewVector(vec)
+		return NewVector(vec...)
 	}
 	if v, ok := val.(interface{}); ok {
 		return v

@@ -14,12 +14,7 @@ type Vector struct {
 	vec  vector.Vector
 }
 
-func NewVector(values []interface{}, opts ...Option) *Vector {
-	var o options
-	for _, opt := range opts {
-		opt(&o)
-	}
-
+func NewVector(values ...interface{}) *Vector {
 	vals := make([]interface{}, len(values))
 	for i, v := range values {
 		vals[i] = v
@@ -27,8 +22,7 @@ func NewVector(values []interface{}, opts ...Option) *Vector {
 	vec := vector.New(vals...)
 
 	return &Vector{
-		Section: o.section,
-		vec:     vec,
+		vec: vec,
 	}
 }
 

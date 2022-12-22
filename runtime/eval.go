@@ -136,7 +136,13 @@ func (env *environment) evalVector(n *value.Vector) (interface{}, error) {
 		}
 		res = append(res, v)
 	}
-	return value.NewVector(res, value.WithSection(n.Section)), nil
+
+	v, err := value.WithMeta(value.NewVector(res...), n.Meta())
+	if err != nil {
+		// this should never happen - vectors can have metadata
+		panic(err)
+	}
+	return v, nil
 }
 
 func (env *environment) evalScalar(n interface{}) (interface{}, error) {
@@ -380,7 +386,7 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 			}
 			resultValues = append(resultValues, result)
 		}
-		return value.NewVector(resultValues), nil
+		return value.NewVector(resultValues...), nil
 	case *value.Symbol:
 		if !strings.HasSuffix(item.Name(), "#") {
 			return item, nil

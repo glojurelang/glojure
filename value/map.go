@@ -31,17 +31,12 @@ var (
 ////////////////////////////////////////////////////////////////////////////////
 // Map
 
-func NewMap(keyVals []interface{}, opts ...Option) IPersistentMap {
-	var o options
-	for _, opt := range opts {
-		opt(&o)
-	}
+func NewMap(keyVals ...interface{}) IPersistentMap {
 	if len(keyVals)%2 != 0 {
 		panic("invalid map. must have even number of inputs")
 	}
 
 	return &Map{
-		Section: o.section,
 		keyVals: keyVals,
 	}
 }
@@ -88,7 +83,7 @@ func (m *Map) Conj(x interface{}) Conjer {
 }
 
 func (m *Map) Assoc(k, v interface{}) Associative {
-	return NewMap(append(m.keyVals, k, v))
+	return NewMap(append(m.keyVals, k, v)...)
 }
 
 func (m *Map) AssocEx(k, v interface{}) (IPersistentMap, error) {
@@ -105,7 +100,7 @@ func (m *Map) Without(k interface{}) IPersistentMap {
 			newKeyVals = append(newKeyVals, m.keyVals[i], m.keyVals[i+1])
 		}
 	}
-	return NewMap(newKeyVals)
+	return NewMap(newKeyVals...)
 }
 
 func (m *Map) Count() int {

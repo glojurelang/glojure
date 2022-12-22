@@ -101,7 +101,7 @@ func analyzeVector(env Env, form value.IPersistentVector) (ast.Node, error) {
 		items = append(items, nn)
 	}
 	n = n.Assoc(kw("items"), items)
-	return n.Assoc(kw("children"), value.NewVector([]interface{}{kw("items")})), nil
+	return n.Assoc(kw("children"), value.NewVector(kw("items"))), nil
 }
 
 // analyzeMap performs semantic analysis on the given map,
@@ -126,7 +126,7 @@ func analyzeMap(env Env, v value.IPersistentMap) (ast.Node, error) {
 		vals = append(vals, valNode)
 	}
 	n = n.Assoc(kw("keys"), keys).Assoc(kw("vals"), vals)
-	return n.Assoc(kw("children"), value.NewVector([]interface{}{kw("keys"), kw("vals")})), nil
+	return n.Assoc(kw("children"), value.NewVector(kw("keys"), kw("vals"))), nil
 }
 
 // analyzeSet performs semantic analysis on the given set,
@@ -143,7 +143,7 @@ func analyzeSet(env Env, v value.IPersistentSet) (ast.Node, error) {
 		items = append(items, item)
 	}
 	n = n.Assoc(kw("items"), items)
-	return n.Assoc(kw("children"), value.NewVector([]interface{}{kw("items")})), nil
+	return n.Assoc(kw("children"), value.NewVector(kw("items"))), nil
 }
 
 // analyzeSeq performs semantic analysis on the given sequence,
@@ -187,7 +187,7 @@ func analyzeConst(env Env, v interface{}) (ast.Node, error) {
 				return nil, err
 			}
 			n = n.Assoc(kw("meta"), mn).
-				Assoc(kw("children"), value.NewVector([]interface{}{kw("meta")}))
+				Assoc(kw("children"), value.NewVector(kw("meta")))
 		}
 	}
 	return n, nil
@@ -249,4 +249,18 @@ func withRawForm(n ast.Node, form interface{}) ast.Node {
 		return n.Assoc(kw("raw-forms"), value.Conj(rf, form))
 	}
 	return n
+}
+
+func merge(a, b value.Associative) value.Associative {
+	if a == nil {
+		return b
+	}
+	if b == nil {
+		return a
+	}
+	for seq := value.Seq(b); seq != nil; seq = seq.Next() {
+		entry := seq.First().(value.IMapEntry)
+		a = a.Assoc(entry.Key(), entry.Val())
+	}
+	return a
 }

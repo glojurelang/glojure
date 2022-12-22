@@ -350,7 +350,8 @@ func (r *Reader) readVector() (interface{}, error) {
 		}
 		nodes = append(nodes, node)
 	}
-	return value.NewVector(nodes, value.WithSection(r.popSection())), nil
+	r.popSection()
+	return value.NewVector(nodes...), nil
 }
 
 func (r *Reader) readMap() (interface{}, error) {
@@ -377,7 +378,9 @@ func (r *Reader) readMap() (interface{}, error) {
 	if len(keyVals)%2 != 0 {
 		return nil, r.error("map literal must contain an even number of forms")
 	}
-	return value.NewMap(keyVals, value.WithSection(r.popSection())), nil
+
+	r.popSection()
+	return value.NewMap(keyVals...), nil
 }
 
 func (r *Reader) readSet() (interface{}, error) {
@@ -527,7 +530,7 @@ func (r *Reader) readFunctionShorthand() (interface{}, error) {
 
 	return value.NewList([]interface{}{
 		value.NewSymbol("fn*"),
-		value.NewVector(args),
+		value.NewVector(args...),
 		body,
 	}, value.WithSection(r.popSection())), nil
 }
@@ -715,7 +718,12 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 		newKeyVals = append(newKeyVals, newKey, val)
 	}
 
-	return value.NewMap(newKeyVals, value.WithSection(mapVal.(*value.Map).Section)), nil
+	m, err := value.WithMeta(value.NewMap(newKeyVals...), mapVal.(value.IMeta).Meta())
+	if err != nil {
+		// This should never happen. Maps can have metadata.
+		panic(err)
+	}
+	return m, nil
 }
 
 var (
@@ -868,9 +876,9 @@ func (r *Reader) readMeta() (value.IPersistentMap, error) {
 	case *value.Map:
 		return res, nil
 	case *value.Symbol, string:
-		return value.NewMap([]interface{}{keywordTag, res}), nil
+		return value.NewMap(keywordTag, res), nil
 	case value.Keyword:
-		return value.NewMap([]interface{}{res, true}), nil
+		return value.NewMap(res, true), nil
 	default:
 		return nil, r.error("metadata must be a map, symbol, keyword, or string")
 	}

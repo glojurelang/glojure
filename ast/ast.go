@@ -75,10 +75,10 @@ type (
 )
 
 func MakeNode(op value.Keyword, form interface{}) Node {
-	return value.NewMap([]interface{}{
+	return value.NewMap(
 		kw("op"), op,
 		kw("form"), form,
-	})
+	)
 }
 
 func Op(n Node) interface{} {

@@ -33,8 +33,8 @@ func NewNamespace(name *Symbol) *Namespace {
 		name: name,
 	}
 
-	ns.mappings.Store(NewMap(nil))
-	ns.aliases.Store(NewMap(nil))
+	ns.mappings.Store(NewMap())
+	ns.aliases.Store(NewMap())
 
 	// TODO: add default mappings (see RT.java in clojure)
 

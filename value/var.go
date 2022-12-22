@@ -37,7 +37,7 @@ func NewVar(ns *Namespace, sym *Symbol) *Var {
 		sym: sym,
 	}
 	v.root.Store(varBox{val: UnboundVar{v: v}})
-	v.meta.Store(IPersistentMap(NewMap(nil)))
+	v.meta.Store(IPersistentMap(NewMap()))
 	return v
 }
 

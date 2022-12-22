@@ -228,7 +228,7 @@ func WithMeta(v interface{}, meta IPersistentMap) (interface{}, error) {
 
 func Assoc(a Associative, k, v interface{}) Associative {
 	if a == nil {
-		return NewMap([]interface{}{k, v})
+		return NewMap(k, v)
 	}
 	return a.Assoc(k, v)
 }
