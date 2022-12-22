@@ -86,11 +86,11 @@ func (v *Var) SetMeta(meta IPersistentMap) {
 
 func (v *Var) IsMacro() bool {
 	meta := v.Meta()
-	b, ok := meta.EntryAt(KeywordMacro)
-	if !ok {
+	isMacro := meta.EntryAt(KeywordMacro)
+	if isMacro == nil {
 		return false
 	}
-	return b.(bool)
+	return isMacro.Val() == true
 }
 
 func (v *Var) SetMacro() {

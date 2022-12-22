@@ -12,11 +12,6 @@ type (
 		keyVals []interface{}
 	}
 
-	// MapEntry represents a key-value pair in a map.
-	MapEntry struct {
-		Key, Value interface{} // TODO: don't export
-	}
-
 	MapSeq struct {
 		m          *Map
 		entryIndex int
@@ -61,8 +56,12 @@ func (m *Map) ValueAt(key interface{}) (interface{}, bool) {
 	return nil, false
 }
 
-func (m *Map) EntryAt(k interface{}) (interface{}, bool) {
-	return m.ValueAt(k)
+func (m *Map) EntryAt(k interface{}) IMapEntry {
+	v, _ := m.ValueAt(k)
+	return &MapEntry{
+		key: k,
+		val: v,
+	}
 }
 
 func (m *Map) ContainsKey(key interface{}) bool {
@@ -73,7 +72,7 @@ func (m *Map) ContainsKey(key interface{}) bool {
 func (m *Map) Conj(x interface{}) Conjer {
 	switch x := x.(type) {
 	case *MapEntry:
-		return m.Assoc(x.Key, x.Value).(Conjer)
+		return m.Assoc(x.Key(), x.Val()).(Conjer)
 	case IPersistentVector:
 		if x.Count() != 2 {
 			panic("vector arg to map conj must be a pair")
@@ -164,8 +163,8 @@ func (s *MapSeq) Seq() ISeq {
 
 func (s *MapSeq) First() interface{} {
 	return &MapEntry{
-		Key:   s.m.keyVals[2*s.entryIndex],
-		Value: s.m.keyVals[2*s.entryIndex+1],
+		key: s.m.keyVals[2*s.entryIndex],
+		val: s.m.keyVals[2*s.entryIndex+1],
 	}
 }
 
@@ -226,7 +225,7 @@ func (s *MapValSeq) Seq() ISeq {
 }
 
 func (s *MapValSeq) First() interface{} {
-	return s.s.First().(*MapEntry).Value
+	return s.s.First().(*MapEntry).Val()
 }
 
 func (s *MapValSeq) Next() ISeq {

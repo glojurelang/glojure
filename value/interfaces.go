@@ -34,9 +34,16 @@ type (
 		Seq() ISeq
 	}
 
+	IMapEntry interface {
+		Key() interface{}
+		Val() interface{}
+	}
+
 	Associative interface {
 		ContainsKey(interface{}) bool
-		EntryAt(interface{}) (interface{}, bool)
+
+		EntryAt(interface{}) IMapEntry
+
 		Assoc(k, v interface{}) Associative
 	}
 
@@ -235,8 +242,8 @@ func GetDefault(coll, key, def interface{}) interface{} {
 	case ILookup:
 		return arg.ValAt(key)
 	case Associative:
-		if val, ok := arg.EntryAt(key); ok {
-			return val
+		if arg.ContainsKey(key) {
+			return arg.EntryAt(key).Val()
 		}
 	case IPersistentSet:
 		if arg.Contains(key) {

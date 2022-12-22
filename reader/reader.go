@@ -703,8 +703,8 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 	for mp := value.Seq(mapVal); mp != nil; mp = mp.Next() {
 		kv := mp.First()
 
-		key := kv.(*value.MapEntry).Key
-		val := kv.(*value.MapEntry).Value
+		key := kv.(*value.MapEntry).Key()
+		val := kv.(*value.MapEntry).Val()
 
 		keyKW, ok := key.(value.Keyword)
 		if !ok || keyKW.Namespace() != "" {

@@ -75,12 +75,19 @@ func (v *Vector) Assoc(key, val interface{}) Associative {
 	return v.AssocN(kInt, val)
 }
 
-func (v *Vector) EntryAt(key interface{}) (interface{}, bool) {
+func (v *Vector) EntryAt(key interface{}) IMapEntry {
 	kInt, ok := AsInt(key)
 	if !ok {
-		return nil, false
+		return nil
 	}
-	return v.Nth(kInt)
+	val, ok := v.Nth(kInt)
+	if !ok {
+		return nil
+	}
+	return &MapEntry{
+		key: key,
+		val: val,
+	}
 }
 
 func (v *Vector) ValueAt(i int) interface{} {

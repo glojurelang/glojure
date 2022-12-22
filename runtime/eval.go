@@ -7,10 +7,18 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/glojurelang/glojure/compiler"
 	"github.com/glojurelang/glojure/value"
 )
 
+func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
+	return form, nil
+}
+
 func (env *environment) Eval(n interface{}) (interface{}, error) {
+	compiler.Analyze(env, n)
+	fmt.Printf("analyzed: %v\n", n)
+
 	switch v := n.(type) {
 	case *value.Vector:
 		return env.evalVector(v)
