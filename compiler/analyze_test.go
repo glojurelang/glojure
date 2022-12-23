@@ -23,16 +23,33 @@ const testForms = `
 
 [(), {:op :const, :form (), :type :seq, :val (), :literal? true}]
 
-[(def x 42), {:op :def, :form (def x 42), :env nil, :name x, :var (var user/x), :meta {:op :map, :form {}, :keys [], :vals [], :children [:keys :vals]}, :init {:op :const, :form 42, :type :number, :val 42, :literal? true}, :children [:meta :init]}]
+[(def x 42), {:op :def, :form (def x 42), :env {:ns user}, :name x, :var (var user/x), :meta {:op :map, :form {}, :keys [], :vals [], :children [:keys :vals]}, :init {:op :const, :form 42, :type :number, :val 42, :literal? true}, :children [:meta :init]}]
 
-[(def x), {:op :def, :form (def x), :env nil, :name x, :var (var user/x), :meta {:op :map, :form {}, :keys [], :vals [], :children [:keys :vals]}, :children [:meta]}]
+[(def x), {:op :def, :form (def x), :env {:ns user}, :name x, :var (var user/x), :meta {:op :map, :form {}, :keys [], :vals [], :children [:keys :vals]}, :children [:meta]}]
 
-[(def x "docstring" 43), {:op :def, :form (def x "docstring" 43), :env nil, :name x, :var (var user/x), :meta {:op :map, :form {:doc "docstring"}, :keys [{:op :const, :form :doc, :type :keyword, :val :doc, :literal? true}], :vals [{:op :const, :form "docstring", :type :string, :val "docstring", :literal? true}], :children [:keys :vals]}, :init {:op :const, :form 43, :type :number, :val 43, :literal? true}, :doc "docstring", :children [:meta :init]}]
+[(def x "docstring" 43), {:op :def, :form (def x "docstring" 43), :env {:ns user}, :name x, :var (var user/x), :meta {:op :map, :form {:doc "docstring"}, :keys [{:op :const, :form :doc, :type :keyword, :val :doc, :literal? true}], :vals [{:op :const, :form "docstring", :type :string, :val "docstring", :literal? true}], :children [:keys :vals]}, :init {:op :const, :form 43, :type :number, :val 43, :literal? true}, :doc "docstring", :children [:meta :init]}]
 
-['foo, {:op :quote, :form (quote foo), :expr {:op :const, :form foo, :type :symbol, :val foo, :literal? true}, :env nil, :literal? true, :children [:expr]}]
+['foo, {:op :quote, :form (quote foo), :expr {:op :const, :form foo, :type :symbol, :val foo, :literal? true}, :env {:ns user}, :literal? true, :children [:expr]}]
 
-[(+ 1 2), {:op :invoke, :form (+ 1 2), :fn {:op :maybe-class, :class +, :env {:context :ctx/expr}, :form +}, :args [{:op :const, :form 1, :type :number, :val 1, :literal? true} {:op :const, :form 2, :type :number, :val 2, :literal? true}], :children [:fn :args]}]
+[(+ 1 2), {:op :invoke, :form (+ 1 2), :fn {:op :maybe-class, :class +, :env {:ns user, :context :ctx/expr}, :form +}, :args [{:op :const, :form 1, :type :number, :val 1, :literal? true} {:op :const, :form 2, :type :number, :val 2, :literal? true}], :children [:fn :args]}]
+
+[#'user/foo, {:op :the-var, :form (var user/foo), :env {:ns user}, :var (var user/foo)}]
+
+[(fn* [] "Hello"), {}]
 `
+
+var (
+	globalEnv = value.NewMap(
+		kw("namespaces"), value.NewMap(
+			value.NewSymbol("user"), value.NewMap(
+				kw("ns"), value.NewSymbol("user"),
+				kw("mappings"), value.NewMap(
+					value.NewSymbol("foo"), value.NewList(value.NewSymbol("var"), value.NewSymbol("user/foo")),
+				),
+			),
+		),
+	)
+)
 
 func TestAnalyze(t *testing.T) {
 	r := reader.New(strings.NewReader(testForms))
@@ -41,8 +58,10 @@ func TestAnalyze(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	const nsName = "user"
+	env := value.NewMap(kw("ns"), value.NewSymbol(nsName))
+
 	for _, form := range forms {
-		const nsName = "user"
 		t.Run(value.ToString(value.First(form)), func(t *testing.T) {
 			a := &Analyzer{
 				Macroexpand1: func(form interface{}) (interface{}, error) {
@@ -53,9 +72,10 @@ func TestAnalyze(t *testing.T) {
 						value.NewSymbol("var"),
 						value.NewSymbol(nsName+"/"+sym.Name())), nil
 				},
+				GlobalEnv: value.NewAtom(globalEnv),
 			}
 
-			ast, err := a.Analyze(value.First(form), nil)
+			ast, err := a.Analyze(value.First(form), env)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -79,6 +99,8 @@ func FuzzAnalyze(f *testing.F) {
 	}
 
 	const nsName = "user"
+	env := value.NewMap(kw("ns"), value.NewSymbol(nsName))
+
 	f.Fuzz(func(t *testing.T, formStr string) {
 		a := &Analyzer{
 			Macroexpand1: func(form interface{}) (interface{}, error) {
@@ -89,6 +111,7 @@ func FuzzAnalyze(f *testing.F) {
 					value.NewSymbol("var"),
 					value.NewSymbol(nsName+"/"+sym.Name())), nil
 			},
+			GlobalEnv: value.NewAtom(globalEnv),
 		}
 
 		r := reader.New(strings.NewReader(formStr))
@@ -98,6 +121,6 @@ func FuzzAnalyze(f *testing.F) {
 		}
 
 		// just make sure it doesn't panic
-		a.Analyze(form, nil)
+		a.Analyze(form, env)
 	})
 }

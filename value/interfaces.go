@@ -207,6 +207,25 @@ type (
 		AddWatch(key interface{}, fn Applyer)
 		RemoveWatch(key interface{})
 	}
+
+	IAtom interface {
+		// Object swap(IFn f);
+		// Object swap(IFn f, Object arg);
+		// Object swap(IFn f, Object arg1, Object arg2);
+		// Object swap(IFn f, Object x, Object y, ISeq args);
+		// boolean compareAndSet(Object oldv, Object newv);
+		// Object reset(Object newval);
+	}
+
+	IAtom2 interface {
+		IAtom
+		// IPersistentVector swapVals(IFn f);
+		// IPersistentVector swapVals(IFn f, Object arg);
+		// IPersistentVector swapVals(IFn f, Object arg1, Object arg2);
+		// IPersistentVector swapVals(IFn f, Object x, Object y, ISeq args);
+		// IPersistentVector resetVals(Object newv);
+
+	}
 )
 
 func Conj(coll Conjer, x interface{}) Conjer {

@@ -1,6 +1,8 @@
 package value
 
-import "strings"
+import (
+	"strings"
+)
 
 type Symbol struct {
 	Section
@@ -77,6 +79,9 @@ func (s *Symbol) Equal(v interface{}) bool {
 	}
 	other, ok := v.(*Symbol)
 	if !ok {
+		return false
+	}
+	if other == nil {
 		return false
 	}
 	return s.ns == other.ns && s.name == other.name

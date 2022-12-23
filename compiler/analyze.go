@@ -23,7 +23,7 @@ type (
 		CreateVar    func(sym *value.Symbol, env Env) (interface{}, error)
 		IsVar        func(v interface{}) bool
 
-		// Env *value.Atom
+		GlobalEnv *value.Atom
 	}
 )
 
@@ -75,7 +75,7 @@ func (a *Analyzer) analyzeSymbol(form *value.Symbol, env Env) (ast.Node, error) 
 			kw("children"), value.NewVectorFromCollection(remove(children, kw("init"))),
 		))
 	} else {
-		v := resolveSym(form, env)
+		v := a.resolveSym(form, env)
 		vr, ok := v.(*value.Var)
 		if ok {
 			m := vr.Meta()
@@ -544,8 +544,32 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (ast.Node, error) {
 	panic("parseFnStar unimplemented!")
 }
 
+// (defn parse-var
+//
+//	[[_ var :as form] env]
+//	(when-not (= 2 (count form))
+//	  (throw (ex-info (str "Wrong number of args to var, had: " (dec (count form)))
+//	                  (merge {:form form}
+//	                         (-source-info form env)))))
+//	(if-let [var (resolve-sym var env)]
+//	  {:op   :the-var
+//	   :env  env
+//	   :form form
+//	   :var  var}
+//	  (throw (ex-info (str "var not found: " var) {:var var}))))
 func (a *Analyzer) parseVar(form interface{}, env Env) (ast.Node, error) {
-	panic("parseVar unimplemented!")
+	vrSym := second(form)
+	if value.Count(form) != 2 {
+		return nil, exInfo(fmt.Sprintf("wrong number of args to var, had: %d", value.Count(form)-1), nil)
+	}
+	vr := a.resolveSym(vrSym, env)
+	if vr == nil {
+		return nil, exInfo(fmt.Sprintf("var not found: %s", vrSym), nil)
+	}
+	return merge(ast.MakeNode(kw("the-var"), form), value.NewMap(
+		kw("env"), env,
+		kw("var"), vr,
+	)), nil
 }
 
 // (defn wrapping-meta
@@ -590,15 +614,75 @@ func (a *Analyzer) wrappingMeta(expr ast.Node) (ast.Node, error) {
 ////////////////////////////////////////////////////////////////////////////////
 // Helpers
 
-func resolveSym(sym *value.Symbol, env Env) interface{} {
-	// var symNS *value.Symbol
-	// if sym.Namespace() != "" {
-	// 	symNS = value.NewSymbol(sym.Namespace())
-	// }
-	// var fullNS *value.Namespace
-
-	// TODO!
+// (defn resolve-ns
+//
+//	"Resolves the ns mapped by the given sym in the global env"
+//	[ns-sym {:keys [ns]}]
+//	(when ns-sym
+//	  (let [namespaces (:namespaces (env/deref-env))]
+//	    (or (get-in namespaces [ns :aliases ns-sym])
+//	        (:ns (namespaces ns-sym))))))
+func (a *Analyzer) resolveNS(nsSym interface{}, env Env) *value.Symbol {
+	ns := value.Get(env, kw("ns")).(*value.Symbol)
+	if nsSym == nil {
+		return nil
+	}
+	globalEnv := a.GlobalEnv.Deref()
+	namespaces, _ := value.Get(globalEnv, kw("namespaces")).(value.IPersistentMap)
+	if res := value.Get(value.Get(value.Get(namespaces, ns), kw("aliases")), nsSym); res != nil {
+		if sym, ok := res.(*value.Symbol); ok {
+			return sym
+		}
+		return nil
+	}
+	if sym, ok := value.Get(value.Get(namespaces, nsSym), kw("ns")).(*value.Symbol); ok {
+		return sym
+	}
 	return nil
+}
+
+// (defn resolve-sym
+//
+//	"Resolves the value mapped by the given sym in the global env"
+//	[sym {:keys [ns] :as env}]
+//	(when (symbol? sym)
+//	  (let [sym-ns (when-let [ns (namespace sym)]
+//	                 (symbol ns))
+//	        full-ns (resolve-ns sym-ns env)]
+//	    (when (or (not sym-ns) full-ns)
+//	      (let [name (if sym-ns (-> sym name symbol) sym)]
+//	        (-> (env/deref-env) :namespaces (get (or full-ns ns)) :mappings (get name)))))))
+func (a *Analyzer) resolveSym(symIfc interface{}, env Env) interface{} {
+	ns, _ := value.Get(env, kw("ns")).(*value.Symbol)
+
+	sym, ok := symIfc.(*value.Symbol)
+	if !ok {
+		return nil
+	}
+	var symNS *value.Symbol
+	if sym.Namespace() != "" {
+		symNS = value.NewSymbol(sym.Namespace())
+	}
+	fullNS := a.resolveNS(symNS, env)
+	if fullNS == nil && symNS != nil {
+		return nil
+	}
+
+	var name *value.Symbol
+	if symNS != nil {
+		name = value.NewSymbol(sym.Name())
+	} else {
+		name = sym
+	}
+
+	if fullNS != nil {
+		ns = fullNS
+	}
+	globalEnv := a.GlobalEnv.Deref()
+	namespaces, _ := value.Get(globalEnv, kw("namespaces")).(value.IPersistentMap)
+	nsMap, _ := value.Get(namespaces, ns).(value.IPersistentMap)
+	mappings, _ := value.Get(nsMap, kw("mappings")).(value.IPersistentMap)
+	return value.Get(mappings, name)
 }
 
 func kw(s string) value.Keyword {

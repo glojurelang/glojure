@@ -9,10 +9,11 @@ func First(x interface{}) interface{} {
 	if x == nil {
 		return nil
 	}
-	if s := Seq(x); s != nil {
-		return s.First()
+	s := Seq(x)
+	if s == nil {
+		return nil
 	}
-	panic(fmt.Errorf("%T can't be converted to ISeq", x))
+	return s.First()
 }
 
 func Rest(x interface{}) interface{} {
