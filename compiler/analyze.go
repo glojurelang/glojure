@@ -136,7 +136,7 @@ func (a *Analyzer) analyzeMap(v value.IPersistentMap, env Env) (ast.Node, error)
 		// TODO: pass a "kv-env" with an expr context
 
 		entry := seq.First().(*value.MapEntry)
-		keyNode, err := a.analyzeForm(entry.Key, env)
+		keyNode, err := a.analyzeForm(entry.Key(), env)
 		if err != nil {
 			return nil, err
 		}
@@ -302,7 +302,30 @@ func (a *Analyzer) parse(form interface{}, env Env) (ast.Node, error) {
 }
 
 func (a *Analyzer) parseInvoke(form interface{}, env Env) (ast.Node, error) {
-	panic("parseInvoke unimplemented!")
+	f := value.First(form)
+	args := value.Rest(form)
+	fenv := ctxEnv(env, ctxExpr)
+	fnExpr, err := a.analyzeForm(f, fenv)
+	if err != nil {
+		return nil, err
+	}
+	argsExprs := make([]interface{}, 0, value.Count(args))
+	for seq := value.Seq(args); seq != nil; seq = seq.Next() {
+		n, err := a.analyzeForm(seq.First(), fenv)
+		if err != nil {
+			return nil, err
+		}
+		argsExprs = append(argsExprs, n)
+	}
+	var meta value.IPersistentMap
+	if m, ok := form.(value.IMeta); ok && value.Seq(m.Meta()) != nil {
+		meta = value.NewMap(kw("meta"), m.Meta())
+	}
+	return merge(ast.MakeNode(kw("invoke"), form), value.NewMap(
+		kw("fn"), fnExpr,
+		kw("args"), value.NewVector(argsExprs...)),
+		meta,
+		value.NewMap(kw("children"), value.NewVector(kw("fn"), kw("args")))), nil
 }
 
 func (a *Analyzer) parseDo(form interface{}, env Env) (ast.Node, error) {
@@ -318,7 +341,21 @@ func (a *Analyzer) parseNew(form interface{}, env Env) (ast.Node, error) {
 }
 
 func (a *Analyzer) parseQuote(form interface{}, env Env) (ast.Node, error) {
-	panic("parseQuote unimplemented!")
+	expr := second(form)
+	if value.Count(form) != 2 {
+		return nil, exInfo(fmt.Sprintf("wrong number of args to quote, had: %v", value.Count(form)-1), nil)
+	}
+	cnst, err := a.analyzeConst(expr, env)
+	if err != nil {
+		return nil, err
+	}
+	n := ast.MakeNode(kw("quote"), form)
+	return merge(n, value.NewMap(
+		kw("expr"), cnst,
+		kw("env"), env,
+		kw("literal?"), true,
+		kw("children"), value.NewVector(kw("expr")),
+	)), nil
 }
 
 func (a *Analyzer) parseSetBang(form interface{}, env Env) (ast.Node, error) {
@@ -363,6 +400,8 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (ast.Node, error) {
 	}
 	if doc == nil {
 		doc = value.Get(sym.Meta(), kw("doc"))
+	} else if _, ok := doc.(string); !ok {
+		return nil, exInfo("doc must be a string", nil)
 	}
 	arglists := value.Get(sym.Meta(), kw("arglists"))
 	if arglists != nil {
@@ -385,7 +424,7 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (ast.Node, error) {
 
 	meta := sym.Meta()
 	if arglists != nil {
-		meta = merge(meta, value.NewMap(kw("arglists"), value.NewList([]interface{}{value.NewSymbol("quote"), arglists}))).(value.IPersistentMap)
+		meta = merge(meta, value.NewMap(kw("arglists"), value.NewList(value.NewSymbol("quote"), arglists))).(value.IPersistentMap)
 	}
 	var metaExpr ast.Node
 	if meta != nil {
