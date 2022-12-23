@@ -9,13 +9,6 @@ import (
 	"github.com/glojurelang/glojure/value"
 )
 
-// interface {
-// 	Macroexpand1(form interface{}) (interface{}, error)
-// 	CurrentNamespace() *value.Symbol
-// 	Locals() value.IPersistentMap
-// 	Context() value.Keyword
-// }
-
 var (
 	ctxExpr      = kw("ctx/expr")
 	ctxReturn    = kw("ctx/return")
@@ -27,8 +20,10 @@ type (
 
 	Analyzer struct {
 		Macroexpand1 func(form interface{}) (interface{}, error)
-		CreateVar    func(sym *value.Symbol) *value.Var
+		CreateVar    func(sym *value.Symbol, env Env) (interface{}, error)
 		IsVar        func(v interface{}) bool
+
+		// Env *value.Atom
 	}
 )
 
@@ -39,10 +34,6 @@ func (a *Analyzer) Analyze(form interface{}, env Env) (ast.Node, error) {
 }
 
 func (a *Analyzer) analyzeForm(form interface{}, env Env) (n ast.Node, err error) {
-	// defer func() {
-	// 	fmt.Printf("analyzed: %v from %v\n", n, form)
-	// }()
-
 	switch v := form.(type) {
 	case *value.Symbol:
 		return a.analyzeSymbol(v, env)
@@ -121,7 +112,7 @@ func (a *Analyzer) analyzeSymbol(form *value.Symbol, env Env) (ast.Node, error) 
 // returning an AST.
 func (a *Analyzer) analyzeVector(form value.IPersistentVector, env Env) (ast.Node, error) {
 	n := ast.MakeNode(kw("vector"), form)
-	var items []ast.Node
+	var items []interface{}
 	for i := 0; i < form.Count(); i++ {
 		// TODO: pass an "items-env" with an expr context
 		nn, err := a.analyzeForm(value.MustNth(form, i), env)
@@ -131,7 +122,7 @@ func (a *Analyzer) analyzeVector(form value.IPersistentVector, env Env) (ast.Nod
 
 		items = append(items, nn)
 	}
-	n = n.Assoc(kw("items"), items)
+	n = n.Assoc(kw("items"), value.NewVector(items...))
 	return n.Assoc(kw("children"), value.NewVector(kw("items"))), nil
 }
 
@@ -139,8 +130,8 @@ func (a *Analyzer) analyzeVector(form value.IPersistentVector, env Env) (ast.Nod
 // returning an AST.
 func (a *Analyzer) analyzeMap(v value.IPersistentMap, env Env) (ast.Node, error) {
 	n := ast.MakeNode(kw("map"), v)
-	var keys []ast.Node
-	var vals []ast.Node
+	var keys []interface{}
+	var vals []interface{}
 	for seq := value.Seq(v); seq != nil; seq = seq.Next() {
 		// TODO: pass a "kv-env" with an expr context
 
@@ -156,7 +147,8 @@ func (a *Analyzer) analyzeMap(v value.IPersistentMap, env Env) (ast.Node, error)
 		keys = append(keys, keyNode)
 		vals = append(vals, valNode)
 	}
-	n = n.Assoc(kw("keys"), keys).Assoc(kw("vals"), vals)
+	n = n.Assoc(kw("keys"), value.NewVector(keys...)).
+		Assoc(kw("vals"), value.NewVector(vals...))
 	return n.Assoc(kw("children"), value.NewVector(kw("keys"), kw("vals"))), nil
 }
 
@@ -164,7 +156,7 @@ func (a *Analyzer) analyzeMap(v value.IPersistentMap, env Env) (ast.Node, error)
 // returning an AST.
 func (a *Analyzer) analyzeSet(v value.IPersistentSet, env Env) (ast.Node, error) {
 	n := ast.MakeNode(kw("set"), v)
-	items := make([]ast.Node, 0, v.Count())
+	items := make([]interface{}, 0, v.Count())
 	for seq := value.Seq(v); seq != nil; seq = seq.Next() {
 		// TODO: pass an "items-env" with an expr context
 		item, err := a.analyzeForm(seq.First(), env)
@@ -173,13 +165,17 @@ func (a *Analyzer) analyzeSet(v value.IPersistentSet, env Env) (ast.Node, error)
 		}
 		items = append(items, item)
 	}
-	n = n.Assoc(kw("items"), items)
+	n = n.Assoc(kw("items"), value.NewVector(items...))
 	return n.Assoc(kw("children"), value.NewVector(kw("items"))), nil
 }
 
 // analyzeSeq performs semantic analysis on the given sequence,
 // returning an AST.
 func (a *Analyzer) analyzeSeq(form value.ISeq, env Env) (ast.Node, error) {
+	if value.Seq(form) == nil {
+		return a.analyzeConst(form, env)
+	}
+
 	op := form.First()
 	if op == nil {
 		return nil, exInfo("can't call nil", nil) // TODO: include form and source info
@@ -207,7 +203,7 @@ func (a *Analyzer) analyzeConst(v interface{}, env Env) (ast.Node, error) {
 	n := ast.MakeNode(kw("const"), v)
 	n = n.Assoc(kw("type"), classifyType(v)).
 		Assoc(kw("val"), v).
-		Assoc(kw("literal"), fmt.Sprintf("%v", v))
+		Assoc(kw("literal?"), true)
 
 	if im, ok := v.(value.IMeta); ok {
 		meta := im.Meta()
@@ -368,18 +364,72 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (ast.Node, error) {
 	if doc == nil {
 		doc = value.Get(sym.Meta(), kw("doc"))
 	}
+	arglists := value.Get(sym.Meta(), kw("arglists"))
+	if arglists != nil {
+		arglists = second(arglists)
+	}
+	sym = value.NewSymbol(sym.Name()).WithMeta(
+		merge(value.NewMap(), // hack to make sure we get a non-nil map
+			sym.Meta(),
+			mapWhen(kw("arglists"), arglists),
+			mapWhen(kw("doc"), doc),
+			// TODO: source info
+		).(value.IPersistentMap)).(*value.Symbol)
 
-	//var vr *value.Var
+	vr, err := a.CreateVar(sym, env)
+	if err != nil {
+		return nil, err
+	}
+	// TODO: make sure we have an environment
+	// TODO: mutate the environment to add the var to the namespace
 
-	var meta *value.Map
-	var children *value.Map
+	meta := sym.Meta()
+	if arglists != nil {
+		meta = merge(meta, value.NewMap(kw("arglists"), value.NewList([]interface{}{value.NewSymbol("quote"), arglists}))).(value.IPersistentMap)
+	}
+	var metaExpr ast.Node
+	if meta != nil {
+		var err error
+		metaExpr, err = a.analyzeForm(meta, ctxEnv(env, ctxExpr))
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	var hasInit bool
+	if init := value.Get(args, kw("init")); init != nil {
+		initNode, err := a.analyzeForm(init, ctxEnv(env, ctxExpr))
+		if err != nil {
+			return nil, err
+		}
+		args = args.Assoc(kw("init"), initNode)
+		hasInit = true
+	}
+
+	children := value.NewVector()
+	if meta != nil {
+		children = children.Conj(kw("meta")).(*value.Vector)
+	}
+	if hasInit {
+		children = children.Conj(kw("init")).(*value.Vector)
+	}
+	var childrenMap, metaMap value.IPersistentMap
+	if children.Count() > 0 {
+		childrenMap = value.NewMap(kw("children"), children)
+	}
+	if meta != nil {
+		metaMap = value.NewMap(kw("meta"), metaExpr)
+	}
 
 	n := ast.MakeNode(kw("def"), form)
 	return merge(n, value.NewMap(
 		kw("env"), env,
 		kw("name"), sym,
-		// kw("var"), vr, // TODO
-	), meta, args, children), nil
+		kw("var"), vr,
+	),
+		metaMap,
+		args,
+		childrenMap), nil
 }
 
 func (a *Analyzer) parseDot(form interface{}, env Env) (ast.Node, error) {
@@ -508,12 +558,16 @@ func resolveSym(sym *value.Symbol, env Env) interface{} {
 	// }
 	// var fullNS *value.Namespace
 
-	// TODO
+	// TODO!
 	return nil
 }
 
 func kw(s string) value.Keyword {
 	return value.NewKeyword(s)
+}
+
+func second(x interface{}) interface{} {
+	return value.First(value.Rest(x))
 }
 
 func exInfo(errStr string, _ interface{}) error {
@@ -527,6 +581,13 @@ func withRawForm(n ast.Node, form interface{}) ast.Node {
 		return n.Assoc(kw("raw-forms"), value.Conj(rf, form))
 	}
 	return n
+}
+
+func mapWhen(k, v interface{}) value.IPersistentMap {
+	if v == nil {
+		return nil
+	}
+	return value.NewMap(k, v)
 }
 
 func merge(as ...interface{}) value.Associative {

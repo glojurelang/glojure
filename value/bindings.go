@@ -12,7 +12,7 @@ func restFromNth(nth interface{}, i int) interface{} {
 		result = append(result, val)
 		i++
 	}
-	return NewList(result)
+	return NewList(result...)
 }
 
 var restSymbol = NewSymbol("&")

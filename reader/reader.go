@@ -326,7 +326,8 @@ func (r *Reader) readList() (interface{}, error) {
 		}
 		nodes = append(nodes, node)
 	}
-	return value.NewList(nodes, value.WithSection(r.popSection())), nil
+	r.popSection()
+	return value.NewList(nodes...), nil
 }
 
 func (r *Reader) readVector() (interface{}, error) {
@@ -528,11 +529,12 @@ func (r *Reader) readFunctionShorthand() (interface{}, error) {
 		args[i] = r.genArg(i + 1)
 	}
 
-	return value.NewList([]interface{}{
+	r.popSection()
+	return value.NewList(
 		value.NewSymbol("fn*"),
 		value.NewVector(args...),
 		body,
-	}, value.WithSection(r.popSection())), nil
+	), nil
 }
 
 func (r *Reader) readRegex() (interface{}, error) {
@@ -606,7 +608,7 @@ func (r *Reader) readQuoteType(form string) (interface{}, error) {
 		value.NewSymbol(form, value.WithSection(value.Section{StartPos: section.StartPos, EndPos: symbolEndPos})),
 		node,
 	}
-	return value.NewList(items, value.WithSection(section)), nil
+	return value.NewList(items...), nil
 }
 
 func (r *Reader) readQuote() (interface{}, error) {
@@ -665,10 +667,11 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		return value.NewList([]interface{}{
+		r.popSection()
+		return value.NewList(
 			value.NewSymbol("var"),
 			expr,
-		}, value.WithSection(r.popSection())), nil
+		), nil
 	case '"':
 		return r.readRegex()
 	default:

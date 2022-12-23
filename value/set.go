@@ -93,8 +93,23 @@ func (s *Set) String() string {
 }
 
 func (s *Set) Equal(v2 interface{}) bool {
-	// TODO: implement me
-	return false
+	if s == v2 {
+		return true
+	}
+
+	v2Set, ok := v2.(IPersistentSet)
+	if !ok {
+		return false
+	}
+	if s.Count() != v2Set.Count() {
+		return false
+	}
+	for seq := s.Seq(); seq != nil; seq = seq.Next() {
+		if !v2Set.Contains(seq.First()) {
+			return false
+		}
+	}
+	return true
 }
 
 func (s *Set) Seq() ISeq {

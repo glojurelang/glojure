@@ -10,6 +10,7 @@ type (
 	// Map represents a map of glojure values.
 	Map struct {
 		Section
+		meta    IPersistentMap
 		keyVals []interface{}
 	}
 
@@ -27,6 +28,7 @@ type (
 
 var (
 	_ IPersistentMap = (*Map)(nil)
+	_ IMeta          = (*Map)(nil)
 )
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +40,7 @@ func NewMap(keyVals ...interface{}) IPersistentMap {
 	}
 
 	return &Map{
-		keyVals: keyVals,
+		keyVals: append([]interface{}{}, keyVals...),
 	}
 }
 
@@ -84,7 +86,17 @@ func (m *Map) Conj(x interface{}) Conjer {
 }
 
 func (m *Map) Assoc(k, v interface{}) Associative {
-	return NewMap(append(m.keyVals, k, v)...)
+	newKeyVals := make([]interface{}, len(m.keyVals), len(m.keyVals)+2)
+	copy(newKeyVals, m.keyVals)
+	for i := 0; i < len(newKeyVals); i += 2 {
+		if Equal(newKeyVals[i], k) {
+			newKeyVals[i+1] = v
+			return &Map{
+				keyVals: newKeyVals,
+			}
+		}
+	}
+	return NewMap(append(newKeyVals, k, v)...)
 }
 
 func (m *Map) AssocEx(k, v interface{}) (IPersistentMap, error) {
@@ -144,8 +156,44 @@ func (m *Map) String() string {
 }
 
 func (m *Map) Equal(v2 interface{}) bool {
-	// TODO: implement me
-	return false
+	if m == v2 {
+		return true
+	}
+
+	if c, ok := v2.(Counter); ok {
+		if m.Count() != c.Count() {
+			return false
+		}
+	}
+	assoc, ok := v2.(Associative)
+	if !ok {
+		return false
+	}
+
+	for seq := m.Seq(); seq != nil; seq = seq.Next() {
+		entry := seq.First().(IMapEntry)
+		if !assoc.ContainsKey(entry.Key()) {
+			return false
+		}
+		if !Equal(entry.Val(), assoc.EntryAt(entry.Key()).Val()) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (m *Map) Meta() IPersistentMap {
+	return m.meta
+}
+
+func (m *Map) WithMeta(meta IPersistentMap) interface{} {
+	if Equal(m.meta, meta) {
+		return m
+	}
+	cpy := *m
+	cpy.meta = meta
+	return &cpy
 }
 
 ////////////////////////////////////////////////////////////////////////////////

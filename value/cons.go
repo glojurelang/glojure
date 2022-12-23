@@ -13,7 +13,7 @@ var (
 func NewCons(x interface{}, xs interface{}) ISeq {
 	switch xs := xs.(type) {
 	case nil:
-		return NewList([]interface{}{x})
+		return NewList(x)
 	case ISeq:
 		return &Cons{first: x, more: xs}
 	default:

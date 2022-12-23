@@ -31,7 +31,7 @@
 (def replacements
   [
    (sexpr-replace 'clojure.core 'glojure.core)
-   (sexpr-replace '(. clojure.lang.PersistentList creator) 'glojure.lang.CreateList)
+   (sexpr-replace '(. clojure.lang.PersistentList creator) 'glojure.lang.NewList)
    (sexpr-replace '(setMacro) '(SetMacro))
    (sexpr-replace 'clojure.lang.Symbol 'glojure.lang.Symbol)
    ;; instance? replacements

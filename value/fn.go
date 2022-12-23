@@ -77,7 +77,7 @@ func ParseFunc(env Environment, form ISeq) (*Func, error) {
 	// signature. to simplify the code below, we'll just wrap it in a
 	// sequence and proceed to parse a sequence of sequences.
 	if _, ok := rest.First().(*Vector); ok {
-		rest = NewList([]interface{}{rest})
+		rest = NewList(rest)
 	}
 
 	fn := &Func{
@@ -252,7 +252,7 @@ func (f *Func) Apply(env Environment, args []interface{}) (interface{}, error) {
 	bindingValues := args[:len(method.requiredParams)]
 	var bindingRestValue interface{}
 	if len(args) > len(method.requiredParams) {
-		bindingRestValue = NewList(args[len(method.requiredParams):])
+		bindingRestValue = NewList(args[len(method.requiredParams):]...)
 	}
 
 Recur:

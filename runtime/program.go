@@ -83,7 +83,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			}
 			ns := env.FindOrCreateNamespace(sym)
 			env.SetCurrentNamespace(ns)
-			return ns, nil
+			return nil, nil
 		}))
 		env.DefVar(value.NewSymbol("in-ns"), value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
 			if len(args) != 1 {
@@ -196,7 +196,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("__debugstr", value.ToString)
 	}
 	{ // core functions
-		define("glojure.lang.CreateList", value.CreateList)
+		define("glojure.lang.NewList", value.NewList)
 		define("glojure.lang.Symbol", reflect.TypeOf(value.NewSymbol("")))
 		define("glojure.lang.HasType", func(t reflect.Type, v interface{}) bool {
 			switch {

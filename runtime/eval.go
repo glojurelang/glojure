@@ -43,6 +43,9 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 func (env *environment) Eval(n interface{}) (interface{}, error) {
 	analyzer := &compiler.Analyzer{
 		Macroexpand1: env.Macroexpand1,
+		CreateVar: func(sym *value.Symbol, e compiler.Env) (interface{}, error) {
+			return value.NewVar(env.CurrentNamespace(), sym), nil
+		},
 	}
 	astNode, err := analyzer.Analyze(n, value.NewMap(
 		value.NewKeyword("ns"), env.CurrentNamespace().Name(),
@@ -50,7 +53,7 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("eval: %v -> %v\n", n, astNode)
+	fmt.Printf("eval: %v -> %v\n", value.ToString(n), astNode)
 	n = ast.Form(astNode)
 
 	switch v := n.(type) {

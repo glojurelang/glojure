@@ -36,7 +36,7 @@ var (
 )
 
 func (e *EmptyList) Conj(x interface{}) Conjer {
-	return NewList([]interface{}{x})
+	return NewList(x)
 }
 
 func (e *EmptyList) Count() int {
@@ -101,15 +101,9 @@ func (e *EmptyList) String() string {
 
 var emptyList = &EmptyList{}
 
-func NewList(values []interface{}, opts ...Option) IPersistentList {
-	var o options
-	for _, opt := range opts {
-		opt(&o)
-	}
+func NewList(values ...interface{}) IPersistentList {
 	if len(values) == 0 {
-		return &EmptyList{
-			Section: o.section,
-		}
+		return &EmptyList{}
 	}
 
 	var list *List
@@ -117,17 +111,12 @@ func NewList(values []interface{}, opts ...Option) IPersistentList {
 	for i := len(values) - 1; i >= 0; i-- {
 		size++
 		list = &List{
-			Section: o.section,
-			item:    values[i],
-			next:    list,
-			size:    size,
+			item: values[i],
+			next: list,
+			size: size,
 		}
 	}
 	return list
-}
-
-func CreateList(values ...interface{}) IPersistentList {
-	return NewList(values)
 }
 
 func ConsList(item interface{}, next *List) *List {
@@ -256,20 +245,18 @@ func (l *List) Equal(v interface{}) bool {
 	if !ok {
 		return false
 	}
+	if l.Count() != other.Count() {
+		return false
+	}
 
-	for {
-		if l.IsEmpty() != other.IsEmpty() {
-			return false
-		}
-		if l.IsEmpty() {
-			return true
-		}
+	for l != nil {
 		if !Equal(l.item, other.item) {
 			return false
 		}
 		l = l.next
 		other = other.next
 	}
+	return true
 }
 
 func (l *List) GoValue() interface{} {
