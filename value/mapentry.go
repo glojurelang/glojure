@@ -94,3 +94,7 @@ func (me *MapEntry) Seq() ISeq {
 func (me *MapEntry) asVector() *Vector {
 	return NewVector(me.key, me.val)
 }
+
+func (me *MapEntry) String() string {
+	return me.asVector().String()
+}

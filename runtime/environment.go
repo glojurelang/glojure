@@ -60,6 +60,7 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 	e.currentNamespaceVar = value.NewVarWithRoot(coreNS, value.NewSymbol("*ns*"), coreNS)
 
 	// bootstrap some vars
+	// BUGBUG: this creates the vars but doesn't add them to the namespace!
 	e.namespaceVar = value.NewVarWithRoot(coreNS, SymbolNamespace,
 		value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) { return coreNS, nil }))
 	e.namespaceVar.SetMacro()
@@ -111,6 +112,7 @@ func (env *environment) lookup(sym *value.Symbol) (interface{}, bool) {
 	}
 
 	ns := env.CurrentNamespace()
+	fmt.Printf("lookup: %s in %s\n", sym, ns)
 	if sym.Namespace() != "" {
 		ns = env.FindNamespace(value.NewSymbol(sym.Namespace()))
 		sym = value.NewSymbol(sym.Name())

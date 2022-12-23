@@ -7,16 +7,51 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/glojurelang/glojure/ast"
 	"github.com/glojurelang/glojure/compiler"
 	"github.com/glojurelang/glojure/value"
 )
 
 func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
-	return form, nil
+	seq, ok := form.(value.ISeq)
+	if !ok {
+		return form, nil
+	}
+
+	op := value.First(seq)
+	sym, ok := op.(*value.Symbol)
+	if !ok {
+		return form, nil
+	}
+
+	macroVar := env.asMacro(sym)
+	if macroVar == nil {
+		return form, nil
+	}
+
+	applyer, ok := macroVar.Get().(value.Applyer)
+	if !ok {
+		return nil, env.errorf(form, "macro %s is not a function", sym)
+	}
+	res, err := env.applyMacro(applyer, form.(value.ISeq))
+	if err != nil {
+		return nil, env.errorf(form, "error applying macro: %w", err)
+	}
+	return res, nil
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
-	compiler.Analyze(env, n)
+	analyzer := &compiler.Analyzer{
+		Macroexpand1: env.Macroexpand1,
+	}
+	astNode, err := analyzer.Analyze(n, value.NewMap(
+		value.NewKeyword("ns"), env.CurrentNamespace().Name(),
+	))
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("eval: %v -> %v\n", n, astNode)
+	n = ast.Form(astNode)
 
 	switch v := n.(type) {
 	case *value.Vector:
@@ -532,7 +567,7 @@ func (env *environment) evalVar(n *value.List) (interface{}, error) {
 	return env.lookupVar(sym, false, true)
 }
 
-func (env *environment) applyMacro(fn value.Applyer, form *value.List) (interface{}, error) {
+func (env *environment) applyMacro(fn value.Applyer, form value.ISeq) (interface{}, error) {
 	argList := form.Next()
 	// two hidden arguments, $form and $env.
 	// $form is the form that was passed to the macro

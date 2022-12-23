@@ -233,12 +233,21 @@ func Assoc(a Associative, k, v interface{}) Associative {
 	return a.Assoc(k, v)
 }
 
+func Dissoc(x interface{}, k interface{}) interface{} {
+	if x == nil {
+		return nil
+	}
+	return x.(IPersistentMap).Without(k)
+}
+
 func Get(coll, key interface{}) interface{} {
 	return GetDefault(coll, key, nil)
 }
 
 func GetDefault(coll, key, def interface{}) interface{} {
 	switch arg := coll.(type) {
+	case nil:
+		return def
 	case ILookup:
 		return arg.ValAt(key)
 	case Associative:
