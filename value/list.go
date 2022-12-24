@@ -236,27 +236,26 @@ func (l *List) String() string {
 	return b.String()
 }
 
+// TODO: rename to Equiv
 func (l *List) Equal(v interface{}) bool {
-	if l == v {
-		return true
-	}
-
-	other, ok := v.(*List)
-	if !ok {
-		return false
-	}
-	if l.Count() != other.Count() {
-		return false
-	}
-
-	for l != nil {
-		if !Equal(l.item, other.item) {
+	// TODO: move to a helper for sequential equality
+	if _, ok := v.(ISeqable); !ok {
+		if _, ok := v.(*List); !ok {
 			return false
 		}
-		l = l.next
-		other = other.next
 	}
-	return true
+	if counter, ok := v.(Counter); ok {
+		if l.Count() != counter.Count() {
+			return false
+		}
+	}
+	seq := Seq(v)
+	for cur := Seq(l); cur != nil; cur, seq = cur.Next(), seq.Next() {
+		if seq == nil || !Equal(cur.First(), seq.First()) {
+			return false
+		}
+	}
+	return seq == nil
 }
 
 func (l *List) GoValue() interface{} {

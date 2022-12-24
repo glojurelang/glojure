@@ -245,11 +245,15 @@ func WithMeta(v interface{}, meta IPersistentMap) (interface{}, error) {
 	return iobj.WithMeta(meta), nil
 }
 
-func Assoc(a Associative, k, v interface{}) Associative {
+func Assoc(a interface{}, k, v interface{}) Associative {
 	if a == nil {
 		return NewMap(k, v)
 	}
-	return a.Assoc(k, v)
+	assoc, ok := a.(Associative)
+	if !ok {
+		panic(fmt.Errorf("value of type %T can't be assoc'd", a))
+	}
+	return assoc.Assoc(k, v)
 }
 
 func Dissoc(x interface{}, k interface{}) interface{} {

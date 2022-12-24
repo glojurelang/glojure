@@ -193,10 +193,16 @@ func (v *Vector) Apply(env Environment, args []interface{}) (interface{}, error)
 }
 
 func (v *Vector) Seq() ISeq {
+	if v.Count() == 0 {
+		return nil
+	}
 	return NewVectorIterator(v, 0, 1)
 }
 
 func (v *Vector) RSeq() ISeq {
+	if v.Count() == 0 {
+		return nil
+	}
 	return NewVectorIterator(v, v.Count()-1, -1)
 }
 

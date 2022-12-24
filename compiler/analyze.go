@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/glojurelang/glojure/ast"
 	"github.com/glojurelang/glojure/value"
@@ -22,6 +23,8 @@ type (
 		Macroexpand1 func(form interface{}) (interface{}, error)
 		CreateVar    func(sym *value.Symbol, env Env) (interface{}, error)
 		IsVar        func(v interface{}) bool
+
+		Gensym func(prefix string) *value.Symbol
 
 		GlobalEnv *value.Atom
 	}
@@ -219,6 +222,14 @@ func (a *Analyzer) analyzeConst(v interface{}, env Env) (ast.Node, error) {
 	return n, nil
 }
 
+func (a *Analyzer) analyzeBody(body interface{}, env Env) (ast.Node, error) {
+	n, err := a.parse(value.NewCons(value.NewSymbol("do"), body), env)
+	if err != nil {
+		return nil, err
+	}
+	return n.Assoc(kw("body?"), true), nil
+}
+
 func classifyType(v interface{}) value.Keyword {
 	switch v.(type) {
 	case nil:
@@ -328,8 +339,51 @@ func (a *Analyzer) parseInvoke(form interface{}, env Env) (ast.Node, error) {
 		value.NewMap(kw("children"), value.NewVector(kw("fn"), kw("args")))), nil
 }
 
+// (defn parse-do
+//
+//	[[_ & exprs :as form] env]
+//	(let [statements-env (ctx env :ctx/statement)
+//	      [statements ret] (loop [statements [] [e & exprs] exprs]
+//	                         (if (seq exprs)
+//	                           (recur (conj statements e) exprs)
+//	                           [statements e]))
+//	      statements (mapv (analyze-in-env statements-env) statements)
+//	      ret (analyze-form ret env)]
+//	  {:op         :do
+//	   :env        env
+//	   :form       form
+//	   :statements statements
+//	   :ret        ret
+//	   :children   [:statements :ret]}))
 func (a *Analyzer) parseDo(form interface{}, env Env) (ast.Node, error) {
-	panic("parseDo unimplemented!")
+	exprs := value.Rest(form)
+	statementsEnv := ctxEnv(env, ctxStatement)
+	var statementForms []interface{}
+	retForm := value.First(exprs)
+	for exprs := value.Seq(value.Rest(exprs)); exprs != nil; exprs = exprs.Next() {
+		statementForms = append(statementForms, retForm)
+		retForm = exprs.First()
+	}
+	statements := make([]interface{}, len(statementForms))
+	for _, form := range statementForms {
+		s, err := a.analyzeForm(form, statementsEnv)
+		if err != nil {
+			return nil, err
+		}
+		statements = append(statements, s)
+	}
+	ret, err := a.analyzeForm(retForm, env)
+	if err != nil {
+		return nil, err
+	}
+
+	return merge(ast.MakeNode(kw("do"), form),
+		value.NewMap(
+			kw("env"), env,
+			kw("statements"), value.NewVector(statements...),
+			kw("ret"), ret,
+			kw("children"), value.NewVector(kw("statements"), kw("ret")),
+		)), nil
 }
 
 func (a *Analyzer) parseIf(form interface{}, env Env) (ast.Node, error) {
@@ -539,9 +593,225 @@ func (a *Analyzer) parseRecur(form interface{}, env Env) (ast.Node, error) {
 //	            {:local name-expr})
 //	          {:children (conj (if n [:local] []) :methods)}))))
 func (a *Analyzer) parseFnStar(form interface{}, env Env) (ast.Node, error) {
-	// op := value.First(form)
-	// args := value.Rest(form)
-	panic("parseFnStar unimplemented!")
+	fnSym, _ := value.First(form).(*value.Symbol)
+	args := value.Rest(form)
+
+	var n *value.Symbol
+	var meths interface{}
+	if sym, ok := value.First(args).(*value.Symbol); ok {
+		n = sym
+		meths = value.Next(args)
+	} else {
+		meths = value.Seq(args)
+	}
+	nameExpr := merge(ast.MakeNode(kw("binding"), n), value.NewMap(
+		kw("env"), env,
+		kw("local"), kw("fn"),
+		kw("name"), n,
+	))
+	e := env
+	if n != nil {
+		e = assocIn(env, value.NewVector(kw("locals"), n), dissocEnv(nameExpr)).(Env)
+		e = value.Assoc(e, kw("local"), nameExpr).(Env)
+	}
+	once := false
+	if fnSym != nil {
+		if o, ok := value.Get(fnSym.Meta(), kw("once")).(bool); ok && o {
+			once = true
+		}
+	}
+	menv := value.Assoc(value.Dissoc(e, kw("in-try")), kw("once"), once)
+	if _, ok := value.First(meths).(*value.Vector); ok {
+		meths = value.NewList(meths)
+	}
+	var methodsExprs []interface{}
+	for seq := value.Seq(meths); seq != nil; seq = seq.Next() {
+		m, err := a.analyzeFnMethod(value.First(seq), menv.(Env))
+		if err != nil {
+			return nil, err
+		}
+		methodsExprs = append(methodsExprs, m)
+	}
+	variadic := false
+	for _, m := range methodsExprs {
+		if value.Get(m, kw("variadic?")).(bool) {
+			variadic = true
+			break
+		}
+	}
+	maxFixedArity := 0
+	arities := make(map[int]bool)
+	sawVariadic := false
+	variadicArity := 0
+	for _, m := range methodsExprs {
+		arity, ok := value.AsInt(value.Get(m, kw("fixed-arity")))
+		if !ok {
+			panic("fixed-arity not an int")
+		}
+		if value.Get(m, kw("variadic?")).(bool) {
+			if sawVariadic {
+				return nil, errors.New("can't have more than 1 variadic overload")
+			}
+			sawVariadic = true
+			arity--
+			variadicArity = arity
+		}
+		if _, ok := arities[arity]; ok {
+			return nil, exInfo("can't have 2 or more overloads with the same arity", nil)
+		}
+		arities[arity] = true
+		if arity > maxFixedArity {
+			maxFixedArity = arity
+		}
+	}
+	if sawVariadic && maxFixedArity > variadicArity {
+		return nil, exInfo("can't have fixed arity overload with more params than variadic overload", nil)
+	}
+
+	var children value.Conjer = value.NewVector()
+	var localMap value.IPersistentMap
+	if n != nil {
+		localMap = value.NewMap(kw("local"), nameExpr)
+		children = value.Conj(children, kw("local"))
+	}
+	children = value.Conj(children, kw("methods"))
+
+	node := merge(ast.MakeNode(kw("fn"), form), value.NewMap(
+		kw("env"), env,
+		kw("variadic?"), variadic,
+		kw("max-fixed-arity"), maxFixedArity,
+		kw("methods"), value.NewVector(methodsExprs...),
+		kw("once"), once,
+	),
+		localMap,
+		value.NewMap(kw("children"), children),
+	)
+	return a.wrappingMeta(node)
+}
+
+// (defn analyze-fn-method [[params & body :as form] {:keys [locals local] :as env}]
+//
+//	(when-not (vector? params)
+//	  (throw (ex-info "Parameter declaration should be a vector"
+//	                  (merge {:params params
+//	                          :form   form}
+//	                         (-source-info form env)
+//	                         (-source-info params env)))))
+//	(when (not-every? valid-binding-symbol? params)
+//	  (throw (ex-info (str "Params must be valid binding symbols, had: "
+//	                       (mapv class params))
+//	                  (merge {:params params
+//	                          :form   form}
+//	                         (-source-info form env)
+//	                         (-source-info params env))))) ;; more specific
+//	(let [variadic? (boolean (some '#{&} params))
+//	      params-names (if variadic? (conj (pop (pop params)) (peek params)) params)
+//	      env (dissoc env :local)
+//	      arity (count params-names)
+//	      params-expr (mapv (fn [name id]
+//	                          {:env       env
+//	                           :form      name
+//	                           :name      name
+//	                           :variadic? (and variadic?
+//	                                           (= id (dec arity)))
+//	                           :op        :binding
+//	                           :arg-id    id
+//	                           :local     :arg})
+//	                        params-names (range))
+//	      fixed-arity (if variadic?
+//	                    (dec arity)
+//	                    arity)
+//	      loop-id (gensym "loop_")
+//	      body-env (into (update-in env [:locals]
+//	                                merge (zipmap params-names (map dissoc-env params-expr)))
+//	                     {:context     :ctx/return
+//	                      :loop-id     loop-id
+//	                      :loop-locals (count params-expr)})
+//	      body (analyze-body body body-env)]
+//	  (when variadic?
+//	    (let [x (drop-while #(not= % '&) params)]
+//	      (when (contains? #{nil '&} (second x))
+//	        (throw (ex-info "Invalid parameter list"
+//	                        (merge {:params params
+//	                                :form   form}
+//	                               (-source-info form env)
+//	                               (-source-info params env)))))
+//	      (when (not= 2 (count x))
+//	        (throw (ex-info (str "Unexpected parameter: " (first (drop 2 x))
+//	                             " after variadic parameter: " (second x))
+//	                        (merge {:params params
+//	                                :form   form}
+//	                               (-source-info form env)
+//	                               (-source-info params env)))))))
+//	  (merge
+//	   {:op          :fn-method
+//	    :form        form
+//	    :loop-id     loop-id
+//	    :env         env
+//	    :variadic?   variadic?
+//	    :params      params-expr
+//	    :fixed-arity fixed-arity
+//	    :body        body
+//	    :children    [:params :body]}
+//	   (when local
+//	     {:local (dissoc-env local)}))))
+func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (ast.Node, error) {
+	params, ok := value.First(form).(value.IPersistentVector)
+	if !ok {
+		return nil, exInfo("parameter declaration should be a vector", nil)
+	}
+	body := value.Rest(form)
+
+	var variadic bool
+	for seq := value.Seq(params); seq != nil; seq = seq.Next() {
+		if !isValidBindingSymbol(seq.First()) {
+			return nil, exInfo(fmt.Sprintf("params must be valid binding symbols, had: %T", seq.First()), nil)
+		}
+		if seq.First().(*value.Symbol).Name() == "&" {
+			variadic = true
+		}
+	}
+	paramsNames := params
+	if variadic {
+		paramsNames = params.Pop().Pop().(value.Conjer).Conj(params.Peek()).(value.IPersistentVector)
+	}
+	env = value.Dissoc(env, kw("local")).(Env)
+	arity := paramsNames.Count()
+	var paramsExpr value.IPersistentVector = value.NewVector()
+	id := 0
+	for seq := value.Seq(paramsNames); seq != nil; seq, id = seq.Next(), id+1 {
+		name := seq.First()
+		paramsExpr = paramsExpr.Cons(value.NewMap(
+			kw("env"), env,
+			kw("form"), name,
+			kw("name"), name,
+			kw("variadic?"), variadic && id == arity-1,
+			kw("op"), kw("binding"),
+			kw("arg-id"), id,
+			kw("local"), kw("arg"),
+		)).(value.IPersistentVector)
+	}
+	fixedArity := arity
+	if variadic {
+		fixedArity = arity - 1
+	}
+	loopID := a.Gensym("loop_")
+	var bodyEnv Env
+	bodyNode, err := a.analyzeBody(body, bodyEnv)
+	if err != nil {
+		return nil, err
+	}
+
+	node := merge(ast.MakeNode(kw("fn-method"), form), value.NewMap(
+		kw("loop-id"), loopID, // TODO
+		kw("env"), env,
+		kw("variadic?"), variadic,
+		kw("params"), paramsExpr,
+		kw("fixed-arity"), fixedArity,
+		kw("body"), bodyNode,
+		kw("children"), value.NewVector(kw("params"), kw("body")),
+	))
+	return node, nil
 }
 
 // (defn parse-var
@@ -754,4 +1024,33 @@ func remove(v interface{}, coll interface{}) interface{} {
 
 func ctxEnv(env Env, ctx value.Keyword) Env {
 	return value.Assoc(env, kw("context"), ctx).(Env)
+}
+
+func assocIn(mp interface{}, keys interface{}, val interface{}) value.Associative {
+	count := value.Count(keys)
+	if count == 0 {
+		return value.Assoc(mp, nil, val)
+	} else if count == 1 {
+		return value.Assoc(mp, value.First(keys), val)
+	}
+	return value.Assoc(mp, value.First(keys),
+		assocIn(value.Get(mp, value.First(keys)), value.Rest(keys), val))
+}
+
+func dissocEnv(node ast.Node) ast.Node {
+	return value.Dissoc(node, kw("env")).(ast.Node)
+}
+
+func isValidBindingSymbol(v interface{}) bool {
+	sym, ok := v.(*value.Symbol)
+	if !ok {
+		return false
+	}
+	if sym.Namespace() != "" {
+		return false
+	}
+	if strings.Contains(sym.Name(), ".") {
+		return false
+	}
+	return true
 }

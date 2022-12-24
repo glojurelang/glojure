@@ -1,6 +1,7 @@
 package compiler
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -35,7 +36,7 @@ const testForms = `
 
 [#'user/foo, {:op :the-var, :form (var user/foo), :env {:ns user}, :var (var user/foo)}]
 
-[(fn* [] "Hello"), {}]
+[(fn* [] "Hello"), {:op :fn, :form (fn* [] "Hello"), :env {:ns user}, :variadic? false, :max-fixed-arity 0, :methods [{:op :fn-method, :form ([] "Hello"), :loop-id loop_1, :env {:ns user, :once false}, :variadic? false, :params [], :fixed-arity 0, :body {:op :do, :form (do "Hello"), :env nil, :statements [], :ret {:op :const, :form "Hello", :type :string, :val "Hello", :literal? true}, :children [:statements :ret], :body? true}, :children [:params :body]}], :once false, :children [:methods]}]
 `
 
 var (
@@ -62,6 +63,7 @@ func TestAnalyze(t *testing.T) {
 	env := value.NewMap(kw("ns"), value.NewSymbol(nsName))
 
 	for _, form := range forms {
+		symCounter := 0
 		t.Run(value.ToString(value.First(form)), func(t *testing.T) {
 			a := &Analyzer{
 				Macroexpand1: func(form interface{}) (interface{}, error) {
@@ -71,6 +73,10 @@ func TestAnalyze(t *testing.T) {
 					return value.NewList(
 						value.NewSymbol("var"),
 						value.NewSymbol(nsName+"/"+sym.Name())), nil
+				},
+				Gensym: func(prefix string) *value.Symbol {
+					symCounter++
+					return value.NewSymbol(fmt.Sprintf("%s%d", prefix, symCounter))
 				},
 				GlobalEnv: value.NewAtom(globalEnv),
 			}
@@ -102,6 +108,7 @@ func FuzzAnalyze(f *testing.F) {
 	env := value.NewMap(kw("ns"), value.NewSymbol(nsName))
 
 	f.Fuzz(func(t *testing.T, formStr string) {
+		symCounter := 0
 		a := &Analyzer{
 			Macroexpand1: func(form interface{}) (interface{}, error) {
 				return form, nil
@@ -110,6 +117,10 @@ func FuzzAnalyze(f *testing.F) {
 				return value.NewList(
 					value.NewSymbol("var"),
 					value.NewSymbol(nsName+"/"+sym.Name())), nil
+			},
+			Gensym: func(prefix string) *value.Symbol {
+				symCounter++
+				return value.NewSymbol(fmt.Sprintf("%s%d", prefix, symCounter))
 			},
 			GlobalEnv: value.NewAtom(globalEnv),
 		}
