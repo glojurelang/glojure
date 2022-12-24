@@ -37,6 +37,8 @@ const testForms = `
 [#'user/foo, {:op :the-var, :form (var user/foo), :env {:ns user}, :var (var user/foo)}]
 
 [(fn* [] "Hello"), {:op :fn, :form (fn* [] "Hello"), :env {:ns user}, :variadic? false, :max-fixed-arity 0, :methods [{:op :fn-method, :form ([] "Hello"), :loop-id loop_1, :env {:ns user, :once false}, :variadic? false, :params [], :fixed-arity 0, :body {:op :do, :form (do "Hello"), :env nil, :statements [], :ret {:op :const, :form "Hello", :type :string, :val "Hello", :literal? true}, :children [:statements :ret], :body? true}, :children [:params :body]}], :once false, :children [:methods]}]
+
+[(fn* [first & rest] 42) {:op :fn, :form (fn* [first & rest] 42), :env {:ns user}, :variadic? true, :max-fixed-arity 0, :methods [{:op :fn-method, :form ([first & rest] 42), :loop-id loop_1, :env {:ns user, :once false}, :variadic? true, :params [{:env {:ns user, :once false}, :form first, :name first, :variadic? false, :op :binding, :arg-id 0, :local :arg} {:env {:ns user, :once false}, :form rest, :name rest, :variadic? true, :op :binding, :arg-id 1, :local :arg}], :fixed-arity 1, :body {:op :do, :form (do 42), :env nil, :statements [], :ret {:op :const, :form 42, :type :number, :val 42, :literal? true}, :children [:statements :ret], :body? true}, :children [:params :body]}], :once false, :children [:methods]}]
 `
 
 var (
