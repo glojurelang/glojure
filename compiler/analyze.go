@@ -797,6 +797,20 @@ func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (ast.Node, error) 
 	}
 	loopID := a.Gensym("loop_")
 	var bodyEnv Env
+	{
+		localsMap := value.NewMap()
+		for i := 0; i < paramsNames.Count(); i++ {
+			localsMap = localsMap.Assoc(value.MustNth(paramsNames, i), dissocEnv(value.MustNth(paramsExpr, i).(value.IPersistentMap))).(value.IPersistentMap)
+		}
+		bodyEnv = env.Assoc(kw("locals"), localsMap).(Env)
+	}
+	bodyEnv = merge(bodyEnv,
+		value.NewMap(
+			kw("context"), kw("ctx/return"),
+			kw("loop-id"), loopID,
+			kw("loop-locals"), paramsExpr.Count(),
+		),
+	).(Env)
 	bodyNode, err := a.analyzeBody(body, bodyEnv)
 	if err != nil {
 		return nil, err
