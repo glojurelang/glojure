@@ -525,8 +525,104 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (ast.Node, error) {
 		childrenMap), nil
 }
 
+// (defn parse-dot
+//
+//	[[_ target & [m-or-f & args] :as form] env]
+//	(when-not (>= (count form) 3)
+//	  (throw (ex-info (str "Wrong number of args to ., had: " (dec (count form)))
+//	                  (merge {:form form}
+//	                         (-source-info form env)))))
+//	(let [[m-or-f field?] (if (and (symbol? m-or-f)
+//	                               (= \- (first (name m-or-f))))
+//	                        [(-> m-or-f name (subs 1) symbol) true]
+//	                        [(if args (cons m-or-f args) m-or-f) false])
+//	      target-expr (analyze-form target (ctx env :ctx/expr))
+//	      call? (and (not field?) (seq? m-or-f))]
+//	  (when (and call? (not (symbol? (first m-or-f))))
+//	    (throw (ex-info (str "Method name must be a symbol, had: " (class (first m-or-f)))
+//	                    (merge {:form   form
+//	                            :method m-or-f}
+//	                           (-source-info form env)))))
+//	  (merge {:form   form
+//	          :env    env
+//	          :target target-expr}
+//	         (cond
+//	          call?
+//	          {:op       :host-call
+//	           :method   (symbol (name (first m-or-f)))
+//	           :args     (mapv (analyze-in-env (ctx env :ctx/expr)) (next m-or-f))
+//	           :children [:target :args]}
+//	          field?
+//	          {:op          :host-field
+//	           :assignable? true
+//	           :field       (symbol (name m-or-f))
+//	           :children    [:target]}
+//	          :else
+//	          {:op          :host-interop ;; either field access or no-args method call
+//	           :assignable? true
+//	           :m-or-f      (symbol (name m-or-f))
+//	           :children    [:target]}))))
 func (a *Analyzer) parseDot(form interface{}, env Env) (ast.Node, error) {
-	panic("parseDot unimplemented!")
+	if value.Count(form) < 3 {
+		return nil, exInfo("wrong number of args to ., had: %d", value.Count(form)-1)
+	}
+	target := second(form)
+	mOrF := value.MustNth(form.(value.Nther), 2)
+	args := value.Rest(value.Rest(form))
+	isField := false
+	if sym, ok := mOrF.(*value.Symbol); ok && len(sym.Name()) > 0 && sym.Name()[0] == '-' {
+		mOrF = value.NewSymbol(sym.Name()[1:])
+		isField = true
+	} else if args != nil {
+		mOrF = value.NewCons(mOrF, args)
+	}
+	targetExpr, err := a.analyzeForm(target, ctxEnv(env, ctxExpr))
+	if err != nil {
+		return nil, err
+	}
+	call := false
+	if _, ok := mOrF.(value.ISeq); ok && !isField {
+		call = true
+	}
+	if call {
+		if _, ok := value.First(mOrF).(*value.Symbol); !ok {
+			return nil, exInfo(fmt.Sprintf("method name must be a symbol, had: %T", value.First(mOrF)), nil)
+		}
+	}
+
+	n := value.NewMap(kw("form"), form, kw("env"), env, kw("target"), targetExpr)
+	switch {
+	case call:
+		var argNodes []interface{}
+		for seq := value.Seq(value.Rest(mOrF)); seq != nil; seq = seq.Next() {
+			arg := value.First(seq)
+			argNode, err := a.analyzeForm(arg, ctxEnv(env, ctxExpr))
+			if err != nil {
+				return nil, err
+			}
+			argNodes = append(argNodes, argNode)
+		}
+		return merge(n, value.NewMap(
+			kw("op"), kw("host-call"),
+			kw("method"), value.NewSymbol(value.First(mOrF).(*value.Symbol).Name()),
+			kw("args"), value.NewVector(argNodes...),
+			kw("children"), value.NewVector(kw("target"), kw("args")),
+		)), nil
+	case isField:
+		return merge(n, value.NewMap(
+			kw("op"), kw("host-field"),
+			kw("assignable?"), true,
+			kw("field"), value.NewSymbol(mOrF.(*value.Symbol).Name()),
+			kw("children"), value.NewVector(kw("target")),
+		)), nil
+	default:
+		return merge(n, value.NewMap(
+			kw("op"), kw("host-interop"),
+			kw("assignable?"), true,
+			kw("m-or-f"), value.NewSymbol(mOrF.(*value.Symbol).Name()),
+			kw("children"), value.NewVector(kw("target")),
+		)), nil
+	}
 }
 
 func (a *Analyzer) parseLetStar(form interface{}, env Env) (ast.Node, error) {
