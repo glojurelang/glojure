@@ -503,8 +503,49 @@ func (a *Analyzer) parseIf(form interface{}, env Env) (ast.Node, error) {
 		)), nil
 }
 
+// (defn parse-new
+//
+//	[[_ class & args :as form] env]
+//	(when-not (>= (count form) 2)
+//	  (throw (ex-info (str "Wrong number of args to new, had: " (dec (count form)))
+//	                  (merge {:form form}
+//	                         (-source-info form env)))))
+//	(let [args-env (ctx env :ctx/expr)
+//	      args (mapv (analyze-in-env args-env) args)]
+//	  {:op          :new
+//	   :env         env
+//	   :form        form
+//	   :class       (analyze-form class (assoc env :locals {})) ;; avoid shadowing
+//	   :args        args
+//	   :children    [:class :args]}))
 func (a *Analyzer) parseNew(form interface{}, env Env) (ast.Node, error) {
-	panic("parseNew unimplemented!")
+	if value.Count(form) < 2 {
+		return nil, exInfo(fmt.Sprintf("wrong number of args to new, had: %d", value.Count(form)-1), nil)
+	}
+
+	class := value.MustNth(form, 1)
+	args := value.Rest(value.Rest(form))
+	argsEnv := ctxEnv(env, ctxExpr)
+	argsExprs := value.NewVector()
+	for seq := value.Seq(args); seq != nil; seq = seq.Next() {
+		arg, err := a.analyzeForm(seq.First(), argsEnv)
+		if err != nil {
+			return nil, err
+		}
+		argsExprs = argsExprs.Conj(arg).(*value.Vector)
+	}
+	classExpr, err := a.analyzeForm(class, env.Assoc(kw("locals"), value.NewMap()).(Env))
+	if err != nil {
+		return nil, err
+	}
+	return value.NewMap(
+		kw("op"), kw("new"),
+		kw("env"), env,
+		kw("form"), form,
+		kw("class"), classExpr,
+		kw("args"), argsExprs,
+		kw("children"), value.NewVector(kw("class"), kw("args")),
+	), nil
 }
 
 func (a *Analyzer) parseQuote(form interface{}, env Env) (ast.Node, error) {
