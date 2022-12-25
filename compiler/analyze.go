@@ -264,6 +264,9 @@ func (a *Analyzer) analyzeBody(body interface{}, env Env) (ast.Node, error) {
 //	         :bindings binds
 //	         :children [:bindings :body]})))))
 func (a *Analyzer) analyzeLet(form interface{}, env Env) (ast.Node, error) {
+	if value.Count(form) < 2 {
+		return nil, exInfo("let requires a binding vector and a body", nil)
+	}
 	op := value.MustNth(form, 0)
 	bindings := value.MustNth(form, 1)
 	body := value.Rest(value.Rest(form))
