@@ -786,8 +786,52 @@ func (a *Analyzer) parseLoopStar(form interface{}, env Env) (ast.Node, error) {
 		loop), nil
 }
 
+// (defn parse-recur
+//
+//	[[_ & exprs :as form] {:keys [context loop-locals loop-id]
+//	                       :as env}]
+//	(when-let [error-msg
+//	           (cond
+//	            (not (isa? context :ctx/return))
+//	            "Can only recur from tail position"
+//	            (not (= (count exprs) loop-locals))
+//	            (str "Mismatched argument count to recur, expected: " loop-locals
+//	                 " args, had: " (count exprs)))]
+//	  (throw (ex-info error-msg
+//	                  (merge {:exprs exprs
+//	                          :form  form}
+//	                         (-source-info form env)))))
+//	(let [exprs (mapv (analyze-in-env (ctx env :ctx/expr)) exprs)]
+//	  {:op          :recur
+//	   :env         env
+//	   :form        form
+//	   :exprs       exprs
+//	   :loop-id     loop-id
+//	   :children    [:exprs]}))
 func (a *Analyzer) parseRecur(form interface{}, env Env) (ast.Node, error) {
-	panic("parseRecur unimplemented!")
+	exprs := value.Rest(form)
+	ctx := value.Get(env, kw("context"))
+	loopLocals := value.Get(env, kw("loop-locals"))
+	loopID := value.Get(env, kw("loop-id"))
+
+	errorMsg := ""
+	switch {
+	case !value.Equal(ctx, ctxReturn):
+		errorMsg = "can only recur from tail position"
+	case !value.Equal(value.Count(exprs), loopLocals):
+		errorMsg = fmt.Sprintf("mismatched argument count to recur, expected: %v args, had: %v", loopLocals, value.Count(exprs))
+	}
+	if errorMsg != "" {
+		return nil, exInfo(errorMsg, nil)
+	}
+
+	return value.NewMap(
+		kw("op"), kw("recur"),
+		kw("env"), env,
+		kw("form"), form,
+		kw("exprs"), exprs,
+		kw("loop-id"), loopID,
+		kw("children"), value.NewVector(kw("exprs"))), nil
 }
 
 // (defn parse-fn*
