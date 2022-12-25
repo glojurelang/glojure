@@ -761,8 +761,29 @@ func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (ast.Node, error) {
 	panic("parseLetfnStar unimplemented!")
 }
 
+// (defn parse-loop*
+//
+//	[form env]
+//	(let [loop-id (gensym "loop_") ;; can be used to find matching recur
+//	      env (assoc env :loop-id loop-id)]
+//	  (into {:op      :loop
+//	         :form    form
+//	         :env     env
+//	         :loop-id loop-id}
+//	        (analyze-let form env))))
 func (a *Analyzer) parseLoopStar(form interface{}, env Env) (ast.Node, error) {
-	panic("parseLoopStar unimplemented!")
+	loopID := a.Gensym("loop_")
+	env = env.Assoc(kw("loop-id"), loopID).(Env)
+	loop, err := a.analyzeLet(form, env)
+	if err != nil {
+		return nil, err
+	}
+	return merge(value.NewMap(
+		kw("op"), kw("loop"),
+		kw("form"), form,
+		kw("env"), env,
+		kw("loop-id"), loopID),
+		loop), nil
 }
 
 func (a *Analyzer) parseRecur(form interface{}, env Env) (ast.Node, error) {
