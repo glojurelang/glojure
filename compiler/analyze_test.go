@@ -45,6 +45,8 @@ const testForms = `
 [(if true 42 43) {:op :if, :form (if true 42 43), :env {:ns user}, :test {:op :const, :form true, :type :bool, :val true, :literal? true}, :then {:op :const, :form 42, :type :number, :val 42, :literal? true}, :else {:op :const, :form 43, :type :number, :val 43, :literal? true}, :children [:test :then :else]}]
 
 [(if true 42) {:op :if, :form (if true 42), :env {:ns user}, :test {:op :const, :form true, :type :bool, :val true, :literal? true}, :then {:op :const, :form 42, :type :number, :val 42, :literal? true}, :else {:op :const, :form nil, :type :nil, :val nil, :literal? true}, :children [:test :then :else]}]
+
+[(let* [x 42] x) {:op :let, :form (let* [x 42] x), :env {:ns user}, :body {:op :do, :form (do x), :env {:ns user, :context nil, :locals {x {:op :binding, :form x, :name x, :init {:op :const, :form 42, :type :number, :val 42, :literal? true}, :local :let, :children [:init]}}}, :statements [], :ret {:op :local, :form x, :name x, :local :let, :children [], :assignable? false, :env {:ns user, :context nil, :locals {x {:op :binding, :form x, :name x, :init {:op :const, :form 42, :type :number, :val 42, :literal? true}, :local :let, :children [:init]}}}}, :children [:statements :ret], :body? true}, :bindings [{:op :binding, :form x, :env {:ns user, :context :ctx/expr}, :name x, :init {:op :const, :form 42, :type :number, :val 42, :literal? true}, :local :let, :children [:init]}], :children [:bindings :body]}]
 `
 
 var (

@@ -230,41 +230,104 @@ func (a *Analyzer) analyzeBody(body interface{}, env Env) (ast.Node, error) {
 	return n.Assoc(kw("body?"), true), nil
 }
 
-func classifyType(v interface{}) value.Keyword {
-	switch v.(type) {
-	case nil:
-		return kw("nil")
-	case bool:
-		return kw("bool")
-	case value.Keyword:
-		return kw("keyword")
-	case *value.Symbol:
-		return kw("symbol")
-	case string:
-		return kw("string")
-	case value.IPersistentVector:
-		return kw("vector")
-	case value.IPersistentMap:
-		return kw("map")
-	case value.IPersistentSet:
-		return kw("set")
-	case value.ISeq:
-		return kw("seq")
-	case *value.Char:
-		return kw("char")
-	case *regexp.Regexp:
-		return kw("regex")
-	case *value.Var:
-		return kw("var")
-	case int, int8, int16, int32, int64,
-		uint, uint8, uint16, uint32, uint64,
-		*value.BigInt, *value.BigDecimal, *value.Ratio:
-		return kw("number")
-	default:
-		return kw("unknown")
+// (defn analyze-let
+//
+//	[[op bindings & body :as form] {:keys [context loop-id] :as env}]
+//	(validate-bindings form env)
+//	(let [loop? (= 'loop* op)]
+//	  (loop [bindings bindings
+//	         env (ctx env :ctx/expr)
+//	         binds []]
+//	    (if-let [[name init & bindings] (seq bindings)]
+//	      (if (not (valid-binding-symbol? name))
+//	        (throw (ex-info (str "Bad binding form: " name)
+//	                        (merge {:form form
+//	                                :sym  name}
+//	                               (-source-info form env))))
+//	        (let [init-expr (analyze-form init env)
+//	              bind-expr {:op       :binding
+//	                         :env      env
+//	                         :name     name
+//	                         :init     init-expr
+//	                         :form     name
+//	                         :local    (if loop? :loop :let)
+//	                         :children [:init]}]
+//	          (recur bindings
+//	                 (assoc-in env [:locals name] (dissoc-env bind-expr))
+//	                 (conj binds bind-expr))))
+//	      (let [body-env (assoc env :context (if loop? :ctx/return context))
+//	            body (analyze-body body (merge body-env
+//	                                           (when loop?
+//	                                             {:loop-id     loop-id
+//	                                              :loop-locals (count binds)})))]
+//	        {:body     body
+//	         :bindings binds
+//	         :children [:bindings :body]})))))
+func (a *Analyzer) analyzeLet(form interface{}, env Env) (ast.Node, error) {
+	op := value.MustNth(form, 0)
+	bindings := value.MustNth(form, 1)
+	body := value.Rest(value.Rest(form))
 
-		// TODO: type, record, class
+	ctx := value.Get(env, kw("context"))
+	loopID := value.Get(env, kw("loop-id"))
+
+	if err := a.validateBindings(form, env); err != nil {
+		return nil, err
 	}
+
+	isLoop := value.Equal(op, value.NewSymbol("loop*"))
+	localKW := kw("let")
+	if isLoop {
+		localKW = kw("loop")
+	}
+	env = ctxEnv(env, kw("ctx/expr"))
+	binds := value.NewVector()
+	for {
+		bindingsSeq := value.Seq(bindings)
+		if bindingsSeq == nil {
+			break
+		}
+		name := bindingsSeq.First()
+		init := second(bindingsSeq)
+		bindings = value.Rest(value.Rest(bindingsSeq))
+		if !isValidBindingSymbol(name) {
+			return nil, exInfo("bad binding form: "+value.ToString(name), nil)
+		}
+		initExpr, err := a.analyzeForm(init, env)
+		if err != nil {
+			return nil, err
+		}
+		bindExpr := merge(ast.MakeNode(kw("binding"), name),
+			value.NewMap(
+				kw("env"), env,
+				kw("name"), name,
+				kw("init"), initExpr,
+				kw("local"), localKW,
+				kw("children"), value.NewVector(kw("init")),
+			),
+		)
+		env = assocIn(env, value.NewVector(kw("locals"), name), dissocEnv(bindExpr)).(Env)
+		binds = value.Conj(binds, bindExpr).(*value.Vector)
+	}
+	if isLoop {
+		ctx = kw("ctx/return")
+	}
+	bodyEnv := value.Assoc(env, kw("context"), ctx).(Env)
+	if isLoop {
+		bodyEnv = merge(bodyEnv, value.NewMap(
+			kw("loop-id"), loopID,
+			kw("loop-locals"), value.Count(binds),
+		)).(Env)
+	}
+	body, err := a.analyzeBody(body, bodyEnv)
+	if err != nil {
+		return nil, err
+	}
+	return value.NewMap(
+		kw("body"), body,
+		kw("bindings"), binds,
+		kw("children"), value.NewVector(kw("bindings"), kw("body")),
+	), nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -672,8 +735,23 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (ast.Node, error) {
 	}
 }
 
+// (defn parse-let*
+//
+//	[form env]
+//	(into {:op   :let
+//	       :form form
+//	       :env  env}
+//	      (analyze-let form env)))
 func (a *Analyzer) parseLetStar(form interface{}, env Env) (ast.Node, error) {
-	panic("parseLetStar unimplemented!")
+	let, err := a.analyzeLet(form, env)
+	if err != nil {
+		return nil, err
+	}
+	return merge(value.NewMap(
+		kw("op"), kw("let"),
+		kw("form"), form,
+		kw("env"), env),
+		let), nil
 }
 
 func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (ast.Node, error) {
@@ -1123,6 +1201,37 @@ func (a *Analyzer) resolveSym(symIfc interface{}, env Env) interface{} {
 	return value.Get(mappings, name)
 }
 
+// (defn validate-bindings
+//
+//	[[op bindings & _ :as form] env]
+//	(when-let [error-msg
+//	           (cond
+//	            (not (vector? bindings))
+//	            (str op " requires a vector for its bindings, had: "
+//	                 (class bindings))
+//	            (not (even? (count bindings)))
+//	            (str op " requires an even number of forms in binding vector, had: "
+//	                 (count bindings)))]
+//	  (throw (ex-info error-msg
+//	                  (merge {:form     form
+//	                          :bindings bindings}
+//	                         (-source-info form env))))))
+func (a *Analyzer) validateBindings(form interface{}, env Env) error {
+	op := value.First(form)
+	bindings, ok := second(form).(*value.Vector)
+	errMsg := ""
+	switch {
+	case !ok:
+		errMsg = fmt.Sprintf("%s requires a vector for its bindings, had: %T", op, bindings)
+	case value.Count(bindings)%2 != 0:
+		errMsg = fmt.Sprintf("%s requires an even number of forms in binding vector, had: %d", op, value.Count(bindings))
+	}
+	if errMsg == "" {
+		return nil
+	}
+	return exInfo(errMsg, nil)
+}
+
 func kw(s string) value.Keyword {
 	return value.NewKeyword(s)
 }
@@ -1221,4 +1330,41 @@ func isValidBindingSymbol(v interface{}) bool {
 		return false
 	}
 	return true
+}
+
+func classifyType(v interface{}) value.Keyword {
+	switch v.(type) {
+	case nil:
+		return kw("nil")
+	case bool:
+		return kw("bool")
+	case value.Keyword:
+		return kw("keyword")
+	case *value.Symbol:
+		return kw("symbol")
+	case string:
+		return kw("string")
+	case value.IPersistentVector:
+		return kw("vector")
+	case value.IPersistentMap:
+		return kw("map")
+	case value.IPersistentSet:
+		return kw("set")
+	case value.ISeq:
+		return kw("seq")
+	case *value.Char:
+		return kw("char")
+	case *regexp.Regexp:
+		return kw("regex")
+	case *value.Var:
+		return kw("var")
+	case int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64,
+		*value.BigInt, *value.BigDecimal, *value.Ratio:
+		return kw("number")
+	default:
+		return kw("unknown")
+
+		// TODO: type, record, class
+	}
 }
