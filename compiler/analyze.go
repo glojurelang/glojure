@@ -386,8 +386,52 @@ func (a *Analyzer) parseDo(form interface{}, env Env) (ast.Node, error) {
 		)), nil
 }
 
+// (defn parse-if
+//
+//	[[_ test then else :as form] env]
+//	(let [formc (count form)]
+//	  (when-not (or (= formc 3) (= formc 4))
+//	    (throw (ex-info (str "Wrong number of args to if, had: " (dec (count form)))
+//	                    (merge {:form form}
+//	                           (-source-info form env))))))
+//	(let [test-expr (analyze-form test (ctx env :ctx/expr))
+//	      then-expr (analyze-form then env)
+//	      else-expr (analyze-form else env)]
+//	  {:op       :if
+//	   :form     form
+//	   :env      env
+//	   :test     test-expr
+//	   :then     then-expr
+//	   :else     else-expr
+//	   :children [:test :then :else]}))
 func (a *Analyzer) parseIf(form interface{}, env Env) (ast.Node, error) {
-	panic("parseIf unimplemented!")
+	test := value.MustNth(form, 1)
+	then := value.MustNth(form, 2)
+	els := value.MustNth(form, 3)
+	formc := value.Count(form)
+	if formc != 3 && formc != 4 {
+		return nil, exInfo(fmt.Sprintf("wrong number of args to if, had: %d", formc-1), nil)
+	}
+	testExpr, err := a.analyzeForm(test, ctxEnv(env, ctxExpr))
+	if err != nil {
+		return nil, err
+	}
+	thenExpr, err := a.analyzeForm(then, env)
+	if err != nil {
+		return nil, err
+	}
+	elseExpr, err := a.analyzeForm(els, env)
+	if err != nil {
+		return nil, err
+	}
+	return merge(ast.MakeNode(kw("if"), form),
+		value.NewMap(
+			kw("env"), env,
+			kw("test"), testExpr,
+			kw("then"), thenExpr,
+			kw("else"), elseExpr,
+			kw("children"), value.NewVector(kw("test"), kw("then"), kw("else")),
+		)), nil
 }
 
 func (a *Analyzer) parseNew(form interface{}, env Env) (ast.Node, error) {

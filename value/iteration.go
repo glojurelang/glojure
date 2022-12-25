@@ -13,8 +13,8 @@ type Nther interface {
 
 // MustNth returns the nth element of the vector. It panics if the
 // index is out of range.
-func MustNth(nth Nther, i int) interface{} {
-	v, ok := nth.Nth(i)
+func MustNth(x interface{}, i int) interface{} {
+	v, ok := Nth(x, i)
 	if !ok {
 		panic("index out of range")
 	}

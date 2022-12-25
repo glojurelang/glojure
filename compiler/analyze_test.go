@@ -41,6 +41,8 @@ const testForms = `
 [(fn* [first & rest] 42) {:op :fn, :form (fn* [first & rest] 42), :env {:ns user}, :variadic? true, :max-fixed-arity 0, :methods [{:op :fn-method, :form ([first & rest] 42), :loop-id loop_1, :env {:ns user, :once false}, :variadic? true, :params [{:env {:ns user, :once false}, :form first, :name first, :variadic? false, :op :binding, :arg-id 0, :local :arg} {:env {:ns user, :once false}, :form rest, :name rest, :variadic? true, :op :binding, :arg-id 1, :local :arg}], :fixed-arity 1, :body {:op :do, :form (do 42), :env {:ns user, :once false, :locals {first {:form first, :name first, :variadic? false, :op :binding, :arg-id 0, :local :arg}, rest {:form rest, :name rest, :variadic? true, :op :binding, :arg-id 1, :local :arg}}, :context :ctx/return, :loop-id loop_1, :loop-locals 2}, :statements [], :ret {:op :const, :form 42, :type :number, :val 42, :literal? true}, :children [:statements :ret], :body? true}, :children [:params :body]}], :once false, :children [:methods]}]
 
 [(. x Meta) {:form (. x Meta), :env {:ns user}, :target {:op :maybe-class, :class x, :env {:ns user, :context :ctx/expr}, :form x}, :op :host-call, :method Meta, :args [{:op :maybe-class, :class Meta, :env {:ns user, :context :ctx/expr}, :form Meta}], :children [:target :args]}]
+
+[(if true 42 43) {:op :if, :form (if true 42 43), :env {:ns user}, :test {:op :const, :form true, :type :bool, :val true, :literal? true}, :then {:op :const, :form 42, :type :number, :val 42, :literal? true}, :else {:op :const, :form 43, :type :number, :val 43, :literal? true}, :children [:test :then :else]}]
 `
 
 var (
