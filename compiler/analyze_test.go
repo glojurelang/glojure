@@ -43,6 +43,8 @@ const testForms = `
 [(. x Meta) {:form (. x Meta), :env {:ns user}, :target {:op :maybe-class, :class x, :env {:ns user, :context :ctx/expr}, :form x}, :op :host-call, :method Meta, :args [{:op :maybe-class, :class Meta, :env {:ns user, :context :ctx/expr}, :form Meta}], :children [:target :args]}]
 
 [(if true 42 43) {:op :if, :form (if true 42 43), :env {:ns user}, :test {:op :const, :form true, :type :bool, :val true, :literal? true}, :then {:op :const, :form 42, :type :number, :val 42, :literal? true}, :else {:op :const, :form 43, :type :number, :val 43, :literal? true}, :children [:test :then :else]}]
+
+[(if true 42) {:op :if, :form (if true 42), :env {:ns user}, :test {:op :const, :form true, :type :bool, :val true, :literal? true}, :then {:op :const, :form 42, :type :number, :val 42, :literal? true}, :else {:op :const, :form nil, :type :nil, :val nil, :literal? true}, :children [:test :then :else]}]
 `
 
 var (

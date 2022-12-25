@@ -405,12 +405,15 @@ func (a *Analyzer) parseDo(form interface{}, env Env) (ast.Node, error) {
 //	   :else     else-expr
 //	   :children [:test :then :else]}))
 func (a *Analyzer) parseIf(form interface{}, env Env) (ast.Node, error) {
-	test := value.MustNth(form, 1)
-	then := value.MustNth(form, 2)
-	els := value.MustNth(form, 3)
 	formc := value.Count(form)
 	if formc != 3 && formc != 4 {
 		return nil, exInfo(fmt.Sprintf("wrong number of args to if, had: %d", formc-1), nil)
+	}
+	test := value.MustNth(form, 1)
+	then := value.MustNth(form, 2)
+	var els interface{}
+	if formc == 4 {
+		els = value.MustNth(form, 3)
 	}
 	testExpr, err := a.analyzeForm(test, ctxEnv(env, ctxExpr))
 	if err != nil {

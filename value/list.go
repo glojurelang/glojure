@@ -162,7 +162,7 @@ func (l *List) More() ISeq {
 }
 
 func (l *List) IsEmpty() bool {
-	return l.size == 0
+	return false
 }
 
 func (l *List) Count() int {
@@ -177,7 +177,7 @@ func (l *List) Nth(i int) (v interface{}, ok bool) {
 	if i < 0 {
 		return nil, false
 	}
-	for !l.IsEmpty() {
+	for l != nil {
 		if i == 0 {
 			return l.item, true
 		}
