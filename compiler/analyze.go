@@ -566,8 +566,43 @@ func (a *Analyzer) parseQuote(form interface{}, env Env) (ast.Node, error) {
 	)), nil
 }
 
+// (defn parse-set!
+//
+//	[[_ target val :as form] env]
+//	(when-not (= 3 (count form))
+//	  (throw (ex-info (str "Wrong number of args to set!, had: " (dec (count form)))
+//	                  (merge {:form form}
+//	                         (-source-info form env)))))
+//	(let [target (analyze-form target (ctx env :ctx/expr))
+//	      val (analyze-form val (ctx env :ctx/expr))]
+//	  {:op       :set!
+//	   :env      env
+//	   :form     form
+//	   :target   target
+//	   :val      val
+//	   :children [:target :val]}))
 func (a *Analyzer) parseSetBang(form interface{}, env Env) (ast.Node, error) {
-	panic("parseSetBang unimplemented!")
+	if value.Count(form) != 3 {
+		return nil, exInfo(fmt.Sprintf("wrong number of args to set!, had: %d", value.Count(form)-1), nil)
+	}
+	target := value.MustNth(form, 1)
+	val := value.MustNth(form, 2)
+
+	targetExpr, err := a.analyzeForm(target, ctxEnv(env, ctxExpr))
+	if err != nil {
+		return nil, err
+	}
+	valExpr, err := a.analyzeForm(val, ctxEnv(env, ctxExpr))
+	if err != nil {
+		return nil, err
+	}
+	return merge(ast.MakeNode(kw("set!"), form),
+		value.NewMap(
+			kw("env"), env,
+			kw("target"), targetExpr,
+			kw("val"), valExpr,
+			kw("children"), vec(kw("target"), kw("val")),
+		)), nil
 }
 
 func (a *Analyzer) parseTry(form interface{}, env Env) (ast.Node, error) {
