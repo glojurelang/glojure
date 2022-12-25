@@ -852,6 +852,9 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (ast.Node, error) {
 //	   (when local
 //	     {:local (dissoc-env local)}))))
 func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (ast.Node, error) {
+	if _, ok := form.(value.ISeqable); !ok {
+		return nil, exInfo("invalid fn method", nil)
+	}
 	params, ok := value.First(form).(value.IPersistentVector)
 	if !ok {
 		return nil, exInfo("parameter declaration should be a vector", nil)
@@ -859,16 +862,24 @@ func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (ast.Node, error) 
 	body := value.Rest(form)
 
 	var variadic bool
+	var variadicParams value.ISeq
 	for seq := value.Seq(params); seq != nil; seq = seq.Next() {
 		if !isValidBindingSymbol(seq.First()) {
 			return nil, exInfo(fmt.Sprintf("params must be valid binding symbols, had: %T", seq.First()), nil)
 		}
 		if seq.First().(*value.Symbol).Name() == "&" {
+			if variadic {
+				return nil, exInfo("can't have more than 1 variadic param", nil)
+			}
 			variadic = true
+			variadicParams = seq.Next()
 		}
 	}
 	paramsNames := params
 	if variadic {
+		if value.Count(variadicParams) != 1 {
+			return nil, exInfo("variadic method must have exactly 1 param", nil)
+		}
 		paramsNames = params.Pop().Pop().(value.Conjer).Conj(params.Peek()).(value.IPersistentVector)
 	}
 	env = value.Dissoc(env, kw("local")).(Env)
