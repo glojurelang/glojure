@@ -508,11 +508,16 @@ func (r *Reader) readFunctionShorthand() (interface{}, error) {
 		return nil, err
 	}
 
+	const maxArgIndex = 20
+
 	args := make([]interface{}, 0, len(r.fnArgMap))
 	var restSym *value.Symbol
 	// NB: arg keys are 1-indexed, -1 represents a "rest" arg
 	for i, sym := range r.fnArgMap {
 		for i > len(args) {
+			if i > maxArgIndex {
+				return nil, r.error("function shorthand cannot have more than %d args", maxArgIndex)
+			}
 			args = append(args, nil)
 		}
 		if i == -1 {
