@@ -38,6 +38,7 @@ type (
 		inNamespaceVar *value.Var // in-ns
 
 		// counter for gensym (symbol generator)
+		// TODO: make this atomic
 		gensymCounter int
 
 		stdout io.Writer
@@ -198,29 +199,24 @@ func (env *environment) ResolveFile(filename string) (string, bool) {
 	return "", false
 }
 
-type poser interface {
-	Pos() value.Pos
-}
-
 func (env *environment) Errorf(n interface{}, format string, args ...interface{}) error {
 	return env.errorf(n, format, args...)
 }
 
 func (env *environment) errorf(n interface{}, format string, args ...interface{}) error {
-	var pos value.Pos
-	if n, ok := n.(poser); ok {
-		pos = n.Pos()
+	var filename, line, col string
+	var meta value.IPersistentMap
+	if n, ok := n.(value.IObj); ok {
+		meta = n.Meta()
 	}
-	filename := "?"
-	line := "?"
-	col := "?"
-	if pos.Valid() {
-		if pos.Filename != "" {
-			filename = pos.Filename
-		}
-		line = fmt.Sprintf("%d", pos.Line)
-		col = fmt.Sprintf("%d", pos.Column)
+	get := func(m value.IPersistentMap, key string) string {
+		return value.ToString(value.GetDefault(m, value.NewKeyword(key), "?"), value.PrintReadably())
 	}
+
+	filename = get(meta, "file")
+	line = get(meta, "line")
+	col = get(meta, "column")
+
 	location := fmt.Sprintf("%s:%s:%s", filename, line, col)
 
 	return fmt.Errorf("%s: "+format, append([]interface{}{location}, args...)...)

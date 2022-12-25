@@ -5,18 +5,13 @@ import (
 )
 
 type Symbol struct {
-	Section
 	meta IPersistentMap
 	ns   string
 	name string
 }
 
 // NewSymbol creates a new symbol.
-func NewSymbol(s string, opts ...Option) *Symbol {
-	var o options
-	for _, opt := range opts {
-		opt(&o)
-	}
+func NewSymbol(s string) *Symbol {
 	ns, name := "", s
 
 	idx := strings.Index(s, "/")
@@ -25,9 +20,8 @@ func NewSymbol(s string, opts ...Option) *Symbol {
 		name = s[idx+1:]
 	}
 	return &Symbol{
-		Section: o.section,
-		ns:      ns,
-		name:    name,
+		ns:   ns,
+		name: name,
 	}
 }
 

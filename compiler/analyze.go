@@ -475,6 +475,7 @@ func (a *Analyzer) parseIf(form interface{}, env Env) (ast.Node, error) {
 	if formc != 3 && formc != 4 {
 		return nil, exInfo(fmt.Sprintf("wrong number of args to if, had: %d", formc-1), nil)
 	}
+
 	test := value.MustNth(form, 1)
 	then := value.MustNth(form, 2)
 	var els interface{}
@@ -1044,10 +1045,8 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (ast.Node, error) {
 				return nil, errors.New("can't have more than 1 variadic overload")
 			}
 			sawVariadic = true
-			arity--
 			variadicArity = arity
-		}
-		if _, ok := arities[arity]; ok {
+		} else if _, ok := arities[arity]; ok {
 			return nil, exInfo("can't have 2 or more overloads with the same arity", nil)
 		}
 		arities[arity] = true

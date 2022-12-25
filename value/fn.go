@@ -14,7 +14,6 @@ const (
 
 // Func is a function.
 type Func struct {
-	Section
 	name           *Symbol
 	env            Environment // TODO: only track closure bindings
 	methods        []*FuncMethod
@@ -245,7 +244,6 @@ func (f *Func) Apply(env Environment, args []interface{}) (interface{}, error) {
 	if method == nil {
 		return nil, errorWithStack(fmt.Errorf("wrong number of arguments (%d) passed to %s", len(args), fnName), StackFrame{
 			FunctionName: fnName,
-			Pos:          f.Pos(),
 		})
 	}
 
@@ -274,13 +272,13 @@ Recur:
 	for _, expr := range exprs[:len(exprs)-1] {
 		_, err := fnEnv.Eval(expr)
 		if err != nil {
-			errPos := f.Pos()
-			if expr, ok := expr.(interface{ Pos() Pos }); ok {
-				errPos = expr.Pos()
-			}
+			// errPos := f.Pos()
+			// if expr, ok := expr.(interface{ Pos() Pos }); ok {
+			// 	errPos = expr.Pos()
+			// }
 			return nil, errorWithStack(err, StackFrame{
 				FunctionName: fnName,
-				Pos:          errPos,
+				// Pos:          errPos,
 			})
 		}
 	}
@@ -296,7 +294,7 @@ Recur:
 			// error. TODO: check this at compile time
 			return nil, errorWithStack(fmt.Errorf("wrong number of arguments (%d) passed to recur", len(recurErr.Args)), StackFrame{
 				FunctionName: fnName,
-				Pos:          f.Pos(),
+				// Pos:          f.Pos(),
 			})
 		}
 		bindingRestValue = nil
@@ -308,13 +306,13 @@ Recur:
 	}
 
 	if err != nil {
-		errPos := f.Pos()
-		if expr, ok := lastExpr.(interface{ Pos() Pos }); ok {
-			errPos = expr.Pos()
-		}
+		// errPos := f.Pos()
+		// if expr, ok := lastExpr.(interface{ Pos() Pos }); ok {
+		// 	errPos = expr.Pos()
+		// }
 		return nil, errorWithStack(err, StackFrame{
 			FunctionName: fnName,
-			Pos:          errPos,
+			// Pos:          errPos,
 		})
 	}
 	return v, nil
@@ -322,7 +320,6 @@ Recur:
 
 // BuiltinFunc is a builtin function.
 type BuiltinFunc struct {
-	Section
 	Applyer
 	Name     string
 	variadic bool
@@ -346,7 +343,7 @@ func (f *BuiltinFunc) Apply(env Environment, args []interface{}) (interface{}, e
 	if err != nil {
 		return nil, NewError(StackFrame{
 			FunctionName: "* builtin " + f.Name + " *",
-			Pos:          f.Section.Pos(),
+			// Pos:          f.Section.Pos(),
 		}, err)
 	}
 	return val, nil

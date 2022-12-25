@@ -16,16 +16,24 @@ var (
 	keywordTag = value.NewKeyword("tag")
 )
 
-type trackingRuneScanner struct {
-	rs io.RuneScanner
+type (
+	trackingRuneScanner struct {
+		rs io.RuneScanner
 
-	filename       string
-	nextRuneLine   int
-	nextRuneColumn int
+		filename       string
+		nextRuneLine   int
+		nextRuneColumn int
 
-	// keep track of the last two runes read, most recent last.
-	history []value.Pos
-}
+		// keep track of the last two runes read, most recent last.
+		history []pos
+	}
+
+	pos struct {
+		Filename string
+		Line     int
+		Column   int
+	}
+)
 
 func newTrackingRuneScanner(rs io.RuneScanner, filename string) *trackingRuneScanner {
 	if filename == "" {
@@ -36,7 +44,7 @@ func newTrackingRuneScanner(rs io.RuneScanner, filename string) *trackingRuneSca
 		filename:       filename,
 		nextRuneLine:   1,
 		nextRuneColumn: 1,
-		history:        make([]value.Pos, 0, 2),
+		history:        make([]pos, 0, 2),
 	}
 }
 
@@ -49,7 +57,7 @@ func (r *trackingRuneScanner) ReadRune() (rune, int, error) {
 		r.history[0] = r.history[1]
 		r.history = r.history[:1]
 	}
-	r.history = append(r.history, value.Pos{
+	r.history = append(r.history, pos{
 		Filename: r.filename,
 		Line:     r.nextRuneLine,
 		Column:   r.nextRuneColumn,
@@ -79,9 +87,9 @@ func (r *trackingRuneScanner) UnreadRune() error {
 }
 
 // pos returns the position of the next rune that will be read.
-func (r *trackingRuneScanner) pos() value.Pos {
+func (r *trackingRuneScanner) pos() pos {
 	if len(r.history) == 0 {
-		return value.Pos{
+		return pos{
 			Filename: r.filename,
 			Line:     r.nextRuneLine,
 			Column:   r.nextRuneColumn,
@@ -114,7 +122,7 @@ type (
 		fnArgMap   map[int]*value.Symbol
 		argCounter int
 
-		posStack []value.Pos
+		posStack []pos
 	}
 )
 
@@ -207,13 +215,17 @@ func (r *Reader) error(format string, args ...interface{}) error {
 
 // popSection returns the last section read, ending at the current
 // input, and pops it off the stack.
-func (r *Reader) popSection() value.Section {
-	sec := value.Section{
-		StartPos: r.posStack[len(r.posStack)-1],
-		EndPos:   r.rs.pos(),
-	}
+func (r *Reader) popSection() value.IPersistentMap {
+	top := r.posStack[len(r.posStack)-1]
 	r.posStack = r.posStack[:len(r.posStack)-1]
-	return sec
+
+	return value.NewMap(
+		value.NewKeyword("file"), r.rs.filename,
+		value.NewKeyword("line"), top.Line,
+		value.NewKeyword("column"), top.Column,
+		value.NewKeyword("end-line"), r.rs.pos().Line,
+		value.NewKeyword("end-column"), r.rs.pos().Column,
+	)
 }
 
 // pushSection pushes a new section onto the stack, starting at the
@@ -248,13 +260,27 @@ func (r *Reader) next() (rune, error) {
 	}
 }
 
-func (r *Reader) readExpr() (interface{}, error) {
+func (r *Reader) readExpr() (expr interface{}, err error) {
 	rune, err := r.next()
 	if err != nil {
 		return nil, err
 	}
 
 	r.pushSection()
+	defer func() {
+		s := r.popSection()
+		obj, ok := expr.(value.IObj)
+		if !ok {
+			return
+		}
+		meta := obj.Meta()
+		for seq := value.Seq(s); seq != nil; seq = seq.Next() {
+			entry := seq.First().(value.IMapEntry)
+			meta = value.Assoc(meta, entry.Key(), entry.Val()).(value.IPersistentMap)
+		}
+		expr = obj.WithMeta(meta)
+	}()
+
 	switch rune {
 	case '(':
 		return r.readList()
@@ -326,7 +352,6 @@ func (r *Reader) readList() (interface{}, error) {
 		}
 		nodes = append(nodes, node)
 	}
-	r.popSection()
 	return value.NewList(nodes...), nil
 }
 
@@ -351,7 +376,6 @@ func (r *Reader) readVector() (interface{}, error) {
 		}
 		nodes = append(nodes, node)
 	}
-	r.popSection()
 	return value.NewVector(nodes...), nil
 }
 
@@ -380,7 +404,6 @@ func (r *Reader) readMap() (interface{}, error) {
 		return nil, r.error("map literal must contain an even number of forms")
 	}
 
-	r.popSection()
 	return value.NewMap(keyVals...), nil
 }
 
@@ -405,7 +428,7 @@ func (r *Reader) readSet() (interface{}, error) {
 		}
 		vals = append(vals, el)
 	}
-	return value.NewSet(vals, value.WithSection(r.popSection())), nil
+	return value.NewSet(vals), nil
 }
 
 func (r *Reader) readString() (interface{}, error) {
@@ -437,7 +460,6 @@ func (r *Reader) readString() (interface{}, error) {
 		return nil, r.error("invalid string: %w", err)
 	}
 
-	r.popSection()
 	return str, nil
 }
 
@@ -537,7 +559,6 @@ func (r *Reader) readFunctionShorthand() (interface{}, error) {
 		args[i] = r.genArg(i + 1)
 	}
 
-	r.popSection()
 	return value.NewList(
 		value.NewSymbol("fn*"),
 		value.NewVector(args...),
@@ -569,7 +590,6 @@ func (r *Reader) readRegex() (interface{}, error) {
 		}
 	}
 
-	r.popSection()
 	re, err := regexp.Compile(str)
 	if err != nil {
 		return nil, r.error("invalid regex: %w", err)
@@ -600,7 +620,7 @@ func (r *Reader) readChar() (interface{}, error) {
 	if err != nil {
 		return nil, r.error("invalid character literal: %w", err)
 	}
-	return value.NewChar(rn, value.WithSection(r.popSection())), nil
+	return value.NewChar(rn), nil
 }
 
 func (r *Reader) readQuoteType(form string) (interface{}, error) {
@@ -608,15 +628,8 @@ func (r *Reader) readQuoteType(form string) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	section := r.popSection()
 
-	symbolEndPos := section.StartPos
-	symbolEndPos.Column += len(form)
-	items := []interface{}{
-		value.NewSymbol(form, value.WithSection(value.Section{StartPos: section.StartPos, EndPos: symbolEndPos})),
-		node,
-	}
-	return value.NewList(items...), nil
+	return value.NewList(value.NewSymbol(form), node), nil
 }
 
 func (r *Reader) readQuote() (interface{}, error) {
@@ -663,7 +676,6 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		r.popSection()
 		// return the next one
 		return r.readExpr()
 	case '(':
@@ -675,11 +687,7 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		r.popSection()
-		return value.NewList(
-			value.NewSymbol("var"),
-			expr,
-		), nil
+		return value.NewList(value.NewSymbol("var"), expr), nil
 	case '"':
 		return r.readRegex()
 	default:
@@ -688,7 +696,6 @@ func (r *Reader) readDispatch() (interface{}, error) {
 }
 
 func (r *Reader) readNamespacedMap() (interface{}, error) {
-	r.pushSection()
 	nsKWVal, err := r.readKeyword()
 	if err != nil {
 		return nil, err
@@ -775,7 +782,6 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 				return nil, r.error("invalid big int: %w", err)
 			}
 
-			r.popSection()
 			return bi, nil
 		}
 
@@ -784,7 +790,6 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 			return nil, r.error("invalid number: %s", numStr)
 		}
 
-		r.popSection()
 		return int64(intVal), nil
 	}
 
@@ -795,7 +800,6 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 		if err != nil {
 			return nil, r.error("invalid big decimal: %w", err)
 		}
-		r.popSection()
 		return bd, nil
 	}
 
@@ -804,7 +808,6 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 		return nil, r.error("invalid number: %s", numStr)
 	}
 
-	r.popSection()
 	return num, nil
 }
 
@@ -835,7 +838,6 @@ func (r *Reader) readSymbol() (interface{}, error) {
 		return nil, r.error("error reading symbol")
 	}
 
-	section := r.popSection()
 	// check if symbol is a keyword
 	switch sym {
 	case "nil":
@@ -846,7 +848,7 @@ func (r *Reader) readSymbol() (interface{}, error) {
 		return false, nil
 	}
 
-	symVal := value.NewSymbol(sym, value.WithSection(section))
+	symVal := value.NewSymbol(sym)
 	if !symVal.IsValidFormat() {
 		return nil, r.error("invalid symbol: %s", sym)
 	}
@@ -872,7 +874,6 @@ func (r *Reader) readKeyword() (interface{}, error) {
 	if sym == "" || sym == ":" || strings.Contains(sym[1:], ":") {
 		return nil, r.error("invalid keyword: :" + sym)
 	}
-	r.popSection()
 	return value.NewKeyword(sym), nil
 }
 
@@ -881,7 +882,6 @@ func (r *Reader) readMeta() (value.IPersistentMap, error) {
 	if err != nil {
 		return nil, err
 	}
-	r.popSection()
 
 	switch res := res.(type) {
 	case *value.Map:

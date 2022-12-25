@@ -41,11 +41,30 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
+	currentNSSym := env.CurrentNamespace().Name()
+	kw := value.NewKeyword
 	analyzer := &compiler.Analyzer{
 		Macroexpand1: env.Macroexpand1,
 		CreateVar: func(sym *value.Symbol, e compiler.Env) (interface{}, error) {
 			return value.NewVar(env.CurrentNamespace(), sym), nil
 		},
+		IsVar: func(v interface{}) bool {
+			_, ok := v.(*value.Var)
+			return ok
+		},
+		Gensym: func(prefix string) *value.Symbol {
+			num := env.gensymCounter
+			env.gensymCounter++
+			return value.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
+		},
+		GlobalEnv: value.NewAtom(value.NewMap(
+			kw("namespaces"), value.NewMap(
+				value.NewSymbol(currentNSSym.Name()), value.NewMap(
+					kw("ns"), currentNSSym,
+					kw("mappings"), value.NewMap(),
+				),
+			),
+		)),
 	}
 	astNode, err := analyzer.Analyze(n, value.NewMap(
 		value.NewKeyword("ns"), env.CurrentNamespace().Name(),
@@ -53,7 +72,6 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("eval: %v -> %v\n", value.ToString(n), astNode)
 	n = ast.Form(astNode)
 
 	switch v := n.(type) {
@@ -72,7 +90,7 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 			// EmptyList is different from List
 			return value.NewList(nil), nil
 		}
-		return env.evalList(value.NewList(elements).(*value.List))
+		return env.evalList(value.NewList(elements...).(*value.List))
 	default:
 		return env.evalScalar(n)
 	}
@@ -576,6 +594,7 @@ func (env *environment) applyMacro(fn value.Applyer, form value.ISeq) (interface
 	// $form is the form that was passed to the macro
 	// $env is the environment that the macro was called in
 	args := append([]interface{}{form, nil}, seqToSlice(argList)...)
+
 	exp, err := env.applyFunc(fn, args)
 	if err != nil {
 		return nil, err
@@ -892,7 +911,7 @@ func (env *environment) asMacro(sym *value.Symbol) *value.Var {
 // Misc. helpers
 
 func seqToList(seq value.ISeq) value.IPersistentList {
-	return value.NewList(seqToSlice(seq))
+	return value.NewList(seqToSlice(seq)...)
 }
 
 func seqToSlice(seq value.ISeq) []interface{} {

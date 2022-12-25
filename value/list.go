@@ -6,7 +6,6 @@ import (
 
 // List is a list of values.
 type List struct {
-	Section
 	meta IPersistentMap
 
 	// the empty list is represented by a nil item and a nil next. all
@@ -24,7 +23,6 @@ var (
 )
 
 type EmptyList struct {
-	Section
 	meta IPersistentMap
 }
 

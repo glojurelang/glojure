@@ -9,7 +9,6 @@ import (
 type (
 	// Map represents a map of glojure values.
 	Map struct {
-		Section
 		meta    IPersistentMap
 		keyVals []interface{}
 	}

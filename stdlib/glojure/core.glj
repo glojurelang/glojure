@@ -279,6 +279,7 @@
                (recur (conj ret (first s)) (next s))
                (seq ret)))))
 
+
 (def 
 
  ^{:doc "Same as (def name (fn [params* ] exprs*)) or (def
@@ -485,7 +486,6 @@
                      (cons `defn decl)
                      (list '. (list 'var name) '(SetMacro))
                      (list 'var name)))))
-
 
 (. (var defmacro) (SetMacro))
 

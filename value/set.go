@@ -6,24 +6,17 @@ import (
 
 // Set represents a map of glojure values.
 type Set struct {
-	Section
 	vals []interface{}
 }
 
-func NewSet(vals []interface{}, opts ...Option) *Set {
-	var o options
-	for _, opt := range opts {
-		opt(&o)
-	}
-
+func NewSet(vals []interface{}) *Set {
 	// TEMP: reverse to pass test
 	if len(vals) == 3 {
 		vals[0], vals[2] = vals[2], vals[0]
 	}
 
 	return &Set{
-		Section: o.section,
-		vals:    vals,
+		vals: vals,
 	}
 }
 

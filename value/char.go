@@ -10,11 +10,7 @@ import (
 type Char rune
 
 // NewChar creates a new character value.
-func NewChar(value rune, opts ...Option) Char {
-	var o options
-	for _, opt := range opts {
-		opt(&o)
-	}
+func NewChar(value rune) Char {
 	return Char(value)
 }
 

@@ -19,7 +19,9 @@ type Error struct {
 
 type StackFrame struct {
 	FunctionName string
-	Pos          Pos
+	Filename     string
+	Line         int
+	Column       int
 }
 
 // NewError creates a new error value.
@@ -38,10 +40,9 @@ func (e *Error) Error() string {
 	for _, frame := range e.stack {
 		builder.WriteString(frame.FunctionName)
 		builder.WriteString("\n\t")
-		pos := frame.Pos
-		filename := pos.Filename
-		line := strconv.Itoa(pos.Line)
-		column := strconv.Itoa(pos.Column)
+		filename := frame.Filename
+		line := strconv.Itoa(frame.Line)
+		column := strconv.Itoa(frame.Column)
 		if filename == "" {
 			filename = "<unknown>"
 			line = "?"

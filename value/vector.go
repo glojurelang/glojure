@@ -9,7 +9,6 @@ import (
 
 // Vector is a vector of values.
 type Vector struct {
-	Section
 	meta IPersistentMap
 	vec  vector.Vector
 }
