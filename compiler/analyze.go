@@ -75,7 +75,7 @@ func (a *Analyzer) analyzeSymbol(form *value.Symbol, env Env) (ast.Node, error) 
 		n = merge(value.Dissoc(localBinding, kw("init")), value.NewMap(
 			kw("op"), kw("local"),
 			kw("assignable?"), mutable != nil && mutable != false,
-			kw("children"), value.NewVectorFromCollection(remove(children, kw("init"))),
+			kw("children"), value.NewVectorFromCollection(remove(kw("init"), children)),
 		))
 	} else {
 		v := a.resolveSym(form, env)

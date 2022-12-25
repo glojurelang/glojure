@@ -483,6 +483,9 @@ func (r *Reader) readArg() (interface{}, error) {
 		if err != nil {
 			return nil, r.error("arg literal must be %, %& or %integer")
 		}
+		if argIndex < 1 {
+			return nil, r.error("arg literal must be %, %& or %integer > 0")
+		}
 		if r.fnArgMap[argIndex] == nil {
 			r.fnArgMap[argIndex] = r.genArg(argIndex)
 		}
