@@ -30,6 +30,8 @@ type (
 		// environment.
 		Eval(expr interface{}) (interface{}, error)
 
+		EvalAST(n interface{}) (interface{}, error)
+
 		// ResolveFile looks up a file in the environment. It should expand
 		// relative paths to absolute paths. Relative paths are searched for
 		// in the environments load paths.

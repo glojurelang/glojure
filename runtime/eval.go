@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/glojurelang/glojure/ast"
 	"github.com/glojurelang/glojure/compiler"
 	"github.com/glojurelang/glojure/value"
 )
@@ -24,6 +23,13 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 		return form, nil
 	}
 
+	if strings.HasPrefix(sym.String(), ".") && len(sym.String()) > 1 {
+		fieldSym := value.NewSymbol(sym.String()[1:])
+		// rewrite the expression to a dot expression
+		newList := seqToList(value.NewCons(SymbolDot, value.NewCons(seq.Next().First(), value.NewCons(fieldSym, seq.Next().Next()))))
+		return env.Macroexpand1(newList)
+	}
+
 	macroVar := env.asMacro(sym)
 	if macroVar == nil {
 		return form, nil
@@ -33,11 +39,21 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 	if !ok {
 		return nil, env.errorf(form, "macro %s is not a function", sym)
 	}
-	res, err := env.applyMacro(applyer, form.(value.ISeq))
+	res, err := env.applyMacro1(applyer, form.(value.ISeq))
 	if err != nil {
 		return nil, env.errorf(form, "error applying macro: %w", err)
 	}
 	return res, nil
+}
+
+func (env *environment) applyMacro1(fn value.Applyer, form value.ISeq) (interface{}, error) {
+	argList := form.Next()
+	// two hidden arguments, $form and $env.
+	// $form is the form that was passed to the macro
+	// $env is the environment that the macro was called in
+	args := append([]interface{}{form, nil}, seqToSlice(argList)...)
+
+	return env.applyFunc(fn, args)
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
@@ -46,22 +62,21 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 	analyzer := &compiler.Analyzer{
 		Macroexpand1: env.Macroexpand1,
 		CreateVar: func(sym *value.Symbol, e compiler.Env) (interface{}, error) {
-			return value.NewVar(env.CurrentNamespace(), sym), nil
+			return env.CurrentNamespace().Intern(env, sym), nil
 		},
 		IsVar: func(v interface{}) bool {
 			_, ok := v.(*value.Var)
 			return ok
 		},
 		Gensym: func(prefix string) *value.Symbol {
-			num := env.gensymCounter
-			env.gensymCounter++
+			num := env.nextSymNum()
 			return value.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
 		},
 		GlobalEnv: value.NewAtom(value.NewMap(
 			kw("namespaces"), value.NewMap(
 				value.NewSymbol(currentNSSym.Name()), value.NewMap(
 					kw("ns"), currentNSSym,
-					kw("mappings"), value.NewMap(),
+					kw("mappings"), env.CurrentNamespace().Mappings(),
 				),
 			),
 		)),
@@ -72,7 +87,7 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	n = ast.Form(astNode)
+	return env.EvalAST(astNode)
 
 	switch v := n.(type) {
 	case *value.Vector:
@@ -449,9 +464,8 @@ func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item
 		symStr := item.String()
 		newName, ok := symbolNameMap[symStr]
 		if !ok {
-			newName = symStr[:len(symStr)-1] + "__" + strconv.Itoa(env.gensymCounter) + "__auto__"
+			newName = symStr[:len(symStr)-1] + "__" + strconv.Itoa(int(env.nextSymNum())) + "__auto__"
 			symbolNameMap[symStr] = newName
-			env.gensymCounter++
 		}
 		return value.NewSymbol(newName), nil
 	default:

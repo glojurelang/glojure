@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+	"sync/atomic"
 
 	"github.com/glojurelang/glojure/value"
 )
@@ -38,8 +39,7 @@ type (
 		inNamespaceVar *value.Var // in-ns
 
 		// counter for gensym (symbol generator)
-		// TODO: make this atomic
-		gensymCounter int
+		symCounter int32
 
 		stdout io.Writer
 		stderr io.Writer
@@ -68,6 +68,15 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 	e.inNamespaceVar = value.NewVarWithRoot(coreNS, SymbolInNamespace, false)
 
 	return e
+}
+
+func (env *environment) nextSymNum() int32 {
+	for {
+		val := atomic.LoadInt32(&env.symCounter)
+		if atomic.CompareAndSwapInt32(&env.symCounter, val, val+1) {
+			return val
+		}
+	}
 }
 
 func (env *environment) Context() context.Context {

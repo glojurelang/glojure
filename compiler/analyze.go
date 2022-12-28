@@ -33,7 +33,7 @@ type (
 // Analyze performs semantic analysis on the given s-expression,
 // returning an AST.
 func (a *Analyzer) Analyze(form interface{}, env Env) (ast.Node, error) {
-	return a.analyzeForm(form, env)
+	return a.analyzeForm(form, ctxEnv(env, ctxExpr).Assoc(kw("top-level"), true).(Env))
 }
 
 func (a *Analyzer) analyzeForm(form interface{}, env Env) (n ast.Node, err error) {
@@ -438,6 +438,7 @@ func (a *Analyzer) parseDo(form interface{}, env Env) (ast.Node, error) {
 		}
 		statements = append(statements, s)
 	}
+
 	ret, err := a.analyzeForm(retForm, env)
 	if err != nil {
 		return nil, err
@@ -784,12 +785,12 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (ast.Node, error) {
 	}
 	target := second(form)
 	mOrF := value.MustNth(form.(value.Nther), 2)
-	args := value.Rest(value.Rest(form))
+	args := value.Rest(value.Rest(value.Rest(form)))
 	isField := false
 	if sym, ok := mOrF.(*value.Symbol); ok && len(sym.Name()) > 0 && sym.Name()[0] == '-' {
 		mOrF = value.NewSymbol(sym.Name()[1:])
 		isField = true
-	} else if args != nil {
+	} else if value.Count(args) != 0 {
 		mOrF = value.NewCons(mOrF, args)
 	}
 	targetExpr, err := a.analyzeForm(target, ctxEnv(env, ctxExpr))
@@ -920,6 +921,7 @@ func (a *Analyzer) parseRecur(form interface{}, env Env) (ast.Node, error) {
 	errorMsg := ""
 	switch {
 	case !value.Equal(ctx, ctxReturn):
+		panic("Can only recur from tail position")
 		errorMsg = "can only recur from tail position"
 	case !value.Equal(value.Count(exprs), loopLocals):
 		errorMsg = fmt.Sprintf("mismatched argument count to recur, expected: %v args, had: %v", loopLocals, value.Count(exprs))
@@ -1284,9 +1286,7 @@ func (a *Analyzer) wrappingMeta(expr ast.Node) (ast.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	var exprNode ast.Node
-	// TODO: assoc-in
-
+	exprNode := assocIn(expr, vec(kw("env"), kw("context")), ctxExpr)
 	n := ast.MakeNode(kw("with-meta"), form)
 	return merge(n, value.NewMap(
 		kw("env"), env,

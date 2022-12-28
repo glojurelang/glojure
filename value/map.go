@@ -2,7 +2,6 @@ package value
 
 import (
 	"fmt"
-	"runtime/debug"
 	"strings"
 )
 
@@ -124,14 +123,6 @@ func (m *Map) Seq() ISeq {
 }
 
 func (m *Map) String() string {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recovered from panic in Map.String():", r)
-			// print stack
-			fmt.Println(string(debug.Stack()))
-		}
-	}()
-
 	b := strings.Builder{}
 
 	first := true
