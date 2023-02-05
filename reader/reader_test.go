@@ -57,7 +57,7 @@ func TestRead(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			r := New(strings.NewReader(tc.input), WithFilename(tc.name))
+			r := New(strings.NewReader(tc.input), WithFilename(tc.name), WithCurrentNS("user"))
 			exprs, err := r.ReadAll()
 			if err != nil {
 				t.Fatal(err)

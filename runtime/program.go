@@ -199,6 +199,9 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.NewList", value.NewList)
 		define("glojure.lang.Symbol", reflect.TypeOf(value.NewSymbol("")))
 		define("glojure.lang.HasType", func(t reflect.Type, v interface{}) bool {
+			if v == nil {
+				return false
+			}
 			switch {
 			case reflect.TypeOf(v) == t, reflect.TypeOf(v).ConvertibleTo(t):
 				return true

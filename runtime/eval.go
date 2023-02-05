@@ -381,11 +381,11 @@ func (env *environment) evalQuasiquote(n *value.List) (interface{}, error) {
 	// symbolNameMap tracks the names of symbols that have been renamed.
 	// symbols that end with a '#' have '#' replaced with a unique
 	// suffix.
-	symbolNameMap := make(map[string]string)
+	symbolNameMap := make(map[string]*value.Symbol)
 	return env.evalQuasiquoteItem(symbolNameMap, n.Next().First())
 }
 
-func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]string, item interface{}) (interface{}, error) {
+func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]*value.Symbol, item interface{}) (interface{}, error) {
 	switch item := item.(type) {
 	case value.ISeq:
 		if value.Seq(item) == nil {

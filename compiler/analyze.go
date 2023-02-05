@@ -431,12 +431,12 @@ func (a *Analyzer) parseDo(form interface{}, env Env) (ast.Node, error) {
 		retForm = exprs.First()
 	}
 	statements := make([]interface{}, len(statementForms))
-	for _, form := range statementForms {
+	for i, form := range statementForms {
 		s, err := a.analyzeForm(form, statementsEnv)
 		if err != nil {
 			return nil, err
 		}
-		statements = append(statements, s)
+		statements[i] = s
 	}
 
 	ret, err := a.analyzeForm(retForm, env)
@@ -929,12 +929,21 @@ func (a *Analyzer) parseRecur(form interface{}, env Env) (ast.Node, error) {
 	if errorMsg != "" {
 		return nil, exInfo(errorMsg, nil)
 	}
+	var exprNodes []interface{}
+	for seq := value.Seq(exprs); seq != nil; seq = seq.Next() {
+		expr := value.First(seq)
+		exprNode, err := a.analyzeForm(expr, ctxEnv(env, ctxExpr))
+		if err != nil {
+			return nil, err
+		}
+		exprNodes = append(exprNodes, exprNode)
+	}
 
 	return value.NewMap(
 		kw("op"), kw("recur"),
 		kw("env"), env,
 		kw("form"), form,
-		kw("exprs"), exprs,
+		kw("exprs"), vec(exprNodes...),
 		kw("loop-id"), loopID,
 		kw("children"), vec(kw("exprs"))), nil
 }

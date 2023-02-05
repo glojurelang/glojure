@@ -11,6 +11,8 @@ import (
 	"github.com/glojurelang/glojure/value"
 )
 
+// TODO: replace all usage of kw() with global vars
+
 var indent = 0
 
 const debug = true
@@ -47,6 +49,8 @@ func (env *environment) EvalAST(x interface{}) (interface{}, error) {
 		return env.EvalASTDo(n)
 	case kw("let"):
 		return env.EvalASTLet(n, false)
+	case kw("loop"):
+		return env.EvalASTLet(n, true)
 	case kw("invoke"):
 		return env.EvalASTInvoke(n)
 	case kw("quote"):
@@ -61,6 +65,10 @@ func (env *environment) EvalAST(x interface{}) (interface{}, error) {
 		return env.EvalASTHostInterop(n)
 	case kw("if"):
 		return env.EvalASTIf(n)
+	case kw("the-var"):
+		return env.EvalASTTheVar(n)
+	case kw("recur"):
+		return env.EvalASTRecur(n)
 	default:
 		panic("unimplemented op: " + value.ToString(op) + "\n" + value.ToString(get(n, kw("form"))))
 	}
@@ -80,11 +88,18 @@ func (env *environment) EvalASTDef(n ast.Node) (interface{}, error) {
 	return env.DefVar(get(n, kw("name")).(*value.Symbol), initVal), nil
 }
 
-func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
-	// TODO: process this in an analysis pass, replacing with a constant
-	// reference to the go object.
+func (env *environment) EvalASTTheVar(n ast.Node) (interface{}, error) {
+	return get(n, kw("var")), nil
+}
 
-	switch get(n, kw("class")).(*value.Symbol).Name() {
+func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
+	// TODO: add go values to the namespace (without vars)
+	sym := get(n, kw("class")).(*value.Symbol)
+	name := sym.Name()
+	if v, ok := env.scope.lookup(sym); ok {
+		return v, nil
+	}
+	switch name {
 	case "os.Exit":
 		return os.Exit, nil
 	case "fmt.Println":
@@ -95,8 +110,10 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return value.WithMeta, nil
 	case "glojure.lang.NewCons":
 		return value.NewCons, nil
+	case "glojure.lang.Symbol":
+		return reflect.TypeOf(value.NewSymbol("")), nil
 	default:
-		return nil, errors.New("unknown class: " + value.ToString(get(n, kw("class"))))
+		return nil, errors.New("unknown Go value: " + value.ToString(get(n, kw("class"))))
 	}
 }
 
@@ -230,11 +247,13 @@ func (env *environment) EvalASTLet(n ast.Node, isLoop bool) (interface{}, error)
 		binding := get(bindings, i)
 		name := get(binding, kw("name"))
 		init := get(binding, kw("init"))
-		initVal, err := env.EvalAST(init.(ast.Node))
+		initVal, err := newEnv.EvalAST(init.(ast.Node))
 		if err != nil {
 			return nil, err
 		}
+		// TODO: this should not mutate in-place!
 		newEnv.BindLocal(name.(*value.Symbol), initVal)
+
 		bindNameVals = append(bindNameVals, name, initVal)
 	}
 
@@ -263,6 +282,27 @@ Recur:
 		goto Recur
 	}
 	return res, err
+}
+
+func (env *environment) EvalASTRecur(n ast.Node) (interface{}, error) {
+	if env.recurTarget == nil {
+		panic("recur outside of loop")
+	}
+
+	exprs := get(n, kw("exprs"))
+	vals := make([]interface{}, 0, value.Count(exprs))
+	noRecurEnv := env.WithRecurTarget(nil).(*environment)
+	for seq := value.Seq(exprs); seq != nil; seq = seq.Next() {
+		val, err := noRecurEnv.EvalAST(seq.First().(ast.Node))
+		if err != nil {
+			return nil, err
+		}
+		vals = append(vals, val)
+	}
+	return nil, &value.RecurError{
+		Target: env.recurTarget,
+		Args:   vals,
+	}
 }
 
 func (env *environment) EvalASTInvoke(n ast.Node) (interface{}, error) {

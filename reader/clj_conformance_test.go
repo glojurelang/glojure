@@ -19,14 +19,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var (
-	testSymbolResolver = SymbolResolverFunc(func(s string) string {
-		if strings.Contains(s, "/") {
-			return s
-		}
-		return "user/" + s
-	})
+type (
+	testSymbolResolver struct{}
 )
+
+func (sr *testSymbolResolver) CurrentNS() *value.Symbol {
+	return value.NewSymbol("user")
+}
+
+func (sr *testSymbolResolver) ResolveStruct(s *value.Symbol) *value.Symbol {
+	return s
+}
+
+func (sr *testSymbolResolver) ResolveAlias(s *value.Symbol) *value.Symbol {
+	return s
+}
+
+func (sr *testSymbolResolver) ResolveVar(s *value.Symbol) *value.Symbol {
+	if strings.Contains(s.String(), "/") {
+		return s
+	}
+	return value.NewSymbol("user/" + s.String())
+}
 
 // Running these fuzz tests is slow because clj is very slow to start
 // up. Use GLOJ_WRITE_GLJ_FUZZ_TEST_CACHE=1 to cache the output of
@@ -72,7 +86,7 @@ func FuzzCLJConformance(f *testing.F) {
 
 		cljExpr, cljErr := cljRdr.readCLJExpr(program)
 
-		r := New(strings.NewReader(program), WithSymbolResolver(testSymbolResolver))
+		r := New(strings.NewReader(program), WithSymbolResolver(&testSymbolResolver{}))
 		// we only want the first expression. TODO: variant that reads
 		// one.
 		gljValue, gljErr := r.ReadOne()
@@ -88,7 +102,7 @@ func FuzzCLJConformance(f *testing.F) {
 			return
 		}
 
-		gljExpr := value.ToString(gljValue)
+		gljExpr := cljNormalize(value.ToString(gljValue))
 
 		// workaround for the fact that Go is able to quote more
 		// unprintable characters than Clojure. e.g. \x00 and \x10.
@@ -262,3 +276,9 @@ func (r *cljReader) readCLJExpr(program string) (string, error) {
 }
 
 // for later: clj -M -e '(binding [*print-meta* true] (pr (read *in*)))'
+
+func cljNormalize(s string) string {
+	// replace glojure with clojure
+	s = strings.ReplaceAll(s, "glojure", "clojure")
+	return s
+}

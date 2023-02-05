@@ -13,7 +13,41 @@ import (
 )
 
 var (
-	keywordTag = value.NewKeyword("tag")
+	symQuote = value.NewSymbol("quote")
+	kwTag    = value.NewKeyword("tag")
+	specials = func() map[string]bool {
+		specialStrs := []string{
+			"def",
+			"loop*",
+			"recur",
+			"if",
+			"case",
+			"let*",
+			"letfn*",
+			"do",
+			"fn*",
+			"quote",
+			"var",
+			"glojure.core/import*",
+			".",
+			"set!",
+			"deftype*",
+			"reify*",
+			"try",
+			"catch",
+			"throw",
+			"finally",
+			"monitor-enter",
+			"monitor-exit",
+			"new",
+			"&",
+		}
+		ret := make(map[string]bool)
+		for _, s := range specialStrs {
+			ret[s] = true
+		}
+		return ret
+	}()
 )
 
 type (
@@ -116,6 +150,7 @@ type (
 		rs *trackingRuneScanner
 
 		symbolResolver SymbolResolver
+		currentNS      string
 
 		// map for function shorthand arguments.
 		// non-nil only when reading a function shorthand.
@@ -127,8 +162,9 @@ type (
 )
 
 type options struct {
-	filename string
-	resolver SymbolResolver
+	filename  string
+	resolver  SymbolResolver
+	currentNS string
 }
 
 // Option represents an option that can be passed to New.
@@ -148,10 +184,15 @@ func WithSymbolResolver(resolver SymbolResolver) Option {
 	}
 }
 
-func New(r io.RuneScanner, opts ...Option) *Reader {
-	o := options{
-		resolver: defaultSymbolResolver,
+// WithCurrentNS sets the current namespace to be used when reading.
+func WithCurrentNS(currentNS string) Option {
+	return func(o *options) {
+		o.currentNS = currentNS
 	}
+}
+
+func New(r io.RuneScanner, opts ...Option) *Reader {
+	o := options{}
 
 	for _, opt := range opts {
 		opt(&o)
@@ -159,6 +200,7 @@ func New(r io.RuneScanner, opts ...Option) *Reader {
 	return &Reader{
 		rs:             newTrackingRuneScanner(r, o.filename),
 		symbolResolver: o.resolver,
+		currentNS:      o.currentNS,
 
 		// TODO: attain through a configured autogen function.
 		//
@@ -637,13 +679,51 @@ func (r *Reader) readQuote() (interface{}, error) {
 }
 
 func (r *Reader) readSyntaxQuote() (interface{}, error) {
-	return r.readQuoteType("quasiquote")
+	node, err := r.readExpr()
+	if err != nil {
+		return nil, err
+	}
+
+	// symbolNameMap tracks the names of symbols that have been renamed.
+	// symbols that end with a '#' have '#' replaced with a unique
+	// suffix.
+	symbolNameMap := make(map[string]*value.Symbol)
+	return r.syntaxQuote(symbolNameMap, node), nil
+}
+
+func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interface{}) interface{} {
+	switch node := node.(type) {
+	case *value.Symbol:
+		sym := node
+		if specials[sym.String()] {
+			return value.NewList(symQuote, sym)
+		}
+		switch {
+		case sym.Namespace() == "" && strings.HasSuffix(sym.Name(), "#"):
+			gs, ok := symbolNameMap[sym.String()]
+			if ok {
+				sym = gs
+				break
+			}
+			symbolNameMap[sym.String()] = value.NewSymbol(sym.Name() + strconv.Itoa(len(symbolNameMap)))
+		case sym.Namespace() == "" && strings.HasSuffix(sym.Name(), "."):
+			panic("a")
+		case sym.Namespace() == "" && strings.HasPrefix(sym.Name(), "."):
+			panic("b")
+		case r.symbolResolver != nil:
+			panic("c")
+		default:
+			// TODO: match actual LispReader.java behavior
+			return value.NewList(symQuote, value.NewSymbol(r.currentNS+"/"+sym.Name()))
+		}
+	}
+	return nil
 }
 
 func (r *Reader) readDeref() (interface{}, error) {
 	// TODO: look up 'deref' with the symbol resolver
 	// it should resolve to glojure.core/deref in the go case
-	return r.readQuoteType("clojure.core/deref")
+	return r.readQuoteType("glojure.core/deref")
 }
 
 func (r *Reader) readUnquote() (interface{}, error) {
@@ -887,7 +967,7 @@ func (r *Reader) readMeta() (value.IPersistentMap, error) {
 	case *value.Map:
 		return res, nil
 	case *value.Symbol, string:
-		return value.NewMap(keywordTag, res), nil
+		return value.NewMap(kwTag, res), nil
 	case value.Keyword:
 		return value.NewMap(res, true), nil
 	default:

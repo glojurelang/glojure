@@ -1,17 +1,12 @@
 package reader
 
+import "github.com/glojurelang/glojure/value"
+
 type (
 	SymbolResolver interface {
-		ResolveSymbol(name string) string
+		CurrentNS() *value.Symbol
+		ResolveStruct(*value.Symbol) *value.Symbol
+		ResolveAlias(*value.Symbol) *value.Symbol
+		ResolveVar(*value.Symbol) *value.Symbol
 	}
-
-	SymbolResolverFunc func(name string) string
 )
-
-func (f SymbolResolverFunc) ResolveSymbol(name string) string {
-	return f(name)
-}
-
-var defaultSymbolResolver = SymbolResolverFunc(func(name string) string {
-	return name
-})

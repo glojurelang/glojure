@@ -1,4 +1,4 @@
-(quasiquote foobar)
-(quasiquote (a b c))
-(quasiquote (a (clojure.core/unquote (+ 1 2))))
-(quasiquote (a (splice-unquote [(+ 1 2)])))
+(quote user/foobar)
+(glojure.core/seq (glojure.core/concat (glojure.core/list (quote user/a)) (glojure.core/list (quote user/b)) (glojure.core/list (quote user/c))))
+(glojure.core/seq (glojure.core/concat (glojure.core/list (quote user/a)) (glojure.core/list (+ 1 2))))
+(glojure.core/seq (glojure.core/concat (glojure.core/list (quote user/a)) [(+ 1 2)]))

@@ -228,7 +228,7 @@
          (fn [fdecl]
            (let [arglist (first fdecl)
                  ;elide implicit macro args
-                 arglist (if (clojure.lang.Util/equals '&form (first arglist)) 
+                 arglist (if (glojure.lang.Equal '&form (first arglist)) 
                            (clojure.lang.RT/subvec arglist 2 (glojure.lang.Count arglist))
                            arglist)
                  body (next fdecl)]
@@ -242,7 +242,7 @@
                               ^glojure.lang.Symbol tag (:tag m)]
                           (if (instance? glojure.lang.Symbol tag)
                             (if (glojure.lang.Equal (.indexOf (.Name tag) ".") -1)
-                              (if (clojure.lang.Util/equals nil (clojure.lang.Compiler$HostExpr/maybeSpecialTag tag))
+                              (if (glojure.lang.Equal nil (clojure.lang.Compiler$HostExpr/maybeSpecialTag tag))
                                 (let [c (clojure.lang.Compiler$HostExpr/maybeClass tag false)]
                                   (if c
                                     (with-meta argvec (assoc m :tag (glojure.lang.NewSymbol (.Name c))))
@@ -278,7 +278,6 @@
              (if (next s)
                (recur (conj ret (first s)) (next s))
                (seq ret)))))
-
 
 (def 
 
@@ -486,6 +485,7 @@
                      (cons `defn decl)
                      (list '. (list 'var name) '(SetMacro))
                      (list 'var name)))))
+
 
 (. (var defmacro) (SetMacro))
 
@@ -803,7 +803,7 @@
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (clojure.lang.Util/equals x y))
+  ([x y] (glojure.lang.Equal x y))
   ([x y & more]
    (if (= x y)
      (if (next more)
