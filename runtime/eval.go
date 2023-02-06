@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
-	"strconv"
 	"strings"
 
 	"github.com/glojurelang/glojure/compiler"
@@ -132,8 +131,6 @@ func (env *environment) evalList(n *value.List) (interface{}, error) {
 			return env.evalFn(n)
 		case "quote":
 			return env.evalQuote(n)
-		case "quasiquote":
-			return env.evalQuasiquote(n)
 		case "let*":
 			return env.evalLet(n, false)
 		case "loop*":
@@ -370,107 +367,6 @@ func (env *environment) evalQuote(n *value.List) (interface{}, error) {
 	}
 
 	return n.Next().First(), nil
-}
-
-func (env *environment) evalQuasiquote(n *value.List) (interface{}, error) {
-	listLength := n.Count()
-	if listLength != 2 {
-		return nil, env.errorf(n, "invalid quasiquote, need 1 argument")
-	}
-
-	// symbolNameMap tracks the names of symbols that have been renamed.
-	// symbols that end with a '#' have '#' replaced with a unique
-	// suffix.
-	symbolNameMap := make(map[string]*value.Symbol)
-	return env.evalQuasiquoteItem(symbolNameMap, n.Next().First())
-}
-
-func (env *environment) evalQuasiquoteItem(symbolNameMap map[string]*value.Symbol, item interface{}) (interface{}, error) {
-	switch item := item.(type) {
-	case value.ISeq:
-		if value.Seq(item) == nil {
-			return item, nil
-		}
-		if value.Equal(item.First(), SymbolUnquote) {
-			return env.Eval(item.Next().First())
-		}
-		if value.Equal(item.First(), SymbolSpliceUnquote) {
-			return nil, env.errorf(item, "splice-unquote not in list")
-		}
-
-		var resultValues []interface{}
-		for cur := item; cur != nil; cur = cur.Next() {
-			if lst, ok := cur.First().(*value.List); ok && !lst.IsEmpty() && value.Equal(lst.First(), SymbolSpliceUnquote) {
-				res, err := env.Eval(lst.Next().First())
-				if err != nil {
-					return nil, err
-				}
-				vals, ok := res.(value.ISeq)
-				if !ok {
-					return nil, env.errorf(lst, "splice-unquote did not return an ISeq")
-				}
-				for ; vals != nil; vals = vals.Next() {
-					v := vals.First()
-					resultValues = append(resultValues, v)
-				}
-				continue
-			}
-
-			result, err := env.evalQuasiquoteItem(symbolNameMap, cur.First())
-			if err != nil {
-				return nil, err
-			}
-			resultValues = append(resultValues, result)
-		}
-		return value.NewList(resultValues), nil
-	case *value.Vector:
-		if item.Count() == 0 {
-			return item, nil
-		}
-
-		var resultValues []interface{}
-		for i := 0; i < item.Count(); i++ {
-			cur := item.ValueAt(i)
-			if lst, ok := cur.(*value.List); ok && !lst.IsEmpty() && value.Equal(lst.First(), SymbolSpliceUnquote) {
-				res, err := env.Eval(lst.Next().First())
-				if err != nil {
-					return nil, err
-				}
-				vals, ok := res.(value.Nther)
-				if !ok {
-					return nil, env.errorf(lst, "splice-unquote did not return an enumerable")
-				}
-				for j := 0; ; j++ {
-					v, ok := vals.Nth(j)
-					if !ok {
-						break
-					}
-					resultValues = append(resultValues, v)
-				}
-				continue
-			}
-
-			result, err := env.evalQuasiquoteItem(symbolNameMap, cur)
-			if err != nil {
-				return nil, err
-			}
-			resultValues = append(resultValues, result)
-		}
-		return value.NewVector(resultValues...), nil
-	case *value.Symbol:
-		if !strings.HasSuffix(item.Name(), "#") {
-			return item, nil
-		}
-		symStr := item.String()
-		newName, ok := symbolNameMap[symStr]
-		if !ok {
-			newName = symStr[:len(symStr)-1] + "__" + strconv.Itoa(int(env.nextSymNum())) + "__auto__"
-			symbolNameMap[symStr] = newName
-		}
-		return value.NewSymbol(newName), nil
-	default:
-		return item, nil
-	}
 }
 
 func (env *environment) evalLet(n *value.List, isLoop bool) (interface{}, error) {

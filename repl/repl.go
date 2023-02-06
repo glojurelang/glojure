@@ -67,7 +67,9 @@ func Start(opts ...Option) {
 		}
 		expr += line + "\n"
 
-		rdr := reader.New(strings.NewReader(expr), reader.WithFilename("repl"))
+		rdr := reader.New(strings.NewReader(expr), reader.WithFilename("repl"), reader.WithGetCurrentNS(func() string {
+			return o.env.CurrentNamespace().Name().String()
+		}))
 		vals, err := rdr.ReadAll()
 		if err != nil {
 			if errors.Is(err, io.EOF) {

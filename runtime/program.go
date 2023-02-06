@@ -257,13 +257,19 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		if err != nil {
 			panic(fmt.Sprintf("could not read stdlib core.glj: %v", err))
 		}
-		r := reader.New(strings.NewReader(string(core)))
-		exprs, err := r.ReadAll()
-		if err != nil {
-			panic(fmt.Sprintf("error reading core lib: %v", err))
-		}
-		for _, expr := range exprs {
-			_, err := env.Eval(expr)
+		r := reader.New(strings.NewReader(string(core)), reader.WithGetCurrentNS(func() string {
+			return env.CurrentNamespace().Name().String()
+		}))
+
+		for {
+			expr, err := r.ReadOne()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				panic(fmt.Sprintf("error reading core lib: %v", err))
+			}
+			_, err = env.Eval(expr)
 			if err != nil {
 				panic(fmt.Sprintf("error evaluating core lib: %v", err))
 			}

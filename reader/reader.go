@@ -157,7 +157,7 @@ type (
 		rs *trackingRuneScanner
 
 		symbolResolver SymbolResolver
-		currentNS      string
+		getCurrentNS   func() string
 
 		// map for function shorthand arguments.
 		// non-nil only when reading a function shorthand.
@@ -169,9 +169,9 @@ type (
 )
 
 type options struct {
-	filename  string
-	resolver  SymbolResolver
-	currentNS string
+	filename     string
+	resolver     SymbolResolver
+	getCurrentNS func() string
 }
 
 // Option represents an option that can be passed to New.
@@ -191,10 +191,10 @@ func WithSymbolResolver(resolver SymbolResolver) Option {
 	}
 }
 
-// WithCurrentNS sets the current namespace to be used when reading.
-func WithCurrentNS(currentNS string) Option {
+// WithGetCurrentNS sets the function to be used to get the current namespace.
+func WithGetCurrentNS(getCurrentNS func() string) Option {
 	return func(o *options) {
-		o.currentNS = currentNS
+		o.getCurrentNS = getCurrentNS
 	}
 }
 
@@ -204,10 +204,14 @@ func New(r io.RuneScanner, opts ...Option) *Reader {
 	for _, opt := range opts {
 		opt(&o)
 	}
+	getCurrentNS := func() string { return "user" }
+	if o.getCurrentNS != nil {
+		getCurrentNS = o.getCurrentNS
+	}
 	return &Reader{
 		rs:             newTrackingRuneScanner(r, o.filename),
 		symbolResolver: o.resolver,
-		currentNS:      o.currentNS,
+		getCurrentNS:   getCurrentNS,
 
 		// TODO: attain through a configured autogen function.
 		//
@@ -721,7 +725,7 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 			return nil
 		default:
 			// TODO: match actual LispReader.java behavior
-			return value.NewList(symQuote, value.NewSymbol(r.currentNS+"/"+sym.Name()))
+			return value.NewList(symQuote, value.NewSymbol(r.getCurrentNS()+"/"+sym.Name()))
 		}
 	case value.IPersistentList:
 		if node.Count() == 0 {

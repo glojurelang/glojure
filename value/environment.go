@@ -54,6 +54,8 @@ type (
 
 		SetCurrentNamespace(ns *Namespace)
 
+		CurrentNamespace() *Namespace
+
 		// Stdout returns the standard output stream for this environment.
 		Stdout() io.Writer
 

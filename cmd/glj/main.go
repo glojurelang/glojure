@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"flag"
+	"io"
 	"log"
 	"os"
 
@@ -21,14 +22,19 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		rdr := reader.New(bufio.NewReader(file))
-		vals, err := rdr.ReadAll()
-		if err != nil {
-			log.Fatal(err)
-		}
 		env := runtime.NewEnvironment(runtime.WithStdout(os.Stdout))
-		for _, val := range vals {
-			_, err := env.Eval(val)
+		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() string {
+			return env.CurrentNamespace().Name().String()
+		}))
+		for {
+			val, err := rdr.ReadOne()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				log.Fatal(err)
+			}
+			_, err = env.Eval(val)
 			if err != nil {
 				log.Fatal(err)
 			}
