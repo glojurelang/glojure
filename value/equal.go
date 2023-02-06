@@ -10,6 +10,9 @@ func Equal(a, b interface{}) bool {
 		return true
 	}
 	if _, ok := AsNumber(a); ok {
+		if _, ok := AsNumber(b); !ok {
+			return false
+		}
 		return NumbersEqual(a, b)
 	}
 

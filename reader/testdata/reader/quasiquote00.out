@@ -1,4 +1,5 @@
 (quote user/foobar)
+(glojure.core/list)
 (glojure.core/seq (glojure.core/concat (glojure.core/list (quote user/a)) (glojure.core/list (quote user/b)) (glojure.core/list (quote user/c))))
 (glojure.core/seq (glojure.core/concat (glojure.core/list (quote user/a)) (glojure.core/list (+ 1 2))))
 (glojure.core/seq (glojure.core/concat (glojure.core/list (quote user/a)) [(+ 1 2)]))

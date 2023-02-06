@@ -13,8 +13,15 @@ import (
 )
 
 var (
-	symQuote = value.NewSymbol("quote")
-	kwTag    = value.NewKeyword("tag")
+	symQuote         = value.NewSymbol("quote")
+	symList          = value.NewSymbol("glojure.core/list")
+	symSeq           = value.NewSymbol("glojure.core/seq")
+	symConcat        = value.NewSymbol("glojure.core/concat")
+	symUnquote       = value.NewSymbol("glojure.core/unquote")
+	symSpliceUnquote = value.NewSymbol("glojure.core/splice-unquote")
+
+	kwTag = value.NewKeyword("tag")
+
 	specials = func() map[string]bool {
 		specialStrs := []string{
 			"def",
@@ -707,15 +714,34 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 			}
 			symbolNameMap[sym.String()] = value.NewSymbol(sym.Name() + strconv.Itoa(len(symbolNameMap)))
 		case sym.Namespace() == "" && strings.HasSuffix(sym.Name(), "."):
-			panic("a")
+			return nil
 		case sym.Namespace() == "" && strings.HasPrefix(sym.Name(), "."):
-			panic("b")
+			return nil
 		case r.symbolResolver != nil:
-			panic("c")
+			return nil
 		default:
 			// TODO: match actual LispReader.java behavior
 			return value.NewList(symQuote, value.NewSymbol(r.currentNS+"/"+sym.Name()))
 		}
+	case value.IPersistentList:
+		if node.Count() == 0 {
+			return value.NewList(symList)
+		}
+		if value.Equal(node.First(), symUnquote) {
+			return value.First(value.Rest(node))
+		}
+
+		elements := []interface{}{symConcat}
+		for seq := value.Seq(node); seq != nil; seq = seq.Next() {
+			first := seq.First()
+			if seq, ok := first.(value.ISeq); ok && value.Equal(value.First(seq), symSpliceUnquote) {
+				elements = append(elements, value.First(value.Rest(first)))
+			} else {
+				elements = append(elements, value.NewList(symList, r.syntaxQuote(symbolNameMap, first)))
+			}
+		}
+		return value.NewList(symSeq,
+			value.NewList(elements...))
 	}
 	return nil
 }
@@ -732,11 +758,11 @@ func (r *Reader) readUnquote() (interface{}, error) {
 		return nil, r.error("error reading input: %w", err)
 	}
 	if rn == '@' {
-		return r.readQuoteType("splice-unquote")
+		return r.readQuoteType("glojure.core/splice-unquote")
 	}
 
 	r.rs.UnreadRune()
-	return r.readQuoteType("clojure.core/unquote")
+	return r.readQuoteType("glojure.core/unquote")
 }
 
 func (r *Reader) readDispatch() (interface{}, error) {

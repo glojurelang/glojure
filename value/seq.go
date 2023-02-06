@@ -24,7 +24,7 @@ func Rest(x interface{}) interface{} {
 	return s.More()
 }
 
-func Next(x interface{}) interface{} {
+func Next(x interface{}) ISeq {
 	if x == nil {
 		return nil
 	}
