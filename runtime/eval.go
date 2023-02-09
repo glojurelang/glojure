@@ -58,10 +58,24 @@ func (env *environment) applyMacro1(fn value.Applyer, form value.ISeq) (interfac
 func (env *environment) Eval(n interface{}) (interface{}, error) {
 	currentNSSym := env.CurrentNamespace().Name()
 	kw := value.NewKeyword
+
+	globalEnv := value.NewAtom(nil)
+	resetGlobalEnv := func() {
+		globalEnv.Reset(value.NewMap(
+			kw("namespaces"), value.NewMap(
+				value.NewSymbol(currentNSSym.Name()), value.NewMap(
+					kw("ns"), currentNSSym,
+					kw("mappings"), env.CurrentNamespace().Mappings(),
+				))))
+	}
+	resetGlobalEnv()
+
 	analyzer := &compiler.Analyzer{
 		Macroexpand1: env.Macroexpand1,
 		CreateVar: func(sym *value.Symbol, e compiler.Env) (interface{}, error) {
-			return env.CurrentNamespace().Intern(env, sym), nil
+			vr := env.CurrentNamespace().Intern(env, sym)
+			resetGlobalEnv()
+			return vr, nil
 		},
 		IsVar: func(v interface{}) bool {
 			_, ok := v.(*value.Var)
@@ -71,14 +85,7 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 			num := env.nextSymNum()
 			return value.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
 		},
-		GlobalEnv: value.NewAtom(value.NewMap(
-			kw("namespaces"), value.NewMap(
-				value.NewSymbol(currentNSSym.Name()), value.NewMap(
-					kw("ns"), currentNSSym,
-					kw("mappings"), env.CurrentNamespace().Mappings(),
-				),
-			),
-		)),
+		GlobalEnv: globalEnv,
 	}
 	astNode, err := analyzer.Analyze(n, value.NewMap(
 		value.NewKeyword("ns"), env.CurrentNamespace().Name(),

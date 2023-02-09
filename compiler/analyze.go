@@ -1396,7 +1396,7 @@ func (a *Analyzer) resolveSym(symIfc interface{}, env Env) interface{} {
 //	                         (-source-info form env))))))
 func (a *Analyzer) validateBindings(form interface{}, env Env) error {
 	op := value.First(form)
-	bindings, ok := second(form).(*value.Vector)
+	bindings, ok := second(form).(value.IPersistentVector)
 	errMsg := ""
 	switch {
 	case !ok:

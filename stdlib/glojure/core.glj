@@ -229,7 +229,7 @@
            (let [arglist (first fdecl)
                  ;elide implicit macro args
                  arglist (if (glojure.lang.Equal '&form (first arglist)) 
-                           (clojure.lang.RT/subvec arglist 2 (glojure.lang.Count arglist))
+                           (glojure.lang.Subvec arglist 2 (glojure.lang.Count arglist))
                            arglist)
                  body (next fdecl)]
              (if (map? (first body))

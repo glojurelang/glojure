@@ -7,6 +7,10 @@ import (
 	"github.com/glojurelang/glojure/persistent/vector"
 )
 
+var (
+	emptyVector = NewVector()
+)
+
 // Vector is a vector of values.
 type Vector struct {
 	meta IPersistentMap
@@ -98,9 +102,6 @@ func (v *Vector) ValueAt(i int) interface{} {
 	if !ok {
 		panic("index out of range")
 	}
-	if val == nil {
-		return nil
-	}
 	return val
 }
 
@@ -117,22 +118,6 @@ func (v *Vector) NthDefault(i int, def interface{}) interface{} {
 		return def
 	}
 	return val
-}
-
-func (v *Vector) SubVector(start, end int) *Vector {
-	return &Vector{vec: v.vec.SubVector(start, end)}
-}
-
-func (v *Vector) Enumerate() (<-chan interface{}, func()) {
-	rest := v.vec
-	return enumerateFunc(func() (interface{}, bool) {
-		if rest.Len() == 0 {
-			return nil, false
-		}
-		val, _ := rest.Index(0)
-		rest = rest.SubVector(1, rest.Len())
-		return val.(interface{}), true
-	})
 }
 
 func (v *Vector) String() string {
@@ -155,7 +140,7 @@ func (v *Vector) String() string {
 }
 
 func (v *Vector) Equal(v2 interface{}) bool {
-	other, ok := v2.(*Vector)
+	other, ok := v2.(IPersistentVector)
 	if !ok {
 		return false
 	}
@@ -163,7 +148,7 @@ func (v *Vector) Equal(v2 interface{}) bool {
 		return false
 	}
 	for i := 0; i < v.Count(); i++ {
-		vVal, oVal := v.ValueAt(i), other.ValueAt(i)
+		vVal, oVal := v.EntryAt(i), other.EntryAt(i)
 		if vVal == nil || oVal == nil {
 			return vVal == oVal
 		}
@@ -216,15 +201,10 @@ func (v *Vector) Pop() IPersistentStack {
 	if v.Count() == 0 {
 		panic("can't pop an empty vector")
 	}
-	return v.SubVector(0, v.Count()-1)
-}
-
-func (v *Vector) GoValue() interface{} {
-	vals := make([]interface{}, v.Count())
-	for i := 0; i < v.Count(); i++ {
-		vals[i] = v.ValueAt(i)
+	if v.Count() == 1 {
+		return emptyVector
 	}
-	return vals
+	return NewSubVector(nil, v, 0, v.Count()-1)
 }
 
 func (v *Vector) Meta() IPersistentMap {

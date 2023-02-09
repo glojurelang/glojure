@@ -716,22 +716,39 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 				sym = gs
 				break
 			}
-			symbolNameMap[sym.String()] = value.NewSymbol(sym.Name() + strconv.Itoa(len(symbolNameMap)))
+			// TODO: use a global counter, not the length of this map
+			sym = value.NewSymbol(strings.TrimSuffix(sym.Name(), "#") + "__" + strconv.Itoa(len(symbolNameMap)) + "__auto__")
+			symbolNameMap[sym.String()] = sym
 		case sym.Namespace() == "" && strings.HasSuffix(sym.Name(), "."):
 			return nil
 		case sym.Namespace() == "" && strings.HasPrefix(sym.Name(), "."):
 			return nil
 		case r.symbolResolver != nil:
 			return nil
-		default:
-			// TODO: match actual LispReader.java behavior
-			return value.NewList(symQuote, value.NewSymbol(r.getCurrentNS()+"/"+sym.Name()))
+		case sym.Namespace() == "":
+			sym = value.NewSymbol(r.getCurrentNS() + "/" + sym.Name())
 		}
-	case value.IPersistentList:
-		if node.Count() == 0 {
+		// TODO: match actual LispReader.java behavior
+		return value.NewList(symQuote, sym)
+	case value.IPersistentList, value.IPersistentVector:
+		_, isVector := node.(value.IPersistentVector)
+		if value.Count(node) == 0 {
+			if isVector {
+				//(glojure.core/apply glojure.core/vector (glojure.core/seq (glojure.core/concat)))
+				return value.NewList(
+					value.NewSymbol("glojure.core/apply"),
+					value.NewSymbol("glojure.core/vector"),
+					value.NewList(
+						value.NewSymbol("glojure.core/seq"),
+						value.NewList(
+							value.NewSymbol("glojure.core/concat"),
+						),
+					),
+				)
+			}
 			return value.NewList(symList)
 		}
-		if value.Equal(node.First(), symUnquote) {
+		if !isVector && value.Equal(value.First(node), symUnquote) {
 			return value.First(value.Rest(node))
 		}
 
@@ -744,10 +761,18 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 				elements = append(elements, value.NewList(symList, r.syntaxQuote(symbolNameMap, first)))
 			}
 		}
-		return value.NewList(symSeq,
+
+		ret := value.NewList(symSeq,
 			value.NewList(elements...))
+		if isVector {
+			ret = value.NewList(
+				value.NewSymbol("glojure.core/apply"),
+				value.NewSymbol("glojure.core/vector"),
+				ret)
+		}
+		return ret
 	}
-	return nil
+	return value.NewList(symQuote, node)
 }
 
 func (r *Reader) readDeref() (interface{}, error) {

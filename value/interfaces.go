@@ -214,7 +214,8 @@ type (
 		// Object swap(IFn f, Object arg1, Object arg2);
 		// Object swap(IFn f, Object x, Object y, ISeq args);
 		// boolean compareAndSet(Object oldv, Object newv);
-		// Object reset(Object newval);
+
+		Reset(newVal interface{}) interface{}
 	}
 
 	IAtom2 interface {
@@ -330,4 +331,19 @@ func Keys(m Associative) ISeq {
 
 func Vals(m Associative) ISeq {
 	return NewMapValSeq(Seq(m))
+}
+
+func Subvec(v IPersistentVector, start, end int) IPersistentVector {
+	// if(end < start || start < 0 || end > v.count())
+	// 	throw new IndexOutOfBoundsException();
+	// if(start == end)
+	// 	return PersistentVector.EMPTY;
+	// return new APersistentVector.SubVector(null, v, start, end);
+	if end < start || start < 0 || end > v.Count() {
+		panic(fmt.Errorf("index out of bounds"))
+	}
+	if start == end {
+		return emptyVector
+	}
+	return NewSubVector(nil, v, start, end)
 }

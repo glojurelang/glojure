@@ -124,7 +124,7 @@ func (i rangeIterator) More() ISeq {
 }
 
 // NewValueIterator returns a lazy sequence of the values of x.
-func NewVectorIterator(x *Vector, start, step int) ISeq {
+func NewVectorIterator(x IPersistentVector, start, step int) ISeq {
 	if x.Count() == 0 {
 		return emptyList
 	}
@@ -132,7 +132,7 @@ func NewVectorIterator(x *Vector, start, step int) ISeq {
 }
 
 type vectorIterator struct {
-	v     *Vector
+	v     IPersistentVector
 	start int
 	step  int
 }
@@ -142,7 +142,8 @@ func (it vectorIterator) Seq() ISeq {
 }
 
 func (it vectorIterator) First() interface{} {
-	return it.v.ValueAt(it.start)
+	v, _ := it.v.Nth(it.start)
+	return v
 }
 
 func (it vectorIterator) Next() ISeq {

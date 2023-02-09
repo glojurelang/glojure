@@ -1,6 +1,8 @@
 package runtime
 
-import "github.com/glojurelang/glojure/value"
+import (
+	"github.com/glojurelang/glojure/value"
+)
 
 type scope struct {
 	parent *scope

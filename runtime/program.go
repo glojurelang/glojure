@@ -231,6 +231,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Seq", value.Seq)
 		define("glojure.lang.Conj", value.Conj)
 		define("glojure.lang.Assoc", value.Assoc)
+		define("glojure.lang.Subvec", value.Subvec)
 		define("glojure.lang.First", value.First)
 		define("glojure.lang.Next", value.Next)
 		define("glojure.lang.Rest", value.Rest)
