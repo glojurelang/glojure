@@ -152,7 +152,7 @@ func (v *Vector) Equal(v2 interface{}) bool {
 		if vVal == nil || oVal == nil {
 			return vVal == oVal
 		}
-		if !Equal(vVal, oVal) {
+		if !Equal(vVal.Val(), oVal.Val()) {
 			return false
 		}
 	}
