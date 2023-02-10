@@ -43,6 +43,8 @@ func Seq(x interface{}) ISeq {
 	switch x := x.(type) {
 	case *EmptyList:
 		return nil
+	case *LazySeq:
+		return x.Seq()
 	case ISeq:
 		return x
 	case ISeqable:

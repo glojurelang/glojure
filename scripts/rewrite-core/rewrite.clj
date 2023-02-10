@@ -160,6 +160,8 @@
    (sexpr-replace 'clojure.lang.RT/uncheckedLongCast 'glojure.lang.AsInt64)
    (sexpr-replace '(. clojure.lang.Numbers and x y) '(glojure.numbers.BitAnd x y))
    (sexpr-replace '(. clojure.lang.Numbers (isZero num)) '(glojure.numbers.IsZero num))
+
+   (sexpr-replace 'clojure.core/cond 'glojure.core/cond)
    ])
 
 (defn rewrite-core [zloc]

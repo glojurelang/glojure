@@ -579,7 +579,7 @@
                 (second clauses)
                 (throw (errors.New
                          "cond requires an even number of forms")))
-            (cons 'clojure.core/cond (next (next clauses))))))
+            (cons 'glojure.core/cond (next (next clauses))))))
 
 (defn symbol
   "Returns a Symbol with the given namespace and name. Arity-1 works
