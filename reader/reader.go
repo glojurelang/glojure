@@ -721,11 +721,11 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 			symbolNameMap[sym.String()] = newSym
 			sym = newSym
 		case sym.Namespace() == "" && strings.HasSuffix(sym.Name(), "."):
-			return nil
+			// TODO: match clojure behavior!
 		case sym.Namespace() == "" && strings.HasPrefix(sym.Name(), "."):
-			return nil
+			// simply quote method names
 		case r.symbolResolver != nil:
-			return nil
+			panic("unimplemented")
 		case sym.Namespace() == "":
 			sym = value.NewSymbol(r.getCurrentNS() + "/" + sym.Name())
 		}
