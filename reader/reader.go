@@ -717,8 +717,9 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 				break
 			}
 			// TODO: use a global counter, not the length of this map
-			sym = value.NewSymbol(strings.TrimSuffix(sym.Name(), "#") + "__" + strconv.Itoa(len(symbolNameMap)) + "__auto__")
-			symbolNameMap[sym.String()] = sym
+			newSym := value.NewSymbol(strings.TrimSuffix(sym.Name(), "#") + "__" + strconv.Itoa(len(symbolNameMap)) + "__auto__")
+			symbolNameMap[sym.String()] = newSym
+			sym = newSym
 		case sym.Namespace() == "" && strings.HasSuffix(sym.Name(), "."):
 			return nil
 		case sym.Namespace() == "" && strings.HasPrefix(sym.Name(), "."):
