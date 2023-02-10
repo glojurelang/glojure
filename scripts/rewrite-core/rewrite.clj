@@ -164,6 +164,9 @@
    (sexpr-replace 'clojure.core/cond 'glojure.core/cond)
 
    (sexpr-replace 'clojure.lang.Keyword 'glojure.lang.Keyword)
+
+   (sexpr-replace 'clojure.lang.RT 'glojure.lang.RT)
+   (sexpr-replace '(nextID) '(NextID))
    ])
 
 (defn rewrite-core [zloc]
