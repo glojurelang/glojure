@@ -48,6 +48,7 @@ func (fn *Fn) Apply(env Environment, args []interface{}) (interface{}, error) {
 	fnEnv := fn.env.PushScope()
 
 	fixedArity := Get(method, NewKeyword("fixed-arity")).(int)
+	methodVariadic := Get(method, NewKeyword("variadic?")).(bool)
 	body := Get(method, NewKeyword("body"))
 
 	bindingValues := args[:fixedArity]
@@ -68,6 +69,8 @@ Recur:
 	}
 	if bindingRestValue != nil {
 		fnEnv.BindLocal(Get(MustNth(params, fixedArity), NewKeyword("name")).(*Symbol), bindingRestValue)
+	} else if methodVariadic {
+		fnEnv.BindLocal(Get(MustNth(params, fixedArity), NewKeyword("name")).(*Symbol), nil)
 	}
 
 	rt := NewRecurTarget()
