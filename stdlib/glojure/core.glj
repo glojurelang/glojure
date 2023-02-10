@@ -361,7 +361,7 @@
 	([a b c d e] [a b c d e])
 	([a b c d e f] [a b c d e f])
   ([a b c d e f & args]
-     (. clojure.lang.LazilyPersistentVector (create (cons a (cons b (cons c (cons d (cons e (cons f args))))))))))
+     (glojure.lang.NewLazilyPersistentVector (cons a (cons b (cons c (cons d (cons e (cons f args)))))))))
 
 (defn vec
   "Creates a new vector containing the contents of coll. Java arrays
@@ -603,7 +603,7 @@
   {:added "1.0"
    :static true}
   ([] (gensym "G__"))
-  ([prefix-string] (. glojure.lang.Symbol (intern (str prefix-string (str (. glojure.lang.RT (NextID))))))))
+  ([prefix-string] (glojure.lang.NewSymbol (str prefix-string (str (. glojure.lang.RT (NextID)))))))
 
 
 (defn keyword

@@ -2,6 +2,7 @@ package value
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/glojurelang/glojure/persistent/vector"
@@ -37,6 +38,16 @@ func NewVectorFromCollection(c interface{}) *Vector {
 		items = append(items, seq.First())
 	}
 	return NewVector(items...)
+}
+
+func NewLazilyPersistentVector(x interface{}) IPersistentVector {
+	// TODO: IReduceInit, Iterable
+	switch x := x.(type) {
+	case ISeq:
+		return NewVectorFromCollection(x)
+	default:
+		return NewVector(toSlice(x)...)
+	}
 }
 
 var (
@@ -219,4 +230,31 @@ func (v *Vector) WithMeta(meta IPersistentMap) interface{} {
 	cpy := *v
 	cpy.meta = meta
 	return &cpy
+}
+
+func toSlice(x interface{}) []interface{} {
+	if x == nil {
+		return nil
+	}
+
+	val := reflect.ValueOf(x)
+	if val.Type().Kind() == reflect.Slice {
+		res := make([]interface{}, val.Len())
+		for i := 0; i < len(res); i++ {
+			res[i] = val.Index(i).Interface()
+		}
+		return res
+	}
+
+	if idxd, ok := x.(Indexed); ok {
+		count := Count(x)
+		res := make([]interface{}, count)
+		for i := 0; i < count; i++ {
+			val, _ := idxd.Nth(i)
+			res = append(res, val)
+		}
+		return res
+	}
+
+	panic(fmt.Sprintf("unable to convert %T to slice", x))
 }

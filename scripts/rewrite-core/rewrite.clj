@@ -167,6 +167,17 @@
 
    (sexpr-replace 'clojure.lang.RT 'glojure.lang.RT)
    (sexpr-replace '(nextID) '(NextID))
+
+   [(fn select [zloc] (and (z/list? zloc)
+                           (= '. (first (z/sexpr zloc)))
+                           (= 'clojure.lang.Symbol (second (z/sexpr zloc)))
+                           (= 'intern (first (nth (z/sexpr zloc) 2)))
+                           ))
+    (fn visit [zloc] (z/replace zloc `(glojure.lang.NewSymbol ~@(rest (nth (z/sexpr zloc) 2)))))]
+
+   (sexpr-replace
+    '(. clojure.lang.LazilyPersistentVector (create (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
+    '(glojure.lang.NewLazilyPersistentVector (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
    ])
 
 (defn rewrite-core [zloc]

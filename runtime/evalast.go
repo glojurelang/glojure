@@ -69,6 +69,8 @@ func (env *environment) EvalAST(x interface{}) (interface{}, error) {
 		return env.EvalASTTheVar(n)
 	case kw("recur"):
 		return env.EvalASTRecur(n)
+	case kw("new"):
+		return env.EvalASTNew(n)
 	default:
 		panic("unimplemented op: " + value.ToString(op) + "\n" + value.ToString(get(n, kw("form"))))
 	}
@@ -110,6 +112,8 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return value.WithMeta, nil
 	case "glojure.lang.NewCons":
 		return value.NewCons, nil
+	case "glojure.lang.NewLazilyPersistentVector":
+		return value.NewLazilyPersistentVector, nil
 	case "glojure.lang.Symbol":
 		return reflect.TypeOf(value.NewSymbol("")), nil
 	case "glojure.lang.IsInteger":
@@ -148,6 +152,9 @@ func (env *environment) EvalASTHostCall(n ast.Node) (interface{}, error) {
 		argVals = append(argVals, argVal)
 	}
 	methodVal := value.FieldOrMethod(tgtVal, method.Name())
+	if methodVal == nil {
+		return nil, fmt.Errorf("no such field or method on %T: %s", tgtVal, method)
+	}
 	// if the field is not a function, return an error
 	if reflect.TypeOf(methodVal).Kind() != reflect.Func {
 		return nil, errors.New("not a method: " + value.ToString(tgtVal) + "." + method.Name())
@@ -349,6 +356,21 @@ func (env *environment) EvalASTLocal(n ast.Node) (interface{}, error) {
 		return nil, env.errorf(get(n, kw("form")), "unable to resolve symbol: %s", sym)
 	}
 	return v, nil
+}
+
+func (env *environment) EvalASTNew(n ast.Node) (interface{}, error) {
+	classVal, err := env.EvalAST(get(n, kw("class")))
+	if err != nil {
+		return nil, err
+	}
+	if value.Count(get(n, kw("args"))) > 0 {
+		return nil, errors.New("new with args unsupported")
+	}
+	classValTyp, ok := classVal.(reflect.Type)
+	if !ok {
+		return nil, fmt.Errorf("new value must be a reflect.Type, got %T", classVal)
+	}
+	return reflect.New(classValTyp).Interface(), nil
 }
 
 func kw(s string) value.Keyword {

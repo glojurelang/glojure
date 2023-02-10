@@ -16,3 +16,7 @@ type RTMethods struct {
 func (rt *RTMethods) NextID() int {
 	return int(rt.id.Add(1))
 }
+
+func (rt *RTMethods) Nth(x interface{}, i int) interface{} {
+	return MustNth(x, i)
+}
