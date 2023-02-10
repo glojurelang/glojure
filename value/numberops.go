@@ -497,3 +497,43 @@ func AsFloat64(x interface{}) float64 {
 		panic("cannot convert to float64")
 	}
 }
+
+func IsZero(x interface{}) bool {
+	// convert to int64 and compare to zero
+	return AsInt64(x) == 0
+}
+
+func BitAnd(x, y interface{}) int64 {
+	return bitOpsCast(x) & bitOpsCast(y)
+}
+
+func bitOpsCast(x interface{}) int64 {
+	switch x := x.(type) {
+	case int:
+		return int64(x)
+	case uint:
+		return int64(x)
+	case int8:
+		return int64(x)
+	case int16:
+		return int64(x)
+	case int32:
+		return int64(x)
+	case int64:
+		return x
+	case uint8:
+		return int64(x)
+	case uint16:
+		return int64(x)
+	case uint32:
+		return int64(x)
+	case uint64:
+		return int64(x)
+	case float32:
+		return int64(x)
+	case float64:
+		return int64(x)
+	default:
+		panic("cannot convert to int64")
+	}
+}

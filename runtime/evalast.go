@@ -112,6 +112,14 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return value.NewCons, nil
 	case "glojure.lang.Symbol":
 		return reflect.TypeOf(value.NewSymbol("")), nil
+	case "glojure.lang.IsInteger":
+		return value.IsInteger, nil
+	case "glojure.lang.AsInt64":
+		return value.AsInt64, nil
+	case "glojure.numbers.BitAnd":
+		return value.BitAnd, nil
+	case "glojure.numbers.IsZero":
+		return value.IsZero, nil
 	default:
 		return nil, errors.New("unknown Go value: " + value.ToString(get(n, kw("class"))))
 	}

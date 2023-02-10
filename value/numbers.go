@@ -195,35 +195,10 @@ func AsInt(v interface{}) (int, bool) {
 	}
 }
 
-// AsInt64 returns any integral value as an int64. If the value cannot
-// be represented as an int64, it returns false. Floats are not
-// converted.
-// func AsInt64(v interface{}) (int64, bool) {
-// 	switch v := v.(type) {
-// 	case int:
-// 		return int64(v), true
-// 	case int64:
-// 		return v, true
-// 	case int32:
-// 		return int64(v), true
-// 	case int16:
-// 		return int64(v), true
-// 	case int8:
-// 		return int64(v), true
-// 	case uint:
-// 		return int64(v), true
-// 	case uint64:
-// 		return int64(v), true
-// 	case uint32:
-// 		return int64(v), true
-// 	case uint16:
-// 		return int64(v), true
-// 	case uint8:
-// 		return int64(v), true
-// 	default:
-// 		return 0, false
-// 	}
-// }
+func IsInteger(v interface{}) bool {
+	_, ok := AsInt(v)
+	return ok
+}
 
 // Inc increments a number value by one. If the value is not a number,
 // it returns an error.

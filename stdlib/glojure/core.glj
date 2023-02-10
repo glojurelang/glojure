@@ -864,7 +864,7 @@
   {
    :inline (fn [num] `(. clojure.lang.Numbers (isZero ~num)))
    :added "1.0"}
-  [num] (. clojure.lang.Numbers (isZero num)))
+  [num] (glojure.numbers.IsZero num))
 
 (defn count
   "Returns the number of items in the collection. (count nil) returns
@@ -1302,7 +1302,7 @@
    {:inline (nary-inline 'and)
     :inline-arities >1?
     :added "1.0"}
-   ([x y] (. clojure.lang.Numbers and x y))
+   ([x y] (glojure.numbers.BitAnd x y))
    ([x y & more]
       (reduce1 bit-and (bit-and x y) more)))
 
@@ -1378,24 +1378,14 @@
    :added "1.6"}
   [x n] (. clojure.lang.Numbers unsignedShiftRight x n))
 
-(defn integer?
-  "Returns true if n is an integer"
-  {:added "1.0"
-   :static true}
-  [n]
-  (or (instance? Integer n)
-      (instance? Long n)
-      (instance? clojure.lang.BigInt n)
-      (instance? BigInteger n)
-      (instance? Short n)
-      (instance? Byte n)))
+(defn integer? "Returns true if n is an integer" {:added "1.0", :static true} [n] (glojure.lang.IsInteger n))
 
 (defn even?
   "Returns true if n is even, throws an exception if n is not an integer"
   {:added "1.0"
    :static true}
    [n] (if (integer? n)
-        (zero? (bit-and (clojure.lang.RT/uncheckedLongCast n) 1))
+        (zero? (bit-and (glojure.lang.AsInt64 n) 1))
         (throw (errors.New (str "Argument must be an integer: " n)))))
 
 (defn odd?
@@ -3541,7 +3531,7 @@
   "Coerce to long. Subject to rounding or truncation."
   {:inline (fn  [x] `(. clojure.lang.RT (uncheckedLongCast ~x)))
    :added "1.3"}
-  [^Number x] (clojure.lang.RT/uncheckedLongCast x))
+  [^Number x] (glojure.lang.AsInt64 x))
 
 (defn unchecked-float
   "Coerce to float. Subject to rounding."

@@ -137,6 +137,29 @@
    (sexpr-replace 'clojure.lang.ISeq 'glojure.lang.ISeq)
    (sexpr-replace 'clojure.lang.IEditableCollection 'glojure.lang.IEditableCollection)
    (sexpr-replace 'clojure.core/import* 'glojure.lang.Import)
+
+   ;; number checksclasses
+   (sexpr-replace '(defn integer?
+                     "Returns true if n is an integer"
+                     {:added "1.0"
+                      :static true}
+                     [n]
+                     (or (instance? Integer n)
+                         (instance? Long n)
+                         (instance? clojure.lang.BigInt n)
+                         (instance? BigInteger n)
+                         (instance? Short n)
+                         (instance? Byte n)))
+                  '(defn integer?
+                     "Returns true if n is an integer"
+                     {:added "1.0"
+                      :static true}
+                     [n]
+                     (glojure.lang.IsInteger n))
+                  )
+   (sexpr-replace 'clojure.lang.RT/uncheckedLongCast 'glojure.lang.AsInt64)
+   (sexpr-replace '(. clojure.lang.Numbers and x y) '(glojure.numbers.BitAnd x y))
+   (sexpr-replace '(. clojure.lang.Numbers (isZero num)) '(glojure.numbers.IsZero num))
    ])
 
 (defn rewrite-core [zloc]
