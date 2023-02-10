@@ -162,6 +162,8 @@
    (sexpr-replace '(. clojure.lang.Numbers (isZero num)) '(glojure.numbers.IsZero num))
 
    (sexpr-replace 'clojure.core/cond 'glojure.core/cond)
+
+   (sexpr-replace 'clojure.lang.Keyword 'glojure.lang.Keyword)
    ])
 
 (defn rewrite-core [zloc]

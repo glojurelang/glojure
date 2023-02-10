@@ -120,6 +120,8 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return value.BitAnd, nil
 	case "glojure.numbers.IsZero":
 		return value.IsZero, nil
+	case "glojure.lang.Keyword":
+		return reflect.TypeOf(value.NewKeyword("nop")), nil
 	default:
 		return nil, errors.New("unknown Go value: " + value.ToString(get(n, kw("class"))))
 	}
