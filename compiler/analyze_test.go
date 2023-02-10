@@ -60,6 +60,8 @@ const testForms = `
 [(throw "not good") {:op :throw, :env {:ns user}, :form (throw "not good"), :exception {:op :const, :form "not good", :type :string, :val "not good", :literal? true}, :children [:exception]}]
 
 [(set! (. Foo -X) 42) {:op :set!, :form (set! (. Foo -X) 42), :env {:ns user}, :target {:form (. Foo -X), :env {:ns user, :context :ctx/expr}, :target {:op :maybe-class, :class Foo, :env {:ns user, :context :ctx/expr}, :form Foo}, :op :host-field, :assignable? true, :field X, :children [:target]}, :val {:op :const, :form 42, :type :number, :val 42, :literal? true}, :children [:target :val]}]
+
+[(try 1) {:op :try, :foo :bar}]
 `
 
 var (

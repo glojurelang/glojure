@@ -607,8 +607,95 @@ func (a *Analyzer) parseSetBang(form interface{}, env Env) (ast.Node, error) {
 		)), nil
 }
 
+// (defn parse-try
+//
+//	[[_ & body :as form] env]
+//	(let [catch? (every-pred seq? #(= (first %) 'catch))
+//	      finally? (every-pred seq? #(= (first %) 'finally))
+//	      [body tail'] (split-with' (complement (some-fn catch? finally?)) body)
+//	      [cblocks tail] (split-with' catch? tail')
+//	      [[fblock & fbs :as fblocks] tail] (split-with' finally? tail)]
+//	  (when-not (empty? tail)
+//	    (throw (ex-info "Only catch or finally clause can follow catch in try expression"
+//	                    (merge {:expr tail
+//	                            :form form}
+//	                           (-source-info form env)))))
+//	  (when-not (empty? fbs)
+//	    (throw (ex-info "Only one finally clause allowed in try expression"
+//	                    (merge {:expr fblocks
+//	                            :form form}
+//	                           (-source-info form env)))))
+//	  (let [env' (assoc env :in-try true)
+//	        body (analyze-body body env')
+//	        cenv (ctx env' :ctx/expr)
+//	        cblocks (mapv #(parse-catch % cenv) cblocks)
+//	        fblock (when-not (empty? fblock)
+//	                 (analyze-body (rest fblock) (ctx env :ctx/statement)))]
+//	    (merge {:op      :try
+//	            :env     env
+//	            :form    form
+//	            :body    body
+//	            :catches cblocks}
+//	           (when fblock
+//	             {:finally fblock})
+//	           {:children (into [:body :catches]
+//	                            (when fblock [:finally]))}))))
 func (a *Analyzer) parseTry(form interface{}, env Env) (ast.Node, error) {
-	panic("parseTry unimplemented!")
+	catch := func(form interface{}) bool {
+		return value.IsSeq(form) && value.First(form) == kw("catch")
+	}
+	finally := func(form interface{}) bool {
+		return value.IsSeq(form) && value.First(form) == kw("finally")
+	}
+	body, tail := splitWith(func(form interface{}) bool {
+		return !catch(form) && !finally(form)
+	}, value.Rest(form))
+	cblocks, tail := splitWith(catch, tail)
+	fblocks, tail := splitWith(finally, tail)
+	if value.Count(tail) != 0 {
+		return nil, exInfo("only catch or finally clause can follow catch in try expression", nil)
+	}
+	if value.Count(fblocks) > 1 {
+		return nil, exInfo("only one finally clause allowed in try expression", nil)
+	}
+	env = env.Assoc(kw("in-try"), true).(Env)
+	bodyExpr, err := a.analyzeBody(body, env)
+	if err != nil {
+		return nil, err
+	}
+	cenv := ctxEnv(env, ctxExpr)
+	var cblocksExpr value.Conjer = vec()
+	for cblockSeq := value.Seq(cblocks); cblockSeq != nil; cblockSeq = value.Next(cblockSeq) {
+		cblock := value.First(cblockSeq)
+		cblockExpr, err := a.parseCatch(cblock, cenv)
+		if err != nil {
+			return nil, err
+		}
+		cblocksExpr = cblocksExpr.Conj(cblockExpr)
+	}
+	var fblockExpr interface{}
+	if value.Count(fblocks) > 0 {
+		fblockExpr, err = a.analyzeBody(value.Rest(value.First(fblocks)), ctxEnv(env, ctxStatement))
+		if err != nil {
+			return nil, err
+		}
+	}
+	children := []interface{}{kw("body"), kw("catches")}
+	if fblockExpr != nil {
+		children = append(children, kw("finally"))
+	}
+	return merge(ast.MakeNode(kw("try"), form),
+		value.NewMap(
+			kw("env"), env,
+			kw("body"), bodyExpr,
+			kw("catches"), cblocksExpr,
+			kw("finally"), fblockExpr,
+			kw("children"), vec(children...),
+		)), nil
+}
+
+func (a *Analyzer) parseCatch(form interface{}, env Env) (ast.Node, error) {
+	panic("not implemented")
 }
 
 // (defn parse-throw
@@ -1548,5 +1635,32 @@ func classifyType(v interface{}) value.Keyword {
 		return kw("unknown")
 
 		// TODO: type, record, class
+	}
+}
+
+// (defn ^:private split-with' [pred coll]
+//
+//	(loop [take [] drop coll]
+//	  (if (seq drop)
+//	    (let [[el & r] drop]
+//	      (if (pred el)
+//	        (recur (conj take el) r)
+//	        [(seq take) drop]))
+//	    [(seq take) ()])))
+func splitWith(pred func(interface{}) bool, coll interface{}) (interface{}, interface{}) {
+	var take value.Conjer = vec()
+	drop := coll
+	for {
+		seq := value.Seq(drop)
+		if seq == nil {
+			return value.Seq(take), value.NewList()
+		}
+		el := value.First(drop)
+		if pred(el) {
+			take = value.Conj(take, el)
+			drop = value.Rest(drop)
+		} else {
+			return value.Seq(take), drop
+		}
 	}
 }

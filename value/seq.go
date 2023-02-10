@@ -34,6 +34,11 @@ func Next(x interface{}) ISeq {
 	panic(fmt.Errorf("%T can't be converted to ISeq", x))
 }
 
+func IsSeq(x interface{}) bool {
+	_, ok := x.(ISeq)
+	return ok
+}
+
 func Seq(x interface{}) ISeq {
 	switch x := x.(type) {
 	case *EmptyList:
