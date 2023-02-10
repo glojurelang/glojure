@@ -175,6 +175,12 @@
                            ))
     (fn visit [zloc] (z/replace zloc `(glojure.lang.NewSymbol ~@(rest (nth (z/sexpr zloc) 2)))))]
 
+   [(fn select [zloc] (and (z/list? zloc)
+                           (= 'nth (first (z/sexpr zloc)))
+                           (= 'glojure.lang.RT (z/sexpr (z/left zloc)))
+                           ))
+    (fn visit [zloc] (z/replace zloc `(~'Nth ~@(rest (z/sexpr zloc)))))]
+
    (sexpr-replace
     '(. clojure.lang.LazilyPersistentVector (create (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
     '(glojure.lang.NewLazilyPersistentVector (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
