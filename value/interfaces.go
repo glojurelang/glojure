@@ -12,6 +12,11 @@ type (
 		Drop(n int) Sequential
 	}
 
+	IFn interface {
+		Invoke(args ...interface{}) interface{}
+		ApplyTo(args ISeq) interface{}
+	}
+
 	// IMeta is an interface for values that can have metadata.
 	IMeta interface {
 		// Meta returns the metadata associated with this value.

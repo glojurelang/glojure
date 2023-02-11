@@ -2411,7 +2411,7 @@
   f must be free of side-effects"
   {:added "1.0"
    :static true}
- [^clojure.lang.IReference iref f & args] (.alterMeta iref f args))
+ [^clojure.lang.IReference iref f & args] (.AlterMeta iref f args))
 
 (defn reset-meta!
   "Atomically resets the metadata for a namespace/var/ref/agent/atom"

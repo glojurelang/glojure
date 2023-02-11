@@ -62,6 +62,7 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 	coreNS.InternWithValue(e, value.NewSymbol("*agent*"), nil, true)
 	coreNS.InternWithValue(e, value.NewSymbol("*print-readably*"), true, true)
 	coreNS.InternWithValue(e, value.NewSymbol("*out*"), stdout, true)
+	coreNS.InternWithValue(e, value.NewSymbol("*assert*"), false, true)
 
 	// bootstrap some vars
 	e.namespaceVar = value.NewVarWithRoot(coreNS, SymbolNamespace,

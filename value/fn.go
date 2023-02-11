@@ -111,3 +111,21 @@ func (fn *Fn) findMethod(methods interface{}, args []interface{}) (interface{}, 
 	}
 	return variadicMethod, nil
 }
+
+// TODO: finish migration from Applyer to IFn
+
+func (fn *Fn) ApplyTo(args ISeq) interface{} {
+	var argSlice []interface{}
+	for seq := Seq(args); seq != nil; seq = seq.Next() {
+		argSlice = append(argSlice, seq.First())
+	}
+	return fn.Invoke(argSlice...)
+}
+
+func (fn *Fn) Invoke(args ...interface{}) interface{} {
+	res, err := fn.Apply(nil, args) // TODO: global/singleton env
+	if err != nil {
+		panic(err)
+	}
+	return res
+}

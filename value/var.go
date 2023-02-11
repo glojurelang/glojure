@@ -84,6 +84,12 @@ func (v *Var) SetMeta(meta IPersistentMap) {
 	v.meta.Store(meta)
 }
 
+func (v *Var) AlterMeta(alter IFn, args ISeq) IPersistentMap {
+	meta := alter.ApplyTo(NewCons(v.Meta(), args)).(IPersistentMap)
+	v.SetMeta(meta)
+	return meta
+}
+
 func (v *Var) IsMacro() bool {
 	meta := v.Meta()
 	isMacro := meta.EntryAt(KeywordMacro)
