@@ -1,6 +1,7 @@
 package value
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -31,6 +32,14 @@ func (s *Set) Get(key interface{}) interface{} {
 		}
 	}
 	return nil
+}
+
+func (s *Set) Apply(env Environment, args []interface{}) (interface{}, error) {
+	if len(args) != 1 {
+		return nil, fmt.Errorf("set apply expects 1 argument, got %d", len(args))
+	}
+
+	return s.Get(args[0]), nil
 }
 
 func (s *Set) Conj(v interface{}) Conjer {

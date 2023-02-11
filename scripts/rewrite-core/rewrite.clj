@@ -193,6 +193,9 @@
    (sexpr-replace
     '(. clojure.lang.LazilyPersistentVector (create (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
     '(glojure.lang.NewLazilyPersistentVector (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
+
+   (sexpr-replace 'clojure.lang.IDrop 'glojure.lang.IDrop)
+
    ])
 
 (defn rewrite-core [zloc]

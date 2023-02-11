@@ -29,7 +29,7 @@ func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, 
 	}
 
 	if gvKind != reflect.Func {
-		return nil, fmt.Errorf("cannot apply non-function")
+		return nil, fmt.Errorf("cannot apply non-function %T", fn)
 	}
 	if gvType.NumIn() != len(args) && !gvType.IsVariadic() {
 		return nil, fmt.Errorf("wrong number of arguments: expected %d, got %d", gvType.NumIn(), len(args))

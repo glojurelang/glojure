@@ -17,7 +17,7 @@ var indent = 0
 
 const debug = true
 
-func (env *environment) EvalAST(x interface{}) (interface{}, error) {
+func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 	n := x.(ast.Node)
 
 	if debug {
@@ -25,7 +25,7 @@ func (env *environment) EvalAST(x interface{}) (interface{}, error) {
 		indent += 2
 		defer func() {
 			indent -= 2
-			fmt.Println(strings.Repeat(" ", indent), "END EvalAST", get(n, kw("op")))
+			fmt.Println(strings.Repeat(" ", indent), "END EvalAST", get(n, kw("op")), "->", ret, ",", err)
 		}()
 	}
 
@@ -132,6 +132,8 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return value.Numbers, nil
 	case "glojure.lang.NewMultiFn":
 		return value.NewMultiFn, nil
+	case "glojure.lang.IDrop":
+		return reflect.TypeOf((*value.IDrop)(nil)).Elem(), nil
 	default:
 		return nil, errors.New("unknown Go value: " + value.ToString(get(n, kw("class"))))
 	}

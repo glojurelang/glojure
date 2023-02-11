@@ -6,6 +6,12 @@ import (
 )
 
 type (
+	Sequential interface{}
+
+	IDrop interface {
+		Drop(n int) Sequential
+	}
+
 	// IMeta is an interface for values that can have metadata.
 	IMeta interface {
 		// Meta returns the metadata associated with this value.
