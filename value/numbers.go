@@ -29,6 +29,10 @@ func (nm *NumberMethods) IsPos(x interface{}) bool {
 	return Ops(x).IsPos(x)
 }
 
+func (nm *NumberMethods) Inc(v interface{}) interface{} {
+	return nm.Add(v, 1)
+}
+
 func (nm *NumberMethods) Dec(x interface{}) interface{} {
 	return nm.Add(x, -1)
 }
