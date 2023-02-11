@@ -20,3 +20,11 @@ func (rt *RTMethods) NextID() int {
 func (rt *RTMethods) Nth(x interface{}, i int) interface{} {
 	return MustNth(x, i)
 }
+
+func (rt *RTMethods) NthDefault(x interface{}, i int, def interface{}) interface{} {
+	v, ok := Nth(x, i)
+	if !ok {
+		return def
+	}
+	return v
+}

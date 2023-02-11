@@ -890,7 +890,7 @@
    :inline-arities #{2 3}
    :added "1.0"}
   ([coll index] (. glojure.lang.RT (Nth coll index)))
-  ([coll index not-found] (. glojure.lang.RT (Nth coll index not-found))))
+  ([coll index not-found] (. glojure.lang.RT (NthDefault coll index not-found))))
 
 (defn <
   "Returns non-nil if nums are in monotonically increasing order,

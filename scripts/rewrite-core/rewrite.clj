@@ -177,6 +177,8 @@
    (sexpr-replace 'clojure.lang.RT 'glojure.lang.RT)
    (sexpr-replace '(nextID) '(NextID))
 
+   (sexpr-replace '(nth coll index not-found) '(NthDefault coll index not-found))
+
    [(fn select [zloc] (and (z/list? zloc)
                            (= '. (first (z/sexpr zloc)))
                            (= 'clojure.lang.Symbol (second (z/sexpr zloc)))
