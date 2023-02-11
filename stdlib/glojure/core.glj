@@ -3201,7 +3201,7 @@
   "Evaluates the form data structure (not text!) and returns the result."
   {:added "1.0"
    :static true}
-  [form] (. clojure.lang.Compiler (eval form)))
+  [form] (. glojure.lang.Compiler (Eval form)))
 
 (defmacro doseq
   "Repeatedly executes body (presumably for side-effects) with
@@ -4011,7 +4011,7 @@
   {:added "1.0"
    :static true}
   [form]
-    (. clojure.lang.Compiler (macroexpand1 form)))
+    (. glojure.lang.Compiler (macroexpand1 form)))
 
 (defn macroexpand
   "Repeatedly calls macroexpand-1 on form until it no longer
@@ -4074,7 +4074,7 @@
   stream/file"
   {:added "1.0"
    :static true}
-  [rdr] (. clojure.lang.Compiler (load rdr)))
+  [rdr] (. glojure.lang.Compiler (load rdr)))
 
 (defn load-string
   "Sequentially read and evaluate the set of forms contained in the
@@ -4984,7 +4984,7 @@
   {:added "1.0"
    :static true}
   [s]
-    (contains? (. clojure.lang.Compiler specials) s))
+    (contains? (. glojure.lang.Compiler specials) s))
 
 (defn var?
   "Returns true if v is of type clojure.lang.Var"

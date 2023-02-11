@@ -98,6 +98,20 @@ func (env *environment) EvalASTTheVar(n ast.Node) (interface{}, error) {
 	return get(n, kw("var")), nil
 }
 
+// TEMP
+// TODO: add a compiler struct
+type evalCompiler struct {
+	env *environment
+}
+
+func (c *evalCompiler) Eval(form interface{}) interface{} {
+	res, err := c.env.Eval(form)
+	if err != nil {
+		panic(err)
+	}
+	return res
+}
+
 func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 	// TODO: add go values to the namespace (without vars)
 	sym := get(n, kw("class")).(*value.Symbol)
@@ -134,6 +148,8 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return value.NewMultiFn, nil
 	case "glojure.lang.IDrop":
 		return reflect.TypeOf((*value.IDrop)(nil)).Elem(), nil
+	case "glojure.lang.Compiler":
+		return &evalCompiler{env: env}, nil
 	default:
 		return nil, errors.New("unknown Go value: " + value.ToString(get(n, kw("class"))))
 	}

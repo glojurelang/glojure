@@ -198,6 +198,9 @@
 
    (sexpr-replace 'clojure.lang.IDrop 'glojure.lang.IDrop)
 
+   (sexpr-replace 'clojure.lang.Compiler 'glojure.lang.Compiler)
+   (sexpr-replace '(. clojure.lang.Compiler (eval form)) '(. clojure.lang.Compiler (Eval form)))
+
    ])
 
 (defn rewrite-core [zloc]
