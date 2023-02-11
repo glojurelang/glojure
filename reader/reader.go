@@ -481,7 +481,7 @@ func (r *Reader) readSet() (interface{}, error) {
 		}
 		vals = append(vals, el)
 	}
-	return value.NewSet(vals), nil
+	return value.NewSet(vals...), nil
 }
 
 func (r *Reader) readString() (interface{}, error) {
@@ -727,6 +727,13 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 		case r.symbolResolver != nil:
 			panic("unimplemented")
 		case sym.Namespace() == "":
+			// HACK: handle well-known host forms
+			// TODO: use a resolver to handle this
+			if sym.Name() == "glojure.lang.NewMultiFn" {
+				break
+			}
+
+			// TODO: match clojure behavior
 			sym = value.NewSymbol(r.getCurrentNS() + "/" + sym.Name())
 		}
 		// TODO: match actual LispReader.java behavior

@@ -8,6 +8,8 @@ type (
 	ops interface {
 		Combine(y ops) ops
 
+		IsPos(x interface{}) bool
+
 		Add(x, y interface{}) interface{}
 		// TODO: implement the precision version of Add, etc.
 		AddP(x, y interface{}) interface{}
@@ -66,9 +68,6 @@ func Ops(x interface{}) ops {
 	}
 }
 
-func Add(x, y interface{}) interface{} {
-	return Ops(x).Combine(Ops(y)).Add(x, y)
-}
 func AddP(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).AddP(x, y)
 }
@@ -89,6 +88,10 @@ func Min(x, y interface{}) interface{} {
 }
 func NumbersEqual(x, y interface{}) bool {
 	return Ops(x).Combine(Ops(y)).Equal(x, y)
+}
+
+func (o int64Ops) IsPos(x interface{}) bool {
+	return x.(int64) > 0
 }
 
 func (o int64Ops) Add(x, y interface{}) interface{} {
@@ -121,6 +124,10 @@ func (o int64Ops) Min(x, y interface{}) interface{} {
 }
 func (o int64Ops) Equal(x, y interface{}) bool {
 	return AsInt64(x) == AsInt64(y)
+}
+
+func (o bigIntOps) IsPos(x interface{}) bool {
+	return AsBigInt(x).val.Sign() > 0
 }
 
 func (o bigIntOps) Add(x, y interface{}) interface{} {
@@ -159,6 +166,10 @@ func (o bigIntOps) Equal(x, y interface{}) bool {
 	return AsBigInt(x).Cmp(AsBigInt(y)) == 0
 }
 
+func (o ratioOps) IsPos(x interface{}) bool {
+	return AsRatio(x).val.Sign() > 0
+}
+
 func (o ratioOps) Add(x, y interface{}) interface{} {
 	return AsRatio(x).Add(AsRatio(y))
 }
@@ -195,6 +206,11 @@ func (o ratioOps) Min(x, y interface{}) interface{} {
 func (o ratioOps) Equal(x, y interface{}) bool {
 	return AsRatio(x).Cmp(AsRatio(y)) == 0
 }
+
+func (o bigDecimalOps) IsPos(x interface{}) bool {
+	return AsBigDecimal(x).val.Sign() > 0
+}
+
 func (o bigDecimalOps) Add(x, y interface{}) interface{} {
 	return AsBigDecimal(x).Add(AsBigDecimal(y))
 }
@@ -231,6 +247,11 @@ func (o bigDecimalOps) Min(x, y interface{}) interface{} {
 func (o bigDecimalOps) Equal(x, y interface{}) bool {
 	return AsBigDecimal(x).Cmp(AsBigDecimal(y)) == 0
 }
+
+func (o float64Ops) IsPos(x interface{}) bool {
+	return AsFloat64(x) > 0
+}
+
 func (o float64Ops) Add(x, y interface{}) interface{} {
 	return AsFloat64(x) + AsFloat64(y)
 }
@@ -495,45 +516,5 @@ func AsFloat64(x interface{}) float64 {
 		return x
 	default:
 		panic("cannot convert to float64")
-	}
-}
-
-func IsZero(x interface{}) bool {
-	// convert to int64 and compare to zero
-	return AsInt64(x) == 0
-}
-
-func BitAnd(x, y interface{}) int64 {
-	return bitOpsCast(x) & bitOpsCast(y)
-}
-
-func bitOpsCast(x interface{}) int64 {
-	switch x := x.(type) {
-	case int:
-		return int64(x)
-	case uint:
-		return int64(x)
-	case int8:
-		return int64(x)
-	case int16:
-		return int64(x)
-	case int32:
-		return int64(x)
-	case int64:
-		return x
-	case uint8:
-		return int64(x)
-	case uint16:
-		return int64(x)
-	case uint32:
-		return int64(x)
-	case uint64:
-		return int64(x)
-	case float32:
-		return int64(x)
-	case float64:
-		return int64(x)
-	default:
-		panic("cannot convert to int64")
 	}
 }

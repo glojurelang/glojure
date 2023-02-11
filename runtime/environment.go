@@ -60,6 +60,7 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 	coreNS := e.FindOrCreateNamespace(value.SymbolCoreNamespace)
 	e.currentNamespaceVar = value.NewVarWithRoot(coreNS, value.NewSymbol("*ns*"), coreNS)
 	coreNS.InternWithValue(e, value.NewSymbol("*agent*"), nil, true)
+	coreNS.InternWithValue(e, value.NewSymbol("*print-readably*"), true, true)
 
 	// bootstrap some vars
 	e.namespaceVar = value.NewVarWithRoot(coreNS, SymbolNamespace,

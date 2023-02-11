@@ -1,5 +1,6 @@
 (ns glojure-rewrite-core
-  (:require [rewrite-clj.zip :as z]))
+  (:require [rewrite-clj.zip :as z]
+            [clojure.string :as s]))
 
 (def zloc (z/of-string (slurp "./core.clj")))
 
@@ -158,8 +159,16 @@
                      (glojure.lang.IsInteger n))
                   )
    (sexpr-replace 'clojure.lang.RT/uncheckedLongCast 'glojure.lang.AsInt64)
-   (sexpr-replace '(. clojure.lang.Numbers and x y) '(glojure.numbers.BitAnd x y))
-   (sexpr-replace '(. clojure.lang.Numbers (isZero num)) '(glojure.numbers.IsZero num))
+   [(fn select [zloc] (try
+                        (and (symbol? (z/sexpr zloc))
+                             (or
+                              (and (z/leftmost? zloc) (= 'glojure.lang.Numbers (-> zloc z/up z/left z/sexpr)))
+                              (= 'glojure.lang.Numbers (-> zloc z/left z/sexpr))))
+                        (catch Exception e false)))
+    (fn visit [zloc] (z/replace zloc
+                                (let [sym (-> zloc z/sexpr str)]
+                                  (symbol (str (s/upper-case (first sym)) (subs sym 1))))))]
+   (sexpr-replace 'clojure.lang.Numbers 'glojure.lang.Numbers)
 
    (sexpr-replace 'clojure.core/cond 'glojure.core/cond)
 

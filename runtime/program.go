@@ -152,13 +152,13 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		{
 			define("glojure.lang/AsNumber", value.AsNumber)
 
-			define("glojure.lang.numbers/Inc", value.Inc)
-			define("glojure.lang.numbers/IncP", value.IncP)
-			define("glojure.lang.Numbers/Add", value.Add)
-			define("glojure.lang.Numbers/Sub", value.Sub)
-			define("glojure.lang.Numbers/Max", value.Max)
-			define("glojure.lang.Numbers/Min", value.Min)
-			define("glojure.lang.Numbers/LT", value.LT)
+			// define("glojure.lang.numbers/Inc", value.Inc)
+			// define("glojure.lang.numbers/IncP", value.IncP)
+			// define("glojure.lang.Numbers/Add", value.Add)
+			// define("glojure.lang.Numbers/Sub", value.Sub)
+			// define("glojure.lang.Numbers/Max", value.Max)
+			// define("glojure.lang.Numbers/Min", value.Min)
+			// define("glojure.lang.Numbers/LT", value.LT)
 		}
 		// iteration functions
 		{

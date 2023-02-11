@@ -9,7 +9,7 @@ type Set struct {
 	vals []interface{}
 }
 
-func NewSet(vals []interface{}) *Set {
+func NewSet(vals ...interface{}) *Set {
 	// TEMP: reverse to pass test
 	if len(vals) == 3 {
 		vals[0], vals[2] = vals[2], vals[0]
@@ -37,7 +37,7 @@ func (s *Set) Conj(v interface{}) Conjer {
 	if s.Contains(v) {
 		return s
 	}
-	return NewSet(append(s.vals, v))
+	return NewSet(append(s.vals, v)...)
 }
 
 func (s *Set) Disjoin(v interface{}) IPersistentSet {
@@ -46,7 +46,7 @@ func (s *Set) Disjoin(v interface{}) IPersistentSet {
 			newItems := make([]interface{}, len(s.vals)-1)
 			copy(newItems, s.vals[:i])
 			copy(newItems[i:], s.vals[i+1:])
-			return NewSet(newItems)
+			return NewSet(newItems...)
 		}
 	}
 	return s

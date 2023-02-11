@@ -871,7 +871,7 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (ast.Node, error) {
 		return nil, exInfo("wrong number of args to ., had: %d", value.Count(form)-1)
 	}
 	target := second(form)
-	mOrF := value.MustNth(form.(value.Nther), 2)
+	mOrF := value.MustNth(form, 2)
 	args := value.Rest(value.Rest(value.Rest(form)))
 	isField := false
 	if sym, ok := mOrF.(*value.Symbol); ok && len(sym.Name()) > 0 && sym.Name()[0] == '-' {

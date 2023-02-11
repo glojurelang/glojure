@@ -2,129 +2,66 @@ package value
 
 import (
 	"fmt"
-	"math/big"
 )
 
-// BigDec is an arbitrary-precision decimal number. It wraps and has
-// the same semantics as big.Float. big.Float is not used directly
-// because it is mutable, and the core BigDecimal should not be.
-type BigDecimal struct {
-	val *big.Float
+var (
+	Numbers = &NumberMethods{}
+)
+
+// NumberMethods is a struct with methods that map to Clojure's Number
+// class' static methods.
+type NumberMethods struct{}
+
+func (nm *NumberMethods) Add(x, y interface{}) interface{} {
+	return Ops(x).Combine(Ops(y)).Add(x, y)
 }
 
-// NewBigDecimal creates a new BigDecimal from a string.
-func NewBigDecimal(s string) (*BigDecimal, error) {
-	bf, ok := new(big.Float).SetString(s)
-	if !ok {
-		return nil, fmt.Errorf("invalid big decimal: %s", s)
+func (nm *NumberMethods) And(x, y interface{}) interface{} {
+	return bitOpsCast(x) & bitOpsCast(y)
+}
+
+func (nm *NumberMethods) IsZero(x interface{}) bool {
+	// convert to int64 and compare to zero
+	return AsInt64(x) == 0
+}
+
+func (nm *NumberMethods) IsPos(x interface{}) bool {
+	return Ops(x).IsPos(x)
+}
+
+func (nm *NumberMethods) Dec(x interface{}) interface{} {
+	return nm.Add(x, -1)
+}
+
+func bitOpsCast(x interface{}) int64 {
+	switch x := x.(type) {
+	case int:
+		return int64(x)
+	case uint:
+		return int64(x)
+	case int8:
+		return int64(x)
+	case int16:
+		return int64(x)
+	case int32:
+		return int64(x)
+	case int64:
+		return x
+	case uint8:
+		return int64(x)
+	case uint16:
+		return int64(x)
+	case uint32:
+		return int64(x)
+	case uint64:
+		return int64(x)
+	case float32:
+		return int64(x)
+	case float64:
+		return int64(x)
+	default:
+		panic("cannot convert to int64")
 	}
-	return &BigDecimal{val: bf}, nil
-}
-
-// NewBigDecimalFromFloat64 creates a new BigDecimal from a float64.
-func NewBigDecimalFromFloat64(x float64) *BigDecimal {
-	return &BigDecimal{val: new(big.Float).SetFloat64(x)}
-}
-
-func (n *BigDecimal) String() string {
-	return n.val.String() + "M"
-}
-
-func (n *BigDecimal) Equal(v interface{}) bool {
-	other, ok := v.(*BigDecimal)
-	if !ok {
-		return false
-	}
-	return n.val.Cmp(other.val) == 0
-}
-
-func (n *BigDecimal) AddInt(x int) *BigDecimal {
-	return &BigDecimal{val: new(big.Float).Add(n.val, big.NewFloat(float64(x)))}
-}
-
-func (n *BigDecimal) Add(other *BigDecimal) *BigDecimal {
-	return &BigDecimal{val: new(big.Float).Add(n.val, other.val)}
-}
-
-func (n *BigDecimal) AddP(other *BigDecimal) *BigDecimal {
-	return n.Add(other)
-}
-
-func (n *BigDecimal) Sub(other *BigDecimal) *BigDecimal {
-	return &BigDecimal{val: new(big.Float).Sub(n.val, other.val)}
-}
-
-func (n *BigDecimal) SubP(other *BigDecimal) *BigDecimal {
-	return n.Sub(other)
-}
-
-func (n *BigDecimal) Cmp(other *BigDecimal) int {
-	return n.val.Cmp(other.val)
-}
-
-func (n *BigDecimal) LT(other *BigDecimal) bool {
-	return n.Cmp(other) < 0
-}
-
-// BigInt is an arbitrary-precision integer. It wraps and has the same
-// semantics as big.Int. big.Int is not used directly because it is
-// mutable, and the core BigInt should not be.
-type BigInt struct {
-	val *big.Int
-}
-
-// NewBigInt creates a new BigInt from a string.
-func NewBigInt(s string) (*BigInt, error) {
-	bi, ok := new(big.Int).SetString(s, 0)
-	if !ok {
-		return nil, fmt.Errorf("invalid big int: %s", s)
-	}
-	return &BigInt{val: bi}, nil
-}
-
-// NewBigIntFromInt64 creates a new BigInt from an int64.
-func NewBigIntFromInt64(x int64) *BigInt {
-	return &BigInt{val: big.NewInt(x)}
-}
-
-func (n *BigInt) String() string {
-	return n.val.String() + "N"
-}
-
-func (n *BigInt) Equal(v interface{}) bool {
-	other, ok := v.(*BigInt)
-	if !ok {
-		return false
-	}
-	return n.val.Cmp(other.val) == 0
-}
-
-func (n *BigInt) AddInt(x int) *BigInt {
-	return &BigInt{val: new(big.Int).Add(n.val, big.NewInt(int64(x)))}
-}
-
-func (n *BigInt) Add(other *BigInt) *BigInt {
-	return &BigInt{val: new(big.Int).Add(n.val, other.val)}
-}
-
-func (n *BigInt) AddP(other *BigInt) *BigInt {
-	return n.Add(other)
-}
-
-func (n *BigInt) Sub(other *BigInt) *BigInt {
-	return &BigInt{val: new(big.Int).Sub(n.val, other.val)}
-}
-
-func (n *BigInt) SubP(other *BigInt) *BigInt {
-	return n.Sub(other)
-}
-
-func (n *BigInt) Cmp(other *BigInt) int {
-	return n.val.Cmp(other.val)
-}
-
-func (n *BigInt) LT(other *BigInt) bool {
-	return n.Cmp(other) < 0
 }
 
 // AsNumber returns any value as a number. If the value is not a

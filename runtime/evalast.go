@@ -45,6 +45,8 @@ func (env *environment) EvalAST(x interface{}) (interface{}, error) {
 		return env.EvalASTMap(n)
 	case kw("vector"):
 		return env.EvalASTVector(n)
+	case kw("set"):
+		return env.EvalASTSet(n)
 	case kw("do"):
 		return env.EvalASTDo(n)
 	case kw("let"):
@@ -63,6 +65,8 @@ func (env *environment) EvalAST(x interface{}) (interface{}, error) {
 		return env.EvalASTHostCall(n)
 	case kw("host-interop"):
 		return env.EvalASTHostInterop(n)
+	case kw("maybe-host-form"):
+		return env.EvalASTMaybeHostForm(n)
 	case kw("if"):
 		return env.EvalASTIf(n)
 	case kw("the-var"):
@@ -120,17 +124,22 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return value.IsInteger, nil
 	case "glojure.lang.AsInt64":
 		return value.AsInt64, nil
-	case "glojure.numbers.BitAnd":
-		return value.BitAnd, nil
-	case "glojure.numbers.IsZero":
-		return value.IsZero, nil
 	case "glojure.lang.Keyword":
 		return reflect.TypeOf(value.NewKeyword("nop")), nil
 	case "glojure.lang.RT":
 		return value.RT, nil
+	case "glojure.lang.Numbers":
+		return value.Numbers, nil
+	case "glojure.lang.NewMultiFn":
+		return value.NewMultiFn, nil
 	default:
 		return nil, errors.New("unknown Go value: " + value.ToString(get(n, kw("class"))))
 	}
+}
+
+func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
+	// TODO: how to handle?
+	panic("EvalASTMaybeHostForm")
 }
 
 func (env *environment) EvalASTHostCall(n ast.Node) (interface{}, error) {
@@ -226,6 +235,20 @@ func (env *environment) EvalASTVector(n ast.Node) (interface{}, error) {
 		vals = append(vals, itemVal)
 	}
 	return value.NewVector(vals...), nil
+}
+
+func (env *environment) EvalASTSet(n ast.Node) (interface{}, error) {
+	items := get(n, kw("items"))
+	var vals []interface{}
+	for i := 0; i < value.Count(items); i++ {
+		item := get(items, i)
+		itemVal, err := env.EvalAST(item.(ast.Node))
+		if err != nil {
+			return nil, err
+		}
+		vals = append(vals, itemVal)
+	}
+	return value.NewSet(vals...), nil
 }
 
 func (env *environment) EvalASTIf(n ast.Node) (interface{}, error) {
