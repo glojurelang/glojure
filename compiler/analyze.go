@@ -948,8 +948,88 @@ func (a *Analyzer) parseLetStar(form interface{}, env Env) (ast.Node, error) {
 		let), nil
 }
 
+// (defn parse-letfn*
+//
+//	[[_ bindings & body :as form] env]
+//	(validate-bindings form env)
+//	(let [bindings (apply array-map bindings) ;; pick only one local with the same name, if more are present.
+//	      fns      (keys bindings)]
+//	  (when-let [[sym] (seq (remove valid-binding-symbol? fns))]
+//	    (throw (ex-info (str "Bad binding form: " sym)
+//	                    (merge {:form form
+//	                            :sym  sym}
+//	                           (-source-info form env)))))
+//	  (let [binds (reduce (fn [binds name]
+//	                        (assoc binds name
+//	                               {:op    :binding
+//	                                :env   env
+//	                                :name  name
+//	                                :form  name
+//	                                :local :letfn}))
+//	                      {} fns)
+//	        e (update-in env [:locals] merge binds) ;; pre-seed locals
+//	        binds (reduce-kv (fn [binds name bind]
+//	                           (assoc binds name
+//	                                  (merge bind
+//	                                         {:init     (analyze-form (bindings name)
+//	                                                                  (ctx e :ctx/expr))
+//	                                          :children [:init]})))
+//	                         {} binds)
+//	        e (update-in env [:locals] merge (update-vals binds dissoc-env))
+//	        body (analyze-body body e)]
+//	    {:op       :letfn
+//	     :env      env
+//	     :form     form
+//	     :bindings (vec (vals binds)) ;; order is irrelevant
+//	     :body     body
+//	     :children [:bindings :body]})))
 func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (ast.Node, error) {
-	panic("parseLetfnStar unimplemented!")
+	if value.Count(form) < 3 {
+		return nil, exInfo("wrong number of args to letfn*, had: %d", value.Count(form)-1)
+	}
+	bindings := second(form)
+	body := value.Rest(value.Rest(form))
+	if err := a.validateBindings(form, env); err != nil {
+		return nil, err
+	}
+	bindingsMap := value.NewMap().(value.Associative)
+	for seq := value.Seq(bindings); seq != nil; seq = seq.Next().Next() {
+		bindingsMap = bindingsMap.Assoc(value.First(seq), second(seq))
+	}
+	fns := value.Keys(bindingsMap)
+	if sym := value.First(value.Seq(removeP(isValidBindingSymbol, fns))); sym != nil {
+		return nil, exInfo("bad binding form: "+value.ToString(sym), nil)
+	}
+	binds := value.ReduceInit(func(binds, name interface{}) interface{} {
+		return value.Assoc(binds, name, value.NewMap(
+			kw("op"), kw("binding"),
+			kw("env"), env,
+			kw("name"), name,
+			kw("form"), name,
+			kw("local"), kw("letfn")))
+	}, value.NewMap(), fns)
+	e := updateIn(env, vec(kw("locals")), merge, binds).(Env)
+	binds = value.ReduceKV(func(binds, name, bind interface{}) interface{} {
+		init, err := a.analyzeForm(value.Get(bindingsMap, name), ctxEnv(e, ctxExpr))
+		if err != nil {
+			panic(err)
+		}
+		return value.Assoc(binds, name, merge(bind, value.NewMap(
+			kw("init"), init,
+			kw("children"), vec(kw("init")))))
+	}, value.NewMap(), binds)
+	e = updateIn(env, vec(kw("locals")), merge, updateVals(binds, dissocEnv)).(Env)
+	body, err := a.analyzeBody(body, e)
+	if err != nil {
+		return nil, err
+	}
+	return value.NewMap(
+		kw("op"), kw("letfn"),
+		kw("env"), env,
+		kw("form"), form,
+		kw("bindings"), value.Vals(binds.(value.Associative)),
+		kw("body"), body,
+		kw("children"), vec(kw("bindings"), kw("body"))), nil
 }
 
 // (defn parse-loop*
@@ -1511,7 +1591,7 @@ func second(x interface{}) interface{} {
 
 func exInfo(errStr string, _ interface{}) error {
 	// TODO
-	return errors.New(errStr)
+	return fmt.Errorf(errStr)
 }
 
 func withRawForm(n ast.Node, form interface{}) ast.Node {
@@ -1568,6 +1648,19 @@ func remove(v interface{}, coll interface{}) interface{} {
 	return vec(items...)
 }
 
+func removeP(fn func(interface{}) bool, coll interface{}) interface{} {
+	if coll == nil {
+		return nil
+	}
+	var items []interface{}
+	for seq := value.Seq(coll); seq != nil; seq = seq.Next() {
+		if !fn(seq.First()) {
+			items = append(items, seq.First())
+		}
+	}
+	return vec(items...)
+}
+
 func ctxEnv(env Env, ctx value.Keyword) Env {
 	return value.Assoc(env, kw("context"), ctx).(Env)
 }
@@ -1583,8 +1676,24 @@ func assocIn(mp interface{}, keys interface{}, val interface{}) value.Associativ
 		assocIn(value.Get(mp, value.First(keys)), value.Rest(keys), val))
 }
 
-func dissocEnv(node ast.Node) ast.Node {
-	return value.Dissoc(node, kw("env")).(ast.Node)
+func updateIn(mp interface{}, keys interface{}, fn func(...interface{}) value.Associative, args ...interface{}) value.Associative {
+	var up func(mp interface{}, keys interface{}, fn func(...interface{}) value.Associative, args []interface{}) value.Associative
+	up = func(mp interface{}, keys interface{}, fn func(...interface{}) value.Associative, args []interface{}) value.Associative {
+		k := value.First(keys)
+		ks := value.Rest(keys)
+		if value.Count(ks) > 0 {
+			return value.Assoc(mp, k, up(value.Get(mp, k), ks, fn, args))
+		} else {
+			vals := []interface{}{value.Get(mp, k)}
+			vals = append(vals, args...)
+			return value.Assoc(mp, k, fn(vals...))
+		}
+	}
+	return up(mp, keys, fn, args)
+}
+
+func dissocEnv(node interface{}) interface{} {
+	return value.Dissoc(node, kw("env"))
 }
 
 func isValidBindingSymbol(v interface{}) bool {
@@ -1663,4 +1772,14 @@ func splitWith(pred func(interface{}) bool, coll interface{}) (interface{}, inte
 			return value.Seq(take), drop
 		}
 	}
+}
+
+func updateVals(m interface{}, fn func(interface{}) interface{}) interface{} {
+	in := m
+	if in == nil {
+		in = value.NewMap()
+	}
+	return value.ReduceKV(func(m interface{}, k interface{}, v interface{}) interface{} {
+		return value.Assoc(m, k, fn(v))
+	}, value.NewMap(), in)
 }

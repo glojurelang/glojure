@@ -240,7 +240,7 @@ func (s *MapKeySeq) Seq() ISeq {
 }
 
 func (s *MapKeySeq) First() interface{} {
-	return s.s.First().(*MapEntry).Key
+	return s.s.First().(*MapEntry).Key()
 }
 
 func (s *MapKeySeq) Next() ISeq {

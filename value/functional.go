@@ -15,3 +15,9 @@ func ReduceInit(f func(interface{}, interface{}) interface{}, init interface{}, 
 	}
 	return res
 }
+
+func ReduceKV(f func(init, k, v interface{}) interface{}, init, coll interface{}) interface{} {
+	return ReduceInit(func(init, e interface{}) interface{} {
+		return f(init, e.(IMapEntry).Key(), e.(IMapEntry).Val())
+	}, init, Seq(coll))
+}

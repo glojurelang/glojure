@@ -48,3 +48,7 @@ func (rt *RTMethods) Contains(coll, key interface{}) bool {
 	}
 	panic(fmt.Errorf("contains? not supported on type: %T", coll))
 }
+
+func (rt *RTMethods) Subvec(v IPersistentVector, start, end int) IPersistentVector {
+	return Subvec(v, start, end)
+}

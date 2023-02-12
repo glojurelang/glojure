@@ -6958,7 +6958,7 @@ fails, attempts to require sym's namespace and retries."
               coll)
       persistent!))
 
-(require '[clojure.java.io :as jio])
+(do)
 
 (defn- normalize-slurp-opts
   [opts]

@@ -248,6 +248,8 @@
    (sexpr-replace '(load "gvec") '(do))
    (sexpr-replace '(load "uuid") '(do))
 
+   (sexpr-replace '(require '[clojure.java.io :as jio]) '(do))
+
    (omit-symbols
     '#{when-class
        Inst
