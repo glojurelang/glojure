@@ -3002,8 +3002,8 @@
   "Returns a lazy (infinite!, or length n if supplied) sequence of xs."
   {:added "1.0"
    :static true}
-  ([x] (clojure.lang.Repeat/create x))
-  ([n x] (clojure.lang.Repeat/create n x)))
+  ([x] (glojure.lang.NewRepeat x))
+  ([n x] (glojure.lang.NewRepeatN n x)))
 
 (defn replicate
   "DEPRECATED: Use 'repeat' instead.
@@ -6804,28 +6804,20 @@ fails, attempts to require sym's namespace and retries."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; helper files ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (alter-meta! (find-ns 'glojure.core) assoc :doc "Fundamental library of the Clojure language")
-(load "core_proxy")
-(load "core_print")
-(load "genclass")
-(load "core_deftype")
-(load "core/protocols")
-(load "gvec")
+(do)
+(do)
+(do)
+(do)
+(do)
+(do)
 
-(defmacro ^:private when-class [class-name & body]
-  `(try
-     (Class/forName ^string ~class-name)
-     ~@body
-     (catch ClassNotFoundException _#)))
+(do)
 
-(when-class "java.sql.Timestamp"
-  (load "instant"))
+(do)
 
-(defprotocol Inst
-  (inst-ms* [inst]))
+(do)
 
-(extend-protocol Inst
-  java.util.Date
-  (inst-ms* [inst] (.getTime ^java.util.Date inst)))
+(do)
 
 (defn inst-ms
   "Return the number of milliseconds since January 1, 1970, 00:00:00 GMT"
@@ -6837,13 +6829,11 @@ fails, attempts to require sym's namespace and retries."
   "Return true if x satisfies Inst"
   {:added "1.9"}
   [x]
-  (satisfies? Inst x))
+  (do))
 
-(extend-protocol clojure.core/Inst
-  java.time.Instant
-  (inst-ms* [inst] (.toEpochMilli ^java.time.Instant inst)))
+(do)
 
-(load "uuid")
+(do)
 
 (defn uuid?
   "Return true if x is a java.util.UUID"
@@ -6877,27 +6867,7 @@ fails, attempts to require sym's namespace and retries."
        (.reduce ^clojure.lang.IReduceInit coll f val)
        (clojure.core.protocols/coll-reduce coll f val))))
 
-(extend-protocol clojure.core.protocols/IKVReduce
- nil
- (kv-reduce
-  [_ f init]
-  init)
-
- ;;slow path default
- java.lang.Object
- (kv-reduce
-  [amap f init]
-  (reduce (fn [ret ^java.util.Map$Entry me]
-            (f ret
-               (.getKey me)
-               (.getValue me)))
-          init
-          amap))
-
- clojure.lang.IKVReduce
- (kv-reduce
-  [amap f init]
-  (.kvreduce amap f init)))
+(do)
 
 (defn reduce-kv
   "Reduces an associative collection. f should be a function of 3

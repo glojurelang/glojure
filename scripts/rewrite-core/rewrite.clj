@@ -29,6 +29,14 @@
                                  (= fsym (first (nth sexpr 2)))))))
    (fn visit [zloc] (z/replace zloc (newfn (rest (nth (z/sexpr zloc) 2)))))])
 
+(defn omit-symbols [syms]
+  [(fn select [zloc] (and (z/list? zloc)
+                          (let [sexp (z/sexpr zloc)]
+                            (contains? #{'defn 'defn- 'defmacro 'defmacro- 'defprotocol 'extend-protocol}
+                                       (first sexp))
+                            (contains? syms (second sexp)))))
+   (fn visit [zloc] (z/replace zloc '(do)))])
+
 (def replacements
   [
    (sexpr-replace 'clojure.core 'glojure.core)
@@ -227,6 +235,27 @@
 
    (sexpr-replace 'clojure.lang.Namespace/find 'glojure.lang.FindNamespace)
 
+   (sexpr-replace '(clojure.lang.Repeat/create x) '(glojure.lang.NewRepeat x))
+   (sexpr-replace '(clojure.lang.Repeat/create n x) '(glojure.lang.NewRepeatN n x))
+
+   ;;;; OMIT PARTS OF THE FILE ENTIRELY FOR NOW
+   ;;; TODO: implement load for embedded files!
+   (sexpr-replace '(load "core_proxy") '(do))
+   (sexpr-replace '(load "core_print") '(do))
+   (sexpr-replace '(load "genclass") '(do))
+   (sexpr-replace '(load "core_deftype") '(do))
+   (sexpr-replace '(load "core/protocols") '(do))
+   (sexpr-replace '(load "gvec") '(do))
+   (sexpr-replace '(load "uuid") '(do))
+
+   (omit-symbols
+    '#{when-class
+       Inst
+       clojure.core/Inst
+       clojure.core.protocols/IKVReduce
+       })
+
+   (sexpr-replace '(when-class "java.sql.Timestamp" (load "instant")) '(do))
    ])
 
 (defn rewrite-core [zloc]

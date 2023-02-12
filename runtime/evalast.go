@@ -160,6 +160,10 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return reflect.TypeOf((*value.Named)(nil)).Elem(), nil
 	case "glojure.lang.FindNamespace":
 		return value.FindNamespace, nil
+	case "glojure.lang.NewRepeat":
+		return value.NewRepeat, nil
+	case "glojure.lang.NewRepeatN":
+		return value.NewRepeatN, nil
 	default:
 		return nil, errors.New("unknown Go value: " + value.ToString(get(n, kw("class"))))
 	}

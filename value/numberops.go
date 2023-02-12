@@ -77,9 +77,7 @@ func Sub(x, y interface{}) interface{} {
 func SubP(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).SubP(x, y)
 }
-func LT(x, y interface{}) bool {
-	return Ops(x).Combine(Ops(y)).LT(x, y)
-}
+
 func Max(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).Max(x, y)
 }

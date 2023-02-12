@@ -42,6 +42,10 @@ func (nm *NumberMethods) ShiftLeft(x, y interface{}) interface{} {
 	return x64 << y64
 }
 
+func (nm *NumberMethods) Lt(x, y interface{}) bool {
+	return Ops(x).Combine(Ops(y)).LT(x, y)
+}
+
 func bitOpsCast(x interface{}) int64 {
 	switch x := x.(type) {
 	case int:

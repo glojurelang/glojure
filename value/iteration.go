@@ -252,3 +252,48 @@ func (i sliceIterator) More() ISeq {
 	}
 	return nxt
 }
+
+type Repeat struct {
+	x     interface{}
+	count int64
+	next  ISeq
+}
+
+func NewRepeat(x interface{}) *Repeat {
+	return &Repeat{x: x, count: -1}
+}
+
+func NewRepeatN(count int64, x interface{}) ISeq {
+	if count <= 0 {
+		return emptyList
+	}
+	return &Repeat{x: x, count: count}
+}
+
+func (r *Repeat) First() interface{} {
+	return r.x
+}
+
+func (r *Repeat) More() ISeq {
+	s := r.Next()
+	if s == nil {
+		return emptyList
+	}
+	return s
+}
+
+func (r *Repeat) Next() ISeq {
+	if r.next != nil {
+		return r.next
+	}
+	if r.count > 1 {
+		r.next = NewRepeatN(r.count-1, r.x)
+	} else if r.count == -1 {
+		r.next = r
+	}
+	return r.next
+}
+
+func (r *Repeat) Seq() ISeq {
+	return r
+}
