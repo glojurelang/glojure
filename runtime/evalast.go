@@ -15,7 +15,7 @@ import (
 
 var indent = 0
 
-const debug = true
+const debug = false
 
 func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 	n := x.(ast.Node)
@@ -150,14 +150,34 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return reflect.TypeOf((*value.IDrop)(nil)).Elem(), nil
 	case "glojure.lang.Compiler":
 		return &evalCompiler{env: env}, nil
+	case "glojure.lang.Ref":
+		return reflect.TypeOf(&value.Ref{}), nil
+	case "glojure.lang.NewRef":
+		return value.NewRef, nil
+	case "glojure.lang.Named":
+		return reflect.TypeOf((*value.Named)(nil)).Elem(), nil
 	default:
 		return nil, errors.New("unknown Go value: " + value.ToString(get(n, kw("class"))))
 	}
 }
 
 func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
+	// TODO: implement this for real
+	switch get(n, kw("class")).(string) {
+	case "clojure.lang.PersistentTreeSet":
+		switch get(n, kw("field")).(*value.Symbol).Name() {
+		case "create":
+			return func(keys interface{}) interface{} {
+				var ks []interface{}
+				for seq := value.Seq(keys); seq != nil; seq = seq.Next() {
+					ks = append(ks, seq.First())
+				}
+				return value.NewSet(ks...)
+			}, nil
+		}
+	}
 	// TODO: how to handle?
-	panic("EvalASTMaybeHostForm")
+	panic("EvalASTMaybeHostForm: " + value.ToString(n))
 }
 
 func (env *environment) EvalASTHostCall(n ast.Node) (interface{}, error) {
@@ -365,7 +385,24 @@ func (env *environment) EvalASTRecur(n ast.Node) (interface{}, error) {
 	}
 }
 
-func (env *environment) EvalASTInvoke(n ast.Node) (interface{}, error) {
+func (env *environment) EvalASTInvoke(n ast.Node) (res interface{}, err error) {
+	defer func() {
+		meta, ok := get(n, kw("meta")).(value.IPersistentMap)
+		if !ok {
+			return
+		}
+		if r := recover(); r != nil {
+			if rerr, ok := r.(error); ok {
+				err = rerr
+			} else {
+				err = fmt.Errorf("%v", r)
+			}
+		}
+
+		if err != nil {
+			fmt.Printf("%s:%d:%d: %s\n", value.Get(meta, kw("file")), value.Get(meta, kw("line")), value.Get(meta, kw("column")), get(n, kw("form")))
+		}
+	}()
 	fn := get(n, kw("fn"))
 	args := get(n, kw("args"))
 	fnVal, err := env.EvalAST(fn.(ast.Node))

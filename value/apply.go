@@ -3,7 +3,6 @@ package value
 import (
 	"fmt"
 	"reflect"
-	"runtime/debug"
 )
 
 func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, err error) {
@@ -54,12 +53,6 @@ func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, 
 		}
 		goArgs = append(goArgs, argGoVal)
 	}
-
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("panic: %v. Stack:\n%s", r, string(debug.Stack()))
-		}
-	}()
 
 	reflectRes := goVal.Call(goArgs)
 	res := make([]interface{}, len(reflectRes))

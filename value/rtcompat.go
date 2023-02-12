@@ -28,3 +28,7 @@ func (rt *RTMethods) NthDefault(x interface{}, i int, def interface{}) interface
 	}
 	return v
 }
+
+func (rt *RTMethods) Dissoc(x interface{}, k interface{}) interface{} {
+	return Dissoc(x, k)
+}

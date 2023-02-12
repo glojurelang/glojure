@@ -18,11 +18,19 @@ func (me *MapEntry) Key() interface{} {
 	return me.key
 }
 
+func (me *MapEntry) GetKey() interface{} {
+	return me.Key()
+}
+
 func (me *MapEntry) Val() interface{} {
 	if me.val == nil {
 		return nil
 	}
 	return me.val
+}
+
+func (me *MapEntry) GetValue() interface{} {
+	return me.Val()
 }
 
 func (me *MapEntry) Count() int {

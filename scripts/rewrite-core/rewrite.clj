@@ -54,6 +54,17 @@
    (RT-replace 'first #(cons 'glojure.lang.First %))
    (RT-replace 'next #(cons 'glojure.lang.Next %))
    (RT-replace 'more #(cons 'glojure.lang.Rest %))
+
+   [(fn select [zloc] (try
+                        (and (symbol? (z/sexpr zloc))
+                             (or
+                              (and (z/leftmost? zloc) (= 'glojure.lang.RT (-> zloc z/up z/left z/sexpr)))
+                              (= 'glojure.lang.RT (-> zloc z/left z/sexpr))))
+                        (catch Exception e false)))
+    (fn visit [zloc] (z/replace zloc
+                                (let [sym (-> zloc z/sexpr str)]
+                                  (symbol (str (s/upper-case (first sym)) (subs sym 1))))))]
+
    (sexpr-replace '.meta '.Meta)
    (sexpr-replace 'clojure.lang.IPersistentMap 'glojure.lang.IPersistentMap)
    (sexpr-replace 'clojure.lang.IPersistentVector 'glojure.lang.IPersistentVector)
@@ -202,6 +213,14 @@
    (sexpr-replace '(. clojure.lang.Compiler (eval form)) '(. clojure.lang.Compiler (Eval form)))
 
    (sexpr-replace '.alterMeta '.AlterMeta)
+
+   (sexpr-replace 'clojure.lang.Ref 'glojure.lang.Ref)
+   (sexpr-replace '(new clojure.lang.Ref x) '(glojure.lang.NewRef x))
+
+   (sexpr-replace '(. e (getKey)) '(. e (GetKey)))
+   (sexpr-replace '(. e (getValue)) '(. e (GetValue)))
+
+   (sexpr-replace 'clojure.lang.Named 'glojure.lang.Named)
 
    ])
 

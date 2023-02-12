@@ -8,6 +8,11 @@ import (
 type (
 	Sequential interface{}
 
+	Named interface {
+		Name() string
+		Namespace() string
+	}
+
 	IDrop interface {
 		Drop(n int) Sequential
 	}

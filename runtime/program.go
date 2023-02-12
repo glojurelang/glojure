@@ -249,7 +249,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.IMeta", reflect.TypeOf((*value.IMeta)(nil)).Elem())
 		define("glojure.lang.IChunkedSeq", reflect.TypeOf((*value.IChunkedSeq)(nil)).Elem())
 		define("glojure.lang.ISeq", reflect.TypeOf((*value.ISeq)(nil)).Elem())
-		define("glojure.lang.MultiFn", reflect.TypeOf(value.MultiFn{}))
+		define("glojure.lang.MultiFn", reflect.TypeOf(&value.MultiFn{}))
 	}
 	{
 		// Add stdlib
@@ -258,7 +258,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		if err != nil {
 			panic(fmt.Sprintf("could not read stdlib core.glj: %v", err))
 		}
-		r := reader.New(strings.NewReader(string(core)), reader.WithGetCurrentNS(func() string {
+		r := reader.New(strings.NewReader(string(core)), reader.WithFilename("glojure/core.glj"), reader.WithGetCurrentNS(func() string {
 			return env.CurrentNamespace().Name().String()
 		}))
 

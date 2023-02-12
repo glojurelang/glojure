@@ -340,7 +340,7 @@
   {:tag "[Ljava.lang.Object;"
    :added "1.0"
    :static true}
-  [coll] (. glojure.lang.RT (toArray coll)))
+  [coll] (. glojure.lang.RT (ToArray coll)))
 
 (defn cast
   "Throws a ClassCastException if x is not a c, else returns x."
@@ -870,7 +870,7 @@
   "Returns the number of items in the collection. (count nil) returns
   0.  Also works on strings, arrays, and Java Collections and Maps"
   {
-   :inline (fn  [x] `(. glojure.lang.RT (count ~x)))
+   :inline (fn  [x] `(. glojure.lang.RT (Count ~x)))
    :added "1.0"}
   [coll] (glojure.lang.Count coll))
 
@@ -879,7 +879,7 @@
   {
    :inline (fn  [x] `(. glojure.lang.RT (~(if *unchecked-math* 'uncheckedIntCast 'intCast) ~x)))
    :added "1.0"}
-  [x] (. glojure.lang.RT (intCast x)))
+  [x] (. glojure.lang.RT (IntCast x)))
 
 (defn nth
   "Returns the value at the index. get returns nil if index out of
@@ -1459,7 +1459,7 @@
   more efficient than, last. If the collection is empty, returns nil."
   {:added "1.0"
    :static true}
-  [coll] (. glojure.lang.RT (peek coll)))
+  [coll] (. glojure.lang.RT (Peek coll)))
 
 (defn pop
   "For a list or queue, returns a new list/queue without the first
@@ -1468,7 +1468,7 @@
   as next/butlast."
   {:added "1.0"
    :static true}
-  [coll] (. glojure.lang.RT (pop coll)))
+  [coll] (. glojure.lang.RT (Pop coll)))
 
 ;;map stuff
 
@@ -1486,12 +1486,12 @@
   it will not perform a linear search for a value.  See also 'some'."
   {:added "1.0"
    :static true}
-  [coll key] (. glojure.lang.RT (contains coll key)))
+  [coll key] (. glojure.lang.RT (Contains coll key)))
 
 (defn get
   "Returns the value mapped to key, not-found or nil if key not present
   in associative collection, set, string, array, or ILookup instance."
-  {:inline (fn  [m k & nf] `(. glojure.lang.RT (get ~m ~k ~@nf)))
+  {:inline (fn  [m k & nf] `(. glojure.lang.RT (Get ~m ~k ~@nf)))
    :inline-arities #{2 3}
    :added "1.0"}
   ([map key]
@@ -1506,7 +1506,7 @@
    :static true}
   ([map] map)
   ([map key]
-   (. glojure.lang.RT (dissoc map key)))
+   (. glojure.lang.RT (Dissoc map key)))
   ([map key & ks]
    (let [ret (dissoc map key)]
      (if ks
@@ -1533,7 +1533,7 @@
   "Returns the map entry for key, or nil if key not present."
   {:added "1.0"
    :static true}
-  [map key] (. glojure.lang.RT (find map key)))
+  [map key] (. glojure.lang.RT (Find map key)))
 
 (defn select-keys
   "Returns a map containing only those entries in map whose key is in keys"
@@ -1542,7 +1542,7 @@
   [map keyseq]
     (loop [ret {} keys (seq keyseq)]
       (if keys
-        (let [entry (. glojure.lang.RT (find map (first keys)))]
+        (let [entry (. glojure.lang.RT (Find map (first keys)))]
           (recur
            (if entry
              (conj ret entry)
@@ -1567,14 +1567,14 @@
   {:added "1.0"
    :static true}
   [^java.util.Map$Entry e]
-    (. e (getKey)))
+    (. e (GetKey)))
 
 (defn val
   "Returns the value in the map entry."
   {:added "1.0"
    :static true}
   [^java.util.Map$Entry e]
-    (. e (getValue)))
+    (. e (GetValue)))
 
 (defn rseq
   "Returns, in constant time, a seq of the items in rev (which
@@ -1590,20 +1590,20 @@
    :added "1.0"
    :static true}
   [x]
-  (if (string? x) x (. ^clojure.lang.Named x (Name))))
+  (if (string? x) x (. ^glojure.lang.Named x (Name))))
 
 (defn namespace
   "Returns the namespace String of a symbol or keyword, or nil if not present."
   {:tag string
    :added "1.0"
    :static true}
-  [^clojure.lang.Named x]
+  [^glojure.lang.Named x]
     (. x (Namespace)))
 
 (defn boolean
   "Coerce to boolean"
   {
-   :inline (fn  [x] `(. glojure.lang.RT (booleanCast ~x)))
+   :inline (fn  [x] `(. glojure.lang.RT (BooleanCast ~x)))
    :added "1.0"}
   [x] (clojure.lang.RT/booleanCast x))
 
@@ -2285,9 +2285,9 @@
   {:added "1.0"
    :static true
    }
-  ([x] (new clojure.lang.Ref x))
+  ([x] (glojure.lang.NewRef x))
   ([x & options] 
-   (let [r  ^clojure.lang.Ref (setup-reference (ref x) options)
+   (let [r  ^glojure.lang.Ref (setup-reference (ref x) options)
          opts (apply hash-map options)]
     (when (:max-history opts)
       (.setMaxHistory r (:max-history opts)))
@@ -2437,7 +2437,7 @@
   {:added "1.0"
    :static true}
 
-  [^clojure.lang.Ref ref fun & args]
+  [^glojure.lang.Ref ref fun & args]
     (. ref (commute fun args)))
 
 (defn alter
@@ -2449,7 +2449,7 @@
   and returns the in-transaction-value of ref."
   {:added "1.0"
    :static true}
-  [^clojure.lang.Ref ref fun & args]
+  [^glojure.lang.Ref ref fun & args]
     (. ref (alter fun args)))
 
 (defn ref-set
@@ -2457,32 +2457,32 @@
   Returns val."
   {:added "1.0"
    :static true}
-  [^clojure.lang.Ref ref val]
+  [^glojure.lang.Ref ref val]
     (. ref (set val)))
 
 (defn ref-history-count
   "Returns the history count of a ref"
   {:added "1.1"
    :static true}
-  [^clojure.lang.Ref ref]
+  [^glojure.lang.Ref ref]
     (.getHistoryCount ref))
 
 (defn ref-min-history
   "Gets the min-history of a ref, or sets it and returns the ref"
   {:added "1.1"
    :static true}
-  ([^clojure.lang.Ref ref]
+  ([^glojure.lang.Ref ref]
     (.getMinHistory ref))
-  ([^clojure.lang.Ref ref n]
+  ([^glojure.lang.Ref ref n]
     (.setMinHistory ref n)))
 
 (defn ref-max-history
   "Gets the max-history of a ref, or sets it and returns the ref"
   {:added "1.1"
    :static true}
-  ([^clojure.lang.Ref ref]
+  ([^glojure.lang.Ref ref]
     (.getMaxHistory ref))
-  ([^clojure.lang.Ref ref n]
+  ([^glojure.lang.Ref ref n]
     (.setMaxHistory ref n)))
 
 (defn ensure
@@ -2491,7 +2491,7 @@
   ref. Allows for more concurrency than (ref-set ref @ref)"
   {:added "1.0"
    :static true}
-  [^clojure.lang.Ref ref]
+  [^glojure.lang.Ref ref]
     (. ref (touch))
     (. ref (deref)))
 
@@ -3469,7 +3469,7 @@
 
 (defn long
   "Coerce to long"
-  {:inline (fn  [x] `(. glojure.lang.RT (longCast ~x)))
+  {:inline (fn  [x] `(. glojure.lang.RT (LongCast ~x)))
    :added "1.0"}
   [^Number x] (clojure.lang.RT/longCast x))
 
@@ -3481,7 +3481,7 @@
 
 (defn double
   "Coerce to double"
-  {:inline (fn  [x] `(. glojure.lang.RT (doubleCast ~x)))
+  {:inline (fn  [x] `(. glojure.lang.RT (DoubleCast ~x)))
    :added "1.0"}
   [^Number x] (clojure.lang.RT/doubleCast x))
 
@@ -3501,47 +3501,47 @@
   "Coerce to char"
   {:inline (fn  [x] `(. glojure.lang.RT (~(if *unchecked-math* 'uncheckedCharCast 'charCast) ~x)))
    :added "1.1"}
-  [x] (. glojure.lang.RT (charCast x)))
+  [x] (. glojure.lang.RT (CharCast x)))
 
 (defn unchecked-byte
   "Coerce to byte. Subject to rounding or truncation."
-  {:inline (fn  [x] `(. glojure.lang.RT (uncheckedByteCast ~x)))
+  {:inline (fn  [x] `(. glojure.lang.RT (UncheckedByteCast ~x)))
    :added "1.3"}
   [^Number x] (clojure.lang.RT/uncheckedByteCast x))
 
 (defn unchecked-short
   "Coerce to short. Subject to rounding or truncation."
-  {:inline (fn  [x] `(. glojure.lang.RT (uncheckedShortCast ~x)))
+  {:inline (fn  [x] `(. glojure.lang.RT (UncheckedShortCast ~x)))
    :added "1.3"}
   [^Number x] (clojure.lang.RT/uncheckedShortCast x))
 
 (defn unchecked-char
   "Coerce to char. Subject to rounding or truncation."
-  {:inline (fn  [x] `(. glojure.lang.RT (uncheckedCharCast ~x)))
+  {:inline (fn  [x] `(. glojure.lang.RT (UncheckedCharCast ~x)))
    :added "1.3"}
-  [x] (. glojure.lang.RT (uncheckedCharCast x)))
+  [x] (. glojure.lang.RT (UncheckedCharCast x)))
 
 (defn unchecked-int
   "Coerce to int. Subject to rounding or truncation."
-  {:inline (fn  [x] `(. glojure.lang.RT (uncheckedIntCast ~x)))
+  {:inline (fn  [x] `(. glojure.lang.RT (UncheckedIntCast ~x)))
    :added "1.3"}
   [^Number x] (clojure.lang.RT/uncheckedIntCast x))
 
 (defn unchecked-long
   "Coerce to long. Subject to rounding or truncation."
-  {:inline (fn  [x] `(. glojure.lang.RT (uncheckedLongCast ~x)))
+  {:inline (fn  [x] `(. glojure.lang.RT (UncheckedLongCast ~x)))
    :added "1.3"}
   [^Number x] (glojure.lang.AsInt64 x))
 
 (defn unchecked-float
   "Coerce to float. Subject to rounding."
-  {:inline (fn  [x] `(. glojure.lang.RT (uncheckedFloatCast ~x)))
+  {:inline (fn  [x] `(. glojure.lang.RT (UncheckedFloatCast ~x)))
    :added "1.3"}
   [^Number x] (clojure.lang.RT/uncheckedFloatCast x))
 
 (defn unchecked-double
   "Coerce to double. Subject to rounding."
-  {:inline (fn  [x] `(. glojure.lang.RT (uncheckedDoubleCast ~x)))
+  {:inline (fn  [x] `(. glojure.lang.RT (UncheckedDoubleCast ~x)))
    :added "1.3"}
   [^Number x] (clojure.lang.RT/uncheckedDoubleCast x))
 
@@ -3816,7 +3816,7 @@
   ([v start]
    (subvec v start (count v)))
   ([v start end]
-   (. glojure.lang.RT (subvec v start end))))
+   (. glojure.lang.RT (Subvec v start end))))
 
 (defmacro with-open
   "bindings => [name init ...]
@@ -3888,21 +3888,21 @@
 (defn alength
   "Returns the length of the Java array. Works on arrays of all
   types."
-  {:inline (fn [a] `(. glojure.lang.RT (alength ~a)))
+  {:inline (fn [a] `(. glojure.lang.RT (Alength ~a)))
    :added "1.0"}
-  [array] (. glojure.lang.RT (alength array)))
+  [array] (. glojure.lang.RT (Alength array)))
 
 (defn aclone
   "Returns a clone of the Java array. Works on arrays of known
   types."
-  {:inline (fn [a] `(. glojure.lang.RT (aclone ~a)))
+  {:inline (fn [a] `(. glojure.lang.RT (Aclone ~a)))
    :added "1.0"}
-  [array] (. glojure.lang.RT (aclone array)))
+  [array] (. glojure.lang.RT (Aclone array)))
 
 (defn aget
   "Returns the value at the index/indices. Works on Java arrays of all
   types."
-  {:inline (fn [a i] `(. glojure.lang.RT (aget ~a (int ~i))))
+  {:inline (fn [a i] `(. glojure.lang.RT (Aget ~a (int ~i))))
    :inline-arities #{2}
    :added "1.0"}
   ([array idx]
@@ -3913,7 +3913,7 @@
 (defn aset
   "Sets the value at the index/indices. Works on Java arrays of
   reference types. Returns val."
-  {:inline (fn [a i v] `(. glojure.lang.RT (aset ~a (int ~i) ~v)))
+  {:inline (fn [a i v] `(. glojure.lang.RT (Aset ~a (int ~i) ~v)))
    :inline-arities #{3}
    :added "1.0"}
   ([array idx val]
@@ -4465,7 +4465,7 @@
                          (if (seq bes)
                            (let [bb (key (first bes))
                                  bk (val (first bes))
-                                 local (if (instance? clojure.lang.Named bb) (with-meta (symbol nil (name bb)) (meta bb)) bb)
+                                 local (if (instance? glojure.lang.Named bb) (with-meta (symbol nil (name bb)) (meta bb)) bb)
                                  bv (if (contains? defaults local)
                                       (list `get gmap bk (defaults local))
                                       (list `get gmap bk))]
@@ -5338,10 +5338,10 @@
 
 (defn object-array
   "Creates an array of objects"
-  {:inline (fn [arg] `(. glojure.lang.RT object_array ~arg))
+  {:inline (fn [arg] `(. glojure.lang.RT Object_array ~arg))
    :inline-arities #{1}
    :added "1.2"}
-  ([size-or-seq] (. glojure.lang.RT object_array size-or-seq)))
+  ([size-or-seq] (. glojure.lang.RT Object_array size-or-seq)))
 
 (defn int-array
   "Creates an array of ints"
@@ -5646,13 +5646,13 @@
   {:added "1.0"}
   ([tag parent]
    (assert (namespace parent))
-   (assert (or (class? tag) (and (instance? clojure.lang.Named tag) (namespace tag))))
+   (assert (or (class? tag) (and (instance? glojure.lang.Named tag) (namespace tag))))
 
    (alter-var-root #'global-hierarchy derive tag parent) nil)
   ([h tag parent]
    (assert (not= tag parent))
-   (assert (or (class? tag) (instance? clojure.lang.Named tag)))
-   (assert (instance? clojure.lang.Named parent))
+   (assert (or (class? tag) (instance? glojure.lang.Named tag)))
+   (assert (instance? glojure.lang.Named parent))
 
    (let [tp (:parents h)
          td (:descendants h)
