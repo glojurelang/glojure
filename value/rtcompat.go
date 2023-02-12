@@ -1,6 +1,9 @@
 package value
 
-import "sync/atomic"
+import (
+	"fmt"
+	"sync/atomic"
+)
 
 var (
 	RT = &RTMethods{}
@@ -31,4 +34,17 @@ func (rt *RTMethods) NthDefault(x interface{}, i int, def interface{}) interface
 
 func (rt *RTMethods) Dissoc(x interface{}, k interface{}) interface{} {
 	return Dissoc(x, k)
+}
+
+func (rt *RTMethods) Contains(coll, key interface{}) bool {
+	switch coll := coll.(type) {
+	case nil:
+		return false
+	case Associative:
+		return coll.ContainsKey(key)
+	case IPersistentSet:
+		return coll.Contains(key)
+		// TODO: other types
+	}
+	panic(fmt.Errorf("contains? not supported on type: %T", coll))
 }

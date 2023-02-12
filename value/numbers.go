@@ -37,6 +37,11 @@ func (nm *NumberMethods) Dec(x interface{}) interface{} {
 	return nm.Add(x, -1)
 }
 
+func (nm *NumberMethods) ShiftLeft(x, y interface{}) interface{} {
+	x64, y64 := bitOpsCast(x), bitOpsCast(y)
+	return x64 << y64
+}
+
 func bitOpsCast(x interface{}) int64 {
 	switch x := x.(type) {
 	case int:

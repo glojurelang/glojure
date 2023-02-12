@@ -134,6 +134,8 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return value.NewLazilyPersistentVector, nil
 	case "glojure.lang.Symbol":
 		return reflect.TypeOf(value.NewSymbol("")), nil
+	case "glojure.lang.InternSymbol":
+		return value.InternSymbol, nil
 	case "glojure.lang.IsInteger":
 		return value.IsInteger, nil
 	case "glojure.lang.AsInt64":

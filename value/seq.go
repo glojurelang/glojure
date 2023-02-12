@@ -25,13 +25,15 @@ func Rest(x interface{}) interface{} {
 }
 
 func Next(x interface{}) ISeq {
-	if x == nil {
-		return nil
-	}
-	if s := Seq(x); s != nil {
+	if s, ok := x.(ISeq); ok {
 		return s.Next()
 	}
-	panic(fmt.Errorf("%T can't be converted to ISeq", x))
+
+	s := Seq(x)
+	if s == nil {
+		return emptyList
+	}
+	return s.Next()
 }
 
 func IsSeq(x interface{}) bool {

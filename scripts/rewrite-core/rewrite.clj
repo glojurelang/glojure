@@ -78,7 +78,10 @@
    (sexpr-replace 'clojure.lang.Util/equiv 'glojure.lang.Equal)
    (sexpr-replace 'clojure.lang.Util/equals 'glojure.lang.Equal) ;; TODO: implement both equals and equiv for go!!!
    (sexpr-replace '(. x (meta)) '(.Meta x))
+
    (sexpr-replace 'clojure.lang.Symbol/intern 'glojure.lang.NewSymbol)
+   (sexpr-replace '(clojure.lang.Symbol/intern ns name) '(glojure.lang.InternSymbol ns name))
+
    (sexpr-replace '.getName '.Name)
    (sexpr-replace '.concat 'glojure.lang.ConcatStrings)
    (sexpr-replace 'clojure.lang.RT/assoc 'glojure.lang.Assoc)

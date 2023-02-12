@@ -594,7 +594,7 @@
       (instance? clojure.lang.Var name) (.toSymbol ^clojure.lang.Var name)
       (instance? glojure.lang.Keyword name) (.sym ^glojure.lang.Keyword name)
       :else (throw (errors.New "no conversion to symbol"))))
-  ([ns name] (glojure.lang.NewSymbol ns name)))
+  ([ns name] (glojure.lang.InternSymbol ns name)))
 
 (defn gensym
   "Returns a new symbol with a unique name. If a prefix string is

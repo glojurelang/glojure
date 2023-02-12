@@ -58,11 +58,33 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 		stderr:     stderr,
 	}
 	coreNS := e.FindOrCreateNamespace(value.SymbolCoreNamespace)
-	e.currentNamespaceVar = value.NewVarWithRoot(coreNS, value.NewSymbol("*ns*"), coreNS)
+	e.currentNamespaceVar = coreNS.InternWithValue(e, value.NewSymbol("*ns*"), coreNS, true)
 	coreNS.InternWithValue(e, value.NewSymbol("*agent*"), nil, true)
 	coreNS.InternWithValue(e, value.NewSymbol("*print-readably*"), true, true)
 	coreNS.InternWithValue(e, value.NewSymbol("*out*"), stdout, true)
+	coreNS.InternWithValue(e, value.NewSymbol("*in*"), os.Stdin, true)
 	coreNS.InternWithValue(e, value.NewSymbol("*assert*"), false, true)
+
+	// TODO: where to set this?
+	coreNS.InternWithValue(e, value.NewSymbol("*compile-files*"), false, true)
+	coreNS.InternWithValue(e, value.NewSymbol("*file*"), "NO_SOURCE_FILE", true)
+	for _, dyn := range []string{
+		"command-line-args",
+		"warn-on-reflection",
+		"compile-path",
+		"unchecked-math",
+		"compiler-options",
+		"err",
+		"flush-on-newline",
+		"print-meta",
+		"print-dup",
+		"read-eval",
+	} {
+		coreNS.InternWithValue(e, value.NewSymbol("*"+dyn+"*"), nil, true)
+	}
+
+	// TODO: implement this
+	coreNS.InternWithValue(e, value.NewSymbol("load-file"), nil, true)
 
 	// bootstrap some vars
 	e.namespaceVar = value.NewVarWithRoot(coreNS, SymbolNamespace,

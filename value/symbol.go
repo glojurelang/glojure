@@ -25,6 +25,18 @@ func NewSymbol(s string) *Symbol {
 	}
 }
 
+func InternSymbol(ns, name interface{}) *Symbol {
+	if ns == nil {
+		return NewSymbol(name.(string))
+	}
+	if ns, ok := ns.(string); ok {
+		if ns == "" {
+			return NewSymbol(name.(string))
+		}
+	}
+	return NewSymbol(ns.(string) + "/" + name.(string))
+}
+
 func (s *Symbol) Namespace() string {
 	return s.ns
 }
