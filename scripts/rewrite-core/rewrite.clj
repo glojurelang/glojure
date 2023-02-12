@@ -225,6 +225,8 @@
 
    (sexpr-replace 'clojure.lang.Named 'glojure.lang.Named)
 
+   (sexpr-replace 'clojure.lang.Namespace/find 'glojure.lang.FindNamespace)
+
    ])
 
 (defn rewrite-core [zloc]

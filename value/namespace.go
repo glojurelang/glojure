@@ -11,6 +11,8 @@ type Namespace struct {
 	// atomic references to maps
 	mappings atomic.Value
 	aliases  atomic.Value
+
+	meta IPersistentMap
 }
 
 var (
@@ -210,4 +212,19 @@ func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 	}
 
 	return o
+}
+
+func (ns *Namespace) Meta() IPersistentMap {
+	return ns.meta
+}
+
+func (ns *Namespace) AlterMeta(alter IFn, args ISeq) IPersistentMap {
+	meta := alter.ApplyTo(NewCons(ns.Meta(), args)).(IPersistentMap)
+	ns.ResetMeta(meta)
+	return meta
+}
+
+func (ns *Namespace) ResetMeta(meta IPersistentMap) IPersistentMap {
+	ns.meta = meta
+	return meta
 }

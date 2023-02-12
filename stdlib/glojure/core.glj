@@ -4117,7 +4117,7 @@
   "Returns the namespace named by the symbol or nil if it doesn't exist."
   {:added "1.0"
    :static true}
-  [sym] (clojure.lang.Namespace/find sym))
+  [sym] (glojure.lang.FindNamespace sym))
 
 (defn create-ns
   "Create a new namespace named by the symbol if one doesn't already
@@ -5823,7 +5823,7 @@
     `(do
        (clojure.core/in-ns '~name)
        ~@(when name-metadata
-           `((.resetMeta (clojure.lang.Namespace/find '~name) ~name-metadata)))
+           `((.resetMeta (glojure.lang.FindNamespace '~name) ~name-metadata)))
        (with-loading-context
         ~@(when gen-class-call (list gen-class-call))
         ~@(when (and (not= name 'glojure.core) (not-any? #(= :refer-clojure (first %)) references))
