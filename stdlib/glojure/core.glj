@@ -241,7 +241,7 @@
                         (let [m (meta argvec)
                               ^glojure.lang.Symbol tag (:tag m)]
                           (if (instance? glojure.lang.Symbol tag)
-                            (if (glojure.lang.Equal (.indexOf (.Name tag) ".") -1)
+                            (if (glojure.lang.Equal (strings.Index (.Name tag) ".") -1)
                               (if (glojure.lang.Equal nil (clojure.lang.Compiler$HostExpr/maybeSpecialTag tag))
                                 (let [c (clojure.lang.Compiler$HostExpr/maybeClass tag false)]
                                   (if c
@@ -5942,7 +5942,7 @@
 (defn- load-lib
   "Loads a lib with options"
   [prefix lib & options]
-  (throw-if (and prefix (pos? (.indexOf (name lib) (int \.))))
+  (throw-if (and prefix (pos? (strings.Index (name lib) (int \.))))
             "Found lib name '%s' containing period with prefix '%s'.  lib names inside prefix lists must not contain periods"
             (name lib) prefix)
   (let [lib (if prefix (symbol (str prefix \. lib)) lib)

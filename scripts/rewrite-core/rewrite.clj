@@ -262,6 +262,8 @@
        })
 
    (sexpr-replace '(when-class "java.sql.Timestamp" (load "instant")) '(do))
+
+   (sexpr-replace '.indexOf 'strings.Index)
    ])
 
 (defn rewrite-core [zloc]
