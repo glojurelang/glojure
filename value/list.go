@@ -256,25 +256,6 @@ func (l *List) Equal(v interface{}) bool {
 	return seq == nil
 }
 
-// func (l *List) GoValue() interface{} {
-// 	var vals []interface{}
-// 	for cur := Seq(l); cur != nil; cur = cur.Next() {
-// 		val := cur.First()
-// 		if val == nil {
-// 			vals = append(vals, nil)
-// 			continue
-// 		}
-
-// 		if gv, ok := val.(GoValuer); ok {
-// 			vals = append(vals, gv.GoValue())
-// 			continue
-// 		}
-
-// 		vals = append(vals, val)
-// 	}
-// 	return vals
-// }
-
 func (l *List) Meta() IPersistentMap {
 	return l.meta
 }

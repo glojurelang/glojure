@@ -87,8 +87,10 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 	coreNS.InternWithValue(e, value.NewSymbol("load-file"), nil, true)
 
 	// bootstrap some vars
-	e.namespaceVar = value.NewVarWithRoot(coreNS, SymbolNamespace,
-		value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) { return coreNS, nil }))
+	e.namespaceVar = coreNS.InternWithValue(e, SymbolNamespace,
+		value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
+			return coreNS, nil
+		}), true)
 	e.namespaceVar.SetMacro()
 
 	e.inNamespaceVar = value.NewVarWithRoot(coreNS, SymbolInNamespace, false)

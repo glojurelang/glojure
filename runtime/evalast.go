@@ -164,12 +164,18 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return reflect.TypeOf((*value.Named)(nil)).Elem(), nil
 	case "glojure.lang.Counted":
 		return reflect.TypeOf((*value.Counted)(nil)).Elem(), nil
+	case "glojure.lang.Var":
+		return reflect.TypeOf(&value.Var{}), nil
 	case "glojure.lang.FindNamespace":
 		return value.FindNamespace, nil
 	case "glojure.lang.NewRepeat":
 		return value.NewRepeat, nil
 	case "glojure.lang.NewRepeatN":
 		return value.NewRepeatN, nil
+	case "glojure.lang.PushThreadBindings":
+		return value.PushThreadBindings, nil
+	case "glojure.lang.PopThreadBindings":
+		return value.PopThreadBindings, nil
 	default:
 		return nil, errors.New("unknown Go value: " + value.ToString(get(n, kw("class"))))
 	}

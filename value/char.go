@@ -27,10 +27,6 @@ func (c Char) Equal(v interface{}) bool {
 	}
 }
 
-func (c Char) GoValue() interface{} {
-	return rune(c)
-}
-
 // RuneFromCharLiteral returns the rune value from a character
 // literal.
 func RuneFromCharLiteral(lit string) (rune, error) {

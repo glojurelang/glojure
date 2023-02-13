@@ -271,6 +271,18 @@
 
    (sexpr-replace 'clojure.lang.Counted 'glojure.lang.Counted)
 
+   (sexpr-replace 'clojure.core/in-ns 'glojure.core/in-ns)
+   (sexpr-replace 'clojure.core/refer 'glojure.core/refer)
+
+   (sexpr-replace 'clojure.lang.Var 'glojure.lang.Var)
+
+   [(fn select [zloc] (and (z/sexpr-able? zloc) (= 'pushThreadBindings (z/sexpr zloc))))
+    (fn visit [zloc] (z/replace (-> zloc z/up z/up)
+                                '(glojure.lang.PushThreadBindings {})))]
+   (sexpr-replace '(. clojure.lang.Var (popThreadBindings)) '(glojure.lang.PopThreadBindings))
+   (sexpr-replace 'clojure.lang.Var/popThreadBindings 'glojure.lang.PopThreadBindings)
+   (sexpr-replace 'clojure.lang.Var/pushThreadBindings 'glojure.lang.PushThreadBindings)
+
    ;; TODO: special tags
    (sexpr-replace '(clojure.lang.Compiler$HostExpr/maybeSpecialTag tag) nil)
    (sexpr-replace '(clojure.lang.Compiler$HostExpr/maybeClass tag false) nil)

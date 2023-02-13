@@ -724,12 +724,15 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 			// TODO: match clojure behavior!
 		case sym.Namespace() == "" && strings.HasPrefix(sym.Name(), "."):
 			// simply quote method names
+		case sym.Namespace() != "" && strings.Contains(sym.Name(), "."):
+			// special class-like go value
+			// TODO: is this a good syntax?
 		case r.symbolResolver != nil:
 			panic("unimplemented")
 		case sym.Namespace() == "":
 			// HACK: handle well-known host forms
 			// TODO: use a resolver to handle this
-			if sym.Name() == "glojure.lang.NewMultiFn" {
+			if strings.Contains(sym.Name(), ".") {
 				break
 			}
 

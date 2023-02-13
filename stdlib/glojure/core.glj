@@ -591,7 +591,7 @@
      (cond
       (symbol? name) name
       (instance? string name) (glojure.lang.NewSymbol name)
-      (instance? clojure.lang.Var name) (.toSymbol ^clojure.lang.Var name)
+      (instance? glojure.lang.Var name) (.toSymbol ^glojure.lang.Var name)
       (instance? glojure.lang.Keyword name) (.sym ^glojure.lang.Keyword name)
       :else (throw (errors.New "no conversion to symbol"))))
   ([ns name] (glojure.lang.InternSymbol ns name)))
@@ -1926,7 +1926,7 @@
   {:added "1.1"
    :static true} 
   [bindings]
-  (clojure.lang.Var/pushThreadBindings bindings))
+  (glojure.lang.PushThreadBindings bindings))
 
 (defn pop-thread-bindings
   "Pop one set of bindings pushed with push-binding before. It is an error to
@@ -1934,7 +1934,7 @@
   {:added "1.1"
    :static true}
   []
-  (clojure.lang.Var/popThreadBindings))
+  (glojure.lang.PopThreadBindings))
 
 (defn get-thread-bindings
   "Get a map with the Var/value pairs which is currently in effect for the
@@ -2017,7 +2017,7 @@
   nil if no var with that name."
   {:added "1.0"
    :static true}
-  [sym] (. clojure.lang.Var (find sym)))
+  [sym] (. glojure.lang.Var (find sym)))
 
 (defn binding-conveyor-fn
   {:private true
@@ -4182,7 +4182,7 @@
    :static true}
   [ns]
   (let [ns (the-ns ns)]
-    (filter-key val (fn [^clojure.lang.Var v] (and (instance? clojure.lang.Var v)
+    (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
                                  (= ns (.ns v))
                                  (.isPublic v)))
                 (ns-map ns))))
@@ -4200,7 +4200,7 @@
    :static true}
   [ns]
   (let [ns (the-ns ns)]
-    (filter-key val (fn [^clojure.lang.Var v] (and (instance? clojure.lang.Var v)
+    (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
                                  (= ns (.ns v))))
                 (ns-map ns))))
 
@@ -4247,7 +4247,7 @@
    :static true}
   [ns]
   (let [ns (the-ns ns)]
-    (filter-key val (fn [^clojure.lang.Var v] (and (instance? clojure.lang.Var v)
+    (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
                                  (not= ns (.ns v))))
                 (ns-map ns))))
 
@@ -4318,14 +4318,14 @@
   "Gets the value in the var object"
   {:added "1.0"
    :static true}
-  [^clojure.lang.Var x] (. x (get)))
+  [^glojure.lang.Var x] (. x (get)))
 
 (defn var-set
   "Sets the value in the var object to val. The var must be
  thread-locally bound."
   {:added "1.0"
    :static true}
-  [^clojure.lang.Var x val] (. x (set val)))
+  [^glojure.lang.Var x val] (. x (set val)))
 
 (defmacro with-local-vars
   "varbinding=> symbol init-expr
@@ -4340,11 +4340,11 @@
      (vector? name-vals-vec) "a vector for its binding"
      (even? (count name-vals-vec)) "an even number of forms in binding vector")
   `(let [~@(interleave (take-nth 2 name-vals-vec)
-                       (repeat '(.. clojure.lang.Var create setDynamic)))]
-     (. clojure.lang.Var (pushThreadBindings (hash-map ~@name-vals-vec)))
+                       (repeat '(.. glojure.lang.Var create setDynamic)))]
+     (glojure.lang.PushThreadBindings {})
      (try
       ~@body
-      (finally (. clojure.lang.Var (popThreadBindings))))))
+      (finally (glojure.lang.PopThreadBindings)))))
 
 (defn ns-resolve
   "Returns the var or Class to which a symbol will be resolved in the
@@ -4990,7 +4990,7 @@
   "Returns true if v is of type clojure.lang.Var"
   {:added "1.0"
    :static true}
-  [v] (instance? clojure.lang.Var v))
+  [v] (instance? glojure.lang.Var v))
 
 (defn subs
   "Returns the substring of s beginning at start inclusive, and ending
@@ -5521,7 +5521,7 @@
   current value plus any args"
   {:added "1.0"
    :static true}
-  [^clojure.lang.Var v f & args] (.alterRoot v f args))
+  [^glojure.lang.Var v f & args] (.alterRoot v f args))
 
 (defn bound?
   "Returns true if all of the vars provided as arguments have any bound value, root or thread-local.
@@ -5529,7 +5529,7 @@
   {:added "1.2"
    :static true}
   [& vars]
-  (every? #(.isBound ^clojure.lang.Var %) vars))
+  (every? #(.isBound ^glojure.lang.Var %) vars))
 
 (defn thread-bound?
   "Returns true if all of the vars provided as arguments have thread-local bindings.
@@ -5537,7 +5537,7 @@
   {:added "1.2"
    :static true}
   [& vars]
-  (every? #(.getThreadBinding ^clojure.lang.Var %) vars))
+  (every? #(.getThreadBinding ^glojure.lang.Var %) vars))
 
 (defn make-hierarchy
   "Creates a hierarchy object for use with derive, isa? etc."
@@ -5768,12 +5768,11 @@
 
 (defmacro with-loading-context [& body]
   `((fn loading# [] 
-        (. clojure.lang.Var (pushThreadBindings {clojure.lang.Compiler/LOADER  
-                                                 (.getClassLoader (.getClass ^Object loading#))}))
+        (glojure.lang.PushThreadBindings {})
         (try
          ~@body
          (finally
-          (. clojure.lang.Var (popThreadBindings)))))))
+          (glojure.lang.PopThreadBindings))))))
 
 (defmacro ns
   "Sets *ns* to the namespace named by name (unevaluated), creating it
@@ -5821,13 +5820,13 @@
         ;ns-effect (clojure.core/in-ns name)
         name-metadata (meta name)]
     `(do
-       (clojure.core/in-ns '~name)
+       (glojure.core/in-ns '~name)
        ~@(when name-metadata
            `((.resetMeta (glojure.lang.FindNamespace '~name) ~name-metadata)))
        (with-loading-context
         ~@(when gen-class-call (list gen-class-call))
         ~@(when (and (not= name 'glojure.core) (not-any? #(= :refer-clojure (first %)) references))
-            `((clojure.core/refer '~'glojure.core)))
+            `((glojure.core/refer '~'glojure.core)))
         ~@(map process-reference references))
         (if (.equals '~name 'glojure.core) 
           nil
@@ -5837,7 +5836,7 @@
   "Same as (refer 'clojure.core <filters>)"
   {:added "1.0"}
   [& filters]
-  `(clojure.core/refer '~'glojure.core ~@filters))
+  `(glojure.core/refer '~'glojure.core ~@filters))
 
 (defmacro defonce
   "defs name to have the root value of the expr iff the named var has no root value,
@@ -7544,9 +7543,9 @@ fails, attempts to require sym's namespace and retries."
   [binding-map func]
   (let [root-bind (fn [m]
                     (doseq [[a-var a-val] m]
-                      (.bindRoot ^clojure.lang.Var a-var a-val)))
+                      (.bindRoot ^glojure.lang.Var a-var a-val)))
         old-vals (zipmap (keys binding-map)
-                         (map #(.getRawRoot ^clojure.lang.Var %) (keys binding-map)))]
+                         (map #(.getRawRoot ^glojure.lang.Var %) (keys binding-map)))]
     (try
       (root-bind binding-map)
       (func)
