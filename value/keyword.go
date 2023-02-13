@@ -26,7 +26,6 @@ func InternKeywordSymbol(s *Symbol) Keyword {
 }
 
 func InternKeyword(ns, name interface{}) Keyword {
-	fmt.Println("InternKeyword ns", ns, "name", name)
 	return InternKeywordSymbol(InternSymbol(ns, name))
 }
 
