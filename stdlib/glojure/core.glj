@@ -613,9 +613,9 @@
    :added "1.0"
    :static true}
   ([name] (cond (keyword? name) name
-                (symbol? name) (clojure.lang.Keyword/intern ^glojure.lang.Symbol name)
-                (string? name) (clojure.lang.Keyword/intern ^string name)))
-  ([ns name] (clojure.lang.Keyword/intern ns name)))
+                (symbol? name) (glojure.lang.InternKeywordSymbol name)
+                (string? name) (glojure.lang.InternKeywordSymbol name)))
+  ([ns name] (glojure.lang.InternKeyword ns name)))
 
 (defn find-keyword
   "Returns a Keyword with the given namespace and name if one already

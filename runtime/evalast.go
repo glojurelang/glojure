@@ -136,6 +136,8 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return reflect.TypeOf(value.NewSymbol("")), nil
 	case "glojure.lang.InternSymbol":
 		return value.InternSymbol, nil
+	case "glojure.lang.InternKeyword":
+		return value.InternKeyword, nil
 	case "glojure.lang.IsInteger":
 		return value.IsInteger, nil
 	case "glojure.lang.AsInt64":

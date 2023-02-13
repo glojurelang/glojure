@@ -984,8 +984,8 @@ func (a *Analyzer) parseLetStar(form interface{}, env Env) (ast.Node, error) {
 //	     :body     body
 //	     :children [:bindings :body]})))
 func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (ast.Node, error) {
-	if value.Count(form) < 3 {
-		return nil, exInfo("wrong number of args to letfn*, had: %d", value.Count(form)-1)
+	if value.Count(form) < 2 {
+		return nil, exInfo("letfn requires a binding vector and a body", nil)
 	}
 	bindings := second(form)
 	body := value.Rest(value.Rest(form))

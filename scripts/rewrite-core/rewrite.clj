@@ -90,6 +90,10 @@
    (sexpr-replace 'clojure.lang.Symbol/intern 'glojure.lang.NewSymbol)
    (sexpr-replace '(clojure.lang.Symbol/intern ns name) '(glojure.lang.InternSymbol ns name))
 
+   (sexpr-replace '(clojure.lang.Keyword/intern ^glojure.lang.Symbol name) '(glojure.lang.InternKeywordSymbol name))
+   (sexpr-replace '(clojure.lang.Keyword/intern ^string name) '(glojure.lang.InternKeywordString name))
+   (sexpr-replace '(clojure.lang.Keyword/intern ns name) '(glojure.lang.InternKeyword ns name))
+
    (sexpr-replace '.getName '.Name)
    (sexpr-replace '.concat 'glojure.lang.ConcatStrings)
    (sexpr-replace 'clojure.lang.RT/assoc 'glojure.lang.Assoc)

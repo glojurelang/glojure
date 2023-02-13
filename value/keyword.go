@@ -21,6 +21,15 @@ func NewKeyword(s string) Keyword {
 	}
 }
 
+func InternKeywordSymbol(s *Symbol) Keyword {
+	return NewKeyword(s.FullName())
+}
+
+func InternKeyword(ns, name interface{}) Keyword {
+	fmt.Println("InternKeyword ns", ns, "name", name)
+	return InternKeywordSymbol(InternSymbol(ns, name))
+}
+
 func (k Keyword) value() string {
 	return k.kw.Get().(string)
 }
