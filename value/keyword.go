@@ -75,5 +75,5 @@ func (k Keyword) Apply(env Environment, args []interface{}) (interface{}, error)
 	if !assoc.ContainsKey(k) {
 		return defaultVal, nil
 	}
-	return assoc.EntryAt(k), nil
+	return assoc.EntryAt(k).Val(), nil
 }
