@@ -1,7 +1,6 @@
 package runtime
 
 import (
-	"errors"
 	"fmt"
 	"reflect"
 	"strings"
@@ -102,110 +101,6 @@ func (env *environment) applyFunc(f interface{}, args []interface{}) (interface{
 		return nil, err
 	}
 	return res, nil
-}
-
-func toBool(v interface{}) bool {
-	b, ok := v.(bool)
-	if !ok {
-		return false
-	}
-	return b
-}
-
-func (env *environment) evalQuote(n *value.List) (interface{}, error) {
-	listLength := n.Count()
-	if listLength != 2 {
-		return nil, env.errorf(n, "invalid quote, need 1 argument")
-	}
-
-	return n.Next().First(), nil
-}
-
-func (env *environment) evalLet(n *value.List, isLoop bool) (interface{}, error) {
-	items := seqToSlice(n)
-	if len(items) < 3 {
-		return nil, env.errorf(n, "invalid let, need bindings and body")
-	}
-
-	var bindNameVals []interface{}
-	var err error
-	bindings, ok := items[1].(*value.Vector)
-	if !ok {
-		return nil, env.errorf(n, "invalid let, bindings must be a vector")
-	}
-
-	bindNameVals, err = env.evalBindings(bindings)
-	if err != nil {
-		return nil, err
-	}
-	// create a new environment with the bindings
-	newEnv := env.PushScope().(*environment)
-
-Recur:
-	for i := 0; i < len(bindNameVals); i += 2 {
-		name := bindNameVals[i].(string)
-		val := bindNameVals[i+1]
-		newEnv.BindLocal(value.NewSymbol(name), val)
-	}
-
-	// evaluate the body
-	for _, item := range items[2 : len(items)-1] {
-		_, err = newEnv.Eval(item)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	rt := value.NewRecurTarget()
-	recurEnv := newEnv.WithRecurTarget(rt)
-	recurErr := &value.RecurError{Target: rt}
-
-	res, err := recurEnv.Eval(items[len(items)-1])
-	if isLoop && errors.As(err, &recurErr) {
-		newVals := recurErr.Args
-		if len(newVals) != len(bindNameVals)/2 {
-			return nil, env.errorf(n, "invalid recur, expected %d arguments, got %d", len(bindNameVals)/2, len(newVals))
-		}
-		for i := 0; i < len(bindNameVals); i += 2 {
-			newValsIndex := i / 2
-			val := newVals[newValsIndex]
-			bindNameVals[i+1] = val
-		}
-		goto Recur
-	}
-	return res, err
-}
-
-func (env *environment) evalBindings(bindings *value.Vector) ([]interface{}, error) {
-	if bindings.Count()%2 != 0 {
-		return nil, env.errorf(bindings, "invalid let, bindings must be a vector of even length")
-	}
-
-	newEnv := env.PushScope().(*environment)
-	var bindingNameVals []interface{}
-	for i := 0; i < bindings.Count(); i += 2 {
-		pattern := bindings.ValueAt(i)
-		val, err := newEnv.Eval(bindings.ValueAt(i + 1))
-		if err != nil {
-			return nil, err
-		}
-		// TODO: replace with macro
-		binds, err := value.Bind(pattern, val)
-		if err != nil {
-			return nil, env.errorf(bindings, "invalid let: %w", err)
-		}
-
-		for i := 0; i < len(binds); i += 2 {
-			name, ok := binds[i].(*value.Symbol)
-			if !ok {
-				return nil, env.errorf(bindings, "invalid let, binding name must be a symbol")
-			}
-			newEnv.BindLocal(name, binds[i+1])
-			bindingNameVals = append(bindingNameVals, name.String(), binds[i+1])
-		}
-	}
-
-	return bindingNameVals, nil
 }
 
 func (env *environment) applyMacro(fn value.Applyer, form value.ISeq) (interface{}, error) {
