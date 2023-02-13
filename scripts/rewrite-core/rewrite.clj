@@ -37,6 +37,10 @@
                             (contains? syms (second sexp)))))
    (fn visit [zloc] (z/replace zloc '(do)))])
 
+(defn omitp [pred]
+  [(fn select [zloc] (pred zloc))
+   (fn visit [zloc] (z/replace zloc '(do)))])
+
 (def replacements
   [
    (sexpr-replace 'clojure.core 'glojure.core)
@@ -265,9 +269,18 @@
 
    (sexpr-replace '.indexOf 'strings.Index)
 
+   (sexpr-replace 'clojure.lang.Counted 'glojure.lang.Counted)
+
    ;; TODO: special tags
    (sexpr-replace '(clojure.lang.Compiler$HostExpr/maybeSpecialTag tag) nil)
    (sexpr-replace '(clojure.lang.Compiler$HostExpr/maybeClass tag false) nil)
+
+   ;; TODO: clojure version
+   (omit-symbols '#{clojure-version})
+   (omitp #(and (z/list? %) (= '*clojure-version* (second (z/sexpr %)))))
+   [(fn select [zloc] (and (z/sexpr-able? zloc) (= 'version-string (z/sexpr zloc))))
+    (fn visit [zloc] (z/replace (-> zloc z/up z/up) '(do)))]
+
    ])
 
 (defn rewrite-core [zloc]

@@ -30,7 +30,7 @@ var (
 	_ ISeq     = (*LazySeq)(nil)
 	_ IPending = (*LazySeq)(nil)
 	_ IObj     = (*LazySeq)(nil)
-	_ Counter  = (*LazySeq)(nil)
+	_ Counted  = (*LazySeq)(nil)
 	// IHashEq
 )
 

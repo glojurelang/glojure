@@ -24,6 +24,7 @@ func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, 
 	gvType := goVal.Type()
 
 	if gvKind == reflect.Slice {
+		fmt.Println("slice", goVal, args)
 		return applySlice(goVal, args)
 	}
 

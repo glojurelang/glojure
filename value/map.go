@@ -150,7 +150,7 @@ func (m *Map) Equal(v2 interface{}) bool {
 		return true
 	}
 
-	if c, ok := v2.(Counter); ok {
+	if c, ok := v2.(Counted); ok {
 		if m.Count() != c.Count() {
 			return false
 		}

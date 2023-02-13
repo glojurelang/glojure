@@ -160,6 +160,8 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 		return value.NewRef, nil
 	case "glojure.lang.Named":
 		return reflect.TypeOf((*value.Named)(nil)).Elem(), nil
+	case "glojure.lang.Counted":
+		return reflect.TypeOf((*value.Counted)(nil)).Elem(), nil
 	case "glojure.lang.FindNamespace":
 		return value.FindNamespace, nil
 	case "glojure.lang.NewRepeat":

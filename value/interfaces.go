@@ -35,9 +35,9 @@ type (
 		WithMeta(meta IPersistentMap) interface{}
 	}
 
-	// Counter is an interface for compound values whose elements can be
+	// Counted is an interface for compound values whose elements can be
 	// counted.
-	Counter interface {
+	Counted interface {
 		Count() int
 	}
 
@@ -99,7 +99,7 @@ type (
 
 	IPersistentCollection interface {
 		ISeqable
-		Counter
+		Counted
 		// NB: we diverge from Clojure here, which has a cons method,
 		// which is used by the conj runtime method. I expect the cons
 		// methods are a relic of a previous implementation.
@@ -128,7 +128,7 @@ type (
 
 		//Iterable do we need this?
 		Associative
-		Counter
+		Counted
 
 		// AssocEx is like Assoc, but returns an error if the key already
 		// exists.
@@ -146,7 +146,7 @@ type (
 		IPersistentStack
 		Reversible
 		Indexed
-		Counter // Note: not in Clojure's vector interface, oddly
+		Counted // Note: not in Clojure's vector interface, oddly
 
 		Length() int
 
@@ -157,7 +157,7 @@ type (
 
 	IPersistentSet interface {
 		IPersistentCollection
-		Counter
+		Counted
 
 		Disjoin(interface{}) IPersistentSet
 		Contains(interface{}) bool
@@ -166,7 +166,7 @@ type (
 
 	ITransientSet interface {
 		IPersistentCollection
-		Counter
+		Counted
 
 		Disjoin(interface{}) ITransientSet
 		Contains(interface{}) bool
@@ -327,7 +327,7 @@ func Count(coll interface{}) int {
 		return 0
 	case string:
 		return len(arg)
-	case Counter:
+	case Counted:
 		return arg.Count()
 	}
 	seq, ok := Seq(coll).(ISeq)

@@ -19,7 +19,7 @@ var (
 	_ IObj            = (*List)(nil)
 	_ ISeq            = (*List)(nil)
 	_ IPersistentList = (*List)(nil)
-	_ Counter         = (*List)(nil)
+	_ Counted         = (*List)(nil)
 )
 
 type EmptyList struct {
@@ -30,7 +30,7 @@ var (
 	_ IObj            = (*EmptyList)(nil)
 	_ ISeq            = (*EmptyList)(nil)
 	_ IPersistentList = (*EmptyList)(nil)
-	_ Counter         = (*EmptyList)(nil)
+	_ Counted         = (*EmptyList)(nil)
 )
 
 func (e *EmptyList) Conj(x interface{}) Conjer {
@@ -242,7 +242,7 @@ func (l *List) Equal(v interface{}) bool {
 			return false
 		}
 	}
-	if counter, ok := v.(Counter); ok {
+	if counter, ok := v.(Counted); ok {
 		if l.Count() != counter.Count() {
 			return false
 		}

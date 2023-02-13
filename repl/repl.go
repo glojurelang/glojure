@@ -29,10 +29,10 @@ func Start(opts ...Option) {
 		o.env = runtime.NewEnvironment(runtime.WithStdout(o.stdout))
 	}
 	{ // switch to the namespace
-		_, err := o.env.Eval(value.NewList([]interface{}{
+		_, err := o.env.Eval(value.NewList(
 			value.NewSymbol("ns"),
 			value.NewSymbol(o.namespace),
-		}))
+		))
 		if err != nil {
 			panic(err)
 		}
