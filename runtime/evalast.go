@@ -15,12 +15,14 @@ import (
 
 var indent = 0
 
-const debug = false
+var (
+	Debug = false
+)
 
 func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 	n := x.(ast.Node)
 
-	if debug {
+	if Debug {
 		fmt.Println(strings.Repeat(" ", indent), "BEG EvalAST", get(n, kw("op")), value.ToString(get(n, kw("form"))))
 		indent += 2
 		defer func() {
@@ -262,12 +264,16 @@ func (env *environment) EvalASTMap(n ast.Node) (interface{}, error) {
 	vals := get(n, kw("vals"))
 	for i := 0; i < value.Count(keys); i++ {
 		key := value.Get(keys, i)
+		keyVal, err := env.EvalAST(key.(ast.Node))
+		if err != nil {
+			return nil, err
+		}
 		val := value.Get(vals, i)
 		valVal, err := env.EvalAST(val.(ast.Node))
 		if err != nil {
 			return nil, err
 		}
-		value.Assoc(res, key, valVal)
+		res = value.Assoc(res, keyVal, valVal).(value.IPersistentMap)
 	}
 
 	return res, nil
