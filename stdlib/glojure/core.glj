@@ -242,8 +242,8 @@
                               ^glojure.lang.Symbol tag (:tag m)]
                           (if (instance? glojure.lang.Symbol tag)
                             (if (glojure.lang.Equal (strings.Index (.Name tag) ".") -1)
-                              (if (glojure.lang.Equal nil (clojure.lang.Compiler$HostExpr/maybeSpecialTag tag))
-                                (let [c (clojure.lang.Compiler$HostExpr/maybeClass tag false)]
+                              (if (glojure.lang.Equal nil nil)
+                                (let [c nil]
                                   (if c
                                     (with-meta argvec (assoc m :tag (glojure.lang.NewSymbol (.Name c))))
                                     argvec))

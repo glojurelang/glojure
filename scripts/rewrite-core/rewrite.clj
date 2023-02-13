@@ -264,6 +264,10 @@
    (sexpr-replace '(when-class "java.sql.Timestamp" (load "instant")) '(do))
 
    (sexpr-replace '.indexOf 'strings.Index)
+
+   ;; TODO: special tags
+   (sexpr-replace '(clojure.lang.Compiler$HostExpr/maybeSpecialTag tag) nil)
+   (sexpr-replace '(clojure.lang.Compiler$HostExpr/maybeClass tag false) nil)
    ])
 
 (defn rewrite-core [zloc]
