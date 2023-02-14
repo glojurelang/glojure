@@ -231,13 +231,16 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Vals", value.Vals)
 		define("glojure.lang.GetDefault", value.GetDefault)
 		define("glojure.lang.ConcatStrings", value.ConcatStrings)
+		define("glojure.lang.IReduceInit", reflect.TypeOf((*value.IReduceInit)(nil)).Elem())
 		define("glojure.lang.IPersistentMap", reflect.TypeOf((*value.IPersistentMap)(nil)).Elem())
+		define("glojure.lang.IPersistentSet", reflect.TypeOf((*value.IPersistentSet)(nil)).Elem())
 		define("glojure.lang.IPersistentVector", reflect.TypeOf((*value.IPersistentVector)(nil)).Elem())
 		define("glojure.lang.IEditableCollection", reflect.TypeOf((*value.IEditableCollection)(nil)).Elem())
 		define("glojure.lang.IMeta", reflect.TypeOf((*value.IMeta)(nil)).Elem())
 		define("glojure.lang.IChunkedSeq", reflect.TypeOf((*value.IChunkedSeq)(nil)).Elem())
 		define("glojure.lang.ISeq", reflect.TypeOf((*value.ISeq)(nil)).Elem())
 		define("glojure.lang.MultiFn", reflect.TypeOf(&value.MultiFn{}))
+		define("glojure.lang.Namespace", reflect.TypeOf(&value.Namespace{}))
 	}
 	{
 		// Add stdlib

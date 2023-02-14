@@ -1519,7 +1519,7 @@
   {:added "1.0"
    :static true}
   ([set] set)
-  ([^clojure.lang.IPersistentSet set key]
+  ([^glojure.lang.IPersistentSet set key]
    (when set
      (. set (Disjoin key))))
   ([set key & ks]
@@ -3334,7 +3334,7 @@
   {:added "1.1"
    :static true}
   [^glojure.lang.IEditableCollection coll] 
-  (.asTransient coll))
+  (.AsTransient coll))
 
 (defn persistent! 
   "Returns a new, persistent version of the transient collection, in
@@ -3343,7 +3343,7 @@
   {:added "1.1"
    :static true}
   [^clojure.lang.ITransientCollection coll]
-  (.persistent coll))
+  (.Persistent coll))
 
 (defn conj!
   "Adds x to the transient collection, and return coll. The 'addition'
@@ -4090,7 +4090,7 @@
   "Returns true if x implements IPersistentSet"
   {:added "1.0"
    :static true}
-  [x] (instance? clojure.lang.IPersistentSet x))
+  [x] (instance? glojure.lang.IPersistentSet x))
 
 (defn set
   "Returns a set of the distinct elements of coll."
@@ -4099,8 +4099,8 @@
   [coll]
   (if (set? coll)
     (with-meta coll nil)
-    (if (instance? clojure.lang.IReduceInit coll)
-      (persistent! (.reduce ^clojure.lang.IReduceInit coll conj! (transient #{})))
+    (if (instance? glojure.lang.IReduceInit coll)
+      (persistent! (.reduce ^glojure.lang.IReduceInit coll conj! (transient #{})))
       (persistent! (reduce1 conj! (transient #{}) coll)))))
 
 (defn ^{:private true
@@ -4146,8 +4146,8 @@
   found."
   {:added "1.0"
    :static true}
-  ^clojure.lang.Namespace [x]
-  (if (instance? clojure.lang.Namespace x)
+  ^glojure.lang.Namespace [x]
+  (if (instance? glojure.lang.Namespace x)
     x
     (or (find-ns x) (throw (Exception. (str "No namespace: " x " found"))))))
 
@@ -4163,7 +4163,7 @@
   {:added "1.0"
    :static true}
   [ns]
-  (.getMappings (the-ns ns)))
+  (.Mappings (the-ns ns)))
 
 (defn ns-unmap
   "Removes the mappings for the symbol from the namespace."
@@ -4183,7 +4183,7 @@
   [ns]
   (let [ns (the-ns ns)]
     (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
-                                 (= ns (.ns v))
+                                 (= ns (.Namespace v))
                                  (.isPublic v)))
                 (ns-map ns))))
 
@@ -4201,7 +4201,7 @@
   [ns]
   (let [ns (the-ns ns)]
     (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
-                                 (= ns (.ns v))))
+                                 (= ns (.Namespace v))))
                 (ns-map ns))))
 
 (defn refer
@@ -4248,7 +4248,7 @@
   [ns]
   (let [ns (the-ns ns)]
     (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
-                                 (not= ns (.ns v))))
+                                 (not= ns (.Namespace v))))
                 (ns-map ns))))
 
 (defn alias
@@ -6862,8 +6862,8 @@ fails, attempts to require sym's namespace and retries."
        (.reduce ^clojure.lang.IReduce coll f)
        (clojure.core.protocols/coll-reduce coll f)))
   ([f val coll]
-     (if (instance? clojure.lang.IReduceInit coll)
-       (.reduce ^clojure.lang.IReduceInit coll f val)
+     (if (instance? glojure.lang.IReduceInit coll)
+       (.reduce ^glojure.lang.IReduceInit coll f val)
        (clojure.core.protocols/coll-reduce coll f val))))
 
 (do)
@@ -6903,8 +6903,8 @@ fails, attempts to require sym's namespace and retries."
   ([xform f coll] (transduce xform f (f) coll))
   ([xform f init coll]
      (let [f (xform f)
-           ret (if (instance? clojure.lang.IReduceInit coll)
-                 (.reduce ^clojure.lang.IReduceInit coll f init)
+           ret (if (instance? glojure.lang.IReduceInit coll)
+                 (.reduce ^glojure.lang.IReduceInit coll f init)
                  (clojure.core.protocols/coll-reduce coll f init))]
        (f ret))))
 

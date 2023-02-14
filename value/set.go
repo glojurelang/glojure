@@ -120,3 +120,20 @@ func (s *Set) Seq() ISeq {
 	}
 	return NewSliceIterator(s.vals)
 }
+
+func (s *Set) AsTransient() ITransientCollection {
+	// TODO: implement transients
+	return &TransientSet{Set: s}
+}
+
+type TransientSet struct {
+	*Set
+}
+
+func (s *TransientSet) Conj(v interface{}) ITransientCollection {
+	return &TransientSet{Set: s.Set.Conj(v).(*Set)}
+}
+
+func (s *TransientSet) Persistent() IPersistentCollection {
+	return s.Set
+}

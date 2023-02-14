@@ -80,10 +80,16 @@
    (sexpr-replace '.meta '.Meta)
    (sexpr-replace 'clojure.lang.IPersistentMap 'glojure.lang.IPersistentMap)
    (sexpr-replace 'clojure.lang.IPersistentVector 'glojure.lang.IPersistentVector)
+   (sexpr-replace 'clojure.lang.IPersistentSet 'glojure.lang.IPersistentSet)
    (sexpr-replace 'String 'string)
    (sexpr-replace 'clojure.lang.IMeta 'glojure.lang.IMeta)
+   (sexpr-replace 'clojure.lang.IReduceInit 'glojure.lang.IReduceInit)
+
    (sexpr-replace 'clojure.lang.RT/conj 'glojure.lang.Conj)
    (sexpr-replace 'withMeta 'WithMeta)
+
+   (sexpr-replace '.asTransient '.AsTransient)
+   (sexpr-replace '.persistent '.Persistent)
 
    ;; no need for a special name, as go doesn't have a
    ;; builtin "Equals"
@@ -275,6 +281,10 @@
    (sexpr-replace 'clojure.core/refer 'glojure.core/refer)
 
    (sexpr-replace 'clojure.lang.Var 'glojure.lang.Var)
+   (sexpr-replace 'clojure.lang.Namespace 'glojure.lang.Namespace)
+
+   (sexpr-replace '.getMappings '.Mappings)
+   (sexpr-replace '.ns '.Namespace)
 
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= 'pushThreadBindings (z/sexpr zloc))))
     (fn visit [zloc] (z/replace (-> zloc z/up z/up)

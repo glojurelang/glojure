@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"runtime/debug"
 	"strings"
 
 	"github.com/glojurelang/glojure/ast"
@@ -77,6 +78,8 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 		return env.EvalASTRecur(n)
 	case kw("new"):
 		return env.EvalASTNew(n)
+	case kw("try"):
+		return env.EvalASTTry(n)
 	default:
 		panic("unimplemented op: " + value.ToString(op) + "\n" + value.ToString(get(n, kw("form"))))
 	}
@@ -240,6 +243,9 @@ func (env *environment) EvalASTHostInterop(n ast.Node) (interface{}, error) {
 	}
 
 	mOrFVal := value.FieldOrMethod(tgtVal, mOrF.Name())
+	if mOrFVal == nil {
+		return nil, fmt.Errorf("no such field or method on %T: %s", tgtVal, mOrF)
+	}
 	switch reflect.TypeOf(mOrFVal).Kind() {
 	case reflect.Func:
 		return value.Apply(env, mOrFVal, nil)
@@ -417,9 +423,9 @@ func (env *environment) EvalASTInvoke(n ast.Node) (res interface{}, err error) {
 		}
 		if r := recover(); r != nil {
 			if rerr, ok := r.(error); ok {
-				err = rerr
+				err = fmt.Errorf("%w\nStack:\n%v", rerr, string(debug.Stack()))
 			} else {
-				err = fmt.Errorf("%v", r)
+				err = fmt.Errorf("%v\nStack:\n%v", r, string(debug.Stack()))
 			}
 		}
 
@@ -473,6 +479,10 @@ func (env *environment) EvalASTNew(n ast.Node) (interface{}, error) {
 		return nil, fmt.Errorf("new value must be a reflect.Type, got %T", classVal)
 	}
 	return reflect.New(classValTyp).Interface(), nil
+}
+
+func (env *environment) EvalASTTry(n ast.Node) (interface{}, error) {
+	return env.EvalAST(get(n, kw("body")))
 }
 
 func kw(s string) value.Keyword {

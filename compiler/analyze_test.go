@@ -61,7 +61,7 @@ const testForms = `
 
 [(set! (. Foo -X) 42) {:op :set!, :form (set! (. Foo -X) 42), :env {:ns user}, :target {:form (. Foo -X), :env {:ns user, :context :ctx/expr}, :target {:op :maybe-class, :class Foo, :env {:ns user, :context :ctx/expr}, :form Foo}, :op :host-field, :assignable? true, :field X, :children [:target]}, :val {:op :const, :form 42, :type :number, :val 42, :literal? true}, :children [:target :val]}]
 
-[(try 1) {:op :try}]
+[(try 1) {:op :try, :form (try 1), :env {:ns user, :context :ctx/expr, :top-level true, :in-try true}, :body {:op :do, :form (do 1), :env {:ns user, :context :ctx/expr, :top-level true, :in-try true}, :statements [], :ret {:op :const, :form 1, :type :number, :val 1, :literal? true}, :children [:statements :ret], :body? true}, :catches [], :finally nil, :children [:body :catches]}]
 
 
 [(letfn* [foo (fn* foo ([] 1))])
