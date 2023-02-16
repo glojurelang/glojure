@@ -135,17 +135,10 @@ func (env *environment) DefineMacro(name string, fn value.Applyer) {
 	vr.SetMacro()
 }
 
-func (env *environment) lookup(sym *value.Symbol) (interface{}, bool) {
+func (env *environment) lookup(sym *value.Symbol) (res interface{}, ok bool) {
 	v, ok := env.scope.lookup(sym)
 	if ok {
 		return v, true
-	}
-
-	{ // HACKHACK
-		// TODO: implement *ns* as a normal var
-		if sym.String() == "*ns*" {
-			return env.CurrentNamespace(), true
-		}
 	}
 
 	ns := env.CurrentNamespace()

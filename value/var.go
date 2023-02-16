@@ -26,7 +26,8 @@ type (
 )
 
 var (
-	KeywordMacro = NewKeyword("macro")
+	KeywordMacro   = NewKeyword("macro")
+	KeywordPrivate = NewKeyword("private")
 
 	_ IRef = (*Var)(nil)
 )
@@ -101,6 +102,22 @@ func (v *Var) IsMacro() bool {
 
 func (v *Var) SetMacro() {
 	v.SetMeta(v.Meta().Assoc(KeywordMacro, true).(IPersistentMap))
+}
+
+func (v *Var) IsPublic() bool {
+	meta := v.Meta()
+	isPrivate := meta.EntryAt(KeywordPrivate)
+	if isPrivate == nil {
+		return true
+	}
+	return !booleanCast(isPrivate.Val())
+}
+
+func booleanCast(x interface{}) bool {
+	if xb, ok := x.(bool); ok {
+		return xb
+	}
+	return x != nil
 }
 
 func (v *Var) Deref() interface{} {

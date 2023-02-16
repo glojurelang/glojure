@@ -2249,7 +2249,7 @@
   agent, allowing subsequent actions to occur."
   {:added "1.0"
    :deprecated "1.2"}
-  [^clojure.lang.Agent a] (restart-agent a (.deref a)))
+  [^clojure.lang.Agent a] (restart-agent a (.Deref a)))
 
 (defn shutdown-agents
   "Initiates a shutdown of the thread pools that back the agent
@@ -2316,12 +2316,12 @@
   value is available. See also - realized?."
   {:added "1.0"
    :static true}
-  ([ref] (if (instance? clojure.lang.IDeref ref)
-           (.deref ^clojure.lang.IDeref ref)
+  ([ref] (if (instance? glojure.lang.IDeref ref)
+           (.Deref ^glojure.lang.IDeref ref)
            (deref-future ref)))
   ([ref timeout-ms timeout-val]
      (if (instance? clojure.lang.IBlockingDeref ref)
-       (.deref ^clojure.lang.IBlockingDeref ref timeout-ms timeout-val)
+       (.Deref ^clojure.lang.IBlockingDeref ref timeout-ms timeout-val)
        (deref-future ref timeout-ms timeout-val))))
 
 (defn atom
@@ -2438,7 +2438,7 @@
    :static true}
 
   [^glojure.lang.Ref ref fun & args]
-    (. ref (commute fun args)))
+    (. ref (Commute fun args)))
 
 (defn alter
   "Must be called in a transaction. Sets the in-transaction-value of
@@ -2505,8 +2505,8 @@
   once, but any effects on Refs will be atomic."
   {:added "1.0"}
   [flags-ignored-for-now & body]
-  `(. clojure.lang.LockingTransaction
-      (runInTransaction (fn [] ~@body))))
+  `(. glojure.lang.LockingTransaction
+      (RunInTransaction (fn [] ~@body))))
 
 
 (defmacro io!
@@ -2543,7 +2543,7 @@
   {:added "1.7"}
   [vol f & args]
   (let [v (with-meta vol {:tag 'clojure.lang.Volatile})]
-    `(.reset ~v (~f (.deref ~v) ~@args))))
+    `(.reset ~v (~f (.Deref ~v) ~@args))))
 
 (defn volatile?
   "Returns true if x is a volatile."
@@ -4184,7 +4184,7 @@
   (let [ns (the-ns ns)]
     (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
                                  (= ns (.Namespace v))
-                                 (.isPublic v)))
+                                 (.IsPublic v)))
                 (ns-map ns))))
 
 (defn ns-imports
@@ -4229,7 +4229,7 @@
           to-do (if (= :all (:refer fs))
                   (keys nspublics)
                   (or (:refer fs) (:only fs) (keys nspublics)))]
-      (when (and to-do (not (instance? clojure.lang.Sequential to-do)))
+      (when (and to-do (not (instance? glojure.lang.Sequential to-do)))
         (throw (new Exception ":only/:refer value must be a sequential collection of symbols")))
       (doseq [sym to-do]
         (when-not (exclude sym)
@@ -4239,7 +4239,7 @@
                           (if (get (ns-interns ns) sym)
                             (str sym " is not public")
                             (str sym " does not exist")))))
-            (. *ns* (refer (or (rename sym) sym) v)))))))
+            (. *ns* (Refer (or (rename sym) sym) v)))))))
 
 (defn ns-refers
   "Returns a map of the refer mappings for the namespace."
@@ -5828,7 +5828,7 @@
         ~@(when (and (not= name 'glojure.core) (not-any? #(= :refer-clojure (first %)) references))
             `((glojure.core/refer '~'glojure.core)))
         ~@(map process-reference references))
-        (if (.equals '~name 'glojure.core) 
+        (if (.Equal '~name 'glojure.core) 
           nil
           (do (dosync (commute @#'*loaded-libs* conj '~name)) nil)))))
 
@@ -5876,8 +5876,8 @@
       (.setStackTrace exception trace)
       (throw (clojure.lang.Compiler$CompilerException.
               *file*
-              (.deref clojure.lang.Compiler/LINE)
-              (.deref clojure.lang.Compiler/COLUMN)
+              (.Deref clojure.lang.Compiler/LINE)
+              (.Deref clojure.lang.Compiler/COLUMN)
               exception)))))
 
 (defn- libspec?
@@ -6267,7 +6267,7 @@ fails, attempts to require sym's namespace and retries."
  "Returns true if coll implements Sequential"
  {:added "1.0"
   :static true}
-  [coll] (instance? clojure.lang.Sequential coll))
+  [coll] (instance? glojure.lang.Sequential coll))
 
 (defn sorted?
  "Returns true if coll implements Sorted"
@@ -7000,7 +7000,7 @@ fails, attempts to require sym's namespace and retries."
   (let [f (binding-conveyor-fn f)
         fut (.submit clojure.lang.Agent/soloExecutor ^Callable f)]
     (reify 
-     clojure.lang.IDeref 
+     glojure.lang.IDeref 
      (deref [_] (deref-future fut))
      clojure.lang.IBlockingDeref
      (deref
@@ -7098,7 +7098,7 @@ fails, attempts to require sym's namespace and retries."
   (let [d (java.util.concurrent.CountDownLatch. 1)
         v (atom d)]
     (reify 
-     clojure.lang.IDeref
+     glojure.lang.IDeref
        (deref [_] (.await d) @v)
      clojure.lang.IBlockingDeref
        (deref

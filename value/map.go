@@ -186,6 +186,15 @@ func (m *Map) WithMeta(meta IPersistentMap) interface{} {
 	return &cpy
 }
 
+func (m *Map) Apply(env Environment, args []interface{}) (interface{}, error) {
+	if len(args) != 1 {
+		return nil, fmt.Errorf("map apply expects 1 argument, got %d", len(args))
+	}
+
+	v, _ := m.ValueAt(args[0])
+	return v, nil
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Map ISeqs
 

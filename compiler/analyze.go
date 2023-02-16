@@ -14,6 +14,9 @@ var (
 	ctxExpr      = kw("ctx/expr")
 	ctxReturn    = kw("ctx/return")
 	ctxStatement = kw("ctx/statement")
+
+	symCatch   = value.NewSymbol("catch")
+	symFinally = value.NewSymbol("finally")
 )
 
 type (
@@ -642,10 +645,10 @@ func (a *Analyzer) parseSetBang(form interface{}, env Env) (ast.Node, error) {
 //	                            (when fblock [:finally]))}))))
 func (a *Analyzer) parseTry(form interface{}, env Env) (ast.Node, error) {
 	catch := func(form interface{}) bool {
-		return value.IsSeq(form) && value.First(form) == kw("catch")
+		return value.IsSeq(form) && value.Equal(symCatch, value.First(form))
 	}
 	finally := func(form interface{}) bool {
-		return value.IsSeq(form) && value.First(form) == kw("finally")
+		return value.IsSeq(form) && value.Equal(symFinally, value.First(form))
 	}
 	body, tail := splitWith(func(form interface{}) bool {
 		return !catch(form) && !finally(form)
@@ -675,7 +678,8 @@ func (a *Analyzer) parseTry(form interface{}, env Env) (ast.Node, error) {
 	}
 	var fblockExpr interface{}
 	if value.Count(fblocks) > 0 {
-		fblockExpr, err = a.analyzeBody(value.Rest(value.First(fblocks)), ctxEnv(env, ctxStatement))
+		fblock := value.First(fblocks)
+		fblockExpr, err = a.analyzeBody(value.Rest(fblock), ctxEnv(env, ctxStatement))
 		if err != nil {
 			return nil, err
 		}
@@ -694,8 +698,57 @@ func (a *Analyzer) parseTry(form interface{}, env Env) (ast.Node, error) {
 		)), nil
 }
 
+// (defn parse-catch
+//
+//	[[_ etype ename & body :as form] env]
+//	(when-not (valid-binding-symbol? ename)
+//	  (throw (ex-info (str "Bad binding form: " ename)
+//	                  (merge {:sym ename
+//	                          :form form}
+//	                         (-source-info form env)))))
+//	(let [env (dissoc env :in-try)
+//	      local {:op    :binding
+//	             :env   env
+//	             :form  ename
+//	             :name  ename
+//	             :local :catch}]
+//	  {:op          :catch
+//	   :class       (analyze-form etype (assoc env :locals {}))
+//	   :local       local
+//	   :env         env
+//	   :form        form
+//	   :body        (analyze-body body (assoc-in env [:locals ename] (dissoc-env local)))
+//	   :children    [:class :local :body]}))
 func (a *Analyzer) parseCatch(form interface{}, env Env) (ast.Node, error) {
-	panic("not implemented")
+	etype := value.First(value.Rest(form))
+	ename := value.First(value.Rest(value.Rest(form)))
+	if !isValidBindingSymbol(ename) {
+		return nil, exInfo("bad binding form: "+value.ToString(ename), nil)
+	}
+	env = value.Dissoc(env, kw("in-try")).(Env)
+	local := ast.MakeNode(kw("binding"), ename)
+	local = merge(local,
+		value.NewMap(
+			kw("env"), env,
+			kw("name"), ename,
+			kw("local"), kw("catch"),
+		))
+	body, err := a.analyzeBody(value.Rest(value.Rest(value.Rest(form))), env.Assoc(kw("locals"), value.NewMap()).(Env))
+	if err != nil {
+		return nil, err
+	}
+	class, err := a.analyzeForm(etype, env.Assoc(kw("locals"), value.NewMap()).(Env))
+	if err != nil {
+		return nil, err
+	}
+	return merge(ast.MakeNode(kw("catch"), form),
+		value.NewMap(
+			kw("env"), env,
+			kw("class"), class,
+			kw("local"), local,
+			kw("body"), body,
+			kw("children"), vec(kw("class"), kw("local"), kw("body")),
+		)), nil
 }
 
 // (defn parse-throw
@@ -1184,6 +1237,7 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (ast.Node, error) {
 		e = assocIn(env, vec(kw("locals"), n), dissocEnv(nameExpr)).(Env)
 		e = value.Assoc(e, kw("local"), nameExpr).(Env)
 	}
+
 	once := false
 	if fnSym != nil {
 		if o, ok := value.Get(fnSym.Meta(), kw("once")).(bool); ok && o {
@@ -1377,7 +1431,10 @@ func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (ast.Node, error) 
 	loopID := a.Gensym("loop_")
 	var bodyEnv Env
 	{
-		localsMap := value.NewMap()
+		var localsMap value.IPersistentMap = value.NewMap()
+		if locals, ok := value.Get(env, kw("locals")).(value.IPersistentMap); ok {
+			localsMap = locals
+		}
 		for i := 0; i < paramsNames.Count(); i++ {
 			localsMap = localsMap.Assoc(value.MustNth(paramsNames, i), dissocEnv(value.MustNth(paramsExpr, i).(value.IPersistentMap))).(value.IPersistentMap)
 		}

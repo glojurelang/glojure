@@ -239,8 +239,13 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.IMeta", reflect.TypeOf((*value.IMeta)(nil)).Elem())
 		define("glojure.lang.IChunkedSeq", reflect.TypeOf((*value.IChunkedSeq)(nil)).Elem())
 		define("glojure.lang.ISeq", reflect.TypeOf((*value.ISeq)(nil)).Elem())
+		define("glojure.lang.IDeref", reflect.TypeOf((*value.IDeref)(nil)).Elem())
+		define("glojure.lang.Sequential", reflect.TypeOf((*value.Sequential)(nil)).Elem())
+
 		define("glojure.lang.MultiFn", reflect.TypeOf(&value.MultiFn{}))
 		define("glojure.lang.Namespace", reflect.TypeOf(&value.Namespace{}))
+
+		define("glojure.lang.LockingTransaction", value.LockingTransaction)
 	}
 	{
 		// Add stdlib

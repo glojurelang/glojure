@@ -85,6 +85,8 @@
    (sexpr-replace 'clojure.lang.IMeta 'glojure.lang.IMeta)
    (sexpr-replace 'clojure.lang.IReduceInit 'glojure.lang.IReduceInit)
 
+   (sexpr-replace '.equals '.Equal)
+
    (sexpr-replace 'clojure.lang.RT/conj 'glojure.lang.Conj)
    (sexpr-replace 'withMeta 'WithMeta)
 
@@ -240,10 +242,17 @@
    (sexpr-replace '.alterMeta '.AlterMeta)
 
    (sexpr-replace 'clojure.lang.Ref 'glojure.lang.Ref)
+   (sexpr-replace 'clojure.lang.IDeref 'glojure.lang.IDeref)
+
    (sexpr-replace '(new clojure.lang.Ref x) '(glojure.lang.NewRef x))
+   (sexpr-replace 'clojure.lang.LockingTransaction 'glojure.lang.LockingTransaction)
+   (sexpr-replace 'runInTransaction 'RunInTransaction)
 
    (sexpr-replace '(. e (getKey)) '(. e (GetKey)))
    (sexpr-replace '(. e (getValue)) '(. e (GetValue)))
+
+   (sexpr-replace '.deref '.Deref)
+   (sexpr-replace '(. ref (commute fun args)) '(. ref (Commute fun args)))
 
    (sexpr-replace 'clojure.lang.Named 'glojure.lang.Named)
 
@@ -283,8 +292,14 @@
    (sexpr-replace 'clojure.lang.Var 'glojure.lang.Var)
    (sexpr-replace 'clojure.lang.Namespace 'glojure.lang.Namespace)
 
+   (sexpr-replace 'clojure.lang.Sequential 'glojure.lang.Sequential)
+
+   (sexpr-replace '(. *ns* (refer (or (rename sym) sym) v))
+                  '(. *ns* (Refer (or (rename sym) sym) v)))
+
    (sexpr-replace '.getMappings '.Mappings)
    (sexpr-replace '.ns '.Namespace)
+   (sexpr-replace '.isPublic '.IsPublic)
 
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= 'pushThreadBindings (z/sexpr zloc))))
     (fn visit [zloc] (z/replace (-> zloc z/up z/up)

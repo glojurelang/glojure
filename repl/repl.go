@@ -40,10 +40,8 @@ func Start(opts ...Option) {
 
 	defaultPrompt := func() string {
 		curNS := "?"
-		ns, err := o.env.Eval(value.NewSymbol("*ns*"))
-		if err == nil {
-			curNS = ns.(*value.Namespace).Name().String()
-		}
+		ns := o.env.CurrentNamespace()
+		curNS = ns.Name().String()
 		return curNS + "=> "
 	}
 

@@ -459,7 +459,7 @@ func (env *environment) EvalASTVar(n ast.Node) (interface{}, error) {
 
 func (env *environment) EvalASTLocal(n ast.Node) (interface{}, error) {
 	sym := get(n, kw("name")).(*value.Symbol)
-	v, ok := env.scope.lookup(sym)
+	v, ok := env.lookup(sym)
 	if !ok {
 		return nil, env.errorf(get(n, kw("form")), "unable to resolve symbol: %s", sym)
 	}
@@ -481,7 +481,15 @@ func (env *environment) EvalASTNew(n ast.Node) (interface{}, error) {
 	return reflect.New(classValTyp).Interface(), nil
 }
 
-func (env *environment) EvalASTTry(n ast.Node) (interface{}, error) {
+func (env *environment) EvalASTTry(n ast.Node) (res interface{}, err error) {
+	if finally := get(n, kw("finally")); finally != nil {
+		defer func() {
+			_, ferr := env.EvalAST(finally.(ast.Node))
+			if ferr != nil {
+				err = ferr
+			}
+		}()
+	}
 	return env.EvalAST(get(n, kw("body")))
 }
 
