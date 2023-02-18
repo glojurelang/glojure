@@ -728,7 +728,27 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 			// special class-like go value
 			// TODO: is this a good syntax?
 		case r.symbolResolver != nil:
-			panic("unimplemented")
+			var nsym *value.Symbol
+			if sym.Namespace() != "" {
+				alias := value.InternSymbol(nil, sym.Namespace())
+				nsym = r.symbolResolver.ResolveStruct(alias)
+				if nsym == nil {
+					nsym = r.symbolResolver.ResolveAlias(alias)
+				}
+			}
+			if nsym != nil {
+				sym = value.InternSymbol(nsym.Name(), sym.Name())
+			} else if sym.Namespace() == "" {
+				rsym := r.symbolResolver.ResolveStruct(sym)
+				if rsym == nil {
+					rsym = r.symbolResolver.ResolveVar(sym)
+				}
+				if rsym != nil {
+					sym = rsym
+				} else {
+					sym = value.InternSymbol(r.symbolResolver.CurrentNS().Name(), sym.Name())
+				}
+			}
 		case sym.Namespace() == "":
 			// HACK: handle well-known host forms
 			// TODO: use a resolver to handle this
