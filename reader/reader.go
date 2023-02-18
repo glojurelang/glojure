@@ -486,19 +486,23 @@ func (r *Reader) readSet() (interface{}, error) {
 
 func (r *Reader) readString() (interface{}, error) {
 	var str string
-	sawSlash := false
 	for {
 		rune, _, err := r.rs.ReadRune()
 		if err != nil {
+			fmt.Println("string so far", str)
 			return nil, r.error("error reading string: %w", err)
 		}
 
 		if rune == '\\' {
-			sawSlash = true
-		} else if rune == '"' && !sawSlash {
+			str += string(rune)
+			rune, _, err = r.rs.ReadRune()
+			if err != nil {
+				return nil, r.error("error reading string: %w", err)
+			}
+			str += string(rune)
+			continue
+		} else if rune == '"' {
 			break
-		} else {
-			sawSlash = false
 		}
 
 		if rune == '\n' {
