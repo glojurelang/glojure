@@ -157,6 +157,7 @@
    (sexpr-replace 'getName 'Name)
    (sexpr-replace 'getNamespace 'Namespace)
    (sexpr-replace '.hasRoot '.HasRoot)
+   (sexpr-replace '.resetMeta '.ResetMeta)
 
 
    ;; Multi-methods

@@ -2046,7 +2046,7 @@
   setup-reference [^clojure.lang.ARef r options]
   (let [opts (apply hash-map options)]
     (when (:meta opts)
-      (.resetMeta r (:meta opts)))
+      (.ResetMeta r (:meta opts)))
     (when (:validator opts)
       (.setValidator r (:validator opts)))
     r))
@@ -2417,7 +2417,7 @@
   "Atomically resets the metadata for a namespace/var/ref/agent/atom"
   {:added "1.0"
    :static true}
- [^clojure.lang.IReference iref metadata-map] (.resetMeta iref metadata-map))
+ [^clojure.lang.IReference iref metadata-map] (.ResetMeta iref metadata-map))
 
 (defn commute
   "Must be called in a transaction. Sets the in-transaction-value of
@@ -5822,7 +5822,7 @@
     `(do
        (glojure.core/in-ns '~name)
        ~@(when name-metadata
-           `((.resetMeta (glojure.lang.FindNamespace '~name) ~name-metadata)))
+           `((.ResetMeta (glojure.lang.FindNamespace '~name) ~name-metadata)))
        (with-loading-context
         ~@(when gen-class-call (list gen-class-call))
         ~@(when (and (not= name 'glojure.core) (not-any? #(= :refer-clojure (first %)) references))
