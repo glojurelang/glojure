@@ -5800,7 +5800,7 @@
   [name & references]
   (let [process-reference
         (fn [[kname & args]]
-          `(~(symbol "clojure.core" (clojure.core/name kname))
+          `(~(symbol "glojure.core" (glojure.core/name kname))
              ~@(map #(list 'quote %) args)))
         docstring  (when (string? (first references)) (first references))
         references (if docstring (next references) references)

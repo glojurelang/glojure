@@ -120,5 +120,5 @@ func ToString(v interface{}, opts ...PrintOption) string {
 		return builder.String()
 	}
 
-	return fmt.Sprintf("%T", v)
+	return fmt.Sprintf("#object[%T]", v)
 }

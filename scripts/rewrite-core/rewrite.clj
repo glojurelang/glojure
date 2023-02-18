@@ -178,6 +178,9 @@
    (sexpr-replace 'clojure.lang.IEditableCollection 'glojure.lang.IEditableCollection)
    (sexpr-replace 'clojure.core/import* 'glojure.lang.Import)
 
+   (sexpr-replace "clojure.core" "glojure.core")
+   (sexpr-replace 'clojure.core/name 'glojure.core/name)
+
    ;; number checksclasses
    (sexpr-replace '(defn integer?
                      "Returns true if n is an integer"
