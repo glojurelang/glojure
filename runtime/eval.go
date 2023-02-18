@@ -55,17 +55,20 @@ func (env *environment) applyMacro1(fn value.Applyer, form value.ISeq) (interfac
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
-	currentNSSym := env.CurrentNamespace().Name()
 	kw := value.NewKeyword
 
 	globalEnv := value.NewAtom(nil)
 	resetGlobalEnv := func() {
-		globalEnv.Reset(value.NewMap(
-			kw("namespaces"), value.NewMap(
-				value.NewSymbol(currentNSSym.Name()), value.NewMap(
-					kw("ns"), currentNSSym,
-					kw("mappings"), env.CurrentNamespace().Mappings(),
-				))))
+		kwNS := kw("ns")
+		kwMappings := kw("mappings")
+		namespaceKVs := make([]interface{}, 0, len(env.namespaces))
+		for _, ns := range env.namespaces {
+			namespaceKVs = append(namespaceKVs, ns.Name(), value.NewMap(
+				kwNS, ns.Name(),
+				kwMappings, ns.Mappings(),
+			))
+		}
+		globalEnv.Reset(value.NewMap(kw("namespaces"), value.NewMap(namespaceKVs...)))
 	}
 	resetGlobalEnv()
 
