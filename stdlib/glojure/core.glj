@@ -434,7 +434,7 @@
 ;;;;;;;;;;;;;;;;;;;;
 (defn nil?
   "Returns true if x is nil, false otherwise."
-  {:tag Boolean
+  {:tag bool
    :added "1.0"
    :static true
    :inline (fn [x] (list 'glojure.lang.Identical x nil))}
@@ -503,14 +503,14 @@
 
 (defn false?
   "Returns true if x is the value false, false otherwise."
-  {:tag Boolean,
+  {:tag bool,
    :added "1.0"
    :static true}
   [x] (glojure.lang.Identical x false))
 
 (defn true?
   "Returns true if x is the value true, false otherwise."
-  {:tag Boolean,
+  {:tag bool,
    :added "1.0"
    :static true}
   [x] (glojure.lang.Identical x true))
@@ -518,25 +518,25 @@
 (defn boolean?
   "Return true if x is a Boolean"
   {:added "1.9"}
-  [x] (instance? Boolean x))
+  [x] (instance? bool x))
 
 (defn not
   "Returns true if x is logical false, false otherwise."
-  {:tag Boolean
+  {:tag bool
    :added "1.0"
    :static true}
   [x] (if x false true))
 
 (defn some?
   "Returns true if x is not nil, false otherwise."
-  {:tag Boolean
+  {:tag bool
    :added "1.6"
    :static true}
   [x] (not (nil? x)))
 
 (defn any?
   "Returns true given any argument."
-  {:tag Boolean
+  {:tag bool
    :added "1.9"}
   [x] true)
 
@@ -813,7 +813,7 @@
 
 (defn not=
   "Same as (not (= obj1 obj2))"
-  {:tag Boolean
+  {:tag bool
    :added "1.0"
    :static true}
   ([x] false)
@@ -1423,7 +1423,7 @@
 (defn double?
   "Return true if x is a Double"
   {:added "1.9"}
-  [x] (instance? Double x))
+  [x] (instance? float64 x))
 
 ;;
 
@@ -1784,7 +1784,7 @@
   "Creates and installs a new method of multimethod associated with dispatch-value. "
   {:added "1.0"}
   [multifn dispatch-val & fn-tail]
-  `(. ~(with-meta multifn {:tag 'glojure.lang.MultiFn}) addMethod ~dispatch-val (fn ~@fn-tail)))
+  `(. ~(with-meta multifn {:tag 'glojure.lang.MultiFn}) AddMethod ~dispatch-val (fn ~@fn-tail)))
 
 (defn remove-all-methods
   "Removes all of the methods of multimethod."
@@ -1806,7 +1806,7 @@
   {:added "1.0"
    :static true}
   [^glojure.lang.MultiFn multifn dispatch-val-x dispatch-val-y]
-  (. multifn preferMethod dispatch-val-x dispatch-val-y))
+  (. multifn PreferMethod dispatch-val-x dispatch-val-y))
 
 (defn methods
   "Given a multimethod, returns a map of dispatch values -> dispatch fns"
@@ -2672,7 +2672,7 @@
 (defn every?
   "Returns true if (pred x) is logical true for every x in coll, else
   false."
-  {:tag Boolean
+  {:tag bool
    :added "1.0"
    :static true}
   [pred coll]
@@ -2682,7 +2682,7 @@
    :else false))
 
 (def
- ^{:tag Boolean
+ ^{:tag bool
    :doc "Returns false if (pred x) is logical true for every x in
   coll, else true."
    :arglists '([pred coll])
@@ -2701,7 +2701,7 @@
       (or (pred (first s)) (recur pred (next s)))))
 
 (def
- ^{:tag Boolean
+ ^{:tag bool
    :doc "Returns false if (pred x) is logical true for any x in coll,
   else true."
    :arglists '([pred coll])
@@ -3483,7 +3483,7 @@
   "Coerce to double"
   {:inline (fn  [x] `(. glojure.lang.RT (DoubleCast ~x)))
    :added "1.0"}
-  [^Number x] (clojure.lang.RT/doubleCast x))
+  [^Number x] (glojure.lang.AsInt64 x))
 
 (defn short
   "Coerce to short"
@@ -3596,8 +3596,8 @@
   {:added "1.0"
    :static true}
   [n]
-  (or (instance? Double n)
-      (instance? Float n)))
+  (or (instance? float64 n)
+      (instance? float32 n)))
 
 (defn rational? 
   "Returns true if n is a rational number"
@@ -3876,9 +3876,9 @@
  expr."
   {:added "1.0"}
   [expr]
-  `(let [start# (. System (nanoTime))
+  `(let [start# (.UnixNano (time.Now))
          ret# ~expr]
-     (prn (str "Elapsed time: " (/ (double (- (. System (nanoTime)) start#)) 1000000.0) " msecs"))
+     (prn (str "Elapsed time: " (/ (double (- (.UnixNano (time.Now)) start#)) 1000000.0) " msecs"))
      ret#))
 
 
@@ -5257,8 +5257,8 @@
   {:added "1.0"
    :static true}
   [coll]
-  (when (instance? clojure.lang.IPersistentCollection coll)
-    (.empty ^clojure.lang.IPersistentCollection coll)))
+  (when (instance? glojure.lang.IPersistentCollection coll)
+    (.empty ^glojure.lang.IPersistentCollection coll)))
 
 (defmacro amap
   "Maps an expression across an array a, using an index named idx, and
@@ -5698,7 +5698,7 @@
 
 (defn distinct?
   "Returns true if no two of the arguments are ="
-  {:tag Boolean
+  {:tag bool
    :added "1.0"
    :static true}
   ([x] true)
@@ -6230,13 +6230,13 @@ fails, attempts to require sym's namespace and retries."
   "Returns true if x implements IPersistentCollection"
   {:added "1.0"
    :static true}
-  [x] (instance? clojure.lang.IPersistentCollection x))
+  [x] (instance? glojure.lang.IPersistentCollection x))
 
 (defn list?
   "Returns true if x implements IPersistentList"
   {:added "1.0"
    :static true}
-  [x] (instance? clojure.lang.IPersistentList x))
+  [x] (instance? glojure.lang.IPersistentList x))
 
 (defn seqable?
   "Return true if the seq function is supported for x"
@@ -6254,7 +6254,7 @@ fails, attempts to require sym's namespace and retries."
   "Returns true if x implements Fn, i.e. is an object created via fn."
   {:added "1.0"
    :static true}
-  [x] (instance? clojure.lang.Fn x))
+  [x] (instance? glojure.lang.Fn x))
 
 
 (defn associative?

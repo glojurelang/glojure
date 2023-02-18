@@ -58,6 +58,10 @@ func (n *BigDecimal) SubP(other *BigDecimal) *BigDecimal {
 	return n.Sub(other)
 }
 
+func (n *BigDecimal) Divide(other *BigDecimal) *BigDecimal {
+	return &BigDecimal{val: new(big.Float).Quo(n.val, other.val)}
+}
+
 func (n *BigDecimal) Cmp(other *BigDecimal) int {
 	return n.val.Cmp(other.val)
 }

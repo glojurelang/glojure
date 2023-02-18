@@ -77,6 +77,13 @@ func (v *Var) Get() interface{} {
 	return box.val
 }
 
+func (v *Var) Set(val interface{}) interface{} {
+	// TODO: validate
+	// TODO: thread-local bindings
+	v.BindRoot(val)
+	return val
+}
+
 func (v *Var) Meta() IPersistentMap {
 	return v.meta.Load().(IPersistentMap)
 }

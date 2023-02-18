@@ -2,7 +2,7 @@
   (:require [rewrite-clj.zip :as z]
             [clojure.string :as s]))
 
-(def zloc (z/of-string (slurp "./core.clj")))
+(def zloc (z/of-string (slurp (first *command-line-args*))))
 
 ;; remove until we're at the end of all forms
 (defn skip-n [zloc n]
@@ -32,7 +32,7 @@
 (defn omit-symbols [syms]
   [(fn select [zloc] (and (z/list? zloc)
                           (let [sexp (z/sexpr zloc)]
-                            (contains? #{'defn 'defn- 'defmacro 'defmacro- 'defprotocol 'extend-protocol}
+                            (contains? #{'defn 'defn- 'defmacro 'defmacro- 'defprotocol 'extend-protocol 'defmethod}
                                        (first sexp))
                             (contains? syms (second sexp)))))
    (fn visit [zloc] (z/replace zloc '(do)))])
@@ -47,6 +47,10 @@
    (sexpr-replace '(. clojure.lang.PersistentList creator) 'glojure.lang.NewList)
    (sexpr-replace '(setMacro) '(SetMacro))
    (sexpr-replace 'clojure.lang.Symbol 'glojure.lang.Symbol)
+   (sexpr-replace 'clojure.lang.Fn 'glojure.lang.Fn)
+   (sexpr-replace 'clojure.lang.IPersistentCollection 'glojure.lang.IPersistentCollection)
+   (sexpr-replace 'clojure.lang.IPersistentList 'glojure.lang.IPersistentList)
+
    ;; instance? replacements
    (sexpr-replace "Evaluates x and tests if it is an instance of the class\n    c. Returns true or false"
                   "Evaluates x and tests if it is an instance of the type\n    t. Returns true or false")
@@ -160,6 +164,7 @@
    (sexpr-replace '.resetMeta '.ResetMeta)
 
 
+   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    ;; Multi-methods
    [(fn select [zloc] (and (z/list? zloc)
                            (let [sexpr (z/sexpr zloc)]
@@ -172,11 +177,20 @@
                          z/right
                          z/remove))]
    (sexpr-replace 'clojure.lang.MultiFn 'glojure.lang.MultiFn)
+   (sexpr-replace 'addMethod 'AddMethod)
+   (sexpr-replace 'preferMethod 'PreferMethod)
+   
+
+   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
    (sexpr-replace '(System/getProperty "line.separator") '"\\n")
    (sexpr-replace 'clojure.lang.ISeq 'glojure.lang.ISeq)
    (sexpr-replace 'clojure.lang.IEditableCollection 'glojure.lang.IEditableCollection)
    (sexpr-replace 'clojure.core/import* 'glojure.lang.Import)
+
+   (sexpr-replace '(. System (nanoTime)) '(.UnixNano (time.Now)))
+
+   (sexpr-replace 'clojure.lang.RT/doubleCast 'glojure.lang.AsInt64)
 
    (sexpr-replace "clojure.core" "glojure.core")
    (sexpr-replace 'clojure.core/name 'glojure.core/name)
@@ -321,6 +335,27 @@
    (omitp #(and (z/list? %) (= '*clojure-version* (second (z/sexpr %)))))
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= 'version-string (z/sexpr zloc))))
     (fn visit [zloc] (z/replace (-> zloc z/up z/up) '(do)))]
+
+
+   ;;; core_print.clj
+
+   (sexpr-replace 'Double 'float64)
+   (sexpr-replace 'Float 'float32)
+   (sexpr-replace 'Boolean 'bool)
+
+   (sexpr-replace '(prefer-method print-dup java.util.Map clojure.lang.Fn) '(do))
+   (sexpr-replace '(prefer-method print-dup java.util.Collection clojure.lang.Fn) '(do))
+   (sexpr-replace '(prefer-method print-method clojure.lang.ISeq java.util.Collection) '(do))
+   (sexpr-replace '(prefer-method print-dup clojure.lang.ISeq java.util.Collection) '(do))
+   (sexpr-replace '(prefer-method print-dup clojure.lang.IPersistentCollection java.util.Collection) '(do))
+
+   ;; Omit some methods
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [sexpr (z/sexpr zloc)]
+                             (and (= 'defmethod (first sexpr))
+                                  (contains? #{'print-method 'print-dup} (second sexpr))
+                                  (contains? #{'Object 'Number 'java.util.Collection} (nth sexpr 2))))))
+    (fn visit [zloc] (z/replace zloc '(do)))]
 
    ])
 

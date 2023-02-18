@@ -38,6 +38,8 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 		return get(n, kw("val")), nil
 	case kw("def"):
 		return env.EvalASTDef(n)
+	case kw("set!"):
+		return env.EvalASTAssign(n)
 	case kw("maybe-class"):
 		return env.EvalASTMaybeClass(n)
 	case kw("with-meta"):
@@ -97,6 +99,20 @@ func (env *environment) EvalASTDef(n ast.Node) (interface{}, error) {
 	}
 
 	return env.DefVar(get(n, kw("name")).(*value.Symbol), initVal), nil
+}
+
+func (env *environment) EvalASTAssign(n ast.Node) (interface{}, error) {
+	val, err := env.EvalAST(get(n, kw("val")).(ast.Node))
+	if err != nil {
+		return nil, err
+	}
+	if get(get(n, kw("target")), kw("op")) == kw("var") {
+		target := get(get(n, kw("target")), kw("var")).(*value.Var)
+		return target.Set(val), nil
+	}
+
+	fmt.Println("EvalASTAssign: ", n)
+	return nil, fmt.Errorf("unsupported assign target: %v", get(n, kw("target")))
 }
 
 func (env *environment) EvalASTTheVar(n ast.Node) (interface{}, error) {

@@ -186,6 +186,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	{ // core functions
 		define("glojure.lang.NewList", value.NewList)
 		define("glojure.lang.Symbol", reflect.TypeOf(value.NewSymbol("")))
+		define("glojure.lang.Fn", reflect.TypeOf(&value.Fn{}))
 		define("glojure.lang.HasType", func(t reflect.Type, v interface{}) bool {
 			if v == nil {
 				return false
@@ -235,7 +236,9 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.IReduceInit", reflect.TypeOf((*value.IReduceInit)(nil)).Elem())
 		define("glojure.lang.IPersistentMap", reflect.TypeOf((*value.IPersistentMap)(nil)).Elem())
 		define("glojure.lang.IPersistentSet", reflect.TypeOf((*value.IPersistentSet)(nil)).Elem())
+		define("glojure.lang.IPersistentList", reflect.TypeOf((*value.IPersistentList)(nil)).Elem())
 		define("glojure.lang.IPersistentVector", reflect.TypeOf((*value.IPersistentVector)(nil)).Elem())
+		define("glojure.lang.IPersistentCollection", reflect.TypeOf((*value.IPersistentCollection)(nil)).Elem())
 		define("glojure.lang.IEditableCollection", reflect.TypeOf((*value.IEditableCollection)(nil)).Elem())
 		define("glojure.lang.IMeta", reflect.TypeOf((*value.IMeta)(nil)).Elem())
 		define("glojure.lang.IChunkedSeq", reflect.TypeOf((*value.IChunkedSeq)(nil)).Elem())
@@ -247,31 +250,36 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Namespace", reflect.TypeOf(&value.Namespace{}))
 
 		define("glojure.lang.LockingTransaction", value.LockingTransaction)
+
+		define("glojure.lang.AsInt64", value.AsInt64)
 	}
 	{
 		// Add stdlib
-
-		core, err := stdlib.StdLib.ReadFile("glojure/core.glj")
-		if err != nil {
-			panic(fmt.Sprintf("could not read stdlib core.glj: %v", err))
-		}
-		r := reader.New(strings.NewReader(string(core)), reader.WithFilename("glojure/core.glj"), reader.WithGetCurrentNS(func() string {
-			return env.CurrentNamespace().Name().String()
-		}))
-
-		for {
-			expr, err := r.ReadOne()
-			if errors.Is(err, io.EOF) {
-				break
-			}
+		evalFile := func(path string) {
+			core, err := stdlib.StdLib.ReadFile(path)
 			if err != nil {
-				panic(fmt.Sprintf("error reading core lib: %v", err))
+				panic(fmt.Sprintf("could not read stdlib core.glj: %v", err))
 			}
-			_, err = env.Eval(expr)
-			if err != nil {
-				panic(fmt.Sprintf("error evaluating core lib: %v", err))
+			r := reader.New(strings.NewReader(string(core)), reader.WithFilename("glojure/core.glj"), reader.WithGetCurrentNS(func() string {
+				return env.CurrentNamespace().Name().String()
+			}))
+
+			for {
+				expr, err := r.ReadOne()
+				if errors.Is(err, io.EOF) {
+					break
+				}
+				if err != nil {
+					panic(fmt.Sprintf("error reading core lib: %v", err))
+				}
+				_, err = env.Eval(expr)
+				if err != nil {
+					panic(fmt.Sprintf("error evaluating core lib: %v", err))
+				}
 			}
 		}
+		evalFile("glojure/core.glj")
+		evalFile("glojure/core_print.glj")
 	}
 
 	return env

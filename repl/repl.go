@@ -7,13 +7,33 @@ import (
 	"os"
 	"runtime/debug"
 	"strings"
+	"time"
 
 	"github.com/chzyer/readline"
 
 	"github.com/glojurelang/glojure/reader"
 	"github.com/glojurelang/glojure/runtime"
 	"github.com/glojurelang/glojure/value"
+
+	// pprof
+	"net/http"
+	_ "net/http/pprof"
 )
+
+const debugMode = true
+
+func init() {
+	// start pprof
+	if debugMode {
+		go func() {
+			if err := http.ListenAndServe("localhost:6060", nil); err != nil {
+				fmt.Println("pprof start failed:", err)
+			}
+		}()
+		// shell command to examine pprof profile with a web ui:
+		// $ go tool pprof -http=:8080 http://localhost:6060/debug/pprof/profile
+	}
+}
 
 // Start starts the REPL.
 func Start(opts ...Option) {
@@ -26,13 +46,19 @@ func Start(opts ...Option) {
 		opt(&o)
 	}
 	if o.env == nil {
+		startTime := time.Now()
 		o.env = runtime.NewEnvironment(runtime.WithStdout(o.stdout))
+		if debugMode {
+			fmt.Printf("Environment created in %v\n", time.Since(startTime))
+		}
 	}
 	{ // switch to the namespace
+		//runtime.Debug = true
 		_, err := o.env.Eval(value.NewList(
 			value.NewSymbol("ns"),
 			value.NewSymbol(o.namespace),
 		))
+		//runtime.Debug = false
 		if err != nil {
 			panic(err)
 		}

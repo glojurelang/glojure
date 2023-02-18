@@ -2,6 +2,7 @@ package value
 
 import (
 	"fmt"
+	"math"
 )
 
 var (
@@ -14,6 +15,23 @@ type NumberMethods struct{}
 
 func (nm *NumberMethods) Add(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).Add(x, y)
+}
+
+func (nm *NumberMethods) Minus(x, y interface{}) interface{} {
+	return Ops(x).Combine(Ops(y)).Sub(x, y)
+}
+
+func (nm *NumberMethods) Divide(x, y interface{}) interface{} {
+	if isNaN(x) {
+		return x
+	} else if isNaN(y) {
+		return y
+	}
+	yops := Ops(y)
+	if yops.IsZero(y) {
+		panic("divide by zero")
+	}
+	return Ops(x).Combine(yops).Divide(x, y)
 }
 
 func (nm *NumberMethods) And(x, y interface{}) interface{} {
@@ -235,4 +253,15 @@ func incP[T basicIntegral](x T) interface{} {
 		return NewBigIntFromInt64(int64(x)).AddInt(1)
 	}
 	return res
+}
+
+func isNaN(x interface{}) bool {
+	switch x := x.(type) {
+	case float32:
+		return math.IsNaN(float64(x))
+	case float64:
+		return math.IsNaN(x)
+	default:
+		return false
+	}
 }
