@@ -225,6 +225,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Rest", value.Rest)
 		define("glojure.lang.Equal", value.Equal)
 		define("glojure.lang.ToString", value.ToString)
+		define("glojure.lang.ToStr", value.ToStr)
 		define("glojure.lang.Identical", value.Identical)
 		define("glojure.lang.Get", value.Get)
 		define("glojure.lang.Keys", value.Keys)

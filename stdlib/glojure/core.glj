@@ -549,7 +549,7 @@
    :static true}
   (^string [] "")
   (^string [^Object x]
-   (if (nil? x) "" (glojure.lang.ToString x)))
+   (if (nil? x) "" (glojure.lang.ToStr x)))
   (^string [x & ys]
      ((fn [^{:tag strings.Builder} sb xs] (if xs (recur (do (. sb (WriteString (str (first xs)))) sb) (next xs)) (.String sb))) (new strings.Builder) (cons x ys))))
 

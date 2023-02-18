@@ -153,7 +153,7 @@
                  (next xs))
           (.String sb)))
       (new strings.Builder) (cons x ys)))
-   (sexpr-replace '(. x (toString)) '(glojure.lang.ToString x))
+   (sexpr-replace '(. x (toString)) '(glojure.lang.ToStr x))
    (sexpr-replace 'getName 'Name)
    (sexpr-replace 'getNamespace 'Namespace)
    (sexpr-replace '.hasRoot '.HasRoot)

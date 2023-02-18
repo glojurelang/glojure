@@ -23,6 +23,12 @@ func PrintReadably() PrintOption {
 	}
 }
 
+// ToStr converts a value to a string. It should behave similarly to
+// Clojure's str function (i.e. Java's .toString method).
+func ToStr(v interface{}) string {
+	return ToString(v, PrintReadably())
+}
+
 // ToString converts a value to a string. By default, any value is
 // printed in a format that can be read back in by the reader. If
 // printReadably is true, the output is more human-readable.
