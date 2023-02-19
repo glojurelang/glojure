@@ -246,7 +246,7 @@ func (env *environment) EvalASTHostCall(n ast.Node) (interface{}, error) {
 		return nil, errors.New("not a method: " + value.ToString(tgtVal) + "." + method.Name())
 	}
 
-	return value.Apply(env, methodVal, argVals)
+	return value.Apply(methodVal, argVals)
 }
 
 func (env *environment) EvalASTHostInterop(n ast.Node) (interface{}, error) {
@@ -264,7 +264,7 @@ func (env *environment) EvalASTHostInterop(n ast.Node) (interface{}, error) {
 	}
 	switch reflect.TypeOf(mOrFVal).Kind() {
 	case reflect.Func:
-		return value.Apply(env, mOrFVal, nil)
+		return value.Apply(mOrFVal, nil)
 	default:
 		panic("uniimplemented")
 	}
@@ -466,7 +466,7 @@ func (env *environment) EvalASTInvoke(n ast.Node) (res interface{}, err error) {
 		argVals = append(argVals, argVal)
 	}
 
-	return value.Apply(env, fnVal, argVals)
+	return value.Apply(fnVal, argVals)
 }
 
 func (env *environment) EvalASTVar(n ast.Node) (interface{}, error) {

@@ -30,19 +30,18 @@ func (fn *Fn) WithMeta(meta IPersistentMap) interface{} {
 	return &cpy
 }
 
-// TODO: rename to Invoke
-func (fn *Fn) Apply(env Environment, args []interface{}) (interface{}, error) {
+func (fn *Fn) Invoke(args ...interface{}) interface{} {
 	methods := Get(fn.astNode, NewKeyword("methods"))
 	variadic := Get(fn.astNode, NewKeyword("variadic?")).(bool)
 	maxArity, _ := AsInt(Get(fn.astNode, NewKeyword("max-fixed-arity")))
 
 	if !variadic && len(args) > maxArity {
-		return nil, fmt.Errorf("too many arguments (%d)", len(args))
+		panic(fmt.Errorf("too many arguments (%d)", len(args)))
 	}
 
 	method, err := fn.findMethod(methods, args)
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
 	fnEnv := fn.env.PushScope()
@@ -89,9 +88,9 @@ Recur:
 		goto Recur
 	}
 	if err != nil {
-		return nil, errorWithStack(err, StackFrame{})
+		panic(errorWithStack(err, StackFrame{}))
 	}
-	return res, nil
+	return res
 }
 
 func (fn *Fn) findMethod(methods interface{}, args []interface{}) (interface{}, error) {
@@ -115,17 +114,16 @@ func (fn *Fn) findMethod(methods interface{}, args []interface{}) (interface{}, 
 // TODO: finish migration from Applyer to IFn
 
 func (fn *Fn) ApplyTo(args ISeq) interface{} {
-	var argSlice []interface{}
-	for seq := Seq(args); seq != nil; seq = seq.Next() {
-		argSlice = append(argSlice, seq.First())
-	}
-	return fn.Invoke(argSlice...)
+	return fn.Invoke(seqToSlice(args)...)
 }
 
-func (fn *Fn) Invoke(args ...interface{}) interface{} {
-	res, err := fn.Apply(nil, args) // TODO: global/singleton env
-	if err != nil {
-		panic(err)
+func errorWithStack(err error, stackFrame StackFrame) error {
+	if err == nil {
+		return nil
 	}
-	return res
+	valErr, ok := err.(*Error)
+	if !ok {
+		return NewError(stackFrame, err)
+	}
+	return valErr.AddStack(stackFrame)
 }

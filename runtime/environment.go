@@ -88,8 +88,8 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 
 	// bootstrap some vars
 	e.namespaceVar = coreNS.InternWithValue(e, SymbolNamespace,
-		value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
-			return coreNS, nil
+		value.IFnFunc(func(args ...interface{}) interface{} {
+			return coreNS
 		}), true)
 	e.namespaceVar.SetMacro()
 
@@ -130,7 +130,7 @@ func (env *environment) DefVar(sym *value.Symbol, val interface{}) *value.Var {
 	return v
 }
 
-func (env *environment) DefineMacro(name string, fn value.Applyer) {
+func (env *environment) DefineMacro(name string, fn value.IFn) {
 	vr := env.DefVar(value.NewSymbol(name), fn)
 	vr.SetMacro()
 }

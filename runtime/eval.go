@@ -33,9 +33,9 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 		return form, nil
 	}
 
-	applyer, ok := macroVar.Get().(value.Applyer)
+	applyer, ok := macroVar.Get().(value.IFn)
 	if !ok {
-		return nil, env.errorf(form, "macro %s is not a function", sym)
+		return nil, env.errorf(form, "macro %s is not a function (%T)", sym, macroVar.Get())
 	}
 	res, err := env.applyMacro1(applyer, form.(value.ISeq))
 	if err != nil {
@@ -44,7 +44,7 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 	return res, nil
 }
 
-func (env *environment) applyMacro1(fn value.Applyer, form value.ISeq) (interface{}, error) {
+func (env *environment) applyMacro1(fn value.IFn, form value.ISeq) (interface{}, error) {
 	argList := form.Next()
 	// two hidden arguments, $form and $env.
 	// $form is the form that was passed to the macro
@@ -99,14 +99,14 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 }
 
 func (env *environment) applyFunc(f interface{}, args []interface{}) (interface{}, error) {
-	res, err := value.Apply(env, f, args)
+	res, err := value.Apply(f, args)
 	if err != nil {
 		return nil, err
 	}
 	return res, nil
 }
 
-func (env *environment) applyMacro(fn value.Applyer, form value.ISeq) (interface{}, error) {
+func (env *environment) applyMacro(fn value.IFn, form value.ISeq) (interface{}, error) {
 	argList := form.Next()
 	// two hidden arguments, $form and $env.
 	// $form is the form that was passed to the macro

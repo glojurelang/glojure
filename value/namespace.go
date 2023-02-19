@@ -18,15 +18,15 @@ type Namespace struct {
 var (
 	SymbolCoreNamespace = NewSymbol("glojure.core")
 
-	FindNamespace = ApplyerFunc(func(env Environment, args []interface{}) (interface{}, error) {
+	FindNamespace = IFnFunc(func(args ...interface{}) interface{} {
 		if len(args) != 1 {
-			return nil, fmt.Errorf("find-ns expects 1 argument, got %d", len(args))
+			panic(fmt.Errorf("find-ns expects 1 argument, got %d", len(args)))
 		}
 		sym, ok := args[0].(*Symbol)
 		if !ok {
-			return nil, fmt.Errorf("find-ns expects a symbol, got %T", args[0])
+			panic(fmt.Errorf("find-ns expects a symbol, got %T", args[0]))
 		}
-		return env.FindNamespace(sym), nil
+		return GlobalEnv.FindNamespace(sym)
 	})
 )
 

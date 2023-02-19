@@ -131,19 +131,11 @@ func (v *Var) Deref() interface{} {
 	return v.Get()
 }
 
-// SetValidator(vf Applyer)
-// Validator() Applyer
-// Watches() IPersistentMap
-// AddWatch(key interface{}, fn Applyer)
-// RemoveWatch(key interface{})
-
-// implementations of the above methods that panic with "not implemented"
-
-func (v *Var) SetValidator(vf Applyer) {
+func (v *Var) SetValidator(vf IFn) {
 	panic("not implemented")
 }
 
-func (v *Var) Validator() Applyer {
+func (v *Var) Validator() IFn {
 	panic("not implemented")
 }
 
@@ -151,7 +143,7 @@ func (v *Var) Watches() IPersistentMap {
 	panic("not implemented")
 }
 
-func (v *Var) AddWatch(key interface{}, fn Applyer) {
+func (v *Var) AddWatch(key interface{}, fn IFn) {
 	panic("not implemented")
 }
 

@@ -30,11 +30,11 @@ func (a *Atom) Deref() interface{} {
 	return a.state.Load().(atomBox).val
 }
 
-func (a *Atom) SetValidator(vf Applyer)              { panic("not implemented") }
-func (a *Atom) Validator() Applyer                   { panic("not implemented") }
-func (a *Atom) Watches() IPersistentMap              { panic("not implemented") }
-func (a *Atom) AddWatch(key interface{}, fn Applyer) { panic("not implemented") }
-func (a *Atom) RemoveWatch(key interface{})          { panic("not implemented") }
+func (a *Atom) SetValidator(vf IFn)              { panic("not implemented") }
+func (a *Atom) Validator() IFn                   { panic("not implemented") }
+func (a *Atom) Watches() IPersistentMap          { panic("not implemented") }
+func (a *Atom) AddWatch(key interface{}, fn IFn) { panic("not implemented") }
+func (a *Atom) RemoveWatch(key interface{})      { panic("not implemented") }
 
 func (a *Atom) Reset(newVal interface{}) interface{} {
 	// old := a.state.Load().(atomBox)

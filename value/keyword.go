@@ -59,9 +59,9 @@ func (k Keyword) Equal(v interface{}) bool {
 	return k == v
 }
 
-func (k Keyword) Apply(env Environment, args []interface{}) (interface{}, error) {
+func (k Keyword) Invoke(args ...interface{}) interface{} {
 	if len(args) == 0 || len(args) > 2 {
-		return nil, fmt.Errorf("wrong number of args (%v) passed to: %v", len(args), k)
+		panic(fmt.Errorf("wrong number of args (%v) passed to: %v", len(args), k))
 	}
 	var defaultVal interface{} = nil
 	if len(args) == 2 {
@@ -70,10 +70,17 @@ func (k Keyword) Apply(env Environment, args []interface{}) (interface{}, error)
 
 	assoc, ok := args[0].(Associative)
 	if !ok {
-		return defaultVal, nil
+		return defaultVal
 	}
-	if !assoc.ContainsKey(k) {
-		return defaultVal, nil
+
+	entry := assoc.EntryAt(k)
+	if entry == nil {
+		return defaultVal
 	}
-	return assoc.EntryAt(k).Val(), nil
+
+	return entry.Val()
+}
+
+func (k Keyword) ApplyTo(args ISeq) interface{} {
+	return k.Invoke(seqToSlice(args)...)
 }

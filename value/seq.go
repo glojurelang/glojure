@@ -102,3 +102,11 @@ func (s stringSeq) More() ISeq {
 	}
 	return nxt
 }
+
+func seqToSlice(s ISeq) []interface{} {
+	var res []interface{}
+	for seq := Seq(s); seq != nil; seq = seq.Next() {
+		res = append(res, seq.First())
+	}
+	return res
+}

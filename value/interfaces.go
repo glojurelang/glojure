@@ -199,7 +199,7 @@ type (
 		Indexed
 
 		DropFirst() IChunk
-		Reduce(fn Applyer, init interface{}) interface{}
+		Reduce(fn IFn, init interface{}) interface{}
 	}
 
 	IChunkedSeq interface {
@@ -223,10 +223,10 @@ type (
 	IRef interface {
 		IDeref
 
-		SetValidator(vf Applyer)
-		Validator() Applyer
+		SetValidator(vf IFn)
+		Validator() IFn
 		Watches() IPersistentMap
-		AddWatch(key interface{}, fn Applyer)
+		AddWatch(key interface{}, fn IFn)
 		RemoveWatch(key interface{})
 	}
 

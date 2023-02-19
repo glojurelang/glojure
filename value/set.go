@@ -34,12 +34,16 @@ func (s *Set) Get(key interface{}) interface{} {
 	return nil
 }
 
-func (s *Set) Apply(env Environment, args []interface{}) (interface{}, error) {
+func (s *Set) Invoke(args ...interface{}) interface{} {
 	if len(args) != 1 {
-		return nil, fmt.Errorf("set apply expects 1 argument, got %d", len(args))
+		panic(fmt.Errorf("set apply expects 1 argument, got %d", len(args)))
 	}
 
-	return s.Get(args[0]), nil
+	return s.Get(args[0])
+}
+
+func (s *Set) ApplyTo(args ISeq) interface{} {
+	return s.Invoke(seqToSlice(args)...)
 }
 
 func (s *Set) Conj(v interface{}) Conjer {

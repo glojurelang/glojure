@@ -5,13 +5,13 @@ import (
 	"reflect"
 )
 
-func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, err error) {
-	if applyer, ok := fn.(Applyer); ok {
-		return applyer.Apply(env, args)
+func Apply(fn interface{}, args []interface{}) (_ interface{}, err error) {
+	if applyer, ok := fn.(IFn); ok {
+		return applyer.Invoke(args...), nil
 	}
 
 	if rt, ok := fn.(reflect.Type); ok {
-		return applyType(env, rt, args)
+		return applyType(rt, args)
 	}
 
 	if fn == nil {
@@ -48,7 +48,7 @@ func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, 
 			targetType = gvType.In(gvType.NumIn() - 1).Elem()
 		}
 
-		argGoVal, err := coerceGoValue(env, targetType, args[i])
+		argGoVal, err := coerceGoValue(targetType, args[i])
 		if err != nil {
 			return nil, fmt.Errorf("argument %d: %s", i, err)
 		}
@@ -69,7 +69,7 @@ func Apply(env Environment, fn interface{}, args []interface{}) (_ interface{}, 
 	return NewVector(res...), nil
 }
 
-func applyType(env Environment, typ reflect.Type, args []interface{}) (interface{}, error) {
+func applyType(typ reflect.Type, args []interface{}) (interface{}, error) {
 	if len(args) == 0 {
 		return reflect.Zero(typ).Interface(), nil
 	}
@@ -79,7 +79,7 @@ func applyType(env Environment, typ reflect.Type, args []interface{}) (interface
 	}
 
 	arg := args[0]
-	res, err := ConvertToGo(env, typ, arg)
+	res, err := ConvertToGo(typ, arg)
 	if err != nil {
 		return nil, err
 	}
@@ -104,8 +104,8 @@ func applySlice(goVal reflect.Value, args []interface{}) (interface{}, error) {
 
 // ConvertToGo converts a Value to a Go value of the given type, if
 // possible.
-func ConvertToGo(env Environment, typ reflect.Type, val interface{}) (interface{}, error) {
-	rval, err := coerceGoValue(env, typ, val)
+func ConvertToGo(typ reflect.Type, val interface{}) (interface{}, error) {
+	rval, err := coerceGoValue(typ, val)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +114,7 @@ func ConvertToGo(env Environment, typ reflect.Type, val interface{}) (interface{
 
 // coerceGoValue attempts to coerce a Go value to be assignable to a
 // target type. If the value is already assignable, it is returned.
-func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (reflect.Value, error) {
+func coerceGoValue(targetType reflect.Type, val interface{}) (reflect.Value, error) {
 	if val == nil {
 		if !isNilableKind(targetType.Kind()) {
 			return reflect.Value{}, fmt.Errorf("cannot assign nil to non-nilable type %s", targetType)
@@ -151,7 +151,7 @@ func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (r
 		sourceSlice := reflect.ValueOf(val)
 		for i := 0; i < sourceSlice.Len(); i++ {
 			// try to coerce each element of the slice
-			coerced, err := coerceGoValue(env, targetType.Elem(), sourceSlice.Index(i).Interface())
+			coerced, err := coerceGoValue(targetType.Elem(), sourceSlice.Index(i).Interface())
 			if err != nil {
 				return reflect.Value{}, err
 			}
@@ -159,8 +159,8 @@ func coerceGoValue(env Environment, targetType reflect.Type, val interface{}) (r
 		}
 		return targetSlice, nil
 	case reflect.Func:
-		if applyer, ok := val.(Applyer); ok {
-			val := reflect.MakeFunc(targetType, reflectFuncFromApplyer(env, targetType, applyer))
+		if applyer, ok := val.(IFn); ok {
+			val := reflect.MakeFunc(targetType, reflectFuncFromIFn(targetType, applyer))
 			if val.Type().AssignableTo(targetType) {
 				return val, nil
 			}
@@ -249,17 +249,13 @@ func isNilableKind(k reflect.Kind) bool {
 	return false
 }
 
-func reflectFuncFromApplyer(env Environment, targetType reflect.Type, applyer Applyer) func(args []reflect.Value) []reflect.Value {
+func reflectFuncFromIFn(targetType reflect.Type, applyer IFn) func(args []reflect.Value) []reflect.Value {
 	return func(args []reflect.Value) []reflect.Value {
 		var glojureArgs []interface{}
 		for _, arg := range args {
 			glojureArgs = append(glojureArgs, fromGo(arg.Interface()))
 		}
-		res, err := applyer.Apply(env, glojureArgs)
-		if err != nil {
-			panic(err)
-		}
-
+		res := applyer.Invoke(glojureArgs...)
 		if res == nil || Equal(res, nil) {
 			// if target type has no return values, return nil
 			if targetType.NumOut() == 0 {

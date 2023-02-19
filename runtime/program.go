@@ -75,18 +75,18 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	// bootstrap namespace control
 	{
 		// bootstrap implementation of the ns macro
-		env.DefVar(value.NewSymbol("in-ns"), value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
+		env.DefVar(value.NewSymbol("in-ns"), value.IFnFunc(func(args ...interface{}) interface{} {
 			if len(args) != 1 {
-				return nil, fmt.Errorf("in-ns: expected namespace name")
+				panic(fmt.Errorf("in-ns: expected namespace name"))
 			}
 
 			sym, ok := args[0].(*value.Symbol)
 			if !ok {
-				return nil, fmt.Errorf("in-ns: expected symbol as namespace name")
+				panic(fmt.Errorf("in-ns: expected symbol as namespace name"))
 			}
 			ns := env.FindOrCreateNamespace(sym)
 			env.SetCurrentNamespace(ns)
-			return ns, nil
+			return ns
 		}))
 	}
 
@@ -217,11 +217,15 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.NewVectorFromCollection", value.NewVectorFromCollection)
 		define("glojure.lang.NewLazySeq", value.NewLazySeq)
 		define("glojure.lang.NewMultiFn", value.NewMultiFn)
-		define("glojure.lang.Apply", value.ApplyerFunc(func(env value.Environment, args []interface{}) (interface{}, error) {
+		define("glojure.lang.Apply", value.IFnFunc(func(args ...interface{}) interface{} {
 			if len(args) != 2 {
-				return nil, fmt.Errorf("wrong number of arguments (%d) to glojure.lang.Apply", len(args))
+				panic(fmt.Errorf("wrong number of arguments (%d) to glojure.lang.Apply", len(args)))
 			}
-			return value.Apply(env, args[0], seqToSlice(value.Seq(args[1])))
+			res, err := value.Apply(args[0], seqToSlice(value.Seq(args[1])))
+			if err != nil {
+				panic(err)
+			}
+			return res
 		}))
 
 		define("glojure.lang.Import", func(args ...interface{}) {

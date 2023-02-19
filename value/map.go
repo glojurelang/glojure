@@ -191,13 +191,17 @@ func (m *Map) WithMeta(meta IPersistentMap) interface{} {
 	return &cpy
 }
 
-func (m *Map) Apply(env Environment, args []interface{}) (interface{}, error) {
+func (m *Map) Invoke(args ...interface{}) interface{} {
 	if len(args) != 1 {
-		return nil, fmt.Errorf("map apply expects 1 argument, got %d", len(args))
+		panic(fmt.Errorf("map apply expects 1 argument, got %d", len(args)))
 	}
 
 	v, _ := m.ValueAt(args[0])
-	return v, nil
+	return v
+}
+
+func (m *Map) ApplyTo(args ISeq) interface{} {
+	return m.Invoke(seqToSlice(args)...)
 }
 
 ////////////////////////////////////////////////////////////////////////////////

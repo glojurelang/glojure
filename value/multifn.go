@@ -38,16 +38,8 @@ func (m *MultiFn) PreferMethod(dispatchValX, dispatchValY interface{}) *MultiFn 
 	return m
 }
 
-func (m *MultiFn) Invoke(args ...interface{}) interface{} {
-	val, err := m.Apply(GlobalEnv, args)
-	if err != nil {
-		panic(err)
-	}
-	return val
-}
-
-func (m *MultiFn) Apply(env Environment, args []interface{}) (interface{}, error) {
-	return m.getFn(m.dispatchFn.Invoke(args...)).Invoke(args...), nil
+func (m *MultiFn) Invoke(args []interface{}) interface{} {
+	return m.getFn(m.dispatchFn.Invoke(args...)).Invoke(args...)
 }
 
 func (m *MultiFn) getFn(dispatchVal interface{}) IFn {
