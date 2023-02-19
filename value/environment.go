@@ -5,6 +5,10 @@ import (
 	"io"
 )
 
+var (
+	GlobalEnv Environment
+)
+
 type (
 	// Environment is an interface for execution environments.
 	Environment interface {

@@ -55,7 +55,10 @@ func (m *Map) ValueAt(key interface{}) (interface{}, bool) {
 }
 
 func (m *Map) EntryAt(k interface{}) IMapEntry {
-	v, _ := m.ValueAt(k)
+	v, ok := m.ValueAt(k)
+	if !ok {
+		return nil
+	}
 	return &MapEntry{
 		key: k,
 		val: v,

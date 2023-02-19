@@ -1653,6 +1653,9 @@ func exInfo(errStr string, _ interface{}) error {
 
 func withRawForm(n ast.Node, form interface{}) ast.Node {
 	rawFormsKV := n.EntryAt(kw("raw-forms"))
+	if rawFormsKV == nil {
+		return n
+	}
 	if rf, ok := rawFormsKV.Val().(value.Conjer); ok {
 		return n.Assoc(kw("raw-forms"), value.Conj(rf, form))
 	}

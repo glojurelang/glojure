@@ -13,6 +13,8 @@ type (
 		Namespace() string
 	}
 
+	IRecord interface{}
+
 	IDrop interface {
 		Drop(n int) Sequential
 	}

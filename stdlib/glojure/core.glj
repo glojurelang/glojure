@@ -41,7 +41,7 @@
  ^{:macro true
    :added "1.0"}
  fn (fn* fn [&form &env & decl] 
-         (let* [res (glojure.lang.WithMeta ^{clojure.lang.IObj true} (cons (quote fn*) decl) (.Meta ^{glojure.lang.IMeta true} &form))] (if (res 1) (throw (res 1)) (res 0)))))
+         (let* [res (glojure.lang.WithMeta ^{glojure.lang.IObj true} (cons (quote fn*) decl) (.Meta ^{glojure.lang.IMeta true} &form))] (if (res 1) (throw (res 1)) (res 0)))))
 
 (def
  ^{:arglists '([coll])
@@ -208,12 +208,12 @@
           (.Meta x))))
 
 (def
- ^{:arglists '([^clojure.lang.IObj obj m])
+ ^{:arglists '([^glojure.lang.IObj obj m])
    :doc "Returns an object of the same type and value as obj, with
     map m as its metadata."
    :added "1.0"
    :static true}
- with-meta (fn ^:static with-meta [^clojure.lang.IObj x m]
+ with-meta (fn ^:static with-meta [^glojure.lang.IObj x m]
              (. x (WithMeta m))))
 
 (def ^{:private true :dynamic true}
@@ -370,7 +370,7 @@
    :static true}
   ([coll]
    (if (vector? coll)
-     (if (instance? clojure.lang.IObj coll)
+     (if (instance? glojure.lang.IObj coll)
        (with-meta coll nil)
        (glojure.lang.NewVectorFromCollection coll))
      (glojure.lang.NewVectorFromCollection coll))))
@@ -383,7 +383,7 @@
    :static true}
   ([] {})
   ([& keyvals]
-   (. clojure.lang.PersistentHashMap (create keyvals))))
+   (. glojure.lang.PersistentHashMap (create keyvals))))
 
 (defn hash-set
   "Returns a new hash set with supplied keys.  Any equal keys are
@@ -656,15 +656,15 @@
   "Applies fn f to the argument list formed by prepending intervening arguments to args."
   {:added "1.0"
    :static true}
-  ([^clojure.lang.IFn f args]
+  ([^glojure.lang.IFn f args]
      (glojure.lang.Apply f (seq args)))
-  ([^clojure.lang.IFn f x args]
+  ([^glojure.lang.IFn f x args]
      (glojure.lang.Apply f (list* x args)))
-  ([^clojure.lang.IFn f x y args]
+  ([^glojure.lang.IFn f x y args]
      (glojure.lang.Apply f (list* x y args)))
-  ([^clojure.lang.IFn f x y z args]
+  ([^glojure.lang.IFn f x y z args]
      (glojure.lang.Apply f (list* x y z args)))
-  ([^clojure.lang.IFn f a b c d & args]
+  ([^glojure.lang.IFn f a b c d & args]
      (glojure.lang.Apply f (cons a (cons b (cons c (cons d (spread args))))))))
 
 (defn vary-meta
@@ -684,16 +684,16 @@
   [& body]
   (list (quote glojure.lang.NewLazySeq) (list* (quote ^{:once true} fn*) [] body)))    
 
-(defn ^:static ^clojure.lang.ChunkBuffer chunk-buffer ^clojure.lang.ChunkBuffer [capacity]
-  (clojure.lang.ChunkBuffer. capacity))
+(defn ^:static ^glojure.lang.ChunkBuffer chunk-buffer ^glojure.lang.ChunkBuffer [capacity]
+  (glojure.lang.ChunkBuffer. capacity))
 
-(defn ^:static chunk-append [^clojure.lang.ChunkBuffer b x]
+(defn ^:static chunk-append [^glojure.lang.ChunkBuffer b x]
   (.add b x))
 
-(defn ^:static ^clojure.lang.IChunk chunk [^clojure.lang.ChunkBuffer b]
+(defn ^:static ^glojure.lang.IChunk chunk [^glojure.lang.ChunkBuffer b]
   (.chunk b))
 
-(defn ^:static  ^clojure.lang.IChunk chunk-first ^clojure.lang.IChunk [^glojure.lang.IChunkedSeq s]
+(defn ^:static  ^glojure.lang.IChunk chunk-first ^glojure.lang.IChunk [^glojure.lang.IChunkedSeq s]
   (.chunkedFirst s))
 
 (defn ^:static ^glojure.lang.ISeq chunk-rest ^glojure.lang.ISeq [^glojure.lang.IChunkedSeq s]
@@ -705,7 +705,7 @@
 (defn ^:static chunk-cons [chunk rest]
   (if (clojure.lang.Numbers/isZero (glojure.lang.Count chunk))
     rest
-    (clojure.lang.ChunkedCons. chunk rest)))
+    (glojure.lang.ChunkedCons. chunk rest)))
   
 (defn ^:static chunked-seq? [s]
   (instance? glojure.lang.IChunkedSeq s))
@@ -745,19 +745,19 @@
   calls. See also - realized?"
   {:added "1.0"}
   [& body]
-    (list 'new 'clojure.lang.Delay (list* `^{:once true} fn* [] body)))
+    (list 'new 'glojure.lang.Delay (list* `^{:once true} fn* [] body)))
 
 (defn delay?
   "returns true if x is a Delay created with delay"
   {:added "1.0"
    :static true}
-  [x] (instance? clojure.lang.Delay x))
+  [x] (instance? glojure.lang.Delay x))
 
 (defn force
   "If x is a Delay, returns the (possibly cached) value of its expression, else returns x"
   {:added "1.0"
    :static true}
-  [x] (. clojure.lang.Delay (force x)))
+  [x] (. glojure.lang.Delay (force x)))
 
 (defmacro if-not
   "Evaluates test. If logical false, evaluates and returns then expr, 
@@ -769,7 +769,7 @@
 
 (defn identical?
   "Tests if 2 arguments are the same object"
-  {:inline (fn [x y] `(. clojure.lang.Util identical ~x ~y))
+  {:inline (fn [x y] `(. glojure.lang.Util identical ~x ~y))
    :inline-arities #{2}
    :added "1.0"}
   ([x y] (glojure.lang.Identical x y)))
@@ -781,7 +781,7 @@
   numbers and collections in a type-independent manner.  Clojure's immutable data
   structures define equals() (and thus =) as a value, not an identity,
   comparison."
-  {:inline (fn [x y] `(. clojure.lang.Util equiv ~x ~y))
+  {:inline (fn [x y] `(. glojure.lang.Util equiv ~x ~y))
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
@@ -799,7 +799,7 @@
   x.equals(y) except it also works for nil. Boxed numbers must have
   same type. Clojure's immutable data structures define equals() (and
   thus =) as a value, not an identity, comparison."
-  {:inline (fn [x y] `(. clojure.lang.Util equals ~x ~y))
+  {:inline (fn [x y] `(. glojure.lang.Util equals ~x ~y))
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
@@ -830,9 +830,9 @@
   compares numbers and collections in a type-independent manner. x
   must implement Comparable"
   {
-   :inline (fn [x y] `(. clojure.lang.Util compare ~x ~y))
+   :inline (fn [x y] `(. glojure.lang.Util compare ~x ~y))
    :added "1.0"}
-  [x y] (. clojure.lang.Util (compare x y)))
+  [x y] (. glojure.lang.Util (compare x y)))
 
 (defmacro and
   "Evaluates exprs one at a time, from left to right. If a form
@@ -1581,7 +1581,7 @@
   can be a vector or sorted-map), in reverse order. If rev is empty returns nil"
   {:added "1.0"
    :static true}
-  [^clojure.lang.Reversible rev]
+  [^glojure.lang.Reversible rev]
     (. rev (rseq)))
 
 (defn name
@@ -2043,7 +2043,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Refs ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn ^{:private true}
-  setup-reference [^clojure.lang.ARef r options]
+  setup-reference [^glojure.lang.ARef r options]
   (let [opts (apply hash-map options)]
     (when (:meta opts)
       (.ResetMeta r (:meta opts)))
@@ -2077,7 +2077,7 @@
    :static true
    }
   ([state & options]
-     (let [a (new clojure.lang.Agent state)
+     (let [a (new glojure.lang.Agent state)
            opts (apply hash-map options)]
        (setup-reference a options)
        (when (:error-handler opts)
@@ -2105,7 +2105,7 @@
 
   (apply action-fn state-of-agent args)"
   {:added "1.5"}
-  [executor ^clojure.lang.Agent a f & args]
+  [executor ^glojure.lang.Agent a f & args]
   (.dispatch a (binding [*agent* a] (binding-conveyor-fn f)) args executor))
 
 (defn send
@@ -2116,7 +2116,7 @@
   (apply action-fn state-of-agent args)"
   {:added "1.0"
    :static true}
-  [^clojure.lang.Agent a f & args]
+  [^glojure.lang.Agent a f & args]
   (apply send-via clojure.lang.Agent/pooledExecutor a f args))
 
 (defn send-off
@@ -2127,7 +2127,7 @@
   (apply action-fn state-of-agent args)"
   {:added "1.0"
    :static true}
-  [^clojure.lang.Agent a f & args]
+  [^glojure.lang.Agent a f & args]
   (apply send-via clojure.lang.Agent/soloExecutor a f args))
 
 (defn release-pending-sends
@@ -2157,13 +2157,13 @@
   the watch mechanism."
   {:added "1.0"
    :static true}
-  [^clojure.lang.IRef reference key fn] (.addWatch reference key fn))
+  [^glojure.lang.IRef reference key fn] (.addWatch reference key fn))
 
 (defn remove-watch
   "Removes a watch (set by add-watch) from a reference"
   {:added "1.0"
    :static true}
-  [^clojure.lang.IRef reference key]
+  [^glojure.lang.IRef reference key]
   (.removeWatch reference key))
 
 (defn agent-error
@@ -2172,7 +2172,7 @@
   failed."
   {:added "1.2"
    :static true}
-  [^clojure.lang.Agent a] (.getError a))
+  [^glojure.lang.Agent a] (.getError a))
 
 (defn restart-agent
   "When an agent is failed, changes the agent state to new-state and
@@ -2187,7 +2187,7 @@
   {:added "1.2"
    :static true
    }
-  [^clojure.lang.Agent a, new-state & options]
+  [^glojure.lang.Agent a, new-state & options]
   (let [opts (apply hash-map options)]
     (.restart a new-state (if (:clear-actions opts) true false))))
 
@@ -2198,7 +2198,7 @@
   agent and the exception."
   {:added "1.2"
    :static true}
-  [^clojure.lang.Agent a, handler-fn]
+  [^glojure.lang.Agent a, handler-fn]
   (.setErrorHandler a handler-fn))
 
 (defn error-handler
@@ -2206,7 +2206,7 @@
   See set-error-handler!"
   {:added "1.2"
    :static true}
-  [^clojure.lang.Agent a]
+  [^glojure.lang.Agent a]
   (.getErrorHandler a))
 
 (defn set-error-mode!
@@ -2223,14 +2223,14 @@
   still work, returning the state of the agent before the error."
   {:added "1.2"
    :static true}
-  [^clojure.lang.Agent a, mode-keyword]
+  [^glojure.lang.Agent a, mode-keyword]
   (.setErrorMode a mode-keyword))
 
 (defn error-mode
   "Returns the error-mode of agent a.  See set-error-mode!"
   {:added "1.2"
    :static true}
-  [^clojure.lang.Agent a]
+  [^glojure.lang.Agent a]
   (.getErrorMode a))
 
 (defn agent-errors
@@ -2249,7 +2249,7 @@
   agent, allowing subsequent actions to occur."
   {:added "1.0"
    :deprecated "1.2"}
-  [^clojure.lang.Agent a] (restart-agent a (.Deref a)))
+  [^glojure.lang.Agent a] (restart-agent a (.Deref a)))
 
 (defn shutdown-agents
   "Initiates a shutdown of the thread pools that back the agent
@@ -2257,7 +2257,7 @@
   accepted"
   {:added "1.0"
    :static true}
-  [] (. clojure.lang.Agent shutdown))
+  [] (. glojure.lang.Agent shutdown))
 
 (defn ref
   "Creates and returns a Ref with an initial value of x and zero or
@@ -2320,8 +2320,8 @@
            (.Deref ^glojure.lang.IDeref ref)
            (deref-future ref)))
   ([ref timeout-ms timeout-val]
-     (if (instance? clojure.lang.IBlockingDeref ref)
-       (.Deref ^clojure.lang.IBlockingDeref ref timeout-ms timeout-val)
+     (if (instance? glojure.lang.IBlockingDeref ref)
+       (.Deref ^glojure.lang.IBlockingDeref ref timeout-ms timeout-val)
        (deref-future ref timeout-ms timeout-val))))
 
 (defn atom
@@ -2339,7 +2339,7 @@
   return false or throw an exception."
   {:added "1.0"
    :static true}
-  ([x] (new clojure.lang.Atom x))
+  ([x] (new glojure.lang.Atom x))
   ([x & options] (setup-reference (atom x) options)))
 
 (defn swap!
@@ -2349,10 +2349,10 @@
   the value that was swapped in."
   {:added "1.0"
    :static true}
-  ([^clojure.lang.IAtom atom f] (.swap atom f))
-  ([^clojure.lang.IAtom atom f x] (.swap atom f x))
-  ([^clojure.lang.IAtom atom f x y] (.swap atom f x y))
-  ([^clojure.lang.IAtom atom f x y & args] (.swap atom f x y args)))
+  ([^glojure.lang.IAtom atom f] (.swap atom f))
+  ([^glojure.lang.IAtom atom f x] (.swap atom f x))
+  ([^glojure.lang.IAtom atom f x y] (.swap atom f x y))
+  ([^glojure.lang.IAtom atom f x y & args] (.swap atom f x y args)))
 
 (defn swap-vals!
   "Atomically swaps the value of atom to be:
@@ -2360,10 +2360,10 @@
   multiple times, and thus should be free of side effects.
   Returns [old new], the value of the atom before and after the swap."
   {:added "1.9"}
-  (^glojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f] (.swapVals atom f))
-  (^glojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f x] (.swapVals atom f x))
-  (^glojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f x y] (.swapVals atom f x y))
-  (^glojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom f x y & args] (.swapVals atom f x y args)))
+  (^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom f] (.swapVals atom f))
+  (^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom f x] (.swapVals atom f x))
+  (^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom f x y] (.swapVals atom f x y))
+  (^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom f x y & args] (.swapVals atom f x y args)))
 
 (defn compare-and-set!
   "Atomically sets the value of atom to newval if and only if the
@@ -2371,20 +2371,20 @@
   set happened, else false"
   {:added "1.0"
    :static true}
-  [^clojure.lang.IAtom atom oldval newval] (.compareAndSet atom oldval newval))
+  [^glojure.lang.IAtom atom oldval newval] (.compareAndSet atom oldval newval))
 
 (defn reset!
   "Sets the value of atom to newval without regard for the
   current value. Returns newval."
   {:added "1.0"
    :static true}
-  [^clojure.lang.IAtom atom newval] (.reset atom newval))
+  [^glojure.lang.IAtom atom newval] (.reset atom newval))
 
 (defn reset-vals!
   "Sets the value of atom to newval. Returns [old new], the value of the
    atom before and after the reset."
   {:added "1.9"}
-  ^glojure.lang.IPersistentVector [^clojure.lang.IAtom2 atom newval] (.resetVals atom newval))
+  ^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom newval] (.resetVals atom newval))
 
 (defn set-validator!
   "Sets the validator-fn for a var/ref/agent/atom. validator-fn must be nil or a
@@ -2395,13 +2395,13 @@
   will be thrown and the validator will not be changed."
   {:added "1.0"
    :static true}
-  [^clojure.lang.IRef iref validator-fn] (. iref (setValidator validator-fn)))
+  [^glojure.lang.IRef iref validator-fn] (. iref (setValidator validator-fn)))
 
 (defn get-validator
   "Gets the validator-fn for a var/ref/agent/atom."
   {:added "1.0"
    :static true}
- [^clojure.lang.IRef iref] (. iref (getValidator)))
+ [^glojure.lang.IRef iref] (. iref (getValidator)))
 
 (defn alter-meta!
   "Atomically sets the metadata for a namespace/var/ref/agent/atom to be:
@@ -2411,13 +2411,13 @@
   f must be free of side-effects"
   {:added "1.0"
    :static true}
- [^clojure.lang.IReference iref f & args] (.AlterMeta iref f args))
+ [^glojure.lang.IReference iref f & args] (.AlterMeta iref f args))
 
 (defn reset-meta!
   "Atomically resets the metadata for a namespace/var/ref/agent/atom"
   {:added "1.0"
    :static true}
- [^clojure.lang.IReference iref metadata-map] (.ResetMeta iref metadata-map))
+ [^glojure.lang.IReference iref metadata-map] (.ResetMeta iref metadata-map))
 
 (defn commute
   "Must be called in a transaction. Sets the in-transaction-value of
@@ -2525,15 +2525,15 @@
 (defn volatile!
   "Creates and returns a Volatile with an initial value of val."
   {:added "1.7"
-   :tag clojure.lang.Volatile}
+   :tag glojure.lang.Volatile}
   [val]
-  (clojure.lang.Volatile. val))
+  (glojure.lang.Volatile. val))
 
 (defn vreset!
   "Sets the value of volatile to newval without regard for the
    current value. Returns newval."
   {:added "1.7"}
-  [^clojure.lang.Volatile vol newval]
+  [^glojure.lang.Volatile vol newval]
   (.reset vol newval))
 
 (defmacro vswap!
@@ -2542,14 +2542,14 @@
    was swapped in."
   {:added "1.7"}
   [vol f & args]
-  (let [v (with-meta vol {:tag 'clojure.lang.Volatile})]
+  (let [v (with-meta vol {:tag 'glojure.lang.Volatile})]
     `(.reset ~v (~f (.Deref ~v) ~@args))))
 
 (defn volatile?
   "Returns true if x is a volatile."
   {:added "1.7"}
   [x]
-  (instance? clojure.lang.Volatile x))
+  (instance? glojure.lang.Volatile x))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; fn stuff ;;;;;;;;;;;;;;;;
 
@@ -2718,7 +2718,7 @@
   [bindings & body]
   (let [i (first bindings)
         n (second bindings)]
-    `(let [n# (clojure.lang.RT/longCast ~n)]
+    `(let [n# (glojure.lang.AsInt64 ~n)]
        (loop [~i 0]
          (when (< ~i n#)
            ~@body
@@ -2837,7 +2837,7 @@
   "Wraps x in a way such that a reduce will terminate with the value x"
   {:added "1.5"}
   [x]
-  (clojure.lang.Reduced. x))
+  (glojure.lang.Reduced. x))
 
 (defn reduced?
   "Returns true if x is the result of a call to reduced"
@@ -3233,7 +3233,7 @@
                                                ~recform)]))
                      (let [seq- (gensym "seq_")
                            chunk- (with-meta (gensym "chunk_")
-                                             {:tag 'clojure.lang.IChunk})
+                                             {:tag 'glojure.lang.IChunk})
                            count- (gensym "count_")
                            i- (gensym "i_")
                            recform `(recur (next ~seq-) nil 0 0)
@@ -3278,7 +3278,7 @@
         (send agent count-down))
       (. latch (await)))))
 
-(defn ^:static await1 [^clojure.lang.Agent a]
+(defn ^:static await1 [^glojure.lang.Agent a]
   (when (pos? (.getQueueCount a))
     (await a))
     a)
@@ -3342,7 +3342,7 @@
   call, any such use will throw an exception."
   {:added "1.1"
    :static true}
-  [^clojure.lang.ITransientCollection coll]
+  [^glojure.lang.ITransientCollection coll]
   (.Persistent coll))
 
 (defn conj!
@@ -3352,7 +3352,7 @@
    :static true}
   ([] (transient []))
   ([coll] coll)
-  ([^clojure.lang.ITransientCollection coll x]
+  ([^glojure.lang.ITransientCollection coll x]
      (.conj coll x)))
 
 (defn assoc!
@@ -3361,8 +3361,8 @@
   Note - index must be <= (count vector). Returns coll."
   {:added "1.1"
    :static true}
-  ([^clojure.lang.ITransientAssociative coll key val] (.assoc coll key val))
-  ([^clojure.lang.ITransientAssociative coll key val & kvs]
+  ([^glojure.lang.ITransientAssociative coll key val] (.assoc coll key val))
+  ([^glojure.lang.ITransientAssociative coll key val & kvs]
    (let [ret (.assoc coll key val)]
      (if kvs
        (recur ret (first kvs) (second kvs) (nnext kvs))
@@ -3372,8 +3372,8 @@
   "Returns a transient map that doesn't contain a mapping for key(s)."
   {:added "1.1"
    :static true}
-  ([^clojure.lang.ITransientMap map key] (.without map key))
-  ([^clojure.lang.ITransientMap map key & ks]
+  ([^glojure.lang.ITransientMap map key] (.without map key))
+  ([^glojure.lang.ITransientMap map key & ks]
    (let [ret (.without map key)]
      (if ks
        (recur ret (first ks) (next ks))
@@ -3384,7 +3384,7 @@
   the collection is empty, throws an exception. Returns coll"
   {:added "1.1"
    :static true}
-  [^clojure.lang.ITransientVector coll] 
+  [^glojure.lang.ITransientVector coll] 
   (.pop coll)) 
 
 (defn disj!
@@ -3393,9 +3393,9 @@
   {:added "1.1"
    :static true}
   ([set] set)
-  ([^clojure.lang.ITransientSet set key]
+  ([^glojure.lang.ITransientSet set key]
    (. set (Disjoin key)))
-  ([^clojure.lang.ITransientSet set key & ks]
+  ([^glojure.lang.ITransientSet set key & ks]
    (let [ret (. set (Disjoin key))]
      (if ks
        (recur ret (first ks) (next ks))
@@ -3451,7 +3451,7 @@
   "Returns the Class of x"
   {:added "1.0"
    :static true}
-  ^Class [^Object x] (if (nil? x) x (. x (getClass))))
+  ^Class [^Object x] (if (nil? x) x (glojure.lang.TypeOf x)))
 
 (defn type 
   "Returns the :type metadata of x, or its Class if none"
@@ -3471,7 +3471,7 @@
   "Coerce to long"
   {:inline (fn  [x] `(. glojure.lang.RT (LongCast ~x)))
    :added "1.0"}
-  [^Number x] (clojure.lang.RT/longCast x))
+  [^Number x] (glojure.lang.AsInt64 x))
 
 (defn float
   "Coerce to float"
@@ -3483,7 +3483,7 @@
   "Coerce to double"
   {:inline (fn  [x] `(. glojure.lang.RT (DoubleCast ~x)))
    :added "1.0"}
-  [^Number x] (glojure.lang.AsInt64 x))
+  [^Number x] (clojure.lang.RT/doubleCast x))
 
 (defn short
   "Coerce to short"
@@ -3567,7 +3567,7 @@
   "Returns true if n is a Ratio"
   {:added "1.0"
    :static true}
-  [n] (instance? clojure.lang.Ratio n))
+  [n] (instance? glojure.lang.Ratio n))
 
 (defn numerator
   "Returns the numerator part of a Ratio."
@@ -3575,7 +3575,7 @@
    :added "1.2"
    :static true}
   [r]
-  (.numerator ^clojure.lang.Ratio r))
+  (.numerator ^glojure.lang.Ratio r))
 
 (defn denominator
   "Returns the denominator part of a Ratio."
@@ -3583,7 +3583,7 @@
    :added "1.2"
    :static true}
   [r]
-  (.denominator ^clojure.lang.Ratio r))
+  (.denominator ^glojure.lang.Ratio r))
 
 (defn decimal?
   "Returns true if n is a BigDecimal"
@@ -3608,15 +3608,15 @@
 
 (defn bigint
   "Coerce to BigInt"
-  {:tag clojure.lang.BigInt
+  {:tag glojure.lang.BigInt
    :static true
    :added "1.3"}
   [x] (cond
-       (instance? clojure.lang.BigInt x) x
+       (instance? glojure.lang.BigInt x) x
        (instance? BigInteger x) (clojure.lang.BigInt/fromBigInteger x)
        (decimal? x) (bigint (.toBigInteger ^BigDecimal x))
        (float? x)  (bigint (. BigDecimal valueOf (double x)))
-       (ratio? x) (bigint (.bigIntegerValue ^clojure.lang.Ratio x))
+       (ratio? x) (bigint (.bigIntegerValue ^glojure.lang.Ratio x))
        (number? x) (clojure.lang.BigInt/valueOf (long x))
        :else (bigint (BigInteger. x))))
 
@@ -3627,10 +3627,10 @@
    :static true}
   [x] (cond
        (instance? BigInteger x) x
-       (instance? clojure.lang.BigInt x) (.toBigInteger ^clojure.lang.BigInt x)
+       (instance? glojure.lang.BigInt x) (.toBigInteger ^glojure.lang.BigInt x)
        (decimal? x) (.toBigInteger ^BigDecimal x)
        (float? x) (.toBigInteger (. BigDecimal valueOf (double x)))
-       (ratio? x) (.bigIntegerValue ^clojure.lang.Ratio x)
+       (ratio? x) (.bigIntegerValue ^glojure.lang.Ratio x)
        (number? x) (BigInteger/valueOf (long x))
        :else (BigInteger. x)))
 
@@ -3642,8 +3642,8 @@
   [x] (cond
        (decimal? x) x
        (float? x) (. BigDecimal valueOf (double x))
-       (ratio? x) (/ (BigDecimal. (.numerator ^clojure.lang.Ratio x)) (.denominator ^clojure.lang.Ratio x))
-       (instance? clojure.lang.BigInt x) (.toBigDecimal ^clojure.lang.BigInt x)
+       (ratio? x) (/ (BigDecimal. (.numerator ^glojure.lang.Ratio x)) (.denominator ^glojure.lang.Ratio x))
+       (instance? glojure.lang.BigInt x) (.toBigDecimal ^glojure.lang.BigInt x)
        (instance? BigInteger x) (BigDecimal. ^BigInteger x)
        (number? x) (BigDecimal/valueOf (long x))
        :else (BigDecimal. x)))
@@ -3676,7 +3676,7 @@
      (pr-on x *out*))
   ([x & more]
    (pr x)
-   (. *out* (append \space))
+   (glojure.lang.AppendWriter *out* \space)
    (if-let [nmore (next more)]
      (recur (first more) nmore)
      (apply pr more))))
@@ -3689,7 +3689,7 @@
   {:added "1.0"
    :static true}
   []
-    (. *out* (append system-newline))
+    (glojure.lang.AppendWriter *out* system-newline)
     nil)
 
 (defn flush
@@ -3753,9 +3753,9 @@
   ([stream eof-error? eof-value]
    (read stream eof-error? eof-value false))
   ([stream eof-error? eof-value recursive?]
-   (. clojure.lang.LispReader (read stream (boolean eof-error?) eof-value recursive?)))
+   (. glojure.lang.LispReader (read stream (boolean eof-error?) eof-value recursive?)))
   ([opts stream]
-   (. clojure.lang.LispReader (read stream opts))))
+   (. glojure.lang.LispReader (read stream opts))))
 
 (defn read+string
   "Like read, and taking the same args. stream must be a LineNumberingPushbackReader.
@@ -3764,7 +3764,7 @@
   ([] (read+string *in*))
   ([stream] (read+string stream true nil))
   ([stream eof-error? eof-value] (read+string stream eof-error? eof-value false))
-  ([^clojure.lang.LineNumberingPushbackReader stream eof-error? eof-value recursive?]
+  ([^glojure.lang.LineNumberingPushbackReader stream eof-error? eof-value recursive?]
    (try
      (.captureString stream)
      (let [o (read stream eof-error? eof-value recursive?)
@@ -3773,7 +3773,7 @@
      (catch Throwable ex
        (.getString stream)
        (throw ex))))
-  ([opts ^clojure.lang.LineNumberingPushbackReader stream]
+  ([opts ^glojure.lang.LineNumberingPushbackReader stream]
    (try
      (.captureString stream)
      (let [o (read opts stream)
@@ -3788,8 +3788,8 @@
   {:added "1.0"
    :static true}
   []
-  (if (instance? clojure.lang.LineNumberingPushbackReader *in*)
-    (.readLine ^clojure.lang.LineNumberingPushbackReader *in*)
+  (if (instance? glojure.lang.LineNumberingPushbackReader *in*)
+    (.readLine ^glojure.lang.LineNumberingPushbackReader *in*)
     (.readLine ^java.io.BufferedReader *in*)))
 
 (defn read-string
@@ -4030,7 +4030,7 @@
   {:added "1.0"
    :static true}
   [& keys]
-    (. clojure.lang.PersistentStructMap (createSlotMap keys)))
+    (. glojure.lang.PersistentStructMap (createSlotMap keys)))
 
 (defmacro defstruct
   "Same as (def name (create-struct keys...))"
@@ -4047,7 +4047,7 @@
   {:added "1.0"
    :static true}
   [s & inits]
-    (. clojure.lang.PersistentStructMap (create s inits)))
+    (. glojure.lang.PersistentStructMap (create s inits)))
 
 (defn struct
   "Returns a new structmap instance with the keys of the
@@ -4056,7 +4056,7 @@
   {:added "1.0"
    :static true}
   [s & vals]
-    (. clojure.lang.PersistentStructMap (construct s vals)))
+    (. glojure.lang.PersistentStructMap (construct s vals)))
 
 (defn accessor
   "Returns a fn that, given an instance of a structmap with the basis,
@@ -4067,7 +4067,7 @@
   {:added "1.0"
    :static true}
   [s key]
-    (. clojure.lang.PersistentStructMap (getAccessor s key)))
+    (. glojure.lang.PersistentStructMap (getAccessor s key)))
 
 (defn load-reader
   "Sequentially read and evaluate the set of forms contained in the
@@ -4083,7 +4083,7 @@
    :static true}
   [s]
   (let [rdr (-> (java.io.StringReader. s)
-                (clojure.lang.LineNumberingPushbackReader.))]
+                (glojure.lang.LineNumberingPushbackReader.))]
     (load-reader rdr)))
 
 (defn set?
@@ -4371,7 +4371,7 @@
   if by repeated uses of assoc."
   {:added "1.0"
    :static true}
-  ([] (. clojure.lang.PersistentArrayMap EMPTY))
+  ([] (. glojure.lang.PersistentArrayMap EMPTY))
   ([& keyvals]
      (let [ary (to-array keyvals)]
        (if (odd? (alength ary))
@@ -4742,7 +4742,7 @@
   StringReader initialized with the string s."
   {:added "1.0"}
   [s & body]
-  `(with-open [s# (-> (java.io.StringReader. ~s) clojure.lang.LineNumberingPushbackReader.)]
+  `(with-open [s# (-> (java.io.StringReader. ~s) glojure.lang.LineNumberingPushbackReader.)]
      (binding [*in* s#]
        ~@body)))
 
@@ -4782,7 +4782,7 @@
     (with-out-str
      (apply println xs)))
 
-(import clojure.lang.ExceptionInfo clojure.lang.IExceptionInfo)
+(import glojure.lang.ExceptionInfo glojure.lang.IExceptionInfo)
 
 (defn ^:private elide-top-frames
   [^Throwable ex class-name]
@@ -4853,12 +4853,12 @@
 (defn re-pattern
   "Returns an instance of java.util.regex.Pattern, for use, e.g. in
   re-matcher."
-  {:tag java.util.regex.Pattern
+  {:tag regexp.Regexp
    :added "1.0"
    :static true}
-  [s] (if (instance? java.util.regex.Pattern s)
+  [s] (if (instance? regexp.Regexp s)
         s
-        (. java.util.regex.Pattern (compile s))))
+        (. regexp.Regexp (compile s))))
 
 (defn re-matcher
   "Returns an instance of java.util.regex.Matcher, for use, e.g. in
@@ -4866,7 +4866,7 @@
   {:tag java.util.regex.Matcher
    :added "1.0"
    :static true}
-  [^java.util.regex.Pattern re s]
+  [^regexp.Regexp re s]
     (. re (matcher s)))
 
 (defn re-groups
@@ -4891,7 +4891,7 @@
   re-groups."
   {:added "1.0"
    :static true}
-  [^java.util.regex.Pattern re s]
+  [^regexp.Regexp re s]
   (let [m (re-matcher re s)]
     ((fn step []
        (when (. m (find))
@@ -4903,7 +4903,7 @@
   groups."
   {:added "1.0"
    :static true}
-  [^java.util.regex.Pattern re s]
+  [^regexp.Regexp re s]
     (let [m (re-matcher re s)]
       (when (. m (matches))
         (re-groups m))))
@@ -4918,7 +4918,7 @@
   ([^java.util.regex.Matcher m]
    (when (. m (find))
      (re-groups m)))
-  ([^java.util.regex.Pattern re s]
+  ([^regexp.Regexp re s]
    (let [m (re-matcher re s)]
      (re-find m))))
 
@@ -5116,7 +5116,7 @@
 
 (defn mk-bound-fn
   {:private true}
-  [^clojure.lang.Sorted sc test key]
+  [^glojure.lang.Sorted sc test key]
   (fn [e]
     (test (.. sc comparator (compare (. sc entryKey e) key)) 0)))
 
@@ -5126,13 +5126,13 @@
   which (test (.. sc comparator (compare ek key)) 0) is true"
   {:added "1.0"
    :static true}
-  ([^clojure.lang.Sorted sc test key]
+  ([^glojure.lang.Sorted sc test key]
    (let [include (mk-bound-fn sc test key)]
      (if (#{> >=} test)
        (when-let [[e :as s] (. sc seqFrom key true)]
          (if (include e) s (next s)))
        (take-while include (. sc seq true)))))
-  ([^clojure.lang.Sorted sc start-test start-key end-test end-key]
+  ([^glojure.lang.Sorted sc start-test start-key end-test end-key]
    (when-let [[e :as s] (. sc seqFrom start-key true)]
      (take-while (mk-bound-fn sc end-test end-key)
                  (if ((mk-bound-fn sc start-test start-key) e) s (next s))))))
@@ -5143,13 +5143,13 @@
   which (test (.. sc comparator (compare ek key)) 0) is true"
   {:added "1.0"
    :static true}
-  ([^clojure.lang.Sorted sc test key]
+  ([^glojure.lang.Sorted sc test key]
    (let [include (mk-bound-fn sc test key)]
      (if (#{< <=} test)
        (when-let [[e :as s] (. sc seqFrom key false)]
          (if (include e) s (next s)))
        (take-while include (. sc seq false)))))
-  ([^clojure.lang.Sorted sc start-test start-key end-test end-key]
+  ([^glojure.lang.Sorted sc start-test start-key end-test end-key]
    (when-let [[e :as s] (. sc seqFrom end-key false)]
      (take-while (mk-bound-fn sc start-test start-key)
                  (if ((mk-bound-fn sc end-test end-key) e) s (next s))))))
@@ -5183,7 +5183,7 @@
 
   {:added "1.0"
    :static true}
-  [x] (. clojure.lang.Util (hasheq x)))
+  [x] (. glojure.lang.Util (hasheq x)))
 
 
 (defn mix-collection-hash
@@ -5874,7 +5874,7 @@
           boring? #(not= (.getMethodName ^StackTraceElement %) "doInvoke")
           trace (into-array StackTraceElement (drop 2 (drop-while boring? raw-trace)))]
       (.setStackTrace exception trace)
-      (throw (clojure.lang.Compiler$CompilerException.
+      (throw (glojure.lang.Compiler$CompilerException.
               *file*
               (.Deref clojure.lang.Compiler/LINE)
               (.Deref clojure.lang.Compiler/COLUMN)
@@ -6248,7 +6248,7 @@ fails, attempts to require sym's namespace and retries."
   (e.g. sets and maps) implement IFn"
   {:added "1.0"
    :static true}
-  [x] (instance? clojure.lang.IFn x))
+  [x] (instance? glojure.lang.IFn x))
 
 (defn fn?
   "Returns true if x implements Fn, i.e. is an object created via fn."
@@ -6261,7 +6261,7 @@ fails, attempts to require sym's namespace and retries."
  "Returns true if coll implements Associative"
  {:added "1.0"
   :static true}
-  [coll] (instance? clojure.lang.Associative coll))
+  [coll] (instance? glojure.lang.Associative coll))
 
 (defn sequential?
  "Returns true if coll implements Sequential"
@@ -6273,7 +6273,7 @@ fails, attempts to require sym's namespace and retries."
  "Returns true if coll implements Sorted"
  {:added "1.0"
    :static true}
-  [coll] (instance? clojure.lang.Sorted coll))
+  [coll] (instance? glojure.lang.Sorted coll))
 
 (defn counted?
  "Returns true if coll implements count in constant time"
@@ -6295,12 +6295,12 @@ fails, attempts to require sym's namespace and retries."
  "Returns true if coll implements Reversible"
  {:added "1.0"
    :static true}
-  [coll] (instance? clojure.lang.Reversible coll))
+  [coll] (instance? glojure.lang.Reversible coll))
 
 (defn indexed?
   "Return true if coll implements Indexed, indicating efficient lookup by index"
   {:added "1.9"}
-  [coll] (instance? clojure.lang.Indexed coll))
+  [coll] (instance? glojure.lang.Indexed coll))
 
 (def ^:dynamic
  ^{:doc "bound in a repl thread to the most recent value printed"
@@ -6858,8 +6858,8 @@ fails, attempts to require sym's namespace and retries."
   items, returns val and f is not called."
   {:added "1.0"}
   ([f coll]
-     (if (instance? clojure.lang.IReduce coll)
-       (.reduce ^clojure.lang.IReduce coll f)
+     (if (instance? glojure.lang.IReduce coll)
+       (.reduce ^glojure.lang.IReduce coll f)
        (clojure.core.protocols/coll-reduce coll f)))
   ([f val coll]
      (if (instance? glojure.lang.IReduceInit coll)
@@ -6985,7 +6985,7 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.2"}
   [f content & options]
   (with-open [^java.io.Writer w (apply jio/writer f options)]
-    (.write w (str content))))
+    (glojure.lang.WriteWriter w (str content))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; futures (needs proxy);;;;;;;;;;;;;;;;;;
 (defn future-call 
@@ -7002,11 +7002,11 @@ fails, attempts to require sym's namespace and retries."
     (reify 
      glojure.lang.IDeref 
      (deref [_] (deref-future fut))
-     clojure.lang.IBlockingDeref
+     glojure.lang.IBlockingDeref
      (deref
       [_ timeout-ms timeout-val]
       (deref-future fut timeout-ms timeout-val))
-     clojure.lang.IPending
+     glojure.lang.IPending
      (isRealized [_] (.isDone fut))
      java.util.concurrent.Future
       (get [_] (.get fut))
@@ -7100,16 +7100,16 @@ fails, attempts to require sym's namespace and retries."
     (reify 
      glojure.lang.IDeref
        (deref [_] (.await d) @v)
-     clojure.lang.IBlockingDeref
+     glojure.lang.IBlockingDeref
        (deref
         [_ timeout-ms timeout-val]
         (if (.await d timeout-ms java.util.concurrent.TimeUnit/MILLISECONDS)
           @v
           timeout-val))  
-     clojure.lang.IPending
+     glojure.lang.IPending
       (isRealized [this]
        (zero? (.getCount d)))
-     clojure.lang.IFn
+     glojure.lang.IFn
      (invoke
       [this x]
       (when (and (pos? (.getCount d))
@@ -7570,7 +7570,7 @@ fails, attempts to require sym's namespace and retries."
 (defn realized?
   "Returns true if a value has been produced for a promise, delay, future or lazy sequence."
   {:added "1.3"}
-  [^clojure.lang.IPending x] (.isRealized x))
+  [^glojure.lang.IPending x] (.isRealized x))
 
 (defmacro cond->
   "Takes an expression and a set of test/form pairs. Threads expr (via ->)

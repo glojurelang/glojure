@@ -1,6 +1,6 @@
 (ns glojure-rewrite-core
   (:require [rewrite-clj.zip :as z]
-            [clojure.string :as s]))
+            [clojure.string :as string]))
 
 (def zloc (z/of-string (slurp (first *command-line-args*))))
 
@@ -15,6 +15,11 @@
 
 (defn sexpr-replace [old new]
   [(fn select [zloc] (and (z/sexpr-able? zloc) (= old (z/sexpr zloc))))
+   (fn visit [zloc] (z/replace zloc new))])
+
+(defn sexpr-replace-any
+  [coll new]
+  [(fn select [zloc] (and (z/sexpr-able? zloc) (reduce #(or %1 (= %2 (z/sexpr zloc))) false coll)))
    (fn visit [zloc] (z/replace zloc new))])
 
 (defn RT-replace
@@ -50,6 +55,11 @@
    (sexpr-replace 'clojure.lang.Fn 'glojure.lang.Fn)
    (sexpr-replace 'clojure.lang.IPersistentCollection 'glojure.lang.IPersistentCollection)
    (sexpr-replace 'clojure.lang.IPersistentList 'glojure.lang.IPersistentList)
+   (sexpr-replace 'clojure.lang.IRecord 'glojure.lang.IRecord)
+   (sexpr-replace 'java.lang.Character 'rune)
+   (sexpr-replace 'java.lang.Long 'int64)
+   (sexpr-replace 'java.lang.Double 'float64)
+   (sexpr-replace 'clojure.lang.Ratio 'glojure.lang.Ratio)
 
    ;; instance? replacements
    (sexpr-replace "Evaluates x and tests if it is an instance of the class\n    c. Returns true or false"
@@ -79,7 +89,7 @@
                         (catch Exception e false)))
     (fn visit [zloc] (z/replace zloc
                                 (let [sym (-> zloc z/sexpr str)]
-                                  (symbol (str (s/upper-case (first sym)) (subs sym 1))))))]
+                                  (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
 
    (sexpr-replace '.meta '.Meta)
    (sexpr-replace 'clojure.lang.IPersistentMap 'glojure.lang.IPersistentMap)
@@ -179,7 +189,6 @@
    (sexpr-replace 'clojure.lang.MultiFn 'glojure.lang.MultiFn)
    (sexpr-replace 'addMethod 'AddMethod)
    (sexpr-replace 'preferMethod 'PreferMethod)
-   
 
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -190,7 +199,7 @@
 
    (sexpr-replace '(. System (nanoTime)) '(.UnixNano (time.Now)))
 
-   (sexpr-replace 'clojure.lang.RT/doubleCast 'glojure.lang.AsInt64)
+   (sexpr-replace 'clojure.lang.RT/longCast 'glojure.lang.AsInt64)
 
    (sexpr-replace "clojure.core" "glojure.core")
    (sexpr-replace 'clojure.core/name 'glojure.core/name)
@@ -223,7 +232,7 @@
                         (catch Exception e false)))
     (fn visit [zloc] (z/replace zloc
                                 (let [sym (-> zloc z/sexpr str)]
-                                  (symbol (str (s/upper-case (first sym)) (subs sym 1))))))]
+                                  (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
    (sexpr-replace 'clojure.lang.Numbers 'glojure.lang.Numbers)
 
    (sexpr-replace 'clojure.core/cond 'glojure.core/cond)
@@ -278,6 +287,8 @@
 
    (sexpr-replace '(clojure.lang.Repeat/create x) '(glojure.lang.NewRepeat x))
    (sexpr-replace '(clojure.lang.Repeat/create n x) '(glojure.lang.NewRepeatN n x))
+
+   (sexpr-replace '.charAt 'glojure.lang.CharAt)
 
    ;;;; OMIT PARTS OF THE FILE ENTIRELY FOR NOW
    ;;; TODO: implement load for embedded files!
@@ -336,6 +347,8 @@
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= 'version-string (z/sexpr zloc))))
     (fn visit [zloc] (z/replace (-> zloc z/up z/up) '(do)))]
 
+   (sexpr-replace '(. x (getClass))
+                  '(glojure.lang.TypeOf x))
 
    ;;; core_print.clj
 
@@ -349,13 +362,62 @@
    (sexpr-replace '(prefer-method print-dup clojure.lang.ISeq java.util.Collection) '(do))
    (sexpr-replace '(prefer-method print-dup clojure.lang.IPersistentCollection java.util.Collection) '(do))
 
+   (sexpr-replace-any
+    '[
+      (prefer-method print-method clojure.lang.IPersistentCollection java.util.Collection)
+      (prefer-method print-method clojure.lang.IPersistentCollection java.util.RandomAccess)
+      (prefer-method print-method java.util.RandomAccess java.util.List)
+      (prefer-method print-method clojure.lang.IPersistentCollection java.util.Map)
+      (prefer-method print-method clojure.lang.IRecord java.util.Map)
+      (prefer-method print-dup clojure.lang.IPersistentCollection java.util.Map)
+      (prefer-method print-dup clojure.lang.IRecord java.util.Map)
+      ]
+    '(do))
+
+   (sexpr-replace 'java.util.regex.Pattern 'regexp.Regexp)
+   (sexpr-replace 'clojure.lang.BigInt 'glojure.lang.BigInt)
+
+   (sexpr-replace '.write 'glojure.lang.WriteWriter)
+   (sexpr-replace '.append 'glojure.lang.AppendWriter)
+   (sexpr-replace '(. *out* (append \space)) '(glojure.lang.AppendWriter *out* \space))
+   (sexpr-replace '(. *out* (append system-newline)) '(glojure.lang.AppendWriter *out* system-newline))
+
+   (omit-symbols '#{primitives-classnames})
+
    ;; Omit some methods
    [(fn select [zloc] (and (z/list? zloc)
                            (let [sexpr (z/sexpr zloc)]
                              (and (= 'defmethod (first sexpr))
                                   (contains? #{'print-method 'print-dup} (second sexpr))
-                                  (contains? #{'Object 'Number 'java.util.Collection} (nth sexpr 2))))))
+                                  (contains? #{'Object
+                                               'Number
+                                               'java.util.Collection
+                                               'java.util.Map
+                                               'java.util.List
+                                               'java.util.RandomAccess
+                                               'java.util.Set
+                                               'java.math.BigDecimal
+                                               'clojure.lang.LazilyPersistentVector
+                                               'Class
+                                               'StackTraceElement
+                                               'Throwable
+                                               ;; TODO: support
+                                               'clojure.lang.TaggedLiteral
+                                               'clojure.lang.ReaderConditional
+                                               } (nth sexpr 2))))))
     (fn visit [zloc] (z/replace zloc '(do)))]
+
+
+   ;;; replace all clojure.lang symbols with glojure.lang
+   [(fn select [zloc] (and (z/sexpr-able? zloc)
+                           (let [sexpr (z/sexpr zloc)]
+                             (and (symbol? sexpr)
+                                  (string/starts-with? (name sexpr) "clojure.lang.")))))
+    (fn visit [zloc] (z/replace zloc (-> zloc
+                                         z/sexpr
+                                         name
+                                         (string/replace "clojure.lang." "glojure.lang.")
+                                         symbol)))]
 
    ])
 

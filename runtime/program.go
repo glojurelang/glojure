@@ -69,6 +69,8 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		env = newEnvironment(context.Background(), options.stdout, options.stderr)
 		env.loadPath = options.loadPath
 	}
+	// TODO: this is rather rather hacky
+	value.GlobalEnv = env
 
 	// bootstrap namespace control
 	{
@@ -178,6 +180,12 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		{
 			define("bool", reflect.TypeOf(true))
 		}
+		{
+			define("glojure.lang.BigInt", reflect.TypeOf(&value.BigInt{}))
+			define("glojure.lang.PersistentHashMap", reflect.TypeOf(&value.Map{}))   // TODO: this is a hack
+			define("glojure.lang.PersistentHashSet", reflect.TypeOf(&value.Set{}))   // TODO: this is a hack
+			define("glojure.lang.PersistentVector", reflect.TypeOf(&value.Vector{})) // TODO: this is a hack
+		}
 
 		define("error", reflect.TypeOf((*error)(nil)).Elem())
 
@@ -186,6 +194,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	{ // core functions
 		define("glojure.lang.NewList", value.NewList)
 		define("glojure.lang.Symbol", reflect.TypeOf(value.NewSymbol("")))
+		define("glojure.lang.Ratio", reflect.TypeOf(value.NewRatio(1, 1)))
 		define("glojure.lang.Fn", reflect.TypeOf(&value.Fn{}))
 		define("glojure.lang.HasType", func(t reflect.Type, v interface{}) bool {
 			if v == nil {
@@ -197,6 +206,9 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			default:
 				return false
 			}
+		})
+		define("glojure.lang.TypeOf", func(v interface{}) reflect.Type {
+			return reflect.TypeOf(v)
 		})
 		define("glojure.lang.WithMeta", value.WithMeta)
 		define("glojure.lang.NewCons", value.NewCons)
@@ -244,7 +256,9 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.IChunkedSeq", reflect.TypeOf((*value.IChunkedSeq)(nil)).Elem())
 		define("glojure.lang.ISeq", reflect.TypeOf((*value.ISeq)(nil)).Elem())
 		define("glojure.lang.IDeref", reflect.TypeOf((*value.IDeref)(nil)).Elem())
+		define("glojure.lang.IRecord", reflect.TypeOf((*value.IRecord)(nil)).Elem())
 		define("glojure.lang.Sequential", reflect.TypeOf((*value.Sequential)(nil)).Elem())
+		define("glojure.lang.IObj", reflect.TypeOf((*value.IObj)(nil)).Elem())
 
 		define("glojure.lang.MultiFn", reflect.TypeOf(&value.MultiFn{}))
 		define("glojure.lang.Namespace", reflect.TypeOf(&value.Namespace{}))
@@ -252,6 +266,46 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.LockingTransaction", value.LockingTransaction)
 
 		define("glojure.lang.AsInt64", value.AsInt64)
+	}
+	{
+		define("glojure.lang.AppendWriter", func(w io.Writer, v interface{}) io.Writer {
+			var err error
+			switch v := v.(type) {
+			case string:
+				_, err = w.Write([]byte(v))
+			case []byte:
+				_, err = w.Write(v)
+			case rune:
+				_, err = w.Write([]byte{byte(v)})
+			case value.Char:
+				_, err = w.Write([]byte{byte(v)})
+			default:
+				err = fmt.Errorf("unsupported type %T", v)
+			}
+
+			if err != nil {
+				panic(err)
+			}
+			return w
+		})
+		define("glojure.lang.WriteWriter", func(w io.Writer, v interface{}) io.Writer {
+			var err error
+			switch v := v.(type) {
+			case string:
+				_, err = w.Write([]byte(v))
+			case []byte:
+				_, err = w.Write(v)
+			default:
+				err = fmt.Errorf("unsupported type %T", v)
+			}
+			if err != nil {
+				panic(err)
+			}
+			return w
+		})
+		define("glojure.lang.CharAt", func(s string, idx int) value.Char {
+			return value.NewChar([]rune(s)[idx])
+		})
 	}
 	{
 		// Add stdlib
