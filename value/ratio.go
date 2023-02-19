@@ -45,6 +45,12 @@ func (r *Ratio) SubP(other *Ratio) *Ratio {
 	return r.Sub(other)
 }
 
+func (r *Ratio) Multiply(other *Ratio) *Ratio {
+	return &Ratio{
+		val: new(big.Rat).Mul(r.val, other.val),
+	}
+}
+
 func (r *Ratio) Divide(other *Ratio) *Ratio {
 	return &Ratio{
 		val: new(big.Rat).Quo(r.val, other.val),

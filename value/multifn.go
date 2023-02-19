@@ -15,6 +15,10 @@ type MultiFn struct {
 	mtx sync.RWMutex
 }
 
+var (
+	_ IFn = (*MultiFn)(nil)
+)
+
 func NewMultiFn(name string, dispatchFn IFn, defaultDispatchVal interface{}, hierarchy IRef) *MultiFn {
 	return &MultiFn{
 		name:               name,
@@ -38,8 +42,12 @@ func (m *MultiFn) PreferMethod(dispatchValX, dispatchValY interface{}) *MultiFn 
 	return m
 }
 
-func (m *MultiFn) Invoke(args []interface{}) interface{} {
+func (m *MultiFn) Invoke(args ...interface{}) interface{} {
 	return m.getFn(m.dispatchFn.Invoke(args...)).Invoke(args...)
+}
+
+func (m *MultiFn) ApplyTo(args ISeq) interface{} {
+	return m.Invoke(seqToSlice(args)...)
 }
 
 func (m *MultiFn) getFn(dispatchVal interface{}) IFn {

@@ -27,6 +27,7 @@ type (
 var (
 	_ IPersistentMap = (*Map)(nil)
 	_ IMeta          = (*Map)(nil)
+	_ IFn            = (*Map)(nil)
 
 	emptyMap = NewMap()
 )

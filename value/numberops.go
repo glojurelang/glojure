@@ -17,6 +17,7 @@ type (
 		Sub(x, y interface{}) interface{}
 		SubP(x, y interface{}) interface{}
 
+		Multiply(x, y interface{}) interface{}
 		Divide(x, y interface{}) interface{}
 
 		LT(x, y interface{}) bool
@@ -112,6 +113,9 @@ func (o int64Ops) Sub(x, y interface{}) interface{} {
 func (o int64Ops) SubP(x, y interface{}) interface{} {
 	return AsInt64(x) - AsInt64(y)
 }
+func (o int64Ops) Multiply(x, y interface{}) interface{} {
+	return AsInt64(x) * AsInt64(y)
+}
 func (o int64Ops) Divide(x, y interface{}) interface{} {
 	return AsInt64(x) / AsInt64(y)
 }
@@ -154,6 +158,9 @@ func (o bigIntOps) Sub(x, y interface{}) interface{} {
 }
 func (o bigIntOps) SubP(x, y interface{}) interface{} {
 	return AsBigInt(x).SubP(AsBigInt(y))
+}
+func (o bigIntOps) Multiply(x, y interface{}) interface{} {
+	return AsBigInt(x).Multiply(AsBigInt(y))
 }
 func (o bigIntOps) Divide(x, y interface{}) interface{} {
 	return AsBigInt(x).Divide(AsBigInt(y))
@@ -201,6 +208,9 @@ func (o ratioOps) Sub(x, y interface{}) interface{} {
 }
 func (o ratioOps) SubP(x, y interface{}) interface{} {
 	return AsRatio(x).SubP(AsRatio(y))
+}
+func (o ratioOps) Multiply(x, y interface{}) interface{} {
+	return AsRatio(x).Multiply(AsRatio(y))
 }
 func (o ratioOps) Divide(x, y interface{}) interface{} {
 	return AsRatio(x).Divide(AsRatio(y))
@@ -250,6 +260,9 @@ func (o bigDecimalOps) Sub(x, y interface{}) interface{} {
 func (o bigDecimalOps) SubP(x, y interface{}) interface{} {
 	return AsBigDecimal(x).SubP(AsBigDecimal(y))
 }
+func (o bigDecimalOps) Multiply(x, y interface{}) interface{} {
+	return AsBigDecimal(x).Multiply(AsBigDecimal(y))
+}
 func (o bigDecimalOps) Divide(x, y interface{}) interface{} {
 	return AsBigDecimal(x).Divide(AsBigDecimal(y))
 }
@@ -297,6 +310,9 @@ func (o float64Ops) Sub(x, y interface{}) interface{} {
 }
 func (o float64Ops) SubP(x, y interface{}) interface{} {
 	return AsFloat64(x) - AsFloat64(y)
+}
+func (o float64Ops) Multiply(x, y interface{}) interface{} {
+	return AsFloat64(x) * AsFloat64(y)
 }
 func (o float64Ops) Divide(x, y interface{}) interface{} {
 	return AsFloat64(x) / AsFloat64(y)

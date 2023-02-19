@@ -58,6 +58,10 @@ func (n *BigInt) SubP(other *BigInt) *BigInt {
 	return n.Sub(other)
 }
 
+func (n *BigInt) Multiply(other *BigInt) *BigInt {
+	return &BigInt{val: new(big.Int).Mul(n.val, other.val)}
+}
+
 func (n *BigInt) Divide(other *BigInt) *BigInt {
 	return &BigInt{val: new(big.Int).Div(n.val, other.val)}
 }

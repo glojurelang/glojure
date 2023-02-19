@@ -24,8 +24,12 @@ type (
 		ApplyTo(args ISeq) interface{}
 	}
 
+	IReduce interface {
+		Reduce(f IFn) interface{}
+	}
+
 	IReduceInit interface {
-		Reduce(f IFn, init interface{}) interface{}
+		ReduceInit(f IFn, init interface{}) interface{}
 	}
 
 	// IMeta is an interface for values that can have metadata.

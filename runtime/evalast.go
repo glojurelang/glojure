@@ -196,7 +196,7 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 	case "glojure.lang.PopThreadBindings":
 		return value.PopThreadBindings, nil
 	default:
-		return nil, errors.New("unknown Go value: " + value.ToString(get(n, kw("class"))))
+		return nil, errors.New("unable to resolve symbol: " + value.ToString(get(n, kw("class"))))
 	}
 }
 
@@ -266,7 +266,7 @@ func (env *environment) EvalASTHostInterop(n ast.Node) (interface{}, error) {
 	case reflect.Func:
 		return value.Apply(mOrFVal, nil)
 	default:
-		panic("uniimplemented")
+		panic("unimplemented")
 	}
 }
 

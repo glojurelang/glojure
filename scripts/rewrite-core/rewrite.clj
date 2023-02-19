@@ -58,8 +58,16 @@
    (sexpr-replace 'clojure.lang.IRecord 'glojure.lang.IRecord)
    (sexpr-replace 'java.lang.Character 'rune)
    (sexpr-replace 'java.lang.Long 'int64)
+   (sexpr-replace 'Long 'int64)
    (sexpr-replace 'java.lang.Double 'float64)
    (sexpr-replace 'clojure.lang.Ratio 'glojure.lang.Ratio)
+
+   (sexpr-replace '(clojure.lang.LongRange/create end)
+                  '(glojure.lang.NewRangeIterator 0 end 1))
+   (sexpr-replace '(clojure.lang.LongRange/create start end)
+                  '(glojure.lang.NewRangeIterator start end 1))
+   (sexpr-replace '(clojure.lang.LongRange/create start end step)
+                  '(glojure.lang.NewRangeIterator start end step))
 
    ;; instance? replacements
    (sexpr-replace "Evaluates x and tests if it is an instance of the class\n    c. Returns true or false"
@@ -98,6 +106,13 @@
    (sexpr-replace 'String 'string)
    (sexpr-replace 'clojure.lang.IMeta 'glojure.lang.IMeta)
    (sexpr-replace 'clojure.lang.IReduceInit 'glojure.lang.IReduceInit)
+
+   [(fn select [zloc] (and (z/sexpr-able? zloc) (= '.reduce (z/sexpr zloc))))
+    (fn visit [zloc] (z/replace zloc
+                                (let [lst (z/sexpr (z/up zloc))]
+                                  (if (= 3 (count lst))
+                                    '.Reduce
+                                    '.ReduceInit))))]
 
    (sexpr-replace '.equals '.Equal)
 
@@ -234,6 +249,7 @@
                                 (let [sym (-> zloc z/sexpr str)]
                                   (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
    (sexpr-replace 'clojure.lang.Numbers 'glojure.lang.Numbers)
+   (sexpr-replace '(cast Number x) '(glojure.lang.AsNumber x))
 
    (sexpr-replace 'clojure.core/cond 'glojure.core/cond)
 

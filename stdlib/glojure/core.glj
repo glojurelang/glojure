@@ -934,7 +934,7 @@
             (if s
               (if (chunked-seq? s)
                 (recur f 
-                       (.reduce (chunk-first s) f val)
+                       (.ReduceInit (chunk-first s) f val)
                        (chunk-next s))
                 (recur f (f val (first s)) (next s)))
          val))))
@@ -971,7 +971,7 @@
    :inline-arities >1?
    :added "1.0"}
   ([] 0)
-  ([x] (cast Number x))
+  ([x] (glojure.lang.AsNumber x))
   ([x y] (. glojure.lang.Numbers (AddP x y)))
   ([x y & more]
    (reduce1 +' (+' x y) more)))
@@ -983,7 +983,7 @@
    :inline-arities >1?
    :added "1.2"}
   ([] 0)
-  ([x] (cast Number x))
+  ([x] (glojure.lang.AsNumber x))
   ([x y] (. glojure.lang.Numbers (Add x y)))
   ([x y & more]
      (reduce1 + (+ x y) more)))
@@ -995,7 +995,7 @@
    :inline-arities >1?
    :added "1.0"}
   ([] 1)
-  ([x] (cast Number x))
+  ([x] (glojure.lang.AsNumber x))
   ([x y] (. glojure.lang.Numbers (MultiplyP x y)))
   ([x y & more]
    (reduce1 *' (*' x y) more)))
@@ -1007,7 +1007,7 @@
    :inline-arities >1?
    :added "1.2"}
   ([] 1)
-  ([x] (cast Number x))
+  ([x] (glojure.lang.AsNumber x))
   ([x y] (. glojure.lang.Numbers (Multiply x y)))
   ([x y & more]
      (reduce1 * (* x y) more)))
@@ -1397,7 +1397,7 @@
 (defn int?
   "Return true if x is a fixed precision integer"
   {:added "1.9"}
-  [x] (or (instance? Long x)
+  [x] (or (instance? int64 x)
           (instance? Integer x)
           (instance? Short x)
           (instance? Byte x)))
@@ -3028,16 +3028,16 @@
   ([]
    (iterate inc' 0))
   ([end]
-   (if (instance? Long end)
-     (clojure.lang.LongRange/create end)
+   (if (instance? int64 end)
+     (glojure.lang.NewRangeIterator 0 end 1)
      (clojure.lang.Range/create end)))
   ([start end]
-   (if (and (instance? Long start) (instance? Long end))
-     (clojure.lang.LongRange/create start end)
+   (if (and (instance? int64 start) (instance? int64 end))
+     (glojure.lang.NewRangeIterator start end 1)
      (clojure.lang.Range/create start end)))
   ([start end step]
-   (if (and (instance? Long start) (instance? Long end) (instance? Long step))
-     (clojure.lang.LongRange/create start end step)
+   (if (and (instance? int64 start) (instance? int64 end) (instance? int64 step))
+     (glojure.lang.NewRangeIterator start end step)
      (clojure.lang.Range/create start end step))))
 
 (defn merge
@@ -4100,7 +4100,7 @@
   (if (set? coll)
     (with-meta coll nil)
     (if (instance? glojure.lang.IReduceInit coll)
-      (persistent! (.reduce ^glojure.lang.IReduceInit coll conj! (transient #{})))
+      (persistent! (.ReduceInit ^glojure.lang.IReduceInit coll conj! (transient #{})))
       (persistent! (reduce1 conj! (transient #{}) coll)))))
 
 (defn ^{:private true
@@ -6859,11 +6859,11 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.0"}
   ([f coll]
      (if (instance? glojure.lang.IReduce coll)
-       (.reduce ^glojure.lang.IReduce coll f)
+       (.Reduce ^glojure.lang.IReduce coll f)
        (clojure.core.protocols/coll-reduce coll f)))
   ([f val coll]
      (if (instance? glojure.lang.IReduceInit coll)
-       (.reduce ^glojure.lang.IReduceInit coll f val)
+       (.ReduceInit ^glojure.lang.IReduceInit coll f val)
        (clojure.core.protocols/coll-reduce coll f val))))
 
 (do)
@@ -6904,7 +6904,7 @@ fails, attempts to require sym's namespace and retries."
   ([xform f init coll]
      (let [f (xform f)
            ret (if (instance? glojure.lang.IReduceInit coll)
-                 (.reduce ^glojure.lang.IReduceInit coll f init)
+                 (.ReduceInit ^glojure.lang.IReduceInit coll f init)
                  (clojure.core.protocols/coll-reduce coll f init))]
        (f ret))))
 

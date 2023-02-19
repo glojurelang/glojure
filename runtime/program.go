@@ -153,10 +153,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		// iteration functions
 		{
 			define("glojure.lang.iteration/NewIterator", value.NewIterator)
-			define("glojure.lang.iteration/NewRangeIterator", value.NewRangeIterator)
-
-			define("glojure.lang.functional/Reduce", value.Reduce)
-			define("glojure.lang.functional/ReduceInit", value.ReduceInit)
+			define("glojure.lang.NewRangeIterator", value.NewRangeIterator)
 
 			define("glojure.lang.iteration/NewConcatIterator", value.NewConcatIterator)
 
@@ -250,6 +247,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.GetDefault", value.GetDefault)
 		define("glojure.lang.ConcatStrings", value.ConcatStrings)
 		define("glojure.lang.IReduceInit", reflect.TypeOf((*value.IReduceInit)(nil)).Elem())
+		define("glojure.lang.IReduce", reflect.TypeOf((*value.IReduce)(nil)).Elem())
 		define("glojure.lang.IPersistentMap", reflect.TypeOf((*value.IPersistentMap)(nil)).Elem())
 		define("glojure.lang.IPersistentSet", reflect.TypeOf((*value.IPersistentSet)(nil)).Elem())
 		define("glojure.lang.IPersistentList", reflect.TypeOf((*value.IPersistentList)(nil)).Elem())
@@ -270,6 +268,13 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.LockingTransaction", value.LockingTransaction)
 
 		define("glojure.lang.AsInt64", value.AsInt64)
+		define("glojure.lang.AsNumber", func(v interface{}) interface{} {
+			x, ok := value.AsNumber(v)
+			if !ok {
+				panic(fmt.Errorf("cannot convert %T to number", v))
+			}
+			return x
+		})
 	}
 	{
 		define("glojure.lang.AppendWriter", func(w io.Writer, v interface{}) io.Writer {

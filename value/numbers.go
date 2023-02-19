@@ -21,6 +21,10 @@ func (nm *NumberMethods) Minus(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).Sub(x, y)
 }
 
+func (nm *NumberMethods) Multiply(x, y interface{}) interface{} {
+	return Ops(x).Combine(Ops(y)).Multiply(x, y)
+}
+
 func (nm *NumberMethods) Divide(x, y interface{}) interface{} {
 	if isNaN(x) {
 		return x

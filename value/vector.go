@@ -53,6 +53,8 @@ func NewLazilyPersistentVector(x interface{}) IPersistentVector {
 var (
 	_ IPersistentVector = (*Vector)(nil)
 	_ IFn               = (*Vector)(nil)
+	_ IReduce           = (*Vector)(nil)
+	_ IReduceInit       = (*Vector)(nil)
 )
 
 func (v *Vector) Count() int {
@@ -235,6 +237,25 @@ func (v *Vector) WithMeta(meta IPersistentMap) interface{} {
 	cpy := *v
 	cpy.meta = meta
 	return &cpy
+}
+
+func (v *Vector) ReduceInit(f IFn, init interface{}) interface{} {
+	res := init
+	for i := 0; i < v.Count(); i++ {
+		res = f.Invoke(res, v.ValueAt(i))
+	}
+	return res
+}
+
+func (v *Vector) Reduce(f IFn) interface{} {
+	if v.Count() == 0 {
+		return f.Invoke()
+	}
+	res := v.ValueAt(0)
+	for i := 1; i < v.Count(); i++ {
+		res = f.Invoke(res, v.ValueAt(i))
+	}
+	return res
 }
 
 func toSlice(x interface{}) []interface{} {
