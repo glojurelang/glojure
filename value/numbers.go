@@ -64,6 +64,11 @@ func (nm *NumberMethods) ShiftLeft(x, y interface{}) interface{} {
 	return x64 << y64
 }
 
+func (nm *NumberMethods) ShiftRight(x, y interface{}) interface{} {
+	x64, y64 := bitOpsCast(x), bitOpsCast(y)
+	return x64 >> y64
+}
+
 func (nm *NumberMethods) Max(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).Max(x, y)
 }
