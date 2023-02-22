@@ -52,3 +52,19 @@ func (rt *RTMethods) Contains(coll, key interface{}) bool {
 func (rt *RTMethods) Subvec(v IPersistentVector, start, end int) IPersistentVector {
 	return Subvec(v, start, end)
 }
+
+func (rt *RTMethods) Find(coll, key interface{}) interface{} {
+	switch coll := coll.(type) {
+	case nil:
+		return nil
+	case Associative:
+		return coll.EntryAt(key)
+	default:
+		panic(fmt.Errorf("find not supported on type: %T", coll))
+	}
+}
+
+func (rt *RTMethods) Load(scriptBase string) {
+	// TODO: implement
+	fmt.Println("load", scriptBase)
+}

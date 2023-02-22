@@ -6,6 +6,10 @@ import (
 )
 
 type (
+	Object interface {
+		Hash() uint32
+	}
+
 	Sequential interface{}
 
 	Named interface {

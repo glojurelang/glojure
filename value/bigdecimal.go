@@ -73,3 +73,7 @@ func (n *BigDecimal) Cmp(other *BigDecimal) int {
 func (n *BigDecimal) LT(other *BigDecimal) bool {
 	return n.Cmp(other) < 0
 }
+
+func (n *BigDecimal) GT(other *BigDecimal) bool {
+	return n.Cmp(other) > 0
+}

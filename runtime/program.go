@@ -190,6 +190,8 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	}
 	{ // core functions
 		define("glojure.lang.NewList", value.NewList)
+		define("glojure.lang.CreatePersistentHashMap", value.CreatePersistentHashMap)
+
 		define("glojure.lang.Symbol", reflect.TypeOf(value.NewSymbol("")))
 		define("glojure.lang.Ratio", reflect.TypeOf(value.NewRatio(1, 1)))
 		define("glojure.lang.Fn", reflect.TypeOf(&value.Fn{}))
@@ -267,6 +269,8 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 
 		define("glojure.lang.LockingTransaction", value.LockingTransaction)
 
+		define("glojure.lang.Hash", value.Hash)
+
 		define("glojure.lang.AsInt64", value.AsInt64)
 		define("glojure.lang.AsNumber", func(v interface{}) interface{} {
 			x, ok := value.AsNumber(v)
@@ -343,6 +347,10 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		}
 		evalFile("glojure/core.glj")
 		evalFile("glojure/core_print.glj")
+		evalFile("glojure/string.glj")
+		evalFile("glojure/walk.glj")
+		evalFile("glojure/template.glj")
+		evalFile("glojure/test.glj")
 	}
 
 	return env

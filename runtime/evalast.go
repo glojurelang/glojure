@@ -239,7 +239,7 @@ func (env *environment) EvalASTHostCall(n ast.Node) (interface{}, error) {
 	}
 	methodVal := value.FieldOrMethod(tgtVal, method.Name())
 	if methodVal == nil {
-		return nil, fmt.Errorf("no such field or method on %T: %s", tgtVal, method)
+		return nil, fmt.Errorf("no such field or method on %v (%T): %s", tgtVal, tgtVal, method)
 	}
 	// if the field is not a function, return an error
 	if reflect.TypeOf(methodVal).Kind() != reflect.Func {
@@ -477,7 +477,7 @@ func (env *environment) EvalASTLocal(n ast.Node) (interface{}, error) {
 	sym := get(n, kw("name")).(*value.Symbol)
 	v, ok := env.lookup(sym)
 	if !ok {
-		return nil, env.errorf(get(n, kw("form")), "unable to resolve symbol: %s", sym)
+		return nil, env.errorf(get(n, kw("form")), "unable to resolve local symbol: %s", sym)
 	}
 	return v, nil
 }

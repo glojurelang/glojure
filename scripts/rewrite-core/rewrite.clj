@@ -17,6 +17,10 @@
   [(fn select [zloc] (and (z/sexpr-able? zloc) (= old (z/sexpr zloc))))
    (fn visit [zloc] (z/replace zloc new))])
 
+(defn sexpr-remove [old]
+  [(fn select [zloc] (and (z/sexpr-able? zloc) (= old (z/sexpr zloc))))
+   (fn visit [zloc] (z/remove zloc))])
+
 (defn sexpr-replace-any
   [coll new]
   [(fn select [zloc] (and (z/sexpr-able? zloc) (reduce #(or %1 (= %2 (z/sexpr zloc))) false coll)))
@@ -69,6 +73,18 @@
    (sexpr-replace '(clojure.lang.LongRange/create start end step)
                   '(glojure.lang.NewRangeIterator start end step))
 
+   (sexpr-replace '(. clojure.lang.PersistentHashMap (create keyvals))
+                  '(glojure.lang.CreatePersistentHashMap keyvals))
+
+   (sexpr-replace '(.. (name lib)
+                       (replace \- \_)
+                       (replace \. \/))
+                  '(->
+                    (name lib)
+                    (strings.ReplaceAll "-" "_")
+                    (strings.ReplaceAll "." "/")))
+   (sexpr-replace '.startsWith 'strings.HasPrefix)
+
    ;; instance? replacements
    (sexpr-replace "Evaluates x and tests if it is an instance of the class\n    c. Returns true or false"
                   "Evaluates x and tests if it is an instance of the type\n    t. Returns true or false")
@@ -107,6 +123,10 @@
    (sexpr-replace 'clojure.lang.IMeta 'glojure.lang.IMeta)
    (sexpr-replace 'clojure.lang.IReduceInit 'glojure.lang.IReduceInit)
 
+   (sexpr-replace '{:tag Object} '{}) ;; TODO: is there a replacement for Object?
+
+   (sexpr-replace 'clojure.lang.Util/hash 'glojure.lang.Hash)
+
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= '.reduce (z/sexpr zloc))))
     (fn visit [zloc] (z/replace zloc
                                 (let [lst (z/sexpr (z/up zloc))]
@@ -116,11 +136,15 @@
 
    (sexpr-replace '.equals '.Equal)
 
+   (sexpr-replace '(clojure.lang.RT/load (.substring path 1))
+                  '(. glojure.lang.RT (Load (strings.TrimPrefix path "/"))))
+
    (sexpr-replace 'clojure.lang.RT/conj 'glojure.lang.Conj)
    (sexpr-replace 'withMeta 'WithMeta)
 
    (sexpr-replace '.asTransient '.AsTransient)
    (sexpr-replace '.persistent '.Persistent)
+   (sexpr-replace '.conj '.Conj)
 
    ;; no need for a special name, as go doesn't have a
    ;; builtin "Equals"
@@ -183,6 +207,7 @@
           (.String sb)))
       (new strings.Builder) (cons x ys)))
    (sexpr-replace '(. x (toString)) '(glojure.lang.ToStr x))
+   (sexpr-replace '.toString 'glojure.lang.ToStr)
    (sexpr-replace 'getName 'Name)
    (sexpr-replace 'getNamespace 'Namespace)
    (sexpr-replace '.hasRoot '.HasRoot)
@@ -345,6 +370,7 @@
    (sexpr-replace '.getMappings '.Mappings)
    (sexpr-replace '.ns '.Namespace)
    (sexpr-replace '.isPublic '.IsPublic)
+   (sexpr-replace '.addAlias '.AddAlias)
 
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= 'pushThreadBindings (z/sexpr zloc))))
     (fn visit [zloc] (z/replace (-> zloc z/up z/up)
@@ -424,16 +450,21 @@
     (fn visit [zloc] (z/replace zloc '(do)))]
 
 
-   ;;; replace all clojure.lang symbols with glojure.lang
+   ;;; replace all clojure. symbols with glojure.
    [(fn select [zloc] (and (z/sexpr-able? zloc)
                            (let [sexpr (z/sexpr zloc)]
                              (and (symbol? sexpr)
-                                  (string/starts-with? (name sexpr) "clojure.lang.")))))
+                                  (string/starts-with? (name sexpr) "clojure.")))))
     (fn visit [zloc] (z/replace zloc (-> zloc
                                          z/sexpr
                                          name
-                                         (string/replace "clojure.lang." "glojure.lang.")
+                                         (string/replace "clojure." "glojure.")
                                          symbol)))]
+
+   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+   ;; test.clj
+
+   (sexpr-remove '[clojure.stacktrace :as stack])
 
    ])
 

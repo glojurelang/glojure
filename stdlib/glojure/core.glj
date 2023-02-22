@@ -383,7 +383,7 @@
    :static true}
   ([] {})
   ([& keyvals]
-   (. glojure.lang.PersistentHashMap (create keyvals))))
+   (glojure.lang.CreatePersistentHashMap keyvals)))
 
 (defn hash-set
   "Returns a new hash set with supplied keys.  Any equal keys are
@@ -3353,7 +3353,7 @@
   ([] (transient []))
   ([coll] coll)
   ([^glojure.lang.ITransientCollection coll x]
-     (.conj coll x)))
+     (.Conj coll x)))
 
 (defn assoc!
   "When applied to a transient map, adds mapping of key(s) to
@@ -4259,7 +4259,7 @@
   {:added "1.0"
    :static true}
   [alias namespace-sym]
-  (.addAlias *ns* alias (the-ns namespace-sym)))
+  (.AddAlias *ns* alias (the-ns namespace-sym)))
 
 (defn ns-aliases
   "Returns a map of the aliases for the namespace."
@@ -5474,7 +5474,7 @@
 (defn- descriptor [^Class c] (clojure.asm.Type/getDescriptor c))
 
 (declare process-annotation)
-(defn- add-annotation [^clojure.asm.AnnotationVisitor av name v]
+(defn- add-annotation [^glojure.asm.AnnotationVisitor av name v]
   (cond
    (vector? v) (let [avec (.visitArray av name)]
                  (doseq [vval v]
@@ -5901,9 +5901,7 @@
   {:tag string}
   [lib]
   (str \/
-       (.. (name lib)
-           (replace \- \_)
-           (replace \. \/))))
+       (-> (name lib) (strings.ReplaceAll "-" "_") (strings.ReplaceAll "." "/"))))
 
 (defn- root-directory
   "Returns the root resource path for a lib"
@@ -6137,7 +6135,7 @@ fails, attempts to require sym's namespace and retries."
    :added "1.0"}
   [& paths]
   (doseq [^string path paths]
-    (let [^string path (if (.startsWith path "/")
+    (let [^string path (if (strings.HasPrefix path "/")
                           path
                           (str (root-directory (ns-name *ns*)) \/ path))]
       (when *loading-verbosely*
@@ -6146,7 +6144,7 @@ fails, attempts to require sym's namespace and retries."
       (check-cyclic-dependency path)
       (when-not (= path (first *pending-paths*))
         (binding [*pending-paths* (conj *pending-paths* path)]
-          (clojure.lang.RT/load (.substring path 1)))))))
+          (. glojure.lang.RT (Load (strings.TrimPrefix path "/"))))))))
 
 (defn compile
   "Compiles the namespace named by the symbol lib into a set of
@@ -6688,7 +6686,7 @@ fails, attempts to require sym's namespace and retries."
   (let [buckets (loop [m {} ks tests vs thens]
                   (if (and ks vs)
                     (recur
-                      (update m (clojure.lang.Util/hash (first ks)) (fnil conj []) [(first ks) (first vs)])
+                      (update m (glojure.lang.Hash (first ks)) (fnil conj []) [(first ks) (first vs)])
                       (next ks) (next vs))
                     m))
         assoc-multi (fn [m h bucket]
@@ -6715,7 +6713,7 @@ fails, attempts to require sym's namespace and retries."
   post-switch equivalence checking must not be done (occurs with hash
   collisions)."
   [expr-sym default tests thens]
-  (let [hashcode #(clojure.lang.Util/hash %)
+  (let [hashcode #(glojure.lang.Hash %)
         hashes (into1 #{} (map hashcode tests))]
     (if (== (count tests) (count hashes))
       (if (fits-table? hashes)
@@ -6762,7 +6760,7 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.2"}
 
   [e & clauses]
-  (let [ge (with-meta (gensym) {:tag Object})
+  (let [ge (with-meta (gensym) {})
         default (if (odd? (count clauses)) 
                   (last clauses)
                   `(throw (errors.New (str "No matching clause: " ~ge))))]
@@ -6977,7 +6975,7 @@ fails, attempts to require sym's namespace and retries."
            sw (java.io.StringWriter.)]
        (with-open [^java.io.Reader r (apply jio/reader f opts)]
          (jio/copy r sw)
-         (.toString sw)))))
+         (glojure.lang.ToStr sw)))))
 
 (defn spit
   "Opposite of slurp.  Opens f with writer, writes content, then

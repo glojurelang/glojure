@@ -73,3 +73,7 @@ func (n *BigInt) Cmp(other *BigInt) int {
 func (n *BigInt) LT(other *BigInt) bool {
 	return n.Cmp(other) < 0
 }
+
+func (n *BigInt) GT(other *BigInt) bool {
+	return n.Cmp(other) > 0
+}

@@ -45,6 +45,9 @@ func (fn *Fn) Invoke(args ...interface{}) interface{} {
 	}
 
 	fnEnv := fn.env.PushScope()
+	if local, ok := Get(fn.astNode, NewKeyword("local")).(IPersistentMap); ok {
+		fnEnv.BindLocal(Get(local, NewKeyword("name")).(*Symbol), fn)
+	}
 
 	fixedArity := Get(method, NewKeyword("fixed-arity")).(int)
 	methodVariadic := Get(method, NewKeyword("variadic?")).(bool)

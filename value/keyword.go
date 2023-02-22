@@ -12,12 +12,18 @@ import (
 type Keyword struct {
 	// kw is an interned string. This guarantees that two keywords with
 	// the same name share the underlying string.
-	kw *intern.Value
+	kw   *intern.Value
+	hash uint32
 }
+
+var (
+	_ Object = Keyword{}
+)
 
 func NewKeyword(s string) Keyword {
 	return Keyword{
-		kw: intern.GetByString(s),
+		kw:   intern.GetByString(s),
+		hash: Hash(s) ^ keywordHashMask,
 	}
 }
 
@@ -83,4 +89,8 @@ func (k Keyword) Invoke(args ...interface{}) interface{} {
 
 func (k Keyword) ApplyTo(args ISeq) interface{} {
 	return k.Invoke(seqToSlice(args)...)
+}
+
+func (k Keyword) Hash() uint32 {
+	return k.hash
 }

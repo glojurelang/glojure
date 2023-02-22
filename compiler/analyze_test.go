@@ -250,6 +250,7 @@ const testForms = `
              :children [:init]}],
  :children [:bindings :body]}]
 
+[(fn* named-fn [] "Hello"), {:foo 1}]
 `
 
 var (

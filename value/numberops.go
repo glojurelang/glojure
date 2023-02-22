@@ -21,11 +21,12 @@ type (
 		Divide(x, y interface{}) interface{}
 
 		LT(x, y interface{}) bool
+		GT(x, y interface{}) bool
 
 		Max(x, y interface{}) interface{}
 		Min(x, y interface{}) interface{}
 
-		Equal(x, y interface{}) bool
+		Equiv(x, y interface{}) bool
 
 		IsZero(x interface{}) bool
 	}
@@ -90,7 +91,7 @@ func Min(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).Min(x, y)
 }
 func NumbersEqual(x, y interface{}) bool {
-	return Ops(x).Combine(Ops(y)).Equal(x, y)
+	return Ops(x).Combine(Ops(y)).Equiv(x, y)
 }
 
 func (o int64Ops) IsPos(x interface{}) bool {
@@ -122,6 +123,9 @@ func (o int64Ops) Divide(x, y interface{}) interface{} {
 func (o int64Ops) LT(x, y interface{}) bool {
 	return AsInt64(x) < AsInt64(y)
 }
+func (o int64Ops) GT(x, y interface{}) bool {
+	return AsInt64(x) > AsInt64(y)
+}
 func (o int64Ops) Max(x, y interface{}) interface{} {
 	if AsInt64(x) > AsInt64(y) {
 		return x
@@ -135,7 +139,7 @@ func (o int64Ops) Min(x, y interface{}) interface{} {
 	}
 	return y
 }
-func (o int64Ops) Equal(x, y interface{}) bool {
+func (o int64Ops) Equiv(x, y interface{}) bool {
 	return AsInt64(x) == AsInt64(y)
 }
 
@@ -168,6 +172,9 @@ func (o bigIntOps) Divide(x, y interface{}) interface{} {
 func (o bigIntOps) LT(x, y interface{}) bool {
 	return AsBigInt(x).LT(AsBigInt(y))
 }
+func (o bigIntOps) GT(x, y interface{}) bool {
+	return AsBigInt(x).GT(AsBigInt(y))
+}
 func (o bigIntOps) Max(x, y interface{}) interface{} {
 	xx := AsBigInt(x)
 	yy := AsBigInt(y)
@@ -185,7 +192,7 @@ func (o bigIntOps) Min(x, y interface{}) interface{} {
 	}
 	return y
 }
-func (o bigIntOps) Equal(x, y interface{}) bool {
+func (o bigIntOps) Equiv(x, y interface{}) bool {
 	return AsBigInt(x).Cmp(AsBigInt(y)) == 0
 }
 
@@ -218,6 +225,9 @@ func (o ratioOps) Divide(x, y interface{}) interface{} {
 func (o ratioOps) LT(x, y interface{}) bool {
 	return AsRatio(x).LT(AsRatio(y))
 }
+func (o ratioOps) GT(x, y interface{}) bool {
+	return AsRatio(x).GT(AsRatio(y))
+}
 func (o ratioOps) Max(x, y interface{}) interface{} {
 	xx := AsRatio(x)
 	yy := AsRatio(y)
@@ -236,7 +246,7 @@ func (o ratioOps) Min(x, y interface{}) interface{} {
 	return y
 
 }
-func (o ratioOps) Equal(x, y interface{}) bool {
+func (o ratioOps) Equiv(x, y interface{}) bool {
 	return AsRatio(x).Cmp(AsRatio(y)) == 0
 }
 
@@ -269,6 +279,9 @@ func (o bigDecimalOps) Divide(x, y interface{}) interface{} {
 func (o bigDecimalOps) LT(x, y interface{}) bool {
 	return AsBigDecimal(x).LT(AsBigDecimal(y))
 }
+func (o bigDecimalOps) GT(x, y interface{}) bool {
+	return AsBigDecimal(x).GT(AsBigDecimal(y))
+}
 func (o bigDecimalOps) Max(x, y interface{}) interface{} {
 	xx := AsBigDecimal(x)
 	yy := AsBigDecimal(y)
@@ -287,7 +300,7 @@ func (o bigDecimalOps) Min(x, y interface{}) interface{} {
 	return y
 
 }
-func (o bigDecimalOps) Equal(x, y interface{}) bool {
+func (o bigDecimalOps) Equiv(x, y interface{}) bool {
 	return AsBigDecimal(x).Cmp(AsBigDecimal(y)) == 0
 }
 
@@ -320,6 +333,9 @@ func (o float64Ops) Divide(x, y interface{}) interface{} {
 func (o float64Ops) LT(x, y interface{}) bool {
 	return AsFloat64(x) < AsFloat64(y)
 }
+func (o float64Ops) GT(x, y interface{}) bool {
+	return AsFloat64(x) > AsFloat64(y)
+}
 func (o float64Ops) Max(x, y interface{}) interface{} {
 	if AsFloat64(x) > AsFloat64(y) {
 		return x
@@ -334,7 +350,7 @@ func (o float64Ops) Min(x, y interface{}) interface{} {
 	return y
 
 }
-func (o float64Ops) Equal(x, y interface{}) bool {
+func (o float64Ops) Equiv(x, y interface{}) bool {
 	return AsFloat64(x) == AsFloat64(y)
 }
 func (o int64Ops) Combine(y ops) ops {

@@ -172,6 +172,21 @@ func (ns *Namespace) LookupAlias(sym *Symbol) *Namespace {
 	return v.(*Namespace)
 }
 
+func (ns *Namespace) AddAlias(alias *Symbol, ns2 *Namespace) {
+	if alias == nil || ns2 == nil {
+		panic(fmt.Errorf("add-alias: expecting symbol (%v) + namespace (%v)", alias, ns2))
+	}
+	aliases := ns.Aliases()
+	for !aliases.ContainsKey(alias) {
+		newAliases := aliases.Assoc(alias, ns2)
+		ns.aliases.CompareAndSwap(aliases, newAliases)
+		aliases = ns.Aliases()
+	}
+	if v, _ := aliases.ValueAt(alias); v != ns2 {
+		panic(fmt.Errorf("add-alias: alias %s already refers to %s", alias, v))
+	}
+}
+
 // Refer adds a reference to an existing Var, possibly in another
 // namespace, to this namespace.
 func (ns *Namespace) Refer(sym *Symbol, v *Var) *Var {
