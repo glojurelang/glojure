@@ -95,11 +95,11 @@ func NumbersEqual(x, y interface{}) bool {
 }
 
 func (o int64Ops) IsPos(x interface{}) bool {
-	return x.(int64) > 0
+	return AsInt64(x) > 0
 }
 
 func (o int64Ops) IsZero(x interface{}) bool {
-	return x.(int64) == 0
+	return AsInt64(x) == 0
 }
 
 func (o int64Ops) Add(x, y interface{}) interface{} {

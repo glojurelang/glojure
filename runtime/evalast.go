@@ -82,6 +82,8 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 		return env.EvalASTNew(n)
 	case kw("try"):
 		return env.EvalASTTry(n)
+	case kw("throw"):
+		return env.EvalASTThrow(n)
 	default:
 		panic("unimplemented op: " + value.ToString(op) + "\n" + value.ToString(get(n, kw("form"))))
 	}
@@ -506,7 +508,16 @@ func (env *environment) EvalASTTry(n ast.Node) (res interface{}, err error) {
 			}
 		}()
 	}
+	// TODO: catch
 	return env.EvalAST(get(n, kw("body")))
+}
+
+func (env *environment) EvalASTThrow(n ast.Node) (interface{}, error) {
+	exception, err := env.EvalAST(get(n, kw("exception")))
+	if err != nil {
+		return nil, err
+	}
+	panic(exception)
 }
 
 func kw(s string) value.Keyword {

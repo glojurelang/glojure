@@ -53,12 +53,10 @@ func Start(opts ...Option) {
 		}
 	}
 	{ // switch to the namespace
-		//runtime.Debug = true
 		_, err := o.env.Eval(value.NewList(
 			value.NewSymbol("ns"),
 			value.NewSymbol(o.namespace),
 		))
-		//runtime.Debug = false
 		if err != nil {
 			panic(err)
 		}

@@ -416,8 +416,11 @@
   {:added "1.1"}
   [name & body]
   (when *load-tests*
-    `(def ~(vary-meta name assoc :test `(fn [] ~@body))
-          (fn [] (test-var (var ~name))))))
+    (prn "loading test" name (str body))
+    (let [result `(def ~(vary-meta name assoc :test `(fn [] ~@body))
+                    (fn [] (test-var (var ~name))))]
+      (prn "result" (str result))
+      result)))
 
 (defmacro deftest-
   "Like deftest but creates a private var."

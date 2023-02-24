@@ -76,6 +76,9 @@
    (sexpr-replace '(. clojure.lang.PersistentHashMap (create keyvals))
                   '(glojure.lang.CreatePersistentHashMap keyvals))
 
+   (sexpr-replace '(clojure.lang.PersistentTreeMap/create keyvals)
+                  '(glojure.lang.CreatePersistentTreeMap keyvals))
+
    (sexpr-replace '(.. (name lib)
                        (replace \- \_)
                        (replace \. \/))
@@ -122,6 +125,8 @@
    (sexpr-replace 'String 'string)
    (sexpr-replace 'clojure.lang.IMeta 'glojure.lang.IMeta)
    (sexpr-replace 'clojure.lang.IReduceInit 'glojure.lang.IReduceInit)
+
+   (sexpr-replace '.assoc '.Assoc)
 
    (sexpr-replace '{:tag Object} '{}) ;; TODO: is there a replacement for Object?
 

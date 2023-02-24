@@ -55,6 +55,10 @@ func (nm *NumberMethods) Inc(v interface{}) interface{} {
 	return nm.Add(v, 1)
 }
 
+func (nm *NumberMethods) Unchecked_inc(v interface{}) interface{} {
+	return nm.Inc(v)
+}
+
 func (nm *NumberMethods) Dec(x interface{}) interface{} {
 	return nm.Add(x, -1)
 }

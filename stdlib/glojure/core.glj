@@ -401,7 +401,7 @@
   {:added "1.0"
    :static true}
   ([& keyvals]
-   (clojure.lang.PersistentTreeMap/create keyvals)))
+   (glojure.lang.CreatePersistentTreeMap keyvals)))
 
 (defn sorted-map-by
   "keyval => key val
@@ -3361,9 +3361,9 @@
   Note - index must be <= (count vector). Returns coll."
   {:added "1.1"
    :static true}
-  ([^glojure.lang.ITransientAssociative coll key val] (.assoc coll key val))
+  ([^glojure.lang.ITransientAssociative coll key val] (.Assoc coll key val))
   ([^glojure.lang.ITransientAssociative coll key val & kvs]
-   (let [ret (.assoc coll key val)]
+   (let [ret (.Assoc coll key val)]
      (if kvs
        (recur ret (first kvs) (second kvs) (nnext kvs))
        ret))))

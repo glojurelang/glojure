@@ -61,11 +61,18 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 	resetGlobalEnv := func() {
 		kwNS := kw("ns")
 		kwMappings := kw("mappings")
+		kwAliases := kw("aliases")
 		namespaceKVs := make([]interface{}, 0, len(env.namespaces))
 		for _, ns := range env.namespaces {
+			aliases := make([]interface{}, 0, 2*value.Count(ns.Aliases()))
+			for seq := value.Seq(ns.Aliases()); seq != nil; seq = seq.Next() {
+				entry := seq.First().(value.IMapEntry)
+				aliases = append(aliases, entry.Key(), entry.Val().(*value.Namespace).Name())
+			}
 			namespaceKVs = append(namespaceKVs, ns.Name(), value.NewMap(
 				kwNS, ns.Name(),
 				kwMappings, ns.Mappings(),
+				kwAliases, value.NewMap(aliases...),
 			))
 		}
 		globalEnv.Reset(value.NewMap(kw("namespaces"), value.NewMap(namespaceKVs...)))

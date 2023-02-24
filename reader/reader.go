@@ -753,15 +753,15 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 					sym = value.InternSymbol(r.symbolResolver.CurrentNS().Name(), sym.Name())
 				}
 			}
-		case sym.Namespace() == "":
+		default:
 			// HACK: handle well-known host forms
-			// TODO: use a resolver to handle this
 			if strings.Contains(sym.Name(), ".") {
 				break
 			}
-
-			// TODO: match clojure behavior
-			sym = value.NewSymbol(r.getCurrentNS() + "/" + sym.Name())
+			// TODO: need to do anything for equiv of clojure maybeClass?
+			if sym.Namespace() == "" {
+				sym = resolveSymbol(sym)
+			}
 		}
 		// TODO: match actual LispReader.java behavior
 		return value.NewList(symQuote, sym)
@@ -1067,4 +1067,27 @@ func (r *Reader) readMeta() (value.IPersistentMap, error) {
 
 func isSpace(r rune) bool {
 	return r == ',' || unicode.IsSpace(r)
+}
+
+// Translated from Clojure's Compiler.java
+func resolveSymbol(sym *value.Symbol) *value.Symbol {
+	if strings.Contains(sym.Name(), ".") {
+		return sym
+	}
+	if sym.Namespace() != "" {
+		ns := value.GlobalEnv.FindNamespace(value.NewSymbol(sym.Namespace()))
+		if ns == nil || (ns.Name().Name() == "" && sym.Namespace() == "") ||
+			(ns.Name().Name() != "" && ns.Name().Name() == sym.Namespace()) {
+			return sym
+		}
+	}
+	currentNS := value.GlobalEnv.CurrentNamespace()
+	o := currentNS.GetMapping(sym)
+	switch o := o.(type) {
+	case nil:
+		return value.InternSymbol(currentNS.Name().Name(), sym.Name())
+	case *value.Var:
+		return value.InternSymbol(o.Namespace().Name().Name(), o.Symbol().Name())
+	}
+	return nil
 }

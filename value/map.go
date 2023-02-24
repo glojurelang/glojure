@@ -124,6 +124,10 @@ func (m *Map) Count() int {
 	return len(m.keyVals) / 2
 }
 
+func (m *Map) IsEmpty() bool {
+	return m.Count() == 0
+}
+
 func (m *Map) Seq() ISeq {
 	return NewMapSeq(m)
 }
@@ -203,6 +207,27 @@ func (m *Map) Invoke(args ...interface{}) interface{} {
 
 func (m *Map) ApplyTo(args ISeq) interface{} {
 	return m.Invoke(seqToSlice(args)...)
+}
+
+func (m *Map) AsTransient() ITransientCollection {
+	// TODO: implement transients
+	return &TransientMap{Map: m}
+}
+
+type TransientMap struct {
+	*Map
+}
+
+func (m *TransientMap) Conj(v interface{}) ITransientCollection {
+	return &TransientMap{Map: m.Map.Conj(v).(*Map)}
+}
+
+func (m *TransientMap) Assoc(k, v interface{}) Associative {
+	return &TransientMap{Map: m.Map.Assoc(k, v).(*Map)}
+}
+
+func (m *TransientMap) Persistent() IPersistentCollection {
+	return m.Map
 }
 
 ////////////////////////////////////////////////////////////////////////////////
