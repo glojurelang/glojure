@@ -3,6 +3,7 @@ package compiler
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"regexp"
 	"strings"
 
@@ -376,6 +377,8 @@ func (a *Analyzer) parse(form interface{}, env Env) (ast.Node, error) {
 		return a.parseFnStar(form, env)
 	case "var":
 		return a.parseVar(form, env)
+	case "case*":
+		return a.parseCaseStar(form, env)
 	}
 
 	return a.parseInvoke(form, env)
@@ -1311,6 +1314,83 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (ast.Node, error) {
 	return a.wrappingMeta(node)
 }
 
+// {:op   :case
+//
+//	:doc  "Node for a case* special-form expression"
+//	:keys [[:form "`(case* expr shift mask default case-map switch-type test-type skip-check?)`"]
+//	       ^:children
+//	       [:test "The AST node for the expression to test against"]
+//	       ^:children
+//	       [:nodes "A vector of :case-node AST nodes representing the test/then clauses of the case* expression"]
+//	       ^:children
+//	       [:default "An AST node representing the default value of the case expression"]
+//	       ]}
+func (a *Analyzer) parseCaseStar(form interface{}, env Env) (ast.Node, error) {
+	var expr *value.Symbol
+	var shift, mask int64
+	var defaultExpr interface{}
+	var caseMap value.IPersistentMap
+	var switchType, testType value.Keyword
+	var skipCheck interface{}
+	var err error
+	if value.Count(form) == 9 {
+		err = unpackSeq(value.Rest(form), &expr, &shift, &mask, &defaultExpr, &caseMap, &switchType, &testType, &skipCheck)
+	} else {
+		err = unpackSeq(value.Rest(form), &expr, &shift, &mask, &defaultExpr, &caseMap, &switchType, &testType)
+	}
+	if err != nil {
+		return nil, exInfo(fmt.Sprintf("case*: %v", err), nil)
+	}
+	if switchType != kw("compact") && switchType != kw("sparse") {
+		return nil, exInfo(fmt.Sprintf("unexpected shift type: %v", switchType), nil)
+	}
+	if testType != kw("int") && testType != kw("hash-identity") && testType != kw("hash-equiv") {
+		return nil, exInfo(fmt.Sprintf("unexpected test type: %v", testType), nil)
+	}
+
+	testExpr, err := a.analyzeForm(expr, ctxEnv(env, kw("ctx/expr")))
+	if err != nil {
+		return nil, err
+	}
+	defaultExpr, err = a.analyzeForm(defaultExpr, env)
+	if err != nil {
+		return nil, err
+	}
+
+	var nodes []interface{}
+	for seq := value.Seq(caseMap); seq != nil; seq = seq.Next() {
+		// TODO: is the shift, mask, etc. relevant for anything but
+		// performance? omitting for now.
+		entry := value.First(seq).(value.IMapEntry).Val()
+		cond, then := value.First(entry), second(entry)
+		// TODO: support a vector of conditions
+		condExpr, err := a.analyzeConst(cond, ctxEnv(env, kw("ctx/expr")))
+		if err != nil {
+			return nil, err
+		}
+		thenExpr, err := a.analyzeForm(then, env)
+		if err != nil {
+			return nil, err
+		}
+		nodes = append(nodes, value.NewMap(
+			kw("op"), kw("case-node"),
+			kw("env"), env,
+			kw("tests"), vec(condExpr),
+			kw("then"), thenExpr,
+		))
+	}
+
+	node := merge(ast.MakeNode(kw("case"), form), value.NewMap(
+		kw("env"), env,
+		kw("test"), testExpr,
+		kw("nodes"), vec(nodes...),
+		kw("default"), defaultExpr,
+	),
+		value.NewMap(kw("children"), vec(kw("test"), kw("nodes"), kw("default"))),
+	)
+	return node, nil
+}
+
 // (defn analyze-fn-method [[params & body :as form] {:keys [locals local] :as env}]
 //
 //	(when-not (vector? params)
@@ -1842,4 +1922,30 @@ func updateVals(m interface{}, fn func(interface{}) interface{}) interface{} {
 	return value.ReduceKV(func(m interface{}, k interface{}, v interface{}) interface{} {
 		return value.Assoc(m, k, fn(v))
 	}, value.NewMap(), in)
+}
+
+func unpackSeq(s interface{}, dsts ...interface{}) error {
+	seq := value.Seq(s)
+	for i, d := range dsts {
+		if seq == nil {
+			return fmt.Errorf("not enough arguments, got %d, expected %d", i, len(dsts))
+		}
+		dst := reflect.ValueOf(d)
+
+		v := value.First(seq)
+		if v == nil {
+			if dst.Elem().Kind() != reflect.Interface {
+				return fmt.Errorf("cannot assign nil to %s", dst.Type())
+			}
+			continue // leave nil
+		}
+
+		val := reflect.ValueOf(v)
+		seq = seq.Next()
+		if !val.Type().AssignableTo(dst.Elem().Type()) {
+			return fmt.Errorf("argument %d: expected %s, got %s", i, dst.Elem().Type(), val.Type())
+		}
+		dst.Elem().Set(val)
+	}
+	return nil
 }

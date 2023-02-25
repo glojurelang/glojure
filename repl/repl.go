@@ -112,7 +112,7 @@ func Start(opts ...Option) {
 
 				//runtime.Debug = true
 				val, err := o.env.Eval(val)
-				//runtime.Debug = false
+				runtime.Debug = false
 				if err != nil {
 					return "", err
 				}

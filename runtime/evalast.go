@@ -74,6 +74,8 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 		return env.EvalASTMaybeHostForm(n)
 	case kw("if"):
 		return env.EvalASTIf(n)
+	case kw("case"):
+		return env.EvalASTCase(n)
 	case kw("the-var"):
 		return env.EvalASTTheVar(n)
 	case kw("recur"):
@@ -218,7 +220,7 @@ func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 		}
 	}
 	// TODO: how to handle?
-	panic("EvalASTMaybeHostForm: " + value.ToString(n))
+	panic("EvalASTMaybeHostForm: " + get(n, kw("class")).(string))
 }
 
 func (env *environment) EvalASTHostCall(n ast.Node) (interface{}, error) {
@@ -351,6 +353,30 @@ func (env *environment) EvalASTIf(n ast.Node) (interface{}, error) {
 	} else {
 		return env.EvalAST(els.(ast.Node))
 	}
+}
+
+func (env *environment) EvalASTCase(n ast.Node) (interface{}, error) {
+	testVal, err := env.EvalAST(get(n, kw("test")))
+	if err != nil {
+		return nil, err
+	}
+	for seq := value.Seq(get(n, kw("nodes"))); seq != nil; seq = value.Next(seq) {
+		node := value.First(seq)
+		for testSeq := value.Seq(get(node, kw("tests"))); testSeq != nil; testSeq = value.Next(testSeq) {
+			caseTestVal, err := env.EvalAST(value.First(testSeq).(ast.Node))
+			if err != nil {
+				return nil, err
+			}
+			if value.Equal(testVal, caseTestVal) {
+				res, err := env.EvalAST(get(node, kw("then")))
+				if err != nil {
+					return nil, err
+				}
+				return res, nil
+			}
+		}
+	}
+	return env.EvalAST(get(n, kw("default")))
 }
 
 func (env *environment) EvalASTDo(n ast.Node) (interface{}, error) {

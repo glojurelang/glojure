@@ -22,6 +22,7 @@ type (
 
 		LT(x, y interface{}) bool
 		GT(x, y interface{}) bool
+		LTE(x, y interface{}) bool
 
 		Max(x, y interface{}) interface{}
 		Min(x, y interface{}) interface{}
@@ -123,6 +124,9 @@ func (o int64Ops) Divide(x, y interface{}) interface{} {
 func (o int64Ops) LT(x, y interface{}) bool {
 	return AsInt64(x) < AsInt64(y)
 }
+func (o int64Ops) LTE(x, y interface{}) bool {
+	return AsInt64(x) <= AsInt64(y)
+}
 func (o int64Ops) GT(x, y interface{}) bool {
 	return AsInt64(x) > AsInt64(y)
 }
@@ -171,6 +175,9 @@ func (o bigIntOps) Divide(x, y interface{}) interface{} {
 }
 func (o bigIntOps) LT(x, y interface{}) bool {
 	return AsBigInt(x).LT(AsBigInt(y))
+}
+func (o bigIntOps) LTE(x, y interface{}) bool {
+	return AsBigInt(x).LTE(AsBigInt(y))
 }
 func (o bigIntOps) GT(x, y interface{}) bool {
 	return AsBigInt(x).GT(AsBigInt(y))
@@ -224,6 +231,9 @@ func (o ratioOps) Divide(x, y interface{}) interface{} {
 }
 func (o ratioOps) LT(x, y interface{}) bool {
 	return AsRatio(x).LT(AsRatio(y))
+}
+func (o ratioOps) LTE(x, y interface{}) bool {
+	return AsRatio(x).LTE(AsRatio(y))
 }
 func (o ratioOps) GT(x, y interface{}) bool {
 	return AsRatio(x).GT(AsRatio(y))
@@ -279,6 +289,9 @@ func (o bigDecimalOps) Divide(x, y interface{}) interface{} {
 func (o bigDecimalOps) LT(x, y interface{}) bool {
 	return AsBigDecimal(x).LT(AsBigDecimal(y))
 }
+func (o bigDecimalOps) LTE(x, y interface{}) bool {
+	return AsBigDecimal(x).LTE(AsBigDecimal(y))
+}
 func (o bigDecimalOps) GT(x, y interface{}) bool {
 	return AsBigDecimal(x).GT(AsBigDecimal(y))
 }
@@ -332,6 +345,9 @@ func (o float64Ops) Divide(x, y interface{}) interface{} {
 }
 func (o float64Ops) LT(x, y interface{}) bool {
 	return AsFloat64(x) < AsFloat64(y)
+}
+func (o float64Ops) LTE(x, y interface{}) bool {
+	return AsFloat64(x) <= AsFloat64(y)
 }
 func (o float64Ops) GT(x, y interface{}) bool {
 	return AsFloat64(x) > AsFloat64(y)

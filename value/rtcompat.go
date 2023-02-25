@@ -32,6 +32,13 @@ func (rt *RTMethods) NthDefault(x interface{}, i int, def interface{}) interface
 	return v
 }
 
+func (rt *RTMethods) IntCast(x interface{}) int {
+	if c, ok := x.(Char); ok {
+		return int(c)
+	}
+	return int(AsInt64(x))
+}
+
 func (rt *RTMethods) Dissoc(x interface{}, k interface{}) interface{} {
 	return Dissoc(x, k)
 }
@@ -67,4 +74,16 @@ func (rt *RTMethods) Find(coll, key interface{}) interface{} {
 func (rt *RTMethods) Load(scriptBase string) {
 	// TODO: implement
 	fmt.Println("load", scriptBase)
+}
+
+func (rt *RTMethods) FindVar(qualifiedSym *Symbol) *Var {
+	if qualifiedSym.Namespace() == "" {
+		panic(fmt.Errorf("qualified symbol required: %v", qualifiedSym))
+	}
+	ns := GlobalEnv.FindNamespace(NewSymbol(qualifiedSym.Namespace()))
+	if ns == nil {
+		panic(fmt.Errorf("namespace not found: %v", qualifiedSym.Namespace()))
+	}
+
+	return ns.FindInternedVar(NewSymbol(qualifiedSym.Name()))
 }

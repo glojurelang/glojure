@@ -2017,7 +2017,7 @@
   nil if no var with that name."
   {:added "1.0"
    :static true}
-  [sym] (. glojure.lang.Var (find sym)))
+  [sym] (. glojure.lang.RT (FindVar sym)))
 
 (defn binding-conveyor-fn
   {:private true
@@ -4318,14 +4318,14 @@
   "Gets the value in the var object"
   {:added "1.0"
    :static true}
-  [^glojure.lang.Var x] (. x (get)))
+  [^glojure.lang.Var x] (. x (Get)))
 
 (defn var-set
   "Sets the value in the var object to val. The var must be
  thread-locally bound."
   {:added "1.0"
    :static true}
-  [^glojure.lang.Var x val] (. x (set val)))
+  [^glojure.lang.Var x val] (. x (Set val)))
 
 (defmacro with-local-vars
   "varbinding=> symbol init-expr
@@ -6780,7 +6780,7 @@ fails, attempts to require sym's namespace and retries."
             tests (keys pairs)
             thens (vals pairs)
             mode (cond
-                   (every? #(and (integer? %) (<= Integer/MIN_VALUE % Integer/MAX_VALUE)) tests)
+                   (every? #(and (integer? %) (<= math.MinInt % math.MaxInt)) tests)
                    :ints
                    (every? keyword? tests)
                    :identity

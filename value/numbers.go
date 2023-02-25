@@ -89,6 +89,10 @@ func (nm *NumberMethods) Gt(x, y interface{}) bool {
 	return Ops(x).Combine(Ops(y)).GT(x, y)
 }
 
+func (nm *NumberMethods) Lte(x, y interface{}) bool {
+	return Ops(x).Combine(Ops(y)).LTE(x, y)
+}
+
 func (nm *NumberMethods) Equiv(x, y interface{}) bool {
 	return Ops(x).Combine(Ops(y)).Equiv(x, y)
 }

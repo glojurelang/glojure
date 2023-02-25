@@ -128,6 +128,15 @@
 
    (sexpr-replace '.assoc '.Assoc)
 
+   (sexpr-replace 'Integer/MIN_VALUE 'math.MinInt)
+   (sexpr-replace 'Integer/MAX_VALUE 'math.MaxInt)
+
+   (sexpr-replace '(. clojure.lang.Var (find sym))
+                  '(. glojure.lang.RT (FindVar sym)))
+
+   (sexpr-replace '(. x (get)) '(. x (Get)))
+   (sexpr-replace '(. x (set val)) '(. x (Set val)))
+
    (sexpr-replace '{:tag Object} '{}) ;; TODO: is there a replacement for Object?
 
    (sexpr-replace 'clojure.lang.Util/hash 'glojure.lang.Hash)
