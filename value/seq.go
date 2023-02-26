@@ -80,6 +80,8 @@ type stringSeq struct {
 	i int
 }
 
+func (s stringSeq) xxx_sequential() {}
+
 func (s stringSeq) Seq() ISeq {
 	return s
 }

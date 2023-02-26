@@ -195,6 +195,8 @@ type (
 	}
 
 	ISeq interface {
+		Sequential
+
 		ISeqable
 
 		// First returns the first element of the sequence.

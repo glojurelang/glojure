@@ -69,6 +69,8 @@ type iterator struct {
 	x interface{}
 }
 
+func (i iterator) xxx_sequential() {}
+
 func (i iterator) Seq() ISeq {
 	return i
 }
@@ -98,6 +100,8 @@ type rangeIterator struct {
 	// TODO: support arbitrary numeric types!
 	start, end, step int64
 }
+
+func (i rangeIterator) xxx_sequential() {}
 
 func (i rangeIterator) Seq() ISeq {
 	return i
@@ -136,6 +140,8 @@ type vectorIterator struct {
 	start int
 	step  int
 }
+
+func (it vectorIterator) xxx_sequential() {}
 
 func (it vectorIterator) Seq() ISeq {
 	return it
@@ -184,6 +190,8 @@ type concatIterator struct {
 	next *concatIterator
 }
 
+func (i *concatIterator) xxx_sequential() {}
+
 func (i *concatIterator) Seq() ISeq {
 	return i
 }
@@ -229,6 +237,8 @@ type sliceIterator struct {
 	i int
 }
 
+func (i sliceIterator) xxx_sequential() {}
+
 func (i sliceIterator) Seq() ISeq {
 	return i
 }
@@ -259,6 +269,11 @@ type Repeat struct {
 	next  ISeq
 }
 
+var (
+	_ ISeq       = (*Repeat)(nil)
+	_ Sequential = (*Repeat)(nil)
+)
+
 func NewRepeat(x interface{}) *Repeat {
 	return &Repeat{x: x, count: -1}
 }
@@ -269,6 +284,8 @@ func NewRepeatN(count int64, x interface{}) ISeq {
 	}
 	return &Repeat{x: x, count: count}
 }
+
+func (r *Repeat) xxx_sequential() {}
 
 func (r *Repeat) First() interface{} {
 	return r.x

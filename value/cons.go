@@ -21,6 +21,8 @@ func NewCons(x interface{}, xs interface{}) ISeq {
 	}
 }
 
+func (c *Cons) xxx_sequential() {}
+
 func (c *Cons) Seq() ISeq {
 	return c
 }

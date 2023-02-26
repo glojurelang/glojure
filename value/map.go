@@ -30,6 +30,7 @@ var (
 	_ IFn            = (*Map)(nil)
 	_ IReduce        = (*Map)(nil)
 	_ IReduceInit    = (*Map)(nil)
+	_ Sequential     = (*Map)(nil)
 
 	_ IReduce     = (*MapValSeq)(nil)
 	_ IReduceInit = (*MapValSeq)(nil)
@@ -49,6 +50,8 @@ func NewMap(keyVals ...interface{}) IPersistentMap {
 		keyVals: append([]interface{}{}, keyVals...),
 	}
 }
+
+func (m *Map) xxx_sequential() {}
 
 func (m *Map) ValueAt(key interface{}) (interface{}, bool) {
 	for i := 0; i < len(m.keyVals); i += 2 {
@@ -284,6 +287,8 @@ func NewMapSeq(m *Map) ISeq {
 	}
 }
 
+func (s *MapSeq) xxx_sequential() {}
+
 func (s *MapSeq) Seq() ISeq {
 	return s
 }
@@ -320,6 +325,8 @@ func NewMapKeySeq(s ISeq) ISeq {
 	return &MapKeySeq{s}
 }
 
+func (s *MapKeySeq) xxx_sequential() {}
+
 func (s *MapKeySeq) Seq() ISeq {
 	return s
 }
@@ -346,6 +353,8 @@ func NewMapValSeq(s ISeq) ISeq {
 	}
 	return &MapValSeq{s}
 }
+
+func (s *MapValSeq) xxx_sequential() {}
 
 func (s *MapValSeq) Seq() ISeq {
 	return s
