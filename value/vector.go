@@ -57,6 +57,8 @@ var (
 	_ IReduceInit       = (*Vector)(nil)
 )
 
+func (v *Vector) xxx_sequential() {}
+
 func (v *Vector) Count() int {
 	return v.vec.Len()
 }

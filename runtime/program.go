@@ -1,12 +1,15 @@
 package runtime
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"io"
+	"math/big"
 	"os"
 	"reflect"
+	"regexp"
 	"strings"
 
 	"github.com/glojurelang/glojure/reader"
@@ -265,12 +268,27 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Sequential", reflect.TypeOf((*value.Sequential)(nil)).Elem())
 		define("glojure.lang.IObj", reflect.TypeOf((*value.IObj)(nil)).Elem())
 
+		define("glojure.lang.Volatile", reflect.TypeOf(&value.Volatile{}))
+
 		define("glojure.lang.MultiFn", reflect.TypeOf(&value.MultiFn{}))
 		define("glojure.lang.Namespace", reflect.TypeOf(&value.Namespace{}))
 
 		define("glojure.lang.LockingTransaction", value.LockingTransaction)
 
 		define("glojure.lang.Hash", value.Hash)
+
+		define("big.Int", reflect.TypeOf(big.Int{}))
+		define("glojure.lang.BigDecimal", reflect.TypeOf(&value.BigDecimal{}))
+
+		// TODO: go versions of these java-isms
+		{
+			{
+				var x interface{}
+				define("Throwable", reflect.TypeOf(x))
+			}
+			define("java.util.regex.Matcher", reflect.TypeOf(&regexp.Regexp{})) // wrong
+			define("java.io.PrintWriter", reflect.TypeOf(&bytes.Buffer{}))      // wrong
+		}
 
 		define("glojure.lang.AsInt64", value.AsInt64)
 		define("glojure.lang.AsNumber", func(v interface{}) interface{} {
@@ -328,7 +346,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			if err != nil {
 				panic(fmt.Sprintf("could not read stdlib core.glj: %v", err))
 			}
-			r := reader.New(strings.NewReader(string(core)), reader.WithFilename("glojure/core.glj"), reader.WithGetCurrentNS(func() string {
+			r := reader.New(strings.NewReader(string(core)), reader.WithFilename(path), reader.WithGetCurrentNS(func() string {
 				return env.CurrentNamespace().Name().String()
 			}))
 
@@ -338,11 +356,11 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 					break
 				}
 				if err != nil {
-					panic(fmt.Sprintf("error reading core lib: %v", err))
+					panic(fmt.Sprintf("error reading core lib %v: %v", path, err))
 				}
 				_, err = env.Eval(expr)
 				if err != nil {
-					panic(fmt.Sprintf("error evaluating core lib: %v", err))
+					panic(fmt.Sprintf("error evaluating core lib %v: %v", path, err))
 				}
 			}
 		}

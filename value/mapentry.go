@@ -11,6 +11,8 @@ var (
 	_ ISeqable          = (*MapEntry)(nil)
 )
 
+func (me *MapEntry) xxx_sequential() {}
+
 func (me *MapEntry) Key() interface{} {
 	if me.key == nil {
 		return nil

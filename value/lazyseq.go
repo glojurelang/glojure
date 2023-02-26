@@ -27,12 +27,15 @@ func newLazySeqWithMeta(meta IPersistentMap, seq ISeq) ISeq {
 }
 
 var (
-	_ ISeq     = (*LazySeq)(nil)
-	_ IPending = (*LazySeq)(nil)
-	_ IObj     = (*LazySeq)(nil)
-	_ Counted  = (*LazySeq)(nil)
+	_ ISeq       = (*LazySeq)(nil)
+	_ IPending   = (*LazySeq)(nil)
+	_ IObj       = (*LazySeq)(nil)
+	_ Counted    = (*LazySeq)(nil)
+	_ Sequential = (*LazySeq)(nil)
 	// IHashEq
 )
+
+func (s *LazySeq) xxx_sequential() {}
 
 func (s *LazySeq) First() interface{} {
 	seq := s.Seq()

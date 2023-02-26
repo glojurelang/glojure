@@ -10,10 +10,17 @@ func IsTruthy(v interface{}) bool {
 	case bool:
 		return v
 	default:
-		rv := reflect.ValueOf(v)
-		if rv.Kind() == reflect.Ptr && rv.IsNil() {
-			return false
-		}
+		return !IsNil(v)
+	}
+}
+
+func IsNil(v interface{}) bool {
+	if v == nil {
 		return true
 	}
+	rv := reflect.ValueOf(v)
+	if rv.Kind() == reflect.Ptr && rv.IsNil() {
+		return true
+	}
+	return false
 }

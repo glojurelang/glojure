@@ -33,6 +33,8 @@ var (
 	_ Counted         = (*EmptyList)(nil)
 )
 
+func (e *EmptyList) xxx_sequential() {}
+
 func (e *EmptyList) Conj(x interface{}) Conjer {
 	return NewList(x)
 }
@@ -128,6 +130,8 @@ func ConsList(item interface{}, next *List) *List {
 		size: size,
 	}
 }
+
+func (l *List) xxx_sequential() {}
 
 func (l *List) First() interface{} {
 	return l.Item()

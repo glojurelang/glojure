@@ -850,7 +850,8 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (ast.Node, error) {
 	}
 
 	var hasInit bool
-	if init := value.Get(args, kw("init")); init != nil {
+	if args != nil && args.ContainsKey(kw("init")) {
+		init := value.Get(args, kw("init"))
 		initNode, err := a.analyzeForm(init, ctxEnv(env, ctxExpr))
 		if err != nil {
 			return nil, err

@@ -28,6 +28,11 @@ var (
 	_ IPersistentMap = (*Map)(nil)
 	_ IMeta          = (*Map)(nil)
 	_ IFn            = (*Map)(nil)
+	_ IReduce        = (*Map)(nil)
+	_ IReduceInit    = (*Map)(nil)
+
+	_ IReduce     = (*MapValSeq)(nil)
+	_ IReduceInit = (*MapValSeq)(nil)
 
 	emptyMap = NewMap()
 )
@@ -196,6 +201,31 @@ func (m *Map) WithMeta(meta IPersistentMap) interface{} {
 	return &cpy
 }
 
+func (m *Map) Reduce(f IFn) interface{} {
+	if m.Count() == 0 {
+		return f.Invoke()
+	}
+	var res interface{}
+	first := true
+	for seq := Seq(m); seq != nil; seq = seq.Next() {
+		if first {
+			res = seq.First()
+			first = false
+			continue
+		}
+		res = f.Invoke(res, seq.First())
+	}
+	return res
+}
+
+func (m *Map) ReduceInit(f IFn, init interface{}) interface{} {
+	res := init
+	for seq := Seq(m); seq != nil; seq = seq.Next() {
+		res = f.Invoke(res, seq.First())
+	}
+	return res
+}
+
 func (m *Map) Invoke(args ...interface{}) interface{} {
 	if len(args) != 1 {
 		panic(fmt.Errorf("map apply expects 1 argument, got %d", len(args)))
@@ -214,9 +244,20 @@ func (m *Map) AsTransient() ITransientCollection {
 	return &TransientMap{Map: m}
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Transient
+
 type TransientMap struct {
 	*Map
 }
+
+var (
+	_ IPersistentMap = (*TransientMap)(nil)
+	_ IMeta          = (*TransientMap)(nil)
+	_ IFn            = (*TransientMap)(nil)
+	_ IReduce        = (*TransientMap)(nil)
+	_ IReduceInit    = (*TransientMap)(nil)
+)
 
 func (m *TransientMap) Conj(v interface{}) ITransientCollection {
 	return &TransientMap{Map: m.Map.Conj(v).(*Map)}
@@ -324,4 +365,31 @@ func (s *MapValSeq) More() ISeq {
 		return emptyList
 	}
 	return nxt
+}
+
+func (s *MapValSeq) Reduce(f IFn) interface{} {
+	count := 0
+	var res interface{}
+	first := true
+	for seq := Seq(s); seq != nil; seq = seq.Next() {
+		count++
+		if first {
+			res = seq.First()
+			first = false
+			continue
+		}
+		res = f.Invoke(res, seq.First())
+	}
+	if count == 0 {
+		return f.Invoke()
+	}
+	return res
+}
+
+func (s *MapValSeq) ReduceInit(f IFn, init interface{}) interface{} {
+	res := init
+	for seq := Seq(s); seq != nil; seq = seq.Next() {
+		res = f.Invoke(res, seq.First())
+	}
+	return res
 }

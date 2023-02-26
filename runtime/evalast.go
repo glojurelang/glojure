@@ -93,7 +93,7 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 
 func (env *environment) EvalASTDef(n ast.Node) (interface{}, error) {
 	init := get(n, kw("init"))
-	if init == nil {
+	if value.IsNil(init) {
 		return get(n, kw("var")), nil
 	}
 
@@ -101,8 +101,22 @@ func (env *environment) EvalASTDef(n ast.Node) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
+	sym := get(n, kw("name")).(*value.Symbol)
+	// evaluate symbol metadata if present
+	meta := get(n, kw("meta"))
+	if !value.IsNil(meta) {
+		metaVal, err := env.EvalAST(meta.(ast.Node))
+		if err != nil {
+			return nil, err
+		}
+		s, err := value.WithMeta(sym, metaVal.(value.IPersistentMap))
+		if err != nil {
+			return nil, err
+		}
+		sym = s.(*value.Symbol)
+	}
 
-	return env.DefVar(get(n, kw("name")).(*value.Symbol), initVal), nil
+	return env.DefVar(sym, initVal), nil
 }
 
 func (env *environment) EvalASTAssign(n ast.Node) (interface{}, error) {
@@ -281,8 +295,12 @@ func (env *environment) EvalASTWithMeta(n ast.Node) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
+	metaVal, err := env.EvalAST(meta)
+	if err != nil {
+		return nil, err
+	}
 
-	return value.WithMeta(exprVal, meta)
+	return value.WithMeta(exprVal, metaVal.(value.IPersistentMap))
 }
 
 func (env *environment) EvalASTFn(n ast.Node) (interface{}, error) {

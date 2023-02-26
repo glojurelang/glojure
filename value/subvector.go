@@ -23,6 +23,8 @@ func NewSubVector(meta IPersistentMap, v IPersistentVector, start, end int) *Sub
 	}
 }
 
+func (v *SubVector) xxx_sequential() {}
+
 func (v *SubVector) Meta() IPersistentMap {
 	return v.meta
 }

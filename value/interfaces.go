@@ -10,7 +10,10 @@ type (
 		Hash() uint32
 	}
 
-	Sequential interface{}
+	Sequential interface {
+		// Private interface method used to tag sequential types.
+		xxx_sequential() // TODO: anything that inherits from ASeq in java impl should implement this
+	}
 
 	Named interface {
 		Name() string
@@ -130,6 +133,8 @@ type (
 	}
 
 	IPersistentList interface {
+		Sequential
+
 		IPersistentCollection
 		IPersistentStack
 		// Clojure's IPersistentList does not implement this, but it
@@ -154,6 +159,8 @@ type (
 
 	// IPersistentVector is a persistent vector.
 	IPersistentVector interface {
+		Sequential
+
 		Equaler // Note: not in Clojure's interfaces
 
 		Associative

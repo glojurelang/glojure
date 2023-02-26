@@ -148,6 +148,9 @@
                                     '.Reduce
                                     '.ReduceInit))))]
 
+   (sexpr-replace 'BigInteger 'big.Int)
+   (sexpr-replace 'BigDecimal 'glojure.lang.BigDecimal)
+
    (sexpr-replace '.equals '.Equal)
 
    (sexpr-replace '(clojure.lang.RT/load (.substring path 1))
