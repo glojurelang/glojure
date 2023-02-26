@@ -176,6 +176,7 @@
    (sexpr-replace '(clojure.lang.Keyword/intern ^string name) '(glojure.lang.InternKeywordString name))
    (sexpr-replace '(clojure.lang.Keyword/intern ns name) '(glojure.lang.InternKeyword ns name))
 
+   (sexpr-replace '.get '.Get)
    (sexpr-replace '.getName '.Name)
    (sexpr-replace '.concat 'glojure.lang.ConcatStrings)
    (sexpr-replace 'clojure.lang.RT/assoc 'glojure.lang.Assoc)

@@ -28,7 +28,10 @@ func (sr *testSymbolResolver) CurrentNS() *value.Symbol {
 }
 
 func (sr *testSymbolResolver) ResolveStruct(s *value.Symbol) *value.Symbol {
-	return s
+	if strings.Contains(s.Name(), ".") {
+		return s
+	}
+	return nil
 }
 
 func (sr *testSymbolResolver) ResolveAlias(s *value.Symbol) *value.Symbol {

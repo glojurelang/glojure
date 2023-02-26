@@ -489,7 +489,6 @@ func (r *Reader) readString() (interface{}, error) {
 	for {
 		rune, _, err := r.rs.ReadRune()
 		if err != nil {
-			fmt.Println("string so far", str)
 			return nil, r.error("error reading string: %w", err)
 		}
 
@@ -708,6 +707,8 @@ func (r *Reader) readSyntaxQuote() (interface{}, error) {
 
 func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interface{}) interface{} {
 	switch node := node.(type) {
+	case value.Keyword, value.Char, string:
+		return node
 	case *value.Symbol:
 		sym := node
 		if specials[sym.String()] {
@@ -765,6 +766,23 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 		}
 		// TODO: match actual LispReader.java behavior
 		return value.NewList(symQuote, sym)
+	case value.IPersistentMap:
+		var keyvals []interface{}
+		for seq := value.Seq(node); seq != nil; seq = seq.Next() {
+			entry := seq.First().(value.IMapEntry)
+			keyvals = append(keyvals, entry.Key(), entry.Val())
+		}
+		return value.NewList(
+			value.NewSymbol("glojure.core/apply"),
+			value.NewSymbol("glojure.core/hash-map"),
+			value.NewList(
+				value.NewSymbol("glojure.core/seq"),
+				value.NewCons(
+					value.NewSymbol("glojure.core/concat"),
+					r.sqExpandList(symbolNameMap, keyvals),
+				),
+			),
+		)
 	case value.IPersistentList, value.IPersistentVector:
 		_, isVector := node.(value.IPersistentVector)
 		if value.Count(node) == 0 {
@@ -783,7 +801,7 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 			}
 			return value.NewList(symList)
 		}
-		if !isVector && value.Equal(value.First(node), symUnquote) {
+		if r.isUnquote(node) {
 			return value.First(value.Rest(node))
 		}
 
@@ -808,6 +826,30 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 		return ret
 	}
 	return value.NewList(symQuote, node)
+}
+
+func (r *Reader) sqExpandList(symbolNameMap map[string]*value.Symbol, els []interface{}) value.ISeq {
+	var ret value.IPersistentVector = value.NewVector()
+	for _, v := range els {
+		if r.isUnquote(v) {
+			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), value.First(value.Rest(v))))
+		} else if r.isUnquoteSplicing(v) {
+			ret = ret.Cons(value.First(value.Rest(v)))
+		} else {
+			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), r.syntaxQuote(symbolNameMap, v)))
+		}
+	}
+	return value.Seq(ret)
+}
+
+func (r *Reader) isUnquote(form interface{}) bool {
+	seq, ok := form.(value.ISeq)
+	return ok && value.Equal(seq.First(), symUnquote)
+}
+
+func (r *Reader) isUnquoteSplicing(form interface{}) bool {
+	seq, ok := form.(value.ISeq)
+	return ok && value.Equal(seq.First(), symSpliceUnquote)
 }
 
 func (r *Reader) readDeref() (interface{}, error) {

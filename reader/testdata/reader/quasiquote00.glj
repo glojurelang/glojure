@@ -5,4 +5,4 @@
 `(a ~(+ 1 2))
 `(a ~@[(+ 1 2)])
 `(do.not.Qualify)
-;; todo: vectors
+`{:x ~[]}

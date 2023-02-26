@@ -4,3 +4,4 @@
 (glojure.core/seq (glojure.core/concat (glojure.core/list (quote user/a)) (glojure.core/list (+ 1 2))))
 (glojure.core/seq (glojure.core/concat (glojure.core/list (quote user/a)) [(+ 1 2)]))
 (glojure.core/seq (glojure.core/concat (glojure.core/list (quote do.not.Qualify))))
+(glojure.core/apply glojure.core/hash-map (glojure.core/seq (glojure.core/concat (glojure.core/list :x) (glojure.core/list []))))

@@ -2297,9 +2297,9 @@
 
 (defn ^:private deref-future
   ([^java.util.concurrent.Future fut]
-     (.get fut))
+     (.Get fut))
   ([^java.util.concurrent.Future fut timeout-ms timeout-val]
-     (try (.get fut timeout-ms java.util.concurrent.TimeUnit/MILLISECONDS)
+     (try (.Get fut timeout-ms java.util.concurrent.TimeUnit/MILLISECONDS)
           (catch java.util.concurrent.TimeoutException e
             timeout-val))))
      
@@ -6864,7 +6864,7 @@ fails, attempts to require sym's namespace and retries."
        (.ReduceInit ^glojure.lang.IReduceInit coll f val)
        (if (nil? coll)
          val
-       (clojure.core.protocols/coll-reduce coll f val)))))
+         (clojure.core.protocols/coll-reduce coll f val)))))
 
 (do)
 
@@ -7009,8 +7009,8 @@ fails, attempts to require sym's namespace and retries."
      glojure.lang.IPending
      (isRealized [_] (.isDone fut))
      java.util.concurrent.Future
-      (get [_] (.get fut))
-      (get [_ timeout unit] (.get fut timeout unit))
+      (get [_] (.Get fut))
+      (get [_ timeout unit] (.Get fut timeout unit))
       (isCancelled [_] (.isCancelled fut))
       (isDone [_] (.isDone fut))
       (cancel [_ interrupt?] (.cancel fut interrupt?)))))
