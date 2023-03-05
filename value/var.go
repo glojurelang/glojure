@@ -1,7 +1,10 @@
 package value
 
 import (
+	"sync"
 	"sync/atomic"
+
+	"github.com/jtolio/gls"
 )
 
 type (
@@ -11,6 +14,8 @@ type (
 		root atomic.Value
 
 		meta atomic.Value
+
+		dynamicBound atomic.Bool
 	}
 
 	UnboundVar struct {
@@ -23,11 +28,22 @@ type (
 	varBox struct {
 		val interface{}
 	}
+
+	varBindings map[*Var]*varBox
+	glStorage   struct {
+		bindings []varBindings
+	}
 )
 
 var (
 	KeywordMacro   = NewKeyword("macro")
 	KeywordPrivate = NewKeyword("private")
+	KeywordDynamic = NewKeyword("dynamic")
+	KeywordNS      = NewKeyword("ns")
+
+	// TODO: use an atomic and CAS
+	glsBindings    = make(map[uint]*glStorage)
+	glsBindingsMtx sync.RWMutex
 
 	_ IRef = (*Var)(nil)
 )
@@ -71,10 +87,15 @@ func (v *Var) BindRoot(root interface{}) {
 	v.root.Store(varBox{val: root})
 }
 
+func (v *Var) getRoot() interface{} {
+	return v.root.Load().(varBox).val
+}
+
 func (v *Var) Get() interface{} {
-	// TODO: figure out goroutine-local bindings
-	box := v.root.Load().(varBox)
-	return box.val
+	if !v.dynamicBound.Load() {
+		return v.getRoot()
+	}
+	return v.Deref()
 }
 
 func (v *Var) Set(val interface{}) interface{} {
@@ -89,6 +110,8 @@ func (v *Var) Meta() IPersistentMap {
 }
 
 func (v *Var) SetMeta(meta IPersistentMap) {
+	// TODO: ResetMeta
+	meta = Assoc(meta, KeywordNS, v.ns).(IPersistentMap)
 	v.meta.Store(meta)
 }
 
@@ -120,15 +143,36 @@ func (v *Var) IsPublic() bool {
 	return !booleanCast(isPrivate.Val())
 }
 
-func booleanCast(x interface{}) bool {
-	if xb, ok := x.(bool); ok {
-		return xb
+func (v *Var) isDynamic() bool {
+	meta := v.Meta()
+	isDynamic := meta.EntryAt(KeywordDynamic)
+	if isDynamic == nil {
+		return false
 	}
-	return x != nil
+	return booleanCast(isDynamic.Val())
 }
 
 func (v *Var) Deref() interface{} {
-	return v.Get()
+	if b := v.getDynamicBinding(); b != nil {
+		return b.val
+	}
+	return v.getRoot()
+}
+
+func (v *Var) getDynamicBinding() *varBox {
+	if !v.dynamicBound.Load() {
+		return nil
+	}
+	var storage *glStorage
+	var ok bool
+	gid := goroutineID()
+	glsBindingsMtx.RLock()
+	storage, ok = glsBindings[gid]
+	glsBindingsMtx.RUnlock()
+	if !ok {
+		return nil
+	}
+	return storage.get(v)
 }
 
 func (v *Var) SetValidator(vf IFn) {
@@ -149,4 +193,76 @@ func (v *Var) AddWatch(key interface{}, fn IFn) {
 
 func (v *Var) RemoveWatch(key interface{}) {
 	panic("not implemented")
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Dynamic binding
+
+func (s *glStorage) get(v *Var) *varBox {
+	for i := len(s.bindings) - 1; i >= 0; i-- {
+		if b, ok := s.bindings[i][v]; ok {
+			return b
+		}
+	}
+	return nil
+}
+
+func goroutineID() uint {
+	gid, ok := gls.GetGoroutineId()
+	if !ok {
+		panic("no goroutine id")
+	}
+	return gid
+}
+
+func PushThreadBindings(bindings IPersistentMap) {
+	gid := goroutineID()
+	glsBindingsMtx.RLock()
+	storage, ok := glsBindings[gid]
+	glsBindingsMtx.RUnlock()
+	if !ok {
+		glsBindingsMtx.Lock()
+		storage = &glStorage{}
+		glsBindings[gid] = storage
+		glsBindingsMtx.Unlock()
+	}
+
+	store := make(varBindings)
+	storage.bindings = append(storage.bindings, store)
+
+	for seq := Seq(bindings); seq != nil; seq = seq.Next() {
+		entry := seq.First().(IMapEntry)
+		vr := entry.Key().(*Var)
+		val := entry.Val()
+
+		if !vr.isDynamic() {
+			//panic("cannot dynamically bind non-dynamic var: " + vr.String())
+		}
+		// TODO: validate
+		vr.dynamicBound.Store(true)
+		store[vr] = &varBox{val: val}
+	}
+}
+
+func PopThreadBindings() {
+	gid := goroutineID()
+	glsBindingsMtx.RLock()
+	storage := glsBindings[gid]
+	glsBindingsMtx.RUnlock()
+
+	if len(storage.bindings) > 1 {
+		storage.bindings = storage.bindings[:len(storage.bindings)-1]
+		return
+	}
+
+	glsBindingsMtx.Lock()
+	delete(glsBindings, gid)
+	glsBindingsMtx.Unlock()
+}
+
+func booleanCast(x interface{}) bool {
+	if xb, ok := x.(bool); ok {
+		return xb
+	}
+	return x != nil
 }

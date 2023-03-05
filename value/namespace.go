@@ -43,6 +43,10 @@ func NewNamespace(name *Symbol) *Namespace {
 	return ns
 }
 
+func (ns *Namespace) String() string {
+	return ns.Name().String()
+}
+
 func (ns *Namespace) Name() *Symbol {
 	return ns.name
 }

@@ -234,6 +234,7 @@ func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 		}
 	}
 	// TODO: how to handle?
+	fmt.Println("EvalASTMaybeHostForm: ", n)
 	panic("EvalASTMaybeHostForm: " + get(n, kw("class")).(string))
 }
 

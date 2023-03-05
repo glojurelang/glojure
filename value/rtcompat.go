@@ -2,6 +2,7 @@ package value
 
 import (
 	"fmt"
+	"strings"
 	"sync/atomic"
 )
 
@@ -86,4 +87,46 @@ func (rt *RTMethods) FindVar(qualifiedSym *Symbol) *Var {
 	}
 
 	return ns.FindInternedVar(NewSymbol(qualifiedSym.Name()))
+}
+
+var (
+	mungeCharMap = map[rune]string{
+		'-':  "_",
+		':':  "_COLON_",
+		'+':  "_PLUS_",
+		'>':  "_GT_",
+		'<':  "_LT_",
+		'=':  "_EQ_",
+		'~':  "_TILDE_",
+		'!':  "_BANG_",
+		'@':  "_CIRCA_",
+		'#':  "_SHARP_",
+		'\'': "_SINGLEQUOTE_",
+		'"':  "_DOUBLEQUOTE_",
+		'%':  "_PERCENT_",
+		'^':  "_CARET_",
+		'&':  "_AMPERSAND_",
+		'*':  "_STAR_",
+		'|':  "_BAR_",
+		'{':  "_LBRACE_",
+		'}':  "_RBRACE_",
+		'[':  "_LBRACK_",
+		']':  "_RBRACK_",
+		'/':  "_SLASH_",
+		'\\': "_BSLASH_",
+		'?':  "_QMARK_",
+	}
+)
+
+func (rt *RTMethods) Munge(name string) string {
+	sb := strings.Builder{}
+	for _, c := range name {
+		sub, ok := mungeCharMap[c]
+		if ok {
+			sb.WriteString(sub)
+		} else {
+			sb.WriteRune(c)
+		}
+	}
+	return sb.String()
 }

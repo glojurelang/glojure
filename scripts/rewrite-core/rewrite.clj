@@ -87,6 +87,9 @@
                     (strings.ReplaceAll "-" "_")
                     (strings.ReplaceAll "." "/")))
    (sexpr-replace '.startsWith 'strings.HasPrefix)
+   (sexpr-replace '(.replace (str ns) \- \_) '(strings.ReplaceAll (str ns) "-" "_"))
+
+   (sexpr-replace '(clojure.lang.Compiler/munge (str s)) '(. clojure.lang.RT (Munge (str s))))
 
    ;; instance? replacements
    (sexpr-replace "Evaluates x and tests if it is an instance of the class\n    c. Returns true or false"
@@ -172,8 +175,13 @@
    (sexpr-replace 'clojure.lang.Symbol/intern 'glojure.lang.NewSymbol)
    (sexpr-replace '(clojure.lang.Symbol/intern ns name) '(glojure.lang.InternSymbol ns name))
 
-   (sexpr-replace '(clojure.lang.Keyword/intern ^glojure.lang.Symbol name) '(glojure.lang.InternKeywordSymbol name))
-   (sexpr-replace '(clojure.lang.Keyword/intern ^string name) '(glojure.lang.InternKeywordString name))
+   (sexpr-replace '(cond (keyword? name) name
+                (symbol? name) (clojure.lang.Keyword/intern ^clojure.lang.Symbol name)
+                (string? name) (clojure.lang.Keyword/intern ^String name))
+                  '(cond (keyword? name) name
+                (symbol? name) (glojure.lang.InternKeywordSymbol ^clojure.lang.Symbol name)
+                (string? name) (glojure.lang.InternKeywordString ^String name)))
+
    (sexpr-replace '(clojure.lang.Keyword/intern ns name) '(glojure.lang.InternKeyword ns name))
 
    (sexpr-replace '.get '.Get)

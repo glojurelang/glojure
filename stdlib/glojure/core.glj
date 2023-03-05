@@ -612,9 +612,7 @@
   {:tag glojure.lang.Keyword
    :added "1.0"
    :static true}
-  ([name] (cond (keyword? name) name
-                (symbol? name) (glojure.lang.InternKeywordSymbol name)
-                (string? name) (glojure.lang.InternKeywordSymbol name)))
+  ([name] (cond (keyword? name) name (symbol? name) (glojure.lang.InternKeywordSymbol ^{:tag glojure.lang.Symbol} name) (string? name) (glojure.lang.InternKeywordString ^{:tag string} name)))
   ([ns name] (glojure.lang.InternKeyword ns name)))
 
 (defn find-keyword
@@ -6862,9 +6860,7 @@ fails, attempts to require sym's namespace and retries."
   ([f val coll]
      (if (instance? glojure.lang.IReduceInit coll)
        (.ReduceInit ^glojure.lang.IReduceInit coll f val)
-       (if (nil? coll)
-         val
-         (clojure.core.protocols/coll-reduce coll f val)))))
+       (clojure.core.protocols/coll-reduce coll f val))))
 
 (do)
 

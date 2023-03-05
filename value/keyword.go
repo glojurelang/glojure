@@ -31,6 +31,10 @@ func InternKeywordSymbol(s *Symbol) Keyword {
 	return NewKeyword(s.FullName())
 }
 
+func InternKeywordString(s string) Keyword {
+	return NewKeyword(s)
+}
+
 func InternKeyword(ns, name interface{}) Keyword {
 	return InternKeywordSymbol(InternSymbol(ns, name))
 }
