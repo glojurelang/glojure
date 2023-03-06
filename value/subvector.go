@@ -90,12 +90,17 @@ func (v *SubVector) EntryAt(key interface{}) IMapEntry {
 	return nil
 }
 
-func (v *SubVector) ValueAt(i int) interface{} {
-	val, ok := v.Nth(i)
-	if !ok {
-		panic("index out of range")
+func (v *SubVector) ValAt(i interface{}) interface{} {
+	return v.ValAtDefault(i, nil)
+}
+
+func (v *SubVector) ValAtDefault(k, def interface{}) interface{} {
+	if i, ok := AsInt(k); ok {
+		if val, ok := v.Nth(i); ok {
+			return val
+		}
 	}
-	return val
+	return def
 }
 
 func (v *SubVector) Equal(v2 interface{}) bool {
@@ -134,7 +139,7 @@ func (v *SubVector) Peek() interface{} {
 	if v.Count() == 0 {
 		return nil
 	}
-	return v.ValueAt(v.Count() - 1)
+	return v.ValAt(v.Count() - 1)
 }
 
 func (v *SubVector) Pop() IPersistentStack {
@@ -159,4 +164,8 @@ func (v *SubVector) Seq() ISeq {
 		return nil
 	}
 	return NewVectorIterator(v, 0, 1)
+}
+
+func (v *SubVector) IsEmpty() bool {
+	return v.Count() == 0
 }

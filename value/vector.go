@@ -113,19 +113,25 @@ func (v *Vector) EntryAt(key interface{}) IMapEntry {
 	}
 }
 
-func (v *Vector) ValueAt(i int) interface{} {
-	val, ok := v.vec.Index(i)
-	if !ok {
-		panic("index out of range")
+func (v *Vector) IsEmpty() bool {
+	return v.Count() == 0
+}
+
+func (v *Vector) ValAt(i interface{}) interface{} {
+	return v.ValAtDefault(i, nil)
+}
+
+func (v *Vector) ValAtDefault(k, def interface{}) interface{} {
+	if i, ok := AsInt(k); ok {
+		if val, ok := v.Nth(i); ok {
+			return val
+		}
 	}
-	return val
+	return def
 }
 
 func (v *Vector) Nth(i int) (val interface{}, ok bool) {
-	if i < 0 || i >= v.Count() {
-		return nil, false
-	}
-	return v.ValueAt(i), true
+	return v.vec.Index(i)
 }
 
 func (v *Vector) NthDefault(i int, def interface{}) interface{} {
@@ -141,7 +147,7 @@ func (v *Vector) String() string {
 
 	b.WriteString("[")
 	for i := 0; i < v.Count(); i++ {
-		el := v.ValueAt(i)
+		el := v.ValAt(i)
 		if el == nil {
 			b.WriteString("nil")
 		} else {
@@ -189,7 +195,7 @@ func (v *Vector) Invoke(args ...interface{}) interface{} {
 		panic(fmt.Errorf("index out of bounds"))
 	}
 
-	return v.ValueAt(i)
+	return v.ValAt(i)
 }
 
 func (v *Vector) ApplyTo(args ISeq) interface{} {
@@ -214,7 +220,7 @@ func (v *Vector) Peek() interface{} {
 	if v.Count() == 0 {
 		return nil
 	}
-	return v.ValueAt(v.Count() - 1)
+	return v.ValAt(v.Count() - 1)
 }
 
 func (v *Vector) Pop() IPersistentStack {
@@ -244,7 +250,7 @@ func (v *Vector) WithMeta(meta IPersistentMap) interface{} {
 func (v *Vector) ReduceInit(f IFn, init interface{}) interface{} {
 	res := init
 	for i := 0; i < v.Count(); i++ {
-		res = f.Invoke(res, v.ValueAt(i))
+		res = f.Invoke(res, v.ValAt(i))
 	}
 	return res
 }
@@ -253,9 +259,9 @@ func (v *Vector) Reduce(f IFn) interface{} {
 	if v.Count() == 0 {
 		return f.Invoke()
 	}
-	res := v.ValueAt(0)
+	res := v.ValAt(0)
 	for i := 1; i < v.Count(); i++ {
-		res = f.Invoke(res, v.ValueAt(i))
+		res = f.Invoke(res, v.ValAt(i))
 	}
 	return res
 }

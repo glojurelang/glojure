@@ -134,7 +134,7 @@ type TransientSet struct {
 	*Set
 }
 
-func (s *TransientSet) Conj(v interface{}) ITransientCollection {
+func (s *TransientSet) Conj(v interface{}) Conjer {
 	return &TransientSet{Set: s.Set.Conj(v).(*Set)}
 }
 

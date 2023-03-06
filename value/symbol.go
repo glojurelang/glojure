@@ -106,3 +106,9 @@ func (s *Symbol) WithMeta(meta IPersistentMap) interface{} {
 	symCopy.meta = meta
 	return &symCopy
 }
+
+func (s *Symbol) Hash() uint32 {
+	h := getHash()
+	h.Write([]byte(s.ns + "/" + s.name))
+	return h.Sum32() ^ symbolHashMask
+}

@@ -3,6 +3,7 @@ package value
 import (
 	"sync"
 	"sync/atomic"
+	"unsafe"
 
 	"github.com/jtolio/gls"
 )
@@ -54,7 +55,7 @@ func NewVar(ns *Namespace, sym *Symbol) *Var {
 		sym: sym,
 	}
 	v.root.Store(varBox{val: UnboundVar{v: v}})
-	v.meta.Store(IPersistentMap(NewMap()))
+	v.meta.Store(NewBox(emptyMap))
 	return v
 }
 
@@ -106,13 +107,13 @@ func (v *Var) Set(val interface{}) interface{} {
 }
 
 func (v *Var) Meta() IPersistentMap {
-	return v.meta.Load().(IPersistentMap)
+	return v.meta.Load().(*Box).val.(IPersistentMap)
 }
 
 func (v *Var) SetMeta(meta IPersistentMap) {
 	// TODO: ResetMeta
 	meta = Assoc(meta, KeywordNS, v.ns).(IPersistentMap)
-	v.meta.Store(meta)
+	v.meta.Store(NewBox(meta))
 }
 
 func (v *Var) AlterMeta(alter IFn, args ISeq) IPersistentMap {
@@ -193,6 +194,10 @@ func (v *Var) AddWatch(key interface{}, fn IFn) {
 
 func (v *Var) RemoveWatch(key interface{}) {
 	panic("not implemented")
+}
+
+func (v *Var) Hash() uint32 {
+	return hashPtr(uintptr(unsafe.Pointer(v)))
 }
 
 ////////////////////////////////////////////////////////////////////////////////

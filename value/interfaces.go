@@ -73,6 +73,9 @@ type (
 	}
 
 	Associative interface {
+		IPersistentCollection
+		ILookup
+
 		ContainsKey(interface{}) bool
 
 		EntryAt(interface{}) IMapEntry
@@ -106,7 +109,7 @@ type (
 	// Collections
 
 	ITransientCollection interface {
-		Conj(interface{}) ITransientCollection
+		Conj(interface{}) Conjer
 		Persistent() IPersistentCollection
 	}
 
@@ -151,7 +154,7 @@ type (
 
 		// AssocEx is like Assoc, but returns an error if the key already
 		// exists.
-		AssocEx(key, val interface{}) (IPersistentMap, error)
+		AssocEx(key, val interface{}) IPersistentMap
 
 		// Without returns a new map with the given key removed.
 		Without(key interface{}) IPersistentMap

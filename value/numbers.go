@@ -298,3 +298,32 @@ func isNaN(x interface{}) bool {
 		return false
 	}
 }
+
+func isInteger(x interface{}) bool {
+	switch x.(type) {
+	case int:
+		return true
+	case int64:
+		return true
+	case int32:
+		return true
+	case int16:
+		return true
+	case int8:
+		return true
+	case uint:
+		return true
+	case uint64:
+		return true
+	case uint32:
+		return true
+	case uint16:
+		return true
+	case uint8:
+		return true
+	case *BigInt:
+		return true
+	default:
+		return false
+	}
+}

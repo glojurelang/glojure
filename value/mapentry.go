@@ -11,6 +11,10 @@ var (
 	_ ISeqable          = (*MapEntry)(nil)
 )
 
+func NewMapEntry(key, val interface{}) *MapEntry {
+	return &MapEntry{key: key, val: val}
+}
+
 func (me *MapEntry) xxx_sequential() {}
 
 func (me *MapEntry) Key() interface{} {
@@ -107,4 +111,20 @@ func (me *MapEntry) asVector() *Vector {
 
 func (me *MapEntry) String() string {
 	return me.asVector().String()
+}
+
+func (me *MapEntry) Conj(v interface{}) Conjer {
+	return me.asVector().Conj(v)
+}
+
+func (me *MapEntry) IsEmpty() bool {
+	return false
+}
+
+func (me *MapEntry) ValAt(k interface{}) interface{} {
+	return me.asVector().ValAt(k)
+}
+
+func (me *MapEntry) ValAtDefault(k, def interface{}) interface{} {
+	return me.asVector().ValAtDefault(k, def)
 }

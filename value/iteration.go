@@ -1,6 +1,7 @@
 package value
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 )
@@ -313,4 +314,8 @@ func (r *Repeat) Next() ISeq {
 
 func (r *Repeat) Seq() ISeq {
 	return r
+}
+
+func newIteratorError() error {
+	return errors.New("iterator reached the end of collection")
 }

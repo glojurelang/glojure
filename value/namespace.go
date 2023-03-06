@@ -35,8 +35,8 @@ func NewNamespace(name *Symbol) *Namespace {
 		name: name,
 	}
 
-	ns.mappings.Store(NewMap())
-	ns.aliases.Store(NewMap())
+	ns.mappings.Store(NewBox(emptyMap))
+	ns.aliases.Store(NewBox(emptyMap))
 
 	// TODO: add default mappings (see RT.java in clojure)
 
@@ -51,12 +51,20 @@ func (ns *Namespace) Name() *Symbol {
 	return ns.name
 }
 
-func (ns *Namespace) Mappings() *Map {
-	return ns.mappings.Load().(*Map)
+func (ns *Namespace) mappingsBox() *Box {
+	return ns.mappings.Load().(*Box)
 }
 
-func (ns *Namespace) Aliases() *Map {
-	return ns.aliases.Load().(*Map)
+func (ns *Namespace) Mappings() IPersistentMap {
+	return ns.mappingsBox().val.(IPersistentMap)
+}
+
+func (ns *Namespace) aliasesBox() *Box {
+	return ns.aliases.Load().(*Box)
+}
+
+func (ns *Namespace) Aliases() IPersistentMap {
+	return ns.aliasesBox().val.(IPersistentMap)
 }
 
 func (ns *Namespace) isInternedMapping(sym *Symbol, v interface{}) bool {
@@ -69,23 +77,22 @@ func (ns *Namespace) Intern(env Environment, sym *Symbol) *Var {
 	if sym.Namespace() != "" {
 		panic(fmt.Errorf("can't intern qualified name: %s", sym))
 	}
-	m := ns.Mappings()
+	mb := ns.mappingsBox()
 
 	var v *Var
 	var o interface{}
 	for {
-		var ok bool
-		o, ok = m.ValueAt(sym)
-		if ok {
+		o = mb.val.(IPersistentMap).ValAt(sym)
+		if o != nil {
 			break
 		}
 
 		if v == nil {
 			v = NewVar(ns, sym)
 		}
-		newMap := m.Assoc(sym, v)
-		ns.mappings.CompareAndSwap(m, newMap)
-		m = ns.Mappings()
+		newMap := mb.val.(IPersistentMap).Assoc(sym, v)
+		ns.mappings.CompareAndSwap(mb, NewBox(newMap))
+		mb = ns.mappingsBox()
 	}
 	if ns.isInternedMapping(sym, o) {
 		return o.(*Var)
@@ -94,8 +101,8 @@ func (ns *Namespace) Intern(env Environment, sym *Symbol) *Var {
 		v = NewVar(ns, sym)
 	}
 	if ns.checkReplacement(env, sym, o, v) {
-		for !ns.mappings.CompareAndSwap(m, m.Assoc(sym, v)) {
-			m = ns.Mappings()
+		for !ns.mappings.CompareAndSwap(mb, NewBox(mb.val.(IPersistentMap).Assoc(sym, v))) {
+			mb = ns.mappingsBox()
 		}
 		return v
 	}
@@ -144,17 +151,13 @@ func (ns *Namespace) InternWithValue(env Environment, sym *Symbol, value interfa
 
 func (ns *Namespace) GetMapping(sym *Symbol) interface{} {
 	m := ns.Mappings()
-	v, ok := m.ValueAt(sym)
-	if !ok {
-		return nil
-	}
-	return v
+	return m.ValAt(sym)
 }
 
 func (ns *Namespace) FindInternedVar(sym *Symbol) *Var {
 	m := ns.Mappings()
-	v, ok := m.ValueAt(sym)
-	if !ok {
+	v := m.ValAt(sym)
+	if v == nil {
 		return nil
 	}
 	vr, ok := v.(*Var)
@@ -169,8 +172,8 @@ func (ns *Namespace) FindInternedVar(sym *Symbol) *Var {
 
 func (ns *Namespace) LookupAlias(sym *Symbol) *Namespace {
 	m := ns.Aliases()
-	v, ok := m.ValueAt(sym)
-	if !ok {
+	v := m.ValAt(sym)
+	if v == nil {
 		return nil
 	}
 	return v.(*Namespace)
@@ -180,13 +183,13 @@ func (ns *Namespace) AddAlias(alias *Symbol, ns2 *Namespace) {
 	if alias == nil || ns2 == nil {
 		panic(fmt.Errorf("add-alias: expecting symbol (%v) + namespace (%v)", alias, ns2))
 	}
-	aliases := ns.Aliases()
-	for !aliases.ContainsKey(alias) {
-		newAliases := aliases.Assoc(alias, ns2)
-		ns.aliases.CompareAndSwap(aliases, newAliases)
-		aliases = ns.Aliases()
+	ab := ns.aliasesBox()
+	for !ab.val.(IPersistentMap).ContainsKey(alias) {
+		newAliases := ab.val.(IPersistentMap).Assoc(alias, ns2)
+		ns.aliases.CompareAndSwap(ab, NewBox(newAliases))
+		ab = ns.aliasesBox()
 	}
-	if v, _ := aliases.ValueAt(alias); v != ns2 {
+	if v := ab.val.(IPersistentMap).ValAt(alias); v != ns2 {
 		panic(fmt.Errorf("add-alias: alias %s already refers to %s", alias, v))
 	}
 }
@@ -202,17 +205,16 @@ func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 		panic(fmt.Errorf("can't intern qualified name: %s", sym))
 	}
 
-	m := ns.Mappings()
+	mb := ns.mappingsBox()
 	var o interface{}
 	for {
-		var ok bool
-		o, ok = m.ValueAt(sym)
-		if ok {
+		o = mb.val.(IPersistentMap).ValAt(sym)
+		if o != nil {
 			break
 		}
-		newMap := m.Assoc(sym, v)
-		ns.mappings.CompareAndSwap(m, newMap)
-		m = ns.Mappings()
+		newMap := mb.val.(IPersistentMap).Assoc(sym, v)
+		ns.mappings.CompareAndSwap(mb, NewBox(newMap))
+		mb = ns.mappingsBox()
 	}
 	if ns.isInternedMapping(sym, o) {
 		return o.(*Var)
@@ -224,8 +226,8 @@ func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 	// TODO: this will panic :). need to plumb through env, live with a
 	// global env, or make the check less strict if env is nil.
 	if ns.checkReplacement(nil, sym, o, v) {
-		for !ns.mappings.CompareAndSwap(m, m.Assoc(sym, v)) {
-			m = ns.Mappings()
+		for !ns.mappings.CompareAndSwap(mb, mb.val.(IPersistentMap).Assoc(sym, v)) {
+			mb = ns.mappingsBox()
 		}
 		return v
 	}
