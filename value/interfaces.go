@@ -315,7 +315,7 @@ func GetDefault(coll, key, def interface{}) interface{} {
 	case nil:
 		return def
 	case ILookup:
-		return arg.ValAt(key)
+		return arg.ValAtDefault(key, def)
 	case Associative:
 		if arg.ContainsKey(key) {
 			return arg.EntryAt(key).Val()

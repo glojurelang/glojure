@@ -149,8 +149,8 @@ func (env *environment) lookup(sym *value.Symbol) (res interface{}, ok bool) {
 	if ns == nil {
 		return nil, false
 	}
-	vr, ok := ns.Mappings().ValueAt(sym)
-	if !ok {
+	vr := ns.Mappings().ValAt(sym)
+	if vr == nil {
 		return nil, false
 	}
 	// TODO: can these only be vars?

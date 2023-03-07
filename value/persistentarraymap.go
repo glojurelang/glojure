@@ -54,8 +54,11 @@ func NewMap(keyVals ...interface{}) IPersistentMap {
 		return NewPersistentHashMap(keyVals...)
 	}
 
+	kv := make([]interface{}, len(keyVals))
+	copy(kv, keyVals)
+
 	return &Map{
-		keyVals: append([]interface{}{}, keyVals...),
+		keyVals: kv,
 	}
 }
 
