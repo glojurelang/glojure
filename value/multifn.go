@@ -2,6 +2,7 @@ package value
 
 import (
 	"fmt"
+	"reflect"
 	"sync"
 )
 
@@ -62,9 +63,40 @@ func (m *MultiFn) getMethod(dispatchVal interface{}) IFn {
 	m.mtx.RLock()
 	defer m.mtx.RUnlock()
 
+	// TODO: proper hierarchy and implement a cache
+
 	entry := m.methodTable.EntryAt(dispatchVal)
+	if entry != nil {
+		return entry.Val().(IFn)
+	}
+
+	var bestMatch IFn
+	for seq := Seq(m.methodTable); seq != nil; seq = seq.Next() {
+		entry := seq.First().(IMapEntry)
+		if m.isA(dispatchVal, entry.Key()) {
+			bestMatch = entry.Val().(IFn)
+			break
+		}
+	}
+	if bestMatch != nil {
+		return bestMatch
+	}
+
+	entry = m.methodTable.EntryAt(m.defaultDispatchVal)
 	if entry == nil {
-		entry = m.methodTable.EntryAt(m.defaultDispatchVal)
+		return nil
 	}
 	return entry.Val().(IFn)
+}
+
+func (m *MultiFn) isA(x, y interface{}) bool {
+	child, ok := x.(reflect.Type)
+	if !ok {
+		return false
+	}
+	parent, ok := y.(reflect.Type)
+	if !ok {
+		return false
+	}
+	return child.AssignableTo(parent)
 }
