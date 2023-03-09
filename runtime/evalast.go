@@ -151,6 +151,14 @@ func (c *evalCompiler) Eval(form interface{}) interface{} {
 	return res
 }
 
+func (c *evalCompiler) Macroexpand1(form interface{}) interface{} {
+	res, err := c.env.Macroexpand1(form)
+	if err != nil {
+		panic(err)
+	}
+	return res
+}
+
 func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 	// TODO: add go values to the namespace (without vars)
 	sym := get(n, kw("class")).(*value.Symbol)
