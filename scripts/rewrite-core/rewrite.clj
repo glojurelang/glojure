@@ -48,7 +48,7 @@
 
 (defn omitp [pred]
   [(fn select [zloc] (pred zloc))
-   (fn visit [zloc] (z/replace zloc '(do)))])
+   (fn visit [zloc] (z/remove zloc))])
 
 (def replacements
   [
@@ -139,6 +139,17 @@
 
    (sexpr-replace '(. x (get)) '(. x (Get)))
    (sexpr-replace '(. x (set val)) '(. x (Set val)))
+
+   (sexpr-replace '(new clojure.lang.Atom x) '(glojure.lang.NewAtom x))
+   (omitp #(and (z/list? %)
+                (let [sexpr (z/sexpr %)]
+                  (and (vector? (first sexpr))
+                       (= 'atom (first (first sexpr)))
+                       (> (count (first sexpr)) 2)))))
+   (sexpr-replace '([^clojure.lang.IAtom atom f] (.swap atom f))
+                  '([atom f & args] (.swap atom f args)))
+   (sexpr-replace '(^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom f] (.swapVals atom f))
+                  '([atom f & args] (.swapVals atom f args)))
 
    (sexpr-replace '{:tag Object} '{}) ;; TODO: is there a replacement for Object?
 

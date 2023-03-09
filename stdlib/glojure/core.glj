@@ -2337,7 +2337,7 @@
   return false or throw an exception."
   {:added "1.0"
    :static true}
-  ([x] (new glojure.lang.Atom x))
+  ([x] (glojure.lang.NewAtom x))
   ([x & options] (setup-reference (atom x) options)))
 
 (defn swap!
@@ -2347,10 +2347,7 @@
   the value that was swapped in."
   {:added "1.0"
    :static true}
-  ([^glojure.lang.IAtom atom f] (.swap atom f))
-  ([^glojure.lang.IAtom atom f x] (.swap atom f x))
-  ([^glojure.lang.IAtom atom f x y] (.swap atom f x y))
-  ([^glojure.lang.IAtom atom f x y & args] (.swap atom f x y args)))
+  ([atom f & args] (.swap atom f args)))
 
 (defn swap-vals!
   "Atomically swaps the value of atom to be:
@@ -2358,10 +2355,7 @@
   multiple times, and thus should be free of side effects.
   Returns [old new], the value of the atom before and after the swap."
   {:added "1.9"}
-  (^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom f] (.swapVals atom f))
-  (^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom f x] (.swapVals atom f x))
-  (^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom f x y] (.swapVals atom f x y))
-  (^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom f x y & args] (.swapVals atom f x y args)))
+  ([atom f & args] (.swapVals atom f args)))
 
 (defn compare-and-set!
   "Atomically sets the value of atom to newval if and only if the
@@ -7075,8 +7069,6 @@ fails, attempts to require sym's namespace and retries."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; clojure version number ;;;;;;;;;;;;;;;;;;;;;;
-
-(do)
 
 (do)
 

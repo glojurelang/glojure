@@ -39,13 +39,17 @@ var (
 	_ IReduce     = (*MapValSeq)(nil)
 	_ IReduceInit = (*MapValSeq)(nil)
 
-	emptyMap = NewMap()
+	emptyMap = &Map{}
 )
 
 ////////////////////////////////////////////////////////////////////////////////
 // Map
 
 func NewMap(keyVals ...interface{}) IPersistentMap {
+	if len(keyVals) == 0 {
+		return emptyMap
+	}
+
 	if len(keyVals)%2 != 0 {
 		panic("invalid map. must have even number of inputs")
 	}
@@ -128,7 +132,7 @@ func (m *Map) Assoc(k, v interface{}) Associative {
 		newMap.keyVals = append(newMap.keyVals, k, v)
 		return newMap
 	}
-	newMap := NewPersistentHashMap(m.keyVals...).WithMeta(m.meta).(Associative)
+	newMap := NewPersistentHashMap(m.keyVals...).(*PersistentHashMap).WithMeta(m.meta).(Associative)
 	return newMap.Assoc(k, v)
 }
 

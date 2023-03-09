@@ -216,6 +216,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.WithMeta", value.WithMeta)
 		define("glojure.lang.NewCons", value.NewCons)
 		define("glojure.lang.NewSymbol", value.NewSymbol)
+		define("glojure.lang.NewAtom", value.NewAtom)
 		define("glojure.lang.InternKeywordSymbol", value.InternKeywordSymbol)
 		define("glojure.lang.InternKeywordString", value.InternKeywordString)
 		define("glojure.lang.NewVector", value.NewVector)
@@ -254,6 +255,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Vals", value.Vals)
 		define("glojure.lang.GetDefault", value.GetDefault)
 		define("glojure.lang.ConcatStrings", value.ConcatStrings)
+
 		define("glojure.lang.IReduceInit", reflect.TypeOf((*value.IReduceInit)(nil)).Elem())
 		define("glojure.lang.IReduce", reflect.TypeOf((*value.IReduce)(nil)).Elem())
 		define("glojure.lang.IPersistentMap", reflect.TypeOf((*value.IPersistentMap)(nil)).Elem())
@@ -270,10 +272,13 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.IRecord", reflect.TypeOf((*value.IRecord)(nil)).Elem())
 		define("glojure.lang.Sequential", reflect.TypeOf((*value.Sequential)(nil)).Elem())
 		define("glojure.lang.IObj", reflect.TypeOf((*value.IObj)(nil)).Elem())
+		define("glojure.lang.IAtom", reflect.TypeOf((*value.IAtom)(nil)).Elem())
 
 		define("glojure.lang.Volatile", reflect.TypeOf(&value.Volatile{}))
-
 		define("glojure.lang.MultiFn", reflect.TypeOf(&value.MultiFn{}))
+		define("glojure.lang.Var", reflect.TypeOf(&value.Var{}))
+		define("glojure.lang.Atom", reflect.TypeOf(&value.Atom{}))
+
 		define("glojure.lang.Namespace", reflect.TypeOf(&value.Namespace{}))
 
 		define("glojure.lang.LockingTransaction", value.LockingTransaction)

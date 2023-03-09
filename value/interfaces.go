@@ -251,12 +251,8 @@ type (
 	}
 
 	IAtom interface {
-		// Object swap(IFn f);
-		// Object swap(IFn f, Object arg);
-		// Object swap(IFn f, Object arg1, Object arg2);
-		// Object swap(IFn f, Object x, Object y, ISeq args);
-		// boolean compareAndSet(Object oldv, Object newv);
-
+		Swap(f IFn, args ISeq) interface{}
+		CompareAndSet(oldv, newv interface{}) bool
 		Reset(newVal interface{}) interface{}
 	}
 

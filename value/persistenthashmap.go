@@ -94,7 +94,11 @@ var (
 	emptyIndexedNode = &BitmapIndexedNode{}
 )
 
-func NewPersistentHashMap(keyvals ...interface{}) *PersistentHashMap {
+func NewPersistentHashMap(keyvals ...interface{}) IPersistentMap {
+	if len(keyvals) == 0 {
+		return emptyMap
+	}
+
 	var res Associative = emptyPersistentHashMap
 	for i := 0; i < len(keyvals); i += 2 {
 		res = res.Assoc(keyvals[i], keyvals[i+1])

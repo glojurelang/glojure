@@ -36,6 +36,22 @@ func (a *Atom) Watches() IPersistentMap          { panic("not implemented") }
 func (a *Atom) AddWatch(key interface{}, fn IFn) { panic("not implemented") }
 func (a *Atom) RemoveWatch(key interface{})      { panic("not implemented") }
 
+func (a *Atom) Swap(f IFn, args ISeq) interface{} {
+	for {
+		old := a.state.Load().(atomBox)
+		nw := f.ApplyTo(NewCons(old.val, args))
+		if a.CompareAndSet(old.val, nw) {
+			return nw
+		}
+	}
+}
+
+func (a *Atom) CompareAndSet(oldv, newv interface{}) bool {
+	// TODO: validate
+	// TODO: notifyWatches
+	return a.state.CompareAndSwap(atomBox{val: oldv}, atomBox{val: newv})
+}
+
 func (a *Atom) Reset(newVal interface{}) interface{} {
 	// old := a.state.Load().(atomBox)
 	// TODO: validate
