@@ -88,7 +88,7 @@
                      :sigs '~sigs
                      :impls {}
                      })
-         (swap! -protocols assoc '~name ~'name)
+         (swap! -protocols assoc '~name ~name)
          ~@(map
             (fn [sig]
               `(defn ~(first sig)
