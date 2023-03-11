@@ -20,7 +20,9 @@ type (
 		Namespace() string
 	}
 
-	IRecord interface{}
+	IRecord interface {
+		xxx_irecord()
+	}
 
 	IDrop interface {
 		Drop(n int) Sequential

@@ -374,7 +374,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		}
 		evalFile("glojure/core.glj")
 		evalFile("glojure/core_print.glj")
-		// evalFile("glojure/core_deftype.glj")
+		evalFile("glojure/core_deftype.glj")
 		// evalFile("glojure/protocols.glj")
 		evalFile("glojure/string.glj")
 		evalFile("glojure/walk.glj")
