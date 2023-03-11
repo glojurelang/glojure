@@ -80,25 +80,19 @@
   => 17"
   [name & opts+sigs]
   ;; todo: verify args
-  ;; todo: reimplement in terms of multimethods
   (let [doc (when (string? (first opts+sigs)) (first opts+sigs))
         opts+sigs (if doc (rest opts+sigs) opts+sigs)
         sigs opts+sigs]
-    `(do (def ~name {
+    `(do (def ~name (atom {
                      :sigs '~sigs
-                     :impls {}
-                     })
+                     :multis {}
+                     }))
          (swap! -protocols assoc '~name ~name)
          ~@(map
             (fn [sig]
-              `(defn ~(first sig)
-                 [~'this & ~'args]
-                 (let [~'method-name ~(keyword (first sig))
-                       ~'method (get-in @-protocols ['~name :impls (class ~'this) ~'method-name])]
-                   (if ~'method
-                     (apply ~'method ~'args)
-                     (throw (fmt.Errorf "No implementation of method: %v of protocol: %v found for type: %T"
-                                        ~'method-name (var ~name) ~'this))))))
+              `(do (defmulti ~(first sig) (fn [~'this & ~'args] (class ~'this)))
+                   (swap! ~name assoc-in [:multis '~(first sig)] ~(first sig))))
+            ;; (throw (fmt.Errorf "No implementation of method: %v of protocol: %v found for type: %T"
+            ;;                    ~'method-name (var ~name) ~'this))
             sigs)
          (var ~name))))
-
