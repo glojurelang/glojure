@@ -449,7 +449,7 @@
         {:cause root-msg})
       (when-let [data (ex-data root)]
         {:data data})
-      (when-let [phase (-> o ex-data :clojure.error/phase)]
+      (when-let [phase (-> o ex-data :glojure.error/phase)]
         {:phase phase}))))
 
 (defn- print-throwable [^Throwable o ^Writer w]

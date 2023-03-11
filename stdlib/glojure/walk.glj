@@ -32,7 +32,7 @@
   (cond
    (list? form) (outer (apply list (map inner form)))
    (instance? glojure.lang.IMapEntry form)
-   (outer (clojure.lang.MapEntry/create (inner (key form)) (inner (val form))))
+   (outer (glojure.lang.MapEntry/create (inner (key form)) (inner (val form))))
    (seq? form) (outer (doall (map inner form)))
    (instance? glojure.lang.IRecord form)
      (outer (reduce (fn [r x] (conj r (inner x))) form form))
@@ -98,7 +98,7 @@
 
 (defn prewalk-replace
   "Recursively transforms form by replacing keys in smap with their
-  values.  Like clojure/replace but works on any data structure.  Does
+  values.  Like glojure/replace but works on any data structure.  Does
   replacement at the root of the tree first."
   {:added "1.1"}
   [smap form]
@@ -106,7 +106,7 @@
 
 (defn postwalk-replace
   "Recursively transforms form by replacing keys in smap with their
-  values.  Like clojure/replace but works on any data structure.  Does
+  values.  Like glojure/replace but works on any data structure.  Does
   replacement at the leaves of the tree first."
   {:added "1.1"}
   [smap form]

@@ -227,7 +227,7 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 	// TODO: implement this for real
 	switch get(n, kw("class")).(string) {
-	case "clojure.lang.PersistentTreeSet":
+	case "glojure.lang.PersistentTreeSet":
 		switch get(n, kw("field")).(*value.Symbol).Name() {
 		case "create":
 			return func(keys interface{}) interface{} {

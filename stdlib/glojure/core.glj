@@ -392,7 +392,7 @@
    :static true}
   ([] #{})
   ([& keys]
-   (clojure.lang.PersistentHashSet/create keys)))
+   (glojure.lang.PersistentHashSet/create keys)))
 
 (defn sorted-map
   "keyval => key val
@@ -411,7 +411,7 @@
   {:added "1.0"
    :static true}
   ([comparator & keyvals]
-   (clojure.lang.PersistentTreeMap/create comparator keyvals)))
+   (glojure.lang.PersistentTreeMap/create comparator keyvals)))
 
 (defn sorted-set
   "Returns a new sorted set with supplied keys.  Any equal keys are
@@ -419,7 +419,7 @@
   {:added "1.0"
    :static true}
   ([& keys]
-   (clojure.lang.PersistentTreeSet/create keys)))
+   (glojure.lang.PersistentTreeSet/create keys)))
 
 (defn sorted-set-by
   "Returns a new sorted set with supplied keys, using the supplied
@@ -428,7 +428,7 @@
   {:added "1.1"
    :static true} 
   ([comparator & keys]
-   (clojure.lang.PersistentTreeSet/create comparator keys)))
+   (glojure.lang.PersistentTreeSet/create comparator keys)))
 
  
 ;;;;;;;;;;;;;;;;;;;;
@@ -624,9 +624,9 @@
    :added "1.3"
    :static true}
   ([name] (cond (keyword? name) name
-                (symbol? name) (clojure.lang.Keyword/find ^glojure.lang.Symbol name)
-                (string? name) (clojure.lang.Keyword/find ^string name)))
-  ([ns name] (clojure.lang.Keyword/find ns name)))
+                (symbol? name) (glojure.lang.Keyword/find ^glojure.lang.Symbol name)
+                (string? name) (glojure.lang.Keyword/find ^string name)))
+  ([ns name] (glojure.lang.Keyword/find ns name)))
 
 
 (defn spread
@@ -701,7 +701,7 @@
   (.chunkedNext s))
 
 (defn ^:static chunk-cons [chunk rest]
-  (if (clojure.lang.Numbers/isZero (glojure.lang.Count chunk))
+  (if (glojure.lang.Numbers/isZero (glojure.lang.Count chunk))
     rest
     (glojure.lang.ChunkedCons. chunk rest)))
   
@@ -959,8 +959,8 @@
              (fn [a b] `(. glojure.lang.Numbers (~op ~a ~b)))
              `(. glojure.lang.Numbers (~op ~x ~y)) more))))))
 
-(defn ^:private >1? [n] (clojure.lang.Numbers/gt n 1))
-(defn ^:private >0? [n] (clojure.lang.Numbers/gt n 0))
+(defn ^:private >1? [n] (glojure.lang.Numbers/gt n 1))
+(defn ^:private >0? [n] (glojure.lang.Numbers/gt n 0))
 
 (defn +'
   "Returns the sum of nums. (+') returns 0. Supports arbitrary precision.
@@ -1132,10 +1132,10 @@
   If a is a double and ##Inf or ##-Inf => ##Inf
   If a is a double and ##NaN => ##NaN"
    :inline-arities #{1}
-   :inline (fn [a] `(clojure.lang.Numbers/abs ~a))
+   :inline (fn [a] `(glojure.lang.Numbers/abs ~a))
    :added "1.11"}
   [a]
-  (clojure.lang.Numbers/abs a))
+  (glojure.lang.Numbers/abs a))
 
 (defn dec'
   "Returns a number one less than num. Supports arbitrary precision.
@@ -1940,7 +1940,7 @@
   {:added "1.1"
    :static true}
   []
-  (clojure.lang.Var/getThreadBindings))
+  (glojure.lang.Var/getThreadBindings))
 
 (defmacro binding
   "binding => var-symbol init-expr
@@ -2021,22 +2021,22 @@
   {:private true
    :added "1.3"}
   [f]
-  (let [frame (clojure.lang.Var/cloneThreadBindingFrame)]
+  (let [frame (glojure.lang.Var/cloneThreadBindingFrame)]
     (fn 
       ([]
-         (clojure.lang.Var/resetThreadBindingFrame frame)
+         (glojure.lang.Var/resetThreadBindingFrame frame)
          (f))
       ([x]
-         (clojure.lang.Var/resetThreadBindingFrame frame)
+         (glojure.lang.Var/resetThreadBindingFrame frame)
          (f x))
       ([x y]
-         (clojure.lang.Var/resetThreadBindingFrame frame)
+         (glojure.lang.Var/resetThreadBindingFrame frame)
          (f x y))
       ([x y z]
-         (clojure.lang.Var/resetThreadBindingFrame frame)
+         (glojure.lang.Var/resetThreadBindingFrame frame)
          (f x y z))
       ([x y z & args] 
-         (clojure.lang.Var/resetThreadBindingFrame frame)
+         (glojure.lang.Var/resetThreadBindingFrame frame)
          (apply f x y z args)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Refs ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2088,13 +2088,13 @@
   "Sets the ExecutorService to be used by send"
   {:added "1.5"}
   [executor]
-  (set! clojure.lang.Agent/pooledExecutor executor))
+  (set! glojure.lang.Agent/pooledExecutor executor))
 
 (defn set-agent-send-off-executor!
   "Sets the ExecutorService to be used by send-off"
   {:added "1.5"}
   [executor]
-  (set! clojure.lang.Agent/soloExecutor executor))
+  (set! glojure.lang.Agent/soloExecutor executor))
 
 (defn send-via
   "Dispatch an action to an agent. Returns the agent immediately.
@@ -2115,7 +2115,7 @@
   {:added "1.0"
    :static true}
   [^glojure.lang.Agent a f & args]
-  (apply send-via clojure.lang.Agent/pooledExecutor a f args))
+  (apply send-via glojure.lang.Agent/pooledExecutor a f args))
 
 (defn send-off
   "Dispatch a potentially blocking action to an agent. Returns the
@@ -2126,7 +2126,7 @@
   {:added "1.0"
    :static true}
   [^glojure.lang.Agent a f & args]
-  (apply send-via clojure.lang.Agent/soloExecutor a f args))
+  (apply send-via glojure.lang.Agent/soloExecutor a f args))
 
 (defn release-pending-sends
   "Normally, actions sent directly or indirectly during another action
@@ -2137,7 +2137,7 @@
   occurring, does nothing. Returns the number of actions dispatched."
   {:added "1.0"
    :static true}
-  [] (clojure.lang.Agent/releasePendingSends))
+  [] (glojure.lang.Agent/releasePendingSends))
 
 (defn add-watch
   "Adds a watch function to an agent/atom/var/ref reference. The watch
@@ -2510,7 +2510,7 @@
   [& body]
   (let [message (when (string? (first body)) (first body))
         body (if message (next body) body)]
-    `(if (clojure.lang.LockingTransaction/isRunning)
+    `(if (glojure.lang.LockingTransaction/isRunning)
        (throw (new IllegalStateException ~(or message "I/O in transaction")))
        (do ~@body))))
 
@@ -2651,14 +2651,14 @@
      (if (seq? coll) coll
          (or (seq coll) ())))
   ([xform coll]
-     (or (clojure.lang.RT/chunkIteratorSeq
-         (clojure.lang.TransformerIterator/create xform (clojure.lang.RT/iter coll)))
+     (or (glojure.lang.RT/chunkIteratorSeq
+         (glojure.lang.TransformerIterator/create xform (glojure.lang.RT/iter coll)))
        ()))
   ([xform coll & colls]
-     (or (clojure.lang.RT/chunkIteratorSeq
-         (clojure.lang.TransformerIterator/createMulti
+     (or (glojure.lang.RT/chunkIteratorSeq
+         (glojure.lang.TransformerIterator/createMulti
            xform
-           (map #(clojure.lang.RT/iter %) (cons coll colls))))
+           (map #(glojure.lang.RT/iter %) (cons coll colls))))
        ())))
 
 (defn every?
@@ -2833,10 +2833,10 @@
 
 (defn reduced?
   "Returns true if x is the result of a call to reduced"
-  {:inline (fn [x] `(clojure.lang.RT/isReduced ~x ))
+  {:inline (fn [x] `(glojure.lang.RT/isReduced ~x ))
    :inline-arities #{1}
    :added "1.5"}
-  ([x] (clojure.lang.RT/isReduced x)))
+  ([x] (glojure.lang.RT/isReduced x)))
 
 (defn ensure-reduced
   "If x is already reduced?, returns it, else returns (reduced x)"
@@ -2974,7 +2974,7 @@
   "Returns a lazy (infinite!) sequence of repetitions of the items in coll."
   {:added "1.0"
    :static true}
-  [coll] (clojure.lang.Cycle/create (seq coll)))
+  [coll] (glojure.lang.Cycle/create (seq coll)))
 
 (defn split-at
   "Returns a vector of [(take n coll) (drop n coll)]"
@@ -3008,7 +3008,7 @@
   "Returns a lazy sequence of x, (f x), (f (f x)) etc. f must be free of side-effects"
   {:added "1.0"
    :static true}
-  [f x] (clojure.lang.Iterate/create f x) )
+  [f x] (glojure.lang.Iterate/create f x) )
 
 (defn range
   "Returns a lazy seq of nums from start (inclusive) to end
@@ -3022,15 +3022,15 @@
   ([end]
    (if (instance? int64 end)
      (glojure.lang.NewRangeIterator 0 end 1)
-     (clojure.lang.Range/create end)))
+     (glojure.lang.Range/create end)))
   ([start end]
    (if (and (instance? int64 start) (instance? int64 end))
      (glojure.lang.NewRangeIterator start end 1)
-     (clojure.lang.Range/create start end)))
+     (glojure.lang.Range/create start end)))
   ([start end step]
    (if (and (instance? int64 start) (instance? int64 end) (instance? int64 step))
      (glojure.lang.NewRangeIterator start end step)
-     (clojure.lang.Range/create start end step))))
+     (glojure.lang.Range/create start end step))))
 
 (defn merge
   "Returns a map that consists of the rest of the maps conj-ed onto
@@ -3431,9 +3431,9 @@
   {:added "1.0"
    :static true}
   ([aseq]
-     (clojure.lang.RT/seqToTypedArray (seq aseq)))
+     (glojure.lang.RT/seqToTypedArray (seq aseq)))
   ([type aseq]
-     (clojure.lang.RT/seqToTypedArray type (seq aseq))))
+     (glojure.lang.RT/seqToTypedArray type (seq aseq))))
 
 (defn ^{:private true}
   array [& items]
@@ -3469,25 +3469,25 @@
   "Coerce to float"
   {:inline (fn  [x] `(. glojure.lang.RT (~(if *unchecked-math* 'uncheckedFloatCast 'floatCast) ~x)))
    :added "1.0"}
-  [x] (clojure.lang.RT/floatCast x))
+  [x] (glojure.lang.RT/floatCast x))
 
 (defn double
   "Coerce to double"
   {:inline (fn  [x] `(. glojure.lang.RT (DoubleCast ~x)))
    :added "1.0"}
-  [x] (clojure.lang.RT/doubleCast x))
+  [x] (glojure.lang.RT/doubleCast x))
 
 (defn short
   "Coerce to short"
   {:inline (fn  [x] `(. glojure.lang.RT (~(if *unchecked-math* 'uncheckedShortCast 'shortCast) ~x)))
    :added "1.0"}
-  [x] (clojure.lang.RT/shortCast x))
+  [x] (glojure.lang.RT/shortCast x))
 
 (defn byte
   "Coerce to byte"
   {:inline (fn  [x] `(. glojure.lang.RT (~(if *unchecked-math* 'uncheckedByteCast 'byteCast) ~x)))
    :added "1.0"}
-  [x] (clojure.lang.RT/byteCast x))
+  [x] (glojure.lang.RT/byteCast x))
 
 (defn char
   "Coerce to char"
@@ -3499,13 +3499,13 @@
   "Coerce to byte. Subject to rounding or truncation."
   {:inline (fn  [x] `(. glojure.lang.RT (UncheckedByteCast ~x)))
    :added "1.3"}
-  [x] (clojure.lang.RT/uncheckedByteCast x))
+  [x] (glojure.lang.RT/uncheckedByteCast x))
 
 (defn unchecked-short
   "Coerce to short. Subject to rounding or truncation."
   {:inline (fn  [x] `(. glojure.lang.RT (UncheckedShortCast ~x)))
    :added "1.3"}
-  [x] (clojure.lang.RT/uncheckedShortCast x))
+  [x] (glojure.lang.RT/uncheckedShortCast x))
 
 (defn unchecked-char
   "Coerce to char. Subject to rounding or truncation."
@@ -3517,7 +3517,7 @@
   "Coerce to int. Subject to rounding or truncation."
   {:inline (fn  [x] `(. glojure.lang.RT (UncheckedIntCast ~x)))
    :added "1.3"}
-  [x] (clojure.lang.RT/uncheckedIntCast x))
+  [x] (glojure.lang.RT/uncheckedIntCast x))
 
 (defn unchecked-long
   "Coerce to long. Subject to rounding or truncation."
@@ -3529,13 +3529,13 @@
   "Coerce to float. Subject to rounding."
   {:inline (fn  [x] `(. glojure.lang.RT (UncheckedFloatCast ~x)))
    :added "1.3"}
-  [x] (clojure.lang.RT/uncheckedFloatCast x))
+  [x] (glojure.lang.RT/uncheckedFloatCast x))
 
 (defn unchecked-double
   "Coerce to double. Subject to rounding."
   {:inline (fn  [x] `(. glojure.lang.RT (UncheckedDoubleCast ~x)))
    :added "1.3"}
-  [x] (clojure.lang.RT/uncheckedDoubleCast x))
+  [x] (glojure.lang.RT/uncheckedDoubleCast x))
 
 
 (defn number?
@@ -3605,11 +3605,11 @@
    :added "1.3"}
   [x] (cond
        (instance? glojure.lang.BigInt x) x
-       (instance? big.Int x) (clojure.lang.BigInt/fromBigInteger x)
+       (instance? big.Int x) (glojure.lang.BigInt/fromBigInteger x)
        (decimal? x) (bigint (.toBigInteger ^glojure.lang.BigDecimal x))
        (float? x)  (bigint (. glojure.lang.BigDecimal valueOf (double x)))
        (ratio? x) (bigint (.bigIntegerValue ^glojure.lang.Ratio x))
-       (number? x) (clojure.lang.BigInt/valueOf (long x))
+       (number? x) (glojure.lang.BigInt/valueOf (long x))
        :else (bigint (BigInteger. x))))
 
 (defn biginteger
@@ -3735,7 +3735,7 @@
   Note that read can execute code (controlled by *read-eval*),
   and as such should be used only with trusted sources.
 
-  For data structure interop use clojure.edn/read"
+  For data structure interop use glojure.edn/read"
   {:added "1.0"
    :static true}
   ([]
@@ -3791,11 +3791,11 @@
   Note that read-string can execute code (controlled by *read-eval*),
   and as such should be used only with trusted sources.
 
-  For data structure interop use clojure.edn/read-string"
+  For data structure interop use glojure.edn/read-string"
   {:added "1.0"
    :static true}
-  ([s] (clojure.lang.RT/readString s))
-  ([opts s] (clojure.lang.RT/readString s opts)))
+  ([s] (glojure.lang.RT/readString s))
+  ([opts s] (glojure.lang.RT/readString s opts)))
 
 (defn subvec
   "Returns a persistent vector of the items in vector from
@@ -3898,7 +3898,7 @@
    :inline-arities #{2}
    :added "1.0"}
   ([array idx]
-   (clojure.lang.Reflector/prepRet (.getComponentType (class array)) (. Array (get array idx))))
+   (glojure.lang.Reflector/prepRet (.getComponentType (class array)) (. Array (get array idx))))
   ([array idx & idxs]
    (apply aget (aget array idx) idxs)))
 
@@ -4117,20 +4117,20 @@
   name."
   {:added "1.0"
    :static true}
-  [sym] (clojure.lang.Namespace/findOrCreate sym))
+  [sym] (glojure.lang.Namespace/findOrCreate sym))
 
 (defn remove-ns
   "Removes the namespace named by the symbol. Use with caution.
-  Cannot be used to remove the clojure namespace."
+  Cannot be used to remove the glojure namespace."
   {:added "1.0"
    :static true}
-  [sym] (clojure.lang.Namespace/remove sym))
+  [sym] (glojure.lang.Namespace/remove sym))
 
 (defn all-ns
   "Returns a sequence of all namespaces."
   {:added "1.0"
    :static true}
-  [] (clojure.lang.Namespace/all))
+  [] (glojure.lang.Namespace/all))
 
 (defn the-ns
   "If passed a namespace, returns it. Else, when passed a symbol,
@@ -4349,7 +4349,7 @@
     (ns-resolve ns nil sym))
   ([ns env sym]
     (when-not (contains? env sym)
-      (clojure.lang.Compiler/maybeResolveIn (the-ns ns) sym))))
+      (glojure.lang.Compiler/maybeResolveIn (the-ns ns) sym))))
 
 (defn resolve
   "same as (ns-resolve *ns* symbol) or (ns-resolve *ns* &env symbol)"
@@ -4368,16 +4368,16 @@
      (let [ary (to-array keyvals)]
        (if (odd? (alength ary))
          (throw (errors.New (str "No value supplied for key: " (last keyvals))))
-         (clojure.lang.PersistentArrayMap/createAsIfByAssoc ary)))))
+         (glojure.lang.PersistentArrayMap/createAsIfByAssoc ary)))))
 
 (defn seq-to-map-for-destructuring
   "Builds a map from a seq as described in
-  https://clojure.org/reference/special_forms#keyword-arguments"
+  https://glojure.org/reference/special_forms#keyword-arguments"
   {:added "1.11"}
   [s]
   (if (next s)
-    (clojure.lang.PersistentArrayMap/createAsIfByAssoc (to-array s))
-    (if (seq s) (first s) clojure.lang.PersistentArrayMap/EMPTY)))
+    (glojure.lang.PersistentArrayMap/createAsIfByAssoc (to-array s))
+    (if (seq s) (first s) glojure.lang.PersistentArrayMap/EMPTY)))
 
 ;;redefine let and loop  with destructuring
 (defn destructure [bindings]
@@ -4427,8 +4427,8 @@
                        (loop [ret (-> bvec (conj gmap) (conj v)
                                       (conj gmap) (conj `(if (seq? ~gmap)
                                                            (if (next ~gmapseq)
-                                                             (clojure.lang.PersistentArrayMap/createAsIfByAssoc (to-array ~gmapseq))
-                                                             (if (seq ~gmapseq) (first ~gmapseq) clojure.lang.PersistentArrayMap/EMPTY))
+                                                             (glojure.lang.PersistentArrayMap/createAsIfByAssoc (to-array ~gmapseq))
+                                                             (if (seq ~gmapseq) (first ~gmapseq) glojure.lang.PersistentArrayMap/EMPTY))
                                                            ~gmap))
                                       ((fn [ret]
                                          (if (:as b)
@@ -4485,7 +4485,7 @@
   the binding-forms are bound to their respective init-exprs or parts
   therein.
 
-  See https://clojure.org/reference/special_forms#binding-forms for
+  See https://glojure.org/reference/special_forms#binding-forms for
   more information about destructuring."
   {:added "1.0", :special-form true, :forms '[(let [bindings*] exprs*)]}
   [bindings & body]
@@ -4521,7 +4521,7 @@
 
   Defines a function.
 
-  See https://clojure.org/reference/special_forms#fn for more information"
+  See https://glojure.org/reference/special_forms#fn for more information"
   {:added "1.0", :special-form true,
    :forms '[(fn name? [params* ] exprs*) (fn name? ([params* ] exprs*)+)]}
   [& sigs]
@@ -4790,9 +4790,9 @@
    that carries a map of additional data."
   {:added "1.4"}
   ([msg map]
-    (elide-top-frames (ExceptionInfo. msg map) "clojure.core$ex_info"))
+    (elide-top-frames (ExceptionInfo. msg map) "glojure.core$ex_info"))
   ([msg map cause]
-    (elide-top-frames (ExceptionInfo. msg map cause) "clojure.core$ex_info")))
+    (elide-top-frames (ExceptionInfo. msg map cause) "glojure.core$ex_info")))
 
 (defn ex-data
   "Returns exception data (a map) if ex is an IExceptionInfo.
@@ -4979,7 +4979,7 @@
     (contains? (. glojure.lang.Compiler specials) s))
 
 (defn var?
-  "Returns true if v is of type clojure.lang.Var"
+  "Returns true if v is of type glojure.lang.Var"
   {:added "1.0"
    :static true}
   [v] (instance? glojure.lang.Var v))
@@ -5164,7 +5164,7 @@
    :deprecated "1.1"}
   [url]
   (println "WARNING: add-classpath is deprecated")
-  (clojure.lang.RT/addURL url))
+  (glojure.lang.RT/addURL url))
 
 
 
@@ -5183,31 +5183,31 @@
    hash-basis is the combined collection hash, count is the number
    of elements included in the basis. Note this is the hash code
    consistent with =, different from .hashCode.
-   See http://clojure.org/data_structures#hash for full algorithms."
+   See http://glojure.org/data_structures#hash for full algorithms."
   {:added "1.6"
    :static true}
   ^long
-  [^long hash-basis ^long count] (clojure.lang.Murmur3/mixCollHash hash-basis count))
+  [^long hash-basis ^long count] (glojure.lang.Murmur3/mixCollHash hash-basis count))
 
 (defn hash-ordered-coll
   "Returns the hash code, consistent with =, for an external ordered
    collection implementing Iterable.
-   See http://clojure.org/data_structures#hash for full algorithms."
+   See http://glojure.org/data_structures#hash for full algorithms."
   {:added "1.6"
    :static true}
   ^long
-  [coll] (clojure.lang.Murmur3/hashOrdered coll))
+  [coll] (glojure.lang.Murmur3/hashOrdered coll))
 
 (defn hash-unordered-coll
   "Returns the hash code, consistent with =, for an external unordered
    collection implementing Iterable. For maps, the iterator should
    return map entries whose hash is computed as
      (hash-ordered-coll [k v]).
-   See http://clojure.org/data_structures#hash for full algorithms."
+   See http://glojure.org/data_structures#hash for full algorithms."
   {:added "1.6"
    :static true}
   ^long
-  [coll] (clojure.lang.Murmur3/hashUnordered coll))
+  [coll] (glojure.lang.Murmur3/hashUnordered coll))
 
 (defn interpose
   "Returns a lazy seq of the elements of coll separated by sep.
@@ -5463,7 +5463,7 @@
                    (.getAnnotation c java.lang.annotation.Retention)] 
           (= (.value r) java.lang.annotation.RetentionPolicy/RUNTIME)))))
 
-(defn- descriptor [^Class c] (clojure.asm.Type/getDescriptor c))
+(defn- descriptor [^Class c] (glojure.asm.Type/getDescriptor c))
 
 (declare process-annotation)
 (defn- add-annotation [^glojure.asm.AnnotationVisitor av name v]
@@ -5476,7 +5476,7 @@
                  (cond 
                   (instance? java.lang.Enum ev)
                   (.visitEnum av name (descriptor (class ev)) (str ev))
-                  (class? ev) (.visit av name (clojure.asm.Type/getType ev))
+                  (class? ev) (.visit av name (glojure.asm.Type/getType ev))
                   :else (throw (errors.New 
                                 (str "Unsupported annotation value: " v " of class " (class ev))))))
    (seq? v) (let [[nested nv] v
@@ -5732,14 +5732,14 @@
   {:added "1.0"
    :static true}
   [iter]
-  (clojure.lang.RT/chunkIteratorSeq iter))
+  (glojure.lang.RT/chunkIteratorSeq iter))
 
 (defn enumeration-seq
   "Returns a seq on a java.util.Enumeration"
   {:added "1.0"
    :static true}
   [e]
-  (clojure.lang.EnumerationSeq/create e))
+  (glojure.lang.EnumerationSeq/create e))
 
 (defn format
   "Formats a string using java.lang.String.format, see java.util.Formatter for format
@@ -5768,22 +5768,22 @@
 
 (defmacro ns
   "Sets *ns* to the namespace named by name (unevaluated), creating it
-  if needed.  references can be zero or more of: (:refer-clojure ...)
+  if needed.  references can be zero or more of: (:refer-glojure ...)
   (:require ...) (:use ...) (:import ...) (:load ...) (:gen-class)
-  with the syntax of refer-clojure/require/use/import/load/gen-class
+  with the syntax of refer-glojure/require/use/import/load/gen-class
   respectively, except the arguments are unevaluated and need not be
   quoted. (:gen-class ...), when supplied, defaults to :name
   corresponding to the ns name, :main true, :impl-ns same as ns, and
   :init-impl-ns true. All options of gen-class are
   supported. The :gen-class directive is ignored when not
   compiling. If :gen-class is not supplied, when compiled only an
-  nsname__init.class will be generated. If :refer-clojure is not used, a
-  default (refer 'clojure.core) is used.  Use of ns is preferred to
+  nsname__init.class will be generated. If :refer-glojure is not used, a
+  default (refer 'glojure.core) is used.  Use of ns is preferred to
   individual calls to in-ns/require/use/import:
 
   (ns foo.bar
-    (:refer-clojure :exclude [ancestors printf])
-    (:require (clojure.contrib sql combinatorics))
+    (:refer-glojure :exclude [ancestors printf])
+    (:require (glojure.contrib sql combinatorics))
     (:use (my.lib this that))
     (:import (java.util Date Timer Random)
              (java.sql Connection Statement)))"
@@ -5809,7 +5809,7 @@
           (when gen-class-clause
             (list* `gen-class :name (.replace (str name) \- \_) :impl-ns name :main true (next gen-class-clause)))
         references (remove #(= :gen-class (first %)) references)
-        ;ns-effect (clojure.core/in-ns name)
+        ;ns-effect (glojure.core/in-ns name)
         name-metadata (meta name)]
     `(do
        (glojure.core/in-ns '~name)
@@ -5817,15 +5817,15 @@
            `((.ResetMeta (glojure.lang.FindNamespace '~name) ~name-metadata)))
        (with-loading-context
         ~@(when gen-class-call (list gen-class-call))
-        ~@(when (and (not= name 'glojure.core) (not-any? #(= :refer-clojure (first %)) references))
+        ~@(when (and (not= name 'glojure.core) (not-any? #(= :refer-glojure (first %)) references))
             `((glojure.core/refer '~'glojure.core)))
         ~@(map process-reference references))
         (if (.Equal '~name 'glojure.core) 
           nil
           (do (dosync (commute @#'*loaded-libs* conj '~name)) nil)))))
 
-(defmacro refer-clojure
-  "Same as (refer 'clojure.core <filters>)"
+(defmacro refer-glojure
+  "Same as (refer 'glojure.core <filters>)"
   {:added "1.0"}
   [& filters]
   `(glojure.core/refer '~'glojure.core ~@filters))
@@ -5868,8 +5868,8 @@
       (.setStackTrace exception trace)
       (throw (glojure.lang.Compiler$CompilerException.
               *file*
-              (.Deref clojure.lang.Compiler/LINE)
-              (.Deref clojure.lang.Compiler/COLUMN)
+              (.Deref glojure.lang.Compiler/LINE)
+              (.Deref glojure.lang.Compiler/COLUMN)
               exception)))))
 
 (defn- libspec?
@@ -5958,18 +5958,18 @@
         (throw-if (and need-ns (not (find-ns lib)))
           "namespace '%s' not found" lib))
       (when (and need-ns *loading-verbosely*)
-        (printf "(clojure.core/in-ns '%s)\n" (ns-name *ns*)))
+        (printf "(glojure.core/in-ns '%s)\n" (ns-name *ns*)))
       (when as
         (when *loading-verbosely*
-          (printf "(clojure.core/alias '%s '%s)\n" as lib))
+          (printf "(glojure.core/alias '%s '%s)\n" as lib))
         (alias as lib))
       (when as-alias
         (when *loading-verbosely*
-          (printf "(clojure.core/alias '%s '%s)\n" as-alias lib))
+          (printf "(glojure.core/alias '%s '%s)\n" as-alias lib))
         (alias as-alias lib))
       (when (or use (:refer filter-opts))
         (when *loading-verbosely*
-          (printf "(clojure.core/refer '%s" lib)
+          (printf "(glojure.core/refer '%s" lib)
           (doseq [opt filter-opts]
             (printf " %s '%s" (key opt) (print-str (val opt))))
           (printf ")\n"))
@@ -6074,10 +6074,10 @@
 
   Example:
 
-  The following would load the libraries clojure.zip and clojure.set
+  The following would load the libraries glojure.zip and glojure.set
   abbreviated as 's'.
 
-  (require '(clojure zip [set :as s]))"
+  (require '(glojure zip [set :as s]))"
   {:added "1.0"}
 
   [& args]
@@ -6089,7 +6089,7 @@
   Future changes may make these equivalent."
   {:added "1.10"}
   [& args]
-  (locking clojure.lang.RT/REQUIRE_LOCK
+  (locking glojure.lang.RT/REQUIRE_LOCK
     (apply require args)))
 
 (defn requiring-resolve
@@ -6105,12 +6105,12 @@ fails, attempts to require sym's namespace and retries."
 
 (defn use
   "Like 'require, but also refers to each lib's namespace using
-  clojure.core/refer. Use :use in the ns macro in preference to calling
+  glojure.core/refer. Use :use in the ns macro in preference to calling
   this directly.
 
   'use accepts additional options in libspecs: :exclude, :only, :rename.
   The arguments and semantics for :exclude, :only, and :rename are the same
-  as those documented for clojure.core/refer."
+  as those documented for glojure.core/refer."
   {:added "1.0"}
   [& args] (apply load-libs :require :use args))
 
@@ -6131,7 +6131,7 @@ fails, attempts to require sym's namespace and retries."
                           path
                           (str (root-directory (ns-name *ns*)) \/ path))]
       (when *loading-verbosely*
-        (printf "(clojure.core/load \"%s\")\n" path)
+        (printf "(glojure.core/load \"%s\")\n" path)
         (flush))
       (check-cyclic-dependency path)
       (when-not (= path (first *pending-paths*))
@@ -6231,7 +6231,7 @@ fails, attempts to require sym's namespace and retries."
 (defn seqable?
   "Return true if the seq function is supported for x"
   {:added "1.9"}
-  [x] (clojure.lang.RT/canSeq x))
+  [x] (glojure.lang.RT/canSeq x))
 
 (defn ifn?
   "Returns true if x implements IFn. Note that many data structures
@@ -6338,11 +6338,11 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.0"
    :static true}
   ([ns ^glojure.lang.Symbol name]
-     (let [v (clojure.lang.Var/intern (the-ns ns) name)]
+     (let [v (glojure.lang.Var/intern (the-ns ns) name)]
        (when (meta name) (.setMeta v (meta name)))
        v))
   ([ns name val]
-     (let [v (clojure.lang.Var/intern (the-ns ns) name val)]
+     (let [v (glojure.lang.Var/intern (the-ns ns) name val)]
        (when (meta name) (.setMeta v (meta name)))
        v)))
 
@@ -6468,11 +6468,11 @@ fails, attempts to require sym's namespace and retries."
   :direct-linking - set to true to use direct static invocation of functions, rather than vars
     Note that call sites compiled with direct linking will not be affected by var redefinition.
     Use ^:redef (or ^:dynamic) on a var to prevent direct linking and allow redefinition.
-  See https://clojure.org/reference/compilation for more information."
+  See https://glojure.org/reference/compilation for more information."
   {:added "1.4"})
 
 (add-doc-and-meta *ns*
-  "A clojure.lang.Namespace object representing the current namespace."
+  "A glojure.lang.Namespace object representing the current namespace."
   {:added "1.0"})
 
 (add-doc-and-meta *in*
@@ -6524,20 +6524,20 @@ fails, attempts to require sym's namespace and retries."
  "Defaults to true (or value specified by system property, see below)
   ***This setting implies that the full power of the reader is in play,
   including syntax that can cause code to execute. It should never be
-  used with untrusted sources. See also: clojure.edn/read.***
+  used with untrusted sources. See also: glojure.edn/read.***
 
   When set to logical false in the thread-local binding,
   the eval reader (#=) and record/type literal syntax are disabled in read/load.
   Example (will fail): (binding [*read-eval* false] (read-string \"#=(* 2 21)\"))
 
   The default binding can be controlled by the system property
-  'clojure.read.eval' System properties can be set on the command line
+  'glojure.read.eval' System properties can be set on the command line
   like this:
 
-  java -Dclojure.read.eval=false ...
+  java -Dglojure.read.eval=false ...
 
   The system property can also be set to 'unknown' via
-  -Dclojure.read.eval=unknown, in which case the default binding
+  -Dglojure.read.eval=unknown, in which case the default binding
   is :unknown and all reads will fail in contexts where *read-eval*
   has not been explicitly bound to either true or false. This setting
   can be a useful diagnostic tool to ensure that all of your reads
@@ -6850,11 +6850,11 @@ fails, attempts to require sym's namespace and retries."
   ([f coll]
      (if (instance? glojure.lang.IReduce coll)
        (.Reduce ^glojure.lang.IReduce coll f)
-       (clojure.core.protocols/coll-reduce coll f)))
+       (glojure.core.protocols/coll-reduce coll f)))
   ([f val coll]
      (if (instance? glojure.lang.IReduceInit coll)
        (.ReduceInit ^glojure.lang.IReduceInit coll f val)
-       (clojure.core.protocols/coll-reduce coll f val))))
+       (glojure.core.protocols/coll-reduce coll f val))))
 
 (do)
 
@@ -6867,7 +6867,7 @@ fails, attempts to require sym's namespace and retries."
   where the keys will be the ordinals."  
   {:added "1.4"}
   ([f init coll]
-     (clojure.core.protocols/kv-reduce coll f init)))
+     (glojure.core.protocols/kv-reduce coll f init)))
 
 (defn completing
   "Takes a reducing function f of 2 args and returns a fn suitable for
@@ -6895,7 +6895,7 @@ fails, attempts to require sym's namespace and retries."
      (let [f (xform f)
            ret (if (instance? glojure.lang.IReduceInit coll)
                  (.ReduceInit ^glojure.lang.IReduceInit coll f init)
-                 (clojure.core.protocols/coll-reduce coll f init))]
+                 (glojure.core.protocols/coll-reduce coll f init))]
        (f ret))))
 
 (defn into
@@ -6959,7 +6959,7 @@ fails, attempts to require sym's namespace and retries."
 
 (defn slurp
   "Opens a reader on f and reads all its contents, returning a string.
-  See clojure.java.io/reader for a complete list of supported arguments."
+  See glojure.java.io/reader for a complete list of supported arguments."
   {:added "1.0"
    :tag string}
   ([f & opts]
@@ -6971,7 +6971,7 @@ fails, attempts to require sym's namespace and retries."
 
 (defn spit
   "Opposite of slurp.  Opens f with writer, writes content, then
-  closes f. Options passed to clojure.java.io/writer."
+  closes f. Options passed to glojure.java.io/writer."
   {:added "1.2"}
   [f content & options]
   (with-open [^java.io.Writer w (apply jio/writer f options)]
@@ -6988,7 +6988,7 @@ fails, attempts to require sym's namespace and retries."
    :static true}
   [f]
   (let [f (binding-conveyor-fn f)
-        fut (.submit clojure.lang.Agent/soloExecutor ^Callable f)]
+        fut (.submit glojure.lang.Agent/soloExecutor ^Callable f)]
     (reify 
      glojure.lang.IDeref 
      (deref [_] (deref-future fut))
@@ -7068,7 +7068,7 @@ fails, attempts to require sym's namespace and retries."
   `(pcalls ~@(map #(list `fn [] %) exprs)))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; clojure version number ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; glojure version number ;;;;;;;;;;;;;;;;;;;;;;
 
 (do)
 
@@ -7303,7 +7303,7 @@ fails, attempts to require sym's namespace and retries."
   [^java.util.Collection coll]
   (let [al (java.util.ArrayList. coll)]
     (java.util.Collections/shuffle al)
-    (clojure.lang.RT/vector (.toArray al))))
+    (glojure.lang.RT/vector (.toArray al))))
 
 (defn map-indexed
   "Returns a lazy sequence consisting of the result of applying f to 0

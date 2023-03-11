@@ -10,4 +10,5 @@ cd scripts/rewrite-core
 clj -M ./rewrite.clj "../../$1" | \
     sed 's/\^Number //g' | \
     sed 's/:tag Number//g' | \
-    sed '/deftype Eduction/Q'
+    sed '/deftype Eduction/Q' | \
+    sed 's/clojure/glojure/g'
