@@ -182,9 +182,10 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		}
 		{
 			define("glojure.lang.BigInt", reflect.TypeOf(&value.BigInt{}))
-			define("glojure.lang.PersistentHashMap", reflect.TypeOf(&value.Map{}))   // TODO: this is a hack
-			define("glojure.lang.PersistentHashSet", reflect.TypeOf(&value.Set{}))   // TODO: this is a hack
-			define("glojure.lang.PersistentVector", reflect.TypeOf(&value.Vector{})) // TODO: this is a hack
+			define("glojure.lang.PersistentHashMap", reflect.TypeOf(&value.PersistentHashMap{}))
+			define("glojure.lang.PersistentHashSet", reflect.TypeOf(&value.Set{})) // TODO: this is a hack
+			define("glojure.lang.PersistentVector", reflect.TypeOf(&value.Vector{}))
+			define("glojure.lang.LazySeq", reflect.TypeOf(&value.LazySeq{}))
 		}
 
 		define("error", reflect.TypeOf((*error)(nil)).Elem())
@@ -375,7 +376,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		evalFile("glojure/core.glj")
 		evalFile("glojure/core_print.glj")
 		evalFile("glojure/core_deftype.glj")
-		// evalFile("glojure/protocols.glj")
+		evalFile("glojure/protocols.glj")
 		evalFile("glojure/string.glj")
 		evalFile("glojure/walk.glj")
 		evalFile("glojure/template.glj")

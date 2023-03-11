@@ -78,10 +78,10 @@
    ([coll f] (f))
    ([coll f val] val))
 
-  Object
-  (coll-reduce
-   ([coll f] (seq-reduce coll f))
-   ([coll f val] (seq-reduce coll f val)))
+  ;; Object
+  ;; (coll-reduce
+  ;;  ([coll f] (seq-reduce coll f))
+  ;;  ([coll f val] (seq-reduce coll f val)))
 
   glojure.lang.IReduceInit
   (coll-reduce
@@ -89,10 +89,10 @@
     ([coll f val] (.ReduceInit coll f val)))
 
   ;;aseqs are iterable, masking internal-reducers
-  glojure.lang.ASeq
-  (coll-reduce
-   ([coll f] (seq-reduce coll f))
-   ([coll f val] (seq-reduce coll f val)))
+  ;; glojure.lang.ASeq
+  ;; (coll-reduce
+  ;;  ([coll f] (seq-reduce coll f))
+  ;;  ([coll f val] (seq-reduce coll f val)))
 
   ;;for range
   glojure.lang.LazySeq
@@ -106,20 +106,21 @@
    ([coll f] (seq-reduce coll f))
    ([coll f val] (seq-reduce coll f val)))
   
-  Iterable
-  (coll-reduce
-   ([coll f] (iter-reduce coll f))
-   ([coll f val] (iter-reduce coll f val)))
+  ;; Iterable
+  ;; (coll-reduce
+  ;;  ([coll f] (iter-reduce coll f))
+  ;;  ([coll f val] (iter-reduce coll f val)))
 
-  glojure.lang.APersistentMap$KeySeq
-  (coll-reduce
-    ([coll f] (iter-reduce coll f))
-    ([coll f val] (iter-reduce coll f val)))
+  ;; glojure.lang.APersistentMap$KeySeq
+  ;; (coll-reduce
+  ;;   ([coll f] (iter-reduce coll f))
+  ;;   ([coll f val] (iter-reduce coll f val)))
 
-  glojure.lang.APersistentMap$ValSeq
-  (coll-reduce
-    ([coll f] (iter-reduce coll f))
-    ([coll f val] (iter-reduce coll f val))))
+  ;; glojure.lang.APersistentMap$ValSeq
+  ;; (coll-reduce
+  ;;   ([coll f] (iter-reduce coll f))
+  ;;   ([coll f val] (iter-reduce coll f val))))
+)
 
 (extend-protocol InternalReduce
   nil
@@ -142,35 +143,36 @@
        (interface-or-naive-reduce s f val))
      val))
  
-  glojure.lang.StringSeq
-  (internal-reduce
-   [str-seq f val]
-   (let [s (.s str-seq)
-         len (.length s)]
-     (loop [i (.i str-seq)
-            val val]
-       (if (< i len)
-         (let [ret (f val (glojure.lang.CharAt s i))]
-                (if (reduced? ret)
-                  @ret
-                  (recur (inc i) ret)))
-         val))))
+  ;; glojure.lang.StringSeq
+  ;; (internal-reduce
+  ;;  [str-seq f val]
+  ;;  (let [s (.s str-seq)
+  ;;        len (.length s)]
+  ;;    (loop [i (.i str-seq)
+  ;;           val val]
+  ;;      (if (< i len)
+  ;;        (let [ret (f val (glojure.lang.CharAt s i))]
+  ;;               (if (reduced? ret)
+  ;;                 @ret
+  ;;                 (recur (inc i) ret)))
+  ;;        val))))
   
-  java.lang.Object
-  (internal-reduce
-   [s f val]
-   (loop [cls (class s)
-          s s
-          f f
-          val val]
-     (if-let [s (seq s)]
-       (if (identical? (class s) cls)
-         (let [ret (f val (first s))]
-                (if (reduced? ret)
-                  @ret
-                  (recur cls (next s) f ret)))
-         (interface-or-naive-reduce s f val))
-       val))))
+  ;; java.lang.Object
+  ;; (internal-reduce
+  ;;  [s f val]
+  ;;  (loop [cls (class s)
+  ;;         s s
+  ;;         f f
+  ;;         val val]
+  ;;    (if-let [s (seq s)]
+  ;;      (if (identical? (class s) cls)
+  ;;        (let [ret (f val (first s))]
+  ;;               (if (reduced? ret)
+  ;;                 @ret
+  ;;                 (recur cls (next s) f ret)))
+  ;;        (interface-or-naive-reduce s f val))
+  ;;      val))))
+)
 
 (defprotocol IKVReduce
   "Protocol for concrete associative types that can reduce themselves
@@ -186,10 +188,10 @@
 
 (extend-protocol Datafiable  
   nil
-  (datafy [_] nil)
+  (datafy [_] nil))
 
-  Object
-  (datafy [x] x))
+  ;; Object
+  ;; (datafy [x] x))
 
 (defprotocol Navigable
   :extend-via-metadata true
@@ -197,6 +199,6 @@
   (nav [coll k v] "return (possibly transformed) v in the context of coll and k (a key/index or nil),
 defaults to returning v."))
 
-(extend-protocol Navigable
-  Object
-  (nav [_ _ x] x))
+;; (extend-protocol Navigable
+;;   Object
+;;   (nav [_ _ x] x))

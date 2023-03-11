@@ -300,7 +300,11 @@
                      [n]
                      (glojure.lang.IsInteger n))
                   )
+
+
+   (sexpr-replace '(clojure.lang.RT/booleanCast x) '(. glojure.lang.RT (BooleanCast x)))
    (sexpr-replace 'clojure.lang.RT/uncheckedLongCast 'glojure.lang.AsInt64)
+
    [(fn select [zloc] (try
                         (and (symbol? (z/sexpr zloc))
                              (or

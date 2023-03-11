@@ -1603,7 +1603,7 @@
   {
    :inline (fn  [x] `(. glojure.lang.RT (BooleanCast ~x)))
    :added "1.0"}
-  [x] (clojure.lang.RT/booleanCast x))
+  [x] (. glojure.lang.RT (BooleanCast x)))
 
 (defn ident?
   "Return true if x is a symbol or keyword"

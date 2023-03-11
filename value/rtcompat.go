@@ -40,6 +40,13 @@ func (rt *RTMethods) IntCast(x interface{}) int {
 	return int(AsInt64(x))
 }
 
+func (rt *RTMethods) BooleanCast(x interface{}) bool {
+	if b, ok := x.(bool); ok {
+		return b
+	}
+	return !IsNil(x)
+}
+
 func (rt *RTMethods) Dissoc(x interface{}, k interface{}) interface{} {
 	return Dissoc(x, k)
 }
