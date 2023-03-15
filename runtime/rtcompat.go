@@ -1,9 +1,13 @@
-package value
+package runtime
 
 import (
 	"fmt"
 	"strings"
 	"sync/atomic"
+
+	"github.com/glojurelang/glojure/stdlib"
+
+	. "github.com/glojurelang/glojure/value"
 )
 
 var (
@@ -80,8 +84,12 @@ func (rt *RTMethods) Find(coll, key interface{}) interface{} {
 }
 
 func (rt *RTMethods) Load(scriptBase string) {
-	// TODO: implement
-	fmt.Println("load", scriptBase)
+	filename := scriptBase + ".glj"
+	buf, err := stdlib.StdLib.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+	ReadEval(string(buf), WithFilename(filename))
 }
 
 func (rt *RTMethods) FindVar(qualifiedSym *Symbol) *Var {

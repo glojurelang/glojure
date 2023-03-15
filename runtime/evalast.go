@@ -192,7 +192,7 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 	case "glojure.lang.Keyword":
 		return reflect.TypeOf(value.NewKeyword("nop")), nil
 	case "glojure.lang.RT":
-		return value.RT, nil
+		return RT, nil
 	case "glojure.lang.Numbers":
 		return value.Numbers, nil
 	case "glojure.lang.NewMultiFn":
@@ -238,7 +238,35 @@ func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 				return value.NewSet(ks...)
 			}, nil
 		}
+	case "go":
+		switch get(n, kw("field")).(*value.Symbol).Name() {
+		case "slice":
+			return func(sliceOrString interface{}, indices ...interface{}) interface{} {
+				if len(indices) == 0 || len(indices) > 2 {
+					panic("go/slice: must have 1 or 2 indices")
+				}
+				var start, end int64 = -1, -1
+				if !value.IsNil(indices[0]) {
+					start = value.AsInt64(indices[0])
+				}
+				if len(indices) == 2 && !value.IsNil(indices[1]) {
+					end = value.AsInt64(indices[1])
+				}
+				if str, ok := sliceOrString.(string); ok {
+					if start == -1 {
+						start = 0
+					}
+					if end == -1 {
+						end = int64(len(str))
+					}
+					fmt.Println("slice string", str, start, end)
+					return str[start:end]
+				}
+				panic("slices not implemented yet")
+			}, nil
+		}
 	}
+
 	// TODO: how to handle?
 	fmt.Println("EvalASTMaybeHostForm: ", n)
 	panic("EvalASTMaybeHostForm: " + get(n, kw("class")).(string))

@@ -4989,8 +4989,8 @@
   at end (defaults to length of string), exclusive."
   {:added "1.0"
    :static true}
-  (^string [^string s start] (. s (substring start)))
-  (^string [^string s start end] (. s (substring start end))))
+  (^string [^string s start] (go/slice s start))
+  (^string [^string s start end] (go/slice s start end)))
 
 (defn max-key
   "Returns the x for which (k x), a number, is greatest.
@@ -5899,7 +5899,7 @@
   "Returns the root resource path for a lib"
   [lib]
   (let [d (root-resource lib)]
-    (subs d 0 (.lastIndexOf d "/"))))
+    (subs d 0 (strings.LastIndex d "/"))))
 
 (def ^:declared ^:redef load)
 
@@ -6794,9 +6794,9 @@ fails, attempts to require sym's namespace and retries."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; helper files ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (alter-meta! (find-ns 'glojure.core) assoc :doc "Fundamental library of the Clojure language")
 (do)
+(load "core_print")
 (do)
-(do)
-(do)
+(load "core_deftype")
 (do)
 (do)
 

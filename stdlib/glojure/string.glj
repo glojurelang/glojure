@@ -312,16 +312,16 @@
   ([^CharSequence s value]
   (let [result ^long
         (if (instance? Character value)
-          (.lastIndexOf (glojure.lang.ToStr s) ^int (.charValue ^Character value))
-          (.lastIndexOf (glojure.lang.ToStr s) ^string value))]
+          (strings.LastIndex (glojure.lang.ToStr s) ^int (.charValue ^Character value))
+          (strings.LastIndex (glojure.lang.ToStr s) ^string value))]
     (if (= result -1)
       nil
       result)))
   ([^CharSequence s value ^long from-index]
   (let [result ^long
         (if (instance? Character value)
-          (.lastIndexOf (glojure.lang.ToStr s) ^int (.charValue ^Character value) (unchecked-int from-index))
-          (.lastIndexOf (glojure.lang.ToStr s) ^string value (unchecked-int from-index)))]
+          (strings.LastIndex (glojure.lang.ToStr s) ^int (.charValue ^Character value) (unchecked-int from-index))
+          (strings.LastIndex (glojure.lang.ToStr s) ^string value (unchecked-int from-index)))]
     (if (= result -1)
       nil
       result))))

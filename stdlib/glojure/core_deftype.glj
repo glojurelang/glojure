@@ -89,8 +89,8 @@
   ;; todo: verify args
   (let [doc (when (string? (first opts+sigs)) (first opts+sigs))
         opts+sigs (if doc (rest opts+sigs) opts+sigs)
-        [opts sigs] (partition-by seq? opts+sigs)
-        sigs (or sigs (and (seq? (first opts)) opts))
+        opts (take-while #(not (seq? %)) opts+sigs)
+        sigs (drop-while #(not (seq? %)) opts+sigs)
         opts (if (= sigs opts) nil opts)]
     `(do (def ~name (atom {
                            :on-interface true
@@ -153,12 +153,12 @@
   (doseq [[proto mmap] (partition 2 proto+mmaps)]
     (when-not (protocol? proto)
       (throw (errors.New (str proto " is not a protocol"))))
-    (reduce (fn [_ [k v]]
-              (defmethod
-                (get-in @proto [:multis k])
-                atype [this & args]
-                (apply v (cons this args))))
-              nil mmap)))
+    (reduce1 (fn [_ [k v]]
+               (defmethod
+                 (get-in @proto [:multis k])
+                 atype [this & args]
+                 (apply v (cons this args))))
+             nil mmap)))
 
 (defn- emit-hinted-impl [c [p fs]]
   (let [hint (fn [specs]

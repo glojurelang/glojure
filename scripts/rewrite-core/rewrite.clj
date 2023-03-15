@@ -169,6 +169,10 @@
 
    (sexpr-replace '(clojure.lang.RT/load (.substring path 1))
                   '(. glojure.lang.RT (Load (strings.TrimPrefix path "/"))))
+   (sexpr-replace '(. s (substring start)) '(go/slice s start))
+   (sexpr-replace '(. s (substring start end)) '(go/slice s start end))
+
+   (sexpr-replace '.lastIndexOf 'strings.LastIndex)
 
    (sexpr-replace 'clojure.lang.RT/conj 'glojure.lang.Conj)
    (sexpr-replace 'withMeta 'WithMeta)
@@ -375,9 +379,7 @@
    ;;;; OMIT PARTS OF THE FILE ENTIRELY FOR NOW
    ;;; TODO: implement load for embedded files!
    (sexpr-replace '(load "core_proxy") '(do))
-   (sexpr-replace '(load "core_print") '(do))
    (sexpr-replace '(load "genclass") '(do))
-   (sexpr-replace '(load "core_deftype") '(do))
    (sexpr-replace '(load "core/protocols") '(do))
    (sexpr-replace '(load "gvec") '(do))
    (sexpr-replace '(load "uuid") '(do))
