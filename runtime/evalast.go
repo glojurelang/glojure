@@ -259,7 +259,6 @@ func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 					if end == -1 {
 						end = int64(len(str))
 					}
-					fmt.Println("slice string", str, start, end)
 					return str[start:end]
 				}
 				panic("slices not implemented yet")

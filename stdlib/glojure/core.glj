@@ -6797,7 +6797,7 @@ fails, attempts to require sym's namespace and retries."
 (load "core_print")
 (do)
 (load "core_deftype")
-(do)
+(load "protocols")
 (do)
 
 (do)

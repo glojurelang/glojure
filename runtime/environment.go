@@ -206,7 +206,7 @@ func (env *environment) CurrentNamespace() *value.Namespace {
 }
 
 func (env *environment) SetCurrentNamespace(ns *value.Namespace) {
-	env.currentNamespaceVar.BindRoot(ns)
+	env.currentNamespaceVar.Set(ns)
 }
 
 func (env *environment) PushLoadPaths(paths []string) value.Environment {

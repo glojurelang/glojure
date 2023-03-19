@@ -84,6 +84,19 @@ func (rt *RTMethods) Find(coll, key interface{}) interface{} {
 }
 
 func (rt *RTMethods) Load(scriptBase string) {
+	ns := GlobalEnv.CurrentNamespace()
+
+	kvs := make([]interface{}, 0, 3)
+	for _, vrName := range []string{"*ns*", "*warn-on-reflection*", "*unchecked-math*"} {
+		vr := ns.FindInternedVar(NewSymbol(vrName))
+		if vr == nil {
+			continue
+		}
+		kvs = append(kvs, vr, vr.Deref())
+	}
+	PushThreadBindings(NewMap(kvs...))
+	defer PopThreadBindings()
+
 	filename := scriptBase + ".glj"
 	buf, err := stdlib.StdLib.ReadFile(filename)
 	if err != nil {

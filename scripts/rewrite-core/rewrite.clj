@@ -380,7 +380,7 @@
    ;;; TODO: implement load for embedded files!
    (sexpr-replace '(load "core_proxy") '(do))
    (sexpr-replace '(load "genclass") '(do))
-   (sexpr-replace '(load "core/protocols") '(do))
+   (sexpr-replace '(load "core/protocols") '(load "protocols"))
    (sexpr-replace '(load "gvec") '(do))
    (sexpr-replace '(load "uuid") '(do))
 

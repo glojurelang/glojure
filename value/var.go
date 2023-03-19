@@ -1,6 +1,7 @@
 package value
 
 import (
+	"fmt"
 	"sync"
 	"sync/atomic"
 	"unsafe"
@@ -101,8 +102,11 @@ func (v *Var) Get() interface{} {
 
 func (v *Var) Set(val interface{}) interface{} {
 	// TODO: validate
-	// TODO: thread-local bindings
-	v.BindRoot(val)
+	b := v.getDynamicBinding()
+	if b == nil {
+		panic(fmt.Sprintf("can't change/establish root binding of: %s", v))
+	}
+	b.val = val
 	return val
 }
 
@@ -166,7 +170,10 @@ func (v *Var) getDynamicBinding() *varBox {
 	}
 	var storage *glStorage
 	var ok bool
-	gid := goroutineID()
+	gid, ok := goroutineID()
+	if !ok {
+		return nil
+	}
 	glsBindingsMtx.RLock()
 	storage, ok = glsBindings[gid]
 	glsBindingsMtx.RUnlock()
@@ -212,8 +219,12 @@ func (s *glStorage) get(v *Var) *varBox {
 	return nil
 }
 
-func goroutineID() uint {
-	gid, ok := gls.GetGoroutineId()
+func goroutineID() (uint, bool) {
+	return gls.GetGoroutineId()
+}
+
+func mustGoroutineID() uint {
+	gid, ok := goroutineID()
 	if !ok {
 		panic("no goroutine id")
 	}
@@ -221,7 +232,7 @@ func goroutineID() uint {
 }
 
 func PushThreadBindings(bindings IPersistentMap) {
-	gid := goroutineID()
+	gid := mustGoroutineID()
 	glsBindingsMtx.RLock()
 	storage, ok := glsBindings[gid]
 	glsBindingsMtx.RUnlock()
@@ -241,6 +252,7 @@ func PushThreadBindings(bindings IPersistentMap) {
 		val := entry.Val()
 
 		if !vr.isDynamic() {
+			// TODO: throw exception
 			//panic("cannot dynamically bind non-dynamic var: " + vr.String())
 		}
 		// TODO: validate
@@ -250,7 +262,7 @@ func PushThreadBindings(bindings IPersistentMap) {
 }
 
 func PopThreadBindings() {
-	gid := goroutineID()
+	gid := mustGoroutineID()
 	glsBindingsMtx.RLock()
 	storage := glsBindings[gid]
 	glsBindingsMtx.RUnlock()

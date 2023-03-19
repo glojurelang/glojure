@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/chzyer/readline"
+	"github.com/jtolio/gls"
 
 	"github.com/glojurelang/glojure/reader"
 	"github.com/glojurelang/glojure/runtime"
@@ -37,6 +38,12 @@ func init() {
 
 // Start starts the REPL.
 func Start(opts ...Option) {
+	gls.EnsureGoroutineId(func(uint) {
+		start(opts...)
+	})
+}
+
+func start(opts ...Option) {
 	o := options{
 		stdin:     os.Stdin,
 		stdout:    os.Stdout,
@@ -53,6 +60,19 @@ func Start(opts ...Option) {
 		}
 	}
 	{ // switch to the namespace
+		// TODO: clean up this code. copied from rtcompat.go.
+		ns := o.env.CurrentNamespace()
+		kvs := make([]interface{}, 0, 3)
+		for _, vrName := range []string{"*ns*", "*warn-on-reflection*", "*unchecked-math*"} {
+			vr := ns.FindInternedVar(value.NewSymbol(vrName))
+			if vr == nil {
+				continue
+			}
+			kvs = append(kvs, vr, vr.Deref())
+		}
+		value.PushThreadBindings(value.NewMap(kvs...))
+		defer value.PopThreadBindings()
+
 		_, err := o.env.Eval(value.NewList(
 			value.NewSymbol("ns"),
 			value.NewSymbol(o.namespace),
