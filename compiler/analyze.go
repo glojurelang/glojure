@@ -9,12 +9,15 @@ import (
 
 	"github.com/glojurelang/glojure/ast"
 	"github.com/glojurelang/glojure/value"
+
+	// Make it easier to refer to global vars.
+	. "github.com/glojurelang/glojure/value"
 )
 
 var (
-	ctxExpr      = kw("ctx/expr")
-	ctxReturn    = kw("ctx/return")
-	ctxStatement = kw("ctx/statement")
+	ctxExpr      = KWCtxExpr
+	ctxReturn    = KWCtxReturn
+	ctxStatement = KWCtxStatement
 
 	symCatch   = value.NewSymbol("catch")
 	symFinally = value.NewSymbol("finally")
@@ -37,7 +40,7 @@ type (
 // Analyze performs semantic analysis on the given s-expression,
 // returning an AST.
 func (a *Analyzer) Analyze(form interface{}, env Env) (ast.Node, error) {
-	return a.analyzeForm(form, ctxEnv(env, ctxExpr).Assoc(kw("top-level"), true).(Env))
+	return a.analyzeForm(form, ctxEnv(env, ctxExpr).Assoc(KWTopLevel, true).(Env))
 }
 
 func (a *Analyzer) analyzeForm(form interface{}, env Env) (n ast.Node, err error) {
@@ -73,13 +76,13 @@ func (a *Analyzer) analyzeSymbol(form *value.Symbol, env Env) (ast.Node, error) 
 	}
 
 	var n ast.Node
-	if localBinding := value.Get(value.Get(env, kw("locals")), form); localBinding != nil {
-		mutable := value.Get(localBinding, kw("mutable"))
-		children := value.Get(localBinding, kw("children"))
-		n = merge(value.Dissoc(localBinding, kw("init")), value.NewMap(
-			kw("op"), kw("local"),
-			kw("assignable?"), mutable != nil && mutable != false,
-			kw("children"), value.NewVectorFromCollection(remove(kw("init"), children)),
+	if localBinding := value.Get(value.Get(env, KWLocals), form); localBinding != nil {
+		mutable := value.Get(localBinding, KWMutable)
+		children := value.Get(localBinding, KWChildren)
+		n = merge(value.Dissoc(localBinding, KWInit), value.NewMap(
+			KWOp, KWLocal,
+			KWIsAssignable, mutable != nil && mutable != false,
+			KWChildren, value.NewVectorFromCollection(remove(KWInit, children)),
 		))
 	} else {
 		v := a.resolveSym(form, env)
@@ -87,38 +90,38 @@ func (a *Analyzer) analyzeSymbol(form *value.Symbol, env Env) (ast.Node, error) 
 		if ok {
 			m := vr.Meta()
 			n = value.NewMap(
-				kw("op"), kw("var"),
-				// kw("assignable?"), dynamicVar(vr, m), // TODO
-				kw("var"), vr,
-				kw("meta"), m,
+				KWOp, KWVar,
+				// KWIsAssignable, dynamicVar(vr, m), // TODO
+				KWVar, vr,
+				KWMeta, m,
 			)
 		} else {
 			maybeClass := form.Namespace()
 			if maybeClass != "" {
 				n = value.NewMap(
-					kw("op"), kw("maybe-host-form"), // TODO: define this for Go interop
-					kw("class"), maybeClass,
-					kw("field"), value.NewSymbol(form.Name()),
+					KWOp, KWMaybeHostForm, // TODO: define this for Go interop
+					KWClass, maybeClass,
+					KWField, value.NewSymbol(form.Name()),
 				)
 			} else {
 				n = value.NewMap(
-					kw("op"), kw("maybe-class"),
-					kw("class"), mform,
+					KWOp, KWMaybeClass,
+					KWClass, mform,
 				)
 			}
 		}
 	}
 
 	return merge(n, value.NewMap(
-		kw("env"), env,
-		kw("form"), mform,
+		KWEnv, env,
+		KWForm, mform,
 	)), nil
 }
 
 // analyzeVector performs semantic analysis on the given vector,
 // returning an AST.
 func (a *Analyzer) analyzeVector(form value.IPersistentVector, env Env) (ast.Node, error) {
-	n := ast.MakeNode(kw("vector"), form)
+	n := ast.MakeNode(KWVector, form)
 	var items []interface{}
 	for i := 0; i < form.Count(); i++ {
 		// TODO: pass an "items-env" with an expr context
@@ -129,14 +132,14 @@ func (a *Analyzer) analyzeVector(form value.IPersistentVector, env Env) (ast.Nod
 
 		items = append(items, nn)
 	}
-	n = n.Assoc(kw("items"), vec(items...))
-	return n.Assoc(kw("children"), vec(kw("items"))), nil
+	n = n.Assoc(KWItems, vec(items...))
+	return n.Assoc(KWChildren, vec(KWItems)), nil
 }
 
 // analyzeMap performs semantic analysis on the given map,
 // returning an AST.
 func (a *Analyzer) analyzeMap(v value.IPersistentMap, env Env) (ast.Node, error) {
-	n := ast.MakeNode(kw("map"), v)
+	n := ast.MakeNode(KWMap, v)
 	var keys []interface{}
 	var vals []interface{}
 	for seq := value.Seq(v); seq != nil; seq = seq.Next() {
@@ -154,15 +157,15 @@ func (a *Analyzer) analyzeMap(v value.IPersistentMap, env Env) (ast.Node, error)
 		keys = append(keys, keyNode)
 		vals = append(vals, valNode)
 	}
-	n = n.Assoc(kw("keys"), vec(keys...)).
-		Assoc(kw("vals"), vec(vals...))
-	return n.Assoc(kw("children"), vec(kw("keys"), kw("vals"))), nil
+	n = n.Assoc(KWKeys, vec(keys...)).
+		Assoc(KWVals, vec(vals...))
+	return n.Assoc(KWChildren, vec(KWKeys, KWVals)), nil
 }
 
 // analyzeSet performs semantic analysis on the given set,
 // returning an AST.
 func (a *Analyzer) analyzeSet(v value.IPersistentSet, env Env) (ast.Node, error) {
-	n := ast.MakeNode(kw("set"), v)
+	n := ast.MakeNode(KWSet, v)
 	items := make([]interface{}, 0, v.Count())
 	for seq := value.Seq(v); seq != nil; seq = seq.Next() {
 		// TODO: pass an "items-env" with an expr context
@@ -172,8 +175,8 @@ func (a *Analyzer) analyzeSet(v value.IPersistentSet, env Env) (ast.Node, error)
 		}
 		items = append(items, item)
 	}
-	n = n.Assoc(kw("items"), vec(items...))
-	return n.Assoc(kw("children"), vec(kw("items"))), nil
+	n = n.Assoc(KWItems, vec(items...))
+	return n.Assoc(KWChildren, vec(KWItems)), nil
 }
 
 // analyzeSeq performs semantic analysis on the given sequence,
@@ -207,10 +210,10 @@ func (a *Analyzer) analyzeSeq(form value.ISeq, env Env) (ast.Node, error) {
 // analyzeConst performs semantic analysis on the given constant
 // expression,
 func (a *Analyzer) analyzeConst(v interface{}, env Env) (ast.Node, error) {
-	n := ast.MakeNode(kw("const"), v)
-	n = n.Assoc(kw("type"), classifyType(v)).
-		Assoc(kw("val"), v).
-		Assoc(kw("literal?"), true)
+	n := ast.MakeNode(KWConst, v)
+	n = n.Assoc(KWType, classifyType(v)).
+		Assoc(KWVal, v).
+		Assoc(KWIsLiteral, true)
 
 	if im, ok := v.(value.IMeta); ok {
 		meta := im.Meta()
@@ -219,8 +222,8 @@ func (a *Analyzer) analyzeConst(v interface{}, env Env) (ast.Node, error) {
 			if err != nil {
 				return nil, err
 			}
-			n = n.Assoc(kw("meta"), mn).
-				Assoc(kw("children"), vec(kw("meta")))
+			n = n.Assoc(KWMeta, mn).
+				Assoc(KWChildren, vec(KWMeta))
 		}
 	}
 	return n, nil
@@ -231,7 +234,7 @@ func (a *Analyzer) analyzeBody(body interface{}, env Env) (ast.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	return n.Assoc(kw("body?"), true), nil
+	return n.Assoc(KWIsBody, true), nil
 }
 
 // (defn analyze-let
@@ -275,19 +278,19 @@ func (a *Analyzer) analyzeLet(form interface{}, env Env) (ast.Node, error) {
 	bindings := value.MustNth(form, 1)
 	body := value.Rest(value.Rest(form))
 
-	ctx := value.Get(env, kw("context"))
-	loopID := value.Get(env, kw("loop-id"))
+	ctx := value.Get(env, KWContext)
+	loopID := value.Get(env, KWLoopId)
 
 	if err := a.validateBindings(form, env); err != nil {
 		return nil, err
 	}
 
 	isLoop := value.Equal(op, value.NewSymbol("loop*"))
-	localKW := kw("let")
+	localKW := KWLet
 	if isLoop {
-		localKW = kw("loop")
+		localKW = KWLoop
 	}
-	env = ctxEnv(env, kw("ctx/expr"))
+	env = ctxEnv(env, KWCtxExpr)
 	binds := vec()
 	for {
 		bindingsSeq := value.Seq(bindings)
@@ -304,26 +307,26 @@ func (a *Analyzer) analyzeLet(form interface{}, env Env) (ast.Node, error) {
 		if err != nil {
 			return nil, err
 		}
-		bindExpr := merge(ast.MakeNode(kw("binding"), name),
+		bindExpr := merge(ast.MakeNode(KWBinding, name),
 			value.NewMap(
-				kw("env"), env,
-				kw("name"), name,
-				kw("init"), initExpr,
-				kw("local"), localKW,
-				kw("children"), vec(kw("init")),
+				KWEnv, env,
+				KWName, name,
+				KWInit, initExpr,
+				KWLocal, localKW,
+				KWChildren, vec(KWInit),
 			),
 		)
-		env = assocIn(env, vec(kw("locals"), name), dissocEnv(bindExpr)).(Env)
+		env = assocIn(env, vec(KWLocals, name), dissocEnv(bindExpr)).(Env)
 		binds = value.Conj(binds, bindExpr).(*value.Vector)
 	}
 	if isLoop {
-		ctx = kw("ctx/return")
+		ctx = KWCtxReturn
 	}
-	bodyEnv := value.Assoc(env, kw("context"), ctx).(Env)
+	bodyEnv := value.Assoc(env, KWContext, ctx).(Env)
 	if isLoop {
 		bodyEnv = merge(bodyEnv, value.NewMap(
-			kw("loop-id"), loopID,
-			kw("loop-locals"), value.Count(binds),
+			KWLoopId, loopID,
+			KWLoopLocals, value.Count(binds),
 		)).(Env)
 	}
 	body, err := a.analyzeBody(body, bodyEnv)
@@ -331,9 +334,9 @@ func (a *Analyzer) analyzeLet(form interface{}, env Env) (ast.Node, error) {
 		return nil, err
 	}
 	return value.NewMap(
-		kw("body"), body,
-		kw("bindings"), binds,
-		kw("children"), vec(kw("bindings"), kw("body")),
+		KWBody, body,
+		KWBindings, binds,
+		KWChildren, vec(KWBindings, KWBody),
 	), nil
 }
 
@@ -402,13 +405,13 @@ func (a *Analyzer) parseInvoke(form interface{}, env Env) (ast.Node, error) {
 	}
 	var meta value.IPersistentMap
 	if m, ok := form.(value.IMeta); ok && value.Seq(m.Meta()) != nil {
-		meta = value.NewMap(kw("meta"), m.Meta())
+		meta = value.NewMap(KWMeta, m.Meta())
 	}
-	return merge(ast.MakeNode(kw("invoke"), form), value.NewMap(
-		kw("fn"), fnExpr,
-		kw("args"), vec(argsExprs...)),
+	return merge(ast.MakeNode(KWInvoke, form), value.NewMap(
+		KWFn, fnExpr,
+		KWArgs, vec(argsExprs...)),
 		meta,
-		value.NewMap(kw("children"), vec(kw("fn"), kw("args")))), nil
+		value.NewMap(KWChildren, vec(KWFn, KWArgs))), nil
 }
 
 // (defn parse-do
@@ -450,12 +453,12 @@ func (a *Analyzer) parseDo(form interface{}, env Env) (ast.Node, error) {
 		return nil, err
 	}
 
-	return merge(ast.MakeNode(kw("do"), form),
+	return merge(ast.MakeNode(KWDo, form),
 		value.NewMap(
-			kw("env"), env,
-			kw("statements"), vec(statements...),
-			kw("ret"), ret,
-			kw("children"), vec(kw("statements"), kw("ret")),
+			KWEnv, env,
+			KWStatements, vec(statements...),
+			KWRet, ret,
+			KWChildren, vec(KWStatements, KWRet),
 		)), nil
 }
 
@@ -501,13 +504,13 @@ func (a *Analyzer) parseIf(form interface{}, env Env) (ast.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	return merge(ast.MakeNode(kw("if"), form),
+	return merge(ast.MakeNode(KWIf, form),
 		value.NewMap(
-			kw("env"), env,
-			kw("test"), testExpr,
-			kw("then"), thenExpr,
-			kw("else"), elseExpr,
-			kw("children"), vec(kw("test"), kw("then"), kw("else")),
+			KWEnv, env,
+			KWTest, testExpr,
+			KWThen, thenExpr,
+			KWElse, elseExpr,
+			KWChildren, vec(KWTest, KWThen, KWElse),
 		)), nil
 }
 
@@ -542,17 +545,17 @@ func (a *Analyzer) parseNew(form interface{}, env Env) (ast.Node, error) {
 		}
 		argsExprs = argsExprs.Conj(arg).(*value.Vector)
 	}
-	classExpr, err := a.analyzeForm(class, env.Assoc(kw("locals"), value.NewMap()).(Env))
+	classExpr, err := a.analyzeForm(class, env.Assoc(KWLocals, value.NewMap()).(Env))
 	if err != nil {
 		return nil, err
 	}
 	return value.NewMap(
-		kw("op"), kw("new"),
-		kw("env"), env,
-		kw("form"), form,
-		kw("class"), classExpr,
-		kw("args"), argsExprs,
-		kw("children"), vec(kw("class"), kw("args")),
+		KWOp, KWNew,
+		KWEnv, env,
+		KWForm, form,
+		KWClass, classExpr,
+		KWArgs, argsExprs,
+		KWChildren, vec(KWClass, KWArgs),
 	), nil
 }
 
@@ -565,12 +568,12 @@ func (a *Analyzer) parseQuote(form interface{}, env Env) (ast.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	n := ast.MakeNode(kw("quote"), form)
+	n := ast.MakeNode(KWQuote, form)
 	return merge(n, value.NewMap(
-		kw("expr"), cnst,
-		kw("env"), env,
-		kw("literal?"), true,
-		kw("children"), vec(kw("expr")),
+		KWExpr, cnst,
+		KWEnv, env,
+		KWIsLiteral, true,
+		KWChildren, vec(KWExpr),
 	)), nil
 }
 
@@ -604,12 +607,12 @@ func (a *Analyzer) parseSetBang(form interface{}, env Env) (ast.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	return merge(ast.MakeNode(kw("set!"), form),
+	return merge(ast.MakeNode(KWSetBang, form),
 		value.NewMap(
-			kw("env"), env,
-			kw("target"), targetExpr,
-			kw("val"), valExpr,
-			kw("children"), vec(kw("target"), kw("val")),
+			KWEnv, env,
+			KWTarget, targetExpr,
+			KWVal, valExpr,
+			KWChildren, vec(KWTarget, KWVal),
 		)), nil
 }
 
@@ -664,7 +667,7 @@ func (a *Analyzer) parseTry(form interface{}, env Env) (ast.Node, error) {
 	if value.Count(fblocks) > 1 {
 		return nil, exInfo("only one finally clause allowed in try expression", nil)
 	}
-	env = env.Assoc(kw("in-try"), true).(Env)
+	env = env.Assoc(KWInTry, true).(Env)
 	bodyExpr, err := a.analyzeBody(body, env)
 	if err != nil {
 		return nil, err
@@ -687,17 +690,17 @@ func (a *Analyzer) parseTry(form interface{}, env Env) (ast.Node, error) {
 			return nil, err
 		}
 	}
-	children := []interface{}{kw("body"), kw("catches")}
+	children := []interface{}{KWBody, KWCatches}
 	if fblockExpr != nil {
-		children = append(children, kw("finally"))
+		children = append(children, KWFinally)
 	}
-	return merge(ast.MakeNode(kw("try"), form),
+	return merge(ast.MakeNode(KWTry, form),
 		value.NewMap(
-			kw("env"), env,
-			kw("body"), bodyExpr,
-			kw("catches"), cblocksExpr,
-			kw("finally"), fblockExpr,
-			kw("children"), vec(children...),
+			KWEnv, env,
+			KWBody, bodyExpr,
+			KWCatches, cblocksExpr,
+			KWFinally, fblockExpr,
+			KWChildren, vec(children...),
 		)), nil
 }
 
@@ -728,29 +731,29 @@ func (a *Analyzer) parseCatch(form interface{}, env Env) (ast.Node, error) {
 	if !isValidBindingSymbol(ename) {
 		return nil, exInfo("bad binding form: "+value.ToString(ename), nil)
 	}
-	env = value.Dissoc(env, kw("in-try")).(Env)
-	local := ast.MakeNode(kw("binding"), ename)
+	env = value.Dissoc(env, KWInTry).(Env)
+	local := ast.MakeNode(KWBinding, ename)
 	local = merge(local,
 		value.NewMap(
-			kw("env"), env,
-			kw("name"), ename,
-			kw("local"), kw("catch"),
+			KWEnv, env,
+			KWName, ename,
+			KWLocal, KWCatch,
 		))
-	body, err := a.analyzeBody(value.Rest(value.Rest(value.Rest(form))), env.Assoc(kw("locals"), value.NewMap()).(Env))
+	body, err := a.analyzeBody(value.Rest(value.Rest(value.Rest(form))), env.Assoc(KWLocals, value.NewMap()).(Env))
 	if err != nil {
 		return nil, err
 	}
-	class, err := a.analyzeForm(etype, env.Assoc(kw("locals"), value.NewMap()).(Env))
+	class, err := a.analyzeForm(etype, env.Assoc(KWLocals, value.NewMap()).(Env))
 	if err != nil {
 		return nil, err
 	}
-	return merge(ast.MakeNode(kw("catch"), form),
+	return merge(ast.MakeNode(KWCatch, form),
 		value.NewMap(
-			kw("env"), env,
-			kw("class"), class,
-			kw("local"), local,
-			kw("body"), body,
-			kw("children"), vec(kw("class"), kw("local"), kw("body")),
+			KWEnv, env,
+			KWClass, class,
+			KWLocal, local,
+			KWBody, body,
+			KWChildren, vec(KWClass, KWLocal, KWBody),
 		)), nil
 }
 
@@ -776,11 +779,11 @@ func (a *Analyzer) parseThrow(form interface{}, env Env) (ast.Node, error) {
 		return nil, err
 	}
 	return value.NewMap(
-		kw("op"), kw("throw"),
-		kw("env"), env,
-		kw("form"), form,
-		kw("exception"), exception,
-		kw("children"), vec(kw("exception")),
+		KWOp, KWThrow,
+		KWEnv, env,
+		KWForm, form,
+		KWException, exception,
+		KWChildren, vec(KWException),
 	), nil
 }
 
@@ -793,7 +796,7 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (ast.Node, error) {
 		return nil, exInfo(fmt.Sprintf("first argument to def must be a symbol, got %T", symForm), nil)
 	}
 
-	if sym.Namespace() != "" && sym.Namespace() != value.Get(env, kw("ns")).(*value.Symbol).Name() {
+	if sym.Namespace() != "" && sym.Namespace() != value.Get(env, KWNS).(*value.Symbol).Name() {
 		return nil, exInfo("can't def namespace-qualified symbol", nil)
 	}
 
@@ -803,29 +806,29 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (ast.Node, error) {
 	case 0:
 		// no-op
 	case 1:
-		args = value.Assoc(args, kw("init"), value.First(expr))
+		args = value.Assoc(args, KWInit, value.First(expr))
 	case 2:
 		doc = value.First(expr)
 		init := value.First(value.Rest(expr))
-		args = value.Assoc(args, kw("init"), init).
-			Assoc(kw("doc"), doc)
+		args = value.Assoc(args, KWInit, init).
+			Assoc(KWDoc, doc)
 	default:
 		return nil, exInfo("invalid def", nil)
 	}
 	if doc == nil {
-		doc = value.Get(sym.Meta(), kw("doc"))
+		doc = value.Get(sym.Meta(), KWDoc)
 	} else if _, ok := doc.(string); !ok {
 		return nil, exInfo("doc must be a string", nil)
 	}
-	arglists := value.Get(sym.Meta(), kw("arglists"))
+	arglists := value.Get(sym.Meta(), KWArglists)
 	if arglists != nil {
 		arglists = second(arglists)
 	}
 	sym = value.NewSymbol(sym.Name()).WithMeta(
 		merge(value.NewMap(), // hack to make sure we get a non-nil map
 			sym.Meta(),
-			mapWhen(kw("arglists"), arglists),
-			mapWhen(kw("doc"), doc),
+			mapWhen(KWArglists, arglists),
+			mapWhen(KWDoc, doc),
 			// TODO: source info
 		).(value.IPersistentMap)).(*value.Symbol)
 
@@ -838,7 +841,7 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (ast.Node, error) {
 
 	meta := sym.Meta()
 	if arglists != nil {
-		meta = merge(meta, value.NewMap(kw("arglists"), value.NewList(value.NewSymbol("quote"), arglists))).(value.IPersistentMap)
+		meta = merge(meta, value.NewMap(KWArglists, value.NewList(value.NewSymbol("quote"), arglists))).(value.IPersistentMap)
 	}
 	var metaExpr ast.Node
 	if meta != nil {
@@ -850,36 +853,36 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (ast.Node, error) {
 	}
 
 	var hasInit bool
-	if args != nil && args.ContainsKey(kw("init")) {
-		init := value.Get(args, kw("init"))
+	if args != nil && args.ContainsKey(KWInit) {
+		init := value.Get(args, KWInit)
 		initNode, err := a.analyzeForm(init, ctxEnv(env, ctxExpr))
 		if err != nil {
 			return nil, err
 		}
-		args = args.Assoc(kw("init"), initNode)
+		args = args.Assoc(KWInit, initNode)
 		hasInit = true
 	}
 
 	children := vec()
 	if meta != nil {
-		children = children.Conj(kw("meta")).(*value.Vector)
+		children = children.Conj(KWMeta).(*value.Vector)
 	}
 	if hasInit {
-		children = children.Conj(kw("init")).(*value.Vector)
+		children = children.Conj(KWInit).(*value.Vector)
 	}
 	var childrenMap, metaMap value.IPersistentMap
 	if children.Count() > 0 {
-		childrenMap = value.NewMap(kw("children"), children)
+		childrenMap = value.NewMap(KWChildren, children)
 	}
 	if meta != nil {
-		metaMap = value.NewMap(kw("meta"), metaExpr)
+		metaMap = value.NewMap(KWMeta, metaExpr)
 	}
 
-	n := ast.MakeNode(kw("def"), form)
+	n := ast.MakeNode(KWDef, form)
 	return merge(n, value.NewMap(
-		kw("env"), env,
-		kw("name"), sym,
-		kw("var"), vr,
+		KWEnv, env,
+		KWName, sym,
+		KWVar, vr,
 	),
 		metaMap,
 		args,
@@ -951,7 +954,7 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (ast.Node, error) {
 		}
 	}
 
-	n := value.NewMap(kw("form"), form, kw("env"), env, kw("target"), targetExpr)
+	n := value.NewMap(KWForm, form, KWEnv, env, KWTarget, targetExpr)
 	switch {
 	case call:
 		var argNodes []interface{}
@@ -964,24 +967,24 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (ast.Node, error) {
 			argNodes = append(argNodes, argNode)
 		}
 		return merge(n, value.NewMap(
-			kw("op"), kw("host-call"),
-			kw("method"), value.NewSymbol(value.First(mOrF).(*value.Symbol).Name()),
-			kw("args"), vec(argNodes...),
-			kw("children"), vec(kw("target"), kw("args")),
+			KWOp, KWHostCall,
+			KWMethod, value.NewSymbol(value.First(mOrF).(*value.Symbol).Name()),
+			KWArgs, vec(argNodes...),
+			KWChildren, vec(KWTarget, KWArgs),
 		)), nil
 	case isField:
 		return merge(n, value.NewMap(
-			kw("op"), kw("host-field"),
-			kw("assignable?"), true,
-			kw("field"), value.NewSymbol(mOrF.(*value.Symbol).Name()),
-			kw("children"), vec(kw("target")),
+			KWOp, KWHostField,
+			KWIsAssignable, true,
+			KWField, value.NewSymbol(mOrF.(*value.Symbol).Name()),
+			KWChildren, vec(KWTarget),
 		)), nil
 	default:
 		return merge(n, value.NewMap(
-			kw("op"), kw("host-interop"),
-			kw("assignable?"), true,
-			kw("m-or-f"), value.NewSymbol(mOrF.(*value.Symbol).Name()),
-			kw("children"), vec(kw("target")),
+			KWOp, KWHostInterop,
+			KWIsAssignable, true,
+			KWMOrF, value.NewSymbol(mOrF.(*value.Symbol).Name()),
+			KWChildren, vec(KWTarget),
 		)), nil
 	}
 }
@@ -999,9 +1002,9 @@ func (a *Analyzer) parseLetStar(form interface{}, env Env) (ast.Node, error) {
 		return nil, err
 	}
 	return merge(value.NewMap(
-		kw("op"), kw("let"),
-		kw("form"), form,
-		kw("env"), env),
+		KWOp, KWLet,
+		KWForm, form,
+		KWEnv, env),
 		let), nil
 }
 
@@ -1059,34 +1062,34 @@ func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (ast.Node, error) {
 	}
 	binds := value.ReduceInit(func(binds, name interface{}) interface{} {
 		return value.Assoc(binds, name, value.NewMap(
-			kw("op"), kw("binding"),
-			kw("env"), env,
-			kw("name"), name,
-			kw("form"), name,
-			kw("local"), kw("letfn")))
+			KWOp, KWBinding,
+			KWEnv, env,
+			KWName, name,
+			KWForm, name,
+			KWLocal, KWLetfn))
 	}, value.NewMap(), fns)
-	e := updateIn(env, vec(kw("locals")), merge, binds).(Env)
+	e := updateIn(env, vec(KWLocals), merge, binds).(Env)
 	binds = value.ReduceKV(func(binds, name, bind interface{}) interface{} {
 		init, err := a.analyzeForm(value.Get(bindingsMap, name), ctxEnv(e, ctxExpr))
 		if err != nil {
 			panic(err)
 		}
 		return value.Assoc(binds, name, merge(bind, value.NewMap(
-			kw("init"), init,
-			kw("children"), vec(kw("init")))))
+			KWInit, init,
+			KWChildren, vec(KWInit))))
 	}, value.NewMap(), binds)
-	e = updateIn(env, vec(kw("locals")), merge, updateVals(binds, dissocEnv)).(Env)
+	e = updateIn(env, vec(KWLocals), merge, updateVals(binds, dissocEnv)).(Env)
 	body, err := a.analyzeBody(body, e)
 	if err != nil {
 		return nil, err
 	}
 	return value.NewMap(
-		kw("op"), kw("letfn"),
-		kw("env"), env,
-		kw("form"), form,
-		kw("bindings"), value.Vals(binds.(value.Associative)),
-		kw("body"), body,
-		kw("children"), vec(kw("bindings"), kw("body"))), nil
+		KWOp, KWLetfn,
+		KWEnv, env,
+		KWForm, form,
+		KWBindings, value.Vals(binds.(value.Associative)),
+		KWBody, body,
+		KWChildren, vec(KWBindings, KWBody)), nil
 }
 
 // (defn parse-loop*
@@ -1101,16 +1104,16 @@ func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (ast.Node, error) {
 //	        (analyze-let form env))))
 func (a *Analyzer) parseLoopStar(form interface{}, env Env) (ast.Node, error) {
 	loopID := a.Gensym("loop_")
-	env = env.Assoc(kw("loop-id"), loopID).(Env)
+	env = env.Assoc(KWLoopId, loopID).(Env)
 	loop, err := a.analyzeLet(form, env)
 	if err != nil {
 		return nil, err
 	}
 	return merge(value.NewMap(
-		kw("op"), kw("loop"),
-		kw("form"), form,
-		kw("env"), env,
-		kw("loop-id"), loopID),
+		KWOp, KWLoop,
+		KWForm, form,
+		KWEnv, env,
+		KWLoopId, loopID),
 		loop), nil
 }
 
@@ -1138,9 +1141,9 @@ func (a *Analyzer) parseLoopStar(form interface{}, env Env) (ast.Node, error) {
 //	   :children    [:exprs]}))
 func (a *Analyzer) parseRecur(form interface{}, env Env) (ast.Node, error) {
 	exprs := value.Rest(form)
-	ctx := value.Get(env, kw("context"))
-	loopLocals := value.Get(env, kw("loop-locals"))
-	loopID := value.Get(env, kw("loop-id"))
+	ctx := value.Get(env, KWContext)
+	loopLocals := value.Get(env, KWLoopLocals)
+	loopID := value.Get(env, KWLoopId)
 
 	errorMsg := ""
 	switch {
@@ -1164,12 +1167,12 @@ func (a *Analyzer) parseRecur(form interface{}, env Env) (ast.Node, error) {
 	}
 
 	return value.NewMap(
-		kw("op"), kw("recur"),
-		kw("env"), env,
-		kw("form"), form,
-		kw("exprs"), vec(exprNodes...),
-		kw("loop-id"), loopID,
-		kw("children"), vec(kw("exprs"))), nil
+		KWOp, KWRecur,
+		KWEnv, env,
+		KWForm, form,
+		KWExprs, vec(exprNodes...),
+		KWLoopId, loopID,
+		KWChildren, vec(KWExprs)), nil
 }
 
 // (defn parse-fn*
@@ -1231,24 +1234,24 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (ast.Node, error) {
 	} else {
 		meths = value.Seq(args)
 	}
-	nameExpr := merge(ast.MakeNode(kw("binding"), n), value.NewMap(
-		kw("env"), env,
-		kw("local"), kw("fn"),
-		kw("name"), n,
+	nameExpr := merge(ast.MakeNode(KWBinding, n), value.NewMap(
+		KWEnv, env,
+		KWLocal, KWFn,
+		KWName, n,
 	))
 	e := env
 	if n != nil {
-		e = assocIn(env, vec(kw("locals"), n), dissocEnv(nameExpr)).(Env)
-		e = value.Assoc(e, kw("local"), nameExpr).(Env)
+		e = assocIn(env, vec(KWLocals, n), dissocEnv(nameExpr)).(Env)
+		e = value.Assoc(e, KWLocal, nameExpr).(Env)
 	}
 
 	once := false
 	if fnSym != nil {
-		if o, ok := value.Get(fnSym.Meta(), kw("once")).(bool); ok && o {
+		if o, ok := value.Get(fnSym.Meta(), KWOnce).(bool); ok && o {
 			once = true
 		}
 	}
-	menv := value.Assoc(value.Dissoc(e, kw("in-try")), kw("once"), once)
+	menv := value.Assoc(value.Dissoc(e, KWInTry), KWOnce, once)
 	if _, ok := value.First(meths).(*value.Vector); ok {
 		meths = value.NewList(meths)
 	}
@@ -1262,7 +1265,7 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (ast.Node, error) {
 	}
 	variadic := false
 	for _, m := range methodsExprs {
-		if value.Get(m, kw("variadic?")).(bool) {
+		if value.Get(m, KWIsVariadic).(bool) {
 			variadic = true
 			break
 		}
@@ -1272,11 +1275,11 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (ast.Node, error) {
 	sawVariadic := false
 	variadicArity := 0
 	for _, m := range methodsExprs {
-		arity, ok := value.AsInt(value.Get(m, kw("fixed-arity")))
+		arity, ok := value.AsInt(value.Get(m, KWFixedArity))
 		if !ok {
 			panic("fixed-arity not an int")
 		}
-		if value.Get(m, kw("variadic?")).(bool) {
+		if value.Get(m, KWIsVariadic).(bool) {
 			if sawVariadic {
 				return nil, errors.New("can't have more than 1 variadic overload")
 			}
@@ -1297,20 +1300,20 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (ast.Node, error) {
 	var children value.Conjer = vec()
 	var localMap value.IPersistentMap
 	if n != nil {
-		localMap = value.NewMap(kw("local"), nameExpr)
-		children = value.Conj(children, kw("local"))
+		localMap = value.NewMap(KWLocal, nameExpr)
+		children = value.Conj(children, KWLocal)
 	}
-	children = value.Conj(children, kw("methods"))
+	children = value.Conj(children, KWMethods)
 
-	node := merge(ast.MakeNode(kw("fn"), form), value.NewMap(
-		kw("env"), env,
-		kw("variadic?"), variadic,
-		kw("max-fixed-arity"), maxFixedArity,
-		kw("methods"), vec(methodsExprs...),
-		kw("once"), once,
+	node := merge(ast.MakeNode(KWFn, form), value.NewMap(
+		KWEnv, env,
+		KWIsVariadic, variadic,
+		KWMaxFixedArity, maxFixedArity,
+		KWMethods, vec(methodsExprs...),
+		KWOnce, once,
 	),
 		localMap,
-		value.NewMap(kw("children"), children),
+		value.NewMap(KWChildren, children),
 	)
 	return a.wrappingMeta(node)
 }
@@ -1342,14 +1345,14 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (ast.Node, error) {
 	if err != nil {
 		return nil, exInfo(fmt.Sprintf("case*: %v", err), nil)
 	}
-	if switchType != kw("compact") && switchType != kw("sparse") {
+	if switchType != KWCompact && switchType != KWSparse {
 		return nil, exInfo(fmt.Sprintf("unexpected shift type: %v", switchType), nil)
 	}
-	if testType != kw("int") && testType != kw("hash-identity") && testType != kw("hash-equiv") {
+	if testType != KWInt && testType != KWHashIdentity && testType != KWHashEquiv {
 		return nil, exInfo(fmt.Sprintf("unexpected test type: %v", testType), nil)
 	}
 
-	testExpr, err := a.analyzeForm(expr, ctxEnv(env, kw("ctx/expr")))
+	testExpr, err := a.analyzeForm(expr, ctxEnv(env, KWCtxExpr))
 	if err != nil {
 		return nil, err
 	}
@@ -1365,7 +1368,7 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (ast.Node, error) {
 		entry := value.First(seq).(value.IMapEntry).Val()
 		cond, then := value.First(entry), second(entry)
 		// TODO: support a vector of conditions
-		condExpr, err := a.analyzeConst(cond, ctxEnv(env, kw("ctx/expr")))
+		condExpr, err := a.analyzeConst(cond, ctxEnv(env, KWCtxExpr))
 		if err != nil {
 			return nil, err
 		}
@@ -1374,20 +1377,20 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (ast.Node, error) {
 			return nil, err
 		}
 		nodes = append(nodes, value.NewMap(
-			kw("op"), kw("case-node"),
-			kw("env"), env,
-			kw("tests"), vec(condExpr),
-			kw("then"), thenExpr,
+			KWOp, KWCaseNode,
+			KWEnv, env,
+			KWTests, vec(condExpr),
+			KWThen, thenExpr,
 		))
 	}
 
-	node := merge(ast.MakeNode(kw("case"), form), value.NewMap(
-		kw("env"), env,
-		kw("test"), testExpr,
-		kw("nodes"), vec(nodes...),
-		kw("default"), defaultExpr,
+	node := merge(ast.MakeNode(KWCase, form), value.NewMap(
+		KWEnv, env,
+		KWTest, testExpr,
+		KWNodes, vec(nodes...),
+		KWDefault, defaultExpr,
 	),
-		value.NewMap(kw("children"), vec(kw("test"), kw("nodes"), kw("default"))),
+		value.NewMap(KWChildren, vec(KWTest, KWNodes, KWDefault)),
 	)
 	return node, nil
 }
@@ -1489,20 +1492,20 @@ func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (ast.Node, error) 
 		}
 		paramsNames = params.Pop().Pop().(value.Conjer).Conj(params.Peek()).(value.IPersistentVector)
 	}
-	env = value.Dissoc(env, kw("local")).(Env)
+	env = value.Dissoc(env, KWLocal).(Env)
 	arity := paramsNames.Count()
 	var paramsExpr value.IPersistentVector = vec()
 	id := 0
 	for seq := value.Seq(paramsNames); seq != nil; seq, id = seq.Next(), id+1 {
 		name := seq.First()
 		paramsExpr = paramsExpr.Cons(value.NewMap(
-			kw("env"), env,
-			kw("form"), name,
-			kw("name"), name,
-			kw("variadic?"), variadic && id == arity-1,
-			kw("op"), kw("binding"),
-			kw("arg-id"), id,
-			kw("local"), kw("arg"),
+			KWEnv, env,
+			KWForm, name,
+			KWName, name,
+			KWIsVariadic, variadic && id == arity-1,
+			KWOp, KWBinding,
+			KWArgId, id,
+			KWLocal, KWArg,
 		)).(value.IPersistentVector)
 	}
 	fixedArity := arity
@@ -1513,19 +1516,19 @@ func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (ast.Node, error) 
 	var bodyEnv Env
 	{
 		var localsMap value.IPersistentMap = value.NewMap()
-		if locals, ok := value.Get(env, kw("locals")).(value.IPersistentMap); ok {
+		if locals, ok := value.Get(env, KWLocals).(value.IPersistentMap); ok {
 			localsMap = locals
 		}
 		for i := 0; i < paramsNames.Count(); i++ {
 			localsMap = localsMap.Assoc(value.MustNth(paramsNames, i), dissocEnv(value.MustNth(paramsExpr, i).(value.IPersistentMap))).(value.IPersistentMap)
 		}
-		bodyEnv = env.Assoc(kw("locals"), localsMap).(Env)
+		bodyEnv = env.Assoc(KWLocals, localsMap).(Env)
 	}
 	bodyEnv = merge(bodyEnv,
 		value.NewMap(
-			kw("context"), kw("ctx/return"),
-			kw("loop-id"), loopID,
-			kw("loop-locals"), paramsExpr.Count(),
+			KWContext, KWCtxReturn,
+			KWLoopId, loopID,
+			KWLoopLocals, paramsExpr.Count(),
 		),
 	).(Env)
 	bodyNode, err := a.analyzeBody(body, bodyEnv)
@@ -1533,14 +1536,14 @@ func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (ast.Node, error) 
 		return nil, err
 	}
 
-	node := merge(ast.MakeNode(kw("fn-method"), form), value.NewMap(
-		kw("loop-id"), loopID, // TODO
-		kw("env"), env,
-		kw("variadic?"), variadic,
-		kw("params"), paramsExpr,
-		kw("fixed-arity"), fixedArity,
-		kw("body"), bodyNode,
-		kw("children"), vec(kw("params"), kw("body")),
+	node := merge(ast.MakeNode(KWFnMethod, form), value.NewMap(
+		KWLoopId, loopID, // TODO
+		KWEnv, env,
+		KWIsVariadic, variadic,
+		KWParams, paramsExpr,
+		KWFixedArity, fixedArity,
+		KWBody, bodyNode,
+		KWChildren, vec(KWParams, KWBody),
 	))
 	return node, nil
 }
@@ -1567,9 +1570,9 @@ func (a *Analyzer) parseVar(form interface{}, env Env) (ast.Node, error) {
 	if vr == nil {
 		return nil, exInfo(fmt.Sprintf("var not found: %s", vrSym), nil)
 	}
-	return merge(ast.MakeNode(kw("the-var"), form), value.NewMap(
-		kw("env"), env,
-		kw("var"), vr,
+	return merge(ast.MakeNode(KWTheVar, form), value.NewMap(
+		KWEnv, env,
+		KWVar, vr,
 	)), nil
 }
 
@@ -1588,7 +1591,7 @@ func (a *Analyzer) parseVar(form interface{}, env Env) (ast.Node, error) {
 //	    expr)))
 func (a *Analyzer) wrappingMeta(expr ast.Node) (ast.Node, error) {
 	form := ast.Form(expr)
-	env := value.Get(expr, kw("env")).(Env)
+	env := value.Get(expr, KWEnv).(Env)
 	var meta value.IPersistentMap
 	if m, ok := form.(value.IMeta); ok {
 		meta = m.Meta()
@@ -1600,13 +1603,13 @@ func (a *Analyzer) wrappingMeta(expr ast.Node) (ast.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	exprNode := assocIn(expr, vec(kw("env"), kw("context")), ctxExpr)
-	n := ast.MakeNode(kw("with-meta"), form)
+	exprNode := assocIn(expr, vec(KWEnv, KWContext), ctxExpr)
+	n := ast.MakeNode(KWWithMeta, form)
 	return merge(n, value.NewMap(
-		kw("env"), env,
-		kw("meta"), metaNode,
-		kw("expr"), exprNode,
-		kw("children"), vec(kw("meta"), kw("expr")),
+		KWEnv, env,
+		KWMeta, metaNode,
+		KWExpr, exprNode,
+		KWChildren, vec(KWMeta, KWExpr),
 	)), nil
 }
 
@@ -1622,19 +1625,19 @@ func (a *Analyzer) wrappingMeta(expr ast.Node) (ast.Node, error) {
 //	    (or (get-in namespaces [ns :aliases ns-sym])
 //	        (:ns (namespaces ns-sym))))))
 func (a *Analyzer) resolveNS(nsSym interface{}, env Env) *value.Symbol {
-	ns := value.Get(env, kw("ns")).(*value.Symbol)
+	ns := value.Get(env, KWNS).(*value.Symbol)
 	if nsSym == nil {
 		return nil
 	}
 	globalEnv := a.GlobalEnv.Deref()
-	namespaces, _ := value.Get(globalEnv, kw("namespaces")).(value.IPersistentMap)
-	if res := value.Get(value.Get(value.Get(namespaces, ns), kw("aliases")), nsSym); res != nil {
+	namespaces, _ := value.Get(globalEnv, KWNamespaces).(value.IPersistentMap)
+	if res := value.Get(value.Get(value.Get(namespaces, ns), KWAliases), nsSym); res != nil {
 		if sym, ok := res.(*value.Symbol); ok {
 			return sym
 		}
 		return nil
 	}
-	if sym, ok := value.Get(value.Get(namespaces, nsSym), kw("ns")).(*value.Symbol); ok {
+	if sym, ok := value.Get(value.Get(namespaces, nsSym), KWNS).(*value.Symbol); ok {
 		return sym
 	}
 	return nil
@@ -1652,7 +1655,7 @@ func (a *Analyzer) resolveNS(nsSym interface{}, env Env) *value.Symbol {
 //	      (let [name (if sym-ns (-> sym name symbol) sym)]
 //	        (-> (env/deref-env) :namespaces (get (or full-ns ns)) :mappings (get name)))))))
 func (a *Analyzer) resolveSym(symIfc interface{}, env Env) interface{} {
-	ns, _ := value.Get(env, kw("ns")).(*value.Symbol)
+	ns, _ := value.Get(env, KWNS).(*value.Symbol)
 
 	sym, ok := symIfc.(*value.Symbol)
 	if !ok {
@@ -1678,9 +1681,9 @@ func (a *Analyzer) resolveSym(symIfc interface{}, env Env) interface{} {
 		ns = fullNS
 	}
 	globalEnv := a.GlobalEnv.Deref()
-	namespaces, _ := value.Get(globalEnv, kw("namespaces")).(value.IPersistentMap)
+	namespaces, _ := value.Get(globalEnv, KWNamespaces).(value.IPersistentMap)
 	nsMap, _ := value.Get(namespaces, ns).(value.IPersistentMap)
-	mappings, _ := value.Get(nsMap, kw("mappings")).(value.IPersistentMap)
+	mappings, _ := value.Get(nsMap, KWMappings).(value.IPersistentMap)
 	return value.Get(mappings, name)
 }
 
@@ -1733,12 +1736,12 @@ func exInfo(errStr string, _ interface{}) error {
 }
 
 func withRawForm(n ast.Node, form interface{}) ast.Node {
-	rawFormsKV := n.EntryAt(kw("raw-forms"))
+	rawFormsKV := n.EntryAt(KWRawForms)
 	if rawFormsKV == nil {
 		return n
 	}
 	if rf, ok := rawFormsKV.Val().(value.Conjer); ok {
-		return n.Assoc(kw("raw-forms"), value.Conj(rf, form))
+		return n.Assoc(KWRawForms, value.Conj(rf, form))
 	}
 	return n
 }
@@ -1803,7 +1806,7 @@ func removeP(fn func(interface{}) bool, coll interface{}) interface{} {
 }
 
 func ctxEnv(env Env, ctx value.Keyword) Env {
-	return value.Assoc(env, kw("context"), ctx).(Env)
+	return value.Assoc(env, KWContext, ctx).(Env)
 }
 
 func assocIn(mp interface{}, keys interface{}, val interface{}) value.Associative {
@@ -1834,7 +1837,7 @@ func updateIn(mp interface{}, keys interface{}, fn func(...interface{}) value.As
 }
 
 func dissocEnv(node interface{}) interface{} {
-	return value.Dissoc(node, kw("env"))
+	return value.Dissoc(node, KWEnv)
 }
 
 func isValidBindingSymbol(v interface{}) bool {
@@ -1854,35 +1857,35 @@ func isValidBindingSymbol(v interface{}) bool {
 func classifyType(v interface{}) value.Keyword {
 	switch v.(type) {
 	case nil:
-		return kw("nil")
+		return KWNil
 	case bool:
-		return kw("bool")
+		return KWBool
 	case value.Keyword:
-		return kw("keyword")
+		return KWKeyword
 	case *value.Symbol:
-		return kw("symbol")
+		return KWSymbol
 	case string:
-		return kw("string")
+		return KWString
 	case value.IPersistentVector:
-		return kw("vector")
+		return KWVector
 	case value.IPersistentMap:
-		return kw("map")
+		return KWMap
 	case value.IPersistentSet:
-		return kw("set")
+		return KWSet
 	case value.ISeq:
-		return kw("seq")
+		return KWSeq
 	case *value.Char:
-		return kw("char")
+		return KWChar
 	case *regexp.Regexp:
-		return kw("regex")
+		return KWRegex
 	case *value.Var:
-		return kw("var")
+		return KWVar
 	case int, int8, int16, int32, int64,
 		uint, uint8, uint16, uint32, uint64,
 		*value.BigInt, *value.BigDecimal, *value.Ratio:
-		return kw("number")
+		return KWNumber
 	default:
-		return kw("unknown")
+		return KWUnknown
 
 		// TODO: type, record, class
 	}
