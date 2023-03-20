@@ -20,8 +20,6 @@ var (
 	symUnquote       = value.NewSymbol("glojure.core/unquote")
 	symSpliceUnquote = value.NewSymbol("glojure.core/splice-unquote")
 
-	kwTag = value.NewKeyword("tag")
-
 	specials = func() map[string]bool {
 		specialStrs := []string{
 			"def",
@@ -273,11 +271,11 @@ func (r *Reader) popSection() value.IPersistentMap {
 	r.posStack = r.posStack[:len(r.posStack)-1]
 
 	return value.NewMap(
-		value.NewKeyword("file"), r.rs.filename,
-		value.NewKeyword("line"), top.Line,
-		value.NewKeyword("column"), top.Column,
-		value.NewKeyword("end-line"), r.rs.pos().Line,
-		value.NewKeyword("end-column"), r.rs.pos().Column,
+		value.KWFile, r.rs.filename,
+		value.KWLine, top.Line,
+		value.KWColumn, top.Column,
+		value.KWEndLine, r.rs.pos().Line,
+		value.KWEndColumn, r.rs.pos().Column,
 	)
 }
 
@@ -1103,7 +1101,7 @@ func (r *Reader) readMeta() (value.IPersistentMap, error) {
 	case *value.Map:
 		return res, nil
 	case *value.Symbol, string:
-		return value.NewMap(kwTag, res), nil
+		return value.NewMap(value.KWTag, res), nil
 	case value.Keyword:
 		return value.NewMap(res, true), nil
 	default:

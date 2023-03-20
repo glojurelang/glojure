@@ -31,9 +31,9 @@ func (fn *Fn) WithMeta(meta IPersistentMap) interface{} {
 }
 
 func (fn *Fn) Invoke(args ...interface{}) interface{} {
-	methods := Get(fn.astNode, NewKeyword("methods"))
-	variadic := Get(fn.astNode, NewKeyword("variadic?")).(bool)
-	maxArity, _ := AsInt(Get(fn.astNode, NewKeyword("max-fixed-arity")))
+	methods := Get(fn.astNode, KWMethods)
+	variadic := Get(fn.astNode, KWIsVariadic).(bool)
+	maxArity, _ := AsInt(Get(fn.astNode, KWMaxFixedArity))
 
 	if !variadic && len(args) > maxArity {
 		panic(fmt.Errorf("too many arguments (%d)", len(args)))
@@ -45,13 +45,13 @@ func (fn *Fn) Invoke(args ...interface{}) interface{} {
 	}
 
 	fnEnv := fn.env.PushScope()
-	if local, ok := Get(fn.astNode, NewKeyword("local")).(IPersistentMap); ok {
-		fnEnv.BindLocal(Get(local, NewKeyword("name")).(*Symbol), fn)
+	if local, ok := Get(fn.astNode, KWLocal).(IPersistentMap); ok {
+		fnEnv.BindLocal(Get(local, KWName).(*Symbol), fn)
 	}
 
-	fixedArity := Get(method, NewKeyword("fixed-arity")).(int)
-	methodVariadic := Get(method, NewKeyword("variadic?")).(bool)
-	body := Get(method, NewKeyword("body"))
+	fixedArity := Get(method, KWFixedArity).(int)
+	methodVariadic := Get(method, KWIsVariadic).(bool)
+	body := Get(method, KWBody)
 
 	bindingValues := args[:fixedArity]
 
