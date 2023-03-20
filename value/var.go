@@ -162,12 +162,7 @@ func (v *Var) IsPublic() bool {
 }
 
 func (v *Var) isDynamic() bool {
-	meta := v.Meta()
-	isDynamic := meta.EntryAt(KeywordDynamic)
-	if isDynamic == nil {
-		return false
-	}
-	return booleanCast(isDynamic.Val())
+	return v.dynamic
 }
 
 func (v *Var) SetDynamic() *Var {
@@ -271,8 +266,7 @@ func PushThreadBindings(bindings IPersistentMap) {
 		val := entry.Val()
 
 		if !vr.isDynamic() {
-			// TODO: throw exception
-			//panic("cannot dynamically bind non-dynamic var: " + vr.String())
+			panic("cannot dynamically bind non-dynamic var: " + vr.String())
 		}
 		// TODO: validate
 		vr.dynamicBound.Store(true)

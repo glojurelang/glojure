@@ -116,7 +116,11 @@ func (env *environment) EvalASTDef(n ast.Node) (interface{}, error) {
 		sym = s.(*value.Symbol)
 	}
 
-	return env.DefVar(sym, initVal), nil
+	vr := env.DefVar(sym, initVal)
+	if RT.BooleanCast(get(vr.Meta(), value.KeywordDynamic)) {
+		vr.SetDynamic()
+	}
+	return vr, nil
 }
 
 func (env *environment) EvalASTAssign(n ast.Node) (interface{}, error) {
