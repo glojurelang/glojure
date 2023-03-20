@@ -10,9 +10,10 @@ import (
 
 	"github.com/glojurelang/glojure/ast"
 	"github.com/glojurelang/glojure/value"
-)
 
-// TODO: replace all usage of kw() with global vars
+	// Make it easier to refer to KW globals
+	. "github.com/glojurelang/glojure/value"
+)
 
 var indent = 0
 
@@ -24,86 +25,86 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 	n := x.(ast.Node)
 
 	if Debug {
-		fmt.Println(strings.Repeat(" ", indent), "BEG EvalAST", get(n, kw("op")), value.ToString(get(n, kw("form"))))
+		fmt.Println(strings.Repeat(" ", indent), "BEG EvalAST", get(n, KWOp), value.ToString(get(n, KWForm)))
 		indent += 2
 		defer func() {
 			indent -= 2
-			fmt.Println(strings.Repeat(" ", indent), "END EvalAST", get(n, kw("op")), "->", ret, ",", err)
+			fmt.Println(strings.Repeat(" ", indent), "END EvalAST", get(n, KWOp), "->", ret, ",", err)
 		}()
 	}
 
 	op := ast.Op(n)
 	switch op {
-	case kw("const"):
-		return get(n, kw("val")), nil
-	case kw("def"):
+	case KWConst:
+		return get(n, KWVal), nil
+	case KWDef:
 		return env.EvalASTDef(n)
-	case kw("set!"):
+	case KWSetBang:
 		return env.EvalASTAssign(n)
-	case kw("maybe-class"):
+	case KWMaybeClass:
 		return env.EvalASTMaybeClass(n)
-	case kw("with-meta"):
+	case KWWithMeta:
 		return env.EvalASTWithMeta(n)
-	case kw("fn"):
+	case KWFn:
 		return env.EvalASTFn(n)
-	case kw("map"):
+	case KWMap:
 		return env.EvalASTMap(n)
-	case kw("vector"):
+	case KWVector:
 		return env.EvalASTVector(n)
-	case kw("set"):
+	case KWSet:
 		return env.EvalASTSet(n)
-	case kw("do"):
+	case KWDo:
 		return env.EvalASTDo(n)
-	case kw("let"):
+	case KWLet:
 		return env.EvalASTLet(n, false)
-	case kw("loop"):
+	case KWLoop:
 		return env.EvalASTLet(n, true)
-	case kw("invoke"):
+	case KWInvoke:
 		return env.EvalASTInvoke(n)
-	case kw("quote"):
-		return get(get(n, kw("expr")), kw("val")), nil
-	case kw("var"):
+	case KWQuote:
+		return get(get(n, KWExpr), KWVal), nil
+	case KWVar:
 		return env.EvalASTVar(n)
-	case kw("local"):
+	case KWLocal:
 		return env.EvalASTLocal(n)
-	case kw("host-call"):
+	case KWHostCall:
 		return env.EvalASTHostCall(n)
-	case kw("host-interop"):
+	case KWHostInterop:
 		return env.EvalASTHostInterop(n)
-	case kw("maybe-host-form"):
+	case KWMaybeHostForm:
 		return env.EvalASTMaybeHostForm(n)
-	case kw("if"):
+	case KWIf:
 		return env.EvalASTIf(n)
-	case kw("case"):
+	case KWCase:
 		return env.EvalASTCase(n)
-	case kw("the-var"):
+	case KWTheVar:
 		return env.EvalASTTheVar(n)
-	case kw("recur"):
+	case KWRecur:
 		return env.EvalASTRecur(n)
-	case kw("new"):
+	case KWNew:
 		return env.EvalASTNew(n)
-	case kw("try"):
+	case KWTry:
 		return env.EvalASTTry(n)
-	case kw("throw"):
+	case KWThrow:
 		return env.EvalASTThrow(n)
 	default:
-		panic("unimplemented op: " + value.ToString(op) + "\n" + value.ToString(get(n, kw("form"))))
+		panic("unimplemented op: " + value.ToString(op) + "\n" + value.ToString(get(n, KWForm)))
 	}
 }
 
 func (env *environment) EvalASTDef(n ast.Node) (interface{}, error) {
-	init := get(n, kw("init"))
+	init := get(n, KWInit)
 	if value.IsNil(init) {
-		return get(n, kw("var")), nil
+		return get(n, KWVar), nil
 	}
 
 	initVal, err := env.EvalAST(init.(ast.Node))
 	if err != nil {
 		return nil, err
 	}
-	sym := get(n, kw("name")).(*value.Symbol)
+	sym := get(n, KWName).(*value.Symbol)
 	// evaluate symbol metadata if present
-	meta := get(n, kw("meta"))
+	meta := get(n, KWMeta)
 	if !value.IsNil(meta) {
 		metaVal, err := env.EvalAST(meta.(ast.Node))
 		if err != nil {
@@ -117,28 +118,27 @@ func (env *environment) EvalASTDef(n ast.Node) (interface{}, error) {
 	}
 
 	vr := env.DefVar(sym, initVal)
-	if RT.BooleanCast(get(vr.Meta(), value.KeywordDynamic)) {
+	if RT.BooleanCast(get(vr.Meta(), value.KWDynamic)) {
 		vr.SetDynamic()
 	}
 	return vr, nil
 }
 
 func (env *environment) EvalASTAssign(n ast.Node) (interface{}, error) {
-	val, err := env.EvalAST(get(n, kw("val")).(ast.Node))
+	val, err := env.EvalAST(get(n, KWVal).(ast.Node))
 	if err != nil {
 		return nil, err
 	}
-	if get(get(n, kw("target")), kw("op")) == kw("var") {
-		target := get(get(n, kw("target")), kw("var")).(*value.Var)
+	if get(get(n, KWTarget), KWOp) == KWVar {
+		target := get(get(n, KWTarget), KWVar).(*value.Var)
 		return target.Set(val), nil
 	}
 
-	fmt.Println("EvalASTAssign: ", n)
-	return nil, fmt.Errorf("unsupported assign target: %v", get(n, kw("target")))
+	return nil, fmt.Errorf("unsupported assign target: %v", get(n, KWTarget))
 }
 
 func (env *environment) EvalASTTheVar(n ast.Node) (interface{}, error) {
-	return get(n, kw("var")), nil
+	return get(n, KWVar), nil
 }
 
 // TEMP
@@ -165,7 +165,7 @@ func (c *evalCompiler) Macroexpand1(form interface{}) interface{} {
 
 func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 	// TODO: add go values to the namespace (without vars)
-	sym := get(n, kw("class")).(*value.Symbol)
+	sym := get(n, KWClass).(*value.Symbol)
 	name := sym.Name()
 	if v, ok := env.scope.lookup(sym); ok {
 		return v, nil
@@ -194,7 +194,7 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 	case "glojure.lang.AsInt64":
 		return value.AsInt64, nil
 	case "glojure.lang.Keyword":
-		return reflect.TypeOf(value.NewKeyword("nop")), nil
+		return reflect.TypeOf(value.KWName), nil
 	case "glojure.lang.RT":
 		return RT, nil
 	case "glojure.lang.Numbers":
@@ -224,15 +224,15 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 	case "glojure.lang.PopThreadBindings":
 		return value.PopThreadBindings, nil
 	default:
-		return nil, errors.New("unable to resolve symbol: " + value.ToString(get(n, kw("class"))))
+		return nil, errors.New("unable to resolve symbol: " + value.ToString(get(n, KWClass)))
 	}
 }
 
 func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 	// TODO: implement this for real
-	switch get(n, kw("class")).(string) {
+	switch get(n, KWClass).(string) {
 	case "glojure.lang.PersistentTreeSet":
-		switch get(n, kw("field")).(*value.Symbol).Name() {
+		switch get(n, KWField).(*value.Symbol).Name() {
 		case "create":
 			return func(keys interface{}) interface{} {
 				var ks []interface{}
@@ -243,7 +243,7 @@ func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 			}, nil
 		}
 	case "go":
-		switch get(n, kw("field")).(*value.Symbol).Name() {
+		switch get(n, KWField).(*value.Symbol).Name() {
 		case "slice":
 			return func(sliceOrString interface{}, indices ...interface{}) interface{} {
 				if len(indices) == 0 || len(indices) > 2 {
@@ -272,13 +272,13 @@ func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 
 	// TODO: how to handle?
 	fmt.Println("EvalASTMaybeHostForm: ", n)
-	panic("EvalASTMaybeHostForm: " + get(n, kw("class")).(string))
+	panic("EvalASTMaybeHostForm: " + get(n, KWClass).(string))
 }
 
 func (env *environment) EvalASTHostCall(n ast.Node) (interface{}, error) {
-	tgt := get(n, kw("target"))
-	method := get(n, kw("method")).(*value.Symbol)
-	args := get(n, kw("args"))
+	tgt := get(n, KWTarget)
+	method := get(n, KWMethod).(*value.Symbol)
+	args := get(n, KWArgs)
 
 	tgtVal, err := env.EvalAST(tgt.(ast.Node))
 	if err != nil {
@@ -306,8 +306,8 @@ func (env *environment) EvalASTHostCall(n ast.Node) (interface{}, error) {
 }
 
 func (env *environment) EvalASTHostInterop(n ast.Node) (interface{}, error) {
-	tgt := get(n, kw("target"))
-	mOrF := get(n, kw("m-or-f")).(*value.Symbol)
+	tgt := get(n, KWTarget)
+	mOrF := get(n, KWMOrF).(*value.Symbol)
 
 	tgtVal, err := env.EvalAST(tgt.(ast.Node))
 	if err != nil {
@@ -327,8 +327,8 @@ func (env *environment) EvalASTHostInterop(n ast.Node) (interface{}, error) {
 }
 
 func (env *environment) EvalASTWithMeta(n ast.Node) (interface{}, error) {
-	expr := get(n, kw("expr"))
-	meta := get(n, kw("meta")).(value.IPersistentMap)
+	expr := get(n, KWExpr)
+	meta := get(n, KWMeta).(value.IPersistentMap)
 	exprVal, err := env.EvalAST(expr.(ast.Node))
 	if err != nil {
 		return nil, err
@@ -348,8 +348,8 @@ func (env *environment) EvalASTFn(n ast.Node) (interface{}, error) {
 func (env *environment) EvalASTMap(n ast.Node) (interface{}, error) {
 	res := value.NewMap()
 
-	keys := get(n, kw("keys"))
-	vals := get(n, kw("vals"))
+	keys := get(n, KWKeys)
+	vals := get(n, KWVals)
 	for i := 0; i < value.Count(keys); i++ {
 		key := value.Get(keys, i)
 		keyVal, err := env.EvalAST(key.(ast.Node))
@@ -368,7 +368,7 @@ func (env *environment) EvalASTMap(n ast.Node) (interface{}, error) {
 }
 
 func (env *environment) EvalASTVector(n ast.Node) (interface{}, error) {
-	items := get(n, kw("items"))
+	items := get(n, KWItems)
 	var vals []interface{}
 	for i := 0; i < value.Count(items); i++ {
 		item := get(items, i)
@@ -382,7 +382,7 @@ func (env *environment) EvalASTVector(n ast.Node) (interface{}, error) {
 }
 
 func (env *environment) EvalASTSet(n ast.Node) (interface{}, error) {
-	items := get(n, kw("items"))
+	items := get(n, KWItems)
 	var vals []interface{}
 	for i := 0; i < value.Count(items); i++ {
 		item := get(items, i)
@@ -396,9 +396,9 @@ func (env *environment) EvalASTSet(n ast.Node) (interface{}, error) {
 }
 
 func (env *environment) EvalASTIf(n ast.Node) (interface{}, error) {
-	test := get(n, kw("test"))
-	then := get(n, kw("then"))
-	els := get(n, kw("else"))
+	test := get(n, KWTest)
+	then := get(n, KWThen)
+	els := get(n, KWElse)
 
 	testVal, err := env.EvalAST(test.(ast.Node))
 	if err != nil {
@@ -412,19 +412,19 @@ func (env *environment) EvalASTIf(n ast.Node) (interface{}, error) {
 }
 
 func (env *environment) EvalASTCase(n ast.Node) (interface{}, error) {
-	testVal, err := env.EvalAST(get(n, kw("test")))
+	testVal, err := env.EvalAST(get(n, KWTest))
 	if err != nil {
 		return nil, err
 	}
-	for seq := value.Seq(get(n, kw("nodes"))); seq != nil; seq = value.Next(seq) {
+	for seq := value.Seq(get(n, KWNodes)); seq != nil; seq = value.Next(seq) {
 		node := value.First(seq)
-		for testSeq := value.Seq(get(node, kw("tests"))); testSeq != nil; testSeq = value.Next(testSeq) {
+		for testSeq := value.Seq(get(node, KWTests)); testSeq != nil; testSeq = value.Next(testSeq) {
 			caseTestVal, err := env.EvalAST(value.First(testSeq).(ast.Node))
 			if err != nil {
 				return nil, err
 			}
 			if value.Equal(testVal, caseTestVal) {
-				res, err := env.EvalAST(get(node, kw("then")))
+				res, err := env.EvalAST(get(node, KWThen))
 				if err != nil {
 					return nil, err
 				}
@@ -432,18 +432,18 @@ func (env *environment) EvalASTCase(n ast.Node) (interface{}, error) {
 			}
 		}
 	}
-	return env.EvalAST(get(n, kw("default")))
+	return env.EvalAST(get(n, KWDefault))
 }
 
 func (env *environment) EvalASTDo(n ast.Node) (interface{}, error) {
-	statements := get(n, kw("statements"))
+	statements := get(n, KWStatements)
 	for i := 0; i < value.Count(statements); i++ {
 		_, err := env.EvalAST(value.Get(statements, i).(ast.Node))
 		if err != nil {
 			return nil, err
 		}
 	}
-	ret := get(n, kw("ret"))
+	ret := get(n, KWRet)
 	return env.EvalAST(ret.(ast.Node))
 }
 
@@ -452,11 +452,11 @@ func (env *environment) EvalASTLet(n ast.Node, isLoop bool) (interface{}, error)
 
 	var bindNameVals []interface{}
 
-	bindings := get(n, kw("bindings"))
+	bindings := get(n, KWBindings)
 	for i := 0; i < value.Count(bindings); i++ {
 		binding := get(bindings, i)
-		name := get(binding, kw("name"))
-		init := get(binding, kw("init"))
+		name := get(binding, KWName)
+		init := get(binding, KWInit)
 		initVal, err := newEnv.EvalAST(init.(ast.Node))
 		if err != nil {
 			return nil, err
@@ -478,7 +478,7 @@ Recur:
 	recurEnv := newEnv.WithRecurTarget(rt).(*environment)
 	recurErr := &value.RecurError{Target: rt}
 
-	res, err := recurEnv.EvalAST(get(n, kw("body")).(ast.Node))
+	res, err := recurEnv.EvalAST(get(n, KWBody).(ast.Node))
 	if isLoop && errors.As(err, &recurErr) {
 		newVals := recurErr.Args
 		if len(newVals) != len(bindNameVals)/2 {
@@ -499,7 +499,7 @@ func (env *environment) EvalASTRecur(n ast.Node) (interface{}, error) {
 		panic("recur outside of loop")
 	}
 
-	exprs := get(n, kw("exprs"))
+	exprs := get(n, KWExprs)
 	vals := make([]interface{}, 0, value.Count(exprs))
 	noRecurEnv := env.WithRecurTarget(nil).(*environment)
 	for seq := value.Seq(exprs); seq != nil; seq = seq.Next() {
@@ -517,7 +517,7 @@ func (env *environment) EvalASTRecur(n ast.Node) (interface{}, error) {
 
 func (env *environment) EvalASTInvoke(n ast.Node) (res interface{}, err error) {
 	defer func() {
-		meta, ok := get(n, kw("meta")).(value.IPersistentMap)
+		meta, ok := get(n, KWMeta).(value.IPersistentMap)
 		if !ok {
 			return
 		}
@@ -530,11 +530,11 @@ func (env *environment) EvalASTInvoke(n ast.Node) (res interface{}, err error) {
 		}
 
 		if err != nil {
-			fmt.Printf("%s:%d:%d: %s\n", value.Get(meta, kw("file")), value.Get(meta, kw("line")), value.Get(meta, kw("column")), get(n, kw("form")))
+			fmt.Printf("%s:%d:%d: %s\n", value.Get(meta, KWFile), value.Get(meta, KWLine), value.Get(meta, KWColumn), get(n, KWForm))
 		}
 	}()
-	fn := get(n, kw("fn"))
-	args := get(n, kw("args"))
+	fn := get(n, KWFn)
+	args := get(n, KWArgs)
 	fnVal, err := env.EvalAST(fn.(ast.Node))
 	if err != nil {
 		return nil, err
@@ -554,24 +554,24 @@ func (env *environment) EvalASTInvoke(n ast.Node) (res interface{}, err error) {
 }
 
 func (env *environment) EvalASTVar(n ast.Node) (interface{}, error) {
-	return get(n, kw("var")).(*value.Var).Get(), nil
+	return get(n, KWVar).(*value.Var).Get(), nil
 }
 
 func (env *environment) EvalASTLocal(n ast.Node) (interface{}, error) {
-	sym := get(n, kw("name")).(*value.Symbol)
+	sym := get(n, KWName).(*value.Symbol)
 	v, ok := env.lookup(sym)
 	if !ok {
-		return nil, env.errorf(get(n, kw("form")), "unable to resolve local symbol: %s", sym)
+		return nil, env.errorf(get(n, KWForm), "unable to resolve local symbol: %s", sym)
 	}
 	return v, nil
 }
 
 func (env *environment) EvalASTNew(n ast.Node) (interface{}, error) {
-	classVal, err := env.EvalAST(get(n, kw("class")))
+	classVal, err := env.EvalAST(get(n, KWClass))
 	if err != nil {
 		return nil, err
 	}
-	if value.Count(get(n, kw("args"))) > 0 {
+	if value.Count(get(n, KWArgs)) > 0 {
 		return nil, errors.New("new with args unsupported")
 	}
 	classValTyp, ok := classVal.(reflect.Type)
@@ -582,7 +582,7 @@ func (env *environment) EvalASTNew(n ast.Node) (interface{}, error) {
 }
 
 func (env *environment) EvalASTTry(n ast.Node) (res interface{}, err error) {
-	if finally := get(n, kw("finally")); finally != nil {
+	if finally := get(n, KWFinally); finally != nil {
 		defer func() {
 			_, ferr := env.EvalAST(finally.(ast.Node))
 			if ferr != nil {
@@ -591,11 +591,11 @@ func (env *environment) EvalASTTry(n ast.Node) (res interface{}, err error) {
 		}()
 	}
 	// TODO: catch
-	return env.EvalAST(get(n, kw("body")))
+	return env.EvalAST(get(n, KWBody))
 }
 
 func (env *environment) EvalASTThrow(n ast.Node) (interface{}, error) {
-	exception, err := env.EvalAST(get(n, kw("exception")))
+	exception, err := env.EvalAST(get(n, KWException))
 	if err != nil {
 		return nil, err
 	}

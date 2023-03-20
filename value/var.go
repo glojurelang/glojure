@@ -33,11 +33,6 @@ type (
 )
 
 var (
-	KeywordMacro   = NewKeyword("macro")
-	KeywordPrivate = NewKeyword("private")
-	KeywordDynamic = NewKeyword("dynamic")
-	KeywordNS      = NewKeyword("ns")
-
 	NSCore = FindOrCreateNamespace(SymbolCoreNamespace)
 
 	VarCurrentNS        = InternVarReplaceRoot(NSCore, NewSymbol("*ns*"), NSCore).SetDynamic()
@@ -129,7 +124,7 @@ func (v *Var) Meta() IPersistentMap {
 
 func (v *Var) SetMeta(meta IPersistentMap) {
 	// TODO: ResetMeta
-	meta = Assoc(meta, KeywordNS, v.ns).(IPersistentMap)
+	meta = Assoc(meta, KWNS, v.ns).(IPersistentMap)
 	v.meta.Store(NewBox(meta))
 }
 
@@ -141,7 +136,7 @@ func (v *Var) AlterMeta(alter IFn, args ISeq) IPersistentMap {
 
 func (v *Var) IsMacro() bool {
 	meta := v.Meta()
-	isMacro := meta.EntryAt(KeywordMacro)
+	isMacro := meta.EntryAt(KWMacro)
 	if isMacro == nil {
 		return false
 	}
@@ -149,12 +144,12 @@ func (v *Var) IsMacro() bool {
 }
 
 func (v *Var) SetMacro() {
-	v.SetMeta(v.Meta().Assoc(KeywordMacro, true).(IPersistentMap))
+	v.SetMeta(v.Meta().Assoc(KWMacro, true).(IPersistentMap))
 }
 
 func (v *Var) IsPublic() bool {
 	meta := v.Meta()
-	isPrivate := meta.EntryAt(KeywordPrivate)
+	isPrivate := meta.EntryAt(KWPrivate)
 	if isPrivate == nil {
 		return true
 	}
