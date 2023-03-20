@@ -1086,6 +1086,10 @@ func (r *Reader) readKeyword() (interface{}, error) {
 	if sym == "" || sym == ":" || strings.Contains(sym[1:], ":") {
 		return nil, r.error("invalid keyword: :" + sym)
 	}
+	if sym[0] == ':' {
+		ns := value.GlobalEnv.CurrentNamespace().Name().Name()
+		sym = ns + "/" + sym[1:]
+	}
 	return value.NewKeyword(sym), nil
 }
 
