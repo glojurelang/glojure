@@ -282,6 +282,8 @@
 
    (sexpr-replace 'clojure.lang.RT/longCast 'glojure.lang.AsInt64)
 
+   (sexpr-replace 'clojure.lang.RT/doubleCast 'glojure.lang.AsFloat64)
+
    (sexpr-replace "clojure.core" "glojure.core")
    (sexpr-replace 'clojure.core/name 'glojure.core/name)
 

@@ -3475,7 +3475,7 @@
   "Coerce to double"
   {:inline (fn  [x] `(. glojure.lang.RT (DoubleCast ~x)))
    :added "1.0"}
-  [x] (glojure.lang.RT/doubleCast x))
+  [x] (glojure.lang.AsFloat64 x))
 
 (defn short
   "Coerce to short"

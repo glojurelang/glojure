@@ -300,6 +300,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		}
 
 		define("glojure.lang.AsInt64", value.AsInt64)
+		define("glojure.lang.AsFloat64", value.AsFloat64)
 		define("glojure.lang.AsNumber", func(v interface{}) interface{} {
 			x, ok := value.AsNumber(v)
 			if !ok {
