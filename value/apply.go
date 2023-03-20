@@ -24,7 +24,6 @@ func Apply(fn interface{}, args []interface{}) (_ interface{}, err error) {
 	gvType := goVal.Type()
 
 	if gvKind == reflect.Slice {
-		fmt.Println("slice", goVal, args)
 		return applySlice(goVal, args)
 	}
 
@@ -131,9 +130,7 @@ func coerceGoValue(targetType reflect.Type, val interface{}) (reflect.Value, err
 			// convert string to []byte
 			val = []byte(val.(string))
 		}
-		if goValuer, ok := val.(GoValuer); ok {
-			val = goValuer.GoValue()
-		}
+
 		if iseq, ok := val.(ISeq); ok {
 			var slc []interface{}
 			for iseq = Seq(iseq); iseq != nil; iseq = iseq.Next() {
@@ -183,64 +180,6 @@ func coerceGoValue(targetType reflect.Type, val interface{}) (reflect.Value, err
 	return reflect.Value{}, fmt.Errorf("cannot coerce %s to %s", reflect.TypeOf(val), targetType)
 }
 
-func ConvertFromGo(val interface{}) interface{} {
-	return fromGo(val)
-}
-
-func fromGo(val interface{}) interface{} {
-	// convert the Go value to a Glojure value
-	// - integral values are converted to floats
-	// - strings are converted to strings
-	// - slices are converted to vectors
-	// - anything else is converted to a GoVal
-	// TODO: don't do this... let the user decide what to do with the Go value
-	switch val := val.(type) {
-	case int:
-		return int64(val)
-	case int8:
-		return int64(val)
-	case int16:
-		return int64(val)
-	case int32:
-		return int64(val)
-	case int64:
-		return int64(val)
-	case uint:
-		return int64(val)
-	case uint8:
-		return int64(val)
-	case uint16:
-		return int64(val)
-	case uint32:
-		return int64(val)
-	case uint64:
-		return int64(val)
-	case float32:
-		return float64(val)
-	case float64:
-		return val
-	case string:
-		return val
-	case bool:
-		return val
-	case nil:
-		return nil
-	}
-
-	// TODO: support all collection types
-	if reflect.TypeOf(val).Kind() == reflect.Slice {
-		var vec []interface{}
-		for i := 0; i < reflect.ValueOf(val).Len(); i++ {
-			vec = append(vec, fromGo(reflect.ValueOf(val).Index(i).Interface()))
-		}
-		return NewVector(vec...)
-	}
-	if v, ok := val.(interface{}); ok {
-		return v
-	}
-	return val
-}
-
 func isNilableKind(k reflect.Kind) bool {
 	switch k {
 	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
@@ -253,10 +192,10 @@ func reflectFuncFromIFn(targetType reflect.Type, applyer IFn) func(args []reflec
 	return func(args []reflect.Value) []reflect.Value {
 		var glojureArgs []interface{}
 		for _, arg := range args {
-			glojureArgs = append(glojureArgs, fromGo(arg.Interface()))
+			glojureArgs = append(glojureArgs, arg.Interface())
 		}
 		res := applyer.Invoke(glojureArgs...)
-		if res == nil || Equal(res, nil) {
+		if IsNil(res) {
 			// if target type has no return values, return nil
 			if targetType.NumOut() == 0 {
 				return nil
@@ -269,9 +208,6 @@ func reflectFuncFromIFn(targetType reflect.Type, applyer IFn) func(args []reflec
 			return zeroValues
 		}
 
-		if goValuerRes, ok := res.(GoValuer); ok {
-			res = goValuerRes.GoValue()
-		}
 		return []reflect.Value{reflect.ValueOf(res)}
 	}
 }
