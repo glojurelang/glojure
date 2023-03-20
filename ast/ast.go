@@ -9,8 +9,8 @@ type (
 
 func MakeNode(op value.Keyword, form interface{}) Node {
 	return value.NewMap(
-		kw("op"), op,
-		kw("form"), form,
+		value.KWOp, op,
+		value.KWForm, form,
 	)
 }
 
@@ -22,21 +22,17 @@ func Get(n Node, k interface{}) interface{} {
 }
 
 func Op(n Node) interface{} {
-	return Get(n, kw("op"))
+	return Get(n, value.KWOp)
 }
 
 func Form(n Node) interface{} {
-	return Get(n, kw("form"))
+	return Get(n, value.KWForm)
 }
 
 func RawForms(n Node) interface{} {
-	return Get(n, kw("raw-forms"))
+	return Get(n, value.KWRawForms)
 }
 
 func Children(n Node) interface{} {
-	return Get(n, kw("children"))
-}
-
-func kw(s string) value.Keyword {
-	return value.NewKeyword(s)
+	return Get(n, value.KWChildren)
 }

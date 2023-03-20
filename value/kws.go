@@ -68,6 +68,8 @@ var (
 	KWVals          = NewKeyword("vals")
 	KWVar           = NewKeyword("var")
 	KWVector        = NewKeyword("vector")
+	KWRawForms      = NewKeyword("raw-forms")
+	KWChildren      = NewKeyword("children")
 
 	KWMacro   = NewKeyword("macro")
 	KWPrivate = NewKeyword("private")
