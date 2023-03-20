@@ -64,15 +64,15 @@ func (fn *Fn) Invoke(args ...interface{}) interface{} {
 
 Recur:
 
-	params := Get(method, NewKeyword("params"))
+	params := Get(method, KWParams)
 	for i, paramValue := range bindingValues {
 		param := MustNth(params, i)
-		fnEnv.BindLocal(Get(param, NewKeyword("name")).(*Symbol), paramValue)
+		fnEnv.BindLocal(Get(param, KWName).(*Symbol), paramValue)
 	}
 	if bindingRestValue != nil {
-		fnEnv.BindLocal(Get(MustNth(params, fixedArity), NewKeyword("name")).(*Symbol), bindingRestValue)
+		fnEnv.BindLocal(Get(MustNth(params, fixedArity), KWName).(*Symbol), bindingRestValue)
 	} else if methodVariadic {
-		fnEnv.BindLocal(Get(MustNth(params, fixedArity), NewKeyword("name")).(*Symbol), nil)
+		fnEnv.BindLocal(Get(MustNth(params, fixedArity), KWName).(*Symbol), nil)
 	}
 
 	rt := NewRecurTarget()
@@ -100,15 +100,15 @@ func (fn *Fn) findMethod(methods interface{}, args []interface{}) (interface{}, 
 	var variadicMethod interface{}
 	for mths := Seq(methods); mths != nil; mths = mths.Next() {
 		method := mths.First()
-		if Get(method, NewKeyword("variadic?")).(bool) {
+		if Get(method, KWIsVariadic).(bool) {
 			variadicMethod = method
 			continue
 		}
-		if Get(method, NewKeyword("fixed-arity")).(int) == len(args) {
+		if Get(method, KWFixedArity).(int) == len(args) {
 			return method, nil
 		}
 	}
-	if variadicMethod == nil || len(args) < Get(variadicMethod, NewKeyword("fixed-arity")).(int) {
+	if variadicMethod == nil || len(args) < Get(variadicMethod, KWFixedArity).(int) {
 		return nil, fmt.Errorf("wrong number of arguments (%d)", len(args))
 	}
 	return variadicMethod, nil
