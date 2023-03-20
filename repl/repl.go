@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"runtime/debug"
+	"runtime/pprof"
 	"strings"
 	"time"
 
@@ -52,29 +53,9 @@ func start(opts ...Option) {
 	for _, opt := range opts {
 		opt(&o)
 	}
-	if o.env == nil {
-		startTime := time.Now()
-		o.env = runtime.NewEnvironment(runtime.WithStdout(o.stdout))
-		if debugMode {
-			fmt.Printf("Environment created in %v\n", time.Since(startTime))
-		}
-	}
-	{ // switch to the namespace
-		// TODO: clean up this code. copied from rtcompat.go.
-		kvs := make([]interface{}, 0, 3)
-		for _, vr := range []*value.Var{value.VarCurrentNS, value.VarWarnOnReflection, value.VarUncheckedMath} {
-			kvs = append(kvs, vr, vr.Deref())
-		}
-		value.PushThreadBindings(value.NewMap(kvs...))
-		defer value.PopThreadBindings()
 
-		_, err := o.env.Eval(value.NewList(
-			value.NewSymbol("ns"),
-			value.NewSymbol(o.namespace),
-		))
-		if err != nil {
-			panic(err)
-		}
+	if o.env == nil {
+		o.env = initEnv(o.namespace, o.stdout)
 	}
 
 	defaultPrompt := func() string {
@@ -156,4 +137,35 @@ func readLine(r io.Reader) (string, error) {
 		line += string(buf)
 	}
 	return line, nil
+}
+
+func initEnv(ns string, stdout io.Writer) value.Environment {
+	if debugMode {
+		f, err := os.Create("./gljInitEnv.prof")
+		if err != nil {
+			panic(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
+	startTime := time.Now()
+	env := runtime.NewEnvironment(runtime.WithStdout(stdout))
+	if debugMode {
+		fmt.Printf("Environment created in %v\n", time.Since(startTime))
+	}
+	// TODO: clean up this code. copied from rtcompat.go.
+	kvs := make([]interface{}, 0, 3)
+	for _, vr := range []*value.Var{value.VarCurrentNS, value.VarWarnOnReflection, value.VarUncheckedMath} {
+		kvs = append(kvs, vr, vr.Deref())
+	}
+	value.PushThreadBindings(value.NewMap(kvs...))
+
+	_, err := env.Eval(value.NewList(
+		value.NewSymbol("ns"),
+		value.NewSymbol(ns),
+	))
+	if err != nil {
+		panic(err)
+	}
+	return env
 }
