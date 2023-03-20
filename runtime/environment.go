@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"sync"
 	"sync/atomic"
 
 	"github.com/glojurelang/glojure/value"
@@ -30,10 +29,6 @@ type (
 
 		recurTarget interface{}
 
-		currentNamespaceVar *value.Var
-		namespaces          map[string]*value.Namespace
-		nsMtx               *sync.RWMutex
-
 		// some well-known vars
 		namespaceVar   *value.Var // ns
 		inNamespaceVar *value.Var // in-ns
@@ -50,24 +45,22 @@ type (
 
 func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment {
 	e := &environment{
-		ctx:        ctx,
-		scope:      newScope(),
-		namespaces: make(map[string]*value.Namespace),
-		nsMtx:      &sync.RWMutex{},
-		stdout:     stdout,
-		stderr:     stderr,
+		ctx:    ctx,
+		scope:  newScope(),
+		stdout: stdout,
+		stderr: stderr,
 	}
-	coreNS := e.FindOrCreateNamespace(value.SymbolCoreNamespace)
-	e.currentNamespaceVar = coreNS.InternWithValue(e, value.NewSymbol("*ns*"), coreNS, true)
-	coreNS.InternWithValue(e, value.NewSymbol("*agent*"), nil, true)
-	coreNS.InternWithValue(e, value.NewSymbol("*print-readably*"), true, true)
-	coreNS.InternWithValue(e, value.NewSymbol("*out*"), stdout, true)
-	coreNS.InternWithValue(e, value.NewSymbol("*in*"), os.Stdin, true)
-	coreNS.InternWithValue(e, value.NewSymbol("*assert*"), false, true)
+	coreNS := value.NSCore
+
+	coreNS.InternWithValue(value.NewSymbol("*agent*"), nil, true)
+	coreNS.InternWithValue(value.NewSymbol("*print-readably*"), true, true)
+	coreNS.InternWithValue(value.NewSymbol("*out*"), stdout, true)
+	coreNS.InternWithValue(value.NewSymbol("*in*"), os.Stdin, true)
+	coreNS.InternWithValue(value.NewSymbol("*assert*"), false, true)
 
 	// TODO: where to set this?
-	coreNS.InternWithValue(e, value.NewSymbol("*compile-files*"), false, true)
-	coreNS.InternWithValue(e, value.NewSymbol("*file*"), "NO_SOURCE_FILE", true)
+	coreNS.InternWithValue(value.NewSymbol("*compile-files*"), false, true)
+	coreNS.InternWithValue(value.NewSymbol("*file*"), "NO_SOURCE_FILE", true)
 	for _, dyn := range []string{
 		"command-line-args",
 		"warn-on-reflection",
@@ -80,14 +73,14 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 		"print-dup",
 		"read-eval",
 	} {
-		coreNS.InternWithValue(e, value.NewSymbol("*"+dyn+"*"), nil, true)
+		coreNS.InternWithValue(value.NewSymbol("*"+dyn+"*"), nil, true)
 	}
 
 	// TODO: implement this
-	coreNS.InternWithValue(e, value.NewSymbol("load-file"), nil, true)
+	coreNS.InternWithValue(value.NewSymbol("load-file"), nil, true)
 
 	// bootstrap some vars
-	e.namespaceVar = coreNS.InternWithValue(e, SymbolNamespace,
+	e.namespaceVar = coreNS.InternWithValue(SymbolNamespace,
 		value.IFnFunc(func(args ...interface{}) interface{} {
 			return coreNS
 		}), true)
@@ -123,7 +116,7 @@ func (env *environment) BindLocal(sym *value.Symbol, val interface{}) {
 
 func (env *environment) DefVar(sym *value.Symbol, val interface{}) *value.Var {
 	// TODO: match clojure implementation more closely
-	v := env.CurrentNamespace().InternWithValue(env, sym, val, true /* replace root */)
+	v := env.CurrentNamespace().InternWithValue(sym, val, true /* replace root */)
 	if meta := sym.Meta(); meta != nil {
 		v.SetMeta(meta)
 	}
@@ -143,7 +136,7 @@ func (env *environment) lookup(sym *value.Symbol) (res interface{}, ok bool) {
 
 	ns := env.CurrentNamespace()
 	if sym.Namespace() != "" {
-		ns = env.FindNamespace(value.NewSymbol(sym.Namespace()))
+		ns = value.FindNamespace(value.NewSymbol(sym.Namespace()))
 		sym = value.NewSymbol(sym.Name())
 	}
 	if ns == nil {
@@ -179,34 +172,12 @@ func (env *environment) Stderr() io.Writer {
 	return env.stderr
 }
 
-func (env *environment) FindNamespace(sym *value.Symbol) *value.Namespace {
-	env.nsMtx.RLock()
-	defer env.nsMtx.RUnlock()
-	return env.namespaces[sym.String()]
-}
-
-func (env *environment) FindOrCreateNamespace(sym *value.Symbol) *value.Namespace {
-	ns := env.FindNamespace(sym)
-	if ns != nil {
-		return ns
-	}
-	env.nsMtx.Lock()
-	defer env.nsMtx.Unlock()
-	ns = env.namespaces[sym.String()]
-	if ns != nil {
-		return ns
-	}
-	ns = value.NewNamespace(sym)
-	env.namespaces[sym.String()] = ns
-	return ns
-}
-
 func (env *environment) CurrentNamespace() *value.Namespace {
-	return env.currentNamespaceVar.Get().(*value.Namespace)
+	return value.VarCurrentNS.Get().(*value.Namespace)
 }
 
 func (env *environment) SetCurrentNamespace(ns *value.Namespace) {
-	env.currentNamespaceVar.Set(ns)
+	value.VarCurrentNS.Set(ns)
 }
 
 func (env *environment) PushLoadPaths(paths []string) value.Environment {

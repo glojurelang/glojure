@@ -87,7 +87,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			if !ok {
 				panic(fmt.Errorf("in-ns: expected symbol as namespace name"))
 			}
-			ns := env.FindOrCreateNamespace(sym)
+			ns := value.FindOrCreateNamespace(sym)
 			env.SetCurrentNamespace(ns)
 			return ns
 		}))

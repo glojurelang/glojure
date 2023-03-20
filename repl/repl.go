@@ -61,13 +61,8 @@ func start(opts ...Option) {
 	}
 	{ // switch to the namespace
 		// TODO: clean up this code. copied from rtcompat.go.
-		ns := o.env.CurrentNamespace()
 		kvs := make([]interface{}, 0, 3)
-		for _, vrName := range []string{"*ns*", "*warn-on-reflection*", "*unchecked-math*"} {
-			vr := ns.FindInternedVar(value.NewSymbol(vrName))
-			if vr == nil {
-				continue
-			}
+		for _, vr := range []*value.Var{value.VarCurrentNS, value.VarWarnOnReflection, value.VarUncheckedMath} {
 			kvs = append(kvs, vr, vr.Deref())
 		}
 		value.PushThreadBindings(value.NewMap(kvs...))

@@ -74,8 +74,9 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 		kwNS := kw("ns")
 		kwMappings := kw("mappings")
 		kwAliases := kw("aliases")
-		namespaceKVs := make([]interface{}, 0, len(env.namespaces))
-		for _, ns := range env.namespaces {
+		namespaces := value.Namespaces()
+		namespaceKVs := make([]interface{}, 0, 2*len(namespaces))
+		for _, ns := range namespaces {
 			aliases := make([]interface{}, 0, 2*value.Count(ns.Aliases()))
 			for seq := value.Seq(ns.Aliases()); seq != nil; seq = seq.Next() {
 				entry := seq.First().(value.IMapEntry)
@@ -94,7 +95,7 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 	analyzer := &compiler.Analyzer{
 		Macroexpand1: env.Macroexpand1,
 		CreateVar: func(sym *value.Symbol, e compiler.Env) (interface{}, error) {
-			vr := env.CurrentNamespace().Intern(env, sym)
+			vr := env.CurrentNamespace().Intern(sym)
 			resetGlobalEnv()
 			return vr, nil
 		},
@@ -152,7 +153,7 @@ func (env *environment) lookupVar(sym *value.Symbol, internNew, registerMacro bo
 		}
 		nameSym := value.NewSymbol(sym.Name())
 		if internNew && ns == env.CurrentNamespace() {
-			result = ns.Intern(env, nameSym)
+			result = ns.Intern(nameSym)
 		} else {
 			result = ns.FindInternedVar(nameSym)
 		}
@@ -166,7 +167,7 @@ func (env *environment) lookupVar(sym *value.Symbol, internNew, registerMacro bo
 		if v == nil {
 			// introduce a new var in the current ns
 			if internNew {
-				result = env.CurrentNamespace().Intern(env, value.NewSymbol(sym.Name()))
+				result = env.CurrentNamespace().Intern(value.NewSymbol(sym.Name()))
 			}
 		} else if v, ok := v.(*value.Var); ok {
 			result = v
@@ -193,7 +194,7 @@ func (env *environment) namespaceFor(inns *value.Namespace, sym *value.Symbol) *
 		return ns
 	}
 
-	return env.FindNamespace(nsSym)
+	return value.FindNamespace(nsSym)
 }
 
 func (env *environment) registerVar(v *value.Var) {

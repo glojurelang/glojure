@@ -84,14 +84,8 @@ func (rt *RTMethods) Find(coll, key interface{}) interface{} {
 }
 
 func (rt *RTMethods) Load(scriptBase string) {
-	ns := GlobalEnv.CurrentNamespace()
-
 	kvs := make([]interface{}, 0, 3)
-	for _, vrName := range []string{"*ns*", "*warn-on-reflection*", "*unchecked-math*"} {
-		vr := ns.FindInternedVar(NewSymbol(vrName))
-		if vr == nil {
-			continue
-		}
+	for _, vr := range []*Var{VarCurrentNS, VarWarnOnReflection, VarUncheckedMath} {
 		kvs = append(kvs, vr, vr.Deref())
 	}
 	PushThreadBindings(NewMap(kvs...))
@@ -109,7 +103,7 @@ func (rt *RTMethods) FindVar(qualifiedSym *Symbol) *Var {
 	if qualifiedSym.Namespace() == "" {
 		panic(fmt.Errorf("qualified symbol required: %v", qualifiedSym))
 	}
-	ns := GlobalEnv.FindNamespace(NewSymbol(qualifiedSym.Namespace()))
+	ns := FindNamespace(NewSymbol(qualifiedSym.Namespace()))
 	if ns == nil {
 		panic(fmt.Errorf("namespace not found: %v", qualifiedSym.Namespace()))
 	}

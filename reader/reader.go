@@ -1117,7 +1117,7 @@ func resolveSymbol(sym *value.Symbol) *value.Symbol {
 		return sym
 	}
 	if sym.Namespace() != "" {
-		ns := value.GlobalEnv.FindNamespace(value.NewSymbol(sym.Namespace()))
+		ns := value.FindNamespace(value.NewSymbol(sym.Namespace()))
 		if ns == nil || (ns.Name().Name() == "" && sym.Namespace() == "") ||
 			(ns.Name().Name() != "" && ns.Name().Name() == sym.Namespace()) {
 			return sym

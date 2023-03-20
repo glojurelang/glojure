@@ -50,12 +50,6 @@ type (
 		// Deprecated
 		PushLoadPaths(paths []string) Environment
 
-		// FindNamespace looks up a namespace in the environment. If the
-		// namespace is not found, it returns nil.
-		FindNamespace(sym *Symbol) *Namespace
-
-		FindOrCreateNamespace(sym *Symbol) *Namespace
-
 		SetCurrentNamespace(ns *Namespace)
 
 		CurrentNamespace() *Namespace

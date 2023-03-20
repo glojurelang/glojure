@@ -2,6 +2,7 @@ package value
 
 import (
 	"fmt"
+	"sync"
 	"sync/atomic"
 )
 
@@ -18,17 +19,42 @@ type Namespace struct {
 var (
 	SymbolCoreNamespace = NewSymbol("glojure.core")
 
-	FindNamespace = IFnFunc(func(args ...interface{}) interface{} {
-		if len(args) != 1 {
-			panic(fmt.Errorf("find-ns expects 1 argument, got %d", len(args)))
-		}
-		sym, ok := args[0].(*Symbol)
-		if !ok {
-			panic(fmt.Errorf("find-ns expects a symbol, got %T", args[0]))
-		}
-		return GlobalEnv.FindNamespace(sym)
-	})
+	namespaces = map[string]*Namespace{}
+	nsMtx      sync.RWMutex
 )
+
+func Namespaces() []*Namespace {
+	nsMtx.RLock()
+	defer nsMtx.RUnlock()
+	ns := make([]*Namespace, 0, len(namespaces))
+	for _, n := range namespaces {
+		ns = append(ns, n)
+	}
+	return ns
+}
+
+func FindNamespace(sym *Symbol) *Namespace {
+	nsMtx.RLock()
+	defer nsMtx.RUnlock()
+	return namespaces[sym.String()]
+}
+
+func FindOrCreateNamespace(sym *Symbol) *Namespace {
+	ns := FindNamespace(sym)
+	if ns != nil {
+		return ns
+	}
+	nsMtx.Lock()
+	defer nsMtx.Unlock()
+	ns = namespaces[sym.String()]
+	if ns != nil {
+		return ns
+	}
+	ns = NewNamespace(sym)
+	namespaces[sym.String()] = ns
+	return ns
+
+}
 
 func NewNamespace(name *Symbol) *Namespace {
 	ns := &Namespace{
@@ -73,7 +99,7 @@ func (ns *Namespace) isInternedMapping(sym *Symbol, v interface{}) bool {
 }
 
 // Intern creates a new Var in this namespace with the given name.
-func (ns *Namespace) Intern(env Environment, sym *Symbol) *Var {
+func (ns *Namespace) Intern(sym *Symbol) *Var {
 	if sym.Namespace() != "" {
 		panic(fmt.Errorf("can't intern qualified name: %s", sym))
 	}
@@ -100,7 +126,7 @@ func (ns *Namespace) Intern(env Environment, sym *Symbol) *Var {
 	if v == nil {
 		v = NewVar(ns, sym)
 	}
-	if ns.checkReplacement(env, sym, o, v) {
+	if ns.checkReplacement(sym, o, v) {
 		for !ns.mappings.CompareAndSwap(mb, NewBox(mb.val.(IPersistentMap).Assoc(sym, v))) {
 			mb = ns.mappingsBox()
 		}
@@ -110,7 +136,7 @@ func (ns *Namespace) Intern(env Environment, sym *Symbol) *Var {
 	return o.(*Var)
 }
 
-func (ns *Namespace) checkReplacement(env Environment, sym *Symbol, old, neu interface{}) bool {
+func (ns *Namespace) checkReplacement(sym *Symbol, old, neu interface{}) bool {
 	/*
 		 This method checks if a namespace's mapping is applicable and warns on problematic cases.
 		 It will return a boolean indicating if a mapping is replaceable.
@@ -122,7 +148,7 @@ func (ns *Namespace) checkReplacement(env Environment, sym *Symbol, old, neu int
 		| alias mapping  | name -> other/whatever | warn + replace                       | warn + replace                      |
 	*/
 
-	errOut := env.Stderr()
+	errOut := GlobalEnv.Stderr()
 
 	if _, ok := old.(*Var); ok {
 		var nns *Namespace
@@ -130,7 +156,7 @@ func (ns *Namespace) checkReplacement(env Environment, sym *Symbol, old, neu int
 			nns = neuVar.Namespace()
 		}
 		if ns.isInternedMapping(sym, old) {
-			if nns != env.FindNamespace(SymbolCoreNamespace) {
+			if nns != FindNamespace(SymbolCoreNamespace) {
 				fmt.Fprintf(errOut, "REJECTED: attempt to replace interned var %s with %s in %s, you must ns-unmap first\n", old, neu, ns.name)
 			}
 			return false
@@ -141,8 +167,8 @@ func (ns *Namespace) checkReplacement(env Environment, sym *Symbol, old, neu int
 	return true
 }
 
-func (ns *Namespace) InternWithValue(env Environment, sym *Symbol, value interface{}, replaceRoot bool) *Var {
-	v := ns.Intern(env, sym)
+func (ns *Namespace) InternWithValue(sym *Symbol, value interface{}, replaceRoot bool) *Var {
+	v := ns.Intern(sym)
 	if !v.HasRoot() || replaceRoot {
 		v.BindRoot(value)
 	}
@@ -223,9 +249,7 @@ func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 		return o
 	}
 
-	// TODO: this will panic :). need to plumb through env, live with a
-	// global env, or make the check less strict if env is nil.
-	if ns.checkReplacement(nil, sym, o, v) {
+	if ns.checkReplacement(sym, o, v) {
 		for !ns.mappings.CompareAndSwap(mb, mb.val.(IPersistentMap).Assoc(sym, v)) {
 			mb = ns.mappingsBox()
 		}

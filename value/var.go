@@ -17,6 +17,8 @@ type (
 
 		meta atomic.Value
 
+		// TODO: populate this from meta in the right places
+		dynamic      bool
 		dynamicBound atomic.Bool
 	}
 
@@ -43,12 +45,30 @@ var (
 	KeywordDynamic = NewKeyword("dynamic")
 	KeywordNS      = NewKeyword("ns")
 
+	NSCore = FindOrCreateNamespace(SymbolCoreNamespace)
+
+	VarCurrentNS        = InternVarReplaceRoot(NSCore, NewSymbol("*ns*"), NSCore).SetDynamic()
+	VarWarnOnReflection = InternVarReplaceRoot(NSCore, NewSymbol("*warn-on-reflection*"), false).SetDynamic()
+	VarUncheckedMath    = InternVarReplaceRoot(NSCore, NewSymbol("*unchecked-math*"), false).SetDynamic()
+
 	// TODO: use an atomic and CAS
 	glsBindings    = make(map[uint]*glStorage)
 	glsBindingsMtx sync.RWMutex
 
 	_ IRef = (*Var)(nil)
 )
+
+func InternVarReplaceRoot(ns *Namespace, sym *Symbol, root interface{}) *Var {
+	return InternVar(ns, sym, root, true)
+}
+
+func InternVar(ns *Namespace, sym *Symbol, root interface{}, replaceRoot bool) *Var {
+	dvout := ns.Intern(sym)
+	if !dvout.HasRoot() || replaceRoot {
+		dvout.BindRoot(root)
+	}
+	return dvout
+}
 
 func NewVar(ns *Namespace, sym *Symbol) *Var {
 	v := &Var{
@@ -157,6 +177,11 @@ func (v *Var) isDynamic() bool {
 	return booleanCast(isDynamic.Val())
 }
 
+func (v *Var) SetDynamic() *Var {
+	v.dynamic = true
+	return v
+}
+
 func (v *Var) Deref() interface{} {
 	if b := v.getDynamicBinding(); b != nil {
 		return b.val
@@ -233,6 +258,7 @@ func mustGoroutineID() uint {
 
 func PushThreadBindings(bindings IPersistentMap) {
 	gid := mustGoroutineID()
+
 	glsBindingsMtx.RLock()
 	storage, ok := glsBindings[gid]
 	glsBindingsMtx.RUnlock()
