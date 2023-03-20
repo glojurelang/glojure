@@ -602,10 +602,6 @@ func (env *environment) EvalASTThrow(n ast.Node) (interface{}, error) {
 	panic(exception)
 }
 
-func kw(s string) value.Keyword {
-	return value.NewKeyword(s)
-}
-
 func get(x interface{}, key interface{}) interface{} {
 	return value.Get(x, key)
 }

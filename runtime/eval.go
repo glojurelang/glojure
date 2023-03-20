@@ -110,7 +110,7 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 		GlobalEnv: globalEnv,
 	}
 	astNode, err := analyzer.Analyze(n, value.NewMap(
-		value.NewKeyword("ns"), env.CurrentNamespace().Name(),
+		value.KWNS, env.CurrentNamespace().Name(),
 	))
 	if err != nil {
 		return nil, err
