@@ -1718,10 +1718,6 @@ func (a *Analyzer) validateBindings(form interface{}, env Env) error {
 	return exInfo(errMsg, nil)
 }
 
-func kw(s string) value.Keyword {
-	return value.NewKeyword(s)
-}
-
 func vec(v ...interface{}) *value.Vector {
 	return value.NewVector(v...)
 }
