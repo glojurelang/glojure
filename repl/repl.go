@@ -23,6 +23,7 @@ import (
 )
 
 const debugMode = true
+const cpuProfile = true
 
 func init() {
 	// start pprof
@@ -140,8 +141,8 @@ func readLine(r io.Reader) (string, error) {
 }
 
 func initEnv(ns string, stdout io.Writer) value.Environment {
-	if debugMode {
-		f, err := os.Create("./gljInitEnv.prof")
+	if cpuProfile {
+		f, err := os.Create("./gljInitEnvCpu.prof")
 		if err != nil {
 			panic(err)
 		}
