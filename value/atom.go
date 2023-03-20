@@ -6,13 +6,6 @@ type (
 	Atom struct {
 		state atomic.Value
 	}
-
-	// atomBox is a wrapper around a value stored in an atom. Because
-	// atomic.Value requires that all values loaded and stored must be
-	// of the same concrete type, we need to wrap the value in a struct.
-	atomBox struct {
-		val interface{}
-	}
 )
 
 var (
@@ -22,12 +15,12 @@ var (
 
 func NewAtom(val interface{}) *Atom {
 	a := &Atom{}
-	a.state.Store(atomBox{val})
+	a.state.Store(Box{val})
 	return a
 }
 
 func (a *Atom) Deref() interface{} {
-	return a.state.Load().(atomBox).val
+	return a.state.Load().(Box).val
 }
 
 func (a *Atom) SetValidator(vf IFn)              { panic("not implemented") }
@@ -38,7 +31,7 @@ func (a *Atom) RemoveWatch(key interface{})      { panic("not implemented") }
 
 func (a *Atom) Swap(f IFn, args ISeq) interface{} {
 	for {
-		old := a.state.Load().(atomBox)
+		old := a.state.Load().(Box)
 		nw := f.ApplyTo(NewCons(old.val, args))
 		if a.CompareAndSet(old.val, nw) {
 			return nw
@@ -49,14 +42,14 @@ func (a *Atom) Swap(f IFn, args ISeq) interface{} {
 func (a *Atom) CompareAndSet(oldv, newv interface{}) bool {
 	// TODO: validate
 	// TODO: notifyWatches
-	return a.state.CompareAndSwap(atomBox{val: oldv}, atomBox{val: newv})
+	return a.state.CompareAndSwap(Box{val: oldv}, Box{val: newv})
 }
 
 func (a *Atom) Reset(newVal interface{}) interface{} {
-	// old := a.state.Load().(atomBox)
+	// old := a.state.Load().(Box)
 	// TODO: validate
 
-	a.state.Store(atomBox{newVal})
+	a.state.Store(Box{newVal})
 	// TODO: notifyWatches
 	return newVal
 }

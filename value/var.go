@@ -26,14 +26,7 @@ type (
 		v *Var
 	}
 
-	// varBox is a wrapper around a value stored in a var. Because
-	// atomic.Value requires that all values loaded and stored must be
-	// of the same concrete type, we need to wrap the value in a struct.
-	varBox struct {
-		val interface{}
-	}
-
-	varBindings map[*Var]*varBox
+	varBindings map[*Var]*Box
 	glStorage   struct {
 		bindings []varBindings
 	}
@@ -75,7 +68,7 @@ func NewVar(ns *Namespace, sym *Symbol) *Var {
 		ns:  ns,
 		sym: sym,
 	}
-	v.root.Store(varBox{val: UnboundVar{v: v}})
+	v.root.Store(Box{val: UnboundVar{v: v}})
 	v.meta.Store(NewBox(emptyMap))
 	return v
 }
@@ -99,18 +92,18 @@ func (v *Var) String() string {
 }
 
 func (v *Var) HasRoot() bool {
-	box := v.root.Load().(varBox)
+	box := v.root.Load().(Box)
 	_, ok := box.val.(UnboundVar)
 	return !ok
 }
 
 func (v *Var) BindRoot(root interface{}) {
 	// TODO: handle metadata correctly
-	v.root.Store(varBox{val: root})
+	v.root.Store(Box{val: root})
 }
 
 func (v *Var) getRoot() interface{} {
-	return v.root.Load().(varBox).val
+	return v.root.Load().(Box).val
 }
 
 func (v *Var) Get() interface{} {
@@ -189,7 +182,7 @@ func (v *Var) Deref() interface{} {
 	return v.getRoot()
 }
 
-func (v *Var) getDynamicBinding() *varBox {
+func (v *Var) getDynamicBinding() *Box {
 	if !v.dynamicBound.Load() {
 		return nil
 	}
@@ -235,7 +228,7 @@ func (v *Var) Hash() uint32 {
 ////////////////////////////////////////////////////////////////////////////////
 // Dynamic binding
 
-func (s *glStorage) get(v *Var) *varBox {
+func (s *glStorage) get(v *Var) *Box {
 	for i := len(s.bindings) - 1; i >= 0; i-- {
 		if b, ok := s.bindings[i][v]; ok {
 			return b
@@ -283,7 +276,7 @@ func PushThreadBindings(bindings IPersistentMap) {
 		}
 		// TODO: validate
 		vr.dynamicBound.Store(true)
-		store[vr] = &varBox{val: val}
+		store[vr] = &Box{val: val}
 	}
 }
 
