@@ -52,15 +52,6 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 	}
 	coreNS := value.NSCore
 
-	coreNS.InternWithValue(value.NewSymbol("*agent*"), nil, true)
-	coreNS.InternWithValue(value.NewSymbol("*print-readably*"), true, true)
-	coreNS.InternWithValue(value.NewSymbol("*out*"), stdout, true)
-	coreNS.InternWithValue(value.NewSymbol("*in*"), os.Stdin, true)
-	coreNS.InternWithValue(value.NewSymbol("*assert*"), false, true)
-
-	// TODO: where to set this?
-	coreNS.InternWithValue(value.NewSymbol("*compile-files*"), false, true)
-	coreNS.InternWithValue(value.NewSymbol("*file*"), "NO_SOURCE_FILE", true)
 	for _, dyn := range []string{
 		"command-line-args",
 		"warn-on-reflection",
@@ -73,7 +64,7 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 		"print-dup",
 		"read-eval",
 	} {
-		coreNS.InternWithValue(value.NewSymbol("*"+dyn+"*"), nil, true)
+		coreNS.InternWithValue(value.NewSymbol("*"+dyn+"*"), nil, true).SetDynamic()
 	}
 
 	// TODO: implement this

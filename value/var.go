@@ -2,6 +2,7 @@ package value
 
 import (
 	"fmt"
+	"os"
 	"sync"
 	"sync/atomic"
 	"unsafe"
@@ -38,6 +39,13 @@ var (
 	VarCurrentNS        = InternVarReplaceRoot(NSCore, NewSymbol("*ns*"), NSCore).SetDynamic()
 	VarWarnOnReflection = InternVarReplaceRoot(NSCore, NewSymbol("*warn-on-reflection*"), false).SetDynamic()
 	VarUncheckedMath    = InternVarReplaceRoot(NSCore, NewSymbol("*unchecked-math*"), false).SetDynamic()
+	VarAgent            = InternVarReplaceRoot(NSCore, NewSymbol("*agent*"), nil).SetDynamic()
+	VarPrintReadably    = InternVarReplaceRoot(NSCore, NewSymbol("*print-readably*"), true).SetDynamic()
+	VarOut              = InternVarReplaceRoot(NSCore, NewSymbol("*out*"), os.Stdout).SetDynamic()
+	VarIn               = InternVarReplaceRoot(NSCore, NewSymbol("*in*"), os.Stdin).SetDynamic()
+	VarAssert           = InternVarReplaceRoot(NSCore, NewSymbol("*assert*"), false).SetDynamic()
+	VarCompileFiles     = InternVarReplaceRoot(NSCore, NewSymbol("*compile-files*"), false).SetDynamic()
+	VarFile             = InternVarReplaceRoot(NSCore, NewSymbol("*file*"), "NO_SOURCE_FILE").SetDynamic()
 
 	// TODO: use an atomic and CAS
 	glsBindings    = make(map[uint]*glStorage)

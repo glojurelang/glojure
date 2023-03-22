@@ -23,7 +23,7 @@ import (
 )
 
 const debugMode = true
-const cpuProfile = true
+const cpuProfile = false
 
 func init() {
 	// start pprof
