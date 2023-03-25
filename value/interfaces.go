@@ -10,6 +10,11 @@ type (
 		Hash() uint32
 	}
 
+	// TODO: use this interface
+	IHashEq interface {
+		HashEq() uint32
+	}
+
 	Sequential interface {
 		// Private interface method used to tag sequential types.
 		xxx_sequential() // TODO: anything that inherits from ASeq in java impl should implement this

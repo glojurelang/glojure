@@ -56,7 +56,16 @@ func start(opts ...Option) {
 	}
 
 	if o.env == nil {
-		o.env = initEnv(o.namespace, o.stdout)
+		o.env = initEnv(o.stdout)
+	}
+	{ // set namespace
+		_, err := o.env.Eval(value.NewList(
+			value.NewSymbol("ns"),
+			value.NewSymbol(o.namespace),
+		))
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	defaultPrompt := func() string {
@@ -140,7 +149,7 @@ func readLine(r io.Reader) (string, error) {
 	return line, nil
 }
 
-func initEnv(ns string, stdout io.Writer) value.Environment {
+func initEnv(stdout io.Writer) value.Environment {
 	if cpuProfile {
 		f, err := os.Create("./gljInitEnvCpu.prof")
 		if err != nil {
@@ -161,12 +170,5 @@ func initEnv(ns string, stdout io.Writer) value.Environment {
 	}
 	value.PushThreadBindings(value.NewMap(kvs...))
 
-	_, err := env.Eval(value.NewList(
-		value.NewSymbol("ns"),
-		value.NewSymbol(ns),
-	))
-	if err != nil {
-		panic(err)
-	}
 	return env
 }

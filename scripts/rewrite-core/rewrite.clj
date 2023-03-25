@@ -79,6 +79,16 @@
    (sexpr-replace '(clojure.lang.PersistentTreeMap/create keyvals)
                   '(glojure.lang.CreatePersistentTreeMap keyvals))
 
+   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+   ;; struct map
+   (sexpr-replace '(. clojure.lang.PersistentStructMap (createSlotMap keys))
+                  '(glojure.lang.CreatePersistentStructMapSlotMap keys))
+   (sexpr-replace '(. clojure.lang.PersistentStructMap (create s inits))
+                  '(glojure.lang.CreatePersistentStructMap s inits))
+   (sexpr-replace '(. clojure.lang.PersistentStructMap (construct s vals))
+                  '(glojure.lang.ConstructPersistentStructMap s vals))
+   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
    (sexpr-replace '(.. (name lib)
                        (replace \- \_)
                        (replace \. \/))
@@ -353,6 +363,8 @@
 
    (sexpr-replace 'clojure.lang.Compiler 'glojure.lang.Compiler)
    (sexpr-replace '(. clojure.lang.Compiler (eval form)) '(. clojure.lang.Compiler (Eval form)))
+   (sexpr-replace '(clojure.lang.Compiler/maybeResolveIn (the-ns ns) sym)
+                  '(. glojure.lang.Compiler maybeResolveIn (the-ns ns) sym))
 
    (sexpr-replace '.alterMeta '.AlterMeta)
 

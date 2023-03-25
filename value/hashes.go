@@ -18,7 +18,7 @@ const (
 )
 
 func Hash(x interface{}) uint32 {
-	if x == nil {
+	if IsNil(x) {
 		return 0
 	}
 	switch x := x.(type) {

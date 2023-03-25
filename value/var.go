@@ -36,6 +36,9 @@ type (
 var (
 	NSCore = FindOrCreateNamespace(SymbolCoreNamespace)
 
+	VarNS   = InternVar(NSCore, NewSymbol("ns"), false, true)
+	VarInNS = InternVar(NSCore, NewSymbol("in-ns"), false, true)
+
 	VarCurrentNS        = InternVarReplaceRoot(NSCore, NewSymbol("*ns*"), NSCore).SetDynamic()
 	VarWarnOnReflection = InternVarReplaceRoot(NSCore, NewSymbol("*warn-on-reflection*"), false).SetDynamic()
 	VarUncheckedMath    = InternVarReplaceRoot(NSCore, NewSymbol("*unchecked-math*"), false).SetDynamic()

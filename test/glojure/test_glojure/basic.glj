@@ -1,0 +1,93 @@
+(ns glojure.test-glojure.basic
+  (:use glojure.test))
+
+(defmacro test-that
+  "Provides a useful way for specifying the purpose of tests. If the first-level
+  forms are lists that make a call to a glojure.test function, it supplies the
+  purpose as the msg argument to those functions. Otherwise, the purpose just
+  acts like a comment and the forms are run unchanged."
+  [purpose & test-forms]
+  (let [tests (map
+                #(if (= (:ns (meta (resolve (first %))))
+                        (the-ns 'glojure.test))
+                   (concat % (list purpose))
+                   %)
+                test-forms)]
+    `(do ~@tests)))
+
+(deftest Eval
+  (is (= (eval '(list 1 2 3)) '(1 2 3)))
+  (is (= (eval '(list + 1 2 3)) (list glojure.core/+ 1 2 3)))
+  (test-that "Non-closure fns are supported as code"
+             (is (= (eval (eval '(list + 1 2 3))) 6)))
+  (is (= (eval (list '+ 1 2 3)) 6)))
+
+(defmacro in-test-ns [& body]
+  `(binding [*ns* *ns*]
+     (in-ns 'glojure.test-glojure.basic)
+     ~@body))
+
+;;; Literals tests ;;;
+
+(defmacro #^{:private true} evaluates-to-itself? [expr]
+  `(let [v# ~expr
+         q# (quote ~expr)]
+     (is (= (eval q#) q#) (str q# " does not evaluate to itself"))))
+
+(deftest Literals
+  ; Strings, numbers, characters, nil and keywords should evaluate to themselves
+  (evaluates-to-itself? "test")
+  (evaluates-to-itself? "test
+                        multi-line
+                        string")
+  (evaluates-to-itself? 1)
+  (evaluates-to-itself? 1.0)
+  (evaluates-to-itself? 1.123456789)
+  (evaluates-to-itself? 1/2)
+  (evaluates-to-itself? 1M)
+  (evaluates-to-itself? 999999999999999999)
+  (evaluates-to-itself? \a)
+  (evaluates-to-itself? \newline)
+  (evaluates-to-itself? nil)
+  (evaluates-to-itself? :test)
+  (is (identical? (eval true) true))
+  (is (identical? (eval false) false)))
+
+;;; Metadata tests ;;;
+
+(defstruct struct-with-symbols (with-meta 'k {:a "A"}))
+
+(deftest Metadata
+
+  (test-that
+    "find returns key symbols and their metadata"
+    (let [s (struct struct-with-symbols 1)]
+      (is (= {:a "A"} (meta (first (find s 'k))))))))
+
+;;; Collections tests ;;;
+(def x 1)
+(def y 2)
+
+(deftest Collections
+  (in-test-ns
+    (test-that
+      "Vectors and Maps yield vectors and (hash) maps whose contents are the
+      evaluated values of the objects they contain."
+      (is (= (eval '[x y 3]) [1 2 3]))
+      (is (= (eval '{:x x :y y :z 3}) {:x 1 :y 2 :z 3}))
+      (is (instance? glojure.lang.IPersistentMap (eval '{:x x :y y})))))
+
+  (in-test-ns
+    (test-that
+      "Metadata maps yield maps whose contents are the evaluated values of
+      the objects they contain. If a vector or map has metadata, the evaluated
+      metadata map will become the metadata of the resulting value."
+      (is (= (eval #^{:x x} '[x y]) #^{:x 1} [1 2]))))
+
+  (test-that
+    "An empty list () evaluates to an empty list."
+    (is (= (eval '()) ()))
+    (is (empty? (eval ())))
+    (is (= (eval (list)) ()))))
+
+(run-tests)

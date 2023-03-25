@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"flag"
 	"io"
 	"log"
@@ -10,6 +11,8 @@ import (
 	"github.com/glojurelang/glojure/reader"
 	"github.com/glojurelang/glojure/repl"
 	"github.com/glojurelang/glojure/runtime"
+	"github.com/glojurelang/glojure/value"
+	"github.com/jtolio/gls"
 )
 
 func main() {
@@ -22,22 +25,36 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		env := runtime.NewEnvironment(runtime.WithStdout(os.Stdout))
-		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() string {
-			return env.CurrentNamespace().Name().String()
-		}))
-		for {
-			val, err := rdr.ReadOne()
-			if err == io.EOF {
-				break
+		gls.EnsureGoroutineId(func(uint) {
+			env := initEnv(os.Stdout)
+			rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() string {
+				return env.CurrentNamespace().Name().String()
+			}))
+			for {
+				val, err := rdr.ReadOne()
+				if errors.Is(err, io.EOF) {
+					break
+				}
+				if err != nil {
+					log.Fatal(err)
+				}
+				_, err = env.Eval(val)
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
-			if err != nil {
-				log.Fatal(err)
-			}
-			_, err = env.Eval(val)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
+		})
 	}
+}
+
+func initEnv(stdout io.Writer) value.Environment {
+	env := runtime.NewEnvironment(runtime.WithStdout(stdout))
+	// TODO: clean up this code. copied from rtcompat.go.
+	kvs := make([]interface{}, 0, 3)
+	for _, vr := range []*value.Var{value.VarCurrentNS, value.VarWarnOnReflection, value.VarUncheckedMath} {
+		kvs = append(kvs, vr, vr.Deref())
+	}
+	value.PushThreadBindings(value.NewMap(kvs...))
+
+	return env
 }

@@ -19,6 +19,9 @@ var indent = 0
 
 var (
 	Debug = false
+
+	SymNS   = value.NewSymbol("ns")
+	SymInNS = value.NewSymbol("in-ns")
 )
 
 func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
@@ -161,6 +164,25 @@ func (c *evalCompiler) Macroexpand1(form interface{}) interface{} {
 		panic(err)
 	}
 	return res
+}
+
+func (c *evalCompiler) MaybeResolveIn(ns *value.Namespace, sym *value.Symbol) interface{} {
+	switch {
+	case sym.Namespace() != "":
+		n := c.env.namespaceFor(ns, sym)
+		if n == nil {
+			return nil
+		}
+		return n.FindInternedVar(value.NewSymbol(sym.Name()))
+	case strings.Index(sym.Name(), ".") > 0 && !strings.HasSuffix(sym.Name(), ".") || sym.Name()[0] == '[':
+		panic(fmt.Errorf("can't resolve class"))
+	case sym.Equal(SymNS):
+		return value.VarNS
+	case sym.Equal(SymInNS):
+		return value.VarInNS
+	default:
+		return ns.GetMapping(sym)
+	}
 }
 
 func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {

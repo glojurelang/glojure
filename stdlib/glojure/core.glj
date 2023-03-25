@@ -4022,7 +4022,7 @@
   {:added "1.0"
    :static true}
   [& keys]
-    (. glojure.lang.PersistentStructMap (createSlotMap keys)))
+    (glojure.lang.CreatePersistentStructMapSlotMap keys))
 
 (defmacro defstruct
   "Same as (def name (create-struct keys...))"
@@ -4039,7 +4039,7 @@
   {:added "1.0"
    :static true}
   [s & inits]
-    (. glojure.lang.PersistentStructMap (create s inits)))
+    (glojure.lang.CreatePersistentStructMap s inits))
 
 (defn struct
   "Returns a new structmap instance with the keys of the
@@ -4048,7 +4048,7 @@
   {:added "1.0"
    :static true}
   [s & vals]
-    (. glojure.lang.PersistentStructMap (construct s vals)))
+    (glojure.lang.ConstructPersistentStructMap s vals))
 
 (defn accessor
   "Returns a fn that, given an instance of a structmap with the basis,
@@ -4349,7 +4349,7 @@
     (ns-resolve ns nil sym))
   ([ns env sym]
     (when-not (contains? env sym)
-      (glojure.lang.Compiler/maybeResolveIn (the-ns ns) sym))))
+      (. glojure.lang.Compiler maybeResolveIn (the-ns ns) sym))))
 
 (defn resolve
   "same as (ns-resolve *ns* symbol) or (ns-resolve *ns* &env symbol)"

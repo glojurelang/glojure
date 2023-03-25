@@ -14,6 +14,13 @@ func NewRatio(numerator, denominator int64) *Ratio {
 	}
 }
 
+// NewRatio creates a new ratio value front BigInts.
+func NewRatioBigInt(num, den *BigInt) *Ratio {
+	return &Ratio{
+		val: new(big.Rat).SetFrac(num.val, den.val),
+	}
+}
+
 func (r *Ratio) String() string {
 	return r.val.RatString()
 }

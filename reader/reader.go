@@ -366,7 +366,6 @@ func (r *Reader) readExpr() (expr interface{}, err error) {
 	case '#':
 		return r.readDispatch()
 	case '^':
-		// TODO: attach to next form
 		meta, err := r.readMeta()
 		if err != nil {
 			return nil, err
@@ -900,6 +899,10 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		return value.NewList(value.NewSymbol("var"), expr), nil
 	case '"':
 		return r.readRegex()
+	case '^':
+		r.rs.UnreadRune()
+		// just read normally
+		return r.readExpr()
 	default:
 		return nil, r.error("invalid dispatch character: %c", rn)
 	}
@@ -957,6 +960,7 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 var (
 	numPrefixRegex = regexp.MustCompile(`^[-+]?[0-9]+`)
 	intRegex       = regexp.MustCompile(`^[-+]?\d(\d|[a-fA-F])*N?$`)
+	ratioRegex     = regexp.MustCompile(`^[-+]?\d+\/\d+$`)
 	hexRegex       = regexp.MustCompile(`^[-+]?0[xX]([a-fA-F]|\d)*N?$`)
 )
 
@@ -1001,6 +1005,20 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 		}
 
 		return int64(intVal), nil
+	}
+
+	if ratioRegex.MatchString(numStr) {
+		parts := strings.Split(numStr, "/")
+
+		numBig, err := value.NewBigInt(parts[0])
+		if err != nil {
+			return nil, r.error("invalid ratio: %s", numStr)
+		}
+		denomBig, err := value.NewBigInt(parts[1])
+		if err != nil {
+			return nil, r.error("invalid ratio: %s", numStr)
+		}
+		return value.NewRatioBigInt(numBig, denomBig), nil
 	}
 
 	// else, it's a float

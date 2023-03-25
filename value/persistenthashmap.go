@@ -127,7 +127,7 @@ func (m *PersistentHashMap) Assoc(key, val interface{}) Associative {
 	} else {
 		t = m.root
 	}
-	//fmt.Printf("assoc: %v %v %v %v %v\n", m, key, val, addedLeaf, t)
+
 	newroot = t.assoc(0, Hash(key), key, val, addedLeaf)
 	if newroot == m.root {
 		return m
