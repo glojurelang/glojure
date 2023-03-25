@@ -1,9 +1,5 @@
+//go:generate go run ../cmd/gen-abstract-class/main.go -class APersistentMap -struct Map -receiver m
 package value
-
-import (
-	"errors"
-	"fmt"
-)
 
 const (
 	hashmapThreshold = 16
@@ -66,10 +62,6 @@ func NewMap(keyVals ...interface{}) IPersistentMap {
 	}
 }
 
-func (m *Map) ValAt(key interface{}) interface{} {
-	return m.ValAtDefault(key, nil)
-}
-
 func (m *Map) ValAtDefault(key, def interface{}) interface{} {
 	for i := 0; i < len(m.keyVals); i += 2 {
 		if Equal(m.keyVals[i], key) {
@@ -88,28 +80,6 @@ func (m *Map) EntryAt(k interface{}) IMapEntry {
 	}
 
 	return nil
-}
-
-func (m *Map) ContainsKey(key interface{}) bool {
-	return m.EntryAt(key) != nil
-}
-
-func (m *Map) Conj(x interface{}) Conjer {
-	switch x := x.(type) {
-	case *MapEntry:
-		return m.Assoc(x.Key(), x.Val()).(Conjer)
-	case IPersistentVector:
-		if x.Count() != 2 {
-			panic("vector arg to map conj must be a pair")
-		}
-		return m.Assoc(MustNth(x, 0), MustNth(x, 1)).(Conjer)
-	}
-
-	var ret Conjer = m
-	for seq := Seq(x); seq != nil; seq = seq.Next() {
-		ret = ret.Conj(seq.First().(*MapEntry))
-	}
-	return ret
 }
 
 func (m *Map) clone() *Map {
@@ -136,13 +106,6 @@ func (m *Map) Assoc(k, v interface{}) Associative {
 	return newMap.Assoc(k, v)
 }
 
-func (m *Map) AssocEx(k, v interface{}) IPersistentMap {
-	if m.ContainsKey(k) {
-		panic(errors.New("key already present"))
-	}
-	return m.Assoc(k, v).(IPersistentMap)
-}
-
 func (m *Map) Without(k interface{}) IPersistentMap {
 	newKeyVals := make([]interface{}, 0, len(m.keyVals))
 	for i := 0; i < len(m.keyVals); i += 2 {
@@ -157,10 +120,6 @@ func (m *Map) Count() int {
 	return len(m.keyVals) / 2
 }
 
-func (m *Map) IsEmpty() bool {
-	return m.Count() == 0
-}
-
 func (m *Map) Seq() ISeq {
 	return NewMapSeq(m)
 }
@@ -169,16 +128,12 @@ func (m *Map) String() string {
 	return mapString(m)
 }
 
-func (m *Map) Equal(v2 interface{}) bool {
-	return mapEquals(m, v2)
-}
-
 func (m *Map) Meta() IPersistentMap {
 	return m.meta
 }
 
 func (m *Map) WithMeta(meta IPersistentMap) interface{} {
-	if Equal(m.meta, meta) {
+	if m.meta == meta {
 		return m
 	}
 	cpy := *m
@@ -209,18 +164,6 @@ func (m *Map) ReduceInit(f IFn, init interface{}) interface{} {
 		res = f.Invoke(res, seq.First())
 	}
 	return res
-}
-
-func (m *Map) Invoke(args ...interface{}) interface{} {
-	if len(args) != 1 {
-		panic(fmt.Errorf("map apply expects 1 argument, got %d", len(args)))
-	}
-
-	return m.ValAt(args[0])
-}
-
-func (m *Map) ApplyTo(args ISeq) interface{} {
-	return m.Invoke(seqToSlice(args)...)
 }
 
 func (m *Map) AsTransient() ITransientCollection {

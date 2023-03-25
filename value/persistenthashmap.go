@@ -1,9 +1,5 @@
+//go:generate go run ../cmd/gen-abstract-class/main.go -class APersistentMap -struct PersistentHashMap -receiver m
 package value
-
-import (
-	"errors"
-	"fmt"
-)
 
 func CreatePersistentHashMap(keyvals interface{}) interface{} {
 	return NewPersistentHashMap(seqToSlice(Seq(keyvals))...)
@@ -144,13 +140,6 @@ func (m *PersistentHashMap) Assoc(key, val interface{}) Associative {
 	return res
 }
 
-func (m *PersistentHashMap) AssocEx(k, v interface{}) IPersistentMap {
-	if m.ContainsKey(k) {
-		panic(errors.New("key already present"))
-	}
-	return m.Assoc(k, v).(IPersistentMap)
-}
-
 func (m *PersistentHashMap) Without(key interface{}) IPersistentMap {
 	if m.root == nil {
 		return m
@@ -167,14 +156,6 @@ func (m *PersistentHashMap) Without(key interface{}) IPersistentMap {
 	return res
 }
 
-func (m *PersistentHashMap) ContainsKey(key interface{}) bool {
-	if m.root != nil {
-		return m.root.find(0, Hash(key), key) != nil
-	} else {
-		return false
-	}
-}
-
 func (m *PersistentHashMap) EntryAt(key interface{}) IMapEntry {
 	if m.root != nil {
 		p := m.root.find(0, Hash(key), key)
@@ -188,16 +169,8 @@ func (m *PersistentHashMap) EntryAt(key interface{}) IMapEntry {
 	return nil
 }
 
-func (m *PersistentHashMap) Conj(obj interface{}) Conjer {
-	return mapConj(m, obj)
-}
-
 func (m *PersistentHashMap) Count() int {
 	return m.count
-}
-
-func (m *PersistentHashMap) IsEmpty() bool {
-	return m.Count() == 0
 }
 
 func (m *PersistentHashMap) Seq() ISeq {
@@ -207,10 +180,6 @@ func (m *PersistentHashMap) Seq() ISeq {
 	return nil
 }
 
-func (m *PersistentHashMap) ValAt(k interface{}) interface{} {
-	return m.ValAtDefault(k, nil)
-}
-
 func (m *PersistentHashMap) ValAtDefault(key, notFound interface{}) interface{} {
 	if m.root != nil {
 		if res := m.root.find(0, Hash(key), key); res != nil {
@@ -218,22 +187,6 @@ func (m *PersistentHashMap) ValAtDefault(key, notFound interface{}) interface{} 
 		}
 	}
 	return notFound
-}
-
-func (m *PersistentHashMap) Equal(other interface{}) bool {
-	return mapEquals(m, other)
-}
-
-func (m *PersistentHashMap) Invoke(args ...interface{}) interface{} {
-	if len(args) != 1 {
-		panic(fmt.Errorf("map apply expects 1 argument, got %d", len(args)))
-	}
-
-	return m.ValAt(args[0])
-}
-
-func (m *PersistentHashMap) ApplyTo(args ISeq) interface{} {
-	return m.Invoke(seqToSlice(args)...)
 }
 
 func (m *PersistentHashMap) Reduce(f IFn) interface{} {

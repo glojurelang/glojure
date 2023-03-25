@@ -1,7 +1,6 @@
 package value
 
 import (
-	"errors"
 	"strings"
 )
 
@@ -23,20 +22,6 @@ func Merge(m1, m2 IPersistentMap) IPersistentMap {
 		res = res.Assoc(entry.Key(), entry.Val())
 	}
 	return res.(IPersistentMap)
-}
-
-func mapConj(m IPersistentMap, obj interface{}) Conjer {
-	switch obj := obj.(type) {
-	case IPersistentVector:
-		if obj.Count() != 2 {
-			panic(errors.New("Vector argument to map's conj must be a vector with two elements"))
-		}
-		return m.Assoc(obj.ValAt(0), obj.ValAt(1))
-	case IPersistentMap:
-		return Merge(m, obj)
-	default:
-		panic(errors.New("argument to map's conj must be a vector with two elements or a map"))
-	}
 }
 
 func mapEquals(m IPersistentMap, v2 interface{}) bool {
