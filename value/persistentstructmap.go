@@ -79,7 +79,7 @@ func (m *PersistentStructMap) Meta() IPersistentMap {
 }
 
 func (m *PersistentStructMap) WithMeta(meta IPersistentMap) interface{} {
-	if Equal(m.meta, meta) {
+	if m.meta == meta {
 		return m
 	}
 	cpy := *m
