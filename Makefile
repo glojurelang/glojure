@@ -19,3 +19,7 @@ stdlib/glojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-core/
 
 vet:
 	@go vet ./...
+
+.PHONY: test
+test:
+	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/basic.glj
