@@ -7,8 +7,6 @@ import (
 
 	"github.com/glojurelang/glojure/compiler"
 	"github.com/glojurelang/glojure/value"
-
-	"github.com/jtolio/gls"
 )
 
 func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
@@ -57,13 +55,7 @@ func (env *environment) applyMacro1(fn value.IFn, form value.ISeq) (interface{},
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
-	var res interface{}
-	var err error
-	// make sure the running goroutine id is available for dynamic vars
-	gls.EnsureGoroutineId(func(uint) {
-		res, err = env.evalInternal(n)
-	})
-	return res, err
+	return env.evalInternal(n)
 }
 
 func (env *environment) evalInternal(n interface{}) (interface{}, error) {

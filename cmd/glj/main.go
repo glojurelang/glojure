@@ -12,7 +12,6 @@ import (
 	"github.com/glojurelang/glojure/repl"
 	"github.com/glojurelang/glojure/runtime"
 	"github.com/glojurelang/glojure/value"
-	"github.com/jtolio/gls"
 )
 
 func main() {
@@ -25,25 +24,23 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		gls.EnsureGoroutineId(func(uint) {
-			env := initEnv(os.Stdout)
-			rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() string {
-				return env.CurrentNamespace().Name().String()
-			}))
-			for {
-				val, err := rdr.ReadOne()
-				if errors.Is(err, io.EOF) {
-					break
-				}
-				if err != nil {
-					log.Fatal(err)
-				}
-				_, err = env.Eval(val)
-				if err != nil {
-					log.Fatal(err)
-				}
+		env := initEnv(os.Stdout)
+		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() string {
+			return env.CurrentNamespace().Name().String()
+		}))
+		for {
+			val, err := rdr.ReadOne()
+			if errors.Is(err, io.EOF) {
+				break
 			}
-		})
+			if err != nil {
+				log.Fatal(err)
+			}
+			_, err = env.Eval(val)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
 	}
 }
 

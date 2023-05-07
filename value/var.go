@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"unsafe"
 
-	"github.com/jtolio/gls"
+	"github.com/modern-go/gls"
 )
 
 type (
@@ -51,10 +51,11 @@ var (
 	VarFile             = InternVarReplaceRoot(NSCore, NewSymbol("*file*"), "NO_SOURCE_FILE").SetDynamic()
 
 	// TODO: use an atomic and CAS
-	glsBindings    = make(map[uint]*glStorage)
+	glsBindings    = make(map[int64]*glStorage)
 	glsBindingsMtx sync.RWMutex
 
 	_ IRef = (*Var)(nil)
+	_ IFn  = (*Var)(nil)
 )
 
 func InternVarReplaceRoot(ns *Namespace, sym *Symbol, root interface{}) *Var {
@@ -67,6 +68,11 @@ func InternVar(ns *Namespace, sym *Symbol, root interface{}, replaceRoot bool) *
 		dvout.BindRoot(root)
 	}
 	return dvout
+}
+
+func InternVarName(nsSym, nameSym *Symbol) *Var {
+	ns := FindOrCreateNamespace(nsSym)
+	return ns.Intern(nameSym)
 }
 
 func NewVar(ns *Namespace, sym *Symbol) *Var {
@@ -188,13 +194,10 @@ func (v *Var) getDynamicBinding() *Box {
 		return nil
 	}
 	var storage *glStorage
-	var ok bool
-	gid, ok := goroutineID()
-	if !ok {
-		return nil
-	}
+	gid := mustGoroutineID()
+
 	glsBindingsMtx.RLock()
-	storage, ok = glsBindings[gid]
+	storage, ok := glsBindings[gid]
 	glsBindingsMtx.RUnlock()
 	if !ok {
 		return nil
@@ -226,6 +229,18 @@ func (v *Var) Hash() uint32 {
 	return hashPtr(uintptr(unsafe.Pointer(v)))
 }
 
+func (v *Var) fn() IFn {
+	return v.Deref().(IFn)
+}
+
+func (v *Var) Invoke(args ...interface{}) interface{} {
+	return v.fn().Invoke(args...)
+}
+
+func (v *Var) ApplyTo(args ISeq) interface{} {
+	return v.fn().ApplyTo(args)
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Dynamic binding
 
@@ -238,16 +253,8 @@ func (s *glStorage) get(v *Var) *Box {
 	return nil
 }
 
-func goroutineID() (uint, bool) {
-	return gls.GetGoroutineId()
-}
-
-func mustGoroutineID() uint {
-	gid, ok := goroutineID()
-	if !ok {
-		panic("no goroutine id")
-	}
-	return gid
+func mustGoroutineID() int64 {
+	return gls.GoID()
 }
 
 func PushThreadBindings(bindings IPersistentMap) {

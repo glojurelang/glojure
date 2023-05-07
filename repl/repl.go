@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/chzyer/readline"
-	"github.com/jtolio/gls"
 
 	"github.com/glojurelang/glojure/reader"
 	"github.com/glojurelang/glojure/runtime"
@@ -40,12 +39,6 @@ func init() {
 
 // Start starts the REPL.
 func Start(opts ...Option) {
-	gls.EnsureGoroutineId(func(uint) {
-		start(opts...)
-	})
-}
-
-func start(opts ...Option) {
 	o := options{
 		stdin:     os.Stdin,
 		stdout:    os.Stdout,
