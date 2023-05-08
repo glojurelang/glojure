@@ -2,6 +2,8 @@ package runtime
 
 import (
 	"fmt"
+	"io"
+	"io/fs"
 	"strings"
 	"sync/atomic"
 
@@ -92,11 +94,32 @@ func (rt *RTMethods) Load(scriptBase string) {
 	defer PopThreadBindings()
 
 	filename := scriptBase + ".glj"
-	buf, err := stdlib.StdLib.ReadFile(filename)
+	fileSystems := []fs.FS{
+		stdlib.StdLib,
+	}
+	var buf []byte
+	var err error
+	for _, fs := range fileSystems {
+
+		buf, err = readFile(fs, filename)
+		if err == nil {
+			break
+		}
+	}
 	if err != nil {
 		panic(err)
 	}
 	ReadEval(string(buf), WithFilename(filename))
+}
+
+func readFile(fs fs.FS, filename string) ([]byte, error) {
+	f, err := fs.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	return io.ReadAll(f)
 }
 
 func (rt *RTMethods) FindVar(qualifiedSym *Symbol) *Var {

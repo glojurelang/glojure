@@ -1,26 +1,26 @@
-# Gloj
+# Glojure
 
-Gloj is an interpreter for [Clojure](https://clojure.org/), hosted
-in Go. Gloj provides easy access to Go libraries, just as Clojure
+Glojure is an interpreter for [Clojure](https://clojure.org/), hosted
+in Go. Glojure provides easy access to Go libraries, just as Clojure
 provides easy access to Java frameworks.
 
 ## Frequently Asked Questions
 
 (TODO)
 
-**How does Gloj compare to Joker?**
+**How does Glojure compare to Joker?**
 
-Gloj makes some fundamental design choices differently from Joker.
+Glojure makes some fundamental design choices differently from Joker.
 
-First, Gloj strives to be hosted in Go in the same sense in which
+First, Glojure strives to be hosted in Go in the same sense in which
 Clojure is hosted on the JVM. What does it mean to be a hosted
 language? For Clojure on the JVM, it means that all Java values are
-also Clojure values, and vice versa. Gloj strives to maintain the same
-relationship with Go.
+also Clojure values, and vice versa. Glojure strives to maintain the
+same relationship with Go.
 
 
-Less importantly, the Gloj project was begun before its primary author
-was aware of other projects bringing Clojure to Go.
+Less importantly, the Glojure project was begun before its primary
+author was aware of other projects bringing Clojure to Go.
 
 **Why not a compiler?**
 
@@ -42,4 +42,4 @@ func(string, string) bool
 ### Field and Method Access
 
 
-### Calling Gloj from Go
+### Calling Glojure from Go
