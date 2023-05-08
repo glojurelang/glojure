@@ -91,10 +91,7 @@ func main() {
 					decl = fmt.Sprintf("_register(%q, %s)", glojureDeclName, qualifiedName)
 				}
 			case *types.TypeName:
-				decl = fmt.Sprintf(`{
-	var x %s
-	_register(%q, reflect.TypeOf(x))
-}`, qualifiedName, glojureDeclName)
+				decl = fmt.Sprintf("_register(%q, reflect.TypeOf((*%s)(nil)).Elem())", glojureDeclName, qualifiedName)
 			default:
 				panic(fmt.Sprintf("unknown type %T", obj))
 			}

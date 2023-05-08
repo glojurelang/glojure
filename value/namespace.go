@@ -239,6 +239,9 @@ func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 	if sym.Namespace() != "" {
 		panic(fmt.Errorf("can't intern qualified name: %s", sym))
 	}
+	if v == nil {
+		panic(fmt.Errorf("can't refer to nil (%s)", sym))
+	}
 
 	mb := ns.mappingsBox()
 	var o interface{}

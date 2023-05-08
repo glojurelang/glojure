@@ -29,10 +29,7 @@ import (
 func RegisterImports(_register func(string, interface{})) {
 	// package bytes
 	////////////////////////////////////////
-	{
-		var x bytes.Buffer
-		_register("bytes.Buffer", reflect.TypeOf(x))
-	}
+	_register("bytes.Buffer", reflect.TypeOf((*bytes.Buffer)(nil)).Elem())
 	_register("bytes.Compare", bytes.Compare)
 	_register("bytes.Contains", bytes.Contains)
 	_register("bytes.ContainsAny", bytes.ContainsAny)
@@ -61,10 +58,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("bytes.NewBuffer", bytes.NewBuffer)
 	_register("bytes.NewBufferString", bytes.NewBufferString)
 	_register("bytes.NewReader", bytes.NewReader)
-	{
-		var x bytes.Reader
-		_register("bytes.Reader", reflect.TypeOf(x))
-	}
+	_register("bytes.Reader", reflect.TypeOf((*bytes.Reader)(nil)).Elem())
 	_register("bytes.Repeat", bytes.Repeat)
 	_register("bytes.Replace", bytes.Replace)
 	_register("bytes.ReplaceAll", bytes.ReplaceAll)
@@ -94,15 +88,9 @@ func RegisterImports(_register func(string, interface{})) {
 	// package context
 	////////////////////////////////////////
 	_register("context.Background", context.Background)
-	{
-		var x context.CancelFunc
-		_register("context.CancelFunc", reflect.TypeOf(x))
-	}
+	_register("context.CancelFunc", reflect.TypeOf((*context.CancelFunc)(nil)).Elem())
 	_register("context.Canceled", context.Canceled)
-	{
-		var x context.Context
-		_register("context.Context", reflect.TypeOf(x))
-	}
+	_register("context.Context", reflect.TypeOf((*context.Context)(nil)).Elem())
 	_register("context.DeadlineExceeded", context.DeadlineExceeded)
 	_register("context.TODO", context.TODO)
 	_register("context.WithCancel", context.WithCancel)
@@ -128,26 +116,14 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("flag.Duration", flag.Duration)
 	_register("flag.DurationVar", flag.DurationVar)
 	_register("flag.ErrHelp", flag.ErrHelp)
-	{
-		var x flag.ErrorHandling
-		_register("flag.ErrorHandling", reflect.TypeOf(x))
-	}
+	_register("flag.ErrorHandling", reflect.TypeOf((*flag.ErrorHandling)(nil)).Elem())
 	_register("flag.ExitOnError", flag.ExitOnError)
-	{
-		var x flag.Flag
-		_register("flag.Flag", reflect.TypeOf(x))
-	}
-	{
-		var x flag.FlagSet
-		_register("flag.FlagSet", reflect.TypeOf(x))
-	}
+	_register("flag.Flag", reflect.TypeOf((*flag.Flag)(nil)).Elem())
+	_register("flag.FlagSet", reflect.TypeOf((*flag.FlagSet)(nil)).Elem())
 	_register("flag.Float64", flag.Float64)
 	_register("flag.Float64Var", flag.Float64Var)
 	_register("flag.Func", flag.Func)
-	{
-		var x flag.Getter
-		_register("flag.Getter", reflect.TypeOf(x))
-	}
+	_register("flag.Getter", reflect.TypeOf((*flag.Getter)(nil)).Elem())
 	_register("flag.Int", flag.Int)
 	_register("flag.Int64", flag.Int64)
 	_register("flag.Int64Var", flag.Int64Var)
@@ -170,10 +146,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("flag.UintVar", flag.UintVar)
 	_register("flag.UnquoteUsage", flag.UnquoteUsage)
 	_register("flag.Usage", flag.Usage)
-	{
-		var x flag.Value
-		_register("flag.Value", reflect.TypeOf(x))
-	}
+	_register("flag.Value", reflect.TypeOf((*flag.Value)(nil)).Elem())
 	_register("flag.Var", flag.Var)
 	_register("flag.Visit", flag.Visit)
 	_register("flag.VisitAll", flag.VisitAll)
@@ -184,67 +157,37 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("fmt.Appendf", fmt.Appendf)
 	_register("fmt.Appendln", fmt.Appendln)
 	_register("fmt.Errorf", fmt.Errorf)
-	{
-		var x fmt.Formatter
-		_register("fmt.Formatter", reflect.TypeOf(x))
-	}
+	_register("fmt.Formatter", reflect.TypeOf((*fmt.Formatter)(nil)).Elem())
 	_register("fmt.Fprint", fmt.Fprint)
 	_register("fmt.Fprintf", fmt.Fprintf)
 	_register("fmt.Fprintln", fmt.Fprintln)
 	_register("fmt.Fscan", fmt.Fscan)
 	_register("fmt.Fscanf", fmt.Fscanf)
 	_register("fmt.Fscanln", fmt.Fscanln)
-	{
-		var x fmt.GoStringer
-		_register("fmt.GoStringer", reflect.TypeOf(x))
-	}
+	_register("fmt.GoStringer", reflect.TypeOf((*fmt.GoStringer)(nil)).Elem())
 	_register("fmt.Print", fmt.Print)
 	_register("fmt.Printf", fmt.Printf)
 	_register("fmt.Println", fmt.Println)
 	_register("fmt.Scan", fmt.Scan)
-	{
-		var x fmt.ScanState
-		_register("fmt.ScanState", reflect.TypeOf(x))
-	}
+	_register("fmt.ScanState", reflect.TypeOf((*fmt.ScanState)(nil)).Elem())
 	_register("fmt.Scanf", fmt.Scanf)
 	_register("fmt.Scanln", fmt.Scanln)
-	{
-		var x fmt.Scanner
-		_register("fmt.Scanner", reflect.TypeOf(x))
-	}
+	_register("fmt.Scanner", reflect.TypeOf((*fmt.Scanner)(nil)).Elem())
 	_register("fmt.Sprint", fmt.Sprint)
 	_register("fmt.Sprintf", fmt.Sprintf)
 	_register("fmt.Sprintln", fmt.Sprintln)
 	_register("fmt.Sscan", fmt.Sscan)
 	_register("fmt.Sscanf", fmt.Sscanf)
 	_register("fmt.Sscanln", fmt.Sscanln)
-	{
-		var x fmt.State
-		_register("fmt.State", reflect.TypeOf(x))
-	}
-	{
-		var x fmt.Stringer
-		_register("fmt.Stringer", reflect.TypeOf(x))
-	}
+	_register("fmt.State", reflect.TypeOf((*fmt.State)(nil)).Elem())
+	_register("fmt.Stringer", reflect.TypeOf((*fmt.Stringer)(nil)).Elem())
 
 	// package io
 	////////////////////////////////////////
-	{
-		var x io.ByteReader
-		_register("io.ByteReader", reflect.TypeOf(x))
-	}
-	{
-		var x io.ByteScanner
-		_register("io.ByteScanner", reflect.TypeOf(x))
-	}
-	{
-		var x io.ByteWriter
-		_register("io.ByteWriter", reflect.TypeOf(x))
-	}
-	{
-		var x io.Closer
-		_register("io.Closer", reflect.TypeOf(x))
-	}
+	_register("io.ByteReader", reflect.TypeOf((*io.ByteReader)(nil)).Elem())
+	_register("io.ByteScanner", reflect.TypeOf((*io.ByteScanner)(nil)).Elem())
+	_register("io.ByteWriter", reflect.TypeOf((*io.ByteWriter)(nil)).Elem())
+	_register("io.Closer", reflect.TypeOf((*io.Closer)(nil)).Elem())
 	_register("io.Copy", io.Copy)
 	_register("io.CopyBuffer", io.CopyBuffer)
 	_register("io.CopyN", io.CopyN)
@@ -256,141 +199,57 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("io.ErrShortWrite", io.ErrShortWrite)
 	_register("io.ErrUnexpectedEOF", io.ErrUnexpectedEOF)
 	_register("io.LimitReader", io.LimitReader)
-	{
-		var x io.LimitedReader
-		_register("io.LimitedReader", reflect.TypeOf(x))
-	}
+	_register("io.LimitedReader", reflect.TypeOf((*io.LimitedReader)(nil)).Elem())
 	_register("io.MultiReader", io.MultiReader)
 	_register("io.MultiWriter", io.MultiWriter)
 	_register("io.NewSectionReader", io.NewSectionReader)
 	_register("io.NopCloser", io.NopCloser)
 	_register("io.Pipe", io.Pipe)
-	{
-		var x io.PipeReader
-		_register("io.PipeReader", reflect.TypeOf(x))
-	}
-	{
-		var x io.PipeWriter
-		_register("io.PipeWriter", reflect.TypeOf(x))
-	}
+	_register("io.PipeReader", reflect.TypeOf((*io.PipeReader)(nil)).Elem())
+	_register("io.PipeWriter", reflect.TypeOf((*io.PipeWriter)(nil)).Elem())
 	_register("io.ReadAll", io.ReadAll)
 	_register("io.ReadAtLeast", io.ReadAtLeast)
-	{
-		var x io.ReadCloser
-		_register("io.ReadCloser", reflect.TypeOf(x))
-	}
+	_register("io.ReadCloser", reflect.TypeOf((*io.ReadCloser)(nil)).Elem())
 	_register("io.ReadFull", io.ReadFull)
-	{
-		var x io.ReadSeekCloser
-		_register("io.ReadSeekCloser", reflect.TypeOf(x))
-	}
-	{
-		var x io.ReadSeeker
-		_register("io.ReadSeeker", reflect.TypeOf(x))
-	}
-	{
-		var x io.ReadWriteCloser
-		_register("io.ReadWriteCloser", reflect.TypeOf(x))
-	}
-	{
-		var x io.ReadWriteSeeker
-		_register("io.ReadWriteSeeker", reflect.TypeOf(x))
-	}
-	{
-		var x io.ReadWriter
-		_register("io.ReadWriter", reflect.TypeOf(x))
-	}
-	{
-		var x io.Reader
-		_register("io.Reader", reflect.TypeOf(x))
-	}
-	{
-		var x io.ReaderAt
-		_register("io.ReaderAt", reflect.TypeOf(x))
-	}
-	{
-		var x io.ReaderFrom
-		_register("io.ReaderFrom", reflect.TypeOf(x))
-	}
-	{
-		var x io.RuneReader
-		_register("io.RuneReader", reflect.TypeOf(x))
-	}
-	{
-		var x io.RuneScanner
-		_register("io.RuneScanner", reflect.TypeOf(x))
-	}
-	{
-		var x io.SectionReader
-		_register("io.SectionReader", reflect.TypeOf(x))
-	}
+	_register("io.ReadSeekCloser", reflect.TypeOf((*io.ReadSeekCloser)(nil)).Elem())
+	_register("io.ReadSeeker", reflect.TypeOf((*io.ReadSeeker)(nil)).Elem())
+	_register("io.ReadWriteCloser", reflect.TypeOf((*io.ReadWriteCloser)(nil)).Elem())
+	_register("io.ReadWriteSeeker", reflect.TypeOf((*io.ReadWriteSeeker)(nil)).Elem())
+	_register("io.ReadWriter", reflect.TypeOf((*io.ReadWriter)(nil)).Elem())
+	_register("io.Reader", reflect.TypeOf((*io.Reader)(nil)).Elem())
+	_register("io.ReaderAt", reflect.TypeOf((*io.ReaderAt)(nil)).Elem())
+	_register("io.ReaderFrom", reflect.TypeOf((*io.ReaderFrom)(nil)).Elem())
+	_register("io.RuneReader", reflect.TypeOf((*io.RuneReader)(nil)).Elem())
+	_register("io.RuneScanner", reflect.TypeOf((*io.RuneScanner)(nil)).Elem())
+	_register("io.SectionReader", reflect.TypeOf((*io.SectionReader)(nil)).Elem())
 	_register("io.SeekCurrent", io.SeekCurrent)
 	_register("io.SeekEnd", io.SeekEnd)
 	_register("io.SeekStart", io.SeekStart)
-	{
-		var x io.Seeker
-		_register("io.Seeker", reflect.TypeOf(x))
-	}
-	{
-		var x io.StringWriter
-		_register("io.StringWriter", reflect.TypeOf(x))
-	}
+	_register("io.Seeker", reflect.TypeOf((*io.Seeker)(nil)).Elem())
+	_register("io.StringWriter", reflect.TypeOf((*io.StringWriter)(nil)).Elem())
 	_register("io.TeeReader", io.TeeReader)
-	{
-		var x io.WriteCloser
-		_register("io.WriteCloser", reflect.TypeOf(x))
-	}
-	{
-		var x io.WriteSeeker
-		_register("io.WriteSeeker", reflect.TypeOf(x))
-	}
+	_register("io.WriteCloser", reflect.TypeOf((*io.WriteCloser)(nil)).Elem())
+	_register("io.WriteSeeker", reflect.TypeOf((*io.WriteSeeker)(nil)).Elem())
 	_register("io.WriteString", io.WriteString)
-	{
-		var x io.Writer
-		_register("io.Writer", reflect.TypeOf(x))
-	}
-	{
-		var x io.WriterAt
-		_register("io.WriterAt", reflect.TypeOf(x))
-	}
-	{
-		var x io.WriterTo
-		_register("io.WriterTo", reflect.TypeOf(x))
-	}
+	_register("io.Writer", reflect.TypeOf((*io.Writer)(nil)).Elem())
+	_register("io.WriterAt", reflect.TypeOf((*io.WriterAt)(nil)).Elem())
+	_register("io.WriterTo", reflect.TypeOf((*io.WriterTo)(nil)).Elem())
 
 	// package io/fs
 	////////////////////////////////////////
-	{
-		var x io_fs.DirEntry
-		_register("io/fs.DirEntry", reflect.TypeOf(x))
-	}
+	_register("io/fs.DirEntry", reflect.TypeOf((*io_fs.DirEntry)(nil)).Elem())
 	_register("io/fs.ErrClosed", io_fs.ErrClosed)
 	_register("io/fs.ErrExist", io_fs.ErrExist)
 	_register("io/fs.ErrInvalid", io_fs.ErrInvalid)
 	_register("io/fs.ErrNotExist", io_fs.ErrNotExist)
 	_register("io/fs.ErrPermission", io_fs.ErrPermission)
-	{
-		var x io_fs.FS
-		_register("io/fs.FS", reflect.TypeOf(x))
-	}
-	{
-		var x io_fs.File
-		_register("io/fs.File", reflect.TypeOf(x))
-	}
-	{
-		var x io_fs.FileInfo
-		_register("io/fs.FileInfo", reflect.TypeOf(x))
-	}
+	_register("io/fs.FS", reflect.TypeOf((*io_fs.FS)(nil)).Elem())
+	_register("io/fs.File", reflect.TypeOf((*io_fs.File)(nil)).Elem())
+	_register("io/fs.FileInfo", reflect.TypeOf((*io_fs.FileInfo)(nil)).Elem())
 	_register("io/fs.FileInfoToDirEntry", io_fs.FileInfoToDirEntry)
-	{
-		var x io_fs.FileMode
-		_register("io/fs.FileMode", reflect.TypeOf(x))
-	}
+	_register("io/fs.FileMode", reflect.TypeOf((*io_fs.FileMode)(nil)).Elem())
 	_register("io/fs.Glob", io_fs.Glob)
-	{
-		var x io_fs.GlobFS
-		_register("io/fs.GlobFS", reflect.TypeOf(x))
-	}
+	_register("io/fs.GlobFS", reflect.TypeOf((*io_fs.GlobFS)(nil)).Elem())
 	_register("io/fs.ModeAppend", io_fs.ModeAppend)
 	_register("io/fs.ModeCharDevice", io_fs.ModeCharDevice)
 	_register("io/fs.ModeDevice", io_fs.ModeDevice)
@@ -406,41 +265,20 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("io/fs.ModeSymlink", io_fs.ModeSymlink)
 	_register("io/fs.ModeTemporary", io_fs.ModeTemporary)
 	_register("io/fs.ModeType", io_fs.ModeType)
-	{
-		var x io_fs.PathError
-		_register("io/fs.PathError", reflect.TypeOf(x))
-	}
+	_register("io/fs.PathError", reflect.TypeOf((*io_fs.PathError)(nil)).Elem())
 	_register("io/fs.ReadDir", io_fs.ReadDir)
-	{
-		var x io_fs.ReadDirFS
-		_register("io/fs.ReadDirFS", reflect.TypeOf(x))
-	}
-	{
-		var x io_fs.ReadDirFile
-		_register("io/fs.ReadDirFile", reflect.TypeOf(x))
-	}
+	_register("io/fs.ReadDirFS", reflect.TypeOf((*io_fs.ReadDirFS)(nil)).Elem())
+	_register("io/fs.ReadDirFile", reflect.TypeOf((*io_fs.ReadDirFile)(nil)).Elem())
 	_register("io/fs.ReadFile", io_fs.ReadFile)
-	{
-		var x io_fs.ReadFileFS
-		_register("io/fs.ReadFileFS", reflect.TypeOf(x))
-	}
+	_register("io/fs.ReadFileFS", reflect.TypeOf((*io_fs.ReadFileFS)(nil)).Elem())
 	_register("io/fs.SkipDir", io_fs.SkipDir)
 	_register("io/fs.Stat", io_fs.Stat)
-	{
-		var x io_fs.StatFS
-		_register("io/fs.StatFS", reflect.TypeOf(x))
-	}
+	_register("io/fs.StatFS", reflect.TypeOf((*io_fs.StatFS)(nil)).Elem())
 	_register("io/fs.Sub", io_fs.Sub)
-	{
-		var x io_fs.SubFS
-		_register("io/fs.SubFS", reflect.TypeOf(x))
-	}
+	_register("io/fs.SubFS", reflect.TypeOf((*io_fs.SubFS)(nil)).Elem())
 	_register("io/fs.ValidPath", io_fs.ValidPath)
 	_register("io/fs.WalkDir", io_fs.WalkDir)
-	{
-		var x io_fs.WalkDirFunc
-		_register("io/fs.WalkDirFunc", reflect.TypeOf(x))
-	}
+	_register("io/fs.WalkDirFunc", reflect.TypeOf((*io_fs.WalkDirFunc)(nil)).Elem())
 
 	// package io/ioutil
 	////////////////////////////////////////
@@ -556,25 +394,13 @@ func RegisterImports(_register func(string, interface{})) {
 	// package math/big
 	////////////////////////////////////////
 	_register("math/big.Above", math_big.Above)
-	{
-		var x math_big.Accuracy
-		_register("math/big.Accuracy", reflect.TypeOf(x))
-	}
+	_register("math/big.Accuracy", reflect.TypeOf((*math_big.Accuracy)(nil)).Elem())
 	_register("math/big.AwayFromZero", math_big.AwayFromZero)
 	_register("math/big.Below", math_big.Below)
-	{
-		var x math_big.ErrNaN
-		_register("math/big.ErrNaN", reflect.TypeOf(x))
-	}
+	_register("math/big.ErrNaN", reflect.TypeOf((*math_big.ErrNaN)(nil)).Elem())
 	_register("math/big.Exact", math_big.Exact)
-	{
-		var x math_big.Float
-		_register("math/big.Float", reflect.TypeOf(x))
-	}
-	{
-		var x math_big.Int
-		_register("math/big.Int", reflect.TypeOf(x))
-	}
+	_register("math/big.Float", reflect.TypeOf((*math_big.Float)(nil)).Elem())
+	_register("math/big.Int", reflect.TypeOf((*math_big.Int)(nil)).Elem())
 	_register("math/big.Jacobi", math_big.Jacobi)
 	_register("math/big.MaxBase", math_big.MaxBase)
 	_register("math/big.MaxExp", math_big.MaxExp)
@@ -584,23 +410,14 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("math/big.NewInt", math_big.NewInt)
 	_register("math/big.NewRat", math_big.NewRat)
 	_register("math/big.ParseFloat", math_big.ParseFloat)
-	{
-		var x math_big.Rat
-		_register("math/big.Rat", reflect.TypeOf(x))
-	}
-	{
-		var x math_big.RoundingMode
-		_register("math/big.RoundingMode", reflect.TypeOf(x))
-	}
+	_register("math/big.Rat", reflect.TypeOf((*math_big.Rat)(nil)).Elem())
+	_register("math/big.RoundingMode", reflect.TypeOf((*math_big.RoundingMode)(nil)).Elem())
 	_register("math/big.ToNearestAway", math_big.ToNearestAway)
 	_register("math/big.ToNearestEven", math_big.ToNearestEven)
 	_register("math/big.ToNegativeInf", math_big.ToNegativeInf)
 	_register("math/big.ToPositiveInf", math_big.ToPositiveInf)
 	_register("math/big.ToZero", math_big.ToZero)
-	{
-		var x math_big.Word
-		_register("math/big.Word", reflect.TypeOf(x))
-	}
+	_register("math/big.Word", reflect.TypeOf((*math_big.Word)(nil)).Elem())
 
 	// package math/rand
 	////////////////////////////////////////
@@ -618,62 +435,32 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("math/rand.NewZipf", math_rand.NewZipf)
 	_register("math/rand.NormFloat64", math_rand.NormFloat64)
 	_register("math/rand.Perm", math_rand.Perm)
-	{
-		var x math_rand.Rand
-		_register("math/rand.Rand", reflect.TypeOf(x))
-	}
+	_register("math/rand.Rand", reflect.TypeOf((*math_rand.Rand)(nil)).Elem())
 	_register("math/rand.Read", math_rand.Read)
 	_register("math/rand.Seed", math_rand.Seed)
 	_register("math/rand.Shuffle", math_rand.Shuffle)
-	{
-		var x math_rand.Source
-		_register("math/rand.Source", reflect.TypeOf(x))
-	}
-	{
-		var x math_rand.Source64
-		_register("math/rand.Source64", reflect.TypeOf(x))
-	}
+	_register("math/rand.Source", reflect.TypeOf((*math_rand.Source)(nil)).Elem())
+	_register("math/rand.Source64", reflect.TypeOf((*math_rand.Source64)(nil)).Elem())
 	_register("math/rand.Uint32", math_rand.Uint32)
 	_register("math/rand.Uint64", math_rand.Uint64)
-	{
-		var x math_rand.Zipf
-		_register("math/rand.Zipf", reflect.TypeOf(x))
-	}
+	_register("math/rand.Zipf", reflect.TypeOf((*math_rand.Zipf)(nil)).Elem())
 
 	// package net/http
 	////////////////////////////////////////
 	_register("net/http.AllowQuerySemicolons", net_http.AllowQuerySemicolons)
 	_register("net/http.CanonicalHeaderKey", net_http.CanonicalHeaderKey)
-	{
-		var x net_http.Client
-		_register("net/http.Client", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.CloseNotifier
-		_register("net/http.CloseNotifier", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.ConnState
-		_register("net/http.ConnState", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.Cookie
-		_register("net/http.Cookie", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.CookieJar
-		_register("net/http.CookieJar", reflect.TypeOf(x))
-	}
+	_register("net/http.Client", reflect.TypeOf((*net_http.Client)(nil)).Elem())
+	_register("net/http.CloseNotifier", reflect.TypeOf((*net_http.CloseNotifier)(nil)).Elem())
+	_register("net/http.ConnState", reflect.TypeOf((*net_http.ConnState)(nil)).Elem())
+	_register("net/http.Cookie", reflect.TypeOf((*net_http.Cookie)(nil)).Elem())
+	_register("net/http.CookieJar", reflect.TypeOf((*net_http.CookieJar)(nil)).Elem())
 	_register("net/http.DefaultClient", net_http.DefaultClient)
 	_register("net/http.DefaultMaxHeaderBytes", net_http.DefaultMaxHeaderBytes)
 	_register("net/http.DefaultMaxIdleConnsPerHost", net_http.DefaultMaxIdleConnsPerHost)
 	_register("net/http.DefaultServeMux", net_http.DefaultServeMux)
 	_register("net/http.DefaultTransport", net_http.DefaultTransport)
 	_register("net/http.DetectContentType", net_http.DetectContentType)
-	{
-		var x net_http.Dir
-		_register("net/http.Dir", reflect.TypeOf(x))
-	}
+	_register("net/http.Dir", reflect.TypeOf((*net_http.Dir)(nil)).Elem())
 	_register("net/http.ErrAbortHandler", net_http.ErrAbortHandler)
 	_register("net/http.ErrBodyNotAllowed", net_http.ErrBodyNotAllowed)
 	_register("net/http.ErrBodyReadAfterClose", net_http.ErrBodyReadAfterClose)
@@ -697,46 +484,22 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("net/http.ErrWriteAfterFlush", net_http.ErrWriteAfterFlush)
 	_register("net/http.Error", net_http.Error)
 	_register("net/http.FS", net_http.FS)
-	{
-		var x net_http.File
-		_register("net/http.File", reflect.TypeOf(x))
-	}
+	_register("net/http.File", reflect.TypeOf((*net_http.File)(nil)).Elem())
 	_register("net/http.FileServer", net_http.FileServer)
-	{
-		var x net_http.FileSystem
-		_register("net/http.FileSystem", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.Flusher
-		_register("net/http.Flusher", reflect.TypeOf(x))
-	}
+	_register("net/http.FileSystem", reflect.TypeOf((*net_http.FileSystem)(nil)).Elem())
+	_register("net/http.Flusher", reflect.TypeOf((*net_http.Flusher)(nil)).Elem())
 	_register("net/http.Get", net_http.Get)
 	_register("net/http.Handle", net_http.Handle)
 	_register("net/http.HandleFunc", net_http.HandleFunc)
-	{
-		var x net_http.Handler
-		_register("net/http.Handler", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.HandlerFunc
-		_register("net/http.HandlerFunc", reflect.TypeOf(x))
-	}
+	_register("net/http.Handler", reflect.TypeOf((*net_http.Handler)(nil)).Elem())
+	_register("net/http.HandlerFunc", reflect.TypeOf((*net_http.HandlerFunc)(nil)).Elem())
 	_register("net/http.Head", net_http.Head)
-	{
-		var x net_http.Header
-		_register("net/http.Header", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.Hijacker
-		_register("net/http.Hijacker", reflect.TypeOf(x))
-	}
+	_register("net/http.Header", reflect.TypeOf((*net_http.Header)(nil)).Elem())
+	_register("net/http.Hijacker", reflect.TypeOf((*net_http.Hijacker)(nil)).Elem())
 	_register("net/http.ListenAndServe", net_http.ListenAndServe)
 	_register("net/http.ListenAndServeTLS", net_http.ListenAndServeTLS)
 	_register("net/http.LocalAddrContextKey", net_http.LocalAddrContextKey)
-	{
-		var x net_http.MaxBytesError
-		_register("net/http.MaxBytesError", reflect.TypeOf(x))
-	}
+	_register("net/http.MaxBytesError", reflect.TypeOf((*net_http.MaxBytesError)(nil)).Elem())
 	_register("net/http.MaxBytesHandler", net_http.MaxBytesHandler)
 	_register("net/http.MaxBytesReader", net_http.MaxBytesReader)
 	_register("net/http.MethodConnect", net_http.MethodConnect)
@@ -759,44 +522,20 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("net/http.ParseTime", net_http.ParseTime)
 	_register("net/http.Post", net_http.Post)
 	_register("net/http.PostForm", net_http.PostForm)
-	{
-		var x net_http.ProtocolError
-		_register("net/http.ProtocolError", reflect.TypeOf(x))
-	}
+	_register("net/http.ProtocolError", reflect.TypeOf((*net_http.ProtocolError)(nil)).Elem())
 	_register("net/http.ProxyFromEnvironment", net_http.ProxyFromEnvironment)
 	_register("net/http.ProxyURL", net_http.ProxyURL)
-	{
-		var x net_http.PushOptions
-		_register("net/http.PushOptions", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.Pusher
-		_register("net/http.Pusher", reflect.TypeOf(x))
-	}
+	_register("net/http.PushOptions", reflect.TypeOf((*net_http.PushOptions)(nil)).Elem())
+	_register("net/http.Pusher", reflect.TypeOf((*net_http.Pusher)(nil)).Elem())
 	_register("net/http.ReadRequest", net_http.ReadRequest)
 	_register("net/http.ReadResponse", net_http.ReadResponse)
 	_register("net/http.Redirect", net_http.Redirect)
 	_register("net/http.RedirectHandler", net_http.RedirectHandler)
-	{
-		var x net_http.Request
-		_register("net/http.Request", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.Response
-		_register("net/http.Response", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.ResponseWriter
-		_register("net/http.ResponseWriter", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.RoundTripper
-		_register("net/http.RoundTripper", reflect.TypeOf(x))
-	}
-	{
-		var x net_http.SameSite
-		_register("net/http.SameSite", reflect.TypeOf(x))
-	}
+	_register("net/http.Request", reflect.TypeOf((*net_http.Request)(nil)).Elem())
+	_register("net/http.Response", reflect.TypeOf((*net_http.Response)(nil)).Elem())
+	_register("net/http.ResponseWriter", reflect.TypeOf((*net_http.ResponseWriter)(nil)).Elem())
+	_register("net/http.RoundTripper", reflect.TypeOf((*net_http.RoundTripper)(nil)).Elem())
+	_register("net/http.SameSite", reflect.TypeOf((*net_http.SameSite)(nil)).Elem())
 	_register("net/http.SameSiteDefaultMode", net_http.SameSiteDefaultMode)
 	_register("net/http.SameSiteLaxMode", net_http.SameSiteLaxMode)
 	_register("net/http.SameSiteNoneMode", net_http.SameSiteNoneMode)
@@ -804,15 +543,9 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("net/http.Serve", net_http.Serve)
 	_register("net/http.ServeContent", net_http.ServeContent)
 	_register("net/http.ServeFile", net_http.ServeFile)
-	{
-		var x net_http.ServeMux
-		_register("net/http.ServeMux", reflect.TypeOf(x))
-	}
+	_register("net/http.ServeMux", reflect.TypeOf((*net_http.ServeMux)(nil)).Elem())
 	_register("net/http.ServeTLS", net_http.ServeTLS)
-	{
-		var x net_http.Server
-		_register("net/http.Server", reflect.TypeOf(x))
-	}
+	_register("net/http.Server", reflect.TypeOf((*net_http.Server)(nil)).Elem())
 	_register("net/http.ServerContextKey", net_http.ServerContextKey)
 	_register("net/http.SetCookie", net_http.SetCookie)
 	_register("net/http.StateActive", net_http.StateActive)
@@ -887,10 +620,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("net/http.TimeFormat", net_http.TimeFormat)
 	_register("net/http.TimeoutHandler", net_http.TimeoutHandler)
 	_register("net/http.TrailerPrefix", net_http.TrailerPrefix)
-	{
-		var x net_http.Transport
-		_register("net/http.Transport", reflect.TypeOf(x))
-	}
+	_register("net/http.Transport", reflect.TypeOf((*net_http.Transport)(nil)).Elem())
 
 	// package os
 	////////////////////////////////////////
@@ -903,10 +633,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("os.Create", os.Create)
 	_register("os.CreateTemp", os.CreateTemp)
 	_register("os.DevNull", os.DevNull)
-	{
-		var x os.DirEntry
-		_register("os.DirEntry", reflect.TypeOf(x))
-	}
+	_register("os.DirEntry", reflect.TypeOf((*os.DirEntry)(nil)).Elem())
 	_register("os.DirFS", os.DirFS)
 	_register("os.Environ", os.Environ)
 	_register("os.ErrClosed", os.ErrClosed)
@@ -921,18 +648,9 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("os.Exit", os.Exit)
 	_register("os.Expand", os.Expand)
 	_register("os.ExpandEnv", os.ExpandEnv)
-	{
-		var x os.File
-		_register("os.File", reflect.TypeOf(x))
-	}
-	{
-		var x os.FileInfo
-		_register("os.FileInfo", reflect.TypeOf(x))
-	}
-	{
-		var x os.FileMode
-		_register("os.FileMode", reflect.TypeOf(x))
-	}
+	_register("os.File", reflect.TypeOf((*os.File)(nil)).Elem())
+	_register("os.FileInfo", reflect.TypeOf((*os.FileInfo)(nil)).Elem())
+	_register("os.FileMode", reflect.TypeOf((*os.FileMode)(nil)).Elem())
 	_register("os.FindProcess", os.FindProcess)
 	_register("os.Getegid", os.Getegid)
 	_register("os.Getenv", os.Getenv)
@@ -954,10 +672,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("os.Kill", os.Kill)
 	_register("os.Lchown", os.Lchown)
 	_register("os.Link", os.Link)
-	{
-		var x os.LinkError
-		_register("os.LinkError", reflect.TypeOf(x))
-	}
+	_register("os.LinkError", reflect.TypeOf((*os.LinkError)(nil)).Elem())
 	_register("os.LookupEnv", os.LookupEnv)
 	_register("os.Lstat", os.Lstat)
 	_register("os.Mkdir", os.Mkdir)
@@ -990,25 +705,13 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("os.O_WRONLY", os.O_WRONLY)
 	_register("os.Open", os.Open)
 	_register("os.OpenFile", os.OpenFile)
-	{
-		var x os.PathError
-		_register("os.PathError", reflect.TypeOf(x))
-	}
+	_register("os.PathError", reflect.TypeOf((*os.PathError)(nil)).Elem())
 	_register("os.PathListSeparator", os.PathListSeparator)
 	_register("os.PathSeparator", os.PathSeparator)
 	_register("os.Pipe", os.Pipe)
-	{
-		var x os.ProcAttr
-		_register("os.ProcAttr", reflect.TypeOf(x))
-	}
-	{
-		var x os.Process
-		_register("os.Process", reflect.TypeOf(x))
-	}
-	{
-		var x os.ProcessState
-		_register("os.ProcessState", reflect.TypeOf(x))
-	}
+	_register("os.ProcAttr", reflect.TypeOf((*os.ProcAttr)(nil)).Elem())
+	_register("os.Process", reflect.TypeOf((*os.Process)(nil)).Elem())
+	_register("os.ProcessState", reflect.TypeOf((*os.ProcessState)(nil)).Elem())
 	_register("os.ReadDir", os.ReadDir)
 	_register("os.ReadFile", os.ReadFile)
 	_register("os.Readlink", os.Readlink)
@@ -1020,20 +723,14 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("os.SEEK_SET", os.SEEK_SET)
 	_register("os.SameFile", os.SameFile)
 	_register("os.Setenv", os.Setenv)
-	{
-		var x os.Signal
-		_register("os.Signal", reflect.TypeOf(x))
-	}
+	_register("os.Signal", reflect.TypeOf((*os.Signal)(nil)).Elem())
 	_register("os.StartProcess", os.StartProcess)
 	_register("os.Stat", os.Stat)
 	_register("os.Stderr", os.Stderr)
 	_register("os.Stdin", os.Stdin)
 	_register("os.Stdout", os.Stdout)
 	_register("os.Symlink", os.Symlink)
-	{
-		var x os.SyscallError
-		_register("os.SyscallError", reflect.TypeOf(x))
-	}
+	_register("os.SyscallError", reflect.TypeOf((*os.SyscallError)(nil)).Elem())
 	_register("os.TempDir", os.TempDir)
 	_register("os.Truncate", os.Truncate)
 	_register("os.Unsetenv", os.Unsetenv)
@@ -1044,22 +741,13 @@ func RegisterImports(_register func(string, interface{})) {
 
 	// package os/exec
 	////////////////////////////////////////
-	{
-		var x os_exec.Cmd
-		_register("os/exec.Cmd", reflect.TypeOf(x))
-	}
+	_register("os/exec.Cmd", reflect.TypeOf((*os_exec.Cmd)(nil)).Elem())
 	_register("os/exec.Command", os_exec.Command)
 	_register("os/exec.CommandContext", os_exec.CommandContext)
 	_register("os/exec.ErrDot", os_exec.ErrDot)
 	_register("os/exec.ErrNotFound", os_exec.ErrNotFound)
-	{
-		var x os_exec.Error
-		_register("os/exec.Error", reflect.TypeOf(x))
-	}
-	{
-		var x os_exec.ExitError
-		_register("os/exec.ExitError", reflect.TypeOf(x))
-	}
+	_register("os/exec.Error", reflect.TypeOf((*os_exec.Error)(nil)).Elem())
+	_register("os/exec.ExitError", reflect.TypeOf((*os_exec.ExitError)(nil)).Elem())
 	_register("os/exec.LookPath", os_exec.LookPath)
 
 	// package os/signal
@@ -1081,10 +769,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("regexp.MustCompile", regexp.MustCompile)
 	_register("regexp.MustCompilePOSIX", regexp.MustCompilePOSIX)
 	_register("regexp.QuoteMeta", regexp.QuoteMeta)
-	{
-		var x regexp.Regexp
-		_register("regexp.Regexp", reflect.TypeOf(x))
-	}
+	_register("regexp.Regexp", reflect.TypeOf((*regexp.Regexp)(nil)).Elem())
 
 	// package reflect
 	////////////////////////////////////////
@@ -1095,10 +780,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("reflect.Bool", reflect.Bool)
 	_register("reflect.BothDir", reflect.BothDir)
 	_register("reflect.Chan", reflect.Chan)
-	{
-		var x reflect.ChanDir
-		_register("reflect.ChanDir", reflect.TypeOf(x))
-	}
+	_register("reflect.ChanDir", reflect.TypeOf((*reflect.ChanDir)(nil)).Elem())
 	_register("reflect.ChanOf", reflect.ChanOf)
 	_register("reflect.Complex128", reflect.Complex128)
 	_register("reflect.Complex64", reflect.Complex64)
@@ -1116,25 +798,16 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("reflect.Int8", reflect.Int8)
 	_register("reflect.Interface", reflect.Interface)
 	_register("reflect.Invalid", reflect.Invalid)
-	{
-		var x reflect.Kind
-		_register("reflect.Kind", reflect.TypeOf(x))
-	}
+	_register("reflect.Kind", reflect.TypeOf((*reflect.Kind)(nil)).Elem())
 	_register("reflect.MakeChan", reflect.MakeChan)
 	_register("reflect.MakeFunc", reflect.MakeFunc)
 	_register("reflect.MakeMap", reflect.MakeMap)
 	_register("reflect.MakeMapWithSize", reflect.MakeMapWithSize)
 	_register("reflect.MakeSlice", reflect.MakeSlice)
 	_register("reflect.Map", reflect.Map)
-	{
-		var x reflect.MapIter
-		_register("reflect.MapIter", reflect.TypeOf(x))
-	}
+	_register("reflect.MapIter", reflect.TypeOf((*reflect.MapIter)(nil)).Elem())
 	_register("reflect.MapOf", reflect.MapOf)
-	{
-		var x reflect.Method
-		_register("reflect.Method", reflect.TypeOf(x))
-	}
+	_register("reflect.Method", reflect.TypeOf((*reflect.Method)(nil)).Elem())
 	_register("reflect.New", reflect.New)
 	_register("reflect.NewAt", reflect.NewAt)
 	_register("reflect.Pointer", reflect.Pointer)
@@ -1143,44 +816,23 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("reflect.PtrTo", reflect.PtrTo)
 	_register("reflect.RecvDir", reflect.RecvDir)
 	_register("reflect.Select", reflect.Select)
-	{
-		var x reflect.SelectCase
-		_register("reflect.SelectCase", reflect.TypeOf(x))
-	}
+	_register("reflect.SelectCase", reflect.TypeOf((*reflect.SelectCase)(nil)).Elem())
 	_register("reflect.SelectDefault", reflect.SelectDefault)
-	{
-		var x reflect.SelectDir
-		_register("reflect.SelectDir", reflect.TypeOf(x))
-	}
+	_register("reflect.SelectDir", reflect.TypeOf((*reflect.SelectDir)(nil)).Elem())
 	_register("reflect.SelectRecv", reflect.SelectRecv)
 	_register("reflect.SelectSend", reflect.SelectSend)
 	_register("reflect.SendDir", reflect.SendDir)
 	_register("reflect.Slice", reflect.Slice)
-	{
-		var x reflect.SliceHeader
-		_register("reflect.SliceHeader", reflect.TypeOf(x))
-	}
+	_register("reflect.SliceHeader", reflect.TypeOf((*reflect.SliceHeader)(nil)).Elem())
 	_register("reflect.SliceOf", reflect.SliceOf)
 	_register("reflect.String", reflect.String)
-	{
-		var x reflect.StringHeader
-		_register("reflect.StringHeader", reflect.TypeOf(x))
-	}
+	_register("reflect.StringHeader", reflect.TypeOf((*reflect.StringHeader)(nil)).Elem())
 	_register("reflect.Struct", reflect.Struct)
-	{
-		var x reflect.StructField
-		_register("reflect.StructField", reflect.TypeOf(x))
-	}
+	_register("reflect.StructField", reflect.TypeOf((*reflect.StructField)(nil)).Elem())
 	_register("reflect.StructOf", reflect.StructOf)
-	{
-		var x reflect.StructTag
-		_register("reflect.StructTag", reflect.TypeOf(x))
-	}
+	_register("reflect.StructTag", reflect.TypeOf((*reflect.StructTag)(nil)).Elem())
 	_register("reflect.Swapper", reflect.Swapper)
-	{
-		var x reflect.Type
-		_register("reflect.Type", reflect.TypeOf(x))
-	}
+	_register("reflect.Type", reflect.TypeOf((*reflect.Type)(nil)).Elem())
 	_register("reflect.TypeOf", reflect.TypeOf)
 	_register("reflect.Uint", reflect.Uint)
 	_register("reflect.Uint16", reflect.Uint16)
@@ -1189,14 +841,8 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("reflect.Uint8", reflect.Uint8)
 	_register("reflect.Uintptr", reflect.Uintptr)
 	_register("reflect.UnsafePointer", reflect.UnsafePointer)
-	{
-		var x reflect.Value
-		_register("reflect.Value", reflect.TypeOf(x))
-	}
-	{
-		var x reflect.ValueError
-		_register("reflect.ValueError", reflect.TypeOf(x))
-	}
+	_register("reflect.Value", reflect.TypeOf((*reflect.Value)(nil)).Elem())
+	_register("reflect.ValueError", reflect.TypeOf((*reflect.ValueError)(nil)).Elem())
 	_register("reflect.ValueOf", reflect.ValueOf)
 	_register("reflect.VisibleFields", reflect.VisibleFields)
 	_register("reflect.Zero", reflect.Zero)
@@ -1204,20 +850,11 @@ func RegisterImports(_register func(string, interface{})) {
 	// package sort
 	////////////////////////////////////////
 	_register("sort.Find", sort.Find)
-	{
-		var x sort.Float64Slice
-		_register("sort.Float64Slice", reflect.TypeOf(x))
-	}
+	_register("sort.Float64Slice", reflect.TypeOf((*sort.Float64Slice)(nil)).Elem())
 	_register("sort.Float64s", sort.Float64s)
 	_register("sort.Float64sAreSorted", sort.Float64sAreSorted)
-	{
-		var x sort.IntSlice
-		_register("sort.IntSlice", reflect.TypeOf(x))
-	}
-	{
-		var x sort.Interface
-		_register("sort.Interface", reflect.TypeOf(x))
-	}
+	_register("sort.IntSlice", reflect.TypeOf((*sort.IntSlice)(nil)).Elem())
+	_register("sort.Interface", reflect.TypeOf((*sort.Interface)(nil)).Elem())
 	_register("sort.Ints", sort.Ints)
 	_register("sort.IntsAreSorted", sort.IntsAreSorted)
 	_register("sort.IsSorted", sort.IsSorted)
@@ -1231,10 +868,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("sort.SliceStable", sort.SliceStable)
 	_register("sort.Sort", sort.Sort)
 	_register("sort.Stable", sort.Stable)
-	{
-		var x sort.StringSlice
-		_register("sort.StringSlice", reflect.TypeOf(x))
-	}
+	_register("sort.StringSlice", reflect.TypeOf((*sort.StringSlice)(nil)).Elem())
 	_register("sort.Strings", sort.Strings)
 	_register("sort.StringsAreSorted", sort.StringsAreSorted)
 
@@ -1263,10 +897,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("strconv.IsGraphic", strconv.IsGraphic)
 	_register("strconv.IsPrint", strconv.IsPrint)
 	_register("strconv.Itoa", strconv.Itoa)
-	{
-		var x strconv.NumError
-		_register("strconv.NumError", reflect.TypeOf(x))
-	}
+	_register("strconv.NumError", reflect.TypeOf((*strconv.NumError)(nil)).Elem())
 	_register("strconv.ParseBool", strconv.ParseBool)
 	_register("strconv.ParseComplex", strconv.ParseComplex)
 	_register("strconv.ParseFloat", strconv.ParseFloat)
@@ -1284,10 +915,7 @@ func RegisterImports(_register func(string, interface{})) {
 
 	// package strings
 	////////////////////////////////////////
-	{
-		var x strings.Builder
-		_register("strings.Builder", reflect.TypeOf(x))
-	}
+	_register("strings.Builder", reflect.TypeOf((*strings.Builder)(nil)).Elem())
 	_register("strings.Clone", strings.Clone)
 	_register("strings.Compare", strings.Compare)
 	_register("strings.Contains", strings.Contains)
@@ -1313,17 +941,11 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("strings.Map", strings.Map)
 	_register("strings.NewReader", strings.NewReader)
 	_register("strings.NewReplacer", strings.NewReplacer)
-	{
-		var x strings.Reader
-		_register("strings.Reader", reflect.TypeOf(x))
-	}
+	_register("strings.Reader", reflect.TypeOf((*strings.Reader)(nil)).Elem())
 	_register("strings.Repeat", strings.Repeat)
 	_register("strings.Replace", strings.Replace)
 	_register("strings.ReplaceAll", strings.ReplaceAll)
-	{
-		var x strings.Replacer
-		_register("strings.Replacer", reflect.TypeOf(x))
-	}
+	_register("strings.Replacer", reflect.TypeOf((*strings.Replacer)(nil)).Elem())
 	_register("strings.Split", strings.Split)
 	_register("strings.SplitAfter", strings.SplitAfter)
 	_register("strings.SplitAfterN", strings.SplitAfterN)
@@ -1355,10 +977,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("time.August", time.August)
 	_register("time.Date", time.Date)
 	_register("time.December", time.December)
-	{
-		var x time.Duration
-		_register("time.Duration", reflect.TypeOf(x))
-	}
+	_register("time.Duration", reflect.TypeOf((*time.Duration)(nil)).Elem())
 	_register("time.February", time.February)
 	_register("time.FixedZone", time.FixedZone)
 	_register("time.Friday", time.Friday)
@@ -1371,20 +990,14 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("time.LoadLocation", time.LoadLocation)
 	_register("time.LoadLocationFromTZData", time.LoadLocationFromTZData)
 	_register("time.Local", time.Local)
-	{
-		var x time.Location
-		_register("time.Location", reflect.TypeOf(x))
-	}
+	_register("time.Location", reflect.TypeOf((*time.Location)(nil)).Elem())
 	_register("time.March", time.March)
 	_register("time.May", time.May)
 	_register("time.Microsecond", time.Microsecond)
 	_register("time.Millisecond", time.Millisecond)
 	_register("time.Minute", time.Minute)
 	_register("time.Monday", time.Monday)
-	{
-		var x time.Month
-		_register("time.Month", reflect.TypeOf(x))
-	}
+	_register("time.Month", reflect.TypeOf((*time.Month)(nil)).Elem())
 	_register("time.Nanosecond", time.Nanosecond)
 	_register("time.NewTicker", time.NewTicker)
 	_register("time.NewTimer", time.NewTimer)
@@ -1393,10 +1006,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("time.October", time.October)
 	_register("time.Parse", time.Parse)
 	_register("time.ParseDuration", time.ParseDuration)
-	{
-		var x time.ParseError
-		_register("time.ParseError", reflect.TypeOf(x))
-	}
+	_register("time.ParseError", reflect.TypeOf((*time.ParseError)(nil)).Elem())
 	_register("time.ParseInLocation", time.ParseInLocation)
 	_register("time.RFC1123", time.RFC1123)
 	_register("time.RFC1123Z", time.RFC1123Z)
@@ -1418,18 +1028,9 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("time.Sunday", time.Sunday)
 	_register("time.Thursday", time.Thursday)
 	_register("time.Tick", time.Tick)
-	{
-		var x time.Ticker
-		_register("time.Ticker", reflect.TypeOf(x))
-	}
-	{
-		var x time.Time
-		_register("time.Time", reflect.TypeOf(x))
-	}
-	{
-		var x time.Timer
-		_register("time.Timer", reflect.TypeOf(x))
-	}
+	_register("time.Ticker", reflect.TypeOf((*time.Ticker)(nil)).Elem())
+	_register("time.Time", reflect.TypeOf((*time.Time)(nil)).Elem())
+	_register("time.Timer", reflect.TypeOf((*time.Timer)(nil)).Elem())
 	_register("time.Tuesday", time.Tuesday)
 	_register("time.UTC", time.UTC)
 	_register("time.Unix", time.Unix)
@@ -1438,10 +1039,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("time.UnixMilli", time.UnixMilli)
 	_register("time.Until", time.Until)
 	_register("time.Wednesday", time.Wednesday)
-	{
-		var x time.Weekday
-		_register("time.Weekday", reflect.TypeOf(x))
-	}
+	_register("time.Weekday", reflect.TypeOf((*time.Weekday)(nil)).Elem())
 
 	// package unicode
 	////////////////////////////////////////
@@ -1468,10 +1066,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("unicode.C", unicode.C)
 	_register("unicode.Canadian_Aboriginal", unicode.Canadian_Aboriginal)
 	_register("unicode.Carian", unicode.Carian)
-	{
-		var x unicode.CaseRange
-		_register("unicode.CaseRange", reflect.TypeOf(x))
-	}
+	_register("unicode.CaseRange", reflect.TypeOf((*unicode.CaseRange)(nil)).Elem())
 	_register("unicode.CaseRanges", unicode.CaseRanges)
 	_register("unicode.Categories", unicode.Categories)
 	_register("unicode.Caucasian_Albanian", unicode.Caucasian_Albanian)
@@ -1659,18 +1254,9 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("unicode.Punct", unicode.Punct)
 	_register("unicode.Quotation_Mark", unicode.Quotation_Mark)
 	_register("unicode.Radical", unicode.Radical)
-	{
-		var x unicode.Range16
-		_register("unicode.Range16", reflect.TypeOf(x))
-	}
-	{
-		var x unicode.Range32
-		_register("unicode.Range32", reflect.TypeOf(x))
-	}
-	{
-		var x unicode.RangeTable
-		_register("unicode.RangeTable", reflect.TypeOf(x))
-	}
+	_register("unicode.Range16", reflect.TypeOf((*unicode.Range16)(nil)).Elem())
+	_register("unicode.Range32", reflect.TypeOf((*unicode.Range32)(nil)).Elem())
+	_register("unicode.RangeTable", reflect.TypeOf((*unicode.RangeTable)(nil)).Elem())
 	_register("unicode.Regional_Indicator", unicode.Regional_Indicator)
 	_register("unicode.Rejang", unicode.Rejang)
 	_register("unicode.ReplacementChar", unicode.ReplacementChar)
@@ -1696,10 +1282,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("unicode.Sora_Sompeng", unicode.Sora_Sompeng)
 	_register("unicode.Soyombo", unicode.Soyombo)
 	_register("unicode.Space", unicode.Space)
-	{
-		var x unicode.SpecialCase
-		_register("unicode.SpecialCase", reflect.TypeOf(x))
-	}
+	_register("unicode.SpecialCase", reflect.TypeOf((*unicode.SpecialCase)(nil)).Elem())
 	_register("unicode.Sundanese", unicode.Sundanese)
 	_register("unicode.Syloti_Nagri", unicode.Syloti_Nagri)
 	_register("unicode.Symbol", unicode.Symbol)
