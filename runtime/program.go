@@ -12,6 +12,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/glojurelang/glojure/pkgmap"
 	"github.com/glojurelang/glojure/reader"
 	"github.com/glojurelang/glojure/stdlib"
 	"github.com/glojurelang/glojure/value"
@@ -94,8 +95,9 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	}
 
 	gljimports.RegisterImports(func(name string, val interface{}) {
-		// TODO: use DefVar!
+		// TODO: just add to the package map!
 		env.BindLocal(value.NewSymbol(name), val)
+		pkgmap.Set(name, val)
 	})
 
 	define := func(name string, val interface{}) {
@@ -144,14 +146,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		// numeric functions
 		{
 			define("glojure.lang/AsNumber", value.AsNumber)
-
-			// define("glojure.lang.numbers/Inc", value.Inc)
-			// define("glojure.lang.numbers/IncP", value.IncP)
-			// define("glojure.lang.Numbers/Add", value.Add)
-			// define("glojure.lang.Numbers/Sub", value.Sub)
-			// define("glojure.lang.Numbers/Max", value.Max)
-			// define("glojure.lang.Numbers/Min", value.Min)
-			// define("glojure.lang.Numbers/LT", value.LT)
 		}
 		// iteration functions
 		{
@@ -239,7 +233,18 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		}))
 
 		define("glojure.lang.Import", func(args ...interface{}) {
-			// TODO: implement me?
+			if len(args) != 1 {
+				panic(fmt.Errorf("wrong number of arguments (%d) to glojure.lang.Import", len(args)))
+			}
+
+			export := args[0].(string)
+			v, ok := pkgmap.Get(export)
+			if !ok {
+				// TODO: panic
+				fmt.Println("WARNING: export not found in package map:", args[0], "- this will be a panic in the future")
+				return
+			}
+			env.CurrentNamespace().Import(export, v)
 		})
 
 		define("glojure.lang.Count", value.Count)

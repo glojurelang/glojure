@@ -2,8 +2,11 @@ package value
 
 import (
 	"fmt"
+	"reflect"
 	"sync"
 	"sync/atomic"
+
+	"github.com/glojurelang/glojure/pkgmap"
 )
 
 type Namespace struct {
@@ -53,7 +56,6 @@ func FindOrCreateNamespace(sym *Symbol) *Namespace {
 	ns = NewNamespace(sym)
 	namespaces[sym.String()] = ns
 	return ns
-
 }
 
 func NewNamespace(name *Symbol) *Namespace {
@@ -220,6 +222,13 @@ func (ns *Namespace) AddAlias(alias *Symbol, ns2 *Namespace) {
 	}
 }
 
+// Import references an export from a Go package.
+func (ns *Namespace) Import(export string, v interface{}) interface{} {
+	_, name := pkgmap.SplitExport(export)
+	ns.reference(NewSymbol(name), v)
+	return v
+}
+
 // Refer adds a reference to an existing Var, possibly in another
 // namespace, to this namespace.
 func (ns *Namespace) Refer(sym *Symbol, v *Var) *Var {
@@ -245,7 +254,16 @@ func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 	if ns.isInternedMapping(sym, o) {
 		return o.(*Var)
 	}
-	if o == v {
+
+	// NB: in Go, some types are not comparable.
+	oCmp := reflect.TypeOf(o).Comparable()
+	vCmp := reflect.TypeOf(v).Comparable()
+	if oCmp && vCmp {
+		if o == v {
+			return o
+		}
+	} else if oCmp == vCmp {
+		// TODO: what to do here? for now, assume equal
 		return o
 	}
 

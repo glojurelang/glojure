@@ -1,0 +1,9 @@
+(ns glojure.test-glojure.import
+  (:use glojure.test)
+  (:import (strings TrimPrefix)))
+
+(deftest Import
+  (is (= "bar" (TrimPrefix "foobar" "foo"))))
+
+(run-tests)
+

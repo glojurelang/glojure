@@ -245,7 +245,12 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 	case "glojure.lang.PopThreadBindings":
 		return value.PopThreadBindings, nil
 	default:
-		return nil, errors.New("unable to resolve symbol: " + value.ToString(get(n, KWClass)))
+		ns := value.GlobalEnv.CurrentNamespace()
+		m := ns.Mappings()
+		if !m.ContainsKey(sym) {
+			return nil, errors.New("unable to resolve symbol: " + value.ToString(get(n, KWClass)))
+		}
+		return m.ValAt(sym), nil
 	}
 }
 
