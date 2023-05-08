@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"os"
 	"strings"
 	"sync/atomic"
 
@@ -96,6 +97,7 @@ func (rt *RTMethods) Load(scriptBase string) {
 	filename := scriptBase + ".glj"
 	fileSystems := []fs.FS{
 		stdlib.StdLib,
+		os.DirFS("."), // TODO: don't hardcode
 	}
 	var buf []byte
 	var err error
