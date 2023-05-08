@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"os"
 	"strings"
+	"sync"
 	"sync/atomic"
 
 	"github.com/glojurelang/glojure/stdlib"
@@ -15,7 +15,18 @@ import (
 
 var (
 	RT = &RTMethods{}
+
+	loadPath     = []fs.FS{stdlib.StdLib}
+	loadPathLock sync.Mutex
 )
+
+// AddLoadPath adds a filesystem to the load path.
+func AddLoadPath(fs fs.FS) {
+	loadPathLock.Lock()
+	defer loadPathLock.Unlock()
+
+	loadPath = append(loadPath, fs)
+}
 
 // RT is a struct with methods that map to Clojure's RT class' static
 // methods. This approach is used to make translation of core.clj to
@@ -95,14 +106,14 @@ func (rt *RTMethods) Load(scriptBase string) {
 	defer PopThreadBindings()
 
 	filename := scriptBase + ".glj"
-	fileSystems := []fs.FS{
-		stdlib.StdLib,
-		os.DirFS("."), // TODO: don't hardcode
-	}
+
 	var buf []byte
 	var err error
-	for _, fs := range fileSystems {
 
+	loadPathLock.Lock()
+	lp := loadPath
+	loadPathLock.Unlock()
+	for _, fs := range lp {
 		buf, err = readFile(fs, filename)
 		if err == nil {
 			break
