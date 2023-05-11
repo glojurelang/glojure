@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/glojurelang/glojure/ast"
+	"github.com/glojurelang/glojure/pkgmap"
 	"github.com/glojurelang/glojure/value"
 
 	// Make it easier to refer to KW globals
@@ -245,12 +246,18 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 	case "glojure.lang.PopThreadBindings":
 		return value.PopThreadBindings, nil
 	default:
-		ns := value.GlobalEnv.CurrentNamespace()
+		ns := env.CurrentNamespace()
 		m := ns.Mappings()
-		if !m.ContainsKey(sym) {
-			return nil, errors.New("unable to resolve symbol: " + value.ToString(get(n, KWClass)))
+		if m.ContainsKey(sym) {
+			return m.ValAt(sym), nil
 		}
-		return m.ValAt(sym), nil
+
+		v, ok := pkgmap.Get(sym.FullName())
+		if ok {
+			return v, nil
+		}
+
+		return nil, errors.New("unable to resolve symbol: " + value.ToString(get(n, KWClass)))
 	}
 }
 
@@ -348,7 +355,7 @@ func (env *environment) EvalASTHostInterop(n ast.Node) (interface{}, error) {
 	case reflect.Func:
 		return value.Apply(mOrFVal, nil)
 	default:
-		panic("unimplemented")
+		return mOrFVal, nil
 	}
 }
 
