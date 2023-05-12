@@ -25,6 +25,29 @@ var (
 	SymInNS = value.NewSymbol("in-ns")
 )
 
+type EvalError struct {
+	Err      error
+	GLJStack []string
+	GoStack  string
+}
+
+func (e *EvalError) Error() string {
+	sb := strings.Builder{}
+	sb.WriteString(e.Err.Error())
+	sb.WriteString("\n\n")
+	if e.GoStack != "" {
+		sb.WriteString("Go Stack:\n")
+		sb.WriteString(e.GoStack)
+		sb.WriteString("\n\n")
+	}
+	sb.WriteString("GLJ Stack:\n")
+	for _, s := range e.GLJStack {
+		sb.WriteString(s)
+		sb.WriteString("\n")
+	}
+	return sb.String()
+}
+
 func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 	n := x.(ast.Node)
 
@@ -592,16 +615,28 @@ func (env *environment) EvalASTInvoke(n ast.Node) (res interface{}, err error) {
 		if !ok {
 			return
 		}
+		gljFrame := fmt.Sprintf("%s:%d:%d: %s\n", value.Get(meta, KWFile), value.Get(meta, KWLine), value.Get(meta, KWColumn), get(n, KWForm))
 		if r := recover(); r != nil {
-			if rerr, ok := r.(error); ok {
-				err = fmt.Errorf("%w\nStack:\n%v", rerr, string(debug.Stack()))
-			} else {
-				err = fmt.Errorf("%v\nStack:\n%v", r, string(debug.Stack()))
+			switch r := r.(type) {
+			case *EvalError:
+				r.GLJStack = append(r.GLJStack, gljFrame)
+				if r.GoStack == "" {
+					r.GoStack = string(debug.Stack())
+				}
+				err = r
+			case error:
+				err = &EvalError{
+					Err:      r,
+					GLJStack: []string{gljFrame},
+					GoStack:  string(debug.Stack()),
+				}
+			default:
+				err = &EvalError{
+					Err:      fmt.Errorf("%v", r),
+					GLJStack: []string{gljFrame},
+					GoStack:  string(debug.Stack()),
+				}
 			}
-		}
-
-		if err != nil {
-			fmt.Printf("%s:%d:%d: %s\n", value.Get(meta, KWFile), value.Get(meta, KWLine), value.Get(meta, KWColumn), get(n, KWForm))
 		}
 	}()
 	fn := get(n, KWFn)
