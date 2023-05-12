@@ -302,12 +302,6 @@ func (env *environment) EvalASTMaybeClass(n ast.Node) (interface{}, error) {
 	case "glojure.lang.PopThreadBindings":
 		return value.PopThreadBindings, nil
 	default:
-		ns := env.CurrentNamespace()
-		m := ns.Mappings()
-		if m.ContainsKey(sym) {
-			return m.ValAt(sym), nil
-		}
-
 		v, ok := pkgmap.Get(sym.FullName())
 		if ok {
 			return v, nil

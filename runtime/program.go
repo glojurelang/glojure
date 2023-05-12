@@ -94,11 +94,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		}))
 	}
 
-	gljimports.RegisterImports(func(name string, val interface{}) {
-		// TODO: just add to the package map!
-		env.BindLocal(value.NewSymbol(name), val)
-		pkgmap.Set(name, val)
-	})
+	gljimports.RegisterImports(pkgmap.Set)
 
 	define := func(name string, val interface{}) {
 		// TODO: use DefVar!
