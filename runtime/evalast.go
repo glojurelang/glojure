@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"runtime/debug"
 	"strings"
 
 	"github.com/glojurelang/glojure/ast"
@@ -593,9 +594,9 @@ func (env *environment) EvalASTInvoke(n ast.Node) (res interface{}, err error) {
 		}
 		if r := recover(); r != nil {
 			if rerr, ok := r.(error); ok {
-				err = fmt.Errorf("%w\n", rerr)
+				err = fmt.Errorf("%w\nStack:\n%v", rerr, string(debug.Stack()))
 			} else {
-				err = fmt.Errorf("%v\n", r)
+				err = fmt.Errorf("%v\nStack:\n%v", r, string(debug.Stack()))
 			}
 		}
 
