@@ -326,8 +326,8 @@ func (env *environment) EvalASTHostCall(n ast.Node) (interface{}, error) {
 		}
 		argVals = append(argVals, argVal)
 	}
-	methodVal := value.FieldOrMethod(tgtVal, method.Name())
-	if methodVal == nil {
+	methodVal, ok := value.FieldOrMethod(tgtVal, method.Name())
+	if !ok {
 		return nil, fmt.Errorf("no such field or method on %v (%T): %s", tgtVal, tgtVal, method)
 	}
 	// if the field is not a function, return an error
@@ -347,9 +347,14 @@ func (env *environment) EvalASTHostInterop(n ast.Node) (interface{}, error) {
 		return nil, err
 	}
 
-	mOrFVal := value.FieldOrMethod(tgtVal, mOrF.Name())
-	if mOrFVal == nil {
+	mOrFVal, ok := value.FieldOrMethod(tgtVal, mOrF.Name())
+	if !ok {
 		return nil, fmt.Errorf("no such field or method on %T: %s", tgtVal, mOrF)
+	}
+	if mOrFVal == nil {
+		// Avoid panic in kind check below and just return if nil. It
+		// can't have been a method.
+		return mOrFVal, nil
 	}
 	switch reflect.TypeOf(mOrFVal).Kind() {
 	case reflect.Func:

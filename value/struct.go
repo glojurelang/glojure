@@ -7,13 +7,14 @@ import (
 )
 
 // FieldOrMethod returns the field or method of the given name on the
-// given value or pointer to a value. If the value is a pointer, it is
-// dereferenced. If the value or pointer target is not a struct, or if
-// no such field or method exists, nil is returned. The first letter
-// of the name will be capitalized if it is not already. This is
-// because Go exports fields and methods that start with a capital
-// letter.
-func FieldOrMethod(v interface{}, name string) interface{} {
+// given value or pointer to a value, and a boolean indicating whether
+// the field or method was found. If the given value is a pointer, it
+// is dereferenced. If the value or pointer target is not a struct, or
+// if no such field or method exists, nil and false are returned. The
+// first letter of the name will be capitalized if it is not
+// already. This is because Go exports fields and methods that start
+// with a capital letter.
+func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 	if unicode.IsLower(rune(name[0])) {
 		name = string(unicode.ToUpper(rune(name[0]))) + string([]rune(name)[1:])
 	}
@@ -22,7 +23,7 @@ func FieldOrMethod(v interface{}, name string) interface{} {
 
 	val := target.MethodByName(name)
 	if val.IsValid() {
-		return val.Interface()
+		return val.Interface(), true
 	}
 
 	// dereference the value if it's a pointer
@@ -31,15 +32,15 @@ func FieldOrMethod(v interface{}, name string) interface{} {
 	}
 
 	if target.Kind() != reflect.Struct {
-		return nil
+		return nil, false
 	}
 
 	val = target.FieldByName(name)
 	if val.IsValid() {
-		return val.Interface()
+		return val.Interface(), true
 	}
 
-	return nil
+	return nil, false
 }
 
 func SetField(target interface{}, name string, val interface{}) error {
