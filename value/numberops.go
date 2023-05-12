@@ -506,8 +506,10 @@ func AsBigInt(x interface{}) *BigInt {
 		return NewBigIntFromInt64(int64(x))
 	case float64:
 		return NewBigIntFromInt64(int64(x))
+	case *BigInt:
+		return x
 	default:
-		panic("cannot convert to BigInt")
+		panic(fmt.Errorf("cannot convert %T to BigInt", x))
 	}
 }
 
@@ -537,6 +539,10 @@ func AsRatio(x interface{}) *Ratio {
 		return NewRatio(int64(x), 1)
 	case float64:
 		return NewRatio(int64(x), 1)
+	case *BigInt:
+		return NewRatioBigInt(x, NewBigIntFromInt64(1))
+	case *Ratio:
+		return x
 	default:
 		panic("cannot convert to Ratio")
 	}
@@ -568,6 +574,8 @@ func AsBigDecimal(x interface{}) *BigDecimal {
 		return NewBigDecimalFromFloat64(float64(x))
 	case float64:
 		return NewBigDecimalFromFloat64(float64(x))
+	case *BigDecimal:
+		return x
 	default:
 		panic("cannot convert to BigDecimal")
 	}
