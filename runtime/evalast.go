@@ -132,12 +132,44 @@ func (env *environment) EvalASTAssign(n ast.Node) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	if get(get(n, KWTarget), KWOp) == KWVar {
-		target := get(get(n, KWTarget), KWVar).(*value.Var)
-		return target.Set(val), nil
-	}
+	target := get(n, KWTarget)
+	switch get(target, KWOp) {
+	case KWVar:
+		tgtVar := get(target, KWVar).(*value.Var)
+		return tgtVar.Set(val), nil
+	case KWHostInterop:
+		interopTargetVal, err := env.EvalAST(get(target, KWTarget).(ast.Node))
+		if err != nil {
+			return nil, err
+		}
+		field := get(target, KWMOrF).(*value.Symbol)
 
-	return nil, fmt.Errorf("unsupported assign target: %v", get(n, KWTarget))
+		targetV := reflect.ValueOf(interopTargetVal)
+		if targetV.Kind() == reflect.Ptr {
+			targetV = targetV.Elem()
+		}
+		fieldVal := targetV.FieldByName(field.Name())
+		if !fieldVal.IsValid() {
+			return nil, fmt.Errorf("no such field %s", field.Name())
+		}
+		if !fieldVal.CanSet() {
+			return nil, fmt.Errorf("cannot set field %s", field.Name())
+		}
+		valV := reflect.ValueOf(val)
+		if !valV.IsValid() {
+			switch fieldVal.Kind() {
+			case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+				fieldVal.Set(reflect.Zero(fieldVal.Type()))
+			default:
+				return nil, fmt.Errorf("cannot set field %s to nil", field.Name())
+			}
+		} else {
+			fieldVal.Set(valV)
+		}
+		return val, nil
+	default:
+		return nil, fmt.Errorf("unsupported assign target: %v", get(target, KWForm))
+	}
 }
 
 func (env *environment) EvalASTTheVar(n ast.Node) (interface{}, error) {
