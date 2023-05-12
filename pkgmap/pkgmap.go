@@ -35,6 +35,9 @@ func Get(export string) (interface{}, bool) {
 
 func SplitExport(export string) (string, string) {
 	lastDot := strings.LastIndex(export, ".")
+	if lastDot == -1 {
+		return "", export
+	}
 	pkg := export[:lastDot]
 	name := export[lastDot+1:]
 	return pkg, name
