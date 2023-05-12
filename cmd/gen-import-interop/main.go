@@ -1,14 +1,16 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"go/importer"
+	"go/token"
 	"go/types"
 	"strings"
 )
 
 var (
-	packages = []string{
+	defaultPackages = []string{
 		"bytes",
 		"context",
 		"errors",
@@ -34,13 +36,24 @@ var (
 	}
 )
 
+var (
+	packages = flag.String("packages", "", "comma separated list of packages to import")
+)
+
 func main() {
+	flag.Parse()
+
+	pkgs := defaultPackages
+	if *packages != "" {
+		pkgs = strings.Split(*packages, ",")
+	}
+
 	builder := &strings.Builder{}
 	builder.WriteString("// GENERATED FILE. DO NOT EDIT.\n")
 	builder.WriteString("package gljimports\n\n")
 	builder.WriteString("import (\n")
 	importedReflect := false
-	for _, pkg := range packages {
+	for _, pkg := range pkgs {
 		if pkg == "reflect" {
 			importedReflect = true
 		}
@@ -54,14 +67,14 @@ func main() {
 	builder.WriteString(")\n\n")
 
 	builder.WriteString("func RegisterImports(_register func(string, interface{})) {\n")
-	for i, pkgName := range packages {
+	for i, pkgName := range pkgs {
 		if i > 0 {
 			builder.WriteRune('\n')
 		}
 		builder.WriteString(fmt.Sprintf("\t// package %s\n", pkgName))
 		builder.WriteString(fmt.Sprintf("\t%s\n", strings.Repeat("//", 20)))
 
-		pkg, err := importer.Default().Import(pkgName)
+		pkg, err := importer.ForCompiler(token.NewFileSet(), "source", nil).Import(pkgName)
 		if err != nil {
 			panic(err)
 		}

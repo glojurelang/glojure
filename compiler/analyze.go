@@ -95,6 +95,12 @@ func (a *Analyzer) analyzeSymbol(form *value.Symbol, env Env) (ast.Node, error) 
 				KWVar, vr,
 				KWMeta, m,
 			)
+		} else if v != nil {
+			// The symbol resolves to a non-var value. Treat it as a
+			// constant.
+			n = ast.MakeNode(KWConst, v)
+			n = n.Assoc(KWType, classifyType(v)).
+				Assoc(KWVal, v)
 		} else {
 			maybeClass := form.Namespace()
 			if maybeClass != "" {
