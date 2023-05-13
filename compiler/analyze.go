@@ -1154,7 +1154,6 @@ func (a *Analyzer) parseRecur(form interface{}, env Env) (ast.Node, error) {
 	errorMsg := ""
 	switch {
 	case !value.Equal(ctx, ctxReturn):
-		panic("Can only recur from tail position")
 		errorMsg = "can only recur from tail position"
 	case !value.Equal(value.Count(exprs), loopLocals):
 		errorMsg = fmt.Sprintf("mismatched argument count to recur, expected: %v args, had: %v", loopLocals, value.Count(exprs))
