@@ -2,6 +2,7 @@ package value
 
 import (
 	"fmt"
+	"math"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -69,11 +70,24 @@ func ToString(v interface{}, opts ...PrintOption) string {
 		if v == float64(int64(v)) {
 			return fmt.Sprintf("%d.0", int64(v))
 		}
+		if math.IsNaN(v) {
+			return "##NaN"
+		}
+		if math.IsInf(v, 1) {
+			return "##Inf"
+		}
+		if math.IsInf(v, -1) {
+			return "##-Inf"
+		}
 		return strconv.FormatFloat(v, 'f', -1, 64)
 	case *regexp.Regexp:
 		return fmt.Sprintf("#\"%s\"", v.String())
 	case uint64, uint32, uint16, uint8, uint, int64, int32, int16, int8, int:
 		return fmt.Sprintf("%d", v)
+	case *BigInt:
+		return v.String() + "N"
+	case *BigDecimal:
+		return v.String() + "M"
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

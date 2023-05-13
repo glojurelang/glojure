@@ -135,8 +135,8 @@
 
 (defmethod print-method float32 [o, ^Writer w]
   (cond
-    (= Float/POSITIVE_INFINITY o) (glojure.lang.WriteWriter w "##Inf")
-    (= Float/NEGATIVE_INFINITY o) (glojure.lang.WriteWriter w "##-Inf")
+    (= (float32 (math.Inf 1)) o) (glojure.lang.WriteWriter w "##Inf")
+    (= (float32 (math.Inf -1)) o) (glojure.lang.WriteWriter w "##-Inf")
     (math.IsNaN ^float32 o) (glojure.lang.WriteWriter w "##NaN")
     :else (glojure.lang.WriteWriter w (str o))))
 

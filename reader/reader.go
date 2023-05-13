@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -906,6 +907,8 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		r.rs.UnreadRune()
 		// just read normally
 		return r.readExpr()
+	case '#':
+		return r.readSymbolicValue()
 	default:
 		return nil, r.error("invalid dispatch character: %c", rn)
 	}
@@ -958,6 +961,26 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 		panic(err)
 	}
 	return m, nil
+}
+
+func (r *Reader) readSymbolicValue() (interface{}, error) {
+	v, err := r.readExpr()
+	if err != nil {
+		return nil, err
+	}
+	sym, ok := v.(*value.Symbol)
+	if !ok {
+		return nil, r.error("symbolic value must be a symbol")
+	}
+	switch sym.Name() {
+	case "Inf":
+		return math.Inf(1), nil
+	case "-Inf":
+		return math.Inf(-1), nil
+	case "NaN":
+		return math.NaN(), nil
+	}
+	return nil, r.error("unknown symbolic value: ##%s", sym.Name())
 }
 
 var (

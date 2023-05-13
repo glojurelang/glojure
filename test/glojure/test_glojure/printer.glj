@@ -1,6 +1,5 @@
 (ns glojure.test-glojure.printer
   (:use glojure.test))
-;;        [glojure.test-helper :only [platform-newlines]])
 ;;(:require [glojure.pprint :refer [pprint]]))
 
 (deftest print-length-empty-seq
@@ -86,24 +85,24 @@
        1M
        "hi"))
 
-;; (def ^{:foo :anything} var-with-meta 42)
-;; (def ^{:type :anything} var-with-type 666)
+(def ^{:foo :anything} var-with-meta 42)
+(def ^{:type :anything} var-with-type 666)
 
-;; (deftest print-var
-;;   (are [x s] (= s (pr-str x))
-;;        #'pr-str  "#'clojure.core/pr-str"
-;;        #'var-with-meta "#'clojure.test-clojure.printer/var-with-meta"
-;;        #'var-with-type "#'clojure.test-clojure.printer/var-with-type"))
+(deftest print-var
+  (are [x s] (= s (pr-str x))
+       #'pr-str  "#'glojure.core/pr-str"
+       #'var-with-meta "#'glojure.test-glojure.printer/var-with-meta"
+       #'var-with-type "#'glojure.test-glojure.printer/var-with-type"))
 
-;; (deftest print-meta
-;;   (are [x s] (binding [*print-meta* true] 
-;;                (let [pstr (pr-str x)]
-;;                  (and (.endsWith pstr s)
-;;                       (.startsWith pstr "^")
-;;                       (.contains pstr (pr-str (meta x))))))
-;;        #'pr-str  "#'clojure.core/pr-str"
-;;        #'var-with-meta "#'clojure.test-clojure.printer/var-with-meta"
-;;        #'var-with-type "#'clojure.test-clojure.printer/var-with-type"))
+(deftest print-meta
+  (are [x s] (binding [*print-meta* true] 
+               (let [pstr (pr-str x)]
+                 (and (strings.HasSuffix pstr s)
+                      (strings.HasPrefix pstr "^")
+                      (strings.Contains pstr (pr-str (meta x))))))
+       #'pr-str  "#'glojure.core/pr-str"
+       #'var-with-meta "#'glojure.test-glojure.printer/var-with-meta"
+       #'var-with-type "#'glojure.test-glojure.printer/var-with-type"))
 
 ;; (deftest print-throwable
 ;;   (binding [*data-readers* {'error identity}]
@@ -123,7 +122,7 @@
 ;; (deftest print-ns-maps
 ;;   (are [m s-on pp-on s-off]
 ;;     (and (= s-on (binding [*print-namespace-maps* true] (pr-str m)))
-;;       (= (platform-newlines pp-on) (binding [*print-namespace-maps* true] (with-out-str (pprint m))))
+;;       (= pp-on (binding [*print-namespace-maps* true] (with-out-str (pprint m))))
 ;;       (= s-off (binding [*print-namespace-maps* false] (pr-str m))))
 ;;     {} "{}" "{}\n" "{}"
 ;;     {:a 1, :b 2} "{:a 1, :b 2}" "{:a 1, :b 2}\n" "{:a 1, :b 2}"
@@ -168,14 +167,14 @@
 ;;     (is (= (binding [*print-namespace-maps* true] (pr-str date-map))
 ;;            (binding [*print-namespace-maps* false] (pr-str date-map))))))
 
-;; (deftest print-symbol-values
-;;   (are [s v] (= s (pr-str v))
-;;              "##Inf" Double/POSITIVE_INFINITY
-;;              "##-Inf" Double/NEGATIVE_INFINITY
-;;              "##NaN" Double/NaN
-;;              "##Inf" Float/POSITIVE_INFINITY
-;;              "##-Inf" Float/NEGATIVE_INFINITY
-;;              "##NaN" Float/NaN))
+(deftest print-symbol-values
+  (are [s v] (= s (pr-str v))
+             "##Inf" (math.Inf 1)
+             "##-Inf" (math.Inf -1)
+             "##NaN" (math.NaN)
+             "##Inf" (float32 (math.Inf 1))
+             "##-Inf" (float32 (math.Inf -1))
+             "##NaN" (float32 (math.NaN))))
 
 (run-tests)
 

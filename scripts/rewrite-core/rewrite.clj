@@ -68,6 +68,8 @@
 
    (sexpr-replace 'Double/POSITIVE_INFINITY '(math.Inf 1))
    (sexpr-replace 'Double/NEGATIVE_INFINITY '(math.Inf -1))
+   (sexpr-replace 'Float/POSITIVE_INFINITY '(float32 (math.Inf 1)))
+   (sexpr-replace 'Float/NEGATIVE_INFINITY '(float32 (math.Inf -1)))
    (sexpr-replace '.isNaN 'math.IsNaN)
 
    (sexpr-replace '(clojure.lang.LongRange/create end)
