@@ -8,6 +8,7 @@ import (
 	"sync"
 	"sync/atomic"
 
+	"github.com/glojurelang/glojure/reader"
 	"github.com/glojurelang/glojure/stdlib"
 	"github.com/glojurelang/glojure/value"
 
@@ -188,4 +189,15 @@ func (rt *RTMethods) Munge(name string) string {
 		}
 	}
 	return sb.String()
+}
+
+func RTReadString(s string) interface{} {
+	rdr := reader.New(strings.NewReader(s), reader.WithGetCurrentNS(func() *value.Namespace {
+		return value.VarCurrentNS.Deref().(*value.Namespace)
+	}))
+	v, err := rdr.ReadOne()
+	if err != nil {
+		panic(err)
+	}
+	return v
 }

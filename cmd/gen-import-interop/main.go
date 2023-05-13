@@ -35,6 +35,7 @@ var (
 		"unicode",
 
 		"github.com/glojurelang/glojure/value",
+		"github.com/glojurelang/glojure/runtime",
 	}
 )
 

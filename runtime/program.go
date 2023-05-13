@@ -17,8 +17,6 @@ import (
 	"github.com/glojurelang/glojure/stdlib"
 	"github.com/glojurelang/glojure/value"
 	"github.com/glojurelang/glojure/value/util"
-
-	"github.com/glojurelang/glojure/gen/gljimports"
 )
 
 type Program struct {
@@ -93,8 +91,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			return ns
 		}))
 	}
-
-	gljimports.RegisterImports(pkgmap.Set)
 
 	define := func(name string, val interface{}) {
 		// TODO: use DefVar!

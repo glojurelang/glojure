@@ -12,6 +12,9 @@ import (
 	"github.com/glojurelang/glojure/repl"
 	"github.com/glojurelang/glojure/runtime"
 	"github.com/glojurelang/glojure/value"
+
+	// Bootstrap the runtime
+	_ "github.com/glojurelang/glojure/glj"
 )
 
 func main() {

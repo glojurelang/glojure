@@ -4,6 +4,8 @@ import (
 	"io"
 	"os"
 
+	"github.com/glojurelang/glojure/gen/gljimports"
+	"github.com/glojurelang/glojure/pkgmap"
 	"github.com/glojurelang/glojure/runtime"
 	"github.com/glojurelang/glojure/value"
 )
@@ -13,6 +15,8 @@ func init() {
 }
 
 func initEnv(stdout io.Writer) value.Environment {
+	gljimports.RegisterImports(pkgmap.Set)
+
 	// TODO: clean up this code. copied from rtcompat.go.
 	kvs := make([]interface{}, 0, 3)
 	for _, vr := range []*value.Var{value.VarCurrentNS, value.VarWarnOnReflection, value.VarUncheckedMath, value.VarDataReaders} {

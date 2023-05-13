@@ -214,6 +214,8 @@
    (sexpr-replace '(. s (substring start)) '(go/slice s start))
    (sexpr-replace '(. s (substring start end)) '(go/slice s start end))
 
+   (sexpr-replace 'clojure.lang.RT/readString 'github.com$glojurelang$glojure$runtime.RTReadString)
+
    (sexpr-replace '.lastIndexOf 'strings.LastIndex)
 
    (sexpr-replace 'clojure.lang.RT/conj 'glojure.lang.Conj)

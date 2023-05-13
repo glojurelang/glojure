@@ -9,8 +9,9 @@ all: $(STDLIB_TARGETS) generate gen/gljimports/gljimports.go
 generate:
 	@go generate ./...
 
-gen/gljimports/gljimports.go: ./cmd/gen-import-interop/main.go $(wildcard ./value/*.go)
-	@go run ./cmd/gen-import-interop/main.go > $@
+gen/gljimports/gljimports.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go $(wildcard ./value/*.go)
+	@echo "Generating $@"
+	@./scripts/gen-gljimports.sh $@
 
 stdlib/glojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-core/run.sh scripts/rewrite-core/rewrite.clj
 	@echo "Rewriting $<"
@@ -25,7 +26,7 @@ vet:
 
 .PHONY: test
 test:
-	# @go run ./cmd/glj/main.go ./test/glojure/test_glojure/basic.glj
-	# @go run ./cmd/glj/main.go ./test/glojure/test_glojure/import.glj
+	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/basic.glj
+	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/import.glj
 	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/printer.glj
 
