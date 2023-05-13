@@ -16,6 +16,8 @@ var (
 	_ ISeq            = (*List)(nil)
 	_ IPersistentList = (*List)(nil)
 	_ Counted         = (*List)(nil)
+	_ IReduce         = (*List)(nil)
+	_ IReduceInit     = (*List)(nil)
 )
 
 type EmptyList struct {
@@ -205,43 +207,33 @@ func (l *List) Nth(i int) (v interface{}, ok bool) {
 	return nil, false
 }
 
-func (l *List) Enumerate() (<-chan interface{}, func()) {
-	return enumerateFunc(func() (v interface{}, ok bool) {
-		if l.IsEmpty() {
-			return nil, false
-		}
-		v = l.item
-		l = l.next
-		return v, true
-	})
-}
-
-func enumerateFunc(next func() (v interface{}, ok bool)) (<-chan interface{}, func()) {
-	ch := make(chan interface{})
-
-	done := make(chan struct{})
-	cancel := func() {
-		close(done)
-	}
-	go func() {
-		for {
-			v, ok := next()
-			if !ok {
-				break
-			}
-			select {
-			case ch <- v:
-			case <-done:
-				return
-			}
-		}
-		close(ch)
-	}()
-	return ch, cancel
-}
-
 func (l *List) String() string {
 	return PrintString(l)
+}
+
+func (l *List) Reduce(f IFn) interface{} {
+	ret := l.First()
+	for s := l.Next(); s != nil; s = s.Next() {
+		ret = f.Invoke(ret, s.First())
+		if IsReduced(ret) {
+			return ret.(IDeref).Deref()
+		}
+	}
+	return ret
+}
+
+func (l *List) ReduceInit(f IFn, init interface{}) interface{} {
+	ret := f.Invoke(init, l.First())
+	for s := l.Next(); s != nil; s = s.Next() {
+		if IsReduced(ret) {
+			return ret.(IDeref).Deref()
+		}
+		ret = f.Invoke(ret, s.First())
+	}
+	if IsReduced(ret) {
+		return ret.(IDeref).Deref()
+	}
+	return ret
 }
 
 // TODO: rename to Equiv
