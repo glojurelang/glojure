@@ -26,6 +26,7 @@ vet:
 
 .PHONY: test
 test:
+	@go test ./...
 	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/basic.glj
 	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/import.glj
 	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/printer.glj
