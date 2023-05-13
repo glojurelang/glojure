@@ -52,12 +52,22 @@ func TestRead(t *testing.T) {
 		})
 	}
 
+	aliasNS := value.FindOrCreateNamespace(value.NewSymbol("resolved.alias"))
+	ns := value.FindOrCreateNamespace(value.NewSymbol("user"))
+	ns.AddAlias(value.NewSymbol("aliased"), aliasNS)
+
 	for _, tc := range testCases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			r := New(strings.NewReader(tc.input), WithFilename(tc.name), WithSymbolResolver(&testSymbolResolver{}))
+			r := New(strings.NewReader(tc.input),
+				WithFilename(tc.name),
+				// WithSymbolResolver(&testSymbolResolver{}), // TODO: option to test with this
+				WithGetCurrentNS(func() *value.Namespace {
+					return ns
+				}),
+			)
 			exprs, err := r.ReadAll()
 			if err != nil {
 				t.Fatal(err)

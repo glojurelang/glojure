@@ -34,6 +34,8 @@ var (
 
 	_ ISeq = (*persistentStructMapSeq)(nil)
 	_ IObj = (*persistentStructMapSeq)(nil)
+
+	emptyPersistentStructMap = newPersistentStructMap(nil, nil, nil, emptyMap)
 )
 
 func ConstructPersistentStructMap(def *PersistentStructMapDef, valseq ISeq) *PersistentStructMap {
@@ -113,6 +115,10 @@ func (m *PersistentStructMap) EntryAt(k interface{}) IMapEntry {
 
 func (m *PersistentStructMap) Seq() ISeq {
 	return newPersistentStructMapSeq(nil, m.def.keys, m.vals, 0, m.ext)
+}
+
+func (m *PersistentStructMap) Empty() IPersistentCollection {
+	return emptyPersistentStructMap.WithMeta(m.meta).(IPersistentCollection)
 }
 
 func (m *PersistentStructMap) ValAtDefault(key, def interface{}) interface{} {

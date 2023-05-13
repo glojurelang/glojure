@@ -91,10 +91,6 @@ var (
 )
 
 func NewPersistentHashMap(keyvals ...interface{}) IPersistentMap {
-	if len(keyvals) == 0 {
-		return emptyMap
-	}
-
 	var res Associative = emptyPersistentHashMap
 	for i := 0; i < len(keyvals); i += 2 {
 		res = res.Assoc(keyvals[i], keyvals[i+1])
@@ -178,6 +174,10 @@ func (m *PersistentHashMap) Seq() ISeq {
 		return m.root.nodeSeq()
 	}
 	return nil
+}
+
+func (m *PersistentHashMap) Empty() IPersistentCollection {
+	return emptyPersistentHashMap.WithMeta(m.Meta()).(IPersistentCollection)
 }
 
 func (m *PersistentHashMap) ValAtDefault(key, notFound interface{}) interface{} {

@@ -174,19 +174,7 @@ func (env *environment) lookupVar(sym *value.Symbol, internNew, registerMacro bo
 }
 
 func (env *environment) namespaceForSymbol(sym *value.Symbol) *value.Namespace {
-	return env.namespaceFor(env.CurrentNamespace(), sym)
-}
-
-func (env *environment) namespaceFor(inns *value.Namespace, sym *value.Symbol) *value.Namespace {
-	//note, presumes non-nil sym.ns
-	// first check against currentNS' aliases...
-	nsSym := value.NewSymbol(sym.Namespace())
-	ns := inns.LookupAlias(nsSym)
-	if ns != nil {
-		return ns
-	}
-
-	return value.FindNamespace(nsSym)
+	return value.NamespaceFor(env.CurrentNamespace(), sym)
 }
 
 func (env *environment) registerVar(v *value.Var) {

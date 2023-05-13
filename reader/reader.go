@@ -155,7 +155,7 @@ type (
 		rs *trackingRuneScanner
 
 		symbolResolver SymbolResolver
-		getCurrentNS   func() string
+		getCurrentNS   func() *value.Namespace
 
 		// map for function shorthand arguments.
 		// non-nil only when reading a function shorthand.
@@ -169,7 +169,7 @@ type (
 type options struct {
 	filename     string
 	resolver     SymbolResolver
-	getCurrentNS func() string
+	getCurrentNS func() *value.Namespace
 }
 
 // Option represents an option that can be passed to New.
@@ -190,7 +190,7 @@ func WithSymbolResolver(resolver SymbolResolver) Option {
 }
 
 // WithGetCurrentNS sets the function to be used to get the current namespace.
-func WithGetCurrentNS(getCurrentNS func() string) Option {
+func WithGetCurrentNS(getCurrentNS func() *value.Namespace) Option {
 	return func(o *options) {
 		o.getCurrentNS = getCurrentNS
 	}
@@ -202,7 +202,12 @@ func New(r io.RuneScanner, opts ...Option) *Reader {
 	for _, opt := range opts {
 		opt(&o)
 	}
-	getCurrentNS := func() string { return "user" }
+	getCurrentNS := func() *value.Namespace {
+		if value.GlobalEnv != nil { // TODO: should be unnecessary
+			return value.GlobalEnv.CurrentNamespace()
+		}
+		return value.FindOrCreateNamespace(value.NewSymbol("user"))
+	}
 	if o.getCurrentNS != nil {
 		getCurrentNS = o.getCurrentNS
 	}
@@ -757,9 +762,7 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 				break
 			}
 			// TODO: need to do anything for equiv of clojure maybeClass?
-			if sym.Namespace() == "" {
-				sym = resolveSymbol(sym)
-			}
+			sym = r.resolveSymbol(sym)
 		}
 		// TODO: match actual LispReader.java behavior
 		return value.NewList(symQuote, sym)
@@ -1103,7 +1106,8 @@ func (r *Reader) readKeyword() (interface{}, error) {
 		return nil, r.error("invalid keyword: :" + sym)
 	}
 	if sym[0] == ':' {
-		ns := value.GlobalEnv.CurrentNamespace().Name().Name()
+		// TODO: handle auto-resolving keywords with namespaces
+		ns := r.getCurrentNS().Name().Name()
 		sym = ns + "/" + sym[1:]
 	}
 	return value.NewKeyword(sym), nil
@@ -1127,23 +1131,21 @@ func (r *Reader) readMeta() (value.IPersistentMap, error) {
 	}
 }
 
-func isSpace(r rune) bool {
-	return r == ',' || unicode.IsSpace(r)
-}
-
 // Translated from Clojure's Compiler.java
-func resolveSymbol(sym *value.Symbol) *value.Symbol {
+func (r *Reader) resolveSymbol(sym *value.Symbol) *value.Symbol {
 	if strings.Contains(sym.Name(), ".") {
 		return sym
 	}
 	if sym.Namespace() != "" {
-		ns := value.FindNamespace(value.NewSymbol(sym.Namespace()))
+		ns := value.NamespaceFor(r.getCurrentNS(), sym)
 		if ns == nil || (ns.Name().Name() == "" && sym.Namespace() == "") ||
 			(ns.Name().Name() != "" && ns.Name().Name() == sym.Namespace()) {
 			return sym
 		}
+		return value.InternSymbol(ns.Name().Name(), sym.Name())
 	}
-	currentNS := value.GlobalEnv.CurrentNamespace()
+
+	currentNS := r.getCurrentNS()
 	o := currentNS.GetMapping(sym)
 	switch o := o.(type) {
 	case nil:
@@ -1152,4 +1154,8 @@ func resolveSymbol(sym *value.Symbol) *value.Symbol {
 		return value.InternSymbol(o.Namespace().Name().Name(), o.Symbol().Name())
 	}
 	return nil
+}
+
+func isSpace(r rune) bool {
+	return r == ',' || unicode.IsSpace(r)
 }

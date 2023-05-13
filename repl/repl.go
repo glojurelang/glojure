@@ -88,8 +88,8 @@ func Start(opts ...Option) {
 		}
 		expr += line + "\n"
 
-		rdr := reader.New(strings.NewReader(expr), reader.WithFilename("repl"), reader.WithGetCurrentNS(func() string {
-			return o.env.CurrentNamespace().Name().String()
+		rdr := reader.New(strings.NewReader(expr), reader.WithFilename("repl"), reader.WithGetCurrentNS(func() *value.Namespace {
+			return o.env.CurrentNamespace()
 		}))
 
 		vals, err := rdr.ReadAll()

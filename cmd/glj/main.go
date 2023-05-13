@@ -25,8 +25,8 @@ func main() {
 			log.Fatal(err)
 		}
 		env := initEnv(os.Stdout)
-		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() string {
-			return env.CurrentNamespace().Name().String()
+		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() *value.Namespace {
+			return env.CurrentNamespace()
 		}))
 		for {
 			val, err := rdr.ReadOne()

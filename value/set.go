@@ -7,11 +7,13 @@ import (
 
 // Set represents a map of glojure values.
 type Set struct {
+	meta IPersistentMap
+
 	vals []interface{}
 }
 
 func NewSet(vals ...interface{}) *Set {
-	// TEMP: reverse to pass test
+	// TODO: fixme. reverse to pass test
 	if len(vals) == 3 {
 		vals[0], vals[2] = vals[2], vals[0]
 	}
@@ -22,7 +24,11 @@ func NewSet(vals ...interface{}) *Set {
 }
 
 var (
-	_ IPersistentSet = (*Set)(nil)
+	_ IPersistentSet        = (*Set)(nil)
+	_ IPersistentCollection = (*Set)(nil)
+	_ IFn                   = (*Set)(nil)
+
+	emptySet = NewSet()
 )
 
 func (s *Set) Get(key interface{}) interface{} {
@@ -82,6 +88,10 @@ func (s *Set) IsEmpty() bool {
 	return s.Count() == 0
 }
 
+func (s *Set) Empty() IPersistentCollection {
+	return emptySet.WithMeta(s.Meta()).(IPersistentCollection)
+}
+
 func (s *Set) String() string {
 	b := strings.Builder{}
 
@@ -123,6 +133,17 @@ func (s *Set) Seq() ISeq {
 		return nil
 	}
 	return NewSliceIterator(s.vals)
+}
+
+func (s *Set) Meta() IPersistentMap {
+	return s.meta
+}
+
+func (s *Set) WithMeta(meta IPersistentMap) interface{} {
+	return &Set{
+		meta: meta,
+		vals: s.vals,
+	}
 }
 
 func (s *Set) AsTransient() ITransientCollection {

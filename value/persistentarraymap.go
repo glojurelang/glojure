@@ -124,6 +124,10 @@ func (m *Map) Seq() ISeq {
 	return NewMapSeq(m)
 }
 
+func (m *Map) Empty() IPersistentCollection {
+	return emptyMap.WithMeta(m.meta).(IPersistentCollection)
+}
+
 func (m *Map) String() string {
 	return mapString(m)
 }

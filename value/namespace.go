@@ -58,6 +58,18 @@ func FindOrCreateNamespace(sym *Symbol) *Namespace {
 	return ns
 }
 
+func NamespaceFor(inns *Namespace, sym *Symbol) *Namespace {
+	//note, presumes non-nil sym.ns
+	// first check against currentNS' aliases...
+	nsSym := NewSymbol(sym.Namespace())
+	ns := inns.LookupAlias(nsSym)
+	if ns != nil {
+		return ns
+	}
+
+	return FindNamespace(nsSym)
+}
+
 func NewNamespace(name *Symbol) *Namespace {
 	ns := &Namespace{
 		name: name,

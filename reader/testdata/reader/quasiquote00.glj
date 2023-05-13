@@ -6,3 +6,4 @@
 `(a ~@[(+ 1 2)])
 `(do.not.Qualify)
 `{:x ~[]}
+`(aliased/foo)

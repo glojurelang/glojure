@@ -225,7 +225,7 @@ func (c *evalCompiler) Macroexpand1(form interface{}) interface{} {
 func (c *evalCompiler) MaybeResolveIn(ns *value.Namespace, sym *value.Symbol) interface{} {
 	switch {
 	case sym.Namespace() != "":
-		n := c.env.namespaceFor(ns, sym)
+		n := value.NamespaceFor(ns, sym)
 		if n == nil {
 			return nil
 		}

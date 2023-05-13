@@ -49,8 +49,8 @@ func ReadEval(code string, options ...ReadEvalOption) interface{} {
 		env = value.GlobalEnv
 	}
 	readerOpts := []reader.Option{
-		reader.WithGetCurrentNS(func() string {
-			return env.CurrentNamespace().Name().String()
+		reader.WithGetCurrentNS(func() *value.Namespace {
+			return env.CurrentNamespace()
 		}),
 	}
 	if opts.filename != "" {

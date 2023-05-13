@@ -169,3 +169,7 @@ func (v *SubVector) Seq() ISeq {
 func (v *SubVector) IsEmpty() bool {
 	return v.Count() == 0
 }
+
+func (v *SubVector) Empty() IPersistentCollection {
+	return emptyVector.WithMeta(v.meta).(IPersistentCollection)
+}

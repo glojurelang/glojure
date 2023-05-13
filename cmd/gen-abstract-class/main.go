@@ -15,7 +15,7 @@ import (
 // a struct.
 
 var (
-	class      = flag.String("class", "", "name of class to generate. One of APersistentMap")
+	class      = flag.String("class", "", "name of class to generate. One of APersistentMap, ASeq")
 	structName = flag.String("struct", "", "name of struct to add methods to")
 	receiver   = flag.String("receiver", "", "name of receiver variable")
 )

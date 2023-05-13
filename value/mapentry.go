@@ -121,6 +121,10 @@ func (me *MapEntry) IsEmpty() bool {
 	return false
 }
 
+func (me *MapEntry) Empty() IPersistentCollection {
+	return nil
+}
+
 func (me *MapEntry) ValAt(k interface{}) interface{} {
 	return me.asVector().ValAt(k)
 }

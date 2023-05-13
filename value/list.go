@@ -73,6 +73,10 @@ func (e *EmptyList) IsEmpty() bool {
 	return true
 }
 
+func (e *EmptyList) Empty() IPersistentCollection {
+	return e
+}
+
 func (e *EmptyList) Equal(other interface{}) bool {
 	if e == other {
 		return true
@@ -177,6 +181,10 @@ func (l *List) More() ISeq {
 
 func (l *List) IsEmpty() bool {
 	return false
+}
+
+func (l *List) Empty() IPersistentCollection {
+	return emptyList.WithMeta(l.meta).(IPersistentCollection)
 }
 
 func (l *List) Count() int {

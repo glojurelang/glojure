@@ -360,8 +360,8 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			if err != nil {
 				panic(fmt.Sprintf("could not read stdlib core.glj: %v", err))
 			}
-			r := reader.New(strings.NewReader(string(core)), reader.WithFilename(path), reader.WithGetCurrentNS(func() string {
-				return env.CurrentNamespace().Name().String()
+			r := reader.New(strings.NewReader(string(core)), reader.WithFilename(path), reader.WithGetCurrentNS(func() *value.Namespace {
+				return env.CurrentNamespace()
 			}))
 
 			for {

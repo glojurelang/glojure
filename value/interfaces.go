@@ -132,7 +132,9 @@ type (
 		// methods are a relic of a previous implementation.
 		Conjer
 
-		IsEmpty() bool
+		// IsEmpty() bool // TODO: remove this. it's not actually part of the interface
+
+		Empty() IPersistentCollection
 
 		// Equiv(interface{}) bool
 	}

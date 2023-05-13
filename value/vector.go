@@ -117,6 +117,10 @@ func (v *Vector) IsEmpty() bool {
 	return v.Count() == 0
 }
 
+func (v *Vector) Empty() IPersistentCollection {
+	return emptyVector.WithMeta(v.meta).(IPersistentCollection)
+}
+
 func (v *Vector) ValAt(i interface{}) interface{} {
 	return v.ValAtDefault(i, nil)
 }
