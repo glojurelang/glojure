@@ -33,6 +33,8 @@ var (
 		"strings",
 		"time",
 		"unicode",
+
+		"github.com/glojurelang/glojure/value",
 	}
 )
 

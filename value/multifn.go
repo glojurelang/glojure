@@ -98,5 +98,5 @@ func (m *MultiFn) isA(x, y interface{}) bool {
 	if !ok {
 		return false
 	}
-	return child.AssignableTo(parent)
+	return child.AssignableTo(parent) || child.Kind() == reflect.Pointer && child.Elem().AssignableTo(parent)
 }

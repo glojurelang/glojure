@@ -22,7 +22,7 @@ func Hash(x interface{}) uint32 {
 		return 0
 	}
 	switch x := x.(type) {
-	case Object:
+	case Hasher:
 		return x.Hash()
 	case string:
 		h := fnv.New32a()

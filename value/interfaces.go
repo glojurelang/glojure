@@ -6,7 +6,12 @@ import (
 )
 
 type (
-	Object interface {
+	Object interface{}
+
+	// Hasher is an interface for types that can be hashed. It's not in
+	// Clojure, but it's useful for Go where values don't come with a
+	// default hash method.
+	Hasher interface {
 		Hash() uint32
 	}
 

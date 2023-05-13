@@ -17,7 +17,7 @@ type Keyword struct {
 }
 
 var (
-	_ Object = Keyword{}
+	_ Hasher = Keyword{}
 )
 
 func NewKeyword(s string) Keyword {

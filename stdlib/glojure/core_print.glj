@@ -128,16 +128,16 @@
 
 (defmethod print-method float64 [o, ^Writer w]
   (cond
-    (= Double/POSITIVE_INFINITY o) (glojure.lang.WriteWriter w "##Inf")
-    (= Double/NEGATIVE_INFINITY o) (glojure.lang.WriteWriter w "##-Inf")
-    (.isNaN ^float64 o) (glojure.lang.WriteWriter w "##NaN")
+    (= (math.Inf 1) o) (glojure.lang.WriteWriter w "##Inf")
+    (= (math.Inf -1) o) (glojure.lang.WriteWriter w "##-Inf")
+    (math.IsNaN ^float64 o) (glojure.lang.WriteWriter w "##NaN")
     :else (glojure.lang.WriteWriter w (str o))))
 
 (defmethod print-method float32 [o, ^Writer w]
   (cond
     (= Float/POSITIVE_INFINITY o) (glojure.lang.WriteWriter w "##Inf")
     (= Float/NEGATIVE_INFINITY o) (glojure.lang.WriteWriter w "##-Inf")
-    (.isNaN ^float32 o) (glojure.lang.WriteWriter w "##NaN")
+    (math.IsNaN ^float32 o) (glojure.lang.WriteWriter w "##NaN")
     :else (glojure.lang.WriteWriter w (str o))))
 
 (do)
@@ -334,7 +334,7 @@
 (defmethod print-dup int64 [o w] (print-method o w))
 (defmethod print-dup float64 [o w] (print-method o w))
 (defmethod print-dup glojure.lang.Ratio [o w] (print-method o w))
-(do)
+(defmethod print-dup github.com$glojurelang$glojure$value.BigDecimal [o w] (print-method o w))
 (defmethod print-dup glojure.lang.BigInt [o w] (print-method o w))
 (defmethod print-dup glojure.lang.PersistentHashMap [o w] (print-method o w))
 (defmethod print-dup glojure.lang.PersistentHashSet [o w] (print-method o w))
@@ -347,7 +347,9 @@
 
 (do)
 
-(do)
+(defmethod print-method github.com$glojurelang$glojure$value.BigDecimal [b, ^Writer w]
+  (glojure.lang.WriteWriter w (str b))
+  (glojure.lang.WriteWriter w "M"))
 
 (defmethod print-method glojure.lang.BigInt [b, ^Writer w]
   (glojure.lang.WriteWriter w (str b))

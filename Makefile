@@ -3,11 +3,14 @@ STDLIB := $(notdir $(wildcard scripts/rewrite-core/originals/*.clj))
 STDLIB_ORIGINALS := $(addprefix scripts/rewrite-core/originals/,$(STDLIB))
 STDLIB_TARGETS := $(addprefix stdlib/glojure/,$(STDLIB:.clj=.glj))
 
-all: $(STDLIB_TARGETS) generate
+all: $(STDLIB_TARGETS) generate gen/gljimports/gljimports.go
 
 .PHONY:generate
 generate:
 	@go generate ./...
+
+gen/gljimports/gljimports.go: ./cmd/gen-import-interop/main.go $(wildcard ./value/*.go)
+	@go run ./cmd/gen-import-interop/main.go > $@
 
 stdlib/glojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-core/run.sh scripts/rewrite-core/rewrite.clj
 	@echo "Rewriting $<"

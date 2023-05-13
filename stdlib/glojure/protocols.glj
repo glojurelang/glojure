@@ -157,22 +157,21 @@
   ;;                 (recur (inc i) ret)))
   ;;        val))))
   
-  ;; java.lang.Object
-  ;; (internal-reduce
-  ;;  [s f val]
-  ;;  (loop [cls (class s)
-  ;;         s s
-  ;;         f f
-  ;;         val val]
-  ;;    (if-let [s (seq s)]
-  ;;      (if (identical? (class s) cls)
-  ;;        (let [ret (f val (first s))]
-  ;;               (if (reduced? ret)
-  ;;                 @ret
-  ;;                 (recur cls (next s) f ret)))
-  ;;        (interface-or-naive-reduce s f val))
-  ;;      val))))
-)
+  glojure.lang.Object
+  (internal-reduce
+   [s f val]
+   (loop [cls (class s)
+          s s
+          f f
+          val val]
+     (if-let [s (seq s)]
+       (if (identical? (class s) cls)
+         (let [ret (f val (first s))]
+                (if (reduced? ret)
+                  @ret
+                  (recur cls (next s) f ret)))
+         (interface-or-naive-reduce s f val))
+       val))))
 
 (defprotocol IKVReduce
   "Protocol for concrete associative types that can reduce themselves

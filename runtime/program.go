@@ -197,8 +197,9 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			if v == nil {
 				return false
 			}
+			vType := reflect.TypeOf(v)
 			switch {
-			case reflect.TypeOf(v) == t, reflect.TypeOf(v).ConvertibleTo(t):
+			case vType == t, vType.ConvertibleTo(t), vType.Kind() == reflect.Pointer && vType.Elem().ConvertibleTo(t):
 				return true
 			default:
 				return false
@@ -278,6 +279,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Sequential", reflect.TypeOf((*value.Sequential)(nil)).Elem())
 		define("glojure.lang.IObj", reflect.TypeOf((*value.IObj)(nil)).Elem())
 		define("glojure.lang.IAtom", reflect.TypeOf((*value.IAtom)(nil)).Elem())
+		define("glojure.lang.Object", reflect.TypeOf((*value.Object)(nil)).Elem())
 
 		define("glojure.lang.Volatile", reflect.TypeOf(&value.Volatile{}))
 		define("glojure.lang.MultiFn", reflect.TypeOf(&value.MultiFn{}))

@@ -33,7 +33,7 @@ func NewBigIntFromGoBigInt(x *big.Int) *BigInt {
 }
 
 func (n *BigInt) String() string {
-	return n.val.String() + "N"
+	return n.val.String()
 }
 
 func (n *BigInt) Equal(v interface{}) bool {

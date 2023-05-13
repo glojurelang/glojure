@@ -27,7 +27,7 @@ func NewBigDecimalFromFloat64(x float64) *BigDecimal {
 }
 
 func (n *BigDecimal) String() string {
-	return n.val.String() + "M"
+	return n.val.String()
 }
 
 func (n *BigDecimal) Equal(v interface{}) bool {

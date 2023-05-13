@@ -2829,14 +2829,14 @@
   "Wraps x in a way such that a reduce will terminate with the value x"
   {:added "1.5"}
   [x]
-  (glojure.lang.Reduced. x))
+  (github.com$glojurelang$glojure$value.NewReduced x))
 
 (defn reduced?
   "Returns true if x is the result of a call to reduced"
-  {:inline (fn [x] `(glojure.lang.RT/isReduced ~x ))
+  {:inline (fn [x] `(github.com$glojurelang$glojure$value.IsReduced ~x ))
    :inline-arities #{1}
    :added "1.5"}
-  ([x] (glojure.lang.RT/isReduced x)))
+  ([x] (github.com$glojurelang$glojure$value.IsReduced x)))
 
 (defn ensure-reduced
   "If x is already reduced?, returns it, else returns (reduced x)"
@@ -3581,7 +3581,7 @@
   "Returns true if n is a BigDecimal"
   {:added "1.0"
    :static true}
-  [n] (instance? glojure.lang.BigDecimal n))
+  [n] (instance? github.com$glojurelang$glojure$value.BigDecimal n))
 
 (defn float?
   "Returns true if n is a floating point number"
@@ -3606,8 +3606,8 @@
   [x] (cond
        (instance? glojure.lang.BigInt x) x
        (instance? big.Int x) (glojure.lang.BigInt/fromBigInteger x)
-       (decimal? x) (bigint (.toBigInteger ^glojure.lang.BigDecimal x))
-       (float? x)  (bigint (. glojure.lang.BigDecimal valueOf (double x)))
+       (decimal? x) (bigint (.toBigInteger ^github.com$glojurelang$glojure$value.BigDecimal x))
+       (float? x)  (bigint (. github.com$glojurelang$glojure$value.BigDecimal valueOf (double x)))
        (ratio? x) (bigint (.bigIntegerValue ^glojure.lang.Ratio x))
        (number? x) (glojure.lang.BigInt/valueOf (long x))
        :else (bigint (BigInteger. x))))
@@ -3620,20 +3620,20 @@
   [x] (cond
        (instance? big.Int x) x
        (instance? glojure.lang.BigInt x) (.toBigInteger ^glojure.lang.BigInt x)
-       (decimal? x) (.toBigInteger ^glojure.lang.BigDecimal x)
-       (float? x) (.toBigInteger (. glojure.lang.BigDecimal valueOf (double x)))
+       (decimal? x) (.toBigInteger ^github.com$glojurelang$glojure$value.BigDecimal x)
+       (float? x) (.toBigInteger (. github.com$glojurelang$glojure$value.BigDecimal valueOf (double x)))
        (ratio? x) (.bigIntegerValue ^glojure.lang.Ratio x)
        (number? x) (BigInteger/valueOf (long x))
        :else (BigInteger. x)))
 
 (defn bigdec
   "Coerce to BigDecimal"
-  {:tag glojure.lang.BigDecimal
+  {:tag github.com$glojurelang$glojure$value.BigDecimal
    :added "1.0"
    :static true}
   [x] (cond
        (decimal? x) x
-       (float? x) (. glojure.lang.BigDecimal valueOf (double x))
+       (float? x) (. github.com$glojurelang$glojure$value.BigDecimal valueOf (double x))
        (ratio? x) (/ (BigDecimal. (.numerator ^glojure.lang.Ratio x)) (.denominator ^glojure.lang.Ratio x))
        (instance? glojure.lang.BigInt x) (.toBigDecimal ^glojure.lang.BigInt x)
        (instance? big.Int x) (BigDecimal. ^big.Int x)

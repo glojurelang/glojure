@@ -66,6 +66,10 @@
    (sexpr-replace 'java.lang.Double 'float64)
    (sexpr-replace 'clojure.lang.Ratio 'glojure.lang.Ratio)
 
+   (sexpr-replace 'Double/POSITIVE_INFINITY '(math.Inf 1))
+   (sexpr-replace 'Double/NEGATIVE_INFINITY '(math.Inf -1))
+   (sexpr-replace '.isNaN 'math.IsNaN)
+
    (sexpr-replace '(clojure.lang.LongRange/create end)
                   '(glojure.lang.NewRangeIterator 0 end 1))
    (sexpr-replace '(clojure.lang.LongRange/create start end)
@@ -139,6 +143,9 @@
    (sexpr-replace 'clojure.lang.IMeta 'glojure.lang.IMeta)
    (sexpr-replace 'clojure.lang.IReduceInit 'glojure.lang.IReduceInit)
 
+   (sexpr-replace 'clojure.lang.Reduced. 'github.com$glojurelang$glojure$value.NewReduced)
+   (sexpr-replace 'clojure.lang.RT/isReduced 'github.com$glojurelang$glojure$value.IsReduced)
+
    (sexpr-replace '.assoc '.Assoc)
 
    (sexpr-replace 'Integer/MIN_VALUE 'math.MinInt)
@@ -198,7 +205,7 @@
                                     '.ReduceInit))))]
 
    (sexpr-replace 'BigInteger 'big.Int)
-   (sexpr-replace 'BigDecimal 'glojure.lang.BigDecimal)
+   (sexpr-replace 'BigDecimal 'github.com$glojurelang$glojure$value.BigDecimal)
 
    (sexpr-replace '.equals '.Equal)
 
@@ -502,6 +509,7 @@
 
    (sexpr-replace 'java.util.regex.Pattern 'regexp.Regexp)
    (sexpr-replace 'clojure.lang.BigInt 'glojure.lang.BigInt)
+   (sexpr-replace 'java.math.BigDecimal 'github.com$glojurelang$glojure$value.BigDecimal)
 
    (sexpr-replace '.write 'glojure.lang.WriteWriter)
    (sexpr-replace '.append 'glojure.lang.AppendWriter)
@@ -522,7 +530,6 @@
                                                'java.util.List
                                                'java.util.RandomAccess
                                                'java.util.Set
-                                               'java.math.BigDecimal
                                                'clojure.lang.LazilyPersistentVector
                                                'Class
                                                'StackTraceElement
@@ -549,6 +556,11 @@
    ;; test.clj
 
    (sexpr-remove '[clojure.stacktrace :as stack])
+
+   [(fn select [zloc] (and (z/list? zloc)
+                           (= 'stacktrace-file-and-line
+                              (first (z/sexpr zloc)))))
+    (fn visit [zloc] (z/replace zloc '{}))]
 
    ])
 
