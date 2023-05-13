@@ -21,11 +21,12 @@ stdlib/glojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-core/
 	@echo "Rewriting $<"
 	@scripts/rewrite-core/run.sh $< > $@
 
+.PHONY: vet
 vet:
 	@go vet ./...
 
 .PHONY: test
-test:
+test: vet
 	@go test ./...
 	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/basic.glj
 	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/import.glj
