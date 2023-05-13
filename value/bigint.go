@@ -26,6 +26,12 @@ func NewBigIntFromInt64(x int64) *BigInt {
 	return &BigInt{val: big.NewInt(x)}
 }
 
+func NewBigIntFromGoBigInt(x *big.Int) *BigInt {
+	xCopy := new(big.Int)
+	xCopy.Set(x)
+	return &BigInt{val: xCopy}
+}
+
 func (n *BigInt) String() string {
 	return n.val.String() + "N"
 }
@@ -64,6 +70,10 @@ func (n *BigInt) Multiply(other *BigInt) *BigInt {
 
 func (n *BigInt) Divide(other *BigInt) *BigInt {
 	return &BigInt{val: new(big.Int).Div(n.val, other.val)}
+}
+
+func (n *BigInt) Remainder(other *BigInt) *BigInt {
+	return &BigInt{val: new(big.Int).Rem(n.val, other.val)}
 }
 
 func (n *BigInt) Cmp(other *BigInt) int {

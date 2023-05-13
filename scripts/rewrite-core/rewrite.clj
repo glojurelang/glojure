@@ -150,6 +150,31 @@
    (sexpr-replace '(. x (get)) '(. x (Get)))
    (sexpr-replace '(. x (set val)) '(. x (Set val)))
 
+   ;; omit Eduction for now
+   (omitp #(and (z/list? %)
+                (= 'deftype (first (z/sexpr %)))))
+   (omitp #(and (z/list? %)
+                (= 'defmethod (first (z/sexpr %)))
+                (= 'Eduction (nth (z/sexpr %) 2))))
+
+   ;; omit default-data-readers for now
+   (omitp #(and (z/list? %)
+                (= 'def (first (z/sexpr %)))
+                (= 'default-data-readers (second (z/sexpr %)))))
+
+   ;; omit tap functions
+   (omitp #(and (z/list? %)
+                (= 'defonce (first (z/sexpr %)))
+                (= 'tap-loop (second (z/sexpr %)))))
+   (omitp #(and (z/list? %)
+                (= 'defonce (first (z/sexpr %)))
+                (= 'tapq (second (z/sexpr %)))))
+
+   [(fn select [zloc] (and (z/list? zloc)
+                           (= 'defn- (first (z/sexpr zloc)))
+                           (= 'data-reader-urls (second (z/sexpr zloc)))))
+    (fn visit [zloc] (z/replace zloc '(defn- data-reader-urls [] ())))]
+
    (sexpr-replace '(new clojure.lang.Atom x) '(glojure.lang.NewAtom x))
    (omitp #(and (z/list? %)
                 (let [sexpr (z/sexpr %)]

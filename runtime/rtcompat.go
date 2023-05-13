@@ -9,6 +9,7 @@ import (
 	"sync/atomic"
 
 	"github.com/glojurelang/glojure/stdlib"
+	"github.com/glojurelang/glojure/value"
 
 	. "github.com/glojurelang/glojure/value"
 )
@@ -99,7 +100,7 @@ func (rt *RTMethods) Find(coll, key interface{}) interface{} {
 
 func (rt *RTMethods) Load(scriptBase string) {
 	kvs := make([]interface{}, 0, 3)
-	for _, vr := range []*Var{VarCurrentNS, VarWarnOnReflection, VarUncheckedMath} {
+	for _, vr := range []*Var{VarCurrentNS, VarWarnOnReflection, VarUncheckedMath, value.VarDataReaders} {
 		kvs = append(kvs, vr, vr.Deref())
 	}
 	PushThreadBindings(NewMap(kvs...))

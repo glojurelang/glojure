@@ -152,16 +152,18 @@ func initEnv(stdout io.Writer) value.Environment {
 		defer pprof.StopCPUProfile()
 	}
 	startTime := time.Now()
+
+	// TODO: clean up this code. copied from rtcompat.go.
+	kvs := make([]interface{}, 0, 3)
+	for _, vr := range []*value.Var{value.VarCurrentNS, value.VarWarnOnReflection, value.VarUncheckedMath, value.VarDataReaders} {
+		kvs = append(kvs, vr, vr.Deref())
+	}
+	value.PushThreadBindings(value.NewMap(kvs...))
+
 	env := runtime.NewEnvironment(runtime.WithStdout(stdout))
 	if debugMode {
 		fmt.Printf("Environment created in %v\n", time.Since(startTime))
 	}
-	// TODO: clean up this code. copied from rtcompat.go.
-	kvs := make([]interface{}, 0, 3)
-	for _, vr := range []*value.Var{value.VarCurrentNS, value.VarWarnOnReflection, value.VarUncheckedMath} {
-		kvs = append(kvs, vr, vr.Deref())
-	}
-	value.PushThreadBindings(value.NewMap(kvs...))
 
 	return env
 }

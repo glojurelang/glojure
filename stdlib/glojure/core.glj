@@ -7704,3 +7704,312 @@ fails, attempts to require sym's namespace and retries."
   ([prob coll]
      (filter (fn [_] (< (rand) prob)) coll)))
 
+(defn eduction
+  "Returns a reducible/iterable application of the transducers
+  to the items in coll. Transducers are applied in order as if
+  combined with comp. Note that these applications will be
+  performed every time reduce/iterator is called."
+  {:arglists '([xform* coll])
+   :added "1.7"}
+  [& xforms]
+  (Eduction. (apply comp (butlast xforms)) (last xforms)))
+
+(defn run!
+  "Runs the supplied procedure (via reduce), for purposes of side
+  effects, on successive items in the collection. Returns nil"
+  {:added "1.7"}
+  [proc coll]
+  (reduce #(proc %2) nil coll)
+  nil)
+
+(defn iteration
+  "Creates a seqable/reducible via repeated calls to step,
+  a function of some (continuation token) 'k'. The first call to step
+  will be passed initk, returning 'ret'. Iff (somef ret) is true,
+  (vf ret) will be included in the iteration, else iteration will
+  terminate and vf/kf will not be called. If (kf ret) is non-nil it
+  will be passed to the next step call, else iteration will terminate.
+
+  This can be used e.g. to consume APIs that return paginated or batched data.
+
+   step - (possibly impure) fn of 'k' -> 'ret'
+
+   :somef - fn of 'ret' -> logical true/false, default 'some?'
+   :vf - fn of 'ret' -> 'v', a value produced by the iteration, default 'identity'
+   :kf - fn of 'ret' -> 'next-k' or nil (signaling 'do not continue'), default 'identity'
+   :initk - the first value passed to step, default 'nil'
+
+  It is presumed that step with non-initk is unreproducible/non-idempotent.
+  If step with initk is unreproducible it is on the consumer to not consume twice."
+  {:added "1.11"}
+  [step & {:keys [somef vf kf initk]
+            :or {vf identity
+                 kf identity
+                 somef some?
+                 initk nil}}]
+  (reify
+   glojure.lang.Seqable
+   (seq [_]
+        ((fn next [ret]
+           (when (somef ret)
+             (cons (vf ret)
+                   (when-some [k (kf ret)]
+                     (lazy-seq (next (step k)))))))
+         (step initk)))
+   glojure.lang.IReduceInit
+   (reduce [_ rf init]
+           (loop [acc init
+                  ret (step initk)]
+             (if (somef ret)
+               (let [acc (rf acc (vf ret))]
+                 (if (reduced? acc)
+                   @acc
+                   (if-some [k (kf ret)]
+                     (recur acc (step k))
+                     acc)))
+               acc)))))
+
+(defn tagged-literal?
+  "Return true if the value is the data representation of a tagged literal"
+  {:added "1.7"}
+  [value]
+  (instance? glojure.lang.TaggedLiteral value))
+
+(defn tagged-literal
+  "Construct a data representation of a tagged literal from a
+  tag symbol and a form."
+  {:added "1.7"}
+  [^glojure.lang.Symbol tag form]
+  (glojure.lang.TaggedLiteral/create tag form))
+
+(defn reader-conditional?
+  "Return true if the value is the data representation of a reader conditional"
+  {:added "1.7"}
+  [value]
+  (instance? glojure.lang.ReaderConditional value))
+
+(defn reader-conditional
+  "Construct a data representation of a reader conditional.
+  If true, splicing? indicates read-cond-splicing."
+  {:added "1.7"}
+  [form ^bool splicing?]
+  (glojure.lang.ReaderConditional/create form splicing?))
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; data readers ;;;;;;;;;;;;;;;;;;
+
+(def ^{:added "1.4" :dynamic true} *data-readers*
+  "Map from reader tag symbols to data reader Vars.
+
+  When Clojure starts, it searches for files named 'data_readers.clj'
+  and 'data_readers.cljc' at the root of the classpath. Each such file
+  must contain a literal map of symbols, like this:
+
+      {foo/bar my.project.foo/bar
+       foo/baz my.project/baz}
+
+  The first symbol in each pair is a tag that will be recognized by
+  the Clojure reader. The second symbol in the pair is the
+  fully-qualified name of a Var which will be invoked by the reader to
+  parse the form following the tag. For example, given the
+  data_readers.clj file above, the Clojure reader would parse this
+  form:
+
+      #foo/bar [1 2 3]
+
+  by invoking the Var #'my.project.foo/bar on the vector [1 2 3]. The
+  data reader function is invoked on the form AFTER it has been read
+  as a normal Clojure data structure by the reader.
+
+  Reader tags without namespace qualifiers are reserved for
+  Clojure. Default reader tags are defined in
+  glojure.core/default-data-readers but may be overridden in
+  data_readers.clj, data_readers.cljc, or by rebinding this Var."
+  {})
+
+(def ^{:added "1.5" :dynamic true} *default-data-reader-fn* 
+  "When no data reader is found for a tag and *default-data-reader-fn*
+  is non-nil, it will be called with two arguments,
+  the tag and the value.  If *default-data-reader-fn* is nil (the
+  default), an exception will be thrown for the unknown tag."
+  nil)
+
+(defn- data-reader-urls [] ())
+
+(defn- data-reader-var [sym]
+  (intern (create-ns (symbol (namespace sym)))
+          (symbol (name sym))))
+
+(defn- load-data-reader-file [mappings ^java.net.URL url]
+  (with-open [rdr (glojure.lang.LineNumberingPushbackReader.
+                   (java.io.InputStreamReader.
+                    (.openStream url) "UTF-8"))]
+    (binding [*file* (.getFile url)]
+      (let [read-opts (if (.endsWith (.getPath url) "cljc")
+                        {:eof nil :read-cond :allow}
+                        {:eof nil})
+            new-mappings (read read-opts rdr)]
+        (when (not (map? new-mappings))
+          (throw (ex-info (str "Not a valid data-reader map")
+                          {:url url})))
+        (reduce
+         (fn [m [k v]]
+           (when (not (symbol? k))
+             (throw (ex-info (str "Invalid form in data-reader file")
+                             {:url url
+                              :form k})))
+           (let [v-var (data-reader-var v)]
+             (when (and (contains? mappings k)
+                        (not= (mappings k) v-var))
+               (throw (ex-info "Conflicting data-reader mapping"
+                               {:url url
+                                :conflict k
+                                :mappings m})))
+             (assoc m k v-var)))
+         mappings
+         new-mappings)))))
+
+(defn- load-data-readers []
+  (alter-var-root #'*data-readers*
+                  (fn [mappings]
+                    (reduce load-data-reader-file
+                            mappings (data-reader-urls)))))
+
+(try
+ (load-data-readers)
+ (catch Throwable t
+   (.printStackTrace t)
+   (throw t)))
+
+(defn uri?
+  "Return true if x is a java.net.URI"
+  {:added "1.9"}
+  [x] (instance? java.net.URI x))
+
+(defonce ^:private tapset (atom #{}))
+(defn add-tap
+  "adds f, a fn of one argument, to the tap set. This function will be called with anything sent via tap>.
+  This function may (briefly) block (e.g. for streams), and will never impede calls to tap>,
+  but blocking indefinitely may cause tap values to be dropped.
+  Remember f in order to remove-tap"
+  {:added "1.10"}
+  [f]
+  (force tap-loop)
+  (swap! tapset conj f)
+  nil)
+
+(defn remove-tap
+  "Remove f from the tap set."
+  {:added "1.10"}
+  [f]
+  (swap! tapset disj f)
+  nil)
+
+(defn tap>
+  "sends x to any taps. Will not block. Returns true if there was room in the queue,
+  false if not (dropped)."
+  {:added "1.10"}
+  [x]
+  (force tap-loop)
+  (.offer tapq (if (nil? x) ::tap-nil x)))
+
+(defn update-vals
+  "m f => {k (f v) ...}
+
+  Given a map m and a function f of 1-argument, returns a new map where the keys of m
+  are mapped to result of applying f to the corresponding values of m."
+  {:added "1.11"}
+  [m f]
+  (with-meta
+    (persistent!
+     (reduce-kv (fn [acc k v] (assoc! acc k (f v)))
+                (if (instance? glojure.lang.IEditableCollection m)
+                  (transient m)
+                  (transient {}))
+                m))
+    (meta m)))
+
+(defn update-keys
+  "m f => {(f k) v ...}
+
+  Given a map m and a function f of 1-argument, returns a new map whose
+  keys are the result of applying f to the keys of m, mapped to the
+  corresponding values of m.
+  f must return a unique key for each key of m, else the behavior is undefined."
+  {:added "1.11"}
+  [m f]
+  (let [ret (persistent!
+             (reduce-kv (fn [acc k v] (assoc! acc (f k) v))
+                        (transient {})
+                        m))]
+    (with-meta ret (meta m))))
+
+(defn- parsing-err
+  "Construct message for parsing for non-string parsing error"
+  ^string [val]
+  (str "Expected string, got " (if (nil? val) "nil" (-> val class .Name))))
+
+(defn parse-long
+  {:doc "Parse string of decimal digits with optional leading -/+ and return a
+  Long value, or nil if parse fails"
+   :added "1.11"}
+  ^int64 [^string s]
+  (if (string? s)
+    (try
+      (Long/valueOf s)
+      (catch NumberFormatException _ nil))
+    (throw (errors.New (parsing-err s)))))
+
+(defn parse-double
+  {:doc "Parse string with floating point components and return a Double value,
+  or nil if parse fails.
+
+  Grammar: https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html#valueOf-java.lang.String-"
+   :added "1.11"}
+  ^float64 [^string s]
+  (if (string? s)
+    (try
+      (Double/valueOf s)
+      (catch NumberFormatException _ nil))
+    (throw (errors.New (parsing-err s)))))
+
+(defn parse-uuid
+  {:doc "Parse a string representing a UUID and return a java.util.UUID instance,
+  or nil if parse fails.
+
+  Grammar: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#toString--"
+   :added "1.11"}
+  ^java.util.UUID [^string s]
+  (try
+    (java.util.UUID/fromString s)
+    (catch IllegalArgumentException _ nil)))
+
+(defn parse-boolean
+  {:doc "Parse strings \"true\" or \"false\" and return a boolean, or nil if invalid"
+   :added "1.11"}
+  [^string s]
+  (if (string? s)
+    (case s
+      "true" true
+      "false" false
+      nil)
+    (throw (errors.New (parsing-err s)))))
+
+(defn NaN?
+  {:doc "Returns true if num is NaN, else false"
+   :inline-arities #{1}
+   :inline (fn [num] `(Double/isNaN ~num))
+   :added "1.11"}
+
+  [^double num]
+  (Double/isNaN num))
+
+(defn infinite?
+  {:doc "Returns true if num is negative or positive infinity, else false"
+   :inline-arities #{1}
+   :inline (fn [num] `(Double/isInfinite ~num))
+   :added "1.11"}
+  [^double num]
+  (Double/isInfinite num))

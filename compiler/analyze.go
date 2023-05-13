@@ -1943,6 +1943,7 @@ func unpackSeq(s interface{}, dsts ...interface{}) error {
 			if dst.Elem().Kind() != reflect.Interface {
 				return fmt.Errorf("cannot assign nil to %s", dst.Type())
 			}
+			seq = seq.Next()
 			continue // leave nil
 		}
 

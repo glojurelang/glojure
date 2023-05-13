@@ -38,6 +38,19 @@ func (nm *NumberMethods) Divide(x, y interface{}) interface{} {
 	return Ops(x).Combine(yops).Divide(x, y)
 }
 
+func (nm *NumberMethods) Remainder(x, y interface{}) interface{} {
+	if isNaN(x) {
+		return x
+	} else if isNaN(y) {
+		return y
+	}
+	yops := Ops(y)
+	if yops.IsZero(y) {
+		panic("divide by zero")
+	}
+	return Ops(x).Combine(yops).Remainder(x, y)
+}
+
 func (nm *NumberMethods) And(x, y interface{}) interface{} {
 	return bitOpsCast(x) & bitOpsCast(y)
 }

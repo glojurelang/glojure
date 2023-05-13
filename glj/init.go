@@ -13,13 +13,12 @@ func init() {
 }
 
 func initEnv(stdout io.Writer) value.Environment {
-	env := runtime.NewEnvironment(runtime.WithStdout(stdout))
 	// TODO: clean up this code. copied from rtcompat.go.
 	kvs := make([]interface{}, 0, 3)
-	for _, vr := range []*value.Var{value.VarCurrentNS, value.VarWarnOnReflection, value.VarUncheckedMath} {
+	for _, vr := range []*value.Var{value.VarCurrentNS, value.VarWarnOnReflection, value.VarUncheckedMath, value.VarDataReaders} {
 		kvs = append(kvs, vr, vr.Deref())
 	}
 	value.PushThreadBindings(value.NewMap(kvs...))
 
-	return env
+	return runtime.NewEnvironment(runtime.WithStdout(stdout))
 }

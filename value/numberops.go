@@ -2,6 +2,8 @@ package value
 
 import (
 	"fmt"
+	"math"
+	"math/big"
 )
 
 type (
@@ -19,6 +21,8 @@ type (
 
 		Multiply(x, y interface{}) interface{}
 		Divide(x, y interface{}) interface{}
+
+		Remainder(x, y interface{}) interface{}
 
 		LT(x, y interface{}) bool
 		GT(x, y interface{}) bool
@@ -121,6 +125,9 @@ func (o int64Ops) Multiply(x, y interface{}) interface{} {
 func (o int64Ops) Divide(x, y interface{}) interface{} {
 	return AsInt64(x) / AsInt64(y)
 }
+func (o int64Ops) Remainder(x, y interface{}) interface{} {
+	return AsInt64(x) % AsInt64(y)
+}
 func (o int64Ops) LT(x, y interface{}) bool {
 	return AsInt64(x) < AsInt64(y)
 }
@@ -172,6 +179,9 @@ func (o bigIntOps) Multiply(x, y interface{}) interface{} {
 }
 func (o bigIntOps) Divide(x, y interface{}) interface{} {
 	return AsBigInt(x).Divide(AsBigInt(y))
+}
+func (o bigIntOps) Remainder(x, y interface{}) interface{} {
+	return AsBigInt(x).Remainder(AsBigInt(y))
 }
 func (o bigIntOps) LT(x, y interface{}) bool {
 	return AsBigInt(x).LT(AsBigInt(y))
@@ -228,6 +238,20 @@ func (o ratioOps) Multiply(x, y interface{}) interface{} {
 }
 func (o ratioOps) Divide(x, y interface{}) interface{} {
 	return AsRatio(x).Divide(AsRatio(y))
+}
+func (o ratioOps) Remainder(x, y interface{}) interface{} {
+	xRat := AsRatio(x)
+	yRat := AsRatio(y)
+
+	q := new(big.Int)
+	q.Mul(xRat.val.Num(), yRat.val.Denom())
+
+	qd := new(big.Int)
+	qd.Mul(xRat.val.Denom(), yRat.val.Num())
+
+	q.Div(q, qd)
+	ret := xRat.Sub(yRat.Multiply(NewRatioBigInt(NewBigIntFromGoBigInt(q), NewBigIntFromInt64(1))))
+	return ret
 }
 func (o ratioOps) LT(x, y interface{}) bool {
 	return AsRatio(x).LT(AsRatio(y))
@@ -286,6 +310,9 @@ func (o bigDecimalOps) Multiply(x, y interface{}) interface{} {
 func (o bigDecimalOps) Divide(x, y interface{}) interface{} {
 	return AsBigDecimal(x).Divide(AsBigDecimal(y))
 }
+func (o bigDecimalOps) Remainder(x, y interface{}) interface{} {
+	return AsBigDecimal(x).Remainder(AsBigDecimal(y))
+}
 func (o bigDecimalOps) LT(x, y interface{}) bool {
 	return AsBigDecimal(x).LT(AsBigDecimal(y))
 }
@@ -342,6 +369,9 @@ func (o float64Ops) Multiply(x, y interface{}) interface{} {
 }
 func (o float64Ops) Divide(x, y interface{}) interface{} {
 	return AsFloat64(x) / AsFloat64(y)
+}
+func (o float64Ops) Remainder(x, y interface{}) interface{} {
+	return math.Mod(AsFloat64(x), AsFloat64(y))
 }
 func (o float64Ops) LT(x, y interface{}) bool {
 	return AsFloat64(x) < AsFloat64(y)

@@ -21,6 +21,8 @@ type (
 		// TODO: populate this from meta in the right places
 		dynamic      bool
 		dynamicBound atomic.Bool
+
+		syncLock sync.Mutex
 	}
 
 	UnboundVar struct {
@@ -31,6 +33,8 @@ type (
 	glStorage   struct {
 		bindings []varBindings
 	}
+
+	// TODO: public rev counter
 )
 
 var (
@@ -49,6 +53,7 @@ var (
 	VarAssert           = InternVarReplaceRoot(NSCore, NewSymbol("*assert*"), false).SetDynamic()
 	VarCompileFiles     = InternVarReplaceRoot(NSCore, NewSymbol("*compile-files*"), false).SetDynamic()
 	VarFile             = InternVarReplaceRoot(NSCore, NewSymbol("*file*"), "NO_SOURCE_FILE").SetDynamic()
+	VarDataReaders      = InternVarReplaceRoot(NSCore, NewSymbol("*data-readers*"), emptyMap).SetDynamic()
 
 	// TODO: use an atomic and CAS
 	glsBindings    = make(map[int64]*glStorage)
@@ -199,10 +204,22 @@ func (v *Var) getDynamicBinding() *Box {
 	glsBindingsMtx.RLock()
 	storage, ok := glsBindings[gid]
 	glsBindingsMtx.RUnlock()
+
 	if !ok {
 		return nil
 	}
 	return storage.get(v)
+}
+
+func (v *Var) AlterRoot(alter IFn, args ISeq) interface{} {
+	v.syncLock.Lock()
+	defer v.syncLock.Unlock()
+
+	newRoot := alter.ApplyTo(NewCons(v.Get(), args))
+	// TODO: validate, ++rev, notifyWatches
+	// oldRoot := v.Get()
+	v.Set(newRoot)
+	return newRoot
 }
 
 func (v *Var) SetValidator(vf IFn) {

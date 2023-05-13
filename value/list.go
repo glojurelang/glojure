@@ -31,6 +31,8 @@ var (
 	_ ISeq            = (*EmptyList)(nil)
 	_ IPersistentList = (*EmptyList)(nil)
 	_ Counted         = (*EmptyList)(nil)
+	_ IReduce         = (*EmptyList)(nil)
+	_ IReduceInit     = (*EmptyList)(nil)
 )
 
 func (e *EmptyList) xxx_sequential() {}
@@ -99,7 +101,17 @@ func (e *EmptyList) String() string {
 	return "()"
 }
 
+func (e *EmptyList) Reduce(f IFn) interface{} {
+	return f.Invoke()
+}
+
+func (e *EmptyList) ReduceInit(f IFn, init interface{}) interface{} {
+	return init
+}
+
 var emptyList = &EmptyList{}
+
+////////////////////////////////////////////////////////////////////////////////
 
 func NewList(values ...interface{}) IPersistentList {
 	if len(values) == 0 {
