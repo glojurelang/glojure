@@ -1,5 +1,8 @@
 # Glojure
 
+![example workflow](https://github.com/glojurelang/glojure/actions/workflows/ci.yml/badge.svg)
+
+
 Glojure is an interpreter for [Clojure](https://clojure.org/), hosted
 in Go. Glojure provides easy access to Go libraries, just as Clojure
 provides easy access to Java frameworks.
