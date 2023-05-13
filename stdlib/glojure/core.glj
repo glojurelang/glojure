@@ -4724,7 +4724,7 @@
   calls."
   {:added "1.0"}
   [& body]
-  `(let [s# (new java.io.StringWriter)]
+  `(let [s# (new strings.Builder)]
      (binding [*out* s#]
        ~@body
        (str s#))))

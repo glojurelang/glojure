@@ -11,6 +11,7 @@ type (
 		Combine(y ops) ops
 
 		IsPos(x interface{}) bool
+		IsNeg(x interface{}) bool
 
 		Add(x, y interface{}) interface{}
 		// TODO: implement the precision version of Add, etc.
@@ -103,6 +104,10 @@ func (o int64Ops) IsPos(x interface{}) bool {
 	return AsInt64(x) > 0
 }
 
+func (o int64Ops) IsNeg(x interface{}) bool {
+	return AsInt64(x) < 0
+}
+
 func (o int64Ops) IsZero(x interface{}) bool {
 	return AsInt64(x) == 0
 }
@@ -156,6 +161,10 @@ func (o int64Ops) Equiv(x, y interface{}) bool {
 
 func (o bigIntOps) IsPos(x interface{}) bool {
 	return AsBigInt(x).val.Sign() > 0
+}
+
+func (o bigIntOps) IsNeg(x interface{}) bool {
+	return AsBigInt(x).val.Sign() < 0
 }
 
 func (o bigIntOps) IsZero(x interface{}) bool {
@@ -215,6 +224,10 @@ func (o bigIntOps) Equiv(x, y interface{}) bool {
 
 func (o ratioOps) IsPos(x interface{}) bool {
 	return AsRatio(x).val.Sign() > 0
+}
+
+func (o ratioOps) IsNeg(x interface{}) bool {
+	return AsRatio(x).val.Sign() < 0
 }
 
 func (o ratioOps) IsZero(x interface{}) bool {
@@ -288,6 +301,10 @@ func (o bigDecimalOps) IsPos(x interface{}) bool {
 	return AsBigDecimal(x).val.Sign() > 0
 }
 
+func (o bigDecimalOps) IsNeg(x interface{}) bool {
+	return AsBigDecimal(x).val.Sign() < 0
+}
+
 func (o bigDecimalOps) IsZero(x interface{}) bool {
 	return AsBigDecimal(x).val.Sign() == 0
 }
@@ -346,6 +363,10 @@ func (o bigDecimalOps) Equiv(x, y interface{}) bool {
 
 func (o float64Ops) IsPos(x interface{}) bool {
 	return AsFloat64(x) > 0
+}
+
+func (o float64Ops) IsNeg(x interface{}) bool {
+	return AsFloat64(x) < 0
 }
 
 func (o float64Ops) IsZero(x interface{}) bool {

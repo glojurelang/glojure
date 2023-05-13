@@ -64,6 +64,10 @@ func (nm *NumberMethods) IsPos(x interface{}) bool {
 	return Ops(x).IsPos(x)
 }
 
+func (nm *NumberMethods) IsNeg(x interface{}) bool {
+	return Ops(x).IsNeg(x)
+}
+
 func (nm *NumberMethods) Inc(v interface{}) interface{} {
 	return nm.Add(v, 1)
 }

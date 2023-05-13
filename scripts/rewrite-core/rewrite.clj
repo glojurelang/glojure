@@ -425,6 +425,8 @@
 
    (sexpr-replace '(require '[clojure.java.io :as jio]) '(do))
 
+   (sexpr-replace 'java.io.StringWriter 'strings.Builder)
+
    (omit-symbols
     '#{when-class
        Inst
