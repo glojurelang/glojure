@@ -55,6 +55,10 @@ var (
 	VarFile             = InternVarReplaceRoot(NSCore, NewSymbol("*file*"), "NO_SOURCE_FILE").SetDynamic()
 	VarDataReaders      = InternVarReplaceRoot(NSCore, NewSymbol("*data-readers*"), emptyMap).SetDynamic()
 
+	// TODO: use variant of InternVar that doesn't replace root.
+	VarPrintInitialized = InternVarName(NSCore.Name(), NewSymbol("print-initialized"))
+	VarPrOn             = InternVarName(NSCore.Name(), NewSymbol("pr-on"))
+
 	// TODO: use an atomic and CAS
 	glsBindings    = make(map[int64]*glStorage)
 	glsBindingsMtx sync.RWMutex
@@ -119,6 +123,10 @@ func (v *Var) BindRoot(root interface{}) {
 	v.root.Store(Box{val: root})
 }
 
+func (v *Var) IsBound() bool {
+	return v.HasRoot() || v.dynamicBound.Load() && v.getDynamicBinding() != nil
+}
+
 func (v *Var) getRoot() interface{} {
 	return v.root.Load().(Box).val
 }
@@ -175,7 +183,7 @@ func (v *Var) IsPublic() bool {
 	if isPrivate == nil {
 		return true
 	}
-	return !booleanCast(isPrivate.Val())
+	return !BooleanCast(isPrivate.Val())
 }
 
 func (v *Var) isDynamic() bool {
@@ -318,11 +326,4 @@ func PopThreadBindings() {
 	glsBindingsMtx.Lock()
 	delete(glsBindings, gid)
 	glsBindingsMtx.Unlock()
-}
-
-func booleanCast(x interface{}) bool {
-	if xb, ok := x.(bool); ok {
-		return xb
-	}
-	return x != nil
 }

@@ -14,10 +14,6 @@ func NewChar(value rune) Char {
 	return Char(value)
 }
 
-func (c Char) String() string {
-	return CharLiteralFromRune(rune(c))
-}
-
 func (c Char) Equal(v interface{}) bool {
 	switch v := v.(type) {
 	case Char:

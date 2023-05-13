@@ -51,15 +51,6 @@ func (e *EvalError) Error() string {
 func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 	n := x.(ast.Node)
 
-	if Debug {
-		fmt.Println(strings.Repeat(" ", indent), "BEG EvalAST", get(n, KWOp), value.ToString(get(n, KWForm)))
-		indent += 2
-		defer func() {
-			indent -= 2
-			fmt.Println(strings.Repeat(" ", indent), "END EvalAST", get(n, KWOp), "->", ret, ",", err)
-		}()
-	}
-
 	op := ast.Op(n)
 	switch op {
 	case KWConst:
@@ -609,8 +600,11 @@ func (env *environment) EvalASTInvoke(n ast.Node) (res interface{}, err error) {
 		if !ok {
 			return
 		}
-		gljFrame := fmt.Sprintf("%s:%d:%d: %s\n", value.Get(meta, KWFile), value.Get(meta, KWLine), value.Get(meta, KWColumn), get(n, KWForm))
+		var gljFrame string
 		if r := recover(); r != nil {
+			// TODO: dynamically set pr-on to nil to avoid infinite
+			// recursion; need to use go-only stringification for errors.
+			gljFrame = fmt.Sprintf("%s:%d:%d: %s\n", value.Get(meta, KWFile), value.Get(meta, KWLine), value.Get(meta, KWColumn), get(n, KWForm))
 			switch r := r.(type) {
 			case *EvalError:
 				r.GLJStack = append(r.GLJStack, gljFrame)

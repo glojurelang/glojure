@@ -61,10 +61,7 @@ func (rt *RTMethods) IntCast(x interface{}) int {
 }
 
 func (rt *RTMethods) BooleanCast(x interface{}) bool {
-	if b, ok := x.(bool); ok {
-		return b
-	}
-	return !IsNil(x)
+	return value.BooleanCast(x)
 }
 
 func (rt *RTMethods) Dissoc(x interface{}, k interface{}) interface{} {

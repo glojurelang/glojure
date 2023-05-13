@@ -549,7 +549,7 @@
    :static true}
   (^string [] "")
   (^string [^Object x]
-   (if (nil? x) "" (glojure.lang.ToStr x)))
+   (if (nil? x) "" (github.com$glojurelang$glojure$value.ToString x)))
   (^string [x & ys]
      ((fn [^{:tag strings.Builder} sb xs] (if xs (recur (do (. sb (WriteString (str (first xs)))) sb) (next xs)) (.String sb))) (new strings.Builder) (cons x ys))))
 
@@ -6967,7 +6967,7 @@ fails, attempts to require sym's namespace and retries."
            sw (java.io.StringWriter.)]
        (with-open [^java.io.Reader r (apply jio/reader f opts)]
          (jio/copy r sw)
-         (glojure.lang.ToStr sw)))))
+         (github.com$glojurelang$glojure$value.ToString sw)))))
 
 (defn spit
   "Opposite of slurp.  Opens f with writer, writes content, then

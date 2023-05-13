@@ -215,7 +215,7 @@ func (m *PersistentHashMap) ReduceInit(f IFn, init interface{}) interface{} {
 }
 
 func (m *PersistentHashMap) String() string {
-	return mapString(m)
+	return PrintString(m)
 }
 
 ////////////////////////////////////////////////////////////////////////////////

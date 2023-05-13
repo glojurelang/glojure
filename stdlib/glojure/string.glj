@@ -17,7 +17,7 @@
   "Returns s with its characters reversed."
   {:added "1.2"}
   [^CharSequence s]
-  (glojure.lang.ToStr (.reverse (StringBuilder. s))))
+  (github.com$glojurelang$glojure$value.ToString (.reverse (StringBuilder. s))))
 
 (defn ^string re-quote-replacement
   "Given a replacement string that you wish to be a literal
@@ -25,7 +25,7 @@
    necessary escaping of special characters in the replacement."
   {:added "1.5"}
   [^CharSequence replacement]
-  (Matcher/quoteReplacement (glojure.lang.ToStr ^CharSequence replacement)))
+  (Matcher/quoteReplacement (github.com$glojurelang$glojure$value.ToString ^CharSequence replacement)))
 
 (defn- replace-by
   [^CharSequence s re f]
@@ -37,7 +37,7 @@
             (do (.appendReplacement m buffer (Matcher/quoteReplacement (f (re-groups m))))
                 (recur (.find m)))
             (do (.appendTail m buffer)
-                (glojure.lang.ToStr buffer)))))
+                (github.com$glojurelang$glojure$value.ToString buffer)))))
       s)))
 
 (defn ^string replace
@@ -66,13 +66,13 @@
    -> \"lmostAay igPay atinLay\""
   {:added "1.2"}
   [^CharSequence s match replacement]
-  (let [s (glojure.lang.ToStr s)]
+  (let [s (github.com$glojurelang$glojure$value.ToString s)]
     (cond 
      (instance? Character match) (.replace s ^Character match ^Character replacement)
      (instance? CharSequence match) (.replace s ^CharSequence match ^CharSequence replacement)
      (instance? Pattern match) (if (instance? CharSequence replacement)
                                  (.replaceAll (re-matcher ^Pattern match s)
-                                              (glojure.lang.ToStr ^CharSequence replacement))
+                                              (github.com$glojurelang$glojure$value.ToString ^CharSequence replacement))
                                  (replace-by s match replacement))
      :else (throw (errors.New (str "Invalid match arg: " match))))))
 
@@ -89,7 +89,7 @@
 
 (defn- replace-first-char
   [^CharSequence s ^Character match replace]
-  (let [s (glojure.lang.ToStr s)
+  (let [s (github.com$glojurelang$glojure$value.ToString s)
         i (strings.Index s (int match))]
     (if (= -1 i)
       s
@@ -97,7 +97,7 @@
 
 (defn- replace-first-str
   [^CharSequence s ^string match ^string replace]
-  (let [^string s (glojure.lang.ToStr s)
+  (let [^string s (github.com$glojurelang$glojure$value.ToString s)
         i (strings.Index s match)]
     (if (= -1 i)
       s
@@ -130,17 +130,17 @@
    -> \"first swap two words\""
   {:added "1.2"}
   [^CharSequence s match replacement]
-  (let [s (glojure.lang.ToStr s)]
+  (let [s (github.com$glojurelang$glojure$value.ToString s)]
     (cond
      (instance? Character match)
      (replace-first-char s match replacement)
      (instance? CharSequence match)
-     (replace-first-str s (glojure.lang.ToStr ^CharSequence match)
-                        (glojure.lang.ToStr ^CharSequence replacement))
+     (replace-first-str s (github.com$glojurelang$glojure$value.ToString ^CharSequence match)
+                        (github.com$glojurelang$glojure$value.ToString ^CharSequence replacement))
      (instance? Pattern match)
      (if (instance? CharSequence replacement)
        (.replaceFirst (re-matcher ^Pattern match s)
-                      (glojure.lang.ToStr ^CharSequence replacement))
+                      (github.com$glojurelang$glojure$value.ToString ^CharSequence replacement))
        (replace-first-by s match replacement))
      :else (throw (errors.New (str "Invalid match arg: " match))))))
 
@@ -166,7 +166,7 @@
   characters to lower-case."
   {:added "1.2"}
   [^CharSequence s]
-  (let [s (glojure.lang.ToStr s)]
+  (let [s (github.com$glojurelang$glojure$value.ToString s)]
     (if (< (count s) 2)
       (.toUpperCase s)
       (str (.toUpperCase (subs s 0 1))
@@ -277,7 +277,7 @@
   (loop [index (int 0)
          buffer (StringBuilder. (.length s))]
     (if (= (.length s) index)
-      (glojure.lang.ToStr buffer)
+      (github.com$glojurelang$glojure$value.ToString buffer)
       (let [ch (glojure.lang.CharAt s index)]
         (if-let [replacement (cmap ch)]
           (glojure.lang.AppendWriter buffer replacement)
@@ -291,16 +291,16 @@
   ([^CharSequence s value]
   (let [result ^long
         (if (instance? Character value)
-          (strings.Index (glojure.lang.ToStr s) ^int (.charValue ^Character value))
-          (strings.Index (glojure.lang.ToStr s) ^string value))]
+          (strings.Index (github.com$glojurelang$glojure$value.ToString s) ^int (.charValue ^Character value))
+          (strings.Index (github.com$glojurelang$glojure$value.ToString s) ^string value))]
     (if (= result -1)
       nil
       result)))
   ([^CharSequence s value ^long from-index]
   (let [result ^long
         (if (instance? Character value)
-          (strings.Index (glojure.lang.ToStr s) ^int (.charValue ^Character value) (unchecked-int from-index))
-          (strings.Index (glojure.lang.ToStr s) ^string value (unchecked-int from-index)))]
+          (strings.Index (github.com$glojurelang$glojure$value.ToString s) ^int (.charValue ^Character value) (unchecked-int from-index))
+          (strings.Index (github.com$glojurelang$glojure$value.ToString s) ^string value (unchecked-int from-index)))]
     (if (= result -1)
       nil
       result))))
@@ -312,16 +312,16 @@
   ([^CharSequence s value]
   (let [result ^long
         (if (instance? Character value)
-          (strings.LastIndex (glojure.lang.ToStr s) ^int (.charValue ^Character value))
-          (strings.LastIndex (glojure.lang.ToStr s) ^string value))]
+          (strings.LastIndex (github.com$glojurelang$glojure$value.ToString s) ^int (.charValue ^Character value))
+          (strings.LastIndex (github.com$glojurelang$glojure$value.ToString s) ^string value))]
     (if (= result -1)
       nil
       result)))
   ([^CharSequence s value ^long from-index]
   (let [result ^long
         (if (instance? Character value)
-          (strings.LastIndex (glojure.lang.ToStr s) ^int (.charValue ^Character value) (unchecked-int from-index))
-          (strings.LastIndex (glojure.lang.ToStr s) ^string value (unchecked-int from-index)))]
+          (strings.LastIndex (github.com$glojurelang$glojure$value.ToString s) ^int (.charValue ^Character value) (unchecked-int from-index))
+          (strings.LastIndex (github.com$glojurelang$glojure$value.ToString s) ^string value (unchecked-int from-index)))]
     (if (= result -1)
       nil
       result))))
@@ -330,16 +330,16 @@
   "True if s starts with substr."
   {:added "1.8"}
   [^CharSequence s ^string substr]
-  (strings.HasPrefix (glojure.lang.ToStr s) substr))
+  (strings.HasPrefix (github.com$glojurelang$glojure$value.ToString s) substr))
 
 (defn ends-with?
   "True if s ends with substr."
   {:added "1.8"}
   [^CharSequence s ^string substr]
-  (.endsWith (glojure.lang.ToStr s) substr))
+  (.endsWith (github.com$glojurelang$glojure$value.ToString s) substr))
 
 (defn includes?
   "True if s includes substr."
   {:added "1.8"}
   [^CharSequence s ^CharSequence substr]
-  (.contains (glojure.lang.ToStr s) substr))
+  (.contains (github.com$glojurelang$glojure$value.ToString s) substr))

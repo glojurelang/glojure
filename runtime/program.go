@@ -16,7 +16,6 @@ import (
 	"github.com/glojurelang/glojure/reader"
 	"github.com/glojurelang/glojure/stdlib"
 	"github.com/glojurelang/glojure/value"
-	"github.com/glojurelang/glojure/value/util"
 )
 
 type Program struct {
@@ -149,10 +148,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			define("glojure.lang/Pop", value.Pop)
 			define("glojure.lang/Peek", value.Peek)
 		}
-		{ // random utilities
-			define("glojure.lang.util/Compare", util.Compare)
-			define("glojure.lang.util/Seq", util.Seq)
-		}
 		{
 			define("glojure.lang/FindNamespace", value.FindNamespace)
 		}
@@ -175,8 +170,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		}
 
 		define("error", reflect.TypeOf((*error)(nil)).Elem())
-
-		define("__debugstr", value.ToString)
 	}
 	{ // core functions
 		define("glojure.lang.NewList", value.NewList)
@@ -249,8 +242,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		define("glojure.lang.Next", value.Next)
 		define("glojure.lang.Rest", value.Rest)
 		define("glojure.lang.Equal", value.Equal)
-		define("glojure.lang.ToString", value.ToString)
-		define("glojure.lang.ToStr", value.ToStr)
 		define("glojure.lang.Identical", value.Identical)
 		define("glojure.lang.Get", value.Get)
 		define("glojure.lang.Keys", value.Keys)

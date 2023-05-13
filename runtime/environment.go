@@ -202,7 +202,7 @@ func (env *environment) errorf(n interface{}, format string, args ...interface{}
 		meta = n.Meta()
 	}
 	get := func(m value.IPersistentMap, key string) string {
-		return value.ToString(value.GetDefault(m, value.NewKeyword(key), "?"), value.PrintReadably())
+		return value.PrintString(value.GetDefault(m, value.NewKeyword(key), "?"))
 	}
 
 	filename = get(meta, "file")

@@ -129,7 +129,7 @@ func (m *Map) Empty() IPersistentCollection {
 }
 
 func (m *Map) String() string {
-	return mapString(m)
+	return PrintString(m)
 }
 
 func (m *Map) Meta() IPersistentMap {

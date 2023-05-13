@@ -508,7 +508,7 @@
     (-> (proxy [Writer] []
           (flush []
                  (when (pos? (.length sb))
-                   (flush-fn (glojure.lang.ToStr sb)))
+                   (flush-fn (github.com$glojurelang$glojure$value.ToString sb)))
                  (.setLength sb 0))
           (close []
                  (.flush ^Writer this)

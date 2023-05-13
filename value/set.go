@@ -2,7 +2,6 @@ package value
 
 import (
 	"fmt"
-	"strings"
 )
 
 // Set represents a map of glojure values.
@@ -93,19 +92,7 @@ func (s *Set) Empty() IPersistentCollection {
 }
 
 func (s *Set) String() string {
-	b := strings.Builder{}
-
-	first := true
-	b.WriteString("#{")
-	for i := 0; i < s.Count(); i++ {
-		if !first {
-			b.WriteString(" ")
-		}
-		first = false
-		b.WriteString(ToString(s.vals[i]))
-	}
-	b.WriteString("}")
-	return b.String()
+	return PrintString(s)
 }
 
 func (s *Set) Equal(v2 interface{}) bool {

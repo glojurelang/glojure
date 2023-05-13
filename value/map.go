@@ -1,9 +1,5 @@
 package value
 
-import (
-	"strings"
-)
-
 func SafeMerge(m1, m2 IPersistentMap) IPersistentMap {
 	if m1 == nil {
 		return m2
@@ -50,26 +46,4 @@ func mapEquals(m IPersistentMap, v2 interface{}) bool {
 	}
 
 	return true
-}
-
-func mapString(m IPersistentMap) string {
-	b := strings.Builder{}
-
-	first := true
-
-	// TODO: factor out common namespace
-	b.WriteString("{")
-	for seq := Seq(m); seq != nil; seq = seq.Next() {
-		if !first {
-			b.WriteString(", ")
-		}
-		first = false
-
-		entry := seq.First().(IMapEntry)
-		b.WriteString(ToString(entry.Key()))
-		b.WriteRune(' ')
-		b.WriteString(ToString(entry.Val()))
-	}
-	b.WriteString("}")
-	return b.String()
 }

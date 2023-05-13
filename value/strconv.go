@@ -2,65 +2,22 @@ package value
 
 import (
 	"fmt"
-	"math"
+	"io"
 	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
 )
 
-type printOptions struct {
-	printReadably bool
-}
-
-// PrintOption is a function that configures a print operation.
-type PrintOption func(*printOptions)
-
-// PrintReadably returns a PrintOption that configures the print
-// operation to print in a human-readable format.
-func PrintReadably() PrintOption {
-	return func(o *printOptions) {
-		o.printReadably = true
-	}
-}
-
-// ToStr converts a value to a string. It should behave similarly to
-// Clojure's str function (i.e. Java's .toString method).
-func ToStr(v interface{}) string {
-	return ToString(v, PrintReadably())
-}
-
-// ToString converts a value to a string. By default, any value is
-// printed in a format that can be read back in by the reader. If
-// printReadably is true, the output is more human-readable.
-func ToString(v interface{}, opts ...PrintOption) string {
-	// TODO: this function should take an io.Writer and write directly
-	// to it.
-
-	options := printOptions{}
-	for _, opt := range opts {
-		opt(&options)
-	}
-
-	////////////////////////////////////////////////////////////////////////////////
-	// Glojure types and special cases for native, basic types.
+// ToString converts a value to a string a la Java's .toString method.
+func ToString(v interface{}) string {
 	switch v := v.(type) {
 	case nil:
 		return "nil"
 	case string:
-		if options.printReadably {
-			return v
-		}
-		// NB: java does not support \x escape sequences, but go does.  this
-		// results in a difference in the output of the string from Clojure
-		// if such characters make it into the string. We will escape them
-		// but Clojure on the JVM will not.
-		return strconv.Quote(v)
+		return v
 	case Char:
-		if options.printReadably {
-			return string(v)
-		}
-		return v.String()
+		return string(v)
 	case bool:
 		if v {
 			return "true"
@@ -70,24 +27,13 @@ func ToString(v interface{}, opts ...PrintOption) string {
 		if v == float64(int64(v)) {
 			return fmt.Sprintf("%d.0", int64(v))
 		}
-		if math.IsNaN(v) {
-			return "##NaN"
-		}
-		if math.IsInf(v, 1) {
-			return "##Inf"
-		}
-		if math.IsInf(v, -1) {
-			return "##-Inf"
-		}
 		return strconv.FormatFloat(v, 'f', -1, 64)
-	case *regexp.Regexp:
-		return fmt.Sprintf("#\"%s\"", v.String())
 	case uint64, uint32, uint16, uint8, uint, int64, int32, int16, int8, int:
 		return fmt.Sprintf("%d", v)
 	case *BigInt:
-		return v.String() + "N"
+		return v.String()
 	case *BigDecimal:
-		return v.String() + "M"
+		return v.String()
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -109,30 +55,116 @@ func ToString(v interface{}, opts ...PrintOption) string {
 			// There is a danger here that we will recurse infinitely if the
 			// slice contains itself. We should probably check for that, but
 			// clojure does not.
-			builder.WriteString(ToString(vv.Index(i).Interface(), opts...))
+			builder.WriteString(ToString(vv.Index(i).Interface()))
 		}
 		builder.WriteString("]")
 		return builder.String()
 	}
 
-	// TODO: how to handle empty lists properly?
-	if lst, ok := v.(*List); ok && lst.Count() == 0 {
-		return "()"
-	}
-
-	if seq, ok := v.(ISeq); ok {
-		builder := strings.Builder{}
-		builder.WriteString("(")
-		for ; seq != nil; seq = seq.Next() {
-			cur := seq.First()
-			if builder.Len() > 1 {
-				builder.WriteString(" ")
-			}
-			builder.WriteString(ToString(cur, opts...))
-		}
-		builder.WriteString(")")
-		return builder.String()
-	}
+	// if seq, ok := v.(ISeq); ok {
+	// 	builder := strings.Builder{}
+	// 	builder.WriteString("(")
+	// 	for ; seq != nil; seq = seq.Next() {
+	// 		cur := seq.First()
+	// 		if builder.Len() > 1 {
+	// 			builder.WriteString(" ")
+	// 		}
+	// 		builder.WriteString(ToString(cur))
+	// 	}
+	// 	builder.WriteString(")")
+	// 	return builder.String()
+	// }
 
 	return fmt.Sprintf("#object[%T]", v)
+}
+
+// RTPrintString corresponds to Clojure's RT.printString.
+func PrintString(v interface{}) string {
+	sb := strings.Builder{}
+	Print(v, &sb)
+	return sb.String()
+}
+
+// Print prints a value to the given io.Writer. Corresponds to
+// Clojure's RT.print.
+func Print(x interface{}, w io.Writer) {
+	if VarPrintInitialized.IsBound() && BooleanCast(VarPrintInitialized.Deref()) {
+		VarPrOn.Invoke(x, w)
+		return
+	}
+	readably := BooleanCast(VarPrintReadably.Deref())
+
+	if IsNil(x) {
+		io.WriteString(w, "nil")
+	} else if seq, ok := x.(ISeq); ok {
+		io.WriteString(w, "(")
+		for ; seq != nil; seq = seq.Next() {
+			Print(seq.First(), w)
+			if seq.Next() != nil {
+				io.WriteString(w, " ")
+			}
+		}
+		io.WriteString(w, ")")
+	} else if s, ok := x.(string); ok {
+		if !readably {
+			io.WriteString(w, s)
+		} else {
+			io.WriteString(w, strconv.Quote(s))
+		}
+	} else if m, ok := x.(IPersistentMap); ok {
+		io.WriteString(w, "{")
+		for seq := m.Seq(); seq != nil; seq = seq.Next() {
+			e := seq.First().(IMapEntry)
+			Print(e.Key(), w)
+			io.WriteString(w, " ")
+			Print(e.Val(), w)
+			if seq.Next() != nil {
+				io.WriteString(w, ", ")
+			}
+		}
+		io.WriteString(w, "}")
+	} else if v, ok := x.(IPersistentVector); ok {
+		io.WriteString(w, "[")
+		for i := 0; i < v.Count(); i++ {
+			Print(MustNth(v, i), w)
+			if i < v.Count()-1 {
+				io.WriteString(w, " ")
+			}
+		}
+		io.WriteString(w, "]")
+	} else if s, ok := x.(IPersistentSet); ok {
+		io.WriteString(w, "#{")
+		for seq := s.Seq(); seq != nil; seq = seq.Next() {
+			Print(seq.First(), w)
+			if seq.Next() != nil {
+				io.WriteString(w, " ")
+			}
+		}
+		io.WriteString(w, "}")
+	} else if c, ok := x.(Char); ok {
+		if !readably {
+			io.WriteString(w, string(c))
+		} else {
+			io.WriteString(w, CharLiteralFromRune(rune(c)))
+		}
+	} else if v, ok := x.(*BigDecimal); ok && readably {
+		io.WriteString(w, v.String())
+		io.WriteString(w, "M")
+	} else if v, ok := x.(*BigInt); ok && readably {
+		io.WriteString(w, v.String())
+		io.WriteString(w, "N")
+	} else if v, ok := x.(*Var); ok {
+		io.WriteString(w, "#=(var "+v.Namespace().Name().Name()+"/"+v.Symbol().Name()+")")
+	} else if v, ok := x.(*regexp.Regexp); ok {
+		io.WriteString(w, "#\""+v.String()+"\"")
+	} else {
+		io.WriteString(w, ToString(x))
+	}
+}
+
+func BooleanCast(x interface{}) bool {
+	if b, ok := x.(bool); ok {
+		return b
+	}
+	return !IsNil(x)
 }

@@ -105,7 +105,7 @@ func FuzzCLJConformance(f *testing.F) {
 			return
 		}
 
-		gljExpr := cljNormalize(value.ToString(gljValue))
+		gljExpr := cljNormalize(testPrintString(gljValue))
 
 		// workaround for the fact that Go is able to quote more
 		// unprintable characters than Clojure. e.g. \x00 and \x10.

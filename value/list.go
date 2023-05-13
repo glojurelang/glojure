@@ -1,9 +1,5 @@
 package value
 
-import (
-	"strings"
-)
-
 // List is a list of values.
 type List struct {
 	meta IPersistentMap
@@ -245,17 +241,7 @@ func enumerateFunc(next func() (v interface{}, ok bool)) (<-chan interface{}, fu
 }
 
 func (l *List) String() string {
-	b := strings.Builder{}
-	b.WriteString("(")
-	for cur := Seq(l); cur != nil; cur = cur.Next() {
-		v := cur.First()
-		b.WriteString(ToString(v))
-		if cur.Next() != nil {
-			b.WriteString(" ")
-		}
-	}
-	b.WriteString(")")
-	return b.String()
+	return PrintString(l)
 }
 
 // TODO: rename to Equiv

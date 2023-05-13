@@ -3,7 +3,6 @@ package value
 import (
 	"fmt"
 	"reflect"
-	"strings"
 
 	"github.com/glojurelang/glojure/persistent/vector"
 )
@@ -147,22 +146,7 @@ func (v *Vector) NthDefault(i int, def interface{}) interface{} {
 }
 
 func (v *Vector) String() string {
-	b := strings.Builder{}
-
-	b.WriteString("[")
-	for i := 0; i < v.Count(); i++ {
-		el := v.ValAt(i)
-		if el == nil {
-			b.WriteString("nil")
-		} else {
-			b.WriteString(ToString(el))
-		}
-		if i < v.Count()-1 {
-			b.WriteString(" ")
-		}
-	}
-	b.WriteString("]")
-	return b.String()
+	return PrintString(v)
 }
 
 func (v *Vector) Equal(v2 interface{}) bool {

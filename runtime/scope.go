@@ -30,14 +30,3 @@ func (s *scope) lookup(sym *value.Symbol) (interface{}, bool) {
 	}
 	return s.parent.lookup(sym)
 }
-
-func (s *scope) printIndented(indent string) string {
-	str := ""
-	for k, v := range s.syms {
-		str += indent + k + ": " + value.ToString(v) + "\n"
-	}
-	if s.parent != nil {
-		str += s.parent.printIndented(indent + "  ")
-	}
-	return str
-}

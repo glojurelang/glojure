@@ -2,6 +2,7 @@ package reader
 
 import (
 	"io/ioutil"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -76,7 +77,7 @@ func TestRead(t *testing.T) {
 			strs := make([]string, len(exprs)+1)
 			strs[len(strs)-1] = ""
 			for i, expr := range exprs {
-				strs[i] = value.ToString(expr)
+				strs[i] = testPrintString(expr)
 			}
 			output := strings.Join(strs, "\n")
 			if output != tc.output {
@@ -167,7 +168,28 @@ func FuzzRead(f *testing.F) {
 			return
 		}
 		for _, expr := range exprs {
-			value.ToString(expr)
+			testPrintString(expr)
 		}
 	})
+}
+
+func testPrintString(x interface{}) string {
+	value.PushThreadBindings(value.NewMap(
+		value.VarPrintReadably, true,
+	))
+	defer value.PopThreadBindings()
+
+	if v, ok := x.(float64); ok {
+		if math.IsNaN(v) {
+			return "##NaN"
+		}
+		if math.IsInf(v, 1) {
+			return "##Inf"
+		}
+		if math.IsInf(v, -1) {
+			return "##-Inf"
+		}
+	}
+
+	return value.PrintString(x)
 }
