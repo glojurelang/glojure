@@ -115,7 +115,7 @@ func Start(opts ...Option) {
 				if err != nil {
 					return "", err
 				}
-				return value.ToString(val), nil
+				return value.PrintString(val), nil
 			}()
 			if err != nil {
 				fmt.Fprintln(o.stdout, err)
