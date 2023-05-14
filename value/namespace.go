@@ -283,7 +283,7 @@ func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 	}
 
 	if ns.checkReplacement(sym, o, v) {
-		for !ns.mappings.CompareAndSwap(mb, mb.val.(IPersistentMap).Assoc(sym, v)) {
+		for !ns.mappings.CompareAndSwap(mb, NewBox(mb.val.(IPersistentMap).Assoc(sym, v))) {
 			mb = ns.mappingsBox()
 		}
 		return v
