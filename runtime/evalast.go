@@ -35,7 +35,7 @@ func (e *EvalError) Error() string {
 	sb := strings.Builder{}
 	sb.WriteString(e.Err.Error())
 	sb.WriteString("\n\n")
-	if e.GoStack != "" {
+	if e.GoStack != "" && false {
 		sb.WriteString("Go Stack:\n")
 		sb.WriteString(e.GoStack)
 		sb.WriteString("\n\n")

@@ -60,7 +60,7 @@ func main() {
 		if pkg == "reflect" {
 			importedReflect = true
 		}
-		aliasName := strings.NewReplacer(".", "_", "/", "_").Replace(pkg)
+		aliasName := strings.NewReplacer(".", "_", "/", "_", "-", "_").Replace(pkg)
 		builder.WriteString(fmt.Sprintf("\t%s \"%s\"\n", aliasName, pkg))
 	}
 	// import reflect
@@ -90,7 +90,7 @@ func main() {
 
 			glojureDeclName := fmt.Sprintf("%s.%s", pkgName, declName)
 
-			pkgImportName := strings.NewReplacer(".", "_", "/", "_").Replace(pkgName)
+			pkgImportName := strings.NewReplacer(".", "_", "/", "_", "-", "_").Replace(pkgName)
 			qualifiedName := fmt.Sprintf("%s.%s", pkgImportName, declName)
 
 			var decl string
