@@ -112,7 +112,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		// numeric types
 		{
 			// integral types
-			define("int", reflect.TypeOf(int(0)))
 			define("uint", reflect.TypeOf(uint(0)))
 			define("uintptr", reflect.TypeOf(uintptr(0)))
 

@@ -69,7 +69,7 @@ func ({{.Receiver}} *{{.Struct}}) Conj(x interface{}) Conjer {
 	case *MapEntry:
 		return {{.Receiver}}.Assoc(x.Key(), x.Val()).(Conjer)
 	case IPersistentVector:
-		if {{.Receiver}}.Count() != 2 {
+		if x.Count() != 2 {
 			panic("vector arg to map conj must be a pair")
 		}
 		return m.Assoc(MustNth(x, 0), MustNth(x, 1)).(Conjer)

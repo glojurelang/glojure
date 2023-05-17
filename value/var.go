@@ -58,6 +58,7 @@ var (
 	// TODO: use variant of InternVar that doesn't replace root.
 	VarPrintInitialized = InternVarName(NSCore.Name(), NewSymbol("print-initialized"))
 	VarPrOn             = InternVarName(NSCore.Name(), NewSymbol("pr-on"))
+	VarParents          = InternVarName(NSCore.Name(), NewSymbol("parents"))
 
 	// TODO: use an atomic and CAS
 	glsBindings    = make(map[int64]*glStorage)

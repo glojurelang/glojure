@@ -1677,6 +1677,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/value.VarInNS", github_com_glojurelang_glojure_value.VarInNS)
 	_register("github.com/glojurelang/glojure/value.VarNS", github_com_glojurelang_glojure_value.VarNS)
 	_register("github.com/glojurelang/glojure/value.VarOut", github_com_glojurelang_glojure_value.VarOut)
+	_register("github.com/glojurelang/glojure/value.VarParents", github_com_glojurelang_glojure_value.VarParents)
 	_register("github.com/glojurelang/glojure/value.VarPrOn", github_com_glojurelang_glojure_value.VarPrOn)
 	_register("github.com/glojurelang/glojure/value.VarPrintInitialized", github_com_glojurelang_glojure_value.VarPrintInitialized)
 	_register("github.com/glojurelang/glojure/value.VarPrintReadably", github_com_glojurelang_glojure_value.VarPrintReadably)

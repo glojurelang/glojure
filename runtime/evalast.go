@@ -318,6 +318,8 @@ func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 		}
 	case "go":
 		switch get(n, KWField).(*value.Symbol).Name() {
+		case "int":
+			return reflect.TypeOf(int(0)), nil
 		case "slice":
 			return func(sliceOrString interface{}, indices ...interface{}) interface{} {
 				if len(indices) == 0 || len(indices) > 2 {

@@ -11,7 +11,7 @@ func (m *PersistentStructMap) Conj(x interface{}) Conjer {
 	case *MapEntry:
 		return m.Assoc(x.Key(), x.Val()).(Conjer)
 	case IPersistentVector:
-		if m.Count() != 2 {
+		if x.Count() != 2 {
 			panic("vector arg to map conj must be a pair")
 		}
 		return m.Assoc(MustNth(x, 0), MustNth(x, 1)).(Conjer)

@@ -195,8 +195,6 @@
    (sexpr-replace '(^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom f] (.swapVals atom f))
                   '([atom f & args] (.swapVals atom f args)))
 
-   (sexpr-replace '{:tag Object} '{}) ;; TODO: is there a replacement for Object?
-
    (sexpr-replace 'clojure.lang.Util/hash 'glojure.lang.Hash)
 
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= '.reduce (z/sexpr zloc))))
@@ -493,6 +491,11 @@
    (sexpr-replace 'Float 'float32)
    (sexpr-replace 'Boolean 'bool)
 
+   (sexpr-replace 'Object 'github.com$glojurelang$glojure$value.Object)
+   (sexpr-replace '(.isArray c) false)
+   ;; (sexpr-replace '(print-method (.Name c) w) 'TODO)
+   ;; (sexpr-replace '(glojure.lang.WriteWriter w (.Name c)) 'TODO)
+
    (sexpr-replace '(prefer-method print-dup java.util.Map clojure.lang.Fn) '(do))
    (sexpr-replace '(prefer-method print-dup java.util.Collection clojure.lang.Fn) '(do))
    (sexpr-replace '(prefer-method print-method clojure.lang.ISeq java.util.Collection) '(do))
@@ -522,14 +525,16 @@
 
    (omit-symbols '#{primitives-classnames})
 
+   (sexpr-replace 'Class 'reflect.Type)
+   (sexpr-replace '(.getInterfaces c) nil) ;; no such concept in go
+   (sexpr-replace '(.getSuperclass c) nil) ;; no such concept in go
+
    ;; Omit some methods
    [(fn select [zloc] (and (z/list? zloc)
                            (let [sexpr (z/sexpr zloc)]
                              (and (= 'defmethod (first sexpr))
                                   (contains? #{'print-method 'print-dup} (second sexpr))
-                                  (contains? #{'Object
-                                               'Number
-                                               'java.util.Collection
+                                  (contains? #{'java.util.Collection
                                                'java.util.Map
                                                'java.util.List
                                                'java.util.RandomAccess
@@ -544,6 +549,24 @@
                                                } (nth sexpr 2))))))
     (fn visit [zloc] (z/replace zloc '(do)))]
 
+   ;; Implement print-* for integral types
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [sexpr (z/sexpr zloc)]
+                             (and (= 'defmethod (first sexpr))
+                                  (contains? #{'print-method 'print-dup} (second sexpr))
+                                  (= (nth sexpr 2) 'Number)))))
+    (fn visit [zloc]
+      (loop [ints '[go/int uint uint8 uint16 uint32 uint64 int8 int16 int32 int64]
+             zloc zloc]
+        (if (empty? ints)
+          (z/remove zloc)
+          (recur (rest ints)
+                 (-> zloc
+                     (z/insert-left
+                      `(~'defmethod ~'print-method ~(first ints) [~'o, ~'w]
+                        (~'.write ~'w (~'str ~'o))))
+                     (z/insert-newline-left))
+                 ))))]
 
    ;;; replace all clojure. symbols with glojure.
    [(fn select [zloc] (and (z/sexpr-able? zloc)

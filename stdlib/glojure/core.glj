@@ -136,7 +136,7 @@
  seq (fn ^:static seq ^glojure.lang.ISeq [coll] (glojure.lang.Seq coll)))
 
 (def
- ^{:arglists '([^Class c x])
+ ^{:arglists '([^reflect.Type c x])
    :doc "Evaluates x and tests if it is an instance of the type
     t. Returns true or false"
    :added "1.0"}
@@ -346,7 +346,7 @@
   "Throws a ClassCastException if x is not a c, else returns x."
   {:added "1.0"
    :static true}
-  [^Class c x] 
+  [^reflect.Type c x] 
   (. c (cast x)))
  
 (defn vector
@@ -548,7 +548,7 @@
    :added "1.0"
    :static true}
   (^string [] "")
-  (^string [^Object x]
+  (^string [^github.com$glojurelang$glojure$value.Object x]
    (if (nil? x) "" (github.com$glojurelang$glojure$value.ToString x)))
   (^string [x & ys]
      ((fn [^{:tag strings.Builder} sb xs] (if xs (recur (do (. sb (WriteString (str (first xs)))) sb) (next xs)) (.String sb))) (new strings.Builder) (cons x ys))))
@@ -3443,7 +3443,7 @@
   "Returns the Class of x"
   {:added "1.0"
    :static true}
-  ^Class [^Object x] (if (nil? x) x (glojure.lang.TypeOf x)))
+  ^reflect.Type [^github.com$glojurelang$glojure$value.Object x] (if (nil? x) x (glojure.lang.TypeOf x)))
 
 (defn type 
   "Returns the :type metadata of x, or its Class if none"
@@ -3973,9 +3973,9 @@
   obtained using, e.g., Integer/TYPE."
   {:added "1.0"
    :static true}
-  ([^Class type len]
+  ([^reflect.Type type len]
    (. Array (newInstance type (int len))))
-  ([^Class type dim & more-dims]
+  ([^reflect.Type type dim & more-dims]
    (let [dims (cons dim more-dims)
          ^"[I" dimarray (make-array (. Integer TYPE)  (count dims))]
      (dotimes [i (alength dimarray)]
@@ -3990,7 +3990,7 @@
    :added "1.0"
    :static true}
   [^java.util.Collection coll]
-    (let [ret (make-array (. Class (forName "[Ljava.lang.Object;")) (. coll (size)))]
+    (let [ret (make-array (. reflect.Type (forName "[Ljava.lang.Object;")) (. coll (size)))]
       (loop [i 0 xs (seq coll)]
         (when xs
           (aset ret i (to-array (first xs)))
@@ -4184,7 +4184,7 @@
   {:added "1.0"
    :static true}
   [ns]
-  (filter-key val (partial instance? Class) (ns-map ns)))
+  (filter-key val (partial instance? reflect.Type) (ns-map ns)))
 
 (defn ns-interns
   "Returns a map of the intern mappings for the namespace."
@@ -5450,20 +5450,20 @@
   "Returns true if x is an instance of Class"
   {:added "1.0"
    :static true}
-  [x] (instance? Class x))
+  [x] (instance? reflect.Type x))
 
 (defn- is-annotation? [c]
   (and (class? c)
        (.isAssignableFrom java.lang.annotation.Annotation c)))
 
-(defn- is-runtime-annotation? [^Class c]
+(defn- is-runtime-annotation? [^reflect.Type c]
   (boolean 
    (and (is-annotation? c)
         (when-let [^java.lang.annotation.Retention r 
                    (.getAnnotation c java.lang.annotation.Retention)] 
           (= (.value r) java.lang.annotation.RetentionPolicy/RUNTIME)))))
 
-(defn- descriptor [^Class c] (glojure.asm.Type/getDescriptor c))
+(defn- descriptor [^reflect.Type c] (glojure.asm.Type/getDescriptor c))
 
 (declare process-annotation)
 (defn- add-annotation [^glojure.asm.AnnotationVisitor av name v]
@@ -5550,17 +5550,17 @@
   "Returns the immediate superclass and direct interfaces of c, if any"
   {:added "1.0"
    :static true}
-  [^Class c]
+  [^reflect.Type c]
   (when c
-    (let [i (seq (.getInterfaces c))
-          s (.getSuperclass c)]
+    (let [i (seq nil)
+          s nil]
       (if s (cons s i) i))))
 
 (defn supers
   "Returns the immediate and indirect superclasses and interfaces of c, if any"
   {:added "1.0"
    :static true}
-  [^Class class]
+  [^reflect.Type class]
   (loop [ret (set (bases class)) cs ret]
     (if (seq cs)
       (let [c (first cs) bs (bases c)]
@@ -5578,7 +5578,7 @@
   ([h child parent]
    (or (= child parent)
        (and (class? parent) (class? child)
-            (. ^Class parent isAssignableFrom child))
+            (. ^reflect.Type parent isAssignableFrom child))
        (contains? ((:ancestors h) child) parent)
        (and (class? child) (some #(contains? ((:ancestors h) %) parent) (supers child)))
        (and (vector? parent) (vector? child)
@@ -6752,7 +6752,7 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.2"}
 
   [e & clauses]
-  (let [ge (with-meta (gensym) {})
+  (let [ge (with-meta (gensym) {:tag github.com$glojurelang$glojure$value.Object})
         default (if (odd? (count clauses)) 
                   (last clauses)
                   `(throw (errors.New (str "No matching clause: " ~ge))))]

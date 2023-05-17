@@ -96,7 +96,7 @@
 
 (defn print-ctor [o print-args ^Writer w]
   (glojure.lang.WriteWriter w "#=(")
-  (glojure.lang.WriteWriter w (.Name ^Class (class o)))
+  (glojure.lang.WriteWriter w (.Name ^reflect.Type (class o)))
   (glojure.lang.WriteWriter w ". ")
   (print-args o w)
   (glojure.lang.WriteWriter w ")"))
@@ -106,7 +106,7 @@
     (print-meta o w))
   (glojure.lang.WriteWriter w "#object[")
   (let [c (class o)]
-    (if (.isArray c)
+    (if false
       (print-method (.Name c) w)
       (glojure.lang.WriteWriter w (.Name c))))
   (glojure.lang.WriteWriter w " ")
@@ -117,15 +117,24 @@
 (defn- print-object [o, ^Writer w]
   (print-tagged-object o (str o) w))
 
-(do)
+(defmethod print-method github.com$glojurelang$glojure$value.Object [o, ^Writer w]
+  (print-object o w))
 
 (defmethod print-method glojure.lang.Keyword [o, ^Writer w]
   (glojure.lang.WriteWriter w (str o)))
 
 (defmethod print-dup glojure.lang.Keyword [o w] (print-method o w))
 
-(do)
-
+(defmethod print-method go/int [o w] (.write w (str o))) 
+(defmethod print-method uint [o w] (.write w (str o))) 
+(defmethod print-method uint8 [o w] (.write w (str o))) 
+(defmethod print-method uint16 [o w] (.write w (str o))) 
+(defmethod print-method uint32 [o w] (.write w (str o))) 
+(defmethod print-method uint64 [o w] (.write w (str o))) 
+(defmethod print-method int8 [o w] (.write w (str o))) 
+(defmethod print-method int16 [o w] (.write w (str o))) 
+(defmethod print-method int32 [o w] (.write w (str o))) 
+(defmethod print-method int64 [o w] (.write w (str o))) 
 (defmethod print-method float64 [o, ^Writer w]
   (cond
     (= (math.Inf 1) o) (glojure.lang.WriteWriter w "##Inf")
@@ -140,8 +149,16 @@
     (math.IsNaN ^float32 o) (glojure.lang.WriteWriter w "##NaN")
     :else (glojure.lang.WriteWriter w (str o))))
 
-(do)
-
+(defmethod print-method go/int [o w] (.write w (str o))) 
+(defmethod print-method uint [o w] (.write w (str o))) 
+(defmethod print-method uint8 [o w] (.write w (str o))) 
+(defmethod print-method uint16 [o w] (.write w (str o))) 
+(defmethod print-method uint32 [o w] (.write w (str o))) 
+(defmethod print-method uint64 [o w] (.write w (str o))) 
+(defmethod print-method int8 [o w] (.write w (str o))) 
+(defmethod print-method int16 [o w] (.write w (str o))) 
+(defmethod print-method int32 [o w] (.write w (str o))) 
+(defmethod print-method int64 [o w] (.write w (str o))) 
 (defmethod print-dup glojure.lang.Fn [o, ^Writer w]
   (print-ctor o (fn [o w]) w))
 
@@ -183,7 +200,7 @@
 (defmethod print-dup glojure.lang.IPersistentCollection [o, ^Writer w]
   (print-meta o w)
   (glojure.lang.WriteWriter w "#=(")
-  (glojure.lang.WriteWriter w (.Name ^Class (class o)))
+  (glojure.lang.WriteWriter w (.Name ^reflect.Type (class o)))
   (glojure.lang.WriteWriter w "/create ")
   (print-sequential "[" print-dup " " "]" o w)
   (glojure.lang.WriteWriter w ")"))
