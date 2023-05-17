@@ -135,6 +135,8 @@
 (defmethod print-method int16 [o w] (.write w (str o))) 
 (defmethod print-method int32 [o w] (.write w (str o))) 
 (defmethod print-method int64 [o w] (.write w (str o))) 
+(defmethod print-method go/byte [o w] (.write w (str o))) 
+(defmethod print-method rune [o w] (.write w (str o))) 
 (defmethod print-method float64 [o, ^Writer w]
   (cond
     (= (math.Inf 1) o) (glojure.lang.WriteWriter w "##Inf")
@@ -159,6 +161,8 @@
 (defmethod print-method int16 [o w] (.write w (str o))) 
 (defmethod print-method int32 [o w] (.write w (str o))) 
 (defmethod print-method int64 [o w] (.write w (str o))) 
+(defmethod print-method go/byte [o w] (.write w (str o))) 
+(defmethod print-method rune [o w] (.write w (str o))) 
 (defmethod print-dup glojure.lang.Fn [o, ^Writer w]
   (print-ctor o (fn [o w]) w))
 
@@ -339,7 +343,7 @@
     \formfeed "formfeed"
     \return "return"})
 
-(defmethod print-method rune [^Character c, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$value.Char [^Character c, ^Writer w]
   (if (or *print-dup* *print-readably*)
     (do (glojure.lang.AppendWriter w \\)
         (let [n (char-name-string c)]
@@ -347,7 +351,7 @@
     (glojure.lang.AppendWriter w c))
   nil)
 
-(defmethod print-dup rune [c w] (print-method c w))
+(defmethod print-dup github.com$glojurelang$glojure$value.Char [c w] (print-method c w))
 (defmethod print-dup int64 [o w] (print-method o w))
 (defmethod print-dup float64 [o w] (print-method o w))
 (defmethod print-dup glojure.lang.Ratio [o w] (print-method o w))

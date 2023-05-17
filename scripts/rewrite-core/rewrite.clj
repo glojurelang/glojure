@@ -60,7 +60,7 @@
    (sexpr-replace 'clojure.lang.IPersistentCollection 'glojure.lang.IPersistentCollection)
    (sexpr-replace 'clojure.lang.IPersistentList 'glojure.lang.IPersistentList)
    (sexpr-replace 'clojure.lang.IRecord 'glojure.lang.IRecord)
-   (sexpr-replace 'java.lang.Character 'rune)
+   (sexpr-replace 'java.lang.Character 'github.com$glojurelang$glojure$value.Char)
    (sexpr-replace 'java.lang.Long 'int64)
    (sexpr-replace 'Long 'int64)
    (sexpr-replace 'java.lang.Double 'float64)
@@ -556,7 +556,7 @@
                                   (contains? #{'print-method 'print-dup} (second sexpr))
                                   (= (nth sexpr 2) 'Number)))))
     (fn visit [zloc]
-      (loop [ints '[go/int uint uint8 uint16 uint32 uint64 int8 int16 int32 int64]
+      (loop [ints '[go/int uint uint8 uint16 uint32 uint64 int8 int16 int32 int64 go/byte rune]
              zloc zloc]
         (if (empty? ints)
           (z/remove zloc)
