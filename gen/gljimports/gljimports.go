@@ -1416,6 +1416,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/value.ITransientCollection", reflect.TypeOf((*github_com_glojurelang_glojure_value.ITransientCollection)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/value.ITransientSet", reflect.TypeOf((*github_com_glojurelang_glojure_value.ITransientSet)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/value.Identical", github_com_glojurelang_glojure_value.Identical)
+	_register("github.com/glojurelang/glojure/value.IdentityHash", github_com_glojurelang_glojure_value.IdentityHash)
 	_register("github.com/glojurelang/glojure/value.Inc", github_com_glojurelang_glojure_value.Inc)
 	_register("github.com/glojurelang/glojure/value.IncP", github_com_glojurelang_glojure_value.IncP)
 	_register("github.com/glojurelang/glojure/value.Indexed", reflect.TypeOf((*github_com_glojurelang_glojure_value.Indexed)(nil)).Elem())

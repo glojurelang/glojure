@@ -45,6 +45,16 @@ func Hash(x interface{}) uint32 {
 	}
 }
 
+func IdentityHash(x interface{}) uint32 {
+	if IsNil(x) {
+		return 0
+	}
+	if reflect.TypeOf(x).Kind() == reflect.Ptr {
+		return hashPtr(reflect.ValueOf(x).Pointer())
+	}
+	return Hash(x)
+}
+
 func getHash() hash.Hash32 {
 	return fnv.New32a()
 }

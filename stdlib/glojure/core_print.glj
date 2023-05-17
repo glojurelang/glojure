@@ -110,7 +110,7 @@
       (print-method (.Name c) w)
       (glojure.lang.WriteWriter w (.Name c))))
   (glojure.lang.WriteWriter w " ")
-  (glojure.lang.WriteWriter w (format "0x%x " (System/identityHashCode o)))
+  (glojure.lang.WriteWriter w (format "0x%x " (github.com$glojurelang$glojure$value.IdentityHash o)))
   (print-method rep w)
   (glojure.lang.WriteWriter w "]"))
 

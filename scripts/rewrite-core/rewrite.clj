@@ -197,6 +197,11 @@
 
    (sexpr-replace 'clojure.lang.Util/hash 'glojure.lang.Hash)
 
+   (sexpr-replace 'System/identityHashCode 'github.com$glojurelang$glojure$value.IdentityHash)
+
+   (sexpr-replace '(String/format fmt (to-array args))
+                  '(apply fmt.Sprintf fmt args))
+
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= '.reduce (z/sexpr zloc))))
     (fn visit [zloc] (z/replace zloc
                                 (let [lst (z/sexpr (z/up zloc))]

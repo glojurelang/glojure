@@ -5747,7 +5747,7 @@
   {:added "1.0"
    :static true}
   ^string [fmt & args]
-  (String/format fmt (to-array args)))
+  (apply fmt.Sprintf fmt args))
 
 (defn printf
   "Prints formatted output, as per format"

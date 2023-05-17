@@ -192,6 +192,9 @@ func (m *MultiFn) findBestMethod(dispatchVal interface{}) IFn {
 
 // TODO: take hierarchy
 func (m *MultiFn) isA(x, y interface{}) bool {
+	if IsNil(x) && IsNil(y) || x == y {
+		return true
+	}
 	child, ok := x.(reflect.Type)
 	if !ok {
 		return false
