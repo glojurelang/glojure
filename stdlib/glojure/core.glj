@@ -1028,7 +1028,7 @@
   {:inline (nary-inline 'minusP)
    :inline-arities >0?
    :added "1.0"}
-  ([x] (. glojure.lang.Numbers (MinusP x)))
+  ([x] (* -1 x))
   ([x y] (. glojure.lang.Numbers (MinusP x y)))
   ([x y & more]
    (reduce1 -' (-' x y) more)))
@@ -1040,7 +1040,7 @@
   {:inline (nary-inline 'minus 'unchecked_minus)
    :inline-arities >0?
    :added "1.2"}
-  ([x] (. glojure.lang.Numbers (Minus x)))
+  ([x] (* -1 x))
   ([x y] (. glojure.lang.Numbers (Minus x y)))
   ([x y & more]
      (reduce1 - (- x y) more)))

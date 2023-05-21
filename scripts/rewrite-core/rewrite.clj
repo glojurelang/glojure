@@ -374,6 +374,11 @@
    (sexpr-replace 'clojure.lang.Numbers 'glojure.lang.Numbers)
    (sexpr-replace '(cast Number x) '(glojure.lang.AsNumber x))
 
+   (sexpr-replace '(. clojure.lang.Numbers (minus x))
+                  '(* -1 x))
+   (sexpr-replace '(. clojure.lang.Numbers (minusP x))
+                  '(* -1 x))
+
    (sexpr-replace 'clojure.core/cond 'glojure.core/cond)
 
    (sexpr-replace 'clojure.lang.Keyword 'glojure.lang.Keyword)
