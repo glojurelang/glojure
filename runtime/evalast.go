@@ -324,6 +324,30 @@ func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 			return reflect.TypeOf(byte(0)), nil
 		case "rune":
 			return reflect.TypeOf(rune(0)), nil
+		case "sliceof":
+			return func(t reflect.Type, sizeCap ...interface{}) interface{} {
+				if len(sizeCap) > 2 {
+					panic("go/sliceof: too many arguments")
+				}
+				l, c := 0, 0
+				var ok bool
+				if len(sizeCap) > 0 {
+					l, ok = value.AsInt(sizeCap[0])
+					if !ok {
+						panic("go/sliceof: length is not an integer")
+					}
+				}
+				if len(sizeCap) > 1 {
+					c, ok = value.AsInt(sizeCap[1])
+					if !ok {
+						panic("go/sliceof: capacity is not an integer")
+					}
+				}
+				if c < l {
+					c = l
+				}
+				return reflect.MakeSlice(reflect.SliceOf(t), l, c).Interface()
+			}, nil
 		case "slice":
 			return func(sliceOrString interface{}, indices ...interface{}) interface{} {
 				if len(indices) == 0 || len(indices) > 2 {

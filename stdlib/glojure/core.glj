@@ -4919,7 +4919,7 @@
   n (default 1) (exclusive)."
   {:added "1.0"
    :static true}
-  ([] (. Math (random)))
+  ([] (math$rand.Float64))
   ([n] (* n (rand))))
 
 (defn rand-int

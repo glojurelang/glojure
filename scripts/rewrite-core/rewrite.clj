@@ -153,6 +153,8 @@
    (sexpr-replace 'Integer/MIN_VALUE 'math.MinInt)
    (sexpr-replace 'Integer/MAX_VALUE 'math.MaxInt)
 
+   (sexpr-replace '(. Math (random)) '(math$rand.Float64))
+
    (sexpr-replace '(. clojure.lang.Var (find sym))
                   '(. glojure.lang.RT (FindVar sym)))
 
