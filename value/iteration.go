@@ -226,7 +226,7 @@ func NewSliceIterator(x interface{}) ISeq {
 	switch reflectVal.Kind() {
 	case reflect.Array, reflect.Slice:
 		if reflectVal.Len() == 0 {
-			return emptyList
+			return nil
 		}
 		return sliceIterator{v: reflectVal, i: 0}
 	}

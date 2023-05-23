@@ -346,12 +346,20 @@ func GetDefault(coll, key, def interface{}) interface{} {
 			}
 		}
 	}
-	if reflect.TypeOf(coll).Kind() == reflect.Slice {
+	collVal := reflect.ValueOf(coll)
+	if collVal.Kind() == reflect.Slice {
 		if idx, ok := AsInt(key); ok {
 			res, ok := Nth(coll, idx)
 			if ok {
 				return res
 			}
+		}
+	}
+	if collVal.Kind() == reflect.Map {
+		keyVal := reflect.ValueOf(key)
+		res := collVal.MapIndex(keyVal)
+		if res.IsValid() {
+			return res.Interface()
 		}
 	}
 	return def
@@ -366,10 +374,7 @@ func Count(coll interface{}) int {
 	case Counted:
 		return arg.Count()
 	}
-	seq, ok := Seq(coll).(ISeq)
-	if !ok {
-		panic(fmt.Errorf("count expects a collection, got %v", coll))
-	}
+	seq := Seq(coll)
 	count := 0
 	for ; seq != nil; seq = seq.Next() {
 		count++

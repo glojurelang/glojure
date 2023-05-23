@@ -207,6 +207,12 @@ func reflectFuncFromIFn(targetType reflect.Type, applyer IFn) func(args []reflec
 			}
 			return zeroValues
 		}
+		// convert return value to expected type of target type
+		coerced, err := coerceGoValue(targetType.Out(0), res)
+		if err != nil {
+			panic(err)
+		}
+		res = coerced.Interface()
 
 		return []reflect.Value{reflect.ValueOf(res)}
 	}

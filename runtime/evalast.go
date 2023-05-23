@@ -369,7 +369,17 @@ func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 					}
 					return str[start:end]
 				}
-				panic("slices not implemented yet")
+				sVal := reflect.ValueOf(sliceOrString)
+				if sVal.Kind() != reflect.Slice {
+					panic(fmt.Sprintf("go/slice: %v is not a slice or string", sliceOrString))
+				}
+				if start == -1 {
+					start = 0
+				}
+				if end == -1 {
+					end = int64(sVal.Len())
+				}
+				return sVal.Slice(int(start), int(end)).Interface()
 			}, nil
 		}
 	}
