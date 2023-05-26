@@ -438,7 +438,7 @@
    :added "1.0"
    :static true
    :inline (fn [x] (list 'glojure.lang.Identical x nil))}
-  [x] (glojure.lang.Identical x nil))
+  [x] (github.com$glojurelang$glojure$value.IsNil x))
 
 (def
 

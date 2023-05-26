@@ -250,6 +250,8 @@
 
    (sexpr-replace '(clojure.lang.Keyword/intern ns name) '(glojure.lang.InternKeyword ns name))
 
+   (sexpr-replace '(clojure.lang.Util/identical x nil) '(github.com$glojurelang$glojure$value.IsNil x))
+
    (sexpr-replace '.get '.Get)
    (sexpr-replace '.getName '.Name)
    (sexpr-replace '.concat 'glojure.lang.ConcatStrings)

@@ -2,6 +2,9 @@
   (:use glojure.test))
 ;;(:require [glojure.pprint :refer [pprint]]))
 
+(deftest print-nil
+  (is (= "nil" (print-str nil))))
+
 (deftest print-length-empty-seq
   (let [coll () val "()"]
     (is (= val (binding [*print-length* 0] (print-str coll))))

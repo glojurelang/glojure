@@ -6,7 +6,7 @@ type equaler interface {
 
 // Equal returns true if the two values are equal.
 func Equal(a, b interface{}) bool {
-	if a == b {
+	if a == b || IsNil(a) && IsNil(b) {
 		return true
 	}
 	if _, ok := AsNumber(a); ok {
