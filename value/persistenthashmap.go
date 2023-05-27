@@ -375,12 +375,6 @@ func newNodeSeq(array []interface{}, i int, s ISeq) ISeq {
 		}
 	}
 	for j := i; j < len(array); j += 2 {
-		if array[j] != nil {
-			return &NodeSeq{
-				array: array,
-				i:     j,
-			}
-		}
 		switch node := array[j+1].(type) {
 		case Node:
 			nodeSeq := node.nodeSeq()
@@ -390,6 +384,11 @@ func newNodeSeq(array []interface{}, i int, s ISeq) ISeq {
 					i:     j + 2,
 					s:     nodeSeq,
 				}
+			}
+		default:
+			return &NodeSeq{
+				array: array,
+				i:     j,
 			}
 		}
 	}

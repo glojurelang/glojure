@@ -11,6 +11,8 @@ func TestPersistentHashMap(t *testing.T) {
 	m = m.Assoc(nil, 1)
 	assert.Equal(t, 1, m.ValAt(nil))
 
+	assert.NotNil(t, m.Seq())
+
 	m = NewPersistentHashMap()
 	for i := 0; i < 1000; i++ {
 		m = m.Assoc(i, i)
