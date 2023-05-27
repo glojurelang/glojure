@@ -50,6 +50,14 @@
   [(fn select [zloc] (pred zloc))
    (fn visit [zloc] (z/remove zloc))])
 
+(defn omit-form [form]
+  (omitp #(and (z/sexpr-able? %)
+               (= form (z/sexpr %)))))
+
+(defn omit-forms [forms]
+  (omitp #(and (z/sexpr-able? %)
+               (contains? forms (z/sexpr %)))))
+
 (def replacements
   [
    (sexpr-replace 'clojure.core 'glojure.core)
@@ -331,6 +339,11 @@
    (sexpr-replace 'clojure.lang.IEditableCollection 'glojure.lang.IEditableCollection)
    (sexpr-replace 'clojure.core/import* 'glojure.lang.Import)
 
+   (omit-forms '#{(import '(java.lang.reflect Array))
+                  (import clojure.lang.ExceptionInfo clojure.lang.IExceptionInfo)
+                  (import '(java.util.concurrent BlockingQueue LinkedBlockingQueue))
+                  (import '(java.io Writer))})
+
    (sexpr-replace '(. System (nanoTime)) '(.UnixNano (time.Now)))
 
    (sexpr-replace 'clojure.lang.RT/longCast 'glojure.lang.AsInt64)
@@ -449,6 +462,8 @@
    (sexpr-replace '(require '[clojure.java.io :as jio]) '(do))
 
    (sexpr-replace 'java.io.StringWriter 'strings.Builder)
+
+   (sexpr-replace 'java.io.Writer 'io.Writer)
 
    (omit-symbols
     '#{when-class

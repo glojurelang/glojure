@@ -10,8 +10,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; printing ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(import '(java.io Writer))
-
 (set! *warn-on-reflection* true)
 (def ^:dynamic
  ^{:doc "*print-length* controls how many items of each collection the

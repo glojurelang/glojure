@@ -12,7 +12,7 @@
   {:pre [(string? form)]}
   (java.util.UUID/fromString form))
 
-(defmethod print-method java.util.UUID [uuid ^java.io.Writer w]
+(defmethod print-method java.util.UUID [uuid ^io.Writer w]
   (glojure.lang.WriteWriter w (str "#uuid \"" (str uuid) "\"")))
 
 (defmethod print-dup java.util.UUID [o w]

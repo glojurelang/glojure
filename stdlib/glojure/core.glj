@@ -3875,8 +3875,6 @@
 
 
 
-(import '(java.lang.reflect Array))
-
 (defn alength
   "Returns the length of the Java array. Works on arrays of all
   types."
@@ -4774,8 +4772,6 @@
     (with-out-str
      (apply println xs)))
 
-(import glojure.lang.ExceptionInfo glojure.lang.IExceptionInfo)
-
 (defn ^:private elide-top-frames
   [^Throwable ex class-name]
   (let [tr (.getStackTrace ex)]
@@ -5397,8 +5393,6 @@
   [x] (if (nil? x)
         false
         (-> x class .getComponentType (= Byte/TYPE))))
-
-(import '(java.util.concurrent BlockingQueue LinkedBlockingQueue))
 
 (defn seque
   "Creates a queued seq on another (presumably lazy) seq s. The queued
@@ -6974,7 +6968,7 @@ fails, attempts to require sym's namespace and retries."
   closes f. Options passed to glojure.java.io/writer."
   {:added "1.2"}
   [f content & options]
-  (with-open [^java.io.Writer w (apply jio/writer f options)]
+  (with-open [^io.Writer w (apply jio/writer f options)]
     (glojure.lang.WriteWriter w (str content))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; futures (needs proxy);;;;;;;;;;;;;;;;;;
