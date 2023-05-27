@@ -658,6 +658,9 @@ func AsFloat64(x interface{}) float64 {
 		return float64(x)
 	case float64:
 		return x
+	case *Ratio:
+		f, _ := x.val.Float64()
+		return f
 	default:
 		panic("cannot convert to float64")
 	}
