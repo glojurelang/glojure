@@ -578,14 +578,14 @@
                                                } (nth sexpr 2))))))
     (fn visit [zloc] (z/replace zloc '(do)))]
 
-   ;; Implement print-* for integral types
+   ;; Implement print-* for number types
    [(fn select [zloc] (and (z/list? zloc)
                            (let [sexpr (z/sexpr zloc)]
                              (and (= 'defmethod (first sexpr))
                                   (contains? #{'print-method 'print-dup} (second sexpr))
                                   (= (nth sexpr 2) 'Number)))))
     (fn visit [zloc]
-      (loop [ints '[go/int uint uint8 uint16 uint32 uint64 int8 int16 int32 int64 go/byte rune]
+      (loop [ints '[go/int uint uint8 uint16 uint32 uint64 int8 int16 int32 int64 go/byte rune glojure.lang.Ratio]
              zloc zloc]
         (if (empty? ints)
           (z/remove zloc)

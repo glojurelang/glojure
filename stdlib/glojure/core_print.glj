@@ -135,6 +135,7 @@
 (defmethod print-method int64 [o w] (.write w (str o))) 
 (defmethod print-method go/byte [o w] (.write w (str o))) 
 (defmethod print-method rune [o w] (.write w (str o))) 
+(defmethod print-method glojure.lang.Ratio [o w] (.write w (str o))) 
 (defmethod print-method float64 [o, ^Writer w]
   (cond
     (= (math.Inf 1) o) (glojure.lang.WriteWriter w "##Inf")
@@ -161,6 +162,7 @@
 (defmethod print-method int64 [o w] (.write w (str o))) 
 (defmethod print-method go/byte [o w] (.write w (str o))) 
 (defmethod print-method rune [o w] (.write w (str o))) 
+(defmethod print-method glojure.lang.Ratio [o w] (.write w (str o))) 
 (defmethod print-dup glojure.lang.Fn [o, ^Writer w]
   (print-ctor o (fn [o w]) w))
 
