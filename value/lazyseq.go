@@ -27,11 +27,12 @@ func newLazySeqWithMeta(meta IPersistentMap, seq ISeq) ISeq {
 }
 
 var (
-	_ ISeq       = (*LazySeq)(nil)
-	_ IPending   = (*LazySeq)(nil)
-	_ IObj       = (*LazySeq)(nil)
-	_ Counted    = (*LazySeq)(nil)
-	_ Sequential = (*LazySeq)(nil)
+	_ ISeq                  = (*LazySeq)(nil)
+	_ IPending              = (*LazySeq)(nil)
+	_ IObj                  = (*LazySeq)(nil)
+	_ Counted               = (*LazySeq)(nil)
+	_ Sequential            = (*LazySeq)(nil)
+	_ IPersistentCollection = (*LazySeq)(nil)
 	// IHashEq
 )
 
@@ -63,6 +64,14 @@ func (s *LazySeq) More() ISeq {
 
 func (s *LazySeq) Cons(x interface{}) ISeq {
 	return NewCons(x, s)
+}
+
+func (s *LazySeq) Conj(x interface{}) Conjer {
+	return s.Cons(x).(Conjer)
+}
+
+func (s *LazySeq) Empty() IPersistentCollection {
+	return emptyList
 }
 
 func (s *LazySeq) Equal(o interface{}) bool {
