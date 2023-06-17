@@ -1,6 +1,8 @@
 //go:generate go run ../cmd/gen-abstract-class/main.go -class APersistentMap -struct PersistentHashMap -receiver m
 package value
 
+import "errors"
+
 func CreatePersistentHashMap(keyvals interface{}) interface{} {
 	return NewPersistentHashMap(seqToSlice(Seq(keyvals))...)
 }
@@ -840,4 +842,8 @@ func clone(s []interface{}) []interface{} {
 	result := make([]interface{}, len(s), cap(s))
 	copy(result, s)
 	return result
+}
+
+func newIteratorError() error {
+	return errors.New("iterator reached the end of collection")
 }

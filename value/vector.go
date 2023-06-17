@@ -194,6 +194,7 @@ func (v *Vector) Seq() ISeq {
 	if v.Count() == 0 {
 		return nil
 	}
+	// TODO: chunked seq
 	return NewVectorIterator(v, 0, 1)
 }
 

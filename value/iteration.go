@@ -1,7 +1,6 @@
 package value
 
 import (
-	"errors"
 	"fmt"
 	"reflect"
 )
@@ -220,6 +219,10 @@ func (i *concatIterator) More() ISeq {
 	return nxt
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+// TODO: rename to SliceSeq.
+
 // NewSliceIterator returns a lazy sequence of the values of x.
 func NewSliceIterator(x interface{}) ISeq {
 	reflectVal := reflect.ValueOf(x)
@@ -237,6 +240,13 @@ type sliceIterator struct {
 	v reflect.Value
 	i int
 }
+
+var (
+	_ ISeq        = (*sliceIterator)(nil)
+	_ Sequential  = (*sliceIterator)(nil)
+	_ IReduce     = (*sliceIterator)(nil)
+	_ IReduceInit = (*sliceIterator)(nil)
+)
 
 func (i sliceIterator) xxx_sequential() {}
 
@@ -264,6 +274,41 @@ func (i sliceIterator) More() ISeq {
 	return nxt
 }
 
+func (i sliceIterator) Reduce(f IFn) interface{} {
+	if i.v.IsZero() || i.v.IsNil() {
+		return nil
+	}
+
+	ret := i.v.Index(i.i).Interface()
+	for x := i.i + 1; x < i.v.Len(); x++ {
+		ret = f.Invoke(ret, i.v.Index(x).Interface())
+		if IsReduced(ret) {
+			return ret.(IDeref).Deref()
+		}
+	}
+	return ret
+}
+
+func (i sliceIterator) ReduceInit(f IFn, start interface{}) interface{} {
+	if i.v.IsZero() || i.v.IsNil() {
+		return start
+	}
+
+	ret := f.Invoke(start, i.v.Index(i.i).Interface())
+	for x := i.i + 1; x < i.v.Len(); x++ {
+		ret = f.Invoke(ret, i.v.Index(x).Interface())
+		if IsReduced(ret) {
+			return ret.(IDeref).Deref()
+		}
+	}
+	if IsReduced(ret) {
+		return ret.(IDeref).Deref()
+	}
+	return ret
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 type Repeat struct {
 	x     interface{}
 	count int64
@@ -271,8 +316,10 @@ type Repeat struct {
 }
 
 var (
-	_ ISeq       = (*Repeat)(nil)
-	_ Sequential = (*Repeat)(nil)
+	_ ISeq        = (*Repeat)(nil)
+	_ Sequential  = (*Repeat)(nil)
+	_ IReduce     = (*Repeat)(nil)
+	_ IReduceInit = (*Repeat)(nil)
 )
 
 func NewRepeat(x interface{}) *Repeat {
@@ -316,6 +363,42 @@ func (r *Repeat) Seq() ISeq {
 	return r
 }
 
-func newIteratorError() error {
-	return errors.New("iterator reached the end of collection")
+func (r *Repeat) Reduce(f IFn) interface{} {
+	ret := r.x
+	if r.count == -1 {
+		for {
+			ret = f.Invoke(ret, r.x)
+			if IsReduced(ret) {
+				return ret.(IDeref).Deref()
+			}
+		}
+	} else {
+		for i := int64(1); i < r.count; i++ {
+			ret = f.Invoke(ret, r.x)
+			if IsReduced(ret) {
+				return ret.(IDeref).Deref()
+			}
+		}
+		return ret
+	}
+}
+
+func (r *Repeat) ReduceInit(f IFn, start interface{}) interface{} {
+	ret := start
+	if r.count == -1 {
+		for {
+			ret = f.Invoke(ret, r.x)
+			if IsReduced(ret) {
+				return ret.(IDeref).Deref()
+			}
+		}
+	} else {
+		for i := int64(0); i < r.count; i++ {
+			ret = f.Invoke(ret, r.x)
+			if IsReduced(ret) {
+				return ret.(IDeref).Deref()
+			}
+		}
+		return ret
+	}
 }
