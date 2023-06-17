@@ -324,6 +324,16 @@ func (env *environment) EvalASTMaybeHostForm(n ast.Node) (interface{}, error) {
 			return reflect.TypeOf(byte(0)), nil
 		case "rune":
 			return reflect.TypeOf(rune(0)), nil
+		case "append":
+			return func(slc interface{}, vals ...interface{}) interface{} {
+				slcVal := reflect.ValueOf(slc)
+				slcTyp := slcVal.Type().Elem()
+				valSlc := reflect.MakeSlice(reflect.SliceOf(slcTyp), len(vals), len(vals))
+				for i, v := range vals {
+					valSlc.Index(i).Set(reflect.ValueOf(v))
+				}
+				return reflect.AppendSlice(slcVal, valSlc).Interface()
+			}, nil
 		case "sliceof":
 			return func(t reflect.Type, sizeCap ...interface{}) interface{} {
 				if len(sizeCap) > 2 {

@@ -143,6 +143,10 @@ func (v *Var) Set(val interface{}) interface{} {
 	// TODO: validate
 	b := v.getDynamicBinding()
 	if b == nil {
+		fmt.Println("current gid", mustGoroutineID())
+		for k, v := range glsBindings {
+			fmt.Printf("glsBindings[%d] = %v\n", k, v)
+		}
 		panic(fmt.Sprintf("can't change/establish root binding of: %s", v))
 	}
 	b.val = val

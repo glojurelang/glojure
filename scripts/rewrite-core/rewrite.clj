@@ -93,6 +93,8 @@
    (sexpr-replace '(clojure.lang.PersistentTreeMap/create keyvals)
                   '(glojure.lang.CreatePersistentTreeMap keyvals))
 
+   (sexpr-replace 'clojure.lang.Cycle/create 'github.com$glojurelang$glojure$value.NewCycle)
+
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    ;; struct map
    (sexpr-replace '(. clojure.lang.PersistentStructMap (createSlotMap keys))

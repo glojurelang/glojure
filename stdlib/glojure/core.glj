@@ -2974,7 +2974,7 @@
   "Returns a lazy (infinite!) sequence of repetitions of the items in coll."
   {:added "1.0"
    :static true}
-  [coll] (glojure.lang.Cycle/create (seq coll)))
+  [coll] (github.com$glojurelang$glojure$value.NewCycle (seq coll)))
 
 (defn split-at
   "Returns a vector of [(take n coll) (drop n coll)]"
