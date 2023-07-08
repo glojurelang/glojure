@@ -21,6 +21,10 @@ func Hash(x interface{}) uint32 {
 	if IsNil(x) {
 		return 0
 	}
+	if reflect.TypeOf(x).Kind() == reflect.Func {
+		// hash of function pointer
+		return hashPtr(reflect.ValueOf(x).Pointer())
+	}
 	switch x := x.(type) {
 	case Hasher:
 		return x.Hash()
