@@ -56,8 +56,7 @@ func (nm *NumberMethods) And(x, y interface{}) interface{} {
 }
 
 func (nm *NumberMethods) IsZero(x interface{}) bool {
-	// convert to int64 and compare to zero
-	return AsInt64(x) == 0
+	return Ops(x).IsZero(x)
 }
 
 func (nm *NumberMethods) IsPos(x interface{}) bool {
