@@ -1,11 +1,22 @@
 package value
 
+import "reflect"
+
 type equaler interface {
 	Equal(interface{}) bool
 }
 
 // Equal returns true if the two values are equal.
 func Equal(a, b interface{}) bool {
+	// check functions first, because == panics on func comparison.
+	aVal, bVal := reflect.ValueOf(a), reflect.ValueOf(b)
+	if aVal.Kind() == reflect.Func || bVal.Kind() == reflect.Func {
+		if !(aVal.Kind() == reflect.Func && bVal.Kind() == reflect.Func) {
+			return false
+		}
+		return aVal.Pointer() == bVal.Pointer()
+	}
+
 	if a == b || IsNil(a) && IsNil(b) {
 		return true
 	}
