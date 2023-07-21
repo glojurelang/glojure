@@ -2,6 +2,9 @@
 
 ![example workflow](https://github.com/glojurelang/glojure/actions/workflows/ci.yml/badge.svg)
 
+<img alt="Gopher image" src="./doc/logo.png" width="512" />
+*Gopher image derived from [@egonelbre](https://github.com/egonelbre/gophers), licensed under [Creative Commons 1.0 Attributions license](https://creativecommons.org/licenses/by/1.0/).*
+
 
 Glojure is an interpreter for [Clojure](https://clojure.org/), hosted
 in Go. Glojure provides easy access to Go libraries, just as Clojure
@@ -46,3 +49,5 @@ func(string, string) bool
 
 
 ### Calling Glojure from Go
+
+## Developing
