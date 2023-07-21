@@ -10,9 +10,9 @@ Glojure is an interpreter for [Clojure](https://clojure.org/), hosted
 in Go. Glojure provides easy access to Go libraries, just as Clojure
 provides easy access to Java frameworks.
 
-**Glojure is in early development; expect bugs, missing features, and limited performance.** That
-said, it is used successfully in hobby projects and runs a significant subset of the (transformed)
-core Clojure library.
+**Glojure is in early development; expect bugs, missing features, and limited performance. Backwards
+compatibility is not guaranteed until a v1 release.** That said, it is used successfully in hobby
+projects and runs a significant subset of the (transformed) core Clojure library.
 
 ## Installation
 
