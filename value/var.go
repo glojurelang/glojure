@@ -37,6 +37,10 @@ type (
 	// TODO: public rev counter
 )
 
+func (uv *UnboundVar) String() string {
+	return "Unbound: " + uv.v.String()
+}
+
 var (
 	NSCore = FindOrCreateNamespace(SymbolCoreNamespace)
 
@@ -90,7 +94,7 @@ func NewVar(ns *Namespace, sym *Symbol) *Var {
 		ns:  ns,
 		sym: sym,
 	}
-	v.root.Store(Box{val: UnboundVar{v: v}})
+	v.root.Store(Box{val: &UnboundVar{v: v}})
 	v.meta.Store(NewBox(emptyMap))
 	return v
 }
@@ -115,7 +119,7 @@ func (v *Var) String() string {
 
 func (v *Var) HasRoot() bool {
 	box := v.root.Load().(Box)
-	_, ok := box.val.(UnboundVar)
+	_, ok := box.val.(*UnboundVar)
 	return !ok
 }
 
