@@ -12,18 +12,16 @@ provides easy access to Java frameworks.
 
 ## Comparisons to other Go ports of Clojure
 
-*If you'd like to see another port in this table, please file an issue or open a pull request!*
+*If you'd like to see another port in this table, or if you believe there is an
+error in it, please file an issue or open a pull request!*
 
-| Aspect      | Glojure | Joker | let-go |
-| ----------- | ----------- | | |
-| Header      | Title       | | |
-| Paragraph   | Text        | | |
+| Aspect      | Glojure | [Joker](https://github.com/candid82/joker) | [let-go](https://github.com/nooga/let-go) |
+| ----------- | ----------- |----------- | -----------|
+| Hosted[^1]  | Yes       | No  | No  |
+| Execution   | Tree-walk interpreter | Tree-walk interpreter  | Bytecode Interpreter |
+| Easy Go interop | Yes | No | No |
 
-Glojure makes some fundamental design choices differently from other
-ports of Clojure to Go.
-
-First, Glojure strives to be hosted in Go in the same sense in which
-Clojure is hosted on the JVM. What does it mean to be a hosted
+[^1]: What does it mean to be a hosted
 language? For Clojure on the JVM, it means that all Java values are
 also Clojure values, and vice versa. Glojure strives to maintain the
 same relationship with Go.
