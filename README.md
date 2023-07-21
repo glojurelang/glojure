@@ -6,11 +6,10 @@
 
 *Gopher image derived from [@egonelbre](https://github.com/egonelbre/gophers), licensed under [Creative Commons 1.0 Attributions license](https://creativecommons.org/licenses/by/1.0/).*
 
-Glojure is an interpreter for the
-[Clojure](https://clojure.org/), that is hosted in the Go
-programming language. Glojure provides easy access to Go
-libraries, similar to how Clojure provides easy access to Java
-frameworks.
+Glojure is an interpreter for
+[Clojure](https://clojure.org/), hosted on Go. Glojure provides
+easy access to Go libraries, similar to how Clojure provides easy
+access to Java frameworks.
 
 Glojure is in early development; expect bugs, missing features,
 and limited performance. Backwards compatibility is not
