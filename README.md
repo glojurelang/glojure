@@ -109,8 +109,9 @@ error in it, please file an issue or open a pull request!*
 | Aspect      | Glojure | [Joker](https://github.com/candid82/joker) | [let-go](https://github.com/nooga/let-go) |
 | ----------- | ----------- |----------- | -----------|
 | Hosted[^1]  | Yes       | No  | No  |
-| Execution   | Tree-walk interpreter | Tree-walk interpreter  | Bytecode Interpreter |
 | Easy Go interop | Yes | No | No |
+| Concurrency | Yes | No | Yes |
+| Execution   | Tree-walk interpreter | Tree-walk interpreter  | Bytecode Interpreter |
 
 [^1]: What does it mean to be a hosted
 language? For Clojure on the JVM, it means that all Java values are
