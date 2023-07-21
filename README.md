@@ -50,6 +50,32 @@ user=>
 
 ## Usage
 
+Here's a small example program that starts an HTTP server with a
+simple handler function that responds with the request body:
+```clojure
+;; example.glj
+(ns example.server)
+
+(defn echo-handler
+  [w r]
+  (io.Copy w (.Body r))
+  nil)
+
+(net$http.Handle "/" (net$http.HandlerFunc echo-handler))
+
+(net$http.ListenAndServe ":8080" nil)
+```
+
+Run it with the `glj` command:
+```
+$ glj ./example.glj
+```
+
+```
+$ curl localhost:8080 -d "sicp"
+sicp
+```
+
 ### Interop
 
 Glojure ships with interop with many standard library packages
