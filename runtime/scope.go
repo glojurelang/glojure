@@ -1,7 +1,7 @@
 package runtime
 
 import (
-	"github.com/glojurelang/glojure/value"
+	value "github.com/glojurelang/glojure/pkg/lang"
 )
 
 type scope struct {

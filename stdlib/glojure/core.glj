@@ -438,7 +438,7 @@
    :added "1.0"
    :static true
    :inline (fn [x] (list 'glojure.lang.Identical x nil))}
-  [x] (github.com$glojurelang$glojure$value.IsNil x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.IsNil x))
 
 (def
 
@@ -548,8 +548,8 @@
    :added "1.0"
    :static true}
   (^string [] "")
-  (^string [^github.com$glojurelang$glojure$value.Object x]
-   (if (nil? x) "" (github.com$glojurelang$glojure$value.ToString x)))
+  (^string [^github.com$glojurelang$glojure$pkg$lang.Object x]
+   (if (nil? x) "" (github.com$glojurelang$glojure$pkg$lang.ToString x)))
   (^string [x & ys]
      ((fn [^{:tag strings.Builder} sb xs] (if xs (recur (do (. sb (WriteString (str (first xs)))) sb) (next xs)) (.String sb))) (new strings.Builder) (cons x ys))))
 
@@ -2829,14 +2829,14 @@
   "Wraps x in a way such that a reduce will terminate with the value x"
   {:added "1.5"}
   [x]
-  (github.com$glojurelang$glojure$value.NewReduced x))
+  (github.com$glojurelang$glojure$pkg$lang.NewReduced x))
 
 (defn reduced?
   "Returns true if x is the result of a call to reduced"
-  {:inline (fn [x] `(github.com$glojurelang$glojure$value.IsReduced ~x ))
+  {:inline (fn [x] `(github.com$glojurelang$glojure$pkg$lang.IsReduced ~x ))
    :inline-arities #{1}
    :added "1.5"}
-  ([x] (github.com$glojurelang$glojure$value.IsReduced x)))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.IsReduced x)))
 
 (defn ensure-reduced
   "If x is already reduced?, returns it, else returns (reduced x)"
@@ -2974,7 +2974,7 @@
   "Returns a lazy (infinite!) sequence of repetitions of the items in coll."
   {:added "1.0"
    :static true}
-  [coll] (github.com$glojurelang$glojure$value.NewCycle (seq coll)))
+  [coll] (github.com$glojurelang$glojure$pkg$lang.NewCycle (seq coll)))
 
 (defn split-at
   "Returns a vector of [(take n coll) (drop n coll)]"
@@ -3443,7 +3443,7 @@
   "Returns the Class of x"
   {:added "1.0"
    :static true}
-  ^reflect.Type [^github.com$glojurelang$glojure$value.Object x] (if (nil? x) x (glojure.lang.TypeOf x)))
+  ^reflect.Type [^github.com$glojurelang$glojure$pkg$lang.Object x] (if (nil? x) x (glojure.lang.TypeOf x)))
 
 (defn type 
   "Returns the :type metadata of x, or its Class if none"
@@ -3581,7 +3581,7 @@
   "Returns true if n is a BigDecimal"
   {:added "1.0"
    :static true}
-  [n] (instance? github.com$glojurelang$glojure$value.BigDecimal n))
+  [n] (instance? github.com$glojurelang$glojure$pkg$lang.BigDecimal n))
 
 (defn float?
   "Returns true if n is a floating point number"
@@ -3606,8 +3606,8 @@
   [x] (cond
        (instance? glojure.lang.BigInt x) x
        (instance? big.Int x) (glojure.lang.BigInt/fromBigInteger x)
-       (decimal? x) (bigint (.toBigInteger ^github.com$glojurelang$glojure$value.BigDecimal x))
-       (float? x)  (bigint (. github.com$glojurelang$glojure$value.BigDecimal valueOf (double x)))
+       (decimal? x) (bigint (.toBigInteger ^github.com$glojurelang$glojure$pkg$lang.BigDecimal x))
+       (float? x)  (bigint (. github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x)))
        (ratio? x) (bigint (.bigIntegerValue ^glojure.lang.Ratio x))
        (number? x) (glojure.lang.BigInt/valueOf (long x))
        :else (bigint (BigInteger. x))))
@@ -3620,20 +3620,20 @@
   [x] (cond
        (instance? big.Int x) x
        (instance? glojure.lang.BigInt x) (.toBigInteger ^glojure.lang.BigInt x)
-       (decimal? x) (.toBigInteger ^github.com$glojurelang$glojure$value.BigDecimal x)
-       (float? x) (.toBigInteger (. github.com$glojurelang$glojure$value.BigDecimal valueOf (double x)))
+       (decimal? x) (.toBigInteger ^github.com$glojurelang$glojure$pkg$lang.BigDecimal x)
+       (float? x) (.toBigInteger (. github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x)))
        (ratio? x) (.bigIntegerValue ^glojure.lang.Ratio x)
        (number? x) (BigInteger/valueOf (long x))
        :else (BigInteger. x)))
 
 (defn bigdec
   "Coerce to BigDecimal"
-  {:tag github.com$glojurelang$glojure$value.BigDecimal
+  {:tag github.com$glojurelang$glojure$pkg$lang.BigDecimal
    :added "1.0"
    :static true}
   [x] (cond
        (decimal? x) x
-       (float? x) (. github.com$glojurelang$glojure$value.BigDecimal valueOf (double x))
+       (float? x) (. github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x))
        (ratio? x) (/ (BigDecimal. (.numerator ^glojure.lang.Ratio x)) (.denominator ^glojure.lang.Ratio x))
        (instance? glojure.lang.BigInt x) (.toBigDecimal ^glojure.lang.BigInt x)
        (instance? big.Int x) (BigDecimal. ^big.Int x)
@@ -6746,7 +6746,7 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.2"}
 
   [e & clauses]
-  (let [ge (with-meta (gensym) {:tag github.com$glojurelang$glojure$value.Object})
+  (let [ge (with-meta (gensym) {:tag github.com$glojurelang$glojure$pkg$lang.Object})
         default (if (odd? (count clauses)) 
                   (last clauses)
                   `(throw (errors.New (str "No matching clause: " ~ge))))]
@@ -6961,7 +6961,7 @@ fails, attempts to require sym's namespace and retries."
            sw (java.io.StringWriter.)]
        (with-open [^java.io.Reader r (apply jio/reader f opts)]
          (jio/copy r sw)
-         (github.com$glojurelang$glojure$value.ToString sw)))))
+         (github.com$glojurelang$glojure$pkg$lang.ToString sw)))))
 
 (defn spit
   "Opposite of slurp.  Opens f with writer, writes content, then

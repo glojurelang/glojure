@@ -14,7 +14,7 @@ import (
 
 	"github.com/glojurelang/glojure/reader"
 	"github.com/glojurelang/glojure/runtime"
-	"github.com/glojurelang/glojure/value"
+	value "github.com/glojurelang/glojure/pkg/lang"
 
 	// pprof
 	"net/http"

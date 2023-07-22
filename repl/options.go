@@ -3,7 +3,7 @@ package repl
 import (
 	"io"
 
-	"github.com/glojurelang/glojure/value"
+	value "github.com/glojurelang/glojure/pkg/lang"
 )
 
 type options struct {

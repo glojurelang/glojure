@@ -8,10 +8,10 @@ import (
 	"strings"
 
 	"github.com/glojurelang/glojure/ast"
-	"github.com/glojurelang/glojure/value"
+	value "github.com/glojurelang/glojure/pkg/lang"
 
 	// Make it easier to refer to global vars.
-	. "github.com/glojurelang/glojure/value"
+	. "github.com/glojurelang/glojure/pkg/lang"
 )
 
 var (

@@ -1,6 +1,6 @@
 package reader
 
-import "github.com/glojurelang/glojure/value"
+import value "github.com/glojurelang/glojure/pkg/lang"
 
 type (
 	SymbolResolver interface {

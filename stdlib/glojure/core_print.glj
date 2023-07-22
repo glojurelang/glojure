@@ -108,14 +108,14 @@
       (print-method (.Name c) w)
       (glojure.lang.WriteWriter w (.Name c))))
   (glojure.lang.WriteWriter w " ")
-  (glojure.lang.WriteWriter w (format "0x%x " (github.com$glojurelang$glojure$value.IdentityHash o)))
+  (glojure.lang.WriteWriter w (format "0x%x " (github.com$glojurelang$glojure$pkg$lang.IdentityHash o)))
   (print-method rep w)
   (glojure.lang.WriteWriter w "]"))
 
 (defn- print-object [o, ^Writer w]
   (print-tagged-object o (str o) w))
 
-(defmethod print-method github.com$glojurelang$glojure$value.Object [o, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Object [o, ^Writer w]
   (print-object o w))
 
 (defmethod print-method glojure.lang.Keyword [o, ^Writer w]
@@ -343,7 +343,7 @@
     \formfeed "formfeed"
     \return "return"})
 
-(defmethod print-method github.com$glojurelang$glojure$value.Char [^Character c, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Char [^Character c, ^Writer w]
   (if (or *print-dup* *print-readably*)
     (do (glojure.lang.AppendWriter w \\)
         (let [n (char-name-string c)]
@@ -351,11 +351,11 @@
     (glojure.lang.AppendWriter w c))
   nil)
 
-(defmethod print-dup github.com$glojurelang$glojure$value.Char [c w] (print-method c w))
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Char [c w] (print-method c w))
 (defmethod print-dup int64 [o w] (print-method o w))
 (defmethod print-dup float64 [o w] (print-method o w))
 (defmethod print-dup glojure.lang.Ratio [o w] (print-method o w))
-(defmethod print-dup github.com$glojurelang$glojure$value.BigDecimal [o w] (print-method o w))
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.BigDecimal [o w] (print-method o w))
 (defmethod print-dup glojure.lang.BigInt [o w] (print-method o w))
 (defmethod print-dup glojure.lang.PersistentHashMap [o w] (print-method o w))
 (defmethod print-dup glojure.lang.PersistentHashSet [o w] (print-method o w))
@@ -368,7 +368,7 @@
 
 (do)
 
-(defmethod print-method github.com$glojurelang$glojure$value.BigDecimal [b, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.BigDecimal [b, ^Writer w]
   (glojure.lang.WriteWriter w (str b))
   (glojure.lang.WriteWriter w "M"))
 
@@ -529,7 +529,7 @@
     (-> (proxy [Writer] []
           (flush []
                  (when (pos? (.length sb))
-                   (flush-fn (github.com$glojurelang$glojure$value.ToString sb)))
+                   (flush-fn (github.com$glojurelang$glojure$pkg$lang.ToString sb)))
                  (.setLength sb 0))
           (close []
                  (.flush ^Writer this)

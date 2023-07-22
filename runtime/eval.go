@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/glojurelang/glojure/compiler"
-	"github.com/glojurelang/glojure/value"
+	value "github.com/glojurelang/glojure/pkg/lang"
 )
 
 func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {

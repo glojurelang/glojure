@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/glojurelang/glojure/value"
+import value "github.com/glojurelang/glojure/pkg/lang"
 
 // Modeled after clojure's tools.analyzer
 type (

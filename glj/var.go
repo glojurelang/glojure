@@ -1,6 +1,6 @@
 package glj
 
-import "github.com/glojurelang/glojure/value"
+import value "github.com/glojurelang/glojure/pkg/lang"
 
 // Var returns an IFn associated with the namespace and name.
 func Var(ns, name interface{}) value.IFn {

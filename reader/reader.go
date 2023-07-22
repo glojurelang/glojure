@@ -10,7 +10,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/glojurelang/glojure/value"
+	value "github.com/glojurelang/glojure/pkg/lang"
 )
 
 var (
