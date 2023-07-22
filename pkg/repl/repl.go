@@ -12,9 +12,9 @@ import (
 
 	"github.com/chzyer/readline"
 
-	"github.com/glojurelang/glojure/pkg/reader"
-	"github.com/glojurelang/glojure/runtime"
 	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/reader"
+	"github.com/glojurelang/glojure/pkg/runtime"
 
 	// pprof
 	"net/http"

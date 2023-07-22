@@ -3794,8 +3794,8 @@
   For data structure interop use glojure.edn/read-string"
   {:added "1.0"
    :static true}
-  ([s] (github.com$glojurelang$glojure$runtime.RTReadString s))
-  ([opts s] (github.com$glojurelang$glojure$runtime.RTReadString s opts)))
+  ([s] (github.com$glojurelang$glojure$pkg$runtime.RTReadString s))
+  ([opts s] (github.com$glojurelang$glojure$pkg$runtime.RTReadString s opts)))
 
 (defn subvec
   "Returns a persistent vector of the items in vector from

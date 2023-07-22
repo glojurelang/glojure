@@ -11,7 +11,7 @@ import (
 	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/repl"
-	"github.com/glojurelang/glojure/runtime"
+	"github.com/glojurelang/glojure/pkg/runtime"
 
 	// Bootstrap the runtime
 	_ "github.com/glojurelang/glojure/pkg/glj"

@@ -7,7 +7,7 @@ import (
 	"github.com/glojurelang/glojure/gen/gljimports"
 	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
-	"github.com/glojurelang/glojure/runtime"
+	"github.com/glojurelang/glojure/pkg/runtime"
 )
 
 func init() {

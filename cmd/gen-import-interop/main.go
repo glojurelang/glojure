@@ -34,7 +34,7 @@ var (
 		"time",
 		"unicode",
 
-		"github.com/glojurelang/glojure/runtime",
+		"github.com/glojurelang/glojure/pkg/runtime",
 		"github.com/glojurelang/glojure/pkg/lang",
 	}
 )

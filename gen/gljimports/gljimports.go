@@ -24,7 +24,7 @@ import (
 	strings "strings"
 	time "time"
 	unicode "unicode"
-	github_com_glojurelang_glojure_runtime "github.com/glojurelang/glojure/runtime"
+	github_com_glojurelang_glojure_pkg_runtime "github.com/glojurelang/glojure/pkg/runtime"
 	github_com_glojurelang_glojure_pkg_lang "github.com/glojurelang/glojure/pkg/lang"
 )
 
@@ -1330,32 +1330,32 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("unicode.Zp", unicode.Zp)
 	_register("unicode.Zs", unicode.Zs)
 
-	// package github.com/glojurelang/glojure/runtime
+	// package github.com/glojurelang/glojure/pkg/runtime
 	////////////////////////////////////////
-	_register("github.com/glojurelang/glojure/runtime.AddLoadPath", github_com_glojurelang_glojure_runtime.AddLoadPath)
-	_register("github.com/glojurelang/glojure/runtime.Debug", github_com_glojurelang_glojure_runtime.Debug)
-	_register("github.com/glojurelang/glojure/runtime.EvalError", reflect.TypeOf((*github_com_glojurelang_glojure_runtime.EvalError)(nil)).Elem())
-	_register("github.com/glojurelang/glojure/runtime.EvalOption", reflect.TypeOf((*github_com_glojurelang_glojure_runtime.EvalOption)(nil)).Elem())
-	_register("github.com/glojurelang/glojure/runtime.NewEnvironment", github_com_glojurelang_glojure_runtime.NewEnvironment)
-	_register("github.com/glojurelang/glojure/runtime.Program", reflect.TypeOf((*github_com_glojurelang_glojure_runtime.Program)(nil)).Elem())
-	_register("github.com/glojurelang/glojure/runtime.RT", github_com_glojurelang_glojure_runtime.RT)
-	_register("github.com/glojurelang/glojure/runtime.RTMethods", reflect.TypeOf((*github_com_glojurelang_glojure_runtime.RTMethods)(nil)).Elem())
-	_register("github.com/glojurelang/glojure/runtime.RTReadString", github_com_glojurelang_glojure_runtime.RTReadString)
-	_register("github.com/glojurelang/glojure/runtime.ReadEval", github_com_glojurelang_glojure_runtime.ReadEval)
-	_register("github.com/glojurelang/glojure/runtime.ReadEvalOption", reflect.TypeOf((*github_com_glojurelang_glojure_runtime.ReadEvalOption)(nil)).Elem())
-	_register("github.com/glojurelang/glojure/runtime.SymInNS", github_com_glojurelang_glojure_runtime.SymInNS)
-	_register("github.com/glojurelang/glojure/runtime.SymNS", github_com_glojurelang_glojure_runtime.SymNS)
-	_register("github.com/glojurelang/glojure/runtime.SymbolDot", github_com_glojurelang_glojure_runtime.SymbolDot)
-	_register("github.com/glojurelang/glojure/runtime.SymbolInNamespace", github_com_glojurelang_glojure_runtime.SymbolInNamespace)
-	_register("github.com/glojurelang/glojure/runtime.SymbolNamespace", github_com_glojurelang_glojure_runtime.SymbolNamespace)
-	_register("github.com/glojurelang/glojure/runtime.SymbolSpliceUnquote", github_com_glojurelang_glojure_runtime.SymbolSpliceUnquote)
-	_register("github.com/glojurelang/glojure/runtime.SymbolUnquote", github_com_glojurelang_glojure_runtime.SymbolUnquote)
-	_register("github.com/glojurelang/glojure/runtime.SymbolUserNamespace", github_com_glojurelang_glojure_runtime.SymbolUserNamespace)
-	_register("github.com/glojurelang/glojure/runtime.WithEnv", github_com_glojurelang_glojure_runtime.WithEnv)
-	_register("github.com/glojurelang/glojure/runtime.WithFilename", github_com_glojurelang_glojure_runtime.WithFilename)
-	_register("github.com/glojurelang/glojure/runtime.WithLoadPath", github_com_glojurelang_glojure_runtime.WithLoadPath)
-	_register("github.com/glojurelang/glojure/runtime.WithStderr", github_com_glojurelang_glojure_runtime.WithStderr)
-	_register("github.com/glojurelang/glojure/runtime.WithStdout", github_com_glojurelang_glojure_runtime.WithStdout)
+	_register("github.com/glojurelang/glojure/pkg/runtime.AddLoadPath", github_com_glojurelang_glojure_pkg_runtime.AddLoadPath)
+	_register("github.com/glojurelang/glojure/pkg/runtime.Debug", github_com_glojurelang_glojure_pkg_runtime.Debug)
+	_register("github.com/glojurelang/glojure/pkg/runtime.EvalError", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.EvalError)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/runtime.EvalOption", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.EvalOption)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/runtime.NewEnvironment", github_com_glojurelang_glojure_pkg_runtime.NewEnvironment)
+	_register("github.com/glojurelang/glojure/pkg/runtime.Program", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.Program)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/runtime.RT", github_com_glojurelang_glojure_pkg_runtime.RT)
+	_register("github.com/glojurelang/glojure/pkg/runtime.RTMethods", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.RTMethods)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/runtime.RTReadString", github_com_glojurelang_glojure_pkg_runtime.RTReadString)
+	_register("github.com/glojurelang/glojure/pkg/runtime.ReadEval", github_com_glojurelang_glojure_pkg_runtime.ReadEval)
+	_register("github.com/glojurelang/glojure/pkg/runtime.ReadEvalOption", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.ReadEvalOption)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/runtime.SymInNS", github_com_glojurelang_glojure_pkg_runtime.SymInNS)
+	_register("github.com/glojurelang/glojure/pkg/runtime.SymNS", github_com_glojurelang_glojure_pkg_runtime.SymNS)
+	_register("github.com/glojurelang/glojure/pkg/runtime.SymbolDot", github_com_glojurelang_glojure_pkg_runtime.SymbolDot)
+	_register("github.com/glojurelang/glojure/pkg/runtime.SymbolInNamespace", github_com_glojurelang_glojure_pkg_runtime.SymbolInNamespace)
+	_register("github.com/glojurelang/glojure/pkg/runtime.SymbolNamespace", github_com_glojurelang_glojure_pkg_runtime.SymbolNamespace)
+	_register("github.com/glojurelang/glojure/pkg/runtime.SymbolSpliceUnquote", github_com_glojurelang_glojure_pkg_runtime.SymbolSpliceUnquote)
+	_register("github.com/glojurelang/glojure/pkg/runtime.SymbolUnquote", github_com_glojurelang_glojure_pkg_runtime.SymbolUnquote)
+	_register("github.com/glojurelang/glojure/pkg/runtime.SymbolUserNamespace", github_com_glojurelang_glojure_pkg_runtime.SymbolUserNamespace)
+	_register("github.com/glojurelang/glojure/pkg/runtime.WithEnv", github_com_glojurelang_glojure_pkg_runtime.WithEnv)
+	_register("github.com/glojurelang/glojure/pkg/runtime.WithFilename", github_com_glojurelang_glojure_pkg_runtime.WithFilename)
+	_register("github.com/glojurelang/glojure/pkg/runtime.WithLoadPath", github_com_glojurelang_glojure_pkg_runtime.WithLoadPath)
+	_register("github.com/glojurelang/glojure/pkg/runtime.WithStderr", github_com_glojurelang_glojure_pkg_runtime.WithStderr)
+	_register("github.com/glojurelang/glojure/pkg/runtime.WithStdout", github_com_glojurelang_glojure_pkg_runtime.WithStdout)
 
 	// package github.com/glojurelang/glojure/pkg/lang
 	////////////////////////////////////////
