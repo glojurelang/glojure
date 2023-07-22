@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"reflect"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -62,6 +63,10 @@ func (rt *RTMethods) IntCast(x interface{}) int {
 
 func (rt *RTMethods) BooleanCast(x interface{}) bool {
 	return value.BooleanCast(x)
+}
+
+func (rt *RTMethods) ByteCast(x interface{}) byte {
+	return value.ByteCast(x)
 }
 
 func (rt *RTMethods) Dissoc(x interface{}, k interface{}) interface{} {
@@ -144,6 +149,14 @@ func (rt *RTMethods) FindVar(qualifiedSym *Symbol) *Var {
 	}
 
 	return ns.FindInternedVar(NewSymbol(qualifiedSym.Name()))
+}
+
+func (rt *RTMethods) Alength(x interface{}) int {
+	xVal := reflect.ValueOf(x)
+	if xVal.Kind() == reflect.Slice {
+		return xVal.Len()
+	}
+	panic(fmt.Errorf("Alength not supported on type: %T", x))
 }
 
 var (

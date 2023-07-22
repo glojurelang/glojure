@@ -9,7 +9,7 @@ all: $(STDLIB_TARGETS) generate pkg/gen/gljimports/gljimports.go
 generate:
 	@go generate ./...
 
-pkg/gen/gljimports/gljimports.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go $(wildcard ./value/*.go)
+pkg/gen/gljimports/gljimports.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go $(wildcard ./pkg/*/*.go)
 	@echo "Generating $@"
 	@./scripts/gen-gljimports.sh $@
 

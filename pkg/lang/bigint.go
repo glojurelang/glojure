@@ -91,3 +91,7 @@ func (n *BigInt) LTE(other *BigInt) bool {
 func (n *BigInt) GT(other *BigInt) bool {
 	return n.Cmp(other) > 0
 }
+
+func (n *BigInt) GTE(other *BigInt) bool {
+	return n.Cmp(other) >= 0
+}

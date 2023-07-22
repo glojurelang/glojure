@@ -26,6 +26,28 @@
   [(fn select [zloc] (and (z/sexpr-able? zloc) (reduce #(or %1 (= %2 (z/sexpr zloc))) false coll)))
    (fn visit [zloc] (z/replace zloc new))])
 
+(defn replace-num-array
+  [typ]
+  (let [fn-sym (symbol (str typ "_array"))
+        new-sym (symbol (str typ "Array"))
+        new-sym2 (symbol (str typ "ArrayInit"))]
+    [(fn select [zloc]
+       (and (z/sexpr-able? zloc)
+            (let [sexpr (z/sexpr zloc)]
+              (and (list? sexpr)
+                   (= (first sexpr) '.)
+                   (= (second sexpr) 'clojure.lang.Numbers)
+                   (= (nth sexpr 2) fn-sym)))))
+     (fn visit [zloc]
+       (let [sexpr (z/sexpr zloc)]
+         (if (= (count sexpr) 4)
+           (z/replace zloc (list '. 'clojure.lang.Numbers new-sym (nth sexpr 3)))
+           (z/replace zloc (list '. 'clojure.lang.Numbers new-sym2 (nth sexpr 3) (nth sexpr 4))))))]))
+
+;; (defn replace-num-array
+;;   [typ]
+;;   (sexpr-replace (symbol (str typ "_array")) (symbol (str typ "Array"))))
+
 (defn RT-replace
   "Replace all instances of a call to a clojure.lang.RT method fsym with
   the result of calling newfn with the argument forms."
@@ -207,12 +229,19 @@
    (sexpr-replace '(^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom f] (.swapVals atom f))
                   '([atom f & args] (.swapVals atom f args)))
 
+   (sexpr-replace '(. clojure.lang.Agent shutdown) '(github.com$glojurelang$glojure$pkg$lang.ShutdownAgents))
+
    (sexpr-replace 'clojure.lang.Util/hash 'glojure.lang.Hash)
 
    (sexpr-replace 'System/identityHashCode 'github.com$glojurelang$glojure$pkg$lang.IdentityHash)
 
    (sexpr-replace '(String/format fmt (to-array args))
                   '(apply fmt.Sprintf fmt args))
+
+   (sexpr-replace '(clojure.lang.Reflector/prepRet (.getComponentType (class array)) (. Array (get array idx)))
+                  '(github.com$glojurelang$glojure$pkg$lang.Get array idx))
+
+   (sexpr-replace '(. Array (set array idx val)) '(github.com$glojurelang$glojure$pkg$lang.SliceSet array idx val))
 
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= '.reduce (z/sexpr zloc))))
     (fn visit [zloc] (z/replace zloc
@@ -349,7 +378,7 @@
    (sexpr-replace '(. System (nanoTime)) '(.UnixNano (time.Now)))
 
    (sexpr-replace 'clojure.lang.RT/longCast 'glojure.lang.AsInt64)
-
+   (sexpr-replace 'clojure.lang.RT/byteCast 'github.com$glojurelang$glojure$pkg$lang.ByteCast)
    (sexpr-replace 'clojure.lang.RT/doubleCast 'glojure.lang.AsFloat64)
 
    (sexpr-replace "clojure.core" "glojure.core")
@@ -395,6 +424,13 @@
                   '(* -1 x))
    (sexpr-replace '(. clojure.lang.Numbers (minusP x))
                   '(* -1 x))
+
+   (sexpr-replace 'Unchecked_add 'UncheckedAdd)
+   (sexpr-replace 'Unchecked_dec 'UncheckedDec)
+   (sexpr-replace 'Unchecked_int_divide 'UncheckedIntDivide)
+
+   (replace-num-array 'byte)
+   (replace-num-array 'double)
 
    (sexpr-replace 'clojure.core/cond 'glojure.core/cond)
 
@@ -553,6 +589,7 @@
    (sexpr-replace '.append 'glojure.lang.AppendWriter)
    (sexpr-replace '(. *out* (append \space)) '(glojure.lang.AppendWriter *out* \space))
    (sexpr-replace '(. *out* (append system-newline)) '(glojure.lang.AppendWriter *out* system-newline))
+   (sexpr-replace '(. *out* (flush)) '(. *out* (Sync)))
 
    (omit-symbols '#{primitives-classnames})
 

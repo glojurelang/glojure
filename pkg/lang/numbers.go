@@ -3,6 +3,7 @@ package lang
 import (
 	"fmt"
 	"math"
+	"reflect"
 )
 
 var (
@@ -12,6 +13,18 @@ var (
 // NumberMethods is a struct with methods that map to Clojure's Number
 // class' static methods.
 type NumberMethods struct{}
+
+func (nm *NumberMethods) UncheckedAdd(x, y interface{}) interface{} {
+	return Ops(x).Combine(Ops(y)).UncheckedAdd(x, y)
+}
+
+func (nm *NumberMethods) UncheckedDec(x interface{}) interface{} {
+	return Ops(x).UncheckedDec(x)
+}
+
+func (nm *NumberMethods) UncheckedIntDivide(x, y int) interface{} {
+	return x / y
+}
 
 func (nm *NumberMethods) Add(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).Add(x, y)
@@ -109,8 +122,56 @@ func (nm *NumberMethods) Lte(x, y interface{}) bool {
 	return Ops(x).Combine(Ops(y)).LTE(x, y)
 }
 
+func (nm *NumberMethods) Gte(x, y interface{}) bool {
+	return Ops(x).Combine(Ops(y)).GTE(x, y)
+}
+
 func (nm *NumberMethods) Equiv(x, y interface{}) bool {
 	return Ops(x).Combine(Ops(y)).Equiv(x, y)
+}
+
+func (nm *NumberMethods) DoubleArrayInit(size int, init interface{}) []float64 {
+	ret := make([]float64, size)
+	if IsNumber(init) {
+		f := AsFloat64(init)
+		for i := 0; i < size; i++ {
+			ret[i] = f
+		}
+	} else {
+		s := Seq(init)
+		for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+			ret[i] = AsFloat64(s.First())
+		}
+	}
+	return ret
+}
+
+func (nm *NumberMethods) ByteArray(sizeOrSeq interface{}) []byte {
+	if IsNumber(sizeOrSeq) {
+		return make([]byte, MustAsInt(sizeOrSeq))
+	}
+	s := Seq(sizeOrSeq)
+	size := Count(sizeOrSeq)
+	ret := make([]byte, size)
+	for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+		ret[i] = AsByte(s.First())
+	}
+	return ret
+}
+
+func (nm *NumberMethods) ByteArrayInit(size int, init interface{}) []byte {
+	ret := make([]byte, size)
+	if b, ok := init.(byte); ok {
+		for i := 0; i < size; i++ {
+			ret[i] = b
+		}
+	} else {
+		s := Seq(init)
+		for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+			ret[i] = AsByte(s.First())
+		}
+	}
+	return ret
 }
 
 func bitOpsCast(x interface{}) int64 {
@@ -181,6 +242,14 @@ func AsNumber(v interface{}) (interface{}, bool) {
 	}
 }
 
+func MustAsInt(v interface{}) int {
+	res, ok := AsInt(v)
+	if !ok {
+		panic(fmt.Errorf("cannot convert %T to int", v))
+	}
+	return res
+}
+
 // AsInt returns any integral value as an int. If the value cannot be
 // represented as an int, it returns false. Floats are not converted.
 func AsInt(v interface{}) (int, bool) {
@@ -209,6 +278,76 @@ func AsInt(v interface{}) (int, bool) {
 		return int(v.val.Int64()), true
 	default:
 		return 0, false
+	}
+}
+
+func AsFloat64(x interface{}) float64 {
+	switch x := x.(type) {
+	case int:
+		return float64(x)
+	case uint:
+		return float64(x)
+	case int8:
+		return float64(x)
+	case int16:
+		return float64(x)
+	case int32:
+		return float64(x)
+	case int64:
+		return float64(x)
+	case uint8:
+		return float64(x)
+	case uint16:
+		return float64(x)
+	case uint32:
+		return float64(x)
+	case uint64:
+		return float64(x)
+	case float32:
+		return float64(x)
+	case float64:
+		return x
+	case *Ratio:
+		f, _ := x.val.Float64()
+		return f
+	default:
+		panic("cannot convert to float64")
+	}
+}
+
+var (
+	byteType = reflect.TypeOf(byte(0))
+)
+
+func AsByte(x interface{}) byte {
+	switch x := x.(type) {
+	case int:
+		return byte(x)
+	case uint:
+		return byte(x)
+	case int8:
+		return byte(x)
+	case int16:
+		return byte(x)
+	case int32:
+		return byte(x)
+	case int64:
+		return byte(x)
+	case uint8:
+		return byte(x)
+	case uint16:
+		return byte(x)
+	case uint32:
+		return byte(x)
+	case uint64:
+		return byte(x)
+	case float32:
+		return byte(x)
+	case *Ratio:
+		f, _ := x.val.Float64()
+		return byte(f)
+	default:
+		panic("cannot convert to float64")
 	}
 }
 
@@ -292,8 +431,38 @@ func IncP(v interface{}) interface{} {
 	}
 }
 
+func IsNumber(x interface{}) bool {
+	switch x.(type) {
+	case int, int64, int32, int16, int8,
+		uint, uint64, uint32, uint16, uint8,
+		float64, float32,
+		*BigDecimal, *BigInt, *Ratio:
+		return true
+	default:
+		return false
+	}
+}
+
+func BooleanCast(x interface{}) bool {
+	if b, ok := x.(bool); ok {
+		return b
+	}
+	return !IsNil(x)
+}
+
+func ByteCast(x interface{}) byte {
+	if b, ok := x.(byte); ok {
+		return b
+	}
+	l := AsInt64(x)
+	if l < math.MinInt8 || l > math.MaxInt8 {
+		panic(fmt.Errorf("value out of range for byte: %v", x))
+	}
+	return byte(l)
+}
+
 type basicIntegral interface {
-	int | uint | uint8 | uint16 | uint32 | uint64 | int8 | int16 | int32 | int64
+	int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64
 }
 
 func incP[T basicIntegral](x T) interface{} {
