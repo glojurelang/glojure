@@ -57,7 +57,7 @@ func genAPersistentMap() string {
 	w := bytes.NewBuffer(nil)
 	err := template.Must(template.New("APersistentMap").Parse(
 		`// GENERATED CODE. DO NOT EDIT
-package value
+package lang
 
 import (
 	"errors"
@@ -144,7 +144,7 @@ func genTemplate(tmpl string) string {
 
 const (
 	aseqTmpl = `// GENERATED CODE. DO NOT EDIT
-package value
+package lang
 
 func ({{.Receiver}} *{{.Struct}}) xxx_sequential() {}
 

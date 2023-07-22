@@ -68,7 +68,7 @@
    (sexpr-replace 'clojure.lang.IPersistentCollection 'glojure.lang.IPersistentCollection)
    (sexpr-replace 'clojure.lang.IPersistentList 'glojure.lang.IPersistentList)
    (sexpr-replace 'clojure.lang.IRecord 'glojure.lang.IRecord)
-   (sexpr-replace 'java.lang.Character 'github.com$glojurelang$glojure$value.Char)
+   (sexpr-replace 'java.lang.Character 'github.com$glojurelang$glojure$pkg$lang.Char)
    (sexpr-replace 'java.lang.Long 'int64)
    (sexpr-replace 'Long 'int64)
    (sexpr-replace 'java.lang.Double 'float64)
@@ -93,7 +93,7 @@
    (sexpr-replace '(clojure.lang.PersistentTreeMap/create keyvals)
                   '(glojure.lang.CreatePersistentTreeMap keyvals))
 
-   (sexpr-replace 'clojure.lang.Cycle/create 'github.com$glojurelang$glojure$value.NewCycle)
+   (sexpr-replace 'clojure.lang.Cycle/create 'github.com$glojurelang$glojure$pkg$lang.NewCycle)
 
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    ;; struct map
@@ -155,8 +155,8 @@
    (sexpr-replace 'clojure.lang.IMeta 'glojure.lang.IMeta)
    (sexpr-replace 'clojure.lang.IReduceInit 'glojure.lang.IReduceInit)
 
-   (sexpr-replace 'clojure.lang.Reduced. 'github.com$glojurelang$glojure$value.NewReduced)
-   (sexpr-replace 'clojure.lang.RT/isReduced 'github.com$glojurelang$glojure$value.IsReduced)
+   (sexpr-replace 'clojure.lang.Reduced. 'github.com$glojurelang$glojure$pkg$lang.NewReduced)
+   (sexpr-replace 'clojure.lang.RT/isReduced 'github.com$glojurelang$glojure$pkg$lang.IsReduced)
 
    (sexpr-replace '.assoc '.Assoc)
 
@@ -209,7 +209,7 @@
 
    (sexpr-replace 'clojure.lang.Util/hash 'glojure.lang.Hash)
 
-   (sexpr-replace 'System/identityHashCode 'github.com$glojurelang$glojure$value.IdentityHash)
+   (sexpr-replace 'System/identityHashCode 'github.com$glojurelang$glojure$pkg$lang.IdentityHash)
 
    (sexpr-replace '(String/format fmt (to-array args))
                   '(apply fmt.Sprintf fmt args))
@@ -222,7 +222,7 @@
                                     '.ReduceInit))))]
 
    (sexpr-replace 'BigInteger 'big.Int)
-   (sexpr-replace 'BigDecimal 'github.com$glojurelang$glojure$value.BigDecimal)
+   (sexpr-replace 'BigDecimal 'github.com$glojurelang$glojure$pkg$lang.BigDecimal)
 
    (sexpr-replace '.equals '.Equal)
 
@@ -231,7 +231,7 @@
    (sexpr-replace '(. s (substring start)) '(go/slice s start))
    (sexpr-replace '(. s (substring start end)) '(go/slice s start end))
 
-   (sexpr-replace 'clojure.lang.RT/readString 'github.com$glojurelang$glojure$runtime.RTReadString)
+   (sexpr-replace 'clojure.lang.RT/readString 'github.com$glojurelang$glojure$pkg$runtime.RTReadString)
 
    (sexpr-replace '.lastIndexOf 'strings.LastIndex)
 
@@ -260,7 +260,7 @@
 
    (sexpr-replace '(clojure.lang.Keyword/intern ns name) '(glojure.lang.InternKeyword ns name))
 
-   (sexpr-replace '(clojure.lang.Util/identical x nil) '(github.com$glojurelang$glojure$value.IsNil x))
+   (sexpr-replace '(clojure.lang.Util/identical x nil) '(github.com$glojurelang$glojure$pkg$lang.IsNil x))
 
    (sexpr-replace '.get '.Get)
    (sexpr-replace '.getName '.Name)
@@ -310,8 +310,8 @@
                  (next xs))
           (.String sb)))
       (new strings.Builder) (cons x ys)))
-   (sexpr-replace '(. x (toString)) '(github.com$glojurelang$glojure$value.ToString x))
-   (sexpr-replace '.toString 'github.com$glojurelang$glojure$value.ToString)
+   (sexpr-replace '(. x (toString)) '(github.com$glojurelang$glojure$pkg$lang.ToString x))
+   (sexpr-replace '.toString 'github.com$glojurelang$glojure$pkg$lang.ToString)
    (sexpr-replace 'getName 'Name)
    (sexpr-replace 'getNamespace 'Namespace)
    (sexpr-replace '.hasRoot '.HasRoot)
@@ -522,7 +522,7 @@
    (sexpr-replace 'Float 'float32)
    (sexpr-replace 'Boolean 'bool)
 
-   (sexpr-replace 'Object 'github.com$glojurelang$glojure$value.Object)
+   (sexpr-replace 'Object 'github.com$glojurelang$glojure$pkg$lang.Object)
    (sexpr-replace '(.isArray c) false)
    ;; (sexpr-replace '(print-method (.Name c) w) 'TODO)
    ;; (sexpr-replace '(glojure.lang.WriteWriter w (.Name c)) 'TODO)
@@ -547,7 +547,7 @@
 
    (sexpr-replace 'java.util.regex.Pattern 'regexp.Regexp)
    (sexpr-replace 'clojure.lang.BigInt 'glojure.lang.BigInt)
-   (sexpr-replace 'java.math.BigDecimal 'github.com$glojurelang$glojure$value.BigDecimal)
+   (sexpr-replace 'java.math.BigDecimal 'github.com$glojurelang$glojure$pkg$lang.BigDecimal)
 
    (sexpr-replace '.write 'glojure.lang.WriteWriter)
    (sexpr-replace '.append 'glojure.lang.AppendWriter)
