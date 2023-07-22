@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/glojurelang/glojure/reader"
+	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/repl"
 	"github.com/glojurelang/glojure/runtime"
 	value "github.com/glojurelang/glojure/pkg/lang"

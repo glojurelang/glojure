@@ -12,10 +12,10 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/glojurelang/glojure/pkgmap"
-	"github.com/glojurelang/glojure/reader"
-	"github.com/glojurelang/glojure/stdlib"
 	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/reader"
+	"github.com/glojurelang/glojure/pkgmap"
+	"github.com/glojurelang/glojure/stdlib"
 )
 
 type Program struct {

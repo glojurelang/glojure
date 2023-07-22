@@ -9,7 +9,7 @@ import (
 	"sync/atomic"
 
 	value "github.com/glojurelang/glojure/pkg/lang"
-	"github.com/glojurelang/glojure/reader"
+	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/stdlib"
 
 	. "github.com/glojurelang/glojure/pkg/lang"

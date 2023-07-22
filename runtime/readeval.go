@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/glojurelang/glojure/reader"
+	"github.com/glojurelang/glojure/pkg/reader"
 	value "github.com/glojurelang/glojure/pkg/lang"
 )
 
