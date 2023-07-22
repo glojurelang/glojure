@@ -137,7 +137,7 @@ package main
 import (
 	"your.package/gljimports"
 
-	"github.com/glojurelang/glojure/runtime"
+	"github.com/glojurelang/glojure/pkg/runtime"
 )
 
 func init() {
