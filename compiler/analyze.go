@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/glojurelang/glojure/ast"
+	"github.com/glojurelang/glojure/pkg/ast"
 	value "github.com/glojurelang/glojure/pkg/lang"
 
 	// Make it easier to refer to global vars.
