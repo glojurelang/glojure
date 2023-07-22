@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/glojurelang/glojure/persistent/vector"
+	"github.com/glojurelang/glojure/internal/persistent/vector"
 )
 
 var (
