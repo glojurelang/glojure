@@ -5,9 +5,9 @@ import (
 	"os"
 
 	"github.com/glojurelang/glojure/gen/gljimports"
-	"github.com/glojurelang/glojure/pkgmap"
-	"github.com/glojurelang/glojure/runtime"
 	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/runtime"
 )
 
 func init() {

@@ -13,8 +13,8 @@ import (
 	"strings"
 
 	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 	"github.com/glojurelang/glojure/pkg/reader"
-	"github.com/glojurelang/glojure/pkgmap"
 	"github.com/glojurelang/glojure/stdlib"
 )
 

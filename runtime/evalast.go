@@ -10,7 +10,7 @@ import (
 
 	"github.com/glojurelang/glojure/ast"
 	value "github.com/glojurelang/glojure/pkg/lang"
-	"github.com/glojurelang/glojure/pkgmap"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 
 	// Make it easier to refer to KW globals
 	. "github.com/glojurelang/glojure/pkg/lang"
