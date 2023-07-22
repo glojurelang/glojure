@@ -4,7 +4,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/glojurelang/glojure/gen/gljimports"
+	"github.com/glojurelang/glojure/pkg/gen/gljimports"
 	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 	"github.com/glojurelang/glojure/pkg/runtime"
