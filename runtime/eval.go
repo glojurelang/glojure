@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/glojurelang/glojure/compiler"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	value "github.com/glojurelang/glojure/pkg/lang"
 )
 
