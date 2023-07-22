@@ -10,7 +10,7 @@ import (
 
 	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
-	"github.com/glojurelang/glojure/stdlib"
+	"github.com/glojurelang/glojure/pkg/stdlib"
 
 	. "github.com/glojurelang/glojure/pkg/lang"
 )
