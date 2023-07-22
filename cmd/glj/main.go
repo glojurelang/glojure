@@ -8,13 +8,13 @@ import (
 	"log"
 	"os"
 
-	"github.com/glojurelang/glojure/pkg/reader"
-	"github.com/glojurelang/glojure/repl"
-	"github.com/glojurelang/glojure/runtime"
 	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/reader"
+	"github.com/glojurelang/glojure/pkg/repl"
+	"github.com/glojurelang/glojure/runtime"
 
 	// Bootstrap the runtime
-	_ "github.com/glojurelang/glojure/glj"
+	_ "github.com/glojurelang/glojure/pkg/glj"
 )
 
 func main() {
