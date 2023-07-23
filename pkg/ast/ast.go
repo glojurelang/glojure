@@ -33,6 +33,10 @@ type (
 	}
 
 	LocalNode struct {
+		Name       *lang.Symbol
+		Local      lang.Keyword
+		ArgID      int
+		IsVariadic bool
 	}
 
 	VarNode struct {

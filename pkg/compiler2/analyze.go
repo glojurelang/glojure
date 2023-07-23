@@ -41,6 +41,10 @@ type (
 // Analyze performs semantic analysis on the given s-expression,
 // returning an AST.
 func (a *Analyzer) Analyze(form interface{}, env Env) (*ast.Node2, error) {
+	// defer func() {
+	// 	fmt.Println("DONE Analyze", lang.ToString(form))
+	// }()
+	// fmt.Println("Analyze", lang.ToString(form))
 	return a.analyzeForm(form, ctxEnv(env, ctxExpr).Assoc(KWTopLevel, true).(Env))
 }
 
@@ -81,11 +85,18 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node2, error) {
 		Form: mform,
 	}
 	if localBinding := Get(Get(env, KWLocals), form); localBinding != nil {
-		mutable := Get(localBinding, KWMutable)
+		// TODO: make sure this is correct...
+		binding := localBinding.(*ast.Node2)
+		bindingNode := binding.Sub.(*ast.BindingNode)
 
 		n.Op = ast.OpLocal
-		n.IsAssignable = mutable != nil && mutable.(bool)
-		n.Sub = &ast.LocalNode{}
+		n.IsAssignable = binding.IsAssignable
+		n.Sub = &ast.LocalNode{
+			Name:       bindingNode.Name,
+			Local:      bindingNode.Local,
+			ArgID:      bindingNode.ArgID,
+			IsVariadic: bindingNode.IsVariadic,
+		}
 	} else {
 		v := a.resolveSym(form, env)
 		vr, ok := v.(*Var)
@@ -816,9 +827,10 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (*ast.Node2, error) {
 	}
 
 	var init, doc interface{}
+	hasInit := true
 	switch Count(expr) {
 	case 0:
-		// no-op
+		hasInit = false
 	case 1:
 		init = First(expr)
 	case 2:
@@ -865,7 +877,7 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (*ast.Node2, error) {
 	}
 
 	var initNode *ast.Node2
-	if init != nil {
+	if hasInit {
 		initNode, err = a.analyzeForm(init, ctxEnv(env, ctxExpr))
 		if err != nil {
 			return nil, err

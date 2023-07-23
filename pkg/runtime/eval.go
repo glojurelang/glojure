@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/glojurelang/glojure/pkg/compiler"
 	compiler2 "github.com/glojurelang/glojure/pkg/compiler2"
 	"github.com/glojurelang/glojure/pkg/lang"
 	value "github.com/glojurelang/glojure/pkg/lang"
@@ -34,6 +33,8 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 		return form, nil
 	}
 
+	//fmt.Println("macroexpand1", sym)
+
 	applyer, ok := macroVar.Get().(value.IFn)
 	if !ok {
 		return nil, env.errorf(form, "macro %s is not a function (%T)", sym, macroVar.Get())
@@ -58,62 +59,10 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 }
 
 func (env *environment) evalInternal(n interface{}) (interface{}, error) {
-	kw := value.NewKeyword
-
-	globalEnv := value.NewAtom(nil)
-	resetGlobalEnv := func() {
-		kwNS := kw("ns")
-		kwMappings := kw("mappings")
-		kwAliases := kw("aliases")
-		namespaces := value.Namespaces()
-		namespaceKVs := make([]interface{}, 0, 2*len(namespaces))
-		for _, ns := range namespaces {
-			aliases := make([]interface{}, 0, 2*value.Count(ns.Aliases()))
-			for seq := value.Seq(ns.Aliases()); seq != nil; seq = seq.Next() {
-				entry := seq.First().(value.IMapEntry)
-				aliases = append(aliases, entry.Key(), entry.Val().(*value.Namespace).Name())
-			}
-			namespaceKVs = append(namespaceKVs, ns.Name(), value.NewMap(
-				kwNS, ns.Name(),
-				kwMappings, ns.Mappings(),
-				kwAliases, value.NewMap(aliases...),
-			))
-		}
-		globalEnv.Reset(value.NewMap(kw("namespaces"), value.NewMap(namespaceKVs...)))
-	}
-	resetGlobalEnv()
-
-	if false {
-		analyzer := &compiler2.Analyzer{
-			Macroexpand1: env.Macroexpand1,
-			CreateVar: func(sym *value.Symbol, e compiler2.Env) (interface{}, error) {
-				vr := env.CurrentNamespace().Intern(sym)
-				resetGlobalEnv()
-				return vr, nil
-			},
-			IsVar: func(v interface{}) bool {
-				_, ok := v.(*value.Var)
-				return ok
-			},
-			Gensym: func(prefix string) *value.Symbol {
-				num := env.nextSymNum()
-				return value.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
-			},
-			FindNamespace: lang.FindNamespace,
-		}
-		_, err := analyzer.Analyze(n, value.NewMap(
-			value.KWNS, env.CurrentNamespace().Name(),
-		))
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	analyzer := &compiler.Analyzer{
+	analyzer := &compiler2.Analyzer{
 		Macroexpand1: env.Macroexpand1,
-		CreateVar: func(sym *value.Symbol, e compiler.Env) (interface{}, error) {
+		CreateVar: func(sym *value.Symbol, e compiler2.Env) (interface{}, error) {
 			vr := env.CurrentNamespace().Intern(sym)
-			resetGlobalEnv()
 			return vr, nil
 		},
 		IsVar: func(v interface{}) bool {
@@ -124,7 +73,7 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 			num := env.nextSymNum()
 			return value.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
 		},
-		GlobalEnv: globalEnv,
+		FindNamespace: lang.FindNamespace,
 	}
 	astNode, err := analyzer.Analyze(n, value.NewMap(
 		value.KWNS, env.CurrentNamespace().Name(),
