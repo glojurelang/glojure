@@ -33,8 +33,6 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 		return form, nil
 	}
 
-	//fmt.Println("macroexpand1", sym)
-
 	applyer, ok := macroVar.Get().(value.IFn)
 	if !ok {
 		return nil, env.errorf(form, "macro %s is not a function (%T)", sym, macroVar.Get())

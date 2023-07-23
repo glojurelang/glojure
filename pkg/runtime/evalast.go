@@ -113,7 +113,6 @@ func (env *environment) EvalASTDef(n *ast.Node) (interface{}, error) {
 	defNode := n.Sub.(*ast.DefNode)
 	init := defNode.Init
 	if value.IsNil(init) {
-		//fmt.Println("DEF(uninit)", defNode.Name)
 		return defNode.Var, nil
 	}
 
@@ -123,21 +122,10 @@ func (env *environment) EvalASTDef(n *ast.Node) (interface{}, error) {
 	}
 	sym := defNode.Name
 
-	// if sym.Name() == "*print-level*" {
-	// 	fmt.Printf("Setting print level to %v\n", initVal)
-	// }
-
-	// defer func() {
-	// 	fmt.Println("DONE DEF", sym)
-	// }()
-	//fmt.Println("DEF", sym)
-
 	// evaluate symbol metadata if present
 	meta := defNode.Meta
 	if !value.IsNil(meta) {
-		//fmt.Println("META", sym)
 		metaVal, err := env.EvalAST(meta)
-		//fmt.Println("DONE META", sym)
 		if err != nil {
 			return nil, err
 		}
@@ -414,7 +402,6 @@ func (env *environment) EvalASTMaybeHostForm(n *ast.Node) (interface{}, error) {
 	}
 
 	// TODO: how to handle?
-	fmt.Println("EvalASTMaybeHostForm: ", n)
 	panic("EvalASTMaybeHostForm: " + hostFormNode.Class)
 }
 
@@ -424,8 +411,6 @@ func (env *environment) EvalASTHostCall(n *ast.Node) (interface{}, error) {
 	tgt := hostCallNode.Target
 	method := hostCallNode.Method
 	args := hostCallNode.Args
-
-	// fmt.Println("EvalASTHostCall: ", method)
 
 	tgtVal, err := env.EvalAST(tgt)
 	if err != nil {

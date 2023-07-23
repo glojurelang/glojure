@@ -41,10 +41,6 @@ type (
 // Analyze performs semantic analysis on the given s-expression,
 // returning an AST.
 func (a *Analyzer) Analyze(form interface{}, env Env) (*ast.Node, error) {
-	// defer func() {
-	// 	fmt.Println("DONE Analyze", lang.ToString(form))
-	// }()
-	// fmt.Println("Analyze", lang.ToString(form))
 	return a.analyzeForm(form, ctxEnv(env, ctxExpr).Assoc(KWTopLevel, true).(Env))
 }
 
