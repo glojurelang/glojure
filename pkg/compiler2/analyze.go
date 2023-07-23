@@ -40,7 +40,7 @@ type (
 
 // Analyze performs semantic analysis on the given s-expression,
 // returning an AST.
-func (a *Analyzer) Analyze(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) Analyze(form interface{}, env Env) (*ast.Node, error) {
 	// defer func() {
 	// 	fmt.Println("DONE Analyze", lang.ToString(form))
 	// }()
@@ -48,7 +48,7 @@ func (a *Analyzer) Analyze(form interface{}, env Env) (*ast.Node2, error) {
 	return a.analyzeForm(form, ctxEnv(env, ctxExpr).Assoc(KWTopLevel, true).(Env))
 }
 
-func (a *Analyzer) analyzeForm(form interface{}, env Env) (n *ast.Node2, err error) {
+func (a *Analyzer) analyzeForm(form interface{}, env Env) (n *ast.Node, err error) {
 	switch v := form.(type) {
 	case *Symbol:
 		return a.analyzeSymbol(v, env)
@@ -67,7 +67,7 @@ func (a *Analyzer) analyzeForm(form interface{}, env Env) (n *ast.Node2, err err
 
 // analyzeSymbol performs semantic analysis on the given symbol,
 // returning an AST.
-func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node2, error) {
+func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 	mform, err := a.Macroexpand1(form)
 	if err != nil {
 		return nil, err
@@ -80,13 +80,13 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node2, error) {
 		return withRawForm(n, form), nil
 	}
 
-	n := &ast.Node2{
+	n := &ast.Node{
 		Env:  env,
 		Form: mform,
 	}
 	if localBinding := Get(Get(env, KWLocals), form); localBinding != nil {
 		// TODO: make sure this is correct...
-		binding := localBinding.(*ast.Node2)
+		binding := localBinding.(*ast.Node)
 		bindingNode := binding.Sub.(*ast.BindingNode)
 
 		n.Op = ast.OpLocal
@@ -136,9 +136,9 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node2, error) {
 
 // analyzeVector performs semantic analysis on the given vector,
 // returning an AST.
-func (a *Analyzer) analyzeVector(form IPersistentVector, env Env) (*ast.Node2, error) {
-	n := ast.MakeNode2(ast.OpVector, form)
-	var items []*ast.Node2
+func (a *Analyzer) analyzeVector(form IPersistentVector, env Env) (*ast.Node, error) {
+	n := ast.MakeNode(ast.OpVector, form)
+	var items []*ast.Node
 	for i := 0; i < form.Count(); i++ {
 		// TODO: pass an "items-env" with an expr context
 		nn, err := a.analyzeForm(MustNth(form, i), env)
@@ -156,10 +156,10 @@ func (a *Analyzer) analyzeVector(form IPersistentVector, env Env) (*ast.Node2, e
 
 // analyzeMap performs semantic analysis on the given map,
 // returning an AST.
-func (a *Analyzer) analyzeMap(v IPersistentMap, env Env) (*ast.Node2, error) {
-	n := ast.MakeNode2(ast.OpMap, v)
-	var keys []*ast.Node2
-	var vals []*ast.Node2
+func (a *Analyzer) analyzeMap(v IPersistentMap, env Env) (*ast.Node, error) {
+	n := ast.MakeNode(ast.OpMap, v)
+	var keys []*ast.Node
+	var vals []*ast.Node
 	for seq := Seq(v); seq != nil; seq = seq.Next() {
 		// TODO: pass a "kv-env" with an expr context
 
@@ -184,9 +184,9 @@ func (a *Analyzer) analyzeMap(v IPersistentMap, env Env) (*ast.Node2, error) {
 
 // analyzeSet performs semantic analysis on the given set,
 // returning an AST.
-func (a *Analyzer) analyzeSet(v IPersistentSet, env Env) (*ast.Node2, error) {
-	n := ast.MakeNode2(ast.OpSet, v)
-	items := make([]*ast.Node2, 0, v.Count())
+func (a *Analyzer) analyzeSet(v IPersistentSet, env Env) (*ast.Node, error) {
+	n := ast.MakeNode(ast.OpSet, v)
+	items := make([]*ast.Node, 0, v.Count())
 	for seq := Seq(v); seq != nil; seq = seq.Next() {
 		// TODO: pass an "items-env" with an expr context
 		item, err := a.analyzeForm(seq.First(), env)
@@ -203,7 +203,7 @@ func (a *Analyzer) analyzeSet(v IPersistentSet, env Env) (*ast.Node2, error) {
 
 // analyzeSeq performs semantic analysis on the given sequence,
 // returning an AST.
-func (a *Analyzer) analyzeSeq(form ISeq, env Env) (*ast.Node2, error) {
+func (a *Analyzer) analyzeSeq(form ISeq, env Env) (*ast.Node, error) {
 	if Seq(form) == nil {
 		return a.analyzeConst(form, env)
 	}
@@ -231,8 +231,8 @@ func (a *Analyzer) analyzeSeq(form ISeq, env Env) (*ast.Node2, error) {
 
 // analyzeConst performs semantic analysis on the given constant
 // expression,
-func (a *Analyzer) analyzeConst(v interface{}, env Env) (*ast.Node2, error) {
-	n := ast.MakeNode2(ast.OpConst, v)
+func (a *Analyzer) analyzeConst(v interface{}, env Env) (*ast.Node, error) {
+	n := ast.MakeNode(ast.OpConst, v)
 	n.IsLiteral = true
 	constNode := &ast.ConstNode{
 		Type:  classifyType(v),
@@ -253,7 +253,7 @@ func (a *Analyzer) analyzeConst(v interface{}, env Env) (*ast.Node2, error) {
 	return n, nil
 }
 
-func (a *Analyzer) analyzeBody(body interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) analyzeBody(body interface{}, env Env) (*ast.Node, error) {
 	n, err := a.parse(NewCons(NewSymbol("do"), body), env)
 	if err != nil {
 		return nil, err
@@ -295,7 +295,7 @@ func (a *Analyzer) analyzeBody(body interface{}, env Env) (*ast.Node2, error) {
 //	        {:body     body
 //	         :bindings binds
 //	         :children [:bindings :body]})))))
-func (a *Analyzer) analyzeLet(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) analyzeLet(form interface{}, env Env) (*ast.Node, error) {
 	if Count(form) < 2 {
 		return nil, exInfo("let requires a binding vector and a body", nil)
 	}
@@ -316,7 +316,7 @@ func (a *Analyzer) analyzeLet(form interface{}, env Env) (*ast.Node2, error) {
 		localKW = KWLoop
 	}
 	env = ctxEnv(env, KWCtxExpr)
-	var binds []*ast.Node2
+	var binds []*ast.Node
 	for {
 		bindingsSeq := Seq(bindings)
 		if bindingsSeq == nil {
@@ -332,7 +332,7 @@ func (a *Analyzer) analyzeLet(form interface{}, env Env) (*ast.Node2, error) {
 		if err != nil {
 			return nil, err
 		}
-		bindExpr := ast.MakeNode2(ast.OpBinding, name)
+		bindExpr := ast.MakeNode(ast.OpBinding, name)
 		bindExpr.Env = env
 		bindExpr.Sub = &ast.BindingNode{
 			Name:  name.(*lang.Symbol),
@@ -356,7 +356,7 @@ func (a *Analyzer) analyzeLet(form interface{}, env Env) (*ast.Node2, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &ast.Node2{
+	return &ast.Node{
 		Sub: &ast.LetNode{
 			Body:     bodyExpr,
 			Bindings: binds,
@@ -367,7 +367,7 @@ func (a *Analyzer) analyzeLet(form interface{}, env Env) (*ast.Node2, error) {
 ////////////////////////////////////////////////////////////////////////////////
 // Parse
 
-func (a *Analyzer) parse(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parse(form interface{}, env Env) (*ast.Node, error) {
 	op := First(form)
 	opSym, ok := op.(*Symbol)
 	if !ok {
@@ -411,7 +411,7 @@ func (a *Analyzer) parse(form interface{}, env Env) (*ast.Node2, error) {
 	return a.parseInvoke(form, env)
 }
 
-func (a *Analyzer) parseInvoke(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseInvoke(form interface{}, env Env) (*ast.Node, error) {
 	f := First(form)
 	args := Rest(form)
 	fenv := ctxEnv(env, ctxExpr)
@@ -419,7 +419,7 @@ func (a *Analyzer) parseInvoke(form interface{}, env Env) (*ast.Node2, error) {
 	if err != nil {
 		return nil, err
 	}
-	argsExprs := make([]*ast.Node2, 0, Count(args))
+	argsExprs := make([]*ast.Node, 0, Count(args))
 	for seq := Seq(args); seq != nil; seq = seq.Next() {
 		n, err := a.analyzeForm(seq.First(), fenv)
 		if err != nil {
@@ -431,7 +431,7 @@ func (a *Analyzer) parseInvoke(form interface{}, env Env) (*ast.Node2, error) {
 	if m, ok := form.(IMeta); ok && Seq(m.Meta()) != nil {
 		meta = m.Meta()
 	}
-	n := ast.MakeNode2(ast.OpInvoke, form)
+	n := ast.MakeNode(ast.OpInvoke, form)
 	n.Sub = &ast.InvokeNode{
 		Meta: meta,
 		Fn:   fnExpr,
@@ -456,7 +456,7 @@ func (a *Analyzer) parseInvoke(form interface{}, env Env) (*ast.Node2, error) {
 //	   :statements statements
 //	   :ret        ret
 //	   :children   [:statements :ret]}))
-func (a *Analyzer) parseDo(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseDo(form interface{}, env Env) (*ast.Node, error) {
 	exprs := Rest(form)
 	statementsEnv := ctxEnv(env, ctxStatement)
 	var statementForms []interface{}
@@ -465,7 +465,7 @@ func (a *Analyzer) parseDo(form interface{}, env Env) (*ast.Node2, error) {
 		statementForms = append(statementForms, retForm)
 		retForm = exprs.First()
 	}
-	statements := make([]*ast.Node2, len(statementForms))
+	statements := make([]*ast.Node, len(statementForms))
 	for i, form := range statementForms {
 		s, err := a.analyzeForm(form, statementsEnv)
 		if err != nil {
@@ -479,7 +479,7 @@ func (a *Analyzer) parseDo(form interface{}, env Env) (*ast.Node2, error) {
 		return nil, err
 	}
 
-	n := ast.MakeNode2(ast.OpDo, form)
+	n := ast.MakeNode(ast.OpDo, form)
 	n.Env = env
 	n.Sub = &ast.DoNode{
 		Statements: statements,
@@ -506,7 +506,7 @@ func (a *Analyzer) parseDo(form interface{}, env Env) (*ast.Node2, error) {
 //	   :then     then-expr
 //	   :else     else-expr
 //	   :children [:test :then :else]}))
-func (a *Analyzer) parseIf(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseIf(form interface{}, env Env) (*ast.Node, error) {
 	formc := Count(form)
 	if formc != 3 && formc != 4 {
 		return nil, exInfo(fmt.Sprintf("wrong number of args to if, had: %d", formc-1), nil)
@@ -530,7 +530,7 @@ func (a *Analyzer) parseIf(form interface{}, env Env) (*ast.Node2, error) {
 	if err != nil {
 		return nil, err
 	}
-	n := ast.MakeNode2(ast.OpIf, form)
+	n := ast.MakeNode(ast.OpIf, form)
 	n.Env = env
 	n.Sub = &ast.IfNode{
 		Test: testExpr,
@@ -555,7 +555,7 @@ func (a *Analyzer) parseIf(form interface{}, env Env) (*ast.Node2, error) {
 //	   :class       (analyze-form class (assoc env :locals {})) ;; avoid shadowing
 //	   :args        args
 //	   :children    [:class :args]}))
-func (a *Analyzer) parseNew(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseNew(form interface{}, env Env) (*ast.Node, error) {
 	if Count(form) < 2 {
 		return nil, exInfo(fmt.Sprintf("wrong number of args to new, had: %d", Count(form)-1), nil)
 	}
@@ -563,7 +563,7 @@ func (a *Analyzer) parseNew(form interface{}, env Env) (*ast.Node2, error) {
 	class := MustNth(form, 1)
 	args := Rest(Rest(form))
 	argsEnv := ctxEnv(env, ctxExpr)
-	var argsExprs []*ast.Node2
+	var argsExprs []*ast.Node
 	for seq := Seq(args); seq != nil; seq = seq.Next() {
 		arg, err := a.analyzeForm(seq.First(), argsEnv)
 		if err != nil {
@@ -576,7 +576,7 @@ func (a *Analyzer) parseNew(form interface{}, env Env) (*ast.Node2, error) {
 		return nil, err
 	}
 
-	n := ast.MakeNode2(ast.OpNew, form)
+	n := ast.MakeNode(ast.OpNew, form)
 	n.Env = env
 	n.Sub = &ast.NewNode{
 		Class: classExpr,
@@ -585,7 +585,7 @@ func (a *Analyzer) parseNew(form interface{}, env Env) (*ast.Node2, error) {
 	return n, nil
 }
 
-func (a *Analyzer) parseQuote(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseQuote(form interface{}, env Env) (*ast.Node, error) {
 	expr := second(form)
 	if Count(form) != 2 {
 		return nil, exInfo(fmt.Sprintf("wrong number of args to quote, had: %v", Count(form)-1), nil)
@@ -594,7 +594,7 @@ func (a *Analyzer) parseQuote(form interface{}, env Env) (*ast.Node2, error) {
 	if err != nil {
 		return nil, err
 	}
-	n := ast.MakeNode2(ast.OpQuote, form)
+	n := ast.MakeNode(ast.OpQuote, form)
 	n.Env = env
 	n.IsLiteral = true
 	n.Sub = &ast.QuoteNode{
@@ -618,7 +618,7 @@ func (a *Analyzer) parseQuote(form interface{}, env Env) (*ast.Node2, error) {
 //	   :target   target
 //	   :val      val
 //	   :children [:target :val]}))
-func (a *Analyzer) parseSetBang(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseSetBang(form interface{}, env Env) (*ast.Node, error) {
 	if Count(form) != 3 {
 		return nil, exInfo(fmt.Sprintf("wrong number of args to set!, had: %d", Count(form)-1), nil)
 	}
@@ -633,7 +633,7 @@ func (a *Analyzer) parseSetBang(form interface{}, env Env) (*ast.Node2, error) {
 	if err != nil {
 		return nil, err
 	}
-	n := ast.MakeNode2(ast.OpSetBang, form)
+	n := ast.MakeNode(ast.OpSetBang, form)
 	n.Env = env
 	n.Sub = &ast.SetBangNode{
 		Target: targetExpr,
@@ -675,7 +675,7 @@ func (a *Analyzer) parseSetBang(form interface{}, env Env) (*ast.Node2, error) {
 //	             {:finally fblock})
 //	           {:children (into [:body :catches]
 //	                            (when fblock [:finally]))}))))
-func (a *Analyzer) parseTry(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseTry(form interface{}, env Env) (*ast.Node, error) {
 	catch := func(form interface{}) bool {
 		return IsSeq(form) && Equal(symCatch, First(form))
 	}
@@ -699,7 +699,7 @@ func (a *Analyzer) parseTry(form interface{}, env Env) (*ast.Node2, error) {
 		return nil, err
 	}
 	cenv := ctxEnv(env, ctxExpr)
-	var cblocksExpr []*ast.Node2
+	var cblocksExpr []*ast.Node
 	for cblockSeq := Seq(cblocks); cblockSeq != nil; cblockSeq = Next(cblockSeq) {
 		cblock := First(cblockSeq)
 		cblockExpr, err := a.parseCatch(cblock, cenv)
@@ -708,7 +708,7 @@ func (a *Analyzer) parseTry(form interface{}, env Env) (*ast.Node2, error) {
 		}
 		cblocksExpr = append(cblocksExpr, cblockExpr)
 	}
-	var fblockExpr *ast.Node2
+	var fblockExpr *ast.Node
 	if Count(fblocks) > 0 {
 		fblock := First(fblocks)
 		fblockExpr, err = a.analyzeBody(Rest(fblock), ctxEnv(env, ctxStatement))
@@ -720,7 +720,7 @@ func (a *Analyzer) parseTry(form interface{}, env Env) (*ast.Node2, error) {
 	if fblockExpr != nil {
 		children = append(children, KWFinally)
 	}
-	n := ast.MakeNode2(ast.OpTry, form)
+	n := ast.MakeNode(ast.OpTry, form)
 	n.Env = env
 	n.Sub = &ast.TryNode{
 		Body:    bodyExpr,
@@ -751,7 +751,7 @@ func (a *Analyzer) parseTry(form interface{}, env Env) (*ast.Node2, error) {
 //	   :form        form
 //	   :body        (analyze-body body (assoc-in env [:locals ename] (dissoc-env local)))
 //	   :children    [:class :local :body]}))
-func (a *Analyzer) parseCatch(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseCatch(form interface{}, env Env) (*ast.Node, error) {
 	etype := First(Rest(form))
 	ename := First(Rest(Rest(form)))
 	if !isValidBindingSymbol(ename) {
@@ -759,7 +759,7 @@ func (a *Analyzer) parseCatch(form interface{}, env Env) (*ast.Node2, error) {
 	}
 	env = Dissoc(env, KWInTry).(Env)
 
-	local := ast.MakeNode2(ast.OpBinding, ename)
+	local := ast.MakeNode(ast.OpBinding, ename)
 	local.Env = env
 	local.Sub = &ast.BindingNode{
 		Name:  ename.(*lang.Symbol),
@@ -774,7 +774,7 @@ func (a *Analyzer) parseCatch(form interface{}, env Env) (*ast.Node2, error) {
 	if err != nil {
 		return nil, err
 	}
-	n := ast.MakeNode2(ast.OpCatch, form)
+	n := ast.MakeNode(ast.OpCatch, form)
 	n.Env = env
 	n.Sub = &ast.CatchNode{
 		Class: class,
@@ -796,7 +796,7 @@ func (a *Analyzer) parseCatch(form interface{}, env Env) (*ast.Node2, error) {
 //	 :form      form
 //	 :exception (analyze-form throw (ctx env :ctx/expr))
 //	 :children  [:exception]})
-func (a *Analyzer) parseThrow(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseThrow(form interface{}, env Env) (*ast.Node, error) {
 	throw := second(form)
 	if Count(form) != 2 {
 		return nil, exInfo(fmt.Sprintf("wrong number of args to throw, had: %d", Count(form)-1), nil)
@@ -805,7 +805,7 @@ func (a *Analyzer) parseThrow(form interface{}, env Env) (*ast.Node2, error) {
 	if err != nil {
 		return nil, err
 	}
-	n := ast.MakeNode2(ast.OpThrow, form)
+	n := ast.MakeNode(ast.OpThrow, form)
 	n.Env = env
 	n.Sub = &ast.ThrowNode{
 		Exception: exception,
@@ -813,7 +813,7 @@ func (a *Analyzer) parseThrow(form interface{}, env Env) (*ast.Node2, error) {
 	return n, nil
 }
 
-func (a *Analyzer) parseDef(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseDef(form interface{}, env Env) (*ast.Node, error) {
 	symForm := First(Rest(form))
 	expr := Rest(Rest(form))
 
@@ -867,7 +867,7 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (*ast.Node2, error) {
 	if arglists != nil {
 		meta = merge(meta, NewMap(KWArglists, NewList(NewSymbol("quote"), arglists))).(IPersistentMap)
 	}
-	var metaExpr *ast.Node2
+	var metaExpr *ast.Node
 	if meta != nil {
 		var err error
 		metaExpr, err = a.analyzeForm(meta, ctxEnv(env, ctxExpr))
@@ -876,7 +876,7 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (*ast.Node2, error) {
 		}
 	}
 
-	var initNode *ast.Node2
+	var initNode *ast.Node
 	if hasInit {
 		initNode, err = a.analyzeForm(init, ctxEnv(env, ctxExpr))
 		if err != nil {
@@ -884,7 +884,7 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (*ast.Node2, error) {
 		}
 	}
 
-	n := ast.MakeNode2(ast.OpDef, form)
+	n := ast.MakeNode(ast.OpDef, form)
 	n.Env = env
 	n.Sub = &ast.DefNode{
 		Name: sym,
@@ -933,7 +933,7 @@ func (a *Analyzer) parseDef(form interface{}, env Env) (*ast.Node2, error) {
 //	           :assignable? true
 //	           :m-or-f      (symbol (name m-or-f))
 //	           :children    [:target]}))))
-func (a *Analyzer) parseDot(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseDot(form interface{}, env Env) (*ast.Node, error) {
 	if Count(form) < 3 {
 		return nil, exInfo("wrong number of args to ., had: %d", Count(form)-1)
 	}
@@ -963,7 +963,7 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (*ast.Node2, error) {
 
 	switch {
 	case call:
-		var argNodes []*ast.Node2
+		var argNodes []*ast.Node
 		for seq := Seq(Rest(mOrF)); seq != nil; seq = seq.Next() {
 			arg := First(seq)
 			argNode, err := a.analyzeForm(arg, ctxEnv(env, ctxExpr))
@@ -973,7 +973,7 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (*ast.Node2, error) {
 			argNodes = append(argNodes, argNode)
 		}
 
-		n := ast.MakeNode2(ast.OpHostCall, form)
+		n := ast.MakeNode(ast.OpHostCall, form)
 		n.Env = env
 		n.Sub = &ast.HostCallNode{
 			Target: targetExpr,
@@ -982,7 +982,7 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (*ast.Node2, error) {
 		}
 		return n, nil
 	case isField:
-		n := ast.MakeNode2(ast.OpHostField, form)
+		n := ast.MakeNode(ast.OpHostField, form)
 		n.Env = env
 		n.IsAssignable = true
 		n.Sub = &ast.HostFieldNode{
@@ -991,7 +991,7 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (*ast.Node2, error) {
 		}
 		return n, nil
 	default:
-		n := ast.MakeNode2(ast.OpHostInterop, form)
+		n := ast.MakeNode(ast.OpHostInterop, form)
 		n.Env = env
 		n.IsAssignable = true
 		n.Sub = &ast.HostInteropNode{
@@ -1009,7 +1009,7 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (*ast.Node2, error) {
 //	       :form form
 //	       :env  env}
 //	      (analyze-let form env)))
-func (a *Analyzer) parseLetStar(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseLetStar(form interface{}, env Env) (*ast.Node, error) {
 	let, err := a.analyzeLet(form, env)
 	if err != nil {
 		return nil, err
@@ -1061,7 +1061,7 @@ func (a *Analyzer) parseLetStar(form interface{}, env Env) (*ast.Node2, error) {
 //	     :bindings (vec (vals binds)) ;; order is irrelevant
 //	     :body     body
 //	     :children [:bindings :body]})))
-func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (*ast.Node, error) {
 	if Count(form) < 2 {
 		return nil, exInfo("letfn requires a binding vector and a body", nil)
 	}
@@ -1078,10 +1078,10 @@ func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (*ast.Node2, error)
 	if sym := First(Seq(removeP(isValidBindingSymbol, fns))); sym != nil {
 		return nil, exInfo("bad binding form: "+ToString(sym), nil)
 	}
-	bindsMap := map[*lang.Symbol]*ast.Node2{}
+	bindsMap := map[*lang.Symbol]*ast.Node{}
 	for s := Seq(fns); s != nil; s = s.Next() {
 		name := s.First().(*lang.Symbol)
-		bind := ast.MakeNode2(ast.OpBinding, name)
+		bind := ast.MakeNode(ast.OpBinding, name)
 		bind.Env = env
 		bind.Sub = &ast.BindingNode{
 			Name:  name,
@@ -1093,7 +1093,7 @@ func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (*ast.Node2, error)
 	for name, bind := range bindsMap {
 		e = updateIn(env, vec(KWLocals), merge, NewMap(name, bind)).(Env)
 	}
-	var binds []*ast.Node2
+	var binds []*ast.Node
 	for name, bind := range bindsMap {
 		init, err := a.analyzeForm(Get(bindingsMap, name), ctxEnv(e, ctxExpr))
 		if err != nil {
@@ -1111,7 +1111,7 @@ func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (*ast.Node2, error)
 	if err != nil {
 		return nil, err
 	}
-	n := ast.MakeNode2(ast.OpLetFn, form)
+	n := ast.MakeNode(ast.OpLetFn, form)
 	n.Env = env
 	n.Sub = &ast.LetFnNode{
 		Bindings: binds,
@@ -1130,7 +1130,7 @@ func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (*ast.Node2, error)
 //	         :env     env
 //	         :loop-id loop-id}
 //	        (analyze-let form env))))
-func (a *Analyzer) parseLoopStar(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseLoopStar(form interface{}, env Env) (*ast.Node, error) {
 	loopID := a.Gensym("loop_")
 	env = env.Assoc(KWLoopId, loopID).(Env)
 	loop, err := a.analyzeLet(form, env)
@@ -1173,7 +1173,7 @@ func (a *Analyzer) parseLoopStar(form interface{}, env Env) (*ast.Node2, error) 
 //	   :exprs       exprs
 //	   :loop-id     loop-id
 //	   :children    [:exprs]}))
-func (a *Analyzer) parseRecur(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseRecur(form interface{}, env Env) (*ast.Node, error) {
 	exprs := Rest(form)
 	ctx := Get(env, KWContext)
 	loopLocals := Get(env, KWLoopLocals)
@@ -1189,7 +1189,7 @@ func (a *Analyzer) parseRecur(form interface{}, env Env) (*ast.Node2, error) {
 	if errorMsg != "" {
 		return nil, exInfo(errorMsg, nil)
 	}
-	var exprNodes []*ast.Node2
+	var exprNodes []*ast.Node
 	for seq := Seq(exprs); seq != nil; seq = seq.Next() {
 		expr := First(seq)
 		exprNode, err := a.analyzeForm(expr, ctxEnv(env, ctxExpr))
@@ -1199,7 +1199,7 @@ func (a *Analyzer) parseRecur(form interface{}, env Env) (*ast.Node2, error) {
 		exprNodes = append(exprNodes, exprNode)
 	}
 
-	n := ast.MakeNode2(ast.OpRecur, form)
+	n := ast.MakeNode(ast.OpRecur, form)
 	n.Env = env
 	n.Sub = &ast.RecurNode{
 		Exprs:  exprNodes,
@@ -1255,7 +1255,7 @@ func (a *Analyzer) parseRecur(form interface{}, env Env) (*ast.Node2, error) {
 //	          (when n
 //	            {:local name-expr})
 //	          {:children (conj (if n [:local] []) :methods)}))))
-func (a *Analyzer) parseFnStar(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseFnStar(form interface{}, env Env) (*ast.Node, error) {
 	fnSym, _ := First(form).(*Symbol)
 	args := Rest(form)
 
@@ -1267,7 +1267,7 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (*ast.Node2, error) {
 	} else {
 		meths = Seq(args)
 	}
-	nameExpr := ast.MakeNode2(ast.OpBinding, name)
+	nameExpr := ast.MakeNode(ast.OpBinding, name)
 	nameExpr.Env = env
 	nameExpr.Sub = &ast.BindingNode{
 		Name:  name,
@@ -1289,7 +1289,7 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (*ast.Node2, error) {
 	if _, ok := First(meths).(*Vector); ok {
 		meths = NewList(meths)
 	}
-	var methodsExprs []*ast.Node2
+	var methodsExprs []*ast.Node
 	for seq := Seq(meths); seq != nil; seq = seq.Next() {
 		m, err := a.analyzeFnMethod(First(seq), menv.(Env))
 		if err != nil {
@@ -1329,7 +1329,7 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (*ast.Node2, error) {
 		return nil, exInfo("can't have fixed arity overload with more params than variadic overload", nil)
 	}
 
-	n := ast.MakeNode2(ast.OpFn, form)
+	n := ast.MakeNode(ast.OpFn, form)
 	n.Env = env
 	fnNode := &ast.FnNode{
 		IsVariadic:    variadic,
@@ -1356,7 +1356,7 @@ func (a *Analyzer) parseFnStar(form interface{}, env Env) (*ast.Node2, error) {
 //	       ^:children
 //	       [:default "An AST node representing the default value of the case expression"]
 //	       ]}
-func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node, error) {
 	var expr *Symbol
 	var shift, mask int64
 	var defaultForm interface{}
@@ -1388,7 +1388,7 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node2, error) 
 		return nil, err
 	}
 
-	var nodes []*ast.Node2
+	var nodes []*ast.Node
 	for seq := Seq(caseMap); seq != nil; seq = seq.Next() {
 		// TODO: is the shift, mask, etc. relevant for anything but
 		// performance? omitting for now.
@@ -1403,16 +1403,16 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node2, error) 
 		if err != nil {
 			return nil, err
 		}
-		caseNode := ast.MakeNode2(ast.OpCaseNode, form)
+		caseNode := ast.MakeNode(ast.OpCaseNode, form)
 		caseNode.Env = env
 		caseNode.Sub = &ast.CaseNodeNode{
-			Tests: []*ast.Node2{condExpr},
+			Tests: []*ast.Node{condExpr},
 			Then:  thenExpr,
 		}
 		nodes = append(nodes, caseNode)
 	}
 
-	n := ast.MakeNode2(ast.OpCase, form)
+	n := ast.MakeNode(ast.OpCase, form)
 	n.Env = env
 	n.Sub = &ast.CaseNode{
 		Test:    testExpr,
@@ -1488,7 +1488,7 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node2, error) 
 //	    :children    [:params :body]}
 //	   (when local
 //	     {:local (dissoc-env local)}))))
-func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (*ast.Node, error) {
 	if _, ok := form.(ISeqable); !ok {
 		return nil, exInfo("invalid fn method", nil)
 	}
@@ -1521,11 +1521,11 @@ func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (*ast.Node2, error
 	}
 	env = Dissoc(env, KWLocal).(Env)
 	arity := paramsNames.Count()
-	var paramsExpr []*ast.Node2
+	var paramsExpr []*ast.Node
 	id := 0
 	for seq := Seq(paramsNames); seq != nil; seq, id = seq.Next(), id+1 {
 		name := seq.First()
-		param := ast.MakeNode2(ast.OpBinding, name)
+		param := ast.MakeNode(ast.OpBinding, name)
 		param.Env = env
 		param.Sub = &ast.BindingNode{
 			Name:       name.(*Symbol),
@@ -1563,7 +1563,7 @@ func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (*ast.Node2, error
 		return nil, err
 	}
 
-	n := ast.MakeNode2(ast.OpFnMethod, form)
+	n := ast.MakeNode(ast.OpFnMethod, form)
 	n.Env = env
 	n.Sub = &ast.FnMethodNode{
 		Params:     paramsExpr,
@@ -1588,7 +1588,7 @@ func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (*ast.Node2, error
 //	   :form form
 //	   :var  var}
 //	  (throw (ex-info (str "var not found: " var) {:var var}))))
-func (a *Analyzer) parseVar(form interface{}, env Env) (*ast.Node2, error) {
+func (a *Analyzer) parseVar(form interface{}, env Env) (*ast.Node, error) {
 	vrSym := second(form)
 	if Count(form) != 2 {
 		return nil, exInfo(fmt.Sprintf("wrong number of args to var, had: %d", Count(form)-1), nil)
@@ -1601,7 +1601,7 @@ func (a *Analyzer) parseVar(form interface{}, env Env) (*ast.Node2, error) {
 	if !ok {
 		return nil, exInfo(fmt.Sprintf("expecting var, but %s is mapped to %v", vrSym, maybeVar), nil)
 	}
-	n := ast.MakeNode2(ast.OpTheVar, form)
+	n := ast.MakeNode(ast.OpTheVar, form)
 	n.Env = env
 	n.Sub = &ast.TheVarNode{
 		Var: vr,
@@ -1622,7 +1622,7 @@ func (a *Analyzer) parseVar(form interface{}, env Env) (*ast.Node2, error) {
 //	     :expr     (assoc-in expr [:env :context] :ctx/expr)
 //	     :children [:meta :expr]}
 //	    expr)))
-func (a *Analyzer) wrappingMeta(expr *ast.Node2) (*ast.Node2, error) {
+func (a *Analyzer) wrappingMeta(expr *ast.Node) (*ast.Node, error) {
 	form := expr.Form
 	env := expr.Env
 	var meta IPersistentMap
@@ -1637,7 +1637,7 @@ func (a *Analyzer) wrappingMeta(expr *ast.Node2) (*ast.Node2, error) {
 		return nil, err
 	}
 	expr.Env = lang.Assoc(expr.Env, KWContext, ctxExpr).(Env)
-	n := ast.MakeNode2(ast.OpWithMeta, form)
+	n := ast.MakeNode(ast.OpWithMeta, form)
 	n.Env = env
 	n.Sub = &ast.WithMetaNode{
 		Expr: expr,
@@ -1760,7 +1760,7 @@ func exInfo(errStr string, _ interface{}) error {
 	return fmt.Errorf(errStr)
 }
 
-func withRawForm(n *ast.Node2, form interface{}) *ast.Node2 {
+func withRawForm(n *ast.Node, form interface{}) *ast.Node {
 	n.RawForms = append(n.RawForms, form)
 	return n
 }
@@ -1856,7 +1856,7 @@ func updateIn(mp interface{}, keys interface{}, fn func(...interface{}) Associat
 }
 
 func dissocEnv(node interface{}) interface{} {
-	n := node.(*ast.Node2)
+	n := node.(*ast.Node)
 	newN := *n
 	newN.Env = nil
 	return &newN

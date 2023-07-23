@@ -69,8 +69,8 @@ var (
 	KWE = lang.NewKeyword("E")
 	KWF = lang.NewKeyword("F")
 
-	MapItems = func() []Node {
-		items := make([]Node, len(Items))
+	MapItems = func() []lang.IPersistentMap {
+		items := make([]lang.IPersistentMap, len(Items))
 		for i, item := range Items {
 			var op lang.Keyword
 			switch item.(type) {
@@ -87,7 +87,7 @@ var (
 			case *F:
 				op = KWF
 			}
-			items[i] = MakeNode(op, nil)
+			items[i] = lang.NewMap(lang.KWOp, op)
 		}
 		return items
 	}()
@@ -130,7 +130,7 @@ func BenchmarkTypeSwitch(b *testing.B) {
 func BenchmarkMapSwitch(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		for _, item := range MapItems {
-			switch Op(item) {
+			switch lang.Get(item, lang.KWOp) {
 			case KWA:
 			case KWB:
 			case KWC:

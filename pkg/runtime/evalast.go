@@ -50,7 +50,7 @@ func (e *EvalError) Error() string {
 }
 
 func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
-	n := x.(*ast.Node2)
+	n := x.(*ast.Node)
 	switch n.Op {
 	case ast.OpConst:
 		return n.Sub.(*ast.ConstNode).Value, nil
@@ -109,7 +109,7 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 	}
 }
 
-func (env *environment) EvalASTDef(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTDef(n *ast.Node) (interface{}, error) {
 	defNode := n.Sub.(*ast.DefNode)
 	init := defNode.Init
 	if value.IsNil(init) {
@@ -155,7 +155,7 @@ func (env *environment) EvalASTDef(n *ast.Node2) (interface{}, error) {
 	return vr, nil
 }
 
-func (env *environment) EvalASTAssign(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTAssign(n *ast.Node) (interface{}, error) {
 	setBangNode := n.Sub.(*ast.SetBangNode)
 
 	val, err := env.EvalAST(setBangNode.Val)
@@ -204,7 +204,7 @@ func (env *environment) EvalASTAssign(n *ast.Node2) (interface{}, error) {
 	}
 }
 
-func (env *environment) EvalASTTheVar(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTTheVar(n *ast.Node) (interface{}, error) {
 	return n.Sub.(*ast.TheVarNode).Var, nil
 }
 
@@ -249,7 +249,7 @@ func (c *evalCompiler) MaybeResolveIn(ns *value.Namespace, sym *value.Symbol) in
 	}
 }
 
-func (env *environment) EvalASTMaybeClass(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTMaybeClass(n *ast.Node) (interface{}, error) {
 	// TODO: add go values to the namespace (without vars)
 	sym := n.Sub.(*ast.MaybeClassNode).Class.(*value.Symbol)
 	name := sym.Name()
@@ -319,7 +319,7 @@ func (env *environment) EvalASTMaybeClass(n *ast.Node2) (interface{}, error) {
 	}
 }
 
-func (env *environment) EvalASTMaybeHostForm(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTMaybeHostForm(n *ast.Node) (interface{}, error) {
 	hostFormNode := n.Sub.(*ast.MaybeHostFormNode)
 	field := hostFormNode.Field
 	// TODO: implement this for real
@@ -418,7 +418,7 @@ func (env *environment) EvalASTMaybeHostForm(n *ast.Node2) (interface{}, error) 
 	panic("EvalASTMaybeHostForm: " + hostFormNode.Class)
 }
 
-func (env *environment) EvalASTHostCall(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTHostCall(n *ast.Node) (interface{}, error) {
 	hostCallNode := n.Sub.(*ast.HostCallNode)
 
 	tgt := hostCallNode.Target
@@ -451,7 +451,7 @@ func (env *environment) EvalASTHostCall(n *ast.Node2) (interface{}, error) {
 	return value.Apply(methodVal, argVals)
 }
 
-func (env *environment) EvalASTHostInterop(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTHostInterop(n *ast.Node) (interface{}, error) {
 	hostInteropNode := n.Sub.(*ast.HostInteropNode)
 
 	tgt := hostInteropNode.Target
@@ -479,7 +479,7 @@ func (env *environment) EvalASTHostInterop(n *ast.Node2) (interface{}, error) {
 	}
 }
 
-func (env *environment) EvalASTWithMeta(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTWithMeta(n *ast.Node) (interface{}, error) {
 	wmNode := n.Sub.(*ast.WithMetaNode)
 
 	expr := wmNode.Expr
@@ -496,11 +496,11 @@ func (env *environment) EvalASTWithMeta(n *ast.Node2) (interface{}, error) {
 	return value.WithMeta(exprVal, metaVal.(value.IPersistentMap))
 }
 
-func (env *environment) EvalASTFn(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTFn(n *ast.Node) (interface{}, error) {
 	return NewFn(n, env), nil
 }
 
-func (env *environment) EvalASTMap(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTMap(n *ast.Node) (interface{}, error) {
 	res := value.NewMap()
 
 	mapNode := n.Sub.(*ast.MapNode)
@@ -523,7 +523,7 @@ func (env *environment) EvalASTMap(n *ast.Node2) (interface{}, error) {
 	return res, nil
 }
 
-func (env *environment) EvalASTVector(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTVector(n *ast.Node) (interface{}, error) {
 	vectorNode := n.Sub.(*ast.VectorNode)
 
 	items := vectorNode.Items
@@ -539,7 +539,7 @@ func (env *environment) EvalASTVector(n *ast.Node2) (interface{}, error) {
 	return value.NewVector(vals...), nil
 }
 
-func (env *environment) EvalASTSet(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTSet(n *ast.Node) (interface{}, error) {
 	setNode := n.Sub.(*ast.SetNode)
 
 	items := setNode.Items
@@ -555,7 +555,7 @@ func (env *environment) EvalASTSet(n *ast.Node2) (interface{}, error) {
 	return value.NewSet(vals...), nil
 }
 
-func (env *environment) EvalASTIf(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTIf(n *ast.Node) (interface{}, error) {
 	ifNode := n.Sub.(*ast.IfNode)
 
 	test := ifNode.Test
@@ -573,7 +573,7 @@ func (env *environment) EvalASTIf(n *ast.Node2) (interface{}, error) {
 	}
 }
 
-func (env *environment) EvalASTCase(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 	caseNode := n.Sub.(*ast.CaseNode)
 
 	testVal, err := env.EvalAST(caseNode.Test)
@@ -601,7 +601,7 @@ func (env *environment) EvalASTCase(n *ast.Node2) (interface{}, error) {
 	return env.EvalAST(caseNode.Default)
 }
 
-func (env *environment) EvalASTDo(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTDo(n *ast.Node) (interface{}, error) {
 	doNode := n.Sub.(*ast.DoNode)
 
 	statements := doNode.Statements
@@ -615,7 +615,7 @@ func (env *environment) EvalASTDo(n *ast.Node2) (interface{}, error) {
 	return env.EvalAST(ret)
 }
 
-func (env *environment) EvalASTLet(n *ast.Node2, isLoop bool) (interface{}, error) {
+func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error) {
 	letNode := n.Sub.(*ast.LetNode)
 
 	newEnv := env.PushScope().(*environment)
@@ -665,7 +665,7 @@ Recur:
 	return res, err
 }
 
-func (env *environment) EvalASTRecur(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTRecur(n *ast.Node) (interface{}, error) {
 	if env.recurTarget == nil {
 		panic("recur outside of loop")
 	}
@@ -688,7 +688,7 @@ func (env *environment) EvalASTRecur(n *ast.Node2) (interface{}, error) {
 	}
 }
 
-func (env *environment) EvalASTInvoke(n *ast.Node2) (res interface{}, err error) {
+func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) {
 	invokeNode := n.Sub.(*ast.InvokeNode)
 	defer func() {
 		meta := invokeNode.Meta
@@ -739,11 +739,11 @@ func (env *environment) EvalASTInvoke(n *ast.Node2) (res interface{}, err error)
 	return value.Apply(fnVal, argVals)
 }
 
-func (env *environment) EvalASTVar(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTVar(n *ast.Node) (interface{}, error) {
 	return n.Sub.(*ast.VarNode).Var.Get(), nil
 }
 
-func (env *environment) EvalASTLocal(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTLocal(n *ast.Node) (interface{}, error) {
 	localNode := n.Sub.(*ast.LocalNode)
 
 	sym := localNode.Name
@@ -754,7 +754,7 @@ func (env *environment) EvalASTLocal(n *ast.Node2) (interface{}, error) {
 	return v, nil
 }
 
-func (env *environment) EvalASTNew(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTNew(n *ast.Node) (interface{}, error) {
 	newNode := n.Sub.(*ast.NewNode)
 
 	classVal, err := env.EvalAST(newNode.Class)
@@ -771,7 +771,7 @@ func (env *environment) EvalASTNew(n *ast.Node2) (interface{}, error) {
 	return reflect.New(classValTyp).Interface(), nil
 }
 
-func (env *environment) EvalASTTry(n *ast.Node2) (res interface{}, err error) {
+func (env *environment) EvalASTTry(n *ast.Node) (res interface{}, err error) {
 	tryNode := n.Sub.(*ast.TryNode)
 
 	if finally := tryNode.Finally; finally != nil {
@@ -786,7 +786,7 @@ func (env *environment) EvalASTTry(n *ast.Node2) (res interface{}, err error) {
 	return env.EvalAST(tryNode.Body)
 }
 
-func (env *environment) EvalASTThrow(n *ast.Node2) (interface{}, error) {
+func (env *environment) EvalASTThrow(n *ast.Node) (interface{}, error) {
 	throwNode := n.Sub.(*ast.ThrowNode)
 
 	exception, err := env.EvalAST(throwNode.Exception)

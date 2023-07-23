@@ -11,7 +11,7 @@ import (
 type Fn struct {
 	meta lang.IPersistentMap
 
-	astNode *ast.Node2
+	astNode *ast.Node
 	env     lang.Environment
 }
 
@@ -19,7 +19,7 @@ var (
 	_ lang.IObj = (*Fn)(nil)
 )
 
-func NewFn(astNode *ast.Node2, env lang.Environment) *Fn {
+func NewFn(astNode *ast.Node, env lang.Environment) *Fn {
 	return &Fn{astNode: astNode, env: env}
 }
 
@@ -109,8 +109,8 @@ Recur:
 	return res
 }
 
-func (fn *Fn) findMethod(methods []*ast.Node2, args []interface{}) (*ast.Node2, error) {
-	var variadicMethod *ast.Node2
+func (fn *Fn) findMethod(methods []*ast.Node, args []interface{}) (*ast.Node, error) {
+	var variadicMethod *ast.Node
 	for _, method := range methods {
 		methodNode := method.Sub.(*ast.FnMethodNode)
 		if methodNode.IsVariadic {

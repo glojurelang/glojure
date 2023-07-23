@@ -2,13 +2,10 @@ package ast
 
 import "github.com/glojurelang/glojure/pkg/lang"
 
-// Modeled after clojure's tools.analyzer
 type (
-	Node lang.Associative
-
 	NodeOp int32
 
-	Node2 struct {
+	Node struct {
 		// Benchmarking shows that switching on an integer op is faster
 		// than type switching on a polymorphic interface.
 		Op NodeOp
@@ -18,14 +15,7 @@ type (
 
 		Env lang.IPersistentMap
 
-		// Options:
-		// 1. inline all fields for all types
-		// 2. include pointers to type-specific structs for all types, but
-		// only set one.
-		// 3. include a single pointer to a type-specific struct.
-		//
-		// Start with 3, then benchmark 1 vs 3.
-		// TODO
+		// Sub is a pointer to an Op-specific struct.
 		Sub interface{}
 
 		IsLiteral    bool
@@ -47,7 +37,7 @@ type (
 	ConstNode struct {
 		Type  lang.Keyword
 		Value interface{}
-		Meta  *Node2
+		Meta  *Node
 	}
 
 	MaybeHostFormNode struct {
@@ -60,33 +50,33 @@ type (
 	}
 
 	VectorNode struct {
-		Items []*Node2
+		Items []*Node
 	}
 
 	MapNode struct {
-		Keys []*Node2
-		Vals []*Node2
+		Keys []*Node
+		Vals []*Node
 	}
 
 	SetNode struct {
-		Items []*Node2
+		Items []*Node
 	}
 
 	DoNode struct {
-		Statements []*Node2
-		Ret        *Node2
+		Statements []*Node
+		Ret        *Node
 		IsBody     bool
 	}
 
 	LetNode struct {
-		Body     *Node2
-		Bindings []*Node2
+		Body     *Node
+		Bindings []*Node
 		LoopID   *lang.Symbol
 	}
 
 	BindingNode struct {
 		Name       *lang.Symbol
-		Init       *Node2
+		Init       *Node
 		Local      lang.Keyword
 		ArgID      int
 		IsVariadic bool
@@ -94,110 +84,110 @@ type (
 
 	InvokeNode struct {
 		Meta lang.IPersistentMap
-		Fn   *Node2
-		Args []*Node2
+		Fn   *Node
+		Args []*Node
 	}
 
 	IfNode struct {
-		Test *Node2
-		Then *Node2
-		Else *Node2
+		Test *Node
+		Then *Node
+		Else *Node
 	}
 
 	NewNode struct {
-		Class *Node2
-		Args  []*Node2
+		Class *Node
+		Args  []*Node
 	}
 
 	QuoteNode struct {
-		Expr *Node2
+		Expr *Node
 	}
 
 	SetBangNode struct {
-		Target *Node2
-		Val    *Node2
+		Target *Node
+		Val    *Node
 	}
 
 	TryNode struct {
-		Body    *Node2
-		Catches []*Node2
-		Finally *Node2
+		Body    *Node
+		Catches []*Node
+		Finally *Node
 	}
 
 	CatchNode struct {
-		Class *Node2
-		Local *Node2
-		Body  *Node2
+		Class *Node
+		Local *Node
+		Body  *Node
 	}
 
 	ThrowNode struct {
-		Exception *Node2
+		Exception *Node
 	}
 
 	DefNode struct {
 		Name *lang.Symbol
 		Var  *lang.Var
-		Meta *Node2
-		Init *Node2
+		Meta *Node
+		Init *Node
 		Doc  interface{}
 	}
 
 	HostCallNode struct {
-		Target *Node2
+		Target *Node
 		Method *lang.Symbol
-		Args   []*Node2
+		Args   []*Node
 	}
 
 	HostFieldNode struct {
-		Target *Node2
+		Target *Node
 		Field  *lang.Symbol
 	}
 
 	HostInteropNode struct {
-		Target *Node2
+		Target *Node
 		MOrF   *lang.Symbol
 	}
 
 	LetFnNode struct {
-		Bindings []*Node2
-		Body     *Node2
+		Bindings []*Node
+		Body     *Node
 	}
 
 	RecurNode struct {
-		Exprs  []*Node2
+		Exprs  []*Node
 		LoopID *lang.Symbol
 	}
 
 	FnNode struct {
 		IsVariadic    bool
 		MaxFixedArity int
-		Methods       []*Node2
+		Methods       []*Node
 		Once          bool
-		Local         *Node2
+		Local         *Node
 	}
 
 	FnMethodNode struct {
-		Params     []*Node2
+		Params     []*Node
 		FixedArity int
-		Body       *Node2
+		Body       *Node
 		LoopID     *lang.Symbol
 		IsVariadic bool
 	}
 
 	WithMetaNode struct {
-		Expr *Node2
-		Meta *Node2
+		Expr *Node
+		Meta *Node
 	}
 
 	CaseNode struct {
-		Test    *Node2
-		Nodes   []*Node2
-		Default *Node2
+		Test    *Node
+		Nodes   []*Node
+		Default *Node
 	}
 
 	CaseNodeNode struct {
-		Tests []*Node2
-		Then  *Node2
+		Tests []*Node
+		Then  *Node
 	}
 
 	TheVarNode struct {
@@ -241,39 +231,9 @@ const (
 	OpThrow
 )
 
-func MakeNode(op lang.Keyword, form interface{}) Node {
-	return lang.NewMap(
-		lang.KWOp, op,
-		lang.KWForm, form,
-	)
-}
-
-func MakeNode2(op NodeOp, form interface{}) *Node2 {
-	return &Node2{
+func MakeNode(op NodeOp, form interface{}) *Node {
+	return &Node{
 		Op:   op,
 		Form: form,
 	}
-}
-
-func Get(n Node, k interface{}) interface{} {
-	if n == nil {
-		return nil
-	}
-	return n.EntryAt(k).Val()
-}
-
-func Op(n Node) interface{} {
-	return Get(n, lang.KWOp)
-}
-
-func Form(n Node) interface{} {
-	return Get(n, lang.KWForm)
-}
-
-func RawForms(n Node) interface{} {
-	return Get(n, lang.KWRawForms)
-}
-
-func Children(n Node) interface{} {
-	return Get(n, lang.KWChildren)
 }
