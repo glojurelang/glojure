@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	compiler2 "github.com/glojurelang/glojure/pkg/compiler2"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 	value "github.com/glojurelang/glojure/pkg/lang"
 )
@@ -59,9 +59,9 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 }
 
 func (env *environment) evalInternal(n interface{}) (interface{}, error) {
-	analyzer := &compiler2.Analyzer{
+	analyzer := &compiler.Analyzer{
 		Macroexpand1: env.Macroexpand1,
-		CreateVar: func(sym *value.Symbol, e compiler2.Env) (interface{}, error) {
+		CreateVar: func(sym *value.Symbol, e compiler.Env) (interface{}, error) {
 			vr := env.CurrentNamespace().Intern(sym)
 			return vr, nil
 		},
