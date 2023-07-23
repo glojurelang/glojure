@@ -681,7 +681,7 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 		if r := recover(); r != nil {
 			// TODO: dynamically set pr-on to nil to avoid infinite
 			// recursion; need to use go-only stringification for errors.
-			gljFrame = fmt.Sprintf("%s:%d:%d: %s\n", value.Get(meta, KWFile), value.Get(meta, KWLine), value.Get(meta, KWColumn), "omitted") //, lang.ToString(n.Form))
+			gljFrame = fmt.Sprintf("%s:%d:%d: %s\n", value.Get(meta, KWFile), value.Get(meta, KWLine), value.Get(meta, KWColumn), n.Form)
 			switch r := r.(type) {
 			case *EvalError:
 				r.GLJStack = append(r.GLJStack, gljFrame)
