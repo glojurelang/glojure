@@ -2,7 +2,6 @@ package runtime
 
 import (
 	"fmt"
-	"reflect"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/compiler"
@@ -26,8 +25,8 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 	if strings.HasPrefix(sym.String(), ".") && len(sym.String()) > 1 {
 		fieldSym := value.NewSymbol(sym.String()[1:])
 		// rewrite the expression to a dot expression
-		newList := seqToList(value.NewCons(SymbolDot, value.NewCons(seq.Next().First(), value.NewCons(fieldSym, seq.Next().Next()))))
-		return env.Macroexpand1(newList)
+		dotExpr := value.NewCons(SymbolDot, value.NewCons(seq.Next().First(), value.NewCons(fieldSym, seq.Next().Next())))
+		return env.Macroexpand1(dotExpr)
 	}
 
 	macroVar := env.asMacro(sym)
@@ -39,21 +38,19 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 	if !ok {
 		return nil, env.errorf(form, "macro %s is not a function (%T)", sym, macroVar.Get())
 	}
-	res, err := env.applyMacro1(applyer, form.(value.ISeq))
+	res, err := env.applyMacro(applyer, form.(value.ISeq))
 	if err != nil {
 		return nil, env.errorf(form, "error applying macro: %w", err)
 	}
 	return res, nil
 }
 
-func (env *environment) applyMacro1(fn value.IFn, form value.ISeq) (interface{}, error) {
+func (env *environment) applyMacro(fn value.IFn, form value.ISeq) (interface{}, error) {
 	argList := form.Next()
-	// two hidden arguments, $form and $env.
+	// two hidden arguments, $form and $env (nil for now).
 	// $form is the form that was passed to the macro
 	// $env is the environment that the macro was called in
-	args := append([]interface{}{form, nil}, seqToSlice(argList)...)
-
-	return env.applyFunc(fn, args)
+	return fn.ApplyTo(value.NewCons(form, value.NewCons(nil, argList))), nil
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
@@ -146,20 +143,6 @@ func (env *environment) applyFunc(f interface{}, args []interface{}) (interface{
 	return res, nil
 }
 
-func (env *environment) applyMacro(fn value.IFn, form value.ISeq) (interface{}, error) {
-	argList := form.Next()
-	// two hidden arguments, $form and $env.
-	// $form is the form that was passed to the macro
-	// $env is the environment that the macro was called in
-	args := append([]interface{}{form, nil}, seqToSlice(argList)...)
-
-	exp, err := env.applyFunc(fn, args)
-	if err != nil {
-		return nil, err
-	}
-	return env.Eval(exp)
-}
-
 // Helpers
 
 func (env *environment) lookupVar(sym *value.Symbol, internNew, registerMacro bool) (*value.Var, error) {
@@ -223,10 +206,6 @@ func (env *environment) asMacro(sym *value.Symbol) *value.Var {
 
 // Misc. helpers
 
-func seqToList(seq value.ISeq) value.IPersistentList {
-	return value.NewList(seqToSlice(seq)...)
-}
-
 func seqToSlice(seq value.ISeq) []interface{} {
 	if seq == nil {
 		return nil
@@ -236,12 +215,4 @@ func seqToSlice(seq value.ISeq) []interface{} {
 		items = append(items, seq.First())
 	}
 	return items
-}
-
-func isNilableKind(k reflect.Kind) bool {
-	switch k {
-	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
-		return true
-	}
-	return false
 }
