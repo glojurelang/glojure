@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/compiler"
+	compiler2 "github.com/glojurelang/glojure/pkg/compiler2"
 	value "github.com/glojurelang/glojure/pkg/lang"
 )
 
@@ -83,6 +84,32 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 		globalEnv.Reset(value.NewMap(kw("namespaces"), value.NewMap(namespaceKVs...)))
 	}
 	resetGlobalEnv()
+
+	{
+		analyzer := &compiler2.Analyzer{
+			Macroexpand1: env.Macroexpand1,
+			CreateVar: func(sym *value.Symbol, e compiler2.Env) (interface{}, error) {
+				vr := env.CurrentNamespace().Intern(sym)
+				resetGlobalEnv()
+				return vr, nil
+			},
+			IsVar: func(v interface{}) bool {
+				_, ok := v.(*value.Var)
+				return ok
+			},
+			Gensym: func(prefix string) *value.Symbol {
+				num := env.nextSymNum()
+				return value.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
+			},
+			GlobalEnv: globalEnv,
+		}
+		_, err := analyzer.Analyze(n, value.NewMap(
+			value.KWNS, env.CurrentNamespace().Name(),
+		))
+		if err != nil {
+			panic(err)
+		}
+	}
 
 	analyzer := &compiler.Analyzer{
 		Macroexpand1: env.Macroexpand1,
