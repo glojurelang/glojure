@@ -19,7 +19,18 @@ type (
 		Typ TypCode
 		V   interface{}
 	}
+
+	Ifc interface {
+		Do()
+	}
 )
+
+func (a *A) Do() {}
+func (b *B) Do() {}
+func (c *C) Do() {}
+func (d *D) Do() {}
+func (e *E) Do() {}
+func (f *F) Do() {}
 
 const (
 	TypA TypCode = iota
@@ -31,7 +42,7 @@ const (
 )
 
 var (
-	Items = []interface{}{
+	Items = []Ifc{
 		&A{},
 		&B{},
 		&C{},
@@ -140,6 +151,14 @@ func BenchmarkMapSwitch(b *testing.B) {
 			default:
 				panic("unreachable")
 			}
+		}
+	}
+}
+
+func BenchmarkIfc(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		for _, item := range Items {
+			item.Do()
 		}
 	}
 }

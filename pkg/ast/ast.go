@@ -7,7 +7,8 @@ type (
 
 	Node struct {
 		// Benchmarking shows that switching on an integer op is faster
-		// than type switching on a polymorphic interface.
+		// than type switching on a polymorphic interface or calling a
+		// polymorphic method.
 		Op NodeOp
 
 		Form     interface{}
