@@ -34,7 +34,7 @@ type (
 
 		Gensym func(prefix string) *Symbol
 
-		GlobalEnv *Atom
+		FindNamespace func(sym *lang.Symbol) *lang.Namespace
 	}
 )
 
@@ -1645,21 +1645,20 @@ func (a *Analyzer) wrappingMeta(expr *ast.Node2) (*ast.Node2, error) {
 //	  (let [namespaces (:namespaces (env/deref-env))]
 //	    (or (get-in namespaces [ns :aliases ns-sym])
 //	        (:ns (namespaces ns-sym))))))
-func (a *Analyzer) resolveNS(nsSym interface{}, env Env) *Symbol {
-	ns := Get(env, KWNS).(*Symbol)
+func (a *Analyzer) resolveNS(nsSym *lang.Symbol, env Env) *Symbol {
+	curNSSym := Get(env, KWNS).(*lang.Symbol)
 	if nsSym == nil {
 		return nil
 	}
-	globalEnv := a.GlobalEnv.Deref()
-	namespaces, _ := Get(globalEnv, KWNamespaces).(IPersistentMap)
-	if res := Get(Get(Get(namespaces, ns), KWAliases), nsSym); res != nil {
-		if sym, ok := res.(*Symbol); ok {
-			return sym
-		}
+	curNS := a.FindNamespace(curNSSym)
+	if curNS == nil {
 		return nil
 	}
-	if sym, ok := Get(Get(namespaces, nsSym), KWNS).(*Symbol); ok {
-		return sym
+	if res := curNS.LookupAlias(nsSym); res != nil {
+		return res.Name()
+	}
+	if ns := a.FindNamespace(nsSym); ns != nil {
+		return ns.Name()
 	}
 	return nil
 }
@@ -1701,11 +1700,8 @@ func (a *Analyzer) resolveSym(symIfc interface{}, env Env) interface{} {
 	if fullNS != nil {
 		ns = fullNS
 	}
-	globalEnv := a.GlobalEnv.Deref()
-	namespaces, _ := Get(globalEnv, KWNamespaces).(IPersistentMap)
-	nsMap, _ := Get(namespaces, ns).(IPersistentMap)
-	mappings, _ := Get(nsMap, KWMappings).(IPersistentMap)
-	return Get(mappings, name)
+	theNS := a.FindNamespace(ns)
+	return Get(theNS.Mappings(), name)
 }
 
 // (defn validate-bindings

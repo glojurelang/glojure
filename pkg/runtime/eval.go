@@ -7,6 +7,7 @@ import (
 
 	"github.com/glojurelang/glojure/pkg/compiler"
 	compiler2 "github.com/glojurelang/glojure/pkg/compiler2"
+	"github.com/glojurelang/glojure/pkg/lang"
 	value "github.com/glojurelang/glojure/pkg/lang"
 )
 
@@ -85,7 +86,7 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 	}
 	resetGlobalEnv()
 
-	{
+	if false {
 		analyzer := &compiler2.Analyzer{
 			Macroexpand1: env.Macroexpand1,
 			CreateVar: func(sym *value.Symbol, e compiler2.Env) (interface{}, error) {
@@ -101,7 +102,7 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 				num := env.nextSymNum()
 				return value.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
 			},
-			GlobalEnv: globalEnv,
+			FindNamespace: lang.FindNamespace,
 		}
 		_, err := analyzer.Analyze(n, value.NewMap(
 			value.KWNS, env.CurrentNamespace().Name(),
