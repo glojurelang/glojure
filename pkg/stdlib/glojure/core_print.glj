@@ -43,7 +43,7 @@
    :added "1.9"}
  *print-namespace-maps* false)
 
-(defn- print-sequential [^string begin, print-one, ^string sep, ^string end, sequence, ^Writer w]
+(defn- print-sequential [^go/string begin, print-one, ^go/string sep, ^go/string end, sequence, ^Writer w]
   (binding [*print-level* (and (not *print-dup*) *print-level* (dec *print-level*))]
     (if (and *print-level* (neg? *print-level*))
       (glojure.lang.WriteWriter w "#")
@@ -100,7 +100,7 @@
   (glojure.lang.WriteWriter w ")"))
 
 (defn- print-tagged-object [o rep ^Writer w]
-  (when (instance? glojure.lang.IMeta o)
+  (when (instance? github.com$glojurelang$glojure$pkg$lang.IMeta o)
     (print-meta o w))
   (glojure.lang.WriteWriter w "#object[")
   (let [c (class o)]
@@ -124,61 +124,61 @@
 (defmethod print-dup glojure.lang.Keyword [o w] (print-method o w))
 
 (defmethod print-method go/int [o w] (.write w (str o))) 
-(defmethod print-method uint [o w] (.write w (str o))) 
-(defmethod print-method uint8 [o w] (.write w (str o))) 
-(defmethod print-method uint16 [o w] (.write w (str o))) 
-(defmethod print-method uint32 [o w] (.write w (str o))) 
-(defmethod print-method uint64 [o w] (.write w (str o))) 
-(defmethod print-method int8 [o w] (.write w (str o))) 
-(defmethod print-method int16 [o w] (.write w (str o))) 
-(defmethod print-method int32 [o w] (.write w (str o))) 
-(defmethod print-method int64 [o w] (.write w (str o))) 
+(defmethod print-method go/uint [o w] (.write w (str o))) 
+(defmethod print-method go/uint8 [o w] (.write w (str o))) 
+(defmethod print-method go/uint16 [o w] (.write w (str o))) 
+(defmethod print-method go/uint32 [o w] (.write w (str o))) 
+(defmethod print-method go/uint64 [o w] (.write w (str o))) 
+(defmethod print-method go/int8 [o w] (.write w (str o))) 
+(defmethod print-method go/int16 [o w] (.write w (str o))) 
+(defmethod print-method go/int32 [o w] (.write w (str o))) 
+(defmethod print-method go/int64 [o w] (.write w (str o))) 
 (defmethod print-method go/byte [o w] (.write w (str o))) 
-(defmethod print-method rune [o w] (.write w (str o))) 
-(defmethod print-method glojure.lang.Ratio [o w] (.write w (str o))) 
-(defmethod print-method float64 [o, ^Writer w]
+(defmethod print-method go/rune [o w] (.write w (str o))) 
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Ratio [o w] (.write w (str o))) 
+(defmethod print-method go/float64 [o, ^Writer w]
   (cond
     (= (math.Inf 1) o) (glojure.lang.WriteWriter w "##Inf")
     (= (math.Inf -1) o) (glojure.lang.WriteWriter w "##-Inf")
-    (math.IsNaN ^float64 o) (glojure.lang.WriteWriter w "##NaN")
+    (math.IsNaN ^go/float64 o) (glojure.lang.WriteWriter w "##NaN")
     :else (glojure.lang.WriteWriter w (str o))))
 
-(defmethod print-method float32 [o, ^Writer w]
+(defmethod print-method go/float32 [o, ^Writer w]
   (cond
-    (= (float32 (math.Inf 1)) o) (glojure.lang.WriteWriter w "##Inf")
-    (= (float32 (math.Inf -1)) o) (glojure.lang.WriteWriter w "##-Inf")
-    (math.IsNaN ^float32 o) (glojure.lang.WriteWriter w "##NaN")
+    (= (go/float32 (math.Inf 1)) o) (glojure.lang.WriteWriter w "##Inf")
+    (= (go/float32 (math.Inf -1)) o) (glojure.lang.WriteWriter w "##-Inf")
+    (math.IsNaN ^go/float32 o) (glojure.lang.WriteWriter w "##NaN")
     :else (glojure.lang.WriteWriter w (str o))))
 
 (defmethod print-method go/int [o w] (.write w (str o))) 
-(defmethod print-method uint [o w] (.write w (str o))) 
-(defmethod print-method uint8 [o w] (.write w (str o))) 
-(defmethod print-method uint16 [o w] (.write w (str o))) 
-(defmethod print-method uint32 [o w] (.write w (str o))) 
-(defmethod print-method uint64 [o w] (.write w (str o))) 
-(defmethod print-method int8 [o w] (.write w (str o))) 
-(defmethod print-method int16 [o w] (.write w (str o))) 
-(defmethod print-method int32 [o w] (.write w (str o))) 
-(defmethod print-method int64 [o w] (.write w (str o))) 
+(defmethod print-method go/uint [o w] (.write w (str o))) 
+(defmethod print-method go/uint8 [o w] (.write w (str o))) 
+(defmethod print-method go/uint16 [o w] (.write w (str o))) 
+(defmethod print-method go/uint32 [o w] (.write w (str o))) 
+(defmethod print-method go/uint64 [o w] (.write w (str o))) 
+(defmethod print-method go/int8 [o w] (.write w (str o))) 
+(defmethod print-method go/int16 [o w] (.write w (str o))) 
+(defmethod print-method go/int32 [o w] (.write w (str o))) 
+(defmethod print-method go/int64 [o w] (.write w (str o))) 
 (defmethod print-method go/byte [o w] (.write w (str o))) 
-(defmethod print-method rune [o w] (.write w (str o))) 
-(defmethod print-method glojure.lang.Ratio [o w] (.write w (str o))) 
+(defmethod print-method go/rune [o w] (.write w (str o))) 
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Ratio [o w] (.write w (str o))) 
 (defmethod print-dup glojure.lang.Fn [o, ^Writer w]
   (print-ctor o (fn [o w]) w))
 
-(prefer-method print-dup glojure.lang.IPersistentCollection glojure.lang.Fn)
+(prefer-method print-dup github.com$glojurelang$glojure$pkg$lang.IPersistentCollection glojure.lang.Fn)
 (do)
 (do)
 
-(defmethod print-method bool [o, ^Writer w]
+(defmethod print-method go/bool [o, ^Writer w]
   (glojure.lang.WriteWriter w (str o)))
 
-(defmethod print-dup bool [o w] (print-method o w))
+(defmethod print-dup go/bool [o w] (print-method o w))
 
-(defmethod print-method glojure.lang.Symbol [o, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Symbol [o, ^Writer w]
   (print-simple o w))
 
-(defmethod print-dup glojure.lang.Symbol [o w] (print-method o w))
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Symbol [o w] (print-method o w))
 
 (defmethod print-method glojure.lang.Var [o, ^Writer w]
   (print-simple o w))
@@ -191,9 +191,9 @@
   (print-sequential "(" pr-on " " ")" o w))
 
 (defmethod print-dup glojure.lang.ISeq [o w] (print-method o w))
-(defmethod print-dup glojure.lang.IPersistentList [o w] (print-method o w))
-(prefer-method print-method glojure.lang.ISeq glojure.lang.IPersistentCollection)
-(prefer-method print-dup glojure.lang.ISeq glojure.lang.IPersistentCollection)
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.IPersistentList [o w] (print-method o w))
+(prefer-method print-method glojure.lang.ISeq github.com$glojurelang$glojure$pkg$lang.IPersistentCollection)
+(prefer-method print-dup glojure.lang.ISeq github.com$glojurelang$glojure$pkg$lang.IPersistentCollection)
 (do)
 (do)
 
@@ -201,7 +201,7 @@
 
 (do)
 
-(defmethod print-dup glojure.lang.IPersistentCollection [o, ^Writer w]
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.IPersistentCollection [o, ^Writer w]
   (print-meta o w)
   (glojure.lang.WriteWriter w "#=(")
   (glojure.lang.WriteWriter w (.Name ^reflect.Type (class o)))
@@ -211,7 +211,7 @@
 
 (do)
 
-(def ^{:tag string 
+(def ^{:tag go/string 
        :doc "Returns escape string for char or nil if none"
        :added "1.0"}
   char-escape-string
@@ -223,7 +223,7 @@
      \formfeed "\\f"
      \backspace "\\b"})
 
-(defmethod print-method string [^string s, ^Writer w]
+(defmethod print-method go/string [^go/string s, ^Writer w]
   (if (or *print-dup* *print-readably*)
     (do (glojure.lang.AppendWriter w \")
       (dotimes [n (count s)]
@@ -234,9 +234,9 @@
     (glojure.lang.WriteWriter w s))
   nil)
 
-(defmethod print-dup string [s w] (print-method s w))
+(defmethod print-dup go/string [s w] (print-method s w))
 
-(defmethod print-method glojure.lang.IPersistentVector [v, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.IPersistentVector [v, ^Writer w]
   (print-meta v w)
   (print-sequential "[" pr-on " " "]" v w))
 
@@ -274,7 +274,7 @@
               (recur new-ns entries (conj kvs [(strip-ns k) v])))))
         [ns kvs]))))
 
-(defmethod print-method glojure.lang.IPersistentMap [m, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.IPersistentMap [m, ^Writer w]
   (print-meta m w)
   (let [[ns lift-kvs] (lift-ns m)]
     (if ns
@@ -283,7 +283,7 @@
 
 (do)
 
-(defmethod print-dup glojure.lang.IPersistentMap [m, ^Writer w]
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.IPersistentMap [m, ^Writer w]
   (print-meta m w)
   (glojure.lang.WriteWriter w "#=(")
   (glojure.lang.WriteWriter w (.Name (class m)))
@@ -307,13 +307,13 @@
 
 ;; Records
 
-(defmethod print-method glojure.lang.IRecord [r, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.IRecord [r, ^Writer w]
   (print-meta r w)
   (glojure.lang.WriteWriter w "#")
   (glojure.lang.WriteWriter w (.Name (class r)))
   (print-map r pr-on w))
 
-(defmethod print-dup glojure.lang.IRecord [r, ^Writer w]
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.IRecord [r, ^Writer w]
   (print-meta r w)
   (glojure.lang.WriteWriter w "#")
   (glojure.lang.WriteWriter w (.Name (class r)))
@@ -322,17 +322,17 @@
     (print-sequential "[" pr-on ", " "]" (vals r) w)))
 
 (do)
-(prefer-method print-method glojure.lang.IRecord glojure.lang.IPersistentMap)
-(prefer-method print-dup glojure.lang.IRecord glojure.lang.IPersistentMap)
+(prefer-method print-method github.com$glojurelang$glojure$pkg$lang.IRecord github.com$glojurelang$glojure$pkg$lang.IPersistentMap)
+(prefer-method print-dup github.com$glojurelang$glojure$pkg$lang.IRecord github.com$glojurelang$glojure$pkg$lang.IPersistentMap)
 (do)
-(prefer-method print-dup glojure.lang.IRecord glojure.lang.IPersistentCollection)
+(prefer-method print-dup github.com$glojurelang$glojure$pkg$lang.IRecord github.com$glojurelang$glojure$pkg$lang.IPersistentCollection)
 (do)
 
-(defmethod print-method glojure.lang.IPersistentSet [s, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.IPersistentSet [s, ^Writer w]
   (print-meta s w)
   (print-sequential "#{" pr-on " " "}" (seq s) w))
 
-(def ^{:tag string
+(def ^{:tag go/string
        :doc "Returns name string for char or nil if none"
        :added "1.0"} 
  char-name-string
@@ -352,14 +352,14 @@
   nil)
 
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Char [c w] (print-method c w))
-(defmethod print-dup int64 [o w] (print-method o w))
-(defmethod print-dup float64 [o w] (print-method o w))
-(defmethod print-dup glojure.lang.Ratio [o w] (print-method o w))
+(defmethod print-dup go/int64 [o w] (print-method o w))
+(defmethod print-dup go/float64 [o w] (print-method o w))
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Ratio [o w] (print-method o w))
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.BigDecimal [o w] (print-method o w))
-(defmethod print-dup glojure.lang.BigInt [o w] (print-method o w))
-(defmethod print-dup glojure.lang.PersistentHashMap [o w] (print-method o w))
-(defmethod print-dup glojure.lang.PersistentHashSet [o w] (print-method o w))
-(defmethod print-dup glojure.lang.PersistentVector [o w] (print-method o w))
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.BigInt [o w] (print-method o w))
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.PersistentHashMap [o w] (print-method o w))
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.PersistentHashSet [o w] (print-method o w))
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.PersistentVector [o w] (print-method o w))
 (do)
 
 (do)
@@ -372,7 +372,7 @@
   (glojure.lang.WriteWriter w (str b))
   (glojure.lang.WriteWriter w "M"))
 
-(defmethod print-method glojure.lang.BigInt [b, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.BigInt [b, ^Writer w]
   (glojure.lang.WriteWriter w (str b))
   (glojure.lang.WriteWriter w "N"))
 
@@ -537,8 +537,8 @@
                  nil)
           (write [str-cbuf off len]
                  (when (pos? len)
-                   (if (instance? string str-cbuf)
-                     (glojure.lang.AppendWriter sb ^string str-cbuf ^int off ^int len)
+                   (if (instance? go/string str-cbuf)
+                     (glojure.lang.AppendWriter sb ^go/string str-cbuf ^int off ^int len)
                      (glojure.lang.AppendWriter sb ^chars str-cbuf ^int off ^int len)))))
         java.io.BufferedWriter.
         java.io.PrintWriter.)))

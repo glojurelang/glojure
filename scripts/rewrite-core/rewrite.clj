@@ -83,48 +83,57 @@
 (def replacements
   [
    (sexpr-replace 'clojure.core 'glojure.core)
-   (sexpr-replace '(. clojure.lang.PersistentList creator) 'glojure.lang.NewList)
+   (sexpr-replace '(. clojure.lang.PersistentList creator) 'github.com$glojurelang$glojure$pkg$lang.NewList)
    (sexpr-replace '(setMacro) '(SetMacro))
-   (sexpr-replace 'clojure.lang.Symbol 'glojure.lang.Symbol)
+   (sexpr-replace 'clojure.lang.Symbol 'github.com$glojurelang$glojure$pkg$lang.Symbol)
    (sexpr-replace 'clojure.lang.Fn 'glojure.lang.Fn)
-   (sexpr-replace 'clojure.lang.IPersistentCollection 'glojure.lang.IPersistentCollection)
-   (sexpr-replace 'clojure.lang.IPersistentList 'glojure.lang.IPersistentList)
-   (sexpr-replace 'clojure.lang.IRecord 'glojure.lang.IRecord)
+   (sexpr-replace 'clojure.lang.IPersistentCollection 'github.com$glojurelang$glojure$pkg$lang.IPersistentCollection)
+   (sexpr-replace 'clojure.lang.IPersistentList 'github.com$glojurelang$glojure$pkg$lang.IPersistentList)
+   (sexpr-replace 'clojure.lang.IRecord 'github.com$glojurelang$glojure$pkg$lang.IRecord)
    (sexpr-replace 'java.lang.Character 'github.com$glojurelang$glojure$pkg$lang.Char)
-   (sexpr-replace 'java.lang.Long 'int64)
-   (sexpr-replace 'Long 'int64)
-   (sexpr-replace 'java.lang.Double 'float64)
-   (sexpr-replace 'clojure.lang.Ratio 'glojure.lang.Ratio)
+   (sexpr-replace 'java.lang.Long 'go/int64)
+   (sexpr-replace 'Long 'go/int64)
+   (sexpr-replace 'java.lang.Double 'go/float64)
+   (sexpr-replace 'clojure.lang.Ratio 'github.com$glojurelang$glojure$pkg$lang.Ratio)
 
    (sexpr-replace 'Double/POSITIVE_INFINITY '(math.Inf 1))
    (sexpr-replace 'Double/NEGATIVE_INFINITY '(math.Inf -1))
-   (sexpr-replace 'Float/POSITIVE_INFINITY '(float32 (math.Inf 1)))
-   (sexpr-replace 'Float/NEGATIVE_INFINITY '(float32 (math.Inf -1)))
+   (sexpr-replace 'Float/POSITIVE_INFINITY '(go/float32 (math.Inf 1)))
+   (sexpr-replace 'Float/NEGATIVE_INFINITY '(go/float32 (math.Inf -1)))
    (sexpr-replace '.isNaN 'math.IsNaN)
 
    (sexpr-replace '(clojure.lang.LongRange/create end)
-                  '(glojure.lang.NewRangeIterator 0 end 1))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewRangeIterator 0 end 1))
    (sexpr-replace '(clojure.lang.LongRange/create start end)
-                  '(glojure.lang.NewRangeIterator start end 1))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewRangeIterator start end 1))
    (sexpr-replace '(clojure.lang.LongRange/create start end step)
-                  '(glojure.lang.NewRangeIterator start end step))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewRangeIterator start end step))
 
    (sexpr-replace '(. clojure.lang.PersistentHashMap (create keyvals))
-                  '(glojure.lang.CreatePersistentHashMap keyvals))
+                  '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentHashMap keyvals))
+
+   (sexpr-replace 'clojure.lang.PersistentHashMap
+                  'github.com$glojurelang$glojure$pkg$lang.PersistentHashMap)
+   (sexpr-replace 'clojure.lang.PersistentHashSet
+                  'github.com$glojurelang$glojure$pkg$lang.PersistentHashSet)
+   (sexpr-replace 'clojure.lang.PersistentVector
+                  'github.com$glojurelang$glojure$pkg$lang.PersistentVector)
+   (sexpr-replace 'clojure.lang.LazySeq
+                  'github.com$glojurelang$glojure$pkg$lang.LazySeq)
 
    (sexpr-replace '(clojure.lang.PersistentTreeMap/create keyvals)
-                  '(glojure.lang.CreatePersistentTreeMap keyvals))
+                  '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentTreeMap keyvals))
 
    (sexpr-replace 'clojure.lang.Cycle/create 'github.com$glojurelang$glojure$pkg$lang.NewCycle)
 
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    ;; struct map
    (sexpr-replace '(. clojure.lang.PersistentStructMap (createSlotMap keys))
-                  '(glojure.lang.CreatePersistentStructMapSlotMap keys))
+                  '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentStructMapSlotMap keys))
    (sexpr-replace '(. clojure.lang.PersistentStructMap (create s inits))
-                  '(glojure.lang.CreatePersistentStructMap s inits))
+                  '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentStructMap s inits))
    (sexpr-replace '(. clojure.lang.PersistentStructMap (construct s vals))
-                  '(glojure.lang.ConstructPersistentStructMap s vals))
+                  '(github.com$glojurelang$glojure$pkg$lang.ConstructPersistentStructMap s vals))
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
    (sexpr-replace '(.. (name lib)
@@ -143,21 +152,21 @@
    (sexpr-replace "Evaluates x and tests if it is an instance of the class\n    c. Returns true or false"
                   "Evaluates x and tests if it is an instance of the type\n    t. Returns true or false")
    (sexpr-replace '(fn instance? [^Class c x] (. c (isInstance x)))
-                  '(fn instance? [t x] (glojure.lang.HasType t x)))
+                  '(fn instance? [t x] (github.com$glojurelang$glojure$pkg$lang.HasType t x)))
    ;;
    (sexpr-replace 'IllegalArgumentException. 'errors.New)
    ;; replace .withMeta
    [(fn select [zloc] (and (z/list? zloc) (= '.withMeta (first (z/sexpr zloc)))))
     (fn visit [zloc] (z/replace zloc
-                                `(let* [~'res (glojure.lang.WithMeta ~@(rest (z/sexpr zloc)))]
+                                `(let* [~'res (github.com$glojurelang$glojure$pkg$lang.WithMeta ~@(rest (z/sexpr zloc)))]
                                    (if (~'res 1)
                                      (throw (~'res 1))
                                      (~'res 0)))))]
 
-   (RT-replace 'cons #(cons 'glojure.lang.NewCons %))
-   (RT-replace 'first #(cons 'glojure.lang.First %))
-   (RT-replace 'next #(cons 'glojure.lang.Next %))
-   (RT-replace 'more #(cons 'glojure.lang.Rest %))
+   (RT-replace 'cons #(cons 'github.com$glojurelang$glojure$pkg$lang.NewCons %))
+   (RT-replace 'first #(cons 'github.com$glojurelang$glojure$pkg$lang.First %))
+   (RT-replace 'next #(cons 'github.com$glojurelang$glojure$pkg$lang.Next %))
+   (RT-replace 'more #(cons 'github.com$glojurelang$glojure$pkg$lang.Rest %))
 
    [(fn select [zloc] (try
                         (and (symbol? (z/sexpr zloc))
@@ -170,12 +179,12 @@
                                   (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
 
    (sexpr-replace '.meta '.Meta)
-   (sexpr-replace 'clojure.lang.IPersistentMap 'glojure.lang.IPersistentMap)
-   (sexpr-replace 'clojure.lang.IPersistentVector 'glojure.lang.IPersistentVector)
-   (sexpr-replace 'clojure.lang.IPersistentSet 'glojure.lang.IPersistentSet)
-   (sexpr-replace 'String 'string)
-   (sexpr-replace 'clojure.lang.IMeta 'glojure.lang.IMeta)
-   (sexpr-replace 'clojure.lang.IReduceInit 'glojure.lang.IReduceInit)
+   (sexpr-replace 'clojure.lang.IPersistentMap 'github.com$glojurelang$glojure$pkg$lang.IPersistentMap)
+   (sexpr-replace 'clojure.lang.IPersistentVector 'github.com$glojurelang$glojure$pkg$lang.IPersistentVector)
+   (sexpr-replace 'clojure.lang.IPersistentSet 'github.com$glojurelang$glojure$pkg$lang.IPersistentSet)
+   (sexpr-replace 'String 'go/string)
+   (sexpr-replace 'clojure.lang.IMeta 'github.com$glojurelang$glojure$pkg$lang.IMeta)
+   (sexpr-replace 'clojure.lang.IReduceInit 'github.com$glojurelang$glojure$pkg$lang.IReduceInit)
 
    (sexpr-replace 'clojure.lang.Reduced. 'github.com$glojurelang$glojure$pkg$lang.NewReduced)
    (sexpr-replace 'clojure.lang.RT/isReduced 'github.com$glojurelang$glojure$pkg$lang.IsReduced)
@@ -218,7 +227,7 @@
                            (= 'data-reader-urls (second (z/sexpr zloc)))))
     (fn visit [zloc] (z/replace zloc '(defn- data-reader-urls [] ())))]
 
-   (sexpr-replace '(new clojure.lang.Atom x) '(glojure.lang.NewAtom x))
+   (sexpr-replace '(new clojure.lang.Atom x) '(github.com$glojurelang$glojure$pkg$lang.NewAtom x))
    (omitp #(and (z/list? %)
                 (let [sexpr (z/sexpr %)]
                   (and (vector? (first sexpr))
@@ -231,7 +240,7 @@
 
    (sexpr-replace '(. clojure.lang.Agent shutdown) '(github.com$glojurelang$glojure$pkg$lang.ShutdownAgents))
 
-   (sexpr-replace 'clojure.lang.Util/hash 'glojure.lang.Hash)
+   (sexpr-replace 'clojure.lang.Util/hash 'github.com$glojurelang$glojure$pkg$lang.Hash)
 
    (sexpr-replace 'System/identityHashCode 'github.com$glojurelang$glojure$pkg$lang.IdentityHash)
 
@@ -300,7 +309,7 @@
    (sexpr-replace 'clojure.lang.LazilyPersistentVector/create 'glojure.lang.NewVectorFromCollection)
    (sexpr-replace '(. clojure.lang.RT (seq coll)) '(glojure.lang.Seq coll))
    (sexpr-replace '(list 'new 'clojure.lang.LazySeq (list* '^{:once true} fn* [] body))
-                  '(list 'glojure.lang.NewLazySeq (list* '^{:once true} fn* [] body)))
+                  '(list 'github.com$glojurelang$glojure$pkg$lang.NewLazySeq (list* '^{:once true} fn* [] body)))
    (sexpr-replace 'clojure.lang.RT/count 'glojure.lang.Count)
    (sexpr-replace 'clojure.lang.IChunkedSeq 'glojure.lang.IChunkedSeq)
 
@@ -418,7 +427,7 @@
                                 (let [sym (-> zloc z/sexpr str)]
                                   (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
    (sexpr-replace 'clojure.lang.Numbers 'glojure.lang.Numbers)
-   (sexpr-replace '(cast Number x) '(glojure.lang.AsNumber x))
+   (sexpr-replace '(cast Number x) '(github.com$glojurelang$glojure$pkg$lang.AsNumber x))
 
    (sexpr-replace '(. clojure.lang.Numbers (minus x))
                   '(* -1 x))
@@ -482,7 +491,7 @@
 
    (sexpr-replace 'clojure.lang.Named 'glojure.lang.Named)
 
-   (sexpr-replace 'clojure.lang.Namespace/find 'glojure.lang.FindNamespace)
+   (sexpr-replace 'clojure.lang.Namespace/find 'github.com$glojurelang$glojure$pkg$lang.FindNamespace)
 
    (sexpr-replace '(clojure.lang.Repeat/create x) '(glojure.lang.NewRepeat x))
    (sexpr-replace '(clojure.lang.Repeat/create n x) '(glojure.lang.NewRepeatN n x))
@@ -554,9 +563,9 @@
 
    ;;; core_print.clj
 
-   (sexpr-replace 'Double 'float64)
-   (sexpr-replace 'Float 'float32)
-   (sexpr-replace 'Boolean 'bool)
+   (sexpr-replace 'Double 'go/float64)
+   (sexpr-replace 'Float 'go/float32)
+   (sexpr-replace 'Boolean 'go/bool)
 
    (sexpr-replace 'Object 'github.com$glojurelang$glojure$pkg$lang.Object)
    (sexpr-replace '(.isArray c) false)
@@ -582,7 +591,7 @@
     '(do))
 
    (sexpr-replace 'java.util.regex.Pattern 'regexp.Regexp)
-   (sexpr-replace 'clojure.lang.BigInt 'glojure.lang.BigInt)
+   (sexpr-replace 'clojure.lang.BigInt 'github.com$glojurelang$glojure$pkg$lang.BigInt)
    (sexpr-replace 'java.math.BigDecimal 'github.com$glojurelang$glojure$pkg$lang.BigDecimal)
 
    (sexpr-replace '.write 'glojure.lang.WriteWriter)
@@ -624,7 +633,7 @@
                                   (contains? #{'print-method 'print-dup} (second sexpr))
                                   (= (nth sexpr 2) 'Number)))))
     (fn visit [zloc]
-      (loop [ints '[go/int uint uint8 uint16 uint32 uint64 int8 int16 int32 int64 go/byte rune glojure.lang.Ratio]
+      (loop [ints '[go/int go/uint go/uint8 go/uint16 go/uint32 go/uint64 go/int8 go/int16 go/int32 go/int64 go/byte go/rune github.com$glojurelang$glojure$pkg$lang.Ratio]
              zloc zloc]
         (if (empty? ints)
           (z/remove zloc)

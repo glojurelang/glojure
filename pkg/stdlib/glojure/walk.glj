@@ -34,7 +34,7 @@
    (instance? glojure.lang.IMapEntry form)
    (outer (glojure.lang.MapEntry/create (inner (key form)) (inner (val form))))
    (seq? form) (outer (doall (map inner form)))
-   (instance? glojure.lang.IRecord form)
+   (instance? github.com$glojurelang$glojure$pkg$lang.IRecord form)
      (outer (reduce (fn [r x] (conj r (inner x))) form form))
    (coll? form) (outer (into (empty form) (map inner form)))
    :else (outer form)))

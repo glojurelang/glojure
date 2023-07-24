@@ -97,76 +97,16 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	}
 
 	{
-		// go-sliceof returns a slice type with the given element type.
-		// TODO: reader shorthand for this (and pointers, maps, and channels)
-		define("go-sliceof", func(t reflect.Type) reflect.Type {
-			return reflect.SliceOf(t)
-		})
-		define("go-pointerto", func(t reflect.Type) reflect.Type {
-			return reflect.PtrTo(t)
-		})
 
 		////////////////////////////////////////////////////////////////////////////
 		// basic types
-
-		// numeric types
-		{
-			// integral types
-			define("uint", reflect.TypeOf(uint(0)))
-			define("uintptr", reflect.TypeOf(uintptr(0)))
-
-			define("int8", reflect.TypeOf(int8(0)))
-			define("int16", reflect.TypeOf(int16(0)))
-			define("int32", reflect.TypeOf(int32(0)))
-			define("int64", reflect.TypeOf(int64(0)))
-
-			define("uint8", reflect.TypeOf(uint8(0)))
-			define("uint16", reflect.TypeOf(uint16(0)))
-			define("uint32", reflect.TypeOf(uint32(0)))
-			define("uint64", reflect.TypeOf(uint64(0)))
-
-			// floating point types
-			define("float32", reflect.TypeOf(float32(0)))
-			define("float64", reflect.TypeOf(float64(0)))
-
-			// aliases
-			define("byte", reflect.TypeOf(byte(0)))
-			define("rune", reflect.TypeOf(rune(0)))
-		}
-		// numeric functions
-		{
-			define("glojure.lang/AsNumber", value.AsNumber)
-		}
-		// iteration functions
-		{
-			define("glojure.lang.iteration/NewIterator", value.NewIterator)
-			define("glojure.lang.NewRangeIterator", value.NewRangeIterator)
-
-			define("glojure.lang.iteration/NewConcatIterator", value.NewConcatIterator)
-
-			define("glojure.lang/Pop", value.Pop)
-			define("glojure.lang/Peek", value.Peek)
-		}
-		{
-			define("glojure.lang/FindNamespace", value.FindNamespace)
-		}
-
-		// string
-		{
-			define("string", reflect.TypeOf(""))
-		}
-
-		// boolean
-		{
-			define("bool", reflect.TypeOf(true))
-		}
-		{
-			define("glojure.lang.BigInt", reflect.TypeOf(&value.BigInt{}))
-			define("glojure.lang.PersistentHashMap", reflect.TypeOf(&value.PersistentHashMap{}))
-			define("glojure.lang.PersistentHashSet", reflect.TypeOf(&value.Set{})) // TODO: this is a hack
-			define("glojure.lang.PersistentVector", reflect.TypeOf(&value.Vector{}))
-			define("glojure.lang.LazySeq", reflect.TypeOf(&value.LazySeq{}))
-		}
+		// {
+		// 	define("glojure.lang.BigInt", reflect.TypeOf(&value.BigInt{}))
+		// 	define("glojure.lang.PersistentHashMap", reflect.TypeOf(&value.PersistentHashMap{}))
+		// 	define("glojure.lang.PersistentHashSet", reflect.TypeOf(&value.Set{})) // TODO: this is a hack
+		// 	define("glojure.lang.PersistentVector", reflect.TypeOf(&value.Vector{}))
+		// 	define("glojure.lang.LazySeq", reflect.TypeOf(&value.LazySeq{}))
+		// }
 
 		define("error", reflect.TypeOf((*error)(nil)).Elem())
 	}

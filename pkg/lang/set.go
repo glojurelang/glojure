@@ -11,6 +11,8 @@ type Set struct {
 	vals []interface{}
 }
 
+type PersistentHashSet = Set // hack until we have a proper persistent hash set
+
 func NewSet(vals ...interface{}) *Set {
 	// TODO: fixme. reverse to pass test
 	if len(vals) == 3 {
