@@ -161,10 +161,3 @@ func Print(x interface{}, w io.Writer) {
 		io.WriteString(w, ToString(x))
 	}
 }
-
-func BooleanCast(x interface{}) bool {
-	if b, ok := x.(bool); ok {
-		return b
-	}
-	return !IsNil(x)
-}

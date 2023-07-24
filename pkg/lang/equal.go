@@ -17,7 +17,7 @@ func Equal(a, b interface{}) bool {
 		return aVal.Pointer() == bVal.Pointer()
 	}
 
-	if a == b || IsNil(a) && IsNil(b) {
+	if a == b || aVal.Kind() == reflect.Ptr && aVal.IsNil() && bVal.Kind() == reflect.Ptr && bVal.IsNil() {
 		return true
 	}
 	if _, ok := AsNumber(a); ok {

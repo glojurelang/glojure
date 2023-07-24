@@ -2,10 +2,10 @@ package runtime
 
 import (
 	"fmt"
-	"reflect"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/compiler"
+	"github.com/glojurelang/glojure/pkg/lang"
 	value "github.com/glojurelang/glojure/pkg/lang"
 )
 
@@ -24,8 +24,8 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 	if strings.HasPrefix(sym.String(), ".") && len(sym.String()) > 1 {
 		fieldSym := value.NewSymbol(sym.String()[1:])
 		// rewrite the expression to a dot expression
-		newList := seqToList(value.NewCons(SymbolDot, value.NewCons(seq.Next().First(), value.NewCons(fieldSym, seq.Next().Next()))))
-		return env.Macroexpand1(newList)
+		dotExpr := value.NewCons(SymbolDot, value.NewCons(seq.Next().First(), value.NewCons(fieldSym, seq.Next().Next())))
+		return env.Macroexpand1(dotExpr)
 	}
 
 	macroVar := env.asMacro(sym)
@@ -37,21 +37,19 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 	if !ok {
 		return nil, env.errorf(form, "macro %s is not a function (%T)", sym, macroVar.Get())
 	}
-	res, err := env.applyMacro1(applyer, form.(value.ISeq))
+	res, err := env.applyMacro(applyer, form.(value.ISeq))
 	if err != nil {
 		return nil, env.errorf(form, "error applying macro: %w", err)
 	}
 	return res, nil
 }
 
-func (env *environment) applyMacro1(fn value.IFn, form value.ISeq) (interface{}, error) {
+func (env *environment) applyMacro(fn value.IFn, form value.ISeq) (interface{}, error) {
 	argList := form.Next()
-	// two hidden arguments, $form and $env.
+	// two hidden arguments, $form and $env (nil for now).
 	// $form is the form that was passed to the macro
 	// $env is the environment that the macro was called in
-	args := append([]interface{}{form, nil}, seqToSlice(argList)...)
-
-	return env.applyFunc(fn, args)
+	return fn.ApplyTo(value.NewCons(form, value.NewCons(nil, argList))), nil
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
@@ -59,36 +57,10 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 }
 
 func (env *environment) evalInternal(n interface{}) (interface{}, error) {
-	kw := value.NewKeyword
-
-	globalEnv := value.NewAtom(nil)
-	resetGlobalEnv := func() {
-		kwNS := kw("ns")
-		kwMappings := kw("mappings")
-		kwAliases := kw("aliases")
-		namespaces := value.Namespaces()
-		namespaceKVs := make([]interface{}, 0, 2*len(namespaces))
-		for _, ns := range namespaces {
-			aliases := make([]interface{}, 0, 2*value.Count(ns.Aliases()))
-			for seq := value.Seq(ns.Aliases()); seq != nil; seq = seq.Next() {
-				entry := seq.First().(value.IMapEntry)
-				aliases = append(aliases, entry.Key(), entry.Val().(*value.Namespace).Name())
-			}
-			namespaceKVs = append(namespaceKVs, ns.Name(), value.NewMap(
-				kwNS, ns.Name(),
-				kwMappings, ns.Mappings(),
-				kwAliases, value.NewMap(aliases...),
-			))
-		}
-		globalEnv.Reset(value.NewMap(kw("namespaces"), value.NewMap(namespaceKVs...)))
-	}
-	resetGlobalEnv()
-
 	analyzer := &compiler.Analyzer{
 		Macroexpand1: env.Macroexpand1,
 		CreateVar: func(sym *value.Symbol, e compiler.Env) (interface{}, error) {
 			vr := env.CurrentNamespace().Intern(sym)
-			resetGlobalEnv()
 			return vr, nil
 		},
 		IsVar: func(v interface{}) bool {
@@ -99,7 +71,7 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 			num := env.nextSymNum()
 			return value.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
 		},
-		GlobalEnv: globalEnv,
+		FindNamespace: lang.FindNamespace,
 	}
 	astNode, err := analyzer.Analyze(n, value.NewMap(
 		value.KWNS, env.CurrentNamespace().Name(),
@@ -116,20 +88,6 @@ func (env *environment) applyFunc(f interface{}, args []interface{}) (interface{
 		return nil, err
 	}
 	return res, nil
-}
-
-func (env *environment) applyMacro(fn value.IFn, form value.ISeq) (interface{}, error) {
-	argList := form.Next()
-	// two hidden arguments, $form and $env.
-	// $form is the form that was passed to the macro
-	// $env is the environment that the macro was called in
-	args := append([]interface{}{form, nil}, seqToSlice(argList)...)
-
-	exp, err := env.applyFunc(fn, args)
-	if err != nil {
-		return nil, err
-	}
-	return env.Eval(exp)
 }
 
 // Helpers
@@ -195,10 +153,6 @@ func (env *environment) asMacro(sym *value.Symbol) *value.Var {
 
 // Misc. helpers
 
-func seqToList(seq value.ISeq) value.IPersistentList {
-	return value.NewList(seqToSlice(seq)...)
-}
-
 func seqToSlice(seq value.ISeq) []interface{} {
 	if seq == nil {
 		return nil
@@ -208,12 +162,4 @@ func seqToSlice(seq value.ISeq) []interface{} {
 		items = append(items, seq.First())
 	}
 	return items
-}
-
-func isNilableKind(k reflect.Kind) bool {
-	switch k {
-	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
-		return true
-	}
-	return false
 }

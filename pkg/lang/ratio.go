@@ -79,3 +79,7 @@ func (r *Ratio) LTE(other *Ratio) bool {
 func (r *Ratio) GT(other *Ratio) bool {
 	return r.Cmp(other) > 0
 }
+
+func (r *Ratio) GTE(other *Ratio) bool {
+	return r.Cmp(other) >= 0
+}

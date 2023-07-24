@@ -1175,9 +1175,9 @@
 (defn unchecked-dec
   "Returns a number one less than x, a long.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x] `(. glojure.lang.Numbers (Unchecked_dec ~x)))
+  {:inline (fn [x] `(. glojure.lang.Numbers (UncheckedDec ~x)))
    :added "1.0"}
-  [x] (. glojure.lang.Numbers (Unchecked_dec x)))
+  [x] (. glojure.lang.Numbers (UncheckedDec x)))
 
 (defn unchecked-negate-int
   "Returns the negation of x, an int.
@@ -1203,9 +1203,9 @@
 (defn unchecked-add
   "Returns the sum of x and y, both long.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x y] `(. glojure.lang.Numbers (Unchecked_add ~x ~y)))
+  {:inline (fn [x y] `(. glojure.lang.Numbers (UncheckedAdd ~x ~y)))
    :added "1.0"}
-  [x y] (. glojure.lang.Numbers (Unchecked_add x y)))
+  [x y] (. glojure.lang.Numbers (UncheckedAdd x y)))
 
 (defn unchecked-subtract-int
   "Returns the difference of x and y, both int.
@@ -1238,9 +1238,9 @@
 (defn unchecked-divide-int
   "Returns the division of x by y, both int.
   Note - uses a primitive operator subject to truncation."
-  {:inline (fn [x y] `(. glojure.lang.Numbers (Unchecked_int_divide ~x ~y)))
+  {:inline (fn [x y] `(. glojure.lang.Numbers (UncheckedIntDivide ~x ~y)))
    :added "1.0"}
-  [x y] (. glojure.lang.Numbers (Unchecked_int_divide x y)))
+  [x y] (. glojure.lang.Numbers (UncheckedIntDivide x y)))
 
 (defn unchecked-remainder-int
   "Returns the remainder of division of x by y, both int.
@@ -2255,7 +2255,7 @@
   accepted"
   {:added "1.0"
    :static true}
-  [] (. glojure.lang.Agent shutdown))
+  [] (github.com$glojurelang$glojure$pkg$lang.ShutdownAgents))
 
 (defn ref
   "Creates and returns a Ref with an initial value of x and zero or
@@ -3487,7 +3487,7 @@
   "Coerce to byte"
   {:inline (fn  [x] `(. glojure.lang.RT (~(if *unchecked-math* 'uncheckedByteCast 'byteCast) ~x)))
    :added "1.0"}
-  [x] (glojure.lang.RT/byteCast x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.ByteCast x))
 
 (defn char
   "Coerce to char"
@@ -3690,7 +3690,7 @@
   {:added "1.0"
    :static true}
   []
-    (. *out* (flush))
+    (. *out* (Sync))
     nil)
 
 (defn prn
@@ -3896,7 +3896,7 @@
    :inline-arities #{2}
    :added "1.0"}
   ([array idx]
-   (glojure.lang.Reflector/prepRet (.getComponentType (class array)) (. Array (get array idx))))
+   (github.com$glojurelang$glojure$pkg$lang.Get array idx))
   ([array idx & idxs]
    (apply aget (aget array idx) idxs)))
 
@@ -3907,7 +3907,7 @@
    :inline-arities #{3}
    :added "1.0"}
   ([array idx val]
-   (. Array (set array idx val))
+   (github.com$glojurelang$glojure$pkg$lang.SliceSet array idx val)
    val)
   ([array idx idx2 & idxv]
    (apply aset (aget array idx) idx2 idxv)))
@@ -5294,11 +5294,11 @@
 
 (defn byte-array
   "Creates an array of bytes"
-  {:inline (fn [& args] `(. glojure.lang.Numbers Byte_array ~@args))
+  {:inline (fn [& args] `(. glojure.lang.Numbers ByteArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.1"}
-  ([size-or-seq] (. glojure.lang.Numbers Byte_array size-or-seq))
-  ([size init-val-or-seq] (. glojure.lang.Numbers Byte_array size init-val-or-seq)))
+  ([size-or-seq] (. glojure.lang.Numbers ByteArray size-or-seq))
+  ([size init-val-or-seq] (. glojure.lang.Numbers ByteArrayInit size init-val-or-seq)))
 
 (defn char-array
   "Creates an array of chars"
@@ -5318,11 +5318,11 @@
 
 (defn double-array
   "Creates an array of doubles"
-  {:inline (fn [& args] `(. glojure.lang.Numbers Double_array ~@args))
+  {:inline (fn [& args] `(. glojure.lang.Numbers DoubleArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.0"}
-  ([size-or-seq] (. glojure.lang.Numbers Double_array size-or-seq))
-  ([size init-val-or-seq] (. glojure.lang.Numbers Double_array size init-val-or-seq)))
+  ([size-or-seq] (. glojure.lang.Numbers DoubleArray size-or-seq))
+  ([size init-val-or-seq] (. glojure.lang.Numbers DoubleArrayInit size init-val-or-seq)))
 
 (defn object-array
   "Creates an array of objects"

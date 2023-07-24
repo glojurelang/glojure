@@ -85,3 +85,7 @@ func (n *BigDecimal) LTE(other *BigDecimal) bool {
 func (n *BigDecimal) GT(other *BigDecimal) bool {
 	return n.Cmp(other) > 0
 }
+
+func (n *BigDecimal) GTE(other *BigDecimal) bool {
+	return n.Cmp(other) >= 0
+}

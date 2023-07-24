@@ -16,6 +16,9 @@ type (
 		Add(x, y interface{}) interface{}
 		// TODO: implement the precision version of Add, etc.
 		AddP(x, y interface{}) interface{}
+		UncheckedAdd(x, y interface{}) interface{}
+
+		UncheckedDec(x interface{}) interface{}
 
 		Sub(x, y interface{}) interface{}
 		SubP(x, y interface{}) interface{}
@@ -28,6 +31,7 @@ type (
 		LT(x, y interface{}) bool
 		GT(x, y interface{}) bool
 		LTE(x, y interface{}) bool
+		GTE(x, y interface{}) bool
 
 		Max(x, y interface{}) interface{}
 		Min(x, y interface{}) interface{}
@@ -118,6 +122,12 @@ func (o int64Ops) Add(x, y interface{}) interface{} {
 func (o int64Ops) AddP(x, y interface{}) interface{} {
 	return AsInt64(x) + AsInt64(y)
 }
+func (o int64Ops) UncheckedAdd(x, y interface{}) interface{} {
+	return AsInt64(x) + AsInt64(y)
+}
+func (o int64Ops) UncheckedDec(x interface{}) interface{} {
+	return AsInt64(x) - 1
+}
 func (o int64Ops) Sub(x, y interface{}) interface{} {
 	return AsInt64(x) - AsInt64(y)
 }
@@ -141,6 +151,9 @@ func (o int64Ops) LTE(x, y interface{}) bool {
 }
 func (o int64Ops) GT(x, y interface{}) bool {
 	return AsInt64(x) > AsInt64(y)
+}
+func (o int64Ops) GTE(x, y interface{}) bool {
+	return AsInt64(x) >= AsInt64(y)
 }
 func (o int64Ops) Max(x, y interface{}) interface{} {
 	if AsInt64(x) > AsInt64(y) {
@@ -177,6 +190,12 @@ func (o bigIntOps) Add(x, y interface{}) interface{} {
 func (o bigIntOps) AddP(x, y interface{}) interface{} {
 	return AsBigInt(x).AddP(AsBigInt(y))
 }
+func (o bigIntOps) UncheckedAdd(x, y interface{}) interface{} {
+	return AsBigInt(x).Add(AsBigInt(y))
+}
+func (o bigIntOps) UncheckedDec(x interface{}) interface{} {
+	return AsBigInt(x).Sub(AsBigInt(1))
+}
 func (o bigIntOps) Sub(x, y interface{}) interface{} {
 	return AsBigInt(x).Sub(AsBigInt(y))
 }
@@ -200,6 +219,9 @@ func (o bigIntOps) LTE(x, y interface{}) bool {
 }
 func (o bigIntOps) GT(x, y interface{}) bool {
 	return AsBigInt(x).GT(AsBigInt(y))
+}
+func (o bigIntOps) GTE(x, y interface{}) bool {
+	return AsBigInt(x).GTE(AsBigInt(y))
 }
 func (o bigIntOps) Max(x, y interface{}) interface{} {
 	xx := AsBigInt(x)
@@ -240,6 +262,12 @@ func (o ratioOps) Add(x, y interface{}) interface{} {
 func (o ratioOps) AddP(x, y interface{}) interface{} {
 	return AsRatio(x).AddP(AsRatio(y))
 }
+func (o ratioOps) UncheckedAdd(x, y interface{}) interface{} {
+	return AsRatio(x).Add(AsRatio(y))
+}
+func (o ratioOps) UncheckedDec(x interface{}) interface{} {
+	return AsRatio(x).Sub(AsRatio(1))
+}
 func (o ratioOps) Sub(x, y interface{}) interface{} {
 	return AsRatio(x).Sub(AsRatio(y))
 }
@@ -274,6 +302,9 @@ func (o ratioOps) LTE(x, y interface{}) bool {
 }
 func (o ratioOps) GT(x, y interface{}) bool {
 	return AsRatio(x).GT(AsRatio(y))
+}
+func (o ratioOps) GTE(x, y interface{}) bool {
+	return AsRatio(x).GTE(AsRatio(y))
 }
 func (o ratioOps) Max(x, y interface{}) interface{} {
 	xx := AsRatio(x)
@@ -315,6 +346,12 @@ func (o bigDecimalOps) Add(x, y interface{}) interface{} {
 func (o bigDecimalOps) AddP(x, y interface{}) interface{} {
 	return AsBigDecimal(x).AddP(AsBigDecimal(y))
 }
+func (o bigDecimalOps) UncheckedAdd(x, y interface{}) interface{} {
+	return AsBigDecimal(x).Add(AsBigDecimal(y))
+}
+func (o bigDecimalOps) UncheckedDec(x interface{}) interface{} {
+	return AsBigDecimal(x).Sub(AsBigDecimal(1))
+}
 func (o bigDecimalOps) Sub(x, y interface{}) interface{} {
 	return AsBigDecimal(x).Sub(AsBigDecimal(y))
 }
@@ -338,6 +375,9 @@ func (o bigDecimalOps) LTE(x, y interface{}) bool {
 }
 func (o bigDecimalOps) GT(x, y interface{}) bool {
 	return AsBigDecimal(x).GT(AsBigDecimal(y))
+}
+func (o bigDecimalOps) GTE(x, y interface{}) bool {
+	return AsBigDecimal(x).GTE(AsBigDecimal(y))
 }
 func (o bigDecimalOps) Max(x, y interface{}) interface{} {
 	xx := AsBigDecimal(x)
@@ -379,6 +419,12 @@ func (o float64Ops) Add(x, y interface{}) interface{} {
 func (o float64Ops) AddP(x, y interface{}) interface{} {
 	return AsFloat64(x) + AsFloat64(y)
 }
+func (o float64Ops) UncheckedAdd(x, y interface{}) interface{} {
+	return AsFloat64(x) + AsFloat64(y)
+}
+func (o float64Ops) UncheckedDec(x interface{}) interface{} {
+	return AsFloat64(x) - 1
+}
 func (o float64Ops) Sub(x, y interface{}) interface{} {
 	return AsFloat64(x) - AsFloat64(y)
 }
@@ -402,6 +448,9 @@ func (o float64Ops) LTE(x, y interface{}) bool {
 }
 func (o float64Ops) GT(x, y interface{}) bool {
 	return AsFloat64(x) > AsFloat64(y)
+}
+func (o float64Ops) GTE(x, y interface{}) bool {
+	return AsFloat64(x) >= AsFloat64(y)
 }
 func (o float64Ops) Max(x, y interface{}) interface{} {
 	if AsFloat64(x) > AsFloat64(y) {
@@ -629,39 +678,5 @@ func AsBigDecimal(x interface{}) *BigDecimal {
 		return x
 	default:
 		panic("cannot convert to BigDecimal")
-	}
-}
-
-func AsFloat64(x interface{}) float64 {
-	switch x := x.(type) {
-	case int:
-		return float64(x)
-	case uint:
-		return float64(x)
-	case int8:
-		return float64(x)
-	case int16:
-		return float64(x)
-	case int32:
-		return float64(x)
-	case int64:
-		return float64(x)
-	case uint8:
-		return float64(x)
-	case uint16:
-		return float64(x)
-	case uint32:
-		return float64(x)
-	case uint64:
-		return float64(x)
-	case float32:
-		return float64(x)
-	case float64:
-		return x
-	case *Ratio:
-		f, _ := x.val.Float64()
-		return f
-	default:
-		panic("cannot convert to float64")
 	}
 }
