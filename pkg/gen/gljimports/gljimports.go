@@ -22,6 +22,8 @@ import (
 	sort "sort"
 	strconv "strconv"
 	strings "strings"
+	sync "sync"
+	sync_atomic "sync/atomic"
 	time "time"
 	unicode "unicode"
 	github_com_glojurelang_glojure_pkg_runtime "github.com/glojurelang/glojure/pkg/runtime"
@@ -969,6 +971,57 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("strings.TrimRightFunc", strings.TrimRightFunc)
 	_register("strings.TrimSpace", strings.TrimSpace)
 	_register("strings.TrimSuffix", strings.TrimSuffix)
+
+	// package sync
+	////////////////////////////////////////
+	_register("sync.Cond", reflect.TypeOf((*sync.Cond)(nil)).Elem())
+	_register("sync.Locker", reflect.TypeOf((*sync.Locker)(nil)).Elem())
+	_register("sync.Map", reflect.TypeOf((*sync.Map)(nil)).Elem())
+	_register("sync.Mutex", reflect.TypeOf((*sync.Mutex)(nil)).Elem())
+	_register("sync.NewCond", sync.NewCond)
+	_register("sync.Once", reflect.TypeOf((*sync.Once)(nil)).Elem())
+	_register("sync.Pool", reflect.TypeOf((*sync.Pool)(nil)).Elem())
+	_register("sync.RWMutex", reflect.TypeOf((*sync.RWMutex)(nil)).Elem())
+	_register("sync.WaitGroup", reflect.TypeOf((*sync.WaitGroup)(nil)).Elem())
+
+	// package sync/atomic
+	////////////////////////////////////////
+	_register("sync/atomic.AddInt32", sync_atomic.AddInt32)
+	_register("sync/atomic.AddInt64", sync_atomic.AddInt64)
+	_register("sync/atomic.AddUint32", sync_atomic.AddUint32)
+	_register("sync/atomic.AddUint64", sync_atomic.AddUint64)
+	_register("sync/atomic.AddUintptr", sync_atomic.AddUintptr)
+	_register("sync/atomic.Bool", reflect.TypeOf((*sync_atomic.Bool)(nil)).Elem())
+	_register("sync/atomic.CompareAndSwapInt32", sync_atomic.CompareAndSwapInt32)
+	_register("sync/atomic.CompareAndSwapInt64", sync_atomic.CompareAndSwapInt64)
+	_register("sync/atomic.CompareAndSwapPointer", sync_atomic.CompareAndSwapPointer)
+	_register("sync/atomic.CompareAndSwapUint32", sync_atomic.CompareAndSwapUint32)
+	_register("sync/atomic.CompareAndSwapUint64", sync_atomic.CompareAndSwapUint64)
+	_register("sync/atomic.CompareAndSwapUintptr", sync_atomic.CompareAndSwapUintptr)
+	_register("sync/atomic.Int32", reflect.TypeOf((*sync_atomic.Int32)(nil)).Elem())
+	_register("sync/atomic.Int64", reflect.TypeOf((*sync_atomic.Int64)(nil)).Elem())
+	_register("sync/atomic.LoadInt32", sync_atomic.LoadInt32)
+	_register("sync/atomic.LoadInt64", sync_atomic.LoadInt64)
+	_register("sync/atomic.LoadPointer", sync_atomic.LoadPointer)
+	_register("sync/atomic.LoadUint32", sync_atomic.LoadUint32)
+	_register("sync/atomic.LoadUint64", sync_atomic.LoadUint64)
+	_register("sync/atomic.LoadUintptr", sync_atomic.LoadUintptr)
+	_register("sync/atomic.StoreInt32", sync_atomic.StoreInt32)
+	_register("sync/atomic.StoreInt64", sync_atomic.StoreInt64)
+	_register("sync/atomic.StorePointer", sync_atomic.StorePointer)
+	_register("sync/atomic.StoreUint32", sync_atomic.StoreUint32)
+	_register("sync/atomic.StoreUint64", sync_atomic.StoreUint64)
+	_register("sync/atomic.StoreUintptr", sync_atomic.StoreUintptr)
+	_register("sync/atomic.SwapInt32", sync_atomic.SwapInt32)
+	_register("sync/atomic.SwapInt64", sync_atomic.SwapInt64)
+	_register("sync/atomic.SwapPointer", sync_atomic.SwapPointer)
+	_register("sync/atomic.SwapUint32", sync_atomic.SwapUint32)
+	_register("sync/atomic.SwapUint64", sync_atomic.SwapUint64)
+	_register("sync/atomic.SwapUintptr", sync_atomic.SwapUintptr)
+	_register("sync/atomic.Uint32", reflect.TypeOf((*sync_atomic.Uint32)(nil)).Elem())
+	_register("sync/atomic.Uint64", reflect.TypeOf((*sync_atomic.Uint64)(nil)).Elem())
+	_register("sync/atomic.Uintptr", reflect.TypeOf((*sync_atomic.Uintptr)(nil)).Elem())
+	_register("sync/atomic.Value", reflect.TypeOf((*sync_atomic.Value)(nil)).Elem())
 
 	// package time
 	////////////////////////////////////////

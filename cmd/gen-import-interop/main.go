@@ -31,6 +31,8 @@ var (
 		"sort",
 		"strconv",
 		"strings",
+		"sync",
+		"sync/atomic",
 		"time",
 		"unicode",
 
@@ -107,6 +109,11 @@ func main() {
 					decl = fmt.Sprintf("_register(%q, %s)", glojureDeclName, qualifiedName)
 				}
 			case *types.TypeName:
+				// continue if this is a generic type
+				if strings.HasSuffix(obj.Type().String(), "]") {
+					continue
+				}
+
 				decl = fmt.Sprintf("_register(%q, reflect.TypeOf((*%s)(nil)).Elem())", glojureDeclName, qualifiedName)
 			default:
 				panic(fmt.Sprintf("unknown type %T", obj))

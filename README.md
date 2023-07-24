@@ -109,6 +109,8 @@ The following standard library packages are included by default:
 - `sort`
 - `strconv`
 - `strings`
+- `sync`
+- `sync/atomic`
 - `time`
 - `unicode`
 
