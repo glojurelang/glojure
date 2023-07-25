@@ -115,8 +115,8 @@
                   '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentHashMap keyvals))
 
 
-   (sexpr-replace 'clojure.lang.IPersistentMap
-                  'github.com$glojurelang$glojure$pkg$lang.IPersistentMap)
+   (sexpr-replace 'clojure.lang.IAtom
+                  'github.com$glojurelang$glojure$pkg$lang.IAtom)
    (sexpr-replace 'clojure.lang.IMapEntry
                   'github.com$glojurelang$glojure$pkg$lang.IMapEntry)
 
@@ -187,12 +187,19 @@
                                   (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
 
    (sexpr-replace '.meta '.Meta)
-   (sexpr-replace 'clojure.lang.IPersistentMap 'github.com$glojurelang$glojure$pkg$lang.IPersistentMap)
-   (sexpr-replace 'clojure.lang.IPersistentVector 'github.com$glojurelang$glojure$pkg$lang.IPersistentVector)
-   (sexpr-replace 'clojure.lang.IPersistentSet 'github.com$glojurelang$glojure$pkg$lang.IPersistentSet)
+   (sexpr-replace 'clojure.lang.IPersistentMap
+                  'github.com$glojurelang$glojure$pkg$lang.IPersistentMap)
+   (sexpr-replace 'clojure.lang.IPersistentVector
+                  'github.com$glojurelang$glojure$pkg$lang.IPersistentVector)
+   (sexpr-replace 'clojure.lang.IPersistentSet
+                  'github.com$glojurelang$glojure$pkg$lang.IPersistentSet)
    (sexpr-replace 'String 'go/string)
-   (sexpr-replace 'clojure.lang.IMeta 'github.com$glojurelang$glojure$pkg$lang.IMeta)
-   (sexpr-replace 'clojure.lang.IReduceInit 'github.com$glojurelang$glojure$pkg$lang.IReduceInit)
+   (sexpr-replace 'clojure.lang.IMeta
+                  'github.com$glojurelang$glojure$pkg$lang.IMeta)
+   (sexpr-replace 'clojure.lang.IReduceInit
+                  'github.com$glojurelang$glojure$pkg$lang.IReduceInit)
+   (sexpr-replace 'clojure.lang.IObj
+                  'github.com$glojurelang$glojure$pkg$lang.IObj)
 
    (sexpr-replace 'clojure.lang.Reduced. 'github.com$glojurelang$glojure$pkg$lang.NewReduced)
    (sexpr-replace 'clojure.lang.RT/isReduced 'github.com$glojurelang$glojure$pkg$lang.IsReduced)

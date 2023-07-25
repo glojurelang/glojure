@@ -109,7 +109,7 @@
 
 (defn- protocol?
   [maybe-p]
-  (if (instance? glojure.lang.IAtom maybe-p)
+  (if (instance? github.com$glojurelang$glojure$pkg$lang.IAtom maybe-p)
     (boolean (:on-interface @maybe-p))
     false))
 

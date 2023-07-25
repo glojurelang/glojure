@@ -83,7 +83,7 @@
   (glojure.lang.WriteWriter w (str o)))
 
 (defmethod print-method :default [o, ^Writer w]
-  (if (instance? glojure.lang.IObj o)
+  (if (instance? github.com$glojurelang$glojure$pkg$lang.IObj o)
     (print-method (vary-meta o #(dissoc % :type)) w)
     (print-simple o w)))
 

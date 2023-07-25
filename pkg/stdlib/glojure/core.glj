@@ -41,7 +41,7 @@
  ^{:macro true
    :added "1.0"}
  fn (fn* fn [&form &env & decl] 
-         (let* [res (github.com$glojurelang$glojure$pkg$lang.WithMeta ^{glojure.lang.IObj true} (cons (quote fn*) decl) (.Meta ^{github.com$glojurelang$glojure$pkg$lang.IMeta true} &form))] (if (res 1) (throw (res 1)) (res 0)))))
+         (let* [res (github.com$glojurelang$glojure$pkg$lang.WithMeta ^{github.com$glojurelang$glojure$pkg$lang.IObj true} (cons (quote fn*) decl) (.Meta ^{github.com$glojurelang$glojure$pkg$lang.IMeta true} &form))] (if (res 1) (throw (res 1)) (res 0)))))
 
 (def
  ^{:arglists '([coll])
@@ -208,12 +208,12 @@
           (.Meta x))))
 
 (def
- ^{:arglists '([^glojure.lang.IObj obj m])
+ ^{:arglists '([^github.com$glojurelang$glojure$pkg$lang.IObj obj m])
    :doc "Returns an object of the same type and value as obj, with
     map m as its metadata."
    :added "1.0"
    :static true}
- with-meta (fn ^:static with-meta [^glojure.lang.IObj x m]
+ with-meta (fn ^:static with-meta [^github.com$glojurelang$glojure$pkg$lang.IObj x m]
              (. x (WithMeta m))))
 
 (def ^{:private true :dynamic true}
@@ -370,7 +370,7 @@
    :static true}
   ([coll]
    (if (vector? coll)
-     (if (instance? glojure.lang.IObj coll)
+     (if (instance? github.com$glojurelang$glojure$pkg$lang.IObj coll)
        (with-meta coll nil)
        (github.com$glojurelang$glojure$pkg$lang.NewVectorFromCollection coll))
      (github.com$glojurelang$glojure$pkg$lang.NewVectorFromCollection coll))))
@@ -2363,14 +2363,14 @@
   set happened, else false"
   {:added "1.0"
    :static true}
-  [^glojure.lang.IAtom atom oldval newval] (.compareAndSet atom oldval newval))
+  [^github.com$glojurelang$glojure$pkg$lang.IAtom atom oldval newval] (.compareAndSet atom oldval newval))
 
 (defn reset!
   "Sets the value of atom to newval without regard for the
   current value. Returns newval."
   {:added "1.0"
    :static true}
-  [^glojure.lang.IAtom atom newval] (.reset atom newval))
+  [^github.com$glojurelang$glojure$pkg$lang.IAtom atom newval] (.reset atom newval))
 
 (defn reset-vals!
   "Sets the value of atom to newval. Returns [old new], the value of the
