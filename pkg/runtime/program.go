@@ -108,19 +108,19 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		// 	define("glojure.lang.LazySeq", reflect.TypeOf(&value.LazySeq{}))
 		// }
 
-		define("error", reflect.TypeOf((*error)(nil)).Elem())
+		// define("error", reflect.TypeOf((*error)(nil)).Elem())
 	}
 	{ // core functions
-		define("glojure.lang.NewList", value.NewList)
-		define("glojure.lang.CreatePersistentHashMap", value.CreatePersistentHashMap)
-		define("glojure.lang.CreatePersistentTreeMap", value.CreatePersistentTreeMap)
+		// define("glojure.lang.NewList", value.NewList)
+		// define("glojure.lang.CreatePersistentHashMap", value.CreatePersistentHashMap)
+		// define("glojure.lang.CreatePersistentTreeMap", value.CreatePersistentTreeMap)
 
-		define("glojure.lang.CreatePersistentStructMapSlotMap", value.CreatePersistentStructMapSlotMap)
-		define("glojure.lang.ConstructPersistentStructMap", value.ConstructPersistentStructMap)
+		// define("glojure.lang.CreatePersistentStructMapSlotMap", value.CreatePersistentStructMapSlotMap)
+		// define("glojure.lang.ConstructPersistentStructMap", value.ConstructPersistentStructMap)
 
-		define("glojure.lang.Symbol", reflect.TypeOf(value.NewSymbol("")))
-		define("glojure.lang.Ratio", reflect.TypeOf(value.NewRatio(1, 1)))
-		define("glojure.lang.Fn", reflect.TypeOf(&Fn{}))
+		// define("glojure.lang.Symbol", reflect.TypeOf(value.NewSymbol("")))
+		// define("glojure.lang.Ratio", reflect.TypeOf(value.NewRatio(1, 1)))
+		//define("glojure.lang.Fn", reflect.TypeOf(&Fn{}))
 		define("glojure.lang.HasType", func(t reflect.Type, v interface{}) bool {
 			if v == nil {
 				return false

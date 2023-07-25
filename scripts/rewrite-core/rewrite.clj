@@ -86,7 +86,7 @@
    (sexpr-replace '(. clojure.lang.PersistentList creator) 'github.com$glojurelang$glojure$pkg$lang.NewList)
    (sexpr-replace '(setMacro) '(SetMacro))
    (sexpr-replace 'clojure.lang.Symbol 'github.com$glojurelang$glojure$pkg$lang.Symbol)
-   (sexpr-replace 'clojure.lang.Fn 'glojure.lang.Fn)
+   (sexpr-replace 'clojure.lang.Fn 'github.com$glojurelang$glojure$pkg$runtime.Fn)
    (sexpr-replace 'clojure.lang.IPersistentCollection 'github.com$glojurelang$glojure$pkg$lang.IPersistentCollection)
    (sexpr-replace 'clojure.lang.IPersistentList 'github.com$glojurelang$glojure$pkg$lang.IPersistentList)
    (sexpr-replace 'clojure.lang.IRecord 'github.com$glojurelang$glojure$pkg$lang.IRecord)

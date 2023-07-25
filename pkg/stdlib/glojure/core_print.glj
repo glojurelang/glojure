@@ -163,10 +163,10 @@
 (defmethod print-method go/byte [o w] (.write w (str o))) 
 (defmethod print-method go/rune [o w] (.write w (str o))) 
 (defmethod print-method github.com$glojurelang$glojure$pkg$lang.Ratio [o w] (.write w (str o))) 
-(defmethod print-dup glojure.lang.Fn [o, ^Writer w]
+(defmethod print-dup github.com$glojurelang$glojure$pkg$runtime.Fn [o, ^Writer w]
   (print-ctor o (fn [o w]) w))
 
-(prefer-method print-dup github.com$glojurelang$glojure$pkg$lang.IPersistentCollection glojure.lang.Fn)
+(prefer-method print-dup github.com$glojurelang$glojure$pkg$lang.IPersistentCollection github.com$glojurelang$glojure$pkg$runtime.Fn)
 (do)
 (do)
 
