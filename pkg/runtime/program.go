@@ -123,13 +123,13 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			env.CurrentNamespace().Import(export, v)
 		})
 
-		define("glojure.lang.IReduceInit", reflect.TypeOf((*value.IReduceInit)(nil)).Elem())
-		define("glojure.lang.IReduce", reflect.TypeOf((*value.IReduce)(nil)).Elem())
-		define("glojure.lang.IPersistentMap", reflect.TypeOf((*value.IPersistentMap)(nil)).Elem())
-		define("glojure.lang.IPersistentSet", reflect.TypeOf((*value.IPersistentSet)(nil)).Elem())
-		define("glojure.lang.IPersistentList", reflect.TypeOf((*value.IPersistentList)(nil)).Elem())
-		define("glojure.lang.IPersistentVector", reflect.TypeOf((*value.IPersistentVector)(nil)).Elem())
-		define("glojure.lang.IPersistentCollection", reflect.TypeOf((*value.IPersistentCollection)(nil)).Elem())
+		// define("glojure.lang.IReduceInit", reflect.TypeOf((*value.IReduceInit)(nil)).Elem())
+		// define("glojure.lang.IReduce", reflect.TypeOf((*value.IReduce)(nil)).Elem())
+		// define("glojure.lang.IPersistentMap", reflect.TypeOf((*value.IPersistentMap)(nil)).Elem())
+		// define("glojure.lang.IPersistentSet", reflect.TypeOf((*value.IPersistentSet)(nil)).Elem())
+		// define("glojure.lang.IPersistentList", reflect.TypeOf((*value.IPersistentList)(nil)).Elem())
+		// define("glojure.lang.IPersistentVector", reflect.TypeOf((*value.IPersistentVector)(nil)).Elem())
+		// define("glojure.lang.IPersistentCollection", reflect.TypeOf((*value.IPersistentCollection)(nil)).Elem())
 		define("glojure.lang.IEditableCollection", reflect.TypeOf((*value.IEditableCollection)(nil)).Elem())
 		define("glojure.lang.IMeta", reflect.TypeOf((*value.IMeta)(nil)).Elem())
 		define("glojure.lang.IMapEntry", reflect.TypeOf((*value.IMapEntry)(nil)).Elem())
@@ -212,9 +212,9 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			}
 			return w
 		})
-		define("glojure.lang.CharAt", func(s string, idx int) value.Char {
-			return value.NewChar([]rune(s)[idx])
-		})
+		// define("glojure.lang.CharAt", func(s string, idx int) value.Char {
+		// 	return value.NewChar([]rune(s)[idx])
+		// })
 	}
 	{
 		// Add stdlib

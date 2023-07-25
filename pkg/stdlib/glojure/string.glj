@@ -208,12 +208,12 @@
     (loop [rindex len]
       (if (zero? rindex)
         ""
-        (if (Character/isWhitespace (glojure.lang.CharAt s (dec rindex)))
+        (if (Character/isWhitespace (github.com$glojurelang$glojure$pkg$lang.CharAt s (dec rindex)))
           (recur (dec rindex))
           ;; there is at least one non-whitespace char in the string,
           ;; so no need to check for lindex reaching len.
           (loop [lindex 0]
-            (if (Character/isWhitespace (glojure.lang.CharAt s lindex))
+            (if (Character/isWhitespace (github.com$glojurelang$glojure$pkg$lang.CharAt s lindex))
               (recur (inc lindex))
               (.. s (subSequence lindex rindex) toString))))))))
 
@@ -225,7 +225,7 @@
     (loop [index 0]
       (if (= len index)
         ""
-        (if (Character/isWhitespace (glojure.lang.CharAt s index))
+        (if (Character/isWhitespace (github.com$glojurelang$glojure$pkg$lang.CharAt s index))
           (recur (unchecked-inc index))
           (.. s (subSequence index len) toString))))))
 
@@ -236,7 +236,7 @@
   (loop [index (.length s)]
     (if (zero? index)
       ""
-      (if (Character/isWhitespace (glojure.lang.CharAt s (unchecked-dec index)))
+      (if (Character/isWhitespace (github.com$glojurelang$glojure$pkg$lang.CharAt s (unchecked-dec index)))
         (recur (unchecked-dec index))
         (.. s (subSequence 0 index) toString)))))
 
@@ -248,7 +248,7 @@
   (loop [index (.length s)]
     (if (zero? index)
       ""
-      (let [ch (glojure.lang.CharAt s (dec index))]
+      (let [ch (github.com$glojurelang$glojure$pkg$lang.CharAt s (dec index))]
         (if (or (= ch \newline) (= ch \return))
           (recur (dec index))
           (.. s (subSequence 0 index) toString))))))
@@ -261,7 +261,7 @@
     (loop [index (int 0)]
       (if (= (.length s) index)
         true
-        (if (Character/isWhitespace (glojure.lang.CharAt s index))
+        (if (Character/isWhitespace (github.com$glojurelang$glojure$pkg$lang.CharAt s index))
           (recur (inc index))
           false)))
     true))
@@ -278,7 +278,7 @@
          buffer (StringBuilder. (.length s))]
     (if (= (.length s) index)
       (github.com$glojurelang$glojure$pkg$lang.ToString buffer)
-      (let [ch (glojure.lang.CharAt s index)]
+      (let [ch (github.com$glojurelang$glojure$pkg$lang.CharAt s index)]
         (if-let [replacement (cmap ch)]
           (glojure.lang.AppendWriter buffer replacement)
           (glojure.lang.AppendWriter buffer ch))

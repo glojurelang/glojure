@@ -114,6 +114,10 @@
    (sexpr-replace '(. clojure.lang.PersistentHashMap (create keyvals))
                   '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentHashMap keyvals))
 
+
+   (sexpr-replace 'clojure.lang.IPersistentMap
+                  'github.com$glojurelang$glojure$pkg$lang.IPersistentMap)
+
    (sexpr-replace 'clojure.lang.PersistentHashMap
                   'github.com$glojurelang$glojure$pkg$lang.PersistentHashMap)
    (sexpr-replace 'clojure.lang.PersistentHashSet
@@ -377,8 +381,8 @@
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
    (sexpr-replace '(System/getProperty "line.separator") '"\\n")
-   (sexpr-replace 'clojure.lang.ISeq 'glojure.lang.ISeq)
-   (sexpr-replace 'clojure.lang.IEditableCollection 'glojure.lang.IEditableCollection)
+   (sexpr-replace 'clojure.lang.ISeq 'github.com$glojurelang$glojure$pkg$lang.ISeq)
+   (sexpr-replace 'clojure.lang.IEditableCollection 'github.com$glojurelang$glojure$pkg$lang.IEditableCollection)
    (sexpr-replace 'clojure.core/import* 'glojure.lang.Import)
 
    (omit-forms '#{(import '(java.lang.reflect Array))
@@ -478,10 +482,10 @@
 
    (sexpr-replace '.alterMeta '.AlterMeta)
 
-   (sexpr-replace 'clojure.lang.Ref 'glojure.lang.Ref)
-   (sexpr-replace 'clojure.lang.IDeref 'glojure.lang.IDeref)
+   (sexpr-replace 'clojure.lang.Ref 'github.com$glojurelang$glojure$pkg$lang.Ref)
+   (sexpr-replace 'clojure.lang.IDeref 'github.com$glojurelang$glojure$pkg$lang.IDeref)
 
-   (sexpr-replace '(new clojure.lang.Ref x) '(glojure.lang.NewRef x))
+   (sexpr-replace '(new clojure.lang.Ref x) '(github.com$glojurelang$glojure$pkg$lang.NewRef x))
    (sexpr-replace 'clojure.lang.LockingTransaction 'glojure.lang.LockingTransaction)
    (sexpr-replace 'runInTransaction 'RunInTransaction)
 
@@ -491,14 +495,14 @@
    (sexpr-replace '.deref '.Deref)
    (sexpr-replace '(. ref (commute fun args)) '(. ref (Commute fun args)))
 
-   (sexpr-replace 'clojure.lang.Named 'glojure.lang.Named)
+   (sexpr-replace 'clojure.lang.Named 'github.com$glojurelang$glojure$pkg$lang.Named)
 
    (sexpr-replace 'clojure.lang.Namespace/find 'github.com$glojurelang$glojure$pkg$lang.FindNamespace)
 
-   (sexpr-replace '(clojure.lang.Repeat/create x) '(glojure.lang.NewRepeat x))
-   (sexpr-replace '(clojure.lang.Repeat/create n x) '(glojure.lang.NewRepeatN n x))
+   (sexpr-replace '(clojure.lang.Repeat/create x) '(github.com$glojurelang$glojure$pkg$lang.NewRepeat x))
+   (sexpr-replace '(clojure.lang.Repeat/create n x) '(github.com$glojurelang$glojure$pkg$lang.NewRepeatN n x))
 
-   (sexpr-replace '.charAt 'glojure.lang.CharAt)
+   (sexpr-replace '.charAt 'github.com$glojurelang$glojure$pkg$lang.CharAt)
 
    ;;;; OMIT PARTS OF THE FILE ENTIRELY FOR NOW
    ;;; TODO: implement load for embedded files!

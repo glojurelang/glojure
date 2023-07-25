@@ -53,7 +53,7 @@
 
 (def
  ^{:arglists '([coll])
-   :tag glojure.lang.ISeq
+   :tag github.com$glojurelang$glojure$pkg$lang.ISeq
    :doc "Returns a seq of the items after the first. Calls seq on its
   argument.  If there are no more items, returns nil."
    :added "1.0"
@@ -62,7 +62,7 @@
 
 (def
  ^{:arglists '([coll])
-   :tag glojure.lang.ISeq
+   :tag github.com$glojurelang$glojure$pkg$lang.ISeq
    :doc "Returns a possibly empty seq of the items after the first. Calls seq on its
   argument."
    :added "1.0"
@@ -123,17 +123,17 @@
  nnext (fn ^:static nnext [x] (next (next x))))
 
 (def
- ^{:arglists '(^glojure.lang.ISeq [coll])
+ ^{:arglists '(^github.com$glojurelang$glojure$pkg$lang.ISeq [coll])
    :doc "Returns a seq on the collection. If the collection is
     empty, returns nil.  (seq nil) returns nil. seq also works on
     Strings, native Java arrays (of reference types) and any objects
     that implement Iterable. Note that seqs cache values, thus seq
     should not be used on any Iterable whose iterator repeatedly
     returns the same mutable object."
-   :tag glojure.lang.ISeq
+   :tag github.com$glojurelang$glojure$pkg$lang.ISeq
    :added "1.0"
    :static true}
- seq (fn ^:static seq ^glojure.lang.ISeq [coll] (github.com$glojurelang$glojure$pkg$lang.Seq coll)))
+ seq (fn ^:static seq ^github.com$glojurelang$glojure$pkg$lang.ISeq [coll] (github.com$glojurelang$glojure$pkg$lang.Seq coll)))
 
 (def
  ^{:arglists '([^reflect.Type c x])
@@ -147,7 +147,7 @@
    :doc "Return true if x implements ISeq"
    :added "1.0"
    :static true}
- seq? (fn ^:static seq? [x] (instance? glojure.lang.ISeq x)))
+ seq? (fn ^:static seq? [x] (instance? github.com$glojurelang$glojure$pkg$lang.ISeq x)))
 
 (def
  ^{:arglists '([x])
@@ -694,10 +694,10 @@
 (defn ^:static  ^glojure.lang.IChunk chunk-first ^glojure.lang.IChunk [^github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s]
   (.chunkedFirst s))
 
-(defn ^:static ^glojure.lang.ISeq chunk-rest ^glojure.lang.ISeq [^github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s]
+(defn ^:static ^github.com$glojurelang$glojure$pkg$lang.ISeq chunk-rest ^github.com$glojurelang$glojure$pkg$lang.ISeq [^github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s]
   (.chunkedMore s))
 
-(defn ^:static ^glojure.lang.ISeq chunk-next ^glojure.lang.ISeq [^github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s]
+(defn ^:static ^github.com$glojurelang$glojure$pkg$lang.ISeq chunk-next ^github.com$glojurelang$glojure$pkg$lang.ISeq [^github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s]
   (.chunkedNext s))
 
 (defn ^:static chunk-cons [chunk rest]
@@ -1588,14 +1588,14 @@
    :added "1.0"
    :static true}
   [x]
-  (if (string? x) x (. ^glojure.lang.Named x (Name))))
+  (if (string? x) x (. ^github.com$glojurelang$glojure$pkg$lang.Named x (Name))))
 
 (defn namespace
   "Returns the namespace String of a symbol or keyword, or nil if not present."
   {:tag go/string
    :added "1.0"
    :static true}
-  [^glojure.lang.Named x]
+  [^github.com$glojurelang$glojure$pkg$lang.Named x]
     (. x (Namespace)))
 
 (defn boolean
@@ -2283,9 +2283,9 @@
   {:added "1.0"
    :static true
    }
-  ([x] (glojure.lang.NewRef x))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.NewRef x))
   ([x & options] 
-   (let [r  ^glojure.lang.Ref (setup-reference (ref x) options)
+   (let [r  ^github.com$glojurelang$glojure$pkg$lang.Ref (setup-reference (ref x) options)
          opts (apply hash-map options)]
     (when (:max-history opts)
       (.setMaxHistory r (:max-history opts)))
@@ -2314,8 +2314,8 @@
   value is available. See also - realized?."
   {:added "1.0"
    :static true}
-  ([ref] (if (instance? glojure.lang.IDeref ref)
-           (.Deref ^glojure.lang.IDeref ref)
+  ([ref] (if (instance? github.com$glojurelang$glojure$pkg$lang.IDeref ref)
+           (.Deref ^github.com$glojurelang$glojure$pkg$lang.IDeref ref)
            (deref-future ref)))
   ([ref timeout-ms timeout-val]
      (if (instance? glojure.lang.IBlockingDeref ref)
@@ -2429,7 +2429,7 @@
   {:added "1.0"
    :static true}
 
-  [^glojure.lang.Ref ref fun & args]
+  [^github.com$glojurelang$glojure$pkg$lang.Ref ref fun & args]
     (. ref (Commute fun args)))
 
 (defn alter
@@ -2441,7 +2441,7 @@
   and returns the in-transaction-value of ref."
   {:added "1.0"
    :static true}
-  [^glojure.lang.Ref ref fun & args]
+  [^github.com$glojurelang$glojure$pkg$lang.Ref ref fun & args]
     (. ref (alter fun args)))
 
 (defn ref-set
@@ -2449,32 +2449,32 @@
   Returns val."
   {:added "1.0"
    :static true}
-  [^glojure.lang.Ref ref val]
+  [^github.com$glojurelang$glojure$pkg$lang.Ref ref val]
     (. ref (set val)))
 
 (defn ref-history-count
   "Returns the history count of a ref"
   {:added "1.1"
    :static true}
-  [^glojure.lang.Ref ref]
+  [^github.com$glojurelang$glojure$pkg$lang.Ref ref]
     (.getHistoryCount ref))
 
 (defn ref-min-history
   "Gets the min-history of a ref, or sets it and returns the ref"
   {:added "1.1"
    :static true}
-  ([^glojure.lang.Ref ref]
+  ([^github.com$glojurelang$glojure$pkg$lang.Ref ref]
     (.getMinHistory ref))
-  ([^glojure.lang.Ref ref n]
+  ([^github.com$glojurelang$glojure$pkg$lang.Ref ref n]
     (.setMinHistory ref n)))
 
 (defn ref-max-history
   "Gets the max-history of a ref, or sets it and returns the ref"
   {:added "1.1"
    :static true}
-  ([^glojure.lang.Ref ref]
+  ([^github.com$glojurelang$glojure$pkg$lang.Ref ref]
     (.getMaxHistory ref))
-  ([^glojure.lang.Ref ref n]
+  ([^github.com$glojurelang$glojure$pkg$lang.Ref ref n]
     (.setMaxHistory ref n)))
 
 (defn ensure
@@ -2483,7 +2483,7 @@
   ref. Allows for more concurrency than (ref-set ref @ref)"
   {:added "1.0"
    :static true}
-  [^glojure.lang.Ref ref]
+  [^github.com$glojurelang$glojure$pkg$lang.Ref ref]
     (. ref (touch))
     (. ref (deref)))
 
@@ -2994,8 +2994,8 @@
   "Returns a lazy (infinite!, or length n if supplied) sequence of xs."
   {:added "1.0"
    :static true}
-  ([x] (glojure.lang.NewRepeat x))
-  ([n x] (glojure.lang.NewRepeatN n x)))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.NewRepeat x))
+  ([n x] (github.com$glojurelang$glojure$pkg$lang.NewRepeatN n x)))
 
 (defn replicate
   "DEPRECATED: Use 'repeat' instead.
@@ -3325,7 +3325,7 @@
   "Returns a new, transient version of the collection, in constant time."
   {:added "1.1"
    :static true}
-  [^glojure.lang.IEditableCollection coll] 
+  [^github.com$glojurelang$glojure$pkg$lang.IEditableCollection coll] 
   (.AsTransient coll))
 
 (defn persistent! 
@@ -3400,7 +3400,7 @@
   {:added "1.0"
    :static true}
   [to from]
-  (if (instance? glojure.lang.IEditableCollection to)
+  (if (instance? github.com$glojurelang$glojure$pkg$lang.IEditableCollection to)
     (persistent! (reduce1 conj! (transient to) from))
     (reduce1 conj to from)))
 
@@ -4420,7 +4420,7 @@
                    pmap
                    (fn [bvec b v]
                      (let [gmap (gensym "map__")
-                           gmapseq (with-meta gmap {:tag 'glojure.lang.ISeq})
+                           gmapseq (with-meta gmap {:tag 'github.com$glojurelang$glojure$pkg$lang.ISeq})
                            defaults (:or b)]
                        (loop [ret (-> bvec (conj gmap) (conj v)
                                       (conj gmap) (conj `(if (seq? ~gmap)
@@ -4455,7 +4455,7 @@
                          (if (seq bes)
                            (let [bb (key (first bes))
                                  bk (val (first bes))
-                                 local (if (instance? glojure.lang.Named bb) (with-meta (symbol nil (name bb)) (meta bb)) bb)
+                                 local (if (instance? github.com$glojurelang$glojure$pkg$lang.Named bb) (with-meta (symbol nil (name bb)) (meta bb)) bb)
                                  bv (if (contains? defaults local)
                                       (list `get gmap bk (defaults local))
                                       (list `get gmap bk))]
@@ -5632,13 +5632,13 @@
   {:added "1.0"}
   ([tag parent]
    (assert (namespace parent))
-   (assert (or (class? tag) (and (instance? glojure.lang.Named tag) (namespace tag))))
+   (assert (or (class? tag) (and (instance? github.com$glojurelang$glojure$pkg$lang.Named tag) (namespace tag))))
 
    (alter-var-root #'global-hierarchy derive tag parent) nil)
   ([h tag parent]
    (assert (not= tag parent))
-   (assert (or (class? tag) (instance? glojure.lang.Named tag)))
-   (assert (instance? glojure.lang.Named parent))
+   (assert (or (class? tag) (instance? github.com$glojurelang$glojure$pkg$lang.Named tag)))
+   (assert (instance? github.com$glojurelang$glojure$pkg$lang.Named parent))
 
    (let [tp (:parents h)
          td (:descendants h)
@@ -6900,11 +6900,11 @@ fails, attempts to require sym's namespace and retries."
   ([] [])
   ([to] to)
   ([to from]
-     (if (instance? glojure.lang.IEditableCollection to)
+     (if (instance? github.com$glojurelang$glojure$pkg$lang.IEditableCollection to)
        (with-meta (persistent! (reduce conj! (transient to) from)) (meta to))
        (reduce conj to from)))
   ([to xform from]
-     (if (instance? glojure.lang.IEditableCollection to)
+     (if (instance? github.com$glojurelang$glojure$pkg$lang.IEditableCollection to)
        (let [tm (meta to)
              rf (fn
                   ([coll] (-> (persistent! coll) (with-meta tm)))
@@ -6984,7 +6984,7 @@ fails, attempts to require sym's namespace and retries."
   (let [f (binding-conveyor-fn f)
         fut (.submit glojure.lang.Agent/soloExecutor ^Callable f)]
     (reify 
-     glojure.lang.IDeref 
+     github.com$glojurelang$glojure$pkg$lang.IDeref 
      (deref [_] (deref-future fut))
      glojure.lang.IBlockingDeref
      (deref
@@ -7080,7 +7080,7 @@ fails, attempts to require sym's namespace and retries."
   (let [d (java.util.concurrent.CountDownLatch. 1)
         v (atom d)]
     (reify 
-     glojure.lang.IDeref
+     github.com$glojurelang$glojure$pkg$lang.IDeref
        (deref [_] (.await d) @v)
      glojure.lang.IBlockingDeref
        (deref
@@ -7919,7 +7919,7 @@ fails, attempts to require sym's namespace and retries."
   (with-meta
     (persistent!
      (reduce-kv (fn [acc k v] (assoc! acc k (f v)))
-                (if (instance? glojure.lang.IEditableCollection m)
+                (if (instance? github.com$glojurelang$glojure$pkg$lang.IEditableCollection m)
                   (transient m)
                   (transient {}))
                 m))

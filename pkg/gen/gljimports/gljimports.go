@@ -1437,6 +1437,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.Box", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Box)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.ByteCast", github_com_glojurelang_glojure_pkg_lang.ByteCast)
 	_register("github.com/glojurelang/glojure/pkg/lang.Char", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Char)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/lang.CharAt", github_com_glojurelang_glojure_pkg_lang.CharAt)
 	_register("github.com/glojurelang/glojure/pkg/lang.CharLiteralFromRune", github_com_glojurelang_glojure_pkg_lang.CharLiteralFromRune)
 	_register("github.com/glojurelang/glojure/pkg/lang.Comparer", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Comparer)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.ConcatStrings", github_com_glojurelang_glojure_pkg_lang.ConcatStrings)

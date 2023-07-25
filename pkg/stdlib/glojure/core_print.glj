@@ -186,14 +186,14 @@
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Var [^github.com$glojurelang$glojure$pkg$lang.Var o, ^Writer w]
   (glojure.lang.WriteWriter w (str "#=(var " (.name (.Namespace o)) "/" (.sym o) ")")))
 
-(defmethod print-method glojure.lang.ISeq [o, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.ISeq [o, ^Writer w]
   (print-meta o w)
   (print-sequential "(" pr-on " " ")" o w))
 
-(defmethod print-dup glojure.lang.ISeq [o w] (print-method o w))
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.ISeq [o w] (print-method o w))
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.IPersistentList [o w] (print-method o w))
-(prefer-method print-method glojure.lang.ISeq github.com$glojurelang$glojure$pkg$lang.IPersistentCollection)
-(prefer-method print-dup glojure.lang.ISeq github.com$glojurelang$glojure$pkg$lang.IPersistentCollection)
+(prefer-method print-method github.com$glojurelang$glojure$pkg$lang.ISeq github.com$glojurelang$glojure$pkg$lang.IPersistentCollection)
+(prefer-method print-dup github.com$glojurelang$glojure$pkg$lang.ISeq github.com$glojurelang$glojure$pkg$lang.IPersistentCollection)
 (do)
 (do)
 
@@ -227,7 +227,7 @@
   (if (or *print-dup* *print-readably*)
     (do (glojure.lang.AppendWriter w \")
       (dotimes [n (count s)]
-        (let [c (glojure.lang.CharAt s n)
+        (let [c (github.com$glojurelang$glojure$pkg$lang.CharAt s n)
               e (char-escape-string c)]
           (if e (glojure.lang.WriteWriter w e) (glojure.lang.AppendWriter w c))))
       (glojure.lang.AppendWriter w \"))
@@ -405,7 +405,7 @@
   (print-dup (.name n) w)
   (glojure.lang.WriteWriter w ")"))
 
-(defn- deref-as-map [^glojure.lang.IDeref o]
+(defn- deref-as-map [^github.com$glojurelang$glojure$pkg$lang.IDeref o]
   (let [pending (and (instance? glojure.lang.IPending o)
                      (not (.isRealized ^glojure.lang.IPending o)))
         [ex val]
@@ -428,7 +428,7 @@
 
      :val val}))
 
-(defmethod print-method glojure.lang.IDeref [o ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.IDeref [o ^Writer w]
   (print-tagged-object o (deref-as-map o) w))
 
 (do)
