@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"math/big"
 	"os"
 	"reflect"
 	"regexp"
@@ -123,25 +122,19 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			env.CurrentNamespace().Import(export, v)
 		})
 
-		// define("glojure.lang.IRecord", reflect.TypeOf((*value.IRecord)(nil)).Elem())
-		// define("glojure.lang.Sequential", reflect.TypeOf((*value.Sequential)(nil)).Elem())
-		// define("glojure.lang.IObj", reflect.TypeOf((*value.IObj)(nil)).Elem())
-		// define("glojure.lang.IAtom", reflect.TypeOf((*value.IAtom)(nil)).Elem())
-		// define("glojure.lang.Object", reflect.TypeOf((*value.Object)(nil)).Elem())
+		// define("glojure.lang.Volatile", reflect.TypeOf(&value.Volatile{}))
+		// define("glojure.lang.MultiFn", reflect.TypeOf(&value.MultiFn{}))
+		// define("glojure.lang.Var", reflect.TypeOf(&value.Var{}))
+		// define("glojure.lang.Atom", reflect.TypeOf(&value.Atom{}))
 
-		define("glojure.lang.Volatile", reflect.TypeOf(&value.Volatile{}))
-		define("glojure.lang.MultiFn", reflect.TypeOf(&value.MultiFn{}))
-		define("glojure.lang.Var", reflect.TypeOf(&value.Var{}))
-		define("glojure.lang.Atom", reflect.TypeOf(&value.Atom{}))
+		// define("glojure.lang.Namespace", reflect.TypeOf(&value.Namespace{}))
 
-		define("glojure.lang.Namespace", reflect.TypeOf(&value.Namespace{}))
+		// define("glojure.lang.LockingTransaction", value.LockingTransaction)
 
-		define("glojure.lang.LockingTransaction", value.LockingTransaction)
+		// define("glojure.lang.Hash", value.Hash)
 
-		define("glojure.lang.Hash", value.Hash)
-
-		define("big.Int", reflect.TypeOf(big.Int{}))
-		define("glojure.lang.BigDecimal", reflect.TypeOf(&value.BigDecimal{}))
+		// define("big.Int", reflect.TypeOf(big.Int{}))
+		// define("glojure.lang.BigDecimal", reflect.TypeOf(&value.BigDecimal{}))
 
 		// TODO: go versions of these java-isms
 		{
@@ -153,8 +146,8 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			define("java.io.PrintWriter", reflect.TypeOf(&bytes.Buffer{}))      // wrong
 		}
 
-		define("glojure.lang.AsInt64", value.AsInt64)
-		define("glojure.lang.AsFloat64", value.AsFloat64)
+		// define("glojure.lang.AsInt64", value.AsInt64)
+		// define("glojure.lang.AsFloat64", value.AsFloat64)
 		define("glojure.lang.AsNumber", func(v interface{}) interface{} {
 			x, ok := value.AsNumber(v)
 			if !ok {

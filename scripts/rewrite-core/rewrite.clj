@@ -114,7 +114,14 @@
    (sexpr-replace '(. clojure.lang.PersistentHashMap (create keyvals))
                   '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentHashMap keyvals))
 
+   ;; map a bunch of java types to go equivalent
+   ;; TODO: once everything passes, see if we can replace with a blanket
+   ;; replacement of the clojure.lang prefix.
 
+   (sexpr-replace 'clojure.lang.MultiFn
+                  'github.com$glojurelang$glojure$pkg$lang.MultiFn)
+   (sexpr-replace 'clojure.lang.Volatile
+                  'github.com$glojurelang$glojure$pkg$lang.Volatile)
    (sexpr-replace 'clojure.lang.IAtom
                   'github.com$glojurelang$glojure$pkg$lang.IAtom)
    (sexpr-replace 'clojure.lang.IMapEntry
@@ -274,7 +281,7 @@
                                     '.Reduce
                                     '.ReduceInit))))]
 
-   (sexpr-replace 'BigInteger 'big.Int)
+   (sexpr-replace 'BigInteger 'math$big.Int)
    (sexpr-replace 'BigDecimal 'github.com$glojurelang$glojure$pkg$lang.BigDecimal)
 
    (sexpr-replace '.equals '.Equal)
@@ -495,7 +502,7 @@
    (sexpr-replace 'clojure.lang.IDeref 'github.com$glojurelang$glojure$pkg$lang.IDeref)
 
    (sexpr-replace '(new clojure.lang.Ref x) '(github.com$glojurelang$glojure$pkg$lang.NewRef x))
-   (sexpr-replace 'clojure.lang.LockingTransaction 'glojure.lang.LockingTransaction)
+   (sexpr-replace 'clojure.lang.LockingTransaction 'github.com$glojurelang$glojure$pkg$lang.LockingTransaction)
    (sexpr-replace 'runInTransaction 'RunInTransaction)
 
    (sexpr-replace '(. e (getKey)) '(. e (GetKey)))

@@ -1774,7 +1774,7 @@
           hierarchy (get options :hierarchy #'global-hierarchy)]
       (check-valid-options options :default :hierarchy)
       `(let [v# (def ~mm-name)]
-         (when-not (and (.HasRoot v#) (instance? glojure.lang.MultiFn (deref v#)))
+         (when-not (and (.HasRoot v#) (instance? github.com$glojurelang$glojure$pkg$lang.MultiFn (deref v#)))
            (def ~mm-name
                 (glojure.lang.NewMultiFn ~(name mm-name) ~dispatch-fn ~default ~hierarchy)))))))
 
@@ -1782,20 +1782,20 @@
   "Creates and installs a new method of multimethod associated with dispatch-value. "
   {:added "1.0"}
   [multifn dispatch-val & fn-tail]
-  `(. ~(with-meta multifn {:tag 'glojure.lang.MultiFn}) AddMethod ~dispatch-val (fn ~@fn-tail)))
+  `(. ~(with-meta multifn {:tag 'github.com$glojurelang$glojure$pkg$lang.MultiFn}) AddMethod ~dispatch-val (fn ~@fn-tail)))
 
 (defn remove-all-methods
   "Removes all of the methods of multimethod."
   {:added "1.2"
    :static true} 
- [^glojure.lang.MultiFn multifn]
+ [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn]
  (.reset multifn))
 
 (defn remove-method
   "Removes the method of multimethod associated with dispatch-value."
   {:added "1.0"
    :static true}
- [^glojure.lang.MultiFn multifn dispatch-val]
+ [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn dispatch-val]
  (. multifn removeMethod dispatch-val))
 
 (defn prefer-method
@@ -1803,27 +1803,27 @@
    when there is a conflict"
   {:added "1.0"
    :static true}
-  [^glojure.lang.MultiFn multifn dispatch-val-x dispatch-val-y]
+  [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn dispatch-val-x dispatch-val-y]
   (. multifn PreferMethod dispatch-val-x dispatch-val-y))
 
 (defn methods
   "Given a multimethod, returns a map of dispatch values -> dispatch fns"
   {:added "1.0"
    :static true}
-  [^glojure.lang.MultiFn multifn] (.getMethodTable multifn))
+  [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn] (.getMethodTable multifn))
 
 (defn get-method
   "Given a multimethod and a dispatch value, returns the dispatch fn
   that would apply to that value, or nil if none apply and no default"
   {:added "1.0"
    :static true}
-  [^glojure.lang.MultiFn multifn dispatch-val] (.getMethod multifn dispatch-val))
+  [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn dispatch-val] (.getMethod multifn dispatch-val))
 
 (defn prefers
   "Given a multimethod, returns a map of preferred value -> set of other values"
   {:added "1.0"
    :static true}
-  [^glojure.lang.MultiFn multifn] (.getPreferTable multifn))
+  [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn] (.getPreferTable multifn))
 
 ;;;;;;;;; var stuff
 
@@ -2497,7 +2497,7 @@
   once, but any effects on Refs will be atomic."
   {:added "1.0"}
   [flags-ignored-for-now & body]
-  `(. glojure.lang.LockingTransaction
+  `(. github.com$glojurelang$glojure$pkg$lang.LockingTransaction
       (RunInTransaction (fn [] ~@body))))
 
 
@@ -2517,7 +2517,7 @@
 (defn volatile!
   "Creates and returns a Volatile with an initial value of val."
   {:added "1.7"
-   :tag glojure.lang.Volatile}
+   :tag github.com$glojurelang$glojure$pkg$lang.Volatile}
   [val]
   (glojure.lang.Volatile. val))
 
@@ -2525,7 +2525,7 @@
   "Sets the value of volatile to newval without regard for the
    current value. Returns newval."
   {:added "1.7"}
-  [^glojure.lang.Volatile vol newval]
+  [^github.com$glojurelang$glojure$pkg$lang.Volatile vol newval]
   (.reset vol newval))
 
 (defmacro vswap!
@@ -2534,14 +2534,14 @@
    was swapped in."
   {:added "1.7"}
   [vol f & args]
-  (let [v (with-meta vol {:tag 'glojure.lang.Volatile})]
+  (let [v (with-meta vol {:tag 'github.com$glojurelang$glojure$pkg$lang.Volatile})]
     `(.reset ~v (~f (.Deref ~v) ~@args))))
 
 (defn volatile?
   "Returns true if x is a volatile."
   {:added "1.7"}
   [x]
-  (instance? glojure.lang.Volatile x))
+  (instance? github.com$glojurelang$glojure$pkg$lang.Volatile x))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; fn stuff ;;;;;;;;;;;;;;;;
 
@@ -3563,7 +3563,7 @@
 
 (defn numerator
   "Returns the numerator part of a Ratio."
-  {:tag big.Int
+  {:tag math$big.Int
    :added "1.2"
    :static true}
   [r]
@@ -3571,7 +3571,7 @@
 
 (defn denominator
   "Returns the denominator part of a Ratio."
-  {:tag big.Int
+  {:tag math$big.Int
    :added "1.2"
    :static true}
   [r]
@@ -3605,7 +3605,7 @@
    :added "1.3"}
   [x] (cond
        (instance? github.com$glojurelang$glojure$pkg$lang.BigInt x) x
-       (instance? big.Int x) (glojure.lang.BigInt/fromBigInteger x)
+       (instance? math$big.Int x) (glojure.lang.BigInt/fromBigInteger x)
        (decimal? x) (bigint (.toBigInteger ^github.com$glojurelang$glojure$pkg$lang.BigDecimal x))
        (float? x)  (bigint (. github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x)))
        (ratio? x) (bigint (.bigIntegerValue ^github.com$glojurelang$glojure$pkg$lang.Ratio x))
@@ -3614,11 +3614,11 @@
 
 (defn biginteger
   "Coerce to BigInteger"
-  {:tag big.Int
+  {:tag math$big.Int
    :added "1.0"
    :static true}
   [x] (cond
-       (instance? big.Int x) x
+       (instance? math$big.Int x) x
        (instance? github.com$glojurelang$glojure$pkg$lang.BigInt x) (.toBigInteger ^github.com$glojurelang$glojure$pkg$lang.BigInt x)
        (decimal? x) (.toBigInteger ^github.com$glojurelang$glojure$pkg$lang.BigDecimal x)
        (float? x) (.toBigInteger (. github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x)))
@@ -3636,7 +3636,7 @@
        (float? x) (. github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x))
        (ratio? x) (/ (BigDecimal. (.numerator ^github.com$glojurelang$glojure$pkg$lang.Ratio x)) (.denominator ^github.com$glojurelang$glojure$pkg$lang.Ratio x))
        (instance? github.com$glojurelang$glojure$pkg$lang.BigInt x) (.toBigDecimal ^github.com$glojurelang$glojure$pkg$lang.BigInt x)
-       (instance? big.Int x) (BigDecimal. ^big.Int x)
+       (instance? math$big.Int x) (BigDecimal. ^math$big.Int x)
        (number? x) (BigDecimal/valueOf (long x))
        :else (BigDecimal. x)))
 
