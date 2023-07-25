@@ -81,11 +81,11 @@
  conj (fn ^:static conj
         ([] [])
         ([coll] coll)
-        ([coll x] (glojure.lang.Conj coll x))
+        ([coll x] (github.com$glojurelang$glojure$pkg$lang.Conj coll x))
         ([coll x & xs]
          (if xs
-           (recur (glojure.lang.Conj coll x) (first xs) (next xs))
-           (glojure.lang.Conj coll x)))))
+           (recur (github.com$glojurelang$glojure$pkg$lang.Conj coll x) (first xs) (next xs))
+           (github.com$glojurelang$glojure$pkg$lang.Conj coll x)))))
 
 (def
  ^{:doc "Same as (first (next x))"
@@ -133,7 +133,7 @@
    :tag glojure.lang.ISeq
    :added "1.0"
    :static true}
- seq (fn ^:static seq ^glojure.lang.ISeq [coll] (glojure.lang.Seq coll)))
+ seq (fn ^:static seq ^glojure.lang.ISeq [coll] (github.com$glojurelang$glojure$pkg$lang.Seq coll)))
 
 (def
  ^{:arglists '([^reflect.Type c x])
@@ -187,9 +187,9 @@
    :static true}
  assoc
  (fn ^:static assoc
-   ([map key val] (glojure.lang.Assoc map key val))
+   ([map key val] (github.com$glojurelang$glojure$pkg$lang.Assoc map key val))
    ([map key val & kvs]
-    (let [ret (glojure.lang.Assoc map key val)]
+    (let [ret (github.com$glojurelang$glojure$pkg$lang.Assoc map key val)]
       (if kvs
         (if (next kvs)
           (recur ret (first kvs) (second kvs) (nnext kvs))
@@ -228,8 +228,8 @@
          (fn [fdecl]
            (let [arglist (first fdecl)
                  ;elide implicit macro args
-                 arglist (if (glojure.lang.Equal '&form (first arglist)) 
-                           (glojure.lang.Subvec arglist 2 (glojure.lang.Count arglist))
+                 arglist (if (github.com$glojurelang$glojure$pkg$lang.Equal '&form (first arglist)) 
+                           (github.com$glojurelang$glojure$pkg$lang.Subvec arglist 2 (github.com$glojurelang$glojure$pkg$lang.Count arglist))
                            arglist)
                  body (next fdecl)]
              (if (map? (first body))
@@ -241,11 +241,11 @@
                         (let [m (meta argvec)
                               ^github.com$glojurelang$glojure$pkg$lang.Symbol tag (:tag m)]
                           (if (instance? github.com$glojurelang$glojure$pkg$lang.Symbol tag)
-                            (if (glojure.lang.Equal (strings.Index (.Name tag) ".") -1)
-                              (if (glojure.lang.Equal nil nil)
+                            (if (github.com$glojurelang$glojure$pkg$lang.Equal (strings.Index (.Name tag) ".") -1)
+                              (if (github.com$glojurelang$glojure$pkg$lang.Equal nil nil)
                                 (let [c nil]
                                   (if c
-                                    (with-meta argvec (assoc m :tag (glojure.lang.NewSymbol (.Name c))))
+                                    (with-meta argvec (assoc m :tag (github.com$glojurelang$glojure$pkg$lang.NewSymbol (.Name c))))
                                     argvec))
                                 argvec)
                               argvec)
@@ -319,10 +319,10 @@
                       ifn (first inline)
                       iname (second inline)]
                   ;; same as: (if (and (= 'fn ifn) (not (symbol? iname))) ...)
-                  (if (if (glojure.lang.Equal 'fn ifn)
+                  (if (if (github.com$glojurelang$glojure$pkg$lang.Equal 'fn ifn)
                         (if (instance? github.com$glojurelang$glojure$pkg$lang.Symbol iname) false true))
                     ;; inserts the same fn name to the inline fn if it does not have one
-                    (assoc m :inline (cons ifn (cons (glojure.lang.NewSymbol (glojure.lang.ConcatStrings (.Name ^github.com$glojurelang$glojure$pkg$lang.Symbol name) "__inliner"))
+                    (assoc m :inline (cons ifn (cons (github.com$glojurelang$glojure$pkg$lang.NewSymbol (github.com$glojurelang$glojure$pkg$lang.ConcatStrings (.Name ^github.com$glojurelang$glojure$pkg$lang.Symbol name) "__inliner"))
                                                      (next inline))))
                     m))
               m (conj (if (meta name) (meta name) {}) m)]
@@ -372,8 +372,8 @@
    (if (vector? coll)
      (if (instance? glojure.lang.IObj coll)
        (with-meta coll nil)
-       (glojure.lang.NewVectorFromCollection coll))
-     (glojure.lang.NewVectorFromCollection coll))))
+       (github.com$glojurelang$glojure$pkg$lang.NewVectorFromCollection coll))
+     (github.com$glojurelang$glojure$pkg$lang.NewVectorFromCollection coll))))
 
 (defn hash-map
   "keyval => key val
@@ -437,7 +437,7 @@
   {:tag go/bool
    :added "1.0"
    :static true
-   :inline (fn [x] (list 'glojure.lang.Identical x nil))}
+   :inline (fn [x] (list 'github.com$glojurelang$glojure$pkg$lang.Identical x nil))}
   [x] (github.com$glojurelang$glojure$pkg$lang.IsNil x))
 
 (def
@@ -506,14 +506,14 @@
   {:tag go/bool,
    :added "1.0"
    :static true}
-  [x] (glojure.lang.Identical x false))
+  [x] (github.com$glojurelang$glojure$pkg$lang.Identical x false))
 
 (defn true?
   "Returns true if x is the value true, false otherwise."
   {:tag go/bool,
    :added "1.0"
    :static true}
-  [x] (glojure.lang.Identical x true))
+  [x] (github.com$glojurelang$glojure$pkg$lang.Identical x true))
 
 (defn boolean?
   "Return true if x is a Boolean"
@@ -590,8 +590,8 @@
   ([name]
      (cond
       (symbol? name) name
-      (instance? go/string name) (glojure.lang.NewSymbol name)
-      (instance? glojure.lang.Var name) (.toSymbol ^glojure.lang.Var name)
+      (instance? go/string name) (github.com$glojurelang$glojure$pkg$lang.NewSymbol name)
+      (instance? github.com$glojurelang$glojure$pkg$lang.Var name) (.toSymbol ^github.com$glojurelang$glojure$pkg$lang.Var name)
       (instance? glojure.lang.Keyword name) (.sym ^glojure.lang.Keyword name)
       :else (throw (errors.New "no conversion to symbol"))))
   ([ns name] (glojure.lang.InternSymbol ns name)))
@@ -603,7 +603,7 @@
   {:added "1.0"
    :static true}
   ([] (gensym "G__"))
-  ([prefix-string] (glojure.lang.NewSymbol (str prefix-string (str (. glojure.lang.RT (NextID)))))))
+  ([prefix-string] (github.com$glojurelang$glojure$pkg$lang.NewSymbol (str prefix-string (str (. glojure.lang.RT (NextID)))))))
 
 
 (defn keyword
@@ -612,8 +612,8 @@
   {:tag glojure.lang.Keyword
    :added "1.0"
    :static true}
-  ([name] (cond (keyword? name) name (symbol? name) (glojure.lang.InternKeywordSymbol ^{:tag github.com$glojurelang$glojure$pkg$lang.Symbol} name) (string? name) (glojure.lang.InternKeywordString ^{:tag go/string} name)))
-  ([ns name] (glojure.lang.InternKeyword ns name)))
+  ([name] (cond (keyword? name) name (symbol? name) (github.com$glojurelang$glojure$pkg$lang.InternKeywordSymbol ^{:tag github.com$glojurelang$glojure$pkg$lang.Symbol} name) (string? name) (github.com$glojurelang$glojure$pkg$lang.InternKeywordString ^{:tag go/string} name)))
+  ([ns name] (github.com$glojurelang$glojure$pkg$lang.InternKeyword ns name)))
 
 (defn find-keyword
   "Returns a Keyword with the given namespace and name if one already
@@ -691,22 +691,22 @@
 (defn ^:static ^glojure.lang.IChunk chunk [^glojure.lang.ChunkBuffer b]
   (.chunk b))
 
-(defn ^:static  ^glojure.lang.IChunk chunk-first ^glojure.lang.IChunk [^glojure.lang.IChunkedSeq s]
+(defn ^:static  ^glojure.lang.IChunk chunk-first ^glojure.lang.IChunk [^github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s]
   (.chunkedFirst s))
 
-(defn ^:static ^glojure.lang.ISeq chunk-rest ^glojure.lang.ISeq [^glojure.lang.IChunkedSeq s]
+(defn ^:static ^glojure.lang.ISeq chunk-rest ^glojure.lang.ISeq [^github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s]
   (.chunkedMore s))
 
-(defn ^:static ^glojure.lang.ISeq chunk-next ^glojure.lang.ISeq [^glojure.lang.IChunkedSeq s]
+(defn ^:static ^glojure.lang.ISeq chunk-next ^glojure.lang.ISeq [^github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s]
   (.chunkedNext s))
 
 (defn ^:static chunk-cons [chunk rest]
-  (if (glojure.lang.Numbers/isZero (glojure.lang.Count chunk))
+  (if (glojure.lang.Numbers/isZero (github.com$glojurelang$glojure$pkg$lang.Count chunk))
     rest
     (glojure.lang.ChunkedCons. chunk rest)))
   
 (defn ^:static chunked-seq? [s]
-  (instance? glojure.lang.IChunkedSeq s))
+  (instance? github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s))
 
 (defn concat
   "Returns a lazy seq representing the concatenation of the elements in the supplied colls."
@@ -770,7 +770,7 @@
   {:inline (fn [x y] `(. glojure.lang.Util identical ~x ~y))
    :inline-arities #{2}
    :added "1.0"}
-  ([x y] (glojure.lang.Identical x y)))
+  ([x y] (github.com$glojurelang$glojure$pkg$lang.Identical x y)))
 
 ;equiv-based
 (defn =
@@ -783,12 +783,12 @@
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (glojure.lang.Equal x y))
+  ([x y] (github.com$glojurelang$glojure$pkg$lang.Equal x y))
   ([x y & more]
-   (if (glojure.lang.Equal x y)
+   (if (github.com$glojurelang$glojure$pkg$lang.Equal x y)
      (if (next more)
        (recur y (first more) (next more))
-       (glojure.lang.Equal y (first more)))
+       (github.com$glojurelang$glojure$pkg$lang.Equal y (first more)))
      false)))
 
 ;equals-based
@@ -801,7 +801,7 @@
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (glojure.lang.Equal x y))
+  ([x y] (github.com$glojurelang$glojure$pkg$lang.Equal x y))
   ([x y & more]
    (if (= x y)
      (if (next more)
@@ -870,7 +870,7 @@
   {
    :inline (fn  [x] `(. glojure.lang.RT (Count ~x)))
    :added "1.0"}
-  [coll] (glojure.lang.Count coll))
+  [coll] (github.com$glojurelang$glojure$pkg$lang.Count coll))
 
 (defn int
   "Coerce to int"
@@ -1493,9 +1493,9 @@
    :inline-arities #{2 3}
    :added "1.0"}
   ([map key]
-   (glojure.lang.Get map key))
+   (github.com$glojurelang$glojure$pkg$lang.Get map key))
   ([map key not-found]
-   (glojure.lang.GetDefault map key not-found)))
+   (github.com$glojurelang$glojure$pkg$lang.GetDefault map key not-found)))
 
 (defn dissoc
   "dissoc[iate]. Returns a new map of the same (hashed/sorted) type,
@@ -1552,13 +1552,13 @@
   "Returns a sequence of the map's keys, in the same order as (seq map)."
   {:added "1.0"
    :static true}
-  [map] (glojure.lang.Keys map))
+  [map] (github.com$glojurelang$glojure$pkg$lang.Keys map))
 
 (defn vals
   "Returns a sequence of the map's values, in the same order as (seq map)."
   {:added "1.0"
    :static true}
-  [map] (glojure.lang.Vals map))
+  [map] (github.com$glojurelang$glojure$pkg$lang.Vals map))
 
 (defn key
   "Returns the key of the map entry."
@@ -3443,7 +3443,7 @@
   "Returns the Class of x"
   {:added "1.0"
    :static true}
-  ^reflect.Type [^github.com$glojurelang$glojure$pkg$lang.Object x] (if (nil? x) x (glojure.lang.TypeOf x)))
+  ^reflect.Type [^github.com$glojurelang$glojure$pkg$lang.Object x] (if (nil? x) x (github.com$glojurelang$glojure$pkg$lang.TypeOf x)))
 
 (defn type 
   "Returns the :type metadata of x, or its Class if none"
@@ -4136,8 +4136,8 @@
   found."
   {:added "1.0"
    :static true}
-  ^glojure.lang.Namespace [x]
-  (if (instance? glojure.lang.Namespace x)
+  ^github.com$glojurelang$glojure$pkg$lang.Namespace [x]
+  (if (instance? github.com$glojurelang$glojure$pkg$lang.Namespace x)
     x
     (or (find-ns x) (throw (Exception. (str "No namespace: " x " found"))))))
 
@@ -4172,7 +4172,7 @@
    :static true}
   [ns]
   (let [ns (the-ns ns)]
-    (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
+    (filter-key val (fn [^github.com$glojurelang$glojure$pkg$lang.Var v] (and (instance? github.com$glojurelang$glojure$pkg$lang.Var v)
                                  (= ns (.Namespace v))
                                  (.IsPublic v)))
                 (ns-map ns))))
@@ -4190,7 +4190,7 @@
    :static true}
   [ns]
   (let [ns (the-ns ns)]
-    (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
+    (filter-key val (fn [^github.com$glojurelang$glojure$pkg$lang.Var v] (and (instance? github.com$glojurelang$glojure$pkg$lang.Var v)
                                  (= ns (.Namespace v))))
                 (ns-map ns))))
 
@@ -4219,7 +4219,7 @@
           to-do (if (= :all (:refer fs))
                   (keys nspublics)
                   (or (:refer fs) (:only fs) (keys nspublics)))]
-      (when (and to-do (not (instance? glojure.lang.Sequential to-do)))
+      (when (and to-do (not (instance? github.com$glojurelang$glojure$pkg$lang.Sequential to-do)))
         (throw (new Exception ":only/:refer value must be a sequential collection of symbols")))
       (doseq [sym to-do]
         (when-not (exclude sym)
@@ -4237,7 +4237,7 @@
    :static true}
   [ns]
   (let [ns (the-ns ns)]
-    (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
+    (filter-key val (fn [^github.com$glojurelang$glojure$pkg$lang.Var v] (and (instance? github.com$glojurelang$glojure$pkg$lang.Var v)
                                  (not= ns (.Namespace v))))
                 (ns-map ns))))
 
@@ -4308,14 +4308,14 @@
   "Gets the value in the var object"
   {:added "1.0"
    :static true}
-  [^glojure.lang.Var x] (. x (Get)))
+  [^github.com$glojurelang$glojure$pkg$lang.Var x] (. x (Get)))
 
 (defn var-set
   "Sets the value in the var object to val. The var must be
  thread-locally bound."
   {:added "1.0"
    :static true}
-  [^glojure.lang.Var x val] (. x (Set val)))
+  [^github.com$glojurelang$glojure$pkg$lang.Var x val] (. x (Set val)))
 
 (defmacro with-local-vars
   "varbinding=> symbol init-expr
@@ -4330,7 +4330,7 @@
      (vector? name-vals-vec) "a vector for its binding"
      (even? (count name-vals-vec)) "an even number of forms in binding vector")
   `(let [~@(interleave (take-nth 2 name-vals-vec)
-                       (repeat '(.. glojure.lang.Var create setDynamic)))]
+                       (repeat '(.. github.com$glojurelang$glojure$pkg$lang.Var create setDynamic)))]
      (glojure.lang.PushThreadBindings {})
      (try
       ~@body
@@ -4978,7 +4978,7 @@
   "Returns true if v is of type glojure.lang.Var"
   {:added "1.0"
    :static true}
-  [v] (instance? glojure.lang.Var v))
+  [v] (instance? github.com$glojurelang$glojure$pkg$lang.Var v))
 
 (defn subs
   "Returns the substring of s beginning at start inclusive, and ending
@@ -5507,7 +5507,7 @@
   current value plus any args"
   {:added "1.0"
    :static true}
-  [^glojure.lang.Var v f & args] (.alterRoot v f args))
+  [^github.com$glojurelang$glojure$pkg$lang.Var v f & args] (.alterRoot v f args))
 
 (defn bound?
   "Returns true if all of the vars provided as arguments have any bound value, root or thread-local.
@@ -5515,7 +5515,7 @@
   {:added "1.2"
    :static true}
   [& vars]
-  (every? #(.isBound ^glojure.lang.Var %) vars))
+  (every? #(.isBound ^github.com$glojurelang$glojure$pkg$lang.Var %) vars))
 
 (defn thread-bound?
   "Returns true if all of the vars provided as arguments have thread-local bindings.
@@ -5523,7 +5523,7 @@
   {:added "1.2"
    :static true}
   [& vars]
-  (every? #(.getThreadBinding ^glojure.lang.Var %) vars))
+  (every? #(.getThreadBinding ^github.com$glojurelang$glojure$pkg$lang.Var %) vars))
 
 (defn make-hierarchy
   "Creates a hierarchy object for use with derive, isa? etc."
@@ -6251,7 +6251,7 @@ fails, attempts to require sym's namespace and retries."
  "Returns true if coll implements Sequential"
  {:added "1.0"
   :static true}
-  [coll] (instance? glojure.lang.Sequential coll))
+  [coll] (instance? github.com$glojurelang$glojure$pkg$lang.Sequential coll))
 
 (defn sorted?
  "Returns true if coll implements Sorted"
@@ -6263,7 +6263,7 @@ fails, attempts to require sym's namespace and retries."
  "Returns true if coll implements count in constant time"
  {:added "1.0"
    :static true}
-  [coll] (instance? glojure.lang.Counted coll))
+  [coll] (instance? github.com$glojurelang$glojure$pkg$lang.Counted coll))
 
 (defn empty?
   "Returns true if coll has no items. To check the emptiness of a seq,
@@ -7525,9 +7525,9 @@ fails, attempts to require sym's namespace and retries."
   [binding-map func]
   (let [root-bind (fn [m]
                     (doseq [[a-var a-val] m]
-                      (.bindRoot ^glojure.lang.Var a-var a-val)))
+                      (.bindRoot ^github.com$glojurelang$glojure$pkg$lang.Var a-var a-val)))
         old-vals (zipmap (keys binding-map)
-                         (map #(.getRawRoot ^glojure.lang.Var %) (keys binding-map)))]
+                         (map #(.getRawRoot ^github.com$glojurelang$glojure$pkg$lang.Var %) (keys binding-map)))]
     (try
       (root-bind binding-map)
       (func)

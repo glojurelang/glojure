@@ -180,10 +180,10 @@
 
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Symbol [o w] (print-method o w))
 
-(defmethod print-method glojure.lang.Var [o, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Var [o, ^Writer w]
   (print-simple o w))
 
-(defmethod print-dup glojure.lang.Var [^glojure.lang.Var o, ^Writer w]
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Var [^github.com$glojurelang$glojure$pkg$lang.Var o, ^Writer w]
   (glojure.lang.WriteWriter w (str "#=(var " (.name (.Namespace o)) "/" (.sym o) ")")))
 
 (defmethod print-method glojure.lang.ISeq [o, ^Writer w]
@@ -400,7 +400,7 @@
 
 (defmethod print-dup regexp.Regexp [p ^Writer w] (print-method p w))
 
-(defmethod print-dup glojure.lang.Namespace [^glojure.lang.Namespace n ^Writer w]
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Namespace [^github.com$glojurelang$glojure$pkg$lang.Namespace n ^Writer w]
   (glojure.lang.WriteWriter w "#=(find-ns ")
   (print-dup (.name n) w)
   (glojure.lang.WriteWriter w ")"))

@@ -97,55 +97,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	}
 
 	{
-
-		////////////////////////////////////////////////////////////////////////////
-		// basic types
-		// {
-		// 	define("glojure.lang.BigInt", reflect.TypeOf(&value.BigInt{}))
-		// 	define("glojure.lang.PersistentHashMap", reflect.TypeOf(&value.PersistentHashMap{}))
-		// 	define("glojure.lang.PersistentHashSet", reflect.TypeOf(&value.Set{})) // TODO: this is a hack
-		// 	define("glojure.lang.PersistentVector", reflect.TypeOf(&value.Vector{}))
-		// 	define("glojure.lang.LazySeq", reflect.TypeOf(&value.LazySeq{}))
-		// }
-
-		// define("error", reflect.TypeOf((*error)(nil)).Elem())
-	}
-	{ // core functions
-		// define("glojure.lang.NewList", value.NewList)
-		// define("glojure.lang.CreatePersistentHashMap", value.CreatePersistentHashMap)
-		// define("glojure.lang.CreatePersistentTreeMap", value.CreatePersistentTreeMap)
-
-		// define("glojure.lang.CreatePersistentStructMapSlotMap", value.CreatePersistentStructMapSlotMap)
-		// define("glojure.lang.ConstructPersistentStructMap", value.ConstructPersistentStructMap)
-
-		// define("glojure.lang.Symbol", reflect.TypeOf(value.NewSymbol("")))
-		// define("glojure.lang.Ratio", reflect.TypeOf(value.NewRatio(1, 1)))
-		//define("glojure.lang.Fn", reflect.TypeOf(&Fn{}))
-		define("glojure.lang.HasType", func(t reflect.Type, v interface{}) bool {
-			if v == nil {
-				return false
-			}
-			vType := reflect.TypeOf(v)
-			switch {
-			case vType == t, vType.ConvertibleTo(t), vType.Kind() == reflect.Pointer && vType.Elem().ConvertibleTo(t):
-				return true
-			default:
-				return false
-			}
-		})
-		define("glojure.lang.TypeOf", func(v interface{}) reflect.Type {
-			return reflect.TypeOf(v)
-		})
-		define("glojure.lang.WithMeta", value.WithMeta)
-		define("glojure.lang.NewCons", value.NewCons)
-		define("glojure.lang.NewSymbol", value.NewSymbol)
-		define("glojure.lang.NewAtom", value.NewAtom)
-		define("glojure.lang.InternKeywordSymbol", value.InternKeywordSymbol)
-		define("glojure.lang.InternKeywordString", value.InternKeywordString)
-		define("glojure.lang.NewVector", value.NewVector)
-		define("glojure.lang.NewVectorFromCollection", value.NewVectorFromCollection)
-		define("glojure.lang.NewLazySeq", value.NewLazySeq)
-		define("glojure.lang.NewMultiFn", value.NewMultiFn)
 		define("glojure.lang.Apply", value.IFnFunc(func(args ...interface{}) interface{} {
 			if len(args) != 2 {
 				panic(fmt.Errorf("wrong number of arguments (%d) to glojure.lang.Apply", len(args)))
@@ -171,22 +122,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			}
 			env.CurrentNamespace().Import(export, v)
 		})
-
-		define("glojure.lang.Count", value.Count)
-		define("glojure.lang.Seq", value.Seq)
-		define("glojure.lang.Conj", value.Conj)
-		define("glojure.lang.Assoc", value.Assoc)
-		define("glojure.lang.Subvec", value.Subvec)
-		define("glojure.lang.First", value.First)
-		define("glojure.lang.Next", value.Next)
-		define("glojure.lang.Rest", value.Rest)
-		define("glojure.lang.Equal", value.Equal)
-		define("glojure.lang.Identical", value.Identical)
-		define("glojure.lang.Get", value.Get)
-		define("glojure.lang.Keys", value.Keys)
-		define("glojure.lang.Vals", value.Vals)
-		define("glojure.lang.GetDefault", value.GetDefault)
-		define("glojure.lang.ConcatStrings", value.ConcatStrings)
 
 		define("glojure.lang.IReduceInit", reflect.TypeOf((*value.IReduceInit)(nil)).Elem())
 		define("glojure.lang.IReduce", reflect.TypeOf((*value.IReduce)(nil)).Elem())

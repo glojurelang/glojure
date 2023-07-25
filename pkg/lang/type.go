@@ -15,3 +15,7 @@ func HasType(t reflect.Type, v interface{}) bool {
 		return false
 	}
 }
+
+func TypeOf(v interface{}) reflect.Type {
+	return reflect.TypeOf(v)
+}
