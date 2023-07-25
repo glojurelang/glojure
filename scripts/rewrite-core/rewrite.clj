@@ -117,6 +117,8 @@
 
    (sexpr-replace 'clojure.lang.IPersistentMap
                   'github.com$glojurelang$glojure$pkg$lang.IPersistentMap)
+   (sexpr-replace 'clojure.lang.IMapEntry
+                  'github.com$glojurelang$glojure$pkg$lang.IMapEntry)
 
    (sexpr-replace 'clojure.lang.PersistentHashMap
                   'github.com$glojurelang$glojure$pkg$lang.PersistentHashMap)

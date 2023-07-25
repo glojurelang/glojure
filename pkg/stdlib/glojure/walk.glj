@@ -31,7 +31,7 @@
   [inner outer form]
   (cond
    (list? form) (outer (apply list (map inner form)))
-   (instance? glojure.lang.IMapEntry form)
+   (instance? github.com$glojurelang$glojure$pkg$lang.IMapEntry form)
    (outer (glojure.lang.MapEntry/create (inner (key form)) (inner (val form))))
    (seq? form) (outer (doall (map inner form)))
    (instance? github.com$glojurelang$glojure$pkg$lang.IRecord form)
