@@ -118,6 +118,10 @@
    ;; TODO: once everything passes, see if we can replace with a blanket
    ;; replacement of the clojure.lang prefix.
 
+   (sexpr-replace 'clojure.lang.IReduce
+                  'github.com$glojurelang$glojure$pkg$lang.IReduce)
+   (sexpr-replace 'clojure.lang.IPending
+                  'github.com$glojurelang$glojure$pkg$lang.IPending)
    (sexpr-replace 'clojure.lang.MultiFn
                   'github.com$glojurelang$glojure$pkg$lang.MultiFn)
    (sexpr-replace 'clojure.lang.Volatile
@@ -408,9 +412,9 @@
 
    (sexpr-replace '(. System (nanoTime)) '(.UnixNano (time.Now)))
 
-   (sexpr-replace 'clojure.lang.RT/longCast 'glojure.lang.AsInt64)
+   (sexpr-replace 'clojure.lang.RT/longCast 'github.com$glojurelang$glojure$pkg$lang.AsInt64)
    (sexpr-replace 'clojure.lang.RT/byteCast 'github.com$glojurelang$glojure$pkg$lang.ByteCast)
-   (sexpr-replace 'clojure.lang.RT/doubleCast 'glojure.lang.AsFloat64)
+   (sexpr-replace 'clojure.lang.RT/doubleCast 'github.com$glojurelang$glojure$pkg$lang.AsFloat64)
 
    (sexpr-replace "clojure.core" "glojure.core")
    (sexpr-replace 'clojure.core/name 'glojure.core/name)

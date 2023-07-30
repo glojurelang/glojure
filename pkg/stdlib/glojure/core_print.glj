@@ -406,8 +406,8 @@
   (glojure.lang.WriteWriter w ")"))
 
 (defn- deref-as-map [^github.com$glojurelang$glojure$pkg$lang.IDeref o]
-  (let [pending (and (instance? glojure.lang.IPending o)
-                     (not (.isRealized ^glojure.lang.IPending o)))
+  (let [pending (and (instance? github.com$glojurelang$glojure$pkg$lang.IPending o)
+                     (not (.isRealized ^github.com$glojurelang$glojure$pkg$lang.IPending o)))
         [ex val]
         (when-not pending
           (try [false (deref o)]

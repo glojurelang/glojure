@@ -122,20 +122,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			env.CurrentNamespace().Import(export, v)
 		})
 
-		// define("glojure.lang.Volatile", reflect.TypeOf(&value.Volatile{}))
-		// define("glojure.lang.MultiFn", reflect.TypeOf(&value.MultiFn{}))
-		// define("glojure.lang.Var", reflect.TypeOf(&value.Var{}))
-		// define("glojure.lang.Atom", reflect.TypeOf(&value.Atom{}))
-
-		// define("glojure.lang.Namespace", reflect.TypeOf(&value.Namespace{}))
-
-		// define("glojure.lang.LockingTransaction", value.LockingTransaction)
-
-		// define("glojure.lang.Hash", value.Hash)
-
-		// define("big.Int", reflect.TypeOf(big.Int{}))
-		// define("glojure.lang.BigDecimal", reflect.TypeOf(&value.BigDecimal{}))
-
 		// TODO: go versions of these java-isms
 		{
 			{
@@ -192,9 +178,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			}
 			return w
 		})
-		// define("glojure.lang.CharAt", func(s string, idx int) value.Char {
-		// 	return value.NewChar([]rune(s)[idx])
-		// })
 	}
 	{
 		// Add stdlib
