@@ -655,15 +655,15 @@
   {:added "1.0"
    :static true}
   ([^glojure.lang.IFn f args]
-     (glojure.lang.Apply f (seq args)))
+     (github.com$glojurelang$glojure$pkg$lang.Apply f (seq args)))
   ([^glojure.lang.IFn f x args]
-     (glojure.lang.Apply f (list* x args)))
+     (github.com$glojurelang$glojure$pkg$lang.Apply f (list* x args)))
   ([^glojure.lang.IFn f x y args]
-     (glojure.lang.Apply f (list* x y args)))
+     (github.com$glojurelang$glojure$pkg$lang.Apply f (list* x y args)))
   ([^glojure.lang.IFn f x y z args]
-     (glojure.lang.Apply f (list* x y z args)))
+     (github.com$glojurelang$glojure$pkg$lang.Apply f (list* x y z args)))
   ([^glojure.lang.IFn f a b c d & args]
-     (glojure.lang.Apply f (cons a (cons b (cons c (cons d (spread args))))))))
+     (github.com$glojurelang$glojure$pkg$lang.Apply f (cons a (cons b (cons c (cons d (spread args))))))))
 
 (defn vary-meta
  "Returns an object of the same type and value as obj, with
@@ -3762,7 +3762,7 @@
      (let [o (read stream eof-error? eof-value recursive?)
            s (.trim (.getString stream))]
        [o s])
-     (catch Throwable ex
+     (catch github.com$glojurelang$glojure$pkg$lang.Throwable ex
        (.getString stream)
        (throw ex))))
   ([opts ^glojure.lang.LineNumberingPushbackReader stream]
@@ -3771,7 +3771,7 @@
      (let [o (read opts stream)
            s (.trim (.getString stream))]
        [o s])
-     (catch Throwable ex
+     (catch github.com$glojurelang$glojure$pkg$lang.Throwable ex
        (.getString stream)
        (throw ex)))))
 
@@ -4773,7 +4773,7 @@
      (apply println xs)))
 
 (defn ^:private elide-top-frames
-  [^Throwable ex class-name]
+  [^github.com$glojurelang$glojure$pkg$lang.Throwable ex class-name]
   (let [tr (.getStackTrace ex)]
     (doto ex
       (.setStackTrace
@@ -4803,17 +4803,17 @@
   Otherwise returns nil."
   {:added "1.10"}
   [ex]
-  (when (instance? Throwable ex)
-    (.getMessage ^Throwable ex)))
+  (when (instance? github.com$glojurelang$glojure$pkg$lang.Throwable ex)
+    (.getMessage ^github.com$glojurelang$glojure$pkg$lang.Throwable ex)))
 
 (defn ex-cause
   "Returns the cause of ex if ex is a Throwable.
   Otherwise returns nil."
-  {:tag Throwable
+  {:tag github.com$glojurelang$glojure$pkg$lang.Throwable
    :added "1.10"}
   [ex]
-  (when (instance? Throwable ex)
-    (.getCause ^Throwable ex)))
+  (when (instance? github.com$glojurelang$glojure$pkg$lang.Throwable ex)
+    (.getCause ^github.com$glojurelang$glojure$pkg$lang.Throwable ex)))
 
 (defmacro assert
   "Evaluates expr and throws an exception if it does not evaluate to
@@ -4851,7 +4851,7 @@
 (defn re-matcher
   "Returns an instance of java.util.regex.Matcher, for use, e.g. in
   re-find."
-  {:tag java.util.regex.Matcher
+  {:tag github.com$glojurelang$glojure$pkg$lang.Matcher
    :added "1.0"
    :static true}
   [^regexp.Regexp re s]
@@ -4864,7 +4864,7 @@
   being the entire match."
   {:added "1.0"
    :static true}
-  [^java.util.regex.Matcher m]
+  [^github.com$glojurelang$glojure$pkg$lang.Matcher m]
     (let [gc  (. m (groupCount))]
       (if (zero? gc)
         (. m (group))
@@ -4903,7 +4903,7 @@
   groups."
   {:added "1.0"
    :static true}
-  ([^java.util.regex.Matcher m]
+  ([^github.com$glojurelang$glojure$pkg$lang.Matcher m]
    (when (. m (find))
      (re-groups m)))
   ([^regexp.Regexp re s]
@@ -7873,7 +7873,7 @@ fails, attempts to require sym's namespace and retries."
 
 (try
  (load-data-readers)
- (catch Throwable t
+ (catch github.com$glojurelang$glojure$pkg$lang.Throwable t
    (.printStackTrace t)
    (throw t)))
 

@@ -411,7 +411,7 @@
         [ex val]
         (when-not pending
           (try [false (deref o)]
-               (catch Throwable e
+               (catch github.com$glojurelang$glojure$pkg$lang.Throwable e
                  [true e])))]
     {:status
      (cond
@@ -450,8 +450,8 @@
              :at - top stack element
     :trace - root cause stack elements"
   {:added "1.7"}
-  [^Throwable o]
-  (let [base (fn [^Throwable t]
+  [^github.com$glojurelang$glojure$pkg$lang.Throwable o]
+  (let [base (fn [^github.com$glojurelang$glojure$pkg$lang.Throwable t]
                (merge {:type (symbol (.Name (class t)))}
                  (when-let [msg (.getLocalizedMessage t)]
                    {:message msg})
@@ -460,14 +460,14 @@
                  (let [st (.getStackTrace t)]
                    (when (pos? (alength st))
                      {:at (StackTraceElement->vec (aget st 0))}))))
-        via (loop [via [], ^Throwable t o]
+        via (loop [via [], ^github.com$glojurelang$glojure$pkg$lang.Throwable t o]
               (if t
                 (recur (conj via t) (.getCause t))
                 via))
-        ^Throwable root (peek via)]
+        ^github.com$glojurelang$glojure$pkg$lang.Throwable root (peek via)]
     (merge {:via (vec (map base via))
             :trace (vec (map StackTraceElement->vec
-                             (.getStackTrace ^Throwable (or root o))))}
+                             (.getStackTrace ^github.com$glojurelang$glojure$pkg$lang.Throwable (or root o))))}
       (when-let [root-msg (.getLocalizedMessage root)]
         {:cause root-msg})
       (when-let [data (ex-data root)]
@@ -475,7 +475,7 @@
       (when-let [phase (-> o ex-data :glojure.error/phase)]
         {:phase phase}))))
 
-(defn- print-throwable [^Throwable o ^Writer w]
+(defn- print-throwable [^github.com$glojurelang$glojure$pkg$lang.Throwable o ^Writer w]
   (glojure.lang.WriteWriter w "#error {\n :cause ")
   (let [{:keys [cause data via trace]} (Throwable->map o)
         print-via #(do (glojure.lang.WriteWriter w "{:type ")
@@ -519,7 +519,7 @@
 
 (def ^{:private true} print-initialized true)
 
-(defn ^java.io.PrintWriter PrintWriter-on
+(defn ^github.com$glojurelang$glojure$pkg$lang.PrintWriter PrintWriter-on
   "implements java.io.PrintWriter given flush-fn, which will be called
   when .flush() is called, with a string built up since the last call to .flush().
   if not nil, close-fn will be called with no arguments when .close is called"

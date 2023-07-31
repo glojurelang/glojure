@@ -5,9 +5,9 @@ import (
 	"reflect"
 )
 
-func Apply(fn interface{}, args []interface{}) (_ interface{}, err error) {
+func Apply(fn interface{}, args []interface{}) interface{} {
 	if applyer, ok := fn.(IFn); ok {
-		return applyer.Invoke(args...), nil
+		return applyer.Invoke(args...)
 	}
 
 	if rt, ok := fn.(reflect.Type); ok {
@@ -15,7 +15,7 @@ func Apply(fn interface{}, args []interface{}) (_ interface{}, err error) {
 	}
 
 	if fn == nil {
-		return nil, fmt.Errorf("cannot apply nil")
+		panic(fmt.Errorf("cannot call nil"))
 	}
 
 	goVal := reflect.ValueOf(fn)
@@ -28,10 +28,10 @@ func Apply(fn interface{}, args []interface{}) (_ interface{}, err error) {
 	}
 
 	if gvKind != reflect.Func {
-		return nil, fmt.Errorf("cannot apply non-function %T", fn)
+		panic(fmt.Errorf("cannot apply non-function %T", fn))
 	}
 	if gvType.NumIn() != len(args) && !gvType.IsVariadic() {
-		return nil, fmt.Errorf("wrong number of arguments: expected %d, got %d", gvType.NumIn(), len(args))
+		panic(fmt.Errorf("wrong number of arguments: expected %d, got %d", gvType.NumIn(), len(args)))
 	}
 
 	var goArgs []reflect.Value
@@ -49,7 +49,7 @@ func Apply(fn interface{}, args []interface{}) (_ interface{}, err error) {
 
 		argGoVal, err := coerceGoValue(targetType, args[i])
 		if err != nil {
-			return nil, fmt.Errorf("argument %d: %s", i, err)
+			panic(fmt.Errorf("argument %d: %s", i, err))
 		}
 		goArgs = append(goArgs, argGoVal)
 	}
@@ -60,43 +60,43 @@ func Apply(fn interface{}, args []interface{}) (_ interface{}, err error) {
 		res[i] = val.Interface()
 	}
 	if len(res) == 0 {
-		return nil, nil
+		return nil
 	}
 	if len(res) == 1 {
-		return res[0], nil
+		return res[0]
 	}
-	return NewVector(res...), nil
+	return NewVector(res...)
 }
 
-func applyType(typ reflect.Type, args []interface{}) (interface{}, error) {
+func applyType(typ reflect.Type, args []interface{}) interface{} {
 	if len(args) == 0 {
-		return reflect.Zero(typ).Interface(), nil
+		return reflect.Zero(typ).Interface()
 	}
 
 	if len(args) > 1 {
-		return nil, fmt.Errorf("too many arguments")
+		panic(fmt.Errorf("too many arguments"))
 	}
 
 	arg := args[0]
 	res, err := ConvertToGo(typ, arg)
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
-	return res, nil
+	return res
 }
 
-func applySlice(goVal reflect.Value, args []interface{}) (interface{}, error) {
+func applySlice(goVal reflect.Value, args []interface{}) interface{} {
 	if len(args) != 1 {
-		return nil, fmt.Errorf("wrong number of arguments for slice: expected 1, got %d", len(args))
+		panic(fmt.Errorf("wrong number of arguments for slice: expected 1, got %d", len(args)))
 	}
 	idx, ok := AsInt(args[0])
 	if !ok {
-		return nil, fmt.Errorf("slice index must be an integer")
+		panic(fmt.Errorf("slice index must be an integer"))
 	}
 	if idx < 0 || idx >= goVal.Len() {
-		return nil, fmt.Errorf("slice index out of bounds")
+		panic(fmt.Errorf("slice index out of bounds"))
 	}
-	return goVal.Index(idx).Interface(), nil
+	return goVal.Index(idx).Interface()
 }
 
 // TODO: reconsider the semantics of the functions below.

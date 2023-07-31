@@ -44,10 +44,6 @@
            (z/replace zloc (list '. 'clojure.lang.Numbers new-sym (nth sexpr 3)))
            (z/replace zloc (list '. 'clojure.lang.Numbers new-sym2 (nth sexpr 3) (nth sexpr 4))))))]))
 
-;; (defn replace-num-array
-;;   [typ]
-;;   (sexpr-replace (symbol (str typ "_array")) (symbol (str typ "Array"))))
-
 (defn RT-replace
   "Replace all instances of a call to a clojure.lang.RT method fsym with
   the result of calling newfn with the argument forms."
@@ -117,6 +113,14 @@
    ;; map a bunch of java types to go equivalent
    ;; TODO: once everything passes, see if we can replace with a blanket
    ;; replacement of the clojure.lang prefix.
+
+   (sexpr-replace 'java.util.regex.Matcher
+                  'github.com$glojurelang$glojure$pkg$lang.Matcher)
+   (sexpr-replace 'java.io.PrintWriter
+                  'github.com$glojurelang$glojure$pkg$lang.PrintWriter)
+
+   (sexpr-replace 'Throwable
+                  'github.com$glojurelang$glojure$pkg$lang.Throwable)
 
    (sexpr-replace 'clojure.lang.IReduce
                   'github.com$glojurelang$glojure$pkg$lang.IReduce)
@@ -349,8 +353,9 @@
                               (= 'applyTo (first (nth sexpr 2)))))))
     (fn visit [zloc] (z/replace zloc
                                 (let [sexpr (z/sexpr zloc)]
-                                  `(glojure.lang.Apply ~(nth sexpr 1)
-                                                       ~(nth (nth sexpr 2) 1)))))]
+                                  `(github.com$glojurelang$glojure$pkg$lang.Apply
+                                    ~(nth sexpr 1)
+                                    ~(nth (nth sexpr 2) 1)))))]
 
    (sexpr-replace '(. clojure.lang.RT (get map key)) '(github.com$glojurelang$glojure$pkg$lang.Get map key))
    (sexpr-replace '(. clojure.lang.RT (get map key not-found)) '(github.com$glojurelang$glojure$pkg$lang.GetDefault map key not-found))

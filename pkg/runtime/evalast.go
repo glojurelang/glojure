@@ -473,7 +473,7 @@ func (env *environment) EvalASTHostCall(n *ast.Node) (interface{}, error) {
 		return nil, errors.New("not a method: " + value.ToString(tgtVal) + "." + method.Name())
 	}
 
-	return value.Apply(methodVal, argVals)
+	return value.Apply(methodVal, argVals), nil
 }
 
 func (env *environment) EvalASTHostInterop(n *ast.Node) (interface{}, error) {
@@ -498,7 +498,7 @@ func (env *environment) EvalASTHostInterop(n *ast.Node) (interface{}, error) {
 	}
 	switch reflect.TypeOf(mOrFVal).Kind() {
 	case reflect.Func:
-		return value.Apply(mOrFVal, nil)
+		return value.Apply(mOrFVal, nil), nil
 	default:
 		return mOrFVal, nil
 	}
@@ -761,7 +761,7 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 		argVals = append(argVals, argVal)
 	}
 
-	return value.Apply(fnVal, argVals)
+	return value.Apply(fnVal, argVals), nil
 }
 
 func (env *environment) EvalASTVar(n *ast.Node) (interface{}, error) {

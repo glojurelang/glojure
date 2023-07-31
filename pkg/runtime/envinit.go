@@ -1,14 +1,11 @@
 package runtime
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"io"
 	"os"
-	"reflect"
-	"regexp"
 	"strings"
 
 	value "github.com/glojurelang/glojure/pkg/lang"
@@ -96,17 +93,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 	}
 
 	{
-		define("glojure.lang.Apply", value.IFnFunc(func(args ...interface{}) interface{} {
-			if len(args) != 2 {
-				panic(fmt.Errorf("wrong number of arguments (%d) to glojure.lang.Apply", len(args)))
-			}
-			res, err := value.Apply(args[0], seqToSlice(value.Seq(args[1])))
-			if err != nil {
-				panic(err)
-			}
-			return res
-		}))
-
 		define("glojure.lang.Import", func(args ...interface{}) {
 			if len(args) != 1 {
 				panic(fmt.Errorf("wrong number of arguments (%d) to glojure.lang.Import", len(args)))
@@ -120,26 +106,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 				return
 			}
 			env.CurrentNamespace().Import(export, v)
-		})
-
-		// TODO: go versions of these java-isms
-		{
-			{
-				var x interface{}
-				define("Throwable", reflect.TypeOf(x))
-			}
-			define("java.util.regex.Matcher", reflect.TypeOf(&regexp.Regexp{})) // wrong
-			define("java.io.PrintWriter", reflect.TypeOf(&bytes.Buffer{}))      // wrong
-		}
-
-		// define("glojure.lang.AsInt64", value.AsInt64)
-		// define("glojure.lang.AsFloat64", value.AsFloat64)
-		define("glojure.lang.AsNumber", func(v interface{}) interface{} {
-			x, ok := value.AsNumber(v)
-			if !ok {
-				panic(fmt.Errorf("cannot convert %T to number", v))
-			}
-			return x
 		})
 	}
 	{
