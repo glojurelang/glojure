@@ -2,7 +2,10 @@ package lang
 
 import (
 	"context"
+	"fmt"
 	"io"
+
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
 var (
@@ -89,4 +92,19 @@ func (e *RecurError) Error() string {
 func (e *RecurError) Is(err error) bool {
 	re, ok := err.(*RecurError)
 	return ok && re.Target == e.Target
+}
+
+func Import(args ...interface{}) {
+	if len(args) != 1 {
+		panic(fmt.Errorf("wrong number of arguments (%d) to glojure.lang.Import", len(args)))
+	}
+
+	export := args[0].(string)
+	v, ok := pkgmap.Get(export)
+	if !ok {
+		// TODO: panic
+		fmt.Println("WARNING: export not found in package map:", args[0], "- this will be a panic in the future")
+		return
+	}
+	GlobalEnv.CurrentNamespace().Import(export, v)
 }

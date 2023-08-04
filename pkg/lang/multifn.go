@@ -105,7 +105,7 @@ func (m *MultiFn) prefers(hierarchy, x, y interface{}) (res bool) {
 	if !ok {
 		return false
 	}
-	if xType.AssignableTo(yType) {
+	if xType.AssignableTo(yType) || reflect.PointerTo(xType).AssignableTo(yType) {
 		return true
 	}
 

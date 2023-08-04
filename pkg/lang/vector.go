@@ -17,6 +17,8 @@ type Vector struct {
 	vec  vector.Vector
 }
 
+type PersistentVector = Vector
+
 func NewVector(values ...interface{}) *Vector {
 	vals := make([]interface{}, len(values))
 	for i, v := range values {

@@ -85,3 +85,7 @@ func CharLiteralFromRune(rn rune) string {
 
 	return fmt.Sprintf("\\%c", rn)
 }
+
+func CharAt(s string, idx int) Char {
+	return NewChar([]rune(s)[idx])
+}

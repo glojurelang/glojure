@@ -82,14 +82,6 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 	return env.EvalAST(astNode)
 }
 
-func (env *environment) applyFunc(f interface{}, args []interface{}) (interface{}, error) {
-	res, err := value.Apply(f, args)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
-}
-
 // Helpers
 
 func (env *environment) lookupVar(sym *value.Symbol, internNew, registerMacro bool) (*value.Var, error) {

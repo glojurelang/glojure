@@ -15,7 +15,7 @@
  ^{:arglists '([& items])
    :doc "Creates a new list containing the items."
    :added "1.0"}
-  list glojure.lang.NewList)
+  list github.com$glojurelang$glojure$pkg$lang.NewList)
 
 (def
  ^{:arglists '([x seq])
@@ -24,7 +24,7 @@
    :added "1.0"
    :static true}
 
- cons (fn* ^:static cons [x seq] (glojure.lang.NewCons x seq)))
+ cons (fn* ^:static cons [x seq] (github.com$glojurelang$glojure$pkg$lang.NewCons x seq)))
 
 ;during bootstrap we don't have destructuring let, loop or fn, will redefine later
 (def
@@ -41,7 +41,7 @@
  ^{:macro true
    :added "1.0"}
  fn (fn* fn [&form &env & decl] 
-         (let* [res (glojure.lang.WithMeta ^{glojure.lang.IObj true} (cons (quote fn*) decl) (.Meta ^{glojure.lang.IMeta true} &form))] (if (res 1) (throw (res 1)) (res 0)))))
+         (let* [res (github.com$glojurelang$glojure$pkg$lang.WithMeta ^{github.com$glojurelang$glojure$pkg$lang.IObj true} (cons (quote fn*) decl) (.Meta ^{github.com$glojurelang$glojure$pkg$lang.IMeta true} &form))] (if (res 1) (throw (res 1)) (res 0)))))
 
 (def
  ^{:arglists '([coll])
@@ -49,25 +49,25 @@
     argument. If coll is nil, returns nil."
    :added "1.0"
    :static true}
- first (fn ^:static first [coll] (glojure.lang.First coll)))
+ first (fn ^:static first [coll] (github.com$glojurelang$glojure$pkg$lang.First coll)))
 
 (def
  ^{:arglists '([coll])
-   :tag glojure.lang.ISeq
+   :tag github.com$glojurelang$glojure$pkg$lang.ISeq
    :doc "Returns a seq of the items after the first. Calls seq on its
   argument.  If there are no more items, returns nil."
    :added "1.0"
    :static true}  
- next (fn ^:static next [x] (glojure.lang.Next x)))
+ next (fn ^:static next [x] (github.com$glojurelang$glojure$pkg$lang.Next x)))
 
 (def
  ^{:arglists '([coll])
-   :tag glojure.lang.ISeq
+   :tag github.com$glojurelang$glojure$pkg$lang.ISeq
    :doc "Returns a possibly empty seq of the items after the first. Calls seq on its
   argument."
    :added "1.0"
    :static true}  
- rest (fn ^:static rest [x] (glojure.lang.Rest x)))
+ rest (fn ^:static rest [x] (github.com$glojurelang$glojure$pkg$lang.Rest x)))
 
 (def
  ^{:arglists '([] [coll] [coll x] [coll x & xs])
@@ -81,11 +81,11 @@
  conj (fn ^:static conj
         ([] [])
         ([coll] coll)
-        ([coll x] (glojure.lang.Conj coll x))
+        ([coll x] (github.com$glojurelang$glojure$pkg$lang.Conj coll x))
         ([coll x & xs]
          (if xs
-           (recur (glojure.lang.Conj coll x) (first xs) (next xs))
-           (glojure.lang.Conj coll x)))))
+           (recur (github.com$glojurelang$glojure$pkg$lang.Conj coll x) (first xs) (next xs))
+           (github.com$glojurelang$glojure$pkg$lang.Conj coll x)))))
 
 (def
  ^{:doc "Same as (first (next x))"
@@ -123,31 +123,31 @@
  nnext (fn ^:static nnext [x] (next (next x))))
 
 (def
- ^{:arglists '(^glojure.lang.ISeq [coll])
+ ^{:arglists '(^github.com$glojurelang$glojure$pkg$lang.ISeq [coll])
    :doc "Returns a seq on the collection. If the collection is
     empty, returns nil.  (seq nil) returns nil. seq also works on
     Strings, native Java arrays (of reference types) and any objects
     that implement Iterable. Note that seqs cache values, thus seq
     should not be used on any Iterable whose iterator repeatedly
     returns the same mutable object."
-   :tag glojure.lang.ISeq
+   :tag github.com$glojurelang$glojure$pkg$lang.ISeq
    :added "1.0"
    :static true}
- seq (fn ^:static seq ^glojure.lang.ISeq [coll] (glojure.lang.Seq coll)))
+ seq (fn ^:static seq ^github.com$glojurelang$glojure$pkg$lang.ISeq [coll] (github.com$glojurelang$glojure$pkg$lang.Seq coll)))
 
 (def
  ^{:arglists '([^reflect.Type c x])
    :doc "Evaluates x and tests if it is an instance of the type
     t. Returns true or false"
    :added "1.0"}
- instance? (fn instance? [t x] (glojure.lang.HasType t x)))
+ instance? (fn instance? [t x] (github.com$glojurelang$glojure$pkg$lang.HasType t x)))
 
 (def
  ^{:arglists '([x])
    :doc "Return true if x implements ISeq"
    :added "1.0"
    :static true}
- seq? (fn ^:static seq? [x] (instance? glojure.lang.ISeq x)))
+ seq? (fn ^:static seq? [x] (instance? github.com$glojurelang$glojure$pkg$lang.ISeq x)))
 
 (def
  ^{:arglists '([x])
@@ -161,21 +161,21 @@
    :doc "Return true if x is a String"
    :added "1.0"
    :static true}
- string? (fn ^:static string? [x] (instance? string x)))
+ string? (fn ^:static string? [x] (instance? go/string x)))
 
 (def
  ^{:arglists '([x])
    :doc "Return true if x implements IPersistentMap"
    :added "1.0"
    :static true}
- map? (fn ^:static map? [x] (instance? glojure.lang.IPersistentMap x)))
+ map? (fn ^:static map? [x] (instance? github.com$glojurelang$glojure$pkg$lang.IPersistentMap x)))
 
 (def
  ^{:arglists '([x])
    :doc "Return true if x implements IPersistentVector"
    :added "1.0"
    :static true}
- vector? (fn ^:static vector? [x] (instance? glojure.lang.IPersistentVector x)))
+ vector? (fn ^:static vector? [x] (instance? github.com$glojurelang$glojure$pkg$lang.IPersistentVector x)))
 
 (def
  ^{:arglists '([map key val] [map key val & kvs])
@@ -187,9 +187,9 @@
    :static true}
  assoc
  (fn ^:static assoc
-   ([map key val] (glojure.lang.Assoc map key val))
+   ([map key val] (github.com$glojurelang$glojure$pkg$lang.Assoc map key val))
    ([map key val & kvs]
-    (let [ret (glojure.lang.Assoc map key val)]
+    (let [ret (github.com$glojurelang$glojure$pkg$lang.Assoc map key val)]
       (if kvs
         (if (next kvs)
           (recur ret (first kvs) (second kvs) (nnext kvs))
@@ -204,16 +204,16 @@
    :added "1.0"
    :static true}
  meta (fn ^:static meta [x]
-        (if (instance? glojure.lang.IMeta x)
+        (if (instance? github.com$glojurelang$glojure$pkg$lang.IMeta x)
           (.Meta x))))
 
 (def
- ^{:arglists '([^glojure.lang.IObj obj m])
+ ^{:arglists '([^github.com$glojurelang$glojure$pkg$lang.IObj obj m])
    :doc "Returns an object of the same type and value as obj, with
     map m as its metadata."
    :added "1.0"
    :static true}
- with-meta (fn ^:static with-meta [^glojure.lang.IObj x m]
+ with-meta (fn ^:static with-meta [^github.com$glojurelang$glojure$pkg$lang.IObj x m]
              (. x (WithMeta m))))
 
 (def ^{:private true :dynamic true}
@@ -228,8 +228,8 @@
          (fn [fdecl]
            (let [arglist (first fdecl)
                  ;elide implicit macro args
-                 arglist (if (glojure.lang.Equal '&form (first arglist)) 
-                           (glojure.lang.Subvec arglist 2 (glojure.lang.Count arglist))
+                 arglist (if (github.com$glojurelang$glojure$pkg$lang.Equal '&form (first arglist)) 
+                           (github.com$glojurelang$glojure$pkg$lang.Subvec arglist 2 (github.com$glojurelang$glojure$pkg$lang.Count arglist))
                            arglist)
                  body (next fdecl)]
              (if (map? (first body))
@@ -239,13 +239,13 @@
                arglist)))
          resolve-tag (fn [argvec]
                         (let [m (meta argvec)
-                              ^glojure.lang.Symbol tag (:tag m)]
-                          (if (instance? glojure.lang.Symbol tag)
-                            (if (glojure.lang.Equal (strings.Index (.Name tag) ".") -1)
-                              (if (glojure.lang.Equal nil nil)
+                              ^github.com$glojurelang$glojure$pkg$lang.Symbol tag (:tag m)]
+                          (if (instance? github.com$glojurelang$glojure$pkg$lang.Symbol tag)
+                            (if (github.com$glojurelang$glojure$pkg$lang.Equal (strings.Index (.Name tag) ".") -1)
+                              (if (github.com$glojurelang$glojure$pkg$lang.Equal nil nil)
                                 (let [c nil]
                                   (if c
-                                    (with-meta argvec (assoc m :tag (glojure.lang.NewSymbol (.Name c))))
+                                    (with-meta argvec (assoc m :tag (github.com$glojurelang$glojure$pkg$lang.NewSymbol (.Name c))))
                                     argvec))
                                 argvec)
                               argvec)
@@ -290,7 +290,7 @@
    :added "1.0"}
  defn (fn defn [&form &env name & fdecl]
         ;; Note: Cannot delegate this check to def because of the call to (with-meta name ..)
-        (if (instance? glojure.lang.Symbol name)
+        (if (instance? github.com$glojurelang$glojure$pkg$lang.Symbol name)
           nil
           (throw (errors.New "First argument to defn must be a symbol")))
         (let [m (if (string? (first fdecl))
@@ -319,10 +319,10 @@
                       ifn (first inline)
                       iname (second inline)]
                   ;; same as: (if (and (= 'fn ifn) (not (symbol? iname))) ...)
-                  (if (if (glojure.lang.Equal 'fn ifn)
-                        (if (instance? glojure.lang.Symbol iname) false true))
+                  (if (if (github.com$glojurelang$glojure$pkg$lang.Equal 'fn ifn)
+                        (if (instance? github.com$glojurelang$glojure$pkg$lang.Symbol iname) false true))
                     ;; inserts the same fn name to the inline fn if it does not have one
-                    (assoc m :inline (cons ifn (cons (glojure.lang.NewSymbol (glojure.lang.ConcatStrings (.Name ^glojure.lang.Symbol name) "__inliner"))
+                    (assoc m :inline (cons ifn (cons (github.com$glojurelang$glojure$pkg$lang.NewSymbol (github.com$glojurelang$glojure$pkg$lang.ConcatStrings (.Name ^github.com$glojurelang$glojure$pkg$lang.Symbol name) "__inliner"))
                                                      (next inline))))
                     m))
               m (conj (if (meta name) (meta name) {}) m)]
@@ -370,10 +370,10 @@
    :static true}
   ([coll]
    (if (vector? coll)
-     (if (instance? glojure.lang.IObj coll)
+     (if (instance? github.com$glojurelang$glojure$pkg$lang.IObj coll)
        (with-meta coll nil)
-       (glojure.lang.NewVectorFromCollection coll))
-     (glojure.lang.NewVectorFromCollection coll))))
+       (github.com$glojurelang$glojure$pkg$lang.NewVectorFromCollection coll))
+     (github.com$glojurelang$glojure$pkg$lang.NewVectorFromCollection coll))))
 
 (defn hash-map
   "keyval => key val
@@ -383,7 +383,7 @@
    :static true}
   ([] {})
   ([& keyvals]
-   (glojure.lang.CreatePersistentHashMap keyvals)))
+   (github.com$glojurelang$glojure$pkg$lang.CreatePersistentHashMap keyvals)))
 
 (defn hash-set
   "Returns a new hash set with supplied keys.  Any equal keys are
@@ -401,7 +401,7 @@
   {:added "1.0"
    :static true}
   ([& keyvals]
-   (glojure.lang.CreatePersistentTreeMap keyvals)))
+   (github.com$glojurelang$glojure$pkg$lang.CreatePersistentTreeMap keyvals)))
 
 (defn sorted-map-by
   "keyval => key val
@@ -434,10 +434,10 @@
 ;;;;;;;;;;;;;;;;;;;;
 (defn nil?
   "Returns true if x is nil, false otherwise."
-  {:tag bool
+  {:tag go/bool
    :added "1.0"
    :static true
-   :inline (fn [x] (list 'glojure.lang.Identical x nil))}
+   :inline (fn [x] (list 'github.com$glojurelang$glojure$pkg$lang.Identical x nil))}
   [x] (github.com$glojurelang$glojure$pkg$lang.IsNil x))
 
 (def
@@ -503,40 +503,40 @@
 
 (defn false?
   "Returns true if x is the value false, false otherwise."
-  {:tag bool,
+  {:tag go/bool,
    :added "1.0"
    :static true}
-  [x] (glojure.lang.Identical x false))
+  [x] (github.com$glojurelang$glojure$pkg$lang.Identical x false))
 
 (defn true?
   "Returns true if x is the value true, false otherwise."
-  {:tag bool,
+  {:tag go/bool,
    :added "1.0"
    :static true}
-  [x] (glojure.lang.Identical x true))
+  [x] (github.com$glojurelang$glojure$pkg$lang.Identical x true))
 
 (defn boolean?
   "Return true if x is a Boolean"
   {:added "1.9"}
-  [x] (instance? bool x))
+  [x] (instance? go/bool x))
 
 (defn not
   "Returns true if x is logical false, false otherwise."
-  {:tag bool
+  {:tag go/bool
    :added "1.0"
    :static true}
   [x] (if x false true))
 
 (defn some?
   "Returns true if x is not nil, false otherwise."
-  {:tag bool
+  {:tag go/bool
    :added "1.6"
    :static true}
   [x] (not (nil? x)))
 
 (defn any?
   "Returns true given any argument."
-  {:tag bool
+  {:tag go/bool
    :added "1.9"}
   [x] true)
 
@@ -544,13 +544,13 @@
   "With no args, returns the empty string. With one arg x, returns
   x.toString().  (str nil) returns the empty string. With more than
   one arg, returns the concatenation of the str values of the args."
-  {:tag string
+  {:tag go/string
    :added "1.0"
    :static true}
-  (^string [] "")
-  (^string [^github.com$glojurelang$glojure$pkg$lang.Object x]
+  (^go/string [] "")
+  (^go/string [^github.com$glojurelang$glojure$pkg$lang.Object x]
    (if (nil? x) "" (github.com$glojurelang$glojure$pkg$lang.ToString x)))
-  (^string [x & ys]
+  (^go/string [x & ys]
      ((fn [^{:tag strings.Builder} sb xs] (if xs (recur (do (. sb (WriteString (str (first xs)))) sb) (next xs)) (.String sb))) (new strings.Builder) (cons x ys))))
 
 
@@ -558,7 +558,7 @@
   "Return true if x is a Symbol"
   {:added "1.0"
    :static true}
-  [x] (instance? glojure.lang.Symbol x))
+  [x] (instance? github.com$glojurelang$glojure$pkg$lang.Symbol x))
 
 (defn keyword?
   "Return true if x is a Keyword"
@@ -584,14 +584,14 @@
 (defn symbol
   "Returns a Symbol with the given namespace and name. Arity-1 works
   on strings, keywords, and vars."
-  {:tag glojure.lang.Symbol
+  {:tag github.com$glojurelang$glojure$pkg$lang.Symbol
    :added "1.0"
    :static true}
   ([name]
      (cond
       (symbol? name) name
-      (instance? string name) (glojure.lang.NewSymbol name)
-      (instance? glojure.lang.Var name) (.toSymbol ^glojure.lang.Var name)
+      (instance? go/string name) (github.com$glojurelang$glojure$pkg$lang.NewSymbol name)
+      (instance? github.com$glojurelang$glojure$pkg$lang.Var name) (.toSymbol ^github.com$glojurelang$glojure$pkg$lang.Var name)
       (instance? glojure.lang.Keyword name) (.sym ^glojure.lang.Keyword name)
       :else (throw (errors.New "no conversion to symbol"))))
   ([ns name] (glojure.lang.InternSymbol ns name)))
@@ -603,7 +603,7 @@
   {:added "1.0"
    :static true}
   ([] (gensym "G__"))
-  ([prefix-string] (glojure.lang.NewSymbol (str prefix-string (str (. glojure.lang.RT (NextID)))))))
+  ([prefix-string] (github.com$glojurelang$glojure$pkg$lang.NewSymbol (str prefix-string (str (. glojure.lang.RT (NextID)))))))
 
 
 (defn keyword
@@ -612,8 +612,8 @@
   {:tag glojure.lang.Keyword
    :added "1.0"
    :static true}
-  ([name] (cond (keyword? name) name (symbol? name) (glojure.lang.InternKeywordSymbol ^{:tag glojure.lang.Symbol} name) (string? name) (glojure.lang.InternKeywordString ^{:tag string} name)))
-  ([ns name] (glojure.lang.InternKeyword ns name)))
+  ([name] (cond (keyword? name) name (symbol? name) (github.com$glojurelang$glojure$pkg$lang.InternKeywordSymbol ^{:tag github.com$glojurelang$glojure$pkg$lang.Symbol} name) (string? name) (github.com$glojurelang$glojure$pkg$lang.InternKeywordString ^{:tag go/string} name)))
+  ([ns name] (github.com$glojurelang$glojure$pkg$lang.InternKeyword ns name)))
 
 (defn find-keyword
   "Returns a Keyword with the given namespace and name if one already
@@ -624,8 +624,8 @@
    :added "1.3"
    :static true}
   ([name] (cond (keyword? name) name
-                (symbol? name) (glojure.lang.Keyword/find ^glojure.lang.Symbol name)
-                (string? name) (glojure.lang.Keyword/find ^string name)))
+                (symbol? name) (glojure.lang.Keyword/find ^github.com$glojurelang$glojure$pkg$lang.Symbol name)
+                (string? name) (glojure.lang.Keyword/find ^go/string name)))
   ([ns name] (glojure.lang.Keyword/find ns name)))
 
 
@@ -655,15 +655,15 @@
   {:added "1.0"
    :static true}
   ([^glojure.lang.IFn f args]
-     (glojure.lang.Apply f (seq args)))
+     (github.com$glojurelang$glojure$pkg$lang.Apply f (seq args)))
   ([^glojure.lang.IFn f x args]
-     (glojure.lang.Apply f (list* x args)))
+     (github.com$glojurelang$glojure$pkg$lang.Apply f (list* x args)))
   ([^glojure.lang.IFn f x y args]
-     (glojure.lang.Apply f (list* x y args)))
+     (github.com$glojurelang$glojure$pkg$lang.Apply f (list* x y args)))
   ([^glojure.lang.IFn f x y z args]
-     (glojure.lang.Apply f (list* x y z args)))
+     (github.com$glojurelang$glojure$pkg$lang.Apply f (list* x y z args)))
   ([^glojure.lang.IFn f a b c d & args]
-     (glojure.lang.Apply f (cons a (cons b (cons c (cons d (spread args))))))))
+     (github.com$glojurelang$glojure$pkg$lang.Apply f (cons a (cons b (cons c (cons d (spread args))))))))
 
 (defn vary-meta
  "Returns an object of the same type and value as obj, with
@@ -680,7 +680,7 @@
   seq calls. See also - realized?"
   {:added "1.0"}
   [& body]
-  (list (quote glojure.lang.NewLazySeq) (list* (quote ^{:once true} fn*) [] body)))    
+  (list (quote github.com$glojurelang$glojure$pkg$lang.NewLazySeq) (list* (quote ^{:once true} fn*) [] body)))    
 
 (defn ^:static ^glojure.lang.ChunkBuffer chunk-buffer ^glojure.lang.ChunkBuffer [capacity]
   (glojure.lang.ChunkBuffer. capacity))
@@ -691,22 +691,22 @@
 (defn ^:static ^glojure.lang.IChunk chunk [^glojure.lang.ChunkBuffer b]
   (.chunk b))
 
-(defn ^:static  ^glojure.lang.IChunk chunk-first ^glojure.lang.IChunk [^glojure.lang.IChunkedSeq s]
+(defn ^:static  ^glojure.lang.IChunk chunk-first ^glojure.lang.IChunk [^github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s]
   (.chunkedFirst s))
 
-(defn ^:static ^glojure.lang.ISeq chunk-rest ^glojure.lang.ISeq [^glojure.lang.IChunkedSeq s]
+(defn ^:static ^github.com$glojurelang$glojure$pkg$lang.ISeq chunk-rest ^github.com$glojurelang$glojure$pkg$lang.ISeq [^github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s]
   (.chunkedMore s))
 
-(defn ^:static ^glojure.lang.ISeq chunk-next ^glojure.lang.ISeq [^glojure.lang.IChunkedSeq s]
+(defn ^:static ^github.com$glojurelang$glojure$pkg$lang.ISeq chunk-next ^github.com$glojurelang$glojure$pkg$lang.ISeq [^github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s]
   (.chunkedNext s))
 
 (defn ^:static chunk-cons [chunk rest]
-  (if (glojure.lang.Numbers/isZero (glojure.lang.Count chunk))
+  (if (glojure.lang.Numbers/isZero (github.com$glojurelang$glojure$pkg$lang.Count chunk))
     rest
     (glojure.lang.ChunkedCons. chunk rest)))
   
 (defn ^:static chunked-seq? [s]
-  (instance? glojure.lang.IChunkedSeq s))
+  (instance? github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s))
 
 (defn concat
   "Returns a lazy seq representing the concatenation of the elements in the supplied colls."
@@ -770,7 +770,7 @@
   {:inline (fn [x y] `(. glojure.lang.Util identical ~x ~y))
    :inline-arities #{2}
    :added "1.0"}
-  ([x y] (glojure.lang.Identical x y)))
+  ([x y] (github.com$glojurelang$glojure$pkg$lang.Identical x y)))
 
 ;equiv-based
 (defn =
@@ -783,12 +783,12 @@
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (glojure.lang.Equal x y))
+  ([x y] (github.com$glojurelang$glojure$pkg$lang.Equal x y))
   ([x y & more]
-   (if (glojure.lang.Equal x y)
+   (if (github.com$glojurelang$glojure$pkg$lang.Equal x y)
      (if (next more)
        (recur y (first more) (next more))
-       (glojure.lang.Equal y (first more)))
+       (github.com$glojurelang$glojure$pkg$lang.Equal y (first more)))
      false)))
 
 ;equals-based
@@ -801,7 +801,7 @@
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (glojure.lang.Equal x y))
+  ([x y] (github.com$glojurelang$glojure$pkg$lang.Equal x y))
   ([x y & more]
    (if (= x y)
      (if (next more)
@@ -811,7 +811,7 @@
 
 (defn not=
   "Same as (not (= obj1 obj2))"
-  {:tag bool
+  {:tag go/bool
    :added "1.0"
    :static true}
   ([x] false)
@@ -870,7 +870,7 @@
   {
    :inline (fn  [x] `(. glojure.lang.RT (Count ~x)))
    :added "1.0"}
-  [coll] (glojure.lang.Count coll))
+  [coll] (github.com$glojurelang$glojure$pkg$lang.Count coll))
 
 (defn int
   "Coerce to int"
@@ -969,7 +969,7 @@
    :inline-arities >1?
    :added "1.0"}
   ([] 0)
-  ([x] (glojure.lang.AsNumber x))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.AsNumber x))
   ([x y] (. glojure.lang.Numbers (AddP x y)))
   ([x y & more]
    (reduce1 +' (+' x y) more)))
@@ -981,7 +981,7 @@
    :inline-arities >1?
    :added "1.2"}
   ([] 0)
-  ([x] (glojure.lang.AsNumber x))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.AsNumber x))
   ([x y] (. glojure.lang.Numbers (Add x y)))
   ([x y & more]
      (reduce1 + (+ x y) more)))
@@ -993,7 +993,7 @@
    :inline-arities >1?
    :added "1.0"}
   ([] 1)
-  ([x] (glojure.lang.AsNumber x))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.AsNumber x))
   ([x y] (. glojure.lang.Numbers (MultiplyP x y)))
   ([x y & more]
    (reduce1 *' (*' x y) more)))
@@ -1005,7 +1005,7 @@
    :inline-arities >1?
    :added "1.2"}
   ([] 1)
-  ([x] (glojure.lang.AsNumber x))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.AsNumber x))
   ([x y] (. glojure.lang.Numbers (Multiply x y)))
   ([x y & more]
      (reduce1 * (* x y) more)))
@@ -1395,7 +1395,7 @@
 (defn int?
   "Return true if x is a fixed precision integer"
   {:added "1.9"}
-  [x] (or (instance? int64 x)
+  [x] (or (instance? go/int64 x)
           (instance? Integer x)
           (instance? Short x)
           (instance? Byte x)))
@@ -1421,7 +1421,7 @@
 (defn double?
   "Return true if x is a Double"
   {:added "1.9"}
-  [x] (instance? float64 x))
+  [x] (instance? go/float64 x))
 
 ;;
 
@@ -1493,9 +1493,9 @@
    :inline-arities #{2 3}
    :added "1.0"}
   ([map key]
-   (glojure.lang.Get map key))
+   (github.com$glojurelang$glojure$pkg$lang.Get map key))
   ([map key not-found]
-   (glojure.lang.GetDefault map key not-found)))
+   (github.com$glojurelang$glojure$pkg$lang.GetDefault map key not-found)))
 
 (defn dissoc
   "dissoc[iate]. Returns a new map of the same (hashed/sorted) type,
@@ -1517,7 +1517,7 @@
   {:added "1.0"
    :static true}
   ([set] set)
-  ([^glojure.lang.IPersistentSet set key]
+  ([^github.com$glojurelang$glojure$pkg$lang.IPersistentSet set key]
    (when set
      (. set (Disjoin key))))
   ([set key & ks]
@@ -1552,13 +1552,13 @@
   "Returns a sequence of the map's keys, in the same order as (seq map)."
   {:added "1.0"
    :static true}
-  [map] (glojure.lang.Keys map))
+  [map] (github.com$glojurelang$glojure$pkg$lang.Keys map))
 
 (defn vals
   "Returns a sequence of the map's values, in the same order as (seq map)."
   {:added "1.0"
    :static true}
-  [map] (glojure.lang.Vals map))
+  [map] (github.com$glojurelang$glojure$pkg$lang.Vals map))
 
 (defn key
   "Returns the key of the map entry."
@@ -1584,18 +1584,18 @@
 
 (defn name
   "Returns the name String of a string, symbol or keyword."
-  {:tag string
+  {:tag go/string
    :added "1.0"
    :static true}
   [x]
-  (if (string? x) x (. ^glojure.lang.Named x (Name))))
+  (if (string? x) x (. ^github.com$glojurelang$glojure$pkg$lang.Named x (Name))))
 
 (defn namespace
   "Returns the namespace String of a symbol or keyword, or nil if not present."
-  {:tag string
+  {:tag go/string
    :added "1.0"
    :static true}
-  [^glojure.lang.Named x]
+  [^github.com$glojurelang$glojure$pkg$lang.Named x]
     (. x (Namespace)))
 
 (defn boolean
@@ -1774,7 +1774,7 @@
           hierarchy (get options :hierarchy #'global-hierarchy)]
       (check-valid-options options :default :hierarchy)
       `(let [v# (def ~mm-name)]
-         (when-not (and (.HasRoot v#) (instance? glojure.lang.MultiFn (deref v#)))
+         (when-not (and (.HasRoot v#) (instance? github.com$glojurelang$glojure$pkg$lang.MultiFn (deref v#)))
            (def ~mm-name
                 (glojure.lang.NewMultiFn ~(name mm-name) ~dispatch-fn ~default ~hierarchy)))))))
 
@@ -1782,20 +1782,20 @@
   "Creates and installs a new method of multimethod associated with dispatch-value. "
   {:added "1.0"}
   [multifn dispatch-val & fn-tail]
-  `(. ~(with-meta multifn {:tag 'glojure.lang.MultiFn}) AddMethod ~dispatch-val (fn ~@fn-tail)))
+  `(. ~(with-meta multifn {:tag 'github.com$glojurelang$glojure$pkg$lang.MultiFn}) AddMethod ~dispatch-val (fn ~@fn-tail)))
 
 (defn remove-all-methods
   "Removes all of the methods of multimethod."
   {:added "1.2"
    :static true} 
- [^glojure.lang.MultiFn multifn]
+ [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn]
  (.reset multifn))
 
 (defn remove-method
   "Removes the method of multimethod associated with dispatch-value."
   {:added "1.0"
    :static true}
- [^glojure.lang.MultiFn multifn dispatch-val]
+ [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn dispatch-val]
  (. multifn removeMethod dispatch-val))
 
 (defn prefer-method
@@ -1803,27 +1803,27 @@
    when there is a conflict"
   {:added "1.0"
    :static true}
-  [^glojure.lang.MultiFn multifn dispatch-val-x dispatch-val-y]
+  [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn dispatch-val-x dispatch-val-y]
   (. multifn PreferMethod dispatch-val-x dispatch-val-y))
 
 (defn methods
   "Given a multimethod, returns a map of dispatch values -> dispatch fns"
   {:added "1.0"
    :static true}
-  [^glojure.lang.MultiFn multifn] (.getMethodTable multifn))
+  [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn] (.getMethodTable multifn))
 
 (defn get-method
   "Given a multimethod and a dispatch value, returns the dispatch fn
   that would apply to that value, or nil if none apply and no default"
   {:added "1.0"
    :static true}
-  [^glojure.lang.MultiFn multifn dispatch-val] (.getMethod multifn dispatch-val))
+  [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn dispatch-val] (.getMethod multifn dispatch-val))
 
 (defn prefers
   "Given a multimethod, returns a map of preferred value -> set of other values"
   {:added "1.0"
    :static true}
-  [^glojure.lang.MultiFn multifn] (.getPreferTable multifn))
+  [^github.com$glojurelang$glojure$pkg$lang.MultiFn multifn] (.getPreferTable multifn))
 
 ;;;;;;;;; var stuff
 
@@ -2283,9 +2283,9 @@
   {:added "1.0"
    :static true
    }
-  ([x] (glojure.lang.NewRef x))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.NewRef x))
   ([x & options] 
-   (let [r  ^glojure.lang.Ref (setup-reference (ref x) options)
+   (let [r  ^github.com$glojurelang$glojure$pkg$lang.Ref (setup-reference (ref x) options)
          opts (apply hash-map options)]
     (when (:max-history opts)
       (.setMaxHistory r (:max-history opts)))
@@ -2314,8 +2314,8 @@
   value is available. See also - realized?."
   {:added "1.0"
    :static true}
-  ([ref] (if (instance? glojure.lang.IDeref ref)
-           (.Deref ^glojure.lang.IDeref ref)
+  ([ref] (if (instance? github.com$glojurelang$glojure$pkg$lang.IDeref ref)
+           (.Deref ^github.com$glojurelang$glojure$pkg$lang.IDeref ref)
            (deref-future ref)))
   ([ref timeout-ms timeout-val]
      (if (instance? glojure.lang.IBlockingDeref ref)
@@ -2337,7 +2337,7 @@
   return false or throw an exception."
   {:added "1.0"
    :static true}
-  ([x] (glojure.lang.NewAtom x))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.NewAtom x))
   ([x & options] (setup-reference (atom x) options)))
 
 (defn swap!
@@ -2363,20 +2363,20 @@
   set happened, else false"
   {:added "1.0"
    :static true}
-  [^glojure.lang.IAtom atom oldval newval] (.compareAndSet atom oldval newval))
+  [^github.com$glojurelang$glojure$pkg$lang.IAtom atom oldval newval] (.compareAndSet atom oldval newval))
 
 (defn reset!
   "Sets the value of atom to newval without regard for the
   current value. Returns newval."
   {:added "1.0"
    :static true}
-  [^glojure.lang.IAtom atom newval] (.reset atom newval))
+  [^github.com$glojurelang$glojure$pkg$lang.IAtom atom newval] (.reset atom newval))
 
 (defn reset-vals!
   "Sets the value of atom to newval. Returns [old new], the value of the
    atom before and after the reset."
   {:added "1.9"}
-  ^glojure.lang.IPersistentVector [^glojure.lang.IAtom2 atom newval] (.resetVals atom newval))
+  ^github.com$glojurelang$glojure$pkg$lang.IPersistentVector [^glojure.lang.IAtom2 atom newval] (.resetVals atom newval))
 
 (defn set-validator!
   "Sets the validator-fn for a var/ref/agent/atom. validator-fn must be nil or a
@@ -2429,7 +2429,7 @@
   {:added "1.0"
    :static true}
 
-  [^glojure.lang.Ref ref fun & args]
+  [^github.com$glojurelang$glojure$pkg$lang.Ref ref fun & args]
     (. ref (Commute fun args)))
 
 (defn alter
@@ -2441,7 +2441,7 @@
   and returns the in-transaction-value of ref."
   {:added "1.0"
    :static true}
-  [^glojure.lang.Ref ref fun & args]
+  [^github.com$glojurelang$glojure$pkg$lang.Ref ref fun & args]
     (. ref (alter fun args)))
 
 (defn ref-set
@@ -2449,32 +2449,32 @@
   Returns val."
   {:added "1.0"
    :static true}
-  [^glojure.lang.Ref ref val]
+  [^github.com$glojurelang$glojure$pkg$lang.Ref ref val]
     (. ref (set val)))
 
 (defn ref-history-count
   "Returns the history count of a ref"
   {:added "1.1"
    :static true}
-  [^glojure.lang.Ref ref]
+  [^github.com$glojurelang$glojure$pkg$lang.Ref ref]
     (.getHistoryCount ref))
 
 (defn ref-min-history
   "Gets the min-history of a ref, or sets it and returns the ref"
   {:added "1.1"
    :static true}
-  ([^glojure.lang.Ref ref]
+  ([^github.com$glojurelang$glojure$pkg$lang.Ref ref]
     (.getMinHistory ref))
-  ([^glojure.lang.Ref ref n]
+  ([^github.com$glojurelang$glojure$pkg$lang.Ref ref n]
     (.setMinHistory ref n)))
 
 (defn ref-max-history
   "Gets the max-history of a ref, or sets it and returns the ref"
   {:added "1.1"
    :static true}
-  ([^glojure.lang.Ref ref]
+  ([^github.com$glojurelang$glojure$pkg$lang.Ref ref]
     (.getMaxHistory ref))
-  ([^glojure.lang.Ref ref n]
+  ([^github.com$glojurelang$glojure$pkg$lang.Ref ref n]
     (.setMaxHistory ref n)))
 
 (defn ensure
@@ -2483,7 +2483,7 @@
   ref. Allows for more concurrency than (ref-set ref @ref)"
   {:added "1.0"
    :static true}
-  [^glojure.lang.Ref ref]
+  [^github.com$glojurelang$glojure$pkg$lang.Ref ref]
     (. ref (touch))
     (. ref (deref)))
 
@@ -2497,7 +2497,7 @@
   once, but any effects on Refs will be atomic."
   {:added "1.0"}
   [flags-ignored-for-now & body]
-  `(. glojure.lang.LockingTransaction
+  `(. github.com$glojurelang$glojure$pkg$lang.LockingTransaction
       (RunInTransaction (fn [] ~@body))))
 
 
@@ -2517,7 +2517,7 @@
 (defn volatile!
   "Creates and returns a Volatile with an initial value of val."
   {:added "1.7"
-   :tag glojure.lang.Volatile}
+   :tag github.com$glojurelang$glojure$pkg$lang.Volatile}
   [val]
   (glojure.lang.Volatile. val))
 
@@ -2525,7 +2525,7 @@
   "Sets the value of volatile to newval without regard for the
    current value. Returns newval."
   {:added "1.7"}
-  [^glojure.lang.Volatile vol newval]
+  [^github.com$glojurelang$glojure$pkg$lang.Volatile vol newval]
   (.reset vol newval))
 
 (defmacro vswap!
@@ -2534,14 +2534,14 @@
    was swapped in."
   {:added "1.7"}
   [vol f & args]
-  (let [v (with-meta vol {:tag 'glojure.lang.Volatile})]
+  (let [v (with-meta vol {:tag 'github.com$glojurelang$glojure$pkg$lang.Volatile})]
     `(.reset ~v (~f (.Deref ~v) ~@args))))
 
 (defn volatile?
   "Returns true if x is a volatile."
   {:added "1.7"}
   [x]
-  (instance? glojure.lang.Volatile x))
+  (instance? github.com$glojurelang$glojure$pkg$lang.Volatile x))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; fn stuff ;;;;;;;;;;;;;;;;
 
@@ -2664,7 +2664,7 @@
 (defn every?
   "Returns true if (pred x) is logical true for every x in coll, else
   false."
-  {:tag bool
+  {:tag go/bool
    :added "1.0"
    :static true}
   [pred coll]
@@ -2674,7 +2674,7 @@
    :else false))
 
 (def
- ^{:tag bool
+ ^{:tag go/bool
    :doc "Returns false if (pred x) is logical true for every x in
   coll, else true."
    :arglists '([pred coll])
@@ -2693,7 +2693,7 @@
       (or (pred (first s)) (recur pred (next s)))))
 
 (def
- ^{:tag bool
+ ^{:tag go/bool
    :doc "Returns false if (pred x) is logical true for any x in coll,
   else true."
    :arglists '([pred coll])
@@ -2710,7 +2710,7 @@
   [bindings & body]
   (let [i (first bindings)
         n (second bindings)]
-    `(let [n# (glojure.lang.AsInt64 ~n)]
+    `(let [n# (github.com$glojurelang$glojure$pkg$lang.AsInt64 ~n)]
        (loop [~i 0]
          (when (< ~i n#)
            ~@body
@@ -2994,8 +2994,8 @@
   "Returns a lazy (infinite!, or length n if supplied) sequence of xs."
   {:added "1.0"
    :static true}
-  ([x] (glojure.lang.NewRepeat x))
-  ([n x] (glojure.lang.NewRepeatN n x)))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.NewRepeat x))
+  ([n x] (github.com$glojurelang$glojure$pkg$lang.NewRepeatN n x)))
 
 (defn replicate
   "DEPRECATED: Use 'repeat' instead.
@@ -3020,16 +3020,16 @@
   ([]
    (iterate inc' 0))
   ([end]
-   (if (instance? int64 end)
-     (glojure.lang.NewRangeIterator 0 end 1)
+   (if (instance? go/int64 end)
+     (github.com$glojurelang$glojure$pkg$lang.NewRangeIterator 0 end 1)
      (glojure.lang.Range/create end)))
   ([start end]
-   (if (and (instance? int64 start) (instance? int64 end))
-     (glojure.lang.NewRangeIterator start end 1)
+   (if (and (instance? go/int64 start) (instance? go/int64 end))
+     (github.com$glojurelang$glojure$pkg$lang.NewRangeIterator start end 1)
      (glojure.lang.Range/create start end)))
   ([start end step]
-   (if (and (instance? int64 start) (instance? int64 end) (instance? int64 step))
-     (glojure.lang.NewRangeIterator start end step)
+   (if (and (instance? go/int64 start) (instance? go/int64 end) (instance? go/int64 step))
+     (github.com$glojurelang$glojure$pkg$lang.NewRangeIterator start end step)
      (glojure.lang.Range/create start end step))))
 
 (defn merge
@@ -3325,7 +3325,7 @@
   "Returns a new, transient version of the collection, in constant time."
   {:added "1.1"
    :static true}
-  [^glojure.lang.IEditableCollection coll] 
+  [^github.com$glojurelang$glojure$pkg$lang.IEditableCollection coll] 
   (.AsTransient coll))
 
 (defn persistent! 
@@ -3400,7 +3400,7 @@
   {:added "1.0"
    :static true}
   [to from]
-  (if (instance? glojure.lang.IEditableCollection to)
+  (if (instance? github.com$glojurelang$glojure$pkg$lang.IEditableCollection to)
     (persistent! (reduce1 conj! (transient to) from))
     (reduce1 conj to from)))
 
@@ -3414,7 +3414,7 @@
   [& import-symbols-or-lists]
   (let [specs (map #(if (and (seq? %) (= 'quote (first %))) (second %) %) 
                    import-symbols-or-lists)]
-    `(do ~@(map #(list 'glojure.lang.Import %)
+    `(do ~@(map #(list 'github.com$glojurelang$glojure$pkg$lang.Import %)
                 (reduce1 (fn [v spec] 
                           (if (symbol? spec)
                             (conj v (name spec))
@@ -3443,7 +3443,7 @@
   "Returns the Class of x"
   {:added "1.0"
    :static true}
-  ^reflect.Type [^github.com$glojurelang$glojure$pkg$lang.Object x] (if (nil? x) x (glojure.lang.TypeOf x)))
+  ^reflect.Type [^github.com$glojurelang$glojure$pkg$lang.Object x] (if (nil? x) x (github.com$glojurelang$glojure$pkg$lang.TypeOf x)))
 
 (defn type 
   "Returns the :type metadata of x, or its Class if none"
@@ -3463,7 +3463,7 @@
   "Coerce to long"
   {:inline (fn  [x] `(. glojure.lang.RT (LongCast ~x)))
    :added "1.0"}
-  [x] (glojure.lang.AsInt64 x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.AsInt64 x))
 
 (defn float
   "Coerce to float"
@@ -3475,7 +3475,7 @@
   "Coerce to double"
   {:inline (fn  [x] `(. glojure.lang.RT (DoubleCast ~x)))
    :added "1.0"}
-  [x] (glojure.lang.AsFloat64 x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.AsFloat64 x))
 
 (defn short
   "Coerce to short"
@@ -3559,23 +3559,23 @@
   "Returns true if n is a Ratio"
   {:added "1.0"
    :static true}
-  [n] (instance? glojure.lang.Ratio n))
+  [n] (instance? github.com$glojurelang$glojure$pkg$lang.Ratio n))
 
 (defn numerator
   "Returns the numerator part of a Ratio."
-  {:tag big.Int
+  {:tag math$big.Int
    :added "1.2"
    :static true}
   [r]
-  (.numerator ^glojure.lang.Ratio r))
+  (.numerator ^github.com$glojurelang$glojure$pkg$lang.Ratio r))
 
 (defn denominator
   "Returns the denominator part of a Ratio."
-  {:tag big.Int
+  {:tag math$big.Int
    :added "1.2"
    :static true}
   [r]
-  (.denominator ^glojure.lang.Ratio r))
+  (.denominator ^github.com$glojurelang$glojure$pkg$lang.Ratio r))
 
 (defn decimal?
   "Returns true if n is a BigDecimal"
@@ -3588,8 +3588,8 @@
   {:added "1.0"
    :static true}
   [n]
-  (or (instance? float64 n)
-      (instance? float32 n)))
+  (or (instance? go/float64 n)
+      (instance? go/float32 n)))
 
 (defn rational? 
   "Returns true if n is a rational number"
@@ -3600,29 +3600,29 @@
 
 (defn bigint
   "Coerce to BigInt"
-  {:tag glojure.lang.BigInt
+  {:tag github.com$glojurelang$glojure$pkg$lang.BigInt
    :static true
    :added "1.3"}
   [x] (cond
-       (instance? glojure.lang.BigInt x) x
-       (instance? big.Int x) (glojure.lang.BigInt/fromBigInteger x)
+       (instance? github.com$glojurelang$glojure$pkg$lang.BigInt x) x
+       (instance? math$big.Int x) (glojure.lang.BigInt/fromBigInteger x)
        (decimal? x) (bigint (.toBigInteger ^github.com$glojurelang$glojure$pkg$lang.BigDecimal x))
        (float? x)  (bigint (. github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x)))
-       (ratio? x) (bigint (.bigIntegerValue ^glojure.lang.Ratio x))
+       (ratio? x) (bigint (.bigIntegerValue ^github.com$glojurelang$glojure$pkg$lang.Ratio x))
        (number? x) (glojure.lang.BigInt/valueOf (long x))
        :else (bigint (BigInteger. x))))
 
 (defn biginteger
   "Coerce to BigInteger"
-  {:tag big.Int
+  {:tag math$big.Int
    :added "1.0"
    :static true}
   [x] (cond
-       (instance? big.Int x) x
-       (instance? glojure.lang.BigInt x) (.toBigInteger ^glojure.lang.BigInt x)
+       (instance? math$big.Int x) x
+       (instance? github.com$glojurelang$glojure$pkg$lang.BigInt x) (.toBigInteger ^github.com$glojurelang$glojure$pkg$lang.BigInt x)
        (decimal? x) (.toBigInteger ^github.com$glojurelang$glojure$pkg$lang.BigDecimal x)
        (float? x) (.toBigInteger (. github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x)))
-       (ratio? x) (.bigIntegerValue ^glojure.lang.Ratio x)
+       (ratio? x) (.bigIntegerValue ^github.com$glojurelang$glojure$pkg$lang.Ratio x)
        (number? x) (BigInteger/valueOf (long x))
        :else (BigInteger. x)))
 
@@ -3634,9 +3634,9 @@
   [x] (cond
        (decimal? x) x
        (float? x) (. github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x))
-       (ratio? x) (/ (BigDecimal. (.numerator ^glojure.lang.Ratio x)) (.denominator ^glojure.lang.Ratio x))
-       (instance? glojure.lang.BigInt x) (.toBigDecimal ^glojure.lang.BigInt x)
-       (instance? big.Int x) (BigDecimal. ^big.Int x)
+       (ratio? x) (/ (BigDecimal. (.numerator ^github.com$glojurelang$glojure$pkg$lang.Ratio x)) (.denominator ^github.com$glojurelang$glojure$pkg$lang.Ratio x))
+       (instance? github.com$glojurelang$glojure$pkg$lang.BigInt x) (.toBigDecimal ^github.com$glojurelang$glojure$pkg$lang.BigInt x)
+       (instance? math$big.Int x) (BigDecimal. ^math$big.Int x)
        (number? x) (BigDecimal/valueOf (long x))
        :else (BigDecimal. x)))
 
@@ -3668,12 +3668,12 @@
      (pr-on x *out*))
   ([x & more]
    (pr x)
-   (glojure.lang.AppendWriter *out* \space)
+   (github.com$glojurelang$glojure$pkg$lang.AppendWriter *out* \space)
    (if-let [nmore (next more)]
      (recur (first more) nmore)
      (apply pr more))))
 
-(def ^:private ^string system-newline
+(def ^:private ^go/string system-newline
      "\n")
 
 (defn newline
@@ -3681,7 +3681,7 @@
   {:added "1.0"
    :static true}
   []
-    (glojure.lang.AppendWriter *out* system-newline)
+    (github.com$glojurelang$glojure$pkg$lang.AppendWriter *out* system-newline)
     nil)
 
 (defn flush
@@ -3762,7 +3762,7 @@
      (let [o (read stream eof-error? eof-value recursive?)
            s (.trim (.getString stream))]
        [o s])
-     (catch Throwable ex
+     (catch github.com$glojurelang$glojure$pkg$lang.Throwable ex
        (.getString stream)
        (throw ex))))
   ([opts ^glojure.lang.LineNumberingPushbackReader stream]
@@ -3771,7 +3771,7 @@
      (let [o (read opts stream)
            s (.trim (.getString stream))]
        [o s])
-     (catch Throwable ex
+     (catch github.com$glojurelang$glojure$pkg$lang.Throwable ex
        (.getString stream)
        (throw ex)))))
 
@@ -4020,7 +4020,7 @@
   {:added "1.0"
    :static true}
   [& keys]
-    (glojure.lang.CreatePersistentStructMapSlotMap keys))
+    (github.com$glojurelang$glojure$pkg$lang.CreatePersistentStructMapSlotMap keys))
 
 (defmacro defstruct
   "Same as (def name (create-struct keys...))"
@@ -4037,7 +4037,7 @@
   {:added "1.0"
    :static true}
   [s & inits]
-    (glojure.lang.CreatePersistentStructMap s inits))
+    (github.com$glojurelang$glojure$pkg$lang.CreatePersistentStructMap s inits))
 
 (defn struct
   "Returns a new structmap instance with the keys of the
@@ -4046,7 +4046,7 @@
   {:added "1.0"
    :static true}
   [s & vals]
-    (glojure.lang.ConstructPersistentStructMap s vals))
+    (github.com$glojurelang$glojure$pkg$lang.ConstructPersistentStructMap s vals))
 
 (defn accessor
   "Returns a fn that, given an instance of a structmap with the basis,
@@ -4080,7 +4080,7 @@
   "Returns true if x implements IPersistentSet"
   {:added "1.0"
    :static true}
-  [x] (instance? glojure.lang.IPersistentSet x))
+  [x] (instance? github.com$glojurelang$glojure$pkg$lang.IPersistentSet x))
 
 (defn set
   "Returns a set of the distinct elements of coll."
@@ -4089,8 +4089,8 @@
   [coll]
   (if (set? coll)
     (with-meta coll nil)
-    (if (instance? glojure.lang.IReduceInit coll)
-      (persistent! (.ReduceInit ^glojure.lang.IReduceInit coll conj! (transient #{})))
+    (if (instance? github.com$glojurelang$glojure$pkg$lang.IReduceInit coll)
+      (persistent! (.ReduceInit ^github.com$glojurelang$glojure$pkg$lang.IReduceInit coll conj! (transient #{})))
       (persistent! (reduce1 conj! (transient #{}) coll)))))
 
 (defn ^{:private true
@@ -4107,7 +4107,7 @@
   "Returns the namespace named by the symbol or nil if it doesn't exist."
   {:added "1.0"
    :static true}
-  [sym] (glojure.lang.FindNamespace sym))
+  [sym] (github.com$glojurelang$glojure$pkg$lang.FindNamespace sym))
 
 (defn create-ns
   "Create a new namespace named by the symbol if one doesn't already
@@ -4136,8 +4136,8 @@
   found."
   {:added "1.0"
    :static true}
-  ^glojure.lang.Namespace [x]
-  (if (instance? glojure.lang.Namespace x)
+  ^github.com$glojurelang$glojure$pkg$lang.Namespace [x]
+  (if (instance? github.com$glojurelang$glojure$pkg$lang.Namespace x)
     x
     (or (find-ns x) (throw (Exception. (str "No namespace: " x " found"))))))
 
@@ -4172,7 +4172,7 @@
    :static true}
   [ns]
   (let [ns (the-ns ns)]
-    (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
+    (filter-key val (fn [^github.com$glojurelang$glojure$pkg$lang.Var v] (and (instance? github.com$glojurelang$glojure$pkg$lang.Var v)
                                  (= ns (.Namespace v))
                                  (.IsPublic v)))
                 (ns-map ns))))
@@ -4190,7 +4190,7 @@
    :static true}
   [ns]
   (let [ns (the-ns ns)]
-    (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
+    (filter-key val (fn [^github.com$glojurelang$glojure$pkg$lang.Var v] (and (instance? github.com$glojurelang$glojure$pkg$lang.Var v)
                                  (= ns (.Namespace v))))
                 (ns-map ns))))
 
@@ -4219,7 +4219,7 @@
           to-do (if (= :all (:refer fs))
                   (keys nspublics)
                   (or (:refer fs) (:only fs) (keys nspublics)))]
-      (when (and to-do (not (instance? glojure.lang.Sequential to-do)))
+      (when (and to-do (not (instance? github.com$glojurelang$glojure$pkg$lang.Sequential to-do)))
         (throw (new Exception ":only/:refer value must be a sequential collection of symbols")))
       (doseq [sym to-do]
         (when-not (exclude sym)
@@ -4237,7 +4237,7 @@
    :static true}
   [ns]
   (let [ns (the-ns ns)]
-    (filter-key val (fn [^glojure.lang.Var v] (and (instance? glojure.lang.Var v)
+    (filter-key val (fn [^github.com$glojurelang$glojure$pkg$lang.Var v] (and (instance? github.com$glojurelang$glojure$pkg$lang.Var v)
                                  (not= ns (.Namespace v))))
                 (ns-map ns))))
 
@@ -4308,14 +4308,14 @@
   "Gets the value in the var object"
   {:added "1.0"
    :static true}
-  [^glojure.lang.Var x] (. x (Get)))
+  [^github.com$glojurelang$glojure$pkg$lang.Var x] (. x (Get)))
 
 (defn var-set
   "Sets the value in the var object to val. The var must be
  thread-locally bound."
   {:added "1.0"
    :static true}
-  [^glojure.lang.Var x val] (. x (Set val)))
+  [^github.com$glojurelang$glojure$pkg$lang.Var x val] (. x (Set val)))
 
 (defmacro with-local-vars
   "varbinding=> symbol init-expr
@@ -4330,7 +4330,7 @@
      (vector? name-vals-vec) "a vector for its binding"
      (even? (count name-vals-vec)) "an even number of forms in binding vector")
   `(let [~@(interleave (take-nth 2 name-vals-vec)
-                       (repeat '(.. glojure.lang.Var create setDynamic)))]
+                       (repeat '(.. github.com$glojurelang$glojure$pkg$lang.Var create setDynamic)))]
      (glojure.lang.PushThreadBindings {})
      (try
       ~@body
@@ -4420,7 +4420,7 @@
                    pmap
                    (fn [bvec b v]
                      (let [gmap (gensym "map__")
-                           gmapseq (with-meta gmap {:tag 'glojure.lang.ISeq})
+                           gmapseq (with-meta gmap {:tag 'github.com$glojurelang$glojure$pkg$lang.ISeq})
                            defaults (:or b)]
                        (loop [ret (-> bvec (conj gmap) (conj v)
                                       (conj gmap) (conj `(if (seq? ~gmap)
@@ -4455,7 +4455,7 @@
                          (if (seq bes)
                            (let [bb (key (first bes))
                                  bk (val (first bes))
-                                 local (if (instance? glojure.lang.Named bb) (with-meta (symbol nil (name bb)) (meta bb)) bb)
+                                 local (if (instance? github.com$glojurelang$glojure$pkg$lang.Named bb) (with-meta (symbol nil (name bb)) (meta bb)) bb)
                                  bv (if (contains? defaults local)
                                       (list `get gmap bk (defaults local))
                                       (list `get gmap bk))]
@@ -4645,7 +4645,7 @@
                                 (conj (pop groups) (conj (peek groups) [k v]))
                                 (conj groups [k v])))
                             [] (partition 2 seq-exprs)))
-        err (fn [& msg] (throw (errors.New ^string (apply str msg))))
+        err (fn [& msg] (throw (errors.New ^go/string (apply str msg))))
         emit-bind (fn emit-bind [[[bind expr & mod-pairs]
                                   & [[_ next-expr] :as next-groups]]]
                     (let [giter (gensym "iter__")
@@ -4738,7 +4738,7 @@
 
 (defn pr-str
   "pr to a string, returning it"
-  {:tag string
+  {:tag go/string
    :added "1.0"
    :static true}
   [& xs]
@@ -4747,7 +4747,7 @@
 
 (defn prn-str
   "prn to a string, returning it"
-  {:tag string
+  {:tag go/string
    :added "1.0"
    :static true}
   [& xs]
@@ -4756,7 +4756,7 @@
 
 (defn print-str
   "print to a string, returning it"
-  {:tag string
+  {:tag go/string
    :added "1.0"
    :static true}
   [& xs]
@@ -4765,7 +4765,7 @@
 
 (defn println-str
   "println to a string, returning it"
-  {:tag string
+  {:tag go/string
    :added "1.0"
    :static true}
   [& xs]
@@ -4773,7 +4773,7 @@
      (apply println xs)))
 
 (defn ^:private elide-top-frames
-  [^Throwable ex class-name]
+  [^github.com$glojurelang$glojure$pkg$lang.Throwable ex class-name]
   (let [tr (.getStackTrace ex)]
     (doto ex
       (.setStackTrace
@@ -4803,17 +4803,17 @@
   Otherwise returns nil."
   {:added "1.10"}
   [ex]
-  (when (instance? Throwable ex)
-    (.getMessage ^Throwable ex)))
+  (when (instance? github.com$glojurelang$glojure$pkg$lang.Throwable ex)
+    (.getMessage ^github.com$glojurelang$glojure$pkg$lang.Throwable ex)))
 
 (defn ex-cause
   "Returns the cause of ex if ex is a Throwable.
   Otherwise returns nil."
-  {:tag Throwable
+  {:tag github.com$glojurelang$glojure$pkg$lang.Throwable
    :added "1.10"}
   [ex]
-  (when (instance? Throwable ex)
-    (.getCause ^Throwable ex)))
+  (when (instance? github.com$glojurelang$glojure$pkg$lang.Throwable ex)
+    (.getCause ^github.com$glojurelang$glojure$pkg$lang.Throwable ex)))
 
 (defmacro assert
   "Evaluates expr and throws an exception if it does not evaluate to
@@ -4851,7 +4851,7 @@
 (defn re-matcher
   "Returns an instance of java.util.regex.Matcher, for use, e.g. in
   re-find."
-  {:tag java.util.regex.Matcher
+  {:tag github.com$glojurelang$glojure$pkg$lang.Matcher
    :added "1.0"
    :static true}
   [^regexp.Regexp re s]
@@ -4864,7 +4864,7 @@
   being the entire match."
   {:added "1.0"
    :static true}
-  [^java.util.regex.Matcher m]
+  [^github.com$glojurelang$glojure$pkg$lang.Matcher m]
     (let [gc  (. m (groupCount))]
       (if (zero? gc)
         (. m (group))
@@ -4903,7 +4903,7 @@
   groups."
   {:added "1.0"
    :static true}
-  ([^java.util.regex.Matcher m]
+  ([^github.com$glojurelang$glojure$pkg$lang.Matcher m]
    (when (. m (find))
      (re-groups m)))
   ([^regexp.Regexp re s]
@@ -4978,15 +4978,15 @@
   "Returns true if v is of type glojure.lang.Var"
   {:added "1.0"
    :static true}
-  [v] (instance? glojure.lang.Var v))
+  [v] (instance? github.com$glojurelang$glojure$pkg$lang.Var v))
 
 (defn subs
   "Returns the substring of s beginning at start inclusive, and ending
   at end (defaults to length of string), exclusive."
   {:added "1.0"
    :static true}
-  (^string [^string s start] (go/slice s start))
-  (^string [^string s start end] (go/slice s start end)))
+  (^go/string [^go/string s start] (go/slice s start))
+  (^go/string [^go/string s start end] (go/slice s start end)))
 
 (defn max-key
   "Returns the x for which (k x), a number, is greatest.
@@ -5245,8 +5245,8 @@
   {:added "1.0"
    :static true}
   [coll]
-  (when (instance? glojure.lang.IPersistentCollection coll)
-    (.empty ^glojure.lang.IPersistentCollection coll)))
+  (when (instance? github.com$glojurelang$glojure$pkg$lang.IPersistentCollection coll)
+    (.empty ^github.com$glojurelang$glojure$pkg$lang.IPersistentCollection coll)))
 
 (defmacro amap
   "Maps an expression across an array a, using an index named idx, and
@@ -5507,7 +5507,7 @@
   current value plus any args"
   {:added "1.0"
    :static true}
-  [^glojure.lang.Var v f & args] (.alterRoot v f args))
+  [^github.com$glojurelang$glojure$pkg$lang.Var v f & args] (.alterRoot v f args))
 
 (defn bound?
   "Returns true if all of the vars provided as arguments have any bound value, root or thread-local.
@@ -5515,7 +5515,7 @@
   {:added "1.2"
    :static true}
   [& vars]
-  (every? #(.isBound ^glojure.lang.Var %) vars))
+  (every? #(.isBound ^github.com$glojurelang$glojure$pkg$lang.Var %) vars))
 
 (defn thread-bound?
   "Returns true if all of the vars provided as arguments have thread-local bindings.
@@ -5523,7 +5523,7 @@
   {:added "1.2"
    :static true}
   [& vars]
-  (every? #(.getThreadBinding ^glojure.lang.Var %) vars))
+  (every? #(.getThreadBinding ^github.com$glojurelang$glojure$pkg$lang.Var %) vars))
 
 (defn make-hierarchy
   "Creates a hierarchy object for use with derive, isa? etc."
@@ -5632,13 +5632,13 @@
   {:added "1.0"}
   ([tag parent]
    (assert (namespace parent))
-   (assert (or (class? tag) (and (instance? glojure.lang.Named tag) (namespace tag))))
+   (assert (or (class? tag) (and (instance? github.com$glojurelang$glojure$pkg$lang.Named tag) (namespace tag))))
 
    (alter-var-root #'global-hierarchy derive tag parent) nil)
   ([h tag parent]
    (assert (not= tag parent))
-   (assert (or (class? tag) (instance? glojure.lang.Named tag)))
-   (assert (instance? glojure.lang.Named parent))
+   (assert (or (class? tag) (instance? github.com$glojurelang$glojure$pkg$lang.Named tag)))
+   (assert (instance? github.com$glojurelang$glojure$pkg$lang.Named parent))
 
    (let [tp (:parents h)
          td (:descendants h)
@@ -5684,7 +5684,7 @@
 
 (defn distinct?
   "Returns true if no two of the arguments are ="
-  {:tag bool
+  {:tag go/bool
    :added "1.0"
    :static true}
   ([x] true)
@@ -5706,7 +5706,7 @@
   [^java.sql.ResultSet rs]
     (let [rsmeta (. rs (getMetaData))
           idxs (range 1 (inc (. rsmeta (getColumnCount))))
-          keys (map (comp keyword #(.toLowerCase ^string %))
+          keys (map (comp keyword #(.toLowerCase ^go/string %))
                     (map (fn [i] (. rsmeta (getColumnLabel i))) idxs))
           check-keys
                 (or (apply distinct? keys)
@@ -5740,7 +5740,7 @@
   string syntax"
   {:added "1.0"
    :static true}
-  ^string [fmt & args]
+  ^go/string [fmt & args]
   (apply fmt.Sprintf fmt args))
 
 (defn printf
@@ -5808,7 +5808,7 @@
     `(do
        (glojure.core/in-ns '~name)
        ~@(when name-metadata
-           `((.ResetMeta (glojure.lang.FindNamespace '~name) ~name-metadata)))
+           `((.ResetMeta (github.com$glojurelang$glojure$pkg$lang.FindNamespace '~name) ~name-metadata)))
        (with-loading-context
         ~@(when gen-class-call (list gen-class-call))
         ~@(when (and (not= name 'glojure.core) (not-any? #(= :refer-glojure (first %)) references))
@@ -5854,7 +5854,7 @@
   "Throws a CompilerException with a message if pred is true"
   [pred fmt & args]
   (when pred
-    (let [^string message (apply format fmt args)
+    (let [^go/string message (apply format fmt args)
           exception (Exception. message)
           raw-trace (.getStackTrace exception)
           boring? #(not= (.getMethodName ^StackTraceElement %) "doInvoke")
@@ -5884,7 +5884,7 @@
 
 (defn- root-resource
   "Returns the root directory path for a lib"
-  {:tag string}
+  {:tag go/string}
   [lib]
   (str \/
        (-> (name lib) (strings.ReplaceAll "-" "_") (strings.ReplaceAll "." "/"))))
@@ -6120,8 +6120,8 @@ fails, attempts to require sym's namespace and retries."
   {:redef true
    :added "1.0"}
   [& paths]
-  (doseq [^string path paths]
-    (let [^string path (if (strings.HasPrefix path "/")
+  (doseq [^go/string path paths]
+    (let [^go/string path (if (strings.HasPrefix path "/")
                           path
                           (str (root-directory (ns-name *ns*)) \/ path))]
       (when *loading-verbosely*
@@ -6214,13 +6214,13 @@ fails, attempts to require sym's namespace and retries."
   "Returns true if x implements IPersistentCollection"
   {:added "1.0"
    :static true}
-  [x] (instance? glojure.lang.IPersistentCollection x))
+  [x] (instance? github.com$glojurelang$glojure$pkg$lang.IPersistentCollection x))
 
 (defn list?
   "Returns true if x implements IPersistentList"
   {:added "1.0"
    :static true}
-  [x] (instance? glojure.lang.IPersistentList x))
+  [x] (instance? github.com$glojurelang$glojure$pkg$lang.IPersistentList x))
 
 (defn seqable?
   "Return true if the seq function is supported for x"
@@ -6238,7 +6238,7 @@ fails, attempts to require sym's namespace and retries."
   "Returns true if x implements Fn, i.e. is an object created via fn."
   {:added "1.0"
    :static true}
-  [x] (instance? glojure.lang.Fn x))
+  [x] (instance? github.com$glojurelang$glojure$pkg$runtime.Fn x))
 
 
 (defn associative?
@@ -6251,7 +6251,7 @@ fails, attempts to require sym's namespace and retries."
  "Returns true if coll implements Sequential"
  {:added "1.0"
   :static true}
-  [coll] (instance? glojure.lang.Sequential coll))
+  [coll] (instance? github.com$glojurelang$glojure$pkg$lang.Sequential coll))
 
 (defn sorted?
  "Returns true if coll implements Sorted"
@@ -6263,7 +6263,7 @@ fails, attempts to require sym's namespace and retries."
  "Returns true if coll implements count in constant time"
  {:added "1.0"
    :static true}
-  [coll] (instance? glojure.lang.Counted coll))
+  [coll] (instance? github.com$glojurelang$glojure$pkg$lang.Counted coll))
 
 (defn empty?
   "Returns true if coll has no items. To check the emptiness of a seq,
@@ -6331,7 +6331,7 @@ fails, attempts to require sym's namespace and retries."
   metadata from the name symbol.  Returns the var."
   {:added "1.0"
    :static true}
-  ([ns ^glojure.lang.Symbol name]
+  ([ns ^github.com$glojurelang$glojure$pkg$lang.Symbol name]
      (let [v (glojure.lang.Var/intern (the-ns ns) name)]
        (when (meta name) (.setMeta v (meta name)))
        v))
@@ -6672,7 +6672,7 @@ fails, attempts to require sym's namespace and retries."
   (let [buckets (loop [m {} ks tests vs thens]
                   (if (and ks vs)
                     (recur
-                      (update m (glojure.lang.Hash (first ks)) (fnil conj []) [(first ks) (first vs)])
+                      (update m (github.com$glojurelang$glojure$pkg$lang.Hash (first ks)) (fnil conj []) [(first ks) (first vs)])
                       (next ks) (next vs))
                     m))
         assoc-multi (fn [m h bucket]
@@ -6699,7 +6699,7 @@ fails, attempts to require sym's namespace and retries."
   post-switch equivalence checking must not be done (occurs with hash
   collisions)."
   [expr-sym default tests thens]
-  (let [hashcode #(glojure.lang.Hash %)
+  (let [hashcode #(github.com$glojurelang$glojure$pkg$lang.Hash %)
         hashes (into1 #{} (map hashcode tests))]
     (if (== (count tests) (count hashes))
       (if (fits-table? hashes)
@@ -6842,12 +6842,12 @@ fails, attempts to require sym's namespace and retries."
   items, returns val and f is not called."
   {:added "1.0"}
   ([f coll]
-     (if (instance? glojure.lang.IReduce coll)
-       (.Reduce ^glojure.lang.IReduce coll f)
+     (if (instance? github.com$glojurelang$glojure$pkg$lang.IReduce coll)
+       (.Reduce ^github.com$glojurelang$glojure$pkg$lang.IReduce coll f)
        (glojure.core.protocols/coll-reduce coll f)))
   ([f val coll]
-     (if (instance? glojure.lang.IReduceInit coll)
-       (.ReduceInit ^glojure.lang.IReduceInit coll f val)
+     (if (instance? github.com$glojurelang$glojure$pkg$lang.IReduceInit coll)
+       (.ReduceInit ^github.com$glojurelang$glojure$pkg$lang.IReduceInit coll f val)
        (glojure.core.protocols/coll-reduce coll f val))))
 
 (do)
@@ -6887,8 +6887,8 @@ fails, attempts to require sym's namespace and retries."
   ([xform f coll] (transduce xform f (f) coll))
   ([xform f init coll]
      (let [f (xform f)
-           ret (if (instance? glojure.lang.IReduceInit coll)
-                 (.ReduceInit ^glojure.lang.IReduceInit coll f init)
+           ret (if (instance? github.com$glojurelang$glojure$pkg$lang.IReduceInit coll)
+                 (.ReduceInit ^github.com$glojurelang$glojure$pkg$lang.IReduceInit coll f init)
                  (glojure.core.protocols/coll-reduce coll f init))]
        (f ret))))
 
@@ -6900,11 +6900,11 @@ fails, attempts to require sym's namespace and retries."
   ([] [])
   ([to] to)
   ([to from]
-     (if (instance? glojure.lang.IEditableCollection to)
+     (if (instance? github.com$glojurelang$glojure$pkg$lang.IEditableCollection to)
        (with-meta (persistent! (reduce conj! (transient to) from)) (meta to))
        (reduce conj to from)))
   ([to xform from]
-     (if (instance? glojure.lang.IEditableCollection to)
+     (if (instance? github.com$glojurelang$glojure$pkg$lang.IEditableCollection to)
        (let [tm (meta to)
              rf (fn
                   ([coll] (-> (persistent! coll) (with-meta tm)))
@@ -6955,7 +6955,7 @@ fails, attempts to require sym's namespace and retries."
   "Opens a reader on f and reads all its contents, returning a string.
   See glojure.java.io/reader for a complete list of supported arguments."
   {:added "1.0"
-   :tag string}
+   :tag go/string}
   ([f & opts]
      (let [opts (normalize-slurp-opts opts)
            sw (java.io.StringWriter.)]
@@ -6969,7 +6969,7 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.2"}
   [f content & options]
   (with-open [^io.Writer w (apply jio/writer f options)]
-    (glojure.lang.WriteWriter w (str content))))
+    (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str content))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; futures (needs proxy);;;;;;;;;;;;;;;;;;
 (defn future-call 
@@ -6984,13 +6984,13 @@ fails, attempts to require sym's namespace and retries."
   (let [f (binding-conveyor-fn f)
         fut (.submit glojure.lang.Agent/soloExecutor ^Callable f)]
     (reify 
-     glojure.lang.IDeref 
+     github.com$glojurelang$glojure$pkg$lang.IDeref 
      (deref [_] (deref-future fut))
      glojure.lang.IBlockingDeref
      (deref
       [_ timeout-ms timeout-val]
       (deref-future fut timeout-ms timeout-val))
-     glojure.lang.IPending
+     github.com$glojurelang$glojure$pkg$lang.IPending
      (isRealized [_] (.isDone fut))
      java.util.concurrent.Future
       (get [_] (.Get fut))
@@ -7080,7 +7080,7 @@ fails, attempts to require sym's namespace and retries."
   (let [d (java.util.concurrent.CountDownLatch. 1)
         v (atom d)]
     (reify 
-     glojure.lang.IDeref
+     github.com$glojurelang$glojure$pkg$lang.IDeref
        (deref [_] (.await d) @v)
      glojure.lang.IBlockingDeref
        (deref
@@ -7088,7 +7088,7 @@ fails, attempts to require sym's namespace and retries."
         (if (.await d timeout-ms java.util.concurrent.TimeUnit/MILLISECONDS)
           @v
           timeout-val))  
-     glojure.lang.IPending
+     github.com$glojurelang$glojure$pkg$lang.IPending
       (isRealized [this]
        (zero? (.getCount d)))
      glojure.lang.IFn
@@ -7525,9 +7525,9 @@ fails, attempts to require sym's namespace and retries."
   [binding-map func]
   (let [root-bind (fn [m]
                     (doseq [[a-var a-val] m]
-                      (.bindRoot ^glojure.lang.Var a-var a-val)))
+                      (.bindRoot ^github.com$glojurelang$glojure$pkg$lang.Var a-var a-val)))
         old-vals (zipmap (keys binding-map)
-                         (map #(.getRawRoot ^glojure.lang.Var %) (keys binding-map)))]
+                         (map #(.getRawRoot ^github.com$glojurelang$glojure$pkg$lang.Var %) (keys binding-map)))]
     (try
       (root-bind binding-map)
       (func)
@@ -7552,7 +7552,7 @@ fails, attempts to require sym's namespace and retries."
 (defn realized?
   "Returns true if a value has been produced for a promise, delay, future or lazy sequence."
   {:added "1.3"}
-  [^glojure.lang.IPending x] (.isRealized x))
+  [^github.com$glojurelang$glojure$pkg$lang.IPending x] (.isRealized x))
 
 (defmacro cond->
   "Takes an expression and a set of test/form pairs. Threads expr (via ->)
@@ -7750,7 +7750,7 @@ fails, attempts to require sym's namespace and retries."
                    (when-some [k (kf ret)]
                      (lazy-seq (next (step k)))))))
          (step initk)))
-   glojure.lang.IReduceInit
+   github.com$glojurelang$glojure$pkg$lang.IReduceInit
    (reduce [_ rf init]
            (loop [acc init
                   ret (step initk)]
@@ -7773,7 +7773,7 @@ fails, attempts to require sym's namespace and retries."
   "Construct a data representation of a tagged literal from a
   tag symbol and a form."
   {:added "1.7"}
-  [^glojure.lang.Symbol tag form]
+  [^github.com$glojurelang$glojure$pkg$lang.Symbol tag form]
   (glojure.lang.TaggedLiteral/create tag form))
 
 (defn reader-conditional?
@@ -7786,7 +7786,7 @@ fails, attempts to require sym's namespace and retries."
   "Construct a data representation of a reader conditional.
   If true, splicing? indicates read-cond-splicing."
   {:added "1.7"}
-  [form ^bool splicing?]
+  [form ^go/bool splicing?]
   (glojure.lang.ReaderConditional/create form splicing?))
 
 
@@ -7873,7 +7873,7 @@ fails, attempts to require sym's namespace and retries."
 
 (try
  (load-data-readers)
- (catch Throwable t
+ (catch github.com$glojurelang$glojure$pkg$lang.Throwable t
    (.printStackTrace t)
    (throw t)))
 
@@ -7919,7 +7919,7 @@ fails, attempts to require sym's namespace and retries."
   (with-meta
     (persistent!
      (reduce-kv (fn [acc k v] (assoc! acc k (f v)))
-                (if (instance? glojure.lang.IEditableCollection m)
+                (if (instance? github.com$glojurelang$glojure$pkg$lang.IEditableCollection m)
                   (transient m)
                   (transient {}))
                 m))
@@ -7942,14 +7942,14 @@ fails, attempts to require sym's namespace and retries."
 
 (defn- parsing-err
   "Construct message for parsing for non-string parsing error"
-  ^string [val]
+  ^go/string [val]
   (str "Expected string, got " (if (nil? val) "nil" (-> val class .Name))))
 
 (defn parse-long
   {:doc "Parse string of decimal digits with optional leading -/+ and return a
   Long value, or nil if parse fails"
    :added "1.11"}
-  ^int64 [^string s]
+  ^go/int64 [^go/string s]
   (if (string? s)
     (try
       (Long/valueOf s)
@@ -7962,7 +7962,7 @@ fails, attempts to require sym's namespace and retries."
 
   Grammar: https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html#valueOf-java.lang.String-"
    :added "1.11"}
-  ^float64 [^string s]
+  ^go/float64 [^go/string s]
   (if (string? s)
     (try
       (Double/valueOf s)
@@ -7975,7 +7975,7 @@ fails, attempts to require sym's namespace and retries."
 
   Grammar: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#toString--"
    :added "1.11"}
-  ^java.util.UUID [^string s]
+  ^java.util.UUID [^go/string s]
   (try
     (java.util.UUID/fromString s)
     (catch IllegalArgumentException _ nil)))
@@ -7983,7 +7983,7 @@ fails, attempts to require sym's namespace and retries."
 (defn parse-boolean
   {:doc "Parse strings \"true\" or \"false\" and return a boolean, or nil if invalid"
    :added "1.11"}
-  [^string s]
+  [^go/string s]
   (if (string? s)
     (case s
       "true" true

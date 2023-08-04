@@ -175,9 +175,9 @@
              "##Inf" (math.Inf 1)
              "##-Inf" (math.Inf -1)
              "##NaN" (math.NaN)
-             "##Inf" (float32 (math.Inf 1))
-             "##-Inf" (float32 (math.Inf -1))
-             "##NaN" (float32 (math.NaN))))
+             "##Inf" (go/float32 (math.Inf 1))
+             "##-Inf" (go/float32 (math.Inf -1))
+             "##NaN" (go/float32 (math.NaN))))
 
 (run-tests)
 
