@@ -3,7 +3,6 @@ package runtime
 import (
 	"errors"
 	"fmt"
-	"os"
 	"reflect"
 	"runtime/debug"
 	"strings"
@@ -196,14 +195,15 @@ func (env *environment) EvalASTTheVar(n *ast.Node) (interface{}, error) {
 	return n.Sub.(*ast.TheVarNode).Var, nil
 }
 
-// TEMP
-// TODO: add a compiler struct
-type evalCompiler struct {
-	env *environment
-}
+// TODO: this is a bit of a mess
+type evalCompiler struct{}
+
+var (
+	Compiler = &evalCompiler{}
+)
 
 func (c *evalCompiler) Eval(form interface{}) interface{} {
-	res, err := c.env.Eval(form)
+	res, err := lang.GlobalEnv.Eval(form)
 	if err != nil {
 		panic(err)
 	}
@@ -211,7 +211,7 @@ func (c *evalCompiler) Eval(form interface{}) interface{} {
 }
 
 func (c *evalCompiler) Macroexpand1(form interface{}) interface{} {
-	res, err := c.env.Macroexpand1(form)
+	res, err := lang.GlobalEnv.(*environment).Macroexpand1(form)
 	if err != nil {
 		panic(err)
 	}
@@ -238,73 +238,13 @@ func (c *evalCompiler) MaybeResolveIn(ns *value.Namespace, sym *value.Symbol) in
 }
 
 func (env *environment) EvalASTMaybeClass(n *ast.Node) (interface{}, error) {
-	// TODO: add go values to the namespace (without vars)
 	sym := n.Sub.(*ast.MaybeClassNode).Class.(*value.Symbol)
-	name := sym.Name()
-	if v, ok := env.scope.lookup(sym); ok {
+	v, ok := pkgmap.Get(sym.FullName())
+	if ok {
 		return v, nil
 	}
-	switch name {
-	case "os.Exit":
-		return os.Exit, nil
-	case "fmt.Println":
-		return fmt.Println, nil
-	case "glojure.lang.NewList":
-		return value.NewList, nil
-	case "glojure.lang.WithMeta":
-		return value.WithMeta, nil
-	case "glojure.lang.NewCons":
-		return value.NewCons, nil
-	case "glojure.lang.NewLazilyPersistentVector":
-		return value.NewLazilyPersistentVector, nil
-	case "glojure.lang.Symbol":
-		return reflect.TypeOf(value.NewSymbol("")), nil
-	case "glojure.lang.InternSymbol":
-		return value.InternSymbol, nil
-	case "glojure.lang.InternKeyword":
-		return value.InternKeyword, nil
-	case "glojure.lang.IsInteger":
-		return value.IsInteger, nil
-	case "glojure.lang.AsInt64":
-		return value.AsInt64, nil
-	case "glojure.lang.Keyword":
-		return reflect.TypeOf(value.KWName), nil
-	case "glojure.lang.RT":
-		return RT, nil
-	case "glojure.lang.Numbers":
-		return value.Numbers, nil
-	case "glojure.lang.NewMultiFn":
-		return value.NewMultiFn, nil
-	case "glojure.lang.IDrop":
-		return reflect.TypeOf((*value.IDrop)(nil)).Elem(), nil
-	case "glojure.lang.Compiler":
-		return &evalCompiler{env: env}, nil
-	case "glojure.lang.Ref":
-		return reflect.TypeOf(&value.Ref{}), nil
-	case "glojure.lang.NewRef":
-		return value.NewRef, nil
-	case "glojure.lang.Named":
-		return reflect.TypeOf((*value.Named)(nil)).Elem(), nil
-	case "glojure.lang.Counted":
-		return reflect.TypeOf((*value.Counted)(nil)).Elem(), nil
-	case "glojure.lang.FindNamespace":
-		return value.FindNamespace, nil
-	case "glojure.lang.NewRepeat":
-		return value.NewRepeat, nil
-	case "glojure.lang.NewRepeatN":
-		return value.NewRepeatN, nil
-	case "glojure.lang.PushThreadBindings":
-		return value.PushThreadBindings, nil
-	case "glojure.lang.PopThreadBindings":
-		return value.PopThreadBindings, nil
-	default:
-		v, ok := pkgmap.Get(sym.FullName())
-		if ok {
-			return v, nil
-		}
 
-		return nil, errors.New("unable to resolve symbol: " + value.ToString(sym))
-	}
+	return nil, errors.New("unable to resolve symbol: " + value.ToString(sym))
 }
 
 func (env *environment) EvalASTMaybeHostForm(n *ast.Node) (interface{}, error) {

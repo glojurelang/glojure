@@ -118,10 +118,10 @@
 (defmethod print-method github.com$glojurelang$glojure$pkg$lang.Object [o, ^Writer w]
   (print-object o w))
 
-(defmethod print-method glojure.lang.Keyword [o, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Keyword [o, ^Writer w]
   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str o)))
 
-(defmethod print-dup glojure.lang.Keyword [o w] (print-method o w))
+(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Keyword [o w] (print-method o w))
 
 (defmethod print-method go/int [o w] (.write w (str o))) 
 (defmethod print-method go/uint [o w] (.write w (str o))) 

@@ -1386,6 +1386,7 @@ func RegisterImports(_register func(string, interface{})) {
 	// package github.com/glojurelang/glojure/pkg/runtime
 	////////////////////////////////////////
 	_register("github.com/glojurelang/glojure/pkg/runtime.AddLoadPath", github_com_glojurelang_glojure_pkg_runtime.AddLoadPath)
+	_register("github.com/glojurelang/glojure/pkg/runtime.Compiler", github_com_glojurelang_glojure_pkg_runtime.Compiler)
 	_register("github.com/glojurelang/glojure/pkg/runtime.Debug", github_com_glojurelang_glojure_pkg_runtime.Debug)
 	_register("github.com/glojurelang/glojure/pkg/runtime.EvalError", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.EvalError)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/runtime.EvalOption", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.EvalOption)(nil)).Elem())
