@@ -1415,6 +1415,7 @@ func RegisterImports(_register func(string, interface{})) {
 	// package github.com/glojurelang/glojure/pkg/lang
 	////////////////////////////////////////
 	_register("github.com/glojurelang/glojure/pkg/lang.AddP", github_com_glojurelang_glojure_pkg_lang.AddP)
+	_register("github.com/glojurelang/glojure/pkg/lang.AppendWriter", github_com_glojurelang_glojure_pkg_lang.AppendWriter)
 	_register("github.com/glojurelang/glojure/pkg/lang.Apply", github_com_glojurelang_glojure_pkg_lang.Apply)
 	_register("github.com/glojurelang/glojure/pkg/lang.ArrayNode", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ArrayNode)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.ArrayNodeIterator", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ArrayNodeIterator)(nil)).Elem())
@@ -1783,4 +1784,5 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.Vector", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Vector)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.Volatile", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Volatile)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.WithMeta", github_com_glojurelang_glojure_pkg_lang.WithMeta)
+	_register("github.com/glojurelang/glojure/pkg/lang.WriteWriter", github_com_glojurelang_glojure_pkg_lang.WriteWriter)
 }

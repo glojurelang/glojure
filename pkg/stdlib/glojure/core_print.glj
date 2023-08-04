@@ -46,41 +46,41 @@
 (defn- print-sequential [^go/string begin, print-one, ^go/string sep, ^go/string end, sequence, ^Writer w]
   (binding [*print-level* (and (not *print-dup*) *print-level* (dec *print-level*))]
     (if (and *print-level* (neg? *print-level*))
-      (glojure.lang.WriteWriter w "#")
+      (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#")
       (do
-        (glojure.lang.WriteWriter w begin)
+        (github.com$glojurelang$glojure$pkg$lang.WriteWriter w begin)
         (when-let [xs (seq sequence)]
           (if (and (not *print-dup*) *print-length*)
             (loop [[x & xs] xs
                    print-length *print-length*]
               (if (zero? print-length)
-                (glojure.lang.WriteWriter w "...")
+                (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "...")
                 (do
                   (print-one x w)
                   (when xs
-                    (glojure.lang.WriteWriter w sep)
+                    (github.com$glojurelang$glojure$pkg$lang.WriteWriter w sep)
                     (recur xs (dec print-length))))))
             (loop [[x & xs] xs]
               (print-one x w)
               (when xs
-                (glojure.lang.WriteWriter w sep)
+                (github.com$glojurelang$glojure$pkg$lang.WriteWriter w sep)
                 (recur xs)))))
-        (glojure.lang.WriteWriter w end)))))
+        (github.com$glojurelang$glojure$pkg$lang.WriteWriter w end)))))
 
 (defn- print-meta [o, ^Writer w]
   (when-let [m (meta o)]
     (when (and (pos? (count m))
                (or *print-dup*
                    (and *print-meta* *print-readably*)))
-      (glojure.lang.WriteWriter w "^")
+      (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "^")
       (if (and (= (count m) 1) (:tag m))
           (pr-on (:tag m) w)
           (pr-on m w))
-      (glojure.lang.WriteWriter w " "))))
+      (github.com$glojurelang$glojure$pkg$lang.WriteWriter w " "))))
 
 (defn print-simple [o, ^Writer w]
   (print-meta o w)
-  (glojure.lang.WriteWriter w (str o)))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str o)))
 
 (defmethod print-method :default [o, ^Writer w]
   (if (instance? github.com$glojurelang$glojure$pkg$lang.IObj o)
@@ -88,29 +88,29 @@
     (print-simple o w)))
 
 (defmethod print-method nil [o, ^Writer w]
-  (glojure.lang.WriteWriter w "nil"))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "nil"))
 
 (defmethod print-dup nil [o w] (print-method o w))
 
 (defn print-ctor [o print-args ^Writer w]
-  (glojure.lang.WriteWriter w "#=(")
-  (glojure.lang.WriteWriter w (.Name ^reflect.Type (class o)))
-  (glojure.lang.WriteWriter w ". ")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#=(")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (.Name ^reflect.Type (class o)))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w ". ")
   (print-args o w)
-  (glojure.lang.WriteWriter w ")"))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w ")"))
 
 (defn- print-tagged-object [o rep ^Writer w]
   (when (instance? github.com$glojurelang$glojure$pkg$lang.IMeta o)
     (print-meta o w))
-  (glojure.lang.WriteWriter w "#object[")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#object[")
   (let [c (class o)]
     (if false
       (print-method (.Name c) w)
-      (glojure.lang.WriteWriter w (.Name c))))
-  (glojure.lang.WriteWriter w " ")
-  (glojure.lang.WriteWriter w (format "0x%x " (github.com$glojurelang$glojure$pkg$lang.IdentityHash o)))
+      (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (.Name c))))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w " ")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (format "0x%x " (github.com$glojurelang$glojure$pkg$lang.IdentityHash o)))
   (print-method rep w)
-  (glojure.lang.WriteWriter w "]"))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "]"))
 
 (defn- print-object [o, ^Writer w]
   (print-tagged-object o (str o) w))
@@ -119,7 +119,7 @@
   (print-object o w))
 
 (defmethod print-method glojure.lang.Keyword [o, ^Writer w]
-  (glojure.lang.WriteWriter w (str o)))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str o)))
 
 (defmethod print-dup glojure.lang.Keyword [o w] (print-method o w))
 
@@ -138,17 +138,17 @@
 (defmethod print-method github.com$glojurelang$glojure$pkg$lang.Ratio [o w] (.write w (str o))) 
 (defmethod print-method go/float64 [o, ^Writer w]
   (cond
-    (= (math.Inf 1) o) (glojure.lang.WriteWriter w "##Inf")
-    (= (math.Inf -1) o) (glojure.lang.WriteWriter w "##-Inf")
-    (math.IsNaN ^go/float64 o) (glojure.lang.WriteWriter w "##NaN")
-    :else (glojure.lang.WriteWriter w (str o))))
+    (= (math.Inf 1) o) (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "##Inf")
+    (= (math.Inf -1) o) (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "##-Inf")
+    (math.IsNaN ^go/float64 o) (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "##NaN")
+    :else (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str o))))
 
 (defmethod print-method go/float32 [o, ^Writer w]
   (cond
-    (= (go/float32 (math.Inf 1)) o) (glojure.lang.WriteWriter w "##Inf")
-    (= (go/float32 (math.Inf -1)) o) (glojure.lang.WriteWriter w "##-Inf")
-    (math.IsNaN ^go/float32 o) (glojure.lang.WriteWriter w "##NaN")
-    :else (glojure.lang.WriteWriter w (str o))))
+    (= (go/float32 (math.Inf 1)) o) (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "##Inf")
+    (= (go/float32 (math.Inf -1)) o) (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "##-Inf")
+    (math.IsNaN ^go/float32 o) (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "##NaN")
+    :else (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str o))))
 
 (defmethod print-method go/int [o w] (.write w (str o))) 
 (defmethod print-method go/uint [o w] (.write w (str o))) 
@@ -171,7 +171,7 @@
 (do)
 
 (defmethod print-method go/bool [o, ^Writer w]
-  (glojure.lang.WriteWriter w (str o)))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str o)))
 
 (defmethod print-dup go/bool [o w] (print-method o w))
 
@@ -184,7 +184,7 @@
   (print-simple o w))
 
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Var [^github.com$glojurelang$glojure$pkg$lang.Var o, ^Writer w]
-  (glojure.lang.WriteWriter w (str "#=(var " (.name (.Namespace o)) "/" (.sym o) ")")))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str "#=(var " (.name (.Namespace o)) "/" (.sym o) ")")))
 
 (defmethod print-method github.com$glojurelang$glojure$pkg$lang.ISeq [o, ^Writer w]
   (print-meta o w)
@@ -203,11 +203,11 @@
 
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.IPersistentCollection [o, ^Writer w]
   (print-meta o w)
-  (glojure.lang.WriteWriter w "#=(")
-  (glojure.lang.WriteWriter w (.Name ^reflect.Type (class o)))
-  (glojure.lang.WriteWriter w "/create ")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#=(")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (.Name ^reflect.Type (class o)))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "/create ")
   (print-sequential "[" print-dup " " "]" o w)
-  (glojure.lang.WriteWriter w ")"))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w ")"))
 
 (do)
 
@@ -225,13 +225,13 @@
 
 (defmethod print-method go/string [^go/string s, ^Writer w]
   (if (or *print-dup* *print-readably*)
-    (do (glojure.lang.AppendWriter w \")
+    (do (github.com$glojurelang$glojure$pkg$lang.AppendWriter w \")
       (dotimes [n (count s)]
         (let [c (github.com$glojurelang$glojure$pkg$lang.CharAt s n)
               e (char-escape-string c)]
-          (if e (glojure.lang.WriteWriter w e) (glojure.lang.AppendWriter w c))))
-      (glojure.lang.AppendWriter w \"))
-    (glojure.lang.WriteWriter w s))
+          (if e (github.com$glojurelang$glojure$pkg$lang.WriteWriter w e) (github.com$glojurelang$glojure$pkg$lang.AppendWriter w c))))
+      (github.com$glojurelang$glojure$pkg$lang.AppendWriter w \"))
+    (github.com$glojurelang$glojure$pkg$lang.WriteWriter w s))
   nil)
 
 (defmethod print-dup go/string [s w] (print-method s w))
@@ -244,7 +244,7 @@
   (print-sequential
     (str prefix "{")
     (fn [[k v] ^Writer w]
-      (do (print-one k w) (glojure.lang.AppendWriter w \space) (print-one v w)))
+      (do (print-one k w) (github.com$glojurelang$glojure$pkg$lang.AppendWriter w \space) (print-one v w)))
     ", "
     "}"
     kvs w))
@@ -285,11 +285,11 @@
 
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.IPersistentMap [m, ^Writer w]
   (print-meta m w)
-  (glojure.lang.WriteWriter w "#=(")
-  (glojure.lang.WriteWriter w (.Name (class m)))
-  (glojure.lang.WriteWriter w "/create ")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#=(")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (.Name (class m)))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "/create ")
   (print-map m print-dup w)
-  (glojure.lang.WriteWriter w ")"))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w ")"))
 
 ;; java.util
 (do)
@@ -309,14 +309,14 @@
 
 (defmethod print-method github.com$glojurelang$glojure$pkg$lang.IRecord [r, ^Writer w]
   (print-meta r w)
-  (glojure.lang.WriteWriter w "#")
-  (glojure.lang.WriteWriter w (.Name (class r)))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (.Name (class r)))
   (print-map r pr-on w))
 
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.IRecord [r, ^Writer w]
   (print-meta r w)
-  (glojure.lang.WriteWriter w "#")
-  (glojure.lang.WriteWriter w (.Name (class r)))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (.Name (class r)))
   (if *verbose-defrecords*
     (print-map r print-dup w)
     (print-sequential "[" pr-on ", " "]" (vals r) w)))
@@ -345,10 +345,10 @@
 
 (defmethod print-method github.com$glojurelang$glojure$pkg$lang.Char [^Character c, ^Writer w]
   (if (or *print-dup* *print-readably*)
-    (do (glojure.lang.AppendWriter w \\)
+    (do (github.com$glojurelang$glojure$pkg$lang.AppendWriter w \\)
         (let [n (char-name-string c)]
-          (if n (glojure.lang.WriteWriter w n) (glojure.lang.AppendWriter w c))))
-    (glojure.lang.AppendWriter w c))
+          (if n (github.com$glojurelang$glojure$pkg$lang.WriteWriter w n) (github.com$glojurelang$glojure$pkg$lang.AppendWriter w c))))
+    (github.com$glojurelang$glojure$pkg$lang.AppendWriter w c))
   nil)
 
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Char [c w] (print-method c w))
@@ -369,41 +369,41 @@
 (do)
 
 (defmethod print-method github.com$glojurelang$glojure$pkg$lang.BigDecimal [b, ^Writer w]
-  (glojure.lang.WriteWriter w (str b))
-  (glojure.lang.WriteWriter w "M"))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str b))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "M"))
 
 (defmethod print-method github.com$glojurelang$glojure$pkg$lang.BigInt [b, ^Writer w]
-  (glojure.lang.WriteWriter w (str b))
-  (glojure.lang.WriteWriter w "N"))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str b))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "N"))
 
 (defmethod print-method regexp.Regexp [p ^Writer w]
-  (glojure.lang.WriteWriter w "#\"")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#\"")
   (loop [[^Character c & r :as s] (seq (.pattern ^regexp.Regexp p))
          qmode false]
     (when s
       (cond
         (= c \\) (let [[^Character c2 & r2] r]
-                   (glojure.lang.AppendWriter w \\)
-                   (glojure.lang.AppendWriter w c2)
+                   (github.com$glojurelang$glojure$pkg$lang.AppendWriter w \\)
+                   (github.com$glojurelang$glojure$pkg$lang.AppendWriter w c2)
                    (if qmode
                       (recur r2 (not= c2 \E))
                       (recur r2 (= c2 \Q))))
         (= c \") (do
                    (if qmode
-                     (glojure.lang.WriteWriter w "\\E\\\"\\Q")
-                     (glojure.lang.WriteWriter w "\\\""))
+                     (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "\\E\\\"\\Q")
+                     (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "\\\""))
                    (recur r qmode))
         :else    (do
-                   (glojure.lang.AppendWriter w c)
+                   (github.com$glojurelang$glojure$pkg$lang.AppendWriter w c)
                    (recur r qmode)))))
-  (glojure.lang.AppendWriter w \"))
+  (github.com$glojurelang$glojure$pkg$lang.AppendWriter w \"))
 
 (defmethod print-dup regexp.Regexp [p ^Writer w] (print-method p w))
 
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Namespace [^github.com$glojurelang$glojure$pkg$lang.Namespace n ^Writer w]
-  (glojure.lang.WriteWriter w "#=(find-ns ")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#=(find-ns ")
   (print-dup (.name n) w)
-  (glojure.lang.WriteWriter w ")"))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w ")"))
 
 (defn- deref-as-map [^github.com$glojurelang$glojure$pkg$lang.IDeref o]
   (let [pending (and (instance? github.com$glojurelang$glojure$pkg$lang.IPending o)
@@ -476,40 +476,40 @@
         {:phase phase}))))
 
 (defn- print-throwable [^github.com$glojurelang$glojure$pkg$lang.Throwable o ^Writer w]
-  (glojure.lang.WriteWriter w "#error {\n :cause ")
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#error {\n :cause ")
   (let [{:keys [cause data via trace]} (Throwable->map o)
-        print-via #(do (glojure.lang.WriteWriter w "{:type ")
+        print-via #(do (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "{:type ")
 		               (print-method (:type %) w)
-					   (glojure.lang.WriteWriter w "\n   :message ")
+					   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "\n   :message ")
 					   (print-method (:message %) w)
              (when-let [data (:data %)]
-               (glojure.lang.WriteWriter w "\n   :data ")
+               (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "\n   :data ")
                (print-method data w))
              (when-let [at (:at %)]
-               (glojure.lang.WriteWriter w "\n   :at ")
+               (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "\n   :at ")
                (print-method (:at %) w))
-             (glojure.lang.WriteWriter w "}"))]
+             (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "}"))]
     (print-method cause w)
     (when data
-      (glojure.lang.WriteWriter w "\n :data ")
+      (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "\n :data ")
       (print-method data w))
     (when via
-      (glojure.lang.WriteWriter w "\n :via\n [")
+      (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "\n :via\n [")
       (when-let [fv (first via)]
 	    (print-via fv)
         (doseq [v (rest via)]
-          (glojure.lang.WriteWriter w "\n  ")
+          (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "\n  ")
 		  (print-via v)))
-      (glojure.lang.WriteWriter w "]"))
+      (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "]"))
     (when trace
-      (glojure.lang.WriteWriter w "\n :trace\n [")
+      (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "\n :trace\n [")
       (when-let [ft (first trace)]
         (print-method ft w)
         (doseq [t (rest trace)]
-          (glojure.lang.WriteWriter w "\n  ")
+          (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "\n  ")
           (print-method t w)))
-      (glojure.lang.WriteWriter w "]")))
-  (glojure.lang.WriteWriter w "}"))
+      (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "]")))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "}"))
 
 (do)
 
@@ -538,7 +538,7 @@
           (write [str-cbuf off len]
                  (when (pos? len)
                    (if (instance? go/string str-cbuf)
-                     (glojure.lang.AppendWriter sb ^go/string str-cbuf ^int off ^int len)
-                     (glojure.lang.AppendWriter sb ^chars str-cbuf ^int off ^int len)))))
+                     (github.com$glojurelang$glojure$pkg$lang.AppendWriter sb ^go/string str-cbuf ^int off ^int len)
+                     (github.com$glojurelang$glojure$pkg$lang.AppendWriter sb ^chars str-cbuf ^int off ^int len)))))
         java.io.BufferedWriter.
         java.io.PrintWriter.)))

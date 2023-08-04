@@ -109,43 +109,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		})
 	}
 	{
-		define("glojure.lang.AppendWriter", func(w io.Writer, v interface{}) io.Writer {
-			var err error
-			switch v := v.(type) {
-			case string:
-				_, err = w.Write([]byte(v))
-			case []byte:
-				_, err = w.Write(v)
-			case rune:
-				_, err = w.Write([]byte{byte(v)})
-			case value.Char:
-				_, err = w.Write([]byte{byte(v)})
-			default:
-				err = fmt.Errorf("unsupported type %T", v)
-			}
-
-			if err != nil {
-				panic(err)
-			}
-			return w
-		})
-		define("glojure.lang.WriteWriter", func(w io.Writer, v interface{}) io.Writer {
-			var err error
-			switch v := v.(type) {
-			case string:
-				_, err = w.Write([]byte(v))
-			case []byte:
-				_, err = w.Write(v)
-			default:
-				err = fmt.Errorf("unsupported type %T", v)
-			}
-			if err != nil {
-				panic(err)
-			}
-			return w
-		})
-	}
-	{
 		// Add stdlib
 		evalFile := func(path string) {
 			core, err := stdlib.StdLib.ReadFile(path)

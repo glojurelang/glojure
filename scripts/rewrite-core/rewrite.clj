@@ -625,10 +625,11 @@
    (sexpr-replace 'clojure.lang.BigInt 'github.com$glojurelang$glojure$pkg$lang.BigInt)
    (sexpr-replace 'java.math.BigDecimal 'github.com$glojurelang$glojure$pkg$lang.BigDecimal)
 
-   (sexpr-replace '.write 'glojure.lang.WriteWriter)
-   (sexpr-replace '.append 'glojure.lang.AppendWriter)
-   (sexpr-replace '(. *out* (append \space)) '(glojure.lang.AppendWriter *out* \space))
-   (sexpr-replace '(. *out* (append system-newline)) '(glojure.lang.AppendWriter *out* system-newline))
+   (sexpr-replace '.write 'github.com$glojurelang$glojure$pkg$lang.WriteWriter)
+   (sexpr-replace '.append 'github.com$glojurelang$glojure$pkg$lang.AppendWriter)
+   (sexpr-replace '(. *out* (append \space)) '(github.com$glojurelang$glojure$pkg$lang.AppendWriter *out* \space))
+   (sexpr-replace '(. *out* (append system-newline))
+                  '(github.com$glojurelang$glojure$pkg$lang.AppendWriter *out* system-newline))
    (sexpr-replace '(. *out* (flush)) '(. *out* (Sync)))
 
    (omit-symbols '#{primitives-classnames})

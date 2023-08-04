@@ -3668,7 +3668,7 @@
      (pr-on x *out*))
   ([x & more]
    (pr x)
-   (glojure.lang.AppendWriter *out* \space)
+   (github.com$glojurelang$glojure$pkg$lang.AppendWriter *out* \space)
    (if-let [nmore (next more)]
      (recur (first more) nmore)
      (apply pr more))))
@@ -3681,7 +3681,7 @@
   {:added "1.0"
    :static true}
   []
-    (glojure.lang.AppendWriter *out* system-newline)
+    (github.com$glojurelang$glojure$pkg$lang.AppendWriter *out* system-newline)
     nil)
 
 (defn flush
@@ -6969,7 +6969,7 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.2"}
   [f content & options]
   (with-open [^io.Writer w (apply jio/writer f options)]
-    (glojure.lang.WriteWriter w (str content))))
+    (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str content))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; futures (needs proxy);;;;;;;;;;;;;;;;;;
 (defn future-call 

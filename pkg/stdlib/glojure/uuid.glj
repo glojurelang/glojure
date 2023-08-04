@@ -13,7 +13,7 @@
   (java.util.UUID/fromString form))
 
 (defmethod print-method java.util.UUID [uuid ^io.Writer w]
-  (glojure.lang.WriteWriter w (str "#uuid \"" (str uuid) "\"")))
+  (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str "#uuid \"" (str uuid) "\"")))
 
 (defmethod print-dup java.util.UUID [o w]
   (print-method o w))

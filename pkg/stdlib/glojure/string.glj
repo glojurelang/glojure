@@ -156,7 +156,7 @@
             more (next coll)
             sep (str separator)]
        (if more
-         (recur (-> sb (glojure.lang.AppendWriter sep) (glojure.lang.AppendWriter (str (first more))))
+         (recur (-> sb (github.com$glojurelang$glojure$pkg$lang.AppendWriter sep) (github.com$glojurelang$glojure$pkg$lang.AppendWriter (str (first more))))
                 (next more)
                 sep)
          (str sb)))))
@@ -280,8 +280,8 @@
       (github.com$glojurelang$glojure$pkg$lang.ToString buffer)
       (let [ch (github.com$glojurelang$glojure$pkg$lang.CharAt s index)]
         (if-let [replacement (cmap ch)]
-          (glojure.lang.AppendWriter buffer replacement)
-          (glojure.lang.AppendWriter buffer ch))
+          (github.com$glojurelang$glojure$pkg$lang.AppendWriter buffer replacement)
+          (github.com$glojurelang$glojure$pkg$lang.AppendWriter buffer ch))
         (recur (inc index) buffer)))))
 
 (defn index-of
