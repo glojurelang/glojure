@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	value "github.com/glojurelang/glojure/pkg/lang"
-	"github.com/glojurelang/glojure/pkg/pkgmap"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/stdlib"
 )
@@ -87,27 +86,6 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		}))
 	}
 
-	define := func(name string, val interface{}) {
-		// TODO: use DefVar!
-		env.BindLocal(value.NewSymbol(name), val)
-	}
-
-	{
-		define("glojure.lang.Import", func(args ...interface{}) {
-			if len(args) != 1 {
-				panic(fmt.Errorf("wrong number of arguments (%d) to glojure.lang.Import", len(args)))
-			}
-
-			export := args[0].(string)
-			v, ok := pkgmap.Get(export)
-			if !ok {
-				// TODO: panic
-				fmt.Println("WARNING: export not found in package map:", args[0], "- this will be a panic in the future")
-				return
-			}
-			env.CurrentNamespace().Import(export, v)
-		})
-	}
 	{
 		// Add stdlib
 		evalFile := func(path string) {

@@ -408,7 +408,7 @@
    (sexpr-replace '(System/getProperty "line.separator") '"\\n")
    (sexpr-replace 'clojure.lang.ISeq 'github.com$glojurelang$glojure$pkg$lang.ISeq)
    (sexpr-replace 'clojure.lang.IEditableCollection 'github.com$glojurelang$glojure$pkg$lang.IEditableCollection)
-   (sexpr-replace 'clojure.core/import* 'glojure.lang.Import)
+   (sexpr-replace 'clojure.core/import* 'github.com$glojurelang$glojure$pkg$lang.Import)
 
    (omit-forms '#{(import '(java.lang.reflect Array))
                   (import clojure.lang.ExceptionInfo clojure.lang.IExceptionInfo)

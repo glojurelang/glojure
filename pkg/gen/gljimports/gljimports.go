@@ -1504,6 +1504,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.ITransientSet", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ITransientSet)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.Identical", github_com_glojurelang_glojure_pkg_lang.Identical)
 	_register("github.com/glojurelang/glojure/pkg/lang.IdentityHash", github_com_glojurelang_glojure_pkg_lang.IdentityHash)
+	_register("github.com/glojurelang/glojure/pkg/lang.Import", github_com_glojurelang_glojure_pkg_lang.Import)
 	_register("github.com/glojurelang/glojure/pkg/lang.Inc", github_com_glojurelang_glojure_pkg_lang.Inc)
 	_register("github.com/glojurelang/glojure/pkg/lang.IncP", github_com_glojurelang_glojure_pkg_lang.IncP)
 	_register("github.com/glojurelang/glojure/pkg/lang.Indexed", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Indexed)(nil)).Elem())

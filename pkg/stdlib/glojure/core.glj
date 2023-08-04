@@ -3414,7 +3414,7 @@
   [& import-symbols-or-lists]
   (let [specs (map #(if (and (seq? %) (= 'quote (first %))) (second %) %) 
                    import-symbols-or-lists)]
-    `(do ~@(map #(list 'glojure.lang.Import %)
+    `(do ~@(map #(list 'github.com$glojurelang$glojure$pkg$lang.Import %)
                 (reduce1 (fn [v spec] 
                           (if (symbol? spec)
                             (conj v (name spec))
