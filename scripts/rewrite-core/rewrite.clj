@@ -147,6 +147,11 @@
    (sexpr-replace '(clojure.lang.PersistentTreeMap/create keyvals)
                   '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentTreeMap keyvals))
 
+   (sexpr-replace '(clojure.lang.PersistentTreeSet/create keys)
+                  '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentTreeSet keys))
+   (sexpr-replace '(clojure.lang.PersistentTreeSet/create comparator keys)
+                  '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentTreeSetWithComparator comparator keys))
+
    (sexpr-replace 'clojure.lang.Cycle/create 'github.com$glojurelang$glojure$pkg$lang.NewCycle)
 
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

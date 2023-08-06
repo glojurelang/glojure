@@ -115,10 +115,23 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 		} else {
 			maybeClass := form.Namespace()
 			if maybeClass != "" {
-				n.Op = ast.OpMaybeHostForm // TODO: define this for Go interop
-				n.Sub = &ast.MaybeHostFormNode{
-					Class: maybeClass,
-					Field: NewSymbol(form.Name()),
+				if maybeClass == "go" {
+					v, ok := lang.Builtins[form.Name()]
+					if !ok {
+						return nil, fmt.Errorf("unknown go builtin: go/%s", form.Name())
+					}
+					n.Op = ast.OpGoBuiltin
+					n.Sub = &ast.GoBuiltinNode{
+						Sym:   NewSymbol(form.Name()),
+						Value: v,
+					}
+				} else {
+					// TODO: does this make any sense for go?
+					n.Op = ast.OpMaybeHostForm
+					n.Sub = &ast.MaybeHostFormNode{
+						Class: maybeClass,
+						Field: NewSymbol(form.Name()),
+					}
 				}
 			} else {
 				n.Op = ast.OpMaybeClass
@@ -134,6 +147,7 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 // returning an AST.
 func (a *Analyzer) analyzeVector(form IPersistentVector, env Env) (*ast.Node, error) {
 	n := ast.MakeNode(ast.OpVector, form)
+	n.Env = env
 	var items []*ast.Node
 	for i := 0; i < form.Count(); i++ {
 		// TODO: pass an "items-env" with an expr context
@@ -369,7 +383,8 @@ func (a *Analyzer) parse(form interface{}, env Env) (*ast.Node, error) {
 	if !ok {
 		return a.parseInvoke(form, env)
 	}
-	switch opSym.Name() {
+
+	switch opSym.FullName() {
 	case "do":
 		return a.parseDo(form, env)
 	case "if":
@@ -402,6 +417,10 @@ func (a *Analyzer) parse(form interface{}, env Env) (*ast.Node, error) {
 		return a.parseVar(form, env)
 	case "case*":
 		return a.parseCaseStar(form, env)
+
+		// go-specific forms
+	case "go/go":
+		return a.parseGo(form, env)
 	}
 
 	return a.parseInvoke(form, env)
@@ -1414,6 +1433,27 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node, error) {
 		Test:    testExpr,
 		Nodes:   nodes,
 		Default: defaultExpr,
+	}
+	return n, nil
+}
+
+func (a *Analyzer) parseGo(form interface{}, env Env) (*ast.Node, error) {
+	invokeForm := second(form)
+	if Count(form) != 2 {
+		return nil, exInfo(fmt.Sprintf("wrong number of args to go/go, had: %d", Count(form)-1), nil)
+	}
+	invokeEnv := Assoc(env, KWContext, ctxStatement).(Env)
+	invokeExpr, err := a.analyzeForm(invokeForm, invokeEnv)
+	if err != nil {
+		return nil, err
+	}
+	if invokeExpr.Op != ast.OpInvoke {
+		return nil, exInfo("go/go only supports function calls", nil)
+	}
+	n := ast.MakeNode(ast.OpGo, form)
+	n.Env = env
+	n.Sub = &ast.GoNode{
+		Invoke: invokeExpr,
 	}
 	return n, nil
 }

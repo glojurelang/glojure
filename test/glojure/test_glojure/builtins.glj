@@ -1,0 +1,46 @@
+(ns glojure.test-glojure.builtins
+  (:use glojure.test))
+
+(deftest append-slice
+  (are [exp init vals] (= exp
+                          (go/len
+                           (apply go/append
+                                  (go/make (go/slice-of go/int) init)
+                                  (map go/int vals))))
+    0 0 []
+    1 0 [1]
+    2 1 [1]))
+
+(deftest ptr-deref
+  (are [zero typ] (= zero (go/deref (new typ)))
+    0 go/int
+    0 go/float32
+    "" go/string
+    false go/bool))
+
+(let [ch (go/make (go/chan-of go/int64))
+      num 100]
+  (go/go (#(do (doseq [n (range num)]
+                 (go/send ch n))
+               (go/close ch))))
+  (deftest channels
+    (is (= (reduce + (range num))
+           (loop [sum 0]
+             (if-let [n (go/recv ch)]
+               (recur (+ sum n))
+               sum))))))
+
+(deftest channels
+  (let [ch (go/make (go/chan-of go/int64))
+        num 100]
+    (go/go (#(do (doseq [n (range num)]
+                   (go/send ch n))
+                 (go/close ch))))
+    (is (= (reduce + (range num))
+           (loop [sum 0]
+             (let [[n ok] (go/recv ch)]
+               (if ok
+                 (recur (+ sum n))
+                 sum)))))))
+
+(run-tests)
