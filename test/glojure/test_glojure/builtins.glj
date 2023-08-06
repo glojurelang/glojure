@@ -1,0 +1,21 @@
+(ns glojure.test-glojure.builtins
+  (:use glojure.test))
+
+(deftest append-slice
+  (are [exp init vals] (= exp
+                          (go/len
+                           (apply go/append
+                                  (go/make (go/slice-of go/int) init)
+                                  (map go/int vals))))
+    0 0 []
+    1 0 [1]
+    2 1 [1]))
+
+(deftest deref
+  (are [zero typ] (= zero (go/deref (new typ)))
+    0 go/int
+    0 go/float32
+    "" go/string
+    false go/bool))
+
+(run-tests)

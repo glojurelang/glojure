@@ -13,6 +13,16 @@ type Set struct {
 
 type PersistentHashSet = Set // hack until we have a proper persistent hash set
 
+func CreatePersistentTreeSet(keys ISeq) interface{} {
+	// TODO: implement
+	return NewSet(seqToSlice(keys)...)
+}
+
+func CreatePersistentTreeSetWithComparator(comparator IFn, keys ISeq) interface{} {
+	// TODO: implement
+	return NewSet(seqToSlice(keys)...)
+}
+
 func NewSet(vals ...interface{}) *Set {
 	// TODO: fixme. reverse to pass test
 	if len(vals) == 3 {

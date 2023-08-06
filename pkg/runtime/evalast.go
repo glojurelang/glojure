@@ -83,6 +83,8 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 		return env.EvalASTVar(n)
 	case ast.OpLocal:
 		return env.EvalASTLocal(n)
+	case ast.OpGoBuiltin:
+		return n.Sub.(*ast.GoBuiltinNode).Value, nil
 	case ast.OpHostCall:
 		return env.EvalASTHostCall(n)
 	case ast.OpHostInterop:
@@ -261,122 +263,6 @@ func (env *environment) EvalASTMaybeHostForm(n *ast.Node) (interface{}, error) {
 					ks = append(ks, seq.First())
 				}
 				return value.NewSet(ks...)
-			}, nil
-		}
-	case "go":
-		switch field.Name() {
-		case "int":
-			return reflect.TypeOf(int(0)), nil
-		case "int8":
-			return reflect.TypeOf(int8(0)), nil
-		case "int16":
-			return reflect.TypeOf(int16(0)), nil
-		case "int32":
-			return reflect.TypeOf(int32(0)), nil
-		case "int64":
-			return reflect.TypeOf(int64(0)), nil
-		case "uint":
-			return reflect.TypeOf(uint(0)), nil
-		case "uint8":
-			return reflect.TypeOf(uint8(0)), nil
-		case "uint16":
-			return reflect.TypeOf(uint16(0)), nil
-		case "uint32":
-			return reflect.TypeOf(uint32(0)), nil
-		case "uint64":
-			return reflect.TypeOf(uint64(0)), nil
-		case "uintptr":
-			return reflect.TypeOf(uintptr(0)), nil
-		case "float32":
-			return reflect.TypeOf(float32(0)), nil
-		case "float64":
-			return reflect.TypeOf(float64(0)), nil
-		case "complex64":
-			return reflect.TypeOf(complex64(0)), nil
-		case "complex128":
-			return reflect.TypeOf(complex128(0)), nil
-		case "byte":
-			return reflect.TypeOf(byte(0)), nil
-		case "rune":
-			return reflect.TypeOf(rune(0)), nil
-		case "bool":
-			return reflect.TypeOf(false), nil
-		case "string":
-			return reflect.TypeOf(""), nil
-		case "error":
-			return reflect.TypeOf((*error)(nil)).Elem(), nil
-		case "append":
-			return func(slc interface{}, vals ...interface{}) interface{} {
-				slcVal := reflect.ValueOf(slc)
-				slcTyp := slcVal.Type().Elem()
-				valSlc := reflect.MakeSlice(reflect.SliceOf(slcTyp), len(vals), len(vals))
-				for i, v := range vals {
-					valSlc.Index(i).Set(reflect.ValueOf(v))
-				}
-				return reflect.AppendSlice(slcVal, valSlc).Interface()
-			}, nil
-		case "sliceof":
-			// TODO: some of these functions can be implemented in clojure
-			// in terms of exported go functions.
-			return func(t reflect.Type, sizeCap ...interface{}) interface{} {
-				if len(sizeCap) > 2 {
-					panic("go/sliceof: too many arguments")
-				}
-				l, c := 0, 0
-				var ok bool
-				if len(sizeCap) > 0 {
-					l, ok = value.AsInt(sizeCap[0])
-					if !ok {
-						panic("go/sliceof: length is not an integer")
-					}
-				}
-				if len(sizeCap) > 1 {
-					c, ok = value.AsInt(sizeCap[1])
-					if !ok {
-						panic("go/sliceof: capacity is not an integer")
-					}
-				}
-				if c < l {
-					c = l
-				}
-				return reflect.MakeSlice(reflect.SliceOf(t), l, c).Interface()
-			}, nil
-		case "pointerto":
-			return func(t reflect.Type) interface{} {
-				return reflect.PtrTo(t)
-			}, nil
-		case "slice":
-			return func(sliceOrString interface{}, indices ...interface{}) interface{} {
-				if len(indices) == 0 || len(indices) > 2 {
-					panic("go/slice: must have 1 or 2 indices")
-				}
-				var start, end int64 = -1, -1
-				if !value.IsNil(indices[0]) {
-					start = value.AsInt64(indices[0])
-				}
-				if len(indices) == 2 && !value.IsNil(indices[1]) {
-					end = value.AsInt64(indices[1])
-				}
-				if str, ok := sliceOrString.(string); ok {
-					if start == -1 {
-						start = 0
-					}
-					if end == -1 {
-						end = int64(len(str))
-					}
-					return str[start:end]
-				}
-				sVal := reflect.ValueOf(sliceOrString)
-				if sVal.Kind() != reflect.Slice {
-					panic(fmt.Sprintf("go/slice: %v is not a slice or string", sliceOrString))
-				}
-				if start == -1 {
-					start = 0
-				}
-				if end == -1 {
-					end = int64(sVal.Len())
-				}
-				return sVal.Slice(int(start), int(end)).Interface()
 			}, nil
 		}
 	}

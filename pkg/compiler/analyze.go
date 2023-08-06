@@ -115,10 +115,23 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 		} else {
 			maybeClass := form.Namespace()
 			if maybeClass != "" {
-				n.Op = ast.OpMaybeHostForm // TODO: define this for Go interop
-				n.Sub = &ast.MaybeHostFormNode{
-					Class: maybeClass,
-					Field: NewSymbol(form.Name()),
+				if maybeClass == "go" {
+					v, ok := lang.Builtins[form.Name()]
+					if !ok {
+						return nil, fmt.Errorf("unknown go builtin: go/%s", form.Name())
+					}
+					n.Op = ast.OpGoBuiltin
+					n.Sub = &ast.GoBuiltinNode{
+						Sym:   NewSymbol(form.Name()),
+						Value: v,
+					}
+				} else {
+					// TODO: does this make any sense for go?
+					n.Op = ast.OpMaybeHostForm
+					n.Sub = &ast.MaybeHostFormNode{
+						Class: maybeClass,
+						Field: NewSymbol(form.Name()),
+					}
 				}
 			} else {
 				n.Op = ast.OpMaybeClass

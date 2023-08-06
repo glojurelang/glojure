@@ -419,7 +419,7 @@
   {:added "1.0"
    :static true}
   ([& keys]
-   (glojure.lang.PersistentTreeSet/create keys)))
+   (github.com$glojurelang$glojure$pkg$lang.CreatePersistentTreeSet keys)))
 
 (defn sorted-set-by
   "Returns a new sorted set with supplied keys, using the supplied
@@ -428,7 +428,7 @@
   {:added "1.1"
    :static true} 
   ([comparator & keys]
-   (glojure.lang.PersistentTreeSet/create comparator keys)))
+   (github.com$glojurelang$glojure$pkg$lang.CreatePersistentTreeSetWithComparator comparator keys)))
 
  
 ;;;;;;;;;;;;;;;;;;;;

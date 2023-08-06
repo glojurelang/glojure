@@ -41,6 +41,11 @@ type (
 		Meta  *Node
 	}
 
+	GoBuiltinNode struct {
+		Sym   *lang.Symbol
+		Value interface{}
+	}
+
 	MaybeHostFormNode struct {
 		Class string
 		Field *lang.Symbol
@@ -221,6 +226,7 @@ const (
 	OpHostInterop
 	OpHostField
 	OpMaybeHostForm
+	OpGoBuiltin
 	OpIf
 	OpCase
 	OpCaseNode
