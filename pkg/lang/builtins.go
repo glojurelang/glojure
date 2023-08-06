@@ -46,12 +46,14 @@ var (
 		// a deferred function. instead, try/catch should be used.
 
 		// Built-in type operators
-		"slice-of": reflect.SliceOf, // sliceof(T) -> []T
-		"ptr-to":   reflect.PtrTo,   // ptrto(T) -> *T
-		"chan-of":  reflect.ChanOf,  // chanof(dir, T) -> chan T
-		"map-of":   reflect.MapOf,   // mapof(K, V) -> map[K]V
-		"func-of":  reflect.FuncOf,
-		"array-of": reflect.ArrayOf, // arrayof(n, T) -> [n]T
+		"slice-of":  reflect.SliceOf, // sliceof(T) -> []T
+		"ptr-to":    reflect.PtrTo,   // ptrto(T) -> *T
+		"chan-of":   GoChanOf,        // chanof(dir, T) -> chan T
+		"<-chan-of": GoRecvChanOf,    // recvchanof(T) -> <-chan T
+		"chan<--of": GoSendChanOf,    // sendchanof(T) -> chan<- T
+		"map-of":    reflect.MapOf,   // mapof(K, V) -> map[K]V
+		"func-of":   reflect.FuncOf,
+		"array-of":  reflect.ArrayOf, // arrayof(n, T) -> [n]T
 
 		// Built-in operators
 		"deref": GoDeref, // deref(ptr) -> val
@@ -202,6 +204,18 @@ func GoSlice(slc interface{}, indices ...interface{}) interface{} {
 		}
 	}
 	return slcVal.Slice(i, j).Interface()
+}
+
+func GoChanOf(typ reflect.Type) reflect.Type {
+	return reflect.ChanOf(reflect.BothDir, typ)
+}
+
+func GoRecvChanOf(typ reflect.Type) reflect.Type {
+	return reflect.ChanOf(reflect.RecvDir, typ)
+}
+
+func GoSendChanOf(typ reflect.Type) reflect.Type {
+	return reflect.ChanOf(reflect.SendDir, typ)
 }
 
 func GoSend(ch, val interface{}) {
