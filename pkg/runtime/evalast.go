@@ -85,6 +85,8 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 		return env.EvalASTLocal(n)
 	case ast.OpGoBuiltin:
 		return n.Sub.(*ast.GoBuiltinNode).Value, nil
+	case ast.OpGo:
+		return env.EvalASTGo(n)
 	case ast.OpHostCall:
 		return env.EvalASTHostCall(n)
 	case ast.OpHostInterop:
@@ -328,6 +330,31 @@ func (env *environment) EvalASTHostInterop(n *ast.Node) (interface{}, error) {
 	default:
 		return mOrFVal, nil
 	}
+}
+
+func (env *environment) EvalASTGo(n *ast.Node) (interface{}, error) {
+	goNode := n.Sub.(*ast.GoNode)
+
+	invokeNode := goNode.Invoke.Sub.(*ast.InvokeNode)
+
+	fn := invokeNode.Fn
+	args := invokeNode.Args
+	fnVal, err := env.EvalAST(fn)
+	if err != nil {
+		return nil, err
+	}
+
+	var argVals []interface{}
+	for _, arg := range args {
+		argVal, err := env.EvalAST(arg)
+		if err != nil {
+			return nil, err
+		}
+		argVals = append(argVals, argVal)
+	}
+
+	go value.Apply(fnVal, argVals)
+	return nil, nil
 }
 
 func (env *environment) EvalASTWithMeta(n *ast.Node) (interface{}, error) {

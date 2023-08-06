@@ -46,6 +46,10 @@ type (
 		Value interface{}
 	}
 
+	GoNode struct {
+		Invoke *Node
+	}
+
 	MaybeHostFormNode struct {
 		Class string
 		Field *lang.Symbol
@@ -227,6 +231,7 @@ const (
 	OpHostField
 	OpMaybeHostForm
 	OpGoBuiltin
+	OpGo
 	OpIf
 	OpCase
 	OpCaseNode

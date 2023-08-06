@@ -27,7 +27,7 @@ var (
 			"loop*",
 			"recur",
 			"if",
-			"case",
+			"case*",
 			"let*",
 			"letfn*",
 			"do",
