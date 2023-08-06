@@ -1487,6 +1487,8 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.GoNew", github_com_glojurelang_glojure_pkg_lang.GoNew)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoPanic", github_com_glojurelang_glojure_pkg_lang.GoPanic)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoReal", github_com_glojurelang_glojure_pkg_lang.GoReal)
+	_register("github.com/glojurelang/glojure/pkg/lang.GoRecv", github_com_glojurelang_glojure_pkg_lang.GoRecv)
+	_register("github.com/glojurelang/glojure/pkg/lang.GoSend", github_com_glojurelang_glojure_pkg_lang.GoSend)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoSlice", github_com_glojurelang_glojure_pkg_lang.GoSlice)
 	_register("github.com/glojurelang/glojure/pkg/lang.HasType", github_com_glojurelang_glojure_pkg_lang.HasType)
 	_register("github.com/glojurelang/glojure/pkg/lang.Hash", github_com_glojurelang_glojure_pkg_lang.Hash)

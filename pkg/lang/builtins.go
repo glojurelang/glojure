@@ -61,6 +61,8 @@ var (
 		// address of slice elements and struct fields.
 		"index": GoIndex, // index(slc, i) -> val
 		"slice": GoSlice, // slice(slc, i, j) -> slc[i:j]
+		"send":  GoSend,  // send(ch, val) -> ch <- val
+		"recv":  GoRecv,  // recv(ch) -> val, ok <- ch
 	}
 )
 
@@ -200,4 +202,13 @@ func GoSlice(slc interface{}, indices ...interface{}) interface{} {
 		}
 	}
 	return slcVal.Slice(i, j).Interface()
+}
+
+func GoSend(ch, val interface{}) {
+	reflect.ValueOf(ch).Send(reflect.ValueOf(val))
+}
+
+func GoRecv(ch interface{}) (interface{}, bool) {
+	val, ok := reflect.ValueOf(ch).Recv()
+	return val.Interface(), ok
 }
