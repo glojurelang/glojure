@@ -2,7 +2,6 @@ package runtime
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -99,7 +98,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 
 			for {
 				expr, err := r.ReadOne()
-				if errors.Is(err, io.EOF) {
+				if err == reader.ErrEOF {
 					break
 				}
 				if err != nil {

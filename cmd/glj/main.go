@@ -2,16 +2,14 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"flag"
-	"io"
 	"log"
 	"os"
 
+	"github.com/glojurelang/glojure/pkg/lang"
 	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/repl"
-	"github.com/glojurelang/glojure/pkg/runtime"
 
 	// Bootstrap the runtime
 	_ "github.com/glojurelang/glojure/pkg/glj"
@@ -27,13 +25,13 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		env := initEnv(os.Stdout)
+		env := lang.GlobalEnv
 		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() *value.Namespace {
 			return env.CurrentNamespace()
 		}))
 		for {
 			val, err := rdr.ReadOne()
-			if errors.Is(err, io.EOF) {
+			if err == reader.ErrEOF {
 				break
 			}
 			if err != nil {
@@ -45,15 +43,4 @@ func main() {
 			}
 		}
 	}
-}
-
-func initEnv(stdout io.Writer) value.Environment {
-	// TODO: clean up this code. copied from rtcompat.go.
-	kvs := make([]interface{}, 0, 3)
-	for _, vr := range []*value.Var{value.VarCurrentNS, value.VarWarnOnReflection, value.VarUncheckedMath, value.VarDataReaders} {
-		kvs = append(kvs, vr, vr.Deref())
-	}
-	value.PushThreadBindings(value.NewMap(kvs...))
-
-	return runtime.NewEnvironment(runtime.WithStdout(stdout))
 }

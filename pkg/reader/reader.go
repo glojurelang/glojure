@@ -54,6 +54,12 @@ var (
 		}
 		return ret
 	}()
+
+	// ErrEOF is returned when the end of the input is reached after
+	// all input has been read. Callers can check for this error to
+	// determine if an error is due to malformed input or exhausted
+	// input.
+	ErrEOF = errors.New("EOF")
 )
 
 type (
@@ -73,7 +79,21 @@ type (
 		Line     int
 		Column   int
 	}
+
+	Error struct {
+		wrapped error
+		pos     pos
+	}
 )
+
+func (e *Error) Error() string {
+	prefix := fmt.Sprintf("%s:%d:%d: ", e.pos.Filename, e.pos.Line, e.pos.Column)
+	return prefix + e.wrapped.Error()
+}
+
+func (e *Error) Unwrap() error {
+	return e.wrapped
+}
 
 func newTrackingRuneScanner(rs io.RuneScanner, filename string) *trackingRuneScanner {
 	if filename == "" {
@@ -253,9 +273,16 @@ func (r *Reader) ReadAll() ([]interface{}, error) {
 	return nodes, nil
 }
 
+// ReadOne reads the next expression from the input. If the input
+// contains more than one expression, subsequent calls to ReadOne will
+// return the next expression. If the input contains no expressions,
+// ErrEOF will be returned.
 func (r *Reader) ReadOne() (interface{}, error) {
 	_, err := r.next()
 	if err != nil {
+		if errors.Is(err, io.EOF) {
+			return 0, ErrEOF
+		}
 		return nil, err
 	}
 	r.rs.UnreadRune()
@@ -265,9 +292,10 @@ func (r *Reader) ReadOne() (interface{}, error) {
 // error returns a formatted error that includes the current position
 // of the scanner.
 func (r *Reader) error(format string, args ...interface{}) error {
-	pos := r.rs.pos()
-	prefix := fmt.Sprintf("%s:%d:%d: ", pos.Filename, pos.Line, pos.Column)
-	return fmt.Errorf(prefix+format, args...)
+	return &Error{
+		pos:     r.rs.pos(),
+		wrapped: fmt.Errorf(format, args...),
+	}
 }
 
 // popSection returns the last section read, ending at the current
@@ -562,10 +590,10 @@ func (r *Reader) readArg() (interface{}, error) {
 	default:
 		argIndex, err := strconv.Atoi(argSuffix)
 		if err != nil {
-			return nil, r.error("arg literal must be %, %& or %integer")
+			return nil, r.error("arg literal must be %%, %%& or %%integer")
 		}
 		if argIndex < 1 {
-			return nil, r.error("arg literal must be %, %& or %integer > 0")
+			return nil, r.error("arg literal must be %%, %%& or %%integer > 0")
 		}
 		if r.fnArgMap[argIndex] == nil {
 			r.fnArgMap[argIndex] = r.genArg(argIndex)
