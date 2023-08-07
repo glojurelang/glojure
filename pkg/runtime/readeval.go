@@ -1,13 +1,11 @@
 package runtime
 
 import (
-	"errors"
 	"fmt"
-	"io"
 	"strings"
 
-	"github.com/glojurelang/glojure/pkg/reader"
 	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/reader"
 )
 
 type (
@@ -62,7 +60,7 @@ func ReadEval(code string, options ...ReadEvalOption) interface{} {
 	var lastValue interface{}
 	for {
 		expr, err := r.ReadOne()
-		if errors.Is(err, io.EOF) {
+		if err == reader.ErrEOF {
 			break
 		}
 		if err != nil {
