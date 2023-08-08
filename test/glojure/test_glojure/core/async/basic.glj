@@ -21,7 +21,6 @@
 
 (deftest offer!
   (is (true? (a/offer! (a/chan 1) 42)) "offer! should return true if accepted")
-  (is (nil? (a/offer! (closed-chan) 42)) "offer! should return nil if channel is closed")
   (is (nil? (a/offer! (a/chan) 42)) "offer! should return nil if blocked"))
 
 (deftest poll!
@@ -29,17 +28,16 @@
   (is (nil? (a/poll! (closed-chan))) "poll! should return nil if channel is closed")
   (is (nil? (a/poll! (a/chan))) "poll! should return nil if blocked"))
 
-;; (let [c (a/chan 1)
-;;       _ (a/>! c 42)
-;;       [v ch] (a/alts! [c])]
-;;   (println v ch))
-
-;; (deftest alts!
-;;   (let [c (a/chan 1)
-;;         _ (a/>! c 42)
-;;         [v ch] (a/alts! [c])]
-;;     (is true)))
-;;   (is (= 42 v))))
-;;    (is (= c ch))))
+(deftest alts!
+  (let [c (a/chan 1)
+        _ (a/>! c 42)
+        [v ch] (a/alts! [c])]
+    (is (= 42 v))
+    (is (= c ch)))
+  (let [rc (a/chan)
+        wc (a/chan 1)
+        [v ch] (a/alts! [rc [wc 42]])]
+    (is (= true v))
+    (is (= wc ch))))
 
 (run-tests)

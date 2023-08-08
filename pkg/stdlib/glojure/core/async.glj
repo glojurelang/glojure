@@ -71,30 +71,26 @@ to catch and handle.")
 
 (defn >!
   "puts a val into port. nil values are not allowed. Will park if no buffer space is available.
-  Returns true unless port is already closed."
+  Returns true, or throws if port is already closed."
   [port val]
-  (try
-    (go/send port val)
-    true
-    (catch go/any _ ;; swallow all sends on closed channels
-      false)))
+  (go/send port val)
+  true)
 
 (def >!! >!)
 
 (defn close!
   "Closes a channel. The channel will no longer accept any puts (they
-  will be ignored). Data in the channel remains available for taking, until
-  exhausted, after which takes will return nil. If there are any
+  will be ignored). Data in the channel remains available for taking,
+  until exhausted, after which takes will return nil. If there are any
   pending takes, they will be dispatched with nil. Closing a closed
-  channel is a no-op. Returns nil.
+  channel will throw an exception.
 
-  Logically closing happens after all puts have been delivered. Therefore, any
-  blocked or parked puts will remain blocked/parked until a taker releases them."
+  Logically closing happens after all puts have been
+  delivered. Therefore, any blocked or parked puts will remain
+  blocked/parked until a taker releases them."
 
   [chan]
-  (try
-    (go/close chan)
-    (catch go/any _)))
+  (go/close chan))
 
 (defmacro go
   "Asynchronously executes the body, returning immediately to the
@@ -139,15 +135,13 @@ to catch and handle.")
     select-case))
 
 (defn- try-put
-  "Returns true if val was sent on the port, false if sending would block,
-  and nil if the channel was closed."
+  "Returns true if val was sent on the port, false if sending would
+  block"
   [port val]
-  (try
-    (let [sc (port-case [port val])
-          def (default-case)
-          [chosen val ok] (reflect.Select (map go/deref [sc def]))]
-      (= 0 chosen))
-    (catch go/any _))) ;; TODO: sharpen this check
+  (let [sc (port-case [port val])
+        def (default-case)
+        [chosen val ok] (reflect.Select (map go/deref [sc def]))]
+    (= 0 chosen)))
 
 (defn- try-take
   "Returns [val true] if val was received from the port, [nil false] if the channel was closed,
@@ -183,19 +177,18 @@ to catch and handle.")
           :else (do (go (<! port)) ;; enqueue the take; it is discarded
                     nil))))
 
-;; (defn- do-alts
-;;   "returns derefable [val port] if immediate, nil if enqueued"
-;;   [fret ports opts]
-;;   (assert (pos? (count ports)) "alts must have at least one channel operation")
-;;   (let [ports (vec ports) ;; ensure vector for indexed nth
-;;         n (count ports)
-;;         priority (:priority opts)
-;;         selects (map port-case ports)
-;;         def ()
-;;         _ (println selects)
-;;         _ nil]))
-        ;; (println (count selects))]))
-
+(defn- do-alts
+  "returns derefable [val port] if immediate, nil if enqueued"
+  [ports opts]
+  (assert (pos? (count ports)) "alts must have at least one channel operation")
+  (let [ports (vec ports) ;; ensure vector for indexed nth
+        n (count ports)
+        priority (:priority opts)
+        selects (map port-case ports)
+        def (default-case)
+        [chosen-idx val ok] (reflect.Select (map go/deref selects))
+        chosen (get ports chosen-idx)]
+    (if (vector? chosen) [true (chosen 0)] [(when ok (.Interface val)) chosen])))
 
 ;; (println ports)
         ;;cases (map port-case ports)
@@ -220,37 +213,33 @@ to catch and handle.")
     ;;      (when got
     ;;        (channels/box [(:default opts) :default])))))))
 
-;; (defn alts!
-;;   "Completes at most one of several channel operations. Must be called
-;;   inside a (go ...) block. ports is a vector of channel endpoints,
-;;   which can be either a channel to take from or a vector of
-;;   [channel-to-put-to val-to-put], in any combination. Takes will be
-;;   made as if by <!, and puts will be made as if by >!. Unless
-;;   the :priority option is true, if more than one port operation is
-;;   ready a non-deterministic choice will be made. If no operation is
-;;   ready and a :default value is supplied, [default-val :default] will
-;;   be returned, otherwise alts! will park until the first operation to
-;;   become ready completes. Returns [val port] of the completed
-;;   operation, where val is the value taken for takes, and a
-;;   boolean (true unless already closed, as per put!) for puts.
+(defn alts!
+  "Completes at most one of several channel operations. Must be called
+  inside a (go ...) block. ports is a vector of channel endpoints,
+  which can be either a channel to take from or a vector of
+  [channel-to-put-to val-to-put], in any combination. Takes will be
+  made as if by <!, and puts will be made as if by >!. Unless
+  the :priority option is true, if more than one port operation is
+  ready a non-deterministic choice will be made. If no operation is
+  ready and a :default value is supplied, [default-val :default] will
+  be returned, otherwise alts! will park until the first operation to
+  become ready completes. Returns [val port] of the completed
+  operation, where val is the value taken for takes, and true for
+  puts.
 
-;;   opts are passed as :key val ... Supported options:
+  opts are passed as :key val ... Supported options:
 
-;;   :default val - the value to use if none of the operations are immediately ready
-;;   :priority true - (default nil) when true, the operations will be tried in order.
+  :default val - the value to use if none of the operations are immediately ready
+  :priority true - (default nil) when true, the operations will be tried in order.
 
-;;   Note: there is no guarantee that the port exps or val exprs will be
-;;   used, nor in what order should they be, so they should not be
-;;   depended upon for side effects."
+  Note: there is no guarantee that the port exps or val exprs will be
+  used, nor in what order should they be, so they should not be
+  depended upon for side effects."
 
-;;   [ports & {:as opts}]
-;;   (let [a (atom nil)
-;;         ret (do-alts (partial reset! a) ports (apply hash-map opts))]
-;;     (if ret
-;;       @ret
-;;       @a)))
+  [ports & {:as opts}]
+  (do-alts ports (apply hash-map opts)))
 
-;; (def alts!! alts!)
+(def alts!! alts!)
 
 
 ;; admix

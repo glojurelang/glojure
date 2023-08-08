@@ -14,7 +14,8 @@ const (
 	symbolHashMask  = 0x9e3779b9
 
 	// TODO: generic hashes for abitrary go types
-	reflectTypeHashMask = 0x49c091a8
+	reflectTypeHashMask  = 0x49c091a8
+	reflectValueHashMask = 0x49c791a8
 )
 
 func Hash(x interface{}) uint32 {
@@ -41,6 +42,11 @@ func Hash(x interface{}) uint32 {
 		h := getHash()
 		h.Write([]byte(x.String()))
 		return h.Sum32() ^ reflectTypeHashMask
+	case reflect.Value:
+		if !x.IsValid() {
+			return reflectValueHashMask
+		}
+		return Hash(x.Interface()) ^ reflectValueHashMask
 	}
 
 	switch reflect.TypeOf(x).Kind() {
