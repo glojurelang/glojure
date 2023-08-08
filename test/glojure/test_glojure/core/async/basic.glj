@@ -42,4 +42,26 @@
   (let [rc (a/chan)
         [v ch] (a/alts! [rc] :default 42)]))
 
+(deftest alt!
+  (let [wc (a/chan 1)
+        [rc1 rc2 rc3] (repeatedly 3 #(a/chan))
+        val 42
+        res (a/alt!
+              [rc1 rc2] ([v ch] [:read v ch])
+              rc3 ([v] v)
+              [[wc val]] :wrote
+              :default :none-ready)]
+    (is (= :wrote res)))
+  (let [ch (a/chan 2)
+        _ (a/>! ch :init)
+        val 42
+        err (try
+              (a/alt!
+                ch :read
+                [[ch val]] :wrote)
+              nil
+              (catch go/any x
+                x))]
+    (is (not (nil? err)) "duplicate ports should throw")))
+
 (run-tests)

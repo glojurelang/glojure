@@ -12,6 +12,8 @@ primarily during development. Invalid blocking calls will throw in
 go block threads - use Thread.setDefaultUncaughtExceptionHandler()
 to catch and handle.")
 
+(alias 'core 'glojure.core)
+
 (defn chan
   "Creates a channel with an optional buffer, an optional transducer
   (like (map f), (filter p) etc or a composition thereof), and an
@@ -28,37 +30,6 @@ to catch and handle.")
    (when xform (assert buf-or-n "buffer must be supplied when transducer is"))
    (when xform (throw (fmt.Errorf "xform and ex-handler not yet supported"))) ;; TODO
    (go/make (go/chan-of go/any) (or buf-or-n 0))))
-
-(defn- nop [_])
-
-(defn- impl-put!
-  "derefable boolean (false iff already closed) if handled, nil if put
-  was enqueued. Must throw on nil val."
-  [port val fn1-handler]
-  (when (nil? val)
-    (throw (fmt.Errorf "can't put nil on channel")))
-  )
-
-(defn put!
-  "Asynchronously puts a val into port, calling fn1 (if supplied) when
-   complete, passing false iff port is already closed. nil values are
-   not allowed. If on-caller? (default true) is true, and the put is
-   immediately accepted, will call fn1 on calling thread.
-
-   Returns true unless port is already closed."
-  ([port val]
-     (if-let [ret (impl/put! port val nop)]
-       @ret
-       true))
-  ([port val fn1] (put! port val fn1 true))
-  ([port val fn1 on-caller?]
-     (if-let [retb (impl/put! port val (fn-handler fn1))]
-       (let [ret @retb]
-         (if on-caller?
-           (fn1 ret)
-           (dispatch/run #(fn1 ret)))
-         ret)
-       true)))
 
 (defn <!
   "takes a val from port. Will return nil if closed. Will park if
@@ -115,6 +86,15 @@ to catch and handle.")
                 (>! c# res#)))]
      (go/go (f#))
      ((go/<-chan-of go/any) c#)))
+
+(defn timeout
+  "Returns a channel that will close after msecs"
+  [^go/int64 msecs]
+  (let [ret (chan)
+        after (time.After (* msecs (go/int64 time.Millisecond)))]
+    (go (do (<! after)
+            (close! ret)))
+    ret))
 
 (defn- default-case
   []
@@ -177,10 +157,18 @@ to catch and handle.")
           :else (do (go (<! port)) ;; enqueue the take; it is discarded
                     nil))))
 
+(defn- check-unique-ports!
+  [ports]
+  (let [chans (map #(if (vector? %) (% 0) %) ports)
+        s (set chans)]
+    (when (not= (count s) (count ports))
+      (throw (fmt.Errorf "duplicate ports found in alt(s)! operation")))))
+
 (defn- do-alts
   "returns derefable [val port] if immediate, nil if enqueued"
   [ports opts]
   (assert (pos? (count ports)) "alts must have at least one channel operation")
+  (check-unique-ports! ports)
   (let [ports (vec ports) ;; ensure vector for indexed nth
         n (count ports)
         priority (:priority opts) ;; TODO: implement priority
@@ -224,13 +212,105 @@ to catch and handle.")
 
 (def alts!! alts!)
 
+(defn do-alt [alts clauses]
+  (assert (even? (count clauses)) "unbalanced clauses")
+  (let [clauses (core/partition 2 clauses)
+        opt? #(keyword? (first %))
+        opts (filter opt? clauses)
+        clauses (remove opt? clauses)
+        [clauses bindings]
+        (core/reduce
+         (fn [[clauses bindings] [ports expr]]
+           (let [ports (if (vector? ports) ports [ports])
+                 [ports bindings]
+                 (core/reduce
+                  (fn [[ports bindings] port]
+                    (if (vector? port)
+                      (let [[port val] port
+                            gp (gensym)
+                            gv (gensym)]
+                        [(conj ports [gp gv]) (conj bindings [gp port] [gv val])])
+                      (let [gp (gensym)]
+                        [(conj ports gp) (conj bindings [gp port])])))
+                  [[] bindings] ports)]
+             [(conj clauses [ports expr]) bindings]))
+         [[] []] clauses)
+        gch (gensym "ch")
+        gret (gensym "ret")]
+    `(let [~@(mapcat identity bindings)
+           [val# ~gch :as ~gret] (~alts [~@(apply concat (core/map first clauses))] ~@(apply concat opts))]
+       (cond
+        ~@(mapcat (fn [[ports expr]]
+                    [`(or ~@(core/map (fn [port]
+                                   `(= ~gch ~(if (vector? port) (first port) port)))
+                                 ports))
+                     (if (and (seq? expr) (vector? (first expr)))
+                       `(let [~(first expr) ~gret] ~@(rest expr))
+                       expr)])
+                  clauses)
+        (= ~gch :default) val#))))
+
+(defmacro alt!
+  "Makes a single choice between one of several channel operations,
+  as if by alts!, returning the value of the result expr corresponding
+  to the operation completed. Must be called inside a (go ...) block.
+
+  Each clause takes the form of:
+
+  channel-op[s] result-expr
+
+  where channel-ops is one of:
+
+  take-port - a single port to take
+  [take-port | [put-port put-val] ...] - a vector of ports as per alts!
+  :default | :priority - an option for alts!
+
+  and result-expr is either a list beginning with a vector, whereupon that
+  vector will be treated as a binding for the [val port] return of the
+  operation, else any other expression.
+
+  (alt!
+    [c t] ([val ch] (foo ch val))
+    x ([v] v)
+    [[out val]] :wrote
+    :default 42)
+
+  Each option may appear at most once. The choice and parking
+  characteristics are those of alts!."
+
+  [& clauses]
+  (do-alt `alts! clauses))
+
+(def alt!! alt!)
+
+;;;;;;;;;;;;;;;;;;;; ops ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro go-loop
+  "Like (go (loop ...))"
+  [bindings & body]
+  `(go (loop ~bindings ~@body)))
+
+(defn pipe
+  "Takes elements from the from channel and supplies them to the to
+  channel. By default, the to channel will be closed when the from
+  channel closes, but can be determined by the close?  parameter. Will
+  stop consuming the from channel if the to channel closes"
+  ([from to] (pipe from to true))
+  ([from to close?]
+     (go-loop []
+      (let [v (<! from)]
+        (if (nil? v)
+          (when close? (close! to))
+          (when (>! to v)
+            (recur)))))
+     to))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TODO
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; admix
-;; alt!
-;; alt!!
 ;; buffer
-;; do-alts
 ;; dropping-buffer
-;; go-loop
 ;; into
 ;; map
 ;; merge
@@ -239,7 +319,6 @@ to catch and handle.")
 ;; onto-chan
 ;; onto-chan!
 ;; onto-chan!!
-;; pipe
 ;; pipeline
 ;; pipeline-async
 ;; pipeline-blocking
