@@ -120,23 +120,34 @@ to catch and handle.")
      (go/go (f#))
      ((go/<-chan-of go/any) c#)))
 
+(defn- default-case
+  []
+  (let [def (new reflect.SelectCase)]
+    (set! (.Dir def) reflect.SelectDefault)
+    def))
+
+(defn- port-case
+  "Returns a *reflect.SelectCase for the given channel operation."
+  [port-or-put]
+  (let [wport (when (vector? port-or-put) (port-or-put 0))
+        port (or wport port-or-put)
+        val (when wport (reflect.ValueOf (port-or-put 1)))
+        select-case (new reflect.SelectCase)]
+    (set! (.Chan select-case) (reflect.ValueOf port))
+    (set! (.Dir select-case) (if wport reflect.SelectSend reflect.SelectRecv))
+    (if wport (set! (.Send select-case) val))
+    select-case))
+
 (defn- try-put
   "Returns true if val was sent on the port, false if sending would block,
   and nil if the channel was closed."
   [port val]
   (try
-    (let [sc (new reflect.SelectCase)
-          _ (do
-              (set! (.Dir sc) reflect.SelectSend)
-              (set! (.Chan sc) (reflect.ValueOf port))
-              (set! (.Send sc) (reflect.ValueOf val)))
-          def (new reflect.SelectCase)
-          _ (do
-              (set! (.Dir def) reflect.SelectDefault))
-          [chosen _ _] (reflect.Select (map go/deref [sc def]))]
-      (or (= 0 chosen) nil))
-    (catch go/any x
-      false)))
+    (let [sc (port-case [port val])
+          def (default-case)
+          [chosen val ok] (reflect.Select (map go/deref [sc def]))]
+      (= 0 chosen))
+    (catch go/any _))) ;; TODO: sharpen this check
 
 (defn- try-take
   "Returns [val true] if val was received from the port, [nil false] if the channel was closed,
@@ -158,11 +169,8 @@ to catch and handle.")
   "Puts a val into port if it's possible to do so immediately.
    nil values are not allowed. Never blocks. Returns true if offer succeeds."
   [port val]
-  (let [res (try-put port val)]
-    (if (boolean? res)
-      res
-      (do (go (>! port val)) ;; enqueue the send
-          nil))))
+  (let [ret (try-put port val)]
+    (if ret ret)))
 
 (defn poll!
   "Takes a val from port if it's possible to do so immediately.
@@ -175,34 +183,74 @@ to catch and handle.")
           :else (do (go (<! port)) ;; enqueue the take; it is discarded
                     nil))))
 
-(defn alts!
-  "Completes at most one of several channel operations. Must be called
-  inside a (go ...) block. ports is a vector of channel endpoints,
-  which can be either a channel to take from or a vector of
-  [channel-to-put-to val-to-put], in any combination. Takes will be
-  made as if by <!, and puts will be made as if by >!. Unless
-  the :priority option is true, if more than one port operation is
-  ready a non-deterministic choice will be made. If no operation is
-  ready and a :default value is supplied, [default-val :default] will
-  be returned, otherwise alts! will park until the first operation to
-  become ready completes. Returns [val port] of the completed
-  operation, where val is the value taken for takes, and a
-  boolean (true unless already closed, as per put!) for puts.
+;; (defn- do-alts
+;;   "returns derefable [val port] if immediate, nil if enqueued"
+;;   [fret ports opts]
+;;   (assert (pos? (count ports)) "alts must have at least one channel operation")
+;;   (let [ports (vec ports) ;; ensure vector for indexed nth
+;;         n (count ports)
+;;         priority (:priority opts)
+;;         selects (map port-case ports)
+;;         def ()
+;;         _ (println selects)
+;;         _ nil]))
+        ;; (println (count selects))]))
 
-  opts are passed as :key val ... Supported options:
 
-  :default val - the value to use if none of the operations are immediately ready
-  :priority true - (default nil) when true, the operations will be tried in order.
+;; (println ports)
+        ;;cases (map port-case ports)
+        ;;ret
+    ;;     (loop [i 0]
+    ;;       (when (< i n)
+    ;;         (let [port (nth ports i)
+    ;;               wport (when (vector? port) (port 0))
+    ;;               vbox (if wport
+    ;;                      (let [val (port 1)]
+    ;;                        (impl/put! wport val (alt-handler flag #(fret [% wport]))))
+    ;;                      (impl/take! port (alt-handler flag #(fret [% port]))))]
+    ;;           (if vbox
+    ;;             (channels/box [@vbox (or wport port)])
+    ;;             (recur (inc i))))))]
+    ;; (or
+    ;;  ret
+    ;;  (when (contains? opts :default)
+    ;;    (.lock ^Lock flag)
+    ;;    (let [got (and (impl/active? flag) (impl/commit flag))]
+    ;;      (.unlock ^Lock flag)
+    ;;      (when got
+    ;;        (channels/box [(:default opts) :default])))))))
 
-  Note: there is no guarantee that the port exps or val exprs will be
-  used, nor in what order should they be, so they should not be
-  depended upon for side effects."
+;; (defn alts!
+;;   "Completes at most one of several channel operations. Must be called
+;;   inside a (go ...) block. ports is a vector of channel endpoints,
+;;   which can be either a channel to take from or a vector of
+;;   [channel-to-put-to val-to-put], in any combination. Takes will be
+;;   made as if by <!, and puts will be made as if by >!. Unless
+;;   the :priority option is true, if more than one port operation is
+;;   ready a non-deterministic choice will be made. If no operation is
+;;   ready and a :default value is supplied, [default-val :default] will
+;;   be returned, otherwise alts! will park until the first operation to
+;;   become ready completes. Returns [val port] of the completed
+;;   operation, where val is the value taken for takes, and a
+;;   boolean (true unless already closed, as per put!) for puts.
 
-  [ports & {:as opts}]
-  (assert nil "alts! used not in (go ...) block"))
+;;   opts are passed as :key val ... Supported options:
 
-(def alts!! alts!)
+;;   :default val - the value to use if none of the operations are immediately ready
+;;   :priority true - (default nil) when true, the operations will be tried in order.
 
+;;   Note: there is no guarantee that the port exps or val exprs will be
+;;   used, nor in what order should they be, so they should not be
+;;   depended upon for side effects."
+
+;;   [ports & {:as opts}]
+;;   (let [a (atom nil)
+;;         ret (do-alts (partial reset! a) ports (apply hash-map opts))]
+;;     (if ret
+;;       @ret
+;;       @a)))
+
+;; (def alts!! alts!)
 
 
 ;; admix
