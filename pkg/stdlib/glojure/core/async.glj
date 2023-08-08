@@ -175,11 +175,39 @@ to catch and handle.")
           :else (do (go (<! port)) ;; enqueue the take; it is discarded
                     nil))))
 
+(defn alts!
+  "Completes at most one of several channel operations. Must be called
+  inside a (go ...) block. ports is a vector of channel endpoints,
+  which can be either a channel to take from or a vector of
+  [channel-to-put-to val-to-put], in any combination. Takes will be
+  made as if by <!, and puts will be made as if by >!. Unless
+  the :priority option is true, if more than one port operation is
+  ready a non-deterministic choice will be made. If no operation is
+  ready and a :default value is supplied, [default-val :default] will
+  be returned, otherwise alts! will park until the first operation to
+  become ready completes. Returns [val port] of the completed
+  operation, where val is the value taken for takes, and a
+  boolean (true unless already closed, as per put!) for puts.
+
+  opts are passed as :key val ... Supported options:
+
+  :default val - the value to use if none of the operations are immediately ready
+  :priority true - (default nil) when true, the operations will be tried in order.
+
+  Note: there is no guarantee that the port exps or val exprs will be
+  used, nor in what order should they be, so they should not be
+  depended upon for side effects."
+
+  [ports & {:as opts}]
+  (assert nil "alts! used not in (go ...) block"))
+
+(def alts!! alts!)
+
+
+
 ;; admix
 ;; alt!
 ;; alt!!
-;; alts!
-;; alts!!
 ;; buffer
 ;; do-alts
 ;; dropping-buffer
