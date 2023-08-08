@@ -38,6 +38,8 @@
         wc (a/chan 1)
         [v ch] (a/alts! [rc [wc 42]])]
     (is (= true v))
-    (is (= wc ch))))
+    (is (= wc ch)))
+  (let [rc (a/chan)
+        [v ch] (a/alts! [rc] :default 42)]))
 
 (run-tests)

@@ -183,35 +183,18 @@ to catch and handle.")
   (assert (pos? (count ports)) "alts must have at least one channel operation")
   (let [ports (vec ports) ;; ensure vector for indexed nth
         n (count ports)
-        priority (:priority opts)
+        priority (:priority opts) ;; TODO: implement priority
         selects (map port-case ports)
+        selects (if (contains? opts :default)
+                  (conj (vec selects) (default-case))
+                  selects)
         def (default-case)
         [chosen-idx val ok] (reflect.Select (map go/deref selects))
         chosen (get ports chosen-idx)]
-    (if (vector? chosen) [true (chosen 0)] [(when ok (.Interface val)) chosen])))
-
-;; (println ports)
-        ;;cases (map port-case ports)
-        ;;ret
-    ;;     (loop [i 0]
-    ;;       (when (< i n)
-    ;;         (let [port (nth ports i)
-    ;;               wport (when (vector? port) (port 0))
-    ;;               vbox (if wport
-    ;;                      (let [val (port 1)]
-    ;;                        (impl/put! wport val (alt-handler flag #(fret [% wport]))))
-    ;;                      (impl/take! port (alt-handler flag #(fret [% port]))))]
-    ;;           (if vbox
-    ;;             (channels/box [@vbox (or wport port)])
-    ;;             (recur (inc i))))))]
-    ;; (or
-    ;;  ret
-    ;;  (when (contains? opts :default)
-    ;;    (.lock ^Lock flag)
-    ;;    (let [got (and (impl/active? flag) (impl/commit flag))]
-    ;;      (.unlock ^Lock flag)
-    ;;      (when got
-    ;;        (channels/box [(:default opts) :default])))))))
+    (cond
+      (vector? chosen) [true (chosen 0)]
+      (= n chosen-idx) [(:default opts) :default]
+      :else [(when ok (.Interface val)) chosen])))
 
 (defn alts!
   "Completes at most one of several channel operations. Must be called
@@ -237,10 +220,9 @@ to catch and handle.")
   depended upon for side effects."
 
   [ports & {:as opts}]
-  (do-alts ports (apply hash-map opts)))
+  (do-alts ports opts))
 
 (def alts!! alts!)
-
 
 ;; admix
 ;; alt!
