@@ -1,0 +1,42 @@
+(ns glojure.test-glojure.core.async.basic
+  (:use glojure.test)
+  (:require [glojure.core.async :as async]))
+
+(defn- chan-with
+  [val]
+  (let [c (async/chan 1)]
+    (async/>! c val)
+    c))
+
+(defn- closed-chan
+  []
+  (let [c (async/chan)]
+    (async/close! c)
+    c))
+
+(deftest simple-go
+  (is (= 42 (async/<! (async/go 42)))))
+
+(deftest offer!
+  (is (true? (async/offer! (async/chan 1) 42)) "offer! should return true if accepted")
+  (is (false? (async/offer! (closed-chan) 42)) "offer! should return false if channel is closed")
+  (is (let [c (async/chan)
+            res (async/offer! c 42)]
+        (and (nil? res)
+             (= 42 (async/<! c))))
+      "offer! should return nil if enqueued, but still send"))
+
+(deftest poll!
+  (is (= 42 (async/poll! (chan-with 42))) "poll! should return true if accepted")
+  (is (nil? (async/poll! (closed-chan))) "poll! should return nil if channel is closed")
+  (is (let [c (async/chan 1)
+            res (async/poll! c)]
+        (and (nil? res)
+             (= nil (do (async/>! c 42)
+                        (async/close! c)
+                        (time.Sleep time.Millisecond) ;; hack to let the other take win the race
+                        (async/<! c)))))
+      "poll! should return nil if enqueued, but still take")
+  )
+
+(run-tests)

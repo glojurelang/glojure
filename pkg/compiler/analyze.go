@@ -781,7 +781,8 @@ func (a *Analyzer) parseCatch(form interface{}, env Env) (*ast.Node, error) {
 		Local: KWCatch,
 	}
 
-	body, err := a.analyzeBody(Rest(Rest(Rest(form))), env.Assoc(KWLocals, NewMap()).(Env))
+	bodyEnv := assocIn(env, vec(KWLocals, ename), dissocEnv(local)).(Env)
+	body, err := a.analyzeBody(Rest(Rest(Rest(form))), bodyEnv)
 	if err != nil {
 		return nil, err
 	}

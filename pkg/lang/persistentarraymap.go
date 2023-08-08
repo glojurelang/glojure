@@ -1,6 +1,8 @@
 //go:generate go run ../../cmd/gen-abstract-class/main.go -class APersistentMap -struct Map -receiver m
 package lang
 
+import "fmt"
+
 const (
 	hashmapThreshold = 16
 )
@@ -60,6 +62,72 @@ func NewMap(keyVals ...interface{}) IPersistentMap {
 	return &Map{
 		keyVals: kv,
 	}
+}
+
+func NewPersistentArrayMapAsIfByAssoc(init []interface{}) IPersistentMap {
+	complexPath := (len(init) & 1) == 1
+	for i := 0; i < len(init) && !complexPath; i += 2 {
+		for j := 0; j < i; j += 2 {
+			if equalKey(init[i], init[j]) {
+				complexPath = true
+				break
+			}
+		}
+	}
+
+	if complexPath {
+		return newPersistentArrayMapAsIfByAssocComplexPath(init)
+	}
+
+	return NewMap(init...)
+}
+
+func newPersistentArrayMapAsIfByAssocComplexPath(init []interface{}) IPersistentMap {
+	n := 0
+	for i := 0; i < len(init); i += 2 {
+		duplicateKey := false
+		for j := 0; j < i; j += 2 {
+			if equalKey(init[i], init[j]) {
+				duplicateKey = true
+				break
+			}
+		}
+		if !duplicateKey {
+			n += 2
+		}
+	}
+
+	if n < len(init) {
+		nodups := make([]interface{}, n)
+		m := 0
+		for i := 0; i < len(init); i += 2 {
+			duplicateKey := false
+			for j := 0; j < m; j += 2 {
+				if equalKey(init[i], nodups[j]) {
+					duplicateKey = true
+					break
+				}
+			}
+			if duplicateKey {
+				continue
+			}
+
+			var j int
+			for j = len(init) - 2; j >= i; j -= 2 {
+				if equalKey(init[i], init[j]) {
+					break
+				}
+			}
+			nodups[m] = init[i]
+			nodups[m+1] = init[j+1]
+			m += 2
+		}
+		if m != n {
+			panic(fmt.Errorf("internal error: m=%d", m))
+		}
+		init = nodups
+	}
+	return NewMap(init...)
 }
 
 func (m *Map) ValAtDefault(key, def interface{}) interface{} {

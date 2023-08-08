@@ -9,6 +9,7 @@ import (
 	"sync"
 	"sync/atomic"
 
+	"github.com/glojurelang/glojure/pkg/lang"
 	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/stdlib"
@@ -157,6 +158,23 @@ func (rt *RTMethods) Alength(x interface{}) int {
 		return xVal.Len()
 	}
 	panic(fmt.Errorf("Alength not supported on type: %T", x))
+}
+
+func (rt *RTMethods) ToArray(coll interface{}) []interface{} {
+	if lang.IsNil(coll) {
+		return nil
+	}
+	switch coll := coll.(type) {
+	case []interface{}:
+		return coll
+	case lang.ISeq:
+		res := make([]interface{}, 0, lang.Count(coll))
+		for s := lang.Seq(coll); s != nil; s = lang.Next(s) {
+			res = append(res, lang.First(s))
+		}
+		return res
+	}
+	panic(fmt.Errorf("ToArray not supported on type: %T", coll))
 }
 
 var (
