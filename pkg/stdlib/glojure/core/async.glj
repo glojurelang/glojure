@@ -152,10 +152,7 @@ to catch and handle.")
   [port]
   (let [res (try-take port)
         [val ok] res]
-    (cond ok val
-          (= false ok) nil
-          :else (do (go (<! port)) ;; enqueue the take; it is discarded
-                    nil))))
+    (when ok val)))
 
 (defn- check-unique-ports!
   [ports]
