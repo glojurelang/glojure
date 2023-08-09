@@ -2,7 +2,6 @@ package runtime
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -21,7 +20,8 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 		return form, nil
 	}
 
-	if strings.HasPrefix(sym.String(), ".") && len(sym.String()) > 1 {
+	symStr := sym.String()
+	if len(symStr) > 1 && symStr[0] == '.' && symStr[1] != '.' {
 		fieldSym := value.NewSymbol(sym.String()[1:])
 		// rewrite the expression to a dot expression
 		dotExpr := value.NewCons(SymbolDot, value.NewCons(seq.Next().First(), value.NewCons(fieldSym, seq.Next().Next())))
