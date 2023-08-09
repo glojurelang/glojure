@@ -1,16 +1,17 @@
 (ns glojure.core.async
   "Facilities for async programming and communication.
 
-go blocks are dispatched over an internal thread pool, which
-defaults to 8 threads. The size of this pool can be modified using
-the Java system property `clojure.core.async.pool-size`.
+  go blocks are dispatched on goroutines, and channels map to Go
+  channels.
 
-Set Java system property `clojure.core.async.go-checking` to true
-to validate go blocks do not invoke core.async blocking operations.
-Property is read once, at namespace load time. Recommended for use
-primarily during development. Invalid blocking calls will throw in
-go block threads - use Thread.setDefaultUncaughtExceptionHandler()
-to catch and handle.")
+  Channels have a few key differences from their Clojure and
+  ClojureScript counterparts:
+
+  1. Glojure channels do not silently accept sends when closed. They throw (panic).
+
+  2. Custom buffer policies are not supported. Only unbuffered or
+  fixed-buffer channels are implemented (by mapping directly to Go
+  channels.)")
 
 (alias 'core 'glojure.core)
 
@@ -182,18 +183,17 @@ to catch and handle.")
       :else [(when ok (.Interface val)) chosen])))
 
 (defn alts!
-  "Completes at most one of several channel operations. Must be called
-  inside a (go ...) block. ports is a vector of channel endpoints,
-  which can be either a channel to take from or a vector of
-  [channel-to-put-to val-to-put], in any combination. Takes will be
-  made as if by <!, and puts will be made as if by >!. Unless
-  the :priority option is true, if more than one port operation is
-  ready a non-deterministic choice will be made. If no operation is
-  ready and a :default value is supplied, [default-val :default] will
-  be returned, otherwise alts! will park until the first operation to
-  become ready completes. Returns [val port] of the completed
-  operation, where val is the value taken for takes, and true for
-  puts.
+  "Completes at most one of several channel operations. Must ports is a
+  vector of channel endpoints, which can be either a channel to take
+  from or a vector of [channel-to-put-to val-to-put], in any
+  combination.  Takes will be made as if by <!, and puts will be made
+  as if by >!. Unless the :priority option is true, if more than one
+  port operation is ready a non-deterministic choice will be made. If
+  no operation is ready and a :default value is
+  supplied, [default-val :default] will be returned, otherwise alts!
+  will park until the first operation to become ready
+  completes. Returns [val port] of the completed operation, where val
+  is the value taken for takes, and true for puts.
 
   opts are passed as :key val ... Supported options:
 
@@ -250,7 +250,7 @@ to catch and handle.")
 (defmacro alt!
   "Makes a single choice between one of several channel operations,
   as if by alts!, returning the value of the result expr corresponding
-  to the operation completed. Must be called inside a (go ...) block.
+  to the operation completed.
 
   Each clause takes the form of:
 
