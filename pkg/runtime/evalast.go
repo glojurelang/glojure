@@ -660,8 +660,41 @@ func (env *environment) EvalASTTry(n *ast.Node) (res interface{}, err error) {
 			}
 		}()
 	}
-	// TODO: catch
-	return env.EvalAST(tryNode.Body)
+	if len(tryNode.Catches) > 0 {
+		defer func() {
+			r := recover()
+			if r == nil {
+				return
+			}
+			for _, c := range tryNode.Catches {
+				catch := c.Sub.(*ast.CatchNode)
+				classVal, classErr := env.EvalAST(catch.Class)
+				if classErr != nil {
+					panic(classErr)
+				}
+
+				if !reflect.TypeOf(r).AssignableTo(classVal.(reflect.Type)) {
+					continue
+				}
+
+				newEnv := env.PushScope().(*environment)
+				newEnv.BindLocal(catch.Local.Sub.(*ast.BindingNode).Name, r)
+				res, err = newEnv.EvalAST(catch.Body)
+				if err != nil {
+					panic(err)
+				}
+				return
+			}
+			// re-throw if no catch matches
+			panic(r)
+		}()
+	}
+
+	res, err = env.EvalAST(tryNode.Body)
+	if err != nil {
+		panic(err)
+	}
+	return res, nil
 }
 
 func (env *environment) EvalASTThrow(n *ast.Node) (interface{}, error) {

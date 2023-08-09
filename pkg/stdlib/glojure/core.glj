@@ -4366,7 +4366,7 @@
      (let [ary (to-array keyvals)]
        (if (odd? (alength ary))
          (throw (errors.New (str "No value supplied for key: " (last keyvals))))
-         (glojure.lang.PersistentArrayMap/createAsIfByAssoc ary)))))
+         (github.com$glojurelang$glojure$pkg$lang.NewPersistentArrayMapAsIfByAssoc ary)))))
 
 (defn seq-to-map-for-destructuring
   "Builds a map from a seq as described in
@@ -4374,7 +4374,7 @@
   {:added "1.11"}
   [s]
   (if (next s)
-    (glojure.lang.PersistentArrayMap/createAsIfByAssoc (to-array s))
+    (github.com$glojurelang$glojure$pkg$lang.NewPersistentArrayMapAsIfByAssoc (to-array s))
     (if (seq s) (first s) glojure.lang.PersistentArrayMap/EMPTY)))
 
 ;;redefine let and loop  with destructuring
@@ -4425,7 +4425,7 @@
                        (loop [ret (-> bvec (conj gmap) (conj v)
                                       (conj gmap) (conj `(if (seq? ~gmap)
                                                            (if (next ~gmapseq)
-                                                             (glojure.lang.PersistentArrayMap/createAsIfByAssoc (to-array ~gmapseq))
+                                                             (github.com$glojurelang$glojure$pkg$lang.NewPersistentArrayMapAsIfByAssoc (to-array ~gmapseq))
                                                              (if (seq ~gmapseq) (first ~gmapseq) glojure.lang.PersistentArrayMap/EMPTY))
                                                            ~gmap))
                                       ((fn [ret]

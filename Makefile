@@ -32,3 +32,4 @@ test: vet
 	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/import.glj
 	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/printer.glj
 	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/builtins.glj
+	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/core/async/basic.glj

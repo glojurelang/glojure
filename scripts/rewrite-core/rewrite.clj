@@ -154,6 +154,9 @@
 
    (sexpr-replace 'clojure.lang.Cycle/create 'github.com$glojurelang$glojure$pkg$lang.NewCycle)
 
+   (sexpr-replace 'clojure.lang.PersistentArrayMap/createAsIfByAssoc
+                  'github.com$glojurelang$glojure$pkg$lang.NewPersistentArrayMapAsIfByAssoc)
+
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    ;; struct map
    (sexpr-replace '(. clojure.lang.PersistentStructMap (createSlotMap keys))

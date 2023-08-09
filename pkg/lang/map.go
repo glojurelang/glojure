@@ -47,3 +47,10 @@ func mapEquals(m IPersistentMap, v2 interface{}) bool {
 
 	return true
 }
+
+func equalKey(k1, k2 interface{}) bool {
+	if k1, ok := k1.(Keyword); ok {
+		return k1 == k2
+	}
+	return Equal(k1, k2)
+}

@@ -14,17 +14,15 @@ const (
 	symbolHashMask  = 0x9e3779b9
 
 	// TODO: generic hashes for abitrary go types
-	reflectTypeHashMask = 0x49c091a8
+	reflectTypeHashMask  = 0x49c091a8
+	reflectValueHashMask = 0x49c791a8
 )
 
 func Hash(x interface{}) uint32 {
 	if IsNil(x) {
 		return 0
 	}
-	if reflect.TypeOf(x).Kind() == reflect.Func {
-		// hash of function pointer
-		return hashPtr(reflect.ValueOf(x).Pointer())
-	}
+
 	switch x := x.(type) {
 	case Hasher:
 		return x.Hash()
@@ -44,9 +42,20 @@ func Hash(x interface{}) uint32 {
 		h := getHash()
 		h.Write([]byte(x.String()))
 		return h.Sum32() ^ reflectTypeHashMask
-	default:
-		panic(fmt.Sprintf("Hash(%v [%T]) not implemented", x, x))
+	case reflect.Value:
+		if !x.IsValid() {
+			return reflectValueHashMask
+		}
+		return Hash(x.Interface()) ^ reflectValueHashMask
 	}
+
+	switch reflect.TypeOf(x).Kind() {
+	case reflect.Func, reflect.Chan, reflect.Pointer, reflect.UnsafePointer, reflect.Map, reflect.Slice:
+		// hash of pointer
+		return hashPtr(reflect.ValueOf(x).Pointer())
+	}
+
+	panic(fmt.Sprintf("Hash(%v [%T]) not implemented", x, x))
 }
 
 func IdentityHash(x interface{}) uint32 {

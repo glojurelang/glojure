@@ -28,6 +28,7 @@ var (
 		"os/signal",
 		"regexp",
 		"reflect",
+		"runtime",
 		"sort",
 		"strconv",
 		"strings",

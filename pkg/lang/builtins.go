@@ -8,6 +8,7 @@ import (
 var (
 	Builtins = map[string]interface{}{
 		// Built-in types
+		"any":        reflect.TypeOf((*interface{})(nil)).Elem(),
 		"bool":       reflect.TypeOf(false),
 		"uint8":      reflect.TypeOf(uint8(0)),
 		"uint16":     reflect.TypeOf(uint16(0)),
@@ -219,7 +220,18 @@ func GoSendChanOf(typ reflect.Type) reflect.Type {
 }
 
 func GoSend(ch, val interface{}) {
-	reflect.ValueOf(ch).Send(reflect.ValueOf(val))
+	chVal := reflect.ValueOf(ch)
+	// handle untyped nil
+	valVal := reflect.ValueOf(val)
+
+	if !valVal.IsValid() {
+		valVal = reflect.Zero(chVal.Type().Elem())
+		if !valVal.IsNil() {
+			panic(fmt.Errorf("send: invalid value %v for chan of type %T", val, ch))
+		}
+	}
+
+	chVal.Send(valVal)
 }
 
 func GoRecv(ch interface{}) (interface{}, bool) {
