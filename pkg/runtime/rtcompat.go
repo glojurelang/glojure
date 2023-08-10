@@ -160,19 +160,22 @@ func (rt *RTMethods) Alength(x interface{}) int {
 	panic(fmt.Errorf("Alength not supported on type: %T", x))
 }
 
-func (rt *RTMethods) ToArray(coll interface{}) []interface{} {
+func (rt *RTMethods) ToArray(coll interface{}) interface{} {
 	if lang.IsNil(coll) {
 		return nil
 	}
 	switch coll := coll.(type) {
 	case []interface{}:
 		return coll
-	case lang.ISeq:
+	case lang.ISeq, lang.IPersistentCollection:
 		res := make([]interface{}, 0, lang.Count(coll))
 		for s := lang.Seq(coll); s != nil; s = lang.Next(s) {
 			res = append(res, lang.First(s))
 		}
 		return res
+	}
+	if v := reflect.ValueOf(coll); v.Kind() == reflect.Slice {
+		return coll
 	}
 	panic(fmt.Errorf("ToArray not supported on type: %T", coll))
 }

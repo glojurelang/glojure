@@ -4,6 +4,10 @@ package gljimports
 import (
 	bytes "bytes"
 	context "context"
+	encoding "encoding"
+	encoding_binary "encoding/binary"
+	encoding_csv "encoding/csv"
+	encoding_json "encoding/json"
 	errors "errors"
 	flag "flag"
 	fmt "fmt"
@@ -102,6 +106,74 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("context.WithDeadline", context.WithDeadline)
 	_register("context.WithTimeout", context.WithTimeout)
 	_register("context.WithValue", context.WithValue)
+
+	// package encoding
+	////////////////////////////////////////
+	_register("encoding.BinaryMarshaler", reflect.TypeOf((*encoding.BinaryMarshaler)(nil)).Elem())
+	_register("encoding.BinaryUnmarshaler", reflect.TypeOf((*encoding.BinaryUnmarshaler)(nil)).Elem())
+	_register("encoding.TextMarshaler", reflect.TypeOf((*encoding.TextMarshaler)(nil)).Elem())
+	_register("encoding.TextUnmarshaler", reflect.TypeOf((*encoding.TextUnmarshaler)(nil)).Elem())
+
+	// package encoding/binary
+	////////////////////////////////////////
+	_register("encoding/binary.AppendByteOrder", reflect.TypeOf((*encoding_binary.AppendByteOrder)(nil)).Elem())
+	_register("encoding/binary.AppendUvarint", encoding_binary.AppendUvarint)
+	_register("encoding/binary.AppendVarint", encoding_binary.AppendVarint)
+	_register("encoding/binary.BigEndian", encoding_binary.BigEndian)
+	_register("encoding/binary.ByteOrder", reflect.TypeOf((*encoding_binary.ByteOrder)(nil)).Elem())
+	_register("encoding/binary.LittleEndian", encoding_binary.LittleEndian)
+	_register("encoding/binary.MaxVarintLen16", encoding_binary.MaxVarintLen16)
+	_register("encoding/binary.MaxVarintLen32", encoding_binary.MaxVarintLen32)
+	_register("encoding/binary.MaxVarintLen64", encoding_binary.MaxVarintLen64)
+	_register("encoding/binary.PutUvarint", encoding_binary.PutUvarint)
+	_register("encoding/binary.PutVarint", encoding_binary.PutVarint)
+	_register("encoding/binary.Read", encoding_binary.Read)
+	_register("encoding/binary.ReadUvarint", encoding_binary.ReadUvarint)
+	_register("encoding/binary.ReadVarint", encoding_binary.ReadVarint)
+	_register("encoding/binary.Size", encoding_binary.Size)
+	_register("encoding/binary.Uvarint", encoding_binary.Uvarint)
+	_register("encoding/binary.Varint", encoding_binary.Varint)
+	_register("encoding/binary.Write", encoding_binary.Write)
+
+	// package encoding/csv
+	////////////////////////////////////////
+	_register("encoding/csv.ErrBareQuote", encoding_csv.ErrBareQuote)
+	_register("encoding/csv.ErrFieldCount", encoding_csv.ErrFieldCount)
+	_register("encoding/csv.ErrQuote", encoding_csv.ErrQuote)
+	_register("encoding/csv.ErrTrailingComma", encoding_csv.ErrTrailingComma)
+	_register("encoding/csv.NewReader", encoding_csv.NewReader)
+	_register("encoding/csv.NewWriter", encoding_csv.NewWriter)
+	_register("encoding/csv.ParseError", reflect.TypeOf((*encoding_csv.ParseError)(nil)).Elem())
+	_register("encoding/csv.Reader", reflect.TypeOf((*encoding_csv.Reader)(nil)).Elem())
+	_register("encoding/csv.Writer", reflect.TypeOf((*encoding_csv.Writer)(nil)).Elem())
+
+	// package encoding/json
+	////////////////////////////////////////
+	_register("encoding/json.Compact", encoding_json.Compact)
+	_register("encoding/json.Decoder", reflect.TypeOf((*encoding_json.Decoder)(nil)).Elem())
+	_register("encoding/json.Delim", reflect.TypeOf((*encoding_json.Delim)(nil)).Elem())
+	_register("encoding/json.Encoder", reflect.TypeOf((*encoding_json.Encoder)(nil)).Elem())
+	_register("encoding/json.HTMLEscape", encoding_json.HTMLEscape)
+	_register("encoding/json.Indent", encoding_json.Indent)
+	_register("encoding/json.InvalidUTF8Error", reflect.TypeOf((*encoding_json.InvalidUTF8Error)(nil)).Elem())
+	_register("encoding/json.InvalidUnmarshalError", reflect.TypeOf((*encoding_json.InvalidUnmarshalError)(nil)).Elem())
+	_register("encoding/json.Marshal", encoding_json.Marshal)
+	_register("encoding/json.MarshalIndent", encoding_json.MarshalIndent)
+	_register("encoding/json.Marshaler", reflect.TypeOf((*encoding_json.Marshaler)(nil)).Elem())
+	_register("encoding/json.MarshalerError", reflect.TypeOf((*encoding_json.MarshalerError)(nil)).Elem())
+	_register("encoding/json.NewDecoder", encoding_json.NewDecoder)
+	_register("encoding/json.NewEncoder", encoding_json.NewEncoder)
+	_register("encoding/json.Number", reflect.TypeOf((*encoding_json.Number)(nil)).Elem())
+	_register("encoding/json.RawMessage", reflect.TypeOf((*encoding_json.RawMessage)(nil)).Elem())
+	_register("encoding/json.SyntaxError", reflect.TypeOf((*encoding_json.SyntaxError)(nil)).Elem())
+	_register("encoding/json.Token", reflect.TypeOf((*encoding_json.Token)(nil)).Elem())
+	_register("encoding/json.Unmarshal", encoding_json.Unmarshal)
+	_register("encoding/json.UnmarshalFieldError", reflect.TypeOf((*encoding_json.UnmarshalFieldError)(nil)).Elem())
+	_register("encoding/json.UnmarshalTypeError", reflect.TypeOf((*encoding_json.UnmarshalTypeError)(nil)).Elem())
+	_register("encoding/json.Unmarshaler", reflect.TypeOf((*encoding_json.Unmarshaler)(nil)).Elem())
+	_register("encoding/json.UnsupportedTypeError", reflect.TypeOf((*encoding_json.UnsupportedTypeError)(nil)).Elem())
+	_register("encoding/json.UnsupportedValueError", reflect.TypeOf((*encoding_json.UnsupportedValueError)(nil)).Elem())
+	_register("encoding/json.Valid", encoding_json.Valid)
 
 	// package errors
 	////////////////////////////////////////

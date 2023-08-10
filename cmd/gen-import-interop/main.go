@@ -13,6 +13,10 @@ var (
 	defaultPackages = []string{
 		"bytes",
 		"context",
+		"encoding",
+		"encoding/binary",
+		"encoding/csv",
+		"encoding/json",
 		"errors",
 		"flag",
 		"fmt",
