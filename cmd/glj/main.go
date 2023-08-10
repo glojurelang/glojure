@@ -2,12 +2,10 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"log"
 	"os"
 
 	"github.com/glojurelang/glojure/pkg/lang"
-	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/repl"
 
@@ -16,17 +14,21 @@ import (
 )
 
 func main() {
-	flag.Parse()
+	args := os.Args[1:]
 
-	if flag.NArg() == 0 {
+	if len(args) == 0 {
 		repl.Start()
-	} else if flag.NArg() == 1 {
-		file, err := os.Open(flag.Arg(0))
+	} else {
+		file, err := os.Open(os.Args[1])
 		if err != nil {
 			log.Fatal(err)
 		}
 		env := lang.GlobalEnv
-		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() *value.Namespace {
+
+		core := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+		core.FindInternedVar(lang.NewSymbol("*command-line-args*")).BindRoot(lang.Seq(os.Args[2:]))
+
+		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() *lang.Namespace {
 			return env.CurrentNamespace()
 		}))
 		for {
