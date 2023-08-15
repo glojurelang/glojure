@@ -5589,7 +5589,6 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("runtime.GOMAXPROCS", runtime.GOMAXPROCS)
 	_register("runtime.GOOS", runtime.GOOS)
 	_register("runtime.GOROOT", runtime.GOROOT)
-	_register("runtime.GOTOOLDIR", runtime.GOTOOLDIR)
 	_register("runtime.Goexit", runtime.Goexit)
 	_register("runtime.GoroutineProfile", runtime.GoroutineProfile)
 	_register("runtime.Gosched", runtime.Gosched)

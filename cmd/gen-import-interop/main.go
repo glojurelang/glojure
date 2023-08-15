@@ -210,6 +210,13 @@ func main() {
 			if !obj.Exported() {
 				continue
 			}
+
+			if pkgName+"."+declName == "runtime.GOTOOLDIR" {
+				// TODO: use a non-nix go installation to generate the
+				// standard library mappings. nix patches extern.go to add the
+				// GOTOOLDIR function.
+				continue
+			}
 			if _, ok := obj.(*types.Builtin); ok {
 				// Builtin types can't be used as values, and so we can't map
 				// them.
