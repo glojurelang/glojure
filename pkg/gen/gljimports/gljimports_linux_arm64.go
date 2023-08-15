@@ -130,7 +130,6 @@ import (
 	regexp "regexp"
 	regexp_syntax "regexp/syntax"
 	runtime "runtime"
-	runtime_cgo "runtime/cgo"
 	runtime_debug "runtime/debug"
 	runtime_metrics "runtime/metrics"
 	runtime_pprof "runtime/pprof"
@@ -5619,11 +5618,6 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("runtime.TypeAssertionError", reflect.TypeOf((*runtime.TypeAssertionError)(nil)).Elem())
 	_register("runtime.UnlockOSThread", runtime.UnlockOSThread)
 	_register("runtime.Version", runtime.Version)
-
-	// package runtime/cgo
-	////////////////////////////////////////
-	_register("runtime/cgo.Handle", reflect.TypeOf((*runtime_cgo.Handle)(nil)).Elem())
-	_register("runtime/cgo.NewHandle", runtime_cgo.NewHandle)
 
 	// package runtime/debug
 	////////////////////////////////////////

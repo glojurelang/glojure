@@ -10,7 +10,7 @@ STDLIB_TARGETS := $(addprefix pkg/stdlib/glojure/,$(STDLIB:.clj=.glj))
 GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows
 GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(platform).go)
 
-all: $(STDLIB_TARGETS) generate # $(GLJIMPORTS)
+all: $(STDLIB_TARGETS) generate $(GLJIMPORTS)
 
 .PHONY:generate
 generate:

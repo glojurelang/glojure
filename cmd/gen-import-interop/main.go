@@ -140,7 +140,7 @@ var (
 		"regexp",
 		"regexp/syntax",
 		"runtime",
-		"runtime/cgo",
+		// "runtime/cgo", // exclude cgo because it imposes a dependency on cgo
 		"runtime/debug",
 		"runtime/metrics",
 		"runtime/pprof",
