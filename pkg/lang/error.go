@@ -6,22 +6,38 @@ import (
 	"strings"
 )
 
-// Stacker is an interface for retrieving stack traces.
-type Stacker interface {
-	Stack() []StackFrame
+type (
+	TimeoutError struct {
+		msg string
+	}
+
+	// Stacker is an interface for retrieving stack traces.
+	Stacker interface {
+		Stack() []StackFrame
+	}
+
+	// Error is a value that represents an error.
+	Error struct {
+		err   error
+		stack []StackFrame
+	}
+
+	StackFrame struct {
+		FunctionName string
+		Filename     string
+		Line         int
+		Column       int
+	}
+)
+
+// NewTimeoutError creates a new timeout error.
+func NewTimeoutError(msg string) error {
+	return &TimeoutError{msg: msg}
 }
 
-// Error is a value that represents an error.
-type Error struct {
-	err   error
-	stack []StackFrame
-}
-
-type StackFrame struct {
-	FunctionName string
-	Filename     string
-	Line         int
-	Column       int
+// Error returns the error message.
+func (e *TimeoutError) Error() string {
+	return e.msg
 }
 
 // NewError creates a new error value.

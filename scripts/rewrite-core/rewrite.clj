@@ -276,7 +276,9 @@
    (sexpr-replace '(^github.com$glojurelang$glojure$pkg$lang.IPersistentVector [^github.com$glojurelang$glojure$pkg$lang.IAtom2 atom f] (.swapVals atom f))
                   '([atom f & args] (.swapVals atom f args)))
 
+   ;; Agents
    (sexpr-replace '(. clojure.lang.Agent shutdown) '(github.com$glojurelang$glojure$pkg$lang.ShutdownAgents))
+   (sexpr-replace 'clojure.lang.Agent 'github.com$glojurelang$glojure$pkg$lang.Agent)
 
    (sexpr-replace 'clojure.lang.Util/hash 'github.com$glojurelang$glojure$pkg$lang.Hash)
 
@@ -424,6 +426,9 @@
                   (import '(java.io Writer))})
 
    (sexpr-replace '(. System (nanoTime)) '(.UnixNano (time.Now)))
+
+   (sexpr-replace '(.. Runtime getRuntime availableProcessors)
+                  '(runtime.NumCPU))
 
    (sexpr-replace 'clojure.lang.RT/longCast 'github.com$glojurelang$glojure$pkg$lang.AsInt64)
    (sexpr-replace 'clojure.lang.RT/byteCast 'github.com$glojurelang$glojure$pkg$lang.ByteCast)
@@ -586,6 +591,37 @@
    (sexpr-replace '(. clojure.lang.Var (popThreadBindings)) '(github.com$glojurelang$glojure$pkg$lang.PopThreadBindings))
    (sexpr-replace 'clojure.lang.Var/popThreadBindings 'github.com$glojurelang$glojure$pkg$lang.PopThreadBindings)
    (sexpr-replace 'clojure.lang.Var/pushThreadBindings 'github.com$glojurelang$glojure$pkg$lang.PushThreadBindings)
+
+   ;; support pmap
+   (sexpr-replace 'clojure.lang.Var/cloneThreadBindingFrame
+                  'github.com$glojurelang$glojure$pkg$lang.CloneThreadBindingFrame)
+   (sexpr-replace 'clojure.lang.Var/resetThreadBindingFrame
+                  'github.com$glojurelang$glojure$pkg$lang.ResetThreadBindingFrame)
+   [(fn select [zloc] (and (z/list? zloc) (= 'future-call (second (z/sexpr zloc)))))
+    (fn visit [zloc] (z/replace zloc
+                                '(defn future-call 
+                                   "Takes a function of no args and yields a future object that will
+  invoke the function in another thread, and will cache the result and
+  return it on all subsequent calls to deref/@. If the computation has
+  not yet finished, calls to deref/@ will block, unless the variant
+  of deref with timeout is used. See also - realized?."
+                                   {:added "1.1"
+                                    :static true}
+                                   [f]
+                                   (let [f (binding-conveyor-fn f)
+                                         fut (github.com$glojurelang$glojure$pkg$lang.AgentSubmit f)]
+                                     fut))))]
+   (sexpr-replace 'java.util.concurrent.TimeUnit/MILLISECONDS
+                  'time.Millisecond)
+   (sexpr-replace 'java.util.concurrent.TimeoutException
+                  'github.com$glojurelang$glojure$pkg$lang.TimeoutError)
+   (sexpr-replace 'clojure.lang.IBlockingDeref
+                  'github.com$glojurelang$glojure$pkg$lang.IBlockingDeref)
+   [(fn select [zloc] (and (z/list? zloc)
+                           (= '.deref (first (z/sexpr zloc)))
+                           (= 4 (count (z/sexpr zloc)))))
+    (fn visit [zloc] (z/replace zloc
+                                '(.DerefWithTimeout ref timeout-ms timeout-val)))]
 
    ;; TODO: special tags
    (sexpr-replace '(clojure.lang.Compiler$HostExpr/maybeSpecialTag tag) nil)

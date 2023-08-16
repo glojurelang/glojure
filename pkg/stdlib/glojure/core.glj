@@ -2021,22 +2021,22 @@
   {:private true
    :added "1.3"}
   [f]
-  (let [frame (glojure.lang.Var/cloneThreadBindingFrame)]
+  (let [frame (github.com$glojurelang$glojure$pkg$lang.CloneThreadBindingFrame)]
     (fn 
       ([]
-         (glojure.lang.Var/resetThreadBindingFrame frame)
+         (github.com$glojurelang$glojure$pkg$lang.ResetThreadBindingFrame frame)
          (f))
       ([x]
-         (glojure.lang.Var/resetThreadBindingFrame frame)
+         (github.com$glojurelang$glojure$pkg$lang.ResetThreadBindingFrame frame)
          (f x))
       ([x y]
-         (glojure.lang.Var/resetThreadBindingFrame frame)
+         (github.com$glojurelang$glojure$pkg$lang.ResetThreadBindingFrame frame)
          (f x y))
       ([x y z]
-         (glojure.lang.Var/resetThreadBindingFrame frame)
+         (github.com$glojurelang$glojure$pkg$lang.ResetThreadBindingFrame frame)
          (f x y z))
       ([x y z & args] 
-         (glojure.lang.Var/resetThreadBindingFrame frame)
+         (github.com$glojurelang$glojure$pkg$lang.ResetThreadBindingFrame frame)
          (apply f x y z args)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Refs ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2075,7 +2075,7 @@
    :static true
    }
   ([state & options]
-     (let [a (new glojure.lang.Agent state)
+     (let [a (new github.com$glojurelang$glojure$pkg$lang.Agent state)
            opts (apply hash-map options)]
        (setup-reference a options)
        (when (:error-handler opts)
@@ -2103,7 +2103,7 @@
 
   (apply action-fn state-of-agent args)"
   {:added "1.5"}
-  [executor ^glojure.lang.Agent a f & args]
+  [executor ^github.com$glojurelang$glojure$pkg$lang.Agent a f & args]
   (.dispatch a (binding [*agent* a] (binding-conveyor-fn f)) args executor))
 
 (defn send
@@ -2114,7 +2114,7 @@
   (apply action-fn state-of-agent args)"
   {:added "1.0"
    :static true}
-  [^glojure.lang.Agent a f & args]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a f & args]
   (apply send-via glojure.lang.Agent/pooledExecutor a f args))
 
 (defn send-off
@@ -2125,7 +2125,7 @@
   (apply action-fn state-of-agent args)"
   {:added "1.0"
    :static true}
-  [^glojure.lang.Agent a f & args]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a f & args]
   (apply send-via glojure.lang.Agent/soloExecutor a f args))
 
 (defn release-pending-sends
@@ -2170,7 +2170,7 @@
   failed."
   {:added "1.2"
    :static true}
-  [^glojure.lang.Agent a] (.getError a))
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a] (.getError a))
 
 (defn restart-agent
   "When an agent is failed, changes the agent state to new-state and
@@ -2185,7 +2185,7 @@
   {:added "1.2"
    :static true
    }
-  [^glojure.lang.Agent a, new-state & options]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a, new-state & options]
   (let [opts (apply hash-map options)]
     (.restart a new-state (if (:clear-actions opts) true false))))
 
@@ -2196,7 +2196,7 @@
   agent and the exception."
   {:added "1.2"
    :static true}
-  [^glojure.lang.Agent a, handler-fn]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a, handler-fn]
   (.setErrorHandler a handler-fn))
 
 (defn error-handler
@@ -2204,7 +2204,7 @@
   See set-error-handler!"
   {:added "1.2"
    :static true}
-  [^glojure.lang.Agent a]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a]
   (.getErrorHandler a))
 
 (defn set-error-mode!
@@ -2221,14 +2221,14 @@
   still work, returning the state of the agent before the error."
   {:added "1.2"
    :static true}
-  [^glojure.lang.Agent a, mode-keyword]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a, mode-keyword]
   (.setErrorMode a mode-keyword))
 
 (defn error-mode
   "Returns the error-mode of agent a.  See set-error-mode!"
   {:added "1.2"
    :static true}
-  [^glojure.lang.Agent a]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a]
   (.getErrorMode a))
 
 (defn agent-errors
@@ -2247,7 +2247,7 @@
   agent, allowing subsequent actions to occur."
   {:added "1.0"
    :deprecated "1.2"}
-  [^glojure.lang.Agent a] (restart-agent a (.Deref a)))
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a] (restart-agent a (.Deref a)))
 
 (defn shutdown-agents
   "Initiates a shutdown of the thread pools that back the agent
@@ -2297,8 +2297,8 @@
   ([^java.util.concurrent.Future fut]
      (.Get fut))
   ([^java.util.concurrent.Future fut timeout-ms timeout-val]
-     (try (.Get fut timeout-ms java.util.concurrent.TimeUnit/MILLISECONDS)
-          (catch java.util.concurrent.TimeoutException e
+     (try (.Get fut timeout-ms time.Millisecond)
+          (catch github.com$glojurelang$glojure$pkg$lang.TimeoutError e
             timeout-val))))
      
 (defn deref
@@ -2318,8 +2318,8 @@
            (.Deref ^github.com$glojurelang$glojure$pkg$lang.IDeref ref)
            (deref-future ref)))
   ([ref timeout-ms timeout-val]
-     (if (instance? glojure.lang.IBlockingDeref ref)
-       (.Deref ^glojure.lang.IBlockingDeref ref timeout-ms timeout-val)
+     (if (instance? github.com$glojurelang$glojure$pkg$lang.IBlockingDeref ref)
+       (.DerefWithTimeout ref timeout-ms timeout-val)
        (deref-future ref timeout-ms timeout-val))))
 
 (defn atom
@@ -3270,7 +3270,7 @@
         (send agent count-down))
       (. latch (await)))))
 
-(defn ^:static await1 [^glojure.lang.Agent a]
+(defn ^:static await1 [^github.com$glojurelang$glojure$pkg$lang.Agent a]
   (when (pos? (.getQueueCount a))
     (await a))
     a)
@@ -6972,32 +6972,11 @@ fails, attempts to require sym's namespace and retries."
     (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str content))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; futures (needs proxy);;;;;;;;;;;;;;;;;;
-(defn future-call 
-  "Takes a function of no args and yields a future object that will
+(defn future-call "Takes a function of no args and yields a future object that will
   invoke the function in another thread, and will cache the result and
   return it on all subsequent calls to deref/@. If the computation has
   not yet finished, calls to deref/@ will block, unless the variant
-  of deref with timeout is used. See also - realized?."
-  {:added "1.1"
-   :static true}
-  [f]
-  (let [f (binding-conveyor-fn f)
-        fut (.submit glojure.lang.Agent/soloExecutor ^Callable f)]
-    (reify 
-     github.com$glojurelang$glojure$pkg$lang.IDeref 
-     (deref [_] (deref-future fut))
-     glojure.lang.IBlockingDeref
-     (deref
-      [_ timeout-ms timeout-val]
-      (deref-future fut timeout-ms timeout-val))
-     github.com$glojurelang$glojure$pkg$lang.IPending
-     (isRealized [_] (.isDone fut))
-     java.util.concurrent.Future
-      (get [_] (.Get fut))
-      (get [_ timeout unit] (.Get fut timeout unit))
-      (isCancelled [_] (.isCancelled fut))
-      (isDone [_] (.isDone fut))
-      (cancel [_ interrupt?] (.cancel fut interrupt?)))))
+  of deref with timeout is used. See also - realized?." {:added "1.1", :static true} [f] (let [f (binding-conveyor-fn f) fut (github.com$glojurelang$glojure$pkg$lang.AgentSubmit f)] fut))
   
 (defmacro future
   "Takes a body of expressions and yields a future object that will
@@ -7030,7 +7009,7 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.0"
    :static true}
   ([f coll]
-   (let [n (+ 2 (.. Runtime getRuntime availableProcessors))
+   (let [n (+ 2 (runtime.NumCPU))
          rets (map #(future (f %)) coll)
          step (fn step [[x & xs :as vs] fs]
                 (lazy-seq
@@ -7082,10 +7061,10 @@ fails, attempts to require sym's namespace and retries."
     (reify 
      github.com$glojurelang$glojure$pkg$lang.IDeref
        (deref [_] (.await d) @v)
-     glojure.lang.IBlockingDeref
+     github.com$glojurelang$glojure$pkg$lang.IBlockingDeref
        (deref
         [_ timeout-ms timeout-val]
-        (if (.await d timeout-ms java.util.concurrent.TimeUnit/MILLISECONDS)
+        (if (.await d timeout-ms time.Millisecond)
           @v
           timeout-val))  
      github.com$glojurelang$glojure$pkg$lang.IPending

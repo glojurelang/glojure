@@ -3,6 +3,7 @@ package lang
 import (
 	"fmt"
 	"reflect"
+	"time"
 )
 
 type (
@@ -254,6 +255,10 @@ type (
 		Deref() interface{}
 	}
 
+	IBlockingDeref interface {
+		DerefWithTimeout(timeoutMS int64, timeoutVal interface{}) interface{}
+	}
+
 	IRef interface {
 		IDeref
 
@@ -278,6 +283,15 @@ type (
 		// IPersistentVector swapVals(IFn f, Object x, Object y, ISeq args);
 		// IPersistentVector resetVals(Object newv);
 
+	}
+
+	// Java Future interface
+	Future interface {
+		Get() interface{}
+		GetWithTimeout(timeout int64, timeUnit time.Duration) interface{}
+		// Cancel(mayInterruptIfRunning bool) bool
+		// IsCancelled() bool
+		// IsDone() bool
 	}
 )
 

@@ -21,7 +21,7 @@ import (
 	_ "net/http/pprof"
 )
 
-const debugMode = true
+const debugMode = false
 const cpuProfile = false
 
 func init() {
