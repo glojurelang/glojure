@@ -63,6 +63,8 @@ import (
 	expvar "expvar"
 	flag "flag"
 	fmt "fmt"
+	github_com_glojurelang_glojure_pkg_lang "github.com/glojurelang/glojure/pkg/lang"
+	github_com_glojurelang_glojure_pkg_runtime "github.com/glojurelang/glojure/pkg/runtime"
 	go_ast "go/ast"
 	go_build "go/build"
 	go_build_constraint "go/build/constraint"
@@ -153,8 +155,6 @@ import (
 	unicode_utf16 "unicode/utf16"
 	unicode_utf8 "unicode/utf8"
 	unsafe "unsafe"
-	github_com_glojurelang_glojure_pkg_runtime "github.com/glojurelang/glojure/pkg/runtime"
-	github_com_glojurelang_glojure_pkg_lang "github.com/glojurelang/glojure/pkg/lang"
 )
 
 func RegisterImports(_register func(string, interface{})) {
@@ -4544,22 +4544,22 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("math.Max", math.Max)
 	_register("math.MaxFloat32", float64(math.MaxFloat32))
 	_register("math.MaxFloat64", float64(math.MaxFloat64))
-	_register("math.MaxInt", int(math.MaxInt))
-	_register("math.MaxInt16", int16(math.MaxInt16))
-	_register("math.MaxInt32", int32(math.MaxInt32))
-	_register("math.MaxInt64", int64(math.MaxInt64))
-	_register("math.MaxInt8", int8(math.MaxInt8))
-	_register("math.MaxUint", uint(math.MaxUint))
-	_register("math.MaxUint16", uint16(math.MaxUint16))
-	_register("math.MaxUint32", uint32(math.MaxUint32))
+	_register("math.MaxInt", math.MaxInt)
+	_register("math.MaxInt16", math.MaxInt16)
+	_register("math.MaxInt32", math.MaxInt32)
+	_register("math.MaxInt64", math.MaxInt64)
+	_register("math.MaxInt8", math.MaxInt8)
+	_register("math.MaxUint", uint64(math.MaxUint))
+	_register("math.MaxUint16", math.MaxUint16)
+	_register("math.MaxUint32", math.MaxUint32)
 	_register("math.MaxUint64", uint64(math.MaxUint64))
-	_register("math.MaxUint8", uint8(math.MaxUint8))
+	_register("math.MaxUint8", math.MaxUint8)
 	_register("math.Min", math.Min)
-	_register("math.MinInt", int(math.MinInt))
-	_register("math.MinInt16", int16(math.MinInt16))
-	_register("math.MinInt32", int32(math.MinInt32))
-	_register("math.MinInt64", int64(math.MinInt64))
-	_register("math.MinInt8", int8(math.MinInt8))
+	_register("math.MinInt", math.MinInt)
+	_register("math.MinInt16", math.MinInt16)
+	_register("math.MinInt32", math.MinInt32)
+	_register("math.MinInt64", math.MinInt64)
+	_register("math.MinInt8", math.MinInt8)
 	_register("math.Mod", math.Mod)
 	_register("math.Modf", math.Modf)
 	_register("math.NaN", math.NaN)
@@ -5837,6 +5837,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("sync/atomic.LoadUint32", sync_atomic.LoadUint32)
 	_register("sync/atomic.LoadUint64", sync_atomic.LoadUint64)
 	_register("sync/atomic.LoadUintptr", sync_atomic.LoadUintptr)
+
 	_register("sync/atomic.StoreInt32", sync_atomic.StoreInt32)
 	_register("sync/atomic.StoreInt64", sync_atomic.StoreInt64)
 	_register("sync/atomic.StorePointer", sync_atomic.StorePointer)
@@ -6394,7 +6395,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("syscall.IPv6Mreq", reflect.TypeOf((*syscall.IPv6Mreq)(nil)).Elem())
 	_register("syscall.ImplementsGetwd", syscall.ImplementsGetwd)
 	_register("syscall.InterfaceInfo", reflect.TypeOf((*syscall.InterfaceInfo)(nil)).Elem())
-	_register("syscall.InvalidHandle", syscall.InvalidHandle)
+	_register("syscall.InvalidHandle", uint64(syscall.InvalidHandle))
 	_register("syscall.IpAdapterInfo", reflect.TypeOf((*syscall.IpAdapterInfo)(nil)).Elem())
 	_register("syscall.IpAddrString", reflect.TypeOf((*syscall.IpAddrString)(nil)).Elem())
 	_register("syscall.IpAddressString", reflect.TypeOf((*syscall.IpAddressString)(nil)).Elem())

@@ -17,8 +17,6 @@
 (deftest simple-go
   (is (= 42 (a/<! (a/go 42)))))
 
-;; FIX offer and poll... they aren't as dumb as you thought
-
 (deftest offer!
   (is (true? (a/offer! (a/chan 1) 42)) "offer! should return true if accepted")
   (is (nil? (a/offer! (a/chan) 42)) "offer! should return nil if blocked"))
