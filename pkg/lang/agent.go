@@ -23,12 +23,12 @@ func (f *future) Deref() interface{} {
 	return f.res
 }
 
-func (f *future) DerefWithTimeout(timeout int64, timeUnit time.Duration) interface{} {
+func (f *future) DerefWithTimeout(timeoutMS int64, timeoutVal interface{}) interface{} {
 	select {
 	case <-f.done:
 		return f.res
-	case <-time.After(time.Duration(timeout) * timeUnit):
-		return nil
+	case <-time.After(time.Duration(timeoutMS) * time.Millisecond):
+		return timeoutVal
 	}
 }
 
@@ -37,7 +37,12 @@ func (f *future) Get() interface{} {
 }
 
 func (f *future) GetWithTimeout(timeout int64, timeUnit time.Duration) interface{} {
-	return f.DerefWithTimeout(timeout, timeUnit)
+	select {
+	case <-f.done:
+		return f.res
+	case <-time.After(time.Duration(timeout) * time.Millisecond):
+		panic(NewTimeoutError("future timeout"))
+	}
 }
 
 func (f *future) IsRealized() bool {

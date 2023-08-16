@@ -256,7 +256,7 @@ type (
 	}
 
 	IBlockingDeref interface {
-		DerefWithTimeout(timeout int64, timeUnit time.Duration) interface{}
+		DerefWithTimeout(timeoutMS int64, timeoutVal interface{}) interface{}
 	}
 
 	IRef interface {

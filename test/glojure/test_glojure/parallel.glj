@@ -14,7 +14,6 @@
 
 ;; !! Tests for the parallel library will be in a separate file clojure_parallel.clj !!
 
-; future-call
 ; future
 ; pmap
 ; pcalls
@@ -27,6 +26,10 @@
   ;; regression fixed in r1218; was OutOfMemoryError
   (is (= '(1) (pmap inc [0]))))
 
+;; future-call
+;;
+(deftest future-call-timeout
+  (is (= 42 (deref (future-call #(time.Sleep time.Second)) 1 42))))
 
 (def ^:dynamic *test-value* 1)
 

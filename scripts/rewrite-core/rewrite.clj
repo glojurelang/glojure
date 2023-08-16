@@ -611,6 +611,17 @@
                                    (let [f (binding-conveyor-fn f)
                                          fut (github.com$glojurelang$glojure$pkg$lang.AgentSubmit f)]
                                      fut))))]
+   (sexpr-replace 'java.util.concurrent.TimeUnit/MILLISECONDS
+                  'time.Millisecond)
+   (sexpr-replace 'java.util.concurrent.TimeoutException
+                  'github.com$glojurelang$glojure$pkg$lang.TimeoutError)
+   (sexpr-replace 'clojure.lang.IBlockingDeref
+                  'github.com$glojurelang$glojure$pkg$lang.IBlockingDeref)
+   [(fn select [zloc] (and (z/list? zloc)
+                           (= '.deref (first (z/sexpr zloc)))
+                           (= 4 (count (z/sexpr zloc)))))
+    (fn visit [zloc] (z/replace zloc
+                                '(.DerefWithTimeout ref timeout-ms timeout-val)))]
 
    ;; TODO: special tags
    (sexpr-replace '(clojure.lang.Compiler$HostExpr/maybeSpecialTag tag) nil)

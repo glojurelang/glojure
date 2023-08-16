@@ -2297,8 +2297,8 @@
   ([^java.util.concurrent.Future fut]
      (.Get fut))
   ([^java.util.concurrent.Future fut timeout-ms timeout-val]
-     (try (.Get fut timeout-ms java.util.concurrent.TimeUnit/MILLISECONDS)
-          (catch java.util.concurrent.TimeoutException e
+     (try (.Get fut timeout-ms time.Millisecond)
+          (catch github.com$glojurelang$glojure$pkg$lang.TimeoutError e
             timeout-val))))
      
 (defn deref
@@ -2318,8 +2318,8 @@
            (.Deref ^github.com$glojurelang$glojure$pkg$lang.IDeref ref)
            (deref-future ref)))
   ([ref timeout-ms timeout-val]
-     (if (instance? glojure.lang.IBlockingDeref ref)
-       (.Deref ^glojure.lang.IBlockingDeref ref timeout-ms timeout-val)
+     (if (instance? github.com$glojurelang$glojure$pkg$lang.IBlockingDeref ref)
+       (.DerefWithTimeout ref timeout-ms timeout-val)
        (deref-future ref timeout-ms timeout-val))))
 
 (defn atom
@@ -7061,10 +7061,10 @@ fails, attempts to require sym's namespace and retries."
     (reify 
      github.com$glojurelang$glojure$pkg$lang.IDeref
        (deref [_] (.await d) @v)
-     glojure.lang.IBlockingDeref
+     github.com$glojurelang$glojure$pkg$lang.IBlockingDeref
        (deref
         [_ timeout-ms timeout-val]
-        (if (.await d timeout-ms java.util.concurrent.TimeUnit/MILLISECONDS)
+        (if (.await d timeout-ms time.Millisecond)
           @v
           timeout-val))  
      github.com$glojurelang$glojure$pkg$lang.IPending

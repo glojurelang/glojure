@@ -16,7 +16,7 @@ GO_VERSION := 1.19.3
 GO_CMD := go$(GO_VERSION)
 
 .PHONY: all
-all: $(STDLIB_TARGETS) generate $(GLJIMPORTS)
+all: gocmd $(STDLIB_TARGETS) generate $(GLJIMPORTS)
 
 .PHONY: gocmd
 gocmd:
@@ -28,7 +28,7 @@ gocmd:
 generate:
 	@go generate ./...
 
-pkg/gen/gljimports/gljimports_%.go: gocmd ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go \
+pkg/gen/gljimports/gljimports_%.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go \
 					$(wildcard ./pkg/lang/*.go) $(wildcard ./pkg/runtime/*.go)
 	@echo "Generating $@"
 	@./scripts/gen-gljimports.sh $@ $* $(GO_CMD)
