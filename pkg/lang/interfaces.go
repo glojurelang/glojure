@@ -254,6 +254,10 @@ type (
 		Deref() interface{}
 	}
 
+	IBlockingDeref interface {
+		DerefWithTimeout(ms int64, timeoutValue interface{}) interface{}
+	}
+
 	IRef interface {
 		IDeref
 
@@ -278,6 +282,15 @@ type (
 		// IPersistentVector swapVals(IFn f, Object x, Object y, ISeq args);
 		// IPersistentVector resetVals(Object newv);
 
+	}
+
+	// Java Future interface
+	Future interface {
+		Get() interface{}
+		GetWithTimeout(timeout int64, timeoutValue interface{}) interface{}
+		// Cancel(mayInterruptIfRunning bool) bool
+		// IsCancelled() bool
+		// IsDone() bool
 	}
 )
 

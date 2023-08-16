@@ -1,11 +1,12 @@
 
 STDLIB_ORIGINALS_DIR := scripts/rewrite-core/originals
 STDLIB_ORIGINALS := $(shell find $(STDLIB_ORIGINALS_DIR) -name '*.clj')
-# STDLIB_ORIGINALS := $(wildcard scripts/rewrite-core/originals/**/*.clj)
-# STDLIB_ORIGINALS += $(wildcard scripts/rewrite-core/originals/*.clj)
 STDLIB := $(STDLIB_ORIGINALS:scripts/rewrite-core/originals/%=%)
 STDLIB_ORIGINALS := $(addprefix scripts/rewrite-core/originals/,$(STDLIB))
 STDLIB_TARGETS := $(addprefix pkg/stdlib/glojure/,$(STDLIB:.clj=.glj))
+
+TEST_FILES := $(shell find ./test -name '*.glj')
+TEST_TARGETS := $(addsuffix .test,$(TEST_FILES))
 
 GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows
 GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(platform).go)
@@ -13,6 +14,7 @@ GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(pla
 GO_VERSION := 1.19.3 # eventually, support multiple minor versions
 GO_CMD := go$(GO_VERSION)
 
+.PHONY: all
 all: $(STDLIB_TARGETS) generate $(GLJIMPORTS)
 
 .PHONY: gocmd
@@ -37,11 +39,9 @@ pkg/stdlib/glojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-c
 vet:
 	@go vet ./...
 
+.PHONY: $(TEST_TARGETS)
+$(TEST_TARGETS): gocmd
+	@$(GO_CMD) run ./cmd/glj/main.go $(basename $@)
+
 .PHONY: test
-test: vet
-	@go test ./...
-	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/basic.glj
-	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/import.glj
-	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/printer.glj
-	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/builtins.glj
-	@go run ./cmd/glj/main.go ./test/glojure/test_glojure/core/async/basic.glj
+test: vet $(TEST_TARGETS)

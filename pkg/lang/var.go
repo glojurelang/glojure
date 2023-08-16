@@ -332,3 +332,18 @@ func PopThreadBindings() {
 	delete(glsBindings, gid)
 	glsBindingsMtx.Unlock()
 }
+
+func CloneThreadBindingFrame() interface{} {
+	gid := mustGoroutineID()
+	glsBindingsMtx.RLock()
+	storage := glsBindings[gid]
+	glsBindingsMtx.RUnlock()
+	return storage
+}
+
+func ResetThreadBindingFrame(frame interface{}) {
+	gid := mustGoroutineID()
+	glsBindingsMtx.Lock()
+	glsBindings[gid] = frame.(*glStorage)
+	glsBindingsMtx.Unlock()
+}
