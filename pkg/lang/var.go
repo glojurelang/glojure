@@ -336,14 +336,13 @@ func PopThreadBindings() {
 func CloneThreadBindingFrame() interface{} {
 	gid := mustGoroutineID()
 	glsBindingsMtx.RLock()
-	storage := glsBindings[gid]
-	glsBindingsMtx.RUnlock()
-	return storage
+	defer glsBindingsMtx.RUnlock()
+	return glsBindings[gid]
 }
 
 func ResetThreadBindingFrame(frame interface{}) {
 	gid := mustGoroutineID()
 	glsBindingsMtx.Lock()
+	defer glsBindingsMtx.Unlock()
 	glsBindings[gid] = frame.(*glStorage)
-	glsBindingsMtx.Unlock()
 }
