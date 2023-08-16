@@ -10,15 +10,23 @@ STDLIB_TARGETS := $(addprefix pkg/stdlib/glojure/,$(STDLIB:.clj=.glj))
 GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows
 GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(platform).go)
 
+GO_VERSION := 1.19.3 # eventually, support multiple minor versions
+GO_CMD := go$(GO_VERSION)
+
 all: $(STDLIB_TARGETS) generate $(GLJIMPORTS)
 
-.PHONY:generate
+.PHONY: gocmd
+gocmd:
+	@go$(GO_VERSION) version > /dev/null || (go install golang.org/dl/$(GO_VERSION) && $(GO_CMD) version)
+
+.PHONY: generate
 generate:
 	@go generate ./...
 
-pkg/gen/gljimports/gljimports_%.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go $(wildcard ./pkg/*/*.go)
+pkg/gen/gljimports/gljimports_%.go: gocmd ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go \
+					$(wildcard ./pkg/lang/*.go) $(wildcard ./pkg/runtime/*.go)
 	@echo "Generating $@"
-	@./scripts/gen-gljimports.sh $@ $*
+	@./scripts/gen-gljimports.sh $@ $* $(GO_CMD)
 
 pkg/stdlib/glojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-core/run.sh scripts/rewrite-core/rewrite.clj
 	@echo "Rewriting $< to $@"
