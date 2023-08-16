@@ -11,7 +11,8 @@ TEST_TARGETS := $(addsuffix .test,$(TEST_FILES))
 GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows
 GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(platform).go)
 
-GO_VERSION := 1.19.3 # eventually, support multiple minor versions
+# eventually, support multiple minor versions
+GO_VERSION := 1.19.3
 GO_CMD := go$(GO_VERSION)
 
 .PHONY: all
@@ -19,7 +20,9 @@ all: $(STDLIB_TARGETS) generate $(GLJIMPORTS)
 
 .PHONY: gocmd
 gocmd:
-	@go$(GO_VERSION) version > /dev/null || (go install golang.org/dl/$(GO_VERSION) && $(GO_CMD) version)
+	@$(GO_CMD) version 2>&1 > /dev/null || \
+		(go install "golang.org/dl/$(GO_CMD)@latest" && \
+		$(GO_CMD) download > /dev/null && $(GO_CMD) version > /dev/null)
 
 .PHONY: generate
 generate:
