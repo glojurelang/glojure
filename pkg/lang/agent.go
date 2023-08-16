@@ -3,6 +3,8 @@ package lang
 import "time"
 
 type (
+	Agent struct{}
+
 	future struct {
 		done chan struct{}
 		res  interface{}

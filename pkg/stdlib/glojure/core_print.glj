@@ -416,7 +416,7 @@
     {:status
      (cond
       (or ex
-          (and (instance? glojure.lang.Agent o)
+          (and (instance? github.com$glojurelang$glojure$pkg$lang.Agent o)
                (agent-error o)))
       :failed
 

@@ -3154,6 +3154,7 @@ func RegisterImports(_register func(string, interface{})) {
 	// package github.com/glojurelang/glojure/pkg/lang
 	////////////////////////////////////////
 	_register("github.com/glojurelang/glojure/pkg/lang.AddP", github_com_glojurelang_glojure_pkg_lang.AddP)
+	_register("github.com/glojurelang/glojure/pkg/lang.Agent", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Agent)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.AgentSubmit", github_com_glojurelang_glojure_pkg_lang.AgentSubmit)
 	_register("github.com/glojurelang/glojure/pkg/lang.AppendWriter", github_com_glojurelang_glojure_pkg_lang.AppendWriter)
 	_register("github.com/glojurelang/glojure/pkg/lang.Apply", github_com_glojurelang_glojure_pkg_lang.Apply)

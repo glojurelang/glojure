@@ -2075,7 +2075,7 @@
    :static true
    }
   ([state & options]
-     (let [a (new glojure.lang.Agent state)
+     (let [a (new github.com$glojurelang$glojure$pkg$lang.Agent state)
            opts (apply hash-map options)]
        (setup-reference a options)
        (when (:error-handler opts)
@@ -2103,7 +2103,7 @@
 
   (apply action-fn state-of-agent args)"
   {:added "1.5"}
-  [executor ^glojure.lang.Agent a f & args]
+  [executor ^github.com$glojurelang$glojure$pkg$lang.Agent a f & args]
   (.dispatch a (binding [*agent* a] (binding-conveyor-fn f)) args executor))
 
 (defn send
@@ -2114,7 +2114,7 @@
   (apply action-fn state-of-agent args)"
   {:added "1.0"
    :static true}
-  [^glojure.lang.Agent a f & args]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a f & args]
   (apply send-via glojure.lang.Agent/pooledExecutor a f args))
 
 (defn send-off
@@ -2125,7 +2125,7 @@
   (apply action-fn state-of-agent args)"
   {:added "1.0"
    :static true}
-  [^glojure.lang.Agent a f & args]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a f & args]
   (apply send-via glojure.lang.Agent/soloExecutor a f args))
 
 (defn release-pending-sends
@@ -2170,7 +2170,7 @@
   failed."
   {:added "1.2"
    :static true}
-  [^glojure.lang.Agent a] (.getError a))
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a] (.getError a))
 
 (defn restart-agent
   "When an agent is failed, changes the agent state to new-state and
@@ -2185,7 +2185,7 @@
   {:added "1.2"
    :static true
    }
-  [^glojure.lang.Agent a, new-state & options]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a, new-state & options]
   (let [opts (apply hash-map options)]
     (.restart a new-state (if (:clear-actions opts) true false))))
 
@@ -2196,7 +2196,7 @@
   agent and the exception."
   {:added "1.2"
    :static true}
-  [^glojure.lang.Agent a, handler-fn]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a, handler-fn]
   (.setErrorHandler a handler-fn))
 
 (defn error-handler
@@ -2204,7 +2204,7 @@
   See set-error-handler!"
   {:added "1.2"
    :static true}
-  [^glojure.lang.Agent a]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a]
   (.getErrorHandler a))
 
 (defn set-error-mode!
@@ -2221,14 +2221,14 @@
   still work, returning the state of the agent before the error."
   {:added "1.2"
    :static true}
-  [^glojure.lang.Agent a, mode-keyword]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a, mode-keyword]
   (.setErrorMode a mode-keyword))
 
 (defn error-mode
   "Returns the error-mode of agent a.  See set-error-mode!"
   {:added "1.2"
    :static true}
-  [^glojure.lang.Agent a]
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a]
   (.getErrorMode a))
 
 (defn agent-errors
@@ -2247,7 +2247,7 @@
   agent, allowing subsequent actions to occur."
   {:added "1.0"
    :deprecated "1.2"}
-  [^glojure.lang.Agent a] (restart-agent a (.Deref a)))
+  [^github.com$glojurelang$glojure$pkg$lang.Agent a] (restart-agent a (.Deref a)))
 
 (defn shutdown-agents
   "Initiates a shutdown of the thread pools that back the agent
@@ -3270,7 +3270,7 @@
         (send agent count-down))
       (. latch (await)))))
 
-(defn ^:static await1 [^glojure.lang.Agent a]
+(defn ^:static await1 [^github.com$glojurelang$glojure$pkg$lang.Agent a]
   (when (pos? (.getQueueCount a))
     (await a))
     a)
