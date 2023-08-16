@@ -153,7 +153,7 @@ func init() {
 | ----------- | ----------- |----------- | -----------|
 | Hosted[^1]  | Yes       | No  | No  |
 | Extensible Go interop | Yes | No | No |
-| Concurrency | Yes | No | Yes |
+| Concurrency | Yes | Yes (with GIL) | Yes |
 | Clojure tooling (e.g. linter) | No | Yes | No |
 | Execution   | Tree-walk interpreter | Tree-walk interpreter  | Bytecode Interpreter |
 
