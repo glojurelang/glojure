@@ -34,6 +34,10 @@ func NewSet(vals ...interface{}) *Set {
 	}
 }
 
+func NewPersistentHashSet(vals ...interface{}) IPersistentSet {
+	return NewSet(vals...)
+}
+
 var (
 	_ IPersistentSet        = (*Set)(nil)
 	_ IPersistentCollection = (*Set)(nil)

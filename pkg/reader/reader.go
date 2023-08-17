@@ -408,7 +408,9 @@ func (r *Reader) readExpr() (expr interface{}, err error) {
 		if err != nil {
 			return nil, err
 		}
-		return value.WithMeta(val, meta)
+		// TODO: WithMeta throws on non-IObj, but we want to return an
+		// error here instead.
+		return value.WithMeta(val, meta), nil
 	default:
 		r.rs.UnreadRune()
 		return r.readSymbol()
@@ -983,12 +985,7 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 		newKeyVals = append(newKeyVals, newKey, val)
 	}
 
-	m, err := value.WithMeta(value.NewMap(newKeyVals...), mapVal.(value.IMeta).Meta())
-	if err != nil {
-		// This should never happen. Maps can have metadata.
-		panic(err)
-	}
-	return m, nil
+	return value.WithMeta(value.NewMap(newKeyVals...), mapVal.(value.IMeta).Meta()), nil
 }
 
 func (r *Reader) readSymbolicValue() (interface{}, error) {

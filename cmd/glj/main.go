@@ -10,6 +10,8 @@ import (
 	"github.com/glojurelang/glojure/pkg/repl"
 	"github.com/glojurelang/glojure/pkg/runtime"
 
+	_ "github.com/glojurelang/glojure/pkg/stdlib/gen/glojure/core"
+
 	// Bootstrap the runtime
 	_ "github.com/glojurelang/glojure/pkg/glj"
 )

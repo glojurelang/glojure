@@ -41,7 +41,8 @@
  ^{:macro true
    :added "1.0"}
  fn (fn* fn [&form &env & decl] 
-         (let* [res (github.com$glojurelang$glojure$pkg$lang.WithMeta ^{github.com$glojurelang$glojure$pkg$lang.IObj true} (cons (quote fn*) decl) (.Meta ^{github.com$glojurelang$glojure$pkg$lang.IMeta true} &form))] (if (res 1) (throw (res 1)) (res 0)))))
+         (.withMeta ^github.com$glojurelang$glojure$pkg$lang.IObj (cons 'fn* decl) 
+                    (.Meta ^github.com$glojurelang$glojure$pkg$lang.IMeta &form))))
 
 (def
  ^{:arglists '([coll])

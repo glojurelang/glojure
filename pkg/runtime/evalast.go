@@ -132,10 +132,7 @@ func (env *environment) EvalASTDef(n *ast.Node) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		s, err := value.WithMeta(sym, metaVal.(value.IPersistentMap))
-		if err != nil {
-			return nil, err
-		}
+		s := value.WithMeta(sym, metaVal.(value.IPersistentMap))
 		sym = s.(*value.Symbol)
 	}
 
@@ -371,7 +368,7 @@ func (env *environment) EvalASTWithMeta(n *ast.Node) (interface{}, error) {
 		return nil, err
 	}
 
-	return value.WithMeta(exprVal, metaVal.(value.IPersistentMap))
+	return value.WithMeta(exprVal, metaVal.(value.IPersistentMap)), nil
 }
 
 func (env *environment) EvalASTFn(n *ast.Node) (interface{}, error) {

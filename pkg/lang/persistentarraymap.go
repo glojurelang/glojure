@@ -64,6 +64,10 @@ func NewMap(keyVals ...interface{}) IPersistentMap {
 	}
 }
 
+func NewPersistentArrayMap(keyVals ...interface{}) IPersistentMap {
+	return NewMap(keyVals...)
+}
+
 func NewPersistentArrayMapAsIfByAssoc(init []interface{}) IPersistentMap {
 	complexPath := (len(init) & 1) == 1
 	for i := 0; i < len(init) && !complexPath; i += 2 {

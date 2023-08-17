@@ -186,13 +186,6 @@
                   '(fn instance? [t x] (github.com$glojurelang$glojure$pkg$lang.HasType t x)))
    ;;
    (sexpr-replace 'IllegalArgumentException. 'errors.New)
-   ;; replace .withMeta
-   [(fn select [zloc] (and (z/list? zloc) (= '.withMeta (first (z/sexpr zloc)))))
-    (fn visit [zloc] (z/replace zloc
-                                `(let* [~'res (github.com$glojurelang$glojure$pkg$lang.WithMeta ~@(rest (z/sexpr zloc)))]
-                                   (if (~'res 1)
-                                     (throw (~'res 1))
-                                     (~'res 0)))))]
 
    (RT-replace 'cons #(cons 'github.com$glojurelang$glojure$pkg$lang.NewCons %))
    (RT-replace 'first #(cons 'github.com$glojurelang$glojure$pkg$lang.First %))

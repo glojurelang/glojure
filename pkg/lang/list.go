@@ -117,7 +117,7 @@ var emptyList = &EmptyList{}
 
 func NewList(values ...interface{}) IPersistentList {
 	if len(values) == 0 {
-		return &EmptyList{}
+		return emptyList
 	}
 
 	var list *List
