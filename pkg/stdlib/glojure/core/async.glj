@@ -278,7 +278,9 @@
   [& clauses]
   (do-alt `alts! clauses))
 
-(def alt!! alt!)
+(defmacro alt!!
+  [& args]
+  `(alt! ~@args))
 
 ;;;;;;;;;;;;;;;;;;;; ops ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
