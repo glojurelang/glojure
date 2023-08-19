@@ -46,3 +46,7 @@ func SplitExport(export string) (string, string) {
 func mungePkg(pkg string) string {
 	return strings.Replace(pkg, "/", "$", -1)
 }
+
+func UnmungePkg(pkg string) string {
+	return strings.Replace(pkg, "$", "/", -1)
+}

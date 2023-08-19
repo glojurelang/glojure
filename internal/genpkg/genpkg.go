@@ -119,9 +119,17 @@ func createHeaderBuilder(packageNames []string) *strings.Builder {
 	builder.WriteString("package gljimports\n\n")
 	builder.WriteString("import (\n")
 
+	reflectImported := false
+
 	for _, packageName := range packageNames {
+		if packageName == "reflect" {
+			reflectImported = true
+		}
 		aliasName := strings.NewReplacer(".", "_", "/", "_", "-", "_").Replace(packageName)
 		builder.WriteString(fmt.Sprintf("\t%s \"%s\"\n", aliasName, packageName))
+	}
+	if !reflectImported {
+		builder.WriteString("\t\"reflect\"\n")
 	}
 
 	builder.WriteString(")\n\n")
