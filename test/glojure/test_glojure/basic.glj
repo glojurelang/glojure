@@ -90,4 +90,10 @@
     (is (empty? (eval ())))
     (is (= (eval (list)) ()))))
 
+(deftest macros
+  (is (some? (try (identity defn)
+                  nil
+                  (catch go/any e
+                    e))) "taking value of macro should throw"))
+
 (run-tests)

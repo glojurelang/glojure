@@ -3263,7 +3263,7 @@
   [& agents]
   (io! "await in transaction"
     (when *agent*
-      (throw (new Exception "Can't await in agent action")))
+      (throw (errors.New "Can't await in agent action")))
     (let [latch (new java.util.concurrent.CountDownLatch (count agents))
           count-down (fn [agent] (. latch (countDown)) agent)]
       (doseq [agent agents]
@@ -3285,7 +3285,7 @@
   [timeout-ms & agents]
     (io! "await-for in transaction"
      (when *agent*
-       (throw (new Exception "Can't await in agent action")))
+       (throw (errors.New "Can't await in agent action")))
      (let [latch (new java.util.concurrent.CountDownLatch (count agents))
            count-down (fn [agent] (. latch (countDown)) agent)]
        (doseq [agent agents]
@@ -4122,7 +4122,7 @@
   Cannot be used to remove the glojure namespace."
   {:added "1.0"
    :static true}
-  [sym] (glojure.lang.Namespace/remove sym))
+  [sym] (github.com$glojurelang$glojure$pkg$lang.RemoveNamespace sym))
 
 (defn all-ns
   "Returns a sequence of all namespaces."
@@ -4211,7 +4211,7 @@
   clashes. Use :use in the ns macro in preference to calling this directly."
   {:added "1.0"}
   [ns-sym & filters]
-    (let [ns (or (find-ns ns-sym) (throw (new Exception (str "No namespace: " ns-sym))))
+    (let [ns (or (find-ns ns-sym) (throw (errors.New (str "No namespace: " ns-sym))))
           fs (apply hash-map filters)
           nspublics (ns-publics ns)
           rename (or (:rename fs) {})
@@ -4220,7 +4220,7 @@
                   (keys nspublics)
                   (or (:refer fs) (:only fs) (keys nspublics)))]
       (when (and to-do (not (instance? github.com$glojurelang$glojure$pkg$lang.Sequential to-do)))
-        (throw (new Exception ":only/:refer value must be a sequential collection of symbols")))
+        (throw (errors.New ":only/:refer value must be a sequential collection of symbols")))
       (doseq [sym to-do]
         (when-not (exclude sym)
           (let [v (nspublics sym)]
@@ -4403,7 +4403,7 @@
                                                    true)
                               (= firstb :as) (pb ret (second bs) gvec)
                               :else (if seen-rest?
-                                      (throw (new Exception "Unsupported binding form, only :as can follow & parameter"))
+                                      (throw (errors.New "Unsupported binding form, only :as can follow & parameter"))
                                       (recur (pb (if has-rest
                                                    (conj ret
                                                          gfirst `(first ~gseq)
@@ -4468,7 +4468,7 @@
                 (symbol? b) (-> bvec (conj b) (conj v))
                 (vector? b) (pvec bvec b v)
                 (map? b) (pmap bvec b v)
-                :else (throw (new Exception (str "Unsupported binding form: " b))))))
+                :else (throw (errors.New (str "Unsupported binding form: " b))))))
         process-entry (fn [bvec b] (pb bvec (first b) (second b)))]
     (if (every? symbol? (map first bents))
       bindings
@@ -5426,7 +5426,7 @@
                             s)
                           (when-not (.offer q q) ; q itself is eos sentinel
                             ()))) ; empty seq, not nil, so we know to put eos next time
-                      (catch Exception e
+                      (catch go/any e
                         (log-error q e))))))
          drain (fn drain []
                  (lazy-seq
@@ -5945,7 +5945,7 @@
       (if load
         (try
           (load lib need-ns require)
-          (catch Exception e
+          (catch go/any e
             (when undefined-on-entry
               (remove-ns lib))
             (throw e)))

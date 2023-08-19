@@ -1,6 +1,7 @@
 package lang
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"sync"
@@ -56,6 +57,16 @@ func FindOrCreateNamespace(sym *Symbol) *Namespace {
 	ns = NewNamespace(sym)
 	namespaces[sym.String()] = ns
 	return ns
+}
+
+func RemoveNamespace(sym *Symbol) {
+	if sym.String() == "glojure.core" {
+		panic(errors.New("cannot remove glojure.core namespace"))
+	}
+
+	nsMtx.Lock()
+	defer nsMtx.Unlock()
+	delete(namespaces, sym.String())
 }
 
 func NamespaceFor(inns *Namespace, sym *Symbol) *Namespace {

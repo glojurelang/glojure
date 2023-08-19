@@ -3507,6 +3507,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.ReduceKV", github_com_glojurelang_glojure_pkg_lang.ReduceKV)
 	_register("github.com/glojurelang/glojure/pkg/lang.Reduced", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Reduced)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.Ref", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Ref)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/lang.RemoveNamespace", github_com_glojurelang_glojure_pkg_lang.RemoveNamespace)
 	_register("github.com/glojurelang/glojure/pkg/lang.Repeat", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Repeat)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.ResetThreadBindingFrame", github_com_glojurelang_glojure_pkg_lang.ResetThreadBindingFrame)
 	_register("github.com/glojurelang/glojure/pkg/lang.Rest", github_com_glojurelang_glojure_pkg_lang.Rest)

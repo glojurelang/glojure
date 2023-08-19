@@ -184,8 +184,24 @@
                   "Evaluates x and tests if it is an instance of the type\n    t. Returns true or false")
    (sexpr-replace '(fn instance? [^Class c x] (. c (isInstance x)))
                   '(fn instance? [t x] (github.com$glojurelang$glojure$pkg$lang.HasType t x)))
-   ;;
+
+
+   ;;;; Exceptions
    (sexpr-replace 'IllegalArgumentException. 'errors.New)
+   ;; new Exception
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [expr (z/sexpr zloc)]
+                             (and (= 'new (first expr))
+                                  (= 'Exception (second expr))))))
+    (fn visit [zloc]
+      (z/replace zloc (concat '(errors.New) (rest (rest (z/sexpr zloc))))))]
+   ;; catch Exception
+   [(fn select [zloc] (and (z/sexpr-able? zloc)
+                           (= 'Exception (z/sexpr zloc))
+                           (= 'catch (-> zloc z/left z/sexpr))))
+    (fn visit [zloc]
+      (z/replace zloc 'go/any))]
+
    ;; replace .withMeta
    [(fn select [zloc] (and (z/list? zloc) (= '.withMeta (first (z/sexpr zloc)))))
     (fn visit [zloc] (z/replace zloc
@@ -536,6 +552,8 @@
    (sexpr-replace 'clojure.lang.Named 'github.com$glojurelang$glojure$pkg$lang.Named)
 
    (sexpr-replace 'clojure.lang.Namespace/find 'github.com$glojurelang$glojure$pkg$lang.FindNamespace)
+   (sexpr-replace 'clojure.lang.Namespace/remove
+                  'github.com$glojurelang$glojure$pkg$lang.RemoveNamespace)
 
    (sexpr-replace '(clojure.lang.Repeat/create x) '(github.com$glojurelang$glojure$pkg$lang.NewRepeat x))
    (sexpr-replace '(clojure.lang.Repeat/create n x) '(github.com$glojurelang$glojure$pkg$lang.NewRepeatN n x))

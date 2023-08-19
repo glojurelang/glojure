@@ -618,7 +618,11 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 }
 
 func (env *environment) EvalASTVar(n *ast.Node) (interface{}, error) {
-	return n.Sub.(*ast.VarNode).Var.Get(), nil
+	v := n.Sub.(*ast.VarNode).Var
+	if v.IsMacro() {
+		return nil, fmt.Errorf("can't take value of a macro: %v", v)
+	}
+	return v.Get(), nil
 }
 
 func (env *environment) EvalASTLocal(n *ast.Node) (interface{}, error) {
