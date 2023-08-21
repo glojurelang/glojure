@@ -5,6 +5,9 @@ import (
 	"log"
 	"os"
 
+	// bootstrap the runtime
+	_ "github.com/glojurelang/glojure/pkg/glj"
+
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/repl"
