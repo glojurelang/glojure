@@ -20,8 +20,8 @@ func main() {
 		log.Fatal(err)
 	}
 	if dps != nil {
-		if err := dps.Get(); err != nil {
-			log.Fatalf("failed to fetch dependencies: %v", err)
+		if err := dps.Gen(); err != nil {
+			panic(err)
 		}
 
 		exe, err := exec.LookPath("go")
