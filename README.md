@@ -137,14 +137,11 @@ Then, in your own program:
 package main
 
 import (
-	"your.package/gljimports"
-
-	"github.com/glojurelang/glojure/pkg/runtime"
+	// Add your packages' exports to the pkgmap.
+	_ "your.package/gljimports"
 )
 
-func init() {
-	gljimports.RegisterImports(pkgmap.Set)
-}
+// ...
 ```
 
 ## Comparisons to other Go ports of Clojure

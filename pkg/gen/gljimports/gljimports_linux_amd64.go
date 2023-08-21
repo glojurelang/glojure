@@ -64,6 +64,7 @@ import (
 	flag "flag"
 	fmt "fmt"
 	github_com_glojurelang_glojure_pkg_lang "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 	github_com_glojurelang_glojure_pkg_runtime "github.com/glojurelang/glojure/pkg/runtime"
 	go_ast "go/ast"
 	go_build "go/build"
@@ -156,6 +157,10 @@ import (
 	unicode_utf8 "unicode/utf8"
 	unsafe "unsafe"
 )
+
+func init() {
+	RegisterImports(pkgmap.Set)
+}
 
 func RegisterImports(_register func(string, interface{})) {
 	// package archive/tar
