@@ -367,7 +367,12 @@
    (sexpr-replace '(list 'new 'clojure.lang.LazySeq (list* '^{:once true} fn* [] body))
                   '(list 'github.com$glojurelang$glojure$pkg$lang.NewLazySeq (list* '^{:once true} fn* [] body)))
    (sexpr-replace 'clojure.lang.RT/count 'github.com$glojurelang$glojure$pkg$lang.Count)
+
    (sexpr-replace 'clojure.lang.IChunkedSeq 'github.com$glojurelang$glojure$pkg$lang.IChunkedSeq)
+   (sexpr-replace 'clojure.lang.ChunkBuffer.
+                  'github.com$glojurelang$glojure$pkg$lang.NewChunkBuffer)
+   (sexpr-replace 'clojure.lang.ChunkedCons.
+                  'github.com$glojurelang$glojure$pkg$lang.NewChunkedCons)
 
    ;; replace (. <fn-form> (applyTo <args>)) with (glojure.lang.Apply <fn-form> <args>)
    [(fn select [zloc] (and (z/list? zloc)
@@ -490,9 +495,11 @@
    (sexpr-replace '(cast Number x) '(github.com$glojurelang$glojure$pkg$lang.AsNumber x))
 
    (sexpr-replace '(. clojure.lang.Numbers (minus x))
-                  '(* -1 x))
+                  '(* -1 x)) ;; TODO: unary minus
    (sexpr-replace '(. clojure.lang.Numbers (minusP x))
-                  '(* -1 x))
+                  '(* -1 x)) ;; TODO: promoting ops
+   (sexpr-replace 'clojure.lang.Numbers/isZero
+                  'github.com$glojurelang$glojure$pkg$lang.IsZero)
 
    (sexpr-replace 'Unchecked_add 'UncheckedAdd)
    (sexpr-replace 'Unchecked_dec 'UncheckedDec)
