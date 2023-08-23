@@ -348,7 +348,7 @@ func chunkIteratorSeq(iter *reflect.MapIter) ISeq {
 		chunk := make([]interface{}, 0, chunkSize)
 		exhausted := false
 		for n := 0; n < chunkSize; n++ {
-			chunk[n] = NewMapEntry(iter.Key().Interface(), iter.Value().Interface())
+			chunk = append(chunk, NewMapEntry(iter.Key().Interface(), iter.Value().Interface()))
 			if !iter.Next() {
 				exhausted = true
 				break

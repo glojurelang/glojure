@@ -43,4 +43,10 @@
                  (recur (+ sum n))
                  sum)))))))
 
+(deftest maps
+  (let [mp (go/make (go/map-of go/string go/any))]
+    (go/set-map-index mp "foo" 42)
+    (is (= 42 (go/map-index mp "foo")))
+    (is (= ["foo" 42] (first (seq mp))))))
+
 (run-tests)

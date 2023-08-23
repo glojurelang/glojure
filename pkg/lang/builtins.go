@@ -62,10 +62,12 @@ var (
 		// function; it can only be applied to lvalues, which are not
 		// first-class in clojure. we'll need a special form to take the
 		// address of slice elements and struct fields.
-		"index": GoIndex, // index(slc, i) -> val
-		"slice": GoSlice, // slice(slc, i, j) -> slc[i:j]
-		"send":  GoSend,  // send(ch, val) -> ch <- val
-		"recv":  GoRecv,  // recv(ch) -> val, ok <- ch
+		"index":         GoIndex,       // index(slc, i) -> val
+		"slice":         GoSlice,       // slice(slc, i, j) -> slc[i:j]
+		"map-index":     GoMapIndex,    // mapindex(m, key) -> val
+		"set-map-index": GoSetMapIndex, // setmapindex(m, key, val) -> m[key] = val
+		"send":          GoSend,        // send(ch, val) -> ch <- val
+		"recv":          GoRecv,        // recv(ch) -> val, ok <- ch
 	}
 )
 
@@ -179,8 +181,16 @@ func GoDeref(ptr interface{}) interface{} {
 	return reflect.Indirect(reflect.ValueOf(ptr)).Interface()
 }
 
-func GoIndex(slc interface{}, i interface{}) interface{} {
+func GoIndex(slc, i interface{}) interface{} {
 	return reflect.ValueOf(slc).Index(MustAsInt(i)).Interface()
+}
+
+func GoMapIndex(m, k interface{}) interface{} {
+	return reflect.ValueOf(m).MapIndex(reflect.ValueOf(k)).Interface()
+}
+
+func GoSetMapIndex(m, k, v interface{}) {
+	reflect.ValueOf(m).SetMapIndex(reflect.ValueOf(k), reflect.ValueOf(v))
 }
 
 func GoSlice(slc interface{}, indices ...interface{}) interface{} {
