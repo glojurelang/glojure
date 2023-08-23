@@ -104,8 +104,8 @@ func (v *Vector) EntryAt(key interface{}) IMapEntry {
 	if !ok {
 		return nil
 	}
-	val, ok := v.Nth(kInt)
-	if !ok {
+	val := v.NthDefault(kInt, notFound)
+	if val == notFound {
 		return nil
 	}
 	return &MapEntry{
@@ -128,23 +128,24 @@ func (v *Vector) ValAt(i interface{}) interface{} {
 
 func (v *Vector) ValAtDefault(k, def interface{}) interface{} {
 	if i, ok := AsInt(k); ok {
-		if val, ok := v.Nth(i); ok {
-			return val
-		}
+		return v.NthDefault(i, def)
 	}
 	return def
 }
 
-func (v *Vector) Nth(i int) (val interface{}, ok bool) {
-	return v.vec.Index(i)
+func (v *Vector) Nth(i int) interface{} {
+	res, ok := v.vec.Index(i)
+	if !ok {
+		panic(NewIndexOutOfBoundsError())
+	}
+	return res
 }
 
 func (v *Vector) NthDefault(i int, def interface{}) interface{} {
-	val, ok := v.Nth(i)
-	if !ok {
-		return def
+	if i >= 0 && i < v.Count() {
+		return v.Nth(i)
 	}
-	return val
+	return def
 }
 
 func (v *Vector) String() string {
@@ -275,8 +276,7 @@ func toSlice(x interface{}) []interface{} {
 		count := Count(x)
 		res := make([]interface{}, count)
 		for i := 0; i < count; i++ {
-			val, _ := idxd.Nth(i)
-			res = append(res, val)
+			res = append(res, idxd.Nth(i))
 		}
 		return res
 	}

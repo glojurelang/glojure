@@ -63,6 +63,8 @@ func Seq(x interface{}) ISeq {
 	switch t.Kind() {
 	case reflect.Slice, reflect.Array:
 		return NewSliceIterator(x)
+	case reflect.Map:
+		return NewGoMapSeq(x)
 	}
 
 	panic(fmt.Errorf("can't convert %T to ISeq", x))

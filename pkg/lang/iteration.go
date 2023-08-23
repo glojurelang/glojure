@@ -84,7 +84,11 @@ func (i iterator) Next() ISeq {
 }
 
 func (i iterator) More() ISeq {
-	return i.Next()
+	nxt := i.Next()
+	if nxt == nil {
+		return emptyList
+	}
+	return nxt
 }
 
 // NewRangeIterator returns a lazy sequence of start, start + step, start + 2*step, ...
@@ -177,8 +181,7 @@ func (it vectorIterator) Seq() ISeq {
 }
 
 func (it vectorIterator) First() interface{} {
-	v, _ := it.v.Nth(it.start)
-	return v
+	return it.v.Nth(it.start)
 }
 
 func (it vectorIterator) Next() ISeq {
@@ -334,4 +337,34 @@ func (i sliceIterator) ReduceInit(f IFn, start interface{}) interface{} {
 		return ret.(IDeref).Deref()
 	}
 	return ret
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+func chunkIteratorSeq(iter *reflect.MapIter) ISeq {
+	const chunkSize = 32
+
+	return NewLazySeq(func() interface{} {
+		chunk := make([]interface{}, 0, chunkSize)
+		exhausted := false
+		for n := 0; n < chunkSize; n++ {
+			chunk[n] = NewMapEntry(iter.Key().Interface(), iter.Value().Interface())
+			if !iter.Next() {
+				exhausted = true
+				break
+			}
+		}
+		if exhausted {
+			return NewChunkedCons(NewSliceChunk(chunk), nil)
+		}
+		return NewChunkedCons(NewSliceChunk(chunk), chunkIteratorSeq(iter))
+	})
+}
+
+func NewGoMapSeq(x interface{}) ISeq {
+	rng := reflect.ValueOf(x).MapRange()
+	if !rng.Next() {
+		return nil
+	}
+	return chunkIteratorSeq(rng)
 }

@@ -47,20 +47,20 @@ func (me *MapEntry) Length() int {
 	return me.Count()
 }
 
-func (me *MapEntry) Nth(i int) (interface{}, bool) {
+func (me *MapEntry) Nth(i int) interface{} {
 	switch i {
 	case 0:
-		return me.Key(), true
+		return me.Key()
 	case 1:
-		return me.Val(), true
+		return me.Val()
 	default:
-		return nil, false
+		panic(NewIndexOutOfBoundsError())
 	}
 }
 
 func (me *MapEntry) NthDefault(i int, d interface{}) interface{} {
-	if v, ok := me.Nth(i); ok {
-		return v
+	if i >= 0 && i < 2 {
+		return me.Nth(i)
 	}
 	return d
 }

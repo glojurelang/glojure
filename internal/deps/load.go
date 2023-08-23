@@ -4,6 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
 
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
@@ -11,12 +14,7 @@ import (
 )
 
 func Load() (*Deps, error) {
-	// look for a deps.edn file in the current directory if it exists,
-	// read it and parse it into a Deps struct.
-
-	// if it doesn't exist, return nil, nil
-
-	const filename = "deps.edn"
+	const filename = "./deps.edn"
 
 	_, err := os.Stat(filename)
 	if err != nil {
@@ -24,6 +22,16 @@ func Load() (*Deps, error) {
 			return nil, nil
 		}
 		return nil, err
+	}
+
+	modRootDir, err := goModRootDir()
+	if err != nil {
+		return nil, fmt.Errorf("failed to find go mod dir: %w", err)
+	}
+
+	modName, err := goModName()
+	if err != nil {
+		return nil, fmt.Errorf("failed to find go mod name: %w", err)
 	}
 
 	f, err := os.Open(filename)
@@ -44,7 +52,9 @@ func Load() (*Deps, error) {
 	}
 
 	deps := &Deps{
-		Deps: make(map[string]map[string]string),
+		Deps:      make(map[string]map[string]string),
+		goModName: modName,
+		goModDir:  modRootDir,
 	}
 	{ // paths
 		for s := lang.Seq(dmap.ValAt(lang.NewKeyword("paths"))); s != nil; s = s.Next() {
@@ -101,4 +111,20 @@ func Load() (*Deps, error) {
 	}
 
 	return deps, nil
+}
+
+func goModRootDir() (string, error) {
+	out, err := exec.Command("go", "env", "GOMOD").CombinedOutput()
+	if err != nil {
+		return "", fmt.Errorf("%w\n%s", err, string(out))
+	}
+	return filepath.Dir(string(out)), nil
+}
+
+func goModName() (string, error) {
+	out, err := exec.Command("go", "list", "-m").CombinedOutput()
+	if err != nil {
+		return "", fmt.Errorf("%w\n%s", err, string(out))
+	}
+	return strings.TrimSpace(string(out)), nil
 }

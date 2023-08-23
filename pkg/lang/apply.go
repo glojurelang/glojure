@@ -207,13 +207,34 @@ func reflectFuncFromIFn(targetType reflect.Type, applyer IFn) func(args []reflec
 			}
 			return zeroValues
 		}
-		// convert return value to expected type of target type
-		coerced, err := coerceGoValue(targetType.Out(0), res)
-		if err != nil {
-			panic(err)
-		}
-		res = coerced.Interface()
 
-		return []reflect.Value{reflect.ValueOf(res)}
+		if targetType.NumOut() == 0 {
+			return nil
+		}
+
+		ret := make([]reflect.Value, targetType.NumOut())
+		if targetType.NumOut() == 1 {
+			// convert return value to expected type of target type
+			coerced, err := coerceGoValue(targetType.Out(0), res)
+			if err != nil {
+				panic(err)
+			}
+			ret[0] = coerced
+		} else {
+			i := 0
+			for s := Seq(res); s != nil && i < len(ret); s = s.Next() {
+				coerced, err := coerceGoValue(targetType.Out(i), s.First())
+				if err != nil {
+					panic(err)
+				}
+				ret[i] = coerced
+				i++
+			}
+			for ; i < len(ret); i++ {
+				ret[i] = reflect.Zero(targetType.Out(i))
+			}
+		}
+
+		return ret
 	}
 }
