@@ -84,7 +84,7 @@ func (v *SubVector) EntryAt(key interface{}) IMapEntry {
 		return nil
 	}
 	if kInt >= 0 && kInt < v.end-v.start {
-		val, _ := v.v.Nth(v.start + kInt)
+		val := v.v.Nth(v.start + kInt)
 		return &MapEntry{key: kInt, val: val}
 	}
 	return nil
@@ -96,9 +96,7 @@ func (v *SubVector) ValAt(i interface{}) interface{} {
 
 func (v *SubVector) ValAtDefault(k, def interface{}) interface{} {
 	if i, ok := AsInt(k); ok {
-		if val, ok := v.Nth(i); ok {
-			return val
-		}
+		return v.NthDefault(i, def)
 	}
 	return def
 }
@@ -123,16 +121,18 @@ func (v *SubVector) Equal(v2 interface{}) bool {
 	return true
 }
 
-func (v *SubVector) Nth(i int) (val interface{}, ok bool) {
+func (v *SubVector) Nth(i int) interface{} {
+	if v.start+i >= v.end || i < 0 {
+		panic(NewIndexOutOfBoundsError())
+	}
 	return v.v.Nth(v.start + i)
 }
 
 func (v *SubVector) NthDefault(i int, def interface{}) interface{} {
-	val, ok := v.Nth(i)
-	if !ok {
-		return def
+	if i >= 0 && i < v.Count() {
+		return v.Nth(i)
 	}
-	return val
+	return def
 }
 
 func (v *SubVector) Peek() interface{} {

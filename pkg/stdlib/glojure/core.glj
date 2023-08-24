@@ -683,7 +683,7 @@
   (list (quote github.com$glojurelang$glojure$pkg$lang.NewLazySeq) (list* (quote ^{:once true} fn*) [] body)))    
 
 (defn ^:static ^glojure.lang.ChunkBuffer chunk-buffer ^glojure.lang.ChunkBuffer [capacity]
-  (glojure.lang.ChunkBuffer. capacity))
+  (github.com$glojurelang$glojure$pkg$lang.NewChunkBuffer capacity))
 
 (defn ^:static chunk-append [^glojure.lang.ChunkBuffer b x]
   (.add b x))
@@ -701,9 +701,9 @@
   (.chunkedNext s))
 
 (defn ^:static chunk-cons [chunk rest]
-  (if (glojure.lang.Numbers/isZero (github.com$glojurelang$glojure$pkg$lang.Count chunk))
+  (if (github.com$glojurelang$glojure$pkg$lang.IsZero (github.com$glojurelang$glojure$pkg$lang.Count chunk))
     rest
-    (glojure.lang.ChunkedCons. chunk rest)))
+    (github.com$glojurelang$glojure$pkg$lang.NewChunkedCons chunk rest)))
   
 (defn ^:static chunked-seq? [s]
   (instance? github.com$glojurelang$glojure$pkg$lang.IChunkedSeq s))

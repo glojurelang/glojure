@@ -114,7 +114,9 @@ type (
 	}
 
 	Indexed interface {
-		Nth(int) (interface{}, bool)
+		Counted
+
+		Nth(int) interface{}
 		NthDefault(int, interface{}) interface{}
 	}
 
@@ -234,7 +236,7 @@ type (
 		Indexed
 
 		DropFirst() IChunk
-		Reduce(fn IFn, init interface{}) interface{}
+		ReduceInit(fn IFn, init interface{}) interface{}
 	}
 
 	IChunkedSeq interface {
@@ -285,6 +287,13 @@ type (
 
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+	// Abstract classes
+	//
+	// TODO: represent Clojure's abstract classes as interfaces to
+	// provide compile-time checks for implementations of required
+	// methods.
+
 	// Java Future interface
 	Future interface {
 		Get() interface{}
@@ -293,6 +302,11 @@ type (
 		// IsCancelled() bool
 		// IsDone() bool
 	}
+)
+
+var (
+	// sentinel value for "not found"
+	notFound = &struct{}{}
 )
 
 func Conj(coll Conjer, x interface{}) Conjer {

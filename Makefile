@@ -28,7 +28,7 @@ gocmd:
 generate:
 	@go generate ./...
 
-pkg/gen/gljimports/gljimports_%.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go \
+pkg/gen/gljimports/gljimports_%.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go ./internal/genpkg/genpkg.go \
 					$(wildcard ./pkg/lang/*.go) $(wildcard ./pkg/runtime/*.go)
 	@echo "Generating $@"
 	@./scripts/gen-gljimports.sh $@ $* $(GO_CMD)

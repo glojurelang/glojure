@@ -68,8 +68,12 @@ func (nm *NumberMethods) And(x, y interface{}) interface{} {
 	return bitOpsCast(x) & bitOpsCast(y)
 }
 
-func (nm *NumberMethods) IsZero(x interface{}) bool {
+func IsZero(x interface{}) bool {
 	return Ops(x).IsZero(x)
+}
+
+func (nm *NumberMethods) IsZero(x interface{}) bool {
+	return IsZero(x)
 }
 
 func (nm *NumberMethods) IsPos(x interface{}) bool {

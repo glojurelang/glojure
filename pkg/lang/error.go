@@ -11,6 +11,8 @@ type (
 		msg string
 	}
 
+	IndexOutOfBoundsError struct{}
+
 	// Stacker is an interface for retrieving stack traces.
 	Stacker interface {
 		Stack() []StackFrame
@@ -39,6 +41,17 @@ func NewTimeoutError(msg string) error {
 func (e *TimeoutError) Error() string {
 	return e.msg
 }
+
+func NewIndexOutOfBoundsError() error {
+	return &IndexOutOfBoundsError{}
+}
+
+func (e *IndexOutOfBoundsError) Error() string {
+	return "index out of bounds"
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// TODO: Revisit
 
 // NewError creates a new error value.
 func NewError(frame StackFrame, err error) *Error {

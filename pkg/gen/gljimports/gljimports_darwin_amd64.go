@@ -64,6 +64,7 @@ import (
 	flag "flag"
 	fmt "fmt"
 	github_com_glojurelang_glojure_pkg_lang "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 	github_com_glojurelang_glojure_pkg_runtime "github.com/glojurelang/glojure/pkg/runtime"
 	go_ast "go/ast"
 	go_build "go/build"
@@ -156,6 +157,10 @@ import (
 	unicode_utf8 "unicode/utf8"
 	unsafe "unsafe"
 )
+
+func init() {
+	RegisterImports(pkgmap.Set)
+}
 
 func RegisterImports(_register func(string, interface{})) {
 	// package archive/tar
@@ -3182,6 +3187,8 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.Char", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Char)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.CharAt", github_com_glojurelang_glojure_pkg_lang.CharAt)
 	_register("github.com/glojurelang/glojure/pkg/lang.CharLiteralFromRune", github_com_glojurelang_glojure_pkg_lang.CharLiteralFromRune)
+	_register("github.com/glojurelang/glojure/pkg/lang.ChunkBuffer", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ChunkBuffer)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/lang.ChunkedCons", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ChunkedCons)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.CloneThreadBindingFrame", github_com_glojurelang_glojure_pkg_lang.CloneThreadBindingFrame)
 	_register("github.com/glojurelang/glojure/pkg/lang.Comparer", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Comparer)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.ConcatStrings", github_com_glojurelang_glojure_pkg_lang.ConcatStrings)
@@ -3227,6 +3234,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.GoIndex", github_com_glojurelang_glojure_pkg_lang.GoIndex)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoLen", github_com_glojurelang_glojure_pkg_lang.GoLen)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoMake", github_com_glojurelang_glojure_pkg_lang.GoMake)
+	_register("github.com/glojurelang/glojure/pkg/lang.GoMapIndex", github_com_glojurelang_glojure_pkg_lang.GoMapIndex)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoNew", github_com_glojurelang_glojure_pkg_lang.GoNew)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoPanic", github_com_glojurelang_glojure_pkg_lang.GoPanic)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoReal", github_com_glojurelang_glojure_pkg_lang.GoReal)
@@ -3234,6 +3242,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.GoRecvChanOf", github_com_glojurelang_glojure_pkg_lang.GoRecvChanOf)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoSend", github_com_glojurelang_glojure_pkg_lang.GoSend)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoSendChanOf", github_com_glojurelang_glojure_pkg_lang.GoSendChanOf)
+	_register("github.com/glojurelang/glojure/pkg/lang.GoSetMapIndex", github_com_glojurelang_glojure_pkg_lang.GoSetMapIndex)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoSlice", github_com_glojurelang_glojure_pkg_lang.GoSlice)
 	_register("github.com/glojurelang/glojure/pkg/lang.HasType", github_com_glojurelang_glojure_pkg_lang.HasType)
 	_register("github.com/glojurelang/glojure/pkg/lang.Hash", github_com_glojurelang_glojure_pkg_lang.Hash)
@@ -3274,6 +3283,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.Import", github_com_glojurelang_glojure_pkg_lang.Import)
 	_register("github.com/glojurelang/glojure/pkg/lang.Inc", github_com_glojurelang_glojure_pkg_lang.Inc)
 	_register("github.com/glojurelang/glojure/pkg/lang.IncP", github_com_glojurelang_glojure_pkg_lang.IncP)
+	_register("github.com/glojurelang/glojure/pkg/lang.IndexOutOfBoundsError", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.IndexOutOfBoundsError)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.Indexed", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Indexed)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.InternKeyword", github_com_glojurelang_glojure_pkg_lang.InternKeyword)
 	_register("github.com/glojurelang/glojure/pkg/lang.InternKeywordString", github_com_glojurelang_glojure_pkg_lang.InternKeywordString)
@@ -3289,6 +3299,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.IsSeq", github_com_glojurelang_glojure_pkg_lang.IsSeq)
 	_register("github.com/glojurelang/glojure/pkg/lang.IsSeqEqual", github_com_glojurelang_glojure_pkg_lang.IsSeqEqual)
 	_register("github.com/glojurelang/glojure/pkg/lang.IsTruthy", github_com_glojurelang_glojure_pkg_lang.IsTruthy)
+	_register("github.com/glojurelang/glojure/pkg/lang.IsZero", github_com_glojurelang_glojure_pkg_lang.IsZero)
 	_register("github.com/glojurelang/glojure/pkg/lang.KWAliases", github_com_glojurelang_glojure_pkg_lang.KWAliases)
 	_register("github.com/glojurelang/glojure/pkg/lang.KWArg", github_com_glojurelang_glojure_pkg_lang.KWArg)
 	_register("github.com/glojurelang/glojure/pkg/lang.KWArgId", github_com_glojurelang_glojure_pkg_lang.KWArgId)
@@ -3438,10 +3449,14 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.NewBigIntFromInt64", github_com_glojurelang_glojure_pkg_lang.NewBigIntFromInt64)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewBox", github_com_glojurelang_glojure_pkg_lang.NewBox)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewChar", github_com_glojurelang_glojure_pkg_lang.NewChar)
+	_register("github.com/glojurelang/glojure/pkg/lang.NewChunkBuffer", github_com_glojurelang_glojure_pkg_lang.NewChunkBuffer)
+	_register("github.com/glojurelang/glojure/pkg/lang.NewChunkedCons", github_com_glojurelang_glojure_pkg_lang.NewChunkedCons)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewConcatIterator", github_com_glojurelang_glojure_pkg_lang.NewConcatIterator)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewCons", github_com_glojurelang_glojure_pkg_lang.NewCons)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewCycle", github_com_glojurelang_glojure_pkg_lang.NewCycle)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewError", github_com_glojurelang_glojure_pkg_lang.NewError)
+	_register("github.com/glojurelang/glojure/pkg/lang.NewGoMapSeq", github_com_glojurelang_glojure_pkg_lang.NewGoMapSeq)
+	_register("github.com/glojurelang/glojure/pkg/lang.NewIndexOutOfBoundsError", github_com_glojurelang_glojure_pkg_lang.NewIndexOutOfBoundsError)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewIterator", github_com_glojurelang_glojure_pkg_lang.NewIterator)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewKeyword", github_com_glojurelang_glojure_pkg_lang.NewKeyword)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewLazilyPersistentVector", github_com_glojurelang_glojure_pkg_lang.NewLazilyPersistentVector)
@@ -3465,6 +3480,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.NewRepeat", github_com_glojurelang_glojure_pkg_lang.NewRepeat)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewRepeatN", github_com_glojurelang_glojure_pkg_lang.NewRepeatN)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewSet", github_com_glojurelang_glojure_pkg_lang.NewSet)
+	_register("github.com/glojurelang/glojure/pkg/lang.NewSliceChunk", github_com_glojurelang_glojure_pkg_lang.NewSliceChunk)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewSliceIterator", github_com_glojurelang_glojure_pkg_lang.NewSliceIterator)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewSubVector", github_com_glojurelang_glojure_pkg_lang.NewSubVector)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewSymbol", github_com_glojurelang_glojure_pkg_lang.NewSymbol)
@@ -3520,6 +3536,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.Set", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Set)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.SetField", github_com_glojurelang_glojure_pkg_lang.SetField)
 	_register("github.com/glojurelang/glojure/pkg/lang.ShutdownAgents", github_com_glojurelang_glojure_pkg_lang.ShutdownAgents)
+	_register("github.com/glojurelang/glojure/pkg/lang.SliceChunk", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.SliceChunk)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.SliceSet", github_com_glojurelang_glojure_pkg_lang.SliceSet)
 	_register("github.com/glojurelang/glojure/pkg/lang.StackFrame", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.StackFrame)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.Stacker", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Stacker)(nil)).Elem())
