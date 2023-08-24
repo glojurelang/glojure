@@ -14,7 +14,7 @@ import (
 )
 
 func Load() (*Deps, error) {
-	const filename = "./deps.edn"
+	const filename = "./gljdeps.edn"
 
 	_, err := os.Stat(filename)
 	if err != nil {

@@ -11,7 +11,7 @@ import (
 )
 
 // Embed generates an gljembed.go file that embeds the directories
-// from deps.edn's pkgs and adds them to the Glojure load path when
+// from gljdeps.edn's pkgs and adds them to the Glojure load path when
 // imported.
 func (d *Deps) Embed() error {
 	sort.Strings(d.Pkgs)
@@ -23,7 +23,7 @@ func (d *Deps) Embed() error {
 		return err
 	}
 	if d.goModDir != currentDir {
-		return fmt.Errorf("deps.edn must be in the root directory of the go module")
+		return fmt.Errorf("gljdeps.edn must be in the root directory of the go module")
 	}
 
 	f, err := os.Create(filepath.Join(d.goModDir, "gljembed.go"))
