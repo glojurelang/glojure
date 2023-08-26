@@ -13,6 +13,10 @@ type (
 
 	IndexOutOfBoundsError struct{}
 
+	IllegalArgumentError struct {
+		msg string
+	}
+
 	// Stacker is an interface for retrieving stack traces.
 	Stacker interface {
 		Stack() []StackFrame
@@ -48,6 +52,14 @@ func NewIndexOutOfBoundsError() error {
 
 func (e *IndexOutOfBoundsError) Error() string {
 	return "index out of bounds"
+}
+
+func NewIllegalArgumentError(msg string) error {
+	return &IllegalArgumentError{msg: msg}
+}
+
+func (e *IllegalArgumentError) Error() string {
+	return e.msg
 }
 
 ////////////////////////////////////////////////////////////////////////////////

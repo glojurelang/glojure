@@ -18,7 +18,7 @@
       }
  byte-array-type (go/slice-of go/byte))
 
-(defmacro go-try!
+(defmacro ^:private go-try!
   [& call]
   `(let [res# (~@call)
          [[fst# rst# :as res#] err#] (if (vector? res#)
@@ -165,10 +165,10 @@
   {:make-reader (fn [x opts] (make-input-stream x opts))
    :make-writer (fn [x opts] (make-writer (make-output-stream x opts) opts))
    :make-input-stream (fn [x opts]
-                        (throw (IllegalArgumentException.
+                        (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError
                                 (str "Cannot open <" (pr-str x) "> as an InputStream."))))
    :make-output-stream (fn [x opts]
-                         (throw (IllegalArgumentException.
+                         (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError
                                  (str "Cannot open <" (pr-str x) "> as an OutputStream."))))})
 
 ;; (defn- inputstream->reader
@@ -179,22 +179,17 @@
 ;;   [^OutputStream os opts]
 ;;   (make-writer (OutputStreamWriter. os (encoding opts)) opts))
 
-;; (extend BufferedInputStream
-;;   IOFactory
-;;   (assoc default-streams-impl
-;;     :make-input-stream (fn [x opts] x)
-;;     :make-reader inputstream->reader))
+(extend io.Reader
+  IOFactory
+  (assoc default-streams-impl
+    :make-input-stream (fn [x opts] x)
+    :make-reader (fn [x opts] x)))
 
 ;; (extend InputStream
 ;;   IOFactory
 ;;   (assoc default-streams-impl
 ;;     :make-input-stream (fn [x opts] (BufferedInputStream. x))
 ;;     :make-reader inputstream->reader))
-
-;; (extend Reader
-;;   IOFactory
-;;   (assoc default-streams-impl
-;;     :make-reader (fn [x opts] (BufferedReader. x))))
 
 ;; (extend BufferedReader
 ;;   IOFactory
@@ -236,7 +231,15 @@
                          (make-input-stream
                           (if (= "file" (.scheme x))
                             (FileInputStream. (as-file x))
-                            (.openStream x)) opts))
+                            (let [req (go-try! net$http.NewRequest net$http.MethodGet (.String x) nil)
+                                  res (go-try! . net$http.DefaultClient Do req)
+                                  status (.StatusCode res)
+                                  body (.Body res)]
+                              (when (not= 200 status)
+                                (. body Close)
+                                (throw (fmt.Errorf "http error: %s" status)))
+                              body))
+                          opts))
     :make-output-stream (fn [^*net$url.URL x opts]
                           (if (= "file" (.scheme x))
                             (make-output-stream (as-file x) opts)
