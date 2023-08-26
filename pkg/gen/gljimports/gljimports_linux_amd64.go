@@ -3439,6 +3439,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.BooleanCast", github_com_glojurelang_glojure_pkg_lang.BooleanCast)
 	_register("github.com/glojurelang/glojure/pkg/lang.Box", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Box)(nil)).Elem())
 	_register("*github.com/glojurelang/glojure/pkg/lang.Box", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Box)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/lang.BuiltinTypes", github_com_glojurelang_glojure_pkg_lang.BuiltinTypes)
 	_register("github.com/glojurelang/glojure/pkg/lang.Builtins", github_com_glojurelang_glojure_pkg_lang.Builtins)
 	_register("github.com/glojurelang/glojure/pkg/lang.ByteCast", github_com_glojurelang_glojure_pkg_lang.ByteCast)
 	_register("github.com/glojurelang/glojure/pkg/lang.Char", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Char)(nil)).Elem())
