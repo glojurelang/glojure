@@ -24,6 +24,8 @@ type MultiFn struct {
 
 var (
 	_ IFn = (*MultiFn)(nil)
+
+	varIsA = InternVarName(NSCore.Name(), NewSymbol("isa?"))
 )
 
 func NewMultiFn(name string, dispatchFn IFn, defaultDispatchVal interface{}, hierarchy IRef) *MultiFn {
@@ -169,8 +171,8 @@ func (m *MultiFn) findBestMethod(dispatchVal interface{}) IFn {
 	var bestEntry IMapEntry
 	for seq := Seq(m.methodTable); seq != nil; seq = seq.Next() {
 		entry := seq.First().(IMapEntry)
-		if m.isA(dispatchVal, entry.Key()) {
-			if bestEntry == nil || m.dominates(m.hierarchy, entry.Key(), bestEntry.Key()) {
+		if m.isA(m.cachedHierarchy, dispatchVal, entry.Key()) {
+			if bestEntry == nil || m.dominates(m.cachedHierarchy, entry.Key(), bestEntry.Key()) {
 				bestEntry = entry
 			}
 			if !m.dominates(m.hierarchy, bestEntry.Key(), entry.Key()) {
@@ -190,22 +192,10 @@ func (m *MultiFn) findBestMethod(dispatchVal interface{}) IFn {
 	return bestValue.(IFn)
 }
 
-// TODO: take hierarchy
-func (m *MultiFn) isA(x, y interface{}) bool {
-	if IsNil(x) && IsNil(y) || x == y {
-		return true
-	}
-	child, ok := x.(reflect.Type)
-	if !ok {
-		return false
-	}
-	parent, ok := y.(reflect.Type)
-	if !ok {
-		return false
-	}
-	return child.AssignableTo(parent) || child.Kind() == reflect.Pointer && child.Elem().AssignableTo(parent)
+func (m *MultiFn) isA(h, x, y interface{}) bool {
+	return varIsA.Invoke(h, x, y).(bool)
 }
 
-func (m *MultiFn) dominates(hierarchy, x, y interface{}) bool {
-	return m.prefers(m.hierarchy, x, y) || m.isA(x, y)
+func (m *MultiFn) dominates(h, x, y interface{}) bool {
+	return m.prefers(m.hierarchy, x, y) || m.isA(h, x, y)
 }

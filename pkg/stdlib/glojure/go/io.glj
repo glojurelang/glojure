@@ -223,21 +223,21 @@
 ;;     :make-output-stream (fn [x opts] x)
 ;;     :make-writer outputstream->writer))
 
-(extend os.File
+(extend *os.File
   IOFactory
   (assoc {} ;; default-streams-impl
-    :make-input-stream (fn [^File x opts] x)
-    :make-output-stream (fn [^File x opts] x)))
+    :make-input-stream (fn [^*os.File x opts] x)
+    :make-output-stream (fn [^*os.File x opts] x)))
 
-(extend net$url.URL
+(extend *net$url.URL
   IOFactory
   (assoc default-streams-impl
-    :make-input-stream (fn [^URL x opts]
+    :make-input-stream (fn [^*net$url.URL x opts]
                          (make-input-stream
                           (if (= "file" (.scheme x))
                             (FileInputStream. (as-file x))
                             (.openStream x)) opts))
-    :make-output-stream (fn [^URL x opts]
+    :make-output-stream (fn [^*net$url.URL x opts]
                           (if (= "file" (.scheme x))
                             (make-output-stream (as-file x) opts)
                             (throw (IllegalArgumentException. (str "Can not write to non-file URL <" x ">")))))))
@@ -299,13 +299,8 @@
   do-copy
   (fn [input output opts] [(type input) (type output)]))
 
-;; (defmethod do-copy [InputStream OutputStream] [^InputStream input ^OutputStream output opts]
-;;   (let [buffer (make-array Byte/TYPE (buffer-size opts))]
-;;     (loop []
-;;       (let [size (.read input buffer)]
-;;         (when (pos? size)
-;;           (do (.write output buffer 0 size)
-;;               (recur)))))))
+(defmethod do-copy [io.Reader io.Writer] [^io.Reader input ^io.Writer output opts]
+  (go-try! io.Copy output input))
 
 ;; (defmethod do-copy [InputStream Writer] [^InputStream input ^Writer output opts]
 ;;   (let [^"[C" buffer (make-array Character/TYPE (buffer-size opts))

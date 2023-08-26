@@ -95,13 +95,13 @@
   ;;  ([coll f val] (seq-reduce coll f val)))
 
   ;;for range
-  github.com$glojurelang$glojure$pkg$lang.LazySeq
+  *github.com$glojurelang$glojure$pkg$lang.LazySeq
   (coll-reduce
    ([coll f] (seq-reduce coll f))
    ([coll f val] (seq-reduce coll f val)))
 
   ;;vector's chunked seq is faster than its iter
-  github.com$glojurelang$glojure$pkg$lang.PersistentVector
+  *github.com$glojurelang$glojure$pkg$lang.PersistentVector
   (coll-reduce
    ([coll f] (seq-reduce coll f))
    ([coll f val] (seq-reduce coll f val)))
