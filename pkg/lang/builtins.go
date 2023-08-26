@@ -6,8 +6,7 @@ import (
 )
 
 var (
-	Builtins = map[string]interface{}{
-		// Built-in types
+	BuiltinTypes = map[string]reflect.Type{
 		"any":        reflect.TypeOf((*interface{})(nil)).Elem(),
 		"bool":       reflect.TypeOf(false),
 		"uint8":      reflect.TypeOf(uint8(0)),
@@ -29,7 +28,9 @@ var (
 		"byte":       reflect.TypeOf(byte(0)),
 		"rune":       reflect.TypeOf(rune(0)),
 		"error":      reflect.TypeOf((*error)(nil)).Elem(),
+	}
 
+	Builtins = map[string]interface{}{
 		// Built-in functions
 		"append":  GoAppend,
 		"copy":    GoCopy,
@@ -70,6 +71,12 @@ var (
 		"recv":          GoRecv,        // recv(ch) -> val, ok <- ch
 	}
 )
+
+func init() {
+	for name, typ := range BuiltinTypes {
+		Builtins[name] = typ
+	}
+}
 
 func GoAppend(slc interface{}, vals ...interface{}) interface{} {
 	slcVal := reflect.ValueOf(slc)

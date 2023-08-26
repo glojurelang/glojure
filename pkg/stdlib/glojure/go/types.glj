@@ -1,0 +1,98 @@
+(ns glojure.go.types)
+
+(defprotocol AstType
+  (ast->type [ast]))
+
+(defn- struct-field
+  ([type-ast] (struct-field type-ast nil))
+  ([type-ast name]
+   (let [typ (ast->type type-ast)
+         name (if (= "" name) nil name)
+         anonymous (nil? name)
+         name (or name (.Name typ))
+         sf (go/new reflect.StructField)]
+     (set! (.Type sf) typ)
+     (set! (.Name sf) name)
+     (when anonymous
+       (set! (.Anonymous sf) true))
+     (go/deref sf))))
+
+(extend-protocol AstType
+  *go$ast.Ident
+  (ast->type
+    [ast]
+    (let [name (.Name ast)
+          typ (get github.com$glojurelang$glojure$pkg$lang.BuiltinTypes name)]
+      (when-not typ (throw (fmt.Errorf "unknown type %s" name)))
+      typ))
+
+  *go$ast.ArrayType
+  (ast->type
+    [ast]
+    (let [len (.Len ast)
+          elt (ast->type (.Elt ast))]
+      (if len
+        (go/array-of (-> len .Value strconv.Atoi first) elt)
+        (go/slice-of elt))))
+
+  *go$ast.MapType
+  (ast->type
+    [ast]
+    (go/map-of (ast->type (.Key ast)) (ast->type (.Value ast))))
+
+  *go$ast.ChanType
+  (ast->type
+    [ast]
+    (let [dir (.Dir ast)
+          ctor (cond
+                 (= dir go$ast.SEND) go/chan<--of
+                 (= dir go$ast.RECV) go/<-chan-of
+                 :else go/chan-of)]
+      (ctor (ast->type (.Value ast)))))
+
+  *go$ast.FuncType
+  (ast->type
+    [ast]
+    (let [pl (or (.Params ast) nil)
+          params (and pl
+                      (->> (.List pl)
+                           (map #(repeat (max 1 (go/len (.Names %))) (.Type %)))
+                           (apply concat)))
+          last-param (last params)
+          variadic (instance? *go$ast.Ellipsis last-param)
+          params (if-not variadic
+                   (map ast->type params)
+                   (concat (map ast->type (butlast params))
+                           [(go/slice-of (ast->type (.Elt last-param)))]))
+          rl (or (.Results ast) nil)
+          results (and rl
+                       (->> (.List rl)
+                            (map #(repeat (max 1 (go/len (.Names %))) (.Type %)))
+                            (apply concat)
+                            (map ast->type)))]
+    (go/func-of params results variadic)))
+
+  *go$ast.StructType
+  (ast->type
+    [ast]
+    (let [fields (.. ast Fields List)
+          struct-fields (->> fields
+                             (map (fn [f]
+                                    (let [names (map #(.Name %) (.Names f))
+                                          type (.Type f)
+                                          tag (.Type f)]
+                                      (cond
+                                        (empty? names) [(struct-field type)]
+                                        (= 1 (count names)) [(struct-field type (first names))]
+                                        :else (map #(struct-field type %) names)))))
+                             (apply concat))]
+      (reflect.StructOf struct-fields)))
+  )
+
+(defn from-string
+  "Returns a Go type from a go type expression."
+  [typ]
+  (if-not (string? typ) (throw (fmt.Errorf "from-string: argument must be a string, got %T" typ)))
+  (let [[ast err] (go$parser.ParseExpr typ)]
+    (if err (throw (fmt.Errorf "from-string: invalid type string '%s': %w" typ err)))
+    (ast->type ast)))
