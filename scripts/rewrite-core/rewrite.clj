@@ -575,9 +575,16 @@
    (sexpr-replace '(load "gvec") '(do))
    (sexpr-replace '(load "uuid") '(do))
 
-   (sexpr-replace '(require '[clojure.java.io :as jio]) '(do))
+   (sexpr-replace '(require '[clojure.java.io :as jio])
+                  '(require '[glojure.go.io :as gio]))
+   (sexpr-replace 'jio/reader 'gio/reader)
+   (sexpr-replace 'jio/copy 'gio/copy)
+   (sexpr-replace 'jio/writer 'gio/writer)
+   (sexpr-replace 'Reader 'io.Reader)
 
    (sexpr-replace 'java.io.StringWriter 'strings.Builder)
+   (sexpr-replace '(java.io.StringWriter.)
+                  '(new strings.Builder))
 
    (sexpr-replace 'java.io.Writer 'io.Writer)
 

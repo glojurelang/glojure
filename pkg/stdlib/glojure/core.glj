@@ -3827,6 +3827,7 @@
                               (try
                                 (with-open ~(subvec bindings 2) ~@body)
                                 (finally
+                                  (println "with-open" bindings)
                                   (. ~(bindings 0) close))))
     :else (throw (errors.New
                    "with-open only allows Symbols in bindings"))))
@@ -6941,7 +6942,7 @@ fails, attempts to require sym's namespace and retries."
               coll)
       persistent!))
 
-(do)
+(require (quote [glojure.go.io :as gio]))
 
 (defn- normalize-slurp-opts
   [opts]
@@ -6958,9 +6959,10 @@ fails, attempts to require sym's namespace and retries."
    :tag go/string}
   ([f & opts]
      (let [opts (normalize-slurp-opts opts)
-           sw (java.io.StringWriter.)]
-       (with-open [^java.io.Reader r (apply jio/reader f opts)]
-         (jio/copy r sw)
+           sw (new strings.Builder)]
+       (with-open [^java.io.Reader r (apply gio/reader f opts)]
+         (println "reader" r)
+         (gio/copy r sw)
          (github.com$glojurelang$glojure$pkg$lang.ToString sw)))))
 
 (defn spit
@@ -6968,7 +6970,7 @@ fails, attempts to require sym's namespace and retries."
   closes f. Options passed to glojure.java.io/writer."
   {:added "1.2"}
   [f content & options]
-  (with-open [^io.Writer w (apply jio/writer f options)]
+  (with-open [^io.Writer w (apply gio/writer f options)]
     (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str content))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; futures (needs proxy);;;;;;;;;;;;;;;;;;

@@ -55,6 +55,14 @@ func (rt *RTMethods) NthDefault(x interface{}, i int, def interface{}) interface
 	return v
 }
 
+func (rt *RTMethods) Pop(x interface{}) interface{} {
+	if IsNil(x) {
+		return nil
+	}
+	stk := x.(IPersistentStack)
+	return stk.Pop()
+}
+
 func (rt *RTMethods) IntCast(x interface{}) int {
 	if c, ok := x.(Char); ok {
 		return int(c)
