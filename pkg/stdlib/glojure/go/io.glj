@@ -21,10 +21,12 @@
 (defmacro ^:private go-try!
   [& call]
   `(let [res# (~@call)
-         [[fst# rst# :as res#] err#] (if (vector? res#)
-                       [(pop res#) (last res#)]
-                       [nil res#])
-         res# (if rst# res# fst#)]
+         [[fst# & rst# :as res#] err#] (if (vector? res#)
+                                         [(pop res#) (last res#)]
+                                         [nil res#])
+         res# (if (not-empty rst#)
+                res#
+                fst#)]
      (when err# (throw err#))
      res#))
 
