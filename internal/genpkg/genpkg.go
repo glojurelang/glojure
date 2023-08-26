@@ -244,7 +244,11 @@ func getTypeNameDeclaration(object *types.TypeName, globalName string, aliasName
 		return ""
 	}
 
-	return fmt.Sprintf("_register(%q, reflect.TypeOf((*%s)(nil)).Elem())", globalName, aliasName)
+	ret := fmt.Sprintf("_register(%q, reflect.TypeOf((*%s)(nil)).Elem())", globalName, aliasName)
+	if _, ok := object.Type().Underlying().(*types.Struct); ok {
+		ret += fmt.Sprintf("\n_register(%q, reflect.TypeOf((*%s)(nil)))", "*"+globalName, aliasName)
+	}
+	return ret
 }
 
 // getTypedInt derives the type of the integer literal from its string

@@ -21,6 +21,10 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 
 	target := reflect.ValueOf(v)
 
+	if !target.IsValid() {
+		panic(fmt.Errorf("FieldOrMethod on nil value. field: %v", name))
+	}
+
 	val := target.MethodByName(name)
 	if val.IsValid() {
 		return val.Interface(), true

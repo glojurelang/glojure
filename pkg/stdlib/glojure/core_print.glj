@@ -135,7 +135,7 @@
 (defmethod print-method go/int64 [o w] (.write w (str o))) 
 (defmethod print-method go/byte [o w] (.write w (str o))) 
 (defmethod print-method go/rune [o w] (.write w (str o))) 
-(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Ratio [o w] (.write w (str o))) 
+(defmethod print-method *github.com$glojurelang$glojure$pkg$lang.Ratio [o w] (.write w (str o))) 
 (defmethod print-method go/float64 [o, ^Writer w]
   (cond
     (= (math.Inf 1) o) (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "##Inf")
@@ -162,11 +162,11 @@
 (defmethod print-method go/int64 [o w] (.write w (str o))) 
 (defmethod print-method go/byte [o w] (.write w (str o))) 
 (defmethod print-method go/rune [o w] (.write w (str o))) 
-(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Ratio [o w] (.write w (str o))) 
-(defmethod print-dup github.com$glojurelang$glojure$pkg$runtime.Fn [o, ^Writer w]
+(defmethod print-method *github.com$glojurelang$glojure$pkg$lang.Ratio [o w] (.write w (str o))) 
+(defmethod print-dup *github.com$glojurelang$glojure$pkg$runtime.Fn [o, ^Writer w]
   (print-ctor o (fn [o w]) w))
 
-(prefer-method print-dup github.com$glojurelang$glojure$pkg$lang.IPersistentCollection github.com$glojurelang$glojure$pkg$runtime.Fn)
+(prefer-method print-dup github.com$glojurelang$glojure$pkg$lang.IPersistentCollection *github.com$glojurelang$glojure$pkg$runtime.Fn)
 (do)
 (do)
 
@@ -175,15 +175,15 @@
 
 (defmethod print-dup go/bool [o w] (print-method o w))
 
-(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Symbol [o, ^Writer w]
+(defmethod print-method *github.com$glojurelang$glojure$pkg$lang.Symbol [o, ^Writer w]
   (print-simple o w))
 
-(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Symbol [o w] (print-method o w))
+(defmethod print-dup *github.com$glojurelang$glojure$pkg$lang.Symbol [o w] (print-method o w))
 
-(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Var [o, ^Writer w]
+(defmethod print-method *github.com$glojurelang$glojure$pkg$lang.Var [o, ^Writer w]
   (print-simple o w))
 
-(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Var [^github.com$glojurelang$glojure$pkg$lang.Var o, ^Writer w]
+(defmethod print-dup *github.com$glojurelang$glojure$pkg$lang.Var [^*github.com$glojurelang$glojure$pkg$lang.Var o, ^Writer w]
   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str "#=(var " (.name (.Namespace o)) "/" (.sym o) ")")))
 
 (defmethod print-method github.com$glojurelang$glojure$pkg$lang.ISeq [o, ^Writer w]
@@ -354,12 +354,12 @@
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Char [c w] (print-method c w))
 (defmethod print-dup go/int64 [o w] (print-method o w))
 (defmethod print-dup go/float64 [o w] (print-method o w))
-(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Ratio [o w] (print-method o w))
-(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.BigDecimal [o w] (print-method o w))
-(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.BigInt [o w] (print-method o w))
-(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.PersistentHashMap [o w] (print-method o w))
-(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.PersistentHashSet [o w] (print-method o w))
-(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.PersistentVector [o w] (print-method o w))
+(defmethod print-dup *github.com$glojurelang$glojure$pkg$lang.Ratio [o w] (print-method o w))
+(defmethod print-dup *github.com$glojurelang$glojure$pkg$lang.BigDecimal [o w] (print-method o w))
+(defmethod print-dup *github.com$glojurelang$glojure$pkg$lang.BigInt [o w] (print-method o w))
+(defmethod print-dup *github.com$glojurelang$glojure$pkg$lang.PersistentHashMap [o w] (print-method o w))
+(defmethod print-dup *github.com$glojurelang$glojure$pkg$lang.PersistentHashSet [o w] (print-method o w))
+(defmethod print-dup *github.com$glojurelang$glojure$pkg$lang.PersistentVector [o w] (print-method o w))
 (do)
 
 (do)
@@ -368,17 +368,17 @@
 
 (do)
 
-(defmethod print-method github.com$glojurelang$glojure$pkg$lang.BigDecimal [b, ^Writer w]
+(defmethod print-method *github.com$glojurelang$glojure$pkg$lang.BigDecimal [b, ^Writer w]
   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str b))
   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "M"))
 
-(defmethod print-method github.com$glojurelang$glojure$pkg$lang.BigInt [b, ^Writer w]
+(defmethod print-method *github.com$glojurelang$glojure$pkg$lang.BigInt [b, ^Writer w]
   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str b))
   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "N"))
 
-(defmethod print-method regexp.Regexp [p ^Writer w]
+(defmethod print-method *regexp.Regexp [p ^Writer w]
   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#\"")
-  (loop [[^Character c & r :as s] (seq (.pattern ^regexp.Regexp p))
+  (loop [[^Character c & r :as s] (seq (.pattern ^*regexp.Regexp p))
          qmode false]
     (when s
       (cond
@@ -398,9 +398,9 @@
                    (recur r qmode)))))
   (github.com$glojurelang$glojure$pkg$lang.AppendWriter w \"))
 
-(defmethod print-dup regexp.Regexp [p ^Writer w] (print-method p w))
+(defmethod print-dup *regexp.Regexp [p ^Writer w] (print-method p w))
 
-(defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Namespace [^github.com$glojurelang$glojure$pkg$lang.Namespace n ^Writer w]
+(defmethod print-dup *github.com$glojurelang$glojure$pkg$lang.Namespace [^*github.com$glojurelang$glojure$pkg$lang.Namespace n ^Writer w]
   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#=(find-ns ")
   (print-dup (.name n) w)
   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w ")"))
@@ -416,7 +416,7 @@
     {:status
      (cond
       (or ex
-          (and (instance? github.com$glojurelang$glojure$pkg$lang.Agent o)
+          (and (instance? *github.com$glojurelang$glojure$pkg$lang.Agent o)
                (agent-error o)))
       :failed
 
