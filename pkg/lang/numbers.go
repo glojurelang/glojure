@@ -30,6 +30,10 @@ func (nm *NumberMethods) Add(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).Add(x, y)
 }
 
+func (nm *NumberMethods) AddP(x, y interface{}) interface{} {
+	return Ops(x).Combine(Ops(y)).AddP(x, y)
+}
+
 func (nm *NumberMethods) Minus(x, y interface{}) interface{} {
 	return Ops(x).Combine(Ops(y)).Sub(x, y)
 }
