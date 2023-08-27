@@ -3716,6 +3716,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.MultiFn", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.MultiFn)(nil)).Elem())
 	_register("*github.com/glojurelang/glojure/pkg/lang.MultiFn", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.MultiFn)(nil)))
 	_register("github.com/glojurelang/glojure/pkg/lang.MustAsInt", github_com_glojurelang_glojure_pkg_lang.MustAsInt)
+	_register("github.com/glojurelang/glojure/pkg/lang.MustAsNumber", github_com_glojurelang_glojure_pkg_lang.MustAsNumber)
 	_register("github.com/glojurelang/glojure/pkg/lang.MustNth", github_com_glojurelang_glojure_pkg_lang.MustNth)
 	_register("github.com/glojurelang/glojure/pkg/lang.NSCore", github_com_glojurelang_glojure_pkg_lang.NSCore)
 	_register("github.com/glojurelang/glojure/pkg/lang.Named", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Named)(nil)).Elem())

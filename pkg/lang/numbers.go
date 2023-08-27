@@ -213,9 +213,17 @@ func bitOpsCast(x interface{}) int64 {
 	}
 }
 
+func MustAsNumber(v any) any {
+	n, ok := AsNumber(v)
+	if !ok {
+		panic(fmt.Errorf("cannot convert %T to number", v))
+	}
+	return n
+}
+
 // AsNumber returns any value as a number. If the value is not a
 // number, it returns false.
-func AsNumber(v interface{}) (interface{}, bool) {
+func AsNumber(v any) (any, bool) {
 	switch v := v.(type) {
 	case int:
 		return v, true
@@ -244,6 +252,8 @@ func AsNumber(v interface{}) (interface{}, bool) {
 	case *BigDecimal:
 		return v, true
 	case *BigInt:
+		return v, true
+	case *Ratio:
 		return v, true
 	default:
 		return nil, false
