@@ -101,12 +101,21 @@
    (sexpr-replace 'Float/NEGATIVE_INFINITY '(go/float32 (math.Inf -1)))
    (sexpr-replace '.isNaN 'math.IsNaN)
 
+   ;; Range
    (sexpr-replace '(clojure.lang.LongRange/create end)
-                  '(github.com$glojurelang$glojure$pkg$lang.NewRangeIterator 0 end 1))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewLongRange 0 end 1))
    (sexpr-replace '(clojure.lang.LongRange/create start end)
-                  '(github.com$glojurelang$glojure$pkg$lang.NewRangeIterator start end 1))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewLongRange start end 1))
    (sexpr-replace '(clojure.lang.LongRange/create start end step)
-                  '(github.com$glojurelang$glojure$pkg$lang.NewRangeIterator start end step))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewLongRange start end step))
+
+   (sexpr-replace '(clojure.lang.Range/create end)
+                  '(github.com$glojurelang$glojure$pkg$lang.NewRange 0 end 1))
+   (sexpr-replace '(clojure.lang.Range/create start end)
+                  '(github.com$glojurelang$glojure$pkg$lang.NewRange start end 1))
+   (sexpr-replace '(clojure.lang.Range/create start end step)
+                  '(github.com$glojurelang$glojure$pkg$lang.NewRange start end step))
+
 
    (sexpr-replace '(. clojure.lang.PersistentHashMap (create keyvals))
                   '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentHashMap keyvals))
