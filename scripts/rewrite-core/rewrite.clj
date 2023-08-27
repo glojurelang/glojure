@@ -531,7 +531,7 @@
                                 (let [sym (-> zloc z/sexpr str)]
                                   (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
    (sexpr-replace 'clojure.lang.Numbers 'github.com$glojurelang$glojure$pkg$lang.Numbers)
-   (sexpr-replace '(cast Number x) '(github.com$glojurelang$glojure$pkg$lang.AsNumber x))
+   (sexpr-replace '(cast Number x) '(github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
 
    (sexpr-replace '(. clojure.lang.Numbers (minus x))
                   '(* -1 x)) ;; TODO: unary minus

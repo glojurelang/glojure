@@ -969,7 +969,7 @@
    :inline-arities >1?
    :added "1.0"}
   ([] 0)
-  ([x] (github.com$glojurelang$glojure$pkg$lang.AsNumber x))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
   ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (AddP x y)))
   ([x y & more]
    (reduce1 +' (+' x y) more)))
@@ -981,7 +981,7 @@
    :inline-arities >1?
    :added "1.2"}
   ([] 0)
-  ([x] (github.com$glojurelang$glojure$pkg$lang.AsNumber x))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
   ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Add x y)))
   ([x y & more]
      (reduce1 + (+ x y) more)))
@@ -993,7 +993,7 @@
    :inline-arities >1?
    :added "1.0"}
   ([] 1)
-  ([x] (github.com$glojurelang$glojure$pkg$lang.AsNumber x))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
   ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (MultiplyP x y)))
   ([x y & more]
    (reduce1 *' (*' x y) more)))
@@ -1005,7 +1005,7 @@
    :inline-arities >1?
    :added "1.2"}
   ([] 1)
-  ([x] (github.com$glojurelang$glojure$pkg$lang.AsNumber x))
+  ([x] (github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
   ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Multiply x y)))
   ([x y & more]
      (reduce1 * (* x y) more)))
