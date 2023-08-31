@@ -644,6 +644,11 @@ func AsInt64(x any) int64 {
 		d := x.Denominator()
 		q := new(big.Int).Quo(n.val, d.val)
 		return q.Int64()
+	case *BigInt:
+		return x.val.Int64()
+	case *BigDecimal:
+		i, _ := x.val.Int(nil)
+		return i.Int64()
 	default:
 		panic(fmt.Errorf("cannot convert %T to int64", x))
 	}
@@ -754,6 +759,10 @@ func AsBigDecimal(x any) *BigDecimal {
 	case *big.Int:
 		f := new(big.Float)
 		f.SetInt(x)
+		return NewBigDecimalFromBigFloat(f)
+	case *Ratio:
+		f := new(big.Float)
+		f.SetRat(x.val)
 		return NewBigDecimalFromBigFloat(f)
 	default:
 		panic(fmt.Errorf("cannot convert %T to BigDecimal", x))

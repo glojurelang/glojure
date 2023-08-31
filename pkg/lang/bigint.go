@@ -43,6 +43,10 @@ func (n *BigInt) ToBigInteger() *big.Int {
 	return new(big.Int).Set(n.val)
 }
 
+func (n *BigInt) ToBigDecimal() *BigDecimal {
+	return NewBigDecimalFromBigFloat(new(big.Float).SetInt(n.val))
+}
+
 func (n *BigInt) String() string {
 	return n.val.String()
 }

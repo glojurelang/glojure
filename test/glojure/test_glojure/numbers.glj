@@ -31,7 +31,7 @@
 (deftest Coerced-BigDecimal
   (doseq [v [(bigdec 3) (bigdec (inc (bigint math.MaxInt64)))]]
     (are [x] (true? x)
-     (instance? BigDecimal v)
+     (instance? *github.com$glojurelang$glojure$pkg$lang.BigDecimal v)
      (number? v)
      (decimal? v)
      (not (float? v)))))
@@ -216,7 +216,7 @@
       (- 2.2 1.1) 1.1
       (- 6.6 2.2 1.1) 3.3 )
 
-  (is (< (- Integer/MIN_VALUE 10) Integer/MIN_VALUE)) )  ; no underflow
+  (is (< (- math.MinInt 10) math.MinInt)) )  ; no underflow
 
 
 (deftest test-multiply
@@ -808,8 +808,8 @@ Math/pow overflows to Infinity."
 
 
 (deftest comparisons
-  (let [small-numbers [1 1.0 (Integer. 1) (go/float32 1.0) 9/10 1N 1M]
-        big-numbers [10 10.0 (Integer. 10) (go/float32 10.0) 99/10 10N 10N]]
+  (let [small-numbers [1 1.0 (go/int 1) (go/float32 1.0) 9/10 1N 1M]
+        big-numbers [10 10.0 (go/int 10) (go/float32 10.0) 99/10 10N 10N]]
     (doseq [small small-numbers big big-numbers]
       (is (< small big))
       (is (not (< big small)))
