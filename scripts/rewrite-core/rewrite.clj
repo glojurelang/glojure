@@ -335,6 +335,12 @@
                   'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromInt64)
    (sexpr-replace '(BigInteger/valueOf (long x))
                   '(math$big.NewInt (long x)))
+   (sexpr-replace '(BigDecimal/valueOf (long x))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromInt64 (long x)))
+   (sexpr-replace '(. BigDecimal valueOf (double x))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromFloat64 (double x)))
+   (sexpr-replace 'clojure.lang.BigInt/fromBigInteger
+                  'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromGoBigInt)
 
    (sexpr-replace '.equals '.Equal)
 
@@ -500,9 +506,13 @@
 
    (sexpr-replace 'clojure.lang.RT/longCast 'github.com$glojurelang$glojure$pkg$lang.AsInt64)
    (sexpr-replace 'clojure.lang.RT/byteCast 'github.com$glojurelang$glojure$pkg$lang.ByteCast)
+   (sexpr-replace 'clojure.lang.RT/uncheckedByteCast 'github.com$glojurelang$glojure$pkg$lang.UncheckedByteCast)
    (sexpr-replace 'clojure.lang.RT/shortCast 'github.com$glojurelang$glojure$pkg$lang.ShortCast)
-   (sexpr-replace 'clojure.lang.RT/doubleCast 'github.com$glojurelang$glojure$pkg$lang.AsFloat64)
+   (sexpr-replace 'clojure.lang.RT/uncheckedShortCast 'github.com$glojurelang$glojure$pkg$lang.UncheckedShortCast)
+   (sexpr-replace 'clojure.lang.RT/doubleCast 'github.com$glojurelang$glojure$pkg$lang.AsFloat64) ;; todo: checked version
+   (sexpr-replace 'clojure.lang.RT/uncheckedDoubleCast 'github.com$glojurelang$glojure$pkg$lang.AsFloat64)
    (sexpr-replace 'clojure.lang.RT/floatCast 'github.com$glojurelang$glojure$pkg$lang.FloatCast)
+   (sexpr-replace 'clojure.lang.RT/uncheckedFloatCast 'github.com$glojurelang$glojure$pkg$lang.UncheckedFloatCast)
 
    (sexpr-replace "clojure.core" "glojure.core")
    (sexpr-replace 'clojure.core/name 'glojure.core/name)
@@ -559,9 +569,16 @@
    (sexpr-replace 'Unchecked_add 'UncheckedAdd)
    (sexpr-replace 'Unchecked_dec 'UncheckedDec)
    (sexpr-replace 'Unchecked_int_divide 'UncheckedIntDivide)
+   (sexpr-replace '(unchecked_minus x) '(Unchecked_negate x))
 
+   (replace-num-array 'char)
    (replace-num-array 'byte)
+   (replace-num-array 'short)
+   (replace-num-array 'int)
+   (replace-num-array 'long)
+   (replace-num-array 'float)
    (replace-num-array 'double)
+   (replace-num-array 'boolean)
 
    (sexpr-replace 'clojure.core/cond 'glojure.core/cond)
 

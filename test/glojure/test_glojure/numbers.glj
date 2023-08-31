@@ -156,11 +156,11 @@
       (let [wrapped (fn [x]
                       (try
                        (f x)
-                       (catch RuntimeException e :error)))]
+                       (catch go/any e :error)))]
         (is (= vals (map wrapped inputs)))))))
 
 (deftest test-prim-with-matching-hint
-  (is (= 1 (let [x 1.2] (Math/round ^double x)))))
+  (is (= 1 (let [x 1.2] (math.Round ^double x)))))
 
 ;; *** Functions ***
 
@@ -190,7 +190,7 @@
       (+ 1.1 2.2 3.3) 6.6 )
 
   (is (> (+ math.MaxInt 10) math.MaxInt))  ; no overflow
-  (is (thrown? ClassCastException (+ "ab" "cd"))) )    ; no string concatenation
+  (is (thrown? go/any (+ "ab" "cd"))) )    ; no string concatenation
 
 
 (deftest test-subtract
@@ -558,15 +558,15 @@ Math/pow overflows to Infinity."
 
 ;; arrays
 (deftest test-array-types
-  (are [x y z] (= (Class/forName x) (class y) (class z))
-       "[Z" (boolean-array 1) (booleans (boolean-array 1 true))
-       "[B" (byte-array 1) (bytes (byte-array 1 (byte 1)))
-       "[C" (char-array 1) (chars (char-array 1 \a))
-       "[S" (short-array 1) (shorts (short-array 1 (short 1)))
-       "[F" (float-array 1) (floats (float-array 1 1))
-       "[D" (double-array 1) (doubles (double-array 1 1))
-       "[I" (int-array 1) (ints (int-array 1 1))
-       "[J" (long-array 1) (longs (long-array 1 1))))
+  (are [x y z] (= x (class y) (class z))
+    (go/slice-of go/bool) (boolean-array 1) (booleans (boolean-array 1 true))
+    (go/slice-of go/byte) (byte-array 1) (bytes (byte-array 1 (byte 1)))
+    (go/slice-of github.com$glojurelang$glojure$pkg$lang.Char) (char-array 1) (chars (char-array 1 \a))
+    (go/slice-of go/int16) (short-array 1) (shorts (short-array 1 (short 1)))
+    (go/slice-of go/float32) (float-array 1) (floats (float-array 1 1))
+    (go/slice-of go/float64) (double-array 1) (doubles (double-array 1 1))
+    (go/slice-of go/int) (int-array 1) (ints (int-array 1 1))
+    (go/slice-of go/int64) (long-array 1) (longs (long-array 1 1))))
 
 
 (deftest test-ratios
@@ -578,8 +578,8 @@ Math/pow overflows to Infinity."
 (deftest test-arbitrary-precision-subtract
   (are [x y] (= x y)
        9223372036854775808N (-' 0 -9223372036854775808)
-       clojure.lang.BigInt  (class (-' 0 -9223372036854775808))
-       java.lang.Long       (class (-' 0 -9223372036854775807))))
+       *github.com$glojurelang$glojure$pkg$lang.BigInt  (class (-' 0 -9223372036854775808))
+       go/int64       (class (-' 0 -9223372036854775807))))
 
 (deftest test-min-max
   (testing "min/max on different numbers of floats and doubles"
@@ -607,20 +607,20 @@ Math/pow overflows to Infinity."
          -1.0  1.0  0.0 -1.0  1.0
          -1.0  1.0 -1.0  1.0  0.0))
   (testing "min/max preserves type of winner"
-    (is (= java.lang.Long (class (max 10))))
-    (is (= java.lang.Long (class (max 1.0 10))))
-    (is (= java.lang.Long (class (max 10 1.0))))
-    (is (= java.lang.Long (class (max 10 1.0 2.0))))
-    (is (= java.lang.Long (class (max 1.0 10 2.0))))
-    (is (= java.lang.Long (class (max 1.0 2.0 10))))
-    (is (= java.lang.Double (class (max 1 2 10.0 3 4 5))))
-    (is (= java.lang.Long (class (min 10))))
-    (is (= java.lang.Long (class (min 1.0 -10))))
-    (is (= java.lang.Long (class (min -10 1.0))))
-    (is (= java.lang.Long (class (min -10 1.0 2.0))))
-    (is (= java.lang.Long (class (min 1.0 -10 2.0))))
-    (is (= java.lang.Long (class (min 1.0 2.0 -10))))
-    (is (= java.lang.Double (class (min 1 2 -10.0 3 4 5))))))
+    (is (= go/int64 (class (max 10))))
+    (is (= go/int64 (class (max 1.0 10))))
+    (is (= go/int64 (class (max 10 1.0))))
+    (is (= go/int64 (class (max 10 1.0 2.0))))
+    (is (= go/int64 (class (max 1.0 10 2.0))))
+    (is (= go/int64 (class (max 1.0 2.0 10))))
+    (is (= go/float64 (class (max 1 2 10.0 3 4 5))))
+    (is (= go/int64 (class (min 10))))
+    (is (= go/int64 (class (min 1.0 -10))))
+    (is (= go/int64 (class (min -10 1.0))))
+    (is (= go/int64 (class (min -10 1.0 2.0))))
+    (is (= go/int64 (class (min 1.0 -10 2.0))))
+    (is (= go/int64 (class (min 1.0 2.0 -10))))
+    (is (= go/float64 (class (min 1 2 -10.0 3 4 5))))))
 
 (deftest test-abs
   (are [in ex] (= ex (abs in))
@@ -729,53 +729,53 @@ Math/pow overflows to Infinity."
 (deftest unchecked-inc-overflow
   (testing "max value overflows to min value"
     (is (= math.MinInt64 (unchecked-inc math.MaxInt64)))
-    (is (= math.MinInt64 (unchecked-inc (Long/valueOf math.MaxInt64))))))
+    (is (= math.MinInt64 (unchecked-inc (go/int64 math.MaxInt64))))))
 
 (deftest unchecked-dec-overflow
   (testing "min value overflows to max value"
     (is (= math.MaxInt64 (unchecked-dec math.MinInt64)))
-    (is (= math.MaxInt64 (unchecked-dec (Long/valueOf math.MinInt64))))))
+    (is (= math.MaxInt64 (unchecked-dec (go/int64 math.MinInt64))))))
 
 (deftest unchecked-negate-overflow
   (testing "negating min value overflows to min value itself"
     (is (= math.MinInt64 (unchecked-negate math.MinInt64)))
-    (is (= math.MinInt64 (unchecked-negate (Long/valueOf math.MinInt64))))))
+    (is (= math.MinInt64 (unchecked-negate (go/int64 math.MinInt64))))))
 
 (deftest unchecked-add-overflow
   (testing "max value overflows to min value"
     (is (= math.MinInt64 (unchecked-add math.MaxInt64 1)))
-    (is (= math.MinInt64 (unchecked-add math.MaxInt64 (Long/valueOf 1))))
-    (is (= math.MinInt64 (unchecked-add (Long/valueOf math.MaxInt64) 1)))
-    (is (= math.MinInt64 (unchecked-add (Long/valueOf math.MaxInt64) (Long/valueOf 1)))))
+    (is (= math.MinInt64 (unchecked-add math.MaxInt64 (go/int64 1))))
+    (is (= math.MinInt64 (unchecked-add (go/int64 math.MaxInt64) 1)))
+    (is (= math.MinInt64 (unchecked-add (go/int64 math.MaxInt64) (go/int64 1)))))
   (testing "adding min value to min value results in zero"
     (is (= 0 (unchecked-add math.MinInt64 math.MinInt64)))
-    (is (= 0 (unchecked-add math.MinInt64 (Long/valueOf math.MinInt64))))
-    (is (= 0 (unchecked-add (Long/valueOf math.MinInt64) math.MinInt64)))
-    (is (= 0 (unchecked-add (Long/valueOf math.MinInt64) (Long/valueOf math.MinInt64))))))
+    (is (= 0 (unchecked-add math.MinInt64 (go/int64 math.MinInt64))))
+    (is (= 0 (unchecked-add (go/int64 math.MinInt64) math.MinInt64)))
+    (is (= 0 (unchecked-add (go/int64 math.MinInt64) (go/int64 math.MinInt64))))))
 
 (deftest unchecked-subtract-overflow
   (testing "min value overflows to max-value"
     (is (= math.MaxInt64 (unchecked-subtract math.MinInt64 1)))
-    (is (= math.MaxInt64 (unchecked-subtract math.MinInt64 (Long/valueOf 1))))
-    (is (= math.MaxInt64 (unchecked-subtract (Long/valueOf math.MinInt64) 1)))
-    (is (= math.MaxInt64 (unchecked-subtract (Long/valueOf math.MinInt64) (Long/valueOf 1)))))
+    (is (= math.MaxInt64 (unchecked-subtract math.MinInt64 (go/int64 1))))
+    (is (= math.MaxInt64 (unchecked-subtract (go/int64 math.MinInt64) 1)))
+    (is (= math.MaxInt64 (unchecked-subtract (go/int64 math.MinInt64) (go/int64 1)))))
   (testing "negating min value overflows to min value itself"
     (is (= math.MinInt64 (unchecked-subtract 0 math.MinInt64)))
-    (is (= math.MinInt64 (unchecked-subtract 0 (Long/valueOf math.MinInt64))))
-    (is (= math.MinInt64 (unchecked-subtract (Long/valueOf 0) math.MinInt64)))
-    (is (= math.MinInt64 (unchecked-subtract (Long/valueOf 0) (Long/valueOf math.MinInt64))))))
+    (is (= math.MinInt64 (unchecked-subtract 0 (go/int64 math.MinInt64))))
+    (is (= math.MinInt64 (unchecked-subtract (go/int64 0) math.MinInt64)))
+    (is (= math.MinInt64 (unchecked-subtract (go/int64 0) (go/int64 math.MinInt64))))))
 
 (deftest unchecked-multiply-overflow
   (testing "two times max value results in -2"
     (is (= -2 (unchecked-multiply math.MaxInt64 2)))
-    (is (= -2 (unchecked-multiply math.MaxInt64 (Long/valueOf 2))))
-    (is (= -2 (unchecked-multiply (Long/valueOf math.MaxInt64) 2)))
-    (is (= -2 (unchecked-multiply (Long/valueOf math.MaxInt64) (Long/valueOf 2)))))
+    (is (= -2 (unchecked-multiply math.MaxInt64 (go/int64 2))))
+    (is (= -2 (unchecked-multiply (go/int64 math.MaxInt64) 2)))
+    (is (= -2 (unchecked-multiply (go/int64 math.MaxInt64) (go/int64 2)))))
   (testing "two times min value results in 0"
     (is (= 0 (unchecked-multiply math.MinInt64 2)))
-    (is (= 0 (unchecked-multiply math.MinInt64 (Long/valueOf 2))))
-    (is (= 0 (unchecked-multiply (Long/valueOf math.MinInt64) 2)))
-    (is (= 0 (unchecked-multiply (Long/valueOf math.MinInt64) (Long/valueOf 2))))))
+    (is (= 0 (unchecked-multiply math.MinInt64 (go/int64 2))))
+    (is (= 0 (unchecked-multiply (go/int64 math.MinInt64) 2)))
+    (is (= 0 (unchecked-multiply (go/int64 math.MinInt64) (go/int64 2))))))
 
 ;; TODO: if/when type tags are used
 ;;
@@ -850,10 +850,10 @@ Math/pow overflows to Infinity."
 
 (deftest test-nan-comparison
   (are [x y] (= x y)
-       (< 1000 NaN) (< 1000 (Double. NaN))
-       (<= 1000 NaN) (<= 1000 (Double. NaN))
-       (> 1000 NaN) (> 1000 (Double. NaN))
-       (>= 1000 NaN) (>= 1000 (Double. NaN))))
+       (< 1000 NaN) (< 1000 (go/float64 NaN))
+       (<= 1000 NaN) (<= 1000 (go/float64 NaN))
+       (> 1000 NaN) (> 1000 (go/float64 NaN))
+       (>= 1000 NaN) (>= 1000 (go/float64 NaN))))
 
 (deftest test-nan-as-operand
   (testing "All numeric operations with NaN as an operand produce NaN as a result"

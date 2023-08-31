@@ -370,7 +370,7 @@
             (pos? (count args))
             (zero? (mod (count args) (count argv)))))
     `(temp/do-template ~argv (is ~expr) ~@args)
-    (throw (errors.New "The number of args doesn't match are's argv."))))
+    (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError "The number of args doesn't match are's argv."))))
 
 (defmacro testing
   "Adds a new string to the list of testing contexts.  May be nested,

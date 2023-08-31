@@ -39,6 +39,10 @@ func NewBigIntFromGoBigInt(x *big.Int) *BigInt {
 	return &BigInt{val: xCopy}
 }
 
+func (n *BigInt) ToBigInteger() *big.Int {
+	return new(big.Int).Set(n.val)
+}
+
 func (n *BigInt) String() string {
 	return n.val.String()
 }

@@ -639,6 +639,11 @@ func AsInt64(x any) int64 {
 		return int64(x)
 	case float64:
 		return int64(x)
+	case *Ratio:
+		n := x.Numerator()
+		d := x.Denominator()
+		q := new(big.Int).Quo(n.val, d.val)
+		return q.Int64()
 	default:
 		panic(fmt.Errorf("cannot convert %T to int64", x))
 	}

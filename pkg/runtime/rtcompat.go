@@ -82,6 +82,10 @@ func (rt *RTMethods) CharCast(x interface{}) Char {
 	return value.CharCast(x)
 }
 
+func (rt *RTMethods) UncheckedCharCast(x interface{}) Char {
+	return value.UncheckedCharCast(x)
+}
+
 func (rt *RTMethods) Dissoc(x interface{}, k interface{}) interface{} {
 	return Dissoc(x, k)
 }

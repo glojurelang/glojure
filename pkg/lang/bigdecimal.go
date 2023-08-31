@@ -35,6 +35,15 @@ func NewBigDecimalFromFloat64(x float64) *BigDecimal {
 	return &BigDecimal{val: new(big.Float).SetFloat64(x)}
 }
 
+func NewBigDecimalFromInt64(x int64) *BigDecimal {
+	return &BigDecimal{val: new(big.Float).SetInt64(x)}
+}
+
+func (n *BigDecimal) ToBigInteger() *big.Int {
+	res, _ := n.val.Int(nil)
+	return res
+}
+
 func (n *BigDecimal) String() string {
 	return n.val.String()
 }

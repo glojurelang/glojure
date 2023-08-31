@@ -1191,7 +1191,7 @@
   Note - uses a primitive operator subject to overflow."
   {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_minus ~x)))
    :added "1.0"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_minus x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_negate x)))
 
 (defn unchecked-add-int
   "Returns the sum of x and y, both int.
@@ -3499,13 +3499,13 @@
   "Coerce to byte. Subject to rounding or truncation."
   {:inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$runtime.RT (UncheckedByteCast ~x)))
    :added "1.3"}
-  [x] (glojure.lang.RT/uncheckedByteCast x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.UncheckedByteCast x))
 
 (defn unchecked-short
   "Coerce to short. Subject to rounding or truncation."
   {:inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$runtime.RT (UncheckedShortCast ~x)))
    :added "1.3"}
-  [x] (glojure.lang.RT/uncheckedShortCast x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.UncheckedShortCast x))
 
 (defn unchecked-char
   "Coerce to char. Subject to rounding or truncation."
@@ -3529,13 +3529,13 @@
   "Coerce to float. Subject to rounding."
   {:inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$runtime.RT (UncheckedFloatCast ~x)))
    :added "1.3"}
-  [x] (glojure.lang.RT/uncheckedFloatCast x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.UncheckedFloatCast x))
 
 (defn unchecked-double
   "Coerce to double. Subject to rounding."
   {:inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$runtime.RT (UncheckedDoubleCast ~x)))
    :added "1.3"}
-  [x] (glojure.lang.RT/uncheckedDoubleCast x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.AsFloat64 x))
 
 
 (defn number?
@@ -3605,9 +3605,9 @@
    :added "1.3"}
   [x] (cond
        (instance? *github.com$glojurelang$glojure$pkg$lang.BigInt x) x
-       (instance? *math$big.Int x) (glojure.lang.BigInt/fromBigInteger x)
+       (instance? *math$big.Int x) (github.com$glojurelang$glojure$pkg$lang.NewBigIntFromGoBigInt x)
        (decimal? x) (bigint (.toBigInteger ^*github.com$glojurelang$glojure$pkg$lang.BigDecimal x))
-       (float? x)  (bigint (. *github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x)))
+       (float? x)  (bigint (github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromFloat64 (double x)))
        (ratio? x) (bigint (.bigIntegerValue ^*github.com$glojurelang$glojure$pkg$lang.Ratio x))
        (number? x) (github.com$glojurelang$glojure$pkg$lang.NewBigIntFromInt64 (long x))
        :else (bigint (BigInteger. x))))
@@ -3621,7 +3621,7 @@
        (instance? *math$big.Int x) x
        (instance? *github.com$glojurelang$glojure$pkg$lang.BigInt x) (.toBigInteger ^*github.com$glojurelang$glojure$pkg$lang.BigInt x)
        (decimal? x) (.toBigInteger ^*github.com$glojurelang$glojure$pkg$lang.BigDecimal x)
-       (float? x) (.toBigInteger (. *github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x)))
+       (float? x) (.toBigInteger (github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromFloat64 (double x)))
        (ratio? x) (.bigIntegerValue ^*github.com$glojurelang$glojure$pkg$lang.Ratio x)
        (number? x) (math$big.NewInt (long x))
        :else (BigInteger. x)))
@@ -3633,11 +3633,11 @@
    :static true}
   [x] (cond
        (decimal? x) x
-       (float? x) (. *github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x))
+       (float? x) (github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromFloat64 (double x))
        (ratio? x) (/ (BigDecimal. (.numerator ^*github.com$glojurelang$glojure$pkg$lang.Ratio x)) (.denominator ^*github.com$glojurelang$glojure$pkg$lang.Ratio x))
        (instance? *github.com$glojurelang$glojure$pkg$lang.BigInt x) (.toBigDecimal ^*github.com$glojurelang$glojure$pkg$lang.BigInt x)
        (instance? *math$big.Int x) (BigDecimal. ^*math$big.Int x)
-       (number? x) (BigDecimal/valueOf (long x))
+       (number? x) (github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromInt64 (long x))
        :else (BigDecimal. x)))
 
 (def ^:dynamic ^{:private true} print-initialized false)
@@ -5278,19 +5278,19 @@
 
 (defn float-array
   "Creates an array of floats"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Float_array ~@args))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers FloatArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.0"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Float_array size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Float_array size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers FloatArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers FloatArrayInit size init-val-or-seq)))
 
 (defn boolean-array
   "Creates an array of booleans"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Boolean_array ~@args))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers BooleanArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.1"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Boolean_array size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Boolean_array size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers BooleanArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers BooleanArrayInit size init-val-or-seq)))
 
 (defn byte-array
   "Creates an array of bytes"
@@ -5302,19 +5302,19 @@
 
 (defn char-array
   "Creates an array of chars"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Char_array ~@args))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers CharArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.1"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Char_array size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Char_array size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers CharArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers CharArrayInit size init-val-or-seq)))
 
 (defn short-array
   "Creates an array of shorts"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Short_array ~@args))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers ShortArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.1"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Short_array size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Short_array size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers ShortArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers ShortArrayInit size init-val-or-seq)))
 
 (defn double-array
   "Creates an array of doubles"
@@ -5333,19 +5333,19 @@
 
 (defn int-array
   "Creates an array of ints"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Int_array ~@args))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers IntArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.0"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Int_array size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Int_array size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers IntArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers IntArrayInit size init-val-or-seq)))
 
 (defn long-array
   "Creates an array of longs"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Long_array ~@args))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers LongArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.0"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Long_array size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers Long_array size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers LongArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers LongArrayInit size init-val-or-seq)))
 
 (definline booleans
   "Casts to boolean[]"

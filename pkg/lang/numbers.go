@@ -40,12 +40,28 @@ func (nm *NumberMethods) Minus(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Sub(x, y)
 }
 
+func (nm *NumberMethods) MinusP(x, y any) any {
+	return Ops(x).Combine(Ops(y)).SubP(x, y)
+}
+
+func (nm *NumberMethods) Unchecked_minus(x, y any) any {
+	return nm.Minus(x, y) // TODO: the normal implementations are currently unchecked. fix
+}
+
+func (nm *NumberMethods) Unchecked_negate(x any) any {
+	return nm.Multiply(-1, x) // TODO: the normal implementations are currently unchecked. fix
+}
+
 func (nm *NumberMethods) Multiply(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Multiply(x, y)
 }
 
 func (nm *NumberMethods) MultiplyP(x, y any) any {
 	return Ops(x).Combine(Ops(y)).MultiplyP(x, y)
+}
+
+func (nm *NumberMethods) Unchecked_multiply(x, y any) any {
+	return nm.Multiply(x, y) // TODO: the normal implementations are currently unchecked. fix
 }
 
 func (nm *NumberMethods) Divide(x, y any) any {
@@ -114,14 +130,35 @@ func (nm *NumberMethods) Dec(x any) any {
 	return nm.Add(x, -1)
 }
 
-func (nm *NumberMethods) ShiftLeft(x, y any) any {
+func (nm *NumberMethods) ClearBit(x, y any) int64 {
+	return bitOpsCast(x) & ^(1 << bitOpsCast(y))
+}
+
+func (nm *NumberMethods) SetBit(x, y any) int64 {
+	return bitOpsCast(x) | (1 << bitOpsCast(y))
+}
+
+func (nm *NumberMethods) ShiftLeft(x, y any) int64 {
 	x64, y64 := bitOpsCast(x), bitOpsCast(y)
 	return x64 << (y64 & 0x3f)
 }
 
-func (nm *NumberMethods) ShiftRight(x, y any) any {
+func (nm *NumberMethods) ShiftRight(x, y any) int64 {
 	x64, y64 := bitOpsCast(x), bitOpsCast(y)
 	return x64 >> (y64 & 0x3f)
+}
+
+func (nm *NumberMethods) UnsignedShiftRight(x, y any) int64 {
+	x64, y64 := bitOpsCast(x), bitOpsCast(y)
+	return int64(uint64(x64) >> (y64 & 0x3f))
+}
+
+func (nm *NumberMethods) FlipBit(x, y any) int64 {
+	return bitOpsCast(x) ^ (1 << bitOpsCast(y))
+}
+
+func (nm *NumberMethods) TestBit(x, y any) bool {
+	return bitOpsCast(x)&(1<<bitOpsCast(y)) != 0
 }
 
 func (nm *NumberMethods) Max(x, y any) any {
@@ -152,6 +189,56 @@ func (nm *NumberMethods) Equiv(x, y any) bool {
 	return Ops(x).Combine(Ops(y)).Equiv(x, y)
 }
 
+func (nm *NumberMethods) Floats(x any) []float32 {
+	return x.([]float32)
+}
+
+func (nm *NumberMethods) FloatArray(sizeOrSeq any) []float32 {
+	if IsNumber(sizeOrSeq) {
+		return make([]float32, MustAsInt(sizeOrSeq))
+	}
+	s := Seq(sizeOrSeq)
+	size := Count(s)
+	ret := make([]float32, size)
+	for i := 0; i < len(ret) && s != nil; i, s = i+1, s.Next() {
+		ret[i] = float32(AsFloat64(s.First()))
+	}
+	return ret
+}
+
+func (nm *NumberMethods) FloatArrayInit(size int, init any) []float32 {
+	ret := make([]float32, size)
+	if IsNumber(init) {
+		f := AsFloat64(init)
+		for i := 0; i < size; i++ {
+			ret[i] = float32(f)
+		}
+	} else {
+		s := Seq(init)
+		for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+			ret[i] = float32(AsFloat64(s.First()))
+		}
+	}
+	return ret
+}
+
+func (nm *NumberMethods) Doubles(x any) []float64 {
+	return x.([]float64)
+}
+
+func (nm *NumberMethods) DoubleArray(sizeOrSeq any) []float64 {
+	if IsNumber(sizeOrSeq) {
+		return make([]float64, MustAsInt(sizeOrSeq))
+	}
+	s := Seq(sizeOrSeq)
+	size := Count(s)
+	ret := make([]float64, size)
+	for i := 0; i < len(ret) && s != nil; i, s = i+1, s.Next() {
+		ret[i] = AsFloat64(s.First())
+	}
+	return ret
+}
+
 func (nm *NumberMethods) DoubleArrayInit(size int, init any) []float64 {
 	ret := make([]float64, size)
 	if IsNumber(init) {
@@ -166,6 +253,75 @@ func (nm *NumberMethods) DoubleArrayInit(size int, init any) []float64 {
 		}
 	}
 	return ret
+}
+
+func (nm *NumberMethods) Ints(x any) []int {
+	return x.([]int)
+}
+
+func (nm *NumberMethods) IntArray(sizeOrSeq any) []int {
+	if IsNumber(sizeOrSeq) {
+		return make([]int, MustAsInt(sizeOrSeq))
+	}
+	s := Seq(sizeOrSeq)
+	size := Count(s)
+	ret := make([]int, size)
+	for i := 0; i < len(ret) && s != nil; i, s = i+1, s.Next() {
+		ret[i] = MustAsInt(s.First())
+	}
+	return ret
+}
+
+func (nm *NumberMethods) IntArrayInit(size int, init any) []int {
+	ret := make([]int, size)
+	if IsNumber(init) {
+		n := MustAsInt(init)
+		for i := 0; i < size; i++ {
+			ret[i] = n
+		}
+	} else {
+		s := Seq(init)
+		for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+			ret[i] = MustAsInt(s.First())
+		}
+	}
+	return ret
+}
+
+func (nm *NumberMethods) Chars(x any) []Char {
+	return x.([]Char)
+}
+
+func (nm *NumberMethods) CharArray(sizeOrSeq any) []Char {
+	if IsNumber(sizeOrSeq) {
+		return make([]Char, MustAsInt(sizeOrSeq))
+	}
+	s := Seq(sizeOrSeq)
+	size := Count(s)
+	ret := make([]Char, size)
+	for i := 0; i < len(ret) && s != nil; i, s = i+1, s.Next() {
+		ret[i] = s.First().(Char)
+	}
+	return ret
+}
+
+func (nm *NumberMethods) CharArrayInit(size int, init any) []Char {
+	ret := make([]Char, size)
+	if f, ok := init.(Char); ok {
+		for i := 0; i < size; i++ {
+			ret[i] = f
+		}
+	} else {
+		s := Seq(init)
+		for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+			ret[i] = s.First().(Char)
+		}
+	}
+	return ret
+}
+
+func (nm *NumberMethods) Bytes(x any) []byte {
+	return x.([]byte)
 }
 
 func (nm *NumberMethods) ByteArray(sizeOrSeq any) []byte {
@@ -191,6 +347,103 @@ func (nm *NumberMethods) ByteArrayInit(size int, init any) []byte {
 		s := Seq(init)
 		for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
 			ret[i] = AsByte(s.First())
+		}
+	}
+	return ret
+}
+
+func (nm *NumberMethods) Shorts(x any) []int16 {
+	return x.([]int16)
+}
+
+func (nm *NumberMethods) ShortArray(sizeOrSeq any) []int16 {
+	if IsNumber(sizeOrSeq) {
+		return make([]int16, MustAsInt(sizeOrSeq))
+	}
+	s := Seq(sizeOrSeq)
+	size := Count(sizeOrSeq)
+	ret := make([]int16, size)
+	for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+		ret[i] = int16(AsInt64(s.First()))
+	}
+	return ret
+}
+
+func (nm *NumberMethods) ShortArrayInit(size int, init any) []int16 {
+	ret := make([]int16, size)
+	if b, ok := init.(int16); ok {
+		for i := 0; i < size; i++ {
+			ret[i] = b
+		}
+	} else {
+		s := Seq(init)
+		for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+			ret[i] = int16(AsInt64(s.First()))
+		}
+	}
+	return ret
+}
+
+func (nm *NumberMethods) Longs(x any) []int64 {
+	return x.([]int64)
+}
+
+func (nm *NumberMethods) LongArray(sizeOrSeq any) []int64 {
+	if IsNumber(sizeOrSeq) {
+		return make([]int64, MustAsInt(sizeOrSeq))
+	}
+	s := Seq(sizeOrSeq)
+	size := Count(sizeOrSeq)
+	ret := make([]int64, size)
+	for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+		ret[i] = AsInt64(s.First())
+	}
+	return ret
+}
+
+func (nm *NumberMethods) LongArrayInit(size int, init any) []int64 {
+	ret := make([]int64, size)
+	if IsNumber(init) {
+		n := AsInt64(init)
+		for i := 0; i < size; i++ {
+			ret[i] = n
+		}
+	} else {
+		s := Seq(init)
+		for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+			ret[i] = AsInt64(s.First())
+		}
+	}
+	return ret
+}
+
+func (nm *NumberMethods) Booleans(x any) []bool {
+	return x.([]bool)
+}
+
+func (nm *NumberMethods) BooleanArray(sizeOrSeq any) []bool {
+	if IsNumber(sizeOrSeq) {
+		return make([]bool, MustAsInt(sizeOrSeq))
+	}
+	s := Seq(sizeOrSeq)
+	size := Count(sizeOrSeq)
+	ret := make([]bool, size)
+	for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+		ret[i] = s.First().(bool)
+	}
+	return ret
+}
+
+func (nm *NumberMethods) BooleanArrayInit(size int, init any) []bool {
+	ret := make([]bool, size)
+	if b, ok := init.(bool); ok {
+		for i := 0; i < size; i++ {
+			ret[i] = b
+		}
+	} else {
+		s := Seq(init)
+		for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
+			ret[i] = s.First().(bool)
 		}
 	}
 	return ret
@@ -311,6 +564,10 @@ func AsInt(v any) (int, bool) {
 	case uint16:
 		return int(v), true
 	case uint8:
+		return int(v), true
+	case float32:
+		return int(v), true
+	case float64:
 		return int(v), true
 	case *BigInt:
 		return int(v.val.Int64()), true
@@ -510,6 +767,13 @@ func ByteCast(x any) byte {
 	return byte(l)
 }
 
+func UncheckedByteCast(x any) byte {
+	if b, ok := x.(byte); ok {
+		return b
+	}
+	return byte(AsInt64(x))
+}
+
 func CharCast(x any) Char {
 	if c, ok := x.(Char); ok {
 		return c
@@ -519,6 +783,13 @@ func CharCast(x any) Char {
 		panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for char: %v", x)))
 	}
 	return Char(n)
+}
+
+func UncheckedCharCast(x any) Char {
+	if c, ok := x.(Char); ok {
+		return c
+	}
+	return Char(AsInt64(x))
 }
 
 func ShortCast(x any) int16 {
@@ -532,6 +803,13 @@ func ShortCast(x any) int16 {
 	return int16(v)
 }
 
+func UncheckedShortCast(x any) int16 {
+	if v, ok := x.(int16); ok {
+		return v
+	}
+	return int16(AsInt64(x))
+}
+
 func FloatCast(x any) float32 {
 	if v, ok := x.(float32); ok {
 		return v
@@ -541,6 +819,13 @@ func FloatCast(x any) float32 {
 		panic(fmt.Errorf("value out of range for float32: %v", x))
 	}
 	return float32(v)
+}
+
+func UncheckedFloatCast(x any) float32 {
+	if v, ok := x.(float32); ok {
+		return v
+	}
+	return float32(AsFloat64(x))
 }
 
 type basicIntegral interface {
