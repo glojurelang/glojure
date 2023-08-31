@@ -6,15 +6,15 @@ import (
 	"fmt"
 )
 
-func (m *Map) Conj(x interface{}) Conjer {
+func (m *Map) Cons(x interface{}) Conser {
 	switch x := x.(type) {
 	case *MapEntry:
-		return m.Assoc(x.Key(), x.Val()).(Conjer)
+		return m.Assoc(x.Key(), x.Val()).(Conser)
 	case IPersistentVector:
 		if x.Count() != 2 {
 			panic("vector arg to map conj must be a pair")
 		}
-		return m.Assoc(MustNth(x, 0), MustNth(x, 1)).(Conjer)
+		return m.Assoc(MustNth(x, 0), MustNth(x, 1)).(Conser)
 	}
 
 	var ret Conjer = m

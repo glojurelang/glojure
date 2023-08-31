@@ -1,17 +1,26 @@
 package lang
 
+import (
+	"reflect"
+
+	"github.com/glojurelang/glojure/pkg/murmur3"
+)
+
 // List is a list of values.
 type List struct {
-	meta IPersistentMap
+	meta   IPersistentMap
+	hash   uint32
+	hashEq uint32
 
 	// the empty list is represented by a nil item and a nil next. all
 	// other lists have a non-nil item and a non-nil next.
-	item interface{}
+	item any
 	next *List
 	size int
 }
 
 var (
+	_ ASeq            = (*List)(nil)
 	_ IObj            = (*List)(nil)
 	_ ISeq            = (*List)(nil)
 	_ IPersistentList = (*List)(nil)
@@ -31,11 +40,12 @@ var (
 	_ Counted         = (*EmptyList)(nil)
 	_ IReduce         = (*EmptyList)(nil)
 	_ IReduceInit     = (*EmptyList)(nil)
+	_ IHashEq         = (*EmptyList)(nil)
 )
 
 func (e *EmptyList) xxx_sequential() {}
 
-func (e *EmptyList) Conj(x interface{}) Conjer {
+func (e *EmptyList) Cons(x any) Conser {
 	return NewList(x)
 }
 
@@ -43,7 +53,7 @@ func (e *EmptyList) Count() int {
 	return 0
 }
 
-func (e *EmptyList) Peek() interface{} {
+func (e *EmptyList) Peek() any {
 	return nil
 }
 
@@ -55,7 +65,7 @@ func (e *EmptyList) Seq() ISeq {
 	return nil
 }
 
-func (e *EmptyList) First() interface{} {
+func (e *EmptyList) First() any {
 	return nil
 }
 
@@ -75,22 +85,42 @@ func (e *EmptyList) Empty() IPersistentCollection {
 	return e
 }
 
-func (e *EmptyList) Equal(other interface{}) bool {
+func (e *EmptyList) Equals(other any) bool {
 	if e == other {
 		return true
 	}
-	if _, ok := other.(*EmptyList); ok {
-		return true
+	if _, ok := other.(Sequential); ok {
+		return Seq(other) == nil
+	}
+	t := reflect.TypeOf(other)
+	if t.IsValid() && t.Kind() == reflect.Slice {
+		return Seq(other) == nil
 	}
 	return false
+}
+
+func (e *EmptyList) Equiv(other any) bool {
+	return e.Equals(other)
 }
 
 func (e *EmptyList) Meta() IPersistentMap {
 	return e.meta
 }
 
-func (e *EmptyList) WithMeta(meta IPersistentMap) interface{} {
-	if Equal(e.meta, meta) {
+func (e *EmptyList) Hash() uint32 {
+	return 1
+}
+
+var (
+	emptyHashOrdered = murmur3.HashOrdered(nil, HashEq)
+)
+
+func (e *EmptyList) HashEq() uint32 {
+	return emptyHashOrdered
+}
+
+func (e *EmptyList) WithMeta(meta IPersistentMap) any {
+	if e.meta == meta {
 		return e
 	}
 
@@ -103,11 +133,11 @@ func (e *EmptyList) String() string {
 	return "()"
 }
 
-func (e *EmptyList) Reduce(f IFn) interface{} {
+func (e *EmptyList) Reduce(f IFn) any {
 	return f.Invoke()
 }
 
-func (e *EmptyList) ReduceInit(f IFn, init interface{}) interface{} {
+func (e *EmptyList) ReduceInit(f IFn, init any) any {
 	return init
 }
 
@@ -115,7 +145,7 @@ var emptyList = &EmptyList{}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-func NewList(values ...interface{}) IPersistentList {
+func NewList(values ...any) IPersistentList {
 	if len(values) == 0 {
 		return &EmptyList{}
 	}
@@ -133,7 +163,7 @@ func NewList(values ...interface{}) IPersistentList {
 	return list
 }
 
-func ConsList(item interface{}, next *List) *List {
+func ConsList(item any, next *List) *List {
 	size := 1
 	if next != nil {
 		size += next.size
@@ -147,12 +177,12 @@ func ConsList(item interface{}, next *List) *List {
 
 func (l *List) xxx_sequential() {}
 
-func (l *List) First() interface{} {
+func (l *List) First() any {
 	return l.Item()
 }
 
 // Item returns the data from this list node. AKA car.
-func (l *List) Item() interface{} {
+func (l *List) Item() any {
 	return l.item
 }
 
@@ -189,29 +219,15 @@ func (l *List) Count() int {
 	return l.size
 }
 
-func (l *List) Conj(x interface{}) Conjer {
+func (l *List) Cons(x any) Conser {
 	return ConsList(x, l)
-}
-
-func (l *List) Nth(i int) (v interface{}, ok bool) {
-	if i < 0 {
-		return nil, false
-	}
-	for l != nil {
-		if i == 0 {
-			return l.item, true
-		}
-		i--
-		l = l.next
-	}
-	return nil, false
 }
 
 func (l *List) String() string {
 	return PrintString(l)
 }
 
-func (l *List) Reduce(f IFn) interface{} {
+func (l *List) Reduce(f IFn) any {
 	ret := l.First()
 	for s := l.Next(); s != nil; s = s.Next() {
 		ret = f.Invoke(ret, s.First())
@@ -222,7 +238,7 @@ func (l *List) Reduce(f IFn) interface{} {
 	return ret
 }
 
-func (l *List) ReduceInit(f IFn, init interface{}) interface{} {
+func (l *List) ReduceInit(f IFn, init any) any {
 	ret := f.Invoke(init, l.First())
 	for s := l.Next(); s != nil; s = s.Next() {
 		if IsReduced(ret) {
@@ -236,33 +252,11 @@ func (l *List) ReduceInit(f IFn, init interface{}) interface{} {
 	return ret
 }
 
-// TODO: rename to Equiv
-func (l *List) Equal(v interface{}) bool {
-	// TODO: move to a helper for sequential equality
-	if _, ok := v.(ISeqable); !ok {
-		if _, ok := v.(*List); !ok {
-			return false
-		}
-	}
-	if counter, ok := v.(Counted); ok {
-		if l.Count() != counter.Count() {
-			return false
-		}
-	}
-	seq := Seq(v)
-	for cur := Seq(l); cur != nil; cur, seq = cur.Next(), seq.Next() {
-		if seq == nil || !Equal(cur.First(), seq.First()) {
-			return false
-		}
-	}
-	return seq == nil
-}
-
 func (l *List) Meta() IPersistentMap {
 	return l.meta
 }
 
-func (l *List) WithMeta(meta IPersistentMap) interface{} {
+func (l *List) WithMeta(meta IPersistentMap) any {
 	if Equal(l.meta, meta) {
 		return l
 	}
@@ -272,7 +266,7 @@ func (l *List) WithMeta(meta IPersistentMap) interface{} {
 	return &cpy
 }
 
-func (l *List) Peek() interface{} {
+func (l *List) Peek() any {
 	return l.Item()
 }
 
@@ -281,4 +275,20 @@ func (l *List) Pop() IPersistentStack {
 		return emptyList
 	}
 	return l.next
+}
+
+func (l *List) Equals(other any) bool {
+	return aseqEquals(l, other)
+}
+
+func (l *List) Equiv(other any) bool {
+	return aseqEquiv(l, other)
+}
+
+func (l *List) Hash() uint32 {
+	return aseqHash(&l.hash, l)
+}
+
+func (l *List) HashEq() uint32 {
+	return aseqHashEq(&l.hashEq, l)
 }

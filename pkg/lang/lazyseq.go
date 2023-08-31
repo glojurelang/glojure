@@ -2,6 +2,8 @@ package lang
 
 import (
 	"sync"
+
+	"github.com/glojurelang/glojure/pkg/murmur3"
 )
 
 type LazySeq struct {
@@ -33,7 +35,7 @@ var (
 	_ Counted               = (*LazySeq)(nil)
 	_ Sequential            = (*LazySeq)(nil)
 	_ IPersistentCollection = (*LazySeq)(nil)
-	// IHashEq
+	_ IHashEq               = (*LazySeq)(nil)
 )
 
 func (s *LazySeq) xxx_sequential() {}
@@ -62,12 +64,8 @@ func (s *LazySeq) More() ISeq {
 	return seq.More()
 }
 
-func (s *LazySeq) Cons(x interface{}) ISeq {
+func (s *LazySeq) Cons(x interface{}) Conser {
 	return NewCons(x, s)
-}
-
-func (s *LazySeq) Conj(x interface{}) Conjer {
-	return s.Cons(x).(Conjer)
 }
 
 func (s *LazySeq) Empty() IPersistentCollection {
@@ -142,4 +140,8 @@ func (s *LazySeq) WithMeta(meta IPersistentMap) interface{} {
 	}
 
 	return newLazySeqWithMeta(meta, s.Seq())
+}
+
+func (s *LazySeq) HashEq() uint32 {
+	return murmur3.HashOrdered(s)
 }

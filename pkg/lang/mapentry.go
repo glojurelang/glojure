@@ -2,133 +2,111 @@ package lang
 
 // MapEntry represents a key-value pair in a map.
 type MapEntry struct {
-	key, val interface{}
+	hasheq uint32
+
+	key, val any
 }
 
 var (
-	_ IMapEntry         = (*MapEntry)(nil)
+	_ AMapEntry         = (*MapEntry)(nil)
 	_ IPersistentVector = (*MapEntry)(nil)
-	_ ISeqable          = (*MapEntry)(nil)
+	_ Seqable           = (*MapEntry)(nil)
 )
 
-func NewMapEntry(key, val interface{}) *MapEntry {
+func NewMapEntry(key, val any) *MapEntry {
 	return &MapEntry{key: key, val: val}
 }
 
 func (me *MapEntry) xxx_sequential() {}
 
-func (me *MapEntry) Key() interface{} {
-	if me.key == nil {
-		return nil
-	}
+func (me *MapEntry) Key() any {
 	return me.key
 }
 
-func (me *MapEntry) GetKey() interface{} {
-	return me.Key()
-}
-
-func (me *MapEntry) Val() interface{} {
-	if me.val == nil {
-		return nil
-	}
+func (me *MapEntry) Val() any {
 	return me.val
 }
 
-func (me *MapEntry) GetValue() interface{} {
-	return me.Val()
-}
-
 func (me *MapEntry) Count() int {
-	return 2
+	return amapentryCount(me)
 }
 
-func (me *MapEntry) Length() int {
-	return me.Count()
+func (me *MapEntry) Nth(i int) any {
+	return amapentryNth(me, i)
 }
 
-func (me *MapEntry) Nth(i int) interface{} {
-	switch i {
-	case 0:
-		return me.Key()
-	case 1:
-		return me.Val()
-	default:
-		panic(NewIndexOutOfBoundsError())
-	}
-}
-
-func (me *MapEntry) NthDefault(i int, d interface{}) interface{} {
-	if i >= 0 && i < 2 {
-		return me.Nth(i)
-	}
-	return d
-}
-
-func (me *MapEntry) Peek() interface{} {
-	return me.Val()
+func (me *MapEntry) NthDefault(i int, d any) any {
+	return amapentryNthDefault(me, i, d)
 }
 
 func (me *MapEntry) Pop() IPersistentStack {
-	return NewVector(me.key)
-}
-
-func (me *MapEntry) RSeq() ISeq {
-	return me.asVector().RSeq()
-}
-
-func (me *MapEntry) Assoc(k, v interface{}) Associative {
-	return me.asVector().Assoc(k, v)
-}
-
-func (me *MapEntry) AssocN(i int, o interface{}) IPersistentVector {
-	return me.asVector().AssocN(i, o)
-}
-
-func (me *MapEntry) Cons(o interface{}) IPersistentVector {
-	return me.asVector().Cons(o)
-}
-
-func (me *MapEntry) ContainsKey(k interface{}) bool {
-	return me.asVector().ContainsKey(k)
-}
-
-func (me *MapEntry) EntryAt(k interface{}) IMapEntry {
-	return me.asVector().EntryAt(k)
-}
-
-func (me *MapEntry) Equal(o interface{}) bool {
-	return me.asVector().Equal(o)
+	return amapentryPop(me)
 }
 
 func (me *MapEntry) Seq() ISeq {
-	return me.asVector().Seq()
+	return amapentrySeq(me)
 }
 
-func (me *MapEntry) asVector() *Vector {
-	return NewVector(me.key, me.val)
+func (me *MapEntry) AssocN(i int, o any) IPersistentVector {
+	return amapentryAssocN(me, i, o)
 }
 
-func (me *MapEntry) String() string {
-	return me.asVector().String()
-}
-
-func (me *MapEntry) Conj(v interface{}) Conjer {
-	return me.asVector().Conj(v)
-}
-
-func (me *MapEntry) IsEmpty() bool {
-	return false
+func (me *MapEntry) Cons(o any) IPersistentVector {
+	return amapentryCons(me, o)
 }
 
 func (me *MapEntry) Empty() IPersistentCollection {
-	return nil
+	return amapentryEmpty(me)
 }
 
-func (me *MapEntry) ValAt(k interface{}) interface{} {
-	return me.asVector().ValAt(k)
+func (me *MapEntry) RSeq() ISeq {
+	return apersistentVectorRSeq(me)
 }
 
-func (me *MapEntry) ValAtDefault(k, def interface{}) interface{} {
-	return me.asVector().ValAtDefault(k, def)
+func (me *MapEntry) Assoc(k, v any) Associative {
+	return apersistentVectorAssoc(me, k, v)
+}
+
+func (me *MapEntry) ContainsKey(k any) bool {
+	return apersistentVectorContainsKey(me, k)
+}
+
+func (me *MapEntry) EntryAt(k any) IMapEntry {
+	return apeMapEntryEntryAt(me, k)
+}
+
+func (me *MapEntry) String() string {
+	return apersistentVectorString(me)
+}
+
+func (me *MapEntry) ApplyTo(args ISeq) any {
+	return afnApplyTo(me, args)
+}
+
+func (me *MapEntry) Equiv(o any) bool {
+	return apersistentVectorEquiv(me, o)
+}
+
+func (me *MapEntry) HashEq() uint32 {
+	return apersistentVectorHashEq(&me.hasheq, me)
+}
+
+func (me *MapEntry) Invoke(args ...any) any {
+	return apersistentVectorInvoke(me, args)
+}
+
+func (me *MapEntry) Length() int {
+	return apersistentVectorLength(me)
+}
+
+func (me *MapEntry) Peek() any {
+	return apersistentVectorPeek(me)
+}
+
+func (me *MapEntry) ValAt(key any) any {
+	return apersistentVectorValAt(me, key)
+}
+
+func (me *MapEntry) ValAtDefault(key, notFound any) any {
+	return apersistentVectorValAtDefault(me, key, notFound)
 }

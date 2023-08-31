@@ -52,7 +52,7 @@ func HashOrdered(xs Seq, elHash func(any) uint32) uint32 {
 		hash = 31*hash + eh
 		n++
 	}
-	return mixCollHash(hash, n)
+	return MixCollHash(hash, n)
 }
 
 func HashUnordered(xs Seq, elHash func(any) uint32) uint32 {
@@ -63,10 +63,10 @@ func HashUnordered(xs Seq, elHash func(any) uint32) uint32 {
 		hash += eh
 		n++
 	}
-	return mixCollHash(hash, n)
+	return MixCollHash(hash, n)
 }
 
-func mixCollHash(hash, count uint32) uint32 {
+func MixCollHash(hash, count uint32) uint32 {
 	h1 := uint32(seed)
 	k1 := mixK1(hash)
 	h1 = mixH1(h1, k1)

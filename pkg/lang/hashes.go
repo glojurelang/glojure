@@ -21,6 +21,10 @@ const (
 	reflectValueHashMask = 0x49c791a8
 )
 
+func HashEq(x any) uint32 {
+	return Hash(x)
+}
+
 func Hash(x interface{}) uint32 {
 	if IsNil(x) {
 		return 0

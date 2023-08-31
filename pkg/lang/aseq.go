@@ -97,7 +97,7 @@ func aseqHashEq(hc *uint32, a ASeq) uint32 {
 	if *hc != 0 {
 		return *hc
 	}
-	hash := murmur3.HashOrdered(a)
+	hash := murmur3.HashOrdered(a, HashEq)
 	*hc = hash
 	return hash
 }
