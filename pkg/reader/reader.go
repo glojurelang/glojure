@@ -1012,7 +1012,8 @@ func (r *Reader) readSymbolicValue() (interface{}, error) {
 }
 
 var (
-	numPrefixRegex = regexp.MustCompile(`^[-+]?[0-9]+`)
+	numPrefixRegex = regexp.MustCompile(`^[-+]?([0-9]+|[1-9]+r)`)
+	radixRegex     = regexp.MustCompile(`^[-+]?([1-9]+)r(\d(\d|[a-zA-Z])*N?)$`)
 	intRegex       = regexp.MustCompile(`^[-+]?\d(\d|[a-fA-F])*N?$`)
 	ratioRegex     = regexp.MustCompile(`^[-+]?\d+\/\d+$`)
 	hexRegex       = regexp.MustCompile(`^[-+]?0[xX]([a-fA-F]|\d)*N?$`)
@@ -1043,9 +1044,26 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 		numStr += string(rn)
 	}
 
+	base := 0 // infer from prefix
+	if match := radixRegex.FindStringSubmatch(numStr); match != nil {
+		sign := ""
+		if numStr[0] == '-' || numStr[0] == '+' {
+			sign = string(numStr[0])
+		}
+		radix, err := strconv.Atoi(match[1])
+		if err != nil {
+			return nil, r.error("error parsing radix %s: %w", match[1], err)
+		}
+		if radix > 36 {
+			return nil, r.error("radix out of range: %d", radix)
+		}
+		base = radix
+		numStr = sign + match[2]
+	}
+
 	if intRegex.MatchString(numStr) || hexRegex.MatchString(numStr) {
 		if strings.HasSuffix(numStr, "N") {
-			bi, err := value.NewBigInt(numStr[:len(numStr)-1])
+			bi, err := value.NewBigIntWithBase(numStr[:len(numStr)-1], base)
 			if err != nil {
 				return nil, r.error("invalid big int: %w", err)
 			}
@@ -1053,8 +1071,15 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 			return bi, nil
 		}
 
-		intVal, err := strconv.ParseInt(numStr, 0, 64)
+		intVal, err := strconv.ParseInt(numStr, base, 64)
 		if err != nil {
+			if errors.Is(err, strconv.ErrRange) {
+				bi, err := value.NewBigIntWithBase(numStr, base)
+				if err != nil {
+					return nil, r.error("invalid big int: %w", err)
+				}
+				return bi, nil
+			}
 			return nil, r.error("invalid number: %s", numStr)
 		}
 

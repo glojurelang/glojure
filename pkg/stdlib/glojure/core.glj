@@ -193,7 +193,7 @@
       (if kvs
         (if (next kvs)
           (recur ret (first kvs) (second kvs) (nnext kvs))
-          (throw (errors.New
+          (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError
                   "assoc expects even number of arguments after map/vector, found odd number")))
         ret)))))
 
@@ -292,7 +292,7 @@
         ;; Note: Cannot delegate this check to def because of the call to (with-meta name ..)
         (if (instance? *github.com$glojurelang$glojure$pkg$lang.Symbol name)
           nil
-          (throw (errors.New "First argument to defn must be a symbol")))
+          (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError "First argument to defn must be a symbol")))
         (let [m (if (string? (first fdecl))
                   {:doc (first fdecl)}
                   {})
@@ -577,7 +577,7 @@
       (list 'if (first clauses)
             (if (next clauses)
                 (second clauses)
-                (throw (errors.New
+                (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError
                          "cond requires an even number of forms")))
             (cons 'glojure.core/cond (next (next clauses))))))
 
@@ -593,7 +593,7 @@
       (instance? go/string name) (github.com$glojurelang$glojure$pkg$lang.NewSymbol name)
       (instance? *github.com$glojurelang$glojure$pkg$lang.Var name) (.toSymbol ^*github.com$glojurelang$glojure$pkg$lang.Var name)
       (instance? github.com$glojurelang$glojure$pkg$lang.Keyword name) (.sym ^github.com$glojurelang$glojure$pkg$lang.Keyword name)
-      :else (throw (errors.New "no conversion to symbol"))))
+      :else (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError "no conversion to symbol"))))
   ([ns name] (github.com$glojurelang$glojure$pkg$lang.InternSymbol ns name)))
 
 (defn gensym
@@ -1132,10 +1132,10 @@
   If a is a double and ##Inf or ##-Inf => ##Inf
   If a is a double and ##NaN => ##NaN"
    :inline-arities #{1}
-   :inline (fn [a] `(glojure.lang.Numbers/abs ~a))
+   :inline (fn [a] `(github.com$glojurelang$glojure$pkg$lang.Abs ~a))
    :added "1.11"}
   [a]
-  (glojure.lang.Numbers/abs a))
+  (github.com$glojurelang$glojure$pkg$lang.Abs a))
 
 (defn dec'
   "Returns a number one less than num. Supports arbitrary precision.
@@ -1384,7 +1384,7 @@
    :static true}
    [n] (if (integer? n)
         (zero? (bit-and (github.com$glojurelang$glojure$pkg$lang.AsInt64 n) 1))
-        (throw (errors.New (str "Argument must be an integer: " n)))))
+        (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Argument must be an integer: " n)))))
 
 (defn odd?
   "Returns true if n is odd, throws an exception if n is not an integer"
@@ -1712,7 +1712,7 @@
   [options & valid-keys]
   (when (seq (apply disj (apply hash-set (keys options)) valid-keys))
     (throw
-      (errors.New
+      (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError
         (apply str "Only these options are valid: "
           (first valid-keys)
           (map #(str ", " %) (rest valid-keys)))))))
@@ -1830,7 +1830,7 @@
 (defmacro ^{:private true} assert-args
   [& pairs]
   `(do (when-not ~(first pairs)
-         (throw (errors.New
+         (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError
                   (str (first ~'&form) " requires " ~(second pairs) " in " ~'*ns* ":" (:line (meta ~'&form))))))
      ~(let [more (nnext pairs)]
         (when more
@@ -3469,7 +3469,7 @@
   "Coerce to float"
   {:inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$runtime.RT (~(if *unchecked-math* 'uncheckedFloatCast 'floatCast) ~x)))
    :added "1.0"}
-  [x] (glojure.lang.RT/floatCast x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.FloatCast x))
 
 (defn double
   "Coerce to double"
@@ -3481,7 +3481,7 @@
   "Coerce to short"
   {:inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$runtime.RT (~(if *unchecked-math* 'uncheckedShortCast 'shortCast) ~x)))
    :added "1.0"}
-  [x] (glojure.lang.RT/shortCast x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.ShortCast x))
 
 (defn byte
   "Coerce to byte"
@@ -3517,7 +3517,7 @@
   "Coerce to int. Subject to rounding or truncation."
   {:inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$runtime.RT (UncheckedIntCast ~x)))
    :added "1.3"}
-  [x] (glojure.lang.RT/uncheckedIntCast x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.MustAsInt x))
 
 (defn unchecked-long
   "Coerce to long. Subject to rounding or truncation."
@@ -3543,7 +3543,7 @@
   {:added "1.0"
    :static true}
   [x]
-  (instance? Number x))
+  (github.com$glojurelang$glojure$pkg$lang.IsNumber x))
 
 (defn mod
   "Modulus of num and div. Truncates toward negative infinity."
@@ -3609,7 +3609,7 @@
        (decimal? x) (bigint (.toBigInteger ^*github.com$glojurelang$glojure$pkg$lang.BigDecimal x))
        (float? x)  (bigint (. *github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x)))
        (ratio? x) (bigint (.bigIntegerValue ^*github.com$glojurelang$glojure$pkg$lang.Ratio x))
-       (number? x) (glojure.lang.BigInt/valueOf (long x))
+       (number? x) (github.com$glojurelang$glojure$pkg$lang.NewBigIntFromInt64 (long x))
        :else (bigint (BigInteger. x))))
 
 (defn biginteger
@@ -3623,7 +3623,7 @@
        (decimal? x) (.toBigInteger ^*github.com$glojurelang$glojure$pkg$lang.BigDecimal x)
        (float? x) (.toBigInteger (. *github.com$glojurelang$glojure$pkg$lang.BigDecimal valueOf (double x)))
        (ratio? x) (.bigIntegerValue ^*github.com$glojurelang$glojure$pkg$lang.Ratio x)
-       (number? x) (BigInteger/valueOf (long x))
+       (number? x) (math$big.NewInt (long x))
        :else (BigInteger. x)))
 
 (defn bigdec
@@ -3828,7 +3828,7 @@
                                 (with-open ~(subvec bindings 2) ~@body)
                                 (finally
                                   (. ~(bindings 0) close))))
-    :else (throw (errors.New
+    :else (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError
                    "with-open only allows Symbols in bindings"))))
 
 (defmacro doto
@@ -4365,7 +4365,7 @@
   ([& keyvals]
      (let [ary (to-array keyvals)]
        (if (odd? (alength ary))
-         (throw (errors.New (str "No value supplied for key: " (last keyvals))))
+         (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "No value supplied for key: " (last keyvals))))
          (github.com$glojurelang$glojure$pkg$lang.NewPersistentArrayMapAsIfByAssoc ary)))))
 
 (defn seq-to-map-for-destructuring
@@ -4530,7 +4530,7 @@
                  (if (seq? (first sigs))
                    sigs
                    ;; Assume single arity syntax
-                   (throw (errors.New 
+                   (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError 
                             (if (seq sigs)
                               (str "Parameter declaration " 
                                    (first sigs)
@@ -4539,12 +4539,12 @@
           psig (fn* [sig]
                  ;; Ensure correct type before destructuring sig
                  (when (not (seq? sig))
-                   (throw (errors.New
+                   (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError
                             (str "Invalid signature " sig
                                  " should be a list"))))
                  (let [[params & body] sig
                        _ (when (not (vector? params))
-                           (throw (errors.New 
+                           (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError 
                                     (if (seq? (first sigs))
                                       (str "Parameter declaration " params
                                            " should be a vector")
@@ -4645,7 +4645,7 @@
                                 (conj (pop groups) (conj (peek groups) [k v]))
                                 (conj groups [k v])))
                             [] (partition 2 seq-exprs)))
-        err (fn [& msg] (throw (errors.New ^go/string (apply str msg))))
+        err (fn [& msg] (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError ^go/string (apply str msg))))
         emit-bind (fn emit-bind [[[bind expr & mod-pairs]
                                   & [[_ next-expr] :as next-groups]]]
                     (let [giter (gensym "iter__")
@@ -5171,7 +5171,7 @@
 
   {:added "1.0"
    :static true}
-  [x] (. glojure.lang.Util (hasheq x)))
+  [x] (github.com$glojurelang$glojure$pkg$lang.Hash x))
 
 
 (defn mix-collection-hash
@@ -5471,7 +5471,7 @@
                   (instance? java.lang.Enum ev)
                   (.visitEnum av name (descriptor (class ev)) (str ev))
                   (class? ev) (.visit av name (glojure.asm.Type/getType ev))
-                  :else (throw (errors.New 
+                  :else (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError 
                                 (str "Unsupported annotation value: " v " of class " (class ev))))))
    (seq? v) (let [[nested nv] v
                   c (resolve nested)
@@ -6095,7 +6095,7 @@ fails, attempts to require sym's namespace and retries."
     (or (resolve sym)
         (do (-> sym namespace symbol serialized-require)
             (resolve sym)))
-    (throw (errors.New (str "Not a qualified symbol: " sym)))))
+    (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Not a qualified symbol: " sym)))))
 
 (defn use
   "Like 'require, but also refers to each lib's namespace using
@@ -6395,7 +6395,7 @@ fails, attempts to require sym's namespace and retries."
                        (split-at (if (= :>> (second args)) 3 2) args)
                        n (count clause)]
                  (cond
-                  (= 0 n) `(throw (errors.New (str "No matching clause: " ~expr)))
+                  (= 0 n) `(throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "No matching clause: " ~expr)))
                   (= 1 n) a
                   (= 2 n) `(if (~pred ~a ~expr)
                              ~b
@@ -6749,13 +6749,13 @@ fails, attempts to require sym's namespace and retries."
   (let [ge (with-meta (gensym) {:tag github.com$glojurelang$glojure$pkg$lang.Object})
         default (if (odd? (count clauses)) 
                   (last clauses)
-                  `(throw (errors.New (str "No matching clause: " ~ge))))]
+                  `(throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "No matching clause: " ~ge))))]
     (if (> 2 (count clauses))
       `(let [~ge ~e] ~default)
       (let [pairs (partition 2 clauses)
             assoc-test (fn assoc-test [m test expr]
                          (if (contains? m test)
-                           (throw (errors.New (str "Duplicate case test constant: " test)))
+                           (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Duplicate case test constant: " test)))
                            (assoc m test expr)))
             pairs (reduce1
                        (fn [m [test expr]]
@@ -7474,12 +7474,12 @@ fails, attempts to require sym's namespace and retries."
 (defn- ^{:dynamic true} assert-valid-fdecl
   "A good fdecl looks like (([a] ...) ([a b] ...)) near the end of defn."
   [fdecl]
-  (when (empty? fdecl) (throw (errors.New
+  (when (empty? fdecl) (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError
                                 "Parameter declaration missing")))
   (let [argdecls (map 
                    #(if (seq? %)
                       (first %)
-                      (throw (errors.New 
+                      (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError 
                         (if (seq? (first fdecl))
                           (str "Invalid signature \""
                                %
@@ -7490,7 +7490,7 @@ fails, attempts to require sym's namespace and retries."
                    fdecl)
         bad-args (seq (remove #(vector? %) argdecls))]
     (when bad-args
-      (throw (errors.New (str "Parameter declaration \"" (first bad-args) 
+      (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Parameter declaration \"" (first bad-args) 
                                              "\" should be a vector"))))))
 
 (defn with-redefs-fn
@@ -7933,7 +7933,7 @@ fails, attempts to require sym's namespace and retries."
     (try
       (Long/valueOf s)
       (catch NumberFormatException _ nil))
-    (throw (errors.New (parsing-err s)))))
+    (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (parsing-err s)))))
 
 (defn parse-double
   {:doc "Parse string with floating point components and return a Double value,
@@ -7946,7 +7946,7 @@ fails, attempts to require sym's namespace and retries."
     (try
       (Double/valueOf s)
       (catch NumberFormatException _ nil))
-    (throw (errors.New (parsing-err s)))))
+    (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (parsing-err s)))))
 
 (defn parse-uuid
   {:doc "Parse a string representing a UUID and return a java.util.UUID instance,
@@ -7968,16 +7968,16 @@ fails, attempts to require sym's namespace and retries."
       "true" true
       "false" false
       nil)
-    (throw (errors.New (parsing-err s)))))
+    (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (parsing-err s)))))
 
 (defn NaN?
   {:doc "Returns true if num is NaN, else false"
    :inline-arities #{1}
-   :inline (fn [num] `(Double/isNaN ~num))
+   :inline (fn [num] `(math.IsNaN ~num))
    :added "1.11"}
 
   [^double num]
-  (Double/isNaN num))
+  (math.IsNaN num))
 
 (defn infinite?
   {:doc "Returns true if num is negative or positive infinity, else false"

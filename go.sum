@@ -1,3 +1,5 @@
+bitbucket.org/pcastools/hash v1.0.5 h1:Z26b2PcLdC64C07KbGkxZRYOyvkEmxOc8o+wCQ2Bmo8=
+bitbucket.org/pcastools/hash v1.0.5/go.mod h1:PwZDvsw1oSN5uo9+r3ztepeAPUekYPBaaxh0pmUaXDo=
 github.com/chzyer/logex v1.2.1 h1:XHDu3E6q+gdHgsdTPH6ImJMIp436vR6MPtH8gP05QzM=
 github.com/chzyer/logex v1.2.1/go.mod h1:JLbx6lG2kDbNRFnfkgvh4eRJRPX1QCoOIWomwysCBrQ=
 github.com/chzyer/readline v1.5.1 h1:upd/6fQk4src78LMRzh5vItIt361/o4uq553V8B5sGI=

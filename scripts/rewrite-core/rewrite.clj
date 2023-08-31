@@ -100,6 +100,7 @@
    (sexpr-replace 'Float/POSITIVE_INFINITY '(go/float32 (math.Inf 1)))
    (sexpr-replace 'Float/NEGATIVE_INFINITY '(go/float32 (math.Inf -1)))
    (sexpr-replace '.isNaN 'math.IsNaN)
+   (sexpr-replace 'Double/isNaN 'math.IsNaN)
 
    ;; Range
    (sexpr-replace '(clojure.lang.LongRange/create end)
@@ -197,7 +198,7 @@
 
 
    ;;;; Exceptions
-   (sexpr-replace 'IllegalArgumentException. 'errors.New)
+   (sexpr-replace 'IllegalArgumentException. 'github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError)
    ;; new Exception
    [(fn select [zloc] (and (z/list? zloc)
                            (let [expr (z/sexpr zloc)]
@@ -306,7 +307,10 @@
    (sexpr-replace '(. clojure.lang.Agent shutdown) '(github.com$glojurelang$glojure$pkg$lang.ShutdownAgents))
    (sexpr-replace 'clojure.lang.Agent '*github.com$glojurelang$glojure$pkg$lang.Agent)
 
+   ;; TODO: these should likely be different
    (sexpr-replace 'clojure.lang.Util/hash 'github.com$glojurelang$glojure$pkg$lang.Hash)
+   (sexpr-replace '(. clojure.lang.Util (hasheq x))
+                  '(github.com$glojurelang$glojure$pkg$lang.Hash x))
 
    (sexpr-replace 'System/identityHashCode 'github.com$glojurelang$glojure$pkg$lang.IdentityHash)
 
@@ -327,6 +331,10 @@
 
    (sexpr-replace 'BigInteger '*math$big.Int)
    (sexpr-replace 'BigDecimal '*github.com$glojurelang$glojure$pkg$lang.BigDecimal)
+   (sexpr-replace 'clojure.lang.BigInt/valueOf
+                  'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromInt64)
+   (sexpr-replace '(BigInteger/valueOf (long x))
+                  '(math$big.NewInt (long x)))
 
    (sexpr-replace '.equals '.Equal)
 
@@ -492,7 +500,9 @@
 
    (sexpr-replace 'clojure.lang.RT/longCast 'github.com$glojurelang$glojure$pkg$lang.AsInt64)
    (sexpr-replace 'clojure.lang.RT/byteCast 'github.com$glojurelang$glojure$pkg$lang.ByteCast)
+   (sexpr-replace 'clojure.lang.RT/shortCast 'github.com$glojurelang$glojure$pkg$lang.ShortCast)
    (sexpr-replace 'clojure.lang.RT/doubleCast 'github.com$glojurelang$glojure$pkg$lang.AsFloat64)
+   (sexpr-replace 'clojure.lang.RT/floatCast 'github.com$glojurelang$glojure$pkg$lang.FloatCast)
 
    (sexpr-replace "clojure.core" "glojure.core")
    (sexpr-replace 'clojure.core/name 'glojure.core/name)
@@ -519,7 +529,10 @@
 
 
    (sexpr-replace '(clojure.lang.RT/booleanCast x) '(. github.com$glojurelang$glojure$pkg$runtime.RT (BooleanCast x)))
+   ;; TODO: meet unchecked behavior?
    (sexpr-replace 'clojure.lang.RT/uncheckedLongCast 'github.com$glojurelang$glojure$pkg$lang.AsInt64)
+   (sexpr-replace 'clojure.lang.RT/uncheckedIntCast
+                  'github.com$glojurelang$glojure$pkg$lang.MustAsInt)
 
    [(fn select [zloc] (try
                         (and (symbol? (z/sexpr zloc))
@@ -532,6 +545,7 @@
                                   (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
    (sexpr-replace 'clojure.lang.Numbers 'github.com$glojurelang$glojure$pkg$lang.Numbers)
    (sexpr-replace '(cast Number x) '(github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
+   (sexpr-replace '(instance? Number x) '(github.com$glojurelang$glojure$pkg$lang.IsNumber x))
 
    (sexpr-replace '(. clojure.lang.Numbers (minus x))
                   '(* -1 x)) ;; TODO: unary minus
@@ -539,6 +553,8 @@
                   '(* -1 x)) ;; TODO: promoting ops
    (sexpr-replace 'clojure.lang.Numbers/isZero
                   'github.com$glojurelang$glojure$pkg$lang.IsZero)
+   (sexpr-replace 'clojure.lang.Numbers/abs
+                  'github.com$glojurelang$glojure$pkg$lang.Abs)
 
    (sexpr-replace 'Unchecked_add 'UncheckedAdd)
    (sexpr-replace 'Unchecked_dec 'UncheckedDec)

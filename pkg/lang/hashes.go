@@ -7,6 +7,8 @@ import (
 	"hash/fnv"
 	"reflect"
 	"unsafe"
+
+	hash2 "bitbucket.org/pcastools/hash"
 )
 
 const (
@@ -23,6 +25,10 @@ func Hash(x interface{}) uint32 {
 		return 0
 	}
 
+	if IsNumber(x) {
+		return hashNumber(x)
+	}
+
 	switch x := x.(type) {
 	case Hasher:
 		return x.Hash()
@@ -30,14 +36,6 @@ func Hash(x interface{}) uint32 {
 		h := fnv.New32a()
 		h.Write([]byte(x))
 		return h.Sum32()
-	case int64:
-		h := fnv.New32a()
-		b := make([]byte, 8)
-		binary.LittleEndian.PutUint64(b, uint64(x))
-		h.Write(b)
-		return h.Sum32()
-	case int:
-		return Hash(int64(x))
 	case reflect.Type:
 		h := getHash()
 		h.Write([]byte(x.String()))
@@ -101,4 +99,43 @@ func hashPtr(ptr uintptr) uint32 {
 	}
 	h.Write(b)
 	return h.Sum32()
+}
+
+func hashNumber(x any) uint32 {
+	switch x := x.(type) {
+	case int64:
+		return hash2.Int64(x)
+	case int:
+		return hash2.Int64(int64(x))
+	case int32:
+		return hash2.Int64(int64(x))
+	case int16:
+		return hash2.Int64(int64(x))
+	case int8:
+		return hash2.Int64(int64(x))
+	case uint64:
+		return hash2.Uint64(x)
+	case uint:
+		return hash2.Uint64(uint64(x))
+	case uint32:
+		return hash2.Uint64(uint64(x))
+	case uint16:
+		return hash2.Uint64(uint64(x))
+	case uint8:
+		return hash2.Uint64(uint64(x))
+	case float64:
+		if x == 0 {
+			return 0
+		}
+		return hash2.Float64(x)
+	case float32:
+		if x == 0 {
+			return 0
+		}
+		return hash2.Float32(x)
+	case Hasher:
+		return x.Hash()
+	}
+
+	panic(fmt.Sprintf("hashNumber(%v [%T]) not implemented", x, x))
 }

@@ -3,7 +3,9 @@ package lang
 import (
 	"fmt"
 	"math"
+	"math/big"
 	"reflect"
+	"unicode/utf8"
 )
 
 var (
@@ -14,35 +16,39 @@ var (
 // class' static methods.
 type NumberMethods struct{}
 
-func (nm *NumberMethods) UncheckedAdd(x, y interface{}) interface{} {
+func (nm *NumberMethods) UncheckedAdd(x, y any) any {
 	return Ops(x).Combine(Ops(y)).UncheckedAdd(x, y)
 }
 
-func (nm *NumberMethods) UncheckedDec(x interface{}) interface{} {
+func (nm *NumberMethods) UncheckedDec(x any) any {
 	return Ops(x).UncheckedDec(x)
 }
 
-func (nm *NumberMethods) UncheckedIntDivide(x, y int) interface{} {
+func (nm *NumberMethods) UncheckedIntDivide(x, y int) any {
 	return x / y
 }
 
-func (nm *NumberMethods) Add(x, y interface{}) interface{} {
+func (nm *NumberMethods) Add(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Add(x, y)
 }
 
-func (nm *NumberMethods) AddP(x, y interface{}) interface{} {
+func (nm *NumberMethods) AddP(x, y any) any {
 	return Ops(x).Combine(Ops(y)).AddP(x, y)
 }
 
-func (nm *NumberMethods) Minus(x, y interface{}) interface{} {
+func (nm *NumberMethods) Minus(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Sub(x, y)
 }
 
-func (nm *NumberMethods) Multiply(x, y interface{}) interface{} {
+func (nm *NumberMethods) Multiply(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Multiply(x, y)
 }
 
-func (nm *NumberMethods) Divide(x, y interface{}) interface{} {
+func (nm *NumberMethods) MultiplyP(x, y any) any {
+	return Ops(x).Combine(Ops(y)).MultiplyP(x, y)
+}
+
+func (nm *NumberMethods) Divide(x, y any) any {
 	if isNaN(x) {
 		return x
 	} else if isNaN(y) {
@@ -50,12 +56,20 @@ func (nm *NumberMethods) Divide(x, y interface{}) interface{} {
 	}
 	yops := Ops(y)
 	if yops.IsZero(y) {
-		panic("divide by zero")
+		panic(NewArithmeticError("divide by zero"))
 	}
 	return Ops(x).Combine(yops).Divide(x, y)
 }
 
-func (nm *NumberMethods) Remainder(x, y interface{}) interface{} {
+func (nm *NumberMethods) Quotient(x, y any) any {
+	yops := Ops(y)
+	if yops.IsZero(y) {
+		panic(NewArithmeticError("divide by zero"))
+	}
+	return Ops(x).Combine(yops).Quotient(x, y)
+}
+
+func (nm *NumberMethods) Remainder(x, y any) any {
 	if isNaN(x) {
 		return x
 	} else if isNaN(y) {
@@ -68,77 +82,77 @@ func (nm *NumberMethods) Remainder(x, y interface{}) interface{} {
 	return Ops(x).Combine(yops).Remainder(x, y)
 }
 
-func (nm *NumberMethods) And(x, y interface{}) interface{} {
+func (nm *NumberMethods) And(x, y any) any {
 	return bitOpsCast(x) & bitOpsCast(y)
 }
 
-func IsZero(x interface{}) bool {
+func IsZero(x any) bool {
 	return Ops(x).IsZero(x)
 }
 
-func (nm *NumberMethods) IsZero(x interface{}) bool {
+func (nm *NumberMethods) IsZero(x any) bool {
 	return IsZero(x)
 }
 
-func (nm *NumberMethods) IsPos(x interface{}) bool {
+func (nm *NumberMethods) IsPos(x any) bool {
 	return Ops(x).IsPos(x)
 }
 
-func (nm *NumberMethods) IsNeg(x interface{}) bool {
+func (nm *NumberMethods) IsNeg(x any) bool {
 	return Ops(x).IsNeg(x)
 }
 
-func (nm *NumberMethods) Inc(v interface{}) interface{} {
+func (nm *NumberMethods) Inc(v any) any {
 	return nm.Add(v, 1)
 }
 
-func (nm *NumberMethods) Unchecked_inc(v interface{}) interface{} {
+func (nm *NumberMethods) Unchecked_inc(v any) any {
 	return nm.Inc(v)
 }
 
-func (nm *NumberMethods) Dec(x interface{}) interface{} {
+func (nm *NumberMethods) Dec(x any) any {
 	return nm.Add(x, -1)
 }
 
-func (nm *NumberMethods) ShiftLeft(x, y interface{}) interface{} {
+func (nm *NumberMethods) ShiftLeft(x, y any) any {
 	x64, y64 := bitOpsCast(x), bitOpsCast(y)
-	return x64 << y64
+	return x64 << (y64 & 0x3f)
 }
 
-func (nm *NumberMethods) ShiftRight(x, y interface{}) interface{} {
+func (nm *NumberMethods) ShiftRight(x, y any) any {
 	x64, y64 := bitOpsCast(x), bitOpsCast(y)
-	return x64 >> y64
+	return x64 >> (y64 & 0x3f)
 }
 
-func (nm *NumberMethods) Max(x, y interface{}) interface{} {
+func (nm *NumberMethods) Max(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Max(x, y)
 }
 
-func (nm *NumberMethods) Min(x, y interface{}) interface{} {
+func (nm *NumberMethods) Min(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Min(x, y)
 }
 
-func (nm *NumberMethods) Lt(x, y interface{}) bool {
+func (nm *NumberMethods) Lt(x, y any) bool {
 	return Ops(x).Combine(Ops(y)).LT(x, y)
 }
 
-func (nm *NumberMethods) Gt(x, y interface{}) bool {
+func (nm *NumberMethods) Gt(x, y any) bool {
 	return Ops(x).Combine(Ops(y)).GT(x, y)
 }
 
-func (nm *NumberMethods) Lte(x, y interface{}) bool {
+func (nm *NumberMethods) Lte(x, y any) bool {
 	return Ops(x).Combine(Ops(y)).LTE(x, y)
 }
 
-func (nm *NumberMethods) Gte(x, y interface{}) bool {
+func (nm *NumberMethods) Gte(x, y any) bool {
 	return Ops(x).Combine(Ops(y)).GTE(x, y)
 }
 
-func (nm *NumberMethods) Equiv(x, y interface{}) bool {
+func (nm *NumberMethods) Equiv(x, y any) bool {
 	return Ops(x).Combine(Ops(y)).Equiv(x, y)
 }
 
-func (nm *NumberMethods) DoubleArrayInit(size int, init interface{}) []float64 {
+func (nm *NumberMethods) DoubleArrayInit(size int, init any) []float64 {
 	ret := make([]float64, size)
 	if IsNumber(init) {
 		f := AsFloat64(init)
@@ -154,7 +168,7 @@ func (nm *NumberMethods) DoubleArrayInit(size int, init interface{}) []float64 {
 	return ret
 }
 
-func (nm *NumberMethods) ByteArray(sizeOrSeq interface{}) []byte {
+func (nm *NumberMethods) ByteArray(sizeOrSeq any) []byte {
 	if IsNumber(sizeOrSeq) {
 		return make([]byte, MustAsInt(sizeOrSeq))
 	}
@@ -167,7 +181,7 @@ func (nm *NumberMethods) ByteArray(sizeOrSeq interface{}) []byte {
 	return ret
 }
 
-func (nm *NumberMethods) ByteArrayInit(size int, init interface{}) []byte {
+func (nm *NumberMethods) ByteArrayInit(size int, init any) []byte {
 	ret := make([]byte, size)
 	if b, ok := init.(byte); ok {
 		for i := 0; i < size; i++ {
@@ -182,7 +196,11 @@ func (nm *NumberMethods) ByteArrayInit(size int, init interface{}) []byte {
 	return ret
 }
 
-func bitOpsCast(x interface{}) int64 {
+func Abs(x any) any {
+	return Ops(x).Abs(x)
+}
+
+func bitOpsCast(x any) int64 {
 	switch x := x.(type) {
 	case int:
 		return int64(x)
@@ -208,8 +226,10 @@ func bitOpsCast(x interface{}) int64 {
 		return int64(x)
 	case float64:
 		return int64(x)
+	case *BigInt:
+		return x.val.Int64()
 	default:
-		panic("cannot convert to int64")
+		panic(fmt.Errorf("cannot convert %T to int64", x))
 	}
 }
 
@@ -260,7 +280,7 @@ func AsNumber(v any) (any, bool) {
 	}
 }
 
-func MustAsInt(v interface{}) int {
+func MustAsInt(v any) int {
 	res, ok := AsInt(v)
 	if !ok {
 		panic(fmt.Errorf("cannot convert %T to int", v))
@@ -270,7 +290,7 @@ func MustAsInt(v interface{}) int {
 
 // AsInt returns any integral value as an int. If the value cannot be
 // represented as an int, it returns false. Floats are not converted.
-func AsInt(v interface{}) (int, bool) {
+func AsInt(v any) (int, bool) {
 	switch v := v.(type) {
 	case int:
 		return v, true
@@ -294,12 +314,14 @@ func AsInt(v interface{}) (int, bool) {
 		return int(v), true
 	case *BigInt:
 		return int(v.val.Int64()), true
+	case Char:
+		return int(v), true
 	default:
 		return 0, false
 	}
 }
 
-func AsFloat64(x interface{}) float64 {
+func AsFloat64(x any) float64 {
 	switch x := x.(type) {
 	case int:
 		return float64(x)
@@ -328,8 +350,17 @@ func AsFloat64(x interface{}) float64 {
 	case *Ratio:
 		f, _ := x.val.Float64()
 		return f
+	case *BigInt:
+		// TODO: newer go versions have Int.Float64()
+		return float64(x.val.Int64())
+	case *big.Int:
+		// TODO: newer go versions have Int.Float64()
+		return float64(x.Int64())
+	case *BigDecimal:
+		f, _ := x.val.Float64()
+		return f
 	default:
-		panic("cannot convert to float64")
+		panic(fmt.Errorf("cannot convert %T to float64", x))
 	}
 }
 
@@ -337,7 +368,7 @@ var (
 	byteType = reflect.TypeOf(byte(0))
 )
 
-func AsByte(x interface{}) byte {
+func AsByte(x any) byte {
 	switch x := x.(type) {
 	case int:
 		return byte(x)
@@ -369,14 +400,14 @@ func AsByte(x interface{}) byte {
 	}
 }
 
-func IsInteger(v interface{}) bool {
+func IsInteger(v any) bool {
 	_, ok := AsInt(v)
 	return ok
 }
 
 // Inc increments a number value by one. If the value is not a number,
 // it returns an error.
-func Inc(v interface{}) interface{} {
+func Inc(v any) any {
 	switch v := v.(type) {
 	case int:
 		return v + 1
@@ -414,7 +445,7 @@ func Inc(v interface{}) interface{} {
 // IncP increments a number value by one. If incrementing would
 // overflow, it promotes the value to a wider type, or BigInt. If the
 // value is not a number, it returns an error.
-func IncP(v interface{}) interface{} {
+func IncP(v any) any {
 	switch v := v.(type) {
 	case int:
 		return incP(v)
@@ -449,7 +480,7 @@ func IncP(v interface{}) interface{} {
 	}
 }
 
-func IsNumber(x interface{}) bool {
+func IsNumber(x any) bool {
 	switch x.(type) {
 	case int, int64, int32, int16, int8,
 		uint, uint64, uint32, uint16, uint8,
@@ -461,14 +492,14 @@ func IsNumber(x interface{}) bool {
 	}
 }
 
-func BooleanCast(x interface{}) bool {
+func BooleanCast(x any) bool {
 	if b, ok := x.(bool); ok {
 		return b
 	}
 	return !IsNil(x)
 }
 
-func ByteCast(x interface{}) byte {
+func ByteCast(x any) byte {
 	if b, ok := x.(byte); ok {
 		return b
 	}
@@ -479,11 +510,44 @@ func ByteCast(x interface{}) byte {
 	return byte(l)
 }
 
+func CharCast(x any) Char {
+	if c, ok := x.(Char); ok {
+		return c
+	}
+	n := AsInt64(x)
+	if n < 0 || n > utf8.MaxRune {
+		panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for char: %v", x)))
+	}
+	return Char(n)
+}
+
+func ShortCast(x any) int16 {
+	if v, ok := x.(int16); ok {
+		return v
+	}
+	v := AsInt64(x)
+	if v < math.MinInt16 || v > math.MaxInt16 {
+		panic(fmt.Errorf("value out of range for int16: %v", x))
+	}
+	return int16(v)
+}
+
+func FloatCast(x any) float32 {
+	if v, ok := x.(float32); ok {
+		return v
+	}
+	v := AsFloat64(x)
+	if v < -math.MaxFloat32 || v > math.MaxFloat32 {
+		panic(fmt.Errorf("value out of range for float32: %v", x))
+	}
+	return float32(v)
+}
+
 type basicIntegral interface {
 	int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64
 }
 
-func incP[T basicIntegral](x T) interface{} {
+func incP[T basicIntegral](x T) any {
 	res := x + 1
 	if res < x {
 		return NewBigIntFromInt64(int64(x)).AddInt(1)
@@ -491,7 +555,7 @@ func incP[T basicIntegral](x T) interface{} {
 	return res
 }
 
-func isNaN(x interface{}) bool {
+func isNaN(x any) bool {
 	switch x := x.(type) {
 	case float32:
 		return math.IsNaN(float64(x))

@@ -78,6 +78,10 @@ func (rt *RTMethods) ByteCast(x interface{}) byte {
 	return value.ByteCast(x)
 }
 
+func (rt *RTMethods) CharCast(x interface{}) Char {
+	return value.CharCast(x)
+}
+
 func (rt *RTMethods) Dissoc(x interface{}, k interface{}) interface{} {
 	return Dissoc(x, k)
 }

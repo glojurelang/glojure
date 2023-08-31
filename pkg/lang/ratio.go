@@ -21,6 +21,14 @@ func NewRatioBigInt(num, den *BigInt) *Ratio {
 	}
 }
 
+func (r *Ratio) Numerator() *BigInt {
+	return NewBigIntFromGoBigInt(r.val.Num())
+}
+
+func (r *Ratio) Denominator() *BigInt {
+	return NewBigIntFromGoBigInt(r.val.Denom())
+}
+
 func (r *Ratio) String() string {
 	return r.val.RatString()
 }
@@ -59,6 +67,14 @@ func (r *Ratio) Multiply(other *Ratio) *Ratio {
 }
 
 func (r *Ratio) Divide(other *Ratio) *Ratio {
+	// TODO: verify
+	return &Ratio{
+		val: new(big.Rat).Quo(r.val, other.val),
+	}
+}
+
+func (r *Ratio) Quotient(other *Ratio) *Ratio {
+	// TODO: verify
 	return &Ratio{
 		val: new(big.Rat).Quo(r.val, other.val),
 	}
@@ -82,4 +98,13 @@ func (r *Ratio) GT(other *Ratio) bool {
 
 func (r *Ratio) GTE(other *Ratio) bool {
 	return r.Cmp(other) >= 0
+}
+
+func (r *Ratio) Abs() *Ratio {
+	if r.val.Sign() < 0 {
+		return &Ratio{
+			val: new(big.Rat).Abs(r.val),
+		}
+	}
+	return r
 }

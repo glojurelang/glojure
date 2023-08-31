@@ -74,7 +74,7 @@
                                  (.replaceAll (re-matcher ^Pattern match s)
                                               (github.com$glojurelang$glojure$pkg$lang.ToString ^CharSequence replacement))
                                  (replace-by s match replacement))
-     :else (throw (errors.New (str "Invalid match arg: " match))))))
+     :else (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Invalid match arg: " match))))))
 
 (defn- replace-first-by
   [^CharSequence s ^Pattern re f]
@@ -142,7 +142,7 @@
        (.replaceFirst (re-matcher ^Pattern match s)
                       (github.com$glojurelang$glojure$pkg$lang.ToString ^CharSequence replacement))
        (replace-first-by s match replacement))
-     :else (throw (errors.New (str "Invalid match arg: " match))))))
+     :else (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Invalid match arg: " match))))))
 
 
 (defn ^go/string join

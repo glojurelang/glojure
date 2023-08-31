@@ -10,35 +10,39 @@ type (
 	ops interface {
 		Combine(y ops) ops
 
-		IsPos(x interface{}) bool
-		IsNeg(x interface{}) bool
+		IsPos(x any) bool
+		IsNeg(x any) bool
 
-		Add(x, y interface{}) interface{}
+		Add(x, y any) any
 		// TODO: implement the precision version of Add, etc.
-		AddP(x, y interface{}) interface{}
-		UncheckedAdd(x, y interface{}) interface{}
+		AddP(x, y any) any
+		UncheckedAdd(x, y any) any
 
-		UncheckedDec(x interface{}) interface{}
+		UncheckedDec(x any) any
 
-		Sub(x, y interface{}) interface{}
-		SubP(x, y interface{}) interface{}
+		Sub(x, y any) any
+		SubP(x, y any) any
 
-		Multiply(x, y interface{}) interface{}
-		Divide(x, y interface{}) interface{}
+		Multiply(x, y any) any
+		MultiplyP(x, y any) any
+		Divide(x, y any) any
+		Quotient(x, y any) any
 
-		Remainder(x, y interface{}) interface{}
+		Remainder(x, y any) any
 
-		LT(x, y interface{}) bool
-		GT(x, y interface{}) bool
-		LTE(x, y interface{}) bool
-		GTE(x, y interface{}) bool
+		LT(x, y any) bool
+		GT(x, y any) bool
+		LTE(x, y any) bool
+		GTE(x, y any) bool
 
-		Max(x, y interface{}) interface{}
-		Min(x, y interface{}) interface{}
+		Max(x, y any) any
+		Min(x, y any) any
 
-		Equiv(x, y interface{}) bool
+		Equiv(x, y any) bool
 
-		IsZero(x interface{}) bool
+		IsZero(x any) bool
+
+		Abs(x any) any
 	}
 	int64Ops      struct{}
 	bigIntOps     struct{}
@@ -47,7 +51,7 @@ type (
 	float64Ops    struct{}
 )
 
-func Ops(x interface{}) ops {
+func Ops(x any) ops {
 	switch x.(type) {
 	case int:
 		return int64Ops{}
@@ -75,7 +79,7 @@ func Ops(x interface{}) ops {
 		return float64Ops{}
 	case *Ratio:
 		return ratioOps{}
-	case *BigInt:
+	case *BigInt, *big.Int:
 		return bigIntOps{}
 	case *BigDecimal:
 		return bigDecimalOps{}
@@ -84,146 +88,173 @@ func Ops(x interface{}) ops {
 	}
 }
 
-func AddP(x, y interface{}) interface{} {
+func AddP(x, y any) any {
 	return Ops(x).Combine(Ops(y)).AddP(x, y)
 }
-func Sub(x, y interface{}) interface{} {
+func Sub(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Sub(x, y)
 }
-func SubP(x, y interface{}) interface{} {
+func SubP(x, y any) any {
 	return Ops(x).Combine(Ops(y)).SubP(x, y)
 }
 
-func Max(x, y interface{}) interface{} {
+func Max(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Max(x, y)
 }
-func Min(x, y interface{}) interface{} {
+func Min(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Min(x, y)
 }
-func NumbersEqual(x, y interface{}) bool {
+func NumbersEqual(x, y any) bool {
 	return Ops(x).Combine(Ops(y)).Equiv(x, y)
 }
 
-func (o int64Ops) IsPos(x interface{}) bool {
+func (o int64Ops) IsPos(x any) bool {
 	return AsInt64(x) > 0
 }
 
-func (o int64Ops) IsNeg(x interface{}) bool {
+func (o int64Ops) IsNeg(x any) bool {
 	return AsInt64(x) < 0
 }
 
-func (o int64Ops) IsZero(x interface{}) bool {
+func (o int64Ops) IsZero(x any) bool {
 	return AsInt64(x) == 0
 }
 
-func (o int64Ops) Add(x, y interface{}) interface{} {
+func (o int64Ops) Add(x, y any) any {
 	return AsInt64(x) + AsInt64(y)
 }
-func (o int64Ops) AddP(x, y interface{}) interface{} {
+func (o int64Ops) AddP(x, y any) any {
 	return AsInt64(x) + AsInt64(y)
 }
-func (o int64Ops) UncheckedAdd(x, y interface{}) interface{} {
+func (o int64Ops) UncheckedAdd(x, y any) any {
 	return AsInt64(x) + AsInt64(y)
 }
-func (o int64Ops) UncheckedDec(x interface{}) interface{} {
+func (o int64Ops) UncheckedDec(x any) any {
 	return AsInt64(x) - 1
 }
-func (o int64Ops) Sub(x, y interface{}) interface{} {
+func (o int64Ops) Sub(x, y any) any {
 	return AsInt64(x) - AsInt64(y)
 }
-func (o int64Ops) SubP(x, y interface{}) interface{} {
+func (o int64Ops) SubP(x, y any) any {
 	return AsInt64(x) - AsInt64(y)
 }
-func (o int64Ops) Multiply(x, y interface{}) interface{} {
+func (o int64Ops) Multiply(x, y any) any {
 	return AsInt64(x) * AsInt64(y)
 }
-func (o int64Ops) Divide(x, y interface{}) interface{} {
+func (o int64Ops) MultiplyP(x, y any) any {
+	xInt := AsInt64(x)
+	yInt := AsInt64(y)
+	if xInt == math.MinInt64 && yInt < 0 {
+		return bigIntOps{}.Multiply(x, y)
+	}
+	ret := xInt * yInt
+	if yInt != 0 && ret/yInt != xInt {
+		return bigIntOps{}.Multiply(x, y)
+	}
+	return ret
+}
+func (o int64Ops) Divide(x, y any) any {
 	return AsInt64(x) / AsInt64(y)
 }
-func (o int64Ops) Remainder(x, y interface{}) interface{} {
+func (o int64Ops) Quotient(x, y any) any {
+	return AsInt64(x) / AsInt64(y)
+}
+func (o int64Ops) Remainder(x, y any) any {
 	return AsInt64(x) % AsInt64(y)
 }
-func (o int64Ops) LT(x, y interface{}) bool {
+func (o int64Ops) LT(x, y any) bool {
 	return AsInt64(x) < AsInt64(y)
 }
-func (o int64Ops) LTE(x, y interface{}) bool {
+func (o int64Ops) LTE(x, y any) bool {
 	return AsInt64(x) <= AsInt64(y)
 }
-func (o int64Ops) GT(x, y interface{}) bool {
+func (o int64Ops) GT(x, y any) bool {
 	return AsInt64(x) > AsInt64(y)
 }
-func (o int64Ops) GTE(x, y interface{}) bool {
+func (o int64Ops) GTE(x, y any) bool {
 	return AsInt64(x) >= AsInt64(y)
 }
-func (o int64Ops) Max(x, y interface{}) interface{} {
+func (o int64Ops) Max(x, y any) any {
 	if AsInt64(x) > AsInt64(y) {
 		return x
 	}
 	return y
 
 }
-func (o int64Ops) Min(x, y interface{}) interface{} {
+func (o int64Ops) Min(x, y any) any {
 	if AsInt64(x) < AsInt64(y) {
 		return x
 	}
 	return y
 }
-func (o int64Ops) Equiv(x, y interface{}) bool {
+func (o int64Ops) Equiv(x, y any) bool {
 	return AsInt64(x) == AsInt64(y)
 }
+func (o int64Ops) Abs(x any) any {
+	if AsInt64(x) < 0 {
+		return -AsInt64(x)
+	}
+	return x
+}
 
-func (o bigIntOps) IsPos(x interface{}) bool {
+func (o bigIntOps) IsPos(x any) bool {
 	return AsBigInt(x).val.Sign() > 0
 }
 
-func (o bigIntOps) IsNeg(x interface{}) bool {
+func (o bigIntOps) IsNeg(x any) bool {
 	return AsBigInt(x).val.Sign() < 0
 }
 
-func (o bigIntOps) IsZero(x interface{}) bool {
+func (o bigIntOps) IsZero(x any) bool {
 	return AsBigInt(x).val.Sign() == 0
 }
 
-func (o bigIntOps) Add(x, y interface{}) interface{} {
+func (o bigIntOps) Add(x, y any) any {
 	return AsBigInt(x).Add(AsBigInt(y))
 }
-func (o bigIntOps) AddP(x, y interface{}) interface{} {
+func (o bigIntOps) AddP(x, y any) any {
 	return AsBigInt(x).AddP(AsBigInt(y))
 }
-func (o bigIntOps) UncheckedAdd(x, y interface{}) interface{} {
+func (o bigIntOps) UncheckedAdd(x, y any) any {
 	return AsBigInt(x).Add(AsBigInt(y))
 }
-func (o bigIntOps) UncheckedDec(x interface{}) interface{} {
+func (o bigIntOps) UncheckedDec(x any) any {
 	return AsBigInt(x).Sub(AsBigInt(1))
 }
-func (o bigIntOps) Sub(x, y interface{}) interface{} {
+func (o bigIntOps) Sub(x, y any) any {
 	return AsBigInt(x).Sub(AsBigInt(y))
 }
-func (o bigIntOps) SubP(x, y interface{}) interface{} {
+func (o bigIntOps) SubP(x, y any) any {
 	return AsBigInt(x).SubP(AsBigInt(y))
 }
-func (o bigIntOps) Multiply(x, y interface{}) interface{} {
+func (o bigIntOps) Multiply(x, y any) any {
 	return AsBigInt(x).Multiply(AsBigInt(y))
 }
-func (o bigIntOps) Divide(x, y interface{}) interface{} {
+func (o bigIntOps) MultiplyP(x, y any) any {
+	return AsBigInt(x).Multiply(AsBigInt(y))
+}
+func (o bigIntOps) Divide(x, y any) any {
 	return AsBigInt(x).Divide(AsBigInt(y))
 }
-func (o bigIntOps) Remainder(x, y interface{}) interface{} {
+func (o bigIntOps) Quotient(x, y any) any {
+	return AsBigInt(x).Quotient(AsBigInt(y))
+}
+func (o bigIntOps) Remainder(x, y any) any {
 	return AsBigInt(x).Remainder(AsBigInt(y))
 }
-func (o bigIntOps) LT(x, y interface{}) bool {
+func (o bigIntOps) LT(x, y any) bool {
 	return AsBigInt(x).LT(AsBigInt(y))
 }
-func (o bigIntOps) LTE(x, y interface{}) bool {
+func (o bigIntOps) LTE(x, y any) bool {
 	return AsBigInt(x).LTE(AsBigInt(y))
 }
-func (o bigIntOps) GT(x, y interface{}) bool {
+func (o bigIntOps) GT(x, y any) bool {
 	return AsBigInt(x).GT(AsBigInt(y))
 }
-func (o bigIntOps) GTE(x, y interface{}) bool {
+func (o bigIntOps) GTE(x, y any) bool {
 	return AsBigInt(x).GTE(AsBigInt(y))
 }
-func (o bigIntOps) Max(x, y interface{}) interface{} {
+func (o bigIntOps) Max(x, y any) any {
 	xx := AsBigInt(x)
 	yy := AsBigInt(y)
 	if xx.Cmp(yy) > 0 {
@@ -232,7 +263,7 @@ func (o bigIntOps) Max(x, y interface{}) interface{} {
 	return y
 
 }
-func (o bigIntOps) Min(x, y interface{}) interface{} {
+func (o bigIntOps) Min(x, y any) any {
 	xx := AsBigInt(x)
 	yy := AsBigInt(y)
 	if xx.Cmp(yy) < 0 {
@@ -240,47 +271,56 @@ func (o bigIntOps) Min(x, y interface{}) interface{} {
 	}
 	return y
 }
-func (o bigIntOps) Equiv(x, y interface{}) bool {
+func (o bigIntOps) Equiv(x, y any) bool {
 	return AsBigInt(x).Cmp(AsBigInt(y)) == 0
 }
+func (o bigIntOps) Abs(x any) any {
+	return AsBigInt(x).Abs()
+}
 
-func (o ratioOps) IsPos(x interface{}) bool {
+func (o ratioOps) IsPos(x any) bool {
 	return AsRatio(x).val.Sign() > 0
 }
 
-func (o ratioOps) IsNeg(x interface{}) bool {
+func (o ratioOps) IsNeg(x any) bool {
 	return AsRatio(x).val.Sign() < 0
 }
 
-func (o ratioOps) IsZero(x interface{}) bool {
+func (o ratioOps) IsZero(x any) bool {
 	return AsRatio(x).val.Sign() == 0
 }
 
-func (o ratioOps) Add(x, y interface{}) interface{} {
+func (o ratioOps) Add(x, y any) any {
 	return AsRatio(x).Add(AsRatio(y))
 }
-func (o ratioOps) AddP(x, y interface{}) interface{} {
+func (o ratioOps) AddP(x, y any) any {
 	return AsRatio(x).AddP(AsRatio(y))
 }
-func (o ratioOps) UncheckedAdd(x, y interface{}) interface{} {
+func (o ratioOps) UncheckedAdd(x, y any) any {
 	return AsRatio(x).Add(AsRatio(y))
 }
-func (o ratioOps) UncheckedDec(x interface{}) interface{} {
+func (o ratioOps) UncheckedDec(x any) any {
 	return AsRatio(x).Sub(AsRatio(1))
 }
-func (o ratioOps) Sub(x, y interface{}) interface{} {
+func (o ratioOps) Sub(x, y any) any {
 	return AsRatio(x).Sub(AsRatio(y))
 }
-func (o ratioOps) SubP(x, y interface{}) interface{} {
+func (o ratioOps) SubP(x, y any) any {
 	return AsRatio(x).SubP(AsRatio(y))
 }
-func (o ratioOps) Multiply(x, y interface{}) interface{} {
+func (o ratioOps) Multiply(x, y any) any {
 	return AsRatio(x).Multiply(AsRatio(y))
 }
-func (o ratioOps) Divide(x, y interface{}) interface{} {
+func (o ratioOps) MultiplyP(x, y any) any {
+	return AsRatio(x).Multiply(AsRatio(y))
+}
+func (o ratioOps) Divide(x, y any) any {
 	return AsRatio(x).Divide(AsRatio(y))
 }
-func (o ratioOps) Remainder(x, y interface{}) interface{} {
+func (o ratioOps) Quotient(x, y any) any {
+	return AsRatio(x).Quotient(AsRatio(y))
+}
+func (o ratioOps) Remainder(x, y any) any {
 	xRat := AsRatio(x)
 	yRat := AsRatio(y)
 
@@ -294,19 +334,19 @@ func (o ratioOps) Remainder(x, y interface{}) interface{} {
 	ret := xRat.Sub(yRat.Multiply(NewRatioBigInt(NewBigIntFromGoBigInt(q), NewBigIntFromInt64(1))))
 	return ret
 }
-func (o ratioOps) LT(x, y interface{}) bool {
+func (o ratioOps) LT(x, y any) bool {
 	return AsRatio(x).LT(AsRatio(y))
 }
-func (o ratioOps) LTE(x, y interface{}) bool {
+func (o ratioOps) LTE(x, y any) bool {
 	return AsRatio(x).LTE(AsRatio(y))
 }
-func (o ratioOps) GT(x, y interface{}) bool {
+func (o ratioOps) GT(x, y any) bool {
 	return AsRatio(x).GT(AsRatio(y))
 }
-func (o ratioOps) GTE(x, y interface{}) bool {
+func (o ratioOps) GTE(x, y any) bool {
 	return AsRatio(x).GTE(AsRatio(y))
 }
-func (o ratioOps) Max(x, y interface{}) interface{} {
+func (o ratioOps) Max(x, y any) any {
 	xx := AsRatio(x)
 	yy := AsRatio(y)
 	if xx.Cmp(yy) > 0 {
@@ -315,7 +355,7 @@ func (o ratioOps) Max(x, y interface{}) interface{} {
 	return y
 
 }
-func (o ratioOps) Min(x, y interface{}) interface{} {
+func (o ratioOps) Min(x, y any) any {
 	xx := AsRatio(x)
 	yy := AsRatio(y)
 	if xx.Cmp(yy) < 0 {
@@ -324,62 +364,71 @@ func (o ratioOps) Min(x, y interface{}) interface{} {
 	return y
 
 }
-func (o ratioOps) Equiv(x, y interface{}) bool {
+func (o ratioOps) Equiv(x, y any) bool {
 	return AsRatio(x).Cmp(AsRatio(y)) == 0
 }
+func (o ratioOps) Abs(x any) any {
+	return AsRatio(x).Abs()
+}
 
-func (o bigDecimalOps) IsPos(x interface{}) bool {
+func (o bigDecimalOps) IsPos(x any) bool {
 	return AsBigDecimal(x).val.Sign() > 0
 }
 
-func (o bigDecimalOps) IsNeg(x interface{}) bool {
+func (o bigDecimalOps) IsNeg(x any) bool {
 	return AsBigDecimal(x).val.Sign() < 0
 }
 
-func (o bigDecimalOps) IsZero(x interface{}) bool {
+func (o bigDecimalOps) IsZero(x any) bool {
 	return AsBigDecimal(x).val.Sign() == 0
 }
 
-func (o bigDecimalOps) Add(x, y interface{}) interface{} {
+func (o bigDecimalOps) Add(x, y any) any {
 	return AsBigDecimal(x).Add(AsBigDecimal(y))
 }
-func (o bigDecimalOps) AddP(x, y interface{}) interface{} {
+func (o bigDecimalOps) AddP(x, y any) any {
 	return AsBigDecimal(x).AddP(AsBigDecimal(y))
 }
-func (o bigDecimalOps) UncheckedAdd(x, y interface{}) interface{} {
+func (o bigDecimalOps) UncheckedAdd(x, y any) any {
 	return AsBigDecimal(x).Add(AsBigDecimal(y))
 }
-func (o bigDecimalOps) UncheckedDec(x interface{}) interface{} {
+func (o bigDecimalOps) UncheckedDec(x any) any {
 	return AsBigDecimal(x).Sub(AsBigDecimal(1))
 }
-func (o bigDecimalOps) Sub(x, y interface{}) interface{} {
+func (o bigDecimalOps) Sub(x, y any) any {
 	return AsBigDecimal(x).Sub(AsBigDecimal(y))
 }
-func (o bigDecimalOps) SubP(x, y interface{}) interface{} {
+func (o bigDecimalOps) SubP(x, y any) any {
 	return AsBigDecimal(x).SubP(AsBigDecimal(y))
 }
-func (o bigDecimalOps) Multiply(x, y interface{}) interface{} {
+func (o bigDecimalOps) Multiply(x, y any) any {
 	return AsBigDecimal(x).Multiply(AsBigDecimal(y))
 }
-func (o bigDecimalOps) Divide(x, y interface{}) interface{} {
+func (o bigDecimalOps) MultiplyP(x, y any) any {
+	return AsBigDecimal(x).Multiply(AsBigDecimal(y))
+}
+func (o bigDecimalOps) Divide(x, y any) any {
 	return AsBigDecimal(x).Divide(AsBigDecimal(y))
 }
-func (o bigDecimalOps) Remainder(x, y interface{}) interface{} {
+func (o bigDecimalOps) Quotient(x, y any) any {
+	return AsBigDecimal(x).Quotient(AsBigDecimal(y))
+}
+func (o bigDecimalOps) Remainder(x, y any) any {
 	return AsBigDecimal(x).Remainder(AsBigDecimal(y))
 }
-func (o bigDecimalOps) LT(x, y interface{}) bool {
+func (o bigDecimalOps) LT(x, y any) bool {
 	return AsBigDecimal(x).LT(AsBigDecimal(y))
 }
-func (o bigDecimalOps) LTE(x, y interface{}) bool {
+func (o bigDecimalOps) LTE(x, y any) bool {
 	return AsBigDecimal(x).LTE(AsBigDecimal(y))
 }
-func (o bigDecimalOps) GT(x, y interface{}) bool {
+func (o bigDecimalOps) GT(x, y any) bool {
 	return AsBigDecimal(x).GT(AsBigDecimal(y))
 }
-func (o bigDecimalOps) GTE(x, y interface{}) bool {
+func (o bigDecimalOps) GTE(x, y any) bool {
 	return AsBigDecimal(x).GTE(AsBigDecimal(y))
 }
-func (o bigDecimalOps) Max(x, y interface{}) interface{} {
+func (o bigDecimalOps) Max(x, y any) any {
 	xx := AsBigDecimal(x)
 	yy := AsBigDecimal(y)
 	if xx.Cmp(yy) > 0 {
@@ -388,7 +437,7 @@ func (o bigDecimalOps) Max(x, y interface{}) interface{} {
 	return y
 
 }
-func (o bigDecimalOps) Min(x, y interface{}) interface{} {
+func (o bigDecimalOps) Min(x, y any) any {
 	xx := AsBigDecimal(x)
 	yy := AsBigDecimal(y)
 	if xx.Cmp(yy) < 0 {
@@ -397,78 +446,93 @@ func (o bigDecimalOps) Min(x, y interface{}) interface{} {
 	return y
 
 }
-func (o bigDecimalOps) Equiv(x, y interface{}) bool {
+func (o bigDecimalOps) Equiv(x, y any) bool {
 	return AsBigDecimal(x).Cmp(AsBigDecimal(y)) == 0
 }
+func (o bigDecimalOps) Abs(x any) any {
+	return AsBigDecimal(x).Abs()
+}
 
-func (o float64Ops) IsPos(x interface{}) bool {
+func (o float64Ops) IsPos(x any) bool {
 	return AsFloat64(x) > 0
 }
 
-func (o float64Ops) IsNeg(x interface{}) bool {
+func (o float64Ops) IsNeg(x any) bool {
 	return AsFloat64(x) < 0
 }
 
-func (o float64Ops) IsZero(x interface{}) bool {
+func (o float64Ops) IsZero(x any) bool {
 	return AsFloat64(x) == 0
 }
 
-func (o float64Ops) Add(x, y interface{}) interface{} {
+func (o float64Ops) Add(x, y any) any {
 	return AsFloat64(x) + AsFloat64(y)
 }
-func (o float64Ops) AddP(x, y interface{}) interface{} {
+func (o float64Ops) AddP(x, y any) any {
 	return AsFloat64(x) + AsFloat64(y)
 }
-func (o float64Ops) UncheckedAdd(x, y interface{}) interface{} {
+func (o float64Ops) UncheckedAdd(x, y any) any {
 	return AsFloat64(x) + AsFloat64(y)
 }
-func (o float64Ops) UncheckedDec(x interface{}) interface{} {
+func (o float64Ops) UncheckedDec(x any) any {
 	return AsFloat64(x) - 1
 }
-func (o float64Ops) Sub(x, y interface{}) interface{} {
+func (o float64Ops) Sub(x, y any) any {
 	return AsFloat64(x) - AsFloat64(y)
 }
-func (o float64Ops) SubP(x, y interface{}) interface{} {
+func (o float64Ops) SubP(x, y any) any {
 	return AsFloat64(x) - AsFloat64(y)
 }
-func (o float64Ops) Multiply(x, y interface{}) interface{} {
+func (o float64Ops) Multiply(x, y any) any {
 	return AsFloat64(x) * AsFloat64(y)
 }
-func (o float64Ops) Divide(x, y interface{}) interface{} {
+func (o float64Ops) MultiplyP(x, y any) any {
+	// as in clojure, no overflow check
+	return AsFloat64(x) * AsFloat64(y)
+}
+func (o float64Ops) Divide(x, y any) any {
 	return AsFloat64(x) / AsFloat64(y)
 }
-func (o float64Ops) Remainder(x, y interface{}) interface{} {
+func (o float64Ops) Quotient(x, y any) any {
+	xf := AsFloat64(x)
+	yf := AsFloat64(y)
+	if IsZero(yf) {
+		panic(NewArithmeticError("divide by zero"))
+	}
+	q := xf / yf
+	if q <= math.MaxInt64 && q >= math.MinInt64 {
+		return float64(int64(q))
+	}
+	return AsBigDecimal(AsBigInt(q))
+}
+func (o float64Ops) Remainder(x, y any) any {
 	return math.Mod(AsFloat64(x), AsFloat64(y))
 }
-func (o float64Ops) LT(x, y interface{}) bool {
+func (o float64Ops) LT(x, y any) bool {
 	return AsFloat64(x) < AsFloat64(y)
 }
-func (o float64Ops) LTE(x, y interface{}) bool {
+func (o float64Ops) LTE(x, y any) bool {
 	return AsFloat64(x) <= AsFloat64(y)
 }
-func (o float64Ops) GT(x, y interface{}) bool {
+func (o float64Ops) GT(x, y any) bool {
 	return AsFloat64(x) > AsFloat64(y)
 }
-func (o float64Ops) GTE(x, y interface{}) bool {
+func (o float64Ops) GTE(x, y any) bool {
 	return AsFloat64(x) >= AsFloat64(y)
 }
-func (o float64Ops) Max(x, y interface{}) interface{} {
-	if AsFloat64(x) > AsFloat64(y) {
-		return x
-	}
-	return y
-
+func (o float64Ops) Max(x, y any) any {
+	return math.Max(AsFloat64(x), AsFloat64(y))
 }
-func (o float64Ops) Min(x, y interface{}) interface{} {
-	if AsFloat64(x) < AsFloat64(y) {
-		return x
-	}
-	return y
-
+func (o float64Ops) Min(x, y any) any {
+	return math.Min(AsFloat64(x), AsFloat64(y))
 }
-func (o float64Ops) Equiv(x, y interface{}) bool {
+func (o float64Ops) Equiv(x, y any) bool {
 	return AsFloat64(x) == AsFloat64(y)
 }
+func (o float64Ops) Abs(x any) any {
+	return math.Abs(AsFloat64(x))
+}
+
 func (o int64Ops) Combine(y ops) ops {
 	switch y.(type) {
 	case int64Ops:
@@ -549,7 +613,7 @@ func (o float64Ops) Combine(y ops) ops {
 		panic("cannot combine Ops")
 	}
 }
-func AsInt64(x interface{}) int64 {
+func AsInt64(x any) int64 {
 	switch x := x.(type) {
 	case int:
 		return int64(x)
@@ -576,11 +640,11 @@ func AsInt64(x interface{}) int64 {
 	case float64:
 		return int64(x)
 	default:
-		panic("cannot convert to int64")
+		panic(fmt.Errorf("cannot convert %T to int64", x))
 	}
 }
 
-func AsBigInt(x interface{}) *BigInt {
+func AsBigInt(x any) *BigInt {
 	switch x := x.(type) {
 	case int:
 		return NewBigIntFromInt64(int64(x))
@@ -608,12 +672,14 @@ func AsBigInt(x interface{}) *BigInt {
 		return NewBigIntFromInt64(int64(x))
 	case *BigInt:
 		return x
+	case *big.Int:
+		return NewBigIntFromGoBigInt(x)
 	default:
 		panic(fmt.Errorf("cannot convert %T to BigInt", x))
 	}
 }
 
-func AsRatio(x interface{}) *Ratio {
+func AsRatio(x any) *Ratio {
 	switch x := x.(type) {
 	case int:
 		return NewRatio(int64(x), 1)
@@ -648,7 +714,7 @@ func AsRatio(x interface{}) *Ratio {
 	}
 }
 
-func AsBigDecimal(x interface{}) *BigDecimal {
+func AsBigDecimal(x any) *BigDecimal {
 	switch x := x.(type) {
 	case int:
 		return NewBigDecimalFromFloat64(float64(x))
@@ -676,7 +742,15 @@ func AsBigDecimal(x interface{}) *BigDecimal {
 		return NewBigDecimalFromFloat64(float64(x))
 	case *BigDecimal:
 		return x
+	case *BigInt:
+		f := new(big.Float)
+		f.SetInt(x.val)
+		return NewBigDecimalFromBigFloat(f)
+	case *big.Int:
+		f := new(big.Float)
+		f.SetInt(x)
+		return NewBigDecimalFromBigFloat(f)
 	default:
-		panic("cannot convert to BigDecimal")
+		panic(fmt.Errorf("cannot convert %T to BigDecimal", x))
 	}
 }

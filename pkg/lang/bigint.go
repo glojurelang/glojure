@@ -3,6 +3,8 @@ package lang
 import (
 	"fmt"
 	"math/big"
+
+	"bitbucket.org/pcastools/hash"
 )
 
 // BigInt is an arbitrary-precision integer. It wraps and has the same
@@ -14,7 +16,12 @@ type BigInt struct {
 
 // NewBigInt creates a new BigInt from a string.
 func NewBigInt(s string) (*BigInt, error) {
-	bi, ok := new(big.Int).SetString(s, 0)
+	return NewBigIntWithBase(s, 0)
+}
+
+// NewBigIntWithBase creates a new BigInt from a string.
+func NewBigIntWithBase(s string, base int) (*BigInt, error) {
+	bi, ok := new(big.Int).SetString(s, base)
 	if !ok {
 		return nil, fmt.Errorf("invalid big int: %s", s)
 	}
@@ -34,6 +41,13 @@ func NewBigIntFromGoBigInt(x *big.Int) *BigInt {
 
 func (n *BigInt) String() string {
 	return n.val.String()
+}
+
+func (n *BigInt) Hash() uint32 {
+	if n.val.IsInt64() {
+		return uint32(hash.Int64(n.val.Int64()))
+	}
+	return uint32(hash.ByteSlice(n.val.Bytes()))
 }
 
 func (n *BigInt) Equal(v interface{}) bool {
@@ -72,6 +86,10 @@ func (n *BigInt) Divide(other *BigInt) *BigInt {
 	return &BigInt{val: new(big.Int).Div(n.val, other.val)}
 }
 
+func (n *BigInt) Quotient(other *BigInt) *BigInt {
+	return &BigInt{val: new(big.Int).Quo(n.val, other.val)}
+}
+
 func (n *BigInt) Remainder(other *BigInt) *BigInt {
 	return &BigInt{val: new(big.Int).Rem(n.val, other.val)}
 }
@@ -94,4 +112,11 @@ func (n *BigInt) GT(other *BigInt) bool {
 
 func (n *BigInt) GTE(other *BigInt) bool {
 	return n.Cmp(other) >= 0
+}
+
+func (n *BigInt) Abs() *BigInt {
+	if n.val.Sign() < 0 {
+		return &BigInt{val: new(big.Int).Abs(n.val)}
+	}
+	return n
 }
