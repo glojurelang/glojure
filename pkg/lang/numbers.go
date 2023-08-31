@@ -479,10 +479,8 @@ func bitOpsCast(x any) int64 {
 		return int64(x)
 	case float64:
 		return int64(x)
-	case *BigInt:
-		return x.val.Int64()
 	default:
-		panic(fmt.Errorf("cannot convert %T to int64", x))
+		panic(NewIllegalArgumentError(fmt.Sprintf("bit operation not supported for %T", x)))
 	}
 }
 
@@ -528,6 +526,8 @@ func AsNumber(v any) (any, bool) {
 		return v, true
 	case *Ratio:
 		return v, true
+	case *big.Int: // TODO: to follow the spirit of clojure, include *big.Float and *big.Rat
+		return v, true
 	default:
 		return nil, false
 	}
@@ -564,10 +564,6 @@ func AsInt(v any) (int, bool) {
 	case uint16:
 		return int(v), true
 	case uint8:
-		return int(v), true
-	case float32:
-		return int(v), true
-	case float64:
 		return int(v), true
 	case *BigInt:
 		return int(v.val.Int64()), true

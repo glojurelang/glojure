@@ -560,7 +560,7 @@
    (sexpr-replace '(. clojure.lang.Numbers (minus x))
                   '(* -1 x)) ;; TODO: unary minus
    (sexpr-replace '(. clojure.lang.Numbers (minusP x))
-                  '(* -1 x)) ;; TODO: promoting ops
+                  '(*' -1 x))
    (sexpr-replace 'clojure.lang.Numbers/isZero
                   'github.com$glojurelang$glojure$pkg$lang.IsZero)
    (sexpr-replace 'clojure.lang.Numbers/abs

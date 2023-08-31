@@ -74,10 +74,10 @@ func (s *LazySeq) Empty() IPersistentCollection {
 	return emptyList
 }
 
-func (s *LazySeq) Equal(o interface{}) bool {
+func (s *LazySeq) Equiv(o interface{}) bool {
 	seq := s.Seq()
 	if s != nil {
-		return Equal(seq, o)
+		return Equiv(seq, o)
 	}
 	return Seq(o) == nil
 }
@@ -137,7 +137,7 @@ func (s *LazySeq) Meta() IPersistentMap {
 }
 
 func (s *LazySeq) WithMeta(meta IPersistentMap) interface{} {
-	if Equal(s.meta, meta) {
+	if s.meta == meta {
 		return s
 	}
 

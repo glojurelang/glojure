@@ -2,12 +2,13 @@ package lang
 
 import "reflect"
 
-type equaler interface {
-	Equal(interface{}) bool
+func Equiv(a, b any) bool {
+	return Equal(a, b)
 }
 
-// Equal returns true if the two values are equal.
-func Equal(a, b interface{}) bool {
+// Equal returns true if the two values are equivalent.
+// TODO: rename to Equiv.
+func Equal(a, b any) bool {
 	// check functions first, because == panics on func comparison.
 	aVal, bVal := reflect.ValueOf(a), reflect.ValueOf(b)
 	if aVal.Kind() == reflect.Func || bVal.Kind() == reflect.Func {
@@ -26,12 +27,25 @@ func Equal(a, b interface{}) bool {
 		}
 		return NumbersEqual(a, b)
 	}
-
-	if a, ok := a.(equaler); ok {
-		return a.Equal(b)
+	if _, ok := a.(IPersistentCollection); ok {
+		return pcEquiv(a, b)
 	}
-	if b, ok := b.(equaler); ok {
-		return b.Equal(a)
+	if _, ok := b.(IPersistentCollection); ok {
+		return pcEquiv(a, b)
+	}
+
+	if a, ok := a.(Equalser); ok {
+		return a.Equals(b)
+	}
+	if b, ok := b.(Equalser); ok {
+		return b.Equals(a)
+	}
+
+	if a, ok := a.(Equiver); ok {
+		return a.Equiv(b)
+	}
+	if b, ok := b.(Equiver); ok {
+		return b.Equiv(a)
 	}
 
 	// TODO: match all clojure equality rules
@@ -39,6 +53,13 @@ func Equal(a, b interface{}) bool {
 	return false
 }
 
-func Identical(a, b interface{}) bool {
+func Identical(a, b any) bool {
 	return a == b
+}
+
+func pcEquiv(a, b any) bool {
+	if a, ok := a.(IPersistentCollection); ok {
+		return a.Equiv(b)
+	}
+	return b.(IPersistentCollection).Equiv(a)
 }

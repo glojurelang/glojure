@@ -1,6 +1,8 @@
 package lang
 
-import "math/big"
+import (
+	"math/big"
+)
 
 // Ratio is a value that represents a ratio.
 type Ratio struct {
@@ -14,19 +16,28 @@ func NewRatio(numerator, denominator int64) *Ratio {
 	}
 }
 
-// NewRatio creates a new ratio value front BigInts.
 func NewRatioBigInt(num, den *BigInt) *Ratio {
 	return &Ratio{
 		val: new(big.Rat).SetFrac(num.val, den.val),
 	}
 }
 
-func (r *Ratio) Numerator() *BigInt {
-	return NewBigIntFromGoBigInt(r.val.Num())
+func NewRatioGoBigInt(num, den *big.Int) *Ratio {
+	return &Ratio{
+		val: new(big.Rat).SetFrac(num, den),
+	}
 }
 
-func (r *Ratio) Denominator() *BigInt {
-	return NewBigIntFromGoBigInt(r.val.Denom())
+func (r *Ratio) Numerator() *big.Int {
+	return new(big.Int).Set(r.val.Num())
+}
+
+func (r *Ratio) Denominator() *big.Int {
+	return new(big.Int).Set(r.val.Denom())
+}
+
+func (r *Ratio) BigIntegerValue() *big.Int {
+	return new(big.Int).Div(r.val.Num(), r.val.Denom())
 }
 
 func (r *Ratio) String() string {
@@ -60,24 +71,29 @@ func (r *Ratio) SubP(other *Ratio) *Ratio {
 	return r.Sub(other)
 }
 
-func (r *Ratio) Multiply(other *Ratio) *Ratio {
-	return &Ratio{
-		val: new(big.Rat).Mul(r.val, other.val),
-	}
+func (r *Ratio) Multiply(other *Ratio) any {
+	xn, xd := r.Numerator(), r.Denominator()
+	yn, yd := other.Numerator(), other.Denominator()
+	return Divide(
+		xn.Mul(xn, yn),
+		xd.Mul(xd, yd))
 }
 
-func (r *Ratio) Divide(other *Ratio) *Ratio {
-	// TODO: verify
-	return &Ratio{
-		val: new(big.Rat).Quo(r.val, other.val),
-	}
+func (r *Ratio) Divide(other *Ratio) any {
+	xn, xd := r.Numerator(), r.Denominator()
+	yn, yd := other.Numerator(), other.Denominator()
+	return Divide(
+		xn.Mul(xn, yd),
+		xd.Mul(xd, yn))
 }
 
-func (r *Ratio) Quotient(other *Ratio) *Ratio {
-	// TODO: verify
-	return &Ratio{
-		val: new(big.Rat).Quo(r.val, other.val),
-	}
+func (r *Ratio) Quotient(other *Ratio) any {
+	xn, xd := r.Numerator(), r.Denominator()
+	yn, yd := other.Numerator(), other.Denominator()
+
+	qn := new(big.Int).Mul(xn, yd)
+	q := qn.Div(qn, xd.Mul(xd, yn))
+	return NewBigIntFromGoBigInt(q)
 }
 
 func (r *Ratio) Cmp(other *Ratio) int {

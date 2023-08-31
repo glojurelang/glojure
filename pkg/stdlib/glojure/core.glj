@@ -1028,7 +1028,7 @@
   {:inline (nary-inline 'minusP)
    :inline-arities >0?
    :added "1.0"}
-  ([x] (* -1 x))
+  ([x] (*' -1 x))
   ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (MinusP x y)))
   ([x y & more]
    (reduce1 -' (-' x y) more)))

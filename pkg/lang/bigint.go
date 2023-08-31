@@ -90,8 +90,30 @@ func (n *BigInt) Multiply(other *BigInt) *BigInt {
 	return &BigInt{val: new(big.Int).Mul(n.val, other.val)}
 }
 
-func (n *BigInt) Divide(other *BigInt) *BigInt {
-	return &BigInt{val: new(big.Int).Div(n.val, other.val)}
+var (
+	bigIntZero   = big.NewInt(0)
+	bigIntOne    = big.NewInt(1)
+	bigIntNegOne = big.NewInt(-1)
+)
+
+func (n *BigInt) Divide(other *BigInt) any {
+	if other.val.Sign() == 0 {
+		panic(NewArithmeticError("divide by zero"))
+	}
+	gcd := new(big.Int).GCD(nil, nil, n.val, other.val)
+	if gcd.Sign() == 0 {
+		return &BigInt{val: bigIntZero}
+	}
+	num := new(big.Int).Div(n.val, gcd)
+	den := new(big.Int).Div(other.val, gcd)
+	// if d == 1, return n
+	if den.Cmp(bigIntOne) == 0 {
+		return &BigInt{val: num}
+	}
+	if den.Cmp(bigIntNegOne) == 0 {
+		return &BigInt{val: num.Neg(num)}
+	}
+	return NewRatioGoBigInt(num, den)
 }
 
 func (n *BigInt) Quotient(other *BigInt) *BigInt {

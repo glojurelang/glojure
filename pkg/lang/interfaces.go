@@ -7,7 +7,7 @@ import (
 )
 
 type (
-	Object interface{}
+	Object any
 
 	// Hasher is an interface for types that can be hashed. It's not in
 	// Clojure, but it's useful for Go where values don't come with a
@@ -40,16 +40,16 @@ type (
 	}
 
 	IFn interface {
-		Invoke(args ...interface{}) interface{}
-		ApplyTo(args ISeq) interface{}
+		Invoke(args ...any) any
+		ApplyTo(args ISeq) any
 	}
 
 	IReduce interface {
-		Reduce(f IFn) interface{}
+		Reduce(f IFn) any
 	}
 
 	IReduceInit interface {
-		ReduceInit(f IFn, init interface{}) interface{}
+		ReduceInit(f IFn, init any) any
 	}
 
 	// IMeta is an interface for values that can have metadata.
@@ -62,7 +62,7 @@ type (
 		IMeta
 
 		// WithMeta returns a new value with the given metadata.
-		WithMeta(meta IPersistentMap) interface{}
+		WithMeta(meta IPersistentMap) any
 	}
 
 	// Counted is an interface for compound values whose elements can be
@@ -71,38 +71,43 @@ type (
 		Count() int
 	}
 
-	// Conjer is an interface for values that can be conjed onto.
-	Conjer interface {
-		Conj(interface{}) Conjer
+	// Conser is an interface for values that can be consed onto.
+	Conser interface {
+		Cons(any) Conser
 	}
 
-	ISeqable interface {
+	Seqable interface {
 		Seq() ISeq
 	}
 
 	IMapEntry interface {
-		Key() interface{}
-		Val() interface{}
+		Key() any
+		Val() any
 	}
 
 	Associative interface {
 		IPersistentCollection
 		ILookup
 
-		ContainsKey(interface{}) bool
+		ContainsKey(any) bool
 
-		EntryAt(interface{}) IMapEntry
+		EntryAt(any) IMapEntry
 
-		Assoc(k, v interface{}) Associative
+		Assoc(k, v any) Associative
 	}
 
 	ILookup interface {
-		ValAt(interface{}) interface{}
-		ValAtDefault(interface{}, interface{}) interface{}
+		ValAt(any) any
+		ValAtDefault(any, any) any
 	}
 
-	Equaler interface {
-		Equal(interface{}) bool
+	// Not a Clojure interface, but useful for Go
+	Equalser interface {
+		Equals(any) bool
+	}
+	// Not a Clojure interface, but useful for Go
+	Equiver interface {
+		Equiv(any) bool
 	}
 
 	Reversible interface {
@@ -116,15 +121,15 @@ type (
 	Indexed interface {
 		Counted
 
-		Nth(int) interface{}
-		NthDefault(int, interface{}) interface{}
+		Nth(int) any
+		NthDefault(int, any) any
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Collections
 
 	ITransientCollection interface {
-		Conj(interface{}) Conjer
+		Conj(any) ITransientCollection
 		Persistent() IPersistentCollection
 	}
 
@@ -133,22 +138,17 @@ type (
 	}
 
 	IPersistentCollection interface {
-		ISeqable
+		Seqable
 		Counted
-		// NB: we diverge from Clojure here, which has a cons method,
-		// which is used by the conj runtime method. I expect the cons
-		// methods are a relic of a previous implementation.
-		Conjer
-
-		// IsEmpty() bool // TODO: remove this. it's not actually part of the interface
+		Conser
 
 		Empty() IPersistentCollection
 
-		// Equiv(interface{}) bool
+		Equiv(any) bool
 	}
 
 	IPersistentStack interface {
-		Peek() interface{}
+		Peek() any
 		Pop() IPersistentStack
 	}
 
@@ -163,25 +163,21 @@ type (
 	}
 
 	IPersistentMap interface {
-		Equaler // Note: not in Clojure's interfaces
-
 		//Iterable do we need this?
 		Associative
 		Counted
 
 		// AssocEx is like Assoc, but returns an error if the key already
 		// exists.
-		AssocEx(key, val interface{}) IPersistentMap
+		AssocEx(key, val any) IPersistentMap
 
 		// Without returns a new map with the given key removed.
-		Without(key interface{}) IPersistentMap
+		Without(key any) IPersistentMap
 	}
 
 	// IPersistentVector is a persistent vector.
 	IPersistentVector interface {
 		Sequential
-
-		Equaler // Note: not in Clojure's interfaces
 
 		Associative
 		IPersistentStack
@@ -191,36 +187,35 @@ type (
 
 		Length() int
 
-		AssocN(int, interface{}) IPersistentVector
+		AssocN(int, any) IPersistentVector
 
-		Cons(interface{}) IPersistentVector
+		Cons(any) IPersistentVector
 	}
 
 	IPersistentSet interface {
 		IPersistentCollection
 		Counted
 
-		Disjoin(interface{}) IPersistentSet
-		Contains(interface{}) bool
-		Get(interface{}) interface{}
+		Disjoin(any) IPersistentSet
+		Contains(any) bool
+		Get(any) any
 	}
 
 	ITransientSet interface {
 		IPersistentCollection
 		Counted
 
-		Disjoin(interface{}) ITransientSet
-		Contains(interface{}) bool
-		Get(interface{}) interface{}
+		Disjoin(any) ITransientSet
+		Contains(any) bool
+		Get(any) any
 	}
 
 	ISeq interface {
-		Sequential
-
-		ISeqable
+		IPersistentCollection
+		Conser
 
 		// First returns the first element of the sequence.
-		First() interface{}
+		First() any
 
 		// Next returns the rest of the sequence, or nil if there are no
 		// more.
@@ -228,19 +223,18 @@ type (
 
 		// More returns true if there are more elements in the sequence.
 		More() ISeq
-
-		// TODO: Missing: Cons, IPersistentCollection
 	}
 
 	IChunk interface {
 		Indexed
 
 		DropFirst() IChunk
-		ReduceInit(fn IFn, init interface{}) interface{}
+		ReduceInit(fn IFn, init any) any
 	}
 
 	IChunkedSeq interface {
 		ISeq
+		Sequential
 
 		ChunkedFirst() IChunk
 		ChunkedNext() ISeq
@@ -248,17 +242,17 @@ type (
 	}
 
 	Comparer interface {
-		Compare(other interface{}) int
+		Compare(other any) int
 	}
 
 	// References
 
 	IDeref interface {
-		Deref() interface{}
+		Deref() any
 	}
 
 	IBlockingDeref interface {
-		DerefWithTimeout(timeoutMS int64, timeoutVal interface{}) interface{}
+		DerefWithTimeout(timeoutMS int64, timeoutVal any) any
 	}
 
 	IRef interface {
@@ -267,14 +261,14 @@ type (
 		SetValidator(vf IFn)
 		Validator() IFn
 		Watches() IPersistentMap
-		AddWatch(key interface{}, fn IFn)
-		RemoveWatch(key interface{})
+		AddWatch(key any, fn IFn)
+		RemoveWatch(key any)
 	}
 
 	IAtom interface {
-		Swap(f IFn, args ISeq) interface{}
-		CompareAndSet(oldv, newv interface{}) bool
-		Reset(newVal interface{}) interface{}
+		Swap(f IFn, args ISeq) any
+		CompareAndSet(oldv, newv any) bool
+		Reset(newVal any) any
 	}
 
 	IAtom2 interface {
@@ -296,8 +290,8 @@ type (
 
 	// Java Future interface
 	Future interface {
-		Get() interface{}
-		GetWithTimeout(timeout int64, timeUnit time.Duration) interface{}
+		Get() any
+		GetWithTimeout(timeout int64, timeUnit time.Duration) any
 		// Cancel(mayInterruptIfRunning bool) bool
 		// IsCancelled() bool
 		// IsDone() bool
@@ -309,15 +303,15 @@ var (
 	notFound = &struct{}{}
 )
 
-func Conj(coll Conjer, x interface{}) Conjer {
+func Conj(coll Conser, x any) Conser {
 	if coll == nil {
-		return emptyList.Conj(x)
+		return emptyList.Cons(x)
 	}
-	return coll.Conj(x)
+	return coll.Cons(x)
 }
 
 // WithMeta returns a new value with the given metadata.
-func WithMeta(v interface{}, meta IPersistentMap) (interface{}, error) {
+func WithMeta(v any, meta IPersistentMap) (any, error) {
 	// TODO: just take an IObj
 	iobj, ok := v.(IObj)
 	if !ok {
@@ -326,7 +320,7 @@ func WithMeta(v interface{}, meta IPersistentMap) (interface{}, error) {
 	return iobj.WithMeta(meta), nil
 }
 
-func Assoc(a interface{}, k, v interface{}) Associative {
+func Assoc(a any, k, v any) Associative {
 	if a == nil {
 		return NewMap(k, v)
 	}
@@ -337,18 +331,18 @@ func Assoc(a interface{}, k, v interface{}) Associative {
 	return assoc.Assoc(k, v)
 }
 
-func Dissoc(x interface{}, k interface{}) interface{} {
+func Dissoc(x any, k any) any {
 	if x == nil {
 		return nil
 	}
 	return x.(IPersistentMap).Without(k)
 }
 
-func Get(coll, key interface{}) interface{} {
+func Get(coll, key any) any {
 	return GetDefault(coll, key, nil)
 }
 
-func GetDefault(coll, key, def interface{}) interface{} {
+func GetDefault(coll, key, def any) any {
 	switch arg := coll.(type) {
 	case nil:
 		return def
@@ -393,7 +387,7 @@ func GetDefault(coll, key, def interface{}) interface{} {
 	return def
 }
 
-func Count(coll interface{}) int {
+func Count(coll any) int {
 	switch arg := coll.(type) {
 	case nil:
 		return 0

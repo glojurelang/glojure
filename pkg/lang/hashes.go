@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"hash"
 	"hash/fnv"
+	"math/big"
 	"reflect"
 	"unsafe"
 
@@ -133,6 +134,13 @@ func hashNumber(x any) uint32 {
 			return 0
 		}
 		return hash2.Float32(x)
+	case *Ratio:
+		return hashNumber(x.Numerator()) ^ hashNumber(x.Denominator())
+	case *big.Int:
+		if x.IsInt64() {
+			return hashNumber(x.Int64())
+		}
+		return hashNumber(hash2.ByteSlice(x.Bytes()))
 	case Hasher:
 		return x.Hash()
 	}

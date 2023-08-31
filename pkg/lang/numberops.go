@@ -6,6 +6,15 @@ import (
 	"math/big"
 )
 
+type Category int
+
+const (
+	CategoryInteger = iota
+	CategoryFloating
+	CategoryDecimal
+	CategoryRatio
+)
+
 type (
 	ops interface {
 		Combine(y ops) ops
@@ -38,6 +47,7 @@ type (
 		Max(x, y any) any
 		Min(x, y any) any
 
+		// TODO: equal vs equiv
 		Equiv(x, y any) bool
 
 		IsZero(x any) bool
@@ -88,6 +98,21 @@ func Ops(x any) ops {
 	}
 }
 
+func category(x any) Category {
+	switch x.(type) {
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, *BigInt, *big.Int:
+		return CategoryInteger
+	case float32, float64:
+		return CategoryFloating
+	case *BigDecimal:
+		return CategoryDecimal
+	case *Ratio:
+		return CategoryRatio
+	default:
+		return CategoryInteger
+	}
+}
+
 func AddP(x, y any) any {
 	return Ops(x).Combine(Ops(y)).AddP(x, y)
 }
@@ -97,7 +122,12 @@ func Sub(x, y any) any {
 func SubP(x, y any) any {
 	return Ops(x).Combine(Ops(y)).SubP(x, y)
 }
-
+func Multiply(x, y any) any {
+	return Ops(x).Combine(Ops(y)).Multiply(x, y)
+}
+func Divide(x, y any) any {
+	return Ops(x).Combine(Ops(y)).Divide(x, y)
+}
 func Max(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Max(x, y)
 }
@@ -105,7 +135,8 @@ func Min(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Min(x, y)
 }
 func NumbersEqual(x, y any) bool {
-	return Ops(x).Combine(Ops(y)).Equiv(x, y)
+	return category(x) == category(y) &&
+		Ops(x).Combine(Ops(y)).Equiv(x, y)
 }
 
 func (o int64Ops) IsPos(x any) bool {
@@ -153,8 +184,32 @@ func (o int64Ops) MultiplyP(x, y any) any {
 	}
 	return ret
 }
+func gcd(u, v int64) int64 {
+	for v != 0 {
+		r := u % v
+		u = v
+		v = r
+	}
+	return u
+}
 func (o int64Ops) Divide(x, y any) any {
-	return AsInt64(x) / AsInt64(y)
+	n := AsInt64(x)
+	val := AsInt64(y)
+	gcd := gcd(n, val)
+	if gcd == 0 {
+		return 0
+	}
+	n = n / gcd
+	d := val / gcd
+	if d == 1 {
+		return n
+	}
+	if d < 0 {
+		n = -n
+		d = -d
+	}
+
+	return NewRatio(n, d)
 }
 func (o int64Ops) Quotient(x, y any) any {
 	return AsInt64(x) / AsInt64(y)
@@ -331,8 +386,7 @@ func (o ratioOps) Remainder(x, y any) any {
 	qd.Mul(xRat.val.Denom(), yRat.val.Num())
 
 	q.Div(q, qd)
-	ret := xRat.Sub(yRat.Multiply(NewRatioBigInt(NewBigIntFromGoBigInt(q), NewBigIntFromInt64(1))))
-	return ret
+	return Sub(x, Multiply(q, y))
 }
 func (o ratioOps) LT(x, y any) bool {
 	return AsRatio(x).LT(AsRatio(y))
@@ -642,7 +696,7 @@ func AsInt64(x any) int64 {
 	case *Ratio:
 		n := x.Numerator()
 		d := x.Denominator()
-		q := new(big.Int).Quo(n.val, d.val)
+		q := n.Quo(n, d)
 		return q.Int64()
 	case *BigInt:
 		return x.val.Int64()
@@ -717,10 +771,12 @@ func AsRatio(x any) *Ratio {
 		return NewRatio(int64(x), 1)
 	case *BigInt:
 		return NewRatioBigInt(x, NewBigIntFromInt64(1))
+	case *big.Int:
+		return NewRatioBigInt(NewBigIntFromGoBigInt(x), NewBigIntFromInt64(1))
 	case *Ratio:
 		return x
 	default:
-		panic("cannot convert to Ratio")
+		panic(fmt.Errorf("cannot convert %T to Ratio", x))
 	}
 }
 
