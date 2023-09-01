@@ -1,21 +1,15 @@
 package murmur3
 
-import "math/bits"
+import (
+	"math/bits"
+
+	"github.com/glojurelang/glojure/internal/seq"
+)
 
 const (
 	seed = 0
 	c1   = 0xcc9e2d51
 	c2   = 0x1b873593
-)
-
-type (
-	// Seq is a sequence of elements. We duplicate the Seq interface
-	// here to avoid a circular dependency.
-	Seq interface {
-		First() any
-		Next() Seq
-		More() Seq
-	}
 )
 
 func HashInt(input int32) uint32 {
@@ -44,7 +38,7 @@ func HashLong(input int64) uint32 {
 	return fmix(h1, 8)
 }
 
-func HashOrdered(xs Seq, elHash func(any) uint32) uint32 {
+func HashOrdered(xs seq.Seq, elHash func(any) uint32) uint32 {
 	var n uint32
 	var hash uint32 = 1
 	for ; xs != nil; xs = xs.Next() {
@@ -55,7 +49,7 @@ func HashOrdered(xs Seq, elHash func(any) uint32) uint32 {
 	return MixCollHash(hash, n)
 }
 
-func HashUnordered(xs Seq, elHash func(any) uint32) uint32 {
+func HashUnordered(xs seq.Seq, elHash func(any) uint32) uint32 {
 	var n uint32
 	var hash uint32
 	for ; xs != nil; xs = xs.Next() {

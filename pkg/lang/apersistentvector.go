@@ -1,9 +1,10 @@
 package lang
 
 import (
+	"fmt"
 	"reflect"
 
-	"github.com/glojurelang/glojure/pkg/murmur3"
+	"github.com/glojurelang/glojure/internal/murmur3"
 )
 
 type (
@@ -19,7 +20,7 @@ type (
 	}
 )
 
-func apersistentVectorString(a APersistentVector) {
+func apersistentVectorString(a APersistentVector) string {
 	return PrintString(a)
 }
 
@@ -129,17 +130,17 @@ func apersistentVectorHashEq(hc *uint32, a APersistentVector) uint32 {
 	}
 	var n int
 	var hash uint32 = 1
-	for i := 0; i < a.Count(); i++ {
-		hash = 31*hash + HashEq(a.Nth(i))
+	for ; n < a.Count(); n++ {
+		hash = 31*hash + HashEq(a.Nth(n))
 	}
-	hash = murmur3.MixCollHash(hash, n)
+	hash = murmur3.MixCollHash(hash, uint32(n))
 	*hc = hash
 	return hash
 }
 
 func apersistentVectorInvoke(a APersistentVector, args ...any) any {
 	if len(args) != 1 {
-		panic(NewIllegalArgumentError("vector apply expects one argument, got %d", len(args)))
+		panic(NewIllegalArgumentError(fmt.Sprintf("vector apply expects one argument, got %d", len(args))))
 	}
 	if !IsInteger(args[0]) {
 		panic(NewIllegalArgumentError("key must be integer"))

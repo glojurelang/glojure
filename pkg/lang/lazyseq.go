@@ -2,16 +2,15 @@ package lang
 
 import (
 	"sync"
-
-	"github.com/glojurelang/glojure/pkg/murmur3"
 )
 
 type LazySeq struct {
+	meta         IPersistentMap
+	hash, hasheq uint32
+
 	fn  func() interface{}
 	sv  interface{}
 	seq ISeq
-
-	meta IPersistentMap
 
 	realizeMtx sync.RWMutex
 	seqMtx     sync.Mutex
@@ -29,6 +28,7 @@ func newLazySeqWithMeta(meta IPersistentMap, seq ISeq) ISeq {
 }
 
 var (
+	_ ASeq                  = (*LazySeq)(nil)
 	_ ISeq                  = (*LazySeq)(nil)
 	_ IPending              = (*LazySeq)(nil)
 	_ IObj                  = (*LazySeq)(nil)
@@ -70,6 +70,14 @@ func (s *LazySeq) Cons(x interface{}) Conser {
 
 func (s *LazySeq) Empty() IPersistentCollection {
 	return emptyList
+}
+
+func (s *LazySeq) Equals(o interface{}) bool {
+	seq := s.Seq()
+	if s != nil {
+		return Equals(seq, o)
+	}
+	return Seq(o) == nil
 }
 
 func (s *LazySeq) Equiv(o interface{}) bool {
@@ -142,6 +150,14 @@ func (s *LazySeq) WithMeta(meta IPersistentMap) interface{} {
 	return newLazySeqWithMeta(meta, s.Seq())
 }
 
+func (s *LazySeq) Hash() uint32 {
+	return aseqHash(&s.hash, s)
+}
+
 func (s *LazySeq) HashEq() uint32 {
-	return murmur3.HashOrdered(s)
+	return aseqHashEq(&s.hasheq, s)
+}
+
+func (s *LazySeq) String() string {
+	return aseqString(s)
 }

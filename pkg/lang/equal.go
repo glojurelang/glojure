@@ -6,6 +6,10 @@ func Equiv(a, b any) bool {
 	return Equal(a, b)
 }
 
+func Equals(a, b any) bool {
+	return Equal(a, b)
+}
+
 // Equal returns true if the two values are equivalent.
 // TODO: rename to Equiv.
 func Equal(a, b any) bool {

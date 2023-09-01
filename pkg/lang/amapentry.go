@@ -44,7 +44,7 @@ func amapentrySeq(a AMapEntry) ISeq {
 	return amapentryAsVector(a).Seq()
 }
 
-func amapentryCons(a AMapEntry, o any) IPersistentCollection {
+func amapentryCons(a AMapEntry, o any) Conser {
 	return amapentryAsVector(a).Cons(o)
 }
 
@@ -52,6 +52,6 @@ func amapentryEmpty(a AMapEntry) IPersistentCollection {
 	return nil
 }
 
-func amapentryPop(a AMapEntry) IPersistentCollection {
+func amapentryPop(a AMapEntry) IPersistentStack {
 	return NewVector(a.Key())
 }

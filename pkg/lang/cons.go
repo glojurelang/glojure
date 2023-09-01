@@ -1,9 +1,11 @@
 package lang
 
 type Cons struct {
+	meta         IPersistentMap
+	hash, hasheq uint32
+
 	first any
 	more  ISeq
-	meta  IPersistentMap
 }
 
 var (
@@ -75,11 +77,11 @@ func (c *Cons) Equiv(o any) bool {
 }
 
 func (c *Cons) Hash() uint32 {
-	return aseqHash(c)
+	return aseqHash(&c.hash, c)
 }
 
 func (c *Cons) HashEq() uint32 {
-	return aseqHashEq(c)
+	return aseqHashEq(&c.hasheq, c)
 }
 
 func (c *Cons) String() string {

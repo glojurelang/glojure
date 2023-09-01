@@ -6,7 +6,8 @@ import (
 
 // Set represents a map of glojure values.
 type Set struct {
-	meta IPersistentMap
+	meta         IPersistentMap
+	hash, hasheq uint32
 
 	vals []interface{}
 }
@@ -24,9 +25,13 @@ func CreatePersistentTreeSetWithComparator(comparator IFn, keys ISeq) interface{
 }
 
 func NewSet(vals ...interface{}) *Set {
-	// TODO: fixme. reverse to pass test
-	if len(vals) == 3 {
-		vals[0], vals[2] = vals[2], vals[0]
+	// check for duplicates
+	for i := 0; i < len(vals); i++ {
+		for j := i + 1; j < len(vals); j++ {
+			if Equal(vals[i], vals[j]) {
+				panic(NewIllegalArgumentError("duplicate key: %v", vals[i]))
+			}
+		}
 	}
 
 	return &Set{
@@ -35,9 +40,9 @@ func NewSet(vals ...interface{}) *Set {
 }
 
 var (
-	_ IPersistentSet        = (*Set)(nil)
+	_ APersistentSet        = (*Set)(nil)
+	_ IObj                  = (*Set)(nil)
 	_ IPersistentCollection = (*Set)(nil)
-	_ IFn                   = (*Set)(nil)
 
 	emptySet = NewSet()
 )
@@ -63,7 +68,7 @@ func (s *Set) ApplyTo(args ISeq) interface{} {
 	return s.Invoke(seqToSlice(args)...)
 }
 
-func (s *Set) Conj(v interface{}) Conjer {
+func (s *Set) Cons(v interface{}) Conser {
 	if s.Contains(v) {
 		return s
 	}
@@ -134,11 +139,23 @@ func (s *Set) Seq() ISeq {
 	return NewSliceIterator(s.vals)
 }
 
+func (s *Set) Equiv(o any) bool {
+	return apersistentsetEquiv(s, o)
+}
+
+func (s *Set) HashEq() uint32 {
+	return apersistentsetHashEq(&s.hasheq, s)
+}
+
 func (s *Set) Meta() IPersistentMap {
 	return s.meta
 }
 
 func (s *Set) WithMeta(meta IPersistentMap) interface{} {
+	if meta == s.meta {
+		return s
+	}
+
 	return &Set{
 		meta: meta,
 		vals: s.vals,

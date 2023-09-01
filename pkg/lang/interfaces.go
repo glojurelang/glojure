@@ -76,6 +76,11 @@ type (
 		Cons(any) Conser
 	}
 
+	// Conjer is an interface for values that can be conjed onto.
+	Conjer interface {
+		Conj(any) Conjer
+	}
+
 	Seqable interface {
 		Seq() ISeq
 	}
@@ -129,7 +134,7 @@ type (
 	// Collections
 
 	ITransientCollection interface {
-		Conj(any) ITransientCollection
+		Conjer
 		Persistent() IPersistentCollection
 	}
 
@@ -177,9 +182,8 @@ type (
 
 	// IPersistentVector is a persistent vector.
 	IPersistentVector interface {
-		Sequential
-
 		Associative
+		Sequential
 		IPersistentStack
 		Reversible
 		Indexed
@@ -189,7 +193,7 @@ type (
 
 		AssocN(int, any) IPersistentVector
 
-		Cons(any) IPersistentVector
+		Cons(any) Conser
 	}
 
 	IPersistentSet interface {

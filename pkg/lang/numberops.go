@@ -113,6 +113,9 @@ func category(x any) Category {
 	}
 }
 
+func Add(x, y any) any {
+	return Ops(x).Combine(Ops(y)).Add(x, y)
+}
 func AddP(x, y any) any {
 	return Ops(x).Combine(Ops(y)).AddP(x, y)
 }

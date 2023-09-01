@@ -3,7 +3,7 @@ package lang
 import (
 	"reflect"
 
-	"github.com/glojurelang/glojure/pkg/murmur3"
+	"github.com/glojurelang/glojure/internal/murmur3"
 )
 
 // List is a list of values.
@@ -93,7 +93,7 @@ func (e *EmptyList) Equals(other any) bool {
 		return Seq(other) == nil
 	}
 	t := reflect.TypeOf(other)
-	if t.IsValid() && t.Kind() == reflect.Slice {
+	if t != nil && t.Kind() == reflect.Slice {
 		return Seq(other) == nil
 	}
 	return false

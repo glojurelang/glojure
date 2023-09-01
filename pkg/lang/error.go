@@ -17,6 +17,10 @@ type (
 		msg string
 	}
 
+	IllegalStateError struct {
+		msg string
+	}
+
 	ArithmeticError struct {
 		msg string
 	}
@@ -91,6 +95,19 @@ func (e *ArithmeticError) Error() string {
 
 func (e *ArithmeticError) Is(other error) bool {
 	_, ok := other.(*ArithmeticError)
+	return ok
+}
+
+func NewIllegalStateError(msg string) error {
+	return &IllegalStateError{msg: msg}
+}
+
+func (e *IllegalStateError) Error() string {
+	return e.msg
+}
+
+func (e *IllegalStateError) Is(other error) bool {
+	_, ok := other.(*IllegalStateError)
 	return ok
 }
 

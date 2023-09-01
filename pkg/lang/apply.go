@@ -166,8 +166,8 @@ func coerceGoValue(targetType reflect.Type, val interface{}) (reflect.Value, err
 		iseqType := reflect.TypeOf((*ISeq)(nil)).Elem()
 		if targetType == iseqType {
 			if reflect.TypeOf(val).Kind() == reflect.Slice {
-				val = NewSliceIterator(val)
-			} else if seqable, ok := val.(ISeqable); ok {
+				val = NewSliceSeq(val)
+			} else if seqable, ok := val.(Seqable); ok {
 				val = seqable.Seq()
 			}
 		}

@@ -87,7 +87,7 @@ func (c *ChunkedCons) Cons(o any) Conser {
 }
 
 func (c *ChunkedCons) Empty() IPersistentCollection {
-	return asetEmpty()
+	return aseqEmpty()
 }
 
 func (c *ChunkedCons) Equiv(o any) bool {

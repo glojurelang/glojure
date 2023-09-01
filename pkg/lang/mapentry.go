@@ -51,7 +51,7 @@ func (me *MapEntry) AssocN(i int, o any) IPersistentVector {
 	return amapentryAssocN(me, i, o)
 }
 
-func (me *MapEntry) Cons(o any) IPersistentVector {
+func (me *MapEntry) Cons(o any) Conser {
 	return amapentryCons(me, o)
 }
 
@@ -72,7 +72,7 @@ func (me *MapEntry) ContainsKey(k any) bool {
 }
 
 func (me *MapEntry) EntryAt(k any) IMapEntry {
-	return apeMapEntryEntryAt(me, k)
+	return apersistentVectorEntryAt(me, k)
 }
 
 func (me *MapEntry) String() string {

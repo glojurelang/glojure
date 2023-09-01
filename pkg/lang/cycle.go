@@ -3,7 +3,8 @@ package lang
 import "sync/atomic"
 
 type Cycle struct {
-	meta IPersistentMap
+	meta         IPersistentMap
+	hash, hasheq uint32
 
 	all     ISeq
 	prev    ISeq
@@ -66,7 +67,7 @@ func (c *Cycle) Cons(o any) Conser {
 }
 
 func (c *Cycle) Count() int {
-	return 1 + Count(c.more)
+	return 1 + Count(c.More())
 }
 
 func (c *Cycle) Empty() IPersistentCollection {
@@ -82,11 +83,11 @@ func (c *Cycle) Equiv(o any) bool {
 }
 
 func (c *Cycle) Hash() uint32 {
-	return aseqHash(c)
+	return aseqHash(&c.hash, c)
 }
 
 func (c *Cycle) HashEq() uint32 {
-	return aseqHashEq(c)
+	return aseqHashEq(&c.hasheq, c)
 }
 
 func (c *Cycle) String() string {

@@ -3,15 +3,17 @@ package lang
 import "fmt"
 
 type SubVector struct {
+	meta         IPersistentMap
+	hash, hasheq uint32
+
 	v          IPersistentVector
 	start, end int
-	meta       IPersistentMap
 }
 
 var (
+	_ APersistentVector = (*SubVector)(nil)
 	_ IObj              = (*SubVector)(nil)
 	_ IPersistentVector = (*SubVector)(nil)
-	// TODO: AFn
 )
 
 func NewSubVector(meta IPersistentMap, v IPersistentVector, start, end int) *SubVector {
@@ -54,11 +56,7 @@ func (v *SubVector) AssocN(i int, val interface{}) IPersistentVector {
 	return NewSubVector(v.meta, v.v.AssocN(v.start+i, val), v.start, v.end)
 }
 
-func (v *SubVector) Conj(val interface{}) Conjer {
-	return v.Cons(val).(Conjer)
-}
-
-func (v *SubVector) Cons(val interface{}) IPersistentVector {
+func (v *SubVector) Cons(val interface{}) Conser {
 	return NewSubVector(v.meta, v.v.AssocN(v.end, val), v.start, v.end+1)
 }
 
@@ -102,23 +100,11 @@ func (v *SubVector) ValAtDefault(k, def interface{}) interface{} {
 }
 
 func (v *SubVector) Equal(v2 interface{}) bool {
-	other, ok := v2.(IPersistentVector)
-	if !ok {
-		return false
-	}
-	if v.Count() != other.Count() {
-		return false
-	}
-	for i := 0; i < v.Count(); i++ {
-		vVal, oVal := v.EntryAt(i), other.EntryAt(i)
-		if vVal == nil || oVal == nil {
-			return vVal == oVal
-		}
-		if !Equal(vVal, oVal) {
-			return false
-		}
-	}
-	return true
+	return apersistentvectorEqual(v, v2)
+}
+
+func (v *SubVector) Equiv(v2 interface{}) bool {
+	return apersistentvectorEquiv(v, v2)
 }
 
 func (v *SubVector) Nth(i int) interface{} {
@@ -172,4 +158,16 @@ func (v *SubVector) IsEmpty() bool {
 
 func (v *SubVector) Empty() IPersistentCollection {
 	return emptyVector.WithMeta(v.meta).(IPersistentCollection)
+}
+
+func (v *SubVector) ApplyTo(args ISeq) any {
+	return apersistentvectorApplyTo(v, args)
+}
+
+func (v *SubVector) Invoke(args ...any) any {
+	return apersistentvectorInvoke(v, args)
+}
+
+func (v *SubVector) HashEq() uint32 {
+	return apersistentvectorHashEq(&v.hasheq, v)
 }

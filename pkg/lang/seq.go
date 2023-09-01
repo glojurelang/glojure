@@ -3,6 +3,8 @@ package lang
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/glojurelang/glojure/internal/seq"
 )
 
 func First(x interface{}) interface{} {
@@ -49,7 +51,7 @@ func Seq(x interface{}) ISeq {
 		return x.Seq()
 	case ISeq:
 		return x
-	case ISeqable:
+	case Seqable:
 		return x.Seq()
 	case string:
 		return newStringSeq(x)
@@ -88,7 +90,7 @@ func IsSeqEqual(seq ISeq, other interface{}) bool {
 	switch other := other.(type) {
 	case Sequential:
 		switch other := other.(type) {
-		case ISeqable:
+		case Seqable:
 			return SeqsEqual(seq, other.Seq())
 		}
 	}
@@ -138,4 +140,23 @@ func seqToSlice(s ISeq) []interface{} {
 		res = append(res, seq.First())
 	}
 	return res
+}
+
+type seqSeq struct {
+	ISeq
+}
+
+func (s seqSeq) Next() seq.Seq {
+	n := s.ISeq.Next()
+	if n == nil {
+		return nil
+	}
+	return seqSeq{ISeq: n}
+}
+
+func seqToInternalSeq(s ISeq) seq.Seq {
+	if s == nil {
+		return nil
+	}
+	return seqSeq{ISeq: s}
 }

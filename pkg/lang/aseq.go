@@ -3,7 +3,7 @@ package lang
 import (
 	"reflect"
 
-	"github.com/glojurelang/glojure/pkg/murmur3"
+	"github.com/glojurelang/glojure/internal/murmur3"
 )
 
 type (
@@ -25,9 +25,17 @@ type (
 	}
 )
 
+func aseqMore(a ASeq) ISeq {
+	s := a.Next()
+	if s == nil {
+		return emptyList
+	}
+	return s
+}
+
 func aseqCount(a ASeq) int {
 	i := 1
-	for s := c.Next(); s != nil; s, i = s.Next(), i+1 {
+	for s := a.Next(); s != nil; s, i = s.Next(), i+1 {
 		if sc, ok := s.(Counted); ok {
 			return i + sc.Count()
 		}
@@ -40,7 +48,7 @@ func aseqCons(a ASeq, o any) Conser {
 }
 
 func aseqEmpty() IPersistentCollection {
-	return emptyString
+	return emptyList
 }
 
 func aseqEquiv(a ASeq, obj any) bool {
@@ -81,7 +89,7 @@ func aseqHash(hc *uint32, a ASeq) uint32 {
 		return *hc
 	}
 
-	hash := 1
+	hash := uint32(1)
 	for s := a.Seq(); s != nil; s = s.Next() {
 		var h uint32
 		if s.First() != nil {
@@ -97,7 +105,7 @@ func aseqHashEq(hc *uint32, a ASeq) uint32 {
 	if *hc != 0 {
 		return *hc
 	}
-	hash := murmur3.HashOrdered(a, HashEq)
+	hash := murmur3.HashOrdered(seqToInternalSeq(a), HashEq)
 	*hc = hash
 	return hash
 }

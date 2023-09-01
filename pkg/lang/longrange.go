@@ -5,14 +5,21 @@ import (
 	"math"
 )
 
-type LongRange struct {
-	meta   IPersistentMap
-	hash   uint32
-	hashEq uint32
+type (
+	LongRange struct {
+		meta   IPersistentMap
+		hash   uint32
+		hashEq uint32
 
-	start, end, step int64
-	count            int
-}
+		start, end, step int64
+		count            int
+	}
+
+	LongChunk struct {
+		start, step int64
+		count       int
+	}
+)
 
 var (
 	_ ISeq        = (*LongRange)(nil)
@@ -22,13 +29,16 @@ var (
 	_ ASeq        = (*LongRange)(nil)
 	_ IDrop       = (*LongRange)(nil)
 	_ IChunkedSeq = (*LongRange)(nil)
+
+	_ IChunk      = (*LongChunk)(nil)
+	_ IReduceInit = (*LongChunk)(nil)
 )
 
 // NewLongRange returns a lazy sequence of start, start + step, start + 2*step, ...
 func NewLongRange(start, end, step int64) (res ISeq) {
 	defer func() {
 		if err := recover(); err != nil {
-			if errors.Is(err, NewArithmeticError("")) {
+			if err, ok := err.(error); ok && errors.Is(err, NewArithmeticError("")) {
 				res = NewRange(start, end, step)
 				return
 			}
@@ -71,7 +81,7 @@ func rangeCount(start, end, step int64) int {
 	if step > 0 {
 		o = -1
 	}
-	count := Add(Add(Minus(end, start), step), o) / step
+	count := Add(Add(Sub(end, start), step), o).(int64) / step
 	if count > math.MaxInt {
 		panic(NewArithmeticError("integer overflow"))
 	}
@@ -84,7 +94,7 @@ func (r *LongRange) Seq() ISeq {
 	return r
 }
 
-func (r *LongRange) First() interface{} {
+func (r *LongRange) First() any {
 	return r.start
 }
 
@@ -125,7 +135,7 @@ func (r *LongRange) Count() int {
 }
 
 func (r *LongRange) Empty() IPersistentCollection {
-	return asetEmpty()
+	return aseqEmpty()
 }
 
 func (r *LongRange) Equiv(o any) bool {
@@ -169,8 +179,8 @@ func (r *LongRange) WithMeta(meta IPersistentMap) any {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-func (r *LongRange) Reduce(f IFn) interface{} {
-	var ret interface{} = r.start
+func (r *LongRange) Reduce(f IFn) any {
+	var ret any = r.start
 	for i := r.start + r.step; i < r.end; i += r.step {
 		ret = f.Invoke(ret, i)
 		if IsReduced(ret) {
@@ -180,8 +190,8 @@ func (r *LongRange) Reduce(f IFn) interface{} {
 	return ret
 }
 
-func (r *LongRange) ReduceInit(f IFn, start interface{}) interface{} {
-	var ret interface{} = start
+func (r *LongRange) ReduceInit(f IFn, init any) any {
+	var ret any = init
 	for i := r.start; i < r.end; i += r.step {
 		ret = f.Invoke(ret, i)
 		if IsReduced(ret) {
@@ -196,8 +206,58 @@ func (r *LongRange) Drop(n int) Sequential {
 		return r
 	}
 	if n < r.count {
-		return NewLongRange(r.start+n*r.step, r.end, r.step)
+		return NewLongRange(r.start+int64(n)*r.step, r.end, r.step).(Sequential)
 	} else {
 		return nil
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// LongChunk
+
+func NewLongChunk(start, step int64, count int) *LongChunk {
+	return &LongChunk{
+		start: start,
+		step:  step,
+		count: count,
+	}
+}
+
+func (c *LongChunk) First() any {
+	return c.start
+}
+
+func (c *LongChunk) Nth(i int) any {
+	return c.start + int64(i)*c.step
+}
+
+func (c *LongChunk) NthDefault(i int, notFound any) any {
+	if i >= 0 && i < c.count {
+		return c.start + int64(i)*c.step
+	}
+	return notFound
+}
+
+func (c *LongChunk) Count() int {
+	return c.count
+}
+
+func (c *LongChunk) DropFirst() IChunk {
+	if c.count <= 0 {
+		panic(NewIllegalStateError("dropFirst of empty chunk"))
+	}
+	return NewLongChunk(c.start+c.step, c.step, c.count-1)
+}
+
+func (c *LongChunk) ReduceInit(f IFn, init any) any {
+	x := c.start
+	ret := init
+	for i := 0; i < c.count; i++ {
+		ret = f.Invoke(ret, x)
+		if IsReduced(ret) {
+			return ret.(IDeref).Deref()
+		}
+		x += c.step
+	}
+	return ret
 }
