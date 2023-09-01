@@ -51,7 +51,7 @@ func (v *SubVector) AssocN(i int, val interface{}) IPersistentVector {
 		panic(fmt.Errorf("index out of bounds: %d", i))
 	}
 	if v.start+i == v.end {
-		return v.Cons(val)
+		return v.Cons(val).(IPersistentVector)
 	}
 	return NewSubVector(v.meta, v.v.AssocN(v.start+i, val), v.start, v.end)
 }
@@ -99,12 +99,12 @@ func (v *SubVector) ValAtDefault(k, def interface{}) interface{} {
 	return def
 }
 
-func (v *SubVector) Equal(v2 interface{}) bool {
-	return apersistentvectorEqual(v, v2)
+func (v *SubVector) Equals(v2 interface{}) bool {
+	return apersistentVectorEquals(v, v2)
 }
 
 func (v *SubVector) Equiv(v2 interface{}) bool {
-	return apersistentvectorEquiv(v, v2)
+	return apersistentVectorEquiv(v, v2)
 }
 
 func (v *SubVector) Nth(i int) interface{} {
@@ -139,17 +139,11 @@ func (v *SubVector) Pop() IPersistentStack {
 }
 
 func (v *SubVector) RSeq() ISeq {
-	if v.Count() == 0 {
-		return nil
-	}
-	return NewVectorIterator(v, v.Count()-1, -1)
+	return apersistentVectorRSeq(v)
 }
 
 func (v *SubVector) Seq() ISeq {
-	if v.Count() == 0 {
-		return nil
-	}
-	return NewVectorIterator(v, 0, 1)
+	return apersistentVectorSeq(v)
 }
 
 func (v *SubVector) IsEmpty() bool {
@@ -161,13 +155,13 @@ func (v *SubVector) Empty() IPersistentCollection {
 }
 
 func (v *SubVector) ApplyTo(args ISeq) any {
-	return apersistentvectorApplyTo(v, args)
+	return afnApplyTo(v, args)
 }
 
 func (v *SubVector) Invoke(args ...any) any {
-	return apersistentvectorInvoke(v, args)
+	return apersistentVectorInvoke(v, args)
 }
 
 func (v *SubVector) HashEq() uint32 {
-	return apersistentvectorHashEq(&v.hasheq, v)
+	return apersistentVectorHashEq(&v.hasheq, v)
 }

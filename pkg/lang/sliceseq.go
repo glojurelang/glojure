@@ -9,7 +9,7 @@ type (
 	// SliceSeq is an implementation of ISeq for slices.
 	SliceSeq struct {
 		meta         IPersistentMap
-		hash, hasheq int32
+		hash, hasheq uint32
 
 		v reflect.Value
 		i int
@@ -29,7 +29,7 @@ func NewSliceSeq(x any) ISeq {
 		if reflectVal.Len() == 0 {
 			return nil
 		}
-		return sliceIterator{v: reflectVal, i: 0}
+		return &SliceSeq{v: reflectVal, i: 0}
 	}
 	panic(NewIllegalArgumentError(fmt.Sprintf("not a slice: %T", x)))
 }
@@ -78,7 +78,7 @@ func (s *SliceSeq) Count() int {
 }
 
 func (s *SliceSeq) Empty() IPersistentCollection {
-	return aseqEmpty(s)
+	return aseqEmpty()
 }
 
 func (s *SliceSeq) Equals(o any) bool {

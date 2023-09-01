@@ -7,10 +7,6 @@ import (
 	"github.com/glojurelang/glojure/internal/persistent/vector"
 )
 
-var (
-	emptyVector = NewVector()
-)
-
 // Vector is a vector of values.
 type Vector struct {
 	meta         IPersistentMap
@@ -20,6 +16,18 @@ type Vector struct {
 }
 
 type PersistentVector = Vector
+
+var (
+	emptyVector = NewVector()
+
+	_ APersistentVector   = (*Vector)(nil)
+	_ IObj                = (*Vector)(nil)
+	_ IReduce             = (*Vector)(nil)
+	_ IReduceInit         = (*Vector)(nil)
+	_ IDrop               = (*Vector)(nil)
+	_ IKVReduce           = (*Vector)(nil)
+	_ IEditableCollection = (*Vector)(nil)
+)
 
 func NewVector(values ...any) *Vector {
 	vals := make([]any, len(values))
@@ -180,19 +188,19 @@ func (v *Vector) ApplyTo(args ISeq) any {
 	return v.Invoke(seqToSlice(args)...)
 }
 
-func (v *Vector) Seq() ISeq {
+func (v *Vector) ChunkedSeq() IChunkedSeq {
 	if v.Count() == 0 {
 		return nil
 	}
-	// TODO: chunked seq
-	return NewVectorIterator(v, 0, 1)
+	return NewChunkedSeq(v, 0, 0)
+}
+
+func (v *Vector) Seq() ISeq {
+	return v.ChunkedSeq()
 }
 
 func (v *Vector) RSeq() ISeq {
-	if v.Count() == 0 {
-		return nil
-	}
-	return NewVectorIterator(v, v.Count()-1, -1)
+	return apersistentVectorRSeq(v)
 }
 
 func (v *Vector) Peek() any {
@@ -247,6 +255,30 @@ func (v *Vector) Reduce(f IFn) any {
 		res = f.Invoke(res, v.ValAt(i))
 	}
 	return res
+}
+
+func (v *Vector) KVReduce(f IFn, init any) any {
+	for i := 0; i < v.Count(); i++ {
+		init = f.Invoke(init, i, v.ValAt(i))
+		if IsReduced(init) {
+			return init.(IDeref).Deref()
+		}
+	}
+	return init
+}
+
+func (v *Vector) Drop(n int) Sequential {
+	if n <= 0 {
+		return v
+	}
+	if n >= v.Count() {
+		return nil
+	}
+	panic("TODO")
+}
+
+func (v *Vector) AsTransient() ITransientCollection {
+	panic("TODO")
 }
 
 func toSlice(x any) []any {

@@ -29,7 +29,7 @@ func NewSet(vals ...interface{}) *Set {
 	for i := 0; i < len(vals); i++ {
 		for j := i + 1; j < len(vals); j++ {
 			if Equal(vals[i], vals[j]) {
-				panic(NewIllegalArgumentError("duplicate key: %v", vals[i]))
+				panic(NewIllegalArgumentError(fmt.Sprintf("duplicate key: %v", vals[i])))
 			}
 		}
 	}
@@ -136,7 +136,7 @@ func (s *Set) Seq() ISeq {
 	if s.Count() == 0 {
 		return nil
 	}
-	return NewSliceIterator(s.vals)
+	return NewSliceSeq(s.vals)
 }
 
 func (s *Set) Equiv(o any) bool {
@@ -172,7 +172,7 @@ type TransientSet struct {
 }
 
 func (s *TransientSet) Conj(v interface{}) Conjer {
-	return &TransientSet{Set: s.Set.Conj(v).(*Set)}
+	return &TransientSet{Set: s.Set.Cons(v).(*Set)}
 }
 
 func (s *TransientSet) Persistent() IPersistentCollection {

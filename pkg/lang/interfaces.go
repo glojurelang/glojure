@@ -52,6 +52,10 @@ type (
 		ReduceInit(f IFn, init any) any
 	}
 
+	IKVReduce interface {
+		KVReduce(f IFn, init any) any
+	}
+
 	// IMeta is an interface for values that can have metadata.
 	IMeta interface {
 		// Meta returns the metadata associated with this value.
@@ -128,6 +132,14 @@ type (
 
 		Nth(int) any
 		NthDefault(int, any) any
+	}
+
+	IndexedSeq interface {
+		ISeq
+		Sequential
+		Counted
+
+		Index() int
 	}
 
 	//////////////////////////////////////////////////////////////////////////////

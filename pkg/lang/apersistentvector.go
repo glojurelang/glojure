@@ -12,6 +12,7 @@ type (
 		AFn
 		IPersistentVector
 		IHashEq
+		Reversible
 	}
 
 	apvSeq struct {
@@ -80,6 +81,48 @@ func apersistentVectorValAtDefault(a APersistentVector, key, notFound any) any {
 		}
 	}
 	return notFound
+}
+
+func apersistentVectorEquals(a APersistentVector, o any) bool {
+	if a == o {
+		return true
+	}
+
+	switch o := o.(type) {
+	case IPersistentVector:
+		if o.Count() != a.Count() {
+			return false
+		}
+		for i := 0; i < a.Count(); i++ {
+			if !Equals(a.Nth(i), o.Nth(i)) {
+				return false
+			}
+		}
+		return true
+	case Sequential:
+		ms := Seq(o)
+		for i := 0; i < a.Count(); i++ {
+			if ms == nil || !Equals(a.Nth(i), ms.First()) {
+				return false
+			}
+			ms = ms.Next()
+		}
+		return ms == nil
+	default:
+		v := reflect.ValueOf(o)
+		if !(v.Kind() == reflect.Slice || v.Kind() == reflect.Array) {
+			return false
+		}
+		if v.Len() != a.Count() {
+			return false
+		}
+		for i := 0; i < a.Count(); i++ {
+			if !Equals(a.Nth(i), v.Index(i).Interface()) {
+				return false
+			}
+		}
+		return true
+	}
 }
 
 func apersistentVectorEquiv(a APersistentVector, o any) bool {
