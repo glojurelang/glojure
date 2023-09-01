@@ -95,6 +95,7 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 		}
 	} else {
 		v := a.resolveSym(form, env)
+
 		vr, ok := v.(*Var)
 		if ok {
 			m := vr.Meta()
@@ -1526,7 +1527,7 @@ func (a *Analyzer) parseGo(form interface{}, env Env) (*ast.Node, error) {
 //	   (when local
 //	     {:local (dissoc-env local)}))))
 func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (*ast.Node, error) {
-	if _, ok := form.(ISeqable); !ok {
+	if _, ok := form.(Seqable); !ok {
 		return nil, exInfo("invalid fn method", nil)
 	}
 	params, ok := First(form).(IPersistentVector)
@@ -1554,7 +1555,7 @@ func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (*ast.Node, error)
 		if Count(variadicParams) != 1 {
 			return nil, exInfo("variadic method must have exactly 1 param", nil)
 		}
-		paramsNames = params.Pop().Pop().(Conjer).Conj(params.Peek()).(IPersistentVector)
+		paramsNames = params.Pop().Pop().(Conser).Cons(params.Peek()).(IPersistentVector)
 	}
 	env = Dissoc(env, KWLocal).(Env)
 	arity := paramsNames.Count()
@@ -1960,7 +1961,7 @@ func classifyType(v interface{}) Keyword {
 //	        [(seq take) drop]))
 //	    [(seq take) ()])))
 func splitWith(pred func(interface{}) bool, coll interface{}) (interface{}, interface{}) {
-	var take Conjer = vec()
+	var take Conser = vec()
 	drop := coll
 	for {
 		seq := Seq(drop)

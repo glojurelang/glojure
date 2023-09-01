@@ -861,11 +861,11 @@ func (r *Reader) sqExpandList(symbolNameMap map[string]*value.Symbol, els []inte
 	var ret value.IPersistentVector = value.NewVector()
 	for _, v := range els {
 		if r.isUnquote(v) {
-			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), value.First(value.Rest(v))))
+			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), value.First(value.Rest(v)))).(value.IPersistentVector)
 		} else if r.isUnquoteSplicing(v) {
-			ret = ret.Cons(value.First(value.Rest(v)))
+			ret = ret.Cons(value.First(value.Rest(v))).(value.IPersistentVector)
 		} else {
-			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), r.syntaxQuote(symbolNameMap, v)))
+			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), r.syntaxQuote(symbolNameMap, v))).(value.IPersistentVector)
 		}
 	}
 	return value.Seq(ret)

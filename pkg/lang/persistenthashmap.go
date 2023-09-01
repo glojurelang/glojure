@@ -1,4 +1,3 @@
-//go:generate go run ../../cmd/gen-abstract-class/main.go -class APersistentMap -struct PersistentHashMap -receiver m
 package lang
 
 import "errors"

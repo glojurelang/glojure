@@ -8,14 +8,16 @@ import (
 )
 
 // Vector is a vector of values.
-type Vector struct {
-	meta         IPersistentMap
-	hash, hasheq uint32
+type (
+	Vector struct {
+		meta         IPersistentMap
+		hash, hasheq uint32
 
-	vec vector.Vector
-}
+		vec vector.Vector
+	}
 
-type PersistentVector = Vector
+	PersistentVector = Vector
+)
 
 var (
 	emptyVector = NewVector()
@@ -188,15 +190,8 @@ func (v *Vector) ApplyTo(args ISeq) any {
 	return v.Invoke(seqToSlice(args)...)
 }
 
-func (v *Vector) ChunkedSeq() IChunkedSeq {
-	if v.Count() == 0 {
-		return nil
-	}
-	return NewChunkedSeq(v, 0, 0)
-}
-
 func (v *Vector) Seq() ISeq {
-	return v.ChunkedSeq()
+	return apersistentVectorSeq(v)
 }
 
 func (v *Vector) RSeq() ISeq {
@@ -306,3 +301,5 @@ func toSlice(x any) []any {
 
 	panic(fmt.Sprintf("unable to convert %T to slice", x))
 }
+
+////////////////////////////////////////////////////////////////////////////////

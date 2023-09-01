@@ -22,9 +22,21 @@ func Equal(a, b any) bool {
 		return aVal.Pointer() == bVal.Pointer()
 	}
 
-	if a == b || aVal.Kind() == reflect.Ptr && aVal.IsNil() && bVal.Kind() == reflect.Ptr && bVal.IsNil() {
+	if a == b {
 		return true
 	}
+
+	aNil, bNil := IsNil(a), IsNil(b)
+
+	if aNil && bNil {
+		// both nil
+		return true
+	}
+	if aNil || bNil {
+		// one nil
+		return false
+	}
+
 	if _, ok := AsNumber(a); ok {
 		if _, ok := AsNumber(b); !ok {
 			return false
