@@ -16,9 +16,30 @@ type (
 	}
 
 	apvSeq struct {
+		meta         IPersistentMap
+		hash, hasheq uint32
+
 		v IPersistentVector
 		i int
 	}
+
+	apvRSeq struct {
+		meta         IPersistentMap
+		hash, hasheq uint32
+
+		v IPersistentVector
+		i int
+	}
+)
+
+var (
+	_ ASeq       = (*apvSeq)(nil)
+	_ IndexedSeq = (*apvSeq)(nil)
+	_ IReduce    = (*apvSeq)(nil)
+
+	_ ASeq       = (*apvRSeq)(nil)
+	_ IndexedSeq = (*apvRSeq)(nil)
+	_ Counted    = (*apvRSeq)(nil)
 )
 
 func apersistentVectorString(a APersistentVector) string {
@@ -201,3 +222,179 @@ func apersistentVectorPeek(a APersistentVector) any {
 	}
 	return nil
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
+func newAPVSeq(v IPersistentVector, i int) *apvSeq {
+	return &apvSeq{
+		v: v,
+		i: i,
+	}
+}
+
+func (s *apvSeq) First() any {
+	return s.v.Nth(s.i)
+}
+
+func (s *apvSeq) Next() ISeq {
+	if s.i+1 >= s.v.Count() {
+		return nil
+	}
+	return newAPVSeq(s.v, s.i+1)
+}
+
+func (s *apvSeq) Index() int {
+	return s.i
+}
+
+func (s *apvSeq) Count() int {
+	return s.v.Count() - s.i
+}
+
+func (s *apvSeq) Cons(o any) Conser {
+	return aseqCons(s, o)
+}
+
+func (s *apvSeq) WithMeta(meta IPersistentMap) any {
+	if meta == s.meta {
+		return s
+	}
+	return newAPVSeq(s.v, s.i).WithMeta(meta)
+}
+
+func (s *apvSeq) Meta() IPersistentMap {
+	return s.meta
+}
+
+func (s *apvSeq) Reduce(f IFn) any {
+	ret := s.v.Nth(s.i)
+	for x := s.i + 1; x < s.v.Count(); x++ {
+		ret = f.Invoke(ret, s.v.Nth(x))
+		if IsReduced(ret) {
+			return ret.(IDeref).Deref()
+		}
+	}
+	return ret
+}
+
+func (s *apvSeq) ReduceInit(f IFn, init any) any {
+	ret := init
+	for x := s.i; x < s.v.Count(); x++ {
+		ret = f.Invoke(ret, s.v.Nth(x))
+		if IsReduced(ret) {
+			return ret.(IDeref).Deref()
+		}
+	}
+	return ret
+}
+
+func (s *apvSeq) Empty() IPersistentCollection {
+	return aseqEmpty()
+}
+
+func (s *apvSeq) String() string {
+	return aseqString(s)
+}
+
+func (s *apvSeq) Equals(o any) bool {
+	return aseqEquals(s, o)
+}
+
+func (s *apvSeq) Equiv(o any) bool {
+	return aseqEquiv(s, o)
+}
+
+func (s *apvSeq) Hash() uint32 {
+	return aseqHash(&s.hash, s)
+}
+
+func (s *apvSeq) HashEq() uint32 {
+	return aseqHashEq(&s.hasheq, s)
+}
+
+func (s *apvSeq) More() ISeq {
+	return aseqMore(s)
+}
+
+func (s *apvSeq) Seq() ISeq {
+	return s
+}
+
+func (s *apvSeq) xxx_sequential() {}
+
+////////////////////////////////////////////////////////////////////////////////
+
+func newAPVRSeq(v IPersistentVector, i int) *apvRSeq {
+	return &apvRSeq{
+		v: v,
+		i: i,
+	}
+}
+
+func (s *apvRSeq) First() any {
+	return s.v.Nth(s.i)
+}
+
+func (s *apvRSeq) Next() ISeq {
+	if s.i <= 0 {
+		return nil
+	}
+	return newAPVSeq(s.v, s.i-1)
+}
+
+func (s *apvRSeq) Index() int {
+	return s.i
+}
+
+func (s *apvRSeq) Count() int {
+	return s.i + 1
+}
+
+func (s *apvRSeq) Cons(o any) Conser {
+	return aseqCons(s, o)
+}
+
+func (s *apvRSeq) WithMeta(meta IPersistentMap) any {
+	if meta == s.meta {
+		return s
+	}
+	return newAPVRSeq(s.v, s.i).WithMeta(meta)
+}
+
+func (s *apvRSeq) Meta() IPersistentMap {
+	return s.meta
+}
+
+func (s *apvRSeq) Empty() IPersistentCollection {
+	return aseqEmpty()
+}
+
+func (s *apvRSeq) String() string {
+	return aseqString(s)
+}
+
+func (s *apvRSeq) Equals(o any) bool {
+	return aseqEquals(s, o)
+}
+
+func (s *apvRSeq) Equiv(o any) bool {
+	return aseqEquiv(s, o)
+}
+
+func (s *apvRSeq) Hash() uint32 {
+	return aseqHash(&s.hash, s)
+}
+
+func (s *apvRSeq) HashEq() uint32 {
+	return aseqHashEq(&s.hasheq, s)
+}
+
+func (s *apvRSeq) More() ISeq {
+	return aseqMore(s)
+}
+
+func (s *apvRSeq) Seq() ISeq {
+	return s
+}
+
+func (s *apvRSeq) xxx_sequential() {}

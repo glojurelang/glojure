@@ -762,22 +762,25 @@ func newArrayNodeSeq(nodes []Node, i int, s ISeq) ISeq {
 	return nil
 }
 
+func (s *ArrayNodeSeq) Meta() IPersistentMap {
+	return s.meta
+}
+
 func (s *ArrayNodeSeq) WithMeta(meta IPersistentMap) any {
+	if meta == s.meta {
+		return s
+	}
 	res := *s
 	res.meta = SafeMerge(res.meta, meta)
 	return &res
 }
 
+func (s *ArrayNodeSeq) String() string {
+	return aseqString(s)
+}
+
 func (s *ArrayNodeSeq) Seq() ISeq {
 	return s
-}
-
-func (s *ArrayNodeSeq) Equal(other any) bool {
-	return IsSeqEqual(s, other)
-}
-
-func (s *ArrayNodeSeq) Hash() uint32 {
-	return hashOrdered(s)
 }
 
 func (s *ArrayNodeSeq) First() any {
@@ -791,18 +794,35 @@ func (s *ArrayNodeSeq) Next() ISeq {
 }
 
 func (s *ArrayNodeSeq) More() ISeq {
-	n := s.Next()
-	if n == nil {
-		return emptyList
-	}
-	return n
+	return aseqMore(s)
 }
 
 func (s *ArrayNodeSeq) Cons(obj any) Conser {
-	if s.s == nil {
-		return NewCons(obj, nil)
-	}
-	return NewCons(obj, s)
+	return aseqCons(s, obj)
+}
+
+func (s *ArrayNodeSeq) Count() int {
+	panic("Not supported")
+}
+
+func (s *ArrayNodeSeq) Empty() IPersistentCollection {
+	return aseqEmpty()
+}
+
+func (s *ArrayNodeSeq) Equiv(obj any) bool {
+	panic("Not supported")
+}
+
+func (s *ArrayNodeSeq) Equals(obj any) bool {
+	panic("Not supported")
+}
+
+func (s *ArrayNodeSeq) Hash() uint32 {
+	return hashOrdered(s)
+}
+
+func (s *ArrayNodeSeq) HashEq() uint32 {
+	panic("Not supported")
 }
 
 func (s *ArrayNodeSeq) xxx_sequential() {}
