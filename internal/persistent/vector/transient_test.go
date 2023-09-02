@@ -3,14 +3,14 @@ package vector
 import "testing"
 
 func TestTransient(t *testing.T) {
-	trans := newTransient(&vector{})
+	trans := NewTransient(&vector{})
 
 	const n = 10000
 
 	for i := 0; i < n; i++ {
-		trans.conj(i)
+		trans.Conj(i)
 	}
-	vec := trans.persistent()
+	vec := trans.Persistent()
 	for i := 0; i < n; i++ {
 		val, ok := vec.Index(i)
 		if !ok {
