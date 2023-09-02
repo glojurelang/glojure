@@ -16,7 +16,6 @@ import (
 
 	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/kylelemons/godebug/diff"
-	"github.com/stretchr/testify/assert"
 )
 
 type (
@@ -71,8 +70,6 @@ func FuzzCLJConformance(f *testing.F) {
 	}
 
 	cljRdr := newCLJReader()
-	// go cljRdr.start()
-	// defer cljRdr.stop()
 
 	f.Fuzz(func(t *testing.T, program string) {
 		// reject program strings with non-ascii or non-printable
@@ -90,19 +87,19 @@ func FuzzCLJConformance(f *testing.F) {
 		cljExpr, cljErr := cljRdr.readCLJExpr(program)
 
 		r := New(strings.NewReader(program), WithSymbolResolver(&testSymbolResolver{}))
-		// we only want the first expression. TODO: variant that reads
-		// one.
 		gljValue, gljErr := r.ReadOne()
 
-		if (cljErr == nil) != (gljErr == nil) {
-			if isCLJConformanceErrorException(cljErr, cljExpr) {
-				t.Skipf("clj error: %v", cljErr)
+		{ // check for matching errors
+			if (cljErr == nil) != (gljErr == nil) {
+				if isCLJConformanceErrorException(cljErr, cljExpr) {
+					t.Skipf("clj error: %v", cljErr)
+				}
+				t.Logf("clj out: %v", cljExpr)
+				t.Fatalf("error mismatch: cljErr=%v gljErr=%v", cljErr, gljErr)
 			}
-			t.Logf("clj out: %v", cljExpr)
-			t.Fatalf("error mismatch: cljErr=%v gljErr=%v", cljErr, gljErr)
-		}
-		if cljErr != nil {
-			return
+			if cljErr != nil {
+				return
+			}
 		}
 
 		gljExpr := cljNormalize(testPrintString(gljValue))
@@ -120,13 +117,30 @@ func FuzzCLJConformance(f *testing.F) {
 		}
 		cljExpr = string(cljExprRunes)
 
-		if gljExpr != cljExpr {
-			assert.Equal(t, []rune(cljExpr), []rune(gljExpr))
+		if !cljExprsEquiv(gljExpr, cljExpr) {
 			t.Errorf("want len=%d, got len=%d", len(cljExpr), len(gljExpr))
 			t.Errorf("diff (-want,+got):\n%s", diff.Diff(cljExpr, gljExpr))
 			t.Fatalf("expression mismatch: glj=%v clj=%v", gljExpr, cljExpr)
 		}
 	})
+}
+
+func cljExprsEquiv(glj, clj string) bool {
+	if glj == clj {
+		return true
+	}
+	// check golden files for equivalence
+
+	// run clj with (= (read-string s1) (read-string s2))
+	expr := fmt.Sprintf("(= (read-string %q) (read-string %q))", glj, clj)
+	cmd := exec.Command("clj", "-e", expr)
+	out, err := cmd.Output()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("expr: %s\n", expr)
+	fmt.Printf("out: %s\n", out)
+	return strings.TrimSpace(string(out)) == "true"
 }
 
 // isCLJConformanceErrorException returns true if the error is one that
@@ -270,15 +284,7 @@ func (r *cljReader) readCLJExpr(program string) (string, error) {
 	}
 
 	return string(out), err
-
-	// rdrCommand := <-r.commands
-	// rdrCommand.pipeIn.Write([]byte(program))
-	// rdrCommand.pipeIn.Close()
-	// <-rdrCommand.done
-	// return rdrCommand.out, rdrCommand.err
 }
-
-// for later: clj -M -e '(binding [*print-meta* true] (pr (read *in*)))'
 
 func cljNormalize(s string) string {
 	// replace glojure with clojure

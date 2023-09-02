@@ -34,7 +34,6 @@ func FuzzPersistentHashMap(f *testing.F) {
 			["symbol", "fn"]
     ]`))
 	f.Fuzz(func(t *testing.T, data []byte) {
-		fmt.Println(string(data))
 		var jsVals []interface{}
 		if err := json.Unmarshal(data, &jsVals); err != nil {
 			t.Skip()
