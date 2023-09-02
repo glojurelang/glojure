@@ -3900,6 +3900,8 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("*github.com/glojurelang/glojure/pkg/lang.TransientMap", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.TransientMap)(nil)))
 	_register("github.com/glojurelang/glojure/pkg/lang.TransientSet", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.TransientSet)(nil)).Elem())
 	_register("*github.com/glojurelang/glojure/pkg/lang.TransientSet", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.TransientSet)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/lang.TransientVector", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.TransientVector)(nil)).Elem())
+	_register("*github.com/glojurelang/glojure/pkg/lang.TransientVector", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.TransientVector)(nil)))
 	_register("github.com/glojurelang/glojure/pkg/lang.TypeOf", github_com_glojurelang_glojure_pkg_lang.TypeOf)
 	_register("github.com/glojurelang/glojure/pkg/lang.UnboundVar", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.UnboundVar)(nil)).Elem())
 	_register("*github.com/glojurelang/glojure/pkg/lang.UnboundVar", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.UnboundVar)(nil)))

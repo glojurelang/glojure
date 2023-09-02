@@ -5171,7 +5171,7 @@
 
   {:added "1.0"
    :static true}
-  [x] (github.com$glojurelang$glojure$pkg$lang.Hash x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.HashEq x))
 
 
 (defn mix-collection-hash

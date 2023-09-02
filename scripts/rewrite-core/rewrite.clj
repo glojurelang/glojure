@@ -310,7 +310,7 @@
    ;; TODO: these should likely be different
    (sexpr-replace 'clojure.lang.Util/hash 'github.com$glojurelang$glojure$pkg$lang.Hash)
    (sexpr-replace '(. clojure.lang.Util (hasheq x))
-                  '(github.com$glojurelang$glojure$pkg$lang.Hash x))
+                  '(github.com$glojurelang$glojure$pkg$lang.HashEq x))
 
    (sexpr-replace 'System/identityHashCode 'github.com$glojurelang$glojure$pkg$lang.IdentityHash)
 
