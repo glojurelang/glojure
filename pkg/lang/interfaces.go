@@ -150,6 +150,13 @@ type (
 		Persistent() IPersistentCollection
 	}
 
+	ITransientAssociative interface {
+		ITransientCollection
+		ILookup
+
+		Assoc(any, any) ITransientAssociative
+	}
+
 	IEditableCollection interface {
 		AsTransient() ITransientCollection
 	}
@@ -295,6 +302,14 @@ type (
 		// IPersistentVector swapVals(IFn f, Object x, Object y, ISeq args);
 		// IPersistentVector resetVals(Object newv);
 
+	}
+
+	ITransientVector interface {
+		ITransientAssociative
+		Indexed
+
+		AssocN(int, any) ITransientVector
+		Pop() ITransientVector
 	}
 
 	////////////////////////////////////////////////////////////////////////////

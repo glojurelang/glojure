@@ -33,6 +33,10 @@ var (
 	_ IDrop               = (*Vector)(nil)
 	_ IKVReduce           = (*Vector)(nil)
 	_ IEditableCollection = (*Vector)(nil)
+
+	_ ITransientVector      = (*TransientVector)(nil)
+	_ AFn                   = (*TransientVector)(nil)
+	_ ITransientAssociative = (*TransientVector)(nil)
 )
 
 func NewVector(values ...any) *Vector {
@@ -93,6 +97,9 @@ func (v *Vector) Cons(x any) Conser {
 }
 
 func (v *Vector) AssocN(i int, val any) IPersistentVector {
+	if i < 0 || i > v.Count() {
+		panic(NewIndexOutOfBoundsError())
+	}
 	return &Vector{vec: v.vec.Assoc(i, val)}
 }
 
@@ -107,7 +114,7 @@ func (v *Vector) ContainsKey(key any) bool {
 func (v *Vector) Assoc(key, val any) Associative {
 	kInt, ok := AsInt(key)
 	if !ok {
-		panic(fmt.Errorf("vector assoc expects an int as a key, got %T", key))
+		panic(NewIllegalArgumentError(fmt.Sprintf("vector assoc expects an int as a key, got %T", key)))
 	}
 	return v.AssocN(kInt, val)
 }
@@ -175,16 +182,16 @@ func (v *Vector) Equiv(v2 any) bool {
 
 func (v *Vector) Invoke(args ...any) any {
 	if len(args) != 1 {
-		panic(fmt.Errorf("vector apply expects 1 argument, got %d", len(args)))
+		panic(NewIllegalArgumentError(fmt.Sprintf("vector apply expects 1 argument, got %d", len(args))))
 	}
 
 	i, ok := AsInt(args[0])
 	if !ok {
-		panic(fmt.Errorf("vector apply takes an int as an argument"))
+		panic(NewIllegalArgumentError("vector apply takes an int as an argument"))
 	}
 
 	if i < 0 || i >= v.Count() {
-		panic(fmt.Errorf("index out of bounds"))
+		panic(NewIllegalArgumentError("index out of bounds"))
 	}
 
 	return v.ValAt(i)
@@ -195,6 +202,7 @@ func (v *Vector) ApplyTo(args ISeq) any {
 }
 
 func (v *Vector) Seq() ISeq {
+	// TODO: more efficient implementation using vector iterator
 	return apersistentVectorSeq(v)
 }
 
@@ -318,8 +326,83 @@ func (t *TransientVector) Conj(o any) Conjer {
 	return t
 }
 
+func (t *TransientVector) ValAt(i any) any {
+	return t.ValAtDefault(i, nil)
+}
+
+func (t *TransientVector) ValAtDefault(k, def any) any {
+	if i, ok := AsInt(k); ok {
+		return t.NthDefault(i, def)
+	}
+	return def
+}
+
 func (t *TransientVector) Persistent() IPersistentCollection {
 	return &Vector{
 		vec: t.vec.Persistent(),
 	}
+}
+
+func (t *TransientVector) Count() int {
+	return t.vec.Count()
+}
+
+func (t *TransientVector) Nth(i int) any {
+	res, ok := t.vec.Index(i)
+	if !ok {
+		panic(NewIndexOutOfBoundsError())
+	}
+	return res
+}
+
+func (t *TransientVector) NthDefault(i int, def any) any {
+	if i >= 0 && i < t.Count() {
+		return t.Nth(i)
+	}
+	return def
+}
+
+func (t *TransientVector) AssocN(i int, val any) ITransientVector {
+	if i < 0 || i > t.Count() {
+		panic(NewIndexOutOfBoundsError())
+	}
+	t.vec.Assoc(i, val)
+	return t
+}
+
+func (t *TransientVector) Assoc(key, val any) ITransientAssociative {
+	kInt, ok := AsInt(key)
+	if !ok {
+		panic(NewIllegalArgumentError(fmt.Sprintf("vector assoc expects an int as a key, got %T", key)))
+	}
+	if kInt < 0 || kInt > t.Count() {
+		panic(NewIndexOutOfBoundsError())
+	}
+	return t.AssocN(kInt, val)
+}
+
+func (t *TransientVector) Pop() ITransientVector {
+	t.vec = t.vec.Pop()
+	return t
+}
+
+func (t *TransientVector) ApplyTo(args ISeq) any {
+	return t.Invoke(seqToSlice(args)...)
+}
+
+func (t *TransientVector) Invoke(args ...any) any {
+	if len(args) != 1 {
+		panic(NewIllegalArgumentError(fmt.Sprintf("vector apply expects 1 argument, got %d", len(args))))
+	}
+
+	i, ok := AsInt(args[0])
+	if !ok {
+		panic(NewIllegalArgumentError("vector apply takes an int as an argument"))
+	}
+
+	if i < 0 || i >= t.Count() {
+		panic(NewIllegalArgumentError("index out of bounds"))
+	}
+
+	return t.ValAt(i)
 }
