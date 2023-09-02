@@ -19,6 +19,9 @@ func NewSymbol(s string) *Symbol {
 		ns = s[:idx]
 		name = s[idx+1:]
 	}
+	if !isValidSymbol(ns, name) {
+		panic(NewIllegalArgumentError("invalid symbol: " + s))
+	}
 	return &Symbol{
 		ns:   ns,
 		name: name,
@@ -49,23 +52,36 @@ func (s *Symbol) FullName() string {
 	return s.String()
 }
 
-func (s *Symbol) IsValidFormat() bool {
+func isValidSymbol(ns, name string) bool {
+	var full string
+	if ns == "" {
+		full = name
+	} else {
+		full = ns + "/" + name
+	}
+
 	// early special case for the division operator /
-	if s.FullName() == "/" {
+	if full == "/" {
 		return true
 	}
 
-	ns, name := s.Namespace(), s.Name()
 	if name == "" {
 		// empty name
 		return false
 	}
-	if ns == "" && s.FullName()[0] == '/' {
+	if ns == "" && full[0] == '/' {
 		// empty namespace
 		return false
 	}
 	if strings.HasSuffix(name, ":") {
 		// name ends with a colon (match clojure)
+		return false
+	}
+	if strings.Contains(name, "::") {
+		// name contains double colon
+		//
+		// NB: clojure reader rejects this, but clojure.core/symbol
+		// accepts it
 		return false
 	}
 

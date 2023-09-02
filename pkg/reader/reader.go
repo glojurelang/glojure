@@ -1118,7 +1118,7 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 	return num, nil
 }
 
-func (r *Reader) readSymbol() (interface{}, error) {
+func (r *Reader) readSymbol() (ret interface{}, retErr error) {
 	// TODO: a cleaner way to do this. adding some hacks while trying to
 	// match clojure's reader's behavior.
 
@@ -1155,11 +1155,13 @@ func (r *Reader) readSymbol() (interface{}, error) {
 		return false, nil
 	}
 
-	symVal := value.NewSymbol(sym)
-	if !symVal.IsValidFormat() {
-		return nil, r.error("invalid symbol: %s", sym)
-	}
-	return symVal, nil
+	defer func() {
+		if r := recover(); r != nil {
+			retErr = r.(error)
+		}
+	}()
+
+	return value.NewSymbol(sym), nil
 }
 
 func (r *Reader) readKeyword() (interface{}, error) {

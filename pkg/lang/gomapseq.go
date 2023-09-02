@@ -65,7 +65,7 @@ func (s *GoMapSeq) Cons(o any) Conser {
 }
 
 func (s *GoMapSeq) First() any {
-	return NewMapEntry(s.iter.Key(), s.iter.Value())
+	return mapIterEntry(s.iter)
 }
 
 func (s *GoMapSeq) Next() ISeq {
@@ -113,9 +113,9 @@ func (s *GoMapSeq) Reduce(f IFn) any {
 	}
 
 	iter := s.cloneIter()
-	var acc any = NewMapEntry(iter.Key(), iter.Value())
+	var acc any = mapIterEntry(iter)
 	for iter.Next() {
-		acc = f.Invoke(acc, NewMapEntry(iter.Key(), iter.Value()))
+		acc = f.Invoke(acc, mapIterEntry(iter))
 		if IsReduced(acc) {
 			return acc.(IDeref).Deref()
 		}
@@ -127,7 +127,7 @@ func (s *GoMapSeq) ReduceInit(f IFn, init any) any {
 	acc := init
 	iter := s.cloneIter()
 	for iter.Next() {
-		acc = f.Invoke(acc, NewMapEntry(iter.Key(), iter.Value()))
+		acc = f.Invoke(acc, mapIterEntry(iter))
 		if IsReduced(acc) {
 			return acc.(IDeref).Deref()
 		}
@@ -139,10 +139,14 @@ func (s *GoMapSeq) KVReduce(f IFn, init any) any {
 	acc := init
 	iter := s.cloneIter()
 	for iter.Next() {
-		acc = f.Invoke(acc, iter.Key(), iter.Value())
+		acc = f.Invoke(acc, iter.Key().Interface(), iter.Value().Interface())
 		if IsReduced(acc) {
 			return acc.(IDeref).Deref()
 		}
 	}
 	return acc
+}
+
+func mapIterEntry(iter *reflect.MapIter) *MapEntry {
+	return NewMapEntry(iter.Key().Interface(), iter.Value().Interface())
 }

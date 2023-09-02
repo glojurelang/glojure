@@ -14,7 +14,7 @@
 (deftest ptr-deref
   (are [zero typ] (= zero (go/deref (new typ)))
     0 go/int
-    0 go/float32
+    0.0 go/float32
     "" go/string
     false go/bool))
 

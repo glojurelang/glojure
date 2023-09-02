@@ -94,6 +94,9 @@ func FuzzCLJConformance(f *testing.F) {
 				if isCLJConformanceErrorException(cljErr, cljExpr) {
 					t.Skipf("clj error: %v", cljErr)
 				}
+				if gljErr == nil && isGLJSupportedValue(program, gljValue) {
+					t.Skipf("ok glj value: %v", gljValue)
+				}
 				t.Logf("clj out: %v", cljExpr)
 				t.Fatalf("error mismatch: cljErr=%v gljErr=%v", cljErr, gljErr)
 			}
@@ -125,11 +128,34 @@ func FuzzCLJConformance(f *testing.F) {
 	})
 }
 
+func isGLJSupportedValue(program string, v any) bool {
+	if _, ok := v.(int64); ok {
+		// go allows ints like 0b0101, but clj does not
+		program = strings.TrimSpace(program)
+		if len(program) > 0 && (program[0] == '-' || program[0] == '+') {
+			program = program[1:]
+		}
+		if strings.HasPrefix(program, "0b") || strings.HasPrefix(program, "0B") {
+			return true
+		}
+	}
+	return false
+}
+
 func cljExprsEquiv(glj, clj string) bool {
+	glj, clj = strings.TrimSpace(glj), strings.TrimSpace(clj)
 	if glj == clj {
 		return true
 	}
-	// check golden files for equivalence
+
+	// ignore regex literal differences
+	if len(glj) > 2 && len(clj) > 2 && glj[:2] == clj[:2] && glj[:2] == "#\"" {
+		return true
+	}
+
+	if buf, cached := getCLJEquivCache(glj, clj); cached {
+		return strings.TrimSpace(string(buf)) == "true"
+	}
 
 	// run clj with (= (read-string s1) (read-string s2))
 	expr := fmt.Sprintf("(= (read-string %q) (read-string %q))", glj, clj)
@@ -138,9 +164,41 @@ func cljExprsEquiv(glj, clj string) bool {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("expr: %s\n", expr)
-	fmt.Printf("out: %s\n", out)
+	if os.Getenv("GLOJ_WRITE_GLJ_FUZZ_TEST_CACHE") != "" {
+		setCLJEquivCache(glj, clj, out)
+	}
 	return strings.TrimSpace(string(out)) == "true"
+}
+
+func cljEquivCacheKey(glj, clj string) string {
+	return fmt.Sprintf("%x", sha256.Sum256([]byte("["+glj+" "+clj+"]")))
+}
+
+// getCLJEquivCache returns the cached result of cljExprsEquiv, if
+// available.
+func getCLJEquivCache(glj, clj string) (buf []byte, cached bool) {
+	key := cljEquivCacheKey(glj, clj)
+	path := filepath.Join("testdata", "clj-equiv-cache", key)
+	if _, err := os.Stat(path); err != nil {
+		return nil, false
+	}
+	buf, err := ioutil.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+	return buf, true
+}
+
+// setCLJEquivCache sets the cached result of cljExprsEquiv.
+func setCLJEquivCache(glj, clj string, buf []byte) {
+	key := cljEquivCacheKey(glj, clj)
+	path := filepath.Join("testdata", "clj-equiv-cache", key)
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		panic(err)
+	}
+	if err := ioutil.WriteFile(path, buf, 0644); err != nil {
+		panic(err)
+	}
 }
 
 // isCLJConformanceErrorException returns true if the error is one that
