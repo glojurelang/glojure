@@ -15,7 +15,8 @@
   (:use glojure.test
         [glojure.test.generative :exclude (is)]
         glojure.template)
-  (:require [glojure.data.generators :as gen]))
+  (:require [glojure.data.generators :as gen])
+  (:import [github.com$glojurelang$glojure$pkg$lang Char]))
 ;;            [glojure.test-helper :as helper]))
 
 
@@ -135,8 +136,11 @@
   [
    [:input           [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt  math.MaxInt64         math.MaxFloat32    math.MaxFloat64]]
    [char             [:error        (char 0)    (char 1)    (char 127)      (char 32767)     :error             :error                 :error             :error]]
-   [unchecked-char   [(char 65535)  (char 0)    (char 1)    (char 127)      (char 32767)     (char 65535)       (char 65535)           (char 65535)       (char 65535)]]
+   ;; In go, char == rune, which is equivalent to int32
+   [unchecked-char   [(Char -1)  (Char 0)    (Char 1)    (Char 127)      (Char 32767)     (Char -1)       (Char -1)           (Char -1)       (Char -1)]]
+   ;; bytes are unsigned in go
    [byte             [-1            0           1           math.MaxInt8  :error           :error             :error                 :error             :error]]
+   ;; bytes are unsigned in go
    [unchecked-byte   [-1            0           1           math.MaxInt8  -1               -1                 -1                     -1                 -1]]
    [short            [-1            0           1           math.MaxInt8  math.MaxInt16  :error             :error                 :error             :error]]
    [unchecked-short  [-1            0           1           math.MaxInt8  math.MaxInt16  -1                 -1                     -1                 -1]] 
@@ -160,7 +164,7 @@
         (is (= vals (map wrapped inputs)))))))
 
 (deftest test-prim-with-matching-hint
-  (is (= 1 (let [x 1.2] (math.Round ^double x)))))
+  (is (= 1.0 (let [x 1.2] (math.Round ^go/float64 x)))))
 
 ;; *** Functions ***
 
@@ -452,7 +456,7 @@
 ;; pos? zero? neg?
 
 (deftest test-pos?-zero?-neg?
-  (let [nums [[(byte 2) (byte 0) (byte -2)]
+  (let [nums [;; [(byte 2) (byte 0) (byte -2)] ;; bytes are unsigned in go. TODO: use int8? or document difference
               [(short 3) (short 0) (short -3)]
               [(int 4) (int 0) (int -4)]
               [(long 5) (long 0) (long -5)]

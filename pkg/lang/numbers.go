@@ -567,6 +567,8 @@ func AsInt(v any) (int, bool) {
 		return int(v), true
 	case *BigInt:
 		return int(v.val.Int64()), true
+	case *big.Int:
+		return int(v.Int64()), true
 	case Char:
 		return int(v), true
 	default:
@@ -738,7 +740,7 @@ func IsNumber(x any) bool {
 	case int, int64, int32, int16, int8,
 		uint, uint64, uint32, uint16, uint8,
 		float64, float32,
-		*BigDecimal, *BigInt, *Ratio:
+		*BigDecimal, *BigInt, *Ratio, *big.Int: // TODO: *big.Rat, *big.Float
 		return true
 	default:
 		return false
