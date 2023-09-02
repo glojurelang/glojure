@@ -175,7 +175,7 @@ func (m *Map) ValAtDefault(key, def any) any {
 
 func (m *Map) EntryAt(k any) IMapEntry {
 	for i := 0; i < len(m.keyVals); i += 2 {
-		if Equal(m.keyVals[i], k) {
+		if Equiv(m.keyVals[i], k) {
 			return NewMapEntry(m.keyVals[i], m.keyVals[i+1])
 		}
 	}
@@ -192,7 +192,7 @@ func (m *Map) clone() *Map {
 
 func (m *Map) Assoc(k, v any) Associative {
 	for i := 0; i < len(m.keyVals); i += 2 {
-		if Equal(m.keyVals[i], k) {
+		if Equiv(m.keyVals[i], k) {
 			newMap := m.clone()
 			newMap.keyVals[i+1] = v
 			return newMap
@@ -214,7 +214,7 @@ func (m *Map) AssocEx(k, v any) IPersistentMap {
 func (m *Map) Without(k any) IPersistentMap {
 	newKeyVals := make([]any, 0, len(m.keyVals))
 	for i := 0; i < len(m.keyVals); i += 2 {
-		if !Equal(m.keyVals[i], k) {
+		if !Equiv(m.keyVals[i], k) {
 			newKeyVals = append(newKeyVals, m.keyVals[i], m.keyVals[i+1])
 		}
 	}
@@ -226,6 +226,9 @@ func (m *Map) Count() int {
 }
 
 func (m *Map) Seq() ISeq {
+	if len(m.keyVals) == 0 {
+		return nil
+	}
 	return NewMapSeq(m.keyVals)
 }
 

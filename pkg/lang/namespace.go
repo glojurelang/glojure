@@ -120,7 +120,7 @@ func (ns *Namespace) Aliases() IPersistentMap {
 
 func (ns *Namespace) isInternedMapping(sym *Symbol, v interface{}) bool {
 	vr, ok := v.(*Var)
-	return ok && vr.Namespace() == ns && Equal(vr.Symbol(), sym)
+	return ok && vr.Namespace() == ns && Equals(vr.Symbol(), sym)
 }
 
 // Intern creates a new Var in this namespace with the given name.

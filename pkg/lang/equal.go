@@ -3,16 +3,10 @@ package lang
 import "reflect"
 
 func Equiv(a, b any) bool {
-	return Equal(a, b)
+	return Equals(a, b)
 }
 
 func Equals(a, b any) bool {
-	return Equal(a, b)
-}
-
-// Equal returns true if the two values are equivalent.
-// TODO: rename to Equiv.
-func Equal(a, b any) bool {
 	// check functions first, because == panics on func comparison.
 	aVal, bVal := reflect.ValueOf(a), reflect.ValueOf(b)
 	if aVal.Kind() == reflect.Func || bVal.Kind() == reflect.Func {

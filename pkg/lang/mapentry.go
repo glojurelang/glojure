@@ -23,7 +23,15 @@ func (me *MapEntry) Key() any {
 	return me.key
 }
 
+func (me *MapEntry) GetKey() any {
+	return me.key
+}
+
 func (me *MapEntry) Val() any {
+	return me.val
+}
+
+func (me *MapEntry) GetValue() any {
 	return me.val
 }
 

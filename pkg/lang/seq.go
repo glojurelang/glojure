@@ -72,31 +72,6 @@ func Seq(x interface{}) ISeq {
 	panic(fmt.Errorf("can't convert %T to ISeq", x))
 }
 
-func SeqsEqual(seq1, seq2 ISeq) bool {
-	for seq1 != nil {
-		if seq2 == nil || !Equal(seq1.First(), seq2.First()) {
-			return false
-		}
-		seq1 = seq1.Next()
-		seq2 = seq2.Next()
-	}
-	return seq2 == nil
-}
-
-func IsSeqEqual(seq ISeq, other interface{}) bool {
-	if seq == other {
-		return true
-	}
-	switch other := other.(type) {
-	case Sequential:
-		switch other := other.(type) {
-		case Seqable:
-			return SeqsEqual(seq, other.Seq())
-		}
-	}
-	return false
-}
-
 func seqToSlice(s ISeq) []interface{} {
 	var res []interface{}
 	for seq := Seq(s); seq != nil; seq = seq.Next() {

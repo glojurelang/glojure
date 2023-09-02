@@ -14,7 +14,7 @@ func NewChar(value rune) Char {
 	return Char(value)
 }
 
-func (c Char) Equal(v interface{}) bool {
+func (c Char) Equals(v interface{}) bool {
 	switch v := v.(type) {
 	case Char:
 		return rune(c) == rune(v)

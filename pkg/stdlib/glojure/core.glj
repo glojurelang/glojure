@@ -228,7 +228,7 @@
          (fn [fdecl]
            (let [arglist (first fdecl)
                  ;elide implicit macro args
-                 arglist (if (github.com$glojurelang$glojure$pkg$lang.Equal '&form (first arglist)) 
+                 arglist (if (github.com$glojurelang$glojure$pkg$lang.Equals '&form (first arglist)) 
                            (github.com$glojurelang$glojure$pkg$lang.Subvec arglist 2 (github.com$glojurelang$glojure$pkg$lang.Count arglist))
                            arglist)
                  body (next fdecl)]
@@ -241,8 +241,8 @@
                         (let [m (meta argvec)
                               ^*github.com$glojurelang$glojure$pkg$lang.Symbol tag (:tag m)]
                           (if (instance? *github.com$glojurelang$glojure$pkg$lang.Symbol tag)
-                            (if (github.com$glojurelang$glojure$pkg$lang.Equal (strings.Index (.Name tag) ".") -1)
-                              (if (github.com$glojurelang$glojure$pkg$lang.Equal nil nil)
+                            (if (github.com$glojurelang$glojure$pkg$lang.Equiv (strings.Index (.Name tag) ".") -1)
+                              (if (github.com$glojurelang$glojure$pkg$lang.Equals nil nil)
                                 (let [c nil]
                                   (if c
                                     (with-meta argvec (assoc m :tag (github.com$glojurelang$glojure$pkg$lang.NewSymbol (.Name c))))
@@ -319,7 +319,7 @@
                       ifn (first inline)
                       iname (second inline)]
                   ;; same as: (if (and (= 'fn ifn) (not (symbol? iname))) ...)
-                  (if (if (github.com$glojurelang$glojure$pkg$lang.Equal 'fn ifn)
+                  (if (if (github.com$glojurelang$glojure$pkg$lang.Equiv 'fn ifn)
                         (if (instance? *github.com$glojurelang$glojure$pkg$lang.Symbol iname) false true))
                     ;; inserts the same fn name to the inline fn if it does not have one
                     (assoc m :inline (cons ifn (cons (github.com$glojurelang$glojure$pkg$lang.NewSymbol (github.com$glojurelang$glojure$pkg$lang.ConcatStrings (.Name ^*github.com$glojurelang$glojure$pkg$lang.Symbol name) "__inliner"))
@@ -783,12 +783,12 @@
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (github.com$glojurelang$glojure$pkg$lang.Equal x y))
+  ([x y] (github.com$glojurelang$glojure$pkg$lang.Equiv x y))
   ([x y & more]
-   (if (github.com$glojurelang$glojure$pkg$lang.Equal x y)
+   (if (github.com$glojurelang$glojure$pkg$lang.Equiv x y)
      (if (next more)
        (recur y (first more) (next more))
-       (github.com$glojurelang$glojure$pkg$lang.Equal y (first more)))
+       (github.com$glojurelang$glojure$pkg$lang.Equiv y (first more)))
      false)))
 
 ;equals-based
@@ -801,7 +801,7 @@
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (github.com$glojurelang$glojure$pkg$lang.Equal x y))
+  ([x y] (github.com$glojurelang$glojure$pkg$lang.Equals x y))
   ([x y & more]
    (if (= x y)
      (if (next more)
@@ -5814,7 +5814,7 @@
         ~@(when (and (not= name 'glojure.core) (not-any? #(= :refer-glojure (first %)) references))
             `((glojure.core/refer '~'glojure.core)))
         ~@(map process-reference references))
-        (if (.Equal '~name 'glojure.core) 
+        (if (.Equals '~name 'glojure.core) 
           nil
           (do (dosync (commute @#'*loaded-libs* conj '~name)) nil)))))
 

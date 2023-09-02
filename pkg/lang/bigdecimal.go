@@ -55,7 +55,7 @@ func (n *BigDecimal) Hash() uint32 {
 	return hash.String(n.val.String())
 }
 
-func (n *BigDecimal) Equal(v interface{}) bool {
+func (n *BigDecimal) Equals(v interface{}) bool {
 	other, ok := v.(*BigDecimal)
 	if !ok {
 		return false

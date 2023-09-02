@@ -837,7 +837,7 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 		elements := []interface{}{symConcat}
 		for seq := value.Seq(node); seq != nil; seq = seq.Next() {
 			first := seq.First()
-			if seq, ok := first.(value.ISeq); ok && value.Equal(value.First(seq), symSpliceUnquote) {
+			if seq, ok := first.(value.ISeq); ok && value.Equals(value.First(seq), symSpliceUnquote) {
 				elements = append(elements, value.First(value.Rest(first)))
 			} else {
 				elements = append(elements, value.NewList(symList, r.syntaxQuote(symbolNameMap, first)))
@@ -873,12 +873,12 @@ func (r *Reader) sqExpandList(symbolNameMap map[string]*value.Symbol, els []inte
 
 func (r *Reader) isUnquote(form interface{}) bool {
 	seq, ok := form.(value.ISeq)
-	return ok && value.Equal(seq.First(), symUnquote)
+	return ok && value.Equals(seq.First(), symUnquote)
 }
 
 func (r *Reader) isUnquoteSplicing(form interface{}) bool {
 	seq, ok := form.(value.ISeq)
-	return ok && value.Equal(seq.First(), symSpliceUnquote)
+	return ok && value.Equals(seq.First(), symSpliceUnquote)
 }
 
 func (r *Reader) readDeref() (interface{}, error) {

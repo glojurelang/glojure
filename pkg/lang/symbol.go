@@ -79,7 +79,7 @@ func (s *Symbol) String() string {
 	return s.ns + "/" + s.name
 }
 
-func (s *Symbol) Equal(v interface{}) bool {
+func (s *Symbol) Equals(v interface{}) bool {
 	if s == v {
 		return true
 	}
@@ -98,7 +98,7 @@ func (s *Symbol) Meta() IPersistentMap {
 }
 
 func (s *Symbol) WithMeta(meta IPersistentMap) interface{} {
-	if Equal(s.meta, meta) {
+	if s.meta == meta {
 		return s
 	}
 

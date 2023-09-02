@@ -342,7 +342,7 @@
    (sexpr-replace 'clojure.lang.BigInt/fromBigInteger
                   'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromGoBigInt)
 
-   (sexpr-replace '.equals '.Equal)
+   (sexpr-replace '.equals '.Equals)
 
    (sexpr-replace '(clojure.lang.RT/load (.substring path 1))
                   '(. github.com$glojurelang$glojure$pkg$runtime.RT (Load (strings.TrimPrefix path "/"))))
@@ -362,8 +362,8 @@
 
    ;; no need for a special name, as go doesn't have a
    ;; builtin "Equals"
-   (sexpr-replace 'clojure.lang.Util/equiv 'github.com$glojurelang$glojure$pkg$lang.Equal)
-   (sexpr-replace 'clojure.lang.Util/equals 'github.com$glojurelang$glojure$pkg$lang.Equal) ;; TODO: implement both equals and equiv for go!!!
+   (sexpr-replace 'clojure.lang.Util/equiv 'github.com$glojurelang$glojure$pkg$lang.Equiv)
+   (sexpr-replace 'clojure.lang.Util/equals 'github.com$glojurelang$glojure$pkg$lang.Equals)
    (sexpr-replace '(. x (meta)) '(.Meta x))
 
    (sexpr-replace 'clojure.lang.Symbol/intern 'github.com$glojurelang$glojure$pkg$lang.NewSymbol)

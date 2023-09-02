@@ -126,7 +126,7 @@ func (m *PersistentHashMap) Assoc(key, val any) Associative {
 		t = m.root
 	}
 
-	newroot = t.assoc(0, Hash(key), key, val, addedLeaf)
+	newroot = t.assoc(0, HashEq(key), key, val, addedLeaf)
 	if newroot == m.root {
 		return m
 	}
@@ -150,7 +150,7 @@ func (m *PersistentHashMap) Without(key any) IPersistentMap {
 	if m.root == nil {
 		return m
 	}
-	newroot := m.root.without(0, Hash(key), key)
+	newroot := m.root.without(0, HashEq(key), key)
 	if newroot == m.root {
 		return m
 	}
@@ -164,7 +164,7 @@ func (m *PersistentHashMap) Without(key any) IPersistentMap {
 
 func (m *PersistentHashMap) EntryAt(key any) IMapEntry {
 	if m.root != nil {
-		p := m.root.find(0, Hash(key), key)
+		p := m.root.find(0, HashEq(key), key)
 		if p != nil {
 			return &MapEntry{
 				key: p.Key,
@@ -192,7 +192,7 @@ func (m *PersistentHashMap) Empty() IPersistentCollection {
 
 func (m *PersistentHashMap) ValAtDefault(key, notFound any) any {
 	if m.root != nil {
-		if res := m.root.find(0, Hash(key), key); res != nil {
+		if res := m.root.find(0, HashEq(key), key); res != nil {
 			return res.Value
 		}
 	}
@@ -286,7 +286,7 @@ func (b *BitmapIndexedNode) assoc(shift uint, hash uint32, key any, val any, add
 				array:  cloneAndSet(b.array, 2*idx+1, n),
 			}
 		}
-		if Equal(key, keyOrNull) {
+		if Equiv(key, keyOrNull) {
 			if val == valOrNode {
 				return b
 			}
@@ -313,7 +313,7 @@ func (b *BitmapIndexedNode) assoc(shift uint, hash uint32, key any, val any, add
 					if node, ok := b.array[j+1].(Node); ok {
 						nodes[i] = node
 					} else {
-						nodes[i] = emptyIndexedNode.assoc(shift+5, Hash(b.array[j]), b.array[j], b.array[j+1], addedLeaf)
+						nodes[i] = emptyIndexedNode.assoc(shift+5, HashEq(b.array[j]), b.array[j], b.array[j+1], addedLeaf)
 					}
 					j += 2
 				}
@@ -368,7 +368,7 @@ func (b *BitmapIndexedNode) without(shift uint, hash uint32, key any) Node {
 			array:  removePair(b.array, idx),
 		}
 	}
-	if Equal(key, keyOrNull) {
+	if Equiv(key, keyOrNull) {
 		return &BitmapIndexedNode{
 			bitmap: b.bitmap ^ bit,
 			array:  removePair(b.array, idx),
@@ -388,7 +388,7 @@ func (b *BitmapIndexedNode) find(shift uint, hash uint32, key any) *Pair {
 	if _, ok := valOrNode.(Node); ok {
 		return valOrNode.(Node).find(shift+5, hash, key)
 	}
-	if Equal(key, keyOrNull) {
+	if Equiv(key, keyOrNull) {
 		return &Pair{
 			Key:   keyOrNull,
 			Value: valOrNode,
@@ -468,10 +468,6 @@ func (s *NodeSeq) Equiv(obj any) bool {
 
 func (s *NodeSeq) Seq() ISeq {
 	return s
-}
-
-func (s *NodeSeq) Equal(other any) bool {
-	return IsSeqEqual(s, other)
 }
 
 func (s *NodeSeq) Hash() uint32 {
@@ -660,7 +656,7 @@ func (n *ArrayNode) pack(idx uint) Node {
 
 func (n *HashCollisionNode) findIndex(key any) int {
 	for i := 0; i < 2*n.count; i += 2 {
-		if Equal(key, n.array[i]) {
+		if Equiv(key, n.array[i]) {
 			return i
 		}
 	}
@@ -902,7 +898,7 @@ func cloneAndSetNode(array []Node, i int, a Node) []Node {
 }
 
 func createNode(shift uint, key1 any, val1 any, key2hash uint32, key2 any, val2 any) Node {
-	key1hash := Hash(key1)
+	key1hash := HashEq(key1)
 	if key1hash == key2hash {
 		return &HashCollisionNode{
 			hash:  key1hash,

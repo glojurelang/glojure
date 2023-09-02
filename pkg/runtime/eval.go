@@ -99,9 +99,9 @@ func (env *environment) lookupVar(sym *value.Symbol, internNew, registerMacro bo
 		} else {
 			result = ns.FindInternedVar(nameSym)
 		}
-	case sym.Equal(SymbolNamespace):
+	case sym.Equals(SymbolNamespace):
 		result = env.namespaceVar
-	case sym.Equal(SymbolInNamespace):
+	case sym.Equals(SymbolInNamespace):
 		result = env.inNamespaceVar
 	default:
 		// is it mapped?

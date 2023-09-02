@@ -2,23 +2,24 @@ package vector
 
 // New returns a new Vector with the given elements.
 func New(elems ...interface{}) Vector {
-	trans := newTransient(&vector{})
+	trans := NewTransient(&vector{})
 	for _, e := range elems {
-		trans.conj(e)
+		trans.Conj(e)
 	}
-	return trans.persistent()
+	return trans.Persistent()
 }
 
-type transient struct {
+type Transient struct {
 	count  uint
 	height uint
 	root   node
 	tail   [32]interface{}
 }
 
-// newTransient returns a new transient vector.
-func newTransient(v *vector) *transient {
-	t := &transient{
+// NewTransient returns a new transient vector.
+func NewTransient(vi Vector) *Transient {
+	v := vi.(*vector)
+	t := &Transient{
 		count:  uint(v.count),
 		height: v.height,
 		root:   v.root,
@@ -30,7 +31,7 @@ func newTransient(v *vector) *transient {
 }
 
 // Conj adds an element to the end of the vector.
-func (t *transient) conj(v interface{}) *transient {
+func (t *Transient) Conj(v interface{}) *Transient {
 	i := t.count
 
 	// room in tail?
@@ -68,14 +69,14 @@ func (t *transient) conj(v interface{}) *transient {
 	return t
 }
 
-func (t *transient) tailoff() uint {
+func (t *Transient) tailoff() uint {
 	if t.count < nodeSize {
 		return 0
 	}
 	return ((t.count - 1) >> chunkBits) << chunkBits
 }
 
-func (t *transient) pushTail(height uint, n, tail node) node {
+func (t *Transient) pushTail(height uint, n, tail node) node {
 	if height == 0 {
 		return tail
 	}
@@ -92,7 +93,7 @@ func (t *transient) pushTail(height uint, n, tail node) node {
 }
 
 // persistent returns a persistent vector from the transient vector.
-func (t *transient) persistent() *vector {
+func (t *Transient) Persistent() *vector {
 	return &vector{
 		count:  int(t.count),
 		height: t.height,

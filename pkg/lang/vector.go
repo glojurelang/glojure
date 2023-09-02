@@ -17,6 +17,10 @@ type (
 	}
 
 	PersistentVector = Vector
+
+	TransientVector struct {
+		vec *vector.Transient
+	}
 )
 
 var (
@@ -220,7 +224,7 @@ func (v *Vector) Meta() IPersistentMap {
 }
 
 func (v *Vector) WithMeta(meta IPersistentMap) any {
-	if Equal(v.meta, meta) {
+	if v.meta == meta {
 		return v
 	}
 
@@ -269,11 +273,15 @@ func (v *Vector) Drop(n int) Sequential {
 	if n >= v.Count() {
 		return nil
 	}
-	panic("TODO")
+	return &Vector{
+		vec: v.vec.SubVector(n, v.Count()),
+	}
 }
 
 func (v *Vector) AsTransient() ITransientCollection {
-	panic("TODO")
+	return &TransientVector{
+		vec: vector.NewTransient(v.vec),
+	}
 }
 
 func toSlice(x any) []any {
@@ -303,3 +311,15 @@ func toSlice(x any) []any {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// TransientVector
+
+func (t *TransientVector) Conj(o any) Conjer {
+	t.vec = t.vec.Conj(o)
+	return t
+}
+
+func (t *TransientVector) Persistent() IPersistentCollection {
+	return &Vector{
+		vec: t.vec.Persistent(),
+	}
+}

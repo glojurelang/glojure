@@ -257,7 +257,7 @@ func (l *List) Meta() IPersistentMap {
 }
 
 func (l *List) WithMeta(meta IPersistentMap) any {
-	if Equal(l.meta, meta) {
+	if l.meta == meta {
 		return l
 	}
 

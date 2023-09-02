@@ -28,7 +28,7 @@ func NewSet(vals ...interface{}) *Set {
 	// check for duplicates
 	for i := 0; i < len(vals); i++ {
 		for j := i + 1; j < len(vals); j++ {
-			if Equal(vals[i], vals[j]) {
+			if Equiv(vals[i], vals[j]) {
 				panic(NewIllegalArgumentError(fmt.Sprintf("duplicate key: %v", vals[i])))
 			}
 		}
@@ -49,7 +49,7 @@ var (
 
 func (s *Set) Get(key interface{}) interface{} {
 	for _, v := range s.vals {
-		if Equal(v, key) {
+		if Equiv(v, key) {
 			return v
 		}
 	}
@@ -77,7 +77,7 @@ func (s *Set) Cons(v interface{}) Conser {
 
 func (s *Set) Disjoin(v interface{}) IPersistentSet {
 	for i, val := range s.vals {
-		if Equal(val, v) {
+		if Equiv(val, v) {
 			newItems := make([]interface{}, len(s.vals)-1)
 			copy(newItems, s.vals[:i])
 			copy(newItems[i:], s.vals[i+1:])
@@ -89,7 +89,7 @@ func (s *Set) Disjoin(v interface{}) IPersistentSet {
 
 func (s *Set) Contains(v interface{}) bool {
 	for _, val := range s.vals {
-		if Equal(val, v) {
+		if Equiv(val, v) {
 			return true
 		}
 	}
@@ -112,7 +112,7 @@ func (s *Set) String() string {
 	return PrintString(s)
 }
 
-func (s *Set) Equal(v2 interface{}) bool {
+func (s *Set) Equals(v2 interface{}) bool {
 	if s == v2 {
 		return true
 	}

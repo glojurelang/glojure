@@ -245,9 +245,9 @@ func (c *evalCompiler) MaybeResolveIn(ns *value.Namespace, sym *value.Symbol) in
 		// TODO: what case does this correspond to? should we be looking for imports here?
 		// previously: panic(fmt.Errorf("can't resolve class %s in ns %s", sym, ns))
 		return nil
-	case sym.Equal(SymNS):
+	case sym.Equals(SymNS):
 		return value.VarNS
-	case sym.Equal(SymInNS):
+	case sym.Equals(SymInNS):
 		return value.VarInNS
 	default:
 		return ns.GetMapping(sym)
@@ -480,7 +480,7 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 			if err != nil {
 				return nil, err
 			}
-			if value.Equal(testVal, caseTestVal) {
+			if value.Equals(testVal, caseTestVal) {
 				res, err := env.EvalAST(caseNodeNode.Then)
 				if err != nil {
 					return nil, err

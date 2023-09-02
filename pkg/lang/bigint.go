@@ -58,7 +58,7 @@ func (n *BigInt) Hash() uint32 {
 	return uint32(hash.ByteSlice(n.val.Bytes()))
 }
 
-func (n *BigInt) Equal(v interface{}) bool {
+func (n *BigInt) Equals(v interface{}) bool {
 	other, ok := v.(*BigInt)
 	if !ok {
 		return false

@@ -68,7 +68,7 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !Equal(form, mform) {
+	if !Equals(form, mform) {
 		n, err := a.analyzeForm(mform, env)
 		if err != nil {
 			return nil, err
@@ -228,7 +228,7 @@ func (a *Analyzer) analyzeSeq(form ISeq, env Env) (*ast.Node, error) {
 		return nil, err
 	}
 
-	if Equal(form, mform) {
+	if Equals(form, mform) {
 		return a.parse(form, env)
 	}
 	n, err := a.analyzeForm(mform, env)
@@ -321,7 +321,7 @@ func (a *Analyzer) analyzeLet(form interface{}, env Env) (*ast.Node, error) {
 		return nil, err
 	}
 
-	isLoop := Equal(op, symLoopStar)
+	isLoop := Equals(op, symLoopStar)
 	localKW := KWLet
 	if isLoop {
 		localKW = KWLoop
@@ -693,10 +693,10 @@ func (a *Analyzer) parseSetBang(form interface{}, env Env) (*ast.Node, error) {
 //	                            (when fblock [:finally]))}))))
 func (a *Analyzer) parseTry(form interface{}, env Env) (*ast.Node, error) {
 	catch := func(form interface{}) bool {
-		return IsSeq(form) && Equal(symCatch, First(form))
+		return IsSeq(form) && Equals(symCatch, First(form))
 	}
 	finally := func(form interface{}) bool {
-		return IsSeq(form) && Equal(symFinally, First(form))
+		return IsSeq(form) && Equals(symFinally, First(form))
 	}
 	body, tail := splitWith(func(form interface{}) bool {
 		return !catch(form) && !finally(form)
@@ -1198,9 +1198,9 @@ func (a *Analyzer) parseRecur(form interface{}, env Env) (*ast.Node, error) {
 
 	errorMsg := ""
 	switch {
-	case !Equal(ctx, ctxReturn):
+	case !Equals(ctx, ctxReturn):
 		errorMsg = "can only recur from tail position"
-	case !Equal(Count(exprs), loopLocals):
+	case !Equals(Count(exprs), loopLocals):
 		errorMsg = fmt.Sprintf("mismatched argument count to recur, expected: %v args, had: %v", loopLocals, Count(exprs))
 	}
 	if errorMsg != "" {
@@ -1842,7 +1842,7 @@ func remove(v interface{}, coll interface{}) interface{} {
 	}
 	var items []interface{}
 	for seq := Seq(coll); seq != nil; seq = seq.Next() {
-		if !Equal(v, seq.First()) {
+		if !Equals(v, seq.First()) {
 			items = append(items, seq.First())
 		}
 	}

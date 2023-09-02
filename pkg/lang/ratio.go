@@ -44,7 +44,7 @@ func (r *Ratio) String() string {
 	return r.val.RatString()
 }
 
-func (r *Ratio) Equal(other interface{}) bool {
+func (r *Ratio) Equals(other interface{}) bool {
 	if other, ok := other.(*Ratio); ok {
 		return r.val.Cmp(other.val) == 0
 	}

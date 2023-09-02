@@ -10,6 +10,9 @@ import (
 	"unsafe"
 
 	hash2 "bitbucket.org/pcastools/hash"
+	"github.com/mitchellh/hashstructure/v2"
+
+	"github.com/glojurelang/glojure/internal/murmur3"
 )
 
 const (
@@ -22,6 +25,20 @@ const (
 )
 
 func HashEq(x any) uint32 {
+	if IsNil(x) {
+		return 0
+	}
+	switch x := x.(type) {
+	case IHashEq:
+		return x.HashEq()
+	case string:
+		return murmur3.HashInt(int32(hashString(x)))
+	}
+
+	if IsNumber(x) {
+		return hashNumber(x)
+	}
+
 	return Hash(x)
 }
 
@@ -50,6 +67,11 @@ func Hash(x interface{}) uint32 {
 			return reflectValueHashMask
 		}
 		return Hash(x.Interface()) ^ reflectValueHashMask
+	case bool:
+		if x {
+			return 1
+		}
+		return 0
 	}
 
 	switch reflect.TypeOf(x).Kind() {
@@ -87,6 +109,14 @@ func uint32ToBytes(i uint32) []byte {
 	b := make([]byte, 4)
 	binary.LittleEndian.PutUint32(b, i)
 	return b
+}
+
+func hashString(s string) uint32 {
+	h, err := hashstructure.Hash(s, hashstructure.FormatV2, nil)
+	if err != nil {
+		panic(err)
+	}
+	return uint32(h)
 }
 
 func hashPtr(ptr uintptr) uint32 {

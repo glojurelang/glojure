@@ -65,7 +65,7 @@ func (k Keyword) String() string {
 	return ":" + k.value()
 }
 
-func (k Keyword) Equal(v interface{}) bool {
+func (k Keyword) Equals(v interface{}) bool {
 	return k == v
 }
 
