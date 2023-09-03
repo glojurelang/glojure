@@ -167,30 +167,14 @@ func (rt *RTMethods) FindVar(qualifiedSym *Symbol) *Var {
 
 func (rt *RTMethods) Alength(x interface{}) int {
 	xVal := reflect.ValueOf(x)
-	if xVal.Kind() == reflect.Slice {
+	if xVal.Kind() == reflect.Slice || xVal.Kind() == reflect.Array {
 		return xVal.Len()
 	}
 	panic(fmt.Errorf("Alength not supported on type: %T", x))
 }
 
 func (rt *RTMethods) ToArray(coll interface{}) interface{} {
-	if lang.IsNil(coll) {
-		return nil
-	}
-	switch coll := coll.(type) {
-	case []interface{}:
-		return coll
-	case lang.ISeq, lang.IPersistentCollection:
-		res := make([]interface{}, 0, lang.Count(coll))
-		for s := lang.Seq(coll); s != nil; s = lang.Next(s) {
-			res = append(res, lang.First(s))
-		}
-		return res
-	}
-	if v := reflect.ValueOf(coll); v.Kind() == reflect.Slice {
-		return coll
-	}
-	panic(fmt.Errorf("ToArray not supported on type: %T", coll))
+	return lang.ToSlice(coll)
 }
 
 var (

@@ -8,8 +8,7 @@
 
 (ns glojure.string
   (:refer-glojure :exclude (replace reverse))
-  (:import (java.util.regex Pattern Matcher)
-           glojure.lang.LazilyPersistentVector))
+  (:import (java.util.regex Pattern Matcher)))
 
 (set! *warn-on-reflection* true)
 

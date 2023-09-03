@@ -386,7 +386,14 @@
    (sexpr-replace 'clojure.lang.RT/assoc 'github.com$glojurelang$glojure$pkg$lang.Assoc)
    (sexpr-replace 'clojure.lang.RT/subvec 'github.com$glojurelang$glojure$pkg$lang.Subvec)
    (sexpr-replace 'clojure.lang.Util/identical 'github.com$glojurelang$glojure$pkg$lang.Identical)
-   (sexpr-replace 'clojure.lang.LazilyPersistentVector/create 'github.com$glojurelang$glojure$pkg$lang.NewVectorFromCollection)
+
+   (sexpr-replace '(:import (java.util.regex Pattern Matcher) clojure.lang.LazilyPersistentVector)
+                  '(:import (java.util.regex Pattern Matcher)))
+   (sexpr-replace 'clojure.lang.LazilyPersistentVector/create
+                  'github.com$glojurelang$glojure$pkg$lang.CreateLazilyPersistentVector)
+   (sexpr-replace 'clojure.lang.LazilyPersistentVector/createOwning
+                  'github.com$glojurelang$glojure$pkg$lang.CreateOwningLazilyPersistentVector)
+   
    (sexpr-replace '(. clojure.lang.RT (seq coll)) '(github.com$glojurelang$glojure$pkg$lang.Seq coll))
    (sexpr-replace '(list 'new 'clojure.lang.LazySeq (list* '^{:once true} fn* [] body))
                   '(list 'github.com$glojurelang$glojure$pkg$lang.NewLazySeq (list* '^{:once true} fn* [] body)))
@@ -605,7 +612,7 @@
 
    (sexpr-replace
     '(. clojure.lang.LazilyPersistentVector (create (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
-    '(github.com$glojurelang$glojure$pkg$lang.NewLazilyPersistentVector (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
+    '(github.com$glojurelang$glojure$pkg$lang.CreateLazilyPersistentVector (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
 
    (sexpr-replace 'clojure.lang.IDrop 'github.com$glojurelang$glojure$pkg$lang.IDrop)
 

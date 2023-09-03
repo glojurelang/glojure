@@ -51,26 +51,6 @@ func NewVector(values ...any) *Vector {
 	}
 }
 
-func NewVectorFromCollection(c any) *Vector {
-	// TODO: match clojure's behavior here. for now, just make it work
-	// for seqs.
-	var items []any
-	for seq := Seq(c); seq != nil; seq = seq.Next() {
-		items = append(items, seq.First())
-	}
-	return NewVector(items...)
-}
-
-func NewLazilyPersistentVector(x any) IPersistentVector {
-	// TODO: IReduceInit, Iterable
-	switch x := x.(type) {
-	case ISeq:
-		return NewVectorFromCollection(x)
-	default:
-		return NewVector(toSlice(x)...)
-	}
-}
-
 var (
 	_ APersistentVector = (*Vector)(nil)
 	_ IPersistentVector = (*Vector)(nil)
