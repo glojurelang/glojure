@@ -16,8 +16,8 @@
         [glojure.test.generative :exclude (is)]
         glojure.template)
   (:require [glojure.data.generators :as gen])
-  (:import [github.com$glojurelang$glojure$pkg$lang Char]))
-;;            [glojure.test-helper :as helper]))
+  (:import [github.com$glojurelang$glojure$pkg$lang
+            Char *IllegalArgumentError *BigDecimal *BigInt]))
 
 
 ; TODO:
@@ -32,7 +32,7 @@
 (deftest Coerced-BigDecimal
   (doseq [v [(bigdec 3) (bigdec (inc (bigint math.MaxInt64)))]]
     (are [x] (true? x)
-     (instance? *github.com$glojurelang$glojure$pkg$lang.BigDecimal v)
+     (instance? *BigDecimal v)
      (number? v)
      (decimal? v)
      (not (float? v)))))
@@ -204,7 +204,7 @@
 
 
 (deftest test-subtract
-  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (-)))
+  (is (thrown? *IllegalArgumentError (-)))
   (are [x y] (= x y)
       (- 1) -1
       (- 1 2) -1
@@ -288,7 +288,7 @@
 
   (is (thrown? go/any (/ 0))) ;; TODO: replace w/ arithmetic exception
   (is (thrown? go/any (/ 2 0)))
-  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (/))) ) ;; TODO: fix pointer
+  (is (thrown? *IllegalArgumentError (/))) ) ;; TODO: fix pointer
 
 (deftest test-divide-bigint-at-edge
   (are [x] (= x (-' math.MinInt64))
@@ -311,9 +311,9 @@
 
 (deftest test-mod
   ; wrong number of args
-;  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (mod)))
-;  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (mod 1)))
-;  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (mod 3 2 1)))
+;  (is (thrown? *IllegalArgumentError (mod)))
+;  (is (thrown? *IllegalArgumentError (mod 1)))
+;  (is (thrown? *IllegalArgumentError (mod 3 2 1)))
 
   ; divide by zero
   (is (thrown? go/any (mod 9 0)))  ;; TODO: replace w/ arithmetic exception
@@ -364,9 +364,9 @@
 
 (deftest test-rem
   ; wrong number of args
-;  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (rem)))
-;  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (rem 1)))
-;  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (rem 3 2 1)))
+;  (is (thrown? *IllegalArgumentError (rem)))
+;  (is (thrown? *IllegalArgumentError (rem 1)))
+;  (is (thrown? *IllegalArgumentError (rem 3 2 1)))
 
   ; divide by zero
   (is (thrown? go/any (rem 9 0)))  ;; TODO: replace w/ arithmetic exception
@@ -411,9 +411,9 @@
 
 (deftest test-quot
   ; wrong number of args
-;  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (quot)))
-;  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (quot 1)))
-;  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (quot 3 2 1)))
+;  (is (thrown? *IllegalArgumentError (quot)))
+;  (is (thrown? *IllegalArgumentError (quot 1)))
+;  (is (thrown? *IllegalArgumentError (quot 3 2 1)))
 
   ; divide by zero
   (is (thrown? go/any (quot 9 0)))  ;; TODO: replace w/ arithmetic exception
@@ -489,8 +489,8 @@
     (even? 0)
     (not (even? 5))
     (even? 8))
-  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (even? 1/2))) ;; TODO: fix pointer import
-  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (even? (double 10)))))
+  (is (thrown? *IllegalArgumentError (even? 1/2))) ;; TODO: fix pointer import
+  (is (thrown? *IllegalArgumentError (even? (double 10)))))
 
 (deftest test-odd?
   (are [x] (true? x)
@@ -499,8 +499,8 @@
     (not (odd? 0))
     (odd? 5)
     (not (odd? 8)))
-  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (odd? 1/2)))
-  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (odd? (double 10)))))
+  (is (thrown? *IllegalArgumentError (odd? 1/2)))
+  (is (thrown? *IllegalArgumentError (odd? (double 10)))))
 
 (defn- expt
   "clojure.contrib.math/expt is a better and much faster impl, but this works.
@@ -518,7 +518,7 @@ Math/pow overflows to Infinity."
        (expt 2 32) (bit-shift-left 1 32)
        (expt 2 16) (bit-shift-left 1 10000) ; truncated to least 6-bits, 16
        )
-  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (bit-shift-left 1N 1))))
+  (is (thrown? *IllegalArgumentError (bit-shift-left 1N 1))))
 
 (deftest test-bit-shift-right
   (are [x y] (= x y)
@@ -533,7 +533,7 @@ Math/pow overflows to Infinity."
        1 (bit-shift-right (expt 2 16) 10000) ; truncated to least 6-bits, 16
        -1 (bit-shift-right -2r10 1)
        )
-  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (bit-shift-right 1N 1))))
+  (is (thrown? *IllegalArgumentError (bit-shift-right 1N 1))))
 
 (deftest test-unsigned-bit-shift-right
   (are [x y] (= x y)
@@ -548,7 +548,7 @@ Math/pow overflows to Infinity."
        1 (unsigned-bit-shift-right (expt 2 16) 10000) ; truncated to least 6-bits, 16
        9223372036854775807 (unsigned-bit-shift-right -2r10 1)
        )
-  (is (thrown? *github.com$glojurelang$glojure$pkg$lang.IllegalArgumentError (unsigned-bit-shift-right 1N 1))))
+  (is (thrown? *IllegalArgumentError (unsigned-bit-shift-right 1N 1))))
 
 (deftest test-bit-clear
   (is (= 2r1101 (bit-clear 2r1111 1)))
@@ -588,8 +588,8 @@ Math/pow overflows to Infinity."
 (deftest test-arbitrary-precision-subtract
   (are [x y] (= x y)
        9223372036854775808N (-' 0 -9223372036854775808)
-       *github.com$glojurelang$glojure$pkg$lang.BigInt  (class (-' 0 -9223372036854775808))
-       go/int64       (class (-' 0 -9223372036854775807))))
+       *BigInt              (class (-' 0 -9223372036854775808))
+       go/int64             (class (-' 0 -9223372036854775807))))
 
 (deftest test-min-max
   (testing "min/max on different numbers of floats and doubles"

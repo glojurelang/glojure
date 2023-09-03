@@ -246,7 +246,13 @@ func getTypeNameDeclaration(object *types.TypeName, globalName string, aliasName
 
 	ret := fmt.Sprintf("_register(%q, reflect.TypeOf((*%s)(nil)).Elem())", globalName, aliasName)
 	if _, ok := object.Type().Underlying().(*types.Struct); ok {
-		ret += fmt.Sprintf("\n_register(%q, reflect.TypeOf((*%s)(nil)))", "*"+globalName, aliasName)
+		// register with a * prepended to the name _within_ the package
+		// first, split globalName into package and name
+		parts := strings.Split(globalName, ".")
+		name := parts[len(parts)-1]
+		name = "*" + name
+		fullName := strings.Join(append(parts[:len(parts)-1], name), ".")
+		ret += fmt.Sprintf("\n_register(%q, reflect.TypeOf((*%s)(nil)))", fullName, aliasName)
 	}
 	return ret
 }
