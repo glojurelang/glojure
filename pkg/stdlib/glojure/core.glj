@@ -361,7 +361,7 @@
 	([a b c d e] [a b c d e])
 	([a b c d e f] [a b c d e f])
   ([a b c d e f & args]
-     (github.com$glojurelang$glojure$pkg$lang.NewLazilyPersistentVector (cons a (cons b (cons c (cons d (cons e (cons f args)))))))))
+     (github.com$glojurelang$glojure$pkg$lang.CreateLazilyPersistentVector (cons a (cons b (cons c (cons d (cons e (cons f args)))))))))
 
 (defn vec
   "Creates a new vector containing the contents of coll. Java arrays
@@ -372,8 +372,8 @@
    (if (vector? coll)
      (if (instance? github.com$glojurelang$glojure$pkg$lang.IObj coll)
        (with-meta coll nil)
-       (github.com$glojurelang$glojure$pkg$lang.NewVectorFromCollection coll))
-     (github.com$glojurelang$glojure$pkg$lang.NewVectorFromCollection coll))))
+       (github.com$glojurelang$glojure$pkg$lang.CreateLazilyPersistentVector coll))
+     (github.com$glojurelang$glojure$pkg$lang.CreateLazilyPersistentVector coll))))
 
 (defn hash-map
   "keyval => key val
