@@ -189,9 +189,9 @@
   Trailing empty strings are not returned - pass limit of -1 to return all."
   {:added "1.2"}
   ([^CharSequence s ^Pattern re]
-     (LazilyPersistentVector/createOwning (.split re s)))
+     (github.com$glojurelang$glojure$pkg$lang.CreateOwningLazilyPersistentVector (.split re s -1)))
   ([ ^CharSequence s ^Pattern re limit]
-     (LazilyPersistentVector/createOwning (.split re s limit))))
+     (github.com$glojurelang$glojure$pkg$lang.CreateOwningLazilyPersistentVector (.split re s limit))))
 
 (defn split-lines
   "Splits s on \\n or \\r\\n. Trailing empty lines are not returned."

@@ -393,7 +393,9 @@
                   'github.com$glojurelang$glojure$pkg$lang.CreateLazilyPersistentVector)
    (sexpr-replace 'clojure.lang.LazilyPersistentVector/createOwning
                   'github.com$glojurelang$glojure$pkg$lang.CreateOwningLazilyPersistentVector)
-   
+   (sexpr-replace 'LazilyPersistentVector/createOwning
+                  'github.com$glojurelang$glojure$pkg$lang.CreateOwningLazilyPersistentVector)
+
    (sexpr-replace '(. clojure.lang.RT (seq coll)) '(github.com$glojurelang$glojure$pkg$lang.Seq coll))
    (sexpr-replace '(list 'new 'clojure.lang.LazySeq (list* '^{:once true} fn* [] body))
                   '(list 'github.com$glojurelang$glojure$pkg$lang.NewLazySeq (list* '^{:once true} fn* [] body)))
@@ -853,6 +855,11 @@
                            (= 'stacktrace-file-and-line
                               (first (z/sexpr zloc)))))
     (fn visit [zloc] (z/replace zloc '{}))]
+
+   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+   ;; Regular Expressions
+   (sexpr-replace '(.split re s)
+                  '(.split re s -1))
 
    ])
 
