@@ -34,6 +34,7 @@ type (
 
 		Multiply(x, y any) any
 		MultiplyP(x, y any) any
+		UncheckedMultiply(x, y any) any
 
 		Divide(x, y any) any
 
@@ -212,6 +213,9 @@ func (o int64Ops) MultiplyP(x, y any) any {
 	}
 	return ret
 }
+func (o int64Ops) UncheckedMultiply(x, y any) any {
+	return AsInt64(x) * AsInt64(y)
+}
 func gcd(u, v int64) int64 {
 	for v != 0 {
 		r := u % v
@@ -326,6 +330,9 @@ func (o bigIntOps) Multiply(x, y any) any {
 func (o bigIntOps) MultiplyP(x, y any) any {
 	return o.Multiply(x, y)
 }
+func (o bigIntOps) UncheckedMultiply(x, y any) any {
+	return o.Multiply(x, y)
+}
 func (o bigIntOps) Divide(x, y any) any {
 	return AsBigInt(x).Divide(AsBigInt(y))
 }
@@ -401,7 +408,10 @@ func (o ratioOps) Multiply(x, y any) any {
 	return AsRatio(x).Multiply(AsRatio(y))
 }
 func (o ratioOps) MultiplyP(x, y any) any {
-	return AsRatio(x).Multiply(AsRatio(y))
+	return o.Multiply(x, y)
+}
+func (o ratioOps) UncheckedMultiply(x, y any) any {
+	return o.Multiply(x, y)
 }
 func (o ratioOps) Divide(x, y any) any {
 	return AsRatio(x).Divide(AsRatio(y))
@@ -490,6 +500,9 @@ func (o bigDecimalOps) Multiply(x, y any) any {
 func (o bigDecimalOps) MultiplyP(x, y any) any {
 	return o.Multiply(x, y)
 }
+func (o bigDecimalOps) UncheckedMultiply(x, y any) any {
+	return o.Multiply(x, y)
+}
 func (o bigDecimalOps) Divide(x, y any) any {
 	return AsBigDecimal(x).Divide(AsBigDecimal(y))
 }
@@ -566,7 +579,10 @@ func (o float64Ops) Multiply(x, y any) any {
 }
 func (o float64Ops) MultiplyP(x, y any) any {
 	// as in clojure, no overflow check
-	return AsFloat64(x) * AsFloat64(y)
+	return o.Multiply(x, y)
+}
+func (o float64Ops) UncheckedMultiply(x, y any) any {
+	return o.Multiply(x, y)
 }
 func (o float64Ops) Divide(x, y any) any {
 	return AsFloat64(x) / AsFloat64(y)

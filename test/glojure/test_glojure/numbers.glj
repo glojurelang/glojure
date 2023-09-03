@@ -226,7 +226,7 @@
       (- 2.2 1.1) 1.1
       (- 6.6 2.2 1.1) 3.3 )
 
-  (is (< (- math.MinInt 10) math.MinInt)) )  ; no underflow
+  (is (< (- math.MinInt32 10) math.MinInt32)) )  ; no underflow
 
 
 (deftest test-multiply

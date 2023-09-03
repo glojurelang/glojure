@@ -61,7 +61,7 @@ func (nm *NumberMethods) MultiplyP(x, y any) any {
 }
 
 func (nm *NumberMethods) Unchecked_multiply(x, y any) any {
-	return nm.Multiply(x, y) // TODO: the normal implementations are currently unchecked. fix
+	return Ops(x).Combine(Ops(y)).UncheckedMultiply(x, y)
 }
 
 func (nm *NumberMethods) Divide(x, y any) any {
