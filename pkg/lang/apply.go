@@ -74,15 +74,15 @@ func applyType(typ reflect.Type, args []interface{}) interface{} {
 	}
 
 	if len(args) > 1 {
-		panic(fmt.Errorf("too many arguments"))
+		panic(NewIllegalArgumentError("too many arguments to type conversion"))
 	}
 
 	arg := args[0]
-	res, err := ConvertToGo(typ, arg)
-	if err != nil {
-		panic(err)
+	argVal := reflect.ValueOf(arg)
+	if !argVal.CanConvert(typ) {
+		panic(NewIllegalArgumentError(fmt.Sprintf("cannot convert %T to %s", arg, typ)))
 	}
-	return res
+	return argVal.Convert(typ).Interface()
 }
 
 func applySlice(goVal reflect.Value, args []interface{}) interface{} {
@@ -99,20 +99,9 @@ func applySlice(goVal reflect.Value, args []interface{}) interface{} {
 	return goVal.Index(idx).Interface()
 }
 
-// TODO: reconsider the semantics of the functions below.
-
-// ConvertToGo converts a Value to a Go value of the given type, if
-// possible.
-func ConvertToGo(typ reflect.Type, val interface{}) (interface{}, error) {
-	rval, err := coerceGoValue(typ, val)
-	if err != nil {
-		return nil, err
-	}
-	return rval.Interface(), nil
-}
-
 // coerceGoValue attempts to coerce a Go value to be assignable to a
 // target type. If the value is already assignable, it is returned.
+// TODO: reconsider semantics of this function
 func coerceGoValue(targetType reflect.Type, val interface{}) (reflect.Value, error) {
 	if val == nil {
 		if !isNilableKind(targetType.Kind()) {

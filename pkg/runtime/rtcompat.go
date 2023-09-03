@@ -63,7 +63,7 @@ func (rt *RTMethods) Pop(x interface{}) interface{} {
 	return stk.Pop()
 }
 
-func (rt *RTMethods) IntCast(x interface{}) int32 {
+func (rt *RTMethods) IntCast(x interface{}) int {
 	return value.IntCast(x)
 }
 

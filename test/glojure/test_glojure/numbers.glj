@@ -132,36 +132,33 @@
   (is (unchecked-int (char 0xFFFF)))
   (is (let [c (char 0xFFFF)] (unchecked-int c)))) ; force primitive char
 
+(defn is-64-bit?
+  []
+  (= math.MaxInt math.MaxInt64))
+
+(def max-int-res (if (is-64-bit?) math.MaxInt :error))
+
 (def expected-casts
   [
-   [:input           [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32  math.MaxInt64         math.MaxFloat32    math.MaxFloat64]]
-   [char             [:error        (char 0)    (char 1)    (char 127)      (char 32767)     :error             :error                 :error             :error]]
+   [:input           [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        math.MaxInt64         math.MaxFloat32    math.MaxFloat64]]
+   [char             [:error        (char 0)    (char 1)    (char 127)    (char 32767)   :error               :error                :error             :error]]
    ;; In go, char == rune, which is equivalent to int32
-   [unchecked-char   [(Char -1)  (Char 0)    (Char 1)    (Char 127)      (Char 32767)     (Char math.MaxInt32)       (Char -1)           (Char -1)       (Char -1)]]
+   [unchecked-char   [(Char -1)     (Char 0)    (Char 1)    (Char 127)    (Char 32767)   (Char math.MaxInt32) (Char -1)             (Char -1)          (Char -1)]]
    ;; bytes are unsigned in go
-   [byte             [255            0           1           math.MaxInt8  :error           :error             :error                 :error             :error]]
+   [byte             [255           0           1           math.MaxInt8  :error         :error               :error                :error             :error]]
    ;; bytes are unsigned in go
-   [unchecked-byte   [255            0           1           math.MaxInt8  255               255                 255                     255                 255]]
-   [short            [-1            0           1           math.MaxInt8  math.MaxInt16  :error             :error                 :error             :error]]
-   [unchecked-short  [-1            0           1           math.MaxInt8  math.MaxInt16  -1                 -1                     -1                 -1]] 
-   [int              [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32  :error                 :error             :error]]
-   ;; TODO: use dedicated unchecked int cast function
-                                                                                                                               ;; java has special conversion rules,
-                                                                                                                               ;; and converts to long or int from floats,
-                                                                                                                               ;; yielding max or min if it's out of range.
-                                                                                                                               ;; if the target type is smaller than int,
-                                                                                                                               ;; the int is then truncated.
-                                                                                                                               ;; thus for jvm clojure, these were:
-                                                                                                                               ;; math.MaxInt32  math.MaxInt32
-                                                                                                                               ;; we follow Go rules here.
-   [unchecked-int    [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32  -1                     -1                -1]]
-   [long             [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32  math.MaxInt64         :error             :error]]
-   [unchecked-long   [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32  math.MaxInt64         math.MaxInt64     math.MaxInt64]]
+   [unchecked-byte   [255           0           1           math.MaxInt8  255            255                  255                   255                255]]
+   [short            [-1            0           1           math.MaxInt8  math.MaxInt16  :error               :error                :error             :error]]
+   [unchecked-short  [-1            0           1           math.MaxInt8  math.MaxInt16  -1                   -1                    -1                 -1]]
+   [int              [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        max-int-res           :error             :error]]
+   [unchecked-int    [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        max-int-res           max-int-res        max-int-res]]
+   [long             [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        math.MaxInt64         :error             :error]]
+   [unchecked-long   [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        math.MaxInt64         math.MaxInt64      math.MaxInt64]]
                                                                                              ;; 2.14748365E9 if when float/double conversion is avoided...
-   [float            [-1.0          0.0         1.0         127.0           32767.0          2.147483648E9      9.223372036854776E18   math.MaxFloat32    :error]]
-   [unchecked-float  [-1.0          0.0         1.0         127.0           32767.0          2.147483648E9      9.223372036854776E18   math.MaxFloat32    (go/float32 (math.Inf 1))]]
-   [double           [-1.0          0.0         1.0         127.0           32767.0          2.147483647E9      9.223372036854776E18   math.MaxFloat32    math.MaxFloat64]]
-   [unchecked-double [-1.0          0.0         1.0         127.0           32767.0          2.147483647E9      9.223372036854776E18   math.MaxFloat32    math.MaxFloat64]]])
+   [float            [-1.0          0.0         1.0         127.0         32767.0        2.147483648E9        9.223372036854776E18  math.MaxFloat32    :error]]
+   [unchecked-float  [-1.0          0.0         1.0         127.0         32767.0        2.147483648E9        9.223372036854776E18  math.MaxFloat32    (go/float32 (math.Inf 1))]]
+   [double           [-1.0          0.0         1.0         127.0         32767.0        2.147483647E9        9.223372036854776E18  math.MaxFloat32    math.MaxFloat64]]
+   [unchecked-double [-1.0          0.0         1.0         127.0         32767.0        2.147483647E9        9.223372036854776E18  math.MaxFloat32    math.MaxFloat64]]])
 
 (deftest test-expected-casts
   (let [[[_ inputs] & expectations] expected-casts]

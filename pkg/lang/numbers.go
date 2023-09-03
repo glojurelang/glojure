@@ -808,22 +808,61 @@ func UncheckedShortCast(x any) int16 {
 	return int16(AsInt64(x))
 }
 
-func IntCast(x any) int32 {
-	if v, ok := x.(int32); ok {
-		return v
-	}
-	v := AsInt64(x)
-	if v < math.MinInt32 || v > math.MaxInt32 {
-		panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int: %v", x)))
-	}
-	return int32(v)
+func _is64Bit() bool {
+	maxU32 := uint(math.MaxUint32)
+	return ((maxU32 << 1) >> 1) == maxU32
 }
 
-func UncheckedIntCast(x any) int32 {
-	if v, ok := x.(int32); ok {
+func intCastLong(x int64) int {
+	if _is64Bit() {
+		return int(x)
+	}
+	if x < math.MinInt || x > math.MaxInt {
+		panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int: %v", x)))
+	}
+	return int(x)
+}
+
+func IntCast(x any) int {
+	switch x := x.(type) {
+	case *BigInt:
+		if !x.IsInt64() {
+			panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int: %v", x)))
+		}
+		return intCastLong(x.Int64())
+	case *big.Int:
+		if !x.IsInt64() {
+			panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int: %v", x)))
+		}
+		return intCastLong(x.Int64())
+	case *Ratio:
+		return IntCast(x.BigIntegerValue())
+	case *BigDecimal:
+		return IntCast(x.ToBigInteger())
+	case float64:
+		if x < math.MinInt || x > math.MaxInt {
+			panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int: %v", x)))
+		}
+		return int(x)
+	case float32:
+		if x < math.MinInt || x > math.MaxInt {
+			panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int: %v", x)))
+		}
+		return int(x)
+	}
+	v := AsInt64(x)
+	if v < math.MinInt || v > math.MaxInt {
+		// only relevant for 32-bit platforms
+		panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int: %v", x)))
+	}
+	return int(v)
+}
+
+func UncheckedIntCast(x any) int {
+	if v, ok := x.(int); ok {
 		return v
 	}
-	return int32(AsInt64(x))
+	return int(AsInt64(x))
 }
 
 func LongCast(x any) int64 {
