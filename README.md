@@ -150,7 +150,7 @@ import (
 
 1. In Java, bytes are signed, whereas Go bytes are unsigned.
 2. Java chars behave as 16-bit unsigned integers, whereas Go runes are 32-bit signed integers.
-3. 
+3. Java ints are 32-bit, whereas Go ints are either 32- or 64-bit depending on architecture.
 
 ## Comparisons to other Go ports of Clojure
 

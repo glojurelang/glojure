@@ -1383,7 +1383,7 @@
   {:added "1.0"
    :static true}
    [n] (if (integer? n)
-        (zero? (bit-and (github.com$glojurelang$glojure$pkg$lang.AsInt64 n) 1))
+        (zero? (bit-and (github.com$glojurelang$glojure$pkg$lang.UncheckedLongCast n) 1))
         (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Argument must be an integer: " n)))))
 
 (defn odd?
@@ -2710,7 +2710,7 @@
   [bindings & body]
   (let [i (first bindings)
         n (second bindings)]
-    `(let [n# (github.com$glojurelang$glojure$pkg$lang.AsInt64 ~n)]
+    `(let [n# (github.com$glojurelang$glojure$pkg$lang.LongCast ~n)]
        (loop [~i 0]
          (when (< ~i n#)
            ~@body
@@ -3463,7 +3463,7 @@
   "Coerce to long"
   {:inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$runtime.RT (LongCast ~x)))
    :added "1.0"}
-  [x] (github.com$glojurelang$glojure$pkg$lang.AsInt64 x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.LongCast x))
 
 (defn float
   "Coerce to float"
@@ -3517,13 +3517,13 @@
   "Coerce to int. Subject to rounding or truncation."
   {:inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$runtime.RT (UncheckedIntCast ~x)))
    :added "1.3"}
-  [x] (github.com$glojurelang$glojure$pkg$lang.MustAsInt x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.UncheckedIntCast x))
 
 (defn unchecked-long
   "Coerce to long. Subject to rounding or truncation."
   {:inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$runtime.RT (UncheckedLongCast ~x)))
    :added "1.3"}
-  [x] (github.com$glojurelang$glojure$pkg$lang.AsInt64 x))
+  [x] (github.com$glojurelang$glojure$pkg$lang.UncheckedLongCast x))
 
 (defn unchecked-float
   "Coerce to float. Subject to rounding."

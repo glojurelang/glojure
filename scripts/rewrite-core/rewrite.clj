@@ -504,7 +504,7 @@
    (sexpr-replace '(.. Runtime getRuntime availableProcessors)
                   '(runtime.NumCPU))
 
-   (sexpr-replace 'clojure.lang.RT/longCast 'github.com$glojurelang$glojure$pkg$lang.AsInt64)
+   (sexpr-replace 'clojure.lang.RT/longCast 'github.com$glojurelang$glojure$pkg$lang.LongCast)
    (sexpr-replace 'clojure.lang.RT/byteCast 'github.com$glojurelang$glojure$pkg$lang.ByteCast)
    (sexpr-replace 'clojure.lang.RT/uncheckedByteCast 'github.com$glojurelang$glojure$pkg$lang.UncheckedByteCast)
    (sexpr-replace 'clojure.lang.RT/shortCast 'github.com$glojurelang$glojure$pkg$lang.ShortCast)
@@ -540,9 +540,10 @@
 
    (sexpr-replace '(clojure.lang.RT/booleanCast x) '(. github.com$glojurelang$glojure$pkg$runtime.RT (BooleanCast x)))
    ;; TODO: meet unchecked behavior?
-   (sexpr-replace 'clojure.lang.RT/uncheckedLongCast 'github.com$glojurelang$glojure$pkg$lang.AsInt64)
+   (sexpr-replace 'clojure.lang.RT/uncheckedLongCast
+                  'github.com$glojurelang$glojure$pkg$lang.UncheckedLongCast)
    (sexpr-replace 'clojure.lang.RT/uncheckedIntCast
-                  'github.com$glojurelang$glojure$pkg$lang.MustAsInt)
+                  'github.com$glojurelang$glojure$pkg$lang.UncheckedIntCast)
 
    [(fn select [zloc] (try
                         (and (symbol? (z/sexpr zloc))

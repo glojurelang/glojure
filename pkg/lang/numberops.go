@@ -19,22 +19,24 @@ type (
 	ops interface {
 		Combine(y ops) ops
 
+		IsZero(x any) bool
 		IsPos(x any) bool
 		IsNeg(x any) bool
 
 		Add(x, y any) any
-		// TODO: implement the precision version of Add, etc.
 		AddP(x, y any) any
 		UncheckedAdd(x, y any) any
 
 		UncheckedDec(x any) any
 
 		Sub(x, y any) any
-		SubP(x, y any) any
+		UncheckedSub(x, y any) any
 
 		Multiply(x, y any) any
 		MultiplyP(x, y any) any
+
 		Divide(x, y any) any
+
 		Quotient(x, y any) any
 
 		Remainder(x, y any) any
@@ -44,13 +46,11 @@ type (
 		LTE(x, y any) bool
 		GTE(x, y any) bool
 
-		Max(x, y any) any
-		Min(x, y any) any
+		Negate(x any) any
+		NegateP(x any) any
+		UncheckedNegate(x any) any
 
-		// TODO: equal vs equiv
 		Equiv(x, y any) bool
-
-		IsZero(x any) bool
 
 		Abs(x any) any
 	}
@@ -123,7 +123,9 @@ func Sub(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Sub(x, y)
 }
 func SubP(x, y any) any {
-	return Ops(x).Combine(Ops(y)).SubP(x, y)
+	yops := Ops(y)
+	negY := yops.NegateP(y)
+	return Ops(x).Combine(Ops(negY)).AddP(x, negY)
 }
 func Multiply(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Multiply(x, y)
@@ -131,17 +133,20 @@ func Multiply(x, y any) any {
 func Divide(x, y any) any {
 	return Ops(x).Combine(Ops(y)).Divide(x, y)
 }
-func Max(x, y any) any {
-	return Ops(x).Combine(Ops(y)).Max(x, y)
+func GT(x, y any) bool {
+	return Ops(x).Combine(Ops(y)).GT(x, y)
 }
-func Min(x, y any) any {
-	return Ops(x).Combine(Ops(y)).Min(x, y)
+func LT(x, y any) bool {
+	return Ops(x).Combine(Ops(y)).LT(x, y)
 }
 func NumbersEqual(x, y any) bool {
 	return category(x) == category(y) &&
 		Ops(x).Combine(Ops(y)).Equiv(x, y)
 }
 
+// //////////////////////////////////////////////////////////////////////////////
+// int64Ops
+// //////////////////////////////////////////////////////////////////////////////
 func (o int64Ops) IsPos(x any) bool {
 	return AsInt64(x) > 0
 }
@@ -155,9 +160,14 @@ func (o int64Ops) IsZero(x any) bool {
 }
 
 func (o int64Ops) Add(x, y any) any {
-	return AsInt64(x) + AsInt64(y)
+	a, b := AsInt64(x), AsInt64(y)
+	c := a + b
+	if (c > a) == (b > 0) {
+		return c
+	}
+	panic(NewArithmeticError("integer overflow"))
 }
-func (o int64Ops) AddP(x, y any) any {
+func (o int64Ops) AddP(x, y any) any { // TODO: implement
 	return AsInt64(x) + AsInt64(y)
 }
 func (o int64Ops) UncheckedAdd(x, y any) any {
@@ -167,13 +177,28 @@ func (o int64Ops) UncheckedDec(x any) any {
 	return AsInt64(x) - 1
 }
 func (o int64Ops) Sub(x, y any) any {
-	return AsInt64(x) - AsInt64(y)
+	a, b := AsInt64(x), AsInt64(y)
+	c := a - b
+	if (c < a) == (b > 0) {
+		return c
+	}
+	panic(NewArithmeticError("integer overflow"))
 }
-func (o int64Ops) SubP(x, y any) any {
+func (o int64Ops) UncheckedSub(x, y any) any {
 	return AsInt64(x) - AsInt64(y)
 }
 func (o int64Ops) Multiply(x, y any) any {
-	return AsInt64(x) * AsInt64(y)
+	a, b := AsInt64(x), AsInt64(y)
+	if a == 0 || b == 0 {
+		return 0
+	}
+	c := a * b
+	if (c < 0) == ((a < 0) != (b < 0)) {
+		if c/b == a {
+			return c
+		}
+	}
+	panic(NewArithmeticError("integer overflow"))
 }
 func (o int64Ops) MultiplyP(x, y any) any {
 	xInt := AsInt64(x)
@@ -232,18 +257,24 @@ func (o int64Ops) GT(x, y any) bool {
 func (o int64Ops) GTE(x, y any) bool {
 	return AsInt64(x) >= AsInt64(y)
 }
-func (o int64Ops) Max(x, y any) any {
-	if AsInt64(x) > AsInt64(y) {
-		return x
+func (o int64Ops) Negate(x any) any {
+	xi := AsInt64(x)
+	if xi == math.MinInt64 {
+		panic(NewArithmeticError("integer overflow"))
 	}
-	return y
-
+	return -xi
 }
-func (o int64Ops) Min(x, y any) any {
-	if AsInt64(x) < AsInt64(y) {
-		return x
+func (o int64Ops) NegateP(x any) any {
+	xi := AsInt64(x)
+	if xi == math.MinInt64 {
+		bigint := new(big.Int).SetInt64(xi)
+		bigint.Neg(bigint)
+		return &BigInt{val: bigint}
 	}
-	return y
+	return -xi
+}
+func (o int64Ops) UncheckedNegate(x any) any {
+	return -AsInt64(x)
 }
 func (o int64Ops) Equiv(x, y any) bool {
 	return AsInt64(x) == AsInt64(y)
@@ -254,6 +285,10 @@ func (o int64Ops) Abs(x any) any {
 	}
 	return x
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// bigIntOps
+////////////////////////////////////////////////////////////////////////////////
 
 func (o bigIntOps) IsPos(x any) bool {
 	return AsBigInt(x).val.Sign() > 0
@@ -271,10 +306,10 @@ func (o bigIntOps) Add(x, y any) any {
 	return AsBigInt(x).Add(AsBigInt(y))
 }
 func (o bigIntOps) AddP(x, y any) any {
-	return AsBigInt(x).AddP(AsBigInt(y))
+	return o.Add(x, y)
 }
 func (o bigIntOps) UncheckedAdd(x, y any) any {
-	return AsBigInt(x).Add(AsBigInt(y))
+	return o.Add(x, y)
 }
 func (o bigIntOps) UncheckedDec(x any) any {
 	return AsBigInt(x).Sub(AsBigInt(1))
@@ -282,14 +317,14 @@ func (o bigIntOps) UncheckedDec(x any) any {
 func (o bigIntOps) Sub(x, y any) any {
 	return AsBigInt(x).Sub(AsBigInt(y))
 }
-func (o bigIntOps) SubP(x, y any) any {
-	return AsBigInt(x).SubP(AsBigInt(y))
+func (o bigIntOps) UncheckedSub(x, y any) any {
+	return o.Sub(x, y)
 }
 func (o bigIntOps) Multiply(x, y any) any {
 	return AsBigInt(x).Multiply(AsBigInt(y))
 }
 func (o bigIntOps) MultiplyP(x, y any) any {
-	return AsBigInt(x).Multiply(AsBigInt(y))
+	return o.Multiply(x, y)
 }
 func (o bigIntOps) Divide(x, y any) any {
 	return AsBigInt(x).Divide(AsBigInt(y))
@@ -312,22 +347,14 @@ func (o bigIntOps) GT(x, y any) bool {
 func (o bigIntOps) GTE(x, y any) bool {
 	return AsBigInt(x).GTE(AsBigInt(y))
 }
-func (o bigIntOps) Max(x, y any) any {
-	xx := AsBigInt(x)
-	yy := AsBigInt(y)
-	if xx.Cmp(yy) > 0 {
-		return x
-	}
-	return y
-
+func (o bigIntOps) Negate(x any) any {
+	return o.Multiply(x, -1)
 }
-func (o bigIntOps) Min(x, y any) any {
-	xx := AsBigInt(x)
-	yy := AsBigInt(y)
-	if xx.Cmp(yy) < 0 {
-		return x
-	}
-	return y
+func (o bigIntOps) NegateP(x any) any {
+	return o.Negate(x)
+}
+func (o bigIntOps) UncheckedNegate(x any) any {
+	return o.Negate(x)
 }
 func (o bigIntOps) Equiv(x, y any) bool {
 	return AsBigInt(x).Cmp(AsBigInt(y)) == 0
@@ -335,6 +362,10 @@ func (o bigIntOps) Equiv(x, y any) bool {
 func (o bigIntOps) Abs(x any) any {
 	return AsBigInt(x).Abs()
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// ratioOps
+////////////////////////////////////////////////////////////////////////////////
 
 func (o ratioOps) IsPos(x any) bool {
 	return AsRatio(x).val.Sign() > 0
@@ -352,10 +383,10 @@ func (o ratioOps) Add(x, y any) any {
 	return AsRatio(x).Add(AsRatio(y))
 }
 func (o ratioOps) AddP(x, y any) any {
-	return AsRatio(x).AddP(AsRatio(y))
+	return o.Add(x, y)
 }
 func (o ratioOps) UncheckedAdd(x, y any) any {
-	return AsRatio(x).Add(AsRatio(y))
+	return o.Add(x, y)
 }
 func (o ratioOps) UncheckedDec(x any) any {
 	return AsRatio(x).Sub(AsRatio(1))
@@ -363,8 +394,8 @@ func (o ratioOps) UncheckedDec(x any) any {
 func (o ratioOps) Sub(x, y any) any {
 	return AsRatio(x).Sub(AsRatio(y))
 }
-func (o ratioOps) SubP(x, y any) any {
-	return AsRatio(x).SubP(AsRatio(y))
+func (o ratioOps) UncheckedSub(x, y any) any {
+	return o.Sub(x, y)
 }
 func (o ratioOps) Multiply(x, y any) any {
 	return AsRatio(x).Multiply(AsRatio(y))
@@ -403,23 +434,14 @@ func (o ratioOps) GT(x, y any) bool {
 func (o ratioOps) GTE(x, y any) bool {
 	return AsRatio(x).GTE(AsRatio(y))
 }
-func (o ratioOps) Max(x, y any) any {
-	xx := AsRatio(x)
-	yy := AsRatio(y)
-	if xx.Cmp(yy) > 0 {
-		return x
-	}
-	return y
-
+func (o ratioOps) Negate(x any) any {
+	return AsRatio(x).Negate()
 }
-func (o ratioOps) Min(x, y any) any {
-	xx := AsRatio(x)
-	yy := AsRatio(y)
-	if xx.Cmp(yy) < 0 {
-		return x
-	}
-	return y
-
+func (o ratioOps) NegateP(x any) any {
+	return o.Negate(x)
+}
+func (o ratioOps) UncheckedNegate(x any) any {
+	return o.Negate(x)
 }
 func (o ratioOps) Equiv(x, y any) bool {
 	return AsRatio(x).Cmp(AsRatio(y)) == 0
@@ -427,6 +449,10 @@ func (o ratioOps) Equiv(x, y any) bool {
 func (o ratioOps) Abs(x any) any {
 	return AsRatio(x).Abs()
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// bigDecimalOps
+////////////////////////////////////////////////////////////////////////////////
 
 func (o bigDecimalOps) IsPos(x any) bool {
 	return AsBigDecimal(x).val.Sign() > 0
@@ -444,10 +470,10 @@ func (o bigDecimalOps) Add(x, y any) any {
 	return AsBigDecimal(x).Add(AsBigDecimal(y))
 }
 func (o bigDecimalOps) AddP(x, y any) any {
-	return AsBigDecimal(x).AddP(AsBigDecimal(y))
+	return o.Add(x, y)
 }
 func (o bigDecimalOps) UncheckedAdd(x, y any) any {
-	return AsBigDecimal(x).Add(AsBigDecimal(y))
+	return o.Add(x, y)
 }
 func (o bigDecimalOps) UncheckedDec(x any) any {
 	return AsBigDecimal(x).Sub(AsBigDecimal(1))
@@ -455,14 +481,14 @@ func (o bigDecimalOps) UncheckedDec(x any) any {
 func (o bigDecimalOps) Sub(x, y any) any {
 	return AsBigDecimal(x).Sub(AsBigDecimal(y))
 }
-func (o bigDecimalOps) SubP(x, y any) any {
-	return AsBigDecimal(x).SubP(AsBigDecimal(y))
+func (o bigDecimalOps) UncheckedSub(x, y any) any {
+	return o.Sub(x, y)
 }
 func (o bigDecimalOps) Multiply(x, y any) any {
 	return AsBigDecimal(x).Multiply(AsBigDecimal(y))
 }
 func (o bigDecimalOps) MultiplyP(x, y any) any {
-	return AsBigDecimal(x).Multiply(AsBigDecimal(y))
+	return o.Multiply(x, y)
 }
 func (o bigDecimalOps) Divide(x, y any) any {
 	return AsBigDecimal(x).Divide(AsBigDecimal(y))
@@ -485,23 +511,14 @@ func (o bigDecimalOps) GT(x, y any) bool {
 func (o bigDecimalOps) GTE(x, y any) bool {
 	return AsBigDecimal(x).GTE(AsBigDecimal(y))
 }
-func (o bigDecimalOps) Max(x, y any) any {
-	xx := AsBigDecimal(x)
-	yy := AsBigDecimal(y)
-	if xx.Cmp(yy) > 0 {
-		return x
-	}
-	return y
-
+func (o bigDecimalOps) Negate(x any) any {
+	return AsBigDecimal(x).Negate()
 }
-func (o bigDecimalOps) Min(x, y any) any {
-	xx := AsBigDecimal(x)
-	yy := AsBigDecimal(y)
-	if xx.Cmp(yy) < 0 {
-		return x
-	}
-	return y
-
+func (o bigDecimalOps) NegateP(x any) any {
+	return o.Negate(x)
+}
+func (o bigDecimalOps) UncheckedNegate(x any) any {
+	return o.Negate(x)
 }
 func (o bigDecimalOps) Equiv(x, y any) bool {
 	return AsBigDecimal(x).Cmp(AsBigDecimal(y)) == 0
@@ -509,6 +526,10 @@ func (o bigDecimalOps) Equiv(x, y any) bool {
 func (o bigDecimalOps) Abs(x any) any {
 	return AsBigDecimal(x).Abs()
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// float64Ops
+////////////////////////////////////////////////////////////////////////////////
 
 func (o float64Ops) IsPos(x any) bool {
 	return AsFloat64(x) > 0
@@ -537,8 +558,8 @@ func (o float64Ops) UncheckedDec(x any) any {
 func (o float64Ops) Sub(x, y any) any {
 	return AsFloat64(x) - AsFloat64(y)
 }
-func (o float64Ops) SubP(x, y any) any {
-	return AsFloat64(x) - AsFloat64(y)
+func (o float64Ops) UncheckedSub(x, y any) any {
+	return o.Sub(x, y)
 }
 func (o float64Ops) Multiply(x, y any) any {
 	return AsFloat64(x) * AsFloat64(y)
@@ -577,11 +598,14 @@ func (o float64Ops) GT(x, y any) bool {
 func (o float64Ops) GTE(x, y any) bool {
 	return AsFloat64(x) >= AsFloat64(y)
 }
-func (o float64Ops) Max(x, y any) any {
-	return math.Max(AsFloat64(x), AsFloat64(y))
+func (o float64Ops) Negate(x any) any {
+	return -AsFloat64(x)
 }
-func (o float64Ops) Min(x, y any) any {
-	return math.Min(AsFloat64(x), AsFloat64(y))
+func (o float64Ops) NegateP(x any) any {
+	return o.Negate(x)
+}
+func (o float64Ops) UncheckedNegate(x any) any {
+	return o.Negate(x)
 }
 func (o float64Ops) Equiv(x, y any) bool {
 	return AsFloat64(x) == AsFloat64(y)
@@ -589,6 +613,8 @@ func (o float64Ops) Equiv(x, y any) bool {
 func (o float64Ops) Abs(x any) any {
 	return math.Abs(AsFloat64(x))
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 func (o int64Ops) Combine(y ops) ops {
 	switch y.(type) {
@@ -687,6 +713,8 @@ func AsInt64(x any) int64 {
 	case uint8:
 		return int64(x)
 	case uint16:
+		return int64(x)
+	case Char:
 		return int64(x)
 	case uint32:
 		return int64(x)
@@ -825,5 +853,206 @@ func AsBigDecimal(x any) *BigDecimal {
 		return NewBigDecimalFromBigFloat(f)
 	default:
 		panic(fmt.Errorf("cannot convert %T to BigDecimal", x))
+	}
+}
+
+func Max(x, y any) any {
+	switch x := x.(type) {
+	////////////////////////////////////////////////////////////////////////////
+	// float64
+	case float64:
+		if math.IsNaN(x) {
+			return x
+		}
+
+		switch y := y.(type) {
+		case float64:
+			return math.Max(x, y)
+		case float32:
+			if math.IsNaN(float64(y)) {
+				return y
+			}
+			if float64(y) > x {
+				return y
+			}
+			return x
+		case int64:
+			if x > float64(y) {
+				return x
+			}
+			return y
+		default:
+			if x > AsFloat64(y) {
+				return x
+			}
+			return y
+		}
+		////////////////////////////////////////////////////////////////////////////
+		// int64
+	case int64:
+		switch y := y.(type) {
+		case float64:
+			if math.IsNaN(y) {
+				return y
+			}
+			if float64(x) > y {
+				return x
+			}
+			return y
+		case float32:
+			if math.IsNaN(float64(y)) {
+				return y
+			}
+			if float32(x) > y {
+				return x
+			}
+			return y
+		case int64:
+			if x > y {
+				return x
+			}
+			return y
+		default:
+			if GT(x, y) {
+				return x
+			}
+			return y
+		}
+		////////////////////////////////////////////////////////////////////////////
+		// default
+	default:
+		if IsNaN(x) {
+			return x
+		}
+		switch y := y.(type) {
+		case float64:
+			if math.IsNaN(y) {
+				return y
+			}
+			if AsFloat64(x) > y {
+				return x
+			}
+			return y
+		case float32:
+			if math.IsNaN(float64(y)) {
+				return y
+			}
+			if AsFloat64(x) > float64(y) {
+				return x
+			}
+			return y
+		default:
+			if GT(x, y) {
+				return x
+			}
+			return y
+		}
+	}
+	panic(NewIllegalArgumentError(fmt.Sprintf("cannot compare %T and %T", x, y)))
+}
+
+func Min(x, y any) any {
+	switch x := x.(type) {
+	////////////////////////////////////////////////////////////////////////////
+	// float64
+	case float64:
+		if math.IsNaN(x) {
+			return x
+		}
+
+		switch y := y.(type) {
+		case float64:
+			return math.Min(x, y)
+		case float32:
+			if math.IsNaN(float64(y)) {
+				return y
+			}
+			if float64(y) < x {
+				return y
+			}
+			return x
+		case int64:
+			if x < float64(y) {
+				return x
+			}
+			return y
+		default:
+			if x < AsFloat64(y) {
+				return x
+			}
+			return y
+		}
+		////////////////////////////////////////////////////////////////////////////
+		// int64
+	case int64:
+		switch y := y.(type) {
+		case float64:
+			if math.IsNaN(y) {
+				return y
+			}
+			if float64(x) < y {
+				return x
+			}
+			return y
+		case float32:
+			if math.IsNaN(float64(y)) {
+				return y
+			}
+			if float32(x) < y {
+				return x
+			}
+			return y
+		case int64:
+			if x < y {
+				return x
+			}
+			return y
+		default:
+			if LT(x, y) {
+				return x
+			}
+			return y
+		}
+		////////////////////////////////////////////////////////////////////////////
+		// default
+	default:
+		if IsNaN(x) {
+			return x
+		}
+		switch y := y.(type) {
+		case float64:
+			if math.IsNaN(y) {
+				return y
+			}
+			if AsFloat64(x) < y {
+				return x
+			}
+			return y
+		case float32:
+			if math.IsNaN(float64(y)) {
+				return y
+			}
+			if AsFloat64(x) < float64(y) {
+				return x
+			}
+			return y
+		default:
+			if LT(x, y) {
+				return x
+			}
+			return y
+		}
+	}
+	panic(NewIllegalArgumentError(fmt.Sprintf("cannot compare %T and %T", x, y)))
+}
+
+func IsNaN(x any) bool {
+	switch x := x.(type) {
+	case float64:
+		return math.IsNaN(x)
+	case float32:
+		return math.IsNaN(float64(x))
+	default:
+		return false
 	}
 }

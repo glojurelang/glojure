@@ -120,6 +120,10 @@ func (n *BigDecimal) GTE(other *BigDecimal) bool {
 	return n.Cmp(other) >= 0
 }
 
+func (n *BigDecimal) Negate() *BigDecimal {
+	return &BigDecimal{val: new(big.Float).Neg(n.val)}
+}
+
 func (n *BigDecimal) Abs() *BigDecimal {
 	if n.val.Sign() < 0 {
 		return &BigDecimal{val: new(big.Float).Abs(n.val)}

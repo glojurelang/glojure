@@ -63,11 +63,8 @@ func (rt *RTMethods) Pop(x interface{}) interface{} {
 	return stk.Pop()
 }
 
-func (rt *RTMethods) IntCast(x interface{}) int {
-	if c, ok := x.(Char); ok {
-		return int(c)
-	}
-	return int(AsInt64(x))
+func (rt *RTMethods) IntCast(x interface{}) int32 {
+	return value.IntCast(x)
 }
 
 func (rt *RTMethods) BooleanCast(x interface{}) bool {

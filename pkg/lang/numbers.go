@@ -41,15 +41,15 @@ func (nm *NumberMethods) Minus(x, y any) any {
 }
 
 func (nm *NumberMethods) MinusP(x, y any) any {
-	return Ops(x).Combine(Ops(y)).SubP(x, y)
+	return SubP(x, y)
 }
 
 func (nm *NumberMethods) Unchecked_minus(x, y any) any {
-	return nm.Minus(x, y) // TODO: the normal implementations are currently unchecked. fix
+	return Ops(x).Combine(Ops(y)).UncheckedSub(x, y)
 }
 
 func (nm *NumberMethods) Unchecked_negate(x any) any {
-	return nm.Multiply(-1, x) // TODO: the normal implementations are currently unchecked. fix
+	return Ops(x).UncheckedNegate(x)
 }
 
 func (nm *NumberMethods) Multiply(x, y any) any {
@@ -123,7 +123,7 @@ func (nm *NumberMethods) Inc(v any) any {
 }
 
 func (nm *NumberMethods) Unchecked_inc(v any) any {
-	return nm.Inc(v)
+	return nm.UncheckedAdd(v, 1)
 }
 
 func (nm *NumberMethods) Dec(x any) any {
@@ -162,11 +162,11 @@ func (nm *NumberMethods) TestBit(x, y any) bool {
 }
 
 func (nm *NumberMethods) Max(x, y any) any {
-	return Ops(x).Combine(Ops(y)).Max(x, y)
+	return Max(x, y)
 }
 
 func (nm *NumberMethods) Min(x, y any) any {
-	return Ops(x).Combine(Ops(y)).Min(x, y)
+	return Min(x, y)
 }
 
 func (nm *NumberMethods) Lt(x, y any) bool {
@@ -806,6 +806,58 @@ func UncheckedShortCast(x any) int16 {
 		return v
 	}
 	return int16(AsInt64(x))
+}
+
+func IntCast(x any) int32 {
+	if v, ok := x.(int32); ok {
+		return v
+	}
+	v := AsInt64(x)
+	if v < math.MinInt32 || v > math.MaxInt32 {
+		panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int: %v", x)))
+	}
+	return int32(v)
+}
+
+func UncheckedIntCast(x any) int32 {
+	if v, ok := x.(int32); ok {
+		return v
+	}
+	return int32(AsInt64(x))
+}
+
+func LongCast(x any) int64 {
+	switch x := x.(type) {
+	case *BigInt:
+		if !x.IsInt64() {
+			panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int64: %v", x)))
+		}
+		return x.Int64()
+	case *big.Int:
+		if !x.IsInt64() {
+			panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int64: %v", x)))
+		}
+		return x.Int64()
+	case *Ratio:
+		return LongCast(x.BigIntegerValue())
+	case *BigDecimal:
+		return LongCast(x.ToBigInteger())
+	case float64:
+		if x < math.MinInt64 || x > math.MaxInt64 {
+			panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int64: %v", x)))
+		}
+		return int64(x)
+	case float32:
+		if x < math.MinInt64 || x > math.MaxInt64 {
+			panic(NewIllegalArgumentError(fmt.Sprintf("value out of range for int64: %v", x)))
+		}
+		return int64(x)
+	}
+	return AsInt64(x)
+}
+
+func UncheckedLongCast(x any) int64 {
+	return AsInt64(x)
 }
 
 func FloatCast(x any) float32 {

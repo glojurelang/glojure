@@ -39,6 +39,14 @@ func NewBigIntFromGoBigInt(x *big.Int) *BigInt {
 	return &BigInt{val: xCopy}
 }
 
+func (n *BigInt) Int64() int64 {
+	return n.val.Int64()
+}
+
+func (n *BigInt) IsInt64() bool {
+	return n.val.IsInt64()
+}
+
 func (n *BigInt) ToBigInteger() *big.Int {
 	return new(big.Int).Set(n.val)
 }
@@ -74,16 +82,8 @@ func (n *BigInt) Add(other *BigInt) *BigInt {
 	return &BigInt{val: new(big.Int).Add(n.val, other.val)}
 }
 
-func (n *BigInt) AddP(other *BigInt) *BigInt {
-	return n.Add(other)
-}
-
 func (n *BigInt) Sub(other *BigInt) *BigInt {
 	return &BigInt{val: new(big.Int).Sub(n.val, other.val)}
-}
-
-func (n *BigInt) SubP(other *BigInt) *BigInt {
-	return n.Sub(other)
 }
 
 func (n *BigInt) Multiply(other *BigInt) *BigInt {

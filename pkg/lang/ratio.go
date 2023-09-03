@@ -51,24 +51,24 @@ func (r *Ratio) Equals(other interface{}) bool {
 	return false
 }
 
-func (r *Ratio) Add(other *Ratio) *Ratio {
+func (r *Ratio) Add(other *Ratio) any {
+	sum := new(big.Rat).Add(r.val, other.val)
+	if sum.IsInt() {
+		return NewBigIntFromGoBigInt(sum.Num())
+	}
 	return &Ratio{
-		val: new(big.Rat).Add(r.val, other.val),
+		val: sum,
 	}
 }
 
-func (r *Ratio) AddP(other *Ratio) *Ratio {
-	return r.Add(other)
-}
-
-func (r *Ratio) Sub(other *Ratio) *Ratio {
-	return &Ratio{
-		val: new(big.Rat).Sub(r.val, other.val),
+func (r *Ratio) Sub(other *Ratio) any {
+	diff := new(big.Rat).Sub(r.val, other.val)
+	if diff.IsInt() {
+		return NewBigIntFromGoBigInt(diff.Num())
 	}
-}
-
-func (r *Ratio) SubP(other *Ratio) *Ratio {
-	return r.Sub(other)
+	return &Ratio{
+		val: diff,
+	}
 }
 
 func (r *Ratio) Multiply(other *Ratio) any {
@@ -114,6 +114,12 @@ func (r *Ratio) GT(other *Ratio) bool {
 
 func (r *Ratio) GTE(other *Ratio) bool {
 	return r.Cmp(other) >= 0
+}
+
+func (r *Ratio) Negate() *Ratio {
+	return &Ratio{
+		val: new(big.Rat).Neg(r.val),
+	}
 }
 
 func (r *Ratio) Abs() *Ratio {
