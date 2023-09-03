@@ -100,6 +100,7 @@
    (sexpr-replace 'Float/POSITIVE_INFINITY '(go/float32 (math.Inf 1)))
    (sexpr-replace 'Float/NEGATIVE_INFINITY '(go/float32 (math.Inf -1)))
    (sexpr-replace '.isNaN 'math.IsNaN)
+   (sexpr-replace 'Double/isNaN 'math.IsNaN)
 
    ;; Range
    (sexpr-replace '(clojure.lang.LongRange/create end)
@@ -197,7 +198,7 @@
 
 
    ;;;; Exceptions
-   (sexpr-replace 'IllegalArgumentException. 'errors.New)
+   (sexpr-replace 'IllegalArgumentException. 'github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError)
    ;; new Exception
    [(fn select [zloc] (and (z/list? zloc)
                            (let [expr (z/sexpr zloc)]
@@ -306,7 +307,10 @@
    (sexpr-replace '(. clojure.lang.Agent shutdown) '(github.com$glojurelang$glojure$pkg$lang.ShutdownAgents))
    (sexpr-replace 'clojure.lang.Agent '*github.com$glojurelang$glojure$pkg$lang.Agent)
 
+   ;; TODO: these should likely be different
    (sexpr-replace 'clojure.lang.Util/hash 'github.com$glojurelang$glojure$pkg$lang.Hash)
+   (sexpr-replace '(. clojure.lang.Util (hasheq x))
+                  '(github.com$glojurelang$glojure$pkg$lang.HashEq x))
 
    (sexpr-replace 'System/identityHashCode 'github.com$glojurelang$glojure$pkg$lang.IdentityHash)
 
@@ -327,8 +331,18 @@
 
    (sexpr-replace 'BigInteger '*math$big.Int)
    (sexpr-replace 'BigDecimal '*github.com$glojurelang$glojure$pkg$lang.BigDecimal)
+   (sexpr-replace 'clojure.lang.BigInt/valueOf
+                  'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromInt64)
+   (sexpr-replace '(BigInteger/valueOf (long x))
+                  '(math$big.NewInt (long x)))
+   (sexpr-replace '(BigDecimal/valueOf (long x))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromInt64 (long x)))
+   (sexpr-replace '(. BigDecimal valueOf (double x))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromFloat64 (double x)))
+   (sexpr-replace 'clojure.lang.BigInt/fromBigInteger
+                  'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromGoBigInt)
 
-   (sexpr-replace '.equals '.Equal)
+   (sexpr-replace '.equals '.Equals)
 
    (sexpr-replace '(clojure.lang.RT/load (.substring path 1))
                   '(. github.com$glojurelang$glojure$pkg$runtime.RT (Load (strings.TrimPrefix path "/"))))
@@ -348,8 +362,8 @@
 
    ;; no need for a special name, as go doesn't have a
    ;; builtin "Equals"
-   (sexpr-replace 'clojure.lang.Util/equiv 'github.com$glojurelang$glojure$pkg$lang.Equal)
-   (sexpr-replace 'clojure.lang.Util/equals 'github.com$glojurelang$glojure$pkg$lang.Equal) ;; TODO: implement both equals and equiv for go!!!
+   (sexpr-replace 'clojure.lang.Util/equiv 'github.com$glojurelang$glojure$pkg$lang.Equiv)
+   (sexpr-replace 'clojure.lang.Util/equals 'github.com$glojurelang$glojure$pkg$lang.Equals)
    (sexpr-replace '(. x (meta)) '(.Meta x))
 
    (sexpr-replace 'clojure.lang.Symbol/intern 'github.com$glojurelang$glojure$pkg$lang.NewSymbol)
@@ -490,9 +504,15 @@
    (sexpr-replace '(.. Runtime getRuntime availableProcessors)
                   '(runtime.NumCPU))
 
-   (sexpr-replace 'clojure.lang.RT/longCast 'github.com$glojurelang$glojure$pkg$lang.AsInt64)
+   (sexpr-replace 'clojure.lang.RT/longCast 'github.com$glojurelang$glojure$pkg$lang.LongCast)
    (sexpr-replace 'clojure.lang.RT/byteCast 'github.com$glojurelang$glojure$pkg$lang.ByteCast)
-   (sexpr-replace 'clojure.lang.RT/doubleCast 'github.com$glojurelang$glojure$pkg$lang.AsFloat64)
+   (sexpr-replace 'clojure.lang.RT/uncheckedByteCast 'github.com$glojurelang$glojure$pkg$lang.UncheckedByteCast)
+   (sexpr-replace 'clojure.lang.RT/shortCast 'github.com$glojurelang$glojure$pkg$lang.ShortCast)
+   (sexpr-replace 'clojure.lang.RT/uncheckedShortCast 'github.com$glojurelang$glojure$pkg$lang.UncheckedShortCast)
+   (sexpr-replace 'clojure.lang.RT/doubleCast 'github.com$glojurelang$glojure$pkg$lang.AsFloat64) ;; todo: checked version
+   (sexpr-replace 'clojure.lang.RT/uncheckedDoubleCast 'github.com$glojurelang$glojure$pkg$lang.AsFloat64)
+   (sexpr-replace 'clojure.lang.RT/floatCast 'github.com$glojurelang$glojure$pkg$lang.FloatCast)
+   (sexpr-replace 'clojure.lang.RT/uncheckedFloatCast 'github.com$glojurelang$glojure$pkg$lang.UncheckedFloatCast)
 
    (sexpr-replace "clojure.core" "glojure.core")
    (sexpr-replace 'clojure.core/name 'glojure.core/name)
@@ -519,7 +539,11 @@
 
 
    (sexpr-replace '(clojure.lang.RT/booleanCast x) '(. github.com$glojurelang$glojure$pkg$runtime.RT (BooleanCast x)))
-   (sexpr-replace 'clojure.lang.RT/uncheckedLongCast 'github.com$glojurelang$glojure$pkg$lang.AsInt64)
+   ;; TODO: meet unchecked behavior?
+   (sexpr-replace 'clojure.lang.RT/uncheckedLongCast
+                  'github.com$glojurelang$glojure$pkg$lang.UncheckedLongCast)
+   (sexpr-replace 'clojure.lang.RT/uncheckedIntCast
+                  'github.com$glojurelang$glojure$pkg$lang.UncheckedIntCast)
 
    [(fn select [zloc] (try
                         (and (symbol? (z/sexpr zloc))
@@ -532,20 +556,30 @@
                                   (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
    (sexpr-replace 'clojure.lang.Numbers 'github.com$glojurelang$glojure$pkg$lang.Numbers)
    (sexpr-replace '(cast Number x) '(github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
+   (sexpr-replace '(instance? Number x) '(github.com$glojurelang$glojure$pkg$lang.IsNumber x))
 
    (sexpr-replace '(. clojure.lang.Numbers (minus x))
                   '(* -1 x)) ;; TODO: unary minus
    (sexpr-replace '(. clojure.lang.Numbers (minusP x))
-                  '(* -1 x)) ;; TODO: promoting ops
+                  '(*' -1 x))
    (sexpr-replace 'clojure.lang.Numbers/isZero
                   'github.com$glojurelang$glojure$pkg$lang.IsZero)
+   (sexpr-replace 'clojure.lang.Numbers/abs
+                  'github.com$glojurelang$glojure$pkg$lang.Abs)
 
    (sexpr-replace 'Unchecked_add 'UncheckedAdd)
    (sexpr-replace 'Unchecked_dec 'UncheckedDec)
    (sexpr-replace 'Unchecked_int_divide 'UncheckedIntDivide)
+   (sexpr-replace '(unchecked_minus x) '(Unchecked_negate x))
 
+   (replace-num-array 'char)
    (replace-num-array 'byte)
+   (replace-num-array 'short)
+   (replace-num-array 'int)
+   (replace-num-array 'long)
+   (replace-num-array 'float)
    (replace-num-array 'double)
+   (replace-num-array 'boolean)
 
    (sexpr-replace 'clojure.core/cond 'glojure.core/cond)
 

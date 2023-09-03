@@ -1,7 +1,8 @@
-//go:generate go run ../../cmd/gen-abstract-class/main.go -class APersistentMap -struct Map -receiver m
 package lang
 
-import "fmt"
+import (
+	"fmt"
+)
 
 const (
 	hashmapThreshold = 16
@@ -10,30 +11,49 @@ const (
 type (
 	// Map represents a map of glojure values.
 	Map struct {
-		meta    IPersistentMap
-		keyVals []interface{}
+		meta         IPersistentMap
+		hash, hasheq uint32
+
+		keyVals []any
 	}
 
 	MapSeq struct {
-		m          *Map
-		entryIndex int
+		meta         IPersistentMap
+		hash, hasheq uint32
+
+		keyVals []any
 	}
 	MapKeySeq struct {
+		meta         IPersistentMap
+		hash, hasheq uint32
+
 		s ISeq
 	}
 	MapValSeq struct {
+		meta         IPersistentMap
+		hash, hasheq uint32
+
 		s ISeq
 	}
 )
 
 var (
-	_ IPersistentMap = (*Map)(nil)
+	_ APersistentMap = (*Map)(nil)
 	_ IMeta          = (*Map)(nil)
 	_ IObj           = (*Map)(nil)
 	_ IFn            = (*Map)(nil)
 	_ IReduce        = (*Map)(nil)
 	_ IReduceInit    = (*Map)(nil)
 
+	_ ASeq        = (*MapSeq)(nil)
+	_ Counted     = (*MapSeq)(nil)
+	_ IReduce     = (*MapSeq)(nil)
+	_ IReduceInit = (*MapSeq)(nil)
+	_ IDrop       = (*MapSeq)(nil)
+
+	_ ASeq = (*MapKeySeq)(nil)
+
+	_ ASeq        = (*MapValSeq)(nil)
 	_ IReduce     = (*MapValSeq)(nil)
 	_ IReduceInit = (*MapValSeq)(nil)
 
@@ -43,7 +63,7 @@ var (
 ////////////////////////////////////////////////////////////////////////////////
 // Map
 
-func NewMap(keyVals ...interface{}) IPersistentMap {
+func NewMap(keyVals ...any) IPersistentMap {
 	if len(keyVals) == 0 {
 		return emptyMap
 	}
@@ -56,7 +76,7 @@ func NewMap(keyVals ...interface{}) IPersistentMap {
 		return NewPersistentHashMap(keyVals...)
 	}
 
-	kv := make([]interface{}, len(keyVals))
+	kv := make([]any, len(keyVals))
 	copy(kv, keyVals)
 
 	return &Map{
@@ -64,7 +84,7 @@ func NewMap(keyVals ...interface{}) IPersistentMap {
 	}
 }
 
-func NewPersistentArrayMapAsIfByAssoc(init []interface{}) IPersistentMap {
+func NewPersistentArrayMapAsIfByAssoc(init []any) IPersistentMap {
 	complexPath := (len(init) & 1) == 1
 	for i := 0; i < len(init) && !complexPath; i += 2 {
 		for j := 0; j < i; j += 2 {
@@ -82,7 +102,7 @@ func NewPersistentArrayMapAsIfByAssoc(init []interface{}) IPersistentMap {
 	return NewMap(init...)
 }
 
-func newPersistentArrayMapAsIfByAssocComplexPath(init []interface{}) IPersistentMap {
+func newPersistentArrayMapAsIfByAssocComplexPath(init []any) IPersistentMap {
 	n := 0
 	for i := 0; i < len(init); i += 2 {
 		duplicateKey := false
@@ -98,7 +118,7 @@ func newPersistentArrayMapAsIfByAssocComplexPath(init []interface{}) IPersistent
 	}
 
 	if n < len(init) {
-		nodups := make([]interface{}, n)
+		nodups := make([]any, n)
 		m := 0
 		for i := 0; i < len(init); i += 2 {
 			duplicateKey := false
@@ -130,9 +150,22 @@ func newPersistentArrayMapAsIfByAssocComplexPath(init []interface{}) IPersistent
 	return NewMap(init...)
 }
 
-func (m *Map) ValAtDefault(key, def interface{}) interface{} {
+func (m *Map) ValAt(key any) any {
+	return m.ValAtDefault(key, nil)
+}
+
+func (m *Map) ValAtDefault(key, def any) any {
+	if kw, ok := key.(Keyword); ok {
+		for i := 0; i < len(m.keyVals); i += 2 {
+			if kw == m.keyVals[i] {
+				return m.keyVals[i+1]
+			}
+		}
+		return def
+	}
+
 	for i := 0; i < len(m.keyVals); i += 2 {
-		if Equal(m.keyVals[i], key) {
+		if Equiv(m.keyVals[i], key) {
 			return m.keyVals[i+1]
 		}
 	}
@@ -140,9 +173,9 @@ func (m *Map) ValAtDefault(key, def interface{}) interface{} {
 	return def
 }
 
-func (m *Map) EntryAt(k interface{}) IMapEntry {
+func (m *Map) EntryAt(k any) IMapEntry {
 	for i := 0; i < len(m.keyVals); i += 2 {
-		if Equal(m.keyVals[i], k) {
+		if Equiv(m.keyVals[i], k) {
 			return NewMapEntry(m.keyVals[i], m.keyVals[i+1])
 		}
 	}
@@ -152,14 +185,14 @@ func (m *Map) EntryAt(k interface{}) IMapEntry {
 
 func (m *Map) clone() *Map {
 	cpy := *m
-	cpy.keyVals = make([]interface{}, len(m.keyVals))
+	cpy.keyVals = make([]any, len(m.keyVals))
 	copy(cpy.keyVals, m.keyVals)
 	return &cpy
 }
 
-func (m *Map) Assoc(k, v interface{}) Associative {
+func (m *Map) Assoc(k, v any) Associative {
 	for i := 0; i < len(m.keyVals); i += 2 {
-		if Equal(m.keyVals[i], k) {
+		if Equiv(m.keyVals[i], k) {
 			newMap := m.clone()
 			newMap.keyVals[i+1] = v
 			return newMap
@@ -174,10 +207,14 @@ func (m *Map) Assoc(k, v interface{}) Associative {
 	return newMap.Assoc(k, v)
 }
 
-func (m *Map) Without(k interface{}) IPersistentMap {
-	newKeyVals := make([]interface{}, 0, len(m.keyVals))
+func (m *Map) AssocEx(k, v any) IPersistentMap {
+	return apersistentmapAssocEx(m, k, v)
+}
+
+func (m *Map) Without(k any) IPersistentMap {
+	newKeyVals := make([]any, 0, len(m.keyVals))
 	for i := 0; i < len(m.keyVals); i += 2 {
-		if !Equal(m.keyVals[i], k) {
+		if !Equiv(m.keyVals[i], k) {
 			newKeyVals = append(newKeyVals, m.keyVals[i], m.keyVals[i+1])
 		}
 	}
@@ -189,7 +226,10 @@ func (m *Map) Count() int {
 }
 
 func (m *Map) Seq() ISeq {
-	return NewMapSeq(m)
+	if len(m.keyVals) == 0 {
+		return nil
+	}
+	return NewMapSeq(m.keyVals)
 }
 
 func (m *Map) Empty() IPersistentCollection {
@@ -197,14 +237,14 @@ func (m *Map) Empty() IPersistentCollection {
 }
 
 func (m *Map) String() string {
-	return PrintString(m)
+	return apersistentmapString(m)
 }
 
 func (m *Map) Meta() IPersistentMap {
 	return m.meta
 }
 
-func (m *Map) WithMeta(meta IPersistentMap) interface{} {
+func (m *Map) WithMeta(meta IPersistentMap) any {
 	if m.meta == meta {
 		return m
 	}
@@ -213,11 +253,35 @@ func (m *Map) WithMeta(meta IPersistentMap) interface{} {
 	return &cpy
 }
 
-func (m *Map) Reduce(f IFn) interface{} {
+func (m *Map) ApplyTo(args ISeq) any {
+	return afnApplyTo(m, args)
+}
+
+func (m *Map) Invoke(args ...any) any {
+	return apersistentmapInvoke(m, args...)
+}
+
+func (m *Map) Cons(x any) Conser {
+	return apersistentmapCons(m, x)
+}
+
+func (m *Map) ContainsKey(k any) bool {
+	return apersistentmapContainsKey(m, k)
+}
+
+func (m *Map) Equiv(o any) bool {
+	return apersistentmapEquiv(m, o)
+}
+
+func (m *Map) HashEq() uint32 {
+	return apersistentmapHashEq(&m.hasheq, m)
+}
+
+func (m *Map) Reduce(f IFn) any {
 	if m.Count() == 0 {
 		return f.Invoke()
 	}
-	var res interface{}
+	var res any
 	first := true
 	for seq := Seq(m); seq != nil; seq = seq.Next() {
 		if first {
@@ -230,7 +294,7 @@ func (m *Map) Reduce(f IFn) interface{} {
 	return res
 }
 
-func (m *Map) ReduceInit(f IFn, init interface{}) interface{} {
+func (m *Map) ReduceInit(f IFn, init any) any {
 	res := init
 	for seq := Seq(m); seq != nil; seq = seq.Next() {
 		res = f.Invoke(res, seq.First())
@@ -258,11 +322,11 @@ var (
 	_ IReduceInit    = (*TransientMap)(nil)
 )
 
-func (m *TransientMap) Conj(v interface{}) Conjer {
-	return &TransientMap{Map: m.Map.Conj(v).(*Map)}
+func (m *TransientMap) Conj(v any) Conjer {
+	return &TransientMap{Map: m.Map.Cons(v).(*Map)}
 }
 
-func (m *TransientMap) Assoc(k, v interface{}) Associative {
+func (m *TransientMap) Assoc(k, v any) Associative {
 	return &TransientMap{Map: m.Map.Assoc(k, v).(*Map)}
 }
 
@@ -273,36 +337,51 @@ func (m *TransientMap) Persistent() IPersistentCollection {
 ////////////////////////////////////////////////////////////////////////////////
 // Map ISeqs
 
-func NewMapSeq(m *Map) ISeq {
-	if m == nil || m.Count() == 0 {
+func NewMapSeq(kvs []any) *MapSeq {
+	if len(kvs) == 0 {
 		return nil
 	}
 	return &MapSeq{
-		m:          m,
-		entryIndex: 0,
+		keyVals: kvs,
 	}
 }
 
 func (s *MapSeq) xxx_sequential() {}
 
+func (s *MapSeq) Meta() IPersistentMap {
+	return s.meta
+}
+
+func (s *MapSeq) WithMeta(meta IPersistentMap) any {
+	if s.meta == meta {
+		return s
+	}
+	cpy := *s
+	cpy.meta = meta
+	return &cpy
+}
+
+func (s *MapSeq) String() string {
+	return aseqString(s)
+}
+
 func (s *MapSeq) Seq() ISeq {
 	return s
 }
 
-func (s *MapSeq) First() interface{} {
+func (s *MapSeq) First() any {
 	return &MapEntry{
-		key: s.m.keyVals[2*s.entryIndex],
-		val: s.m.keyVals[2*s.entryIndex+1],
+		key: s.keyVals[0],
+		val: s.keyVals[1],
 	}
 }
 
 func (s *MapSeq) Next() ISeq {
-	if s.entryIndex+1 >= s.m.Count() {
+	if len(s.keyVals) <= 2 {
 		return nil
 	}
 	return &MapSeq{
-		m:          s.m,
-		entryIndex: s.entryIndex + 1,
+		keyVals: s.keyVals[2:],
 	}
 }
 
@@ -314,11 +393,90 @@ func (s *MapSeq) More() ISeq {
 	return nxt
 }
 
+func (s *MapSeq) Cons(o any) Conser {
+	return aseqCons(s, o)
+}
+
+func (s *MapSeq) Count() int {
+	return len(s.keyVals) / 2
+}
+
+func (s *MapSeq) Empty() IPersistentCollection {
+	return aseqEmpty()
+}
+
+func (s *MapSeq) Equals(o any) bool {
+	return aseqEquals(s, o)
+}
+
+func (s *MapSeq) Equiv(o any) bool {
+	return aseqEquiv(s, o)
+}
+
+func (s *MapSeq) Hash() uint32 {
+	return aseqHash(&s.hash, s)
+}
+
+func (s *MapSeq) HashEq() uint32 {
+	return aseqHashEq(&s.hasheq, s)
+}
+
+func (s *MapSeq) Reduce(f IFn) any {
+	if len(s.keyVals) == 0 {
+		return f.Invoke()
+	}
+	acc := s.First()
+	for i := 2; i < len(s.keyVals); i += 2 {
+		acc = f.Invoke(acc, NewMapEntry(s.keyVals[i], s.keyVals[i+1]))
+		if IsReduced(acc) {
+			return acc.(IDeref).Deref()
+		}
+	}
+	return acc
+}
+
+func (s *MapSeq) ReduceInit(f IFn, init any) any {
+	acc := init
+	for i := 0; i < len(s.keyVals); i += 2 {
+		acc = f.Invoke(acc, NewMapEntry(s.keyVals[i], s.keyVals[i+1]))
+		if IsReduced(acc) {
+			return acc.(IDeref).Deref()
+		}
+	}
+	return acc
+}
+
+func (s *MapSeq) Drop(n int) Sequential {
+	if n >= s.Count() {
+		return nil
+	}
+	return NewMapSeq(s.keyVals[n*2:])
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 func NewMapKeySeq(s ISeq) ISeq {
 	if s == nil {
 		return nil
 	}
-	return &MapKeySeq{s}
+	return &MapKeySeq{s: s}
+}
+
+func (s *MapKeySeq) Meta() IPersistentMap {
+	return s.meta
+}
+
+func (s *MapKeySeq) WithMeta(meta IPersistentMap) any {
+	if s.meta == meta {
+		return s
+	}
+	cpy := *s
+	cpy.meta = meta
+	return &cpy
+}
+
+func (s *MapKeySeq) String() string {
+	return aseqString(s)
 }
 
 func (s *MapKeySeq) xxx_sequential() {}
@@ -327,7 +485,7 @@ func (s *MapKeySeq) Seq() ISeq {
 	return s
 }
 
-func (s *MapKeySeq) First() interface{} {
+func (s *MapKeySeq) First() any {
 	return s.s.First().(*MapEntry).Key()
 }
 
@@ -343,11 +501,58 @@ func (s *MapKeySeq) More() ISeq {
 	return nxt
 }
 
+func (s *MapKeySeq) Cons(o any) Conser {
+	return aseqCons(s, o)
+}
+
+func (s *MapKeySeq) Count() int {
+	return aseqCount(s)
+}
+
+func (s *MapKeySeq) Empty() IPersistentCollection {
+	return aseqEmpty()
+}
+
+func (s *MapKeySeq) Equals(o any) bool {
+	return aseqEquals(s, o)
+}
+
+func (s *MapKeySeq) Equiv(o any) bool {
+	return aseqEquiv(s, o)
+}
+
+func (s *MapKeySeq) Hash() uint32 {
+	return aseqHash(&s.hash, s)
+}
+
+func (s *MapKeySeq) HashEq() uint32 {
+	return aseqHashEq(&s.hasheq, s)
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 func NewMapValSeq(s ISeq) ISeq {
 	if s == nil {
 		return nil
 	}
-	return &MapValSeq{s}
+	return &MapValSeq{s: s}
+}
+
+func (s *MapValSeq) Meta() IPersistentMap {
+	return s.meta
+}
+
+func (s *MapValSeq) WithMeta(meta IPersistentMap) any {
+	if s.meta == meta {
+		return s
+	}
+	cpy := *s
+	cpy.meta = meta
+	return &cpy
+}
+
+func (s *MapValSeq) String() string {
+	return aseqString(s)
 }
 
 func (s *MapValSeq) xxx_sequential() {}
@@ -356,7 +561,7 @@ func (s *MapValSeq) Seq() ISeq {
 	return s
 }
 
-func (s *MapValSeq) First() interface{} {
+func (s *MapValSeq) First() any {
 	return s.s.First().(*MapEntry).Val()
 }
 
@@ -372,9 +577,37 @@ func (s *MapValSeq) More() ISeq {
 	return nxt
 }
 
-func (s *MapValSeq) Reduce(f IFn) interface{} {
+func (s *MapValSeq) Cons(o any) Conser {
+	return aseqCons(s, o)
+}
+
+func (s *MapValSeq) Count() int {
+	return aseqCount(s)
+}
+
+func (s *MapValSeq) Empty() IPersistentCollection {
+	return aseqEmpty()
+}
+
+func (s *MapValSeq) Equals(o any) bool {
+	return aseqEquals(s, o)
+}
+
+func (s *MapValSeq) Equiv(o any) bool {
+	return aseqEquiv(s, o)
+}
+
+func (s *MapValSeq) Hash() uint32 {
+	return aseqHash(&s.hash, s)
+}
+
+func (s *MapValSeq) HashEq() uint32 {
+	return aseqHashEq(&s.hasheq, s)
+}
+
+func (s *MapValSeq) Reduce(f IFn) any {
 	count := 0
-	var res interface{}
+	var res any
 	first := true
 	for seq := Seq(s); seq != nil; seq = seq.Next() {
 		count++
@@ -391,7 +624,7 @@ func (s *MapValSeq) Reduce(f IFn) interface{} {
 	return res
 }
 
-func (s *MapValSeq) ReduceInit(f IFn, init interface{}) interface{} {
+func (s *MapValSeq) ReduceInit(f IFn, init any) any {
 	res := init
 	for seq := Seq(s); seq != nil; seq = seq.Next() {
 		res = f.Invoke(res, seq.First())

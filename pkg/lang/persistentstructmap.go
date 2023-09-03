@@ -1,15 +1,14 @@
-//go:generate go run ../../cmd/gen-abstract-class/main.go -class APersistentMap -struct PersistentStructMap -receiver m
-//go:generate go run ../../cmd/gen-abstract-class/main.go -class ASeq -struct persistentStructMapSeq -receiver s
 package lang
 
 import "fmt"
 
 type (
 	PersistentStructMap struct {
-		meta IPersistentMap
+		meta         IPersistentMap
+		hash, hasheq uint32
 
 		def  *PersistentStructMapDef
-		vals []interface{}
+		vals []any
 		ext  IPersistentMap
 	}
 
@@ -19,19 +18,23 @@ type (
 	}
 
 	persistentStructMapSeq struct {
-		meta IPersistentMap
+		meta         IPersistentMap
+		hash, hasheq uint32
+
 		i    int
 		keys ISeq
-		vals []interface{}
+		vals []any
 		ext  IPersistentMap
 	}
 )
 
 var (
+	_ APersistentMap = (*PersistentStructMap)(nil)
 	_ IObj           = (*PersistentStructMap)(nil)
 	_ IPersistentMap = (*PersistentStructMap)(nil)
 	_ IFn            = (*PersistentStructMap)(nil)
 
+	_ ASeq = (*persistentStructMapSeq)(nil)
 	_ ISeq = (*persistentStructMapSeq)(nil)
 	_ IObj = (*persistentStructMapSeq)(nil)
 
@@ -39,7 +42,7 @@ var (
 )
 
 func ConstructPersistentStructMap(def *PersistentStructMapDef, valseq ISeq) *PersistentStructMap {
-	vals := make([]interface{}, def.keyslots.Count())
+	vals := make([]any, def.keyslots.Count())
 	ext := emptyMap
 	for i := 0; i < len(vals) && valseq != nil; valseq, i = valseq.Next(), i+1 {
 		vals[i] = valseq.First()
@@ -55,7 +58,7 @@ func CreatePersistentStructMapSlotMap(keys ISeq) *PersistentStructMapDef {
 		panic(fmt.Errorf("must supply keys"))
 	}
 	c := Count(keys)
-	v := make([]interface{}, 2*c)
+	v := make([]any, 2*c)
 	i := 0
 	for s := keys; s != nil; s, i = s.Next(), i+1 {
 		v[2*i] = s.First()
@@ -67,7 +70,7 @@ func CreatePersistentStructMapSlotMap(keys ISeq) *PersistentStructMapDef {
 	}
 }
 
-func newPersistentStructMap(meta IPersistentMap, def *PersistentStructMapDef, vals []interface{}, ext IPersistentMap) *PersistentStructMap {
+func newPersistentStructMap(meta IPersistentMap, def *PersistentStructMapDef, vals []any, ext IPersistentMap) *PersistentStructMap {
 	return &PersistentStructMap{
 		meta: meta,
 		def:  def,
@@ -80,7 +83,7 @@ func (m *PersistentStructMap) Meta() IPersistentMap {
 	return m.meta
 }
 
-func (m *PersistentStructMap) WithMeta(meta IPersistentMap) interface{} {
+func (m *PersistentStructMap) WithMeta(meta IPersistentMap) any {
 	if m.meta == meta {
 		return m
 	}
@@ -89,13 +92,13 @@ func (m *PersistentStructMap) WithMeta(meta IPersistentMap) interface{} {
 	return &cpy
 }
 
-func (m *PersistentStructMap) Assoc(k interface{}, v interface{}) Associative {
+func (m *PersistentStructMap) Assoc(k any, v any) Associative {
 	e := m.def.keyslots.EntryAt(k)
 	if e == nil {
 		return newPersistentStructMap(m.meta, m.def, m.vals, m.ext.Assoc(k, v).(IPersistentMap))
 	}
 	i := e.Val().(int)
-	newVals := make([]interface{}, len(m.vals))
+	newVals := make([]any, len(m.vals))
 	copy(newVals, m.vals)
 	newVals[i] = v
 	return newPersistentStructMap(m.meta, m.def, newVals, m.ext)
@@ -105,7 +108,7 @@ func (m *PersistentStructMap) Count() int {
 	return len(m.vals) + Count(m.ext)
 }
 
-func (m *PersistentStructMap) EntryAt(k interface{}) IMapEntry {
+func (m *PersistentStructMap) EntryAt(k any) IMapEntry {
 	e := m.def.keyslots.EntryAt(k)
 	if e != nil {
 		return NewMapEntry(e.Key(), m.vals[e.Val().(int)])
@@ -114,6 +117,9 @@ func (m *PersistentStructMap) EntryAt(k interface{}) IMapEntry {
 }
 
 func (m *PersistentStructMap) Seq() ISeq {
+	if m.Count() == 0 {
+		return nil
+	}
 	return newPersistentStructMapSeq(nil, m.def.keys, m.vals, 0, m.ext)
 }
 
@@ -121,14 +127,14 @@ func (m *PersistentStructMap) Empty() IPersistentCollection {
 	return emptyPersistentStructMap.WithMeta(m.meta).(IPersistentCollection)
 }
 
-func (m *PersistentStructMap) ValAtDefault(key, def interface{}) interface{} {
+func (m *PersistentStructMap) ValAtDefault(key, def any) any {
 	if i, ok := m.def.keyslots.ValAt(key).(int); ok {
 		return m.vals[i]
 	}
 	return m.ext.ValAtDefault(key, def)
 }
 
-func (m *PersistentStructMap) Without(k interface{}) IPersistentMap {
+func (m *PersistentStructMap) Without(k any) IPersistentMap {
 	e := m.def.keyslots.EntryAt(k)
 	if e != nil {
 		panic(fmt.Errorf("cannot remove struct key"))
@@ -140,10 +146,42 @@ func (m *PersistentStructMap) Without(k interface{}) IPersistentMap {
 	return newPersistentStructMap(m.meta, m.def, m.vals, newExt)
 }
 
+func (m *PersistentStructMap) ApplyTo(args ISeq) any {
+	return afnApplyTo(m, args)
+}
+
+func (m *PersistentStructMap) Invoke(args ...any) any {
+	return apersistentmapInvoke(m, args...)
+}
+
+func (m *PersistentStructMap) AssocEx(k, v any) IPersistentMap {
+	return apersistentmapAssocEx(m, k, v)
+}
+
+func (m *PersistentStructMap) Cons(x any) Conser {
+	return apersistentmapCons(m, x)
+}
+
+func (m *PersistentStructMap) ContainsKey(k any) bool {
+	return apersistentmapContainsKey(m, k)
+}
+
+func (m *PersistentStructMap) Equiv(o any) bool {
+	return apersistentmapEquiv(m, o)
+}
+
+func (m *PersistentStructMap) HashEq() uint32 {
+	return apersistentmapHashEq(&m.hasheq, m)
+}
+
+func (m *PersistentStructMap) ValAt(key any) any {
+	return m.ValAtDefault(key, nil)
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // persistentStructMapSeq
 
-func newPersistentStructMapSeq(meta IPersistentMap, keys ISeq, vals []interface{}, i int, ext IPersistentMap) *persistentStructMapSeq {
+func newPersistentStructMapSeq(meta IPersistentMap, keys ISeq, vals []any, i int, ext IPersistentMap) *persistentStructMapSeq {
 	return &persistentStructMapSeq{
 		meta: meta,
 		i:    i,
@@ -153,7 +191,7 @@ func newPersistentStructMapSeq(meta IPersistentMap, keys ISeq, vals []interface{
 	}
 }
 
-func (s *persistentStructMapSeq) First() interface{} {
+func (s *persistentStructMapSeq) First() any {
 	return NewMapEntry(s.keys.First(), s.vals[s.i])
 }
 
@@ -163,3 +201,58 @@ func (s *persistentStructMapSeq) Next() ISeq {
 	}
 	return s.ext.Seq()
 }
+
+func (s *persistentStructMapSeq) More() ISeq {
+	return aseqMore(s)
+}
+
+func (s *persistentStructMapSeq) Cons(o any) Conser {
+	return aseqCons(s, o)
+}
+
+func (s *persistentStructMapSeq) Count() int {
+	return aseqCount(s)
+}
+
+func (s *persistentStructMapSeq) Empty() IPersistentCollection {
+	return aseqEmpty()
+}
+
+func (s *persistentStructMapSeq) Equals(o any) bool {
+	return aseqEquals(s, o)
+}
+
+func (s *persistentStructMapSeq) Equiv(o any) bool {
+	return aseqEquiv(s, o)
+}
+
+func (s *persistentStructMapSeq) Hash() uint32 {
+	return aseqHash(&s.hash, s)
+}
+
+func (s *persistentStructMapSeq) HashEq() uint32 {
+	return aseqHashEq(&s.hasheq, s)
+}
+
+func (s *persistentStructMapSeq) Meta() IPersistentMap {
+	return s.meta
+}
+
+func (s *persistentStructMapSeq) WithMeta(meta IPersistentMap) any {
+	if s.meta == meta {
+		return s
+	}
+	cpy := *s
+	cpy.meta = meta
+	return &cpy
+}
+
+func (s *persistentStructMapSeq) Seq() ISeq {
+	return s
+}
+
+func (s *persistentStructMapSeq) String() string {
+	return aseqString(s)
+}
+
+func (s *persistentStructMapSeq) xxx_sequential() {}

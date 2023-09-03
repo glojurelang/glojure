@@ -1,10 +1,10 @@
-//go:generate go run ../../cmd/gen-abstract-class/main.go -class ASeq -struct Cycle -receiver c
 package lang
 
 import "sync/atomic"
 
 type Cycle struct {
-	meta IPersistentMap
+	meta         IPersistentMap
+	hash, hasheq uint32
 
 	all     ISeq
 	prev    ISeq
@@ -13,11 +13,10 @@ type Cycle struct {
 }
 
 var (
-	_ ISeq        = (*Cycle)(nil)
+	_ ASeq        = (*Cycle)(nil)
 	_ IReduce     = (*Cycle)(nil)
 	_ IReduceInit = (*Cycle)(nil)
 	_ IPending    = (*Cycle)(nil)
-	_ Sequential  = (*Cycle)(nil)
 )
 
 func newCycle(all, prev, current ISeq) *Cycle {
@@ -62,6 +61,67 @@ func (c *Cycle) getCurrent() ISeq {
 	}
 	return cur.(ISeq)
 }
+
+func (c *Cycle) Cons(o any) Conser {
+	return aseqCons(c, o)
+}
+
+func (c *Cycle) Count() int {
+	return 1 + Count(c.More())
+}
+
+func (c *Cycle) Empty() IPersistentCollection {
+	return aseqEmpty()
+}
+
+func (c *Cycle) Equals(o any) bool {
+	return aseqEquals(c, o)
+}
+
+func (c *Cycle) Equiv(o any) bool {
+	return aseqEquiv(c, o)
+}
+
+func (c *Cycle) Hash() uint32 {
+	return aseqHash(&c.hash, c)
+}
+
+func (c *Cycle) HashEq() uint32 {
+	return aseqHashEq(&c.hasheq, c)
+}
+
+func (c *Cycle) String() string {
+	return aseqString(c)
+}
+
+func (c *Cycle) xxx_sequential() {}
+
+func (c *Cycle) More() ISeq {
+	sq := c.Next()
+	if sq == nil {
+		return emptyList
+	}
+	return sq
+}
+
+func (c *Cycle) Seq() ISeq {
+	return c
+}
+
+func (c *Cycle) Meta() IPersistentMap {
+	return c.meta
+}
+
+func (c *Cycle) WithMeta(meta IPersistentMap) interface{} {
+	if c.meta == meta {
+		return c
+	}
+	cpy := *c
+	cpy.meta = meta
+	return &cpy
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 func (c *Cycle) IsRealized() bool {
 	return !IsNil(c.current.Load())

@@ -40,7 +40,7 @@ func mapEquals(m IPersistentMap, v2 interface{}) bool {
 		if !assoc.ContainsKey(entry.Key()) {
 			return false
 		}
-		if !Equal(entry.Val(), assoc.EntryAt(entry.Key()).Val()) {
+		if !Equals(entry.Val(), assoc.EntryAt(entry.Key()).Val()) {
 			return false
 		}
 	}
@@ -52,5 +52,5 @@ func equalKey(k1, k2 interface{}) bool {
 	if k1, ok := k1.(Keyword); ok {
 		return k1 == k2
 	}
-	return Equal(k1, k2)
+	return Equals(k1, k2)
 }

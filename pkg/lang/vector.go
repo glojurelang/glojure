@@ -7,20 +7,40 @@ import (
 	"github.com/glojurelang/glojure/internal/persistent/vector"
 )
 
-var (
-	emptyVector = NewVector()
+// Vector is a vector of values.
+type (
+	Vector struct {
+		meta         IPersistentMap
+		hash, hasheq uint32
+
+		vec vector.Vector
+	}
+
+	PersistentVector = Vector
+
+	TransientVector struct {
+		vec *vector.Transient
+	}
 )
 
-// Vector is a vector of values.
-type Vector struct {
-	meta IPersistentMap
-	vec  vector.Vector
-}
+var (
+	emptyVector = NewVector()
 
-type PersistentVector = Vector
+	_ APersistentVector   = (*Vector)(nil)
+	_ IObj                = (*Vector)(nil)
+	_ IReduce             = (*Vector)(nil)
+	_ IReduceInit         = (*Vector)(nil)
+	_ IDrop               = (*Vector)(nil)
+	_ IKVReduce           = (*Vector)(nil)
+	_ IEditableCollection = (*Vector)(nil)
 
-func NewVector(values ...interface{}) *Vector {
-	vals := make([]interface{}, len(values))
+	_ ITransientVector      = (*TransientVector)(nil)
+	_ AFn                   = (*TransientVector)(nil)
+	_ ITransientAssociative = (*TransientVector)(nil)
+)
+
+func NewVector(values ...any) *Vector {
+	vals := make([]any, len(values))
 	for i, v := range values {
 		vals[i] = v
 	}
@@ -31,17 +51,17 @@ func NewVector(values ...interface{}) *Vector {
 	}
 }
 
-func NewVectorFromCollection(c interface{}) *Vector {
+func NewVectorFromCollection(c any) *Vector {
 	// TODO: match clojure's behavior here. for now, just make it work
 	// for seqs.
-	var items []interface{}
+	var items []any
 	for seq := Seq(c); seq != nil; seq = seq.Next() {
 		items = append(items, seq.First())
 	}
 	return NewVector(items...)
 }
 
-func NewLazilyPersistentVector(x interface{}) IPersistentVector {
+func NewLazilyPersistentVector(x any) IPersistentVector {
 	// TODO: IReduceInit, Iterable
 	switch x := x.(type) {
 	case ISeq:
@@ -52,6 +72,7 @@ func NewLazilyPersistentVector(x interface{}) IPersistentVector {
 }
 
 var (
+	_ APersistentVector = (*Vector)(nil)
 	_ IPersistentVector = (*Vector)(nil)
 	_ IFn               = (*Vector)(nil)
 	_ IReduce           = (*Vector)(nil)
@@ -68,22 +89,21 @@ func (v *Vector) Length() int {
 	return v.Count()
 }
 
-func (v *Vector) Conj(x interface{}) Conjer {
+func (v *Vector) Cons(x any) Conser {
 	return &Vector{
 		meta: v.meta,
 		vec:  v.vec.Conj(x),
 	}
 }
 
-func (v *Vector) Cons(item interface{}) IPersistentVector {
-	return v.Conj(item).(IPersistentVector)
-}
-
-func (v *Vector) AssocN(i int, val interface{}) IPersistentVector {
+func (v *Vector) AssocN(i int, val any) IPersistentVector {
+	if i < 0 || i > v.Count() {
+		panic(NewIndexOutOfBoundsError())
+	}
 	return &Vector{vec: v.vec.Assoc(i, val)}
 }
 
-func (v *Vector) ContainsKey(key interface{}) bool {
+func (v *Vector) ContainsKey(key any) bool {
 	kInt, ok := AsInt(key)
 	if !ok {
 		return false
@@ -91,15 +111,15 @@ func (v *Vector) ContainsKey(key interface{}) bool {
 	return kInt >= 0 && kInt < v.Count()
 }
 
-func (v *Vector) Assoc(key, val interface{}) Associative {
+func (v *Vector) Assoc(key, val any) Associative {
 	kInt, ok := AsInt(key)
 	if !ok {
-		panic(fmt.Errorf("vector assoc expects an int as a key, got %T", key))
+		panic(NewIllegalArgumentError(fmt.Sprintf("vector assoc expects an int as a key, got %T", key)))
 	}
 	return v.AssocN(kInt, val)
 }
 
-func (v *Vector) EntryAt(key interface{}) IMapEntry {
+func (v *Vector) EntryAt(key any) IMapEntry {
 	kInt, ok := AsInt(key)
 	if !ok {
 		return nil
@@ -122,18 +142,18 @@ func (v *Vector) Empty() IPersistentCollection {
 	return emptyVector.WithMeta(v.meta).(IPersistentCollection)
 }
 
-func (v *Vector) ValAt(i interface{}) interface{} {
+func (v *Vector) ValAt(i any) any {
 	return v.ValAtDefault(i, nil)
 }
 
-func (v *Vector) ValAtDefault(k, def interface{}) interface{} {
+func (v *Vector) ValAtDefault(k, def any) any {
 	if i, ok := AsInt(k); ok {
 		return v.NthDefault(i, def)
 	}
 	return def
 }
 
-func (v *Vector) Nth(i int) interface{} {
+func (v *Vector) Nth(i int) any {
 	res, ok := v.vec.Index(i)
 	if !ok {
 		panic(NewIndexOutOfBoundsError())
@@ -141,7 +161,7 @@ func (v *Vector) Nth(i int) interface{} {
 	return res
 }
 
-func (v *Vector) NthDefault(i int, def interface{}) interface{} {
+func (v *Vector) NthDefault(i int, def any) any {
 	if i >= 0 && i < v.Count() {
 		return v.Nth(i)
 	}
@@ -149,66 +169,48 @@ func (v *Vector) NthDefault(i int, def interface{}) interface{} {
 }
 
 func (v *Vector) String() string {
-	return PrintString(v)
+	return apersistentVectorString(v)
 }
 
-func (v *Vector) Equal(v2 interface{}) bool {
-	other, ok := v2.(IPersistentVector)
-	if !ok {
-		return false
-	}
-	if v.Count() != other.Count() {
-		return false
-	}
-	for i := 0; i < v.Count(); i++ {
-		vVal, oVal := v.EntryAt(i), other.EntryAt(i)
-		if vVal == nil || oVal == nil {
-			return vVal == oVal
-		}
-		if !Equal(vVal.Val(), oVal.Val()) {
-			return false
-		}
-	}
-	return true
+func (v *Vector) Equals(v2 any) bool {
+	return apersistentVectorEquals(v, v2)
 }
 
-func (v *Vector) Invoke(args ...interface{}) interface{} {
+func (v *Vector) Equiv(v2 any) bool {
+	return apersistentVectorEquiv(v, v2)
+}
+
+func (v *Vector) Invoke(args ...any) any {
 	if len(args) != 1 {
-		panic(fmt.Errorf("vector apply expects 1 argument, got %d", len(args)))
+		panic(NewIllegalArgumentError(fmt.Sprintf("vector apply expects 1 argument, got %d", len(args))))
 	}
 
 	i, ok := AsInt(args[0])
 	if !ok {
-		panic(fmt.Errorf("vector apply takes an int as an argument"))
+		panic(NewIllegalArgumentError("vector apply takes an int as an argument"))
 	}
 
 	if i < 0 || i >= v.Count() {
-		panic(fmt.Errorf("index out of bounds"))
+		panic(NewIllegalArgumentError("index out of bounds"))
 	}
 
 	return v.ValAt(i)
 }
 
-func (v *Vector) ApplyTo(args ISeq) interface{} {
+func (v *Vector) ApplyTo(args ISeq) any {
 	return v.Invoke(seqToSlice(args)...)
 }
 
 func (v *Vector) Seq() ISeq {
-	if v.Count() == 0 {
-		return nil
-	}
-	// TODO: chunked seq
-	return NewVectorIterator(v, 0, 1)
+	// TODO: more efficient implementation using vector iterator
+	return apersistentVectorSeq(v)
 }
 
 func (v *Vector) RSeq() ISeq {
-	if v.Count() == 0 {
-		return nil
-	}
-	return NewVectorIterator(v, v.Count()-1, -1)
+	return apersistentVectorRSeq(v)
 }
 
-func (v *Vector) Peek() interface{} {
+func (v *Vector) Peek() any {
 	if v.Count() == 0 {
 		return nil
 	}
@@ -229,8 +231,8 @@ func (v *Vector) Meta() IPersistentMap {
 	return v.meta
 }
 
-func (v *Vector) WithMeta(meta IPersistentMap) interface{} {
-	if Equal(v.meta, meta) {
+func (v *Vector) WithMeta(meta IPersistentMap) any {
+	if v.meta == meta {
 		return v
 	}
 
@@ -239,7 +241,11 @@ func (v *Vector) WithMeta(meta IPersistentMap) interface{} {
 	return &cpy
 }
 
-func (v *Vector) ReduceInit(f IFn, init interface{}) interface{} {
+func (v *Vector) HashEq() uint32 {
+	return apersistentVectorHashEq(&v.hasheq, v)
+}
+
+func (v *Vector) ReduceInit(f IFn, init any) any {
 	res := init
 	for i := 0; i < v.Count(); i++ {
 		res = f.Invoke(res, v.ValAt(i))
@@ -247,7 +253,7 @@ func (v *Vector) ReduceInit(f IFn, init interface{}) interface{} {
 	return res
 }
 
-func (v *Vector) Reduce(f IFn) interface{} {
+func (v *Vector) Reduce(f IFn) any {
 	if v.Count() == 0 {
 		return f.Invoke()
 	}
@@ -258,14 +264,42 @@ func (v *Vector) Reduce(f IFn) interface{} {
 	return res
 }
 
-func toSlice(x interface{}) []interface{} {
+func (v *Vector) KVReduce(f IFn, init any) any {
+	for i := 0; i < v.Count(); i++ {
+		init = f.Invoke(init, i, v.ValAt(i))
+		if IsReduced(init) {
+			return init.(IDeref).Deref()
+		}
+	}
+	return init
+}
+
+func (v *Vector) Drop(n int) Sequential {
+	if n <= 0 {
+		return v
+	}
+	if n >= v.Count() {
+		return nil
+	}
+	return &Vector{
+		vec: v.vec.SubVector(n, v.Count()),
+	}
+}
+
+func (v *Vector) AsTransient() ITransientCollection {
+	return &TransientVector{
+		vec: vector.NewTransient(v.vec),
+	}
+}
+
+func toSlice(x any) []any {
 	if x == nil {
 		return nil
 	}
 
 	val := reflect.ValueOf(x)
 	if val.Type().Kind() == reflect.Slice {
-		res := make([]interface{}, val.Len())
+		res := make([]any, val.Len())
 		for i := 0; i < len(res); i++ {
 			res[i] = val.Index(i).Interface()
 		}
@@ -274,7 +308,7 @@ func toSlice(x interface{}) []interface{} {
 
 	if idxd, ok := x.(Indexed); ok {
 		count := Count(x)
-		res := make([]interface{}, count)
+		res := make([]any, count)
 		for i := 0; i < count; i++ {
 			res = append(res, idxd.Nth(i))
 		}
@@ -282,4 +316,93 @@ func toSlice(x interface{}) []interface{} {
 	}
 
 	panic(fmt.Sprintf("unable to convert %T to slice", x))
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// TransientVector
+
+func (t *TransientVector) Conj(o any) Conjer {
+	t.vec = t.vec.Conj(o)
+	return t
+}
+
+func (t *TransientVector) ValAt(i any) any {
+	return t.ValAtDefault(i, nil)
+}
+
+func (t *TransientVector) ValAtDefault(k, def any) any {
+	if i, ok := AsInt(k); ok {
+		return t.NthDefault(i, def)
+	}
+	return def
+}
+
+func (t *TransientVector) Persistent() IPersistentCollection {
+	return &Vector{
+		vec: t.vec.Persistent(),
+	}
+}
+
+func (t *TransientVector) Count() int {
+	return t.vec.Count()
+}
+
+func (t *TransientVector) Nth(i int) any {
+	res, ok := t.vec.Index(i)
+	if !ok {
+		panic(NewIndexOutOfBoundsError())
+	}
+	return res
+}
+
+func (t *TransientVector) NthDefault(i int, def any) any {
+	if i >= 0 && i < t.Count() {
+		return t.Nth(i)
+	}
+	return def
+}
+
+func (t *TransientVector) AssocN(i int, val any) ITransientVector {
+	if i < 0 || i > t.Count() {
+		panic(NewIndexOutOfBoundsError())
+	}
+	t.vec.Assoc(i, val)
+	return t
+}
+
+func (t *TransientVector) Assoc(key, val any) ITransientAssociative {
+	kInt, ok := AsInt(key)
+	if !ok {
+		panic(NewIllegalArgumentError(fmt.Sprintf("vector assoc expects an int as a key, got %T", key)))
+	}
+	if kInt < 0 || kInt > t.Count() {
+		panic(NewIndexOutOfBoundsError())
+	}
+	return t.AssocN(kInt, val)
+}
+
+func (t *TransientVector) Pop() ITransientVector {
+	t.vec = t.vec.Pop()
+	return t
+}
+
+func (t *TransientVector) ApplyTo(args ISeq) any {
+	return t.Invoke(seqToSlice(args)...)
+}
+
+func (t *TransientVector) Invoke(args ...any) any {
+	if len(args) != 1 {
+		panic(NewIllegalArgumentError(fmt.Sprintf("vector apply expects 1 argument, got %d", len(args))))
+	}
+
+	i, ok := AsInt(args[0])
+	if !ok {
+		panic(NewIllegalArgumentError("vector apply takes an int as an argument"))
+	}
+
+	if i < 0 || i >= t.Count() {
+		panic(NewIllegalArgumentError("index out of bounds"))
+	}
+
+	return t.ValAt(i)
 }

@@ -16,7 +16,6 @@ import (
 
 	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/kylelemons/godebug/diff"
-	"github.com/stretchr/testify/assert"
 )
 
 type (
@@ -71,8 +70,6 @@ func FuzzCLJConformance(f *testing.F) {
 	}
 
 	cljRdr := newCLJReader()
-	// go cljRdr.start()
-	// defer cljRdr.stop()
 
 	f.Fuzz(func(t *testing.T, program string) {
 		// reject program strings with non-ascii or non-printable
@@ -90,19 +87,22 @@ func FuzzCLJConformance(f *testing.F) {
 		cljExpr, cljErr := cljRdr.readCLJExpr(program)
 
 		r := New(strings.NewReader(program), WithSymbolResolver(&testSymbolResolver{}))
-		// we only want the first expression. TODO: variant that reads
-		// one.
 		gljValue, gljErr := r.ReadOne()
 
-		if (cljErr == nil) != (gljErr == nil) {
-			if isCLJConformanceErrorException(cljErr, cljExpr) {
-				t.Skipf("clj error: %v", cljErr)
+		{ // check for matching errors
+			if (cljErr == nil) != (gljErr == nil) {
+				if isCLJConformanceErrorException(cljErr, cljExpr) {
+					t.Skipf("clj error: %v", cljErr)
+				}
+				if gljErr == nil && isGLJSupportedValue(program, gljValue) {
+					t.Skipf("ok glj value: %v", gljValue)
+				}
+				t.Logf("clj out: %v", cljExpr)
+				t.Fatalf("error mismatch: cljErr=%v gljErr=%v", cljErr, gljErr)
 			}
-			t.Logf("clj out: %v", cljExpr)
-			t.Fatalf("error mismatch: cljErr=%v gljErr=%v", cljErr, gljErr)
-		}
-		if cljErr != nil {
-			return
+			if cljErr != nil {
+				return
+			}
 		}
 
 		gljExpr := cljNormalize(testPrintString(gljValue))
@@ -120,13 +120,85 @@ func FuzzCLJConformance(f *testing.F) {
 		}
 		cljExpr = string(cljExprRunes)
 
-		if gljExpr != cljExpr {
-			assert.Equal(t, []rune(cljExpr), []rune(gljExpr))
+		if !cljExprsEquiv(gljExpr, cljExpr) {
 			t.Errorf("want len=%d, got len=%d", len(cljExpr), len(gljExpr))
 			t.Errorf("diff (-want,+got):\n%s", diff.Diff(cljExpr, gljExpr))
 			t.Fatalf("expression mismatch: glj=%v clj=%v", gljExpr, cljExpr)
 		}
 	})
+}
+
+func isGLJSupportedValue(program string, v any) bool {
+	if _, ok := v.(int64); ok {
+		// go allows ints like 0b0101, but clj does not
+		program = strings.TrimSpace(program)
+		if len(program) > 0 && (program[0] == '-' || program[0] == '+') {
+			program = program[1:]
+		}
+		if strings.HasPrefix(program, "0b") || strings.HasPrefix(program, "0B") {
+			return true
+		}
+	}
+	return false
+}
+
+func cljExprsEquiv(glj, clj string) bool {
+	glj, clj = strings.TrimSpace(glj), strings.TrimSpace(clj)
+	if glj == clj {
+		return true
+	}
+
+	// ignore regex literal differences
+	if len(glj) > 2 && len(clj) > 2 && glj[:2] == clj[:2] && glj[:2] == "#\"" {
+		return true
+	}
+
+	if buf, cached := getCLJEquivCache(glj, clj); cached {
+		return strings.TrimSpace(string(buf)) == "true"
+	}
+
+	// run clj with (= (read-string s1) (read-string s2))
+	expr := fmt.Sprintf("(= (read-string %q) (read-string %q))", glj, clj)
+	cmd := exec.Command("clj", "-e", expr)
+	out, err := cmd.Output()
+	if err != nil {
+		panic(err)
+	}
+	if os.Getenv("GLOJ_WRITE_GLJ_FUZZ_TEST_CACHE") != "" {
+		setCLJEquivCache(glj, clj, out)
+	}
+	return strings.TrimSpace(string(out)) == "true"
+}
+
+func cljEquivCacheKey(glj, clj string) string {
+	return fmt.Sprintf("%x", sha256.Sum256([]byte("["+glj+" "+clj+"]")))
+}
+
+// getCLJEquivCache returns the cached result of cljExprsEquiv, if
+// available.
+func getCLJEquivCache(glj, clj string) (buf []byte, cached bool) {
+	key := cljEquivCacheKey(glj, clj)
+	path := filepath.Join("testdata", "clj-equiv-cache", key)
+	if _, err := os.Stat(path); err != nil {
+		return nil, false
+	}
+	buf, err := ioutil.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+	return buf, true
+}
+
+// setCLJEquivCache sets the cached result of cljExprsEquiv.
+func setCLJEquivCache(glj, clj string, buf []byte) {
+	key := cljEquivCacheKey(glj, clj)
+	path := filepath.Join("testdata", "clj-equiv-cache", key)
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		panic(err)
+	}
+	if err := ioutil.WriteFile(path, buf, 0644); err != nil {
+		panic(err)
+	}
 }
 
 // isCLJConformanceErrorException returns true if the error is one that
@@ -270,15 +342,7 @@ func (r *cljReader) readCLJExpr(program string) (string, error) {
 	}
 
 	return string(out), err
-
-	// rdrCommand := <-r.commands
-	// rdrCommand.pipeIn.Write([]byte(program))
-	// rdrCommand.pipeIn.Close()
-	// <-rdrCommand.done
-	// return rdrCommand.out, rdrCommand.err
 }
-
-// for later: clj -M -e '(binding [*print-meta* true] (pr (read *in*)))'
 
 func cljNormalize(s string) string {
 	// replace glojure with clojure

@@ -1,6 +1,8 @@
 package lang
 
-import "math/big"
+import (
+	"math/big"
+)
 
 // Ratio is a value that represents a ratio.
 type Ratio struct {
@@ -14,54 +16,84 @@ func NewRatio(numerator, denominator int64) *Ratio {
 	}
 }
 
-// NewRatio creates a new ratio value front BigInts.
 func NewRatioBigInt(num, den *BigInt) *Ratio {
 	return &Ratio{
 		val: new(big.Rat).SetFrac(num.val, den.val),
 	}
 }
 
+func NewRatioGoBigInt(num, den *big.Int) *Ratio {
+	return &Ratio{
+		val: new(big.Rat).SetFrac(num, den),
+	}
+}
+
+func (r *Ratio) Numerator() *big.Int {
+	return new(big.Int).Set(r.val.Num())
+}
+
+func (r *Ratio) Denominator() *big.Int {
+	return new(big.Int).Set(r.val.Denom())
+}
+
+func (r *Ratio) BigIntegerValue() *big.Int {
+	return new(big.Int).Div(r.val.Num(), r.val.Denom())
+}
+
 func (r *Ratio) String() string {
 	return r.val.RatString()
 }
 
-func (r *Ratio) Equal(other interface{}) bool {
+func (r *Ratio) Equals(other interface{}) bool {
 	if other, ok := other.(*Ratio); ok {
 		return r.val.Cmp(other.val) == 0
 	}
 	return false
 }
 
-func (r *Ratio) Add(other *Ratio) *Ratio {
+func (r *Ratio) Add(other *Ratio) any {
+	sum := new(big.Rat).Add(r.val, other.val)
+	if sum.IsInt() {
+		return NewBigIntFromGoBigInt(sum.Num())
+	}
 	return &Ratio{
-		val: new(big.Rat).Add(r.val, other.val),
+		val: sum,
 	}
 }
 
-func (r *Ratio) AddP(other *Ratio) *Ratio {
-	return r.Add(other)
-}
-
-func (r *Ratio) Sub(other *Ratio) *Ratio {
+func (r *Ratio) Sub(other *Ratio) any {
+	diff := new(big.Rat).Sub(r.val, other.val)
+	if diff.IsInt() {
+		return NewBigIntFromGoBigInt(diff.Num())
+	}
 	return &Ratio{
-		val: new(big.Rat).Sub(r.val, other.val),
+		val: diff,
 	}
 }
 
-func (r *Ratio) SubP(other *Ratio) *Ratio {
-	return r.Sub(other)
+func (r *Ratio) Multiply(other *Ratio) any {
+	xn, xd := r.Numerator(), r.Denominator()
+	yn, yd := other.Numerator(), other.Denominator()
+	return Divide(
+		xn.Mul(xn, yn),
+		xd.Mul(xd, yd))
 }
 
-func (r *Ratio) Multiply(other *Ratio) *Ratio {
-	return &Ratio{
-		val: new(big.Rat).Mul(r.val, other.val),
-	}
+func (r *Ratio) Divide(other *Ratio) any {
+	xn, xd := r.Numerator(), r.Denominator()
+	yn, yd := other.Numerator(), other.Denominator()
+	return Divide(
+		xn.Mul(xn, yd),
+		xd.Mul(xd, yn))
 }
 
-func (r *Ratio) Divide(other *Ratio) *Ratio {
-	return &Ratio{
-		val: new(big.Rat).Quo(r.val, other.val),
-	}
+func (r *Ratio) Quotient(other *Ratio) any {
+	xn, xd := r.Numerator(), r.Denominator()
+	yn, yd := other.Numerator(), other.Denominator()
+
+	qn := new(big.Int).Mul(xn, yd)
+	q := qn.Div(qn, xd.Mul(xd, yn))
+	return NewBigIntFromGoBigInt(q)
 }
 
 func (r *Ratio) Cmp(other *Ratio) int {
@@ -82,4 +114,19 @@ func (r *Ratio) GT(other *Ratio) bool {
 
 func (r *Ratio) GTE(other *Ratio) bool {
 	return r.Cmp(other) >= 0
+}
+
+func (r *Ratio) Negate() *Ratio {
+	return &Ratio{
+		val: new(big.Rat).Neg(r.val),
+	}
+}
+
+func (r *Ratio) Abs() *Ratio {
+	if r.val.Sign() < 0 {
+		return &Ratio{
+			val: new(big.Rat).Abs(r.val),
+		}
+	}
+	return r
 }

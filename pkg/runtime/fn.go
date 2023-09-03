@@ -41,7 +41,7 @@ func (fn *Fn) Invoke(args ...interface{}) interface{} {
 	maxArity := fnNode.MaxFixedArity
 
 	if !variadic && len(args) > maxArity {
-		panic(fmt.Errorf("too many arguments (%d)", len(args)))
+		panic(lang.NewIllegalArgumentError(fmt.Sprintf("too many arguments (%d)", len(args))))
 	}
 
 	method, err := fn.findMethod(methods, args)
@@ -122,7 +122,7 @@ func (fn *Fn) findMethod(methods []*ast.Node, args []interface{}) (*ast.Node, er
 		}
 	}
 	if variadicMethod == nil || len(args) < variadicMethod.Sub.(*ast.FnMethodNode).FixedArity {
-		return nil, fmt.Errorf("wrong number of arguments (%d)", len(args))
+		return nil, lang.NewIllegalArgumentError(fmt.Sprintf("wrong number of arguments (%d)", len(args)))
 	}
 	return variadicMethod, nil
 }

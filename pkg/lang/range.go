@@ -6,7 +6,8 @@ type (
 	}
 
 	Range struct {
-		meta IPersistentMap
+		meta         IPersistentMap
+		hash, hasheq uint32
 
 		start, end, step any
 		boundsCheck      boundsCheck
@@ -26,7 +27,7 @@ type (
 )
 
 var (
-	_ ISeq        = (*Range)(nil)
+	_ ASeq        = (*Range)(nil)
 	_ Sequential  = (*Range)(nil)
 	_ IReduce     = (*Range)(nil)
 	_ IReduceInit = (*Range)(nil)
@@ -69,6 +70,10 @@ func NewRange(start, end, step any) ISeq {
 
 func (r *Range) xxx_sequential() {}
 
+func (r *Range) Meta() IPersistentMap {
+	return r.meta
+}
+
 func (r *Range) WithMeta(meta IPersistentMap) any {
 	if meta == r.meta {
 		return r
@@ -82,8 +87,8 @@ func (r *Range) Seq() ISeq {
 	return r
 }
 
-func (r *Range) Cons(val any) ISeq {
-	return NewCons(val, r)
+func (r *Range) Cons(val any) Conser {
+	return aseqCons(r, val)
 }
 
 func (r *Range) First() any {
@@ -91,11 +96,35 @@ func (r *Range) First() any {
 }
 
 func (r *Range) More() ISeq {
-	s := r.Next()
-	if s == nil {
-		return emptyList
-	}
-	return s
+	return aseqMore(r)
+}
+
+func (r *Range) Count() int {
+	return aseqCount(r)
+}
+
+func (r *Range) Empty() IPersistentCollection {
+	return aseqEmpty()
+}
+
+func (r *Range) Equals(o any) bool {
+	return aseqEquals(r, o)
+}
+
+func (r *Range) Equiv(o any) bool {
+	return aseqEquiv(r, o)
+}
+
+func (r *Range) Hash() uint32 {
+	return aseqHash(&r.hash, r)
+}
+
+func (r *Range) HashEq() uint32 {
+	return aseqHashEq(&r.hasheq, r)
+}
+
+func (r *Range) String() string {
+	return aseqString(r)
 }
 
 func (r *Range) ForceChunk() {

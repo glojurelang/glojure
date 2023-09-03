@@ -5,11 +5,12 @@ import (
 )
 
 type LazySeq struct {
+	meta         IPersistentMap
+	hash, hasheq uint32
+
 	fn  func() interface{}
 	sv  interface{}
 	seq ISeq
-
-	meta IPersistentMap
 
 	realizeMtx sync.RWMutex
 	seqMtx     sync.Mutex
@@ -27,13 +28,14 @@ func newLazySeqWithMeta(meta IPersistentMap, seq ISeq) ISeq {
 }
 
 var (
+	_ ASeq                  = (*LazySeq)(nil)
 	_ ISeq                  = (*LazySeq)(nil)
 	_ IPending              = (*LazySeq)(nil)
 	_ IObj                  = (*LazySeq)(nil)
 	_ Counted               = (*LazySeq)(nil)
 	_ Sequential            = (*LazySeq)(nil)
 	_ IPersistentCollection = (*LazySeq)(nil)
-	// IHashEq
+	_ IHashEq               = (*LazySeq)(nil)
 )
 
 func (s *LazySeq) xxx_sequential() {}
@@ -62,22 +64,26 @@ func (s *LazySeq) More() ISeq {
 	return seq.More()
 }
 
-func (s *LazySeq) Cons(x interface{}) ISeq {
+func (s *LazySeq) Cons(x interface{}) Conser {
 	return NewCons(x, s)
-}
-
-func (s *LazySeq) Conj(x interface{}) Conjer {
-	return s.Cons(x).(Conjer)
 }
 
 func (s *LazySeq) Empty() IPersistentCollection {
 	return emptyList
 }
 
-func (s *LazySeq) Equal(o interface{}) bool {
+func (s *LazySeq) Equals(o interface{}) bool {
 	seq := s.Seq()
 	if s != nil {
-		return Equal(seq, o)
+		return Equals(seq, o)
+	}
+	return Seq(o) == nil
+}
+
+func (s *LazySeq) Equiv(o interface{}) bool {
+	seq := s.Seq()
+	if s != nil {
+		return Equiv(seq, o)
 	}
 	return Seq(o) == nil
 }
@@ -137,9 +143,21 @@ func (s *LazySeq) Meta() IPersistentMap {
 }
 
 func (s *LazySeq) WithMeta(meta IPersistentMap) interface{} {
-	if Equal(s.meta, meta) {
+	if s.meta == meta {
 		return s
 	}
 
 	return newLazySeqWithMeta(meta, s.Seq())
+}
+
+func (s *LazySeq) Hash() uint32 {
+	return aseqHash(&s.hash, s)
+}
+
+func (s *LazySeq) HashEq() uint32 {
+	return aseqHashEq(&s.hasheq, s)
+}
+
+func (s *LazySeq) String() string {
+	return aseqString(s)
 }

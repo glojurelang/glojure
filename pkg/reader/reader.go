@@ -837,7 +837,7 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 		elements := []interface{}{symConcat}
 		for seq := value.Seq(node); seq != nil; seq = seq.Next() {
 			first := seq.First()
-			if seq, ok := first.(value.ISeq); ok && value.Equal(value.First(seq), symSpliceUnquote) {
+			if seq, ok := first.(value.ISeq); ok && value.Equals(value.First(seq), symSpliceUnquote) {
 				elements = append(elements, value.First(value.Rest(first)))
 			} else {
 				elements = append(elements, value.NewList(symList, r.syntaxQuote(symbolNameMap, first)))
@@ -861,11 +861,11 @@ func (r *Reader) sqExpandList(symbolNameMap map[string]*value.Symbol, els []inte
 	var ret value.IPersistentVector = value.NewVector()
 	for _, v := range els {
 		if r.isUnquote(v) {
-			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), value.First(value.Rest(v))))
+			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), value.First(value.Rest(v)))).(value.IPersistentVector)
 		} else if r.isUnquoteSplicing(v) {
-			ret = ret.Cons(value.First(value.Rest(v)))
+			ret = ret.Cons(value.First(value.Rest(v))).(value.IPersistentVector)
 		} else {
-			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), r.syntaxQuote(symbolNameMap, v)))
+			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), r.syntaxQuote(symbolNameMap, v))).(value.IPersistentVector)
 		}
 	}
 	return value.Seq(ret)
@@ -873,12 +873,12 @@ func (r *Reader) sqExpandList(symbolNameMap map[string]*value.Symbol, els []inte
 
 func (r *Reader) isUnquote(form interface{}) bool {
 	seq, ok := form.(value.ISeq)
-	return ok && value.Equal(seq.First(), symUnquote)
+	return ok && value.Equals(seq.First(), symUnquote)
 }
 
 func (r *Reader) isUnquoteSplicing(form interface{}) bool {
 	seq, ok := form.(value.ISeq)
-	return ok && value.Equal(seq.First(), symSpliceUnquote)
+	return ok && value.Equals(seq.First(), symSpliceUnquote)
 }
 
 func (r *Reader) readDeref() (interface{}, error) {
@@ -1012,7 +1012,8 @@ func (r *Reader) readSymbolicValue() (interface{}, error) {
 }
 
 var (
-	numPrefixRegex = regexp.MustCompile(`^[-+]?[0-9]+`)
+	numPrefixRegex = regexp.MustCompile(`^[-+]?([0-9]+|[1-9]+r)`)
+	radixRegex     = regexp.MustCompile(`^[-+]?([1-9]+)r(\d(\d|[a-zA-Z])*N?)$`)
 	intRegex       = regexp.MustCompile(`^[-+]?\d(\d|[a-fA-F])*N?$`)
 	ratioRegex     = regexp.MustCompile(`^[-+]?\d+\/\d+$`)
 	hexRegex       = regexp.MustCompile(`^[-+]?0[xX]([a-fA-F]|\d)*N?$`)
@@ -1043,9 +1044,26 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 		numStr += string(rn)
 	}
 
+	base := 0 // infer from prefix
+	if match := radixRegex.FindStringSubmatch(numStr); match != nil {
+		sign := ""
+		if numStr[0] == '-' || numStr[0] == '+' {
+			sign = string(numStr[0])
+		}
+		radix, err := strconv.Atoi(match[1])
+		if err != nil {
+			return nil, r.error("error parsing radix %s: %w", match[1], err)
+		}
+		if radix > 36 {
+			return nil, r.error("radix out of range: %d", radix)
+		}
+		base = radix
+		numStr = sign + match[2]
+	}
+
 	if intRegex.MatchString(numStr) || hexRegex.MatchString(numStr) {
 		if strings.HasSuffix(numStr, "N") {
-			bi, err := value.NewBigInt(numStr[:len(numStr)-1])
+			bi, err := value.NewBigIntWithBase(numStr[:len(numStr)-1], base)
 			if err != nil {
 				return nil, r.error("invalid big int: %w", err)
 			}
@@ -1053,8 +1071,15 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 			return bi, nil
 		}
 
-		intVal, err := strconv.ParseInt(numStr, 0, 64)
+		intVal, err := strconv.ParseInt(numStr, base, 64)
 		if err != nil {
+			if errors.Is(err, strconv.ErrRange) {
+				bi, err := value.NewBigIntWithBase(numStr, base)
+				if err != nil {
+					return nil, r.error("invalid big int: %w", err)
+				}
+				return bi, nil
+			}
 			return nil, r.error("invalid number: %s", numStr)
 		}
 
@@ -1093,7 +1118,7 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 	return num, nil
 }
 
-func (r *Reader) readSymbol() (interface{}, error) {
+func (r *Reader) readSymbol() (ret interface{}, retErr error) {
 	// TODO: a cleaner way to do this. adding some hacks while trying to
 	// match clojure's reader's behavior.
 
@@ -1130,11 +1155,13 @@ func (r *Reader) readSymbol() (interface{}, error) {
 		return false, nil
 	}
 
-	symVal := value.NewSymbol(sym)
-	if !symVal.IsValidFormat() {
-		return nil, r.error("invalid symbol: %s", sym)
-	}
-	return symVal, nil
+	defer func() {
+		if r := recover(); r != nil {
+			retErr = r.(error)
+		}
+	}()
+
+	return value.NewSymbol(sym), nil
 }
 
 func (r *Reader) readKeyword() (interface{}, error) {

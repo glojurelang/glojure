@@ -68,7 +68,7 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !Equal(form, mform) {
+	if !Equals(form, mform) {
 		n, err := a.analyzeForm(mform, env)
 		if err != nil {
 			return nil, err
@@ -95,6 +95,7 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 		}
 	} else {
 		v := a.resolveSym(form, env)
+
 		vr, ok := v.(*Var)
 		if ok {
 			m := vr.Meta()
@@ -227,7 +228,7 @@ func (a *Analyzer) analyzeSeq(form ISeq, env Env) (*ast.Node, error) {
 		return nil, err
 	}
 
-	if Equal(form, mform) {
+	if Equals(form, mform) {
 		return a.parse(form, env)
 	}
 	n, err := a.analyzeForm(mform, env)
@@ -320,7 +321,7 @@ func (a *Analyzer) analyzeLet(form interface{}, env Env) (*ast.Node, error) {
 		return nil, err
 	}
 
-	isLoop := Equal(op, symLoopStar)
+	isLoop := Equals(op, symLoopStar)
 	localKW := KWLet
 	if isLoop {
 		localKW = KWLoop
@@ -692,10 +693,10 @@ func (a *Analyzer) parseSetBang(form interface{}, env Env) (*ast.Node, error) {
 //	                            (when fblock [:finally]))}))))
 func (a *Analyzer) parseTry(form interface{}, env Env) (*ast.Node, error) {
 	catch := func(form interface{}) bool {
-		return IsSeq(form) && Equal(symCatch, First(form))
+		return IsSeq(form) && Equals(symCatch, First(form))
 	}
 	finally := func(form interface{}) bool {
-		return IsSeq(form) && Equal(symFinally, First(form))
+		return IsSeq(form) && Equals(symFinally, First(form))
 	}
 	body, tail := splitWith(func(form interface{}) bool {
 		return !catch(form) && !finally(form)
@@ -1197,9 +1198,9 @@ func (a *Analyzer) parseRecur(form interface{}, env Env) (*ast.Node, error) {
 
 	errorMsg := ""
 	switch {
-	case !Equal(ctx, ctxReturn):
+	case !Equals(ctx, ctxReturn):
 		errorMsg = "can only recur from tail position"
-	case !Equal(Count(exprs), loopLocals):
+	case !Equals(Count(exprs), loopLocals):
 		errorMsg = fmt.Sprintf("mismatched argument count to recur, expected: %v args, had: %v", loopLocals, Count(exprs))
 	}
 	if errorMsg != "" {
@@ -1526,7 +1527,7 @@ func (a *Analyzer) parseGo(form interface{}, env Env) (*ast.Node, error) {
 //	   (when local
 //	     {:local (dissoc-env local)}))))
 func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (*ast.Node, error) {
-	if _, ok := form.(ISeqable); !ok {
+	if _, ok := form.(Seqable); !ok {
 		return nil, exInfo("invalid fn method", nil)
 	}
 	params, ok := First(form).(IPersistentVector)
@@ -1554,7 +1555,7 @@ func (a *Analyzer) analyzeFnMethod(form interface{}, env Env) (*ast.Node, error)
 		if Count(variadicParams) != 1 {
 			return nil, exInfo("variadic method must have exactly 1 param", nil)
 		}
-		paramsNames = params.Pop().Pop().(Conjer).Conj(params.Peek()).(IPersistentVector)
+		paramsNames = params.Pop().Pop().(Conser).Cons(params.Peek()).(IPersistentVector)
 	}
 	env = Dissoc(env, KWLocal).(Env)
 	arity := paramsNames.Count()
@@ -1841,7 +1842,7 @@ func remove(v interface{}, coll interface{}) interface{} {
 	}
 	var items []interface{}
 	for seq := Seq(coll); seq != nil; seq = seq.Next() {
-		if !Equal(v, seq.First()) {
+		if !Equals(v, seq.First()) {
 			items = append(items, seq.First())
 		}
 	}
@@ -1960,7 +1961,7 @@ func classifyType(v interface{}) Keyword {
 //	        [(seq take) drop]))
 //	    [(seq take) ()])))
 func splitWith(pred func(interface{}) bool, coll interface{}) (interface{}, interface{}) {
-	var take Conjer = vec()
+	var take Conser = vec()
 	drop := coll
 	for {
 		seq := Seq(drop)

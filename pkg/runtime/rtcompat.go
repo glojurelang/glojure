@@ -64,10 +64,7 @@ func (rt *RTMethods) Pop(x interface{}) interface{} {
 }
 
 func (rt *RTMethods) IntCast(x interface{}) int {
-	if c, ok := x.(Char); ok {
-		return int(c)
-	}
-	return int(AsInt64(x))
+	return value.IntCast(x)
 }
 
 func (rt *RTMethods) BooleanCast(x interface{}) bool {
@@ -76,6 +73,14 @@ func (rt *RTMethods) BooleanCast(x interface{}) bool {
 
 func (rt *RTMethods) ByteCast(x interface{}) byte {
 	return value.ByteCast(x)
+}
+
+func (rt *RTMethods) CharCast(x interface{}) Char {
+	return value.CharCast(x)
+}
+
+func (rt *RTMethods) UncheckedCharCast(x interface{}) Char {
+	return value.UncheckedCharCast(x)
 }
 
 func (rt *RTMethods) Dissoc(x interface{}, k interface{}) interface{} {

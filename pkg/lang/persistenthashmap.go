@@ -1,28 +1,29 @@
-//go:generate go run ../../cmd/gen-abstract-class/main.go -class APersistentMap -struct PersistentHashMap -receiver m
 package lang
 
 import "errors"
 
-func CreatePersistentHashMap(keyvals interface{}) interface{} {
+func CreatePersistentHashMap(keyvals any) any {
 	return NewPersistentHashMap(seqToSlice(Seq(keyvals))...)
 }
 
 type (
 	PersistentHashMap struct {
-		meta  IPersistentMap
+		meta         IPersistentMap
+		hash, hasheq uint32
+
 		count int
 		root  Node
 	}
 
 	BitmapIndexedNode struct {
 		bitmap int
-		array  []interface{}
+		array  []any
 	}
 
 	HashCollisionNode struct {
 		hash  uint32
 		count int
-		array []interface{}
+		array []any
 	}
 
 	ArrayNode struct {
@@ -31,8 +32,10 @@ type (
 	}
 
 	NodeSeq struct {
-		meta  IPersistentMap
-		array []interface{}
+		meta         IPersistentMap
+		hash, hasheq uint32
+
+		array []any
 		i     int
 		s     ISeq
 	}
@@ -45,9 +48,9 @@ type (
 	}
 
 	Node interface {
-		assoc(shift uint, hash uint32, key interface{}, val interface{}, addedLeaf *Box) Node
-		without(shift uint, hash uint32, key interface{}) Node
-		find(shift uint, hash uint32, key interface{}) *Pair
+		assoc(shift uint, hash uint32, key any, val any, addedLeaf *Box) Node
+		without(shift uint, hash uint32, key any) Node
+		find(shift uint, hash uint32, key any) *Pair
 		nodeSeq() ISeq
 		iter() MapIterator
 	}
@@ -61,12 +64,12 @@ type (
 	}
 
 	Pair struct {
-		Key   interface{}
-		Value interface{}
+		Key   any
+		Value any
 	}
 
 	NodeIterator struct {
-		array     []interface{}
+		array     []any
 		i         int
 		nextEntry *Pair
 		nextIter  MapIterator
@@ -80,6 +83,7 @@ type (
 )
 
 var (
+	_ APersistentMap = (*PersistentHashMap)(nil)
 	_ IPersistentMap = (*PersistentHashMap)(nil)
 	_ IMeta          = (*PersistentHashMap)(nil)
 	_ IObj           = (*PersistentHashMap)(nil)
@@ -92,7 +96,7 @@ var (
 	emptyIndexedNode = &BitmapIndexedNode{}
 )
 
-func NewPersistentHashMap(keyvals ...interface{}) IPersistentMap {
+func NewPersistentHashMap(keyvals ...any) IPersistentMap {
 	var res Associative = emptyPersistentHashMap
 	for i := 0; i < len(keyvals); i += 2 {
 		res = res.Assoc(keyvals[i], keyvals[i+1])
@@ -104,8 +108,8 @@ func (m *PersistentHashMap) Meta() IPersistentMap {
 	return m.meta
 }
 
-func (m *PersistentHashMap) WithMeta(meta IPersistentMap) interface{} {
-	if Equal(m.meta, meta) {
+func (m *PersistentHashMap) WithMeta(meta IPersistentMap) any {
+	if m.meta == meta {
 		return m
 	}
 	cpy := *m
@@ -113,7 +117,7 @@ func (m *PersistentHashMap) WithMeta(meta IPersistentMap) interface{} {
 	return &cpy
 }
 
-func (m *PersistentHashMap) Assoc(key, val interface{}) Associative {
+func (m *PersistentHashMap) Assoc(key, val any) Associative {
 	addedLeaf := &Box{}
 	var newroot, t Node
 	if m.root == nil {
@@ -122,7 +126,7 @@ func (m *PersistentHashMap) Assoc(key, val interface{}) Associative {
 		t = m.root
 	}
 
-	newroot = t.assoc(0, Hash(key), key, val, addedLeaf)
+	newroot = t.assoc(0, HashEq(key), key, val, addedLeaf)
 	if newroot == m.root {
 		return m
 	}
@@ -138,11 +142,15 @@ func (m *PersistentHashMap) Assoc(key, val interface{}) Associative {
 	return res
 }
 
-func (m *PersistentHashMap) Without(key interface{}) IPersistentMap {
+func (m *PersistentHashMap) AssocEx(key, val any) IPersistentMap {
+	return apersistentmapAssocEx(m, key, val)
+}
+
+func (m *PersistentHashMap) Without(key any) IPersistentMap {
 	if m.root == nil {
 		return m
 	}
-	newroot := m.root.without(0, Hash(key), key)
+	newroot := m.root.without(0, HashEq(key), key)
 	if newroot == m.root {
 		return m
 	}
@@ -154,9 +162,9 @@ func (m *PersistentHashMap) Without(key interface{}) IPersistentMap {
 	return res
 }
 
-func (m *PersistentHashMap) EntryAt(key interface{}) IMapEntry {
+func (m *PersistentHashMap) EntryAt(key any) IMapEntry {
 	if m.root != nil {
-		p := m.root.find(0, Hash(key), key)
+		p := m.root.find(0, HashEq(key), key)
 		if p != nil {
 			return &MapEntry{
 				key: p.Key,
@@ -182,20 +190,20 @@ func (m *PersistentHashMap) Empty() IPersistentCollection {
 	return emptyPersistentHashMap.WithMeta(m.Meta()).(IPersistentCollection)
 }
 
-func (m *PersistentHashMap) ValAtDefault(key, notFound interface{}) interface{} {
+func (m *PersistentHashMap) ValAtDefault(key, notFound any) any {
 	if m.root != nil {
-		if res := m.root.find(0, Hash(key), key); res != nil {
+		if res := m.root.find(0, HashEq(key), key); res != nil {
 			return res.Value
 		}
 	}
 	return notFound
 }
 
-func (m *PersistentHashMap) Reduce(f IFn) interface{} {
+func (m *PersistentHashMap) Reduce(f IFn) any {
 	if m.Count() == 0 {
 		return f.Invoke()
 	}
-	var res interface{}
+	var res any
 	first := true
 	for seq := Seq(m); seq != nil; seq = seq.Next() {
 		if first {
@@ -208,7 +216,7 @@ func (m *PersistentHashMap) Reduce(f IFn) interface{} {
 	return res
 }
 
-func (m *PersistentHashMap) ReduceInit(f IFn, init interface{}) interface{} {
+func (m *PersistentHashMap) ReduceInit(f IFn, init any) any {
 	res := init
 	for seq := Seq(m); seq != nil; seq = seq.Next() {
 		res = f.Invoke(res, seq.First())
@@ -217,7 +225,35 @@ func (m *PersistentHashMap) ReduceInit(f IFn, init interface{}) interface{} {
 }
 
 func (m *PersistentHashMap) String() string {
-	return PrintString(m)
+	return apersistentmapString(m)
+}
+
+func (m *PersistentHashMap) Cons(o any) Conser {
+	return apersistentmapCons(m, o)
+}
+
+func (m *PersistentHashMap) ContainsKey(k any) bool {
+	return apersistentmapContainsKey(m, k)
+}
+
+func (m *PersistentHashMap) Equiv(o any) bool {
+	return apersistentmapEquiv(m, o)
+}
+
+func (m *PersistentHashMap) ValAt(key any) any {
+	return m.ValAtDefault(key, nil)
+}
+
+func (m *PersistentHashMap) ApplyTo(args ISeq) any {
+	return afnApplyTo(m, args)
+}
+
+func (m *PersistentHashMap) Invoke(args ...any) any {
+	return apersistentmapInvoke(m, args...)
+}
+
+func (m *PersistentHashMap) HashEq() uint32 {
+	return apersistentmapHashEq(&m.hasheq, m)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -233,7 +269,7 @@ func (b *BitmapIndexedNode) iter() MapIterator {
 	}
 }
 
-func (b *BitmapIndexedNode) assoc(shift uint, hash uint32, key interface{}, val interface{}, addedLeaf *Box) Node {
+func (b *BitmapIndexedNode) assoc(shift uint, hash uint32, key any, val any, addedLeaf *Box) Node {
 	bit := bitpos(hash, shift)
 	idx := b.index(bit)
 
@@ -250,7 +286,7 @@ func (b *BitmapIndexedNode) assoc(shift uint, hash uint32, key interface{}, val 
 				array:  cloneAndSet(b.array, 2*idx+1, n),
 			}
 		}
-		if Equal(key, keyOrNull) {
+		if Equiv(key, keyOrNull) {
 			if val == valOrNode {
 				return b
 			}
@@ -277,7 +313,7 @@ func (b *BitmapIndexedNode) assoc(shift uint, hash uint32, key interface{}, val 
 					if node, ok := b.array[j+1].(Node); ok {
 						nodes[i] = node
 					} else {
-						nodes[i] = emptyIndexedNode.assoc(shift+5, Hash(b.array[j]), b.array[j], b.array[j+1], addedLeaf)
+						nodes[i] = emptyIndexedNode.assoc(shift+5, HashEq(b.array[j]), b.array[j], b.array[j+1], addedLeaf)
 					}
 					j += 2
 				}
@@ -287,7 +323,7 @@ func (b *BitmapIndexedNode) assoc(shift uint, hash uint32, key interface{}, val 
 				array: nodes,
 			}
 		} else {
-			newArray := make([]interface{}, 2*(n+1))
+			newArray := make([]any, 2*(n+1))
 			for i := 0; i < 2*idx; i++ {
 				newArray[i] = b.array[i]
 			}
@@ -305,7 +341,7 @@ func (b *BitmapIndexedNode) assoc(shift uint, hash uint32, key interface{}, val 
 	}
 }
 
-func (b *BitmapIndexedNode) without(shift uint, hash uint32, key interface{}) Node {
+func (b *BitmapIndexedNode) without(shift uint, hash uint32, key any) Node {
 	bit := bitpos(hash, shift)
 	if (b.bitmap & bit) == 0 {
 		return b
@@ -332,7 +368,7 @@ func (b *BitmapIndexedNode) without(shift uint, hash uint32, key interface{}) No
 			array:  removePair(b.array, idx),
 		}
 	}
-	if Equal(key, keyOrNull) {
+	if Equiv(key, keyOrNull) {
 		return &BitmapIndexedNode{
 			bitmap: b.bitmap ^ bit,
 			array:  removePair(b.array, idx),
@@ -341,7 +377,7 @@ func (b *BitmapIndexedNode) without(shift uint, hash uint32, key interface{}) No
 	return b
 }
 
-func (b *BitmapIndexedNode) find(shift uint, hash uint32, key interface{}) *Pair {
+func (b *BitmapIndexedNode) find(shift uint, hash uint32, key any) *Pair {
 	bit := bitpos(hash, shift)
 	if (b.bitmap & bit) == 0 {
 		return nil
@@ -352,7 +388,7 @@ func (b *BitmapIndexedNode) find(shift uint, hash uint32, key interface{}) *Pair
 	if _, ok := valOrNode.(Node); ok {
 		return valOrNode.(Node).find(shift+5, hash, key)
 	}
-	if Equal(key, keyOrNull) {
+	if Equiv(key, keyOrNull) {
 		return &Pair{
 			Key:   keyOrNull,
 			Value: valOrNode,
@@ -368,7 +404,7 @@ func (b *BitmapIndexedNode) nodeSeq() ISeq {
 ////////////////////////////////////////////////////////////////////////////////
 // NodeSeq
 
-func newNodeSeq(array []interface{}, i int, s ISeq) ISeq {
+func newNodeSeq(array []any, i int, s ISeq) ISeq {
 	if s != nil {
 		return &NodeSeq{
 			array: array,
@@ -397,25 +433,52 @@ func newNodeSeq(array []interface{}, i int, s ISeq) ISeq {
 	return nil
 }
 
-func (s *NodeSeq) WithMeta(meta IPersistentMap) interface{} {
+func (n *NodeSeq) Meta() IPersistentMap {
+	return n.meta
+}
+
+func (s *NodeSeq) WithMeta(meta IPersistentMap) any {
+	if meta == s.meta {
+		return s
+	}
 	res := *s
-	res.meta = SafeMerge(res.meta, meta)
+	res.meta = meta
 	return &res
+}
+
+func (s *NodeSeq) String() string {
+	return aseqString(s)
+}
+
+func (s *NodeSeq) Count() int {
+	return aseqCount(s)
+}
+
+func (s *NodeSeq) Empty() IPersistentCollection {
+	return aseqEmpty()
+}
+
+func (s *NodeSeq) Equals(obj any) bool {
+	return aseqEquals(s, obj)
+}
+
+func (s *NodeSeq) Equiv(obj any) bool {
+	return aseqEquiv(s, obj)
 }
 
 func (s *NodeSeq) Seq() ISeq {
 	return s
 }
 
-func (s *NodeSeq) Equal(other interface{}) bool {
-	return IsSeqEqual(s, other)
-}
-
 func (s *NodeSeq) Hash() uint32 {
-	return hashOrdered(s)
+	return aseqHash(&s.hash, s)
 }
 
-func (s *NodeSeq) First() interface{} {
+func (s *NodeSeq) HashEq() uint32 {
+	return aseqHashEq(&s.hasheq, s)
+}
+
+func (s *NodeSeq) First() any {
 	if s.s != nil {
 		return s.s.First()
 	}
@@ -441,7 +504,7 @@ func (s *NodeSeq) More() ISeq {
 	return n
 }
 
-func (s *NodeSeq) Cons(obj interface{}) ISeq {
+func (s *NodeSeq) Cons(obj any) Conser {
 	if s.s == nil {
 		return NewCons(obj, nil)
 	}
@@ -505,7 +568,7 @@ func (n *ArrayNode) iter() MapIterator {
 	}
 }
 
-func (n *ArrayNode) assoc(shift uint, hash uint32, key interface{}, val interface{}, addedLeaf *Box) Node {
+func (n *ArrayNode) assoc(shift uint, hash uint32, key any, val any, addedLeaf *Box) Node {
 	idx := mask(hash, shift)
 	node := n.array[idx]
 	if node == nil {
@@ -524,7 +587,7 @@ func (n *ArrayNode) assoc(shift uint, hash uint32, key interface{}, val interfac
 	}
 }
 
-func (n *ArrayNode) without(shift uint, hash uint32, key interface{}) Node {
+func (n *ArrayNode) without(shift uint, hash uint32, key any) Node {
 	idx := mask(hash, shift)
 	node := n.array[idx]
 	if node == nil {
@@ -550,7 +613,7 @@ func (n *ArrayNode) without(shift uint, hash uint32, key interface{}) Node {
 	}
 }
 
-func (n *ArrayNode) find(shift uint, hash uint32, key interface{}) *Pair {
+func (n *ArrayNode) find(shift uint, hash uint32, key any) *Pair {
 	idx := mask(hash, shift)
 	node := n.array[idx]
 	if node == nil {
@@ -564,7 +627,7 @@ func (n *ArrayNode) nodeSeq() ISeq {
 }
 
 func (n *ArrayNode) pack(idx uint) Node {
-	newArray := make([]interface{}, 2*(n.count-1))
+	newArray := make([]any, 2*(n.count-1))
 	j := 1
 	bitmap := 0
 	var i uint
@@ -591,9 +654,9 @@ func (n *ArrayNode) pack(idx uint) Node {
 ////////////////////////////////////////////////////////////////////////////////
 // HashCollisionNode
 
-func (n *HashCollisionNode) findIndex(key interface{}) int {
+func (n *HashCollisionNode) findIndex(key any) int {
 	for i := 0; i < 2*n.count; i += 2 {
-		if Equal(key, n.array[i]) {
+		if Equiv(key, n.array[i]) {
 			return i
 		}
 	}
@@ -606,7 +669,7 @@ func (n *HashCollisionNode) iter() MapIterator {
 	}
 }
 
-func (n *HashCollisionNode) assoc(shift uint, hash uint32, key interface{}, val interface{}, addedLeaf *Box) Node {
+func (n *HashCollisionNode) assoc(shift uint, hash uint32, key any, val any, addedLeaf *Box) Node {
 	if hash == n.hash {
 		idx := n.findIndex(key)
 		if idx != -1 {
@@ -619,7 +682,7 @@ func (n *HashCollisionNode) assoc(shift uint, hash uint32, key interface{}, val 
 				array: cloneAndSet(n.array, idx+1, val),
 			}
 		}
-		newArray := make([]interface{}, 2*(n.count+1))
+		newArray := make([]any, 2*(n.count+1))
 		for i := 0; i < 2*n.count; i++ {
 			newArray[i] = n.array[i]
 		}
@@ -634,11 +697,11 @@ func (n *HashCollisionNode) assoc(shift uint, hash uint32, key interface{}, val 
 	}
 	return (&BitmapIndexedNode{
 		bitmap: bitpos(n.hash, shift),
-		array:  []interface{}{nil, n},
+		array:  []any{nil, n},
 	}).assoc(shift, hash, key, val, addedLeaf)
 }
 
-func (n *HashCollisionNode) without(shift uint, hash uint32, key interface{}) Node {
+func (n *HashCollisionNode) without(shift uint, hash uint32, key any) Node {
 	idx := n.findIndex(key)
 	if idx == -1 {
 		return n
@@ -653,7 +716,7 @@ func (n *HashCollisionNode) without(shift uint, hash uint32, key interface{}) No
 	}
 }
 
-func (n *HashCollisionNode) find(shift uint, hash uint32, key interface{}) *Pair {
+func (n *HashCollisionNode) find(shift uint, hash uint32, key any) *Pair {
 	idx := n.findIndex(key)
 	if idx == -1 {
 		return nil
@@ -694,25 +757,28 @@ func newArrayNodeSeq(nodes []Node, i int, s ISeq) ISeq {
 	return nil
 }
 
-func (s *ArrayNodeSeq) WithMeta(meta IPersistentMap) interface{} {
+func (s *ArrayNodeSeq) Meta() IPersistentMap {
+	return s.meta
+}
+
+func (s *ArrayNodeSeq) WithMeta(meta IPersistentMap) any {
+	if meta == s.meta {
+		return s
+	}
 	res := *s
 	res.meta = SafeMerge(res.meta, meta)
 	return &res
+}
+
+func (s *ArrayNodeSeq) String() string {
+	return aseqString(s)
 }
 
 func (s *ArrayNodeSeq) Seq() ISeq {
 	return s
 }
 
-func (s *ArrayNodeSeq) Equal(other interface{}) bool {
-	return IsSeqEqual(s, other)
-}
-
-func (s *ArrayNodeSeq) Hash() uint32 {
-	return hashOrdered(s)
-}
-
-func (s *ArrayNodeSeq) First() interface{} {
+func (s *ArrayNodeSeq) First() any {
 	return s.s.First()
 }
 
@@ -723,18 +789,35 @@ func (s *ArrayNodeSeq) Next() ISeq {
 }
 
 func (s *ArrayNodeSeq) More() ISeq {
-	n := s.Next()
-	if n == nil {
-		return emptyList
-	}
-	return n
+	return aseqMore(s)
 }
 
-func (s *ArrayNodeSeq) Cons(obj interface{}) ISeq {
-	if s.s == nil {
-		return NewCons(obj, nil)
-	}
-	return NewCons(obj, s)
+func (s *ArrayNodeSeq) Cons(obj any) Conser {
+	return aseqCons(s, obj)
+}
+
+func (s *ArrayNodeSeq) Count() int {
+	panic("Not supported")
+}
+
+func (s *ArrayNodeSeq) Empty() IPersistentCollection {
+	return aseqEmpty()
+}
+
+func (s *ArrayNodeSeq) Equiv(obj any) bool {
+	panic("Not supported")
+}
+
+func (s *ArrayNodeSeq) Equals(obj any) bool {
+	panic("Not supported")
+}
+
+func (s *ArrayNodeSeq) Hash() uint32 {
+	return hashOrdered(s)
+}
+
+func (s *ArrayNodeSeq) HashEq() uint32 {
+	panic("Not supported")
 }
 
 func (s *ArrayNodeSeq) xxx_sequential() {}
@@ -794,13 +877,13 @@ func bitAt(idx int) int {
 	return 1 << idx
 }
 
-func cloneAndSet(array []interface{}, i int, a interface{}) []interface{} {
+func cloneAndSet(array []any, i int, a any) []any {
 	res := clone(array)
 	res[i] = a
 	return res
 }
 
-func cloneAndSet2(array []interface{}, i int, a interface{}, j int, b interface{}) []interface{} {
+func cloneAndSet2(array []any, i int, a any, j int, b any) []any {
 	res := clone(array)
 	res[i] = a
 	res[j] = b
@@ -814,21 +897,21 @@ func cloneAndSetNode(array []Node, i int, a Node) []Node {
 	return res
 }
 
-func createNode(shift uint, key1 interface{}, val1 interface{}, key2hash uint32, key2 interface{}, val2 interface{}) Node {
-	key1hash := Hash(key1)
+func createNode(shift uint, key1 any, val1 any, key2hash uint32, key2 any, val2 any) Node {
+	key1hash := HashEq(key1)
 	if key1hash == key2hash {
 		return &HashCollisionNode{
 			hash:  key1hash,
 			count: 2,
-			array: []interface{}{key1, val1, key2, val2},
+			array: []any{key1, val1, key2, val2},
 		}
 	}
 	addedLeaf := &Box{}
 	return emptyIndexedNode.assoc(shift, key1hash, key1, val1, addedLeaf).assoc(shift, key2hash, key2, val2, addedLeaf)
 }
 
-func removePair(array []interface{}, n int) []interface{} {
-	newArray := make([]interface{}, len(array)-2)
+func removePair(array []any, n int) []any {
+	newArray := make([]any, len(array)-2)
 	for i := 0; i < 2*n; i++ {
 		newArray[i] = array[i]
 	}
@@ -838,8 +921,8 @@ func removePair(array []interface{}, n int) []interface{} {
 	return newArray
 }
 
-func clone(s []interface{}) []interface{} {
-	result := make([]interface{}, len(s), cap(s))
+func clone(s []any) []any {
+	result := make([]any, len(s), cap(s))
 	copy(result, s)
 	return result
 }

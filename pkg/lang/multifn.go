@@ -70,7 +70,7 @@ func (m *MultiFn) PreferMethod(dispatchValX, dispatchValY interface{}) *MultiFn 
 		panic(fmt.Errorf("Preference conflict in multimethod '%s': %s is already preferred to %s", m.name, dispatchValY, dispatchValX))
 	}
 
-	m.preferTable = m.preferTable.Assoc(dispatchValX, GetDefault(m.preferTable, dispatchValX, emptySet).(Conjer).Conj(dispatchValY)).(IPersistentMap)
+	m.preferTable = m.preferTable.Assoc(dispatchValX, GetDefault(m.preferTable, dispatchValX, emptySet).(Conser).Cons(dispatchValY)).(IPersistentMap)
 
 	m.resetCache()
 

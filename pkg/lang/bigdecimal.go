@@ -3,6 +3,8 @@ package lang
 import (
 	"fmt"
 	"math/big"
+
+	"bitbucket.org/pcastools/hash"
 )
 
 // BigDec is an arbitrary-precision decimal number. It wraps and has
@@ -21,16 +23,39 @@ func NewBigDecimal(s string) (*BigDecimal, error) {
 	return &BigDecimal{val: bf}, nil
 }
 
+// NewBigDecimalFromBigFloat
+func NewBigDecimalFromBigFloat(x *big.Float) *BigDecimal {
+	xCopy := new(big.Float)
+	xCopy.Set(x)
+	return &BigDecimal{val: xCopy}
+}
+
 // NewBigDecimalFromFloat64 creates a new BigDecimal from a float64.
 func NewBigDecimalFromFloat64(x float64) *BigDecimal {
 	return &BigDecimal{val: new(big.Float).SetFloat64(x)}
+}
+
+func NewBigDecimalFromInt64(x int64) *BigDecimal {
+	return &BigDecimal{val: new(big.Float).SetInt64(x)}
+}
+
+func (n *BigDecimal) ToBigInteger() *big.Int {
+	res, _ := n.val.Int(nil)
+	return res
 }
 
 func (n *BigDecimal) String() string {
 	return n.val.String()
 }
 
-func (n *BigDecimal) Equal(v interface{}) bool {
+func (n *BigDecimal) Hash() uint32 {
+	if n.val.Sign() == 0 {
+		return 0
+	}
+	return hash.String(n.val.String())
+}
+
+func (n *BigDecimal) Equals(v interface{}) bool {
 	other, ok := v.(*BigDecimal)
 	if !ok {
 		return false
@@ -63,6 +88,11 @@ func (n *BigDecimal) Multiply(other *BigDecimal) *BigDecimal {
 }
 
 func (n *BigDecimal) Divide(other *BigDecimal) *BigDecimal {
+	// Todo: div
+	return &BigDecimal{val: new(big.Float).Quo(n.val, other.val)}
+}
+
+func (n *BigDecimal) Quotient(other *BigDecimal) *BigDecimal {
 	return &BigDecimal{val: new(big.Float).Quo(n.val, other.val)}
 }
 
@@ -88,4 +118,15 @@ func (n *BigDecimal) GT(other *BigDecimal) bool {
 
 func (n *BigDecimal) GTE(other *BigDecimal) bool {
 	return n.Cmp(other) >= 0
+}
+
+func (n *BigDecimal) Negate() *BigDecimal {
+	return &BigDecimal{val: new(big.Float).Neg(n.val)}
+}
+
+func (n *BigDecimal) Abs() *BigDecimal {
+	if n.val.Sign() < 0 {
+		return &BigDecimal{val: new(big.Float).Abs(n.val)}
+	}
+	return n
 }
