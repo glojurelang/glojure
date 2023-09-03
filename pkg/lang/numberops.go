@@ -964,7 +964,6 @@ func Max(x, y any) any {
 			return y
 		}
 	}
-	panic(NewIllegalArgumentError(fmt.Sprintf("cannot compare %T and %T", x, y)))
 }
 
 func Min(x, y any) any {
@@ -1059,7 +1058,6 @@ func Min(x, y any) any {
 			return y
 		}
 	}
-	panic(NewIllegalArgumentError(fmt.Sprintf("cannot compare %T and %T", x, y)))
 }
 
 func IsNaN(x any) bool {
