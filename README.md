@@ -148,9 +148,22 @@ import (
 
 ### Numbers
 
-1. In Java, bytes are signed, whereas Go bytes are unsigned.
-2. Java chars behave as 16-bit unsigned integers, whereas Go runes are 32-bit signed integers.
-3. Java ints are 32-bit, whereas Go ints are either 32- or 64-bit depending on architecture.
+| Clojure Type | Glojure Type       | Notes |
+| -----------  | -----------        | ----------- |
+| `long`       | `int64`            | |
+| `double`     | `float64`          | |
+| `float`      | `float32`          | |
+| `double`     | `float64`          | |
+| `byte`       | `byte`             | Note that Go bytes are unsigned, whereas JVM bytes are signed. |
+| `short`      | `int16`            | |
+| `int`        | `int`              | Note that JVM ints are 32-bit, whereas Go ints are 32- or 64-bit depending on the platform. |
+| `char`       | `*lang.Char`       | The Glojure type is a tagged rune (`type Char rune`). JVM chars are 16-bit whereas Go runes are 32-bit. |
+| `BigInt`     | `*lang.BigInt`     | The Glojure type wraps `*big.Int`. |
+| `BigDecimal` | `*lang.BigDecimal` | The Glojure type wraps `*big.Float`. |
+| `Ratio`      | `*lang.Ratio`      | The Glojure type wraps `*big.Rat`. |
+| `BigInteger` | `*big.Int`         | Native JVM BigInteger corresponds to `*big.Int`. |
+
+
 
 ## Comparisons to other Go ports of Clojure
 
