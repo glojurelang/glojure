@@ -44,8 +44,8 @@ func ToString(v interface{}) string {
 
 	////////////////////////////////////////////////////////////////////////////////
 	// If v is a slice, print it as a vector
-	if reflect.TypeOf(v).Kind() == reflect.Slice {
-		vv := reflect.ValueOf(v)
+	vv := reflect.ValueOf(v)
+	if vv.Kind() == reflect.Slice || vv.Kind() == reflect.Array {
 		builder := strings.Builder{}
 		builder.WriteString("[")
 		for i := 0; i < vv.Len(); i++ {

@@ -343,7 +343,7 @@
     \formfeed "formfeed"
     \return "return"})
 
-(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Char [^Character c, ^Writer w]
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.Char [^github.com$glojurelang$glojure$pkg$lang.Char c, ^Writer w]
   (if (or *print-dup* *print-readably*)
     (do (github.com$glojurelang$glojure$pkg$lang.AppendWriter w \\)
         (let [n (char-name-string c)]
@@ -378,11 +378,11 @@
 
 (defmethod print-method regexp.*Regexp [p ^Writer w]
   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "#\"")
-  (loop [[^Character c & r :as s] (seq (.pattern ^regexp.*Regexp p))
+  (loop [[^github.com$glojurelang$glojure$pkg$lang.Char c & r :as s] (seq (.String ^regexp.*Regexp p))
          qmode false]
     (when s
       (cond
-        (= c \\) (let [[^Character c2 & r2] r]
+        (= c \\) (let [[^github.com$glojurelang$glojure$pkg$lang.Char c2 & r2] r]
                    (github.com$glojurelang$glojure$pkg$lang.AppendWriter w \\)
                    (github.com$glojurelang$glojure$pkg$lang.AppendWriter w c2)
                    (if qmode

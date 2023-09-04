@@ -1,10 +1,20 @@
 package lang
 
-func CreateOwningLazilyPersistentVector(items ...any) IPersistentVector {
-	if len(items) <= 32 {
-		return NewVector(items...)
+import "reflect"
+
+// CreateOwningLazilyPersistentVector creates a persistent vector that
+// owns the items in items. items must be a slice or array.
+func CreateOwningLazilyPersistentVector(items any) IPersistentVector {
+	itemsVal := reflect.ValueOf(items)
+	if itemsVal.Kind() != reflect.Slice && itemsVal.Kind() != reflect.Array {
+		panic(NewIllegalArgumentError("CreateOwningLazilyPersistentVector argument must be a slice or array"))
 	}
-	return NewVector(items...)
+	// TODO: optimize by building the tree directly within a PersistentVector.
+	args := make([]any, itemsVal.Len())
+	for i := 0; i < itemsVal.Len(); i++ {
+		args[i] = itemsVal.Index(i).Interface()
+	}
+	return NewVector(args...)
 }
 
 func CreateLazilyPersistentVector(obj any) IPersistentVector {

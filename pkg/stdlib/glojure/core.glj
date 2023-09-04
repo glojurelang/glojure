@@ -154,7 +154,7 @@
    :doc "Return true if x is a Character"
    :added "1.0"
    :static true}
- char? (fn ^:static char? [x] (instance? Character x)))
+ char? (fn ^:static char? [x] (instance? github.com$glojurelang$glojure$pkg$lang.Char x)))
 
 (def
  ^{:arglists '([x])
@@ -4846,16 +4846,16 @@
    :static true}
   [s] (if (instance? regexp.*Regexp s)
         s
-        (. regexp.*Regexp (compile s))))
+        (regexp.MustCompile s)))
 
 (defn re-matcher
   "Returns an instance of java.util.regex.Matcher, for use, e.g. in
   re-find."
-  {:tag github.com$glojurelang$glojure$pkg$lang.Matcher
+  {:tag github.com$glojurelang$glojure$pkg$lang.*RegexpMatcher
    :added "1.0"
    :static true}
   [^regexp.*Regexp re s]
-    (. re (matcher s)))
+    (github.com$glojurelang$glojure$pkg$lang.NewRegexpMatcher re s))
 
 (defn re-groups
   "Returns the groups from the most recent match/find. If there are no
@@ -4864,13 +4864,13 @@
   being the entire match."
   {:added "1.0"
    :static true}
-  [^github.com$glojurelang$glojure$pkg$lang.Matcher m]
+  [^github.com$glojurelang$glojure$pkg$lang.*RegexpMatcher m]
     (let [gc  (. m (groupCount))]
       (if (zero? gc)
         (. m (group))
         (loop [ret [] c 0]
           (if (<= c gc)
-            (recur (conj ret (. m (group c))) (inc c))
+            (recur (conj ret (. m (groupInt c))) (inc c))
             ret)))))
 
 (defn re-seq
@@ -4903,7 +4903,7 @@
   groups."
   {:added "1.0"
    :static true}
-  ([^github.com$glojurelang$glojure$pkg$lang.Matcher m]
+  ([^github.com$glojurelang$glojure$pkg$lang.*RegexpMatcher m]
    (when (. m (find))
      (re-groups m)))
   ([^regexp.*Regexp re s]

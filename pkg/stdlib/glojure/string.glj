@@ -8,35 +8,44 @@
 
 (ns glojure.string
   (:refer-glojure :exclude (replace reverse))
-  (:import (java.util.regex Pattern Matcher)))
+  (:import (regexp *Regexp)
+           (github.com$glojurelang$glojure$pkg$lang ToString NewIllegalArgumentError Char CharAt)))
 
 (set! *warn-on-reflection* true)
+
+(defn- check-string
+  [maybe-s]
+  (if (nil? maybe-s)
+    (throw (NewIllegalArgumentError "cannot call clojure.string function on nil"))
+    maybe-s))
 
 (defn ^go/string reverse
   "Returns s with its characters reversed."
   {:added "1.2"}
-  [^CharSequence s]
-  (github.com$glojurelang$glojure$pkg$lang.ToString (.reverse (StringBuilder. s))))
+  [^go/string s]
+  (apply str (glojure.core/reverse (check-string s))))
 
 (defn ^go/string re-quote-replacement
   "Given a replacement string that you wish to be a literal
    replacement for a pattern match in replace or replace-first, do the
    necessary escaping of special characters in the replacement."
   {:added "1.5"}
-  [^CharSequence replacement]
-  (Matcher/quoteReplacement (github.com$glojurelang$glojure$pkg$lang.ToString ^CharSequence replacement)))
+  [^go/string replacement]
+  (strings.ReplaceAll (check-string ^go/string replacement)
+                      "$"
+                      "$$"))
 
 (defn- replace-by
-  [^CharSequence s re f]
+  [^go/string s re f]
   (let [m (re-matcher re s)]
     (if (.find m)
-      (let [buffer (StringBuffer. (.length s))]
+      (let [buffer (new strings.Builder)]
         (loop [found true]
           (if found
-            (do (.appendReplacement m buffer (Matcher/quoteReplacement (f (re-groups m))))
+            (do (.appendReplacement m buffer (re-quote-replacement (f (re-groups m))))
                 (recur (.find m)))
             (do (.appendTail m buffer)
-                (github.com$glojurelang$glojure$pkg$lang.ToString buffer)))))
+                (ToString buffer)))))
       s)))
 
 (defn ^go/string replace
@@ -64,43 +73,42 @@
    (glojure.string/replace \"Almost Pig Latin\" #\"\\b(\\w)(\\w+)\\b\" \"$2$1ay\")
    -> \"lmostAay igPay atinLay\""
   {:added "1.2"}
-  [^CharSequence s match replacement]
-  (let [s (github.com$glojurelang$glojure$pkg$lang.ToString s)]
+  [^go/string s match replacement]
+  (let [s (check-string s)]
     (cond 
-     (instance? Character match) (.replace s ^Character match ^Character replacement)
-     (instance? CharSequence match) (.replace s ^CharSequence match ^CharSequence replacement)
-     (instance? Pattern match) (if (instance? CharSequence replacement)
-                                 (.replaceAll (re-matcher ^Pattern match s)
-                                              (github.com$glojurelang$glojure$pkg$lang.ToString ^CharSequence replacement))
+     (instance? Char match) (strings.ReplaceAll s match replacement)
+     (instance? go/string match) (strings.ReplaceAll s match replacement)
+     (instance? *Regexp match) (if (instance? go/string replacement)
+                                 (.replaceAllString ^*Regexp match s replacement)
                                  (replace-by s match replacement))
-     :else (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Invalid match arg: " match))))))
+     :else (throw (NewIllegalArgumentError (str "Invalid match arg: " match))))))
 
 (defn- replace-first-by
-  [^CharSequence s ^Pattern re f]
+  [^go/string s ^*Regexp re f]
   (let [m (re-matcher re s)]
     (if (.find m)
-      (let [buffer (StringBuffer. (.length s))
-            rep (Matcher/quoteReplacement (f (re-groups m)))]
+      (let [buffer (new strings.Builder)
+            rep (re-quote-replacement (f (re-groups m)))]
         (.appendReplacement m buffer rep)
         (.appendTail m buffer)
         (str buffer))
       s)))
 
 (defn- replace-first-char
-  [^CharSequence s ^Character match replace]
-  (let [s (github.com$glojurelang$glojure$pkg$lang.ToString s)
+  [^go/string s ^Char match replace]
+  (let [s (ToString s)
         i (strings.Index s (int match))]
     (if (= -1 i)
       s
       (str (subs s 0 i) replace (subs s (inc i))))))
 
 (defn- replace-first-str
-  [^CharSequence s ^go/string match ^go/string replace]
-  (let [^go/string s (github.com$glojurelang$glojure$pkg$lang.ToString s)
+  [^go/string s ^go/string match ^go/string replace]
+  (let [^go/string s (ToString s)
         i (strings.Index s match)]
     (if (= -1 i)
       s
-      (str (subs s 0 i) replace (subs s (+ i (.length match)))))))
+      (str (subs s 0 i) replace (subs s (+ i (count match)))))))
 
 (defn ^go/string replace-first
   "Replaces the first instance of match with replacement in s.
@@ -128,20 +136,26 @@
                                  #\"(\\w+)(\\s+)(\\w+)\" \"$3$2$1\")
    -> \"first swap two words\""
   {:added "1.2"}
-  [^CharSequence s match replacement]
-  (let [s (github.com$glojurelang$glojure$pkg$lang.ToString s)]
+  [^go/string s match replacement]
+  (let [s (check-string s)]
     (cond
-     (instance? Character match)
+     (instance? Char match)
      (replace-first-char s match replacement)
-     (instance? CharSequence match)
-     (replace-first-str s (github.com$glojurelang$glojure$pkg$lang.ToString ^CharSequence match)
-                        (github.com$glojurelang$glojure$pkg$lang.ToString ^CharSequence replacement))
-     (instance? Pattern match)
-     (if (instance? CharSequence replacement)
-       (.replaceFirst (re-matcher ^Pattern match s)
-                      (github.com$glojurelang$glojure$pkg$lang.ToString ^CharSequence replacement))
+     (instance? go/string match)
+     (replace-first-str s (ToString ^go/string match)
+                        (ToString ^go/string replacement))
+     (instance? *Regexp match)
+     (if (instance? go/string replacement)
+       (let [done (atom false)]
+         (.ReplaceAllStringFunc ^*Regexp match s
+                                (fn [m]
+                                  (if @done
+                                    m
+                                    (do
+                                      (reset! done true)
+                                      (.ReplaceAllString ^*Regexp match m replacement))))))
        (replace-first-by s match replacement))
-     :else (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Invalid match arg: " match))))))
+     :else (throw (NewIllegalArgumentError (str "Invalid match arg: " match))))))
 
 
 (defn ^go/string join
@@ -151,116 +165,81 @@
   ([coll]
      (apply str coll))
   ([separator coll]
-     (loop [sb (StringBuilder. (str (first coll)))
-            more (next coll)
-            sep (str separator)]
-       (if more
-         (recur (-> sb (github.com$glojurelang$glojure$pkg$lang.AppendWriter sep) (github.com$glojurelang$glojure$pkg$lang.AppendWriter (str (first more))))
-                (next more)
-                sep)
-         (str sb)))))
+   (strings.Join (map str coll) (str separator))))
 
 (defn ^go/string capitalize
   "Converts first character of the string to upper-case, all other
   characters to lower-case."
   {:added "1.2"}
-  [^CharSequence s]
-  (let [s (github.com$glojurelang$glojure$pkg$lang.ToString s)]
+  [^go/string s]
+  (let [s (check-string s)]
     (if (< (count s) 2)
-      (.toUpperCase s)
-      (str (.toUpperCase (subs s 0 1))
-           (.toLowerCase (subs s 1))))))
+      (strings.ToUpper s)
+      (str (strings.ToUpper (subs s 0 1))
+           (strings.ToLower (subs s 1))))))
 
 (defn ^go/string upper-case
   "Converts string to all upper-case."
   {:added "1.2"}
-  [^CharSequence s]
-  (.. s toString toUpperCase))
+  [^go/string s]
+  (strings.ToUpper s))
 
 (defn ^go/string lower-case
   "Converts string to all lower-case."
   {:added "1.2"}
-  [^CharSequence s]
-  (.. s toString toLowerCase))
+  [^go/string s]
+  (strings.ToLower s))
 
 (defn split
   "Splits string on a regular expression.  Optional argument limit is
   the maximum number of parts. Not lazy. Returns vector of the parts.
   Trailing empty strings are not returned - pass limit of -1 to return all."
   {:added "1.2"}
-  ([^CharSequence s ^Pattern re]
-     (LazilyPersistentVector/createOwning (.split re s)))
-  ([ ^CharSequence s ^Pattern re limit]
-     (LazilyPersistentVector/createOwning (.split re s limit))))
+  ([^go/string s ^*Regexp re]
+     (github.com$glojurelang$glojure$pkg$lang.CreateOwningLazilyPersistentVector (.split re s -1)))
+  ([ ^go/string s ^*Regexp re limit]
+     (github.com$glojurelang$glojure$pkg$lang.CreateOwningLazilyPersistentVector (.split re s limit))))
 
 (defn split-lines
   "Splits s on \\n or \\r\\n. Trailing empty lines are not returned."
   {:added "1.2"}
-  [^CharSequence s]
+  [^go/string s]
   (split s #"\r?\n"))
 
 (defn ^go/string trim
   "Removes whitespace from both ends of string."
   {:added "1.2"}
-  [^CharSequence s]
-  (let [len (.length s)]
-    (loop [rindex len]
-      (if (zero? rindex)
-        ""
-        (if (Character/isWhitespace (github.com$glojurelang$glojure$pkg$lang.CharAt s (dec rindex)))
-          (recur (dec rindex))
-          ;; there is at least one non-whitespace char in the string,
-          ;; so no need to check for lindex reaching len.
-          (loop [lindex 0]
-            (if (Character/isWhitespace (github.com$glojurelang$glojure$pkg$lang.CharAt s lindex))
-              (recur (inc lindex))
-              (.. s (subSequence lindex rindex) toString))))))))
+  [^go/string s]
+  (strings.TrimSpace s))
 
 (defn ^go/string triml
   "Removes whitespace from the left side of string."
   {:added "1.2"}
-  [^CharSequence s]
-  (let [len (.length s)]
-    (loop [index 0]
-      (if (= len index)
-        ""
-        (if (Character/isWhitespace (github.com$glojurelang$glojure$pkg$lang.CharAt s index))
-          (recur (unchecked-inc index))
-          (.. s (subSequence index len) toString))))))
+  [^go/string s]
+  (strings.TrimLeftFunc s unicode.IsSpace))
 
 (defn ^go/string trimr
   "Removes whitespace from the right side of string."
   {:added "1.2"}
-  [^CharSequence s]
-  (loop [index (.length s)]
-    (if (zero? index)
-      ""
-      (if (Character/isWhitespace (github.com$glojurelang$glojure$pkg$lang.CharAt s (unchecked-dec index)))
-        (recur (unchecked-dec index))
-        (.. s (subSequence 0 index) toString)))))
+  [^go/string s]
+  (strings.TrimRightFunc s unicode.IsSpace))
 
 (defn ^go/string trim-newline
   "Removes all trailing newline \\n or return \\r characters from
   string.  Similar to Perl's chomp."
   {:added "1.2"}
-  [^CharSequence s]
-  (loop [index (.length s)]
-    (if (zero? index)
-      ""
-      (let [ch (github.com$glojurelang$glojure$pkg$lang.CharAt s (dec index))]
-        (if (or (= ch \newline) (= ch \return))
-          (recur (dec index))
-          (.. s (subSequence 0 index) toString))))))
+  [^go/string s]
+  (strings.TrimRight s "\r\n"))
 
 (defn blank?
   "True if s is nil, empty, or contains only whitespace."
   {:added "1.2"}
-  [^CharSequence s]
+  [^go/string s]
   (if s
     (loop [index (int 0)]
-      (if (= (.length s) index)
+      (if (= (count s) index)
         true
-        (if (Character/isWhitespace (github.com$glojurelang$glojure$pkg$lang.CharAt s index))
+        (if (unicode.IsSpace (CharAt s index))
           (recur (inc index))
           false)))
     true))
@@ -268,77 +247,71 @@
 (defn ^go/string escape
   "Return a new string, using cmap to escape each character ch
    from s as follows:
-   
+
    If (cmap ch) is nil, append ch to the new string.
    If (cmap ch) is non-nil, append (str (cmap ch)) instead."
   {:added "1.2"}
-  [^CharSequence s cmap]
-  (loop [index (int 0)
-         buffer (StringBuilder. (.length s))]
-    (if (= (.length s) index)
-      (github.com$glojurelang$glojure$pkg$lang.ToString buffer)
-      (let [ch (github.com$glojurelang$glojure$pkg$lang.CharAt s index)]
-        (if-let [replacement (cmap ch)]
-          (github.com$glojurelang$glojure$pkg$lang.AppendWriter buffer replacement)
-          (github.com$glojurelang$glojure$pkg$lang.AppendWriter buffer ch))
-        (recur (inc index) buffer)))))
+  [^go/string s cmap]
+  (let [repls (flatten (seq cmap))
+        replacer (apply strings.NewReplacer repls)]
+    (.Replace replacer s)))
 
 (defn index-of
   "Return index of value (string or char) in s, optionally searching
   forward from from-index. Return nil if value not found."
   {:added "1.8"}
-  ([^CharSequence s value]
-  (let [result ^long
-        (if (instance? Character value)
-          (strings.Index (github.com$glojurelang$glojure$pkg$lang.ToString s) ^int (.charValue ^Character value))
-          (strings.Index (github.com$glojurelang$glojure$pkg$lang.ToString s) ^go/string value))]
+  ([^go/string s value]
+  (let [s (check-string s)
+        result ^long
+        (if (instance? Char value)
+          (strings.IndexRune s ^go/rune (go/rune ^Char value))
+          (strings.Index s ^go/string value))]
     (if (= result -1)
       nil
-      result)))
-  ([^CharSequence s value ^long from-index]
-  (let [result ^long
-        (if (instance? Character value)
-          (strings.Index (github.com$glojurelang$glojure$pkg$lang.ToString s) ^int (.charValue ^Character value) (unchecked-int from-index))
-          (strings.Index (github.com$glojurelang$glojure$pkg$lang.ToString s) ^go/string value (unchecked-int from-index)))]
+      (go/int64 result))))
+  ([^go/string s value ^long from-index]
+  (let [from-index (min (count s) (max 0 (unchecked-int from-index)))
+        s (subs (check-string s) from-index)
+        result ^long
+        (if (instance? Char value)
+          (strings.IndexRune s ^go/rune (go/rune ^Char value))
+          (strings.Index s ^go/string value))]
     (if (= result -1)
       nil
-      result))))
+      (+ result from-index)))))
 
 (defn last-index-of
   "Return last index of value (string or char) in s, optionally
   searching backward from from-index. Return nil if value not found."
   {:added "1.8"}
-  ([^CharSequence s value]
-  (let [result ^long
-        (if (instance? Character value)
-          (strings.LastIndex (github.com$glojurelang$glojure$pkg$lang.ToString s) ^int (.charValue ^Character value))
-          (strings.LastIndex (github.com$glojurelang$glojure$pkg$lang.ToString s) ^go/string value))]
-    (if (= result -1)
-      nil
-      result)))
-  ([^CharSequence s value ^long from-index]
-  (let [result ^long
-        (if (instance? Character value)
-          (strings.LastIndex (github.com$glojurelang$glojure$pkg$lang.ToString s) ^int (.charValue ^Character value) (unchecked-int from-index))
-          (strings.LastIndex (github.com$glojurelang$glojure$pkg$lang.ToString s) ^go/string value (unchecked-int from-index)))]
-    (if (= result -1)
-      nil
-      result))))
+  ([^go/string s value]
+   (let [s (check-string s)
+         result (strings.LastIndex s ^go/string (str value))]
+     (if (= result -1)
+       nil
+       (go/int64 result))))
+  ([^go/string s value ^long from-index]
+   (let [from-index (min (count s) (max 0 (inc (unchecked-int from-index))))
+         s (subs (check-string s) 0 from-index)
+         result (strings.LastIndex s ^go/string (str value))]
+     (if (= result -1)
+       nil
+       (go/int64 result)))))
 
 (defn starts-with?
   "True if s starts with substr."
   {:added "1.8"}
-  [^CharSequence s ^go/string substr]
-  (strings.HasPrefix (github.com$glojurelang$glojure$pkg$lang.ToString s) substr))
+  [^go/string s ^go/string substr]
+  (strings.HasPrefix (ToString s) substr))
 
 (defn ends-with?
   "True if s ends with substr."
   {:added "1.8"}
-  [^CharSequence s ^go/string substr]
-  (.endsWith (github.com$glojurelang$glojure$pkg$lang.ToString s) substr))
+  [^go/string s ^go/string substr]
+  (strings.HasSuffix (ToString s) substr))
 
 (defn includes?
   "True if s includes substr."
   {:added "1.8"}
-  [^CharSequence s ^CharSequence substr]
-  (.contains (github.com$glojurelang$glojure$pkg$lang.ToString s) substr))
+  [^go/string s ^go/string substr]
+  (strings.Contains (ToString s) substr))
