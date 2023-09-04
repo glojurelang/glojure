@@ -13,11 +13,17 @@
 
 (set! *warn-on-reflection* true)
 
+(defn- check-string
+  [maybe-s]
+  (if (nil? maybe-s)
+    (throw (NewIllegalArgumentError "cannot call clojure.string function on nil"))
+    maybe-s))
+
 (defn ^go/string reverse
   "Returns s with its characters reversed."
   {:added "1.2"}
   [^go/string s]
-  (apply str (glojure.core/reverse s)))
+  (apply str (glojure.core/reverse (check-string s))))
 
 (defn ^go/string re-quote-replacement
   "Given a replacement string that you wish to be a literal
@@ -25,7 +31,7 @@
    necessary escaping of special characters in the replacement."
   {:added "1.5"}
   [^go/string replacement]
-  (strings.ReplaceAll (ToString ^go/string replacement)
+  (strings.ReplaceAll (check-string ^go/string replacement)
                       "$"
                       "$$"))
 
@@ -68,7 +74,7 @@
    -> \"lmostAay igPay atinLay\""
   {:added "1.2"}
   [^go/string s match replacement]
-  (let [s (ToString s)]
+  (let [s (check-string s)]
     (cond 
      (instance? Char match) (strings.ReplaceAll s match replacement)
      (instance? go/string match) (strings.ReplaceAll s match replacement)
@@ -131,7 +137,7 @@
    -> \"first swap two words\""
   {:added "1.2"}
   [^go/string s match replacement]
-  (let [s (ToString s)]
+  (let [s (check-string s)]
     (cond
      (instance? Char match)
      (replace-first-char s match replacement)
@@ -166,7 +172,7 @@
   characters to lower-case."
   {:added "1.2"}
   [^go/string s]
-  (let [s (ToString s)]
+  (let [s (check-string s)]
     (if (< (count s) 2)
       (strings.ToUpper s)
       (str (strings.ToUpper (subs s 0 1))

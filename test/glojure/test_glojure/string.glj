@@ -114,7 +114,7 @@
        "baz::quux" s/replace-first ["baz--quux" #"--" "::"]
        "baz::quux" s/replace-first ["baz--quux" (str "--") (str "::")]
        "zim-zam" s/replace-first ["zim zam" #" " (str "-")]
-       "\\\\ \\$" s/re-quote-replacement ["\\ $"]
+       "\\ $$" s/re-quote-replacement ["\\ $"] ;; NB: different from clojure
        "Pow" s/capitalize ["POW"]
        "BOOM" s/upper-case ["boom"]
        "whimper" s/lower-case ["whimPER"]
