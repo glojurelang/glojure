@@ -88,7 +88,7 @@
   (is (= "foobar" (s/lower-case "FooBar"))))
 
 (deftest nil-handling
-  (are [f args] (thrown? NullPointerException (apply f args))
+  (are [f args] (thrown? go/any (apply f args))
        s/reverse [nil]
        s/replace [nil #"foo" "bar"]
        s/replace-first [nil #"foo" "bar"]
@@ -103,16 +103,17 @@
        s/trimr [nil]
        s/trim-newline [nil]))
 
+;; There isn't a Go equivalent of CharSequence. just run the tests on strings.
 (deftest char-sequence-handling
-  (are [result f args] (let [[^CharSequence s & more] args]
-                         (= result (apply f (StringBuffer. s) more)))
+  (are [result f args] (let [[^go/string s & more] args]
+                         (= result (apply f (str s) more)))
        "paz" s/reverse ["zap"]
        "foo:bar" s/replace ["foo-bar" \- \:]
        "ABC" s/replace ["abc" #"\w" s/upper-case]
-       "faa" s/replace ["foo" #"o" (StringBuffer. "a")]
+       "faa" s/replace ["foo" #"o" (str "a")]
        "baz::quux" s/replace-first ["baz--quux" #"--" "::"]
-       "baz::quux" s/replace-first ["baz--quux" (StringBuffer. "--") (StringBuffer. "::")]
-       "zim-zam" s/replace-first ["zim zam" #" " (StringBuffer. "-")]
+       "baz::quux" s/replace-first ["baz--quux" (str "--") (str "::")]
+       "zim-zam" s/replace-first ["zim zam" #" " (str "-")]
        "\\\\ \\$" s/re-quote-replacement ["\\ $"]
        "Pow" s/capitalize ["POW"]
        "BOOM" s/upper-case ["boom"]
@@ -148,12 +149,13 @@
   (is (= (list "foo") (s/split-lines "foo"))))
 
 (deftest t-index-of
-  (let [sb (StringBuffer. "tacos")]
+  (let [sb (str "tacos")]
     (is (= 2  (s/index-of sb "c")))
     (is (= 2  (s/index-of sb \c)))
     (is (= 1  (s/index-of sb "ac")))
     (is (= 3  (s/index-of sb "o" 2)))
     (is (= 3  (s/index-of sb  \o  2)))
+    (is (= 3  (s/index-of sb  \o  3)))
     (is (= 3  (s/index-of sb "o" -100)))
     (is (= nil (s/index-of sb "z")))
     (is (= nil (s/index-of sb \z)))
@@ -163,11 +165,12 @@
     (is (= nil (s/index-of sb "z" -10))))))
 
 (deftest t-last-index-of
-  (let [sb (StringBuffer. "banana")]
+  (let [sb (str "banana")]
     (is (= 4 (s/last-index-of sb "n")))
     (is (= 4 (s/last-index-of sb \n)))
     (is (= 3 (s/last-index-of sb "an")))
     (is (= 4 (s/last-index-of sb "n" )))
+    (is (= 4 (s/last-index-of sb "n" 4)))
     (is (= 4 (s/last-index-of sb "n" 5)))
     (is (= 4 (s/last-index-of sb \n  5)))
     (is (= 4 (s/last-index-of sb "n" 500)))
@@ -178,15 +181,15 @@
     (is (= nil (s/last-index-of sb "z" -10))))))
 
 (deftest t-starts-with?
-  (is (s/starts-with? (StringBuffer. "clojure west") "clojure"))
-  (is (not (s/starts-with? (StringBuffer. "conj") "clojure"))))
+  (is (s/starts-with? (str "clojure west") "clojure"))
+  (is (not (s/starts-with? (str "conj") "clojure"))))
 
 (deftest t-ends-with?
-  (is (s/ends-with? (StringBuffer. "Clojure West") "West")
-  (is (not (s/ends-with? (StringBuffer. "Conj") "West")))))
+  (is (s/ends-with? (str "Clojure West") "West")
+  (is (not (s/ends-with? (str "Conj") "West")))))
 
 (deftest t-includes?
-  (let [sb (StringBuffer. "Clojure Applied Book")]
+  (let [sb (str "Clojure Applied Book")]
     (is (s/includes? sb "Applied"))
     (is (not (s/includes? sb "Living")))))
 

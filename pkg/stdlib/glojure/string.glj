@@ -159,14 +159,7 @@
   ([coll]
      (apply str coll))
   ([separator coll]
-     (loop [sb (StringBuilder. (str (first coll)))
-            more (next coll)
-            sep (str separator)]
-       (if more
-         (recur (-> sb (github.com$glojurelang$glojure$pkg$lang.AppendWriter sep) (github.com$glojurelang$glojure$pkg$lang.AppendWriter (str (first more))))
-                (next more)
-                sep)
-         (str sb)))))
+   (strings.Join (map str coll) (str separator))))
 
 (defn ^go/string capitalize
   "Converts first character of the string to upper-case, all other
@@ -248,62 +241,56 @@
 (defn ^go/string escape
   "Return a new string, using cmap to escape each character ch
    from s as follows:
-   
+
    If (cmap ch) is nil, append ch to the new string.
    If (cmap ch) is non-nil, append (str (cmap ch)) instead."
   {:added "1.2"}
   [^go/string s cmap]
-  (loop [index (int 0)
-         buffer (StringBuilder. (count s))]
-    (if (= (count s) index)
-      (ToString buffer)
-      (let [ch (CharAt s index)]
-        (if-let [replacement (cmap ch)]
-          (github.com$glojurelang$glojure$pkg$lang.AppendWriter buffer replacement)
-          (github.com$glojurelang$glojure$pkg$lang.AppendWriter buffer ch))
-        (recur (inc index) buffer)))))
+  (let [repls (flatten (seq cmap))
+        replacer (apply strings.NewReplacer repls)]
+    (.Replace replacer s)))
 
 (defn index-of
   "Return index of value (string or char) in s, optionally searching
   forward from from-index. Return nil if value not found."
   {:added "1.8"}
   ([^go/string s value]
-  (let [result ^long
+  (let [s (ToString s)
+        result ^long
         (if (instance? Char value)
-          (strings.Index (ToString s) ^int (.charValue ^Char value))
-          (strings.Index (ToString s) ^go/string value))]
+          (strings.IndexRune s ^go/rune (go/rune ^Char value))
+          (strings.Index s ^go/string value))]
     (if (= result -1)
       nil
-      result)))
+      (go/int64 result))))
   ([^go/string s value ^long from-index]
-  (let [result ^long
+  (let [from-index (min (count s) (max 0 (unchecked-int from-index)))
+        s (subs (ToString s) from-index)
+        result ^long
         (if (instance? Char value)
-          (strings.Index (ToString s) ^int (.charValue ^Char value) (unchecked-int from-index))
-          (strings.Index (ToString s) ^go/string value (unchecked-int from-index)))]
+          (strings.IndexRune s ^go/rune (go/rune ^Char value))
+          (strings.Index s ^go/string value))]
     (if (= result -1)
       nil
-      result))))
+      (+ result from-index)))))
 
 (defn last-index-of
   "Return last index of value (string or char) in s, optionally
   searching backward from from-index. Return nil if value not found."
   {:added "1.8"}
   ([^go/string s value]
-  (let [result ^long
-        (if (instance? Char value)
-          (strings.LastIndex (ToString s) ^int (.charValue ^Char value))
-          (strings.LastIndex (ToString s) ^go/string value))]
-    (if (= result -1)
-      nil
-      result)))
+   (let [s (ToString s)
+         result (strings.LastIndex s ^go/string (str value))]
+     (if (= result -1)
+       nil
+       (go/int64 result))))
   ([^go/string s value ^long from-index]
-  (let [result ^long
-        (if (instance? Char value)
-          (strings.LastIndex (ToString s) ^int (.charValue ^Char value) (unchecked-int from-index))
-          (strings.LastIndex (ToString s) ^go/string value (unchecked-int from-index)))]
-    (if (= result -1)
-      nil
-      result))))
+   (let [from-index (min (count s) (max 0 (inc (unchecked-int from-index))))
+         s (subs (ToString s) 0 from-index)
+         result (strings.LastIndex (ToString s) ^go/string (str value))]
+     (if (= result -1)
+       nil
+       (go/int64 result)))))
 
 (defn starts-with?
   "True if s starts with substr."
@@ -321,4 +308,4 @@
   "True if s includes substr."
   {:added "1.8"}
   [^go/string s ^go/string substr]
-  (.contains (ToString s) substr))
+  (strings.Contains (ToString s) substr))

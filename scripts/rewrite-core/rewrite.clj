@@ -18,6 +18,15 @@
   [(fn select [zloc] (and (z/sexpr-able? zloc) (= old (z/sexpr zloc))))
    (fn visit [zloc] (z/replace zloc new))])
 
+(defn node-replace
+  "Given string representations of old and new, return a replacer function"
+  [old new]
+  (let [old (p/parse-string old)
+        new (p/parse-string new)]
+    [(fn select [zloc]
+       (= (str (z/node zloc)) (str old)))
+     (fn visit [zloc] (z/replace zloc new))]))
+
 (defn sexpr-remove [old]
   [(fn select [zloc] (and (z/sexpr-able? zloc) (= old (z/sexpr zloc))))
    (fn visit [zloc] (z/remove zloc))])
@@ -126,7 +135,7 @@
    ;; replacement of the clojure.lang prefix.
 
    (sexpr-replace 'java.util.regex.Matcher
-                  'github.com$glojurelang$glojure$pkg$lang.Matcher)
+                  'github.com$glojurelang$glojure$pkg$lang.*RegexpMatcher)
    (sexpr-replace 'java.io.PrintWriter
                   'github.com$glojurelang$glojure$pkg$lang.PrintWriter)
 
@@ -388,7 +397,7 @@
    (sexpr-replace 'clojure.lang.Util/identical 'github.com$glojurelang$glojure$pkg$lang.Identical)
 
    (sexpr-replace '(:import (java.util.regex Pattern Matcher) clojure.lang.LazilyPersistentVector)
-                  '(:import (java.util.regex Pattern Matcher)))
+                  '(:import (regexp *Regexp)))
    (sexpr-replace 'clojure.lang.LazilyPersistentVector/create
                   'github.com$glojurelang$glojure$pkg$lang.CreateLazilyPersistentVector)
    (sexpr-replace 'clojure.lang.LazilyPersistentVector/createOwning
@@ -860,6 +869,23 @@
    ;; Regular Expressions
    (sexpr-replace '(.split re s)
                   '(.split re s -1))
+
+   (sexpr-replace 'Character
+                  'github.com$glojurelang$glojure$pkg$lang.Char)
+   (sexpr-replace 'Pattern '*Regexp)
+   (sexpr-replace 'CharSequence 'go/string)
+   (sexpr-replace '(.length s) '(count s))
+   (sexpr-replace '(.length match) '(count match))
+
+   (sexpr-replace '(. java.util.regex.Pattern (compile s))
+                  '(regexp.MustCompile s))
+   (sexpr-replace '(. re (matcher s))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewRegexpMatcher re s))
+
+   (sexpr-replace '(. m (group c)) '(. m (groupInt c)))
+
+   (node-replace "(.pattern ^java.util.regex.Pattern p)"
+                 "(.String ^regexp.*Regexp p)")
 
    ])
 
