@@ -261,7 +261,7 @@
   forward from from-index. Return nil if value not found."
   {:added "1.8"}
   ([^go/string s value]
-  (let [s (ToString s)
+  (let [s (check-string s)
         result ^long
         (if (instance? Char value)
           (strings.IndexRune s ^go/rune (go/rune ^Char value))
@@ -271,7 +271,7 @@
       (go/int64 result))))
   ([^go/string s value ^long from-index]
   (let [from-index (min (count s) (max 0 (unchecked-int from-index)))
-        s (subs (ToString s) from-index)
+        s (subs (check-string s) from-index)
         result ^long
         (if (instance? Char value)
           (strings.IndexRune s ^go/rune (go/rune ^Char value))
@@ -285,15 +285,15 @@
   searching backward from from-index. Return nil if value not found."
   {:added "1.8"}
   ([^go/string s value]
-   (let [s (ToString s)
+   (let [s (check-string s)
          result (strings.LastIndex s ^go/string (str value))]
      (if (= result -1)
        nil
        (go/int64 result))))
   ([^go/string s value ^long from-index]
    (let [from-index (min (count s) (max 0 (inc (unchecked-int from-index))))
-         s (subs (ToString s) 0 from-index)
-         result (strings.LastIndex (ToString s) ^go/string (str value))]
+         s (subs (check-string s) 0 from-index)
+         result (strings.LastIndex s ^go/string (str value))]
      (if (= result -1)
        nil
        (go/int64 result)))))
