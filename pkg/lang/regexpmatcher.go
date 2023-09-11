@@ -60,12 +60,12 @@ func (m *RegexpMatcher) Group() string {
 	if len(m.lastMatch) == 0 {
 		return ""
 	}
-	return m.GroupInt(0)
+	return m.GroupInt(0).(string)
 }
 
 // GroupInt returns the input subsequence captured by the given group
 // during the previous match operation.
-func (m *RegexpMatcher) GroupInt(group int) string {
+func (m *RegexpMatcher) GroupInt(group int) any {
 	if len(m.lastMatch) == 0 {
 		panic(NewIndexOutOfBoundsError())
 	}
@@ -73,13 +73,21 @@ func (m *RegexpMatcher) GroupInt(group int) string {
 		panic(NewIndexOutOfBoundsError())
 	}
 	start, end := m.lastMatch[2*group], m.lastMatch[2*group+1]
+	if start == -1 || end == -1 {
+		return nil
+	}
 	return m.s[m.lastMatchOffset+start : m.lastMatchOffset+end]
 }
 
 // Matches attempts to match the entire region against the pattern.
 func (m *RegexpMatcher) Matches() bool {
-	match := m.re.FindString(m.s)
-	return len(match) == len(m.s)
+	match := m.re.FindStringSubmatchIndex(m.s)
+	if match == nil || match[0] != 0 || match[1] != len(m.s) {
+		return false
+	}
+	m.lastMatch = match
+	m.lastMatchOffset = 0
+	return true
 }
 
 // AppendReplacement implements a non-terminal append-and-replace step.

@@ -77,3 +77,33 @@ func TestRegexpMatcherReplace(t *testing.T) {
 		t.Errorf("Expected string %q, got %q", "baz bar baz bar baz bar", sb.String())
 	}
 }
+
+func TestRegexpMatcherRegex(t *testing.T) {
+	re := regexp.MustCompile(`([_=^]*)([a-gA-G])([,']*)(/?[1-9][0-9]*)?`)
+	str := "G"
+	matcher := NewRegexpMatcher(re, str)
+
+	if !matcher.Matches() {
+		t.Errorf("Expected string %q to fully match regexp %v", str, re)
+	}
+
+	if matcher.Group() != "G" {
+		t.Errorf("Expected match %q, got %q", "G", matcher.Group())
+	}
+
+	if matcher.GroupInt(1).(string) != "" {
+		t.Errorf("Expected submatch %q, got %q", "", matcher.GroupInt(1))
+	}
+
+	if matcher.GroupInt(2).(string) != "G" {
+		t.Errorf("Expected submatch %q, got %q", "G", matcher.GroupInt(2))
+	}
+
+	if matcher.GroupInt(3).(string) != "" {
+		t.Errorf("Expected submatch %q, got %q", "", matcher.GroupInt(3))
+	}
+
+	if matcher.GroupInt(4) != nil {
+		t.Errorf("Expected submatch %v, got %q", nil, matcher.GroupInt(4))
+	}
+}
