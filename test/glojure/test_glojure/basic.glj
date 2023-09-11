@@ -96,4 +96,11 @@
                   (catch go/any e
                     e))) "taking value of macro should throw"))
 
+(defn defn-keys
+  [{:keys [a b c]}]
+  [a b c])
+
+(deftest funcs
+  (is (= [1 2 3] (defn-keys {:a 1 :b 2 :c 3}))))
+
 (run-tests)

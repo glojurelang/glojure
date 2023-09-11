@@ -57,7 +57,7 @@ func apersistentmapEquiv(a APersistentMap, obj any) bool {
 			return false
 		}
 	}
-	assoc, ok := a.(Associative)
+	assoc, ok := obj.(Associative)
 	if !ok {
 		return false
 	}
