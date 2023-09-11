@@ -23,6 +23,10 @@ func (c Char) Equals(v interface{}) bool {
 	}
 }
 
+func (c Char) Hash() uint32 {
+	return uint32(rune(c))
+}
+
 // RuneFromCharLiteral returns the rune value from a character
 // literal.
 func RuneFromCharLiteral(lit string) (rune, error) {
