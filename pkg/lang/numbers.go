@@ -569,8 +569,6 @@ func AsInt(v any) (int, bool) {
 		return int(v.val.Int64()), true
 	case *big.Int:
 		return int(v.Int64()), true
-	case Char:
-		return int(v), true
 	default:
 		return 0, false
 	}
