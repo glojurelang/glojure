@@ -1,0 +1,2 @@
+go test fuzz v1
+string(";;;SKIP_PRINT_TEST\n(println \\a \\b \\c \\u03a9p(\n)rintln \\newline \\space \\tab)\n")

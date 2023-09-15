@@ -1180,7 +1180,7 @@ func (r *Reader) readKeyword() (interface{}, error) {
 		}
 		sym += string(rn)
 	}
-	if sym == "" || sym == ":" || strings.Contains(sym[1:], ":") {
+	if sym == "" || sym == ":" || strings.Contains(sym, "::") || strings.HasSuffix(sym, ":") {
 		return nil, r.error("invalid keyword: :" + sym)
 	}
 	if sym[0] == ':' {
