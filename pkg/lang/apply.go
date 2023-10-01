@@ -80,7 +80,12 @@ func applyType(typ reflect.Type, args []interface{}) interface{} {
 	arg := args[0]
 	argVal := reflect.ValueOf(arg)
 	if !argVal.CanConvert(typ) {
-		panic(NewIllegalArgumentError(fmt.Sprintf("cannot convert %T to %s", arg, typ)))
+		// try coercing the argument to the target type
+		coerced, err := coerceGoValue(typ, arg)
+		if err != nil {
+			panic(NewIllegalArgumentError(fmt.Sprintf("cannot convert %T to %s", arg, typ)))
+		}
+		return coerced.Interface()
 	}
 	return argVal.Convert(typ).Interface()
 }
