@@ -1014,9 +1014,10 @@ func (r *Reader) readSymbolicValue() (interface{}, error) {
 var (
 	numPrefixRegex = regexp.MustCompile(`^[-+]?([0-9]+|[1-9]+r)`)
 	radixRegex     = regexp.MustCompile(`^[-+]?([1-9]+)r(\d(\d|[a-zA-Z])*N?)$`)
-	intRegex       = regexp.MustCompile(`^[-+]?\d(\d|[a-fA-F])*N?$`)
+	intRegex       = regexp.MustCompile(`^[-+]?\d+N?$`)
 	ratioRegex     = regexp.MustCompile(`^[-+]?\d+\/\d+$`)
 	hexRegex       = regexp.MustCompile(`^[-+]?0[xX]([a-fA-F]|\d)*N?$`)
+	floatRegex     = regexp.MustCompile(`^[-+]?(\d+\.\d*|\.\d+)([eE][-+]?\d+)?|[-+]?(\d+)([eE][-+]?\d+)$`)
 )
 
 func isValidNumberCharacter(rn rune) bool {
@@ -1110,12 +1111,17 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 		return bd, nil
 	}
 
-	num, err := strconv.ParseFloat(numStr, 64)
-	if err != nil {
-		return nil, r.error("invalid number: %s", numStr)
+	if floatRegex.MatchString(numStr) {
+		num, err := strconv.ParseFloat(numStr, 64)
+		if err != nil {
+			return nil, r.error("invalid number: %s", numStr)
+		}
+
+		return num, nil
 	}
 
-	return num, nil
+	return nil, r.error("invalid number: %s", numStr)
+
 }
 
 func (r *Reader) readSymbol() (ret interface{}, retErr error) {
