@@ -27,9 +27,13 @@ func (cb *ChunkBuffer) Add(item interface{}) {
 }
 
 func (cb *ChunkBuffer) Chunk() IChunk {
-	ret := NewSliceChunk(cb.buffer)
+	newSlice := make([]interface{}, cb.end)
+	copy(newSlice, cb.buffer[:cb.end])
+
 	cb.buffer = nil
-	return ret
+	cb.end = 0
+
+	return NewSliceChunk(newSlice)
 }
 
 func (cb *ChunkBuffer) Count() int {
