@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple REPL Component</title>
+    <style>
+      #replContainer {
+          border: 1px solid #ddd;
+          padding: 10px;
+          margin: 10px 0;
+          font-family: monospace;
+          white-space: pre;
+          overflow-y: auto;
+          height: 200px;
+      }
+      #inputLine {
+          border: none;
+          outline: none;
+          width: 95%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="replContainer">
+      <span id="output"></span>
+      <input type="text" id="inputLine" placeholder="Type here...">
+    </div>
+
+    <script>
+      document.getElementById('inputLine').addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+              event.preventDefault();
+              let input = this.value;
+              this.value = '';
+              processInput(input);
+          }
+      });
+
+      function processInput(input) {
+          let outputDiv = document.getElementById('output');
+          outputDiv.textContent += '> ' + input + '\n';
+          // Callback logic goes here
+          console.log('User entered:', input); // Example callback
+      }
+    </script>
+  </body>
+</html>

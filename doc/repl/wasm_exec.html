@@ -1,0 +1,136 @@
+<!doctype html>
+<!--
+     Copyright 2018 The Go Authors. All rights reserved.
+     Use of this source code is governed by a BSD-style
+     license that can be found in the LICENSE file.
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Go wasm</title>
+    <style>
+     #replContainer {
+       background-color: black;
+       color: white;
+       border: 1px solid #ddd;
+       border-radius: 15px;
+       padding: 10px;
+       margin: 10px 0;
+       font-family: monospace;
+       white-space: pre;
+       overflow-y: scroll;
+       height: 500px;
+       width: 800px;
+     }
+     #output {
+       overflow-x: wrap;
+     }
+     #inputLine {
+       background-color: black;
+       color: white;
+       border: none;
+       outline: none;
+       width: 100%;
+     }
+    </style>
+  </head>
+
+  <body>
+    <div id="replContainer">
+      <span id="output"></span>
+      <input type="text" id="inputLine" placeholder="Type here...">
+    </div>
+
+    <!--
+	 Add the following polyfill for Microsoft Edge 17/18 support:
+	 <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
+	 (see https://caniuse.com/#feat=textencoder)
+    -->
+    <script src="wasm_exec.js"></script>
+    <script>
+     if (!WebAssembly.instantiateStreaming) { // polyfill
+       WebAssembly.instantiateStreaming = async (resp, importObject) => {
+	 const source = await (await resp).arrayBuffer();
+	 return await WebAssembly.instantiate(source, importObject);
+       };
+     }
+
+     const go = new Go();
+     let mod, inst;
+
+     async function run() {
+       console.clear();
+       console.log("Starting Go");
+
+       let initialized = false;
+
+       const decoder = new TextDecoder("utf-8");
+       globalThis.fs.writeSync = function(fd, buf) {
+         const output = document.getElementById("output");
+         if (!initialized) {
+           output.innerHTML = "";
+           initialized = true;
+         }
+
+         output.innerText += decoder.decode(buf);
+
+         const inputLine = document.getElementById("inputLine");
+         inputLine.scrollTo(0, inputLine.scrollHeight);
+
+         return buf.length;
+       };
+
+       let pendingRead = null;
+
+       const originalRead = globalThis.fs.read;
+       const encoder = new TextEncoder();
+       globalThis.fs.read = function(fd, buffer, offset, length, position, callback) {
+         if (fd !== 0) {
+           return originalRead(fd, buffer, offset, length, position, callback);
+         }
+         if (pendingRead) {
+            throw new Error("multiple reads");
+         }
+         pendingRead = { buffer, offset, length, position, callback };
+       };
+
+       {
+         document.getElementById('inputLine').addEventListener('keydown', function(event) {
+           if (event.key === 'Enter') {
+             event.preventDefault();
+             let input = this.value;
+             this.value = '';
+             processInput(input);
+           }
+         });
+
+         function processInput(input) {
+           let outputDiv = document.getElementById('output');
+           outputDiv.innerText += '> ' + input + '\n';
+           if (pendingRead) {
+              const { buffer, offset, length, position, callback } = pendingRead;
+              pendingRead = null;
+              const view = encoder.encode(input + "\n");
+              // copy the data into the buffer
+              buffer.set(view, offset);
+              callback(null, view.length);
+           }
+         }
+       }
+
+       await go.run(inst);
+       console.log("Finished");
+       inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
+     }
+
+     WebAssembly.instantiateStreaming(fetch("glj.wasm"), go.importObject).then((result) => {
+       mod = result.module;
+       inst = result.instance;
+       run();
+     }).catch((err) => {
+       console.error(err);
+     });
+
+    </script>
+  </body>
+</html>

@@ -8,7 +8,7 @@ STDLIB_TARGETS := $(addprefix pkg/stdlib/glojure/,$(STDLIB:.clj=.glj))
 TEST_FILES := $(shell find ./test -name '*.glj')
 TEST_TARGETS := $(addsuffix .test,$(TEST_FILES))
 
-GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows
+GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows js_wasm
 GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(platform).go)
 
 # eventually, support multiple minor versions
