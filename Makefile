@@ -56,7 +56,7 @@ vet:
 
 .PHONY: $(TEST_TARGETS)
 $(TEST_TARGETS): gocmd
-	@$(GO_CMD) run ./cmd/glj/main.go $(basename $@)
+	@$(GO_CMD) run ./cmd/glj/main.go $(basename $@) | tee /dev/stderr | grep FAIL > /dev/null && exit 1 || exit 0
 
 .PHONY: test
 test: vet $(TEST_TARGETS)
