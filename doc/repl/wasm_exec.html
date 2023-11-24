@@ -12,33 +12,40 @@
      #replContainer {
        background-color: black;
        color: white;
+
        border: 1px solid #ddd;
        border-radius: 15px;
+
        padding: 10px;
        margin: 10px 0;
        font-family: monospace;
-       white-space: pre;
+
        overflow-y: scroll;
        height: 500px;
        width: 800px;
      }
-     #output {
-       overflow-x: wrap;
-     }
      #inputLine {
        background-color: black;
        color: white;
+
+       font-family: monospace;
+
        border: none;
        outline: none;
-       width: 100%;
+       width: auto;
+     }
+     span {
+       white-space: pre;
      }
     </style>
   </head>
 
   <body>
-    <div id="replContainer">
-      <span id="output"></span>
-      <input type="text" id="inputLine" placeholder="Type here...">
+    <div id="replContainer"
+         onclick="document.getElementById('inputLine').focus()">
+      <div id="output">
+        <span id="inputLine" contenteditable="true" autocomplete="off" spellcheck="false"></span>
+      </div>
     </div>
 
     <!--
@@ -62,20 +69,19 @@
        console.clear();
        console.log("Starting Go");
 
-       let initialized = false;
-
        const decoder = new TextDecoder("utf-8");
        globalThis.fs.writeSync = function(fd, buf) {
          const output = document.getElementById("output");
-         if (!initialized) {
-           output.innerHTML = "";
-           initialized = true;
-         }
+         const text = decoder.decode(buf);
 
-         output.innerText += decoder.decode(buf);
+         const span = document.createElement("span");
+         span.innerText = text;
+         // place span just before the input line
+         inputLine = document.getElementById("inputLine");
+         output.insertBefore(span, inputLine);
 
-         const inputLine = document.getElementById("inputLine");
-         inputLine.scrollTo(0, inputLine.scrollHeight);
+         // scroll to bottom
+         inputLine.scrollIntoView();
 
          return buf.length;
        };
@@ -98,15 +104,19 @@
          document.getElementById('inputLine').addEventListener('keydown', function(event) {
            if (event.key === 'Enter') {
              event.preventDefault();
-             let input = this.value;
-             this.value = '';
+             let input = this.innerText;
+             this.innerText = "";
              processInput(input);
            }
          });
 
          function processInput(input) {
-           let outputDiv = document.getElementById('output');
-           outputDiv.innerText += '> ' + input + '\n';
+           let output = document.getElementById('output');
+           // add a span to the output with the text and a newline
+           const span = document.createElement("span");
+           span.innerText = input + "\n";
+           output.insertBefore(span, document.getElementById("inputLine"));
+
            if (pendingRead) {
               const { buffer, offset, length, position, callback } = pendingRead;
               pendingRead = null;
