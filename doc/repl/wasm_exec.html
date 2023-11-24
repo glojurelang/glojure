@@ -1,9 +1,4 @@
 <!doctype html>
-<!--
-     Copyright 2018 The Go Authors. All rights reserved.
-     Use of this source code is governed by a BSD-style
-     license that can be found in the LICENSE file.
--->
 <html>
   <head>
     <meta charset="utf-8">
@@ -67,7 +62,6 @@
 
      async function run() {
        console.clear();
-       console.log("Starting Go");
 
        const decoder = new TextDecoder("utf-8");
        globalThis.fs.writeSync = function(fd, buf) {
@@ -87,7 +81,6 @@
        };
 
        let pendingRead = null;
-
        const originalRead = globalThis.fs.read;
        const encoder = new TextEncoder();
        globalThis.fs.read = function(fd, buffer, offset, length, position, callback) {
@@ -101,12 +94,39 @@
        };
 
        {
+         const history = [];
+         let historyIndex = 0;
+         let currentLine = "";
          document.getElementById('inputLine').addEventListener('keydown', function(event) {
            if (event.key === 'Enter') {
              event.preventDefault();
              let input = this.innerText;
              this.innerText = "";
              processInput(input);
+             if (input !== "") {
+               history.push(input);
+             }
+             historyIndex = history.length;
+             currentLine = "";
+           } else if (event.key === 'ArrowUp' || (event.ctrlKey && event.key === 'p')) {
+             event.preventDefault();
+             if (historyIndex > 0) {
+               if (historyIndex === history.length) {
+                 currentLine = this.innerText;
+               }
+               historyIndex--;
+               this.innerText = history[historyIndex];
+             }
+           } else if (event.key === 'ArrowDown' || (event.ctrlKey && event.key === 'n')) {
+             event.preventDefault();
+             if (historyIndex < history.length) {
+               historyIndex++;
+               if (historyIndex === history.length) {
+                 this.innerText = currentLine;
+               } else {
+                 this.innerText = history[historyIndex];
+               }
+             }
            }
          });
 
@@ -128,6 +148,7 @@
          }
        }
 
+       console.log("Running");
        await go.run(inst);
        console.log("Finished");
        inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
