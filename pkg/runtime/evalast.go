@@ -608,21 +608,24 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 		if r := recover(); r != nil {
 			// TODO: dynamically set pr-on to nil to avoid infinite
 			// recursion; need to use go-only stringification for errors.
-			gljFrame = fmt.Sprintf("%s:%d:%d: %s\n", value.Get(meta, KWFile), value.Get(meta, KWLine), value.Get(meta, KWColumn), n.Form)
-			switch r := r.(type) {
-			case *EvalError:
-				r.GLJStack = append(r.GLJStack, gljFrame)
-				if r.GoStack == "" {
-					r.GoStack = string(debug.Stack())
+			gljFrame = fmt.Sprintf("%s:%d:%d:\t%s", value.Get(meta, KWFile), value.Get(meta, KWLine), value.Get(meta, KWColumn), n.Form)
+			if rErr, ok := r.(error); ok {
+				if errors.Is(rErr, &EvalError{}) {
+					var evalErr *EvalError
+					errors.As(rErr, &evalErr)
+					evalErr.GLJStack = append(evalErr.GLJStack, gljFrame) // TODO: copy
+					if evalErr.GoStack == "" {
+						evalErr.GoStack = string(debug.Stack())
+					}
+					err = evalErr
+				} else {
+					err = &EvalError{
+						Err:      rErr,
+						GLJStack: []string{gljFrame},
+						GoStack:  string(debug.Stack()),
+					}
 				}
-				err = r
-			case error:
-				err = &EvalError{
-					Err:      r,
-					GLJStack: []string{gljFrame},
-					GoStack:  string(debug.Stack()),
-				}
-			default:
+			} else {
 				err = &EvalError{
 					Err:      fmt.Errorf("%v", r),
 					GLJStack: []string{gljFrame},

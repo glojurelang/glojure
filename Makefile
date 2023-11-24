@@ -8,15 +8,17 @@ STDLIB_TARGETS := $(addprefix pkg/stdlib/glojure/,$(STDLIB:.clj=.glj))
 TEST_FILES := $(shell find ./test -name '*.glj')
 TEST_TARGETS := $(addsuffix .test,$(TEST_FILES))
 
-GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows
+GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows_amd64 windows_arm js_wasm
 GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(platform).go)
+# wasm should have .wasm suffix; others should not
+BINS=$(foreach platform,$(GOPLATFORMS),bin/$(platform)/glj$(if $(findstring wasm,$(platform)),.wasm,))
 
 # eventually, support multiple minor versions
 GO_VERSION := 1.19.3
 GO_CMD := go$(GO_VERSION)
 
 .PHONY: all
-all: gocmd $(STDLIB_TARGETS) generate $(GLJIMPORTS)
+all: gocmd $(STDLIB_TARGETS) generate $(GLJIMPORTS) $(BINS)
 
 .PHONY: gocmd
 gocmd:
@@ -37,6 +39,16 @@ pkg/stdlib/glojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-c
 	@echo "Rewriting $< to $@"
 	@mkdir -p $(dir $@)
 	@scripts/rewrite-core/run.sh $< > $@
+
+bin/%/glj: $(wildcard ./cmd/glj/*.go) $(wildcard ./pkg/**/*.go) $(wildcard ./internal/**/*.go)
+	@echo "Building $@"
+	@mkdir -p $(dir $@)
+	@scripts/build-glj.sh $@ $*
+
+bin/%/glj.wasm: $(wildcard ./cmd/glj/*.go) $(wildcard ./pkg/**/*.go) $(wildcard ./internal/**/*.go)
+	@echo "Building $@"
+	@mkdir -p $(dir $@)
+	@scripts/build-glj.sh $@ $*
 
 .PHONY: vet
 vet:

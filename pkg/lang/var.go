@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"unsafe"
 
-	"github.com/modern-go/gls"
+	"github.com/glojurelang/glojure/internal/goid"
 )
 
 type (
@@ -212,7 +212,7 @@ func (v *Var) getDynamicBinding() *Box {
 		return nil
 	}
 	var storage *glStorage
-	gid := mustGoroutineID()
+	gid := getGoroutineID()
 
 	glsBindingsMtx.RLock()
 	storage, ok := glsBindings[gid]
@@ -283,12 +283,12 @@ func (s *glStorage) get(v *Var) *Box {
 	return nil
 }
 
-func mustGoroutineID() int64 {
-	return gls.GoID()
+func getGoroutineID() int64 {
+	return goid.Get()
 }
 
 func PushThreadBindings(bindings IPersistentMap) {
-	gid := mustGoroutineID()
+	gid := getGoroutineID()
 
 	glsBindingsMtx.RLock()
 	storage, ok := glsBindings[gid]
@@ -319,7 +319,7 @@ func PushThreadBindings(bindings IPersistentMap) {
 }
 
 func PopThreadBindings() {
-	gid := mustGoroutineID()
+	gid := getGoroutineID()
 	glsBindingsMtx.RLock()
 	storage := glsBindings[gid]
 	glsBindingsMtx.RUnlock()
@@ -335,14 +335,14 @@ func PopThreadBindings() {
 }
 
 func CloneThreadBindingFrame() interface{} {
-	gid := mustGoroutineID()
+	gid := getGoroutineID()
 	glsBindingsMtx.RLock()
 	defer glsBindingsMtx.RUnlock()
 	return glsBindings[gid]
 }
 
 func ResetThreadBindingFrame(frame interface{}) {
-	gid := mustGoroutineID()
+	gid := getGoroutineID()
 	glsBindingsMtx.Lock()
 	defer glsBindingsMtx.Unlock()
 	glsBindings[gid] = frame.(*glStorage)

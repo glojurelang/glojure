@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Go wasm</title>
+    <style>
+     #replContainer {
+       background-color: black;
+       color: white;
+
+       border: 1px solid #ddd;
+       border-radius: 15px;
+
+       padding: 10px;
+       margin: 10px 0;
+       font-family: monospace;
+
+       overflow-y: scroll;
+       height: 500px;
+       width: 800px;
+     }
+     #inputLine {
+       background-color: black;
+       color: white;
+
+       font-family: monospace;
+
+       border: none;
+       outline: none;
+       width: auto;
+     }
+     span {
+       white-space: pre;
+     }
+    </style>
+  </head>
+
+  <body>
+    <div id="replContainer"
+         onclick="document.getElementById('inputLine').focus()">
+      <div id="output">
+        <span id="inputLine" contenteditable="true" autocomplete="off" spellcheck="false"></span>
+      </div>
+    </div>
+
+    <!--
+	 Add the following polyfill for Microsoft Edge 17/18 support:
+	 <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
+	 (see https://caniuse.com/#feat=textencoder)
+    -->
+    <script src="wasm_exec.js"></script>
+    <script>
+     if (!WebAssembly.instantiateStreaming) { // polyfill
+       WebAssembly.instantiateStreaming = async (resp, importObject) => {
+	 const source = await (await resp).arrayBuffer();
+	 return await WebAssembly.instantiate(source, importObject);
+       };
+     }
+
+     const go = new Go();
+     let mod, inst;
+
+     async function run() {
+       console.clear();
+
+       const decoder = new TextDecoder("utf-8");
+       globalThis.fs.writeSync = function(fd, buf) {
+         const output = document.getElementById("output");
+         const text = decoder.decode(buf);
+
+         const span = document.createElement("span");
+         span.innerText = text;
+         // place span just before the input line
+         inputLine = document.getElementById("inputLine");
+         output.insertBefore(span, inputLine);
+
+         // scroll to bottom
+         inputLine.scrollIntoView();
+
+         return buf.length;
+       };
+
+       let pendingRead = null;
+       const originalRead = globalThis.fs.read;
+       const encoder = new TextEncoder();
+       globalThis.fs.read = function(fd, buffer, offset, length, position, callback) {
+         if (fd !== 0) {
+           return originalRead(fd, buffer, offset, length, position, callback);
+         }
+         if (pendingRead) {
+            throw new Error("multiple reads");
+         }
+         pendingRead = { buffer, offset, length, position, callback };
+       };
+
+       {
+         const history = [];
+         let historyIndex = 0;
+         let currentLine = "";
+         document.getElementById('inputLine').addEventListener('keydown', function(event) {
+           if (event.key === 'Enter') {
+             event.preventDefault();
+             let input = this.innerText;
+             this.innerText = "";
+             processInput(input);
+             if (input !== "") {
+               history.push(input);
+             }
+             historyIndex = history.length;
+             currentLine = "";
+           } else if (event.key === 'ArrowUp' || (event.ctrlKey && event.key === 'p')) {
+             event.preventDefault();
+             if (historyIndex > 0) {
+               if (historyIndex === history.length) {
+                 currentLine = this.innerText;
+               }
+               historyIndex--;
+               this.innerText = history[historyIndex];
+             }
+           } else if (event.key === 'ArrowDown' || (event.ctrlKey && event.key === 'n')) {
+             event.preventDefault();
+             if (historyIndex < history.length) {
+               historyIndex++;
+               if (historyIndex === history.length) {
+                 this.innerText = currentLine;
+               } else {
+                 this.innerText = history[historyIndex];
+               }
+             }
+           }
+         });
+
+         function processInput(input) {
+           let output = document.getElementById('output');
+           // add a span to the output with the text and a newline
+           const span = document.createElement("span");
+           span.innerText = input + "\n";
+           output.insertBefore(span, document.getElementById("inputLine"));
+
+           if (pendingRead) {
+              const { buffer, offset, length, position, callback } = pendingRead;
+              pendingRead = null;
+              const view = encoder.encode(input + "\n");
+              // copy the data into the buffer
+              buffer.set(view, offset);
+              callback(null, view.length);
+           }
+         }
+       }
+
+       console.log("Running");
+       await go.run(inst);
+       console.log("Finished");
+       inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
+     }
+
+     WebAssembly.instantiateStreaming(fetch("glj.wasm"), go.importObject).then((result) => {
+       mod = result.module;
+       inst = result.instance;
+       run();
+     }).catch((err) => {
+       console.error(err);
+     });
+
+    </script>
+  </body>
+</html>

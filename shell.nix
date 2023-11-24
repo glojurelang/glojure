@@ -4,7 +4,7 @@
 
 pkgs.mkShell {
   nativeBuildInputs = [
-    pkgs.go_1_19
+    pkgs.go_1_21
     pkgs.clojure
   ];
 }

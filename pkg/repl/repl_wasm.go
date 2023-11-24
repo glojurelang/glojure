@@ -1,8 +1,9 @@
-//go:build !wasm
+//go:build wasm
 
 package repl
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"io"
@@ -12,32 +13,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/chzyer/readline"
-
 	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/runtime"
-
-	// pprof
-	"net/http"
-	_ "net/http/pprof"
 )
 
 const debugMode = false
 const cpuProfile = false
-
-func init() {
-	// start pprof
-	if debugMode {
-		go func() {
-			if err := http.ListenAndServe("localhost:6060", nil); err != nil {
-				fmt.Println("pprof start failed:", err)
-			}
-		}()
-		// shell command to examine pprof profile with a web ui:
-		// $ go tool pprof -http=:8080 http://localhost:6060/debug/pprof/profile
-	}
-}
 
 // Start starts the REPL.
 func Start(opts ...Option) {
@@ -70,21 +52,13 @@ func Start(opts ...Option) {
 		return curNS + "=> "
 	}
 
-	rl, err := readline.NewEx(&readline.Config{
-		Prompt: defaultPrompt(),
-		//DisableAutoSaveHistory: true,
-		Stdin:  io.NopCloser(o.stdin),
-		Stdout: o.stdout,
-	})
-	if err != nil {
-		panic(err)
-	}
-	defer rl.Close()
+	rl := bufio.NewReader(os.Stdin)
 
 	var expr string
 
+	fmt.Print(defaultPrompt())
 	for {
-		line, err := rl.Readline()
+		line, err := rl.ReadString('\n')
 		if err != nil {
 			break
 		}
@@ -97,7 +71,7 @@ func Start(opts ...Option) {
 		vals, err := rdr.ReadAll()
 		if err != nil {
 			if errors.Is(err, io.EOF) {
-				rl.SetPrompt("... ")
+				fmt.Print("... ")
 				continue
 			}
 			fmt.Fprintln(o.stdout, err)
@@ -125,7 +99,7 @@ func Start(opts ...Option) {
 			}
 			fmt.Fprintln(o.stdout, out)
 		}
-		rl.SetPrompt(defaultPrompt())
+		fmt.Print(defaultPrompt())
 	}
 }
 

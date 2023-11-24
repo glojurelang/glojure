@@ -8,7 +8,6 @@ import (
 	"go/token"
 	"go/types"
 	"io"
-	"math"
 	"os"
 	"sort"
 	"strconv"
@@ -257,10 +256,36 @@ func getTypeNameDeclaration(object *types.TypeName, globalName string, aliasName
 	return ret
 }
 
+var (
+	goarchIntSize = map[string]int{
+		"386":      32,
+		"amd64":    64,
+		"arm":      32,
+		"arm64":    64,
+		"mips":     32,
+		"mips64":   64,
+		"mipsle":   32,
+		"mips64le": 64,
+		"ppc64":    64,
+		"ppc64le":  64,
+		"s390x":    64,
+		"wasm":     64,
+	}
+)
+
 // getTypedInt derives the type of the integer literal from its string
 // representation. Use the smallest type >= int that can represent the value.
 func getTypedInt(value string) string {
-	if v, err := strconv.ParseInt(value, 10, 0); err == nil && v >= math.MinInt && v <= math.MaxInt {
+	goarch := os.Getenv("GOARCH")
+	intSize, ok := goarchIntSize[goarch]
+	if !ok {
+		panic(fmt.Errorf("unknown GOARCH %q", goarch))
+	}
+	// min/max based on intSize
+	minInt := int64(-1 << (intSize - 1))
+	maxInt := int64(1<<(intSize-1) - 1)
+
+	if v, err := strconv.ParseInt(value, 10, 0); err == nil && v >= minInt && v <= maxInt {
 		return ""
 	} else if v, err := strconv.ParseInt(value, 10, 32); err == nil && v >= -2147483648 && v <= 2147483647 {
 		return "int32"
