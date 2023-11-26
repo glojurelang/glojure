@@ -1,6 +1,6 @@
 
 STDLIB_ORIGINALS_DIR := scripts/rewrite-core/originals
-STDLIB_ORIGINALS := $(shell find $(STDLIB_ORIGINALS_DIR) -name '*.clj')
+STDLIB_ORIGINALS := $(shell find $(STDLIB_ORIGINALS_DIR) -name '*.clj') # TODO: work on Windows
 STDLIB := $(STDLIB_ORIGINALS:scripts/rewrite-core/originals/%=%)
 STDLIB_ORIGINALS := $(addprefix scripts/rewrite-core/originals/,$(STDLIB))
 STDLIB_TARGETS := $(addprefix pkg/stdlib/glojure/,$(STDLIB:.clj=.glj))
