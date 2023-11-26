@@ -1,11 +1,15 @@
 
+# https://stackoverflow.com/a/18258352/1157054
+# Portably find files recursively
+rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
+
 STDLIB_ORIGINALS_DIR := scripts/rewrite-core/originals
-STDLIB_ORIGINALS := $(shell find $(STDLIB_ORIGINALS_DIR) -name '*.clj') # TODO: work on Windows
+STDLIB_ORIGINALS := $(call rwildcard,$(STDLIB_ORIGINALS_DIR),*.clj)
 STDLIB := $(STDLIB_ORIGINALS:scripts/rewrite-core/originals/%=%)
 STDLIB_ORIGINALS := $(addprefix scripts/rewrite-core/originals/,$(STDLIB))
 STDLIB_TARGETS := $(addprefix pkg/stdlib/glojure/,$(STDLIB:.clj=.glj))
 
-TEST_FILES := $(shell find ./test -name '*.glj')
+TEST_FILES := $(call rwildcard,./test,*.glj)
 TEST_TARGETS := $(addsuffix .test,$(TEST_FILES))
 
 GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows_amd64 windows_arm js_wasm
