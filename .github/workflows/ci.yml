@@ -14,11 +14,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        go: ['1.19', '1.20', '1.21']
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
-    - uses: cachix/install-nix-action@v19
+    - name: Setup Go ${{ matrix.go }}
+      uses: actions/setup-go@v4
       with:
-        nix_path: nixpkgs=channel:nixos-unstable
-    - run: nix-shell --run 'PATH=$(go env GOPATH)/bin:$PATH make test'
+        go-version: ${{ matrix.go }}
+        cache: false
+    - run: make test

@@ -15,16 +15,16 @@ BINS=$(foreach platform,$(GOPLATFORMS),bin/$(platform)/glj$(if $(findstring wasm
 
 # eventually, support multiple minor versions
 GO_VERSION := 1.19.3
-GO_CMD := go$(GO_VERSION)
+GENIMPORTS_GO_CMD := go$(GO_VERSION)
 
 .PHONY: all
 all: gocmd $(STDLIB_TARGETS) generate $(GLJIMPORTS) $(BINS)
 
 .PHONY: gocmd
 gocmd:
-	@$(GO_CMD) version 2>&1 > /dev/null || \
-		(go install "golang.org/dl/$(GO_CMD)@latest" && \
-		$(GO_CMD) download > /dev/null && $(GO_CMD) version > /dev/null)
+	@$(GENIMPORTS_GO_CMD) version 2>&1 > /dev/null || \
+		(go install "golang.org/dl/$(GENIMPORTS_GO_CMD)@latest" && \
+		$(GENIMPORTS_GO_CMD) download > /dev/null && $(GENIMPORTS_GO_CMD) version > /dev/null)
 
 .PHONY: generate
 generate:
@@ -33,7 +33,7 @@ generate:
 pkg/gen/gljimports/gljimports_%.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go ./internal/genpkg/genpkg.go \
 					$(wildcard ./pkg/lang/*.go) $(wildcard ./pkg/runtime/*.go)
 	@echo "Generating $@"
-	@./scripts/gen-gljimports.sh $@ $* $(GO_CMD)
+	@./scripts/gen-gljimports.sh $@ $* $(GENIMPORTS_GO_CMD)
 
 pkg/stdlib/glojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-core/run.sh scripts/rewrite-core/rewrite.clj
 	@echo "Rewriting $< to $@"
@@ -56,7 +56,8 @@ vet:
 
 .PHONY: $(TEST_TARGETS)
 $(TEST_TARGETS): gocmd
-	@$(GO_CMD) run ./cmd/glj/main.go $(basename $@) | tee /dev/stderr | grep FAIL > /dev/null && exit 1 || exit 0
+	@go run ./cmd/glj/main.go $(basename $@) | tee /dev/stderr | grep FAIL > /dev/null && exit 1 || exit 0
 
 .PHONY: test
 test: vet $(TEST_TARGETS)
+	@go test ./...
