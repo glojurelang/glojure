@@ -1,6 +1,7 @@
 package reader
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"errors"
 	"fmt"
@@ -66,6 +67,7 @@ func FuzzCLJConformance(f *testing.F) {
 		if err != nil {
 			f.Fatal(err)
 		}
+		data = bytes.ReplaceAll(data, []byte{'\r'}, nil)
 		f.Add(string(data))
 	}
 
