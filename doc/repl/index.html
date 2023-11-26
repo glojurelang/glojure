@@ -61,8 +61,6 @@
      let mod, inst;
 
      async function run() {
-       console.clear();
-
        const decoder = new TextDecoder("utf-8");
        globalThis.fs.writeSync = function(fd, buf) {
          window.top.postMessage({ type: "repl", value: decoder.decode(buf) });

@@ -3,7 +3,9 @@
 
   <head>
     <meta charset="utf-8">
-    <title>Glojure</title>
+    <title>Glojure REPL</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
      window.onmessage = function(event) {
@@ -13,24 +15,137 @@
        }
      };
     </script>
+
+    <script>
+     const DOCS = [
+       {
+         title:'Useful Functions',
+         sections: [
+           {
+             title: 'MATH',
+             items: ['+', '-', '*', '/', 'quot', 'rem', 'mod', 'inc', 'dec', 'max', 'min', 'rand'],
+           },
+           {
+             title: 'COMPARISON',
+             items: ['=', '==', 'not=', '<', '>', '<=', '>='],
+           },
+           {
+             title: 'PREDICATES',
+             items: ['nil?', 'identical?', 'zero?', 'pos?', 'neg?', 'even?', 'odd?',
+                     'true?', 'false?', 'distinct?', 'empty?', 'every?', 'not-every?',
+                     'some', 'not-any?'],
+           },
+         ],
+       },
+       {
+         title: 'Sequences',
+         sections: [
+           {
+             title: 'CREATION',
+             items: ['vec', 'hash-map', 'set', 'for', 'list', 'list*',
+                     'sorted-map', 'repeat', 'range', 'cycle', 'seq', 'rseq'],
+           },
+           {
+             title: 'INSPECTION',
+             items: ['first', 'last', 'rest', 'next', 'get', 'get-in', 'count',
+                     'keys', 'vals', 'nth', 'contains?', 'find'],
+           },
+           {
+             title: 'MANIPULATION',
+             items: ['into', 'conj',, 'cons', 'assoc', 'flatten', 'merge',
+                     'assoc-in', 'dissoc', 'zipmap', 'partition', 'update-in',
+                     'reverse', 'take', 'drop', 'distinct'],
+           },
+         ],
+       },
+       {
+         title: 'Go Interop',
+         sections: [
+           {
+             title: 'LIBRARY USE',
+             examples: [
+               '(fmt.Sprintf "Hello %s!" "World")',
+               '(math$rand.Intn 10)',
+               '(strings.ToUpper "The quick brown fox")',
+             ],
+           },
+           {
+             title: 'METHOD CALL',
+             examples: [
+               '(.String (time.Now))',
+               '(.Format (time.Now) "2006-01-02")',
+             ],
+           },
+           {
+             title: 'FIELD ACCESS',
+              examples: [
+                '(.Handler (net$http.Server))',
+              ],
+           },
+         ],
+       },
+     ];
+     function addDocs() {
+       DOCS.forEach((doc) => {
+         const div = document.createElement('div');
+         div.classList.add('flex-1', 'p-5', 'bg-gray-200', 'rounded-lg', 'mb-5');
+         const sectionsHtml = (doc.sections ?? []).map((section) => {
+           const sectionButtons = (section.items ?? []).map((button) => {
+             return `
+               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold m-1 py-2 px-4 rounded">
+                 ${button}
+               </button>
+             `;
+           });
+           const sectionExamples = (section.examples ?? []).map((example) => {
+             return `
+               <div class="bg-gray-100 p-2 rounded-lg mb-2">
+                 <code>${example}</code>
+               </div>
+             `;
+           });
+           return `
+              <div class="flex row">
+                <div class="font-semibold mr-5">${section.title}</div>
+                <div class="flex flex-wrap">
+                  ${sectionButtons.join('')}
+                  <div>${sectionExamples.join('')}</div>
+                </div>
+              </div>
+                  `;
+         });
+         div.innerHTML = `
+           <h2 class="text-2xl font-semibold">${doc.title}</h2>
+           <div>
+             ${sectionsHtml.join('')}
+           </div>
+         `;
+          document.getElementById('docs').appendChild(div);
+       });
+     }
+     window.onload = addDocs;
+    </script>
   </head>
 
   <body>
-    <nav class="bg-white border-gray-200 dark:bg-gray-900">
-      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <nav class="bg-white border-gray-200 dark:bg-gray-900 mb-2">
+      <div class="max-w-screen-xl flex flex-col flex-wrap items-center justify-center mx-auto p-4">
         <a href="https://github.com/glojurelang/glojure"
+           target="_blank"
            class="flex items-center space-x-3 rtl:space-x-reverse">
           <img src="logo_small.webp"
                class="h-8 border-2 border-black rounded-full"
                alt="Glojure Logo" />
           <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Glojure</span>
         </a>
+        <div class="self-center whitespace-nowrap dark:text-white">
+          A Clojure dialect hosted in Go.
+        </div>
       </div>
     </nav>
 
     <div class="mx-10">
-
-      <div class="relative"
+      <div class="relative flex justify-center"
            width="800px" height="500px">
         <div id="loading"
              class="absolute inset-0 h-full w-[800px] text-white flex flex-col justify-center align-center items-center">
@@ -40,9 +155,12 @@
           <p>Loading REPL...</p>
           <p class="text-sm">This may take a few seconds</p>
         </div>
-        <iframe src="./repl" width="800px" height="500px" frameborder="0" />
+        <iframe src="./repl" width="800px" height="500px" frameborder="0"></iframe>
       </div>
 
+      <div id="docs"
+           class="flex flex-col my-5 md:flex-row md:space-x-4">
+      </div>
     </div>
 
   </body>
