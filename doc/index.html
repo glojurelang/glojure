@@ -105,9 +105,9 @@
              `;
            });
            return `
-              <div class="flex row">
-                <div class="font-semibold mr-5">${section.title}</div>
-                <div class="flex flex-wrap">
+              <div class="grid grid-cols-4">
+                <div class="col-span-1 font-semibold mr-5">${section.title}</div>
+                <div class="col-span-3 flex flex-wrap">
                   ${sectionButtons.join('')}
                   <div>${sectionExamples.join('')}</div>
                 </div>
