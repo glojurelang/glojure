@@ -62,11 +62,11 @@ func FuzzCLJConformance(f *testing.F) {
 			// skip quasiquote tests for now
 			continue
 		}
-		data, err := ioutil.ReadFile(path)
+		data, err := readFile(path)
 		if err != nil {
 			f.Fatal(err)
 		}
-		data = normalizeLineEndings(data)
+
 		f.Add(string(data))
 	}
 
@@ -183,7 +183,7 @@ func getCLJEquivCache(glj, clj string) (buf []byte, cached bool) {
 	if _, err := os.Stat(path); err != nil {
 		return nil, false
 	}
-	buf, err := ioutil.ReadFile(path)
+	buf, err := readFile(path)
 	if err != nil {
 		panic(err)
 	}
@@ -284,7 +284,7 @@ func (r *cljReader) stop() {
 func getFromCache(program string) (bool, string, error) {
 	hash := sha256.Sum256([]byte(program))
 	path := filepath.Join("testdata", "clj-cache", "read", fmt.Sprintf("%x.glj", hash))
-	data, err := ioutil.ReadFile(path)
+	data, err := readFile(path)
 	if err != nil {
 		return false, "", nil
 	}
