@@ -25,3 +25,6 @@ jobs:
         go-version: ${{ matrix.go }}
         cache: false
     - run: make test
+    - name: Debug with tmate on failure
+      if: ${{ failure() }}
+      uses: mxschmitt/action-tmate@v3

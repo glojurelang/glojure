@@ -144,7 +144,6 @@
    [char             [:error        (char 0)    (char 1)    (char 127)    (char 32767)   :error               :error                :error             :error]]
    ;; In go, char == rune, which is equivalent to int32
    [unchecked-char   [(Char -1)     (Char 0)    (Char 1)    (Char 127)    (Char 32767)   (Char math.MaxInt32) (Char -1)             (Char -1)          (Char -1)]]
-   ;; bytes are unsigned in go
    [byte             [255           0           1           math.MaxInt8  :error         :error               :error                :error             :error]]
    ;; bytes are unsigned in go
    [unchecked-byte   [255           0           1           math.MaxInt8  255            255                  255                   255                255]]
