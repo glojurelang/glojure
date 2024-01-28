@@ -55,6 +55,14 @@ func (rt *RTMethods) NthDefault(x interface{}, i int, def interface{}) interface
 	return v
 }
 
+func (rt *RTMethods) Peek(x interface{}) interface{} {
+	if IsNil(x) {
+		return nil
+	}
+	stk := x.(IPersistentStack)
+	return stk.Peek()
+}
+
 func (rt *RTMethods) Pop(x interface{}) interface{} {
 	if IsNil(x) {
 		return nil
