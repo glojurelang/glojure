@@ -1,6 +1,7 @@
 package reader
 
 import (
+	"bytes"
 	"io/ioutil"
 	"math"
 	"os"
@@ -30,10 +31,11 @@ func TestRead(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, path := range paths {
-		data, err := ioutil.ReadFile(path)
+		data, err := readFile(path)
 		if err != nil {
 			t.Fatal(err)
 		}
+
 		// read corresponding *.out file.
 		outPath := strings.TrimSuffix(path, ".glj") + ".out"
 		var outData []byte
@@ -41,7 +43,7 @@ func TestRead(t *testing.T) {
 		if _, err := os.Stat(outPath); os.IsNotExist(err) {
 			outData = data
 		} else {
-			outData, err = ioutil.ReadFile(outPath)
+			outData, err = readFile(outPath)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -107,7 +109,7 @@ func TestReadErrors(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, path := range paths {
-		data, err := ioutil.ReadFile(path)
+		data, err := readFile(path)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -153,10 +155,11 @@ func FuzzRead(f *testing.F) {
 	}
 	paths = append(paths, paths2...)
 	for _, path := range paths {
-		data, err := ioutil.ReadFile(path)
+		data, err := readFile(path)
 		if err != nil {
 			f.Fatal(err)
 		}
+
 		f.Add(string(data))
 	}
 
@@ -192,4 +195,16 @@ func testPrintString(x interface{}) string {
 	}
 
 	return value.PrintString(x)
+}
+
+func readFile(path string) ([]byte, error) {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	return normalizeLineEndings(data), nil
+}
+
+func normalizeLineEndings(buf []byte) []byte {
+	return bytes.ReplaceAll(buf, []byte("\r\n"), []byte("\n"))
 }
