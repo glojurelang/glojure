@@ -211,7 +211,7 @@ func GoSlice(slc interface{}, indices ...interface{}) interface{} {
 	if len(indices) == 0 {
 		panic(fmt.Errorf("slice: no indices"))
 	}
-	if len(indices) == 1 {
+	if len(indices) >= 1 {
 		if !IsNil(indices[0]) {
 			i = MustAsInt(indices[0])
 		}
@@ -221,6 +221,7 @@ func GoSlice(slc interface{}, indices ...interface{}) interface{} {
 			j = MustAsInt(indices[1])
 		}
 	}
+
 	return slcVal.Slice(i, j).Interface()
 }
 
