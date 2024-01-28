@@ -162,7 +162,8 @@ func (a *Analyzer) analyzeVector(form IPersistentVector, env Env) (*ast.Node, er
 	n.Sub = &ast.VectorNode{
 		Items: items,
 	}
-	return n, nil
+
+	return a.wrappingMeta(n)
 }
 
 // analyzeMap performs semantic analysis on the given map,
@@ -190,7 +191,8 @@ func (a *Analyzer) analyzeMap(v IPersistentMap, env Env) (*ast.Node, error) {
 		Keys: keys,
 		Vals: vals,
 	}
-	return n, nil
+
+	return a.wrappingMeta(n)
 }
 
 // analyzeSet performs semantic analysis on the given set,
@@ -209,7 +211,8 @@ func (a *Analyzer) analyzeSet(v IPersistentSet, env Env) (*ast.Node, error) {
 	n.Sub = &ast.SetNode{
 		Items: items,
 	}
-	return n, nil
+
+	return a.wrappingMeta(n)
 }
 
 // analyzeSeq performs semantic analysis on the given sequence,
