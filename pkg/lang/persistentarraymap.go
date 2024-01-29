@@ -304,14 +304,14 @@ func (m *Map) ReduceInit(f IFn, init any) any {
 
 func (m *Map) AsTransient() ITransientCollection {
 	// TODO: implement transients
-	return &TransientMap{Map: m}
+	return &TransientMap{IPersistentMap: m}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Transient
 
 type TransientMap struct {
-	*Map
+	IPersistentMap
 }
 
 var (
@@ -322,16 +322,36 @@ var (
 	_ IReduceInit    = (*TransientMap)(nil)
 )
 
+func (m *TransientMap) Meta() IPersistentMap {
+	return m.IPersistentMap.(IMeta).Meta()
+}
+
+func (m *TransientMap) ApplyTo(args ISeq) any {
+	return m.IPersistentMap.(IFn).ApplyTo(args)
+}
+
+func (m *TransientMap) Invoke(args ...any) any {
+	return m.IPersistentMap.(IFn).Invoke(args...)
+}
+
+func (m *TransientMap) Reduce(f IFn) any {
+	return m.IPersistentMap.(IReduce).Reduce(f)
+}
+
+func (m *TransientMap) ReduceInit(f IFn, init any) any {
+	return m.IPersistentMap.(IReduceInit).ReduceInit(f, init)
+}
+
 func (m *TransientMap) Conj(v any) Conjer {
-	return &TransientMap{Map: m.Map.Cons(v).(*Map)}
+	return &TransientMap{IPersistentMap: m.IPersistentMap.Cons(v).(IPersistentMap)}
 }
 
 func (m *TransientMap) Assoc(k, v any) Associative {
-	return &TransientMap{Map: m.Map.Assoc(k, v).(*Map)}
+	return &TransientMap{IPersistentMap: m.IPersistentMap.Assoc(k, v).(IPersistentMap)}
 }
 
 func (m *TransientMap) Persistent() IPersistentCollection {
-	return m.Map
+	return m.IPersistentMap
 }
 
 ////////////////////////////////////////////////////////////////////////////////
