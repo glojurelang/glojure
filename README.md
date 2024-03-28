@@ -2,6 +2,8 @@
 
 ![example workflow](https://github.com/glojurelang/glojure/actions/workflows/ci.yml/badge.svg)
 
+[Try it in your browser!](https://glojurelang.github.io/glojure/) (fair warning: startup on the web is slow)
+
 <img alt="Gopher image" src="./doc/logo.png" width="512" />
 
 *Gopher image derived from [@egonelbre](https://github.com/egonelbre/gophers), licensed under [Creative Commons 1.0 Attributions license](https://creativecommons.org/licenses/by/1.0/).*
