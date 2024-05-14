@@ -1,0 +1,14 @@
+(ns glojure.test-glojure.lcm
+  (:use glojure.test))
+
+(defn lcm
+  [& x]
+  (letfn [(gcd [a b] (if (zero? b) a (gcd b (mod a b))))
+          (lcm [a b] (/ (* a b) (gcd a b)))]
+    (reduce lcm x)))
+
+(deftest lcmtest
+  (is (= 6 (lcm 2 3))
+      "lcm of 2 and 3 is 6"))
+
+(run-tests)

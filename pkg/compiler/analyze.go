@@ -1111,7 +1111,7 @@ func (a *Analyzer) parseLetfnStar(form interface{}, env Env) (*ast.Node, error) 
 	}
 	e := env
 	for name, bind := range bindsMap {
-		e = updateIn(env, vec(KWLocals), merge, NewMap(name, bind)).(Env)
+		e = updateIn(e, vec(KWLocals), merge, NewMap(name, bind)).(Env)
 	}
 	var binds []*ast.Node
 	for name, bind := range bindsMap {
