@@ -309,7 +309,6 @@ func PushThreadBindings(bindings IPersistentMap) {
 		val := entry.Val()
 
 		if !vr.isDynamic() {
-			fmt.Printf("vr: %s\nmeta: %v\n", vr, vr.Meta())
 			panic("cannot dynamically bind non-dynamic var: " + vr.String())
 		}
 		// TODO: validate
