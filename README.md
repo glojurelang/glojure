@@ -159,7 +159,7 @@ import (
 | `byte`       | `byte`             | Note that Go bytes are unsigned, whereas JVM bytes are signed. |
 | `short`      | `int16`            | |
 | `int`        | `int`              | Note that JVM ints are 32-bit, whereas Go ints are 32- or 64-bit depending on the platform. |
-| `char`       | `*lang.Char`       | The Glojure type is a tagged rune (`type Char rune`). JVM chars are 16-bit whereas Go runes are 32-bit. |
+| `char`       | `lang.Char`       | The Glojure type is a tagged rune (`type Char rune`). JVM chars are 16-bit whereas Go runes are 32-bit. |
 | `BigInt`     | `*lang.BigInt`     | The Glojure type wraps `*big.Int`. |
 | `BigDecimal` | `*lang.BigDecimal` | The Glojure type wraps `*big.Float`. |
 | `Ratio`      | `*lang.Ratio`      | The Glojure type wraps `*big.Rat`. |
