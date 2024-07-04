@@ -15,6 +15,12 @@ func Equals(a, b any) bool {
 		}
 		return aVal.Pointer() == bVal.Pointer()
 	}
+	if aVal.Kind() == reflect.Map || bVal.Kind() == reflect.Map || aVal.Kind() == reflect.Slice || bVal.Kind() == reflect.Slice {
+		if aVal.Kind() != bVal.Kind() {
+			return false
+		}
+		return Equals(Seq(a), Seq(b))
+	}
 
 	if a == b {
 		return true
