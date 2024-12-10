@@ -3466,6 +3466,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.ChunkedCons", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ChunkedCons)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.*ChunkedCons", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ChunkedCons)(nil)))
 	_register("github.com/glojurelang/glojure/pkg/lang.CloneThreadBindingFrame", github_com_glojurelang_glojure_pkg_lang.CloneThreadBindingFrame)
+	_register("github.com/glojurelang/glojure/pkg/lang.Compare", github_com_glojurelang_glojure_pkg_lang.Compare)
 	_register("github.com/glojurelang/glojure/pkg/lang.Comparer", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Comparer)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.ConcatStrings", github_com_glojurelang_glojure_pkg_lang.ConcatStrings)
 	_register("github.com/glojurelang/glojure/pkg/lang.Conj", github_com_glojurelang_glojure_pkg_lang.Conj)

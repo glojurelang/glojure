@@ -126,6 +126,7 @@
    (sexpr-replace '(clojure.lang.Range/create start end step)
                   '(github.com$glojurelang$glojure$pkg$lang.NewRange start end step))
 
+   (sexpr-replace '(. java.util.Arrays (sort a comp)) '(sort.Slice(a, comp)))
 
    (sexpr-replace '(. clojure.lang.PersistentHashMap (create keyvals))
                   '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentHashMap keyvals))

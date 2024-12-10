@@ -21,6 +21,20 @@ func ToSlice(x any) []any {
 		}
 		return res
 	}
+	if s, ok := x.(Vector); ok {
+		res := make([]interface{}, 0, s.Count())
+		for s := Seq(s); s != nil; s = s.Next() {
+			res = append(res, s.First())
+		}
+		return res
+	}
+	if s, ok := x.(*Vector); ok {
+		res := make([]interface{}, 0, s.Count())
+		for s := Seq(s); s != nil; s = s.Next() {
+			res = append(res, s.First())
+		}
+		return res
+	}
 	xVal := reflect.ValueOf(x)
 	if xVal.Kind() == reflect.Slice || xVal.Kind() == reflect.Array {
 		res := make([]interface{}, xVal.Len())

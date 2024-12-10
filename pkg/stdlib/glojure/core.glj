@@ -767,7 +767,7 @@
 
 (defn identical?
   "Tests if 2 arguments are the same object"
-  {:inline (fn [x y] `(. glojure.lang.Util identical ~x ~y))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Identical ~x ~y))
    :inline-arities #{2}
    :added "1.0"}
   ([x y] (github.com$glojurelang$glojure$pkg$lang.Identical x y)))
@@ -779,7 +779,7 @@
   numbers and collections in a type-independent manner.  Clojure's immutable data
   structures define equals() (and thus =) as a value, not an identity,
   comparison."
-  {:inline (fn [x y] `(. glojure.lang.Util equiv ~x ~y))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Equiv ~x ~y))
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
@@ -797,7 +797,7 @@
   x.equals(y) except it also works for nil. Boxed numbers must have
   same type. Clojure's immutable data structures define equals() (and
   thus =) as a value, not an identity, comparison."
-  {:inline (fn [x y] `(. glojure.lang.Util equals ~x ~y))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Equals ~x ~y))
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
@@ -828,9 +828,9 @@
   compares numbers and collections in a type-independent manner. x
   must implement Comparable"
   {
-   :inline (fn [x y] `(. glojure.lang.Util compare ~x ~y))
+   :inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Compare ~x ~y))
    :added "1.0"}
-  [x y] (. glojure.lang.Util (compare x y)))
+  [x y] (github.com$glojurelang$glojure$pkg$lang.Compare x y))
 
 (defmacro and
   "Evaluates exprs one at a time, from left to right. If a form
@@ -3087,10 +3087,10 @@
    :static true}
   ([coll]
    (sort compare coll))
-  ([^java.util.Comparator comp coll]
+  ([^java.util.Comparator comparator coll]
    (if (seq coll)
      (let [a (to-array coll)]
-       (. java.util.Arrays (sort a comp))
+       (sort.Slice a (comp neg? comparator))
        (with-meta (seq a) (meta coll)))
      ())))
 
