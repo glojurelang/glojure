@@ -155,7 +155,6 @@ import (
 | `long`       | `int64`            | |
 | `double`     | `float64`          | |
 | `float`      | `float32`          | |
-| `double`     | `float64`          | |
 | `byte`       | `byte`             | Note that Go bytes are unsigned, whereas JVM bytes are signed. |
 | `short`      | `int16`            | |
 | `int`        | `int`              | Note that JVM ints are 32-bit, whereas Go ints are 32- or 64-bit depending on the platform. |
