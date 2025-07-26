@@ -221,6 +221,7 @@ func GoSlice(slc interface{}, indices ...interface{}) interface{} {
 			j = MustAsInt(indices[1])
 		}
 	}
+
 	return slcVal.Slice(i, j).Interface()
 }
 
