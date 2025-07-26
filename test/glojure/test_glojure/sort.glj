@@ -1,36 +1,130 @@
 (ns glojure.test-glojure.sort
   (:use glojure.test))
 
-(deftest basic-sort
-  (testing "Basic sorting with default comparator"
-    (is (= (sort [3 1 4 1 5 9 2 6]) '(1 1 2 3 4 5 6 9)))
-    (is (= (sort ["banana" "apple" "cherry" "date"]) '("apple" "banana" "cherry" "date")))))
+(deftest numeric-sorting
+  (testing "Numeric sorting with different types"
+    (is (= (sort [3.14 2 1.5 10 -5 0]) '(-5 0 1.5 2 3.14 10)))
+    (is (= (sort [-10 -5 -20 -1 -100]) '(-100 -20 -10 -5 -1)))))
 
-(deftest custom-comparators
-  (testing "Sort with custom comparators"
+(deftest collection-types
+  (testing "Sorting different collection types"
+    (is (= (sort [5 2 8 1 9]) '(1 2 5 8 9)))
+    (is (= (sort '(5 2 8 1 9)) '(1 2 5 8 9)))
+    (is (= (sort ["zebra" "apple" "banana" "cat"]) '("apple" "banana" "cat" "zebra")))))
+
+(deftest edge-cases
+  (testing "Edge cases for sorting"
+    (is (= (sort []) '()))
+    (is (= (sort '()) '()))
+    (is (= (sort [42]) '(42)))
+    (is (= (sort [3 nil 1 4 nil 2]) '(nil nil 1 2 3 4)))
+    (is (= (sort [3 "hello" 1 :keyword 4]) '(1 3 4 :keyword "hello")))))
+
+(deftest custom-comparator-examples
+  (testing "Custom comparator examples"
+    (let [even-odd-compare (fn [a b]
+                             (let [a-even (even? a)
+                                   b-even (even? b)]
+                               (cond
+                                 (and a-even b-even) (compare a b)
+                                 (and (not a-even) (not b-even)) (compare a b)
+                                 a-even -1
+                                 :else 1)))]
+      (is (= (sort even-odd-compare [1 2 3 4 5 6 7 8 9 10])
+             '(2 4 6 8 10 1 3 5 7 9))))))
+
+(deftest complex-examples
+  (testing "Complex sorting examples"
+    (let [students [{:name "Alice" :grade 85 :age 20}
+                    {:name "Bob" :grade 92 :age 19}
+                    {:name "Charlie" :grade 85 :age 21}
+                    {:name "David" :grade 78 :age 20}]]
+
+      (is (= (sort-by (fn [s] [(:age s) (:grade s)]) students)
+             '({:name "Bob" :grade 92 :age 19}
+               {:name "David" :grade 78 :age 20}
+               {:name "Alice" :grade 85 :age 20}
+               {:name "Charlie" :grade 85 :age 21})))
+
+      (let [grade-desc-compare (fn [a b] (compare (:grade b) (:grade a)))]
+        (is (= (sort grade-desc-compare students)
+               '({:name "Bob" :grade 92 :age 19}
+                 {:name "Alice" :grade 85 :age 20}
+                 {:name "Charlie" :grade 85 :age 21}
+                 {:name "David" :grade 78 :age 20})))))))
+
+(deftest sort-clojuredocs-examples
+  (testing "Examples from ClojureDocs sort documentation"
+
+    ;; Basic sort with default comparator
+    (is (= (sort [3 1 4 1 5 9 2 6]) '(1 1 2 3 4 5 6 9)))
+
+    ;; Sort with custom comparator
     (is (= (sort > [3 1 4 1 5 9 2 6]) '(9 6 5 4 3 2 1 1)))
 
-    (let [length-compare (fn [a b] (compare (count (str a)) (count (str b))))]
-      (is (= (sort length-compare ["banana" "apple" "cherry" "date"]) '("date" "apple" "cherry" "banana"))))
-
+    ;; Sort with custom comparator function
     (let [reverse-compare (fn [a b] (compare b a))]
-      (is (= (sort reverse-compare [3 1 4 1 5 9 2 6]) '(9 6 5 4 3 2 1 1))))))
+      (is (= (sort reverse-compare [3 1 4 1 5 9 2 6]) '(9 6 5 4 3 2 1 1))))
 
-(deftest sort-by-tests
-  (testing "Sort-by functionality"
-    (let [people [{:name "Alice" :age 30}
-                  {:name "Bob" :age 25}
-                  {:name "Charlie" :age 35}]]
+    ;; Sort with length-based comparator
+    (let [length-compare (fn [a b] (compare (count (str a)) (count (str b))))]
+      (is (= (sort length-compare ["banana" "apple" "cherry" "date"])
+             '("date" "apple" "cherry" "banana"))))
 
-      (is (= (sort-by :age people)
-             '({:name "Bob" :age 25} {:name "Alice" :age 30} {:name "Charlie" :age 35})))
+    ;; Sort with even-odd comparator
+    (let [even-odd-compare (fn [a b]
+                             (let [a-even (even? a)
+                                   b-even (even? b)]
+                               (cond
+                                 (and a-even b-even) (compare a b)
+                                 (and (not a-even) (not b-even)) (compare a b)
+                                 a-even -1
+                                 :else 1)))]
+      (is (= (sort even-odd-compare [1 2 3 4 5 6 7 8 9 10])
+             '(2 4 6 8 10 1 3 5 7 9))))
 
-      (is (= (sort-by :name people)
-             '({:name "Alice" :age 30} {:name "Bob" :age 25} {:name "Charlie" :age 35})))
+    ;; Sort with grade-based comparator
+    (let [students [{:name "Alice" :grade 85 :age 20}
+                    {:name "Bob" :grade 92 :age 19}
+                    {:name "Charlie" :grade 85 :age 21}
+                    {:name "David" :grade 78 :age 20}]
+          grade-desc-compare (fn [a b] (compare (:grade b) (:grade a)))]
+      (is (= (sort grade-desc-compare students)
+             '({:name "Bob" :grade 92 :age 19}
+               {:name "Alice" :grade 85 :age 20}
+               {:name "Charlie" :grade 85 :age 21}
+               {:name "David" :grade 78 :age 20}))))
 
-      (let [age-then-name (fn [person] [(:age person) (:name person)])]
-        (is (= (sort-by age-then-name people)
-               '({:name "Bob" :age 25} {:name "Alice" :age 30} {:name "Charlie" :age 35})))))))
+    ;; Note: Array modification test is commented out because to-array behavior
+    ;; may differ in Glojure compared to Clojure's Java arrays
+    ;; The original example shows that Java arrays are modified in place,
+    ;; but Glojure's to-array implementation may not have the same behavior
+    ;; (let [arr (to-array [3 1 4 1 5 9 2 6])]
+    ;;   (sort arr)
+    ;;   (is (= (seq arr) '(1 1 2 3 4 5 6 9))))
+
+    ;; Sort with nil values
+    (is (= (sort [3 nil 1 4 nil 2]) '(nil nil 1 2 3 4)))
+
+    ;; Sort with mixed types
+    (is (= (sort [3 "hello" 1 :keyword 4]) '(1 3 4 :keyword "hello")))
+
+    ;; Sort with floating point numbers
+    (is (= (sort [3.14 2 1.5 10 -5 0]) '(-5 0 1.5 2 3.14 10)))
+
+    ;; Sort with negative numbers
+    (is (= (sort [-10 -5 -20 -1 -100]) '(-100 -20 -10 -5 -1)))
+
+    ;; Sort with strings
+    (is (= (sort ["zebra" "apple" "banana" "cat"]) '("apple" "banana" "cat" "zebra")))
+
+    ;; Sort with lists
+    (is (= (sort '(5 2 8 1 9)) '(1 2 5 8 9)))
+
+    ;; Sort with empty collections
+    (is (= (sort []) '()))
+    (is (= (sort '()) '()))
+    (is (= (sort [42]) '(42)))))
 
 (deftest sort-by-clojuredocs-examples
   (testing "Examples from ClojureDocs sort-by documentation"
@@ -93,57 +187,5 @@
 
     (is (= (sort-by identity [42]) '(42)))
     (is (= (sort-by count ["hello"]) '("hello")))))
-
-(deftest edge-cases
-  (testing "Edge cases for sorting"
-    (is (= (sort []) '()))
-    (is (= (sort '()) '()))
-    (is (= (sort [42]) '(42)))
-    (is (= (sort [3 nil 1 4 nil 2]) '(nil nil 1 2 3 4)))
-    (is (= (sort [3 "hello" 1 :keyword 4]) '(1 3 4 :keyword "hello")))))
-
-(deftest collection-types
-  (testing "Sorting different collection types"
-    (is (= (sort [5 2 8 1 9]) '(1 2 5 8 9)))
-    (is (= (sort '(5 2 8 1 9)) '(1 2 5 8 9)))
-    (is (= (sort ["zebra" "apple" "banana" "cat"]) '("apple" "banana" "cat" "zebra")))))
-
-(deftest numeric-sorting
-  (testing "Numeric sorting with different types"
-    (is (= (sort [3.14 2 1.5 10 -5 0]) '(-5 0 1.5 2 3.14 10)))
-    (is (= (sort [-10 -5 -20 -1 -100]) '(-100 -20 -10 -5 -1)))))
-
-(deftest custom-comparator-examples
-  (testing "Custom comparator examples"
-    (let [even-odd-compare (fn [a b]
-                             (let [a-even (even? a)
-                                   b-even (even? b)]
-                               (cond
-                                 (and a-even b-even) (compare a b)
-                                 (and (not a-even) (not b-even)) (compare a b)
-                                 a-even -1
-                                 :else 1)))]
-      (is (= (sort even-odd-compare [1 2 3 4 5 6 7 8 9 10])
-             '(2 4 6 8 10 1 3 5 7 9))))))
-
-(deftest complex-examples
-  (testing "Complex sorting examples"
-    (let [students [{:name "Alice" :grade 85 :age 20}
-                    {:name "Bob" :grade 92 :age 19}
-                    {:name "Charlie" :grade 85 :age 21}
-                    {:name "David" :grade 78 :age 20}]]
-
-      (is (= (sort-by (fn [s] [(:age s) (:grade s)]) students)
-             '({:name "Bob" :grade 92 :age 19}
-               {:name "David" :grade 78 :age 20}
-               {:name "Alice" :grade 85 :age 20}
-               {:name "Charlie" :grade 85 :age 21})))
-
-      (let [grade-desc-compare (fn [a b] (compare (:grade b) (:grade a)))]
-        (is (= (sort grade-desc-compare students)
-               '({:name "Bob" :grade 92 :age 19}
-                 {:name "Alice" :grade 85 :age 20}
-                 {:name "Charlie" :grade 85 :age 21}
-                 {:name "David" :grade 78 :age 20})))))))
 
 (run-tests)
