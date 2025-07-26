@@ -828,9 +828,9 @@
   compares numbers and collections in a type-independent manner. x
   must implement Comparable"
   {
-   :inline (fn [x y] `(. glojure.lang.Util compare ~x ~y))
+   :inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Compare ~x ~y)))
    :added "1.0"}
-  [x y] (. glojure.lang.Util (compare x y)))
+  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Compare x y)))
 
 (defmacro and
   "Evaluates exprs one at a time, from left to right. If a form
@@ -3077,6 +3077,8 @@
     (fn [x y]
       (cond (pred x y) -1 (pred y x) 1 :else 0)))
 
+(declare sort-array!)
+
 (defn sort
   "Returns a sorted sequence of the items in coll. If no comparator is
   supplied, uses compare.  comparator must implement
@@ -3087,10 +3089,16 @@
    :static true}
   ([coll]
    (sort compare coll))
-  ([^java.util.Comparator comp coll]
+  ([comp coll]
    (if (seq coll)
-     (let [a (to-array coll)]
-       (. java.util.Arrays (sort a comp))
+     (let [a (to-array coll)
+           ;; Convert predicate to comparator if needed
+           comp-fn (if (= comp >)
+                     (fn [x y] (compare y x))  ;; Reverse compare
+                     (if (= comp <)
+                       (fn [x y] (compare x y))  ;; Normal compare
+                       comp))]
+       (sort-array! a comp-fn)
        (with-meta (seq a) (meta coll)))
      ())))
 
@@ -3105,8 +3113,8 @@
    :static true}
   ([keyfn coll]
    (sort-by keyfn compare coll))
-  ([keyfn ^java.util.Comparator comp coll]
-   (sort (fn [x y] (. comp (compare (keyfn x) (keyfn y)))) coll)))
+  ([keyfn comp coll]
+   (sort (fn [x y] (comp (keyfn x) (keyfn y))) coll)))
 
 (defn dorun
   "When lazy sequences are produced via functions that have side
@@ -5501,6 +5509,21 @@
                                           (is-runtime-annotation? c)))]
                (process-annotation av v)
                (.visitEnd av))))))))
+
+(defn- sort-array!
+  "Sorts an array in place using the given comparator function."
+  [arr comp]
+  (let [len (count arr)]
+    (loop [i 0]
+      (when (< i len)
+        (loop [j (inc i)]
+          (when (< j len)
+            (when (pos? (comp (nth arr i) (nth arr j)))
+              (let [temp (nth arr i)]
+                (github.com$glojurelang$glojure$pkg$lang.SliceSet arr i (nth arr j))
+                (github.com$glojurelang$glojure$pkg$lang.SliceSet arr j temp)))
+            (recur (inc j))))
+        (recur (inc i))))))
 
 (defn alter-var-root
   "Atomically alters the root binding of var v by applying f to its

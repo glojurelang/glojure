@@ -189,6 +189,53 @@ func (nm *NumberMethods) Equiv(x, y any) bool {
 	return Ops(x).Combine(Ops(y)).Equiv(x, y)
 }
 
+func (nm *NumberMethods) Compare(x, y any) int {
+	if IsNil(x) && IsNil(y) {
+		return 0
+	}
+	if IsNil(x) {
+		return -1
+	}
+	if IsNil(y) {
+		return 1
+	}
+
+	if xStr, xOk := x.(string); xOk {
+		if yStr, yOk := y.(string); yOk {
+			if xStr < yStr {
+				return -1
+			}
+			if xStr > yStr {
+				return 1
+			}
+			return 0
+		}
+	}
+
+	if IsNumber(x) && IsNumber(y) {
+		ops := Ops(x).Combine(Ops(y))
+		if ops.LT(x, y) {
+			return -1
+		}
+		if ops.GT(x, y) {
+			return 1
+		}
+		if ops.Equiv(x, y) {
+			return 0
+		}
+	}
+
+	xStr := fmt.Sprintf("%v", x)
+	yStr := fmt.Sprintf("%v", y)
+	if xStr < yStr {
+		return -1
+	}
+	if xStr > yStr {
+		return 1
+	}
+	return 0
+}
+
 func (nm *NumberMethods) Floats(x any) []float32 {
 	return x.([]float32)
 }
