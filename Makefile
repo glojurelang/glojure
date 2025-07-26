@@ -5,7 +5,7 @@ STDLIB := $(STDLIB_ORIGINALS:scripts/rewrite-core/originals/%=%)
 STDLIB_ORIGINALS := $(addprefix scripts/rewrite-core/originals/,$(STDLIB))
 STDLIB_TARGETS := $(addprefix pkg/stdlib/glojure/,$(STDLIB:.clj=.glj))
 
-TEST_FILES := $(shell find ./test -name '*.glj')
+TEST_FILES := $(shell find ./test -name '*.glj' | sort)
 TEST_TARGETS := $(addsuffix .test,$(TEST_FILES))
 
 GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows_amd64 windows_arm js_wasm
