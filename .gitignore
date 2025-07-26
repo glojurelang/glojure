@@ -1,2 +1,7 @@
 bin
 doc/repl/glj.wasm
+/.cache/
+/.clj-kondo/
+/.lsp/
+/.vscode/
+/*.clj
