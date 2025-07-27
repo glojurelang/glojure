@@ -830,7 +830,7 @@
   {
    :inline (fn [x y] `(. glojure.lang.Util compare ~x ~y))
    :added "1.0"}
-  [x y] (. glojure.lang.Util (compare x y)))
+  [x y] (github.com$glojurelang$glojure$pkg$lang.Compare x y))
 
 (defmacro and
   "Evaluates exprs one at a time, from left to right. If a form
@@ -3090,7 +3090,7 @@
   ([^java.util.Comparator comp coll]
    (if (seq coll)
      (let [a (to-array coll)]
-       (. java.util.Arrays (sort a comp))
+       (github.com$glojurelang$glojure$pkg$lang.SortSlice a comp)
        (with-meta (seq a) (meta coll)))
      ())))
 
