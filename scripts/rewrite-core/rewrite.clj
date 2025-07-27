@@ -86,32 +86,95 @@
   (omitp #(and (z/sexpr-able? %)
                (contains? forms (z/sexpr %)))))
 
+;; Data structures for simple 1:1 replacements
+(def namespace-mappings
+  {'clojure.core 'glojure.core
+   'clojure.string 'glojure.string})
+
+(def type-mappings
+  {;; Simple type replacements when appearing alone
+   'String 'go/string
+   'Long 'go/int64
+   'java.lang.Long 'go/int64
+   'java.lang.Double 'go/float64
+   'Double 'go/float64
+   'Float 'go/float32
+   'Boolean 'go/bool
+   'Character 'github.com$glojurelang$glojure$pkg$lang.Char
+   'java.lang.Character 'github.com$glojurelang$glojure$pkg$lang.Char
+   'Throwable 'github.com$glojurelang$glojure$pkg$lang.Throwable
+   'Object 'github.com$glojurelang$glojure$pkg$lang.Object
+   'BigInteger 'math$big.*Int
+   'BigDecimal 'github.com$glojurelang$glojure$pkg$lang.*BigDecimal
+   'CharSequence 'go/string
+   'Class 'reflect.Type
+   'Pattern '*Regexp})
+
+(def static-field-mappings
+  {'Integer/MIN_VALUE 'math.MinInt
+   'Integer/MAX_VALUE 'math.MaxInt
+   'Double/POSITIVE_INFINITY '(math.Inf 1)
+   'Double/NEGATIVE_INFINITY '(math.Inf -1)
+   'Float/POSITIVE_INFINITY '(go/float32 (math.Inf 1))
+   'Float/NEGATIVE_INFINITY '(go/float32 (math.Inf -1))})
+
+(defn create-simple-replacements
+  "Create sexpr-replace calls from a mapping"
+  [mappings]
+  (map (fn [[old new]] (sexpr-replace old new)) mappings))
+
+(defn clojure-lang->glojure-pkg
+  "Create replacement for clojure.lang.ClassName to glojure package equivalent"
+  [class-name & {:keys [pointer? package] 
+                 :or {pointer? false 
+                      package "github.com$glojurelang$glojure$pkg$lang"}}]
+  (sexpr-replace 
+    (symbol (str "clojure.lang." class-name))
+    (symbol (str package "." (when pointer? "*") class-name))))
+
+(defn clojure-lang-list->glojure-pkg
+  "Create replacements for a list of clojure.lang classes"
+  [classes & opts]
+  (map #(apply clojure-lang->glojure-pkg % opts) classes))
+
 (def replacements
-  [
-   (sexpr-replace 'clojure.core 'glojure.core)
+  (concat
+    ;; Simple mappings from data structures
+    (create-simple-replacements namespace-mappings)
+    (create-simple-replacements type-mappings)
+    (create-simple-replacements static-field-mappings)
+    
+    ;; Pattern-based clojure.lang replacements
+    (clojure-lang-list->glojure-pkg
+      ["IPersistentCollection" "IPersistentList" "IRecord" 
+       "NewSymbol" "IReduce" "IPending" "Volatile" "IAtom" "IMapEntry"
+       "IPersistentMap" "IPersistentVector" "IPersistentSet" "IMeta"
+       "IReduceInit" "IObj" "Keyword" "ISeq" "IEditableCollection"
+       "Named" "Counted" "Sequential" "IChunkedSeq"
+       "IDrop" "IDeref" "IBlockingDeref"]
+      :pointer? false)
+    
+    (clojure-lang-list->glojure-pkg
+      ["Symbol" "Ratio" "MultiFn" "PersistentHashMap" "PersistentHashSet"
+       "PersistentVector" "LazySeq" "Var" "Namespace" "Ref" "Agent"
+       "BigInt" "BigDecimal"]
+      :pointer? true)
+    
+    [(clojure-lang->glojure-pkg "Fn" :pointer? true :package "github.com$glojurelang$glojure$pkg$runtime")]
+    
+    ;; All other replacements remain as-is
+    [
+     ;; ===== Special Clojure.lang Replacements =====
+     ;; These don't follow the standard pattern
    (sexpr-replace '(. clojure.lang.PersistentList creator) 'github.com$glojurelang$glojure$pkg$lang.NewList)
    (sexpr-replace '(setMacro) '(SetMacro))
-   (sexpr-replace 'clojure.lang.Symbol 'github.com$glojurelang$glojure$pkg$lang.*Symbol)
-   (sexpr-replace 'clojure.lang.Fn 'github.com$glojurelang$glojure$pkg$runtime.*Fn)
-   (sexpr-replace 'clojure.lang.IPersistentCollection 'github.com$glojurelang$glojure$pkg$lang.IPersistentCollection)
-   (sexpr-replace 'clojure.lang.IPersistentList 'github.com$glojurelang$glojure$pkg$lang.IPersistentList)
-   (sexpr-replace 'clojure.lang.IRecord 'github.com$glojurelang$glojure$pkg$lang.IRecord)
-   (sexpr-replace 'java.lang.Character 'github.com$glojurelang$glojure$pkg$lang.Char)
-   (sexpr-replace 'java.lang.Long 'go/int64)
-   (sexpr-replace 'Long 'go/int64)
-   (sexpr-replace 'java.lang.Double 'go/float64)
-   (sexpr-replace 'clojure.lang.Ratio 'github.com$glojurelang$glojure$pkg$lang.*Ratio)
 
-   (sexpr-replace 'clojure.lang.NewSymbol 'github.com$glojurelang$glojure$pkg$lang.NewSymbol)
 
-   (sexpr-replace 'Double/POSITIVE_INFINITY '(math.Inf 1))
-   (sexpr-replace 'Double/NEGATIVE_INFINITY '(math.Inf -1))
-   (sexpr-replace 'Float/POSITIVE_INFINITY '(go/float32 (math.Inf 1)))
-   (sexpr-replace 'Float/NEGATIVE_INFINITY '(go/float32 (math.Inf -1)))
+   ;; ===== Math Functions =====
    (sexpr-replace '.isNaN 'math.IsNaN)
    (sexpr-replace 'Double/isNaN 'math.IsNaN)
 
-   ;; Range
+   ;; ===== Range Constructors =====
    (sexpr-replace '(clojure.lang.LongRange/create end)
                   '(github.com$glojurelang$glojure$pkg$lang.NewLongRange 0 end 1))
    (sexpr-replace '(clojure.lang.LongRange/create start end)
@@ -127,9 +190,11 @@
                   '(github.com$glojurelang$glojure$pkg$lang.NewRange start end step))
 
 
+   ;; ===== Collection Constructors =====
    (sexpr-replace '(. clojure.lang.PersistentHashMap (create keyvals))
                   '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentHashMap keyvals))
 
+   ;; ===== Java Type Mappings =====
    ;; map a bunch of java types to go equivalent
    ;; TODO: once everything passes, see if we can replace with a blanket
    ;; replacement of the clojure.lang prefix.
@@ -139,8 +204,6 @@
    (sexpr-replace 'java.io.PrintWriter
                   'github.com$glojurelang$glojure$pkg$lang.PrintWriter)
 
-   (sexpr-replace 'Throwable
-                  'github.com$glojurelang$glojure$pkg$lang.Throwable)
 
    (sexpr-replace 'clojure.lang.IReduce
                   'github.com$glojurelang$glojure$pkg$lang.IReduce)
@@ -206,7 +269,7 @@
                   '(fn instance? [t x] (github.com$glojurelang$glojure$pkg$lang.HasType t x)))
 
 
-   ;;;; Exceptions
+   ;; ===== Exception Handling =====
    (sexpr-replace 'IllegalArgumentException. 'github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError)
    ;; new Exception
    [(fn select [zloc] (and (z/list? zloc)
@@ -222,6 +285,7 @@
     (fn visit [zloc]
       (z/replace zloc 'go/any))]
 
+   ;; ===== Metadata Operations =====
    ;; replace .withMeta
    [(fn select [zloc] (and (z/list? zloc) (= '.withMeta (first (z/sexpr zloc)))))
     (fn visit [zloc] (z/replace zloc
@@ -230,6 +294,7 @@
                                      (throw (~'res 1))
                                      (~'res 0)))))]
 
+   ;; ===== RT Function Replacements =====
    (RT-replace 'cons #(cons 'github.com$glojurelang$glojure$pkg$lang.NewCons %))
    (RT-replace 'first #(cons 'github.com$glojurelang$glojure$pkg$lang.First %))
    (RT-replace 'next #(cons 'github.com$glojurelang$glojure$pkg$lang.Next %))
@@ -252,7 +317,6 @@
                   'github.com$glojurelang$glojure$pkg$lang.IPersistentVector)
    (sexpr-replace 'clojure.lang.IPersistentSet
                   'github.com$glojurelang$glojure$pkg$lang.IPersistentSet)
-   (sexpr-replace 'String 'go/string)
    (sexpr-replace 'clojure.lang.IMeta
                   'github.com$glojurelang$glojure$pkg$lang.IMeta)
    (sexpr-replace 'clojure.lang.IReduceInit
@@ -265,8 +329,6 @@
 
    (sexpr-replace '.assoc '.Assoc)
 
-   (sexpr-replace 'Integer/MIN_VALUE 'math.MinInt)
-   (sexpr-replace 'Integer/MAX_VALUE 'math.MaxInt)
 
    (sexpr-replace '(. Math (random)) '(math$rand.Float64))
 
@@ -276,7 +338,7 @@
    (sexpr-replace '(. x (get)) '(. x (Get)))
    (sexpr-replace '(. x (set val)) '(. x (Set val)))
 
-   ;; omit Eduction for now
+   ;; ===== Omissions and Deferrals =====
    (omitp #(and (z/list? %)
                 (= 'deftype (first (z/sexpr %)))))
    (omitp #(and (z/list? %)
@@ -312,10 +374,11 @@
    (sexpr-replace '(^github.com$glojurelang$glojure$pkg$lang.IPersistentVector [^github.com$glojurelang$glojure$pkg$lang.IAtom2 atom f] (.swapVals atom f))
                   '([atom f & args] (.swapVals atom f args)))
 
-   ;; Agents
+   ;; ===== Agents =====
    (sexpr-replace '(. clojure.lang.Agent shutdown) '(github.com$glojurelang$glojure$pkg$lang.ShutdownAgents))
    (sexpr-replace 'clojure.lang.Agent 'github.com$glojurelang$glojure$pkg$lang.*Agent)
 
+   ;; ===== Hashing Functions =====
    ;; TODO: these should likely be different
    (sexpr-replace 'clojure.lang.Util/hash 'github.com$glojurelang$glojure$pkg$lang.Hash)
    (sexpr-replace '(. clojure.lang.Util (hasheq x))
@@ -331,6 +394,7 @@
 
    (sexpr-replace '(. Array (set array idx val)) '(github.com$glojurelang$glojure$pkg$lang.SliceSet array idx val))
 
+   ;; ===== Array Operations =====
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= '.reduce (z/sexpr zloc))))
     (fn visit [zloc] (z/replace zloc
                                 (let [lst (z/sexpr (z/up zloc))]
@@ -338,8 +402,6 @@
                                     '.Reduce
                                     '.ReduceInit))))]
 
-   (sexpr-replace 'BigInteger 'math$big.*Int)
-   (sexpr-replace 'BigDecimal 'github.com$glojurelang$glojure$pkg$lang.*BigDecimal)
    (sexpr-replace 'clojure.lang.BigInt/valueOf
                   'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromInt64)
    (sexpr-replace '(BigInteger/valueOf (long x))
@@ -460,8 +522,7 @@
    (sexpr-replace '.resetMeta '.ResetMeta)
 
 
-   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-   ;; Multi-methods
+   ;; ===== Multi-methods =====
    [(fn select [zloc] (and (z/list? zloc)
                            (let [sexpr (z/sexpr zloc)]
                              (and
@@ -505,13 +566,13 @@
                                 (= 'isa? (second sexpr))))))
       (fn visit [zloc] (z/replace zloc new-node))])
 
-   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
    (sexpr-replace '(System/getProperty "line.separator") '"\\n")
    (sexpr-replace 'clojure.lang.ISeq 'github.com$glojurelang$glojure$pkg$lang.ISeq)
    (sexpr-replace 'clojure.lang.IEditableCollection 'github.com$glojurelang$glojure$pkg$lang.IEditableCollection)
    (sexpr-replace 'clojure.core/import* 'github.com$glojurelang$glojure$pkg$lang.Import)
 
+   ;; ===== Import Omissions =====
    (omit-forms '#{(import '(java.lang.reflect Array))
                   (import clojure.lang.ExceptionInfo clojure.lang.IExceptionInfo)
                   (import '(java.util.concurrent BlockingQueue LinkedBlockingQueue))
@@ -535,7 +596,7 @@
    (sexpr-replace "clojure.core" "glojure.core")
    (sexpr-replace 'clojure.core/name 'glojure.core/name)
 
-   ;; number checksclasses
+   ;; ===== Number Type Checks =====
    (sexpr-replace '(defn integer?
                      "Returns true if n is an integer"
                      {:added "1.0"
@@ -590,6 +651,7 @@
    (sexpr-replace 'Unchecked_int_divide 'UncheckedIntDivide)
    (sexpr-replace '(unchecked_minus x) '(Unchecked_negate x))
 
+   ;; ===== Numeric Array Replacements =====
    (replace-num-array 'char)
    (replace-num-array 'byte)
    (replace-num-array 'short)
@@ -658,7 +720,7 @@
 
    (sexpr-replace '.charAt 'github.com$glojurelang$glojure$pkg$lang.CharAt)
 
-   ;;;; OMIT PARTS OF THE FILE ENTIRELY FOR NOW
+   ;; ===== File Loading and Module Omissions =====
    ;;; TODO: implement load for embedded files!
    (sexpr-replace '(load "core_proxy") '(do))
    (sexpr-replace '(load "genclass") '(do))
@@ -759,13 +821,9 @@
    (sexpr-replace '(. x (getClass))
                   '(github.com$glojurelang$glojure$pkg$lang.TypeOf x))
 
-   ;;; core_print.clj
+   ;; ===== Core Print Replacements =====
 
-   (sexpr-replace 'Double 'go/float64)
-   (sexpr-replace 'Float 'go/float32)
-   (sexpr-replace 'Boolean 'go/bool)
 
-   (sexpr-replace 'Object 'github.com$glojurelang$glojure$pkg$lang.Object)
    (sexpr-replace '(.isArray c) false)
    ;; (sexpr-replace '(print-method (.Name c) w) 'TODO)
    ;; (sexpr-replace '(github.com$glojurelang$glojure$pkg$lang.WriteWriter w (.Name c)) 'TODO)
@@ -801,7 +859,6 @@
 
    (omit-symbols '#{primitives-classnames})
 
-   (sexpr-replace 'Class 'reflect.Type)
    (sexpr-replace '(.getInterfaces c) nil) ;; no such concept in go
    (sexpr-replace '(.getSuperclass c) nil) ;; no such concept in go
 
@@ -855,8 +912,7 @@
                                          (string/replace "clojure." "glojure.")
                                          symbol)))]
 
-   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-   ;; test.clj
+   ;; ===== Test.clj Replacements =====
 
    (sexpr-remove '[clojure.stacktrace :as stack])
 
@@ -865,15 +921,10 @@
                               (first (z/sexpr zloc)))))
     (fn visit [zloc] (z/replace zloc '{}))]
 
-   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-   ;; Regular Expressions
+   ;; ===== Regular Expression Replacements =====
    (sexpr-replace '(.split re s)
                   '(.split re s -1))
 
-   (sexpr-replace 'Character
-                  'github.com$glojurelang$glojure$pkg$lang.Char)
-   (sexpr-replace 'Pattern '*Regexp)
-   (sexpr-replace 'CharSequence 'go/string)
    (sexpr-replace '(.length s) '(count s))
    (sexpr-replace '(.length match) '(count match))
 
@@ -887,7 +938,7 @@
    (node-replace "(.pattern ^java.util.regex.Pattern p)"
                  "(.String ^regexp.*Regexp p)")
 
-   ])
+   ]))
 
 (defn rewrite-core [zloc]
   (loop [zloc (z/of-node (z/root zloc))]
