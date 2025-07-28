@@ -9,6 +9,7 @@ MAKES-NO-RULES := true
 GO-VERSION ?= 1.19.3
 GO-VERSION ?= 1.22.0
 include $M/go.mk
+include $M/clojure.mk
 include $M/clean.mk
 include $M/shell.mk
 
