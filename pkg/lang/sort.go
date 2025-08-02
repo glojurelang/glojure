@@ -58,18 +58,11 @@ func Compare(x, y any) int {
 		return 1
 	}
 
-	// Handle numbers - convert to float64 for comparison
+	// Handle numbers using the Numbers.Compare method
 	xNum, xIsNum := AsNumber(x)
 	yNum, yIsNum := AsNumber(y)
 	if xIsNum && yIsNum {
-		xFloat := AsFloat64(xNum)
-		yFloat := AsFloat64(yNum)
-		if xFloat < yFloat {
-			return -1
-		} else if xFloat > yFloat {
-			return 1
-		}
-		return 0
+		return Numbers.Compare(xNum, yNum)
 	}
 
 	// Handle strings

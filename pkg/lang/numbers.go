@@ -189,6 +189,16 @@ func (nm *NumberMethods) Equiv(x, y any) bool {
 	return Ops(x).Combine(Ops(y)).Equiv(x, y)
 }
 
+func (nm *NumberMethods) Compare(x, y any) int {
+	ops := Ops(x).Combine(Ops(y))
+	if ops.LT(x, y) {
+		return -1
+	} else if ops.LT(y, x) {
+		return 1
+	}
+	return 0
+}
+
 func (nm *NumberMethods) Floats(x any) []float32 {
 	return x.([]float32)
 }
