@@ -171,17 +171,17 @@ func (v *SubVector) Compare(other any) int {
 	if !ok {
 		panic(NewIllegalArgumentError(fmt.Sprintf("Cannot compare SubVector with %T", other)))
 	}
-	
+
 	myCount := v.Count()
 	otherCount := otherVec.Count()
-	
+
 	// Compare lengths first
 	if myCount < otherCount {
 		return -1
 	} else if myCount > otherCount {
 		return 1
 	}
-	
+
 	// Compare element by element
 	for i := 0; i < myCount; i++ {
 		cmp := Compare(v.Nth(i), otherVec.Nth(i))

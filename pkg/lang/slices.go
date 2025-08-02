@@ -15,12 +15,12 @@ func ToSlice(x any) []any {
 	if IsNil(x) {
 		return []any{}
 	}
-	
+
 	// Handle []any - return as-is
 	if slice, ok := x.([]any); ok {
 		return slice
 	}
-	
+
 	// Handle IPersistentVector
 	if vec, ok := x.(IPersistentVector); ok {
 		count := vec.Count()
@@ -30,7 +30,7 @@ func ToSlice(x any) []any {
 		}
 		return res
 	}
-	
+
 	// Handle IPersistentMap - convert to array of MapEntry objects
 	if m, ok := x.(IPersistentMap); ok {
 		seq := m.Seq()
@@ -41,7 +41,7 @@ func ToSlice(x any) []any {
 		}
 		return res
 	}
-	
+
 	// Handle Set - convert to array of values
 	if s, ok := x.(*Set); ok {
 		seq := s.Seq()
@@ -52,7 +52,7 @@ func ToSlice(x any) []any {
 		}
 		return res
 	}
-	
+
 	// Handle string - convert to character array
 	if s, ok := x.(string); ok {
 		runes := []rune(s) // Important: use runes for proper Unicode handling
@@ -62,7 +62,7 @@ func ToSlice(x any) []any {
 		}
 		return res
 	}
-	
+
 	// Handle ISeq
 	if s, ok := x.(ISeq); ok {
 		res := make([]interface{}, 0, Count(x))
@@ -71,7 +71,7 @@ func ToSlice(x any) []any {
 		}
 		return res
 	}
-	
+
 	// Handle reflection-based slice/array
 	xVal := reflect.ValueOf(x)
 	if xVal.Kind() == reflect.Slice || xVal.Kind() == reflect.Array {
@@ -81,7 +81,7 @@ func ToSlice(x any) []any {
 		}
 		return res
 	}
-	
+
 	// Error with Clojure-style message
 	panic(NewIllegalArgumentError(fmt.Sprintf("Unable to convert: %T to Object[]", x)))
 }
