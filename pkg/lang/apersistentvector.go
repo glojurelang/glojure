@@ -13,6 +13,7 @@ type (
 		IPersistentVector
 		IHashEq
 		Reversible
+		Comparer
 	}
 
 	apvSeq struct {

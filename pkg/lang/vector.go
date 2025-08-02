@@ -272,6 +272,32 @@ func (v *Vector) AsTransient() ITransientCollection {
 	}
 }
 
+func (v *Vector) Compare(other any) int {
+	otherVec, ok := other.(IPersistentVector)
+	if !ok {
+		panic(NewIllegalArgumentError(fmt.Sprintf("Cannot compare Vector with %T", other)))
+	}
+	
+	myCount := v.Count()
+	otherCount := otherVec.Count()
+	
+	// Compare lengths first
+	if myCount < otherCount {
+		return -1
+	} else if myCount > otherCount {
+		return 1
+	}
+	
+	// Compare element by element
+	for i := 0; i < myCount; i++ {
+		cmp := Compare(v.Nth(i), otherVec.Nth(i))
+		if cmp != 0 {
+			return cmp
+		}
+	}
+	return 0
+}
+
 func toSlice(x any) []any {
 	if x == nil {
 		return nil

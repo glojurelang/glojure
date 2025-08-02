@@ -197,5 +197,60 @@
       ;; Should be sorted by key
       (is (= [[:a 1] [:b 2] [:c 3]] sorted)))))
 
+(deftest test-non-comparable-types
+  (testing "Non-comparable types throw errors"
+    ;; Lists are not comparable
+    (is (thrown? go/any (compare '(1 2) '(1 2))))
+    (is (thrown? go/any (sort ['(1 2) '(3 4)])))
+    
+    ;; Maps are not comparable
+    (is (thrown? go/any (compare {:a 1} {:b 2})))
+    (is (thrown? go/any (sort [{:a 1} {:b 2}])))
+    
+    ;; Sets are not comparable
+    (is (thrown? go/any (compare #{1 2} #{3 4})))
+    (is (thrown? go/any (sort [#{1 2} #{3 4}])))
+    
+    ;; Mixed incompatible types
+    (is (thrown? go/any (compare 1 :a)))
+    (is (thrown? go/any (compare "string" 'symbol)))
+    (is (thrown? go/any (compare :keyword [1 2 3])))))
+
+(deftest test-vector-comparison
+  (testing "Vector comparison details"
+    ;; Vectors compare lexicographically
+    (is (= -1 (compare [1 2] [1 3])))
+    (is (= 1 (compare [1 3] [1 2])))
+    (is (= 0 (compare [1 2 3] [1 2 3])))
+    
+    ;; Shorter vectors are less than longer vectors with same prefix
+    (is (= -1 (compare [1 2] [1 2 3])))
+    (is (= 1 (compare [1 2 3] [1 2])))
+    
+    ;; Nested vectors
+    (is (= -1 (compare [[1 2] [3 4]] [[1 2] [3 5]])))
+    (is (= 0 (compare [[1 2] [3 4]] [[1 2] [3 4]])))
+    
+    ;; SubVectors behave like vectors
+    (let [v [1 2 3 4 5]
+          sv1 (subvec v 1 3)  ; [2 3]
+          sv2 (subvec v 2 4)] ; [3 4]
+      (is (= -1 (compare sv1 sv2)))
+      (is (= -1 (compare sv1 [3 4]))))))
+
+(deftest test-symbol-namespace-comparison
+  (testing "Symbols compare namespace-first"
+    ;; No namespace < with namespace
+    (is (= -1 (compare 'x 'a/x)))
+    (is (= 1 (compare 'a/x 'x)))
+    
+    ;; Different namespaces
+    (is (= -1 (compare 'a/x 'b/x)))
+    (is (= 1 (compare 'b/x 'a/x)))
+    
+    ;; Same namespace, different names
+    (is (= -1 (compare 'ns/a 'ns/b)))
+    (is (= 1 (compare 'ns/b 'ns/a)))))
+
 ;; Run tests
 (run-tests)

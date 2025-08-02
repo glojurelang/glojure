@@ -3,6 +3,7 @@ package lang
 import (
 	"fmt"
 	"sort"
+	"strings"
 )
 
 // SortSlice performs an in-place stable sort on the given array using the provided comparator.
@@ -28,7 +29,7 @@ func SortSlice(slice []any, comp any) {
 		if boolResult, ok := result.(bool); ok {
 			return boolResult
 		}
-		
+
 		// Numeric comparator returns:
 		// -1 if first arg is less than second
 		//  0 if args are equal
@@ -47,7 +48,12 @@ func SortSlice(slice []any, comp any) {
 // 'less than', 'equal to', or 'greater than' y.
 // Handles nil values (nil is less than everything except nil).
 func Compare(x, y any) int {
-	// Handle nil cases first
+	// Identity check
+	if x == y {
+		return 0
+	}
+
+	// Handle nil cases
 	if IsNil(x) {
 		if IsNil(y) {
 			return 0
@@ -59,41 +65,19 @@ func Compare(x, y any) int {
 	}
 
 	// Handle numbers using the Numbers.Compare method
-	xNum, xIsNum := AsNumber(x)
-	yNum, yIsNum := AsNumber(y)
-	if xIsNum && yIsNum {
-		return Numbers.Compare(xNum, yNum)
+	if xNum, xIsNum := AsNumber(x); xIsNum {
+		return Numbers.Compare(xNum, y)
 	}
 
-	// Handle strings
+	// Check if x implements Comparer interface
+	if xComp, ok := x.(Comparer); ok {
+		return xComp.Compare(y)
+	}
+
+	// Handle strings (built-in type, doesn't implement Comparer)
 	if xStr, xOk := x.(string); xOk {
 		if yStr, yOk := y.(string); yOk {
-			if xStr < yStr {
-				return -1
-			} else if xStr > yStr {
-				return 1
-			}
-			return 0
-		}
-	}
-
-	// Handle keywords
-	if xKw, xOk := x.(Keyword); xOk {
-		if yKw, yOk := y.(Keyword); yOk {
-			return Compare(xKw.String(), yKw.String())
-		}
-	}
-
-	// Handle symbols
-	if xSym, xOk := x.(*Symbol); xOk {
-		if ySym, yOk := y.(*Symbol); yOk {
-			// Compare namespace first
-			nsComp := Compare(xSym.Namespace(), ySym.Namespace())
-			if nsComp != 0 {
-				return nsComp
-			}
-			// Then compare name
-			return Compare(xSym.Name(), ySym.Name())
+			return strings.Compare(xStr, yStr)
 		}
 	}
 
@@ -109,32 +93,6 @@ func Compare(x, y any) int {
 		}
 	}
 
-	// Handle vectors (including MapEntry which is a vector)
-	if xVec, xOk := x.(IPersistentVector); xOk {
-		if yVec, yOk := y.(IPersistentVector); yOk {
-			xCount := xVec.Count()
-			yCount := yVec.Count()
-			minCount := xCount
-			if yCount < minCount {
-				minCount = yCount
-			}
-			// Compare element by element
-			for i := 0; i < minCount; i++ {
-				cmp := Compare(xVec.Nth(i), yVec.Nth(i))
-				if cmp != 0 {
-					return cmp
-				}
-			}
-			// If all compared elements are equal, shorter vector is less
-			if xCount < yCount {
-				return -1
-			} else if xCount > yCount {
-				return 1
-			}
-			return 0
-		}
-	}
-
-	// If we can't compare, panic with an error
-	panic(NewIllegalArgumentError(fmt.Sprintf("Cannot compare %T with %T", x, y)))
+	// Default error - cannot compare
+	panic(NewIllegalArgumentError(fmt.Sprintf("%T cannot be cast to Comparable", x)))
 }
