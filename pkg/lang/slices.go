@@ -42,6 +42,17 @@ func ToSlice(x any) []any {
 		return res
 	}
 	
+	// Handle Set - convert to array of values
+	if s, ok := x.(*Set); ok {
+		seq := s.Seq()
+		res := make([]any, 0, s.Count())
+		for seq != nil {
+			res = append(res, seq.First())
+			seq = seq.Next()
+		}
+		return res
+	}
+	
 	// Handle string - convert to character array
 	if s, ok := x.(string); ok {
 		runes := []rune(s) // Important: use runes for proper Unicode handling
