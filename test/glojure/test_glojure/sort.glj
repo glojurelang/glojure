@@ -1,0 +1,291 @@
+;; Tests for sort function
+;; Ensures Glojure behavior matches Clojure as closely as possible
+
+(ns glojure.test-glojure.sort
+  (:require [glojure.test :refer :all]
+            [glojure.string :as s]))
+
+(deftest test-sort-basic
+  (testing "Basic sort functionality"
+    ;; Numbers
+    (is (= '(1 2 3 4 5) (sort [3 1 4 2 5])))
+    (is (= '(1 1 3 4 5) (sort [3 1 4 1 5]))) ; duplicates preserved
+    (is (= '(1.0 2.5 3 4.7) (sort [4.7 1.0 3 2.5]))) ; mixed numeric types
+    (is (= '(-5 0 1.5 2 3.14 10) (sort [3.14 2 1.5 10 -5 0])))
+
+    ;; Strings
+    (is (= '("apple" "banana" "cherry") (sort ["cherry" "apple" "banana"])))
+    (is (= '("" "a" "ab" "b") (sort ["b" "a" "" "ab"]))) ; empty string sorts first
+
+    ;; Keywords
+    (is (= '(:a :b :c) (sort [:c :a :b])))
+    (is (= '(:a/x :b/x :c/x) (sort [:c/x :a/x :b/x]))) ; namespaced keywords
+
+    ;; Symbols
+    (is (= '(a b c) (sort '[c a b])))
+    (is (= '(a/x b/x c/x) (sort '[c/x a/x b/x]))) ; namespaced symbols
+
+    ;; Empty collection
+    (is (= '() (sort [])))
+    (is (= '() (sort '())))
+    (is (= '() (sort nil))) ; nil returns empty seq
+
+    ;; Single element
+    (is (= '(42) (sort [42])))
+
+    ;; Already sorted
+    (is (= '(1 2 3) (sort [1 2 3])))
+
+    ;; Reverse sorted
+    (is (= '(1 2 3) (sort [3 2 1])))))
+
+(deftest test-sort-with-comparator
+  (testing "Sort with custom comparator"
+    ;; Reverse sort
+    (is (= '(5 4 3 2 1) (sort (fn [a b] (compare b a)) [3 1 4 5 2])))
+    (is (= '(5 4 3 2 1) (sort > [3 1 4 5 2]))) ; using > as comparator
+
+    ;; Case-insensitive string sort
+    (is (= '("apple" "Banana" "cherry")
+           (sort (fn [a b] (compare (s/lower-case a) (s/lower-case b)))
+                 ["cherry" "apple" "Banana"])))
+
+    ;; Sort by string length
+    (is (= '("a" "bb" "ccc" "dddd")
+           (sort-by count ["ccc" "a" "dddd" "bb"])))
+
+    ;; Sort maps by a specific key
+    (let [data [{:name "John" :age 30}
+                {:name "Jane" :age 25}
+                {:name "Bob" :age 35}]]
+      (is (= [{:name "Jane" :age 25}
+              {:name "John" :age 30}
+              {:name "Bob" :age 35}]
+             (sort (fn [a b] (compare (:age a) (:age b))) data))))))
+
+(deftest test-sort-nil-handling
+  (testing "Nil handling in sort"
+    ;; nil sorts before everything
+    (is (= '(nil 1 2 3) (sort [3 nil 1 2])))
+    (is (= '(nil nil 1 2) (sort [2 nil 1 nil])))
+    (is (= '(nil "a" "b") (sort ["b" nil "a"])))
+
+    ;; With custom comparator that handles nil
+    (is (= '(3 2 1 nil)
+           (sort (fn [a b]
+                   (cond
+                     (nil? a) 1  ; nil goes to end
+                     (nil? b) -1
+                     :else (compare b a)))
+                 [nil 1 2 3])))))
+
+(deftest test-sort-different-collection-types
+  (testing "Sort works on different collection types"
+    ;; Vector
+    (is (= '(1 2 3) (sort [3 1 2])))
+
+    ;; List
+    (is (= '(1 2 3) (sort '(3 1 2))))
+
+    ;; Set
+    (is (= '(1 2 3) (sort #{3 1 2})))
+
+    ;; Map entries (sorted as vectors)
+    (let [result (sort {:b 2 :a 1 :c 3})]
+      (is (= 3 (count result)))
+      (is (every? vector? result))
+      (is (= :a (first (first result)))))
+
+    ;; String (converts to character sequence)
+    (is (= '(\a \b \c \d) (sort "dcba")))
+
+    ;; Range
+    (is (= '(0 1 2 3 4) (sort (reverse (range 5)))))))
+
+(deftest test-sort-stability
+  (testing "Sort is stable"
+    ;; Create items that compare equal but are distinguishable
+    (let [items [{:id 1 :value 1}
+                 {:id 2 :value 2}
+                 {:id 3 :value 1}
+                 {:id 4 :value 2}
+                 {:id 5 :value 1}]
+          sorted (sort (fn [a b] (compare (:value a) (:value b))) items)]
+      ;; Items with same value should maintain relative order
+      (is (= [{:id 1 :value 1}
+              {:id 3 :value 1}
+              {:id 5 :value 1}
+              {:id 2 :value 2}
+              {:id 4 :value 2}]
+             sorted)))))
+
+(deftest test-sort-metadata-preservation
+  (testing "Sort preserves metadata"
+    (let [coll ^{:my-meta true} [3 1 2]
+          sorted (sort coll)]
+      (is (= '(1 2 3) sorted))
+      (is (= true (:my-meta (meta sorted)))))))
+
+(deftest test-sort-edge-cases
+  (testing "Sort edge cases"
+    ;; Large collection
+    (let [large (repeatedly 1000 #(rand-int 100))
+          sorted (sort large)]
+      (is (= 1000 (count sorted)))
+      (is (apply <= sorted))) ; verify it's actually sorted
+
+    ;; All equal elements
+    (is (= '(1 1 1 1) (sort [1 1 1 1])))
+
+    ;; Mixed positive/negative numbers
+    (is (= '(-3 -1 0 1 3) (sort [1 -1 3 0 -3])))))
+
+(deftest test-sort-error-cases
+  (testing "Sort error cases"
+    ;; Invalid comparator (not a function)
+    (is (thrown? go/any (sort "not-a-function" [1 2 3])))
+
+    ;; Comparator returns non-numeric
+    (is (thrown? go/any
+                 (sort (fn [a b] "not-a-number") [1 2 3])))
+
+    ;; Uncomparable types (this might throw or might have undefined behavior)
+    ;; Clojure's behavior here is to throw ClassCastException
+    (is (thrown? go/any
+                 (sort [1 "a" :b])))))
+
+(deftest test-compare-function
+  (testing "Compare function behavior"
+    ;; Numbers
+    (is (= -1 (compare 1 2)))
+    (is (= 0 (compare 2 2)))
+    (is (= 1 (compare 3 2)))
+    (is (= -1 (compare 1.5 2)))
+    (is (= 1 (compare 2.5 2)))
+
+    ;; Strings
+    (is (= -1 (compare "a" "b")))
+    (is (= 0 (compare "hello" "hello")))
+    (is (= 1 (compare "z" "a")))
+
+    ;; Keywords
+    (is (= -1 (compare :a :b)))
+    (is (= 0 (compare :x :x)))
+
+    ;; Symbols
+    (is (= -1 (compare 'a 'b)))
+    (is (= 0 (compare 'x 'x)))
+
+    ;; nil handling
+    (is (= -1 (compare nil 1)))
+    (is (= -1 (compare nil "a")))
+    (is (= -1 (compare nil :a)))
+    (is (= 0 (compare nil nil)))
+    (is (= 1 (compare 1 nil)))
+
+    ;; Different numeric types
+    (is (= 0 (compare 1 1.0)))
+    (is (= 0 (compare 1.0 1)))))
+
+(deftest test-sort-maps-behavior
+  (testing "Sorting maps produces map entries"
+    (let [m {:b 2 :a 1 :c 3}
+          sorted (sort m)]
+      ;; Each element should be a map entry (vector of [k v])
+      (is (every? vector? sorted))
+      (is (every? #(= 2 (count %)) sorted))
+      ;; Should be sorted by key
+      (is (= [[:a 1] [:b 2] [:c 3]] sorted)))))
+
+(deftest test-non-comparable-types
+  (testing "Non-comparable types throw errors"
+    ;; Lists are not comparable
+    (is (thrown? go/any (compare '(1 2) '(1 2))))
+    (is (thrown? go/any (sort ['(1 2) '(3 4)])))
+
+    ;; Maps are not comparable
+    (is (thrown? go/any (compare {:a 1} {:b 2})))
+    (is (thrown? go/any (sort [{:a 1} {:b 2}])))
+
+    ;; Sets are not comparable
+    (is (thrown? go/any (compare #{1 2} #{3 4})))
+    (is (thrown? go/any (sort [#{1 2} #{3 4}])))
+
+    ;; Mixed incompatible types
+    (is (thrown? go/any (compare 1 :a)))
+    (is (thrown? go/any (compare "string" 'symbol)))
+    (is (thrown? go/any (compare :keyword [1 2 3])))))
+
+(deftest test-vector-comparison
+  (testing "Vector comparison details"
+    ;; Vectors compare lexicographically
+    (is (= -1 (compare [1 2] [1 3])))
+    (is (= 1 (compare [1 3] [1 2])))
+    (is (= 0 (compare [1 2 3] [1 2 3])))
+
+    ;; Shorter vectors are less than longer vectors with same prefix
+    (is (= -1 (compare [1 2] [1 2 3])))
+    (is (= 1 (compare [1 2 3] [1 2])))
+
+    ;; Nested vectors
+    (is (= -1 (compare [[1 2] [3 4]] [[1 2] [3 5]])))
+    (is (= 0 (compare [[1 2] [3 4]] [[1 2] [3 4]])))
+
+    ;; SubVectors behave like vectors
+    (let [v [1 2 3 4 5]
+          sv1 (subvec v 1 3)  ; [2 3]
+          sv2 (subvec v 2 4)] ; [3 4]
+      (is (= -1 (compare sv1 sv2)))
+      (is (= -1 (compare sv1 [3 4]))))))
+
+(deftest test-symbol-namespace-comparison
+  (testing "Symbols compare namespace-first"
+    ;; No namespace < with namespace
+    (is (= -1 (compare 'x 'a/x)))
+    (is (= 1 (compare 'a/x 'x)))
+
+    ;; Different namespaces
+    (is (= -1 (compare 'a/x 'b/x)))
+    (is (= 1 (compare 'b/x 'a/x)))
+
+    ;; Same namespace, different names
+    (is (= -1 (compare 'ns/a 'ns/b)))
+    (is (= 1 (compare 'ns/b 'ns/a)))))
+
+(deftest sort-by-clojuredocs-examples
+  (testing "Examples from ClojureDocs sort-by documentation"
+
+    (let [words ["banana" "apple" "cherry" "date"]]
+      (is (= '("date" "apple"  "banana" "cherry")
+             (sort-by count words))))
+
+    (let [words ["banana" "apple" "cherry" "date"]]
+      (is (= (sort-by count > words)
+             '("banana" "cherry" "apple" "date"))))
+
+    (let [people [{:name "Alice" :age 30 :city "NYC"}
+                  {:name "Bob" :age 25 :city "LA"}
+                  {:name "Charlie" :age 35 :city "NYC"}
+                  {:name "David" :age 25 :city "LA"}]]
+      (is (= (sort-by (juxt :city :age) people)
+             '({:name "Bob" :age 25 :city "LA"}
+               {:name "David" :age 25 :city "LA"}
+               {:name "Alice" :age 30 :city "NYC"}
+               {:name "Charlie" :age 35 :city "NYC"}))))
+
+    (let [numbers [3 1 4 1 5 9 2 6]]
+      (is (= '(3 9 6 1 4 1 5 2)
+             (sort-by #(mod % 3) numbers))))
+
+    (let [items [nil "hello" 42 :keyword]]
+      (is (= (sort-by str items)
+             '(nil 42 :keyword "hello"))))
+
+    (is (= (sort-by identity []) '()))
+    (is (= (sort-by count []) '()))
+
+    (is (= (sort-by identity [42]) '(42)))
+    (is (= (sort-by count ["hello"]) '("hello")))))
+
+;; Run tests
+(run-tests)

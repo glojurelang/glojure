@@ -435,6 +435,8 @@
    ;; builtin "Equals"
    (sexpr-replace 'clojure.lang.Util/equiv 'github.com$glojurelang$glojure$pkg$lang.Equiv)
    (sexpr-replace 'clojure.lang.Util/equals 'github.com$glojurelang$glojure$pkg$lang.Equals)
+   (sexpr-replace '(. clojure.lang.Util (compare x y)) '(github.com$glojurelang$glojure$pkg$lang.Compare x y))
+
    (sexpr-replace '(. x (meta)) '(.Meta x))
 
    (sexpr-replace 'clojure.lang.Symbol/intern 'github.com$glojurelang$glojure$pkg$lang.NewSymbol)
@@ -938,6 +940,13 @@
    (node-replace "(.pattern ^java.util.regex.Pattern p)"
                  "(.String ^regexp.*Regexp p)")
 
+   ;; Arrays.sort replacement for Glojure sort function
+   (sexpr-replace '(. java.util.Arrays (sort a comp))
+                  '(github.com$glojurelang$glojure$pkg$lang.SortSlice a comp))
+
+   ;; comparators are simple functions in Glojure
+   (sexpr-replace '(. comp (compare (keyfn x) (keyfn y)))
+                  '(comp (keyfn x) (keyfn y)))
    ]))
 
 (defn rewrite-core [zloc]

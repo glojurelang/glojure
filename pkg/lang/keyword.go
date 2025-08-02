@@ -98,3 +98,10 @@ func (k Keyword) ApplyTo(args ISeq) interface{} {
 func (k Keyword) Hash() uint32 {
 	return k.hash
 }
+
+func (k Keyword) Compare(other any) int {
+	if otherKw, ok := other.(Keyword); ok {
+		return strings.Compare(k.String(), otherKw.String())
+	}
+	panic(NewIllegalArgumentError(fmt.Sprintf("Cannot compare Keyword with %T", other)))
+}

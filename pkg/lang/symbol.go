@@ -1,6 +1,7 @@
 package lang
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -46,6 +47,29 @@ func (s *Symbol) Namespace() string {
 
 func (s *Symbol) Name() string {
 	return s.name
+}
+
+func (s *Symbol) Compare(other any) int {
+	otherSym, ok := other.(*Symbol)
+	if !ok {
+		panic(NewIllegalArgumentError(fmt.Sprintf("Cannot compare Symbol with %T", other)))
+	}
+	
+	// Compare namespace first
+	if s.ns != otherSym.ns {
+		if s.ns == "" && otherSym.ns != "" {
+			return -1
+		}
+		if s.ns != "" && otherSym.ns == "" {
+			return 1
+		}
+		if nsComp := strings.Compare(s.ns, otherSym.ns); nsComp != 0 {
+			return nsComp
+		}
+	}
+	
+	// Then compare name
+	return strings.Compare(s.name, otherSym.name)
 }
 
 func (s *Symbol) FullName() string {
