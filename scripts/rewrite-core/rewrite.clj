@@ -944,6 +944,9 @@
    (sexpr-replace '(. java.util.Arrays (sort a comp))
                   '(github.com$glojurelang$glojure$pkg$lang.SortSlice a comp))
 
+   ;; comparators are simple functions in Glojure
+   (sexpr-replace '(. comp (compare (keyfn x) (keyfn y)))
+                  '(comp (keyfn x) (keyfn y)))
    ]))
 
 (defn rewrite-core [zloc]
