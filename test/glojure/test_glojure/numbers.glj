@@ -142,18 +142,21 @@
   [
    [:input           [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        math.MaxInt64         math.MaxFloat32    math.MaxFloat64]]
    [char             [:error        (char 0)    (char 1)    (char 127)    (char 32767)   :error               :error                :error             :error]]
-   ;; In go, char == rune, which is equivalent to int32
-   [unchecked-char   [(Char -1)     (Char 0)    (Char 1)    (Char 127)    (Char 32767)   (Char math.MaxInt32) (Char -1)             (Char -1)          (Char -1)]]
+   ;; In go, char == rune, which is equivalent to int32                                                                            ;; system-dependent
+   [unchecked-char   [(Char -1)     (Char 0)    (Char 1)    (Char 127)    (Char 32767)   (Char math.MaxInt32) (Char -1)             :skip              :skip]]
    ;; bytes are unsigned in go
    [byte             [255           0           1           math.MaxInt8  :error         :error               :error                :error             :error]]
-   ;; bytes are unsigned in go
-   [unchecked-byte   [255           0           1           math.MaxInt8  255            255                  255                   255                255]]
+   ;; bytes are unsigned in go                                                                                                     ;; system-dependent
+   [unchecked-byte   [255           0           1           math.MaxInt8  255            255                  255                   :skip              :skip]]
    [short            [-1            0           1           math.MaxInt8  math.MaxInt16  :error               :error                :error             :error]]
-   [unchecked-short  [-1            0           1           math.MaxInt8  math.MaxInt16  -1                   -1                    -1                 -1]]
+   ;;                                                                                                                              ;; system-dependent
+   [unchecked-short  [-1            0           1           math.MaxInt8  math.MaxInt16  -1                   -1                    :skip              :skip]]
    [int              [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        max-int-res           :error             :error]]
-   [unchecked-int    [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        max-int-res           max-int-res        max-int-res]]
+   ;;                                                                                                                              ;; system-dependent
+   [unchecked-int    [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        max-int-res           :skip              :skip]]
    [long             [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        math.MaxInt64         :error             :error]]
-   [unchecked-long   [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        math.MaxInt64         math.MaxInt64      math.MaxInt64]]
+   ;;                                                                                                                              ;; system-dependent
+   [unchecked-long   [-1            0           1           math.MaxInt8  math.MaxInt16  math.MaxInt32        math.MaxInt64         :skip              :skip]]
                                                                                              ;; 2.14748365E9 if when float/double conversion is avoided...
    [float            [-1.0          0.0         1.0         127.0         32767.0        2.147483648E9        9.223372036854776E18  math.MaxFloat32    :error]]
    [unchecked-float  [-1.0          0.0         1.0         127.0         32767.0        2.147483648E9        9.223372036854776E18  math.MaxFloat32    (go/float32 (math.Inf 1))]]
@@ -163,11 +166,13 @@
 (deftest test-expected-casts
   (let [[[_ inputs] & expectations] expected-casts]
     (doseq [[f vals] expectations]
-      (let [wrapped (fn [x]
-                      (try
-                       (f x)
-                       (catch go/any e :error)))]
-        (is (= vals (map wrapped inputs)))))))
+      (let [wrapped (fn [x expected]
+                      (if (= expected :skip)
+                        expected
+                        (try
+                          (f x)
+                          (catch go/any e :error))))]
+        (is (= vals (map wrapped inputs vals)))))))
 
 (deftest test-prim-with-matching-hint
   (is (= 1.0 (let [x 1.2] (math.Round ^go/float64 x)))))
