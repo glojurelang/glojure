@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/stdlib"
 )
@@ -43,14 +43,14 @@ func WithLoadPath(path []string) EvalOption {
 	}
 }
 
-func withEnv(env value.Environment) EvalOption {
+func withEnv(env lang.Environment) EvalOption {
 	e := env.(*environment)
 	return func(opts *evalOptions) {
 		opts.env = e
 	}
 }
 
-func NewEnvironment(opts ...EvalOption) value.Environment {
+func NewEnvironment(opts ...EvalOption) lang.Environment {
 	options := &evalOptions{
 		stdout: os.Stdout,
 		stderr: os.Stderr,
@@ -65,21 +65,21 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 		env.loadPath = options.loadPath
 	}
 	// TODO: this is rather rather hacky
-	value.GlobalEnv = env
+	lang.GlobalEnv = env
 
 	// bootstrap namespace control
 	{
 		// bootstrap implementation of the ns macro
-		env.DefVar(value.NewSymbol("in-ns"), value.IFnFunc(func(args ...interface{}) interface{} {
+		env.DefVar(lang.NewSymbol("in-ns"), lang.IFnFunc(func(args ...interface{}) interface{} {
 			if len(args) != 1 {
 				panic(fmt.Errorf("in-ns: expected namespace name"))
 			}
 
-			sym, ok := args[0].(*value.Symbol)
+			sym, ok := args[0].(*lang.Symbol)
 			if !ok {
 				panic(fmt.Errorf("in-ns: expected symbol as namespace name"))
 			}
-			ns := value.FindOrCreateNamespace(sym)
+			ns := lang.FindOrCreateNamespace(sym)
 			env.SetCurrentNamespace(ns)
 			return ns
 		}))
@@ -92,7 +92,7 @@ func NewEnvironment(opts ...EvalOption) value.Environment {
 			if err != nil {
 				panic(fmt.Sprintf("could not read stdlib core.glj: %v", err))
 			}
-			r := reader.New(strings.NewReader(string(core)), reader.WithFilename(path), reader.WithGetCurrentNS(func() *value.Namespace {
+			r := reader.New(strings.NewReader(string(core)), reader.WithFilename(path), reader.WithGetCurrentNS(func() *lang.Namespace {
 				return env.CurrentNamespace()
 			}))
 

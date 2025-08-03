@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/kylelemons/godebug/diff"
 )
 
@@ -53,9 +53,9 @@ func TestRead(t *testing.T) {
 		})
 	}
 
-	aliasNS := value.FindOrCreateNamespace(value.NewSymbol("resolved.alias"))
-	ns := value.FindOrCreateNamespace(value.NewSymbol("user"))
-	ns.AddAlias(value.NewSymbol("aliased"), aliasNS)
+	aliasNS := lang.FindOrCreateNamespace(lang.NewSymbol("resolved.alias"))
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("user"))
+	ns.AddAlias(lang.NewSymbol("aliased"), aliasNS)
 
 	for _, tc := range testCases {
 		tc := tc
@@ -65,7 +65,7 @@ func TestRead(t *testing.T) {
 			r := New(strings.NewReader(tc.input),
 				WithFilename(tc.name),
 				// WithSymbolResolver(&testSymbolResolver{}), // TODO: option to test with this
-				WithGetCurrentNS(func() *value.Namespace {
+				WithGetCurrentNS(func() *lang.Namespace {
 					return ns
 				}),
 			)
@@ -174,10 +174,10 @@ func FuzzRead(f *testing.F) {
 }
 
 func testPrintString(x interface{}) string {
-	value.PushThreadBindings(value.NewMap(
-		value.VarPrintReadably, true,
+	lang.PushThreadBindings(lang.NewMap(
+		lang.VarPrintReadably, true,
 	))
-	defer value.PopThreadBindings()
+	defer lang.PopThreadBindings()
 
 	if v, ok := x.(float64); ok {
 		if math.IsNaN(v) {
@@ -191,5 +191,5 @@ func testPrintString(x interface{}) string {
 		}
 	}
 
-	return value.PrintString(x)
+	return lang.PrintString(x)
 }

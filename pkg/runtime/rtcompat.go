@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 
 	"github.com/glojurelang/glojure/pkg/lang"
-	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/stdlib"
 
@@ -72,23 +71,23 @@ func (rt *RTMethods) Pop(x interface{}) interface{} {
 }
 
 func (rt *RTMethods) IntCast(x interface{}) int {
-	return value.IntCast(x)
+	return lang.IntCast(x)
 }
 
 func (rt *RTMethods) BooleanCast(x interface{}) bool {
-	return value.BooleanCast(x)
+	return lang.BooleanCast(x)
 }
 
 func (rt *RTMethods) ByteCast(x interface{}) byte {
-	return value.ByteCast(x)
+	return lang.ByteCast(x)
 }
 
 func (rt *RTMethods) CharCast(x interface{}) Char {
-	return value.CharCast(x)
+	return lang.CharCast(x)
 }
 
 func (rt *RTMethods) UncheckedCharCast(x interface{}) Char {
-	return value.UncheckedCharCast(x)
+	return lang.UncheckedCharCast(x)
 }
 
 func (rt *RTMethods) Dissoc(x interface{}, k interface{}) interface{} {
@@ -125,7 +124,7 @@ func (rt *RTMethods) Find(coll, key interface{}) interface{} {
 
 func (rt *RTMethods) Load(scriptBase string) {
 	kvs := make([]interface{}, 0, 3)
-	for _, vr := range []*Var{VarCurrentNS, VarWarnOnReflection, VarUncheckedMath, value.VarDataReaders} {
+	for _, vr := range []*Var{VarCurrentNS, VarWarnOnReflection, VarUncheckedMath, lang.VarDataReaders} {
 		kvs = append(kvs, vr, vr.Deref())
 	}
 	PushThreadBindings(NewMap(kvs...))
@@ -228,8 +227,8 @@ func (rt *RTMethods) Munge(name string) string {
 }
 
 func RTReadString(s string) interface{} {
-	rdr := reader.New(strings.NewReader(s), reader.WithGetCurrentNS(func() *value.Namespace {
-		return value.VarCurrentNS.Deref().(*value.Namespace)
+	rdr := reader.New(strings.NewReader(s), reader.WithGetCurrentNS(func() *lang.Namespace {
+		return lang.VarCurrentNS.Deref().(*lang.Namespace)
 	}))
 	v, err := rdr.ReadOne()
 	if err != nil {

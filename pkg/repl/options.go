@@ -3,14 +3,14 @@ package repl
 import (
 	"io"
 
-	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 )
 
 type options struct {
 	stdin     io.Reader
 	stdout    io.Writer
 	namespace string
-	env       value.Environment
+	env       lang.Environment
 }
 
 // Option is a functional option for the REPL.
@@ -31,7 +31,7 @@ func WithStdout(w io.Writer) Option {
 }
 
 // WithEnvironment sets the execution environment for the REPL.
-func WithEnvironment(env value.Environment) Option {
+func WithEnvironment(env lang.Environment) Option {
 	return func(o *options) {
 		o.env = env
 	}

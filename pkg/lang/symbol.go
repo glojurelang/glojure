@@ -54,7 +54,7 @@ func (s *Symbol) Compare(other any) int {
 	if !ok {
 		panic(NewIllegalArgumentError(fmt.Sprintf("Cannot compare Symbol with %T", other)))
 	}
-	
+
 	// Compare namespace first
 	if s.ns != otherSym.ns {
 		if s.ns == "" && otherSym.ns != "" {
@@ -67,7 +67,7 @@ func (s *Symbol) Compare(other any) int {
 			return nsComp
 		}
 	}
-	
+
 	// Then compare name
 	return strings.Compare(s.name, otherSym.name)
 }

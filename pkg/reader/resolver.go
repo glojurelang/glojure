@@ -1,12 +1,12 @@
 package reader
 
-import value "github.com/glojurelang/glojure/pkg/lang"
+import "github.com/glojurelang/glojure/pkg/lang"
 
 type (
 	SymbolResolver interface {
-		CurrentNS() *value.Symbol
-		ResolveStruct(*value.Symbol) *value.Symbol
-		ResolveAlias(*value.Symbol) *value.Symbol
-		ResolveVar(*value.Symbol) *value.Symbol
+		CurrentNS() *lang.Symbol
+		ResolveStruct(*lang.Symbol) *lang.Symbol
+		ResolveAlias(*lang.Symbol) *lang.Symbol
+		ResolveVar(*lang.Symbol) *lang.Symbol
 	}
 )

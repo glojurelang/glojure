@@ -9,7 +9,6 @@ import (
 
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
-	value "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 
 	// Make it easier to refer to KW globals
@@ -21,8 +20,8 @@ var indent = 0
 var (
 	Debug = false
 
-	SymNS   = value.NewSymbol("ns")
-	SymInNS = value.NewSymbol("in-ns")
+	SymNS   = lang.NewSymbol("ns")
+	SymInNS = lang.NewSymbol("in-ns")
 )
 
 type EvalError struct {
@@ -119,14 +118,14 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 	case ast.OpThrow:
 		return env.EvalASTThrow(n)
 	default:
-		panic(fmt.Errorf("unimplemented op: %d. Form: %s", n.Op, value.ToString(n.Form)))
+		panic(fmt.Errorf("unimplemented op: %d. Form: %s", n.Op, lang.ToString(n.Form)))
 	}
 }
 
 func (env *environment) EvalASTDef(n *ast.Node) (interface{}, error) {
 	defNode := n.Sub.(*ast.DefNode)
 	init := defNode.Init
-	if value.IsNil(init) {
+	if lang.IsNil(init) {
 		return defNode.Var, nil
 	}
 
@@ -138,20 +137,20 @@ func (env *environment) EvalASTDef(n *ast.Node) (interface{}, error) {
 
 	// evaluate symbol metadata if present
 	meta := defNode.Meta
-	if !value.IsNil(meta) {
+	if !lang.IsNil(meta) {
 		metaVal, err := env.EvalAST(meta)
 		if err != nil {
 			return nil, err
 		}
-		s, err := value.WithMeta(sym, metaVal.(value.IPersistentMap))
+		s, err := lang.WithMeta(sym, metaVal.(lang.IPersistentMap))
 		if err != nil {
 			return nil, err
 		}
-		sym = s.(*value.Symbol)
+		sym = s.(*lang.Symbol)
 	}
 
 	vr := env.DefVar(sym, initVal)
-	if RT.BooleanCast(lang.Get(vr.Meta(), value.KWDynamic)) {
+	if RT.BooleanCast(lang.Get(vr.Meta(), lang.KWDynamic)) {
 		vr.SetDynamic()
 	}
 	return vr, nil
@@ -233,35 +232,35 @@ func (c *evalCompiler) Macroexpand1(form interface{}) interface{} {
 	return res
 }
 
-func (c *evalCompiler) MaybeResolveIn(ns *value.Namespace, sym *value.Symbol) interface{} {
+func (c *evalCompiler) MaybeResolveIn(ns *lang.Namespace, sym *lang.Symbol) interface{} {
 	switch {
 	case sym.Namespace() != "":
-		n := value.NamespaceFor(ns, sym)
+		n := lang.NamespaceFor(ns, sym)
 		if n == nil {
 			return nil
 		}
-		return n.FindInternedVar(value.NewSymbol(sym.Name()))
+		return n.FindInternedVar(lang.NewSymbol(sym.Name()))
 	case strings.Index(sym.Name(), ".") > 0 && !strings.HasSuffix(sym.Name(), ".") || sym.Name()[0] == '[':
 		// TODO: what case does this correspond to? should we be looking for imports here?
 		// previously: panic(fmt.Errorf("can't resolve class %s in ns %s", sym, ns))
 		return nil
 	case sym.Equals(SymNS):
-		return value.VarNS
+		return lang.VarNS
 	case sym.Equals(SymInNS):
-		return value.VarInNS
+		return lang.VarInNS
 	default:
 		return ns.GetMapping(sym)
 	}
 }
 
 func (env *environment) EvalASTMaybeClass(n *ast.Node) (interface{}, error) {
-	sym := n.Sub.(*ast.MaybeClassNode).Class.(*value.Symbol)
+	sym := n.Sub.(*ast.MaybeClassNode).Class.(*lang.Symbol)
 	v, ok := pkgmap.Get(sym.FullName())
 	if ok {
 		return v, nil
 	}
 
-	return nil, errors.New("unable to resolve symbol: " + value.ToString(sym))
+	return nil, errors.New("unable to resolve symbol: " + lang.ToString(sym))
 }
 
 func (env *environment) EvalASTMaybeHostForm(n *ast.Node) (interface{}, error) {
@@ -274,10 +273,10 @@ func (env *environment) EvalASTMaybeHostForm(n *ast.Node) (interface{}, error) {
 		case "create":
 			return func(keys interface{}) interface{} {
 				var ks []interface{}
-				for seq := value.Seq(keys); seq != nil; seq = seq.Next() {
+				for seq := lang.Seq(keys); seq != nil; seq = seq.Next() {
 					ks = append(ks, seq.First())
 				}
-				return value.NewSet(ks...)
+				return lang.NewSet(ks...)
 			}, nil
 		}
 	}
@@ -305,16 +304,16 @@ func (env *environment) EvalASTHostCall(n *ast.Node) (interface{}, error) {
 		}
 		argVals = append(argVals, argVal)
 	}
-	methodVal, ok := value.FieldOrMethod(tgtVal, method.Name())
+	methodVal, ok := lang.FieldOrMethod(tgtVal, method.Name())
 	if !ok {
 		return nil, fmt.Errorf("no such field or method on %v (%T): %s", tgtVal, tgtVal, method)
 	}
 	// if the field is not a function, return an error
 	if reflect.TypeOf(methodVal).Kind() != reflect.Func {
-		return nil, errors.New("not a method: " + value.ToString(tgtVal) + "." + method.Name())
+		return nil, errors.New("not a method: " + lang.ToString(tgtVal) + "." + method.Name())
 	}
 
-	return value.Apply(methodVal, argVals), nil
+	return lang.Apply(methodVal, argVals), nil
 }
 
 func (env *environment) EvalASTHostInterop(n *ast.Node) (interface{}, error) {
@@ -328,7 +327,7 @@ func (env *environment) EvalASTHostInterop(n *ast.Node) (interface{}, error) {
 		return nil, err
 	}
 
-	mOrFVal, ok := value.FieldOrMethod(tgtVal, mOrF.Name())
+	mOrFVal, ok := lang.FieldOrMethod(tgtVal, mOrF.Name())
 	if !ok {
 		return nil, fmt.Errorf("no such field or method on %T: %s", tgtVal, mOrF)
 	}
@@ -339,7 +338,7 @@ func (env *environment) EvalASTHostInterop(n *ast.Node) (interface{}, error) {
 	}
 	switch reflect.TypeOf(mOrFVal).Kind() {
 	case reflect.Func:
-		return value.Apply(mOrFVal, nil), nil
+		return lang.Apply(mOrFVal, nil), nil
 	default:
 		return mOrFVal, nil
 	}
@@ -366,7 +365,7 @@ func (env *environment) EvalASTGo(n *ast.Node) (interface{}, error) {
 		argVals = append(argVals, argVal)
 	}
 
-	go value.Apply(fnVal, argVals)
+	go lang.Apply(fnVal, argVals)
 	return nil, nil
 }
 
@@ -384,7 +383,7 @@ func (env *environment) EvalASTWithMeta(n *ast.Node) (interface{}, error) {
 		return nil, err
 	}
 
-	return value.WithMeta(exprVal, metaVal.(value.IPersistentMap))
+	return lang.WithMeta(exprVal, metaVal.(lang.IPersistentMap))
 }
 
 func (env *environment) EvalASTFn(n *ast.Node) (interface{}, error) {
@@ -392,7 +391,7 @@ func (env *environment) EvalASTFn(n *ast.Node) (interface{}, error) {
 }
 
 func (env *environment) EvalASTMap(n *ast.Node) (interface{}, error) {
-	res := value.NewMap()
+	res := lang.NewMap()
 
 	mapNode := n.Sub.(*ast.MapNode)
 
@@ -427,7 +426,7 @@ func (env *environment) EvalASTVector(n *ast.Node) (interface{}, error) {
 		}
 		vals = append(vals, itemVal)
 	}
-	return value.NewVector(vals...), nil
+	return lang.NewVector(vals...), nil
 }
 
 func (env *environment) EvalASTSet(n *ast.Node) (interface{}, error) {
@@ -443,7 +442,7 @@ func (env *environment) EvalASTSet(n *ast.Node) (interface{}, error) {
 		}
 		vals = append(vals, itemVal)
 	}
-	return value.NewSet(vals...), nil
+	return lang.NewSet(vals...), nil
 }
 
 func (env *environment) EvalASTIf(n *ast.Node) (interface{}, error) {
@@ -457,7 +456,7 @@ func (env *environment) EvalASTIf(n *ast.Node) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	if value.IsTruthy(testVal) {
+	if lang.IsTruthy(testVal) {
 		return env.EvalAST(then)
 	} else {
 		return env.EvalAST(els)
@@ -480,7 +479,7 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 			if err != nil {
 				return nil, err
 			}
-			if value.Equals(testVal, caseTestVal) {
+			if lang.Equals(testVal, caseTestVal) {
 				res, err := env.EvalAST(caseNodeNode.Then)
 				if err != nil {
 					return nil, err
@@ -531,14 +530,14 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 
 Recur:
 	for i := 0; i < len(bindNameVals); i += 2 {
-		name := bindNameVals[i].(*value.Symbol)
+		name := bindNameVals[i].(*lang.Symbol)
 		val := bindNameVals[i+1]
 		newEnv.BindLocal(name, val)
 	}
 
-	rt := value.NewRecurTarget()
+	rt := lang.NewRecurTarget()
 	recurEnv := newEnv.WithRecurTarget(rt).(*environment)
-	recurErr := &value.RecurError{Target: rt}
+	recurErr := &lang.RecurError{Target: rt}
 
 	res, err := recurEnv.EvalAST(letNode.Body)
 	if isLoop && errors.As(err, &recurErr) {
@@ -585,7 +584,7 @@ func (env *environment) EvalASTRecur(n *ast.Node) (interface{}, error) {
 	recurNode := n.Sub.(*ast.RecurNode)
 
 	exprs := recurNode.Exprs
-	vals := make([]interface{}, 0, value.Count(exprs))
+	vals := make([]interface{}, 0, lang.Count(exprs))
 	noRecurEnv := env.WithRecurTarget(nil).(*environment)
 	for _, expr := range exprs {
 		val, err := noRecurEnv.EvalAST(expr)
@@ -594,7 +593,7 @@ func (env *environment) EvalASTRecur(n *ast.Node) (interface{}, error) {
 		}
 		vals = append(vals, val)
 	}
-	return nil, &value.RecurError{
+	return nil, &lang.RecurError{
 		Target: env.recurTarget,
 		Args:   vals,
 	}
@@ -608,7 +607,7 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 		if r := recover(); r != nil {
 			// TODO: dynamically set pr-on to nil to avoid infinite
 			// recursion; need to use go-only stringification for errors.
-			gljFrame = fmt.Sprintf("%s:%d:%d:\t%s", value.Get(meta, KWFile), value.Get(meta, KWLine), value.Get(meta, KWColumn), n.Form)
+			gljFrame = fmt.Sprintf("%s:%d:%d:\t%s", lang.Get(meta, KWFile), lang.Get(meta, KWLine), lang.Get(meta, KWColumn), n.Form)
 			if rErr, ok := r.(error); ok {
 				if errors.Is(rErr, &EvalError{}) {
 					var evalErr *EvalError
@@ -651,7 +650,7 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 		argVals = append(argVals, argVal)
 	}
 
-	return value.Apply(fnVal, argVals), nil
+	return lang.Apply(fnVal, argVals), nil
 }
 
 func (env *environment) EvalASTVar(n *ast.Node) (interface{}, error) {
