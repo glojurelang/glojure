@@ -51,10 +51,36 @@ user=>
 
 ## Usage
 
-Here's a small example program that starts an HTTP server with a
-simple handler function that responds with the request body:
+Glojure can be used in two ways: as a standalone command-line tool (`glj`) or embedded within Go applications.
+
+### Using the `glj` Command
+
+The `glj` command provides a traditional Clojure development experience:
+
+**Start a REPL (interactive session):**
+```
+$ glj
+user=> (+ 1 2 3)
+6
+user=> (println "Hello from Glojure!")
+Hello from Glojure!
+nil
+```
+
+**Run a Clojure script:**
 ```clojure
-;; example.glj
+;; hello.glj
+(println "Hello," (first *command-line-args*))
+```
+
+```
+$ glj hello.glj World
+Hello, World
+```
+
+**Create executable programs:**
+```clojure
+;; server.glj
 (ns example.server)
 
 (defn echo-handler
@@ -63,19 +89,109 @@ simple handler function that responds with the request body:
   nil)
 
 (net$http.Handle "/" (net$http.HandlerFunc echo-handler))
-
+(println "Server starting on :8080...")
 (net$http.ListenAndServe ":8080" nil)
 ```
 
-Run it with the `glj` command:
 ```
-$ glj ./example.glj
+$ glj server.glj
+Server starting on :8080...
 ```
 
+### Embedding Glojure in Go Applications
+
+You can also embed Glojure as a scripting language within your Go applications. This is useful when you want to:
+- Add scriptable configuration to your Go application
+- Allow users to extend your application with Clojure plugins
+- Mix Go's performance with Clojure's expressiveness
+- Control the execution environment (custom I/O, sandboxing)
+
+**Basic embedding example:**
+```go
+package main
+
+import (
+    "fmt"
+    _ "github.com/glojurelang/glojure/pkg/glj"  // Initialize Glojure
+    "github.com/glojurelang/glojure/pkg/runtime"
+)
+
+func main() {
+    // Evaluate Clojure code
+    result := runtime.ReadEval(`
+        (defn factorial [n]
+          (if (<= n 1)
+            1
+            (* n (factorial (dec n)))))
+        (factorial 5)
+    `)
+    fmt.Printf("5! = %v\n", result) // 5! = 120
+}
 ```
-$ curl localhost:8080 -d "sicp"
-sicp
+
+**Calling Go from Clojure and vice versa:**
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/glojurelang/glojure/pkg/glj"
+    "github.com/glojurelang/glojure/pkg/runtime"
+)
+
+// Define a Go function
+func greet(name string) string {
+    return fmt.Sprintf("Hello, %s from Go!", name)
+}
+
+func main() {
+    // Make the Go function available to Clojure
+    runtime.ReadEval(`(def greet-from-go nil)`) // placeholder
+    greetVar := glj.Var("user", "greet-from-go")
+    greetVar.SetRoot(greet)
+
+    // Use it from Clojure
+    result := runtime.ReadEval(`(greet-from-go "Clojure")`)
+    fmt.Println(result) // "Hello, Clojure from Go!"
+
+    // Call a Clojure function from Go
+    runtime.ReadEval(`(defn add [x y] (+ x y))`)
+    addFn := glj.Var("user", "add")
+    sum := addFn.Invoke(10, 32)
+    fmt.Printf("Sum: %v\n", sum) // Sum: 42
+}
 ```
+
+**Accessing your own Go packages:**
+
+When embedding Glojure, you can also expose your own Go packages or additional standard library packages using the package map approach described in the [Accessing additional Go packages](#accessing-additional-go-packages) section below. This allows embedded Clojure code to access any Go packages you choose to expose:
+
+```go
+import (
+    _ "github.com/glojurelang/glojure/pkg/glj"
+    _ "your.app/gljimports" // Your generated package map
+)
+
+// Now Clojure code can access your exposed packages
+runtime.ReadEval(`
+    (your$package.YourFunction "arg")
+    (another$package.Method)
+`)
+```
+
+### When to Use Each Approach
+
+**Use `glj` command for:**
+- Writing standalone Clojure programs
+- Interactive development with the REPL
+- Running Clojure scripts
+- Learning Clojure with Go interop
+
+**Embed Glojure for:**
+- Adding scripting to an existing Go application
+- Building a platform that users extend with Clojure
+- Custom control over the Glojure execution environment
+- Mixing Go and Clojure in a single binary
 
 ### Interop
 
