@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/runtime"
 )
@@ -36,9 +36,9 @@ func Start(opts ...Option) {
 		o.env = initEnv(o.stdout)
 	}
 	{ // set namespace
-		_, err := o.env.Eval(value.NewList(
-			value.NewSymbol("ns"),
-			value.NewSymbol(o.namespace),
+		_, err := o.env.Eval(lang.NewList(
+			lang.NewSymbol("ns"),
+			lang.NewSymbol(o.namespace),
 		))
 		if err != nil {
 			panic(err)
@@ -64,7 +64,7 @@ func Start(opts ...Option) {
 		}
 		expr += line + "\n"
 
-		rdr := reader.New(strings.NewReader(expr), reader.WithFilename("repl"), reader.WithGetCurrentNS(func() *value.Namespace {
+		rdr := reader.New(strings.NewReader(expr), reader.WithFilename("repl"), reader.WithGetCurrentNS(func() *lang.Namespace {
 			return o.env.CurrentNamespace()
 		}))
 
@@ -91,7 +91,7 @@ func Start(opts ...Option) {
 				if err != nil {
 					return "", err
 				}
-				return value.PrintString(val), nil
+				return lang.PrintString(val), nil
 			}()
 			if err != nil {
 				fmt.Fprintln(o.stdout, err)
@@ -118,7 +118,7 @@ func readLine(r io.Reader) (string, error) {
 	return line, nil
 }
 
-func initEnv(stdout io.Writer) value.Environment {
+func initEnv(stdout io.Writer) lang.Environment {
 	if cpuProfile {
 		f, err := os.Create("./gljInitEnvCpu.prof")
 		if err != nil {
@@ -131,10 +131,10 @@ func initEnv(stdout io.Writer) value.Environment {
 
 	// TODO: clean up this code. copied from rtcompat.go.
 	kvs := make([]interface{}, 0, 3)
-	for _, vr := range []*value.Var{value.VarCurrentNS, value.VarWarnOnReflection, value.VarUncheckedMath, value.VarDataReaders} {
+	for _, vr := range []*lang.Var{lang.VarCurrentNS, lang.VarWarnOnReflection, lang.VarUncheckedMath, lang.VarDataReaders} {
 		kvs = append(kvs, vr, vr.Deref())
 	}
-	value.PushThreadBindings(value.NewMap(kvs...))
+	lang.PushThreadBindings(lang.NewMap(kvs...))
 
 	env := runtime.NewEnvironment(runtime.WithStdout(stdout))
 	if debugMode {

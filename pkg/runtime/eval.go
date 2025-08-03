@@ -5,26 +5,25 @@ import (
 
 	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
-	value "github.com/glojurelang/glojure/pkg/lang"
 )
 
 func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
-	seq, ok := form.(value.ISeq)
+	seq, ok := form.(lang.ISeq)
 	if !ok {
 		return form, nil
 	}
 
-	op := value.First(seq)
-	sym, ok := op.(*value.Symbol)
+	op := lang.First(seq)
+	sym, ok := op.(*lang.Symbol)
 	if !ok {
 		return form, nil
 	}
 
 	symStr := sym.String()
 	if len(symStr) > 1 && symStr[0] == '.' && symStr[1] != '.' {
-		fieldSym := value.NewSymbol(sym.String()[1:])
+		fieldSym := lang.NewSymbol(sym.String()[1:])
 		// rewrite the expression to a dot expression
-		dotExpr := value.NewCons(SymbolDot, value.NewCons(seq.Next().First(), value.NewCons(fieldSym, seq.Next().Next())))
+		dotExpr := lang.NewCons(SymbolDot, lang.NewCons(seq.Next().First(), lang.NewCons(fieldSym, seq.Next().Next())))
 		return env.Macroexpand1(dotExpr)
 	}
 
@@ -33,23 +32,23 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 		return form, nil
 	}
 
-	applyer, ok := macroVar.Get().(value.IFn)
+	applyer, ok := macroVar.Get().(lang.IFn)
 	if !ok {
 		return nil, env.errorf(form, "macro %s is not a function (%T)", sym, macroVar.Get())
 	}
-	res, err := env.applyMacro(applyer, form.(value.ISeq))
+	res, err := env.applyMacro(applyer, form.(lang.ISeq))
 	if err != nil {
 		return nil, env.errorf(form, "error applying macro: %w", err)
 	}
 	return res, nil
 }
 
-func (env *environment) applyMacro(fn value.IFn, form value.ISeq) (interface{}, error) {
+func (env *environment) applyMacro(fn lang.IFn, form lang.ISeq) (interface{}, error) {
 	argList := form.Next()
 	// two hidden arguments, $form and $env (nil for now).
 	// $form is the form that was passed to the macro
 	// $env is the environment that the macro was called in
-	return fn.ApplyTo(value.NewCons(form, value.NewCons(nil, argList))), nil
+	return fn.ApplyTo(lang.NewCons(form, lang.NewCons(nil, argList))), nil
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
@@ -59,22 +58,22 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 	analyzer := &compiler.Analyzer{
 		Macroexpand1: env.Macroexpand1,
-		CreateVar: func(sym *value.Symbol, e compiler.Env) (interface{}, error) {
+		CreateVar: func(sym *lang.Symbol, e compiler.Env) (interface{}, error) {
 			vr := env.CurrentNamespace().Intern(sym)
 			return vr, nil
 		},
 		IsVar: func(v interface{}) bool {
-			_, ok := v.(*value.Var)
+			_, ok := v.(*lang.Var)
 			return ok
 		},
-		Gensym: func(prefix string) *value.Symbol {
+		Gensym: func(prefix string) *lang.Symbol {
 			num := env.nextSymNum()
-			return value.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
+			return lang.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
 		},
 		FindNamespace: lang.FindNamespace,
 	}
-	astNode, err := analyzer.Analyze(n, value.NewMap(
-		value.KWNS, env.CurrentNamespace().Name(),
+	astNode, err := analyzer.Analyze(n, lang.NewMap(
+		lang.KWNS, env.CurrentNamespace().Name(),
 	))
 	if err != nil {
 		return nil, err
@@ -84,16 +83,16 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 
 // Helpers
 
-func (env *environment) lookupVar(sym *value.Symbol, internNew, registerMacro bool) (*value.Var, error) {
+func (env *environment) lookupVar(sym *lang.Symbol, internNew, registerMacro bool) (*lang.Var, error) {
 	// Translated from clojure's Compiler.java
-	var result *value.Var
+	var result *lang.Var
 	switch {
 	case sym.Namespace() != "":
 		ns := env.namespaceForSymbol(sym)
 		if ns == nil {
 			return nil, env.errorf(sym, "unable to resolve %s", sym)
 		}
-		nameSym := value.NewSymbol(sym.Name())
+		nameSym := lang.NewSymbol(sym.Name())
 		if internNew && ns == env.CurrentNamespace() {
 			result = ns.Intern(nameSym)
 		} else {
@@ -109,9 +108,9 @@ func (env *environment) lookupVar(sym *value.Symbol, internNew, registerMacro bo
 		if v == nil {
 			// introduce a new var in the current ns
 			if internNew {
-				result = env.CurrentNamespace().Intern(value.NewSymbol(sym.Name()))
+				result = env.CurrentNamespace().Intern(lang.NewSymbol(sym.Name()))
 			}
-		} else if v, ok := v.(*value.Var); ok {
+		} else if v, ok := v.(*lang.Var); ok {
 			result = v
 		} else {
 			return nil, env.errorf(sym, "expecting var, but %s is mapped to %T", sym, v)
@@ -123,15 +122,15 @@ func (env *environment) lookupVar(sym *value.Symbol, internNew, registerMacro bo
 	return result, nil
 }
 
-func (env *environment) namespaceForSymbol(sym *value.Symbol) *value.Namespace {
-	return value.NamespaceFor(env.CurrentNamespace(), sym)
+func (env *environment) namespaceForSymbol(sym *lang.Symbol) *lang.Namespace {
+	return lang.NamespaceFor(env.CurrentNamespace(), sym)
 }
 
-func (env *environment) registerVar(v *value.Var) {
+func (env *environment) registerVar(v *lang.Var) {
 	// TODO: implement
 }
 
-func (env *environment) asMacro(sym *value.Symbol) *value.Var {
+func (env *environment) asMacro(sym *lang.Symbol) *lang.Var {
 	vr, err := env.lookupVar(sym, false, false)
 	if vr == nil || err != nil {
 		return nil
@@ -145,7 +144,7 @@ func (env *environment) asMacro(sym *value.Symbol) *value.Var {
 
 // Misc. helpers
 
-func seqToSlice(seq value.ISeq) []interface{} {
+func seqToSlice(seq lang.ISeq) []interface{} {
 	if seq == nil {
 		return nil
 	}

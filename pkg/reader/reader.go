@@ -10,16 +10,16 @@ import (
 	"strings"
 	"unicode"
 
-	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 )
 
 var (
-	symQuote         = value.NewSymbol("quote")
-	symList          = value.NewSymbol("glojure.core/list")
-	symSeq           = value.NewSymbol("glojure.core/seq")
-	symConcat        = value.NewSymbol("glojure.core/concat")
-	symUnquote       = value.NewSymbol("glojure.core/unquote")
-	symSpliceUnquote = value.NewSymbol("glojure.core/splice-unquote")
+	symQuote         = lang.NewSymbol("quote")
+	symList          = lang.NewSymbol("glojure.core/list")
+	symSeq           = lang.NewSymbol("glojure.core/seq")
+	symConcat        = lang.NewSymbol("glojure.core/concat")
+	symUnquote       = lang.NewSymbol("glojure.core/unquote")
+	symSpliceUnquote = lang.NewSymbol("glojure.core/splice-unquote")
 
 	specials = func() map[string]bool {
 		specialStrs := []string{
@@ -176,11 +176,11 @@ type (
 		rs *trackingRuneScanner
 
 		symbolResolver SymbolResolver
-		getCurrentNS   func() *value.Namespace
+		getCurrentNS   func() *lang.Namespace
 
 		// map for function shorthand arguments.
 		// non-nil only when reading a function shorthand.
-		fnArgMap   map[int]*value.Symbol
+		fnArgMap   map[int]*lang.Symbol
 		argCounter int
 
 		posStack []pos
@@ -190,7 +190,7 @@ type (
 type options struct {
 	filename     string
 	resolver     SymbolResolver
-	getCurrentNS func() *value.Namespace
+	getCurrentNS func() *lang.Namespace
 }
 
 // Option represents an option that can be passed to New.
@@ -211,7 +211,7 @@ func WithSymbolResolver(resolver SymbolResolver) Option {
 }
 
 // WithGetCurrentNS sets the function to be used to get the current namespace.
-func WithGetCurrentNS(getCurrentNS func() *value.Namespace) Option {
+func WithGetCurrentNS(getCurrentNS func() *lang.Namespace) Option {
 	return func(o *options) {
 		o.getCurrentNS = getCurrentNS
 	}
@@ -223,11 +223,11 @@ func New(r io.RuneScanner, opts ...Option) *Reader {
 	for _, opt := range opts {
 		opt(&o)
 	}
-	getCurrentNS := func() *value.Namespace {
-		if value.GlobalEnv != nil { // TODO: should be unnecessary
-			return value.GlobalEnv.CurrentNamespace()
+	getCurrentNS := func() *lang.Namespace {
+		if lang.GlobalEnv != nil { // TODO: should be unnecessary
+			return lang.GlobalEnv.CurrentNamespace()
 		}
-		return value.FindOrCreateNamespace(value.NewSymbol("user"))
+		return lang.FindOrCreateNamespace(lang.NewSymbol("user"))
 	}
 	if o.getCurrentNS != nil {
 		getCurrentNS = o.getCurrentNS
@@ -300,16 +300,16 @@ func (r *Reader) error(format string, args ...interface{}) error {
 
 // popSection returns the last section read, ending at the current
 // input, and pops it off the stack.
-func (r *Reader) popSection() value.IPersistentMap {
+func (r *Reader) popSection() lang.IPersistentMap {
 	top := r.posStack[len(r.posStack)-1]
 	r.posStack = r.posStack[:len(r.posStack)-1]
 
-	return value.NewMap(
-		value.KWFile, r.rs.filename,
-		value.KWLine, top.Line,
-		value.KWColumn, top.Column,
-		value.KWEndLine, r.rs.pos().Line,
-		value.KWEndColumn, r.rs.pos().Column,
+	return lang.NewMap(
+		lang.KWFile, r.rs.filename,
+		lang.KWLine, top.Line,
+		lang.KWColumn, top.Column,
+		lang.KWEndLine, r.rs.pos().Line,
+		lang.KWEndColumn, r.rs.pos().Column,
 	)
 }
 
@@ -354,14 +354,14 @@ func (r *Reader) readExpr() (expr interface{}, err error) {
 	r.pushSection()
 	defer func() {
 		s := r.popSection()
-		obj, ok := expr.(value.IObj)
+		obj, ok := expr.(lang.IObj)
 		if !ok {
 			return
 		}
 		meta := obj.Meta()
-		for seq := value.Seq(s); seq != nil; seq = seq.Next() {
-			entry := seq.First().(value.IMapEntry)
-			meta = value.Assoc(meta, entry.Key(), entry.Val()).(value.IPersistentMap)
+		for seq := lang.Seq(s); seq != nil; seq = seq.Next() {
+			entry := seq.First().(lang.IMapEntry)
+			meta = lang.Assoc(meta, entry.Key(), entry.Val()).(lang.IPersistentMap)
 		}
 		expr = obj.WithMeta(meta)
 	}()
@@ -408,7 +408,7 @@ func (r *Reader) readExpr() (expr interface{}, err error) {
 		if err != nil {
 			return nil, err
 		}
-		return value.WithMeta(val, meta)
+		return lang.WithMeta(val, meta)
 	default:
 		r.rs.UnreadRune()
 		return r.readSymbol()
@@ -436,7 +436,7 @@ func (r *Reader) readList() (interface{}, error) {
 		}
 		nodes = append(nodes, node)
 	}
-	return value.NewList(nodes...), nil
+	return lang.NewList(nodes...), nil
 }
 
 func (r *Reader) readVector() (interface{}, error) {
@@ -460,7 +460,7 @@ func (r *Reader) readVector() (interface{}, error) {
 		}
 		nodes = append(nodes, node)
 	}
-	return value.NewVector(nodes...), nil
+	return lang.NewVector(nodes...), nil
 }
 
 func (r *Reader) readMap() (interface{}, error) {
@@ -488,7 +488,7 @@ func (r *Reader) readMap() (interface{}, error) {
 		return nil, r.error("map literal must contain an even number of forms")
 	}
 
-	return value.NewMap(keyVals...), nil
+	return lang.NewMap(keyVals...), nil
 }
 
 func (r *Reader) readSet() (interface{}, error) {
@@ -512,7 +512,7 @@ func (r *Reader) readSet() (interface{}, error) {
 		}
 		vals = append(vals, el)
 	}
-	return value.NewSet(vals...), nil
+	return lang.NewSet(vals...), nil
 }
 
 func (r *Reader) readString() (interface{}, error) {
@@ -556,12 +556,12 @@ func (r *Reader) nextID() int {
 	return id
 }
 
-func (r *Reader) genArg(i int) *value.Symbol {
+func (r *Reader) genArg(i int) *lang.Symbol {
 	prefix := "rest"
 	if i != -1 {
 		prefix = fmt.Sprintf("p%d", i)
 	}
-	return value.NewSymbol(fmt.Sprintf("%s__%d#", prefix, r.nextID()))
+	return lang.NewSymbol(fmt.Sprintf("%s__%d#", prefix, r.nextID()))
 }
 
 func (r *Reader) readArg() (interface{}, error) {
@@ -575,7 +575,7 @@ func (r *Reader) readArg() (interface{}, error) {
 		return sym, nil
 	}
 
-	argSuffix := sym.(*value.Symbol).Name()[1:]
+	argSuffix := sym.(*lang.Symbol).Name()[1:]
 	switch {
 	case argSuffix == "&":
 		if r.fnArgMap[-1] == nil {
@@ -606,7 +606,7 @@ func (r *Reader) readFunctionShorthand() (interface{}, error) {
 	if r.fnArgMap != nil {
 		return nil, r.error("nested #()s are not allowed")
 	}
-	r.fnArgMap = make(map[int]*value.Symbol)
+	r.fnArgMap = make(map[int]*lang.Symbol)
 	defer func() {
 		r.fnArgMap = nil
 	}()
@@ -620,7 +620,7 @@ func (r *Reader) readFunctionShorthand() (interface{}, error) {
 	const maxArgIndex = 20
 
 	args := make([]interface{}, 0, len(r.fnArgMap))
-	var restSym *value.Symbol
+	var restSym *lang.Symbol
 	// NB: arg keys are 1-indexed, -1 represents a "rest" arg
 	for i, sym := range r.fnArgMap {
 		for i > len(args) {
@@ -636,7 +636,7 @@ func (r *Reader) readFunctionShorthand() (interface{}, error) {
 		args[i-1] = sym
 	}
 	if restSym != nil {
-		args = append(args, value.NewSymbol("&"), restSym)
+		args = append(args, lang.NewSymbol("&"), restSym)
 	}
 	// fill in any missing args with generated args
 	for i, arg := range args {
@@ -646,9 +646,9 @@ func (r *Reader) readFunctionShorthand() (interface{}, error) {
 		args[i] = r.genArg(i + 1)
 	}
 
-	return value.NewList(
-		value.NewSymbol("fn*"),
-		value.NewVector(args...),
+	return lang.NewList(
+		lang.NewSymbol("fn*"),
+		lang.NewVector(args...),
 		body,
 	), nil
 }
@@ -703,11 +703,11 @@ func (r *Reader) readChar() (interface{}, error) {
 		char += string(rn)
 	}
 
-	rn, err := value.RuneFromCharLiteral("\\" + char)
+	rn, err := lang.RuneFromCharLiteral("\\" + char)
 	if err != nil {
 		return nil, r.error("invalid character literal: %w", err)
 	}
-	return value.NewChar(rn), nil
+	return lang.NewChar(rn), nil
 }
 
 func (r *Reader) readQuoteType(form string) (interface{}, error) {
@@ -716,7 +716,7 @@ func (r *Reader) readQuoteType(form string) (interface{}, error) {
 		return nil, err
 	}
 
-	return value.NewList(value.NewSymbol(form), node), nil
+	return lang.NewList(lang.NewSymbol(form), node), nil
 }
 
 func (r *Reader) readQuote() (interface{}, error) {
@@ -732,18 +732,18 @@ func (r *Reader) readSyntaxQuote() (interface{}, error) {
 	// symbolNameMap tracks the names of symbols that have been renamed.
 	// symbols that end with a '#' have '#' replaced with a unique
 	// suffix.
-	symbolNameMap := make(map[string]*value.Symbol)
+	symbolNameMap := make(map[string]*lang.Symbol)
 	return r.syntaxQuote(symbolNameMap, node), nil
 }
 
-func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interface{}) interface{} {
+func (r *Reader) syntaxQuote(symbolNameMap map[string]*lang.Symbol, node interface{}) interface{} {
 	switch node := node.(type) {
-	case value.Keyword, value.Char, string:
+	case lang.Keyword, lang.Char, string:
 		return node
-	case *value.Symbol:
+	case *lang.Symbol:
 		sym := node
 		if specials[sym.String()] {
-			return value.NewList(symQuote, sym)
+			return lang.NewList(symQuote, sym)
 		}
 		switch {
 		case sym.Namespace() == "" && strings.HasSuffix(sym.Name(), "#"):
@@ -753,7 +753,7 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 				break
 			}
 			// TODO: use a global counter, not the length of this map
-			newSym := value.NewSymbol(strings.TrimSuffix(sym.Name(), "#") + "__" + strconv.Itoa(len(symbolNameMap)) + "__auto__")
+			newSym := lang.NewSymbol(strings.TrimSuffix(sym.Name(), "#") + "__" + strconv.Itoa(len(symbolNameMap)) + "__auto__")
 			symbolNameMap[sym.String()] = newSym
 			sym = newSym
 		case sym.Namespace() == "" && strings.HasSuffix(sym.Name(), "."):
@@ -764,16 +764,16 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 			// special class-like go value
 			// TODO: is this a good syntax?
 		case r.symbolResolver != nil:
-			var nsym *value.Symbol
+			var nsym *lang.Symbol
 			if sym.Namespace() != "" {
-				alias := value.InternSymbol(nil, sym.Namespace())
+				alias := lang.InternSymbol(nil, sym.Namespace())
 				nsym = r.symbolResolver.ResolveStruct(alias)
 				if nsym == nil {
 					nsym = r.symbolResolver.ResolveAlias(alias)
 				}
 			}
 			if nsym != nil {
-				sym = value.InternSymbol(nsym.Name(), sym.Name())
+				sym = lang.InternSymbol(nsym.Name(), sym.Name())
 			} else if sym.Namespace() == "" {
 				rsym := r.symbolResolver.ResolveStruct(sym)
 				if rsym == nil {
@@ -782,7 +782,7 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 				if rsym != nil {
 					sym = rsym
 				} else {
-					sym = value.InternSymbol(r.symbolResolver.CurrentNS().Name(), sym.Name())
+					sym = lang.InternSymbol(r.symbolResolver.CurrentNS().Name(), sym.Name())
 				}
 			}
 		default:
@@ -794,91 +794,91 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*value.Symbol, node interf
 			sym = r.resolveSymbol(sym)
 		}
 		// TODO: match actual LispReader.java behavior
-		return value.NewList(symQuote, sym)
-	case value.IPersistentMap:
+		return lang.NewList(symQuote, sym)
+	case lang.IPersistentMap:
 		var keyvals []interface{}
-		for seq := value.Seq(node); seq != nil; seq = seq.Next() {
-			entry := seq.First().(value.IMapEntry)
+		for seq := lang.Seq(node); seq != nil; seq = seq.Next() {
+			entry := seq.First().(lang.IMapEntry)
 			keyvals = append(keyvals, entry.Key(), entry.Val())
 		}
-		return value.NewList(
-			value.NewSymbol("glojure.core/apply"),
-			value.NewSymbol("glojure.core/hash-map"),
-			value.NewList(
-				value.NewSymbol("glojure.core/seq"),
-				value.NewCons(
-					value.NewSymbol("glojure.core/concat"),
+		return lang.NewList(
+			lang.NewSymbol("glojure.core/apply"),
+			lang.NewSymbol("glojure.core/hash-map"),
+			lang.NewList(
+				lang.NewSymbol("glojure.core/seq"),
+				lang.NewCons(
+					lang.NewSymbol("glojure.core/concat"),
 					r.sqExpandList(symbolNameMap, keyvals),
 				),
 			),
 		)
-	case value.IPersistentList, value.IPersistentVector:
-		_, isVector := node.(value.IPersistentVector)
-		if value.Count(node) == 0 {
+	case lang.IPersistentList, lang.IPersistentVector:
+		_, isVector := node.(lang.IPersistentVector)
+		if lang.Count(node) == 0 {
 			if isVector {
 				//(glojure.core/apply glojure.core/vector (glojure.core/seq (glojure.core/concat)))
-				return value.NewList(
-					value.NewSymbol("glojure.core/apply"),
-					value.NewSymbol("glojure.core/vector"),
-					value.NewList(
-						value.NewSymbol("glojure.core/seq"),
-						value.NewList(
-							value.NewSymbol("glojure.core/concat"),
+				return lang.NewList(
+					lang.NewSymbol("glojure.core/apply"),
+					lang.NewSymbol("glojure.core/vector"),
+					lang.NewList(
+						lang.NewSymbol("glojure.core/seq"),
+						lang.NewList(
+							lang.NewSymbol("glojure.core/concat"),
 						),
 					),
 				)
 			}
-			return value.NewList(symList)
+			return lang.NewList(symList)
 		}
 		if r.isUnquote(node) {
-			return value.First(value.Rest(node))
+			return lang.First(lang.Rest(node))
 		}
 
 		elements := []interface{}{symConcat}
-		for seq := value.Seq(node); seq != nil; seq = seq.Next() {
+		for seq := lang.Seq(node); seq != nil; seq = seq.Next() {
 			first := seq.First()
-			if seq, ok := first.(value.ISeq); ok && value.Equals(value.First(seq), symSpliceUnquote) {
-				elements = append(elements, value.First(value.Rest(first)))
+			if seq, ok := first.(lang.ISeq); ok && lang.Equals(lang.First(seq), symSpliceUnquote) {
+				elements = append(elements, lang.First(lang.Rest(first)))
 			} else {
-				elements = append(elements, value.NewList(symList, r.syntaxQuote(symbolNameMap, first)))
+				elements = append(elements, lang.NewList(symList, r.syntaxQuote(symbolNameMap, first)))
 			}
 		}
 
-		ret := value.NewList(symSeq,
-			value.NewList(elements...))
+		ret := lang.NewList(symSeq,
+			lang.NewList(elements...))
 		if isVector {
-			ret = value.NewList(
-				value.NewSymbol("glojure.core/apply"),
-				value.NewSymbol("glojure.core/vector"),
+			ret = lang.NewList(
+				lang.NewSymbol("glojure.core/apply"),
+				lang.NewSymbol("glojure.core/vector"),
 				ret)
 		}
 		return ret
 	}
-	return value.NewList(symQuote, node)
+	return lang.NewList(symQuote, node)
 }
 
-func (r *Reader) sqExpandList(symbolNameMap map[string]*value.Symbol, els []interface{}) value.ISeq {
-	var ret value.IPersistentVector = value.NewVector()
+func (r *Reader) sqExpandList(symbolNameMap map[string]*lang.Symbol, els []interface{}) lang.ISeq {
+	var ret lang.IPersistentVector = lang.NewVector()
 	for _, v := range els {
 		if r.isUnquote(v) {
-			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), value.First(value.Rest(v)))).(value.IPersistentVector)
+			ret = ret.Cons(lang.NewList(lang.NewSymbol("glojure.core/list"), lang.First(lang.Rest(v)))).(lang.IPersistentVector)
 		} else if r.isUnquoteSplicing(v) {
-			ret = ret.Cons(value.First(value.Rest(v))).(value.IPersistentVector)
+			ret = ret.Cons(lang.First(lang.Rest(v))).(lang.IPersistentVector)
 		} else {
-			ret = ret.Cons(value.NewList(value.NewSymbol("glojure.core/list"), r.syntaxQuote(symbolNameMap, v))).(value.IPersistentVector)
+			ret = ret.Cons(lang.NewList(lang.NewSymbol("glojure.core/list"), r.syntaxQuote(symbolNameMap, v))).(lang.IPersistentVector)
 		}
 	}
-	return value.Seq(ret)
+	return lang.Seq(ret)
 }
 
 func (r *Reader) isUnquote(form interface{}) bool {
-	seq, ok := form.(value.ISeq)
-	return ok && value.Equals(seq.First(), symUnquote)
+	seq, ok := form.(lang.ISeq)
+	return ok && lang.Equals(seq.First(), symUnquote)
 }
 
 func (r *Reader) isUnquoteSplicing(form interface{}) bool {
-	seq, ok := form.(value.ISeq)
-	return ok && value.Equals(seq.First(), symSpliceUnquote)
+	seq, ok := form.(lang.ISeq)
+	return ok && lang.Equals(seq.First(), symSpliceUnquote)
 }
 
 func (r *Reader) readDeref() (interface{}, error) {
@@ -928,7 +928,7 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		return value.NewList(value.NewSymbol("var"), expr), nil
+		return lang.NewList(lang.NewSymbol("var"), expr), nil
 	case '"':
 		return r.readRegex()
 	case '^':
@@ -948,7 +948,7 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 		return nil, err
 	}
 
-	nsKW := nsKWVal.(value.Keyword)
+	nsKW := nsKWVal.(lang.Keyword)
 	if strings.Contains(nsKW.String(), "/") {
 		return nil, r.error("namespaced map must specify a valid namespace: %s", nsKW)
 	}
@@ -968,22 +968,22 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 	}
 
 	newKeyVals := []interface{}{}
-	for mp := value.Seq(mapVal); mp != nil; mp = mp.Next() {
+	for mp := lang.Seq(mapVal); mp != nil; mp = mp.Next() {
 		kv := mp.First()
 
-		key := kv.(*value.MapEntry).Key()
-		val := kv.(*value.MapEntry).Val()
+		key := kv.(*lang.MapEntry).Key()
+		val := kv.(*lang.MapEntry).Val()
 
-		keyKW, ok := key.(value.Keyword)
+		keyKW, ok := key.(lang.Keyword)
 		if !ok || keyKW.Namespace() != "" {
 			newKeyVals = append(newKeyVals, key, val)
 			continue
 		}
-		newKey := value.NewKeyword(nsKW.Name() + "/" + keyKW.Name())
+		newKey := lang.NewKeyword(nsKW.Name() + "/" + keyKW.Name())
 		newKeyVals = append(newKeyVals, newKey, val)
 	}
 
-	m, err := value.WithMeta(value.NewMap(newKeyVals...), mapVal.(value.IMeta).Meta())
+	m, err := lang.WithMeta(lang.NewMap(newKeyVals...), mapVal.(lang.IMeta).Meta())
 	if err != nil {
 		// This should never happen. Maps can have metadata.
 		panic(err)
@@ -996,7 +996,7 @@ func (r *Reader) readSymbolicValue() (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	sym, ok := v.(*value.Symbol)
+	sym, ok := v.(*lang.Symbol)
 	if !ok {
 		return nil, r.error("symbolic value must be a symbol")
 	}
@@ -1064,7 +1064,7 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 
 	if intRegex.MatchString(numStr) || hexRegex.MatchString(numStr) {
 		if strings.HasSuffix(numStr, "N") {
-			bi, err := value.NewBigIntWithBase(numStr[:len(numStr)-1], base)
+			bi, err := lang.NewBigIntWithBase(numStr[:len(numStr)-1], base)
 			if err != nil {
 				return nil, r.error("invalid big int: %w", err)
 			}
@@ -1075,7 +1075,7 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 		intVal, err := strconv.ParseInt(numStr, base, 64)
 		if err != nil {
 			if errors.Is(err, strconv.ErrRange) {
-				bi, err := value.NewBigIntWithBase(numStr, base)
+				bi, err := lang.NewBigIntWithBase(numStr, base)
 				if err != nil {
 					return nil, r.error("invalid big int: %w", err)
 				}
@@ -1090,21 +1090,21 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 	if ratioRegex.MatchString(numStr) {
 		parts := strings.Split(numStr, "/")
 
-		numBig, err := value.NewBigInt(parts[0])
+		numBig, err := lang.NewBigInt(parts[0])
 		if err != nil {
 			return nil, r.error("invalid ratio: %s", numStr)
 		}
-		denomBig, err := value.NewBigInt(parts[1])
+		denomBig, err := lang.NewBigInt(parts[1])
 		if err != nil {
 			return nil, r.error("invalid ratio: %s", numStr)
 		}
-		return value.NewRatioBigInt(numBig, denomBig), nil
+		return lang.NewRatioBigInt(numBig, denomBig), nil
 	}
 
 	// else, it's a float
 	// if the last character is M, it's a big decimal
 	if strings.HasSuffix(numStr, "M") {
-		bd, err := value.NewBigDecimal(numStr[:len(numStr)-1])
+		bd, err := lang.NewBigDecimal(numStr[:len(numStr)-1])
 		if err != nil {
 			return nil, r.error("invalid big decimal: %w", err)
 		}
@@ -1167,7 +1167,7 @@ func (r *Reader) readSymbol() (ret interface{}, retErr error) {
 		}
 	}()
 
-	return value.NewSymbol(sym), nil
+	return lang.NewSymbol(sym), nil
 }
 
 func (r *Reader) readKeyword() (interface{}, error) {
@@ -1194,48 +1194,48 @@ func (r *Reader) readKeyword() (interface{}, error) {
 		ns := r.getCurrentNS().Name().Name()
 		sym = ns + "/" + sym[1:]
 	}
-	return value.NewKeyword(sym), nil
+	return lang.NewKeyword(sym), nil
 }
 
-func (r *Reader) readMeta() (value.IPersistentMap, error) {
+func (r *Reader) readMeta() (lang.IPersistentMap, error) {
 	res, err := r.readExpr()
 	if err != nil {
 		return nil, err
 	}
 
 	switch res := res.(type) {
-	case *value.Map:
+	case *lang.Map:
 		return res, nil
-	case *value.Symbol, string:
-		return value.NewMap(value.KWTag, res), nil
-	case value.Keyword:
-		return value.NewMap(res, true), nil
+	case *lang.Symbol, string:
+		return lang.NewMap(lang.KWTag, res), nil
+	case lang.Keyword:
+		return lang.NewMap(res, true), nil
 	default:
 		return nil, r.error("metadata must be a map, symbol, keyword, or string")
 	}
 }
 
 // Translated from Clojure's Compiler.java
-func (r *Reader) resolveSymbol(sym *value.Symbol) *value.Symbol {
+func (r *Reader) resolveSymbol(sym *lang.Symbol) *lang.Symbol {
 	if strings.Contains(sym.Name(), ".") {
 		return sym
 	}
 	if sym.Namespace() != "" {
-		ns := value.NamespaceFor(r.getCurrentNS(), sym)
+		ns := lang.NamespaceFor(r.getCurrentNS(), sym)
 		if ns == nil || (ns.Name().Name() == "" && sym.Namespace() == "") ||
 			(ns.Name().Name() != "" && ns.Name().Name() == sym.Namespace()) {
 			return sym
 		}
-		return value.InternSymbol(ns.Name().Name(), sym.Name())
+		return lang.InternSymbol(ns.Name().Name(), sym.Name())
 	}
 
 	currentNS := r.getCurrentNS()
 	o := currentNS.GetMapping(sym)
 	switch o := o.(type) {
 	case nil:
-		return value.InternSymbol(currentNS.Name().Name(), sym.Name())
-	case *value.Var:
-		return value.InternSymbol(o.Namespace().Name().Name(), o.Symbol().Name())
+		return lang.InternSymbol(currentNS.Name().Name(), sym.Name())
+	case *lang.Var:
+		return lang.InternSymbol(o.Namespace().Name().Name(), o.Symbol().Name())
 	}
 	return nil
 }

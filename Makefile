@@ -64,7 +64,7 @@ test: vet $(TEST_TARGETS)
 
 .PHONY: format
 format:
-	@if go fmt ./... | grep -q .; then \
+	@if go fmt ./... | grep -q ''; then \
 		echo "Files were formatted. Please commit the changes."; \
 		exit 1; \
 	fi

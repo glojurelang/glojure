@@ -14,7 +14,7 @@ import (
 	"testing"
 	"unicode"
 
-	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/kylelemons/godebug/diff"
 )
 
@@ -22,26 +22,26 @@ type (
 	testSymbolResolver struct{}
 )
 
-func (sr *testSymbolResolver) CurrentNS() *value.Symbol {
-	return value.NewSymbol("user")
+func (sr *testSymbolResolver) CurrentNS() *lang.Symbol {
+	return lang.NewSymbol("user")
 }
 
-func (sr *testSymbolResolver) ResolveStruct(s *value.Symbol) *value.Symbol {
+func (sr *testSymbolResolver) ResolveStruct(s *lang.Symbol) *lang.Symbol {
 	if strings.Contains(s.Name(), ".") {
 		return s
 	}
 	return nil
 }
 
-func (sr *testSymbolResolver) ResolveAlias(s *value.Symbol) *value.Symbol {
+func (sr *testSymbolResolver) ResolveAlias(s *lang.Symbol) *lang.Symbol {
 	return s
 }
 
-func (sr *testSymbolResolver) ResolveVar(s *value.Symbol) *value.Symbol {
+func (sr *testSymbolResolver) ResolveVar(s *lang.Symbol) *lang.Symbol {
 	if strings.Contains(s.String(), "/") {
 		return s
 	}
-	return value.NewSymbol("user/" + s.String())
+	return lang.NewSymbol("user/" + s.String())
 }
 
 // Running these fuzz tests is slow because clj is very slow to start

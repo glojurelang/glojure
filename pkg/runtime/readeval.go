@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 )
 
@@ -15,14 +15,14 @@ type (
 	readEvalOptions struct {
 		// env is the environment to use for evaluation. If not set, the
 		// global environment is used.
-		env value.Environment
+		env lang.Environment
 		// filename is the name of the file being read.
 		filename string
 	}
 )
 
 // WithEnv sets the environment to use for evaluation.
-func WithEnv(env value.Environment) ReadEvalOption {
+func WithEnv(env lang.Environment) ReadEvalOption {
 	return func(o *readEvalOptions) {
 		o.env = env
 	}
@@ -44,10 +44,10 @@ func ReadEval(code string, options ...ReadEvalOption) interface{} {
 	}
 	env := opts.env
 	if env == nil {
-		env = value.GlobalEnv
+		env = lang.GlobalEnv
 	}
 	readerOpts := []reader.Option{
-		reader.WithGetCurrentNS(func() *value.Namespace {
+		reader.WithGetCurrentNS(func() *lang.Namespace {
 			return env.CurrentNamespace()
 		}),
 	}

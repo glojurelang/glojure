@@ -1,8 +1,6 @@
 package runtime
 
-import (
-	value "github.com/glojurelang/glojure/pkg/lang"
-)
+import "github.com/glojurelang/glojure/pkg/lang"
 
 type scope struct {
 	parent *scope
@@ -13,7 +11,7 @@ func newScope() *scope {
 	return &scope{syms: make(map[string]interface{})}
 }
 
-func (s *scope) define(sym *value.Symbol, val interface{}) {
+func (s *scope) define(sym *lang.Symbol, val interface{}) {
 	s.syms[sym.String()] = val
 }
 
@@ -21,7 +19,7 @@ func (s *scope) push() *scope {
 	return &scope{parent: s, syms: make(map[string]interface{})}
 }
 
-func (s *scope) lookup(sym *value.Symbol) (interface{}, bool) {
+func (s *scope) lookup(sym *lang.Symbol) (interface{}, bool) {
 	if v, ok := s.syms[sym.String()]; ok {
 		return v, true
 	}

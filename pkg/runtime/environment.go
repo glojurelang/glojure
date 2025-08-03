@@ -8,16 +8,16 @@ import (
 	"path/filepath"
 	"sync/atomic"
 
-	value "github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 )
 
 var (
-	SymbolUnquote       = value.NewSymbol("clojure.core/unquote") // TODO: rename to glojure.core/unquote
-	SymbolSpliceUnquote = value.NewSymbol("splice-unquote")
-	SymbolNamespace     = value.NewSymbol("ns")
-	SymbolInNamespace   = value.NewSymbol("in-ns")
-	SymbolUserNamespace = value.NewSymbol("user")
-	SymbolDot           = value.NewSymbol(".")
+	SymbolUnquote       = lang.NewSymbol("clojure.core/unquote") // TODO: rename to glojure.core/unquote
+	SymbolSpliceUnquote = lang.NewSymbol("splice-unquote")
+	SymbolNamespace     = lang.NewSymbol("ns")
+	SymbolInNamespace   = lang.NewSymbol("in-ns")
+	SymbolUserNamespace = lang.NewSymbol("user")
+	SymbolDot           = lang.NewSymbol(".")
 )
 
 type (
@@ -30,8 +30,8 @@ type (
 		recurTarget interface{}
 
 		// some well-known vars
-		namespaceVar   *value.Var // ns
-		inNamespaceVar *value.Var // in-ns
+		namespaceVar   *lang.Var // ns
+		inNamespaceVar *lang.Var // in-ns
 
 		// counter for gensym (symbol generator)
 		symCounter int32
@@ -50,7 +50,7 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 		stdout: stdout,
 		stderr: stderr,
 	}
-	coreNS := value.NSCore
+	coreNS := lang.NSCore
 
 	for _, dyn := range []string{
 		"command-line-args",
@@ -64,20 +64,20 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 		"print-dup",
 		"read-eval",
 	} {
-		coreNS.InternWithValue(value.NewSymbol("*"+dyn+"*"), nil, true).SetDynamic()
+		coreNS.InternWithValue(lang.NewSymbol("*"+dyn+"*"), nil, true).SetDynamic()
 	}
 
 	// TODO: implement this
-	coreNS.InternWithValue(value.NewSymbol("load-file"), nil, true)
+	coreNS.InternWithValue(lang.NewSymbol("load-file"), nil, true)
 
 	// bootstrap some vars
 	e.namespaceVar = coreNS.InternWithValue(SymbolNamespace,
-		value.IFnFunc(func(args ...interface{}) interface{} {
+		lang.IFnFunc(func(args ...interface{}) interface{} {
 			return coreNS
 		}), true)
 	e.namespaceVar.SetMacro()
 
-	e.inNamespaceVar = value.NewVarWithRoot(coreNS, SymbolInNamespace, false)
+	e.inNamespaceVar = lang.NewVarWithRoot(coreNS, SymbolInNamespace, false)
 
 	return e
 }
@@ -101,11 +101,11 @@ func (env *environment) String() string {
 
 // TODO: rename to something else; this isn't for `def`s, it's for
 // local bindings.
-func (env *environment) BindLocal(sym *value.Symbol, val interface{}) {
+func (env *environment) BindLocal(sym *lang.Symbol, val interface{}) {
 	env.scope.define(sym, val)
 }
 
-func (env *environment) DefVar(sym *value.Symbol, val interface{}) *value.Var {
+func (env *environment) DefVar(sym *lang.Symbol, val interface{}) *lang.Var {
 	// TODO: match clojure implementation more closely
 	v := env.CurrentNamespace().InternWithValue(sym, val, true /* replace root */)
 	if meta := sym.Meta(); meta != nil {
@@ -114,12 +114,12 @@ func (env *environment) DefVar(sym *value.Symbol, val interface{}) *value.Var {
 	return v
 }
 
-func (env *environment) DefineMacro(name string, fn value.IFn) {
-	vr := env.DefVar(value.NewSymbol(name), fn)
+func (env *environment) DefineMacro(name string, fn lang.IFn) {
+	vr := env.DefVar(lang.NewSymbol(name), fn)
 	vr.SetMacro()
 }
 
-func (env *environment) lookup(sym *value.Symbol) (res interface{}, ok bool) {
+func (env *environment) lookup(sym *lang.Symbol) (res interface{}, ok bool) {
 	v, ok := env.scope.lookup(sym)
 	if ok {
 		return v, true
@@ -127,8 +127,8 @@ func (env *environment) lookup(sym *value.Symbol) (res interface{}, ok bool) {
 
 	ns := env.CurrentNamespace()
 	if sym.Namespace() != "" {
-		ns = value.FindNamespace(value.NewSymbol(sym.Namespace()))
-		sym = value.NewSymbol(sym.Name())
+		ns = lang.FindNamespace(lang.NewSymbol(sym.Namespace()))
+		sym = lang.NewSymbol(sym.Name())
 	}
 	if ns == nil {
 		return nil, false
@@ -138,17 +138,17 @@ func (env *environment) lookup(sym *value.Symbol) (res interface{}, ok bool) {
 		return nil, false
 	}
 	// TODO: can these only be vars?
-	return vr.(*value.Var).Get(), true
+	return vr.(*lang.Var).Get(), true
 }
 
-func (env *environment) WithRecurTarget(rt interface{}) value.Environment {
+func (env *environment) WithRecurTarget(rt interface{}) lang.Environment {
 	wrappedEnv := *env
 	newEnv := &wrappedEnv
 	newEnv.recurTarget = rt
 	return newEnv
 }
 
-func (env *environment) PushScope() value.Environment {
+func (env *environment) PushScope() lang.Environment {
 	wrappedEnv := *env
 	newEnv := &wrappedEnv
 	newEnv.scope = newEnv.scope.push()
@@ -163,15 +163,15 @@ func (env *environment) Stderr() io.Writer {
 	return env.stderr
 }
 
-func (env *environment) CurrentNamespace() *value.Namespace {
-	return value.VarCurrentNS.Get().(*value.Namespace)
+func (env *environment) CurrentNamespace() *lang.Namespace {
+	return lang.VarCurrentNS.Get().(*lang.Namespace)
 }
 
-func (env *environment) SetCurrentNamespace(ns *value.Namespace) {
-	value.VarCurrentNS.Set(ns)
+func (env *environment) SetCurrentNamespace(ns *lang.Namespace) {
+	lang.VarCurrentNS.Set(ns)
 }
 
-func (env *environment) PushLoadPaths(paths []string) value.Environment {
+func (env *environment) PushLoadPaths(paths []string) lang.Environment {
 	newEnv := &(*env)
 	newEnv.loadPath = append(paths, newEnv.loadPath...)
 	return newEnv
@@ -197,12 +197,12 @@ func (env *environment) Errorf(n interface{}, format string, args ...interface{}
 
 func (env *environment) errorf(n interface{}, format string, args ...interface{}) error {
 	var filename, line, col string
-	var meta value.IPersistentMap
-	if n, ok := n.(value.IObj); ok {
+	var meta lang.IPersistentMap
+	if n, ok := n.(lang.IObj); ok {
 		meta = n.Meta()
 	}
-	get := func(m value.IPersistentMap, key string) string {
-		return value.PrintString(value.GetDefault(m, value.NewKeyword(key), "?"))
+	get := func(m lang.IPersistentMap, key string) string {
+		return lang.PrintString(lang.GetDefault(m, lang.NewKeyword(key), "?"))
 	}
 
 	filename = get(meta, "file")
