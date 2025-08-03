@@ -1,4 +1,5 @@
 
+CLOJURE_STDLIB_VERSION := clojure-1.12.1
 STDLIB_ORIGINALS_DIR := scripts/rewrite-core/originals
 STDLIB_ORIGINALS := $(shell find $(STDLIB_ORIGINALS_DIR) -name '*.clj')
 STDLIB := $(STDLIB_ORIGINALS:scripts/rewrite-core/originals/%=%)
@@ -67,3 +68,7 @@ format:
 		echo "Files were formatted. Please commit the changes."; \
 		exit 1; \
 	fi
+
+.PHONY: update-clojure-sources
+update-clojure-sources:
+	@scripts/rewrite-core/update-clojure-sources.sh $(CLOJURE_STDLIB_VERSION)

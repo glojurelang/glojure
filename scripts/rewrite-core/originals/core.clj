@@ -2942,7 +2942,11 @@
                   (rf result input))))))))
   ([n coll]
      (if (instance? clojure.lang.IDrop coll)
-       (or (.drop ^clojure.lang.IDrop coll n) ())
+       (or
+        (if (pos? n)
+          (.drop ^clojure.lang.IDrop coll (if (int? n) n (Math/ceil n)))
+          (seq coll))
+        ())
        (let [step (fn [n coll]
                     (let [s (seq coll)]
                       (if (and (pos? n) s)
@@ -3030,7 +3034,8 @@
   [n x] (take n (repeat x)))
 
 (defn iterate
-  "Returns a lazy sequence of x, (f x), (f (f x)) etc. f must be free of side-effects"
+  "Returns a lazy (infinite!) sequence of x, (f x), (f (f x)) etc.
+  f must be free of side-effects"
   {:added "1.0"
    :static true}
   [f x] (clojure.lang.Iterate/create f x) )
@@ -3045,15 +3050,15 @@
   ([]
    (iterate inc' 0))
   ([end]
-   (if (instance? Long end)
+   (if (int? end)
      (clojure.lang.LongRange/create end)
      (clojure.lang.Range/create end)))
   ([start end]
-   (if (and (instance? Long start) (instance? Long end))
+   (if (and (int? start) (int? end))
      (clojure.lang.LongRange/create start end)
      (clojure.lang.Range/create start end)))
   ([start end step]
-   (if (and (instance? Long start) (instance? Long end) (instance? Long step))
+   (if (and (int? start) (int? end) (int? step))
      (clojure.lang.LongRange/create start end step)
      (clojure.lang.Range/create start end step))))
 
@@ -3170,7 +3175,9 @@
    :static true}
   [coll n]
   (if (instance? clojure.lang.IDrop coll)
-    (.drop ^clojure.lang.IDrop coll n)
+    (if (pos? n)
+      (.drop ^clojure.lang.IDrop coll (if (int? n) n (Math/ceil n)))
+      (seq coll))
     (loop [n n xs (seq coll)]
       (if (and xs (pos? n))
         (recur (dec n) (next xs))
@@ -3181,12 +3188,16 @@
   {:added "1.3"
    :static true}
   [coll n]
-  (if (instance? clojure.lang.IDrop coll)
-    (or (.drop ^clojure.lang.IDrop coll n) ())
-    (loop [n n xs coll]
-      (if-let [xs (and (pos? n) (seq xs))]
-        (recur (dec n) (rest xs))
-        xs))))
+  (if (pos? n)
+    (or
+      (if (instance? clojure.lang.IDrop coll)
+        (.drop ^clojure.lang.IDrop coll (if (int? n) n (Math/ceil n)))
+        (loop [n n xs coll]
+          (if-let [xs (and (pos? n) (seq xs))]
+            (recur (dec n) (rest xs))
+            (seq xs))))
+      ())
+    coll))
 
 (defn partition
   "Returns a lazy sequence of lists of n items each, at offsets step
@@ -3347,7 +3358,15 @@
 
 ;;;;;;;;;;;;;;;;;;;;; editable collections ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn transient 
-  "Returns a new, transient version of the collection, in constant time."
+  "Returns a new, transient version of the collection, in constant time.
+
+  Transients support a parallel set of 'changing' operations, with similar names
+  followed by ! - assoc!, conj! etc. These do the same things as their persistent
+  counterparts except the return values are themselves transient.
+
+  Note in particular that transients are not designed to be bashed in-place. You
+  must capture and use the return value in the next call. In this way, they support
+  the same code structure as the functional persistent code they replace."
   {:added "1.1"
    :static true}
   [^clojure.lang.IEditableCollection coll] 
@@ -3852,7 +3871,7 @@
                               (try
                                 (with-open ~(subvec bindings 2) ~@body)
                                 (finally
-                                  (. ~(bindings 0) close))))
+                                  (. ~(bindings 0) ~'close))))
     :else (throw (IllegalArgumentException.
                    "with-open only allows Symbols in bindings"))))
 
@@ -4845,8 +4864,11 @@
     (.getCause ^Throwable ex)))
 
 (defmacro assert
-  "Evaluates expr and throws an exception if it does not evaluate to
-  logical true."
+  "Evaluates expression x and throws an AssertionError with optional
+  message if x does not evaluate to logical true.
+
+  Assertion checks are omitted from compiled code if '*assert*' is
+  false."
   {:added "1.0"}
   ([x]
      (when *assert*
@@ -6340,6 +6362,11 @@ fails, attempts to require sym's namespace and retries."
    :added "1.0"}
  *e)
 
+(def ^:dynamic
+  ^{:doc "Bound to true in a repl thread"
+    :added "1.12"}
+  *repl* false)
+
 (defn trampoline
   "trampoline can be used to convert algorithms requiring mutual
   recursion without stack consumption. Calls f with supplied args, if
@@ -6572,6 +6599,11 @@ fails, attempts to require sym's namespace and retries."
   occur in considered contexts. You can also accomplish this in a
   particular scope by binding *read-eval* to :unknown
   "
+  {:added "1.0"})
+
+(add-doc-and-meta *assert*
+  "When set to logical false, 'assert' will omit assertion checks in
+  compiled code. Defaults to true."
   {:added "1.0"})
 
 (defn future?
@@ -6817,8 +6849,6 @@ fails, attempts to require sym's namespace and retries."
             `(let [~ge ~e] (case* ~ge ~shift ~mask ~default ~imap ~switch-type :hash-identity ~skip-check))))))))
 
 
-;; redefine reduce with internal-reduce
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; helper files ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (alter-meta! (find-ns 'clojure.core) assoc :doc "Fundamental library of the Clojure language")
 (load "core_proxy")
@@ -6827,6 +6857,45 @@ fails, attempts to require sym's namespace and retries."
 (load "core_deftype")
 (load "core/protocols")
 (load "gvec")
+
+(defn stream-reduce!
+  "Works like reduce but takes a java.util.stream.BaseStream as its source.
+  Honors 'reduced', is a terminal operation on the stream"
+  {:added "1.12"}
+  ([f ^java.util.stream.BaseStream s]
+   (clojure.core.protocols/iterator-reduce! (.iterator s) f))
+  ([f init ^java.util.stream.BaseStream s]
+   (clojure.core.protocols/iterator-reduce! (.iterator s) f init)))
+
+(defn stream-seq!
+  "Takes a java.util.stream.BaseStream instance s and returns a seq of its
+  contents. This is a terminal operation on the stream."
+  {:added "1.12"}
+  [^java.util.stream.BaseStream stream]
+  (iterator-seq (.iterator stream)))
+
+(defn stream-transduce!
+  "Works like transduce but takes a java.util.stream.BaseStream as its source.
+  This is a terminal operation on the stream."
+  {:added "1.12"}
+  ([xform f ^java.util.stream.BaseStream stream] (stream-transduce! xform f (f) stream))
+  ([xform f init ^java.util.stream.BaseStream stream]
+   (let [f (xform f)
+         ret (stream-reduce! f init stream)]
+     (f ret))))
+
+(defn stream-into!
+  "Returns a new coll consisting of coll with all of the items of the
+  stream conjoined. This is a terminal operation on the stream."
+  {:added "1.12"}
+  ([to ^java.util.stream.BaseStream stream]
+   (if (instance? clojure.lang.IEditableCollection to)
+     (with-meta (persistent! (stream-reduce! conj! (transient to) stream)) (meta to))
+     (stream-reduce! conj to stream)))
+  ([to xform ^java.util.stream.BaseStream stream]
+   (if (instance? clojure.lang.IEditableCollection to)
+     (with-meta (persistent! (stream-transduce! xform conj! (transient to) stream)) (meta to))
+     (stream-transduce! xform conj to stream))))
 
 (defmacro ^:private when-class [class-name & body]
   `(try
@@ -6874,6 +6943,7 @@ fails, attempts to require sym's namespace and retries."
    :added "1.11"}
   ^java.util.UUID [] (java.util.UUID/randomUUID))
 
+;; redefine reduce with internal-reduce
 (defn reduce
   "f should be a function of 2 arguments. If val is not supplied,
   returns the result of applying f to the first 2 items in coll, then
@@ -6957,8 +7027,9 @@ fails, attempts to require sym's namespace and retries."
        (f ret))))
 
 (defn into
-  "Returns a new coll consisting of to-coll with all of the items of
-  from-coll conjoined. A transducer may be supplied."
+  "Returns a new coll consisting of to with all of the items of
+  from conjoined. A transducer may be supplied.
+  (into x) returns x. (into) returns []."
   {:added "1.0"
    :static true}
   ([] [])
@@ -7375,7 +7446,7 @@ fails, attempts to require sym's namespace and retries."
        (let [p (into [] (take n) s)]
          (if (= n (count p))
            (cons p (partitionv n step pad (nthrest s step)))
-           (into [] (take n) (concat p pad))))))))
+           (list (into [] (take n) (concat p pad)))))))))
 
 (defn partitionv-all
   "Returns a lazy sequence of vector partitions, but may include
