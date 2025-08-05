@@ -1,0 +1,6 @@
+(ns codegen.test.loop-simple)
+
+(defn simple-loop []
+  (loop [i 0]
+    (if (< i 10)
+      (recur (inc i)))))

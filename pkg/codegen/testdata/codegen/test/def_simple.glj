@@ -1,0 +1,3 @@
+(ns codegen.test.def-simple)
+
+(def foo)

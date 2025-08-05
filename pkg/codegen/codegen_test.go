@@ -5,43 +5,63 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
 	"testing"
 
-	"github.com/glojurelang/glojure/pkg/ast"
-	"github.com/glojurelang/glojure/pkg/compiler"
+	"github.com/glojurelang/glojure/pkg/glj"
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
+	"github.com/glojurelang/glojure/pkg/runtime"
 )
 
 var updateGolden = flag.Bool("update", false, "update golden files")
 
 func TestCodegen(t *testing.T) {
-	testFiles, err := filepath.Glob("testdata/*.glj")
+	var testFiles []string
+	err := filepath.Walk("testdata", func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if strings.HasSuffix(path, ".glj") {
+			testFiles = append(testFiles, path)
+		}
+		return nil
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	for _, testFile := range testFiles {
-		testName := strings.TrimSuffix(filepath.Base(testFile), ".glj")
+	// Sort test files for consistent ordering
+	sort.Strings(testFiles)
+
+	for i, testFile := range testFiles {
+		baseName := strings.TrimSuffix(filepath.Base(testFile), ".glj")
+		testName := fmt.Sprintf("%02d_%s", i+1, baseName)
 		t.Run(testName, func(t *testing.T) {
-			// Read input file
-			input, err := ioutil.ReadFile(testFile)
-			if err != nil {
-				t.Fatal(err)
+			// Parse test file to get namespace name
+			nsName := getNamespaceFromFile(t, testFile)
+			if nsName == "" {
+				// If no namespace declaration, use the filename as namespace
+				nsName = strings.TrimSuffix(filepath.Base(testFile), ".glj")
+				nsName = strings.ReplaceAll(nsName, "_", "-")
+				nsName = strings.ReplaceAll(nsName, ".", "-")
 			}
 
-			// Parse and analyze
-			nodes, err := parseAndAnalyze(string(input))
-			if err != nil {
-				t.Fatalf("failed to parse/analyze: %v", err)
-			}
+			require := glj.Var("glojure.core", "require")
+			runtime.AddLoadPath(os.DirFS("testdata"))
+			// Load the namespace
+			require.Invoke(lang.NewSymbol(nsName))
 
-			// Generate code
+			ns := lang.FindNamespace(lang.NewSymbol(nsName))
+
+			// Generate code for the namespace
 			var buf bytes.Buffer
 			gen := New(&buf)
-			if err := gen.Generate(nodes); err != nil {
+			if err := gen.Generate(ns); err != nil {
 				t.Fatalf("failed to generate code: %v", err)
 			}
 
@@ -65,64 +85,50 @@ func TestCodegen(t *testing.T) {
 					generated, expected)
 			}
 
+			// run go vet on the output file. print any errors from stderr
+			cmd := exec.Command("go", "vet", "-all", goldenFile)
+			var stderr bytes.Buffer
+			cmd.Stderr = &stderr
+			if err := cmd.Run(); err != nil {
+				t.Errorf("go vet failed for %s: %v\nStderr:\n%s", goldenFile, err, stderr.String())
+			}
+
 			// TODO: Compile and run the generated code to verify behavior
 			// This will be added once we have more complete code generation
 		})
 	}
 }
 
-func parseAndAnalyze(input string) ([]*ast.Node, error) {
-	// Create reader without needing full environment
-	r := reader.New(strings.NewReader(input), reader.WithFilename("test.glj"),
-		reader.WithGetCurrentNS(func() *lang.Namespace {
-			// Return a minimal namespace for testing
-			return lang.FindOrCreateNamespace(lang.NewSymbol("user"))
-		}))
-
-	// Create analyzer with minimal setup
-	analyzer := &compiler.Analyzer{
-		Macroexpand1: func(form interface{}) (interface{}, error) {
-			// For now, no macro expansion in tests
-			return form, nil
-		},
-		CreateVar: func(sym *lang.Symbol, env compiler.Env) (interface{}, error) {
-			// Create a var in the current namespace
-			ns := lang.FindOrCreateNamespace(lang.NewSymbol("user"))
-			return ns.Intern(sym), nil
-		},
-		IsVar: func(v interface{}) bool {
-			_, ok := v.(*lang.Var)
-			return ok
-		},
-		Gensym: func(prefix string) *lang.Symbol {
-			// Simple gensym for testing
-			return lang.NewSymbol(fmt.Sprintf("%s_%d", prefix, 1))
-		},
-		FindNamespace: func(sym *lang.Symbol) *lang.Namespace {
-			return lang.FindNamespace(sym)
-		},
+// getNamespaceFromFile attempts to extract the namespace declaration from a file
+func getNamespaceFromFile(t *testing.T, filename string) string {
+	input, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return ""
 	}
 
-	// Parse and analyze all forms
-	var nodes []*ast.Node
-	for {
-		form, err := r.ReadOne()
-		if err == reader.ErrEOF {
-			break
-		}
-		if err != nil {
-			return nil, err
-		}
+	r := reader.New(strings.NewReader(string(input)),
+		reader.WithFilename(filename),
+	)
 
-		node, err := analyzer.Analyze(form, lang.NewMap())
-		if err != nil {
-			return nil, err
-		}
-
-		nodes = append(nodes, node)
+	// Look for first form, check if it's an ns declaration
+	form, err := r.ReadOne()
+	if err != nil {
+		return ""
 	}
 
-	return nodes, nil
+	// Check if it's a list starting with 'ns
+	if list, ok := form.(lang.ISeq); ok {
+		first := lang.First(list)
+		if sym, ok := first.(*lang.Symbol); ok && sym.Name() == "ns" {
+			// Get the namespace name (second element)
+			second := lang.First(lang.Next(list))
+			if nsSym, ok := second.(*lang.Symbol); ok {
+				return nsSym.Name()
+			}
+		}
+	}
+
+	panic("expected namespace declaration in " + filename)
 }
 
 // TestBehavior verifies that generated code produces the same results as interpreted code

@@ -6,7 +6,7 @@ import (
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
-// hello
-func Form_0() interface{} {
-	return "hello"
+func init() {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.ns-skip"))
+	_ = ns
 }

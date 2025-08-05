@@ -33,6 +33,10 @@ func (fn *Fn) WithMeta(meta lang.IPersistentMap) interface{} {
 	return &cpy
 }
 
+func (fn *Fn) ASTNode() *ast.Node {
+	return fn.astNode
+}
+
 func (fn *Fn) Invoke(args ...interface{}) interface{} {
 	fnNode := fn.astNode.Sub.(*ast.FnNode)
 

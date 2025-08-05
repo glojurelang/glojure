@@ -1,0 +1,5 @@
+(ns codegen.test.const-number)
+
+(def const-number
+  "A constant number."
+  42)
