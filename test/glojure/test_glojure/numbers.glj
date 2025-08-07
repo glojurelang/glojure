@@ -376,7 +376,7 @@
   ; divide by zero
   (is (thrown? go/any (rem 9 0)))  ;; TODO: replace w/ arithmetic exception
   (is (thrown? go/any (rem 0 0)))
-  
+
   (are [x y] (= x y)
     (rem 4 2) 0
     (rem 3 2) 1
@@ -407,7 +407,7 @@
     (rem 2 -5) 2
     (rem -2 5) -2
     (rem -2 -5) -2
-    
+
     ; num = 0, div != 0
     (rem 0 3) 0
     (rem 0 -3) 0
@@ -423,7 +423,7 @@
   ; divide by zero
   (is (thrown? go/any (quot 9 0)))  ;; TODO: replace w/ arithmetic exception
   (is (thrown? go/any (quot 0 0)))
-  
+
   (are [x y] (= x y)
     (quot 4 2) 2
     (quot 3 2) 1
@@ -939,5 +939,86 @@ Math/pow overflows to Infinity."
           (* onan nan)
           (/ nan onan)
           (/ onan nan) ))))
+
+(deftest test-arbitrary-base-numbers
+  (testing "Arbitrary base numbers (2r-36r) should work correctly"
+    ;; Test base 2 (binary)
+    (are [x y] (= x y)
+         (read-string "2r1010") 10
+         (read-string "2r1111") 15
+         (read-string "2r1000000") 64)
+
+    ;; Test base 8 (octal)
+    (are [x y] (= x y)
+         (read-string "8r77") 63
+         (read-string "8r100") 64
+         (read-string "8r777") 511)
+
+    ;; Test base 10 (decimal) - should work the same as regular numbers
+    (are [x y] (= x y)
+         (read-string "10r90") 90
+         (read-string "10r123") 123
+         (read-string "10r0") 0)
+
+    ;; Test base 16 (hexadecimal) - the original bug case
+    (are [x y] (= x y)
+         (read-string "16rFF") 255
+         (read-string "16r99") 153
+         (read-string "16rAB") 171
+         (read-string "16r0") 0
+         (read-string "16rABCD") 43981)
+
+    ;; Test base 15 (example from user query)
+    (are [x y] (= x y)
+         (read-string "15rAB3") 2418)
+
+    ;; Test base 36 (maximum supported base)
+    (are [x y] (= x y)
+         (read-string "36rZ") 35
+         (read-string "36r10") 36
+         (read-string "36rZZ") 1295
+         (read-string "36r0") 0
+         (read-string "36rA") 10
+         (read-string "36r9") 9)
+
+    ;; Test with negative numbers
+    (are [x y] (= x y)
+         (read-string "-16rFF") -255
+         (read-string "-36rZ") -35
+         (read-string "-2r1010") -10)
+
+    ;; Test with BigInt suffix N
+    (are [x y] (= x y)
+         (read-string "16rFFN") 255N
+         (read-string "36rZZN") 1295N
+         (read-string "2r1000000N") 64N)
+
+    ;; Test mixed case letters (should be case insensitive)
+    (are [x y] (= x y)
+         (read-string "16rff") 255
+         (read-string "16rFf") 255
+         (read-string "16rfF") 255
+         (read-string "36rz") 35
+         (read-string "36rZz") 1295)))
+
+(deftest test-arbitrary-base-error-cases
+  (testing "Arbitrary base numbers should reject invalid cases"
+    ;; Base 37 should be rejected (max is 36)
+    (is (thrown? go/any (read-string "37rZ")))
+    (is (thrown? go/any (read-string "100r10")))
+
+    ;; Base 0 should be rejected
+    (is (thrown? go/any (read-string "0r10")))
+
+    ;; Invalid digits for the base should be rejected
+    (is (thrown? go/any (read-string "16rG")))  ; G is not valid in base 16
+    (is (thrown? go/any (read-string "10rA")))  ; A is not valid in base 10
+    (is (thrown? go/any (read-string "2r2")))   ; 2 is not valid in base 2
+
+    ;; Empty number part should be rejected
+    (is (thrown? go/any (read-string "16r")))
+
+    ;; Invalid format should be rejected
+    (is (thrown? go/any (read-string "16x10")))))  ; should be 'r' not 'x'
 
 (run-tests)
