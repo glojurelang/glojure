@@ -63,6 +63,7 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 		"print-meta",
 		"print-dup",
 		"read-eval",
+		"glojure-version",
 	} {
 		coreNS.InternWithValue(lang.NewSymbol("*"+dyn+"*"), nil, true).SetDynamic()
 	}

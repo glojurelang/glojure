@@ -61,6 +61,8 @@ The `glj` command provides a traditional Clojure development experience:
 
 **Start a REPL (interactive session):**
 ```
+user=> *glojure-version*
+{:major 0, :minor 3, :incremental 0, :qualifier nil}
 $ glj
 user=> (+ 1 2 3)
 6

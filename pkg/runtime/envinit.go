@@ -5,12 +5,47 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/stdlib"
 )
+
+// The current version of Glojure
+const VERSION = "0.3.0"
+
+// ParseVersion parses the VERSION string and returns a map with major, minor,
+// incremental, and qualifier
+func ParseVersion(version string) lang.IPersistentMap {
+	parts := strings.Split(version, ".")
+
+	major, _ := strconv.Atoi(parts[0])
+	minor, _ := strconv.Atoi(parts[1])
+
+	incremental := 0
+	qualifier := interface{}(nil)
+
+	if len(parts) > 2 {
+		// Check if the third part contains a qualifier (e.g., "0-alpha")
+		incrementalPart := parts[2]
+		if strings.Contains(incrementalPart, "-") {
+			qualifierParts := strings.SplitN(incrementalPart, "-", 2)
+			incremental, _ = strconv.Atoi(qualifierParts[0])
+			qualifier = qualifierParts[1]
+		} else {
+			incremental, _ = strconv.Atoi(incrementalPart)
+		}
+	}
+
+	return lang.NewMap(
+		lang.NewKeyword("major"), major,
+		lang.NewKeyword("minor"), minor,
+		lang.NewKeyword("incremental"), incremental,
+		lang.NewKeyword("qualifier"), qualifier,
+	)
+}
 
 type Program struct {
 	nodes []interface{}
@@ -111,6 +146,13 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 			}
 		}
 		evalFile("glojure/core.glj")
+	}
+
+	// Set the glojure version
+	core := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+	versionVar := core.FindInternedVar(lang.NewSymbol("*glojure-version*"))
+	if versionVar != nil {
+		versionVar.BindRoot(ParseVersion(VERSION))
 	}
 
 	return env
