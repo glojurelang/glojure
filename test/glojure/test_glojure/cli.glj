@@ -38,6 +38,14 @@
      (is (= out "42\n") "Command should output 42")
      (is (empty? err) "Command should not return an error"))))
 
+(deftest version-flag-test
+  (test-that
+   "glj --version flag works correctly"
+   (let [[out err] (run-cli-cmd glj "--version")]
+     (is (re-matches #"glojure v\d+\.\d+\.\d+\n" out)
+         "Command should output version")
+     (is (empty? err) "Command should not return an error"))))
+
 (deftest glojure-version-test
   (test-that
    "*glojure-version* should be set correctly"

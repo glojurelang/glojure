@@ -59,6 +59,12 @@ embedded within Go applications.
 
 The `glj` command provides a traditional Clojure development experience:
 
+**Show the version:**
+```
+$ glj --version
+glojure v0.3.0
+```
+
 **Start a REPL (interactive session):**
 ```
 user=> *glojure-version*

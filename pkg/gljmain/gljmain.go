@@ -21,6 +21,9 @@ func Main(args []string) {
 
 	if len(args) == 0 {
 		repl.Start()
+	} else if args[0] == "--version" {
+		fmt.Printf("glojure v%s\n", runtime.VERSION)
+		return
 	} else if args[0] == "-e" {
 		// Evaluate expression from command line
 		if len(args) < 2 {
