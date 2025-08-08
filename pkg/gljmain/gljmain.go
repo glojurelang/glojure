@@ -16,6 +16,27 @@ import (
 	"github.com/glojurelang/glojure/pkg/runtime"
 )
 
+func printHelp() {
+	fmt.Printf(`Glojure v%s
+
+Usage: glj [options] [file]
+
+Options:
+  -e <expr>        Evaluate expression from command line
+  -h, --help       Show this help message
+  --version        Show version information
+
+Examples:
+  glj                   # Start REPL
+  glj -e "(+ 1 2)"      # Evaluate expression
+  glj script.glj        # Run script file
+  glj --version         # Show version
+  glj --help            # Show this help
+
+For more information, visit: https://github.com/glojurelang/glojure
+`, runtime.VERSION)
+}
+
 func Main(args []string) {
 	runtime.AddLoadPath(os.DirFS("."))
 
@@ -23,6 +44,9 @@ func Main(args []string) {
 		repl.Start()
 	} else if args[0] == "--version" {
 		fmt.Printf("glojure v%s\n", runtime.VERSION)
+		return
+	} else if args[0] == "--help" || args[0] == "-h" {
+		printHelp()
 		return
 	} else if args[0] == "-e" {
 		// Evaluate expression from command line

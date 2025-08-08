@@ -59,6 +59,11 @@ embedded within Go applications.
 
 The `glj` command provides a traditional Clojure development experience:
 
+**Show the help:**
+```
+$ glj --help   # or glj -h
+```
+
 **Show the version:**
 ```
 $ glj --version

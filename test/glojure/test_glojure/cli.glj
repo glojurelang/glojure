@@ -9,11 +9,11 @@
   acts like a comment and the forms are run unchanged."
   [purpose & test-forms]
   (let [tests (map
-                #(if (= (:ns (meta (resolve (first %))))
-                        (the-ns 'glojure.test))
-                   (concat % (list purpose))
-                   %)
-                test-forms)]
+               #(if (= (:ns (meta (resolve (first %))))
+                       (the-ns 'glojure.test))
+                  (concat % (list purpose))
+                  %)
+               test-forms)]
     `(do ~@tests)))
 
 (defn run-cli-cmd [& args]
@@ -52,6 +52,26 @@
    (let [[out err] (run-cli-cmd glj "-e" "*glojure-version*")]
      (is (= out "{:major 0, :minor 3, :incremental 0, :qualifier nil}\n")
          "Version should match expected format")
+     (is (empty? err) "Command should not return an error"))))
+
+(deftest help-flag-test
+  (test-that
+   "glj --help flag works correctly"
+   (let [[out err] (run-cli-cmd glj "--help")]
+     (is (re-matches
+          #"(?s).*Glojure v0\.3\.0.*Usage: glj.*Options:.*-e.*-h.*--help.*--version.*Examples:.*"
+          out)
+         "Command should output help information")
+     (is (empty? err) "Command should not return an error"))))
+
+(deftest short-help-flag-test
+  (test-that
+   "glj -h flag works correctly"
+   (let [[out err] (run-cli-cmd glj "-h")]
+     (is (re-matches
+          #"(?s).*Glojure v0\.3\.0.*Usage: glj.*Options:.*-e.*-h.*--help.*--version.*Examples:.*"
+          out)
+         "Command should output help information")
      (is (empty? err) "Command should not return an error"))))
 
 (run-tests)
