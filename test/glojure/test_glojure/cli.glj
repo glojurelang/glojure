@@ -1,0 +1,41 @@
+(ns glojure.test-glojure.cli
+  (:use glojure.test)
+  (:require [glojure.string :as str]))
+
+(defmacro #^{:private true} test-that
+  "Provides a useful way for specifying the purpose of tests. If the first-level
+  forms are lists that make a call to a glojure.test function, it supplies the
+  purpose as the msg argument to those functions. Otherwise, the purpose just
+  acts like a comment and the forms are run unchanged."
+  [purpose & test-forms]
+  (let [tests (map
+                #(if (= (:ns (meta (resolve (first %))))
+                        (the-ns 'glojure.test))
+                   (concat % (list purpose))
+                   %)
+                test-forms)]
+    `(do ~@tests)))
+
+(defn run-cli-cmd [& args]
+  (let [bytes-to-string (fn [bytes]
+                          (apply str (map char (seq bytes))))
+        cmd (apply os$exec.Command args)
+        [output err] (.CombinedOutput cmd)]
+    [(bytes-to-string output) (bytes-to-string err)]))
+
+(defn find-glj-bin []
+  (let [[out err] (run-cli-cmd "find" "bin" "-name" "glj")]
+    (if (and (seq out) (empty? err))
+      (first (str/split-lines out))
+      (throw (Exception. (str "Failed to find glj bin: " err))))))
+
+(def glj (find-glj-bin))
+
+(deftest e-flag-test
+  (test-that
+   "glj -e flag works correctly"
+   (let [[out err] (run-cli-cmd glj "-e" "(* 6 7)")]
+     (is (= out "42\n") "Command should output 42")
+     (is (empty? err) "Command should not return an error"))))
+
+(run-tests)
