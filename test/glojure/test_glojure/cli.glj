@@ -1,0 +1,77 @@
+(ns glojure.test-glojure.cli
+  (:use glojure.test)
+  (:require [glojure.string :as str]))
+
+(defmacro #^{:private true} test-that
+  "Provides a useful way for specifying the purpose of tests. If the first-level
+  forms are lists that make a call to a glojure.test function, it supplies the
+  purpose as the msg argument to those functions. Otherwise, the purpose just
+  acts like a comment and the forms are run unchanged."
+  [purpose & test-forms]
+  (let [tests (map
+               #(if (= (:ns (meta (resolve (first %))))
+                       (the-ns 'glojure.test))
+                  (concat % (list purpose))
+                  %)
+               test-forms)]
+    `(do ~@tests)))
+
+(defn run-cli-cmd [& args]
+  (let [bytes-to-string (fn [bytes]
+                          (if (nil? bytes)
+                            ""
+                            (apply str (map char (seq bytes)))))
+        cmd (apply os$exec.Command args)
+        [output err] (.CombinedOutput cmd)]
+    [(bytes-to-string output) (bytes-to-string err)]))
+
+(def glj
+  (let [[out err] (run-cli-cmd "find" "bin" "-name" "glj" "-executable")]
+    (if (and (seq out) (empty? err))
+      (first (str/split-lines out))
+      (throw (Exception. (str "Failed to find glj bin: " err))))))
+
+(deftest e-flag-test
+  (test-that
+   "glj -e flag works correctly"
+   (let [[out err] (run-cli-cmd glj "-e" "(* 6 7)")]
+     (is (= out "42\n") "Command should output 42")
+     (is (empty? err) "Command should not return an error"))))
+
+(deftest version-flag-test
+  (test-that
+   "glj --version flag works correctly"
+   (let [[out err] (run-cli-cmd glj "--version")]
+     (is (re-matches #"glojure v\d+\.\d+\.\d+\n" out)
+         "Command should output version")
+     (is (empty? err) "Command should not return an error"))))
+
+(deftest glojure-version-test
+  (test-that
+   "*glojure-version* should be set correctly"
+   (let [[out err] (run-cli-cmd glj "-e" "*glojure-version*")]
+     (is (= out "{:major 0, :minor 3, :incremental 0, :qualifier nil}\n")
+         "Version should match expected format")
+     (is (empty? err) "Command should not return an error"))))
+
+(deftest help-flag-test
+  (test-that
+   "glj --help flag works correctly"
+   (let [[out err] (run-cli-cmd glj "--help")]
+     (is (re-matches
+          #"(?s).*Glojure v0\.3\.0.*Usage: glj.*Options:.*-e.*-h.*--help.*--version.*Examples:.*"
+          out)
+         "Command should output help information")
+     (is (empty? err) "Command should not return an error"))))
+
+(deftest short-help-flag-test
+  (test-that
+   "glj -h flag works correctly"
+   (let [[out err] (run-cli-cmd glj "-h")]
+     (is (re-matches
+          #"(?s).*Glojure v0\.3\.0.*Usage: glj.*Options:.*-e.*-h.*--help.*--version.*Examples:.*"
+          out)
+         "Command should output help information")
+     (is (empty? err) "Command should not return an error"))))
+
+(run-tests)

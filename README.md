@@ -2,7 +2,8 @@
 
 ![example workflow](https://github.com/glojurelang/glojure/actions/workflows/ci.yml/badge.svg)
 
-[Try it in your browser!](https://glojurelang.github.io/glojure/) (fair warning: startup on the web is slow)
+[Try it in your browser!](https://glojurelang.github.io/glojure/)
+(fair warning: startup on the web is slow)
 
 <img alt="Gopher image" src="./doc/logo.png" width="512" />
 
@@ -51,20 +52,46 @@ user=>
 
 ## Usage
 
-Glojure can be used in two ways: as a standalone command-line tool (`glj`) or embedded within Go applications.
+Glojure can be used in two ways: as a standalone command-line tool (`glj`) or
+embedded within Go applications.
 
 ### Using the `glj` Command
 
 The `glj` command provides a traditional Clojure development experience:
 
+**Show the help:**
+```
+$ glj --help   # or glj -h
+```
+
+**Show the version:**
+```
+$ glj --version
+glojure v0.3.0
+```
+
 **Start a REPL (interactive session):**
 ```
+user=> *glojure-version*
+{:major 0, :minor 3, :incremental 0, :qualifier nil}
 $ glj
 user=> (+ 1 2 3)
 6
 user=> (println "Hello from Glojure!")
 Hello from Glojure!
 nil
+```
+
+**Evaluate expressions:**
+```
+$ glj -e '(println "Hello, World!")'
+Hello, World!
+$ glj -e '(apply + (range 3 10))'
+42
+$ glj -e '
+(defn factorial [n] (if (<= n 1) 1 (* n (factorial (dec n)))))
+(factorial 5)'
+120
 ```
 
 **Run a Clojure script:**
@@ -100,7 +127,8 @@ Server starting on :8080...
 
 ### Embedding Glojure in Go Applications
 
-You can also embed Glojure as a scripting language within your Go applications. This is useful when you want to:
+You can also embed Glojure as a scripting language within your Go applications.
+This is useful when you want to:
 - Add scriptable configuration to your Go application
 - Allow users to extend your application with Clojure plugins
 - Mix Go's performance with Clojure's expressiveness
@@ -185,6 +213,7 @@ runtime.ReadEval(`
 - Writing standalone Clojure programs
 - Interactive development with the REPL
 - Running Clojure scripts
+- Evaluating expressions directly from the command line
 - Learning Clojure with Go interop
 
 **Embed Glojure for:**
