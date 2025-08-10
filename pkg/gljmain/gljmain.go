@@ -26,6 +26,9 @@ Options:
   -h, --help       Show this help message
   --version        Show version information
 
+Environment Variables:
+  GLJPATH          PATH of directories for .glj libraries
+
 Examples:
   glj                   # Start REPL
   glj -e "(+ 1 2)"      # Evaluate expression
@@ -39,6 +42,9 @@ For more information, visit: https://github.com/glojurelang/glojure
 
 func Main(args []string) {
 	runtime.AddLoadPath(os.DirFS("."))
+
+	// Add GLJPATH directories to load path if set
+	runtime.AddLoadPaths(os.Getenv("GLJPATH"))
 
 	if len(args) == 0 {
 		repl.Start()

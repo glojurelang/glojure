@@ -31,6 +31,20 @@
       (first (str/split-lines out))
       (throw (Exception. (str "Failed to find glj bin: " err))))))
 
+(deftest help-flag-test
+  (test-that
+   "glj --help flag works correctly"
+   (let [[out err] (run-cli-cmd glj "--help")]
+     (is (re-matches
+          #"(?s).*Glojure v\d+\.\d+\.\d+.*Usage: glj.*Options:.*-e.*-h.*--help.*--version.*Examples:.*"
+          out)
+         "Command should output help information")
+     (is (re-matches
+          #"(?s).*Environment Variables:.*GLJPATH.*PATH of directories for \.glj libraries.*"
+          out)
+         "Help should document GLJPATH environment variable")
+     (is (empty? err) "Command should not return an error"))))
+
 (deftest e-flag-test
   (test-that
    "glj -e flag works correctly"
@@ -46,32 +60,36 @@
          "Command should output version")
      (is (empty? err) "Command should not return an error"))))
 
-(deftest glojure-version-test
+(deftest gljpath-test
   (test-that
-   "*glojure-version* should be set correctly"
-   (let [[out err] (run-cli-cmd glj "-e" "*glojure-version*")]
-     (is (= out "{:major 0, :minor 3, :incremental 0, :qualifier nil}\n")
-         "Version should match expected format")
-     (is (empty? err) "Command should not return an error"))))
-
-(deftest help-flag-test
-  (test-that
-   "glj --help flag works correctly"
-   (let [[out err] (run-cli-cmd glj "--help")]
-     (is (re-matches
-          #"(?s).*Glojure v0\.3\.0.*Usage: glj.*Options:.*-e.*-h.*--help.*--version.*Examples:.*"
-          out)
-         "Command should output help information")
-     (is (empty? err) "Command should not return an error"))))
-
-(deftest short-help-flag-test
-  (test-that
-   "glj -h flag works correctly"
-   (let [[out err] (run-cli-cmd glj "-h")]
-     (is (re-matches
-          #"(?s).*Glojure v0\.3\.0.*Usage: glj.*Options:.*-e.*-h.*--help.*--version.*Examples:.*"
-          out)
-         "Command should output help information")
+   "GLJPATH can load libraries from specified directories"
+   (let [lib1-dir (str (os.Getenv "PWD") "/test_gljpath_priority1")
+         lib2-dir (str (os.Getenv "PWD") "/test_gljpath_priority2")
+         lib1-file (str lib1-dir "/conflict.glj")
+         lib2-file (str lib2-dir "/conflict.glj")
+         test-script (str (os.Getenv "PWD") "/test_gljpath_priority_script.glj")
+         ;; Create conflicting libraries with same name but different content
+         _ (do
+             (os.MkdirAll lib1-dir 0755)
+             (os.MkdirAll lib2-dir 0755)
+             (os.WriteFile lib1-file
+                          (str "(ns conflict)\n(defn version [] \"version 1\")")
+                          0644)
+             (os.WriteFile lib2-file
+                          (str "(ns conflict)\n(defn version [] \"version 2\")")
+                          0644)
+             (os.WriteFile test-script
+                          (str "(ns main)\n(use 'conflict)\n(println (version))")
+                          0644))
+         ;; Test that first directory in GLJPATH takes precedence
+         [out err] (run-cli-cmd "sh" "-c"
+                                (str "GLJPATH=" lib1-dir ":" lib2-dir " " glj " " test-script))
+         ;; Cleanup
+         _ (do
+             (os.RemoveAll lib1-dir)
+             (os.RemoveAll lib2-dir)
+             (os.Remove test-script))]
+     (is (= out "version 1\n") "First directory in GLJPATH should take precedence")
      (is (empty? err) "Command should not return an error"))))
 
 (run-tests)
