@@ -6,6 +6,28 @@ STDLIB := $(STDLIB_ORIGINALS:scripts/rewrite-core/originals/%=%)
 STDLIB_ORIGINALS := $(addprefix scripts/rewrite-core/originals/,$(STDLIB))
 STDLIB_TARGETS := $(addprefix pkg/stdlib/glojure/,$(STDLIB:.clj=.glj))
 
+OS-TYPE := $(shell bash -c 'echo $$OSTYPE')
+OS-NAME := \
+  $(if $(findstring darwin,$(OS-TYPE))\
+	,macos,$(if $(findstring linux,$(OS-TYPE)),linux,))
+ARCH-TYPE := $(shell bash -c 'echo $$MACHTYPE')
+ARCH-NAME := \
+  $(if $(or $(findstring arm64,$(ARCH-TYPE)),\
+	          $(findstring aarch64,$(ARCH-TYPE)))\
+	,arm64,$(if $(findstring x86_64,$(ARCH-TYPE)),int64,))
+
+ifdef OS-NAME
+ifdef ARCH-NAME
+OS-ARCH := $(OS-NAME)-$(ARCH-NAME)
+OA-linux-arm64 := linux_arm64
+OA-linux-int64 := linux_amd64
+OA-macos-arm64 := darwin_arm64
+OA-macos-int64 := darwin_amd64
+OA := $(OA-$(OS-ARCH))
+GLJ := bin/$(OA)/glj
+endif
+endif
+
 TEST_FILES := $(shell find ./test -name '*.glj' | sort)
 TEST_TARGETS := $(addsuffix .test,$(TEST_FILES))
 
@@ -30,6 +52,13 @@ gocmd:
 .PHONY: generate
 generate:
 	@go generate ./...
+
+.PHONY: build
+build: $(GLJ)
+
+.PHONY: clean
+clean:
+	$(RM) -r bin/
 
 pkg/gen/gljimports/gljimports_%.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go ./internal/genpkg/genpkg.go \
 					$(wildcard ./pkg/lang/*.go) $(wildcard ./pkg/runtime/*.go)
@@ -56,7 +85,7 @@ vet:
 	@go vet ./...
 
 .PHONY: $(TEST_TARGETS)
-$(TEST_TARGETS): gocmd
+$(TEST_TARGETS): gocmd $(GLJ)
 	@$(GO_CMD) run ./cmd/glj/main.go $(basename $@)
 
 .PHONY: test
