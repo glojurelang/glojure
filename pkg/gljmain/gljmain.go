@@ -16,6 +16,43 @@ import (
 	"github.com/glojurelang/glojure/pkg/runtime"
 )
 
+// Args represents the parsed command line arguments
+type Args struct {
+	Mode        string   // "repl", "version", "help", "eval", "file"
+	Expression  string   // for eval mode
+	Filename    string   // for file mode
+	CommandArgs []string // remaining arguments after parsing
+}
+
+// parseArgs parses command line arguments and returns an Args struct
+func parseArgs(args []string) (*Args, error) {
+	if len(args) == 0 {
+		return &Args{Mode: "repl"}, nil
+	}
+
+	switch args[0] {
+	case "--version":
+		return &Args{Mode: "version"}, nil
+	case "--help", "-h":
+		return &Args{Mode: "help"}, nil
+	case "-e":
+		if len(args) < 2 {
+			return nil, fmt.Errorf("glj: -e requires an expression")
+		}
+		return &Args{
+			Mode:        "eval",
+			Expression:  args[1],
+			CommandArgs: args[2:],
+		}, nil
+	default:
+		return &Args{
+			Mode:        "file",
+			Filename:    args[0],
+			CommandArgs: args[1:],
+		}, nil
+	}
+}
+
 func printHelp() {
 	fmt.Printf(`Glojure v%s
 
@@ -59,29 +96,34 @@ func Main(args []string) {
 		}
 	}
 
-	if len(args) == 0 {
+	parsedArgs, err := parseArgs(args)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	switch parsedArgs.Mode {
+	case "repl":
 		repl.Start()
-	} else if args[0] == "--version" {
+	case "version":
 		fmt.Printf("glojure v%s\n", runtime.VERSION)
 		return
-	} else if args[0] == "--help" || args[0] == "-h" {
+	case "help":
 		printHelp()
 		return
-	} else if args[0] == "-e" {
+	case "eval":
 		// Evaluate expression from command line
-		if len(args) < 2 {
-			log.Fatal("glj: -e requires an expression")
-		}
-		expr := args[1]
 		env := lang.GlobalEnv
 
 		// Set command line args (everything after -e and the expression)
 		core := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-		core.FindInternedVar(lang.NewSymbol("*command-line-args*")).BindRoot(lang.Seq(args[2:]))
+		core.FindInternedVar(lang.NewSymbol("*command-line-args*")).
+			BindRoot(lang.Seq(parsedArgs.CommandArgs))
 
-		rdr := reader.New(strings.NewReader(expr), reader.WithGetCurrentNS(func() *lang.Namespace {
-			return env.CurrentNamespace()
-		}))
+		rdr := reader.New(
+			strings.NewReader(parsedArgs.Expression),
+			reader.WithGetCurrentNS(func() *lang.Namespace {
+				return env.CurrentNamespace()
+			}))
 		var lastResult interface{}
 		for {
 			val, err := rdr.ReadOne()
@@ -101,20 +143,23 @@ func Main(args []string) {
 		if !lang.IsNil(lastResult) {
 			fmt.Println(lang.PrintString(lastResult))
 		}
-	} else {
+	case "file":
 		// Execute file
-		file, err := os.Open(args[0])
+		file, err := os.Open(parsedArgs.Filename)
 		if err != nil {
 			log.Fatal(err)
 		}
 		env := lang.GlobalEnv
 
 		core := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-		core.FindInternedVar(lang.NewSymbol("*command-line-args*")).BindRoot(lang.Seq(args[1:]))
+		core.FindInternedVar(lang.NewSymbol("*command-line-args*")).
+			BindRoot(lang.Seq(parsedArgs.CommandArgs))
 
-		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() *lang.Namespace {
-			return env.CurrentNamespace()
-		}))
+		rdr := reader.New(
+			bufio.NewReader(file),
+			reader.WithGetCurrentNS(func() *lang.Namespace {
+				return env.CurrentNamespace()
+			}))
 		for {
 			val, err := rdr.ReadOne()
 			if err == reader.ErrEOF {
