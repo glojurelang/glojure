@@ -41,10 +41,23 @@ For more information, visit: https://github.com/glojurelang/glojure
 }
 
 func Main(args []string) {
-	runtime.AddLoadPath(os.DirFS("."))
+	// Add current directory to end of load path
+	runtime.AddLoadPath(os.DirFS("."), false)
 
-	// Add GLJPATH directories to load path if set
-	runtime.AddLoadPaths(os.Getenv("GLJPATH"))
+	// Add GLJPATH directories to front of load path if set
+	loadPaths := os.Getenv("GLJPATH")
+	if loadPaths != "" {
+		paths := strings.Split(loadPaths, ":")
+		for i := len(paths) - 1; i >= 0; i-- {
+			path := paths[i]
+			if path != "" {
+				// Skip non-existent path directories
+				if _, err := os.Stat(path); err == nil {
+					runtime.AddLoadPath(os.DirFS(path), true)
+				}
+			}
+		}
+	}
 
 	if len(args) == 0 {
 		repl.Start()

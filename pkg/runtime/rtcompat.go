@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"os"
 	"reflect"
 	"strings"
 	"sync"
@@ -24,38 +23,16 @@ var (
 	loadPathLock sync.Mutex
 )
 
-// AddLoadPath adds a filesystem to the load path.
-func AddLoadPath(fs fs.FS) {
+// AddLoadPath adds a filesystem to the front or end of the load path.
+func AddLoadPath(_fs fs.FS, front bool) {
 	loadPathLock.Lock()
 	defer loadPathLock.Unlock()
 
-	loadPath = append(loadPath, fs)
-}
-
-// AddLoadPaths adds each element from a colon-separated path string to the
-// front of the load path
-func AddLoadPaths(loadPaths string) {
-	if loadPaths == "" {
-		return
+	if front {
+		loadPath = append([]fs.FS{_fs}, loadPath...)
+	} else {
+		loadPath = append(loadPath, _fs)
 	}
-
-	// Turn the list of strings into a list of dirs
-	paths := strings.Split(loadPaths, ":")
-	var newPaths []fs.FS
-	for i := 0; i < len(paths); i++ {
-		path := paths[i]
-		if path != "" {
-			// Skip non-existent path directories
-			if _, err := os.Stat(path); err == nil {
-				newPaths = append(newPaths, os.DirFS(path))
-			}
-		}
-	}
-
-	// Now add all the new paths to the front
-	loadPathLock.Lock()
-	defer loadPathLock.Unlock()
-	loadPath = append(newPaths, loadPath...)
 }
 
 // RT is a struct with methods that map to Clojure's RT class' static
