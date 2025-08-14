@@ -1,2 +1,5 @@
-bin
-doc/repl/glj.wasm
+/.clj-kondo/
+/.lsp/
+/bin/
+/doc/repl/glj.wasm
+

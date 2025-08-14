@@ -94,6 +94,39 @@ func parseArgs(args []string) (*Args, error) {
 	}, nil
 }
 
+// setupLoadPaths configures the library search path in order of priority
+func setupLoadPaths(includePaths []string) {
+	// Add GLJPATH directories to front of load path if set
+	loadPaths := os.Getenv("GLJPATH")
+	if loadPaths != "" {
+		paths := strings.Split(loadPaths, ":")
+		for i := len(paths) - 1; i >= 0; i-- {
+			path := paths[i]
+			if path != "" {
+				// Skip non-existent path directories
+				if _, err := os.Stat(path); err == nil {
+					runtime.AddLoadPath(os.DirFS(path), true)
+				}
+			}
+		}
+	}
+
+	// Process -I include paths last (add to front of load path, highest priority)
+	// Process in reverse order so first -I on command line gets highest priority
+	for i := len(includePaths) - 1; i >= 0; i-- {
+		path := includePaths[i]
+		if path != "" {
+			// Skip non-existent path directories
+			if _, err := os.Stat(path); err == nil {
+				runtime.AddLoadPath(os.DirFS(path), true)
+			}
+		}
+	}
+
+	// Add current directory to end of load path
+	runtime.AddLoadPath(os.DirFS("."), false)
+}
+
 func printHelp() {
 	fmt.Printf(`Glojure v%s
 
@@ -128,35 +161,8 @@ func Main(args []string) {
 		log.Fatal(err)
 	}
 
-	// Process -I include paths first (add to front of load path)
-	// Process in reverse order so first -I on command line gets highest priority
-	for i := len(parsedArgs.IncludePaths) - 1; i >= 0; i-- {
-		path := parsedArgs.IncludePaths[i]
-		if path != "" {
-			// Skip non-existent path directories
-			if _, err := os.Stat(path); err == nil {
-				runtime.AddLoadPath(os.DirFS(path), true)
-			}
-		}
-	}
-
-	// Add GLJPATH directories to front of load path if set
-	loadPaths := os.Getenv("GLJPATH")
-	if loadPaths != "" {
-		paths := strings.Split(loadPaths, ":")
-		for i := len(paths) - 1; i >= 0; i-- {
-			path := paths[i]
-			if path != "" {
-				// Skip non-existent path directories
-				if _, err := os.Stat(path); err == nil {
-					runtime.AddLoadPath(os.DirFS(path), true)
-				}
-			}
-		}
-	}
-
-	// Add current directory to end of load path
-	runtime.AddLoadPath(os.DirFS("."), false)
+	// Setup library search paths
+	setupLoadPaths(parsedArgs.IncludePaths)
 
 	switch parsedArgs.Mode {
 	case "repl":

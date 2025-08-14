@@ -62,34 +62,56 @@
 
 (deftest gljpath-test
   (test-that
-   "GLJPATH can load libraries from specified directories"
+   "GLJPATH and -I flags can load libraries from specified directories"
    (let [lib1-dir (str (os.Getenv "PWD") "/test_gljpath_priority1")
          lib2-dir (str (os.Getenv "PWD") "/test_gljpath_priority2")
+         lib3-dir (str (os.Getenv "PWD") "/test_gljpath_priority3")
          lib1-file (str lib1-dir "/conflict.glj")
          lib2-file (str lib2-dir "/conflict.glj")
+         lib3-file (str lib3-dir "/conflict.glj")
          test-script (str (os.Getenv "PWD") "/test_gljpath_priority_script.glj")
          ;; Create conflicting libraries with same name but different content
          _ (do
              (os.MkdirAll lib1-dir 0755)
              (os.MkdirAll lib2-dir 0755)
+             (os.MkdirAll lib3-dir 0755)
              (os.WriteFile lib1-file
                           (str "(ns conflict)\n(defn version [] \"version 1\")")
                           0644)
              (os.WriteFile lib2-file
                           (str "(ns conflict)\n(defn version [] \"version 2\")")
                           0644)
+             (os.WriteFile lib3-file
+                          (str "(ns conflict)\n(defn version [] \"version 3\")")
+                          0644)
              (os.WriteFile test-script
                           (str "(ns main)\n(use 'conflict)\n(println (version))")
                           0644))
          ;; Test that first directory in GLJPATH takes precedence
-         [out err] (run-cli-cmd "sh" "-c"
-                                (str "GLJPATH=" lib1-dir ":" lib2-dir " " glj " " test-script))
+         [out1 err1] (run-cli-cmd "sh" "-c"
+                                 (str "GLJPATH=" lib1-dir ":" lib2-dir " "
+                                      glj " " test-script))
+         ;; Test that -I flags take precedence over GLJPATH
+         [out2 err2] (run-cli-cmd "sh" "-c"
+                                 (str "GLJPATH=" lib2-dir ":" lib3-dir " "
+                                      glj " -I " lib1-dir " " test-script))
+         ;; Test that first -I flag takes precedence over later ones
+         [out3 err3] (run-cli-cmd "sh" "-c"
+                                 (str glj " -I " lib3-dir " -I " lib2-dir
+                                      " -I " lib1-dir " " test-script))
          ;; Cleanup
          _ (do
              (os.RemoveAll lib1-dir)
              (os.RemoveAll lib2-dir)
+             (os.RemoveAll lib3-dir)
              (os.Remove test-script))]
-     (is (= out "version 1\n") "First directory in GLJPATH should take precedence")
-     (is (empty? err) "Command should not return an error"))))
-
+     (is (= out1 "version 1\n")
+         "First directory in GLJPATH should take precedence")
+     (is (empty? err1) "First command should not return an error")
+     (is (= out2 "version 1\n")
+         "-I flag should take precedence over GLJPATH")
+     (is (empty? err2) "Second command should not return an error")
+     (is (= out3 "version 3\n")
+         "First -I flag should take precedence over later ones")
+     (is (empty? err3) "Third command should not return an error"))))
 (run-tests)
