@@ -18,10 +18,11 @@ import (
 
 // Args represents the parsed command line arguments
 type Args struct {
-	Mode        string   // "repl", "version", "help", "eval", "file"
-	Expression  string   // for eval mode
-	Filename    string   // for file mode
-	CommandArgs []string // remaining arguments after parsing
+	Mode         string   // "repl", "version", "help", "eval", "file"
+	Expression   string   // for eval mode
+	Filename     string   // for file mode
+	IncludePaths []string // for -I flags
+	CommandArgs  []string // remaining arguments after parsing
 }
 
 // parseArgs parses command line arguments and returns an Args struct
@@ -30,27 +31,67 @@ func parseArgs(args []string) (*Args, error) {
 		return &Args{Mode: "repl"}, nil
 	}
 
-	switch args[0] {
-	case "--version":
-		return &Args{Mode: "version"}, nil
-	case "--help", "-h":
-		return &Args{Mode: "help"}, nil
-	case "-e":
-		if len(args) < 2 {
-			return nil, fmt.Errorf("glj: -e requires an expression")
+	// First pass: collect all -I flags and their paths
+	var includePaths []string
+	var remainingArgs []string
+	var mode string
+	var expression string
+	var filename string
+
+	i := 0
+	for i < len(args) {
+		switch args[i] {
+		case "--version":
+			if mode == "" {
+				mode = "version"
+			}
+			i++
+		case "--help", "-h":
+			if mode == "" {
+				mode = "help"
+			}
+			i++
+		case "-e":
+			if mode == "" {
+				mode = "eval"
+				if i+1 >= len(args) {
+					return nil, fmt.Errorf("glj: -e requires an expression")
+				}
+				expression = args[i+1]
+				i += 2
+			} else {
+				remainingArgs = append(remainingArgs, args[i])
+				i++
+			}
+		case "-I":
+			if i+1 >= len(args) {
+				return nil, fmt.Errorf("glj: -I requires a path")
+			}
+			includePaths = append(includePaths, args[i+1])
+			i += 2
+		default:
+			if mode == "" {
+				mode = "file"
+				filename = args[i]
+			} else {
+				remainingArgs = append(remainingArgs, args[i])
+			}
+			i++
 		}
-		return &Args{
-			Mode:        "eval",
-			Expression:  args[1],
-			CommandArgs: args[2:],
-		}, nil
-	default:
-		return &Args{
-			Mode:        "file",
-			Filename:    args[0],
-			CommandArgs: args[1:],
-		}, nil
 	}
+
+	// If no explicit mode was set, default to repl
+	if mode == "" {
+		mode = "repl"
+	}
+
+	return &Args{
+		Mode:         mode,
+		Expression:   expression,
+		Filename:     filename,
+		IncludePaths: includePaths,
+		CommandArgs:  remainingArgs,
+	}, nil
 }
 
 func printHelp() {
@@ -60,14 +101,18 @@ Usage: glj [options] [file]
 
 Options:
   -e <expr>        Evaluate expression from command line
-  -h, --help       Show this help message
+  -I <path>        Add directory to front of library search path
+
   --version        Show version information
+  -h, --help       Show this help message
 
 Environment Variables:
   GLJPATH          PATH of directories for .glj libraries
 
 Examples:
   glj                   # Start REPL
+  glj -I /path/to/lib   # Add library path and start REPL
+  glj -I /lib1 -I /lib2 # Add multiple library paths
   glj -e "(+ 1 2)"      # Evaluate expression
   glj script.glj        # Run script file
   glj --version         # Show version
@@ -78,8 +123,22 @@ For more information, visit: https://github.com/glojurelang/glojure
 }
 
 func Main(args []string) {
-	// Add current directory to end of load path
-	runtime.AddLoadPath(os.DirFS("."), false)
+	parsedArgs, err := parseArgs(args)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Process -I include paths first (add to front of load path)
+	// Process in reverse order so first -I on command line gets highest priority
+	for i := len(parsedArgs.IncludePaths) - 1; i >= 0; i-- {
+		path := parsedArgs.IncludePaths[i]
+		if path != "" {
+			// Skip non-existent path directories
+			if _, err := os.Stat(path); err == nil {
+				runtime.AddLoadPath(os.DirFS(path), true)
+			}
+		}
+	}
 
 	// Add GLJPATH directories to front of load path if set
 	loadPaths := os.Getenv("GLJPATH")
@@ -96,10 +155,8 @@ func Main(args []string) {
 		}
 	}
 
-	parsedArgs, err := parseArgs(args)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// Add current directory to end of load path
+	runtime.AddLoadPath(os.DirFS("."), false)
 
 	switch parsedArgs.Mode {
 	case "repl":

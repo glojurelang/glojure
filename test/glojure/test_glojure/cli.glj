@@ -36,7 +36,7 @@
    "glj --help flag works correctly"
    (let [[out err] (run-cli-cmd glj "--help")]
      (is (re-matches
-          #"(?s).*Glojure v\d+\.\d+\.\d+.*Usage: glj.*Options:.*-e.*-h.*--help.*--version.*Examples:.*"
+          #"(?s).*Glojure v\d+\.\d+\.\d+.*Usage: glj.*Options:.*-e.*--version.*-h.*--help.*Examples:.*"
           out)
          "Command should output help information")
      (is (re-matches
