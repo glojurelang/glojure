@@ -917,7 +917,18 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		// return the next one
+		// Check if we're at EOF before trying to read the next form
+		_, err = r.next()
+		if err != nil {
+			// If we hit EOF after reading the discarded form, return nil
+			// This handles the case where #_ is used on the last form
+			if errors.Is(err, io.EOF) {
+				return nil, nil
+			}
+			return nil, err
+		}
+		// We're not at EOF, so unread the rune and read the next expression
+		r.rs.UnreadRune()
 		return r.readExpr()
 	case '(':
 		// function shorthand

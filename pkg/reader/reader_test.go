@@ -173,6 +173,115 @@ func FuzzRead(f *testing.F) {
 	})
 }
 
+func TestDiscardMacro(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected []string
+	}{
+		{
+			name:     "basic discard",
+			input:    "#_(prn \"discarded\") (prn \"kept\")",
+			expected: []string{"(prn \"kept\")"},
+		},
+		{
+			name:     "multiple discards",
+			input:    "#_(prn \"first discarded\") #_(prn \"second discarded\") (prn \"kept\")",
+			expected: []string{"(prn \"kept\")"},
+		},
+		{
+			name:     "discard at end",
+			input:    "(prn \"first\") (prn \"second\") #_(prn \"last discarded\")",
+			expected: []string{"(prn \"first\")", "(prn \"second\")"},
+		},
+		{
+			name:     "discard with nested forms",
+			input:    "#_(defn ignored [] (prn \"ignored\")) (defn kept [] (prn \"kept\"))",
+			expected: []string{"(defn kept [] (prn \"kept\"))"},
+		},
+		{
+			name:     "discard with complex structures",
+			input:    "#_(def ignored-map {:a 1 :b 2 :c 3}) (def kept-vector [1 2 3])",
+			expected: []string{"(def kept-vector [1 2 3])"},
+		},
+		{
+			name:     "discard with metadata",
+			input:    "#_^{:tag String} (prn \"ignored\") ^{:tag Number} (prn \"kept\")",
+			expected: []string{"^{:tag Number} (prn \"kept\")"},
+		},
+		{
+			name:     "single discard at end",
+			input:    "#_(prn \"only form discarded\")",
+			expected: []string{},
+		},
+		{
+			name:     "discard followed by whitespace only",
+			input:    "#_(prn \"discarded\")  ",
+			expected: []string{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := New(strings.NewReader(tt.input))
+			exprs, err := r.ReadAll()
+			if err != nil {
+				t.Fatalf("ReadAll() error = %v", err)
+			}
+
+			if len(exprs) != len(tt.expected) {
+				t.Errorf("ReadAll() returned %d expressions, want %d", len(exprs), len(tt.expected))
+			}
+
+			for i, expr := range exprs {
+				got := testPrintString(expr)
+				if i < len(tt.expected) && got != tt.expected[i] {
+					t.Errorf("expression %d = %q, want %q", i, got, tt.expected[i])
+				}
+			}
+		})
+	}
+}
+
+func TestDiscardMacroEdgeCases(t *testing.T) {
+	tests := []struct {
+		name        string
+		input       string
+		shouldError bool
+		errorMsg    string
+	}{
+		{
+			name:        "discard with incomplete form",
+			input:       "#_(prn",
+			shouldError: true,
+			errorMsg:    "unexpected end of input",
+		},
+		{
+			name:        "discard with malformed nested form",
+			input:       "#_(defn broken [",
+			shouldError: true,
+			errorMsg:    "unexpected end of input",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := New(strings.NewReader(tt.input))
+			_, err := r.ReadAll()
+
+			if tt.shouldError {
+				if err == nil {
+					t.Error("expected error, got nil")
+				} else if !strings.Contains(err.Error(), tt.errorMsg) {
+					t.Errorf("error message %q does not contain expected %q", err.Error(), tt.errorMsg)
+				}
+			} else if err != nil {
+				t.Errorf("unexpected error: %v", err)
+			}
+		})
+	}
+}
+
 func testPrintString(x interface{}) string {
 	lang.PushThreadBindings(lang.NewMap(
 		lang.VarPrintReadably, true,

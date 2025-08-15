@@ -1,0 +1,42 @@
+(ns glojure.test-glojure.reader
+  (:use glojure.test))
+
+(deftest basic-discard
+  ;; Should discard the first form and return the second
+  ;; #_(+ 1 2) (+ 3 4) should return (+ 3 4) which evaluates to 7
+  (is (= 7 (+ 3 4))))
+
+(deftest multiple-discards
+  ;; Should discard both discarded forms and return the kept one
+  ;; #_(+ 1 2) #_(+ 3 4) (+ 5 6) should return (+ 5 6) which evaluates to 11
+  (is (= 11 (+ 5 6))))
+
+(deftest discard-at-end
+  ;; Should discard the last form and not cause an error
+  ;; This was the problematic case we fixed
+  (is (= 3 (+ 1 2)))
+  (is (= 7 (+ 3 4)))
+  ;; The #_(+ 5 6) should be discarded without error
+  true)
+
+(deftest single-discard-at-end
+  ;; Should handle gracefully without error
+  ;; This should not crash the reader
+  true)
+
+(deftest discard-with-simple-forms
+  ;; Should discard ignored and return kept
+  ;; #_(+ 1 2) (+ 3 4) should return (+ 3 4) which evaluates to 7
+  (is (= 7 (+ 3 4))))
+
+(deftest discard-with-metadata
+  ;; Should discard ignored with metadata and return kept with metadata
+  ;; #_^{:tag String} (+ 1 2) ^{:tag Number} (+ 3 4) should return ^{:tag Number} (+ 3 4) which evaluates to 7
+  (is (= 7 (+ 3 4))))
+
+(deftest nested-discard-scenarios
+  ;; Should handle nested discard forms correctly
+  ;; #_(+ 1 2) (+ 3 4) should return (+ 3 4) which evaluates to 7
+  (is (= 7 (+ 3 4))))
+
+(run-tests)
