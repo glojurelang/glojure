@@ -60,24 +60,27 @@ func Main(args []string) {
 		core := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 		core.FindInternedVar(lang.NewSymbol("*command-line-args*")).BindRoot(lang.Seq(args[2:]))
 
-		rdr := reader.New(strings.NewReader(expr), reader.WithGetCurrentNS(func() *lang.Namespace {
-			return env.CurrentNamespace()
-		}))
+		rdr := reader.New(
+			strings.NewReader(expr),
+			reader.WithGetCurrentNS(func() *lang.Namespace {
+				return env.CurrentNamespace()
+			}))
+
+		// Use ReadAll to properly handle discard macros and other edge cases
+		vals, err := rdr.ReadAll()
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		var lastResult interface{}
-		for {
-			val, err := rdr.ReadOne()
-			if err == reader.ErrEOF {
-				break
-			}
-			if err != nil {
-				log.Fatal(err)
-			}
+		for _, val := range vals {
 			result, err := env.Eval(val)
 			if err != nil {
 				log.Fatal(err)
 			}
 			lastResult = result
 		}
+
 		// Print only the final result unless it's nil
 		if !lang.IsNil(lastResult) {
 			fmt.Println(lang.PrintString(lastResult))
