@@ -1,6 +1,7 @@
 package codegengotest
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -71,8 +72,22 @@ func TestGeneratedGo(t *testing.T) {
 			}
 
 			expected := meta.ValAt(lang.NewKeyword("expected-output"))
-			if expected == nil {
-				t.Fatalf("no :expected-output metadata for %s/-main", nsName)
+			expectedThrow := meta.ValAt(lang.NewKeyword("expected-throw"))
+			fmt.Println("META:", meta)
+			if lang.IsNil(expected) && lang.IsNil(expectedThrow) {
+				t.Fatalf("no :expected-output or :expected-throw metadata for %s/-main", nsName)
+			}
+
+			if !lang.IsNil(expectedThrow) {
+				defer func() {
+					if r := recover(); r != nil {
+						if !lang.Equals(r, expectedThrow) {
+							t.Errorf("%s/-main threw %v, expected %v", nsName, r, expectedThrow)
+						}
+					} else {
+						t.Errorf("%s/-main did not throw, expected %v", nsName, expectedThrow)
+					}
+				}()
 			}
 
 			// Run -main and check the result
