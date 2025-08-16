@@ -43,6 +43,12 @@ GO_CMD := go$(GO_VERSION)
 .PHONY: all
 all: gocmd $(STDLIB_TARGETS) generate $(GLJIMPORTS) $(BINS)
 
+.PHONY: gljimports
+gljimports: $(GLJIMPORTS)
+
+.PHONY: stdlib
+stdlib: $(STDLIB_TARGETS)
+
 .PHONY: gocmd
 gocmd:
 	@$(GO_CMD) version 2>&1 > /dev/null || \
@@ -64,11 +70,13 @@ pkg/gen/gljimports/gljimports_%.go: ./scripts/gen-gljimports.sh ./cmd/gen-import
 					$(wildcard ./pkg/lang/*.go) $(wildcard ./pkg/runtime/*.go)
 	@echo "Generating $@"
 	@./scripts/gen-gljimports.sh $@ $* $(GO_CMD)
+	@sed -i 's/[[:space:]]*$$//' $@
 
 pkg/stdlib/glojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-core/run.sh scripts/rewrite-core/rewrite.clj
 	@echo "Rewriting $< to $@"
 	@mkdir -p $(dir $@)
 	@scripts/rewrite-core/run.sh $< > $@
+	@sed -i 's/[[:space:]]*$$//' $@
 
 bin/%/glj: $(wildcard ./cmd/glj/*.go) $(wildcard ./pkg/**/*.go) $(wildcard ./internal/**/*.go)
 	@echo "Building $@"

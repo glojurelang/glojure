@@ -123,19 +123,19 @@
 
 (defmethod print-dup github.com$glojurelang$glojure$pkg$lang.Keyword [o w] (print-method o w))
 
-(defmethod print-method go/int [o w] (.write w (str o))) 
-(defmethod print-method go/uint [o w] (.write w (str o))) 
-(defmethod print-method go/uint8 [o w] (.write w (str o))) 
-(defmethod print-method go/uint16 [o w] (.write w (str o))) 
-(defmethod print-method go/uint32 [o w] (.write w (str o))) 
-(defmethod print-method go/uint64 [o w] (.write w (str o))) 
-(defmethod print-method go/int8 [o w] (.write w (str o))) 
-(defmethod print-method go/int16 [o w] (.write w (str o))) 
-(defmethod print-method go/int32 [o w] (.write w (str o))) 
-(defmethod print-method go/int64 [o w] (.write w (str o))) 
-(defmethod print-method go/byte [o w] (.write w (str o))) 
-(defmethod print-method go/rune [o w] (.write w (str o))) 
-(defmethod print-method github.com$glojurelang$glojure$pkg$lang.*Ratio [o w] (.write w (str o))) 
+(defmethod print-method go/int [o w] (.write w (str o)))
+(defmethod print-method go/uint [o w] (.write w (str o)))
+(defmethod print-method go/uint8 [o w] (.write w (str o)))
+(defmethod print-method go/uint16 [o w] (.write w (str o)))
+(defmethod print-method go/uint32 [o w] (.write w (str o)))
+(defmethod print-method go/uint64 [o w] (.write w (str o)))
+(defmethod print-method go/int8 [o w] (.write w (str o)))
+(defmethod print-method go/int16 [o w] (.write w (str o)))
+(defmethod print-method go/int32 [o w] (.write w (str o)))
+(defmethod print-method go/int64 [o w] (.write w (str o)))
+(defmethod print-method go/byte [o w] (.write w (str o)))
+(defmethod print-method go/rune [o w] (.write w (str o)))
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.*Ratio [o w] (.write w (str o)))
 (defmethod print-method go/float64 [o, ^Writer w]
   (cond
     (= (math.Inf 1) o) (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "##Inf")
@@ -150,19 +150,19 @@
     (math.IsNaN ^go/float32 o) (github.com$glojurelang$glojure$pkg$lang.WriteWriter w "##NaN")
     :else (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str o))))
 
-(defmethod print-method go/int [o w] (.write w (str o))) 
-(defmethod print-method go/uint [o w] (.write w (str o))) 
-(defmethod print-method go/uint8 [o w] (.write w (str o))) 
-(defmethod print-method go/uint16 [o w] (.write w (str o))) 
-(defmethod print-method go/uint32 [o w] (.write w (str o))) 
-(defmethod print-method go/uint64 [o w] (.write w (str o))) 
-(defmethod print-method go/int8 [o w] (.write w (str o))) 
-(defmethod print-method go/int16 [o w] (.write w (str o))) 
-(defmethod print-method go/int32 [o w] (.write w (str o))) 
-(defmethod print-method go/int64 [o w] (.write w (str o))) 
-(defmethod print-method go/byte [o w] (.write w (str o))) 
-(defmethod print-method go/rune [o w] (.write w (str o))) 
-(defmethod print-method github.com$glojurelang$glojure$pkg$lang.*Ratio [o w] (.write w (str o))) 
+(defmethod print-method go/int [o w] (.write w (str o)))
+(defmethod print-method go/uint [o w] (.write w (str o)))
+(defmethod print-method go/uint8 [o w] (.write w (str o)))
+(defmethod print-method go/uint16 [o w] (.write w (str o)))
+(defmethod print-method go/uint32 [o w] (.write w (str o)))
+(defmethod print-method go/uint64 [o w] (.write w (str o)))
+(defmethod print-method go/int8 [o w] (.write w (str o)))
+(defmethod print-method go/int16 [o w] (.write w (str o)))
+(defmethod print-method go/int32 [o w] (.write w (str o)))
+(defmethod print-method go/int64 [o w] (.write w (str o)))
+(defmethod print-method go/byte [o w] (.write w (str o)))
+(defmethod print-method go/rune [o w] (.write w (str o)))
+(defmethod print-method github.com$glojurelang$glojure$pkg$lang.*Ratio [o w] (.write w (str o)))
 (defmethod print-dup github.com$glojurelang$glojure$pkg$runtime.*Fn [o, ^Writer w]
   (print-ctor o (fn [o w]) w))
 
@@ -211,7 +211,7 @@
 
 (do)
 
-(def ^{:tag go/string 
+(def ^{:tag go/string
        :doc "Returns escape string for char or nil if none"
        :added "1.0"}
   char-escape-string
@@ -334,7 +334,7 @@
 
 (def ^{:tag go/string
        :doc "Returns name string for char or nil if none"
-       :added "1.0"} 
+       :added "1.0"}
  char-name-string
    {\newline "newline"
     \tab "tab"
