@@ -1,0 +1,4 @@
+(ns codegen.test.throw-simple)
+
+(defn ^{:expected-error "uncaught error"} -main []
+  (throw "uncaught error"))

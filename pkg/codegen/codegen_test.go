@@ -132,7 +132,7 @@ func getNamespaceFromFile(t *testing.T, filename string) string {
 	panic("expected namespace declaration in " + filename)
 }
 
-// testMainFunction tests the -main function if it exists and has :expected-output metadata
+// testMainFunction tests the -main function if it exists and has :expected-output or :expected-error metadata
 func testMainFunction(t *testing.T, ns *lang.Namespace) {
 	// Look for -main var in the namespace
 	mainVar := ns.FindInternedVar(lang.NewSymbol("-main"))
@@ -141,14 +141,34 @@ func testMainFunction(t *testing.T, ns *lang.Namespace) {
 		return
 	}
 
-	// Check if -main has :expected-output metadata
+	// Check if -main has :expected-output or :expected-error metadata
 	meta := mainVar.Meta()
 	if meta == nil {
 		return
 	}
 
 	expectedOutput := meta.ValAt(lang.NewKeyword("expected-output"))
-	if expectedOutput == nil {
+	expectedError := meta.ValAt(lang.NewKeyword("expected-error"))
+	
+	if expectedOutput == nil && expectedError == nil {
+		return
+	}
+
+	// If we expect an error, use recover to catch it
+	if expectedError != nil {
+		defer func() {
+			if r := recover(); r != nil {
+				// Check if the panic matches expected error
+				if !lang.Equals(r, expectedError) {
+					t.Errorf("-main panicked with %v, expected %v", r, expectedError)
+				}
+			} else {
+				t.Errorf("-main should have panicked with %v, but didn't", expectedError)
+			}
+		}()
+		
+		// Run -main - should panic
+		mainVar.Invoke()
 		return
 	}
 

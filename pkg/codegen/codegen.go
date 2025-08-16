@@ -143,7 +143,7 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	defer g.writef("}\n")
 
 	meta := name.Meta()
-	varSym := g.allocateVar("varSym")
+	varSym := g.allocateTempVar()
 	if meta == nil {
 		g.writef("%s := lang.NewSymbol(\"%s\")\n", varSym, name.String())
 	} else {
@@ -152,7 +152,7 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	}
 
 	// check if the var has a value
-	varVar := g.allocateVar("var")
+	varVar := g.allocateTempVar()
 	if vr.IsBound() {
 		g.writef("%s := %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, g.generateValue(vr.Get()))
 	} else {
@@ -260,7 +260,7 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 	fnNode := astNode.Sub.(*ast.FnNode)
 
 	// Allocate a variable for the function
-	fnVar := g.allocateVar("fn")
+	fnVar := g.allocateTempVar()
 
 	// Push a new scope for the function definition
 	g.pushVarScope()
@@ -354,12 +354,37 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 
 	// Generate the body
 	bodyVar := g.generateASTNode(methodNode.Body)
-	g.writef("return %s\n", bodyVar)
+	if bodyVar != "" {
+		g.writef("return %s\n", bodyVar)
+	}
+	// If bodyVar is empty (e.g., from throw), no return is generated
 }
 
 // generateASTNode generates code for an AST node
 func (g *Generator) generateASTNode(node *ast.Node) string {
 	switch node.Op {
+	// OpDef
+	// OpSetBang
+	// OpMaybeClass
+	// OpWithMeta
+	// OpFn
+	// OpMap
+	// OpVector
+	// OpSet
+	// OpLetFn
+	// OpQuote
+	// OpGoBuiltin
+	// OpGo
+	// OpHostCall
+	// OpHostInterop
+	// OpMaybeHostForm
+	// OpCase
+	// OpTheVar
+	// OpNew
+	case ast.OpTry:
+		return g.generateTry(node)
+	case ast.OpThrow:
+		return g.generateThrow(node)
 	case ast.OpConst:
 		constNode := node.Sub.(*ast.ConstNode)
 		return g.generateValue(constNode.Value)
@@ -381,6 +406,11 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.generateVarDeref(node)
 	case ast.OpRecur:
 		return g.generateRecur(node)
+	case ast.OpGoBuiltin:
+		// For now, just return a reference to the go type
+		// This is used for catch clauses with go/any
+		goBuiltinNode := node.Sub.(*ast.GoBuiltinNode)
+		return fmt.Sprintf("lang.NewSymbol(\"%s\")", goBuiltinNode.Sym.Name())
 	default:
 		fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))
@@ -395,18 +425,18 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 	varSymbol := varNode.Var.Symbol()
 
 	// generate code to look up the var in the namespace
-	nsVar := g.allocateVar("ns")
+	nsVar := g.allocateTempVar()
 	g.writef("%s := lang.FindNamespace(lang.NewSymbol(\"%s\"))\n", nsVar, varNamespace.Name())
 	// look up the var in the namespace
-	varId := g.allocateVar("varId")
+	varId := g.allocateTempVar()
 	g.writef("%s := %s.FindInternedVar(lang.NewSymbol(\"%s\"))\n", varId, nsVar, varSymbol.Name())
 
 	// if macro, panic with 'can't take value of macro: %v'
 	g.writef("if %s.IsMacro() {\n", varId)
-	g.writef("  panic(lang.NewIllegalArgumentError(\"can't take value of macro: %v\"))\n", varId)
+	g.writef("  panic(lang.NewIllegalArgumentError(fmt.Sprintf(\"can't take value of macro: %%v\", %s)))\n", varId)
 	g.writef("}\n")
 	// else, return Get()
-	resultId := g.allocateVar("result")
+	resultId := g.allocateTempVar()
 	g.writef("%s := %s.Get()\n", resultId, varId)
 
 	return resultId
@@ -426,7 +456,7 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 	}
 
 	// Allocate a result variable for the invocation
-	resultVar := g.allocateVar("invokeResult")
+	resultVar := g.allocateTempVar()
 
 	// Emit the invocation
 	if len(argExprs) == 0 {
@@ -449,7 +479,7 @@ func (g *Generator) generateDo(node *ast.Node) string {
 			continue
 		}
 		stmtResult := g.generateASTNode(stmt)
-		g.writef("_ = %s\n", stmtResult) // Discard intermediate results
+		g.writeAssign("_", stmtResult) // Discard intermediate results
 	}
 
 	// Return the final expression
@@ -461,7 +491,7 @@ func (g *Generator) generateIf(node *ast.Node) string {
 	ifNode := node.Sub.(*ast.IfNode)
 
 	// Allocate result variable
-	resultVar := g.allocateVar("ifResult")
+	resultVar := g.allocateTempVar()
 
 	// Emit the if statement to g.w
 	g.writef("var %s any\n", resultVar)
@@ -558,6 +588,7 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		// Generate initialization code
 		initCode := g.generateASTNode(init)
 		g.writef("var %s any = %s\n", varName, initCode)
+		g.writeAssign("_", varName) // Prevent unused variable warning
 
 		// Collect binding variables for loop
 		if isLoop {
@@ -565,7 +596,7 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		}
 	}
 
-	resultId := g.allocateVar("letResult")
+	resultId := g.allocateTempVar()
 	if isLoop {
 		// Push recur context for this loop
 		g.recurStack = append(g.recurStack, recurContext{
@@ -635,6 +666,96 @@ func (g *Generator) generateRecur(node *ast.Node) string {
 	// Return empty string since recur doesn't produce a value
 	// (control flow never reaches past the continue)
 	return ""
+}
+
+// generateThrow generates code for a throw node
+func (g *Generator) generateThrow(node *ast.Node) string {
+	throwNode := node.Sub.(*ast.ThrowNode)
+
+	// Generate the exception expression
+	exceptionExpr := g.generateASTNode(throwNode.Exception)
+
+	// Panic with the exception
+	g.writef("panic(%s)\n", exceptionExpr)
+
+	// Return empty string to signal no value is produced
+	// The calling function should not generate a return after this
+	return ""
+}
+
+// generateTry generates code for a try node
+func (g *Generator) generateTry(node *ast.Node) string {
+	tryNode := node.Sub.(*ast.TryNode)
+
+	// Allocate result variable
+	resultVar := g.allocateTempVar()
+	g.writef("var %s any\n", resultVar)
+
+	// Use a closure to handle the try logic
+	g.writef("func() {\n")
+
+	// Generate finally block if present
+	if tryNode.Finally != nil {
+		g.writef("defer func() {\n")
+		// Finally doesn't affect the return value
+		_ = g.generateASTNode(tryNode.Finally)
+		g.writef("}()\n")
+	}
+
+	// Generate catch blocks if present
+	if len(tryNode.Catches) > 0 {
+		g.writef("defer func() {\n")
+		g.writef("if r := recover(); r != nil {\n")
+
+		for i, catchNode := range tryNode.Catches {
+			catch := catchNode.Sub.(*ast.CatchNode)
+
+			// Generate the class/type check
+			// For now, we'll handle simple cases
+			// TODO: implement proper type matching
+			classExpr := g.generateASTNode(catch.Class)
+
+			// For each catch, check if the exception matches
+			if i > 0 {
+				g.writef("} else ")
+			}
+
+			// Simple implementation: check for "any" or assume it catches
+			// In a full implementation, we'd need to check types properly
+			g.writef("if true { // TODO: implement catchMatches(r, %s)\n", classExpr)
+
+			// Create new scope for catch binding
+			g.pushVarScope()
+
+			// Bind the exception to the catch variable
+			bindingNode := catch.Local.Sub.(*ast.BindingNode)
+			catchVar := g.allocateVar(bindingNode.Name.Name())
+			g.writef("%s := r\n", catchVar)
+			g.writeAssign("_", catchVar) // Mark as used since catch body might not reference it
+
+			// Generate the catch body
+			bodyResult := g.generateASTNode(catch.Body)
+			g.writeAssign(resultVar, bodyResult)
+
+			g.popVarScope()
+		}
+
+		// Re-panic if no catch matched
+		g.writef("} else {\n")
+		g.writef("panic(r)\n")
+		g.writef("}\n")
+
+		g.writef("}\n")
+		g.writef("}()\n")
+	}
+
+	// Generate the try body
+	bodyResult := g.generateASTNode(tryNode.Body)
+	g.writeAssign(resultVar, bodyResult)
+
+	g.writef("}()\n")
+
+	return resultVar
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -717,6 +838,18 @@ func (g *Generator) allocateVar(name string) string {
 	currentScope.names[name] = varName
 	currentScope.nextNum++
 
+	return varName
+}
+
+// allocateTempVar allocates a fresh temporary variable without name tracking
+func (g *Generator) allocateTempVar() string {
+	if len(g.varScopes) == 0 {
+		panic("no variable scope available")
+	}
+
+	currentScope := &g.varScopes[len(g.varScopes)-1]
+	varName := fmt.Sprintf("v%d", currentScope.nextNum)
+	currentScope.nextNum++
 	return varName
 }
 

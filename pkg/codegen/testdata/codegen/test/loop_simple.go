@@ -20,7 +20,7 @@ func init() {
 			v3 := lang.FindNamespace(lang.NewSymbol("codegen.test.loop-simple"))
 			v4 := v3.FindInternedVar(lang.NewSymbol("simple-loop"))
 			if v4.IsMacro() {
-				panic(lang.NewIllegalArgumentError("can't take value of macro: v4"))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v4)))
 			}
 			v5 := v4.Get()
 			v6 := lang.Apply(v5, nil)
@@ -41,25 +41,26 @@ func init() {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
 			var v3 any = int64(0)
+			_ = v3
 			var v4 any
 			for {
 				var v5 any
 				v6 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 				v7 := v6.FindInternedVar(lang.NewSymbol("<"))
 				if v7.IsMacro() {
-					panic(lang.NewIllegalArgumentError("can't take value of macro: v7"))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 				}
 				v8 := v7.Get()
 				v9 := lang.Apply(v8, []any{v3, int64(10)})
 				if lang.IsTruthy(v9) {
-					v6 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-					v7 := v6.FindInternedVar(lang.NewSymbol("inc"))
-					if v7.IsMacro() {
-						panic(lang.NewIllegalArgumentError("can't take value of macro: v7"))
+					v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+					v12 := v11.FindInternedVar(lang.NewSymbol("inc"))
+					if v12.IsMacro() {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v12)))
 					}
-					v8 := v7.Get()
-					v9 := lang.Apply(v8, []any{v3})
-					var v10 any = v9
+					v13 := v12.Get()
+					v14 := lang.Apply(v13, []any{v3})
+					var v10 any = v14
 					v3 = v10
 					continue
 				} else {
