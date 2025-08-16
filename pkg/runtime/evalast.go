@@ -689,27 +689,6 @@ func (env *environment) EvalASTNew(n *ast.Node) (interface{}, error) {
 	return reflect.New(classValTyp).Interface(), nil
 }
 
-var (
-	errorType = reflect.TypeOf((*error)(nil)).Elem()
-)
-
-func catchMatches(r, expect any) bool {
-	if lang.IsNil(expect) {
-		return false
-	}
-
-	// if expect is an error type, check if r is an instance of it
-	if rErr, ok := r.(error); ok {
-		if expectTyp, ok := expect.(reflect.Type); ok && expectTyp.Implements(errorType) {
-			expectVal := reflect.New(expectTyp).Elem().Interface().(error)
-			if errors.Is(rErr, expectVal) {
-				return true
-			}
-		}
-	}
-
-	return reflect.TypeOf(r).AssignableTo(expect.(reflect.Type))
-}
 
 func (env *environment) EvalASTTry(n *ast.Node) (res interface{}, err error) {
 	tryNode := n.Sub.(*ast.TryNode)
@@ -735,7 +714,7 @@ func (env *environment) EvalASTTry(n *ast.Node) (res interface{}, err error) {
 					panic(classErr)
 				}
 
-				if !catchMatches(r, classVal) {
+				if !lang.CatchMatches(r, classVal) {
 					continue
 				}
 

@@ -23,7 +23,7 @@ func init() {
 				}()
 				defer func() {
 					if r := recover(); r != nil {
-						if true { // TODO: implement catchMatches(r, lang.NewSymbol("any"))
+						if lang.CatchMatches(r, lang.Builtins["any"]) {
 							v4 := r
 							_ = v4
 							v3 = "caught"
@@ -196,7 +196,7 @@ func init() {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						if true { // TODO: implement catchMatches(r, lang.NewSymbol("any"))
+						if lang.CatchMatches(r, lang.Builtins["any"]) {
 							v4 := r
 							_ = v4
 							v3 = "caught exception"
@@ -250,7 +250,7 @@ func init() {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						if true { // TODO: implement catchMatches(r, lang.NewSymbol("any"))
+						if lang.CatchMatches(r, lang.Builtins["any"]) {
 							v4 := r
 							_ = v4
 							v3 = "outer caught"
@@ -263,7 +263,7 @@ func init() {
 				func() {
 					defer func() {
 						if r := recover(); r != nil {
-							if true { // TODO: implement catchMatches(r, lang.NewSymbol("any"))
+							if lang.CatchMatches(r, lang.Builtins["any"]) {
 								v5 := r
 								_ = v5
 								v4 = "inner caught"
@@ -296,7 +296,7 @@ func init() {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						if true { // TODO: implement catchMatches(r, lang.NewSymbol("any"))
+						if lang.CatchMatches(r, lang.Builtins["any"]) {
 							v4 := r
 							_ = v4
 							v3 = "caught"

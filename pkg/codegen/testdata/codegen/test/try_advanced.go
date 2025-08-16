@@ -21,7 +21,7 @@ func init() {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						if true { // TODO: implement catchMatches(r, lang.NewSymbol("any"))
+						if lang.CatchMatches(r, lang.Builtins["any"]) {
 							v4 := r
 							_ = v4
 							v3 = v4
@@ -155,7 +155,7 @@ func init() {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						if true { // TODO: implement catchMatches(r, lang.NewSymbol("any"))
+						if lang.CatchMatches(r, lang.Builtins["any"]) {
 							v6 := r
 							_ = v6
 							v5 = v6
