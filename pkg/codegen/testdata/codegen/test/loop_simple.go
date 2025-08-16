@@ -17,7 +17,7 @@ func init() {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			v2 := int64(0)
+			var v2 any = int64(0)
 			var v3 any
 			for {
 				var v4 any
@@ -29,9 +29,18 @@ func init() {
 				v7 := v6.Get()
 				v8 := lang.Apply(v7, []any{v2, int64(10)})
 				if lang.IsTruthy(v8) {
-					v4 = nil
+					v5 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+					v6 := v5.FindInternedVar(lang.NewSymbol("inc"))
+					if v6.IsMacro() {
+						panic(lang.NewIllegalArgumentError("can't take value of macro: v6"))
+					}
+					v7 := v6.Get()
+					v8 := lang.Apply(v7, []any{v2})
+					var v9 any = v8
+					v2 = v9
+					continue
 				} else {
-					v4 = nil
+					v4 = v2
 				}
 				v3 = v4
 				break

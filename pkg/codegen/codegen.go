@@ -18,11 +18,18 @@ type varScope struct {
 	names   map[string]string // maps Clojure names to Go variable names
 }
 
+// recurContext represents the context for a loop/recur form
+type recurContext struct {
+	loopID   *lang.Symbol // The loop ID to match recur with its loop
+	bindings []string     // Go variable names for loop bindings (in order)
+}
+
 // Generator handles the conversion of AST nodes to Go code
 type Generator struct {
 	originalWriter io.Writer
 	w              io.Writer
-	varScopes      []varScope // stack of variable scopes
+	varScopes      []varScope     // stack of variable scopes
+	recurStack     []recurContext // stack of recur contexts for nested loops
 }
 
 // New creates a new code generator
@@ -31,6 +38,7 @@ func New(w io.Writer) *Generator {
 		originalWriter: w,
 		w:              w,
 		varScopes:      []varScope{{nextNum: 0, names: make(map[string]string)}},
+		recurStack:     []recurContext{},
 	}
 }
 
@@ -259,7 +267,7 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 		g.writef("  }\n")
 
 		// Generate method body
-		g.generateFnMethod(methodNode, "args", 0)
+		g.generateFnMethod(methodNode, "args")
 
 		g.writef("})\n")
 	} else {
@@ -277,7 +285,7 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 			}
 
 			g.writef("  case %d:\n", methodNode.FixedArity)
-			g.generateFnMethod(methodNode, "args", 1)
+			g.generateFnMethod(methodNode, "args")
 		}
 
 		// Generate default case for variadic method
@@ -287,7 +295,7 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 			g.writef("    if len(args) < %d {\n", variadicMethodNode.FixedArity)
 			g.writef("      panic(lang.NewIllegalArgumentError(\"wrong number of arguments (\" + fmt.Sprint(len(args)) + \")\"))\n")
 			g.writef("    }\n")
-			g.generateFnMethod(variadicMethodNode, "args", 1)
+			g.generateFnMethod(variadicMethodNode, "args")
 		} else {
 			// No variadic method - error on any other arity
 			g.writef("  default:\n")
@@ -311,17 +319,12 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 }
 
 // generateFnMethod generates the body of a function method
-func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar string, indentLevel int) {
-	indent := strings.Repeat("  ", indentLevel)
-
+func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar string) {
 	// Push a new scope for the method body
 	g.pushVarScope()
 	defer g.popVarScope()
 
-	// TODO: Handle recur with a label when we implement recur
-	// if methodNode.LoopID != nil {
-	//     g.writef("%sRecur_%s:\n", indent, mungeID(methodNode.LoopID.Name()))
-	// }
+	// TODO: Handle recur with a label
 
 	// Bind parameters
 	for i, param := range methodNode.Params {
@@ -330,16 +333,16 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 
 		if i < methodNode.FixedArity {
 			// Regular parameter
-			g.writef("%s  %s := %s[%d]\n", indent, paramVar, argsVar, i)
+			g.writef("%s := %s[%d]\n", paramVar, argsVar, i)
 		} else {
 			// Variadic parameter - collect rest args
-			g.writef("%s  %s := lang.NewList(%s[%d:]...)\n", indent, paramVar, argsVar, methodNode.FixedArity)
+			g.writef("%s := lang.NewList(%s[%d:]...)\n", paramVar, argsVar, methodNode.FixedArity)
 		}
 	}
 
 	// Generate the body
 	bodyVar := g.generateASTNode(methodNode.Body)
-	g.writef("%s  return %s\n", indent, bodyVar)
+	g.writef("return %s\n", bodyVar)
 }
 
 // generateASTNode generates code for an AST node
@@ -354,6 +357,8 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.allocateVar(localNode.Name.Name())
 	case ast.OpDo:
 		return g.generateDo(node)
+	case ast.OpLet:
+		return g.generateLet(node, false)
 	case ast.OpLoop:
 		return g.generateLet(node, true)
 	case ast.OpIf:
@@ -451,11 +456,11 @@ func (g *Generator) generateIf(node *ast.Node) string {
 	testExpr := g.generateASTNode(ifNode.Test)
 	g.writef("if lang.IsTruthy(%s) {\n", testExpr)
 	thenExpr := g.generateASTNode(ifNode.Then)
-	g.writef("  %s = %s\n", resultVar, thenExpr)
+	g.writeAssign(resultVar, thenExpr)
 	g.writef("} else {\n")
 	if ifNode.Else != nil {
 		elsExpr := g.generateASTNode(ifNode.Else)
-		g.writef("  %s = %s\n", resultVar, elsExpr)
+		g.writeAssign(resultVar, elsExpr)
 	} else {
 		g.writef("  %s = nil\n", resultVar)
 	}
@@ -523,6 +528,12 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	g.pushVarScope()
 	defer g.popVarScope()
 
+	// Collect binding variable names for recur context if this is a loop
+	var bindingVars []string
+	if isLoop {
+		bindingVars = make([]string, 0, len(letNode.Bindings))
+	}
+
 	// Emit bindings directly to g.w
 	for _, binding := range letNode.Bindings {
 		bindingNode := binding.Sub.(*ast.BindingNode)
@@ -534,11 +545,26 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 
 		// Generate initialization code
 		initCode := g.generateASTNode(init)
-		g.writef("%s := %s\n", varName, initCode)
+		g.writef("var %s any = %s\n", varName, initCode)
+
+		// Collect binding variables for loop
+		if isLoop {
+			bindingVars = append(bindingVars, varName)
+		}
 	}
 
 	resultId := g.allocateVar("letResult")
 	if isLoop {
+		// Push recur context for this loop
+		g.recurStack = append(g.recurStack, recurContext{
+			loopID:   letNode.LoopID,
+			bindings: bindingVars,
+		})
+		defer func() {
+			// Pop recur context when done
+			g.recurStack = g.recurStack[:len(g.recurStack)-1]
+		}()
+
 		g.writef("var %s any\n", resultId)
 		g.writef("for {\n")
 	}
@@ -546,7 +572,7 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	// Return the body expression (r-value)
 	result := g.generateASTNode(letNode.Body)
 	if isLoop {
-		g.writef("  %s = %s\n", resultId, result)
+		g.writeAssign(resultId, result)
 		g.writef("  break\n") // Break out of the loop after the body
 		g.writef("}\n")
 		return resultId
@@ -558,14 +584,45 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 func (g *Generator) generateRecur(node *ast.Node) string {
 	recurNode := node.Sub.(*ast.RecurNode)
 
-	exprs := recurNode.Exprs
-	for _, expr := range exprs {
-		val, err := noRecurEnv.EvalAST(expr)
-		if err != nil {
-			return nil, err
+	// Find the matching recur context
+	var ctx *recurContext
+	for i := len(g.recurStack) - 1; i >= 0; i-- {
+		if lang.Equals(g.recurStack[i].loopID, recurNode.LoopID) {
+			ctx = &g.recurStack[i]
+			break
 		}
-		vals = append(vals, val)
 	}
+
+	if ctx == nil {
+		panic(fmt.Sprintf("recur without matching loop for ID: %v", recurNode.LoopID))
+	}
+
+	// Verify the number of recur expressions matches the number of loop bindings
+	if len(recurNode.Exprs) != len(ctx.bindings) {
+		panic(fmt.Sprintf("recur expects %d arguments, got %d", len(ctx.bindings), len(recurNode.Exprs)))
+	}
+
+	// Generate temporary variables to hold the new values
+	// This prevents issues with bindings that reference each other
+	tempVars := make([]string, len(recurNode.Exprs))
+	for i, expr := range recurNode.Exprs {
+		tempVar := g.allocateVar(fmt.Sprintf("recurTemp%d", i))
+		tempVars[i] = tempVar
+		exprCode := g.generateASTNode(expr)
+		g.writef("var %s any = %s\n", tempVar, exprCode)
+	}
+
+	// Assign the temporary values to the loop bindings
+	for i, bindingVar := range ctx.bindings {
+		g.writef("%s = %s\n", bindingVar, tempVars[i])
+	}
+
+	// Continue the loop
+	g.writef("continue\n")
+
+	// Return empty string since recur doesn't produce a value
+	// (control flow never reaches past the continue)
+	return ""
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -592,6 +649,14 @@ import (
 func (g *Generator) writef(format string, args ...any) error {
 	_, err := fmt.Fprintf(g.w, format, args...)
 	return err
+}
+
+// writeAssign writes an assignment iff the r-value string is non-empty
+func (g *Generator) writeAssign(varName, rValue string) {
+	if rValue == "" {
+		return
+	}
+	g.writef("%s = %s\n", varName, rValue)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
