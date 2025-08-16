@@ -125,10 +125,10 @@
 
 (defn clojure-lang->glojure-pkg
   "Create replacement for clojure.lang.ClassName to glojure package equivalent"
-  [class-name & {:keys [pointer? package] 
-                 :or {pointer? false 
+  [class-name & {:keys [pointer? package]
+                 :or {pointer? false
                       package "github.com$glojurelang$glojure$pkg$lang"}}]
-  (sexpr-replace 
+  (sexpr-replace
     (symbol (str "clojure.lang." class-name))
     (symbol (str package "." (when pointer? "*") class-name))))
 
@@ -143,25 +143,25 @@
     (create-simple-replacements namespace-mappings)
     (create-simple-replacements type-mappings)
     (create-simple-replacements static-field-mappings)
-    
+
     ;; Pattern-based clojure.lang replacements
     (clojure-lang-list->glojure-pkg
-      ["IPersistentCollection" "IPersistentList" "IRecord" 
+      ["IPersistentCollection" "IPersistentList" "IRecord"
        "NewSymbol" "IReduce" "IPending" "Volatile" "IAtom" "IMapEntry"
        "IPersistentMap" "IPersistentVector" "IPersistentSet" "IMeta"
        "IReduceInit" "IObj" "Keyword" "ISeq" "IEditableCollection"
        "Named" "Counted" "Sequential" "IChunkedSeq"
        "IDrop" "IDeref" "IBlockingDeref"]
       :pointer? false)
-    
+
     (clojure-lang-list->glojure-pkg
       ["Symbol" "Ratio" "MultiFn" "PersistentHashMap" "PersistentHashSet"
        "PersistentVector" "LazySeq" "Var" "Namespace" "Ref" "Agent"
        "BigInt" "BigDecimal"]
       :pointer? true)
-    
+
     [(clojure-lang->glojure-pkg "Fn" :pointer? true :package "github.com$glojurelang$glojure$pkg$runtime")]
-    
+
     ;; All other replacements remain as-is
     [
      ;; ===== Special Clojure.lang Replacements =====
@@ -786,7 +786,7 @@
                   'github.com$glojurelang$glojure$pkg$lang.ResetThreadBindingFrame)
    [(fn select [zloc] (and (z/list? zloc) (= 'future-call (second (z/sexpr zloc)))))
     (fn visit [zloc] (z/replace zloc
-                                '(defn future-call 
+                                '(defn future-call
                                    "Takes a function of no args and yields a future object that will
   invoke the function in another thread, and will cache the result and
   return it on all subsequent calls to deref/@. If the computation has

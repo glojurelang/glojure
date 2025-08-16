@@ -98,7 +98,7 @@
        #'var-with-type "#'glojure.test-glojure.printer/var-with-type"))
 
 (deftest print-meta
-  (are [x s] (binding [*print-meta* true] 
+  (are [x s] (binding [*print-meta* true]
                (let [pstr (pr-str x)]
                  (and (strings.HasSuffix pstr s)
                       (strings.HasPrefix pstr "^")

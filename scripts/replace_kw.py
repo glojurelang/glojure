@@ -5,7 +5,7 @@ import os
 def replace_kw_calls(match):
     s = match.group(1).strip('"')
     prefix, suffix = "", ""
-    
+
     if s.endswith("?"):
         prefix = "Is"
         s = s[:-1]
