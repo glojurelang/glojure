@@ -12,6 +12,10 @@ import (
 	"github.com/glojurelang/glojure/pkg/runtime"
 )
 
+// TODO
+// - handle namespace requires/uses/etc.
+// - handle let bindings that are shared across multiple vars
+
 // varScope represents a variable allocation scope
 type varScope struct {
 	nextNum int
@@ -148,10 +152,18 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	}
 
 	// check if the var has a value
+	varVar := g.allocateVar("var")
 	if vr.IsBound() {
-		g.writef("%s.InternWithValue(%s, %s, true)\n", nsVariableName, varSym, g.generateValue(vr.Get()))
+		g.writef("%s := %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, g.generateValue(vr.Get()))
 	} else {
-		g.writef("%s.Intern(%s)\n", nsVariableName, varSym)
+		g.writef("%s := %s.Intern(%s)\n", varVar, nsVariableName, varSym)
+	}
+
+	// Set metadata on the var if the symbol has metadata
+	if meta != nil {
+		g.writef("if %s.Meta() != nil {\n", varSym)
+		g.writef("\t%s.SetMeta(%s.Meta().(lang.IPersistentMap))\n", varVar, varSym)
+		g.writef("}\n")
 	}
 
 	return nil

@@ -1,4 +1,4 @@
-package codegentest
+package codegengotest
 
 import (
 	"io/ioutil"
@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	_ "github.com/glojurelang/glojure/pkg/codegen/testdata/codegen/test"
+	_ "github.com/glojurelang/glojure/pkg/glj"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
