@@ -75,7 +75,7 @@
   {:added "1.2"}
   [^go/string s match replacement]
   (let [s (check-string s)]
-    (cond 
+    (cond
      (instance? Char match) (strings.ReplaceAll s match replacement)
      (instance? go/string match) (strings.ReplaceAll s match replacement)
      (instance? *Regexp match) (if (instance? go/string replacement)

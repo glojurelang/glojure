@@ -105,7 +105,7 @@
   (coll-reduce
    ([coll f] (seq-reduce coll f))
    ([coll f val] (seq-reduce coll f val)))
-  
+
   ;; Iterable
   ;; (coll-reduce
   ;;  ([coll f] (iter-reduce coll f))
@@ -127,7 +127,7 @@
   (internal-reduce
    [s f val]
    val)
-  
+
   ;; handles vectors and ranges
   github.com$glojurelang$glojure$pkg$lang.IChunkedSeq
   (internal-reduce
@@ -142,7 +142,7 @@
                   ret)))
        (interface-or-naive-reduce s f val))
      val))
- 
+
   ;; github.com$glojurelang$glojure$pkg$lang.StringSeq
   ;; (internal-reduce
   ;;  [str-seq f val]
@@ -156,7 +156,7 @@
   ;;                 @ret
   ;;                 (recur (inc i) ret)))
   ;;        val))))
-  
+
   github.com$glojurelang$glojure$pkg$lang.Object
   (internal-reduce
    [s f val]
@@ -185,7 +185,7 @@
 
   (datafy [o] "return a representation of o as data (default identity)"))
 
-(extend-protocol Datafiable  
+(extend-protocol Datafiable
   nil
   (datafy [_] nil))
 
@@ -194,7 +194,7 @@
 
 (defprotocol Navigable
   :extend-via-metadata true
-  
+
   (nav [coll k v] "return (possibly transformed) v in the context of coll and k (a key/index or nil),
 defaults to returning v."))
 

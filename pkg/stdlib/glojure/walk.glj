@@ -18,7 +18,7 @@
 ;; * December 9, 2008: first version
 
 
-(ns 
+(ns
   glojure.walk)
 
 (defn walk

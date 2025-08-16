@@ -48,7 +48,7 @@
   (get-tests [_]))
 
 (extend-protocol Testable
-  clojure.lang.Var 
+  clojure.lang.Var
   (get-tests
    [v]
    (let [m (meta v)

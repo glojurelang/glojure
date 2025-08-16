@@ -40,9 +40,9 @@ mkdir -p "${ORIGINALS_DIR}"
 for file in "${FILES[@]}"; do
     url="${BASE_URL}/${file}"
     dest="${ORIGINALS_DIR}/${file}"
-    
+
     echo -n "Downloading ${file}... "
-    
+
     if curl -fsSL "${url}" -o "${dest}"; then
         echo "✓"
     else
