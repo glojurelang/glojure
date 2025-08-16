@@ -244,12 +244,6 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 	// Allocate a variable for the function
 	fnVar := g.allocateVar("fn")
 
-	// Start building the function
-	var buf bytes.Buffer
-
-	// Generate an immediately invoked function expression (IIFE) to define and return the function
-	buf.WriteString("func() interface{} {\n")
-
 	// Push a new scope for the function definition
 	g.pushVarScope()
 	defer g.popVarScope()
@@ -259,21 +253,21 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 		method := fnNode.Methods[0]
 		methodNode := method.Sub.(*ast.FnMethodNode)
 
-		buf.WriteString(fmt.Sprintf("  %s := lang.IFnFunc(func(args ...interface{}) interface{} {\n", fnVar))
+		g.writef("%s := lang.IFnFunc(func(args ...any) any {\n", fnVar)
 
 		// Check arity
-		buf.WriteString(fmt.Sprintf("    if len(args) != %d {\n", methodNode.FixedArity))
-		buf.WriteString(fmt.Sprintf("      panic(lang.NewIllegalArgumentError(\"wrong number of arguments (\" + fmt.Sprint(len(args)) + \")\"))\n"))
-		buf.WriteString("    }\n")
+		g.writef("  if len(args) != %d {\n", methodNode.FixedArity)
+		g.writef("    panic(lang.NewIllegalArgumentError(\"wrong number of arguments (\" + fmt.Sprint(len(args)) + \")\"))\n")
+		g.writef("  }\n")
 
 		// Generate method body
-		g.generateFnMethod(&buf, methodNode, "args", 0)
+		g.generateFnMethod(methodNode, "args", 0)
 
-		buf.WriteString("  })\n")
+		g.writef("})\n")
 	} else {
 		// Multiple arities or variadic - need to dispatch
-		buf.WriteString(fmt.Sprintf("  %s := lang.IFnFunc(func(args ...interface{}) interface{} {\n", fnVar))
-		buf.WriteString("    switch len(args) {\n")
+		g.writef("%s := lang.IFnFunc(func(args ...any) any {\n", fnVar)
+		g.writef("  switch len(args) {\n")
 
 		// Generate cases for fixed arity methods
 		var variadicMethod *ast.Node
@@ -284,46 +278,42 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 				continue
 			}
 
-			buf.WriteString(fmt.Sprintf("    case %d:\n", methodNode.FixedArity))
-			g.generateFnMethod(&buf, methodNode, "args", 2)
+			g.writef("  case %d:\n", methodNode.FixedArity)
+			g.generateFnMethod(methodNode, "args", 1)
 		}
 
 		// Generate default case for variadic method
 		if variadicMethod != nil {
 			variadicMethodNode := variadicMethod.Sub.(*ast.FnMethodNode)
-			buf.WriteString("    default:\n")
-			buf.WriteString(fmt.Sprintf("      if len(args) < %d {\n", variadicMethodNode.FixedArity))
-			buf.WriteString(fmt.Sprintf("        panic(lang.NewIllegalArgumentError(\"wrong number of arguments (\" + fmt.Sprint(len(args)) + \")\"))\n"))
-			buf.WriteString("      }\n")
-			g.generateFnMethod(&buf, variadicMethodNode, "args", 2)
+			g.writef("  default:\n")
+			g.writef("    if len(args) < %d {\n", variadicMethodNode.FixedArity)
+			g.writef("      panic(lang.NewIllegalArgumentError(\"wrong number of arguments (\" + fmt.Sprint(len(args)) + \")\"))\n")
+			g.writef("    }\n")
+			g.generateFnMethod(variadicMethodNode, "args", 1)
 		} else {
 			// No variadic method - error on any other arity
-			buf.WriteString("    default:\n")
-			buf.WriteString(fmt.Sprintf("      panic(lang.NewIllegalArgumentError(\"wrong number of arguments (\" + fmt.Sprint(len(args)) + \")\"))\n"))
+			g.writef("  default:\n")
+			g.writef("    panic(lang.NewIllegalArgumentError(\"wrong number of arguments (\" + fmt.Sprint(len(args)) + \")\"))\n")
 		}
 
-		buf.WriteString("    }\n")
-		buf.WriteString("  })\n")
+		g.writef("  }\n")
+		g.writef("})\n")
 	}
 
 	// Handle metadata if present
 	if meta := fn.Meta(); meta != nil {
 		metaVar := g.generateValue(meta)
 		// IFnFunc doesn't support metadata directly, so wrap it
-		buf.WriteString(fmt.Sprintf("  // Note: metadata on functions is not yet supported in generated code\n"))
-		buf.WriteString(fmt.Sprintf("  // Original metadata: %s\n", metaVar))
-		buf.WriteString(fmt.Sprintf("  return %s\n", fnVar))
-	} else {
-		buf.WriteString(fmt.Sprintf("  return %s\n", fnVar))
+		g.writef("// Note: metadata on functions is not yet supported in generated code\n")
+		g.writef("// Original metadata: %s\n", metaVar)
 	}
 
-	buf.WriteString("}()")
-
-	return buf.String()
+	// Return the function variable
+	return fnVar
 }
 
 // generateFnMethod generates the body of a function method
-func (g *Generator) generateFnMethod(buf *bytes.Buffer, methodNode *ast.FnMethodNode, argsVar string, indentLevel int) {
+func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar string, indentLevel int) {
 	indent := strings.Repeat("  ", indentLevel)
 
 	// Push a new scope for the method body
@@ -332,7 +322,7 @@ func (g *Generator) generateFnMethod(buf *bytes.Buffer, methodNode *ast.FnMethod
 
 	// TODO: Handle recur with a label when we implement recur
 	// if methodNode.LoopID != nil {
-	//     buf.WriteString(fmt.Sprintf("%s  Recur_%s:\n", indent, mungeID(methodNode.LoopID.Name())))
+	//     g.writef("%sRecur_%s:\n", indent, mungeID(methodNode.LoopID.Name()))
 	// }
 
 	// Bind parameters
@@ -342,16 +332,16 @@ func (g *Generator) generateFnMethod(buf *bytes.Buffer, methodNode *ast.FnMethod
 
 		if i < methodNode.FixedArity {
 			// Regular parameter
-			buf.WriteString(fmt.Sprintf("%s    %s := %s[%d]\n", indent, paramVar, argsVar, i))
+			g.writef("%s  %s := %s[%d]\n", indent, paramVar, argsVar, i)
 		} else {
 			// Variadic parameter - collect rest args
-			buf.WriteString(fmt.Sprintf("%s    %s := lang.NewList(%s[%d:]...)\n", indent, paramVar, argsVar, methodNode.FixedArity))
+			g.writef("%s  %s := lang.NewList(%s[%d:]...)\n", indent, paramVar, argsVar, methodNode.FixedArity)
 		}
 	}
 
 	// Generate the body
 	bodyVar := g.generateASTNode(methodNode.Body)
-	buf.WriteString(fmt.Sprintf("%s    return %s\n", indent, bodyVar))
+	g.writef("%s  return %s\n", indent, bodyVar)
 }
 
 // generateASTNode generates code for an AST node
@@ -378,17 +368,47 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 	}
 }
 
+// generateInvoke generates code for an Invoke node
+func (g *Generator) generateInvoke(node *ast.Node) string {
+	invokeNode := node.Sub.(*ast.InvokeNode)
+	
+	// Generate the function expression
+	fnExpr := g.generateASTNode(invokeNode.Fn)
+	
+	// Generate the arguments
+	var argExprs []string
+	for _, arg := range invokeNode.Args {
+		argExprs = append(argExprs, g.generateASTNode(arg))
+	}
+	
+	// Allocate a result variable for the invocation
+	resultVar := g.allocateVar("invokeResult")
+	
+	// Emit the invocation
+	if len(argExprs) == 0 {
+		g.writef("%s := lang.Invoke(%s)\n", resultVar, fnExpr)
+	} else {
+		g.writef("%s := lang.Invoke(%s, %s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
+	}
+	
+	// Return the result variable
+	return resultVar
+}
+
 // generateDo generates code for a Do node
 func (g *Generator) generateDo(node *ast.Node) string {
-	var buf bytes.Buffer
 	doNode := node.Sub.(*ast.DoNode)
-	for _, subNode := range doNode.Statements {
-		if subNode == nil {
+	
+	// Emit all statements except the last to g.w
+	for _, stmt := range doNode.Statements {
+		if stmt == nil {
 			continue
 		}
-		subCode := g.generateASTNode(subNode)
-		buf.WriteString(subCode + "\n")
+		stmtResult := g.generateASTNode(stmt)
+		g.writef("_ = %s\n", stmtResult) // Discard intermediate results
 	}
+	
+	// Return the final expression
 	return g.generateASTNode(doNode.Ret)
 }
 
@@ -396,30 +416,26 @@ func (g *Generator) generateDo(node *ast.Node) string {
 func (g *Generator) generateIf(node *ast.Node) string {
 	ifNode := node.Sub.(*ast.IfNode)
 
-	test := ifNode.Test
-	then := ifNode.Then
-	els := ifNode.Else
-
-	// testVal, err := env.EvalAST(test)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// if lang.IsTruthy(testVal) {
-	// 	return env.EvalAST(then)
-	// } else {
-	// 	return env.EvalAST(els)
-	// }
-
-	var buf bytes.Buffer
-	buf.WriteString("if lang.IsTruthy(")
-	buf.WriteString(g.generateASTNode(test) + ") {\n")
-	buf.WriteString("  return " + g.generateASTNode(then) + "\n")
-	if els != nil {
-		buf.WriteString("} else {\n")
-		buf.WriteString("  return " + g.generateASTNode(els) + "\n")
+	// Allocate result variable
+	resultVar := g.allocateVar("ifResult")
+	
+	// Emit the if statement to g.w
+	g.writef("var %s any\n", resultVar)
+	testExpr := g.generateASTNode(ifNode.Test)
+	g.writef("if lang.IsTruthy(%s) {\n", testExpr)
+	thenExpr := g.generateASTNode(ifNode.Then)
+	g.writef("  %s = %s\n", resultVar, thenExpr)
+	g.writef("} else {\n")
+	if ifNode.Else != nil {
+		elsExpr := g.generateASTNode(ifNode.Else)
+		g.writef("  %s = %s\n", resultVar, elsExpr)
+	} else {
+		g.writef("  %s = nil\n", resultVar)
 	}
-	buf.WriteString("}\n")
-	return buf.String()
+	g.writef("}\n")
+	
+	// Return the r-value
+	return resultVar
 }
 
 // func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error) {
@@ -480,9 +496,7 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	g.pushVarScope()
 	defer g.popVarScope()
 
-	var buf bytes.Buffer
-
-	// Bind variables
+	// Emit bindings directly to g.w
 	for _, binding := range letNode.Bindings {
 		bindingNode := binding.Sub.(*ast.BindingNode)
 		name := bindingNode.Name.Name()
@@ -493,14 +507,11 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 
 		// Generate initialization code
 		initCode := g.generateASTNode(init)
-		buf.WriteString(fmt.Sprintf("%s := %s\n", varName, initCode))
+		g.writef("%s := %s\n", varName, initCode)
 	}
 
-	// Generate the body of the let
-	bodyCode := g.generateASTNode(letNode.Body)
-	buf.WriteString(fmt.Sprintf("return %s\n", bodyCode))
-
-	return buf.String()
+	// Return the body expression (r-value)
+	return g.generateASTNode(letNode.Body)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -524,7 +535,7 @@ import (
 	return err
 }
 
-func (g *Generator) writef(format string, args ...interface{}) error {
+func (g *Generator) writef(format string, args ...any) error {
 	_, err := fmt.Fprintf(g.w, format, args...)
 	return err
 }
