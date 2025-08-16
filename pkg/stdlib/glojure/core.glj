@@ -8001,9 +8001,10 @@ fails, attempts to require sym's namespace and retries."
    :added "1.11"}
   ^go/int64 [^go/string s]
   (if (string? s)
-    (try
-      (Long/valueOf s)
-      (catch NumberFormatException _ nil))
+    (let [result (. github.com$glojurelang$glojure$pkg$lang.Numbers (ValueOf s))]
+      (if (nil? (result 1))
+        (result 0)
+        nil))
     (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (parsing-err s)))))
 
 (defn parse-double
@@ -8014,9 +8015,10 @@ fails, attempts to require sym's namespace and retries."
    :added "1.11"}
   ^go/float64 [^go/string s]
   (if (string? s)
-    (try
-      (Double/valueOf s)
-      (catch NumberFormatException _ nil))
+    (let [result (. github.com$glojurelang$glojure$pkg$lang.Numbers (ValueOfDouble s))]
+      (if (nil? (result 1))
+        (result 0)
+        nil))
     (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (parsing-err s)))))
 
 (defn parse-uuid

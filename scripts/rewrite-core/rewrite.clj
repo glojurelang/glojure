@@ -271,6 +271,8 @@
 
    ;; ===== Exception Handling =====
    (sexpr-replace 'IllegalArgumentException. 'github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError)
+   (sexpr-replace 'NumberFormatException. 'github.com$glojurelang$glojure$pkg$lang.NewNumberFormatException)
+   (sexpr-replace 'MalformedURLException. 'github.com$glojurelang$glojure$pkg$lang.NewMalformedURLException)
    ;; new Exception
    [(fn select [zloc] (and (z/list? zloc)
                            (let [expr (z/sexpr zloc)]
@@ -412,6 +414,9 @@
                   '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromFloat64 (double x)))
    (sexpr-replace 'clojure.lang.BigInt/fromBigInteger
                   'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromGoBigInt)
+
+   (sexpr-replace 'Long/valueOf '(github.com$glojurelang$glojure$pkg$lang.Numbers.ValueOf ~1))
+   (sexpr-replace 'Double/valueOf '(github.com$glojurelang$glojure$pkg$lang.Numbers.ValueOfDouble ~1))
 
    (sexpr-replace '.equals '.Equals)
 

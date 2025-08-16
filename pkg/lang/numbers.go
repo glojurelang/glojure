@@ -5,6 +5,7 @@ import (
 	"math"
 	"math/big"
 	"reflect"
+	"strconv"
 	"unicode/utf8"
 )
 
@@ -62,6 +63,14 @@ func (nm *NumberMethods) MultiplyP(x, y any) any {
 
 func (nm *NumberMethods) Unchecked_multiply(x, y any) any {
 	return Ops(x).Combine(Ops(y)).UncheckedMultiply(x, y)
+}
+
+func (nm *NumberMethods) ValueOf(s string) (int64, error) {
+	return strconv.ParseInt(s, 10, 64)
+}
+
+func (nm *NumberMethods) ValueOfDouble(s string) (float64, error) {
+	return strconv.ParseFloat(s, 64)
 }
 
 func (nm *NumberMethods) Divide(x, y any) any {

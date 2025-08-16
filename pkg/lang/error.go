@@ -25,6 +25,14 @@ type (
 		msg string
 	}
 
+	NumberFormatException struct {
+		msg string
+	}
+
+	MalformedURLException struct {
+		msg string
+	}
+
 	// Stacker is an interface for retrieving stack traces.
 	Stacker interface {
 		Stack() []StackFrame
@@ -108,6 +116,32 @@ func (e *IllegalStateError) Error() string {
 
 func (e *IllegalStateError) Is(other error) bool {
 	_, ok := other.(*IllegalStateError)
+	return ok
+}
+
+func NewNumberFormatException(msg string) error {
+	return &NumberFormatException{msg: msg}
+}
+
+func (e *NumberFormatException) Error() string {
+	return e.msg
+}
+
+func (e *NumberFormatException) Is(other error) bool {
+	_, ok := other.(*NumberFormatException)
+	return ok
+}
+
+func NewMalformedURLException(msg string) error {
+	return &MalformedURLException{msg: msg}
+}
+
+func (e *MalformedURLException) Error() string {
+	return e.msg
+}
+
+func (e *MalformedURLException) Is(other error) bool {
+	_, ok := other.(*MalformedURLException)
 	return ok
 }
 
