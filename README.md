@@ -125,6 +125,16 @@ $ glj server.glj
 Server starting on :8080...
 ```
 
+### Environment Variables
+
+Glojure recognizes the following environment variables:
+
+- **`GLJPATH`**
+
+  Colon-separated list of directories to search for `.glj` libraries.
+  This allows you to organize Glojure libraries in a custom manner.
+  Note: Glojure will always search the current directory for `.glj` libraries.
+
 ### Embedding Glojure in Go Applications
 
 You can also embed Glojure as a scripting language within your Go applications.

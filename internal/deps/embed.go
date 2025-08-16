@@ -67,7 +67,7 @@ func (d *Deps) Embed() error {
 	fmt.Fprintf(b, "func init() {\n")
 	for _, pkg := range d.Pkgs {
 		fsName := mungePath(pkg) + "FS"
-		fmt.Fprintf(b, "\truntime.AddLoadPath(subfs(%s, %q))\n", fsName, pkg)
+		fmt.Fprintf(b, "\truntime.AddLoadPath(subfs(%s, %q), %q)\n", fsName, pkg, pkg)
 	}
 	fmt.Fprintf(b, "}\n")
 

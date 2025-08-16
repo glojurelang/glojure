@@ -1,2 +1,8 @@
-bin
-doc/repl/glj.wasm
+/*.glj
+/*.clj
+/.cache/
+/.clj-kondo/
+/.lsp/
+/bin/
+/doc/repl/glj.wasm
+/GNUmakefile
