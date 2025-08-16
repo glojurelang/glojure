@@ -80,14 +80,14 @@ func setupLoadPaths() {
 			if path != "" {
 				// Skip non-existent path directories
 				if _, err := os.Stat(path); err == nil {
-					runtime.AddLoadPath(os.DirFS(path), true)
+					runtime.PrependLoadPath(os.DirFS(path))
 				}
 			}
 		}
 	}
 
 	// Add current directory to end of load path
-	runtime.AddLoadPath(os.DirFS("."), false)
+	runtime.AddLoadPath(os.DirFS("."))
 }
 
 func printHelp() {
