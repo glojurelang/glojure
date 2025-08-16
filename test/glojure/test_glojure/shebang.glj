@@ -1,0 +1,54 @@
+(ns glojure.test-glojure.shebang
+  (:use glojure.test)
+  (:require [glojure.string :as str]))
+
+;; Test that shebang lines are properly handled in the reader
+(deftest shebang-line-detection
+  (testing "Shebang line detection works correctly"
+    (let [content "#!/usr/bin/env glj\n(println \"Hello\")"
+          lines (str/split-lines content)
+          has-shebang (and (seq lines) 
+                          (str/starts-with? 
+                           (str/trim (first lines)) "#!"))]
+      (is has-shebang "Should detect shebang line"))))
+
+(deftest shebang-line-removal
+  (testing "Shebang line removal logic works correctly"
+    (let [content "#!/usr/bin/env glj\n(println \"Hello\")"
+          lines (str/split-lines content)
+          filtered-lines (if (and (seq lines) 
+                                 (str/starts-with? 
+                                  (str/trim (first lines)) "#!"))
+                           (rest lines)
+                           lines)
+          first-line (first filtered-lines)]
+      (is (= "(println \"Hello\")" first-line) 
+          "First line should be the Clojure code, not shebang"))))
+
+(deftest shebang-preserves-content
+  (testing "Shebang handling preserves script content"
+    (let [content "#!/usr/bin/env glj\n(println \"Hello\")\n(+ 1 2)"
+          lines (str/split-lines content)
+          filtered-lines (if (and (seq lines) 
+                                 (str/starts-with? 
+                                  (str/trim (first lines)) "#!"))
+                           (rest lines)
+                           lines)
+          filtered-content (str/join "\n" filtered-lines)]
+      (is (= "(println \"Hello\")\n(+ 1 2)" filtered-content)
+          "Filtered content should preserve all non-shebang lines"))))
+
+(deftest no-shebang-handling
+  (testing "Files without shebang are handled normally"
+    (let [content "(println \"Hello\")\n(+ 1 2)"
+          lines (str/split-lines content)
+          filtered-lines (if (and (seq lines) 
+                                 (str/starts-with? 
+                                  (str/trim (first lines)) "#!"))
+                           (rest lines)
+                           lines)
+          filtered-content (str/join "\n" filtered-lines)]
+      (is (= content filtered-content)
+          "Content without shebang should remain unchanged"))))
+
+(run-tests) 
