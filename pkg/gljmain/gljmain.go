@@ -1,8 +1,8 @@
 package gljmain
 
 import (
-	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -32,6 +32,8 @@ Examples:
   glj script.glj        # Run script file
   glj --version         # Show version
   glj --help            # Show this help
+
+Scripts with shebang lines (#!/usr/bin/env glj) are supported.
 
 For more information, visit: https://github.com/glojurelang/glojure
 `, runtime.VERSION)
@@ -88,14 +90,35 @@ func Main(args []string) {
 		if err != nil {
 			log.Fatal(err)
 		}
+		defer file.Close()
+
 		env := lang.GlobalEnv
 
 		core := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 		core.FindInternedVar(lang.NewSymbol("*command-line-args*")).BindRoot(lang.Seq(args[1:]))
 
-		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() *lang.Namespace {
+		// Read the entire file content and filter out shebang lines
+		content, err := io.ReadAll(file)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Remove shebang line if present
+		lines := strings.Split(string(content), "\n")
+		if len(lines) > 0 && strings.HasPrefix(strings.TrimSpace(lines[0]), "#!") {
+			lines = lines[1:]
+		}
+
+		// Create a new reader from the filtered content
+		filteredContent := strings.Join(lines, "\n")
+		if filteredContent != "" && !strings.HasSuffix(filteredContent, "\n") {
+			filteredContent += "\n"
+		}
+
+		rdr := reader.New(strings.NewReader(filteredContent), reader.WithGetCurrentNS(func() *lang.Namespace {
 			return env.CurrentNamespace()
 		}))
+
 		for {
 			val, err := rdr.ReadOne()
 			if err == reader.ErrEOF {
