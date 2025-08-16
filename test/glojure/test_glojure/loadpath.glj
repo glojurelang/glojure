@@ -1,0 +1,21 @@
+(ns glojure.test-glojure.load-path
+  (:use glojure.test))
+
+(deftest LoadPath
+  (is (some? *glojure-load-path*) "glojure-load-path dynamic var exists")
+  (is (seq? *glojure-load-path*) "glojure-load-path is a sequence")
+  (is (> (count *glojure-load-path*) 0) "glojure-load-path has elements")
+  (is (some? (first *glojure-load-path*)) "glojure-load-path first element exists")
+
+  (is (some #(= % "<StdLib>") *glojure-load-path*) "glojure-load-path contains stdlib")
+
+  (let [original-path *glojure-load-path*]
+    (binding [*glojure-load-path* ["test-path"]]
+      (is (= *glojure-load-path* ["test-path"]) "binding works correctly")
+      (is (= (count *glojure-load-path*) 1) "binding changes count"))
+    (is (= *glojure-load-path* original-path) "binding is restored"))
+
+  (doseq [path *glojure-load-path*]
+    (is (string? path) (str "Path element is not a string: " path))))
+
+(run-tests)

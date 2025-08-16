@@ -1,9 +1,11 @@
 package runtime
 
 import (
+	"embed"
 	"fmt"
 	"io"
 	"io/fs"
+	"os"
 	"reflect"
 	"strings"
 	"sync"
@@ -16,27 +18,83 @@ import (
 	. "github.com/glojurelang/glojure/pkg/lang"
 )
 
+// loadPathEntry represents a single entry in the load path
+type loadPathEntry struct {
+	fs   fs.FS
+	name string
+}
+
 var (
 	RT = &RTMethods{}
 
-	loadPath     = []fs.FS{stdlib.StdLib}
+	loadPath     = []loadPathEntry{{fs: stdlib.StdLib, name: "<StdLib>"}}
 	loadPathLock sync.Mutex
 )
 
-// AddLoadPath adds a filesystem to the end of the load path.
-func AddLoadPath(fs fs.FS) {
+// AddLoadPath adds a filesystem with a name to the end of the load path.
+func AddLoadPath(fs fs.FS, name string) {
 	loadPathLock.Lock()
 	defer loadPathLock.Unlock()
 
-	loadPath = append(loadPath, fs)
+	loadPath = append(loadPath, loadPathEntry{fs: fs, name: name})
 }
 
-// PrependLoadPath adds a filesystem to the front of the load path.
-func PrependLoadPath(_fs fs.FS) {
+// AddLoadPathString adds a directory path to the end of the load path.
+func AddLoadPathString(path string) {
+	AddLoadPath(os.DirFS(path), path)
+}
+
+// PrependLoadPathString adds a directory path to the front of the load path.
+func PrependLoadPathString(path string) {
 	loadPathLock.Lock()
 	defer loadPathLock.Unlock()
 
-	loadPath = append([]fs.FS{_fs}, loadPath...)
+	loadPath = append([]loadPathEntry{{fs: os.DirFS(path), name: path}}, loadPath...)
+}
+
+// GetLoadPath returns a copy of the current load path as a slice of strings.
+// Each string represents a filesystem path that can be used by Glojure.
+func GetLoadPath() []string {
+	loadPathLock.Lock()
+	defer loadPathLock.Unlock()
+
+	result := make([]string, len(loadPath))
+	for i, entry := range loadPath {
+		if entry.name != "" {
+			result[i] = entry.name
+		} else {
+			// Fallback to the old logic for unnamed filesystems
+			switch v := entry.fs.(type) {
+			case embed.FS:
+				result[i] = "<StdLib>"
+			default:
+				if name := getFSName(v); name != "" {
+					result[i] = name
+				} else {
+					result[i] = fmt.Sprintf("<%v>", v)
+				}
+			}
+		}
+	}
+	return result
+}
+
+// getFSName attempts to extract a meaningful name from a filesystem.
+// This is a helper function for GetLoadPath.
+func getFSName(fsys fs.FS) string {
+	// Try to read the root directory to see if it's a named filesystem
+	if entries, err := fs.ReadDir(fsys, "."); err == nil && len(entries) > 0 {
+		// If it's a subdirectory filesystem, try to get the parent name
+		if subFS, ok := fsys.(interface{ Name() string }); ok {
+			return subFS.Name()
+		}
+		// For embedded filesystems, we might be able to infer the name
+		// from the directory structure
+		if len(entries) == 1 && entries[0].IsDir() {
+			return entries[0].Name()
+		}
+	}
+	return ""
 }
 
 // RT is a struct with methods that map to Clojure's RT class' static
@@ -146,8 +204,8 @@ func (rt *RTMethods) Load(scriptBase string) {
 	loadPathLock.Lock()
 	lp := loadPath
 	loadPathLock.Unlock()
-	for _, fs := range lp {
-		buf, err = readFile(fs, filename)
+	for _, entry := range lp {
+		buf, err = readFile(entry.fs, filename)
 		if err == nil {
 			break
 		}

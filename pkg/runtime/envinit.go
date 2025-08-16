@@ -155,6 +155,12 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 		versionVar.BindRoot(ParseVersion(VERSION))
 	}
 
+	// Set the glojure load path
+	loadPathVar := core.FindInternedVar(lang.NewSymbol("*glojure-load-path*"))
+	if loadPathVar != nil {
+		loadPathVar.BindRoot(lang.Seq(GetLoadPath()))
+	}
+
 	return env
 }
 

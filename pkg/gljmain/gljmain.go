@@ -78,16 +78,21 @@ func setupLoadPaths() {
 		for i := len(paths) - 1; i >= 0; i-- {
 			path := paths[i]
 			if path != "" {
-				// Skip non-existent path directories
-				if _, err := os.Stat(path); err == nil {
-					runtime.PrependLoadPath(os.DirFS(path))
-				}
+				runtime.PrependLoadPathString(path)
 			}
 		}
 	}
 
 	// Add current directory to end of load path
-	runtime.AddLoadPath(os.DirFS("."))
+	runtime.AddLoadPathString(".")
+
+	// Update the *glojure-load-path* dynamic var with the current load path
+	if core := lang.FindNamespace(lang.NewSymbol("glojure.core")); core != nil {
+		loadPathVar := core.FindInternedVar(lang.NewSymbol("*glojure-load-path*"))
+		if loadPathVar != nil {
+			loadPathVar.BindRoot(lang.Seq(runtime.GetLoadPath()))
+		}
+	}
 }
 
 func printHelp() {
