@@ -23,12 +23,20 @@ var (
 	loadPathLock sync.Mutex
 )
 
-// AddLoadPath adds a filesystem to the load path.
+// AddLoadPath adds a filesystem to the end of the load path.
 func AddLoadPath(fs fs.FS) {
 	loadPathLock.Lock()
 	defer loadPathLock.Unlock()
 
 	loadPath = append(loadPath, fs)
+}
+
+// PrependLoadPath adds a filesystem to the front of the load path.
+func PrependLoadPath(_fs fs.FS) {
+	loadPathLock.Lock()
+	defer loadPathLock.Unlock()
+
+	loadPath = append([]fs.FS{_fs}, loadPath...)
 }
 
 // RT is a struct with methods that map to Clojure's RT class' static
