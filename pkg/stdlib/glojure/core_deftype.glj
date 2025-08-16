@@ -44,9 +44,9 @@
   polymorphic functions and a protocol object. All are
   namespace-qualified by the ns enclosing the definition The resulting
   functions dispatch on the type of their first argument, which is
-  required and corresponds to the implicit target object ('this' in 
-  Java parlance). defprotocol is dynamic, has no special compile-time 
-  effect, and defines no new types or classes. Implementations of 
+  required and corresponds to the implicit target object ('this' in
+  Java parlance). defprotocol is dynamic, has no special compile-time
+  effect, and defines no new types or classes. Implementations of
   the protocol methods can be provided using extend.
 
   When :extend-via-metadata is true, values can extend protocols by
@@ -65,22 +65,22 @@
   Note that you should not use this interface with deftype or
   reify, as they support the protocol directly:
 
-  (defprotocol P 
-    (foo [this]) 
+  (defprotocol P
+    (foo [this])
     (bar-me [this] [this y]))
 
-  (deftype Foo [a b c] 
+  (deftype Foo [a b c]
    P
     (foo [this] a)
     (bar-me [this] b)
     (bar-me [this y] (+ c y)))
-  
+
   (bar-me (Foo. 1 2 3) 42)
   => 45
 
-  (foo 
+  (foo
     (let [x 42]
-      (reify P 
+      (reify P
         (foo [this] 17)
         (bar-me [this] x)
         (bar-me [this y] x))))
@@ -113,7 +113,7 @@
     (boolean (:on-interface @maybe-p))
     false))
 
-(defn extend 
+(defn extend
   "Implementations of protocol methods can be provided using the extend construct:
 
   (extend AType
@@ -121,14 +121,14 @@
      {:foo an-existing-fn
       :bar (fn [a b] ...)
       :baz (fn ([a]...) ([a b] ...)...)}
-    BProtocol 
-      {...} 
+    BProtocol
+      {...}
     ...)
- 
+
   extend takes a type/class (or interface, see below), and one or more
   protocol + method map pairs. It will extend the polymorphism of the
   protocol's methods to call the supplied methods when an AType is
-  provided as the first argument. 
+  provided as the first argument.
 
   Method maps are maps of the keyword-ized method names to ordinary
   fns. This facilitates easy reuse of existing fns and fn maps, for
@@ -148,7 +148,7 @@
 
   See also:
   extends?, satisfies?, extenders"
-  {:added "1.2"} 
+  {:added "1.2"}
   [atype & proto+mmaps]
   (doseq [[proto mmap] (partition 2 proto+mmaps)]
     (when-not (protocol? proto)
@@ -162,8 +162,8 @@
 
 (defn- emit-hinted-impl [c [p fs]]
   (let [hint (fn [specs]
-               (let [specs (if (vector? (first specs)) 
-                                        (list specs) 
+               (let [specs (if (vector? (first specs))
+                                        (list specs)
                                         specs)]
                  (map (fn [[[target & args] & body]]
                         (cons (apply vector (vary-meta target assoc :tag c) args)
@@ -177,13 +177,13 @@
     `(extend ~c
              ~@(mapcat (partial emit-hinted-impl c) impls))))
 
-(defmacro extend-type 
+(defmacro extend-type
   "A macro that expands into an extend call. Useful when you are
   supplying the definitions explicitly inline, extend-type
   automatically creates the maps required by extend.  Propagates the
   class as a type hint on the first argument of all fns.
 
-  (extend-type MyType 
+  (extend-type MyType
     Countable
       (cnt [c] ...)
     Foo
@@ -198,7 +198,7 @@
    Foo
      {:baz (fn ([x] ...) ([x y & zs] ...))
       :bar (fn [x y] ...)})"
-  {:added "1.2"} 
+  {:added "1.2"}
   [t & specs]
   (emit-extend-type t specs))
 
@@ -231,17 +231,17 @@
   expands into:
 
   (do
-   (clojure.core/extend-type AType Protocol 
-     (foo [x] ...) 
+   (clojure.core/extend-type AType Protocol
+     (foo [x] ...)
      (bar [x y] ...))
-   (clojure.core/extend-type BType Protocol 
-     (foo [x] ...) 
+   (clojure.core/extend-type BType Protocol
+     (foo [x] ...)
      (bar [x y] ...))
-   (clojure.core/extend-type AClass Protocol 
-     (foo [x] ...) 
+   (clojure.core/extend-type AClass Protocol
+     (foo [x] ...)
      (bar [x y] ...))
-   (clojure.core/extend-type nil Protocol 
-     (foo [x] ...) 
+   (clojure.core/extend-type nil Protocol
+     (foo [x] ...)
      (bar [x y] ...)))"
   {:added "1.2"}
 

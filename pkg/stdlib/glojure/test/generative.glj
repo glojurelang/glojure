@@ -40,7 +40,7 @@
   [arg]
   (let [form (walk/prewalk (fn [s] (if (symbol? s) (fully-qualified s) s)) (dequote arg))]
     (if (seq? form)
-      (list 'fn '[] form) 
+      (list 'fn '[] form)
       form)))
 
 (defmacro defspec
