@@ -2,6 +2,7 @@ package gljmain
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -18,84 +19,58 @@ import (
 
 // Args represents the parsed command line arguments
 type Args struct {
-	Mode         string   // "repl", "version", "help", "eval", "file"
-	Expression   string   // for eval mode
-	Filename     string   // for file mode
-	IncludePaths []string // for -I flags
-	CommandArgs  []string // remaining arguments after parsing
+	Mode        string   // "repl", "version", "help", "eval", "file"
+	Expression  string   // for eval mode
+	Filename    string   // for file mode
+	CommandArgs []string // remaining arguments after parsing
 }
 
 // parseArgs parses command line arguments and returns an Args struct
 func parseArgs(args []string) (*Args, error) {
-	if len(args) == 0 {
-		return &Args{Mode: "repl"}, nil
+	fs := flag.NewFlagSet("glj", flag.ExitOnError)
+
+	var (
+		helpFlag    = fs.Bool("help", false, "Show this help message")
+		versionFlag = fs.Bool("version", false, "Show version information")
+		evalFlag    = fs.String("e", "", "Evaluate expression from command line")
+	)
+
+	fs.Bool("h", false, "Show this help message (shorthand)")
+
+	if err := fs.Parse(args); err != nil {
+		return nil, err
 	}
 
-	// First pass: collect all -I flags and their paths
-	var includePaths []string
-	var remainingArgs []string
-	var mode string
-	var expression string
-	var filename string
-
-	i := 0
-	for i < len(args) {
-		switch args[i] {
-		case "--version":
-			if mode == "" {
-				mode = "version"
-			}
-			i++
-		case "--help", "-h":
-			if mode == "" {
-				mode = "help"
-			}
-			i++
-		case "-e":
-			if mode == "" {
-				mode = "eval"
-				if i+1 >= len(args) {
-					return nil, fmt.Errorf("glj: -e requires an expression")
-				}
-				expression = args[i+1]
-				i += 2
-			} else {
-				remainingArgs = append(remainingArgs, args[i])
-				i++
-			}
-		case "-I":
-			if i+1 >= len(args) {
-				return nil, fmt.Errorf("glj: -I requires a path")
-			}
-			includePaths = append(includePaths, args[i+1])
-			i += 2
-		default:
-			if mode == "" {
-				mode = "file"
-				filename = args[i]
-			} else {
-				remainingArgs = append(remainingArgs, args[i])
-			}
-			i++
-		}
+	if *helpFlag || fs.Lookup("h").Value.String() == "true" {
+		return &Args{Mode: "help"}, nil
 	}
 
-	// If no explicit mode was set, default to repl
-	if mode == "" {
-		mode = "repl"
+	if *versionFlag {
+		return &Args{Mode: "version"}, nil
 	}
 
-	return &Args{
-		Mode:         mode,
-		Expression:   expression,
-		Filename:     filename,
-		IncludePaths: includePaths,
-		CommandArgs:  remainingArgs,
-	}, nil
+	if *evalFlag != "" {
+		return &Args{
+			Mode:        "eval",
+			Expression:  *evalFlag,
+			CommandArgs: fs.Args(),
+		}, nil
+	}
+
+	remainingArgs := fs.Args()
+	if len(remainingArgs) > 0 {
+		return &Args{
+			Mode:        "file",
+			Filename:    remainingArgs[0],
+			CommandArgs: remainingArgs[1:],
+		}, nil
+	}
+
+	return &Args{Mode: "repl"}, nil
 }
 
-// setupLoadPaths configures the library search path in order of priority
-func setupLoadPaths(includePaths []string) {
+// setupLoadPaths configures the library search path
+func setupLoadPaths() {
 	// Add GLJPATH directories to front of load path if set
 	loadPaths := os.Getenv("GLJPATH")
 	if loadPaths != "" {
@@ -111,18 +86,6 @@ func setupLoadPaths(includePaths []string) {
 		}
 	}
 
-	// Process -I include paths last (add to front of load path, highest priority)
-	// Process in reverse order so first -I on command line gets highest priority
-	for i := len(includePaths) - 1; i >= 0; i-- {
-		path := includePaths[i]
-		if path != "" {
-			// Skip non-existent path directories
-			if _, err := os.Stat(path); err == nil {
-				runtime.AddLoadPath(os.DirFS(path), true)
-			}
-		}
-	}
-
 	// Add current directory to end of load path
 	runtime.AddLoadPath(os.DirFS("."), false)
 }
@@ -134,7 +97,6 @@ Usage: glj [options] [file]
 
 Options:
   -e <expr>        Evaluate expression from command line
-  -I <path>        Add directory to front of library search path
 
   --version        Show version information
   -h, --help       Show this help message
@@ -144,8 +106,6 @@ Environment Variables:
 
 Examples:
   glj                   # Start REPL
-  glj -I /path/to/lib   # Add library path and start REPL
-  glj -I /lib1 -I /lib2 # Add multiple library paths
   glj -e "(+ 1 2)"      # Evaluate expression
   glj script.glj        # Run script file
   glj --version         # Show version
@@ -162,7 +122,7 @@ func Main(args []string) {
 	}
 
 	// Setup library search paths
-	setupLoadPaths(parsedArgs.IncludePaths)
+	setupLoadPaths()
 
 	switch parsedArgs.Mode {
 	case "repl":
