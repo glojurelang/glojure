@@ -63,13 +63,14 @@
 (deftest gljpath-test
   (test-that
    "GLJPATH and -I flags can load libraries from specified directories"
-   (let [lib1-dir (str (os.Getenv "PWD") "/test_gljpath_priority1")
-         lib2-dir (str (os.Getenv "PWD") "/test_gljpath_priority2")
-         lib3-dir (str (os.Getenv "PWD") "/test_gljpath_priority3")
+   (let [temp-dir (os.TempDir)
+         lib1-dir (str temp-dir "/test_gljpath_priority1")
+         lib2-dir (str temp-dir "/test_gljpath_priority2")
+         lib3-dir (str temp-dir "/test_gljpath_priority3")
          lib1-file (str lib1-dir "/conflict.glj")
          lib2-file (str lib2-dir "/conflict.glj")
          lib3-file (str lib3-dir "/conflict.glj")
-         test-script (str (os.Getenv "PWD") "/test_gljpath_priority_script.glj")
+         test-script (str temp-dir "/test_gljpath_priority_script.glj")
          ;; Create conflicting libraries with same name but different content
          _ (do
              (os.MkdirAll lib1-dir 0755)
