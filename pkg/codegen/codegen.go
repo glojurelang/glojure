@@ -81,11 +81,9 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	g.writef("  ns := lang.FindOrCreateNamespace(lang.NewSymbol(\"%s\"))\n", ns.Name().String())
 	g.writef("  _ = ns\n")
 
-	// TODO: Generate code to populate the namespace
-	// This will involve:
-	// 1. Iterating through ns.Mappings()
-	// 2. Generating Go code for each var
-	// 3. Creating initialization functions
+	// 1. Iterate through ns.Mappings()
+	// 2. Generate Go code for each var
+	// 3. Create initialization functions
 	for seq := mappings.Seq(); seq != nil; seq = seq.Next() {
 		entry := seq.First()
 		name, ok := lang.First(entry).(*lang.Symbol)
@@ -346,7 +344,6 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 
 // generateASTNode generates code for an AST node
 func (g *Generator) generateASTNode(node *ast.Node) string {
-	fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 	switch node.Op {
 	case ast.OpConst:
 		constNode := node.Sub.(*ast.ConstNode)
@@ -363,34 +360,64 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.generateIf(node)
 	case ast.OpInvoke:
 		return g.generateInvoke(node)
+	case ast.OpVar:
+		return g.generateVarDeref(node)
+	case ast.OpRecur:
+		return g.generateRecur(node)
 	default:
+		fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))
 	}
+}
+
+// generateVarDeref generates code for a Var dereference
+func (g *Generator) generateVarDeref(node *ast.Node) string {
+	varNode := node.Sub.(*ast.VarNode)
+
+	varNamespace := varNode.Var.Namespace()
+	varSymbol := varNode.Var.Symbol()
+
+	// generate code to look up the var in the namespace
+	nsVar := g.allocateVar("ns")
+	g.writef("%s := lang.FindNamespace(lang.NewSymbol(\"%s\"))\n", nsVar, varNamespace.Name())
+	// look up the var in the namespace
+	varId := g.allocateVar("varId")
+	g.writef("%s := %s.FindInternedVar(lang.NewSymbol(\"%s\"))\n", varId, nsVar, varSymbol.Name())
+
+	// if macro, panic with 'can't take value of macro: %v'
+	g.writef("if %s.IsMacro() {\n", varId)
+	g.writef("  panic(lang.NewIllegalArgumentError(\"can't take value of macro: %v\"))\n", varId)
+	g.writef("}\n")
+	// else, return Get()
+	resultId := g.allocateVar("result")
+	g.writef("%s := %s.Get()\n", resultId, varId)
+
+	return resultId
 }
 
 // generateInvoke generates code for an Invoke node
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
-	
+
 	// Generate the function expression
 	fnExpr := g.generateASTNode(invokeNode.Fn)
-	
+
 	// Generate the arguments
 	var argExprs []string
 	for _, arg := range invokeNode.Args {
 		argExprs = append(argExprs, g.generateASTNode(arg))
 	}
-	
+
 	// Allocate a result variable for the invocation
 	resultVar := g.allocateVar("invokeResult")
-	
+
 	// Emit the invocation
 	if len(argExprs) == 0 {
-		g.writef("%s := lang.Invoke(%s)\n", resultVar, fnExpr)
+		g.writef("%s := lang.Apply(%s, nil)\n", resultVar, fnExpr)
 	} else {
-		g.writef("%s := lang.Invoke(%s, %s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
+		g.writef("%s := lang.Apply(%s, []any{%s})\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
 	}
-	
+
 	// Return the result variable
 	return resultVar
 }
@@ -398,7 +425,7 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 // generateDo generates code for a Do node
 func (g *Generator) generateDo(node *ast.Node) string {
 	doNode := node.Sub.(*ast.DoNode)
-	
+
 	// Emit all statements except the last to g.w
 	for _, stmt := range doNode.Statements {
 		if stmt == nil {
@@ -407,7 +434,7 @@ func (g *Generator) generateDo(node *ast.Node) string {
 		stmtResult := g.generateASTNode(stmt)
 		g.writef("_ = %s\n", stmtResult) // Discard intermediate results
 	}
-	
+
 	// Return the final expression
 	return g.generateASTNode(doNode.Ret)
 }
@@ -418,7 +445,7 @@ func (g *Generator) generateIf(node *ast.Node) string {
 
 	// Allocate result variable
 	resultVar := g.allocateVar("ifResult")
-	
+
 	// Emit the if statement to g.w
 	g.writef("var %s any\n", resultVar)
 	testExpr := g.generateASTNode(ifNode.Test)
@@ -433,7 +460,7 @@ func (g *Generator) generateIf(node *ast.Node) string {
 		g.writef("  %s = nil\n", resultVar)
 	}
 	g.writef("}\n")
-	
+
 	// Return the r-value
 	return resultVar
 }
@@ -510,8 +537,35 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		g.writef("%s := %s\n", varName, initCode)
 	}
 
+	resultId := g.allocateVar("letResult")
+	if isLoop {
+		g.writef("var %s any\n", resultId)
+		g.writef("for {\n")
+	}
+
 	// Return the body expression (r-value)
-	return g.generateASTNode(letNode.Body)
+	result := g.generateASTNode(letNode.Body)
+	if isLoop {
+		g.writef("  %s = %s\n", resultId, result)
+		g.writef("  break\n") // Break out of the loop after the body
+		g.writef("}\n")
+		return resultId
+	} else {
+		return result
+	}
+}
+
+func (g *Generator) generateRecur(node *ast.Node) string {
+	recurNode := node.Sub.(*ast.RecurNode)
+
+	exprs := recurNode.Exprs
+	for _, expr := range exprs {
+		val, err := noRecurEnv.EvalAST(expr)
+		if err != nil {
+			return nil, err
+		}
+		vals = append(vals, val)
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////

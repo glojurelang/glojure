@@ -13,16 +13,33 @@ func init() {
 	// simple-loop
 	{
 		v0 := lang.NewSymbol("simple-loop").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/loop_simple.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(17), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()))).(*lang.Symbol)
-		ns.InternWithValue(v0, func() interface{} {
-			v1 := lang.IFnFunc(func(args ...interface{}) interface{} {
-				if len(args) != 0 {
-					panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+		v1 := lang.IFnFunc(func(args ...any) any {
+			if len(args) != 0 {
+				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+			}
+			v2 := int64(0)
+			var v3 any
+			for {
+				var v4 any
+				v5 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+				v6 := v5.FindInternedVar(lang.NewSymbol("<"))
+				if v6.IsMacro() {
+					panic(lang.NewIllegalArgumentError("can't take value of macro: v6"))
 				}
-				return nil
-			})
-			// Note: metadata on functions is not yet supported in generated code
-			// Original metadata: lang.NewMap(lang.NewKeyword("rettag"), nil)
-			return v1
-		}(), true)
+				v7 := v6.Get()
+				v8 := lang.Apply(v7, []any{v2, int64(10)})
+				if lang.IsTruthy(v8) {
+					v4 = nil
+				} else {
+					v4 = nil
+				}
+				v3 = v4
+				break
+			}
+			return v3
+		})
+		// Note: metadata on functions is not yet supported in generated code
+		// Original metadata: lang.NewMap(lang.NewKeyword("rettag"), nil)
+		ns.InternWithValue(v0, v1, true)
 	}
 }
