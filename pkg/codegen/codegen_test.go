@@ -20,6 +20,97 @@ import (
 
 var updateGolden = flag.Bool("update", false, "update golden files")
 
+const testHarnessCode = `package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"strings"
+	
+	_ "github.com/glojurelang/glojure/pkg/codegen/testdata/codegen/test"
+	"github.com/glojurelang/glojure/pkg/lang"
+)
+
+func main() {
+	// Find all .glj files in testdata directory
+	// Get the testdata path relative to GOPATH or module root
+	testdataDir := os.Args[1]
+	var namespaces []string
+	
+	err := filepath.Walk(testdataDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if strings.HasSuffix(path, ".glj") {
+			// Read first line to get namespace
+			content, err := ioutil.ReadFile(path)
+			if err != nil {
+				return err
+			}
+			lines := strings.Split(string(content), "\n")
+			if len(lines) > 0 && strings.HasPrefix(lines[0], "(ns ") {
+				// Extract namespace name
+				nsLine := lines[0]
+				nsLine = strings.TrimPrefix(nsLine, "(ns ")
+				nsLine = strings.TrimSuffix(nsLine, ")")
+				parts := strings.Fields(nsLine)
+				if len(parts) > 0 {
+					namespaces = append(namespaces, parts[0])
+				}
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Printf("Error walking testdata: %v\n", err)
+		os.Exit(1)
+	}
+
+	failed := false
+	for _, nsName := range namespaces {
+		ns := lang.FindNamespace(lang.NewSymbol(nsName))
+		if ns == nil {
+			fmt.Printf("SKIP: namespace %s not found\n", nsName)
+			continue
+		}
+
+		mainVar := ns.FindInternedVar(lang.NewSymbol("-main"))
+		if mainVar == nil {
+			fmt.Printf("SKIP: %s/-main not found\n", nsName)
+			continue
+		}
+
+		// Check if -main has :expected-output metadata
+		meta := mainVar.Meta()
+		if meta == nil {
+			fmt.Printf("SKIP: %s/-main has no metadata\n", nsName)
+			continue
+		}
+
+		expected := meta.ValAt(lang.NewKeyword("expected-output"))
+		if expected == nil {
+			fmt.Printf("SKIP: %s/-main has no :expected-output\n", nsName)
+			continue
+		}
+
+		// Run -main and check the result
+		result := mainVar.Invoke()
+		if !lang.Equals(result, expected) {
+			fmt.Printf("FAIL: %s/-main returned %v, expected %v\n", nsName, result, expected)
+			failed = true
+		} else {
+			fmt.Printf("PASS: %s/-main\n", nsName)
+		}
+	}
+
+	if failed {
+		os.Exit(1)
+	}
+}
+`
+
 func TestCodegen(t *testing.T) {
 	var testFiles []string
 	err := filepath.Walk("testdata", func(path string, info os.FileInfo, err error) error {
@@ -93,8 +184,8 @@ func TestCodegen(t *testing.T) {
 				t.Errorf("go vet failed for %s: %v\nStderr:\n%s", goldenFile, err, stderr.String())
 			}
 
-			// TODO: Compile and run the generated code to verify behavior
-			// This will be added once we have more complete code generation
+			// Check if namespace has -main function with expected output
+			testMainFunction(t, ns)
 		})
 	}
 }
@@ -131,8 +222,61 @@ func getNamespaceFromFile(t *testing.T, filename string) string {
 	panic("expected namespace declaration in " + filename)
 }
 
-// TestBehavior verifies that generated code produces the same results as interpreted code
-func TestBehavior(t *testing.T) {
-	// This test will be implemented once we can compile and run generated code
-	t.Skip("Behavioral testing not yet implemented")
+// testMainFunction tests the -main function if it exists and has :expected-output metadata
+func testMainFunction(t *testing.T, ns *lang.Namespace) {
+	// Look for -main var in the namespace
+	mainVar := ns.FindInternedVar(lang.NewSymbol("-main"))
+	if mainVar == nil {
+		// No -main function, nothing to test
+		return
+	}
+
+	// Check if -main has :expected-output metadata
+	meta := mainVar.Meta()
+	if meta == nil {
+		return
+	}
+
+	expectedOutput := meta.ValAt(lang.NewKeyword("expected-output"))
+	if expectedOutput == nil {
+		return
+	}
+
+	// Run -main and check the result
+	result := mainVar.Invoke()
+	if !lang.Equals(result, expectedOutput) {
+		t.Errorf("-main returned %v, expected %v", result, expectedOutput)
+	}
+}
+
+// TestGeneratedCode compiles and runs the generated code to verify behavior
+func TestGeneratedCode(t *testing.T) {
+	// Write the test harness in a temporary directory
+	tmpDir, err := ioutil.TempDir("", "glojure_test_harness")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	harnessPath := filepath.Join(tmpDir, "harness_main.go")
+	if err := ioutil.WriteFile(harnessPath, []byte(testHarnessCode), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Get absolute path to testdata directory
+	testdataPath, err := filepath.Abs("testdata")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Compile and run the test harness
+	cmd := exec.Command("go", "run", harnessPath, testdataPath)
+	cmd.Dir = "."
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("Test harness failed: %v\nOutput:\n%s", err, output)
+	}
+
+	// Print the output for visibility
+	t.Logf("Test harness output:\n%s", output)
 }

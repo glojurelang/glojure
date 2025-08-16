@@ -10,6 +10,26 @@ import (
 func init() {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.loop-simple"))
 	_ = ns
+	// -main
+	{
+		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), int64(10), lang.NewKeyword("file"), "codegen/test/loop_simple.glj", lang.NewKeyword("line"), int(9), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(10), lang.NewKeyword("end-column"), int(7), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()))).(*lang.Symbol)
+		v1 := lang.IFnFunc(func(args ...any) any {
+			if len(args) != 0 {
+				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+			}
+			v2 := lang.FindNamespace(lang.NewSymbol("codegen.test.loop-simple"))
+			v3 := v2.FindInternedVar(lang.NewSymbol("simple-loop"))
+			if v3.IsMacro() {
+				panic(lang.NewIllegalArgumentError("can't take value of macro: v3"))
+			}
+			v4 := v3.Get()
+			v5 := lang.Apply(v4, nil)
+			return v5
+		})
+		// Note: metadata on functions is not yet supported in generated code
+		// Original metadata: lang.NewMap(lang.NewKeyword("rettag"), nil)
+		ns.InternWithValue(v0, v1, true)
+	}
 	// simple-loop
 	{
 		v0 := lang.NewSymbol("simple-loop").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/loop_simple.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(17), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()))).(*lang.Symbol)

@@ -5,3 +5,6 @@
     (if (< i 10)
       (recur (inc i))
       i)))
+
+(defn ^{:expected-output 10}
+  -main [] (simple-loop))
