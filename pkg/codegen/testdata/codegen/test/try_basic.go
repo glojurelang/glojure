@@ -12,7 +12,7 @@ func init() {
 	_ = ns
 	// try-catch-finally
 	{
-		v0 := lang.NewSymbol("try-catch-finally").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(26), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(26), lang.NewKeyword("end-column"), int(23), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()))).(*lang.Symbol)
+		v0 := lang.NewSymbol("try-catch-finally").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(26), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(26), lang.NewKeyword("end-column"), int(23), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
 		v2 := lang.IFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -45,7 +45,7 @@ func init() {
 	}
 	// -main
 	{
-		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), "all tests passed", lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(43), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(43), lang.NewKeyword("end-column"), int(50), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()))).(*lang.Symbol)
+		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), "all tests passed", lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(43), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(43), lang.NewKeyword("end-column"), int(50), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
 		v2 := lang.IFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -187,7 +187,7 @@ func init() {
 	}
 	// try-with-throw
 	{
-		v0 := lang.NewSymbol("try-with-throw").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(9), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(9), lang.NewKeyword("end-column"), int(20), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()))).(*lang.Symbol)
+		v0 := lang.NewSymbol("try-with-throw").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(9), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(9), lang.NewKeyword("end-column"), int(20), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
 		v2 := lang.IFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -219,7 +219,7 @@ func init() {
 	}
 	// try-finally-only
 	{
-		v0 := lang.NewSymbol("try-finally-only").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(20), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(20), lang.NewKeyword("end-column"), int(22), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()))).(*lang.Symbol)
+		v0 := lang.NewSymbol("try-finally-only").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(20), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(20), lang.NewKeyword("end-column"), int(22), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
 		v2 := lang.IFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -241,7 +241,7 @@ func init() {
 	}
 	// nested-try
 	{
-		v0 := lang.NewSymbol("nested-try").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(34), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(34), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()))).(*lang.Symbol)
+		v0 := lang.NewSymbol("nested-try").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(34), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(34), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
 		v2 := lang.IFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -287,7 +287,7 @@ func init() {
 	}
 	// basic-try
 	{
-		v0 := lang.NewSymbol("basic-try").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(15), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()))).(*lang.Symbol)
+		v0 := lang.NewSymbol("basic-try").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(15), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
 		v2 := lang.IFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -318,7 +318,7 @@ func init() {
 	}
 	// try-no-catch
 	{
-		v0 := lang.NewSymbol("try-no-catch").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(16), lang.NewKeyword("end-column"), int(18), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()))).(*lang.Symbol)
+		v0 := lang.NewSymbol("try-no-catch").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(16), lang.NewKeyword("end-column"), int(18), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
 		v2 := lang.IFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))

@@ -59,7 +59,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 
 	g.writef("func init() {\n")
 
-	g.writef("  ns := lang.FindOrCreateNamespace(lang.NewSymbol(\"%s\"))\n", ns.Name().String())
+	g.writef("  ns := lang.FindOrCreateNamespace(lang.NewSymbol(%#v))\n", ns.Name().String())
 	g.writef("  _ = ns\n")
 
 	// 1. Iterate through ns.Mappings()
@@ -117,9 +117,9 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	g.writef("{\n")
 	defer g.writef("}\n")
 
-	meta := name.Meta()
+	meta := vr.Meta()
 	varSym := g.allocateTempVar()
-	if meta == nil {
+	if lang.IsNil(meta) {
 		g.writef("%s := lang.NewSymbol(\"%s\")\n", varSym, name.String())
 	} else {
 		metaVariable := g.generateValue(meta)
@@ -147,6 +147,9 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 // returns the variable name or constant expression for the value
 func (g *Generator) generateValue(value any) string {
 	switch v := value.(type) {
+	case *lang.Namespace:
+		// Generate code to find or create the namespace
+		return fmt.Sprintf("lang.FindOrCreateNamespace(lang.NewSymbol(%#v))", v.Name().String())
 	case *runtime.Fn:
 		return g.generateFn(v)
 	case *lang.Map:
@@ -154,8 +157,7 @@ func (g *Generator) generateValue(value any) string {
 	case *lang.Vector:
 		return g.generateVectorValue(v)
 	case *lang.SubVector:
-		// XXX TODO: handle sub-vectors
-		return fmt.Sprintf("%#v", "subvector not implemented yet")
+		return g.generateVectorValue(v)
 	case lang.Keyword:
 		if ns := v.Namespace(); ns != "" {
 			return fmt.Sprintf("lang.NewKeyword(\"%s/%s\")", ns, v.Name())
@@ -208,7 +210,7 @@ func (g *Generator) generateMapValue(m *lang.Map) string {
 	}
 
 	// Remove trailing comma and space
-	if buf.Len() > 0 {
+	if m.Count() > 0 {
 		buf.Truncate(buf.Len() - 2)
 	}
 
@@ -217,7 +219,7 @@ func (g *Generator) generateMapValue(m *lang.Map) string {
 }
 
 // generateVectorValue generates Go code for a Clojure vector
-func (g *Generator) generateVectorValue(v *lang.Vector) string {
+func (g *Generator) generateVectorValue(v lang.IPersistentVector) string {
 	var buf bytes.Buffer
 	buf.WriteString("lang.NewVector(")
 
@@ -350,7 +352,6 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 	// OpMap
 	// OpSet
 	// OpLetFn
-	// OpQuote
 	// OpGo
 	// OpHostCall
 	// OpHostInterop
@@ -393,6 +394,8 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.generateWithMeta(node)
 	case ast.OpMaybeClass:
 		return g.generateMaybeClass(node)
+	case ast.OpQuote:
+		return g.generateValue(node.Sub.(*ast.QuoteNode).Expr.Sub.(*ast.ConstNode).Value)
 	default:
 		fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))

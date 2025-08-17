@@ -12,7 +12,7 @@ func init() {
 	_ = ns
 	// -main
 	{
-		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-throw"), "uncaught error", lang.NewKeyword("file"), "codegen/test/throw_simple.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(47), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()))).(*lang.Symbol)
+		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-throw"), "uncaught error", lang.NewKeyword("file"), "codegen/test/throw_simple.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(47), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.throw-simple")))).(*lang.Symbol)
 		v2 := lang.IFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))

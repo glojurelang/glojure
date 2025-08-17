@@ -11,7 +11,7 @@ func init() {
 	_ = ns
 	// const-number
 	{
-		v0 := lang.NewSymbol("const-number").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/const_number.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(17), lang.NewKeyword("doc"), "A constant number.")).(*lang.Symbol)
+		v0 := lang.NewSymbol("const-number").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/const_number.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(17), lang.NewKeyword("doc"), "A constant number.", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.const-number")))).(*lang.Symbol)
 		v1 := ns.InternWithValue(v0, int64(42), true)
 		if v0.Meta() != nil {
 			v1.SetMeta(v0.Meta().(lang.IPersistentMap))

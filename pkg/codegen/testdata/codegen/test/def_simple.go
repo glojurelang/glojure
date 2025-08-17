@@ -11,7 +11,7 @@ func init() {
 	_ = ns
 	// foo
 	{
-		v0 := lang.NewSymbol("foo").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/def_simple.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(8))).(*lang.Symbol)
+		v0 := lang.NewSymbol("foo").WithMeta(lang.NewMap()).(*lang.Symbol)
 		v1 := ns.Intern(v0)
 		if v0.Meta() != nil {
 			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
