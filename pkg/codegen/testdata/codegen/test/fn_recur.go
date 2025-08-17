@@ -13,7 +13,7 @@ func init() {
 	// -main
 	{
 		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), int64(55), lang.NewKeyword("file"), "codegen/test/fn_recur.glj", lang.NewKeyword("line"), int(12), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(12), lang.NewKeyword("end-column"), int(34), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-recur")))).(*lang.Symbol)
-		v2 := lang.IFnFunc(func(args ...any) any {
+		v2 := lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
@@ -36,12 +36,12 @@ func init() {
 	// fib
 	{
 		v0 := lang.NewSymbol("fib").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/fn_recur.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(9), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("n"))), lang.NewKeyword("doc"), "Calculates the nth Fibonacci number using iteration with recur.", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-recur")))).(*lang.Symbol)
-		v2 := lang.IFnFunc(func(args ...any) any {
+		v2 := lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 1 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
 			v3 := args[0]
-			v5 := lang.IFnFunc(func(args ...any) any {
+			v5 := lang.NewFnFunc(func(args ...any) any {
 				if len(args) != 3 {
 					panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 				}
@@ -56,30 +56,30 @@ func init() {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v11)))
 				}
 				v12 := v11.Get()
-				v14 := lang.Apply(v12, []any{v8, v13})
-				if lang.IsTruthy(v14) {
+				v13 := lang.Apply(v12, []any{v8, v3})
+				if lang.IsTruthy(v13) {
 					v9 = v6
 				} else {
-					var v15 any = v7
-					v17 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-					v18 := v17.FindInternedVar(lang.NewSymbol("+"))
-					if v18.IsMacro() {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v18)))
+					var v14 any = v7
+					v16 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+					v17 := v16.FindInternedVar(lang.NewSymbol("+"))
+					if v17.IsMacro() {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v17)))
 					}
-					v19 := v18.Get()
-					v20 := lang.Apply(v19, []any{v6, v7})
-					var v16 any = v20
-					v22 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-					v23 := v22.FindInternedVar(lang.NewSymbol("inc"))
-					if v23.IsMacro() {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v23)))
+					v18 := v17.Get()
+					v19 := lang.Apply(v18, []any{v6, v7})
+					var v15 any = v19
+					v21 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+					v22 := v21.FindInternedVar(lang.NewSymbol("inc"))
+					if v22.IsMacro() {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v22)))
 					}
-					v24 := v23.Get()
-					v25 := lang.Apply(v24, []any{v8})
-					var v21 any = v25
-					v6 = v15
-					v7 = v16
-					v8 = v21
+					v23 := v22.Get()
+					v24 := lang.Apply(v23, []any{v8})
+					var v20 any = v24
+					v6 = v14
+					v7 = v15
+					v8 = v20
 					goto recur_loop_1620
 				}
 				return v9

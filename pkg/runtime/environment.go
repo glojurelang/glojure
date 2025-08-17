@@ -72,7 +72,7 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 
 	// bootstrap some vars
 	e.namespaceVar = coreNS.InternWithValue(SymbolNamespace,
-		lang.IFnFunc(func(args ...interface{}) interface{} {
+		lang.NewFnFunc(func(args ...interface{}) interface{} {
 			return coreNS
 		}), true)
 	e.namespaceVar.SetMacro()

@@ -70,7 +70,7 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 	// bootstrap namespace control
 	{
 		// bootstrap implementation of the ns macro
-		env.DefVar(lang.NewSymbol("in-ns"), lang.IFnFunc(func(args ...interface{}) interface{} {
+		env.DefVar(lang.NewSymbol("in-ns"), lang.NewFnFunc(func(args ...interface{}) interface{} {
 			if len(args) != 1 {
 				panic(fmt.Errorf("in-ns: expected namespace name"))
 			}

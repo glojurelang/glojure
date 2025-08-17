@@ -277,7 +277,7 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 		method := fnNode.Methods[0]
 		methodNode := method.Sub.(*ast.FnMethodNode)
 
-		g.writef("%s := lang.IFnFunc(func(args ...any) any {\n", fnVar)
+		g.writef("%s := lang.NewFnFunc(func(args ...any) any {\n", fnVar)
 
 		g.addImport("fmt") // Import fmt for error formatting
 		// Check arity
@@ -291,7 +291,7 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 		g.writef("})\n")
 	} else {
 		// Multiple arities or variadic - need to dispatch
-		g.writef("%s := lang.IFnFunc(func(args ...any) any {\n", fnVar)
+		g.writef("%s := lang.NewFnFunc(func(args ...any) any {\n", fnVar)
 		g.writef("  switch len(args) {\n")
 
 		// Generate cases for fixed arity methods
@@ -348,7 +348,7 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 	// Bind parameters
 	for i, param := range methodNode.Params {
 		paramNode := param.Sub.(*ast.BindingNode)
-		paramVar := g.allocateVar(paramNode.Name.Name())
+		paramVar := g.allocateLocal(paramNode.Name.Name())
 
 		if i < methodNode.FixedArity {
 			// Regular parameter
@@ -406,7 +406,7 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 	case ast.OpLocal:
 		localNode := node.Sub.(*ast.LocalNode)
 		// Look up the variable in our scope
-		return g.allocateVar(localNode.Name.Name())
+		return g.getLocal(localNode.Name.Name())
 	case ast.OpDo:
 		return g.generateDo(node)
 	case ast.OpLet:
@@ -555,7 +555,7 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		init := bindingNode.Init
 
 		// Allocate a Go variable for the Clojure name
-		varName := g.allocateVar(name)
+		varName := g.allocateLocal(name)
 
 		// Generate initialization code
 		initCode := g.generateASTNode(init)
@@ -615,7 +615,7 @@ func (g *Generator) generateRecur(node *ast.Node) string {
 	// This prevents issues with bindings that reference each other
 	tempVars := make([]string, len(recurNode.Exprs))
 	for i, expr := range recurNode.Exprs {
-		tempVar := g.allocateVar(fmt.Sprintf("recurTemp%d", i))
+		tempVar := g.allocateLocal(fmt.Sprintf("recurTemp%d", i))
 		tempVars[i] = tempVar
 		exprCode := g.generateASTNode(expr)
 		g.writef("var %s any = %s\n", tempVar, exprCode)
@@ -699,7 +699,7 @@ func (g *Generator) generateTry(node *ast.Node) string {
 
 			// Bind the exception to the catch variable
 			bindingNode := catch.Local.Sub.(*ast.BindingNode)
-			catchVar := g.allocateVar(bindingNode.Name.Name())
+			catchVar := g.allocateLocal(bindingNode.Name.Name())
 			g.writef("%s := r\n", catchVar)
 			g.writeAssign("_", catchVar) // Mark as used since catch body might not reference it
 
@@ -931,19 +931,14 @@ func (g *Generator) popVarScope() {
 	g.varScopes = g.varScopes[:len(g.varScopes)-1]
 }
 
-// AllocateVar allocates a Go variable name for the given Clojure name in the current scope
+// allocateLocal allocates a Go variable name for the given Clojure name in the current scope
 // If the name already exists in the current scope, it returns the existing Go variable name
-func (g *Generator) allocateVar(name string) string {
+func (g *Generator) allocateLocal(name string) string {
 	if len(g.varScopes) == 0 {
 		panic("no variable scope available")
 	}
 
 	currentScope := &g.varScopes[len(g.varScopes)-1]
-
-	// Check if already allocated in current scope
-	if varName, exists := currentScope.names[name]; exists {
-		return varName
-	}
 
 	// Allocate new variable name
 	varName := fmt.Sprintf("v%d", currentScope.nextNum)
@@ -951,6 +946,17 @@ func (g *Generator) allocateVar(name string) string {
 	currentScope.nextNum++
 
 	return varName
+}
+
+func (g *Generator) getLocal(name string) string {
+	for i := len(g.varScopes) - 1; i >= 0; i-- {
+		currentScope := &g.varScopes[i]
+		if varName, ok := currentScope.names[name]; ok {
+			return varName
+		}
+	}
+
+	panic(fmt.Sprintf("variable %s not found in any scope", name))
 }
 
 // allocateTempVar allocates a fresh temporary variable without name tracking
