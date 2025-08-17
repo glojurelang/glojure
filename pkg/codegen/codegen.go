@@ -152,11 +152,9 @@ func (g *Generator) generateValue(value any) string {
 		return fmt.Sprintf("lang.FindOrCreateNamespace(lang.NewSymbol(%#v))", v.Name().String())
 	case *runtime.Fn:
 		return g.generateFn(v)
-	case *lang.Map:
+	case lang.IPersistentMap:
 		return g.generateMapValue(v)
-	case *lang.Vector:
-		return g.generateVectorValue(v)
-	case *lang.SubVector:
+	case lang.IPersistentVector:
 		return g.generateVectorValue(v)
 	case lang.Keyword:
 		if ns := v.Namespace(); ns != "" {
@@ -195,7 +193,7 @@ func (g *Generator) generateValue(value any) string {
 }
 
 // generateMapValue generates Go code for a Clojure map
-func (g *Generator) generateMapValue(m *lang.Map) string {
+func (g *Generator) generateMapValue(m lang.IPersistentMap) string {
 	var buf bytes.Buffer
 	buf.WriteString("lang.NewMap(")
 
