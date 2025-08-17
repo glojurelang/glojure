@@ -16,12 +16,7 @@ func CatchMatches(r, expect any) bool {
 		return false
 	}
 
-	// Special case: the symbol "any" catches everything (for go/any)
-	if sym, ok := expect.(*Symbol); ok && sym.Name() == "any" {
-		return true
-	}
-
-	// If expect is an error type, check if r is an instance of it
+	// if expect is an error type, check if r is an instance of it
 	if rErr, ok := r.(error); ok {
 		if expectTyp, ok := expect.(reflect.Type); ok && expectTyp.Implements(errorType) {
 			expectVal := reflect.New(expectTyp).Elem().Interface().(error)
@@ -31,15 +26,5 @@ func CatchMatches(r, expect any) bool {
 		}
 	}
 
-	// General type check
-	if expectTyp, ok := expect.(reflect.Type); ok {
-		return reflect.TypeOf(r).AssignableTo(expectTyp)
-	}
-
-	// For interface{} type (go/any), catch everything
-	if expectTyp, ok := expect.(reflect.Type); ok && expectTyp.Kind() == reflect.Interface && expectTyp.NumMethod() == 0 {
-		return true
-	}
-
-	return false
+	return reflect.TypeOf(r).AssignableTo(expect.(reflect.Type))
 }
