@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"fmt"
+	fmt "fmt"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 

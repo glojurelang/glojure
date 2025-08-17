@@ -73,7 +73,6 @@ func TestGeneratedGo(t *testing.T) {
 
 			expected := meta.ValAt(lang.NewKeyword("expected-output"))
 			expectedThrow := meta.ValAt(lang.NewKeyword("expected-throw"))
-			fmt.Println("META:", meta)
 			if lang.IsNil(expected) && lang.IsNil(expectedThrow) {
 				t.Fatalf("no :expected-output or :expected-throw metadata for %s/-main", nsName)
 			}
@@ -93,6 +92,7 @@ func TestGeneratedGo(t *testing.T) {
 			// Run -main and check the result
 			result := mainVar.Invoke()
 			if !lang.Equals(result, expected) {
+				fmt.Printf("Result of %s/-main: %+v (%T)\n", nsName, result, result)
 				t.Errorf("%s/-main returned %v, expected %v", nsName, result, expected)
 			}
 		})

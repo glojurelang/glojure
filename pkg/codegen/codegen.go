@@ -9,6 +9,7 @@ import (
 
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 	"github.com/glojurelang/glojure/pkg/runtime"
 )
 
@@ -35,7 +36,7 @@ type Generator struct {
 	varScopes      []varScope     // stack of variable scopes
 	recurStack     []recurContext // stack of recur contexts for nested loops
 
-	imports map[string]bool // set of imported packages to avoid duplicates
+	imports map[string]string // set of imported packages with their aliases
 }
 
 // New creates a new code generator
@@ -45,7 +46,7 @@ func New(w io.Writer) *Generator {
 		w:              w,
 		varScopes:      []varScope{{nextNum: 0, names: make(map[string]string)}},
 		recurStack:     []recurContext{},
-		imports:        make(map[string]bool),
+		imports:        make(map[string]string),
 	}
 }
 
@@ -111,6 +112,7 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	g.pushVarScope()
 	defer g.popVarScope()
 
+	fmt.Printf("Generating var: %s\n", name.String())
 	g.writef("// %s\n", name.String())
 	g.writef("{\n")
 	defer g.writef("}\n")
@@ -151,6 +153,9 @@ func (g *Generator) generateValue(value any) string {
 		return g.generateMapValue(v)
 	case *lang.Vector:
 		return g.generateVectorValue(v)
+	case *lang.SubVector:
+		// XXX TODO: handle sub-vectors
+		return fmt.Sprintf("%#v", "subvector not implemented yet")
 	case lang.Keyword:
 		if ns := v.Namespace(); ns != "" {
 			return fmt.Sprintf("lang.NewKeyword(\"%s/%s\")", ns, v.Name())
@@ -341,7 +346,6 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 	switch node.Op {
 	// OpDef
 	// OpSetBang
-	// OpMaybeClass
 	// OpFn
 	// OpMap
 	// OpSet
@@ -387,6 +391,8 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.generateGoBuiltin(node)
 	case ast.OpWithMeta:
 		return g.generateWithMeta(node)
+	case ast.OpMaybeClass:
+		return g.generateMaybeClass(node)
 	default:
 		fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))
@@ -797,10 +803,44 @@ func (g *Generator) generateMap(node *ast.Node) string {
 	return mapId
 }
 
+func (g *Generator) generateMaybeClass(node *ast.Node) string {
+	sym := node.Sub.(*ast.MaybeClassNode).Class.(*lang.Symbol)
+	pkg := sym.FullName()
+
+	// find last dot in the package name
+	dotIndex := strings.LastIndex(pkg, ".")
+	if dotIndex == -1 {
+		panic(fmt.Sprintf("invalid package reference: %s", pkg))
+	}
+	mungedPkgName := pkg[:dotIndex]
+	exportedName := pkg[dotIndex+1:]
+
+	packageName := pkgmap.UnmungePkg(mungedPkgName)
+	alias := g.addImportWithAlias(packageName)
+
+	return alias + "." + exportedName
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 func (g *Generator) addImport(pkg string) {
-	g.imports[pkg] = true
+	parts := strings.Split(pkg, "/")
+	alias := parts[len(parts)-1]
+	g.imports[pkg] = alias
+}
+
+func (g *Generator) addImportWithAlias(pkg string) string {
+	// Check if the package is already imported
+	if alias, ok := g.imports[pkg]; ok {
+		return alias // Return existing alias
+	}
+	// Generate a new alias based on the last part of the package name
+	parts := strings.Split(pkg, "/")
+	// Use the last part of the package name and current import count
+	alias := fmt.Sprintf("%s%d", parts[len(parts)-1], len(g.imports))
+	g.imports[pkg] = alias // Store the alias for this package
+
+	return alias
 }
 
 func (g *Generator) header() string {
@@ -812,8 +852,8 @@ import (
   "github.com/glojurelang/glojure/pkg/lang"
 `
 
-	for pkg := range g.imports {
-		header += fmt.Sprintf("  \"%s\"\n", pkg)
+	for pkg, alias := range g.imports {
+		header += fmt.Sprintf("  %s \"%s\"\n", alias, pkg)
 	}
 
 	header += ")\n"

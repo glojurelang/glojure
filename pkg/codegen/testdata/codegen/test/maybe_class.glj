@@ -1,0 +1,4 @@
+(ns codegen.test.maybe-class)
+
+(defn ^{:expected-output ["1" "2" "3"]} -main []
+  (vec (strings.Split "1,2,3" ",")))
