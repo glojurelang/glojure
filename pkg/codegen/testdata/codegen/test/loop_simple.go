@@ -26,8 +26,7 @@ func init() {
 			v6 := lang.Apply(v5, nil)
 			return v6
 		})
-		// Note: metadata on functions is not yet supported in generated code
-		// Original metadata: lang.NewMap(lang.NewKeyword("rettag"), nil)
+		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
 		v1 := ns.InternWithValue(v0, v2, true)
 		if v0.Meta() != nil {
 			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
@@ -71,8 +70,7 @@ func init() {
 			}
 			return v4
 		})
-		// Note: metadata on functions is not yet supported in generated code
-		// Original metadata: lang.NewMap(lang.NewKeyword("rettag"), nil)
+		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
 		v1 := ns.InternWithValue(v0, v2, true)
 		if v0.Meta() != nil {
 			v1.SetMeta(v0.Meta().(lang.IPersistentMap))

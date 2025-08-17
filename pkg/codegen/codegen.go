@@ -326,11 +326,11 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 	}
 
 	// Handle metadata if present
+	// NB: we've got metadata with :rettag on our function, but clojure's functions have no metadata...
+	// TODO: before merge, investigate this.
 	if meta := fn.Meta(); meta != nil {
 		metaVar := g.generateValue(meta)
-		// IFnFunc doesn't support metadata directly, so wrap it
-		g.writef("// Note: metadata on functions is not yet supported in generated code\n")
-		g.writef("// Original metadata: %s\n", metaVar)
+		g.writeAssign(fnVar, fmt.Sprintf("%s.WithMeta(%s).(lang.FnFunc)", fnVar, metaVar))
 	}
 
 	// Return the function variable
