@@ -1,0 +1,13 @@
+(ns codegen.test.fn-recur)
+
+(defn fib
+  "Calculates the nth Fibonacci number using iteration with recur."
+  [n]
+  (let [fib-helper (fn fib-helper [a b i]
+                     (if (= i n)
+                       a
+                       (recur b (+ a b) (inc i))))]
+    (fib-helper 0 1 0)))
+
+(defn ^{:expected-output 55} -main []
+  (fib 10))

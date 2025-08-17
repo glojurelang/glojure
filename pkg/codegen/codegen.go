@@ -27,6 +27,7 @@ type varScope struct {
 type recurContext struct {
 	loopID   *lang.Symbol // The loop ID to match recur with its loop
 	bindings []string     // Go variable names for loop bindings (in order)
+	useGoto  bool         // Whether to use Go's "goto" for recur
 }
 
 // Generator handles the conversion of AST nodes to Go code
@@ -156,6 +157,8 @@ func (g *Generator) generateValue(value any) string {
 		return g.generateMapValue(v)
 	case lang.IPersistentVector:
 		return g.generateVectorValue(v)
+	case lang.IPersistentSet:
+		return g.generateSetValue(v)
 	case lang.Keyword:
 		if ns := v.Namespace(); ns != "" {
 			return fmt.Sprintf("lang.NewKeyword(\"%s/%s\")", ns, v.Name())
@@ -164,6 +167,8 @@ func (g *Generator) generateValue(value any) string {
 		}
 	case *lang.Symbol:
 		return fmt.Sprintf("lang.NewSymbol(\"%s\")", v.FullName())
+	case lang.Char:
+		return fmt.Sprintf("lang.NewChar(%#v)", rune(v))
 	case string:
 		// just return the string as a Go string literal
 		return fmt.Sprintf("%#v", v)
@@ -227,6 +232,27 @@ func (g *Generator) generateVectorValue(v lang.IPersistentVector) string {
 			buf.WriteString(", ")
 		}
 		element := v.Nth(i)
+		elementVar := g.generateValue(element)
+		buf.WriteString(elementVar)
+	}
+
+	buf.WriteString(")")
+	return buf.String()
+}
+
+// generateSetValue generates Go code for a Clojure set
+func (g *Generator) generateSetValue(s lang.IPersistentSet) string {
+	var buf bytes.Buffer
+	buf.WriteString("lang.CreatePersistentTreeSet(")
+
+	idx := 0
+
+	// Iterate through the set elements
+	for seq := s.Seq(); seq != nil; seq = seq.Next() {
+		if idx > 0 {
+			buf.WriteString(", ")
+		}
+		element := seq.First()
 		elementVar := g.generateValue(element)
 		buf.WriteString(elementVar)
 	}
@@ -317,7 +343,7 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 	g.pushVarScope()
 	defer g.popVarScope()
 
-	// TODO: Handle recur with a label
+	paramVars := make([]string, methodNode.FixedArity)
 
 	// Bind parameters
 	for i, param := range methodNode.Params {
@@ -327,10 +353,20 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 		if i < methodNode.FixedArity {
 			// Regular parameter
 			g.writef("%s := %s[%d]\n", paramVar, argsVar, i)
+			paramVars[i] = paramVar
 		} else {
 			// Variadic parameter - collect rest args
 			g.writef("%s := lang.NewList(%s[%d:]...)\n", paramVar, argsVar, methodNode.FixedArity)
+			paramVars = append(paramVars, paramVar)
 		}
+	}
+
+	// Add a recur label
+	if methodNode.LoopID != nil && nodeRecurs(methodNode.Body, methodNode.LoopID.Name()) {
+		g.writef("recur_%s:\n", methodNode.LoopID.Name())
+
+		g.pushRecurContext(methodNode.LoopID, paramVars, true)
+		defer g.popRecurContext()
 	}
 
 	// Generate the body
@@ -346,12 +382,9 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 	switch node.Op {
 	// OpDef
 	// OpSetBang
-	// OpFn
 	// OpMap
-	// OpSet
 	// OpLetFn
 	// OpGo
-	// OpHostCall
 	// OpHostInterop
 	// OpMaybeHostForm
 	// OpCase
@@ -368,6 +401,8 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.generateVector(node)
 	case ast.OpMap:
 		return g.generateMap(node)
+	case ast.OpSet:
+		return g.generateSet(node)
 	case ast.OpLocal:
 		localNode := node.Sub.(*ast.LocalNode)
 		// Look up the variable in our scope
@@ -394,6 +429,10 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.generateMaybeClass(node)
 	case ast.OpQuote:
 		return g.generateValue(node.Sub.(*ast.QuoteNode).Expr.Sub.(*ast.ConstNode).Value)
+	case ast.OpFn:
+		return g.generateFn(runtime.NewFn(node, nil))
+	case ast.OpHostCall:
+		return g.generateHostCall(node)
 	default:
 		fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))
@@ -495,56 +534,6 @@ func (g *Generator) generateIf(node *ast.Node) string {
 	return resultVar
 }
 
-// func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error) {
-// 	letNode := n.Sub.(*ast.LetNode)
-
-// 	newEnv := env.PushScope().(*environment)
-
-// 	var bindNameVals []interface{}
-
-// 	bindings := letNode.Bindings
-// 	for _, binding := range bindings {
-// 		bindingNode := binding.Sub.(*ast.BindingNode)
-
-// 		name := bindingNode.Name
-// 		init := bindingNode.Init
-// 		initVal, err := newEnv.EvalAST(init)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		// TODO: this should not mutate in-place!
-// 		newEnv.BindLocal(name, initVal)
-
-// 		bindNameVals = append(bindNameVals, name, initVal)
-// 	}
-
-// Recur:
-// 	for i := 0; i < len(bindNameVals); i += 2 {
-// 		name := bindNameVals[i].(*lang.Symbol)
-// 		val := bindNameVals[i+1]
-// 		newEnv.BindLocal(name, val)
-// 	}
-
-// 	rt := lang.NewRecurTarget()
-// 	recurEnv := newEnv.WithRecurTarget(rt).(*environment)
-// 	recurErr := &lang.RecurError{Target: rt}
-
-// 	res, err := recurEnv.EvalAST(letNode.Body)
-// 	if isLoop && errors.As(err, &recurErr) {
-// 		newVals := recurErr.Args
-// 		if len(newVals) != len(bindNameVals)/2 {
-// 			return nil, env.errorf(n, "invalid recur, expected %d arguments, got %d", len(bindNameVals)/2, len(newVals))
-// 		}
-// 		for i := 0; i < len(bindNameVals); i += 2 {
-// 			newValsIndex := i / 2
-// 			val := newVals[newValsIndex]
-// 			bindNameVals[i+1] = val
-// 		}
-// 		goto Recur
-// 	}
-// 	return res, err
-// }
-
 // generateLet generates code for a Let node
 func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	letNode := node.Sub.(*ast.LetNode)
@@ -582,14 +571,8 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	resultId := g.allocateTempVar()
 	if isLoop {
 		// Push recur context for this loop
-		g.recurStack = append(g.recurStack, recurContext{
-			loopID:   letNode.LoopID,
-			bindings: bindingVars,
-		})
-		defer func() {
-			// Pop recur context when done
-			g.recurStack = g.recurStack[:len(g.recurStack)-1]
-		}()
+		g.pushRecurContext(letNode.LoopID, bindingVars, false)
+		defer g.popRecurContext()
 
 		g.writef("var %s any\n", resultId)
 		g.writef("for {\n")
@@ -643,8 +626,13 @@ func (g *Generator) generateRecur(node *ast.Node) string {
 		g.writef("%s = %s\n", bindingVar, tempVars[i])
 	}
 
-	// Continue the loop
-	g.writef("continue\n")
+	if ctx.useGoto {
+		// Use a goto statement to jump back to the loop label
+		g.writef("goto recur_%s\n", ctx.loopID.Name())
+	} else {
+		// Continue the loop
+		g.writef("continue\n")
+	}
 
 	// Return empty string since recur doesn't produce a value
 	// (control flow never reaches past the continue)
@@ -804,6 +792,19 @@ func (g *Generator) generateMap(node *ast.Node) string {
 	return mapId
 }
 
+func (g *Generator) generateSet(node *ast.Node) string {
+	setNode := node.Sub.(*ast.SetNode)
+
+	itemIds := make([]string, len(setNode.Items))
+	for i, item := range setNode.Items {
+		itemId := g.generateASTNode(item)
+		itemIds[i] = itemId
+	}
+	setId := g.allocateTempVar()
+	g.writef("%s := lang.CreatePersistentTreeSet(%s)\n", setId, strings.Join(itemIds, ", "))
+	return setId
+}
+
 func (g *Generator) generateMaybeClass(node *ast.Node) string {
 	sym := node.Sub.(*ast.MaybeClassNode).Class.(*lang.Symbol)
 	pkg := sym.FullName()
@@ -820,6 +821,35 @@ func (g *Generator) generateMaybeClass(node *ast.Node) string {
 	alias := g.addImportWithAlias(packageName)
 
 	return alias + "." + exportedName
+}
+
+func (g *Generator) generateHostCall(node *ast.Node) string {
+	hostCallNode := node.Sub.(*ast.HostCallNode)
+
+	tgt := hostCallNode.Target
+	method := hostCallNode.Method
+	args := hostCallNode.Args
+
+	tgtId := g.generateASTNode(tgt)
+
+	argIds := make([]string, len(args))
+	for i, arg := range args {
+		argIds[i] = g.generateASTNode(arg)
+	}
+
+	g.addImport("reflect")
+
+	methodName := method.Name()
+	methodId := g.allocateTempVar()
+	g.writef("%s, _ := lang.FieldOrMethod(%s, %q)\n", methodId, tgtId, methodName)
+	g.writef("if reflect.TypeOf(%s).Kind() != reflect.Func {\n", methodId)
+	g.writef("  panic(lang.NewIllegalArgumentError(fmt.Sprintf(\"%s is not a function\")))\n", methodName)
+	g.writef("}\n")
+
+	resultId := g.allocateTempVar()
+	g.writef("%s := lang.Apply(%s, []any{%s})\n", resultId, methodId, strings.Join(argIds, ", "))
+
+	return resultId
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -937,4 +967,26 @@ func (g *Generator) allocateTempVar() string {
 
 func mungeID(name string) string {
 	return strings.ReplaceAll(name, "-", "__")
+}
+
+func (g *Generator) pushRecurContext(loopID *lang.Symbol, bindings []string, useGoto bool) {
+	g.recurStack = append(g.recurStack, recurContext{
+		loopID:   loopID,
+		bindings: bindings,
+		useGoto:  useGoto,
+	})
+}
+
+func (g *Generator) popRecurContext() {
+	if len(g.recurStack) == 0 {
+		panic("no recur context to pop")
+	}
+	g.recurStack = g.recurStack[:len(g.recurStack)-1]
+}
+
+func (g *Generator) currentRecurContext() *recurContext {
+	if len(g.recurStack) == 0 {
+		return nil // No recur context available
+	}
+	return &g.recurStack[len(g.recurStack)-1]
 }
