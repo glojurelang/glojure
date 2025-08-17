@@ -2,7 +2,6 @@ package codegen_test
 
 import (
 	"bytes"
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -18,8 +17,6 @@ import (
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/runtime"
 )
-
-var updateGolden = flag.Bool("update", false, "update golden files")
 
 func TestCodegen(t *testing.T) {
 	var testFiles []string
@@ -59,45 +56,64 @@ func TestCodegen(t *testing.T) {
 
 			ns := lang.FindNamespace(lang.NewSymbol(nsName))
 
-			// Generate code for the namespace
-			var buf bytes.Buffer
-			gen := codegen.New(&buf)
-			if err := gen.Generate(ns); err != nil {
-				t.Fatalf("failed to generate code: %v", err)
-			}
-
-			generated := buf.Bytes()
-
-			// Compare with golden file
-			goldenFile := strings.TrimSuffix(testFile, ".glj") + ".go"
-			if *updateGolden {
-				if err := ioutil.WriteFile(goldenFile, generated, 0644); err != nil {
-					t.Fatal(err)
-				}
-			}
-
-			expected, err := ioutil.ReadFile(goldenFile)
-			if err != nil {
-				t.Fatalf("failed to read golden file: %v", err)
-			}
-
-			if !bytes.Equal(generated, expected) {
-				t.Errorf("generated code does not match golden file.\nGenerated:\n%s\nExpected:\n%s",
-					generated, expected)
-			}
-
-			// run go vet on the output file. print any errors from stderr
-			cmd := exec.Command("go", "vet", "-all", goldenFile)
-			var stderr bytes.Buffer
-			cmd.Stderr = &stderr
-			if err := cmd.Run(); err != nil {
-				t.Errorf("go vet failed for %s: %v\nStderr:\n%s", goldenFile, err, stderr.String())
-			}
-
-			// Check if namespace has -main function with expected output
-			testMainFunction(t, ns)
+			generateAndTestNamespace(t, ns, strings.TrimSuffix(testFile, ".glj")+".go")
 		})
 	}
+
+	t.Run("glojure.core", func(t *testing.T) {
+		// Test the core namespace
+		ns := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+		if ns == nil {
+			t.Fatal("glojure.core namespace not found")
+		}
+
+		goldenFile := "testdata/codegen/test/core.go"
+		generateAndTestNamespace(t, ns, goldenFile)
+	})
+}
+
+func generateAndTestNamespace(t *testing.T, ns *lang.Namespace, goldenFile string) {
+	t.Helper()
+
+	// Generate code for the namespace
+	var buf bytes.Buffer
+	gen := codegen.New(&buf)
+	if err := gen.Generate(ns); err != nil {
+		t.Fatalf("failed to generate code: %v", err)
+	}
+
+	generated := buf.Bytes()
+
+	updateGolden := os.Getenv("UPDATE_SNAPSHOT") == "1"
+	if updateGolden {
+		if err := ioutil.WriteFile(goldenFile, generated, 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	// Compare with golden file
+	expected, err := ioutil.ReadFile(goldenFile)
+	if err != nil {
+		t.Fatalf("failed to read golden file: %v", err)
+	}
+
+	if !bytes.Equal(generated, expected) {
+		t.Errorf("generated code does not match golden file.\nGenerated:\n%s\nExpected:\n%s",
+			generated, expected)
+	}
+
+	// run go vet on the output file. print any errors from stderr
+	cmd := exec.Command("go", "vet", "-all", goldenFile)
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+	if err := cmd.Run(); err != nil {
+		t.Errorf("go vet failed for %s: %v\nStderr:\n%s", goldenFile, err, stderr.String())
+	}
+
+	// Check if namespace has -main function with expected output
+	// TODO: consider dropping this; we really just want to ensure
+	// the interpreter, here, behaves the same as the generated code
+	testMainFunction(t, ns)
 }
 
 // getNamespaceFromFile attempts to extract the namespace declaration from a file
@@ -149,7 +165,7 @@ func testMainFunction(t *testing.T, ns *lang.Namespace) {
 
 	expectedOutput := meta.ValAt(lang.NewKeyword("expected-output"))
 	expectedError := meta.ValAt(lang.NewKeyword("expected-error"))
-	
+
 	if expectedOutput == nil && expectedError == nil {
 		return
 	}
@@ -166,7 +182,7 @@ func testMainFunction(t *testing.T, ns *lang.Namespace) {
 				t.Errorf("-main should have panicked with %v, but didn't", expectedError)
 			}
 		}()
-		
+
 		// Run -main - should panic
 		mainVar.Invoke()
 		return

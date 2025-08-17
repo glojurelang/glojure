@@ -148,15 +148,17 @@ func (g *Generator) generateValue(value any) string {
 	case *runtime.Fn:
 		return g.generateFn(v)
 	case *lang.Map:
-		return g.generateMap(v)
+		return g.generateMapValue(v)
 	case *lang.Vector:
-		return g.generateVector(v)
+		return g.generateVectorValue(v)
 	case lang.Keyword:
 		if ns := v.Namespace(); ns != "" {
 			return fmt.Sprintf("lang.NewKeyword(\"%s/%s\")", ns, v.Name())
 		} else {
 			return fmt.Sprintf("lang.NewKeyword(\"%s\")", v.Name())
 		}
+	case *lang.Symbol:
+		return fmt.Sprintf("lang.NewSymbol(\"%s\")", v.FullName())
 	case string:
 		// just return the string as a Go string literal
 		return fmt.Sprintf("%#v", v)
@@ -185,8 +187,8 @@ func (g *Generator) generateValue(value any) string {
 	}
 }
 
-// generateMap generates Go code for a Clojure map
-func (g *Generator) generateMap(m *lang.Map) string {
+// generateMapValue generates Go code for a Clojure map
+func (g *Generator) generateMapValue(m *lang.Map) string {
 	var buf bytes.Buffer
 	buf.WriteString("lang.NewMap(")
 
@@ -209,8 +211,8 @@ func (g *Generator) generateMap(m *lang.Map) string {
 	return buf.String()
 }
 
-// generateVector generates Go code for a Clojure vector
-func (g *Generator) generateVector(v *lang.Vector) string {
+// generateVectorValue generates Go code for a Clojure vector
+func (g *Generator) generateVectorValue(v *lang.Vector) string {
 	var buf bytes.Buffer
 	buf.WriteString("lang.NewVector(")
 
@@ -340,10 +342,8 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 	// OpDef
 	// OpSetBang
 	// OpMaybeClass
-	// OpWithMeta
 	// OpFn
 	// OpMap
-	// OpVector
 	// OpSet
 	// OpLetFn
 	// OpQuote
@@ -361,6 +361,10 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 	case ast.OpConst:
 		constNode := node.Sub.(*ast.ConstNode)
 		return g.generateValue(constNode.Value)
+	case ast.OpVector:
+		return g.generateVector(node)
+	case ast.OpMap:
+		return g.generateMap(node)
 	case ast.OpLocal:
 		localNode := node.Sub.(*ast.LocalNode)
 		// Look up the variable in our scope
@@ -381,6 +385,8 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.generateRecur(node)
 	case ast.OpGoBuiltin:
 		return g.generateGoBuiltin(node)
+	case ast.OpWithMeta:
+		return g.generateWithMeta(node)
 	default:
 		fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))
@@ -737,6 +743,58 @@ func (g *Generator) generateGoBuiltin(node *ast.Node) string {
 	}
 
 	return "lang.Builtins[\"" + sym.Name() + "\"]"
+}
+
+// generateWithMeta generates code for a WithMeta node
+func (g *Generator) generateWithMeta(node *ast.Node) string {
+	wmNode := node.Sub.(*ast.WithMetaNode)
+
+	expr := wmNode.Expr
+	meta := wmNode.Meta
+
+	exprVal := g.generateASTNode(expr)
+	metaVal := g.generateASTNode(meta)
+
+	resultId := g.allocateTempVar()
+	g.writef("%s, err := lang.WithMeta(%s, %s.(lang.IPersistentMap))\n", resultId, exprVal, metaVal)
+	g.writef("if err != nil {\n")
+	g.writef("  panic(err)\n")
+	g.writef("}\n")
+
+	return resultId
+}
+
+func (g *Generator) generateVector(node *ast.Node) string {
+	vectorNode := node.Sub.(*ast.VectorNode)
+
+	itemIds := make([]string, len(vectorNode.Items))
+	for i, item := range vectorNode.Items {
+		itemId := g.generateASTNode(item)
+		itemIds[i] = itemId
+	}
+	vecId := g.allocateTempVar()
+	g.writef("%s := lang.NewVector(%s)\n", vecId, strings.Join(itemIds, ", "))
+
+	return vecId
+}
+
+func (g *Generator) generateMap(node *ast.Node) string {
+	mapNode := node.Sub.(*ast.MapNode)
+
+	keyValIds := make([]string, 2*len(mapNode.Keys))
+	for i, key := range mapNode.Keys {
+		keyId := g.generateASTNode(key)
+
+		valNode := mapNode.Vals[i]
+		valId := g.generateASTNode(valNode)
+
+		keyValIds[2*i] = keyId   // key
+		keyValIds[2*i+1] = valId // value
+	}
+	mapId := g.allocateTempVar()
+	g.writef("%s := lang.NewMap(%s)\n", mapId, strings.Join(keyValIds, ", "))
+
+	return mapId
 }
 
 ////////////////////////////////////////////////////////////////////////////////
