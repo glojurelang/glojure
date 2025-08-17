@@ -40,9 +40,42 @@ func init() {
 			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
 		}
 	}
+	// catch-binding-scope-2
+	{
+		v0 := lang.NewSymbol("catch-binding-scope-2").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(16), lang.NewKeyword("end-column"), int(27), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
+		v2 := lang.NewFnFunc(func(args ...any) any {
+			if len(args) != 0 {
+				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+			}
+			var v3 any = "outer"
+			_ = v3
+			var v5 any
+			func() {
+				defer func() {
+					if r := recover(); r != nil {
+						if lang.CatchMatches(r, lang.Builtins["any"]) {
+							v6 := r
+							_ = v6
+							v5 = v6
+						} else {
+							panic(r)
+						}
+					}
+				}()
+				panic("test")
+			}()
+			_ = v5
+			return v3
+		})
+		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		v1 := ns.InternWithValue(v0, v2, true)
+		if v0.Meta() != nil {
+			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		}
+	}
 	// -main
 	{
-		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), "advanced tests passed", lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(22), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(22), lang.NewKeyword("end-column"), int(55), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
+		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), "advanced tests passed", lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(30), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(30), lang.NewKeyword("end-column"), int(55), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
 		v2 := lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -97,19 +130,40 @@ func init() {
 			}
 			v24 := v23.Get()
 			v25 := lang.FindNamespace(lang.NewSymbol("codegen.test.try-advanced"))
-			v26 := v25.FindInternedVar(lang.NewSymbol("finally-with-return"))
+			v26 := v25.FindInternedVar(lang.NewSymbol("catch-binding-scope-2"))
 			if v26.IsMacro() {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v26)))
 			}
 			v27 := v26.Get()
 			v28 := lang.Apply(v27, nil)
-			v29 := lang.Apply(v24, []any{v28, int64(42)})
+			v29 := lang.Apply(v24, []any{v28, "outer"})
 			if lang.IsTruthy(v29) {
 				v21 = nil
 			} else {
-				panic("finally-with-return failed")
+				panic("catch-binding-scope-2 failed")
 			}
 			_ = v21
+			var v30 any
+			v31 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+			v32 := v31.FindInternedVar(lang.NewSymbol("="))
+			if v32.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v32)))
+			}
+			v33 := v32.Get()
+			v34 := lang.FindNamespace(lang.NewSymbol("codegen.test.try-advanced"))
+			v35 := v34.FindInternedVar(lang.NewSymbol("finally-with-return"))
+			if v35.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v35)))
+			}
+			v36 := v35.Get()
+			v37 := lang.Apply(v36, nil)
+			v38 := lang.Apply(v33, []any{v37, int64(42)})
+			if lang.IsTruthy(v38) {
+				v30 = nil
+			} else {
+				panic("finally-with-return failed")
+			}
+			_ = v30
 			return "advanced tests passed"
 		})
 		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -120,7 +174,7 @@ func init() {
 	}
 	// finally-with-return
 	{
-		v0 := lang.NewSymbol("finally-with-return").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(16), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
+		v0 := lang.NewSymbol("finally-with-return").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(24), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(24), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
 		v2 := lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))

@@ -266,7 +266,14 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 	fnNode := astNode.Sub.(*ast.FnNode)
 
 	// Allocate a variable for the function
-	fnVar := g.allocateTempVar()
+	var fnVar string
+	if fnNode.Local == nil {
+		fnVar = g.allocateTempVar()
+	} else {
+		// If there's a local binding, use that name
+		localNode := fnNode.Local.Sub.(*ast.BindingNode)
+		fnVar = g.allocateLocal(localNode.Name.Name())
+	}
 
 	// Push a new scope for the function definition
 	g.pushVarScope()
@@ -385,7 +392,6 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 	// OpMap
 	// OpLetFn
 	// OpGo
-	// OpHostInterop
 	// OpMaybeHostForm
 	// OpCase
 	// OpTheVar
@@ -433,6 +439,8 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.generateFn(runtime.NewFn(node, nil))
 	case ast.OpHostCall:
 		return g.generateHostCall(node)
+	case ast.OpHostInterop:
+		return g.generateHostInterop(node)
 	default:
 		fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))
@@ -615,7 +623,7 @@ func (g *Generator) generateRecur(node *ast.Node) string {
 	// This prevents issues with bindings that reference each other
 	tempVars := make([]string, len(recurNode.Exprs))
 	for i, expr := range recurNode.Exprs {
-		tempVar := g.allocateLocal(fmt.Sprintf("recurTemp%d", i))
+		tempVar := g.allocateTempVar()
 		tempVars[i] = tempVar
 		exprCode := g.generateASTNode(expr)
 		g.writef("var %s any = %s\n", tempVar, exprCode)
@@ -848,6 +856,32 @@ func (g *Generator) generateHostCall(node *ast.Node) string {
 
 	resultId := g.allocateTempVar()
 	g.writef("%s := lang.Apply(%s, []any{%s})\n", resultId, methodId, strings.Join(argIds, ", "))
+
+	return resultId
+}
+
+func (g *Generator) generateHostInterop(node *ast.Node) string {
+	hostInteropNode := node.Sub.(*ast.HostInteropNode)
+
+	tgtId := g.generateASTNode(hostInteropNode.Target)
+
+	mOrF := hostInteropNode.MOrF.Name()
+	mOrFId := g.allocateTempVar()
+	g.writef("%s, ok := lang.FieldOrMethod(%s, %q)\n", mOrFId, tgtId, mOrF)
+	g.writef("if !ok {\n")
+	g.writef("  panic(lang.NewIllegalArgumentError(fmt.Sprintf(\"no such field or method on %%T: %%s\", %s, %q)))\n", tgtId, mOrF)
+	g.writef("}\n")
+
+	g.addImport("reflect")
+
+	resultId := g.allocateTempVar()
+	g.writef("var %s any\n", resultId)
+	g.writef("switch reflect.TypeOf(%s).Kind() {\n", mOrFId)
+	g.writef("case reflect.Func:\n")
+	g.writef("  %s = lang.Apply(%s, nil)\n", resultId, mOrFId)
+	g.writef("default:\n")
+	g.writef("  %s = %s\n", resultId, mOrFId)
+	g.writef("}\n")
 
 	return resultId
 }

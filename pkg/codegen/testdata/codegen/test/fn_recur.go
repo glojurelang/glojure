@@ -90,7 +90,7 @@ func init() {
 			}
 			var v4 any = v7
 			_ = v4
-			v9 := lang.Apply(v4, []any{int64(0), int64(1), int64(0)})
+			v9 := lang.Apply(v5, []any{int64(0), int64(1), int64(0)})
 			return v9
 		})
 		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
