@@ -213,3 +213,12 @@ func (env *environment) errorf(n interface{}, format string, args ...interface{}
 
 	return fmt.Errorf("%s: "+format, append([]interface{}{location}, args...)...)
 }
+
+// LookupLocal looks up a local binding in the environment.
+// This is used by the codegen system to access captured values.
+func (env *environment) LookupLocal(name string) (any, bool) {
+	if env == nil || env.scope == nil {
+		return nil, false
+	}
+	return env.scope.lookup(lang.NewSymbol(name))
+}

@@ -7,6 +7,7 @@ import (
 	"go/format"
 	"io"
 	"reflect"
+	"sort"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
@@ -18,6 +19,7 @@ import (
 // TODO
 // - handle namespace requires/uses/etc.
 // - handle let bindings that are shared across multiple vars
+// - test repeated let bindings of the same name, where previous bindings are shadowed
 
 // varScope represents a variable allocation scope
 type varScope struct {
@@ -32,6 +34,19 @@ type recurContext struct {
 	useGoto  bool         // Whether to use Go's "goto" for recur
 }
 
+// liftedKey is a composite key for deduplicating lifted values
+type liftedKey struct {
+	isPointer bool
+	pointer   uintptr // For reference types
+	value     any     // For primitive types (used in equality check)
+}
+
+// liftedValue represents a value that has been lifted to package scope
+type liftedValue struct {
+	value   any
+	varName string
+}
+
 // Generator handles the conversion of AST nodes to Go code
 type Generator struct {
 	originalWriter io.Writer
@@ -40,6 +55,11 @@ type Generator struct {
 	recurStack     []recurContext // stack of recur contexts for nested loops
 
 	imports map[string]string // set of imported packages with their aliases
+
+	// Fields for handling closures
+	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
+	liftedCounter int                        // Counter for closed0, closed1...
+	currentFnEnv  lang.Environment           // Current function's captured env
 }
 
 // New creates a new code generator
@@ -50,6 +70,8 @@ func New(w io.Writer) *Generator {
 		varScopes:      []varScope{{nextNum: 0, names: make(map[string]string)}},
 		recurStack:     []recurContext{},
 		imports:        make(map[string]string),
+		liftedValues:   make(map[liftedKey]*liftedValue),
+		liftedCounter:  0,
 	}
 }
 
@@ -92,15 +114,40 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 
 	g.writef("}\n")
 
-	// Write package header
-	sourceBytes := []byte(g.header())
-	sourceBytes = append(sourceBytes, buf.Bytes()...)
+	// Prepare the final source
+	sourceBytes := []byte(g.header()) // Package declaration and imports
+
+	// Generate lifted values block if any
+	if len(g.liftedValues) > 0 {
+		var liftedBuf bytes.Buffer
+		liftedBuf.WriteString("\n// Closed-over values\nvar (\n")
+
+		// Sort by variable name for deterministic output
+		var sortedLifted []*liftedValue
+		for _, lifted := range g.liftedValues {
+			sortedLifted = append(sortedLifted, lifted)
+		}
+		sort.Slice(sortedLifted, func(i, j int) bool {
+			return sortedLifted[i].varName < sortedLifted[j].varName
+		})
+
+		// Generate each lifted value
+		for _, lifted := range sortedLifted {
+			valueCode := g.generateValue(lifted.value)
+			liftedBuf.WriteString(fmt.Sprintf("    %s = %s\n",
+				lifted.varName, valueCode))
+		}
+		liftedBuf.WriteString(")\n\n")
+		sourceBytes = append(sourceBytes, liftedBuf.Bytes()...)
+	}
+
+	sourceBytes = append(sourceBytes, buf.Bytes()...) // The init function
 
 	// Format the generated code
 	formatted, err := format.Source(sourceBytes)
 	if err != nil {
 		// If formatting fails, write the unformatted code with the error
-		return fmt.Errorf("formatting failed: %w\n\nGenerated code:\n%s", err, buf.String())
+		return fmt.Errorf("formatting failed: %w\n\nGenerated code:\n%s", err, string(sourceBytes))
 	}
 
 	// Write formatted code to the original writer
@@ -155,6 +202,8 @@ func (g *Generator) generateValue(value any) string {
 	switch v := value.(type) {
 	case reflect.Type:
 		return g.generateTypeValue(v)
+	case *lang.Atom:
+		return g.generateAtomValue(v)
 	case *lang.Namespace:
 		// Generate code to find or create the namespace
 		return fmt.Sprintf("lang.FindOrCreateNamespace(lang.NewSymbol(%#v))", v.Name().String())
@@ -348,6 +397,27 @@ func (g *Generator) getTypeString(t reflect.Type) string {
 	return alias + "." + t.Name()
 }
 
+func (g *Generator) generateAtomValue(atom *lang.Atom) string {
+	// Allocate a variable to hold the atom
+	atomVar := g.allocateTempVar()
+
+	// Generate the initial value
+	initialValue := g.generateValue(atom.Deref())
+
+	var metaVar string
+	if meta := atom.Meta(); meta != nil {
+		metaVar = g.generateValue(meta)
+	}
+
+	if metaVar == "" {
+		g.writef("%s := lang.NewAtom(%s)\n", atomVar, initialValue)
+	} else {
+		g.writef("%s := lang.NewAtomWithMeta(%s, %s)\n", atomVar, initialValue, metaVar)
+	}
+
+	return atomVar
+}
+
 // generateMapValue generates Go code for a Clojure map
 func (g *Generator) generateMapValue(m lang.IPersistentMap) string {
 	var buf bytes.Buffer
@@ -438,6 +508,11 @@ func (g *Generator) generateSetValue(s lang.IPersistentSet) string {
 }
 
 func (g *Generator) generateFn(fn *runtime.Fn) string {
+	// Save and restore current environment
+	prevEnv := g.currentFnEnv
+	g.currentFnEnv = fn.GetEnvironment() // Set the captured environment for this function
+	defer func() { g.currentFnEnv = prevEnv }()
+
 	astNode := fn.ASTNode()
 	fnNode := astNode.Sub.(*ast.FnNode)
 
@@ -1195,10 +1270,75 @@ func (g *Generator) allocateLocal(name string) string {
 	return varName
 }
 
+// makeLiftedKey creates a composite key for deduplicating lifted values
+func (g *Generator) makeLiftedKey(value any) liftedKey {
+	// Handle primitive types that should be compared by value
+	switch v := value.(type) {
+	case int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64,
+		float32, float64, complex64, complex128,
+		bool, string, lang.Keyword, lang.Char:
+		// Primitive types - use value-based comparison
+		return liftedKey{
+			isPointer: false,
+			value:     value,
+		}
+	case *lang.Symbol:
+		// Symbols are immutable singletons, use value comparison
+		return liftedKey{
+			isPointer: false,
+			value:     v.FullName(), // Use string representation for key
+		}
+	default:
+		// Reference types - use pointer-based comparison
+		rv := reflect.ValueOf(value)
+		if rv.Kind() == reflect.Ptr || rv.Kind() == reflect.Interface {
+			if rv.IsNil() {
+				return liftedKey{isPointer: false, value: nil}
+			}
+			if rv.CanAddr() || rv.Kind() == reflect.Ptr {
+				return liftedKey{
+					isPointer: true,
+					pointer:   rv.Pointer(),
+				}
+			}
+		}
+		// Fallback: use value comparison
+		return liftedKey{
+			isPointer: false,
+			value:     value,
+		}
+	}
+}
+
 func (g *Generator) getLocal(name string) string {
+	// First check normal scopes
 	for i := len(g.varScopes) - 1; i >= 0; i-- {
 		currentScope := &g.varScopes[i]
 		if varName, ok := currentScope.names[name]; ok {
+			return varName
+		}
+	}
+
+	// Not in scope - check if we have a captured environment
+	if g.currentFnEnv != nil {
+		// Look up in the environment using the new public method
+		if value, found := g.currentFnEnv.LookupLocal(name); found {
+			// Create a key for deduplication
+			key := g.makeLiftedKey(value)
+
+			// Check if already lifted
+			if lifted, ok := g.liftedValues[key]; ok {
+				return lifted.varName
+			}
+
+			// Create new lifted value
+			varName := fmt.Sprintf("closed%d", g.liftedCounter)
+			g.liftedCounter++
+			g.liftedValues[key] = &liftedValue{
+				value:   value,
+				varName: varName,
+			}
 			return varName
 		}
 	}

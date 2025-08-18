@@ -1,0 +1,5 @@
+
+- locals scope should start EMPTY when generating values!
+- handle namespace requires/uses/etc.
+- handle let bindings that are shared across multiple vars
+- test repeated let bindings of the same name, where previous bindings are shadowed

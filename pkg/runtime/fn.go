@@ -37,6 +37,12 @@ func (fn *Fn) ASTNode() *ast.Node {
 	return fn.astNode
 }
 
+// GetEnvironment returns the captured environment for this function.
+// This is used by the codegen system to access captured values.
+func (fn *Fn) GetEnvironment() lang.Environment {
+	return fn.env
+}
+
 func (fn *Fn) Invoke(args ...interface{}) interface{} {
 	fnNode := fn.astNode.Sub.(*ast.FnNode)
 
