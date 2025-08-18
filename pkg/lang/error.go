@@ -25,10 +25,6 @@ type (
 		msg string
 	}
 
-	NumberFormatError struct {
-		msg string
-	}
-
 	// Stacker is an interface for retrieving stack traces.
 	Stacker interface {
 		Stack() []StackFrame
@@ -99,19 +95,6 @@ func (e *ArithmeticError) Error() string {
 
 func (e *ArithmeticError) Is(other error) bool {
 	_, ok := other.(*ArithmeticError)
-	return ok
-}
-
-func NewNumberFormatError(msg string) error {
-	return &NumberFormatError{msg: msg}
-}
-
-func (e *NumberFormatError) Error() string {
-	return e.msg
-}
-
-func (e *NumberFormatError) Is(other error) bool {
-	_, ok := other.(*NumberFormatError)
 	return ok
 }
 

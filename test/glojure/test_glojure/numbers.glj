@@ -940,4 +940,85 @@ Math/pow overflows to Infinity."
           (/ nan onan)
           (/ onan nan) ))))
 
+(deftest test-parse-long
+  (testing "parse-long with valid inputs"
+    (are [s expected] (= expected (parse-long s))
+      "0" 0
+      "1" 1
+      "-1" -1
+      "42" 42
+      "-42" -42
+      "9223372036854775807" 9223372036854775807  ; Long/MAX_VALUE
+      "-9223372036854775808" -9223372036854775808 ; Long/MIN_VALUE
+      "+123" 123
+      "00123" 123))
+
+  (testing "parse-long with invalid inputs returns nil"
+    (are [s] (nil? (parse-long s))
+      ""
+      "abc"
+      "12.34"
+      "1 2 3"
+      " 123"
+      "123 "
+      "12abc"
+      "9223372036854775808"  ; overflow
+      "-9223372036854775809" ; underflow
+      "++1"
+      "--1"
+      "1.0"
+      "NaN"
+      "Infinity"))
+
+  (testing "parse-long throws on non-string input"
+    (is (thrown? *IllegalArgumentError (parse-long 123)))
+    (is (thrown? *IllegalArgumentError (parse-long nil)))
+    (is (thrown? *IllegalArgumentError (parse-long :keyword)))
+    (is (thrown? *IllegalArgumentError (parse-long 'symbol)))))
+
+(deftest test-parse-double
+  (testing "parse-double with valid inputs"
+    (are [s expected] (= expected (parse-double s))
+      "0" 0.0
+      "0.0" 0.0
+      "1" 1.0
+      "1.0" 1.0
+      "-1" -1.0
+      "-1.0" -1.0
+      "42.5" 42.5
+      "-42.5" -42.5
+      "3.14159" 3.14159
+      "1.23e10" 1.23e10
+      "1.23E10" 1.23E10
+      "-1.23e-10" -1.23e-10
+      "+123.456" 123.456
+      ".5" 0.5
+      "-.5" -0.5))
+
+  (testing "parse-double special values"
+    (let [inf-result (parse-double "Inf")
+          neg-inf-result (parse-double "-Inf")
+          nan-result (parse-double "NaN")]
+      (is (= ##Inf inf-result))
+      (is (= ##-Inf neg-inf-result))
+      (is (NaN? nan-result))))
+
+  (testing "parse-double with invalid inputs returns nil"
+    (are [s] (nil? (parse-double s))
+      ""
+      "abc"
+      "1 2 3"
+      " 123"
+      "123 "
+      "12abc"
+      "++1"
+      "--1"
+      "1.2.3"))
+
+  (testing "parse-double throws on non-string input"
+    (is (thrown? *IllegalArgumentError (parse-double 123)))
+    (is (thrown? *IllegalArgumentError (parse-double nil)))
+    (is (thrown? *IllegalArgumentError (parse-double :keyword)))
+    (is (thrown? *IllegalArgumentError (parse-double 'symbol)))))
+
 (run-tests)

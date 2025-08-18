@@ -393,7 +393,6 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 	// OpLetFn
 	// OpGo
 	// OpCase
-	// OpTheVar
 	// OpNew
 	case ast.OpTry:
 		return g.generateTry(node)
@@ -442,6 +441,8 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.generateHostInterop(node)
 	case ast.OpMaybeHostForm:
 		return g.generateMaybeHostForm(node)
+	case ast.OpTheVar:
+		return g.generateTheVar(node)
 	default:
 		fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))
@@ -892,10 +893,18 @@ func (g *Generator) generateMaybeHostForm(node *ast.Node) string {
 	maybeHostNode := node.Sub.(*ast.MaybeHostFormNode)
 	field := maybeHostNode.Field
 
-	switch maybeHostNode.Class {
-	default:
-		panic(fmt.Sprintf("unsupported host form class: %s.%s", maybeHostNode.Class, field))
-	}
+	panic(fmt.Sprintf("unsupported form: %s/%s", maybeHostNode.Class, field))
+}
+
+func (g *Generator) generateTheVar(node *ast.Node) string {
+	theVarNode := node.Sub.(*ast.TheVarNode)
+	varSym := theVarNode.Var
+	ns := varSym.Namespace()
+	name := varSym.Symbol()
+
+	resultId := g.allocateTempVar()
+	g.writef("%s := lang.InternVarName(lang.NewSymbol(\"%s\"), lang.NewSymbol(\"%s\"))\n", resultId, ns.Name(), name.Name())
+	return resultId
 }
 
 ////////////////////////////////////////////////////////////////////////////////

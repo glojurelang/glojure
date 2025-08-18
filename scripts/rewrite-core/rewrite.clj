@@ -285,7 +285,31 @@
     (fn visit [zloc]
       (z/replace zloc 'go/any))]
 
-   (sexpr-replace 'NumberFormatException 'github.com$glojurelang$glojure$pkg$lang.NumberFormatError)
+   ;; Replace try/catch blocks for Long/valueOf
+   [(fn select [zloc] 
+      (and (z/list? zloc)
+           (= 'try (first (z/sexpr zloc)))
+           (let [body (second (z/sexpr zloc))]
+             (and (list? body)
+                  (= 'Long/valueOf (first body))))))
+    (fn visit [zloc]
+      (let [s (second (second (z/sexpr zloc)))] ; extract the 's' variable
+        (z/replace zloc 
+                   `(let [result# (strconv.ParseInt ~s 10 64)]
+                      (if (result# 1) nil (result# 0))))))]
+
+   ;; Replace try/catch blocks for Double/valueOf  
+   [(fn select [zloc]
+      (and (z/list? zloc)
+           (= 'try (first (z/sexpr zloc)))
+           (let [body (second (z/sexpr zloc))]
+             (and (list? body)
+                  (= 'Double/valueOf (first body))))))
+    (fn visit [zloc]
+      (let [s (second (second (z/sexpr zloc)))] ; extract the 's' variable
+        (z/replace zloc
+                   `(let [result# (strconv.ParseFloat ~s 64)]
+                      (if (result# 1) nil (result# 0))))))]
 
    ;; ===== Metadata Operations =====
    ;; replace .withMeta
