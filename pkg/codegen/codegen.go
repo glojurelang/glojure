@@ -162,6 +162,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	formatted, err := format.Source(sourceBytes)
 	if err != nil {
 		// If formatting fails, write the unformatted code with the error
+		g.originalWriter.Write(sourceBytes)
 		return fmt.Errorf("formatting failed: %w\n\nGenerated code:\n%s", err, string(sourceBytes))
 	}
 
@@ -272,7 +273,11 @@ func (g *Generator) generateValue(value any) string {
 			}
 			return fmt.Sprintf("lang.NewList(%s)", strings.Join(vals, ", "))
 		}
-		panic(fmt.Sprintf("unsupported value type %T: %s", v, v))
+
+		fmt.Println("Unsupported value type:", reflect.TypeOf(v), v)
+		return "nil"
+		// TODO: panic
+		//panic(fmt.Sprintf("unsupported value type %T: %s", v, v))
 	}
 }
 
@@ -675,11 +680,21 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 // generateASTNode generates code for an AST node
 func (g *Generator) generateASTNode(node *ast.Node) string {
 	switch node.Op {
-	// OpDef
-	// OpSetBang
-	// OpLetFn
-	// OpGo
-	// OpCase
+	case ast.OpDef:
+		fmt.Println("Def not yet implemented; returning nil")
+		return "nil"
+	case ast.OpSetBang:
+		fmt.Println("SetBang not yet implemented; returning nil")
+		return "nil"
+	case ast.OpLetFn:
+		fmt.Println("LetFn not yet implemented; returning nil")
+		return "nil"
+	case ast.OpGo:
+		fmt.Println("Go not yet implemented; returning nil")
+		return "nil"
+	case ast.OpCase:
+		fmt.Println("Case not yet implemented; returning nil")
+		return "nil"
 	case ast.OpTry:
 		return g.generateTry(node)
 	case ast.OpThrow:

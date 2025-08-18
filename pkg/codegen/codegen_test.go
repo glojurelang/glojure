@@ -79,6 +79,14 @@ func generateAndTestNamespace(t *testing.T, ns *lang.Namespace, goldenFile strin
 	var buf bytes.Buffer
 	gen := codegen.New(&buf)
 	if err := gen.Generate(ns); err != nil {
+		if os.Getenv("UPDATE_SNAPSHOT") == "1" {
+			// write the output anyway if we're updating the snapshot
+			generated := buf.Bytes()
+			if len(generated) > 0 {
+				ioutil.WriteFile(goldenFile, generated, 0644)
+			}
+		}
+
 		t.Fatalf("failed to generate code: %v", err)
 	}
 
