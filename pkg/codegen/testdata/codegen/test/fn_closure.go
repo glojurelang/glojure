@@ -7,30 +7,103 @@ import (
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
-// Closed-over values
-var (
-	closed0 = int64(42)
-)
-
 func init() {
+	// Closed-over values
+	v0 := lang.NewAtom(int64(0))
+	var closed0 = v0
+	var closed1 = int64(42)
+
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-closure"))
 	_ = ns
+	// get-atom
+	{
+		v0 := lang.NewSymbol("get-atom").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/fn_closure.glj", lang.NewKeyword("line"), int(10), lang.NewKeyword("column"), int(9), lang.NewKeyword("end-line"), int(10), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-closure")))).(*lang.Symbol)
+		var v2 lang.FnFunc
+		v2 = lang.NewFnFunc(func(args ...any) any {
+			if len(args) != 0 {
+				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+			}
+			v3 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+			v4 := v3.FindInternedVar(lang.NewSymbol("deref"))
+			if v4.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v4)))
+			}
+			v5 := v4.Get()
+			v6 := lang.Apply(v5, []any{closed0})
+			return v6
+		})
+		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		v1 := ns.InternWithValue(v0, v2, true)
+		if v0.Meta() != nil {
+			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// inc-atom
+	{
+		v0 := lang.NewSymbol("inc-atom").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/fn_closure.glj", lang.NewKeyword("line"), int(8), lang.NewKeyword("column"), int(9), lang.NewKeyword("end-line"), int(8), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-closure")))).(*lang.Symbol)
+		var v2 lang.FnFunc
+		v2 = lang.NewFnFunc(func(args ...any) any {
+			if len(args) != 0 {
+				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+			}
+			v3 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+			v4 := v3.FindInternedVar(lang.NewSymbol("swap!"))
+			if v4.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v4)))
+			}
+			v5 := v4.Get()
+			v6 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+			v7 := v6.FindInternedVar(lang.NewSymbol("inc"))
+			if v7.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
+			}
+			v8 := v7.Get()
+			v9 := lang.Apply(v5, []any{closed0, v8})
+			return v9
+		})
+		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		v1 := ns.InternWithValue(v0, v2, true)
+		if v0.Meta() != nil {
+			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		}
+	}
 	// -main
 	{
-		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), int64(42), lang.NewKeyword("file"), "codegen/test/fn_closure.glj", lang.NewKeyword("line"), int(7), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(7), lang.NewKeyword("end-column"), int(34), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-closure")))).(*lang.Symbol)
+		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), lang.NewVector(int64(42), int64(1)), lang.NewKeyword("file"), "codegen/test/fn_closure.glj", lang.NewKeyword("line"), int(13), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(13), lang.NewKeyword("end-column"), int(38), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-closure")))).(*lang.Symbol)
 		var v2 lang.FnFunc
 		v2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
 			v3 := lang.FindNamespace(lang.NewSymbol("codegen.test.fn-closure"))
-			v4 := v3.FindInternedVar(lang.NewSymbol("closed"))
+			v4 := v3.FindInternedVar(lang.NewSymbol("inc-atom"))
 			if v4.IsMacro() {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v4)))
 			}
 			v5 := v4.Get()
 			v6 := lang.Apply(v5, nil)
-			return v6
+			_ = v6
+			v7 := lang.FindNamespace(lang.NewSymbol("codegen.test.fn-closure"))
+			v8 := v7.FindInternedVar(lang.NewSymbol("closed"))
+			if v8.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v8)))
+			}
+			v9 := v8.Get()
+			v10 := lang.Apply(v9, nil)
+			v11 := lang.FindNamespace(lang.NewSymbol("codegen.test.fn-closure"))
+			v12 := v11.FindInternedVar(lang.NewSymbol("get-atom"))
+			if v12.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v12)))
+			}
+			v13 := v12.Get()
+			v14 := lang.Apply(v13, nil)
+			v15 := lang.NewVector(v10, v14)
+			v16 := lang.NewMap(lang.NewKeyword("file"), "codegen/test/fn_closure.glj", lang.NewKeyword("line"), int(15), lang.NewKeyword("column"), int(3), lang.NewKeyword("end-line"), int(16), lang.NewKeyword("end-column"), int(14))
+			v17, err := lang.WithMeta(v15, v16.(lang.IPersistentMap))
+			if err != nil {
+				panic(err)
+			}
+			return v17
 		})
 		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
 		v1 := ns.InternWithValue(v0, v2, true)
@@ -46,7 +119,7 @@ func init() {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			return closed0
+			return closed1
 		})
 		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/fn_closure.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(32), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(49))).(lang.FnFunc)
 		v1 := ns.InternWithValue(v0, v2, true)

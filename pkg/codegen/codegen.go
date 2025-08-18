@@ -77,19 +77,15 @@ func New(w io.Writer) *Generator {
 
 // Generate takes a namespace and generates Go code that populates the same namespace
 func (g *Generator) Generate(ns *lang.Namespace) error {
-	// TODO: Implement namespace-based code generation
-	// For now, just stub it out
-	var buf bytes.Buffer
-	g.w = &buf
-
-	g.writef("func init() {\n")
+	// Buffer for the vars and namespace setup
+	var varsBuf bytes.Buffer
+	g.w = &varsBuf
 
 	g.writef("  ns := lang.FindOrCreateNamespace(lang.NewSymbol(%#v))\n", ns.Name().String())
 	g.writef("  _ = ns\n")
 
 	// 1. Iterate through ns.Mappings()
-	// 2. Generate Go code for each var
-	// 3. Create initialization functions
+	// 2. Generate Go code for each var (this discovers lifted values)
 	mappings := ns.Mappings()
 	for seq := mappings.Seq(); seq != nil; seq = seq.Next() {
 		entry := seq.First()
@@ -112,15 +108,13 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 		}
 	}
 
-	g.writef("}\n")
+	// Now construct the complete init function
+	var initBuf bytes.Buffer
+	initBuf.WriteString("func init() {\n")
 
-	// Prepare the final source
-	sourceBytes := []byte(g.header()) // Package declaration and imports
-
-	// Generate lifted values block if any
+	// Generate lifted values at the beginning of init() if any
 	if len(g.liftedValues) > 0 {
-		var liftedBuf bytes.Buffer
-		liftedBuf.WriteString("\n// Closed-over values\nvar (\n")
+		initBuf.WriteString("  // Closed-over values\n")
 
 		// Sort by variable name for deterministic output
 		var sortedLifted []*liftedValue
@@ -131,17 +125,30 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 			return sortedLifted[i].varName < sortedLifted[j].varName
 		})
 
-		// Generate each lifted value
+		// Generate code for each lifted value
+		// Use a temporary buffer to capture any initialization code
+		var liftedBuf bytes.Buffer
+		g.w = &liftedBuf
+
 		for _, lifted := range sortedLifted {
+			// Generate the value - this will write any needed initialization
 			valueCode := g.generateValue(lifted.value)
-			liftedBuf.WriteString(fmt.Sprintf("    %s = %s\n",
-				lifted.varName, valueCode))
+			// Declare the lifted variable with the final value
+			g.writef("  var %s = %s\n", lifted.varName, valueCode)
 		}
-		liftedBuf.WriteString(")\n\n")
-		sourceBytes = append(sourceBytes, liftedBuf.Bytes()...)
+
+		// Write the lifted values code to init
+		initBuf.Write(liftedBuf.Bytes())
+		initBuf.WriteString("\n")
 	}
 
-	sourceBytes = append(sourceBytes, buf.Bytes()...) // The init function
+	// Add the vars code after the lifted values
+	initBuf.Write(varsBuf.Bytes())
+	initBuf.WriteString("}\n")
+
+	// Prepare the final source
+	sourceBytes := []byte(g.header())                     // Package declaration and imports
+	sourceBytes = append(sourceBytes, initBuf.Bytes()...) // The complete init function
 
 	// Format the generated code
 	formatted, err := format.Source(sourceBytes)
