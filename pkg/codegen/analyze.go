@@ -4,9 +4,6 @@ import (
 	"github.com/glojurelang/glojure/pkg/ast"
 )
 
-// return true to stop visiting
-type visitor func(*ast.Node) bool
-
 func nodeRecurs(n *ast.Node, loopID string) bool {
 	switch n.Op {
 	case ast.OpRecur:

@@ -7933,31 +7933,12 @@ fails, attempts to require sym's namespace and retries."
   [x] (instance? java.net.URI x))
 
 (defonce ^:private tapset (atom #{}))
-(defn add-tap
-  "adds f, a fn of one argument, to the tap set. This function will be called with anything sent via tap>.
-  This function may (briefly) block (e.g. for streams), and will never impede calls to tap>,
-  but blocking indefinitely may cause tap values to be dropped.
-  Remember f in order to remove-tap"
-  {:added "1.10"}
-  [f]
-  (force tap-loop)
-  (swap! tapset conj f)
-  nil)
-
 (defn remove-tap
   "Remove f from the tap set."
   {:added "1.10"}
   [f]
   (swap! tapset disj f)
   nil)
-
-(defn tap>
-  "sends x to any taps. Will not block. Returns true if there was room in the queue,
-  false if not (dropped)."
-  {:added "1.10"}
-  [x]
-  (force tap-loop)
-  (.offer tapq (if (nil? x) ::tap-nil x)))
 
 (defn update-vals
   "m f => {k (f v) ...}

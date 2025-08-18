@@ -62,6 +62,14 @@ type Generator struct {
 	currentFnEnv  lang.Environment           // Current function's captured env
 }
 
+var (
+	omittedVars = map[string]bool{
+		// initialized by the runtime
+		"#'glojure.core/*in*":  true,
+		"#'glojure.core/*out*": true,
+	}
+)
+
 // New creates a new code generator
 func New(w io.Writer) *Generator {
 	return &Generator{
@@ -166,6 +174,12 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 
 // generateVar generates Go code for a single Var
 func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *lang.Var) error {
+	if omittedVars[vr.String()] {
+		// Skip omitted vars
+		fmt.Printf("Skipping omitted var: %s\n", name.String())
+		return nil
+	}
+
 	g.pushVarScope()
 	defer g.popVarScope()
 
@@ -663,11 +677,9 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 	switch node.Op {
 	// OpDef
 	// OpSetBang
-	// OpMap
 	// OpLetFn
 	// OpGo
 	// OpCase
-	// OpNew
 	case ast.OpTry:
 		return g.generateTry(node)
 	case ast.OpThrow:
@@ -717,6 +729,8 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.generateMaybeHostForm(node)
 	case ast.OpTheVar:
 		return g.generateTheVar(node)
+	case ast.OpNew:
+		return g.generateNew(node)
 	default:
 		fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))
@@ -1096,7 +1110,11 @@ func (g *Generator) generateMaybeClass(node *ast.Node) string {
 	// find last dot in the package name
 	dotIndex := strings.LastIndex(pkg, ".")
 	if dotIndex == -1 {
-		panic(fmt.Sprintf("invalid package reference: %s", pkg))
+		// TODO: panic
+		// For now, return a nil value to avoid panic
+		fmt.Println("Warning: invalid package reference:", pkg)
+		return "nil"
+		//panic(fmt.Sprintf("invalid package reference: %s", pkg))
 	}
 	mungedPkgName := pkg[:dotIndex]
 	exportedName := pkg[dotIndex+1:]
@@ -1165,9 +1183,14 @@ func (g *Generator) generateHostInterop(node *ast.Node) string {
 // generateMaybeHostForm generates code for a MaybeHostForm node
 func (g *Generator) generateMaybeHostForm(node *ast.Node) string {
 	maybeHostNode := node.Sub.(*ast.MaybeHostFormNode)
+	class := maybeHostNode.Class
 	field := maybeHostNode.Field
 
-	panic(fmt.Sprintf("unsupported form: %s/%s", maybeHostNode.Class, field))
+	// TODO: implement support for host forms or disallow entirely
+	//panic(fmt.Sprintf("unsupported form: %s/%s", maybeHostNode.Class, field))
+
+	fmt.Printf("skipping host form: %s/%s\n", class, field)
+	return "nil"
 }
 
 func (g *Generator) generateTheVar(node *ast.Node) string {
@@ -1178,6 +1201,30 @@ func (g *Generator) generateTheVar(node *ast.Node) string {
 
 	resultId := g.allocateTempVar()
 	g.writef("%s := lang.InternVarName(lang.NewSymbol(\"%s\"), lang.NewSymbol(\"%s\"))\n", resultId, ns.Name(), name.Name())
+	return resultId
+}
+
+func (g *Generator) generateNew(node *ast.Node) string {
+	newNode := node.Sub.(*ast.NewNode)
+
+	// the interpreter is more lax; it allows for expressions that evaluate to a type
+	// here we assume the class is a constant type. clojure's new form is similar
+	constNode, ok := newNode.Class.Sub.(*ast.ConstNode)
+	if !ok {
+		fmt.Println("Warning: glojure codegen only supports new with constant class types.")
+		return fmt.Sprintf("%q", "unimplemented: new with non-constant class type")
+	}
+
+	class, ok := constNode.Value.(reflect.Type)
+	if !ok {
+		fmt.Println("Warning: glojure codegen only supports new with constant class types.")
+		return fmt.Sprintf("%q", "unimplemented: new with non-constant class type")
+	}
+
+	// generate a reflect.Type for the class
+	classId := g.generateValue(class)
+	resultId := g.allocateTempVar()
+	g.writef("%s := reflect.New(%s).Interface()\n", resultId, classId)
 	return resultId
 }
 

@@ -402,6 +402,12 @@
    (omitp #(and (z/list? %)
                 (= 'defonce (first (z/sexpr %)))
                 (= 'tapq (second (z/sexpr %)))))
+   (omitp #(and (z/list? %)
+                (= 'defn (first (z/sexpr %)))
+                (= 'add-tap (second (z/sexpr %)))))
+   (omitp #(and (z/list? %)
+                (= 'defn (first (z/sexpr %)))
+                (= 'tap> (second (z/sexpr %)))))
 
    [(fn select [zloc] (and (z/list? zloc)
                            (= 'defn- (first (z/sexpr zloc)))
