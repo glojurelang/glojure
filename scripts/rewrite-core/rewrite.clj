@@ -285,6 +285,8 @@
     (fn visit [zloc]
       (z/replace zloc 'go/any))]
 
+   (sexpr-replace 'NumberFormatException 'github.com$glojurelang$glojure$pkg$lang.NumberFormatError)
+
    ;; ===== Metadata Operations =====
    ;; replace .withMeta
    [(fn select [zloc] (and (z/list? zloc) (= '.withMeta (first (z/sexpr zloc)))))

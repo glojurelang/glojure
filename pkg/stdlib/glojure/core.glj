@@ -8003,7 +8003,7 @@ fails, attempts to require sym's namespace and retries."
   (if (string? s)
     (try
       (Long/valueOf s)
-      (catch NumberFormatException _ nil))
+      (catch github.com$glojurelang$glojure$pkg$lang.NumberFormatError _ nil))
     (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (parsing-err s)))))
 
 (defn parse-double
@@ -8016,7 +8016,7 @@ fails, attempts to require sym's namespace and retries."
   (if (string? s)
     (try
       (Double/valueOf s)
-      (catch NumberFormatException _ nil))
+      (catch github.com$glojurelang$glojure$pkg$lang.NumberFormatError _ nil))
     (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (parsing-err s)))))
 
 (defn parse-uuid

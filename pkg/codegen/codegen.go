@@ -392,7 +392,6 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 	// OpMap
 	// OpLetFn
 	// OpGo
-	// OpMaybeHostForm
 	// OpCase
 	// OpTheVar
 	// OpNew
@@ -441,6 +440,8 @@ func (g *Generator) generateASTNode(node *ast.Node) string {
 		return g.generateHostCall(node)
 	case ast.OpHostInterop:
 		return g.generateHostInterop(node)
+	case ast.OpMaybeHostForm:
+		return g.generateMaybeHostForm(node)
 	default:
 		fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))
@@ -884,6 +885,17 @@ func (g *Generator) generateHostInterop(node *ast.Node) string {
 	g.writef("}\n")
 
 	return resultId
+}
+
+// generateMaybeHostForm generates code for a MaybeHostForm node
+func (g *Generator) generateMaybeHostForm(node *ast.Node) string {
+	maybeHostNode := node.Sub.(*ast.MaybeHostFormNode)
+	field := maybeHostNode.Field
+
+	switch maybeHostNode.Class {
+	default:
+		panic(fmt.Sprintf("unsupported host form class: %s.%s", maybeHostNode.Class, field))
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
