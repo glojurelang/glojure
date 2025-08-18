@@ -27,6 +27,25 @@
        (= (str (z/node zloc)) (str old)))
      (fn visit [zloc] (z/replace zloc new))]))
 
+(defn sexpr-splice-replace 
+  "Replace a single form with multiple forms from a list"
+  [old replacement-list]
+  [(fn select [zloc] (and (z/sexpr-able? zloc) (= old (z/sexpr zloc))))
+   (fn visit [zloc]
+     ;; We need to replace the current node with multiple nodes
+     ;; First insert all the new nodes after the current one, then remove the current
+     (let [parent (z/up zloc)]
+       (if (and parent (z/list? parent))
+         ;; We're in a list context, can splice
+         (loop [zloc zloc
+                forms (reverse replacement-list)]
+           (if (empty? forms)
+             (z/remove zloc)
+             (recur (z/insert-right zloc (first forms))
+                    (rest forms))))
+         ;; Not in a list context, fall back to regular replacement with a list
+         (z/replace zloc (cons 'do replacement-list)))))])
+
 (defn sexpr-remove [old]
   [(fn select [zloc] (and (z/sexpr-able? zloc) (= old (z/sexpr zloc))))
    (fn visit [zloc] (z/remove zloc))])
@@ -652,15 +671,9 @@
    (sexpr-replace 'clojure.lang.RT/uncheckedIntCast
                   'github.com$glojurelang$glojure$pkg$lang.UncheckedIntCast)
 
-   [(fn select [zloc] (try
-                        (and (symbol? (z/sexpr zloc))
-                             (or
-                              (and (z/leftmost? zloc) (= 'github.com$glojurelang$glojure$pkg$lang.Numbers (-> zloc z/up z/left z/sexpr)))
-                              (= 'github.com$glojurelang$glojure$pkg$lang.Numbers (-> zloc z/left z/sexpr))))
-                        (catch Exception e false)))
-    (fn visit [zloc] (z/replace zloc
-                                (let [sym (-> zloc z/sexpr str)]
-                                  (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
+   (sexpr-splice-replace 'clojure.lang.Numbers/gt
+                         ['.Gt 'github.com$glojurelang$glojure$pkg$lang.Numbers])
+
    (sexpr-replace 'clojure.lang.Numbers 'github.com$glojurelang$glojure$pkg$lang.Numbers)
    (sexpr-replace '(cast Number x) '(github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
    (sexpr-replace '(instance? Number x) '(github.com$glojurelang$glojure$pkg$lang.IsNumber x))

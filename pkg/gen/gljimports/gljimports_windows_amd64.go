@@ -3766,6 +3766,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.Namespaces", github_com_glojurelang_glojure_pkg_lang.Namespaces)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewArithmeticError", github_com_glojurelang_glojure_pkg_lang.NewArithmeticError)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewAtom", github_com_glojurelang_glojure_pkg_lang.NewAtom)
+	_register("github.com/glojurelang/glojure/pkg/lang.NewAtomWithMeta", github_com_glojurelang_glojure_pkg_lang.NewAtomWithMeta)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewBigDecimal", github_com_glojurelang_glojure_pkg_lang.NewBigDecimal)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewBigDecimalFromBigFloat", github_com_glojurelang_glojure_pkg_lang.NewBigDecimalFromBigFloat)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewBigDecimalFromFloat64", github_com_glojurelang_glojure_pkg_lang.NewBigDecimalFromFloat64)
