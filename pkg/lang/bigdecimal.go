@@ -44,6 +44,12 @@ func (n *BigDecimal) ToBigInteger() *big.Int {
 	return res
 }
 
+func (n *BigDecimal) ToBigFloat() *big.Float {
+	res := new(big.Float)
+	res.Set(n.val)
+	return res
+}
+
 func (n *BigDecimal) String() string {
 	return n.val.String()
 }

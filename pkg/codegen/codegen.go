@@ -2,9 +2,11 @@ package codegen
 
 import (
 	"bytes"
+	"encoding/hex"
 	"fmt"
 	"go/format"
 	"io"
+	"reflect"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
@@ -145,9 +147,14 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	return nil
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Value Generation
+
 // returns the variable name or constant expression for the value
 func (g *Generator) generateValue(value any) string {
 	switch v := value.(type) {
+	case reflect.Type:
+		return g.generateTypeValue(v)
 	case *lang.Namespace:
 		// Generate code to find or create the namespace
 		return fmt.Sprintf("lang.FindOrCreateNamespace(lang.NewSymbol(%#v))", v.Name().String())
@@ -176,6 +183,8 @@ func (g *Generator) generateValue(value any) string {
 		return fmt.Sprintf("int(%d)", v)
 	case int64:
 		return fmt.Sprintf("int64(%d)", v)
+	case *lang.BigDecimal:
+		return g.generateBigDecimalValue(v)
 	case bool:
 		// return the boolean as a Go boolean literal
 		if v {
@@ -195,6 +204,148 @@ func (g *Generator) generateValue(value any) string {
 		}
 		panic(fmt.Sprintf("unsupported value type %T: %s", v, v))
 	}
+}
+
+func (g *Generator) generateTypeValue(t reflect.Type) string {
+	g.addImport("reflect")
+
+	resultId := g.allocateTempVar()
+
+	// Generate the appropriate zero value expression based on the type
+	// TODO: review this LLM slop
+	zeroValueExpr := g.generateZeroValueExpr(t)
+
+	// For named types (structs, interfaces), use the (*T)(nil).Elem() pattern
+	// For other types, use the zero value directly
+	if t.Kind() == reflect.Struct || t.Kind() == reflect.Interface {
+		g.writef("%s := reflect.TypeOf((*%s)(nil)).Elem()\n", resultId, zeroValueExpr)
+	} else {
+		g.writef("%s := reflect.TypeOf(%s)\n", resultId, zeroValueExpr)
+	}
+
+	return resultId
+}
+
+// generateZeroValueExpr generates a Go expression that creates a zero value
+// of the given type, handling package imports as needed
+func (g *Generator) generateZeroValueExpr(t reflect.Type) string {
+	switch t.Kind() {
+	case reflect.Bool:
+		return "false"
+	case reflect.Int:
+		return "int(0)"
+	case reflect.Int8:
+		return "int8(0)"
+	case reflect.Int16:
+		return "int16(0)"
+	case reflect.Int32:
+		return "int32(0)"
+	case reflect.Int64:
+		return "int64(0)"
+	case reflect.Uint:
+		return "uint(0)"
+	case reflect.Uint8:
+		return "uint8(0)"
+	case reflect.Uint16:
+		return "uint16(0)"
+	case reflect.Uint32:
+		return "uint32(0)"
+	case reflect.Uint64:
+		return "uint64(0)"
+	case reflect.Uintptr:
+		return "uintptr(0)"
+	case reflect.Float32:
+		return "float32(0)"
+	case reflect.Float64:
+		return "float64(0)"
+	case reflect.Complex64:
+		return "complex64(0)"
+	case reflect.Complex128:
+		return "complex128(0)"
+	case reflect.String:
+		return `""`
+	case reflect.Array:
+		elemExpr := g.generateZeroValueExpr(t.Elem())
+		return fmt.Sprintf("[%d]%s{}", t.Len(), elemExpr)
+	case reflect.Slice:
+		elemType := g.getTypeString(t.Elem())
+		return fmt.Sprintf("[]%s(nil)", elemType)
+	case reflect.Map:
+		keyType := g.getTypeString(t.Key())
+		elemType := g.getTypeString(t.Elem())
+		return fmt.Sprintf("map[%s]%s(nil)", keyType, elemType)
+	case reflect.Chan:
+		elemType := g.getTypeString(t.Elem())
+		switch t.ChanDir() {
+		case reflect.RecvDir:
+			return fmt.Sprintf("(<-chan %s)(nil)", elemType)
+		case reflect.SendDir:
+			return fmt.Sprintf("(chan<- %s)(nil)", elemType)
+		default:
+			return fmt.Sprintf("(chan %s)(nil)", elemType)
+		}
+	case reflect.Func:
+		return g.getTypeString(t) + "(nil)"
+	case reflect.Interface:
+		// For interfaces, return the type string for use with (*T)(nil).Elem()
+		return g.getTypeString(t)
+	case reflect.Ptr:
+		elemType := g.getTypeString(t.Elem())
+		return fmt.Sprintf("(*%s)(nil)", elemType)
+	case reflect.Struct:
+		// For structs, return the type string for use with (*T)(nil).Elem()
+		return g.getTypeString(t)
+	default:
+		// Fallback: try to use the type string directly
+		return g.getTypeString(t) + "{}"
+	}
+}
+
+// getTypeString returns a string representation of the type suitable for use
+// in Go code, adding package imports as necessary
+func (g *Generator) getTypeString(t reflect.Type) string {
+	// Handle unnamed types
+	if t.Name() == "" {
+		switch t.Kind() {
+		case reflect.Slice:
+			return "[]" + g.getTypeString(t.Elem())
+		case reflect.Array:
+			return fmt.Sprintf("[%d]%s", t.Len(), g.getTypeString(t.Elem()))
+		case reflect.Map:
+			return fmt.Sprintf("map[%s]%s", g.getTypeString(t.Key()), g.getTypeString(t.Elem()))
+		case reflect.Ptr:
+			return "*" + g.getTypeString(t.Elem())
+		case reflect.Chan:
+			switch t.ChanDir() {
+			case reflect.RecvDir:
+				return "<-chan " + g.getTypeString(t.Elem())
+			case reflect.SendDir:
+				return "chan<- " + g.getTypeString(t.Elem())
+			default:
+				return "chan " + g.getTypeString(t.Elem())
+			}
+		default:
+			// For basic types like int, string, etc.
+			// Note: We can't use t.String() directly here because it might
+			// return "package.Type" format which is not what we want
+			return t.Kind().String()
+		}
+	}
+
+	// Handle named types
+	pkgPath := t.PkgPath()
+	if pkgPath == "" {
+		// Built-in type or type from current package
+		// For built-in types, Name() might be empty, so use String() as fallback
+		if t.Name() != "" {
+			return t.Name()
+		}
+		return t.String()
+	}
+
+	// Import the package and get an alias
+	alias := g.addImportWithAlias(pkgPath)
+	return alias + "." + t.Name()
 }
 
 // generateMapValue generates Go code for a Clojure map
@@ -238,6 +389,31 @@ func (g *Generator) generateVectorValue(v lang.IPersistentVector) string {
 
 	buf.WriteString(")")
 	return buf.String()
+}
+
+func (g *Generator) generateBigDecimalValue(bd *lang.BigDecimal) string {
+	bigFloat := bd.ToBigFloat()
+	blob, err := bigFloat.GobEncode()
+	if err != nil {
+		panic(fmt.Sprintf("failed to encode big.Float: %v", err))
+	}
+	// nice compact hex literal
+	hexBlob := hex.EncodeToString(blob)
+
+	resultId := g.allocateTempVar()
+
+	hexAlias := g.addImportWithAlias("encoding/hex")
+	bigAlias := g.addImportWithAlias("math/big")
+
+	g.writef(`%s := lang.NewBigDecimalFromBigFloat((func() *%s.Float {
+  var z %s.Float
+  b, _ := %s.DecodeString("%s")
+  if err := z.GobDecode(b); err != nil { panic(err) }
+  return &z
+})())
+`, resultId, bigAlias, bigAlias, hexAlias, hexBlob)
+
+	return resultId
 }
 
 // generateSetValue generates Go code for a Clojure set
@@ -383,6 +559,9 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 	}
 	// If bodyVar is empty (e.g., from throw), no return is generated
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// AST Node Generation
 
 // generateASTNode generates code for an AST node
 func (g *Generator) generateASTNode(node *ast.Node) string {
