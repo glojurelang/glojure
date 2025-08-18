@@ -1,0 +1,7 @@
+(ns codegen.test.fn-closure)
+
+(defn gen-closure [the-result] (fn [] the-result))
+
+(def closed (gen-closure 42))
+
+(defn ^{:expected-output 42} -main [] (closed))
