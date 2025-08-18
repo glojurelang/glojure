@@ -13,7 +13,8 @@ func init() {
 	// try-custom-value
 	{
 		v0 := lang.NewSymbol("try-custom-value").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(22), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
-		v2 := lang.NewFnFunc(func(args ...any) any {
+		var v2 lang.FnFunc
+		v2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
@@ -43,7 +44,8 @@ func init() {
 	// catch-binding-scope-2
 	{
 		v0 := lang.NewSymbol("catch-binding-scope-2").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(16), lang.NewKeyword("end-column"), int(27), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
-		v2 := lang.NewFnFunc(func(args ...any) any {
+		var v2 lang.FnFunc
+		v2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
@@ -76,7 +78,8 @@ func init() {
 	// -main
 	{
 		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), "advanced tests passed", lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(30), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(30), lang.NewKeyword("end-column"), int(55), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
-		v2 := lang.NewFnFunc(func(args ...any) any {
+		var v2 lang.FnFunc
+		v2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
@@ -175,7 +178,8 @@ func init() {
 	// finally-with-return
 	{
 		v0 := lang.NewSymbol("finally-with-return").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(24), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(24), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
-		v2 := lang.NewFnFunc(func(args ...any) any {
+		var v2 lang.FnFunc
+		v2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
@@ -196,7 +200,8 @@ func init() {
 	// catch-binding-scope
 	{
 		v0 := lang.NewSymbol("catch-binding-scope").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(9), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(9), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
-		v2 := lang.NewFnFunc(func(args ...any) any {
+		var v2 lang.FnFunc
+		v2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}

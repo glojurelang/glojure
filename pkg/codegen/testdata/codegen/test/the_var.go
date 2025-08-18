@@ -14,7 +14,8 @@ func init() {
 	// -main
 	{
 		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), int64(42), lang.NewKeyword("file"), "codegen/test/the_var.glj", lang.NewKeyword("line"), int(5), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(5), lang.NewKeyword("end-column"), int(34), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.the-var")))).(*lang.Symbol)
-		v2 := lang.NewFnFunc(func(args ...any) any {
+		var v2 lang.FnFunc
+		v2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}

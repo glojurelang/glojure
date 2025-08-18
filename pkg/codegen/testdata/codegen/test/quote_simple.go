@@ -13,7 +13,8 @@ func init() {
 	// -main
 	{
 		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), lang.NewList(int64(1), int64(2), int64(3)), lang.NewKeyword("file"), "codegen/test/quote_simple.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(44), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.quote-simple")))).(*lang.Symbol)
-		v2 := lang.NewFnFunc(func(args ...any) any {
+		var v2 lang.FnFunc
+		v2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}

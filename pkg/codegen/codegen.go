@@ -441,26 +441,39 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 	astNode := fn.ASTNode()
 	fnNode := astNode.Sub.(*ast.FnNode)
 
-	// Allocate a variable for the function
-	var fnVar string
-	if fnNode.Local == nil {
-		fnVar = g.allocateTempVar()
-	} else {
-		// If there's a local binding, use that name
-		localNode := fnNode.Local.Sub.(*ast.BindingNode)
-		fnVar = g.allocateLocal(localNode.Name.Name())
-	}
+	// Allocate a variable to return the function
+	fnVar := g.allocateTempVar()
+
+	// declare it now to make sure it's in the scope of the caller
+	// we may add a nested scope to declare the function in to keep a
+	// scoped variable for the function itelf, if the function is named
+	g.writef("var %s lang.FnFunc\n", fnVar)
 
 	// Push a new scope for the function definition
 	g.pushVarScope()
 	defer g.popVarScope()
+
+	if fnNode.Local != nil {
+		// If there's a local binding, use that name
+		localNode := fnNode.Local.Sub.(*ast.BindingNode)
+		if fnName := localNode.Name.Name(); fnName != "" {
+			g.writef("{ // function %s\n", fnName)
+			defer g.writef("}\n")
+
+			namedFnVar := g.allocateLocal(fnName)
+			defer func() {
+				g.writef("%s := %s\n", namedFnVar, fnVar)
+				g.writeAssign("_", namedFnVar) // Prevent unused variable warning
+			}()
+		}
+	}
 
 	// If there's only one method and it's not variadic, generate a simple function
 	if len(fnNode.Methods) == 1 && !fnNode.IsVariadic {
 		method := fnNode.Methods[0]
 		methodNode := method.Sub.(*ast.FnMethodNode)
 
-		g.writef("%s := lang.NewFnFunc(func(args ...any) any {\n", fnVar)
+		g.writef("%s = lang.NewFnFunc(func(args ...any) any {\n", fnVar)
 
 		g.addImport("fmt") // Import fmt for error formatting
 		// Check arity
@@ -474,7 +487,7 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 		g.writef("})\n")
 	} else {
 		// Multiple arities or variadic - need to dispatch
-		g.writef("%s := lang.NewFnFunc(func(args ...any) any {\n", fnVar)
+		g.writef("%s = lang.NewFnFunc(func(args ...any) any {\n", fnVar)
 		g.writef("  switch len(args) {\n")
 
 		// Generate cases for fixed arity methods
