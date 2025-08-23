@@ -274,6 +274,9 @@
    (sexpr-replace 'clojure.lang.PersistentArrayMap/createAsIfByAssoc
                   'github.com$glojurelang$glojure$pkg$lang.NewPersistentArrayMapAsIfByAssoc)
 
+
+   (sexpr-replace 'java.util.Map$Entry 'github.com$glojurelang$glojure$pkg$lang.MapEntry)
+
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    ;; struct map
    (sexpr-replace '(. clojure.lang.PersistentStructMap (createSlotMap keys))

@@ -1474,7 +1474,7 @@
   "Return true if x is a map entry"
   {:added "1.8"}
   [x]
-	(instance? java.util.Map$Entry x))
+	(instance? github.com$glojurelang$glojure$pkg$lang.MapEntry x))
 
 (defn contains?
   "Returns true if key is present in the given collection, otherwise
@@ -1564,14 +1564,14 @@
   "Returns the key of the map entry."
   {:added "1.0"
    :static true}
-  [^java.util.Map$Entry e]
+  [^github.com$glojurelang$glojure$pkg$lang.MapEntry e]
     (. e (GetKey)))
 
 (defn val
   "Returns the value in the map entry."
   {:added "1.0"
    :static true}
-  [^java.util.Map$Entry e]
+  [^github.com$glojurelang$glojure$pkg$lang.MapEntry e]
     (. e (GetValue)))
 
 (defn rseq

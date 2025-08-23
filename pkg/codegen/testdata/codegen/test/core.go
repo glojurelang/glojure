@@ -4,7 +4,7 @@ package generated
 
 import (
   ExceptionInfo11 "ExceptionInfo"
-  LinkedBlockingQueue22 "LinkedBlockingQueue"
+  LinkedBlockingQueue21 "LinkedBlockingQueue"
   big8 "math/big"
   errors6 "errors"
   fmt "fmt"
@@ -13,18 +13,18 @@ import (
   java.io.InputStreamReader14 "java.io.InputStreamReader"
   java.io.StringReader15 "java.io.StringReader"
   java.lang.UnsupportedOperationException10 "java.lang.UnsupportedOperationException"
-  java.net23 "java.net"
-  java.util.concurrent.CountDownLatch19 "java.util.concurrent.CountDownLatch"
+  java.net22 "java.net"
+  java.util.concurrent.CountDownLatch18 "java.util.concurrent.CountDownLatch"
   java.util.concurrent7 "java.util.concurrent"
-  java.util16 "java.util"
+  java.util23 "java.util"
   lang "github.com/glojurelang/glojure/pkg/lang"
   math3 "math"
-  rand20 "math/rand"
+  rand19 "math/rand"
   reflect "reflect"
-  regexp21 "regexp"
-  runtime18 "runtime"
+  regexp20 "regexp"
+  runtime17 "runtime"
   runtime5 "github.com/glojurelang/glojure/pkg/runtime"
-  strconv17 "strconv"
+  strconv16 "strconv"
   strings12 "strings"
   time9 "time"
 )
@@ -49001,7 +49001,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{java.util16.Map$Entry, v3})
+v7 := lang.Apply(v6, []any{lang.MapEntry, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -56231,7 +56231,7 @@ if v6.IsMacro() {
 v7 := v6.Get()
 v8 := lang.Apply(v7, []any{v3})
 if lang.IsTruthy(v8) {
-v10 := lang.Apply(strconv17.ParseFloat, []any{v3, int64(64)})
+v10 := lang.Apply(strconv16.ParseFloat, []any{v3, int64(64)})
 var v9 any = v10
 _ = v9
 var v12 any
@@ -56383,7 +56383,7 @@ if v6.IsMacro() {
 v7 := v6.Get()
 v8 := lang.Apply(v7, []any{v3})
 if lang.IsTruthy(v8) {
-v10 := lang.Apply(strconv17.ParseInt, []any{v3, int64(10), int64(64)})
+v10 := lang.Apply(strconv16.ParseInt, []any{v3, int64(10), int64(64)})
 var v9 any = v10
 _ = v9
 var v12 any
@@ -58012,7 +58012,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(runtime18.NumCPU, nil)
+v9 := lang.Apply(runtime17.NumCPU, nil)
 v10 := lang.Apply(v8, []any{int64(2), v9})
 var v5 any = v10
 _ = v5
@@ -61443,7 +61443,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 0 {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
-v4 := lang.Apply(java.util.concurrent.CountDownLatch19., []any{int64(1)})
+v4 := lang.Apply(java.util.concurrent.CountDownLatch18., []any{int64(1)})
 var v3 any = v4
 _ = v3
 v6 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -62023,7 +62023,7 @@ var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 0:
-v3 := lang.Apply(rand20.Float64, nil)
+v3 := lang.Apply(rand19.Float64, nil)
 return v3
   case 1:
 v3 := args[0]
@@ -62680,7 +62680,7 @@ if v0.Meta() != nil {
 }
 // re-pattern
 {
-v1 := reflect.TypeOf((*regexp21.Regexp)(nil))
+v1 := reflect.TypeOf((*regexp20.Regexp)(nil))
 v0 := lang.NewSymbol("re-pattern").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Returns an instance of java.util.regex.Pattern, for use, e.g. in\n  re-matcher.", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.0", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(4863), lang.NewKeyword("end-line"), int(4863))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
@@ -62695,16 +62695,16 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{regexp21.*Regexp, v4})
+v9 := lang.Apply(v8, []any{regexp20.*Regexp, v4})
 if lang.IsTruthy(v9) {
 v5 = v4
 } else {
-v10 := lang.Apply(regexp21.MustCompile, []any{v4})
+v10 := lang.Apply(regexp20.MustCompile, []any{v4})
 v5 = v10
 }
 return v5
 })
-v4 := reflect.TypeOf((*regexp21.Regexp)(nil))
+v4 := reflect.TypeOf((*regexp20.Regexp)(nil))
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), v4)).(lang.FnFunc)
 v2 := ns.InternWithValue(v0, v3, true)
 if v0.Meta() != nil {
@@ -66391,7 +66391,7 @@ if v12.IsMacro() {
 }
 v13 := v12.Get()
 v14 := lang.Apply(v13, []any{v3})
-v15 := lang.Apply(LinkedBlockingQueue22., []any{v14})
+v15 := lang.Apply(LinkedBlockingQueue21., []any{v14})
 v6 = v15
 }
 var v5 any = v6
@@ -75952,7 +75952,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{java.net23.URI, v3})
+v7 := lang.Apply(v6, []any{java.net22.URI, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -76009,7 +76009,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{java.util16.UUID, v3})
+v7 := lang.Apply(v6, []any{java.util23.UUID, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
