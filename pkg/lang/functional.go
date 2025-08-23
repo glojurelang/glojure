@@ -12,6 +12,9 @@ func ReduceInit(f func(interface{}, interface{}) interface{}, init interface{}, 
 	var res interface{} = init
 	for ; seq != nil; seq = seq.Next() {
 		res = f(res, seq.First())
+		if IsReduced(res) {
+			return res.(IDeref).Deref()
+		}
 	}
 	return res
 }

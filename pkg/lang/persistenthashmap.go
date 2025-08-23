@@ -212,6 +212,9 @@ func (m *PersistentHashMap) Reduce(f IFn) any {
 			continue
 		}
 		res = f.Invoke(res, seq.First())
+		if IsReduced(res) {
+			return res.(IDeref).Deref()
+		}
 	}
 	return res
 }
@@ -220,6 +223,9 @@ func (m *PersistentHashMap) ReduceInit(f IFn, init any) any {
 	res := init
 	for seq := Seq(m); seq != nil; seq = seq.Next() {
 		res = f.Invoke(res, seq.First())
+		if IsReduced(res) {
+			return res.(IDeref).Deref()
+		}
 	}
 	return res
 }

@@ -2519,7 +2519,7 @@
   {:added "1.7"
    :tag github.com$glojurelang$glojure$pkg$lang.Volatile}
   [val]
-  (glojure.lang.Volatile. val))
+  (github.com$glojurelang$glojure$pkg$lang.NewVolatile val))
 
 (defn vreset!
   "Sets the value of volatile to newval without regard for the
@@ -7190,7 +7190,7 @@ fails, attempts to require sym's namespace and retries."
    :static true}
   ([f]
   (fn [rf]
-    (let [a (java.util.ArrayList.)
+    (let [a (new github.com$glojurelang$glojure$pkg$lang.ArrayList)
           pv (volatile! ::none)]
       (fn
         ([] (rf))
@@ -7270,7 +7270,7 @@ fails, attempts to require sym's namespace and retries."
    :static true}
   ([^long n]
    (fn [rf]
-     (let [a (java.util.ArrayList. n)]
+     (let [a (github.com$glojurelang$glojure$pkg$lang.NewArrayList (to-array n))]
        (fn
          ([] (rf))
          ([result]
@@ -7345,7 +7345,7 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.2"
    :static true}
   [^java.util.Collection coll]
-  (let [al (java.util.ArrayList. coll)]
+  (let [al (github.com$glojurelang$glojure$pkg$lang.NewArrayList (to-array coll))]
     (java.util.Collections/shuffle al)
     (glojure.lang.RT/vector (.toArray al))))
 
@@ -7747,16 +7747,6 @@ fails, attempts to require sym's namespace and retries."
      (filter (fn [_] (< (rand) prob))))
   ([prob coll]
      (filter (fn [_] (< (rand) prob)) coll)))
-
-(defn eduction
-  "Returns a reducible/iterable application of the transducers
-  to the items in coll. Transducers are applied in order as if
-  combined with comp. Note that these applications will be
-  performed every time reduce/iterator is called."
-  {:arglists '([xform* coll])
-   :added "1.7"}
-  [& xforms]
-  (Eduction. (apply comp (butlast xforms)) (last xforms)))
 
 (defn run!
   "Runs the supplied procedure (via reduce), for purposes of side

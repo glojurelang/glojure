@@ -4,44 +4,41 @@ package generated
 
 import (
   "github.com/glojurelang/glojure/pkg/lang"
-  Eduction28 "Eduction"
-  CompilerException34 "glojure.lang.Compiler/CompilerException"
-  lang1 "github.com/glojurelang/glojure/pkg/lang"
+  CompilerException31 "glojure.lang.Compiler/CompilerException"
+  runtime3 "github.com/glojurelang/glojure/pkg/runtime"
   strconv4 "strconv"
-  java.net16 "java.net"
-  StringBuilder19 "StringBuilder"
-  BigDecimal8 "BigDecimal"
-  rand36 "math/rand"
-  java.lang.UnsupportedOperationException29 "java.lang.UnsupportedOperationException"
-  regexp33 "regexp"
   BigInteger12 "BigInteger"
-  java.util13 "java.util"
-  Object23 "Object"
-  Exception25 "Exception"
+  regexp30 "regexp"
+  rand33 "math/rand"
+  reflect "reflect"
   strings22 "strings"
-  glojure.lang.Volatile24 "glojure.lang.Volatile"
+  java.lang.UnsupportedOperationException26 "java.lang.UnsupportedOperationException"
+  java.io.BufferedWriter21 "java.io.BufferedWriter"
+  time27 "time"
+  java.util13 "java.util"
+  java.util.concurrent15 "java.util.concurrent"
+  java.net16 "java.net"
+  Exception24 "Exception"
+  LinkedBlockingQueue28 "LinkedBlockingQueue"
+  java.util.concurrent.CountDownLatch29 "java.util.concurrent.CountDownLatch"
+  java.io.StringReader34 "java.io.StringReader"
   glojure.lang.LineNumberingPushbackReader5 "glojure.lang.LineNumberingPushbackReader"
-  math7 "math"
-  big9 "math/big"
-  java.lang.annotation17 "java.lang.annotation"
-  bytes18 "bytes"
-  time30 "time"
-  java.util.concurrent.CountDownLatch32 "java.util.concurrent.CountDownLatch"
-  fmt "fmt"
   java.io.InputStreamReader6 "java.io.InputStreamReader"
   errors10 "errors"
-  glojure.lang11 "glojure.lang"
-  LinkedBlockingQueue31 "LinkedBlockingQueue"
-  ExceptionInfo14 "ExceptionInfo"
-  java.util.concurrent15 "java.util.concurrent"
-  java.io.BufferedWriter21 "java.io.BufferedWriter"
-  java.util.ArrayList27 "java.util.ArrayList"
-  reflect "reflect"
-  java.lang35 "java.lang"
-  java.io.StringReader37 "java.io.StringReader"
-  runtime3 "github.com/glojurelang/glojure/pkg/runtime"
+  fmt "fmt"
+  math7 "math"
+  BigDecimal8 "BigDecimal"
+  big9 "math/big"
+  Object23 "Object"
+  java.lang32 "java.lang"
+  bytes18 "bytes"
   java.io.PrintWriter20 "java.io.PrintWriter"
-  runtime26 "runtime"
+  lang1 "github.com/glojurelang/glojure/pkg/lang"
+  ExceptionInfo14 "ExceptionInfo"
+  java.lang.annotation17 "java.lang.annotation"
+  glojure.lang11 "glojure.lang"
+  StringBuilder19 "StringBuilder"
+  runtime25 "runtime"
 )
 func init() {
   // Closed-over values
@@ -4610,7 +4607,7 @@ if v0.Meta() != nil {
 }
 // parse-double
 {
-v0 := lang.NewSymbol("parse-double").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Parse string with floating point components and return a Double value,\n  or nil if parse fails.\n\n  Grammar: https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html#valueOf-java.lang.String-", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(18), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7988), lang.NewKeyword("end-line"), int(7988))).(*lang.Symbol)
+v0 := lang.NewSymbol("parse-double").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Parse string with floating point components and return a Double value,\n  or nil if parse fails.\n\n  Grammar: https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html#valueOf-java.lang.String-", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(18), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7978), lang.NewKeyword("end-line"), int(7978))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {
@@ -4659,7 +4656,7 @@ if v0.Meta() != nil {
 }
 // load-data-reader-file
 {
-v0 := lang.NewSymbol("load-data-reader-file").WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7889), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(7889), lang.NewKeyword("end-column"), int(28), lang.NewKeyword("private"), true, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("mappings"), lang.NewSymbol("url"))), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")))).(*lang.Symbol)
+v0 := lang.NewSymbol("load-data-reader-file").WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7879), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(7879), lang.NewKeyword("end-column"), int(28), lang.NewKeyword("private"), true, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("mappings"), lang.NewSymbol("url"))), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 2 {
@@ -4754,7 +4751,7 @@ if reflect.TypeOf(v35).Kind() != reflect.Func {
 v36 := lang.Apply(v35, []any{"cljc"})
 if lang.IsTruthy(v36) {
 v37 := lang.NewMap(lang.NewKeyword("eof"), nil, lang.NewKeyword("read-cond"), lang.NewKeyword("allow"))
-v38 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7895), lang.NewKeyword("column"), int(25), lang.NewKeyword("end-line"), int(7895), lang.NewKeyword("end-column"), int(52))
+v38 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7885), lang.NewKeyword("column"), int(25), lang.NewKeyword("end-line"), int(7885), lang.NewKeyword("end-column"), int(52))
 v39, err := lang.WithMeta(v37, v38.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -4762,7 +4759,7 @@ if err != nil {
 v32 = v39
 } else {
 v40 := lang.NewMap(lang.NewKeyword("eof"), nil)
-v41 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7896), lang.NewKeyword("column"), int(25), lang.NewKeyword("end-line"), int(7896), lang.NewKeyword("end-column"), int(34))
+v41 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7886), lang.NewKeyword("column"), int(25), lang.NewKeyword("end-line"), int(7886), lang.NewKeyword("end-column"), int(34))
 v42, err := lang.WithMeta(v40, v41.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -4810,7 +4807,7 @@ if v62.IsMacro() {
 v63 := v62.Get()
 v64 := lang.Apply(v63, []any{"Not a valid data-reader map"})
 v65 := lang.NewMap(lang.NewKeyword("url"), v4)
-v66 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7900), lang.NewKeyword("column"), int(27), lang.NewKeyword("end-line"), int(7900), lang.NewKeyword("end-column"), int(36))
+v66 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7890), lang.NewKeyword("column"), int(27), lang.NewKeyword("end-line"), int(7890), lang.NewKeyword("end-column"), int(36))
 v67, err := lang.WithMeta(v65, v66.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -4884,7 +4881,7 @@ if v100.IsMacro() {
 v101 := v100.Get()
 v102 := lang.Apply(v101, []any{"Invalid form in data-reader file"})
 v103 := lang.NewMap(lang.NewKeyword("url"), v4, lang.NewKeyword("form"), v76)
-v104 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7905), lang.NewKeyword("column"), int(30), lang.NewKeyword("end-line"), int(7906), lang.NewKeyword("end-column"), int(38))
+v104 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7895), lang.NewKeyword("column"), int(30), lang.NewKeyword("end-line"), int(7896), lang.NewKeyword("end-column"), int(38))
 v105, err := lang.WithMeta(v103, v104.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -4936,7 +4933,7 @@ if v115.IsMacro() {
 }
 v116 := v115.Get()
 v117 := lang.NewMap(lang.NewKeyword("url"), v4, lang.NewKeyword("conflict"), v76, lang.NewKeyword("mappings"), v73)
-v118 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7911), lang.NewKeyword("column"), int(32), lang.NewKeyword("end-line"), int(7913), lang.NewKeyword("end-column"), int(44))
+v118 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7901), lang.NewKeyword("column"), int(32), lang.NewKeyword("end-line"), int(7903), lang.NewKeyword("end-column"), int(44))
 v119, err := lang.WithMeta(v117, v118.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -4956,7 +4953,7 @@ v123 := v122.Get()
 v124 := lang.Apply(v123, []any{v73, v76, v107})
 return v124
 })
-v73 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7902), lang.NewKeyword("column"), int(10), lang.NewKeyword("end-line"), int(7914), lang.NewKeyword("end-column"), int(32))
+v73 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7892), lang.NewKeyword("column"), int(10), lang.NewKeyword("end-line"), int(7904), lang.NewKeyword("end-column"), int(32))
 v74, err := lang.WithMeta(v72, v73.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -5828,7 +5825,7 @@ return v19
 v2 := v1
 _ = v2
 }
-v0 := lang.NewSymbol("NaN?").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("num"))), lang.NewKeyword("inline"), v1, lang.NewKeyword("doc"), "Returns true if num is NaN, else false", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("inline-arities"), lang.CreatePersistentTreeSet(int64(1)), lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(10), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(8021), lang.NewKeyword("end-line"), int(8021))).(*lang.Symbol)
+v0 := lang.NewSymbol("NaN?").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("num"))), lang.NewKeyword("inline"), v1, lang.NewKeyword("doc"), "Returns true if num is NaN, else false", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("inline-arities"), lang.CreatePersistentTreeSet(int64(1)), lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(10), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(8011), lang.NewKeyword("end-line"), int(8011))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {
@@ -9237,7 +9234,7 @@ if v0.Meta() != nil {
 }
 // *default-data-reader-fn*
 {
-v0 := lang.NewSymbol("*default-data-reader-fn*").WithMeta(lang.NewMap(lang.NewKeyword("doc"), "When no data reader is found for a tag and *default-data-reader-fn*\n  is non-nil, it will be called with two arguments,\n  the tag and the value.  If *default-data-reader-fn* is nil (the\n  default), an exception will be thrown for the unknown tag.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.5", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(59), lang.NewKeyword("column"), int(6), lang.NewKeyword("line"), int(7876), lang.NewKeyword("end-line"), int(7876), lang.NewKeyword("dynamic"), true)).(*lang.Symbol)
+v0 := lang.NewSymbol("*default-data-reader-fn*").WithMeta(lang.NewMap(lang.NewKeyword("doc"), "When no data reader is found for a tag and *default-data-reader-fn*\n  is non-nil, it will be called with two arguments,\n  the tag and the value.  If *default-data-reader-fn* is nil (the\n  default), an exception will be thrown for the unknown tag.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.5", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(59), lang.NewKeyword("column"), int(6), lang.NewKeyword("line"), int(7866), lang.NewKeyword("end-line"), int(7866), lang.NewKeyword("dynamic"), true)).(*lang.Symbol)
 v1 := ns.InternWithValue(v0, nil, true)
 if v0.Meta() != nil {
 	v1.SetMeta(v0.Meta().(lang.IPersistentMap))
@@ -12067,7 +12064,7 @@ if v0.Meta() != nil {
 }
 // uri?
 {
-v0 := lang.NewSymbol("uri?").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("x"))), lang.NewKeyword("doc"), "Return true if x is a java.net.URI", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.9", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(10), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7930), lang.NewKeyword("end-line"), int(7930))).(*lang.Symbol)
+v0 := lang.NewSymbol("uri?").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("x"))), lang.NewKeyword("doc"), "Return true if x is a java.net.URI", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.9", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(10), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7920), lang.NewKeyword("end-line"), int(7920))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {
@@ -12509,7 +12506,7 @@ if v0.Meta() != nil {
 }
 // *data-readers*
 {
-v0 := lang.NewSymbol("*data-readers*").WithMeta(lang.NewMap(lang.NewKeyword("doc"), "Map from reader tag symbols to data reader Vars.\n\n  When Clojure starts, it searches for files named 'data_readers.clj'\n  and 'data_readers.cljc' at the root of the classpath. Each such file\n  must contain a literal map of symbols, like this:\n\n      {foo/bar my.project.foo/bar\n       foo/baz my.project/baz}\n\n  The first symbol in each pair is a tag that will be recognized by\n  the Clojure reader. The second symbol in the pair is the\n  fully-qualified name of a Var which will be invoked by the reader to\n  parse the form following the tag. For example, given the\n  data_readers.clj file above, the Clojure reader would parse this\n  form:\n\n      #foo/bar [1 2 3]\n\n  by invoking the Var #'my.project.foo/bar on the vector [1 2 3]. The\n  data reader function is invoked on the form AFTER it has been read\n  as a normal Clojure data structure by the reader.\n\n  Reader tags without namespace qualifiers are reserved for\n  Clojure. Default reader tags are defined in\n  glojure.core/default-data-readers but may be overridden in\n  data_readers.clj, data_readers.cljc, or by rebinding this Var.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.4", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(49), lang.NewKeyword("column"), int(6), lang.NewKeyword("line"), int(7847), lang.NewKeyword("end-line"), int(7847), lang.NewKeyword("dynamic"), true)).(*lang.Symbol)
+v0 := lang.NewSymbol("*data-readers*").WithMeta(lang.NewMap(lang.NewKeyword("doc"), "Map from reader tag symbols to data reader Vars.\n\n  When Clojure starts, it searches for files named 'data_readers.clj'\n  and 'data_readers.cljc' at the root of the classpath. Each such file\n  must contain a literal map of symbols, like this:\n\n      {foo/bar my.project.foo/bar\n       foo/baz my.project/baz}\n\n  The first symbol in each pair is a tag that will be recognized by\n  the Clojure reader. The second symbol in the pair is the\n  fully-qualified name of a Var which will be invoked by the reader to\n  parse the form following the tag. For example, given the\n  data_readers.clj file above, the Clojure reader would parse this\n  form:\n\n      #foo/bar [1 2 3]\n\n  by invoking the Var #'my.project.foo/bar on the vector [1 2 3]. The\n  data reader function is invoked on the form AFTER it has been read\n  as a normal Clojure data structure by the reader.\n\n  Reader tags without namespace qualifiers are reserved for\n  Clojure. Default reader tags are defined in\n  glojure.core/default-data-readers but may be overridden in\n  data_readers.clj, data_readers.cljc, or by rebinding this Var.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.4", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(49), lang.NewKeyword("column"), int(6), lang.NewKeyword("line"), int(7837), lang.NewKeyword("end-line"), int(7837), lang.NewKeyword("dynamic"), true)).(*lang.Symbol)
 v1 := ns.InternWithValue(v0, lang.NewMap(), true)
 if v0.Meta() != nil {
 	v1.SetMeta(v0.Meta().(lang.IPersistentMap))
@@ -12911,7 +12908,7 @@ if v0.Meta() != nil {
 }
 // tapset
 {
-v0 := lang.NewSymbol("tapset").WithMeta(lang.NewMap(lang.NewKeyword("private"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7935), lang.NewKeyword("column"), int(10), lang.NewKeyword("end-line"), int(7935), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")))).(*lang.Symbol)
+v0 := lang.NewSymbol("tapset").WithMeta(lang.NewMap(lang.NewKeyword("private"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7925), lang.NewKeyword("column"), int(10), lang.NewKeyword("end-line"), int(7925), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")))).(*lang.Symbol)
 v2 := lang.NewAtom(lang.CreatePersistentTreeSet())
 v1 := ns.InternWithValue(v0, v2, true)
 if v0.Meta() != nil {
@@ -12957,7 +12954,7 @@ if v0.Meta() != nil {
 }
 // iteration
 {
-v0 := lang.NewSymbol("iteration").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("step"), lang.NewSymbol("&"), lang.NewMap(lang.NewKeyword("keys"), lang.NewVector(lang.NewSymbol("somef"), lang.NewSymbol("vf"), lang.NewSymbol("kf"), lang.NewSymbol("initk")), lang.NewKeyword("or"), lang.NewMap(lang.NewSymbol("vf"), lang.NewSymbol("identity"), lang.NewSymbol("kf"), lang.NewSymbol("identity"), lang.NewSymbol("somef"), lang.NewSymbol("some?"), lang.NewSymbol("initk"), nil)))), lang.NewKeyword("doc"), "Creates a seqable/reducible via repeated calls to step,\n  a function of some (continuation token) 'k'. The first call to step\n  will be passed initk, returning 'ret'. Iff (somef ret) is true,\n  (vf ret) will be included in the iteration, else iteration will\n  terminate and vf/kf will not be called. If (kf ret) is non-nil it\n  will be passed to the next step call, else iteration will terminate.\n\n  This can be used e.g. to consume APIs that return paginated or batched data.\n\n   step - (possibly impure) fn of 'k' -> 'ret'\n\n   :somef - fn of 'ret' -> logical true/false, default 'some?'\n   :vf - fn of 'ret' -> 'v', a value produced by the iteration, default 'identity'\n   :kf - fn of 'ret' -> 'next-k' or nil (signaling 'do not continue'), default 'identity'\n   :initk - the first value passed to step, default 'nil'\n\n  It is presumed that step with non-initk is unreproducible/non-idempotent.\n  If step with initk is unreproducible it is on the consumer to not consume twice.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(15), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7769), lang.NewKeyword("end-line"), int(7769))).(*lang.Symbol)
+v0 := lang.NewSymbol("iteration").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("step"), lang.NewSymbol("&"), lang.NewMap(lang.NewKeyword("keys"), lang.NewVector(lang.NewSymbol("somef"), lang.NewSymbol("vf"), lang.NewSymbol("kf"), lang.NewSymbol("initk")), lang.NewKeyword("or"), lang.NewMap(lang.NewSymbol("vf"), lang.NewSymbol("identity"), lang.NewSymbol("kf"), lang.NewSymbol("identity"), lang.NewSymbol("somef"), lang.NewSymbol("some?"), lang.NewSymbol("initk"), nil)))), lang.NewKeyword("doc"), "Creates a seqable/reducible via repeated calls to step,\n  a function of some (continuation token) 'k'. The first call to step\n  will be passed initk, returning 'ret'. Iff (somef ret) is true,\n  (vf ret) will be included in the iteration, else iteration will\n  terminate and vf/kf will not be called. If (kf ret) is non-nil it\n  will be passed to the next step call, else iteration will terminate.\n\n  This can be used e.g. to consume APIs that return paginated or batched data.\n\n   step - (possibly impure) fn of 'k' -> 'ret'\n\n   :somef - fn of 'ret' -> logical true/false, default 'some?'\n   :vf - fn of 'ret' -> 'v', a value produced by the iteration, default 'identity'\n   :kf - fn of 'ret' -> 'next-k' or nil (signaling 'do not continue'), default 'identity'\n   :initk - the first value passed to step, default 'nil'\n\n  It is presumed that step with non-initk is unreproducible/non-idempotent.\n  If step with initk is unreproducible it is on the consumer to not consume twice.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(15), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7759), lang.NewKeyword("end-line"), int(7759))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
@@ -13086,7 +13083,7 @@ if v62.IsMacro() {
 }
 v63 := v62.Get()
 v64 := lang.NewVector(nil)
-v65 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7796), lang.NewKeyword("column"), int(9), lang.NewKeyword("end-line"), int(7796), lang.NewKeyword("end-column"), int(11))
+v65 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7786), lang.NewKeyword("column"), int(9), lang.NewKeyword("end-line"), int(7786), lang.NewKeyword("end-column"), int(11))
 v66, err := lang.WithMeta(v64, v65.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -13146,7 +13143,7 @@ return v70
 v68 := v67
 _ = v68
 }
-v68 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7797), lang.NewKeyword("column"), int(10), lang.NewKeyword("end-line"), int(7801), lang.NewKeyword("end-column"), int(51))
+v68 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7787), lang.NewKeyword("column"), int(10), lang.NewKeyword("end-line"), int(7791), lang.NewKeyword("end-column"), int(51))
 v69, err := lang.WithMeta(v67, v68.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -13161,7 +13158,7 @@ if v74.IsMacro() {
 }
 v75 := v74.Get()
 v76 := lang.NewVector(nil, nil, nil)
-v77 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7804), lang.NewKeyword("column"), int(12), lang.NewKeyword("end-line"), int(7804), lang.NewKeyword("end-column"), int(22))
+v77 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7794), lang.NewKeyword("column"), int(12), lang.NewKeyword("end-line"), int(7794), lang.NewKeyword("end-column"), int(22))
 v78, err := lang.WithMeta(v76, v77.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -15027,7 +15024,7 @@ if v0.Meta() != nil {
 }
 // load-data-readers
 {
-v0 := lang.NewSymbol("load-data-readers").WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7918), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(7918), lang.NewKeyword("end-column"), int(24), lang.NewKeyword("private"), true, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")))).(*lang.Symbol)
+v0 := lang.NewSymbol("load-data-readers").WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7908), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(7908), lang.NewKeyword("end-column"), int(24), lang.NewKeyword("private"), true, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 0 {
@@ -15068,7 +15065,7 @@ v18 := lang.Apply(v17, nil)
 v19 := lang.Apply(v11, []any{v14, v8, v18})
 return v19
 })
-v8 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7920), lang.NewKeyword("column"), int(19), lang.NewKeyword("end-line"), int(7922), lang.NewKeyword("end-column"), int(57))
+v8 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7910), lang.NewKeyword("column"), int(19), lang.NewKeyword("end-line"), int(7912), lang.NewKeyword("end-column"), int(57))
 v9, err := lang.WithMeta(v7, v8.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -16779,7 +16776,7 @@ if v0.Meta() != nil {
 }
 // data-reader-urls
 {
-v0 := lang.NewSymbol("data-reader-urls").WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7883), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(7883), lang.NewKeyword("end-column"), int(23), lang.NewKeyword("private"), true, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")))).(*lang.Symbol)
+v0 := lang.NewSymbol("data-reader-urls").WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7873), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(7873), lang.NewKeyword("end-column"), int(23), lang.NewKeyword("private"), true, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 0 {
@@ -19456,7 +19453,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(glojure.lang.Volatile24., []any{v4})
+v5 := lang.Apply(lang1.NewVolatile, []any{v4})
 return v5
 })
 v4 := reflect.TypeOf((*lang1.Volatile)(nil)).Elem()
@@ -21598,7 +21595,7 @@ if v0.Meta() != nil {
 }
 // tagged-literal?
 {
-v0 := lang.NewSymbol("tagged-literal?").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("value"))), lang.NewKeyword("doc"), "Return true if the value is the data representation of a tagged literal", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(21), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7816), lang.NewKeyword("end-line"), int(7816))).(*lang.Symbol)
+v0 := lang.NewSymbol("tagged-literal?").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("value"))), lang.NewKeyword("doc"), "Return true if the value is the data representation of a tagged literal", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(21), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7806), lang.NewKeyword("end-line"), int(7806))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {
@@ -25958,7 +25955,7 @@ if v0.Meta() != nil {
 }
 // remove-tap
 {
-v0 := lang.NewSymbol("remove-tap").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("f"))), lang.NewKeyword("doc"), "Remove f from the tap set.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.10", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7936), lang.NewKeyword("end-line"), int(7936))).(*lang.Symbol)
+v0 := lang.NewSymbol("remove-tap").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("f"))), lang.NewKeyword("doc"), "Remove f from the tap set.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.10", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7926), lang.NewKeyword("end-line"), int(7926))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {
@@ -26082,7 +26079,7 @@ if v0.Meta() != nil {
 }
 // parse-long
 {
-v0 := lang.NewSymbol("parse-long").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Parse string of decimal digits with optional leading -/+ and return a\n  Long value, or nil if parse fails", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7979), lang.NewKeyword("end-line"), int(7979))).(*lang.Symbol)
+v0 := lang.NewSymbol("parse-long").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Parse string of decimal digits with optional leading -/+ and return a\n  Long value, or nil if parse fails", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7969), lang.NewKeyword("end-line"), int(7969))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {
@@ -26368,7 +26365,7 @@ if v0.Meta() != nil {
 }
 // update-vals
 {
-v0 := lang.NewSymbol("update-vals").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("m"), lang.NewSymbol("f"))), lang.NewKeyword("doc"), "m f => {k (f v) ...}\n\n  Given a map m and a function f of 1-argument, returns a new map where the keys of m\n  are mapped to result of applying f to the corresponding values of m.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(17), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7943), lang.NewKeyword("end-line"), int(7943))).(*lang.Symbol)
+v0 := lang.NewSymbol("update-vals").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("m"), lang.NewSymbol("f"))), lang.NewKeyword("doc"), "m f => {k (f v) ...}\n\n  Given a map m and a function f of 1-argument, returns a new map where the keys of m\n  are mapped to result of applying f to the corresponding values of m.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(17), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7933), lang.NewKeyword("end-line"), int(7933))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 2 {
@@ -26412,7 +26409,7 @@ v21 := lang.Apply(v4, []any{v17})
 v22 := lang.Apply(v20, []any{v15, v16, v21})
 return v22
 })
-v15 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7952), lang.NewKeyword("column"), int(17), lang.NewKeyword("end-line"), int(7952), lang.NewKeyword("end-column"), int(51))
+v15 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7942), lang.NewKeyword("column"), int(17), lang.NewKeyword("end-line"), int(7942), lang.NewKeyword("end-column"), int(51))
 v16, err := lang.WithMeta(v14, v15.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -26442,7 +26439,7 @@ if v27.IsMacro() {
 }
 v28 := v27.Get()
 v29 := lang.NewMap()
-v30 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7955), lang.NewKeyword("column"), int(30), lang.NewKeyword("end-line"), int(7955), lang.NewKeyword("end-column"), int(31))
+v30 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7945), lang.NewKeyword("column"), int(30), lang.NewKeyword("end-line"), int(7945), lang.NewKeyword("end-column"), int(31))
 v31, err := lang.WithMeta(v29, v30.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -31816,7 +31813,7 @@ if v31.IsMacro() {
 }
 v32 := v31.Get()
 v33 := lang.Apply(v32, []any{v4, "already has", v5, "as ancestor"})
-v34 := lang.Apply(Exception25., []any{v33})
+v34 := lang.Apply(Exception24., []any{v33})
 panic(v34)
 } else {
 v24 = nil
@@ -31839,7 +31836,7 @@ if v42.IsMacro() {
 }
 v43 := v42.Get()
 v44 := lang.Apply(v43, []any{"Cyclic derivation:", v5, "has", v4, "as ancestor"})
-v45 := lang.Apply(Exception25., []any{v44})
+v45 := lang.Apply(Exception24., []any{v44})
 panic(v45)
 } else {
 v35 = nil
@@ -32300,7 +32297,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(runtime26.NumCPU, nil)
+v9 := lang.Apply(runtime25.NumCPU, nil)
 v10 := lang.Apply(v8, []any{int64(2), v9})
 var v5 any = v10
 _ = v5
@@ -33459,7 +33456,7 @@ if v0.Meta() != nil {
 }
 // tagged-literal
 {
-v0 := lang.NewSymbol("tagged-literal").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("tag"), lang.NewSymbol("form"))), lang.NewKeyword("doc"), "Construct a data representation of a tagged literal from a\n  tag symbol and a form.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(20), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7822), lang.NewKeyword("end-line"), int(7822))).(*lang.Symbol)
+v0 := lang.NewSymbol("tagged-literal").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("tag"), lang.NewSymbol("form"))), lang.NewKeyword("doc"), "Construct a data representation of a tagged literal from a\n  tag symbol and a form.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(20), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7812), lang.NewKeyword("end-line"), int(7812))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 2 {
@@ -36642,209 +36639,208 @@ v4 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v5 := args[0]
-v7 := lang.Apply(java.util.ArrayList27., nil)
-var v6 any = v7
+var v6 any = "unimplemented: new with non-constant class type"
 _ = v6
-v9 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v10 := v9.FindInternedVar(lang.NewSymbol("volatile!"))
-if v10.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v10)))
+v8 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v9 := v8.FindInternedVar(lang.NewSymbol("volatile!"))
+if v9.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v9)))
 }
-v11 := v10.Get()
-v12 := lang.Apply(v11, []any{lang.NewKeyword("glojure.core/none")})
-var v8 any = v12
-_ = v8
-var v14 lang.FnFunc
-v14 = lang.NewFnFunc(func(args ...any) any {
+v10 := v9.Get()
+v11 := lang.Apply(v10, []any{lang.NewKeyword("glojure.core/none")})
+var v7 any = v11
+_ = v7
+var v13 lang.FnFunc
+v13 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 0:
-v15 := lang.Apply(v5, nil)
-return v15
+v14 := lang.Apply(v5, nil)
+return v14
   case 1:
-v15 := args[0]
-var v17 any
-v18, ok := lang.FieldOrMethod(v6, "isEmpty")
+v14 := args[0]
+var v16 any
+v17, ok := lang.FieldOrMethod(v6, "isEmpty")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "isEmpty")))
 }
-var v19 any
-switch reflect.TypeOf(v18).Kind() {
+var v18 any
+switch reflect.TypeOf(v17).Kind() {
 case reflect.Func:
-  v19 = lang.Apply(v18, nil)
+  v18 = lang.Apply(v17, nil)
 default:
-  v19 = v18
+  v18 = v17
 }
-if lang.IsTruthy(v19) {
-v17 = v16
+if lang.IsTruthy(v18) {
+v16 = v15
 } else {
-v21 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v22 := v21.FindInternedVar(lang.NewSymbol("vec"))
-if v22.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v22)))
+v20 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v21 := v20.FindInternedVar(lang.NewSymbol("vec"))
+if v21.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v21)))
 }
-v23 := v22.Get()
-v24, ok := lang.FieldOrMethod(v6, "toArray")
+v22 := v21.Get()
+v23, ok := lang.FieldOrMethod(v6, "toArray")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "toArray")))
 }
-var v25 any
-switch reflect.TypeOf(v24).Kind() {
+var v24 any
+switch reflect.TypeOf(v23).Kind() {
 case reflect.Func:
-  v25 = lang.Apply(v24, nil)
+  v24 = lang.Apply(v23, nil)
 default:
-  v25 = v24
+  v24 = v23
 }
-v26 := lang.Apply(v23, []any{v25})
-var v20 any = v26
-_ = v20
-v28, ok := lang.FieldOrMethod(v6, "clear")
+v25 := lang.Apply(v22, []any{v24})
+var v19 any = v25
+_ = v19
+v27, ok := lang.FieldOrMethod(v6, "clear")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "clear")))
 }
-var v29 any
-switch reflect.TypeOf(v28).Kind() {
+var v28 any
+switch reflect.TypeOf(v27).Kind() {
 case reflect.Func:
-  v29 = lang.Apply(v28, nil)
+  v28 = lang.Apply(v27, nil)
 default:
-  v29 = v28
+  v28 = v27
 }
-_ = v29
+_ = v28
+v29 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v30 := v29.FindInternedVar(lang.NewSymbol("unreduced"))
+if v30.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v30)))
+}
+v31 := v30.Get()
+v32 := lang.Apply(v5, []any{v15, v19})
+v33 := lang.Apply(v31, []any{v32})
+v16 = v33
+}
+var v15 any = v16
+_ = v15
+v20 := lang.Apply(v5, []any{v15})
+return v20
+  case 2:
+v14 := args[0]
+v15 := args[1]
+v17 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v18 := v17.FindInternedVar(lang.NewSymbol("deref"))
+if v18.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v18)))
+}
+v19 := v18.Get()
+v20 := lang.Apply(v19, []any{v7})
+var v16 any = v20
+_ = v16
+v22 := lang.Apply(v3, []any{v15})
+var v21 any = v22
+_ = v21
+v24 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v25 := v24.FindInternedVar(lang.NewSymbol("vreset!"))
+if v25.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v25)))
+}
+v26 := v25.Get()
+v27 := lang.Apply(v26, []any{v7, v21})
+_ = v27
+var v28 any
 v30 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v31 := v30.FindInternedVar(lang.NewSymbol("unreduced"))
+v31 := v30.FindInternedVar(lang.NewSymbol("identical?"))
 if v31.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v31)))
 }
 v32 := v31.Get()
-v33 := lang.Apply(v5, []any{v16, v20})
-v34 := lang.Apply(v32, []any{v33})
-v17 = v34
-}
-var v16 any = v17
-_ = v16
-v21 := lang.Apply(v5, []any{v16})
-return v21
-  case 2:
-v15 := args[0]
-v16 := args[1]
-v18 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v19 := v18.FindInternedVar(lang.NewSymbol("deref"))
-if v19.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v19)))
-}
-v20 := v19.Get()
-v21 := lang.Apply(v20, []any{v8})
-var v17 any = v21
-_ = v17
-v23 := lang.Apply(v3, []any{v16})
-var v22 any = v23
-_ = v22
-v25 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v26 := v25.FindInternedVar(lang.NewSymbol("vreset!"))
-if v26.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v26)))
-}
-v27 := v26.Get()
-v28 := lang.Apply(v27, []any{v8, v22})
-_ = v28
-var v29 any
-v31 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v32 := v31.FindInternedVar(lang.NewSymbol("identical?"))
-if v32.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v32)))
-}
-v33 := v32.Get()
-v34 := lang.Apply(v33, []any{v17, lang.NewKeyword("glojure.core/none")})
-var v30 any = v34
-_ = v30
-var v36 any
-if lang.IsTruthy(v30) {
-v36 = v30
+v33 := lang.Apply(v32, []any{v16, lang.NewKeyword("glojure.core/none")})
+var v29 any = v33
+_ = v29
+var v35 any
+if lang.IsTruthy(v29) {
+v35 = v29
 } else {
-v37 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v38 := v37.FindInternedVar(lang.NewSymbol("="))
-if v38.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v38)))
+v36 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v37 := v36.FindInternedVar(lang.NewSymbol("="))
+if v37.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v37)))
 }
-v39 := v38.Get()
-v40 := lang.Apply(v39, []any{v22, v17})
-v36 = v40
+v38 := v37.Get()
+v39 := lang.Apply(v38, []any{v21, v16})
+v35 = v39
 }
-if lang.IsTruthy(v36) {
-v30, _ := lang.FieldOrMethod(v6, "add")
-if reflect.TypeOf(v30).Kind() != reflect.Func {
+if lang.IsTruthy(v35) {
+v29, _ := lang.FieldOrMethod(v6, "add")
+if reflect.TypeOf(v29).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("add is not a function")))
 }
-v31 := lang.Apply(v30, []any{v16})
-_ = v31
-v29 = v15
+v30 := lang.Apply(v29, []any{v15})
+_ = v30
+v28 = v14
 } else {
-v33 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v34 := v33.FindInternedVar(lang.NewSymbol("vec"))
-if v34.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v34)))
+v32 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v33 := v32.FindInternedVar(lang.NewSymbol("vec"))
+if v33.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v33)))
 }
-v35 := v34.Get()
-v36, ok := lang.FieldOrMethod(v6, "toArray")
+v34 := v33.Get()
+v35, ok := lang.FieldOrMethod(v6, "toArray")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "toArray")))
 }
-var v37 any
-switch reflect.TypeOf(v36).Kind() {
+var v36 any
+switch reflect.TypeOf(v35).Kind() {
 case reflect.Func:
-  v37 = lang.Apply(v36, nil)
+  v36 = lang.Apply(v35, nil)
 default:
-  v37 = v36
+  v36 = v35
 }
-v38 := lang.Apply(v35, []any{v37})
-var v32 any = v38
-_ = v32
-v40, ok := lang.FieldOrMethod(v6, "clear")
+v37 := lang.Apply(v34, []any{v36})
+var v31 any = v37
+_ = v31
+v39, ok := lang.FieldOrMethod(v6, "clear")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "clear")))
 }
-var v41 any
-switch reflect.TypeOf(v40).Kind() {
+var v40 any
+switch reflect.TypeOf(v39).Kind() {
 case reflect.Func:
-  v41 = lang.Apply(v40, nil)
+  v40 = lang.Apply(v39, nil)
 default:
-  v41 = v40
+  v40 = v39
 }
+_ = v40
+v42 := lang.Apply(v5, []any{v14, v31})
+var v41 any = v42
 _ = v41
-v43 := lang.Apply(v5, []any{v15, v32})
-var v42 any = v43
-_ = v42
-var v45 any
-v46 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v47 := v46.FindInternedVar(lang.NewSymbol("reduced?"))
-if v47.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v47)))
+var v44 any
+v45 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v46 := v45.FindInternedVar(lang.NewSymbol("reduced?"))
+if v46.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v46)))
 }
-v48 := v47.Get()
-v49 := lang.Apply(v48, []any{v42})
-if lang.IsTruthy(v49) {
-v45 = nil
+v47 := v46.Get()
+v48 := lang.Apply(v47, []any{v41})
+if lang.IsTruthy(v48) {
+v44 = nil
 } else {
-v50, _ := lang.FieldOrMethod(v6, "add")
-if reflect.TypeOf(v50).Kind() != reflect.Func {
+v49, _ := lang.FieldOrMethod(v6, "add")
+if reflect.TypeOf(v49).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("add is not a function")))
 }
-v51 := lang.Apply(v50, []any{v16})
-v45 = v51
+v50 := lang.Apply(v49, []any{v15})
+v44 = v50
 }
-_ = v45
-v29 = v42
+_ = v44
+v28 = v41
 }
-return v29
+return v28
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 })
-v15 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7195), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(7219), lang.NewKeyword("end-column"), int(28))
-v16, err := lang.WithMeta(v14, v15.(lang.IPersistentMap))
+v14 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7195), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(7219), lang.NewKeyword("end-column"), int(28))
+v15, err := lang.WithMeta(v13, v14.(lang.IPersistentMap))
 if err != nil {
   panic(err)
 }
-return v16
+return v15
 })
 v5 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7192), lang.NewKeyword("column"), int(3), lang.NewKeyword("end-line"), int(7219), lang.NewKeyword("end-column"), int(30))
 v6, err := lang.WithMeta(v4, v5.(lang.IPersistentMap))
@@ -39206,54 +39202,6 @@ v25 := lang.Apply(v21, []any{v24, v3})
 v14 = v25
 }()
 return v14
-  }
-})
-v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-v1 := ns.InternWithValue(v0, v2, true)
-if v0.Meta() != nil {
-	v1.SetMeta(v0.Meta().(lang.IPersistentMap))
-}
-}
-// eduction
-{
-v0 := lang.NewSymbol("eduction").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("xform*"), lang.NewSymbol("coll"))), lang.NewKeyword("doc"), "Returns a reducible/iterable application of the transducers\n  to the items in coll. Transducers are applied in order as if\n  combined with comp. Note that these applications will be\n  performed every time reduce/iterator is called.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(14), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7751), lang.NewKeyword("end-line"), int(7751))).(*lang.Symbol)
-var v2 lang.FnFunc
-v2 = lang.NewFnFunc(func(args ...any) any {
-  switch len(args) {
-  default:
-    if len(args) < 0 {
-      panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
-    }
-v3 := lang.NewList(args[0:]...)
-v4 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v5 := v4.FindInternedVar(lang.NewSymbol("apply"))
-if v5.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
-}
-v6 := v5.Get()
-v7 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v8 := v7.FindInternedVar(lang.NewSymbol("comp"))
-if v8.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v8)))
-}
-v9 := v8.Get()
-v10 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v11 := v10.FindInternedVar(lang.NewSymbol("butlast"))
-if v11.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v11)))
-}
-v12 := v11.Get()
-v13 := lang.Apply(v12, []any{v3})
-v14 := lang.Apply(v6, []any{v9, v13})
-v15 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v16 := v15.FindInternedVar(lang.NewSymbol("last"))
-if v16.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v16)))
-}
-v17 := v16.Get()
-v18 := lang.Apply(v17, []any{v3})
-v19 := lang.Apply(Eduction28., []any{v14, v18})
-return v19
   }
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -44194,7 +44142,7 @@ if v7.IsMacro() {
 v8 := v7.Get()
 v9 := lang.Apply(v8, []any{v4})
 if lang.IsTruthy(v9) {
-v10 := lang.Apply(java.lang.UnsupportedOperationException29., []any{"Can't get descendants of classes"})
+v10 := lang.Apply(java.lang.UnsupportedOperationException26., []any{"Can't get descendants of classes"})
 panic(v10)
 } else {
 v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -47390,7 +47338,7 @@ v7, _ := lang.FieldOrMethod(v3, "Get")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
 }
-v8 := lang.Apply(v7, []any{v4, time30.Millisecond})
+v8 := lang.Apply(v7, []any{v4, time27.Millisecond})
 v6 = v8
 }()
 return v6
@@ -52280,7 +52228,7 @@ if v12.IsMacro() {
 }
 v13 := v12.Get()
 v14 := lang.Apply(v13, []any{v3})
-v15 := lang.Apply(LinkedBlockingQueue31., []any{v14})
+v15 := lang.Apply(LinkedBlockingQueue28., []any{v14})
 v6 = v15
 }
 var v5 any = v6
@@ -52760,7 +52708,7 @@ if v0.Meta() != nil {
 }
 // parse-uuid
 {
-v0 := lang.NewSymbol("parse-uuid").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Parse a string representing a UUID and return a java.util.UUID instance,\n  or nil if parse fails.\n\n  Grammar: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#toString--", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7999), lang.NewKeyword("end-line"), int(7999))).(*lang.Symbol)
+v0 := lang.NewSymbol("parse-uuid").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Parse a string representing a UUID and return a java.util.UUID instance,\n  or nil if parse fails.\n\n  Grammar: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#toString--", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7989), lang.NewKeyword("end-line"), int(7989))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {
@@ -52926,7 +52874,7 @@ var v50 any
 if lang.IsTruthy(v41) {
 v50 = v41
 } else {
-v51 := lang.Apply(Exception25., []any{"ResultSet must have unique column labels"})
+v51 := lang.Apply(Exception24., []any{"ResultSet must have unique column labels"})
 panic(v51)
 }
 var v40 any = v50
@@ -53856,7 +53804,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 0 {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
-v4 := lang.Apply(java.util.concurrent.CountDownLatch32., []any{int64(1)})
+v4 := lang.Apply(java.util.concurrent.CountDownLatch29., []any{int64(1)})
 var v3 any = v4
 _ = v3
 v6 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -53916,7 +53864,7 @@ v31, _ := lang.FieldOrMethod(v3, "await")
 if reflect.TypeOf(v31).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("await is not a function")))
 }
-v32 := lang.Apply(v31, []any{nil, time30.Millisecond})
+v32 := lang.Apply(v31, []any{nil, time27.Millisecond})
 if lang.IsTruthy(v32) {
 v33 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v34 := v33.FindInternedVar(lang.NewSymbol("deref"))
@@ -54129,55 +54077,48 @@ v4 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v5 := args[0]
-v7 := lang.Apply(java.util.ArrayList27., []any{v3})
-var v6 any = v7
+v7 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v8 := v7.FindInternedVar(lang.NewSymbol("to-array"))
+if v8.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v8)))
+}
+v9 := v8.Get()
+v10 := lang.Apply(v9, []any{v3})
+v11 := lang.Apply(lang1.NewArrayList, []any{v10})
+var v6 any = v11
 _ = v6
-var v9 lang.FnFunc
-v9 = lang.NewFnFunc(func(args ...any) any {
+var v13 lang.FnFunc
+v13 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 0:
-v10 := lang.Apply(v5, nil)
-return v10
+v14 := lang.Apply(v5, nil)
+return v14
   case 1:
-v10 := args[0]
-var v12 any
-v13, ok := lang.FieldOrMethod(v6, "isEmpty")
+v14 := args[0]
+var v16 any
+v17, ok := lang.FieldOrMethod(v6, "isEmpty")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "isEmpty")))
 }
-var v14 any
-switch reflect.TypeOf(v13).Kind() {
+var v18 any
+switch reflect.TypeOf(v17).Kind() {
 case reflect.Func:
-  v14 = lang.Apply(v13, nil)
+  v18 = lang.Apply(v17, nil)
 default:
-  v14 = v13
+  v18 = v17
 }
-if lang.IsTruthy(v14) {
-v12 = v11
+if lang.IsTruthy(v18) {
+v16 = v15
 } else {
-v16 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v17 := v16.FindInternedVar(lang.NewSymbol("vec"))
-if v17.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v17)))
+v20 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v21 := v20.FindInternedVar(lang.NewSymbol("vec"))
+if v21.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v21)))
 }
-v18 := v17.Get()
-v19, ok := lang.FieldOrMethod(v6, "toArray")
+v22 := v21.Get()
+v23, ok := lang.FieldOrMethod(v6, "toArray")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "toArray")))
-}
-var v20 any
-switch reflect.TypeOf(v19).Kind() {
-case reflect.Func:
-  v20 = lang.Apply(v19, nil)
-default:
-  v20 = v19
-}
-v21 := lang.Apply(v18, []any{v20})
-var v15 any = v21
-_ = v15
-v23, ok := lang.FieldOrMethod(v6, "clear")
-if !ok {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "clear")))
 }
 var v24 any
 switch reflect.TypeOf(v23).Kind() {
@@ -54186,73 +54127,73 @@ case reflect.Func:
 default:
   v24 = v23
 }
-_ = v24
-v25 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v26 := v25.FindInternedVar(lang.NewSymbol("unreduced"))
-if v26.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v26)))
+v25 := lang.Apply(v22, []any{v24})
+var v19 any = v25
+_ = v19
+v27, ok := lang.FieldOrMethod(v6, "clear")
+if !ok {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "clear")))
 }
-v27 := v26.Get()
-v28 := lang.Apply(v5, []any{v11, v15})
-v29 := lang.Apply(v27, []any{v28})
-v12 = v29
+var v28 any
+switch reflect.TypeOf(v27).Kind() {
+case reflect.Func:
+  v28 = lang.Apply(v27, nil)
+default:
+  v28 = v27
 }
-var v11 any = v12
-_ = v11
-v16 := lang.Apply(v5, []any{v11})
-return v16
+_ = v28
+v29 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v30 := v29.FindInternedVar(lang.NewSymbol("unreduced"))
+if v30.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v30)))
+}
+v31 := v30.Get()
+v32 := lang.Apply(v5, []any{v15, v19})
+v33 := lang.Apply(v31, []any{v32})
+v16 = v33
+}
+var v15 any = v16
+_ = v15
+v20 := lang.Apply(v5, []any{v15})
+return v20
   case 2:
-v10 := args[0]
-v11 := args[1]
-v12, _ := lang.FieldOrMethod(v6, "add")
-if reflect.TypeOf(v12).Kind() != reflect.Func {
+v14 := args[0]
+v15 := args[1]
+v16, _ := lang.FieldOrMethod(v6, "add")
+if reflect.TypeOf(v16).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("add is not a function")))
 }
-v13 := lang.Apply(v12, []any{v11})
-_ = v13
-var v14 any
-v15 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v16 := v15.FindInternedVar(lang.NewSymbol("="))
-if v16.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v16)))
+v17 := lang.Apply(v16, []any{v15})
+_ = v17
+var v18 any
+v19 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v20 := v19.FindInternedVar(lang.NewSymbol("="))
+if v20.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v20)))
 }
-v17 := v16.Get()
-v18, ok := lang.FieldOrMethod(v6, "size")
+v21 := v20.Get()
+v22, ok := lang.FieldOrMethod(v6, "size")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "size")))
 }
-var v19 any
-switch reflect.TypeOf(v18).Kind() {
+var v23 any
+switch reflect.TypeOf(v22).Kind() {
 case reflect.Func:
-  v19 = lang.Apply(v18, nil)
+  v23 = lang.Apply(v22, nil)
 default:
-  v19 = v18
+  v23 = v22
 }
-v20 := lang.Apply(v17, []any{v3, v19})
-if lang.IsTruthy(v20) {
-v22 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-v23 := v22.FindInternedVar(lang.NewSymbol("vec"))
-if v23.IsMacro() {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v23)))
+v24 := lang.Apply(v21, []any{v3, v23})
+if lang.IsTruthy(v24) {
+v26 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v27 := v26.FindInternedVar(lang.NewSymbol("vec"))
+if v27.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v27)))
 }
-v24 := v23.Get()
-v25, ok := lang.FieldOrMethod(v6, "toArray")
+v28 := v27.Get()
+v29, ok := lang.FieldOrMethod(v6, "toArray")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "toArray")))
-}
-var v26 any
-switch reflect.TypeOf(v25).Kind() {
-case reflect.Func:
-  v26 = lang.Apply(v25, nil)
-default:
-  v26 = v25
-}
-v27 := lang.Apply(v24, []any{v26})
-var v21 any = v27
-_ = v21
-v29, ok := lang.FieldOrMethod(v6, "clear")
-if !ok {
-  panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "clear")))
 }
 var v30 any
 switch reflect.TypeOf(v29).Kind() {
@@ -54261,23 +54202,37 @@ case reflect.Func:
 default:
   v30 = v29
 }
-_ = v30
-v31 := lang.Apply(v5, []any{v10, v21})
-v14 = v31
-} else {
-v14 = v10
+v31 := lang.Apply(v28, []any{v30})
+var v25 any = v31
+_ = v25
+v33, ok := lang.FieldOrMethod(v6, "clear")
+if !ok {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "clear")))
 }
-return v14
+var v34 any
+switch reflect.TypeOf(v33).Kind() {
+case reflect.Func:
+  v34 = lang.Apply(v33, nil)
+default:
+  v34 = v33
+}
+_ = v34
+v35 := lang.Apply(v5, []any{v14, v25})
+v18 = v35
+} else {
+v18 = v14
+}
+return v18
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 })
-v10 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7274), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(7290), lang.NewKeyword("end-column"), int(23))
-v11, err := lang.WithMeta(v9, v10.(lang.IPersistentMap))
+v14 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7274), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(7290), lang.NewKeyword("end-column"), int(23))
+v15, err := lang.WithMeta(v13, v14.(lang.IPersistentMap))
 if err != nil {
   panic(err)
 }
-return v11
+return v15
 })
 v5 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7272), lang.NewKeyword("column"), int(4), lang.NewKeyword("end-line"), int(7290), lang.NewKeyword("end-column"), int(25))
 v6, err := lang.WithMeta(v4, v5.(lang.IPersistentMap))
@@ -57048,7 +57003,7 @@ if v0.Meta() != nil {
 }
 // reader-conditional?
 {
-v0 := lang.NewSymbol("reader-conditional?").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("value"))), lang.NewKeyword("doc"), "Return true if the value is the data representation of a reader conditional", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7829), lang.NewKeyword("end-line"), int(7829))).(*lang.Symbol)
+v0 := lang.NewSymbol("reader-conditional?").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("value"))), lang.NewKeyword("doc"), "Return true if the value is the data representation of a reader conditional", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7819), lang.NewKeyword("end-line"), int(7819))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {
@@ -59668,7 +59623,7 @@ if v0.Meta() != nil {
 }
 // parse-boolean
 {
-v0 := lang.NewSymbol("parse-boolean").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Parse strings \"true\" or \"false\" and return a boolean, or nil if invalid", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(19), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(8010), lang.NewKeyword("end-line"), int(8010))).(*lang.Symbol)
+v0 := lang.NewSymbol("parse-boolean").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Parse strings \"true\" or \"false\" and return a boolean, or nil if invalid", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(19), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(8000), lang.NewKeyword("end-line"), int(8000))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {
@@ -60964,7 +60919,7 @@ if v0.Meta() != nil {
 }
 // re-pattern
 {
-v1 := reflect.TypeOf((*regexp33.Regexp)(nil))
+v1 := reflect.TypeOf((*regexp30.Regexp)(nil))
 v0 := lang.NewSymbol("re-pattern").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Returns an instance of java.util.regex.Pattern, for use, e.g. in\n  re-matcher.", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.0", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(4863), lang.NewKeyword("end-line"), int(4863))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
@@ -60979,16 +60934,16 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{regexp33.*Regexp, v4})
+v9 := lang.Apply(v8, []any{regexp30.*Regexp, v4})
 if lang.IsTruthy(v9) {
 v5 = v4
 } else {
-v10 := lang.Apply(regexp33.MustCompile, []any{v4})
+v10 := lang.Apply(regexp30.MustCompile, []any{v4})
 v5 = v10
 }
 return v5
 })
-v4 := reflect.TypeOf((*regexp33.Regexp)(nil))
+v4 := reflect.TypeOf((*regexp30.Regexp)(nil))
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), v4)).(lang.FnFunc)
 v2 := ns.InternWithValue(v0, v3, true)
 if v0.Meta() != nil {
@@ -63821,7 +63776,7 @@ if v17.IsMacro() {
 }
 v18 := v17.Get()
 v19 := lang.Apply(v18, []any{"No namespace: ", v3, " found"})
-v20 := lang.Apply(Exception25., []any{v19})
+v20 := lang.Apply(Exception24., []any{v19})
 panic(v20)
 }
 v4 = v15
@@ -65665,7 +65620,7 @@ if v0.Meta() != nil {
 }
 // update-keys
 {
-v0 := lang.NewSymbol("update-keys").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("m"), lang.NewSymbol("f"))), lang.NewKeyword("doc"), "m f => {(f k) v ...}\n\n  Given a map m and a function f of 1-argument, returns a new map whose\n  keys are the result of applying f to the keys of m, mapped to the\n  corresponding values of m.\n  f must return a unique key for each key of m, else the behavior is undefined.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(17), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7959), lang.NewKeyword("end-line"), int(7959))).(*lang.Symbol)
+v0 := lang.NewSymbol("update-keys").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("m"), lang.NewSymbol("f"))), lang.NewKeyword("doc"), "m f => {(f k) v ...}\n\n  Given a map m and a function f of 1-argument, returns a new map whose\n  keys are the result of applying f to the keys of m, mapped to the\n  corresponding values of m.\n  f must return a unique key for each key of m, else the behavior is undefined.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(17), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7949), lang.NewKeyword("end-line"), int(7949))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 2 {
@@ -65703,7 +65658,7 @@ v19 := lang.Apply(v4, []any{v14})
 v20 := lang.Apply(v18, []any{v13, v19, v15})
 return v20
 })
-v13 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7969), lang.NewKeyword("column"), int(25), lang.NewKeyword("end-line"), int(7969), lang.NewKeyword("end-column"), int(59))
+v13 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7959), lang.NewKeyword("column"), int(25), lang.NewKeyword("end-line"), int(7959), lang.NewKeyword("end-column"), int(59))
 v14, err := lang.WithMeta(v12, v13.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -65715,7 +65670,7 @@ if v16.IsMacro() {
 }
 v17 := v16.Get()
 v18 := lang.NewMap()
-v19 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7970), lang.NewKeyword("column"), int(36), lang.NewKeyword("end-line"), int(7970), lang.NewKeyword("end-column"), int(37))
+v19 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7960), lang.NewKeyword("column"), int(36), lang.NewKeyword("end-line"), int(7960), lang.NewKeyword("end-column"), int(37))
 v20, err := lang.WithMeta(v18, v19.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -66247,7 +66202,7 @@ v13 := v12.Get()
 v14 := lang.Apply(v10, []any{v13, v4, v5})
 var v7 any = v14
 _ = v7
-v16 := lang.Apply(Exception25., []any{v7})
+v16 := lang.Apply(Exception24., []any{v7})
 var v15 any = v16
 _ = v15
 v18, ok := lang.FieldOrMethod(v15, "getStackTrace")
@@ -66353,7 +66308,7 @@ case reflect.Func:
 default:
   v46 = v45
 }
-v47 := lang.Apply(CompilerException34., []any{v42, v44, v46, v15})
+v47 := lang.Apply(CompilerException31., []any{v42, v44, v46, v15})
 panic(v47)
 } else {
 v6 = nil
@@ -66387,7 +66342,7 @@ if v0.Meta() != nil {
 }
 // run!
 {
-v0 := lang.NewSymbol("run!").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("proc"), lang.NewSymbol("coll"))), lang.NewKeyword("doc"), "Runs the supplied procedure (via reduce), for purposes of side\n  effects, on successive items in the collection. Returns nil", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(10), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7761), lang.NewKeyword("end-line"), int(7761))).(*lang.Symbol)
+v0 := lang.NewSymbol("run!").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("proc"), lang.NewSymbol("coll"))), lang.NewKeyword("doc"), "Runs the supplied procedure (via reduce), for purposes of side\n  effects, on successive items in the collection. Returns nil", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(10), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7751), lang.NewKeyword("end-line"), int(7751))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 2 {
@@ -66411,7 +66366,7 @@ v10 := args[1]
 v11 := lang.Apply(v3, []any{v10})
 return v11
 })
-v9 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7766), lang.NewKeyword("column"), int(11), lang.NewKeyword("end-line"), int(7766), lang.NewKeyword("end-column"), int(20))
+v9 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7756), lang.NewKeyword("column"), int(11), lang.NewKeyword("end-line"), int(7756), lang.NewKeyword("end-column"), int(20))
 v10, err := lang.WithMeta(v8, v9.(lang.IPersistentMap))
 if err != nil {
   panic(err)
@@ -70183,7 +70138,7 @@ v108 := v107.Get()
 v109 := lang.Apply(v108, []any{v71})
 v110 := lang.Apply(v105, []any{v109, int64(1)})
 if lang.IsTruthy(v110) {
-v111 := lang.Apply(Exception25., []any{"The syntax for defmulti has changed. Example: (defmulti name dispatch-fn :default dispatch-value)"})
+v111 := lang.Apply(Exception24., []any{"The syntax for defmulti has changed. Example: (defmulti name dispatch-fn :default dispatch-value)"})
 panic(v111)
 } else {
 v102 = nil
@@ -71146,7 +71101,7 @@ if v24.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v24)))
 }
 v25 := v24.Get()
-v26 := lang.Apply(v25, []any{java.lang35.Enum, v16})
+v26 := lang.Apply(v25, []any{java.lang32.Enum, v16})
 if lang.IsTruthy(v26) {
 v27 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v28 := v27.FindInternedVar(lang.NewSymbol("descriptor"))
@@ -71677,7 +71632,7 @@ var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 0:
-v3 := lang.Apply(rand36.Float64, nil)
+v3 := lang.Apply(rand33.Float64, nil)
 return v3
   case 1:
 v3 := args[0]
@@ -74116,7 +74071,7 @@ if v0.Meta() != nil {
 }
 // parsing-err
 {
-v0 := lang.NewSymbol("parsing-err").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("val"))), lang.NewKeyword("doc"), "Construct message for parsing for non-string parsing error", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(18), lang.NewKeyword("column"), int(8), lang.NewKeyword("line"), int(7974), lang.NewKeyword("end-line"), int(7974), lang.NewKeyword("private"), true)).(*lang.Symbol)
+v0 := lang.NewSymbol("parsing-err").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("val"))), lang.NewKeyword("doc"), "Construct message for parsing for non-string parsing error", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(18), lang.NewKeyword("column"), int(8), lang.NewKeyword("line"), int(7964), lang.NewKeyword("end-line"), int(7964), lang.NewKeyword("private"), true)).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {
@@ -74596,7 +74551,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v5 := lang.Apply(java.io.StringReader37., []any{v3})
+v5 := lang.Apply(java.io.StringReader34., []any{v3})
 v6 := lang.Apply(glojure.lang.LineNumberingPushbackReader5., []any{v5})
 var v4 any = v6
 _ = v4
@@ -76324,7 +76279,7 @@ if v0.Meta() != nil {
 }
 // reader-conditional
 {
-v0 := lang.NewSymbol("reader-conditional").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("form"), lang.NewSymbol("splicing?"))), lang.NewKeyword("doc"), "Construct a data representation of a reader conditional.\n  If true, splicing? indicates read-cond-splicing.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(24), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7835), lang.NewKeyword("end-line"), int(7835))).(*lang.Symbol)
+v0 := lang.NewSymbol("reader-conditional").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("form"), lang.NewSymbol("splicing?"))), lang.NewKeyword("doc"), "Construct a data representation of a reader conditional.\n  If true, splicing? indicates read-cond-splicing.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(24), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(7825), lang.NewKeyword("end-line"), int(7825))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 2 {
@@ -77495,24 +77450,31 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v5 := lang.Apply(java.util.ArrayList27., []any{v3})
-var v4 any = v5
+v5 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+v6 := v5.FindInternedVar(lang.NewSymbol("to-array"))
+if v6.IsMacro() {
+  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
+}
+v7 := v6.Get()
+v8 := lang.Apply(v7, []any{v3})
+v9 := lang.Apply(lang1.NewArrayList, []any{v8})
+var v4 any = v9
 _ = v4
-v7 := lang.Apply(nil, []any{v4})
-_ = v7
-v8, ok := lang.FieldOrMethod(v4, "toArray")
+v11 := lang.Apply(nil, []any{v4})
+_ = v11
+v12, ok := lang.FieldOrMethod(v4, "toArray")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "toArray")))
 }
-var v9 any
-switch reflect.TypeOf(v8).Kind() {
+var v13 any
+switch reflect.TypeOf(v12).Kind() {
 case reflect.Func:
-  v9 = lang.Apply(v8, nil)
+  v13 = lang.Apply(v12, nil)
 default:
-  v9 = v8
+  v13 = v12
 }
-v10 := lang.Apply(nil, []any{v9})
-return v10
+v14 := lang.Apply(nil, []any{v13})
+return v14
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
 v1 := ns.InternWithValue(v0, v2, true)
@@ -79398,7 +79360,7 @@ return v19
 v2 := v1
 _ = v2
 }
-v0 := lang.NewSymbol("infinite?").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("num"))), lang.NewKeyword("inline"), v1, lang.NewKeyword("doc"), "Returns true if num is negative or positive infinity, else false", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("inline-arities"), lang.CreatePersistentTreeSet(int64(1)), lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(15), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(8030), lang.NewKeyword("end-line"), int(8030))).(*lang.Symbol)
+v0 := lang.NewSymbol("infinite?").WithMeta(lang.NewMap(lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("num"))), lang.NewKeyword("inline"), v1, lang.NewKeyword("doc"), "Returns true if num is negative or positive infinity, else false", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("inline-arities"), lang.CreatePersistentTreeSet(int64(1)), lang.NewKeyword("added"), "1.11", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(15), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(8020), lang.NewKeyword("end-line"), int(8020))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {
@@ -81110,7 +81072,7 @@ if v0.Meta() != nil {
 }
 // data-reader-var
 {
-v0 := lang.NewSymbol("data-reader-var").WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7885), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(7885), lang.NewKeyword("end-column"), int(22), lang.NewKeyword("private"), true, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("sym"))), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")))).(*lang.Symbol)
+v0 := lang.NewSymbol("data-reader-var").WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(7875), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(7875), lang.NewKeyword("end-column"), int(22), lang.NewKeyword("private"), true, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("sym"))), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")))).(*lang.Symbol)
 var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 1 {

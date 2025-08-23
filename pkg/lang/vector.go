@@ -229,6 +229,9 @@ func (v *Vector) ReduceInit(f IFn, init any) any {
 	res := init
 	for i := 0; i < v.Count(); i++ {
 		res = f.Invoke(res, v.ValAt(i))
+		if IsReduced(res) {
+			return res.(IDeref).Deref()
+		}
 	}
 	return res
 }
@@ -240,6 +243,9 @@ func (v *Vector) Reduce(f IFn) any {
 	res := v.ValAt(0)
 	for i := 1; i < v.Count(); i++ {
 		res = f.Invoke(res, v.ValAt(i))
+		if IsReduced(res) {
+			return res.(IDeref).Deref()
+		}
 	}
 	return res
 }

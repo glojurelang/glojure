@@ -213,6 +213,10 @@
    (sexpr-replace '(. clojure.lang.PersistentHashMap (create keyvals))
                   '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentHashMap keyvals))
 
+   (sexpr-replace '(java.util.ArrayList. n) '(github.com$glojurelang$glojure$pkg$lang.NewArrayList (to-array n)))
+   (sexpr-replace '(java.util.ArrayList. coll) '(github.com$glojurelang$glojure$pkg$lang.NewArrayList (to-array coll)))
+   (sexpr-replace '(java.util.ArrayList.) '(new github.com$glojurelang$glojure$pkg$lang.ArrayList))
+
    ;; ===== Java Type Mappings =====
    ;; map a bunch of java types to go equivalent
    ;; TODO: once everything passes, see if we can replace with a blanket
@@ -232,6 +236,8 @@
                   'github.com$glojurelang$glojure$pkg$lang.*MultiFn)
    (sexpr-replace 'clojure.lang.Volatile
                   'github.com$glojurelang$glojure$pkg$lang.Volatile)
+   (sexpr-replace 'clojure.lang.Volatile.
+                  'github.com$glojurelang$glojure$pkg$lang.NewVolatile)
    (sexpr-replace 'clojure.lang.IAtom
                   'github.com$glojurelang$glojure$pkg$lang.IAtom)
    (sexpr-replace 'clojure.lang.IMapEntry
@@ -389,6 +395,11 @@
    (omitp #(and (z/list? %)
                 (= 'defmethod (first (z/sexpr %)))
                 (= 'Eduction (nth (z/sexpr %) 2))))
+
+   ;; Omit eduction function
+   (omitp #(and (z/list? %)
+                (= 'defn (first (z/sexpr %)))
+                (= 'eduction (second (z/sexpr %)))))
 
    ;; omit default-data-readers for now
    (omitp #(and (z/list? %)

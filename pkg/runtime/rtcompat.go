@@ -42,11 +42,11 @@ func (rt *RTMethods) NextID() int {
 	return int(rt.id.Add(1))
 }
 
-func (rt *RTMethods) Nth(x interface{}, i int) interface{} {
+func (rt *RTMethods) Nth(x any, i int) any {
 	return MustNth(x, i)
 }
 
-func (rt *RTMethods) NthDefault(x interface{}, i int, def interface{}) interface{} {
+func (rt *RTMethods) NthDefault(x any, i int, def any) any {
 	v, ok := Nth(x, i)
 	if !ok {
 		return def
@@ -54,7 +54,7 @@ func (rt *RTMethods) NthDefault(x interface{}, i int, def interface{}) interface
 	return v
 }
 
-func (rt *RTMethods) Peek(x interface{}) interface{} {
+func (rt *RTMethods) Peek(x any) any {
 	if IsNil(x) {
 		return nil
 	}
@@ -62,7 +62,7 @@ func (rt *RTMethods) Peek(x interface{}) interface{} {
 	return stk.Peek()
 }
 
-func (rt *RTMethods) Pop(x interface{}) interface{} {
+func (rt *RTMethods) Pop(x any) any {
 	if IsNil(x) {
 		return nil
 	}
@@ -70,31 +70,31 @@ func (rt *RTMethods) Pop(x interface{}) interface{} {
 	return stk.Pop()
 }
 
-func (rt *RTMethods) IntCast(x interface{}) int {
+func (rt *RTMethods) IntCast(x any) int {
 	return lang.IntCast(x)
 }
 
-func (rt *RTMethods) BooleanCast(x interface{}) bool {
+func (rt *RTMethods) BooleanCast(x any) bool {
 	return lang.BooleanCast(x)
 }
 
-func (rt *RTMethods) ByteCast(x interface{}) byte {
+func (rt *RTMethods) ByteCast(x any) byte {
 	return lang.ByteCast(x)
 }
 
-func (rt *RTMethods) CharCast(x interface{}) Char {
+func (rt *RTMethods) CharCast(x any) Char {
 	return lang.CharCast(x)
 }
 
-func (rt *RTMethods) UncheckedCharCast(x interface{}) Char {
+func (rt *RTMethods) UncheckedCharCast(x any) Char {
 	return lang.UncheckedCharCast(x)
 }
 
-func (rt *RTMethods) Dissoc(x interface{}, k interface{}) interface{} {
+func (rt *RTMethods) Dissoc(x any, k any) any {
 	return Dissoc(x, k)
 }
 
-func (rt *RTMethods) Contains(coll, key interface{}) bool {
+func (rt *RTMethods) Contains(coll, key any) bool {
 	switch coll := coll.(type) {
 	case nil:
 		return false
@@ -111,7 +111,7 @@ func (rt *RTMethods) Subvec(v IPersistentVector, start, end int) IPersistentVect
 	return Subvec(v, start, end)
 }
 
-func (rt *RTMethods) Find(coll, key interface{}) interface{} {
+func (rt *RTMethods) Find(coll, key any) any {
 	switch coll := coll.(type) {
 	case nil:
 		return nil
@@ -123,7 +123,7 @@ func (rt *RTMethods) Find(coll, key interface{}) interface{} {
 }
 
 func (rt *RTMethods) Load(scriptBase string) {
-	kvs := make([]interface{}, 0, 3)
+	kvs := make([]any, 0, 3)
 	for _, vr := range []*Var{VarCurrentNS, VarWarnOnReflection, VarUncheckedMath, lang.VarDataReaders} {
 		kvs = append(kvs, vr, vr.Deref())
 	}
@@ -172,7 +172,7 @@ func (rt *RTMethods) FindVar(qualifiedSym *Symbol) *Var {
 	return ns.FindInternedVar(NewSymbol(qualifiedSym.Name()))
 }
 
-func (rt *RTMethods) Alength(x interface{}) int {
+func (rt *RTMethods) Alength(x any) int {
 	xVal := reflect.ValueOf(x)
 	if xVal.Kind() == reflect.Slice || xVal.Kind() == reflect.Array {
 		return xVal.Len()
@@ -180,8 +180,33 @@ func (rt *RTMethods) Alength(x interface{}) int {
 	panic(fmt.Errorf("Alength not supported on type: %T", x))
 }
 
-func (rt *RTMethods) ToArray(coll interface{}) interface{} {
+func (rt *RTMethods) ToArray(coll any) any {
 	return lang.ToSlice(coll)
+}
+
+func (rt *RTMethods) ChunkIteratorSeq(iter any) ISeq {
+	// Go does not have an iterator interface like Java, but it does now
+	// have the iter.Seq functions. For now, we support only TransformerIterators.
+	ti, ok := iter.(*lang.TransformerIterator)
+	if !ok {
+		panic(fmt.Errorf("ChunkIteratorSeq requires a TransformerIterator, got %T", iter))
+	}
+
+	if !ti.HasNext() {
+		return nil
+	}
+
+	const chunkSize = 32
+
+	return lang.NewLazySeq(func() any {
+		arr := make([]any, 0, chunkSize)
+		n := 0
+		for ti.HasNext() && n < chunkSize {
+			arr[n] = ti.Next()
+			n++
+		}
+		return lang.NewChunkedCons(lang.NewSliceChunk(arr), rt.ChunkIteratorSeq(ti))
+	})
 }
 
 var (
@@ -226,7 +251,7 @@ func (rt *RTMethods) Munge(name string) string {
 	return sb.String()
 }
 
-func RTReadString(s string) interface{} {
+func RTReadString(s string) any {
 	rdr := reader.New(strings.NewReader(s), reader.WithGetCurrentNS(func() *lang.Namespace {
 		return lang.VarCurrentNS.Deref().(*lang.Namespace)
 	}))
