@@ -8,7 +8,6 @@
 Handle
 - ExceptionInfo15 "ExceptionInfo"
 - LinkedBlockingQueue28 "LinkedBlockingQueue"
-- Object16 "Object"
 - glojure.lang.LineNumberingPushbackReader19 "glojure.lang.LineNumberingPushbackReader"
 - glojure.lang4 "glojure.lang"
 - java.io.InputStreamReader20 "java.io.InputStreamReader"

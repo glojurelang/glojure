@@ -5430,7 +5430,7 @@
    (let [^BlockingQueue q (if (instance? BlockingQueue n-or-q)
                              n-or-q
                              (LinkedBlockingQueue. (int n-or-q)))
-         NIL (Object.) ;nil sentinel since LBQ doesn't support nils
+         NIL (-> nil reflect.StructOf reflect.New .Interface) ;nil sentinel since LBQ doesn't support nils
          agt (agent (lazy-seq s)) ; never start with nil; that signifies we've already put eos
          log-error (fn [q e]
                      (if (.offer q q)
@@ -6134,7 +6134,7 @@ fails, attempts to require sym's namespace and retries."
   ([m ks]
      (reduce1 get m ks))
   ([m ks not-found]
-     (loop [sentinel (Object.)
+     (loop [sentinel (-> nil reflect.StructOf reflect.New .Interface)
             m m
             ks (seq ks)]
        (if ks

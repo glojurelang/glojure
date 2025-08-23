@@ -217,6 +217,11 @@
    (sexpr-replace '(java.util.ArrayList. coll) '(github.com$glojurelang$glojure$pkg$lang.NewArrayList (to-array coll)))
    (sexpr-replace '(java.util.ArrayList.) '(new github.com$glojurelang$glojure$pkg$lang.ArrayList))
 
+   ;; ===== Other Constructors =====
+
+   (sexpr-replace '(Object.)
+                  '(-> nil reflect.StructOf reflect.New .Interface))
+
    ;; ===== Java Type Mappings =====
    ;; map a bunch of java types to go equivalent
    ;; TODO: once everything passes, see if we can replace with a blanket
@@ -393,7 +398,7 @@
                   '(. github.com$glojurelang$glojure$pkg$runtime.RT (FindVar sym)))
 
    (sexpr-replace '(. x (get)) '(. x (Get)))
-   (sexpr-replace '(. x (set val)) '(. x (Set val)))
+    (sexpr-replace '(. x (set val)) '(. x (Set val)))
 
    ;; ===== Omissions and Deferrals =====
    (omitp #(and (z/list? %)
