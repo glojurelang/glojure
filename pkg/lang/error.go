@@ -7,6 +7,10 @@ import (
 )
 
 type (
+	Error struct {
+		msg string
+	}
+
 	TimeoutError struct {
 		msg string
 	}
@@ -37,8 +41,8 @@ type (
 		Stack() []StackFrame
 	}
 
-	// Error is a value that represents an error.
-	Error struct {
+	// EvalError is a value that represents an evaluation error.
+	EvalError struct {
 		err   error
 		stack []StackFrame
 	}
@@ -50,6 +54,18 @@ type (
 		Column       int
 	}
 )
+
+////////////////////////////////////////////////////////////////////////////////
+
+// NewError creates a new error value.
+func NewError(msg string) error {
+	return &Error{msg: msg}
+}
+
+// Error returns the error message.
+func (e *Error) Error() string {
+	return e.msg
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -146,16 +162,16 @@ func (e *CompilerError) Error() string {
 ////////////////////////////////////////////////////////////////////////////////
 // TODO: Revisit
 
-// NewError creates a new error value.
-func NewError(frame StackFrame, err error) *Error {
-	return &Error{
+// NewEvalError creates a new error value.
+func NewEvalError(frame StackFrame, err error) *EvalError {
+	return &EvalError{
 		err:   err,
 		stack: []StackFrame{frame},
 	}
 }
 
 // Error returns the error message.
-func (e *Error) Error() string {
+func (e *EvalError) Error() string {
 	var builder strings.Builder
 	builder.WriteString(e.err.Error())
 	builder.WriteString("\nStack trace (most recent call first):\n")
@@ -177,17 +193,17 @@ func (e *Error) Error() string {
 }
 
 // Stack returns the stack trace.
-func (e *Error) Stack() []StackFrame {
+func (e *EvalError) Stack() []StackFrame {
 	return e.stack
 }
 
 // AddStack adds a new stack trace entry.
-func (e *Error) AddStack(frame StackFrame) error {
+func (e *EvalError) AddStack(frame StackFrame) error {
 	e.stack = append(e.stack, frame)
 	return e
 }
 
 // Unwrap returns the underlying error.
-func (e *Error) Unwrap() error {
+func (e *EvalError) Unwrap() error {
 	return e.err
 }

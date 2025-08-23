@@ -299,6 +299,8 @@
 
 
    ;; ===== Exception Handling =====
+   (sexpr-replace 'Exception. 'github.com$glojurelang$glojure$pkg$lang.NewError)
+
    (sexpr-replace 'IllegalArgumentException. 'github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError)
    ;; new Exception
    [(fn select [zloc] (and (z/list? zloc)

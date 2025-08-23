@@ -4,8 +4,8 @@ package generated
 
 import (
 	fmt "fmt"
-	"github.com/glojurelang/glojure/pkg/lang"
-	strings1 "strings"
+	lang "github.com/glojurelang/glojure/pkg/lang"
+	strings2 "strings"
 )
 
 func init() {
@@ -25,7 +25,7 @@ func init() {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v4)))
 			}
 			v5 := v4.Get()
-			v6 := lang.Apply(strings1.Split, []any{"1,2,3", ","})
+			v6 := lang.Apply(strings2.Split, []any{"1,2,3", ","})
 			v7 := lang.Apply(v5, []any{v6})
 			return v7
 		})

@@ -145,9 +145,9 @@ func errorWithStack(err error, stackFrame lang.StackFrame) error {
 	if err == nil {
 		return nil
 	}
-	valErr, ok := err.(*lang.Error)
+	valErr, ok := err.(*lang.EvalError)
 	if !ok {
-		return lang.NewError(stackFrame, err)
+		return lang.NewEvalError(stackFrame, err)
 	}
 	return valErr.AddStack(stackFrame)
 }

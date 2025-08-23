@@ -3,33 +3,31 @@
 package generated
 
 import (
-  "github.com/glojurelang/glojure/pkg/lang"
-  Exception9 "Exception"
-  ExceptionInfo12 "ExceptionInfo"
-  LinkedBlockingQueue24 "LinkedBlockingQueue"
-  Object13 "Object"
+  ExceptionInfo11 "ExceptionInfo"
+  LinkedBlockingQueue23 "LinkedBlockingQueue"
+  Object12 "Object"
   big8 "math/big"
   errors6 "errors"
   fmt "fmt"
-  glojure.lang.LineNumberingPushbackReader15 "glojure.lang.LineNumberingPushbackReader"
+  glojure.lang.LineNumberingPushbackReader14 "glojure.lang.LineNumberingPushbackReader"
   glojure.lang4 "glojure.lang"
-  java.io.InputStreamReader16 "java.io.InputStreamReader"
-  java.io.StringReader17 "java.io.StringReader"
-  java.lang.UnsupportedOperationException11 "java.lang.UnsupportedOperationException"
-  java.net25 "java.net"
-  java.util.concurrent.CountDownLatch21 "java.util.concurrent.CountDownLatch"
+  java.io.InputStreamReader15 "java.io.InputStreamReader"
+  java.io.StringReader16 "java.io.StringReader"
+  java.lang.UnsupportedOperationException10 "java.lang.UnsupportedOperationException"
+  java.net24 "java.net"
+  java.util.concurrent.CountDownLatch20 "java.util.concurrent.CountDownLatch"
   java.util.concurrent7 "java.util.concurrent"
-  java.util18 "java.util"
-  lang1 "github.com/glojurelang/glojure/pkg/lang"
+  java.util17 "java.util"
+  lang "github.com/glojurelang/glojure/pkg/lang"
   math3 "math"
-  rand22 "math/rand"
+  rand21 "math/rand"
   reflect "reflect"
-  regexp23 "regexp"
-  runtime20 "runtime"
+  regexp22 "regexp"
+  runtime19 "runtime"
   runtime5 "github.com/glojurelang/glojure/pkg/runtime"
-  strconv19 "strconv"
-  strings14 "strings"
-  time10 "time"
+  strconv18 "strconv"
+  strings13 "strings"
+  time9 "time"
 )
 func init() {
   // Closed-over values
@@ -551,7 +549,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -567,12 +565,12 @@ v4 = lang.NewFnFunc(func(args ...any) any {
 return int64(1)
   case 1:
 v5 := args[0]
-v6 := lang.Apply(lang1.MustAsNumber, []any{v5})
+v6 := lang.Apply(lang.MustAsNumber, []any{v5})
 return v6
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "multiply")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "multiply")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("multiply is not a function")))
 }
@@ -979,7 +977,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -995,12 +993,12 @@ v4 = lang.NewFnFunc(func(args ...any) any {
 return int64(1)
   case 1:
 v5 := args[0]
-v6 := lang.Apply(lang1.MustAsNumber, []any{v5})
+v6 := lang.Apply(lang.MustAsNumber, []any{v5})
 return v6
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "multiplyP")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "multiplyP")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("multiplyP is not a function")))
 }
@@ -1647,7 +1645,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -1663,12 +1661,12 @@ v4 = lang.NewFnFunc(func(args ...any) any {
 return int64(0)
   case 1:
 v5 := args[0]
-v6 := lang.Apply(lang1.MustAsNumber, []any{v5})
+v6 := lang.Apply(lang.MustAsNumber, []any{v5})
 return v6
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "add")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "add")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("add is not a function")))
 }
@@ -2075,7 +2073,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -2091,12 +2089,12 @@ v4 = lang.NewFnFunc(func(args ...any) any {
 return int64(0)
   case 1:
 v5 := args[0]
-v6 := lang.Apply(lang1.MustAsNumber, []any{v5})
+v6 := lang.Apply(lang.MustAsNumber, []any{v5})
 return v6
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "addP")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "addP")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("addP is not a function")))
 }
@@ -2503,7 +2501,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -2528,7 +2526,7 @@ return v9
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "minus")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "minus")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("minus is not a function")))
 }
@@ -2935,7 +2933,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -2960,7 +2958,7 @@ return v9
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "minusP")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "minusP")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("minusP is not a function")))
 }
@@ -3782,7 +3780,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -3807,7 +3805,7 @@ return v9
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "divide")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "divide")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("divide is not a function")))
 }
@@ -3944,7 +3942,7 @@ return true
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "lt")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "lt")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("lt is not a function")))
 }
@@ -4122,7 +4120,7 @@ return true
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "lte")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "lte")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("lte is not a function")))
 }
@@ -4279,7 +4277,7 @@ return true
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6 := lang.Apply(lang1.Equiv, []any{v4, v5})
+v6 := lang.Apply(lang.Equiv, []any{v4, v5})
 return v6
   default:
     if len(args) < 2 {
@@ -4290,7 +4288,7 @@ v5 := args[1]
 v6 := lang.NewList(args[2:]...)
 recur_loop_126:
 var v7 any
-v8 := lang.Apply(lang1.Equiv, []any{v4, v5})
+v8 := lang.Apply(lang.Equiv, []any{v4, v5})
 if lang.IsTruthy(v8) {
 var v9 any
 v10 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -4330,7 +4328,7 @@ if v26.IsMacro() {
 }
 v27 := v26.Get()
 v28 := lang.Apply(v27, []any{v6})
-v29 := lang.Apply(lang1.Equiv, []any{v5, v28})
+v29 := lang.Apply(lang.Equiv, []any{v5, v28})
 v9 = v29
 }
 v7 = v9
@@ -4441,7 +4439,7 @@ return true
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "equiv")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "equiv")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("equiv is not a function")))
 }
@@ -4619,7 +4617,7 @@ return true
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "gt")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "gt")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("gt is not a function")))
 }
@@ -4711,7 +4709,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -4733,7 +4731,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -4841,7 +4839,7 @@ return true
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "gte")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "gte")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("gte is not a function")))
 }
@@ -5479,7 +5477,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.Abs, []any{v4})
+v5 := lang.Apply(lang.Abs, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -6062,7 +6060,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6 := lang.Apply(lang1.Get, []any{v4, v5})
+v6 := lang.Apply(lang.Get, []any{v4, v5})
 return v6
   default:
     if len(args) < 2 {
@@ -7135,7 +7133,7 @@ if v6.IsMacro() {
 }
 v7 := v6.Get()
 v8 := lang.Apply(v7, []any{v4})
-v9 := lang.Apply(lang1.Apply, []any{v3, v8})
+v9 := lang.Apply(lang.Apply, []any{v3, v8})
 return v9
   case 3:
 v3 := args[0]
@@ -7148,7 +7146,7 @@ if v7.IsMacro() {
 }
 v8 := v7.Get()
 v9 := lang.Apply(v8, []any{v4, v5})
-v10 := lang.Apply(lang1.Apply, []any{v3, v9})
+v10 := lang.Apply(lang.Apply, []any{v3, v9})
 return v10
   case 4:
 v3 := args[0]
@@ -7162,7 +7160,7 @@ if v8.IsMacro() {
 }
 v9 := v8.Get()
 v10 := lang.Apply(v9, []any{v4, v5, v6})
-v11 := lang.Apply(lang1.Apply, []any{v3, v10})
+v11 := lang.Apply(lang.Apply, []any{v3, v10})
 return v11
   case 5:
 v3 := args[0]
@@ -7177,7 +7175,7 @@ if v9.IsMacro() {
 }
 v10 := v9.Get()
 v11 := lang.Apply(v10, []any{v4, v5, v6, v7})
-v12 := lang.Apply(lang1.Apply, []any{v3, v11})
+v12 := lang.Apply(lang.Apply, []any{v3, v11})
 return v12
   default:
     if len(args) < 5 {
@@ -7224,7 +7222,7 @@ v25 := lang.Apply(v20, []any{v7, v24})
 v26 := lang.Apply(v17, []any{v6, v25})
 v27 := lang.Apply(v14, []any{v5, v26})
 v28 := lang.Apply(v11, []any{v4, v27})
-v29 := lang.Apply(lang1.Apply, []any{v3, v28})
+v29 := lang.Apply(lang.Apply, []any{v3, v28})
 return v29
   }
 })
@@ -7695,10 +7693,10 @@ if v23.IsMacro() {
 v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(v21, []any{"No value supplied for key: ", v25})
-v27 := lang.Apply(lang1.NewIllegalArgumentError, []any{v26})
+v27 := lang.Apply(lang.NewIllegalArgumentError, []any{v26})
 panic(v27)
 } else {
-v28 := lang.Apply(lang1.NewPersistentArrayMapAsIfByAssoc, []any{v4})
+v28 := lang.Apply(lang.NewPersistentArrayMapAsIfByAssoc, []any{v4})
 v10 = v28
 }
 return v10
@@ -7980,7 +7978,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
 v4 := args[0]
 v5 := args[1]
 v6 := args[2]
-v7 := lang.Apply(lang1.SliceSet, []any{v4, v5, v6})
+v7 := lang.Apply(lang.SliceSet, []any{v4, v5, v6})
 _ = v7
 return v6
   default:
@@ -9307,7 +9305,7 @@ if v6.IsMacro() {
 v7 := v6.Get()
 v8 := lang.Apply(v7, []any{v3})
 if lang.IsTruthy(v8) {
-v9 := lang.Apply(lang1.NewIllegalArgumentError, []any{"Parameter declaration missing"})
+v9 := lang.Apply(lang.NewIllegalArgumentError, []any{"Parameter declaration missing"})
 panic(v9)
 } else {
 v4 = nil
@@ -9377,7 +9375,7 @@ v40 := v39.Get()
 v41 := lang.Apply(v40, []any{"Parameter declaration \"", v15, "\" should be a vector"})
 v25 = v41
 }
-v42 := lang.Apply(lang1.NewIllegalArgumentError, []any{v25})
+v42 := lang.Apply(lang.NewIllegalArgumentError, []any{v25})
 panic(v42)
 }
 return v16
@@ -9442,7 +9440,7 @@ if v36.IsMacro() {
 v37 := v36.Get()
 v38 := lang.Apply(v37, []any{v18})
 v39 := lang.Apply(v34, []any{"Parameter declaration \"", v38, "\" should be a vector"})
-v40 := lang.Apply(lang1.NewIllegalArgumentError, []any{v39})
+v40 := lang.Apply(lang.NewIllegalArgumentError, []any{v39})
 panic(v40)
 } else {
 v31 = nil
@@ -9466,7 +9464,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
 v4 := args[0]
 v5 := args[1]
 v6 := args[2]
-v7 := lang.Apply(lang1.Assoc, []any{v4, v5, v6})
+v7 := lang.Apply(lang.Assoc, []any{v4, v5, v6})
 return v7
   default:
     if len(args) < 3 {
@@ -9477,7 +9475,7 @@ v5 := args[1]
 v6 := args[2]
 v7 := lang.NewList(args[3:]...)
 recur_loop_24:
-v9 := lang.Apply(lang1.Assoc, []any{v4, v5, v6})
+v9 := lang.Apply(lang.Assoc, []any{v4, v5, v6})
 var v8 any = v9
 _ = v8
 var v11 any
@@ -9522,7 +9520,7 @@ v6 = v23
 v7 = v28
 goto recur_loop_24
 } else {
-v33 := lang.Apply(lang1.NewIllegalArgumentError, []any{"assoc expects even number of arguments after map/vector, found odd number"})
+v33 := lang.Apply(lang.NewIllegalArgumentError, []any{"assoc expects even number of arguments after map/vector, found odd number"})
 panic(v33)
 }
 v11 = v12
@@ -9735,7 +9733,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 1:
 v3 := args[0]
-v4 := lang.Apply(lang1.NewAtom, []any{v3})
+v4 := lang.Apply(lang.NewAtom, []any{v3})
 return v4
   default:
     if len(args) < 1 {
@@ -10356,7 +10354,7 @@ if v0.Meta() != nil {
 }
 // bigdec
 {
-v1 := reflect.TypeOf((*lang1.BigDecimal)(nil))
+v1 := reflect.TypeOf((*lang.BigDecimal)(nil))
 v0 := lang.NewSymbol("bigdec").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("x"))), lang.NewKeyword("doc"), "Coerce to BigDecimal", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.0", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(12), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(3648), lang.NewKeyword("end-line"), int(3648))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
@@ -10391,7 +10389,7 @@ if v16.IsMacro() {
 }
 v17 := v16.Get()
 v18 := lang.Apply(v17, []any{v4})
-v19 := lang.Apply(lang1.NewBigDecimalFromFloat64, []any{v18})
+v19 := lang.Apply(lang.NewBigDecimalFromFloat64, []any{v18})
 v10 = v19
 } else {
 var v20 any
@@ -10409,7 +10407,7 @@ if v26.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v26)))
 }
 v27 := v26.Get()
-v28 := lang.Apply(lang1.NewBigDecimalFromRatio, []any{v4})
+v28 := lang.Apply(lang.NewBigDecimalFromRatio, []any{v4})
 v29, ok := lang.FieldOrMethod(v4, "denominator")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "denominator")))
@@ -10431,7 +10429,7 @@ if v34.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v34)))
 }
 v35 := v34.Get()
-v36 := lang.Apply(v35, []any{lang1.*BigInt, v4})
+v36 := lang.Apply(v35, []any{lang.*BigInt, v4})
 if lang.IsTruthy(v36) {
 v37, ok := lang.FieldOrMethod(v4, "toBigDecimal")
 if !ok {
@@ -10455,7 +10453,7 @@ if v41.IsMacro() {
 v42 := v41.Get()
 v43 := lang.Apply(v42, []any{big8.*Int, v4})
 if lang.IsTruthy(v43) {
-v44 := lang.Apply(lang1.NewBigDecimal, []any{v4})
+v44 := lang.Apply(lang.NewBigDecimal, []any{v4})
 v39 = v44
 } else {
 var v45 any
@@ -10474,12 +10472,12 @@ if v51.IsMacro() {
 }
 v52 := v51.Get()
 v53 := lang.Apply(v52, []any{v4})
-v54 := lang.Apply(lang1.NewBigDecimalFromInt64, []any{v53})
+v54 := lang.Apply(lang.NewBigDecimalFromInt64, []any{v53})
 v45 = v54
 } else {
 var v55 any
 if lang.IsTruthy(lang.NewKeyword("else")) {
-v56 := lang.Apply(lang1.NewBigDecimal, []any{v4})
+v56 := lang.Apply(lang.NewBigDecimal, []any{v4})
 v55 = v56
 } else {
 v55 = nil
@@ -10498,7 +10496,7 @@ v5 = v10
 }
 return v5
 })
-v4 := reflect.TypeOf((*lang1.BigDecimal)(nil))
+v4 := reflect.TypeOf((*lang.BigDecimal)(nil))
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), v4)).(lang.FnFunc)
 v2 := ns.InternWithValue(v0, v3, true)
 if v0.Meta() != nil {
@@ -10507,7 +10505,7 @@ if v0.Meta() != nil {
 }
 // bigint
 {
-v1 := reflect.TypeOf((*lang1.BigInt)(nil))
+v1 := reflect.TypeOf((*lang.BigInt)(nil))
 v0 := lang.NewSymbol("bigint").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("x"))), lang.NewKeyword("doc"), "Coerce to BigInt", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.3", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(12), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(3620), lang.NewKeyword("end-line"), int(3620))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
@@ -10522,7 +10520,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{lang1.*BigInt, v4})
+v9 := lang.Apply(v8, []any{lang.*BigInt, v4})
 if lang.IsTruthy(v9) {
 v5 = v4
 } else {
@@ -10535,7 +10533,7 @@ if v12.IsMacro() {
 v13 := v12.Get()
 v14 := lang.Apply(v13, []any{big8.*Int, v4})
 if lang.IsTruthy(v14) {
-v15 := lang.Apply(lang1.NewBigIntFromGoBigInt, []any{v4})
+v15 := lang.Apply(lang.NewBigIntFromGoBigInt, []any{v4})
 v10 = v15
 } else {
 var v16 any
@@ -10589,7 +10587,7 @@ if v36.IsMacro() {
 }
 v37 := v36.Get()
 v38 := lang.Apply(v37, []any{v4})
-v39 := lang.Apply(lang1.NewBigDecimalFromFloat64, []any{v38})
+v39 := lang.Apply(lang.NewBigDecimalFromFloat64, []any{v38})
 v40 := lang.Apply(v34, []any{v39})
 v27 = v40
 } else {
@@ -10638,7 +10636,7 @@ if v58.IsMacro() {
 }
 v59 := v58.Get()
 v60 := lang.Apply(v59, []any{v4})
-v61 := lang.Apply(lang1.NewBigIntFromInt64, []any{v60})
+v61 := lang.Apply(lang.NewBigIntFromInt64, []any{v60})
 v52 = v61
 } else {
 var v62 any
@@ -10649,7 +10647,7 @@ if v64.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v64)))
 }
 v65 := v64.Get()
-v66 := lang.Apply(lang1.NewBigInt, []any{v4})
+v66 := lang.Apply(lang.NewBigInt, []any{v4})
 v67 := lang.Apply(v65, []any{v66})
 v62 = v67
 } else {
@@ -10669,7 +10667,7 @@ v5 = v10
 }
 return v5
 })
-v4 := reflect.TypeOf((*lang1.BigInt)(nil))
+v4 := reflect.TypeOf((*lang.BigInt)(nil))
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), v4)).(lang.FnFunc)
 v2 := ns.InternWithValue(v0, v3, true)
 if v0.Meta() != nil {
@@ -10704,7 +10702,7 @@ if v12.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v12)))
 }
 v13 := v12.Get()
-v14 := lang.Apply(v13, []any{lang1.*BigInt, v4})
+v14 := lang.Apply(v13, []any{lang.*BigInt, v4})
 if lang.IsTruthy(v14) {
 v15, ok := lang.FieldOrMethod(v4, "toBigInteger")
 if !ok {
@@ -10757,7 +10755,7 @@ if v30.IsMacro() {
 }
 v31 := v30.Get()
 v32 := lang.Apply(v31, []any{v4})
-v33 := lang.Apply(lang1.NewBigDecimalFromFloat64, []any{v32})
+v33 := lang.Apply(lang.NewBigDecimalFromFloat64, []any{v32})
 v34, ok := lang.FieldOrMethod(v33, "toBigInteger")
 if !ok {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v33, "toBigInteger")))
@@ -10814,7 +10812,7 @@ v43 = v52
 } else {
 var v53 any
 if lang.IsTruthy(lang.NewKeyword("else")) {
-v54 := lang.Apply(lang1.NewBigInt, []any{v4})
+v54 := lang.Apply(lang.NewBigInt, []any{v4})
 v53 = v54
 } else {
 v53 = nil
@@ -10893,7 +10891,7 @@ v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(lang.NewKeyword("line"), []any{v25})
 v27 := lang.Apply(v14, []any{v18, " requires ", "a vector for its binding", " in ", v21, ":", v26})
-v28 := lang.Apply(lang1.NewIllegalArgumentError, []any{v27})
+v28 := lang.Apply(lang.NewIllegalArgumentError, []any{v27})
 panic(v28)
 }
 _ = v7
@@ -10943,7 +10941,7 @@ v50 := v49.Get()
 v51 := lang.Apply(v50, []any{v3})
 v52 := lang.Apply(lang.NewKeyword("line"), []any{v51})
 v53 := lang.Apply(v40, []any{v44, " requires ", "an even number of forms in binding vector", " in ", v47, ":", v52})
-v54 := lang.Apply(lang1.NewIllegalArgumentError, []any{v53})
+v54 := lang.Apply(lang.NewIllegalArgumentError, []any{v53})
 panic(v54)
 }
 _ = v29
@@ -11286,27 +11284,27 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v5 := lang.Apply(lang1.CloneThreadBindingFrame, nil)
+v5 := lang.Apply(lang.CloneThreadBindingFrame, nil)
 var v4 any = v5
 _ = v4
 var v7 lang.FnFunc
 v7 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 0:
-v8 := lang.Apply(lang1.ResetThreadBindingFrame, []any{v4})
+v8 := lang.Apply(lang.ResetThreadBindingFrame, []any{v4})
 _ = v8
 v9 := lang.Apply(v3, nil)
 return v9
   case 1:
 v8 := args[0]
-v9 := lang.Apply(lang1.ResetThreadBindingFrame, []any{v4})
+v9 := lang.Apply(lang.ResetThreadBindingFrame, []any{v4})
 _ = v9
 v10 := lang.Apply(v3, []any{v8})
 return v10
   case 2:
 v8 := args[0]
 v9 := args[1]
-v10 := lang.Apply(lang1.ResetThreadBindingFrame, []any{v4})
+v10 := lang.Apply(lang.ResetThreadBindingFrame, []any{v4})
 _ = v10
 v11 := lang.Apply(v3, []any{v8, v9})
 return v11
@@ -11314,7 +11312,7 @@ return v11
 v8 := args[0]
 v9 := args[1]
 v10 := args[2]
-v11 := lang.Apply(lang1.ResetThreadBindingFrame, []any{v4})
+v11 := lang.Apply(lang.ResetThreadBindingFrame, []any{v4})
 _ = v11
 v12 := lang.Apply(v3, []any{v8, v9, v10})
 return v12
@@ -11326,7 +11324,7 @@ v8 := args[0]
 v9 := args[1]
 v10 := args[2]
 v11 := lang.NewList(args[3:]...)
-v12 := lang.Apply(lang1.ResetThreadBindingFrame, []any{v4})
+v12 := lang.Apply(lang.ResetThreadBindingFrame, []any{v4})
 _ = v12
 v13 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v14 := v13.FindInternedVar(lang.NewSymbol("apply"))
@@ -11716,7 +11714,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -11731,7 +11729,7 @@ v4 = lang.NewFnFunc(func(args ...any) any {
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "and")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "and")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("and is not a function")))
 }
@@ -12138,7 +12136,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -12153,7 +12151,7 @@ v4 = lang.NewFnFunc(func(args ...any) any {
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "andNot")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "andNot")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("andNot is not a function")))
 }
@@ -12205,7 +12203,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   }
 v3 := args[0]
 v4 := args[1]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "clearBit")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "clearBit")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("clearBit is not a function")))
 }
@@ -12228,7 +12226,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   }
 v3 := args[0]
 v4 := args[1]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "flipBit")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "flipBit")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("flipBit is not a function")))
 }
@@ -12325,7 +12323,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "not")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "not")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("not is not a function")))
 }
@@ -12703,7 +12701,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -12718,7 +12716,7 @@ v4 = lang.NewFnFunc(func(args ...any) any {
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "or")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "or")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("or is not a function")))
 }
@@ -12770,7 +12768,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   }
 v3 := args[0]
 v4 := args[1]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "setBit")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "setBit")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("setBit is not a function")))
 }
@@ -12876,7 +12874,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "shiftLeft")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "shiftLeft")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("shiftLeft is not a function")))
 }
@@ -12982,7 +12980,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "shiftRight")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "shiftRight")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("shiftRight is not a function")))
 }
@@ -13005,7 +13003,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   }
 v3 := args[0]
 v4 := args[1]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "testBit")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "testBit")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("testBit is not a function")))
 }
@@ -13383,7 +13381,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -13398,7 +13396,7 @@ v4 = lang.NewFnFunc(func(args ...any) any {
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "xor")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "xor")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("xor is not a function")))
 }
@@ -13630,7 +13628,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 1:
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "booleanArray")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "booleanArray")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("booleanArray is not a function")))
 }
@@ -13639,7 +13637,7 @@ return v6
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "booleanArrayInit")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "booleanArrayInit")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("booleanArrayInit is not a function")))
 }
@@ -13742,7 +13740,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "booleans")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "booleans")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("booleans is not a function")))
 }
@@ -14202,7 +14200,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.ByteCast, []any{v4})
+v5 := lang.Apply(lang.ByteCast, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -14304,7 +14302,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 1:
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "byteArray")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "byteArray")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("byteArray is not a function")))
 }
@@ -14313,7 +14311,7 @@ return v6
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "byteArrayInit")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "byteArrayInit")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("byteArrayInit is not a function")))
 }
@@ -14392,7 +14390,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "bytes")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "bytes")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("bytes is not a function")))
 }
@@ -14487,7 +14485,7 @@ if v12.IsMacro() {
 }
 v13 := v12.Get()
 v14 := lang.Apply(v13, nil)
-v15 := lang.NewMap(lang.NewKeyword("tag"), lang1.Object)
+v15 := lang.NewMap(lang.NewKeyword("tag"), lang.Object)
 v16 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(6738), lang.NewKeyword("column"), int(32), lang.NewKeyword("end-line"), int(6738), lang.NewKeyword("end-column"), int(84))
 v17, err := lang.WithMeta(v15, v16.(lang.IPersistentMap))
 if err != nil {
@@ -14744,7 +14742,7 @@ if v155.IsMacro() {
 }
 v156 := v155.Get()
 v157 := lang.Apply(v156, []any{"Duplicate case test constant: ", v147})
-v158 := lang.Apply(lang1.NewIllegalArgumentError, []any{v157})
+v158 := lang.Apply(lang.NewIllegalArgumentError, []any{v157})
 panic(v158)
 } else {
 v159 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -15583,7 +15581,7 @@ if v200.IsMacro() {
 }
 v201 := v200.Get()
 v202 := lang.Apply(v201, []any{"No matching clause: ", v191})
-v203 := lang.Apply(lang1.NewIllegalArgumentError, []any{v202})
+v203 := lang.Apply(lang.NewIllegalArgumentError, []any{v202})
 panic(v203)
 }
 v195 = v197
@@ -15950,7 +15948,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 1:
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "charArray")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "charArray")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("charArray is not a function")))
 }
@@ -15959,7 +15957,7 @@ return v6
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "charArrayInit")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "charArrayInit")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("charArrayInit is not a function")))
 }
@@ -16009,7 +16007,7 @@ if v6.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
 }
 v7 := v6.Get()
-v8 := lang.Apply(v7, []any{lang1.Char, v4})
+v8 := lang.Apply(v7, []any{lang.Char, v4})
 return v8
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(157), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(157), lang.NewKeyword("end-column"), int(89))).(lang.FnFunc)
@@ -16084,7 +16082,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "chars")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "chars")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("chars is not a function")))
 }
@@ -16338,7 +16336,7 @@ v46 := v45.Get()
 v47 := lang.Apply(v46, []any{v4})
 v48 := lang.Apply(v40, []any{v43, v47})
 v49 := lang.Apply(v30, []any{v33, "Only these options are valid: ", v37, v48})
-v50 := lang.Apply(lang1.NewIllegalArgumentError, []any{v49})
+v50 := lang.Apply(lang.NewIllegalArgumentError, []any{v49})
 panic(v50)
 } else {
 v5 = nil
@@ -16412,7 +16410,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4 := lang.Apply(lang1.NewChunkBuffer, []any{v3})
+v4 := lang.Apply(lang.NewChunkBuffer, []any{v3})
 return v4
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -16432,12 +16430,12 @@ v2 = lang.NewFnFunc(func(args ...any) any {
 v3 := args[0]
 v4 := args[1]
 var v5 any
-v6 := lang.Apply(lang1.Count, []any{v3})
-v7 := lang.Apply(lang1.IsZero, []any{v6})
+v6 := lang.Apply(lang.Count, []any{v3})
+v7 := lang.Apply(lang.IsZero, []any{v6})
 if lang.IsTruthy(v7) {
 v5 = v4
 } else {
-v8 := lang.Apply(lang1.NewChunkedCons, []any{v3, v4})
+v8 := lang.Apply(lang.NewChunkedCons, []any{v3, v4})
 v5 = v8
 }
 return v5
@@ -16547,7 +16545,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.IChunkedSeq, v3})
+v7 := lang.Apply(v6, []any{lang.IChunkedSeq, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -16576,7 +16574,7 @@ v8 := lang.Apply(v7, []any{v3})
 if lang.IsTruthy(v8) {
 v4 = v3
 } else {
-v9 := lang.Apply(lang1.TypeOf, []any{v3})
+v9 := lang.Apply(lang.TypeOf, []any{v3})
 v4 = v9
 }
 return v4
@@ -16661,7 +16659,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.IPersistentCollection, v3})
+v7 := lang.Apply(v6, []any{lang.IPersistentCollection, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -16948,7 +16946,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6 := lang.Apply(lang1.Compare, []any{v4, v5})
+v6 := lang.Apply(lang.Compare, []any{v4, v5})
 return v6
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -17191,7 +17189,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 return nil
 })
-v4 := lang.Apply(lang1.NewLazySeq, []any{v3})
+v4 := lang.Apply(lang.NewLazySeq, []any{v3})
 return v4
   case 1:
 v3 := args[0]
@@ -17202,7 +17200,7 @@ v4 = lang.NewFnFunc(func(args ...any) any {
   }
 return v3
 })
-v5 := lang.Apply(lang1.NewLazySeq, []any{v4})
+v5 := lang.Apply(lang.NewLazySeq, []any{v4})
 return v5
   case 2:
 v3 := args[0]
@@ -17298,7 +17296,7 @@ v12 = v4
 }
 return v12
 })
-v6 := lang.Apply(lang1.NewLazySeq, []any{v5})
+v6 := lang.Apply(lang.NewLazySeq, []any{v5})
 return v6
   default:
     if len(args) < 2 {
@@ -17415,7 +17413,7 @@ v18 = v50
 }
 return v18
 })
-v12 := lang.Apply(lang1.NewLazySeq, []any{v11})
+v12 := lang.Apply(lang.NewLazySeq, []any{v11})
 return v12
 })
 v8 := v7
@@ -17491,7 +17489,7 @@ v21 := v20.Get()
 v22 := lang.Apply(v21, []any{v5})
 v14 = v22
 } else {
-v23 := lang.Apply(lang1.NewIllegalArgumentError, []any{"cond requires an even number of forms"})
+v23 := lang.Apply(lang.NewIllegalArgumentError, []any{"cond requires an even number of forms"})
 panic(v23)
 }
 v24 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -18702,7 +18700,7 @@ return v4
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6 := lang.Apply(lang1.Conj, []any{v4, v5})
+v6 := lang.Apply(lang.Conj, []any{v4, v5})
 return v6
   default:
     if len(args) < 2 {
@@ -18714,7 +18712,7 @@ v6 := lang.NewList(args[2:]...)
 recur_loop_10:
 var v7 any
 if lang.IsTruthy(v6) {
-v9 := lang.Apply(lang1.Conj, []any{v4, v5})
+v9 := lang.Apply(lang.Conj, []any{v4, v5})
 var v8 any = v9
 v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v12 := v11.FindInternedVar(lang.NewSymbol("first"))
@@ -18737,7 +18735,7 @@ v5 = v10
 v6 = v15
 goto recur_loop_10
 } else {
-v20 := lang.Apply(lang1.Conj, []any{v4, v5})
+v20 := lang.Apply(lang.Conj, []any{v4, v5})
 v7 = v20
 }
 return v7
@@ -18806,7 +18804,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6 := lang.Apply(lang1.NewCons, []any{v4, v5})
+v6 := lang.Apply(lang.NewCons, []any{v4, v5})
 return v6
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(27), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(27), lang.NewKeyword("end-column"), int(89))).(lang.FnFunc)
@@ -18958,7 +18956,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.Count, []any{v4})
+v5 := lang.Apply(lang.Count, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -18982,7 +18980,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.Counted, v3})
+v7 := lang.Apply(v6, []any{lang.Counted, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -19020,7 +19018,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
       panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
     }
 v3 := lang.NewList(args[0:]...)
-v4 := lang.Apply(lang1.CreatePersistentStructMapSlotMap, []any{v3})
+v4 := lang.Apply(lang.CreatePersistentStructMapSlotMap, []any{v3})
 return v4
   }
 })
@@ -19046,7 +19044,7 @@ if v5.IsMacro() {
 }
 v6 := v5.Get()
 v7 := lang.Apply(v6, []any{v3})
-v8 := lang.Apply(lang1.NewCycle, []any{v7})
+v8 := lang.Apply(lang.NewCycle, []any{v7})
 return v8
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -19226,7 +19224,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "dec")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "dec")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("dec is not a function")))
 }
@@ -19323,7 +19321,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "decP")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "decP")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("decP is not a function")))
 }
@@ -19351,7 +19349,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.*BigDecimal, v3})
+v7 := lang.Apply(v6, []any{lang.*BigDecimal, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -21300,7 +21298,7 @@ v108 := v107.Get()
 v109 := lang.Apply(v108, []any{v71})
 v110 := lang.Apply(v105, []any{v109, int64(1)})
 if lang.IsTruthy(v110) {
-v111 := lang.Apply(Exception9., []any{"The syntax for defmulti has changed. Example: (defmulti name dispatch-fn :default dispatch-value)"})
+v111 := lang.Apply(lang.NewError, []any{"The syntax for defmulti has changed. Example: (defmulti name dispatch-fn :default dispatch-value)"})
 panic(v111)
 } else {
 v102 = nil
@@ -21735,11 +21733,11 @@ if v10.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v10)))
 }
 v11 := v10.Get()
-v12 := lang.Apply(v11, []any{lang1.*Symbol, v6})
+v12 := lang.Apply(v11, []any{lang.*Symbol, v6})
 if lang.IsTruthy(v12) {
 v8 = nil
 } else {
-v13 := lang.Apply(lang1.NewIllegalArgumentError, []any{"First argument to defn must be a symbol"})
+v13 := lang.Apply(lang.NewIllegalArgumentError, []any{"First argument to defn must be a symbol"})
 panic(v13)
 }
 _ = v8
@@ -22024,7 +22022,7 @@ var v150 any = v154
 _ = v150
 var v156 any
 var v157 any
-v158 := lang.Apply(lang1.Equiv, []any{lang.NewSymbol("fn"), v145})
+v158 := lang.Apply(lang.Equiv, []any{lang.NewSymbol("fn"), v145})
 if lang.IsTruthy(v158) {
 var v159 any
 v160 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -22033,7 +22031,7 @@ if v161.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v161)))
 }
 v162 := v161.Get()
-v163 := lang.Apply(v162, []any{lang1.*Symbol, v150})
+v163 := lang.Apply(v162, []any{lang.*Symbol, v150})
 if lang.IsTruthy(v163) {
 v159 = false
 } else {
@@ -22073,8 +22071,8 @@ case reflect.Func:
 default:
   v174 = v173
 }
-v175 := lang.Apply(lang1.ConcatStrings, []any{v174, "__inliner"})
-v176 := lang.Apply(lang1.NewSymbol, []any{v175})
+v175 := lang.Apply(lang.ConcatStrings, []any{v174, "__inliner"})
+v176 := lang.Apply(lang.NewSymbol, []any{v175})
 v177 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v178 := v177.FindInternedVar(lang.NewSymbol("next"))
 if v178.IsMacro() {
@@ -23511,7 +23509,7 @@ if v6.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
 }
 v7 := v6.Get()
-v8 := lang.Apply(v7, []any{lang1.IDeref, v3})
+v8 := lang.Apply(v7, []any{lang.IDeref, v3})
 if lang.IsTruthy(v8) {
 v9, ok := lang.FieldOrMethod(v3, "Deref")
 if !ok {
@@ -23547,7 +23545,7 @@ if v8.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v8)))
 }
 v9 := v8.Get()
-v10 := lang.Apply(v9, []any{lang1.IBlockingDeref, v3})
+v10 := lang.Apply(v9, []any{lang.IBlockingDeref, v3})
 if lang.IsTruthy(v10) {
 v11, _ := lang.FieldOrMethod(v3, "DerefWithTimeout")
 if reflect.TypeOf(v11).Kind() != reflect.Func {
@@ -23591,7 +23589,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{lang1.IPending, v3})
+v9 := lang.Apply(v8, []any{lang.IPending, v3})
 var v5 any = v9
 _ = v5
 var v11 any
@@ -23628,7 +23626,7 @@ var v7 any
 func() {
 defer func() {
 if r := recover(); r != nil {
-if lang.CatchMatches(r, lang1.Throwable) {
+if lang.CatchMatches(r, lang.Throwable) {
 v8 := r
 _ = v8
 v9 := lang.NewVector(true, v8)
@@ -23693,7 +23691,7 @@ if v32.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v32)))
 }
 v33 := v32.Get()
-v34 := lang.Apply(v33, []any{lang1.*Agent, v3})
+v34 := lang.Apply(v33, []any{lang.*Agent, v3})
 var v30 any = v34
 _ = v30
 var v36 any
@@ -23770,7 +23768,7 @@ var v6 any
 func() {
 defer func() {
 if r := recover(); r != nil {
-if lang.CatchMatches(r, lang1.TimeoutError) {
+if lang.CatchMatches(r, lang.TimeoutError) {
 v7 := r
 _ = v7
 v6 = v5
@@ -23783,7 +23781,7 @@ v7, _ := lang.FieldOrMethod(v3, "Get")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
 }
-v8 := lang.Apply(v7, []any{v4, time10.Millisecond})
+v8 := lang.Apply(v7, []any{v4, time9.Millisecond})
 v6 = v8
 }()
 return v6
@@ -23958,7 +23956,7 @@ if v31.IsMacro() {
 }
 v32 := v31.Get()
 v33 := lang.Apply(v32, []any{v4, "already has", v5, "as ancestor"})
-v34 := lang.Apply(Exception9., []any{v33})
+v34 := lang.Apply(lang.NewError, []any{v33})
 panic(v34)
 } else {
 v24 = nil
@@ -23981,7 +23979,7 @@ if v42.IsMacro() {
 }
 v43 := v42.Get()
 v44 := lang.Apply(v43, []any{"Cyclic derivation:", v5, "has", v4, "as ancestor"})
-v45 := lang.Apply(Exception9., []any{v44})
+v45 := lang.Apply(lang.NewError, []any{v44})
 panic(v45)
 } else {
 v35 = nil
@@ -24080,7 +24078,7 @@ if v7.IsMacro() {
 v8 := v7.Get()
 v9 := lang.Apply(v8, []any{v4})
 if lang.IsTruthy(v9) {
-v10 := lang.Apply(java.lang.UnsupportedOperationException11., []any{"Can't get descendants of classes"})
+v10 := lang.Apply(java.lang.UnsupportedOperationException10., []any{"Can't get descendants of classes"})
 panic(v10)
 } else {
 v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -25192,7 +25190,7 @@ if v257.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v257)))
 }
 v258 := v257.Get()
-v259 := lang.Apply(v258, []any{lang1.Named, v236})
+v259 := lang.Apply(v258, []any{lang.Named, v236})
 if lang.IsTruthy(v259) {
 v260 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v261 := v260.FindInternedVar(lang.NewSymbol("with-meta"))
@@ -25969,7 +25967,7 @@ if err != nil {
 v13 := lang.Apply(v12, []any{v7, v8})
 return v13
 })
-v10 := lang.Apply(lang1.NewLazySeq, []any{v9})
+v10 := lang.Apply(lang.NewLazySeq, []any{v9})
 return v10
 })
 v6 := v5
@@ -26368,7 +26366,7 @@ v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(lang.NewKeyword("line"), []any{v25})
 v27 := lang.Apply(v14, []any{v18, " requires ", "a vector for its binding", " in ", v21, ":", v26})
-v28 := lang.Apply(lang1.NewIllegalArgumentError, []any{v27})
+v28 := lang.Apply(lang.NewIllegalArgumentError, []any{v27})
 panic(v28)
 }
 _ = v7
@@ -26418,7 +26416,7 @@ v50 := v49.Get()
 v51 := lang.Apply(v50, []any{v3})
 v52 := lang.Apply(lang.NewKeyword("line"), []any{v51})
 v53 := lang.Apply(v40, []any{v44, " requires ", "an even number of forms in binding vector", " in ", v47, ":", v52})
-v54 := lang.Apply(lang1.NewIllegalArgumentError, []any{v53})
+v54 := lang.Apply(lang.NewIllegalArgumentError, []any{v53})
 panic(v54)
 }
 _ = v29
@@ -28021,7 +28019,7 @@ v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(lang.NewKeyword("line"), []any{v25})
 v27 := lang.Apply(v14, []any{v18, " requires ", "a vector for its binding", " in ", v21, ":", v26})
-v28 := lang.Apply(lang1.NewIllegalArgumentError, []any{v27})
+v28 := lang.Apply(lang.NewIllegalArgumentError, []any{v27})
 panic(v28)
 }
 _ = v7
@@ -28071,7 +28069,7 @@ v50 := v49.Get()
 v51 := lang.Apply(v50, []any{v3})
 v52 := lang.Apply(lang.NewKeyword("line"), []any{v51})
 v53 := lang.Apply(v40, []any{v44, " requires ", "exactly 2 forms in binding vector", " in ", v47, ":", v52})
-v54 := lang.Apply(lang1.NewIllegalArgumentError, []any{v53})
+v54 := lang.Apply(lang.NewIllegalArgumentError, []any{v53})
 panic(v54)
 }
 _ = v29
@@ -28718,7 +28716,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.AsFloat64, []any{v4})
+v5 := lang.Apply(lang.AsFloat64, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -28820,7 +28818,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 1:
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "doubleArray")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "doubleArray")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("doubleArray is not a function")))
 }
@@ -28829,7 +28827,7 @@ return v6
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "doubleArrayInit")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "doubleArrayInit")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("doubleArrayInit is not a function")))
 }
@@ -28932,7 +28930,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "doubles")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "doubles")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("doubles is not a function")))
 }
@@ -29056,7 +29054,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{lang1.IDrop, v4})
+v9 := lang.Apply(v8, []any{lang.IDrop, v4})
 if lang.IsTruthy(v9) {
 var v11 any
 v12 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -29180,7 +29178,7 @@ v15 = lang.NewFnFunc(func(args ...any) any {
 v16 := lang.Apply(v10, []any{v3, v4})
 return v16
 })
-v16 := lang.Apply(lang1.NewLazySeq, []any{v15})
+v16 := lang.Apply(lang.NewLazySeq, []any{v15})
 v5 = v16
 }
 return v5
@@ -29409,7 +29407,7 @@ v10 = lang.NewFnFunc(func(args ...any) any {
 v11 := lang.Apply(v5, []any{v3, v4})
 return v11
 })
-v11 := lang.Apply(lang1.NewLazySeq, []any{v10})
+v11 := lang.Apply(lang.NewLazySeq, []any{v10})
 return v11
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -30013,7 +30011,7 @@ if v6.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
 }
 v7 := v6.Get()
-v8 := lang.Apply(v7, []any{lang1.IPersistentCollection, v3})
+v8 := lang.Apply(v7, []any{lang.IPersistentCollection, v3})
 if lang.IsTruthy(v8) {
 v9, ok := lang.FieldOrMethod(v3, "empty")
 if !ok {
@@ -30287,7 +30285,7 @@ if v13.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v13)))
 }
 v14 := v13.Get()
-v15 := lang.Apply(lang1.UncheckedLongCast, []any{v3})
+v15 := lang.Apply(lang.UncheckedLongCast, []any{v3})
 v16 := lang.Apply(v14, []any{v15, int64(1)})
 v17 := lang.Apply(v11, []any{v16})
 v4 = v17
@@ -30299,7 +30297,7 @@ if v19.IsMacro() {
 }
 v20 := v19.Get()
 v21 := lang.Apply(v20, []any{"Argument must be an integer: ", v3})
-v22 := lang.Apply(lang1.NewIllegalArgumentError, []any{v21})
+v22 := lang.Apply(lang.NewIllegalArgumentError, []any{v21})
 panic(v22)
 }
 return v4
@@ -31162,7 +31160,7 @@ if v6.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
 }
 v7 := v6.Get()
-v8 := lang.Apply(v7, []any{lang1.Throwable, v3})
+v8 := lang.Apply(v7, []any{lang.Throwable, v3})
 if lang.IsTruthy(v8) {
 v9, ok := lang.FieldOrMethod(v3, "getCause")
 if !ok {
@@ -31243,7 +31241,7 @@ if v6.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
 }
 v7 := v6.Get()
-v8 := lang.Apply(ExceptionInfo12., []any{v3, v4})
+v8 := lang.Apply(ExceptionInfo11., []any{v3, v4})
 v9 := lang.Apply(v7, []any{v8, "glojure.core$ex_info"})
 return v9
   case 3:
@@ -31256,7 +31254,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(ExceptionInfo12., []any{v3, v4, v5})
+v9 := lang.Apply(ExceptionInfo11., []any{v3, v4, v5})
 v10 := lang.Apply(v8, []any{v9, "glojure.core$ex_info"})
 return v10
   default:
@@ -31285,7 +31283,7 @@ if v6.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
 }
 v7 := v6.Get()
-v8 := lang.Apply(v7, []any{lang1.Throwable, v3})
+v8 := lang.Apply(v7, []any{lang.Throwable, v3})
 if lang.IsTruthy(v8) {
 v9, ok := lang.FieldOrMethod(v3, "getMessage")
 if !ok {
@@ -31828,7 +31826,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.Identical, []any{v4, false})
+v5 := lang.Apply(lang.Identical, []any{v4, false})
 return v5
 })
 v4 := reflect.TypeOf(false)
@@ -32050,7 +32048,7 @@ v33 := v32.Get()
 v34 := lang.Apply(v33, []any{v25})
 var v30 any = v34
 _ = v30
-v37 := lang.Apply(lang1.LongCast, []any{v25})
+v37 := lang.Apply(lang.LongCast, []any{v25})
 var v36 any = v37
 _ = v36
 var v39 any = int64(0)
@@ -32189,7 +32187,7 @@ v12 = nil
 }
 return v12
 })
-v6 := lang.Apply(lang1.NewLazySeq, []any{v5})
+v6 := lang.Apply(lang.NewLazySeq, []any{v5})
 return v6
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -32418,7 +32416,7 @@ if v0.Meta() != nil {
 }
 // find-keyword
 {
-v1 := reflect.TypeOf((*lang1.Keyword)(nil)).Elem()
+v1 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
 v0 := lang.NewSymbol("find-keyword").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("name")), lang.NewVector(lang.NewSymbol("ns"), lang.NewSymbol("name"))), lang.NewKeyword("doc"), "Returns a Keyword with the given namespace and name if one already\n  exists.  This function will not intern a new keyword. If the keyword\n  has not already been interned, it will return nil.  Do not use :\n  in the keyword strings, it will be added automatically.", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.3", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(18), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(618), lang.NewKeyword("end-line"), int(618))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
@@ -32476,7 +32474,7 @@ return v6
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 })
-v4 := reflect.TypeOf((*lang1.Keyword)(nil)).Elem()
+v4 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), v4)).(lang.FnFunc)
 v2 := ns.InternWithValue(v0, v3, true)
 if v0.Meta() != nil {
@@ -32492,7 +32490,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4 := lang.Apply(lang1.FindNamespace, []any{v3})
+v4 := lang.Apply(lang.FindNamespace, []any{v3})
 return v4
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -32533,7 +32531,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.First, []any{v4})
+v5 := lang.Apply(lang.First, []any{v4})
 return v5
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(52), lang.NewKeyword("column"), int(8), lang.NewKeyword("end-line"), int(52), lang.NewKeyword("end-column"), int(86))).(lang.FnFunc)
@@ -32781,7 +32779,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.FloatCast, []any{v4})
+v5 := lang.Apply(lang.FloatCast, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -32883,7 +32881,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 1:
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "floatArray")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "floatArray")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("floatArray is not a function")))
 }
@@ -32892,7 +32890,7 @@ return v6
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "floatArrayInit")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "floatArrayInit")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("floatArrayInit is not a function")))
 }
@@ -33010,7 +33008,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "floats")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "floats")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("floats is not a function")))
 }
@@ -33185,7 +33183,7 @@ v64 := v63.Get()
 v65 := lang.Apply(v64, []any{"Parameter declaration missing"})
 v49 = v65
 }
-v66 := lang.Apply(lang1.NewIllegalArgumentError, []any{v49})
+v66 := lang.Apply(lang.NewIllegalArgumentError, []any{v49})
 panic(v66)
 }
 v27 = v40
@@ -33221,7 +33219,7 @@ if v80.IsMacro() {
 }
 v81 := v80.Get()
 v82 := lang.Apply(v81, []any{"Invalid signature ", v69, " should be a list"})
-v83 := lang.Apply(lang1.NewIllegalArgumentError, []any{v82})
+v83 := lang.Apply(lang.NewIllegalArgumentError, []any{v82})
 panic(v83)
 } else {
 v70 = nil
@@ -33310,7 +33308,7 @@ v127 := v126.Get()
 v128 := lang.Apply(v127, []any{"Invalid signature ", v69, " should be a list"})
 v112 = v128
 }
-v129 := lang.Apply(lang1.NewIllegalArgumentError, []any{v112})
+v129 := lang.Apply(lang.NewIllegalArgumentError, []any{v112})
 panic(v129)
 } else {
 v103 = nil
@@ -34221,7 +34219,7 @@ v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(lang.NewKeyword("line"), []any{v25})
 v27 := lang.Apply(v14, []any{v18, " requires ", "a vector for its binding", " in ", v21, ":", v26})
-v28 := lang.Apply(lang1.NewIllegalArgumentError, []any{v27})
+v28 := lang.Apply(lang.NewIllegalArgumentError, []any{v27})
 panic(v28)
 }
 _ = v7
@@ -34271,7 +34269,7 @@ v50 := v49.Get()
 v51 := lang.Apply(v50, []any{v3})
 v52 := lang.Apply(lang.NewKeyword("line"), []any{v51})
 v53 := lang.Apply(v40, []any{v44, " requires ", "an even number of forms in binding vector", " in ", v47, ":", v52})
-v54 := lang.Apply(lang1.NewIllegalArgumentError, []any{v53})
+v54 := lang.Apply(lang.NewIllegalArgumentError, []any{v53})
 panic(v54)
 }
 _ = v29
@@ -34426,7 +34424,7 @@ if v66.IsMacro() {
 }
 v67 := v66.Get()
 v68 := lang.Apply(v64, []any{v67, v61})
-v69 := lang.Apply(lang1.NewIllegalArgumentError, []any{v68})
+v69 := lang.Apply(lang.NewIllegalArgumentError, []any{v68})
 panic(v69)
   }
 })
@@ -37596,7 +37594,7 @@ v7 := v6.Get()
 v8 := lang.Apply(v7, []any{v4})
 var v4 any = v8
 _ = v4
-v10 := lang.Apply(lang1.AgentSubmit, []any{v4})
+v10 := lang.Apply(lang.AgentSubmit, []any{v4})
 var v9 any = v10
 _ = v9
 return v9
@@ -37753,7 +37751,7 @@ if reflect.TypeOf(v10).Kind() != reflect.Func {
 v11 := lang.Apply(v10, []any{})
 v12 := lang.Apply(v9, []any{v11})
 v13 := lang.Apply(v6, []any{v3, v12})
-v14 := lang.Apply(lang1.NewSymbol, []any{v13})
+v14 := lang.Apply(lang.NewSymbol, []any{v13})
 return v14
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -37861,13 +37859,13 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6 := lang.Apply(lang1.Get, []any{v4, v5})
+v6 := lang.Apply(lang.Get, []any{v4, v5})
 return v6
   case 3:
 v4 := args[0]
 v5 := args[1]
 v6 := args[2]
-v7 := lang.Apply(lang1.GetDefault, []any{v4, v5, v6})
+v7 := lang.Apply(lang.GetDefault, []any{v4, v5, v6})
 return v7
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -37906,7 +37904,7 @@ return v11
 v3 := args[0]
 v4 := args[1]
 v5 := args[2]
-v7 := lang.Apply(Object13., nil)
+v7 := lang.Apply(Object12., nil)
 var v6 any = v7
 _ = v6
 var v8 any = v8
@@ -38276,7 +38274,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4 := lang.Apply(lang1.HashEq, []any{v3})
+v4 := lang.Apply(lang.HashEq, []any{v3})
 return v4
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -38304,7 +38302,7 @@ return v5
       panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
     }
 v3 := lang.NewList(args[0:]...)
-v4 := lang.Apply(lang1.CreatePersistentHashMap, []any{v3})
+v4 := lang.Apply(lang.CreatePersistentHashMap, []any{v3})
 return v4
   }
 })
@@ -38490,7 +38488,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6 := lang.Apply(lang1.Identical, []any{v4, v5})
+v6 := lang.Apply(lang.Identical, []any{v4, v5})
 return v6
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -38619,7 +38617,7 @@ v26 := v25.Get()
 v27 := lang.Apply(v26, []any{v3})
 v28 := lang.Apply(lang.NewKeyword("line"), []any{v27})
 v29 := lang.Apply(v16, []any{v20, " requires ", "a vector for its binding", " in ", v23, ":", v28})
-v30 := lang.Apply(lang1.NewIllegalArgumentError, []any{v29})
+v30 := lang.Apply(lang.NewIllegalArgumentError, []any{v29})
 panic(v30)
 }
 _ = v9
@@ -38662,7 +38660,7 @@ v48 := v47.Get()
 v49 := lang.Apply(v48, []any{v3})
 v50 := lang.Apply(lang.NewKeyword("line"), []any{v49})
 v51 := lang.Apply(v38, []any{v42, " requires ", "1 or 2 forms after binding vector", " in ", v45, ":", v50})
-v52 := lang.Apply(lang1.NewIllegalArgumentError, []any{v51})
+v52 := lang.Apply(lang.NewIllegalArgumentError, []any{v51})
 panic(v52)
 }
 _ = v31
@@ -38712,7 +38710,7 @@ v74 := v73.Get()
 v75 := lang.Apply(v74, []any{v3})
 v76 := lang.Apply(lang.NewKeyword("line"), []any{v75})
 v77 := lang.Apply(v64, []any{v68, " requires ", "exactly 2 forms in binding vector", " in ", v71, ":", v76})
-v78 := lang.Apply(lang1.NewIllegalArgumentError, []any{v77})
+v78 := lang.Apply(lang.NewIllegalArgumentError, []any{v77})
 panic(v78)
 }
 _ = v53
@@ -39170,7 +39168,7 @@ v26 := v25.Get()
 v27 := lang.Apply(v26, []any{v3})
 v28 := lang.Apply(lang.NewKeyword("line"), []any{v27})
 v29 := lang.Apply(v16, []any{v20, " requires ", "a vector for its binding", " in ", v23, ":", v28})
-v30 := lang.Apply(lang1.NewIllegalArgumentError, []any{v29})
+v30 := lang.Apply(lang.NewIllegalArgumentError, []any{v29})
 panic(v30)
 }
 _ = v9
@@ -39213,7 +39211,7 @@ v48 := v47.Get()
 v49 := lang.Apply(v48, []any{v3})
 v50 := lang.Apply(lang.NewKeyword("line"), []any{v49})
 v51 := lang.Apply(v38, []any{v42, " requires ", "1 or 2 forms after binding vector", " in ", v45, ":", v50})
-v52 := lang.Apply(lang1.NewIllegalArgumentError, []any{v51})
+v52 := lang.Apply(lang.NewIllegalArgumentError, []any{v51})
 panic(v52)
 }
 _ = v31
@@ -39263,7 +39261,7 @@ v74 := v73.Get()
 v75 := lang.Apply(v74, []any{v3})
 v76 := lang.Apply(lang.NewKeyword("line"), []any{v75})
 v77 := lang.Apply(v64, []any{v68, " requires ", "exactly 2 forms in binding vector", " in ", v71, ":", v76})
-v78 := lang.Apply(lang1.NewIllegalArgumentError, []any{v77})
+v78 := lang.Apply(lang.NewIllegalArgumentError, []any{v77})
 panic(v78)
 }
 _ = v53
@@ -39873,7 +39871,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "inc")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "inc")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("inc is not a function")))
 }
@@ -39970,7 +39968,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "incP")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "incP")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("incP is not a function")))
 }
@@ -40111,7 +40109,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6 := lang.Apply(lang1.HasType, []any{v4, v5})
+v6 := lang.Apply(lang.HasType, []any{v4, v5})
 return v6
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(143), lang.NewKeyword("column"), int(12), lang.NewKeyword("end-line"), int(143), lang.NewKeyword("end-column"), int(85))).(lang.FnFunc)
@@ -40325,7 +40323,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 1:
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "intArray")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "intArray")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("intArray is not a function")))
 }
@@ -40334,7 +40332,7 @@ return v6
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "intArrayInit")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "intArrayInit")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("intArrayInit is not a function")))
 }
@@ -40428,7 +40426,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4 := lang.Apply(lang1.IsInteger, []any{v3})
+v4 := lang.Apply(lang.IsInteger, []any{v3})
 return v4
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -40454,7 +40452,7 @@ v4 = lang.NewFnFunc(func(args ...any) any {
   }
 return v3
 })
-v5 := lang.Apply(lang1.NewLazySeq, []any{v4})
+v5 := lang.Apply(lang.NewLazySeq, []any{v4})
 return v5
   case 2:
 v3 := args[0]
@@ -40547,7 +40545,7 @@ v17 = nil
 }
 return v17
 })
-v6 := lang.Apply(lang1.NewLazySeq, []any{v5})
+v6 := lang.Apply(lang.NewLazySeq, []any{v5})
 return v6
   default:
     if len(args) < 2 {
@@ -40650,7 +40648,7 @@ v20 = nil
 }
 return v20
 })
-v7 := lang.Apply(lang1.NewLazySeq, []any{v6})
+v7 := lang.Apply(lang.NewLazySeq, []any{v6})
 return v7
   }
 })
@@ -40912,7 +40910,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{lang1.IEditableCollection, v3})
+v9 := lang.Apply(v8, []any{lang.IEditableCollection, v3})
 if lang.IsTruthy(v9) {
 v10 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v11 := v10.FindInternedVar(lang.NewSymbol("with-meta"))
@@ -40984,7 +40982,7 @@ if v8.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v8)))
 }
 v9 := v8.Get()
-v10 := lang.Apply(v9, []any{lang1.IEditableCollection, v3})
+v10 := lang.Apply(v9, []any{lang.IEditableCollection, v3})
 if lang.IsTruthy(v10) {
 v12 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v13 := v12.FindInternedVar(lang.NewSymbol("meta"))
@@ -41135,7 +41133,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{lang1.IEditableCollection, v3})
+v9 := lang.Apply(v8, []any{lang.IEditableCollection, v3})
 if lang.IsTruthy(v9) {
 v10 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v11 := v10.FindInternedVar(lang.NewSymbol("persistent!"))
@@ -41252,7 +41250,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "ints")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "ints")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("ints is not a function")))
 }
@@ -41839,7 +41837,7 @@ if v18.IsMacro() {
 }
 v19 := v18.Get()
 v20 := lang.Apply(v19, []any{v6})
-v21 := lang.Apply(lang1.NewPersistentArrayMapAsIfByAssoc, []any{v20})
+v21 := lang.Apply(lang.NewPersistentArrayMapAsIfByAssoc, []any{v20})
 v12 = v21
 } else {
 var v22 any
@@ -41978,7 +41976,7 @@ v87 := lang.Apply(v3, []any{v84})
 v88 := lang.Apply(v68, []any{v87})
 return v88
 })
-v87 := lang.Apply(lang1.NewLazySeq, []any{v86})
+v87 := lang.Apply(lang.NewLazySeq, []any{v86})
 v79 = v87
 }
 v76 := lang.Apply(v74, []any{v75, v79})
@@ -42076,7 +42074,7 @@ v82 = v83
   break
 }
 v79 := lang.Apply(v75, []any{v78, v82})
-v80 := lang.Apply(nil, []any{glojure.lang4.Seqable, v72, lang1.IReduceInit, v79})
+v80 := lang.Apply(nil, []any{glojure.lang4.Seqable, v72, lang.IReduceInit, v79})
 return v80
   }
 })
@@ -42900,7 +42898,7 @@ v12 = nil
 }
 return v12
 })
-v6 := lang.Apply(lang1.NewLazySeq, []any{v5})
+v6 := lang.Apply(lang.NewLazySeq, []any{v5})
 return v6
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -43053,7 +43051,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4 := lang.Apply(lang1.Keys, []any{v3})
+v4 := lang.Apply(lang.Keys, []any{v3})
 return v4
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -43064,7 +43062,7 @@ if v0.Meta() != nil {
 }
 // keyword
 {
-v1 := reflect.TypeOf((*lang1.Keyword)(nil)).Elem()
+v1 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
 v0 := lang.NewSymbol("keyword").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("name")), lang.NewVector(lang.NewSymbol("ns"), lang.NewSymbol("name"))), lang.NewKeyword("doc"), "Returns a Keyword with the given namespace and name.  Do not use :\n  in the keyword strings, it will be added automatically.", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.0", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(13), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(609), lang.NewKeyword("end-line"), int(609))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
@@ -43091,7 +43089,7 @@ if v12.IsMacro() {
 v13 := v12.Get()
 v14 := lang.Apply(v13, []any{v4})
 if lang.IsTruthy(v14) {
-v15 := lang.Apply(lang1.InternKeywordSymbol, []any{v4})
+v15 := lang.Apply(lang.InternKeywordSymbol, []any{v4})
 v10 = v15
 } else {
 var v16 any
@@ -43103,7 +43101,7 @@ if v18.IsMacro() {
 v19 := v18.Get()
 v20 := lang.Apply(v19, []any{v4})
 if lang.IsTruthy(v20) {
-v21 := lang.Apply(lang1.InternKeywordString, []any{v4})
+v21 := lang.Apply(lang.InternKeywordString, []any{v4})
 v16 = v21
 } else {
 v16 = nil
@@ -43116,13 +43114,13 @@ return v5
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6 := lang.Apply(lang1.InternKeyword, []any{v4, v5})
+v6 := lang.Apply(lang.InternKeyword, []any{v4, v5})
 return v6
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 })
-v4 := reflect.TypeOf((*lang1.Keyword)(nil)).Elem()
+v4 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), v4)).(lang.FnFunc)
 v2 := ns.InternWithValue(v0, v3, true)
 if v0.Meta() != nil {
@@ -43144,7 +43142,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.Keyword, v3})
+v7 := lang.Apply(v6, []any{lang.Keyword, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -43369,7 +43367,7 @@ v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(lang.NewKeyword("line"), []any{v25})
 v27 := lang.Apply(v14, []any{v18, " requires ", "a vector for its binding", " in ", v21, ":", v26})
-v28 := lang.Apply(lang1.NewIllegalArgumentError, []any{v27})
+v28 := lang.Apply(lang.NewIllegalArgumentError, []any{v27})
 panic(v28)
 }
 _ = v7
@@ -43419,7 +43417,7 @@ v50 := v49.Get()
 v51 := lang.Apply(v50, []any{v3})
 v52 := lang.Apply(lang.NewKeyword("line"), []any{v51})
 v53 := lang.Apply(v40, []any{v44, " requires ", "an even number of forms in binding vector", " in ", v47, ":", v52})
-v54 := lang.Apply(lang1.NewIllegalArgumentError, []any{v53})
+v54 := lang.Apply(lang.NewIllegalArgumentError, []any{v53})
 panic(v54)
 }
 _ = v29
@@ -43991,7 +43989,7 @@ v17 := v16.Get()
 v18 := lang.Apply(v17, []any{v3})
 return v18
 })
-v15 := lang.Apply(lang1.NewLazySeq, []any{v14})
+v15 := lang.Apply(lang.NewLazySeq, []any{v14})
 v16 := lang.Apply(v13, []any{v9, v15})
 v8 = v16
 } else {
@@ -44154,7 +44152,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.IPersistentList, v3})
+v7 := lang.Apply(v6, []any{lang.IPersistentList, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -44208,7 +44206,7 @@ v20 := lang.Apply(v19, []any{v11})
 var v18 any = v20
 _ = v18
 var v23 any
-v24 := lang.Apply(strings14.HasPrefix, []any{v22, "/"})
+v24 := lang.Apply(strings13.HasPrefix, []any{v22, "/"})
 if lang.IsTruthy(v24) {
 v23 = v22
 } else {
@@ -44343,7 +44341,7 @@ if v88.IsMacro() {
 v89 := v88.Get()
 v90 := lang.Apply(v89, nil)
 }()
-v91 := lang.Apply(strings14.TrimPrefix, []any{v22, "/"})
+v91 := lang.Apply(strings13.TrimPrefix, []any{v22, "/"})
 v92, _ := lang.FieldOrMethod(runtime5.RT, "Load")
 if reflect.TypeOf(v92).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Load is not a function")))
@@ -44450,7 +44448,7 @@ v36 := lang.Apply(v35, []any{v25})
 var v32 any = v36
 _ = v32
 var v39 any
-v40 := lang.Apply(strings14.HasPrefix, []any{v38, "/"})
+v40 := lang.Apply(strings13.HasPrefix, []any{v38, "/"})
 if lang.IsTruthy(v40) {
 v39 = v38
 } else {
@@ -44585,7 +44583,7 @@ if v104.IsMacro() {
 v105 := v104.Get()
 v106 := lang.Apply(v105, nil)
 }()
-v107 := lang.Apply(strings14.TrimPrefix, []any{v38, "/"})
+v107 := lang.Apply(strings13.TrimPrefix, []any{v38, "/"})
 v108, _ := lang.FieldOrMethod(runtime5.RT, "Load")
 if reflect.TypeOf(v108).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Load is not a function")))
@@ -44753,7 +44751,7 @@ v34 = v49
 v16 := lang.Apply(v9, []any{v12, v15, v34})
 return v16
 })
-v7, _ := lang.FieldOrMethod(lang1.LockingTransaction, "RunInTransaction")
+v7, _ := lang.FieldOrMethod(lang.LockingTransaction, "RunInTransaction")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("RunInTransaction is not a function")))
 }
@@ -44787,8 +44785,8 @@ case reflect.Func:
 default:
   v7 = v6
 }
-v8 := lang.Apply(java.io.InputStreamReader16., []any{v7, "UTF-8"})
-v9 := lang.Apply(glojure.lang.LineNumberingPushbackReader15., []any{v8})
+v8 := lang.Apply(java.io.InputStreamReader15., []any{v7, "UTF-8"})
+v9 := lang.Apply(glojure.lang.LineNumberingPushbackReader14., []any{v8})
 var v5 any = v9
 _ = v5
 var v11 any
@@ -45191,7 +45189,7 @@ if v20.IsMacro() {
 }
 v21 := v20.Get()
 v22 := lang.Apply(v21, []any{lang.NewChar(46)})
-v23 := lang.Apply(strings14.Index, []any{v18, v22})
+v23 := lang.Apply(strings13.Index, []any{v18, v22})
 v24 := lang.Apply(v14, []any{v23})
 v11 = v24
 } else {
@@ -45270,7 +45268,7 @@ if v45.IsMacro() {
 }
 v46 := v45.Get()
 v47 := lang.Apply(v46, []any{v33})
-v48 := lang.Apply(lang1.NewPersistentArrayMapAsIfByAssoc, []any{v47})
+v48 := lang.Apply(lang.NewPersistentArrayMapAsIfByAssoc, []any{v47})
 v39 = v48
 } else {
 var v49 any
@@ -46969,7 +46967,7 @@ v32 := v31.Get()
 v33 := lang.Apply(v26, []any{v29, v32, v3})
 return v33
 })
-v24, _ := lang.FieldOrMethod(lang1.LockingTransaction, "RunInTransaction")
+v24, _ := lang.FieldOrMethod(lang.LockingTransaction, "RunInTransaction")
 if reflect.TypeOf(v24).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("RunInTransaction is not a function")))
 }
@@ -47017,8 +47015,8 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v5 := lang.Apply(java.io.StringReader17., []any{v3})
-v6 := lang.Apply(glojure.lang.LineNumberingPushbackReader15., []any{v5})
+v5 := lang.Apply(java.io.StringReader16., []any{v3})
+v6 := lang.Apply(glojure.lang.LineNumberingPushbackReader14., []any{v5})
 var v4 any = v6
 _ = v4
 v8 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -47471,7 +47469,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.LongCast, []any{v4})
+v5 := lang.Apply(lang.LongCast, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -47573,7 +47571,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 1:
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "longArray")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "longArray")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("longArray is not a function")))
 }
@@ -47582,7 +47580,7 @@ return v6
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "longArrayInit")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "longArrayInit")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("longArrayInit is not a function")))
 }
@@ -47661,7 +47659,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "longs")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "longs")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("longs is not a function")))
 }
@@ -47727,7 +47725,7 @@ v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(lang.NewKeyword("line"), []any{v25})
 v27 := lang.Apply(v14, []any{v18, " requires ", "a vector for its binding", " in ", v21, ":", v26})
-v28 := lang.Apply(lang1.NewIllegalArgumentError, []any{v27})
+v28 := lang.Apply(lang.NewIllegalArgumentError, []any{v27})
 panic(v28)
 }
 _ = v7
@@ -47777,7 +47775,7 @@ v50 := v49.Get()
 v51 := lang.Apply(v50, []any{v3})
 v52 := lang.Apply(lang.NewKeyword("line"), []any{v51})
 v53 := lang.Apply(v40, []any{v44, " requires ", "an even number of forms in binding vector", " in ", v47, ":", v52})
-v54 := lang.Apply(lang1.NewIllegalArgumentError, []any{v53})
+v54 := lang.Apply(lang.NewIllegalArgumentError, []any{v53})
 panic(v54)
 }
 _ = v29
@@ -48505,7 +48503,7 @@ v37 := v36.Get()
 v38 := lang.Apply(v37, []any{v25})
 var v34 any = v38
 _ = v34
-v41 := lang.Apply(lang1.LongCast, []any{v25})
+v41 := lang.Apply(lang.LongCast, []any{v25})
 var v40 any = v41
 _ = v40
 var v43 any = int64(0)
@@ -48619,7 +48617,7 @@ v12 = nil
 }
 return v12
 })
-v6 := lang.Apply(lang1.NewLazySeq, []any{v5})
+v6 := lang.Apply(lang.NewLazySeq, []any{v5})
 return v6
   case 3:
 v3 := args[0]
@@ -48707,7 +48705,7 @@ v18 = nil
 }
 return v18
 })
-v7 := lang.Apply(lang1.NewLazySeq, []any{v6})
+v7 := lang.Apply(lang.NewLazySeq, []any{v6})
 return v7
   case 4:
 v3 := args[0]
@@ -48827,7 +48825,7 @@ v24 = nil
 }
 return v24
 })
-v8 := lang.Apply(lang1.NewLazySeq, []any{v7})
+v8 := lang.Apply(lang.NewLazySeq, []any{v7})
 return v8
   default:
     if len(args) < 4 {
@@ -48920,7 +48918,7 @@ v22 = nil
 }
 return v22
 })
-v13 := lang.Apply(lang1.NewLazySeq, []any{v12})
+v13 := lang.Apply(lang.NewLazySeq, []any{v12})
 return v13
 })
 v10 := v9
@@ -48992,7 +48990,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{java.util18.Map$Entry, v3})
+v7 := lang.Apply(v6, []any{java.util17.Map$Entry, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -49110,7 +49108,7 @@ if v6.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
 }
 v7 := v6.Get()
-v8 := lang.Apply(v7, []any{lang1.IPersistentMap, v4})
+v8 := lang.Apply(v7, []any{lang.IPersistentMap, v4})
 return v8
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(171), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(171), lang.NewKeyword("end-column"), int(97))).(lang.FnFunc)
@@ -49711,7 +49709,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -49729,7 +49727,7 @@ return v5
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "max")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "max")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("max is not a function")))
 }
@@ -50539,7 +50537,7 @@ v41 = v48
 }
 return v41
 })
-v40 := lang.Apply(lang1.NewLazySeq, []any{v39})
+v40 := lang.Apply(lang.NewLazySeq, []any{v39})
 return v40
 })
 v37 := v36
@@ -50603,7 +50601,7 @@ v19 = v26
 }
 return v19
 })
-v18 := lang.Apply(lang1.NewLazySeq, []any{v17})
+v18 := lang.Apply(lang.NewLazySeq, []any{v17})
 return v18
 })
 v15 := v14
@@ -51079,7 +51077,7 @@ if v21.IsMacro() {
 }
 v22 := v21.Get()
 v23 := lang.Apply(v22, []any{v12})
-v24 := lang.Apply(lang1.Hash, []any{v23})
+v24 := lang.Apply(lang.Hash, []any{v23})
 v25 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v26 := v25.FindInternedVar(lang.NewSymbol("fnil"))
 if v26.IsMacro() {
@@ -51638,7 +51636,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{lang1.IMeta, v4})
+v9 := lang.Apply(v8, []any{lang.IMeta, v4})
 if lang.IsTruthy(v9) {
 v10, ok := lang.FieldOrMethod(v4, "Meta")
 if !ok {
@@ -52059,7 +52057,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "Gt")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 }
@@ -52077,7 +52075,7 @@ return v5
   case 2:
 v5 := args[0]
 v6 := args[1]
-v7, _ := lang.FieldOrMethod(lang1.Numbers, "min")
+v7, _ := lang.FieldOrMethod(lang.Numbers, "min")
 if reflect.TypeOf(v7).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("min is not a function")))
 }
@@ -53055,7 +53053,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "isNeg")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "isNeg")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("isNeg is not a function")))
 }
@@ -53088,7 +53086,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(lang1.AppendWriter, []any{v5, v8})
+v9 := lang.Apply(lang.AppendWriter, []any{v5, v8})
 _ = v9
 return nil
 })
@@ -53100,7 +53098,7 @@ if v0.Meta() != nil {
 }
 // next
 {
-v1 := reflect.TypeOf((*lang1.ISeq)(nil)).Elem()
+v1 := reflect.TypeOf((*lang.ISeq)(nil)).Elem()
 v0 := lang.NewSymbol("next").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("coll"))), lang.NewKeyword("doc"), "Returns a seq of the items after the first. Calls seq on its\n  argument.  If there are no more items, returns nil.", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.0", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(5), lang.NewKeyword("column"), int(2), lang.NewKeyword("line"), int(55), lang.NewKeyword("end-line"), int(61))).(*lang.Symbol)
 var v3 lang.FnFunc
 { // function next
@@ -53109,7 +53107,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v5 := args[0]
-v6 := lang.Apply(lang1.Next, []any{v5})
+v6 := lang.Apply(lang.Next, []any{v5})
 return v6
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(61), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(61), lang.NewKeyword("end-column"), int(77))).(lang.FnFunc)
@@ -53185,7 +53183,7 @@ v4 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v5 := args[0]
-v6 := lang.Apply(lang1.IsNil, []any{v5})
+v6 := lang.Apply(lang.IsNil, []any{v5})
 return v6
 })
 v5 := reflect.TypeOf(false)
@@ -54739,7 +54737,7 @@ if v20.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v20)))
 }
 v21 := v20.Get()
-v22 := lang.Apply(v21, []any{lang1.*Var, v17})
+v22 := lang.Apply(v21, []any{lang.*Var, v17})
 var v18 any = v22
 _ = v18
 var v24 any
@@ -54901,7 +54899,7 @@ if v20.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v20)))
 }
 v21 := v20.Get()
-v22 := lang.Apply(v21, []any{lang1.*Var, v17})
+v22 := lang.Apply(v21, []any{lang.*Var, v17})
 var v18 any = v22
 _ = v18
 var v24 any
@@ -55012,7 +55010,7 @@ if v20.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v20)))
 }
 v21 := v20.Get()
-v22 := lang.Apply(v21, []any{lang1.*Var, v17})
+v22 := lang.Apply(v21, []any{lang.*Var, v17})
 var v18 any = v22
 _ = v18
 var v24 any
@@ -55409,7 +55407,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{lang1.IDrop, v3})
+v9 := lang.Apply(v8, []any{lang.IDrop, v3})
 if lang.IsTruthy(v9) {
 var v10 any
 v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -55543,7 +55541,7 @@ if v13.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v13)))
 }
 v14 := v13.Get()
-v15 := lang.Apply(v14, []any{lang1.IDrop, v3})
+v15 := lang.Apply(v14, []any{lang.IDrop, v3})
 if lang.IsTruthy(v15) {
 var v16 any
 v17 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -55738,7 +55736,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "num")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "num")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("num is not a function")))
 }
@@ -55760,7 +55758,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4 := lang.Apply(lang1.IsNumber, []any{v3})
+v4 := lang.Apply(lang.IsNumber, []any{v3})
 return v4
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -56193,7 +56191,7 @@ if v10.IsMacro() {
 }
 v11 := v10.Get()
 v12 := lang.Apply(v11, []any{v3})
-v13 := lang.Apply(lang1.NewIllegalArgumentError, []any{v12})
+v13 := lang.Apply(lang.NewIllegalArgumentError, []any{v12})
 panic(v13)
 }
 return v4
@@ -56222,7 +56220,7 @@ if v6.IsMacro() {
 v7 := v6.Get()
 v8 := lang.Apply(v7, []any{v3})
 if lang.IsTruthy(v8) {
-v10 := lang.Apply(strconv19.ParseFloat, []any{v3, int64(64)})
+v10 := lang.Apply(strconv18.ParseFloat, []any{v3, int64(64)})
 var v9 any = v10
 _ = v9
 var v12 any
@@ -56242,7 +56240,7 @@ if v10.IsMacro() {
 }
 v11 := v10.Get()
 v12 := lang.Apply(v11, []any{v3})
-v13 := lang.Apply(lang1.NewIllegalArgumentError, []any{v12})
+v13 := lang.Apply(lang.NewIllegalArgumentError, []any{v12})
 panic(v13)
 }
 return v4
@@ -56374,7 +56372,7 @@ if v6.IsMacro() {
 v7 := v6.Get()
 v8 := lang.Apply(v7, []any{v3})
 if lang.IsTruthy(v8) {
-v10 := lang.Apply(strconv19.ParseInt, []any{v3, int64(10), int64(64)})
+v10 := lang.Apply(strconv18.ParseInt, []any{v3, int64(10), int64(64)})
 var v9 any = v10
 _ = v9
 var v12 any
@@ -56394,7 +56392,7 @@ if v10.IsMacro() {
 }
 v11 := v10.Get()
 v12 := lang.Apply(v11, []any{v3})
-v13 := lang.Apply(lang1.NewIllegalArgumentError, []any{v12})
+v13 := lang.Apply(lang.NewIllegalArgumentError, []any{v12})
 panic(v13)
 }
 return v4
@@ -56799,7 +56797,7 @@ v13 = nil
 }
 return v13
 })
-v7 := lang.Apply(lang1.NewLazySeq, []any{v6})
+v7 := lang.Apply(lang.NewLazySeq, []any{v6})
 return v7
   case 4:
 v3 := args[0]
@@ -56908,7 +56906,7 @@ v14 = nil
 }
 return v14
 })
-v8 := lang.Apply(lang1.NewLazySeq, []any{v7})
+v8 := lang.Apply(lang.NewLazySeq, []any{v7})
 return v8
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -56941,7 +56939,7 @@ if v8.IsMacro() {
 }
 v9 := v8.Get()
 v10 := lang.Apply(v9, []any{v3})
-v11 := lang.Apply(lang1.NewArrayList, []any{v10})
+v11 := lang.Apply(lang.NewArrayList, []any{v10})
 var v6 any = v11
 _ = v6
 var v13 lang.FnFunc
@@ -57173,7 +57171,7 @@ v13 = nil
 }
 return v13
 })
-v7 := lang.Apply(lang1.NewLazySeq, []any{v6})
+v7 := lang.Apply(lang.NewLazySeq, []any{v6})
 return v7
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -57518,7 +57516,7 @@ v52 := lang.Apply(v51, []any{v22})
 v53 := lang.Apply(v48, []any{v52, v13})
 return v53
 })
-v46 := lang.Apply(lang1.NewLazySeq, []any{v45})
+v46 := lang.Apply(lang.NewLazySeq, []any{v45})
 v47 := lang.Apply(v44, []any{v3, v46})
 v48 := lang.Apply(v41, []any{v22, v47})
 v12 = v48
@@ -57527,7 +57525,7 @@ v12 = nil
 }
 return v12
 })
-v6 := lang.Apply(lang1.NewLazySeq, []any{v5})
+v6 := lang.Apply(lang.NewLazySeq, []any{v5})
 return v6
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -57647,7 +57645,7 @@ v13 = nil
 }
 return v13
 })
-v7 := lang.Apply(lang1.NewLazySeq, []any{v6})
+v7 := lang.Apply(lang.NewLazySeq, []any{v6})
 return v7
   case 4:
 v3 := args[0]
@@ -57775,7 +57773,7 @@ v14 = nil
 }
 return v14
 })
-v8 := lang.Apply(lang1.NewLazySeq, []any{v7})
+v8 := lang.Apply(lang.NewLazySeq, []any{v7})
 return v8
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -57885,7 +57883,7 @@ v13 = nil
 }
 return v13
 })
-v7 := lang.Apply(lang1.NewLazySeq, []any{v6})
+v7 := lang.Apply(lang.NewLazySeq, []any{v6})
 return v7
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -58003,7 +58001,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(runtime20.NumCPU, nil)
+v9 := lang.Apply(runtime19.NumCPU, nil)
 v10 := lang.Apply(v8, []any{int64(2), v9})
 var v5 any = v10
 _ = v5
@@ -58146,7 +58144,7 @@ v51 = v58
 }
 return v51
 })
-v45 := lang.Apply(lang1.NewLazySeq, []any{v44})
+v45 := lang.Apply(lang.NewLazySeq, []any{v44})
 return v45
 })
 v21 := v20
@@ -58257,7 +58255,7 @@ v20 = nil
 }
 return v20
 })
-v11 := lang.Apply(lang1.NewLazySeq, []any{v10})
+v11 := lang.Apply(lang.NewLazySeq, []any{v10})
 return v11
 })
 v8 := v7
@@ -58372,7 +58370,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 0 {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
-v3 := lang.Apply(lang1.PopThreadBindings, nil)
+v3 := lang.Apply(lang.PopThreadBindings, nil)
 return v3
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -58504,7 +58502,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "isPos")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "isPos")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("isPos is not a function")))
 }
@@ -58562,7 +58560,7 @@ if v10.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v10)))
 }
 v11 := v10.Get()
-v12 := lang.Apply(lang1.AppendWriter, []any{v11, lang.NewChar(32)})
+v12 := lang.Apply(lang.AppendWriter, []any{v11, lang.NewChar(32)})
 _ = v12
 v14 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v15 := v14.FindInternedVar(lang.NewSymbol("next"))
@@ -58803,7 +58801,7 @@ v8 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v9 := args[0]
-v10 := lang.Apply(lang1.Hash, []any{v9})
+v10 := lang.Apply(lang.Hash, []any{v9})
 return v10
 })
 v9 := lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(6691), lang.NewKeyword("column"), int(18), lang.NewKeyword("end-line"), int(6691), lang.NewKeyword("end-column"), int(66))
@@ -59523,7 +59521,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
 v3 := args[0]
 v4 := args[1]
 v5 := args[2]
-v6 := lang.Apply(lang1.WriteWriter, []any{v5, "#=("})
+v6 := lang.Apply(lang.WriteWriter, []any{v5, "#=("})
 _ = v6
 v7 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v8 := v7.FindInternedVar(lang.NewSymbol("class"))
@@ -59543,13 +59541,13 @@ case reflect.Func:
 default:
   v12 = v11
 }
-v13 := lang.Apply(lang1.WriteWriter, []any{v5, v12})
+v13 := lang.Apply(lang.WriteWriter, []any{v5, v12})
 _ = v13
-v14 := lang.Apply(lang1.WriteWriter, []any{v5, ". "})
+v14 := lang.Apply(lang.WriteWriter, []any{v5, ". "})
 _ = v14
 v15 := lang.Apply(v4, []any{v3, v5})
 _ = v15
-v16 := lang.Apply(lang1.WriteWriter, []any{v5, ")"})
+v16 := lang.Apply(lang.WriteWriter, []any{v5, ")"})
 return v16
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -59681,7 +59679,7 @@ v25 = v31
 v25 = v15
 }
 if lang.IsTruthy(v25) {
-v15 := lang.Apply(lang1.WriteWriter, []any{v4, "^"})
+v15 := lang.Apply(lang.WriteWriter, []any{v4, "^"})
 _ = v15
 var v16 any
 v18 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -59728,7 +59726,7 @@ v25 := lang.Apply(v24, []any{v12, v4})
 v16 = v25
 }
 _ = v16
-v26 := lang.Apply(lang1.WriteWriter, []any{v4, " "})
+v26 := lang.Apply(lang.WriteWriter, []any{v4, " "})
 v14 = v26
 } else {
 v14 = nil
@@ -59839,7 +59837,7 @@ var v23 any = v27
 _ = v23
 v29 := lang.Apply(v5, []any{v18, v16})
 _ = v29
-v30 := lang.Apply(lang1.AppendWriter, []any{v16, lang.NewChar(32)})
+v30 := lang.Apply(lang.AppendWriter, []any{v16, lang.NewChar(32)})
 _ = v30
 v31 := lang.Apply(v5, []any{v23, v16})
 return v31
@@ -59976,10 +59974,10 @@ v30 = v37
 v30 = v25
 }
 if lang.IsTruthy(v30) {
-v25 := lang.Apply(lang1.WriteWriter, []any{v8, "#"})
+v25 := lang.Apply(lang.WriteWriter, []any{v8, "#"})
 v24 = v25
 } else {
-v26 := lang.Apply(lang1.WriteWriter, []any{v8, v3})
+v26 := lang.Apply(lang.WriteWriter, []any{v8, v3})
 _ = v26
 v28 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v29 := v28.FindInternedVar(lang.NewSymbol("seq"))
@@ -60116,14 +60114,14 @@ if v86.IsMacro() {
 v87 := v86.Get()
 v88 := lang.Apply(v87, []any{v82})
 if lang.IsTruthy(v88) {
-v89 := lang.Apply(lang1.WriteWriter, []any{v8, "..."})
+v89 := lang.Apply(lang.WriteWriter, []any{v8, "..."})
 v84 = v89
 } else {
 v90 := lang.Apply(v4, []any{v80, v8})
 _ = v90
 var v91 any
 if lang.IsTruthy(v81) {
-v92 := lang.Apply(lang1.WriteWriter, []any{v8, v5})
+v92 := lang.Apply(lang.WriteWriter, []any{v8, v5})
 _ = v92
 var v93 any = v81
 v95 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -60223,7 +60221,7 @@ v78 := lang.Apply(v4, []any{v75, v8})
 _ = v78
 var v79 any
 if lang.IsTruthy(v76) {
-v80 := lang.Apply(lang1.WriteWriter, []any{v8, v5})
+v80 := lang.Apply(lang.WriteWriter, []any{v8, v5})
 _ = v80
 var v81 any = v76
 v57 = v81
@@ -60241,7 +60239,7 @@ v33 = v36
 v33 = nil
 }
 _ = v33
-v27 := lang.Apply(lang1.WriteWriter, []any{v8, v6})
+v27 := lang.Apply(lang.WriteWriter, []any{v8, v6})
 v24 = v27
 }
 v19 = v24
@@ -60279,7 +60277,7 @@ if v10.IsMacro() {
 }
 v11 := v10.Get()
 v12 := lang.Apply(v11, []any{v3})
-v13 := lang.Apply(lang1.WriteWriter, []any{v4, v12})
+v13 := lang.Apply(lang.WriteWriter, []any{v4, v12})
 return v13
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -60380,7 +60378,7 @@ if v8.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v8)))
 }
 v9 := v8.Get()
-v10 := lang.Apply(v9, []any{lang1.IMeta, v3})
+v10 := lang.Apply(v9, []any{lang.IMeta, v3})
 if lang.IsTruthy(v10) {
 v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v12 := v11.FindInternedVar(lang.NewSymbol("print-meta"))
@@ -60394,7 +60392,7 @@ v6 = v14
 v6 = nil
 }
 _ = v6
-v15 := lang.Apply(lang1.WriteWriter, []any{v5, "#object["})
+v15 := lang.Apply(lang.WriteWriter, []any{v5, "#object["})
 _ = v15
 v17 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v18 := v17.FindInternedVar(lang.NewSymbol("class"))
@@ -60438,11 +60436,11 @@ case reflect.Func:
 default:
   v30 = v29
 }
-v31 := lang.Apply(lang1.WriteWriter, []any{v5, v30})
+v31 := lang.Apply(lang.WriteWriter, []any{v5, v30})
 v22 = v31
 }
 _ = v22
-v16 := lang.Apply(lang1.WriteWriter, []any{v5, " "})
+v16 := lang.Apply(lang.WriteWriter, []any{v5, " "})
 _ = v16
 v17 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v18 := v17.FindInternedVar(lang.NewSymbol("format"))
@@ -60450,9 +60448,9 @@ if v18.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v18)))
 }
 v19 := v18.Get()
-v20 := lang.Apply(lang1.IdentityHash, []any{v3})
+v20 := lang.Apply(lang.IdentityHash, []any{v3})
 v21 := lang.Apply(v19, []any{"0x%x ", v20})
-v22 := lang.Apply(lang1.WriteWriter, []any{v5, v21})
+v22 := lang.Apply(lang.WriteWriter, []any{v5, v21})
 _ = v22
 v23 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v24 := v23.FindInternedVar(lang.NewSymbol("print-method"))
@@ -60462,7 +60460,7 @@ if v24.IsMacro() {
 v25 := v24.Get()
 v26 := lang.Apply(v25, []any{v4, v5})
 _ = v26
-v27 := lang.Apply(lang1.WriteWriter, []any{v5, "]"})
+v27 := lang.Apply(lang.WriteWriter, []any{v5, "]"})
 return v27
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -60481,7 +60479,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   }
 v3 := args[0]
 v4 := args[1]
-v5 := lang.Apply(lang1.WriteWriter, []any{v4, "#error {\n :cause "})
+v5 := lang.Apply(lang.WriteWriter, []any{v4, "#error {\n :cause "})
 _ = v5
 v7 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v8 := v7.FindInternedVar(lang.NewSymbol("Throwable->map"))
@@ -60517,7 +60515,7 @@ if v23.IsMacro() {
 }
 v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v11})
-v26 := lang.Apply(lang1.NewPersistentArrayMapAsIfByAssoc, []any{v25})
+v26 := lang.Apply(lang.NewPersistentArrayMapAsIfByAssoc, []any{v25})
 v17 = v26
 } else {
 var v27 any
@@ -60590,7 +60588,7 @@ v57 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v58 := args[0]
-v59 := lang.Apply(lang1.WriteWriter, []any{v4, "{:type "})
+v59 := lang.Apply(lang.WriteWriter, []any{v4, "{:type "})
 _ = v59
 v60 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v61 := v60.FindInternedVar(lang.NewSymbol("print-method"))
@@ -60601,7 +60599,7 @@ v62 := v61.Get()
 v63 := lang.Apply(lang.NewKeyword("type"), []any{v58})
 v64 := lang.Apply(v62, []any{v63, v4})
 _ = v64
-v65 := lang.Apply(lang1.WriteWriter, []any{v4, "\n   :message "})
+v65 := lang.Apply(lang.WriteWriter, []any{v4, "\n   :message "})
 _ = v65
 v66 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v67 := v66.FindInternedVar(lang.NewSymbol("print-method"))
@@ -60619,7 +60617,7 @@ var v74 any
 if lang.IsTruthy(v71) {
 var v75 any = v71
 _ = v75
-v77 := lang.Apply(lang1.WriteWriter, []any{v4, "\n   :data "})
+v77 := lang.Apply(lang.WriteWriter, []any{v4, "\n   :data "})
 _ = v77
 v78 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v79 := v78.FindInternedVar(lang.NewSymbol("print-method"))
@@ -60640,7 +60638,7 @@ var v74 any
 if lang.IsTruthy(v71) {
 var v75 any = v71
 _ = v75
-v77 := lang.Apply(lang1.WriteWriter, []any{v4, "\n   :at "})
+v77 := lang.Apply(lang.WriteWriter, []any{v4, "\n   :at "})
 _ = v77
 v78 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v79 := v78.FindInternedVar(lang.NewSymbol("print-method"))
@@ -60655,7 +60653,7 @@ v74 = v82
 v74 = nil
 }
 _ = v74
-v71 := lang.Apply(lang1.WriteWriter, []any{v4, "}"})
+v71 := lang.Apply(lang.WriteWriter, []any{v4, "}"})
 return v71
 })
 v58 := lang.NewMap(lang.NewKeyword("file"), "glojure/core_print.glj", lang.NewKeyword("line"), int(481), lang.NewKeyword("column"), int(19), lang.NewKeyword("end-line"), int(491), lang.NewKeyword("end-column"), int(73))
@@ -60675,7 +60673,7 @@ v64 := lang.Apply(v63, []any{v36, v4})
 _ = v64
 var v65 any
 if lang.IsTruthy(v41) {
-v66 := lang.Apply(lang1.WriteWriter, []any{v4, "\n :data "})
+v66 := lang.Apply(lang.WriteWriter, []any{v4, "\n :data "})
 _ = v66
 v67 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v68 := v67.FindInternedVar(lang.NewSymbol("print-method"))
@@ -60691,7 +60689,7 @@ v65 = nil
 _ = v65
 var v71 any
 if lang.IsTruthy(v46) {
-v72 := lang.Apply(lang1.WriteWriter, []any{v4, "\n :via\n ["})
+v72 := lang.Apply(lang.WriteWriter, []any{v4, "\n :via\n ["})
 _ = v72
 v74 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v75 := v74.FindInternedVar(lang.NewSymbol("first"))
@@ -60748,7 +60746,7 @@ if reflect.TypeOf(v102).Kind() != reflect.Func {
 v103 := lang.Apply(v102, []any{v94})
 var v101 any = v103
 _ = v101
-v105 := lang.Apply(lang1.WriteWriter, []any{v4, "\n  "})
+v105 := lang.Apply(lang.WriteWriter, []any{v4, "\n  "})
 _ = v105
 v106 := lang.Apply(v56, []any{v101})
 _ = v106
@@ -60847,7 +60845,7 @@ v118 := v117.Get()
 v119 := lang.Apply(v118, []any{v108})
 var v115 any = v119
 _ = v115
-v121 := lang.Apply(lang1.WriteWriter, []any{v4, "\n  "})
+v121 := lang.Apply(lang.WriteWriter, []any{v4, "\n  "})
 _ = v121
 v122 := lang.Apply(v56, []any{v115})
 _ = v122
@@ -60882,7 +60880,7 @@ v79 = v95
 v79 = nil
 }
 _ = v79
-v73 := lang.Apply(lang1.WriteWriter, []any{v4, "]"})
+v73 := lang.Apply(lang.WriteWriter, []any{v4, "]"})
 v71 = v73
 } else {
 v71 = nil
@@ -60890,7 +60888,7 @@ v71 = nil
 _ = v71
 var v74 any
 if lang.IsTruthy(v51) {
-v75 := lang.Apply(lang1.WriteWriter, []any{v4, "\n :trace\n ["})
+v75 := lang.Apply(lang.WriteWriter, []any{v4, "\n :trace\n ["})
 _ = v75
 v77 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v78 := v77.FindInternedVar(lang.NewSymbol("first"))
@@ -60953,7 +60951,7 @@ if reflect.TypeOf(v108).Kind() != reflect.Func {
 v109 := lang.Apply(v108, []any{v100})
 var v107 any = v109
 _ = v107
-v111 := lang.Apply(lang1.WriteWriter, []any{v4, "\n  "})
+v111 := lang.Apply(lang.WriteWriter, []any{v4, "\n  "})
 _ = v111
 v112 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v113 := v112.FindInternedVar(lang.NewSymbol("print-method"))
@@ -61058,7 +61056,7 @@ v124 := v123.Get()
 v125 := lang.Apply(v124, []any{v114})
 var v121 any = v125
 _ = v121
-v127 := lang.Apply(lang1.WriteWriter, []any{v4, "\n  "})
+v127 := lang.Apply(lang.WriteWriter, []any{v4, "\n  "})
 _ = v127
 v128 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v129 := v128.FindInternedVar(lang.NewSymbol("print-method"))
@@ -61099,13 +61097,13 @@ v82 = v101
 v82 = nil
 }
 _ = v82
-v76 := lang.Apply(lang1.WriteWriter, []any{v4, "]"})
+v76 := lang.Apply(lang.WriteWriter, []any{v4, "]"})
 v74 = v76
 } else {
 v74 = nil
 }
 _ = v74
-v6 := lang.Apply(lang1.WriteWriter, []any{v4, "}"})
+v6 := lang.Apply(lang.WriteWriter, []any{v4, "}"})
 return v6
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -61434,7 +61432,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 0 {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
-v4 := lang.Apply(java.util.concurrent.CountDownLatch21., []any{int64(1)})
+v4 := lang.Apply(java.util.concurrent.CountDownLatch20., []any{int64(1)})
 var v3 any = v4
 _ = v3
 v6 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -61494,7 +61492,7 @@ v31, _ := lang.FieldOrMethod(v3, "await")
 if reflect.TypeOf(v31).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("await is not a function")))
 }
-v32 := lang.Apply(v31, []any{nil, time10.Millisecond})
+v32 := lang.Apply(v31, []any{nil, time9.Millisecond})
 if lang.IsTruthy(v32) {
 v33 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v34 := v33.FindInternedVar(lang.NewSymbol("deref"))
@@ -61591,7 +61589,7 @@ v51 = nil
 v51 = nil
 }
 v54 := lang.Apply(nil, []any{v50, v51})
-v55 := lang.Apply(nil, []any{lang1.IDeref, v23, lang1.IBlockingDeref, v37, lang1.IPending, v47, glojure.lang4.IFn, v54})
+v55 := lang.Apply(nil, []any{lang.IDeref, v23, lang.IBlockingDeref, v37, lang.IPending, v47, glojure.lang4.IFn, v54})
 return v55
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -61616,7 +61614,7 @@ if v6.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
 }
 v7 := v6.Get()
-v8 := lang.Apply(v7, []any{lang1.IAtom, v3})
+v8 := lang.Apply(v7, []any{lang.IAtom, v3})
 if lang.IsTruthy(v8) {
 v9 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v10 := v9.FindInternedVar(lang.NewSymbol("boolean"))
@@ -61654,7 +61652,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4 := lang.Apply(lang1.PushThreadBindings, []any{v3})
+v4 := lang.Apply(lang.PushThreadBindings, []any{v3})
 return v4
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -61994,7 +61992,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "quotient")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "quotient")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("quotient is not a function")))
 }
@@ -62014,7 +62012,7 @@ var v2 lang.FnFunc
 v2 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 0:
-v3 := lang.Apply(rand22.Float64, nil)
+v3 := lang.Apply(rand21.Float64, nil)
 return v3
   case 1:
 v3 := args[0]
@@ -62252,10 +62250,10 @@ if v6.IsMacro() {
 v7 := v6.Get()
 v8 := lang.Apply(v7, []any{v3})
 if lang.IsTruthy(v8) {
-v9 := lang.Apply(lang1.NewLongRange, []any{int64(0), v3, int64(1)})
+v9 := lang.Apply(lang.NewLongRange, []any{int64(0), v3, int64(1)})
 v4 = v9
 } else {
-v10 := lang.Apply(lang1.NewRange, []any{int64(0), v3, int64(1)})
+v10 := lang.Apply(lang.NewRange, []any{int64(0), v3, int64(1)})
 v4 = v10
 }
 return v4
@@ -62286,10 +62284,10 @@ v12 = v16
 v12 = v6
 }
 if lang.IsTruthy(v12) {
-v6 := lang.Apply(lang1.NewLongRange, []any{v3, v4, int64(1)})
+v6 := lang.Apply(lang.NewLongRange, []any{v3, v4, int64(1)})
 v5 = v6
 } else {
-v7 := lang.Apply(lang1.NewRange, []any{v3, v4, int64(1)})
+v7 := lang.Apply(lang.NewRange, []any{v3, v4, int64(1)})
 v5 = v7
 }
 return v5
@@ -62336,10 +62334,10 @@ v13 = v20
 v13 = v7
 }
 if lang.IsTruthy(v13) {
-v7 := lang.Apply(lang1.NewLongRange, []any{v3, v4, v5})
+v7 := lang.Apply(lang.NewLongRange, []any{v3, v4, v5})
 v6 = v7
 } else {
-v8 := lang.Apply(lang1.NewRange, []any{v3, v4, v5})
+v8 := lang.Apply(lang.NewRange, []any{v3, v4, v5})
 v6 = v8
 }
 return v6
@@ -62368,7 +62366,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.*Ratio, v3})
+v7 := lang.Apply(v6, []any{lang.*Ratio, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -62440,7 +62438,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4, _ := lang.FieldOrMethod(lang1.Numbers, "rationalize")
+v4, _ := lang.FieldOrMethod(lang.Numbers, "rationalize")
 if reflect.TypeOf(v4).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("rationalize is not a function")))
 }
@@ -62605,7 +62603,7 @@ if v0.Meta() != nil {
 }
 // re-matcher
 {
-v1 := reflect.TypeOf((*lang1.RegexpMatcher)(nil))
+v1 := reflect.TypeOf((*lang.RegexpMatcher)(nil))
 v0 := lang.NewSymbol("re-matcher").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("re"), lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Returns an instance of java.util.regex.Matcher, for use, e.g. in\n  re-find.", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.0", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(4873), lang.NewKeyword("end-line"), int(4873))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
@@ -62614,10 +62612,10 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6 := lang.Apply(lang1.NewRegexpMatcher, []any{v4, v5})
+v6 := lang.Apply(lang.NewRegexpMatcher, []any{v4, v5})
 return v6
 })
-v4 := reflect.TypeOf((*lang1.RegexpMatcher)(nil))
+v4 := reflect.TypeOf((*lang.RegexpMatcher)(nil))
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), v4)).(lang.FnFunc)
 v2 := ns.InternWithValue(v0, v3, true)
 if v0.Meta() != nil {
@@ -62671,7 +62669,7 @@ if v0.Meta() != nil {
 }
 // re-pattern
 {
-v1 := reflect.TypeOf((*regexp23.Regexp)(nil))
+v1 := reflect.TypeOf((*regexp22.Regexp)(nil))
 v0 := lang.NewSymbol("re-pattern").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("s"))), lang.NewKeyword("doc"), "Returns an instance of java.util.regex.Pattern, for use, e.g. in\n  re-matcher.", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.0", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(4863), lang.NewKeyword("end-line"), int(4863))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
@@ -62686,16 +62684,16 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{regexp23.*Regexp, v4})
+v9 := lang.Apply(v8, []any{regexp22.*Regexp, v4})
 if lang.IsTruthy(v9) {
 v5 = v4
 } else {
-v10 := lang.Apply(regexp23.MustCompile, []any{v4})
+v10 := lang.Apply(regexp22.MustCompile, []any{v4})
 v5 = v10
 }
 return v5
 })
-v4 := reflect.TypeOf((*regexp23.Regexp)(nil))
+v4 := reflect.TypeOf((*regexp22.Regexp)(nil))
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), v4)).(lang.FnFunc)
 v2 := ns.InternWithValue(v0, v3, true)
 if v0.Meta() != nil {
@@ -62755,7 +62753,7 @@ v23 = lang.NewFnFunc(func(args ...any) any {
 v24 := lang.Apply(v12, nil)
 return v24
 })
-v24 := lang.Apply(lang1.NewLazySeq, []any{v23})
+v24 := lang.Apply(lang.NewLazySeq, []any{v23})
 v25 := lang.Apply(v18, []any{v22, v24})
 v13 = v25
 } else {
@@ -62912,7 +62910,7 @@ var v7 any
 func() {
 defer func() {
 if r := recover(); r != nil {
-if lang.CatchMatches(r, lang1.Throwable) {
+if lang.CatchMatches(r, lang.Throwable) {
 v8 := r
 _ = v8
 v9, ok := lang.FieldOrMethod(v3, "getString")
@@ -62994,7 +62992,7 @@ var v5 any
 func() {
 defer func() {
 if r := recover(); r != nil {
-if lang.CatchMatches(r, lang1.Throwable) {
+if lang.CatchMatches(r, lang.Throwable) {
 v6 := r
 _ = v6
 v7, ok := lang.FieldOrMethod(v4, "getString")
@@ -63260,7 +63258,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{lang1.IReduce, v4})
+v9 := lang.Apply(v8, []any{lang.IReduce, v4})
 if lang.IsTruthy(v9) {
 v10, _ := lang.FieldOrMethod(v4, "Reduce")
 if reflect.TypeOf(v10).Kind() != reflect.Func {
@@ -63290,7 +63288,7 @@ if v8.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v8)))
 }
 v9 := v8.Get()
-v10 := lang.Apply(v9, []any{lang1.IReduceInit, v5})
+v10 := lang.Apply(v9, []any{lang.IReduceInit, v5})
 if lang.IsTruthy(v10) {
 v11, _ := lang.FieldOrMethod(v5, "ReduceInit")
 if reflect.TypeOf(v11).Kind() != reflect.Func {
@@ -63491,7 +63489,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4 := lang.Apply(lang1.NewReduced, []any{v3})
+v4 := lang.Apply(lang.NewReduced, []any{v3})
 return v4
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -63549,7 +63547,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.IsReduced, []any{v4})
+v5 := lang.Apply(lang.IsReduced, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -63620,7 +63618,7 @@ v12 = v17
 }
 return v12
 })
-v6 := lang.Apply(lang1.NewLazySeq, []any{v5})
+v6 := lang.Apply(lang.NewLazySeq, []any{v5})
 return v6
   case 3:
 v3 := args[0]
@@ -63703,7 +63701,7 @@ v29 = nil
 }
 return v29
 })
-v23 := lang.Apply(lang1.NewLazySeq, []any{v22})
+v23 := lang.Apply(lang.NewLazySeq, []any{v22})
 v24 := lang.Apply(v21, []any{v4, v23})
 v6 = v24
 }
@@ -63726,7 +63724,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 1:
 v3 := args[0]
-v4 := lang.Apply(lang1.NewRef, []any{v3})
+v4 := lang.Apply(lang.NewRef, []any{v3})
 return v4
   default:
     if len(args) < 1 {
@@ -64084,7 +64082,7 @@ if v46.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v46)))
 }
 v47 := v46.Get()
-v48 := lang.Apply(v47, []any{lang1.Sequential, v26})
+v48 := lang.Apply(v47, []any{lang.Sequential, v26})
 v49 := lang.Apply(v44, []any{v48})
 v41 = v49
 } else {
@@ -64524,7 +64522,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "remainder")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "remainder")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("remainder is not a function")))
 }
@@ -64648,7 +64646,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4 := lang.Apply(lang1.RemoveNamespace, []any{v3})
+v4 := lang.Apply(lang.RemoveNamespace, []any{v3})
 return v4
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -64725,12 +64723,12 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 1:
 v3 := args[0]
-v4 := lang.Apply(lang1.NewRepeat, []any{v3})
+v4 := lang.Apply(lang.NewRepeat, []any{v3})
 return v4
   case 2:
 v3 := args[0]
 v4 := args[1]
-v5 := lang.Apply(lang1.NewRepeatN, []any{v3, v4})
+v5 := lang.Apply(lang.NewRepeatN, []any{v3, v4})
 return v5
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -64772,7 +64770,7 @@ v12 := lang.Apply(v11, []any{v3})
 v13 := lang.Apply(v7, []any{v8, v12})
 return v13
 })
-v5 := lang.Apply(lang1.NewLazySeq, []any{v4})
+v5 := lang.Apply(lang.NewLazySeq, []any{v4})
 return v5
   case 2:
 v3 := args[0]
@@ -65135,7 +65133,7 @@ if v10.IsMacro() {
 }
 v11 := v10.Get()
 v12 := lang.Apply(v11, []any{"Not a qualified symbol: ", v3})
-v13 := lang.Apply(lang1.NewIllegalArgumentError, []any{v12})
+v13 := lang.Apply(lang.NewIllegalArgumentError, []any{v12})
 panic(v13)
 }
 return v4
@@ -65266,7 +65264,7 @@ if v0.Meta() != nil {
 }
 // rest
 {
-v1 := reflect.TypeOf((*lang1.ISeq)(nil)).Elem()
+v1 := reflect.TypeOf((*lang.ISeq)(nil)).Elem()
 v0 := lang.NewSymbol("rest").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("coll"))), lang.NewKeyword("doc"), "Returns a possibly empty seq of the items after the first. Calls seq on its\n  argument.", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.0", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(5), lang.NewKeyword("column"), int(2), lang.NewKeyword("line"), int(64), lang.NewKeyword("end-line"), int(70))).(*lang.Symbol)
 var v3 lang.FnFunc
 { // function rest
@@ -65275,7 +65273,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v5 := args[0]
-v6 := lang.Apply(lang1.Rest, []any{v5})
+v6 := lang.Apply(lang.Rest, []any{v5})
 return v6
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(70), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(70), lang.NewKeyword("end-column"), int(77))).(lang.FnFunc)
@@ -65463,7 +65461,7 @@ var v50 any
 if lang.IsTruthy(v41) {
 v50 = v41
 } else {
-v51 := lang.Apply(Exception9., []any{"ResultSet must have unique column labels"})
+v51 := lang.Apply(lang.NewError, []any{"ResultSet must have unique column labels"})
 panic(v51)
 }
 var v40 any = v50
@@ -65563,7 +65561,7 @@ v70 = lang.NewFnFunc(func(args ...any) any {
 v71 := lang.Apply(v55, nil)
 return v71
 })
-v71 := lang.Apply(lang1.NewLazySeq, []any{v70})
+v71 := lang.Apply(lang.NewLazySeq, []any{v70})
 v72 := lang.Apply(v61, []any{v69, v71})
 v56 = v72
 } else {
@@ -65668,7 +65666,7 @@ if v11.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v11)))
 }
 v12 := v11.Get()
-v13 := lang.Apply(strings14.LastIndex, []any{v4, "/"})
+v13 := lang.Apply(strings13.LastIndex, []any{v4, "/"})
 v14 := lang.Apply(v12, []any{v4, int64(0), v13})
 return v14
 })
@@ -65701,8 +65699,8 @@ if v9.IsMacro() {
 }
 v10 := v9.Get()
 v11 := lang.Apply(v10, []any{v4})
-v12 := lang.Apply(strings14.ReplaceAll, []any{v11, "-", "_"})
-v13 := lang.Apply(strings14.ReplaceAll, []any{v12, ".", "/"})
+v12 := lang.Apply(strings13.ReplaceAll, []any{v11, "-", "_"})
+v13 := lang.Apply(strings13.ReplaceAll, []any{v12, ".", "/"})
 v14 := lang.Apply(v7, []any{lang.NewChar(47), v13})
 return v14
 })
@@ -66220,7 +66218,7 @@ if v0.Meta() != nil {
 }
 // seq
 {
-v1 := reflect.TypeOf((*lang1.ISeq)(nil)).Elem()
+v1 := reflect.TypeOf((*lang.ISeq)(nil)).Elem()
 v0 := lang.NewSymbol("seq").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("coll"))), lang.NewKeyword("doc"), "Returns a seq on the collection. If the collection is\n    empty, returns nil.  (seq nil) returns nil. seq also works on\n    Strings, native Java arrays (of reference types) and any objects\n    that implement Iterable. Note that seqs cache values, thus seq\n    should not be used on any Iterable whose iterator repeatedly\n    returns the same mutable object.", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.0", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(4), lang.NewKeyword("column"), int(2), lang.NewKeyword("line"), int(126), lang.NewKeyword("end-line"), int(136))).(*lang.Symbol)
 var v3 lang.FnFunc
 { // function seq
@@ -66229,7 +66227,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v5 := args[0]
-v6 := lang.Apply(lang1.Seq, []any{v5})
+v6 := lang.Apply(lang.Seq, []any{v5})
 return v6
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(136), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(136), lang.NewKeyword("end-column"), int(126))).(lang.FnFunc)
@@ -66266,7 +66264,7 @@ if v10.IsMacro() {
 }
 v11 := v10.Get()
 v12 := lang.Apply(v11, []any{v3})
-v13 := lang.Apply(lang1.NewPersistentArrayMapAsIfByAssoc, []any{v12})
+v13 := lang.Apply(lang.NewPersistentArrayMapAsIfByAssoc, []any{v12})
 v4 = v13
 } else {
 var v14 any
@@ -66315,7 +66313,7 @@ if v6.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
 }
 v7 := v6.Get()
-v8 := lang.Apply(v7, []any{lang1.ISeq, v4})
+v8 := lang.Apply(v7, []any{lang.ISeq, v4})
 return v8
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(150), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(150), lang.NewKeyword("end-column"), int(87))).(lang.FnFunc)
@@ -66382,12 +66380,12 @@ if v12.IsMacro() {
 }
 v13 := v12.Get()
 v14 := lang.Apply(v13, []any{v3})
-v15 := lang.Apply(LinkedBlockingQueue24., []any{v14})
+v15 := lang.Apply(LinkedBlockingQueue23., []any{v14})
 v6 = v15
 }
 var v5 any = v6
 _ = v5
-v17 := lang.Apply(Object13., nil)
+v17 := lang.Apply(Object12., nil)
 var v16 any = v17
 _ = v16
 v19 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
@@ -66403,7 +66401,7 @@ v22 = lang.NewFnFunc(func(args ...any) any {
   }
 return v4
 })
-v23 := lang.Apply(lang1.NewLazySeq, []any{v22})
+v23 := lang.Apply(lang.NewLazySeq, []any{v22})
 v24 := lang.Apply(v21, []any{v23})
 var v18 any = v24
 _ = v18
@@ -66698,7 +66696,7 @@ v41 = v67
 }
 return v41
 })
-v37 := lang.Apply(lang1.NewLazySeq, []any{v36})
+v37 := lang.Apply(lang.NewLazySeq, []any{v36})
 return v37
 })
 v35 := v34
@@ -66852,7 +66850,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.Sequential, v3})
+v7 := lang.Apply(v6, []any{lang.Sequential, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -66945,7 +66943,7 @@ if v15.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v15)))
 }
 v16 := v15.Get()
-v17 := lang.Apply(v16, []any{lang1.IReduceInit, v3})
+v17 := lang.Apply(v16, []any{lang.IReduceInit, v3})
 if lang.IsTruthy(v17) {
 v18 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v19 := v18.FindInternedVar(lang.NewSymbol("persistent!"))
@@ -67143,7 +67141,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.IPersistentSet, v3})
+v7 := lang.Apply(v6, []any{lang.IPersistentSet, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -67342,7 +67340,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.ShortCast, []any{v4})
+v5 := lang.Apply(lang.ShortCast, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -67444,7 +67442,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   switch len(args) {
   case 1:
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "shortArray")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "shortArray")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("shortArray is not a function")))
 }
@@ -67453,7 +67451,7 @@ return v6
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "shortArrayInit")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "shortArrayInit")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("shortArrayInit is not a function")))
 }
@@ -67532,7 +67530,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "shorts")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "shorts")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("shorts is not a function")))
 }
@@ -67561,7 +67559,7 @@ if v6.IsMacro() {
 }
 v7 := v6.Get()
 v8 := lang.Apply(v7, []any{v3})
-v9 := lang.Apply(lang1.NewArrayList, []any{v8})
+v9 := lang.Apply(lang.NewArrayList, []any{v8})
 var v4 any = v9
 _ = v4
 v11 := lang.Apply(nil, []any{v4})
@@ -67594,7 +67592,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
   if len(args) != 0 {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
-v3 := lang.Apply(lang1.ShutdownAgents, nil)
+v3 := lang.Apply(lang.ShutdownAgents, nil)
 return v3
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -67643,10 +67641,10 @@ if v19.IsMacro() {
 }
 v20 := v19.Get()
 v21 := lang.Apply(v20, []any{v16})
-v22 := lang.Apply(lang1.Equals, []any{lang.NewSymbol("&form"), v21})
+v22 := lang.Apply(lang.Equals, []any{lang.NewSymbol("&form"), v21})
 if lang.IsTruthy(v22) {
-v23 := lang.Apply(lang1.Count, []any{v16})
-v24 := lang.Apply(lang1.Subvec, []any{v16, int64(2), v23})
+v23 := lang.Apply(lang.Count, []any{v16})
+v24 := lang.Apply(lang.Subvec, []any{v16, int64(2), v23})
 v17 = v24
 } else {
 v17 = v16
@@ -67776,7 +67774,7 @@ if v25.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v25)))
 }
 v26 := v25.Get()
-v27 := lang.Apply(v26, []any{lang1.*Symbol, v20})
+v27 := lang.Apply(v26, []any{lang.*Symbol, v20})
 if lang.IsTruthy(v27) {
 var v28 any
 v29, ok := lang.FieldOrMethod(v20, "Name")
@@ -67790,11 +67788,11 @@ case reflect.Func:
 default:
   v30 = v29
 }
-v31 := lang.Apply(strings14.Index, []any{v30, "."})
-v32 := lang.Apply(lang1.Equiv, []any{v31, int64(-1)})
+v31 := lang.Apply(strings13.Index, []any{v30, "."})
+v32 := lang.Apply(lang.Equiv, []any{v31, int64(-1)})
 if lang.IsTruthy(v32) {
 var v33 any
-v34 := lang.Apply(lang1.Equals, []any{nil, nil})
+v34 := lang.Apply(lang.Equals, []any{nil, nil})
 if lang.IsTruthy(v34) {
 var v35 any = nil
 _ = v35
@@ -67823,7 +67821,7 @@ case reflect.Func:
 default:
   v45 = v44
 }
-v46 := lang.Apply(lang1.NewSymbol, []any{v45})
+v46 := lang.Apply(lang.NewSymbol, []any{v45})
 v47 := lang.Apply(v43, []any{v15, lang.NewKeyword("tag"), v46})
 v48 := lang.Apply(v40, []any{v14, v47})
 v37 = v48
@@ -68143,7 +68141,7 @@ if v26.IsMacro() {
 v27 := v26.Get()
 v28 := lang.Apply(v27, []any{v13, v11})
 _ = v28
-v29 := lang.Apply(lang1.ToString, []any{v11})
+v29 := lang.Apply(lang.ToString, []any{v11})
 v22 = v29
 }()
 return v22
@@ -69520,7 +69518,7 @@ v13 := v12.Get()
 v14 := lang.Apply(v13, []any{v4})
 var v10 any = v14
 _ = v10
-v16 := lang.Apply(lang1.SortSlice, []any{v10, v3})
+v16 := lang.Apply(lang.SortSlice, []any{v10, v3})
 _ = v16
 v17 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v18 := v17.FindInternedVar(lang.NewSymbol("with-meta"))
@@ -69631,7 +69629,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
       panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
     }
 v3 := lang.NewList(args[0:]...)
-v4 := lang.Apply(lang1.CreatePersistentTreeMap, []any{v3})
+v4 := lang.Apply(lang.CreatePersistentTreeMap, []any{v3})
 return v4
   }
 })
@@ -69674,7 +69672,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
       panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
     }
 v3 := lang.NewList(args[0:]...)
-v4 := lang.Apply(lang1.CreatePersistentTreeSet, []any{v3})
+v4 := lang.Apply(lang.CreatePersistentTreeSet, []any{v3})
 return v4
   }
 })
@@ -69696,7 +69694,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     }
 v3 := args[0]
 v4 := lang.NewList(args[1:]...)
-v5 := lang.Apply(lang1.CreatePersistentTreeSetWithComparator, []any{v3, v4})
+v5 := lang.Apply(lang.CreatePersistentTreeSetWithComparator, []any{v3, v4})
 return v5
   }
 })
@@ -69809,7 +69807,7 @@ if v16.IsMacro() {
 }
 v17 := v16.Get()
 v18 := lang.Apply(v17, []any{v4})
-v19 := lang.Apply(lang1.WriteWriter, []any{v6, v18})
+v19 := lang.Apply(lang.WriteWriter, []any{v6, v18})
 v12 = v19
 }()
 return v12
@@ -70068,7 +70066,7 @@ v9 := lang.Apply(v8, []any{v4})
 if lang.IsTruthy(v9) {
 v5 = ""
 } else {
-v10 := lang.Apply(lang1.ToString, []any{v4})
+v10 := lang.Apply(lang.ToString, []any{v4})
 v5 = v10
 }
 return v5
@@ -70175,7 +70173,7 @@ if v7.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 }
 v8 := v7.Get()
-v9 := lang.Apply(v8, []any{lang1.IEditableCollection, v3})
+v9 := lang.Apply(v8, []any{lang.IEditableCollection, v3})
 if lang.IsTruthy(v9) {
 v10 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v11 := v10.FindInternedVar(lang.NewSymbol("with-meta"))
@@ -70247,7 +70245,7 @@ if v8.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v8)))
 }
 v9 := v8.Get()
-v10 := lang.Apply(v9, []any{lang1.IEditableCollection, v3})
+v10 := lang.Apply(v9, []any{lang.IEditableCollection, v3})
 if lang.IsTruthy(v10) {
 v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v12 := v11.FindInternedVar(lang.NewSymbol("with-meta"))
@@ -70548,7 +70546,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     }
 v3 := args[0]
 v4 := lang.NewList(args[1:]...)
-v5 := lang.Apply(lang1.ConstructPersistentStructMap, []any{v3, v4})
+v5 := lang.Apply(lang.ConstructPersistentStructMap, []any{v3, v4})
 return v5
   }
 })
@@ -70570,7 +70568,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     }
 v3 := args[0]
 v4 := lang.NewList(args[1:]...)
-v5 := lang.Apply(lang1.CreatePersistentStructMap, []any{v3, v4})
+v5 := lang.Apply(lang.CreatePersistentStructMap, []any{v3, v4})
 return v5
   }
 })
@@ -70985,7 +70983,7 @@ if v0.Meta() != nil {
 }
 // symbol
 {
-v1 := reflect.TypeOf((*lang1.Symbol)(nil))
+v1 := reflect.TypeOf((*lang.Symbol)(nil))
 v0 := lang.NewSymbol("symbol").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("name")), lang.NewVector(lang.NewSymbol("ns"), lang.NewSymbol("name"))), lang.NewKeyword("doc"), "Returns a Symbol with the given namespace and name. Arity-1 works\n  on strings, keywords, and vars.", lang.NewKeyword("static"), true, lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.0", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(12), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(584), lang.NewKeyword("end-line"), int(584))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
@@ -71012,7 +71010,7 @@ if v12.IsMacro() {
 v13 := v12.Get()
 v14 := lang.Apply(v13, []any{lang.Builtins["string"], v4})
 if lang.IsTruthy(v14) {
-v15 := lang.Apply(lang1.NewSymbol, []any{v4})
+v15 := lang.Apply(lang.NewSymbol, []any{v4})
 v10 = v15
 } else {
 var v16 any
@@ -71022,7 +71020,7 @@ if v18.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v18)))
 }
 v19 := v18.Get()
-v20 := lang.Apply(v19, []any{lang1.*Var, v4})
+v20 := lang.Apply(v19, []any{lang.*Var, v4})
 if lang.IsTruthy(v20) {
 v21, ok := lang.FieldOrMethod(v4, "toSymbol")
 if !ok {
@@ -71044,7 +71042,7 @@ if v25.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v25)))
 }
 v26 := v25.Get()
-v27 := lang.Apply(v26, []any{lang1.Keyword, v4})
+v27 := lang.Apply(v26, []any{lang.Keyword, v4})
 if lang.IsTruthy(v27) {
 v28, ok := lang.FieldOrMethod(v4, "sym")
 if !ok {
@@ -71061,7 +71059,7 @@ v23 = v29
 } else {
 var v30 any
 if lang.IsTruthy(lang.NewKeyword("else")) {
-v31 := lang.Apply(lang1.NewIllegalArgumentError, []any{"no conversion to symbol"})
+v31 := lang.Apply(lang.NewIllegalArgumentError, []any{"no conversion to symbol"})
 panic(v31)
 } else {
 v30 = nil
@@ -71078,13 +71076,13 @@ return v5
   case 2:
 v4 := args[0]
 v5 := args[1]
-v6 := lang.Apply(lang1.InternSymbol, []any{v4, v5})
+v6 := lang.Apply(lang.InternSymbol, []any{v4, v5})
 return v6
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 })
-v4 := reflect.TypeOf((*lang1.Symbol)(nil))
+v4 := reflect.TypeOf((*lang.Symbol)(nil))
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), v4)).(lang.FnFunc)
 v2 := ns.InternWithValue(v0, v3, true)
 if v0.Meta() != nil {
@@ -71106,7 +71104,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.*Symbol, v3})
+v7 := lang.Apply(v6, []any{lang.*Symbol, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -71513,7 +71511,7 @@ v6 = nil
 }
 return v6
 })
-v6 := lang.Apply(lang1.NewLazySeq, []any{v5})
+v6 := lang.Apply(lang.NewLazySeq, []any{v5})
 return v6
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -71752,7 +71750,7 @@ v12 = nil
 }
 return v12
 })
-v6 := lang.Apply(lang1.NewLazySeq, []any{v5})
+v6 := lang.Apply(lang.NewLazySeq, []any{v5})
 return v6
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -71893,7 +71891,7 @@ v12 = nil
 }
 return v12
 })
-v6 := lang.Apply(lang1.NewLazySeq, []any{v5})
+v6 := lang.Apply(lang.NewLazySeq, []any{v5})
 return v6
   default:
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -71965,7 +71963,7 @@ if v6.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
 }
 v7 := v6.Get()
-v8 := lang.Apply(v7, []any{lang1.*Namespace, v3})
+v8 := lang.Apply(v7, []any{lang.*Namespace, v3})
 if lang.IsTruthy(v8) {
 v4 = v3
 } else {
@@ -71989,7 +71987,7 @@ if v17.IsMacro() {
 }
 v18 := v17.Get()
 v19 := lang.Apply(v18, []any{"No namespace: ", v3, " found"})
-v20 := lang.Apply(Exception9., []any{v19})
+v20 := lang.Apply(lang.NewError, []any{v19})
 panic(v20)
 }
 v4 = v15
@@ -72083,7 +72081,7 @@ v13 := v12.Get()
 v14 := lang.Apply(v10, []any{v13, v4, v5})
 var v7 any = v14
 _ = v7
-v16 := lang.Apply(Exception9., []any{v7})
+v16 := lang.Apply(lang.NewError, []any{v7})
 var v15 any = v16
 _ = v15
 v18, ok := lang.FieldOrMethod(v15, "getStackTrace")
@@ -72189,7 +72187,7 @@ case reflect.Func:
 default:
   v46 = v45
 }
-v47 := lang.Apply(lang1.NewCompilerError, []any{v42, v44, v46, v15})
+v47 := lang.Apply(lang.NewCompilerError, []any{v42, v44, v46, v15})
 panic(v47)
 } else {
 v6 = nil
@@ -72809,7 +72807,7 @@ if v12.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v12)))
 }
 v13 := v12.Get()
-v14 := lang.Apply(v13, []any{lang1.IReduceInit, v6})
+v14 := lang.Apply(v13, []any{lang.IReduceInit, v6})
 if lang.IsTruthy(v14) {
 v15, _ := lang.FieldOrMethod(v6, "ReduceInit")
 if reflect.TypeOf(v15).Kind() != reflect.Func {
@@ -72916,7 +72914,7 @@ v14 = nil
 v21 := lang.Apply(v13, []any{v9, v14})
 return v21
 })
-v11 := lang.Apply(lang1.NewLazySeq, []any{v10})
+v11 := lang.Apply(lang.NewLazySeq, []any{v10})
 return v11
 })
 v8 := v7
@@ -72948,7 +72946,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.Identical, []any{v4, true})
+v5 := lang.Apply(lang.Identical, []any{v4, true})
 return v5
 })
 v4 := reflect.TypeOf(false)
@@ -73097,7 +73095,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_add")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_add")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_add is not a function")))
 }
@@ -73203,7 +73201,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_int_add")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_add")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_add is not a function")))
 }
@@ -73300,7 +73298,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.UncheckedByteCast, []any{v4})
+v5 := lang.Apply(lang.UncheckedByteCast, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -73490,7 +73488,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_dec")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_dec")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_dec is not a function")))
 }
@@ -73587,7 +73585,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_int_dec")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_dec")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_dec is not a function")))
 }
@@ -73693,7 +73691,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_int_divide")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_divide")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_divide is not a function")))
 }
@@ -73790,7 +73788,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.AsFloat64, []any{v4})
+v5 := lang.Apply(lang.AsFloat64, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -73883,7 +73881,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.UncheckedFloatCast, []any{v4})
+v5 := lang.Apply(lang.UncheckedFloatCast, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -73976,7 +73974,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_inc")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_inc")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_inc is not a function")))
 }
@@ -74073,7 +74071,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_int_inc")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_inc")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_inc is not a function")))
 }
@@ -74170,7 +74168,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.UncheckedIntCast, []any{v4})
+v5 := lang.Apply(lang.UncheckedIntCast, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -74263,7 +74261,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.UncheckedLongCast, []any{v4})
+v5 := lang.Apply(lang.UncheckedLongCast, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -74365,7 +74363,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_multiply")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_multiply")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_multiply is not a function")))
 }
@@ -74471,7 +74469,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_int_multiply")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_multiply")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_multiply is not a function")))
 }
@@ -74568,7 +74566,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "Unchecked_negate")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "Unchecked_negate")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unchecked_negate is not a function")))
 }
@@ -74665,7 +74663,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_int_negate")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_negate")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_negate is not a function")))
 }
@@ -74771,7 +74769,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_int_remainder")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_remainder")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_remainder is not a function")))
 }
@@ -74868,7 +74866,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.UncheckedShortCast, []any{v4})
+v5 := lang.Apply(lang.UncheckedShortCast, []any{v4})
 return v5
 })
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -74970,7 +74968,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_minus")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_minus")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_minus is not a function")))
 }
@@ -75076,7 +75074,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "unchecked_int_subtract")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_subtract")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_subtract is not a function")))
 }
@@ -75463,7 +75461,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
   }
 v4 := args[0]
 v5 := args[1]
-v6, _ := lang.FieldOrMethod(lang1.Numbers, "unsignedShiftRight")
+v6, _ := lang.FieldOrMethod(lang.Numbers, "unsignedShiftRight")
 if reflect.TypeOf(v6).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("unsignedShiftRight is not a function")))
 }
@@ -75872,7 +75870,7 @@ if v19.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v19)))
 }
 v20 := v19.Get()
-v21 := lang.Apply(v20, []any{lang1.IEditableCollection, v3})
+v21 := lang.Apply(v20, []any{lang.IEditableCollection, v3})
 if lang.IsTruthy(v21) {
 v22 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v23 := v22.FindInternedVar(lang.NewSymbol("transient"))
@@ -75931,7 +75929,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{java.net25.URI, v3})
+v7 := lang.Apply(v6, []any{java.net24.URI, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -75988,7 +75986,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{java.util18.UUID, v3})
+v7 := lang.Apply(v6, []any{java.util17.UUID, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -76028,7 +76026,7 @@ v2 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v3 := args[0]
-v4 := lang.Apply(lang1.Vals, []any{v3})
+v4 := lang.Apply(lang.Vals, []any{v3})
 return v4
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -76097,7 +76095,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.*Var, v3})
+v7 := lang.Apply(v6, []any{lang.*Var, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -76174,7 +76172,7 @@ if v11.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v11)))
 }
 v12 := v11.Get()
-v13 := lang.Apply(v12, []any{lang1.IObj, v3})
+v13 := lang.Apply(v12, []any{lang.IObj, v3})
 if lang.IsTruthy(v13) {
 v14 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 v15 := v14.FindInternedVar(lang.NewSymbol("with-meta"))
@@ -76185,12 +76183,12 @@ v16 := v15.Get()
 v17 := lang.Apply(v16, []any{v3, nil})
 v9 = v17
 } else {
-v18 := lang.Apply(lang1.CreateLazilyPersistentVector, []any{v3})
+v18 := lang.Apply(lang.CreateLazilyPersistentVector, []any{v3})
 v9 = v18
 }
 v4 = v9
 } else {
-v19 := lang.Apply(lang1.CreateLazilyPersistentVector, []any{v3})
+v19 := lang.Apply(lang.CreateLazilyPersistentVector, []any{v3})
 v4 = v19
 }
 return v4
@@ -76337,7 +76335,7 @@ v30 := lang.Apply(v21, []any{v6, v29})
 v31 := lang.Apply(v18, []any{v5, v30})
 v32 := lang.Apply(v15, []any{v4, v31})
 v33 := lang.Apply(v12, []any{v3, v32})
-v34 := lang.Apply(lang1.CreateLazilyPersistentVector, []any{v33})
+v34 := lang.Apply(lang.CreateLazilyPersistentVector, []any{v33})
 return v34
   }
 })
@@ -76363,7 +76361,7 @@ if v6.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
 }
 v7 := v6.Get()
-v8 := lang.Apply(v7, []any{lang1.IPersistentVector, v4})
+v8 := lang.Apply(v7, []any{lang.IPersistentVector, v4})
 return v8
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("line"), int(178), lang.NewKeyword("column"), int(10), lang.NewKeyword("end-line"), int(178), lang.NewKeyword("end-column"), int(106))).(lang.FnFunc)
@@ -76377,7 +76375,7 @@ if v0.Meta() != nil {
 }
 // volatile!
 {
-v1 := reflect.TypeOf((*lang1.Volatile)(nil)).Elem()
+v1 := reflect.TypeOf((*lang.Volatile)(nil)).Elem()
 v0 := lang.NewSymbol("volatile!").WithMeta(lang.NewMap(lang.NewKeyword("tag"), v1, lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("val"))), lang.NewKeyword("doc"), "Creates and returns a Volatile with an initial value of val.", lang.NewKeyword("file"), "glojure/core.glj", lang.NewKeyword("added"), "1.7", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("glojure.core")), lang.NewKeyword("end-column"), int(15), lang.NewKeyword("column"), int(7), lang.NewKeyword("line"), int(2517), lang.NewKeyword("end-line"), int(2517))).(*lang.Symbol)
 var v3 lang.FnFunc
 v3 = lang.NewFnFunc(func(args ...any) any {
@@ -76385,10 +76383,10 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5 := lang.Apply(lang1.NewVolatile, []any{v4})
+v5 := lang.Apply(lang.NewVolatile, []any{v4})
 return v5
 })
-v4 := reflect.TypeOf((*lang1.Volatile)(nil)).Elem()
+v4 := reflect.TypeOf((*lang.Volatile)(nil)).Elem()
 v3 = v3.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), v4)).(lang.FnFunc)
 v2 := ns.InternWithValue(v0, v3, true)
 if v0.Meta() != nil {
@@ -76410,7 +76408,7 @@ if v5.IsMacro() {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
 }
 v6 := v5.Get()
-v7 := lang.Apply(v6, []any{lang1.Volatile, v3})
+v7 := lang.Apply(v6, []any{lang.Volatile, v3})
 return v7
 })
 v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
@@ -76662,7 +76660,7 @@ v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(lang.NewKeyword("line"), []any{v25})
 v27 := lang.Apply(v14, []any{v18, " requires ", "a vector for its binding", " in ", v21, ":", v26})
-v28 := lang.Apply(lang1.NewIllegalArgumentError, []any{v27})
+v28 := lang.Apply(lang.NewIllegalArgumentError, []any{v27})
 panic(v28)
 }
 _ = v7
@@ -76712,7 +76710,7 @@ v50 := v49.Get()
 v51 := lang.Apply(v50, []any{v3})
 v52 := lang.Apply(lang.NewKeyword("line"), []any{v51})
 v53 := lang.Apply(v40, []any{v44, " requires ", "exactly 2 forms in binding vector", " in ", v47, ":", v52})
-v54 := lang.Apply(lang1.NewIllegalArgumentError, []any{v53})
+v54 := lang.Apply(lang.NewIllegalArgumentError, []any{v53})
 panic(v54)
 }
 _ = v29
@@ -77000,7 +76998,7 @@ v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(lang.NewKeyword("line"), []any{v25})
 v27 := lang.Apply(v14, []any{v18, " requires ", "a vector for its binding", " in ", v21, ":", v26})
-v28 := lang.Apply(lang1.NewIllegalArgumentError, []any{v27})
+v28 := lang.Apply(lang.NewIllegalArgumentError, []any{v27})
 panic(v28)
 }
 _ = v7
@@ -77050,7 +77048,7 @@ v50 := v49.Get()
 v51 := lang.Apply(v50, []any{v3})
 v52 := lang.Apply(lang.NewKeyword("line"), []any{v51})
 v53 := lang.Apply(v40, []any{v44, " requires ", "exactly 2 forms in binding vector", " in ", v47, ":", v52})
-v54 := lang.Apply(lang1.NewIllegalArgumentError, []any{v53})
+v54 := lang.Apply(lang.NewIllegalArgumentError, []any{v53})
 panic(v54)
 }
 _ = v29
@@ -77340,7 +77338,7 @@ v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(lang.NewKeyword("line"), []any{v25})
 v27 := lang.Apply(v14, []any{v18, " requires ", "a vector for its binding", " in ", v21, ":", v26})
-v28 := lang.Apply(lang1.NewIllegalArgumentError, []any{v27})
+v28 := lang.Apply(lang.NewIllegalArgumentError, []any{v27})
 panic(v28)
 }
 _ = v7
@@ -77390,7 +77388,7 @@ v50 := v49.Get()
 v51 := lang.Apply(v50, []any{v3})
 v52 := lang.Apply(lang.NewKeyword("line"), []any{v51})
 v53 := lang.Apply(v40, []any{v44, " requires ", "exactly 2 forms in binding vector", " in ", v47, ":", v52})
-v54 := lang.Apply(lang1.NewIllegalArgumentError, []any{v53})
+v54 := lang.Apply(lang.NewIllegalArgumentError, []any{v53})
 panic(v54)
 }
 _ = v29
@@ -78464,7 +78462,7 @@ v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(lang.NewKeyword("line"), []any{v25})
 v27 := lang.Apply(v14, []any{v18, " requires ", "a vector for its binding", " in ", v21, ":", v26})
-v28 := lang.Apply(lang1.NewIllegalArgumentError, []any{v27})
+v28 := lang.Apply(lang.NewIllegalArgumentError, []any{v27})
 panic(v28)
 }
 _ = v7
@@ -78514,7 +78512,7 @@ v50 := v49.Get()
 v51 := lang.Apply(v50, []any{v3})
 v52 := lang.Apply(lang.NewKeyword("line"), []any{v51})
 v53 := lang.Apply(v40, []any{v44, " requires ", "an even number of forms in binding vector", " in ", v47, ":", v52})
-v54 := lang.Apply(lang1.NewIllegalArgumentError, []any{v53})
+v54 := lang.Apply(lang.NewIllegalArgumentError, []any{v53})
 panic(v54)
 }
 _ = v29
@@ -78830,7 +78828,7 @@ v24 := v23.Get()
 v25 := lang.Apply(v24, []any{v3})
 v26 := lang.Apply(lang.NewKeyword("line"), []any{v25})
 v27 := lang.Apply(v14, []any{v18, " requires ", "a vector for its binding", " in ", v21, ":", v26})
-v28 := lang.Apply(lang1.NewIllegalArgumentError, []any{v27})
+v28 := lang.Apply(lang.NewIllegalArgumentError, []any{v27})
 panic(v28)
 }
 _ = v7
@@ -78880,7 +78878,7 @@ v50 := v49.Get()
 v51 := lang.Apply(v50, []any{v3})
 v52 := lang.Apply(lang.NewKeyword("line"), []any{v51})
 v53 := lang.Apply(v40, []any{v44, " requires ", "an even number of forms in binding vector", " in ", v47, ":", v52})
-v54 := lang.Apply(lang1.NewIllegalArgumentError, []any{v53})
+v54 := lang.Apply(lang.NewIllegalArgumentError, []any{v53})
 panic(v54)
 }
 _ = v29
@@ -79114,7 +79112,7 @@ v76 = v182
 } else {
 var v183 any
 if lang.IsTruthy(lang.NewKeyword("else")) {
-v184 := lang.Apply(lang1.NewIllegalArgumentError, []any{"with-open only allows Symbols in bindings"})
+v184 := lang.Apply(lang.NewIllegalArgumentError, []any{"with-open only allows Symbols in bindings"})
 panic(v184)
 } else {
 v183 = nil
@@ -80212,7 +80210,7 @@ v3 = lang.NewFnFunc(func(args ...any) any {
     panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 v4 := args[0]
-v5, _ := lang.FieldOrMethod(lang1.Numbers, "isZero")
+v5, _ := lang.FieldOrMethod(lang.Numbers, "isZero")
 if reflect.TypeOf(v5).Kind() != reflect.Func {
   panic(lang.NewIllegalArgumentError(fmt.Sprintf("isZero is not a function")))
 }

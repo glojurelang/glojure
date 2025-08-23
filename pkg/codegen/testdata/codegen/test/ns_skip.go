@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/glojurelang/glojure/pkg/lang"
+	lang "github.com/glojurelang/glojure/pkg/lang"
 )
 
 func init() {

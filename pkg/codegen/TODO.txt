@@ -6,7 +6,6 @@
 
 
 Handle
-- Exception12 "Exception"
 - ExceptionInfo15 "ExceptionInfo"
 - LinkedBlockingQueue28 "LinkedBlockingQueue"
 - Object16 "Object"
@@ -20,4 +19,3 @@ Handle
 - java.util.concurrent.CountDownLatch25 "java.util.concurrent.CountDownLatch"
 - java.util.concurrent8 "java.util.concurrent"
 - java.util22 "java.util"
-- lang1 "github.com/glojurelang/glojure/pkg/lang"

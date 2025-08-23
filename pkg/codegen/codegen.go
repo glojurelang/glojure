@@ -89,6 +89,9 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	var varsBuf bytes.Buffer
 	g.w = &varsBuf
 
+	// add lang import
+	g.addImport("github.com/glojurelang/glojure/pkg/lang")
+
 	g.writef("  ns := lang.FindOrCreateNamespace(lang.NewSymbol(%#v))\n", ns.Name().String())
 	g.writef("  _ = ns\n")
 
@@ -1285,7 +1288,6 @@ func (g *Generator) header() string {
 package generated
 
 import (
-  "github.com/glojurelang/glojure/pkg/lang"
 `
 
 	// sort the imports by their package name for deterministic output

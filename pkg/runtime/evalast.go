@@ -24,13 +24,13 @@ var (
 	SymInNS = lang.NewSymbol("in-ns")
 )
 
-type EvalError struct {
+type RTEvalError struct {
 	Err      error
 	GLJStack []string
 	GoStack  string
 }
 
-func (e *EvalError) Error() string {
+func (e *RTEvalError) Error() string {
 	sb := strings.Builder{}
 	sb.WriteString(e.Err.Error())
 	sb.WriteString("\n\n")
@@ -47,12 +47,12 @@ func (e *EvalError) Error() string {
 	return sb.String()
 }
 
-func (e *EvalError) Unwrap() error {
+func (e *RTEvalError) Unwrap() error {
 	return e.Err
 }
 
-func (e *EvalError) Is(err error) bool {
-	_, ok := err.(*EvalError)
+func (e *RTEvalError) Is(err error) bool {
+	_, ok := err.(*RTEvalError)
 	return ok
 }
 
@@ -609,8 +609,8 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 			// recursion; need to use go-only stringification for errors.
 			gljFrame = fmt.Sprintf("%s:%d:%d:\t%s", lang.Get(meta, KWFile), lang.Get(meta, KWLine), lang.Get(meta, KWColumn), n.Form)
 			if rErr, ok := r.(error); ok {
-				if errors.Is(rErr, &EvalError{}) {
-					var evalErr *EvalError
+				if errors.Is(rErr, &RTEvalError{}) {
+					var evalErr *RTEvalError
 					errors.As(rErr, &evalErr)
 					evalErr.GLJStack = append(evalErr.GLJStack, gljFrame) // TODO: copy
 					if evalErr.GoStack == "" {
@@ -618,14 +618,14 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 					}
 					err = evalErr
 				} else {
-					err = &EvalError{
+					err = &RTEvalError{
 						Err:      rErr,
 						GLJStack: []string{gljFrame},
 						GoStack:  string(debug.Stack()),
 					}
 				}
 			} else {
-				err = &EvalError{
+				err = &RTEvalError{
 					Err:      fmt.Errorf("%v", r),
 					GLJStack: []string{gljFrame},
 					GoStack:  string(debug.Stack()),
@@ -688,7 +688,6 @@ func (env *environment) EvalASTNew(n *ast.Node) (interface{}, error) {
 	}
 	return reflect.New(classValTyp).Interface(), nil
 }
-
 
 func (env *environment) EvalASTTry(n *ast.Node) (res interface{}, err error) {
 	tryNode := n.Sub.(*ast.TryNode)
