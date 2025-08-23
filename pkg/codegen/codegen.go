@@ -1288,7 +1288,17 @@ import (
   "github.com/glojurelang/glojure/pkg/lang"
 `
 
-	for pkg, alias := range g.imports {
+	// sort the imports by their package name for deterministic output
+	keys := make([]string, 0, len(g.imports))
+	for k := range g.imports {
+		keys = append(keys, k)
+	}
+	sort.Slice(keys, func(i, j int) bool {
+		return g.imports[keys[i]] < g.imports[keys[j]]
+	})
+
+	for _, pkg := range keys {
+		alias := g.imports[pkg]
 		header += fmt.Sprintf("  %s \"%s\"\n", alias, pkg)
 	}
 

@@ -227,6 +227,10 @@
    (sexpr-replace 'java.io.PrintWriter
                   'github.com$glojurelang$glojure$pkg$lang.PrintWriter)
 
+   ;; omit PrintWriter-on (defn PrintWriter-on ...)
+   (omitp #(and (z/list? %)
+                (= 'defn (first (z/sexpr %)))
+                (= 'PrintWriter-on (second (z/sexpr %)))))
 
    (sexpr-replace 'clojure.lang.IReduce
                   'github.com$glojurelang$glojure$pkg$lang.IReduce)

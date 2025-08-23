@@ -51,7 +51,7 @@ func init() {
 					v7 := args[0]
 					v8 := args[1]
 					v9 := args[2]
-				recur_loop_1624:
+				recur_loop_1622:
 					var v10 any
 					v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
 					v12 := v11.FindInternedVar(lang.NewSymbol("="))
@@ -83,7 +83,7 @@ func init() {
 						v7 = v15
 						v8 = v16
 						v9 = v21
-						goto recur_loop_1624
+						goto recur_loop_1622
 					}
 					return v10
 				})
