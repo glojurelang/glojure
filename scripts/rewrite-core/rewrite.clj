@@ -340,9 +340,6 @@
                    `(let [result# (strconv.ParseFloat ~s 64)]
                       (if (result# 1) nil (result# 0))))))]
 
-   (sexpr-replace 'glojure.lang.Compiler$CompilerException.
-                  'github.com$glojurelang$glojure$pkg$lang.NewCompilerError)
-
    ;; ===== Metadata Operations =====
    ;; replace .withMeta
    [(fn select [zloc] (and (z/list? zloc) (= '.withMeta (first (z/sexpr zloc)))))
@@ -413,6 +410,10 @@
                 (= 'def (first (z/sexpr %)))
                 (= 'default-data-readers (second (z/sexpr %)))))
 
+   ;; omit Java annotation-related functions (not needed for Go)
+   (omit-symbols '#{is-annotation? is-runtime-annotation? descriptor
+                     add-annotation process-annotation add-annotations})
+
    ;; omit tap functions
    (omitp #(and (z/list? %)
                 (= 'defonce (first (z/sexpr %)))
@@ -475,10 +476,15 @@
                   'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromInt64)
    (sexpr-replace '(BigInteger/valueOf (long x))
                   '(math$big.NewInt (long x)))
+   (sexpr-replace '(BigInteger. x) '(github.com$glojurelang$glojure$pkg$lang.NewBigInt x))
    (sexpr-replace '(BigDecimal/valueOf (long x))
                   '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromInt64 (long x)))
    (sexpr-replace '(. BigDecimal valueOf (double x))
                   '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromFloat64 (double x)))
+   (sexpr-replace '(BigDecimal. x)
+                  '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimal x))
+   (sexpr-replace '(BigDecimal. (.numerator ^github.com$glojurelang$glojure$pkg$lang.*Ratio x))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromRatio x))
    (sexpr-replace 'clojure.lang.BigInt/fromBigInteger
                   'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromGoBigInt)
 
@@ -758,6 +764,8 @@
    (sexpr-replace '(. clojure.lang.Compiler (eval form)) '(. clojure.lang.Compiler (Eval form)))
    (sexpr-replace '(clojure.lang.Compiler/maybeResolveIn (the-ns ns) sym)
                   '(. github.com$glojurelang$glojure$pkg$runtime.Compiler maybeResolveIn (the-ns ns) sym))
+   (sexpr-replace 'clojure.lang.Compiler$CompilerException.
+                  'github.com$glojurelang$glojure$pkg$lang.NewCompilerError)
 
    (sexpr-replace '.alterMeta '.AlterMeta)
 

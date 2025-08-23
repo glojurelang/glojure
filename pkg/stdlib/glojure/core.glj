@@ -3629,7 +3629,7 @@
        (float? x)  (bigint (github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromFloat64 (double x)))
        (ratio? x) (bigint (.bigIntegerValue ^github.com$glojurelang$glojure$pkg$lang.*Ratio x))
        (number? x) (github.com$glojurelang$glojure$pkg$lang.NewBigIntFromInt64 (long x))
-       :else (bigint (BigInteger. x))))
+       :else (bigint (github.com$glojurelang$glojure$pkg$lang.NewBigInt x))))
 
 (defn biginteger
   "Coerce to BigInteger"
@@ -3643,7 +3643,7 @@
        (float? x) (.toBigInteger (github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromFloat64 (double x)))
        (ratio? x) (.bigIntegerValue ^github.com$glojurelang$glojure$pkg$lang.*Ratio x)
        (number? x) (math$big.NewInt (long x))
-       :else (BigInteger. x)))
+       :else (github.com$glojurelang$glojure$pkg$lang.NewBigInt x)))
 
 (defn bigdec
   "Coerce to BigDecimal"
@@ -3653,11 +3653,11 @@
   [x] (cond
        (decimal? x) x
        (float? x) (github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromFloat64 (double x))
-       (ratio? x) (/ (BigDecimal. (.numerator ^github.com$glojurelang$glojure$pkg$lang.*Ratio x)) (.denominator ^github.com$glojurelang$glojure$pkg$lang.*Ratio x))
+       (ratio? x) (/ (github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromRatio x) (.denominator ^github.com$glojurelang$glojure$pkg$lang.*Ratio x))
        (instance? github.com$glojurelang$glojure$pkg$lang.*BigInt x) (.toBigDecimal ^github.com$glojurelang$glojure$pkg$lang.*BigInt x)
-       (instance? math$big.*Int x) (BigDecimal. ^math$big.*Int x)
+       (instance? math$big.*Int x) (github.com$glojurelang$glojure$pkg$lang.NewBigDecimal x)
        (number? x) (github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromInt64 (long x))
-       :else (BigDecimal. x)))
+       :else (github.com$glojurelang$glojure$pkg$lang.NewBigDecimal x)))
 
 (def ^:dynamic ^{:private true} print-initialized false)
 
@@ -5468,61 +5468,18 @@
    :static true}
   [x] (instance? reflect.Type x))
 
-(defn- is-annotation? [c]
-  (and (class? c)
-       (.isAssignableFrom java.lang.annotation.Annotation c)))
+(do)
 
-(defn- is-runtime-annotation? [^reflect.Type c]
-  (boolean 
-   (and (is-annotation? c)
-        (when-let [^java.lang.annotation.Retention r 
-                   (.getAnnotation c java.lang.annotation.Retention)] 
-          (= (.value r) java.lang.annotation.RetentionPolicy/RUNTIME)))))
+(do)
 
-(defn- descriptor [^reflect.Type c] (glojure.asm.Type/getDescriptor c))
+(do)
 
-(declare process-annotation)
-(defn- add-annotation [^glojure.asm.AnnotationVisitor av name v]
-  (cond
-   (vector? v) (let [avec (.visitArray av name)]
-                 (doseq [vval v]
-                   (add-annotation avec "value" vval))
-                 (.visitEnd avec))
-   (symbol? v) (let [ev (eval v)]
-                 (cond 
-                  (instance? java.lang.Enum ev)
-                  (.visitEnum av name (descriptor (class ev)) (str ev))
-                  (class? ev) (.visit av name (glojure.asm.Type/getType ev))
-                  :else (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError 
-                                (str "Unsupported annotation value: " v " of class " (class ev))))))
-   (seq? v) (let [[nested nv] v
-                  c (resolve nested)
-                  nav (.visitAnnotation av name (descriptor c))]
-              (process-annotation nav nv)
-              (.visitEnd nav))
-   :else (.visit av name v)))
+(do)
+(do)
 
-(defn- process-annotation [av v]
-  (if (map? v) 
-    (doseq [[k v] v]
-      (add-annotation av (name k) v))
-    (add-annotation av "value" v)))
+(do)
 
-(defn- add-annotations
-  ([visitor m] (add-annotations visitor m nil))
-  ([visitor m i]
-     (doseq [[k v] m]
-       (when (symbol? k)
-         (when-let [c (resolve k)]
-           (when (is-annotation? c)
-                                        ;this is known duck/reflective as no common base of ASM Visitors
-             (let [av (if i
-                        (.visitParameterAnnotation visitor i (descriptor c) 
-                                                   (is-runtime-annotation? c))
-                        (.visitAnnotation visitor (descriptor c) 
-                                          (is-runtime-annotation? c)))]
-               (process-annotation av v)
-               (.visitEnd av))))))))
+(do)
 
 (defn alter-var-root
   "Atomically alters the root binding of var v by applying f to its
@@ -5882,7 +5839,7 @@
           boring? #(not= (.getMethodName ^StackTraceElement %) "doInvoke")
           trace (into-array StackTraceElement (drop 2 (drop-while boring? raw-trace)))]
       (.setStackTrace exception trace)
-      (throw (glojure.lang.Compiler$CompilerException.
+      (throw (github.com$glojurelang$glojure$pkg$lang.NewCompilerError
               *file*
               (.Deref glojure.lang.Compiler/LINE)
               (.Deref glojure.lang.Compiler/COLUMN)
