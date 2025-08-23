@@ -10,39 +10,6 @@ import (
 func init() {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic"))
 	_ = ns
-	// try-catch-finally
-	{
-		v0 := lang.NewSymbol("try-catch-finally").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(26), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(26), lang.NewKeyword("end-column"), int(23), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
-			if len(args) != 0 {
-				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
-			}
-			var v3 any
-			func() {
-				defer func() {
-				}()
-				defer func() {
-					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.Builtins["any"]) {
-							v4 := r
-							_ = v4
-							v3 = "caught"
-						} else {
-							panic(r)
-						}
-					}
-				}()
-				panic("error")
-			}()
-			return v3
-		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// -main
 	{
 		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), "all tests passed", lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(43), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(43), lang.NewKeyword("end-column"), int(50), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
@@ -185,9 +152,9 @@ func init() {
 			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
 		}
 	}
-	// try-with-throw
+	// basic-try
 	{
-		v0 := lang.NewSymbol("try-with-throw").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(9), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(9), lang.NewKeyword("end-column"), int(20), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
+		v0 := lang.NewSymbol("basic-try").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(15), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
 		var v2 lang.FnFunc
 		v2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
@@ -200,36 +167,13 @@ func init() {
 						if lang.CatchMatches(r, lang.Builtins["any"]) {
 							v4 := r
 							_ = v4
-							v3 = "caught exception"
+							v3 = "caught"
 						} else {
 							panic(r)
 						}
 					}
 				}()
-				panic("test error")
-				v3 = "not reached"
-			}()
-			return v3
-		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// try-finally-only
-	{
-		v0 := lang.NewSymbol("try-finally-only").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(20), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(20), lang.NewKeyword("end-column"), int(22), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
-			if len(args) != 0 {
-				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
-			}
-			var v3 any
-			func() {
-				defer func() {
-				}()
-				v3 = "body"
+				v3 = "success"
 			}()
 			return v3
 		})
@@ -285,9 +229,9 @@ func init() {
 			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
 		}
 	}
-	// basic-try
+	// try-catch-finally
 	{
-		v0 := lang.NewSymbol("basic-try").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(15), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
+		v0 := lang.NewSymbol("try-catch-finally").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(26), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(26), lang.NewKeyword("end-column"), int(23), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
 		var v2 lang.FnFunc
 		v2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
@@ -295,6 +239,8 @@ func init() {
 			}
 			var v3 any
 			func() {
+				defer func() {
+				}()
 				defer func() {
 					if r := recover(); r != nil {
 						if lang.CatchMatches(r, lang.Builtins["any"]) {
@@ -306,7 +252,29 @@ func init() {
 						}
 					}
 				}()
-				v3 = "success"
+				panic("error")
+			}()
+			return v3
+		})
+		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		v1 := ns.InternWithValue(v0, v2, true)
+		if v0.Meta() != nil {
+			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// try-finally-only
+	{
+		v0 := lang.NewSymbol("try-finally-only").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(20), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(20), lang.NewKeyword("end-column"), int(22), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
+		var v2 lang.FnFunc
+		v2 = lang.NewFnFunc(func(args ...any) any {
+			if len(args) != 0 {
+				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+			}
+			var v3 any
+			func() {
+				defer func() {
+				}()
+				v3 = "body"
 			}()
 			return v3
 		})
@@ -327,6 +295,38 @@ func init() {
 			var v3 any
 			func() {
 				v3 = "just body"
+			}()
+			return v3
+		})
+		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		v1 := ns.InternWithValue(v0, v2, true)
+		if v0.Meta() != nil {
+			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// try-with-throw
+	{
+		v0 := lang.NewSymbol("try-with-throw").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_basic.glj", lang.NewKeyword("line"), int(9), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(9), lang.NewKeyword("end-column"), int(20), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-basic")))).(*lang.Symbol)
+		var v2 lang.FnFunc
+		v2 = lang.NewFnFunc(func(args ...any) any {
+			if len(args) != 0 {
+				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+			}
+			var v3 any
+			func() {
+				defer func() {
+					if r := recover(); r != nil {
+						if lang.CatchMatches(r, lang.Builtins["any"]) {
+							v4 := r
+							_ = v4
+							v3 = "caught exception"
+						} else {
+							panic(r)
+						}
+					}
+				}()
+				panic("test error")
+				v3 = "not reached"
 			}()
 			return v3
 		})

@@ -336,6 +336,9 @@
                    `(let [result# (strconv.ParseFloat ~s 64)]
                       (if (result# 1) nil (result# 0))))))]
 
+   (sexpr-replace 'glojure.lang.Compiler$CompilerException.
+                  'github.com$glojurelang$glojure$pkg$lang.NewCompilerError)
+
    ;; ===== Metadata Operations =====
    ;; replace .withMeta
    [(fn select [zloc] (and (z/list? zloc) (= '.withMeta (first (z/sexpr zloc)))))

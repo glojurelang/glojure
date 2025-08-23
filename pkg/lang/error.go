@@ -25,6 +25,13 @@ type (
 		msg string
 	}
 
+	CompilerError struct {
+		file string
+		line int
+		col  int
+		err  error
+	}
+
 	// Stacker is an interface for retrieving stack traces.
 	Stacker interface {
 		Stack() []StackFrame
@@ -44,6 +51,8 @@ type (
 	}
 )
 
+////////////////////////////////////////////////////////////////////////////////
+
 // NewTimeoutError creates a new timeout error.
 func NewTimeoutError(msg string) error {
 	return &TimeoutError{msg: msg}
@@ -59,6 +68,8 @@ func (e *TimeoutError) Is(other error) bool {
 	return ok
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 func NewIndexOutOfBoundsError() error {
 	return &IndexOutOfBoundsError{}
 }
@@ -71,6 +82,8 @@ func (e *IndexOutOfBoundsError) Is(other error) bool {
 	_, ok := other.(*IndexOutOfBoundsError)
 	return ok
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 func NewIllegalArgumentError(msg string) error {
 	return &IllegalArgumentError{msg: msg}
@@ -85,6 +98,8 @@ func (e *IllegalArgumentError) Is(other error) bool {
 	return ok
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 func NewArithmeticError(msg string) error {
 	return &ArithmeticError{msg: msg}
 }
@@ -98,6 +113,8 @@ func (e *ArithmeticError) Is(other error) bool {
 	return ok
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 func NewIllegalStateError(msg string) error {
 	return &IllegalStateError{msg: msg}
 }
@@ -109,6 +126,21 @@ func (e *IllegalStateError) Error() string {
 func (e *IllegalStateError) Is(other error) bool {
 	_, ok := other.(*IllegalStateError)
 	return ok
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+func NewCompilerError(file string, line, col int, err error) error {
+	return &CompilerError{
+		file: file,
+		line: line,
+		col:  col,
+		err:  err,
+	}
+}
+
+func (e *CompilerError) Error() string {
+	return fmt.Sprintf("compiler error at %s:%d:%d: %v", e.file, e.line, e.col, e.err)
 }
 
 ////////////////////////////////////////////////////////////////////////////////

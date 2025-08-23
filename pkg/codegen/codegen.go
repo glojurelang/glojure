@@ -95,6 +95,13 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	// 1. Iterate through ns.Mappings()
 	// 2. Generate Go code for each var (this discovers lifted values)
 	mappings := ns.Mappings()
+
+	type namedVar struct {
+		name *lang.Symbol
+		vr   *lang.Var
+	}
+	var internedVars []namedVar
+
 	for seq := mappings.Seq(); seq != nil; seq = seq.Next() {
 		entry := seq.First()
 		name, ok := lang.First(entry).(*lang.Symbol)
@@ -111,8 +118,15 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 			continue // Skip non-interned mappings
 		}
 
-		if err := g.generateVar("ns", name, vr); err != nil {
-			return fmt.Errorf("failed to generate code for var %s: %w", name, err)
+		internedVars = append(internedVars, namedVar{name: name, vr: vr})
+	}
+	// Sort internedVars by name for deterministic output
+	sort.Slice(internedVars, func(i, j int) bool {
+		return internedVars[i].name.String() < internedVars[j].name.String()
+	})
+	for _, nv := range internedVars {
+		if err := g.generateVar("ns", nv.name, nv.vr); err != nil {
+			return fmt.Errorf("failed to generate code for var %s: %w", nv.name, err)
 		}
 	}
 
