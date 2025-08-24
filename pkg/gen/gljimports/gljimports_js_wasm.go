@@ -66,6 +66,7 @@ import (
 	github_com_glojurelang_glojure_pkg_lang "github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 	github_com_glojurelang_glojure_pkg_runtime "github.com/glojurelang/glojure/pkg/runtime"
+	github_com_google_uuid "github.com/google/uuid"
 	go_ast "go/ast"
 	go_build "go/build"
 	go_build_constraint "go/build/constraint"
@@ -3829,6 +3830,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.NewSymbol", github_com_glojurelang_glojure_pkg_lang.NewSymbol)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewTimeoutError", github_com_glojurelang_glojure_pkg_lang.NewTimeoutError)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewTransformerIterator", github_com_glojurelang_glojure_pkg_lang.NewTransformerIterator)
+	_register("github.com/glojurelang/glojure/pkg/lang.NewUnsupportedOperationError", github_com_glojurelang_glojure_pkg_lang.NewUnsupportedOperationError)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewVar", github_com_glojurelang_glojure_pkg_lang.NewVar)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewVarWithRoot", github_com_glojurelang_glojure_pkg_lang.NewVarWithRoot)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewVector", github_com_glojurelang_glojure_pkg_lang.NewVector)
@@ -3940,6 +3942,8 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.UncheckedIntCast", github_com_glojurelang_glojure_pkg_lang.UncheckedIntCast)
 	_register("github.com/glojurelang/glojure/pkg/lang.UncheckedLongCast", github_com_glojurelang_glojure_pkg_lang.UncheckedLongCast)
 	_register("github.com/glojurelang/glojure/pkg/lang.UncheckedShortCast", github_com_glojurelang_glojure_pkg_lang.UncheckedShortCast)
+	_register("github.com/glojurelang/glojure/pkg/lang.UnsupportedOperationError", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.UnsupportedOperationError)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/lang.*UnsupportedOperationError", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.UnsupportedOperationError)(nil)))
 	_register("github.com/glojurelang/glojure/pkg/lang.Vals", github_com_glojurelang_glojure_pkg_lang.Vals)
 	_register("github.com/glojurelang/glojure/pkg/lang.Var", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Var)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.*Var", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Var)(nil)))
@@ -3999,6 +4003,62 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/runtime.WithLoadPath", github_com_glojurelang_glojure_pkg_runtime.WithLoadPath)
 	_register("github.com/glojurelang/glojure/pkg/runtime.WithStderr", github_com_glojurelang_glojure_pkg_runtime.WithStderr)
 	_register("github.com/glojurelang/glojure/pkg/runtime.WithStdout", github_com_glojurelang_glojure_pkg_runtime.WithStdout)
+
+	// package github.com/google/uuid
+	////////////////////////////////////////
+	_register("github.com/google/uuid.ClockSequence", github_com_google_uuid.ClockSequence)
+	_register("github.com/google/uuid.DisableRandPool", github_com_google_uuid.DisableRandPool)
+	_register("github.com/google/uuid.Domain", reflect.TypeOf((*github_com_google_uuid.Domain)(nil)).Elem())
+	_register("github.com/google/uuid.EnableRandPool", github_com_google_uuid.EnableRandPool)
+	_register("github.com/google/uuid.FromBytes", github_com_google_uuid.FromBytes)
+	_register("github.com/google/uuid.Future", github_com_google_uuid.Future)
+	_register("github.com/google/uuid.GetTime", github_com_google_uuid.GetTime)
+	_register("github.com/google/uuid.Group", github_com_google_uuid.Group)
+	_register("github.com/google/uuid.Invalid", github_com_google_uuid.Invalid)
+	_register("github.com/google/uuid.IsInvalidLengthError", github_com_google_uuid.IsInvalidLengthError)
+	_register("github.com/google/uuid.Max", github_com_google_uuid.Max)
+	_register("github.com/google/uuid.Microsoft", github_com_google_uuid.Microsoft)
+	_register("github.com/google/uuid.Must", github_com_google_uuid.Must)
+	_register("github.com/google/uuid.MustParse", github_com_google_uuid.MustParse)
+	_register("github.com/google/uuid.NameSpaceDNS", github_com_google_uuid.NameSpaceDNS)
+	_register("github.com/google/uuid.NameSpaceOID", github_com_google_uuid.NameSpaceOID)
+	_register("github.com/google/uuid.NameSpaceURL", github_com_google_uuid.NameSpaceURL)
+	_register("github.com/google/uuid.NameSpaceX500", github_com_google_uuid.NameSpaceX500)
+	_register("github.com/google/uuid.New", github_com_google_uuid.New)
+	_register("github.com/google/uuid.NewDCEGroup", github_com_google_uuid.NewDCEGroup)
+	_register("github.com/google/uuid.NewDCEPerson", github_com_google_uuid.NewDCEPerson)
+	_register("github.com/google/uuid.NewDCESecurity", github_com_google_uuid.NewDCESecurity)
+	_register("github.com/google/uuid.NewHash", github_com_google_uuid.NewHash)
+	_register("github.com/google/uuid.NewMD5", github_com_google_uuid.NewMD5)
+	_register("github.com/google/uuid.NewRandom", github_com_google_uuid.NewRandom)
+	_register("github.com/google/uuid.NewRandomFromReader", github_com_google_uuid.NewRandomFromReader)
+	_register("github.com/google/uuid.NewSHA1", github_com_google_uuid.NewSHA1)
+	_register("github.com/google/uuid.NewString", github_com_google_uuid.NewString)
+	_register("github.com/google/uuid.NewUUID", github_com_google_uuid.NewUUID)
+	_register("github.com/google/uuid.NewV6", github_com_google_uuid.NewV6)
+	_register("github.com/google/uuid.NewV7", github_com_google_uuid.NewV7)
+	_register("github.com/google/uuid.NewV7FromReader", github_com_google_uuid.NewV7FromReader)
+	_register("github.com/google/uuid.Nil", github_com_google_uuid.Nil)
+	_register("github.com/google/uuid.NodeID", github_com_google_uuid.NodeID)
+	_register("github.com/google/uuid.NodeInterface", github_com_google_uuid.NodeInterface)
+	_register("github.com/google/uuid.NullUUID", reflect.TypeOf((*github_com_google_uuid.NullUUID)(nil)).Elem())
+	_register("github.com/google/uuid.*NullUUID", reflect.TypeOf((*github_com_google_uuid.NullUUID)(nil)))
+	_register("github.com/google/uuid.Org", github_com_google_uuid.Org)
+	_register("github.com/google/uuid.Parse", github_com_google_uuid.Parse)
+	_register("github.com/google/uuid.ParseBytes", github_com_google_uuid.ParseBytes)
+	_register("github.com/google/uuid.Person", github_com_google_uuid.Person)
+	_register("github.com/google/uuid.RFC4122", github_com_google_uuid.RFC4122)
+	_register("github.com/google/uuid.Reserved", github_com_google_uuid.Reserved)
+	_register("github.com/google/uuid.SetClockSequence", github_com_google_uuid.SetClockSequence)
+	_register("github.com/google/uuid.SetNodeID", github_com_google_uuid.SetNodeID)
+	_register("github.com/google/uuid.SetNodeInterface", github_com_google_uuid.SetNodeInterface)
+	_register("github.com/google/uuid.SetRand", github_com_google_uuid.SetRand)
+	_register("github.com/google/uuid.Time", reflect.TypeOf((*github_com_google_uuid.Time)(nil)).Elem())
+	_register("github.com/google/uuid.UUID", reflect.TypeOf((*github_com_google_uuid.UUID)(nil)).Elem())
+	_register("github.com/google/uuid.UUIDs", reflect.TypeOf((*github_com_google_uuid.UUIDs)(nil)).Elem())
+	_register("github.com/google/uuid.Validate", github_com_google_uuid.Validate)
+	_register("github.com/google/uuid.Variant", reflect.TypeOf((*github_com_google_uuid.Variant)(nil)).Elem())
+	_register("github.com/google/uuid.Version", reflect.TypeOf((*github_com_google_uuid.Version)(nil)).Elem())
 
 	// package go/ast
 	////////////////////////////////////////

@@ -277,6 +277,19 @@
 
    (sexpr-replace 'java.util.Map$Entry 'github.com$glojurelang$glojure$pkg$lang.MapEntry)
 
+   (sexpr-replace 'java.net.URI 'net$url.URL)
+
+   (sexpr-replace 'java.util.UUID 'github.com$google$uuid$uuid.UUID)
+
+   (sexpr-replace '(java.util.UUID/fromString s)
+                  '(let [[uuid err] (github.com$google$uuid.Parse s)]
+                     (if err
+                       (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Error parsing UUID: " err)))
+                       uuid)))
+
+   (sexpr-replace '(java.util.UUID/randomUUID)
+                  '(github.com$google$uuid$uuid.NewV7))
+
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    ;; struct map
    (sexpr-replace '(. clojure.lang.PersistentStructMap (createSlotMap keys))
@@ -309,7 +322,10 @@
    ;; ===== Exception Handling =====
    (sexpr-replace 'Exception. 'github.com$glojurelang$glojure$pkg$lang.NewError)
 
+   (sexpr-replace 'java.lang.UnsupportedOperationException. 'github.com$glojurelang$glojure$pkg$lang.NewUnsupportedOperationError)
+
    (sexpr-replace 'IllegalArgumentException. 'github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError)
+   (sexpr-replace 'IllegalArgumentException 'github.com$glojurelang$glojure$pkg$lang.*IllegalArgumentError)
    ;; new Exception
    [(fn select [zloc] (and (z/list? zloc)
                            (let [expr (z/sexpr zloc)]

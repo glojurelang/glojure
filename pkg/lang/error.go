@@ -25,6 +25,10 @@ type (
 		msg string
 	}
 
+	UnsupportedOperationError struct {
+		msg string
+	}
+
 	ArithmeticError struct {
 		msg string
 	}
@@ -111,6 +115,21 @@ func (e *IllegalArgumentError) Error() string {
 
 func (e *IllegalArgumentError) Is(other error) bool {
 	_, ok := other.(*IllegalArgumentError)
+	return ok
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+func NewUnsupportedOperationError(msg string) error {
+	return &UnsupportedOperationError{msg: msg}
+}
+
+func (e *UnsupportedOperationError) Error() string {
+	return e.msg
+}
+
+func (e *UnsupportedOperationError) Is(other error) bool {
+	_, ok := other.(*UnsupportedOperationError)
 	return ok
 }
 

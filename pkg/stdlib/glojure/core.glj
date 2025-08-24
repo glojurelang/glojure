@@ -5599,7 +5599,7 @@
   {:added "1.0"}
   ([tag] (descendants global-hierarchy tag))
   ([h tag] (if (class? tag)
-             (throw (java.lang.UnsupportedOperationException. "Can't get descendants of classes"))
+             (throw (github.com$glojurelang$glojure$pkg$lang.NewUnsupportedOperationError "Can't get descendants of classes"))
              (not-empty (get (:descendants h) tag)))))
 
 (defn derive
@@ -6847,14 +6847,14 @@ fails, attempts to require sym's namespace and retries."
 (defn uuid?
   "Return true if x is a java.util.UUID"
   {:added "1.9"}
-  [x] (instance? java.util.UUID x))
+  [x] (instance? github.com$google$uuid$uuid.UUID x))
 
 (defn random-uuid
   {:doc "Returns a pseudo-randomly generated java.util.UUID instance (i.e. type 4).
 
   See: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#randomUUID--"
    :added "1.11"}
-  ^java.util.UUID [] (java.util.UUID/randomUUID))
+  ^github.com$google$uuid$uuid.UUID [] (github.com$google$uuid$uuid.NewV7))
 
 ;; redefine reduce with internal-reduce
 (defn reduce
@@ -7877,7 +7877,7 @@ fails, attempts to require sym's namespace and retries."
 (defn uri?
   "Return true if x is a java.net.URI"
   {:added "1.9"}
-  [x] (instance? java.net.URI x))
+  [x] (instance? net$url.URL x))
 
 (defonce ^:private tapset (atom #{}))
 (defn remove-tap
@@ -7949,10 +7949,10 @@ fails, attempts to require sym's namespace and retries."
 
   Grammar: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#toString--"
    :added "1.11"}
-  ^java.util.UUID [^go/string s]
+  ^github.com$google$uuid$uuid.UUID [^go/string s]
   (try
-    (java.util.UUID/fromString s)
-    (catch IllegalArgumentException _ nil)))
+    (let [[uuid err] (github.com$google$uuid.Parse s)] (if err (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Error parsing UUID: " err))) uuid))
+    (catch github.com$glojurelang$glojure$pkg$lang.*IllegalArgumentError _ nil)))
 
 (defn parse-boolean
   {:doc "Parse strings \"true\" or \"false\" and return a boolean, or nil if invalid"

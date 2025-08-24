@@ -13,8 +13,5 @@ Handle
 - java.io.InputStreamReader20 "java.io.InputStreamReader"
 - java.io.StringReader21 "java.io.StringReader"
 - java.lang.UnsupportedOperationException14 "java.lang.UnsupportedOperationException"
-- java.lang6 "java.lang"
-- java.net30 "java.net"
 - java.util.concurrent.CountDownLatch25 "java.util.concurrent.CountDownLatch"
 - java.util.concurrent8 "java.util.concurrent"
-- java.util22 "java.util"
