@@ -1,0 +1,9 @@
+!YS-v0
+
+ns: hello
+
+defn main+(name='world'):
+  println: "Hello, $name!"
+
+=>: !clj |
+  (defn -main [& args] (apply main+ args))
