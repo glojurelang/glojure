@@ -8,6 +8,8 @@ import (
 )
 
 func init() {
+	// reference fmt to avoid unused import error
+	_ = fmt.Printf
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.loop-simple"))
 	_ = ns
 	// -main
@@ -41,36 +43,39 @@ func init() {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			var v3 any = int64(0)
-			_ = v3
-			var v4 any
-			for {
-				var v5 any
-				v6 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-				v7 := v6.FindInternedVar(lang.NewSymbol("<"))
-				if v7.IsMacro() {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
-				}
-				v8 := v7.Get()
-				v9 := lang.Apply(v8, []any{v3, int64(10)})
-				if lang.IsTruthy(v9) {
-					v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-					v12 := v11.FindInternedVar(lang.NewSymbol("inc"))
-					if v12.IsMacro() {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v12)))
+			var v3 any
+			{ // let
+				// let binding "i"
+				var v4 any = int64(0)
+				_ = v4
+				for {
+					var v5 any
+					v6 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+					v7 := v6.FindInternedVar(lang.NewSymbol("<"))
+					if v7.IsMacro() {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
 					}
-					v13 := v12.Get()
-					v14 := lang.Apply(v13, []any{v3})
-					var v10 any = v14
-					v3 = v10
-					continue
-				} else {
-					v5 = v3
+					v8 := v7.Get()
+					v9 := lang.Apply(v8, []any{v4, int64(10)})
+					if lang.IsTruthy(v9) {
+						v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+						v12 := v11.FindInternedVar(lang.NewSymbol("inc"))
+						if v12.IsMacro() {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v12)))
+						}
+						v13 := v12.Get()
+						v14 := lang.Apply(v13, []any{v4})
+						var v10 any = v14
+						v4 = v10
+						continue
+					} else {
+						v5 = v4
+					}
+					v3 = v5
+					break
 				}
-				v4 = v5
-				break
-			}
-			return v4
+			} // end let
+			return v3
 		})
 		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
 		v1 := ns.InternWithValue(v0, v2, true)

@@ -91,6 +91,9 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 
 	// add lang import
 	g.addImport("github.com/glojurelang/glojure/pkg/lang")
+	g.addImport("fmt") // for error formatting
+	g.writef("// reference fmt to avoid unused import error\n")
+	g.writef("_ = fmt.Printf\n")
 
 	g.writef("  ns := lang.FindOrCreateNamespace(lang.NewSymbol(%#v))\n", ns.Name().String())
 	g.writef("  _ = ns\n")
@@ -157,9 +160,14 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 
 		for _, lifted := range sortedLifted {
 			// Generate the value - this will write any needed initialization
+			g.writef("var %s any\n", lifted.varName)
+			g.pushVarScope()
+			g.writef("{\n")
 			valueCode := g.generateValue(lifted.value)
 			// Declare the lifted variable with the final value
-			g.writef("  var %s = %s\n", lifted.varName, valueCode)
+			g.writef("%s = %s\n", lifted.varName, valueCode)
+			g.writef("}\n")
+			g.popVarScope()
 		}
 
 		// Write the lifted values code to init
@@ -180,7 +188,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	if err != nil {
 		// If formatting fails, write the unformatted code with the error
 		g.originalWriter.Write(sourceBytes)
-		return fmt.Errorf("formatting failed: %w\n\nGenerated code:\n%s", err, string(sourceBytes))
+		return fmt.Errorf("formatting failed: %w\n", err)
 	}
 
 	// Write formatted code to the original writer
@@ -541,12 +549,14 @@ func (g *Generator) generateSetValue(s lang.IPersistentSet) string {
 		if idx > 0 {
 			buf.WriteString(", ")
 		}
+		idx++
 		element := seq.First()
 		elementVar := g.generateValue(element)
 		buf.WriteString(elementVar)
 	}
 
 	buf.WriteString(")")
+
 	return buf.String()
 }
 
@@ -593,7 +603,6 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 
 		g.writef("%s = lang.NewFnFunc(func(args ...any) any {\n", fnVar)
 
-		g.addImport("fmt") // Import fmt for error formatting
 		// Check arity
 		g.writef("  if len(args) != %d {\n", methodNode.FixedArity)
 		g.writef("    panic(lang.NewIllegalArgumentError(\"wrong number of arguments (\" + fmt.Sprint(len(args)) + \")\"))\n")
@@ -667,6 +676,7 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 		if i < methodNode.FixedArity {
 			// Regular parameter
 			g.writef("%s := %s[%d]\n", paramVar, argsVar, i)
+			g.writeAssign("_", paramVar) // Prevent unused variable warning
 			paramVars[i] = paramVar
 		} else {
 			// Variadic parameter - collect rest args
@@ -869,8 +879,15 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	letNode := node.Sub.(*ast.LetNode)
 
 	// Push a new variable scope for the let bindings
+	resultId := g.allocateTempVar()
+	g.writef("var %s any\n", resultId)
+
+	g.writef("{ // let\n")
 	g.pushVarScope()
-	defer g.popVarScope()
+	defer func() {
+		g.popVarScope()
+		g.writef("} // end let\n")
+	}()
 
 	// Collect binding variable names for recur context if this is a loop
 	var bindingVars []string
@@ -885,10 +902,11 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		init := bindingNode.Init
 
 		// Allocate a Go variable for the Clojure name
-		varName := g.allocateLocal(name)
+		g.writef("// let binding \"%s\"\n", name)
 
 		// Generate initialization code
 		initCode := g.generateASTNode(init)
+		varName := g.allocateLocal(name)
 		g.writef("var %s any = %s\n", varName, initCode)
 		g.writeAssign("_", varName) // Prevent unused variable warning
 
@@ -898,13 +916,11 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		}
 	}
 
-	resultId := g.allocateTempVar()
 	if isLoop {
 		// Push recur context for this loop
 		g.pushRecurContext(letNode.LoopID, bindingVars, false)
 		defer g.popRecurContext()
 
-		g.writef("var %s any\n", resultId)
 		g.writef("for {\n")
 	}
 
@@ -914,10 +930,10 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		g.writeAssign(resultId, result)
 		g.writef("  break\n") // Break out of the loop after the body
 		g.writef("}\n")
-		return resultId
 	} else {
-		return result
+		g.writeAssign(resultId, result)
 	}
+	return resultId
 }
 
 func (g *Generator) generateRecur(node *ast.Node) string {
@@ -1135,9 +1151,36 @@ func (g *Generator) generateSet(node *ast.Node) string {
 	return setId
 }
 
+var (
+	// TODO: fix all these invalid imports
+	expectedInvalidImports = map[string]bool{
+		"ExceptionInfo":                            true,
+		"LinkedBlockingQueue":                      true,
+		"glojure.lang.LineNumberingPushbackReader": true,
+		"glojure.lang":                             true,
+		"java.io.InputStreamReader":                true,
+		"java.io.StringReader":                     true,
+		"java.util.concurrent.CountDownLatch":      true,
+		"java.util.concurrent":                     true,
+	}
+)
+
 func (g *Generator) generateMaybeClass(node *ast.Node) string {
 	sym := node.Sub.(*ast.MaybeClassNode).Class.(*lang.Symbol)
 	pkg := sym.FullName()
+
+	v, ok := pkgmap.Get(sym.FullName())
+	// special-case for reflect.Types
+	//
+	// NB: we're allowing references to exports of packages that aren't in the package map
+	// This implies a difference in behavior, where the interpreter would fail while
+	// the compiled code would succeed, because the import will cause the go toolchain
+	// to pull in the package.
+	if ok {
+		if t, ok := v.(reflect.Type); ok {
+			return g.getTypeString(t)
+		}
+	}
 
 	// find last dot in the package name
 	dotIndex := strings.LastIndex(pkg, ".")
@@ -1152,6 +1195,12 @@ func (g *Generator) generateMaybeClass(node *ast.Node) string {
 	exportedName := pkg[dotIndex+1:]
 
 	packageName := pkgmap.UnmungePkg(mungedPkgName)
+
+	if _, ok := expectedInvalidImports[packageName]; ok {
+		// TODO: fix all these invalid imports
+		fmt.Println("Warning: skipping invalid import:", packageName)
+		return "nil"
+	}
 	alias := g.addImportWithAlias(packageName)
 
 	return alias + "." + exportedName
@@ -1269,6 +1318,10 @@ func (g *Generator) addImport(pkg string) {
 }
 
 func (g *Generator) addImportWithAlias(pkg string) string {
+	if pkg == "glojure.lang.LineNumberingPushbackReader" {
+		panic("glojure.lang.LineNumberingPushbackReader is not a valid Go package")
+	}
+
 	// Check if the package is already imported
 	if alias, ok := g.imports[pkg]; ok {
 		return alias // Return existing alias

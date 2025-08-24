@@ -9,10 +9,18 @@ import (
 
 func init() {
 	// Closed-over values
-	var closed0 = int64(42)
-	v0 := lang.NewAtom(int64(0))
-	var closed1 = v0
+	var closed0 any
+	{
+		closed0 = int64(42)
+	}
+	var closed1 any
+	{
+		v0 := lang.NewAtom(int64(0))
+		closed1 = v0
+	}
 
+	// reference fmt to avoid unused import error
+	_ = fmt.Printf
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-closure"))
 	_ = ns
 	// -main
@@ -84,6 +92,7 @@ func init() {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
 			v3 := args[0]
+			_ = v3
 			var v4 lang.FnFunc
 			v4 = lang.NewFnFunc(func(args ...any) any {
 				if len(args) != 0 {

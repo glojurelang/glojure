@@ -13,8 +13,8 @@
     (java.util.UUID/fromString form)
     (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError "#uuid data reader expected string"))))
 
-(defmethod print-method github.com$google$uuid$uuid.UUID [uuid ^io.Writer w]
+(defmethod print-method github.com$google$uuid.UUID [uuid ^io.Writer w]
   (github.com$glojurelang$glojure$pkg$lang.WriteWriter w (str "#uuid \"" (str uuid) "\"")))
 
-(defmethod print-dup github.com$google$uuid$uuid.UUID [o w]
+(defmethod print-dup github.com$google$uuid.UUID [o w]
   (print-method o w))

@@ -3,21 +3,23 @@
 package generated
 
 import (
-	hex1 "encoding/hex"
+	hex2 "encoding/hex"
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
-	big2 "math/big"
+	big3 "math/big"
 	reflect "reflect"
 )
 
 func init() {
+	// reference fmt to avoid unused import error
+	_ = fmt.Printf
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values"))
 	_ = ns
 	// -main
 	{
-		v1 := lang.NewBigDecimalFromBigFloat((func() *big2.Float {
-			var z big2.Float
-			b, _ := hex1.DecodeString("010a0000004000000004a000000000000000")
+		v1 := lang.NewBigDecimalFromBigFloat((func() *big3.Float {
+			var z big3.Float
+			b, _ := hex2.DecodeString("010a0000004000000004a000000000000000")
 			if err := z.GobDecode(b); err != nil {
 				panic(err)
 			}
@@ -59,9 +61,9 @@ func init() {
 	// big-decimal
 	{
 		v0 := lang.NewSymbol("big-decimal").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values")))).(*lang.Symbol)
-		v2 := lang.NewBigDecimalFromBigFloat((func() *big2.Float {
-			var z big2.Float
-			b, _ := hex1.DecodeString("010a0000004000000004a000000000000000")
+		v2 := lang.NewBigDecimalFromBigFloat((func() *big3.Float {
+			var z big3.Float
+			b, _ := hex2.DecodeString("010a0000004000000004a000000000000000")
 			if err := z.GobDecode(b); err != nil {
 				panic(err)
 			}

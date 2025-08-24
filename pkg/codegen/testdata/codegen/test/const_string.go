@@ -3,10 +3,13 @@
 package generated
 
 import (
+	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 )
 
 func init() {
+	// reference fmt to avoid unused import error
+	_ = fmt.Printf
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.const-string"))
 	_ = ns
 	// const-string

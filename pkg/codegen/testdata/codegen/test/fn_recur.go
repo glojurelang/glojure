@@ -8,6 +8,8 @@ import (
 )
 
 func init() {
+	// reference fmt to avoid unused import error
+	_ = fmt.Printf
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-recur"))
 	_ = ns
 	// -main
@@ -42,63 +44,72 @@ func init() {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
 			v3 := args[0]
-			var v5 lang.FnFunc
-			{ // function fib-helper
-				v5 = lang.NewFnFunc(func(args ...any) any {
-					if len(args) != 3 {
-						panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
-					}
-					v7 := args[0]
-					v8 := args[1]
-					v9 := args[2]
-				recur_loop_1612:
-					var v10 any
-					v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-					v12 := v11.FindInternedVar(lang.NewSymbol("="))
-					if v12.IsMacro() {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v12)))
-					}
-					v13 := v12.Get()
-					v14 := lang.Apply(v13, []any{v9, v3})
-					if lang.IsTruthy(v14) {
-						v10 = v7
-					} else {
-						var v15 any = v8
-						v17 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-						v18 := v17.FindInternedVar(lang.NewSymbol("+"))
-						if v18.IsMacro() {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v18)))
+			_ = v3
+			var v4 any
+			{ // let
+				// let binding "fib-helper"
+				var v5 lang.FnFunc
+				{ // function fib-helper
+					v5 = lang.NewFnFunc(func(args ...any) any {
+						if len(args) != 3 {
+							panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 						}
-						v19 := v18.Get()
-						v20 := lang.Apply(v19, []any{v7, v8})
-						var v16 any = v20
-						v22 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-						v23 := v22.FindInternedVar(lang.NewSymbol("inc"))
-						if v23.IsMacro() {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v23)))
+						v7 := args[0]
+						_ = v7
+						v8 := args[1]
+						_ = v8
+						v9 := args[2]
+						_ = v9
+					recur_loop_1612:
+						var v10 any
+						v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+						v12 := v11.FindInternedVar(lang.NewSymbol("="))
+						if v12.IsMacro() {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v12)))
 						}
-						v24 := v23.Get()
-						v25 := lang.Apply(v24, []any{v9})
-						var v21 any = v25
-						v7 = v15
-						v8 = v16
-						v9 = v21
-						goto recur_loop_1612
-					}
-					return v10
-				})
-				v6 := v5
-				_ = v6
-			}
-			v6 := lang.NewMap(lang.NewKeyword("file"), "codegen/test/fn_recur.glj", lang.NewKeyword("line"), int(6), lang.NewKeyword("column"), int(20), lang.NewKeyword("end-line"), int(9), lang.NewKeyword("end-column"), int(50))
-			v7, err := lang.WithMeta(v5, v6.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			var v4 any = v7
-			_ = v4
-			v9 := lang.Apply(v4, []any{int64(0), int64(1), int64(0)})
-			return v9
+						v13 := v12.Get()
+						v14 := lang.Apply(v13, []any{v9, v3})
+						if lang.IsTruthy(v14) {
+							v10 = v7
+						} else {
+							var v15 any = v8
+							v17 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+							v18 := v17.FindInternedVar(lang.NewSymbol("+"))
+							if v18.IsMacro() {
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v18)))
+							}
+							v19 := v18.Get()
+							v20 := lang.Apply(v19, []any{v7, v8})
+							var v16 any = v20
+							v22 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+							v23 := v22.FindInternedVar(lang.NewSymbol("inc"))
+							if v23.IsMacro() {
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v23)))
+							}
+							v24 := v23.Get()
+							v25 := lang.Apply(v24, []any{v9})
+							var v21 any = v25
+							v7 = v15
+							v8 = v16
+							v9 = v21
+							goto recur_loop_1612
+						}
+						return v10
+					})
+					v6 := v5
+					_ = v6
+				}
+				v6 := lang.NewMap(lang.NewKeyword("file"), "codegen/test/fn_recur.glj", lang.NewKeyword("line"), int(6), lang.NewKeyword("column"), int(20), lang.NewKeyword("end-line"), int(9), lang.NewKeyword("end-column"), int(50))
+				v7, err := lang.WithMeta(v5, v6.(lang.IPersistentMap))
+				if err != nil {
+					panic(err)
+				}
+				var v8 any = v7
+				_ = v8
+				v9 := lang.Apply(v8, []any{int64(0), int64(1), int64(0)})
+				v4 = v9
+			} // end let
+			return v4
 		})
 		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
 		v1 := ns.InternWithValue(v0, v2, true)

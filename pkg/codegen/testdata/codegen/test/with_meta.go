@@ -8,6 +8,8 @@ import (
 )
 
 func init() {
+	// reference fmt to avoid unused import error
+	_ = fmt.Printf
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.with-meta"))
 	_ = ns
 	// -main

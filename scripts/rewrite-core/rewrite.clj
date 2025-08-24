@@ -279,7 +279,7 @@
 
    (sexpr-replace 'java.net.URI 'net$url.URL)
 
-   (sexpr-replace 'java.util.UUID 'github.com$google$uuid$uuid.UUID)
+   (sexpr-replace 'java.util.UUID 'github.com$google$uuid.UUID)
 
    (sexpr-replace '(java.util.UUID/fromString s)
                   '(let [[uuid err] (github.com$google$uuid.Parse s)]
@@ -288,7 +288,7 @@
                        uuid)))
 
    (sexpr-replace '(java.util.UUID/randomUUID)
-                  '(github.com$google$uuid$uuid.NewV7))
+                  '(github.com$google$uuid.NewV7))
 
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    ;; struct map

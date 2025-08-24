@@ -8,6 +8,8 @@ import (
 )
 
 func init() {
+	// reference fmt to avoid unused import error
+	_ = fmt.Printf
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced"))
 	_ = ns
 	// -main
@@ -118,24 +120,29 @@ func init() {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			var v3 any = "outer"
-			_ = v3
-			var v5 any
-			func() {
-				defer func() {
-					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.Builtins["any"]) {
-							v6 := r
-							_ = v6
-							v5 = v6
-						} else {
-							panic(r)
+			var v3 any
+			{ // let
+				// let binding "e"
+				var v4 any = "outer"
+				_ = v4
+				var v5 any
+				func() {
+					defer func() {
+						if r := recover(); r != nil {
+							if lang.CatchMatches(r, lang.Builtins["any"]) {
+								v6 := r
+								_ = v6
+								v5 = v6
+							} else {
+								panic(r)
+							}
 						}
-					}
+					}()
+					panic("test")
 				}()
-				panic("test")
-			}()
-			return v5
+				v3 = v5
+			} // end let
+			return v3
 		})
 		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
 		v1 := ns.InternWithValue(v0, v2, true)
@@ -151,24 +158,29 @@ func init() {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			var v3 any = "outer"
-			_ = v3
-			var v5 any
-			func() {
-				defer func() {
-					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.Builtins["any"]) {
-							v6 := r
-							_ = v6
-							v5 = v6
-						} else {
-							panic(r)
+			var v3 any
+			{ // let
+				// let binding "e"
+				var v4 any = "outer"
+				_ = v4
+				var v5 any
+				func() {
+					defer func() {
+						if r := recover(); r != nil {
+							if lang.CatchMatches(r, lang.Builtins["any"]) {
+								v6 := r
+								_ = v6
+								v5 = v6
+							} else {
+								panic(r)
+							}
 						}
-					}
+					}()
+					panic("test")
 				}()
-				panic("test")
-			}()
-			_ = v5
+				_ = v5
+				v3 = v4
+			} // end let
 			return v3
 		})
 		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
