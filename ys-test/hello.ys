@@ -1,0 +1,10 @@
+!YS-v0
+
+ns: main
+ARGS =: +[]
+
+defn main(name='world'):
+  foo:
+  println: "Hello, $name!"
+
+defn foo(): 42
