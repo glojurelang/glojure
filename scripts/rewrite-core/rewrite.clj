@@ -727,6 +727,15 @@
    (sexpr-replace 'clojure.lang.RT/uncheckedIntCast
                   'github.com$glojurelang$glojure$pkg$lang.UncheckedIntCast)
 
+   [(fn select [zloc] (try
+                        (and (symbol? (z/sexpr zloc))
+                             (or
+                              (and (z/leftmost? zloc) (= 'github.com$glojurelang$glojure$pkg$lang.Numbers (-> zloc z/up z/left z/sexpr)))
+                              (= 'github.com$glojurelang$glojure$pkg$lang.Numbers (-> zloc z/left z/sexpr))))
+                        (catch Exception e false)))
+    (fn visit [zloc] (z/replace zloc
+                                (let [sym (-> zloc z/sexpr str)]
+                                  (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
    (sexpr-splice-replace 'clojure.lang.Numbers/gt
                          ['.Gt 'github.com$glojurelang$glojure$pkg$lang.Numbers])
 
