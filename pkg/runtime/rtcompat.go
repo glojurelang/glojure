@@ -184,31 +184,6 @@ func (rt *RTMethods) ToArray(coll any) any {
 	return lang.ToSlice(coll)
 }
 
-func (rt *RTMethods) ChunkIteratorSeq(iter any) ISeq {
-	// Go does not have an iterator interface like Java, but it does now
-	// have the iter.Seq functions. For now, we support only TransformerIterators.
-	ti, ok := iter.(*lang.TransformerIterator)
-	if !ok {
-		panic(fmt.Errorf("ChunkIteratorSeq requires a TransformerIterator, got %T", iter))
-	}
-
-	if !ti.HasNext() {
-		return nil
-	}
-
-	const chunkSize = 32
-
-	return lang.NewLazySeq(func() any {
-		arr := make([]any, 0, chunkSize)
-		n := 0
-		for ti.HasNext() && n < chunkSize {
-			arr[n] = ti.Next()
-			n++
-		}
-		return lang.NewChunkedCons(lang.NewSliceChunk(arr), rt.ChunkIteratorSeq(ti))
-	})
-}
-
 var (
 	mungeCharMap = map[rune]string{
 		'-':  "_",
