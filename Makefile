@@ -15,7 +15,7 @@ GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(pla
 BINS=$(foreach platform,$(GOPLATFORMS),bin/$(platform)/glj$(if $(findstring wasm,$(platform)),.wasm,))
 
 # eventually, support multiple minor versions
-GO_VERSION := 1.19.3
+GO_VERSION := 1.23.0
 GO_CMD := go$(GO_VERSION)
 
 .PHONY: all
