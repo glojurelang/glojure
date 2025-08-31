@@ -10,21 +10,40 @@ import (
 	reflect "reflect"
 )
 
+func checkDerefVar(v *lang.Var) any {
+	if v.IsMacro() {
+		panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v)))
+	}
+	return v.Get()
+}
+func checkArity(args []any, expected int) {
+	if len(args) != expected {
+		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+	}
+}
+
 // LoadNS initializes the namespace "codegen.test.values"
 func LoadNS() {
-	checkDerefMacro := func(v *lang.Var) {
-		if v.IsMacro() {
-			panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v)))
-		}
-	}
-	_ = checkDerefMacro
+	sym__DASH_main := lang.NewSymbol("-main")
+	sym_big_DASH_decimal := lang.NewSymbol("big-decimal")
+	sym_big_DASH_decimal_DASH_type := lang.NewSymbol("big-decimal-type")
+	sym_codegen_DOT_test_DOT_values := lang.NewSymbol("codegen.test.values")
+	kw_arglists := lang.NewKeyword("arglists")
+	kw_column := lang.NewKeyword("column")
+	kw_end_DASH_column := lang.NewKeyword("end-column")
+	kw_end_DASH_line := lang.NewKeyword("end-line")
+	kw_expected_DASH_output := lang.NewKeyword("expected-output")
+	kw_file := lang.NewKeyword("file")
+	kw_line := lang.NewKeyword("line")
+	kw_ns := lang.NewKeyword("ns")
+	kw_rettag := lang.NewKeyword("rettag")
 	// var codegen.test.values/big-decimal
-	codegen_DOT_test_DOT_values_big_decimal := lang.InternVarName(lang.NewSymbol("codegen.test.values"), lang.NewSymbol("big-decimal"))
+	var_codegen_DOT_test_DOT_values_big_DASH_decimal := lang.InternVarName(sym_codegen_DOT_test_DOT_values, sym_big_DASH_decimal)
 	// var codegen.test.values/big-decimal-type
-	codegen_DOT_test_DOT_values_big_decimal_type := lang.InternVarName(lang.NewSymbol("codegen.test.values"), lang.NewSymbol("big-decimal-type"))
+	var_codegen_DOT_test_DOT_values_big_DASH_decimal_DASH_type := lang.InternVarName(sym_codegen_DOT_test_DOT_values, sym_big_DASH_decimal_DASH_type)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
-	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values"))
+	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values)
 	_ = ns
 	// -main
 	{
@@ -37,25 +56,21 @@ func LoadNS() {
 			return &z
 		})())
 		tmp2 := reflect.TypeOf((*lang.BigDecimal)(nil))
-		tmp0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), lang.NewVector(tmp1, tmp2), lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(6), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(6), lang.NewKeyword("end-column"), int(56), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values")))).(*lang.Symbol)
+		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, lang.NewVector(tmp1, tmp2), kw_file, "codegen/test/values.glj", kw_line, int(6), kw_column, int(7), kw_end_DASH_line, int(6), kw_end_DASH_column, int(56), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))).(*lang.Symbol)
 		var tmp4 lang.FnFunc
 		tmp4 = lang.NewFnFunc(func(args ...any) any {
-			if len(args) != 0 {
-				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
-			}
-			checkDerefMacro(codegen_DOT_test_DOT_values_big_decimal)
-			tmp5 := codegen_DOT_test_DOT_values_big_decimal.Get()
-			checkDerefMacro(codegen_DOT_test_DOT_values_big_decimal_type)
-			tmp6 := codegen_DOT_test_DOT_values_big_decimal_type.Get()
+			checkArity(args, 0)
+			tmp5 := checkDerefVar(var_codegen_DOT_test_DOT_values_big_DASH_decimal)
+			tmp6 := checkDerefVar(var_codegen_DOT_test_DOT_values_big_DASH_decimal_DASH_type)
 			tmp7 := lang.NewVector(tmp5, tmp6)
-			tmp8 := lang.NewMap(lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(7), lang.NewKeyword("column"), int(3), lang.NewKeyword("end-line"), int(7), lang.NewKeyword("end-column"), int(32))
+			tmp8 := lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(7), kw_column, int(3), kw_end_DASH_line, int(7), kw_end_DASH_column, int(32))
 			tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
 			}
 			return tmp9
 		})
-		tmp4 = tmp4.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp4 = tmp4.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		tmp3 := ns.InternWithValue(tmp0, tmp4, true)
 		if tmp0.Meta() != nil {
 			tmp3.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -63,7 +78,7 @@ func LoadNS() {
 	}
 	// big-decimal
 	{
-		tmp0 := lang.NewSymbol("big-decimal").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values")))).(*lang.Symbol)
+		tmp0 := sym_big_DASH_decimal.WithMeta(lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(16), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))).(*lang.Symbol)
 		tmp2 := lang.NewBigDecimalFromBigFloat((func() *big3.Float {
 			var z big3.Float
 			b, _ := hex2.DecodeString("010a0000004000000004a000000000000000")
@@ -79,7 +94,7 @@ func LoadNS() {
 	}
 	// big-decimal-type
 	{
-		tmp0 := lang.NewSymbol("big-decimal-type").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(4), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(4), lang.NewKeyword("end-column"), int(21), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values")))).(*lang.Symbol)
+		tmp0 := sym_big_DASH_decimal_DASH_type.WithMeta(lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(4), kw_column, int(6), kw_end_DASH_line, int(4), kw_end_DASH_column, int(21), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))).(*lang.Symbol)
 		tmp2 := reflect.TypeOf((*lang.BigDecimal)(nil))
 		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {

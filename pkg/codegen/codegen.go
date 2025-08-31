@@ -59,8 +59,10 @@ type Generator struct {
 	varScopes      []varScope     // stack of variable scopes
 	recurStack     []recurContext // stack of recur contexts for nested loops
 
-	imports      map[string]string  // set of imported packages with their aliases
-	varVariables map[varInfo]string // map of vars to their Go variable names
+	imports         map[string]string  // set of imported packages with their aliases
+	varVariables    map[varInfo]string // map of vars to their Go variable names
+	symbolVariables map[string]string  // set of all generated symbols to minimize allocations
+	kwVariables     map[string]string  // set of all generated keywords to minimize allocations
 
 	// Fields for handling closures
 	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
@@ -79,14 +81,16 @@ var (
 // New creates a new code generator
 func New(w io.Writer) *Generator {
 	return &Generator{
-		originalWriter: w,
-		w:              w,
-		varScopes:      []varScope{{nextNum: 0, names: make(map[string]string)}},
-		recurStack:     []recurContext{},
-		imports:        make(map[string]string),
-		liftedValues:   make(map[liftedKey]*liftedValue),
-		liftedCounter:  0,
-		varVariables:   make(map[varInfo]string),
+		originalWriter:  w,
+		w:               w,
+		varScopes:       []varScope{{nextNum: 0, names: make(map[string]string)}},
+		recurStack:      []recurContext{},
+		imports:         make(map[string]string),
+		varVariables:    make(map[varInfo]string),
+		symbolVariables: make(map[string]string),
+		kwVariables:     make(map[string]string),
+		liftedValues:    make(map[liftedKey]*liftedValue),
+		liftedCounter:   0,
 	}
 }
 
@@ -102,7 +106,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	g.writef("// reference fmt to avoid unused import error\n")
 	g.writef("_ = fmt.Printf\n")
 
-	g.writef("  ns := lang.FindOrCreateNamespace(lang.NewSymbol(%#v))\n", ns.Name().String())
+	g.writef("  ns := lang.FindOrCreateNamespace(%s)\n", g.allocSymVar(ns.Name().String()))
 	g.writef("  _ = ns\n")
 
 	// 1. Iterate through ns.Mappings()
@@ -186,10 +190,41 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
   return v.Get()
 }
 `)
+	initBuf.WriteString(`func checkArity(args []any, expected int) {
+  if len(args) != expected {
+		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+  }
+}
+`)
 	initBuf.WriteString(fmt.Sprintf("// LoadNS initializes the namespace %q\n", ns.Name().String()))
 	initBuf.WriteString("func LoadNS() {\n")
 
-	// initialize all the vars first
+	//////////////////////////
+	// Symbols
+	var symbolNames []string
+	for sym := range g.symbolVariables {
+		symbolNames = append(symbolNames, sym)
+	}
+	sort.Strings(symbolNames) // Sort for deterministic output
+	for _, sym := range symbolNames {
+		varName := g.symbolVariables[sym]
+		initBuf.WriteString(fmt.Sprintf("%s := lang.NewSymbol(%q)\n", varName, sym))
+	}
+
+	//////////////////////////
+	// Keywords
+	var kwNames []string
+	for kw := range g.kwVariables {
+		kwNames = append(kwNames, kw)
+	}
+	sort.Strings(kwNames) // Sort for deterministic output
+	for _, kw := range kwNames {
+		varName := g.kwVariables[kw]
+		initBuf.WriteString(fmt.Sprintf("%s := lang.NewKeyword(%q)\n", varName, kw))
+	}
+
+	//////////////////////////
+	// Vars initialization
 	var varNames []string
 	var inverseVarMap = make(map[string]varInfo)
 	for vi, varName := range g.varVariables {
@@ -200,7 +235,8 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	for _, varName := range varNames {
 		vi := inverseVarMap[varName]
 		initBuf.WriteString(fmt.Sprintf("// var %s/%s\n", vi.ns, vi.sym))
-		initBuf.WriteString(fmt.Sprintf("%s := lang.InternVarName(lang.NewSymbol(%q), lang.NewSymbol(%q))\n", varName, vi.ns, vi.sym))
+		// NB: the variables will already have been allocated
+		initBuf.WriteString(fmt.Sprintf("%s := lang.InternVarName(%s, %s)\n", varName, g.allocSymVar(vi.ns), g.allocSymVar(vi.sym)))
 	}
 
 	// Add lifted values if any
@@ -251,10 +287,10 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	meta := vr.Meta()
 	varSym := g.allocateTempVar()
 	if lang.IsNil(meta) {
-		g.writef("%s := lang.NewSymbol(\"%s\")\n", varSym, name.String())
+		g.writef("%s := %s\n", varSym, g.allocSymVar(name.String()))
 	} else {
 		metaVariable := g.generateValue(meta)
-		g.writef("%s := lang.NewSymbol(\"%s\").WithMeta(%s).(*lang.Symbol)\n", varSym, name.String(), metaVariable)
+		g.writef("%s := %s.WithMeta(%s).(*lang.Symbol)\n", varSym, g.allocSymVar(name.String()), metaVariable)
 	}
 
 	// check if the var has a value
@@ -291,9 +327,9 @@ func (g *Generator) generateValue(value any) string {
 		// Generate a reference to a Var
 		ns := v.Namespace()
 		sym := v.Symbol()
-		return fmt.Sprintf("lang.FindOrCreateNamespace(lang.NewSymbol(%#v)).FindInternedVar(lang.NewSymbol(%#v))", ns.Name().String(), sym.String())
+		return fmt.Sprintf("lang.FindOrCreateNamespace(%s).FindInternedVar(%s)", g.allocSymVar(ns.Name().String()), g.allocSymVar(sym.String()))
 	case *lang.Namespace:
-		return fmt.Sprintf("lang.FindOrCreateNamespace(lang.NewSymbol(%#v))", v.Name().String())
+		return fmt.Sprintf("lang.FindOrCreateNamespace(%s)", g.allocSymVar(v.Name().String()))
 	case *runtime.Fn:
 		return g.generateFn(v)
 	case lang.FnFunc:
@@ -308,12 +344,12 @@ func (g *Generator) generateValue(value any) string {
 		return g.generateMultiFn(v)
 	case lang.Keyword:
 		if ns := v.Namespace(); ns != "" {
-			return fmt.Sprintf("lang.NewKeyword(\"%s/%s\")", ns, v.Name())
+			return g.allocKWVar(fmt.Sprintf("%s/%s", ns, v.Name()))
 		} else {
-			return fmt.Sprintf("lang.NewKeyword(\"%s\")", v.Name())
+			return g.allocKWVar(v.Name())
 		}
 	case *lang.Symbol:
-		return fmt.Sprintf("lang.NewSymbol(\"%s\")", v.FullName())
+		return g.allocSymVar(v.String())
 	case lang.Char:
 		return fmt.Sprintf("lang.NewChar(%#v)", rune(v))
 	case string:
@@ -720,9 +756,7 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 		g.writef("%s = lang.NewFnFunc(func(args ...any) any {\n", fnVar)
 
 		// Check arity
-		g.writef("  if len(args) != %d {\n", methodNode.FixedArity)
-		g.writef("    panic(lang.NewIllegalArgumentError(\"wrong number of arguments (\" + fmt.Sprint(len(args)) + \")\"))\n")
-		g.writef("  }\n")
+		g.writef("checkArity(args, %d)\n", methodNode.FixedArity)
 
 		// Generate method body
 		g.generateFnMethod(methodNode, "args")
@@ -750,14 +784,13 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 		if variadicMethod != nil {
 			variadicMethodNode := variadicMethod.Sub.(*ast.FnMethodNode)
 			g.writef("  default:\n")
-			g.writef("    if len(args) < %d {\n", variadicMethodNode.FixedArity)
-			g.writef("      panic(lang.NewIllegalArgumentError(\"wrong number of arguments (\" + fmt.Sprint(len(args)) + \")\"))\n")
-			g.writef("    }\n")
+			g.writef("checkArity(args, %d)\n", variadicMethodNode.FixedArity)
 			g.generateFnMethod(variadicMethodNode, "args")
 		} else {
 			// No variadic method - error on any other arity
 			g.writef("  default:\n")
-			g.writef("    panic(lang.NewIllegalArgumentError(\"wrong number of arguments (\" + fmt.Sprint(len(args)) + \")\"))\n")
+			g.writef("    checkArity(args, -1)\n")
+			g.writef("    panic(\"unreachable\")\n")
 		}
 
 		g.writef("  }\n")
@@ -904,7 +937,7 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 	varSymbol := varNode.Var.Symbol()
 
 	// Look up the var variable
-	varId := g.allocateVarVariable(varNamespace.Name().String(), varSymbol.String())
+	varId := g.allocVarVar(varNamespace.Name().String(), varSymbol.String())
 
 	resultId := g.allocateTempVar()
 	g.writef("%s := checkDerefVar(%s)\n", resultId, varId)
@@ -1390,7 +1423,7 @@ func (g *Generator) generateTheVar(node *ast.Node) string {
 	name := varSym.Symbol()
 
 	resultId := g.allocateTempVar()
-	g.writef("%s := lang.InternVarName(lang.NewSymbol(\"%s\"), lang.NewSymbol(\"%s\"))\n", resultId, ns.Name(), name.Name())
+	g.writef("%s := lang.InternVarName(%s, %s)\n", resultId, g.allocSymVar(ns.Name().Name()), g.allocSymVar(name.Name()))
 	return resultId
 }
 
@@ -1617,24 +1650,25 @@ func (g *Generator) allocateTempVar() string {
 
 var (
 	replacements = map[rune]string{
-		'!': "_BANG_",
-		'?': "_QMARK_",
-		'-': "_",
-		'+': "_PLUS_",
-		'*': "_STAR_",
-		'/': "_SLASH_",
-		'=': "_EQ_",
-		'<': "_LT_",
-		'>': "_GT_",
-		'&': "_AMP_",
-		'%': "_PCT_",
-		'$': "_DOLLAR_",
-		'^': "_CARET_",
-		'~': "_TILDE_",
-		'.': "_DOT_",
-		':': "_COLON_",
-		'@': "_AT_",
-		'#': "_HASH_",
+		'!':  "_BANG_",
+		'?':  "_QMARK_",
+		'-':  "_DASH_",
+		'+':  "_PLUS_",
+		'*':  "_STAR_",
+		'/':  "_SLASH_",
+		'=':  "_EQ_",
+		'<':  "_LT_",
+		'>':  "_GT_",
+		'&':  "_AMP_",
+		'%':  "_PCT_",
+		'$':  "_DOLLAR_",
+		'^':  "_CARET_",
+		'~':  "_TILDE_",
+		'.':  "_DOT_",
+		':':  "_COLON_",
+		'@':  "_AT_",
+		'#':  "_HASH_",
+		'\'': "_TICK_",
 	}
 )
 
@@ -1680,13 +1714,36 @@ func (g *Generator) currentRecurContext() *recurContext {
 	return &g.recurStack[len(g.recurStack)-1]
 }
 
-func (g *Generator) allocateVarVariable(ns, sym string) string {
+func (g *Generator) allocVarVar(ns, sym string) string {
 	varInfo := varInfo{ns: ns, sym: sym}
 	if v, ok := g.varVariables[varInfo]; ok {
 		return v
 	}
-	varName := mungeID(ns) + "_" + mungeID(sym)
+
+	// also allocate for ns and symbols
+	g.allocSymVar(ns)
+	g.allocSymVar(sym)
+
+	varName := "var_" + mungeID(ns) + "_" + mungeID(sym)
 	g.varVariables[varInfo] = varName
+	return varName
+}
+
+func (g *Generator) allocSymVar(sym string) string {
+	if v, ok := g.symbolVariables[sym]; ok {
+		return v
+	}
+	varName := "sym_" + mungeID(sym)
+	g.symbolVariables[sym] = varName
+	return varName
+}
+
+func (g *Generator) allocKWVar(kw string) string {
+	if v, ok := g.kwVariables[kw]; ok {
+		return v
+	}
+	varName := "kw_" + mungeID(kw)
+	g.kwVariables[kw] = varName
 	return varName
 }
 
