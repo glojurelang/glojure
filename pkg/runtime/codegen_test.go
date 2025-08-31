@@ -1,4 +1,4 @@
-package codegen_test
+package runtime_test
 
 import (
 	"bytes"
@@ -84,7 +84,7 @@ func generateAndTestNamespace(t *testing.T, ns *lang.Namespace, goldenFile strin
 
 	// Generate code for the namespace
 	var buf bytes.Buffer
-	gen := codegen.New(&buf)
+	gen := codegen.NewGenerator(&buf)
 	if err := gen.Generate(ns); err != nil {
 		if os.Getenv("UPDATE_SNAPSHOT") == "1" {
 			// write the output anyway if we're updating the snapshot

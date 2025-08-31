@@ -1,4 +1,4 @@
-package codegen
+package runtime
 
 import (
 	"bytes"
@@ -13,7 +13,6 @@ import (
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
-	"github.com/glojurelang/glojure/pkg/runtime"
 )
 
 // TODO
@@ -78,8 +77,8 @@ var (
 	}
 )
 
-// New creates a new code generator
-func New(w io.Writer) *Generator {
+// NewGenerator creates a new code generator
+func NewGenerator(w io.Writer) *Generator {
 	return &Generator{
 		originalWriter:  w,
 		w:               w,
@@ -344,7 +343,7 @@ func (g *Generator) generateValue(value any) string {
 		return fmt.Sprintf("lang.FindOrCreateNamespace(%s).FindInternedVar(%s)", g.allocSymVar(ns.Name().String()), g.allocSymVar(sym.String()))
 	case *lang.Namespace:
 		return fmt.Sprintf("lang.FindOrCreateNamespace(%s)", g.allocSymVar(v.Name().String()))
-	case *runtime.Fn:
+	case *Fn:
 		return g.generateFn(v)
 	case lang.FnFunc:
 		return g.generateFnFunc(v)
@@ -725,7 +724,7 @@ func (g *Generator) generateFnFunc(fn lang.FnFunc) string {
 	panic("cannot generate opaque go function values")
 }
 
-func (g *Generator) generateFn(fn *runtime.Fn) string {
+func (g *Generator) generateFn(fn *Fn) string {
 	// Save and restore current environment
 	prevEnv := g.currentFnEnv
 	g.currentFnEnv = fn.GetEnvironment() // Set the captured environment for this function
@@ -926,7 +925,7 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 	case ast.OpQuote:
 		return g.generateValue(node.Sub.(*ast.QuoteNode).Expr.Sub.(*ast.ConstNode).Value)
 	case ast.OpFn:
-		return g.generateFn(runtime.NewFn(node, nil))
+		return g.generateFn(NewFn(node, nil))
 	case ast.OpHostCall:
 		return g.generateHostCall(node)
 	case ast.OpHostInterop:
@@ -1786,4 +1785,56 @@ func getWellKnownFunctionName(fn any) (string, bool) {
 	ptr := reflect.ValueOf(fn).Pointer()
 	name, ok := wellKnownFunctions[ptr]
 	return name, ok
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+func nodeRecurs(n *ast.Node, loopID string) bool {
+	switch n.Op {
+	case ast.OpRecur:
+		recurNode := n.Sub.(*ast.RecurNode)
+		return recurNode.LoopID.Name() == loopID
+	case ast.OpDo:
+		doNode := n.Sub.(*ast.DoNode)
+		return nodeRecurs(doNode.Ret, loopID)
+	case ast.OpLet, ast.OpLoop:
+		letNode := n.Sub.(*ast.LetNode)
+		return nodeRecurs(letNode.Body, loopID)
+	case ast.OpLetFn:
+		letFnNode := n.Sub.(*ast.LetFnNode)
+		return nodeRecurs(letFnNode.Body, loopID)
+	case ast.OpIf:
+		ifNode := n.Sub.(*ast.IfNode)
+		return nodeRecurs(ifNode.Then, loopID) || nodeRecurs(ifNode.Else, loopID)
+	case ast.OpTry:
+		tryNode := n.Sub.(*ast.TryNode)
+		if nodeRecurs(tryNode.Body, loopID) {
+			return true
+		}
+		for _, catch := range tryNode.Catches {
+			if nodeRecurs(catch, loopID) {
+				return true
+			}
+		}
+	case ast.OpCatch:
+		catchNode := n.Sub.(*ast.CatchNode)
+		return nodeRecurs(catchNode.Body, loopID)
+	case ast.OpCase:
+		caseNode := n.Sub.(*ast.CaseNode)
+		if nodeRecurs(caseNode.Default, loopID) {
+			return true
+		}
+		for _, branch := range caseNode.Nodes {
+			if nodeRecurs(branch, loopID) {
+				return true
+			}
+		}
+	case ast.OpCaseNode:
+		caseNode := n.Sub.(*ast.CaseNodeNode)
+		return nodeRecurs(caseNode.Then, loopID)
+	default:
+		return false // can't recur in this node type
+	}
+
+	return false
 }
