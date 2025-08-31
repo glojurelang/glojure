@@ -26,6 +26,12 @@ func checkArity(args []any, expected int) {
 	}
 }
 
+func checkArityGTE(args []any, min int) {
+	if len(args) < min {
+		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+	}
+}
+
 // LoadNS initializes the namespace "glojure.core.protocols"
 func LoadNS() {
 	sym_CollReduce := lang.NewSymbol("CollReduce")
@@ -307,7 +313,7 @@ func LoadNS() {
 			_ = v2
 			v3 := args[2]
 			_ = v3
-		recur_loop_1560:
+		recur_loop_2815:
 			var tmp4 any
 			{ // let
 				// let binding "temp__0__auto__"
@@ -354,7 +360,7 @@ func LoadNS() {
 									v1 = tmp25
 									v2 = tmp28
 									v3 = tmp29
-									goto recur_loop_1560
+									goto recur_loop_2815
 								}
 								tmp14 = tmp20
 							} // end let
@@ -483,7 +489,7 @@ func LoadNS() {
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
 				var v5 any = lang.NewList(args[1:]...)
@@ -493,12 +499,13 @@ func LoadNS() {
 				return tmp7
 			}
 		})
+		// MultiFn coll-reduce
 		tmp2 := lang.NewMultiFn("coll-reduce", tmp3, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp4 lang.FnFunc
 		tmp4 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v5 := args[0]
 				_ = v5
 				var v6 any = lang.NewList(args[1:]...)
@@ -516,7 +523,7 @@ func LoadNS() {
 		tmp6 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v7 := args[0]
 				_ = v7
 				var v8 any = lang.NewList(args[1:]...)
@@ -534,7 +541,7 @@ func LoadNS() {
 		tmp8 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v9 := args[0]
 				_ = v9
 				var v10 any = lang.NewList(args[1:]...)
@@ -552,7 +559,7 @@ func LoadNS() {
 		tmp10 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v11 := args[0]
 				_ = v11
 				var v12 any = lang.NewList(args[1:]...)
@@ -578,7 +585,7 @@ func LoadNS() {
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
 				var v5 any = lang.NewList(args[1:]...)
@@ -588,12 +595,13 @@ func LoadNS() {
 				return tmp7
 			}
 		})
+		// MultiFn datafy
 		tmp2 := lang.NewMultiFn("datafy", tmp3, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp4 lang.FnFunc
 		tmp4 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v5 := args[0]
 				_ = v5
 				var v6 any = lang.NewList(args[1:]...)
@@ -619,7 +627,7 @@ func LoadNS() {
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
 				var v5 any = lang.NewList(args[1:]...)
@@ -629,6 +637,7 @@ func LoadNS() {
 				return tmp7
 			}
 		})
+		// MultiFn kv-reduce
 		tmp2 := lang.NewMultiFn("kv-reduce", tmp3, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_kv_DASH_reduce, tmp2), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_kv_DASH_reduce, lang.NewVector(sym_amap, sym_f, sym_init)))))
 		var_glojure_DOT_core_DOT_protocols_IKVReduce = ns.InternWithValue(tmp0, tmp1, true)
@@ -643,7 +652,7 @@ func LoadNS() {
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
 				var v5 any = lang.NewList(args[1:]...)
@@ -653,12 +662,13 @@ func LoadNS() {
 				return tmp7
 			}
 		})
+		// MultiFn internal-reduce
 		tmp2 := lang.NewMultiFn("internal-reduce", tmp3, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp4 lang.FnFunc
 		tmp4 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v5 := args[0]
 				_ = v5
 				var v6 any = lang.NewList(args[1:]...)
@@ -676,7 +686,7 @@ func LoadNS() {
 		tmp6 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v7 := args[0]
 				_ = v7
 				var v8 any = lang.NewList(args[1:]...)
@@ -694,7 +704,7 @@ func LoadNS() {
 		tmp8 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v9 := args[0]
 				_ = v9
 				var v10 any = lang.NewList(args[1:]...)
@@ -720,7 +730,7 @@ func LoadNS() {
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
 				var v5 any = lang.NewList(args[1:]...)
@@ -730,6 +740,7 @@ func LoadNS() {
 				return tmp7
 			}
 		})
+		// MultiFn nav
 		tmp2 := lang.NewMultiFn("nav", tmp3, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_nav, tmp2), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_nav, lang.NewVector(sym_coll, sym_k, sym_v), "return (possibly transformed) v in the context of coll and k (a key/index or nil),\ndefaults to returning v."))))
 		var_glojure_DOT_core_DOT_protocols_Navigable = ns.InternWithValue(tmp0, tmp1, true)
@@ -744,7 +755,7 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
 				var v4 any = lang.NewList(args[1:]...)
@@ -754,12 +765,13 @@ func LoadNS() {
 				return tmp6
 			}
 		})
+		// MultiFn coll-reduce
 		tmp1 := lang.NewMultiFn("coll-reduce", tmp2, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
 				var v5 any = lang.NewList(args[1:]...)
@@ -777,7 +789,7 @@ func LoadNS() {
 		tmp5 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v6 := args[0]
 				_ = v6
 				var v7 any = lang.NewList(args[1:]...)
@@ -795,7 +807,7 @@ func LoadNS() {
 		tmp7 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v8 := args[0]
 				_ = v8
 				var v9 any = lang.NewList(args[1:]...)
@@ -813,7 +825,7 @@ func LoadNS() {
 		tmp9 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v10 := args[0]
 				_ = v10
 				var v11 any = lang.NewList(args[1:]...)
@@ -838,7 +850,7 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
 				var v4 any = lang.NewList(args[1:]...)
@@ -848,12 +860,13 @@ func LoadNS() {
 				return tmp6
 			}
 		})
+		// MultiFn datafy
 		tmp1 := lang.NewMultiFn("datafy", tmp2, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
 				var v5 any = lang.NewList(args[1:]...)
@@ -914,7 +927,7 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
 				var v4 any = lang.NewList(args[1:]...)
@@ -924,12 +937,13 @@ func LoadNS() {
 				return tmp6
 			}
 		})
+		// MultiFn internal-reduce
 		tmp1 := lang.NewMultiFn("internal-reduce", tmp2, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
 				var v5 any = lang.NewList(args[1:]...)
@@ -947,7 +961,7 @@ func LoadNS() {
 		tmp5 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v6 := args[0]
 				_ = v6
 				var v7 any = lang.NewList(args[1:]...)
@@ -965,7 +979,7 @@ func LoadNS() {
 		tmp7 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v8 := args[0]
 				_ = v8
 				var v9 any = lang.NewList(args[1:]...)
@@ -1202,7 +1216,7 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
 				var v4 any = lang.NewList(args[1:]...)
@@ -1212,6 +1226,7 @@ func LoadNS() {
 				return tmp6
 			}
 		})
+		// MultiFn kv-reduce
 		tmp1 := lang.NewMultiFn("kv-reduce", tmp2, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var_glojure_DOT_core_DOT_protocols_kv_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
@@ -1292,7 +1307,7 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
 				var v4 any = lang.NewList(args[1:]...)
@@ -1302,6 +1317,7 @@ func LoadNS() {
 				return tmp6
 			}
 		})
+		// MultiFn nav
 		tmp1 := lang.NewMultiFn("nav", tmp2, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var_glojure_DOT_core_DOT_protocols_nav = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {

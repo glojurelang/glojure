@@ -149,12 +149,10 @@ func (rt *RTMethods) Load(scriptBase string) {
 	if useAot {
 		// check nsloaders
 		if loader := GetNSLoader(strings.TrimPrefix(scriptBase, "/")); loader != nil {
-			fmt.Printf("Using custom loader for %s\n", scriptBase)
 			loader()
 			return
 		}
 	}
-	fmt.Printf("Loading %s\n", scriptBase)
 
 	filename := scriptBase + ".glj"
 

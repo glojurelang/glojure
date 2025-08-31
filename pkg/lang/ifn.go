@@ -21,7 +21,7 @@ func (f FnFunc) Invoke(args ...any) any {
 }
 
 func (f FnFunc) ApplyTo(args ISeq) any {
-	return f.fn(seqToSlice(args))
+	return f.fn(seqToSlice(args)...)
 }
 
 func (f FnFunc) Meta() IPersistentMap {

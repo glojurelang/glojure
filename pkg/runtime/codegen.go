@@ -223,6 +223,13 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 }
 
 `)
+	initBuf.WriteString(`func checkArityGTE(args []any, min int) {
+  if len(args) < min {
+		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+  }
+}
+
+`)
 	initBuf.WriteString(fmt.Sprintf("// LoadNS initializes the namespace %q\n", ns.Name().String()))
 	initBuf.WriteString("func LoadNS() {\n")
 
@@ -380,11 +387,15 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 
 	meta := vr.Meta()
 	varSym := g.allocateTempVar()
+	var isDynamic bool
 	if lang.IsNil(meta) {
 		g.writef("%s := %s\n", varSym, g.allocSymVar(name.String()))
 	} else {
 		metaVariable := g.generateValue(meta)
 		g.writef("%s := %s.WithMeta(%s).(*lang.Symbol)\n", varSym, g.allocSymVar(name.String()), metaVariable)
+		if RT.BooleanCast(lang.Get(meta, lang.KWDynamic)) {
+			isDynamic = true
+		}
 	}
 
 	// check if the var has a value
@@ -399,6 +410,9 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 		g.writef("if %s.Meta() != nil {\n", varSym)
 		g.writef("\t%s.SetMeta(%s.Meta().(lang.IPersistentMap))\n", varVar, varSym)
 		g.writef("}\n")
+	}
+	if isDynamic {
+		g.writef("%s.SetDynamic()\n", varVar)
 	}
 
 	return nil
@@ -503,6 +517,12 @@ func (g *Generator) generateTypeValue(t reflect.Type) string {
 // generateZeroValueExpr generates a Go expression that creates a zero value
 // of the given type, handling package imports as needed
 func (g *Generator) generateZeroValueExpr(t reflect.Type) string {
+	// TODO: review this LLM slop
+	switch {
+	case t == reflect.TypeOf(lang.NewChar('a')):
+		return "lang.NewChar(0)"
+	}
+
 	switch t.Kind() {
 	case reflect.Bool:
 		return "false"
@@ -744,6 +764,8 @@ func (g *Generator) generateSetValue(s lang.IPersistentSet) string {
 }
 
 func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
+	fmt.Println("Generating MultiFn:", mf.GetName())
+
 	// Allocate a variable for the MultiFn
 	mfVar := g.allocateTempVar()
 
@@ -757,6 +779,7 @@ func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
 	hierarchyVar := g.generateValue(mf.GetHierarchy())
 
 	// Create the MultiFn
+	g.writef("// MultiFn %s\n", mf.GetName())
 	g.writef("%s := lang.NewMultiFn(%#v, %s, %s, %s)\n",
 		mfVar, mf.GetName(), dispatchFnVar, defaultValVar, hierarchyVar)
 
@@ -770,6 +793,8 @@ func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
 
 			dispatchValVar := g.generateValue(dispatchVal)
 			methodVar := g.generateValue(method)
+
+			fmt.Println("Adding method for dispatch value:", dispatchVal)
 
 			g.writef("%s.AddMethod(%s, %s)\n", mfVar, dispatchValVar, methodVar)
 		}
@@ -875,7 +900,7 @@ func (g *Generator) generateFn(fn *Fn) string {
 		if variadicMethod != nil {
 			variadicMethodNode := variadicMethod.Sub.(*ast.FnMethodNode)
 			g.writef("  default:\n")
-			g.writef("checkArity(args, %d)\n", variadicMethodNode.FixedArity)
+			g.writef("checkArityGTE(args, %d)\n", variadicMethodNode.FixedArity)
 			g.generateFnMethod(variadicMethodNode, "args")
 		} else {
 			// No variadic method - error on any other arity

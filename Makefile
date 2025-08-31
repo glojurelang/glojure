@@ -30,9 +30,8 @@ gocmd:
 .PHONY: generate
 generate:
 	@go generate ./...
-	@echo "(compile 'glojure.core)" | GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO_CMD) run ./cmd/glj
-	@echo "(compile 'glojure.core.async)" | GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO_CMD) run ./cmd/glj
-	@echo "(compile 'glojure.protocols)" | GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO_CMD) run ./cmd/glj
+	@echo "(map compile '[glojure.core glojure.core.async])" | \
+		GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO_CMD) run ./cmd/glj
 
 pkg/gen/gljimports/gljimports_%.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go ./internal/genpkg/genpkg.go \
 					$(wildcard ./pkg/lang/*.go) $(wildcard ./pkg/runtime/*.go)

@@ -8455,7 +8455,7 @@ func LoadNS() {
 				v3 := args[0]
 				_ = v3
 				tmp4 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-				tmp5 := reflect.TypeOf(int32(0))
+				tmp5 := reflect.TypeOf(lang.NewChar(0))
 				tmp6 := lang.Apply(tmp4, []any{tmp5, v3})
 				return tmp6
 			})
@@ -48721,6 +48721,7 @@ func LoadNS() {
 				return tmp8
 			}
 		})
+		// MultiFn coll-reduce
 		tmp3 := lang.NewMultiFn("coll-reduce", tmp4, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp5 lang.FnFunc
 		tmp5 = lang.NewFnFunc(func(args ...any) any {
@@ -48808,6 +48809,7 @@ func LoadNS() {
 				return tmp18
 			}
 		})
+		// MultiFn internal-reduce
 		tmp13 := lang.NewMultiFn("internal-reduce", tmp14, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp15 lang.FnFunc
 		tmp15 = lang.NewFnFunc(func(args ...any) any {
@@ -48877,6 +48879,7 @@ func LoadNS() {
 				return tmp26
 			}
 		})
+		// MultiFn kv-reduce
 		tmp21 := lang.NewMultiFn("kv-reduce", tmp22, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp20 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_kv_DASH_reduce, tmp21), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_kv_DASH_reduce, lang.NewVector(sym_amap, sym_f, sym_init)))))
 		var tmp25 lang.FnFunc
@@ -48893,6 +48896,7 @@ func LoadNS() {
 				return tmp29
 			}
 		})
+		// MultiFn datafy
 		tmp24 := lang.NewMultiFn("datafy", tmp25, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp26 lang.FnFunc
 		tmp26 = lang.NewFnFunc(func(args ...any) any {
@@ -48926,6 +48930,7 @@ func LoadNS() {
 				return tmp33
 			}
 		})
+		// MultiFn nav
 		tmp28 := lang.NewMultiFn("nav", tmp29, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp27 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_nav, tmp28), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_nav, lang.NewVector(sym_coll, sym_k, sym_v), "return (possibly transformed) v in the context of coll and k (a key/index or nil),\ndefaults to returning v."))))
 		var tmp32 lang.FnFunc
@@ -48942,6 +48947,7 @@ func LoadNS() {
 				return tmp36
 			}
 		})
+		// MultiFn make-reader
 		tmp31 := lang.NewMultiFn("make-reader", tmp32, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp33 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
 		var tmp34 lang.FnFunc
@@ -49011,6 +49017,7 @@ func LoadNS() {
 				return tmp44
 			}
 		})
+		// MultiFn make-writer
 		tmp39 := lang.NewMultiFn("make-writer", tmp40, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp41 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
 		var tmp42 lang.FnFunc
@@ -49080,6 +49087,7 @@ func LoadNS() {
 				return tmp52
 			}
 		})
+		// MultiFn make-input-stream
 		tmp47 := lang.NewMultiFn("make-input-stream", tmp48, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp49 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
 		var tmp50 lang.FnFunc
@@ -49167,6 +49175,7 @@ func LoadNS() {
 				return tmp62
 			}
 		})
+		// MultiFn make-output-stream
 		tmp57 := lang.NewMultiFn("make-output-stream", tmp58, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp59 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
 		var tmp60 lang.FnFunc
@@ -54640,6 +54649,7 @@ func LoadNS() {
 			return tmp6
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(3667), kw_column, int(21), kw_end_DASH_line, int(3667), kw_end_DASH_column, int(45))).(lang.FnFunc)
+		// MultiFn print-dup
 		tmp1 := lang.NewMultiFn("print-dup", tmp2, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
@@ -54854,7 +54864,7 @@ func LoadNS() {
 			return tmp40
 		})
 		tmp1.AddMethod(tmp24, tmp25)
-		tmp26 := reflect.TypeOf(int32(0))
+		tmp26 := reflect.TypeOf(lang.NewChar(0))
 		var tmp27 lang.FnFunc
 		tmp27 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -55136,6 +55146,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(3664), kw_column, int(24), kw_end_DASH_line, int(3666), kw_end_DASH_column, int(58))).(lang.FnFunc)
+		// MultiFn print-method
 		tmp1 := lang.NewMultiFn("print-method", tmp2, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
@@ -55441,7 +55452,7 @@ func LoadNS() {
 			return nil
 		})
 		tmp1.AddMethod(tmp19, tmp20)
-		tmp21 := reflect.TypeOf(int32(0))
+		tmp21 := reflect.TypeOf(lang.NewChar(0))
 		var tmp22 lang.FnFunc
 		tmp22 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)

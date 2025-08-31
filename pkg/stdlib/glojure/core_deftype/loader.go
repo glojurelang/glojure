@@ -37,6 +37,12 @@ func checkArity(args []any, expected int) {
 	}
 }
 
+func checkArityGTE(args []any, min int) {
+	if len(args) < min {
+		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+	}
+}
+
 // LoadNS initializes the namespace "glojure.core"
 func LoadNS() {
 	sym__PCT_ := lang.NewSymbol("%")
@@ -2980,6 +2986,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_data_DASH_readers_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_data_DASH_readers_STAR_.SetDynamic()
 	}
 	// *default-data-reader-fn*
 	{
@@ -2988,6 +2995,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_.SetDynamic()
 	}
 	// *e
 	{
@@ -3029,6 +3037,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_loaded_DASH_libs_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_loaded_DASH_libs_STAR_.SetDynamic()
 	}
 	// *loading-verbosely*
 	{
@@ -3037,6 +3046,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_loading_DASH_verbosely_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_loading_DASH_verbosely_STAR_.SetDynamic()
 	}
 	// *ns*
 	{
@@ -3053,6 +3063,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_pending_DASH_paths_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_pending_DASH_paths_STAR_.SetDynamic()
 	}
 	// *print-dup*
 	{
@@ -3069,6 +3080,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_print_DASH_length_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_print_DASH_length_STAR_.SetDynamic()
 	}
 	// *print-level*
 	{
@@ -3077,6 +3089,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_print_DASH_level_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_print_DASH_level_STAR_.SetDynamic()
 	}
 	// *print-meta*
 	{
@@ -3093,6 +3106,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_print_DASH_namespace_DASH_maps_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_print_DASH_namespace_DASH_maps_STAR_.SetDynamic()
 	}
 	// *print-readably*
 	{
@@ -3117,6 +3131,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_repl_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_repl_STAR_.SetDynamic()
 	}
 	// *unchecked-math*
 	{
@@ -3133,6 +3148,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_verbose_DASH_defrecords_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_verbose_DASH_defrecords_STAR_.SetDynamic()
 	}
 	// *warn-on-reflection*
 	{
@@ -3239,7 +3255,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -3267,7 +3283,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -3295,7 +3311,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -3349,6 +3365,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_assert_DASH_valid_DASH_fdecl.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core_assert_DASH_valid_DASH_fdecl.SetDynamic()
 	}
 	// bit-clear
 	{
@@ -3665,7 +3682,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -3688,7 +3705,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -3819,7 +3836,7 @@ func LoadNS() {
 			tmp3 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 0)
+					checkArityGTE(args, 0)
 					var v4 any = lang.NewList(args[0:]...)
 					_ = v4
 					return v2
@@ -3885,7 +3902,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := lang.Apply(lang.CreatePersistentStructMapSlotMap, []any{v2})
@@ -4445,7 +4462,7 @@ func LoadNS() {
 				}
 				return tmp4
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := lang.Apply(lang.CreatePersistentHashMap, []any{v2})
@@ -4490,7 +4507,7 @@ func LoadNS() {
 				}
 				return tmp4
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := lang.Apply(nil, []any{v2})
@@ -6534,7 +6551,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := lang.Apply(lang.CreatePersistentTreeMap, []any{v2})
@@ -6554,7 +6571,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -6576,7 +6593,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := lang.Apply(lang.CreatePersistentTreeSet, []any{v2})
@@ -6596,7 +6613,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -6731,7 +6748,7 @@ func LoadNS() {
 				}
 				return tmp4
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
 				var v4 any = lang.NewList(args[1:]...)
@@ -6963,7 +6980,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -6985,7 +7002,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -7040,7 +7057,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -7068,7 +7085,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -7685,7 +7702,7 @@ func LoadNS() {
 				}
 				return tmp10
 			default:
-				checkArity(args, 6)
+				checkArityGTE(args, 6)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -7814,7 +7831,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -7843,7 +7860,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -8080,7 +8097,7 @@ func LoadNS() {
 					tmp6 := lang.Apply(lang.Assoc, []any{v3, v4, v5})
 					return tmp6
 				default:
-					checkArity(args, 3)
+					checkArityGTE(args, 3)
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
@@ -8159,7 +8176,7 @@ func LoadNS() {
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -8298,7 +8315,7 @@ func LoadNS() {
 				v3 := args[0]
 				_ = v3
 				tmp4 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-				tmp5 := reflect.TypeOf(int32(0))
+				tmp5 := reflect.TypeOf(lang.NewChar(0))
 				tmp6 := lang.Apply(tmp4, []any{tmp5, v3})
 				return tmp6
 			})
@@ -8527,7 +8544,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(lang.NewLazySeq, []any{tmp4})
 				return tmp5
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -8632,7 +8649,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -8702,7 +8719,7 @@ func LoadNS() {
 					tmp5 := lang.Apply(lang.Conj, []any{v3, v4})
 					return tmp5
 				default:
-					checkArity(args, 2)
+					checkArityGTE(args, 2)
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
@@ -9002,7 +9019,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 4)
+				checkArityGTE(args, 4)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -9057,7 +9074,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -9203,7 +9220,7 @@ func LoadNS() {
 				}
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -9272,7 +9289,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(tmp4, []any{v3})
 				return tmp5
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -9339,7 +9356,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(tmp4, []any{v2, v3})
 				return tmp5
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -9399,7 +9416,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(tmp4, []any{v3})
 				return tmp5
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -9451,7 +9468,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -9530,7 +9547,7 @@ func LoadNS() {
 			tmp1 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 0)
+					checkArityGTE(args, 0)
 					var v3 any = lang.NewList(args[0:]...)
 					_ = v3
 					tmp4 := checkDerefVar(var_glojure_DOT_core_seq)
@@ -10240,7 +10257,7 @@ func LoadNS() {
 			tmp1 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 0)
+					checkArityGTE(args, 0)
 					var v3 any = lang.NewList(args[0:]...)
 					_ = v3
 					tmp4 := checkDerefVar(var_glojure_DOT_core_seq)
@@ -10487,7 +10504,7 @@ func LoadNS() {
 			tmp1 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 2)
+					checkArityGTE(args, 2)
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
@@ -11066,7 +11083,7 @@ func LoadNS() {
 			tmp1 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 0)
+					checkArityGTE(args, 0)
 					var v3 any = lang.NewList(args[0:]...)
 					_ = v3
 					tmp4 := checkDerefVar(var_glojure_DOT_core_seq)
@@ -11296,7 +11313,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -11716,7 +11733,7 @@ func LoadNS() {
 				tmp11 := lang.Apply(tmp6, []any{v2, tmp10})
 				return tmp11
 			default:
-				checkArity(args, 4)
+				checkArityGTE(args, 4)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -11818,7 +11835,7 @@ func LoadNS() {
 			tmp1 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 0)
+					checkArityGTE(args, 0)
 					var v3 any = lang.NewList(args[0:]...)
 					_ = v3
 					tmp4 := checkDerefVar(var_glojure_DOT_core_seq)
@@ -12484,7 +12501,7 @@ func LoadNS() {
 			tmp1 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 2)
+					checkArityGTE(args, 2)
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
@@ -13442,7 +13459,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -13867,7 +13884,7 @@ func LoadNS() {
 			tmp1 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 0)
+					checkArityGTE(args, 0)
 					var v3 any = lang.NewList(args[0:]...)
 					_ = v3
 					tmp4 := checkDerefVar(var_glojure_DOT_core_seq)
@@ -14417,7 +14434,7 @@ func LoadNS() {
 							} // end let
 							return tmp8
 						default:
-							checkArity(args, 3)
+							checkArityGTE(args, 3)
 							v5 := args[0]
 							_ = v5
 							v6 := args[1]
@@ -14614,7 +14631,7 @@ func LoadNS() {
 							} // end let
 							return tmp9
 						default:
-							checkArity(args, 3)
+							checkArityGTE(args, 3)
 							v6 := args[0]
 							_ = v6
 							v7 := args[1]
@@ -14924,7 +14941,7 @@ func LoadNS() {
 							} // end let
 							return tmp10
 						default:
-							checkArity(args, 3)
+							checkArityGTE(args, 3)
 							v7 := args[0]
 							_ = v7
 							v8 := args[1]
@@ -15003,7 +15020,7 @@ func LoadNS() {
 				}
 				return tmp7
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -15132,7 +15149,7 @@ func LoadNS() {
 								tmp19 := lang.Apply(tmp15, []any{tmp18, v9})
 								return tmp19
 							default:
-								checkArity(args, 3)
+								checkArityGTE(args, 3)
 								v12 := args[0]
 								_ = v12
 								v13 := args[1]
@@ -15438,7 +15455,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := checkDerefVar(var_glojure_DOT_core_every_QMARK_)
@@ -16732,7 +16749,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 4)
+				checkArityGTE(args, 4)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -17041,7 +17058,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -17129,7 +17146,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -17237,7 +17254,7 @@ func LoadNS() {
 				tmp15 := lang.Apply(tmp6, []any{tmp14})
 				return tmp15
 			default:
-				checkArity(args, 4)
+				checkArityGTE(args, 4)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -17321,7 +17338,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(lang.Equiv, []any{v3, v4})
 				return tmp5
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -17422,7 +17439,7 @@ func LoadNS() {
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -17525,7 +17542,7 @@ func LoadNS() {
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -17628,7 +17645,7 @@ func LoadNS() {
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -17731,7 +17748,7 @@ func LoadNS() {
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -17834,7 +17851,7 @@ func LoadNS() {
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -17963,7 +17980,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -18080,7 +18097,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -18183,7 +18200,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -18300,7 +18317,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -18403,7 +18420,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -18519,7 +18536,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -18622,7 +18639,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -18739,7 +18756,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -18842,7 +18859,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -18959,7 +18976,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -19230,7 +19247,7 @@ func LoadNS() {
 				tmp9 := lang.Apply(lang.Apply, []any{v2, tmp8})
 				return tmp9
 			default:
-				checkArity(args, 5)
+				checkArityGTE(args, 5)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -19396,7 +19413,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := checkDerefVar(var_glojure_DOT_core_into_DASH_array)
@@ -19576,7 +19593,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -20145,7 +20162,7 @@ func LoadNS() {
 						tmp11 := lang.Apply(v2, []any{v7, v8, v9})
 						return tmp11
 					default:
-						checkArity(args, 3)
+						checkArityGTE(args, 3)
 						v7 := args[0]
 						_ = v7
 						v8 := args[1]
@@ -20258,7 +20275,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -20368,7 +20385,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -20471,7 +20488,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -20581,7 +20598,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -20735,7 +20752,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -20845,7 +20862,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -21062,7 +21079,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -21172,7 +21189,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -21252,7 +21269,7 @@ func LoadNS() {
 			tmp1 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 0)
+					checkArityGTE(args, 0)
 					var v3 any = lang.NewList(args[0:]...)
 					_ = v3
 					tmp4 := checkDerefVar(var_glojure_DOT_core_seq)
@@ -21368,7 +21385,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -21405,7 +21422,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := checkDerefVar(var_glojure_DOT_core_every_QMARK_)
@@ -21636,7 +21653,7 @@ func LoadNS() {
 			tmp1 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 0)
+					checkArityGTE(args, 0)
 					var v3 any = lang.NewList(args[0:]...)
 					_ = v3
 					tmp4 := checkDerefVar(var_glojure_DOT_core_seq)
@@ -21850,7 +21867,7 @@ func LoadNS() {
 			tmp1 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 0)
+					checkArityGTE(args, 0)
 					var v3 any = lang.NewList(args[0:]...)
 					_ = v3
 					tmp4 := checkDerefVar(var_glojure_DOT_core_seq)
@@ -22009,7 +22026,7 @@ func LoadNS() {
 						tmp9 := lang.Apply(v2, []any{tmp8})
 						return tmp9
 					default:
-						checkArity(args, 3)
+						checkArityGTE(args, 3)
 						v5 := args[0]
 						_ = v5
 						v6 := args[1]
@@ -22031,7 +22048,7 @@ func LoadNS() {
 				}
 				return tmp6
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -22132,7 +22149,7 @@ func LoadNS() {
 					tmp8 := lang.Apply(tmp6, []any{tmp7})
 					return tmp8
 				default:
-					checkArity(args, 2)
+					checkArityGTE(args, 2)
 					v4 := args[0]
 					_ = v4
 					v5 := args[1]
@@ -22391,7 +22408,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -22521,7 +22538,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -22809,7 +22826,7 @@ func LoadNS() {
 			tmp1 = lang.NewFnFunc(func(args ...any) any {
 				switch len(args) {
 				default:
-					checkArity(args, 3)
+					checkArityGTE(args, 3)
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
@@ -23086,7 +23103,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -23198,7 +23215,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -23731,7 +23748,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -24369,7 +24386,7 @@ func LoadNS() {
 							tmp10 := lang.Apply(tmp8, []any{tmp9})
 							return tmp10
 						default:
-							checkArity(args, 3)
+							checkArityGTE(args, 3)
 							v5 := args[0]
 							_ = v5
 							v6 := args[1]
@@ -24574,7 +24591,7 @@ func LoadNS() {
 							tmp11 := lang.Apply(tmp9, []any{tmp10})
 							return tmp11
 						default:
-							checkArity(args, 3)
+							checkArityGTE(args, 3)
 							v6 := args[0]
 							_ = v6
 							v7 := args[1]
@@ -24892,7 +24909,7 @@ func LoadNS() {
 							tmp12 := lang.Apply(tmp10, []any{tmp11})
 							return tmp12
 						default:
-							checkArity(args, 3)
+							checkArityGTE(args, 3)
 							v7 := args[0]
 							_ = v7
 							v8 := args[1]
@@ -24973,7 +24990,7 @@ func LoadNS() {
 				}
 				return tmp7
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -25102,7 +25119,7 @@ func LoadNS() {
 								tmp19 := lang.Apply(tmp15, []any{tmp18, v9})
 								return tmp19
 							default:
-								checkArity(args, 3)
+								checkArityGTE(args, 3)
 								v12 := args[0]
 								_ = v12
 								v13 := args[1]
@@ -25476,7 +25493,7 @@ func LoadNS() {
 						tmp11 := lang.Apply(v2, []any{tmp8, v6, v7})
 						return tmp11
 					default:
-						checkArity(args, 3)
+						checkArityGTE(args, 3)
 						v5 := args[0]
 						_ = v5
 						v6 := args[1]
@@ -25563,7 +25580,7 @@ func LoadNS() {
 						tmp15 := lang.Apply(v2, []any{tmp9, tmp12, v8})
 						return tmp15
 					default:
-						checkArity(args, 3)
+						checkArityGTE(args, 3)
 						v6 := args[0]
 						_ = v6
 						v7 := args[1]
@@ -25668,7 +25685,7 @@ func LoadNS() {
 						tmp19 := lang.Apply(v2, []any{tmp10, tmp13, tmp16})
 						return tmp19
 					default:
-						checkArity(args, 3)
+						checkArityGTE(args, 3)
 						v7 := args[0]
 						_ = v7
 						v8 := args[1]
@@ -25730,7 +25747,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -25753,7 +25770,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -25948,7 +25965,7 @@ func LoadNS() {
 				tmp17 := lang.Apply(tmp6, []any{tmp16})
 				return tmp17
 			default:
-				checkArity(args, 5)
+				checkArityGTE(args, 5)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -26118,7 +26135,7 @@ func LoadNS() {
 				tmp17 := lang.Apply(tmp6, []any{tmp16})
 				return tmp17
 			default:
-				checkArity(args, 5)
+				checkArityGTE(args, 5)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -26365,7 +26382,7 @@ func LoadNS() {
 						}
 						return tmp10
 					default:
-						checkArity(args, 3)
+						checkArityGTE(args, 3)
 						v4 := args[0]
 						_ = v4
 						v5 := args[1]
@@ -26452,7 +26469,7 @@ func LoadNS() {
 						}
 						return tmp12
 					default:
-						checkArity(args, 3)
+						checkArityGTE(args, 3)
 						v5 := args[0]
 						_ = v5
 						v6 := args[1]
@@ -26547,7 +26564,7 @@ func LoadNS() {
 						}
 						return tmp14
 					default:
-						checkArity(args, 3)
+						checkArityGTE(args, 3)
 						v6 := args[0]
 						_ = v6
 						v7 := args[1]
@@ -26578,7 +26595,7 @@ func LoadNS() {
 				}
 				return tmp7
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -26718,7 +26735,7 @@ func LoadNS() {
 							tmp21 := lang.Apply(tmp14, []any{tmp17, tmp20, v9})
 							return tmp21
 						default:
-							checkArity(args, 3)
+							checkArityGTE(args, 3)
 							v11 := args[0]
 							_ = v11
 							v12 := args[1]
@@ -27006,7 +27023,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -27039,7 +27056,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -27175,7 +27192,7 @@ func LoadNS() {
 							tmp9 := lang.Apply(v4, []any{v6, tmp8})
 							return tmp9
 						default:
-							checkArity(args, 2)
+							checkArityGTE(args, 2)
 							v6 := args[0]
 							_ = v6
 							v7 := args[1]
@@ -27462,7 +27479,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(lang.NewLazySeq, []any{tmp6})
 				return tmp7
 			default:
-				checkArity(args, 4)
+				checkArityGTE(args, 4)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -27640,7 +27657,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -27754,7 +27771,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -27806,7 +27823,7 @@ func LoadNS() {
 				}
 				return tmp5
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -27935,7 +27952,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -28008,7 +28025,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				var tmp3 any
@@ -28072,7 +28089,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -28268,7 +28285,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -28382,7 +28399,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -28434,7 +28451,7 @@ func LoadNS() {
 				}
 				return tmp5
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -28709,7 +28726,7 @@ func LoadNS() {
 						} // end let
 						return tmp7
 					default:
-						checkArity(args, 2)
+						checkArityGTE(args, 2)
 						v5 := args[0]
 						_ = v5
 						v6 := args[1]
@@ -28910,7 +28927,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(closed16, []any{tmp6})
 				return tmp7
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -28967,7 +28984,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(closed16, []any{tmp6})
 				return tmp7
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -29010,7 +29027,7 @@ func LoadNS() {
 				tmp8 := lang.Apply(tmp5, []any{tmp7})
 				return tmp8
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -29527,7 +29544,7 @@ func LoadNS() {
 				_ = v4
 				return v4
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -29800,7 +29817,7 @@ func LoadNS() {
 						tmp8 := lang.Apply(v2, []any{v3, v5, v6, v7})
 						return tmp8
 					default:
-						checkArity(args, 3)
+						checkArityGTE(args, 3)
 						v5 := args[0]
 						_ = v5
 						v6 := args[1]
@@ -29855,7 +29872,7 @@ func LoadNS() {
 						tmp9 := lang.Apply(v2, []any{v3, v4, v6, v7, v8})
 						return tmp9
 					default:
-						checkArity(args, 3)
+						checkArityGTE(args, 3)
 						v6 := args[0]
 						_ = v6
 						v7 := args[1]
@@ -29912,7 +29929,7 @@ func LoadNS() {
 						tmp10 := lang.Apply(v2, []any{v3, v4, v5, v7, v8, v9})
 						return tmp10
 					default:
-						checkArity(args, 3)
+						checkArityGTE(args, 3)
 						v7 := args[0]
 						_ = v7
 						v8 := args[1]
@@ -29933,7 +29950,7 @@ func LoadNS() {
 				}
 				return tmp8
 			default:
-				checkArity(args, 4)
+				checkArityGTE(args, 4)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -29948,7 +29965,7 @@ func LoadNS() {
 				tmp7 = lang.NewFnFunc(func(args ...any) any {
 					switch len(args) {
 					default:
-						checkArity(args, 0)
+						checkArityGTE(args, 0)
 						var v8 any = lang.NewList(args[0:]...)
 						_ = v8
 						tmp9 := checkDerefVar(var_glojure_DOT_core_apply)
@@ -30427,7 +30444,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -30970,7 +30987,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -31482,7 +31499,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -32037,7 +32054,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -32266,7 +32283,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -32366,7 +32383,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -32607,7 +32624,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -32915,7 +32932,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -33343,7 +33360,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -33612,7 +33629,7 @@ func LoadNS() {
 				} // end let
 				return tmp3
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -33711,7 +33728,7 @@ func LoadNS() {
 				tmp12 := lang.Apply(tmp8, []any{v2, v3, tmp11})
 				return tmp12
 			default:
-				checkArity(args, 6)
+				checkArityGTE(args, 6)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -33748,7 +33765,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -33849,7 +33866,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -33878,7 +33895,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -34012,7 +34029,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -34135,7 +34152,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -34268,7 +34285,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -34326,7 +34343,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -34376,7 +34393,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -34413,7 +34430,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -34496,7 +34513,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -34583,7 +34600,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -34726,7 +34743,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -34807,7 +34824,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -34920,7 +34937,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -35307,7 +35324,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -35423,7 +35440,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -35526,7 +35543,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -35642,7 +35659,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v4 := args[0]
 				_ = v4
 				v5 := args[1]
@@ -35670,7 +35687,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -35796,7 +35813,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(lang.Get, []any{v3, v4})
 				return tmp5
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -36073,7 +36090,7 @@ func LoadNS() {
 				_ = v4
 				return v4
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -36150,7 +36167,7 @@ func LoadNS() {
 				}
 				return tmp3
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				var tmp3 any
@@ -36250,7 +36267,7 @@ func LoadNS() {
 				_ = tmp6
 				return v5
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -36296,7 +36313,7 @@ func LoadNS() {
 				_ = tmp8
 				return v4
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -36342,7 +36359,7 @@ func LoadNS() {
 				_ = tmp8
 				return v4
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -36388,7 +36405,7 @@ func LoadNS() {
 				_ = tmp8
 				return v4
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -36434,7 +36451,7 @@ func LoadNS() {
 				_ = tmp8
 				return v4
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -36480,7 +36497,7 @@ func LoadNS() {
 				_ = tmp8
 				return v4
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -36526,7 +36543,7 @@ func LoadNS() {
 				_ = tmp8
 				return v4
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -36572,7 +36589,7 @@ func LoadNS() {
 				_ = tmp8
 				return v4
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -36618,7 +36635,7 @@ func LoadNS() {
 				_ = tmp8
 				return v4
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -36653,7 +36670,7 @@ func LoadNS() {
 				tmp3 := lang.Apply(lang.NewAtom, []any{v2})
 				return tmp3
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -36678,7 +36695,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -36879,7 +36896,7 @@ func LoadNS() {
 				tmp7 = lang.NewFnFunc(func(args ...any) any {
 					switch len(args) {
 					default:
-						checkArity(args, 0)
+						checkArityGTE(args, 0)
 						var v8 any = lang.NewList(args[0:]...)
 						_ = v8
 						tmp9 := checkDerefVar(var_glojure_DOT_core_apply)
@@ -36945,7 +36962,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -37034,7 +37051,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -37178,7 +37195,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -37449,7 +37466,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -37776,7 +37793,7 @@ func LoadNS() {
 				tmp8 := lang.Apply(tmp5, []any{tmp7})
 				return tmp8
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
@@ -37951,7 +37968,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -38587,7 +38604,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -39000,7 +39017,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -39058,7 +39075,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -39429,7 +39446,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -39658,7 +39675,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(lang.NewLazySeq, []any{tmp4})
 				return tmp5
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -40087,7 +40104,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -40132,7 +40149,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -40431,7 +40448,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp6, []any{v2, tmp5})
 				return tmp7
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -40889,7 +40906,7 @@ func LoadNS() {
 				tmp10 = lang.NewFnFunc(func(args ...any) any {
 					switch len(args) {
 					default:
-						checkArity(args, 0)
+						checkArityGTE(args, 0)
 						var v11 any = lang.NewList(args[0:]...)
 						_ = v11
 						var tmp12 any
@@ -40956,7 +40973,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -41856,7 +41873,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := checkDerefVar(var_glojure_DOT_core_pmap)
@@ -42270,7 +42287,7 @@ func LoadNS() {
 				tmp3 := lang.Apply(lang.NewRef, []any{v2})
 				return tmp3
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -42588,7 +42605,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -42614,7 +42631,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -42973,7 +42990,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -43091,7 +43108,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -43309,7 +43326,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -43772,7 +43789,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 4)
+				checkArityGTE(args, 4)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -43836,7 +43853,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				var tmp3 any
@@ -44071,7 +44088,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -44358,7 +44375,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -44487,7 +44504,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -44616,7 +44633,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 4)
+				checkArityGTE(args, 4)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -45654,7 +45671,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -45750,7 +45767,7 @@ func LoadNS() {
 										tmp51 = lang.NewFnFunc(func(args ...any) any {
 											switch len(args) {
 											default:
-												checkArity(args, 1)
+												checkArityGTE(args, 1)
 												v52 := args[0]
 												_ = v52
 												var v53 any = lang.NewList(args[1:]...)
@@ -45902,7 +45919,7 @@ func LoadNS() {
 														tmp63 = lang.NewFnFunc(func(args ...any) any {
 															switch len(args) {
 															default:
-																checkArity(args, 1)
+																checkArityGTE(args, 1)
 																v64 := args[0]
 																_ = v64
 																var v65 any = lang.NewList(args[1:]...)
@@ -46109,7 +46126,7 @@ func LoadNS() {
 				tmp37 = lang.NewFnFunc(func(args ...any) any {
 					switch len(args) {
 					default:
-						checkArity(args, 0)
+						checkArityGTE(args, 0)
 						var v38 any = lang.NewList(args[0:]...)
 						_ = v38
 						tmp39 := checkDerefVar(var_glojure_DOT_core_apply)
@@ -47183,7 +47200,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -47254,7 +47271,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -47523,7 +47540,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -48138,7 +48155,7 @@ func LoadNS() {
 				tmp7 := lang.Apply(tmp3, []any{tmp5, tmp6})
 				return tmp7
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -48822,7 +48839,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 3)
+				checkArityGTE(args, 3)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -49897,7 +49914,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -50123,7 +50140,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				var tmp3 any
@@ -50843,7 +50860,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 2)
+				checkArityGTE(args, 2)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -51402,7 +51419,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				var tmp3 any
@@ -51971,7 +51988,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := checkDerefVar(var_glojure_DOT_core_apply)
@@ -51993,7 +52010,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				var tmp3 any
@@ -52043,7 +52060,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := checkDerefVar(var_glojure_DOT_core_apply)
@@ -52189,7 +52206,7 @@ func LoadNS() {
 				tmp12 := lang.Apply(tmp6, []any{tmp9, tmp11})
 				return tmp12
 			default:
-				checkArity(args, 4)
+				checkArityGTE(args, 4)
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -52291,7 +52308,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(tmp3, []any{v2, tmp4})
 				return tmp5
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -52342,6 +52359,7 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_pr.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core_pr.SetDynamic()
 	}
 	// pr-str
 	{
@@ -52351,7 +52369,7 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v3 any = lang.NewList(args[0:]...)
 				_ = v3
 				var tmp4 any
@@ -52403,7 +52421,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				var tmp3 any
@@ -52445,7 +52463,7 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v3 any = lang.NewList(args[0:]...)
 				_ = v3
 				var tmp4 any
@@ -52497,7 +52515,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
@@ -52523,7 +52541,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				tmp3 := checkDerefVar(var_glojure_DOT_core_apply)
@@ -52558,7 +52576,7 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v3 any = lang.NewList(args[0:]...)
 				_ = v3
 				var tmp4 any
@@ -52610,7 +52628,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v2 any = lang.NewList(args[0:]...)
 				_ = v2
 				var tmp3 any
@@ -52652,7 +52670,7 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 0)
+				checkArityGTE(args, 0)
 				var v3 any = lang.NewList(args[0:]...)
 				_ = v3
 				var tmp4 any
@@ -52889,6 +52907,7 @@ func LoadNS() {
 			return tmp6
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(3667), kw_column, int(21), kw_end_DASH_line, int(3667), kw_end_DASH_column, int(45))).(lang.FnFunc)
+		// MultiFn print-dup
 		tmp1 := lang.NewMultiFn("print-dup", tmp2, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
@@ -53103,7 +53122,7 @@ func LoadNS() {
 			return tmp40
 		})
 		tmp1.AddMethod(tmp24, tmp25)
-		tmp26 := reflect.TypeOf(int32(0))
+		tmp26 := reflect.TypeOf(lang.NewChar(0))
 		var tmp27 lang.FnFunc
 		tmp27 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -53385,6 +53404,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(3664), kw_column, int(24), kw_end_DASH_line, int(3666), kw_end_DASH_column, int(58))).(lang.FnFunc)
+		// MultiFn print-method
 		tmp1 := lang.NewMultiFn("print-method", tmp2, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
@@ -53690,7 +53710,7 @@ func LoadNS() {
 			return nil
 		})
 		tmp1.AddMethod(tmp19, tmp20)
-		tmp21 := reflect.TypeOf(int32(0))
+		tmp21 := reflect.TypeOf(lang.NewChar(0))
 		var tmp22 lang.FnFunc
 		tmp22 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -55536,7 +55556,7 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			default:
-				checkArity(args, 1)
+				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
 				var v4 any = lang.NewList(args[1:]...)
