@@ -53,6 +53,44 @@ func ConstructPersistentStructMap(def *PersistentStructMapDef, valseq ISeq) *Per
 	return newPersistentStructMap(nil, def, vals, ext)
 }
 
+/*
+Object[] vals = new Object[def.keyslots.count()];
+IPersistentMap ext = PersistentHashMap.EMPTY;
+for(; keyvals != null; keyvals = keyvals.next().next())
+
+	{
+	if(keyvals.next() == null)
+		throw new IllegalArgumentException(String.format("No value supplied for key: %s", keyvals.first()));
+	Object k = keyvals.first();
+	Object v = RT.second(keyvals);
+	Map.Entry e = def.keyslots.entryAt(k);
+	if(e != null)
+		vals[(Integer) e.getValue()] = v;
+	else
+		ext = ext.assoc(k, v);
+	}
+
+return new PersistentStructMap(null, def, vals, ext);
+*/
+func CreatePersistentStructMap(def *PersistentStructMapDef, keyvals ISeq) *PersistentStructMap {
+	vals := make([]any, def.keyslots.Count())
+	var ext IPersistentMap = emptyMap
+	for ; keyvals != nil; keyvals = keyvals.Next().Next() {
+		if keyvals.Next() == nil {
+			panic(fmt.Errorf("no value supplied for key: %v", keyvals.First()))
+		}
+		k := keyvals.First()
+		v := First(Rest(keyvals))
+		e := def.keyslots.EntryAt(k)
+		if e != nil {
+			vals[e.Val().(int)] = v
+		} else {
+			ext = ext.Assoc(k, v).(IPersistentMap)
+		}
+	}
+	return newPersistentStructMap(nil, def, vals, ext)
+}
+
 func CreatePersistentStructMapSlotMap(keys ISeq) *PersistentStructMapDef {
 	if keys == nil {
 		panic(fmt.Errorf("must supply keys"))

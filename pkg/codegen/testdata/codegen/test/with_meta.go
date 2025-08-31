@@ -14,37 +14,37 @@ func init() {
 	_ = ns
 	// -main
 	{
-		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), lang.NewKeyword("bar"), lang.NewKeyword("file"), "codegen/test/with_meta.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(36), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.with-meta")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), lang.NewKeyword("bar"), lang.NewKeyword("file"), "codegen/test/with_meta.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(36), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.with-meta")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			v3 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-			v4 := v3.FindInternedVar(lang.NewSymbol("meta"))
-			if v4.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v4)))
+			tmp3 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+			tmp4 := tmp3.FindInternedVar(lang.NewSymbol("meta"))
+			if tmp4.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp4)))
 			}
-			v5 := v4.Get()
-			v6 := lang.NewVector()
-			v7 := lang.NewMap(lang.NewKeyword("foo"), lang.NewKeyword("bar"), lang.NewKeyword("file"), "codegen/test/with_meta.glj", lang.NewKeyword("line"), int(4), lang.NewKeyword("column"), int(15), lang.NewKeyword("end-line"), int(4), lang.NewKeyword("end-column"), int(28))
-			v8 := lang.NewMap(lang.NewKeyword("file"), "codegen/test/with_meta.glj", lang.NewKeyword("line"), int(4), lang.NewKeyword("column"), int(16), lang.NewKeyword("end-line"), int(4), lang.NewKeyword("end-column"), int(26))
-			v9, err := lang.WithMeta(v7, v8.(lang.IPersistentMap))
+			tmp5 := tmp4.Get()
+			tmp6 := lang.NewVector()
+			tmp7 := lang.NewMap(lang.NewKeyword("foo"), lang.NewKeyword("bar"), lang.NewKeyword("file"), "codegen/test/with_meta.glj", lang.NewKeyword("line"), int(4), lang.NewKeyword("column"), int(15), lang.NewKeyword("end-line"), int(4), lang.NewKeyword("end-column"), int(28))
+			tmp8 := lang.NewMap(lang.NewKeyword("file"), "codegen/test/with_meta.glj", lang.NewKeyword("line"), int(4), lang.NewKeyword("column"), int(16), lang.NewKeyword("end-line"), int(4), lang.NewKeyword("end-column"), int(26))
+			tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
 			}
-			v10, err := lang.WithMeta(v6, v9.(lang.IPersistentMap))
+			tmp10, err := lang.WithMeta(tmp6, tmp9.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
 			}
-			v11 := lang.Apply(v5, []any{v10})
-			v12 := lang.Apply(lang.NewKeyword("foo"), []any{v11})
-			return v12
+			tmp11 := lang.Apply(tmp5, []any{tmp10})
+			tmp12 := lang.Apply(lang.NewKeyword("foo"), []any{tmp11})
+			return tmp12
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

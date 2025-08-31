@@ -17,7 +17,7 @@ func init() {
 	_ = ns
 	// -main
 	{
-		v1 := lang.NewBigDecimalFromBigFloat((func() *big3.Float {
+		tmp1 := lang.NewBigDecimalFromBigFloat((func() *big3.Float {
 			var z big3.Float
 			b, _ := hex2.DecodeString("010a0000004000000004a000000000000000")
 			if err := z.GobDecode(b); err != nil {
@@ -25,43 +25,43 @@ func init() {
 			}
 			return &z
 		})())
-		v2 := reflect.TypeOf((*lang.BigDecimal)(nil))
-		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), lang.NewVector(v1, v2), lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(6), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(6), lang.NewKeyword("end-column"), int(56), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values")))).(*lang.Symbol)
-		var v4 lang.FnFunc
-		v4 = lang.NewFnFunc(func(args ...any) any {
+		tmp2 := reflect.TypeOf((*lang.BigDecimal)(nil))
+		tmp0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), lang.NewVector(tmp1, tmp2), lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(6), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(6), lang.NewKeyword("end-column"), int(56), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values")))).(*lang.Symbol)
+		var tmp4 lang.FnFunc
+		tmp4 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			v5 := lang.FindNamespace(lang.NewSymbol("codegen.test.values"))
-			v6 := v5.FindInternedVar(lang.NewSymbol("big-decimal"))
-			if v6.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v6)))
+			tmp5 := lang.FindNamespace(lang.NewSymbol("codegen.test.values"))
+			tmp6 := tmp5.FindInternedVar(lang.NewSymbol("big-decimal"))
+			if tmp6.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp6)))
 			}
-			v7 := v6.Get()
-			v8 := lang.FindNamespace(lang.NewSymbol("codegen.test.values"))
-			v9 := v8.FindInternedVar(lang.NewSymbol("big-decimal-type"))
-			if v9.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v9)))
+			tmp7 := tmp6.Get()
+			tmp8 := lang.FindNamespace(lang.NewSymbol("codegen.test.values"))
+			tmp9 := tmp8.FindInternedVar(lang.NewSymbol("big-decimal-type"))
+			if tmp9.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp9)))
 			}
-			v10 := v9.Get()
-			v11 := lang.NewVector(v7, v10)
-			v12 := lang.NewMap(lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(7), lang.NewKeyword("column"), int(3), lang.NewKeyword("end-line"), int(7), lang.NewKeyword("end-column"), int(32))
-			v13, err := lang.WithMeta(v11, v12.(lang.IPersistentMap))
+			tmp10 := tmp9.Get()
+			tmp11 := lang.NewVector(tmp7, tmp10)
+			tmp12 := lang.NewMap(lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(7), lang.NewKeyword("column"), int(3), lang.NewKeyword("end-line"), int(7), lang.NewKeyword("end-column"), int(32))
+			tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
 			}
-			return v13
+			return tmp13
 		})
-		v4 = v4.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v3 := ns.InternWithValue(v0, v4, true)
-		if v0.Meta() != nil {
-			v3.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp4 = tmp4.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp3 := ns.InternWithValue(tmp0, tmp4, true)
+		if tmp0.Meta() != nil {
+			tmp3.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// big-decimal
 	{
-		v0 := lang.NewSymbol("big-decimal").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values")))).(*lang.Symbol)
-		v2 := lang.NewBigDecimalFromBigFloat((func() *big3.Float {
+		tmp0 := lang.NewSymbol("big-decimal").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(16), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values")))).(*lang.Symbol)
+		tmp2 := lang.NewBigDecimalFromBigFloat((func() *big3.Float {
 			var z big3.Float
 			b, _ := hex2.DecodeString("010a0000004000000004a000000000000000")
 			if err := z.GobDecode(b); err != nil {
@@ -69,18 +69,18 @@ func init() {
 			}
 			return &z
 		})())
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// big-decimal-type
 	{
-		v0 := lang.NewSymbol("big-decimal-type").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(4), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(4), lang.NewKeyword("end-column"), int(21), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values")))).(*lang.Symbol)
-		v2 := reflect.TypeOf((*lang.BigDecimal)(nil))
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp0 := lang.NewSymbol("big-decimal-type").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/values.glj", lang.NewKeyword("line"), int(4), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(4), lang.NewKeyword("end-column"), int(21), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.values")))).(*lang.Symbol)
+		tmp2 := reflect.TypeOf((*lang.BigDecimal)(nil))
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

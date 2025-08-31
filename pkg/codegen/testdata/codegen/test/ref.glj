@@ -1,0 +1,10 @@
+(ns codegen.test.ref)
+
+(def test-ref
+  "A reference to a set."
+  (ref #{1 2 3}))
+
+(defn
+  ^{:expected-output #{1 2 3}}
+  -main []
+  @test-ref)

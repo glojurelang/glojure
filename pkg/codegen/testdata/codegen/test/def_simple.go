@@ -14,10 +14,10 @@ func init() {
 	_ = ns
 	// foo
 	{
-		v0 := lang.NewSymbol("foo").WithMeta(lang.NewMap()).(*lang.Symbol)
-		v1 := ns.Intern(v0)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp0 := lang.NewSymbol("foo").WithMeta(lang.NewMap()).(*lang.Symbol)
+		tmp1 := ns.Intern(tmp0)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

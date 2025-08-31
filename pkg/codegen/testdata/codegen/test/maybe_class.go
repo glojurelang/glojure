@@ -15,26 +15,26 @@ func init() {
 	_ = ns
 	// -main
 	{
-		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), lang.NewVector("1", "2", "3"), lang.NewKeyword("file"), "codegen/test/maybe_class.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(45), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.maybe-class")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), lang.NewVector("1", "2", "3"), lang.NewKeyword("file"), "codegen/test/maybe_class.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(45), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.maybe-class")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			v3 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-			v4 := v3.FindInternedVar(lang.NewSymbol("vec"))
-			if v4.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v4)))
+			tmp3 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+			tmp4 := tmp3.FindInternedVar(lang.NewSymbol("vec"))
+			if tmp4.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp4)))
 			}
-			v5 := v4.Get()
-			v6 := lang.Apply(strings2.Split, []any{"1,2,3", ","})
-			v7 := lang.Apply(v5, []any{v6})
-			return v7
+			tmp5 := tmp4.Get()
+			tmp6 := lang.Apply(strings2.Split, []any{"1,2,3", ","})
+			tmp7 := lang.Apply(tmp5, []any{tmp6})
+			return tmp7
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

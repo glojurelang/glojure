@@ -14,125 +14,121 @@ func init() {
 	_ = ns
 	// -main
 	{
-		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), "advanced tests passed", lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(30), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(30), lang.NewKeyword("end-column"), int(55), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), "advanced tests passed", lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(30), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(30), lang.NewKeyword("end-column"), int(55), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			var v3 any
-			v4 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-			v5 := v4.FindInternedVar(lang.NewSymbol("="))
-			if v5.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v5)))
+			var tmp3 any
+			tmp4 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+			tmp5 := tmp4.FindInternedVar(lang.NewSymbol("="))
+			if tmp5.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp5)))
 			}
-			v6 := v5.Get()
-			v7 := lang.FindNamespace(lang.NewSymbol("codegen.test.try-advanced"))
-			v8 := v7.FindInternedVar(lang.NewSymbol("try-custom-value"))
-			if v8.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v8)))
+			tmp6 := tmp5.Get()
+			tmp7 := lang.FindNamespace(lang.NewSymbol("codegen.test.try-advanced"))
+			tmp8 := tmp7.FindInternedVar(lang.NewSymbol("try-custom-value"))
+			if tmp8.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp8)))
 			}
-			v9 := v8.Get()
-			v10 := lang.Apply(v9, nil)
-			v11 := lang.Apply(v6, []any{v10, "custom error"})
-			if lang.IsTruthy(v11) {
-				v3 = nil
+			tmp9 := tmp8.Get()
+			tmp10 := lang.Apply(tmp9, nil)
+			tmp11 := lang.Apply(tmp6, []any{tmp10, "custom error"})
+			if lang.IsTruthy(tmp11) {
 			} else {
 				panic("try-custom-value failed")
 			}
-			_ = v3
-			var v12 any
-			v13 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-			v14 := v13.FindInternedVar(lang.NewSymbol("="))
-			if v14.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v14)))
+			_ = tmp3
+			var tmp12 any
+			tmp13 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+			tmp14 := tmp13.FindInternedVar(lang.NewSymbol("="))
+			if tmp14.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp14)))
 			}
-			v15 := v14.Get()
-			v16 := lang.FindNamespace(lang.NewSymbol("codegen.test.try-advanced"))
-			v17 := v16.FindInternedVar(lang.NewSymbol("catch-binding-scope"))
-			if v17.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v17)))
+			tmp15 := tmp14.Get()
+			tmp16 := lang.FindNamespace(lang.NewSymbol("codegen.test.try-advanced"))
+			tmp17 := tmp16.FindInternedVar(lang.NewSymbol("catch-binding-scope"))
+			if tmp17.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp17)))
 			}
-			v18 := v17.Get()
-			v19 := lang.Apply(v18, nil)
-			v20 := lang.Apply(v15, []any{v19, "test"})
-			if lang.IsTruthy(v20) {
-				v12 = nil
+			tmp18 := tmp17.Get()
+			tmp19 := lang.Apply(tmp18, nil)
+			tmp20 := lang.Apply(tmp15, []any{tmp19, "test"})
+			if lang.IsTruthy(tmp20) {
 			} else {
 				panic("catch-binding-scope failed")
 			}
-			_ = v12
-			var v21 any
-			v22 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-			v23 := v22.FindInternedVar(lang.NewSymbol("="))
-			if v23.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v23)))
+			_ = tmp12
+			var tmp21 any
+			tmp22 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+			tmp23 := tmp22.FindInternedVar(lang.NewSymbol("="))
+			if tmp23.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp23)))
 			}
-			v24 := v23.Get()
-			v25 := lang.FindNamespace(lang.NewSymbol("codegen.test.try-advanced"))
-			v26 := v25.FindInternedVar(lang.NewSymbol("catch-binding-scope-2"))
-			if v26.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v26)))
+			tmp24 := tmp23.Get()
+			tmp25 := lang.FindNamespace(lang.NewSymbol("codegen.test.try-advanced"))
+			tmp26 := tmp25.FindInternedVar(lang.NewSymbol("catch-binding-scope-2"))
+			if tmp26.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp26)))
 			}
-			v27 := v26.Get()
-			v28 := lang.Apply(v27, nil)
-			v29 := lang.Apply(v24, []any{v28, "outer"})
-			if lang.IsTruthy(v29) {
-				v21 = nil
+			tmp27 := tmp26.Get()
+			tmp28 := lang.Apply(tmp27, nil)
+			tmp29 := lang.Apply(tmp24, []any{tmp28, "outer"})
+			if lang.IsTruthy(tmp29) {
 			} else {
 				panic("catch-binding-scope-2 failed")
 			}
-			_ = v21
-			var v30 any
-			v31 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-			v32 := v31.FindInternedVar(lang.NewSymbol("="))
-			if v32.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v32)))
+			_ = tmp21
+			var tmp30 any
+			tmp31 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+			tmp32 := tmp31.FindInternedVar(lang.NewSymbol("="))
+			if tmp32.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp32)))
 			}
-			v33 := v32.Get()
-			v34 := lang.FindNamespace(lang.NewSymbol("codegen.test.try-advanced"))
-			v35 := v34.FindInternedVar(lang.NewSymbol("finally-with-return"))
-			if v35.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v35)))
+			tmp33 := tmp32.Get()
+			tmp34 := lang.FindNamespace(lang.NewSymbol("codegen.test.try-advanced"))
+			tmp35 := tmp34.FindInternedVar(lang.NewSymbol("finally-with-return"))
+			if tmp35.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp35)))
 			}
-			v36 := v35.Get()
-			v37 := lang.Apply(v36, nil)
-			v38 := lang.Apply(v33, []any{v37, int64(42)})
-			if lang.IsTruthy(v38) {
-				v30 = nil
+			tmp36 := tmp35.Get()
+			tmp37 := lang.Apply(tmp36, nil)
+			tmp38 := lang.Apply(tmp33, []any{tmp37, int64(42)})
+			if lang.IsTruthy(tmp38) {
 			} else {
 				panic("finally-with-return failed")
 			}
-			_ = v30
+			_ = tmp30
 			return "advanced tests passed"
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// catch-binding-scope
 	{
-		v0 := lang.NewSymbol("catch-binding-scope").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(9), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(9), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("catch-binding-scope").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(9), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(9), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			var v3 any
+			var tmp3 any
 			{ // let
 				// let binding "e"
 				var v4 any = "outer"
 				_ = v4
-				var v5 any
+				var tmp5 any
 				func() {
 					defer func() {
 						if r := recover(); r != nil {
 							if lang.CatchMatches(r, lang.Builtins["any"]) {
 								v6 := r
 								_ = v6
-								v5 = v6
+								tmp5 = v6
 							} else {
 								panic(r)
 							}
@@ -140,37 +136,37 @@ func init() {
 					}()
 					panic("test")
 				}()
-				v3 = v5
+				tmp3 = tmp5
 			} // end let
-			return v3
+			return tmp3
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// catch-binding-scope-2
 	{
-		v0 := lang.NewSymbol("catch-binding-scope-2").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(16), lang.NewKeyword("end-column"), int(27), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("catch-binding-scope-2").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(16), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(16), lang.NewKeyword("end-column"), int(27), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			var v3 any
+			var tmp3 any
 			{ // let
 				// let binding "e"
 				var v4 any = "outer"
 				_ = v4
-				var v5 any
+				var tmp5 any
 				func() {
 					defer func() {
 						if r := recover(); r != nil {
 							if lang.CatchMatches(r, lang.Builtins["any"]) {
 								v6 := r
 								_ = v6
-								v5 = v6
+								tmp5 = v6
 							} else {
 								panic(r)
 							}
@@ -178,55 +174,56 @@ func init() {
 					}()
 					panic("test")
 				}()
-				_ = v5
-				v3 = v4
+				_ = tmp5
+				tmp3 = v4
 			} // end let
-			return v3
+			return tmp3
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// finally-with-return
 	{
-		v0 := lang.NewSymbol("finally-with-return").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(24), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(24), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("finally-with-return").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(24), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(24), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			var v3 any
+			var tmp3 any
 			func() {
 				defer func() {
+					_ = int64(100)
 				}()
-				v3 = int64(42)
+				tmp3 = int64(42)
 			}()
-			return v3
+			return tmp3
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// try-custom-value
 	{
-		v0 := lang.NewSymbol("try-custom-value").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(22), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("try-custom-value").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/try_advanced.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(22), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.try-advanced")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			var v3 any
+			var tmp3 any
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
 						if lang.CatchMatches(r, lang.Builtins["any"]) {
 							v4 := r
 							_ = v4
-							v3 = v4
+							tmp3 = v4
 						} else {
 							panic(r)
 						}
@@ -234,12 +231,12 @@ func init() {
 				}()
 				panic("custom error")
 			}()
-			return v3
+			return tmp3
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

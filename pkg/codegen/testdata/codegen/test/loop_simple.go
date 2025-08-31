@@ -14,73 +14,73 @@ func init() {
 	_ = ns
 	// -main
 	{
-		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), int64(10), lang.NewKeyword("file"), "codegen/test/loop_simple.glj", lang.NewKeyword("line"), int(9), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(10), lang.NewKeyword("end-column"), int(7), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.loop-simple")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), int64(10), lang.NewKeyword("file"), "codegen/test/loop_simple.glj", lang.NewKeyword("line"), int(9), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(10), lang.NewKeyword("end-column"), int(7), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.loop-simple")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			v3 := lang.FindNamespace(lang.NewSymbol("codegen.test.loop-simple"))
-			v4 := v3.FindInternedVar(lang.NewSymbol("simple-loop"))
-			if v4.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v4)))
+			tmp3 := lang.FindNamespace(lang.NewSymbol("codegen.test.loop-simple"))
+			tmp4 := tmp3.FindInternedVar(lang.NewSymbol("simple-loop"))
+			if tmp4.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp4)))
 			}
-			v5 := v4.Get()
-			v6 := lang.Apply(v5, nil)
-			return v6
+			tmp5 := tmp4.Get()
+			tmp6 := lang.Apply(tmp5, nil)
+			return tmp6
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// simple-loop
 	{
-		v0 := lang.NewSymbol("simple-loop").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/loop_simple.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(17), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.loop-simple")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("simple-loop").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/loop_simple.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(17), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.loop-simple")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			var v3 any
+			var tmp3 any
 			{ // let
 				// let binding "i"
 				var v4 any = int64(0)
 				_ = v4
 				for {
-					var v5 any
-					v6 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-					v7 := v6.FindInternedVar(lang.NewSymbol("<"))
-					if v7.IsMacro() {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v7)))
+					var tmp5 any
+					tmp6 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+					tmp7 := tmp6.FindInternedVar(lang.NewSymbol("<"))
+					if tmp7.IsMacro() {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp7)))
 					}
-					v8 := v7.Get()
-					v9 := lang.Apply(v8, []any{v4, int64(10)})
-					if lang.IsTruthy(v9) {
-						v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-						v12 := v11.FindInternedVar(lang.NewSymbol("inc"))
-						if v12.IsMacro() {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v12)))
+					tmp8 := tmp7.Get()
+					tmp9 := lang.Apply(tmp8, []any{v4, int64(10)})
+					if lang.IsTruthy(tmp9) {
+						tmp11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+						tmp12 := tmp11.FindInternedVar(lang.NewSymbol("inc"))
+						if tmp12.IsMacro() {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp12)))
 						}
-						v13 := v12.Get()
-						v14 := lang.Apply(v13, []any{v4})
-						var v10 any = v14
-						v4 = v10
+						tmp13 := tmp12.Get()
+						tmp14 := lang.Apply(tmp13, []any{v4})
+						var tmp10 any = tmp14
+						v4 = tmp10
 						continue
 					} else {
-						v5 = v4
+						tmp5 = v4
 					}
-					v3 = v5
+					tmp3 = tmp5
 					break
 				}
 			} // end let
-			return v3
+			return tmp3
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

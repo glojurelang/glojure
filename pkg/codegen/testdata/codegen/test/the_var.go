@@ -15,38 +15,38 @@ func init() {
 	_ = ns
 	// -main
 	{
-		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), int64(42), lang.NewKeyword("file"), "codegen/test/the_var.glj", lang.NewKeyword("line"), int(5), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(5), lang.NewKeyword("end-column"), int(34), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.the-var")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), int64(42), lang.NewKeyword("file"), "codegen/test/the_var.glj", lang.NewKeyword("line"), int(5), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(5), lang.NewKeyword("end-column"), int(34), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.the-var")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			v3 := lang.InternVarName(lang.NewSymbol("codegen.test.the-var"), lang.NewSymbol("foo"))
-			v4, ok := lang.FieldOrMethod(v3, "get")
+			tmp3 := lang.InternVarName(lang.NewSymbol("codegen.test.the-var"), lang.NewSymbol("foo"))
+			tmp4, ok := lang.FieldOrMethod(tmp3, "get")
 			if !ok {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v3, "get")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp3, "get")))
 			}
-			var v5 any
-			switch reflect.TypeOf(v4).Kind() {
+			var tmp5 any
+			switch reflect.TypeOf(tmp4).Kind() {
 			case reflect.Func:
-				v5 = lang.Apply(v4, nil)
+				tmp5 = lang.Apply(tmp4, nil)
 			default:
-				v5 = v4
+				tmp5 = tmp4
 			}
-			return v5
+			return tmp5
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// foo
 	{
-		v0 := lang.NewSymbol("foo").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/the_var.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(8), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.the-var")))).(*lang.Symbol)
-		v1 := ns.InternWithValue(v0, int64(42), true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp0 := lang.NewSymbol("foo").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/the_var.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(8), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.the-var")))).(*lang.Symbol)
+		tmp1 := ns.InternWithValue(tmp0, int64(42), true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

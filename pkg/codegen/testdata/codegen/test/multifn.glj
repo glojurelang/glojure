@@ -1,0 +1,9 @@
+(ns codegen.test.multifn)
+
+(defmulti add "a multimethod for addition" (fn [a b] (type a)))
+(defmethod add go/int64 [a b] (str "int64: " (+ a b)))
+(defmethod add go/float64 [a b] (str "float64: " (+ a b)))
+(defmethod add :default [a b] (str "default: " a " " b))
+
+(defn ^{:expected-output "int64: 7 float64: 8.0 default: 3 4"} -main []
+  (str (add 3 4) " " (add 3.5 4.5) " " (add "3" "4")))

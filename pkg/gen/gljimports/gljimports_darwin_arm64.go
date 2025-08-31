@@ -3780,6 +3780,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.NewBigDecimalFromBigFloat", github_com_glojurelang_glojure_pkg_lang.NewBigDecimalFromBigFloat)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewBigDecimalFromFloat64", github_com_glojurelang_glojure_pkg_lang.NewBigDecimalFromFloat64)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewBigDecimalFromInt64", github_com_glojurelang_glojure_pkg_lang.NewBigDecimalFromInt64)
+	_register("github.com/glojurelang/glojure/pkg/lang.NewBigDecimalFromRatio", github_com_glojurelang_glojure_pkg_lang.NewBigDecimalFromRatio)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewBigInt", github_com_glojurelang_glojure_pkg_lang.NewBigInt)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewBigIntFromGoBigInt", github_com_glojurelang_glojure_pkg_lang.NewBigIntFromGoBigInt)
 	_register("github.com/glojurelang/glojure/pkg/lang.NewBigIntFromInt64", github_com_glojurelang_glojure_pkg_lang.NewBigIntFromInt64)

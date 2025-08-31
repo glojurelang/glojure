@@ -14,10 +14,10 @@ func init() {
 	_ = ns
 	// const-string
 	{
-		v0 := lang.NewSymbol("const-string").WithMeta(lang.NewMap(lang.NewKeyword("hello"), true, lang.NewKeyword("file"), "codegen/test/const_string.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.const-string")))).(*lang.Symbol)
-		v1 := ns.InternWithValue(v0, "Hello, World!", true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp0 := lang.NewSymbol("const-string").WithMeta(lang.NewMap(lang.NewKeyword("hello"), true, lang.NewKeyword("file"), "codegen/test/const_string.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(6), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(25), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.const-string")))).(*lang.Symbol)
+		tmp1 := ns.InternWithValue(tmp0, "Hello, World!", true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

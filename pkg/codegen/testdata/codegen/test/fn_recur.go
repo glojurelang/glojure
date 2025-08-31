@@ -14,43 +14,44 @@ func init() {
 	_ = ns
 	// -main
 	{
-		v0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), int64(55), lang.NewKeyword("file"), "codegen/test/fn_recur.glj", lang.NewKeyword("line"), int(12), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(12), lang.NewKeyword("end-column"), int(34), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-recur")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("-main").WithMeta(lang.NewMap(lang.NewKeyword("expected-output"), int64(55), lang.NewKeyword("file"), "codegen/test/fn_recur.glj", lang.NewKeyword("line"), int(12), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(12), lang.NewKeyword("end-column"), int(34), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector()), lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-recur")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 0 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
-			v3 := lang.FindNamespace(lang.NewSymbol("codegen.test.fn-recur"))
-			v4 := v3.FindInternedVar(lang.NewSymbol("fib"))
-			if v4.IsMacro() {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v4)))
+			tmp3 := lang.FindNamespace(lang.NewSymbol("codegen.test.fn-recur"))
+			tmp4 := tmp3.FindInternedVar(lang.NewSymbol("fib"))
+			if tmp4.IsMacro() {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp4)))
 			}
-			v5 := v4.Get()
-			v6 := lang.Apply(v5, []any{int64(10)})
-			return v6
+			tmp5 := tmp4.Get()
+			tmp6 := lang.Apply(tmp5, []any{int64(10)})
+			return tmp6
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// fib
 	{
-		v0 := lang.NewSymbol("fib").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/fn_recur.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(9), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("n"))), lang.NewKeyword("doc"), "Calculates the nth Fibonacci number using iteration with recur.", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-recur")))).(*lang.Symbol)
-		var v2 lang.FnFunc
-		v2 = lang.NewFnFunc(func(args ...any) any {
+		tmp0 := lang.NewSymbol("fib").WithMeta(lang.NewMap(lang.NewKeyword("file"), "codegen/test/fn_recur.glj", lang.NewKeyword("line"), int(3), lang.NewKeyword("column"), int(7), lang.NewKeyword("end-line"), int(3), lang.NewKeyword("end-column"), int(9), lang.NewKeyword("arglists"), lang.NewList(lang.NewVector(lang.NewSymbol("n"))), lang.NewKeyword("doc"), "Calculates the nth Fibonacci number using iteration with recur.", lang.NewKeyword("ns"), lang.FindOrCreateNamespace(lang.NewSymbol("codegen.test.fn-recur")))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			if len(args) != 1 {
 				panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 			}
 			v3 := args[0]
 			_ = v3
-			var v4 any
+			var tmp4 any
 			{ // let
 				// let binding "fib-helper"
-				var v5 lang.FnFunc
+				var tmp5 lang.FnFunc
 				{ // function fib-helper
-					v5 = lang.NewFnFunc(func(args ...any) any {
+					var v6 lang.FnFunc
+					tmp5 = lang.NewFnFunc(func(args ...any) any {
 						if len(args) != 3 {
 							panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
 						}
@@ -61,60 +62,60 @@ func init() {
 						v9 := args[2]
 						_ = v9
 					recur_loop_1612:
-						var v10 any
-						v11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-						v12 := v11.FindInternedVar(lang.NewSymbol("="))
-						if v12.IsMacro() {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v12)))
+						var tmp10 any
+						tmp11 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+						tmp12 := tmp11.FindInternedVar(lang.NewSymbol("="))
+						if tmp12.IsMacro() {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp12)))
 						}
-						v13 := v12.Get()
-						v14 := lang.Apply(v13, []any{v9, v3})
-						if lang.IsTruthy(v14) {
-							v10 = v7
+						tmp13 := tmp12.Get()
+						tmp14 := lang.Apply(tmp13, []any{v9, v3})
+						if lang.IsTruthy(tmp14) {
+							tmp10 = v7
 						} else {
-							var v15 any = v8
-							v17 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-							v18 := v17.FindInternedVar(lang.NewSymbol("+"))
-							if v18.IsMacro() {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v18)))
+							var tmp15 any = v8
+							tmp17 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+							tmp18 := tmp17.FindInternedVar(lang.NewSymbol("+"))
+							if tmp18.IsMacro() {
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp18)))
 							}
-							v19 := v18.Get()
-							v20 := lang.Apply(v19, []any{v7, v8})
-							var v16 any = v20
-							v22 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
-							v23 := v22.FindInternedVar(lang.NewSymbol("inc"))
-							if v23.IsMacro() {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v23)))
+							tmp19 := tmp18.Get()
+							tmp20 := lang.Apply(tmp19, []any{v7, v8})
+							var tmp16 any = tmp20
+							tmp22 := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+							tmp23 := tmp22.FindInternedVar(lang.NewSymbol("inc"))
+							if tmp23.IsMacro() {
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", tmp23)))
 							}
-							v24 := v23.Get()
-							v25 := lang.Apply(v24, []any{v9})
-							var v21 any = v25
-							v7 = v15
-							v8 = v16
-							v9 = v21
+							tmp24 := tmp23.Get()
+							tmp25 := lang.Apply(tmp24, []any{v9})
+							var tmp21 any = tmp25
+							v7 = tmp15
+							v8 = tmp16
+							v9 = tmp21
 							goto recur_loop_1612
 						}
-						return v10
+						return tmp10
 					})
-					v6 := v5
+					v6 = tmp5
 					_ = v6
 				}
-				v6 := lang.NewMap(lang.NewKeyword("file"), "codegen/test/fn_recur.glj", lang.NewKeyword("line"), int(6), lang.NewKeyword("column"), int(20), lang.NewKeyword("end-line"), int(9), lang.NewKeyword("end-column"), int(50))
-				v7, err := lang.WithMeta(v5, v6.(lang.IPersistentMap))
+				tmp6 := lang.NewMap(lang.NewKeyword("file"), "codegen/test/fn_recur.glj", lang.NewKeyword("line"), int(6), lang.NewKeyword("column"), int(20), lang.NewKeyword("end-line"), int(9), lang.NewKeyword("end-column"), int(50))
+				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				var v8 any = v7
+				var v8 any = tmp7
 				_ = v8
-				v9 := lang.Apply(v8, []any{int64(0), int64(1), int64(0)})
-				v4 = v9
+				tmp9 := lang.Apply(v8, []any{int64(0), int64(1), int64(0)})
+				tmp4 = tmp9
 			} // end let
-			return v4
+			return tmp4
 		})
-		v2 = v2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
-		v1 := ns.InternWithValue(v0, v2, true)
-		if v0.Meta() != nil {
-			v1.SetMeta(v0.Meta().(lang.IPersistentMap))
+		tmp2 = tmp2.WithMeta(lang.NewMap(lang.NewKeyword("rettag"), nil)).(lang.FnFunc)
+		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

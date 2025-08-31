@@ -209,7 +209,6 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	g.pushVarScope()
 	defer g.popVarScope()
 
-	fmt.Printf("Generating var: %s\n", name.String())
 	g.writef("// %s\n", name.String())
 	g.writef("{\n")
 	defer g.writef("}\n")
@@ -251,8 +250,9 @@ func (g *Generator) generateValue(value any) string {
 		return g.generateTypeValue(v)
 	case *lang.Atom:
 		return g.generateAtomValue(v)
+	case *lang.Ref:
+		return g.generateRefValue(v)
 	case *lang.Namespace:
-		// Generate code to find or create the namespace
 		return fmt.Sprintf("lang.FindOrCreateNamespace(lang.NewSymbol(%#v))", v.Name().String())
 	case *runtime.Fn:
 		return g.generateFn(v)
@@ -262,6 +262,8 @@ func (g *Generator) generateValue(value any) string {
 		return g.generateVectorValue(v)
 	case lang.IPersistentSet:
 		return g.generateSetValue(v)
+	case *lang.MultiFn:
+		return g.generateMultiFn(v)
 	case lang.Keyword:
 		if ns := v.Namespace(); ns != "" {
 			return fmt.Sprintf("lang.NewKeyword(\"%s/%s\")", ns, v.Name())
@@ -279,6 +281,8 @@ func (g *Generator) generateValue(value any) string {
 		return fmt.Sprintf("int(%d)", v)
 	case int64:
 		return fmt.Sprintf("int64(%d)", v)
+	case float64:
+		return fmt.Sprintf("float64(%g)", v)
 	case *lang.BigDecimal:
 		return g.generateBigDecimalValue(v)
 	case bool:
@@ -299,10 +303,7 @@ func (g *Generator) generateValue(value any) string {
 			return fmt.Sprintf("lang.NewList(%s)", strings.Join(vals, ", "))
 		}
 
-		fmt.Println("Unsupported value type:", reflect.TypeOf(v), v)
-		return "nil"
-		// TODO: panic
-		//panic(fmt.Sprintf("unsupported value type %T: %s", v, v))
+		panic(fmt.Sprintf("unsupported value type %T: %s", v, v))
 	}
 }
 
@@ -365,7 +366,7 @@ func (g *Generator) generateZeroValueExpr(t reflect.Type) string {
 	case reflect.String:
 		return `""`
 	case reflect.Array:
-		elemExpr := g.generateZeroValueExpr(t.Elem())
+		elemExpr := g.getTypeString(t.Elem())
 		return fmt.Sprintf("[%d]%s{}", t.Len(), elemExpr)
 	case reflect.Slice:
 		elemType := g.getTypeString(t.Elem())
@@ -414,6 +415,8 @@ func (g *Generator) getTypeString(t reflect.Type) string {
 		case reflect.Map:
 			return fmt.Sprintf("map[%s]%s", g.getTypeString(t.Key()), g.getTypeString(t.Elem()))
 		case reflect.Ptr:
+			fmt.Printf("Pointer to %s\n", t.Elem().String())
+			fmt.Println("returning", "*"+g.getTypeString(t.Elem()))
 			return "*" + g.getTypeString(t.Elem())
 		case reflect.Chan:
 			switch t.ChanDir() {
@@ -467,6 +470,13 @@ func (g *Generator) generateAtomValue(atom *lang.Atom) string {
 	}
 
 	return atomVar
+}
+
+func (g *Generator) generateRefValue(ref *lang.Ref) string {
+	refVar := g.allocateTempVar()
+	initialValue := g.generateValue(ref.Deref())
+	g.writef("%s := lang.NewRef(%s)\n", refVar, initialValue)
+	return refVar
 }
 
 // generateMapValue generates Go code for a Clojure map
@@ -540,7 +550,7 @@ func (g *Generator) generateBigDecimalValue(bd *lang.BigDecimal) string {
 // generateSetValue generates Go code for a Clojure set
 func (g *Generator) generateSetValue(s lang.IPersistentSet) string {
 	var buf bytes.Buffer
-	buf.WriteString("lang.CreatePersistentTreeSet(")
+	buf.WriteString("lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{")
 
 	idx := 0
 
@@ -555,9 +565,13 @@ func (g *Generator) generateSetValue(s lang.IPersistentSet) string {
 		buf.WriteString(elementVar)
 	}
 
-	buf.WriteString(")")
+	buf.WriteString("}))")
 
 	return buf.String()
+}
+
+func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
+
 }
 
 func (g *Generator) generateFn(fn *runtime.Fn) string {
@@ -589,8 +603,9 @@ func (g *Generator) generateFn(fn *runtime.Fn) string {
 			defer g.writef("}\n")
 
 			namedFnVar := g.allocateLocal(fnName)
+			g.writef("var %s lang.FnFunc\n", namedFnVar)
 			defer func() {
-				g.writef("%s := %s\n", namedFnVar, fnVar)
+				g.writeAssign(namedFnVar, fnVar)
 				g.writeAssign("_", namedFnVar) // Prevent unused variable warning
 			}()
 		}
@@ -680,7 +695,8 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 			paramVars[i] = paramVar
 		} else {
 			// Variadic parameter - collect rest args
-			g.writef("%s := lang.NewList(%s[%d:]...)\n", paramVar, argsVar, methodNode.FixedArity)
+			g.writef("var %s any = lang.NewList(%s[%d:]...)\n", paramVar, argsVar, methodNode.FixedArity)
+			g.writeAssign("_", paramVar) // Prevent unused variable warning
 			paramVars = append(paramVars, paramVar)
 		}
 	}
@@ -705,7 +721,7 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 // AST Node Generation
 
 // generateASTNode generates code for an AST node
-func (g *Generator) generateASTNode(node *ast.Node) string {
+func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 	switch node.Op {
 	case ast.OpDef:
 		fmt.Println("Def not yet implemented; returning nil")
@@ -841,7 +857,7 @@ func (g *Generator) generateDo(node *ast.Node) string {
 			continue
 		}
 		stmtResult := g.generateASTNode(stmt)
-		g.writeAssign("_", stmtResult) // Discard intermediate results
+		g.writeAssign("_", stmtResult) // Prevent unused variable warning
 	}
 
 	// Return the final expression
@@ -1015,7 +1031,8 @@ func (g *Generator) generateTry(node *ast.Node) string {
 	if tryNode.Finally != nil {
 		g.writef("defer func() {\n")
 		// Finally doesn't affect the return value
-		_ = g.generateASTNode(tryNode.Finally)
+		result := g.generateASTNode(tryNode.Finally)
+		g.writeAssign("_", result) // Prevent unused variable warning
 		g.writef("}()\n")
 	}
 
@@ -1147,7 +1164,7 @@ func (g *Generator) generateSet(node *ast.Node) string {
 		itemIds[i] = itemId
 	}
 	setId := g.allocateTempVar()
-	g.writef("%s := lang.CreatePersistentTreeSet(%s)\n", setId, strings.Join(itemIds, ", "))
+	g.writef("%s := lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{%s}))\n", setId, strings.Join(itemIds, ", "))
 	return setId
 }
 
@@ -1178,7 +1195,7 @@ func (g *Generator) generateMaybeClass(node *ast.Node) string {
 	// to pull in the package.
 	if ok {
 		if t, ok := v.(reflect.Type); ok {
-			return g.getTypeString(t)
+			return g.generateTypeValue(t)
 		}
 	}
 
@@ -1368,7 +1385,7 @@ func (g *Generator) writef(format string, args ...any) error {
 
 // writeAssign writes an assignment iff the r-value string is non-empty
 func (g *Generator) writeAssign(varName, rValue string) {
-	if rValue == "" {
+	if rValue == "" || rValue == "nil" {
 		return
 	}
 	g.writef("%s = %s\n", varName, rValue)
@@ -1501,7 +1518,7 @@ func (g *Generator) allocateTempVar() string {
 	}
 
 	currentScope := &g.varScopes[len(g.varScopes)-1]
-	varName := fmt.Sprintf("v%d", currentScope.nextNum)
+	varName := fmt.Sprintf("tmp%d", currentScope.nextNum)
 	currentScope.nextNum++
 	return varName
 }
