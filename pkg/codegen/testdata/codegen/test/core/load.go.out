@@ -6,15 +6,15 @@ import (
 	errors8 "errors"
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
-	runtime7 "github.com/glojurelang/glojure/pkg/runtime"
+	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	uuid13 "github.com/google/uuid"
-	io3 "io"
-	math6 "math"
+	io4 "io"
+	math7 "math"
 	big9 "math/big"
 	rand16 "math/rand"
 	http17 "net/http"
-	url4 "net/url"
-	os5 "os"
+	url5 "net/url"
+	os6 "os"
 	reflect "reflect"
 	regexp15 "regexp"
 	runtime14 "runtime"
@@ -23,12 +23,17 @@ import (
 	time10 "time"
 )
 
+func init() {
+	runtime.RegisterNSLoader("glojure.core", LoadNS)
+}
+
 func checkDerefVar(v *lang.Var) any {
 	if v.IsMacro() {
 		panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v)))
 	}
 	return v.Get()
 }
+
 func checkArity(args []any, expected int) {
 	if len(args) != expected {
 		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -2830,7 +2835,7 @@ func LoadNS() {
 			var tmp3 any
 			{ // let
 				// let binding "vec__307"
-				tmp4 := lang.Apply(url4.ParseRequestURI, []any{v1})
+				tmp4 := lang.Apply(url5.ParseRequestURI, []any{v1})
 				var v5 any = tmp4
 				_ = v5
 				// let binding "url"
@@ -2849,7 +2854,7 @@ func LoadNS() {
 					var tmp14 any
 					{ // let
 						// let binding "res__0__auto__"
-						tmp15 := lang.Apply(os5.Open, []any{v1})
+						tmp15 := lang.Apply(os6.Open, []any{v1})
 						var v16 any = tmp15
 						_ = v16
 						// let binding "vec__310"
@@ -3038,7 +3043,7 @@ func LoadNS() {
 							var tmp6 any
 							{ // let
 								// let binding "res__0__auto__"
-								tmp7 := lang.Apply(os5.Open, []any{v1})
+								tmp7 := lang.Apply(os6.Open, []any{v1})
 								tmp8 := lang.Apply(tmp7, nil)
 								var v9 any = tmp8
 								_ = v9
@@ -3133,7 +3138,7 @@ func LoadNS() {
 				var tmp5 any
 				{ // let
 					// let binding "res__0__auto__"
-					tmp6 := lang.Apply(url4.Parse, []any{v1})
+					tmp6 := lang.Apply(url5.Parse, []any{v1})
 					tmp7 := lang.Apply(tmp6, nil)
 					var v8 any = tmp7
 					_ = v8
@@ -5406,7 +5411,7 @@ func LoadNS() {
 			}
 		})
 		tmp32 := lang.NewMultiFn("make-reader", tmp33, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp34 := reflect.TypeOf((*io3.Reader)(nil)).Elem()
+		tmp34 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
 		var tmp35 lang.FnFunc
 		tmp35 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5424,7 +5429,7 @@ func LoadNS() {
 			}
 		})
 		tmp32.AddMethod(tmp34, tmp35)
-		tmp36 := reflect.TypeOf((*url4.URL)(nil))
+		tmp36 := reflect.TypeOf((*url5.URL)(nil))
 		var tmp37 lang.FnFunc
 		tmp37 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5475,7 +5480,7 @@ func LoadNS() {
 			}
 		})
 		tmp40 := lang.NewMultiFn("make-writer", tmp41, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp42 := reflect.TypeOf((*io3.Reader)(nil)).Elem()
+		tmp42 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
 		var tmp43 lang.FnFunc
 		tmp43 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5493,7 +5498,7 @@ func LoadNS() {
 			}
 		})
 		tmp40.AddMethod(tmp42, tmp43)
-		tmp44 := reflect.TypeOf((*url4.URL)(nil))
+		tmp44 := reflect.TypeOf((*url5.URL)(nil))
 		var tmp45 lang.FnFunc
 		tmp45 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5544,7 +5549,7 @@ func LoadNS() {
 			}
 		})
 		tmp48 := lang.NewMultiFn("make-input-stream", tmp49, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp50 := reflect.TypeOf((*io3.Reader)(nil)).Elem()
+		tmp50 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
 		var tmp51 lang.FnFunc
 		tmp51 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5562,7 +5567,7 @@ func LoadNS() {
 			}
 		})
 		tmp48.AddMethod(tmp50, tmp51)
-		tmp52 := reflect.TypeOf((*os5.File)(nil))
+		tmp52 := reflect.TypeOf((*os6.File)(nil))
 		var tmp53 lang.FnFunc
 		tmp53 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5580,7 +5585,7 @@ func LoadNS() {
 			}
 		})
 		tmp48.AddMethod(tmp52, tmp53)
-		tmp54 := reflect.TypeOf((*url4.URL)(nil))
+		tmp54 := reflect.TypeOf((*url5.URL)(nil))
 		var tmp55 lang.FnFunc
 		tmp55 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5631,7 +5636,7 @@ func LoadNS() {
 			}
 		})
 		tmp58 := lang.NewMultiFn("make-output-stream", tmp59, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp60 := reflect.TypeOf((*io3.Reader)(nil)).Elem()
+		tmp60 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
 		var tmp61 lang.FnFunc
 		tmp61 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5649,7 +5654,7 @@ func LoadNS() {
 			}
 		})
 		tmp58.AddMethod(tmp60, tmp61)
-		tmp62 := reflect.TypeOf((*os5.File)(nil))
+		tmp62 := reflect.TypeOf((*os6.File)(nil))
 		var tmp63 lang.FnFunc
 		tmp63 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5667,7 +5672,7 @@ func LoadNS() {
 			}
 		})
 		tmp58.AddMethod(tmp62, tmp63)
-		tmp64 := reflect.TypeOf((*url4.URL)(nil))
+		tmp64 := reflect.TypeOf((*url5.URL)(nil))
 		var tmp65 lang.FnFunc
 		tmp65 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -6670,7 +6675,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v4 := args[0]
 			_ = v4
-			tmp5 := lang.Apply(math6.IsNaN, []any{v4})
+			tmp5 := lang.Apply(math7.IsNaN, []any{v4})
 			return tmp5
 		})
 		tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -7187,7 +7192,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v4 := args[0]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(runtime7.RT, "Aclone")
+			tmp5, _ := lang.FieldOrMethod(runtime.RT, "Aclone")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Aclone is not a function")))
 			}
@@ -7559,7 +7564,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v4 := args[0]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(runtime7.RT, "Alength")
+			tmp5, _ := lang.FieldOrMethod(runtime.RT, "Alength")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Alength is not a function")))
 			}
@@ -11725,7 +11730,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v4 := args[0]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(runtime7.RT, "BooleanCast")
+			tmp5, _ := lang.FieldOrMethod(runtime.RT, "BooleanCast")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("BooleanCast is not a function")))
 			}
@@ -12581,7 +12586,7 @@ func LoadNS() {
 									var tmp108 any
 									if lang.IsTruthy(v107) {
 										tmp109 := checkDerefVar(var_glojure_DOT_core__LT__EQ_)
-										tmp110 := lang.Apply(tmp109, []any{math6.MinInt, v103, math6.MaxInt})
+										tmp110 := lang.Apply(tmp109, []any{math7.MinInt, v103, math7.MaxInt})
 										tmp108 = tmp110
 									} else {
 										tmp108 = v107
@@ -13048,7 +13053,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v4 := args[0]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(runtime7.RT, "CharCast")
+			tmp5, _ := lang.FieldOrMethod(runtime.RT, "CharCast")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("CharCast is not a function")))
 			}
@@ -14980,7 +14985,7 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(runtime7.RT, "Contains")
+			tmp5, _ := lang.FieldOrMethod(runtime.RT, "Contains")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Contains is not a function")))
 			}
@@ -18645,7 +18650,7 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(runtime7.RT, "Dissoc")
+				tmp5, _ := lang.FieldOrMethod(runtime.RT, "Dissoc")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Dissoc is not a function")))
 				}
@@ -21394,7 +21399,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(runtime7.Compiler, "Eval")
+			tmp4, _ := lang.FieldOrMethod(runtime.Compiler, "Eval")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Eval is not a function")))
 			}
@@ -23338,7 +23343,7 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(runtime7.RT, "Find")
+			tmp5, _ := lang.FieldOrMethod(runtime.RT, "Find")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Find is not a function")))
 			}
@@ -23431,7 +23436,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(runtime7.RT, "FindVar")
+			tmp4, _ := lang.FieldOrMethod(runtime.RT, "FindVar")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("FindVar is not a function")))
 			}
@@ -24129,7 +24134,7 @@ func LoadNS() {
 			v3 := args[0]
 			_ = v3
 			tmp4 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-			tmp5 := reflect.TypeOf((*runtime7.Fn)(nil))
+			tmp5 := reflect.TypeOf((*runtime.Fn)(nil))
 			tmp6 := lang.Apply(tmp4, []any{tmp5, v3})
 			return tmp6
 		})
@@ -25964,7 +25969,7 @@ func LoadNS() {
 				_ = v3
 				tmp4 := checkDerefVar(var_glojure_DOT_core_str)
 				tmp5 := checkDerefVar(var_glojure_DOT_core_str)
-				tmp6, _ := lang.FieldOrMethod(runtime7.RT, "NextID")
+				tmp6, _ := lang.FieldOrMethod(runtime.RT, "NextID")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("NextID is not a function")))
 				}
@@ -27466,7 +27471,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v4 := args[0]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(runtime7.RT, "IntCast")
+			tmp5, _ := lang.FieldOrMethod(runtime.RT, "IntCast")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("IntCast is not a function")))
 			}
@@ -30540,7 +30545,7 @@ func LoadNS() {
 													_ = tmp54
 												}()
 												tmp55 := lang.Apply(strings11.TrimPrefix, []any{v28, "/"})
-												tmp56, _ := lang.FieldOrMethod(runtime7.RT, "Load")
+												tmp56, _ := lang.FieldOrMethod(runtime.RT, "Load")
 												if reflect.TypeOf(tmp56).Kind() != reflect.Func {
 													panic(lang.NewIllegalArgumentError(fmt.Sprintf("Load is not a function")))
 												}
@@ -30681,7 +30686,7 @@ func LoadNS() {
 																	_ = tmp66
 																}()
 																tmp67 := lang.Apply(strings11.TrimPrefix, []any{v40, "/"})
-																tmp68, _ := lang.FieldOrMethod(runtime7.RT, "Load")
+																tmp68, _ := lang.FieldOrMethod(runtime.RT, "Load")
 																if reflect.TypeOf(tmp68).Kind() != reflect.Func {
 																	panic(lang.NewIllegalArgumentError(fmt.Sprintf("Load is not a function")))
 																}
@@ -32302,7 +32307,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(runtime7.Compiler, "load")
+			tmp4, _ := lang.FieldOrMethod(runtime.Compiler, "load")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("load is not a function")))
 			}
@@ -32902,7 +32907,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(runtime7.Compiler, "macroexpand1")
+			tmp4, _ := lang.FieldOrMethod(runtime.Compiler, "macroexpand1")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("macroexpand1 is not a function")))
 			}
@@ -37393,7 +37398,7 @@ func LoadNS() {
 				} else {
 					tmp9 := checkDerefVar(var_glojure_DOT_core_the_DASH_ns)
 					tmp10 := lang.Apply(tmp9, []any{v3})
-					tmp11, _ := lang.FieldOrMethod(runtime7.Compiler, "maybeResolveIn")
+					tmp11, _ := lang.FieldOrMethod(runtime.Compiler, "maybeResolveIn")
 					if reflect.TypeOf(tmp11).Kind() != reflect.Func {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("maybeResolveIn is not a function")))
 					}
@@ -37538,7 +37543,7 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(runtime7.RT, "Nth")
+				tmp6, _ := lang.FieldOrMethod(runtime.RT, "Nth")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Nth is not a function")))
 				}
@@ -37551,7 +37556,7 @@ func LoadNS() {
 				_ = v5
 				v6 := args[2]
 				_ = v6
-				tmp7, _ := lang.FieldOrMethod(runtime7.RT, "NthDefault")
+				tmp7, _ := lang.FieldOrMethod(runtime.RT, "NthDefault")
 				if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("NthDefault is not a function")))
 				}
@@ -37914,7 +37919,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v4 := args[0]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(runtime7.RT, "Object_array")
+			tmp5, _ := lang.FieldOrMethod(runtime.RT, "Object_array")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Object_array is not a function")))
 			}
@@ -39594,7 +39599,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(runtime7.RT, "Peek")
+			tmp4, _ := lang.FieldOrMethod(runtime.RT, "Peek")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Peek is not a function")))
 			}
@@ -39876,7 +39881,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(runtime7.RT, "Pop")
+			tmp4, _ := lang.FieldOrMethod(runtime.RT, "Pop")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Pop is not a function")))
 			}
@@ -41172,7 +41177,7 @@ func LoadNS() {
 			return tmp48
 		})
 		tmp2.AddMethod(tmp43, tmp44)
-		tmp45 := reflect.TypeOf((*runtime7.Fn)(nil))
+		tmp45 := reflect.TypeOf((*runtime.Fn)(nil))
 		var tmp46 lang.FnFunc
 		tmp46 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -41213,7 +41218,7 @@ func LoadNS() {
 		})
 		tmp2.AddMethod(tmp47, tmp48)
 		tmp49 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
-		tmp50 := reflect.TypeOf((*runtime7.Fn)(nil))
+		tmp50 := reflect.TypeOf((*runtime.Fn)(nil))
 		tmp2.PreferMethod(tmp49, tmp50)
 		tmp51 := reflect.TypeOf((*lang.ISeq)(nil)).Elem()
 		tmp52 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
@@ -41592,7 +41597,7 @@ func LoadNS() {
 			_ = v21
 			var tmp22 any
 			tmp23 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp24 := lang.Apply(math6.Inf, []any{int64(1)})
+			tmp24 := lang.Apply(math7.Inf, []any{int64(1)})
 			tmp25 := lang.Apply(tmp23, []any{tmp24, v20})
 			if lang.IsTruthy(tmp25) {
 				tmp26 := lang.Apply(lang.WriteWriter, []any{v21, "##Inf"})
@@ -41600,14 +41605,14 @@ func LoadNS() {
 			} else {
 				var tmp27 any
 				tmp28 := checkDerefVar(var_glojure_DOT_core__EQ_)
-				tmp29 := lang.Apply(math6.Inf, []any{int64(-1)})
+				tmp29 := lang.Apply(math7.Inf, []any{int64(-1)})
 				tmp30 := lang.Apply(tmp28, []any{tmp29, v20})
 				if lang.IsTruthy(tmp30) {
 					tmp31 := lang.Apply(lang.WriteWriter, []any{v21, "##-Inf"})
 					tmp27 = tmp31
 				} else {
 					var tmp32 any
-					tmp33 := lang.Apply(math6.IsNaN, []any{v20})
+					tmp33 := lang.Apply(math7.IsNaN, []any{v20})
 					if lang.IsTruthy(tmp33) {
 						tmp34 := lang.Apply(lang.WriteWriter, []any{v21, "##NaN"})
 						tmp32 = tmp34
@@ -42188,7 +42193,7 @@ func LoadNS() {
 			_ = v49
 			var tmp50 any
 			tmp51 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp52 := lang.Apply(math6.Inf, []any{int64(1)})
+			tmp52 := lang.Apply(math7.Inf, []any{int64(1)})
 			tmp53 := lang.Apply(lang.Builtins["float32"], []any{tmp52})
 			tmp54 := lang.Apply(tmp51, []any{tmp53, v48})
 			if lang.IsTruthy(tmp54) {
@@ -42197,7 +42202,7 @@ func LoadNS() {
 			} else {
 				var tmp56 any
 				tmp57 := checkDerefVar(var_glojure_DOT_core__EQ_)
-				tmp58 := lang.Apply(math6.Inf, []any{int64(-1)})
+				tmp58 := lang.Apply(math7.Inf, []any{int64(-1)})
 				tmp59 := lang.Apply(lang.Builtins["float32"], []any{tmp58})
 				tmp60 := lang.Apply(tmp57, []any{tmp59, v48})
 				if lang.IsTruthy(tmp60) {
@@ -42205,7 +42210,7 @@ func LoadNS() {
 					tmp56 = tmp61
 				} else {
 					var tmp62 any
-					tmp63 := lang.Apply(math6.IsNaN, []any{v48})
+					tmp63 := lang.Apply(math7.IsNaN, []any{v48})
 					if lang.IsTruthy(tmp63) {
 						tmp64 := lang.Apply(lang.WriteWriter, []any{v49, "##NaN"})
 						tmp62 = tmp64
@@ -45078,14 +45083,14 @@ func LoadNS() {
 			case 1:
 				v3 := args[0]
 				_ = v3
-				tmp4 := lang.Apply(runtime7.RTReadString, []any{v3})
+				tmp4 := lang.Apply(runtime.RTReadString, []any{v3})
 				return tmp4
 			case 2:
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5 := lang.Apply(runtime7.RTReadString, []any{v4, v3})
+				tmp5 := lang.Apply(runtime.RTReadString, []any{v4, v3})
 				return tmp5
 			default:
 				checkArity(args, -1)
@@ -47389,7 +47394,7 @@ func LoadNS() {
 							// let binding "entry"
 							tmp15 := checkDerefVar(var_glojure_DOT_core_first)
 							tmp16 := lang.Apply(tmp15, []any{v12})
-							tmp17, _ := lang.FieldOrMethod(runtime7.RT, "Find")
+							tmp17, _ := lang.FieldOrMethod(runtime.RT, "Find")
 							if reflect.TypeOf(tmp17).Kind() != reflect.Func {
 								panic(lang.NewIllegalArgumentError(fmt.Sprintf("Find is not a function")))
 							}
@@ -50447,9 +50452,9 @@ func LoadNS() {
 			v3 := args[0]
 			_ = v3
 			tmp4 := checkDerefVar(var_glojure_DOT_core_contains_QMARK_)
-			tmp5, ok := lang.FieldOrMethod(runtime7.Compiler, "specials")
+			tmp5, ok := lang.FieldOrMethod(runtime.Compiler, "specials")
 			if !ok {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", runtime7.Compiler, "specials")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", runtime.Compiler, "specials")))
 			}
 			var tmp6 any
 			switch reflect.TypeOf(tmp5).Kind() {
@@ -51275,7 +51280,7 @@ func LoadNS() {
 				_ = v4
 				v5 := args[2]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(runtime7.RT, "Subvec")
+				tmp6, _ := lang.FieldOrMethod(runtime.RT, "Subvec")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Subvec is not a function")))
 				}
@@ -52503,7 +52508,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(runtime7.RT, "ToArray")
+			tmp4, _ := lang.FieldOrMethod(runtime.RT, "ToArray")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("ToArray is not a function")))
 			}
@@ -53054,7 +53059,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v4 := args[0]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(runtime7.RT, "UncheckedCharCast")
+			tmp5, _ := lang.FieldOrMethod(runtime.RT, "UncheckedCharCast")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("UncheckedCharCast is not a function")))
 			}
@@ -54525,7 +54530,7 @@ func LoadNS() {
 			v3 := args[0]
 			_ = v3
 			tmp4 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-			tmp5 := reflect.TypeOf((*url4.URL)(nil)).Elem()
+			tmp5 := reflect.TypeOf((*url5.URL)(nil)).Elem()
 			tmp6 := lang.Apply(tmp4, []any{tmp5, v3})
 			return tmp6
 		})

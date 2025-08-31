@@ -5,7 +5,12 @@ package quote_DASH_simple
 import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
+	runtime "github.com/glojurelang/glojure/pkg/runtime"
 )
+
+func init() {
+	runtime.RegisterNSLoader("codegen.test.quote-simple", LoadNS)
+}
 
 func checkDerefVar(v *lang.Var) any {
 	if v.IsMacro() {
@@ -13,6 +18,7 @@ func checkDerefVar(v *lang.Var) any {
 	}
 	return v.Get()
 }
+
 func checkArity(args []any, expected int) {
 	if len(args) != expected {
 		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))

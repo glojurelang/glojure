@@ -3,12 +3,17 @@
 package values
 
 import (
-	hex2 "encoding/hex"
+	hex3 "encoding/hex"
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
-	big3 "math/big"
+	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	big4 "math/big"
 	reflect "reflect"
 )
+
+func init() {
+	runtime.RegisterNSLoader("codegen.test.values", LoadNS)
+}
 
 func checkDerefVar(v *lang.Var) any {
 	if v.IsMacro() {
@@ -16,6 +21,7 @@ func checkDerefVar(v *lang.Var) any {
 	}
 	return v.Get()
 }
+
 func checkArity(args []any, expected int) {
 	if len(args) != expected {
 		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -47,9 +53,9 @@ func LoadNS() {
 	_ = ns
 	// -main
 	{
-		tmp1 := lang.NewBigDecimalFromBigFloat((func() *big3.Float {
-			var z big3.Float
-			b, _ := hex2.DecodeString("010a0000004000000004a000000000000000")
+		tmp1 := lang.NewBigDecimalFromBigFloat((func() *big4.Float {
+			var z big4.Float
+			b, _ := hex3.DecodeString("010a0000004000000004a000000000000000")
 			if err := z.GobDecode(b); err != nil {
 				panic(err)
 			}
@@ -79,9 +85,9 @@ func LoadNS() {
 	// big-decimal
 	{
 		tmp0 := sym_big_DASH_decimal.WithMeta(lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(16), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))).(*lang.Symbol)
-		tmp2 := lang.NewBigDecimalFromBigFloat((func() *big3.Float {
-			var z big3.Float
-			b, _ := hex2.DecodeString("010a0000004000000004a000000000000000")
+		tmp2 := lang.NewBigDecimalFromBigFloat((func() *big4.Float {
+			var z big4.Float
+			b, _ := hex3.DecodeString("010a0000004000000004a000000000000000")
 			if err := z.GobDecode(b); err != nil {
 				panic(err)
 			}

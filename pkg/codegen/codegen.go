@@ -102,6 +102,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 
 	// add lang import
 	g.addImport("github.com/glojurelang/glojure/pkg/lang")
+	g.addImport("github.com/glojurelang/glojure/pkg/runtime")
 	g.addImport("fmt") // for error formatting
 	g.writef("// reference fmt to avoid unused import error\n")
 	g.writef("_ = fmt.Printf\n")
@@ -183,18 +184,31 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 
 	// Now construct the complete init function
 	var initBuf bytes.Buffer
+	{
+		// Reproduce the behavior of root-resource function
+		rootResourceName := "/" + ns.Name().String()
+		rootResourceName = strings.ReplaceAll(rootResourceName, "-", "_")
+		rootResourceName = strings.ReplaceAll(rootResourceName, ".", "/")
+		initBuf.WriteString(`func init() {
+runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
+}
+
+`)
+	}
 	initBuf.WriteString(`func checkDerefVar (v *lang.Var) any {
   if v.IsMacro() {
 	  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v)))
   }
   return v.Get()
 }
+
 `)
 	initBuf.WriteString(`func checkArity(args []any, expected int) {
   if len(args) != expected {
 		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
   }
 }
+
 `)
 	initBuf.WriteString(fmt.Sprintf("// LoadNS initializes the namespace %q\n", ns.Name().String()))
 	initBuf.WriteString("func LoadNS() {\n")

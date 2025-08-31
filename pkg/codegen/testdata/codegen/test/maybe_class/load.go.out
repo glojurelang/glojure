@@ -5,8 +5,13 @@ package maybe_DASH_class
 import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
-	strings2 "strings"
+	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	strings3 "strings"
 )
+
+func init() {
+	runtime.RegisterNSLoader("codegen.test.maybe-class", LoadNS)
+}
 
 func checkDerefVar(v *lang.Var) any {
 	if v.IsMacro() {
@@ -14,6 +19,7 @@ func checkDerefVar(v *lang.Var) any {
 	}
 	return v.Get()
 }
+
 func checkArity(args []any, expected int) {
 	if len(args) != expected {
 		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
@@ -48,7 +54,7 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
 			tmp3 := checkDerefVar(var_glojure_DOT_core_vec)
-			tmp4 := lang.Apply(strings2.Split, []any{"1,2,3", ","})
+			tmp4 := lang.Apply(strings3.Split, []any{"1,2,3", ","})
 			tmp5 := lang.Apply(tmp3, []any{tmp4})
 			return tmp5
 		})
