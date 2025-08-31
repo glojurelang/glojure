@@ -3487,6 +3487,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.CreateLazilyPersistentVector", github_com_glojurelang_glojure_pkg_lang.CreateLazilyPersistentVector)
 	_register("github.com/glojurelang/glojure/pkg/lang.CreateOwningLazilyPersistentVector", github_com_glojurelang_glojure_pkg_lang.CreateOwningLazilyPersistentVector)
 	_register("github.com/glojurelang/glojure/pkg/lang.CreatePersistentHashMap", github_com_glojurelang_glojure_pkg_lang.CreatePersistentHashMap)
+	_register("github.com/glojurelang/glojure/pkg/lang.CreatePersistentStructMap", github_com_glojurelang_glojure_pkg_lang.CreatePersistentStructMap)
 	_register("github.com/glojurelang/glojure/pkg/lang.CreatePersistentStructMapSlotMap", github_com_glojurelang_glojure_pkg_lang.CreatePersistentStructMapSlotMap)
 	_register("github.com/glojurelang/glojure/pkg/lang.CreatePersistentTreeMap", github_com_glojurelang_glojure_pkg_lang.CreatePersistentTreeMap)
 	_register("github.com/glojurelang/glojure/pkg/lang.CreatePersistentTreeSet", github_com_glojurelang_glojure_pkg_lang.CreatePersistentTreeSet)

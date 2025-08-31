@@ -138,22 +138,56 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 		return internedVars[i].name.String() < internedVars[j].name.String()
 	})
 	for _, nv := range internedVars {
+		if isRuntimeOwnedVar(nv.vr) {
+			// Skip runtime-owned vars
+			continue
+		}
 		if err := g.generateVar("ns", nv.name, nv.vr); err != nil {
 			return fmt.Errorf("failed to generate code for var %s: %w", nv.name, err)
 		}
 	}
 
+	////////////////////////////////////////////////////////////////////////////////
+	var liftedBuf bytes.Buffer
+	// Generate lifted values at the beginning of init() if any
+	if len(g.liftedValues) > 0 {
+		// Sort by variable name for deterministic output
+		var sortedLifted []*liftedValue
+		for _, lifted := range g.liftedValues {
+			sortedLifted = append(sortedLifted, lifted)
+		}
+		sort.Slice(sortedLifted, func(i, j int) bool {
+			return sortedLifted[i].varName < sortedLifted[j].varName
+		})
+
+		// Generate code for each lifted value
+		g.w = &liftedBuf
+		for _, lifted := range sortedLifted {
+			// Generate the value - this will write any needed initialization
+			g.writef("var %s any\n", lifted.varName)
+			g.pushVarScope()
+			g.writef("{\n")
+			valueCode := g.generateValue(lifted.value)
+			// Declare the lifted variable with the final value
+			g.writef("%s = %s\n", lifted.varName, valueCode)
+			g.writef("}\n")
+			g.popVarScope()
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+
 	// Now construct the complete init function
 	var initBuf bytes.Buffer
-	initBuf.WriteString(fmt.Sprintf("// LoadNS initializes the namespace %q\n", ns.Name().String()))
-	initBuf.WriteString("func LoadNS() {\n")
-	initBuf.WriteString(`checkDerefMacro := func (v *lang.Var) {
+	initBuf.WriteString(`func checkDerefVar (v *lang.Var) any {
   if v.IsMacro() {
 	  panic(lang.NewIllegalArgumentError(fmt.Sprintf("can't take value of macro: %v", v)))
   }
+  return v.Get()
 }
-_ = checkDerefMacro
 `)
+	initBuf.WriteString(fmt.Sprintf("// LoadNS initializes the namespace %q\n", ns.Name().String()))
+	initBuf.WriteString("func LoadNS() {\n")
 
 	// initialize all the vars first
 	var varNames []string
@@ -169,37 +203,10 @@ _ = checkDerefMacro
 		initBuf.WriteString(fmt.Sprintf("%s := lang.InternVarName(lang.NewSymbol(%q), lang.NewSymbol(%q))\n", varName, vi.ns, vi.sym))
 	}
 
-	// Generate lifted values at the beginning of init() if any
-	if len(g.liftedValues) > 0 {
-		initBuf.WriteString("  // Closed-over values\n")
-
-		// Sort by variable name for deterministic output
-		var sortedLifted []*liftedValue
-		for _, lifted := range g.liftedValues {
-			sortedLifted = append(sortedLifted, lifted)
-		}
-		sort.Slice(sortedLifted, func(i, j int) bool {
-			return sortedLifted[i].varName < sortedLifted[j].varName
-		})
-
-		// Generate code for each lifted value
-		// Use a temporary buffer to capture any initialization code
-		var liftedBuf bytes.Buffer
-		g.w = &liftedBuf
-
-		for _, lifted := range sortedLifted {
-			// Generate the value - this will write any needed initialization
-			g.writef("var %s any\n", lifted.varName)
-			g.pushVarScope()
-			g.writef("{\n")
-			valueCode := g.generateValue(lifted.value)
-			// Declare the lifted variable with the final value
-			g.writef("%s = %s\n", lifted.varName, valueCode)
-			g.writef("}\n")
-			g.popVarScope()
-		}
-
-		// Write the lifted values code to init
+	// Add lifted values if any
+	if liftedBuf.Len() > 0 {
+		initBuf.WriteString(strings.Repeat("/", 80))
+		initBuf.WriteString("// Closed-over values\n")
 		initBuf.Write(liftedBuf.Bytes())
 		initBuf.WriteString("\n")
 	}
@@ -230,8 +237,7 @@ _ = checkDerefMacro
 // generateVar generates Go code for a single Var
 func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *lang.Var) error {
 	if omittedVars[vr.String()] {
-		// Skip omitted vars
-		fmt.Printf("Skipping omitted var: %s\n", name.String())
+		// Skip omitted vars like *in* and *out*, which are initialized by the runtime
 		return nil
 	}
 
@@ -291,13 +297,7 @@ func (g *Generator) generateValue(value any) string {
 	case *runtime.Fn:
 		return g.generateFn(v)
 	case lang.FnFunc:
-		// FnFunc is a simple function wrapper, we can't regenerate its exact implementation
-		// so we generate a placeholder that will panic if called
-		fnVar := g.allocateTempVar()
-		g.writef("%s := lang.NewFnFunc(func(args ...any) any {\n", fnVar)
-		g.writef("  panic(\"generated FnFunc not implemented\")\n")
-		g.writef("})\n")
-		return fnVar
+		return g.generateFnFunc(v)
 	case lang.IPersistentMap:
 		return g.generateMapValue(v)
 	case lang.IPersistentVector:
@@ -343,6 +343,10 @@ func (g *Generator) generateValue(value any) string {
 				vals = append(vals, g.generateValue(first))
 			}
 			return fmt.Sprintf("lang.NewList(%s)", strings.Join(vals, ", "))
+		}
+
+		if fname, ok := getWellKnownFunctionName(v); ok {
+			return fname
 		}
 
 		panic(fmt.Sprintf("unsupported value type %T: %s", v, v))
@@ -667,6 +671,10 @@ func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
 	return mfVar
 }
 
+func (g *Generator) generateFnFunc(fn lang.FnFunc) string {
+	panic("cannot generate opaque go function values")
+}
+
 func (g *Generator) generateFn(fn *runtime.Fn) string {
 	// Save and restore current environment
 	prevEnv := g.currentFnEnv
@@ -898,9 +906,8 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 	// Look up the var variable
 	varId := g.allocateVarVariable(varNamespace.Name().String(), varSymbol.String())
 
-	g.writef("checkDerefMacro(%s)\n", varId)
 	resultId := g.allocateTempVar()
-	g.writef("%s := %s.Get()\n", resultId, varId)
+	g.writef("%s := checkDerefVar(%s)\n", resultId, varId)
 
 	return resultId
 }
@@ -1681,4 +1688,31 @@ func (g *Generator) allocateVarVariable(ns, sym string) string {
 	varName := mungeID(ns) + "_" + mungeID(sym)
 	g.varVariables[varInfo] = varName
 	return varName
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+var (
+	runtimeOwnedVars = map[string]bool{
+		"in-ns": true,
+	}
+
+	wellKnownFunctions = map[uintptr]string{
+		reflect.ValueOf(lang.NewList).Pointer(): "lang.NewList",
+	}
+)
+
+func isRuntimeOwnedVar(v *lang.Var) bool {
+	// namespace must be glojure.core
+	if v.Namespace().Name().Name() != "glojure.core" {
+		return false
+	}
+
+	return runtimeOwnedVars[v.Symbol().Name()]
+}
+
+func getWellKnownFunctionName(fn any) (string, bool) {
+	ptr := reflect.ValueOf(fn).Pointer()
+	name, ok := wellKnownFunctions[ptr]
+	return name, ok
 }
