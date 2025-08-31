@@ -56,7 +56,11 @@ func TestCodegen(t *testing.T) {
 
 			ns := lang.FindNamespace(lang.NewSymbol(nsName))
 
-			generateAndTestNamespace(t, ns, strings.TrimSuffix(testFile, ".glj")+".go")
+			outputDir := strings.TrimSuffix(testFile, ".glj")
+			if err := os.MkdirAll(outputDir, 0755); err != nil {
+				t.Fatalf("failed to create output directory: %v", err)
+			}
+			generateAndTestNamespace(t, ns, filepath.Join(outputDir, "load.go.out"))
 		})
 	}
 
@@ -67,7 +71,10 @@ func TestCodegen(t *testing.T) {
 			t.Fatal("glojure.core namespace not found")
 		}
 
-		goldenFile := "testdata/codegen/test/core.go"
+		if err := os.MkdirAll("testdata/codegen/test/core", 0755); err != nil {
+			t.Fatalf("failed to create output directory: %v", err)
+		}
+		goldenFile := "testdata/codegen/test/core/load.go.out"
 		generateAndTestNamespace(t, ns, goldenFile)
 	})
 }
@@ -110,12 +117,28 @@ func generateAndTestNamespace(t *testing.T, ns *lang.Namespace, goldenFile strin
 			generated, expected)
 	}
 
-	// run go vet on the output file. print any errors from stderr
-	cmd := exec.Command("go", "vet", "-all", goldenFile)
-	var stderr bytes.Buffer
-	cmd.Stderr = &stderr
-	if err := cmd.Run(); err != nil {
-		t.Errorf("go vet failed for %s: %v\nStderr:\n%s", goldenFile, err, stderr.String())
+	{
+		// Copy golden file to temp directory with .go extension for go vet
+		tempFile, err := ioutil.TempFile("", "codegen_test_*.go")
+		if err != nil {
+			t.Fatalf("failed to create temp file: %v", err)
+		}
+		defer os.Remove(tempFile.Name())
+
+		if _, err := tempFile.Write(expected); err != nil {
+			t.Fatalf("failed to write to temp file: %v", err)
+		}
+		if err := tempFile.Close(); err != nil {
+			t.Fatalf("failed to close temp file: %v", err)
+		}
+
+		// run go vet on the temp file with .go extension
+		cmd := exec.Command("go", "vet", "-all", tempFile.Name())
+		var stderr bytes.Buffer
+		cmd.Stderr = &stderr
+		if err := cmd.Run(); err != nil {
+			t.Errorf("go vet failed for %s: %v\nStderr:\n%s", goldenFile, err, stderr.String())
+		}
 	}
 
 	// Check if namespace has -main function with expected output
