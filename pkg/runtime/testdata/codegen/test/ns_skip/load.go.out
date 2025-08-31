@@ -6,10 +6,11 @@ import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	reflect "reflect"
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.ns-skip", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/ns_skip", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -30,6 +31,8 @@ func LoadNS() {
 	sym_codegen_DOT_test_DOT_ns_DASH_skip := lang.NewSymbol("codegen.test.ns-skip")
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_ns_DASH_skip)
 	_ = ns
 }

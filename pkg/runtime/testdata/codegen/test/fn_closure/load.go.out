@@ -6,10 +6,11 @@ import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	reflect "reflect"
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.fn-closure", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/fn_closure", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -47,8 +48,12 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
+	// var codegen.test.fn-closure/-main
+	var_codegen_DOT_test_DOT_fn_DASH_closure__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_fn_DASH_closure, sym__DASH_main)
 	// var codegen.test.fn-closure/closed
 	var_codegen_DOT_test_DOT_fn_DASH_closure_closed := lang.InternVarName(sym_codegen_DOT_test_DOT_fn_DASH_closure, sym_closed)
+	// var codegen.test.fn-closure/gen-closure
+	var_codegen_DOT_test_DOT_fn_DASH_closure_gen_DASH_closure := lang.InternVarName(sym_codegen_DOT_test_DOT_fn_DASH_closure, sym_gen_DASH_closure)
 	// var codegen.test.fn-closure/get-atom
 	var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom := lang.InternVarName(sym_codegen_DOT_test_DOT_fn_DASH_closure, sym_get_DASH_atom)
 	// var codegen.test.fn-closure/inc-atom
@@ -59,7 +64,12 @@ func LoadNS() {
 	var_glojure_DOT_core_inc := lang.InternVarName(sym_glojure_DOT_core, sym_inc)
 	// var glojure.core/swap!
 	var_glojure_DOT_core_swap_BANG_ := lang.InternVarName(sym_glojure_DOT_core, sym_swap_BANG_)
-	// //////////////////////////////////////////////////////////////////////////////// Closed-over values
+	// reference fmt to avoid unused import error
+	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
+	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure)
+	_ = ns
 	var closed0 any
 	{
 		closed0 = int64(42)
@@ -69,109 +79,104 @@ func LoadNS() {
 		tmp0 := lang.NewAtom(int64(0))
 		closed1 = tmp0
 	}
-
-	// reference fmt to avoid unused import error
-	_ = fmt.Printf
-	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure)
-	_ = ns
-	// -main
-	{
-		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, lang.NewVector(int64(42), int64(1)), kw_file, "codegen/test/fn_closure.glj", kw_line, int(13), kw_column, int(7), kw_end_DASH_line, int(13), kw_end_DASH_column, int(38), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 0)
-			tmp3 := checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom)
-			tmp4 := lang.Apply(tmp3, nil)
-			_ = tmp4
-			tmp5 := checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_closure_closed)
-			tmp6 := lang.Apply(tmp5, nil)
-			tmp7 := checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom)
-			tmp8 := lang.Apply(tmp7, nil)
-			tmp9 := lang.NewVector(tmp6, tmp8)
-			tmp10 := lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(15), kw_column, int(3), kw_end_DASH_line, int(16), kw_end_DASH_column, int(14))
-			tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			return tmp11
-		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
-		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// closed
 	{
 		tmp0 := sym_closed.WithMeta(lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(5), kw_column, int(6), kw_end_DASH_line, int(5), kw_end_DASH_column, int(11), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
 			return closed0
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(3), kw_column, int(32), kw_end_DASH_line, int(3), kw_end_DASH_column, int(49))).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(3), kw_column, int(32), kw_end_DASH_line, int(3), kw_end_DASH_column, int(49))).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_fn_DASH_closure_closed = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_fn_DASH_closure_closed.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// gen-closure
 	{
 		tmp0 := sym_gen_DASH_closure.WithMeta(lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_the_DASH_result)), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
-			v3 := args[0]
-			_ = v3
-			var tmp4 lang.FnFunc
-			tmp4 = lang.NewFnFunc(func(args ...any) any {
+			v2 := args[0]
+			_ = v2
+			var tmp3 lang.FnFunc
+			tmp3 = lang.NewFnFunc(func(args ...any) any {
 				checkArity(args, 0)
-				return v3
+				return v2
 			})
-			tmp5 := lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(3), kw_column, int(32), kw_end_DASH_line, int(3), kw_end_DASH_column, int(49))
-			tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
+			tmp4 := lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(3), kw_column, int(32), kw_end_DASH_line, int(3), kw_end_DASH_column, int(49))
+			tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
 			}
-			return tmp6
+			return tmp5
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_fn_DASH_closure_gen_DASH_closure = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_fn_DASH_closure_gen_DASH_closure.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// -main
+	{
+		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, lang.NewVector(int64(42), int64(1)), kw_file, "codegen/test/fn_closure.glj", kw_line, int(13), kw_column, int(7), kw_end_DASH_line, int(13), kw_end_DASH_column, int(38), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))).(*lang.Symbol)
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
+			checkArity(args, 0)
+			tmp2 := checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom)
+			tmp3 := lang.Apply(tmp2, nil)
+			_ = tmp3
+			tmp4 := checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_closure_closed)
+			tmp5 := lang.Apply(tmp4, nil)
+			tmp6 := checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom)
+			tmp7 := lang.Apply(tmp6, nil)
+			tmp8 := lang.NewVector(tmp5, tmp7)
+			tmp9 := lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(15), kw_column, int(3), kw_end_DASH_line, int(16), kw_end_DASH_column, int(14))
+			tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
+			if err != nil {
+				panic(err)
+			}
+			return tmp10
+		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_fn_DASH_closure__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_codegen_DOT_test_DOT_fn_DASH_closure__DASH_main.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// get-atom
 	{
 		tmp0 := sym_get_DASH_atom.WithMeta(lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(10), kw_column, int(9), kw_end_DASH_line, int(10), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			tmp3 := checkDerefVar(var_glojure_DOT_core_deref)
-			tmp4 := lang.Apply(tmp3, []any{closed1})
-			return tmp4
+			tmp2 := checkDerefVar(var_glojure_DOT_core_deref)
+			tmp3 := lang.Apply(tmp2, []any{closed1})
+			return tmp3
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_fn_DASH_closure_get_DASH_atom.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// inc-atom
 	{
 		tmp0 := sym_inc_DASH_atom.WithMeta(lang.NewMap(kw_file, "codegen/test/fn_closure.glj", kw_line, int(8), kw_column, int(9), kw_end_DASH_line, int(8), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_closure))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			tmp3 := checkDerefVar(var_glojure_DOT_core_swap_BANG_)
-			tmp4 := checkDerefVar(var_glojure_DOT_core_inc)
-			tmp5 := lang.Apply(tmp3, []any{closed1, tmp4})
-			return tmp5
+			tmp2 := checkDerefVar(var_glojure_DOT_core_swap_BANG_)
+			tmp3 := checkDerefVar(var_glojure_DOT_core_inc)
+			tmp4 := lang.Apply(tmp2, []any{closed1, tmp3})
+			return tmp4
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_fn_DASH_closure_inc_DASH_atom.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

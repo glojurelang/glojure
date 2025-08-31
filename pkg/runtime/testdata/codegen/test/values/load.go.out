@@ -3,16 +3,16 @@
 package values
 
 import (
-	hex3 "encoding/hex"
+	hex4 "encoding/hex"
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
-	big4 "math/big"
+	big5 "math/big"
 	reflect "reflect"
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.values", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/values", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -43,19 +43,48 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
+	// var codegen.test.values/-main
+	var_codegen_DOT_test_DOT_values__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_values, sym__DASH_main)
 	// var codegen.test.values/big-decimal
 	var_codegen_DOT_test_DOT_values_big_DASH_decimal := lang.InternVarName(sym_codegen_DOT_test_DOT_values, sym_big_DASH_decimal)
 	// var codegen.test.values/big-decimal-type
 	var_codegen_DOT_test_DOT_values_big_DASH_decimal_DASH_type := lang.InternVarName(sym_codegen_DOT_test_DOT_values, sym_big_DASH_decimal_DASH_type)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values)
 	_ = ns
+	// big-decimal
+	{
+		tmp0 := sym_big_DASH_decimal.WithMeta(lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(16), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))).(*lang.Symbol)
+		tmp1 := lang.NewBigDecimalFromBigFloat((func() *big5.Float {
+			var z big5.Float
+			b, _ := hex4.DecodeString("010a0000004000000004a000000000000000")
+			if err := z.GobDecode(b); err != nil {
+				panic(err)
+			}
+			return &z
+		})())
+		var_codegen_DOT_test_DOT_values_big_DASH_decimal = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_codegen_DOT_test_DOT_values_big_DASH_decimal.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// big-decimal-type
+	{
+		tmp0 := sym_big_DASH_decimal_DASH_type.WithMeta(lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(4), kw_column, int(6), kw_end_DASH_line, int(4), kw_end_DASH_column, int(21), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))).(*lang.Symbol)
+		tmp1 := reflect.TypeOf((*lang.BigDecimal)(nil))
+		var_codegen_DOT_test_DOT_values_big_DASH_decimal_DASH_type = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_codegen_DOT_test_DOT_values_big_DASH_decimal_DASH_type.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
 	// -main
 	{
-		tmp1 := lang.NewBigDecimalFromBigFloat((func() *big4.Float {
-			var z big4.Float
-			b, _ := hex3.DecodeString("010a0000004000000004a000000000000000")
+		tmp1 := lang.NewBigDecimalFromBigFloat((func() *big5.Float {
+			var z big5.Float
+			b, _ := hex4.DecodeString("010a0000004000000004a000000000000000")
 			if err := z.GobDecode(b); err != nil {
 				panic(err)
 			}
@@ -63,48 +92,23 @@ func LoadNS() {
 		})())
 		tmp2 := reflect.TypeOf((*lang.BigDecimal)(nil))
 		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, lang.NewVector(tmp1, tmp2), kw_file, "codegen/test/values.glj", kw_line, int(6), kw_column, int(7), kw_end_DASH_line, int(6), kw_end_DASH_column, int(56), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))).(*lang.Symbol)
-		var tmp4 lang.FnFunc
-		tmp4 = lang.NewFnFunc(func(args ...any) any {
+		var tmp3 lang.FnFunc
+		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			tmp5 := checkDerefVar(var_codegen_DOT_test_DOT_values_big_DASH_decimal)
-			tmp6 := checkDerefVar(var_codegen_DOT_test_DOT_values_big_DASH_decimal_DASH_type)
-			tmp7 := lang.NewVector(tmp5, tmp6)
-			tmp8 := lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(7), kw_column, int(3), kw_end_DASH_line, int(7), kw_end_DASH_column, int(32))
-			tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
+			tmp4 := checkDerefVar(var_codegen_DOT_test_DOT_values_big_DASH_decimal)
+			tmp5 := checkDerefVar(var_codegen_DOT_test_DOT_values_big_DASH_decimal_DASH_type)
+			tmp6 := lang.NewVector(tmp4, tmp5)
+			tmp7 := lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(7), kw_column, int(3), kw_end_DASH_line, int(7), kw_end_DASH_column, int(32))
+			tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
 			}
-			return tmp9
+			return tmp8
 		})
-		tmp4 = tmp4.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp3 := ns.InternWithValue(tmp0, tmp4, true)
+		tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_values__DASH_main = ns.InternWithValue(tmp0, tmp3, true)
 		if tmp0.Meta() != nil {
-			tmp3.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// big-decimal
-	{
-		tmp0 := sym_big_DASH_decimal.WithMeta(lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(16), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))).(*lang.Symbol)
-		tmp2 := lang.NewBigDecimalFromBigFloat((func() *big4.Float {
-			var z big4.Float
-			b, _ := hex3.DecodeString("010a0000004000000004a000000000000000")
-			if err := z.GobDecode(b); err != nil {
-				panic(err)
-			}
-			return &z
-		})())
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
-		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// big-decimal-type
-	{
-		tmp0 := sym_big_DASH_decimal_DASH_type.WithMeta(lang.NewMap(kw_file, "codegen/test/values.glj", kw_line, int(4), kw_column, int(6), kw_end_DASH_line, int(4), kw_end_DASH_column, int(21), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_values))).(*lang.Symbol)
-		tmp2 := reflect.TypeOf((*lang.BigDecimal)(nil))
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
-		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_values__DASH_main.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

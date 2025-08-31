@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.multifn", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/multifn", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -47,6 +47,8 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
+	// var codegen.test.multifn/-main
+	var_codegen_DOT_test_DOT_multifn__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_multifn, sym__DASH_main)
 	// var codegen.test.multifn/add
 	var_codegen_DOT_test_DOT_multifn_add := lang.InternVarName(sym_codegen_DOT_test_DOT_multifn, sym_add)
 	// var glojure.core/+
@@ -57,62 +59,78 @@ func LoadNS() {
 	var_glojure_DOT_core_type := lang.InternVarName(sym_glojure_DOT_core, sym_type)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_multifn)
 	_ = ns
 	// -main
 	{
 		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, "int64: 7 float64: 8.0 default: 3 4", kw_file, "codegen/test/multifn.glj", kw_line, int(8), kw_column, int(7), kw_end_DASH_line, int(8), kw_end_DASH_column, int(68), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_multifn))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			tmp3 := checkDerefVar(var_glojure_DOT_core_str)
-			tmp4 := checkDerefVar(var_codegen_DOT_test_DOT_multifn_add)
-			tmp5 := lang.Apply(tmp4, []any{int64(3), int64(4)})
-			tmp6 := checkDerefVar(var_codegen_DOT_test_DOT_multifn_add)
-			tmp7 := lang.Apply(tmp6, []any{float64(3.5), float64(4.5)})
-			tmp8 := checkDerefVar(var_codegen_DOT_test_DOT_multifn_add)
-			tmp9 := lang.Apply(tmp8, []any{"3", "4"})
-			tmp10 := lang.Apply(tmp3, []any{tmp5, " ", tmp7, " ", tmp9})
-			return tmp10
+			tmp2 := checkDerefVar(var_glojure_DOT_core_str)
+			tmp3 := checkDerefVar(var_codegen_DOT_test_DOT_multifn_add)
+			tmp4 := lang.Apply(tmp3, []any{int64(3), int64(4)})
+			tmp5 := checkDerefVar(var_codegen_DOT_test_DOT_multifn_add)
+			tmp6 := lang.Apply(tmp5, []any{float64(3.5), float64(4.5)})
+			tmp7 := checkDerefVar(var_codegen_DOT_test_DOT_multifn_add)
+			tmp8 := lang.Apply(tmp7, []any{"3", "4"})
+			tmp9 := lang.Apply(tmp2, []any{tmp4, " ", tmp6, " ", tmp8})
+			return tmp9
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_multifn__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_multifn__DASH_main.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// add
 	{
 		tmp0 := sym_add.WithMeta(lang.NewMap(kw_file, "codegen/test/multifn.glj", kw_line, int(3), kw_column, int(11), kw_end_DASH_line, int(3), kw_end_DASH_column, int(13), kw_doc, "a multimethod for addition", kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_multifn))).(*lang.Symbol)
-		var tmp3 lang.FnFunc
-		tmp3 = lang.NewFnFunc(func(args ...any) any {
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
-			v4 := args[0]
+			v3 := args[0]
+			_ = v3
+			v4 := args[1]
 			_ = v4
-			v5 := args[1]
-			_ = v5
-			tmp6 := checkDerefVar(var_glojure_DOT_core_type)
-			tmp7 := lang.Apply(tmp6, []any{v4})
-			return tmp7
+			tmp5 := checkDerefVar(var_glojure_DOT_core_type)
+			tmp6 := lang.Apply(tmp5, []any{v3})
+			return tmp6
 		})
-		tmp3 = tmp3.WithMeta(lang.NewMap(kw_file, "codegen/test/multifn.glj", kw_line, int(3), kw_column, int(44), kw_end_DASH_line, int(3), kw_end_DASH_column, int(62))).(lang.FnFunc)
-		tmp2 := lang.NewMultiFn("add", tmp3, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp4 := reflect.TypeOf(int64(0))
-		var tmp5 lang.FnFunc
-		tmp5 = lang.NewFnFunc(func(args ...any) any {
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "codegen/test/multifn.glj", kw_line, int(3), kw_column, int(44), kw_end_DASH_line, int(3), kw_end_DASH_column, int(62))).(lang.FnFunc)
+		tmp1 := lang.NewMultiFn("add", tmp2, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
+		tmp3 := reflect.TypeOf(int64(0))
+		var tmp4 lang.FnFunc
+		tmp4 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
-			v6 := args[0]
+			v5 := args[0]
+			_ = v5
+			v6 := args[1]
 			_ = v6
-			v7 := args[1]
-			_ = v7
-			tmp8 := checkDerefVar(var_glojure_DOT_core_str)
-			tmp9 := checkDerefVar(var_glojure_DOT_core__PLUS_)
-			tmp10 := lang.Apply(tmp9, []any{v6, v7})
-			tmp11 := lang.Apply(tmp8, []any{"int64: ", tmp10})
-			return tmp11
+			tmp7 := checkDerefVar(var_glojure_DOT_core_str)
+			tmp8 := checkDerefVar(var_glojure_DOT_core__PLUS_)
+			tmp9 := lang.Apply(tmp8, []any{v5, v6})
+			tmp10 := lang.Apply(tmp7, []any{"int64: ", tmp9})
+			return tmp10
 		})
-		tmp2.AddMethod(tmp4, tmp5)
-		tmp6 := reflect.TypeOf(float64(0))
+		tmp1.AddMethod(tmp3, tmp4)
+		tmp5 := reflect.TypeOf(float64(0))
+		var tmp6 lang.FnFunc
+		tmp6 = lang.NewFnFunc(func(args ...any) any {
+			checkArity(args, 2)
+			v7 := args[0]
+			_ = v7
+			v8 := args[1]
+			_ = v8
+			tmp9 := checkDerefVar(var_glojure_DOT_core_str)
+			tmp10 := checkDerefVar(var_glojure_DOT_core__PLUS_)
+			tmp11 := lang.Apply(tmp10, []any{v7, v8})
+			tmp12 := lang.Apply(tmp9, []any{"float64: ", tmp11})
+			return tmp12
+		})
+		tmp1.AddMethod(tmp5, tmp6)
 		var tmp7 lang.FnFunc
 		tmp7 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -121,27 +139,13 @@ func LoadNS() {
 			v9 := args[1]
 			_ = v9
 			tmp10 := checkDerefVar(var_glojure_DOT_core_str)
-			tmp11 := checkDerefVar(var_glojure_DOT_core__PLUS_)
-			tmp12 := lang.Apply(tmp11, []any{v8, v9})
-			tmp13 := lang.Apply(tmp10, []any{"float64: ", tmp12})
-			return tmp13
+			tmp11 := lang.Apply(tmp10, []any{"default: ", v8, " ", v9})
+			return tmp11
 		})
-		tmp2.AddMethod(tmp6, tmp7)
-		var tmp8 lang.FnFunc
-		tmp8 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v9 := args[0]
-			_ = v9
-			v10 := args[1]
-			_ = v10
-			tmp11 := checkDerefVar(var_glojure_DOT_core_str)
-			tmp12 := lang.Apply(tmp11, []any{"default: ", v9, " ", v10})
-			return tmp12
-		})
-		tmp2.AddMethod(kw_default, tmp8)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1.AddMethod(kw_default, tmp7)
+		var_codegen_DOT_test_DOT_multifn_add = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_multifn_add.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

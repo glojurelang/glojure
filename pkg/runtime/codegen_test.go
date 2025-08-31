@@ -11,7 +11,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/glojurelang/glojure/pkg/codegen"
 	"github.com/glojurelang/glojure/pkg/glj"
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
@@ -20,7 +19,7 @@ import (
 
 func TestCodegen(t *testing.T) {
 	var testFiles []string
-	err := filepath.Walk("testdata", func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk("testdata/codegen", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -84,7 +83,7 @@ func generateAndTestNamespace(t *testing.T, ns *lang.Namespace, goldenFile strin
 
 	// Generate code for the namespace
 	var buf bytes.Buffer
-	gen := codegen.NewGenerator(&buf)
+	gen := runtime.NewGenerator(&buf)
 	if err := gen.Generate(ns); err != nil {
 		if os.Getenv("UPDATE_SNAPSHOT") == "1" {
 			// write the output anyway if we're updating the snapshot

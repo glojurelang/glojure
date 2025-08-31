@@ -6,10 +6,11 @@ import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	reflect "reflect"
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.fn-recur", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/fn_recur", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -45,6 +46,8 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
+	// var codegen.test.fn-recur/-main
+	var_codegen_DOT_test_DOT_fn_DASH_recur__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_fn_DASH_recur, sym__DASH_main)
 	// var codegen.test.fn-recur/fib
 	var_codegen_DOT_test_DOT_fn_DASH_recur_fib := lang.InternVarName(sym_codegen_DOT_test_DOT_fn_DASH_recur, sym_fib)
 	// var glojure.core/=
@@ -55,86 +58,88 @@ func LoadNS() {
 	var_glojure_DOT_core_inc := lang.InternVarName(sym_glojure_DOT_core, sym_inc)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_recur)
 	_ = ns
 	// -main
 	{
 		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, int64(55), kw_file, "codegen/test/fn_recur.glj", kw_line, int(12), kw_column, int(7), kw_end_DASH_line, int(12), kw_end_DASH_column, int(34), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_recur))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			tmp3 := checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_recur_fib)
-			tmp4 := lang.Apply(tmp3, []any{int64(10)})
-			return tmp4
+			tmp2 := checkDerefVar(var_codegen_DOT_test_DOT_fn_DASH_recur_fib)
+			tmp3 := lang.Apply(tmp2, []any{int64(10)})
+			return tmp3
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_fn_DASH_recur__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_fn_DASH_recur__DASH_main.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// fib
 	{
 		tmp0 := sym_fib.WithMeta(lang.NewMap(kw_file, "codegen/test/fn_recur.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(9), kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Calculates the nth Fibonacci number using iteration with recur.", kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_fn_DASH_recur))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
-			v3 := args[0]
-			_ = v3
-			var tmp4 any
+			v2 := args[0]
+			_ = v2
+			var tmp3 any
 			{ // let
 				// let binding "fib-helper"
-				var tmp5 lang.FnFunc
+				var tmp4 lang.FnFunc
 				{ // function fib-helper
-					var v6 lang.FnFunc
-					tmp5 = lang.NewFnFunc(func(args ...any) any {
+					var v5 lang.FnFunc
+					tmp4 = lang.NewFnFunc(func(args ...any) any {
 						checkArity(args, 3)
-						v7 := args[0]
+						v6 := args[0]
+						_ = v6
+						v7 := args[1]
 						_ = v7
-						v8 := args[1]
+						v8 := args[2]
 						_ = v8
-						v9 := args[2]
-						_ = v9
 					recur_loop_1612:
-						var tmp10 any
-						tmp11 := checkDerefVar(var_glojure_DOT_core__EQ_)
-						tmp12 := lang.Apply(tmp11, []any{v9, v3})
-						if lang.IsTruthy(tmp12) {
-							tmp10 = v7
+						var tmp9 any
+						tmp10 := checkDerefVar(var_glojure_DOT_core__EQ_)
+						tmp11 := lang.Apply(tmp10, []any{v8, v2})
+						if lang.IsTruthy(tmp11) {
+							tmp9 = v6
 						} else {
-							var tmp13 any = v8
-							tmp15 := checkDerefVar(var_glojure_DOT_core__PLUS_)
-							tmp16 := lang.Apply(tmp15, []any{v7, v8})
-							var tmp14 any = tmp16
-							tmp18 := checkDerefVar(var_glojure_DOT_core_inc)
-							tmp19 := lang.Apply(tmp18, []any{v9})
-							var tmp17 any = tmp19
+							var tmp12 any = v7
+							tmp14 := checkDerefVar(var_glojure_DOT_core__PLUS_)
+							tmp15 := lang.Apply(tmp14, []any{v6, v7})
+							var tmp13 any = tmp15
+							tmp17 := checkDerefVar(var_glojure_DOT_core_inc)
+							tmp18 := lang.Apply(tmp17, []any{v8})
+							var tmp16 any = tmp18
+							v6 = tmp12
 							v7 = tmp13
-							v8 = tmp14
-							v9 = tmp17
+							v8 = tmp16
 							goto recur_loop_1612
 						}
-						return tmp10
+						return tmp9
 					})
-					v6 = tmp5
-					_ = v6
+					v5 = tmp4
+					_ = v5
 				}
-				tmp6 := lang.NewMap(kw_file, "codegen/test/fn_recur.glj", kw_line, int(6), kw_column, int(20), kw_end_DASH_line, int(9), kw_end_DASH_column, int(50))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
+				tmp5 := lang.NewMap(kw_file, "codegen/test/fn_recur.glj", kw_line, int(6), kw_column, int(20), kw_end_DASH_line, int(9), kw_end_DASH_column, int(50))
+				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				var v8 any = tmp7
-				_ = v8
-				tmp9 := lang.Apply(v8, []any{int64(0), int64(1), int64(0)})
-				tmp4 = tmp9
+				var v7 any = tmp6
+				_ = v7
+				tmp8 := lang.Apply(v7, []any{int64(0), int64(1), int64(0)})
+				tmp3 = tmp8
 			} // end let
-			return tmp4
+			return tmp3
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_fn_DASH_recur_fib = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_fn_DASH_recur_fib.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

@@ -6,10 +6,11 @@ import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	reflect "reflect"
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.try-advanced", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/try_advanced", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -44,6 +45,8 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
+	// var codegen.test.try-advanced/-main
+	var_codegen_DOT_test_DOT_try_DASH_advanced__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_try_DASH_advanced, sym__DASH_main)
 	// var codegen.test.try-advanced/catch-binding-scope
 	var_codegen_DOT_test_DOT_try_DASH_advanced_catch_DASH_binding_DASH_scope := lang.InternVarName(sym_codegen_DOT_test_DOT_try_DASH_advanced, sym_catch_DASH_binding_DASH_scope)
 	// var codegen.test.try-advanced/catch-binding-scope-2
@@ -56,81 +59,29 @@ func LoadNS() {
 	var_glojure_DOT_core__EQ_ := lang.InternVarName(sym_glojure_DOT_core, sym__EQ_)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_advanced)
 	_ = ns
-	// -main
-	{
-		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, "advanced tests passed", kw_file, "codegen/test/try_advanced.glj", kw_line, int(30), kw_column, int(7), kw_end_DASH_line, int(30), kw_end_DASH_column, int(55), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_advanced))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 0)
-			var tmp3 any
-			tmp4 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp5 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_advanced_try_DASH_custom_DASH_value)
-			tmp6 := lang.Apply(tmp5, nil)
-			tmp7 := lang.Apply(tmp4, []any{tmp6, "custom error"})
-			if lang.IsTruthy(tmp7) {
-			} else {
-				panic("try-custom-value failed")
-			}
-			_ = tmp3
-			var tmp8 any
-			tmp9 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp10 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_advanced_catch_DASH_binding_DASH_scope)
-			tmp11 := lang.Apply(tmp10, nil)
-			tmp12 := lang.Apply(tmp9, []any{tmp11, "test"})
-			if lang.IsTruthy(tmp12) {
-			} else {
-				panic("catch-binding-scope failed")
-			}
-			_ = tmp8
-			var tmp13 any
-			tmp14 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp15 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_advanced_catch_DASH_binding_DASH_scope_DASH_2)
-			tmp16 := lang.Apply(tmp15, nil)
-			tmp17 := lang.Apply(tmp14, []any{tmp16, "outer"})
-			if lang.IsTruthy(tmp17) {
-			} else {
-				panic("catch-binding-scope-2 failed")
-			}
-			_ = tmp13
-			var tmp18 any
-			tmp19 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp20 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_advanced_finally_DASH_with_DASH_return)
-			tmp21 := lang.Apply(tmp20, nil)
-			tmp22 := lang.Apply(tmp19, []any{tmp21, int64(42)})
-			if lang.IsTruthy(tmp22) {
-			} else {
-				panic("finally-with-return failed")
-			}
-			_ = tmp18
-			return "advanced tests passed"
-		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
-		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// catch-binding-scope
 	{
 		tmp0 := sym_catch_DASH_binding_DASH_scope.WithMeta(lang.NewMap(kw_file, "codegen/test/try_advanced.glj", kw_line, int(9), kw_column, int(7), kw_end_DASH_line, int(9), kw_end_DASH_column, int(25), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_advanced))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			var tmp3 any
+			var tmp2 any
 			{ // let
 				// let binding "e"
-				var v4 any = "outer"
-				_ = v4
-				var tmp5 any
+				var v3 any = "outer"
+				_ = v3
+				var tmp4 any
 				func() {
 					defer func() {
 						if r := recover(); r != nil {
 							if lang.CatchMatches(r, lang.Builtins["any"]) {
-								v6 := r
-								_ = v6
-								tmp5 = v6
+								v5 := r
+								_ = v5
+								tmp4 = v5
 							} else {
 								panic(r)
 							}
@@ -138,35 +89,35 @@ func LoadNS() {
 					}()
 					panic("test")
 				}()
-				tmp3 = tmp5
+				tmp2 = tmp4
 			} // end let
-			return tmp3
+			return tmp2
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_advanced_catch_DASH_binding_DASH_scope = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_try_DASH_advanced_catch_DASH_binding_DASH_scope.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// catch-binding-scope-2
 	{
 		tmp0 := sym_catch_DASH_binding_DASH_scope_DASH_2.WithMeta(lang.NewMap(kw_file, "codegen/test/try_advanced.glj", kw_line, int(16), kw_column, int(7), kw_end_DASH_line, int(16), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_advanced))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			var tmp3 any
+			var tmp2 any
 			{ // let
 				// let binding "e"
-				var v4 any = "outer"
-				_ = v4
-				var tmp5 any
+				var v3 any = "outer"
+				_ = v3
+				var tmp4 any
 				func() {
 					defer func() {
 						if r := recover(); r != nil {
 							if lang.CatchMatches(r, lang.Builtins["any"]) {
-								v6 := r
-								_ = v6
-								tmp5 = v6
+								v5 := r
+								_ = v5
+								tmp4 = v5
 							} else {
 								panic(r)
 							}
@@ -174,52 +125,52 @@ func LoadNS() {
 					}()
 					panic("test")
 				}()
-				_ = tmp5
-				tmp3 = v4
+				_ = tmp4
+				tmp2 = v3
 			} // end let
-			return tmp3
+			return tmp2
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_advanced_catch_DASH_binding_DASH_scope_DASH_2 = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_try_DASH_advanced_catch_DASH_binding_DASH_scope_DASH_2.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// finally-with-return
 	{
 		tmp0 := sym_finally_DASH_with_DASH_return.WithMeta(lang.NewMap(kw_file, "codegen/test/try_advanced.glj", kw_line, int(24), kw_column, int(7), kw_end_DASH_line, int(24), kw_end_DASH_column, int(25), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_advanced))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			var tmp3 any
+			var tmp2 any
 			func() {
 				defer func() {
 					_ = int64(100)
 				}()
-				tmp3 = int64(42)
+				tmp2 = int64(42)
 			}()
-			return tmp3
+			return tmp2
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_advanced_finally_DASH_with_DASH_return = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_try_DASH_advanced_finally_DASH_with_DASH_return.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// try-custom-value
 	{
 		tmp0 := sym_try_DASH_custom_DASH_value.WithMeta(lang.NewMap(kw_file, "codegen/test/try_advanced.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_advanced))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			var tmp3 any
+			var tmp2 any
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
 						if lang.CatchMatches(r, lang.Builtins["any"]) {
-							v4 := r
-							_ = v4
-							tmp3 = v4
+							v3 := r
+							_ = v3
+							tmp2 = v3
 						} else {
 							panic(r)
 						}
@@ -227,12 +178,66 @@ func LoadNS() {
 				}()
 				panic("custom error")
 			}()
-			return tmp3
+			return tmp2
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_advanced_try_DASH_custom_DASH_value = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_try_DASH_advanced_try_DASH_custom_DASH_value.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// -main
+	{
+		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, "advanced tests passed", kw_file, "codegen/test/try_advanced.glj", kw_line, int(30), kw_column, int(7), kw_end_DASH_line, int(30), kw_end_DASH_column, int(55), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_advanced))).(*lang.Symbol)
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
+			checkArity(args, 0)
+			var tmp2 any
+			tmp3 := checkDerefVar(var_glojure_DOT_core__EQ_)
+			tmp4 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_advanced_try_DASH_custom_DASH_value)
+			tmp5 := lang.Apply(tmp4, nil)
+			tmp6 := lang.Apply(tmp3, []any{tmp5, "custom error"})
+			if lang.IsTruthy(tmp6) {
+			} else {
+				panic("try-custom-value failed")
+			}
+			_ = tmp2
+			var tmp7 any
+			tmp8 := checkDerefVar(var_glojure_DOT_core__EQ_)
+			tmp9 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_advanced_catch_DASH_binding_DASH_scope)
+			tmp10 := lang.Apply(tmp9, nil)
+			tmp11 := lang.Apply(tmp8, []any{tmp10, "test"})
+			if lang.IsTruthy(tmp11) {
+			} else {
+				panic("catch-binding-scope failed")
+			}
+			_ = tmp7
+			var tmp12 any
+			tmp13 := checkDerefVar(var_glojure_DOT_core__EQ_)
+			tmp14 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_advanced_catch_DASH_binding_DASH_scope_DASH_2)
+			tmp15 := lang.Apply(tmp14, nil)
+			tmp16 := lang.Apply(tmp13, []any{tmp15, "outer"})
+			if lang.IsTruthy(tmp16) {
+			} else {
+				panic("catch-binding-scope-2 failed")
+			}
+			_ = tmp12
+			var tmp17 any
+			tmp18 := checkDerefVar(var_glojure_DOT_core__EQ_)
+			tmp19 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_advanced_finally_DASH_with_DASH_return)
+			tmp20 := lang.Apply(tmp19, nil)
+			tmp21 := lang.Apply(tmp18, []any{tmp20, int64(42)})
+			if lang.IsTruthy(tmp21) {
+			} else {
+				panic("finally-with-return failed")
+			}
+			_ = tmp17
+			return "advanced tests passed"
+		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_advanced__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_codegen_DOT_test_DOT_try_DASH_advanced__DASH_main.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

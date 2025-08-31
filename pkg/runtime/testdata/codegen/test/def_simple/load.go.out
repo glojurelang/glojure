@@ -6,10 +6,11 @@ import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	reflect "reflect"
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.def-simple", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/def_simple", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -29,16 +30,20 @@ func checkArity(args []any, expected int) {
 func LoadNS() {
 	sym_codegen_DOT_test_DOT_def_DASH_simple := lang.NewSymbol("codegen.test.def-simple")
 	sym_foo := lang.NewSymbol("foo")
+	// var codegen.test.def-simple/foo
+	var_codegen_DOT_test_DOT_def_DASH_simple_foo := lang.InternVarName(sym_codegen_DOT_test_DOT_def_DASH_simple, sym_foo)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_def_DASH_simple)
 	_ = ns
 	// foo
 	{
 		tmp0 := sym_foo.WithMeta(lang.NewMap()).(*lang.Symbol)
-		tmp1 := ns.Intern(tmp0)
+		var_codegen_DOT_test_DOT_def_DASH_simple_foo = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_def_DASH_simple_foo.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

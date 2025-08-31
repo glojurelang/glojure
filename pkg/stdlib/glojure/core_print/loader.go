@@ -3,24 +3,21 @@
 package core
 
 import (
-	errors8 "errors"
+	errors5 "errors"
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
-	uuid13 "github.com/google/uuid"
-	io4 "io"
-	math7 "math"
-	big9 "math/big"
-	rand16 "math/rand"
-	http17 "net/http"
-	url5 "net/url"
-	os6 "os"
+	uuid10 "github.com/google/uuid"
+	math4 "math"
+	big6 "math/big"
+	rand13 "math/rand"
+	url14 "net/url"
 	reflect "reflect"
-	regexp15 "regexp"
-	runtime14 "runtime"
-	strconv12 "strconv"
-	strings11 "strings"
-	time10 "time"
+	regexp12 "regexp"
+	runtime11 "runtime"
+	strconv9 "strconv"
+	strings8 "strings"
+	time7 "time"
 )
 
 func init() {
@@ -109,7 +106,6 @@ func LoadNS() {
 	sym_Datafiable := lang.NewSymbol("Datafiable")
 	sym_Double_SLASH_isInfinite := lang.NewSymbol("Double/isInfinite")
 	sym_IKVReduce := lang.NewSymbol("IKVReduce")
-	sym_IOFactory := lang.NewSymbol("IOFactory")
 	sym_InternalReduce := lang.NewSymbol("InternalReduce")
 	sym_NaN_QMARK_ := lang.NewSymbol("NaN?")
 	sym_Navigable := lang.NewSymbol("Navigable")
@@ -389,7 +385,6 @@ func LoadNS() {
 	sym_extend_DASH_type := lang.NewSymbol("extend-type")
 	sym_f := lang.NewSymbol("f")
 	sym_false_QMARK_ := lang.NewSymbol("false?")
-	sym_fdecl := lang.NewSymbol("fdecl")
 	sym_ffirst := lang.NewSymbol("ffirst")
 	sym_file_DASH_seq := lang.NewSymbol("file-seq")
 	sym_filter := lang.NewSymbol("filter")
@@ -774,10 +769,6 @@ func LoadNS() {
 	sym_macroexpand_DASH_1 := lang.NewSymbol("macroexpand-1")
 	sym_make_DASH_array := lang.NewSymbol("make-array")
 	sym_make_DASH_hierarchy := lang.NewSymbol("make-hierarchy")
-	sym_make_DASH_input_DASH_stream := lang.NewSymbol("make-input-stream")
-	sym_make_DASH_output_DASH_stream := lang.NewSymbol("make-output-stream")
-	sym_make_DASH_reader := lang.NewSymbol("make-reader")
-	sym_make_DASH_writer := lang.NewSymbol("make-writer")
 	sym_map := lang.NewSymbol("map")
 	sym_map_DASH_entry_QMARK_ := lang.NewSymbol("map-entry?")
 	sym_map_DASH_indexed := lang.NewSymbol("map-indexed")
@@ -1215,6 +1206,7 @@ func LoadNS() {
 	sym_uri_QMARK_ := lang.NewSymbol("uri?")
 	sym_url := lang.NewSymbol("url")
 	sym_use := lang.NewSymbol("use")
+	sym_user := lang.NewSymbol("user")
 	sym_uuid_QMARK_ := lang.NewSymbol("uuid?")
 	sym_v := lang.NewSymbol("v")
 	sym_v__0__auto__ := lang.NewSymbol("v__0__auto__")
@@ -1330,10 +1322,6 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_macro := lang.NewKeyword("macro")
 	kw_main := lang.NewKeyword("main")
-	kw_make_DASH_input_DASH_stream := lang.NewKeyword("make-input-stream")
-	kw_make_DASH_output_DASH_stream := lang.NewKeyword("make-output-stream")
-	kw_make_DASH_reader := lang.NewKeyword("make-reader")
-	kw_make_DASH_writer := lang.NewKeyword("make-writer")
 	kw_mappings := lang.NewKeyword("mappings")
 	kw_max_DASH_history := lang.NewKeyword("max-history")
 	kw_message := lang.NewKeyword("message")
@@ -2790,12 +2778,6 @@ func LoadNS() {
 	var_glojure_DOT_core_zipmap := lang.InternVarName(sym_glojure_DOT_core, sym_zipmap)
 	// var glojure.go.io/copy
 	var_glojure_DOT_go_DOT_io_copy := lang.InternVarName(sym_glojure_DOT_go_DOT_io, sym_copy)
-	// var glojure.go.io/make-input-stream
-	var_glojure_DOT_go_DOT_io_make_DASH_input_DASH_stream := lang.InternVarName(sym_glojure_DOT_go_DOT_io, sym_make_DASH_input_DASH_stream)
-	// var glojure.go.io/make-output-stream
-	var_glojure_DOT_go_DOT_io_make_DASH_output_DASH_stream := lang.InternVarName(sym_glojure_DOT_go_DOT_io, sym_make_DASH_output_DASH_stream)
-	// var glojure.go.io/make-writer
-	var_glojure_DOT_go_DOT_io_make_DASH_writer := lang.InternVarName(sym_glojure_DOT_go_DOT_io, sym_make_DASH_writer)
 	// var glojure.go.io/reader
 	var_glojure_DOT_go_DOT_io_reader := lang.InternVarName(sym_glojure_DOT_go_DOT_io, sym_reader)
 	// reference fmt to avoid unused import error
@@ -2876,17 +2858,15 @@ func LoadNS() {
 	}
 	var closed17 any
 	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v1 := args[0]
-			_ = v1
-			v2 := args[1]
-			_ = v2
-			return v1
-		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(188), kw_column, int(18), kw_end_DASH_line, int(188), kw_end_DASH_column, int(32))).(lang.FnFunc)
-		closed17 = tmp0
+		closed17 = sym_divide
+	}
+	var closed18 any
+	{
+		closed18 = sym_and
+	}
+	var closed19 any
+	{
+		closed19 = sym_andNot
 	}
 	var closed2 any
 	{
@@ -2894,79 +2874,21 @@ func LoadNS() {
 	}
 	var closed20 any
 	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v1 := args[0]
-			_ = v1
-			v2 := args[1]
-			_ = v2
-			return v1
-		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(187), kw_column, int(24), kw_end_DASH_line, int(187), kw_end_DASH_column, int(38))).(lang.FnFunc)
-		closed20 = tmp0
+		closed20 = sym_or
 	}
 	var closed21 any
 	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v1 := args[0]
-			_ = v1
-			v2 := args[1]
-			_ = v2
-			return v1
-		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(226), kw_column, int(24), kw_end_DASH_line, int(226), kw_end_DASH_column, int(48))).(lang.FnFunc)
-		closed21 = tmp0
+		closed21 = sym_xor
 	}
-	var closed25 any
+	var closed22 any
 	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v1 := args[0]
-			_ = v1
-			v2 := args[1]
-			_ = v2
-			return v1
-		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(227), kw_column, int(25), kw_end_DASH_line, int(227), kw_end_DASH_column, int(49))).(lang.FnFunc)
-		closed25 = tmp0
+		closed22 = sym_max
 	}
-	var closed28 any
+	var closed23 any
 	{
-		closed28 = sym_divide
+		closed23 = sym_min
 	}
-	var closed29 any
-	{
-		closed29 = sym_and
-	}
-	var closed3 any
-	{
-		closed3 = sym_unchecked_add
-	}
-	var closed30 any
-	{
-		closed30 = sym_andNot
-	}
-	var closed31 any
-	{
-		closed31 = sym_or
-	}
-	var closed32 any
-	{
-		closed32 = sym_xor
-	}
-	var closed33 any
-	{
-		closed33 = sym_max
-	}
-	var closed34 any
-	{
-		closed34 = sym_min
-	}
-	var closed35 any
+	var closed24 any
 	{
 		var tmp0 lang.FnFunc
 		tmp0 = lang.NewFnFunc(func(args ...any) any {
@@ -2983,7 +2905,11 @@ func LoadNS() {
 		})
 		tmp1 := reflect.TypeOf(false)
 		tmp0 = tmp0.WithMeta(lang.NewMap(kw_rettag, tmp1)).(lang.FnFunc)
-		closed35 = tmp0
+		closed24 = tmp0
+	}
+	var closed3 any
+	{
+		closed3 = sym_unchecked_add
 	}
 	var closed4 any
 	{
@@ -3125,7 +3051,7 @@ func LoadNS() {
 	// *compile-files*
 	{
 		tmp0 := sym__STAR_compile_DASH_files_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "Set to true when compiling files, false otherwise.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		var_glojure_DOT_core__STAR_compile_DASH_files_STAR_ = ns.InternWithValue(tmp0, false, true)
+		var_glojure_DOT_core__STAR_compile_DASH_files_STAR_ = ns.InternWithValue(tmp0, true, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_compile_DASH_files_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
@@ -3197,7 +3123,7 @@ func LoadNS() {
 	// *loaded-libs*
 	{
 		tmp0 := sym__STAR_loaded_DASH_libs_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "glojure/core.glj", kw_line, int(5817), kw_column, int(10), kw_end_DASH_line, int(5820), kw_end_DASH_column, int(15), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_glojure_DOT_core_DOT_protocols, sym_glojure_DOT_string, sym_glojure_DOT_go_DOT_io})))
+		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_glojure_DOT_core_DOT_protocols, sym_glojure_DOT_string, sym_glojure_DOT_go_DOT_io, sym_user})))
 		var_glojure_DOT_core__STAR_loaded_DASH_libs_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_loaded_DASH_libs_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3222,7 +3148,7 @@ func LoadNS() {
 	// *pending-paths*
 	{
 		tmp0 := sym__STAR_pending_DASH_paths_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "glojure/core.glj", kw_line, int(5822), kw_column, int(10), kw_end_DASH_line, int(5825), kw_end_DASH_column, int(17), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		var_glojure_DOT_core__STAR_pending_DASH_paths_STAR_ = ns.InternWithValue(tmp0, lang.NewList(), true)
+		var_glojure_DOT_core__STAR_pending_DASH_paths_STAR_ = ns.InternWithValue(tmp0, lang.NewList("/glojure/core_print", "/glojure/core"), true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_pending_DASH_paths_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
@@ -3294,7 +3220,7 @@ func LoadNS() {
 	// *unchecked-math*
 	{
 		tmp0 := sym__STAR_unchecked_DASH_math_STAR_.WithMeta(lang.NewMap(kw_added, "1.3", kw_doc, "While bound to true, compilations of +, -, *, inc, dec and the\n  coercions will be done without overflow checks. While bound\n  to :warn-on-boxed, same behavior as true, and a warning is emitted\n  when compilation uses boxed math. Default: false.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_ = ns.InternWithValue(tmp0, nil, true)
+		var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_ = ns.InternWithValue(tmp0, false, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
@@ -3310,7 +3236,7 @@ func LoadNS() {
 	// *warn-on-reflection*
 	{
 		tmp0 := sym__STAR_warn_DASH_on_DASH_reflection_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "When set to true, the compiler will emit warnings when reflection is\n  needed to resolve Java method calls or field accesses.\n\n  Defaults to false.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		var_glojure_DOT_core__STAR_warn_DASH_on_DASH_reflection_STAR_ = ns.InternWithValue(tmp0, nil, true)
+		var_glojure_DOT_core__STAR_warn_DASH_on_DASH_reflection_STAR_ = ns.InternWithValue(tmp0, true, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_warn_DASH_on_DASH_reflection_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
@@ -3505,6 +3431,22 @@ func LoadNS() {
 		var_glojure_DOT_core_any_QMARK_ = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_any_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// assert-valid-fdecl
+	{
+		tmp0 := sym_assert_DASH_valid_DASH_fdecl.WithMeta(lang.NewMap(kw_private, true, kw_dynamic, true, kw_file, "glojure/core.glj", kw_line, int(219), kw_column, int(6), kw_end_DASH_line, int(220), kw_end_DASH_column, int(20), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
+			checkArity(args, 1)
+			v2 := args[0]
+			_ = v2
+			return nil
+		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(220), kw_column, int(22), kw_end_DASH_line, int(220), kw_end_DASH_column, int(33))).(lang.FnFunc)
+		var_glojure_DOT_core_assert_DASH_valid_DASH_fdecl = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_glojure_DOT_core_assert_DASH_valid_DASH_fdecl.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// bit-clear
@@ -4090,7 +4032,7 @@ func LoadNS() {
 	}
 	// denominator
 	{
-		tmp1 := reflect.TypeOf((*big9.Int)(nil))
+		tmp1 := reflect.TypeOf((*big6.Int)(nil))
 		tmp0 := sym_denominator.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_r)), kw_doc, "Returns the denominator part of a Ratio.", kw_static, true, kw_file, "glojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3591), kw_end_DASH_line, int(3591))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
@@ -4110,7 +4052,7 @@ func LoadNS() {
 			}
 			return tmp5
 		})
-		tmp3 := reflect.TypeOf((*big9.Int)(nil))
+		tmp3 := reflect.TypeOf((*big6.Int)(nil))
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
 		var_glojure_DOT_core_denominator = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
@@ -4163,7 +4105,7 @@ func LoadNS() {
 					if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
 					}
-					tmp8 := lang.Apply(tmp7, []any{v3, time10.Millisecond})
+					tmp8 := lang.Apply(tmp7, []any{v3, time7.Millisecond})
 					tmp5 = tmp8
 				}()
 				return tmp5
@@ -5492,7 +5434,7 @@ func LoadNS() {
 	}
 	// numerator
 	{
-		tmp1 := reflect.TypeOf((*big9.Int)(nil))
+		tmp1 := reflect.TypeOf((*big6.Int)(nil))
 		tmp0 := sym_numerator.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_r)), kw_doc, "Returns the numerator part of a Ratio.", kw_static, true, kw_file, "glojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3583), kw_end_DASH_line, int(3583))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
@@ -5512,7 +5454,7 @@ func LoadNS() {
 			}
 			return tmp5
 		})
-		tmp3 := reflect.TypeOf((*big9.Int)(nil))
+		tmp3 := reflect.TypeOf((*big6.Int)(nil))
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
 		var_glojure_DOT_core_numerator = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
@@ -5713,7 +5655,7 @@ func LoadNS() {
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			tmp2 := lang.Apply(uuid13.NewV7, nil)
+			tmp2 := lang.Apply(uuid10.NewV7, nil)
 			return tmp2
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -5785,7 +5727,7 @@ func LoadNS() {
 	}
 	// re-pattern
 	{
-		tmp1 := reflect.TypeOf((*regexp15.Regexp)(nil))
+		tmp1 := reflect.TypeOf((*regexp12.Regexp)(nil))
 		tmp0 := sym_re_DASH_pattern.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns an instance of java.util.regex.Pattern, for use, e.g. in\n  re-matcher.", kw_static, true, kw_file, "glojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4863), kw_end_DASH_line, int(4863))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
@@ -5794,17 +5736,17 @@ func LoadNS() {
 			_ = v3
 			var tmp4 any
 			tmp5 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-			tmp6 := reflect.TypeOf((*regexp15.Regexp)(nil))
+			tmp6 := reflect.TypeOf((*regexp12.Regexp)(nil))
 			tmp7 := lang.Apply(tmp5, []any{tmp6, v3})
 			if lang.IsTruthy(tmp7) {
 				tmp4 = v3
 			} else {
-				tmp8 := lang.Apply(regexp15.MustCompile, []any{v3})
+				tmp8 := lang.Apply(regexp12.MustCompile, []any{v3})
 				tmp4 = tmp8
 			}
 			return tmp4
 		})
-		tmp3 := reflect.TypeOf((*regexp15.Regexp)(nil))
+		tmp3 := reflect.TypeOf((*regexp12.Regexp)(nil))
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
 		var_glojure_DOT_core_re_DASH_pattern = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
@@ -6610,7 +6552,7 @@ func LoadNS() {
 			_ = v2
 			v3 := args[1]
 			_ = v3
-		recur_loop_481:
+		recur_loop_2021:
 			var tmp4 any
 			{ // let
 				// let binding "temp__0__auto__"
@@ -6643,7 +6585,7 @@ func LoadNS() {
 								var tmp18 any = tmp20
 								v2 = tmp17
 								v3 = tmp18
-								goto recur_loop_481
+								goto recur_loop_2021
 							}
 							tmp11 = tmp16
 						} // end let
@@ -6900,7 +6842,7 @@ func LoadNS() {
 					_ = v6
 					v7 := args[1]
 					_ = v7
-				recur_loop_74:
+				recur_loop_1614:
 					var tmp8 any
 					if lang.IsTruthy(v7) {
 						tmp10 := checkDerefVar(var_glojure_DOT_core_str)
@@ -6919,7 +6861,7 @@ func LoadNS() {
 						var tmp16 any = tmp18
 						v6 = tmp9
 						v7 = tmp16
-						goto recur_loop_74
+						goto recur_loop_1614
 					} else {
 						tmp19, ok := lang.FieldOrMethod(v6, "String")
 						if !ok {
@@ -7607,7 +7549,7 @@ func LoadNS() {
 			v2 := args[0]
 			_ = v2
 			tmp3 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-			tmp4 := reflect.TypeOf((*url5.URL)(nil)).Elem()
+			tmp4 := reflect.TypeOf((*url14.URL)(nil)).Elem()
 			tmp5 := lang.Apply(tmp3, []any{tmp4, v2})
 			return tmp5
 		})
@@ -8050,7 +7992,7 @@ func LoadNS() {
 			var_glojure_DOT_core_with_DASH_meta.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
-	var closed36 any
+	var closed25 any
 	{
 		var tmp0 lang.FnFunc
 		tmp0 = lang.NewFnFunc(func(args ...any) any {
@@ -8059,7 +8001,7 @@ func LoadNS() {
 			_ = v1
 			v2 := args[1]
 			_ = v2
-		recur_loop_481:
+		recur_loop_2021:
 			var tmp3 any
 			{ // let
 				// let binding "temp__0__auto__"
@@ -8092,7 +8034,7 @@ func LoadNS() {
 								var tmp17 any = tmp19
 								v1 = tmp16
 								v2 = tmp17
-								goto recur_loop_481
+								goto recur_loop_2021
 							}
 							tmp10 = tmp15
 						} // end let
@@ -8106,9 +8048,9 @@ func LoadNS() {
 			return tmp3
 		})
 		tmp0 = tmp0.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		closed36 = tmp0
+		closed25 = tmp0
 	}
-	var closed37 any
+	var closed26 any
 	{
 		var tmp0 lang.FnFunc
 		tmp0 = lang.NewFnFunc(func(args ...any) any {
@@ -8117,7 +8059,7 @@ func LoadNS() {
 			_ = v1
 			v2 := args[1]
 			_ = v2
-		recur_loop_480:
+		recur_loop_2020:
 			var tmp3 any
 			tmp4 := checkDerefVar(var_glojure_DOT_core_nil_QMARK_)
 			tmp5 := checkDerefVar(var_glojure_DOT_core_seq)
@@ -8137,7 +8079,7 @@ func LoadNS() {
 					var tmp13 any = tmp15
 					v1 = tmp12
 					v2 = tmp13
-					goto recur_loop_480
+					goto recur_loop_2020
 				} else {
 					var tmp16 any
 					if lang.IsTruthy(kw_else) {
@@ -8152,7 +8094,7 @@ func LoadNS() {
 		})
 		tmp1 := reflect.TypeOf(false)
 		tmp0 = tmp0.WithMeta(lang.NewMap(kw_rettag, tmp1)).(lang.FnFunc)
-		closed37 = tmp0
+		closed26 = tmp0
 	}
 	// agent-errors
 	{
@@ -8246,7 +8188,7 @@ func LoadNS() {
 					_ = v5
 					var v6 any = lang.NewList(args[3:]...)
 					_ = v6
-				recur_loop_24:
+				recur_loop_1564:
 					var tmp7 any
 					{ // let
 						// let binding "ret"
@@ -8273,7 +8215,7 @@ func LoadNS() {
 								v4 = tmp15
 								v5 = tmp18
 								v6 = tmp21
-								goto recur_loop_24
+								goto recur_loop_1564
 							} else {
 								tmp24 := lang.Apply(lang.NewIllegalArgumentError, []any{"assoc expects even number of arguments after map/vector, found odd number"})
 								panic(tmp24)
@@ -8325,7 +8267,7 @@ func LoadNS() {
 				_ = v4
 				var v5 any = lang.NewList(args[3:]...)
 				_ = v5
-			recur_loop_609:
+			recur_loop_2149:
 				var tmp6 any
 				{ // let
 					// let binding "ret"
@@ -8352,7 +8294,7 @@ func LoadNS() {
 						v3 = tmp12
 						v4 = tmp15
 						v5 = tmp18
-						goto recur_loop_609
+						goto recur_loop_2149
 					} else {
 						tmp10 = v9
 					}
@@ -8866,7 +8808,7 @@ func LoadNS() {
 					_ = v4
 					var v5 any = lang.NewList(args[2:]...)
 					_ = v5
-				recur_loop_10:
+				recur_loop_1550:
 					var tmp6 any
 					if lang.IsTruthy(v5) {
 						tmp8 := lang.Apply(lang.Conj, []any{v3, v4})
@@ -8880,7 +8822,7 @@ func LoadNS() {
 						v3 = tmp7
 						v4 = tmp9
 						v5 = tmp12
-						goto recur_loop_10
+						goto recur_loop_1550
 					} else {
 						tmp15 := lang.Apply(lang.Conj, []any{v3, v4})
 						tmp6 = tmp15
@@ -9367,7 +9309,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = lang.NewList(args[2:]...)
 				_ = v4
-			recur_loop_304:
+			recur_loop_1844:
 				var tmp5 any
 				if lang.IsTruthy(v2) {
 					var tmp6 any
@@ -9389,7 +9331,7 @@ func LoadNS() {
 							v2 = tmp11
 							v3 = tmp12
 							v4 = tmp15
-							goto recur_loop_304
+							goto recur_loop_1844
 						} else {
 							tmp10 = v9
 						}
@@ -9436,7 +9378,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = lang.NewList(args[2:]...)
 				_ = v4
-			recur_loop_615:
+			recur_loop_2155:
 				var tmp5 any
 				{ // let
 					// let binding "ret"
@@ -9459,7 +9401,7 @@ func LoadNS() {
 						v2 = tmp10
 						v3 = tmp11
 						v4 = tmp14
-						goto recur_loop_615
+						goto recur_loop_2155
 					} else {
 						tmp9 = v8
 					}
@@ -9503,7 +9445,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = lang.NewList(args[2:]...)
 				_ = v4
-			recur_loop_301:
+			recur_loop_1841:
 				var tmp5 any
 				{ // let
 					// let binding "ret"
@@ -9523,7 +9465,7 @@ func LoadNS() {
 						v2 = tmp10
 						v3 = tmp11
 						v4 = tmp14
-						goto recur_loop_301
+						goto recur_loop_1841
 					} else {
 						tmp9 = v8
 					}
@@ -9563,7 +9505,7 @@ func LoadNS() {
 				_ = v3
 				var v4 any = lang.NewList(args[2:]...)
 				_ = v4
-			recur_loop_611:
+			recur_loop_2151:
 				var tmp5 any
 				{ // let
 					// let binding "ret"
@@ -9586,7 +9528,7 @@ func LoadNS() {
 						v2 = tmp10
 						v3 = tmp11
 						v4 = tmp14
-						goto recur_loop_611
+						goto recur_loop_2151
 					} else {
 						tmp9 = v8
 					}
@@ -9920,7 +9862,7 @@ func LoadNS() {
 						_ = v6
 						v7 := args[1]
 						_ = v7
-					recur_loop_552:
+					recur_loop_2092:
 						var tmp8 any
 						{ // let
 							// let binding "s"
@@ -9952,7 +9894,7 @@ func LoadNS() {
 								var tmp15 any = tmp17
 								v6 = tmp14
 								v7 = tmp15
-								goto recur_loop_552
+								goto recur_loop_2092
 							} else {
 								tmp12 = v11
 							}
@@ -10034,7 +9976,7 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-		recur_loop_480:
+		recur_loop_2020:
 			var tmp5 any
 			tmp6 := checkDerefVar(var_glojure_DOT_core_nil_QMARK_)
 			tmp7 := checkDerefVar(var_glojure_DOT_core_seq)
@@ -10054,7 +9996,7 @@ func LoadNS() {
 					var tmp15 any = tmp17
 					v3 = tmp14
 					v4 = tmp15
-					goto recur_loop_480
+					goto recur_loop_2020
 				} else {
 					var tmp18 any
 					if lang.IsTruthy(kw_else) {
@@ -11731,7 +11673,7 @@ func LoadNS() {
 				checkArity(args, 1)
 				v3 := args[0]
 				_ = v3
-			recur_loop_32:
+			recur_loop_1572:
 				var tmp4 any
 				tmp5 := checkDerefVar(var_glojure_DOT_core_next)
 				tmp6 := lang.Apply(tmp5, []any{v3})
@@ -11740,7 +11682,7 @@ func LoadNS() {
 					tmp9 := lang.Apply(tmp8, []any{v3})
 					var tmp7 any = tmp9
 					v3 = tmp7
-					goto recur_loop_32
+					goto recur_loop_1572
 				} else {
 					tmp10 := checkDerefVar(var_glojure_DOT_core_first)
 					tmp11 := lang.Apply(tmp10, []any{v3})
@@ -12919,8 +12861,8 @@ func LoadNS() {
 				}()
 				var tmp5 any
 				{ // let
-					// let binding "vec__362"
-					tmp6 := lang.Apply(uuid13.Parse, []any{v2})
+					// let binding "vec__688"
+					tmp6 := lang.Apply(uuid10.Parse, []any{v2})
 					var v7 any = tmp6
 					_ = v7
 					// let binding "uuid"
@@ -13377,7 +13319,7 @@ func LoadNS() {
 				_ = v3
 				v4 := args[2]
 				_ = v4
-			recur_loop_156:
+			recur_loop_1696:
 				var tmp5 any
 				{ // let
 					// let binding "s"
@@ -13406,7 +13348,7 @@ func LoadNS() {
 							v2 = tmp13
 							v3 = tmp14
 							v4 = tmp19
-							goto recur_loop_156
+							goto recur_loop_1696
 						} else {
 							var tmp22 any = v2
 							tmp24 := checkDerefVar(var_glojure_DOT_core_first)
@@ -13419,7 +13361,7 @@ func LoadNS() {
 							v2 = tmp22
 							v3 = tmp23
 							v4 = tmp27
-							goto recur_loop_156
+							goto recur_loop_1696
 						}
 						tmp9 = tmp10
 					} else {
@@ -13773,8 +13715,8 @@ func LoadNS() {
 			tmp4 := checkDerefVar(var_glojure_DOT_core_str)
 			tmp5 := checkDerefVar(var_glojure_DOT_core_name)
 			tmp6 := lang.Apply(tmp5, []any{v3})
-			tmp7 := lang.Apply(strings11.ReplaceAll, []any{tmp6, "-", "_"})
-			tmp8 := lang.Apply(strings11.ReplaceAll, []any{tmp7, ".", "/"})
+			tmp7 := lang.Apply(strings8.ReplaceAll, []any{tmp6, "-", "_"})
+			tmp8 := lang.Apply(strings8.ReplaceAll, []any{tmp7, ".", "/"})
 			tmp9 := lang.Apply(tmp4, []any{lang.NewChar(47), tmp8})
 			return tmp9
 		})
@@ -14171,6 +14113,257 @@ func LoadNS() {
 		var_glojure_DOT_core_shuffle = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_shuffle.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// sigs
+	{
+		tmp0 := sym_sigs.WithMeta(lang.NewMap(kw_private, true, kw_file, "glojure/core.glj", kw_line, int(223), kw_column, int(2), kw_end_DASH_line, int(224), kw_end_DASH_column, int(5), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
+			checkArity(args, 1)
+			v2 := args[0]
+			_ = v2
+			tmp3 := checkDerefVar(var_glojure_DOT_core_assert_DASH_valid_DASH_fdecl)
+			tmp4 := lang.Apply(tmp3, []any{v2})
+			_ = tmp4
+			var tmp5 any
+			{ // let
+				// let binding "asig"
+				var tmp6 lang.FnFunc
+				tmp6 = lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 1)
+					v7 := args[0]
+					_ = v7
+					var tmp8 any
+					{ // let
+						// let binding "arglist"
+						tmp9 := checkDerefVar(var_glojure_DOT_core_first)
+						tmp10 := lang.Apply(tmp9, []any{v7})
+						var v11 any = tmp10
+						_ = v11
+						// let binding "arglist"
+						var tmp12 any
+						tmp13 := checkDerefVar(var_glojure_DOT_core_first)
+						tmp14 := lang.Apply(tmp13, []any{v11})
+						tmp15 := lang.Apply(lang.Equals, []any{sym__AMP_form, tmp14})
+						if lang.IsTruthy(tmp15) {
+							tmp16 := lang.Apply(lang.Count, []any{v11})
+							tmp17 := lang.Apply(lang.Subvec, []any{v11, int64(2), tmp16})
+							tmp12 = tmp17
+						} else {
+							tmp12 = v11
+						}
+						var v18 any = tmp12
+						_ = v18
+						// let binding "body"
+						tmp19 := checkDerefVar(var_glojure_DOT_core_next)
+						tmp20 := lang.Apply(tmp19, []any{v7})
+						var v21 any = tmp20
+						_ = v21
+						var tmp22 any
+						tmp23 := checkDerefVar(var_glojure_DOT_core_map_QMARK_)
+						tmp24 := checkDerefVar(var_glojure_DOT_core_first)
+						tmp25 := lang.Apply(tmp24, []any{v21})
+						tmp26 := lang.Apply(tmp23, []any{tmp25})
+						if lang.IsTruthy(tmp26) {
+							var tmp27 any
+							tmp28 := checkDerefVar(var_glojure_DOT_core_next)
+							tmp29 := lang.Apply(tmp28, []any{v21})
+							if lang.IsTruthy(tmp29) {
+								tmp30 := checkDerefVar(var_glojure_DOT_core_with_DASH_meta)
+								tmp31 := checkDerefVar(var_glojure_DOT_core_conj)
+								var tmp32 any
+								tmp33 := checkDerefVar(var_glojure_DOT_core_meta)
+								tmp34 := lang.Apply(tmp33, []any{v18})
+								if lang.IsTruthy(tmp34) {
+									tmp35 := checkDerefVar(var_glojure_DOT_core_meta)
+									tmp36 := lang.Apply(tmp35, []any{v18})
+									tmp32 = tmp36
+								} else {
+									tmp37 := lang.NewMap()
+									tmp38 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(237), kw_column, int(77), kw_end_DASH_line, int(237), kw_end_DASH_column, int(78))
+									tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
+									if err != nil {
+										panic(err)
+									}
+									tmp32 = tmp39
+								}
+								tmp40 := checkDerefVar(var_glojure_DOT_core_first)
+								tmp41 := lang.Apply(tmp40, []any{v21})
+								tmp42 := lang.Apply(tmp31, []any{tmp32, tmp41})
+								tmp43 := lang.Apply(tmp30, []any{v18, tmp42})
+								tmp27 = tmp43
+							} else {
+								tmp27 = v18
+							}
+							tmp22 = tmp27
+						} else {
+							tmp22 = v18
+						}
+						tmp8 = tmp22
+					} // end let
+					return tmp8
+				})
+				tmp7 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(228), kw_column, int(10), kw_end_DASH_line, int(239), kw_end_DASH_column, int(25))
+				tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
+				if err != nil {
+					panic(err)
+				}
+				var v9 any = tmp8
+				_ = v9
+				// let binding "resolve-tag"
+				var tmp10 lang.FnFunc
+				tmp10 = lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 1)
+					v11 := args[0]
+					_ = v11
+					var tmp12 any
+					{ // let
+						// let binding "m"
+						tmp13 := checkDerefVar(var_glojure_DOT_core_meta)
+						tmp14 := lang.Apply(tmp13, []any{v11})
+						var v15 any = tmp14
+						_ = v15
+						// let binding "tag"
+						tmp16 := lang.Apply(kw_tag, []any{v15})
+						var v17 any = tmp16
+						_ = v17
+						var tmp18 any
+						tmp19 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
+						tmp20 := reflect.TypeOf((*lang.Symbol)(nil))
+						tmp21 := lang.Apply(tmp19, []any{tmp20, v17})
+						if lang.IsTruthy(tmp21) {
+							var tmp22 any
+							tmp23, ok := lang.FieldOrMethod(v17, "Name")
+							if !ok {
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v17, "Name")))
+							}
+							var tmp24 any
+							switch reflect.TypeOf(tmp23).Kind() {
+							case reflect.Func:
+								tmp24 = lang.Apply(tmp23, nil)
+							default:
+								tmp24 = tmp23
+							}
+							tmp25 := lang.Apply(strings8.Index, []any{tmp24, "."})
+							tmp26 := lang.Apply(lang.Equiv, []any{tmp25, int64(-1)})
+							if lang.IsTruthy(tmp26) {
+								var tmp27 any
+								tmp28 := lang.Apply(lang.Equals, []any{nil, nil})
+								if lang.IsTruthy(tmp28) {
+									var tmp29 any
+									{ // let
+										// let binding "c"
+										var v30 any = nil
+										_ = v30
+										var tmp31 any
+										if lang.IsTruthy(v30) {
+											tmp32 := checkDerefVar(var_glojure_DOT_core_with_DASH_meta)
+											tmp33 := checkDerefVar(var_glojure_DOT_core_assoc)
+											tmp34, ok := lang.FieldOrMethod(v30, "Name")
+											if !ok {
+												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v30, "Name")))
+											}
+											var tmp35 any
+											switch reflect.TypeOf(tmp34).Kind() {
+											case reflect.Func:
+												tmp35 = lang.Apply(tmp34, nil)
+											default:
+												tmp35 = tmp34
+											}
+											tmp36 := lang.Apply(lang.NewSymbol, []any{tmp35})
+											tmp37 := lang.Apply(tmp33, []any{v15, kw_tag, tmp36})
+											tmp38 := lang.Apply(tmp32, []any{v11, tmp37})
+											tmp31 = tmp38
+										} else {
+											tmp31 = v11
+										}
+										tmp29 = tmp31
+									} // end let
+									tmp27 = tmp29
+								} else {
+									tmp27 = v11
+								}
+								tmp22 = tmp27
+							} else {
+								tmp22 = v11
+							}
+							tmp18 = tmp22
+						} else {
+							tmp18 = v11
+						}
+						tmp12 = tmp18
+					} // end let
+					return tmp12
+				})
+				tmp11 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(240), kw_column, int(22), kw_end_DASH_line, int(252), kw_end_DASH_column, int(37))
+				tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
+				if err != nil {
+					panic(err)
+				}
+				var v13 any = tmp12
+				_ = v13
+				var tmp14 any
+				tmp15 := checkDerefVar(var_glojure_DOT_core_seq_QMARK_)
+				tmp16 := checkDerefVar(var_glojure_DOT_core_first)
+				tmp17 := lang.Apply(tmp16, []any{v2})
+				tmp18 := lang.Apply(tmp15, []any{tmp17})
+				if lang.IsTruthy(tmp18) {
+					var tmp19 any
+					{ // let
+						// let binding "ret"
+						tmp20 := lang.NewVector()
+						tmp21 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(254), kw_column, int(19), kw_end_DASH_line, int(254), kw_end_DASH_column, int(20))
+						tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
+						if err != nil {
+							panic(err)
+						}
+						var v23 any = tmp22
+						_ = v23
+						// let binding "fdecls"
+						var v24 any = v2
+						_ = v24
+						for {
+							var tmp25 any
+							if lang.IsTruthy(v24) {
+								tmp27 := checkDerefVar(var_glojure_DOT_core_conj)
+								tmp28 := checkDerefVar(var_glojure_DOT_core_first)
+								tmp29 := lang.Apply(tmp28, []any{v24})
+								tmp30 := lang.Apply(v9, []any{tmp29})
+								tmp31 := lang.Apply(v13, []any{tmp30})
+								tmp32 := lang.Apply(tmp27, []any{v23, tmp31})
+								var tmp26 any = tmp32
+								tmp34 := checkDerefVar(var_glojure_DOT_core_next)
+								tmp35 := lang.Apply(tmp34, []any{v24})
+								var tmp33 any = tmp35
+								v23 = tmp26
+								v24 = tmp33
+								continue
+							} else {
+								tmp36 := checkDerefVar(var_glojure_DOT_core_seq)
+								tmp37 := lang.Apply(tmp36, []any{v23})
+								tmp25 = tmp37
+							}
+							tmp19 = tmp25
+							break
+						}
+					} // end let
+					tmp14 = tmp19
+				} else {
+					tmp20 := checkDerefVar(var_glojure_DOT_core_list)
+					tmp21 := lang.Apply(v9, []any{v2})
+					tmp22 := lang.Apply(v13, []any{tmp21})
+					tmp23 := lang.Apply(tmp20, []any{tmp22})
+					tmp14 = tmp23
+				}
+				tmp5 = tmp14
+			} // end let
+			return tmp5
+		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(225), kw_column, int(2), kw_end_DASH_line, int(258), kw_end_DASH_column, int(43))).(lang.FnFunc)
+		var_glojure_DOT_core_sigs = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_glojure_DOT_core_sigs.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// simple-ident?
@@ -16861,7 +17054,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4 := lang.Apply(math7.IsNaN, []any{v3})
+			tmp4 := lang.Apply(math4.IsNaN, []any{v3})
 			return tmp4
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -17234,7 +17427,7 @@ func LoadNS() {
 				_ = v4
 				var v5 any = lang.NewList(args[2:]...)
 				_ = v5
-			recur_loop_126:
+			recur_loop_1666:
 				var tmp6 any
 				tmp7 := lang.Apply(lang.Equiv, []any{v3, v4})
 				if lang.IsTruthy(tmp7) {
@@ -17252,7 +17445,7 @@ func LoadNS() {
 						v3 = tmp11
 						v4 = tmp12
 						v5 = tmp15
-						goto recur_loop_126
+						goto recur_loop_1666
 					} else {
 						tmp18 := checkDerefVar(var_glojure_DOT_core_first)
 						tmp19 := lang.Apply(tmp18, []any{v5})
@@ -17335,7 +17528,7 @@ func LoadNS() {
 				_ = v4
 				var v5 any = lang.NewList(args[2:]...)
 				_ = v5
-			recur_loop_206:
+			recur_loop_1746:
 				var tmp6 any
 				tmp7 := checkDerefVar(var_glojure_DOT_core__EQ__EQ_)
 				tmp8 := lang.Apply(tmp7, []any{v3, v4})
@@ -17354,7 +17547,7 @@ func LoadNS() {
 						v3 = tmp12
 						v4 = tmp13
 						v5 = tmp16
-						goto recur_loop_206
+						goto recur_loop_1746
 					} else {
 						tmp19 := checkDerefVar(var_glojure_DOT_core__EQ__EQ_)
 						tmp20 := checkDerefVar(var_glojure_DOT_core_first)
@@ -17438,7 +17631,7 @@ func LoadNS() {
 				_ = v4
 				var v5 any = lang.NewList(args[2:]...)
 				_ = v5
-			recur_loop_198:
+			recur_loop_1738:
 				var tmp6 any
 				tmp7 := checkDerefVar(var_glojure_DOT_core__GT_)
 				tmp8 := lang.Apply(tmp7, []any{v3, v4})
@@ -17457,7 +17650,7 @@ func LoadNS() {
 						v3 = tmp12
 						v4 = tmp13
 						v5 = tmp16
-						goto recur_loop_198
+						goto recur_loop_1738
 					} else {
 						tmp19 := checkDerefVar(var_glojure_DOT_core__GT_)
 						tmp20 := checkDerefVar(var_glojure_DOT_core_first)
@@ -17541,7 +17734,7 @@ func LoadNS() {
 				_ = v4
 				var v5 any = lang.NewList(args[2:]...)
 				_ = v5
-			recur_loop_202:
+			recur_loop_1742:
 				var tmp6 any
 				tmp7 := checkDerefVar(var_glojure_DOT_core__GT__EQ_)
 				tmp8 := lang.Apply(tmp7, []any{v3, v4})
@@ -17560,7 +17753,7 @@ func LoadNS() {
 						v3 = tmp12
 						v4 = tmp13
 						v5 = tmp16
-						goto recur_loop_202
+						goto recur_loop_1742
 					} else {
 						tmp19 := checkDerefVar(var_glojure_DOT_core__GT__EQ_)
 						tmp20 := checkDerefVar(var_glojure_DOT_core_first)
@@ -17644,7 +17837,7 @@ func LoadNS() {
 				_ = v4
 				var v5 any = lang.NewList(args[2:]...)
 				_ = v5
-			recur_loop_150:
+			recur_loop_1690:
 				var tmp6 any
 				tmp7 := checkDerefVar(var_glojure_DOT_core__LT_)
 				tmp8 := lang.Apply(tmp7, []any{v3, v4})
@@ -17663,7 +17856,7 @@ func LoadNS() {
 						v3 = tmp12
 						v4 = tmp13
 						v5 = tmp16
-						goto recur_loop_150
+						goto recur_loop_1690
 					} else {
 						tmp19 := checkDerefVar(var_glojure_DOT_core__LT_)
 						tmp20 := checkDerefVar(var_glojure_DOT_core_first)
@@ -17747,7 +17940,7 @@ func LoadNS() {
 				_ = v4
 				var v5 any = lang.NewList(args[2:]...)
 				_ = v5
-			recur_loop_194:
+			recur_loop_1734:
 				var tmp6 any
 				tmp7 := checkDerefVar(var_glojure_DOT_core__LT__EQ_)
 				tmp8 := lang.Apply(tmp7, []any{v3, v4})
@@ -17766,7 +17959,7 @@ func LoadNS() {
 						v3 = tmp12
 						v4 = tmp13
 						v5 = tmp16
-						goto recur_loop_194
+						goto recur_loop_1734
 					} else {
 						tmp19 := checkDerefVar(var_glojure_DOT_core__LT__EQ_)
 						tmp20 := checkDerefVar(var_glojure_DOT_core_first)
@@ -18241,9 +18434,9 @@ func LoadNS() {
 					var tmp4 any
 					tmp5 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp5) {
-						tmp4 = closed28
+						tmp4 = closed17
 					} else {
-						tmp4 = closed28
+						tmp4 = closed17
 					}
 					var v6 any = tmp4
 					_ = v6
@@ -18279,9 +18472,9 @@ func LoadNS() {
 					var tmp5 any
 					tmp6 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp6) {
-						tmp5 = closed28
+						tmp5 = closed17
 					} else {
-						tmp5 = closed28
+						tmp5 = closed17
 					}
 					var v7 any = tmp5
 					_ = v7
@@ -18322,9 +18515,9 @@ func LoadNS() {
 					var tmp6 any
 					tmp7 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp7) {
-						tmp6 = closed28
+						tmp6 = closed17
 					} else {
-						tmp6 = closed28
+						tmp6 = closed17
 					}
 					var v8 any = tmp6
 					_ = v8
@@ -19612,20 +19805,20 @@ func LoadNS() {
 			_ = v4
 			var tmp5 any
 			{ // let
-				// let binding "vec__138"
+				// let binding "vec__829"
 				var v6 any = v3
 				_ = v6
-				// let binding "seq__139"
+				// let binding "seq__830"
 				tmp7 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp8 := lang.Apply(tmp7, []any{v6})
 				var v9 any = tmp8
 				_ = v9
-				// let binding "first__140"
+				// let binding "first__831"
 				tmp10 := checkDerefVar(var_glojure_DOT_core_first)
 				tmp11 := lang.Apply(tmp10, []any{v9})
 				var v12 any = tmp11
 				_ = v12
-				// let binding "seq__139"
+				// let binding "seq__830"
 				tmp13 := checkDerefVar(var_glojure_DOT_core_next)
 				tmp14 := lang.Apply(tmp13, []any{v9})
 				var v15 any = tmp14
@@ -19724,7 +19917,7 @@ func LoadNS() {
 						} else {
 							var tmp27 any
 							tmp28 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-							tmp29 := reflect.TypeOf((*big9.Int)(nil))
+							tmp29 := reflect.TypeOf((*big6.Int)(nil))
 							tmp30 := lang.Apply(tmp28, []any{tmp29, v3})
 							if lang.IsTruthy(tmp30) {
 								tmp31 := lang.Apply(lang.NewBigDecimal, []any{v3})
@@ -19784,7 +19977,7 @@ func LoadNS() {
 			} else {
 				var tmp8 any
 				tmp9 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-				tmp10 := reflect.TypeOf((*big9.Int)(nil))
+				tmp10 := reflect.TypeOf((*big6.Int)(nil))
 				tmp11 := lang.Apply(tmp9, []any{tmp10, v3})
 				if lang.IsTruthy(tmp11) {
 					tmp12 := lang.Apply(lang.NewBigIntFromGoBigInt, []any{v3})
@@ -19879,7 +20072,7 @@ func LoadNS() {
 	}
 	// biginteger
 	{
-		tmp1 := reflect.TypeOf((*big9.Int)(nil))
+		tmp1 := reflect.TypeOf((*big6.Int)(nil))
 		tmp0 := sym_biginteger.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Coerce to BigInteger", kw_static, true, kw_file, "glojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3634), kw_end_DASH_line, int(3634))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
@@ -19888,7 +20081,7 @@ func LoadNS() {
 			_ = v3
 			var tmp4 any
 			tmp5 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-			tmp6 := reflect.TypeOf((*big9.Int)(nil))
+			tmp6 := reflect.TypeOf((*big6.Int)(nil))
 			tmp7 := lang.Apply(tmp5, []any{tmp6, v3})
 			if lang.IsTruthy(tmp7) {
 				tmp4 = v3
@@ -19971,7 +20164,7 @@ func LoadNS() {
 								if lang.IsTruthy(tmp34) {
 									tmp35 := checkDerefVar(var_glojure_DOT_core_long)
 									tmp36 := lang.Apply(tmp35, []any{v3})
-									tmp37 := lang.Apply(big9.NewInt, []any{tmp36})
+									tmp37 := lang.Apply(big6.NewInt, []any{tmp36})
 									tmp32 = tmp37
 								} else {
 									var tmp38 any
@@ -19994,7 +20187,7 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp3 := reflect.TypeOf((*big9.Int)(nil))
+		tmp3 := reflect.TypeOf((*big6.Int)(nil))
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
 		var_glojure_DOT_core_biginteger = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
@@ -20096,9 +20289,9 @@ func LoadNS() {
 					var tmp4 any
 					tmp5 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp5) {
-						tmp4 = closed29
+						tmp4 = closed18
 					} else {
-						tmp4 = closed29
+						tmp4 = closed18
 					}
 					var v6 any = tmp4
 					_ = v6
@@ -20134,9 +20327,9 @@ func LoadNS() {
 					var tmp5 any
 					tmp6 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp6) {
-						tmp5 = closed29
+						tmp5 = closed18
 					} else {
-						tmp5 = closed29
+						tmp5 = closed18
 					}
 					var v7 any = tmp5
 					_ = v7
@@ -20177,9 +20370,9 @@ func LoadNS() {
 					var tmp6 any
 					tmp7 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp7) {
-						tmp6 = closed29
+						tmp6 = closed18
 					} else {
-						tmp6 = closed29
+						tmp6 = closed18
 					}
 					var v8 any = tmp6
 					_ = v8
@@ -20309,9 +20502,9 @@ func LoadNS() {
 					var tmp4 any
 					tmp5 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp5) {
-						tmp4 = closed30
+						tmp4 = closed19
 					} else {
-						tmp4 = closed30
+						tmp4 = closed19
 					}
 					var v6 any = tmp4
 					_ = v6
@@ -20347,9 +20540,9 @@ func LoadNS() {
 					var tmp5 any
 					tmp6 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp6) {
-						tmp5 = closed30
+						tmp5 = closed19
 					} else {
-						tmp5 = closed30
+						tmp5 = closed19
 					}
 					var v7 any = tmp5
 					_ = v7
@@ -20390,9 +20583,9 @@ func LoadNS() {
 					var tmp6 any
 					tmp7 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp7) {
-						tmp6 = closed30
+						tmp6 = closed19
 					} else {
-						tmp6 = closed30
+						tmp6 = closed19
 					}
 					var v8 any = tmp6
 					_ = v8
@@ -20573,9 +20766,9 @@ func LoadNS() {
 					var tmp4 any
 					tmp5 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp5) {
-						tmp4 = closed31
+						tmp4 = closed20
 					} else {
-						tmp4 = closed31
+						tmp4 = closed20
 					}
 					var v6 any = tmp4
 					_ = v6
@@ -20611,9 +20804,9 @@ func LoadNS() {
 					var tmp5 any
 					tmp6 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp6) {
-						tmp5 = closed31
+						tmp5 = closed20
 					} else {
-						tmp5 = closed31
+						tmp5 = closed20
 					}
 					var v7 any = tmp5
 					_ = v7
@@ -20654,9 +20847,9 @@ func LoadNS() {
 					var tmp6 any
 					tmp7 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp7) {
-						tmp6 = closed31
+						tmp6 = closed20
 					} else {
-						tmp6 = closed31
+						tmp6 = closed20
 					}
 					var v8 any = tmp6
 					_ = v8
@@ -20900,9 +21093,9 @@ func LoadNS() {
 					var tmp4 any
 					tmp5 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp5) {
-						tmp4 = closed32
+						tmp4 = closed21
 					} else {
-						tmp4 = closed32
+						tmp4 = closed21
 					}
 					var v6 any = tmp4
 					_ = v6
@@ -20938,9 +21131,9 @@ func LoadNS() {
 					var tmp5 any
 					tmp6 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp6) {
-						tmp5 = closed32
+						tmp5 = closed21
 					} else {
-						tmp5 = closed32
+						tmp5 = closed21
 					}
 					var v7 any = tmp5
 					_ = v7
@@ -20981,9 +21174,9 @@ func LoadNS() {
 					var tmp6 any
 					tmp7 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp7) {
-						tmp6 = closed32
+						tmp6 = closed21
 					} else {
-						tmp6 = closed32
+						tmp6 = closed21
 					}
 					var v8 any = tmp6
 					_ = v8
@@ -22308,7 +22501,7 @@ func LoadNS() {
 				_ = v5
 				var tmp6 any
 				{ // let
-					// let binding "vec__80"
+					// let binding "vec__771"
 					tmp7 := checkDerefVar(var_glojure_DOT_core_split_DASH_with)
 					tmp8 := checkDerefVar(var_glojure_DOT_core_comp)
 					tmp9 := checkDerefVar(var_glojure_DOT_core_not)
@@ -22322,7 +22515,7 @@ func LoadNS() {
 					tmp15 := lang.Apply(tmp14, []any{v13, int64(0), nil})
 					var v16 any = tmp15
 					_ = v16
-					// let binding "vec__83"
+					// let binding "vec__774"
 					tmp17 := checkDerefVar(var_glojure_DOT_core_nth)
 					tmp18 := lang.Apply(tmp17, []any{v13, int64(1), nil})
 					var v19 any = tmp18
@@ -22595,7 +22788,7 @@ func LoadNS() {
 						_ = v24
 						v25 := args[1]
 						_ = v25
-					recur_loop_61:
+					recur_loop_1601:
 						var tmp26 any
 						tmp27 := checkDerefVar(var_glojure_DOT_core_nil_QMARK_)
 						tmp28 := lang.Apply(tmp27, []any{v25})
@@ -22626,7 +22819,7 @@ func LoadNS() {
 									var tmp42 any = tmp44
 									v24 = tmp38
 									v25 = tmp42
-									goto recur_loop_61
+									goto recur_loop_1601
 								}
 								tmp29 = tmp33
 							} // end let
@@ -22704,6 +22897,285 @@ func LoadNS() {
 		var_glojure_DOT_core_defmacro = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_defmacro.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// defn
+	{
+		tmp0 := sym_defn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewVector(sym_params_STAR_), sym_prepost_DASH_map_QMARK_, sym_body), lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_prepost_DASH_map_QMARK_, sym_body), sym__PLUS_, sym_attr_DASH_map_QMARK_)), kw_doc, "Same as (def name (fn [params* ] exprs*)) or (def\n    name (fn ([params* ] exprs*)+)) with any doc-string or attrs added\n    to the var metadata. prepost-map defines a map with optional keys\n    :pre and :post that contain collections of pre or post conditions.", kw_file, "glojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(284), kw_end_DASH_line, int(291))).(*lang.Symbol)
+		var tmp1 lang.FnFunc
+		{ // function defn
+			var v2 lang.FnFunc
+			tmp1 = lang.NewFnFunc(func(args ...any) any {
+				switch len(args) {
+				default:
+					checkArity(args, 3)
+					v3 := args[0]
+					_ = v3
+					v4 := args[1]
+					_ = v4
+					v5 := args[2]
+					_ = v5
+					var v6 any = lang.NewList(args[3:]...)
+					_ = v6
+					var tmp7 any
+					tmp8 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
+					tmp9 := reflect.TypeOf((*lang.Symbol)(nil))
+					tmp10 := lang.Apply(tmp8, []any{tmp9, v5})
+					if lang.IsTruthy(tmp10) {
+					} else {
+						tmp11 := lang.Apply(lang.NewIllegalArgumentError, []any{"First argument to defn must be a symbol"})
+						panic(tmp11)
+					}
+					_ = tmp7
+					var tmp12 any
+					{ // let
+						// let binding "m"
+						var tmp13 any
+						tmp14 := checkDerefVar(var_glojure_DOT_core_string_QMARK_)
+						tmp15 := checkDerefVar(var_glojure_DOT_core_first)
+						tmp16 := lang.Apply(tmp15, []any{v6})
+						tmp17 := lang.Apply(tmp14, []any{tmp16})
+						if lang.IsTruthy(tmp17) {
+							tmp18 := checkDerefVar(var_glojure_DOT_core_first)
+							tmp19 := lang.Apply(tmp18, []any{v6})
+							tmp20 := lang.NewMap(kw_doc, tmp19)
+							tmp21 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(297), kw_column, int(19), kw_end_DASH_line, int(297), kw_end_DASH_column, int(38))
+							tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
+							if err != nil {
+								panic(err)
+							}
+							tmp13 = tmp22
+						} else {
+							tmp23 := lang.NewMap()
+							tmp24 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(298), kw_column, int(19), kw_end_DASH_line, int(298), kw_end_DASH_column, int(20))
+							tmp25, err := lang.WithMeta(tmp23, tmp24.(lang.IPersistentMap))
+							if err != nil {
+								panic(err)
+							}
+							tmp13 = tmp25
+						}
+						var v26 any = tmp13
+						_ = v26
+						// let binding "fdecl"
+						var tmp27 any
+						tmp28 := checkDerefVar(var_glojure_DOT_core_string_QMARK_)
+						tmp29 := checkDerefVar(var_glojure_DOT_core_first)
+						tmp30 := lang.Apply(tmp29, []any{v6})
+						tmp31 := lang.Apply(tmp28, []any{tmp30})
+						if lang.IsTruthy(tmp31) {
+							tmp32 := checkDerefVar(var_glojure_DOT_core_next)
+							tmp33 := lang.Apply(tmp32, []any{v6})
+							tmp27 = tmp33
+						} else {
+							tmp27 = v6
+						}
+						var v34 any = tmp27
+						_ = v34
+						// let binding "m"
+						var tmp35 any
+						tmp36 := checkDerefVar(var_glojure_DOT_core_map_QMARK_)
+						tmp37 := checkDerefVar(var_glojure_DOT_core_first)
+						tmp38 := lang.Apply(tmp37, []any{v34})
+						tmp39 := lang.Apply(tmp36, []any{tmp38})
+						if lang.IsTruthy(tmp39) {
+							tmp40 := checkDerefVar(var_glojure_DOT_core_conj)
+							tmp41 := checkDerefVar(var_glojure_DOT_core_first)
+							tmp42 := lang.Apply(tmp41, []any{v34})
+							tmp43 := lang.Apply(tmp40, []any{v26, tmp42})
+							tmp35 = tmp43
+						} else {
+							tmp35 = v26
+						}
+						var v44 any = tmp35
+						_ = v44
+						// let binding "fdecl"
+						var tmp45 any
+						tmp46 := checkDerefVar(var_glojure_DOT_core_map_QMARK_)
+						tmp47 := checkDerefVar(var_glojure_DOT_core_first)
+						tmp48 := lang.Apply(tmp47, []any{v34})
+						tmp49 := lang.Apply(tmp46, []any{tmp48})
+						if lang.IsTruthy(tmp49) {
+							tmp50 := checkDerefVar(var_glojure_DOT_core_next)
+							tmp51 := lang.Apply(tmp50, []any{v34})
+							tmp45 = tmp51
+						} else {
+							tmp45 = v34
+						}
+						var v52 any = tmp45
+						_ = v52
+						// let binding "fdecl"
+						var tmp53 any
+						tmp54 := checkDerefVar(var_glojure_DOT_core_vector_QMARK_)
+						tmp55 := checkDerefVar(var_glojure_DOT_core_first)
+						tmp56 := lang.Apply(tmp55, []any{v52})
+						tmp57 := lang.Apply(tmp54, []any{tmp56})
+						if lang.IsTruthy(tmp57) {
+							tmp58 := checkDerefVar(var_glojure_DOT_core_list)
+							tmp59 := lang.Apply(tmp58, []any{v52})
+							tmp53 = tmp59
+						} else {
+							tmp53 = v52
+						}
+						var v60 any = tmp53
+						_ = v60
+						// let binding "m"
+						var tmp61 any
+						tmp62 := checkDerefVar(var_glojure_DOT_core_map_QMARK_)
+						tmp63 := checkDerefVar(var_glojure_DOT_core_last)
+						tmp64 := lang.Apply(tmp63, []any{v60})
+						tmp65 := lang.Apply(tmp62, []any{tmp64})
+						if lang.IsTruthy(tmp65) {
+							tmp66 := checkDerefVar(var_glojure_DOT_core_conj)
+							tmp67 := checkDerefVar(var_glojure_DOT_core_last)
+							tmp68 := lang.Apply(tmp67, []any{v60})
+							tmp69 := lang.Apply(tmp66, []any{v44, tmp68})
+							tmp61 = tmp69
+						} else {
+							tmp61 = v44
+						}
+						var v70 any = tmp61
+						_ = v70
+						// let binding "fdecl"
+						var tmp71 any
+						tmp72 := checkDerefVar(var_glojure_DOT_core_map_QMARK_)
+						tmp73 := checkDerefVar(var_glojure_DOT_core_last)
+						tmp74 := lang.Apply(tmp73, []any{v60})
+						tmp75 := lang.Apply(tmp72, []any{tmp74})
+						if lang.IsTruthy(tmp75) {
+							tmp76 := checkDerefVar(var_glojure_DOT_core_butlast)
+							tmp77 := lang.Apply(tmp76, []any{v60})
+							tmp71 = tmp77
+						} else {
+							tmp71 = v60
+						}
+						var v78 any = tmp71
+						_ = v78
+						// let binding "m"
+						tmp79 := checkDerefVar(var_glojure_DOT_core_conj)
+						tmp80 := checkDerefVar(var_glojure_DOT_core_list)
+						tmp81 := checkDerefVar(var_glojure_DOT_core_sigs)
+						tmp82 := lang.Apply(tmp81, []any{v78})
+						tmp83 := lang.Apply(tmp80, []any{sym_quote, tmp82})
+						tmp84 := lang.NewMap(kw_arglists, tmp83)
+						tmp85 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(317), kw_column, int(23), kw_end_DASH_line, int(317), kw_end_DASH_column, int(60))
+						tmp86, err := lang.WithMeta(tmp84, tmp85.(lang.IPersistentMap))
+						if err != nil {
+							panic(err)
+						}
+						tmp87 := lang.Apply(tmp79, []any{tmp86, v70})
+						var v88 any = tmp87
+						_ = v88
+						// let binding "m"
+						var tmp89 any
+						{ // let
+							// let binding "inline"
+							tmp90 := lang.Apply(kw_inline, []any{v88})
+							var v91 any = tmp90
+							_ = v91
+							// let binding "ifn"
+							tmp92 := checkDerefVar(var_glojure_DOT_core_first)
+							tmp93 := lang.Apply(tmp92, []any{v91})
+							var v94 any = tmp93
+							_ = v94
+							// let binding "iname"
+							tmp95 := checkDerefVar(var_glojure_DOT_core_second)
+							tmp96 := lang.Apply(tmp95, []any{v91})
+							var v97 any = tmp96
+							_ = v97
+							var tmp98 any
+							var tmp99 any
+							tmp100 := lang.Apply(lang.Equiv, []any{sym_fn, v94})
+							if lang.IsTruthy(tmp100) {
+								var tmp101 any
+								tmp102 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
+								tmp103 := reflect.TypeOf((*lang.Symbol)(nil))
+								tmp104 := lang.Apply(tmp102, []any{tmp103, v97})
+								if lang.IsTruthy(tmp104) {
+									tmp101 = false
+								} else {
+									tmp101 = true
+								}
+								tmp99 = tmp101
+							} else {
+							}
+							if lang.IsTruthy(tmp99) {
+								tmp105 := checkDerefVar(var_glojure_DOT_core_assoc)
+								tmp106 := checkDerefVar(var_glojure_DOT_core_cons)
+								tmp107 := checkDerefVar(var_glojure_DOT_core_cons)
+								tmp108, ok := lang.FieldOrMethod(v5, "Name")
+								if !ok {
+									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v5, "Name")))
+								}
+								var tmp109 any
+								switch reflect.TypeOf(tmp108).Kind() {
+								case reflect.Func:
+									tmp109 = lang.Apply(tmp108, nil)
+								default:
+									tmp109 = tmp108
+								}
+								tmp110 := lang.Apply(lang.ConcatStrings, []any{tmp109, "__inliner"})
+								tmp111 := lang.Apply(lang.NewSymbol, []any{tmp110})
+								tmp112 := checkDerefVar(var_glojure_DOT_core_next)
+								tmp113 := lang.Apply(tmp112, []any{v91})
+								tmp114 := lang.Apply(tmp107, []any{tmp111, tmp113})
+								tmp115 := lang.Apply(tmp106, []any{v94, tmp114})
+								tmp116 := lang.Apply(tmp105, []any{v88, kw_inline, tmp115})
+								tmp98 = tmp116
+							} else {
+								tmp98 = v88
+							}
+							tmp89 = tmp98
+						} // end let
+						var v90 any = tmp89
+						_ = v90
+						// let binding "m"
+						tmp91 := checkDerefVar(var_glojure_DOT_core_conj)
+						var tmp92 any
+						tmp93 := checkDerefVar(var_glojure_DOT_core_meta)
+						tmp94 := lang.Apply(tmp93, []any{v5})
+						if lang.IsTruthy(tmp94) {
+							tmp95 := checkDerefVar(var_glojure_DOT_core_meta)
+							tmp96 := lang.Apply(tmp95, []any{v5})
+							tmp92 = tmp96
+						} else {
+							tmp97 := lang.NewMap()
+							tmp98 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(328), kw_column, int(51), kw_end_DASH_line, int(328), kw_end_DASH_column, int(52))
+							tmp99, err := lang.WithMeta(tmp97, tmp98.(lang.IPersistentMap))
+							if err != nil {
+								panic(err)
+							}
+							tmp92 = tmp99
+						}
+						tmp100 := lang.Apply(tmp91, []any{tmp92, v90})
+						var v101 any = tmp100
+						_ = v101
+						tmp102 := checkDerefVar(var_glojure_DOT_core_list)
+						tmp103 := checkDerefVar(var_glojure_DOT_core_with_DASH_meta)
+						tmp104 := lang.Apply(tmp103, []any{v5, v101})
+						tmp105 := checkDerefVar(var_glojure_DOT_core_with_DASH_meta)
+						tmp106 := checkDerefVar(var_glojure_DOT_core_cons)
+						tmp107 := lang.Apply(tmp106, []any{sym_glojure_DOT_core_SLASH_fn, v78})
+						tmp108 := lang.Apply(kw_tag, []any{v101})
+						tmp109 := lang.NewMap(kw_rettag, tmp108)
+						tmp110 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(333), kw_column, int(37), kw_end_DASH_line, int(333), kw_end_DASH_column, int(54))
+						tmp111, err := lang.WithMeta(tmp109, tmp110.(lang.IPersistentMap))
+						if err != nil {
+							panic(err)
+						}
+						tmp112 := lang.Apply(tmp105, []any{tmp107, tmp111})
+						tmp113 := lang.Apply(tmp102, []any{sym_def, tmp104, tmp112})
+						tmp12 = tmp113
+					} // end let
+					return tmp12
+				}
+			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(291), kw_column, int(7), kw_end_DASH_line, int(333), kw_end_DASH_column, int(58))).(lang.FnFunc)
+			v2 = tmp1
+			_ = v2
+		}
+		var_glojure_DOT_core_defn = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_glojure_DOT_core_defn.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// defn-
@@ -22893,7 +23365,7 @@ func LoadNS() {
 				} // end let
 				var v5 any = tmp4
 				_ = v5
-				// let binding "vec__250"
+				// let binding "vec__941"
 				var tmp6 any
 				if lang.IsTruthy(v5) {
 				} else {
@@ -23165,10 +23637,10 @@ func LoadNS() {
 									_ = v10
 									v11 := args[1]
 									_ = v11
-								recur_loop_877:
+								recur_loop_2417:
 									var tmp12 any
 									{ // let
-										// let binding "vec__62"
+										// let binding "vec__753"
 										var v13 any = v10
 										_ = v13
 										// let binding "f"
@@ -23203,7 +23675,7 @@ func LoadNS() {
 														var tmp31 any = v11
 														v10 = tmp28
 														v11 = tmp31
-														goto recur_loop_877
+														goto recur_loop_2417
 													} else {
 														tmp32 := checkDerefVar(var_glojure_DOT_core_cons)
 														tmp33 := checkDerefVar(var_glojure_DOT_core_rest)
@@ -23276,7 +23748,7 @@ func LoadNS() {
 			case 1:
 				v2 := args[0]
 				_ = v2
-			recur_loop_579:
+			recur_loop_2119:
 				var tmp3 any
 				{ // let
 					// let binding "temp__0__auto__"
@@ -23295,7 +23767,7 @@ func LoadNS() {
 							tmp12 := lang.Apply(tmp11, []any{v9})
 							var tmp10 any = tmp12
 							v2 = tmp10
-							goto recur_loop_579
+							goto recur_loop_2119
 						} // end let
 						tmp7 = tmp8
 					} else {
@@ -23308,7 +23780,7 @@ func LoadNS() {
 				_ = v2
 				v3 := args[1]
 				_ = v3
-			recur_loop_580:
+			recur_loop_2120:
 				var tmp4 any
 				var tmp5 any
 				{ // let
@@ -23336,7 +23808,7 @@ func LoadNS() {
 					var tmp9 any = tmp11
 					v2 = tmp6
 					v3 = tmp9
-					goto recur_loop_580
+					goto recur_loop_2120
 				} else {
 				}
 				return tmp4
@@ -23666,7 +24138,7 @@ func LoadNS() {
 							_ = v11
 							v12 := args[1]
 							_ = v12
-						recur_loop_539:
+						recur_loop_2079:
 							var tmp13 any
 							{ // let
 								// let binding "s"
@@ -23699,7 +24171,7 @@ func LoadNS() {
 									var tmp22 any = tmp24
 									v11 = tmp19
 									v12 = tmp22
-									goto recur_loop_539
+									goto recur_loop_2079
 								} else {
 									tmp17 = v16
 								}
@@ -23765,7 +24237,7 @@ func LoadNS() {
 				_ = v7
 				var tmp8 any
 				{ // let
-					// let binding "G__54"
+					// let binding "G__745"
 					var v9 any = v2
 					_ = v9
 					var tmp10 any
@@ -27199,9 +27671,9 @@ func LoadNS() {
 					var tmp4 any
 					tmp5 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp5) {
-						tmp4 = closed33
+						tmp4 = closed22
 					} else {
-						tmp4 = closed33
+						tmp4 = closed22
 					}
 					var v6 any = tmp4
 					_ = v6
@@ -27237,9 +27709,9 @@ func LoadNS() {
 					var tmp5 any
 					tmp6 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp6) {
-						tmp5 = closed33
+						tmp5 = closed22
 					} else {
-						tmp5 = closed33
+						tmp5 = closed22
 					}
 					var v7 any = tmp5
 					_ = v7
@@ -27280,9 +27752,9 @@ func LoadNS() {
 					var tmp6 any
 					tmp7 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp7) {
-						tmp6 = closed33
+						tmp6 = closed22
 					} else {
-						tmp6 = closed33
+						tmp6 = closed22
 					}
 					var v8 any = tmp6
 					_ = v8
@@ -27452,7 +27924,7 @@ func LoadNS() {
 					tmp9 := lang.Apply(v2, []any{v4})
 					var v10 any = tmp9
 					_ = v10
-					// let binding "vec__55"
+					// let binding "vec__746"
 					var tmp11 any
 					tmp12 := checkDerefVar(var_glojure_DOT_core__GT_)
 					tmp13 := lang.Apply(tmp12, []any{v8, v10})
@@ -27827,9 +28299,9 @@ func LoadNS() {
 					var tmp4 any
 					tmp5 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp5) {
-						tmp4 = closed34
+						tmp4 = closed23
 					} else {
-						tmp4 = closed34
+						tmp4 = closed23
 					}
 					var v6 any = tmp4
 					_ = v6
@@ -27865,9 +28337,9 @@ func LoadNS() {
 					var tmp5 any
 					tmp6 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp6) {
-						tmp5 = closed34
+						tmp5 = closed23
 					} else {
-						tmp5 = closed34
+						tmp5 = closed23
 					}
 					var v7 any = tmp5
 					_ = v7
@@ -27908,9 +28380,9 @@ func LoadNS() {
 					var tmp6 any
 					tmp7 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 					if lang.IsTruthy(tmp7) {
-						tmp6 = closed34
+						tmp6 = closed23
 					} else {
-						tmp6 = closed34
+						tmp6 = closed23
 					}
 					var v8 any = tmp6
 					_ = v8
@@ -28080,7 +28552,7 @@ func LoadNS() {
 					tmp9 := lang.Apply(v2, []any{v4})
 					var v10 any = tmp9
 					_ = v10
-					// let binding "vec__58"
+					// let binding "vec__749"
 					var tmp11 any
 					tmp12 := checkDerefVar(var_glojure_DOT_core__LT_)
 					tmp13 := lang.Apply(tmp12, []any{v8, v10})
@@ -28509,22 +28981,22 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			case 0:
-				tmp3 := lang.Apply(closed36, nil)
-				tmp4 := lang.Apply(closed35, []any{tmp3})
+				tmp3 := lang.Apply(closed25, nil)
+				tmp4 := lang.Apply(closed24, []any{tmp3})
 				return tmp4
 			case 1:
 				v3 := args[0]
 				_ = v3
-				tmp4 := lang.Apply(closed36, []any{v3})
-				tmp5 := lang.Apply(closed35, []any{tmp4})
+				tmp4 := lang.Apply(closed25, []any{v3})
+				tmp5 := lang.Apply(closed24, []any{tmp4})
 				return tmp5
 			case 2:
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5 := lang.Apply(closed36, []any{v3, v4})
-				tmp6 := lang.Apply(closed35, []any{tmp5})
+				tmp5 := lang.Apply(closed25, []any{v3, v4})
+				tmp6 := lang.Apply(closed24, []any{tmp5})
 				return tmp6
 			case 3:
 				v3 := args[0]
@@ -28533,8 +29005,8 @@ func LoadNS() {
 				_ = v4
 				v5 := args[2]
 				_ = v5
-				tmp6 := lang.Apply(closed36, []any{v3, v4, v5})
-				tmp7 := lang.Apply(closed35, []any{tmp6})
+				tmp6 := lang.Apply(closed25, []any{v3, v4, v5})
+				tmp7 := lang.Apply(closed24, []any{tmp6})
 				return tmp7
 			default:
 				checkArity(args, 3)
@@ -28547,8 +29019,8 @@ func LoadNS() {
 				var v6 any = lang.NewList(args[3:]...)
 				_ = v6
 				tmp7 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp8 := lang.Apply(tmp7, []any{closed36, v3, v4, v5, v6})
-				tmp9 := lang.Apply(closed35, []any{tmp8})
+				tmp8 := lang.Apply(tmp7, []any{closed25, v3, v4, v5, v6})
+				tmp9 := lang.Apply(closed24, []any{tmp8})
 				return tmp9
 			}
 		})
@@ -28566,22 +29038,22 @@ func LoadNS() {
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			case 0:
-				tmp3 := lang.Apply(closed37, nil)
-				tmp4 := lang.Apply(closed35, []any{tmp3})
+				tmp3 := lang.Apply(closed26, nil)
+				tmp4 := lang.Apply(closed24, []any{tmp3})
 				return tmp4
 			case 1:
 				v3 := args[0]
 				_ = v3
-				tmp4 := lang.Apply(closed37, []any{v3})
-				tmp5 := lang.Apply(closed35, []any{tmp4})
+				tmp4 := lang.Apply(closed26, []any{v3})
+				tmp5 := lang.Apply(closed24, []any{tmp4})
 				return tmp5
 			case 2:
 				v3 := args[0]
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5 := lang.Apply(closed37, []any{v3, v4})
-				tmp6 := lang.Apply(closed35, []any{tmp5})
+				tmp5 := lang.Apply(closed26, []any{v3, v4})
+				tmp6 := lang.Apply(closed24, []any{tmp5})
 				return tmp6
 			case 3:
 				v3 := args[0]
@@ -28590,8 +29062,8 @@ func LoadNS() {
 				_ = v4
 				v5 := args[2]
 				_ = v5
-				tmp6 := lang.Apply(closed37, []any{v3, v4, v5})
-				tmp7 := lang.Apply(closed35, []any{tmp6})
+				tmp6 := lang.Apply(closed26, []any{v3, v4, v5})
+				tmp7 := lang.Apply(closed24, []any{tmp6})
 				return tmp7
 			default:
 				checkArity(args, 3)
@@ -28604,8 +29076,8 @@ func LoadNS() {
 				var v6 any = lang.NewList(args[3:]...)
 				_ = v6
 				tmp7 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp8 := lang.Apply(tmp7, []any{closed37, v3, v4, v5, v6})
-				tmp9 := lang.Apply(closed35, []any{tmp8})
+				tmp8 := lang.Apply(tmp7, []any{closed26, v3, v4, v5, v6})
+				tmp9 := lang.Apply(closed24, []any{tmp8})
 				return tmp9
 			}
 		})
@@ -29281,7 +29753,7 @@ func LoadNS() {
 			if lang.IsTruthy(tmp5) {
 				var tmp6 any
 				{ // let
-					// let binding "G__365"
+					// let binding "G__691"
 					var v7 any = v2
 					_ = v7
 				} // end let
@@ -29315,7 +29787,7 @@ func LoadNS() {
 				var tmp6 any
 				{ // let
 					// let binding "result__3649__auto__"
-					tmp7 := lang.Apply(strconv12.ParseFloat, []any{v2, int64(64)})
+					tmp7 := lang.Apply(strconv9.ParseFloat, []any{v2, int64(64)})
 					var v8 any = tmp7
 					_ = v8
 					var tmp9 any
@@ -29357,7 +29829,7 @@ func LoadNS() {
 				var tmp6 any
 				{ // let
 					// let binding "result__3648__auto__"
-					tmp7 := lang.Apply(strconv12.ParseInt, []any{v2, int64(10), int64(64)})
+					tmp7 := lang.Apply(strconv9.ParseInt, []any{v2, int64(10), int64(64)})
 					var v8 any = tmp7
 					_ = v8
 					var tmp9 any
@@ -29927,7 +30399,7 @@ func LoadNS() {
 				{ // let
 					// let binding "n"
 					tmp5 := checkDerefVar(var_glojure_DOT_core__PLUS_)
-					tmp6 := lang.Apply(runtime14.NumCPU, nil)
+					tmp6 := lang.Apply(runtime11.NumCPU, nil)
 					tmp7 := lang.Apply(tmp5, []any{int64(2), tmp6})
 					var v8 any = tmp7
 					_ = v8
@@ -29968,20 +30440,20 @@ func LoadNS() {
 							_ = v18
 							var tmp19 any
 							{ // let
-								// let binding "vec__335"
+								// let binding "vec__661"
 								var v20 any = v17
 								_ = v20
-								// let binding "seq__336"
+								// let binding "seq__662"
 								tmp21 := checkDerefVar(var_glojure_DOT_core_seq)
 								tmp22 := lang.Apply(tmp21, []any{v20})
 								var v23 any = tmp22
 								_ = v23
-								// let binding "first__337"
+								// let binding "first__663"
 								tmp24 := checkDerefVar(var_glojure_DOT_core_first)
 								tmp25 := lang.Apply(tmp24, []any{v23})
 								var v26 any = tmp25
 								_ = v26
-								// let binding "seq__336"
+								// let binding "seq__662"
 								tmp27 := checkDerefVar(var_glojure_DOT_core_next)
 								tmp28 := lang.Apply(tmp27, []any{v23})
 								var v29 any = tmp28
@@ -30352,23 +30824,23 @@ func LoadNS() {
 									if lang.IsTruthy(tmp30) {
 										var tmp31 any
 										{ // let
-											// let binding "G__194"
+											// let binding "G__885"
 											var v32 any = v28
 											_ = v32
-											// let binding "vec__195"
+											// let binding "vec__886"
 											var v33 any = v32
 											_ = v33
-											// let binding "seq__196"
+											// let binding "seq__887"
 											tmp34 := checkDerefVar(var_glojure_DOT_core_seq)
 											tmp35 := lang.Apply(tmp34, []any{v33})
 											var v36 any = tmp35
 											_ = v36
-											// let binding "first__197"
+											// let binding "first__888"
 											tmp37 := checkDerefVar(var_glojure_DOT_core_first)
 											tmp38 := lang.Apply(tmp37, []any{v36})
 											var v39 any = tmp38
 											_ = v39
-											// let binding "seq__196"
+											// let binding "seq__887"
 											tmp40 := checkDerefVar(var_glojure_DOT_core_next)
 											tmp41 := lang.Apply(tmp40, []any{v36})
 											var v42 any = tmp41
@@ -30385,7 +30857,7 @@ func LoadNS() {
 											_ = v46
 											var tmp47 any
 											{ // let
-												// let binding "G__194"
+												// let binding "G__885"
 												var v48 any = v32
 												_ = v48
 												// let binding "print-length"
@@ -30394,20 +30866,20 @@ func LoadNS() {
 												for {
 													var tmp50 any
 													{ // let
-														// let binding "vec__198"
+														// let binding "vec__889"
 														var v51 any = v48
 														_ = v51
-														// let binding "seq__199"
+														// let binding "seq__890"
 														tmp52 := checkDerefVar(var_glojure_DOT_core_seq)
 														tmp53 := lang.Apply(tmp52, []any{v51})
 														var v54 any = tmp53
 														_ = v54
-														// let binding "first__200"
+														// let binding "first__891"
 														tmp55 := checkDerefVar(var_glojure_DOT_core_first)
 														tmp56 := lang.Apply(tmp55, []any{v54})
 														var v57 any = tmp56
 														_ = v57
-														// let binding "seq__199"
+														// let binding "seq__890"
 														tmp58 := checkDerefVar(var_glojure_DOT_core_next)
 														tmp59 := lang.Apply(tmp58, []any{v54})
 														var v60 any = tmp59
@@ -30457,23 +30929,23 @@ func LoadNS() {
 									} else {
 										var tmp32 any
 										{ // let
-											// let binding "G__204"
+											// let binding "G__895"
 											var v33 any = v28
 											_ = v33
-											// let binding "vec__205"
+											// let binding "vec__896"
 											var v34 any = v33
 											_ = v34
-											// let binding "seq__206"
+											// let binding "seq__897"
 											tmp35 := checkDerefVar(var_glojure_DOT_core_seq)
 											tmp36 := lang.Apply(tmp35, []any{v34})
 											var v37 any = tmp36
 											_ = v37
-											// let binding "first__207"
+											// let binding "first__898"
 											tmp38 := checkDerefVar(var_glojure_DOT_core_first)
 											tmp39 := lang.Apply(tmp38, []any{v37})
 											var v40 any = tmp39
 											_ = v40
-											// let binding "seq__206"
+											// let binding "seq__897"
 											tmp41 := checkDerefVar(var_glojure_DOT_core_next)
 											tmp42 := lang.Apply(tmp41, []any{v37})
 											var v43 any = tmp42
@@ -30486,26 +30958,26 @@ func LoadNS() {
 											_ = v45
 											var tmp46 any
 											{ // let
-												// let binding "G__204"
+												// let binding "G__895"
 												var v47 any = v33
 												_ = v47
 												for {
 													var tmp48 any
 													{ // let
-														// let binding "vec__208"
+														// let binding "vec__899"
 														var v49 any = v47
 														_ = v49
-														// let binding "seq__209"
+														// let binding "seq__900"
 														tmp50 := checkDerefVar(var_glojure_DOT_core_seq)
 														tmp51 := lang.Apply(tmp50, []any{v49})
 														var v52 any = tmp51
 														_ = v52
-														// let binding "first__210"
+														// let binding "first__901"
 														tmp53 := checkDerefVar(var_glojure_DOT_core_first)
 														tmp54 := lang.Apply(tmp53, []any{v52})
 														var v55 any = tmp54
 														_ = v55
-														// let binding "seq__209"
+														// let binding "seq__900"
 														tmp56 := checkDerefVar(var_glojure_DOT_core_next)
 														tmp57 := lang.Apply(tmp56, []any{v52})
 														var v58 any = tmp57
@@ -30792,7 +31264,7 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
 			case 0:
-				tmp2 := lang.Apply(rand16.Float64, nil)
+				tmp2 := lang.Apply(rand13.Float64, nil)
 				return tmp2
 			case 1:
 				v2 := args[0]
@@ -31130,7 +31602,7 @@ func LoadNS() {
 						} else {
 							tmp10 := checkDerefVar(var_glojure_DOT_core_str)
 							tmp11 := lang.Apply(tmp10, []any{"No namespace: ", v2})
-							tmp12 := lang.Apply(errors8.New, []any{tmp11})
+							tmp12 := lang.Apply(errors5.New, []any{tmp11})
 							panic(tmp12)
 						}
 						tmp5 = tmp9
@@ -31241,25 +31713,25 @@ func LoadNS() {
 						tmp29 = tmp31
 					} // end let
 					if lang.IsTruthy(tmp29) {
-						tmp30 := lang.Apply(errors8.New, []any{":only/:refer value must be a sequential collection of symbols"})
+						tmp30 := lang.Apply(errors5.New, []any{":only/:refer value must be a sequential collection of symbols"})
 						panic(tmp30)
 					} else {
 					}
 					_ = tmp28
 					var tmp31 any
 					{ // let
-						// let binding "seq_9"
+						// let binding "seq_700"
 						tmp32 := checkDerefVar(var_glojure_DOT_core_seq)
 						tmp33 := lang.Apply(tmp32, []any{v27})
 						var v34 any = tmp33
 						_ = v34
-						// let binding "chunk_10"
+						// let binding "chunk_701"
 						var v35 any = nil
 						_ = v35
-						// let binding "count_11"
+						// let binding "count_702"
 						var v36 any = int64(0)
 						_ = v36
-						// let binding "i_12"
+						// let binding "i_703"
 						var v37 any = int64(0)
 						_ = v37
 						for {
@@ -31343,7 +31815,7 @@ func LoadNS() {
 									if lang.IsTruthy(v45) {
 										var tmp47 any
 										{ // let
-											// let binding "seq_9"
+											// let binding "seq_700"
 											var v48 any = v45
 											_ = v48
 											var tmp49 any
@@ -31718,7 +32190,7 @@ func LoadNS() {
 				var v6 any = tmp5
 				_ = v6
 				tmp7 := checkDerefVar(var_glojure_DOT_core_subs)
-				tmp8 := lang.Apply(strings11.LastIndex, []any{v6, "/"})
+				tmp8 := lang.Apply(strings8.LastIndex, []any{v6, "/"})
 				tmp9 := lang.Apply(tmp7, []any{v6, int64(0), tmp8})
 				tmp3 = tmp9
 			} // end let
@@ -31775,7 +32247,7 @@ func LoadNS() {
 							if lang.IsTruthy(v19) {
 								var tmp21 any
 								{ // let
-									// let binding "vec__74"
+									// let binding "vec__765"
 									var v22 any = v19
 									_ = v22
 									// let binding "e"
@@ -31841,7 +32313,7 @@ func LoadNS() {
 					if lang.IsTruthy(v10) {
 						var tmp12 any
 						{ // let
-							// let binding "vec__77"
+							// let binding "vec__768"
 							var v13 any = v10
 							_ = v13
 							// let binding "e"
@@ -32357,7 +32829,7 @@ func LoadNS() {
 							if lang.IsTruthy(v19) {
 								var tmp21 any
 								{ // let
-									// let binding "vec__68"
+									// let binding "vec__759"
 									var v22 any = v19
 									_ = v22
 									// let binding "e"
@@ -32423,7 +32895,7 @@ func LoadNS() {
 					if lang.IsTruthy(v10) {
 						var tmp12 any
 						{ // let
-							// let binding "vec__71"
+							// let binding "vec__762"
 							var v13 any = v10
 							_ = v13
 							// let binding "e"
@@ -33218,7 +33690,7 @@ func LoadNS() {
 			case 1:
 				v2 := args[0]
 				_ = v2
-			recur_loop_1073:
+			recur_loop_2613:
 				var tmp3 any
 				{ // let
 					// let binding "ret"
@@ -33231,7 +33703,7 @@ func LoadNS() {
 					if lang.IsTruthy(tmp8) {
 						var tmp9 any = v5
 						v2 = tmp9
-						goto recur_loop_1073
+						goto recur_loop_2613
 					} else {
 						tmp6 = v5
 					}
@@ -33402,20 +33874,20 @@ func LoadNS() {
 							_ = v12
 							var tmp13 any
 							{ // let
-								// let binding "vec__141"
+								// let binding "vec__832"
 								var v14 any = v10
 								_ = v14
-								// let binding "seq__142"
+								// let binding "seq__833"
 								tmp15 := checkDerefVar(var_glojure_DOT_core_seq)
 								tmp16 := lang.Apply(tmp15, []any{v14})
 								var v17 any = tmp16
 								_ = v17
-								// let binding "first__143"
+								// let binding "first__834"
 								tmp18 := checkDerefVar(var_glojure_DOT_core_first)
 								tmp19 := lang.Apply(tmp18, []any{v17})
 								var v20 any = tmp19
 								_ = v20
-								// let binding "seq__142"
+								// let binding "seq__833"
 								tmp21 := checkDerefVar(var_glojure_DOT_core_next)
 								tmp22 := lang.Apply(tmp21, []any{v17})
 								var v23 any = tmp22
@@ -33552,7 +34024,7 @@ func LoadNS() {
 				_ = tmp18
 				var tmp32 any
 				{ // let
-					// let binding "vec__20"
+					// let binding "vec__711"
 					var v33 any = v4
 					_ = v33
 					// let binding "x"
@@ -34445,7 +34917,7 @@ func LoadNS() {
 				_ = v5
 				var tmp6 any
 				{ // let
-					// let binding "vec__65"
+					// let binding "vec__756"
 					var tmp7 any
 					tmp8 := checkDerefVar(var_glojure_DOT_core__EQ_)
 					tmp9 := checkDerefVar(var_glojure_DOT_core_first)
@@ -34634,18 +35106,18 @@ func LoadNS() {
 					_ = v6
 					var tmp7 any
 					{ // let
-						// let binding "seq_338"
+						// let binding "seq_664"
 						tmp8 := checkDerefVar(var_glojure_DOT_core_seq)
 						tmp9 := lang.Apply(tmp8, []any{v6})
 						var v10 any = tmp9
 						_ = v10
-						// let binding "chunk_339"
+						// let binding "chunk_665"
 						var v11 any = nil
 						_ = v11
-						// let binding "count_340"
+						// let binding "count_666"
 						var v12 any = int64(0)
 						_ = v12
-						// let binding "i_341"
+						// let binding "i_667"
 						var v13 any = int64(0)
 						_ = v13
 						for {
@@ -34655,7 +35127,7 @@ func LoadNS() {
 							if lang.IsTruthy(tmp16) {
 								var tmp17 any
 								{ // let
-									// let binding "vec__342"
+									// let binding "vec__668"
 									tmp18, _ := lang.FieldOrMethod(v11, "nth")
 									if reflect.TypeOf(tmp18).Kind() != reflect.Func {
 										panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
@@ -34704,7 +35176,7 @@ func LoadNS() {
 									if lang.IsTruthy(v21) {
 										var tmp23 any
 										{ // let
-											// let binding "seq_338"
+											// let binding "seq_664"
 											var v24 any = v21
 											_ = v24
 											var tmp25 any
@@ -34740,7 +35212,7 @@ func LoadNS() {
 											} else {
 												var tmp29 any
 												{ // let
-													// let binding "vec__345"
+													// let binding "vec__671"
 													tmp30 := checkDerefVar(var_glojure_DOT_core_first)
 													tmp31 := lang.Apply(tmp30, []any{v24})
 													var v32 any = tmp31
@@ -36268,108 +36740,6 @@ func LoadNS() {
 			var_glojure_DOT_core_aset_DASH_short.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
-	// assert-valid-fdecl
-	{
-		tmp0 := sym_assert_DASH_valid_DASH_fdecl.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fdecl)), kw_doc, "A good fdecl looks like (([a] ...) ([a b] ...)) near the end of defn.", kw_file, "glojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(42), kw_column, int(8), kw_line, int(7502), kw_end_DASH_line, int(7502), kw_private, true, kw_dynamic, true)).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
-			_ = v2
-			var tmp3 any
-			tmp4 := checkDerefVar(var_glojure_DOT_core_empty_QMARK_)
-			tmp5 := lang.Apply(tmp4, []any{v2})
-			if lang.IsTruthy(tmp5) {
-				tmp6 := lang.Apply(lang.NewIllegalArgumentError, []any{"Parameter declaration missing"})
-				panic(tmp6)
-			} else {
-			}
-			_ = tmp3
-			var tmp7 any
-			{ // let
-				// let binding "argdecls"
-				tmp8 := checkDerefVar(var_glojure_DOT_core_map)
-				var tmp9 lang.FnFunc
-				tmp9 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v10 := args[0]
-					_ = v10
-					var tmp11 any
-					tmp12 := checkDerefVar(var_glojure_DOT_core_seq_QMARK_)
-					tmp13 := lang.Apply(tmp12, []any{v10})
-					if lang.IsTruthy(tmp13) {
-						tmp14 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp15 := lang.Apply(tmp14, []any{v10})
-						tmp11 = tmp15
-					} else {
-						var tmp16 any
-						tmp17 := checkDerefVar(var_glojure_DOT_core_seq_QMARK_)
-						tmp18 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp19 := lang.Apply(tmp18, []any{v2})
-						tmp20 := lang.Apply(tmp17, []any{tmp19})
-						if lang.IsTruthy(tmp20) {
-							tmp21 := checkDerefVar(var_glojure_DOT_core_str)
-							tmp22 := lang.Apply(tmp21, []any{"Invalid signature \"", v10, "\" should be a list"})
-							tmp16 = tmp22
-						} else {
-							tmp23 := checkDerefVar(var_glojure_DOT_core_str)
-							tmp24 := lang.Apply(tmp23, []any{"Parameter declaration \"", v10, "\" should be a vector"})
-							tmp16 = tmp24
-						}
-						tmp25 := lang.Apply(lang.NewIllegalArgumentError, []any{tmp16})
-						panic(tmp25)
-					}
-					return tmp11
-				})
-				tmp10 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7508), kw_column, int(20), kw_end_DASH_line, int(7517), kw_end_DASH_column, int(59))
-				tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp12 := lang.Apply(tmp8, []any{tmp11, v2})
-				var v13 any = tmp12
-				_ = v13
-				// let binding "bad-args"
-				tmp14 := checkDerefVar(var_glojure_DOT_core_seq)
-				tmp15 := checkDerefVar(var_glojure_DOT_core_remove)
-				var tmp16 lang.FnFunc
-				tmp16 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v17 := args[0]
-					_ = v17
-					tmp18 := checkDerefVar(var_glojure_DOT_core_vector_QMARK_)
-					tmp19 := lang.Apply(tmp18, []any{v17})
-					return tmp19
-				})
-				tmp17 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7519), kw_column, int(31), kw_end_DASH_line, int(7519), kw_end_DASH_column, int(42))
-				tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp19 := lang.Apply(tmp15, []any{tmp18, v13})
-				tmp20 := lang.Apply(tmp14, []any{tmp19})
-				var v21 any = tmp20
-				_ = v21
-				var tmp22 any
-				if lang.IsTruthy(v21) {
-					tmp23 := checkDerefVar(var_glojure_DOT_core_str)
-					tmp24 := checkDerefVar(var_glojure_DOT_core_first)
-					tmp25 := lang.Apply(tmp24, []any{v21})
-					tmp26 := lang.Apply(tmp23, []any{"Parameter declaration \"", tmp25, "\" should be a vector"})
-					tmp27 := lang.Apply(lang.NewIllegalArgumentError, []any{tmp26})
-					panic(tmp27)
-				} else {
-				}
-				tmp7 = tmp22
-			} // end let
-			return tmp7
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		var_glojure_DOT_core_assert_DASH_valid_DASH_fdecl = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_glojure_DOT_core_assert_DASH_valid_DASH_fdecl.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// atom
 	{
 		tmp0 := sym_atom.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_options)), kw_doc, "Creates and returns an Atom with an initial value of x and zero or\n  more options (in any order):\n\n  :meta metadata-map\n\n  :validator validate-fn\n\n  If metadata-map is supplied, it will become the metadata on the\n  atom. validate-fn must be nil or a side-effect-free fn of one\n  argument, which will be passed the intended new state on any state\n  change. If the new state is unacceptable, the validate-fn should\n  return false or throw an exception.", kw_static, true, kw_file, "glojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2325), kw_end_DASH_line, int(2325))).(*lang.Symbol)
@@ -37527,23 +37897,23 @@ func LoadNS() {
 						}
 						var v13 any = tmp12
 						_ = v13
-						// let binding "G__99"
+						// let binding "G__790"
 						var v14 any = v5
 						_ = v14
-						// let binding "vec__100"
+						// let binding "vec__791"
 						var v15 any = v14
 						_ = v15
-						// let binding "seq__101"
+						// let binding "seq__792"
 						tmp16 := checkDerefVar(var_glojure_DOT_core_seq)
 						tmp17 := lang.Apply(tmp16, []any{v15})
 						var v18 any = tmp17
 						_ = v18
-						// let binding "first__102"
+						// let binding "first__793"
 						tmp19 := checkDerefVar(var_glojure_DOT_core_first)
 						tmp20 := lang.Apply(tmp19, []any{v18})
 						var v21 any = tmp20
 						_ = v21
-						// let binding "seq__101"
+						// let binding "seq__792"
 						tmp22 := checkDerefVar(var_glojure_DOT_core_next)
 						tmp23 := lang.Apply(tmp22, []any{v18})
 						var v24 any = tmp23
@@ -37562,7 +37932,7 @@ func LoadNS() {
 							// let binding "s"
 							var v29 any = v13
 							_ = v29
-							// let binding "G__99"
+							// let binding "G__790"
 							var v30 any = v14
 							_ = v30
 							for {
@@ -37571,20 +37941,20 @@ func LoadNS() {
 									// let binding "s"
 									var v32 any = v29
 									_ = v32
-									// let binding "vec__103"
+									// let binding "vec__794"
 									var v33 any = v30
 									_ = v33
-									// let binding "seq__104"
+									// let binding "seq__795"
 									tmp34 := checkDerefVar(var_glojure_DOT_core_seq)
 									tmp35 := lang.Apply(tmp34, []any{v33})
 									var v36 any = tmp35
 									_ = v36
-									// let binding "first__105"
+									// let binding "first__796"
 									tmp37 := checkDerefVar(var_glojure_DOT_core_first)
 									tmp38 := lang.Apply(tmp37, []any{v36})
 									var v39 any = tmp38
 									_ = v39
-									// let binding "seq__104"
+									// let binding "seq__795"
 									tmp40 := checkDerefVar(var_glojure_DOT_core_next)
 									tmp41 := lang.Apply(tmp40, []any{v36})
 									var v42 any = tmp41
@@ -38486,7 +38856,7 @@ func LoadNS() {
 					_ = v14
 					var tmp15 any
 					{ // let
-						// let binding "vec__292"
+						// let binding "vec__657"
 						var v16 any = v14
 						_ = v16
 						// let binding "t"
@@ -38543,7 +38913,7 @@ func LoadNS() {
 			_ = v3
 			var tmp4 any
 			{ // let
-				// let binding "vec__281"
+				// let binding "vec__646"
 				var v5 any = v3
 				_ = v5
 				// let binding "p"
@@ -38589,38 +38959,38 @@ func LoadNS() {
 								_ = v26
 								var tmp27 any
 								{ // let
-									// let binding "vec__285"
+									// let binding "vec__650"
 									var v28 any = v26
 									_ = v28
-									// let binding "seq__286"
+									// let binding "seq__651"
 									tmp29 := checkDerefVar(var_glojure_DOT_core_seq)
 									tmp30 := lang.Apply(tmp29, []any{v28})
 									var v31 any = tmp30
 									_ = v31
-									// let binding "first__287"
+									// let binding "first__652"
 									tmp32 := checkDerefVar(var_glojure_DOT_core_first)
 									tmp33 := lang.Apply(tmp32, []any{v31})
 									var v34 any = tmp33
 									_ = v34
-									// let binding "seq__286"
+									// let binding "seq__651"
 									tmp35 := checkDerefVar(var_glojure_DOT_core_next)
 									tmp36 := lang.Apply(tmp35, []any{v31})
 									var v37 any = tmp36
 									_ = v37
-									// let binding "vec__288"
+									// let binding "vec__653"
 									var v38 any = v34
 									_ = v38
-									// let binding "seq__289"
+									// let binding "seq__654"
 									tmp39 := checkDerefVar(var_glojure_DOT_core_seq)
 									tmp40 := lang.Apply(tmp39, []any{v38})
 									var v41 any = tmp40
 									_ = v41
-									// let binding "first__290"
+									// let binding "first__655"
 									tmp42 := checkDerefVar(var_glojure_DOT_core_first)
 									tmp43 := lang.Apply(tmp42, []any{v41})
 									var v44 any = tmp43
 									_ = v44
-									// let binding "seq__289"
+									// let binding "seq__654"
 									tmp45 := checkDerefVar(var_glojure_DOT_core_next)
 									tmp46 := lang.Apply(tmp45, []any{v41})
 									var v47 any = tmp46
@@ -38882,20 +39252,20 @@ func LoadNS() {
 						_ = tmp43
 						var tmp51 any
 						{ // let
-							// let binding "vec__13"
+							// let binding "vec__704"
 							var v52 any = v42
 							_ = v52
-							// let binding "seq__14"
+							// let binding "seq__705"
 							tmp53 := checkDerefVar(var_glojure_DOT_core_seq)
 							tmp54 := lang.Apply(tmp53, []any{v52})
 							var v55 any = tmp54
 							_ = v55
-							// let binding "first__15"
+							// let binding "first__706"
 							tmp56 := checkDerefVar(var_glojure_DOT_core_first)
 							tmp57 := lang.Apply(tmp56, []any{v55})
 							var v58 any = tmp57
 							_ = v58
-							// let binding "seq__14"
+							// let binding "seq__705"
 							tmp59 := checkDerefVar(var_glojure_DOT_core_next)
 							tmp60 := lang.Apply(tmp59, []any{v55})
 							var v61 any = tmp60
@@ -39926,30 +40296,30 @@ func LoadNS() {
 					// let binding "ns"
 					var v6 any = nil
 					_ = v6
-					// let binding "G__221"
+					// let binding "G__912"
 					tmp7 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp8 := lang.Apply(tmp7, []any{v2})
 					var v9 any = tmp8
 					_ = v9
-					// let binding "vec__222"
+					// let binding "vec__913"
 					var v10 any = v9
 					_ = v10
-					// let binding "seq__223"
+					// let binding "seq__914"
 					tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp12 := lang.Apply(tmp11, []any{v10})
 					var v13 any = tmp12
 					_ = v13
-					// let binding "first__224"
+					// let binding "first__915"
 					tmp14 := checkDerefVar(var_glojure_DOT_core_first)
 					tmp15 := lang.Apply(tmp14, []any{v13})
 					var v16 any = tmp15
 					_ = v16
-					// let binding "seq__223"
+					// let binding "seq__914"
 					tmp17 := checkDerefVar(var_glojure_DOT_core_next)
 					tmp18 := lang.Apply(tmp17, []any{v13})
 					var v19 any = tmp18
 					_ = v19
-					// let binding "vec__225"
+					// let binding "vec__916"
 					var v20 any = v16
 					_ = v20
 					// let binding "k"
@@ -39982,7 +40352,7 @@ func LoadNS() {
 						// let binding "ns"
 						var v34 any = v6
 						_ = v34
-						// let binding "G__221"
+						// let binding "G__912"
 						var v35 any = v9
 						_ = v35
 						// let binding "kvs"
@@ -39994,25 +40364,25 @@ func LoadNS() {
 								// let binding "ns"
 								var v38 any = v34
 								_ = v38
-								// let binding "vec__228"
+								// let binding "vec__919"
 								var v39 any = v35
 								_ = v39
-								// let binding "seq__229"
+								// let binding "seq__920"
 								tmp40 := checkDerefVar(var_glojure_DOT_core_seq)
 								tmp41 := lang.Apply(tmp40, []any{v39})
 								var v42 any = tmp41
 								_ = v42
-								// let binding "first__230"
+								// let binding "first__921"
 								tmp43 := checkDerefVar(var_glojure_DOT_core_first)
 								tmp44 := lang.Apply(tmp43, []any{v42})
 								var v45 any = tmp44
 								_ = v45
-								// let binding "seq__229"
+								// let binding "seq__920"
 								tmp46 := checkDerefVar(var_glojure_DOT_core_next)
 								tmp47 := lang.Apply(tmp46, []any{v42})
 								var v48 any = tmp47
 								_ = v48
-								// let binding "vec__231"
+								// let binding "vec__922"
 								var v49 any = v45
 								_ = v49
 								// let binding "k"
@@ -40263,7 +40633,7 @@ func LoadNS() {
 				_ = v6
 				var tmp7 any
 				{ // let
-					// let binding "vec__151"
+					// let binding "vec__842"
 					var v8 any = v6
 					_ = v8
 					// let binding "s"
@@ -40308,7 +40678,7 @@ func LoadNS() {
 			{ // let
 				// let binding "iter__0__auto__"
 				var tmp9 lang.FnFunc
-				{ // function iter__154
+				{ // function iter__845
 					var v10 lang.FnFunc
 					tmp9 = lang.NewFnFunc(func(args ...any) any {
 						checkArity(args, 1)
@@ -40319,7 +40689,7 @@ func LoadNS() {
 							checkArity(args, 0)
 							var tmp13 any
 							{ // let
-								// let binding "s__155"
+								// let binding "s__846"
 								var v14 any = v11
 								_ = v14
 								for {
@@ -40348,7 +40718,7 @@ func LoadNS() {
 													{ // let
 														// let binding "iterys__0__auto__"
 														var tmp27 lang.FnFunc
-														{ // function iter__156
+														{ // function iter__847
 															var v28 lang.FnFunc
 															tmp27 = lang.NewFnFunc(func(args ...any) any {
 																checkArity(args, 1)
@@ -40359,7 +40729,7 @@ func LoadNS() {
 																	checkArity(args, 0)
 																	var tmp31 any
 																	{ // let
-																		// let binding "s__157"
+																		// let binding "s__848"
 																		var v32 any = v29
 																		_ = v32
 																		for {
@@ -40374,7 +40744,7 @@ func LoadNS() {
 																				if lang.IsTruthy(v36) {
 																					var tmp38 any
 																					{ // let
-																						// let binding "s__157"
+																						// let binding "s__848"
 																						var v39 any = v36
 																						_ = v39
 																						var tmp40 any
@@ -40395,7 +40765,7 @@ func LoadNS() {
 																								tmp50 := lang.Apply(tmp47, []any{tmp49})
 																								var v51 any = tmp50
 																								_ = v51
-																								// let binding "b__159"
+																								// let binding "b__850"
 																								tmp52 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_buffer)
 																								tmp53 := lang.Apply(tmp52, []any{v51})
 																								var v54 any = tmp53
@@ -40403,7 +40773,7 @@ func LoadNS() {
 																								var tmp55 any
 																								var tmp56 any
 																								{ // let
-																									// let binding "i__158"
+																									// let binding "i__849"
 																									tmp57 := checkDerefVar(var_glojure_DOT_core_int)
 																									tmp58 := lang.Apply(tmp57, []any{int64(0)})
 																									var v59 any = tmp58
@@ -40704,20 +41074,20 @@ func LoadNS() {
 						_ = v8
 						var tmp9 any
 						{ // let
-							// let binding "vec__107"
+							// let binding "vec__798"
 							var v10 any = v8
 							_ = v10
-							// let binding "seq__108"
+							// let binding "seq__799"
 							tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 							tmp12 := lang.Apply(tmp11, []any{v10})
 							var v13 any = tmp12
 							_ = v13
-							// let binding "first__109"
+							// let binding "first__800"
 							tmp14 := checkDerefVar(var_glojure_DOT_core_first)
 							tmp15 := lang.Apply(tmp14, []any{v13})
 							var v16 any = tmp15
 							_ = v16
-							// let binding "seq__108"
+							// let binding "seq__799"
 							tmp17 := checkDerefVar(var_glojure_DOT_core_next)
 							tmp18 := lang.Apply(tmp17, []any{v13})
 							var v19 any = tmp18
@@ -41640,7 +42010,7 @@ func LoadNS() {
 			} else {
 				var tmp14 any
 				{ // let
-					// let binding "vec__160"
+					// let binding "vec__851"
 					var tmp15 any
 					{ // let
 						// let binding "or__0__auto__"
@@ -41758,7 +42128,7 @@ func LoadNS() {
 				_ = v11
 				var tmp12 any
 				{ // let
-					// let binding "vec__212"
+					// let binding "vec__903"
 					var v13 any = v10
 					_ = v13
 					// let binding "k"
@@ -41846,7 +42216,7 @@ func LoadNS() {
 				if reflect.TypeOf(tmp24).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("await is not a function")))
 				}
-				tmp25 := lang.Apply(tmp24, []any{nil, time10.Millisecond})
+				tmp25 := lang.Apply(tmp24, []any{nil, time7.Millisecond})
 				if lang.IsTruthy(tmp25) {
 					tmp26 := checkDerefVar(var_glojure_DOT_core_deref)
 					tmp27 := lang.Apply(tmp26, []any{v7})
@@ -42481,25 +42851,25 @@ func LoadNS() {
 									}()
 									var tmp34 any
 									{ // let
-										// let binding "G__89"
+										// let binding "G__780"
 										tmp35 := checkDerefVar(var_glojure_DOT_core_seq)
 										tmp36 := lang.Apply(tmp35, []any{v27})
 										var v37 any = tmp36
 										_ = v37
-										// let binding "vec__90"
+										// let binding "vec__781"
 										var v38 any = v37
 										_ = v38
-										// let binding "seq__91"
+										// let binding "seq__782"
 										tmp39 := checkDerefVar(var_glojure_DOT_core_seq)
 										tmp40 := lang.Apply(tmp39, []any{v38})
 										var v41 any = tmp40
 										_ = v41
-										// let binding "first__92"
+										// let binding "first__783"
 										tmp42 := checkDerefVar(var_glojure_DOT_core_first)
 										tmp43 := lang.Apply(tmp42, []any{v41})
 										var v44 any = tmp43
 										_ = v44
-										// let binding "seq__91"
+										// let binding "seq__782"
 										tmp45 := checkDerefVar(var_glojure_DOT_core_next)
 										tmp46 := lang.Apply(tmp45, []any{v41})
 										var v47 any = tmp46
@@ -42515,26 +42885,26 @@ func LoadNS() {
 										_ = v50
 										var tmp51 any
 										{ // let
-											// let binding "G__89"
+											// let binding "G__780"
 											var v52 any = v37
 											_ = v52
 											for {
 												var tmp53 any
 												{ // let
-													// let binding "vec__93"
+													// let binding "vec__784"
 													var v54 any = v52
 													_ = v54
-													// let binding "seq__94"
+													// let binding "seq__785"
 													tmp55 := checkDerefVar(var_glojure_DOT_core_seq)
 													tmp56 := lang.Apply(tmp55, []any{v54})
 													var v57 any = tmp56
 													_ = v57
-													// let binding "first__95"
+													// let binding "first__786"
 													tmp58 := checkDerefVar(var_glojure_DOT_core_first)
 													tmp59 := lang.Apply(tmp58, []any{v57})
 													var v60 any = tmp59
 													_ = v60
-													// let binding "seq__94"
+													// let binding "seq__785"
 													tmp61 := checkDerefVar(var_glojure_DOT_core_next)
 													tmp62 := lang.Apply(tmp61, []any{v57})
 													var v63 any = tmp62
@@ -42693,257 +43063,6 @@ func LoadNS() {
 		var_glojure_DOT_core_seque = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_seque.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// sigs
-	{
-		tmp0 := sym_sigs.WithMeta(lang.NewMap(kw_private, true, kw_file, "glojure/core.glj", kw_line, int(223), kw_column, int(2), kw_end_DASH_line, int(224), kw_end_DASH_column, int(5), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
-			_ = v2
-			tmp3 := checkDerefVar(var_glojure_DOT_core_assert_DASH_valid_DASH_fdecl)
-			tmp4 := lang.Apply(tmp3, []any{v2})
-			_ = tmp4
-			var tmp5 any
-			{ // let
-				// let binding "asig"
-				var tmp6 lang.FnFunc
-				tmp6 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v7 := args[0]
-					_ = v7
-					var tmp8 any
-					{ // let
-						// let binding "arglist"
-						tmp9 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp10 := lang.Apply(tmp9, []any{v7})
-						var v11 any = tmp10
-						_ = v11
-						// let binding "arglist"
-						var tmp12 any
-						tmp13 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp14 := lang.Apply(tmp13, []any{v11})
-						tmp15 := lang.Apply(lang.Equals, []any{sym__AMP_form, tmp14})
-						if lang.IsTruthy(tmp15) {
-							tmp16 := lang.Apply(lang.Count, []any{v11})
-							tmp17 := lang.Apply(lang.Subvec, []any{v11, int64(2), tmp16})
-							tmp12 = tmp17
-						} else {
-							tmp12 = v11
-						}
-						var v18 any = tmp12
-						_ = v18
-						// let binding "body"
-						tmp19 := checkDerefVar(var_glojure_DOT_core_next)
-						tmp20 := lang.Apply(tmp19, []any{v7})
-						var v21 any = tmp20
-						_ = v21
-						var tmp22 any
-						tmp23 := checkDerefVar(var_glojure_DOT_core_map_QMARK_)
-						tmp24 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp25 := lang.Apply(tmp24, []any{v21})
-						tmp26 := lang.Apply(tmp23, []any{tmp25})
-						if lang.IsTruthy(tmp26) {
-							var tmp27 any
-							tmp28 := checkDerefVar(var_glojure_DOT_core_next)
-							tmp29 := lang.Apply(tmp28, []any{v21})
-							if lang.IsTruthy(tmp29) {
-								tmp30 := checkDerefVar(var_glojure_DOT_core_with_DASH_meta)
-								tmp31 := checkDerefVar(var_glojure_DOT_core_conj)
-								var tmp32 any
-								tmp33 := checkDerefVar(var_glojure_DOT_core_meta)
-								tmp34 := lang.Apply(tmp33, []any{v18})
-								if lang.IsTruthy(tmp34) {
-									tmp35 := checkDerefVar(var_glojure_DOT_core_meta)
-									tmp36 := lang.Apply(tmp35, []any{v18})
-									tmp32 = tmp36
-								} else {
-									tmp37 := lang.NewMap()
-									tmp38 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(237), kw_column, int(77), kw_end_DASH_line, int(237), kw_end_DASH_column, int(78))
-									tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
-									if err != nil {
-										panic(err)
-									}
-									tmp32 = tmp39
-								}
-								tmp40 := checkDerefVar(var_glojure_DOT_core_first)
-								tmp41 := lang.Apply(tmp40, []any{v21})
-								tmp42 := lang.Apply(tmp31, []any{tmp32, tmp41})
-								tmp43 := lang.Apply(tmp30, []any{v18, tmp42})
-								tmp27 = tmp43
-							} else {
-								tmp27 = v18
-							}
-							tmp22 = tmp27
-						} else {
-							tmp22 = v18
-						}
-						tmp8 = tmp22
-					} // end let
-					return tmp8
-				})
-				tmp7 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(228), kw_column, int(10), kw_end_DASH_line, int(239), kw_end_DASH_column, int(25))
-				tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v9 any = tmp8
-				_ = v9
-				// let binding "resolve-tag"
-				var tmp10 lang.FnFunc
-				tmp10 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v11 := args[0]
-					_ = v11
-					var tmp12 any
-					{ // let
-						// let binding "m"
-						tmp13 := checkDerefVar(var_glojure_DOT_core_meta)
-						tmp14 := lang.Apply(tmp13, []any{v11})
-						var v15 any = tmp14
-						_ = v15
-						// let binding "tag"
-						tmp16 := lang.Apply(kw_tag, []any{v15})
-						var v17 any = tmp16
-						_ = v17
-						var tmp18 any
-						tmp19 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-						tmp20 := reflect.TypeOf((*lang.Symbol)(nil))
-						tmp21 := lang.Apply(tmp19, []any{tmp20, v17})
-						if lang.IsTruthy(tmp21) {
-							var tmp22 any
-							tmp23, ok := lang.FieldOrMethod(v17, "Name")
-							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v17, "Name")))
-							}
-							var tmp24 any
-							switch reflect.TypeOf(tmp23).Kind() {
-							case reflect.Func:
-								tmp24 = lang.Apply(tmp23, nil)
-							default:
-								tmp24 = tmp23
-							}
-							tmp25 := lang.Apply(strings11.Index, []any{tmp24, "."})
-							tmp26 := lang.Apply(lang.Equiv, []any{tmp25, int64(-1)})
-							if lang.IsTruthy(tmp26) {
-								var tmp27 any
-								tmp28 := lang.Apply(lang.Equals, []any{nil, nil})
-								if lang.IsTruthy(tmp28) {
-									var tmp29 any
-									{ // let
-										// let binding "c"
-										var v30 any = nil
-										_ = v30
-										var tmp31 any
-										if lang.IsTruthy(v30) {
-											tmp32 := checkDerefVar(var_glojure_DOT_core_with_DASH_meta)
-											tmp33 := checkDerefVar(var_glojure_DOT_core_assoc)
-											tmp34, ok := lang.FieldOrMethod(v30, "Name")
-											if !ok {
-												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v30, "Name")))
-											}
-											var tmp35 any
-											switch reflect.TypeOf(tmp34).Kind() {
-											case reflect.Func:
-												tmp35 = lang.Apply(tmp34, nil)
-											default:
-												tmp35 = tmp34
-											}
-											tmp36 := lang.Apply(lang.NewSymbol, []any{tmp35})
-											tmp37 := lang.Apply(tmp33, []any{v15, kw_tag, tmp36})
-											tmp38 := lang.Apply(tmp32, []any{v11, tmp37})
-											tmp31 = tmp38
-										} else {
-											tmp31 = v11
-										}
-										tmp29 = tmp31
-									} // end let
-									tmp27 = tmp29
-								} else {
-									tmp27 = v11
-								}
-								tmp22 = tmp27
-							} else {
-								tmp22 = v11
-							}
-							tmp18 = tmp22
-						} else {
-							tmp18 = v11
-						}
-						tmp12 = tmp18
-					} // end let
-					return tmp12
-				})
-				tmp11 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(240), kw_column, int(22), kw_end_DASH_line, int(252), kw_end_DASH_column, int(37))
-				tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v13 any = tmp12
-				_ = v13
-				var tmp14 any
-				tmp15 := checkDerefVar(var_glojure_DOT_core_seq_QMARK_)
-				tmp16 := checkDerefVar(var_glojure_DOT_core_first)
-				tmp17 := lang.Apply(tmp16, []any{v2})
-				tmp18 := lang.Apply(tmp15, []any{tmp17})
-				if lang.IsTruthy(tmp18) {
-					var tmp19 any
-					{ // let
-						// let binding "ret"
-						tmp20 := lang.NewVector()
-						tmp21 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(254), kw_column, int(19), kw_end_DASH_line, int(254), kw_end_DASH_column, int(20))
-						tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						var v23 any = tmp22
-						_ = v23
-						// let binding "fdecls"
-						var v24 any = v2
-						_ = v24
-						for {
-							var tmp25 any
-							if lang.IsTruthy(v24) {
-								tmp27 := checkDerefVar(var_glojure_DOT_core_conj)
-								tmp28 := checkDerefVar(var_glojure_DOT_core_first)
-								tmp29 := lang.Apply(tmp28, []any{v24})
-								tmp30 := lang.Apply(v9, []any{tmp29})
-								tmp31 := lang.Apply(v13, []any{tmp30})
-								tmp32 := lang.Apply(tmp27, []any{v23, tmp31})
-								var tmp26 any = tmp32
-								tmp34 := checkDerefVar(var_glojure_DOT_core_next)
-								tmp35 := lang.Apply(tmp34, []any{v24})
-								var tmp33 any = tmp35
-								v23 = tmp26
-								v24 = tmp33
-								continue
-							} else {
-								tmp36 := checkDerefVar(var_glojure_DOT_core_seq)
-								tmp37 := lang.Apply(tmp36, []any{v23})
-								tmp25 = tmp37
-							}
-							tmp19 = tmp25
-							break
-						}
-					} // end let
-					tmp14 = tmp19
-				} else {
-					tmp20 := checkDerefVar(var_glojure_DOT_core_list)
-					tmp21 := lang.Apply(v9, []any{v2})
-					tmp22 := lang.Apply(v13, []any{tmp21})
-					tmp23 := lang.Apply(tmp20, []any{tmp22})
-					tmp14 = tmp23
-				}
-				tmp5 = tmp14
-			} // end let
-			return tmp5
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(225), kw_column, int(2), kw_end_DASH_line, int(258), kw_end_DASH_column, int(43))).(lang.FnFunc)
-		var_glojure_DOT_core_sigs = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_glojure_DOT_core_sigs.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// some->
@@ -43827,7 +43946,7 @@ func LoadNS() {
 					var tmp5 any
 					tmp6 := checkDerefVar(var_glojure_DOT_core__STAR_agent_STAR_)
 					if lang.IsTruthy(tmp6) {
-						tmp7 := lang.Apply(errors8.New, []any{"Can't await in agent action"})
+						tmp7 := lang.Apply(errors5.New, []any{"Can't await in agent action"})
 						panic(tmp7)
 					} else {
 					}
@@ -43860,18 +43979,18 @@ func LoadNS() {
 						_ = v13
 						var tmp14 any
 						{ // let
-							// let binding "seq_1"
+							// let binding "seq_692"
 							tmp15 := checkDerefVar(var_glojure_DOT_core_seq)
 							tmp16 := lang.Apply(tmp15, []any{v2})
 							var v17 any = tmp16
 							_ = v17
-							// let binding "chunk_2"
+							// let binding "chunk_693"
 							var v18 any = nil
 							_ = v18
-							// let binding "count_3"
+							// let binding "count_694"
 							var v19 any = int64(0)
 							_ = v19
-							// let binding "i_4"
+							// let binding "i_695"
 							var v20 any = int64(0)
 							_ = v20
 							for {
@@ -43917,7 +44036,7 @@ func LoadNS() {
 										if lang.IsTruthy(v28) {
 											var tmp30 any
 											{ // let
-												// let binding "seq_1"
+												// let binding "seq_692"
 												var v31 any = v28
 												_ = v31
 												var tmp32 any
@@ -44064,7 +44183,7 @@ func LoadNS() {
 					var tmp6 any
 					tmp7 := checkDerefVar(var_glojure_DOT_core__STAR_agent_STAR_)
 					if lang.IsTruthy(tmp7) {
-						tmp8 := lang.Apply(errors8.New, []any{"Can't await in agent action"})
+						tmp8 := lang.Apply(errors5.New, []any{"Can't await in agent action"})
 						panic(tmp8)
 					} else {
 					}
@@ -44097,18 +44216,18 @@ func LoadNS() {
 						_ = v14
 						var tmp15 any
 						{ // let
-							// let binding "seq_5"
+							// let binding "seq_696"
 							tmp16 := checkDerefVar(var_glojure_DOT_core_seq)
 							tmp17 := lang.Apply(tmp16, []any{v3})
 							var v18 any = tmp17
 							_ = v18
-							// let binding "chunk_6"
+							// let binding "chunk_697"
 							var v19 any = nil
 							_ = v19
-							// let binding "count_7"
+							// let binding "count_698"
 							var v20 any = int64(0)
 							_ = v20
-							// let binding "i_8"
+							// let binding "i_699"
 							var v21 any = int64(0)
 							_ = v21
 							for {
@@ -44154,7 +44273,7 @@ func LoadNS() {
 										if lang.IsTruthy(v29) {
 											var tmp31 any
 											{ // let
-												// let binding "seq_5"
+												// let binding "seq_696"
 												var v32 any = v29
 												_ = v32
 												var tmp33 any
@@ -44363,7 +44482,7 @@ func LoadNS() {
 						_ = v12
 						var tmp13 any
 						{ // let
-							// let binding "vec__349"
+							// let binding "vec__675"
 							var v14 any = v12
 							_ = v14
 							// let binding "test"
@@ -44492,7 +44611,7 @@ func LoadNS() {
 						_ = v12
 						var tmp13 any
 						{ // let
-							// let binding "vec__353"
+							// let binding "vec__679"
 							var v14 any = v12
 							_ = v14
 							// let binding "test"
@@ -44633,7 +44752,7 @@ func LoadNS() {
 							_ = v18
 							var tmp19 any
 							{ // let
-								// let binding "vec__144"
+								// let binding "vec__835"
 								tmp20 := checkDerefVar(var_glojure_DOT_core_split_DASH_at)
 								var tmp21 any
 								tmp22 := checkDerefVar(var_glojure_DOT_core__EQ_)
@@ -44648,7 +44767,7 @@ func LoadNS() {
 								tmp26 := lang.Apply(tmp20, []any{tmp21, v18})
 								var v27 any = tmp26
 								_ = v27
-								// let binding "vec__147"
+								// let binding "vec__838"
 								tmp28 := checkDerefVar(var_glojure_DOT_core_nth)
 								tmp29 := lang.Apply(tmp28, []any{v27, int64(0), nil})
 								var v30 any = tmp29
@@ -44852,285 +44971,6 @@ func LoadNS() {
 			var_glojure_DOT_core_condp.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
-	// defn
-	{
-		tmp0 := sym_defn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewVector(sym_params_STAR_), sym_prepost_DASH_map_QMARK_, sym_body), lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_prepost_DASH_map_QMARK_, sym_body), sym__PLUS_, sym_attr_DASH_map_QMARK_)), kw_doc, "Same as (def name (fn [params* ] exprs*)) or (def\n    name (fn ([params* ] exprs*)+)) with any doc-string or attrs added\n    to the var metadata. prepost-map defines a map with optional keys\n    :pre and :post that contain collections of pre or post conditions.", kw_file, "glojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(284), kw_end_DASH_line, int(291))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		{ // function defn
-			var v2 lang.FnFunc
-			tmp1 = lang.NewFnFunc(func(args ...any) any {
-				switch len(args) {
-				default:
-					checkArity(args, 3)
-					v3 := args[0]
-					_ = v3
-					v4 := args[1]
-					_ = v4
-					v5 := args[2]
-					_ = v5
-					var v6 any = lang.NewList(args[3:]...)
-					_ = v6
-					var tmp7 any
-					tmp8 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-					tmp9 := reflect.TypeOf((*lang.Symbol)(nil))
-					tmp10 := lang.Apply(tmp8, []any{tmp9, v5})
-					if lang.IsTruthy(tmp10) {
-					} else {
-						tmp11 := lang.Apply(lang.NewIllegalArgumentError, []any{"First argument to defn must be a symbol"})
-						panic(tmp11)
-					}
-					_ = tmp7
-					var tmp12 any
-					{ // let
-						// let binding "m"
-						var tmp13 any
-						tmp14 := checkDerefVar(var_glojure_DOT_core_string_QMARK_)
-						tmp15 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp16 := lang.Apply(tmp15, []any{v6})
-						tmp17 := lang.Apply(tmp14, []any{tmp16})
-						if lang.IsTruthy(tmp17) {
-							tmp18 := checkDerefVar(var_glojure_DOT_core_first)
-							tmp19 := lang.Apply(tmp18, []any{v6})
-							tmp20 := lang.NewMap(kw_doc, tmp19)
-							tmp21 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(297), kw_column, int(19), kw_end_DASH_line, int(297), kw_end_DASH_column, int(38))
-							tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp13 = tmp22
-						} else {
-							tmp23 := lang.NewMap()
-							tmp24 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(298), kw_column, int(19), kw_end_DASH_line, int(298), kw_end_DASH_column, int(20))
-							tmp25, err := lang.WithMeta(tmp23, tmp24.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp13 = tmp25
-						}
-						var v26 any = tmp13
-						_ = v26
-						// let binding "fdecl"
-						var tmp27 any
-						tmp28 := checkDerefVar(var_glojure_DOT_core_string_QMARK_)
-						tmp29 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp30 := lang.Apply(tmp29, []any{v6})
-						tmp31 := lang.Apply(tmp28, []any{tmp30})
-						if lang.IsTruthy(tmp31) {
-							tmp32 := checkDerefVar(var_glojure_DOT_core_next)
-							tmp33 := lang.Apply(tmp32, []any{v6})
-							tmp27 = tmp33
-						} else {
-							tmp27 = v6
-						}
-						var v34 any = tmp27
-						_ = v34
-						// let binding "m"
-						var tmp35 any
-						tmp36 := checkDerefVar(var_glojure_DOT_core_map_QMARK_)
-						tmp37 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp38 := lang.Apply(tmp37, []any{v34})
-						tmp39 := lang.Apply(tmp36, []any{tmp38})
-						if lang.IsTruthy(tmp39) {
-							tmp40 := checkDerefVar(var_glojure_DOT_core_conj)
-							tmp41 := checkDerefVar(var_glojure_DOT_core_first)
-							tmp42 := lang.Apply(tmp41, []any{v34})
-							tmp43 := lang.Apply(tmp40, []any{v26, tmp42})
-							tmp35 = tmp43
-						} else {
-							tmp35 = v26
-						}
-						var v44 any = tmp35
-						_ = v44
-						// let binding "fdecl"
-						var tmp45 any
-						tmp46 := checkDerefVar(var_glojure_DOT_core_map_QMARK_)
-						tmp47 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp48 := lang.Apply(tmp47, []any{v34})
-						tmp49 := lang.Apply(tmp46, []any{tmp48})
-						if lang.IsTruthy(tmp49) {
-							tmp50 := checkDerefVar(var_glojure_DOT_core_next)
-							tmp51 := lang.Apply(tmp50, []any{v34})
-							tmp45 = tmp51
-						} else {
-							tmp45 = v34
-						}
-						var v52 any = tmp45
-						_ = v52
-						// let binding "fdecl"
-						var tmp53 any
-						tmp54 := checkDerefVar(var_glojure_DOT_core_vector_QMARK_)
-						tmp55 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp56 := lang.Apply(tmp55, []any{v52})
-						tmp57 := lang.Apply(tmp54, []any{tmp56})
-						if lang.IsTruthy(tmp57) {
-							tmp58 := checkDerefVar(var_glojure_DOT_core_list)
-							tmp59 := lang.Apply(tmp58, []any{v52})
-							tmp53 = tmp59
-						} else {
-							tmp53 = v52
-						}
-						var v60 any = tmp53
-						_ = v60
-						// let binding "m"
-						var tmp61 any
-						tmp62 := checkDerefVar(var_glojure_DOT_core_map_QMARK_)
-						tmp63 := checkDerefVar(var_glojure_DOT_core_last)
-						tmp64 := lang.Apply(tmp63, []any{v60})
-						tmp65 := lang.Apply(tmp62, []any{tmp64})
-						if lang.IsTruthy(tmp65) {
-							tmp66 := checkDerefVar(var_glojure_DOT_core_conj)
-							tmp67 := checkDerefVar(var_glojure_DOT_core_last)
-							tmp68 := lang.Apply(tmp67, []any{v60})
-							tmp69 := lang.Apply(tmp66, []any{v44, tmp68})
-							tmp61 = tmp69
-						} else {
-							tmp61 = v44
-						}
-						var v70 any = tmp61
-						_ = v70
-						// let binding "fdecl"
-						var tmp71 any
-						tmp72 := checkDerefVar(var_glojure_DOT_core_map_QMARK_)
-						tmp73 := checkDerefVar(var_glojure_DOT_core_last)
-						tmp74 := lang.Apply(tmp73, []any{v60})
-						tmp75 := lang.Apply(tmp72, []any{tmp74})
-						if lang.IsTruthy(tmp75) {
-							tmp76 := checkDerefVar(var_glojure_DOT_core_butlast)
-							tmp77 := lang.Apply(tmp76, []any{v60})
-							tmp71 = tmp77
-						} else {
-							tmp71 = v60
-						}
-						var v78 any = tmp71
-						_ = v78
-						// let binding "m"
-						tmp79 := checkDerefVar(var_glojure_DOT_core_conj)
-						tmp80 := checkDerefVar(var_glojure_DOT_core_list)
-						tmp81 := checkDerefVar(var_glojure_DOT_core_sigs)
-						tmp82 := lang.Apply(tmp81, []any{v78})
-						tmp83 := lang.Apply(tmp80, []any{sym_quote, tmp82})
-						tmp84 := lang.NewMap(kw_arglists, tmp83)
-						tmp85 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(317), kw_column, int(23), kw_end_DASH_line, int(317), kw_end_DASH_column, int(60))
-						tmp86, err := lang.WithMeta(tmp84, tmp85.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp87 := lang.Apply(tmp79, []any{tmp86, v70})
-						var v88 any = tmp87
-						_ = v88
-						// let binding "m"
-						var tmp89 any
-						{ // let
-							// let binding "inline"
-							tmp90 := lang.Apply(kw_inline, []any{v88})
-							var v91 any = tmp90
-							_ = v91
-							// let binding "ifn"
-							tmp92 := checkDerefVar(var_glojure_DOT_core_first)
-							tmp93 := lang.Apply(tmp92, []any{v91})
-							var v94 any = tmp93
-							_ = v94
-							// let binding "iname"
-							tmp95 := checkDerefVar(var_glojure_DOT_core_second)
-							tmp96 := lang.Apply(tmp95, []any{v91})
-							var v97 any = tmp96
-							_ = v97
-							var tmp98 any
-							var tmp99 any
-							tmp100 := lang.Apply(lang.Equiv, []any{sym_fn, v94})
-							if lang.IsTruthy(tmp100) {
-								var tmp101 any
-								tmp102 := checkDerefVar(var_glojure_DOT_core_instance_QMARK_)
-								tmp103 := reflect.TypeOf((*lang.Symbol)(nil))
-								tmp104 := lang.Apply(tmp102, []any{tmp103, v97})
-								if lang.IsTruthy(tmp104) {
-									tmp101 = false
-								} else {
-									tmp101 = true
-								}
-								tmp99 = tmp101
-							} else {
-							}
-							if lang.IsTruthy(tmp99) {
-								tmp105 := checkDerefVar(var_glojure_DOT_core_assoc)
-								tmp106 := checkDerefVar(var_glojure_DOT_core_cons)
-								tmp107 := checkDerefVar(var_glojure_DOT_core_cons)
-								tmp108, ok := lang.FieldOrMethod(v5, "Name")
-								if !ok {
-									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v5, "Name")))
-								}
-								var tmp109 any
-								switch reflect.TypeOf(tmp108).Kind() {
-								case reflect.Func:
-									tmp109 = lang.Apply(tmp108, nil)
-								default:
-									tmp109 = tmp108
-								}
-								tmp110 := lang.Apply(lang.ConcatStrings, []any{tmp109, "__inliner"})
-								tmp111 := lang.Apply(lang.NewSymbol, []any{tmp110})
-								tmp112 := checkDerefVar(var_glojure_DOT_core_next)
-								tmp113 := lang.Apply(tmp112, []any{v91})
-								tmp114 := lang.Apply(tmp107, []any{tmp111, tmp113})
-								tmp115 := lang.Apply(tmp106, []any{v94, tmp114})
-								tmp116 := lang.Apply(tmp105, []any{v88, kw_inline, tmp115})
-								tmp98 = tmp116
-							} else {
-								tmp98 = v88
-							}
-							tmp89 = tmp98
-						} // end let
-						var v90 any = tmp89
-						_ = v90
-						// let binding "m"
-						tmp91 := checkDerefVar(var_glojure_DOT_core_conj)
-						var tmp92 any
-						tmp93 := checkDerefVar(var_glojure_DOT_core_meta)
-						tmp94 := lang.Apply(tmp93, []any{v5})
-						if lang.IsTruthy(tmp94) {
-							tmp95 := checkDerefVar(var_glojure_DOT_core_meta)
-							tmp96 := lang.Apply(tmp95, []any{v5})
-							tmp92 = tmp96
-						} else {
-							tmp97 := lang.NewMap()
-							tmp98 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(328), kw_column, int(51), kw_end_DASH_line, int(328), kw_end_DASH_column, int(52))
-							tmp99, err := lang.WithMeta(tmp97, tmp98.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp92 = tmp99
-						}
-						tmp100 := lang.Apply(tmp91, []any{tmp92, v90})
-						var v101 any = tmp100
-						_ = v101
-						tmp102 := checkDerefVar(var_glojure_DOT_core_list)
-						tmp103 := checkDerefVar(var_glojure_DOT_core_with_DASH_meta)
-						tmp104 := lang.Apply(tmp103, []any{v5, v101})
-						tmp105 := checkDerefVar(var_glojure_DOT_core_with_DASH_meta)
-						tmp106 := checkDerefVar(var_glojure_DOT_core_cons)
-						tmp107 := lang.Apply(tmp106, []any{sym_glojure_DOT_core_SLASH_fn, v78})
-						tmp108 := lang.Apply(kw_tag, []any{v101})
-						tmp109 := lang.NewMap(kw_rettag, tmp108)
-						tmp110 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(333), kw_column, int(37), kw_end_DASH_line, int(333), kw_end_DASH_column, int(54))
-						tmp111, err := lang.WithMeta(tmp109, tmp110.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp112 := lang.Apply(tmp105, []any{tmp107, tmp111})
-						tmp113 := lang.Apply(tmp102, []any{sym_def, tmp104, tmp112})
-						tmp12 = tmp113
-					} // end let
-					return tmp12
-				}
-			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(291), kw_column, int(7), kw_end_DASH_line, int(333), kw_end_DASH_column, int(58))).(lang.FnFunc)
-			v2 = tmp1
-			_ = v2
-		}
-		var_glojure_DOT_core_defn = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_glojure_DOT_core_defn.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// destructure
 	{
 		tmp0 := sym_destructure.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(4400), kw_column, int(7), kw_end_DASH_line, int(4400), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_bindings)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
@@ -45275,7 +45115,7 @@ func LoadNS() {
 															if lang.IsTruthy(kw_else) {
 																var tmp65 any
 																if lang.IsTruthy(v38) {
-																	tmp66 := lang.Apply(errors8.New, []any{"Unsupported binding form, only :as can follow & parameter"})
+																	tmp66 := lang.Apply(errors5.New, []any{"Unsupported binding form, only :as can follow & parameter"})
 																	panic(tmp66)
 																} else {
 																	var tmp68 any
@@ -45830,7 +45670,7 @@ func LoadNS() {
 										if lang.IsTruthy(kw_else) {
 											tmp37 := checkDerefVar(var_glojure_DOT_core_str)
 											tmp38 := lang.Apply(tmp37, []any{"Unsupported binding form: ", v10})
-											tmp39 := lang.Apply(errors8.New, []any{tmp38})
+											tmp39 := lang.Apply(errors5.New, []any{tmp38})
 											panic(tmp39)
 										} else {
 										}
@@ -45920,20 +45760,20 @@ func LoadNS() {
 				_ = v3
 				var tmp4 any
 				{ // let
-					// let binding "seq_262"
+					// let binding "seq_627"
 					tmp5 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp6 := checkDerefVar(var_glojure_DOT_core_partition)
 					tmp7 := lang.Apply(tmp6, []any{int64(2), v3})
 					tmp8 := lang.Apply(tmp5, []any{tmp7})
 					var v9 any = tmp8
 					_ = v9
-					// let binding "chunk_263"
+					// let binding "chunk_628"
 					var v10 any = nil
 					_ = v10
-					// let binding "count_264"
+					// let binding "count_629"
 					var v11 any = int64(0)
 					_ = v11
-					// let binding "i_265"
+					// let binding "i_630"
 					var v12 any = int64(0)
 					_ = v12
 					for {
@@ -45943,7 +45783,7 @@ func LoadNS() {
 						if lang.IsTruthy(tmp15) {
 							var tmp16 any
 							{ // let
-								// let binding "vec__266"
+								// let binding "vec__631"
 								tmp17, _ := lang.FieldOrMethod(v10, "nth")
 								if reflect.TypeOf(tmp17).Kind() != reflect.Func {
 									panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
@@ -45968,7 +45808,7 @@ func LoadNS() {
 								} else {
 									tmp29 := checkDerefVar(var_glojure_DOT_core_str)
 									tmp30 := lang.Apply(tmp29, []any{v22, " is not a protocol"})
-									tmp31 := lang.Apply(errors8.New, []any{tmp30})
+									tmp31 := lang.Apply(errors5.New, []any{tmp30})
 									panic(tmp31)
 								}
 								_ = tmp26
@@ -45982,7 +45822,7 @@ func LoadNS() {
 									_ = v35
 									var tmp36 any
 									{ // let
-										// let binding "vec__270"
+										// let binding "vec__635"
 										var v37 any = v35
 										_ = v37
 										// let binding "k"
@@ -46062,7 +45902,7 @@ func LoadNS() {
 								if lang.IsTruthy(v20) {
 									var tmp22 any
 									{ // let
-										// let binding "seq_262"
+										// let binding "seq_627"
 										var v23 any = v20
 										_ = v23
 										var tmp24 any
@@ -46098,7 +45938,7 @@ func LoadNS() {
 										} else {
 											var tmp28 any
 											{ // let
-												// let binding "vec__273"
+												// let binding "vec__638"
 												tmp29 := checkDerefVar(var_glojure_DOT_core_first)
 												tmp30 := lang.Apply(tmp29, []any{v23})
 												var v31 any = tmp30
@@ -46120,7 +45960,7 @@ func LoadNS() {
 												} else {
 													tmp41 := checkDerefVar(var_glojure_DOT_core_str)
 													tmp42 := lang.Apply(tmp41, []any{v34, " is not a protocol"})
-													tmp43 := lang.Apply(errors8.New, []any{tmp42})
+													tmp43 := lang.Apply(errors5.New, []any{tmp42})
 													panic(tmp43)
 												}
 												_ = tmp38
@@ -46134,7 +45974,7 @@ func LoadNS() {
 													_ = v47
 													var tmp48 any
 													{ // let
-														// let binding "vec__277"
+														// let binding "vec__642"
 														var v49 any = v47
 														_ = v49
 														// let binding "k"
@@ -46293,7 +46133,7 @@ func LoadNS() {
 						_ = v38
 						var tmp39 any
 						{ // let
-							// let binding "vec__24"
+							// let binding "vec__715"
 							var v40 any = v38
 							_ = v40
 							// let binding "k"
@@ -46395,38 +46235,38 @@ func LoadNS() {
 						_ = v43
 						var tmp44 any
 						{ // let
-							// let binding "vec__28"
+							// let binding "vec__719"
 							var v45 any = v43
 							_ = v45
-							// let binding "seq__29"
+							// let binding "seq__720"
 							tmp46 := checkDerefVar(var_glojure_DOT_core_seq)
 							tmp47 := lang.Apply(tmp46, []any{v45})
 							var v48 any = tmp47
 							_ = v48
-							// let binding "first__30"
+							// let binding "first__721"
 							tmp49 := checkDerefVar(var_glojure_DOT_core_first)
 							tmp50 := lang.Apply(tmp49, []any{v48})
 							var v51 any = tmp50
 							_ = v51
-							// let binding "seq__29"
+							// let binding "seq__720"
 							tmp52 := checkDerefVar(var_glojure_DOT_core_next)
 							tmp53 := lang.Apply(tmp52, []any{v48})
 							var v54 any = tmp53
 							_ = v54
-							// let binding "vec__31"
+							// let binding "vec__722"
 							var v55 any = v51
 							_ = v55
-							// let binding "seq__32"
+							// let binding "seq__723"
 							tmp56 := checkDerefVar(var_glojure_DOT_core_seq)
 							tmp57 := lang.Apply(tmp56, []any{v55})
 							var v58 any = tmp57
 							_ = v58
-							// let binding "first__33"
+							// let binding "first__724"
 							tmp59 := checkDerefVar(var_glojure_DOT_core_first)
 							tmp60 := lang.Apply(tmp59, []any{v58})
 							var v61 any = tmp60
 							_ = v61
-							// let binding "seq__32"
+							// let binding "seq__723"
 							tmp62 := checkDerefVar(var_glojure_DOT_core_next)
 							tmp63 := lang.Apply(tmp62, []any{v58})
 							var v64 any = tmp63
@@ -46434,12 +46274,12 @@ func LoadNS() {
 							// let binding "bind"
 							var v65 any = v61
 							_ = v65
-							// let binding "first__33"
+							// let binding "first__724"
 							tmp66 := checkDerefVar(var_glojure_DOT_core_first)
 							tmp67 := lang.Apply(tmp66, []any{v64})
 							var v68 any = tmp67
 							_ = v68
-							// let binding "seq__32"
+							// let binding "seq__723"
 							tmp69 := checkDerefVar(var_glojure_DOT_core_next)
 							tmp70 := lang.Apply(tmp69, []any{v64})
 							var v71 any = tmp70
@@ -46450,10 +46290,10 @@ func LoadNS() {
 							// let binding "mod-pairs"
 							var v73 any = v71
 							_ = v73
-							// let binding "vec__34"
+							// let binding "vec__725"
 							var v74 any = v54
 							_ = v74
-							// let binding "vec__37"
+							// let binding "vec__728"
 							tmp75 := checkDerefVar(var_glojure_DOT_core_nth)
 							tmp76 := lang.Apply(tmp75, []any{v74, int64(0), nil})
 							var v77 any = tmp76
@@ -46493,25 +46333,25 @@ func LoadNS() {
 										_ = v94
 										var tmp95 any
 										{ // let
-											// let binding "vec__41"
+											// let binding "vec__732"
 											var v96 any = v94
 											_ = v96
-											// let binding "seq__42"
+											// let binding "seq__733"
 											tmp97 := checkDerefVar(var_glojure_DOT_core_seq)
 											tmp98 := lang.Apply(tmp97, []any{v96})
 											var v99 any = tmp98
 											_ = v99
-											// let binding "first__43"
+											// let binding "first__734"
 											tmp100 := checkDerefVar(var_glojure_DOT_core_first)
 											tmp101 := lang.Apply(tmp100, []any{v99})
 											var v102 any = tmp101
 											_ = v102
-											// let binding "seq__42"
+											// let binding "seq__733"
 											tmp103 := checkDerefVar(var_glojure_DOT_core_next)
 											tmp104 := lang.Apply(tmp103, []any{v99})
 											var v105 any = tmp104
 											_ = v105
-											// let binding "vec__44"
+											// let binding "vec__735"
 											var v106 any = v102
 											_ = v106
 											// let binding "k"
@@ -46859,25 +46699,25 @@ func LoadNS() {
 												_ = v178
 												var tmp179 any
 												{ // let
-													// let binding "vec__48"
+													// let binding "vec__739"
 													var v180 any = v178
 													_ = v180
-													// let binding "seq__49"
+													// let binding "seq__740"
 													tmp181 := checkDerefVar(var_glojure_DOT_core_seq)
 													tmp182 := lang.Apply(tmp181, []any{v180})
 													var v183 any = tmp182
 													_ = v183
-													// let binding "first__50"
+													// let binding "first__741"
 													tmp184 := checkDerefVar(var_glojure_DOT_core_first)
 													tmp185 := lang.Apply(tmp184, []any{v183})
 													var v186 any = tmp185
 													_ = v186
-													// let binding "seq__49"
+													// let binding "seq__740"
 													tmp187 := checkDerefVar(var_glojure_DOT_core_next)
 													tmp188 := lang.Apply(tmp187, []any{v183})
 													var v189 any = tmp188
 													_ = v189
-													// let binding "vec__51"
+													// let binding "vec__742"
 													var v190 any = v186
 													_ = v190
 													// let binding "k"
@@ -47631,7 +47471,7 @@ func LoadNS() {
 								_ = v65
 								var tmp66 any
 								{ // let
-									// let binding "vec__17"
+									// let binding "vec__708"
 									var v67 any = v65
 									_ = v67
 									// let binding "b"
@@ -47995,715 +47835,6 @@ func LoadNS() {
 		})
 		closed15 = tmp0
 	}
-	var closed18 any
-	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v1 := args[0]
-			_ = v1
-			v2 := args[1]
-			_ = v2
-			tmp3 := checkDerefVar(var_glojure_DOT_go_DOT_io_make_DASH_input_DASH_stream)
-			tmp4 := lang.Apply(tmp3, []any{v1, v2})
-			return tmp4
-		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(167), kw_column, int(17), kw_end_DASH_line, int(167), kw_end_DASH_column, int(56))).(lang.FnFunc)
-		closed18 = tmp0
-	}
-	var closed19 any
-	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v1 := args[0]
-			_ = v1
-			v2 := args[1]
-			_ = v2
-			tmp3 := checkDerefVar(var_glojure_DOT_go_DOT_io_make_DASH_writer)
-			tmp4 := checkDerefVar(var_glojure_DOT_go_DOT_io_make_DASH_output_DASH_stream)
-			tmp5 := lang.Apply(tmp4, []any{v1, v2})
-			tmp6 := lang.Apply(tmp3, []any{tmp5, v2})
-			return tmp6
-		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(168), kw_column, int(17), kw_end_DASH_line, int(168), kw_end_DASH_column, int(76))).(lang.FnFunc)
-		closed19 = tmp0
-	}
-	var closed22 any
-	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v1 := args[0]
-			_ = v1
-			v2 := args[1]
-			_ = v2
-			tmp3 := checkDerefVar(var_glojure_DOT_go_DOT_io_make_DASH_input_DASH_stream)
-			var tmp4 any
-			tmp5 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp6, ok := lang.FieldOrMethod(v1, "scheme")
-			if !ok {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v1, "scheme")))
-			}
-			var tmp7 any
-			switch reflect.TypeOf(tmp6).Kind() {
-			case reflect.Func:
-				tmp7 = lang.Apply(tmp6, nil)
-			default:
-				tmp7 = tmp6
-			}
-			tmp8 := lang.Apply(tmp5, []any{"file", tmp7})
-			if lang.IsTruthy(tmp8) {
-				tmp9 := lang.Apply(nil, []any{v1})
-				tmp4 = tmp9
-			} else {
-				var tmp10 any
-				{ // let
-					// let binding "req"
-					var tmp11 any
-					{ // let
-						// let binding "res__0__auto__"
-						tmp12, ok := lang.FieldOrMethod(v1, "String")
-						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v1, "String")))
-						}
-						var tmp13 any
-						switch reflect.TypeOf(tmp12).Kind() {
-						case reflect.Func:
-							tmp13 = lang.Apply(tmp12, nil)
-						default:
-							tmp13 = tmp12
-						}
-						tmp14 := lang.Apply(http17.NewRequest, []any{http17.MethodGet, tmp13, nil})
-						var v15 any = tmp14
-						_ = v15
-						// let binding "vec__295"
-						var tmp16 any
-						tmp17 := checkDerefVar(var_glojure_DOT_core_vector_QMARK_)
-						tmp18 := lang.Apply(tmp17, []any{v15})
-						if lang.IsTruthy(tmp18) {
-							tmp19 := checkDerefVar(var_glojure_DOT_core_pop)
-							tmp20 := lang.Apply(tmp19, []any{v15})
-							tmp21 := checkDerefVar(var_glojure_DOT_core_last)
-							tmp22 := lang.Apply(tmp21, []any{v15})
-							tmp23 := lang.NewVector(tmp20, tmp22)
-							tmp24 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(358), kw_column, int(10), kw_end_DASH_line, int(358), kw_end_DASH_column, int(14))
-							tmp25, err := lang.WithMeta(tmp23, tmp24.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp16 = tmp25
-						} else {
-							tmp26 := lang.NewVector(nil, v15)
-							tmp27 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(358), kw_column, int(10), kw_end_DASH_line, int(358), kw_end_DASH_column, int(14))
-							tmp28, err := lang.WithMeta(tmp26, tmp27.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp16 = tmp28
-						}
-						var v29 any = tmp16
-						_ = v29
-						// let binding "vec__298"
-						tmp30 := checkDerefVar(var_glojure_DOT_core_nth)
-						tmp31 := lang.Apply(tmp30, []any{v29, int64(0), nil})
-						var v32 any = tmp31
-						_ = v32
-						// let binding "seq__299"
-						tmp33 := checkDerefVar(var_glojure_DOT_core_seq)
-						tmp34 := lang.Apply(tmp33, []any{v32})
-						var v35 any = tmp34
-						_ = v35
-						// let binding "first__300"
-						tmp36 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp37 := lang.Apply(tmp36, []any{v35})
-						var v38 any = tmp37
-						_ = v38
-						// let binding "seq__299"
-						tmp39 := checkDerefVar(var_glojure_DOT_core_next)
-						tmp40 := lang.Apply(tmp39, []any{v35})
-						var v41 any = tmp40
-						_ = v41
-						// let binding "fst__1__auto__"
-						var v42 any = v38
-						_ = v42
-						// let binding "rst__2__auto__"
-						var v43 any = v41
-						_ = v43
-						// let binding "res__0__auto__"
-						var v44 any = v32
-						_ = v44
-						// let binding "err__3__auto__"
-						tmp45 := checkDerefVar(var_glojure_DOT_core_nth)
-						tmp46 := lang.Apply(tmp45, []any{v29, int64(1), nil})
-						var v47 any = tmp46
-						_ = v47
-						// let binding "res__0__auto__"
-						var tmp48 any
-						tmp49 := checkDerefVar(var_glojure_DOT_core_not_DASH_empty)
-						tmp50 := lang.Apply(tmp49, []any{v43})
-						if lang.IsTruthy(tmp50) {
-							tmp48 = v44
-						} else {
-							tmp48 = v42
-						}
-						var v51 any = tmp48
-						_ = v51
-						var tmp52 any
-						if lang.IsTruthy(v47) {
-							panic(v47)
-						} else {
-						}
-						_ = tmp52
-						tmp11 = v51
-					} // end let
-					var v12 any = tmp11
-					_ = v12
-					// let binding "res"
-					var tmp13 any
-					{ // let
-						// let binding "res__0__auto__"
-						tmp14, _ := lang.FieldOrMethod(http17.DefaultClient, "Do")
-						if reflect.TypeOf(tmp14).Kind() != reflect.Func {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("Do is not a function")))
-						}
-						tmp15 := lang.Apply(tmp14, []any{v12})
-						var v16 any = tmp15
-						_ = v16
-						// let binding "vec__301"
-						var tmp17 any
-						tmp18 := checkDerefVar(var_glojure_DOT_core_vector_QMARK_)
-						tmp19 := lang.Apply(tmp18, []any{v16})
-						if lang.IsTruthy(tmp19) {
-							tmp20 := checkDerefVar(var_glojure_DOT_core_pop)
-							tmp21 := lang.Apply(tmp20, []any{v16})
-							tmp22 := checkDerefVar(var_glojure_DOT_core_last)
-							tmp23 := lang.Apply(tmp22, []any{v16})
-							tmp24 := lang.NewVector(tmp21, tmp23)
-							tmp25 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(358), kw_column, int(10), kw_end_DASH_line, int(358), kw_end_DASH_column, int(14))
-							tmp26, err := lang.WithMeta(tmp24, tmp25.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp17 = tmp26
-						} else {
-							tmp27 := lang.NewVector(nil, v16)
-							tmp28 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(358), kw_column, int(10), kw_end_DASH_line, int(358), kw_end_DASH_column, int(14))
-							tmp29, err := lang.WithMeta(tmp27, tmp28.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp17 = tmp29
-						}
-						var v30 any = tmp17
-						_ = v30
-						// let binding "vec__304"
-						tmp31 := checkDerefVar(var_glojure_DOT_core_nth)
-						tmp32 := lang.Apply(tmp31, []any{v30, int64(0), nil})
-						var v33 any = tmp32
-						_ = v33
-						// let binding "seq__305"
-						tmp34 := checkDerefVar(var_glojure_DOT_core_seq)
-						tmp35 := lang.Apply(tmp34, []any{v33})
-						var v36 any = tmp35
-						_ = v36
-						// let binding "first__306"
-						tmp37 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp38 := lang.Apply(tmp37, []any{v36})
-						var v39 any = tmp38
-						_ = v39
-						// let binding "seq__305"
-						tmp40 := checkDerefVar(var_glojure_DOT_core_next)
-						tmp41 := lang.Apply(tmp40, []any{v36})
-						var v42 any = tmp41
-						_ = v42
-						// let binding "fst__1__auto__"
-						var v43 any = v39
-						_ = v43
-						// let binding "rst__2__auto__"
-						var v44 any = v42
-						_ = v44
-						// let binding "res__0__auto__"
-						var v45 any = v33
-						_ = v45
-						// let binding "err__3__auto__"
-						tmp46 := checkDerefVar(var_glojure_DOT_core_nth)
-						tmp47 := lang.Apply(tmp46, []any{v30, int64(1), nil})
-						var v48 any = tmp47
-						_ = v48
-						// let binding "res__0__auto__"
-						var tmp49 any
-						tmp50 := checkDerefVar(var_glojure_DOT_core_not_DASH_empty)
-						tmp51 := lang.Apply(tmp50, []any{v44})
-						if lang.IsTruthy(tmp51) {
-							tmp49 = v45
-						} else {
-							tmp49 = v43
-						}
-						var v52 any = tmp49
-						_ = v52
-						var tmp53 any
-						if lang.IsTruthy(v48) {
-							panic(v48)
-						} else {
-						}
-						_ = tmp53
-						tmp13 = v52
-					} // end let
-					var v14 any = tmp13
-					_ = v14
-					// let binding "status"
-					tmp15, ok := lang.FieldOrMethod(v14, "StatusCode")
-					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v14, "StatusCode")))
-					}
-					var tmp16 any
-					switch reflect.TypeOf(tmp15).Kind() {
-					case reflect.Func:
-						tmp16 = lang.Apply(tmp15, nil)
-					default:
-						tmp16 = tmp15
-					}
-					var v17 any = tmp16
-					_ = v17
-					// let binding "body"
-					tmp18, ok := lang.FieldOrMethod(v14, "Body")
-					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v14, "Body")))
-					}
-					var tmp19 any
-					switch reflect.TypeOf(tmp18).Kind() {
-					case reflect.Func:
-						tmp19 = lang.Apply(tmp18, nil)
-					default:
-						tmp19 = tmp18
-					}
-					var v20 any = tmp19
-					_ = v20
-					var tmp21 any
-					tmp22 := checkDerefVar(var_glojure_DOT_core_not_EQ_)
-					tmp23 := lang.Apply(tmp22, []any{int64(200), v17})
-					if lang.IsTruthy(tmp23) {
-						tmp24, ok := lang.FieldOrMethod(v20, "Close")
-						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v20, "Close")))
-						}
-						var tmp25 any
-						switch reflect.TypeOf(tmp24).Kind() {
-						case reflect.Func:
-							tmp25 = lang.Apply(tmp24, nil)
-						default:
-							tmp25 = tmp24
-						}
-						_ = tmp25
-						tmp26 := lang.Apply(fmt.Errorf, []any{"http error: %s", v17})
-						panic(tmp26)
-					} else {
-					}
-					_ = tmp21
-					tmp10 = v20
-				} // end let
-				tmp4 = tmp10
-			}
-			tmp11 := lang.Apply(tmp3, []any{tmp4, v2})
-			return tmp11
-		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(232), kw_column, int(24), kw_end_DASH_line, int(244), kw_end_DASH_column, int(32))).(lang.FnFunc)
-		closed22 = tmp0
-	}
-	var closed23 any
-	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v1 := args[0]
-			_ = v1
-			v2 := args[1]
-			_ = v2
-			var tmp3 any
-			{ // let
-				// let binding "vec__307"
-				tmp4 := lang.Apply(url5.ParseRequestURI, []any{v1})
-				var v5 any = tmp4
-				_ = v5
-				// let binding "url"
-				tmp6 := checkDerefVar(var_glojure_DOT_core_nth)
-				tmp7 := lang.Apply(tmp6, []any{v5, int64(0), nil})
-				var v8 any = tmp7
-				_ = v8
-				// let binding "err"
-				tmp9 := checkDerefVar(var_glojure_DOT_core_nth)
-				tmp10 := lang.Apply(tmp9, []any{v5, int64(1), nil})
-				var v11 any = tmp10
-				_ = v11
-				var tmp12 any
-				if lang.IsTruthy(v11) {
-					tmp13 := checkDerefVar(var_glojure_DOT_go_DOT_io_make_DASH_input_DASH_stream)
-					var tmp14 any
-					{ // let
-						// let binding "res__0__auto__"
-						tmp15 := lang.Apply(os6.Open, []any{v1})
-						var v16 any = tmp15
-						_ = v16
-						// let binding "vec__310"
-						var tmp17 any
-						tmp18 := checkDerefVar(var_glojure_DOT_core_vector_QMARK_)
-						tmp19 := lang.Apply(tmp18, []any{v16})
-						if lang.IsTruthy(tmp19) {
-							tmp20 := checkDerefVar(var_glojure_DOT_core_pop)
-							tmp21 := lang.Apply(tmp20, []any{v16})
-							tmp22 := checkDerefVar(var_glojure_DOT_core_last)
-							tmp23 := lang.Apply(tmp22, []any{v16})
-							tmp24 := lang.NewVector(tmp21, tmp23)
-							tmp25 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(358), kw_column, int(10), kw_end_DASH_line, int(358), kw_end_DASH_column, int(14))
-							tmp26, err := lang.WithMeta(tmp24, tmp25.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp17 = tmp26
-						} else {
-							tmp27 := lang.NewVector(nil, v16)
-							tmp28 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(358), kw_column, int(10), kw_end_DASH_line, int(358), kw_end_DASH_column, int(14))
-							tmp29, err := lang.WithMeta(tmp27, tmp28.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp17 = tmp29
-						}
-						var v30 any = tmp17
-						_ = v30
-						// let binding "vec__313"
-						tmp31 := checkDerefVar(var_glojure_DOT_core_nth)
-						tmp32 := lang.Apply(tmp31, []any{v30, int64(0), nil})
-						var v33 any = tmp32
-						_ = v33
-						// let binding "seq__314"
-						tmp34 := checkDerefVar(var_glojure_DOT_core_seq)
-						tmp35 := lang.Apply(tmp34, []any{v33})
-						var v36 any = tmp35
-						_ = v36
-						// let binding "first__315"
-						tmp37 := checkDerefVar(var_glojure_DOT_core_first)
-						tmp38 := lang.Apply(tmp37, []any{v36})
-						var v39 any = tmp38
-						_ = v39
-						// let binding "seq__314"
-						tmp40 := checkDerefVar(var_glojure_DOT_core_next)
-						tmp41 := lang.Apply(tmp40, []any{v36})
-						var v42 any = tmp41
-						_ = v42
-						// let binding "fst__1__auto__"
-						var v43 any = v39
-						_ = v43
-						// let binding "rst__2__auto__"
-						var v44 any = v42
-						_ = v44
-						// let binding "res__0__auto__"
-						var v45 any = v33
-						_ = v45
-						// let binding "err__3__auto__"
-						tmp46 := checkDerefVar(var_glojure_DOT_core_nth)
-						tmp47 := lang.Apply(tmp46, []any{v30, int64(1), nil})
-						var v48 any = tmp47
-						_ = v48
-						// let binding "res__0__auto__"
-						var tmp49 any
-						tmp50 := checkDerefVar(var_glojure_DOT_core_not_DASH_empty)
-						tmp51 := lang.Apply(tmp50, []any{v44})
-						if lang.IsTruthy(tmp51) {
-							tmp49 = v45
-						} else {
-							tmp49 = v43
-						}
-						var v52 any = tmp49
-						_ = v52
-						var tmp53 any
-						if lang.IsTruthy(v48) {
-							panic(v48)
-						} else {
-						}
-						_ = tmp53
-						tmp14 = v52
-					} // end let
-					tmp15 := lang.Apply(tmp13, []any{tmp14, v2})
-					tmp12 = tmp15
-				} else {
-					tmp16 := checkDerefVar(var_glojure_DOT_go_DOT_io_make_DASH_input_DASH_stream)
-					tmp17 := lang.Apply(tmp16, []any{v8, v2})
-					tmp12 = tmp17
-				}
-				tmp3 = tmp12
-			} // end let
-			return tmp3
-		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(259), kw_column, int(24), kw_end_DASH_line, int(263), kw_end_DASH_column, int(60))).(lang.FnFunc)
-		closed23 = tmp0
-	}
-	var closed24 any
-	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v1 := args[0]
-			_ = v1
-			v2 := args[1]
-			_ = v2
-			tmp3 := checkDerefVar(var_glojure_DOT_core_str)
-			tmp4 := checkDerefVar(var_glojure_DOT_core_pr_DASH_str)
-			tmp5 := lang.Apply(tmp4, []any{v1})
-			tmp6 := lang.Apply(tmp3, []any{"Cannot open <", tmp5, "> as an OutputStream."})
-			tmp7 := lang.Apply(lang.NewIllegalArgumentError, []any{tmp6})
-			panic(tmp7)
-		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(172), kw_column, int(24), kw_end_DASH_line, int(174), kw_end_DASH_column, int(92))).(lang.FnFunc)
-		closed24 = tmp0
-	}
-	var closed26 any
-	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v1 := args[0]
-			_ = v1
-			v2 := args[1]
-			_ = v2
-			var tmp3 any
-			tmp4 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp5, ok := lang.FieldOrMethod(v1, "scheme")
-			if !ok {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v1, "scheme")))
-			}
-			var tmp6 any
-			switch reflect.TypeOf(tmp5).Kind() {
-			case reflect.Func:
-				tmp6 = lang.Apply(tmp5, nil)
-			default:
-				tmp6 = tmp5
-			}
-			tmp7 := lang.Apply(tmp4, []any{"file", tmp6})
-			if lang.IsTruthy(tmp7) {
-				tmp8 := checkDerefVar(var_glojure_DOT_go_DOT_io_make_DASH_output_DASH_stream)
-				tmp9 := lang.Apply(nil, []any{v1})
-				tmp10 := lang.Apply(tmp8, []any{tmp9, v2})
-				tmp3 = tmp10
-			} else {
-				tmp11 := checkDerefVar(var_glojure_DOT_core_str)
-				tmp12 := lang.Apply(tmp11, []any{"Can not write to non-file URL <", v1, ">"})
-				tmp13 := lang.Apply(lang.NewIllegalArgumentError, []any{tmp12})
-				panic(tmp13)
-			}
-			return tmp3
-		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(245), kw_column, int(25), kw_end_DASH_line, int(248), kw_end_DASH_column, int(149))).(lang.FnFunc)
-		closed26 = tmp0
-	}
-	var closed27 any
-	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v1 := args[0]
-			_ = v1
-			v2 := args[1]
-			_ = v2
-			var tmp3 any
-			func() {
-				defer func() {
-					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.Builtins["any"]) {
-							v4 := r
-							_ = v4
-							tmp5 := checkDerefVar(var_glojure_DOT_go_DOT_io_make_DASH_output_DASH_stream)
-							var tmp6 any
-							{ // let
-								// let binding "res__0__auto__"
-								tmp7 := lang.Apply(os6.Open, []any{v1})
-								tmp8 := lang.Apply(tmp7, nil)
-								var v9 any = tmp8
-								_ = v9
-								// let binding "vec__322"
-								var tmp10 any
-								tmp11 := checkDerefVar(var_glojure_DOT_core_vector_QMARK_)
-								tmp12 := lang.Apply(tmp11, []any{v9})
-								if lang.IsTruthy(tmp12) {
-									tmp13 := checkDerefVar(var_glojure_DOT_core_pop)
-									tmp14 := lang.Apply(tmp13, []any{v9})
-									tmp15 := checkDerefVar(var_glojure_DOT_core_last)
-									tmp16 := lang.Apply(tmp15, []any{v9})
-									tmp17 := lang.NewVector(tmp14, tmp16)
-									tmp18 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(358), kw_column, int(10), kw_end_DASH_line, int(358), kw_end_DASH_column, int(14))
-									tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
-									if err != nil {
-										panic(err)
-									}
-									tmp10 = tmp19
-								} else {
-									tmp20 := lang.NewVector(nil, v9)
-									tmp21 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(358), kw_column, int(10), kw_end_DASH_line, int(358), kw_end_DASH_column, int(14))
-									tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
-									if err != nil {
-										panic(err)
-									}
-									tmp10 = tmp22
-								}
-								var v23 any = tmp10
-								_ = v23
-								// let binding "vec__325"
-								tmp24 := checkDerefVar(var_glojure_DOT_core_nth)
-								tmp25 := lang.Apply(tmp24, []any{v23, int64(0), nil})
-								var v26 any = tmp25
-								_ = v26
-								// let binding "seq__326"
-								tmp27 := checkDerefVar(var_glojure_DOT_core_seq)
-								tmp28 := lang.Apply(tmp27, []any{v26})
-								var v29 any = tmp28
-								_ = v29
-								// let binding "first__327"
-								tmp30 := checkDerefVar(var_glojure_DOT_core_first)
-								tmp31 := lang.Apply(tmp30, []any{v29})
-								var v32 any = tmp31
-								_ = v32
-								// let binding "seq__326"
-								tmp33 := checkDerefVar(var_glojure_DOT_core_next)
-								tmp34 := lang.Apply(tmp33, []any{v29})
-								var v35 any = tmp34
-								_ = v35
-								// let binding "fst__1__auto__"
-								var v36 any = v32
-								_ = v36
-								// let binding "rst__2__auto__"
-								var v37 any = v35
-								_ = v37
-								// let binding "res__0__auto__"
-								var v38 any = v26
-								_ = v38
-								// let binding "err__3__auto__"
-								tmp39 := checkDerefVar(var_glojure_DOT_core_nth)
-								tmp40 := lang.Apply(tmp39, []any{v23, int64(1), nil})
-								var v41 any = tmp40
-								_ = v41
-								// let binding "res__0__auto__"
-								var tmp42 any
-								tmp43 := checkDerefVar(var_glojure_DOT_core_not_DASH_empty)
-								tmp44 := lang.Apply(tmp43, []any{v37})
-								if lang.IsTruthy(tmp44) {
-									tmp42 = v38
-								} else {
-									tmp42 = v36
-								}
-								var v45 any = tmp42
-								_ = v45
-								var tmp46 any
-								if lang.IsTruthy(v41) {
-									panic(v41)
-								} else {
-								}
-								_ = tmp46
-								tmp6 = v45
-							} // end let
-							tmp7 := lang.Apply(tmp5, []any{tmp6, v2})
-							tmp3 = tmp7
-						} else {
-							panic(r)
-						}
-					}
-				}()
-				tmp4 := checkDerefVar(var_glojure_DOT_go_DOT_io_make_DASH_output_DASH_stream)
-				var tmp5 any
-				{ // let
-					// let binding "res__0__auto__"
-					tmp6 := lang.Apply(url5.Parse, []any{v1})
-					tmp7 := lang.Apply(tmp6, nil)
-					var v8 any = tmp7
-					_ = v8
-					// let binding "vec__316"
-					var tmp9 any
-					tmp10 := checkDerefVar(var_glojure_DOT_core_vector_QMARK_)
-					tmp11 := lang.Apply(tmp10, []any{v8})
-					if lang.IsTruthy(tmp11) {
-						tmp12 := checkDerefVar(var_glojure_DOT_core_pop)
-						tmp13 := lang.Apply(tmp12, []any{v8})
-						tmp14 := checkDerefVar(var_glojure_DOT_core_last)
-						tmp15 := lang.Apply(tmp14, []any{v8})
-						tmp16 := lang.NewVector(tmp13, tmp15)
-						tmp17 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(358), kw_column, int(10), kw_end_DASH_line, int(358), kw_end_DASH_column, int(14))
-						tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp9 = tmp18
-					} else {
-						tmp19 := lang.NewVector(nil, v8)
-						tmp20 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(358), kw_column, int(10), kw_end_DASH_line, int(358), kw_end_DASH_column, int(14))
-						tmp21, err := lang.WithMeta(tmp19, tmp20.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp9 = tmp21
-					}
-					var v22 any = tmp9
-					_ = v22
-					// let binding "vec__319"
-					tmp23 := checkDerefVar(var_glojure_DOT_core_nth)
-					tmp24 := lang.Apply(tmp23, []any{v22, int64(0), nil})
-					var v25 any = tmp24
-					_ = v25
-					// let binding "seq__320"
-					tmp26 := checkDerefVar(var_glojure_DOT_core_seq)
-					tmp27 := lang.Apply(tmp26, []any{v25})
-					var v28 any = tmp27
-					_ = v28
-					// let binding "first__321"
-					tmp29 := checkDerefVar(var_glojure_DOT_core_first)
-					tmp30 := lang.Apply(tmp29, []any{v28})
-					var v31 any = tmp30
-					_ = v31
-					// let binding "seq__320"
-					tmp32 := checkDerefVar(var_glojure_DOT_core_next)
-					tmp33 := lang.Apply(tmp32, []any{v28})
-					var v34 any = tmp33
-					_ = v34
-					// let binding "fst__1__auto__"
-					var v35 any = v31
-					_ = v35
-					// let binding "rst__2__auto__"
-					var v36 any = v34
-					_ = v36
-					// let binding "res__0__auto__"
-					var v37 any = v25
-					_ = v37
-					// let binding "err__3__auto__"
-					tmp38 := checkDerefVar(var_glojure_DOT_core_nth)
-					tmp39 := lang.Apply(tmp38, []any{v22, int64(1), nil})
-					var v40 any = tmp39
-					_ = v40
-					// let binding "res__0__auto__"
-					var tmp41 any
-					tmp42 := checkDerefVar(var_glojure_DOT_core_not_DASH_empty)
-					tmp43 := lang.Apply(tmp42, []any{v36})
-					if lang.IsTruthy(tmp43) {
-						tmp41 = v37
-					} else {
-						tmp41 = v35
-					}
-					var v44 any = tmp41
-					_ = v44
-					var tmp45 any
-					if lang.IsTruthy(v40) {
-						panic(v40)
-					} else {
-					}
-					_ = tmp45
-					tmp5 = v44
-				} // end let
-				tmp6 := lang.Apply(tmp4, []any{tmp5, v2})
-				tmp3 = tmp6
-			}()
-			return tmp3
-		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(264), kw_column, int(25), kw_end_DASH_line, int(268), kw_end_DASH_column, int(79))).(lang.FnFunc)
-		closed27 = tmp0
-	}
 	// -protocols
 	{
 		tmp0 := sym__DASH_protocols.WithMeta(lang.NewMap(kw_private, true, kw_doc, "Private store of protocols. Go's reflection capabilities\n    don't yet support a native interface-based implementation, so\n    protocols are implemented in Glojure as maps from type to protocol\n    method implementations.", kw_file, "glojure/core_deftype.glj", kw_line, int(21), kw_column, int(3), kw_end_DASH_line, int(26), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
@@ -48928,320 +48059,7 @@ func LoadNS() {
 		})
 		tmp28 := lang.NewMultiFn("nav", tmp29, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp27 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_nav, tmp28), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_nav, lang.NewVector(sym_coll, sym_k, sym_v), "return (possibly transformed) v in the context of coll and k (a key/index or nil),\ndefaults to returning v."))))
-		var tmp32 lang.FnFunc
-		tmp32 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v33 := args[0]
-				_ = v33
-				var v34 any = lang.NewList(args[1:]...)
-				_ = v34
-				tmp35 := checkDerefVar(var_glojure_DOT_core_class)
-				tmp36 := lang.Apply(tmp35, []any{v33})
-				return tmp36
-			}
-		})
-		tmp31 := lang.NewMultiFn("make-reader", tmp32, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp33 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
-		var tmp34 lang.FnFunc
-		tmp34 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v35 := args[0]
-				_ = v35
-				var v36 any = lang.NewList(args[1:]...)
-				_ = v36
-				tmp37 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp38 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp39 := lang.Apply(tmp38, []any{v35, v36})
-				tmp40 := lang.Apply(tmp37, []any{closed17, tmp39})
-				return tmp40
-			}
-		})
-		tmp31.AddMethod(tmp33, tmp34)
-		tmp35 := reflect.TypeOf((*url5.URL)(nil))
-		var tmp36 lang.FnFunc
-		tmp36 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v37 := args[0]
-				_ = v37
-				var v38 any = lang.NewList(args[1:]...)
-				_ = v38
-				tmp39 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp40 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp41 := lang.Apply(tmp40, []any{v37, v38})
-				tmp42 := lang.Apply(tmp39, []any{closed18, tmp41})
-				return tmp42
-			}
-		})
-		tmp31.AddMethod(tmp35, tmp36)
-		tmp37 := reflect.TypeOf("")
-		var tmp38 lang.FnFunc
-		tmp38 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v39 := args[0]
-				_ = v39
-				var v40 any = lang.NewList(args[1:]...)
-				_ = v40
-				tmp41 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp42 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp43 := lang.Apply(tmp42, []any{v39, v40})
-				tmp44 := lang.Apply(tmp41, []any{closed18, tmp43})
-				return tmp44
-			}
-		})
-		tmp31.AddMethod(tmp37, tmp38)
-		var tmp40 lang.FnFunc
-		tmp40 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v41 := args[0]
-				_ = v41
-				var v42 any = lang.NewList(args[1:]...)
-				_ = v42
-				tmp43 := checkDerefVar(var_glojure_DOT_core_class)
-				tmp44 := lang.Apply(tmp43, []any{v41})
-				return tmp44
-			}
-		})
-		tmp39 := lang.NewMultiFn("make-writer", tmp40, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp41 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
-		var tmp42 lang.FnFunc
-		tmp42 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v43 := args[0]
-				_ = v43
-				var v44 any = lang.NewList(args[1:]...)
-				_ = v44
-				tmp45 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp46 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp47 := lang.Apply(tmp46, []any{v43, v44})
-				tmp48 := lang.Apply(tmp45, []any{closed19, tmp47})
-				return tmp48
-			}
-		})
-		tmp39.AddMethod(tmp41, tmp42)
-		tmp43 := reflect.TypeOf((*url5.URL)(nil))
-		var tmp44 lang.FnFunc
-		tmp44 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v45 := args[0]
-				_ = v45
-				var v46 any = lang.NewList(args[1:]...)
-				_ = v46
-				tmp47 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp48 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp49 := lang.Apply(tmp48, []any{v45, v46})
-				tmp50 := lang.Apply(tmp47, []any{closed19, tmp49})
-				return tmp50
-			}
-		})
-		tmp39.AddMethod(tmp43, tmp44)
-		tmp45 := reflect.TypeOf("")
-		var tmp46 lang.FnFunc
-		tmp46 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v47 := args[0]
-				_ = v47
-				var v48 any = lang.NewList(args[1:]...)
-				_ = v48
-				tmp49 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp50 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp51 := lang.Apply(tmp50, []any{v47, v48})
-				tmp52 := lang.Apply(tmp49, []any{closed19, tmp51})
-				return tmp52
-			}
-		})
-		tmp39.AddMethod(tmp45, tmp46)
-		var tmp48 lang.FnFunc
-		tmp48 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v49 := args[0]
-				_ = v49
-				var v50 any = lang.NewList(args[1:]...)
-				_ = v50
-				tmp51 := checkDerefVar(var_glojure_DOT_core_class)
-				tmp52 := lang.Apply(tmp51, []any{v49})
-				return tmp52
-			}
-		})
-		tmp47 := lang.NewMultiFn("make-input-stream", tmp48, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp49 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
-		var tmp50 lang.FnFunc
-		tmp50 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v51 := args[0]
-				_ = v51
-				var v52 any = lang.NewList(args[1:]...)
-				_ = v52
-				tmp53 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp54 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp55 := lang.Apply(tmp54, []any{v51, v52})
-				tmp56 := lang.Apply(tmp53, []any{closed20, tmp55})
-				return tmp56
-			}
-		})
-		tmp47.AddMethod(tmp49, tmp50)
-		tmp51 := reflect.TypeOf((*os6.File)(nil))
-		var tmp52 lang.FnFunc
-		tmp52 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v53 := args[0]
-				_ = v53
-				var v54 any = lang.NewList(args[1:]...)
-				_ = v54
-				tmp55 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp56 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp57 := lang.Apply(tmp56, []any{v53, v54})
-				tmp58 := lang.Apply(tmp55, []any{closed21, tmp57})
-				return tmp58
-			}
-		})
-		tmp47.AddMethod(tmp51, tmp52)
-		tmp53 := reflect.TypeOf((*url5.URL)(nil))
-		var tmp54 lang.FnFunc
-		tmp54 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v55 := args[0]
-				_ = v55
-				var v56 any = lang.NewList(args[1:]...)
-				_ = v56
-				tmp57 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp58 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp59 := lang.Apply(tmp58, []any{v55, v56})
-				tmp60 := lang.Apply(tmp57, []any{closed22, tmp59})
-				return tmp60
-			}
-		})
-		tmp47.AddMethod(tmp53, tmp54)
-		tmp55 := reflect.TypeOf("")
-		var tmp56 lang.FnFunc
-		tmp56 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v57 := args[0]
-				_ = v57
-				var v58 any = lang.NewList(args[1:]...)
-				_ = v58
-				tmp59 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp60 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp61 := lang.Apply(tmp60, []any{v57, v58})
-				tmp62 := lang.Apply(tmp59, []any{closed23, tmp61})
-				return tmp62
-			}
-		})
-		tmp47.AddMethod(tmp55, tmp56)
-		var tmp58 lang.FnFunc
-		tmp58 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v59 := args[0]
-				_ = v59
-				var v60 any = lang.NewList(args[1:]...)
-				_ = v60
-				tmp61 := checkDerefVar(var_glojure_DOT_core_class)
-				tmp62 := lang.Apply(tmp61, []any{v59})
-				return tmp62
-			}
-		})
-		tmp57 := lang.NewMultiFn("make-output-stream", tmp58, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp59 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
-		var tmp60 lang.FnFunc
-		tmp60 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v61 := args[0]
-				_ = v61
-				var v62 any = lang.NewList(args[1:]...)
-				_ = v62
-				tmp63 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp64 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp65 := lang.Apply(tmp64, []any{v61, v62})
-				tmp66 := lang.Apply(tmp63, []any{closed24, tmp65})
-				return tmp66
-			}
-		})
-		tmp57.AddMethod(tmp59, tmp60)
-		tmp61 := reflect.TypeOf((*os6.File)(nil))
-		var tmp62 lang.FnFunc
-		tmp62 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v63 := args[0]
-				_ = v63
-				var v64 any = lang.NewList(args[1:]...)
-				_ = v64
-				tmp65 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp66 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp67 := lang.Apply(tmp66, []any{v63, v64})
-				tmp68 := lang.Apply(tmp65, []any{closed25, tmp67})
-				return tmp68
-			}
-		})
-		tmp57.AddMethod(tmp61, tmp62)
-		tmp63 := reflect.TypeOf((*url5.URL)(nil))
-		var tmp64 lang.FnFunc
-		tmp64 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v65 := args[0]
-				_ = v65
-				var v66 any = lang.NewList(args[1:]...)
-				_ = v66
-				tmp67 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp68 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp69 := lang.Apply(tmp68, []any{v65, v66})
-				tmp70 := lang.Apply(tmp67, []any{closed26, tmp69})
-				return tmp70
-			}
-		})
-		tmp57.AddMethod(tmp63, tmp64)
-		tmp65 := reflect.TypeOf("")
-		var tmp66 lang.FnFunc
-		tmp66 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArity(args, 1)
-				v67 := args[0]
-				_ = v67
-				var v68 any = lang.NewList(args[1:]...)
-				_ = v68
-				tmp69 := checkDerefVar(var_glojure_DOT_core_apply)
-				tmp70 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp71 := lang.Apply(tmp70, []any{v67, v68})
-				tmp72 := lang.Apply(tmp69, []any{closed27, tmp71})
-				return tmp72
-			}
-		})
-		tmp57.AddMethod(tmp65, tmp66)
-		tmp30 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_make_DASH_reader, tmp31, kw_make_DASH_writer, tmp39, kw_make_DASH_input_DASH_stream, tmp47, kw_make_DASH_output_DASH_stream, tmp57), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_make_DASH_reader, lang.NewVector(sym_x, sym_opts), "Creates an io.Reader. See also IOFactory docs."), lang.NewList(sym_make_DASH_writer, lang.NewVector(sym_x, sym_opts), "Creates an io.Reader. See also IOFactory docs."), lang.NewList(sym_make_DASH_input_DASH_stream, lang.NewVector(sym_x, sym_opts), "Creates a BufferedInputStream. See also IOFactory docs."), lang.NewList(sym_make_DASH_output_DASH_stream, lang.NewVector(sym_x, sym_opts), "Creates a BufferedOutputStream. See also IOFactory docs."))))
-		tmp1 := lang.NewAtom(lang.NewMap(sym_CollReduce, tmp2, sym_InternalReduce, tmp12, sym_IKVReduce, tmp20, sym_Datafiable, tmp23, sym_Navigable, tmp27, sym_IOFactory, tmp30))
+		tmp1 := lang.NewAtom(lang.NewMap(sym_CollReduce, tmp2, sym_InternalReduce, tmp12, sym_IKVReduce, tmp20, sym_Datafiable, tmp23, sym_Navigable, tmp27))
 		var_glojure_DOT_core__DASH_protocols = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__DASH_protocols.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -49424,7 +48242,7 @@ func LoadNS() {
 								_ = v87
 								var tmp88 any
 								{ // let
-									// let binding "vec__177"
+									// let binding "vec__868"
 									var v89 any = v87
 									_ = v89
 									// let binding "test"
@@ -49509,7 +48327,7 @@ func LoadNS() {
 									var tmp107 any
 									if lang.IsTruthy(v106) {
 										tmp108 := checkDerefVar(var_glojure_DOT_core__LT__EQ_)
-										tmp109 := lang.Apply(tmp108, []any{math7.MinInt, v102, math7.MaxInt})
+										tmp109 := lang.Apply(tmp108, []any{math4.MinInt, v102, math4.MaxInt})
 										tmp107 = tmp109
 									} else {
 										tmp107 = v106
@@ -49547,11 +48365,11 @@ func LoadNS() {
 							_ = v110
 							var tmp111 any
 							{ // let
-								// let binding "pred__180"
+								// let binding "pred__871"
 								tmp112 := checkDerefVar(var_glojure_DOT_core__EQ_)
 								var v113 any = tmp112
 								_ = v113
-								// let binding "expr__181"
+								// let binding "expr__872"
 								var v114 any = v110
 								_ = v114
 								var tmp115 any
@@ -49559,7 +48377,7 @@ func LoadNS() {
 								if lang.IsTruthy(tmp116) {
 									var tmp117 any
 									{ // let
-										// let binding "vec__182"
+										// let binding "vec__873"
 										tmp118 := checkDerefVar(var_glojure_DOT_core_prep_DASH_ints)
 										tmp119 := lang.Apply(tmp118, []any{v95, v98})
 										var v120 any = tmp119
@@ -49634,7 +48452,7 @@ func LoadNS() {
 									if lang.IsTruthy(tmp119) {
 										var tmp120 any
 										{ // let
-											// let binding "vec__185"
+											// let binding "vec__876"
 											tmp121 := checkDerefVar(var_glojure_DOT_core_prep_DASH_hashes)
 											tmp122 := lang.Apply(tmp121, []any{v15, v49, v95, v98})
 											var v123 any = tmp122
@@ -49716,7 +48534,7 @@ func LoadNS() {
 										if lang.IsTruthy(tmp122) {
 											var tmp123 any
 											{ // let
-												// let binding "vec__188"
+												// let binding "vec__879"
 												tmp124 := checkDerefVar(var_glojure_DOT_core_prep_DASH_hashes)
 												tmp125 := lang.Apply(tmp124, []any{v15, v49, v95, v98})
 												var v126 any = tmp125
@@ -50083,7 +48901,7 @@ func LoadNS() {
 					_ = v16
 					var tmp17 any
 					{ // let
-						// let binding "vec__164"
+						// let binding "vec__855"
 						var v18 any = v16
 						_ = v18
 						// let binding "h"
@@ -50257,7 +49075,7 @@ func LoadNS() {
 					} else {
 						var tmp35 any
 						{ // let
-							// let binding "vec__167"
+							// let binding "vec__858"
 							var tmp36 any
 							{ // let
 								// let binding "or__0__auto__"
@@ -50340,7 +49158,7 @@ func LoadNS() {
 				} else {
 					var tmp36 any
 					{ // let
-						// let binding "vec__170"
+						// let binding "vec__861"
 						tmp37 := checkDerefVar(var_glojure_DOT_core_merge_DASH_hash_DASH_collisions)
 						tmp38 := lang.Apply(tmp37, []any{v2, v3, v4, v5})
 						var v39 any = tmp38
@@ -50360,7 +49178,7 @@ func LoadNS() {
 						tmp47 := lang.Apply(tmp46, []any{v39, int64(2), nil})
 						var v48 any = tmp47
 						_ = v48
-						// let binding "vec__173"
+						// let binding "vec__864"
 						tmp49 := checkDerefVar(var_glojure_DOT_core_prep_DASH_hashes)
 						tmp50 := lang.Apply(tmp49, []any{v2, v3, v42, v45})
 						var v51 any = tmp50
@@ -51655,10 +50473,10 @@ func LoadNS() {
 				_ = v3
 				var tmp4 any
 				{ // let
-					// let binding "map__357"
+					// let binding "map__683"
 					var v5 any = v3
 					_ = v5
-					// let binding "map__357"
+					// let binding "map__683"
 					var tmp6 any
 					tmp7 := checkDerefVar(var_glojure_DOT_core_seq_QMARK_)
 					tmp8 := lang.Apply(tmp7, []any{v5})
@@ -51879,18 +50697,18 @@ func LoadNS() {
 				_ = v2
 				var tmp3 any
 				{ // let
-					// let binding "seq_133"
+					// let binding "seq_824"
 					tmp4 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp5 := lang.Apply(tmp4, []any{v2})
 					var v6 any = tmp5
 					_ = v6
-					// let binding "chunk_134"
+					// let binding "chunk_825"
 					var v7 any = nil
 					_ = v7
-					// let binding "count_135"
+					// let binding "count_826"
 					var v8 any = int64(0)
 					_ = v8
-					// let binding "i_136"
+					// let binding "i_827"
 					var v9 any = int64(0)
 					_ = v9
 					for {
@@ -51912,7 +50730,7 @@ func LoadNS() {
 								{ // let
 									// let binding "path"
 									var tmp18 any
-									tmp19 := lang.Apply(strings11.HasPrefix, []any{v16, "/"})
+									tmp19 := lang.Apply(strings8.HasPrefix, []any{v16, "/"})
 									if lang.IsTruthy(tmp19) {
 										tmp18 = v16
 									} else {
@@ -51968,7 +50786,7 @@ func LoadNS() {
 													tmp53 := lang.Apply(tmp52, nil)
 													_ = tmp53
 												}()
-												tmp54 := lang.Apply(strings11.TrimPrefix, []any{v27, "/"})
+												tmp54 := lang.Apply(strings8.TrimPrefix, []any{v27, "/"})
 												tmp55, _ := lang.FieldOrMethod(runtime.RT, "Load")
 												if reflect.TypeOf(tmp55).Kind() != reflect.Func {
 													panic(lang.NewIllegalArgumentError(fmt.Sprintf("Load is not a function")))
@@ -52008,7 +50826,7 @@ func LoadNS() {
 								if lang.IsTruthy(v17) {
 									var tmp19 any
 									{ // let
-										// let binding "seq_133"
+										// let binding "seq_824"
 										var v20 any = v17
 										_ = v20
 										var tmp21 any
@@ -52053,7 +50871,7 @@ func LoadNS() {
 												{ // let
 													// let binding "path"
 													var tmp30 any
-													tmp31 := lang.Apply(strings11.HasPrefix, []any{v28, "/"})
+													tmp31 := lang.Apply(strings8.HasPrefix, []any{v28, "/"})
 													if lang.IsTruthy(tmp31) {
 														tmp30 = v28
 													} else {
@@ -52109,7 +50927,7 @@ func LoadNS() {
 																	tmp65 := lang.Apply(tmp64, nil)
 																	_ = tmp65
 																}()
-																tmp66 := lang.Apply(strings11.TrimPrefix, []any{v39, "/"})
+																tmp66 := lang.Apply(strings8.TrimPrefix, []any{v39, "/"})
 																tmp67, _ := lang.FieldOrMethod(runtime.RT, "Load")
 																if reflect.TypeOf(tmp67).Kind() != reflect.Func {
 																	panic(lang.NewIllegalArgumentError(fmt.Sprintf("Load is not a function")))
@@ -52449,7 +51267,7 @@ func LoadNS() {
 									_ = v55
 									var tmp56 any
 									{ // let
-										// let binding "vec__359"
+										// let binding "vec__685"
 										var v57 any = v55
 										_ = v57
 										// let binding "k"
@@ -52614,7 +51432,7 @@ func LoadNS() {
 						tmp11 := lang.Apply(tmp10, []any{v3})
 						tmp12 := checkDerefVar(var_glojure_DOT_core_int)
 						tmp13 := lang.Apply(tmp12, []any{lang.NewChar(46)})
-						tmp14 := lang.Apply(strings11.Index, []any{tmp11, tmp13})
+						tmp14 := lang.Apply(strings8.Index, []any{tmp11, tmp13})
 						tmp15 := lang.Apply(tmp9, []any{tmp14})
 						tmp8 = tmp15
 					} else {
@@ -52647,10 +51465,10 @@ func LoadNS() {
 					tmp19 := lang.Apply(tmp17, []any{tmp18, v4})
 					var v20 any = tmp19
 					_ = v20
-					// let binding "map__110"
+					// let binding "map__801"
 					var v21 any = v20
 					_ = v21
-					// let binding "map__110"
+					// let binding "map__801"
 					var tmp22 any
 					tmp23 := checkDerefVar(var_glojure_DOT_core_seq_QMARK_)
 					tmp24 := lang.Apply(tmp23, []any{v21})
@@ -52975,18 +51793,18 @@ func LoadNS() {
 									_ = tmp132
 									var tmp133 any
 									{ // let
-										// let binding "seq_111"
+										// let binding "seq_802"
 										tmp134 := checkDerefVar(var_glojure_DOT_core_seq)
 										tmp135 := lang.Apply(tmp134, []any{v84})
 										var v136 any = tmp135
 										_ = v136
-										// let binding "chunk_112"
+										// let binding "chunk_803"
 										var v137 any = nil
 										_ = v137
-										// let binding "count_113"
+										// let binding "count_804"
 										var v138 any = int64(0)
 										_ = v138
-										// let binding "i_114"
+										// let binding "i_805"
 										var v139 any = int64(0)
 										_ = v139
 										for {
@@ -53038,7 +51856,7 @@ func LoadNS() {
 													if lang.IsTruthy(v147) {
 														var tmp149 any
 														{ // let
-															// let binding "seq_111"
+															// let binding "seq_802"
 															var v150 any = v147
 															_ = v150
 															var tmp151 any
@@ -53216,18 +52034,18 @@ func LoadNS() {
 					_ = tmp25
 					var tmp26 any
 					{ // let
-						// let binding "seq_115"
+						// let binding "seq_806"
 						tmp27 := checkDerefVar(var_glojure_DOT_core_seq)
 						tmp28 := lang.Apply(tmp27, []any{v18})
 						var v29 any = tmp28
 						_ = v29
-						// let binding "chunk_116"
+						// let binding "chunk_807"
 						var v30 any = nil
 						_ = v30
-						// let binding "count_117"
+						// let binding "count_808"
 						var v31 any = int64(0)
 						_ = v31
-						// let binding "i_118"
+						// let binding "i_809"
 						var v32 any = int64(0)
 						_ = v32
 						for {
@@ -53258,20 +52076,20 @@ func LoadNS() {
 									} else {
 										var tmp48 any
 										{ // let
-											// let binding "vec__119"
+											// let binding "vec__810"
 											var v49 any = v39
 											_ = v49
-											// let binding "seq__120"
+											// let binding "seq__811"
 											tmp50 := checkDerefVar(var_glojure_DOT_core_seq)
 											tmp51 := lang.Apply(tmp50, []any{v49})
 											var v52 any = tmp51
 											_ = v52
-											// let binding "first__121"
+											// let binding "first__812"
 											tmp53 := checkDerefVar(var_glojure_DOT_core_first)
 											tmp54 := lang.Apply(tmp53, []any{v52})
 											var v55 any = tmp54
 											_ = v55
-											// let binding "seq__120"
+											// let binding "seq__811"
 											tmp56 := checkDerefVar(var_glojure_DOT_core_next)
 											tmp57 := lang.Apply(tmp56, []any{v52})
 											var v58 any = tmp57
@@ -53289,18 +52107,18 @@ func LoadNS() {
 											_ = tmp64
 											var tmp65 any
 											{ // let
-												// let binding "seq_122"
+												// let binding "seq_813"
 												tmp66 := checkDerefVar(var_glojure_DOT_core_seq)
 												tmp67 := lang.Apply(tmp66, []any{v60})
 												var v68 any = tmp67
 												_ = v68
-												// let binding "chunk_123"
+												// let binding "chunk_814"
 												var v69 any = nil
 												_ = v69
-												// let binding "count_124"
+												// let binding "count_815"
 												var v70 any = int64(0)
 												_ = v70
-												// let binding "i_125"
+												// let binding "i_816"
 												var v71 any = int64(0)
 												_ = v71
 												for {
@@ -53349,7 +52167,7 @@ func LoadNS() {
 															if lang.IsTruthy(v79) {
 																var tmp81 any
 																{ // let
-																	// let binding "seq_122"
+																	// let binding "seq_813"
 																	var v82 any = v79
 																	_ = v82
 																	var tmp83 any
@@ -53453,7 +52271,7 @@ func LoadNS() {
 									if lang.IsTruthy(v40) {
 										var tmp42 any
 										{ // let
-											// let binding "seq_115"
+											// let binding "seq_806"
 											var v43 any = v40
 											_ = v43
 											var tmp44 any
@@ -53507,20 +52325,20 @@ func LoadNS() {
 													} else {
 														var tmp60 any
 														{ // let
-															// let binding "vec__126"
+															// let binding "vec__817"
 															var v61 any = v51
 															_ = v61
-															// let binding "seq__127"
+															// let binding "seq__818"
 															tmp62 := checkDerefVar(var_glojure_DOT_core_seq)
 															tmp63 := lang.Apply(tmp62, []any{v61})
 															var v64 any = tmp63
 															_ = v64
-															// let binding "first__128"
+															// let binding "first__819"
 															tmp65 := checkDerefVar(var_glojure_DOT_core_first)
 															tmp66 := lang.Apply(tmp65, []any{v64})
 															var v67 any = tmp66
 															_ = v67
-															// let binding "seq__127"
+															// let binding "seq__818"
 															tmp68 := checkDerefVar(var_glojure_DOT_core_next)
 															tmp69 := lang.Apply(tmp68, []any{v64})
 															var v70 any = tmp69
@@ -53538,18 +52356,18 @@ func LoadNS() {
 															_ = tmp76
 															var tmp77 any
 															{ // let
-																// let binding "seq_129"
+																// let binding "seq_820"
 																tmp78 := checkDerefVar(var_glojure_DOT_core_seq)
 																tmp79 := lang.Apply(tmp78, []any{v72})
 																var v80 any = tmp79
 																_ = v80
-																// let binding "chunk_130"
+																// let binding "chunk_821"
 																var v81 any = nil
 																_ = v81
-																// let binding "count_131"
+																// let binding "count_822"
 																var v82 any = int64(0)
 																_ = v82
-																// let binding "i_132"
+																// let binding "i_823"
 																var v83 any = int64(0)
 																_ = v83
 																for {
@@ -53598,7 +52416,7 @@ func LoadNS() {
 																			if lang.IsTruthy(v91) {
 																				var tmp93 any
 																				{ // let
-																					// let binding "seq_129"
+																					// let binding "seq_820"
 																					var v94 any = v91
 																					_ = v94
 																					var tmp95 any
@@ -54047,7 +52865,7 @@ func LoadNS() {
 				_ = v2
 				var v3 any = lang.NewList(args[1:]...)
 				_ = v3
-			recur_loop_671:
+			recur_loop_2211:
 				tmp4 := checkDerefVar(var_glojure_DOT_core_pr)
 				tmp5 := lang.Apply(tmp4, []any{v2})
 				_ = tmp5
@@ -54074,7 +52892,7 @@ func LoadNS() {
 							var tmp18 any = v14
 							v2 = tmp15
 							v3 = tmp18
-							goto recur_loop_671
+							goto recur_loop_2211
 						} // end let
 						tmp12 = tmp13
 					} else {
@@ -54946,7 +53764,7 @@ func LoadNS() {
 			return tmp37
 		})
 		tmp1.AddMethod(tmp32, tmp33)
-		tmp34 := reflect.TypeOf((*regexp15.Regexp)(nil))
+		tmp34 := reflect.TypeOf((*regexp12.Regexp)(nil))
 		var tmp35 lang.FnFunc
 		tmp35 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -55312,7 +54130,7 @@ func LoadNS() {
 			_ = v20
 			var tmp21 any
 			tmp22 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp23 := lang.Apply(math7.Inf, []any{int64(1)})
+			tmp23 := lang.Apply(math4.Inf, []any{int64(1)})
 			tmp24 := lang.Apply(tmp22, []any{tmp23, v19})
 			if lang.IsTruthy(tmp24) {
 				tmp25 := lang.Apply(lang.WriteWriter, []any{v20, "##Inf"})
@@ -55320,14 +54138,14 @@ func LoadNS() {
 			} else {
 				var tmp26 any
 				tmp27 := checkDerefVar(var_glojure_DOT_core__EQ_)
-				tmp28 := lang.Apply(math7.Inf, []any{int64(-1)})
+				tmp28 := lang.Apply(math4.Inf, []any{int64(-1)})
 				tmp29 := lang.Apply(tmp27, []any{tmp28, v19})
 				if lang.IsTruthy(tmp29) {
 					tmp30 := lang.Apply(lang.WriteWriter, []any{v20, "##-Inf"})
 					tmp26 = tmp30
 				} else {
 					var tmp31 any
-					tmp32 := lang.Apply(math7.IsNaN, []any{v19})
+					tmp32 := lang.Apply(math4.IsNaN, []any{v19})
 					if lang.IsTruthy(tmp32) {
 						tmp33 := lang.Apply(lang.WriteWriter, []any{v20, "##NaN"})
 						tmp31 = tmp33
@@ -55507,7 +54325,7 @@ func LoadNS() {
 			_ = tmp28
 			var tmp29 any
 			{ // let
-				// let binding "vec__234"
+				// let binding "vec__925"
 				tmp30 := checkDerefVar(var_glojure_DOT_core_lift_DASH_ns)
 				tmp31 := lang.Apply(tmp30, []any{v25})
 				var v32 any = tmp31
@@ -55655,7 +54473,7 @@ func LoadNS() {
 			return tmp44
 		})
 		tmp1.AddMethod(tmp37, tmp38)
-		tmp39 := reflect.TypeOf((*regexp15.Regexp)(nil))
+		tmp39 := reflect.TypeOf((*regexp12.Regexp)(nil))
 		var tmp40 lang.FnFunc
 		tmp40 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -55667,7 +54485,7 @@ func LoadNS() {
 			_ = tmp43
 			var tmp44 any
 			{ // let
-				// let binding "G__240"
+				// let binding "G__931"
 				tmp45 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp46, ok := lang.FieldOrMethod(v41, "String")
 				if !ok {
@@ -55683,20 +54501,20 @@ func LoadNS() {
 				tmp48 := lang.Apply(tmp45, []any{tmp47})
 				var v49 any = tmp48
 				_ = v49
-				// let binding "vec__241"
+				// let binding "vec__932"
 				var v50 any = v49
 				_ = v50
-				// let binding "seq__242"
+				// let binding "seq__933"
 				tmp51 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp52 := lang.Apply(tmp51, []any{v50})
 				var v53 any = tmp52
 				_ = v53
-				// let binding "first__243"
+				// let binding "first__934"
 				tmp54 := checkDerefVar(var_glojure_DOT_core_first)
 				tmp55 := lang.Apply(tmp54, []any{v53})
 				var v56 any = tmp55
 				_ = v56
-				// let binding "seq__242"
+				// let binding "seq__933"
 				tmp57 := checkDerefVar(var_glojure_DOT_core_next)
 				tmp58 := lang.Apply(tmp57, []any{v53})
 				var v59 any = tmp58
@@ -55715,7 +54533,7 @@ func LoadNS() {
 				_ = v63
 				var tmp64 any
 				{ // let
-					// let binding "G__240"
+					// let binding "G__931"
 					var v65 any = v49
 					_ = v65
 					// let binding "qmode"
@@ -55724,20 +54542,20 @@ func LoadNS() {
 					for {
 						var tmp67 any
 						{ // let
-							// let binding "vec__244"
+							// let binding "vec__935"
 							var v68 any = v65
 							_ = v68
-							// let binding "seq__245"
+							// let binding "seq__936"
 							tmp69 := checkDerefVar(var_glojure_DOT_core_seq)
 							tmp70 := lang.Apply(tmp69, []any{v68})
 							var v71 any = tmp70
 							_ = v71
-							// let binding "first__246"
+							// let binding "first__937"
 							tmp72 := checkDerefVar(var_glojure_DOT_core_first)
 							tmp73 := lang.Apply(tmp72, []any{v71})
 							var v74 any = tmp73
 							_ = v74
-							// let binding "seq__245"
+							// let binding "seq__936"
 							tmp75 := checkDerefVar(var_glojure_DOT_core_next)
 							tmp76 := lang.Apply(tmp75, []any{v71})
 							var v77 any = tmp76
@@ -55762,20 +54580,20 @@ func LoadNS() {
 								if lang.IsTruthy(tmp85) {
 									var tmp86 any
 									{ // let
-										// let binding "vec__247"
+										// let binding "vec__938"
 										var v87 any = v79
 										_ = v87
-										// let binding "seq__248"
+										// let binding "seq__939"
 										tmp88 := checkDerefVar(var_glojure_DOT_core_seq)
 										tmp89 := lang.Apply(tmp88, []any{v87})
 										var v90 any = tmp89
 										_ = v90
-										// let binding "first__249"
+										// let binding "first__940"
 										tmp91 := checkDerefVar(var_glojure_DOT_core_first)
 										tmp92 := lang.Apply(tmp91, []any{v90})
 										var v93 any = tmp92
 										_ = v93
-										// let binding "seq__248"
+										// let binding "seq__939"
 										tmp94 := checkDerefVar(var_glojure_DOT_core_next)
 										tmp95 := lang.Apply(tmp94, []any{v90})
 										var v96 any = tmp95
@@ -55908,7 +54726,7 @@ func LoadNS() {
 			_ = v48
 			var tmp49 any
 			tmp50 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp51 := lang.Apply(math7.Inf, []any{int64(1)})
+			tmp51 := lang.Apply(math4.Inf, []any{int64(1)})
 			tmp52 := lang.Apply(lang.Builtins["float32"], []any{tmp51})
 			tmp53 := lang.Apply(tmp50, []any{tmp52, v47})
 			if lang.IsTruthy(tmp53) {
@@ -55917,7 +54735,7 @@ func LoadNS() {
 			} else {
 				var tmp55 any
 				tmp56 := checkDerefVar(var_glojure_DOT_core__EQ_)
-				tmp57 := lang.Apply(math7.Inf, []any{int64(-1)})
+				tmp57 := lang.Apply(math4.Inf, []any{int64(-1)})
 				tmp58 := lang.Apply(lang.Builtins["float32"], []any{tmp57})
 				tmp59 := lang.Apply(tmp56, []any{tmp58, v47})
 				if lang.IsTruthy(tmp59) {
@@ -55925,7 +54743,7 @@ func LoadNS() {
 					tmp55 = tmp60
 				} else {
 					var tmp61 any
-					tmp62 := lang.Apply(math7.IsNaN, []any{v47})
+					tmp62 := lang.Apply(math4.IsNaN, []any{v47})
 					if lang.IsTruthy(tmp62) {
 						tmp63 := lang.Apply(lang.WriteWriter, []any{v48, "##NaN"})
 						tmp61 = tmp63
@@ -56191,12 +55009,12 @@ func LoadNS() {
 			_ = tmp4
 			var tmp5 any
 			{ // let
-				// let binding "map__253"
+				// let binding "map__944"
 				tmp6 := checkDerefVar(var_glojure_DOT_core_Throwable_DASH__GT_map)
 				tmp7 := lang.Apply(tmp6, []any{v2})
 				var v8 any = tmp7
 				_ = v8
-				// let binding "map__253"
+				// let binding "map__944"
 				var tmp9 any
 				tmp10 := checkDerefVar(var_glojure_DOT_core_seq_QMARK_)
 				tmp11 := lang.Apply(tmp10, []any{v8})
@@ -56361,20 +55179,20 @@ func LoadNS() {
 								_ = tmp55
 								var tmp56 any
 								{ // let
-									// let binding "seq_254"
+									// let binding "seq_945"
 									tmp57 := checkDerefVar(var_glojure_DOT_core_seq)
 									tmp58 := checkDerefVar(var_glojure_DOT_core_rest)
 									tmp59 := lang.Apply(tmp58, []any{v32})
 									tmp60 := lang.Apply(tmp57, []any{tmp59})
 									var v61 any = tmp60
 									_ = v61
-									// let binding "chunk_255"
+									// let binding "chunk_946"
 									var v62 any = nil
 									_ = v62
-									// let binding "count_256"
+									// let binding "count_947"
 									var v63 any = int64(0)
 									_ = v63
-									// let binding "i_257"
+									// let binding "i_948"
 									var v64 any = int64(0)
 									_ = v64
 									for {
@@ -56421,7 +55239,7 @@ func LoadNS() {
 												if lang.IsTruthy(v72) {
 													var tmp74 any
 													{ // let
-														// let binding "seq_254"
+														// let binding "seq_945"
 														var v75 any = v72
 														_ = v75
 														var tmp76 any
@@ -56529,20 +55347,20 @@ func LoadNS() {
 								_ = tmp60
 								var tmp61 any
 								{ // let
-									// let binding "seq_258"
+									// let binding "seq_949"
 									tmp62 := checkDerefVar(var_glojure_DOT_core_seq)
 									tmp63 := checkDerefVar(var_glojure_DOT_core_rest)
 									tmp64 := lang.Apply(tmp63, []any{v35})
 									tmp65 := lang.Apply(tmp62, []any{tmp64})
 									var v66 any = tmp65
 									_ = v66
-									// let binding "chunk_259"
+									// let binding "chunk_950"
 									var v67 any = nil
 									_ = v67
-									// let binding "count_260"
+									// let binding "count_951"
 									var v68 any = int64(0)
 									_ = v68
-									// let binding "i_261"
+									// let binding "i_952"
 									var v69 any = int64(0)
 									_ = v69
 									for {
@@ -56590,7 +55408,7 @@ func LoadNS() {
 												if lang.IsTruthy(v77) {
 													var tmp79 any
 													{ // let
-														// let binding "seq_258"
+														// let binding "seq_949"
 														var v80 any = v77
 														_ = v80
 														var tmp81 any

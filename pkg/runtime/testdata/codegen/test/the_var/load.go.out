@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.the-var", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/the_var", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -40,42 +40,48 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
+	// var codegen.test.the-var/-main
+	var_codegen_DOT_test_DOT_the_DASH_var__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_the_DASH_var, sym__DASH_main)
+	// var codegen.test.the-var/foo
+	var_codegen_DOT_test_DOT_the_DASH_var_foo := lang.InternVarName(sym_codegen_DOT_test_DOT_the_DASH_var, sym_foo)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_the_DASH_var)
 	_ = ns
 	// -main
 	{
 		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, int64(42), kw_file, "codegen/test/the_var.glj", kw_line, int(5), kw_column, int(7), kw_end_DASH_line, int(5), kw_end_DASH_column, int(34), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_the_DASH_var))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			tmp3 := lang.InternVarName(sym_codegen_DOT_test_DOT_the_DASH_var, sym_foo)
-			tmp4, ok := lang.FieldOrMethod(tmp3, "get")
+			tmp2 := lang.InternVarName(sym_codegen_DOT_test_DOT_the_DASH_var, sym_foo)
+			tmp3, ok := lang.FieldOrMethod(tmp2, "get")
 			if !ok {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp3, "get")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp2, "get")))
 			}
-			var tmp5 any
-			switch reflect.TypeOf(tmp4).Kind() {
+			var tmp4 any
+			switch reflect.TypeOf(tmp3).Kind() {
 			case reflect.Func:
-				tmp5 = lang.Apply(tmp4, nil)
+				tmp4 = lang.Apply(tmp3, nil)
 			default:
-				tmp5 = tmp4
+				tmp4 = tmp3
 			}
-			return tmp5
+			return tmp4
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_the_DASH_var__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_the_DASH_var__DASH_main.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// foo
 	{
 		tmp0 := sym_foo.WithMeta(lang.NewMap(kw_file, "codegen/test/the_var.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_the_DASH_var))).(*lang.Symbol)
-		tmp1 := ns.InternWithValue(tmp0, int64(42), true)
+		var_codegen_DOT_test_DOT_the_DASH_var_foo = ns.InternWithValue(tmp0, int64(42), true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_the_DASH_var_foo.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

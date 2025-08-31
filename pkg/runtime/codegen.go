@@ -51,17 +51,28 @@ type varInfo struct {
 	sym string
 }
 
+type valueInit struct {
+	name string              // Name of the variable or var being initialized
+	buf  bytes.Buffer        // Buffer holding the initialization code
+	deps map[string]struct{} // Set of var/value names this value depends on
+}
+
 // Generator handles the conversion of AST nodes to Go code
 type Generator struct {
 	originalWriter io.Writer
-	w              io.Writer
-	varScopes      []varScope     // stack of variable scopes
-	recurStack     []recurContext // stack of recur contexts for nested loops
+
+	currentWriter    io.Writer
+	currentValueInit *valueInit // current value initialization being generated
+
+	varScopes  []varScope     // stack of variable scopes
+	recurStack []recurContext // stack of recur contexts for nested loops
 
 	imports         map[string]string  // set of imported packages with their aliases
 	varVariables    map[varInfo]string // map of vars to their Go variable names
 	symbolVariables map[string]string  // set of all generated symbols to minimize allocations
 	kwVariables     map[string]string  // set of all generated keywords to minimize allocations
+
+	valueInits []*valueInit // map of value initializations
 
 	// Fields for handling closures
 	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
@@ -81,7 +92,7 @@ var (
 func NewGenerator(w io.Writer) *Generator {
 	return &Generator{
 		originalWriter:  w,
-		w:               w,
+		currentWriter:   w,
 		varScopes:       []varScope{{nextNum: 0, names: make(map[string]string)}},
 		recurStack:      []recurContext{},
 		imports:         make(map[string]string),
@@ -95,16 +106,19 @@ func NewGenerator(w io.Writer) *Generator {
 
 // Generate takes a namespace and generates Go code that populates the same namespace
 func (g *Generator) Generate(ns *lang.Namespace) error {
-	// Buffer for the vars and namespace setup
-	var varsBuf bytes.Buffer
-	g.w = &varsBuf
-
 	// add lang import
 	g.addImport("github.com/glojurelang/glojure/pkg/lang")
 	g.addImport("github.com/glojurelang/glojure/pkg/runtime")
-	g.addImport("fmt") // for error formatting
+	g.addImport("fmt")     // for error formatting
+	g.addImport("reflect") // for reflect.TypeOf
+
+	var nsBuf bytes.Buffer
+	g.currentWriter = &nsBuf
+
 	g.writef("// reference fmt to avoid unused import error\n")
 	g.writef("_ = fmt.Printf\n")
+	g.writef("// reference reflect to avoid unused import error\n")
+	g.writef("_ = reflect.TypeOf\n")
 
 	g.writef("  ns := lang.FindOrCreateNamespace(%s)\n", g.allocSymVar(ns.Name().String()))
 	g.writef("  _ = ns\n")
@@ -146,13 +160,13 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 			// Skip runtime-owned vars
 			continue
 		}
+
 		if err := g.generateVar("ns", nv.name, nv.vr); err != nil {
 			return fmt.Errorf("failed to generate code for var %s: %w", nv.name, err)
 		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
-	var liftedBuf bytes.Buffer
 	// Generate lifted values at the beginning of init() if any
 	if len(g.liftedValues) > 0 {
 		// Sort by variable name for deterministic output
@@ -165,8 +179,8 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 		})
 
 		// Generate code for each lifted value
-		g.w = &liftedBuf
 		for _, lifted := range sortedLifted {
+			g.startNewValueInit(lifted.varName)
 			// Generate the value - this will write any needed initialization
 			g.writef("var %s any\n", lifted.varName)
 			g.pushVarScope()
@@ -185,7 +199,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	var initBuf bytes.Buffer
 	{
 		// Reproduce the behavior of root-resource function
-		rootResourceName := "/" + ns.Name().String()
+		rootResourceName := ns.Name().String()
 		rootResourceName = strings.ReplaceAll(rootResourceName, "-", "_")
 		rootResourceName = strings.ReplaceAll(rootResourceName, ".", "/")
 		initBuf.WriteString(`func init() {
@@ -252,17 +266,80 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 		initBuf.WriteString(fmt.Sprintf("%s := lang.InternVarName(%s, %s)\n", varName, g.allocSymVar(vi.ns), g.allocSymVar(vi.sym)))
 	}
 
-	// Add lifted values if any
-	if liftedBuf.Len() > 0 {
-		initBuf.WriteString(strings.Repeat("/", 80))
-		initBuf.WriteString("// Closed-over values\n")
-		initBuf.Write(liftedBuf.Bytes())
-		initBuf.WriteString("\n")
+	/////////////////////////////
+	// Var and closed-over value inits
+
+	// NS boilerplate
+	initBuf.Write(nsBuf.Bytes())
+
+	{
+		sort.Slice(g.valueInits, func(i, j int) bool {
+			return g.valueInits[i].name < g.valueInits[j].name
+		})
+
+		dependents := make(map[string][]*valueInit)
+
+		for _, vi := range g.valueInits {
+			for dep := range vi.deps {
+				if dep == vi.name {
+					continue // skip self-dependency
+				}
+				dependents[dep] = append(dependents[dep], vi)
+			}
+		}
+		// // print dependencies for debugging
+		// for _, vi := range g.valueInits {
+		// 	fmt.Printf("# %s\n", vi.name)
+		// 	for dep := range vi.deps {
+		// 		fmt.Printf("  -> %s\n", dep)
+		// 	}
+		// 	fmt.Println()
+		// }
+
+		// Simple dependency resolution: repeatedly emit value inits that have no remaining deps
+		emitted := make(map[string]bool)
+		for len(emitted) < len(g.valueInits) {
+			progress := false
+			for _, vi := range g.valueInits {
+				if emitted[vi.name] {
+					continue // already emitted
+				}
+				// Check if all dependencies have been emitted
+				allDepsEmitted := true
+				for dep := range vi.deps {
+					if !emitted[dep] {
+						allDepsEmitted = false
+						break
+					}
+				}
+				if allDepsEmitted {
+					// Emit this value init
+					initBuf.WriteString(vi.buf.String())
+					emitted[vi.name] = true
+					progress = true
+					// Remove this from dependents
+					for _, depVi := range dependents[vi.name] {
+						delete(depVi.deps, vi.name)
+					}
+				}
+			}
+			if !progress {
+				// Circular dependency detected; break the cycle by emitting one of the remaining inits
+				for _, vi := range g.valueInits {
+					if !emitted[vi.name] {
+						initBuf.WriteString(vi.buf.String())
+						emitted[vi.name] = true
+						break
+					}
+				}
+			}
+		}
 	}
 
-	// Add the vars code after the lifted values
-	initBuf.Write(varsBuf.Bytes())
+	// Closing brace for LoadNS
 	initBuf.WriteString("}\n")
+
+	////////////////////////////////////////////////////////////////////////////////
 
 	// Prepare the final source
 	sourceBytes := []byte(g.header(mungeID(getLastNSPart(ns.Name().String())))) // File header with package and imports
@@ -290,6 +367,10 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 		return nil
 	}
 
+	// Generate code for the var
+	varVar := g.allocVarVar(vr.Namespace().Name().String(), name.String())
+	g.startNewValueInit(varVar)
+
 	g.pushVarScope()
 	defer g.popVarScope()
 
@@ -307,11 +388,10 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	}
 
 	// check if the var has a value
-	varVar := g.allocateTempVar()
 	if vr.IsBound() {
-		g.writef("%s := %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, g.generateValue(vr.Get()))
+		g.writef("%s = %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, g.generateValue(vr.Get()))
 	} else {
-		g.writef("%s := %s.Intern(%s)\n", varVar, nsVariableName, varSym)
+		g.writef("%s = %s.Intern(%s)\n", varVar, nsVariableName, varSym)
 	}
 
 	// Set metadata on the var if the symbol has metadata
@@ -403,8 +483,6 @@ func (g *Generator) generateValue(value any) string {
 }
 
 func (g *Generator) generateTypeValue(t reflect.Type) string {
-	g.addImport("reflect")
-
 	resultId := g.allocateTempVar()
 
 	// Generate the appropriate zero value expression based on the type
@@ -951,6 +1029,10 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 
 	// Look up the var variable
 	varId := g.allocVarVar(varNamespace.Name().String(), varSymbol.String())
+	// add as a dependency to the current value init if we're in one
+	if g.currentValueInit != nil && varId != g.currentValueInit.name {
+		g.currentValueInit.deps[varId] = struct{}{}
+	}
 
 	resultId := g.allocateTempVar()
 	g.writef("%s := checkDerefVar(%s)\n", resultId, varId)
@@ -1375,8 +1457,6 @@ func (g *Generator) generateHostCall(node *ast.Node) string {
 		argIds[i] = g.generateASTNode(arg)
 	}
 
-	g.addImport("reflect")
-
 	methodName := method.Name()
 	methodId := g.allocateTempVar()
 	g.writef("%s, _ := lang.FieldOrMethod(%s, %q)\n", methodId, tgtId, methodName)
@@ -1401,8 +1481,6 @@ func (g *Generator) generateHostInterop(node *ast.Node) string {
 	g.writef("if !ok {\n")
 	g.writef("  panic(lang.NewIllegalArgumentError(fmt.Sprintf(\"no such field or method on %%T: %%s\", %s, %q)))\n", tgtId, mOrF)
 	g.writef("}\n")
-
-	g.addImport("reflect")
 
 	resultId := g.allocateTempVar()
 	g.writef("var %s any\n", resultId)
@@ -1517,7 +1595,7 @@ import (
 }
 
 func (g *Generator) writef(format string, args ...any) error {
-	_, err := fmt.Fprintf(g.w, format, args...)
+	_, err := fmt.Fprintf(g.currentWriter, format, args...)
 	return err
 }
 
@@ -1527,6 +1605,17 @@ func (g *Generator) writeAssign(varName, rValue string) {
 		return
 	}
 	g.writef("%s = %s\n", varName, rValue)
+}
+
+func (g *Generator) startNewValueInit(name string) *valueInit {
+	valInit := &valueInit{
+		name: name,
+		deps: make(map[string]struct{}),
+	}
+	g.currentValueInit = valInit
+	g.currentWriter = &valInit.buf
+	g.valueInits = append(g.valueInits, valInit)
+	return valInit
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1642,6 +1731,12 @@ func (g *Generator) getLocal(name string) string {
 				value:   value,
 				varName: varName,
 			}
+
+			// Add as a dependency to the current value init if we're in one
+			if g.currentValueInit != nil && varName != g.currentValueInit.name {
+				g.currentValueInit.deps[varName] = struct{}{}
+			}
+
 			return varName
 		}
 	}

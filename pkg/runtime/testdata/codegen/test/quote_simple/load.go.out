@@ -6,10 +6,11 @@ import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	reflect "reflect"
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.quote-simple", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/quote_simple", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -38,22 +39,26 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
+	// var codegen.test.quote-simple/-main
+	var_codegen_DOT_test_DOT_quote_DASH_simple__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_quote_DASH_simple, sym__DASH_main)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_quote_DASH_simple)
 	_ = ns
 	// -main
 	{
 		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, lang.NewList(int64(1), int64(2), int64(3)), kw_file, "codegen/test/quote_simple.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(44), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_quote_DASH_simple))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
 			return lang.NewList(int64(1), int64(2), int64(3))
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_quote_DASH_simple__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_quote_DASH_simple__DASH_main.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

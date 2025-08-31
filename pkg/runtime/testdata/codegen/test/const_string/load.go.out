@@ -6,10 +6,11 @@ import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	reflect "reflect"
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.const-string", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/const_string", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -36,16 +37,20 @@ func LoadNS() {
 	kw_hello := lang.NewKeyword("hello")
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
+	// var codegen.test.const-string/const-string
+	var_codegen_DOT_test_DOT_const_DASH_string_const_DASH_string := lang.InternVarName(sym_codegen_DOT_test_DOT_const_DASH_string, sym_const_DASH_string)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_const_DASH_string)
 	_ = ns
 	// const-string
 	{
 		tmp0 := sym_const_DASH_string.WithMeta(lang.NewMap(kw_hello, true, kw_file, "codegen/test/const_string.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(25), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_const_DASH_string))).(*lang.Symbol)
-		tmp1 := ns.InternWithValue(tmp0, "Hello, World!", true)
+		var_codegen_DOT_test_DOT_const_DASH_string_const_DASH_string = ns.InternWithValue(tmp0, "Hello, World!", true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_const_DASH_string_const_DASH_string.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

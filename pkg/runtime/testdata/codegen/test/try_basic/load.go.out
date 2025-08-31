@@ -6,10 +6,11 @@ import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	reflect "reflect"
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.try-basic", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/try_basic", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -46,6 +47,8 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
+	// var codegen.test.try-basic/-main
+	var_codegen_DOT_test_DOT_try_DASH_basic__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_try_DASH_basic, sym__DASH_main)
 	// var codegen.test.try-basic/basic-try
 	var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try := lang.InternVarName(sym_codegen_DOT_test_DOT_try_DASH_basic, sym_basic_DASH_try)
 	// var codegen.test.try-basic/nested-try
@@ -62,138 +65,66 @@ func LoadNS() {
 	var_glojure_DOT_core__EQ_ := lang.InternVarName(sym_glojure_DOT_core, sym__EQ_)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic)
 	_ = ns
-	// -main
-	{
-		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, "all tests passed", kw_file, "codegen/test/try_basic.glj", kw_line, int(43), kw_column, int(7), kw_end_DASH_line, int(43), kw_end_DASH_column, int(50), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 0)
-			var tmp3 any
-			tmp4 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp5 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try)
-			tmp6 := lang.Apply(tmp5, nil)
-			tmp7 := lang.Apply(tmp4, []any{tmp6, "success"})
-			if lang.IsTruthy(tmp7) {
-			} else {
-				panic("basic-try failed")
-			}
-			_ = tmp3
-			var tmp8 any
-			tmp9 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp10 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_with_DASH_throw)
-			tmp11 := lang.Apply(tmp10, nil)
-			tmp12 := lang.Apply(tmp9, []any{tmp11, "caught exception"})
-			if lang.IsTruthy(tmp12) {
-			} else {
-				panic("try-with-throw failed")
-			}
-			_ = tmp8
-			var tmp13 any
-			tmp14 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp15 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_no_DASH_catch)
-			tmp16 := lang.Apply(tmp15, nil)
-			tmp17 := lang.Apply(tmp14, []any{tmp16, "just body"})
-			if lang.IsTruthy(tmp17) {
-			} else {
-				panic("try-no-catch failed")
-			}
-			_ = tmp13
-			var tmp18 any
-			tmp19 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp20 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_finally_DASH_only)
-			tmp21 := lang.Apply(tmp20, nil)
-			tmp22 := lang.Apply(tmp19, []any{tmp21, "body"})
-			if lang.IsTruthy(tmp22) {
-			} else {
-				panic("try-finally-only failed")
-			}
-			_ = tmp18
-			var tmp23 any
-			tmp24 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp25 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_catch_DASH_finally)
-			tmp26 := lang.Apply(tmp25, nil)
-			tmp27 := lang.Apply(tmp24, []any{tmp26, "caught"})
-			if lang.IsTruthy(tmp27) {
-			} else {
-				panic("try-catch-finally failed")
-			}
-			_ = tmp23
-			var tmp28 any
-			tmp29 := checkDerefVar(var_glojure_DOT_core__EQ_)
-			tmp30 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_nested_DASH_try)
-			tmp31 := lang.Apply(tmp30, nil)
-			tmp32 := lang.Apply(tmp29, []any{tmp31, "inner caught"})
-			if lang.IsTruthy(tmp32) {
-			} else {
-				panic("nested-try failed")
-			}
-			_ = tmp28
-			return "all tests passed"
-		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
-		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// basic-try
 	{
 		tmp0 := sym_basic_DASH_try.WithMeta(lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			var tmp3 any
+			var tmp2 any
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
 						if lang.CatchMatches(r, lang.Builtins["any"]) {
-							v4 := r
-							_ = v4
-							tmp3 = "caught"
+							v3 := r
+							_ = v3
+							tmp2 = "caught"
 						} else {
 							panic(r)
 						}
 					}
 				}()
-				tmp3 = "success"
+				tmp2 = "success"
 			}()
-			return tmp3
+			return tmp2
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// nested-try
 	{
 		tmp0 := sym_nested_DASH_try.WithMeta(lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(34), kw_column, int(7), kw_end_DASH_line, int(34), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			var tmp3 any
+			var tmp2 any
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
 						if lang.CatchMatches(r, lang.Builtins["any"]) {
-							v4 := r
-							_ = v4
-							tmp3 = "outer caught"
+							v3 := r
+							_ = v3
+							tmp2 = "outer caught"
 						} else {
 							panic(r)
 						}
 					}
 				}()
-				var tmp4 any
+				var tmp3 any
 				func() {
 					defer func() {
 						if r := recover(); r != nil {
 							if lang.CatchMatches(r, lang.Builtins["any"]) {
-								v5 := r
-								_ = v5
-								tmp4 = "inner caught"
+								v4 := r
+								_ = v4
+								tmp3 = "inner caught"
 							} else {
 								panic(r)
 							}
@@ -201,32 +132,32 @@ func LoadNS() {
 					}()
 					panic("inner")
 				}()
-				tmp3 = tmp4
+				tmp2 = tmp3
 			}()
-			return tmp3
+			return tmp2
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_basic_nested_DASH_try = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_try_DASH_basic_nested_DASH_try.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// try-catch-finally
 	{
 		tmp0 := sym_try_DASH_catch_DASH_finally.WithMeta(lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(26), kw_column, int(7), kw_end_DASH_line, int(26), kw_end_DASH_column, int(23), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			var tmp3 any
+			var tmp2 any
 			func() {
 				defer func() {
 				}()
 				defer func() {
 					if r := recover(); r != nil {
 						if lang.CatchMatches(r, lang.Builtins["any"]) {
-							v4 := r
-							_ = v4
-							tmp3 = "caught"
+							v3 := r
+							_ = v3
+							tmp2 = "caught"
 						} else {
 							panic(r)
 						}
@@ -234,80 +165,154 @@ func LoadNS() {
 				}()
 				panic("error")
 			}()
-			return tmp3
+			return tmp2
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_catch_DASH_finally = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_catch_DASH_finally.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// try-finally-only
 	{
 		tmp0 := sym_try_DASH_finally_DASH_only.WithMeta(lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(20), kw_column, int(7), kw_end_DASH_line, int(20), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			var tmp3 any
+			var tmp2 any
 			func() {
 				defer func() {
 				}()
-				tmp3 = "body"
+				tmp2 = "body"
 			}()
-			return tmp3
+			return tmp2
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_finally_DASH_only = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_finally_DASH_only.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// try-no-catch
 	{
 		tmp0 := sym_try_DASH_no_DASH_catch.WithMeta(lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(16), kw_column, int(7), kw_end_DASH_line, int(16), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			var tmp3 any
+			var tmp2 any
 			func() {
-				tmp3 = "just body"
+				tmp2 = "just body"
 			}()
-			return tmp3
+			return tmp2
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_no_DASH_catch = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_no_DASH_catch.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// try-with-throw
 	{
 		tmp0 := sym_try_DASH_with_DASH_throw.WithMeta(lang.NewMap(kw_file, "codegen/test/try_basic.glj", kw_line, int(9), kw_column, int(7), kw_end_DASH_line, int(9), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			var tmp3 any
+			var tmp2 any
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
 						if lang.CatchMatches(r, lang.Builtins["any"]) {
-							v4 := r
-							_ = v4
-							tmp3 = "caught exception"
+							v3 := r
+							_ = v3
+							tmp2 = "caught exception"
 						} else {
 							panic(r)
 						}
 					}
 				}()
 				panic("test error")
-				tmp3 = "not reached"
+				tmp2 = "not reached"
 			}()
-			return tmp3
+			return tmp2
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_with_DASH_throw = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_with_DASH_throw.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// -main
+	{
+		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, "all tests passed", kw_file, "codegen/test/try_basic.glj", kw_line, int(43), kw_column, int(7), kw_end_DASH_line, int(43), kw_end_DASH_column, int(50), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_try_DASH_basic))).(*lang.Symbol)
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
+			checkArity(args, 0)
+			var tmp2 any
+			tmp3 := checkDerefVar(var_glojure_DOT_core__EQ_)
+			tmp4 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_basic_DASH_try)
+			tmp5 := lang.Apply(tmp4, nil)
+			tmp6 := lang.Apply(tmp3, []any{tmp5, "success"})
+			if lang.IsTruthy(tmp6) {
+			} else {
+				panic("basic-try failed")
+			}
+			_ = tmp2
+			var tmp7 any
+			tmp8 := checkDerefVar(var_glojure_DOT_core__EQ_)
+			tmp9 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_with_DASH_throw)
+			tmp10 := lang.Apply(tmp9, nil)
+			tmp11 := lang.Apply(tmp8, []any{tmp10, "caught exception"})
+			if lang.IsTruthy(tmp11) {
+			} else {
+				panic("try-with-throw failed")
+			}
+			_ = tmp7
+			var tmp12 any
+			tmp13 := checkDerefVar(var_glojure_DOT_core__EQ_)
+			tmp14 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_no_DASH_catch)
+			tmp15 := lang.Apply(tmp14, nil)
+			tmp16 := lang.Apply(tmp13, []any{tmp15, "just body"})
+			if lang.IsTruthy(tmp16) {
+			} else {
+				panic("try-no-catch failed")
+			}
+			_ = tmp12
+			var tmp17 any
+			tmp18 := checkDerefVar(var_glojure_DOT_core__EQ_)
+			tmp19 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_finally_DASH_only)
+			tmp20 := lang.Apply(tmp19, nil)
+			tmp21 := lang.Apply(tmp18, []any{tmp20, "body"})
+			if lang.IsTruthy(tmp21) {
+			} else {
+				panic("try-finally-only failed")
+			}
+			_ = tmp17
+			var tmp22 any
+			tmp23 := checkDerefVar(var_glojure_DOT_core__EQ_)
+			tmp24 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_try_DASH_catch_DASH_finally)
+			tmp25 := lang.Apply(tmp24, nil)
+			tmp26 := lang.Apply(tmp23, []any{tmp25, "caught"})
+			if lang.IsTruthy(tmp26) {
+			} else {
+				panic("try-catch-finally failed")
+			}
+			_ = tmp22
+			var tmp27 any
+			tmp28 := checkDerefVar(var_glojure_DOT_core__EQ_)
+			tmp29 := checkDerefVar(var_codegen_DOT_test_DOT_try_DASH_basic_nested_DASH_try)
+			tmp30 := lang.Apply(tmp29, nil)
+			tmp31 := lang.Apply(tmp28, []any{tmp30, "inner caught"})
+			if lang.IsTruthy(tmp31) {
+			} else {
+				panic("nested-try failed")
+			}
+			_ = tmp27
+			return "all tests passed"
+		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_try_DASH_basic__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_codegen_DOT_test_DOT_try_DASH_basic__DASH_main.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

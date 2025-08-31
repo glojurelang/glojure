@@ -6,10 +6,11 @@ import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	reflect "reflect"
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.ref", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/ref", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -42,38 +43,42 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
+	// var codegen.test.ref/-main
+	var_codegen_DOT_test_DOT_ref__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_ref, sym__DASH_main)
 	// var codegen.test.ref/test-ref
 	var_codegen_DOT_test_DOT_ref_test_DASH_ref := lang.InternVarName(sym_codegen_DOT_test_DOT_ref, sym_test_DASH_ref)
 	// var glojure.core/deref
 	var_glojure_DOT_core_deref := lang.InternVarName(sym_glojure_DOT_core, sym_deref)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_ref)
 	_ = ns
-	// -main
-	{
-		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2), int64(3)})), kw_file, "codegen/test/ref.glj", kw_line, int(8), kw_column, int(3), kw_end_DASH_line, int(9), kw_end_DASH_column, int(7), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_ref))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 0)
-			tmp3 := checkDerefVar(var_glojure_DOT_core_deref)
-			tmp4 := checkDerefVar(var_codegen_DOT_test_DOT_ref_test_DASH_ref)
-			tmp5 := lang.Apply(tmp3, []any{tmp4})
-			return tmp5
-		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
-		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// test-ref
 	{
 		tmp0 := sym_test_DASH_ref.WithMeta(lang.NewMap(kw_file, "codegen/test/ref.glj", kw_line, int(3), kw_column, int(6), kw_end_DASH_line, int(3), kw_end_DASH_column, int(13), kw_doc, "A reference to a set.", kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_ref))).(*lang.Symbol)
-		tmp2 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2), int64(3)})))
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2), int64(3)})))
+		var_codegen_DOT_test_DOT_ref_test_DASH_ref = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_ref_test_DASH_ref.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// -main
+	{
+		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2), int64(3)})), kw_file, "codegen/test/ref.glj", kw_line, int(8), kw_column, int(3), kw_end_DASH_line, int(9), kw_end_DASH_column, int(7), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_ref))).(*lang.Symbol)
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
+			checkArity(args, 0)
+			tmp2 := checkDerefVar(var_glojure_DOT_core_deref)
+			tmp3 := checkDerefVar(var_codegen_DOT_test_DOT_ref_test_DASH_ref)
+			tmp4 := lang.Apply(tmp2, []any{tmp3})
+			return tmp4
+		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_ref__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_codegen_DOT_test_DOT_ref__DASH_main.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

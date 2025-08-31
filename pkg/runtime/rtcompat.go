@@ -1,9 +1,12 @@
 package runtime
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"io/fs"
+	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"sync"
@@ -17,11 +20,24 @@ import (
 )
 
 var (
+	// TODO: don't use a global RT instance; incurs overhead from dynamic lookup
+	// of methods. Instead, generate direct calls to functions in this package.
 	RT = &RTMethods{}
 
-	loadPath     = []fs.FS{stdlib.StdLib}
+	loadPath     = []fs.FS{}
 	loadPathLock sync.Mutex
+
+	useAot = os.Getenv("GLOJURE_USE_AOT") == "1"
 )
+
+func init() {
+	stdlibPath := os.Getenv("GLOJURE_STDLIB_PATH")
+	if stdlibPath != "" {
+		AddLoadPath(os.DirFS(stdlibPath))
+	} else {
+		AddLoadPath(stdlib.StdLib)
+	}
+}
 
 // AddLoadPath adds a filesystem to the load path.
 func AddLoadPath(fs fs.FS) {
@@ -130,10 +146,21 @@ func (rt *RTMethods) Load(scriptBase string) {
 	PushThreadBindings(NewMap(kvs...))
 	defer PopThreadBindings()
 
+	if useAot {
+		// check nsloaders
+		if loader := GetNSLoader(strings.TrimPrefix(scriptBase, "/")); loader != nil {
+			fmt.Printf("Using custom loader for %s\n", scriptBase)
+			loader()
+			return
+		}
+	}
+	fmt.Printf("Loading %s\n", scriptBase)
+
 	filename := scriptBase + ".glj"
 
 	var buf []byte
 	var err error
+	var foundFS fs.FS
 
 	loadPathLock.Lock()
 	lp := loadPath
@@ -141,6 +168,7 @@ func (rt *RTMethods) Load(scriptBase string) {
 	for _, fs := range lp {
 		buf, err = readFile(fs, filename)
 		if err == nil {
+			foundFS = fs
 			break
 		}
 	}
@@ -148,6 +176,46 @@ func (rt *RTMethods) Load(scriptBase string) {
 		panic(err)
 	}
 	ReadEval(string(buf), WithFilename(filename))
+
+	compileFiles := VarCompileFiles.Get().(bool)
+	if !compileFiles {
+		return
+	}
+
+	compileNSToFile(foundFS, scriptBase)
+}
+
+// compileNSToFile compiles the given namespace to a Go source file,
+// given a fs.FS and the script base name (without extension).
+func compileNSToFile(fs fs.FS, scriptBase string) {
+	// check if the found FS is writable
+	// we use the fact that os.DirFS(".") is just a named string type under the hood
+	if reflect.TypeOf(fs).Kind() != reflect.String {
+		panic(fmt.Errorf("cannot compile %s: filesystem is not writable", scriptBase))
+	}
+	fsDir := fmt.Sprintf("%s", fs)
+
+	// compile to .go files
+	targetDir := filepath.Join(fsDir, scriptBase)
+	targetFile := filepath.Join(targetDir, "loader.go")
+	fmt.Printf("Compiling %s to %s\n", scriptBase, targetFile)
+
+	// ensure directory exists
+	err := os.MkdirAll(targetDir, 0755)
+	if err != nil {
+		panic(err)
+	}
+
+	var buf bytes.Buffer
+	gen := NewGenerator(&buf)
+	currNS := VarCurrentNS.Deref().(*lang.Namespace)
+	if err = gen.Generate(currNS); err != nil {
+		panic(fmt.Errorf("failed to generate code for namespace %s: %w", currNS.Name(), err))
+	}
+	err = os.WriteFile(targetFile, buf.Bytes(), 0644)
+	if err != nil {
+		panic(fmt.Errorf("failed to write generated code to %s: %w", targetFile, err))
+	}
 }
 
 func readFile(fs fs.FS, filename string) ([]byte, error) {

@@ -6,10 +6,11 @@ import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
+	reflect "reflect"
 )
 
 func init() {
-	runtime.RegisterNSLoader("codegen.test.loop-simple", LoadNS)
+	runtime.RegisterNSLoader("codegen/test/loop_simple", LoadNS)
 }
 
 func checkDerefVar(v *lang.Var) any {
@@ -42,6 +43,8 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
+	// var codegen.test.loop-simple/-main
+	var_codegen_DOT_test_DOT_loop_DASH_simple__DASH_main := lang.InternVarName(sym_codegen_DOT_test_DOT_loop_DASH_simple, sym__DASH_main)
 	// var codegen.test.loop-simple/simple-loop
 	var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop := lang.InternVarName(sym_codegen_DOT_test_DOT_loop_DASH_simple, sym_simple_DASH_loop)
 	// var glojure.core/<
@@ -50,58 +53,60 @@ func LoadNS() {
 	var_glojure_DOT_core_inc := lang.InternVarName(sym_glojure_DOT_core, sym_inc)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
+	// reference reflect to avoid unused import error
+	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_loop_DASH_simple)
 	_ = ns
 	// -main
 	{
 		tmp0 := sym__DASH_main.WithMeta(lang.NewMap(kw_expected_DASH_output, int64(10), kw_file, "codegen/test/loop_simple.glj", kw_line, int(9), kw_column, int(7), kw_end_DASH_line, int(10), kw_end_DASH_column, int(7), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_loop_DASH_simple))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			tmp3 := checkDerefVar(var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop)
-			tmp4 := lang.Apply(tmp3, nil)
-			return tmp4
+			tmp2 := checkDerefVar(var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop)
+			tmp3 := lang.Apply(tmp2, nil)
+			return tmp3
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_loop_DASH_simple__DASH_main = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_loop_DASH_simple__DASH_main.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// simple-loop
 	{
 		tmp0 := sym_simple_DASH_loop.WithMeta(lang.NewMap(kw_file, "codegen/test/loop_simple.glj", kw_line, int(3), kw_column, int(7), kw_end_DASH_line, int(3), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_codegen_DOT_test_DOT_loop_DASH_simple))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			var tmp3 any
+			var tmp2 any
 			{ // let
 				// let binding "i"
-				var v4 any = int64(0)
-				_ = v4
+				var v3 any = int64(0)
+				_ = v3
 				for {
-					var tmp5 any
-					tmp6 := checkDerefVar(var_glojure_DOT_core__LT_)
-					tmp7 := lang.Apply(tmp6, []any{v4, int64(10)})
-					if lang.IsTruthy(tmp7) {
-						tmp9 := checkDerefVar(var_glojure_DOT_core_inc)
-						tmp10 := lang.Apply(tmp9, []any{v4})
-						var tmp8 any = tmp10
-						v4 = tmp8
+					var tmp4 any
+					tmp5 := checkDerefVar(var_glojure_DOT_core__LT_)
+					tmp6 := lang.Apply(tmp5, []any{v3, int64(10)})
+					if lang.IsTruthy(tmp6) {
+						tmp8 := checkDerefVar(var_glojure_DOT_core_inc)
+						tmp9 := lang.Apply(tmp8, []any{v3})
+						var tmp7 any = tmp9
+						v3 = tmp7
 						continue
 					} else {
-						tmp5 = v4
+						tmp4 = v3
 					}
-					tmp3 = tmp5
+					tmp2 = tmp4
 					break
 				}
 			} // end let
-			return tmp3
+			return tmp2
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp1 := ns.InternWithValue(tmp0, tmp2, true)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
-			tmp1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+			var_codegen_DOT_test_DOT_loop_DASH_simple_simple_DASH_loop.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }
