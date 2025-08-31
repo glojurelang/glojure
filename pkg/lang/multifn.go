@@ -12,12 +12,12 @@ type MultiFn struct {
 
 	name               string
 	dispatchFn         IFn
-	defaultDispatchVal interface{}
+	defaultDispatchVal any
 	hierarchy          IRef
 	methodTable        IPersistentMap
 	preferTable        IPersistentMap
 	methodCache        IPersistentMap
-	cachedHierarchy    interface{}
+	cachedHierarchy    any
 
 	mtx sync.RWMutex
 }
@@ -28,7 +28,7 @@ var (
 	varIsA = InternVarName(NSCore.Name(), NewSymbol("isa?"))
 )
 
-func NewMultiFn(name string, dispatchFn IFn, defaultDispatchVal interface{}, hierarchy IRef) *MultiFn {
+func NewMultiFn(name string, dispatchFn IFn, defaultDispatchVal any, hierarchy IRef) *MultiFn {
 	return &MultiFn{
 		name:               name,
 		dispatchFn:         dispatchFn,
@@ -45,6 +45,38 @@ func (m *MultiFn) resetCache() {
 	m.cachedHierarchy = m.hierarchy.Deref()
 }
 
+func (m *MultiFn) GetMethodTable() IPersistentMap {
+	m.mtx.RLock()
+	defer m.mtx.RUnlock()
+
+	return m.methodTable
+}
+
+func (m *MultiFn) GetDispatchFn() IFn {
+	m.mtx.RLock()
+	defer m.mtx.RUnlock()
+
+	return m.dispatchFn
+}
+
+func (m *MultiFn) GetDefaultDispatchVal() any {
+	m.mtx.RLock()
+	defer m.mtx.RUnlock()
+
+	return m.defaultDispatchVal
+}
+
+func (m *MultiFn) GetHierarchy() IRef {
+	m.mtx.RLock()
+	defer m.mtx.RUnlock()
+
+	return m.hierarchy
+}
+
+func (m *MultiFn) GetName() string {
+	return m.name
+}
+
 func (m *MultiFn) PreferTable() IPersistentMap {
 	m.mtx.RLock()
 	defer m.mtx.RUnlock()
@@ -52,7 +84,7 @@ func (m *MultiFn) PreferTable() IPersistentMap {
 	return m.preferTable
 }
 
-func (m *MultiFn) AddMethod(dispatchVal interface{}, method IFn) *MultiFn {
+func (m *MultiFn) AddMethod(dispatchVal any, method IFn) *MultiFn {
 	m.mtx.Lock()
 	defer m.mtx.Unlock()
 
@@ -62,7 +94,7 @@ func (m *MultiFn) AddMethod(dispatchVal interface{}, method IFn) *MultiFn {
 	return m
 }
 
-func (m *MultiFn) PreferMethod(dispatchValX, dispatchValY interface{}) *MultiFn {
+func (m *MultiFn) PreferMethod(dispatchValX, dispatchValY any) *MultiFn {
 	m.mtx.Lock()
 	defer m.mtx.Unlock()
 
@@ -77,7 +109,7 @@ func (m *MultiFn) PreferMethod(dispatchValX, dispatchValY interface{}) *MultiFn 
 	return m
 }
 
-func (m *MultiFn) prefers(hierarchy, x, y interface{}) (res bool) {
+func (m *MultiFn) prefers(hierarchy, x, y any) (res bool) {
 	xprefs := m.preferTable.ValAt(x)
 	if xprefs != nil && xprefs.(IPersistentSet).Contains(y) {
 		return true
@@ -114,15 +146,15 @@ func (m *MultiFn) prefers(hierarchy, x, y interface{}) (res bool) {
 	return false
 }
 
-func (m *MultiFn) Invoke(args ...interface{}) interface{} {
+func (m *MultiFn) Invoke(args ...any) any {
 	return m.getFn(m.dispatchFn.Invoke(args...)).Invoke(args...)
 }
 
-func (m *MultiFn) ApplyTo(args ISeq) interface{} {
+func (m *MultiFn) ApplyTo(args ISeq) any {
 	return m.Invoke(seqToSlice(args)...)
 }
 
-func (m *MultiFn) getMethod(dispatchVal interface{}) IFn {
+func (m *MultiFn) getMethod(dispatchVal any) IFn {
 	// TODO: cached hierarchy
 
 	targetFn := m.methodCache.ValAt(dispatchVal)
@@ -132,7 +164,7 @@ func (m *MultiFn) getMethod(dispatchVal interface{}) IFn {
 	return m.findAndCacheBestMethod(dispatchVal)
 }
 
-func (m *MultiFn) getFn(dispatchVal interface{}) IFn {
+func (m *MultiFn) getFn(dispatchVal any) IFn {
 	targetFn := m.getMethod(dispatchVal)
 	if targetFn == nil {
 		panic(fmt.Errorf("No method in multimethod '%s' for dispatch value: %v", m.name, ToString(dispatchVal)))
@@ -140,7 +172,7 @@ func (m *MultiFn) getFn(dispatchVal interface{}) IFn {
 	return targetFn
 }
 
-func (m *MultiFn) findAndCacheBestMethod(dispatchVal interface{}) IFn {
+func (m *MultiFn) findAndCacheBestMethod(dispatchVal any) IFn {
 	m.mtx.RLock()
 	mt := m.methodTable
 	pt := m.preferTable
@@ -161,13 +193,13 @@ func (m *MultiFn) findAndCacheBestMethod(dispatchVal interface{}) IFn {
 	return bestMethod
 }
 
-func (m *MultiFn) findBestMethod(dispatchVal interface{}) IFn {
+func (m *MultiFn) findBestMethod(dispatchVal any) IFn {
 	m.mtx.RLock()
 	defer m.mtx.RUnlock()
 
 	// TODO: cached hierarchy
 
-	var bestValue interface{}
+	var bestValue any
 	var bestEntry IMapEntry
 	for seq := Seq(m.methodTable); seq != nil; seq = seq.Next() {
 		entry := seq.First().(IMapEntry)
@@ -192,10 +224,10 @@ func (m *MultiFn) findBestMethod(dispatchVal interface{}) IFn {
 	return bestValue.(IFn)
 }
 
-func (m *MultiFn) isA(h, x, y interface{}) bool {
+func (m *MultiFn) isA(h, x, y any) bool {
 	return varIsA.Invoke(h, x, y).(bool)
 }
 
-func (m *MultiFn) dominates(h, x, y interface{}) bool {
+func (m *MultiFn) dominates(h, x, y any) bool {
 	return m.prefers(m.hierarchy, x, y) || m.isA(h, x, y)
 }

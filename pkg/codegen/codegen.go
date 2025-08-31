@@ -252,10 +252,23 @@ func (g *Generator) generateValue(value any) string {
 		return g.generateAtomValue(v)
 	case *lang.Ref:
 		return g.generateRefValue(v)
+	case *lang.Var:
+		// Generate a reference to a Var
+		ns := v.Namespace()
+		sym := v.Symbol()
+		return fmt.Sprintf("lang.FindOrCreateNamespace(lang.NewSymbol(%#v)).FindInternedVar(lang.NewSymbol(%#v))", ns.Name().String(), sym.String())
 	case *lang.Namespace:
 		return fmt.Sprintf("lang.FindOrCreateNamespace(lang.NewSymbol(%#v))", v.Name().String())
 	case *runtime.Fn:
 		return g.generateFn(v)
+	case lang.FnFunc:
+		// FnFunc is a simple function wrapper, we can't regenerate its exact implementation
+		// so we generate a placeholder that will panic if called
+		fnVar := g.allocateTempVar()
+		g.writef("%s := lang.NewFnFunc(func(args ...any) any {\n", fnVar)
+		g.writef("  panic(\"generated FnFunc not implemented\")\n")
+		g.writef("})\n")
+		return fnVar
 	case lang.IPersistentMap:
 		return g.generateMapValue(v)
 	case lang.IPersistentVector:
@@ -571,7 +584,58 @@ func (g *Generator) generateSetValue(s lang.IPersistentSet) string {
 }
 
 func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
+	// Allocate a variable for the MultiFn
+	mfVar := g.allocateTempVar()
 
+	// Generate the dispatch function
+	dispatchFnVar := g.generateValue(mf.GetDispatchFn())
+
+	// Generate the default dispatch value
+	defaultValVar := g.generateValue(mf.GetDefaultDispatchVal())
+
+	// Generate the hierarchy reference
+	hierarchyVar := g.generateValue(mf.GetHierarchy())
+
+	// Create the MultiFn
+	g.writef("%s := lang.NewMultiFn(%#v, %s, %s, %s)\n",
+		mfVar, mf.GetName(), dispatchFnVar, defaultValVar, hierarchyVar)
+
+	// Add all methods from the method table
+	methodTable := mf.GetMethodTable()
+	if methodTable != nil && methodTable.Count() > 0 {
+		for seq := lang.Seq(methodTable); seq != nil; seq = seq.Next() {
+			entry := seq.First().(lang.IMapEntry)
+			dispatchVal := entry.Key()
+			method := entry.Val()
+
+			dispatchValVar := g.generateValue(dispatchVal)
+			methodVar := g.generateValue(method)
+
+			g.writef("%s.AddMethod(%s, %s)\n", mfVar, dispatchValVar, methodVar)
+		}
+	}
+
+	// Add all preferences from the prefer table
+	preferTable := mf.PreferTable()
+	if preferTable != nil && preferTable.Count() > 0 {
+		for seq := lang.Seq(preferTable); seq != nil; seq = seq.Next() {
+			entry := seq.First().(lang.IMapEntry)
+			dispatchValX := entry.Key()
+			prefs := entry.Val()
+
+			// Iterate through the set of preferred values
+			for prefSeq := lang.Seq(prefs); prefSeq != nil; prefSeq = prefSeq.Next() {
+				dispatchValY := prefSeq.First()
+
+				dispatchValXVar := g.generateValue(dispatchValX)
+				dispatchValYVar := g.generateValue(dispatchValY)
+
+				g.writef("%s.PreferMethod(%s, %s)\n", mfVar, dispatchValXVar, dispatchValYVar)
+			}
+		}
+	}
+
+	return mfVar
 }
 
 func (g *Generator) generateFn(fn *runtime.Fn) string {
