@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"text/template"
 
 	"github.com/glojurelang/glojure/pkg/lang"
 )
@@ -44,6 +45,8 @@ func TestGeneratedGo(t *testing.T) {
 		pkgName := filepath.Base(dir)
 
 		t.Run(pkgName, func(t *testing.T) {
+			t.Parallel()
+
 			// Read the corresponding .glj file to check for -main metadata
 			gljFile := strings.TrimSuffix(outFile, "/load.go.out") + ".glj"
 			nsName, hasMain := getNamespaceMetadata(t, gljFile)
@@ -88,7 +91,7 @@ func TestGeneratedGo(t *testing.T) {
 			if err != nil {
 				t.Fatalf("Failed to get project root: %v", err)
 			}
-			
+
 			// Create go.mod with absolute path replacement
 			goModContent := fmt.Sprintf(`module testprog
 
@@ -102,7 +105,7 @@ replace github.com/glojurelang/glojure => %s
 			if err := ioutil.WriteFile(goModFile, []byte(goModContent), 0644); err != nil {
 				t.Fatalf("Failed to write go.mod: %v", err)
 			}
-			
+
 			// Copy go.sum from project root
 			goSumSrc := filepath.Join(projectRoot, "go.sum")
 			goSumContent, err := ioutil.ReadFile(goSumSrc)
@@ -122,7 +125,7 @@ replace github.com/glojurelang/glojure => %s
 			if err := cmd.Run(); err != nil {
 				t.Fatalf("Failed to run go mod tidy: %v\nStderr: %s", err, tidyStderr.String())
 			}
-			
+
 			// Build the program
 			cmd = exec.Command("go", "build", "-o", "testprog", ".")
 			cmd.Dir = tempDir
@@ -205,13 +208,21 @@ func getNamespaceMetadata(t *testing.T, gljFile string) (nsName string, hasMain 
 	return nsName, hasMain
 }
 
-// generateMainFile generates a main.go file that imports and calls LoadNS
-func generateMainFile(pkgName, nsName string) string {
-	mainFunc := fmt.Sprintf(`
-func main() {
-	%s.LoadNS()
+var mainTemplate = template.Must(template.New("main").Parse(`package main
 
-	ns := lang.FindNamespace(lang.NewSymbol("%s"))
+import (
+	"fmt"
+	"os"
+
+	"testprog/{{.PkgName}}"
+	"github.com/glojurelang/glojure/pkg/lang"
+  _ "github.com/glojurelang/glojure/pkg/glj"
+)
+
+func main() {
+	{{.PkgName}}.LoadNS()
+
+	ns := lang.FindNamespace(lang.NewSymbol("{{.NsName}}"))
 	if ns == nil {
 		fmt.Println("ERROR: namespace not found")
 		os.Exit(1)
@@ -246,18 +257,18 @@ func main() {
 					fmt.Println("SUCCESS: Got expected throw")
 					os.Exit(0)
 				} else {
-					fmt.Printf("FAIL: Expected throw %%v, got %%v\n", expectedThrow, r)
+					fmt.Printf("FAIL: Expected throw %v, got %v\n", expectedThrow, r)
 					os.Exit(1)
 				}
 			} else {
-				fmt.Printf("FAIL: Expected throw %%v, but no panic occurred\n", expectedThrow)
+				fmt.Printf("FAIL: Expected throw %v, but no panic occurred\n", expectedThrow)
 				os.Exit(1)
 			}
 		}()
 
 		// Run -main - should panic
 		mainVar.Invoke()
-		fmt.Printf("FAIL: Expected throw %%v, but no panic occurred\n", expectedThrow)
+		fmt.Printf("FAIL: Expected throw %v, but no panic occurred\n", expectedThrow)
 		os.Exit(1)
 	} else {
 		// Expect normal return value
@@ -266,21 +277,25 @@ func main() {
 			fmt.Println("SUCCESS: Got expected output")
 			os.Exit(0)
 		} else {
-			fmt.Printf("FAIL: Expected %%v, got %%v\n", expectedOutput, result)
+			fmt.Printf("FAIL: Expected %v, got %v\n", expectedOutput, result)
 			os.Exit(1)
 		}
 	}
 }
-`, pkgName, nsName)
+`))
 
-	return fmt.Sprintf(`package main
-
-import (
-	"fmt"
-	"os"
-
-	"testprog/%s"
-	"github.com/glojurelang/glojure/pkg/lang"
-)
-%s`, pkgName, mainFunc)
+// generateMainFile generates a main.go file that imports and calls LoadNS
+func generateMainFile(pkgName, nsName string) string {
+	var buf bytes.Buffer
+	err := mainTemplate.Execute(&buf, struct {
+		PkgName string
+		NsName  string
+	}{
+		PkgName: pkgName,
+		NsName:  nsName,
+	})
+	if err != nil {
+		panic(fmt.Sprintf("Failed to generate main.go: %v", err))
+	}
+	return buf.String()
 }
