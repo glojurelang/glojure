@@ -269,6 +269,7 @@ func LoadNS() {
 	sym_codegen_DOT_test_DOT_fn_DASH_closure := lang.NewSymbol("codegen.test.fn-closure")
 	sym_codegen_DOT_test_DOT_fn_DASH_recur := lang.NewSymbol("codegen.test.fn-recur")
 	sym_codegen_DOT_test_DOT_goroutine := lang.NewSymbol("codegen.test.goroutine")
+	sym_codegen_DOT_test_DOT_letfn := lang.NewSymbol("codegen.test.letfn")
 	sym_codegen_DOT_test_DOT_loop_DASH_simple := lang.NewSymbol("codegen.test.loop-simple")
 	sym_codegen_DOT_test_DOT_maybe_DASH_class := lang.NewSymbol("codegen.test.maybe-class")
 	sym_codegen_DOT_test_DOT_multifn := lang.NewSymbol("codegen.test.multifn")
@@ -3228,7 +3229,7 @@ func LoadNS() {
 	// *loaded-libs*
 	{
 		tmp0 := sym__STAR_loaded_DASH_libs_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "glojure/core.glj", kw_line, int(5817), kw_column, int(10), kw_end_DASH_line, int(5820), kw_end_DASH_column, int(15), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_glojure_DOT_core_DOT_protocols, sym_glojure_DOT_string, sym_glojure_DOT_go_DOT_io, sym_codegen_DOT_test_DOT_case_DASH_switch, sym_codegen_DOT_test_DOT_const_DASH_keyword, sym_codegen_DOT_test_DOT_const_DASH_number, sym_codegen_DOT_test_DOT_const_DASH_string, sym_codegen_DOT_test_DOT_def_DASH_simple, sym_codegen_DOT_test_DOT_fn_DASH_closure, sym_codegen_DOT_test_DOT_fn_DASH_recur, sym_codegen_DOT_test_DOT_goroutine, sym_codegen_DOT_test_DOT_loop_DASH_simple, sym_codegen_DOT_test_DOT_maybe_DASH_class, sym_codegen_DOT_test_DOT_multifn, sym_codegen_DOT_test_DOT_ns_DASH_skip, sym_codegen_DOT_test_DOT_quote_DASH_simple, sym_codegen_DOT_test_DOT_ref, sym_codegen_DOT_test_DOT_set_DASH_bang, sym_codegen_DOT_test_DOT_the_DASH_var, sym_codegen_DOT_test_DOT_throw_DASH_simple, sym_codegen_DOT_test_DOT_try_DASH_advanced, sym_codegen_DOT_test_DOT_try_DASH_basic, sym_codegen_DOT_test_DOT_values, sym_codegen_DOT_test_DOT_with_DASH_meta})))
+		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_glojure_DOT_core_DOT_protocols, sym_glojure_DOT_string, sym_glojure_DOT_go_DOT_io, sym_codegen_DOT_test_DOT_case_DASH_switch, sym_codegen_DOT_test_DOT_const_DASH_keyword, sym_codegen_DOT_test_DOT_const_DASH_number, sym_codegen_DOT_test_DOT_const_DASH_string, sym_codegen_DOT_test_DOT_def_DASH_simple, sym_codegen_DOT_test_DOT_fn_DASH_closure, sym_codegen_DOT_test_DOT_fn_DASH_recur, sym_codegen_DOT_test_DOT_goroutine, sym_codegen_DOT_test_DOT_letfn, sym_codegen_DOT_test_DOT_loop_DASH_simple, sym_codegen_DOT_test_DOT_maybe_DASH_class, sym_codegen_DOT_test_DOT_multifn, sym_codegen_DOT_test_DOT_ns_DASH_skip, sym_codegen_DOT_test_DOT_quote_DASH_simple, sym_codegen_DOT_test_DOT_ref, sym_codegen_DOT_test_DOT_set_DASH_bang, sym_codegen_DOT_test_DOT_the_DASH_var, sym_codegen_DOT_test_DOT_throw_DASH_simple, sym_codegen_DOT_test_DOT_try_DASH_advanced, sym_codegen_DOT_test_DOT_try_DASH_basic, sym_codegen_DOT_test_DOT_values, sym_codegen_DOT_test_DOT_with_DASH_meta})))
 		var_glojure_DOT_core__STAR_loaded_DASH_libs_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_loaded_DASH_libs_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -11589,119 +11590,6 @@ func LoadNS() {
 			var_glojure_DOT_core_io_BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
-	// keep-indexed
-	{
-		tmp0 := sym_keep_DASH_indexed.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence of the non-nil results of (f index item). Note,\n  this means false return values will be included.  f must be free of\n  side-effects.  Returns a stateful transducer when no collection is\n  provided.", kw_static, true, kw_file, "glojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(7372), kw_end_DASH_line, int(7372))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 1:
-				v2 := args[0]
-				_ = v2
-				var tmp3 lang.FnFunc
-				tmp3 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v4 := args[0]
-					_ = v4
-					var tmp5 any
-					{ // let
-						// let binding "iv"
-						tmp6 := checkDerefVar(var_glojure_DOT_core_volatile_BANG_)
-						tmp7 := lang.Apply(tmp6, []any{int64(-1)})
-						var v8 any = tmp7
-						_ = v8
-						var tmp9 lang.FnFunc
-						tmp9 = lang.NewFnFunc(func(args ...any) any {
-							switch len(args) {
-							case 0:
-								tmp10 := lang.Apply(v4, nil)
-								return tmp10
-							case 1:
-								v10 := args[0]
-								_ = v10
-								tmp11 := lang.Apply(v4, []any{v10})
-								return tmp11
-							case 2:
-								v10 := args[0]
-								_ = v10
-								v11 := args[1]
-								_ = v11
-								var tmp12 any
-								{ // let
-									// let binding "i"
-									tmp13 := checkDerefVar(var_glojure_DOT_core_inc)
-									tmp14, ok := lang.FieldOrMethod(v8, "Deref")
-									if !ok {
-										panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "Deref")))
-									}
-									var tmp15 any
-									switch reflect.TypeOf(tmp14).Kind() {
-									case reflect.Func:
-										tmp15 = lang.Apply(tmp14, nil)
-									default:
-										tmp15 = tmp14
-									}
-									tmp16 := lang.Apply(tmp13, []any{tmp15})
-									tmp17, _ := lang.FieldOrMethod(v8, "reset")
-									if reflect.TypeOf(tmp17).Kind() != reflect.Func {
-										panic(lang.NewIllegalArgumentError(fmt.Sprintf("reset is not a function")))
-									}
-									tmp18 := lang.Apply(tmp17, []any{tmp16})
-									var v19 any = tmp18
-									_ = v19
-									// let binding "v"
-									tmp20 := lang.Apply(v2, []any{v19, v11})
-									var v21 any = tmp20
-									_ = v21
-									var tmp22 any
-									tmp23 := checkDerefVar(var_glojure_DOT_core_nil_QMARK_)
-									tmp24 := lang.Apply(tmp23, []any{v21})
-									if lang.IsTruthy(tmp24) {
-										tmp22 = v10
-									} else {
-										tmp25 := lang.Apply(v4, []any{v10, v21})
-										tmp22 = tmp25
-									}
-									tmp12 = tmp22
-								} // end let
-								return tmp12
-							default:
-								checkArity(args, -1)
-								panic("unreachable")
-							}
-						})
-						tmp10 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7382), kw_column, int(8), kw_end_DASH_line, int(7390), kw_end_DASH_column, int(33))
-						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp5 = tmp11
-					} // end let
-					return tmp5
-				})
-				tmp4 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7380), kw_column, int(4), kw_end_DASH_line, int(7390), kw_end_DASH_column, int(35))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
-			case 2:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				return nil
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		var_glojure_DOT_core_keep_DASH_indexed = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_glojure_DOT_core_keep_DASH_indexed.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// keyword
 	{
 		tmp1 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
@@ -12153,101 +12041,6 @@ func LoadNS() {
 		var_glojure_DOT_core_macroexpand = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_macroexpand.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// map-indexed
-	{
-		tmp0 := sym_map_DASH_indexed.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence consisting of the result of applying f to 0\n  and the first item of coll, followed by applying f to 1 and the second\n  item in coll, etc, until coll is exhausted. Thus function f should\n  accept 2 arguments, index and item. Returns a stateful transducer when\n  no collection is provided.", kw_static, true, kw_file, "glojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7309), kw_end_DASH_line, int(7309))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 1:
-				v2 := args[0]
-				_ = v2
-				var tmp3 lang.FnFunc
-				tmp3 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v4 := args[0]
-					_ = v4
-					var tmp5 any
-					{ // let
-						// let binding "i"
-						tmp6 := checkDerefVar(var_glojure_DOT_core_volatile_BANG_)
-						tmp7 := lang.Apply(tmp6, []any{int64(-1)})
-						var v8 any = tmp7
-						_ = v8
-						var tmp9 lang.FnFunc
-						tmp9 = lang.NewFnFunc(func(args ...any) any {
-							switch len(args) {
-							case 0:
-								tmp10 := lang.Apply(v4, nil)
-								return tmp10
-							case 1:
-								v10 := args[0]
-								_ = v10
-								tmp11 := lang.Apply(v4, []any{v10})
-								return tmp11
-							case 2:
-								v10 := args[0]
-								_ = v10
-								v11 := args[1]
-								_ = v11
-								tmp12 := checkDerefVar(var_glojure_DOT_core_inc)
-								tmp13, ok := lang.FieldOrMethod(v8, "Deref")
-								if !ok {
-									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "Deref")))
-								}
-								var tmp14 any
-								switch reflect.TypeOf(tmp13).Kind() {
-								case reflect.Func:
-									tmp14 = lang.Apply(tmp13, nil)
-								default:
-									tmp14 = tmp13
-								}
-								tmp15 := lang.Apply(tmp12, []any{tmp14})
-								tmp16, _ := lang.FieldOrMethod(v8, "reset")
-								if reflect.TypeOf(tmp16).Kind() != reflect.Func {
-									panic(lang.NewIllegalArgumentError(fmt.Sprintf("reset is not a function")))
-								}
-								tmp17 := lang.Apply(tmp16, []any{tmp15})
-								tmp18 := lang.Apply(v2, []any{tmp17, v11})
-								tmp19 := lang.Apply(v4, []any{v10, tmp18})
-								return tmp19
-							default:
-								checkArity(args, -1)
-								panic("unreachable")
-							}
-						})
-						tmp10 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7320), kw_column, int(8), kw_end_DASH_line, int(7324), kw_end_DASH_column, int(48))
-						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp5 = tmp11
-					} // end let
-					return tmp5
-				})
-				tmp4 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7318), kw_column, int(4), kw_end_DASH_line, int(7324), kw_end_DASH_column, int(50))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
-			case 2:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				return nil
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		var_glojure_DOT_core_map_DASH_indexed = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_glojure_DOT_core_map_DASH_indexed.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// maybe-destructured
@@ -26662,6 +26455,291 @@ func LoadNS() {
 			var_glojure_DOT_core_keep.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
+	// keep-indexed
+	{
+		tmp0 := sym_keep_DASH_indexed.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence of the non-nil results of (f index item). Note,\n  this means false return values will be included.  f must be free of\n  side-effects.  Returns a stateful transducer when no collection is\n  provided.", kw_static, true, kw_file, "glojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(7372), kw_end_DASH_line, int(7372))).(*lang.Symbol)
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
+			switch len(args) {
+			case 1:
+				v2 := args[0]
+				_ = v2
+				var tmp3 lang.FnFunc
+				tmp3 = lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 1)
+					v4 := args[0]
+					_ = v4
+					var tmp5 any
+					{ // let
+						// let binding "iv"
+						tmp6 := checkDerefVar(var_glojure_DOT_core_volatile_BANG_)
+						tmp7 := lang.Apply(tmp6, []any{int64(-1)})
+						var v8 any = tmp7
+						_ = v8
+						var tmp9 lang.FnFunc
+						tmp9 = lang.NewFnFunc(func(args ...any) any {
+							switch len(args) {
+							case 0:
+								tmp10 := lang.Apply(v4, nil)
+								return tmp10
+							case 1:
+								v10 := args[0]
+								_ = v10
+								tmp11 := lang.Apply(v4, []any{v10})
+								return tmp11
+							case 2:
+								v10 := args[0]
+								_ = v10
+								v11 := args[1]
+								_ = v11
+								var tmp12 any
+								{ // let
+									// let binding "i"
+									tmp13 := checkDerefVar(var_glojure_DOT_core_inc)
+									tmp14, ok := lang.FieldOrMethod(v8, "Deref")
+									if !ok {
+										panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "Deref")))
+									}
+									var tmp15 any
+									switch reflect.TypeOf(tmp14).Kind() {
+									case reflect.Func:
+										tmp15 = lang.Apply(tmp14, nil)
+									default:
+										tmp15 = tmp14
+									}
+									tmp16 := lang.Apply(tmp13, []any{tmp15})
+									tmp17, _ := lang.FieldOrMethod(v8, "reset")
+									if reflect.TypeOf(tmp17).Kind() != reflect.Func {
+										panic(lang.NewIllegalArgumentError(fmt.Sprintf("reset is not a function")))
+									}
+									tmp18 := lang.Apply(tmp17, []any{tmp16})
+									var v19 any = tmp18
+									_ = v19
+									// let binding "v"
+									tmp20 := lang.Apply(v2, []any{v19, v11})
+									var v21 any = tmp20
+									_ = v21
+									var tmp22 any
+									tmp23 := checkDerefVar(var_glojure_DOT_core_nil_QMARK_)
+									tmp24 := lang.Apply(tmp23, []any{v21})
+									if lang.IsTruthy(tmp24) {
+										tmp22 = v10
+									} else {
+										tmp25 := lang.Apply(v4, []any{v10, v21})
+										tmp22 = tmp25
+									}
+									tmp12 = tmp22
+								} // end let
+								return tmp12
+							default:
+								checkArity(args, -1)
+								panic("unreachable")
+							}
+						})
+						tmp10 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7382), kw_column, int(8), kw_end_DASH_line, int(7390), kw_end_DASH_column, int(33))
+						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
+						if err != nil {
+							panic(err)
+						}
+						tmp5 = tmp11
+					} // end let
+					return tmp5
+				})
+				tmp4 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7380), kw_column, int(4), kw_end_DASH_line, int(7390), kw_end_DASH_column, int(35))
+				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
+				if err != nil {
+					panic(err)
+				}
+				return tmp5
+			case 2:
+				v2 := args[0]
+				_ = v2
+				v3 := args[1]
+				_ = v3
+				var tmp4 any
+				{ // letfn
+					// letfn binding "keepi"
+					var v5 lang.FnFunc
+					var tmp6 lang.FnFunc
+					{ // function keepi
+						var v7 lang.FnFunc
+						tmp6 = lang.NewFnFunc(func(args ...any) any {
+							checkArity(args, 2)
+							v8 := args[0]
+							_ = v8
+							v9 := args[1]
+							_ = v9
+							var tmp10 lang.FnFunc
+							tmp10 = lang.NewFnFunc(func(args ...any) any {
+								checkArity(args, 0)
+								var tmp11 any
+								{ // let
+									// let binding "temp__0__auto__"
+									tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
+									tmp13 := lang.Apply(tmp12, []any{v9})
+									var v14 any = tmp13
+									_ = v14
+									var tmp15 any
+									if lang.IsTruthy(v14) {
+										var tmp16 any
+										{ // let
+											// let binding "s"
+											var v17 any = v14
+											_ = v17
+											var tmp18 any
+											tmp19 := checkDerefVar(var_glojure_DOT_core_chunked_DASH_seq_QMARK_)
+											tmp20 := lang.Apply(tmp19, []any{v17})
+											if lang.IsTruthy(tmp20) {
+												var tmp21 any
+												{ // let
+													// let binding "c"
+													tmp22 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_first)
+													tmp23 := lang.Apply(tmp22, []any{v17})
+													var v24 any = tmp23
+													_ = v24
+													// let binding "size"
+													tmp25 := checkDerefVar(var_glojure_DOT_core_count)
+													tmp26 := lang.Apply(tmp25, []any{v24})
+													var v27 any = tmp26
+													_ = v27
+													// let binding "b"
+													tmp28 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_buffer)
+													tmp29 := lang.Apply(tmp28, []any{v27})
+													var v30 any = tmp29
+													_ = v30
+													var tmp31 any
+													{ // let
+														// let binding "n__0__auto__"
+														tmp32 := checkDerefVar(var_glojure_DOT_core_long)
+														tmp33 := lang.Apply(tmp32, []any{v27})
+														var v34 any = tmp33
+														_ = v34
+														var tmp35 any
+														{ // let
+															// let binding "i"
+															var v36 any = int64(0)
+															_ = v36
+															for {
+																var tmp37 any
+																tmp38 := checkDerefVar(var_glojure_DOT_core__LT_)
+																tmp39 := lang.Apply(tmp38, []any{v36, v34})
+																if lang.IsTruthy(tmp39) {
+																	var tmp40 any
+																	{ // let
+																		// let binding "x"
+																		tmp41 := checkDerefVar(var_glojure_DOT_core__PLUS_)
+																		tmp42 := lang.Apply(tmp41, []any{v8, v36})
+																		tmp43, _ := lang.FieldOrMethod(v24, "nth")
+																		if reflect.TypeOf(tmp43).Kind() != reflect.Func {
+																			panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
+																		}
+																		tmp44 := lang.Apply(tmp43, []any{v36})
+																		tmp45 := lang.Apply(v2, []any{tmp42, tmp44})
+																		var v46 any = tmp45
+																		_ = v46
+																		var tmp47 any
+																		tmp48 := checkDerefVar(var_glojure_DOT_core_nil_QMARK_)
+																		tmp49 := lang.Apply(tmp48, []any{v46})
+																		if lang.IsTruthy(tmp49) {
+																		} else {
+																			tmp50 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_append)
+																			tmp51 := lang.Apply(tmp50, []any{v30, v46})
+																			tmp47 = tmp51
+																		}
+																		tmp40 = tmp47
+																	} // end let
+																	_ = tmp40
+																	tmp42 := checkDerefVar(var_glojure_DOT_core_unchecked_DASH_inc)
+																	tmp43 := lang.Apply(tmp42, []any{v36})
+																	var tmp41 any = tmp43
+																	v36 = tmp41
+																	continue
+																} else {
+																}
+																tmp35 = tmp37
+																break
+															}
+														} // end let
+														tmp31 = tmp35
+													} // end let
+													_ = tmp31
+													tmp32 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_cons)
+													tmp33 := checkDerefVar(var_glojure_DOT_core_chunk)
+													tmp34 := lang.Apply(tmp33, []any{v30})
+													tmp35 := checkDerefVar(var_glojure_DOT_core__PLUS_)
+													tmp36 := lang.Apply(tmp35, []any{v8, v27})
+													tmp37 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_rest)
+													tmp38 := lang.Apply(tmp37, []any{v17})
+													tmp39 := lang.Apply(v7, []any{tmp36, tmp38})
+													tmp40 := lang.Apply(tmp32, []any{tmp34, tmp39})
+													tmp21 = tmp40
+												} // end let
+												tmp18 = tmp21
+											} else {
+												var tmp22 any
+												{ // let
+													// let binding "x"
+													tmp23 := checkDerefVar(var_glojure_DOT_core_first)
+													tmp24 := lang.Apply(tmp23, []any{v17})
+													tmp25 := lang.Apply(v2, []any{v8, tmp24})
+													var v26 any = tmp25
+													_ = v26
+													var tmp27 any
+													tmp28 := checkDerefVar(var_glojure_DOT_core_nil_QMARK_)
+													tmp29 := lang.Apply(tmp28, []any{v26})
+													if lang.IsTruthy(tmp29) {
+														tmp30 := checkDerefVar(var_glojure_DOT_core_inc)
+														tmp31 := lang.Apply(tmp30, []any{v8})
+														tmp32 := checkDerefVar(var_glojure_DOT_core_rest)
+														tmp33 := lang.Apply(tmp32, []any{v17})
+														tmp34 := lang.Apply(v7, []any{tmp31, tmp33})
+														tmp27 = tmp34
+													} else {
+														tmp35 := checkDerefVar(var_glojure_DOT_core_cons)
+														tmp36 := checkDerefVar(var_glojure_DOT_core_inc)
+														tmp37 := lang.Apply(tmp36, []any{v8})
+														tmp38 := checkDerefVar(var_glojure_DOT_core_rest)
+														tmp39 := lang.Apply(tmp38, []any{v17})
+														tmp40 := lang.Apply(v7, []any{tmp37, tmp39})
+														tmp41 := lang.Apply(tmp35, []any{v26, tmp40})
+														tmp27 = tmp41
+													}
+													tmp22 = tmp27
+												} // end let
+												tmp18 = tmp22
+											}
+											tmp16 = tmp18
+										} // end let
+										tmp15 = tmp16
+									} else {
+									}
+									tmp11 = tmp15
+								} // end let
+								return tmp11
+							})
+							tmp11 := lang.Apply(lang.NewLazySeq, []any{tmp10})
+							return tmp11
+						})
+						v7 = tmp6
+						_ = v7
+					}
+					v5 = tmp6
+					_ = v5
+					tmp7 := lang.Apply(v5, []any{int64(0), v3})
+					tmp4 = tmp7
+				} // end letfn
+				return tmp4
+			default:
+				checkArity(args, -1)
+				panic("unreachable")
+			}
+		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_glojure_DOT_core_keep_DASH_indexed = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_glojure_DOT_core_keep_DASH_indexed.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
 	// lazy-seq
 	{
 		tmp0 := sym_lazy_DASH_seq.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions that returns an ISeq or nil, and yields\n  a Seqable object that will invoke the body only the first time seq\n  is called, and will cache the result and return it on all subsequent\n  seq calls. See also - realized?", kw_file, "glojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(676), kw_end_DASH_line, int(676))).(*lang.Symbol)
@@ -27219,6 +27297,241 @@ func LoadNS() {
 		var_glojure_DOT_core_map = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_map.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// map-indexed
+	{
+		tmp0 := sym_map_DASH_indexed.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence consisting of the result of applying f to 0\n  and the first item of coll, followed by applying f to 1 and the second\n  item in coll, etc, until coll is exhausted. Thus function f should\n  accept 2 arguments, index and item. Returns a stateful transducer when\n  no collection is provided.", kw_static, true, kw_file, "glojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7309), kw_end_DASH_line, int(7309))).(*lang.Symbol)
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
+			switch len(args) {
+			case 1:
+				v2 := args[0]
+				_ = v2
+				var tmp3 lang.FnFunc
+				tmp3 = lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 1)
+					v4 := args[0]
+					_ = v4
+					var tmp5 any
+					{ // let
+						// let binding "i"
+						tmp6 := checkDerefVar(var_glojure_DOT_core_volatile_BANG_)
+						tmp7 := lang.Apply(tmp6, []any{int64(-1)})
+						var v8 any = tmp7
+						_ = v8
+						var tmp9 lang.FnFunc
+						tmp9 = lang.NewFnFunc(func(args ...any) any {
+							switch len(args) {
+							case 0:
+								tmp10 := lang.Apply(v4, nil)
+								return tmp10
+							case 1:
+								v10 := args[0]
+								_ = v10
+								tmp11 := lang.Apply(v4, []any{v10})
+								return tmp11
+							case 2:
+								v10 := args[0]
+								_ = v10
+								v11 := args[1]
+								_ = v11
+								tmp12 := checkDerefVar(var_glojure_DOT_core_inc)
+								tmp13, ok := lang.FieldOrMethod(v8, "Deref")
+								if !ok {
+									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "Deref")))
+								}
+								var tmp14 any
+								switch reflect.TypeOf(tmp13).Kind() {
+								case reflect.Func:
+									tmp14 = lang.Apply(tmp13, nil)
+								default:
+									tmp14 = tmp13
+								}
+								tmp15 := lang.Apply(tmp12, []any{tmp14})
+								tmp16, _ := lang.FieldOrMethod(v8, "reset")
+								if reflect.TypeOf(tmp16).Kind() != reflect.Func {
+									panic(lang.NewIllegalArgumentError(fmt.Sprintf("reset is not a function")))
+								}
+								tmp17 := lang.Apply(tmp16, []any{tmp15})
+								tmp18 := lang.Apply(v2, []any{tmp17, v11})
+								tmp19 := lang.Apply(v4, []any{v10, tmp18})
+								return tmp19
+							default:
+								checkArity(args, -1)
+								panic("unreachable")
+							}
+						})
+						tmp10 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7320), kw_column, int(8), kw_end_DASH_line, int(7324), kw_end_DASH_column, int(48))
+						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
+						if err != nil {
+							panic(err)
+						}
+						tmp5 = tmp11
+					} // end let
+					return tmp5
+				})
+				tmp4 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7318), kw_column, int(4), kw_end_DASH_line, int(7324), kw_end_DASH_column, int(50))
+				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
+				if err != nil {
+					panic(err)
+				}
+				return tmp5
+			case 2:
+				v2 := args[0]
+				_ = v2
+				v3 := args[1]
+				_ = v3
+				var tmp4 any
+				{ // letfn
+					// letfn binding "mapi"
+					var v5 lang.FnFunc
+					var tmp6 lang.FnFunc
+					{ // function mapi
+						var v7 lang.FnFunc
+						tmp6 = lang.NewFnFunc(func(args ...any) any {
+							checkArity(args, 2)
+							v8 := args[0]
+							_ = v8
+							v9 := args[1]
+							_ = v9
+							var tmp10 lang.FnFunc
+							tmp10 = lang.NewFnFunc(func(args ...any) any {
+								checkArity(args, 0)
+								var tmp11 any
+								{ // let
+									// let binding "temp__0__auto__"
+									tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
+									tmp13 := lang.Apply(tmp12, []any{v9})
+									var v14 any = tmp13
+									_ = v14
+									var tmp15 any
+									if lang.IsTruthy(v14) {
+										var tmp16 any
+										{ // let
+											// let binding "s"
+											var v17 any = v14
+											_ = v17
+											var tmp18 any
+											tmp19 := checkDerefVar(var_glojure_DOT_core_chunked_DASH_seq_QMARK_)
+											tmp20 := lang.Apply(tmp19, []any{v17})
+											if lang.IsTruthy(tmp20) {
+												var tmp21 any
+												{ // let
+													// let binding "c"
+													tmp22 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_first)
+													tmp23 := lang.Apply(tmp22, []any{v17})
+													var v24 any = tmp23
+													_ = v24
+													// let binding "size"
+													tmp25 := checkDerefVar(var_glojure_DOT_core_int)
+													tmp26 := checkDerefVar(var_glojure_DOT_core_count)
+													tmp27 := lang.Apply(tmp26, []any{v24})
+													tmp28 := lang.Apply(tmp25, []any{tmp27})
+													var v29 any = tmp28
+													_ = v29
+													// let binding "b"
+													tmp30 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_buffer)
+													tmp31 := lang.Apply(tmp30, []any{v29})
+													var v32 any = tmp31
+													_ = v32
+													var tmp33 any
+													{ // let
+														// let binding "n__0__auto__"
+														tmp34 := checkDerefVar(var_glojure_DOT_core_long)
+														tmp35 := lang.Apply(tmp34, []any{v29})
+														var v36 any = tmp35
+														_ = v36
+														var tmp37 any
+														{ // let
+															// let binding "i"
+															var v38 any = int64(0)
+															_ = v38
+															for {
+																var tmp39 any
+																tmp40 := checkDerefVar(var_glojure_DOT_core__LT_)
+																tmp41 := lang.Apply(tmp40, []any{v38, v36})
+																if lang.IsTruthy(tmp41) {
+																	tmp42 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_append)
+																	tmp43 := checkDerefVar(var_glojure_DOT_core__PLUS_)
+																	tmp44 := lang.Apply(tmp43, []any{v8, v38})
+																	tmp45, _ := lang.FieldOrMethod(v24, "nth")
+																	if reflect.TypeOf(tmp45).Kind() != reflect.Func {
+																		panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
+																	}
+																	tmp46 := lang.Apply(tmp45, []any{v38})
+																	tmp47 := lang.Apply(v2, []any{tmp44, tmp46})
+																	tmp48 := lang.Apply(tmp42, []any{v32, tmp47})
+																	_ = tmp48
+																	tmp50 := checkDerefVar(var_glojure_DOT_core_unchecked_DASH_inc)
+																	tmp51 := lang.Apply(tmp50, []any{v38})
+																	var tmp49 any = tmp51
+																	v38 = tmp49
+																	continue
+																} else {
+																}
+																tmp37 = tmp39
+																break
+															}
+														} // end let
+														tmp33 = tmp37
+													} // end let
+													_ = tmp33
+													tmp34 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_cons)
+													tmp35 := checkDerefVar(var_glojure_DOT_core_chunk)
+													tmp36 := lang.Apply(tmp35, []any{v32})
+													tmp37 := checkDerefVar(var_glojure_DOT_core__PLUS_)
+													tmp38 := lang.Apply(tmp37, []any{v8, v29})
+													tmp39 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_rest)
+													tmp40 := lang.Apply(tmp39, []any{v17})
+													tmp41 := lang.Apply(v7, []any{tmp38, tmp40})
+													tmp42 := lang.Apply(tmp34, []any{tmp36, tmp41})
+													tmp21 = tmp42
+												} // end let
+												tmp18 = tmp21
+											} else {
+												tmp22 := checkDerefVar(var_glojure_DOT_core_cons)
+												tmp23 := checkDerefVar(var_glojure_DOT_core_first)
+												tmp24 := lang.Apply(tmp23, []any{v17})
+												tmp25 := lang.Apply(v2, []any{v8, tmp24})
+												tmp26 := checkDerefVar(var_glojure_DOT_core_inc)
+												tmp27 := lang.Apply(tmp26, []any{v8})
+												tmp28 := checkDerefVar(var_glojure_DOT_core_rest)
+												tmp29 := lang.Apply(tmp28, []any{v17})
+												tmp30 := lang.Apply(v7, []any{tmp27, tmp29})
+												tmp31 := lang.Apply(tmp22, []any{tmp25, tmp30})
+												tmp18 = tmp31
+											}
+											tmp16 = tmp18
+										} // end let
+										tmp15 = tmp16
+									} else {
+									}
+									tmp11 = tmp15
+								} // end let
+								return tmp11
+							})
+							tmp11 := lang.Apply(lang.NewLazySeq, []any{tmp10})
+							return tmp11
+						})
+						v7 = tmp6
+						_ = v7
+					}
+					v5 = tmp6
+					_ = v5
+					tmp7 := lang.Apply(v5, []any{int64(0), v3})
+					tmp4 = tmp7
+				} // end letfn
+				return tmp4
+			default:
+				checkArity(args, -1)
+				panic("unreachable")
+			}
+		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_glojure_DOT_core_map_DASH_indexed = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_glojure_DOT_core_map_DASH_indexed.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// max

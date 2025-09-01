@@ -984,8 +984,7 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 	case ast.OpDef:
 		return g.generateDef(node)
 	case ast.OpLetFn:
-		fmt.Println("LetFn not yet implemented; returning nil")
-		return "nil"
+		return g.generateLetFn(node)
 	case ast.OpGo:
 		return g.generateGo(node)
 	case ast.OpSetBang:
@@ -1291,6 +1290,42 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	} else {
 		g.writeAssign(resultId, result)
 	}
+	return resultId
+}
+
+func (g *Generator) generateLetFn(node *ast.Node) string {
+	letFnNode := node.Sub.(*ast.LetFnNode)
+
+	resultId := g.allocateTempVar()
+	g.writef("var %s any\n", resultId)
+
+	// Push a new variable scope for the letfn bindings
+	g.writef("{ // letfn\n")
+	g.pushVarScope()
+	defer func() {
+		g.popVarScope()
+		g.writef("} // end letfn\n")
+	}()
+
+	// Emit bindings directly to g.w
+	for _, binding := range letFnNode.Bindings {
+		bindingNode := binding.Sub.(*ast.BindingNode)
+		name := bindingNode.Name
+		fn := bindingNode.Init
+
+		// Allocate a Go variable for the Clojure name
+		g.writef("// letfn binding \"%s\"\n", name)
+		varName := g.allocateLocal(name.Name())
+		// declare the variable now to allow for recursion
+		g.writef("var %s lang.FnFunc\n", varName)
+		fnVar := g.generateASTNode(fn)
+		g.writeAssign(varName, fnVar)
+		g.writeAssign("_", varName) // Prevent unused variable warning
+	}
+
+	// Return the body expression (r-value)
+	result := g.generateASTNode(letFnNode.Body)
+	g.writeAssign(resultId, result)
 	return resultId
 }
 

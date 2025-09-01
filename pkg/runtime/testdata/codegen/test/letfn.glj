@@ -1,0 +1,11 @@
+(ns codegen.test.letfn)
+
+(defn
+  ^{:expected-output 55}
+  -main []
+  ;; recursive function using letfn
+  (letfn [(fib [n]
+            (if (<= n 1)
+              n
+              (+ (fib (- n 1)) (fib (- n 2)))))]
+    (fib 10)))
