@@ -114,11 +114,6 @@ func (env *environment) DefVar(sym *lang.Symbol, val interface{}) *lang.Var {
 	return v
 }
 
-func (env *environment) DefineMacro(name string, fn lang.IFn) {
-	vr := env.DefVar(lang.NewSymbol(name), fn)
-	vr.SetMacro()
-}
-
 func (env *environment) lookup(sym *lang.Symbol) (res interface{}, ok bool) {
 	v, ok := env.scope.lookup(sym)
 	if ok {

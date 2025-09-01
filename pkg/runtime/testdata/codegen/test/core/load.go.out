@@ -1273,6 +1273,7 @@ func LoadNS() {
 	sym_with_DASH_bindings := lang.NewSymbol("with-bindings")
 	sym_with_DASH_bindings_STAR_ := lang.NewSymbol("with-bindings*")
 	sym_with_DASH_in_DASH_str := lang.NewSymbol("with-in-str")
+	sym_with_DASH_init := lang.NewSymbol("with-init")
 	sym_with_DASH_loading_DASH_context := lang.NewSymbol("with-loading-context")
 	sym_with_DASH_local_DASH_vars := lang.NewSymbol("with-local-vars")
 	sym_with_DASH_meta := lang.NewSymbol("with-meta")
@@ -2790,6 +2791,8 @@ func LoadNS() {
 	var_glojure_DOT_core_with_DASH_bindings_STAR_ := lang.InternVarName(sym_glojure_DOT_core, sym_with_DASH_bindings_STAR_)
 	// var glojure.core/with-in-str
 	var_glojure_DOT_core_with_DASH_in_DASH_str := lang.InternVarName(sym_glojure_DOT_core, sym_with_DASH_in_DASH_str)
+	// var glojure.core/with-init
+	var_glojure_DOT_core_with_DASH_init := lang.InternVarName(sym_glojure_DOT_core, sym_with_DASH_init)
 	// var glojure.core/with-loading-context
 	var_glojure_DOT_core_with_DASH_loading_DASH_context := lang.InternVarName(sym_glojure_DOT_core, sym_with_DASH_loading_DASH_context)
 	// var glojure.core/with-local-vars
@@ -8051,6 +8054,14 @@ func LoadNS() {
 		var_glojure_DOT_core_when_DASH_not = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_when_DASH_not.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// with-init
+	{
+		tmp0 := sym_with_DASH_init.WithMeta(lang.NewMap(kw_file, "codegen/test/def_simple.glj", kw_line, int(7), kw_column, int(8), kw_end_DASH_line, int(7), kw_end_DASH_column, int(16), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
+		var_glojure_DOT_core_with_DASH_init = ns.InternWithValue(tmp0, int64(42), true)
+		if tmp0.Meta() != nil {
+			var_glojure_DOT_core_with_DASH_init.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// with-meta

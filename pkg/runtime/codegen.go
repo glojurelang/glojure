@@ -982,16 +982,15 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 	switch node.Op {
 	case ast.OpDef:
-		fmt.Println("Def not yet implemented; returning nil")
-		return "nil"
-	case ast.OpSetBang:
-		return g.generateSetBang(node)
+		return g.generateDef(node)
 	case ast.OpLetFn:
 		fmt.Println("LetFn not yet implemented; returning nil")
 		return "nil"
 	case ast.OpGo:
 		fmt.Println("Go not yet implemented; returning nil")
 		return "nil"
+	case ast.OpSetBang:
+		return g.generateSetBang(node)
 	case ast.OpCase:
 		return g.generateCase(node)
 	case ast.OpTry:
@@ -1048,6 +1047,31 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 	default:
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))
 	}
+}
+
+func (g *Generator) generateDef(node *ast.Node) string {
+	defNode := node.Sub.(*ast.DefNode)
+	init := defNode.Init
+	vr := defNode.Var
+	meta := defNode.Meta
+
+	vrVar := g.allocVarVar(vr.Namespace().Name().String(), vr.Symbol().String())
+	if !lang.IsNil(meta) {
+		metaVar := g.generateASTNode(meta)
+		g.writef("%s.SetMeta(%s.(lang.IPersistentMap))\n", vrVar, metaVar)
+		// SetDynamic if dynamic kw true in meta
+		g.writef("if runtime.RT.BooleanCast(lang.Get(%s, lang.KWDynamic)) {\n", metaVar)
+		g.writef("\t%s.SetDynamic()\n", vrVar)
+		g.writef("}\n")
+	}
+
+	if lang.IsNil(init) {
+		return vrVar // No initialization
+	}
+	initVar := g.generateASTNode(init)
+	g.writef("%s.BindRoot(%s)\n", vrVar, initVar)
+
+	return vrVar
 }
 
 // generateVarDeref generates code for a Var dereference

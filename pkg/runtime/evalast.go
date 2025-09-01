@@ -125,6 +125,19 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 func (env *environment) EvalASTDef(n *ast.Node) (interface{}, error) {
 	defNode := n.Sub.(*ast.DefNode)
 	init := defNode.Init
+	vr := defNode.Var
+	meta := defNode.Meta
+	if !lang.IsNil(meta) {
+		metaVal, err := env.EvalAST(meta)
+		if err != nil {
+			return nil, err
+		}
+		vr.SetMeta(metaVal.(lang.IPersistentMap))
+		// set dynamic if :dynamic true in meta
+		if RT.BooleanCast(lang.Get(vr.Meta(), lang.KWDynamic)) {
+			vr.SetDynamic()
+		}
+	}
 	if lang.IsNil(init) {
 		return defNode.Var, nil
 	}
@@ -133,26 +146,8 @@ func (env *environment) EvalASTDef(n *ast.Node) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	sym := defNode.Name
+	vr.BindRoot(initVal)
 
-	// evaluate symbol metadata if present
-	meta := defNode.Meta
-	if !lang.IsNil(meta) {
-		metaVal, err := env.EvalAST(meta)
-		if err != nil {
-			return nil, err
-		}
-		s, err := lang.WithMeta(sym, metaVal.(lang.IPersistentMap))
-		if err != nil {
-			return nil, err
-		}
-		sym = s.(*lang.Symbol)
-	}
-
-	vr := env.DefVar(sym, initVal)
-	if RT.BooleanCast(lang.Get(vr.Meta(), lang.KWDynamic)) {
-		vr.SetDynamic()
-	}
 	return vr, nil
 }
 
