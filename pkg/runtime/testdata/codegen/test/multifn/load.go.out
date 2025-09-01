@@ -26,6 +26,12 @@ func checkArity(args []any, expected int) {
 	}
 }
 
+func checkArityGTE(args []any, min int) {
+	if len(args) < min {
+		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+	}
+}
+
 // LoadNS initializes the namespace "codegen.test.multifn"
 func LoadNS() {
 	sym__PLUS_ := lang.NewSymbol("+")
@@ -100,6 +106,7 @@ func LoadNS() {
 			return tmp6
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "codegen/test/multifn.glj", kw_line, int(3), kw_column, int(44), kw_end_DASH_line, int(3), kw_end_DASH_column, int(62))).(lang.FnFunc)
+		// MultiFn add
 		tmp1 := lang.NewMultiFn("add", tmp2, kw_default, lang.FindOrCreateNamespace(sym_glojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp3 := reflect.TypeOf(int64(0))
 		var tmp4 lang.FnFunc

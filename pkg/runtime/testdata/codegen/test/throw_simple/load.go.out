@@ -26,6 +26,12 @@ func checkArity(args []any, expected int) {
 	}
 }
 
+func checkArityGTE(args []any, min int) {
+	if len(args) < min {
+		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+	}
+}
+
 // LoadNS initializes the namespace "codegen.test.throw-simple"
 func LoadNS() {
 	sym__DASH_main := lang.NewSymbol("-main")

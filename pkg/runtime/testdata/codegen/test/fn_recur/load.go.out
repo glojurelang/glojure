@@ -26,6 +26,12 @@ func checkArity(args []any, expected int) {
 	}
 }
 
+func checkArityGTE(args []any, min int) {
+	if len(args) < min {
+		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+	}
+}
+
 // LoadNS initializes the namespace "codegen.test.fn-recur"
 func LoadNS() {
 	sym__PLUS_ := lang.NewSymbol("+")
@@ -100,7 +106,7 @@ func LoadNS() {
 						_ = v7
 						v8 := args[2]
 						_ = v8
-					recur_loop_1612:
+					recur_loop_1617:
 						var tmp9 any
 						tmp10 := checkDerefVar(var_glojure_DOT_core__EQ_)
 						tmp11 := lang.Apply(tmp10, []any{v8, v2})
@@ -117,7 +123,7 @@ func LoadNS() {
 							v6 = tmp12
 							v7 = tmp13
 							v8 = tmp16
-							goto recur_loop_1612
+							goto recur_loop_1617
 						}
 						return tmp9
 					})

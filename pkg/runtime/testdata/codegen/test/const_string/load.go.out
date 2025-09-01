@@ -26,6 +26,12 @@ func checkArity(args []any, expected int) {
 	}
 }
 
+func checkArityGTE(args []any, min int) {
+	if len(args) < min {
+		panic(lang.NewIllegalArgumentError("wrong number of arguments (" + fmt.Sprint(len(args)) + ")"))
+	}
+}
+
 // LoadNS initializes the namespace "codegen.test.const-string"
 func LoadNS() {
 	sym_codegen_DOT_test_DOT_const_DASH_string := lang.NewSymbol("codegen.test.const-string")

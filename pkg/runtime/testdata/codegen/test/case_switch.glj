@@ -1,0 +1,18 @@
+(ns codegen.test.case-switch)
+
+(defn case-test [x]
+  (case x
+    1 :one
+    2 :two
+    3 :three
+    :other))
+
+(defn case-test-throw [x]
+  (try
+    (case x
+      1 :nope)
+    (catch go/any e
+      :caught)))
+
+(defn ^{:expected-output [:two :other :caught]} -main []
+  [(case-test 2) (case-test 42) (case-test-throw 42)])

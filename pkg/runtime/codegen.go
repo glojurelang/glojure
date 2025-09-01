@@ -764,8 +764,6 @@ func (g *Generator) generateSetValue(s lang.IPersistentSet) string {
 }
 
 func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
-	fmt.Println("Generating MultiFn:", mf.GetName())
-
 	// Allocate a variable for the MultiFn
 	mfVar := g.allocateTempVar()
 
@@ -986,8 +984,7 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		fmt.Println("Go not yet implemented; returning nil")
 		return "nil"
 	case ast.OpCase:
-		fmt.Println("Case not yet implemented; returning nil")
-		return "nil"
+		return g.generateCase(node)
 	case ast.OpTry:
 		return g.generateTry(node)
 	case ast.OpThrow:
@@ -1040,7 +1037,6 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 	case ast.OpNew:
 		return g.generateNew(node)
 	default:
-		fmt.Printf("Generating code for AST node: %T %+v\n", node.Sub, node.Sub)
 		panic(fmt.Sprintf("unsupported AST node type %T", node.Sub))
 	}
 }
@@ -1132,6 +1128,55 @@ func (g *Generator) generateIf(node *ast.Node) string {
 	g.writef("}\n")
 
 	// Return the r-value
+	return resultVar
+}
+
+func (g *Generator) generateCase(node *ast.Node) string {
+	caseNode := node.Sub.(*ast.CaseNode)
+
+	testExpr := g.generateASTNode(caseNode.Test)
+	resultVar := g.allocateTempVar()
+
+	g.writef("// case\n")
+	g.writef("var %s any\n", resultVar)
+	// implement as if-else chain; evaluation of case clauses is order-dependent
+	// case tests are evaluated lazily, so we need to generate them in the if conditions
+	// moreover, the text expressions may produce multiple statements, so we need to generate them inline
+	// therefore we can't use a switch statement or || operator
+	// instead we generate a series of if-else statements
+	// each test expression is compared to the testExpr using lang.Equals
+	// if a test matches, we evaluate the corresponding body and assign to resultVar
+	// if no tests match, we evaluate the default body (if any) and assign to resultVar
+	// if no default body, panic
+	first := true
+	for i, node := range caseNode.Nodes {
+		caseNodeNode := node.Sub.(*ast.CaseNodeNode)
+		tests := caseNodeNode.Tests
+		g.writef("// case clause %d\n", i)
+		for _, test := range tests {
+			caseTestExpr := g.generateASTNode(test)
+			if first {
+				g.writef("if lang.Equals(%s, %s) {\n", testExpr, caseTestExpr)
+				first = false
+			} else {
+				g.writef("} else if lang.Equals(%s, %s) {\n", testExpr, caseTestExpr)
+			}
+			// Generate the then body
+			thenExpr := g.generateASTNode(caseNodeNode.Then)
+			g.writeAssign(resultVar, thenExpr)
+		}
+	}
+	if caseNode.Default != nil {
+		g.writef("} else {\n")
+		defaultExpr := g.generateASTNode(caseNode.Default)
+		g.writeAssign(resultVar, defaultExpr)
+		g.writef("}\n")
+	} else {
+		g.writef("} else {\n")
+		g.writef("  panic(fmt.Sprintf(\"no matching case clause: %%v\", %s))\n", testExpr)
+		g.writef("}\n")
+	}
+
 	return resultVar
 }
 
