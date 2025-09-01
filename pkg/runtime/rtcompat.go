@@ -175,6 +175,7 @@ func (rt *RTMethods) Load(scriptBase string) {
 	}
 	ReadEval(string(buf), WithFilename(filename))
 
+	// if compileFiles is set, compile the namespace to a .go file
 	compileFiles := VarCompileFiles.Get().(bool)
 	if !compileFiles {
 		return
