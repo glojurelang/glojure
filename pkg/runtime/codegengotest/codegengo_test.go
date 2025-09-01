@@ -214,13 +214,13 @@ import (
 	"fmt"
 	"os"
 
-	"testprog/{{.PkgName}}"
+	testpkg "testprog/{{.PkgName}}"
 	"github.com/glojurelang/glojure/pkg/lang"
   _ "github.com/glojurelang/glojure/pkg/glj"
 )
 
 func main() {
-	{{.PkgName}}.LoadNS()
+	testpkg.LoadNS()
 
 	ns := lang.FindNamespace(lang.NewSymbol("{{.NsName}}"))
 	if ns == nil {
