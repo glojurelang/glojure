@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -468,6 +469,11 @@ func (g *Generator) generateValue(value any) string {
 		return fmt.Sprintf("int64(%d)", v)
 	case float64:
 		return fmt.Sprintf("float64(%g)", v)
+	case float32:
+		return fmt.Sprintf("float32(%g)", v)
+	case time.Duration:
+		alias := g.addImportWithAlias("time")
+		return fmt.Sprintf("%s.Duration(%d)", alias, int64(v))
 	case *lang.BigDecimal:
 		return g.generateBigDecimalValue(v)
 	case bool:
@@ -517,10 +523,14 @@ func (g *Generator) generateTypeValue(t reflect.Type) string {
 // generateZeroValueExpr generates a Go expression that creates a zero value
 // of the given type, handling package imports as needed
 func (g *Generator) generateZeroValueExpr(t reflect.Type) string {
-	// TODO: review this LLM slop
+	// TODO: review this LLM slop. for numeric types, return the type
+	// cast of 0 with the (possibly aliased) type name
 	switch {
 	case t == reflect.TypeOf(lang.NewChar('a')):
 		return "lang.NewChar(0)"
+	case t == reflect.TypeOf(time.Duration(0)):
+		alias := g.addImportWithAlias("time")
+		return fmt.Sprintf("%s.Duration(0)", alias)
 	}
 
 	switch t.Kind() {
@@ -975,8 +985,7 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		fmt.Println("Def not yet implemented; returning nil")
 		return "nil"
 	case ast.OpSetBang:
-		fmt.Println("SetBang not yet implemented; returning nil")
-		return "nil"
+		return g.generateSetBang(node)
 	case ast.OpLetFn:
 		fmt.Println("LetFn not yet implemented; returning nil")
 		return "nil"
@@ -1469,6 +1478,7 @@ var (
 		"java.io.StringReader":                     true,
 		"java.util.concurrent.CountDownLatch":      true,
 		"java.util.concurrent":                     true,
+		"java.lang":                                true,
 	}
 )
 
@@ -1489,6 +1499,10 @@ func (g *Generator) generateMaybeClass(node *ast.Node) string {
 		}
 	}
 
+	return g.generateGoExportedName(pkg)
+}
+
+func (g *Generator) generateGoExportedName(pkg string) string {
 	// find last dot in the package name
 	dotIndex := strings.LastIndex(pkg, ".")
 	if dotIndex == -1 {
@@ -1510,6 +1524,11 @@ func (g *Generator) generateMaybeClass(node *ast.Node) string {
 	}
 	alias := g.addImportWithAlias(packageName)
 
+	if strings.HasPrefix(exportedName, "*") {
+		// pointers look like package.*Type
+		exportedName = exportedName[1:]
+		alias = "*" + alias
+	}
 	return alias + "." + exportedName
 }
 
@@ -1588,28 +1607,106 @@ func (g *Generator) generateTheVar(node *ast.Node) string {
 	return resultId
 }
 
+// generateSetBang generates code for a set! operation
+func (g *Generator) generateSetBang(node *ast.Node) string {
+	setBangNode := node.Sub.(*ast.SetBangNode)
+
+	// Generate the value expression
+	valExpr := g.generateASTNode(setBangNode.Val)
+
+	// Handle the target
+	target := setBangNode.Target
+	switch target.Op {
+	case ast.OpVar:
+		// Setting a Var
+		varNode := target.Sub.(*ast.VarNode)
+		varNamespace := varNode.Var.Namespace()
+		varSymbol := varNode.Var.Symbol()
+
+		// Look up the var variable
+		varId := g.allocVarVar(varNamespace.Name().String(), varSymbol.String())
+
+		// Call Set on the Var and return the value
+		resultId := g.allocateTempVar()
+		g.writef("%s := %s.Set(%s)\n", resultId, varId, valExpr)
+		return resultId
+
+	case ast.OpHostInterop:
+		// Setting a host field
+		interopNode := target.Sub.(*ast.HostInteropNode)
+		tgt := interopNode.Target
+		targetExpr := g.generateASTNode(tgt)
+		field := interopNode.MOrF
+
+		resultId := g.allocateTempVar()
+
+		// Generate reflection-based field setting
+		g.writef("// set! host field\n")
+		g.writef("var %s any\n", resultId)
+		g.writef("{\n")
+		g.writef("  targetV := reflect.ValueOf(%s)\n", targetExpr)
+		g.writef("  if targetV.Kind() == reflect.Ptr {\n")
+		g.writef("    targetV = targetV.Elem()\n")
+		g.writef("  }\n")
+		g.writef("  fieldVal := targetV.FieldByName(%q)\n", field.Name())
+		g.writef("  if !fieldVal.IsValid() {\n")
+		g.writef("    panic(fmt.Errorf(\"no such field %s\"))\n", field.Name())
+		g.writef("  }\n")
+		g.writef("  if !fieldVal.CanSet() {\n")
+		g.writef("    panic(fmt.Errorf(\"cannot set field %s\"))\n", field.Name())
+		g.writef("  }\n")
+		g.writef("  valV := reflect.ValueOf(%s)\n", valExpr)
+		g.writef("  if !valV.IsValid() {\n")
+		g.writef("    switch fieldVal.Kind() {\n")
+		g.writef("    case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:\n")
+		g.writef("      fieldVal.Set(reflect.Zero(fieldVal.Type()))\n")
+		g.writef("    default:\n")
+		g.writef("      panic(fmt.Errorf(\"cannot set field %s to nil\"))\n", field.Name())
+		g.writef("    }\n")
+		g.writef("  } else {\n")
+		g.writef("    fieldVal.Set(valV)\n")
+		g.writef("  }\n")
+		g.writef("  %s = %s\n", resultId, valExpr)
+		g.writef("}\n")
+		return resultId
+
+	default:
+		//return fmt.Sprintf("%q", "unimplemented: set! target type")
+		return `"unimplemented: set! target type"`
+		//panic(fmt.Sprintf("unsupported set! target: %v", target.Op))
+	}
+}
+
 func (g *Generator) generateNew(node *ast.Node) string {
 	newNode := node.Sub.(*ast.NewNode)
 
 	// the interpreter is more lax; it allows for expressions that evaluate to a type
 	// here we assume the class is a constant type. clojure's new form is similar
-	constNode, ok := newNode.Class.Sub.(*ast.ConstNode)
-	if !ok {
-		fmt.Println("Warning: glojure codegen only supports new with constant class types.")
+	switch sub := newNode.Class.Sub.(type) {
+	case *ast.ConstNode:
+		class, ok := sub.Value.(reflect.Type)
+		if !ok {
+			fmt.Printf("Warning: glojure codegen only supports new with constant class types. Got %T\n", sub.Value)
+			return fmt.Sprintf("%q", "unimplemented: new with non-constant class type")
+		}
+		// generate a reflect.Type for the class
+		classId := g.generateValue(class)
+		resultId := g.allocateTempVar()
+		g.writef("%s := reflect.New(%s).Interface()\n", resultId, classId)
+		return resultId
+	case *ast.MaybeClassNode:
+		resultId := g.allocateTempVar()
+		className := g.generateGoExportedName(sub.Class.(*lang.Symbol).FullName())
+		if className == "nil" {
+			fmt.Printf("Failed to resolve class for new, generating nil: %v\n", sub.Class)
+			return "nil"
+		}
+		g.writef("%s := new(%s)\n", resultId, className)
+		return resultId
+	default:
+		fmt.Printf("Warning: glojure codegen only supports new with constant class types. Got %T\n", newNode.Class.Sub)
 		return fmt.Sprintf("%q", "unimplemented: new with non-constant class type")
 	}
-
-	class, ok := constNode.Value.(reflect.Type)
-	if !ok {
-		fmt.Println("Warning: glojure codegen only supports new with constant class types.")
-		return fmt.Sprintf("%q", "unimplemented: new with non-constant class type")
-	}
-
-	// generate a reflect.Type for the class
-	classId := g.generateValue(class)
-	resultId := g.allocateTempVar()
-	g.writef("%s := reflect.New(%s).Interface()\n", resultId, classId)
-	return resultId
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1947,7 +2044,12 @@ func isRuntimeOwnedVar(v *lang.Var) bool {
 }
 
 func getWellKnownFunctionName(fn any) (string, bool) {
-	ptr := reflect.ValueOf(fn).Pointer()
+	val := reflect.ValueOf(fn)
+	// ensure it's a function
+	if val.Kind() != reflect.Func {
+		return "", false
+	}
+	ptr := val.Pointer()
 	name, ok := wellKnownFunctions[ptr]
 	return name, ok
 }

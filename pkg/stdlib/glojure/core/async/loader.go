@@ -393,9 +393,38 @@ func LoadNS() {
 			var tmp2 any
 			{ // let
 				// let binding "def"
-				var v3 any = "unimplemented: new with non-constant class type"
-				_ = v3
-				tmp2 = v3
+				tmp3 := new(reflect.SelectCase)
+				var v4 any = tmp3
+				_ = v4
+				// set! host field
+				var tmp5 any
+				{
+					targetV := reflect.ValueOf(v4)
+					if targetV.Kind() == reflect.Ptr {
+						targetV = targetV.Elem()
+					}
+					fieldVal := targetV.FieldByName("Dir")
+					if !fieldVal.IsValid() {
+						panic(fmt.Errorf("no such field Dir"))
+					}
+					if !fieldVal.CanSet() {
+						panic(fmt.Errorf("cannot set field Dir"))
+					}
+					valV := reflect.ValueOf(reflect.SelectDefault)
+					if !valV.IsValid() {
+						switch fieldVal.Kind() {
+						case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+							fieldVal.Set(reflect.Zero(fieldVal.Type()))
+						default:
+							panic(fmt.Errorf("cannot set field Dir to nil"))
+						}
+					} else {
+						fieldVal.Set(valV)
+					}
+					tmp5 = reflect.SelectDefault
+				}
+				_ = tmp5
+				tmp2 = v4
 			} // end let
 			return tmp2
 		})
@@ -1806,14 +1835,106 @@ func LoadNS() {
 				var v14 any = tmp11
 				_ = v14
 				// let binding "select-case"
-				var v15 any = "unimplemented: new with non-constant class type"
-				_ = v15
-				var tmp16 any
+				tmp15 := new(reflect.SelectCase)
+				var v16 any = tmp15
+				_ = v16
+				tmp17 := lang.Apply(reflect.ValueOf, []any{v10})
+				// set! host field
+				var tmp18 any
+				{
+					targetV := reflect.ValueOf(v16)
+					if targetV.Kind() == reflect.Ptr {
+						targetV = targetV.Elem()
+					}
+					fieldVal := targetV.FieldByName("Chan")
+					if !fieldVal.IsValid() {
+						panic(fmt.Errorf("no such field Chan"))
+					}
+					if !fieldVal.CanSet() {
+						panic(fmt.Errorf("cannot set field Chan"))
+					}
+					valV := reflect.ValueOf(tmp17)
+					if !valV.IsValid() {
+						switch fieldVal.Kind() {
+						case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+							fieldVal.Set(reflect.Zero(fieldVal.Type()))
+						default:
+							panic(fmt.Errorf("cannot set field Chan to nil"))
+						}
+					} else {
+						fieldVal.Set(valV)
+					}
+					tmp18 = tmp17
+				}
+				_ = tmp18
+				var tmp19 any
 				if lang.IsTruthy(v8) {
+					tmp19 = reflect.SelectSend
+				} else {
+					tmp19 = reflect.SelectRecv
+				}
+				// set! host field
+				var tmp20 any
+				{
+					targetV := reflect.ValueOf(v16)
+					if targetV.Kind() == reflect.Ptr {
+						targetV = targetV.Elem()
+					}
+					fieldVal := targetV.FieldByName("Dir")
+					if !fieldVal.IsValid() {
+						panic(fmt.Errorf("no such field Dir"))
+					}
+					if !fieldVal.CanSet() {
+						panic(fmt.Errorf("cannot set field Dir"))
+					}
+					valV := reflect.ValueOf(tmp19)
+					if !valV.IsValid() {
+						switch fieldVal.Kind() {
+						case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+							fieldVal.Set(reflect.Zero(fieldVal.Type()))
+						default:
+							panic(fmt.Errorf("cannot set field Dir to nil"))
+						}
+					} else {
+						fieldVal.Set(valV)
+					}
+					tmp20 = tmp19
+				}
+				_ = tmp20
+				var tmp21 any
+				if lang.IsTruthy(v8) {
+					// set! host field
+					var tmp22 any
+					{
+						targetV := reflect.ValueOf(v16)
+						if targetV.Kind() == reflect.Ptr {
+							targetV = targetV.Elem()
+						}
+						fieldVal := targetV.FieldByName("Send")
+						if !fieldVal.IsValid() {
+							panic(fmt.Errorf("no such field Send"))
+						}
+						if !fieldVal.CanSet() {
+							panic(fmt.Errorf("cannot set field Send"))
+						}
+						valV := reflect.ValueOf(v14)
+						if !valV.IsValid() {
+							switch fieldVal.Kind() {
+							case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+								fieldVal.Set(reflect.Zero(fieldVal.Type()))
+							default:
+								panic(fmt.Errorf("cannot set field Send to nil"))
+							}
+						} else {
+							fieldVal.Set(valV)
+						}
+						tmp22 = v14
+					}
+					tmp21 = tmp22
 				} else {
 				}
-				_ = tmp16
-				tmp3 = v15
+				_ = tmp21
+				tmp3 = v16
 			} // end let
 			return tmp3
 		})
@@ -1967,86 +2088,171 @@ func LoadNS() {
 			var tmp3 any
 			{ // let
 				// let binding "sc"
-				var v4 any = "unimplemented: new with non-constant class type"
-				_ = v4
-				// let binding "_"
-				var v5 any = nil
+				tmp4 := new(reflect.SelectCase)
+				var v5 any = tmp4
 				_ = v5
-				// let binding "def"
-				var v6 any = "unimplemented: new with non-constant class type"
-				_ = v6
 				// let binding "_"
-				var v7 any = nil
-				_ = v7
+				// set! host field
+				var tmp6 any
+				{
+					targetV := reflect.ValueOf(v5)
+					if targetV.Kind() == reflect.Ptr {
+						targetV = targetV.Elem()
+					}
+					fieldVal := targetV.FieldByName("Dir")
+					if !fieldVal.IsValid() {
+						panic(fmt.Errorf("no such field Dir"))
+					}
+					if !fieldVal.CanSet() {
+						panic(fmt.Errorf("cannot set field Dir"))
+					}
+					valV := reflect.ValueOf(reflect.SelectRecv)
+					if !valV.IsValid() {
+						switch fieldVal.Kind() {
+						case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+							fieldVal.Set(reflect.Zero(fieldVal.Type()))
+						default:
+							panic(fmt.Errorf("cannot set field Dir to nil"))
+						}
+					} else {
+						fieldVal.Set(valV)
+					}
+					tmp6 = reflect.SelectRecv
+				}
+				_ = tmp6
+				tmp7 := lang.Apply(reflect.ValueOf, []any{v2})
+				// set! host field
+				var tmp8 any
+				{
+					targetV := reflect.ValueOf(v5)
+					if targetV.Kind() == reflect.Ptr {
+						targetV = targetV.Elem()
+					}
+					fieldVal := targetV.FieldByName("Chan")
+					if !fieldVal.IsValid() {
+						panic(fmt.Errorf("no such field Chan"))
+					}
+					if !fieldVal.CanSet() {
+						panic(fmt.Errorf("cannot set field Chan"))
+					}
+					valV := reflect.ValueOf(tmp7)
+					if !valV.IsValid() {
+						switch fieldVal.Kind() {
+						case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+							fieldVal.Set(reflect.Zero(fieldVal.Type()))
+						default:
+							panic(fmt.Errorf("cannot set field Chan to nil"))
+						}
+					} else {
+						fieldVal.Set(valV)
+					}
+					tmp8 = tmp7
+				}
+				var v9 any = tmp8
+				_ = v9
+				// let binding "def"
+				tmp10 := new(reflect.SelectCase)
+				var v11 any = tmp10
+				_ = v11
+				// let binding "_"
+				// set! host field
+				var tmp12 any
+				{
+					targetV := reflect.ValueOf(v11)
+					if targetV.Kind() == reflect.Ptr {
+						targetV = targetV.Elem()
+					}
+					fieldVal := targetV.FieldByName("Dir")
+					if !fieldVal.IsValid() {
+						panic(fmt.Errorf("no such field Dir"))
+					}
+					if !fieldVal.CanSet() {
+						panic(fmt.Errorf("cannot set field Dir"))
+					}
+					valV := reflect.ValueOf(reflect.SelectDefault)
+					if !valV.IsValid() {
+						switch fieldVal.Kind() {
+						case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+							fieldVal.Set(reflect.Zero(fieldVal.Type()))
+						default:
+							panic(fmt.Errorf("cannot set field Dir to nil"))
+						}
+					} else {
+						fieldVal.Set(valV)
+					}
+					tmp12 = reflect.SelectDefault
+				}
+				var v13 any = tmp12
+				_ = v13
 				// let binding "vec__1024"
-				tmp8 := checkDerefVar(var_glojure_DOT_core_map)
-				tmp9 := lang.NewVector(v4, v6)
-				tmp10 := lang.NewMap(kw_file, "glojure/core/async.glj", kw_line, int(138), kw_column, int(55), kw_end_DASH_line, int(138), kw_end_DASH_column, int(62))
-				tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
+				tmp14 := checkDerefVar(var_glojure_DOT_core_map)
+				tmp15 := lang.NewVector(v5, v11)
+				tmp16 := lang.NewMap(kw_file, "glojure/core/async.glj", kw_line, int(138), kw_column, int(55), kw_end_DASH_line, int(138), kw_end_DASH_column, int(62))
+				tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp12 := lang.Apply(tmp8, []any{lang.Builtins["deref"], tmp11})
-				tmp13 := lang.Apply(reflect.Select, []any{tmp12})
-				var v14 any = tmp13
-				_ = v14
-				// let binding "chosen"
-				tmp15 := checkDerefVar(var_glojure_DOT_core_nth)
-				tmp16 := lang.Apply(tmp15, []any{v14, int64(0), nil})
-				var v17 any = tmp16
-				_ = v17
-				// let binding "val"
-				tmp18 := checkDerefVar(var_glojure_DOT_core_nth)
-				tmp19 := lang.Apply(tmp18, []any{v14, int64(1), nil})
+				tmp18 := lang.Apply(tmp14, []any{lang.Builtins["deref"], tmp17})
+				tmp19 := lang.Apply(reflect.Select, []any{tmp18})
 				var v20 any = tmp19
 				_ = v20
-				// let binding "ok"
+				// let binding "chosen"
 				tmp21 := checkDerefVar(var_glojure_DOT_core_nth)
-				tmp22 := lang.Apply(tmp21, []any{v14, int64(2), nil})
+				tmp22 := lang.Apply(tmp21, []any{v20, int64(0), nil})
 				var v23 any = tmp22
 				_ = v23
-				var tmp24 any
-				tmp25 := checkDerefVar(var_glojure_DOT_core__EQ_)
-				tmp26 := lang.Apply(tmp25, []any{int64(1), v17})
-				if lang.IsTruthy(tmp26) {
+				// let binding "val"
+				tmp24 := checkDerefVar(var_glojure_DOT_core_nth)
+				tmp25 := lang.Apply(tmp24, []any{v20, int64(1), nil})
+				var v26 any = tmp25
+				_ = v26
+				// let binding "ok"
+				tmp27 := checkDerefVar(var_glojure_DOT_core_nth)
+				tmp28 := lang.Apply(tmp27, []any{v20, int64(2), nil})
+				var v29 any = tmp28
+				_ = v29
+				var tmp30 any
+				tmp31 := checkDerefVar(var_glojure_DOT_core__EQ_)
+				tmp32 := lang.Apply(tmp31, []any{int64(1), v23})
+				if lang.IsTruthy(tmp32) {
 				} else {
-					var tmp27 any
-					if lang.IsTruthy(v23) {
-						tmp28, ok := lang.FieldOrMethod(v20, "Interface")
+					var tmp33 any
+					if lang.IsTruthy(v29) {
+						tmp34, ok := lang.FieldOrMethod(v26, "Interface")
 						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v20, "Interface")))
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v26, "Interface")))
 						}
-						var tmp29 any
-						switch reflect.TypeOf(tmp28).Kind() {
+						var tmp35 any
+						switch reflect.TypeOf(tmp34).Kind() {
 						case reflect.Func:
-							tmp29 = lang.Apply(tmp28, nil)
+							tmp35 = lang.Apply(tmp34, nil)
 						default:
-							tmp29 = tmp28
+							tmp35 = tmp34
 						}
-						tmp30 := lang.NewVector(tmp29, true)
-						tmp31 := lang.NewMap(kw_file, "glojure/core/async.glj", kw_line, int(140), kw_column, int(14), kw_end_DASH_line, int(140), kw_end_DASH_column, int(36))
-						tmp32, err := lang.WithMeta(tmp30, tmp31.(lang.IPersistentMap))
+						tmp36 := lang.NewVector(tmp35, true)
+						tmp37 := lang.NewMap(kw_file, "glojure/core/async.glj", kw_line, int(140), kw_column, int(14), kw_end_DASH_line, int(140), kw_end_DASH_column, int(36))
+						tmp38, err := lang.WithMeta(tmp36, tmp37.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
 						}
-						tmp27 = tmp32
+						tmp33 = tmp38
 					} else {
-						var tmp33 any
+						var tmp39 any
 						if lang.IsTruthy(kw_else) {
-							tmp34 := lang.NewVector(nil, false)
-							tmp35 := lang.NewMap(kw_file, "glojure/core/async.glj", kw_line, int(141), kw_column, int(17), kw_end_DASH_line, int(141), kw_end_DASH_column, int(27))
-							tmp36, err := lang.WithMeta(tmp34, tmp35.(lang.IPersistentMap))
+							tmp40 := lang.NewVector(nil, false)
+							tmp41 := lang.NewMap(kw_file, "glojure/core/async.glj", kw_line, int(141), kw_column, int(17), kw_end_DASH_line, int(141), kw_end_DASH_column, int(27))
+							tmp42, err := lang.WithMeta(tmp40, tmp41.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp33 = tmp36
+							tmp39 = tmp42
 						} else {
 						}
-						tmp27 = tmp33
+						tmp33 = tmp39
 					}
-					tmp24 = tmp27
+					tmp30 = tmp33
 				}
-				tmp3 = tmp24
+				tmp3 = tmp30
 			} // end let
 			return tmp3
 		})

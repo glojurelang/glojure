@@ -298,6 +298,8 @@
                   '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentStructMap s inits))
    (sexpr-replace '(. clojure.lang.PersistentStructMap (construct s vals))
                   '(github.com$glojurelang$glojure$pkg$lang.ConstructPersistentStructMap s vals))
+   (sexpr-replace '(. clojure.lang.PersistentStructMap (getAccessor s key))
+                  '(github.com$glojurelang$glojure$pkg$lang.GetPersistentStructMapAccessor s key))
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
    (sexpr-replace '(.. (name lib)
@@ -735,7 +737,7 @@
                         (catch Exception e false)))
     (fn visit [zloc] (z/replace zloc
                                 (let [sym (-> zloc z/sexpr str)]
-                                  (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
+                                  (symbol (str (first sym) (subs sym 1))))))]
    (sexpr-splice-replace 'clojure.lang.Numbers/gt
                          ['.Gt 'github.com$glojurelang$glojure$pkg$lang.Numbers])
 

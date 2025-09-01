@@ -860,9 +860,9 @@
 (defn zero?
   "Returns true if num is zero, else false"
   {
-   :inline (fn [num] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (IsZero ~num)))
+   :inline (fn [num] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (isZero ~num)))
    :added "1.0"}
-  [num] (. github.com$glojurelang$glojure$pkg$lang.Numbers (IsZero num)))
+  [num] (. github.com$glojurelang$glojure$pkg$lang.Numbers (isZero num)))
 
 (defn count
   "Returns the number of items in the collection. (count nil) returns
@@ -893,11 +893,11 @@
 (defn <
   "Returns non-nil if nums are in monotonically increasing order,
   otherwise false."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Lt ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (lt ~x ~y)))
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Lt x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (lt x y)))
   ([x y & more]
    (if (< x y)
      (if (next more)
@@ -908,16 +908,16 @@
 (defn inc'
   "Returns a number one greater than num. Supports arbitrary precision.
   See also: inc"
-  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (IncP ~x)))
+  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (incP ~x)))
    :added "1.0"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (IncP x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (incP x)))
 
 (defn inc
   "Returns a number one greater than num. Does not auto-promote
   longs, will throw on overflow. See also: inc'"
   {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (~(if *unchecked-math* 'unchecked_inc 'inc) ~x)))
    :added "1.2"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Inc x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (inc x)))
 
 ;; reduce is defined again later after InternalReduce loads
 (defn ^:private ^:static
@@ -959,8 +959,8 @@
              (fn [a b] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (~op ~a ~b)))
              `(. github.com$glojurelang$glojure$pkg$lang.Numbers (~op ~x ~y)) more))))))
 
-(defn ^:private >1? [n] (.Gt github.com$glojurelang$glojure$pkg$lang.Numbers N 1))
-(defn ^:private >0? [n] (.Gt github.com$glojurelang$glojure$pkg$lang.Numbers N 0))
+(defn ^:private >1? [n] (.Gt github.com$glojurelang$glojure$pkg$lang.Numbers n 1))
+(defn ^:private >0? [n] (.Gt github.com$glojurelang$glojure$pkg$lang.Numbers n 0))
 
 (defn +'
   "Returns the sum of nums. (+') returns 0. Supports arbitrary precision.
@@ -970,7 +970,7 @@
    :added "1.0"}
   ([] 0)
   ([x] (github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (AddP x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (addP x y)))
   ([x y & more]
    (reduce1 +' (+' x y) more)))
 
@@ -982,7 +982,7 @@
    :added "1.2"}
   ([] 0)
   ([x] (github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Add x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (add x y)))
   ([x y & more]
      (reduce1 + (+ x y) more)))
 
@@ -994,7 +994,7 @@
    :added "1.0"}
   ([] 1)
   ([x] (github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (MultiplyP x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (multiplyP x y)))
   ([x y & more]
    (reduce1 *' (*' x y) more)))
 
@@ -1006,7 +1006,7 @@
    :added "1.2"}
   ([] 1)
   ([x] (github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Multiply x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (multiply x y)))
   ([x y & more]
      (reduce1 * (* x y) more)))
 
@@ -1017,7 +1017,7 @@
    :inline-arities >1?
    :added "1.0"}
   ([x] (/ 1 x))
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Divide x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (divide x y)))
   ([x y & more]
    (reduce1 / (/ x y) more)))
 
@@ -1029,7 +1029,7 @@
    :inline-arities >0?
    :added "1.0"}
   ([x] (*' -1 x))
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (MinusP x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (minusP x y)))
   ([x y & more]
    (reduce1 -' (-' x y) more)))
 
@@ -1041,18 +1041,18 @@
    :inline-arities >0?
    :added "1.2"}
   ([x] (* -1 x))
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Minus x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (minus x y)))
   ([x y & more]
      (reduce1 - (- x y) more)))
 
 (defn <=
   "Returns non-nil if nums are in monotonically non-decreasing order,
   otherwise false."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Lte ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (lte ~x ~y)))
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Lte x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (lte x y)))
   ([x y & more]
    (if (<= x y)
      (if (next more)
@@ -1063,11 +1063,11 @@
 (defn >
   "Returns non-nil if nums are in monotonically decreasing order,
   otherwise false."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Gt ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (gt ~x ~y)))
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Gt x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (gt x y)))
   ([x y & more]
    (if (> x y)
      (if (next more)
@@ -1078,11 +1078,11 @@
 (defn >=
   "Returns non-nil if nums are in monotonically non-increasing order,
   otherwise false."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Gte ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (gte ~x ~y)))
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Gte x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (gte x y)))
   ([x y & more]
    (if (>= x y)
      (if (next more)
@@ -1093,11 +1093,11 @@
 (defn ==
   "Returns non-nil if nums all have the equivalent
   value (type-independent), otherwise false"
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Equiv ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (equiv ~x ~y)))
    :inline-arities #{2}
    :added "1.0"}
   ([x] true)
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Equiv x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (equiv x y)))
   ([x y & more]
    (if (== x y)
      (if (next more)
@@ -1111,7 +1111,7 @@
    :inline-arities >1?
    :inline (nary-inline 'max)}
   ([x] x)
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Max x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (max x y)))
   ([x y & more]
    (reduce1 max (max x y) more)))
 
@@ -1121,7 +1121,7 @@
    :inline-arities >1?
    :inline (nary-inline 'min)}
   ([x] x)
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Min x y)))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (min x y)))
   ([x y & more]
    (reduce1 min (min x y) more)))
 
@@ -1140,159 +1140,159 @@
 (defn dec'
   "Returns a number one less than num. Supports arbitrary precision.
   See also: dec"
-  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (DecP ~x)))
+  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (decP ~x)))
    :added "1.0"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (DecP x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (decP x)))
 
 (defn dec
   "Returns a number one less than num. Does not auto-promote
   longs, will throw on overflow. See also: dec'"
   {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (~(if *unchecked-math* 'unchecked_dec 'dec) ~x)))
    :added "1.2"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Dec x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (dec x)))
 
 (defn unchecked-inc-int
   "Returns a number one greater than x, an int.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_inc ~x)))
+  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_inc ~x)))
    :added "1.0"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_inc x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_inc x)))
 
 (defn unchecked-inc
   "Returns a number one greater than x, a long.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_inc ~x)))
+  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_inc ~x)))
    :added "1.0"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_inc x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_inc x)))
 
 (defn unchecked-dec-int
   "Returns a number one less than x, an int.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_dec ~x)))
+  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_dec ~x)))
    :added "1.0"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_dec x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_dec x)))
 
 (defn unchecked-dec
   "Returns a number one less than x, a long.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedDec ~x)))
+  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_dec ~x)))
    :added "1.0"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedDec x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_dec x)))
 
 (defn unchecked-negate-int
   "Returns the negation of x, an int.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_negate ~x)))
+  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_negate ~x)))
    :added "1.0"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_negate x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_negate x)))
 
 (defn unchecked-negate
   "Returns the negation of x, a long.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_minus ~x)))
+  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_minus ~x)))
    :added "1.0"}
   [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_negate x)))
 
 (defn unchecked-add-int
   "Returns the sum of x and y, both int.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_add ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_add ~x ~y)))
    :added "1.0"}
-  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_add x y)))
+  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_add x y)))
 
 (defn unchecked-add
   "Returns the sum of x and y, both long.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedAdd ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_add ~x ~y)))
    :added "1.0"}
-  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedAdd x y)))
+  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_add x y)))
 
 (defn unchecked-subtract-int
   "Returns the difference of x and y, both int.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_subtract ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_subtract ~x ~y)))
    :added "1.0"}
-  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_subtract x y)))
+  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_subtract x y)))
 
 (defn unchecked-subtract
   "Returns the difference of x and y, both long.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_minus ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_minus ~x ~y)))
    :added "1.0"}
-  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_minus x y)))
+  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_minus x y)))
 
 (defn unchecked-multiply-int
   "Returns the product of x and y, both int.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_multiply ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_multiply ~x ~y)))
    :added "1.0"}
-  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_multiply x y)))
+  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_multiply x y)))
 
 (defn unchecked-multiply
   "Returns the product of x and y, both long.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_multiply ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_multiply ~x ~y)))
    :added "1.0"}
-  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_multiply x y)))
+  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_multiply x y)))
 
 (defn unchecked-divide-int
   "Returns the division of x by y, both int.
   Note - uses a primitive operator subject to truncation."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedIntDivide ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_divide ~x ~y)))
    :added "1.0"}
-  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedIntDivide x y)))
+  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_divide x y)))
 
 (defn unchecked-remainder-int
   "Returns the remainder of division of x by y, both int.
   Note - uses a primitive operator subject to truncation."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_remainder ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_remainder ~x ~y)))
    :added "1.0"}
-  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Unchecked_int_remainder x y)))
+  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_remainder x y)))
 
 (defn pos?
   "Returns true if num is greater than zero, else false"
   {
-   :inline (fn [num] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (IsPos ~num)))
+   :inline (fn [num] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (isPos ~num)))
    :added "1.0"}
-  [num] (. github.com$glojurelang$glojure$pkg$lang.Numbers (IsPos num)))
+  [num] (. github.com$glojurelang$glojure$pkg$lang.Numbers (isPos num)))
 
 (defn neg?
   "Returns true if num is less than zero, else false"
   {
-   :inline (fn [num] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (IsNeg ~num)))
+   :inline (fn [num] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (isNeg ~num)))
    :added "1.0"}
-  [num] (. github.com$glojurelang$glojure$pkg$lang.Numbers (IsNeg num)))
+  [num] (. github.com$glojurelang$glojure$pkg$lang.Numbers (isNeg num)))
 
 (defn quot
   "quot[ient] of dividing numerator by denominator."
   {:added "1.0"
    :static true
-   :inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Quotient ~x ~y)))}
+   :inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (quotient ~x ~y)))}
   [num div]
-    (. github.com$glojurelang$glojure$pkg$lang.Numbers (Quotient num div)))
+    (. github.com$glojurelang$glojure$pkg$lang.Numbers (quotient num div)))
 
 (defn rem
   "remainder of dividing numerator by denominator."
   {:added "1.0"
    :static true
-   :inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Remainder ~x ~y)))}
+   :inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (remainder ~x ~y)))}
   [num div]
-    (. github.com$glojurelang$glojure$pkg$lang.Numbers (Remainder num div)))
+    (. github.com$glojurelang$glojure$pkg$lang.Numbers (remainder num div)))
 
 (defn rationalize
   "returns the rational value of num"
   {:added "1.0"
    :static true}
   [num]
-  (. github.com$glojurelang$glojure$pkg$lang.Numbers (Rationalize num)))
+  (. github.com$glojurelang$glojure$pkg$lang.Numbers (rationalize num)))
 
 ;;Bit ops
 
 (defn bit-not
   "Bitwise complement"
-  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Not ~x)))
+  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (not ~x)))
    :added "1.0"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers Not x))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers not x))
 
 
 (defn bit-and
@@ -1300,7 +1300,7 @@
    {:inline (nary-inline 'and)
     :inline-arities >1?
     :added "1.0"}
-   ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers And x y))
+   ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers and x y))
    ([x y & more]
       (reduce1 bit-and (bit-and x y) more)))
 
@@ -1309,7 +1309,7 @@
   {:inline (nary-inline 'or)
    :inline-arities >1?
    :added "1.0"}
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers Or x y))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers or x y))
   ([x y & more]
     (reduce1 bit-or (bit-or x y) more)))
 
@@ -1318,7 +1318,7 @@
   {:inline (nary-inline 'xor)
    :inline-arities >1?
    :added "1.0"}
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers Xor x y))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers xor x y))
   ([x y & more]
     (reduce1 bit-xor (bit-xor x y) more)))
 
@@ -1328,7 +1328,7 @@
    :inline-arities >1?
    :added "1.0"
    :static true}
-  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers AndNot x y))
+  ([x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers andNot x y))
   ([x y & more]
     (reduce1 bit-and-not (bit-and-not x y) more)))
 
@@ -1337,44 +1337,44 @@
   "Clear bit at index n"
   {:added "1.0"
    :static true}
-  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers ClearBit x n))
+  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers clearBit x n))
 
 (defn bit-set
   "Set bit at index n"
   {:added "1.0"
    :static true}
-  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers SetBit x n))
+  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers setBit x n))
 
 (defn bit-flip
   "Flip bit at index n"
   {:added "1.0"
    :static true}
-  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers FlipBit x n))
+  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers flipBit x n))
 
 (defn bit-test
   "Test bit at index n"
   {:added "1.0"
    :static true}
-  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers TestBit x n))
+  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers testBit x n))
 
 
 (defn bit-shift-left
   "Bitwise shift left"
-  {:inline (fn [x n] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (ShiftLeft ~x ~n)))
+  {:inline (fn [x n] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (shiftLeft ~x ~n)))
    :added "1.0"}
-  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers ShiftLeft x n))
+  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers shiftLeft x n))
 
 (defn bit-shift-right
   "Bitwise shift right"
-  {:inline (fn [x n] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (ShiftRight ~x ~n)))
+  {:inline (fn [x n] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (shiftRight ~x ~n)))
    :added "1.0"}
-  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers ShiftRight x n))
+  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers shiftRight x n))
 
 (defn unsigned-bit-shift-right
   "Bitwise shift right, without sign-extension."
-  {:inline (fn [x n] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (UnsignedShiftRight ~x ~n)))
+  {:inline (fn [x n] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unsignedShiftRight ~x ~n)))
    :added "1.6"}
-  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers UnsignedShiftRight x n))
+  [x n] (. github.com$glojurelang$glojure$pkg$lang.Numbers unsignedShiftRight x n))
 
 (defn integer? "Returns true if n is an integer" {:added "1.0", :static true} [n] (github.com$glojurelang$glojure$pkg$lang.IsInteger n))
 
@@ -3474,9 +3474,9 @@
 (defn num
   "Coerce to Number"
   {
-   :inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (Num ~x)))
+   :inline (fn  [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (num ~x)))
    :added "1.0"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (Num x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (num x)))
 
 (defn long
   "Coerce to long"
@@ -4076,7 +4076,7 @@
   {:added "1.0"
    :static true}
   [s key]
-    (. glojure.lang.PersistentStructMap (getAccessor s key)))
+    (github.com$glojurelang$glojure$pkg$lang.GetPersistentStructMapAccessor s key))
 
 (defn load-reader
   "Sequentially read and evaluate the set of forms contained in the
@@ -5300,51 +5300,51 @@
 
 (defn float-array
   "Creates an array of floats"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers FloatArray (unquote-splicing args)))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers floatArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.0"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers FloatArray size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers FloatArrayInit size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers floatArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers floatArrayInit size init-val-or-seq)))
 
 (defn boolean-array
   "Creates an array of booleans"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers BooleanArray (unquote-splicing args)))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers booleanArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.1"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers BooleanArray size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers BooleanArrayInit size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers booleanArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers booleanArrayInit size init-val-or-seq)))
 
 (defn byte-array
   "Creates an array of bytes"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers ByteArray (unquote-splicing args)))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers byteArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.1"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers ByteArray size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers ByteArrayInit size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers byteArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers byteArrayInit size init-val-or-seq)))
 
 (defn char-array
   "Creates an array of chars"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers CharArray (unquote-splicing args)))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers charArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.1"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers CharArray size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers CharArrayInit size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers charArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers charArrayInit size init-val-or-seq)))
 
 (defn short-array
   "Creates an array of shorts"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers ShortArray (unquote-splicing args)))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers shortArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.1"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers ShortArray size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers ShortArrayInit size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers shortArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers shortArrayInit size init-val-or-seq)))
 
 (defn double-array
   "Creates an array of doubles"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers DoubleArray (unquote-splicing args)))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers doubleArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.0"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers DoubleArray size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers DoubleArrayInit size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers doubleArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers doubleArrayInit size init-val-or-seq)))
 
 (defn object-array
   "Creates an array of objects"
@@ -5355,59 +5355,59 @@
 
 (defn int-array
   "Creates an array of ints"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers IntArray (unquote-splicing args)))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers intArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.0"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers IntArray size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers IntArrayInit size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers intArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers intArrayInit size init-val-or-seq)))
 
 (defn long-array
   "Creates an array of longs"
-  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers LongArray (unquote-splicing args)))
+  {:inline (fn [& args] `(. github.com$glojurelang$glojure$pkg$lang.Numbers longArray (unquote-splicing args)))
    :inline-arities #{1 2}
    :added "1.0"}
-  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers LongArray size-or-seq))
-  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers LongArrayInit size init-val-or-seq)))
+  ([size-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers longArray size-or-seq))
+  ([size init-val-or-seq] (. github.com$glojurelang$glojure$pkg$lang.Numbers longArrayInit size init-val-or-seq)))
 
 (definline booleans
   "Casts to boolean[]"
   {:added "1.1"}
-  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Booleans ~xs))
+  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers booleans ~xs))
 
 (definline bytes
   "Casts to bytes[]"
   {:added "1.1"}
-  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Bytes ~xs))
+  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers bytes ~xs))
 
 (definline chars
   "Casts to chars[]"
   {:added "1.1"}
-  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Chars ~xs))
+  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers chars ~xs))
 
 (definline shorts
   "Casts to shorts[]"
   {:added "1.1"}
-  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Shorts ~xs))
+  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers shorts ~xs))
 
 (definline floats
   "Casts to float[]"
   {:added "1.0"}
-  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Floats ~xs))
+  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers floats ~xs))
 
 (definline ints
   "Casts to int[]"
   {:added "1.0"}
-  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Ints ~xs))
+  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers ints ~xs))
 
 (definline doubles
   "Casts to double[]"
   {:added "1.0"}
-  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Doubles ~xs))
+  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers doubles ~xs))
 
 (definline longs
   "Casts to long[]"
   {:added "1.0"}
-  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers Longs ~xs))
+  [xs] `(. github.com$glojurelang$glojure$pkg$lang.Numbers longs ~xs))
 
 (defn bytes?
   "Return true if x is a byte array"

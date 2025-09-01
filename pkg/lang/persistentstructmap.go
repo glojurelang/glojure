@@ -108,6 +108,10 @@ func CreatePersistentStructMapSlotMap(keys ISeq) *PersistentStructMapDef {
 	}
 }
 
+func GetPersistentStructMapAccessor() any {
+	panic("not implemented")
+}
+
 func newPersistentStructMap(meta IPersistentMap, def *PersistentStructMapDef, vals []any, ext IPersistentMap) *PersistentStructMap {
 	return &PersistentStructMap{
 		meta: meta,

@@ -43,7 +43,7 @@ pkg/stdlib/glojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-c
 	@mkdir -p $(dir $@)
 	@scripts/rewrite-core/run.sh $< > $@
 
-bin/%/glj: $(wildcard ./cmd/glj/*.go) $(wildcard ./pkg/**/*.go) $(wildcard ./internal/**/*.go)
+bin/%/glj: generate $(wildcard ./cmd/glj/*.go) $(wildcard ./pkg/**/*.go) $(wildcard ./internal/**/*.go)
 	@echo "Building $@"
 	@mkdir -p $(dir $@)
 	@scripts/build-glj.sh $@ $*

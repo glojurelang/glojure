@@ -488,68 +488,22 @@ func LoadNS() {
 	sym_glojure_DOT_core_SLASH_Array := lang.NewSymbol("glojure.core/Array")
 	sym_glojure_DOT_core_SLASH_Aset := lang.NewSymbol("glojure.core/Aset")
 	sym_glojure_DOT_core_SLASH_AssertionError := lang.NewSymbol("glojure.core/AssertionError")
-	sym_glojure_DOT_core_SLASH_BooleanArray := lang.NewSymbol("glojure.core/BooleanArray")
 	sym_glojure_DOT_core_SLASH_BooleanCast := lang.NewSymbol("glojure.core/BooleanCast")
-	sym_glojure_DOT_core_SLASH_Booleans := lang.NewSymbol("glojure.core/Booleans")
-	sym_glojure_DOT_core_SLASH_ByteArray := lang.NewSymbol("glojure.core/ByteArray")
-	sym_glojure_DOT_core_SLASH_Bytes := lang.NewSymbol("glojure.core/Bytes")
-	sym_glojure_DOT_core_SLASH_CharArray := lang.NewSymbol("glojure.core/CharArray")
-	sym_glojure_DOT_core_SLASH_Chars := lang.NewSymbol("glojure.core/Chars")
 	sym_glojure_DOT_core_SLASH_Count := lang.NewSymbol("glojure.core/Count")
-	sym_glojure_DOT_core_SLASH_DecP := lang.NewSymbol("glojure.core/DecP")
-	sym_glojure_DOT_core_SLASH_DoubleArray := lang.NewSymbol("glojure.core/DoubleArray")
 	sym_glojure_DOT_core_SLASH_DoubleCast := lang.NewSymbol("glojure.core/DoubleCast")
-	sym_glojure_DOT_core_SLASH_Doubles := lang.NewSymbol("glojure.core/Doubles")
-	sym_glojure_DOT_core_SLASH_Equiv := lang.NewSymbol("glojure.core/Equiv")
-	sym_glojure_DOT_core_SLASH_FloatArray := lang.NewSymbol("glojure.core/FloatArray")
-	sym_glojure_DOT_core_SLASH_Floats := lang.NewSymbol("glojure.core/Floats")
 	sym_glojure_DOT_core_SLASH_Get := lang.NewSymbol("glojure.core/Get")
-	sym_glojure_DOT_core_SLASH_Gt := lang.NewSymbol("glojure.core/Gt")
-	sym_glojure_DOT_core_SLASH_Gte := lang.NewSymbol("glojure.core/Gte")
 	sym_glojure_DOT_core_SLASH_IllegalStateException := lang.NewSymbol("glojure.core/IllegalStateException")
-	sym_glojure_DOT_core_SLASH_IncP := lang.NewSymbol("glojure.core/IncP")
-	sym_glojure_DOT_core_SLASH_IntArray := lang.NewSymbol("glojure.core/IntArray")
-	sym_glojure_DOT_core_SLASH_Ints := lang.NewSymbol("glojure.core/Ints")
-	sym_glojure_DOT_core_SLASH_IsNeg := lang.NewSymbol("glojure.core/IsNeg")
-	sym_glojure_DOT_core_SLASH_IsPos := lang.NewSymbol("glojure.core/IsPos")
-	sym_glojure_DOT_core_SLASH_IsZero := lang.NewSymbol("glojure.core/IsZero")
-	sym_glojure_DOT_core_SLASH_LongArray := lang.NewSymbol("glojure.core/LongArray")
 	sym_glojure_DOT_core_SLASH_LongCast := lang.NewSymbol("glojure.core/LongCast")
-	sym_glojure_DOT_core_SLASH_Longs := lang.NewSymbol("glojure.core/Longs")
-	sym_glojure_DOT_core_SLASH_Lt := lang.NewSymbol("glojure.core/Lt")
-	sym_glojure_DOT_core_SLASH_Lte := lang.NewSymbol("glojure.core/Lte")
-	sym_glojure_DOT_core_SLASH_Not := lang.NewSymbol("glojure.core/Not")
 	sym_glojure_DOT_core_SLASH_Nth := lang.NewSymbol("glojure.core/Nth")
-	sym_glojure_DOT_core_SLASH_Num := lang.NewSymbol("glojure.core/Num")
 	sym_glojure_DOT_core_SLASH_Object_array := lang.NewSymbol("glojure.core/Object_array")
-	sym_glojure_DOT_core_SLASH_Quotient := lang.NewSymbol("glojure.core/Quotient")
-	sym_glojure_DOT_core_SLASH_Remainder := lang.NewSymbol("glojure.core/Remainder")
 	sym_glojure_DOT_core_SLASH_RunInTransaction := lang.NewSymbol("glojure.core/RunInTransaction")
-	sym_glojure_DOT_core_SLASH_ShiftLeft := lang.NewSymbol("glojure.core/ShiftLeft")
-	sym_glojure_DOT_core_SLASH_ShiftRight := lang.NewSymbol("glojure.core/ShiftRight")
-	sym_glojure_DOT_core_SLASH_ShortArray := lang.NewSymbol("glojure.core/ShortArray")
-	sym_glojure_DOT_core_SLASH_Shorts := lang.NewSymbol("glojure.core/Shorts")
-	sym_glojure_DOT_core_SLASH_UncheckedAdd := lang.NewSymbol("glojure.core/UncheckedAdd")
 	sym_glojure_DOT_core_SLASH_UncheckedByteCast := lang.NewSymbol("glojure.core/UncheckedByteCast")
 	sym_glojure_DOT_core_SLASH_UncheckedCharCast := lang.NewSymbol("glojure.core/UncheckedCharCast")
-	sym_glojure_DOT_core_SLASH_UncheckedDec := lang.NewSymbol("glojure.core/UncheckedDec")
 	sym_glojure_DOT_core_SLASH_UncheckedDoubleCast := lang.NewSymbol("glojure.core/UncheckedDoubleCast")
 	sym_glojure_DOT_core_SLASH_UncheckedFloatCast := lang.NewSymbol("glojure.core/UncheckedFloatCast")
 	sym_glojure_DOT_core_SLASH_UncheckedIntCast := lang.NewSymbol("glojure.core/UncheckedIntCast")
-	sym_glojure_DOT_core_SLASH_UncheckedIntDivide := lang.NewSymbol("glojure.core/UncheckedIntDivide")
 	sym_glojure_DOT_core_SLASH_UncheckedLongCast := lang.NewSymbol("glojure.core/UncheckedLongCast")
 	sym_glojure_DOT_core_SLASH_UncheckedShortCast := lang.NewSymbol("glojure.core/UncheckedShortCast")
-	sym_glojure_DOT_core_SLASH_Unchecked_inc := lang.NewSymbol("glojure.core/Unchecked_inc")
-	sym_glojure_DOT_core_SLASH_Unchecked_int_add := lang.NewSymbol("glojure.core/Unchecked_int_add")
-	sym_glojure_DOT_core_SLASH_Unchecked_int_dec := lang.NewSymbol("glojure.core/Unchecked_int_dec")
-	sym_glojure_DOT_core_SLASH_Unchecked_int_inc := lang.NewSymbol("glojure.core/Unchecked_int_inc")
-	sym_glojure_DOT_core_SLASH_Unchecked_int_multiply := lang.NewSymbol("glojure.core/Unchecked_int_multiply")
-	sym_glojure_DOT_core_SLASH_Unchecked_int_negate := lang.NewSymbol("glojure.core/Unchecked_int_negate")
-	sym_glojure_DOT_core_SLASH_Unchecked_int_remainder := lang.NewSymbol("glojure.core/Unchecked_int_remainder")
-	sym_glojure_DOT_core_SLASH_Unchecked_int_subtract := lang.NewSymbol("glojure.core/Unchecked_int_subtract")
-	sym_glojure_DOT_core_SLASH_Unchecked_minus := lang.NewSymbol("glojure.core/Unchecked_minus")
-	sym_glojure_DOT_core_SLASH_Unchecked_multiply := lang.NewSymbol("glojure.core/Unchecked_multiply")
-	sym_glojure_DOT_core_SLASH_UnsignedShiftRight := lang.NewSymbol("glojure.core/UnsignedShiftRight")
 	sym_glojure_DOT_core_SLASH_aclone := lang.NewSymbol("glojure.core/aclone")
 	sym_glojure_DOT_core_SLASH_aget := lang.NewSymbol("glojure.core/aget")
 	sym_glojure_DOT_core_SLASH_alength := lang.NewSymbol("glojure.core/alength")
@@ -564,8 +518,14 @@ func LoadNS() {
 	sym_glojure_DOT_core_SLASH_assoc_DASH_in := lang.NewSymbol("glojure.core/assoc-in")
 	sym_glojure_DOT_core_SLASH_atom := lang.NewSymbol("glojure.core/atom")
 	sym_glojure_DOT_core_SLASH_binding := lang.NewSymbol("glojure.core/binding")
+	sym_glojure_DOT_core_SLASH_booleanArray := lang.NewSymbol("glojure.core/booleanArray")
+	sym_glojure_DOT_core_SLASH_booleans := lang.NewSymbol("glojure.core/booleans")
 	sym_glojure_DOT_core_SLASH_bound_DASH_fn_STAR_ := lang.NewSymbol("glojure.core/bound-fn*")
+	sym_glojure_DOT_core_SLASH_byteArray := lang.NewSymbol("glojure.core/byteArray")
+	sym_glojure_DOT_core_SLASH_bytes := lang.NewSymbol("glojure.core/bytes")
 	sym_glojure_DOT_core_SLASH_c := lang.NewSymbol("glojure.core/c")
+	sym_glojure_DOT_core_SLASH_charArray := lang.NewSymbol("glojure.core/charArray")
+	sym_glojure_DOT_core_SLASH_chars := lang.NewSymbol("glojure.core/chars")
 	sym_glojure_DOT_core_SLASH_chunk := lang.NewSymbol("glojure.core/chunk")
 	sym_glojure_DOT_core_SLASH_chunk_DASH_append := lang.NewSymbol("glojure.core/chunk-append")
 	sym_glojure_DOT_core_SLASH_chunk_DASH_buffer := lang.NewSymbol("glojure.core/chunk-buffer")
@@ -583,19 +543,26 @@ func LoadNS() {
 	sym_glojure_DOT_core_SLASH_cons := lang.NewSymbol("glojure.core/cons")
 	sym_glojure_DOT_core_SLASH_count := lang.NewSymbol("glojure.core/count")
 	sym_glojure_DOT_core_SLASH_create_DASH_struct := lang.NewSymbol("glojure.core/create-struct")
+	sym_glojure_DOT_core_SLASH_decP := lang.NewSymbol("glojure.core/decP")
 	sym_glojure_DOT_core_SLASH_defmulti := lang.NewSymbol("glojure.core/defmulti")
 	sym_glojure_DOT_core_SLASH_defn := lang.NewSymbol("glojure.core/defn")
 	sym_glojure_DOT_core_SLASH_deref := lang.NewSymbol("glojure.core/deref")
 	sym_glojure_DOT_core_SLASH_dosync := lang.NewSymbol("glojure.core/dosync")
 	sym_glojure_DOT_core_SLASH_double := lang.NewSymbol("glojure.core/double")
+	sym_glojure_DOT_core_SLASH_doubleArray := lang.NewSymbol("glojure.core/doubleArray")
+	sym_glojure_DOT_core_SLASH_doubles := lang.NewSymbol("glojure.core/doubles")
 	sym_glojure_DOT_core_SLASH_equiv := lang.NewSymbol("glojure.core/equiv")
 	sym_glojure_DOT_core_SLASH_extend := lang.NewSymbol("glojure.core/extend")
 	sym_glojure_DOT_core_SLASH_extend_DASH_type := lang.NewSymbol("glojure.core/extend-type")
 	sym_glojure_DOT_core_SLASH_first := lang.NewSymbol("glojure.core/first")
+	sym_glojure_DOT_core_SLASH_floatArray := lang.NewSymbol("glojure.core/floatArray")
+	sym_glojure_DOT_core_SLASH_floats := lang.NewSymbol("glojure.core/floats")
 	sym_glojure_DOT_core_SLASH_fn := lang.NewSymbol("glojure.core/fn")
 	sym_glojure_DOT_core_SLASH_future_DASH_call := lang.NewSymbol("glojure.core/future-call")
 	sym_glojure_DOT_core_SLASH_gen_DASH_class := lang.NewSymbol("glojure.core/gen-class")
 	sym_glojure_DOT_core_SLASH_get := lang.NewSymbol("glojure.core/get")
+	sym_glojure_DOT_core_SLASH_gt := lang.NewSymbol("glojure.core/gt")
+	sym_glojure_DOT_core_SLASH_gte := lang.NewSymbol("glojure.core/gte")
 	sym_glojure_DOT_core_SLASH_hash_DASH_map := lang.NewSymbol("glojure.core/hash-map")
 	sym_glojure_DOT_core_SLASH_i := lang.NewSymbol("glojure.core/i")
 	sym_glojure_DOT_core_SLASH_identical := lang.NewSymbol("glojure.core/identical")
@@ -603,13 +570,23 @@ func LoadNS() {
 	sym_glojure_DOT_core_SLASH_if_DASH_not := lang.NewSymbol("glojure.core/if-not")
 	sym_glojure_DOT_core_SLASH_if_DASH_some := lang.NewSymbol("glojure.core/if-some")
 	sym_glojure_DOT_core_SLASH_in_DASH_ns := lang.NewSymbol("glojure.core/in-ns")
+	sym_glojure_DOT_core_SLASH_incP := lang.NewSymbol("glojure.core/incP")
 	sym_glojure_DOT_core_SLASH_instance_QMARK_ := lang.NewSymbol("glojure.core/instance?")
 	sym_glojure_DOT_core_SLASH_int := lang.NewSymbol("glojure.core/int")
+	sym_glojure_DOT_core_SLASH_intArray := lang.NewSymbol("glojure.core/intArray")
+	sym_glojure_DOT_core_SLASH_ints := lang.NewSymbol("glojure.core/ints")
+	sym_glojure_DOT_core_SLASH_isNeg := lang.NewSymbol("glojure.core/isNeg")
+	sym_glojure_DOT_core_SLASH_isPos := lang.NewSymbol("glojure.core/isPos")
+	sym_glojure_DOT_core_SLASH_isZero := lang.NewSymbol("glojure.core/isZero")
 	sym_glojure_DOT_core_SLASH_keyword := lang.NewSymbol("glojure.core/keyword")
 	sym_glojure_DOT_core_SLASH_lazy_DASH_seq := lang.NewSymbol("glojure.core/lazy-seq")
 	sym_glojure_DOT_core_SLASH_let := lang.NewSymbol("glojure.core/let")
 	sym_glojure_DOT_core_SLASH_long := lang.NewSymbol("glojure.core/long")
+	sym_glojure_DOT_core_SLASH_longArray := lang.NewSymbol("glojure.core/longArray")
+	sym_glojure_DOT_core_SLASH_longs := lang.NewSymbol("glojure.core/longs")
 	sym_glojure_DOT_core_SLASH_loop := lang.NewSymbol("glojure.core/loop")
+	sym_glojure_DOT_core_SLASH_lt := lang.NewSymbol("glojure.core/lt")
+	sym_glojure_DOT_core_SLASH_lte := lang.NewSymbol("glojure.core/lte")
 	sym_glojure_DOT_core_SLASH_merge := lang.NewSymbol("glojure.core/merge")
 	sym_glojure_DOT_core_SLASH_meta := lang.NewSymbol("glojure.core/meta")
 	sym_glojure_DOT_core_SLASH_next := lang.NewSymbol("glojure.core/next")
@@ -617,24 +594,45 @@ func LoadNS() {
 	sym_glojure_DOT_core_SLASH_nil_QMARK_ := lang.NewSymbol("glojure.core/nil?")
 	sym_glojure_DOT_core_SLASH_not := lang.NewSymbol("glojure.core/not")
 	sym_glojure_DOT_core_SLASH_nth := lang.NewSymbol("glojure.core/nth")
+	sym_glojure_DOT_core_SLASH_num := lang.NewSymbol("glojure.core/num")
 	sym_glojure_DOT_core_SLASH_or := lang.NewSymbol("glojure.core/or")
 	sym_glojure_DOT_core_SLASH_pcalls := lang.NewSymbol("glojure.core/pcalls")
 	sym_glojure_DOT_core_SLASH_pop_DASH_thread_DASH_bindings := lang.NewSymbol("glojure.core/pop-thread-bindings")
 	sym_glojure_DOT_core_SLASH_pr_DASH_str := lang.NewSymbol("glojure.core/pr-str")
 	sym_glojure_DOT_core_SLASH_prn := lang.NewSymbol("glojure.core/prn")
 	sym_glojure_DOT_core_SLASH_push_DASH_thread_DASH_bindings := lang.NewSymbol("glojure.core/push-thread-bindings")
+	sym_glojure_DOT_core_SLASH_quotient := lang.NewSymbol("glojure.core/quotient")
 	sym_glojure_DOT_core_SLASH_refer := lang.NewSymbol("glojure.core/refer")
+	sym_glojure_DOT_core_SLASH_remainder := lang.NewSymbol("glojure.core/remainder")
 	sym_glojure_DOT_core_SLASH_rest := lang.NewSymbol("glojure.core/rest")
 	sym_glojure_DOT_core_SLASH_seq := lang.NewSymbol("glojure.core/seq")
 	sym_glojure_DOT_core_SLASH_seq_QMARK_ := lang.NewSymbol("glojure.core/seq?")
+	sym_glojure_DOT_core_SLASH_shiftLeft := lang.NewSymbol("glojure.core/shiftLeft")
+	sym_glojure_DOT_core_SLASH_shiftRight := lang.NewSymbol("glojure.core/shiftRight")
+	sym_glojure_DOT_core_SLASH_shortArray := lang.NewSymbol("glojure.core/shortArray")
+	sym_glojure_DOT_core_SLASH_shorts := lang.NewSymbol("glojure.core/shorts")
 	sym_glojure_DOT_core_SLASH_str := lang.NewSymbol("glojure.core/str")
 	sym_glojure_DOT_core_SLASH_swap_BANG_ := lang.NewSymbol("glojure.core/swap!")
 	sym_glojure_DOT_core_SLASH_sync := lang.NewSymbol("glojure.core/sync")
 	sym_glojure_DOT_core_SLASH_to_DASH_array := lang.NewSymbol("glojure.core/to-array")
 	sym_glojure_DOT_core_SLASH_unchecked_DASH_inc := lang.NewSymbol("glojure.core/unchecked-inc")
 	sym_glojure_DOT_core_SLASH_unchecked_DASH_inc_DASH_int := lang.NewSymbol("glojure.core/unchecked-inc-int")
+	sym_glojure_DOT_core_SLASH_unchecked_add := lang.NewSymbol("glojure.core/unchecked_add")
+	sym_glojure_DOT_core_SLASH_unchecked_dec := lang.NewSymbol("glojure.core/unchecked_dec")
+	sym_glojure_DOT_core_SLASH_unchecked_inc := lang.NewSymbol("glojure.core/unchecked_inc")
+	sym_glojure_DOT_core_SLASH_unchecked_int_add := lang.NewSymbol("glojure.core/unchecked_int_add")
+	sym_glojure_DOT_core_SLASH_unchecked_int_dec := lang.NewSymbol("glojure.core/unchecked_int_dec")
+	sym_glojure_DOT_core_SLASH_unchecked_int_divide := lang.NewSymbol("glojure.core/unchecked_int_divide")
+	sym_glojure_DOT_core_SLASH_unchecked_int_inc := lang.NewSymbol("glojure.core/unchecked_int_inc")
+	sym_glojure_DOT_core_SLASH_unchecked_int_multiply := lang.NewSymbol("glojure.core/unchecked_int_multiply")
+	sym_glojure_DOT_core_SLASH_unchecked_int_negate := lang.NewSymbol("glojure.core/unchecked_int_negate")
+	sym_glojure_DOT_core_SLASH_unchecked_int_remainder := lang.NewSymbol("glojure.core/unchecked_int_remainder")
+	sym_glojure_DOT_core_SLASH_unchecked_int_subtract := lang.NewSymbol("glojure.core/unchecked_int_subtract")
+	sym_glojure_DOT_core_SLASH_unchecked_minus := lang.NewSymbol("glojure.core/unchecked_minus")
+	sym_glojure_DOT_core_SLASH_unchecked_multiply := lang.NewSymbol("glojure.core/unchecked_multiply")
 	sym_glojure_DOT_core_SLASH_unquote := lang.NewSymbol("glojure.core/unquote")
 	sym_glojure_DOT_core_SLASH_unquote_DASH_splicing := lang.NewSymbol("glojure.core/unquote-splicing")
+	sym_glojure_DOT_core_SLASH_unsignedShiftRight := lang.NewSymbol("glojure.core/unsignedShiftRight")
 	sym_glojure_DOT_core_SLASH_when := lang.NewSymbol("glojure.core/when")
 	sym_glojure_DOT_core_SLASH_when_DASH_first := lang.NewSymbol("glojure.core/when-first")
 	sym_glojure_DOT_core_SLASH_when_DASH_let := lang.NewSymbol("glojure.core/when-let")
@@ -2976,7 +2974,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp3).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp4 := lang.Apply(tmp3, []any{nil, int64(0)})
+			tmp4 := lang.Apply(tmp3, []any{v2, int64(0)})
 			return tmp4
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -2997,7 +2995,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp3).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp4 := lang.Apply(tmp3, []any{nil, int64(1)})
+			tmp4 := lang.Apply(tmp3, []any{v2, int64(1)})
 			return tmp4
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -3267,12 +3265,8 @@ func LoadNS() {
 			_ = v2
 			v3 := args[1]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(nil, "getAccessor")
-			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("getAccessor is not a function")))
-			}
-			tmp5 := lang.Apply(tmp4, []any{v2, v3})
-			return tmp5
+			tmp4 := lang.Apply(lang.GetPersistentStructMapAccessor, []any{v2, v3})
+			return tmp4
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_glojure_DOT_core_accessor = ns.InternWithValue(tmp0, tmp1, true)
@@ -3476,9 +3470,9 @@ func LoadNS() {
 			_ = v2
 			v3 := args[1]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "ClearBit")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "clearBit")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("ClearBit is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("clearBit is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v2, v3})
 			return tmp5
@@ -3499,9 +3493,9 @@ func LoadNS() {
 			_ = v2
 			v3 := args[1]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "FlipBit")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "flipBit")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("FlipBit is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("flipBit is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v2, v3})
 			return tmp5
@@ -3522,9 +3516,9 @@ func LoadNS() {
 			_ = v2
 			v3 := args[1]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "SetBit")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "setBit")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("SetBit is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("setBit is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v2, v3})
 			return tmp5
@@ -3545,9 +3539,9 @@ func LoadNS() {
 			_ = v2
 			v3 := args[1]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "TestBit")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "testBit")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("TestBit is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("testBit is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v2, v3})
 			return tmp5
@@ -5708,9 +5702,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v2 := args[0]
 			_ = v2
-			tmp3, _ := lang.FieldOrMethod(lang.Numbers, "Rationalize")
+			tmp3, _ := lang.FieldOrMethod(lang.Numbers, "rationalize")
 			if reflect.TypeOf(tmp3).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Rationalize is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("rationalize is not a function")))
 			}
 			tmp4 := lang.Apply(tmp3, []any{v2})
 			return tmp4
@@ -6397,7 +6391,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v2 := args[0]
 			_ = v2
-			return nil
+			return "unimplemented: set! target type"
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_glojure_DOT_core_set_DASH_agent_DASH_send_DASH_executor_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -6413,7 +6407,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v2 := args[0]
 			_ = v2
-			return nil
+			return "unimplemented: set! target type"
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_glojure_DOT_core_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -6900,10 +6894,11 @@ func LoadNS() {
 				if err != nil {
 					panic(err)
 				}
-				tmp8 := checkDerefVar(var_glojure_DOT_core_cons)
-				tmp9 := lang.Apply(tmp8, []any{v3, v4})
-				tmp10 := lang.Apply(tmp7, []any{"unimplemented: new with non-constant class type", tmp9})
-				return tmp10
+				tmp8 := new(strings8.Builder)
+				tmp9 := checkDerefVar(var_glojure_DOT_core_cons)
+				tmp10 := lang.Apply(tmp9, []any{v3, v4})
+				tmp11 := lang.Apply(tmp7, []any{tmp8, tmp10})
+				return tmp11
 			}
 		})
 		tmp3 := reflect.TypeOf("")
@@ -9028,9 +9023,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Dec")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "dec")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Dec is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("dec is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -9060,7 +9055,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_DecP})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_decP})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -9079,9 +9074,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "DecP")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "decP")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("DecP is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("decP is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -9656,7 +9651,7 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 					tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_DoubleArray})
+					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_doubleArray})
 					tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp14 := checkDerefVar(var_glojure_DOT_core_concat)
@@ -9682,9 +9677,9 @@ func LoadNS() {
 			case 1:
 				v3 := args[0]
 				_ = v3
-				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "DoubleArray")
+				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "doubleArray")
 				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("DoubleArray is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("doubleArray is not a function")))
 				}
 				tmp5 := lang.Apply(tmp4, []any{v3})
 				return tmp5
@@ -9693,9 +9688,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "DoubleArrayInit")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "doubleArrayInit")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("DoubleArrayInit is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("doubleArrayInit is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -9744,7 +9739,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 				tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_Doubles})
+				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_doubles})
 				tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp13 := lang.Apply(tmp12, []any{v3})
 				tmp14 := lang.Apply(tmp5, []any{tmp7, tmp9, tmp11, tmp13})
@@ -9760,9 +9755,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Doubles")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "doubles")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Doubles is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("doubles is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -10366,7 +10361,7 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 					tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_FloatArray})
+					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_floatArray})
 					tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp14 := checkDerefVar(var_glojure_DOT_core_concat)
@@ -10392,9 +10387,9 @@ func LoadNS() {
 			case 1:
 				v3 := args[0]
 				_ = v3
-				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "FloatArray")
+				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "floatArray")
 				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("FloatArray is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("floatArray is not a function")))
 				}
 				tmp5 := lang.Apply(tmp4, []any{v3})
 				return tmp5
@@ -10403,9 +10398,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "FloatArrayInit")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "floatArrayInit")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("FloatArrayInit is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("floatArrayInit is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -10469,7 +10464,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 				tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_Floats})
+				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_floats})
 				tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp13 := lang.Apply(tmp12, []any{v3})
 				tmp14 := lang.Apply(tmp5, []any{tmp7, tmp9, tmp11, tmp13})
@@ -10485,9 +10480,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Floats")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "floats")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Floats is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("floats is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -10997,9 +10992,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Inc")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "inc")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Inc is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("inc is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -11029,7 +11024,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_IncP})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_incP})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -11048,9 +11043,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "IncP")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "incP")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("IncP is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("incP is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -11192,7 +11187,7 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 					tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_IntArray})
+					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_intArray})
 					tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp14 := checkDerefVar(var_glojure_DOT_core_concat)
@@ -11218,9 +11213,9 @@ func LoadNS() {
 			case 1:
 				v3 := args[0]
 				_ = v3
-				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "IntArray")
+				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "intArray")
 				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("IntArray is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("intArray is not a function")))
 				}
 				tmp5 := lang.Apply(tmp4, []any{v3})
 				return tmp5
@@ -11229,9 +11224,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "IntArrayInit")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "intArrayInit")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("IntArrayInit is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("intArrayInit is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -11376,7 +11371,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 				tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_Ints})
+				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_ints})
 				tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp13 := lang.Apply(tmp12, []any{v3})
 				tmp14 := lang.Apply(tmp5, []any{tmp7, tmp9, tmp11, tmp13})
@@ -11392,9 +11387,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Ints")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "ints")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Ints is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("ints is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -11944,7 +11939,7 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 					tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_LongArray})
+					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_longArray})
 					tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp14 := checkDerefVar(var_glojure_DOT_core_concat)
@@ -11970,9 +11965,9 @@ func LoadNS() {
 			case 1:
 				v3 := args[0]
 				_ = v3
-				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "LongArray")
+				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "longArray")
 				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("LongArray is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("longArray is not a function")))
 				}
 				tmp5 := lang.Apply(tmp4, []any{v3})
 				return tmp5
@@ -11981,9 +11976,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "LongArrayInit")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "longArrayInit")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("LongArrayInit is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("longArrayInit is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -12014,7 +12009,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 				tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_Longs})
+				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_longs})
 				tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp13 := lang.Apply(tmp12, []any{v3})
 				tmp14 := lang.Apply(tmp5, []any{tmp7, tmp9, tmp11, tmp13})
@@ -12030,9 +12025,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Longs")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "longs")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Longs is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("longs is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -12353,7 +12348,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_IsNeg})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_isNeg})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -12372,9 +12367,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "IsNeg")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "isNeg")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("IsNeg is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("isNeg is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -12717,7 +12712,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_Num})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_num})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -12736,9 +12731,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Num")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "num")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Num is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("num is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -12971,7 +12966,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_IsPos})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_isPos})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -12990,9 +12985,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "IsPos")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "isPos")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("IsPos is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("isPos is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -13096,7 +13091,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Quotient})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_quotient})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -13119,9 +13114,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Quotient")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "quotient")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Quotient is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("quotient is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -13611,7 +13606,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Remainder})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_remainder})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -13634,9 +13629,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Remainder")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "remainder")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Remainder is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("remainder is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -13993,7 +13988,7 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 					tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_ShortArray})
+					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_shortArray})
 					tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp14 := checkDerefVar(var_glojure_DOT_core_concat)
@@ -14019,9 +14014,9 @@ func LoadNS() {
 			case 1:
 				v3 := args[0]
 				_ = v3
-				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "ShortArray")
+				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "shortArray")
 				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("ShortArray is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("shortArray is not a function")))
 				}
 				tmp5 := lang.Apply(tmp4, []any{v3})
 				return tmp5
@@ -14030,9 +14025,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "ShortArrayInit")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "shortArrayInit")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("ShortArrayInit is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("shortArrayInit is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -14063,7 +14058,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 				tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_Shorts})
+				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_shorts})
 				tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp13 := lang.Apply(tmp12, []any{v3})
 				tmp14 := lang.Apply(tmp5, []any{tmp7, tmp9, tmp11, tmp13})
@@ -14079,9 +14074,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Shorts")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "shorts")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Shorts is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("shorts is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -15647,7 +15642,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_UncheckedAdd})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_unchecked_add})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -15670,9 +15665,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "UncheckedAdd")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_add")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("UncheckedAdd is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_add is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -15704,7 +15699,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Unchecked_int_add})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_unchecked_int_add})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -15727,9 +15722,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Unchecked_int_add")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_add")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unchecked_int_add is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_add is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -15857,7 +15852,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_UncheckedDec})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_unchecked_dec})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -15876,9 +15871,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "UncheckedDec")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_dec")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("UncheckedDec is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_dec is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -15908,7 +15903,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_Unchecked_int_dec})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_unchecked_int_dec})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -15927,9 +15922,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Unchecked_int_dec")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_dec")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unchecked_int_dec is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_dec is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -15961,7 +15956,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_UncheckedIntDivide})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_unchecked_int_divide})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -15984,9 +15979,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "UncheckedIntDivide")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_divide")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("UncheckedIntDivide is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_divide is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -16110,7 +16105,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_Unchecked_inc})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_unchecked_inc})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -16129,9 +16124,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Unchecked_inc")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_inc")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unchecked_inc is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_inc is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -16161,7 +16156,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_Unchecked_int_inc})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_unchecked_int_inc})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -16180,9 +16175,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Unchecked_int_inc")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_inc")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unchecked_int_inc is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_inc is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -16308,7 +16303,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Unchecked_multiply})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_unchecked_multiply})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -16331,9 +16326,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Unchecked_multiply")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_multiply")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unchecked_multiply is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_multiply is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -16365,7 +16360,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Unchecked_int_multiply})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_unchecked_int_multiply})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -16388,9 +16383,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Unchecked_int_multiply")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_multiply")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unchecked_int_multiply is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_multiply is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -16420,7 +16415,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_Unchecked_minus})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_unchecked_minus})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -16471,7 +16466,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_Unchecked_int_negate})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_unchecked_int_negate})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -16490,9 +16485,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Unchecked_int_negate")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_negate")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unchecked_int_negate is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_negate is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -16524,7 +16519,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Unchecked_int_remainder})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_unchecked_int_remainder})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -16547,9 +16542,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Unchecked_int_remainder")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_remainder")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unchecked_int_remainder is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_remainder is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -16628,7 +16623,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Unchecked_minus})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_unchecked_minus})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -16651,9 +16646,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Unchecked_minus")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_minus")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unchecked_minus is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_minus is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -16685,7 +16680,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Unchecked_int_subtract})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_unchecked_int_subtract})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -16708,9 +16703,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Unchecked_int_subtract")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_subtract")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unchecked_int_subtract is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_subtract is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -16768,7 +16763,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_UnsignedShiftRight})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_unsignedShiftRight})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -16791,9 +16786,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "UnsignedShiftRight")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "unsignedShiftRight")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("UnsignedShiftRight is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unsignedShiftRight is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -16928,7 +16923,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_IsZero})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_isZero})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -16947,9 +16942,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "IsZero")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "isZero")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("IsZero is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("isZero is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -17503,7 +17498,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Equiv})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_equiv})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -17531,9 +17526,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Equiv")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "equiv")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Equiv is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("equiv is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -17606,7 +17601,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Gt})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_gt})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -17634,9 +17629,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Gt")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "gt")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("gt is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -17709,7 +17704,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Gte})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_gte})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -17737,9 +17732,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Gte")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "gte")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gte is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("gte is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -17812,7 +17807,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Lt})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_lt})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -17840,9 +17835,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Lt")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "lt")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Lt is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("lt is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -17915,7 +17910,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_Lte})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_lte})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -17943,9 +17938,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "Lte")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "lte")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Lte is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("lte is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -18169,7 +18164,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(1)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(1)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -18189,9 +18184,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "Add")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "add")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Add is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("add is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -18389,7 +18384,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(1)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(1)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -18409,9 +18404,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "AddP")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "addP")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("AddP is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("addP is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -18609,7 +18604,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(1)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(1)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -18628,9 +18623,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "Divide")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "divide")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Divide is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("divide is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -18828,7 +18823,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(1)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(1)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -18848,9 +18843,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "Multiply")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "multiply")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Multiply is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("multiply is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -19048,7 +19043,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(1)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(1)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -19068,9 +19063,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "MultiplyP")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "multiplyP")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("MultiplyP is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("multiplyP is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -20464,7 +20459,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(1)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(1)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -20477,9 +20472,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "And")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "and")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("And is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("and is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -20677,7 +20672,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(1)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(1)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -20690,9 +20685,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "AndNot")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "andNot")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("AndNot is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("andNot is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -20737,7 +20732,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_Not})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_not})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -20756,9 +20751,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Not")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "not")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Not is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("not is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -20941,7 +20936,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(1)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(1)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -20954,9 +20949,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "Or")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "or")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Or is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("or is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -21003,7 +20998,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_ShiftLeft})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_shiftLeft})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -21026,9 +21021,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "ShiftLeft")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "shiftLeft")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("ShiftLeft is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("shiftLeft is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -21060,7 +21055,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_ShiftRight})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_shiftRight})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -21083,9 +21078,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "ShiftRight")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "shiftRight")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("ShiftRight is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("shiftRight is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -21268,7 +21263,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(1)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(1)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -21281,9 +21276,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "Xor")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "xor")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Xor is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("xor is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -21378,7 +21373,7 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 					tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_BooleanArray})
+					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_booleanArray})
 					tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp14 := checkDerefVar(var_glojure_DOT_core_concat)
@@ -21404,9 +21399,9 @@ func LoadNS() {
 			case 1:
 				v3 := args[0]
 				_ = v3
-				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "BooleanArray")
+				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "booleanArray")
 				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("BooleanArray is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("booleanArray is not a function")))
 				}
 				tmp5 := lang.Apply(tmp4, []any{v3})
 				return tmp5
@@ -21415,9 +21410,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "BooleanArrayInit")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "booleanArrayInit")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("BooleanArrayInit is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("booleanArrayInit is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -21448,7 +21443,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 				tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_Booleans})
+				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_booleans})
 				tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp13 := lang.Apply(tmp12, []any{v3})
 				tmp14 := lang.Apply(tmp5, []any{tmp7, tmp9, tmp11, tmp13})
@@ -21464,9 +21459,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Booleans")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "booleans")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Booleans is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("booleans is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -21762,7 +21757,7 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 					tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_ByteArray})
+					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_byteArray})
 					tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp14 := checkDerefVar(var_glojure_DOT_core_concat)
@@ -21788,9 +21783,9 @@ func LoadNS() {
 			case 1:
 				v3 := args[0]
 				_ = v3
-				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "ByteArray")
+				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "byteArray")
 				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("ByteArray is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("byteArray is not a function")))
 				}
 				tmp5 := lang.Apply(tmp4, []any{v3})
 				return tmp5
@@ -21799,9 +21794,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "ByteArrayInit")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "byteArrayInit")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("ByteArrayInit is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("byteArrayInit is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -21832,7 +21827,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 				tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_Bytes})
+				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_bytes})
 				tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp13 := lang.Apply(tmp12, []any{v3})
 				tmp14 := lang.Apply(tmp5, []any{tmp7, tmp9, tmp11, tmp13})
@@ -21848,9 +21843,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Bytes")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "bytes")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Bytes is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("bytes is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -21976,7 +21971,7 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 					tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_CharArray})
+					tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_charArray})
 					tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_glojure_DOT_core_seq)
 					tmp14 := checkDerefVar(var_glojure_DOT_core_concat)
@@ -22002,9 +21997,9 @@ func LoadNS() {
 			case 1:
 				v3 := args[0]
 				_ = v3
-				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "CharArray")
+				tmp4, _ := lang.FieldOrMethod(lang.Numbers, "charArray")
 				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("CharArray is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("charArray is not a function")))
 				}
 				tmp5 := lang.Apply(tmp4, []any{v3})
 				return tmp5
@@ -22013,9 +22008,9 @@ func LoadNS() {
 				_ = v3
 				v4 := args[1]
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "CharArrayInit")
+				tmp5, _ := lang.FieldOrMethod(lang.Numbers, "charArrayInit")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("CharArrayInit is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("charArrayInit is not a function")))
 				}
 				tmp6 := lang.Apply(tmp5, []any{v3, v4})
 				return tmp6
@@ -22046,7 +22041,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_DOLLAR_glojurelang_DOLLAR_glojure_DOLLAR_pkg_DOLLAR_lang_DOT_Numbers})
 				tmp10 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_Chars})
+				tmp11 := lang.Apply(tmp10, []any{sym_glojure_DOT_core_SLASH_chars})
 				tmp12 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp13 := lang.Apply(tmp12, []any{v3})
 				tmp14 := lang.Apply(tmp5, []any{tmp7, tmp9, tmp11, tmp13})
@@ -22062,9 +22057,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "Chars")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "chars")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Chars is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("chars is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -27846,7 +27841,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(1)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(1)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -27863,9 +27858,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "Max")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "max")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Max is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("max is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -28474,7 +28469,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(1)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(1)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -28491,9 +28486,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "Min")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "min")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Min is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("min is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -29773,6 +29768,17 @@ func LoadNS() {
 					// let binding "G__691"
 					var v7 any = v2
 					_ = v7
+					// case
+					var tmp8 any
+					// case clause 0
+					if lang.Equals(v7, "true") {
+						tmp8 = true
+						// case clause 1
+					} else if lang.Equals(v7, "false") {
+						tmp8 = false
+					} else {
+					}
+					tmp6 = tmp8
 				} // end let
 				tmp3 = tmp6
 			} else {
@@ -30105,198 +30111,199 @@ func LoadNS() {
 					var tmp5 any
 					{ // let
 						// let binding "a"
-						var v6 any = "unimplemented: new with non-constant class type"
-						_ = v6
+						tmp6 := new(lang.ArrayList)
+						var v7 any = tmp6
+						_ = v7
 						// let binding "pv"
-						tmp7 := checkDerefVar(var_glojure_DOT_core_volatile_BANG_)
-						tmp8 := lang.Apply(tmp7, []any{kw_glojure_DOT_core_SLASH_none})
-						var v9 any = tmp8
-						_ = v9
-						var tmp10 lang.FnFunc
-						tmp10 = lang.NewFnFunc(func(args ...any) any {
+						tmp8 := checkDerefVar(var_glojure_DOT_core_volatile_BANG_)
+						tmp9 := lang.Apply(tmp8, []any{kw_glojure_DOT_core_SLASH_none})
+						var v10 any = tmp9
+						_ = v10
+						var tmp11 lang.FnFunc
+						tmp11 = lang.NewFnFunc(func(args ...any) any {
 							switch len(args) {
 							case 0:
-								tmp11 := lang.Apply(v4, nil)
-								return tmp11
-							case 1:
-								v11 := args[0]
-								_ = v11
-								var tmp12 any
-								{ // let
-									// let binding "result"
-									var tmp13 any
-									tmp14, ok := lang.FieldOrMethod(v6, "isEmpty")
-									if !ok {
-										panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "isEmpty")))
-									}
-									var tmp15 any
-									switch reflect.TypeOf(tmp14).Kind() {
-									case reflect.Func:
-										tmp15 = lang.Apply(tmp14, nil)
-									default:
-										tmp15 = tmp14
-									}
-									if lang.IsTruthy(tmp15) {
-										tmp13 = v11
-									} else {
-										var tmp16 any
-										{ // let
-											// let binding "v"
-											tmp17 := checkDerefVar(var_glojure_DOT_core_vec)
-											tmp18, ok := lang.FieldOrMethod(v6, "toArray")
-											if !ok {
-												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "toArray")))
-											}
-											var tmp19 any
-											switch reflect.TypeOf(tmp18).Kind() {
-											case reflect.Func:
-												tmp19 = lang.Apply(tmp18, nil)
-											default:
-												tmp19 = tmp18
-											}
-											tmp20 := lang.Apply(tmp17, []any{tmp19})
-											var v21 any = tmp20
-											_ = v21
-											tmp22, ok := lang.FieldOrMethod(v6, "clear")
-											if !ok {
-												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "clear")))
-											}
-											var tmp23 any
-											switch reflect.TypeOf(tmp22).Kind() {
-											case reflect.Func:
-												tmp23 = lang.Apply(tmp22, nil)
-											default:
-												tmp23 = tmp22
-											}
-											_ = tmp23
-											tmp24 := checkDerefVar(var_glojure_DOT_core_unreduced)
-											tmp25 := lang.Apply(v4, []any{v11, v21})
-											tmp26 := lang.Apply(tmp24, []any{tmp25})
-											tmp16 = tmp26
-										} // end let
-										tmp13 = tmp16
-									}
-									var v17 any = tmp13
-									_ = v17
-									tmp18 := lang.Apply(v4, []any{v17})
-									tmp12 = tmp18
-								} // end let
+								tmp12 := lang.Apply(v4, nil)
 								return tmp12
-							case 2:
-								v11 := args[0]
-								_ = v11
-								v12 := args[1]
+							case 1:
+								v12 := args[0]
 								_ = v12
 								var tmp13 any
 								{ // let
-									// let binding "pval"
-									tmp14 := checkDerefVar(var_glojure_DOT_core_deref)
-									tmp15 := lang.Apply(tmp14, []any{v9})
-									var v16 any = tmp15
-									_ = v16
-									// let binding "val"
-									tmp17 := lang.Apply(v2, []any{v12})
-									var v18 any = tmp17
-									_ = v18
-									tmp19 := checkDerefVar(var_glojure_DOT_core_vreset_BANG_)
-									tmp20 := lang.Apply(tmp19, []any{v9, v18})
-									_ = tmp20
-									var tmp21 any
-									var tmp22 any
-									{ // let
-										// let binding "or__0__auto__"
-										tmp23 := checkDerefVar(var_glojure_DOT_core_identical_QMARK_)
-										tmp24 := lang.Apply(tmp23, []any{v16, kw_glojure_DOT_core_SLASH_none})
-										var v25 any = tmp24
-										_ = v25
-										var tmp26 any
-										if lang.IsTruthy(v25) {
-											tmp26 = v25
-										} else {
-											tmp27 := checkDerefVar(var_glojure_DOT_core__EQ_)
-											tmp28 := lang.Apply(tmp27, []any{v18, v16})
-											tmp26 = tmp28
-										}
-										tmp22 = tmp26
-									} // end let
-									if lang.IsTruthy(tmp22) {
-										tmp23, _ := lang.FieldOrMethod(v6, "add")
-										if reflect.TypeOf(tmp23).Kind() != reflect.Func {
-											panic(lang.NewIllegalArgumentError(fmt.Sprintf("add is not a function")))
-										}
-										tmp24 := lang.Apply(tmp23, []any{v12})
-										_ = tmp24
-										tmp21 = v11
+									// let binding "result"
+									var tmp14 any
+									tmp15, ok := lang.FieldOrMethod(v7, "isEmpty")
+									if !ok {
+										panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "isEmpty")))
+									}
+									var tmp16 any
+									switch reflect.TypeOf(tmp15).Kind() {
+									case reflect.Func:
+										tmp16 = lang.Apply(tmp15, nil)
+									default:
+										tmp16 = tmp15
+									}
+									if lang.IsTruthy(tmp16) {
+										tmp14 = v12
 									} else {
-										var tmp25 any
+										var tmp17 any
 										{ // let
 											// let binding "v"
-											tmp26 := checkDerefVar(var_glojure_DOT_core_vec)
-											tmp27, ok := lang.FieldOrMethod(v6, "toArray")
+											tmp18 := checkDerefVar(var_glojure_DOT_core_vec)
+											tmp19, ok := lang.FieldOrMethod(v7, "toArray")
 											if !ok {
-												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "toArray")))
+												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "toArray")))
 											}
-											var tmp28 any
-											switch reflect.TypeOf(tmp27).Kind() {
+											var tmp20 any
+											switch reflect.TypeOf(tmp19).Kind() {
 											case reflect.Func:
-												tmp28 = lang.Apply(tmp27, nil)
+												tmp20 = lang.Apply(tmp19, nil)
 											default:
-												tmp28 = tmp27
+												tmp20 = tmp19
 											}
-											tmp29 := lang.Apply(tmp26, []any{tmp28})
-											var v30 any = tmp29
-											_ = v30
-											tmp31, ok := lang.FieldOrMethod(v6, "clear")
+											tmp21 := lang.Apply(tmp18, []any{tmp20})
+											var v22 any = tmp21
+											_ = v22
+											tmp23, ok := lang.FieldOrMethod(v7, "clear")
 											if !ok {
-												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "clear")))
+												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "clear")))
 											}
-											var tmp32 any
-											switch reflect.TypeOf(tmp31).Kind() {
+											var tmp24 any
+											switch reflect.TypeOf(tmp23).Kind() {
 											case reflect.Func:
-												tmp32 = lang.Apply(tmp31, nil)
+												tmp24 = lang.Apply(tmp23, nil)
 											default:
-												tmp32 = tmp31
+												tmp24 = tmp23
 											}
-											_ = tmp32
-											var tmp33 any
-											{ // let
-												// let binding "ret"
-												tmp34 := lang.Apply(v4, []any{v11, v30})
-												var v35 any = tmp34
-												_ = v35
-												var tmp36 any
-												tmp37 := checkDerefVar(var_glojure_DOT_core_reduced_QMARK_)
-												tmp38 := lang.Apply(tmp37, []any{v35})
-												if lang.IsTruthy(tmp38) {
-												} else {
-													tmp39, _ := lang.FieldOrMethod(v6, "add")
-													if reflect.TypeOf(tmp39).Kind() != reflect.Func {
-														panic(lang.NewIllegalArgumentError(fmt.Sprintf("add is not a function")))
-													}
-													tmp40 := lang.Apply(tmp39, []any{v12})
-													tmp36 = tmp40
-												}
-												_ = tmp36
-												tmp33 = v35
-											} // end let
-											tmp25 = tmp33
+											_ = tmp24
+											tmp25 := checkDerefVar(var_glojure_DOT_core_unreduced)
+											tmp26 := lang.Apply(v4, []any{v12, v22})
+											tmp27 := lang.Apply(tmp25, []any{tmp26})
+											tmp17 = tmp27
 										} // end let
-										tmp21 = tmp25
+										tmp14 = tmp17
 									}
-									tmp13 = tmp21
+									var v18 any = tmp14
+									_ = v18
+									tmp19 := lang.Apply(v4, []any{v18})
+									tmp13 = tmp19
 								} // end let
 								return tmp13
+							case 2:
+								v12 := args[0]
+								_ = v12
+								v13 := args[1]
+								_ = v13
+								var tmp14 any
+								{ // let
+									// let binding "pval"
+									tmp15 := checkDerefVar(var_glojure_DOT_core_deref)
+									tmp16 := lang.Apply(tmp15, []any{v10})
+									var v17 any = tmp16
+									_ = v17
+									// let binding "val"
+									tmp18 := lang.Apply(v2, []any{v13})
+									var v19 any = tmp18
+									_ = v19
+									tmp20 := checkDerefVar(var_glojure_DOT_core_vreset_BANG_)
+									tmp21 := lang.Apply(tmp20, []any{v10, v19})
+									_ = tmp21
+									var tmp22 any
+									var tmp23 any
+									{ // let
+										// let binding "or__0__auto__"
+										tmp24 := checkDerefVar(var_glojure_DOT_core_identical_QMARK_)
+										tmp25 := lang.Apply(tmp24, []any{v17, kw_glojure_DOT_core_SLASH_none})
+										var v26 any = tmp25
+										_ = v26
+										var tmp27 any
+										if lang.IsTruthy(v26) {
+											tmp27 = v26
+										} else {
+											tmp28 := checkDerefVar(var_glojure_DOT_core__EQ_)
+											tmp29 := lang.Apply(tmp28, []any{v19, v17})
+											tmp27 = tmp29
+										}
+										tmp23 = tmp27
+									} // end let
+									if lang.IsTruthy(tmp23) {
+										tmp24, _ := lang.FieldOrMethod(v7, "add")
+										if reflect.TypeOf(tmp24).Kind() != reflect.Func {
+											panic(lang.NewIllegalArgumentError(fmt.Sprintf("add is not a function")))
+										}
+										tmp25 := lang.Apply(tmp24, []any{v13})
+										_ = tmp25
+										tmp22 = v12
+									} else {
+										var tmp26 any
+										{ // let
+											// let binding "v"
+											tmp27 := checkDerefVar(var_glojure_DOT_core_vec)
+											tmp28, ok := lang.FieldOrMethod(v7, "toArray")
+											if !ok {
+												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "toArray")))
+											}
+											var tmp29 any
+											switch reflect.TypeOf(tmp28).Kind() {
+											case reflect.Func:
+												tmp29 = lang.Apply(tmp28, nil)
+											default:
+												tmp29 = tmp28
+											}
+											tmp30 := lang.Apply(tmp27, []any{tmp29})
+											var v31 any = tmp30
+											_ = v31
+											tmp32, ok := lang.FieldOrMethod(v7, "clear")
+											if !ok {
+												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "clear")))
+											}
+											var tmp33 any
+											switch reflect.TypeOf(tmp32).Kind() {
+											case reflect.Func:
+												tmp33 = lang.Apply(tmp32, nil)
+											default:
+												tmp33 = tmp32
+											}
+											_ = tmp33
+											var tmp34 any
+											{ // let
+												// let binding "ret"
+												tmp35 := lang.Apply(v4, []any{v12, v31})
+												var v36 any = tmp35
+												_ = v36
+												var tmp37 any
+												tmp38 := checkDerefVar(var_glojure_DOT_core_reduced_QMARK_)
+												tmp39 := lang.Apply(tmp38, []any{v36})
+												if lang.IsTruthy(tmp39) {
+												} else {
+													tmp40, _ := lang.FieldOrMethod(v7, "add")
+													if reflect.TypeOf(tmp40).Kind() != reflect.Func {
+														panic(lang.NewIllegalArgumentError(fmt.Sprintf("add is not a function")))
+													}
+													tmp41 := lang.Apply(tmp40, []any{v13})
+													tmp37 = tmp41
+												}
+												_ = tmp37
+												tmp34 = v36
+											} // end let
+											tmp26 = tmp34
+										} // end let
+										tmp22 = tmp26
+									}
+									tmp14 = tmp22
+								} // end let
+								return tmp14
 							default:
 								checkArity(args, -1)
 								panic("unreachable")
 							}
 						})
-						tmp11 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7152), kw_column, int(7), kw_end_DASH_line, int(7176), kw_end_DASH_column, int(28))
-						tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
+						tmp12 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(7152), kw_column, int(7), kw_end_DASH_line, int(7176), kw_end_DASH_column, int(28))
+						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
 						}
-						tmp5 = tmp12
+						tmp5 = tmp13
 					} // end let
 					return tmp5
 				})
@@ -31779,30 +31786,30 @@ func LoadNS() {
 											var tmp50 any
 											if lang.IsTruthy(v49) {
 											} else {
-												panic("unimplemented: new with non-constant class type")
+												panic(nil)
 											}
 											_ = tmp50
-											tmp51 := checkDerefVar(var_glojure_DOT_core__STAR_ns_STAR_)
-											var tmp52 any
+											tmp52 := checkDerefVar(var_glojure_DOT_core__STAR_ns_STAR_)
+											var tmp53 any
 											{ // let
 												// let binding "or__0__auto__"
-												tmp53 := lang.Apply(v15, []any{v44})
-												var v54 any = tmp53
-												_ = v54
-												var tmp55 any
-												if lang.IsTruthy(v54) {
-													tmp55 = v54
+												tmp54 := lang.Apply(v15, []any{v44})
+												var v55 any = tmp54
+												_ = v55
+												var tmp56 any
+												if lang.IsTruthy(v55) {
+													tmp56 = v55
 												} else {
-													tmp55 = v44
+													tmp56 = v44
 												}
-												tmp52 = tmp55
+												tmp53 = tmp56
 											} // end let
-											tmp53, _ := lang.FieldOrMethod(tmp51, "Refer")
-											if reflect.TypeOf(tmp53).Kind() != reflect.Func {
+											tmp54, _ := lang.FieldOrMethod(tmp52, "Refer")
+											if reflect.TypeOf(tmp54).Kind() != reflect.Func {
 												panic(lang.NewIllegalArgumentError(fmt.Sprintf("Refer is not a function")))
 											}
-											tmp54 := lang.Apply(tmp53, []any{tmp52, v49})
-											tmp47 = tmp54
+											tmp55 := lang.Apply(tmp54, []any{tmp53, v49})
+											tmp47 = tmp55
 										} // end let
 										tmp45 = tmp47
 									}
@@ -31886,30 +31893,30 @@ func LoadNS() {
 															var tmp62 any
 															if lang.IsTruthy(v61) {
 															} else {
-																panic("unimplemented: new with non-constant class type")
+																panic(nil)
 															}
 															_ = tmp62
-															tmp63 := checkDerefVar(var_glojure_DOT_core__STAR_ns_STAR_)
-															var tmp64 any
+															tmp64 := checkDerefVar(var_glojure_DOT_core__STAR_ns_STAR_)
+															var tmp65 any
 															{ // let
 																// let binding "or__0__auto__"
-																tmp65 := lang.Apply(v15, []any{v56})
-																var v66 any = tmp65
-																_ = v66
-																var tmp67 any
-																if lang.IsTruthy(v66) {
-																	tmp67 = v66
+																tmp66 := lang.Apply(v15, []any{v56})
+																var v67 any = tmp66
+																_ = v67
+																var tmp68 any
+																if lang.IsTruthy(v67) {
+																	tmp68 = v67
 																} else {
-																	tmp67 = v56
+																	tmp68 = v56
 																}
-																tmp64 = tmp67
+																tmp65 = tmp68
 															} // end let
-															tmp65, _ := lang.FieldOrMethod(tmp63, "Refer")
-															if reflect.TypeOf(tmp65).Kind() != reflect.Func {
+															tmp66, _ := lang.FieldOrMethod(tmp64, "Refer")
+															if reflect.TypeOf(tmp66).Kind() != reflect.Func {
 																panic(lang.NewIllegalArgumentError(fmt.Sprintf("Refer is not a function")))
 															}
-															tmp66 := lang.Apply(tmp65, []any{tmp64, v61})
-															tmp59 = tmp66
+															tmp67 := lang.Apply(tmp66, []any{tmp65, v61})
+															tmp59 = tmp67
 														} // end let
 														tmp57 = tmp59
 													}
@@ -35513,7 +35520,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(0)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(0)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -35532,9 +35539,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "Minus")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "minus")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Minus is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("minus is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -35732,7 +35739,7 @@ func LoadNS() {
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Gt is not a function")))
 			}
-			tmp5 := lang.Apply(tmp4, []any{nil, int64(0)})
+			tmp5 := lang.Apply(tmp4, []any{v3, int64(0)})
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -35751,9 +35758,9 @@ func LoadNS() {
 				_ = v4
 				v5 := args[1]
 				_ = v5
-				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "MinusP")
+				tmp6, _ := lang.FieldOrMethod(lang.Numbers, "minusP")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("MinusP is not a function")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("minusP is not a function")))
 				}
 				tmp7 := lang.Apply(tmp6, []any{v4, v5})
 				return tmp7
@@ -35794,58 +35801,59 @@ func LoadNS() {
 				var tmp4 any
 				{ // let
 					// let binding "a"
-					var v5 any = "unimplemented: new with non-constant class type"
-					_ = v5
+					tmp5 := new(*lang.Agent)
+					var v6 any = tmp5
+					_ = v6
 					// let binding "opts"
-					tmp6 := checkDerefVar(var_glojure_DOT_core_apply)
-					tmp7 := checkDerefVar(var_glojure_DOT_core_hash_DASH_map)
-					tmp8 := lang.Apply(tmp6, []any{tmp7, v3})
-					var v9 any = tmp8
-					_ = v9
-					tmp10 := checkDerefVar(var_glojure_DOT_core_setup_DASH_reference)
-					tmp11 := lang.Apply(tmp10, []any{v5, v3})
-					_ = tmp11
-					var tmp12 any
-					tmp13 := lang.Apply(kw_error_DASH_handler, []any{v9})
-					if lang.IsTruthy(tmp13) {
-						tmp14 := lang.Apply(kw_error_DASH_handler, []any{v9})
-						tmp15, _ := lang.FieldOrMethod(v5, "setErrorHandler")
-						if reflect.TypeOf(tmp15).Kind() != reflect.Func {
+					tmp7 := checkDerefVar(var_glojure_DOT_core_apply)
+					tmp8 := checkDerefVar(var_glojure_DOT_core_hash_DASH_map)
+					tmp9 := lang.Apply(tmp7, []any{tmp8, v3})
+					var v10 any = tmp9
+					_ = v10
+					tmp11 := checkDerefVar(var_glojure_DOT_core_setup_DASH_reference)
+					tmp12 := lang.Apply(tmp11, []any{v6, v3})
+					_ = tmp12
+					var tmp13 any
+					tmp14 := lang.Apply(kw_error_DASH_handler, []any{v10})
+					if lang.IsTruthy(tmp14) {
+						tmp15 := lang.Apply(kw_error_DASH_handler, []any{v10})
+						tmp16, _ := lang.FieldOrMethod(v6, "setErrorHandler")
+						if reflect.TypeOf(tmp16).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("setErrorHandler is not a function")))
 						}
-						tmp16 := lang.Apply(tmp15, []any{tmp14})
-						tmp12 = tmp16
+						tmp17 := lang.Apply(tmp16, []any{tmp15})
+						tmp13 = tmp17
 					} else {
 					}
-					_ = tmp12
-					var tmp17 any
+					_ = tmp13
+					var tmp18 any
 					{ // let
 						// let binding "or__0__auto__"
-						tmp18 := lang.Apply(kw_error_DASH_mode, []any{v9})
-						var v19 any = tmp18
-						_ = v19
-						var tmp20 any
-						if lang.IsTruthy(v19) {
-							tmp20 = v19
+						tmp19 := lang.Apply(kw_error_DASH_mode, []any{v10})
+						var v20 any = tmp19
+						_ = v20
+						var tmp21 any
+						if lang.IsTruthy(v20) {
+							tmp21 = v20
 						} else {
-							var tmp21 any
-							tmp22 := lang.Apply(kw_error_DASH_handler, []any{v9})
-							if lang.IsTruthy(tmp22) {
-								tmp21 = kw_continue
+							var tmp22 any
+							tmp23 := lang.Apply(kw_error_DASH_handler, []any{v10})
+							if lang.IsTruthy(tmp23) {
+								tmp22 = kw_continue
 							} else {
-								tmp21 = kw_fail
+								tmp22 = kw_fail
 							}
-							tmp20 = tmp21
+							tmp21 = tmp22
 						}
-						tmp17 = tmp20
+						tmp18 = tmp21
 					} // end let
-					tmp18, _ := lang.FieldOrMethod(v5, "setErrorMode")
-					if reflect.TypeOf(tmp18).Kind() != reflect.Func {
+					tmp19, _ := lang.FieldOrMethod(v6, "setErrorMode")
+					if reflect.TypeOf(tmp19).Kind() != reflect.Func {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("setErrorMode is not a function")))
 					}
-					tmp19 := lang.Apply(tmp18, []any{tmp17})
-					_ = tmp19
-					tmp4 = v5
+					tmp20 := lang.Apply(tmp19, []any{tmp18})
+					_ = tmp20
+					tmp4 = v6
 				} // end let
 				return tmp4
 			}
@@ -43971,166 +43979,166 @@ func LoadNS() {
 					var tmp8 any
 					{ // let
 						// let binding "latch"
-						var v9 any = "unimplemented: new with non-constant class type"
-						_ = v9
+						var v10 any = nil
+						_ = v10
 						// let binding "count-down"
-						var tmp10 lang.FnFunc
-						tmp10 = lang.NewFnFunc(func(args ...any) any {
+						var tmp11 lang.FnFunc
+						tmp11 = lang.NewFnFunc(func(args ...any) any {
 							checkArity(args, 1)
-							v11 := args[0]
-							_ = v11
-							tmp12, _ := lang.FieldOrMethod(v9, "countDown")
-							if reflect.TypeOf(tmp12).Kind() != reflect.Func {
+							v12 := args[0]
+							_ = v12
+							tmp13, _ := lang.FieldOrMethod(v10, "countDown")
+							if reflect.TypeOf(tmp13).Kind() != reflect.Func {
 								panic(lang.NewIllegalArgumentError(fmt.Sprintf("countDown is not a function")))
 							}
-							tmp13 := lang.Apply(tmp12, []any{})
-							_ = tmp13
-							return v11
+							tmp14 := lang.Apply(tmp13, []any{})
+							_ = tmp14
+							return v12
 						})
-						tmp11 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(3279), kw_column, int(22), kw_end_DASH_line, int(3279), kw_end_DASH_column, int(61))
-						tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
+						tmp12 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(3279), kw_column, int(22), kw_end_DASH_line, int(3279), kw_end_DASH_column, int(61))
+						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
 						}
-						var v13 any = tmp12
-						_ = v13
-						var tmp14 any
+						var v14 any = tmp13
+						_ = v14
+						var tmp15 any
 						{ // let
 							// let binding "seq_692"
-							tmp15 := checkDerefVar(var_glojure_DOT_core_seq)
-							tmp16 := lang.Apply(tmp15, []any{v2})
-							var v17 any = tmp16
-							_ = v17
-							// let binding "chunk_693"
-							var v18 any = nil
+							tmp16 := checkDerefVar(var_glojure_DOT_core_seq)
+							tmp17 := lang.Apply(tmp16, []any{v2})
+							var v18 any = tmp17
 							_ = v18
-							// let binding "count_694"
-							var v19 any = int64(0)
+							// let binding "chunk_693"
+							var v19 any = nil
 							_ = v19
-							// let binding "i_695"
+							// let binding "count_694"
 							var v20 any = int64(0)
 							_ = v20
+							// let binding "i_695"
+							var v21 any = int64(0)
+							_ = v21
 							for {
-								var tmp21 any
-								tmp22 := checkDerefVar(var_glojure_DOT_core__LT_)
-								tmp23 := lang.Apply(tmp22, []any{v20, v19})
-								if lang.IsTruthy(tmp23) {
-									var tmp24 any
+								var tmp22 any
+								tmp23 := checkDerefVar(var_glojure_DOT_core__LT_)
+								tmp24 := lang.Apply(tmp23, []any{v21, v20})
+								if lang.IsTruthy(tmp24) {
+									var tmp25 any
 									{ // let
 										// let binding "agent"
-										tmp25, _ := lang.FieldOrMethod(v18, "nth")
-										if reflect.TypeOf(tmp25).Kind() != reflect.Func {
+										tmp26, _ := lang.FieldOrMethod(v19, "nth")
+										if reflect.TypeOf(tmp26).Kind() != reflect.Func {
 											panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
 										}
-										tmp26 := lang.Apply(tmp25, []any{v20})
-										var v27 any = tmp26
-										_ = v27
-										tmp28 := checkDerefVar(var_glojure_DOT_core_send)
-										tmp29 := lang.Apply(tmp28, []any{v27, v13})
-										_ = tmp29
-										var tmp30 any = v17
+										tmp27 := lang.Apply(tmp26, []any{v21})
+										var v28 any = tmp27
+										_ = v28
+										tmp29 := checkDerefVar(var_glojure_DOT_core_send)
+										tmp30 := lang.Apply(tmp29, []any{v28, v14})
+										_ = tmp30
 										var tmp31 any = v18
 										var tmp32 any = v19
-										tmp34 := checkDerefVar(var_glojure_DOT_core_unchecked_DASH_inc)
-										tmp35 := lang.Apply(tmp34, []any{v20})
-										var tmp33 any = tmp35
-										v17 = tmp30
+										var tmp33 any = v20
+										tmp35 := checkDerefVar(var_glojure_DOT_core_unchecked_DASH_inc)
+										tmp36 := lang.Apply(tmp35, []any{v21})
+										var tmp34 any = tmp36
 										v18 = tmp31
 										v19 = tmp32
 										v20 = tmp33
+										v21 = tmp34
 										continue
 									} // end let
-									tmp21 = tmp24
+									tmp22 = tmp25
 								} else {
-									var tmp25 any
+									var tmp26 any
 									{ // let
 										// let binding "temp__0__auto__"
-										tmp26 := checkDerefVar(var_glojure_DOT_core_seq)
-										tmp27 := lang.Apply(tmp26, []any{v17})
-										var v28 any = tmp27
-										_ = v28
-										var tmp29 any
-										if lang.IsTruthy(v28) {
-											var tmp30 any
+										tmp27 := checkDerefVar(var_glojure_DOT_core_seq)
+										tmp28 := lang.Apply(tmp27, []any{v18})
+										var v29 any = tmp28
+										_ = v29
+										var tmp30 any
+										if lang.IsTruthy(v29) {
+											var tmp31 any
 											{ // let
 												// let binding "seq_692"
-												var v31 any = v28
-												_ = v31
-												var tmp32 any
-												tmp33 := checkDerefVar(var_glojure_DOT_core_chunked_DASH_seq_QMARK_)
-												tmp34 := lang.Apply(tmp33, []any{v31})
-												if lang.IsTruthy(tmp34) {
-													var tmp35 any
-													{ // let
-														// let binding "c__0__auto__"
-														tmp36 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_first)
-														tmp37 := lang.Apply(tmp36, []any{v31})
-														var v38 any = tmp37
-														_ = v38
-														tmp40 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_rest)
-														tmp41 := lang.Apply(tmp40, []any{v31})
-														var tmp39 any = tmp41
-														var tmp42 any = v38
-														tmp44 := checkDerefVar(var_glojure_DOT_core_int)
-														tmp45 := checkDerefVar(var_glojure_DOT_core_count)
-														tmp46 := lang.Apply(tmp45, []any{v38})
-														tmp47 := lang.Apply(tmp44, []any{tmp46})
-														var tmp43 any = tmp47
-														tmp49 := checkDerefVar(var_glojure_DOT_core_int)
-														tmp50 := lang.Apply(tmp49, []any{int64(0)})
-														var tmp48 any = tmp50
-														v17 = tmp39
-														v18 = tmp42
-														v19 = tmp43
-														v20 = tmp48
-														continue
-													} // end let
-													tmp32 = tmp35
-												} else {
+												var v32 any = v29
+												_ = v32
+												var tmp33 any
+												tmp34 := checkDerefVar(var_glojure_DOT_core_chunked_DASH_seq_QMARK_)
+												tmp35 := lang.Apply(tmp34, []any{v32})
+												if lang.IsTruthy(tmp35) {
 													var tmp36 any
 													{ // let
-														// let binding "agent"
-														tmp37 := checkDerefVar(var_glojure_DOT_core_first)
-														tmp38 := lang.Apply(tmp37, []any{v31})
+														// let binding "c__0__auto__"
+														tmp37 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_first)
+														tmp38 := lang.Apply(tmp37, []any{v32})
 														var v39 any = tmp38
 														_ = v39
-														tmp40 := checkDerefVar(var_glojure_DOT_core_send)
-														tmp41 := lang.Apply(tmp40, []any{v39, v13})
-														_ = tmp41
-														tmp43 := checkDerefVar(var_glojure_DOT_core_next)
-														tmp44 := lang.Apply(tmp43, []any{v31})
-														var tmp42 any = tmp44
-														var tmp45 any = nil
-														var tmp46 any = int64(0)
-														var tmp47 any = int64(0)
-														v17 = tmp42
-														v18 = tmp45
-														v19 = tmp46
-														v20 = tmp47
+														tmp41 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_rest)
+														tmp42 := lang.Apply(tmp41, []any{v32})
+														var tmp40 any = tmp42
+														var tmp43 any = v39
+														tmp45 := checkDerefVar(var_glojure_DOT_core_int)
+														tmp46 := checkDerefVar(var_glojure_DOT_core_count)
+														tmp47 := lang.Apply(tmp46, []any{v39})
+														tmp48 := lang.Apply(tmp45, []any{tmp47})
+														var tmp44 any = tmp48
+														tmp50 := checkDerefVar(var_glojure_DOT_core_int)
+														tmp51 := lang.Apply(tmp50, []any{int64(0)})
+														var tmp49 any = tmp51
+														v18 = tmp40
+														v19 = tmp43
+														v20 = tmp44
+														v21 = tmp49
 														continue
 													} // end let
-													tmp32 = tmp36
+													tmp33 = tmp36
+												} else {
+													var tmp37 any
+													{ // let
+														// let binding "agent"
+														tmp38 := checkDerefVar(var_glojure_DOT_core_first)
+														tmp39 := lang.Apply(tmp38, []any{v32})
+														var v40 any = tmp39
+														_ = v40
+														tmp41 := checkDerefVar(var_glojure_DOT_core_send)
+														tmp42 := lang.Apply(tmp41, []any{v40, v14})
+														_ = tmp42
+														tmp44 := checkDerefVar(var_glojure_DOT_core_next)
+														tmp45 := lang.Apply(tmp44, []any{v32})
+														var tmp43 any = tmp45
+														var tmp46 any = nil
+														var tmp47 any = int64(0)
+														var tmp48 any = int64(0)
+														v18 = tmp43
+														v19 = tmp46
+														v20 = tmp47
+														v21 = tmp48
+														continue
+													} // end let
+													tmp33 = tmp37
 												}
-												tmp30 = tmp32
+												tmp31 = tmp33
 											} // end let
-											tmp29 = tmp30
+											tmp30 = tmp31
 										} else {
 										}
-										tmp25 = tmp29
+										tmp26 = tmp30
 									} // end let
-									tmp21 = tmp25
+									tmp22 = tmp26
 								}
-								tmp14 = tmp21
+								tmp15 = tmp22
 								break
 							}
 						} // end let
-						_ = tmp14
-						tmp15, _ := lang.FieldOrMethod(v9, "await")
-						if reflect.TypeOf(tmp15).Kind() != reflect.Func {
+						_ = tmp15
+						tmp16, _ := lang.FieldOrMethod(v10, "await")
+						if reflect.TypeOf(tmp16).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("await is not a function")))
 						}
-						tmp16 := lang.Apply(tmp15, []any{})
-						tmp8 = tmp16
+						tmp17 := lang.Apply(tmp16, []any{})
+						tmp8 = tmp17
 					} // end let
 					tmp3 = tmp8
 				}
@@ -44208,177 +44216,177 @@ func LoadNS() {
 					var tmp9 any
 					{ // let
 						// let binding "latch"
-						var v10 any = "unimplemented: new with non-constant class type"
-						_ = v10
+						var v11 any = nil
+						_ = v11
 						// let binding "count-down"
-						var tmp11 lang.FnFunc
-						tmp11 = lang.NewFnFunc(func(args ...any) any {
+						var tmp12 lang.FnFunc
+						tmp12 = lang.NewFnFunc(func(args ...any) any {
 							checkArity(args, 1)
-							v12 := args[0]
-							_ = v12
-							tmp13, _ := lang.FieldOrMethod(v10, "countDown")
-							if reflect.TypeOf(tmp13).Kind() != reflect.Func {
+							v13 := args[0]
+							_ = v13
+							tmp14, _ := lang.FieldOrMethod(v11, "countDown")
+							if reflect.TypeOf(tmp14).Kind() != reflect.Func {
 								panic(lang.NewIllegalArgumentError(fmt.Sprintf("countDown is not a function")))
 							}
-							tmp14 := lang.Apply(tmp13, []any{})
-							_ = tmp14
-							return v12
+							tmp15 := lang.Apply(tmp14, []any{})
+							_ = tmp15
+							return v13
 						})
-						tmp12 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(3301), kw_column, int(23), kw_end_DASH_line, int(3301), kw_end_DASH_column, int(62))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
+						tmp13 := lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(3301), kw_column, int(23), kw_end_DASH_line, int(3301), kw_end_DASH_column, int(62))
+						tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
 						}
-						var v14 any = tmp13
-						_ = v14
-						var tmp15 any
+						var v15 any = tmp14
+						_ = v15
+						var tmp16 any
 						{ // let
 							// let binding "seq_696"
-							tmp16 := checkDerefVar(var_glojure_DOT_core_seq)
-							tmp17 := lang.Apply(tmp16, []any{v3})
-							var v18 any = tmp17
-							_ = v18
-							// let binding "chunk_697"
-							var v19 any = nil
+							tmp17 := checkDerefVar(var_glojure_DOT_core_seq)
+							tmp18 := lang.Apply(tmp17, []any{v3})
+							var v19 any = tmp18
 							_ = v19
-							// let binding "count_698"
-							var v20 any = int64(0)
+							// let binding "chunk_697"
+							var v20 any = nil
 							_ = v20
-							// let binding "i_699"
+							// let binding "count_698"
 							var v21 any = int64(0)
 							_ = v21
+							// let binding "i_699"
+							var v22 any = int64(0)
+							_ = v22
 							for {
-								var tmp22 any
-								tmp23 := checkDerefVar(var_glojure_DOT_core__LT_)
-								tmp24 := lang.Apply(tmp23, []any{v21, v20})
-								if lang.IsTruthy(tmp24) {
-									var tmp25 any
+								var tmp23 any
+								tmp24 := checkDerefVar(var_glojure_DOT_core__LT_)
+								tmp25 := lang.Apply(tmp24, []any{v22, v21})
+								if lang.IsTruthy(tmp25) {
+									var tmp26 any
 									{ // let
 										// let binding "agent"
-										tmp26, _ := lang.FieldOrMethod(v19, "nth")
-										if reflect.TypeOf(tmp26).Kind() != reflect.Func {
+										tmp27, _ := lang.FieldOrMethod(v20, "nth")
+										if reflect.TypeOf(tmp27).Kind() != reflect.Func {
 											panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
 										}
-										tmp27 := lang.Apply(tmp26, []any{v21})
-										var v28 any = tmp27
-										_ = v28
-										tmp29 := checkDerefVar(var_glojure_DOT_core_send)
-										tmp30 := lang.Apply(tmp29, []any{v28, v14})
-										_ = tmp30
-										var tmp31 any = v18
+										tmp28 := lang.Apply(tmp27, []any{v22})
+										var v29 any = tmp28
+										_ = v29
+										tmp30 := checkDerefVar(var_glojure_DOT_core_send)
+										tmp31 := lang.Apply(tmp30, []any{v29, v15})
+										_ = tmp31
 										var tmp32 any = v19
 										var tmp33 any = v20
-										tmp35 := checkDerefVar(var_glojure_DOT_core_unchecked_DASH_inc)
-										tmp36 := lang.Apply(tmp35, []any{v21})
-										var tmp34 any = tmp36
-										v18 = tmp31
+										var tmp34 any = v21
+										tmp36 := checkDerefVar(var_glojure_DOT_core_unchecked_DASH_inc)
+										tmp37 := lang.Apply(tmp36, []any{v22})
+										var tmp35 any = tmp37
 										v19 = tmp32
 										v20 = tmp33
 										v21 = tmp34
+										v22 = tmp35
 										continue
 									} // end let
-									tmp22 = tmp25
+									tmp23 = tmp26
 								} else {
-									var tmp26 any
+									var tmp27 any
 									{ // let
 										// let binding "temp__0__auto__"
-										tmp27 := checkDerefVar(var_glojure_DOT_core_seq)
-										tmp28 := lang.Apply(tmp27, []any{v18})
-										var v29 any = tmp28
-										_ = v29
-										var tmp30 any
-										if lang.IsTruthy(v29) {
-											var tmp31 any
+										tmp28 := checkDerefVar(var_glojure_DOT_core_seq)
+										tmp29 := lang.Apply(tmp28, []any{v19})
+										var v30 any = tmp29
+										_ = v30
+										var tmp31 any
+										if lang.IsTruthy(v30) {
+											var tmp32 any
 											{ // let
 												// let binding "seq_696"
-												var v32 any = v29
-												_ = v32
-												var tmp33 any
-												tmp34 := checkDerefVar(var_glojure_DOT_core_chunked_DASH_seq_QMARK_)
-												tmp35 := lang.Apply(tmp34, []any{v32})
-												if lang.IsTruthy(tmp35) {
-													var tmp36 any
-													{ // let
-														// let binding "c__0__auto__"
-														tmp37 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_first)
-														tmp38 := lang.Apply(tmp37, []any{v32})
-														var v39 any = tmp38
-														_ = v39
-														tmp41 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_rest)
-														tmp42 := lang.Apply(tmp41, []any{v32})
-														var tmp40 any = tmp42
-														var tmp43 any = v39
-														tmp45 := checkDerefVar(var_glojure_DOT_core_int)
-														tmp46 := checkDerefVar(var_glojure_DOT_core_count)
-														tmp47 := lang.Apply(tmp46, []any{v39})
-														tmp48 := lang.Apply(tmp45, []any{tmp47})
-														var tmp44 any = tmp48
-														tmp50 := checkDerefVar(var_glojure_DOT_core_int)
-														tmp51 := lang.Apply(tmp50, []any{int64(0)})
-														var tmp49 any = tmp51
-														v18 = tmp40
-														v19 = tmp43
-														v20 = tmp44
-														v21 = tmp49
-														continue
-													} // end let
-													tmp33 = tmp36
-												} else {
+												var v33 any = v30
+												_ = v33
+												var tmp34 any
+												tmp35 := checkDerefVar(var_glojure_DOT_core_chunked_DASH_seq_QMARK_)
+												tmp36 := lang.Apply(tmp35, []any{v33})
+												if lang.IsTruthy(tmp36) {
 													var tmp37 any
 													{ // let
-														// let binding "agent"
-														tmp38 := checkDerefVar(var_glojure_DOT_core_first)
-														tmp39 := lang.Apply(tmp38, []any{v32})
+														// let binding "c__0__auto__"
+														tmp38 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_first)
+														tmp39 := lang.Apply(tmp38, []any{v33})
 														var v40 any = tmp39
 														_ = v40
-														tmp41 := checkDerefVar(var_glojure_DOT_core_send)
-														tmp42 := lang.Apply(tmp41, []any{v40, v14})
-														_ = tmp42
-														tmp44 := checkDerefVar(var_glojure_DOT_core_next)
-														tmp45 := lang.Apply(tmp44, []any{v32})
-														var tmp43 any = tmp45
-														var tmp46 any = nil
-														var tmp47 any = int64(0)
-														var tmp48 any = int64(0)
-														v18 = tmp43
-														v19 = tmp46
-														v20 = tmp47
-														v21 = tmp48
+														tmp42 := checkDerefVar(var_glojure_DOT_core_chunk_DASH_rest)
+														tmp43 := lang.Apply(tmp42, []any{v33})
+														var tmp41 any = tmp43
+														var tmp44 any = v40
+														tmp46 := checkDerefVar(var_glojure_DOT_core_int)
+														tmp47 := checkDerefVar(var_glojure_DOT_core_count)
+														tmp48 := lang.Apply(tmp47, []any{v40})
+														tmp49 := lang.Apply(tmp46, []any{tmp48})
+														var tmp45 any = tmp49
+														tmp51 := checkDerefVar(var_glojure_DOT_core_int)
+														tmp52 := lang.Apply(tmp51, []any{int64(0)})
+														var tmp50 any = tmp52
+														v19 = tmp41
+														v20 = tmp44
+														v21 = tmp45
+														v22 = tmp50
 														continue
 													} // end let
-													tmp33 = tmp37
+													tmp34 = tmp37
+												} else {
+													var tmp38 any
+													{ // let
+														// let binding "agent"
+														tmp39 := checkDerefVar(var_glojure_DOT_core_first)
+														tmp40 := lang.Apply(tmp39, []any{v33})
+														var v41 any = tmp40
+														_ = v41
+														tmp42 := checkDerefVar(var_glojure_DOT_core_send)
+														tmp43 := lang.Apply(tmp42, []any{v41, v15})
+														_ = tmp43
+														tmp45 := checkDerefVar(var_glojure_DOT_core_next)
+														tmp46 := lang.Apply(tmp45, []any{v33})
+														var tmp44 any = tmp46
+														var tmp47 any = nil
+														var tmp48 any = int64(0)
+														var tmp49 any = int64(0)
+														v19 = tmp44
+														v20 = tmp47
+														v21 = tmp48
+														v22 = tmp49
+														continue
+													} // end let
+													tmp34 = tmp38
 												}
-												tmp31 = tmp33
+												tmp32 = tmp34
 											} // end let
-											tmp30 = tmp31
+											tmp31 = tmp32
 										} else {
 										}
-										tmp26 = tmp30
+										tmp27 = tmp31
 									} // end let
-									tmp22 = tmp26
+									tmp23 = tmp27
 								}
-								tmp15 = tmp22
+								tmp16 = tmp23
 								break
 							}
 						} // end let
-						_ = tmp15
-						tmp16, ok := lang.FieldOrMethod(nil, "MILLISECONDS")
+						_ = tmp16
+						tmp17, ok := lang.FieldOrMethod(nil, "MILLISECONDS")
 						if !ok {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", nil, "MILLISECONDS")))
 						}
-						var tmp17 any
-						switch reflect.TypeOf(tmp16).Kind() {
+						var tmp18 any
+						switch reflect.TypeOf(tmp17).Kind() {
 						case reflect.Func:
-							tmp17 = lang.Apply(tmp16, nil)
+							tmp18 = lang.Apply(tmp17, nil)
 						default:
-							tmp17 = tmp16
+							tmp18 = tmp17
 						}
-						tmp18, _ := lang.FieldOrMethod(v10, "await")
-						if reflect.TypeOf(tmp18).Kind() != reflect.Func {
+						tmp19, _ := lang.FieldOrMethod(v11, "await")
+						if reflect.TypeOf(tmp19).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("await is not a function")))
 						}
-						tmp19 := lang.Apply(tmp18, []any{v2, tmp17})
-						tmp9 = tmp19
+						tmp20 := lang.Apply(tmp19, []any{v2, tmp18})
+						tmp9 = tmp20
 					} // end let
 					tmp4 = tmp9
 				}
@@ -52949,34 +52957,35 @@ func LoadNS() {
 				var tmp4 any
 				{ // let
 					// let binding "s__0__auto__"
-					var v5 any = "unimplemented: new with non-constant class type"
-					_ = v5
-					var tmp6 any
+					tmp5 := new(strings8.Builder)
+					var v6 any = tmp5
+					_ = v6
+					var tmp7 any
 					{ // let
-						tmp7 := checkDerefVar(var_glojure_DOT_core_push_DASH_thread_DASH_bindings)
-						tmp8 := checkDerefVar(var_glojure_DOT_core_hash_DASH_map)
-						tmp9 := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_out_STAR_)
-						tmp10 := lang.Apply(tmp8, []any{tmp9, v5})
-						tmp11 := lang.Apply(tmp7, []any{tmp10})
-						_ = tmp11
-						var tmp12 any
+						tmp8 := checkDerefVar(var_glojure_DOT_core_push_DASH_thread_DASH_bindings)
+						tmp9 := checkDerefVar(var_glojure_DOT_core_hash_DASH_map)
+						tmp10 := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_out_STAR_)
+						tmp11 := lang.Apply(tmp9, []any{tmp10, v6})
+						tmp12 := lang.Apply(tmp8, []any{tmp11})
+						_ = tmp12
+						var tmp13 any
 						func() {
 							defer func() {
-								tmp13 := checkDerefVar(var_glojure_DOT_core_pop_DASH_thread_DASH_bindings)
-								tmp14 := lang.Apply(tmp13, nil)
-								_ = tmp14
+								tmp14 := checkDerefVar(var_glojure_DOT_core_pop_DASH_thread_DASH_bindings)
+								tmp15 := lang.Apply(tmp14, nil)
+								_ = tmp15
 							}()
-							tmp15 := checkDerefVar(var_glojure_DOT_core_apply)
-							tmp16 := checkDerefVar(var_glojure_DOT_core_pr)
-							tmp17 := lang.Apply(tmp15, []any{tmp16, v3})
-							_ = tmp17
-							tmp18 := checkDerefVar(var_glojure_DOT_core_str)
-							tmp19 := lang.Apply(tmp18, []any{v5})
-							tmp12 = tmp19
+							tmp16 := checkDerefVar(var_glojure_DOT_core_apply)
+							tmp17 := checkDerefVar(var_glojure_DOT_core_pr)
+							tmp18 := lang.Apply(tmp16, []any{tmp17, v3})
+							_ = tmp18
+							tmp19 := checkDerefVar(var_glojure_DOT_core_str)
+							tmp20 := lang.Apply(tmp19, []any{v6})
+							tmp13 = tmp20
 						}()
-						tmp6 = tmp12
+						tmp7 = tmp13
 					} // end let
-					tmp4 = tmp6
+					tmp4 = tmp7
 				} // end let
 				return tmp4
 			}
@@ -53043,34 +53052,35 @@ func LoadNS() {
 				var tmp4 any
 				{ // let
 					// let binding "s__0__auto__"
-					var v5 any = "unimplemented: new with non-constant class type"
-					_ = v5
-					var tmp6 any
+					tmp5 := new(strings8.Builder)
+					var v6 any = tmp5
+					_ = v6
+					var tmp7 any
 					{ // let
-						tmp7 := checkDerefVar(var_glojure_DOT_core_push_DASH_thread_DASH_bindings)
-						tmp8 := checkDerefVar(var_glojure_DOT_core_hash_DASH_map)
-						tmp9 := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_out_STAR_)
-						tmp10 := lang.Apply(tmp8, []any{tmp9, v5})
-						tmp11 := lang.Apply(tmp7, []any{tmp10})
-						_ = tmp11
-						var tmp12 any
+						tmp8 := checkDerefVar(var_glojure_DOT_core_push_DASH_thread_DASH_bindings)
+						tmp9 := checkDerefVar(var_glojure_DOT_core_hash_DASH_map)
+						tmp10 := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_out_STAR_)
+						tmp11 := lang.Apply(tmp9, []any{tmp10, v6})
+						tmp12 := lang.Apply(tmp8, []any{tmp11})
+						_ = tmp12
+						var tmp13 any
 						func() {
 							defer func() {
-								tmp13 := checkDerefVar(var_glojure_DOT_core_pop_DASH_thread_DASH_bindings)
-								tmp14 := lang.Apply(tmp13, nil)
-								_ = tmp14
+								tmp14 := checkDerefVar(var_glojure_DOT_core_pop_DASH_thread_DASH_bindings)
+								tmp15 := lang.Apply(tmp14, nil)
+								_ = tmp15
 							}()
-							tmp15 := checkDerefVar(var_glojure_DOT_core_apply)
-							tmp16 := checkDerefVar(var_glojure_DOT_core_print)
-							tmp17 := lang.Apply(tmp15, []any{tmp16, v3})
-							_ = tmp17
-							tmp18 := checkDerefVar(var_glojure_DOT_core_str)
-							tmp19 := lang.Apply(tmp18, []any{v5})
-							tmp12 = tmp19
+							tmp16 := checkDerefVar(var_glojure_DOT_core_apply)
+							tmp17 := checkDerefVar(var_glojure_DOT_core_print)
+							tmp18 := lang.Apply(tmp16, []any{tmp17, v3})
+							_ = tmp18
+							tmp19 := checkDerefVar(var_glojure_DOT_core_str)
+							tmp20 := lang.Apply(tmp19, []any{v6})
+							tmp13 = tmp20
 						}()
-						tmp6 = tmp12
+						tmp7 = tmp13
 					} // end let
-					tmp4 = tmp6
+					tmp4 = tmp7
 				} // end let
 				return tmp4
 			}
@@ -53156,34 +53166,35 @@ func LoadNS() {
 				var tmp4 any
 				{ // let
 					// let binding "s__0__auto__"
-					var v5 any = "unimplemented: new with non-constant class type"
-					_ = v5
-					var tmp6 any
+					tmp5 := new(strings8.Builder)
+					var v6 any = tmp5
+					_ = v6
+					var tmp7 any
 					{ // let
-						tmp7 := checkDerefVar(var_glojure_DOT_core_push_DASH_thread_DASH_bindings)
-						tmp8 := checkDerefVar(var_glojure_DOT_core_hash_DASH_map)
-						tmp9 := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_out_STAR_)
-						tmp10 := lang.Apply(tmp8, []any{tmp9, v5})
-						tmp11 := lang.Apply(tmp7, []any{tmp10})
-						_ = tmp11
-						var tmp12 any
+						tmp8 := checkDerefVar(var_glojure_DOT_core_push_DASH_thread_DASH_bindings)
+						tmp9 := checkDerefVar(var_glojure_DOT_core_hash_DASH_map)
+						tmp10 := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_out_STAR_)
+						tmp11 := lang.Apply(tmp9, []any{tmp10, v6})
+						tmp12 := lang.Apply(tmp8, []any{tmp11})
+						_ = tmp12
+						var tmp13 any
 						func() {
 							defer func() {
-								tmp13 := checkDerefVar(var_glojure_DOT_core_pop_DASH_thread_DASH_bindings)
-								tmp14 := lang.Apply(tmp13, nil)
-								_ = tmp14
+								tmp14 := checkDerefVar(var_glojure_DOT_core_pop_DASH_thread_DASH_bindings)
+								tmp15 := lang.Apply(tmp14, nil)
+								_ = tmp15
 							}()
-							tmp15 := checkDerefVar(var_glojure_DOT_core_apply)
-							tmp16 := checkDerefVar(var_glojure_DOT_core_prn)
-							tmp17 := lang.Apply(tmp15, []any{tmp16, v3})
-							_ = tmp17
-							tmp18 := checkDerefVar(var_glojure_DOT_core_str)
-							tmp19 := lang.Apply(tmp18, []any{v5})
-							tmp12 = tmp19
+							tmp16 := checkDerefVar(var_glojure_DOT_core_apply)
+							tmp17 := checkDerefVar(var_glojure_DOT_core_prn)
+							tmp18 := lang.Apply(tmp16, []any{tmp17, v3})
+							_ = tmp18
+							tmp19 := checkDerefVar(var_glojure_DOT_core_str)
+							tmp20 := lang.Apply(tmp19, []any{v6})
+							tmp13 = tmp20
 						}()
-						tmp6 = tmp12
+						tmp7 = tmp13
 					} // end let
-					tmp4 = tmp6
+					tmp4 = tmp7
 				} // end let
 				return tmp4
 			}
@@ -53250,34 +53261,35 @@ func LoadNS() {
 				var tmp4 any
 				{ // let
 					// let binding "s__0__auto__"
-					var v5 any = "unimplemented: new with non-constant class type"
-					_ = v5
-					var tmp6 any
+					tmp5 := new(strings8.Builder)
+					var v6 any = tmp5
+					_ = v6
+					var tmp7 any
 					{ // let
-						tmp7 := checkDerefVar(var_glojure_DOT_core_push_DASH_thread_DASH_bindings)
-						tmp8 := checkDerefVar(var_glojure_DOT_core_hash_DASH_map)
-						tmp9 := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_out_STAR_)
-						tmp10 := lang.Apply(tmp8, []any{tmp9, v5})
-						tmp11 := lang.Apply(tmp7, []any{tmp10})
-						_ = tmp11
-						var tmp12 any
+						tmp8 := checkDerefVar(var_glojure_DOT_core_push_DASH_thread_DASH_bindings)
+						tmp9 := checkDerefVar(var_glojure_DOT_core_hash_DASH_map)
+						tmp10 := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_out_STAR_)
+						tmp11 := lang.Apply(tmp9, []any{tmp10, v6})
+						tmp12 := lang.Apply(tmp8, []any{tmp11})
+						_ = tmp12
+						var tmp13 any
 						func() {
 							defer func() {
-								tmp13 := checkDerefVar(var_glojure_DOT_core_pop_DASH_thread_DASH_bindings)
-								tmp14 := lang.Apply(tmp13, nil)
-								_ = tmp14
+								tmp14 := checkDerefVar(var_glojure_DOT_core_pop_DASH_thread_DASH_bindings)
+								tmp15 := lang.Apply(tmp14, nil)
+								_ = tmp15
 							}()
-							tmp15 := checkDerefVar(var_glojure_DOT_core_apply)
-							tmp16 := checkDerefVar(var_glojure_DOT_core_println)
-							tmp17 := lang.Apply(tmp15, []any{tmp16, v3})
-							_ = tmp17
-							tmp18 := checkDerefVar(var_glojure_DOT_core_str)
-							tmp19 := lang.Apply(tmp18, []any{v5})
-							tmp12 = tmp19
+							tmp16 := checkDerefVar(var_glojure_DOT_core_apply)
+							tmp17 := checkDerefVar(var_glojure_DOT_core_println)
+							tmp18 := lang.Apply(tmp16, []any{tmp17, v3})
+							_ = tmp18
+							tmp19 := checkDerefVar(var_glojure_DOT_core_str)
+							tmp20 := lang.Apply(tmp19, []any{v6})
+							tmp13 = tmp20
 						}()
-						tmp6 = tmp12
+						tmp7 = tmp13
 					} // end let
-					tmp4 = tmp6
+					tmp4 = tmp7
 				} // end let
 				return tmp4
 			}
@@ -56143,41 +56155,42 @@ func LoadNS() {
 					var v8 any = tmp7
 					_ = v8
 					// let binding "sw"
-					var v9 any = "unimplemented: new with non-constant class type"
-					_ = v9
-					var tmp10 any
+					tmp9 := new(strings8.Builder)
+					var v10 any = tmp9
+					_ = v10
+					var tmp11 any
 					{ // let
 						// let binding "r"
-						tmp11 := checkDerefVar(var_glojure_DOT_core_apply)
-						tmp12 := checkDerefVar(var_glojure_DOT_go_DOT_io_reader)
-						tmp13 := lang.Apply(tmp11, []any{tmp12, v3, v8})
-						var v14 any = tmp13
-						_ = v14
-						var tmp15 any
+						tmp12 := checkDerefVar(var_glojure_DOT_core_apply)
+						tmp13 := checkDerefVar(var_glojure_DOT_go_DOT_io_reader)
+						tmp14 := lang.Apply(tmp12, []any{tmp13, v3, v8})
+						var v15 any = tmp14
+						_ = v15
+						var tmp16 any
 						func() {
 							defer func() {
-								tmp16, ok := lang.FieldOrMethod(v14, "close")
+								tmp17, ok := lang.FieldOrMethod(v15, "close")
 								if !ok {
-									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v14, "close")))
+									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v15, "close")))
 								}
-								var tmp17 any
-								switch reflect.TypeOf(tmp16).Kind() {
+								var tmp18 any
+								switch reflect.TypeOf(tmp17).Kind() {
 								case reflect.Func:
-									tmp17 = lang.Apply(tmp16, nil)
+									tmp18 = lang.Apply(tmp17, nil)
 								default:
-									tmp17 = tmp16
+									tmp18 = tmp17
 								}
-								_ = tmp17
+								_ = tmp18
 							}()
-							tmp18 := checkDerefVar(var_glojure_DOT_go_DOT_io_copy)
-							tmp19 := lang.Apply(tmp18, []any{v14, v9})
-							_ = tmp19
-							tmp20 := lang.Apply(lang.ToString, []any{v9})
-							tmp15 = tmp20
+							tmp19 := checkDerefVar(var_glojure_DOT_go_DOT_io_copy)
+							tmp20 := lang.Apply(tmp19, []any{v15, v10})
+							_ = tmp20
+							tmp21 := lang.Apply(lang.ToString, []any{v10})
+							tmp16 = tmp21
 						}()
-						tmp10 = tmp15
+						tmp11 = tmp16
 					} // end let
-					tmp5 = tmp10
+					tmp5 = tmp11
 				} // end let
 				return tmp5
 			}
