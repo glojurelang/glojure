@@ -268,6 +268,7 @@ func LoadNS() {
 	sym_codegen_DOT_test_DOT_def_DASH_simple := lang.NewSymbol("codegen.test.def-simple")
 	sym_codegen_DOT_test_DOT_fn_DASH_closure := lang.NewSymbol("codegen.test.fn-closure")
 	sym_codegen_DOT_test_DOT_fn_DASH_recur := lang.NewSymbol("codegen.test.fn-recur")
+	sym_codegen_DOT_test_DOT_goroutine := lang.NewSymbol("codegen.test.goroutine")
 	sym_codegen_DOT_test_DOT_loop_DASH_simple := lang.NewSymbol("codegen.test.loop-simple")
 	sym_codegen_DOT_test_DOT_maybe_DASH_class := lang.NewSymbol("codegen.test.maybe-class")
 	sym_codegen_DOT_test_DOT_multifn := lang.NewSymbol("codegen.test.multifn")
@@ -1273,7 +1274,6 @@ func LoadNS() {
 	sym_with_DASH_bindings := lang.NewSymbol("with-bindings")
 	sym_with_DASH_bindings_STAR_ := lang.NewSymbol("with-bindings*")
 	sym_with_DASH_in_DASH_str := lang.NewSymbol("with-in-str")
-	sym_with_DASH_init := lang.NewSymbol("with-init")
 	sym_with_DASH_loading_DASH_context := lang.NewSymbol("with-loading-context")
 	sym_with_DASH_local_DASH_vars := lang.NewSymbol("with-local-vars")
 	sym_with_DASH_meta := lang.NewSymbol("with-meta")
@@ -2791,8 +2791,6 @@ func LoadNS() {
 	var_glojure_DOT_core_with_DASH_bindings_STAR_ := lang.InternVarName(sym_glojure_DOT_core, sym_with_DASH_bindings_STAR_)
 	// var glojure.core/with-in-str
 	var_glojure_DOT_core_with_DASH_in_DASH_str := lang.InternVarName(sym_glojure_DOT_core, sym_with_DASH_in_DASH_str)
-	// var glojure.core/with-init
-	var_glojure_DOT_core_with_DASH_init := lang.InternVarName(sym_glojure_DOT_core, sym_with_DASH_init)
 	// var glojure.core/with-loading-context
 	var_glojure_DOT_core_with_DASH_loading_DASH_context := lang.InternVarName(sym_glojure_DOT_core, sym_with_DASH_loading_DASH_context)
 	// var glojure.core/with-local-vars
@@ -3103,27 +3101,30 @@ func LoadNS() {
 	}
 	// *1
 	{
-		tmp0 := sym__STAR_1.WithMeta(lang.NewMap()).(*lang.Symbol)
+		tmp0 := sym__STAR_1.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "glojure/core.glj", kw_line, int(6268), kw_column, int(6), kw_end_DASH_line, int(6271), kw_end_DASH_column, int(3), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
 		var_glojure_DOT_core__STAR_1 = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_1.SetDynamic()
 	}
 	// *2
 	{
-		tmp0 := sym__STAR_2.WithMeta(lang.NewMap()).(*lang.Symbol)
+		tmp0 := sym__STAR_2.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "glojure/core.glj", kw_line, int(6273), kw_column, int(6), kw_end_DASH_line, int(6276), kw_end_DASH_column, int(3), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
 		var_glojure_DOT_core__STAR_2 = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_2.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_2.SetDynamic()
 	}
 	// *3
 	{
-		tmp0 := sym__STAR_3.WithMeta(lang.NewMap()).(*lang.Symbol)
+		tmp0 := sym__STAR_3.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "glojure/core.glj", kw_line, int(6278), kw_column, int(6), kw_end_DASH_line, int(6281), kw_end_DASH_column, int(3), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
 		var_glojure_DOT_core__STAR_3 = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_3.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_3.SetDynamic()
 	}
 	// *agent*
 	{
@@ -3193,11 +3194,12 @@ func LoadNS() {
 	}
 	// *e
 	{
-		tmp0 := sym__STAR_e.WithMeta(lang.NewMap()).(*lang.Symbol)
+		tmp0 := sym__STAR_e.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "glojure/core.glj", kw_line, int(6283), kw_column, int(6), kw_end_DASH_line, int(6286), kw_end_DASH_column, int(3), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
 		var_glojure_DOT_core__STAR_e = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_e.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+		var_glojure_DOT_core__STAR_e.SetDynamic()
 	}
 	// *err*
 	{
@@ -3226,7 +3228,7 @@ func LoadNS() {
 	// *loaded-libs*
 	{
 		tmp0 := sym__STAR_loaded_DASH_libs_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "glojure/core.glj", kw_line, int(5817), kw_column, int(10), kw_end_DASH_line, int(5820), kw_end_DASH_column, int(15), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_glojure_DOT_core_DOT_protocols, sym_glojure_DOT_string, sym_glojure_DOT_go_DOT_io, sym_codegen_DOT_test_DOT_case_DASH_switch, sym_codegen_DOT_test_DOT_const_DASH_keyword, sym_codegen_DOT_test_DOT_const_DASH_number, sym_codegen_DOT_test_DOT_const_DASH_string, sym_codegen_DOT_test_DOT_def_DASH_simple, sym_codegen_DOT_test_DOT_fn_DASH_closure, sym_codegen_DOT_test_DOT_fn_DASH_recur, sym_codegen_DOT_test_DOT_loop_DASH_simple, sym_codegen_DOT_test_DOT_maybe_DASH_class, sym_codegen_DOT_test_DOT_multifn, sym_codegen_DOT_test_DOT_ns_DASH_skip, sym_codegen_DOT_test_DOT_quote_DASH_simple, sym_codegen_DOT_test_DOT_ref, sym_codegen_DOT_test_DOT_set_DASH_bang, sym_codegen_DOT_test_DOT_the_DASH_var, sym_codegen_DOT_test_DOT_throw_DASH_simple, sym_codegen_DOT_test_DOT_try_DASH_advanced, sym_codegen_DOT_test_DOT_try_DASH_basic, sym_codegen_DOT_test_DOT_values, sym_codegen_DOT_test_DOT_with_DASH_meta})))
+		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_glojure_DOT_core_DOT_protocols, sym_glojure_DOT_string, sym_glojure_DOT_go_DOT_io, sym_codegen_DOT_test_DOT_case_DASH_switch, sym_codegen_DOT_test_DOT_const_DASH_keyword, sym_codegen_DOT_test_DOT_const_DASH_number, sym_codegen_DOT_test_DOT_const_DASH_string, sym_codegen_DOT_test_DOT_def_DASH_simple, sym_codegen_DOT_test_DOT_fn_DASH_closure, sym_codegen_DOT_test_DOT_fn_DASH_recur, sym_codegen_DOT_test_DOT_goroutine, sym_codegen_DOT_test_DOT_loop_DASH_simple, sym_codegen_DOT_test_DOT_maybe_DASH_class, sym_codegen_DOT_test_DOT_multifn, sym_codegen_DOT_test_DOT_ns_DASH_skip, sym_codegen_DOT_test_DOT_quote_DASH_simple, sym_codegen_DOT_test_DOT_ref, sym_codegen_DOT_test_DOT_set_DASH_bang, sym_codegen_DOT_test_DOT_the_DASH_var, sym_codegen_DOT_test_DOT_throw_DASH_simple, sym_codegen_DOT_test_DOT_try_DASH_advanced, sym_codegen_DOT_test_DOT_try_DASH_basic, sym_codegen_DOT_test_DOT_values, sym_codegen_DOT_test_DOT_with_DASH_meta})))
 		var_glojure_DOT_core__STAR_loaded_DASH_libs_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_loaded_DASH_libs_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -4530,7 +4532,7 @@ func LoadNS() {
 	}
 	// gen-class
 	{
-		tmp0 := sym_gen_DASH_class.WithMeta(lang.NewMap()).(*lang.Symbol)
+		tmp0 := sym_gen_DASH_class.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(5732), kw_column, int(10), kw_end_DASH_line, int(5732), kw_end_DASH_column, int(18), kw_declared, true, kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
 		var_glojure_DOT_core_gen_DASH_class = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_gen_DASH_class.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7618,7 +7620,7 @@ func LoadNS() {
 	}
 	// unquote
 	{
-		tmp0 := sym_unquote.WithMeta(lang.NewMap()).(*lang.Symbol)
+		tmp0 := sym_unquote.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(11), kw_column, int(6), kw_end_DASH_line, int(11), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
 		var_glojure_DOT_core_unquote = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_unquote.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7626,7 +7628,7 @@ func LoadNS() {
 	}
 	// unquote-splicing
 	{
-		tmp0 := sym_unquote_DASH_splicing.WithMeta(lang.NewMap()).(*lang.Symbol)
+		tmp0 := sym_unquote_DASH_splicing.WithMeta(lang.NewMap(kw_file, "glojure/core.glj", kw_line, int(12), kw_column, int(6), kw_end_DASH_line, int(12), kw_end_DASH_column, int(21), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
 		var_glojure_DOT_core_unquote_DASH_splicing = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_unquote_DASH_splicing.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -8054,14 +8056,6 @@ func LoadNS() {
 		var_glojure_DOT_core_when_DASH_not = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core_when_DASH_not.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// with-init
-	{
-		tmp0 := sym_with_DASH_init.WithMeta(lang.NewMap(kw_file, "codegen/test/def_simple.glj", kw_line, int(7), kw_column, int(8), kw_end_DASH_line, int(7), kw_end_DASH_column, int(16), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		var_glojure_DOT_core_with_DASH_init = ns.InternWithValue(tmp0, int64(42), true)
-		if tmp0.Meta() != nil {
-			var_glojure_DOT_core_with_DASH_init.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// with-meta

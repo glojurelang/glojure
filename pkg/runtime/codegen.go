@@ -987,8 +987,7 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		fmt.Println("LetFn not yet implemented; returning nil")
 		return "nil"
 	case ast.OpGo:
-		fmt.Println("Go not yet implemented; returning nil")
-		return "nil"
+		return g.generateGo(node)
 	case ast.OpSetBang:
 		return g.generateSetBang(node)
 	case ast.OpCase:
@@ -1072,6 +1071,26 @@ func (g *Generator) generateDef(node *ast.Node) string {
 	g.writef("%s.BindRoot(%s)\n", vrVar, initVar)
 
 	return vrVar
+}
+
+func (g *Generator) generateGo(node *ast.Node) string {
+	goNode := node.Sub.(*ast.GoNode)
+
+	invokeNode := goNode.Invoke.Sub.(*ast.InvokeNode)
+	fn := invokeNode.Fn
+	args := invokeNode.Args
+
+	// Generate the function expression
+	fnExpr := g.generateASTNode(fn)
+
+	// Generate the arguments
+	var argExprs []string
+	for _, arg := range args {
+		argExprs = append(argExprs, g.generateASTNode(arg))
+	}
+
+	g.writef("go lang.Apply(%s, []any{%s})\n", fnExpr, strings.Join(argExprs, ", "))
+	return "nil" // starting a goroutine returns nil
 }
 
 // generateVarDeref generates code for a Var dereference

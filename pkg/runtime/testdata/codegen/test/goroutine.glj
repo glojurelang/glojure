@@ -1,0 +1,15 @@
+(ns codegen.test.goroutine)
+
+(defn send-on-chan [ch val]
+  (let [chVal (reflect.ValueOf ch)
+        valVal (reflect.ValueOf val)]
+    (.Send chVal valVal)))
+
+(defn ^{:expected-output 42} -main []
+  (let [ch (go/make (go/chan-of go/int64))
+        chVal (reflect.ValueOf ch)]
+    (go/go (send-on-chan ch 42))
+    (let [[recvResult ok] (.Recv chVal)]
+      (if (not ok)
+        (throw (fmt.Errorf "Channel closed")))
+      (.Interface recvResult))))
