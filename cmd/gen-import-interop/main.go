@@ -42,6 +42,7 @@ var defaultPackages = []string{
 	"crypto/x509",
 	"crypto/x509/pkix",
 	"database/sql",
+	"github.com/google/uuid",
 	"database/sql/driver",
 	"debug/buildinfo",
 	"debug/dwarf",

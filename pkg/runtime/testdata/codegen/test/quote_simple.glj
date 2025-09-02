@@ -1,0 +1,4 @@
+(ns codegen.test.quote-simple)
+
+(defn ^{:expected-output (list 1 2 3)} -main []
+  '(1 2 3))

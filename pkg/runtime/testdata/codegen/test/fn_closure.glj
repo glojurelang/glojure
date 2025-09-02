@@ -1,0 +1,16 @@
+(ns codegen.test.fn-closure)
+
+(defn gen-closure [the-result] (fn [] the-result))
+
+(def closed (gen-closure 42))
+
+(let [hidden-atom (atom 0)]
+  (defn inc-atom []
+    (swap! hidden-atom inc))
+  (defn get-atom []
+    @hidden-atom))
+
+(defn ^{:expected-output [42 1]} -main []
+  (inc-atom)
+  [(closed)
+   (get-atom)])

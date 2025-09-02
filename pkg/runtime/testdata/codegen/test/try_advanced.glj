@@ -1,0 +1,51 @@
+(ns codegen.test.try-advanced)
+
+(defn try-custom-value []
+  (try
+    (throw "custom error")
+    (catch go/any e
+      e)))
+
+(defn catch-binding-scope []
+  (let [e "outer"]
+    (try
+      (throw "test")
+      (catch go/any e
+        e)))) ; should be the exception, not "outer"
+
+(defn catch-binding-scope-2 []
+  (let [e "outer"]
+    (try
+      (throw "test")
+      (catch go/any e
+        e))
+    e)) ; should be "outer", not the exception
+
+(defn finally-with-return []
+  (try
+    42
+    (finally
+      100))) ; should return 42, not 100
+
+(defn ^{:expected-output "advanced tests passed"} -main []
+  ;; Test that custom values can be thrown and caught
+  (if (= (try-custom-value) "custom error")
+    nil
+    (throw "try-custom-value failed"))
+
+  ;; Test that catch binding shadows outer scope
+  (if (= (catch-binding-scope) "test")
+    nil
+    (throw "catch-binding-scope failed"))
+
+  ;; Test that catch binding does not affect outer scope
+  (if (= (catch-binding-scope-2) "outer")
+    nil
+    (throw "catch-binding-scope-2 failed"))
+
+  ;; Test that finally doesn't affect return value
+  (if (= (finally-with-return) 42)
+    nil
+    (throw "finally-with-return failed"))
+
+  "advanced tests passed")

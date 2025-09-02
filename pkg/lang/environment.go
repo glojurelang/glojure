@@ -67,6 +67,10 @@ type (
 		Context() context.Context
 
 		Errorf(form interface{}, format string, args ...interface{}) error
+
+		// LookupLocal looks up a local binding in the environment.
+		// This is used by the codegen system to access captured values.
+		LookupLocal(name string) (any, bool)
 	}
 
 	// RecurError is an error returned by a recur form.

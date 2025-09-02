@@ -1,0 +1,6 @@
+(ns codegen.test.the-var)
+
+(def foo 42)
+
+(defn ^{:expected-output 42} -main []
+  (.get #'foo))

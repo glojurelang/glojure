@@ -33,6 +33,16 @@ func (fn *Fn) WithMeta(meta lang.IPersistentMap) interface{} {
 	return &cpy
 }
 
+func (fn *Fn) ASTNode() *ast.Node {
+	return fn.astNode
+}
+
+// GetEnvironment returns the captured environment for this function.
+// This is used by the codegen system to access captured values.
+func (fn *Fn) GetEnvironment() lang.Environment {
+	return fn.env
+}
+
 func (fn *Fn) Invoke(args ...interface{}) interface{} {
 	fnNode := fn.astNode.Sub.(*ast.FnNode)
 
@@ -135,9 +145,9 @@ func errorWithStack(err error, stackFrame lang.StackFrame) error {
 	if err == nil {
 		return nil
 	}
-	valErr, ok := err.(*lang.Error)
+	valErr, ok := err.(*lang.EvalError)
 	if !ok {
-		return lang.NewError(stackFrame, err)
+		return lang.NewEvalError(stackFrame, err)
 	}
 	return valErr.AddStack(stackFrame)
 }

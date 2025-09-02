@@ -1,0 +1,74 @@
+(ns codegen.test.try-basic)
+
+(defn basic-try []
+  (try
+    "success"
+    (catch go/any e
+      "caught")))
+
+(defn try-with-throw []
+  (try
+    (throw "test error")
+    "not reached"
+    (catch go/any e
+      "caught exception")))
+
+(defn try-no-catch []
+  (try
+    "just body"))
+
+(defn try-finally-only []
+  (try
+    "body"
+    (finally
+      nil))) ; finally doesn't affect return value
+
+(defn try-catch-finally []
+  (try
+    (throw "error")
+    (catch go/any e
+      "caught")
+    (finally
+      nil)))
+
+(defn nested-try []
+  (try
+    (try
+      (throw "inner")
+      (catch go/any e
+        "inner caught"))
+    (catch go/any e
+      "outer caught")))
+
+(defn ^{:expected-output "all tests passed"} -main []
+  ;; Test that basic-try returns success (no exception thrown)
+  (if (= (basic-try) "success")
+    nil
+    (throw "basic-try failed"))
+
+  ;; Test that try-with-throw catches the exception
+  (if (= (try-with-throw) "caught exception")
+    nil
+    (throw "try-with-throw failed"))
+
+  ;; Test that try-no-catch returns the body
+  (if (= (try-no-catch) "just body")
+    nil
+    (throw "try-no-catch failed"))
+
+  ;; Test that try-finally-only returns body (not finally result)
+  (if (= (try-finally-only) "body")
+    nil
+    (throw "try-finally-only failed"))
+
+  ;; Test that try-catch-finally catches the exception
+  (if (= (try-catch-finally) "caught")
+    nil
+    (throw "try-catch-finally failed"))
+
+  ;; Test that nested-try catches in inner block
+  (if (= (nested-try) "inner caught")
+    nil
+    (throw "nested-try failed"))
+
+  "all tests passed")

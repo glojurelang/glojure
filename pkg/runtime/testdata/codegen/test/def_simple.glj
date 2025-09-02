@@ -1,0 +1,11 @@
+(ns codegen.test.def-simple)
+
+(defn deftest [val]
+  (def no-init)
+  (def with-init val))
+
+(defn
+  ^{:expected-output ["Unbound: #'codegen.test.def-simple/no-init" 42]}
+  -main []
+  (deftest 42)
+  [(str (deref #'no-init)) with-init])

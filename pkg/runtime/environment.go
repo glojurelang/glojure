@@ -73,7 +73,7 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 
 	// bootstrap some vars
 	e.namespaceVar = coreNS.InternWithValue(SymbolNamespace,
-		lang.IFnFunc(func(args ...interface{}) interface{} {
+		lang.NewFnFunc(func(args ...interface{}) interface{} {
 			return coreNS
 		}), true)
 	e.namespaceVar.SetMacro()
@@ -113,11 +113,6 @@ func (env *environment) DefVar(sym *lang.Symbol, val interface{}) *lang.Var {
 		v.SetMeta(meta)
 	}
 	return v
-}
-
-func (env *environment) DefineMacro(name string, fn lang.IFn) {
-	vr := env.DefVar(lang.NewSymbol(name), fn)
-	vr.SetMacro()
 }
 
 func (env *environment) lookup(sym *lang.Symbol) (res interface{}, ok bool) {
@@ -213,4 +208,13 @@ func (env *environment) errorf(n interface{}, format string, args ...interface{}
 	location := fmt.Sprintf("%s:%s:%s", filename, line, col)
 
 	return fmt.Errorf("%s: "+format, append([]interface{}{location}, args...)...)
+}
+
+// LookupLocal looks up a local binding in the environment.
+// This is used by the codegen system to access captured values.
+func (env *environment) LookupLocal(name string) (any, bool) {
+	if env == nil || env.scope == nil {
+		return nil, false
+	}
+	return env.scope.lookup(lang.NewSymbol(name))
 }

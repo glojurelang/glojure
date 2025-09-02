@@ -27,6 +27,25 @@
        (= (str (z/node zloc)) (str old)))
      (fn visit [zloc] (z/replace zloc new))]))
 
+(defn sexpr-splice-replace 
+  "Replace a single form with multiple forms from a list"
+  [old replacement-list]
+  [(fn select [zloc] (and (z/sexpr-able? zloc) (= old (z/sexpr zloc))))
+   (fn visit [zloc]
+     ;; We need to replace the current node with multiple nodes
+     ;; First insert all the new nodes after the current one, then remove the current
+     (let [parent (z/up zloc)]
+       (if (and parent (z/list? parent))
+         ;; We're in a list context, can splice
+         (loop [zloc zloc
+                forms (reverse replacement-list)]
+           (if (empty? forms)
+             (z/remove zloc)
+             (recur (z/insert-right zloc (first forms))
+                    (rest forms))))
+         ;; Not in a list context, fall back to regular replacement with a list
+         (z/replace zloc (cons 'do replacement-list)))))])
+
 (defn sexpr-remove [old]
   [(fn select [zloc] (and (z/sexpr-able? zloc) (= old (z/sexpr zloc))))
    (fn visit [zloc] (z/remove zloc))])
@@ -194,6 +213,15 @@
    (sexpr-replace '(. clojure.lang.PersistentHashMap (create keyvals))
                   '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentHashMap keyvals))
 
+   (sexpr-replace '(java.util.ArrayList. n) '(github.com$glojurelang$glojure$pkg$lang.NewArrayList (to-array n)))
+   (sexpr-replace '(java.util.ArrayList. coll) '(github.com$glojurelang$glojure$pkg$lang.NewArrayList (to-array coll)))
+   (sexpr-replace '(java.util.ArrayList.) '(new github.com$glojurelang$glojure$pkg$lang.ArrayList))
+
+   ;; ===== Other Constructors =====
+
+   (sexpr-replace '(Object.)
+                  '(-> nil reflect.StructOf reflect.New .Interface))
+
    ;; ===== Java Type Mappings =====
    ;; map a bunch of java types to go equivalent
    ;; TODO: once everything passes, see if we can replace with a blanket
@@ -204,6 +232,10 @@
    (sexpr-replace 'java.io.PrintWriter
                   'github.com$glojurelang$glojure$pkg$lang.PrintWriter)
 
+   ;; omit PrintWriter-on (defn PrintWriter-on ...)
+   (omitp #(and (z/list? %)
+                (= 'defn (first (z/sexpr %)))
+                (= 'PrintWriter-on (second (z/sexpr %)))))
 
    (sexpr-replace 'clojure.lang.IReduce
                   'github.com$glojurelang$glojure$pkg$lang.IReduce)
@@ -213,6 +245,8 @@
                   'github.com$glojurelang$glojure$pkg$lang.*MultiFn)
    (sexpr-replace 'clojure.lang.Volatile
                   'github.com$glojurelang$glojure$pkg$lang.Volatile)
+   (sexpr-replace 'clojure.lang.Volatile.
+                  'github.com$glojurelang$glojure$pkg$lang.NewVolatile)
    (sexpr-replace 'clojure.lang.IAtom
                   'github.com$glojurelang$glojure$pkg$lang.IAtom)
    (sexpr-replace 'clojure.lang.IMapEntry
@@ -240,6 +274,22 @@
    (sexpr-replace 'clojure.lang.PersistentArrayMap/createAsIfByAssoc
                   'github.com$glojurelang$glojure$pkg$lang.NewPersistentArrayMapAsIfByAssoc)
 
+
+   (sexpr-replace 'java.util.Map$Entry 'github.com$glojurelang$glojure$pkg$lang.MapEntry)
+
+   (sexpr-replace 'java.net.URI 'net$url.URL)
+
+   (sexpr-replace 'java.util.UUID 'github.com$google$uuid.UUID)
+
+   (sexpr-replace '(java.util.UUID/fromString s)
+                  '(let [[uuid err] (github.com$google$uuid.Parse s)]
+                     (if err
+                       (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Error parsing UUID: " err)))
+                       uuid)))
+
+   (sexpr-replace '(java.util.UUID/randomUUID)
+                  '(github.com$google$uuid.NewV7))
+
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    ;; struct map
    (sexpr-replace '(. clojure.lang.PersistentStructMap (createSlotMap keys))
@@ -248,6 +298,8 @@
                   '(github.com$glojurelang$glojure$pkg$lang.CreatePersistentStructMap s inits))
    (sexpr-replace '(. clojure.lang.PersistentStructMap (construct s vals))
                   '(github.com$glojurelang$glojure$pkg$lang.ConstructPersistentStructMap s vals))
+   (sexpr-replace '(. clojure.lang.PersistentStructMap (getAccessor s key))
+                  '(github.com$glojurelang$glojure$pkg$lang.GetPersistentStructMapAccessor s key))
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
    (sexpr-replace '(.. (name lib)
@@ -270,7 +322,12 @@
 
 
    ;; ===== Exception Handling =====
+   (sexpr-replace 'Exception. 'github.com$glojurelang$glojure$pkg$lang.NewError)
+
+   (sexpr-replace 'java.lang.UnsupportedOperationException. 'github.com$glojurelang$glojure$pkg$lang.NewUnsupportedOperationError)
+
    (sexpr-replace 'IllegalArgumentException. 'github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError)
+   (sexpr-replace 'IllegalArgumentException 'github.com$glojurelang$glojure$pkg$lang.*IllegalArgumentError)
    ;; new Exception
    [(fn select [zloc] (and (z/list? zloc)
                            (let [expr (z/sexpr zloc)]
@@ -284,6 +341,32 @@
                            (= 'catch (-> zloc z/left z/sexpr))))
     (fn visit [zloc]
       (z/replace zloc 'go/any))]
+
+   ;; Replace try/catch blocks for Long/valueOf
+   [(fn select [zloc] 
+      (and (z/list? zloc)
+           (= 'try (first (z/sexpr zloc)))
+           (let [body (second (z/sexpr zloc))]
+             (and (list? body)
+                  (= 'Long/valueOf (first body))))))
+    (fn visit [zloc]
+      (let [s (second (second (z/sexpr zloc)))] ; extract the 's' variable
+        (z/replace zloc 
+                   `(let [result# (strconv.ParseInt ~s 10 64)]
+                      (if (result# 1) nil (result# 0))))))]
+
+   ;; Replace try/catch blocks for Double/valueOf  
+   [(fn select [zloc]
+      (and (z/list? zloc)
+           (= 'try (first (z/sexpr zloc)))
+           (let [body (second (z/sexpr zloc))]
+             (and (list? body)
+                  (= 'Double/valueOf (first body))))))
+    (fn visit [zloc]
+      (let [s (second (second (z/sexpr zloc)))] ; extract the 's' variable
+        (z/replace zloc
+                   `(let [result# (strconv.ParseFloat ~s 64)]
+                      (if (result# 1) nil (result# 0))))))]
 
    ;; ===== Metadata Operations =====
    ;; replace .withMeta
@@ -336,7 +419,7 @@
                   '(. github.com$glojurelang$glojure$pkg$runtime.RT (FindVar sym)))
 
    (sexpr-replace '(. x (get)) '(. x (Get)))
-   (sexpr-replace '(. x (set val)) '(. x (Set val)))
+    (sexpr-replace '(. x (set val)) '(. x (Set val)))
 
    ;; ===== Omissions and Deferrals =====
    (omitp #(and (z/list? %)
@@ -345,10 +428,19 @@
                 (= 'defmethod (first (z/sexpr %)))
                 (= 'Eduction (nth (z/sexpr %) 2))))
 
+   ;; Omit eduction function
+   (omitp #(and (z/list? %)
+                (= 'defn (first (z/sexpr %)))
+                (= 'eduction (second (z/sexpr %)))))
+
    ;; omit default-data-readers for now
    (omitp #(and (z/list? %)
                 (= 'def (first (z/sexpr %)))
                 (= 'default-data-readers (second (z/sexpr %)))))
+
+   ;; omit Java annotation-related functions (not needed for Go)
+   (omit-symbols '#{is-annotation? is-runtime-annotation? descriptor
+                     add-annotation process-annotation add-annotations})
 
    ;; omit tap functions
    (omitp #(and (z/list? %)
@@ -357,6 +449,12 @@
    (omitp #(and (z/list? %)
                 (= 'defonce (first (z/sexpr %)))
                 (= 'tapq (second (z/sexpr %)))))
+   (omitp #(and (z/list? %)
+                (= 'defn (first (z/sexpr %)))
+                (= 'add-tap (second (z/sexpr %)))))
+   (omitp #(and (z/list? %)
+                (= 'defn (first (z/sexpr %)))
+                (= 'tap> (second (z/sexpr %)))))
 
    [(fn select [zloc] (and (z/list? zloc)
                            (= 'defn- (first (z/sexpr zloc)))
@@ -406,10 +504,15 @@
                   'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromInt64)
    (sexpr-replace '(BigInteger/valueOf (long x))
                   '(math$big.NewInt (long x)))
+   (sexpr-replace '(BigInteger. x) '(github.com$glojurelang$glojure$pkg$lang.NewBigInt x))
    (sexpr-replace '(BigDecimal/valueOf (long x))
                   '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromInt64 (long x)))
    (sexpr-replace '(. BigDecimal valueOf (double x))
                   '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromFloat64 (double x)))
+   (sexpr-replace '(BigDecimal. x)
+                  '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimal x))
+   (sexpr-replace '(BigDecimal. (.numerator ^github.com$glojurelang$glojure$pkg$lang.*Ratio x))
+                  '(github.com$glojurelang$glojure$pkg$lang.NewBigDecimalFromRatio x))
    (sexpr-replace 'clojure.lang.BigInt/fromBigInteger
                   'github.com$glojurelang$glojure$pkg$lang.NewBigIntFromGoBigInt)
 
@@ -634,7 +737,10 @@
                         (catch Exception e false)))
     (fn visit [zloc] (z/replace zloc
                                 (let [sym (-> zloc z/sexpr str)]
-                                  (symbol (str (string/upper-case (first sym)) (subs sym 1))))))]
+                                  (symbol (str (first sym) (subs sym 1))))))]
+   (sexpr-splice-replace 'clojure.lang.Numbers/gt
+                         ['.Gt 'github.com$glojurelang$glojure$pkg$lang.Numbers])
+
    (sexpr-replace 'clojure.lang.Numbers 'github.com$glojurelang$glojure$pkg$lang.Numbers)
    (sexpr-replace '(cast Number x) '(github.com$glojurelang$glojure$pkg$lang.MustAsNumber x))
    (sexpr-replace '(instance? Number x) '(github.com$glojurelang$glojure$pkg$lang.IsNumber x))
@@ -648,9 +754,9 @@
    (sexpr-replace 'clojure.lang.Numbers/abs
                   'github.com$glojurelang$glojure$pkg$lang.Abs)
 
-   (sexpr-replace 'Unchecked_add 'UncheckedAdd)
-   (sexpr-replace 'Unchecked_dec 'UncheckedDec)
-   (sexpr-replace 'Unchecked_int_divide 'UncheckedIntDivide)
+   (sexpr-replace 'unchecked_add 'UncheckedAdd)
+   (sexpr-replace 'unchecked_dec 'UncheckedDec)
+   (sexpr-replace 'unchecked_int_divide 'UncheckedIntDivide)
    (sexpr-replace '(unchecked_minus x) '(Unchecked_negate x))
 
    ;; ===== Numeric Array Replacements =====
@@ -695,6 +801,8 @@
    (sexpr-replace '(. clojure.lang.Compiler (eval form)) '(. clojure.lang.Compiler (Eval form)))
    (sexpr-replace '(clojure.lang.Compiler/maybeResolveIn (the-ns ns) sym)
                   '(. github.com$glojurelang$glojure$pkg$runtime.Compiler maybeResolveIn (the-ns ns) sym))
+   (sexpr-replace 'clojure.lang.Compiler$CompilerException.
+                  'github.com$glojurelang$glojure$pkg$lang.NewCompilerError)
 
    (sexpr-replace '.alterMeta '.AlterMeta)
 

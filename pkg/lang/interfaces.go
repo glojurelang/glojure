@@ -312,6 +312,13 @@ type (
 		Pop() ITransientVector
 	}
 
+	// Iterator is a Java-like iterator interface; included
+	// to more easly translate Clojure Java-isms.
+	Iterator interface {
+		HasNext() bool
+		Next() any
+	}
+
 	////////////////////////////////////////////////////////////////////////////
 	// Abstract classes
 	//
