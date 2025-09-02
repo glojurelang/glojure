@@ -31,13 +31,13 @@ endif
 TEST_FILES := $(shell find ./test -name '*.glj' | sort)
 TEST_TARGETS := $(addsuffix .test,$(TEST_FILES))
 
-GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows_amd64 windows_arm js_wasm
+GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows_amd64 windows_arm js_wasm wasip1_wasm
 GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(platform).go)
 # wasm should have .wasm suffix; others should not
 BINS=$(foreach platform,$(GOPLATFORMS),bin/$(platform)/glj$(if $(findstring wasm,$(platform)),.wasm,))
 
 # eventually, support multiple minor versions
-GO_VERSION := 1.19.3
+GO_VERSION := 1.25.0
 GO_CMD := go$(GO_VERSION)
 
 .PHONY: all
