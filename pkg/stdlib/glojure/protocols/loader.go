@@ -492,7 +492,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
-				var v5 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v5 any
+				if len(restArgs) > 0 {
+					v5 = lang.NewList(restArgs...)
+				}
 				_ = v5
 				tmp6 := checkDerefVar(var_glojure_DOT_core_class)
 				tmp7 := lang.Apply(tmp6, []any{v4})
@@ -508,7 +512,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v5 := args[0]
 				_ = v5
-				var v6 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v6 any
+				if len(restArgs) > 0 {
+					v6 = lang.NewList(restArgs...)
+				}
 				_ = v6
 				tmp7 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp8 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -526,7 +534,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v7 := args[0]
 				_ = v7
-				var v8 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v8 any
+				if len(restArgs) > 0 {
+					v8 = lang.NewList(restArgs...)
+				}
 				_ = v8
 				tmp9 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp10 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -544,7 +556,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v9 := args[0]
 				_ = v9
-				var v10 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v10 any
+				if len(restArgs) > 0 {
+					v10 = lang.NewList(restArgs...)
+				}
 				_ = v10
 				tmp11 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -562,7 +578,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v11 := args[0]
 				_ = v11
-				var v12 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v12 any
+				if len(restArgs) > 0 {
+					v12 = lang.NewList(restArgs...)
+				}
 				_ = v12
 				tmp13 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -588,7 +608,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
-				var v5 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v5 any
+				if len(restArgs) > 0 {
+					v5 = lang.NewList(restArgs...)
+				}
 				_ = v5
 				tmp6 := checkDerefVar(var_glojure_DOT_core_class)
 				tmp7 := lang.Apply(tmp6, []any{v4})
@@ -604,7 +628,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v5 := args[0]
 				_ = v5
-				var v6 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v6 any
+				if len(restArgs) > 0 {
+					v6 = lang.NewList(restArgs...)
+				}
 				_ = v6
 				tmp7 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp8 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -630,7 +658,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
-				var v5 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v5 any
+				if len(restArgs) > 0 {
+					v5 = lang.NewList(restArgs...)
+				}
 				_ = v5
 				tmp6 := checkDerefVar(var_glojure_DOT_core_class)
 				tmp7 := lang.Apply(tmp6, []any{v4})
@@ -655,7 +687,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
-				var v5 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v5 any
+				if len(restArgs) > 0 {
+					v5 = lang.NewList(restArgs...)
+				}
 				_ = v5
 				tmp6 := checkDerefVar(var_glojure_DOT_core_class)
 				tmp7 := lang.Apply(tmp6, []any{v4})
@@ -671,7 +707,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v5 := args[0]
 				_ = v5
-				var v6 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v6 any
+				if len(restArgs) > 0 {
+					v6 = lang.NewList(restArgs...)
+				}
 				_ = v6
 				tmp7 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp8 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -689,7 +729,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v7 := args[0]
 				_ = v7
-				var v8 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v8 any
+				if len(restArgs) > 0 {
+					v8 = lang.NewList(restArgs...)
+				}
 				_ = v8
 				tmp9 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp10 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -707,7 +751,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v9 := args[0]
 				_ = v9
-				var v10 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v10 any
+				if len(restArgs) > 0 {
+					v10 = lang.NewList(restArgs...)
+				}
 				_ = v10
 				tmp11 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -733,7 +781,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
-				var v5 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v5 any
+				if len(restArgs) > 0 {
+					v5 = lang.NewList(restArgs...)
+				}
 				_ = v5
 				tmp6 := checkDerefVar(var_glojure_DOT_core_class)
 				tmp7 := lang.Apply(tmp6, []any{v4})
@@ -758,7 +810,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
-				var v4 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v4 any
+				if len(restArgs) > 0 {
+					v4 = lang.NewList(restArgs...)
+				}
 				_ = v4
 				tmp5 := checkDerefVar(var_glojure_DOT_core_class)
 				tmp6 := lang.Apply(tmp5, []any{v3})
@@ -774,7 +830,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
-				var v5 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v5 any
+				if len(restArgs) > 0 {
+					v5 = lang.NewList(restArgs...)
+				}
 				_ = v5
 				tmp6 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -792,7 +852,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v6 := args[0]
 				_ = v6
-				var v7 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v7 any
+				if len(restArgs) > 0 {
+					v7 = lang.NewList(restArgs...)
+				}
 				_ = v7
 				tmp8 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp9 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -810,7 +874,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v8 := args[0]
 				_ = v8
-				var v9 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v9 any
+				if len(restArgs) > 0 {
+					v9 = lang.NewList(restArgs...)
+				}
 				_ = v9
 				tmp10 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp11 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -828,7 +896,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v10 := args[0]
 				_ = v10
-				var v11 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v11 any
+				if len(restArgs) > 0 {
+					v11 = lang.NewList(restArgs...)
+				}
 				_ = v11
 				tmp12 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -853,7 +925,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
-				var v4 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v4 any
+				if len(restArgs) > 0 {
+					v4 = lang.NewList(restArgs...)
+				}
 				_ = v4
 				tmp5 := checkDerefVar(var_glojure_DOT_core_class)
 				tmp6 := lang.Apply(tmp5, []any{v3})
@@ -869,7 +945,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
-				var v5 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v5 any
+				if len(restArgs) > 0 {
+					v5 = lang.NewList(restArgs...)
+				}
 				_ = v5
 				tmp6 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -930,7 +1010,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
-				var v4 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v4 any
+				if len(restArgs) > 0 {
+					v4 = lang.NewList(restArgs...)
+				}
 				_ = v4
 				tmp5 := checkDerefVar(var_glojure_DOT_core_class)
 				tmp6 := lang.Apply(tmp5, []any{v3})
@@ -946,7 +1030,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v4 := args[0]
 				_ = v4
-				var v5 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v5 any
+				if len(restArgs) > 0 {
+					v5 = lang.NewList(restArgs...)
+				}
 				_ = v5
 				tmp6 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -964,7 +1052,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v6 := args[0]
 				_ = v6
-				var v7 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v7 any
+				if len(restArgs) > 0 {
+					v7 = lang.NewList(restArgs...)
+				}
 				_ = v7
 				tmp8 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp9 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -982,7 +1074,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v8 := args[0]
 				_ = v8
-				var v9 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v9 any
+				if len(restArgs) > 0 {
+					v9 = lang.NewList(restArgs...)
+				}
 				_ = v9
 				tmp10 := checkDerefVar(var_glojure_DOT_core_apply)
 				tmp11 := checkDerefVar(var_glojure_DOT_core_cons)
@@ -1219,7 +1315,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
-				var v4 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v4 any
+				if len(restArgs) > 0 {
+					v4 = lang.NewList(restArgs...)
+				}
 				_ = v4
 				tmp5 := checkDerefVar(var_glojure_DOT_core_class)
 				tmp6 := lang.Apply(tmp5, []any{v3})
@@ -1310,7 +1410,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v3 := args[0]
 				_ = v3
-				var v4 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v4 any
+				if len(restArgs) > 0 {
+					v4 = lang.NewList(restArgs...)
+				}
 				_ = v4
 				tmp5 := checkDerefVar(var_glojure_DOT_core_class)
 				tmp6 := lang.Apply(tmp5, []any{v3})

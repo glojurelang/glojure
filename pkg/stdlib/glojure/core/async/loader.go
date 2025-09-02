@@ -514,7 +514,11 @@ func LoadNS() {
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				var v4 any = lang.NewList(args[2:]...)
+				restArgs := args[2:]
+				var v4 any
+				if len(restArgs) > 0 {
+					v4 = lang.NewList(restArgs...)
+				}
 				_ = v4
 				tmp5 := checkDerefVar(var_glojure_DOT_core_DOT_async_do_DASH_alt)
 				tmp6 := lang.Apply(tmp5, []any{sym_glojure_DOT_core_DOT_async_SLASH_alts_BANG_, v4})
@@ -539,7 +543,11 @@ func LoadNS() {
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				var v4 any = lang.NewList(args[2:]...)
+				restArgs := args[2:]
+				var v4 any
+				if len(restArgs) > 0 {
+					v4 = lang.NewList(restArgs...)
+				}
 				_ = v4
 				tmp5 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_glojure_DOT_core_concat)
@@ -566,7 +574,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
-				var v3 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v3 any
+				if len(restArgs) > 0 {
+					v3 = lang.NewList(restArgs...)
+				}
 				_ = v3
 				var tmp4 any
 				{ // let
@@ -630,7 +642,11 @@ func LoadNS() {
 				checkArityGTE(args, 1)
 				v2 := args[0]
 				_ = v2
-				var v3 any = lang.NewList(args[1:]...)
+				restArgs := args[1:]
+				var v3 any
+				if len(restArgs) > 0 {
+					v3 = lang.NewList(restArgs...)
+				}
 				_ = v3
 				var tmp4 any
 				{ // let
@@ -1441,7 +1457,11 @@ func LoadNS() {
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				var v4 any = lang.NewList(args[2:]...)
+				restArgs := args[2:]
+				var v4 any
+				if len(restArgs) > 0 {
+					v4 = lang.NewList(restArgs...)
+				}
 				_ = v4
 				tmp5 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_glojure_DOT_core_concat)
@@ -1585,7 +1605,11 @@ func LoadNS() {
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				var v5 any = lang.NewList(args[3:]...)
+				restArgs := args[3:]
+				var v5 any
+				if len(restArgs) > 0 {
+					v5 = lang.NewList(restArgs...)
+				}
 				_ = v5
 				tmp6 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_glojure_DOT_core_concat)
@@ -1727,6 +1751,7 @@ func LoadNS() {
 					})
 					var v10 any = tmp9
 					_ = v10
+					go lang.Apply(v10, []any{})
 					tmp11 := lang.Apply(lang.Builtins["<-chan-of"], []any{lang.Builtins["any"]})
 					tmp12 := lang.Apply(tmp11, []any{v8})
 					tmp5 = tmp12
@@ -1995,6 +2020,7 @@ func LoadNS() {
 					})
 					var v17 any = tmp16
 					_ = v17
+					go lang.Apply(v17, []any{})
 					tmp18 := lang.Apply(lang.Builtins["<-chan-of"], []any{lang.Builtins["any"]})
 					tmp19 := lang.Apply(tmp18, []any{v15})
 					tmp12 = tmp19

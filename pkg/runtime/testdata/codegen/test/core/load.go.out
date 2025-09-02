@@ -122,6 +122,8 @@ func LoadNS() {
 	sym_SetMacro := lang.NewSymbol("SetMacro")
 	sym_StackTraceElement_DASH__GT_vec := lang.NewSymbol("StackTraceElement->vec")
 	sym_Throwable_DASH__GT_map := lang.NewSymbol("Throwable->map")
+	sym_UncheckedAdd := lang.NewSymbol("UncheckedAdd")
+	sym_UncheckedDec := lang.NewSymbol("UncheckedDec")
 	sym_a := lang.NewSymbol("a")
 	sym_a__0__auto__ := lang.NewSymbol("a__0__auto__")
 	sym_abs := lang.NewSymbol("abs")
@@ -524,11 +526,14 @@ func LoadNS() {
 	sym_glojure_DOT_core_SLASH_Nth := lang.NewSymbol("glojure.core/Nth")
 	sym_glojure_DOT_core_SLASH_Object_array := lang.NewSymbol("glojure.core/Object_array")
 	sym_glojure_DOT_core_SLASH_RunInTransaction := lang.NewSymbol("glojure.core/RunInTransaction")
+	sym_glojure_DOT_core_SLASH_UncheckedAdd := lang.NewSymbol("glojure.core/UncheckedAdd")
 	sym_glojure_DOT_core_SLASH_UncheckedByteCast := lang.NewSymbol("glojure.core/UncheckedByteCast")
 	sym_glojure_DOT_core_SLASH_UncheckedCharCast := lang.NewSymbol("glojure.core/UncheckedCharCast")
+	sym_glojure_DOT_core_SLASH_UncheckedDec := lang.NewSymbol("glojure.core/UncheckedDec")
 	sym_glojure_DOT_core_SLASH_UncheckedDoubleCast := lang.NewSymbol("glojure.core/UncheckedDoubleCast")
 	sym_glojure_DOT_core_SLASH_UncheckedFloatCast := lang.NewSymbol("glojure.core/UncheckedFloatCast")
 	sym_glojure_DOT_core_SLASH_UncheckedIntCast := lang.NewSymbol("glojure.core/UncheckedIntCast")
+	sym_glojure_DOT_core_SLASH_UncheckedIntDivide := lang.NewSymbol("glojure.core/UncheckedIntDivide")
 	sym_glojure_DOT_core_SLASH_UncheckedLongCast := lang.NewSymbol("glojure.core/UncheckedLongCast")
 	sym_glojure_DOT_core_SLASH_UncheckedShortCast := lang.NewSymbol("glojure.core/UncheckedShortCast")
 	sym_glojure_DOT_core_SLASH_aclone := lang.NewSymbol("glojure.core/aclone")
@@ -644,12 +649,9 @@ func LoadNS() {
 	sym_glojure_DOT_core_SLASH_to_DASH_array := lang.NewSymbol("glojure.core/to-array")
 	sym_glojure_DOT_core_SLASH_unchecked_DASH_inc := lang.NewSymbol("glojure.core/unchecked-inc")
 	sym_glojure_DOT_core_SLASH_unchecked_DASH_inc_DASH_int := lang.NewSymbol("glojure.core/unchecked-inc-int")
-	sym_glojure_DOT_core_SLASH_unchecked_add := lang.NewSymbol("glojure.core/unchecked_add")
-	sym_glojure_DOT_core_SLASH_unchecked_dec := lang.NewSymbol("glojure.core/unchecked_dec")
 	sym_glojure_DOT_core_SLASH_unchecked_inc := lang.NewSymbol("glojure.core/unchecked_inc")
 	sym_glojure_DOT_core_SLASH_unchecked_int_add := lang.NewSymbol("glojure.core/unchecked_int_add")
 	sym_glojure_DOT_core_SLASH_unchecked_int_dec := lang.NewSymbol("glojure.core/unchecked_int_dec")
-	sym_glojure_DOT_core_SLASH_unchecked_int_divide := lang.NewSymbol("glojure.core/unchecked_int_divide")
 	sym_glojure_DOT_core_SLASH_unchecked_int_inc := lang.NewSymbol("glojure.core/unchecked_int_inc")
 	sym_glojure_DOT_core_SLASH_unchecked_int_multiply := lang.NewSymbol("glojure.core/unchecked_int_multiply")
 	sym_glojure_DOT_core_SLASH_unchecked_int_negate := lang.NewSymbol("glojure.core/unchecked_int_negate")
@@ -1224,8 +1226,6 @@ func LoadNS() {
 	sym_uncheckedFloatCast := lang.NewSymbol("uncheckedFloatCast")
 	sym_uncheckedIntCast := lang.NewSymbol("uncheckedIntCast")
 	sym_uncheckedShortCast := lang.NewSymbol("uncheckedShortCast")
-	sym_unchecked_add := lang.NewSymbol("unchecked_add")
-	sym_unchecked_dec := lang.NewSymbol("unchecked_dec")
 	sym_unchecked_inc := lang.NewSymbol("unchecked_inc")
 	sym_unchecked_minus := lang.NewSymbol("unchecked_minus")
 	sym_unchecked_multiply := lang.NewSymbol("unchecked_multiply")
@@ -1474,8 +1474,6 @@ func LoadNS() {
 	var_glojure_DOT_core__STAR_assert_STAR_ := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_assert_STAR_)
 	// var glojure.core/*command-line-args*
 	var_glojure_DOT_core__STAR_command_DASH_line_DASH_args_STAR_ := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_command_DASH_line_DASH_args_STAR_)
-	// var glojure.core/*compile-files*
-	var_glojure_DOT_core__STAR_compile_DASH_files_STAR_ := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_compile_DASH_files_STAR_)
 	// var glojure.core/*compile-path*
 	var_glojure_DOT_core__STAR_compile_DASH_path_STAR_ := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_compile_DASH_path_STAR_)
 	// var glojure.core/*compiler-options*
@@ -2970,7 +2968,7 @@ func LoadNS() {
 	}
 	var closed3 any
 	{
-		closed3 = sym_unchecked_add
+		closed3 = sym_UncheckedAdd
 	}
 	var closed30 any
 	{
@@ -3149,14 +3147,6 @@ func LoadNS() {
 		var_glojure_DOT_core__STAR_command_DASH_line_DASH_args_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_command_DASH_line_DASH_args_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// *compile-files*
-	{
-		tmp0 := sym__STAR_compile_DASH_files_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "Set to true when compiling files, false otherwise.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		var_glojure_DOT_core__STAR_compile_DASH_files_STAR_ = ns.InternWithValue(tmp0, false, true)
-		if tmp0.Meta() != nil {
-			var_glojure_DOT_core__STAR_compile_DASH_files_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// *compile-path*
@@ -9083,7 +9073,7 @@ func LoadNS() {
 				var tmp14 any
 				tmp15 := checkDerefVar(var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_)
 				if lang.IsTruthy(tmp15) {
-					tmp14 = sym_unchecked_dec
+					tmp14 = sym_UncheckedDec
 				} else {
 					tmp14 = sym_dec
 				}
@@ -15266,7 +15256,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_unchecked_add})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_UncheckedAdd})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -15289,9 +15279,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_add")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "UncheckedAdd")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_add is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("UncheckedAdd is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6
@@ -15476,7 +15466,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_unchecked_dec})
+				tmp14 := lang.Apply(tmp13, []any{sym_glojure_DOT_core_SLASH_UncheckedDec})
 				tmp15 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp16 := lang.Apply(tmp15, []any{v3})
 				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
@@ -15495,9 +15485,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_dec")
+			tmp4, _ := lang.FieldOrMethod(lang.Numbers, "UncheckedDec")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_dec is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("UncheckedDec is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5
@@ -15580,7 +15570,7 @@ func LoadNS() {
 				tmp12 := checkDerefVar(var_glojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_glojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_glojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_unchecked_int_divide})
+				tmp15 := lang.Apply(tmp14, []any{sym_glojure_DOT_core_SLASH_UncheckedIntDivide})
 				tmp16 := checkDerefVar(var_glojure_DOT_core_list)
 				tmp17 := lang.Apply(tmp16, []any{v3})
 				tmp18 := checkDerefVar(var_glojure_DOT_core_list)
@@ -15603,9 +15593,9 @@ func LoadNS() {
 			_ = v3
 			v4 := args[1]
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "unchecked_int_divide")
+			tmp5, _ := lang.FieldOrMethod(lang.Numbers, "UncheckedIntDivide")
 			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unchecked_int_divide is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("UncheckedIntDivide is not a function")))
 			}
 			tmp6 := lang.Apply(tmp5, []any{v3, v4})
 			return tmp6

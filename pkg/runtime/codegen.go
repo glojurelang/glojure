@@ -84,8 +84,9 @@ type Generator struct {
 var (
 	omittedVars = map[string]bool{
 		// initialized by the runtime
-		"#'glojure.core/*in*":  true,
-		"#'glojure.core/*out*": true,
+		"#'glojure.core/*in*":            true,
+		"#'glojure.core/*out*":           true,
+		"#'glojure.core/*compile-files*": true,
 	}
 )
 
@@ -953,7 +954,11 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 			paramVars[i] = paramVar
 		} else {
 			// Variadic parameter - collect rest args
-			g.writef("var %s any = lang.NewList(%s[%d:]...)\n", paramVar, argsVar, methodNode.FixedArity)
+			g.writef("restArgs := %s[%d:]\n", argsVar, methodNode.FixedArity)
+			g.writef("var %s any\n", paramVar)
+			g.writef("if len(restArgs) > 0 {\n")
+			g.writef("  %s = lang.NewList(restArgs...)\n", paramVar)
+			g.writef("}\n")
 			g.writeAssign("_", paramVar) // Prevent unused variable warning
 			paramVars = append(paramVars, paramVar)
 		}

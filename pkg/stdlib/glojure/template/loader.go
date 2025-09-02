@@ -128,7 +128,11 @@ func LoadNS() {
 				_ = v4
 				v5 := args[3]
 				_ = v5
-				var v6 any = lang.NewList(args[4:]...)
+				restArgs := args[4:]
+				var v6 any
+				if len(restArgs) > 0 {
+					v6 = lang.NewList(restArgs...)
+				}
 				_ = v6
 				var tmp7 any
 				{ // let
