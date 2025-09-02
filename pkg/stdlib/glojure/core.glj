@@ -977,7 +977,7 @@
 (defn +
   "Returns the sum of nums. (+) returns 0. Does not auto-promote
   longs, will throw on overflow. See also: +'"
-  {:inline (nary-inline 'add 'unchecked_add)
+  {:inline (nary-inline 'add 'UncheckedAdd)
    :inline-arities >1?
    :added "1.2"}
   ([] 0)
@@ -1147,7 +1147,7 @@
 (defn dec
   "Returns a number one less than num. Does not auto-promote
   longs, will throw on overflow. See also: dec'"
-  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (~(if *unchecked-math* 'unchecked_dec 'dec) ~x)))
+  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (~(if *unchecked-math* 'UncheckedDec 'dec) ~x)))
    :added "1.2"}
   [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (dec x)))
 
@@ -1175,9 +1175,9 @@
 (defn unchecked-dec
   "Returns a number one less than x, a long.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_dec ~x)))
+  {:inline (fn [x] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedDec ~x)))
    :added "1.0"}
-  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_dec x)))
+  [x] (. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedDec x)))
 
 (defn unchecked-negate-int
   "Returns the negation of x, an int.
@@ -1203,9 +1203,9 @@
 (defn unchecked-add
   "Returns the sum of x and y, both long.
   Note - uses a primitive operator subject to overflow."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_add ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedAdd ~x ~y)))
    :added "1.0"}
-  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_add x y)))
+  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedAdd x y)))
 
 (defn unchecked-subtract-int
   "Returns the difference of x and y, both int.
@@ -1238,9 +1238,9 @@
 (defn unchecked-divide-int
   "Returns the division of x by y, both int.
   Note - uses a primitive operator subject to truncation."
-  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_divide ~x ~y)))
+  {:inline (fn [x y] `(. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedIntDivide ~x ~y)))
    :added "1.0"}
-  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (unchecked_int_divide x y)))
+  [x y] (. github.com$glojurelang$glojure$pkg$lang.Numbers (UncheckedIntDivide x y)))
 
 (defn unchecked-remainder-int
   "Returns the remainder of division of x by y, both int.

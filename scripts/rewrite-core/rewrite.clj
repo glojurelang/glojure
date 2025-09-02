@@ -754,9 +754,9 @@
    (sexpr-replace 'clojure.lang.Numbers/abs
                   'github.com$glojurelang$glojure$pkg$lang.Abs)
 
-   (sexpr-replace 'Unchecked_add 'UncheckedAdd)
-   (sexpr-replace 'Unchecked_dec 'UncheckedDec)
-   (sexpr-replace 'Unchecked_int_divide 'UncheckedIntDivide)
+   (sexpr-replace 'unchecked_add 'UncheckedAdd)
+   (sexpr-replace 'unchecked_dec 'UncheckedDec)
+   (sexpr-replace 'unchecked_int_divide 'UncheckedIntDivide)
    (sexpr-replace '(unchecked_minus x) '(Unchecked_negate x))
 
    ;; ===== Numeric Array Replacements =====
