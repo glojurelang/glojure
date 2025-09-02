@@ -5,6 +5,8 @@ import "sync/atomic"
 type (
 	Atom struct {
 		state atomic.Value
+
+		meta IPersistentMap
 	}
 )
 
@@ -13,9 +15,17 @@ var (
 	_ IRef   = (*Atom)(nil)
 )
 
-func NewAtom(val interface{}) *Atom {
+func NewAtom(val any) *Atom {
 	a := &Atom{}
 	a.state.Store(Box{val})
+	return a
+}
+
+func NewAtomWithMeta(val any, meta IPersistentMap) *Atom {
+	a := NewAtom(val)
+	if meta != nil {
+		a.meta = meta
+	}
 	return a
 }
 
@@ -52,4 +62,11 @@ func (a *Atom) Reset(newVal interface{}) interface{} {
 	a.state.Store(Box{newVal})
 	// TODO: notifyWatches
 	return newVal
+}
+
+func (a *Atom) Meta() IPersistentMap {
+	if a.meta == nil {
+		return nil
+	}
+	return a.meta
 }

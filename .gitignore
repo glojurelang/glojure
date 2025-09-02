@@ -1,2 +1,6 @@
 bin
 doc/repl/glj.wasm
+.direnv
+
+# useful to symlink in for context
+clojure

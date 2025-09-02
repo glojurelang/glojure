@@ -10,6 +10,10 @@ import (
 	// bootstrap the runtime
 	_ "github.com/glojurelang/glojure/pkg/glj"
 
+	_ "github.com/glojurelang/glojure/pkg/stdlib/glojure/core"
+	_ "github.com/glojurelang/glojure/pkg/stdlib/glojure/core/async"
+	_ "github.com/glojurelang/glojure/pkg/stdlib/glojure/protocols"
+
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/repl"

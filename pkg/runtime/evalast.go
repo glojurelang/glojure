@@ -24,13 +24,13 @@ var (
 	SymInNS = lang.NewSymbol("in-ns")
 )
 
-type EvalError struct {
+type RTEvalError struct {
 	Err      error
 	GLJStack []string
 	GoStack  string
 }
 
-func (e *EvalError) Error() string {
+func (e *RTEvalError) Error() string {
 	sb := strings.Builder{}
 	sb.WriteString(e.Err.Error())
 	sb.WriteString("\n\n")
@@ -47,12 +47,12 @@ func (e *EvalError) Error() string {
 	return sb.String()
 }
 
-func (e *EvalError) Unwrap() error {
+func (e *RTEvalError) Unwrap() error {
 	return e.Err
 }
 
-func (e *EvalError) Is(err error) bool {
-	_, ok := err.(*EvalError)
+func (e *RTEvalError) Is(err error) bool {
+	_, ok := err.(*RTEvalError)
 	return ok
 }
 
@@ -125,6 +125,19 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 func (env *environment) EvalASTDef(n *ast.Node) (interface{}, error) {
 	defNode := n.Sub.(*ast.DefNode)
 	init := defNode.Init
+	vr := defNode.Var
+	meta := defNode.Meta
+	if !lang.IsNil(meta) {
+		metaVal, err := env.EvalAST(meta)
+		if err != nil {
+			return nil, err
+		}
+		vr.SetMeta(metaVal.(lang.IPersistentMap))
+		// set dynamic if :dynamic true in meta
+		if RT.BooleanCast(lang.Get(vr.Meta(), lang.KWDynamic)) {
+			vr.SetDynamic()
+		}
+	}
 	if lang.IsNil(init) {
 		return defNode.Var, nil
 	}
@@ -133,26 +146,8 @@ func (env *environment) EvalASTDef(n *ast.Node) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	sym := defNode.Name
+	vr.BindRoot(initVal)
 
-	// evaluate symbol metadata if present
-	meta := defNode.Meta
-	if !lang.IsNil(meta) {
-		metaVal, err := env.EvalAST(meta)
-		if err != nil {
-			return nil, err
-		}
-		s, err := lang.WithMeta(sym, metaVal.(lang.IPersistentMap))
-		if err != nil {
-			return nil, err
-		}
-		sym = s.(*lang.Symbol)
-	}
-
-	vr := env.DefVar(sym, initVal)
-	if RT.BooleanCast(lang.Get(vr.Meta(), lang.KWDynamic)) {
-		vr.SetDynamic()
-	}
 	return vr, nil
 }
 
@@ -609,8 +604,8 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 			// recursion; need to use go-only stringification for errors.
 			gljFrame = fmt.Sprintf("%s:%d:%d:\t%s", lang.Get(meta, KWFile), lang.Get(meta, KWLine), lang.Get(meta, KWColumn), n.Form)
 			if rErr, ok := r.(error); ok {
-				if errors.Is(rErr, &EvalError{}) {
-					var evalErr *EvalError
+				if errors.Is(rErr, &RTEvalError{}) {
+					var evalErr *RTEvalError
 					errors.As(rErr, &evalErr)
 					evalErr.GLJStack = append(evalErr.GLJStack, gljFrame) // TODO: copy
 					if evalErr.GoStack == "" {
@@ -618,14 +613,14 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 					}
 					err = evalErr
 				} else {
-					err = &EvalError{
+					err = &RTEvalError{
 						Err:      rErr,
 						GLJStack: []string{gljFrame},
 						GoStack:  string(debug.Stack()),
 					}
 				}
 			} else {
-				err = &EvalError{
+				err = &RTEvalError{
 					Err:      fmt.Errorf("%v", r),
 					GLJStack: []string{gljFrame},
 					GoStack:  string(debug.Stack()),
@@ -689,28 +684,6 @@ func (env *environment) EvalASTNew(n *ast.Node) (interface{}, error) {
 	return reflect.New(classValTyp).Interface(), nil
 }
 
-var (
-	errorType = reflect.TypeOf((*error)(nil)).Elem()
-)
-
-func catchMatches(r, expect any) bool {
-	if lang.IsNil(expect) {
-		return false
-	}
-
-	// if expect is an error type, check if r is an instance of it
-	if rErr, ok := r.(error); ok {
-		if expectTyp, ok := expect.(reflect.Type); ok && expectTyp.Implements(errorType) {
-			expectVal := reflect.New(expectTyp).Elem().Interface().(error)
-			if errors.Is(rErr, expectVal) {
-				return true
-			}
-		}
-	}
-
-	return reflect.TypeOf(r).AssignableTo(expect.(reflect.Type))
-}
-
 func (env *environment) EvalASTTry(n *ast.Node) (res interface{}, err error) {
 	tryNode := n.Sub.(*ast.TryNode)
 
@@ -735,7 +708,7 @@ func (env *environment) EvalASTTry(n *ast.Node) (res interface{}, err error) {
 					panic(classErr)
 				}
 
-				if !catchMatches(r, classVal) {
+				if !lang.CatchMatches(r, classVal) {
 					continue
 				}
 

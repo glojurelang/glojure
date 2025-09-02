@@ -1,0 +1,3 @@
+(ns codegen.test.ns-skip)
+
+:skip

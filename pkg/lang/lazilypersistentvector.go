@@ -20,7 +20,7 @@ func CreateOwningLazilyPersistentVector(items any) IPersistentVector {
 func CreateLazilyPersistentVector(obj any) IPersistentVector {
 	switch obj := obj.(type) {
 	case IReduceInit:
-		return obj.ReduceInit(IFnFunc(func(args ...any) any {
+		return obj.ReduceInit(NewFnFunc(func(args ...any) any {
 			acc, item := args[0], args[1]
 			return acc.(IPersistentVector).Cons(item)
 		}), emptyVector).(IPersistentVector)

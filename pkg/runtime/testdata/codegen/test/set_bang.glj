@@ -1,0 +1,17 @@
+(ns codegen.test.set-bang)
+
+(def ^:dynamic x 10)
+
+(defn set!-var []
+  (binding [x 15]
+    (set! x 20)
+    (set! x (+ x 5))
+    x))
+
+(defn set!-host []
+  (let [c (new net$http.Client)]
+    (set! (. c Timeout) (time.Duration 1000))
+    (. c Timeout)))
+
+(defn ^{:expected-output [25 (time.Duration 1000)]} -main []
+  [(set!-var) (set!-host)])

@@ -1,0 +1,4 @@
+(ns codegen.test.with-meta)
+
+(defn ^{:expected-output :bar} -main []
+  (:foo (meta ^{:foo :bar}[])))

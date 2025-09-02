@@ -1,0 +1,7 @@
+(ns codegen.test.values)
+
+(def big-decimal 10M)
+(def big-decimal-type (type big-decimal))
+
+(defn ^{:expected-output [10M (type big-decimal)]} -main []
+  [big-decimal big-decimal-type])

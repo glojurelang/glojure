@@ -1,0 +1,3 @@
+(ns codegen.test.const-string)
+
+(def ^:hello const-string "Hello, World!")
