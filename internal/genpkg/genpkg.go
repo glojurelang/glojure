@@ -80,12 +80,30 @@ func collectExportedObjects(packages []string) ([]string, map[string][]export) {
 	return packageNames, packageExports
 }
 
+// List of problematic generic functions that can't have their type parameters inferred
+var excludedFunctions = map[string]bool{
+	"hash/maphash.Comparable":     true,
+	"hash/maphash.WriteComparable": true,
+	"reflect.TypeAssert":          true,
+	"reflect.TypeFor":             true,
+	"runtime.AddCleanup":          true,
+	"sync.OnceFunc":               true,
+	"sync.OnceValue":              true,
+	"sync.OnceValues":             true,
+}
+
 func isEligibleForExport(object types.Object, packageName string) bool {
 	if !object.Exported() {
 		return false
 	}
 
 	if _, isIllegalType := object.(*types.Builtin); isIllegalType {
+		return false
+	}
+
+	// Check if this function is in our exclusion list
+	funcName := packageName + "." + object.Name()
+	if excludedFunctions[funcName] {
 		return false
 	}
 
