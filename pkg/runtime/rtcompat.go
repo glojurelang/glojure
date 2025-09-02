@@ -27,7 +27,11 @@ var (
 	loadPath     = []fs.FS{}
 	loadPathLock sync.Mutex
 
-	useAot = os.Getenv("GLOJURE_USE_AOT") == "1"
+	useAot = func() bool {
+		// default to true
+		gua := strings.ToLower(os.Getenv("GLOJURE_USE_AOT"))
+		return !(gua == "0" || gua == "false" || gua == "no" || gua == "false")
+	}()
 )
 
 func init() {
