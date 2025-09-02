@@ -4,3 +4,12 @@ doc/repl/glj.wasm
 
 # useful to symlink in for context
 /clojure
+
+/.cursor
+/*.ys
+/*.clj
+/*.glj
+
+/.cache/
+/.vscode/
+/GNUmakefile

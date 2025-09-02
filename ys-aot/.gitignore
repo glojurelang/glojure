@@ -1,0 +1,6 @@
+/.cache/
+/go.mod
+/go.sum
+/hello*
+/out*
+/*.txt
