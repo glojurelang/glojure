@@ -15,11 +15,11 @@
 
 (set! *warn-on-reflection* true)
 
-(def ^:dynamic ^math$rand.*Rand
+(def ^:dynamic ^math:rand.*Rand
      *rnd*
      "Random instance for use in generators. By consistently using this
 instance you can get a repeatable basis for tests."
-     (math$rand.New (math$rand.NewSource 42)))
+     (math:rand.New (math:rand.NewSource 42)))
 
 (defn- call-through
   "Recursively call x until it doesn't return a function."

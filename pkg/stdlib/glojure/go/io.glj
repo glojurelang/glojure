@@ -167,10 +167,10 @@
   {:make-reader (fn [x opts] (make-input-stream x opts))
    :make-writer (fn [x opts] (make-writer (make-output-stream x opts) opts))
    :make-input-stream (fn [x opts]
-                        (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError
+                        (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError
                                 (str "Cannot open <" (pr-str x) "> as an InputStream."))))
    :make-output-stream (fn [x opts]
-                         (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError
+                         (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError
                                  (str "Cannot open <" (pr-str x) "> as an OutputStream."))))})
 
 ;; (defn- inputstream->reader
@@ -226,15 +226,15 @@
     :make-input-stream (fn [^os.*File x opts] x)
     :make-output-stream (fn [^os.*File x opts] x)))
 
-(extend net$url.*URL
+(extend net:url.*URL
   IOFactory
   (assoc default-streams-impl
-    :make-input-stream (fn [^net$url.*URL x opts]
+    :make-input-stream (fn [^net:url.*URL x opts]
                          (make-input-stream
                           (if (= "file" (.scheme x))
                             (as-file x)
-                            (let [req (go-try! net$http.NewRequest net$http.MethodGet (.String x) nil)
-                                  res (go-try! . net$http.DefaultClient Do req)
+                            (let [req (go-try! net:http.NewRequest net:http.MethodGet (.String x) nil)
+                                  res (go-try! . net:http.DefaultClient Do req)
                                   status (.StatusCode res)
                                   body (.Body res)]
                               (when (not= 200 status)
@@ -242,10 +242,10 @@
                                 (throw (fmt.Errorf "http error: %s" status)))
                               body))
                           opts))
-    :make-output-stream (fn [^net$url.*URL x opts]
+    :make-output-stream (fn [^net:url.*URL x opts]
                           (if (= "file" (.scheme x))
                             (make-output-stream (as-file x) opts)
-                            (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError (str "Can not write to non-file URL <" x ">")))))))
+                            (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError (str "Can not write to non-file URL <" x ">")))))))
 
 ;; (extend URI
 ;;   IOFactory
@@ -257,13 +257,13 @@
   IOFactory
   (assoc default-streams-impl
     :make-input-stream (fn [^go/string x opts]
-                         (let [[url err] (net$url.ParseRequestURI x)]
+                         (let [[url err] (net:url.ParseRequestURI x)]
                            (if err
                              (make-input-stream (go-try! os.Open x) opts)
                              (make-input-stream url opts))))
     :make-output-stream (fn [^go/string x opts]
                           (try
-                           (make-output-stream (go-try! (net$url.Parse x)) opts)
+                           (make-output-stream (go-try! (net:url.Parse x)) opts)
                            (catch go/any err
                              (make-output-stream (go-try! (os.Open x)) opts))))))
 

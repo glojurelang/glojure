@@ -9,7 +9,7 @@
     x))
 
 (defn set!-host []
-  (let [c (new net$http.Client)]
+  (let [c (new net:http.Client)]
     (set! (. c Timeout) (time.Duration 1000))
     (. c Timeout)))
 

@@ -812,8 +812,6 @@ func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
 			dispatchValVar := g.generateValue(dispatchVal)
 			methodVar := g.generateValue(method)
 
-			fmt.Println("Adding method for dispatch value:", dispatchVal)
-
 			g.writef("%s.AddMethod(%s, %s)\n", mfVar, dispatchValVar, methodVar)
 		}
 	}

@@ -16,7 +16,7 @@
         [glojure.test.generative :exclude (is)]
         glojure.template)
   (:require [glojure.data.generators :as gen])
-  (:import [github.com$glojurelang$glojure$pkg$lang
+  (:import [github.com:glojurelang:glojure:pkg:lang
             Char *IllegalArgumentError *BigDecimal *BigInt]))
 
 
@@ -576,7 +576,7 @@ Math/pow overflows to Infinity."
   (are [x y z] (= x (class y) (class z))
     (go/slice-of go/bool) (boolean-array 1) (booleans (boolean-array 1 true))
     (go/slice-of go/byte) (byte-array 1) (bytes (byte-array 1 (byte 1)))
-    (go/slice-of github.com$glojurelang$glojure$pkg$lang.Char) (char-array 1) (chars (char-array 1 \a))
+    (go/slice-of github.com:glojurelang:glojure:pkg:lang.Char) (char-array 1) (chars (char-array 1 \a))
     (go/slice-of go/int16) (short-array 1) (shorts (short-array 1 (short 1)))
     (go/slice-of go/float32) (float-array 1) (floats (float-array 1 1))
     (go/slice-of go/float64) (double-array 1) (doubles (double-array 1 1))

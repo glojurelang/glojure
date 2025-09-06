@@ -257,7 +257,19 @@ func (env *environment) EvalASTMaybeClass(n *ast.Node) (interface{}, error) {
 		return v, nil
 	}
 
-	return nil, errors.New("unable to resolve symbol: " + lang.ToString(sym))
+	var meta lang.IPersistentMap
+	imeta, ok := n.Form.(lang.IMeta)
+	if ok {
+		meta = imeta.Meta()
+	}
+	err := &RTEvalError{
+		Err: errors.New("unable to resolve symbol: " + lang.ToString(sym)),
+		GLJStack: []string{
+			fmt.Sprintf("%s:%d:%d:\t%s", lang.Get(meta, KWFile), lang.Get(meta, KWLine), lang.Get(meta, KWColumn), n.Form),
+		},
+		GoStack: string(debug.Stack()),
+	}
+	return nil, err
 }
 
 func (env *environment) EvalASTMaybeHostForm(n *ast.Node) (interface{}, error) {
