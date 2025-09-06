@@ -68,8 +68,8 @@
 (defn- interface-or-naive-reduce
   "Reduces via IReduceInit if possible, else naively."
   [coll f val]
-  (if (instance? github.com$glojurelang$glojure$pkg$lang.IReduceInit coll)
-    (.ReduceInit ^github.com$glojurelang$glojure$pkg$lang.IReduceInit coll f val)
+  (if (instance? github.com:glojurelang:glojure:pkg:lang.IReduceInit coll)
+    (.ReduceInit ^github.com:glojurelang:glojure:pkg:lang.IReduceInit coll f val)
     (naive-seq-reduce coll f val)))
 
 (extend-protocol CollReduce
@@ -83,25 +83,25 @@
   ;;  ([coll f] (seq-reduce coll f))
   ;;  ([coll f val] (seq-reduce coll f val)))
 
-  github.com$glojurelang$glojure$pkg$lang.IReduceInit
+  github.com:glojurelang:glojure:pkg:lang.IReduceInit
   (coll-reduce
-    ([coll f] (.Reduce ^github.com$glojurelang$glojure$pkg$lang.IReduce coll f))
+    ([coll f] (.Reduce ^github.com:glojurelang:glojure:pkg:lang.IReduce coll f))
     ([coll f val] (.ReduceInit coll f val)))
 
   ;;aseqs are iterable, masking internal-reducers
-  ;; github.com$glojurelang$glojure$pkg$lang.ASeq
+  ;; github.com:glojurelang:glojure:pkg:lang.ASeq
   ;; (coll-reduce
   ;;  ([coll f] (seq-reduce coll f))
   ;;  ([coll f val] (seq-reduce coll f val)))
 
   ;;for range
-  github.com$glojurelang$glojure$pkg$lang.*LazySeq
+  github.com:glojurelang:glojure:pkg:lang.*LazySeq
   (coll-reduce
    ([coll f] (seq-reduce coll f))
    ([coll f val] (seq-reduce coll f val)))
 
   ;;vector's chunked seq is faster than its iter
-  github.com$glojurelang$glojure$pkg$lang.*PersistentVector
+  github.com:glojurelang:glojure:pkg:lang.*PersistentVector
   (coll-reduce
    ([coll f] (seq-reduce coll f))
    ([coll f val] (seq-reduce coll f val)))
@@ -111,12 +111,12 @@
   ;;  ([coll f] (iter-reduce coll f))
   ;;  ([coll f val] (iter-reduce coll f val)))
 
-  ;; github.com$glojurelang$glojure$pkg$lang.APersistentMap$KeySeq
+  ;; github.com:glojurelang:glojure:pkg:lang.APersistentMap$KeySeq
   ;; (coll-reduce
   ;;   ([coll f] (iter-reduce coll f))
   ;;   ([coll f val] (iter-reduce coll f val)))
 
-  ;; github.com$glojurelang$glojure$pkg$lang.APersistentMap$ValSeq
+  ;; github.com:glojurelang:glojure:pkg:lang.APersistentMap$ValSeq
   ;; (coll-reduce
   ;;   ([coll f] (iter-reduce coll f))
   ;;   ([coll f val] (iter-reduce coll f val))))
@@ -129,7 +129,7 @@
    val)
   
   ;; handles vectors and ranges
-  github.com$glojurelang$glojure$pkg$lang.IChunkedSeq
+  github.com:glojurelang:glojure:pkg:lang.IChunkedSeq
   (internal-reduce
    [s f val]
    (if-let [s (seq s)]
@@ -143,7 +143,7 @@
        (interface-or-naive-reduce s f val))
      val))
  
-  ;; github.com$glojurelang$glojure$pkg$lang.StringSeq
+  ;; github.com:glojurelang:glojure:pkg:lang.StringSeq
   ;; (internal-reduce
   ;;  [str-seq f val]
   ;;  (let [s (.s str-seq)
@@ -151,13 +151,13 @@
   ;;    (loop [i (.i str-seq)
   ;;           val val]
   ;;      (if (< i len)
-  ;;        (let [ret (f val (github.com$glojurelang$glojure$pkg$lang.CharAt s i))]
+  ;;        (let [ret (f val (github.com:glojurelang:glojure:pkg:lang.CharAt s i))]
   ;;               (if (reduced? ret)
   ;;                 @ret
   ;;                 (recur (inc i) ret)))
   ;;        val))))
   
-  github.com$glojurelang$glojure$pkg$lang.Object
+  github.com:glojurelang:glojure:pkg:lang.Object
   (internal-reduce
    [s f val]
    (loop [cls (class s)

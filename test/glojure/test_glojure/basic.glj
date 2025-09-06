@@ -75,7 +75,7 @@
       evaluated values of the objects they contain."
       (is (= (eval '[x y 3]) [1 2 3]))
       (is (= (eval '{:x x :y y :z 3}) {:x 1 :y 2 :z 3}))
-      (is (instance? github.com$glojurelang$glojure$pkg$lang.IPersistentMap (eval '{:x x :y y})))))
+      (is (instance? github.com:glojurelang:glojure:pkg:lang.IPersistentMap (eval '{:x x :y y})))))
 
   (in-test-ns
     (test-that

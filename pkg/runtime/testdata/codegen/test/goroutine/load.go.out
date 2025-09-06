@@ -121,7 +121,7 @@ func LoadNS() {
 				go lang.Apply(tmp8, []any{v5, int64(42)})
 				var tmp9 any
 				{ // let
-					// let binding "vec__368"
+					// let binding "vec__3"
 					tmp10, ok := lang.FieldOrMethod(v7, "Recv")
 					if !ok {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "Recv")))

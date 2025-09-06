@@ -9,7 +9,7 @@
 (ns glojure.string
   (:refer-glojure :exclude (replace reverse))
   (:import (regexp *Regexp)
-           (github.com$glojurelang$glojure$pkg$lang ToString NewIllegalArgumentError Char CharAt)))
+           (github.com:glojurelang:glojure:pkg:lang ToString NewIllegalArgumentError Char CharAt)))
 
 (set! *warn-on-reflection* true)
 
@@ -196,9 +196,9 @@
   Trailing empty strings are not returned - pass limit of -1 to return all."
   {:added "1.2"}
   ([^go/string s ^*Regexp re]
-     (github.com$glojurelang$glojure$pkg$lang.CreateOwningLazilyPersistentVector (.split re s -1)))
+     (github.com:glojurelang:glojure:pkg:lang.CreateOwningLazilyPersistentVector (.split re s -1)))
   ([ ^go/string s ^*Regexp re limit]
-     (github.com$glojurelang$glojure$pkg$lang.CreateOwningLazilyPersistentVector (.split re s limit))))
+     (github.com:glojurelang:glojure:pkg:lang.CreateOwningLazilyPersistentVector (.split re s limit))))
 
 (defn split-lines
   "Splits s on \\n or \\r\\n. Trailing empty lines are not returned."

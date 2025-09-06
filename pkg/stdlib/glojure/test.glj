@@ -117,7 +117,7 @@
 
 (defn- file-and-line
   {:deprecated "1.8"}
-  [^github.com$glojurelang$glojure$pkg$lang.Throwable exception depth]
+  [^github.com:glojurelang:glojure:pkg:lang.Throwable exception depth]
   (let [stacktrace (.getStackTrace exception)]
     (if (< depth (count stacktrace))
       (let [^StackTraceElement s (nth stacktrace depth)]
@@ -168,7 +168,7 @@
    (println "expected:" (pr-str (:expected m)))
    (print "  actual: ")
    (let [actual (:actual m)]
-     (if (instance? github.com$glojurelang$glojure$pkg$lang.Throwable actual)
+     (if (instance? github.com:glojurelang:glojure:pkg:lang.Throwable actual)
        (stack/print-cause-trace actual *stack-trace-depth*)
        (prn actual)))))
 
@@ -319,7 +319,7 @@
   {:added "1.1"}
   [msg form]
   `(try ~(assert-expr msg form)
-        (catch github.com$glojurelang$glojure$pkg$lang.Throwable t#
+        (catch github.com:glojurelang:glojure:pkg:lang.Throwable t#
           (do-report {:type :error, :message ~msg,
                       :expected '~form, :actual t#}))))
 
@@ -370,7 +370,7 @@
             (pos? (count args))
             (zero? (mod (count args) (count argv)))))
     `(temp/do-template ~argv (is ~expr) ~@args)
-    (throw (github.com$glojurelang$glojure$pkg$lang.NewIllegalArgumentError "The number of args doesn't match are's argv."))))
+    (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError "The number of args doesn't match are's argv."))))
 
 (defmacro testing
   "Adds a new string to the list of testing contexts.  May be nested,
@@ -493,7 +493,7 @@
       (do-report {:type :begin-test-var, :var v})
       (inc-report-counter :test)
       (try (t)
-           (catch github.com$glojurelang$glojure$pkg$lang.Throwable e
+           (catch github.com:glojurelang:glojure:pkg:lang.Throwable e
              (do-report {:type :error, :message "Uncaught exception, not in assertion."
                       :expected nil, :actual e})))
       (do-report {:type :end-test-var, :var v}))))

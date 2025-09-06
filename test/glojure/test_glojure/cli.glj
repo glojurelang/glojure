@@ -21,7 +21,7 @@
                           (if (nil? bytes)
                             ""
                             (apply str (map char (seq bytes)))))
-        cmd (apply os$exec.Command args)
+        cmd (apply os:exec.Command args)
         [output err] (.CombinedOutput cmd)]
     [(bytes-to-string output) (bytes-to-string err)]))
 

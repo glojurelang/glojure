@@ -43,6 +43,10 @@ func init() {
 	}
 }
 
+func GetUseAOT() bool {
+	return useAot
+}
+
 // AddLoadPath adds a filesystem to the load path.
 func AddLoadPath(fs fs.FS) {
 	loadPathLock.Lock()

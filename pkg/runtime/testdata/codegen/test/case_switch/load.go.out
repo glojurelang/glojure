@@ -80,7 +80,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "G__366"
+				// let binding "G__1"
 				var v4 any = v2
 				_ = v4
 				// case
@@ -156,7 +156,7 @@ func LoadNS() {
 				}()
 				var tmp4 any
 				{ // let
-					// let binding "G__367"
+					// let binding "G__2"
 					var v5 any = v2
 					_ = v5
 					// case

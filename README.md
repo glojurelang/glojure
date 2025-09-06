@@ -115,9 +115,9 @@ Hello, World
   (io.Copy w (.Body r))
   nil)
 
-(net$http.Handle "/" (net$http.HandlerFunc echo-handler))
+(net:http.Handle "/" (net:http.HandlerFunc echo-handler))
 (println "Server starting on :8080...")
-(net$http.ListenAndServe ":8080" nil)
+(net:http.ListenAndServe ":8080" nil)
 ```
 
 ```
@@ -227,10 +227,10 @@ runtime.ReadEval(`
 Glojure ships with interop with many standard library packages
 out-of-the-box.  Go package names are munged to avoid ambiguity with
 the use of `/` to refer to namespaced symbols; instances of `/` in
-package names are replaced with `$`. Here's a simple example:
+package names are replaced with `:`. Here's a simple example:
 
 ```clojure
-user=> (println (fmt.Sprintf "A couple of HTTP methods: %v" [net$http.MethodGet net$http.MethodPost]))
+user=> (println (fmt.Sprintf "A couple of HTTP methods: %v" [net:http.MethodGet net:http.MethodPost]))
 A couple of HTTP methods: ["GET" "POST"]
 nil
 ```

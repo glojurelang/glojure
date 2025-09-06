@@ -18,6 +18,10 @@ import (
 )
 
 func TestCodegen(t *testing.T) {
+	if runtime.GetUseAOT() {
+		t.Skip("Skipping codegen tests with AOT enabled; run with GLOJURE_USE_AOT=0")
+	}
+
 	var testFiles []string
 	err := filepath.Walk("testdata/codegen", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
