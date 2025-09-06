@@ -201,12 +201,15 @@ func compileNSToFile(fs fs.FS, scriptBase string) {
 		panic(fmt.Errorf("cannot compile %s: filesystem is not writable", scriptBase))
 	}
 	fsDir := fmt.Sprintf("%s", fs)
+	generateNamespaceAOT(fsDir, VarCurrentNS.Deref().(*Namespace))
+}
 
-	// compile to .go files
-	targetDir := filepath.Join(fsDir, scriptBase)
+func generateNamespaceAOT(fsDir string, ns *Namespace) {
+	path := nsToPath(ns.Name().Name())
+	targetDir := filepath.Join(fsDir, path)
 	targetFile := filepath.Join(targetDir, "loader.go")
-	fmt.Printf("Compiling %s to %s\n", scriptBase, targetFile)
 
+	fmt.Printf("Compiling %s to %s\n", ns.Name(), targetFile)
 	// ensure directory exists
 	err := os.MkdirAll(targetDir, 0755)
 	if err != nil {
@@ -215,20 +218,9 @@ func compileNSToFile(fs fs.FS, scriptBase string) {
 
 	var buf bytes.Buffer
 	gen := NewGenerator(&buf)
-	currNS := VarCurrentNS.Deref().(*lang.Namespace)
-
-	// only generate if the namespace has a name that matches the scriptBase
-	// - we can do better than this
-	// - TODO: track all namespaces that are loaded while loading this one, and generate for all of them
-	nsName := strings.ReplaceAll(scriptBase, string(os.PathSeparator), ".")
-	if currNS.Name().Name() != nsName {
-		fmt.Printf("Skipping code generation for namespace %s: does not match script base %s\n", currNS.Name(), nsName)
-		return
-	}
-
-	if err = gen.Generate(currNS); err != nil {
+	if err = gen.Generate(ns); err != nil {
 		os.WriteFile(targetFile, buf.Bytes(), 0644)
-		panic(fmt.Errorf("failed to generate code for namespace %s: %w", currNS.Name(), err))
+		panic(fmt.Errorf("failed to generate code for namespace %s: %w", ns.Name(), err))
 	}
 	err = os.WriteFile(targetFile, buf.Bytes(), 0644)
 	if err != nil {

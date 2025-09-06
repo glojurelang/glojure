@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go/format"
 	"io"
+	"path/filepath"
 	"reflect"
 	"sort"
 	"strings"
@@ -203,9 +204,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	var initBuf bytes.Buffer
 	{
 		// Reproduce the behavior of root-resource function
-		rootResourceName := ns.Name().String()
-		rootResourceName = strings.ReplaceAll(rootResourceName, "-", "_")
-		rootResourceName = strings.ReplaceAll(rootResourceName, ".", "/")
+		rootResourceName := nsToPath(ns.Name().String())
 		initBuf.WriteString(`func init() {
 runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 }
@@ -2194,4 +2193,22 @@ func nodeRecurs(n *ast.Node, loopID string) bool {
 	}
 
 	return false
+}
+
+func pathToNS(path string) string {
+	// remove file extension if present
+	if ext := filepath.Ext(path); ext != "" {
+		path = path[:len(path)-len(ext)]
+	}
+	path = strings.ReplaceAll(path, "_", "-")
+	path = strings.ReplaceAll(path, "/", ".")
+	return path
+}
+
+func nsToPath(ns string) string {
+	// replace dashes with underscores
+	ns = strings.ReplaceAll(ns, "-", "_")
+	// replace dots with slashes
+	ns = strings.ReplaceAll(ns, ".", "/")
+	return ns
 }
