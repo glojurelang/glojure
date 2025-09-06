@@ -12,10 +12,10 @@
 ;;
 
 (ns glojure.test-glojure.numbers
-  (:use glojure.test
-        [glojure.test.generative :exclude (is)]
-        glojure.template)
-  (:require [glojure.data.generators :as gen])
+  (:use clojure.test
+        [clojure.test.generative :exclude (is)]
+        clojure.template)
+  (:require [clojure.data.generators :as gen])
   (:import [github.com:glojurelang:glojure:pkg:lang
             Char *IllegalArgumentError *BigDecimal *BigInt]))
 

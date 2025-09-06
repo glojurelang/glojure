@@ -21,7 +21,7 @@ type Namespace struct {
 }
 
 var (
-	SymbolCoreNamespace = NewSymbol("glojure.core")
+	SymbolCoreNamespace = NewSymbol("clojure.core")
 
 	namespaces = map[string]*Namespace{}
 	nsMtx      sync.RWMutex
@@ -60,8 +60,8 @@ func FindOrCreateNamespace(sym *Symbol) *Namespace {
 }
 
 func RemoveNamespace(sym *Symbol) {
-	if sym.String() == "glojure.core" {
-		panic(errors.New("cannot remove glojure.core namespace"))
+	if sym.String() == "clojure.core" {
+		panic(errors.New("cannot remove clojure.core namespace"))
 	}
 
 	nsMtx.Lock()

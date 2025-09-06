@@ -52,7 +52,7 @@ func TestCodegen(t *testing.T) {
 				nsName = strings.ReplaceAll(nsName, ".", "-")
 			}
 
-			require := glj.Var("glojure.core", "require")
+			require := glj.Var("clojure.core", "require")
 			runtime.AddLoadPath(os.DirFS("testdata"))
 			// Load the namespace
 			require.Invoke(lang.NewSymbol(nsName))
@@ -67,11 +67,11 @@ func TestCodegen(t *testing.T) {
 		})
 	}
 
-	t.Run("glojure.core", func(t *testing.T) {
+	t.Run("clojure.core", func(t *testing.T) {
 		// Test the core namespace
-		ns := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+		ns := lang.FindNamespace(lang.NewSymbol("clojure.core"))
 		if ns == nil {
-			t.Fatal("glojure.core namespace not found")
+			t.Fatal("clojure.core namespace not found")
 		}
 
 		if err := os.MkdirAll("testdata/codegen/test/core", 0755); err != nil {
@@ -138,7 +138,7 @@ func generateAndTestNamespace(t *testing.T, ns *lang.Namespace, goldenFile strin
 		// run go vet on the temp file with .go extension
 		// - two exceptions: core and try_basic generate unreachable code
 		// TODO: fix the code generation to avoid unreachable code
-		if ns.Name().String() == "glojure.core" || ns.Name().String() == "codegen.test.try-basic" {
+		if ns.Name().String() == "clojure.core" || ns.Name().String() == "codegen.test.try-basic" {
 			t.Logf("skipping go vet for %s", goldenFile)
 			return
 		}

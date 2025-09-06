@@ -1,6 +1,6 @@
 (ns glojure.test-glojure.cli
-  (:use glojure.test)
-  (:require [glojure.string :as str]))
+  (:use clojure.test)
+  (:require [clojure.string :as str]))
 
 (defmacro #^{:private true} test-that
   "Provides a useful way for specifying the purpose of tests. If the first-level
@@ -10,7 +10,7 @@
   [purpose & test-forms]
   (let [tests (map
                #(if (= (:ns (meta (resolve (first %))))
-                       (the-ns 'glojure.test))
+                       (the-ns 'clojure.test))
                   (concat % (list purpose))
                   %)
                test-forms)]

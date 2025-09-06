@@ -1,5 +1,5 @@
 (ns glojure.test-glojure.basic
-  (:use glojure.test))
+  (:use clojure.test))
 
 (defmacro test-that
   "Provides a useful way for specifying the purpose of tests. If the first-level
@@ -9,7 +9,7 @@
   [purpose & test-forms]
   (let [tests (map
                 #(if (= (:ns (meta (resolve (first %))))
-                        (the-ns 'glojure.test))
+                        (the-ns 'clojure.test))
                    (concat % (list purpose))
                    %)
                 test-forms)]
@@ -17,7 +17,7 @@
 
 (deftest Eval
   (is (= (eval '(list 1 2 3)) '(1 2 3)))
-  (is (= (eval '(list + 1 2 3)) (list glojure.core/+ 1 2 3)))
+  (is (= (eval '(list + 1 2 3)) (list clojure.core/+ 1 2 3)))
   (test-that "Non-closure fns are supported as code"
              (is (= (eval (eval '(list + 1 2 3))) 6)))
   (is (= (eval (list '+ 1 2 3)) 6)))

@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	SymbolUnquote       = lang.NewSymbol("clojure.core/unquote") // TODO: rename to glojure.core/unquote
+	SymbolUnquote       = lang.NewSymbol("clojure.core/unquote")
 	SymbolSpliceUnquote = lang.NewSymbol("splice-unquote")
 	SymbolNamespace     = lang.NewSymbol("ns")
 	SymbolInNamespace   = lang.NewSymbol("in-ns")

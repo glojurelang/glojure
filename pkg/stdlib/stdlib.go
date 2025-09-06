@@ -5,5 +5,5 @@ import (
 	"embed"
 )
 
-//go:embed glojure
+//go:embed glojure clojure
 var StdLib embed.FS

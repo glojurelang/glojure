@@ -9,8 +9,8 @@
 ; Author: Alex Miller
 
 (ns glojure.test-glojure.transducers
-  (:require [glojure.string :as s]
-            [glojure.test :refer :all]))
+  (:require [clojure.string :as s]
+            [clojure.test :refer :all]))
 
 ;; TODO: enable these tests
 

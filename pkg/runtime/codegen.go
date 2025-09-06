@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go/format"
 	"io"
+	"path/filepath"
 	"reflect"
 	"sort"
 	"strings"
@@ -84,9 +85,9 @@ type Generator struct {
 var (
 	omittedVars = map[string]bool{
 		// initialized by the runtime
-		"#'glojure.core/*in*":            true,
-		"#'glojure.core/*out*":           true,
-		"#'glojure.core/*compile-files*": true,
+		"#'clojure.core/*in*":            true,
+		"#'clojure.core/*out*":           true,
+		"#'clojure.core/*compile-files*": true,
 	}
 )
 
@@ -203,9 +204,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	var initBuf bytes.Buffer
 	{
 		// Reproduce the behavior of root-resource function
-		rootResourceName := ns.Name().String()
-		rootResourceName = strings.ReplaceAll(rootResourceName, "-", "_")
-		rootResourceName = strings.ReplaceAll(rootResourceName, ".", "/")
+		rootResourceName := nsToPath(ns.Name().String())
 		initBuf.WriteString(`func init() {
 runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 }
@@ -1562,8 +1561,8 @@ var (
 	expectedInvalidImports = map[string]bool{
 		"ExceptionInfo":                            true,
 		"LinkedBlockingQueue":                      true,
-		"glojure.lang.LineNumberingPushbackReader": true,
-		"glojure.lang":                             true,
+		"clojure.lang.LineNumberingPushbackReader": true,
+		"clojure.lang":                             true,
 		"java.io.InputStreamReader":                true,
 		"java.io.StringReader":                     true,
 		"java.util.concurrent.CountDownLatch":      true,
@@ -2125,8 +2124,8 @@ var (
 )
 
 func isRuntimeOwnedVar(v *lang.Var) bool {
-	// namespace must be glojure.core
-	if v.Namespace().Name().Name() != "glojure.core" {
+	// namespace must be clojure.core
+	if v.Namespace().Name().Name() != "clojure.core" {
 		return false
 	}
 
@@ -2194,4 +2193,22 @@ func nodeRecurs(n *ast.Node, loopID string) bool {
 	}
 
 	return false
+}
+
+func pathToNS(path string) string {
+	// remove file extension if present
+	if ext := filepath.Ext(path); ext != "" {
+		path = path[:len(path)-len(ext)]
+	}
+	path = strings.ReplaceAll(path, "_", "-")
+	path = strings.ReplaceAll(path, "/", ".")
+	return path
+}
+
+func nsToPath(ns string) string {
+	// replace dashes with underscores
+	ns = strings.ReplaceAll(ns, "-", "_")
+	// replace dots with slashes
+	ns = strings.ReplaceAll(ns, ".", "/")
+	return ns
 }

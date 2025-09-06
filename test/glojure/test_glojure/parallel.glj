@@ -10,7 +10,7 @@
 
 
 (ns glojure.test-glojure.parallel
-  (:use glojure.test))
+  (:use clojure.test))
 
 ;; !! Tests for the parallel library will be in a separate file clojure_parallel.clj !!
 

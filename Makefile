@@ -4,7 +4,7 @@ STDLIB_ORIGINALS_DIR := scripts/rewrite-core/originals
 STDLIB_ORIGINALS := $(shell find $(STDLIB_ORIGINALS_DIR) -name '*.clj')
 STDLIB := $(STDLIB_ORIGINALS:scripts/rewrite-core/originals/%=%)
 STDLIB_ORIGINALS := $(addprefix scripts/rewrite-core/originals/,$(STDLIB))
-STDLIB_TARGETS := $(addprefix pkg/stdlib/glojure/,$(STDLIB:.clj=.glj))
+STDLIB_TARGETS := $(addprefix pkg/stdlib/clojure/,$(STDLIB:.clj=.glj))
 
 OS-TYPE := $(shell bash -c 'echo $$OSTYPE')
 OS-NAME := \
@@ -41,7 +41,7 @@ GO_VERSION := 1.19.3
 GO_CMD := go$(GO_VERSION)
 
 .PHONY: all
-all: gocmd $(STDLIB_TARGETS) generate $(GLJIMPORTS) $(BINS)
+all: gocmd $(STDLIB_TARGETS) go-generate aot $(GLJIMPORTS) $(BINS)
 
 .PHONY: gocmd
 gocmd:
@@ -49,11 +49,14 @@ gocmd:
 		(go install "golang.org/dl/$(GO_CMD)@latest" && \
 		$(GO_CMD) download > /dev/null && $(GO_CMD) version > /dev/null)
 
-.PHONY: generate
+.PHONY: go-generate
 generate:
 	@go generate ./...
-	@echo "(map compile '[glojure.core glojure.go.io glojure.core.async glojure.walk glojure.template glojure.go.types glojure.uuid])" | \
-		GLOJURE_USE_AOT=false GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO_CMD) run ./cmd/glj
+
+.PHONY: aot
+aot: gocmd $(STDLIB_TARGETS)
+	@echo "(map compile '[clojure.core clojure.core.async clojure.walk clojure.template clojure.uuid glojure.go.types glojure.go.io])" | \
+		GLOJURE_USE_AOT=false GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO_CMD) run -tags glj_no_aot_stdlib ./cmd/glj
 
 .PHONY: build
 build: $(GLJ)
@@ -67,7 +70,7 @@ pkg/gen/gljimports/gljimports_%.go: ./scripts/gen-gljimports.sh ./cmd/gen-import
 	@echo "Generating $@"
 	@./scripts/gen-gljimports.sh $@ $* $(GO_CMD)
 
-pkg/stdlib/glojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-core/run.sh scripts/rewrite-core/rewrite.clj
+pkg/stdlib/clojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-core/run.sh scripts/rewrite-core/rewrite.clj
 	@echo "Rewriting $< to $@"
 	@mkdir -p $(dir $@)
 	@scripts/rewrite-core/run.sh $< > $@
