@@ -107,8 +107,7 @@
 
 ;; Data structures for simple 1:1 replacements
 (def namespace-mappings
-  {'clojure.core 'glojure.core
-   'clojure.string 'glojure.string})
+  {})
 
 (def type-mappings
   {;; Simple type replacements when appearing alone
@@ -698,8 +697,6 @@
    (sexpr-replace 'clojure.lang.RT/floatCast 'github.com:glojurelang:glojure:pkg:lang.FloatCast)
    (sexpr-replace 'clojure.lang.RT/uncheckedFloatCast 'github.com:glojurelang:glojure:pkg:lang.UncheckedFloatCast)
 
-   (sexpr-replace "clojure.core" "glojure.core")
-   (sexpr-replace 'clojure.core/name 'glojure.core/name)
 
    ;; ===== Number Type Checks =====
    (sexpr-replace '(defn integer?
@@ -769,7 +766,6 @@
    (replace-num-array 'double)
    (replace-num-array 'boolean)
 
-   (sexpr-replace 'clojure.core/cond 'glojure.core/cond)
 
    (sexpr-replace 'clojure.lang.Keyword 'github.com:glojurelang:glojure:pkg:lang.Keyword)
 
@@ -864,9 +860,7 @@
 
    (sexpr-replace 'clojure.lang.Counted 'github.com:glojurelang:glojure:pkg:lang.Counted)
 
-   (sexpr-replace 'clojure.core/in-ns 'glojure.core/in-ns)
-   (sexpr-replace 'clojure.core/refer 'glojure.core/refer)
-
+ 
    (sexpr-replace 'clojure.lang.Var 'github.com:glojurelang:glojure:pkg:lang.*Var)
    (sexpr-replace 'clojure.lang.Namespace 'github.com:glojurelang:glojure:pkg:lang.*Namespace)
 
@@ -1010,17 +1004,6 @@
                         (~'.write ~'w (~'str ~'o))))
                      (z/insert-newline-left))
                  ))))]
-
-   ;;; replace all clojure. symbols with glojure.
-   [(fn select [zloc] (and (z/sexpr-able? zloc)
-                           (let [sexpr (z/sexpr zloc)]
-                             (and (symbol? sexpr)
-                                  (string/starts-with? (name sexpr) "clojure.")))))
-    (fn visit [zloc] (z/replace zloc (-> zloc
-                                         z/sexpr
-                                         name
-                                         (string/replace "clojure." "glojure.")
-                                         symbol)))]
 
    ;; ===== Test.clj Replacements =====
 

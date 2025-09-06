@@ -1,5 +1,5 @@
 (ns glojure.test-glojure.lcm
-  (:use glojure.test))
+  (:use clojure.test))
 
 (defn lcm
   [& x]

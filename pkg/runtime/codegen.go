@@ -84,9 +84,9 @@ type Generator struct {
 var (
 	omittedVars = map[string]bool{
 		// initialized by the runtime
-		"#'glojure.core/*in*":            true,
-		"#'glojure.core/*out*":           true,
-		"#'glojure.core/*compile-files*": true,
+		"#'clojure.core/*in*":            true,
+		"#'clojure.core/*out*":           true,
+		"#'clojure.core/*compile-files*": true,
 	}
 )
 
@@ -1562,8 +1562,8 @@ var (
 	expectedInvalidImports = map[string]bool{
 		"ExceptionInfo":                            true,
 		"LinkedBlockingQueue":                      true,
-		"glojure.lang.LineNumberingPushbackReader": true,
-		"glojure.lang":                             true,
+		"clojure.lang.LineNumberingPushbackReader": true,
+		"clojure.lang":                             true,
 		"java.io.InputStreamReader":                true,
 		"java.io.StringReader":                     true,
 		"java.util.concurrent.CountDownLatch":      true,
@@ -2125,8 +2125,8 @@ var (
 )
 
 func isRuntimeOwnedVar(v *lang.Var) bool {
-	// namespace must be glojure.core
-	if v.Namespace().Name().Name() != "glojure.core" {
+	// namespace must be clojure.core
+	if v.Namespace().Name().Name() != "clojure.core" {
 		return false
 	}
 

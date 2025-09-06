@@ -115,18 +115,18 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 	}
 
 	// Add stdlib
-	RT.Load("glojure/core")
+	RT.Load("clojure/core")
 
 	// Workaround to ensure namespaces that are required by core are loaded.
 	// TODO: AOT should identify this dependency and generate code to load it.
 	if useAot {
-		RT.Load("glojure/protocols")
-		RT.Load("glojure/string")
+		RT.Load("clojure/protocols")
+		RT.Load("clojure/string")
 		RT.Load("glojure/go/io")
 	}
 
 	// Set the glojure version
-	core := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+	core := lang.FindNamespace(lang.NewSymbol("clojure.core"))
 	versionVar := core.FindInternedVar(lang.NewSymbol("*glojure-version*"))
 	if versionVar != nil {
 		versionVar.BindRoot(ParseVersion(VERSION))

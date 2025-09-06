@@ -2,8 +2,8 @@
 ;; Ensures Glojure behavior matches Clojure as closely as possible
 
 (ns glojure.test-glojure.sort
-  (:require [glojure.test :refer :all]
-            [glojure.string :as s]))
+  (:require [clojure.test :refer :all]
+            [clojure.string :as s]))
 
 (deftest test-sort-basic
   (testing "Basic sort functionality"

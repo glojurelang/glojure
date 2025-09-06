@@ -1,6 +1,6 @@
 (ns glojure.test-glojure.core.async.basic
-  (:use glojure.test)
-  (:require [glojure.core.async :as a]))
+  (:use clojure.test)
+  (:require [clojure.core.async :as a]))
 
 (defn- chan-with
   [val]

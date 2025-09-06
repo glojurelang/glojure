@@ -15,11 +15,11 @@ import (
 
 var (
 	symQuote         = lang.NewSymbol("quote")
-	symList          = lang.NewSymbol("glojure.core/list")
-	symSeq           = lang.NewSymbol("glojure.core/seq")
-	symConcat        = lang.NewSymbol("glojure.core/concat")
-	symUnquote       = lang.NewSymbol("glojure.core/unquote")
-	symSpliceUnquote = lang.NewSymbol("glojure.core/splice-unquote")
+	symList          = lang.NewSymbol("clojure.core/list")
+	symSeq           = lang.NewSymbol("clojure.core/seq")
+	symConcat        = lang.NewSymbol("clojure.core/concat")
+	symUnquote       = lang.NewSymbol("clojure.core/unquote")
+	symSpliceUnquote = lang.NewSymbol("clojure.core/splice-unquote")
 
 	specials = func() map[string]bool {
 		specialStrs := []string{
@@ -34,7 +34,7 @@ var (
 			"fn*",
 			"quote",
 			"var",
-			"glojure.core/import*",
+			"clojure.core/import*",
 			".",
 			"set!",
 			"deftype*",
@@ -802,12 +802,12 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*lang.Symbol, node interfa
 			keyvals = append(keyvals, entry.Key(), entry.Val())
 		}
 		return lang.NewList(
-			lang.NewSymbol("glojure.core/apply"),
-			lang.NewSymbol("glojure.core/hash-map"),
+			lang.NewSymbol("clojure.core/apply"),
+			lang.NewSymbol("clojure.core/hash-map"),
 			lang.NewList(
-				lang.NewSymbol("glojure.core/seq"),
+				lang.NewSymbol("clojure.core/seq"),
 				lang.NewCons(
-					lang.NewSymbol("glojure.core/concat"),
+					lang.NewSymbol("clojure.core/concat"),
 					r.sqExpandList(symbolNameMap, keyvals),
 				),
 			),
@@ -816,14 +816,14 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*lang.Symbol, node interfa
 		_, isVector := node.(lang.IPersistentVector)
 		if lang.Count(node) == 0 {
 			if isVector {
-				//(glojure.core/apply glojure.core/vector (glojure.core/seq (glojure.core/concat)))
+				//(clojure.core/apply clojure.core/vector (clojure.core/seq (clojure.core/concat)))
 				return lang.NewList(
-					lang.NewSymbol("glojure.core/apply"),
-					lang.NewSymbol("glojure.core/vector"),
+					lang.NewSymbol("clojure.core/apply"),
+					lang.NewSymbol("clojure.core/vector"),
 					lang.NewList(
-						lang.NewSymbol("glojure.core/seq"),
+						lang.NewSymbol("clojure.core/seq"),
 						lang.NewList(
-							lang.NewSymbol("glojure.core/concat"),
+							lang.NewSymbol("clojure.core/concat"),
 						),
 					),
 				)
@@ -848,8 +848,8 @@ func (r *Reader) syntaxQuote(symbolNameMap map[string]*lang.Symbol, node interfa
 			lang.NewList(elements...))
 		if isVector {
 			ret = lang.NewList(
-				lang.NewSymbol("glojure.core/apply"),
-				lang.NewSymbol("glojure.core/vector"),
+				lang.NewSymbol("clojure.core/apply"),
+				lang.NewSymbol("clojure.core/vector"),
 				ret)
 		}
 		return ret
@@ -861,11 +861,11 @@ func (r *Reader) sqExpandList(symbolNameMap map[string]*lang.Symbol, els []inter
 	var ret lang.IPersistentVector = lang.NewVector()
 	for _, v := range els {
 		if r.isUnquote(v) {
-			ret = ret.Cons(lang.NewList(lang.NewSymbol("glojure.core/list"), lang.First(lang.Rest(v)))).(lang.IPersistentVector)
+			ret = ret.Cons(lang.NewList(lang.NewSymbol("clojure.core/list"), lang.First(lang.Rest(v)))).(lang.IPersistentVector)
 		} else if r.isUnquoteSplicing(v) {
 			ret = ret.Cons(lang.First(lang.Rest(v))).(lang.IPersistentVector)
 		} else {
-			ret = ret.Cons(lang.NewList(lang.NewSymbol("glojure.core/list"), r.syntaxQuote(symbolNameMap, v))).(lang.IPersistentVector)
+			ret = ret.Cons(lang.NewList(lang.NewSymbol("clojure.core/list"), r.syntaxQuote(symbolNameMap, v))).(lang.IPersistentVector)
 		}
 	}
 	return lang.Seq(ret)
@@ -883,8 +883,8 @@ func (r *Reader) isUnquoteSplicing(form interface{}) bool {
 
 func (r *Reader) readDeref() (interface{}, error) {
 	// TODO: look up 'deref' with the symbol resolver
-	// it should resolve to glojure.core/deref in the go case
-	return r.readQuoteType("glojure.core/deref")
+	// it should resolve to clojure.core/deref in the go case
+	return r.readQuoteType("clojure.core/deref")
 }
 
 func (r *Reader) readUnquote() (interface{}, error) {
@@ -893,11 +893,11 @@ func (r *Reader) readUnquote() (interface{}, error) {
 		return nil, r.error("error reading input: %w", err)
 	}
 	if rn == '@' {
-		return r.readQuoteType("glojure.core/splice-unquote")
+		return r.readQuoteType("clojure.core/splice-unquote")
 	}
 
 	r.rs.UnreadRune()
-	return r.readQuoteType("glojure.core/unquote")
+	return r.readQuoteType("clojure.core/unquote")
 }
 
 func (r *Reader) readDispatch() (interface{}, error) {

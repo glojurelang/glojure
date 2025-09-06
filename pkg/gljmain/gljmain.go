@@ -57,7 +57,7 @@ func Main(args []string) {
 		env := lang.GlobalEnv
 
 		// Set command line args (everything after -e and the expression)
-		core := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+		core := lang.FindNamespace(lang.NewSymbol("clojure.core"))
 		core.FindInternedVar(lang.NewSymbol("*command-line-args*")).BindRoot(lang.Seq(args[2:]))
 
 		rdr := reader.New(strings.NewReader(expr), reader.WithGetCurrentNS(func() *lang.Namespace {
@@ -90,7 +90,7 @@ func Main(args []string) {
 		}
 		env := lang.GlobalEnv
 
-		core := lang.FindNamespace(lang.NewSymbol("glojure.core"))
+		core := lang.FindNamespace(lang.NewSymbol("clojure.core"))
 		core.FindInternedVar(lang.NewSymbol("*command-line-args*")).BindRoot(lang.Seq(args[1:]))
 
 		rdr := reader.New(bufio.NewReader(file), reader.WithGetCurrentNS(func() *lang.Namespace {

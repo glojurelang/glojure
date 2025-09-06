@@ -9,5 +9,4 @@
 cd scripts/rewrite-core
 clj -M ./rewrite.clj "../../$1" | \
     sed 's/\^Number //g' | \
-    sed 's/:tag Number//g' | \
-    sed 's/clojure/glojure/g'
+    sed 's/:tag Number//g'

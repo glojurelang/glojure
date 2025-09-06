@@ -1,5 +1,5 @@
 (ns glojure.test-glojure.printer
-  (:use glojure.test))
+  (:use clojure.test))
 ;;(:require [glojure.pprint :refer [pprint]]))
 
 (deftest print-nil
@@ -93,7 +93,7 @@
 
 (deftest print-var
   (are [x s] (= s (pr-str x))
-       #'pr-str  "#'glojure.core/pr-str"
+       #'pr-str  "#'clojure.core/pr-str"
        #'var-with-meta "#'glojure.test-glojure.printer/var-with-meta"
        #'var-with-type "#'glojure.test-glojure.printer/var-with-type"))
 
@@ -103,7 +103,7 @@
                  (and (strings.HasSuffix pstr s)
                       (strings.HasPrefix pstr "^")
                       (strings.Contains pstr (pr-str (meta x))))))
-       #'pr-str  "#'glojure.core/pr-str"
+       #'pr-str  "#'clojure.core/pr-str"
        #'var-with-meta "#'glojure.test-glojure.printer/var-with-meta"
        #'var-with-type "#'glojure.test-glojure.printer/var-with-type"))
 

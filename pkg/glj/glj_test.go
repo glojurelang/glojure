@@ -7,8 +7,8 @@ import (
 )
 
 func TestGLJ(t *testing.T) {
-	mp := Var("glojure.core", "map")
-	inc := Var("glojure.core", "inc")
+	mp := Var("clojure.core", "map")
+	inc := Var("clojure.core", "inc")
 	res := lang.PrintString(mp.Invoke(inc, Read("[1 2 3]")))
 	if res != "(2 3 4)" {
 		t.Errorf("Expected (2 3 4), got %v", res)

@@ -1,6 +1,6 @@
 (ns glojure.test-glojure.string
-  (:require [glojure.string :as s])
-  (:use glojure.test))
+  (:require [clojure.string :as s])
+  (:use clojure.test))
 
 (set! *warn-on-reflection* true)
 
