@@ -120,7 +120,7 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 	// Workaround to ensure namespaces that are required by core are loaded.
 	// TODO: AOT should identify this dependency and generate code to load it.
 	if useAot {
-		RT.Load("glojure/core/protocols")
+		RT.Load("glojure/protocols")
 		RT.Load("glojure/string")
 		RT.Load("glojure/go/io")
 	}
