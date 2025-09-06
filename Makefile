@@ -41,7 +41,7 @@ GO_VERSION := 1.19.3
 GO_CMD := go$(GO_VERSION)
 
 .PHONY: all
-all: gocmd $(STDLIB_TARGETS) generate $(GLJIMPORTS) $(BINS)
+all: gocmd $(STDLIB_TARGETS) go-generate aot $(GLJIMPORTS) $(BINS)
 
 .PHONY: gocmd
 gocmd:
@@ -49,9 +49,12 @@ gocmd:
 		(go install "golang.org/dl/$(GO_CMD)@latest" && \
 		$(GO_CMD) download > /dev/null && $(GO_CMD) version > /dev/null)
 
-.PHONY: generate
+.PHONY: go-generate
 generate:
 	@go generate ./...
+
+.PHONY: aot
+aot: gocmd $(STDLIB_TARGETS)
 	@echo "(map compile '[glojure.core glojure.go.io glojure.core.async glojure.walk glojure.template glojure.go.types glojure.uuid])" | \
 		GLOJURE_USE_AOT=false GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO_CMD) run ./cmd/glj
 
