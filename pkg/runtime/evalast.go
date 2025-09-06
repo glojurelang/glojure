@@ -204,7 +204,9 @@ func (env *environment) EvalASTTheVar(n *ast.Node) (interface{}, error) {
 	return n.Sub.(*ast.TheVarNode).Var, nil
 }
 
-// TODO: this is a bit of a mess
+// TODO: fix up, as this is a bit of a mess. This is a compatibility
+// layer to make certain uses of Clojure Compiler methods work in
+// core.
 type evalCompiler struct{}
 
 var (
@@ -261,22 +263,9 @@ func (env *environment) EvalASTMaybeClass(n *ast.Node) (interface{}, error) {
 func (env *environment) EvalASTMaybeHostForm(n *ast.Node) (interface{}, error) {
 	hostFormNode := n.Sub.(*ast.MaybeHostFormNode)
 	field := hostFormNode.Field
-	// TODO: implement this for real
-	switch hostFormNode.Class {
-	case "glojure.lang.PersistentTreeSet":
-		switch field.Name() {
-		case "create":
-			return func(keys interface{}) interface{} {
-				var ks []interface{}
-				for seq := lang.Seq(keys); seq != nil; seq = seq.Next() {
-					ks = append(ks, seq.First())
-				}
-				return lang.NewSet(ks...)
-			}, nil
-		}
-	}
 
-	// TODO: how to handle?
+	// TODO: should we support any version of this? Go doesn't have any notion of static
+	// vs instance fields.
 	panic("EvalASTMaybeHostForm: " + hostFormNode.Class + "/" + field.Name())
 }
 

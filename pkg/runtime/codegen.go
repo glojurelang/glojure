@@ -144,7 +144,9 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 		second, _ := lang.Nth(entry, 1)
 		vr, ok := second.(*lang.Var)
 		if !ok {
-			panic(fmt.Sprintf("expected var, got %T", second))
+			continue // skip non-var mappings
+			// TODO: handle non-var mappings like direct references to functions or values
+			// panic(fmt.Sprintf("can't codegen %v: expected var, got %T (%v)", name, second, second))
 		}
 
 		if !(vr.Namespace() == ns && lang.Equals(vr.Symbol(), name)) {
@@ -402,7 +404,14 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 
 	// check if the var has a value
 	if vr.IsBound() {
-		g.writef("%s = %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, g.generateValue(vr.Get()))
+		// we call Get() on a new goroutine to ensure we get the root value in the case
+		// of dynamic vars
+		valChan := make(chan any)
+		go func() {
+			valChan <- vr.Get()
+		}()
+		v := <-valChan
+		g.writef("%s = %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, g.generateValue(v))
 	} else {
 		g.writef("%s = %s.Intern(%s)\n", varVar, nsVariableName, varSym)
 	}

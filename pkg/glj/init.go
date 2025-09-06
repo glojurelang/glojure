@@ -8,6 +8,12 @@ import (
 	_ "github.com/glojurelang/glojure/pkg/gen/gljimports"
 	"github.com/glojurelang/glojure/pkg/lang"
 
+	// Add NS loaders for the standard library.
+	_ "github.com/glojurelang/glojure/pkg/stdlib/glojure/core"
+	_ "github.com/glojurelang/glojure/pkg/stdlib/glojure/core/async"
+	_ "github.com/glojurelang/glojure/pkg/stdlib/glojure/go/io"
+	_ "github.com/glojurelang/glojure/pkg/stdlib/glojure/protocols"
+
 	"github.com/glojurelang/glojure/pkg/runtime"
 )
 
