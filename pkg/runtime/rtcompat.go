@@ -212,6 +212,13 @@ func compileNSToFile(fs fs.FS, scriptBase string) {
 	var buf bytes.Buffer
 	gen := NewGenerator(&buf)
 	currNS := VarCurrentNS.Deref().(*lang.Namespace)
+	// only generate if the namespace has a name that matches the scriptBase
+	nsName := strings.ReplaceAll(scriptBase, string(os.PathSeparator), ".")
+	if currNS.Name().Name() != nsName {
+		fmt.Printf("Skipping code generation for namespace %s: does not match script base %s\n", currNS.Name(), nsName)
+		return
+	}
+
 	if err = gen.Generate(currNS); err != nil {
 		panic(fmt.Errorf("failed to generate code for namespace %s: %w", currNS.Name(), err))
 	}

@@ -66,6 +66,7 @@ func LoadNS() {
 	sym__STAR_err_STAR_ := lang.NewSymbol("*err*")
 	sym__STAR_file_STAR_ := lang.NewSymbol("*file*")
 	sym__STAR_flush_DASH_on_DASH_newline_STAR_ := lang.NewSymbol("*flush-on-newline*")
+	sym__STAR_glojure_DASH_version_STAR_ := lang.NewSymbol("*glojure-version*")
 	sym__STAR_in_STAR_ := lang.NewSymbol("*in*")
 	sym__STAR_loaded_DASH_libs_STAR_ := lang.NewSymbol("*loaded-libs*")
 	sym__STAR_loading_DASH_verbosely_STAR_ := lang.NewSymbol("*loading-verbosely*")
@@ -1314,6 +1315,7 @@ func LoadNS() {
 	kw_hierarchy := lang.NewKeyword("hierarchy")
 	kw_identity := lang.NewKeyword("identity")
 	kw_impl_DASH_ns := lang.NewKeyword("impl-ns")
+	kw_incremental := lang.NewKeyword("incremental")
 	kw_initk := lang.NewKeyword("initk")
 	kw_inline := lang.NewKeyword("inline")
 	kw_inline_DASH_arities := lang.NewKeyword("inline-arities")
@@ -1327,11 +1329,13 @@ func LoadNS() {
 	kw_line := lang.NewKeyword("line")
 	kw_macro := lang.NewKeyword("macro")
 	kw_main := lang.NewKeyword("main")
+	kw_major := lang.NewKeyword("major")
 	kw_mappings := lang.NewKeyword("mappings")
 	kw_max_DASH_history := lang.NewKeyword("max-history")
 	kw_message := lang.NewKeyword("message")
 	kw_meta := lang.NewKeyword("meta")
 	kw_min_DASH_history := lang.NewKeyword("min-history")
+	kw_minor := lang.NewKeyword("minor")
 	kw_multis := lang.NewKeyword("multis")
 	kw_name := lang.NewKeyword("name")
 	kw_nav := lang.NewKeyword("nav")
@@ -1347,6 +1351,7 @@ func LoadNS() {
 	kw_post := lang.NewKeyword("post")
 	kw_pre := lang.NewKeyword("pre")
 	kw_private := lang.NewKeyword("private")
+	kw_qualifier := lang.NewKeyword("qualifier")
 	kw_read_DASH_cond := lang.NewKeyword("read-cond")
 	kw_ready := lang.NewKeyword("ready")
 	kw_redef := lang.NewKeyword("redef")
@@ -1457,6 +1462,8 @@ func LoadNS() {
 	var_glojure_DOT_core__STAR_file_STAR_ := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_file_STAR_)
 	// var glojure.core/*flush-on-newline*
 	var_glojure_DOT_core__STAR_flush_DASH_on_DASH_newline_STAR_ := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_flush_DASH_on_DASH_newline_STAR_)
+	// var glojure.core/*glojure-version*
+	var_glojure_DOT_core__STAR_glojure_DASH_version_STAR_ := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_glojure_DASH_version_STAR_)
 	// var glojure.core/*in*
 	var_glojure_DOT_core__STAR_in_STAR_ := lang.InternVarName(sym_glojure_DOT_core, sym__STAR_in_STAR_)
 	// var glojure.core/*loaded-libs*
@@ -3121,6 +3128,14 @@ func LoadNS() {
 			var_glojure_DOT_core__STAR_flush_DASH_on_DASH_newline_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
+	// *glojure-version*
+	{
+		tmp0 := sym__STAR_glojure_DASH_version_STAR_.WithMeta(lang.NewMap()).(*lang.Symbol)
+		var_glojure_DOT_core__STAR_glojure_DASH_version_STAR_ = ns.InternWithValue(tmp0, lang.NewMap(kw_major, int(0), kw_minor, int(3), kw_incremental, int(0), kw_qualifier, nil), true)
+		if tmp0.Meta() != nil {
+			var_glojure_DOT_core__STAR_glojure_DASH_version_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
 	// *loaded-libs*
 	{
 		tmp0 := sym__STAR_loaded_DASH_libs_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "glojure/core.glj", kw_line, int(5817), kw_column, int(10), kw_end_DASH_line, int(5820), kw_end_DASH_column, int(15), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
@@ -3151,7 +3166,7 @@ func LoadNS() {
 	// *pending-paths*
 	{
 		tmp0 := sym__STAR_pending_DASH_paths_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "glojure/core.glj", kw_line, int(5822), kw_column, int(10), kw_end_DASH_line, int(5825), kw_end_DASH_column, int(17), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		var_glojure_DOT_core__STAR_pending_DASH_paths_STAR_ = ns.InternWithValue(tmp0, lang.NewList("/glojure/core"), true)
+		var_glojure_DOT_core__STAR_pending_DASH_paths_STAR_ = ns.InternWithValue(tmp0, lang.NewList(), true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_pending_DASH_paths_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
@@ -3228,7 +3243,7 @@ func LoadNS() {
 	// *unchecked-math*
 	{
 		tmp0 := sym__STAR_unchecked_DASH_math_STAR_.WithMeta(lang.NewMap(kw_added, "1.3", kw_doc, "While bound to true, compilations of +, -, *, inc, dec and the\n  coercions will be done without overflow checks. While bound\n  to :warn-on-boxed, same behavior as true, and a warning is emitted\n  when compilation uses boxed math. Default: false.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_ = ns.InternWithValue(tmp0, false, true)
+		var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_unchecked_DASH_math_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
@@ -3245,7 +3260,7 @@ func LoadNS() {
 	// *warn-on-reflection*
 	{
 		tmp0 := sym__STAR_warn_DASH_on_DASH_reflection_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "When set to true, the compiler will emit warnings when reflection is\n  needed to resolve Java method calls or field accesses.\n\n  Defaults to false.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_core))).(*lang.Symbol)
-		var_glojure_DOT_core__STAR_warn_DASH_on_DASH_reflection_STAR_ = ns.InternWithValue(tmp0, false, true)
+		var_glojure_DOT_core__STAR_warn_DASH_on_DASH_reflection_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_core__STAR_warn_DASH_on_DASH_reflection_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}

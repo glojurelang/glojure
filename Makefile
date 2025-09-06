@@ -52,8 +52,8 @@ gocmd:
 .PHONY: generate
 generate:
 	@go generate ./...
-	@echo "(map compile '[glojure.core glojure.core.async glojure.walk glojure.template])" | \
-		GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO_CMD) run ./cmd/glj
+	@echo "(map compile '[glojure.core glojure.go.io glojure.core.async glojure.walk glojure.template glojure.go.types glojure.uuid])" | \
+		GLOJURE_USE_AOT=false GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO_CMD) run ./cmd/glj
 
 .PHONY: build
 build: $(GLJ)

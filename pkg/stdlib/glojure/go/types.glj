@@ -18,7 +18,7 @@
      (go/deref sf))))
 
 (extend-protocol AstType
-  *go$ast.Ident
+  go$ast.*Ident
   (ast->type
     [ast]
     (let [name (.Name ast)
@@ -26,7 +26,7 @@
       (when-not typ (throw (fmt.Errorf "unknown type %s" name)))
       typ))
 
-  *go$ast.ArrayType
+  go$ast.*ArrayType
   (ast->type
     [ast]
     (let [len (.Len ast)
@@ -35,12 +35,12 @@
         (go/array-of (-> len .Value strconv.Atoi first) elt)
         (go/slice-of elt))))
 
-  *go$ast.MapType
+  go$ast.*MapType
   (ast->type
     [ast]
     (go/map-of (ast->type (.Key ast)) (ast->type (.Value ast))))
 
-  *go$ast.ChanType
+  go$ast.*ChanType
   (ast->type
     [ast]
     (let [dir (.Dir ast)
@@ -50,7 +50,7 @@
                  :else go/chan-of)]
       (ctor (ast->type (.Value ast)))))
 
-  *go$ast.FuncType
+  go$ast.*FuncType
   (ast->type
     [ast]
     (let [pl (or (.Params ast) nil)
@@ -59,7 +59,7 @@
                            (map #(repeat (max 1 (go/len (.Names %))) (.Type %)))
                            (apply concat)))
           last-param (last params)
-          variadic (instance? *go$ast.Ellipsis last-param)
+          variadic (instance? go$ast.*Ellipsis last-param)
           params (if-not variadic
                    (map ast->type params)
                    (concat (map ast->type (butlast params))
@@ -72,7 +72,7 @@
                             (map ast->type)))]
     (go/func-of params results variadic)))
 
-  *go$ast.StructType
+  go$ast.*StructType
   (ast->type
     [ast]
     (let [fields (.. ast Fields List)
