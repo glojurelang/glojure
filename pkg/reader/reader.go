@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/big"
 	"regexp"
 	"strconv"
 	"strings"
@@ -191,6 +192,12 @@ type (
 		posStack []pos
 
 		pendingForms []any
+
+		// nested syntax quoting grows forms exponentially, so we
+		// limit the depth to prevent DoS.
+		//
+		// Found by the fuzz tester.
+		syntaxQuoteNestCounter int
 	}
 )
 
@@ -512,7 +519,11 @@ func (r *Reader) readSet() (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	return lang.NewSet(vals...), nil
+	set, err := lang.NewSet2(vals...)
+	if err != nil {
+		return nil, r.error("invalid set: %w", err)
+	}
+	return set, nil
 }
 
 func (r *Reader) readString() (interface{}, error) {
@@ -724,6 +735,14 @@ func (r *Reader) readQuote() (interface{}, error) {
 }
 
 func (r *Reader) readSyntaxQuote() (interface{}, error) {
+	if r.syntaxQuoteNestCounter > 10 {
+		return nil, r.error("syntax-quote nesting too deep")
+	}
+	r.syntaxQuoteNestCounter++
+	defer func() {
+		r.syntaxQuoteNestCounter--
+	}()
+
 	node, err := r.readExpr(false, 0)
 	if err != nil {
 		return nil, err
@@ -1114,6 +1133,12 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 		if err != nil {
 			return nil, r.error("invalid ratio: %s", numStr)
 		}
+
+		// if denom is 0, error
+		if denomBig.ToBigInteger().Cmp(big.NewInt(0)) == 0 {
+			return nil, r.error("divide by zero")
+		}
+
 		return lang.NewRatioBigInt(numBig, denomBig), nil
 	}
 
@@ -1291,6 +1316,14 @@ func (r *Reader) readConditional(eofOK bool, stopRune rune) (any, error) {
 			return nil, r.error("splicing read-cond form must be seqable")
 		}
 		seq := seqable.Seq()
+		if seq == nil {
+			// return the next expression (not nil!)
+			form, err := r.readExpr(eofOK, stopRune)
+			if err != nil {
+				return nil, err
+			}
+			return form, nil
+		}
 		first := seq.First()
 		for seq = seq.Next(); seq != nil; seq = seq.Next() {
 			r.pendingForms = append(r.pendingForms, seq.First())

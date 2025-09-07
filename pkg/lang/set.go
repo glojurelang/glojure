@@ -25,18 +25,26 @@ func CreatePersistentTreeSetWithComparator(comparator IFn, keys ISeq) interface{
 }
 
 func NewSet(vals ...interface{}) *Set {
+	set, err := NewSet2(vals...)
+	if err != nil {
+		panic(err)
+	}
+	return set
+}
+
+func NewSet2(vals ...interface{}) (*Set, error) {
 	// check for duplicates
 	for i := 0; i < len(vals); i++ {
 		for j := i + 1; j < len(vals); j++ {
 			if Equiv(vals[i], vals[j]) {
-				panic(NewIllegalArgumentError(fmt.Sprintf("duplicate key: %v", vals[i])))
+				return nil, NewIllegalArgumentError(fmt.Sprintf("duplicate key: %v", vals[i]))
 			}
 		}
 	}
 
 	return &Set{
 		vals: vals,
-	}
+	}, nil
 }
 
 var (
