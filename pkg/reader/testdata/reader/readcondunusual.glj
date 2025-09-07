@@ -1,6 +1,8 @@
 ;; skip-clj
 [^#?@(:glj [:foo 'symbol])]
 
+[#?@(:glj [splice with #?@(:glj [a nested splice])])]
+
 [#?(:clj [no match at end of collection])]
 
 #?(:clj [no match at end of input])

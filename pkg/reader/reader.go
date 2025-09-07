@@ -1301,10 +1301,6 @@ func (r *Reader) readConditional(eofOK bool, stopRune rune) (any, error) {
 	return form, nil
 }
 
-// Test cases: topLevel splicing; multiple spliced forms; last form is
-// non-matching conditional; odd number of forms; nested splice; conditional at end of collection;
-// conditional at end of input;
-
 // hasFeature reports whether the reader has the given reader
 // conditional feature.
 func (r *Reader) hasFeature(feat any) (bool, error) {
