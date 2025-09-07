@@ -1,0 +1,12 @@
+;; skip-clj
+
+[1 2 #?@(:clj  (Clojure expression)
+         :glj  (3)
+         :default (fallthrough expression))
+ 4]
+
+[#?@(:glj (2 4 6 8))]
+
+[#?@(:glj ( 1 2 3 #?@(:clj 42) 4) )]
+
+{:foo #?@(:glj [42 :bar :baz])}

@@ -1,0 +1,2 @@
+;;;ERROR: <unknown-file>:2:18: read-cond requires an even number of forms
+#?(:clj :foo :glj)

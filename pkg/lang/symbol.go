@@ -2,6 +2,7 @@ package lang
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -10,6 +11,10 @@ type Symbol struct {
 	ns   string
 	name string
 }
+
+var (
+	symbolRegex = regexp.MustCompile(`^(?:[^0-9/].*/)?(?:/|[^0-9/][^/]*)$`)
+)
 
 // NewSymbol creates a new symbol.
 func NewSymbol(s string) *Symbol {
@@ -83,6 +88,9 @@ func isValidSymbol(ns, name string) bool {
 	} else {
 		full = ns + "/" + name
 	}
+	if !symbolRegex.MatchString(full) {
+		return false
+	}
 
 	// early special case for the division operator /
 	if full == "/" {
@@ -97,11 +105,11 @@ func isValidSymbol(ns, name string) bool {
 		// empty namespace
 		return false
 	}
-	if strings.HasSuffix(name, ":") {
+	if strings.HasSuffix(name, ":") || strings.HasSuffix(ns, ":") {
 		// name ends with a colon (match clojure)
 		return false
 	}
-	if strings.Contains(name, "::") {
+	if strings.Contains(full, "::") {
 		// name contains double colon
 		//
 		// NB: clojure reader rejects this, but clojure.core/symbol
