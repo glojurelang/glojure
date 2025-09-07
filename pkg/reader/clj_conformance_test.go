@@ -66,6 +66,12 @@ func FuzzCLJConformance(f *testing.F) {
 		if err != nil {
 			f.Fatal(err)
 		}
+
+		// skip any files that contain the string ";; skip-clj"
+		if strings.Contains(string(data), ";; skip-clj") {
+			continue
+		}
+
 		f.Add(string(data))
 	}
 

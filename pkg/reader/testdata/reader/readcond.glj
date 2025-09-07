@@ -1,0 +1,9 @@
+;; skip-clj
+
+#?(:clj  (Clojure expression)
+   :glj  (Glojure expression)
+   :default (fallthrough expression))
+#?(:clj  (Clojure expression)
+   :default (fallthrough expression))
+#?(:clj  (Clojure expression))
+42

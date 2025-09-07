@@ -60,6 +60,8 @@ var (
 	// determine if an error is due to malformed input or exhausted
 	// input.
 	ErrEOF = errors.New("EOF")
+
+	readerCondSentinel = &struct{}{}
 )
 
 type (
@@ -184,6 +186,8 @@ type (
 		argCounter int
 
 		posStack []pos
+
+		pendingForms []any
 	}
 )
 
@@ -346,6 +350,12 @@ func (r *Reader) next() (rune, error) {
 }
 
 func (r *Reader) readExpr() (expr interface{}, err error) {
+	if len(r.pendingForms) > 0 {
+		form := r.pendingForms[0]
+		r.pendingForms = r.pendingForms[1:]
+		return form, nil
+	}
+
 	rune, err := r.next()
 	if err != nil {
 		return nil, err
@@ -415,102 +425,80 @@ func (r *Reader) readExpr() (expr interface{}, err error) {
 	}
 }
 
-func (r *Reader) readList() (interface{}, error) {
-	var nodes []interface{}
+func (r *Reader) read1ForColl(end rune) (result any, done bool, err error) {
+	if len(r.pendingForms) > 0 {
+		form := r.pendingForms[0]
+		r.pendingForms = r.pendingForms[1:]
+		return form, false, nil
+	}
+
 	for {
 		rune, err := r.next()
 		if err != nil {
-			return nil, err
+			return nil, false, err
 		}
 		if isSpace(rune) {
 			continue
 		}
-		if rune == ')' {
-			break
+		if rune == end {
+			return nil, true, nil
 		}
 
 		r.rs.UnreadRune()
 		node, err := r.readExpr()
 		if err != nil {
+			return nil, false, err
+		}
+		return node, false, nil
+	}
+}
+
+func (r *Reader) readForColl(end rune) ([]any, error) {
+	var nodes []interface{}
+	for {
+		node, done, err := r.read1ForColl(end)
+		if err != nil {
 			return nil, err
 		}
+		if done {
+			break
+		}
 		nodes = append(nodes, node)
+	}
+	return nodes, nil
+}
+
+func (r *Reader) readList() (interface{}, error) {
+	nodes, err := r.readForColl(')')
+	if err != nil {
+		return nil, err
 	}
 	return lang.NewList(nodes...), nil
 }
 
 func (r *Reader) readVector() (interface{}, error) {
-	var nodes []interface{}
-	for {
-		rune, err := r.next()
-		if err != nil {
-			return nil, err
-		}
-		if isSpace(rune) {
-			continue
-		}
-		if rune == ']' {
-			break
-		}
-
-		r.rs.UnreadRune()
-		node, err := r.readExpr()
-		if err != nil {
-			return nil, err
-		}
-		nodes = append(nodes, node)
+	nodes, err := r.readForColl(']')
+	if err != nil {
+		return nil, err
 	}
 	return lang.NewVector(nodes...), nil
 }
 
 func (r *Reader) readMap() (interface{}, error) {
-	var keyVals []interface{}
-	for {
-		rune, err := r.next()
-		if err != nil {
-			return nil, err
-		}
-		if isSpace(rune) {
-			continue
-		}
-		if rune == '}' {
-			break
-		}
-
-		r.rs.UnreadRune()
-		el, err := r.readExpr()
-		if err != nil {
-			return nil, err
-		}
-		keyVals = append(keyVals, el)
+	keyVals, err := r.readForColl('}')
+	if err != nil {
+		return nil, err
 	}
 	if len(keyVals)%2 != 0 {
 		return nil, r.error("map literal must contain an even number of forms")
 	}
-
 	return lang.NewMap(keyVals...), nil
 }
 
 func (r *Reader) readSet() (interface{}, error) {
-	var vals []interface{}
-	for {
-		rune, err := r.next()
-		if err != nil {
-			return nil, err
-		}
-		if isSpace(rune) {
-			continue
-		}
-		if rune == '}' {
-			break
-		}
-
-		r.rs.UnreadRune()
-		el, err := r.readExpr()
-		if err != nil {
-			return nil, err
-		}
-		vals = append(vals, el)
+	vals, err := r.readForColl('}')
+	if err != nil {
+		return nil, err
 	}
 	return lang.NewSet(vals...), nil
 }
@@ -937,6 +925,8 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		return r.readExpr()
 	case '#':
 		return r.readSymbolicValue()
+	case '?':
+		return r.readConditional()
 	case '!':
 		// comment, discard until end of line
 		for {
@@ -1228,6 +1218,102 @@ func (r *Reader) readMeta() (lang.IPersistentMap, error) {
 		return nil, r.error("metadata must be a map, symbol, keyword, or string")
 	}
 }
+
+func (r *Reader) readConditional() (any, error) {
+	rn, _, err := r.rs.ReadRune()
+	if err != nil {
+		return nil, r.error("error reading conditional: %w", err)
+	}
+
+	var splicing bool
+	if rn == '@' {
+		splicing = true
+	} else {
+		r.rs.UnreadRune()
+	}
+
+	node, err := r.readExpr()
+	if err != nil {
+		return nil, err
+	}
+
+	// must always be a list
+	lst, ok := node.(lang.IPersistentList)
+	if !ok {
+		return nil, r.error("read-cond body must be a list")
+	}
+
+	var form any = readerCondSentinel
+
+	seq := lang.Seq(lst)
+	for seq != nil {
+		feature := seq.First()
+		hfeat, err := r.hasFeature(feature)
+		if err != nil {
+			return nil, err
+		}
+		seq = seq.Next()
+		if seq == nil {
+			return nil, r.error("read-cond requires an even number of forms")
+		}
+		if hfeat {
+			form = seq.First()
+			break
+		}
+
+		seq = seq.Next()
+	}
+
+	if form == readerCondSentinel {
+		// return the next expression (not nil!)
+		return r.readExpr()
+	}
+
+	if splicing {
+		seqable, ok := form.(lang.Seqable)
+		if !ok {
+			return nil, r.error("splicing read-cond form must be seqable")
+		}
+		seq := seqable.Seq()
+		first := seq.First()
+		for seq = seq.Next(); seq != nil; seq = seq.Next() {
+			r.pendingForms = append(r.pendingForms, seq.First())
+		}
+		return first, nil
+	}
+
+	return form, nil
+}
+
+// Test cases: topLevel splicing; multiple spliced forms; last form is
+// non-matching conditional; odd number of forms; nested splice; conditional at end of collection;
+// conditional at end of input;
+
+// hasFeature reports whether the reader has the given reader
+// conditional feature.
+func (r *Reader) hasFeature(feat any) (bool, error) {
+	kw, ok := feat.(lang.Keyword)
+	if !ok {
+		return false, r.error("reader conditional feature must be a keyword")
+	}
+	name := kw.Name()
+
+	// err on reserved features: else, none
+	if name == "else" || name == "none" {
+		return false, r.error(fmt.Sprintf("feature name %q is reserved", name))
+	}
+
+	switch name {
+	case "default":
+		return true, nil
+	case "glj":
+		return true, nil
+	default:
+		return false, nil
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 // Translated from Clojure's Compiler.java
 func (r *Reader) resolveSymbol(sym *lang.Symbol) *lang.Symbol {
