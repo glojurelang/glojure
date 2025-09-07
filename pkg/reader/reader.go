@@ -937,6 +937,18 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		return r.readExpr()
 	case '#':
 		return r.readSymbolicValue()
+	case '!':
+		// comment, discard until end of line
+		for {
+			rn, _, err := r.rs.ReadRune()
+			if err != nil {
+				return nil, r.error("error reading input: %w", err)
+			}
+			if rn == '\n' {
+				break
+			}
+		}
+		return r.readExpr()
 	default:
 		return nil, r.error("invalid dispatch character: %c", rn)
 	}
