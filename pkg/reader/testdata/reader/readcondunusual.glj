@@ -1,4 +1,6 @@
 ;; skip-clj
 [^#?@(:glj [:foo 'symbol])]
 
+[#?(:clj [no match at end of collection])]
+
 #?(:clj [no match at end of input])

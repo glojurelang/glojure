@@ -1,0 +1,5 @@
+12
+#_(anything goes)
+42
+{:foo #_(or within a map #_(or within another)) :bar #_(or at the end of a collection)}
+#_(even at the end of the file)

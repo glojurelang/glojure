@@ -58,10 +58,13 @@ var (
 	// ErrEOF is returned when the end of the input is reached after
 	// all input has been read. Callers can check for this error to
 	// determine if an error is due to malformed input or exhausted
-	// input.
+	// input. ErrEOF will only be returned when a form could not be
+	// read because the input was exhausted, not when a form was
+	// malformed.
 	ErrEOF = errors.New("EOF")
 
 	readerCondSentinel = &struct{}{}
+	stopRuneSentinel   = &struct{}{}
 )
 
 type (
@@ -257,15 +260,10 @@ func New(r io.RuneScanner, opts ...Option) *Reader {
 func (r *Reader) ReadAll() ([]interface{}, error) {
 	var nodes []interface{}
 	for {
-		_, err := r.next()
-		if errors.Is(err, io.EOF) {
+		node, err := r.readExpr(true, 0)
+		if err == ErrEOF {
 			break
 		}
-		if err != nil {
-			return nil, r.error("error reading input: %w", err)
-		}
-		r.rs.UnreadRune()
-		node, err := r.readExpr()
 		if err != nil {
 			return nil, err
 		}
@@ -282,15 +280,7 @@ func (r *Reader) ReadAll() ([]interface{}, error) {
 // return the next expression. If the input contains no expressions,
 // ErrEOF will be returned.
 func (r *Reader) ReadOne() (interface{}, error) {
-	_, err := r.next()
-	if err != nil {
-		if errors.Is(err, io.EOF) {
-			return 0, ErrEOF
-		}
-		return nil, err
-	}
-	r.rs.UnreadRune()
-	return r.readExpr()
+	return r.readExpr(true, 0)
 }
 
 // error returns a formatted error that includes the current position
@@ -349,7 +339,22 @@ func (r *Reader) next() (rune, error) {
 	}
 }
 
-func (r *Reader) readExpr() (expr interface{}, err error) {
+func (r *Reader) readExpr(eofOK bool, stopRune rune) (expr any, err error) {
+	for {
+		form, err := r.read(eofOK, stopRune)
+		if err != nil {
+			return nil, err
+		}
+		// No-op reads return the rune scanner, so just continue.
+		if form == r.rs {
+			continue
+		}
+
+		return form, nil
+	}
+}
+
+func (r *Reader) read(eofOK bool, stopRune rune) (expr any, err error) {
 	if len(r.pendingForms) > 0 {
 		form := r.pendingForms[0]
 		r.pendingForms = r.pendingForms[1:]
@@ -357,8 +362,16 @@ func (r *Reader) readExpr() (expr interface{}, err error) {
 	}
 
 	rune, err := r.next()
+	if eofOK && errors.Is(err, io.EOF) {
+		// return the EOF sentinel error
+		return nil, ErrEOF
+	}
 	if err != nil {
 		return nil, err
+	}
+
+	if rune == stopRune {
+		return stopRuneSentinel, nil
 	}
 
 	r.pushSection()
@@ -377,18 +390,19 @@ func (r *Reader) readExpr() (expr interface{}, err error) {
 	}()
 
 	switch rune {
-	case '(':
-		return r.readList()
 	case ')':
 		return nil, r.error("unexpected ')'")
-	case '{':
-		return r.readMap()
 	case '}':
 		return nil, r.error("unexpected '}'")
-	case '[':
-		return r.readVector()
 	case ']':
 		return nil, r.error("unexpected ']'")
+
+	case '{':
+		return r.readMap()
+	case '(':
+		return r.readList()
+	case '[':
+		return r.readVector()
 	case '"':
 		return r.readString()
 	case '\\':
@@ -397,8 +411,6 @@ func (r *Reader) readExpr() (expr interface{}, err error) {
 		return r.readKeyword()
 	case '%':
 		return r.readArg()
-
-		// TODO: implement as reader macros
 	case '\'':
 		return r.readQuote()
 	case '`':
@@ -408,13 +420,13 @@ func (r *Reader) readExpr() (expr interface{}, err error) {
 	case '@':
 		return r.readDeref()
 	case '#':
-		return r.readDispatch()
+		return r.readDispatch(eofOK, stopRune)
 	case '^':
 		meta, err := r.readMeta()
 		if err != nil {
 			return nil, err
 		}
-		val, err := r.readExpr()
+		val, err := r.readExpr(eofOK, stopRune)
 		if err != nil {
 			return nil, err
 		}
@@ -445,7 +457,7 @@ func (r *Reader) read1ForColl(end rune) (result any, done bool, err error) {
 		}
 
 		r.rs.UnreadRune()
-		node, err := r.readExpr()
+		node, err := r.readExpr(false, end)
 		if err != nil {
 			return nil, false, err
 		}
@@ -460,7 +472,7 @@ func (r *Reader) readForColl(end rune) ([]any, error) {
 		if err != nil {
 			return nil, err
 		}
-		if done {
+		if done || node == stopRuneSentinel {
 			break
 		}
 		nodes = append(nodes, node)
@@ -600,7 +612,7 @@ func (r *Reader) readFunctionShorthand() (interface{}, error) {
 	}()
 
 	r.rs.UnreadRune()
-	body, err := r.readExpr()
+	body, err := r.readExpr(false, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -699,7 +711,7 @@ func (r *Reader) readChar() (interface{}, error) {
 }
 
 func (r *Reader) readQuoteType(form string) (interface{}, error) {
-	node, err := r.readExpr()
+	node, err := r.readExpr(false, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -712,7 +724,7 @@ func (r *Reader) readQuote() (interface{}, error) {
 }
 
 func (r *Reader) readSyntaxQuote() (interface{}, error) {
-	node, err := r.readExpr()
+	node, err := r.readExpr(false, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -888,7 +900,7 @@ func (r *Reader) readUnquote() (interface{}, error) {
 	return r.readQuoteType("clojure.core/unquote")
 }
 
-func (r *Reader) readDispatch() (interface{}, error) {
+func (r *Reader) readDispatch(eofOK bool, stopRune rune) (interface{}, error) {
 	rn, _, err := r.rs.ReadRune()
 	if err != nil {
 		return nil, r.error("error reading input: %w", err)
@@ -901,18 +913,18 @@ func (r *Reader) readDispatch() (interface{}, error) {
 		return r.readSet()
 	case '_':
 		// discard form
-		_, err := r.readExpr()
+		_, err := r.readExpr(eofOK, stopRune)
 		if err != nil {
 			return nil, err
 		}
 		// return the next one
-		return r.readExpr()
+		return r.readExpr(eofOK, stopRune)
 	case '(':
 		// function shorthand
 		return r.readFunctionShorthand()
 	case '\'':
 		// var
-		expr, err := r.readExpr()
+		expr, err := r.readExpr(false, 0)
 		if err != nil {
 			return nil, err
 		}
@@ -922,11 +934,11 @@ func (r *Reader) readDispatch() (interface{}, error) {
 	case '^':
 		r.rs.UnreadRune()
 		// just read normally
-		return r.readExpr()
+		return r.readExpr(false, 0)
 	case '#':
 		return r.readSymbolicValue()
 	case '?':
-		return r.readConditional()
+		return r.readConditional(eofOK, stopRune)
 	case '!':
 		// comment, discard until end of line
 		for {
@@ -938,7 +950,7 @@ func (r *Reader) readDispatch() (interface{}, error) {
 				break
 			}
 		}
-		return r.readExpr()
+		return r.readExpr(eofOK, stopRune)
 	default:
 		return nil, r.error("invalid dispatch character: %c", rn)
 	}
@@ -994,7 +1006,7 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 }
 
 func (r *Reader) readSymbolicValue() (interface{}, error) {
-	v, err := r.readExpr()
+	v, err := r.readExpr(false, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -1202,7 +1214,7 @@ func (r *Reader) readKeyword() (interface{}, error) {
 }
 
 func (r *Reader) readMeta() (lang.IPersistentMap, error) {
-	res, err := r.readExpr()
+	res, err := r.readExpr(false, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -1219,7 +1231,7 @@ func (r *Reader) readMeta() (lang.IPersistentMap, error) {
 	}
 }
 
-func (r *Reader) readConditional() (any, error) {
+func (r *Reader) readConditional(eofOK bool, stopRune rune) (any, error) {
 	rn, _, err := r.rs.ReadRune()
 	if err != nil {
 		return nil, r.error("error reading conditional: %w", err)
@@ -1232,7 +1244,7 @@ func (r *Reader) readConditional() (any, error) {
 		r.rs.UnreadRune()
 	}
 
-	node, err := r.readExpr()
+	node, err := r.readExpr(false, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -1266,7 +1278,11 @@ func (r *Reader) readConditional() (any, error) {
 
 	if form == readerCondSentinel {
 		// return the next expression (not nil!)
-		return r.readExpr()
+		form, err := r.readExpr(eofOK, stopRune)
+		if err != nil {
+			return nil, err
+		}
+		return form, nil
 	}
 
 	if splicing {
