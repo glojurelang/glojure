@@ -120,7 +120,7 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 	// Workaround to ensure namespaces that are required by core are loaded.
 	// TODO: AOT should identify this dependency and generate code to load it.
 	if useAot {
-		RT.Load("clojure/protocols")
+		RT.Load("clojure/core/protocols")
 		RT.Load("clojure/string")
 		RT.Load("glojure/go/io")
 	}
@@ -131,6 +131,22 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 	if versionVar != nil {
 		versionVar.BindRoot(ParseVersion(VERSION))
 	}
+
+	lang.InternVar(core, lang.NewSymbol("load-file"), func(filename string) any {
+		buf, err := os.ReadFile(filename)
+		if err != nil {
+			panic(err)
+		}
+
+		kvs := make([]any, 0, 3)
+		for _, vr := range []*lang.Var{lang.VarCurrentNS, lang.VarWarnOnReflection, lang.VarUncheckedMath, lang.VarDataReaders} {
+			kvs = append(kvs, vr, vr.Deref())
+		}
+		lang.PushThreadBindings(lang.NewMap(kvs...))
+		defer lang.PopThreadBindings()
+
+		return ReadEval(string(buf), WithFilename(filename))
+	}, true)
 
 	return env
 }

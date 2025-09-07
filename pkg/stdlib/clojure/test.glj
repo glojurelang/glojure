@@ -333,7 +333,7 @@
 
 (defn- file-and-line
   {:deprecated "1.8"}
-  [^github.com:glojurelang:glojure:pkg:lang.Throwable exception depth]
+  [^go/any exception depth]
   (let [stacktrace (.getStackTrace exception)]
     (if (< depth (count stacktrace))
       (let [^StackTraceElement s (nth stacktrace depth)]
@@ -384,9 +384,7 @@
    (println "expected:" (pr-str (:expected m)))
    (print "  actual: ")
    (let [actual (:actual m)]
-     (if (instance? github.com:glojurelang:glojure:pkg:lang.Throwable actual)
-       (stack/print-cause-trace actual *stack-trace-depth*)
-       (prn actual)))))
+     (if (instance? go/error actual) (prn (.Error actual)) (prn actual)))))
 
 (defmethod report :summary [m]
   (with-test-out
@@ -535,7 +533,7 @@
   {:added "1.1"}
   [msg form]
   `(try ~(assert-expr msg form)
-        (catch github.com:glojurelang:glojure:pkg:lang.Throwable t#
+        (catch go/any t#
           (do-report {:type :error, :message ~msg,
                       :expected '~form, :actual t#}))))
 
@@ -709,7 +707,7 @@
       (do-report {:type :begin-test-var, :var v})
       (inc-report-counter :test)
       (try (t)
-           (catch github.com:glojurelang:glojure:pkg:lang.Throwable e
+           (catch go/any e
              (do-report {:type :error, :message "Uncaught exception, not in assertion."
                       :expected nil, :actual e})))
       (do-report {:type :end-test-var, :var v}))))

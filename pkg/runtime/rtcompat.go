@@ -162,24 +162,27 @@ func (rt *RTMethods) Load(scriptBase string) {
 		}
 	}
 
-	filename := scriptBase + ".glj"
-
 	var buf []byte
-	var err error
 	var foundFS fs.FS
+	var filename string
 
 	loadPathLock.Lock()
 	lp := loadPath
 	loadPathLock.Unlock()
 	for _, fs := range lp {
-		buf, err = readFile(fs, filename)
-		if err == nil {
-			foundFS = fs
-			break
+		for _, ext := range []string{".glj", ".cljc"} {
+			testFilename := scriptBase + ext
+			b, err := readFile(fs, testFilename)
+			if err == nil {
+				buf = b
+				foundFS = fs
+				filename = testFilename
+				break
+			}
 		}
 	}
-	if err != nil {
-		panic(err)
+	if filename == "" {
+		panic(fmt.Errorf("failed to load %s: not found in load path", scriptBase))
 	}
 	ReadEval(string(buf), WithFilename(filename))
 

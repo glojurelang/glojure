@@ -68,9 +68,6 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 		coreNS.InternWithValue(lang.NewSymbol("*"+dyn+"*"), nil, true).SetDynamic()
 	}
 
-	// TODO: implement this
-	coreNS.InternWithValue(lang.NewSymbol("load-file"), nil, true)
-
 	// bootstrap some vars
 	e.namespaceVar = coreNS.InternWithValue(SymbolNamespace,
 		lang.NewFnFunc(func(args ...interface{}) interface{} {

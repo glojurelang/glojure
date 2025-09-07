@@ -411,7 +411,7 @@
         [ex val]
         (when-not pending
           (try [false (deref o)]
-               (catch github.com:glojurelang:glojure:pkg:lang.Throwable e
+               (catch go/any e
                  [true e])))]
     {:status
      (cond
@@ -450,8 +450,8 @@
              :at - top stack element
     :trace - root cause stack elements"
   {:added "1.7"}
-  [^github.com:glojurelang:glojure:pkg:lang.Throwable o]
-  (let [base (fn [^github.com:glojurelang:glojure:pkg:lang.Throwable t]
+  [^go/any o]
+  (let [base (fn [^go/any t]
                (merge {:type (symbol (.Name (class t)))}
                  (when-let [msg (.getLocalizedMessage t)]
                    {:message msg})
@@ -460,14 +460,14 @@
                  (let [st (.getStackTrace t)]
                    (when (pos? (alength st))
                      {:at (StackTraceElement->vec (aget st 0))}))))
-        via (loop [via [], ^github.com:glojurelang:glojure:pkg:lang.Throwable t o]
+        via (loop [via [], ^go/any t o]
               (if t
                 (recur (conj via t) (.getCause t))
                 via))
-        ^github.com:glojurelang:glojure:pkg:lang.Throwable root (peek via)]
+        ^go/any root (peek via)]
     (merge {:via (vec (map base via))
             :trace (vec (map StackTraceElement->vec
-                             (.getStackTrace ^github.com:glojurelang:glojure:pkg:lang.Throwable (or root o))))}
+                             (.getStackTrace ^go/any (or root o))))}
       (when-let [root-msg (.getLocalizedMessage root)]
         {:cause root-msg})
       (when-let [data (ex-data root)]
@@ -475,7 +475,7 @@
       (when-let [phase (-> o ex-data :clojure.error/phase)]
         {:phase phase}))))
 
-(defn- print-throwable [^github.com:glojurelang:glojure:pkg:lang.Throwable o ^Writer w]
+(defn- print-throwable [^go/any o ^Writer w]
   (github.com:glojurelang:glojure:pkg:lang.WriteWriter w "#error {\n :cause ")
   (let [{:keys [cause data via trace]} (Throwable->map o)
         print-via #(do (github.com:glojurelang:glojure:pkg:lang.WriteWriter w "{:type ")

@@ -3015,7 +3015,7 @@
   f must be free of side-effects"
   {:added "1.0"
    :static true}
-  [f x] (clojure.lang.Iterate/create f x) )
+  [f x] (github.com:glojurelang:glojure:pkg:lang.CreateIterate f x) )
 
 (defn range
   "Returns a lazy seq of nums from start (inclusive) to end
@@ -3783,7 +3783,7 @@
      (let [o (read stream eof-error? eof-value recursive?)
            s (.trim (.getString stream))]
        [o s])
-     (catch github.com:glojurelang:glojure:pkg:lang.Throwable ex
+     (catch go/any ex
        (.getString stream)
        (throw ex))))
   ([opts ^clojure.lang.LineNumberingPushbackReader stream]
@@ -3792,7 +3792,7 @@
      (let [o (read opts stream)
            s (.trim (.getString stream))]
        [o s])
-     (catch github.com:glojurelang:glojure:pkg:lang.Throwable ex
+     (catch go/any ex
        (.getString stream)
        (throw ex)))))
 
@@ -4149,7 +4149,7 @@
   "Returns a sequence of all namespaces."
   {:added "1.0"
    :static true}
-  [] (clojure.lang.Namespace/all))
+  [] (github.com:glojurelang:glojure:pkg:lang.AllNamespaces))
 
 (defn the-ns
   "If passed a namespace, returns it. Else, when passed a symbol,
@@ -4794,7 +4794,7 @@
      (apply println xs)))
 
 (defn ^:private elide-top-frames
-  [^github.com:glojurelang:glojure:pkg:lang.Throwable ex class-name]
+  [^go/any ex class-name]
   (let [tr (.getStackTrace ex)]
     (doto ex
       (.setStackTrace
@@ -4824,17 +4824,17 @@
   Otherwise returns nil."
   {:added "1.10"}
   [ex]
-  (when (instance? github.com:glojurelang:glojure:pkg:lang.Throwable ex)
-    (.getMessage ^github.com:glojurelang:glojure:pkg:lang.Throwable ex)))
+  (when (instance? go/any ex)
+    (.getMessage ^go/any ex)))
 
 (defn ex-cause
   "Returns the cause of ex if ex is a Throwable.
   Otherwise returns nil."
-  {:tag github.com:glojurelang:glojure:pkg:lang.Throwable
+  {:tag go/any
    :added "1.10"}
   [ex]
-  (when (instance? github.com:glojurelang:glojure:pkg:lang.Throwable ex)
-    (.getCause ^github.com:glojurelang:glojure:pkg:lang.Throwable ex)))
+  (when (instance? go/any ex)
+    (.getCause ^go/any ex)))
 
 (defmacro assert
   "Evaluates expression x and throws an AssertionError with optional
@@ -7872,7 +7872,7 @@ fails, attempts to require sym's namespace and retries."
 
 (try
  (load-data-readers)
- (catch github.com:glojurelang:glojure:pkg:lang.Throwable t
+ (catch go/any t
    (.printStackTrace t)
    (throw t)))
 
@@ -7931,7 +7931,7 @@ fails, attempts to require sym's namespace and retries."
    :added "1.11"}
   ^go/int64 [^go/string s]
   (if (string? s)
-    (clojure.core/let [result__3646__auto__ (strconv.ParseInt s 10 64)] (if (result__3646__auto__ 1) nil (result__3646__auto__ 0)))
+    (clojure.core/let [result__3648__auto__ (strconv.ParseInt s 10 64)] (if (result__3648__auto__ 1) nil (result__3648__auto__ 0)))
     (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError (parsing-err s)))))
 
 (defn parse-double
@@ -7942,7 +7942,7 @@ fails, attempts to require sym's namespace and retries."
    :added "1.11"}
   ^go/float64 [^go/string s]
   (if (string? s)
-    (clojure.core/let [result__3647__auto__ (strconv.ParseFloat s 64)] (if (result__3647__auto__ 1) nil (result__3647__auto__ 0)))
+    (clojure.core/let [result__3649__auto__ (strconv.ParseFloat s 64)] (if (result__3649__auto__ 1) nil (result__3649__auto__ 0)))
     (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError (parsing-err s)))))
 
 (defn parse-uuid

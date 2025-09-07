@@ -88,6 +88,7 @@ var (
 		"#'clojure.core/*in*":            true,
 		"#'clojure.core/*out*":           true,
 		"#'clojure.core/*compile-files*": true,
+		"#'clojure.core/load-file":       true,
 	}
 )
 
@@ -639,6 +640,8 @@ func (g *Generator) getTypeString(t reflect.Type) string {
 			default:
 				return "chan " + g.getTypeString(t.Elem())
 			}
+		case reflect.Interface:
+			return "any"
 		default:
 			// For basic types like int, string, etc.
 			// Note: We can't use t.String() directly here because it might

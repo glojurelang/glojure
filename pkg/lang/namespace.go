@@ -27,14 +27,14 @@ var (
 	nsMtx      sync.RWMutex
 )
 
-func Namespaces() []*Namespace {
+func AllNamespaces() ISeq {
 	nsMtx.RLock()
 	defer nsMtx.RUnlock()
 	ns := make([]*Namespace, 0, len(namespaces))
 	for _, n := range namespaces {
 		ns = append(ns, n)
 	}
-	return ns
+	return Seq(ns)
 }
 
 func FindNamespace(sym *Symbol) *Namespace {

@@ -237,6 +237,13 @@ func (s *apvSeq) First() any {
 	return s.v.Nth(s.i)
 }
 
+func (s *apvSeq) Nth(i int) any {
+	if i < 0 || s.i+i >= s.v.Count() {
+		panic(NewIndexOutOfBoundsError())
+	}
+	return s.v.Nth(s.i + i)
+}
+
 func (s *apvSeq) Next() ISeq {
 	if s.i+1 >= s.v.Count() {
 		return nil
@@ -334,6 +341,13 @@ func newAPVRSeq(v IPersistentVector, i int) *apvRSeq {
 
 func (s *apvRSeq) First() any {
 	return s.v.Nth(s.i)
+}
+
+func (s *apvRSeq) Nth(i int) any {
+	if i < 0 || s.i-i < 0 {
+		panic(NewIndexOutOfBoundsError())
+	}
+	return s.v.Nth(s.i - i)
 }
 
 func (s *apvRSeq) Next() ISeq {

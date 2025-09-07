@@ -120,7 +120,7 @@
    'Boolean 'go/bool
    'Character 'github.com:glojurelang:glojure:pkg:lang.Char
    'java.lang.Character 'github.com:glojurelang:glojure:pkg:lang.Char
-   'Throwable 'github.com:glojurelang:glojure:pkg:lang.Throwable
+   'Throwable 'go/any
    'Object 'github.com:glojurelang:glojure:pkg:lang.Object
    'BigInteger 'math:big.*Int
    'BigDecimal 'github.com:glojurelang:glojure:pkg:lang.*BigDecimal
@@ -129,7 +129,9 @@
    'Pattern '*Regexp})
 
 (def static-field-mappings
-  {'Integer/MIN_VALUE 'math.MinInt
+  {'clojure.lang.Namespace/all 'github.com:glojurelang:glojure:pkg:lang.AllNamespaces
+   'clojure.lang.Iterate/create 'github.com:glojurelang:glojure:pkg:lang.CreateIterate
+   'Integer/MIN_VALUE 'math.MinInt
    'Integer/MAX_VALUE 'math.MaxInt
    'Double/POSITIVE_INFINITY '(math.Inf 1)
    'Double/NEGATIVE_INFINITY '(math.Inf -1)
@@ -1013,6 +1015,15 @@
                            (= 'stacktrace-file-and-line
                               (first (z/sexpr zloc)))))
     (fn visit [zloc] (z/replace zloc '{}))]
+
+   ;; use a more direct way of identifying thrown errors
+   ;; TODO: interface for glojure exceptions with stack information
+   (sexpr-replace '(if (instance? Throwable actual)
+                     (stack/print-cause-trace actual *stack-trace-depth*)
+                     (prn actual))
+                  '(if (instance? go/error actual)
+                     (prn (.Error actual))
+                     (prn actual)))
 
    ;; ===== Regular Expression Replacements =====
    (sexpr-replace '(.split re s)
