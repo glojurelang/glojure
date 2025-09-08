@@ -1,6 +1,7 @@
 package lang
 
 import (
+	"fmt"
 	"reflect"
 )
 
@@ -43,6 +44,9 @@ func Nth(x interface{}, n int) (interface{}, bool) {
 	}
 
 	if seq := Seq(x); seq != nil {
+		if seq == x {
+			panic(fmt.Errorf("unexpected Seq result equal to input"))
+		}
 		return Nth(seq, n)
 	}
 

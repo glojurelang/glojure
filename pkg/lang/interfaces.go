@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"time"
+	"unicode/utf8"
 )
 
 type (
@@ -430,7 +431,8 @@ func Count(coll any) int {
 	case nil:
 		return 0
 	case string:
-		return len(arg)
+		// count runes, not bytes
+		return utf8.RuneCountInString(arg)
 	case Counted:
 		return arg.Count()
 	}

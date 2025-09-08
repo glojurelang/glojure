@@ -756,7 +756,6 @@ func LoadNS() {
 	sym_load_DASH_all := lang.NewSymbol("load-all")
 	sym_load_DASH_data_DASH_reader_DASH_file := lang.NewSymbol("load-data-reader-file")
 	sym_load_DASH_data_DASH_readers := lang.NewSymbol("load-data-readers")
-	sym_load_DASH_file := lang.NewSymbol("load-file")
 	sym_load_DASH_lib := lang.NewSymbol("load-lib")
 	sym_load_DASH_libs := lang.NewSymbol("load-libs")
 	sym_load_DASH_one := lang.NewSymbol("load-one")
@@ -2080,8 +2079,6 @@ func LoadNS() {
 	var_clojure_DOT_core_load_DASH_data_DASH_reader_DASH_file := lang.InternVarName(sym_clojure_DOT_core, sym_load_DASH_data_DASH_reader_DASH_file)
 	// var clojure.core/load-data-readers
 	var_clojure_DOT_core_load_DASH_data_DASH_readers := lang.InternVarName(sym_clojure_DOT_core, sym_load_DASH_data_DASH_readers)
-	// var clojure.core/load-file
-	var_clojure_DOT_core_load_DASH_file := lang.InternVarName(sym_clojure_DOT_core, sym_load_DASH_file)
 	// var clojure.core/load-lib
 	var_clojure_DOT_core_load_DASH_lib := lang.InternVarName(sym_clojure_DOT_core, sym_load_DASH_lib)
 	// var clojure.core/load-libs
@@ -3342,7 +3339,7 @@ func LoadNS() {
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			tmp2 := lang.Apply(nil, nil)
+			tmp2 := lang.Apply(lang.AllNamespaces, nil)
 			return tmp2
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -4822,7 +4819,7 @@ func LoadNS() {
 			_ = v2
 			v3 := args[1]
 			_ = v3
-			tmp4 := lang.Apply(nil, []any{v2, v3})
+			tmp4 := lang.Apply(lang.CreateIterate, []any{v2, v3})
 			return tmp4
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -4986,14 +4983,6 @@ func LoadNS() {
 		var_clojure_DOT_core_list_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_list_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// load-file
-	{
-		tmp0 := sym_load_DASH_file.WithMeta(lang.NewMap(kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
-		var_clojure_DOT_core_load_DASH_file = ns.InternWithValue(tmp0, nil, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_load_DASH_file.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// load-reader
@@ -10159,34 +10148,36 @@ func LoadNS() {
 	}
 	// ex-cause
 	{
-		tmp0 := sym_ex_DASH_cause.WithMeta(lang.NewMap(kw_tag, nil, kw_arglists, lang.NewList(lang.NewVector(sym_ex)), kw_doc, "Returns the cause of ex if ex is a Throwable.\n  Otherwise returns nil.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4830), kw_end_DASH_line, int(4830))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
+		tmp1 := reflect.TypeOf((*any)(nil)).Elem()
+		tmp0 := sym_ex_DASH_cause.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_ex)), kw_doc, "Returns the cause of ex if ex is a Throwable.\n  Otherwise returns nil.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4830), kw_end_DASH_line, int(4830))).(*lang.Symbol)
+		var tmp2 lang.FnFunc
+		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
-			v2 := args[0]
-			_ = v2
-			var tmp3 any
-			tmp4 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-			tmp5 := lang.Apply(tmp4, []any{lang.Throwable, v2})
-			if lang.IsTruthy(tmp5) {
-				tmp6, ok := lang.FieldOrMethod(v2, "getCause")
+			v3 := args[0]
+			_ = v3
+			var tmp4 any
+			tmp5 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+			tmp6 := lang.Apply(tmp5, []any{lang.Builtins["any"], v3})
+			if lang.IsTruthy(tmp6) {
+				tmp7, ok := lang.FieldOrMethod(v3, "getCause")
 				if !ok {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v2, "getCause")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v3, "getCause")))
 				}
-				var tmp7 any
-				switch reflect.TypeOf(tmp6).Kind() {
+				var tmp8 any
+				switch reflect.TypeOf(tmp7).Kind() {
 				case reflect.Func:
-					tmp7 = lang.Apply(tmp6, nil)
+					tmp8 = lang.Apply(tmp7, nil)
 				default:
-					tmp7 = tmp6
+					tmp8 = tmp7
 				}
-				tmp3 = tmp7
+				tmp4 = tmp8
 			} else {
 			}
-			return tmp3
+			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		var_clojure_DOT_core_ex_DASH_cause = ns.InternWithValue(tmp0, tmp1, true)
+		tmp3 := reflect.TypeOf((*any)(nil)).Elem()
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		var_clojure_DOT_core_ex_DASH_cause = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_ex_DASH_cause.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
@@ -10235,7 +10226,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			tmp4 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-			tmp5 := lang.Apply(tmp4, []any{lang.Throwable, v2})
+			tmp5 := lang.Apply(tmp4, []any{lang.Builtins["any"], v2})
 			if lang.IsTruthy(tmp5) {
 				tmp6, ok := lang.FieldOrMethod(v2, "getMessage")
 				if !ok {
@@ -23012,7 +23003,7 @@ func LoadNS() {
 					func() {
 						defer func() {
 							if r := recover(); r != nil {
-								if lang.CatchMatches(r, lang.Throwable) {
+								if lang.CatchMatches(r, lang.Builtins["any"]) {
 									v8 := r
 									_ = v8
 									tmp9 := lang.NewVector(true, v8)
@@ -30100,7 +30091,7 @@ func LoadNS() {
 			if lang.IsTruthy(tmp5) {
 				var tmp6 any
 				{ // let
-					// let binding "result__3647__auto__"
+					// let binding "result__3649__auto__"
 					tmp7 := lang.Apply(strconv9.ParseFloat, []any{v2, int64(64)})
 					var v8 any = tmp7
 					_ = v8
@@ -30142,7 +30133,7 @@ func LoadNS() {
 			if lang.IsTruthy(tmp5) {
 				var tmp6 any
 				{ // let
-					// let binding "result__3646__auto__"
+					// let binding "result__3648__auto__"
 					tmp7 := lang.Apply(strconv9.ParseInt, []any{v2, int64(10), int64(64)})
 					var v8 any = tmp7
 					_ = v8
@@ -44719,7 +44710,7 @@ func LoadNS() {
 				tmp24 := lang.Apply(tmp19, []any{tmp20, tmp23})
 				tmp25 := lang.Apply(tmp18, []any{tmp24})
 				tmp26 := lang.NewMap(kw_via, tmp17, kw_trace, tmp25)
-				tmp27 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(468), kw_column, int(12), kw_end_DASH_line, int(470), kw_end_DASH_column, int(111))
+				tmp27 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(468), kw_column, int(12), kw_end_DASH_line, int(470), kw_end_DASH_column, int(68))
 				tmp28, err := lang.WithMeta(tmp26, tmp27.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -57117,7 +57108,7 @@ func LoadNS() {
 				func() {
 					defer func() {
 						if r := recover(); r != nil {
-							if lang.CatchMatches(r, lang.Throwable) {
+							if lang.CatchMatches(r, lang.Builtins["any"]) {
 								v7 := r
 								_ = v7
 								tmp8, ok := lang.FieldOrMethod(v2, "getString")
@@ -57202,7 +57193,7 @@ func LoadNS() {
 				func() {
 					defer func() {
 						if r := recover(); r != nil {
-							if lang.CatchMatches(r, lang.Throwable) {
+							if lang.CatchMatches(r, lang.Builtins["any"]) {
 								v5 := r
 								_ = v5
 								tmp6, ok := lang.FieldOrMethod(v3, "getString")
