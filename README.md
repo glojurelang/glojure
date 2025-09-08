@@ -3,7 +3,6 @@
 ![example workflow](https://github.com/glojurelang/glojure/actions/workflows/ci.yml/badge.svg)
 
 [Try it in your browser!](https://glojurelang.github.io/glojure/)
-(fair warning: startup on the web is slow)
 
 <img alt="Gopher image" src="./doc/logo.png" width="512" />
 
