@@ -249,7 +249,7 @@ func (v *Var) Watches() IPersistentMap {
 	panic("not implemented")
 }
 
-func (v *Var) AddWatch(key interface{}, fn IFn) {
+func (v *Var) AddWatch(key interface{}, fn IFn) IRef {
 	panic("not implemented")
 }
 

@@ -285,7 +285,7 @@ type (
 		SetValidator(vf IFn)
 		Validator() IFn
 		Watches() IPersistentMap
-		AddWatch(key any, fn IFn)
+		AddWatch(key any, fn IFn) IRef
 		RemoveWatch(key any)
 	}
 
@@ -318,6 +318,16 @@ type (
 	Iterator interface {
 		HasNext() bool
 		Next() any
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+
+	// IExceptionInfo is an interface for exceptions that carry data (a
+	// map) as additional payload. Clojure programs that need richer
+	// semantics for exceptions should use this in lieu of defining
+	// project-specific error types..
+	IExceptionInfo interface {
+		GetData() IPersistentMap
 	}
 
 	////////////////////////////////////////////////////////////////////////////

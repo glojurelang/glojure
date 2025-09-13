@@ -10192,20 +10192,21 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			tmp4 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-			tmp5 := lang.Apply(tmp4, []any{nil, v2})
-			if lang.IsTruthy(tmp5) {
-				tmp6, ok := lang.FieldOrMethod(v2, "getData")
+			tmp5 := reflect.TypeOf((*lang.IExceptionInfo)(nil)).Elem()
+			tmp6 := lang.Apply(tmp4, []any{tmp5, v2})
+			if lang.IsTruthy(tmp6) {
+				tmp7, ok := lang.FieldOrMethod(v2, "getData")
 				if !ok {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v2, "getData")))
 				}
-				var tmp7 any
-				switch reflect.TypeOf(tmp6).Kind() {
+				var tmp8 any
+				switch reflect.TypeOf(tmp7).Kind() {
 				case reflect.Func:
-					tmp7 = lang.Apply(tmp6, nil)
+					tmp8 = lang.Apply(tmp7, nil)
 				default:
-					tmp7 = tmp6
+					tmp8 = tmp7
 				}
-				tmp3 = tmp7
+				tmp3 = tmp8
 			} else {
 			}
 			return tmp3

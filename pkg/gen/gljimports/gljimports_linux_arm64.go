@@ -3562,6 +3562,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.IDeref", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.IDeref)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.IDrop", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.IDrop)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.IEditableCollection", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.IEditableCollection)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/lang.IExceptionInfo", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.IExceptionInfo)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.IFn", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.IFn)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.IHashEq", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.IHashEq)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.IKVReduce", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.IKVReduce)(nil)).Elem())

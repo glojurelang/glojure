@@ -325,6 +325,8 @@
    ;; ===== Exception Handling =====
    (sexpr-replace 'Exception. 'github.com:glojurelang:glojure:pkg:lang.NewError)
 
+   (sexpr-replace 'IExceptionInfo 'github.com:glojurelang:glojure:pkg:lang.IExceptionInfo)
+
    (sexpr-replace 'java.lang.UnsupportedOperationException. 'github.com:glojurelang:glojure:pkg:lang.NewUnsupportedOperationError)
 
    (sexpr-replace 'IllegalArgumentException. 'github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError)
