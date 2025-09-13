@@ -327,6 +327,46 @@
 
    (sexpr-replace 'IExceptionInfo 'github.com:glojurelang:glojure:pkg:lang.IExceptionInfo)
 
+   ;; Handle ExceptionInfo constructor with different arities
+   [(fn select [zloc]
+      (and (z/list? zloc)
+           (let [expr (z/sexpr zloc)]
+             (and (seq? expr)
+                  (= 'ExceptionInfo. (first expr))))))
+    (fn visit [zloc]
+      (let [expr (z/sexpr zloc)
+            arg-count (dec (count expr))]
+        (cond
+          (= arg-count 2) ; (ExceptionInfo. msg map)
+          (z/replace zloc (list 'github.com:glojurelang:glojure:pkg:lang.NewExceptionInfo
+                               (nth expr 1)
+                               (nth expr 2)))
+
+          (= arg-count 3) ; (ExceptionInfo. msg map cause)
+          (z/replace zloc (list 'github.com:glojurelang:glojure:pkg:lang.NewExceptionInfoWithCause
+                               (nth expr 1)
+                               (nth expr 2)
+                               (nth expr 3)))
+          :else zloc)))]
+
+   ;; Replace ex-info to not use elide-top-frames
+   [(fn select [zloc]
+      (and (z/list? zloc)
+           (let [expr (z/sexpr zloc)]
+             (and (seq? expr)
+                  (= 'defn (first expr))
+                  (= 'ex-info (second expr))))))
+    (fn visit [zloc]
+      (z/replace zloc
+                '(defn ex-info
+                   "Create an instance of ExceptionInfo, a RuntimeException subclass
+   that carries a map of additional data."
+                   {:added "1.4"}
+                   ([msg map]
+                    (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfo msg map))
+                   ([msg map cause]
+                    (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfoWithCause msg map cause)))))]
+
    (sexpr-replace 'java.lang.UnsupportedOperationException. 'github.com:glojurelang:glojure:pkg:lang.NewUnsupportedOperationError)
 
    (sexpr-replace 'IllegalArgumentException. 'github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError)

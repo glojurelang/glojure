@@ -4802,14 +4802,8 @@
           (into-array StackTraceElement
             (drop-while #(= class-name (.getClassName ^StackTraceElement %1)) tr)))))))
 
-(defn ex-info
-  "Create an instance of ExceptionInfo, a RuntimeException subclass
-   that carries a map of additional data."
-  {:added "1.4"}
-  ([msg map]
-    (elide-top-frames (ExceptionInfo. msg map) "clojure.core$ex_info"))
-  ([msg map cause]
-    (elide-top-frames (ExceptionInfo. msg map cause) "clojure.core$ex_info")))
+(defn ex-info "Create an instance of ExceptionInfo, a RuntimeException subclass
+   that carries a map of additional data." {:added "1.4"} ([msg map] (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfo msg map)) ([msg map cause] (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfoWithCause msg map cause)))
 
 (defn ex-data
   "Returns exception data (a map) if ex is an IExceptionInfo.
