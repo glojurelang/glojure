@@ -774,6 +774,9 @@
    (sexpr-replace 'clojure.lang.RT 'github.com:glojurelang:glojure:pkg:runtime.RT)
    (sexpr-replace '(nextID) '(NextID))
 
+   ;; Replace Object_array with ObjectArray
+   (sexpr-replace 'Object_array 'ObjectArray)
+
    (sexpr-replace '(nth coll index not-found) '(NthDefault coll index not-found))
 
    [(fn select [zloc] (and (z/list? zloc)

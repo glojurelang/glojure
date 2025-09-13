@@ -70,6 +70,37 @@ func Equals(a, b any) bool {
 }
 
 func Identical(a, b any) bool {
+	aVal, bVal := reflect.ValueOf(a), reflect.ValueOf(b)
+
+	// check if comparing functions, because == panics on func comparison.
+	if aVal.Kind() == reflect.Func || bVal.Kind() == reflect.Func {
+		if !(aVal.Kind() == reflect.Func && bVal.Kind() == reflect.Func) {
+			return false
+		}
+		return aVal.Pointer() == bVal.Pointer()
+	}
+	// slices
+	if aVal.Kind() == reflect.Slice || bVal.Kind() == reflect.Slice {
+		if !(aVal.Kind() == reflect.Slice && bVal.Kind() == reflect.Slice) {
+			return false
+		}
+		return aVal.Pointer() == bVal.Pointer()
+	}
+	// arrays
+	if aVal.Kind() == reflect.Array || bVal.Kind() == reflect.Array {
+		if !(aVal.Kind() == reflect.Array && bVal.Kind() == reflect.Array) {
+			return false
+		}
+		return aVal.Pointer() == bVal.Pointer()
+	}
+	// maps
+	if aVal.Kind() == reflect.Map || bVal.Kind() == reflect.Map {
+		if !(aVal.Kind() == reflect.Map && bVal.Kind() == reflect.Map) {
+			return false
+		}
+		return aVal.Pointer() == bVal.Pointer()
+	}
+
 	return a == b
 }
 

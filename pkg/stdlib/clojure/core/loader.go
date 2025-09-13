@@ -286,7 +286,7 @@ func LoadNS() {
 	sym_clojure_DOT_core_SLASH_IllegalStateException := lang.NewSymbol("clojure.core/IllegalStateException")
 	sym_clojure_DOT_core_SLASH_LongCast := lang.NewSymbol("clojure.core/LongCast")
 	sym_clojure_DOT_core_SLASH_Nth := lang.NewSymbol("clojure.core/Nth")
-	sym_clojure_DOT_core_SLASH_Object_array := lang.NewSymbol("clojure.core/Object_array")
+	sym_clojure_DOT_core_SLASH_ObjectArray := lang.NewSymbol("clojure.core/ObjectArray")
 	sym_clojure_DOT_core_SLASH_RunInTransaction := lang.NewSymbol("clojure.core/RunInTransaction")
 	sym_clojure_DOT_core_SLASH_UncheckedAdd := lang.NewSymbol("clojure.core/UncheckedAdd")
 	sym_clojure_DOT_core_SLASH_UncheckedByteCast := lang.NewSymbol("clojure.core/UncheckedByteCast")
@@ -12700,7 +12700,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp9 := lang.Apply(tmp8, []any{sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT})
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp11 := lang.Apply(tmp10, []any{sym_clojure_DOT_core_SLASH_Object_array})
+				tmp11 := lang.Apply(tmp10, []any{sym_clojure_DOT_core_SLASH_ObjectArray})
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp13 := lang.Apply(tmp12, []any{v3})
 				tmp14 := lang.Apply(tmp5, []any{tmp7, tmp9, tmp11, tmp13})
@@ -12716,9 +12716,9 @@ func LoadNS() {
 			checkArity(args, 1)
 			v3 := args[0]
 			_ = v3
-			tmp4, _ := lang.FieldOrMethod(runtime.RT, "Object_array")
+			tmp4, _ := lang.FieldOrMethod(runtime.RT, "ObjectArray")
 			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Object_array is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("ObjectArray is not a function")))
 			}
 			tmp5 := lang.Apply(tmp4, []any{v3})
 			return tmp5

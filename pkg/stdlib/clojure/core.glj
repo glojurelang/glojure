@@ -5350,10 +5350,10 @@
 
 (defn object-array
   "Creates an array of objects"
-  {:inline (fn [arg] `(. github.com:glojurelang:glojure:pkg:runtime.RT Object_array ~arg))
+  {:inline (fn [arg] `(. github.com:glojurelang:glojure:pkg:runtime.RT ObjectArray ~arg))
    :inline-arities #{1}
    :added "1.2"}
-  ([size-or-seq] (. github.com:glojurelang:glojure:pkg:runtime.RT Object_array size-or-seq)))
+  ([size-or-seq] (. github.com:glojurelang:glojure:pkg:runtime.RT ObjectArray size-or-seq)))
 
 (defn int-array
   "Creates an array of ints"
