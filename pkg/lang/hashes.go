@@ -47,6 +47,13 @@ func Hash(x interface{}) uint32 {
 		return 0
 	}
 
+	if ui32, ok := x.(uint32); ok {
+		// special case for uint32
+		// Java's hashCode for Integer is the int value itself
+		// clojure's case relies on this when hashing a colliding hash code
+		return ui32
+	}
+
 	if IsNumber(x) {
 		return hashNumber(x)
 	}
@@ -69,9 +76,9 @@ func Hash(x interface{}) uint32 {
 		return Hash(x.Interface()) ^ reflectValueHashMask
 	case bool:
 		if x {
-			return 1
+			return 1 //1231 // Java's Boolean.TRUE.hashCode()
 		}
-		return 0
+		return 0 //1237 // Java's Boolean.FALSE.hashCode()
 	}
 
 	switch reflect.TypeOf(x).Kind() {
