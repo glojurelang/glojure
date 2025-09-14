@@ -1,6 +1,9 @@
 package lang
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type ExceptionInfo struct {
 	message string
@@ -47,4 +50,17 @@ func (e *ExceptionInfo) Message() string {
 
 func (e *ExceptionInfo) Cause() error {
 	return e.cause
+}
+
+func (e *ExceptionInfo) Is(target error) bool {
+	_, ok := target.(*ExceptionInfo)
+	return ok
+}
+
+func GetExData(err error) IPersistentMap {
+	var ei IExceptionInfo
+	if errors.As(err, &ei) {
+		return ei.GetData()
+	}
+	return nil
 }

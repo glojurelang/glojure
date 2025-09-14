@@ -327,6 +327,8 @@ type (
 	// semantics for exceptions should use this in lieu of defining
 	// project-specific error types..
 	IExceptionInfo interface {
+		error
+
 		GetData() IPersistentMap
 	}
 

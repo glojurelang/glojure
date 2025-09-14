@@ -12,7 +12,7 @@ var (
 // CatchMatches checks if a recovered panic value matches an expected catch type.
 // This implements the semantics of Clojure's try/catch matching.
 func CatchMatches(r, expect any) bool {
-	if IsNil(expect) {
+	if IsNil(expect) || IsNil(r) {
 		return false
 	}
 
@@ -24,14 +24,13 @@ func CatchMatches(r, expect any) bool {
 			// if expectType is a pointer type, instantiate a new value of that type
 			// and check if rErr is an instance of it
 			if expectType.Kind() == reflect.Ptr {
-				expectVal := reflect.New(expectType.Elem()).Interface()
-				if errors.As(rErr, expectVal) {
+				if errors.As(rErr, reflect.New(expectType).Interface()) {
 					return true
 				}
 			}
 			// if expectType is an interface type, check if rErr implements it
 			if expectType.Kind() == reflect.Interface {
-				if reflect.TypeOf(rErr).Implements(expectType) {
+				if errors.As(rErr, reflect.New(expectType).Interface()) {
 					return true
 				}
 			}

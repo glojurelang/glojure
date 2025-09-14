@@ -327,6 +327,10 @@
 
    (sexpr-replace 'IExceptionInfo 'github.com:glojurelang:glojure:pkg:lang.IExceptionInfo)
 
+   (sexpr-replace '(when (instance? IExceptionInfo ex)
+                     (.getData ^IExceptionInfo ex))
+                  '(github.com:glojurelang:glojure:pkg:lang.GetExData ex))
+
    ;; Handle ExceptionInfo constructor with different arities
    [(fn select [zloc]
       (and (z/list? zloc)

@@ -239,7 +239,8 @@ func (v *Var) AlterRoot(alter IFn, args ISeq) interface{} {
 	oldRoot := v.Get()
 	newRoot := alter.ApplyTo(NewCons(oldRoot, args))
 	// TODO: validate, ++rev
-	v.Set(newRoot)
+	v.root.Store(Box{val: newRoot})
+	v.notifyWatches(oldRoot, newRoot)
 	return newRoot
 }
 

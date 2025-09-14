@@ -4810,8 +4810,7 @@
    Otherwise returns nil."
   {:added "1.4"}
   [ex]
-  (when (instance? github.com:glojurelang:glojure:pkg:lang.IExceptionInfo ex)
-    (.getData ^github.com:glojurelang:glojure:pkg:lang.IExceptionInfo ex)))
+  (github.com:glojurelang:glojure:pkg:lang.GetExData ex))
 
 (defn ex-message
   "Returns the message attached to ex if ex is a Throwable.
