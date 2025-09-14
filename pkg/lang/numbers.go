@@ -106,6 +106,22 @@ func (nm *NumberMethods) AndNot(x, y any) any {
 	return bitOpsCast(x) &^ bitOpsCast(y)
 }
 
+func (nm *NumberMethods) Not(x any) any {
+	return ^bitOpsCast(x)
+}
+
+func (nm *NumberMethods) Or(x, y any) any {
+	return bitOpsCast(x) | bitOpsCast(y)
+}
+
+func (nm *NumberMethods) Xor(x, y any) any {
+	return bitOpsCast(x) ^ bitOpsCast(y)
+}
+
+func (nm *NumberMethods) SetBit(x, y any) any {
+	return bitOpsCast(x) | (1 << bitOpsCast(y))
+}
+
 func IsZero(x any) bool {
 	return Ops(x).IsZero(x)
 }
@@ -144,10 +160,6 @@ func (nm *NumberMethods) DecP(v any) any {
 
 func (nm *NumberMethods) ClearBit(x, y any) int64 {
 	return bitOpsCast(x) & ^(1 << bitOpsCast(y))
-}
-
-func (nm *NumberMethods) SetBit(x, y any) int64 {
-	return bitOpsCast(x) | (1 << bitOpsCast(y))
 }
 
 func (nm *NumberMethods) ShiftLeft(x, y any) int64 {
