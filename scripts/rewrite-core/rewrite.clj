@@ -935,6 +935,7 @@
    (sexpr-replace '.isPublic '.IsPublic)
    (sexpr-replace '.addAlias '.AddAlias)
 
+   (sexpr-replace 'clojure.lang.Var/getThreadBindings 'github.com:glojurelang:glojure:pkg:lang.GetThreadBindings)
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= 'pushThreadBindings (z/sexpr zloc))))
     (fn visit [zloc] (z/replace (-> zloc z/up z/up)
                                 '(github.com:glojurelang:glojure:pkg:lang.PushThreadBindings {})))]

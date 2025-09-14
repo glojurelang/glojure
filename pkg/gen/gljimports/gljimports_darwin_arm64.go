@@ -3532,6 +3532,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.GetDefault", github_com_glojurelang_glojure_pkg_lang.GetDefault)
 	_register("github.com/glojurelang/glojure/pkg/lang.GetExData", github_com_glojurelang_glojure_pkg_lang.GetExData)
 	_register("github.com/glojurelang/glojure/pkg/lang.GetPersistentStructMapAccessor", github_com_glojurelang_glojure_pkg_lang.GetPersistentStructMapAccessor)
+	_register("github.com/glojurelang/glojure/pkg/lang.GetThreadBindings", github_com_glojurelang_glojure_pkg_lang.GetThreadBindings)
 	_register("github.com/glojurelang/glojure/pkg/lang.GlobalEnv", github_com_glojurelang_glojure_pkg_lang.GlobalEnv)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoAppend", github_com_glojurelang_glojure_pkg_lang.GoAppend)
 	_register("github.com/glojurelang/glojure/pkg/lang.GoCap", github_com_glojurelang_glojure_pkg_lang.GoCap)

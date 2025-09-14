@@ -504,8 +504,9 @@ func (env *environment) EvalASTDo(n *ast.Node) (interface{}, error) {
 func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error) {
 	letNode := n.Sub.(*ast.LetNode)
 
-	newEnv := env.PushScope().(*environment)
+	newEnv := env
 
+	boundNames := make(map[string]struct{})
 	var bindNameVals []interface{}
 
 	bindings := letNode.Bindings
@@ -518,11 +519,17 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 		if err != nil {
 			return nil, err
 		}
-		// TODO: this should not mutate in-place!
+		if _, ok := boundNames[name.Name()]; ok || newEnv == env {
+			// avoid overwriting a name in the same scope, or binding in the
+			// parent env
+			newEnv = newEnv.PushScope().(*environment)
+		}
+		boundNames[name.Name()] = struct{}{}
 		newEnv.BindLocal(name, initVal)
 
 		bindNameVals = append(bindNameVals, name, initVal)
 	}
+	boundNames = nil // free memory
 
 Recur:
 	for i := 0; i < len(bindNameVals); i += 2 {

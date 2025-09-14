@@ -4549,7 +4549,7 @@ func LoadNS() {
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
-			tmp2 := lang.Apply(nil, nil)
+			tmp2 := lang.Apply(lang.GetThreadBindings, nil)
 			return tmp2
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)

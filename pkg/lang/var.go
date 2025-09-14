@@ -358,6 +358,27 @@ func PopThreadBindings() {
 	glsBindingsMtx.Unlock()
 }
 
+func GetThreadBindings() IPersistentMap {
+	gid := getGoroutineID()
+	glsBindingsMtx.RLock()
+	storage := glsBindings[gid]
+	glsBindingsMtx.RUnlock()
+
+	var ret IPersistentMap = emptyMap
+	if storage == nil {
+		return ret
+	}
+	for i := len(storage.bindings) - 1; i >= 0; i-- {
+		for v, b := range storage.bindings[i] {
+			// most recent binding wins
+			if ret.EntryAt(v) == nil {
+				ret = ret.Assoc(v, b.val).(IPersistentMap)
+			}
+		}
+	}
+	return ret
+}
+
 func CloneThreadBindingFrame() any {
 	gid := getGoroutineID()
 	glsBindingsMtx.RLock()

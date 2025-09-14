@@ -1942,7 +1942,7 @@
   {:added "1.1"
    :static true}
   []
-  (clojure.lang.Var/getThreadBindings))
+  (github.com:glojurelang:glojure:pkg:lang.GetThreadBindings))
 
 (defmacro binding
   "binding => var-symbol init-expr
