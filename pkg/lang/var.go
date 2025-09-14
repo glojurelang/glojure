@@ -358,14 +358,20 @@ func PopThreadBindings() {
 	glsBindingsMtx.Unlock()
 }
 
-func CloneThreadBindingFrame() interface{} {
+func CloneThreadBindingFrame() any {
 	gid := getGoroutineID()
 	glsBindingsMtx.RLock()
 	defer glsBindingsMtx.RUnlock()
-	return glsBindings[gid]
+	bindings := glsBindings[gid]
+	if bindings == nil {
+		return nil
+	}
+	// deref the pointer to copy the struct
+	derefBindings := *bindings
+	return &derefBindings
 }
 
-func ResetThreadBindingFrame(frame interface{}) {
+func ResetThreadBindingFrame(frame any) {
 	gid := getGoroutineID()
 	glsBindingsMtx.Lock()
 	defer glsBindingsMtx.Unlock()
