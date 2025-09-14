@@ -102,7 +102,7 @@ func (rt *RTMethods) BooleanCast(x any) bool {
 	return lang.BooleanCast(x)
 }
 
-func (rt *RTMethods) ByteCast(x any) byte {
+func (rt *RTMethods) ByteCast(x any) int8 {
 	return lang.ByteCast(x)
 }
 

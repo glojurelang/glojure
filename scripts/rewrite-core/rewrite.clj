@@ -143,6 +143,21 @@
 
 (def other-mappings
   {'(. clojure.lang.Delay (force x)) '(github.com:glojurelang:glojure:pkg:lang.ForceDelay x)
+   '(or (instance? Long x)
+          (instance? Integer x)
+          (instance? Short x)
+          (instance? Byte x))
+   '(or (instance? go/int x)
+        (instance? go/uint x)
+        (instance? go/byte x)
+        (instance? go/int64 x)
+        (instance? go/int32 x)
+        (instance? go/int16 x)
+        (instance? go/int8 x)
+        (instance? go/uint64 x)
+        (instance? go/uint32 x)
+        (instance? go/uint16 x)
+        (instance? go/uint8 x))
    })
 
 (defn create-simple-replacements

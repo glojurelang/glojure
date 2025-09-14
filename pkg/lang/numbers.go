@@ -786,15 +786,27 @@ func BooleanCast(x any) bool {
 	return !IsNil(x)
 }
 
-func ByteCast(x any) byte {
-	if b, ok := x.(byte); ok {
-		return b
+func ByteCast(x any) int8 {
+	switch x := x.(type) {
+	case int8:
+		return x
+	case float32:
+		if x < math.MinInt8 || x > math.MaxInt8 {
+			panic(fmt.Errorf("value out of range for byte: %v", x))
+		}
+		return int8(x)
+	case float64:
+		if x < math.MinInt8 || x > math.MaxInt8 {
+			panic(fmt.Errorf("value out of range for byte: %v", x))
+		}
+		return int8(x)
 	}
+
 	l := AsInt64(x)
 	if l < math.MinInt8 || l > math.MaxInt8 {
 		panic(fmt.Errorf("value out of range for byte: %v", x))
 	}
-	return byte(l)
+	return int8(l)
 }
 
 func UncheckedByteCast(x any) byte {
