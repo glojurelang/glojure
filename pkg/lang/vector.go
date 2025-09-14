@@ -65,6 +65,8 @@ func (v *Vector) Count() int {
 	return v.vec.Len()
 }
 
+func (v *Vector) xxx_counted() {}
+
 func (v *Vector) Length() int {
 	return v.Count()
 }
@@ -358,6 +360,8 @@ func (t *TransientVector) Persistent() IPersistentCollection {
 func (t *TransientVector) Count() int {
 	return t.vec.Count()
 }
+
+func (t *TransientVector) xxx_counted() {}
 
 func (t *TransientVector) Nth(i int) any {
 	res, ok := t.vec.Index(i)

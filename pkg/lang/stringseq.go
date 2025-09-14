@@ -79,6 +79,8 @@ func (s *StringSeq) Count() int {
 	return len(s.str) - s.i
 }
 
+func (s *StringSeq) xxx_counted() {}
+
 func (s *StringSeq) Empty() IPersistentCollection {
 	return aseqEmpty()
 }

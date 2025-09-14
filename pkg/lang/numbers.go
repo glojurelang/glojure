@@ -122,12 +122,20 @@ func (nm *NumberMethods) Inc(v any) any {
 	return nm.Add(v, 1)
 }
 
+func (nm *NumberMethods) IncP(v any) any {
+	return IncP(v)
+}
+
 func (nm *NumberMethods) Unchecked_inc(v any) any {
 	return nm.UncheckedAdd(v, 1)
 }
 
 func (nm *NumberMethods) Dec(x any) any {
 	return nm.Add(x, -1)
+}
+
+func (nm *NumberMethods) DecP(v any) any {
+	return nm.MinusP(v, 1)
 }
 
 func (nm *NumberMethods) ClearBit(x, y any) int64 {

@@ -41,6 +41,8 @@ func (me *MapEntry) Count() int {
 	return amapentryCount(me)
 }
 
+func (me *MapEntry) xxx_counted() {}
+
 func (me *MapEntry) Nth(i int) any {
 	return amapentryNth(me, i)
 }

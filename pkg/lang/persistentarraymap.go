@@ -225,6 +225,8 @@ func (m *Map) Count() int {
 	return len(m.keyVals) / 2
 }
 
+func (m *Map) xxx_counted() {}
+
 func (m *Map) Seq() ISeq {
 	if len(m.keyVals) == 0 {
 		return nil
@@ -426,6 +428,8 @@ func (s *MapSeq) Cons(o any) Conser {
 func (s *MapSeq) Count() int {
 	return len(s.keyVals) / 2
 }
+
+func (s *MapSeq) xxx_counted() {}
 
 func (s *MapSeq) Empty() IPersistentCollection {
 	return aseqEmpty()

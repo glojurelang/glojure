@@ -108,6 +108,8 @@ func (s *Set) Count() int {
 	return len(s.vals)
 }
 
+func (s *Set) xxx_counted() {}
+
 func (s *Set) IsEmpty() bool {
 	return s.Count() == 0
 }

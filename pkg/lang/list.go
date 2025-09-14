@@ -53,6 +53,8 @@ func (e *EmptyList) Count() int {
 	return 0
 }
 
+func (e *EmptyList) xxx_counted() {}
+
 func (e *EmptyList) Peek() any {
 	return nil
 }
@@ -218,6 +220,8 @@ func (l *List) Empty() IPersistentCollection {
 func (l *List) Count() int {
 	return l.size
 }
+
+func (l *List) xxx_counted() {}
 
 func (l *List) Cons(x any) Conser {
 	return ConsList(x, l)

@@ -179,6 +179,8 @@ func (m *PersistentHashMap) Count() int {
 	return m.count
 }
 
+func (m *PersistentHashMap) xxx_counted() {}
+
 func (m *PersistentHashMap) Seq() ISeq {
 	if m.root != nil {
 		return m.root.nodeSeq()

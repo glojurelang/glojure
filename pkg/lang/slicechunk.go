@@ -22,6 +22,8 @@ func (sc *SliceChunk) Count() int {
 	return len(sc.slc)
 }
 
+func (sc *SliceChunk) xxx_counted() {}
+
 func (sc *SliceChunk) DropFirst() IChunk {
 	if len(sc.slc) == 0 {
 		panic(errors.New("DropFirst of empty chunk"))

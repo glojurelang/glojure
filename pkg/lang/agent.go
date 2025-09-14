@@ -16,7 +16,7 @@ type (
 )
 
 var (
-	_ ARef = (*Agent)(nil)
+	// _ ARef = (*Agent)(nil)
 
 	_ IBlockingDeref = (*future)(nil)
 	_ IDeref         = (*future)(nil)
@@ -63,14 +63,18 @@ func (f *future) IsRealized() bool {
 ////////////////////////////////////////////////////////////////////////////////
 // Agent
 
+func (a *Agent) Deref() any {
+	panic("not implemented")
+}
+
 func (a *Agent) Watches() IPersistentMap {
 	return a.watches
 }
 
-func (a *Agent) AddWatch(key interface{}, fn IFn) IRef {
-	a.watches = a.watches.Assoc(key, fn).(IPersistentMap)
-	return a
-}
+// func (a *Agent) AddWatch(key interface{}, fn IFn) IRef {
+// 	a.watches = a.watches.Assoc(key, fn).(IPersistentMap)
+// 	return a
+// }
 
 func (a *Agent) RemoveWatch(key interface{}) {
 	a.watches = a.watches.Without(key)

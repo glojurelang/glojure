@@ -3655,7 +3655,7 @@
   [x] (cond
        (decimal? x) x
        (float? x) (github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromFloat64 (double x))
-       (ratio? x) (/ (github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromRatio x) (.denominator ^github.com:glojurelang:glojure:pkg:lang.*Ratio x))
+       (ratio? x) (github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromRatio x)
        (instance? github.com:glojurelang:glojure:pkg:lang.*BigInt x) (.toBigDecimal ^github.com:glojurelang:glojure:pkg:lang.*BigInt x)
        (instance? math:big.*Int x) (github.com:glojurelang:glojure:pkg:lang.NewBigDecimal x)
        (number? x) (github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromInt64 (long x))
@@ -6219,7 +6219,7 @@ fails, attempts to require sym's namespace and retries."
  "Returns true if coll implements Associative"
  {:added "1.0"
   :static true}
-  [coll] (instance? clojure.lang.Associative coll))
+  [coll] (instance? github.com:glojurelang:glojure:pkg:lang.Associative coll))
 
 (defn sequential?
  "Returns true if coll implements Sequential"

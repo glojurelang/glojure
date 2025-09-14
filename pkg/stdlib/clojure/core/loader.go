@@ -8454,8 +8454,9 @@ func LoadNS() {
 			v2 := args[0]
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-			tmp4 := lang.Apply(tmp3, []any{nil, v2})
-			return tmp4
+			tmp4 := reflect.TypeOf((*lang.Associative)(nil)).Elem()
+			tmp5 := lang.Apply(tmp3, []any{tmp4, v2})
+			return tmp5
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_associative_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -19722,70 +19723,57 @@ func LoadNS() {
 					tmp14 := checkDerefVar(var_clojure_DOT_core_ratio_QMARK_)
 					tmp15 := lang.Apply(tmp14, []any{v3})
 					if lang.IsTruthy(tmp15) {
-						tmp16 := checkDerefVar(var_clojure_DOT_core__SLASH_)
-						tmp17 := lang.Apply(lang.NewBigDecimalFromRatio, []any{v3})
-						tmp18, ok := lang.FieldOrMethod(v3, "denominator")
-						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v3, "denominator")))
-						}
-						var tmp19 any
-						switch reflect.TypeOf(tmp18).Kind() {
-						case reflect.Func:
-							tmp19 = lang.Apply(tmp18, nil)
-						default:
-							tmp19 = tmp18
-						}
-						tmp20 := lang.Apply(tmp16, []any{tmp17, tmp19})
-						tmp13 = tmp20
+						tmp16 := lang.Apply(lang.NewBigDecimalFromRatio, []any{v3})
+						tmp13 = tmp16
 					} else {
-						var tmp21 any
-						tmp22 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-						tmp23 := reflect.TypeOf((*lang.BigInt)(nil))
-						tmp24 := lang.Apply(tmp22, []any{tmp23, v3})
-						if lang.IsTruthy(tmp24) {
-							tmp25, ok := lang.FieldOrMethod(v3, "toBigDecimal")
+						var tmp17 any
+						tmp18 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+						tmp19 := reflect.TypeOf((*lang.BigInt)(nil))
+						tmp20 := lang.Apply(tmp18, []any{tmp19, v3})
+						if lang.IsTruthy(tmp20) {
+							tmp21, ok := lang.FieldOrMethod(v3, "toBigDecimal")
 							if !ok {
 								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v3, "toBigDecimal")))
 							}
-							var tmp26 any
-							switch reflect.TypeOf(tmp25).Kind() {
+							var tmp22 any
+							switch reflect.TypeOf(tmp21).Kind() {
 							case reflect.Func:
-								tmp26 = lang.Apply(tmp25, nil)
+								tmp22 = lang.Apply(tmp21, nil)
 							default:
-								tmp26 = tmp25
+								tmp22 = tmp21
 							}
-							tmp21 = tmp26
+							tmp17 = tmp22
 						} else {
-							var tmp27 any
-							tmp28 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-							tmp29 := reflect.TypeOf((*big6.Int)(nil))
-							tmp30 := lang.Apply(tmp28, []any{tmp29, v3})
-							if lang.IsTruthy(tmp30) {
-								tmp31 := lang.Apply(lang.NewBigDecimal, []any{v3})
-								tmp27 = tmp31
+							var tmp23 any
+							tmp24 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+							tmp25 := reflect.TypeOf((*big6.Int)(nil))
+							tmp26 := lang.Apply(tmp24, []any{tmp25, v3})
+							if lang.IsTruthy(tmp26) {
+								tmp27 := lang.Apply(lang.NewBigDecimal, []any{v3})
+								tmp23 = tmp27
 							} else {
-								var tmp32 any
-								tmp33 := checkDerefVar(var_clojure_DOT_core_number_QMARK_)
-								tmp34 := lang.Apply(tmp33, []any{v3})
-								if lang.IsTruthy(tmp34) {
-									tmp35 := checkDerefVar(var_clojure_DOT_core_long)
-									tmp36 := lang.Apply(tmp35, []any{v3})
-									tmp37 := lang.Apply(lang.NewBigDecimalFromInt64, []any{tmp36})
-									tmp32 = tmp37
+								var tmp28 any
+								tmp29 := checkDerefVar(var_clojure_DOT_core_number_QMARK_)
+								tmp30 := lang.Apply(tmp29, []any{v3})
+								if lang.IsTruthy(tmp30) {
+									tmp31 := checkDerefVar(var_clojure_DOT_core_long)
+									tmp32 := lang.Apply(tmp31, []any{v3})
+									tmp33 := lang.Apply(lang.NewBigDecimalFromInt64, []any{tmp32})
+									tmp28 = tmp33
 								} else {
-									var tmp38 any
+									var tmp34 any
 									if lang.IsTruthy(kw_else) {
-										tmp39 := lang.Apply(lang.NewBigDecimal, []any{v3})
-										tmp38 = tmp39
+										tmp35 := lang.Apply(lang.NewBigDecimal, []any{v3})
+										tmp34 = tmp35
 									} else {
 									}
-									tmp32 = tmp38
+									tmp28 = tmp34
 								}
-								tmp27 = tmp32
+								tmp23 = tmp28
 							}
-							tmp21 = tmp27
+							tmp17 = tmp23
 						}
-						tmp13 = tmp21
+						tmp13 = tmp17
 					}
 					tmp7 = tmp13
 				}

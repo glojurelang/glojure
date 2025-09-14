@@ -126,6 +126,7 @@
    'BigDecimal 'github.com:glojurelang:glojure:pkg:lang.*BigDecimal
    'CharSequence 'go/string
    'Class 'reflect.Type
+   'clojure.lang.Associative 'github.com:glojurelang:glojure:pkg:lang.Associative
    'Pattern '*Regexp})
 
 (def static-field-mappings
@@ -558,7 +559,7 @@
                   '(github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromFloat64 (double x)))
    (sexpr-replace '(BigDecimal. x)
                   '(github.com:glojurelang:glojure:pkg:lang.NewBigDecimal x))
-   (sexpr-replace '(BigDecimal. (.numerator ^github.com:glojurelang:glojure:pkg:lang.*Ratio x))
+   (sexpr-replace '(/ (BigDecimal. (.numerator ^clojure.lang.Ratio x)) (.denominator ^clojure.lang.Ratio x))
                   '(github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromRatio x))
    (sexpr-replace 'clojure.lang.BigInt/fromBigInteger
                   'github.com:glojurelang:glojure:pkg:lang.NewBigIntFromGoBigInt)

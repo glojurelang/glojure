@@ -259,6 +259,8 @@ func (s *apvSeq) Count() int {
 	return s.v.Count() - s.i
 }
 
+func (s *apvSeq) xxx_counted() {}
+
 func (s *apvSeq) Cons(o any) Conser {
 	return aseqCons(s, o)
 }
@@ -364,6 +366,8 @@ func (s *apvRSeq) Index() int {
 func (s *apvRSeq) Count() int {
 	return s.i + 1
 }
+
+func (s *apvRSeq) xxx_counted() {}
 
 func (s *apvRSeq) Cons(o any) Conser {
 	return aseqCons(s, o)

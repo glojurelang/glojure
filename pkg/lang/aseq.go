@@ -13,7 +13,7 @@ type (
 		IHashEq
 		Equiver
 		Equalser
-		Counted
+		Counter
 		Seqable
 		ISeq
 		Sequential

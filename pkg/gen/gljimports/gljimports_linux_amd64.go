@@ -3412,6 +3412,8 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.APersistentMap", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.APersistentMap)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.APersistentSet", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.APersistentSet)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.APersistentVector", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.APersistentVector)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/lang.ARef", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ARef)(nil)).Elem())
+	_register("github.com/glojurelang/glojure/pkg/lang.AReference", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.AReference)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.ASeq", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ASeq)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.Abs", github_com_glojurelang_glojure_pkg_lang.Abs)
 	_register("github.com/glojurelang/glojure/pkg/lang.Add", github_com_glojurelang_glojure_pkg_lang.Add)
