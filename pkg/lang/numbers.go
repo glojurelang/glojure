@@ -102,6 +102,10 @@ func (nm *NumberMethods) And(x, y any) any {
 	return bitOpsCast(x) & bitOpsCast(y)
 }
 
+func (nm *NumberMethods) AndNot(x, y any) any {
+	return bitOpsCast(x) &^ bitOpsCast(y)
+}
+
 func IsZero(x any) bool {
 	return Ops(x).IsZero(x)
 }
