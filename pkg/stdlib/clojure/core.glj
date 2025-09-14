@@ -745,19 +745,19 @@
   calls. See also - realized?"
   {:added "1.0"}
   [& body]
-    (list 'new 'clojure.lang.Delay (list* `^{:once true} fn* [] body)))
+    (list (quote github.com:glojurelang:glojure:pkg:lang.NewDelay) (list* (quote ^{:once true} fn*) [] body)))
 
 (defn delay?
   "returns true if x is a Delay created with delay"
   {:added "1.0"
    :static true}
-  [x] (instance? clojure.lang.Delay x))
+  [x] (instance? github.com:glojurelang:glojure:pkg:lang.*Delay x))
 
 (defn force
   "If x is a Delay, returns the (possibly cached) value of its expression, else returns x"
   {:added "1.0"
    :static true}
-  [x] (. clojure.lang.Delay (force x)))
+  [x] (github.com:glojurelang:glojure:pkg:lang.ForceDelay x))
 
 (defmacro if-not
   "Evaluates test. If logical false, evaluates and returns then expr, 

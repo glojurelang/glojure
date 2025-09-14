@@ -127,7 +127,9 @@
    'CharSequence 'go/string
    'Class 'reflect.Type
    'clojure.lang.Associative 'github.com:glojurelang:glojure:pkg:lang.Associative
-   'Pattern '*Regexp})
+   'Pattern '*Regexp
+   'clojure.lang.Delay 'github.com:glojurelang:glojure:pkg:lang.*Delay
+   })
 
 (def static-field-mappings
   {'clojure.lang.Namespace/all 'github.com:glojurelang:glojure:pkg:lang.AllNamespaces
@@ -138,6 +140,10 @@
    'Double/NEGATIVE_INFINITY '(math.Inf -1)
    'Float/POSITIVE_INFINITY '(go/float32 (math.Inf 1))
    'Float/NEGATIVE_INFINITY '(go/float32 (math.Inf -1))})
+
+(def other-mappings
+  {'(. clojure.lang.Delay (force x)) '(github.com:glojurelang:glojure:pkg:lang.ForceDelay x)
+   })
 
 (defn create-simple-replacements
   "Create sexpr-replace calls from a mapping"
@@ -164,7 +170,8 @@
     (create-simple-replacements namespace-mappings)
     (create-simple-replacements type-mappings)
     (create-simple-replacements static-field-mappings)
-    
+    (create-simple-replacements other-mappings)
+
     ;; Pattern-based clojure.lang replacements
     (clojure-lang-list->glojure-pkg
       ["IPersistentCollection" "IPersistentList" "IRecord" 
@@ -174,15 +181,15 @@
        "Named" "Counted" "Sequential" "IChunkedSeq"
        "IDrop" "IDeref" "IBlockingDeref"]
       :pointer? false)
-    
+
     (clojure-lang-list->glojure-pkg
       ["Symbol" "Ratio" "MultiFn" "PersistentHashMap" "PersistentHashSet"
        "PersistentVector" "LazySeq" "Var" "Namespace" "Ref" "Agent"
        "BigInt" "BigDecimal"]
       :pointer? true)
-    
+
     [(clojure-lang->glojure-pkg "Fn" :pointer? true :package "github.com:glojurelang:glojure:pkg:runtime")]
-    
+
     ;; All other replacements remain as-is
     [
      ;; ===== Special Clojure.lang Replacements =====
@@ -623,6 +630,8 @@
    (sexpr-replace '(. clojure.lang.RT (seq coll)) '(github.com:glojurelang:glojure:pkg:lang.Seq coll))
    (sexpr-replace '(list 'new 'clojure.lang.LazySeq (list* '^{:once true} fn* [] body))
                   '(list 'github.com:glojurelang:glojure:pkg:lang.NewLazySeq (list* '^{:once true} fn* [] body)))
+   (sexpr-replace '(list 'new 'clojure.lang.Delay (list* '^{:once true} fn* [] body))
+                  '(list 'github.com:glojurelang:glojure:pkg:lang.NewDelay (list* '^{:once true} fn* [] body)))
    (sexpr-replace 'clojure.lang.RT/count 'github.com:glojurelang:glojure:pkg:lang.Count)
 
    (sexpr-replace 'clojure.lang.IChunkedSeq 'github.com:glojurelang:glojure:pkg:lang.IChunkedSeq)

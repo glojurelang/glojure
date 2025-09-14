@@ -1,6 +1,8 @@
 package lang
 
-import "time"
+import (
+	"time"
+)
 
 type (
 	Agent struct {

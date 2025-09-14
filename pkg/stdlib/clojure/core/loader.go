@@ -432,7 +432,6 @@ func LoadNS() {
 	sym_clojure_DOT_core_SLASH_with_DASH_loading_DASH_context := lang.NewSymbol("clojure.core/with-loading-context")
 	sym_clojure_DOT_core_SLASH_with_DASH_open := lang.NewSymbol("clojure.core/with-open")
 	sym_clojure_DOT_core_SLASH_with_DASH_redefs_DASH_fn := lang.NewSymbol("clojure.core/with-redefs-fn")
-	sym_clojure_DOT_lang_DOT_Delay := lang.NewSymbol("clojure.lang.Delay")
 	sym_clojure_DOT_lang_DOT_IChunk := lang.NewSymbol("clojure.lang.IChunk")
 	sym_clojure_DOT_lang_DOT_LineNumberingPushbackReader_DOT_ := lang.NewSymbol("clojure.lang.LineNumberingPushbackReader.")
 	sym_clojure_DOT_lang_DOT_LockingTransaction_SLASH_isRunning := lang.NewSymbol("clojure.lang.LockingTransaction/isRunning")
@@ -642,6 +641,7 @@ func LoadNS() {
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Import := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Import")
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_IsReduced := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.IsReduced")
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_LockingTransaction := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.LockingTransaction")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewDelay := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewDelay")
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewIllegalArgumentError := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError")
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewLazySeq := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewLazySeq")
 	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMultiFn := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewMultiFn")
@@ -4428,12 +4428,8 @@ func LoadNS() {
 			checkArity(args, 1)
 			v2 := args[0]
 			_ = v2
-			tmp3, _ := lang.FieldOrMethod(nil, "force")
-			if reflect.TypeOf(tmp3).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("force is not a function")))
-			}
-			tmp4 := lang.Apply(tmp3, []any{v2})
-			return tmp4
+			tmp3 := lang.Apply(lang.ForceDelay, []any{v2})
+			return tmp3
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_force = ns.InternWithValue(tmp0, tmp1, true)
@@ -9356,8 +9352,9 @@ func LoadNS() {
 			v2 := args[0]
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-			tmp4 := lang.Apply(tmp3, []any{nil, v2})
-			return tmp4
+			tmp4 := reflect.TypeOf((*lang.Delay)(nil))
+			tmp5 := lang.Apply(tmp3, []any{tmp4, v2})
+			return tmp5
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_delay_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -22941,13 +22938,13 @@ func LoadNS() {
 				tmp5 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
 				tmp7 := lang.NewVector()
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(748), kw_column, int(62), kw_end_DASH_line, int(748), kw_end_DASH_column, int(63))
+				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(748), kw_column, int(101), kw_end_DASH_line, int(748), kw_end_DASH_column, int(102))
 				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
 				tmp10 := lang.Apply(tmp6, []any{sym_fn_STAR_, tmp9, v4})
-				tmp11 := lang.Apply(tmp5, []any{sym_new, sym_clojure_DOT_lang_DOT_Delay, tmp10})
+				tmp11 := lang.Apply(tmp5, []any{sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewDelay, tmp10})
 				return tmp11
 			}
 		})
