@@ -347,6 +347,18 @@ type (
 		// IsCancelled() bool
 		// IsDone() bool
 	}
+
+	AReference interface {
+		Meta() IPersistentMap
+		AlterMeta(f IFn, args ISeq) IPersistentMap
+		ResetMeta(meta IPersistentMap) IPersistentMap
+	}
+
+	ARef interface {
+		IRef
+
+		AReference
+	}
 )
 
 var (

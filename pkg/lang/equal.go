@@ -1,6 +1,8 @@
 package lang
 
-import "reflect"
+import (
+	"reflect"
+)
 
 func Equiv(a, b any) bool {
 	return Equals(a, b)
