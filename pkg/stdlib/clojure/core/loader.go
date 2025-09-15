@@ -4653,38 +4653,6 @@ func LoadNS() {
 			var_clojure_DOT_core_hash_DASH_ordered_DASH_coll.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
-	// hash-set
-	{
-		tmp0 := sym_hash_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a new hash set with supplied keys.  Any equal keys are\n  handled as if by repeated uses of conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(390), kw_end_DASH_line, int(390))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 0:
-				tmp2 := lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{}))
-				tmp3 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(395), kw_column, int(7), kw_end_DASH_line, int(395), kw_end_DASH_column, int(9))
-				tmp4, err := lang.WithMeta(tmp2, tmp3.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp4
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
-				_ = v2
-				tmp3 := lang.Apply(nil, []any{v2})
-				return tmp3
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		var_clojure_DOT_core_hash_DASH_set = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_hash_DASH_set.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// hash-unordered-coll
 	{
 		tmp0 := sym_hash_DASH_unordered_DASH_coll.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns the hash code, consistent with =, for an external unordered\n   collection implementing Iterable. For maps, the iterator should\n   return map entries whose hash is computed as\n     (hash-ordered-coll [k v]).\n   See http://clojure.org/data_structures#hash for full algorithms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(5211), kw_end_DASH_line, int(5211))).(*lang.Symbol)
@@ -25761,6 +25729,39 @@ func LoadNS() {
 			var_clojure_DOT_core_get_DASH_in.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
+	// hash-set
+	{
+		tmp0 := sym_hash_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a new hash set with supplied keys.  Any equal keys are\n  handled as if by repeated uses of conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(390), kw_end_DASH_line, int(390))).(*lang.Symbol)
+		var tmp1 lang.FnFunc
+		tmp1 = lang.NewFnFunc(func(args ...any) any {
+			switch len(args) {
+			case 0:
+				tmp2 := lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{}))
+				tmp3 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(395), kw_column, int(7), kw_end_DASH_line, int(395), kw_end_DASH_column, int(9))
+				tmp4, err := lang.WithMeta(tmp2, tmp3.(lang.IPersistentMap))
+				if err != nil {
+					panic(err)
+				}
+				return tmp4
+			default:
+				checkArityGTE(args, 0)
+				restArgs := args[0:]
+				var v2 any
+				if len(restArgs) > 0 {
+					v2 = lang.NewList(restArgs...)
+				}
+				_ = v2
+				tmp3 := checkDerefVar(var_clojure_DOT_core_apply)
+				tmp4 := lang.Apply(tmp3, []any{lang.NewSet, v2})
+				return tmp4
+			}
+		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		var_clojure_DOT_core_hash_DASH_set = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_clojure_DOT_core_hash_DASH_set.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
 	// if-let
 	{
 		tmp0 := sym_if_DASH_let.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym_then), lang.NewVector(sym_bindings, sym_then, sym_else, sym__AMP_, sym_oldform)), kw_doc, "bindings => binding-form test\n\n  If test is true, evaluates then with binding-form bound to the value of \n  test, if not, yields else", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(1838), kw_end_DASH_line, int(1838))).(*lang.Symbol)
@@ -30121,12 +30122,20 @@ func LoadNS() {
 					_ = v7
 					// case
 					var tmp8 any
-					// case clause 0
-					if lang.Equals(v7, "true") {
-						tmp8 = true
-						// case clause 1
-					} else if lang.Equals(v7, "false") {
-						tmp8 = false
+					var tmp9 int64
+					tmp9 = int64(uint32(lang.Hash(v7)>>0) & uint32(1))
+					// case entry 0 (key=1, collision=false)
+					if tmp9 == 1 {
+						if lang.Equals(v7, "true") {
+							tmp8 = true
+						} else {
+						}
+						// case entry 1 (key=0, collision=false)
+					} else if tmp9 == 0 {
+						if lang.Equals(v7, "false") {
+							tmp8 = false
+						} else {
+						}
 					} else {
 					}
 					tmp6 = tmp8
@@ -30160,7 +30169,7 @@ func LoadNS() {
 			if lang.IsTruthy(tmp5) {
 				var tmp6 any
 				{ // let
-					// let binding "result__3649__auto__"
+					// let binding "result__3647__auto__"
 					tmp7 := lang.Apply(strconv9.ParseFloat, []any{v2, int64(64)})
 					var v8 any = tmp7
 					_ = v8
@@ -30202,7 +30211,7 @@ func LoadNS() {
 			if lang.IsTruthy(tmp5) {
 				var tmp6 any
 				{ // let
-					// let binding "result__3648__auto__"
+					// let binding "result__3646__auto__"
 					tmp7 := lang.Apply(strconv9.ParseInt, []any{v2, int64(10), int64(64)})
 					var v8 any = tmp7
 					_ = v8

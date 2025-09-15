@@ -292,6 +292,8 @@
                   '(github.com:glojurelang:glojure:pkg:lang.CreatePersistentTreeSet keys))
    (sexpr-replace '(clojure.lang.PersistentTreeSet/create comparator keys)
                   '(github.com:glojurelang:glojure:pkg:lang.CreatePersistentTreeSetWithComparator comparator keys))
+   (sexpr-replace '(clojure.lang.PersistentHashSet/create keys)
+                  '(apply github.com:glojurelang:glojure:pkg:lang.NewSet keys))
 
    (sexpr-replace 'clojure.lang.Cycle/create 'github.com:glojurelang:glojure:pkg:lang.NewCycle)
 
