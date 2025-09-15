@@ -275,6 +275,10 @@ func (m *Map) Equiv(o any) bool {
 	return apersistentmapEquiv(m, o)
 }
 
+func (m *Map) Hash() uint32 {
+	return apersistentmapHash(&m.hash, m)
+}
+
 func (m *Map) HashEq() uint32 {
 	return apersistentmapHashEq(&m.hasheq, m)
 }

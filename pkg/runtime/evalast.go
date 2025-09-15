@@ -527,7 +527,6 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 		if entry.Key != lookupKey {
 			continue
 		}
-		
 		if entry.HasCollision {
 			// This entry's key is in skipCheck, so just evaluate the result
 			// The result should be a condp expression that does the comparison
@@ -576,7 +575,6 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 					} else {
 						matches = lang.Equals(testVal, expectedVal)
 					}
-					
 					if matches {
 						result, err := env.EvalAST(entry.ResultExpr)
 						if err != nil {

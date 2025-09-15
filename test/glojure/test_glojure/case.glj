@@ -165,12 +165,15 @@
              nil :nil-result
              :default)))))
 
-;; Test composite values (vectors, lists)
+;; Test composite values (vectors, lists, maps, ets)
 (deftest composite-case
   (testing "Vectors as test constants"
     (is (= :empty-vec (case [] [] :empty-vec [1] :one-vec)))
     (is (= :one-vec (case [1] [] :empty-vec [1] :one-vec)))
-    (is (= :pair (case [1 2] [1 2] :pair [2 1] :reversed))))
+    (is (= :pair (case [1 2] [1 2] :pair [2 1] :reversed)))
+    (is (= :map (case {:a :map :of :kws}
+                     {:a :map :of :kws} :map
+                     :other))))
   
   (testing "Lists must use vectors as test constants"
     ;; Lists can't be written directly as test constants because parentheses group multiple constants
@@ -246,19 +249,4 @@
                25 :twentyfive 26 :twentysix 27 :twentyseven 28 :twentyeight 29 :twentynine
                :other))))))
 
-;; Run tests
-(defn test-ns-hook []
-  (compact-int-case)
-  (sparse-int-case)
-  (keyword-case)
-  (string-case)
-  (symbol-case)
-  (character-case)
-  (default-case)
-  (grouped-constants-case)
-  (nil-case)
-  (boolean-case)
-  (composite-case)
-  (evaluation-order)
-  (mixed-type-case)
-  (edge-cases))
+(run-tests)

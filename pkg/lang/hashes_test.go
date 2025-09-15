@@ -10,6 +10,9 @@ func TestHashEquivalences(t *testing.T) {
 	testCases := [][]any{
 		{nil, uint32(0)},
 		{NewList(NewKeyword("a"), NewKeyword("b")), NewVector(NewKeyword("a"), NewKeyword("b"))},
+		{NewList(), NewVector()},
+		{NewMap(NewKeyword("a"), NewKeyword("b")), NewPersistentHashMap(NewKeyword("a"), NewKeyword("b"))},
+		{NewMap(), NewPersistentHashMap()},
 	}
 
 	for i, group := range testCases {

@@ -11,6 +11,7 @@ type (
 		AFn
 		IPersistentMap
 		IHashEq
+		Hasher
 	}
 )
 
@@ -73,6 +74,23 @@ func apersistentmapEquiv(a APersistentMap, obj any) bool {
 	}
 
 	return true
+}
+
+func apersistentmapHash(hc *uint32, a APersistentMap) uint32 {
+	if *hc != 0 {
+		return *hc
+	}
+	// Following Clojure's APersistentMap.mapHash logic:
+	// Sum of (key.hashCode() XOR value.hashCode()) for each entry
+	var hash uint32 = 0
+	for seq := a.Seq(); seq != nil; seq = seq.Next() {
+		entry := seq.First().(IMapEntry)
+		keyHash := Hash(entry.Key())
+		valHash := Hash(entry.Val())
+		hash += keyHash ^ valHash
+	}
+	*hc = hash
+	return hash
 }
 
 func apersistentmapHashEq(hc *uint32, a APersistentMap) uint32 {

@@ -260,6 +260,10 @@ func (m *PersistentHashMap) Invoke(args ...any) any {
 	return apersistentmapInvoke(m, args...)
 }
 
+func (m *PersistentHashMap) Hash() uint32 {
+	return apersistentmapHash(&m.hash, m)
+}
+
 func (m *PersistentHashMap) HashEq() uint32 {
 	return apersistentmapHashEq(&m.hasheq, m)
 }

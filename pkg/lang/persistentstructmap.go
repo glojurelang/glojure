@@ -214,6 +214,10 @@ func (m *PersistentStructMap) Equiv(o any) bool {
 	return apersistentmapEquiv(m, o)
 }
 
+func (m *PersistentStructMap) Hash() uint32 {
+	return apersistentmapHash(&m.hash, m)
+}
+
 func (m *PersistentStructMap) HashEq() uint32 {
 	return apersistentmapHashEq(&m.hasheq, m)
 }
