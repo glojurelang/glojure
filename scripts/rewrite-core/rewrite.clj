@@ -263,6 +263,8 @@
 
    (sexpr-replace 'clojure.lang.IReduce
                   'github.com:glojurelang:glojure:pkg:lang.IReduce)
+   (sexpr-replace 'clojure.lang.IFn
+                  'github.com:glojurelang:glojure:pkg:lang.IFn)
    (sexpr-replace 'clojure.lang.IPending
                   'github.com:glojurelang:glojure:pkg:lang.IPending)
    (sexpr-replace 'clojure.lang.MultiFn
@@ -346,6 +348,11 @@
    (sexpr-replace '(fn instance? [^Class c x] (. c (isInstance x)))
                   '(fn instance? [t x] (github.com:glojurelang:glojure:pkg:lang.HasType t x)))
 
+
+  ;; Replace instance? checks for clojure.lang.Fn with OR expression checking both runtime.*Fn and IFn
+  (sexpr-replace '(instance? clojure.lang.Fn x)
+                 '(or (instance? github.com:glojurelang:glojure:pkg:runtime.*Fn x)
+                      (instance? github.com:glojurelang:glojure:pkg:lang.IFn x)))
 
    ;; ===== Exception Handling =====
    (sexpr-replace 'Exception. 'github.com:glojurelang:glojure:pkg:lang.NewError)

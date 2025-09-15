@@ -10712,10 +10712,26 @@ func LoadNS() {
 			checkArity(args, 1)
 			v2 := args[0]
 			_ = v2
-			tmp3 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-			tmp4 := reflect.TypeOf((*runtime.Fn)(nil))
-			tmp5 := lang.Apply(tmp3, []any{tmp4, v2})
-			return tmp5
+			var tmp3 any
+			{ // let
+				// let binding "or__0__auto__"
+				tmp4 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+				tmp5 := reflect.TypeOf((*runtime.Fn)(nil))
+				tmp6 := lang.Apply(tmp4, []any{tmp5, v2})
+				var v7 any = tmp6
+				_ = v7
+				var tmp8 any
+				if lang.IsTruthy(v7) {
+					tmp8 = v7
+				} else {
+					tmp9 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+					tmp10 := reflect.TypeOf((*lang.IFn)(nil)).Elem()
+					tmp11 := lang.Apply(tmp9, []any{tmp10, v2})
+					tmp8 = tmp11
+				}
+				tmp3 = tmp8
+			} // end let
+			return tmp3
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_fn_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -11153,8 +11169,9 @@ func LoadNS() {
 			v2 := args[0]
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-			tmp4 := lang.Apply(tmp3, []any{nil, v2})
-			return tmp4
+			tmp4 := reflect.TypeOf((*lang.IFn)(nil)).Elem()
+			tmp5 := lang.Apply(tmp3, []any{tmp4, v2})
+			return tmp5
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_ifn_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -30169,7 +30186,7 @@ func LoadNS() {
 			if lang.IsTruthy(tmp5) {
 				var tmp6 any
 				{ // let
-					// let binding "result__3647__auto__"
+					// let binding "result__3649__auto__"
 					tmp7 := lang.Apply(strconv9.ParseFloat, []any{v2, int64(64)})
 					var v8 any = tmp7
 					_ = v8
@@ -30211,7 +30228,7 @@ func LoadNS() {
 			if lang.IsTruthy(tmp5) {
 				var tmp6 any
 				{ // let
-					// let binding "result__3646__auto__"
+					// let binding "result__3648__auto__"
 					tmp7 := lang.Apply(strconv9.ParseInt, []any{v2, int64(10), int64(64)})
 					var v8 any = tmp7
 					_ = v8
@@ -43001,20 +43018,46 @@ func LoadNS() {
 				}
 				tmp36 := lang.Apply(tmp33, []any{tmp35})
 				tmp37 := lang.Apply(nil, []any{tmp32, tmp36})
-				tmp38 := lang.NewVector(nil, nil)
-				tmp39 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7095), kw_column, int(7), kw_end_DASH_line, int(7095), kw_end_DASH_column, int(14))
-				tmp40, err := lang.WithMeta(tmp38, tmp39.(lang.IPersistentMap))
+				tmp38 := reflect.TypeOf((*lang.IFn)(nil)).Elem()
+				tmp39 := lang.NewVector(nil, nil)
+				tmp40 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7095), kw_column, int(7), kw_end_DASH_line, int(7095), kw_end_DASH_column, int(14))
+				tmp41, err := lang.WithMeta(tmp39, tmp40.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				var tmp41 any
 				var tmp42 any
+				var tmp43 any
 				{ // let
 					// let binding "and__0__auto__"
-					tmp43 := checkDerefVar(var_clojure_DOT_core_pos_QMARK_)
-					tmp44, ok := lang.FieldOrMethod(v4, "getCount")
+					tmp44 := checkDerefVar(var_clojure_DOT_core_pos_QMARK_)
+					tmp45, ok := lang.FieldOrMethod(v4, "getCount")
 					if !ok {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "getCount")))
+					}
+					var tmp46 any
+					switch reflect.TypeOf(tmp45).Kind() {
+					case reflect.Func:
+						tmp46 = lang.Apply(tmp45, nil)
+					default:
+						tmp46 = tmp45
+					}
+					tmp47 := lang.Apply(tmp44, []any{tmp46})
+					var v48 any = tmp47
+					_ = v48
+					var tmp49 any
+					if lang.IsTruthy(v48) {
+						tmp50 := checkDerefVar(var_clojure_DOT_core_compare_DASH_and_DASH_set_BANG_)
+						tmp51 := lang.Apply(tmp50, []any{v7, v4, nil})
+						tmp49 = tmp51
+					} else {
+						tmp49 = v48
+					}
+					tmp43 = tmp49
+				} // end let
+				if lang.IsTruthy(tmp43) {
+					tmp44, ok := lang.FieldOrMethod(v4, "countDown")
+					if !ok {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "countDown")))
 					}
 					var tmp45 any
 					switch reflect.TypeOf(tmp44).Kind() {
@@ -43023,37 +43066,12 @@ func LoadNS() {
 					default:
 						tmp45 = tmp44
 					}
-					tmp46 := lang.Apply(tmp43, []any{tmp45})
-					var v47 any = tmp46
-					_ = v47
-					var tmp48 any
-					if lang.IsTruthy(v47) {
-						tmp49 := checkDerefVar(var_clojure_DOT_core_compare_DASH_and_DASH_set_BANG_)
-						tmp50 := lang.Apply(tmp49, []any{v7, v4, nil})
-						tmp48 = tmp50
-					} else {
-						tmp48 = v47
-					}
-					tmp42 = tmp48
-				} // end let
-				if lang.IsTruthy(tmp42) {
-					tmp43, ok := lang.FieldOrMethod(v4, "countDown")
-					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "countDown")))
-					}
-					var tmp44 any
-					switch reflect.TypeOf(tmp43).Kind() {
-					case reflect.Func:
-						tmp44 = lang.Apply(tmp43, nil)
-					default:
-						tmp44 = tmp43
-					}
-					_ = tmp44
+					_ = tmp45
 				} else {
 				}
-				tmp45 := lang.Apply(nil, []any{tmp40, tmp41})
-				tmp46 := lang.Apply(nil, []any{tmp8, tmp17, tmp18, tmp28, tmp29, tmp37, nil, tmp45})
-				tmp2 = tmp46
+				tmp46 := lang.Apply(nil, []any{tmp41, tmp42})
+				tmp47 := lang.Apply(nil, []any{tmp8, tmp17, tmp18, tmp28, tmp29, tmp37, tmp38, tmp46})
+				tmp2 = tmp47
 			} // end let
 			return tmp2
 		})
