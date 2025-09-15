@@ -127,6 +127,9 @@ func (rt *RTMethods) Contains(coll, key any) bool {
 	case IPersistentSet:
 		return coll.Contains(key)
 		// TODO: other types
+	case string:
+		n := lang.MustAsInt(key)
+		return n >= 0 && n < lang.Count(coll)
 	}
 	panic(fmt.Errorf("contains? not supported on type: %T", coll))
 }

@@ -352,7 +352,7 @@
   ;; Replace instance? checks for clojure.lang.Fn with OR expression checking both runtime.*Fn and IFn
   (sexpr-replace '(instance? clojure.lang.Fn x)
                  '(or (instance? github.com:glojurelang:glojure:pkg:runtime.*Fn x)
-                      (instance? github.com:glojurelang:glojure:pkg:lang.IFn x)))
+                      (instance? github.com:glojurelang:glojure:pkg:lang.FnFunc x)))
 
    ;; ===== Exception Handling =====
    (sexpr-replace 'Exception. 'github.com:glojurelang:glojure:pkg:lang.NewError)

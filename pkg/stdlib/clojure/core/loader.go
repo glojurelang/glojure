@@ -10725,7 +10725,7 @@ func LoadNS() {
 					tmp8 = v7
 				} else {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-					tmp10 := reflect.TypeOf((*lang.IFn)(nil)).Elem()
+					tmp10 := reflect.TypeOf(lang.FnFunc(nil))
 					tmp11 := lang.Apply(tmp9, []any{tmp10, v2})
 					tmp8 = tmp11
 				}
