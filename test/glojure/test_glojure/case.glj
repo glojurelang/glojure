@@ -2,7 +2,7 @@
 ;;
 ;; This file tests all the different paths through case evaluation:
 ;; - Compact integer dispatch
-;; - Sparse integer dispatch  
+;; - Sparse integer dispatch
 ;; - Hash-based dispatch with keywords (identity)
 ;; - Hash-based dispatch with strings and other types (equiv)
 ;; - Default expressions
@@ -21,7 +21,7 @@
     (when (and (seq? case*-form#) (= 'case* (first case*-form#)))
       (let [switch-type# (nth case*-form# 6)
             test-type# (nth case*-form# 7)]
-        (is (= ~expected-switch switch-type#) 
+        (is (= ~expected-switch switch-type#)
             (str "Expected switch type " ~expected-switch " but got " switch-type#))
         (is (= ~expected-type test-type#)
             (str "Expected test type " ~expected-type " but got " test-type#))))))
@@ -140,7 +140,7 @@
   (testing "nil as test value"
     (is (= :nil (case nil nil :nil :not-nil)))
     (is (= :not-nil (case 1 nil :nil :not-nil))))
-  
+
   (testing "nil as result"
     (is (nil? (case 1 1 nil 2 :two)))
     (is (nil? (case :foo :foo nil :bar false)))))
@@ -151,10 +151,10 @@
     (is (= :true (case true true :true false :false)))
     (is (= :false (case false true :true false :false)))
     (is (= :default (case nil true :true false :false :default))))
-  
+
   (testing "Boolean false vs nil distinction"
     ;; This is a specific test case that was failing
-    (is (= :boolean-false-result 
+    (is (= :boolean-false-result
            (case false
              false :boolean-false-result
              nil :nil-result
@@ -173,8 +173,11 @@
     (is (= :pair (case [1 2] [1 2] :pair [2 1] :reversed)))
     (is (= :map (case {:a :map :of :kws}
                      {:a :map :of :kws} :map
+                     :other)))
+    (is (= :set (case #{1 2 3}
+                     #{1 2 3} :set
                      :other))))
-  
+
   (testing "Lists must use vectors as test constants"
     ;; Lists can't be written directly as test constants because parentheses group multiple constants
     ;; But a vector can be used to match a list
@@ -197,7 +200,7 @@
         1 :one
         2 :two)
       (is (= 1 @counter) "Test expression should be evaluated exactly once")))
-  
+
   (testing "Result expressions not evaluated until matched"
     (let [side-effect (atom [])]
       (case 2

@@ -1438,7 +1438,7 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node, error) {
 		mapEntry := First(seq).(IMapEntry)
 		key := mapEntry.Key()
 		val := mapEntry.Val()
-		
+
 		// Convert key to int64
 		var keyInt int64
 		switch k := key.(type) {
@@ -1457,20 +1457,20 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node, error) {
 		default:
 			return nil, exInfo(fmt.Sprintf("case* map key must be integer, got %T", key), nil)
 		}
-		
+
 		// Extract the vector [test-constant result-expr]
 		if Count(val) != 2 {
 			return nil, exInfo("case* map value must be a 2-element vector", nil)
 		}
-		
+
 		testConstant := First(val)
 		resultExpr := second(val)
-		
+
 		// Check if this is a collision case
 		// In Clojure, entries whose keys are in skipCheck should be evaluated directly
 		// without comparison (they contain condp expressions for collision handling)
 		hasCollision := false
-		
+
 		// Check if the map key is in the skip check set
 		switch k := key.(type) {
 		case int64:
@@ -1498,7 +1498,7 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node, error) {
 				hasCollision = true
 			}
 		}
-		
+
 		// Analyze the test constant and result expression
 		var testConstantNode *ast.Node
 		if !hasCollision {
@@ -1508,13 +1508,13 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node, error) {
 				return nil, err
 			}
 		}
-		
+
 		// Analyze the result expression (or condp for collisions)
 		resultExprNode, err := a.analyzeForm(resultExpr, env)
 		if err != nil {
 			return nil, err
 		}
-		
+
 		entries = append(entries, ast.CaseEntry{
 			Key:          keyInt,
 			TestConstant: testConstantNode,

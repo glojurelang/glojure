@@ -153,6 +153,10 @@ func (s *Set) Equiv(o any) bool {
 	return apersistentsetEquiv(s, o)
 }
 
+func (s *Set) Hash() uint32 {
+	return apersistentsetHash(&s.hash, s)
+}
+
 func (s *Set) HashEq() uint32 {
 	return apersistentsetHashEq(&s.hasheq, s)
 }

@@ -470,7 +470,7 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 	// Determine the lookup key based on test type
 	var lookupKey int64
 	testType := caseNode.TestType.(lang.Keyword)
-	
+
 	switch testType {
 	case lang.KWInt:
 		// For integer test type, use the value directly
@@ -493,7 +493,7 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 		if caseNode.Mask != 0 {
 			lookupKey = int64(uint32(lookupKey>>uint(caseNode.Shift)) & uint32(caseNode.Mask))
 		}
-		
+
 	case lang.KWHashIdentity:
 		// Use identity hash for keywords
 		hash := lang.IdentityHash(testVal)
@@ -503,7 +503,7 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 		} else {
 			lookupKey = int64(uint32(hash>>uint(caseNode.Shift)) & uint32(caseNode.Mask))
 		}
-		
+
 	case lang.KWHashEquiv:
 		// Use hash for general values
 		hash := lang.Hash(testVal)
@@ -513,7 +513,7 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 		} else {
 			lookupKey = int64(uint32(hash>>uint(caseNode.Shift)) & uint32(caseNode.Mask))
 		}
-		
+
 	default:
 		return nil, fmt.Errorf("unknown test type: %v", testType)
 	}
@@ -522,7 +522,7 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 	// Following Clojure's implementation: find the entry whose key matches lookupKey
 	// If that entry is marked as collision, evaluate result directly (it's a condp)
 	// Otherwise, verify the test value matches before evaluating result
-	
+
 	for _, entry := range caseNode.Entries {
 		if entry.Key != lookupKey {
 			continue
@@ -538,23 +538,15 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 		} else {
 			// Non-collision case, need to verify the actual value matches
 			if testType == lang.KWInt {
-					// For integers with shift/mask, we need to verify the actual value
-					// because multiple values can map to the same key
-					if caseNode.Mask != 0 {
-						// Need to check actual value matches
-						expectedVal, err := env.EvalAST(entry.TestConstant)
-						if err != nil {
-							return nil, err
-						}
-						if lang.Equals(testVal, expectedVal) {
-							result, err := env.EvalAST(entry.ResultExpr)
-							if err != nil {
-								return nil, err
-							}
-							return result, nil
-						}
-					} else {
-						// For integers without shift/mask, the key match is sufficient
+				// For integers with shift/mask, we need to verify the actual value
+				// because multiple values can map to the same key
+				if caseNode.Mask != 0 {
+					// Need to check actual value matches
+					expectedVal, err := env.EvalAST(entry.TestConstant)
+					if err != nil {
+						return nil, err
+					}
+					if lang.Equals(testVal, expectedVal) {
 						result, err := env.EvalAST(entry.ResultExpr)
 						if err != nil {
 							return nil, err
@@ -562,30 +554,38 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 						return result, nil
 					}
 				} else {
-					// For hash-based dispatch, verify the actual value matches
-					expectedVal, err := env.EvalAST(entry.TestConstant)
+					// For integers without shift/mask, the key match is sufficient
+					result, err := env.EvalAST(entry.ResultExpr)
 					if err != nil {
 						return nil, err
 					}
-					
-					// Use appropriate comparison based on test type
-					var matches bool
-					if testType == lang.KWHashIdentity {
-						matches = testVal == expectedVal
-					} else {
-						matches = lang.Equals(testVal, expectedVal)
+					return result, nil
+				}
+			} else {
+				// For hash-based dispatch, verify the actual value matches
+				expectedVal, err := env.EvalAST(entry.TestConstant)
+				if err != nil {
+					return nil, err
+				}
+
+				// Use appropriate comparison based on test type
+				var matches bool
+				if testType == lang.KWHashIdentity {
+					matches = testVal == expectedVal
+				} else {
+					matches = lang.Equals(testVal, expectedVal)
+				}
+				if matches {
+					result, err := env.EvalAST(entry.ResultExpr)
+					if err != nil {
+						return nil, err
 					}
-					if matches {
-						result, err := env.EvalAST(entry.ResultExpr)
-						if err != nil {
-							return nil, err
-						}
-						return result, nil
+					return result, nil
 				}
 			}
 		}
 	}
-	
+
 	// No match found, evaluate default
 	return env.EvalAST(caseNode.Default)
 }
