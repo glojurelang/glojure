@@ -92,8 +92,9 @@ func aseqHash(hc *uint32, a ASeq) uint32 {
 	hash := uint32(1)
 	for s := a.Seq(); s != nil; s = s.Next() {
 		var h uint32
-		if s.First() != nil {
-			h = Hash(s.First())
+		first := s.First()
+		if first != nil {
+			h = Hash(first)
 		}
 		hash = 31*hash + h
 	}

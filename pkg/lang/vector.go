@@ -227,6 +227,10 @@ func (v *Vector) HashEq() uint32 {
 	return apersistentVectorHashEq(&v.hasheq, v)
 }
 
+func (v *Vector) Hash() uint32 {
+	return apersistentVectorHash(&v.hash, v)
+}
+
 func (v *Vector) ReduceInit(f IFn, init any) any {
 	res := init
 	for i := 0; i < v.Count(); i++ {

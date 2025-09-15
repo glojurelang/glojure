@@ -34,6 +34,8 @@ type (
 )
 
 var (
+	_ Hasher = (*PersistentVector)(nil)
+
 	_ ASeq       = (*apvSeq)(nil)
 	_ IndexedSeq = (*apvSeq)(nil)
 	_ IReduce    = (*apvSeq)(nil)
@@ -199,6 +201,19 @@ func apersistentVectorHashEq(hc *uint32, a APersistentVector) uint32 {
 		hash = 31*hash + HashEq(a.Nth(n))
 	}
 	hash = murmur3.MixCollHash(hash, uint32(n))
+	*hc = hash
+	return hash
+}
+
+func apersistentVectorHash(hc *uint32, a APersistentVector) uint32 {
+	if *hc != 0 {
+		return *hc
+	}
+	var n int
+	var hash uint32 = 1
+	for ; n < a.Count(); n++ {
+		hash = 31*hash + Hash(a.Nth(n))
+	}
 	*hc = hash
 	return hash
 }

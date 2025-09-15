@@ -41,6 +41,7 @@ var (
 	_ IReduce         = (*EmptyList)(nil)
 	_ IReduceInit     = (*EmptyList)(nil)
 	_ IHashEq         = (*EmptyList)(nil)
+	_ Hasher          = (*EmptyList)(nil)
 )
 
 func (e *EmptyList) xxx_sequential() {}
@@ -109,16 +110,16 @@ func (e *EmptyList) Meta() IPersistentMap {
 	return e.meta
 }
 
-func (e *EmptyList) Hash() uint32 {
-	return 1
-}
-
 var (
 	emptyHashOrdered = murmur3.HashOrdered(nil, HashEq)
 )
 
 func (e *EmptyList) HashEq() uint32 {
 	return emptyHashOrdered
+}
+
+func (e *EmptyList) Hash() uint32 {
+	return 1
 }
 
 func (e *EmptyList) WithMeta(meta IPersistentMap) any {
