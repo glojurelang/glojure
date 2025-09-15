@@ -101,7 +101,27 @@ func (k Keyword) Hash() uint32 {
 
 func (k Keyword) Compare(other any) int {
 	if otherKw, ok := other.(Keyword); ok {
-		return strings.Compare(k.String(), otherKw.String())
+		s := k.String()
+		os := otherKw.String()
+		if s == os {
+			return 0
+		}
+		ns := k.Namespace()
+		if ns == "" {
+			if otherKw.Namespace() != "" {
+				return -1
+			}
+		} else {
+			ons := otherKw.Namespace()
+			if ons == "" {
+				return 1
+			}
+			nsc := strings.Compare(ns, ons)
+			if nsc != 0 {
+				return nsc
+			}
+		}
+		return strings.Compare(k.Name(), otherKw.Name())
 	}
 	panic(NewIllegalArgumentError(fmt.Sprintf("Cannot compare Keyword with %T", other)))
 }
