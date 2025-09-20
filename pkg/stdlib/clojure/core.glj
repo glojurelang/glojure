@@ -4133,7 +4133,7 @@
   name."
   {:added "1.0"
    :static true}
-  [sym] (clojure.lang.Namespace/findOrCreate sym))
+  [sym] (github.com:glojurelang:glojure:pkg:lang.FindOrCreateNamespace sym))
 
 (defn remove-ns
   "Removes the namespace named by the symbol. Use with caution.
@@ -6308,11 +6308,11 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.0"
    :static true}
   ([ns ^github.com:glojurelang:glojure:pkg:lang.*Symbol name]
-     (let [v (clojure.lang.Var/intern (the-ns ns) name)]
+     (let [v (.Intern (the-ns ns) name)]
        (when (meta name) (.setMeta v (meta name)))
        v))
   ([ns name val]
-     (let [v (clojure.lang.Var/intern (the-ns ns) name val)]
+     (let [v (github.com:glojurelang:glojure:pkg:lang.InternVar (the-ns ns) name val true)]
        (when (meta name) (.setMeta v (meta name)))
        v)))
 

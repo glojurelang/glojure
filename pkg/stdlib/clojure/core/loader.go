@@ -3993,7 +3993,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v2 := args[0]
 			_ = v2
-			tmp3 := lang.Apply(nil, []any{v2})
+			tmp3 := lang.Apply(lang.FindOrCreateNamespace, []any{v2})
 			return tmp3
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -11493,25 +11493,29 @@ func LoadNS() {
 					// let binding "v"
 					tmp5 := checkDerefVar(var_clojure_DOT_core_the_DASH_ns)
 					tmp6 := lang.Apply(tmp5, []any{v2})
-					tmp7 := lang.Apply(nil, []any{tmp6, v3})
-					var v8 any = tmp7
-					_ = v8
-					var tmp9 any
-					tmp10 := checkDerefVar(var_clojure_DOT_core_meta)
-					tmp11 := lang.Apply(tmp10, []any{v3})
-					if lang.IsTruthy(tmp11) {
-						tmp12 := checkDerefVar(var_clojure_DOT_core_meta)
-						tmp13 := lang.Apply(tmp12, []any{v3})
-						tmp14, _ := lang.FieldOrMethod(v8, "setMeta")
-						if reflect.TypeOf(tmp14).Kind() != reflect.Func {
+					tmp7, _ := lang.FieldOrMethod(tmp6, "Intern")
+					if reflect.TypeOf(tmp7).Kind() != reflect.Func {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("Intern is not a function")))
+					}
+					tmp8 := lang.Apply(tmp7, []any{v3})
+					var v9 any = tmp8
+					_ = v9
+					var tmp10 any
+					tmp11 := checkDerefVar(var_clojure_DOT_core_meta)
+					tmp12 := lang.Apply(tmp11, []any{v3})
+					if lang.IsTruthy(tmp12) {
+						tmp13 := checkDerefVar(var_clojure_DOT_core_meta)
+						tmp14 := lang.Apply(tmp13, []any{v3})
+						tmp15, _ := lang.FieldOrMethod(v9, "setMeta")
+						if reflect.TypeOf(tmp15).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("setMeta is not a function")))
 						}
-						tmp15 := lang.Apply(tmp14, []any{tmp13})
-						tmp9 = tmp15
+						tmp16 := lang.Apply(tmp15, []any{tmp14})
+						tmp10 = tmp16
 					} else {
 					}
-					_ = tmp9
-					tmp4 = v8
+					_ = tmp10
+					tmp4 = v9
 				} // end let
 				return tmp4
 			case 3:
@@ -11526,7 +11530,7 @@ func LoadNS() {
 					// let binding "v"
 					tmp6 := checkDerefVar(var_clojure_DOT_core_the_DASH_ns)
 					tmp7 := lang.Apply(tmp6, []any{v2})
-					tmp8 := lang.Apply(nil, []any{tmp7, v3, v4})
+					tmp8 := lang.Apply(lang.InternVar, []any{tmp7, v3, v4, true})
 					var v9 any = tmp8
 					_ = v9
 					var tmp10 any

@@ -158,6 +158,12 @@
         (instance? go/uint32 x)
         (instance? go/uint16 x)
         (instance? go/uint8 x))
+
+   ;; intern
+   '(clojure.lang.Var/intern (the-ns ns) name) '(.Intern (the-ns ns) name)
+   '(clojure.lang.Var/intern (the-ns ns) name val) '(github.com:glojurelang:glojure:pkg:lang.InternVar (the-ns ns) name val true)
+   ;; create-ns
+   'clojure.lang.Namespace/findOrCreate 'github.com:glojurelang:glojure:pkg:lang.FindOrCreateNamespace
    })
 
 (defn create-simple-replacements
