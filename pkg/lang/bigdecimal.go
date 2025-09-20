@@ -7,9 +7,17 @@ import (
 	"bitbucket.org/pcastools/hash"
 )
 
-// BigDec is an arbitrary-precision decimal number. It wraps and has
-// the same semantics as big.Float. big.Float is not used directly
-// because it is mutable, and the core BigDecimal should not be.
+// BigDec is an arbitrary-precision floating point number. It wraps
+// and has the same semantics as big.Float. big.Float is not used
+// directly because it is mutable, and the core BigDecimal should not
+// be.
+//
+// TODO: swap out with a *decimal* representation. The go standard
+// library big.Float is a binary floating point representation,
+// which means that some decimal fractions cannot be represented
+// exactly. This can lead to unexpected results when doing
+// arithmetic with decimal fractions. A decimal representation
+// would avoid this problem.
 type BigDecimal struct {
 	val *big.Float
 }
@@ -107,7 +115,12 @@ func (n *BigDecimal) Quotient(other *BigDecimal) *BigDecimal {
 }
 
 func (n *BigDecimal) Remainder(other *BigDecimal) *BigDecimal {
-	panic("not implemented")
+	quotient := new(big.Float).Quo(n.val, other.val)
+	intQuotient, _ := quotient.Int(nil)
+	intQuotientFloat := new(big.Float).SetInt(intQuotient)
+	product := new(big.Float).Mul(intQuotientFloat, other.val)
+	remainder := new(big.Float).Sub(n.val, product)
+	return &BigDecimal{val: remainder}
 }
 
 func (n *BigDecimal) Cmp(other *BigDecimal) int {

@@ -104,7 +104,7 @@ func (r *LongRange) Next() ISeq {
 	if next >= r.end {
 		return nil
 	}
-	return &LongRange{start: next, end: r.end, step: r.step}
+	return &LongRange{start: next, end: r.end, step: r.step, count: r.count - 1}
 }
 
 func (r *LongRange) More() ISeq {

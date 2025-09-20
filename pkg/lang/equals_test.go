@@ -20,6 +20,7 @@ func TestEquiv(t *testing.T) {
 		{NewMap(1, 2).Seq(), NewVector(NewList(1, 2)), NewList(NewVector(1, 2))},
 		// empty lazy seqs are equal
 		{NewLazySeq(func() interface{} { return nil }), NewLazySeq(func() interface{} { return nil })},
+		{NewList(1, 2), NewLongRange(0, 3, 1).Next()},
 	}
 
 	for _, els := range equivs {

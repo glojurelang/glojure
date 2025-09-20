@@ -486,12 +486,14 @@ func Count(coll any) int {
 	return count
 }
 
-func Keys(m Associative) ISeq {
-	return NewMapKeySeq(Seq(m))
+func Keys(x any) ISeq {
+	// TODO: optimize for map case
+	return NewMapKeySeq(Seq(x))
 }
 
-func Vals(m Associative) ISeq {
-	return NewMapValSeq(Seq(m))
+func Vals(x any) ISeq {
+	// TODO: optimize for map case
+	return NewMapValSeq(Seq(x))
 }
 
 func Subvec(v IPersistentVector, start, end int) IPersistentVector {

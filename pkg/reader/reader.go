@@ -1008,7 +1008,7 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 		val := kv.(*lang.MapEntry).Val()
 
 		keyKW, ok := key.(lang.Keyword)
-		if !ok || keyKW.Namespace() != "" {
+		if !ok || !lang.IsNil(keyKW.Namespace()) {
 			newKeyVals = append(newKeyVals, key, val)
 			continue
 		}
@@ -1137,6 +1137,10 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 		// if denom is 0, error
 		if denomBig.ToBigInteger().Cmp(big.NewInt(0)) == 0 {
 			return nil, r.error("divide by zero")
+		}
+		// if num is 0, return 0
+		if numBig.ToBigInteger().Cmp(big.NewInt(0)) == 0 {
+			return int64(0), nil
 		}
 
 		return lang.NewRatioBigInt(numBig, denomBig), nil

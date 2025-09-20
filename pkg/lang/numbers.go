@@ -98,6 +98,26 @@ func (nm *NumberMethods) Remainder(x, y any) any {
 	return Ops(x).Combine(yops).Remainder(x, y)
 }
 
+func (nm *NumberMethods) Rationalize(x any) any {
+	switch x := x.(type) {
+	case float32:
+		return nm.Rationalize(NewBigDecimalFromFloat64(float64(x)))
+	case float64:
+		return nm.Rationalize(NewBigDecimalFromFloat64(x))
+	case *BigDecimal:
+		bx := x.val
+		rat, _ := bx.Rat(nil)
+		if rat.IsInt() {
+			return NewBigIntFromGoBigInt(rat.Num())
+		}
+		return &Ratio{val: rat}
+	}
+	if !IsNumber(x) {
+		panic(fmt.Errorf("cannot rationalize %T", x))
+	}
+	return x
+}
+
 func (nm *NumberMethods) And(x, y any) any {
 	return bitOpsCast(x) & bitOpsCast(y)
 }

@@ -3136,7 +3136,7 @@ func LoadNS() {
 	// *loaded-libs*
 	{
 		tmp0 := sym__STAR_loaded_DASH_libs_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(5809), kw_column, int(10), kw_end_DASH_line, int(5812), kw_end_DASH_column, int(15), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
-		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_clojure_DOT_core_DOT_protocols, sym_clojure_DOT_string, sym_glojure_DOT_go_DOT_io, sym_user})))
+		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_clojure_DOT_string, sym_user, sym_clojure_DOT_core_DOT_protocols, sym_glojure_DOT_go_DOT_io})))
 		var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3993,7 +3993,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v2 := args[0]
 			_ = v2
-			tmp3 := lang.Apply(nil, []any{v2})
+			tmp3 := lang.Apply(lang.FindOrCreateNamespace, []any{v2})
 			return tmp3
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
@@ -10862,7 +10862,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_get.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value mapped to key, not-found or nil if key not present\n  in associative collection, set, string, array, or ILookup instance.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2), int64(3)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1488), kw_end_DASH_line, int(1488))).(*lang.Symbol)
+		tmp0 := sym_get.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value mapped to key, not-found or nil if key not present\n  in associative collection, set, string, array, or ILookup instance.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(3), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1488), kw_end_DASH_line, int(1488))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -11493,25 +11493,29 @@ func LoadNS() {
 					// let binding "v"
 					tmp5 := checkDerefVar(var_clojure_DOT_core_the_DASH_ns)
 					tmp6 := lang.Apply(tmp5, []any{v2})
-					tmp7 := lang.Apply(nil, []any{tmp6, v3})
-					var v8 any = tmp7
-					_ = v8
-					var tmp9 any
-					tmp10 := checkDerefVar(var_clojure_DOT_core_meta)
-					tmp11 := lang.Apply(tmp10, []any{v3})
-					if lang.IsTruthy(tmp11) {
-						tmp12 := checkDerefVar(var_clojure_DOT_core_meta)
-						tmp13 := lang.Apply(tmp12, []any{v3})
-						tmp14, _ := lang.FieldOrMethod(v8, "setMeta")
-						if reflect.TypeOf(tmp14).Kind() != reflect.Func {
+					tmp7, _ := lang.FieldOrMethod(tmp6, "Intern")
+					if reflect.TypeOf(tmp7).Kind() != reflect.Func {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("Intern is not a function")))
+					}
+					tmp8 := lang.Apply(tmp7, []any{v3})
+					var v9 any = tmp8
+					_ = v9
+					var tmp10 any
+					tmp11 := checkDerefVar(var_clojure_DOT_core_meta)
+					tmp12 := lang.Apply(tmp11, []any{v3})
+					if lang.IsTruthy(tmp12) {
+						tmp13 := checkDerefVar(var_clojure_DOT_core_meta)
+						tmp14 := lang.Apply(tmp13, []any{v3})
+						tmp15, _ := lang.FieldOrMethod(v9, "setMeta")
+						if reflect.TypeOf(tmp15).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("setMeta is not a function")))
 						}
-						tmp15 := lang.Apply(tmp14, []any{tmp13})
-						tmp9 = tmp15
+						tmp16 := lang.Apply(tmp15, []any{tmp14})
+						tmp10 = tmp16
 					} else {
 					}
-					_ = tmp9
-					tmp4 = v8
+					_ = tmp10
+					tmp4 = v9
 				} // end let
 				return tmp4
 			case 3:
@@ -11526,7 +11530,7 @@ func LoadNS() {
 					// let binding "v"
 					tmp6 := checkDerefVar(var_clojure_DOT_core_the_DASH_ns)
 					tmp7 := lang.Apply(tmp6, []any{v2})
-					tmp8 := lang.Apply(nil, []any{tmp7, v3, v4})
+					tmp8 := lang.Apply(lang.InternVar, []any{tmp7, v3, v4, true})
 					var v9 any = tmp8
 					_ = v9
 					var tmp10 any
@@ -12698,7 +12702,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_nth.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_index), lang.NewVector(sym_coll, sym_index, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value at the index. get returns nil if index out of\n  bounds, nth throws an exception unless not-found is supplied.  nth\n  also works for strings, Java arrays, regex Matchers and Lists, and,\n  in O(n) time, for sequences.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2), int64(3)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(884), kw_end_DASH_line, int(884))).(*lang.Symbol)
+		tmp0 := sym_nth.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_index), lang.NewVector(sym_coll, sym_index, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value at the index. get returns nil if index out of\n  bounds, nth throws an exception unless not-found is supplied.  nth\n  also works for strings, Java arrays, regex Matchers and Lists, and,\n  in O(n) time, for sequences.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(3), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(884), kw_end_DASH_line, int(884))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -32660,8 +32664,8 @@ func LoadNS() {
 					var v8 any = tmp7
 					_ = v8
 					var tmp9 any
-					tmp10 := checkDerefVar(var_clojure_DOT_core__LT_)
-					tmp11 := checkDerefVar(var_clojure_DOT_core__LT__EQ_)
+					tmp10 := checkDerefVar(var_clojure_DOT_core__LT__EQ_)
+					tmp11 := checkDerefVar(var_clojure_DOT_core__LT_)
 					tmp12 := lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{tmp10, tmp11}))
 					tmp13 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5150), kw_column, int(11), kw_end_DASH_line, int(5150), kw_end_DASH_column, int(17))
 					tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
@@ -53465,7 +53469,7 @@ func LoadNS() {
 					var tmp19 any
 					{ // let
 						// let binding "supported"
-						tmp20 := lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{kw_as, kw_reload, kw_reload_DASH_all, kw_require, kw_use, kw_verbose, kw_refer, kw_as_DASH_alias}))
+						tmp20 := lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{kw_use, kw_refer, kw_verbose, kw_require, kw_reload_DASH_all, kw_reload, kw_as_DASH_alias, kw_as}))
 						tmp21 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5951), kw_column, int(21), kw_end_DASH_line, int(5951), kw_end_DASH_column, int(86))
 						tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
 						if err != nil {
@@ -55433,10 +55437,10 @@ func LoadNS() {
 		tmp51 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
 		tmp1.PreferMethod(tmp50, tmp51)
 		tmp52 := reflect.TypeOf((*lang.IRecord)(nil)).Elem()
-		tmp53 := reflect.TypeOf((*lang.IPersistentMap)(nil)).Elem()
+		tmp53 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
 		tmp1.PreferMethod(tmp52, tmp53)
 		tmp54 := reflect.TypeOf((*lang.IRecord)(nil)).Elem()
-		tmp55 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
+		tmp55 := reflect.TypeOf((*lang.IPersistentMap)(nil)).Elem()
 		tmp1.PreferMethod(tmp54, tmp55)
 		var_clojure_DOT_core_print_DASH_dup = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {

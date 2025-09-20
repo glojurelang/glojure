@@ -37,7 +37,9 @@ func (r *Ratio) Denominator() *big.Int {
 }
 
 func (r *Ratio) BigIntegerValue() *big.Int {
-	return new(big.Int).Div(r.val.Num(), r.val.Denom())
+	var tmp big.Int
+	res, _ := new(big.Int).QuoRem(r.val.Num(), r.val.Denom(), &tmp)
+	return res
 }
 
 func (r *Ratio) String() string {

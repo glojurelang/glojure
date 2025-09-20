@@ -43,13 +43,14 @@ func (k Keyword) value() string {
 	return k.kw.Get().(string)
 }
 
-func (k Keyword) Namespace() string {
-	// Return the namespace of the keyword, or the empty string if it
-	// doesn't have one.
+func (k Keyword) Namespace() any {
+	// Return the namespace of the keyword, or nil if it doesn't have
+	// one.
+	// TODO: support both nil and empty string namespace as clojure does
 	if i := strings.Index(k.value(), "/"); i != -1 {
 		return k.value()[:i]
 	}
-	return ""
+	return nil
 }
 
 func (k Keyword) Name() string {
@@ -59,6 +60,10 @@ func (k Keyword) Name() string {
 		return k.value()[i+1:]
 	}
 	return k.value()
+}
+
+func (k Keyword) Sym() *Symbol {
+	return InternSymbol(k.Namespace(), k.Name())
 }
 
 func (k Keyword) String() string {
@@ -106,14 +111,14 @@ func (k Keyword) Compare(other any) int {
 		if s == os {
 			return 0
 		}
-		ns := k.Namespace()
-		if ns == "" {
-			if otherKw.Namespace() != "" {
+		ns, ok := k.Namespace().(string)
+		if !ok {
+			if otherKw.Namespace() != nil {
 				return -1
 			}
 		} else {
-			ons := otherKw.Namespace()
-			if ons == "" {
+			ons, ok := otherKw.Namespace().(string)
+			if !ok {
 				return 1
 			}
 			nsc := strings.Compare(ns, ons)
