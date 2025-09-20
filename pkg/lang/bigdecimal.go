@@ -107,7 +107,12 @@ func (n *BigDecimal) Quotient(other *BigDecimal) *BigDecimal {
 }
 
 func (n *BigDecimal) Remainder(other *BigDecimal) *BigDecimal {
-	panic("not implemented")
+	quotient := new(big.Float).Quo(n.val, other.val)
+	intQuotient, _ := quotient.Int(nil)
+	intQuotientFloat := new(big.Float).SetInt(intQuotient)
+	product := new(big.Float).Mul(intQuotientFloat, other.val)
+	remainder := new(big.Float).Sub(n.val, product)
+	return &BigDecimal{val: remainder}
 }
 
 func (n *BigDecimal) Cmp(other *BigDecimal) int {

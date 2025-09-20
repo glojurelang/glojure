@@ -427,16 +427,20 @@ func (o ratioOps) Quotient(x, y any) any {
 	return AsRatio(x).Quotient(AsRatio(y))
 }
 func (o ratioOps) Remainder(x, y any) any {
-	xRat := AsRatio(x)
-	yRat := AsRatio(y)
+	xRat := AsRatio(x).val
+	yRat := AsRatio(y).val
 
-	q := new(big.Int)
-	q.Mul(xRat.val.Num(), yRat.val.Denom())
+	// BigInteger q = rx.numerator.multiply(ry.denominator).divide(
+	// 		rx.denominator.multiply(ry.numerator));
+	// Number ret = Numbers.minus(x, Numbers.multiply(q, y));
+	// return ret
 
-	qd := new(big.Int)
-	qd.Mul(xRat.val.Denom(), yRat.val.Num())
+	// result should be a BigInt
+	qn := new(big.Int).Mul(xRat.Num(), yRat.Denom())
+	qd := new(big.Int).Mul(xRat.Denom(), yRat.Num())
+	rem := new(big.Int)
+	q, rem := qn.QuoRem(qn, qd, rem)
 
-	q.Div(q, qd)
 	return Sub(x, Multiply(q, y))
 }
 func (o ratioOps) LT(x, y any) bool {
