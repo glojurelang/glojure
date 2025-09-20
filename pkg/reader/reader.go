@@ -1138,6 +1138,10 @@ func (r *Reader) readNumber(numStr string) (interface{}, error) {
 		if denomBig.ToBigInteger().Cmp(big.NewInt(0)) == 0 {
 			return nil, r.error("divide by zero")
 		}
+		// if num is 0, return 0
+		if numBig.ToBigInteger().Cmp(big.NewInt(0)) == 0 {
+			return int64(0), nil
+		}
 
 		return lang.NewRatioBigInt(numBig, denomBig), nil
 	}
