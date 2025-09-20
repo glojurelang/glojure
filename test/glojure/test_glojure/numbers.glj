@@ -144,10 +144,10 @@
    [char             [:error        (char 0)    (char 1)    (char 127)    (char 32767)   :error               :error                :error             :error]]
    ;; In go, char == rune, which is equivalent to int32                                                                            ;; system-dependent
    [unchecked-char   [(Char -1)     (Char 0)    (Char 1)    (Char 127)    (Char 32767)   (Char math.MaxInt32) (Char -1)             :skip              :skip]]
-   ;; bytes are unsigned in go
-   [byte             [255           0           1           math.MaxInt8  :error         :error               :error                :error             :error]]
-   ;; bytes are unsigned in go                                                                                                     ;; system-dependent
-   [unchecked-byte   [255           0           1           math.MaxInt8  255            255                  255                   :skip              :skip]]
+   ;; bytes are unsigned in go, byte glojure byte func returns int8
+   [byte             [-1           0           1           math.MaxInt8  :error         :error               :error                :error             :error]]
+   ;; bytes are unsigned in go, byte glojure byte func returns int8                                                                 ;; system-dependent
+   [unchecked-byte   [-1            0           1           math.MaxInt8  -1             -1                   -1                   :skip              :skip]]
    [short            [-1            0           1           math.MaxInt8  math.MaxInt16  :error               :error                :error             :error]]
    ;;                                                                                                                              ;; system-dependent
    [unchecked-short  [-1            0           1           math.MaxInt8  math.MaxInt16  -1                   -1                    :skip              :skip]]
@@ -575,7 +575,7 @@ Math/pow overflows to Infinity."
 (deftest test-array-types
   (are [x y z] (= x (class y) (class z))
     (go/slice-of go/bool) (boolean-array 1) (booleans (boolean-array 1 true))
-    (go/slice-of go/byte) (byte-array 1) (bytes (byte-array 1 (byte 1)))
+    (go/slice-of go/int8) (byte-array 1) (bytes (byte-array 1 (byte 1)))
     (go/slice-of github.com:glojurelang:glojure:pkg:lang.Char) (char-array 1) (chars (char-array 1 \a))
     (go/slice-of go/int16) (short-array 1) (shorts (short-array 1 (short 1)))
     (go/slice-of go/float32) (float-array 1) (floats (float-array 1 1))
