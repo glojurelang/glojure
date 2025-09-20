@@ -1410,24 +1410,12 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node, error) {
 
 	// Build skip check set
 	skipCheckSet := make(map[int64]bool)
-	if skipCheck != nil {
+	if !lang.IsNil(skipCheck) {
 		if set, ok := skipCheck.(IPersistentSet); ok {
 			for seq := Seq(set); seq != nil; seq = seq.Next() {
 				val := First(seq)
-				switch key := val.(type) {
-				case int64:
-					skipCheckSet[key] = true
-				case int:
-					skipCheckSet[int64(key)] = true
-				case int32:
-					skipCheckSet[int64(key)] = true
-				case uint32:
-					skipCheckSet[int64(key)] = true
-				case uint64:
-					skipCheckSet[int64(key)] = true
-				case uint:
-					skipCheckSet[int64(key)] = true
-				}
+				valInt := lang.AsInt64(val)
+				skipCheckSet[valInt] = true
 			}
 		}
 	}
@@ -1440,23 +1428,7 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node, error) {
 		val := mapEntry.Val()
 
 		// Convert key to int64
-		var keyInt int64
-		switch k := key.(type) {
-		case int64:
-			keyInt = k
-		case int:
-			keyInt = int64(k)
-		case int32:
-			keyInt = int64(k)
-		case uint32:
-			keyInt = int64(k)
-		case uint64:
-			keyInt = int64(k)
-		case uint:
-			keyInt = int64(k)
-		default:
-			return nil, exInfo(fmt.Sprintf("case* map key must be integer, got %T", key), nil)
-		}
+		keyInt := lang.AsInt64(key)
 
 		// Extract the vector [test-constant result-expr]
 		if Count(val) != 2 {
@@ -1471,32 +1443,8 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node, error) {
 		// without comparison (they contain condp expressions for collision handling)
 		hasCollision := false
 
-		// Check if the map key is in the skip check set
-		switch k := key.(type) {
-		case int64:
-			if _, isCollision := skipCheckSet[k]; isCollision {
-				hasCollision = true
-			}
-		case int:
-			if _, isCollision := skipCheckSet[int64(k)]; isCollision {
-				hasCollision = true
-			}
-		case int32:
-			if _, isCollision := skipCheckSet[int64(k)]; isCollision {
-				hasCollision = true
-			}
-		case uint32:
-			if _, isCollision := skipCheckSet[int64(k)]; isCollision {
-				hasCollision = true
-			}
-		case uint64:
-			if _, isCollision := skipCheckSet[int64(k)]; isCollision {
-				hasCollision = true
-			}
-		case uint:
-			if _, isCollision := skipCheckSet[int64(k)]; isCollision {
-				hasCollision = true
-			}
+		if _, isCollision := skipCheckSet[keyInt]; isCollision {
+			hasCollision = true
 		}
 
 		// Analyze the test constant and result expression
