@@ -5,29 +5,42 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime/debug"
 	"strconv"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
-// The current version of Glojure
-const VERSION = "0.3.0"
+var (
+	// The current version of Glojure
+	Version = func() string {
+		info, ok := debug.ReadBuildInfo()
+		if !ok {
+			return "0.0.0"
+		}
+		if info.Main.Version == "" || info.Main.Version == "(devel)" {
+			return "0.0.0"
+		}
+		// Trim any leading "v" from the version string
+		return strings.TrimPrefix(info.Main.Version, "v")
+	}()
+)
 
-// ParseVersion parses the VERSION string and returns a map with major, minor,
+// parseVersion parses the Version string and returns a map with major, minor,
 // incremental, and qualifier
-func ParseVersion(version string) lang.IPersistentMap {
+func parseVersion(version string) lang.IPersistentMap {
 	parts := strings.Split(version, ".")
 
 	major, _ := strconv.Atoi(parts[0])
 	minor, _ := strconv.Atoi(parts[1])
 
 	incremental := 0
-	qualifier := interface{}(nil)
+	var qualifier any
 
 	if len(parts) > 2 {
 		// Check if the third part contains a qualifier (e.g., "0-alpha")
-		incrementalPart := parts[2]
+		incrementalPart := strings.Join(parts[2:], ".")
 		if strings.Contains(incrementalPart, "-") {
 			qualifierParts := strings.SplitN(incrementalPart, "-", 2)
 			incremental, _ = strconv.Atoi(qualifierParts[0])
@@ -129,7 +142,7 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 	core := lang.FindNamespace(lang.NewSymbol("clojure.core"))
 	versionVar := core.FindInternedVar(lang.NewSymbol("*glojure-version*"))
 	if versionVar != nil {
-		versionVar.BindRoot(ParseVersion(VERSION))
+		versionVar.BindRoot(parseVersion(Version))
 	}
 
 	lang.InternVar(core, lang.NewSymbol("load-file"), func(filename string) any {

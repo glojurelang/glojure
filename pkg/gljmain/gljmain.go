@@ -34,7 +34,7 @@ Examples:
   glj --help            # Show this help
 
 For more information, visit: https://github.com/glojurelang/glojure
-`, runtime.VERSION)
+`, runtime.Version)
 }
 
 func Main(args []string) {
@@ -43,7 +43,7 @@ func Main(args []string) {
 	if len(args) == 0 {
 		repl.Start()
 	} else if args[0] == "--version" {
-		fmt.Printf("glojure v%s\n", runtime.VERSION)
+		fmt.Printf("glojure v%s\n", runtime.Version)
 		return
 	} else if args[0] == "--help" || args[0] == "-h" {
 		printHelp()
