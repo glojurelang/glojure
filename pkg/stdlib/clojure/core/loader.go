@@ -3136,7 +3136,7 @@ func LoadNS() {
 	// *loaded-libs*
 	{
 		tmp0 := sym__STAR_loaded_DASH_libs_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(5809), kw_column, int(10), kw_end_DASH_line, int(5812), kw_end_DASH_column, int(15), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
-		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_clojure_DOT_core_DOT_protocols, sym_clojure_DOT_string, sym_glojure_DOT_go_DOT_io, sym_user})))
+		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_clojure_DOT_string, sym_user, sym_clojure_DOT_core_DOT_protocols, sym_glojure_DOT_go_DOT_io})))
 		var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -10862,7 +10862,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_get.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value mapped to key, not-found or nil if key not present\n  in associative collection, set, string, array, or ILookup instance.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2), int64(3)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1488), kw_end_DASH_line, int(1488))).(*lang.Symbol)
+		tmp0 := sym_get.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value mapped to key, not-found or nil if key not present\n  in associative collection, set, string, array, or ILookup instance.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(3), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1488), kw_end_DASH_line, int(1488))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -12698,7 +12698,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_nth.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_index), lang.NewVector(sym_coll, sym_index, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value at the index. get returns nil if index out of\n  bounds, nth throws an exception unless not-found is supplied.  nth\n  also works for strings, Java arrays, regex Matchers and Lists, and,\n  in O(n) time, for sequences.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2), int64(3)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(884), kw_end_DASH_line, int(884))).(*lang.Symbol)
+		tmp0 := sym_nth.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_index), lang.NewVector(sym_coll, sym_index, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value at the index. get returns nil if index out of\n  bounds, nth throws an exception unless not-found is supplied.  nth\n  also works for strings, Java arrays, regex Matchers and Lists, and,\n  in O(n) time, for sequences.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(3), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(884), kw_end_DASH_line, int(884))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -32660,8 +32660,8 @@ func LoadNS() {
 					var v8 any = tmp7
 					_ = v8
 					var tmp9 any
-					tmp10 := checkDerefVar(var_clojure_DOT_core__LT_)
-					tmp11 := checkDerefVar(var_clojure_DOT_core__LT__EQ_)
+					tmp10 := checkDerefVar(var_clojure_DOT_core__LT__EQ_)
+					tmp11 := checkDerefVar(var_clojure_DOT_core__LT_)
 					tmp12 := lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{tmp10, tmp11}))
 					tmp13 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5150), kw_column, int(11), kw_end_DASH_line, int(5150), kw_end_DASH_column, int(17))
 					tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
@@ -53465,7 +53465,7 @@ func LoadNS() {
 					var tmp19 any
 					{ // let
 						// let binding "supported"
-						tmp20 := lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{kw_as, kw_reload, kw_reload_DASH_all, kw_require, kw_use, kw_verbose, kw_refer, kw_as_DASH_alias}))
+						tmp20 := lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{kw_use, kw_refer, kw_verbose, kw_require, kw_reload_DASH_all, kw_reload, kw_as_DASH_alias, kw_as}))
 						tmp21 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5951), kw_column, int(21), kw_end_DASH_line, int(5951), kw_end_DASH_column, int(86))
 						tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
 						if err != nil {
@@ -55433,10 +55433,10 @@ func LoadNS() {
 		tmp51 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
 		tmp1.PreferMethod(tmp50, tmp51)
 		tmp52 := reflect.TypeOf((*lang.IRecord)(nil)).Elem()
-		tmp53 := reflect.TypeOf((*lang.IPersistentMap)(nil)).Elem()
+		tmp53 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
 		tmp1.PreferMethod(tmp52, tmp53)
 		tmp54 := reflect.TypeOf((*lang.IRecord)(nil)).Elem()
-		tmp55 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
+		tmp55 := reflect.TypeOf((*lang.IPersistentMap)(nil)).Elem()
 		tmp1.PreferMethod(tmp54, tmp55)
 		var_clojure_DOT_core_print_DASH_dup = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
