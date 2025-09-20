@@ -32,7 +32,7 @@ var (
 	_ ISeq                  = (*LazySeq)(nil)
 	_ IPending              = (*LazySeq)(nil)
 	_ IObj                  = (*LazySeq)(nil)
-	_ Counted               = (*LazySeq)(nil)
+	_ Counter               = (*LazySeq)(nil)
 	_ Sequential            = (*LazySeq)(nil)
 	_ IPersistentCollection = (*LazySeq)(nil)
 	_ IHashEq               = (*LazySeq)(nil)
@@ -42,7 +42,7 @@ func (s *LazySeq) xxx_sequential() {}
 
 func (s *LazySeq) First() interface{} {
 	seq := s.Seq()
-	if seq == nil {
+	if IsNil(seq) {
 		return nil
 	}
 	return seq.First()
@@ -50,7 +50,7 @@ func (s *LazySeq) First() interface{} {
 
 func (s *LazySeq) Next() ISeq {
 	seq := s.Seq()
-	if seq == nil {
+	if IsNil(seq) {
 		return nil
 	}
 	return seq.Next()
@@ -58,7 +58,7 @@ func (s *LazySeq) Next() ISeq {
 
 func (s *LazySeq) More() ISeq {
 	seq := s.Seq()
-	if seq == nil {
+	if IsNil(seq) {
 		return emptyList
 	}
 	return seq.More()
@@ -74,24 +74,24 @@ func (s *LazySeq) Empty() IPersistentCollection {
 
 func (s *LazySeq) Equals(o interface{}) bool {
 	seq := s.Seq()
-	if s != nil {
+	if !IsNil(seq) {
 		return Equals(seq, o)
 	}
-	return Seq(o) == nil
+	return IsNil(Seq(o))
 }
 
 func (s *LazySeq) Equiv(o interface{}) bool {
 	seq := s.Seq()
-	if s != nil {
+	if !IsNil(seq) {
 		return Equiv(seq, o)
 	}
-	return Seq(o) == nil
+	return IsNil(Seq(o))
 }
 
 func (s *LazySeq) IsRealized() bool {
 	s.realizeMtx.RLock()
 	defer s.realizeMtx.RUnlock()
-	return s.fn == nil
+	return IsNil(s.fn)
 }
 
 func (s *LazySeq) realize() interface{} {
@@ -114,7 +114,7 @@ func (s *LazySeq) Seq() ISeq {
 
 	s.realize()
 
-	if s.sv == nil {
+	if IsNil(s.sv) {
 		return s.seq
 	}
 	ls := s.sv

@@ -1393,7 +1393,7 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node, error) {
 		return nil, exInfo(fmt.Sprintf("case*: %v", err), nil)
 	}
 	if switchType != KWCompact && switchType != KWSparse {
-		return nil, exInfo(fmt.Sprintf("unexpected shift type: %v", switchType), nil)
+		return nil, exInfo(fmt.Sprintf("unexpected switch type: %v", switchType), nil)
 	}
 	if testType != KWInt && testType != KWHashIdentity && testType != KWHashEquiv {
 		return nil, exInfo(fmt.Sprintf("unexpected test type: %v", testType), nil)
@@ -1408,36 +1408,80 @@ func (a *Analyzer) parseCaseStar(form interface{}, env Env) (*ast.Node, error) {
 		return nil, err
 	}
 
-	var nodes []*ast.Node
+	// Build skip check set
+	skipCheckSet := make(map[int64]bool)
+	if !lang.IsNil(skipCheck) {
+		if set, ok := skipCheck.(IPersistentSet); ok {
+			for seq := Seq(set); seq != nil; seq = seq.Next() {
+				val := First(seq)
+				valInt := lang.AsInt64(val)
+				skipCheckSet[valInt] = true
+			}
+		}
+	}
+
+	// Process case map entries
+	var entries []ast.CaseEntry
 	for seq := Seq(caseMap); seq != nil; seq = seq.Next() {
-		// TODO: is the shift, mask, etc. relevant for anything but
-		// performance? omitting for now.
-		entry := First(seq).(IMapEntry).Val()
-		cond, then := First(entry), second(entry)
-		// TODO: support a vector of conditions
-		condExpr, err := a.analyzeConst(cond, ctxEnv(env, KWCtxExpr))
+		mapEntry := First(seq).(IMapEntry)
+		key := mapEntry.Key()
+		val := mapEntry.Val()
+
+		// Convert key to int64
+		keyInt := lang.AsInt64(key)
+
+		// Extract the vector [test-constant result-expr]
+		if Count(val) != 2 {
+			return nil, exInfo("case* map value must be a 2-element vector", nil)
+		}
+
+		testConstant := First(val)
+		resultExpr := second(val)
+
+		// Check if this is a collision case
+		// In Clojure, entries whose keys are in skipCheck should be evaluated directly
+		// without comparison (they contain condp expressions for collision handling)
+		hasCollision := false
+
+		if _, isCollision := skipCheckSet[keyInt]; isCollision {
+			hasCollision = true
+		}
+
+		// Analyze the test constant and result expression
+		var testConstantNode *ast.Node
+		if !hasCollision {
+			// For non-collision cases, analyze the test constant
+			testConstantNode, err = a.analyzeConst(testConstant, ctxEnv(env, KWCtxExpr))
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		// Analyze the result expression (or condp for collisions)
+		resultExprNode, err := a.analyzeForm(resultExpr, env)
 		if err != nil {
 			return nil, err
 		}
-		thenExpr, err := a.analyzeForm(then, env)
-		if err != nil {
-			return nil, err
-		}
-		caseNode := ast.MakeNode(ast.OpCaseNode, form)
-		caseNode.Env = env
-		caseNode.Sub = &ast.CaseNodeNode{
-			Tests: []*ast.Node{condExpr},
-			Then:  thenExpr,
-		}
-		nodes = append(nodes, caseNode)
+
+		entries = append(entries, ast.CaseEntry{
+			Key:          keyInt,
+			TestConstant: testConstantNode,
+			ResultExpr:   resultExprNode,
+			HasCollision: hasCollision,
+		})
 	}
 
 	n := ast.MakeNode(ast.OpCase, form)
 	n.Env = env
 	n.Sub = &ast.CaseNode{
-		Test:    testExpr,
-		Nodes:   nodes,
-		Default: defaultExpr,
+		Test:       testExpr,
+		Shift:      shift,
+		Mask:       mask,
+		TestType:   testType,
+		SwitchType: switchType,
+		Default:    defaultExpr,
+		Entries:    entries,
+		SkipCheck:  skipCheckSet,
 	}
 	return n, nil
 }

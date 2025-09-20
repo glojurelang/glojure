@@ -72,6 +72,8 @@ func (v *SubVector) Count() int {
 	return v.end - v.start
 }
 
+func (v *SubVector) xxx_counted() {}
+
 func (v *SubVector) Length() int {
 	return v.Count()
 }

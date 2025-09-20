@@ -18,6 +18,8 @@ func TestEquiv(t *testing.T) {
 		{NewPersistentHashMap(), emptyMap},
 		{NewPersistentHashMap(1, 2, 3, 4), NewMap(1, 2, 3, 4), NewMap(3, 4, 1, 2)},
 		{NewMap(1, 2).Seq(), NewVector(NewList(1, 2)), NewList(NewVector(1, 2))},
+		// empty lazy seqs are equal
+		{NewLazySeq(func() interface{} { return nil }), NewLazySeq(func() interface{} { return nil })},
 	}
 
 	for _, els := range equivs {

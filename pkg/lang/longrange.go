@@ -29,6 +29,7 @@ var (
 	_ ASeq        = (*LongRange)(nil)
 	_ IDrop       = (*LongRange)(nil)
 	_ IChunkedSeq = (*LongRange)(nil)
+	_ Counted     = (*LongRange)(nil)
 
 	_ IChunk      = (*LongChunk)(nil)
 	_ IReduceInit = (*LongChunk)(nil)
@@ -133,6 +134,8 @@ func (r *LongRange) Cons(o any) Conser {
 func (r *LongRange) Count() int {
 	return r.count
 }
+
+func (r *LongRange) xxx_counted() {}
 
 func (r *LongRange) Empty() IPersistentCollection {
 	return aseqEmpty()
@@ -241,6 +244,8 @@ func (c *LongChunk) NthDefault(i int, notFound any) any {
 func (c *LongChunk) Count() int {
 	return c.count
 }
+
+func (c *LongChunk) xxx_counted() {}
 
 func (c *LongChunk) DropFirst() IChunk {
 	if c.count <= 0 {

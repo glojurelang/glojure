@@ -34,6 +34,8 @@ type (
 )
 
 var (
+	_ Hasher = (*PersistentVector)(nil)
+
 	_ ASeq       = (*apvSeq)(nil)
 	_ IndexedSeq = (*apvSeq)(nil)
 	_ IReduce    = (*apvSeq)(nil)
@@ -203,6 +205,19 @@ func apersistentVectorHashEq(hc *uint32, a APersistentVector) uint32 {
 	return hash
 }
 
+func apersistentVectorHash(hc *uint32, a APersistentVector) uint32 {
+	if *hc != 0 {
+		return *hc
+	}
+	var n int
+	var hash uint32 = 1
+	for ; n < a.Count(); n++ {
+		hash = 31*hash + Hash(a.Nth(n))
+	}
+	*hc = hash
+	return hash
+}
+
 func apersistentVectorInvoke(a APersistentVector, args ...any) any {
 	if len(args) != 1 {
 		panic(NewIllegalArgumentError(fmt.Sprintf("vector apply expects one argument, got %d", len(args))))
@@ -258,6 +273,8 @@ func (s *apvSeq) Index() int {
 func (s *apvSeq) Count() int {
 	return s.v.Count() - s.i
 }
+
+func (s *apvSeq) xxx_counted() {}
 
 func (s *apvSeq) Cons(o any) Conser {
 	return aseqCons(s, o)
@@ -364,6 +381,8 @@ func (s *apvRSeq) Index() int {
 func (s *apvRSeq) Count() int {
 	return s.i + 1
 }
+
+func (s *apvRSeq) xxx_counted() {}
 
 func (s *apvRSeq) Cons(o any) Conser {
 	return aseqCons(s, o)

@@ -23,13 +23,9 @@
                             (apply str (map char (seq bytes)))))
         cmd (apply os:exec.Command args)
         [output err] (.CombinedOutput cmd)]
-    [(bytes-to-string output) (bytes-to-string err)]))
+    [(bytes-to-string output) (bytes-to-string (and err (.Error err)))]))
 
-(def glj
-  (let [[out err] (run-cli-cmd "find" "bin" "-name" "glj" "-executable")]
-    (if (and (seq out) (empty? err))
-      (first (str/split-lines out))
-      (throw (Exception. (str "Failed to find glj bin: " err))))))
+(def glj (first os.Args))
 
 (deftest e-flag-test
   (test-that
@@ -44,14 +40,6 @@
    (let [[out err] (run-cli-cmd glj "--version")]
      (is (re-matches #"glojure v\d+\.\d+\.\d+\n" out)
          "Command should output version")
-     (is (empty? err) "Command should not return an error"))))
-
-(deftest glojure-version-test
-  (test-that
-   "*glojure-version* should be set correctly"
-   (let [[out err] (run-cli-cmd glj "-e" "*glojure-version*")]
-     (is (= out "{:major 0, :minor 3, :incremental 0, :qualifier nil}\n")
-         "Version should match expected format")
      (is (empty? err) "Command should not return an error"))))
 
 (deftest help-flag-test

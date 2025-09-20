@@ -1,0 +1,255 @@
+;   Test cases for the case macro and case* special form
+;;
+;; This file tests all the different paths through case evaluation:
+;; - Compact integer dispatch
+;; - Sparse integer dispatch
+;; - Hash-based dispatch with keywords (identity)
+;; - Hash-based dispatch with strings and other types (equiv)
+;; - Default expressions
+;; - Multiple constants mapping to same expression
+;; - Hash collision handling
+
+(ns glojure.test-glojure.case
+  (:use clojure.test))
+
+;; Helper macro to test case expansion
+(defmacro case-expands-to
+  "Test that a case form expands to the expected case* form"
+  [case-form expected-type expected-switch]
+  `(let [expanded# (macroexpand-1 '~case-form)
+         case*-form# (nth expanded# 2)] ; Extract case* from the let
+    (when (and (seq? case*-form#) (= 'case* (first case*-form#)))
+      (let [switch-type# (nth case*-form# 6)
+            test-type# (nth case*-form# 7)]
+        (is (= ~expected-switch switch-type#)
+            (str "Expected switch type " ~expected-switch " but got " switch-type#))
+        (is (= ~expected-type test-type#)
+            (str "Expected test type " ~expected-type " but got " test-type#))))))
+
+;; Test compact integer dispatch
+(deftest compact-int-case
+  (testing "Small consecutive integers use compact dispatch"
+    (case-expands-to (case x 1 :one 2 :two 3 :three) :int :compact)
+    (is (= :one (case 1 1 :one 2 :two 3 :three)))
+    (is (= :two (case 2 1 :one 2 :two 3 :three)))
+    (is (= :three (case 3 1 :one 2 :two 3 :three))))
+
+  (testing "Negative integers"
+    (is (= :neg-one (case -1 -3 :neg-three -2 :neg-two -1 :neg-one)))
+    (is (= :neg-two (case -2 -3 :neg-three -2 :neg-two -1 :neg-one))))
+
+  (testing "Zero"
+    (is (= :zero (case 0 -1 :neg 0 :zero 1 :pos)))
+    (is (= :pos (case 1 -1 :neg 0 :zero 1 :pos)))))
+
+;; Test sparse integer dispatch
+(deftest sparse-int-case
+  (testing "Integers with large gaps use sparse dispatch"
+    ;; Need enough cases with a range > 8192 to trigger sparse
+    (let [test-val 5]
+      (is (= :five
+             (case test-val
+               0 :zero 1 :one 2 :two 3 :three 4 :four
+               5 :five 6 :six 7 :seven 8 :eight 9 :nine
+               10 :ten 11 :eleven 12 :twelve 13 :thirteen
+               8193 :over-limit)))))
+
+  (testing "Very large integer values"
+    (is (= :big (case 1000000 1000000 :big -1000000 :neg-big)))
+    (is (= :neg-big (case -1000000 1000000 :big -1000000 :neg-big)))))
+
+;; Test keyword dispatch (hash-identity)
+(deftest keyword-case
+  (testing "Keywords use hash-identity dispatch"
+    (case-expands-to (case x :foo :a :bar :b) :hash-identity :compact)
+    (is (= :a (case :foo :foo :a :bar :b :baz :c)))
+    (is (= :b (case :bar :foo :a :bar :b :baz :c)))
+    (is (= :c (case :baz :foo :a :bar :b :baz :c))))
+
+  (testing "Namespaced keywords"
+    (is (= :found (case ::foo ::foo :found ::bar :not-found)))
+    (is (= :user-foo (case :user/foo :user/foo :user-foo :other/foo :other-foo)))))
+
+;; Test string dispatch (hash-equiv)
+(deftest string-case
+  (testing "Strings use hash-equiv dispatch"
+    (case-expands-to (case x "foo" :a "bar" :b) :hash-equiv :compact)
+    (is (= :a (case "foo" "foo" :a "bar" :b)))
+    (is (= :b (case "bar" "foo" :a "bar" :b))))
+
+  (testing "Empty string"
+    (is (= :empty (case "" "" :empty "foo" :not-empty)))
+    (is (= :not-empty (case "foo" "" :empty "foo" :not-empty))))
+
+  (testing "Multi-line strings"
+    (let [multiline "line1\nline2"]
+      (is (= :multi (case multiline
+                      "single" :single
+                      "line1\nline2" :multi))))))
+
+;; Test symbols
+(deftest symbol-case
+  (testing "Symbols in case"
+    (is (= :a-sym (case 'foo foo :a-sym bar :b-sym)))
+    (is (= :b-sym (case 'bar foo :a-sym bar :b-sym))))
+
+  (testing "Namespaced symbols"
+    (is (= :clojure (case 'clojure.core/map
+                       clojure.core/map :clojure
+                       user/map :user)))))
+
+;; Test character dispatch
+(deftest character-case
+  (testing "Characters"
+    (is (= :a (case \a \a :a \b :b \c :c)))
+    (is (= :b (case \b \a :a \b :b \c :c)))
+    (is (= :newline (case \newline \newline :newline \space :space)))))
+
+;; Test default expressions
+(deftest default-case
+  (testing "Default with no match"
+    (is (= :default (case 99 1 :one 2 :two :default)))
+    (is (= "default" (case :unknown :foo "foo" :bar "bar" "default"))))
+
+  (testing "No default throws exception"
+    (is (thrown? github.com:glojurelang:glojure:pkg:lang.*IllegalArgumentError
+                 (case 99 1 :one 2 :two))))
+
+  (testing "Default expression is evaluated"
+    (let [counter (atom 0)]
+      (case :unknown
+        :foo :matched
+        (swap! counter inc))
+      (is (= 1 @counter)))))
+
+;; Test multiple constants mapping to same result
+(deftest grouped-constants-case
+  (testing "List of constants"
+    (is (= :vowel (case \a (\a \e \i \o \u) :vowel :consonant)))
+    (is (= :vowel (case \e (\a \e \i \o \u) :vowel :consonant)))
+    (is (= :vowel (case \i (\a \e \i \o \u) :vowel :consonant)))
+    (is (= :consonant (case \b (\a \e \i \o \u) :vowel :consonant))))
+
+  (testing "Mixed types in groups"
+    (is (= :found (case 1 (1 2 3) :found :not-found)))
+    (is (= :found (case 2 (1 2 3) :found :not-found)))
+    (is (= :found (case 3 (1 2 3) :found :not-found)))))
+
+;; Test nil
+(deftest nil-case
+  (testing "nil as test value"
+    (is (= :nil (case nil nil :nil :not-nil)))
+    (is (= :not-nil (case 1 nil :nil :not-nil))))
+
+  (testing "nil as result"
+    (is (nil? (case 1 1 nil 2 :two)))
+    (is (nil? (case :foo :foo nil :bar false)))))
+
+;; Test boolean values
+(deftest boolean-case
+  (testing "Boolean test values"
+    (is (= :true (case true true :true false :false)))
+    (is (= :false (case false true :true false :false)))
+    (is (= :default (case nil true :true false :false :default))))
+
+  (testing "Boolean false vs nil distinction"
+    ;; This is a specific test case that was failing
+    (is (= :boolean-false-result
+           (case false
+             false :boolean-false-result
+             nil :nil-result
+             :default)))
+    (is (= :nil-result
+           (case nil
+             false :boolean-false-result
+             nil :nil-result
+             :default)))))
+
+;; Test composite values (vectors, lists, maps, ets)
+(deftest composite-case
+  (testing "Vectors as test constants"
+    (is (= :empty-vec (case [] [] :empty-vec [1] :one-vec)))
+    (is (= :one-vec (case [1] [] :empty-vec [1] :one-vec)))
+    (is (= :pair (case [1 2] [1 2] :pair [2 1] :reversed)))
+    (is (= :map (case {:a :map :of :kws}
+                     {:a :map :of :kws} :map
+                     :other)))
+    (is (= :set (case #{1 2 3}
+                     #{1 2 3} :set
+                     :other))))
+
+  (testing "Lists must use vectors as test constants"
+    ;; Lists can't be written directly as test constants because parentheses group multiple constants
+    ;; But a vector can be used to match a list
+    (is (= :list (case '(1 2)
+                   [1 2] :list  ; Vector matches the list (1 2)
+                   :other)))
+    (is (= :empty-list (case '()
+                         [] :empty-list
+                         :other)))
+    (is (= :other (case '(1 2 3)
+                    [1 2] :wrong-list
+                    :other)))))
+
+;; Test evaluation order
+(deftest evaluation-order
+  (testing "Test expression evaluated once"
+    (let [counter (atom 0)
+          test-fn (fn [] (swap! counter inc) 1)]
+      (case (test-fn)
+        1 :one
+        2 :two)
+      (is (= 1 @counter) "Test expression should be evaluated exactly once")))
+
+  (testing "Result expressions not evaluated until matched"
+    (let [side-effect (atom [])]
+      (case 2
+        1 (swap! side-effect conj :one)
+        2 (swap! side-effect conj :two)
+        3 (swap! side-effect conj :three))
+      (is (= [:two] @side-effect) "Only matched expression should be evaluated"))))
+
+;; Test case with all constant types mixed
+(deftest mixed-type-case
+  (testing "Different types in same case"
+    (let [test-fn (fn [x]
+                     (case x
+                       1 :int
+                       :foo :keyword
+                       "bar" :string
+                       \c :char
+                       true :bool
+                       nil :nil
+                       sym :symbol
+                       :other))]
+      (is (= :int (test-fn 1)))
+      (is (= :keyword (test-fn :foo)))
+      (is (= :string (test-fn "bar")))
+      (is (= :char (test-fn \c)))
+      (is (= :bool (test-fn true)))
+      (is (= :nil (test-fn nil)))
+      (is (= :symbol (test-fn 'sym)))
+      (is (= :other (test-fn [1 2 3]))))))
+
+;; Test edge cases
+(deftest edge-cases
+  (testing "Single clause with default"
+    (is (= :one (case 1 1 :one :default)))
+    (is (= :default (case 2 1 :one :default))))
+
+  (testing "Just default (degenerate case)"
+    (is (= :always (case (rand-int 1000) :always))))
+
+  (testing "Large number of cases"
+    (let [test-val 25]
+      (is (= :twentyfive
+             (case test-val
+               0 :zero 1 :one 2 :two 3 :three 4 :four
+               5 :five 6 :six 7 :seven 8 :eight 9 :nine
+               10 :ten 11 :eleven 12 :twelve 13 :thirteen 14 :fourteen
+               15 :fifteen 16 :sixteen 17 :seventeen 18 :eighteen 19 :nineteen
+               20 :twenty 21 :twentyone 22 :twentytwo 23 :twentythree 24 :twentyfour
+               25 :twentyfive 26 :twentysix 27 :twentyseven 28 :twentyeight 29 :twentynine
+               :other))))))
+
+(run-tests)

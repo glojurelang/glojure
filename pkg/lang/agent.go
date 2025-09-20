@@ -1,9 +1,15 @@
 package lang
 
-import "time"
+import (
+	"time"
+)
 
 type (
-	Agent struct{}
+	Agent struct {
+		meta IPersistentMap
+
+		watches IPersistentMap
+	}
 
 	future struct {
 		done chan struct{}
@@ -12,6 +18,8 @@ type (
 )
 
 var (
+	// _ ARef = (*Agent)(nil)
+
 	_ IBlockingDeref = (*future)(nil)
 	_ IDeref         = (*future)(nil)
 	_ IPending       = (*future)(nil)
@@ -53,6 +61,43 @@ func (f *future) IsRealized() bool {
 		return false
 	}
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Agent
+
+func (a *Agent) Deref() any {
+	panic("not implemented")
+}
+
+func (a *Agent) Watches() IPersistentMap {
+	return a.watches
+}
+
+// func (a *Agent) AddWatch(key interface{}, fn IFn) IRef {
+// 	a.watches = a.watches.Assoc(key, fn).(IPersistentMap)
+// 	return a
+// }
+
+func (a *Agent) RemoveWatch(key interface{}) {
+	a.watches = a.watches.Without(key)
+}
+
+func (a *Agent) notifyWatches(oldVal, newVal interface{}) {
+	watches := a.watches
+	if watches == nil || watches.Count() == 0 {
+		return
+	}
+
+	for seq := watches.Seq(); seq != nil; seq = seq.Next() {
+		entry := seq.First().(IMapEntry)
+		key := entry.Key()
+		fn := entry.Val().(IFn)
+		// Call watch function with key, ref, old-state, new-state
+		fn.Invoke(key, a, oldVal, newVal)
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 func ShutdownAgents() {
 	// TODO

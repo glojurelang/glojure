@@ -467,23 +467,126 @@ func (env *environment) EvalASTCase(n *ast.Node) (interface{}, error) {
 		return nil, err
 	}
 
-	for _, node := range caseNode.Nodes {
-		caseNodeNode := node.Sub.(*ast.CaseNodeNode)
-		tests := caseNodeNode.Tests
-		for _, test := range tests {
-			caseTestVal, err := env.EvalAST(test)
+	// Determine the lookup key based on test type
+	var lookupKey int64
+	testType := caseNode.TestType.(lang.Keyword)
+
+	switch testType {
+	case lang.KWInt:
+		// For integer test type, use the value directly
+		switch v := testVal.(type) {
+		case int64:
+			lookupKey = v
+		case int:
+			lookupKey = int64(v)
+		case int32:
+			lookupKey = int64(v)
+		case int16:
+			lookupKey = int64(v)
+		case int8:
+			lookupKey = int64(v)
+		default:
+			// Not an integer, won't match any case
+			return env.EvalAST(caseNode.Default)
+		}
+		// Apply shift and mask if needed
+		if caseNode.Mask != 0 {
+			lookupKey = int64(uint32(lookupKey>>uint(caseNode.Shift)) & uint32(caseNode.Mask))
+		}
+
+	case lang.KWHashIdentity:
+		// Use identity hash for keywords
+		hash := lang.IdentityHash(testVal)
+		// Apply shift and mask (if mask is 0, use raw hash)
+		if caseNode.Mask == 0 {
+			lookupKey = int64(hash)
+		} else {
+			lookupKey = int64(uint32(hash>>uint(caseNode.Shift)) & uint32(caseNode.Mask))
+		}
+
+	case lang.KWHashEquiv:
+		// Use hash for general values
+		hash := lang.Hash(testVal)
+		// Apply shift and mask (if mask is 0, use raw hash)
+		if caseNode.Mask == 0 {
+			lookupKey = int64(hash)
+		} else {
+			lookupKey = int64(uint32(hash>>uint(caseNode.Shift)) & uint32(caseNode.Mask))
+		}
+
+	default:
+		return nil, fmt.Errorf("unknown test type: %v", testType)
+	}
+
+	// Look for matching entry
+	// Following Clojure's implementation: find the entry whose key matches lookupKey
+	// If that entry is marked as collision, evaluate result directly (it's a condp)
+	// Otherwise, verify the test value matches before evaluating result
+
+	for _, entry := range caseNode.Entries {
+		if entry.Key != lookupKey {
+			continue
+		}
+		if entry.HasCollision {
+			// This entry's key is in skipCheck, so just evaluate the result
+			// The result should be a condp expression that does the comparison
+			result, err := env.EvalAST(entry.ResultExpr)
 			if err != nil {
 				return nil, err
 			}
-			if lang.Equals(testVal, caseTestVal) {
-				res, err := env.EvalAST(caseNodeNode.Then)
+			return result, nil
+		} else {
+			// Non-collision case, need to verify the actual value matches
+			if testType == lang.KWInt {
+				// For integers with shift/mask, we need to verify the actual value
+				// because multiple values can map to the same key
+				if caseNode.Mask != 0 {
+					// Need to check actual value matches
+					expectedVal, err := env.EvalAST(entry.TestConstant)
+					if err != nil {
+						return nil, err
+					}
+					if lang.Equals(testVal, expectedVal) {
+						result, err := env.EvalAST(entry.ResultExpr)
+						if err != nil {
+							return nil, err
+						}
+						return result, nil
+					}
+				} else {
+					// For integers without shift/mask, the key match is sufficient
+					result, err := env.EvalAST(entry.ResultExpr)
+					if err != nil {
+						return nil, err
+					}
+					return result, nil
+				}
+			} else {
+				// For hash-based dispatch, verify the actual value matches
+				expectedVal, err := env.EvalAST(entry.TestConstant)
 				if err != nil {
 					return nil, err
 				}
-				return res, nil
+
+				// Use appropriate comparison based on test type
+				var matches bool
+				if testType == lang.KWHashIdentity {
+					matches = testVal == expectedVal
+				} else {
+					matches = lang.Equals(testVal, expectedVal)
+				}
+				if matches {
+					result, err := env.EvalAST(entry.ResultExpr)
+					if err != nil {
+						return nil, err
+					}
+					return result, nil
+				}
 			}
 		}
 	}
+
+	// No match found, evaluate default
 	return env.EvalAST(caseNode.Default)
 }
 
@@ -504,8 +607,9 @@ func (env *environment) EvalASTDo(n *ast.Node) (interface{}, error) {
 func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error) {
 	letNode := n.Sub.(*ast.LetNode)
 
-	newEnv := env.PushScope().(*environment)
+	newEnv := env
 
+	boundNames := make(map[string]struct{})
 	var bindNameVals []interface{}
 
 	bindings := letNode.Bindings
@@ -518,11 +622,17 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 		if err != nil {
 			return nil, err
 		}
-		// TODO: this should not mutate in-place!
+		if _, ok := boundNames[name.Name()]; ok || newEnv == env {
+			// avoid overwriting a name in the same scope, or binding in the
+			// parent env
+			newEnv = newEnv.PushScope().(*environment)
+		}
+		boundNames[name.Name()] = struct{}{}
 		newEnv.BindLocal(name, initVal)
 
 		bindNameVals = append(bindNameVals, name, initVal)
 	}
+	boundNames = nil // free memory
 
 Recur:
 	for i := 0; i < len(bindNameVals); i += 2 {

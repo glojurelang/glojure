@@ -108,6 +108,8 @@ func (s *Set) Count() int {
 	return len(s.vals)
 }
 
+func (s *Set) xxx_counted() {}
+
 func (s *Set) IsEmpty() bool {
 	return s.Count() == 0
 }
@@ -149,6 +151,10 @@ func (s *Set) Seq() ISeq {
 
 func (s *Set) Equiv(o any) bool {
 	return apersistentsetEquiv(s, o)
+}
+
+func (s *Set) Hash() uint32 {
+	return apersistentsetHash(&s.hash, s)
 }
 
 func (s *Set) HashEq() uint32 {

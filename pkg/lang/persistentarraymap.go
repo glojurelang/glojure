@@ -225,6 +225,8 @@ func (m *Map) Count() int {
 	return len(m.keyVals) / 2
 }
 
+func (m *Map) xxx_counted() {}
+
 func (m *Map) Seq() ISeq {
 	if len(m.keyVals) == 0 {
 		return nil
@@ -271,6 +273,10 @@ func (m *Map) ContainsKey(k any) bool {
 
 func (m *Map) Equiv(o any) bool {
 	return apersistentmapEquiv(m, o)
+}
+
+func (m *Map) Hash() uint32 {
+	return apersistentmapHash(&m.hash, m)
 }
 
 func (m *Map) HashEq() uint32 {
@@ -426,6 +432,8 @@ func (s *MapSeq) Cons(o any) Conser {
 func (s *MapSeq) Count() int {
 	return len(s.keyVals) / 2
 }
+
+func (s *MapSeq) xxx_counted() {}
 
 func (s *MapSeq) Empty() IPersistentCollection {
 	return aseqEmpty()

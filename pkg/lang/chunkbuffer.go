@@ -38,3 +38,5 @@ func (cb *ChunkBuffer) Chunk() IChunk {
 func (cb *ChunkBuffer) Count() int {
 	return cb.end
 }
+
+func (cb *ChunkBuffer) xxx_counted() {}

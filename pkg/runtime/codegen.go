@@ -1211,24 +1211,109 @@ func (g *Generator) generateCase(node *ast.Node) string {
 	// instead we generate a series of if-else statements
 	// each test expression is compared to the testExpr using lang.Equals
 	// if a test matches, we evaluate the corresponding body and assign to resultVar
-	// if no tests match, we evaluate the default body (if any) and assign to resultVar
-	// if no default body, panic
+	// Generate code based on test type
+	testType := caseNode.TestType.(lang.Keyword)
+	
+	// Calculate the lookup key based on test type
+	lookupVar := g.allocateTempVar()
+	g.writef("var %s int64\n", lookupVar)
+	
+	switch testType {
+	case lang.KWInt:
+		// For integers, convert directly to int64 and apply shift/mask
+		g.writef("switch v := %s.(type) {\n", testExpr)
+		g.writef("case int64: %s = v\n", lookupVar)
+		g.writef("case int: %s = int64(v)\n", lookupVar)
+		g.writef("case int32: %s = int64(v)\n", lookupVar)
+		g.writef("case int16: %s = int64(v)\n", lookupVar)
+		g.writef("case int8: %s = int64(v)\n", lookupVar)
+		g.writef("default: %s = -1 // won't match any case\n", lookupVar)
+		g.writef("}\n")
+		// Apply shift and mask if needed
+		if caseNode.Mask != 0 {
+			g.writef("%s = int64(uint32(%s >> %d) & uint32(%d))\n",
+				lookupVar, lookupVar, caseNode.Shift, caseNode.Mask)
+		}
+		
+	case lang.KWHashIdentity:
+		// Use identity hash
+		if caseNode.Mask == 0 {
+			g.writef("%s = int64(lang.IdentityHash(%s))\n", lookupVar, testExpr)
+		} else {
+			g.writef("%s = int64(uint32(lang.IdentityHash(%s) >> %d) & uint32(%d))\n",
+				lookupVar, testExpr, caseNode.Shift, caseNode.Mask)
+		}
+			
+	case lang.KWHashEquiv:
+		// Use hash
+		if caseNode.Mask == 0 {
+			g.writef("%s = int64(lang.Hash(%s))\n", lookupVar, testExpr)
+		} else {
+			g.writef("%s = int64(uint32(lang.Hash(%s) >> %d) & uint32(%d))\n",
+				lookupVar, testExpr, caseNode.Shift, caseNode.Mask)
+		}
+	}
+	
+	// Generate switch statement for the entries
 	first := true
-	for i, node := range caseNode.Nodes {
-		caseNodeNode := node.Sub.(*ast.CaseNodeNode)
-		tests := caseNodeNode.Tests
-		g.writef("// case clause %d\n", i)
-		for _, test := range tests {
-			caseTestExpr := g.generateASTNode(test)
-			if first {
-				g.writef("if lang.Equals(%s, %s) {\n", testExpr, caseTestExpr)
-				first = false
+	for i, entry := range caseNode.Entries {
+		g.writef("// case entry %d (key=%d, collision=%v)\n", i, entry.Key, entry.HasCollision)
+		
+		if first {
+			g.writef("if %s == %d {\n", lookupVar, entry.Key)
+			first = false
+		} else {
+			g.writef("} else if %s == %d {\n", lookupVar, entry.Key)
+		}
+		
+		if entry.HasCollision {
+			// For collision cases, evaluate the condp expression
+			condpExpr := g.generateASTNode(entry.ResultExpr)
+			g.writeAssign(resultVar, condpExpr)
+		} else if testType == lang.KWInt {
+			// For integers with shift/mask, we need to verify the actual value
+			// because multiple values can map to the same key
+			if caseNode.Mask != 0 {
+				// Need to check actual value matches
+				expectedExpr := g.generateASTNode(entry.TestConstant)
+				g.writef("if lang.Equals(%s, %s) {\n", testExpr, expectedExpr)
+				resultExpr := g.generateASTNode(entry.ResultExpr)
+				g.writeAssign(resultVar, resultExpr)
+				g.writef("} else {\n")
+				// Fall through to default
+				if caseNode.Default != nil {
+					defaultExpr := g.generateASTNode(caseNode.Default)
+					g.writeAssign(resultVar, defaultExpr)
+				} else {
+					g.writef("panic(lang.NewIllegalArgumentError(fmt.Sprintf(\"No matching clause: %%v\", %s)))\n", testExpr)
+				}
+				g.writef("}\n")
 			} else {
-				g.writef("} else if lang.Equals(%s, %s) {\n", testExpr, caseTestExpr)
+				// For integers without shift/mask, the key match is sufficient
+				resultExpr := g.generateASTNode(entry.ResultExpr)
+				g.writeAssign(resultVar, resultExpr)
 			}
-			// Generate the then body
-			thenExpr := g.generateASTNode(caseNodeNode.Then)
-			g.writeAssign(resultVar, thenExpr)
+		} else {
+			// For hash-based dispatch, verify the actual value matches
+			expectedExpr := g.generateASTNode(entry.TestConstant)
+			g.writef("if ")
+			if testType == lang.KWHashIdentity {
+				g.writef("%s == %s", testExpr, expectedExpr)
+			} else {
+				g.writef("lang.Equals(%s, %s)", testExpr, expectedExpr)
+			}
+			g.writef(" {\n")
+			resultExpr := g.generateASTNode(entry.ResultExpr)
+			g.writeAssign(resultVar, resultExpr)
+			g.writef("} else {\n")
+			// Fall through to default
+			if caseNode.Default != nil {
+				defaultExpr := g.generateASTNode(caseNode.Default)
+				g.writeAssign(resultVar, defaultExpr)
+			} else {
+				g.writef("panic(lang.NewIllegalArgumentError(fmt.Sprintf(\"No matching clause: %%v\", %s)))\n", testExpr)
+			}
+			g.writef("}\n")
 		}
 	}
 	if caseNode.Default != nil {
@@ -2183,14 +2268,11 @@ func nodeRecurs(n *ast.Node, loopID string) bool {
 		if nodeRecurs(caseNode.Default, loopID) {
 			return true
 		}
-		for _, branch := range caseNode.Nodes {
-			if nodeRecurs(branch, loopID) {
+		for _, entry := range caseNode.Entries {
+			if nodeRecurs(entry.ResultExpr, loopID) {
 				return true
 			}
 		}
-	case ast.OpCaseNode:
-		caseNode := n.Sub.(*ast.CaseNodeNode)
-		return nodeRecurs(caseNode.Then, loopID)
 	default:
 		return false // can't recur in this node type
 	}

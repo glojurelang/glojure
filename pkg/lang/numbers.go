@@ -102,6 +102,26 @@ func (nm *NumberMethods) And(x, y any) any {
 	return bitOpsCast(x) & bitOpsCast(y)
 }
 
+func (nm *NumberMethods) AndNot(x, y any) any {
+	return bitOpsCast(x) &^ bitOpsCast(y)
+}
+
+func (nm *NumberMethods) Not(x any) any {
+	return ^bitOpsCast(x)
+}
+
+func (nm *NumberMethods) Or(x, y any) any {
+	return bitOpsCast(x) | bitOpsCast(y)
+}
+
+func (nm *NumberMethods) Xor(x, y any) any {
+	return bitOpsCast(x) ^ bitOpsCast(y)
+}
+
+func (nm *NumberMethods) SetBit(x, y any) any {
+	return bitOpsCast(x) | (1 << bitOpsCast(y))
+}
+
 func IsZero(x any) bool {
 	return Ops(x).IsZero(x)
 }
@@ -122,6 +142,10 @@ func (nm *NumberMethods) Inc(v any) any {
 	return nm.Add(v, 1)
 }
 
+func (nm *NumberMethods) IncP(v any) any {
+	return IncP(v)
+}
+
 func (nm *NumberMethods) Unchecked_inc(v any) any {
 	return nm.UncheckedAdd(v, 1)
 }
@@ -130,12 +154,12 @@ func (nm *NumberMethods) Dec(x any) any {
 	return nm.Add(x, -1)
 }
 
-func (nm *NumberMethods) ClearBit(x, y any) int64 {
-	return bitOpsCast(x) & ^(1 << bitOpsCast(y))
+func (nm *NumberMethods) DecP(v any) any {
+	return nm.MinusP(v, 1)
 }
 
-func (nm *NumberMethods) SetBit(x, y any) int64 {
-	return bitOpsCast(x) | (1 << bitOpsCast(y))
+func (nm *NumberMethods) ClearBit(x, y any) int64 {
+	return bitOpsCast(x) & ^(1 << bitOpsCast(y))
 }
 
 func (nm *NumberMethods) ShiftLeft(x, y any) int64 {
@@ -330,31 +354,31 @@ func (nm *NumberMethods) CharArrayInit(size int, init any) []Char {
 	return ret
 }
 
-func (nm *NumberMethods) Bytes(x any) []byte {
-	return x.([]byte)
+func (nm *NumberMethods) Bytes(x any) []int8 {
+	return x.([]int8)
 }
 
-func (nm *NumberMethods) ByteArray(sizeOrSeq any) []byte {
+func (nm *NumberMethods) ByteArray(sizeOrSeq any) []int8 {
 	if IsNumber(sizeOrSeq) {
-		return make([]byte, MustAsInt(sizeOrSeq))
+		return make([]int8, MustAsInt(sizeOrSeq))
 	}
 	s := Seq(sizeOrSeq)
 	size := Count(sizeOrSeq)
-	ret := make([]byte, size)
+	ret := make([]int8, size)
 	for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
 		ret[i] = AsByte(s.First())
 	}
 	return ret
 }
 
-func (nm *NumberMethods) ByteArrayInit(size int, init any) []byte {
-	ret := make([]byte, size)
-	if b, ok := init.(byte); ok {
+func (nm *NumberMethods) ByteArrayInit(size int, initOrSeq any) []int8 {
+	ret := make([]int8, size)
+	if b, ok := initOrSeq.(int8); ok {
 		for i := 0; i < size; i++ {
 			ret[i] = b
 		}
 	} else {
-		s := Seq(init)
+		s := Seq(initOrSeq)
 		for i := 0; i < size && s != nil; i, s = i+1, s.Next() {
 			ret[i] = AsByte(s.First())
 		}
@@ -628,38 +652,40 @@ func AsFloat64(x any) float64 {
 }
 
 var (
-	byteType = reflect.TypeOf(byte(0))
+	// We use int8 to match clojure's (Java's) byte type for consistency
+	// with other clojure dialects.
+	byteType = reflect.TypeOf(int8(0))
 )
 
-func AsByte(x any) byte {
+func AsByte(x any) int8 {
 	switch x := x.(type) {
 	case int:
-		return byte(x)
+		return int8(x)
 	case uint:
-		return byte(x)
+		return int8(x)
 	case int8:
-		return byte(x)
+		return int8(x)
 	case int16:
-		return byte(x)
+		return int8(x)
 	case int32:
-		return byte(x)
+		return int8(x)
 	case int64:
-		return byte(x)
+		return int8(x)
 	case uint8:
-		return byte(x)
+		return int8(x)
 	case uint16:
-		return byte(x)
+		return int8(x)
 	case uint32:
-		return byte(x)
+		return int8(x)
 	case uint64:
-		return byte(x)
+		return int8(x)
 	case float32:
-		return byte(x)
+		return int8(x)
 	case *Ratio:
 		f, _ := x.val.Float64()
-		return byte(f)
+		return int8(f)
 	default:
-		panic("cannot convert to float64")
+		panic("cannot convert to int8")
 	}
 }
 
@@ -762,22 +788,34 @@ func BooleanCast(x any) bool {
 	return !IsNil(x)
 }
 
-func ByteCast(x any) byte {
-	if b, ok := x.(byte); ok {
-		return b
+func ByteCast(x any) int8 {
+	switch x := x.(type) {
+	case int8:
+		return x
+	case float32:
+		if x < math.MinInt8 || x > math.MaxInt8 {
+			panic(fmt.Errorf("value out of range for byte: %v", x))
+		}
+		return int8(x)
+	case float64:
+		if x < math.MinInt8 || x > math.MaxInt8 {
+			panic(fmt.Errorf("value out of range for byte: %v", x))
+		}
+		return int8(x)
 	}
+
 	l := AsInt64(x)
 	if l < math.MinInt8 || l > math.MaxInt8 {
 		panic(fmt.Errorf("value out of range for byte: %v", x))
 	}
-	return byte(l)
+	return int8(l)
 }
 
-func UncheckedByteCast(x any) byte {
-	if b, ok := x.(byte); ok {
+func UncheckedByteCast(x any) int8 {
+	if b, ok := x.(int8); ok {
 		return b
 	}
-	return byte(AsInt64(x))
+	return int8(AsInt64(x))
 }
 
 func CharCast(x any) Char {

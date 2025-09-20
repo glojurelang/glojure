@@ -7,6 +7,7 @@ type (
 		AFn
 		IPersistentSet
 		IHashEq
+		Hasher
 	}
 )
 
@@ -26,6 +27,21 @@ func apersistentsetEquiv(a APersistentSet, o any) bool {
 		}
 	}
 	return true
+}
+
+func apersistentsetHash(hc *uint32, a APersistentSet) uint32 {
+	if *hc != 0 {
+		return *hc
+	}
+
+	// Following Clojure's APersistentSet.hashCode logic:
+	// Sum of hash values of all elements
+	var hash uint32 = 0
+	for seq := a.Seq(); seq != nil; seq = seq.Next() {
+		hash += Hash(seq.First())
+	}
+	*hc = hash
+	return hash
 }
 
 func apersistentsetHashEq(hc *uint32, a APersistentSet) uint32 {

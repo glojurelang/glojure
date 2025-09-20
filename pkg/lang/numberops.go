@@ -169,7 +169,14 @@ func (o int64Ops) Add(x, y any) any {
 	panic(NewArithmeticError("integer overflow"))
 }
 func (o int64Ops) AddP(x, y any) any { // TODO: implement
-	return AsInt64(x) + AsInt64(y)
+	xInt := AsInt64(x)
+	yInt := AsInt64(y)
+	ret := xInt + yInt
+	if (ret^xInt) < 0 && (ret^yInt) < 0 {
+		return bigIntOps{}.Add(x, y)
+	}
+
+	return ret
 }
 func (o int64Ops) UncheckedAdd(x, y any) any {
 	return AsInt64(x) + AsInt64(y)

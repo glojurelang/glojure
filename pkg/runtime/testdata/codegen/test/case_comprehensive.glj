@@ -1,0 +1,149 @@
+(ns codegen.test.case-comprehensive)
+
+;; Test integer dispatch (:int test type)
+(defn test-int-case [x]
+  (case x
+    1 :one
+    2 :two
+    3 :three
+    10 :ten
+    100 :hundred
+    :default))
+
+;; Test compact switch (contiguous integers)
+(defn test-compact-case [x]
+  (case x
+    0 :zero
+    1 :one
+    2 :two
+    3 :three
+    4 :four
+    5 :five
+    :not-found))
+
+;; Test sparse switch (non-contiguous integers)
+;; This specifically tests that shift/mask is applied correctly for integer cases
+(defn test-sparse-case [x]
+  (case x
+    1 :one
+    100 :hundred
+    1000 :thousand
+    10000 :ten-thousand
+    :not-found))
+
+;; Test another sparse integer case to ensure shift/mask works
+;; These values will have different shift/mask applied
+(defn test-sparse-case-2 [x]
+  (case x
+    5 :five
+    17 :seventeen
+    33 :thirty-three
+    129 :one-twenty-nine
+    :not-found))
+
+;; Test keyword dispatch (:hash-identity test type)
+(defn test-keyword-case [x]
+  (case x
+    :foo :got-foo
+    :bar :got-bar
+    :baz :got-baz
+    :default))
+
+;; Test string dispatch (:hash-equiv test type)
+(defn test-string-case [x]
+  (case x
+    "hello" :greeting
+    "goodbye" :farewell
+    "yes" :affirmative
+    "no" :negative
+    :unknown))
+
+;; Test symbol dispatch
+(defn test-symbol-case [x]
+  (case x
+    foo :got-foo
+    bar :got-bar
+    baz :got-baz
+    :default))
+
+;; Test mixed literals
+(defn test-mixed-case [x]
+  (case x
+    1 :number-one
+    "one" :string-one
+    :one :keyword-one
+    'one :symbol-one
+    :default))
+
+;; Test false/nil collision case (both hash to 0)
+(defn test-collision-case [x]
+  (case x
+    false :boolean-false
+    nil :nil-value
+    true :boolean-true
+    :default))
+
+;; Test default case
+(defn test-default-case [x]
+  (case x
+    :specific :found-specific
+    :default))
+
+;; Test no default case (should throw)
+(defn test-no-default [x]
+  (try
+    (case x
+      1 :one
+      2 :two)
+    (catch go/any e
+      :no-match-error)))
+
+;; Test character literals
+(defn test-char-case [x]
+  (case x
+    \a :letter-a
+    \b :letter-b
+    \space :space-char
+    \newline :newline-char
+    :other-char))
+
+;; Test with vectors matching lists
+(defn test-vector-list-case [x]
+  (case x
+    [1 2] :one-two
+    [3 4 5] :three-four-five
+    :other))
+
+(defn ^{:expected-output
+        {:int-tests [:one :ten :default]
+         :compact-tests [:zero :five :not-found]
+         :sparse-tests [:one :thousand :not-found]
+         :sparse-tests-2 [:five :seventeen :thirty-three :one-twenty-nine :not-found]
+         :keyword-tests [:got-foo :got-bar :default]
+         :string-tests [:greeting :farewell :unknown]
+         :symbol-tests [:got-foo :got-bar :default]
+         :mixed-tests [:number-one :string-one :keyword-one :symbol-one :default]
+         :collision-tests [:boolean-false :nil-value :boolean-true :default]
+         :default-tests [:found-specific :default]
+         :no-default-tests [:one :no-match-error]
+         :char-tests [:letter-a :space-char :other-char]
+         :vector-list-tests [:one-two :three-four-five :other]}}
+  -main []
+  {:int-tests [(test-int-case 1) (test-int-case 10) (test-int-case 999)]
+   :compact-tests [(test-compact-case 0) (test-compact-case 5) (test-compact-case 10)]
+   :sparse-tests [(test-sparse-case 1) (test-sparse-case 1000) (test-sparse-case 999)]
+   :sparse-tests-2 [(test-sparse-case-2 5) (test-sparse-case-2 17)
+                    (test-sparse-case-2 33) (test-sparse-case-2 129) (test-sparse-case-2 1000)]
+   :keyword-tests [(test-keyword-case :foo) (test-keyword-case :bar) (test-keyword-case :qux)]
+   :string-tests [(test-string-case "hello") (test-string-case "goodbye") (test-string-case "unknown")]
+   :symbol-tests [(test-symbol-case 'foo) (test-symbol-case 'bar) (test-symbol-case 'qux)]
+   :mixed-tests [(test-mixed-case 1) (test-mixed-case "one") (test-mixed-case :one)
+                 (test-mixed-case 'one) (test-mixed-case 2.0)]
+   :collision-tests [(test-collision-case false) (test-collision-case nil)
+                     (test-collision-case true) (test-collision-case "other")]
+   :default-tests [(test-default-case :specific) (test-default-case :other)]
+   :no-default-tests [(test-no-default 1) (test-no-default 3)]
+   :char-tests [(test-char-case \a) (test-char-case \space) (test-char-case \z)]
+   :vector-list-tests [(test-vector-list-case '(1 2))
+                       (test-vector-list-case '(3 4 5))
+                       (test-vector-list-case '(6 7))]})

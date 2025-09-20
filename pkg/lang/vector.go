@@ -65,6 +65,8 @@ func (v *Vector) Count() int {
 	return v.vec.Len()
 }
 
+func (v *Vector) xxx_counted() {}
+
 func (v *Vector) Length() int {
 	return v.Count()
 }
@@ -225,6 +227,10 @@ func (v *Vector) HashEq() uint32 {
 	return apersistentVectorHashEq(&v.hasheq, v)
 }
 
+func (v *Vector) Hash() uint32 {
+	return apersistentVectorHash(&v.hash, v)
+}
+
 func (v *Vector) ReduceInit(f IFn, init any) any {
 	res := init
 	for i := 0; i < v.Count(); i++ {
@@ -358,6 +364,8 @@ func (t *TransientVector) Persistent() IPersistentCollection {
 func (t *TransientVector) Count() int {
 	return t.vec.Count()
 }
+
+func (t *TransientVector) xxx_counted() {}
 
 func (t *TransientVector) Nth(i int) any {
 	res, ok := t.vec.Index(i)

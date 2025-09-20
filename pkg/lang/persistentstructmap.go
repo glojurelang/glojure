@@ -150,6 +150,8 @@ func (m *PersistentStructMap) Count() int {
 	return len(m.vals) + Count(m.ext)
 }
 
+func (m *PersistentStructMap) xxx_counted() {}
+
 func (m *PersistentStructMap) EntryAt(k any) IMapEntry {
 	e := m.def.keyslots.EntryAt(k)
 	if e != nil {
@@ -210,6 +212,10 @@ func (m *PersistentStructMap) ContainsKey(k any) bool {
 
 func (m *PersistentStructMap) Equiv(o any) bool {
 	return apersistentmapEquiv(m, o)
+}
+
+func (m *PersistentStructMap) Hash() uint32 {
+	return apersistentmapHash(&m.hash, m)
 }
 
 func (m *PersistentStructMap) HashEq() uint32 {

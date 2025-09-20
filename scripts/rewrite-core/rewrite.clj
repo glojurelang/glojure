@@ -126,7 +126,10 @@
    'BigDecimal 'github.com:glojurelang:glojure:pkg:lang.*BigDecimal
    'CharSequence 'go/string
    'Class 'reflect.Type
-   'Pattern '*Regexp})
+   'clojure.lang.Associative 'github.com:glojurelang:glojure:pkg:lang.Associative
+   'Pattern '*Regexp
+   'clojure.lang.Delay 'github.com:glojurelang:glojure:pkg:lang.*Delay
+   })
 
 (def static-field-mappings
   {'clojure.lang.Namespace/all 'github.com:glojurelang:glojure:pkg:lang.AllNamespaces
@@ -137,6 +140,25 @@
    'Double/NEGATIVE_INFINITY '(math.Inf -1)
    'Float/POSITIVE_INFINITY '(go/float32 (math.Inf 1))
    'Float/NEGATIVE_INFINITY '(go/float32 (math.Inf -1))})
+
+(def other-mappings
+  {'(. clojure.lang.Delay (force x)) '(github.com:glojurelang:glojure:pkg:lang.ForceDelay x)
+   '(or (instance? Long x)
+          (instance? Integer x)
+          (instance? Short x)
+          (instance? Byte x))
+   '(or (instance? go/int x)
+        (instance? go/uint x)
+        (instance? go/byte x)
+        (instance? go/int64 x)
+        (instance? go/int32 x)
+        (instance? go/int16 x)
+        (instance? go/int8 x)
+        (instance? go/uint64 x)
+        (instance? go/uint32 x)
+        (instance? go/uint16 x)
+        (instance? go/uint8 x))
+   })
 
 (defn create-simple-replacements
   "Create sexpr-replace calls from a mapping"
@@ -163,7 +185,8 @@
     (create-simple-replacements namespace-mappings)
     (create-simple-replacements type-mappings)
     (create-simple-replacements static-field-mappings)
-    
+    (create-simple-replacements other-mappings)
+
     ;; Pattern-based clojure.lang replacements
     (clojure-lang-list->glojure-pkg
       ["IPersistentCollection" "IPersistentList" "IRecord" 
@@ -173,15 +196,15 @@
        "Named" "Counted" "Sequential" "IChunkedSeq"
        "IDrop" "IDeref" "IBlockingDeref"]
       :pointer? false)
-    
+
     (clojure-lang-list->glojure-pkg
       ["Symbol" "Ratio" "MultiFn" "PersistentHashMap" "PersistentHashSet"
        "PersistentVector" "LazySeq" "Var" "Namespace" "Ref" "Agent"
        "BigInt" "BigDecimal"]
       :pointer? true)
-    
+
     [(clojure-lang->glojure-pkg "Fn" :pointer? true :package "github.com:glojurelang:glojure:pkg:runtime")]
-    
+
     ;; All other replacements remain as-is
     [
      ;; ===== Special Clojure.lang Replacements =====
@@ -240,6 +263,8 @@
 
    (sexpr-replace 'clojure.lang.IReduce
                   'github.com:glojurelang:glojure:pkg:lang.IReduce)
+   (sexpr-replace 'clojure.lang.IFn
+                  'github.com:glojurelang:glojure:pkg:lang.IFn)
    (sexpr-replace 'clojure.lang.IPending
                   'github.com:glojurelang:glojure:pkg:lang.IPending)
    (sexpr-replace 'clojure.lang.MultiFn
@@ -269,6 +294,8 @@
                   '(github.com:glojurelang:glojure:pkg:lang.CreatePersistentTreeSet keys))
    (sexpr-replace '(clojure.lang.PersistentTreeSet/create comparator keys)
                   '(github.com:glojurelang:glojure:pkg:lang.CreatePersistentTreeSetWithComparator comparator keys))
+   (sexpr-replace '(clojure.lang.PersistentHashSet/create keys)
+                  '(apply github.com:glojurelang:glojure:pkg:lang.NewSet keys))
 
    (sexpr-replace 'clojure.lang.Cycle/create 'github.com:glojurelang:glojure:pkg:lang.NewCycle)
 
@@ -322,8 +349,59 @@
                   '(fn instance? [t x] (github.com:glojurelang:glojure:pkg:lang.HasType t x)))
 
 
+  ;; Replace instance? checks for clojure.lang.Fn with OR expression checking both runtime.*Fn and IFn
+  (sexpr-replace '(instance? clojure.lang.Fn x)
+                 '(or (instance? github.com:glojurelang:glojure:pkg:runtime.*Fn x)
+                      (instance? github.com:glojurelang:glojure:pkg:lang.FnFunc x)))
+
    ;; ===== Exception Handling =====
    (sexpr-replace 'Exception. 'github.com:glojurelang:glojure:pkg:lang.NewError)
+
+   (sexpr-replace 'IExceptionInfo 'github.com:glojurelang:glojure:pkg:lang.IExceptionInfo)
+
+   (sexpr-replace '(when (instance? IExceptionInfo ex)
+                     (.getData ^IExceptionInfo ex))
+                  '(github.com:glojurelang:glojure:pkg:lang.GetExData ex))
+
+   ;; Handle ExceptionInfo constructor with different arities
+   [(fn select [zloc]
+      (and (z/list? zloc)
+           (let [expr (z/sexpr zloc)]
+             (and (seq? expr)
+                  (= 'ExceptionInfo. (first expr))))))
+    (fn visit [zloc]
+      (let [expr (z/sexpr zloc)
+            arg-count (dec (count expr))]
+        (cond
+          (= arg-count 2) ; (ExceptionInfo. msg map)
+          (z/replace zloc (list 'github.com:glojurelang:glojure:pkg:lang.NewExceptionInfo
+                               (nth expr 1)
+                               (nth expr 2)))
+
+          (= arg-count 3) ; (ExceptionInfo. msg map cause)
+          (z/replace zloc (list 'github.com:glojurelang:glojure:pkg:lang.NewExceptionInfoWithCause
+                               (nth expr 1)
+                               (nth expr 2)
+                               (nth expr 3)))
+          :else zloc)))]
+
+   ;; Replace ex-info to not use elide-top-frames
+   [(fn select [zloc]
+      (and (z/list? zloc)
+           (let [expr (z/sexpr zloc)]
+             (and (seq? expr)
+                  (= 'defn (first expr))
+                  (= 'ex-info (second expr))))))
+    (fn visit [zloc]
+      (z/replace zloc
+                '(defn ex-info
+                   "Create an instance of ExceptionInfo, a RuntimeException subclass
+   that carries a map of additional data."
+                   {:added "1.4"}
+                   ([msg map]
+                    (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfo msg map))
+                   ([msg map cause]
+                    (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfoWithCause msg map cause)))))]
 
    (sexpr-replace 'java.lang.UnsupportedOperationException. 'github.com:glojurelang:glojure:pkg:lang.NewUnsupportedOperationError)
 
@@ -512,7 +590,7 @@
                   '(github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromFloat64 (double x)))
    (sexpr-replace '(BigDecimal. x)
                   '(github.com:glojurelang:glojure:pkg:lang.NewBigDecimal x))
-   (sexpr-replace '(BigDecimal. (.numerator ^github.com:glojurelang:glojure:pkg:lang.*Ratio x))
+   (sexpr-replace '(/ (BigDecimal. (.numerator ^clojure.lang.Ratio x)) (.denominator ^clojure.lang.Ratio x))
                   '(github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromRatio x))
    (sexpr-replace 'clojure.lang.BigInt/fromBigInteger
                   'github.com:glojurelang:glojure:pkg:lang.NewBigIntFromGoBigInt)
@@ -576,6 +654,8 @@
    (sexpr-replace '(. clojure.lang.RT (seq coll)) '(github.com:glojurelang:glojure:pkg:lang.Seq coll))
    (sexpr-replace '(list 'new 'clojure.lang.LazySeq (list* '^{:once true} fn* [] body))
                   '(list 'github.com:glojurelang:glojure:pkg:lang.NewLazySeq (list* '^{:once true} fn* [] body)))
+   (sexpr-replace '(list 'new 'clojure.lang.Delay (list* '^{:once true} fn* [] body))
+                  '(list 'github.com:glojurelang:glojure:pkg:lang.NewDelay (list* '^{:once true} fn* [] body)))
    (sexpr-replace 'clojure.lang.RT/count 'github.com:glojurelang:glojure:pkg:lang.Count)
 
    (sexpr-replace 'clojure.lang.IChunkedSeq 'github.com:glojurelang:glojure:pkg:lang.IChunkedSeq)
@@ -774,6 +854,9 @@
    (sexpr-replace 'clojure.lang.RT 'github.com:glojurelang:glojure:pkg:runtime.RT)
    (sexpr-replace '(nextID) '(NextID))
 
+   ;; Replace Object_array with ObjectArray
+   (sexpr-replace 'Object_array 'ObjectArray)
+
    (sexpr-replace '(nth coll index not-found) '(NthDefault coll index not-found))
 
    [(fn select [zloc] (and (z/list? zloc)
@@ -876,6 +959,7 @@
    (sexpr-replace '.isPublic '.IsPublic)
    (sexpr-replace '.addAlias '.AddAlias)
 
+   (sexpr-replace 'clojure.lang.Var/getThreadBindings 'github.com:glojurelang:glojure:pkg:lang.GetThreadBindings)
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= 'pushThreadBindings (z/sexpr zloc))))
     (fn visit [zloc] (z/replace (-> zloc z/up z/up)
                                 '(github.com:glojurelang:glojure:pkg:lang.PushThreadBindings {})))]

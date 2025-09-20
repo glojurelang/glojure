@@ -70,10 +70,23 @@ type (
 		WithMeta(meta IPersistentMap) any
 	}
 
-	// Counted is an interface for compound values whose elements can be
-	// counted.
-	Counted interface {
+	// Counter is an interface for compound values whose elements can be
+	// counted. This interface does not appear in Clojure; in JVM Clojure,
+	// interfaces must be declared, so classes can implement count() without
+	// implementing Counted. Clojure leverages that to distinguish between
+	// collections that can be counted in constant time and those that can't. In
+	// Go, we don't have that distinction, so we use the Counter interface to
+	// represent any value that can be counted, and Counted to represent those
+	// that can be counted in constant time.
+	Counter interface {
 		Count() int
+	}
+
+	// Counted is an interface for compound values whose elements can be
+	// counted in constant time.
+	Counted interface {
+		Counter
+		xxx_counted()
 	}
 
 	// Conser is an interface for values that can be consed onto.
@@ -158,13 +171,18 @@ type (
 		Assoc(any, any) ITransientAssociative
 	}
 
+	ITransientMap interface {
+		ITransientAssociative
+		Counted
+	}
+
 	IEditableCollection interface {
 		AsTransient() ITransientCollection
 	}
 
 	IPersistentCollection interface {
 		Seqable
-		Counted
+		Counter
 		Conser
 
 		Empty() IPersistentCollection
@@ -285,7 +303,7 @@ type (
 		SetValidator(vf IFn)
 		Validator() IFn
 		Watches() IPersistentMap
-		AddWatch(key any, fn IFn)
+		AddWatch(key any, fn IFn) IRef
 		RemoveWatch(key any)
 	}
 
@@ -321,6 +339,18 @@ type (
 	}
 
 	////////////////////////////////////////////////////////////////////////////
+
+	// IExceptionInfo is an interface for exceptions that carry data (a
+	// map) as additional payload. Clojure programs that need richer
+	// semantics for exceptions should use this in lieu of defining
+	// project-specific error types..
+	IExceptionInfo interface {
+		error
+
+		GetData() IPersistentMap
+	}
+
+	////////////////////////////////////////////////////////////////////////////
 	// Abstract classes
 	//
 	// TODO: represent Clojure's abstract classes as interfaces to
@@ -334,6 +364,18 @@ type (
 		// Cancel(mayInterruptIfRunning bool) bool
 		// IsCancelled() bool
 		// IsDone() bool
+	}
+
+	AReference interface {
+		Meta() IPersistentMap
+		AlterMeta(f IFn, args ISeq) IPersistentMap
+		ResetMeta(meta IPersistentMap) IPersistentMap
+	}
+
+	ARef interface {
+		IRef
+
+		AReference
 	}
 )
 

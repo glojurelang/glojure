@@ -394,7 +394,7 @@
    :static true}
   ([] #{})
   ([& keys]
-   (clojure.lang.PersistentHashSet/create keys)))
+   (apply github.com:glojurelang:glojure:pkg:lang.NewSet keys)))
 
 (defn sorted-map
   "keyval => key val
@@ -656,15 +656,15 @@
   "Applies fn f to the argument list formed by prepending intervening arguments to args."
   {:added "1.0"
    :static true}
-  ([^clojure.lang.IFn f args]
+  ([^github.com:glojurelang:glojure:pkg:lang.IFn f args]
      (github.com:glojurelang:glojure:pkg:lang.Apply f (seq args)))
-  ([^clojure.lang.IFn f x args]
+  ([^github.com:glojurelang:glojure:pkg:lang.IFn f x args]
      (github.com:glojurelang:glojure:pkg:lang.Apply f (list* x args)))
-  ([^clojure.lang.IFn f x y args]
+  ([^github.com:glojurelang:glojure:pkg:lang.IFn f x y args]
      (github.com:glojurelang:glojure:pkg:lang.Apply f (list* x y args)))
-  ([^clojure.lang.IFn f x y z args]
+  ([^github.com:glojurelang:glojure:pkg:lang.IFn f x y z args]
      (github.com:glojurelang:glojure:pkg:lang.Apply f (list* x y z args)))
-  ([^clojure.lang.IFn f a b c d & args]
+  ([^github.com:glojurelang:glojure:pkg:lang.IFn f a b c d & args]
      (github.com:glojurelang:glojure:pkg:lang.Apply f (cons a (cons b (cons c (cons d (spread args))))))))
 
 (defn vary-meta
@@ -745,19 +745,19 @@
   calls. See also - realized?"
   {:added "1.0"}
   [& body]
-    (list 'new 'clojure.lang.Delay (list* `^{:once true} fn* [] body)))
+    (list (quote github.com:glojurelang:glojure:pkg:lang.NewDelay) (list* (quote ^{:once true} fn*) [] body)))
 
 (defn delay?
   "returns true if x is a Delay created with delay"
   {:added "1.0"
    :static true}
-  [x] (instance? clojure.lang.Delay x))
+  [x] (instance? github.com:glojurelang:glojure:pkg:lang.*Delay x))
 
 (defn force
   "If x is a Delay, returns the (possibly cached) value of its expression, else returns x"
   {:added "1.0"
    :static true}
-  [x] (. clojure.lang.Delay (force x)))
+  [x] (github.com:glojurelang:glojure:pkg:lang.ForceDelay x))
 
 (defmacro if-not
   "Evaluates test. If logical false, evaluates and returns then expr, 
@@ -1397,10 +1397,7 @@
 (defn int?
   "Return true if x is a fixed precision integer"
   {:added "1.9"}
-  [x] (or (instance? go/int64 x)
-          (instance? Integer x)
-          (instance? Short x)
-          (instance? Byte x)))
+  [x] (or (instance? go/int x) (instance? go/uint x) (instance? go/byte x) (instance? go/int64 x) (instance? go/int32 x) (instance? go/int16 x) (instance? go/int8 x) (instance? go/uint64 x) (instance? go/uint32 x) (instance? go/uint16 x) (instance? go/uint8 x)))
 
 (defn pos-int?
   "Return true if x is a positive fixed precision integer"
@@ -1942,7 +1939,7 @@
   {:added "1.1"
    :static true}
   []
-  (clojure.lang.Var/getThreadBindings))
+  (github.com:glojurelang:glojure:pkg:lang.GetThreadBindings))
 
 (defmacro binding
   "binding => var-symbol init-expr
@@ -3655,7 +3652,7 @@
   [x] (cond
        (decimal? x) x
        (float? x) (github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromFloat64 (double x))
-       (ratio? x) (/ (github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromRatio x) (.denominator ^github.com:glojurelang:glojure:pkg:lang.*Ratio x))
+       (ratio? x) (github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromRatio x)
        (instance? github.com:glojurelang:glojure:pkg:lang.*BigInt x) (.toBigDecimal ^github.com:glojurelang:glojure:pkg:lang.*BigInt x)
        (instance? math:big.*Int x) (github.com:glojurelang:glojure:pkg:lang.NewBigDecimal x)
        (number? x) (github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromInt64 (long x))
@@ -4802,22 +4799,15 @@
           (into-array StackTraceElement
             (drop-while #(= class-name (.getClassName ^StackTraceElement %1)) tr)))))))
 
-(defn ex-info
-  "Create an instance of ExceptionInfo, a RuntimeException subclass
-   that carries a map of additional data."
-  {:added "1.4"}
-  ([msg map]
-    (elide-top-frames (ExceptionInfo. msg map) "clojure.core$ex_info"))
-  ([msg map cause]
-    (elide-top-frames (ExceptionInfo. msg map cause) "clojure.core$ex_info")))
+(defn ex-info "Create an instance of ExceptionInfo, a RuntimeException subclass
+   that carries a map of additional data." {:added "1.4"} ([msg map] (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfo msg map)) ([msg map cause] (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfoWithCause msg map cause)))
 
 (defn ex-data
   "Returns exception data (a map) if ex is an IExceptionInfo.
    Otherwise returns nil."
   {:added "1.4"}
   [ex]
-  (when (instance? IExceptionInfo ex)
-    (.getData ^IExceptionInfo ex)))
+  (github.com:glojurelang:glojure:pkg:lang.GetExData ex))
 
 (defn ex-message
   "Returns the message attached to ex if ex is a Throwable.
@@ -5350,10 +5340,10 @@
 
 (defn object-array
   "Creates an array of objects"
-  {:inline (fn [arg] `(. github.com:glojurelang:glojure:pkg:runtime.RT Object_array ~arg))
+  {:inline (fn [arg] `(. github.com:glojurelang:glojure:pkg:runtime.RT ObjectArray ~arg))
    :inline-arities #{1}
    :added "1.2"}
-  ([size-or-seq] (. github.com:glojurelang:glojure:pkg:runtime.RT Object_array size-or-seq)))
+  ([size-or-seq] (. github.com:glojurelang:glojure:pkg:runtime.RT ObjectArray size-or-seq)))
 
 (defn int-array
   "Creates an array of ints"
@@ -6213,20 +6203,20 @@ fails, attempts to require sym's namespace and retries."
   (e.g. sets and maps) implement IFn"
   {:added "1.0"
    :static true}
-  [x] (instance? clojure.lang.IFn x))
+  [x] (instance? github.com:glojurelang:glojure:pkg:lang.IFn x))
 
 (defn fn?
   "Returns true if x implements Fn, i.e. is an object created via fn."
   {:added "1.0"
    :static true}
-  [x] (instance? github.com:glojurelang:glojure:pkg:runtime.*Fn x))
+  [x] (or (instance? github.com:glojurelang:glojure:pkg:runtime.*Fn x) (instance? github.com:glojurelang:glojure:pkg:lang.FnFunc x)))
 
 
 (defn associative?
  "Returns true if coll implements Associative"
  {:added "1.0"
   :static true}
-  [coll] (instance? clojure.lang.Associative coll))
+  [coll] (instance? github.com:glojurelang:glojure:pkg:lang.Associative coll))
 
 (defn sequential?
  "Returns true if coll implements Sequential"
@@ -7100,7 +7090,7 @@ fails, attempts to require sym's namespace and retries."
      github.com:glojurelang:glojure:pkg:lang.IPending
       (isRealized [this]
        (zero? (.getCount d)))
-     clojure.lang.IFn
+     github.com:glojurelang:glojure:pkg:lang.IFn
      (invoke
       [this x]
       (when (and (pos? (.getCount d))

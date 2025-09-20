@@ -91,7 +91,7 @@ vet:
 
 .PHONY: $(TEST_TARGETS)
 $(TEST_TARGETS): gocmd $(GLJ)
-	@$(GO_CMD) run ./cmd/glj/main.go $(basename $@)
+	@$(GLJ) $(basename $@)
 
 .PHONY: test
 test: $(TEST_TARGETS) # vet - vet is disabled until we fix errors in generated code

@@ -102,7 +102,7 @@ func (rt *RTMethods) BooleanCast(x any) bool {
 	return lang.BooleanCast(x)
 }
 
-func (rt *RTMethods) ByteCast(x any) byte {
+func (rt *RTMethods) ByteCast(x any) int8 {
 	return lang.ByteCast(x)
 }
 
@@ -127,6 +127,9 @@ func (rt *RTMethods) Contains(coll, key any) bool {
 	case IPersistentSet:
 		return coll.Contains(key)
 		// TODO: other types
+	case string:
+		n := lang.MustAsInt(key)
+		return n >= 0 && n < lang.Count(coll)
 	}
 	panic(fmt.Errorf("contains? not supported on type: %T", coll))
 }
@@ -261,8 +264,37 @@ func (rt *RTMethods) Alength(x any) int {
 	panic(fmt.Errorf("Alength not supported on type: %T", x))
 }
 
+func (rt *RTMethods) Aclone(x any) any {
+	xVal := reflect.ValueOf(x)
+	switch xVal.Kind() {
+	case reflect.Slice:
+		cloned := reflect.MakeSlice(xVal.Type(), xVal.Len(), xVal.Cap())
+		reflect.Copy(cloned, xVal)
+		return cloned.Interface()
+	case reflect.Array:
+		cloned := reflect.New(xVal.Type()).Elem()
+		reflect.Copy(cloned, xVal)
+		return cloned.Interface()
+	}
+	panic(fmt.Errorf("Aclone not supported on type: %T", x))
+}
+
 func (rt *RTMethods) ToArray(coll any) any {
 	return lang.ToSlice(coll)
+}
+
+// ObjectArray creates an array of objects ([]any)
+func (rt *RTMethods) ObjectArray(sizeOrSeq any) any {
+	if lang.IsNumber(sizeOrSeq) {
+		return make([]any, lang.MustAsInt(sizeOrSeq))
+	}
+	s := lang.Seq(sizeOrSeq)
+	size := lang.Count(s)
+	ret := make([]any, size)
+	for i := 0; i < len(ret) && s != nil; i, s = i+1, s.Next() {
+		ret[i] = s.First()
+	}
+	return ret
 }
 
 var (

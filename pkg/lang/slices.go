@@ -7,7 +7,16 @@ import (
 
 func SliceSet(slc any, idx int, val any) {
 	slcVal := reflect.ValueOf(slc)
-	slcVal.Index(idx).Set(reflect.ValueOf(val))
+	valVal := reflect.ValueOf(val)
+	// coerce valVal to the element type of slcVal
+	if valVal.Type() != slcVal.Type().Elem() {
+		if valVal.Type().ConvertibleTo(slcVal.Type().Elem()) {
+			valVal = valVal.Convert(slcVal.Type().Elem())
+		} else {
+			panic(NewIllegalArgumentError(fmt.Sprintf("Cannot convert %T to %s", val, slcVal.Type().Elem().String())))
+		}
+	}
+	slcVal.Index(idx).Set(valVal)
 }
 
 func ToSlice(x any) []any {

@@ -32,8 +32,8 @@ func Next(x interface{}) ISeq {
 	}
 
 	s := Seq(x)
-	if s == nil {
-		return emptyList
+	if IsNil(s) {
+		return nil
 	}
 	return s.Next()
 }

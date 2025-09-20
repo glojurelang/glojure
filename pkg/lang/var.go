@@ -22,6 +22,8 @@ type (
 		dynamic      bool
 		dynamicBound atomic.Bool
 
+		watches IPersistentMap
+
 		syncLock sync.Mutex
 	}
 
@@ -93,8 +95,9 @@ func InternVarName(nsSym, nameSym *Symbol) *Var {
 
 func NewVar(ns *Namespace, sym *Symbol) *Var {
 	v := &Var{
-		ns:  ns,
-		sym: sym,
+		ns:      ns,
+		sym:     sym,
+		watches: emptyMap,
 	}
 	v.root.Store(Box{val: &UnboundVar{v: v}})
 	v.meta.Store(NewBox(emptyMap))
@@ -127,7 +130,8 @@ func (v *Var) HasRoot() bool {
 
 func (v *Var) BindRoot(root interface{}) {
 	// TODO: handle metadata correctly
-	v.root.Store(Box{val: root})
+	old := v.root.Swap(Box{val: root})
+	v.notifyWatches(old.(Box).val, root)
 }
 
 func (v *Var) IsBound() bool {
@@ -151,7 +155,9 @@ func (v *Var) Set(val interface{}) interface{} {
 	if b == nil {
 		panic(fmt.Sprintf("can't change/establish root binding of: %s", v))
 	}
+	old := b.val
 	b.val = val
+	v.notifyWatches(old, val)
 	return val
 }
 
@@ -230,10 +236,11 @@ func (v *Var) AlterRoot(alter IFn, args ISeq) interface{} {
 	v.syncLock.Lock()
 	defer v.syncLock.Unlock()
 
-	newRoot := alter.ApplyTo(NewCons(v.Get(), args))
-	// TODO: validate, ++rev, notifyWatches
-	// oldRoot := v.Get()
-	v.Set(newRoot)
+	oldRoot := v.Get()
+	newRoot := alter.ApplyTo(NewCons(oldRoot, args))
+	// TODO: validate, ++rev
+	v.root.Store(Box{val: newRoot})
+	v.notifyWatches(oldRoot, newRoot)
 	return newRoot
 }
 
@@ -246,15 +253,31 @@ func (v *Var) Validator() IFn {
 }
 
 func (v *Var) Watches() IPersistentMap {
-	panic("not implemented")
+	return v.watches
 }
 
-func (v *Var) AddWatch(key interface{}, fn IFn) {
-	panic("not implemented")
+func (v *Var) AddWatch(key interface{}, fn IFn) IRef {
+	v.watches = v.watches.Assoc(key, fn).(IPersistentMap)
+	return v
 }
 
 func (v *Var) RemoveWatch(key interface{}) {
-	panic("not implemented")
+	v.watches = v.watches.Without(key)
+}
+
+func (v *Var) notifyWatches(oldVal, newVal interface{}) {
+	watches := v.watches
+	if watches == nil || watches.Count() == 0 {
+		return
+	}
+
+	for seq := watches.Seq(); seq != nil; seq = seq.Next() {
+		entry := seq.First().(IMapEntry)
+		key := entry.Key()
+		fn := entry.Val().(IFn)
+		// Call watch function with key, ref, old-state, new-state
+		fn.Invoke(key, v, oldVal, newVal)
+	}
 }
 
 func (v *Var) Hash() uint32 {
@@ -335,14 +358,41 @@ func PopThreadBindings() {
 	glsBindingsMtx.Unlock()
 }
 
-func CloneThreadBindingFrame() interface{} {
+func GetThreadBindings() IPersistentMap {
+	gid := getGoroutineID()
+	glsBindingsMtx.RLock()
+	storage := glsBindings[gid]
+	glsBindingsMtx.RUnlock()
+
+	var ret IPersistentMap = emptyMap
+	if storage == nil {
+		return ret
+	}
+	for i := len(storage.bindings) - 1; i >= 0; i-- {
+		for v, b := range storage.bindings[i] {
+			// most recent binding wins
+			if ret.EntryAt(v) == nil {
+				ret = ret.Assoc(v, b.val).(IPersistentMap)
+			}
+		}
+	}
+	return ret
+}
+
+func CloneThreadBindingFrame() any {
 	gid := getGoroutineID()
 	glsBindingsMtx.RLock()
 	defer glsBindingsMtx.RUnlock()
-	return glsBindings[gid]
+	bindings := glsBindings[gid]
+	if bindings == nil {
+		return nil
+	}
+	// deref the pointer to copy the struct
+	derefBindings := *bindings
+	return &derefBindings
 }
 
-func ResetThreadBindingFrame(frame interface{}) {
+func ResetThreadBindingFrame(frame any) {
 	gid := getGoroutineID()
 	glsBindingsMtx.Lock()
 	defer glsBindingsMtx.Unlock()
