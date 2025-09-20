@@ -1008,7 +1008,7 @@ func (r *Reader) readNamespacedMap() (interface{}, error) {
 		val := kv.(*lang.MapEntry).Val()
 
 		keyKW, ok := key.(lang.Keyword)
-		if !ok || keyKW.Namespace() != "" {
+		if !ok || !lang.IsNil(keyKW.Namespace()) {
 			newKeyVals = append(newKeyVals, key, val)
 			continue
 		}
