@@ -490,7 +490,7 @@ func (s *MapSeq) Drop(n int) Sequential {
 ////////////////////////////////////////////////////////////////////////////////
 
 func NewMapKeySeq(s ISeq) ISeq {
-	if s == nil {
+	if IsNil(s) {
 		return nil
 	}
 	return &MapKeySeq{s: s}
@@ -566,7 +566,7 @@ func (s *MapKeySeq) HashEq() uint32 {
 ////////////////////////////////////////////////////////////////////////////////
 
 func NewMapValSeq(s ISeq) ISeq {
-	if s == nil {
+	if IsNil(s) {
 		return nil
 	}
 	return &MapValSeq{s: s}

@@ -21,11 +21,15 @@ func NewStringSeq(s string, i int) *StringSeq {
 	if len(s) == 0 {
 		return nil
 	}
-	return &StringSeq{str: []rune(s), i: i}
+	runes := []rune(s)
+	if i >= len(runes) {
+		return nil
+	}
+	return &StringSeq{str: runes, i: i}
 }
 
 func newStringSeq(s []rune, i int) *StringSeq {
-	if len(s) == 0 {
+	if len(s) == 0 || i >= len(s) {
 		return nil
 	}
 	return &StringSeq{str: s, i: i}
