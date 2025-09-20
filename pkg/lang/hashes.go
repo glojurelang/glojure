@@ -76,9 +76,9 @@ func Hash(x interface{}) uint32 {
 		return Hash(x.Interface()) ^ reflectValueHashMask
 	case bool:
 		if x {
-			return 1 //1231 // Java's Boolean.TRUE.hashCode()
+			return 1231 // Java's Boolean.TRUE.hashCode()
 		}
-		return 0 //1237 // Java's Boolean.FALSE.hashCode()
+		return 1237 // Java's Boolean.FALSE.hashCode()
 	}
 
 	switch reflect.TypeOf(x).Kind() {
