@@ -14,6 +14,8 @@ type Symbol struct {
 
 var (
 	symbolRegex = regexp.MustCompile(`^(?:[^0-9/].*/)?(?:/|[^0-9/][^/]*)$`)
+
+	_ IFn = (*Symbol)(nil)
 )
 
 // NewSymbol creates a new symbol.
@@ -34,7 +36,7 @@ func NewSymbol(s string) *Symbol {
 	}
 }
 
-func InternSymbol(ns, name interface{}) *Symbol {
+func InternSymbol(ns, name any) *Symbol {
 	if ns == nil {
 		return NewSymbol(name.(string))
 	}
@@ -127,7 +129,7 @@ func (s *Symbol) String() string {
 	return s.ns + "/" + s.name
 }
 
-func (s *Symbol) Equals(v interface{}) bool {
+func (s *Symbol) Equals(v any) bool {
 	if s == v {
 		return true
 	}
@@ -145,7 +147,7 @@ func (s *Symbol) Meta() IPersistentMap {
 	return s.meta
 }
 
-func (s *Symbol) WithMeta(meta IPersistentMap) interface{} {
+func (s *Symbol) WithMeta(meta IPersistentMap) any {
 	if s.meta == meta {
 		return s
 	}
@@ -159,4 +161,19 @@ func (s *Symbol) Hash() uint32 {
 	h := getHash()
 	h.Write([]byte(s.ns + "/" + s.name))
 	return h.Sum32() ^ symbolHashMask
+}
+
+func (s *Symbol) Invoke(args ...any) any {
+	switch len(args) {
+	case 1:
+		return Get(args[0], s)
+	case 2:
+		return GetDefault(args[0], s, args[1])
+	default:
+		panic(NewIllegalArgumentError("symbol invoke expects 1 or 2 arguments"))
+	}
+}
+
+func (s *Symbol) ApplyTo(args ISeq) any {
+	return s.Invoke(seqToSlice(args)...)
 }
