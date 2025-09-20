@@ -3128,7 +3128,7 @@ func LoadNS() {
 	// *glojure-version*
 	{
 		tmp0 := sym__STAR_glojure_DASH_version_STAR_.WithMeta(lang.NewMap()).(*lang.Symbol)
-		var_clojure_DOT_core__STAR_glojure_DASH_version_STAR_ = ns.InternWithValue(tmp0, lang.NewMap(kw_major, int(0), kw_minor, int(3), kw_incremental, int(0), kw_qualifier, nil), true)
+		var_clojure_DOT_core__STAR_glojure_DASH_version_STAR_ = ns.InternWithValue(tmp0, lang.NewMap(kw_major, int(0), kw_minor, int(0), kw_incremental, int(0), kw_qualifier, nil), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_glojure_DASH_version_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
