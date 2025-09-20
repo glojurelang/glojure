@@ -95,6 +95,8 @@ $(TEST_TARGETS): gocmd $(GLJ)
 
 .PHONY: test
 test: $(TEST_TARGETS) # vet - vet is disabled until we fix errors in generated code
+	@cd test/clojure-test-suite && \
+	../../$(GLJ) test-glojure.glj --expect-failures 38 --expect-errors 151 2>/dev/null
 
 .PHONY: format
 format:
