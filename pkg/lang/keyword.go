@@ -62,6 +62,10 @@ func (k Keyword) Name() string {
 	return k.value()
 }
 
+func (k Keyword) Sym() *Symbol {
+	return InternSymbol(k.Namespace(), k.Name())
+}
+
 func (k Keyword) String() string {
 	return ":" + k.value()
 }
