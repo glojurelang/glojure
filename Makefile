@@ -72,7 +72,7 @@ GO-CMD := go$(GO-VERSION)
 all: gocmd stdlib-targets generate aot glj-imports glj-bins
 
 gocmd:
-	@$(GO-CMD) version 2>&1 > /dev/null || { \
+	@$(GO-CMD) version &> /dev/null || { \
 		(go install "golang.org/dl/$(GO-CMD)@latest" && \
 		$(GO-CMD) download > /dev/null && \
 		$(GO-CMD) version > /dev/null); }
