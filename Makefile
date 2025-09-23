@@ -63,6 +63,7 @@ build: $(GLJ)
 
 .PHONY: clean
 clean:
+	$(RM) report.html
 	$(RM) -r bin/
 
 pkg/gen/gljimports/gljimports_%.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go ./internal/genpkg/genpkg.go \
