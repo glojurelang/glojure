@@ -40,28 +40,22 @@ GLJ-BINS=$(foreach platform,$(GO-PLATFORMS),bin/$(platform)/glj$(if $(findstring
 GO-VERSION := 1.19.3
 GO-CMD := go$(GO-VERSION)
 
-.PHONY: all
 all: gocmd $(STDLIB-TARGETS) go-generate aot $(GLJ-IMPORTS) $(GLJ-BINS)
 
-.PHONY: gocmd
 gocmd:
 	@$(GO-CMD) version 2>&1 > /dev/null || \
 		(go install "golang.org/dl/$(GO-CMD)@latest" && \
 		$(GO-CMD) download > /dev/null && $(GO-CMD) version > /dev/null)
 
-.PHONY: go-generate
 generate:
 	@go generate ./...
 
-.PHONY: aot
 aot: gocmd $(STDLIB-TARGETS)
 	@echo "(map compile '[clojure.core clojure.core.async clojure.string clojure.template clojure.test clojure.uuid clojure.walk glojure.go.types glojure.go.io])" | \
 		GLOJURE_USE_AOT=false GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO-CMD) run -tags glj_no_aot_stdlib ./cmd/glj
 
-.PHONY: build
 build: $(GLJ-CMD)
 
-.PHONY: clean
 clean:
 	$(RM) report.html
 	$(RM) -r bin/
@@ -86,11 +80,9 @@ bin/%/glj.wasm: $(wildcard ./cmd/glj/*.go) $(wildcard ./pkg/**/*.go) $(wildcard 
 	@mkdir -p $(dir $@)
 	@scripts/build-glj.sh $@ $*
 
-.PHONY: vet
 vet:
 	@go vet ./...
 
-.PHONY: $(TEST-TARGETS)
 $(TEST-TARGETS): gocmd $(GLJ-CMD)
 	@$(GLJ-CMD) $(basename $@)
 
@@ -99,13 +91,11 @@ test: $(TEST-TARGETS) # vet - vet is disabled until we fix errors in generated c
 	@cd test/clojure-test-suite && \
 	../../$(GLJ-CMD) test-glojure.glj --expect-failures 38 --expect-errors 151 2>/dev/null
 
-.PHONY: format
 format:
 	@if go fmt ./... | grep -q ''; then \
 		echo "Files were formatted. Please commit the changes."; \
 		exit 1; \
 	fi
 
-.PHONY: update-clojure-sources
 update-clojure-sources:
 	@scripts/rewrite-core/update-clojure-sources.sh $(CLOJURE-STDLIB-VERSION)
