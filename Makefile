@@ -1,3 +1,4 @@
+SHELL := bash
 
 CLOJURE_STDLIB_VERSION := clojure-1.12.1
 STDLIB_ORIGINALS_DIR := scripts/rewrite-core/originals
