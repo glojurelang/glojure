@@ -66,13 +66,15 @@ GLJ-BINS=$(foreach platform,$(GO-PLATFORMS) \
 
 GO-CMD := go$(GO-VERSION)
 
-all: gocmd $(STDLIB-TARGETS) generate aot $(GLJ-IMPORTS) $(GLJ-BINS)
+all: gocmd stdlib-targets generate aot glj-imports glj-bins
 
 gocmd:
 	@$(GO-CMD) version 2>&1 > /dev/null || \
 		(go install "golang.org/dl/$(GO-CMD)@latest" && \
 		$(GO-CMD) download > /dev/null && \
 		$(GO-CMD) version > /dev/null)
+
+stdlib-targets: $(STDLIB-TARGETS)
 
 generate:
 	go generate ./...
@@ -82,6 +84,10 @@ aot: gocmd $(STDLIB-TARGETS)
 	GLOJURE_STDLIB_PATH=./pkg/stdlib \
 	$(GO-CMD) run -tags glj_no_aot_stdlib ./cmd/glj \
 	<<<"(map compile '[$(AOT-NAMESPACES)])"
+
+glj-imports: $(GLJ-IMPORTS)
+
+glj-bins: $(GLJ-BINS)
 
 build: $(GLJ-CMD)
 
