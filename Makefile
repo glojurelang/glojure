@@ -69,6 +69,9 @@ GLJ-BINS=$(foreach platform,$(GO-PLATFORMS) \
 
 GO-CMD := go$(GO-VERSION)
 
+#-------------------------------------------------------------------------------
+default: all
+
 all: gocmd stdlib-targets generate aot glj-imports glj-bins
 
 gocmd:
