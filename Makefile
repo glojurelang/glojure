@@ -1,6 +1,12 @@
+# Usage:
+#   make clean all test GO-VERSION=1.25.1
+
 SHELL := bash
 
-CLOJURE-STDLIB-VERSION := clojure-1.12.1
+GO-VERSION ?= 1.19.3
+CLOJURE-VERSION ?= 1.12.1
+
+CLOJURE-STDLIB-VERSION := clojure-$(CLOJURE-VERSION)
 STDLIB-ORIGINALS-DIR := scripts/rewrite-core/originals
 STDLIB-ORIGINALS := $(shell find $(STDLIB-ORIGINALS-DIR) -name '*.clj')
 STDLIB-NAMES := $(STDLIB-ORIGINALS:scripts/rewrite-core/originals/%=%)
@@ -47,8 +53,6 @@ GLJ-IMPORTS=$(foreach platform,$(GO-PLATFORMS) \
 GLJ-BINS=$(foreach platform,$(GO-PLATFORMS) \
 	   ,bin/$(platform)/glj$(if $(findstring wasm,$(platform)),.wasm,))
 
-# eventually, support multiple minor versions
-GO-VERSION := 1.19.3
 GO-CMD := go$(GO-VERSION)
 
 all: gocmd $(STDLIB-TARGETS) generate aot $(GLJ-IMPORTS) $(GLJ-BINS)
