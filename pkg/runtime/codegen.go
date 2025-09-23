@@ -461,7 +461,7 @@ func (g *Generator) generateValue(value any) string {
 	case *lang.MultiFn:
 		return g.generateMultiFn(v)
 	case lang.Keyword:
-		if ns := v.Namespace(); ns != "" {
+		if ns := v.Namespace(); ns != nil {
 			return g.allocKWVar(fmt.Sprintf("%s/%s", ns, v.Name()))
 		} else {
 			return g.allocKWVar(v.Name())
@@ -1213,11 +1213,11 @@ func (g *Generator) generateCase(node *ast.Node) string {
 	// if a test matches, we evaluate the corresponding body and assign to resultVar
 	// Generate code based on test type
 	testType := caseNode.TestType.(lang.Keyword)
-	
+
 	// Calculate the lookup key based on test type
 	lookupVar := g.allocateTempVar()
 	g.writef("var %s int64\n", lookupVar)
-	
+
 	switch testType {
 	case lang.KWInt:
 		// For integers, convert directly to int64 and apply shift/mask
@@ -1234,7 +1234,7 @@ func (g *Generator) generateCase(node *ast.Node) string {
 			g.writef("%s = int64(uint32(%s >> %d) & uint32(%d))\n",
 				lookupVar, lookupVar, caseNode.Shift, caseNode.Mask)
 		}
-		
+
 	case lang.KWHashIdentity:
 		// Use identity hash
 		if caseNode.Mask == 0 {
@@ -1243,7 +1243,7 @@ func (g *Generator) generateCase(node *ast.Node) string {
 			g.writef("%s = int64(uint32(lang.IdentityHash(%s) >> %d) & uint32(%d))\n",
 				lookupVar, testExpr, caseNode.Shift, caseNode.Mask)
 		}
-			
+
 	case lang.KWHashEquiv:
 		// Use hash
 		if caseNode.Mask == 0 {
@@ -1253,19 +1253,19 @@ func (g *Generator) generateCase(node *ast.Node) string {
 				lookupVar, testExpr, caseNode.Shift, caseNode.Mask)
 		}
 	}
-	
+
 	// Generate switch statement for the entries
 	first := true
 	for i, entry := range caseNode.Entries {
 		g.writef("// case entry %d (key=%d, collision=%v)\n", i, entry.Key, entry.HasCollision)
-		
+
 		if first {
 			g.writef("if %s == %d {\n", lookupVar, entry.Key)
 			first = false
 		} else {
 			g.writef("} else if %s == %d {\n", lookupVar, entry.Key)
 		}
-		
+
 		if entry.HasCollision {
 			// For collision cases, evaluate the condp expression
 			condpExpr := g.generateASTNode(entry.ResultExpr)
