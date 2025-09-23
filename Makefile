@@ -1,11 +1,11 @@
 SHELL := bash
 
-CLOJURE_STDLIB_VERSION := clojure-1.12.1
-STDLIB_ORIGINALS_DIR := scripts/rewrite-core/originals
-STDLIB_ORIGINALS := $(shell find $(STDLIB_ORIGINALS_DIR) -name '*.clj')
-STDLIB := $(STDLIB_ORIGINALS:scripts/rewrite-core/originals/%=%)
-STDLIB_ORIGINALS := $(addprefix scripts/rewrite-core/originals/,$(STDLIB))
-STDLIB_TARGETS := $(addprefix pkg/stdlib/clojure/,$(STDLIB:.clj=.glj))
+CLOJURE-STDLIB-VERSION := clojure-1.12.1
+STDLIB-ORIGINALS-DIR := scripts/rewrite-core/originals
+STDLIB-ORIGINALS := $(shell find $(STDLIB-ORIGINALS-DIR) -name '*.clj')
+STDLIB := $(STDLIB-ORIGINALS:scripts/rewrite-core/originals/%=%)
+STDLIB-ORIGINALS := $(addprefix scripts/rewrite-core/originals/,$(STDLIB))
+STDLIB-TARGETS := $(addprefix pkg/stdlib/clojure/,$(STDLIB:.clj=.glj))
 
 OS-TYPE := $(shell bash -c 'echo $$OSTYPE')
 OS-NAME := \
@@ -29,8 +29,8 @@ GLJ := bin/$(OA)/glj
 endif
 endif
 
-TEST_FILES := $(shell find ./test -name '*.glj' | sort)
-TEST_TARGETS := $(addsuffix .test,$(TEST_FILES))
+TEST-FILES := $(shell find ./test -name '*.glj' | sort)
+TEST-TARGETS := $(addsuffix .test,$(TEST-FILES))
 
 GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows_amd64 windows_arm js_wasm
 GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(platform).go)
@@ -38,26 +38,26 @@ GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(pla
 BINS=$(foreach platform,$(GOPLATFORMS),bin/$(platform)/glj$(if $(findstring wasm,$(platform)),.wasm,))
 
 # eventually, support multiple minor versions
-GO_VERSION := 1.19.3
-GO_CMD := go$(GO_VERSION)
+GO-VERSION := 1.19.3
+GO-CMD := go$(GO-VERSION)
 
 .PHONY: all
-all: gocmd $(STDLIB_TARGETS) go-generate aot $(GLJIMPORTS) $(BINS)
+all: gocmd $(STDLIB-TARGETS) go-generate aot $(GLJIMPORTS) $(BINS)
 
 .PHONY: gocmd
 gocmd:
-	@$(GO_CMD) version 2>&1 > /dev/null || \
-		(go install "golang.org/dl/$(GO_CMD)@latest" && \
-		$(GO_CMD) download > /dev/null && $(GO_CMD) version > /dev/null)
+	@$(GO-CMD) version 2>&1 > /dev/null || \
+		(go install "golang.org/dl/$(GO-CMD)@latest" && \
+		$(GO-CMD) download > /dev/null && $(GO-CMD) version > /dev/null)
 
 .PHONY: go-generate
 generate:
 	@go generate ./...
 
 .PHONY: aot
-aot: gocmd $(STDLIB_TARGETS)
+aot: gocmd $(STDLIB-TARGETS)
 	@echo "(map compile '[clojure.core clojure.core.async clojure.string clojure.template clojure.test clojure.uuid clojure.walk glojure.go.types glojure.go.io])" | \
-		GLOJURE_USE_AOT=false GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO_CMD) run -tags glj_no_aot_stdlib ./cmd/glj
+		GLOJURE_USE_AOT=false GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO-CMD) run -tags glj_no_aot_stdlib ./cmd/glj
 
 .PHONY: build
 build: $(GLJ)
@@ -70,7 +70,7 @@ clean:
 pkg/gen/gljimports/gljimports_%.go: ./scripts/gen-gljimports.sh ./cmd/gen-import-interop/main.go ./internal/genpkg/genpkg.go \
 					$(wildcard ./pkg/lang/*.go) $(wildcard ./pkg/runtime/*.go)
 	@echo "Generating $@"
-	@./scripts/gen-gljimports.sh $@ $* $(GO_CMD)
+	@./scripts/gen-gljimports.sh $@ $* $(GO-CMD)
 
 pkg/stdlib/clojure/%.glj: scripts/rewrite-core/originals/%.clj scripts/rewrite-core/run.sh scripts/rewrite-core/rewrite.clj
 	@echo "Rewriting $< to $@"
@@ -91,12 +91,12 @@ bin/%/glj.wasm: $(wildcard ./cmd/glj/*.go) $(wildcard ./pkg/**/*.go) $(wildcard 
 vet:
 	@go vet ./...
 
-.PHONY: $(TEST_TARGETS)
-$(TEST_TARGETS): gocmd $(GLJ)
+.PHONY: $(TEST-TARGETS)
+$(TEST-TARGETS): gocmd $(GLJ)
 	@$(GLJ) $(basename $@)
 
 .PHONY: test
-test: $(TEST_TARGETS) # vet - vet is disabled until we fix errors in generated code
+test: $(TEST-TARGETS) # vet - vet is disabled until we fix errors in generated code
 	@cd test/clojure-test-suite && \
 	../../$(GLJ) test-glojure.glj --expect-failures 38 --expect-errors 151 2>/dev/null
 
@@ -109,4 +109,4 @@ format:
 
 .PHONY: update-clojure-sources
 update-clojure-sources:
-	@scripts/rewrite-core/update-clojure-sources.sh $(CLOJURE_STDLIB_VERSION)
+	@scripts/rewrite-core/update-clojure-sources.sh $(CLOJURE-STDLIB-VERSION)
