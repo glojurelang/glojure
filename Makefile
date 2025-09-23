@@ -75,10 +75,10 @@ gocmd:
 		$(GO-CMD) version > /dev/null)
 
 generate:
-	@go generate ./...
+	go generate ./...
 
 aot: gocmd $(STDLIB-TARGETS)
-	@GLOJURE_USE_AOT=false \
+	GLOJURE_USE_AOT=false \
 	GLOJURE_STDLIB_PATH=./pkg/stdlib \
 	$(GO-CMD) run -tags glj_no_aot_stdlib ./cmd/glj \
 	<<<"(map compile '[$(AOT-NAMESPACES)])"
@@ -96,7 +96,7 @@ pkg/gen/gljimports/gljimports_%.go: \
 		$(wildcard ./pkg/lang/*.go) \
 		$(wildcard ./pkg/runtime/*.go)
 	@echo "Generating $@"
-	@./scripts/gen-gljimports.sh $@ $* $(GO-CMD)
+	./scripts/gen-gljimports.sh $@ $* $(GO-CMD)
 
 pkg/stdlib/clojure/%.glj: \
 		scripts/rewrite-core/originals/%.clj \
@@ -104,7 +104,7 @@ pkg/stdlib/clojure/%.glj: \
 		scripts/rewrite-core/rewrite.clj
 	@echo "Rewriting $< to $@"
 	@mkdir -p $(dir $@)
-	@scripts/rewrite-core/run.sh $< > $@
+	scripts/rewrite-core/run.sh $< > $@
 
 bin/%/glj: generate \
 		$(wildcard ./cmd/glj/*.go) \
@@ -112,7 +112,7 @@ bin/%/glj: generate \
 		$(wildcard ./internal/**/*.go)
 	@echo "Building $@"
 	@mkdir -p $(dir $@)
-	@scripts/build-glj.sh $@ $*
+	scripts/build-glj.sh $@ $*
 
 bin/%/glj.wasm: \
 		$(wildcard ./cmd/glj/*.go) \
@@ -120,18 +120,18 @@ bin/%/glj.wasm: \
 		$(wildcard ./internal/**/*.go)
 	@echo "Building $@"
 	@mkdir -p $(dir $@)
-	@scripts/build-glj.sh $@ $*
+	scripts/build-glj.sh $@ $*
 
 vet:
-	@go vet ./...
+	go vet ./...
 
 $(TEST-TARGETS): gocmd $(GLJ-CMD)
-	@$(GLJ-CMD) $(basename $@)
+	$(GLJ-CMD) $(basename $@)
 
 .PHONY: test
 # vet - vet is disabled until we fix errors in generated code
 test: $(TEST-TARGETS)
-	@cd test/clojure-test-suite && \
+	cd test/clojure-test-suite && \
 		../../$(GLJ-CMD) test-glojure.glj \
 			--expect-failures 38 \
 			--expect-errors 151 \
@@ -144,5 +144,5 @@ format:
 	fi
 
 update-clojure-sources:
-	@scripts/rewrite-core/update-clojure-sources.sh \
+	scripts/rewrite-core/update-clojure-sources.sh \
 		$(CLOJURE-STDLIB-VERSION)
