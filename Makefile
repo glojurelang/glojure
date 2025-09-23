@@ -8,7 +8,7 @@ CLOJURE-VERSION ?= 1.12.1
 
 CLOJURE-STDLIB-VERSION := clojure-$(CLOJURE-VERSION)
 STDLIB-ORIGINALS-DIR := scripts/rewrite-core/originals
-STDLIB-ORIGINALS := $(shell find $(STDLIB-ORIGINALS-DIR) -name '*.clj')
+STDLIB-ORIGINALS := $(wildcard $(STDLIB-ORIGINALS-DIR)/*.clj)
 STDLIB-NAMES := $(STDLIB-ORIGINALS:scripts/rewrite-core/originals/%=%)
 STDLIB-ORIGINALS := $(STDLIB-NAMES:%=scripts/rewrite-core/originals/,%)
 STDLIB-TARGETS := $(addprefix pkg/stdlib/clojure/,$(STDLIB-NAMES:.clj=.glj))
@@ -45,8 +45,11 @@ GLJ-CMD := bin/$(OA-$(OS-ARCH))/glj
 endif
 endif
 
-TEST-FILES := $(shell find ./test -name '*.glj' | sort)
-TEST-TARGETS := $(addsuffix .test,$(TEST-FILES))
+TEST-GLJ-DIR := test/glojure
+TEST-GLJ-FILES := $(shell find $(TEST-GLJ-DIR) -name '*.glj' | sort)
+TEST-GLJ-TARGETS := $(addsuffix .test,$(TEST-GLJ-FILES))
+TEST-SUITE-DIR := test/clojure-test-suite
+TEST-SUITE-FILE := test-glojure.glj
 
 GO-PLATFORMS := \
 	darwin_arm64 \
@@ -131,17 +134,21 @@ bin/%/glj.wasm: \
 vet:
 	go vet ./...
 
-$(TEST-TARGETS): gocmd $(GLJ-CMD)
-	$(GLJ-CMD) $(basename $@)
-
 .PHONY: test
-# vet - vet is disabled until we fix errors in generated code
-test: $(TEST-TARGETS)
-	cd test/clojure-test-suite && \
-		../../$(GLJ-CMD) test-glojure.glj \
+# vet is disabled until we fix errors in generated code
+test: test-glj test-suite  # vet
+
+test-glj: $(TEST-GLJ-TARGETS)
+
+test-suite: $(GLJ-CMD)
+	cd $(TEST-SUITE-DIR) && \
+		$(abspath $<) $(TEST-SUITE-FILE) \
 			--expect-failures 38 \
 			--expect-errors 151 \
 			2>/dev/null
+
+$(TEST-GLJ-TARGETS): $(GLJ-CMD)
+	$< $(basename $@)
 
 format:
 	@if go fmt ./... | grep -q ''; then \
