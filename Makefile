@@ -3,9 +3,9 @@ SHELL := bash
 CLOJURE-STDLIB-VERSION := clojure-1.12.1
 STDLIB-ORIGINALS-DIR := scripts/rewrite-core/originals
 STDLIB-ORIGINALS := $(shell find $(STDLIB-ORIGINALS-DIR) -name '*.clj')
-STDLIB := $(STDLIB-ORIGINALS:scripts/rewrite-core/originals/%=%)
-STDLIB-ORIGINALS := $(addprefix scripts/rewrite-core/originals/,$(STDLIB))
-STDLIB-TARGETS := $(addprefix pkg/stdlib/clojure/,$(STDLIB:.clj=.glj))
+STDLIB-NAMES := $(STDLIB-ORIGINALS:scripts/rewrite-core/originals/%=%)
+STDLIB-ORIGINALS := $(addprefix scripts/rewrite-core/originals/,$(STDLIB-NAMES))
+STDLIB-TARGETS := $(addprefix pkg/stdlib/clojure/,$(STDLIB-NAMES:.clj=.glj))
 
 OS-TYPE := $(shell bash -c 'echo $$OSTYPE')
 OS-NAME := \
@@ -24,25 +24,24 @@ OA-linux-arm64 := linux_arm64
 OA-linux-int64 := linux_amd64
 OA-macos-arm64 := darwin_arm64
 OA-macos-int64 := darwin_amd64
-OA := $(OA-$(OS-ARCH))
-GLJ := bin/$(OA)/glj
+GLJ-CMD := bin/$(OA-$(OS-ARCH))/glj
 endif
 endif
 
 TEST-FILES := $(shell find ./test -name '*.glj' | sort)
 TEST-TARGETS := $(addsuffix .test,$(TEST-FILES))
 
-GOPLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows_amd64 windows_arm js_wasm
-GLJIMPORTS=$(foreach platform,$(GOPLATFORMS),pkg/gen/gljimports/gljimports_$(platform).go)
+GO-PLATFORMS := darwin_arm64 darwin_amd64 linux_arm64 linux_amd64 windows_amd64 windows_arm js_wasm
+GLJ-IMPORTS=$(foreach platform,$(GO-PLATFORMS),pkg/gen/gljimports/gljimports_$(platform).go)
 # wasm should have .wasm suffix; others should not
-BINS=$(foreach platform,$(GOPLATFORMS),bin/$(platform)/glj$(if $(findstring wasm,$(platform)),.wasm,))
+GLJ-BINS=$(foreach platform,$(GO-PLATFORMS),bin/$(platform)/glj$(if $(findstring wasm,$(platform)),.wasm,))
 
 # eventually, support multiple minor versions
 GO-VERSION := 1.19.3
 GO-CMD := go$(GO-VERSION)
 
 .PHONY: all
-all: gocmd $(STDLIB-TARGETS) go-generate aot $(GLJIMPORTS) $(BINS)
+all: gocmd $(STDLIB-TARGETS) go-generate aot $(GLJ-IMPORTS) $(GLJ-BINS)
 
 .PHONY: gocmd
 gocmd:
@@ -60,7 +59,7 @@ aot: gocmd $(STDLIB-TARGETS)
 		GLOJURE_USE_AOT=false GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO-CMD) run -tags glj_no_aot_stdlib ./cmd/glj
 
 .PHONY: build
-build: $(GLJ)
+build: $(GLJ-CMD)
 
 .PHONY: clean
 clean:
@@ -92,13 +91,13 @@ vet:
 	@go vet ./...
 
 .PHONY: $(TEST-TARGETS)
-$(TEST-TARGETS): gocmd $(GLJ)
-	@$(GLJ) $(basename $@)
+$(TEST-TARGETS): gocmd $(GLJ-CMD)
+	@$(GLJ-CMD) $(basename $@)
 
 .PHONY: test
 test: $(TEST-TARGETS) # vet - vet is disabled until we fix errors in generated code
 	@cd test/clojure-test-suite && \
-	../../$(GLJ) test-glojure.glj --expect-failures 38 --expect-errors 151 2>/dev/null
+	../../$(GLJ-CMD) test-glojure.glj --expect-failures 38 --expect-errors 151 2>/dev/null
 
 .PHONY: format
 format:
