@@ -13,6 +13,17 @@ STDLIB-NAMES := $(STDLIB-ORIGINALS:scripts/rewrite-core/originals/%=%)
 STDLIB-ORIGINALS := $(STDLIB-NAMES:%=scripts/rewrite-core/originals/,%)
 STDLIB-TARGETS := $(addprefix pkg/stdlib/clojure/,$(STDLIB-NAMES:.clj=.glj))
 
+AOT-NAMESPACES := \
+	clojure.core \
+	clojure.core.async \
+	clojure.string \
+	clojure.template \
+	clojure.test \
+	clojure.walk \
+	clojure.uuid \
+	glojure.go.io \
+	glojure.go.types \
+
 OS-TYPE := $(shell bash -c 'echo $$OSTYPE')
 OS-NAME := \
   $(if $(findstring darwin,$(OS-TYPE))\
@@ -42,8 +53,8 @@ GO-PLATFORMS := \
 	darwin_amd64 \
 	linux_arm64 \
 	linux_amd64 \
-	windows_amd64 \
 	windows_arm \
+	windows_amd64 \
 	js_wasm \
 
 GLJ-IMPORTS=$(foreach platform,$(GO-PLATFORMS) \
@@ -67,22 +78,10 @@ generate:
 	@go generate ./...
 
 aot: gocmd $(STDLIB-TARGETS)
-	@echo "(map compile '[ \
-		clojure.core \
-		clojure.core.async \
-		clojure.string \
-		clojure.template \
-		clojure.test \
-		clojure.uuid \
-		clojure.walk \
-		glojure.go.types \
-		glojure.go.io \
-		])" | \
-		GLOJURE_USE_AOT=false \
-		GLOJURE_STDLIB_PATH=./pkg/stdlib \
-		$(GO-CMD) run \
-			-tags glj_no_aot_stdlib \
-			./cmd/glj
+	@GLOJURE_USE_AOT=false \
+	GLOJURE_STDLIB_PATH=./pkg/stdlib \
+	$(GO-CMD) run -tags glj_no_aot_stdlib ./cmd/glj \
+	<<<"(map compile '[$(AOT-NAMESPACES)])"
 
 build: $(GLJ-CMD)
 
