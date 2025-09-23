@@ -40,7 +40,7 @@ GLJ-BINS=$(foreach platform,$(GO-PLATFORMS),bin/$(platform)/glj$(if $(findstring
 GO-VERSION := 1.19.3
 GO-CMD := go$(GO-VERSION)
 
-all: gocmd $(STDLIB-TARGETS) go-generate aot $(GLJ-IMPORTS) $(GLJ-BINS)
+all: gocmd $(STDLIB-TARGETS) generate aot $(GLJ-IMPORTS) $(GLJ-BINS)
 
 gocmd:
 	@$(GO-CMD) version 2>&1 > /dev/null || \
