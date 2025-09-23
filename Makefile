@@ -1,6 +1,10 @@
 # Usage:
 #   make clean all test GO-VERSION=1.25.1
 
+ifdef GLOJURE_MAKES
+include .makes.mk
+endif
+
 SHELL := bash
 
 GO-VERSION ?= 1.19.3
@@ -80,14 +84,14 @@ ALL-TARGETS := \
 	glj-bins \
 
 #-------------------------------------------------------------------------------
-default: all
+default:: all
 
 # Dummy target for commands like:
 #   make all force=1
 #   make stdlib-targets force=1
 force:
 
-all: $(ALL-TARGETS)
+all:: $(ALL-TARGETS)
 
 gocmd:
 	@$(GO-CMD) version &> /dev/null || { \
@@ -95,24 +99,24 @@ gocmd:
 		$(GO-CMD) download > /dev/null && \
 		$(GO-CMD) version > /dev/null); }
 
-stdlib-targets: $(STDLIB-TARGETS)
+stdlib-targets:: $(STDLIB-TARGETS)
 
-generate:
+generate::
 	go generate ./...
 
-aot: gocmd $(STDLIB-TARGETS)
+aot:: gocmd $(STDLIB-TARGETS)
 	GLOJURE_USE_AOT=false \
 	GLOJURE_STDLIB_PATH=./pkg/stdlib \
 	$(GO-CMD) run -tags glj_no_aot_stdlib ./cmd/glj \
 	<<<"(map compile '[$(AOT-NAMESPACES)])"
 
-glj-imports: $(GLJ-IMPORTS)
+glj-imports:: $(GLJ-IMPORTS)
 
-glj-bins: $(GLJ-BINS)
+glj-bins:: $(GLJ-BINS)
 
-build: $(GLJ-CMD)
+build:: $(GLJ-CMD)
 
-clean:
+clean::
 	$(RM) report.html
 	$(RM) -r bin/ scripts/rewrite-core/.cpcache/
 
@@ -153,16 +157,16 @@ bin/%/glj.wasm: \
 	@mkdir -p $(dir $@)
 	scripts/build-glj.sh $@ $*
 
-vet:
+vet::
 	go vet ./...
 
 .PHONY: test
 # vet is disabled until we fix errors in generated code
-test: test-glj test-suite  # vet
+test:: test-glj test-suite  # vet
 
-test-glj: $(TEST-GLJ-TARGETS)
+test-glj:: $(TEST-GLJ-TARGETS)
 
-test-suite: $(GLJ-CMD)
+test-suite:: $(GLJ-CMD)
 	cd $(TEST-SUITE-DIR) && \
 		$(abspath $<) $(TEST-SUITE-FILE) \
 			--expect-failures 38 \
@@ -172,12 +176,12 @@ test-suite: $(GLJ-CMD)
 $(TEST-GLJ-TARGETS): $(GLJ-CMD)
 	$< $(basename $@)
 
-format:
+format::
 	@if go fmt ./... | grep -q ''; then \
 		echo "Files were formatted. Please commit the changes."; \
 		exit 1; \
 	fi
 
-update-clojure-sources:
+update-clojure-sources::
 	scripts/rewrite-core/update-clojure-sources.sh \
 		$(CLOJURE-STDLIB-VERSION)
