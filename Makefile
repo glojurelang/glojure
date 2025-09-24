@@ -112,7 +112,7 @@ build: $(GLJ-CMD)
 
 clean:
 	$(RM) report.html
-	$(RM) -r bin/
+	$(RM) -r bin/ scripts/rewrite-core/.cpcache/
 
 pkg/gen/gljimports/gljimports_%.go: \
 		./scripts/gen-gljimports.sh \
