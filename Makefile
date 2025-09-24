@@ -69,10 +69,23 @@ GLJ-BINS=$(foreach platform,$(GO-PLATFORMS) \
 
 GO-CMD := go$(GO-VERSION)
 
+ALL-TARGETS := \
+	$(if $(force),update-clojure-sources) \
+	stdlib-targets \
+	generate \
+	aot \
+	glj-imports \
+	glj-bins \
+
 #-------------------------------------------------------------------------------
 default: all
 
-all: gocmd stdlib-targets generate aot glj-imports glj-bins
+# Dummy target for commands like:
+#   make all force=1
+#   make stdlib-targets force=1
+force:
+
+all: $(ALL-TARGETS)
 
 gocmd:
 	@$(GO-CMD) version &> /dev/null || { \
@@ -106,14 +119,16 @@ pkg/gen/gljimports/gljimports_%.go: \
 		./cmd/gen-import-interop/main.go \
 		./internal/genpkg/genpkg.go \
 		$(wildcard ./pkg/lang/*.go) \
-		$(wildcard ./pkg/runtime/*.go)
+		$(wildcard ./pkg/runtime/*.go) \
+		$(if $(force),force)
 	@echo "Generating $@"
 	./scripts/gen-gljimports.sh $@ $* $(GO-CMD)
 
 pkg/stdlib/clojure/%.glj: \
 		scripts/rewrite-core/originals/%.clj \
 		scripts/rewrite-core/run.sh \
-		scripts/rewrite-core/rewrite.clj
+		scripts/rewrite-core/rewrite.clj \
+		$(if $(force),force)
 	@echo "Rewriting $< to $@"
 	@mkdir -p $(dir $@)
 	scripts/rewrite-core/run.sh $< > $@
@@ -121,7 +136,8 @@ pkg/stdlib/clojure/%.glj: \
 bin/%/glj: generate \
 		$(wildcard ./cmd/glj/*.go) \
 		$(wildcard ./pkg/**/*.go) \
-		$(wildcard ./internal/**/*.go)
+		$(wildcard ./internal/**/*.go) \
+		$(if $(force),force)
 	@echo "Building $@"
 	@mkdir -p $(dir $@)
 	scripts/build-glj.sh $@ $*
@@ -129,7 +145,8 @@ bin/%/glj: generate \
 bin/%/glj.wasm: \
 		$(wildcard ./cmd/glj/*.go) \
 		$(wildcard ./pkg/**/*.go) \
-		$(wildcard ./internal/**/*.go)
+		$(wildcard ./internal/**/*.go) \
+		$(if $(force),force)
 	@echo "Building $@"
 	@mkdir -p $(dir $@)
 	scripts/build-glj.sh $@ $*
