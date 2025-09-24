@@ -19,10 +19,11 @@ AOT-NAMESPACES := \
 	clojure.string \
 	clojure.template \
 	clojure.test \
-	clojure.walk \
 	clojure.uuid \
+	clojure.walk \
 	glojure.go.io \
 	glojure.go.types \
+	$(EXTRA-AOT-NAMESPACES)
 
 OS-TYPE := $(shell bash -c 'echo $$OSTYPE')
 OS-NAME := \
@@ -59,6 +60,7 @@ GO-PLATFORMS := \
 	windows_arm \
 	windows_amd64 \
 	js_wasm \
+	$(EXTRA-GO-PLATFORMS)
 
 GLJ-IMPORTS=$(foreach platform,$(GO-PLATFORMS) \
               ,pkg/gen/gljimports/gljimports_$(platform).go)
