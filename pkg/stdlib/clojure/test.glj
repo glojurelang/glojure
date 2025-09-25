@@ -267,13 +267,13 @@
 
 (def ^:dynamic *testing-contexts* (list)) ; bound to hierarchy of "testing" strings
 
-(def ^:dynamic *test-out* *out*)         ; PrintWriter for test reporting output
+(def ^{:dynamic true} *test-out* nil)         ; PrintWriter for test reporting output
 
 (defmacro with-test-out
   "Runs body with *out* bound to the value of *test-out*."
   {:added "1.1"}
   [& body]
-  `(binding [*out* *test-out*]
+  `(binding [*out* (or *test-out* *out*)]
      ~@body))
 
 ;;; UTILITIES FOR REPORTING FUNCTIONS
@@ -287,7 +287,7 @@
   {:added "1.1"
    :deprecated "1.2"}
   [n]
-  (let [^StackTraceElement s (nth (.getStackTrace (new java.lang.Throwable)) n)]
+  (let [^StackTraceElement s (nth (.getStackTrace (new github.com:glojurelang:glojure:pkg:lang.Throwable)) n)]
     [(.getFileName s) (.getLineNumber s)]))
 
 (defn testing-vars-str
@@ -410,8 +410,7 @@
   {:added "1.1"}
   [v]
   (try (var-get v)
-       (catch IllegalStateException e
-         nil)))
+       (catch github.com:glojurelang:glojure:pkg:lang.IllegalStateException e nil)))
 
 (defn function?
   "Returns true if argument is a function or a symbol that resolves to
