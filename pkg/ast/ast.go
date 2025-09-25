@@ -190,21 +190,21 @@ type (
 	}
 
 	CaseNode struct {
-		Test       *Node            // The expression to test
-		Shift      int64            // Bit shift for hash compaction
-		Mask       int64            // Bit mask for hash compaction
-		TestType   interface{}      // Keyword: :int, :hash-identity, or :hash-equiv
-		SwitchType interface{}      // Keyword: :compact or :sparse
-		Default    *Node            // Default expression
-		Entries    []CaseEntry      // Case entries
-		SkipCheck  map[int64]bool   // Set of keys with collisions
+		Test       *Node          // The expression to test
+		Shift      int64          // Bit shift for hash compaction
+		Mask       int64          // Bit mask for hash compaction
+		TestType   interface{}    // Keyword: :int, :hash-identity, or :hash-equiv
+		SwitchType interface{}    // Keyword: :compact or :sparse
+		Default    *Node          // Default expression
+		Entries    []CaseEntry    // Case entries
+		SkipCheck  map[int64]bool // Set of keys with collisions
 	}
 
 	CaseEntry struct {
-		Key          int64       // Map key (int value or shifted/masked hash)
-		TestConstant *Node       // Original test constant (nil for collisions)
-		ResultExpr   *Node       // Result expression or condp for collisions
-		HasCollision bool        // Whether this is a collision case
+		Key          int64 // Map key (int value or shifted/masked hash)
+		TestConstant *Node // Original test constant (nil for collisions)
+		ResultExpr   *Node // Result expression or condp for collisions
+		HasCollision bool  // Whether this is a collision case
 	}
 
 	TheVarNode struct {
