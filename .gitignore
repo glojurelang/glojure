@@ -1,5 +1,6 @@
-bin
-doc/repl/glj.wasm
+/bin
+/doc/repl/glj.wasm
+/report.html
 .direnv
 
 # useful to symlink in for context
