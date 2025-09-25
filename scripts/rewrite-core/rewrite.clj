@@ -368,6 +368,8 @@
    (sexpr-replace '(when (instance? IExceptionInfo ex)
                      (.getData ^IExceptionInfo ex))
                   '(github.com:glojurelang:glojure:pkg:lang.GetExData ex))
+   (sexpr-replace '(catch IllegalStateException e nil)
+                  '(catch github.com:glojurelang:glojure:pkg:lang.IllegalStateException e nil))
 
    ;; Handle ExceptionInfo constructor with different arities
    [(fn select [zloc]
@@ -921,7 +923,6 @@
    ;;; TODO: implement load for embedded files!
    (sexpr-replace '(load "core_proxy") '(do))
    (sexpr-replace '(load "genclass") '(do))
-   (sexpr-replace '(load "core/protocols") '(load "protocols"))
    (sexpr-replace '(load "gvec") '(do))
    (sexpr-replace '(load "uuid") '(do))
 
@@ -1052,6 +1053,10 @@
    (sexpr-replace '(. *out* (append system-newline))
                   '(github.com:glojurelang:glojure:pkg:lang.AppendWriter *out* system-newline))
    (sexpr-replace '(. *out* (flush)) '(. *out* (Sync)))
+   (sexpr-replace '(def ^:dynamic *test-out* *out*)
+                  '(def ^:dynamic *test-out* nil))
+   (sexpr-replace '[*out* *test-out*]
+                  '[*out* (or *test-out* *out*)])
 
    (omit-symbols '#{primitives-classnames})
 
@@ -1114,6 +1119,8 @@
                   '(if (instance? go/error actual)
                      (prn (.Error actual))
                      (prn actual)))
+   (sexpr-replace '(new java.lang.Throwable)
+                  '(new github.com:glojurelang:glojure:pkg:lang.Throwable))
 
    ;; ===== Regular Expression Replacements =====
    (sexpr-replace '(.split re s)

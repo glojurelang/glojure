@@ -30190,7 +30190,7 @@ func LoadNS() {
 			if lang.IsTruthy(tmp5) {
 				var tmp6 any
 				{ // let
-					// let binding "result__3649__auto__"
+					// let binding "result__3647__auto__"
 					tmp7 := lang.Apply(strconv9.ParseFloat, []any{v2, int64(64)})
 					var v8 any = tmp7
 					_ = v8
@@ -30232,7 +30232,7 @@ func LoadNS() {
 			if lang.IsTruthy(tmp5) {
 				var tmp6 any
 				{ // let
-					// let binding "result__3648__auto__"
+					// let binding "result__3646__auto__"
 					tmp7 := lang.Apply(strconv9.ParseInt, []any{v2, int64(10), int64(64)})
 					var v8 any = tmp7
 					_ = v8

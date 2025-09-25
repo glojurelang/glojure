@@ -55,7 +55,7 @@ generate:
 
 .PHONY: aot
 aot: gocmd $(STDLIB_TARGETS)
-	@echo "(map compile '[clojure.core clojure.core.async clojure.walk clojure.template clojure.uuid glojure.go.types glojure.go.io])" | \
+	@echo "(map compile '[clojure.core clojure.core.async clojure.string clojure.template clojure.test clojure.uuid clojure.walk glojure.go.types glojure.go.io])" | \
 		GLOJURE_USE_AOT=false GLOJURE_STDLIB_PATH=./pkg/stdlib $(GO_CMD) run -tags glj_no_aot_stdlib ./cmd/glj
 
 .PHONY: build
