@@ -16,10 +16,16 @@
 (set! *warn-on-reflection* true)
 
 (def ^:dynamic ^math:rand.*Rand
-     *rnd*
-     "Random instance for use in generators. By consistently using this
+  *rnd*
+  "Random instance for use in generators. By consistently using this
 instance you can get a repeatable basis for tests."
-     (math:rand.New (math:rand.NewSource 42)))
+  nil)
+  
+(defn *rnd*- []
+  (or *rnd*
+      (alter-var-root
+       *rnd*
+       (constantly (math:rand.New (math:rand.NewSource 42))))))
 
 (defn- call-through
   "Recursively call x until it doesn't return a function."
@@ -39,25 +45,25 @@ instance you can get a repeatable basis for tests."
 (defn geometric
   "Geometric distribution with mean 1/p."
   ^long [p]
-  (core/long (Math/ceil (/ (Math/log (.nextDouble *rnd*))
+  (core/long (Math/ceil (/ (Math/log (.nextDouble (*rnd*-)))
                            (Math/log (- 1.0 p))))))
 
 (defn uniform
   "Uniform distribution from lo (inclusive) to hi (exclusive).
    Defaults to range of Java long."
-  (^long [] (.nextLong *rnd*))
+  (^long [] (.nextLong (*rnd*-)))
   (^long[lo hi] {:pre [(< lo hi)]}
-         (clojure.core/long (Math/floor (+ lo (* (.nextDouble *rnd*) (- hi lo)))))))
+         (clojure.core/long (Math/floor (+ lo (* (.nextDouble (*rnd*-)) (- hi lo)))))))
 
 (defn float
   "Generate a float between 0 and 1 based on *rnd*"
   ^double []
-  (.nextFloat *rnd*))
+  (.nextFloat (*rnd*-)))
 
 (defn double
   "Generate a double between 0 and 1 based on *rnd*."
   ^double []
-  (.nextDouble *rnd*))
+  (.nextDouble (*rnd*-)))
 
 (defn rand-nth
   "Replacement of core/rand-nth that allows control of the
@@ -117,7 +123,7 @@ instance you can get a repeatable basis for tests."
 (defn boolean
   "Returns a bool based on *rnd*."
   []
-  (.nextBoolean *rnd*))
+  (.nextBoolean (*rnd*-)))
 
 (defn printable-ascii-char
   "Returns a char based on *rnd* in the printable ascii range."
@@ -162,7 +168,7 @@ instance you can get a repeatable basis for tests."
 
 (primitive-arrays ["byte" "short" "long" "char" "double" "float" "int" "boolean"])
 
-#_(defn byte-array
+(defn byte-array
       ([f]
          (byte-array f default-sizer))
       ([f sizer]
@@ -172,7 +178,7 @@ instance you can get a repeatable basis for tests."
            arr)))
 
 ;; TODO: sensible default distributions for bigint, bigdec
-(defn bigint
+#_(defn bigint
   ^clojure.lang.BigInt []
   (loop []
     (let [i (try
@@ -180,7 +186,7 @@ instance you can get a repeatable basis for tests."
              (catch NumberFormatException e :retry))]
       (if (= i :retry) (recur) (core/bigint i)))))
 
-(defn bigdec
+#_(defn bigdec
   []
   (BigDecimal. (.toBigInteger (bigint)) (geometric 0.01)))
 
@@ -249,12 +255,12 @@ instance you can get a repeatable basis for tests."
   ([] (keyword default-sizer))
   ([sizer] (core/keyword (name sizer))))
 
-(defn uuid
+#_(defn uuid
   "Create a UUID based on uniform distribution of low and high parts."
   []
   (java.util.UUID. (long) (long)))
 
-(defn date
+#_(defn date
   "Create a date with geometric mean around base which defaults to
    #inst \"2007-10-16T00:00:00.000-00:00\""
   ([] (date (first (time.Parse time.RFC3339 "2007-10-16T00:00:00.000-00:00"))))
@@ -270,9 +276,11 @@ instance you can get a repeatable basis for tests."
    string
    symbol
    keyword
+   #_#_
    uuid
    date
    ratio
+   #_#_
    bigint
    bigdec])
 
@@ -331,6 +339,3 @@ instance you can get a repeatable basis for tests."
                (inc n)
                (rest coll)))
       (persistent! result))))
-
-
-
