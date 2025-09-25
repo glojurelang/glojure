@@ -16,6 +16,7 @@ STDLIB-TARGETS := $(addprefix pkg/stdlib/clojure/,$(STDLIB-NAMES:.clj=.glj))
 AOT-NAMESPACES := \
 	clojure.core \
 	clojure.core.async \
+	clojure.data.generators \
 	clojure.string \
 	clojure.template \
 	clojure.test \
