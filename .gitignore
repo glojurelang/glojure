@@ -2,6 +2,7 @@
 /doc/repl/glj.wasm
 /report.html
 .direnv
+/.cache/
 
 # useful to symlink in for context
 /clojure
