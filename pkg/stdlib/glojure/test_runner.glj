@@ -1,0 +1,220 @@
+(ns glojure.test-runner
+  "A test runner for Glojure, inspired by cognitect-labs/test-runner"
+  (:require [clojure.test :as t]
+            [clojure.string :as str]))
+
+(defn find-test-files
+  "Find all .glj files in the given directories"
+  [dirs]
+  (let [find-files (fn [dir]
+                     (let [[matches err] (path:filepath.Glob (str dir "/**/*.glj"))]
+                       (if err
+                         (throw (fmt.Errorf "Error finding test files: %s" (.Error err)))
+                         matches)))]
+    (mapcat find-files dirs)))
+
+(defn file->namespace
+  "Convert a file path to a namespace symbol by reading the ns form"
+  [file-path]
+  (try
+    (let [content (slurp file-path)
+          ;; Simple regex to find ns declaration
+          ns-match (re-find #"\(ns\s+([a-zA-Z0-9.-]+)" content)]
+      (when ns-match
+        (symbol (second ns-match))))
+    (catch go/any e
+      (println "Error reading namespace from" file-path ":" (.Error e))
+      nil)))
+
+(defn load-test-namespace
+  "Load a test namespace, return true if successful"
+  [ns-sym]
+  (try
+    (require ns-sym)
+    true
+    (catch go/any e
+      (println "Failed to load namespace" ns-sym ":" (.Error e))
+      false)))
+
+(defn find-test-namespaces
+  "Find all test namespaces in the given directories"
+  [dirs]
+  (let [files (find-test-files dirs)
+        ns-symbols (keep file->namespace files)]
+    (filter #(and %
+                  (or (str/ends-with? (name %) "-test")
+                      (str/ends-with? (name %) "_test")
+                      (str/includes? (name %) "test-")
+                      (str/includes? (name %) "test_"))) 
+            ns-symbols)))
+
+(defn filter-namespaces
+  "Filter namespaces based on pattern"
+  [namespaces pattern]
+  (if pattern
+    (filter #(re-matches pattern (str %)) namespaces)
+    namespaces))
+
+(defn filter-by-metadata
+  "Filter test vars by metadata includes/excludes"
+  [test-vars includes excludes]
+  (let [has-meta? (fn [v meta-key]
+                    (get (meta v) meta-key))
+        included? (fn [v]
+                    (if (empty? includes)
+                      true
+                      (some #(has-meta? v %) includes)))
+        excluded? (fn [v]
+                    (if (empty? excludes)
+                      false
+                      (some #(has-meta? v %) excludes)))]
+    (filter #(and (included? %) (not (excluded? %))) test-vars)))
+
+(defn run-test-namespace
+  "Run tests in a single namespace with optional filtering"
+  [ns-sym {:keys [includes excludes verbose]}]
+  (when verbose
+    (println "Testing" ns-sym))
+  (if-let [ns-obj (find-ns ns-sym)]
+    (let [test-vars (filter #(:test (meta %)) (vals (ns-publics ns-obj)))
+          filtered-vars (filter-by-metadata test-vars includes excludes)]
+      (if (empty? filtered-vars)
+        (when verbose
+          (println "  No matching tests in" ns-sym))
+        (binding [t/*testing-vars* (list)]
+          (t/test-vars filtered-vars))))
+    (println "Namespace not found:" ns-sym)))
+
+(defmulti report-results
+  "Report test results in different formats"
+  (fn [format results output] format))
+
+(defmethod report-results :console
+  [_ results output]
+  (let [{:keys [test pass fail error]} results
+        total (+ pass fail error)
+        ;; ANSI color codes
+        green "\033[32m"
+        red "\033[31m"
+        yellow "\033[33m"
+        reset "\033[0m"
+        bold "\033[1m"]
+    (println)
+    (println (str bold "Ran " test " tests containing " total " assertions." reset))
+    (print (str green "✓ " pass " passed" reset))
+    (when (> fail 0)
+      (print (str ", " red "✗ " fail " failed" reset)))
+    (when (> error 0) 
+      (print (str ", " yellow "⚠ " error " errors" reset)))
+    (println)
+    (println)
+    (if (and (zero? fail) (zero? error))
+      (println (str green bold "SUCCESS!" reset))
+      (do
+        (println (str red bold "FAILURE!" reset))
+        (os.Exit 1)))))
+
+(defmethod report-results :tap
+  [_ results output]
+  (let [{:keys [test pass fail error test-details]} results
+        total (+ pass fail error)]
+    (println "TAP version 13")
+    (println (str "1.." total))
+    (println (str "# tests " test))
+    (println (str "# pass " pass))
+    (when (> fail 0)
+      (println (str "# fail " fail)))
+    (when (> error 0)
+      (println (str "# error " error)))
+    ;; Exit with appropriate code
+    (when (or (> fail 0) (> error 0))
+      (os.Exit 1))))
+
+(defmethod report-results :json
+  [_ results output]
+  ;; For now, use EDN format as JSON (we can improve this later)
+  (println (str "{\"tests\":" (:test results)
+                ",\"passed\":" (:pass results)
+                ",\"failed\":" (:fail results)  
+                ",\"errors\":" (:error results)
+                ",\"success\":" (if (and (zero? (:fail results)) 
+                                        (zero? (:error results)))
+                                 "true" "false")
+                "}"))
+  (when (or (> (:fail results) 0) (> (:error results) 0))
+    (os.Exit 1)))
+
+(defmethod report-results :edn
+  [_ results output]
+  (prn results))
+
+(defmethod report-results :junit
+  [_ results output]
+  ;; TODO: Implement JUnit XML output
+  (println "JUnit format not yet implemented"))
+
+(defn run-tests
+  "Main entry point for running tests"
+  [{:keys [dirs namespace-pattern format output fail-fast 
+           includes excludes parallel verbose list-only]
+    :or {dirs ["test"]
+         format :console
+         parallel 1
+         verbose false
+         list-only false}}]
+  
+  ;; Add parent directory of test directories to load path
+  ;; For "test/glojure" we add "test" to the load path
+  (let [parent-dirs (set (map #(first (str/split % #"/")) dirs))]
+    (doseq [dir parent-dirs]
+      (github.com:glojurelang:glojure:pkg:runtime.AddLoadPath (os.DirFS dir))))
+  
+  ;; Find test namespaces
+  (let [all-namespaces (find-test-namespaces dirs)
+        filtered-namespaces (filter-namespaces all-namespaces namespace-pattern)]
+    
+    (when verbose
+      (println "Found" (count filtered-namespaces) "test namespaces"))
+    
+    (if list-only
+      ;; Just list the namespaces
+      (doseq [ns filtered-namespaces]
+        (println ns))
+      
+      ;; Load and run tests
+      (let [loaded-namespaces (filter load-test-namespace filtered-namespaces)
+            test-results (atom {:test 0 :pass 0 :fail 0 :error 0})
+            original-report t/report]
+        
+        (when verbose
+          (println "Loaded" (count loaded-namespaces) "namespaces"))
+        
+        ;; Custom reporter to collect results
+        (binding [t/report (fn [m]
+                            (case (:type m)
+                              :pass (swap! test-results update :pass inc)
+                              :fail (swap! test-results update :fail inc)
+                              :error (swap! test-results update :error inc)
+                              :begin-test-var (swap! test-results update :test inc)
+                              nil)
+                            (original-report m)
+                            
+                            ;; Fail fast if requested
+                            (when (and fail-fast 
+                                      (#{:fail :error} (:type m)))
+                              (println "Failing fast due to" (:type m))
+                              (report-results format @test-results output)
+                              (os.Exit 1)))]
+          
+          ;; Run tests for each namespace
+          (doseq [ns-sym loaded-namespaces]
+            (run-test-namespace ns-sym {:includes includes
+                                        :excludes excludes
+                                        :verbose verbose})))
+        
+        ;; Report results
+        (report-results format @test-results output)))))
+
+;; Default run function for command-line usage
+(defn -main [& args]
+  (run-tests {}))

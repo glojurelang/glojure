@@ -288,4 +288,4 @@
     (is (= (sort-by count ["hello"]) '("hello")))))
 
 ;; Run tests
-(run-tests)
+;; (run-tests) - commented out for test runner

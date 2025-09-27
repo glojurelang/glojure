@@ -198,4 +198,4 @@
   (is (= "{}" (str {})))
   (is (= "[]" (str []))))
 
-(run-tests)
+;; (run-tests) - commented out for test runner

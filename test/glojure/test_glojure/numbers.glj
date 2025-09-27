@@ -1102,4 +1102,4 @@ Math/pow overflows to Infinity."
     (is (thrown? *IllegalArgumentError (parse-double :keyword)))
     (is (thrown? *IllegalArgumentError (parse-double 'symbol)))))
 
-(run-tests)
+;; (run-tests) - commented out for test runner

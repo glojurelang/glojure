@@ -49,4 +49,4 @@
     (is (= 42 (go/map-index mp "foo")))
     (is (= ["foo" 42] (first (seq mp))))))
 
-(run-tests)
+;; (run-tests) - commented out for test runner

@@ -179,5 +179,5 @@
              "##-Inf" (go/float32 (math.Inf -1))
              "##NaN" (go/float32 (math.NaN))))
 
-(run-tests)
+;; (run-tests) - commented out for test runner
 

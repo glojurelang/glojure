@@ -11,4 +11,4 @@
   (is (= 6 (lcm 2 3))
       "lcm of 2 and 3 is 6"))
 
-(run-tests)
+;; (run-tests) - commented out for test runner

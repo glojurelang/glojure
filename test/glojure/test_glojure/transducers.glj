@@ -406,4 +406,4 @@
 ;;                (halt-when :anomaly #(assoc %2 :partial-results %1))
 ;;                [1 2 {:anomaly :oh-no!} 3 4]))))
 
-(run-tests)
+;; (run-tests) - commented out for test runner

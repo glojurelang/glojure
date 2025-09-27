@@ -1,0 +1,22 @@
+;; Simple test runner for debugging
+(ns test-runner-simple
+  (:require [clojure.test :as t]))
+
+(println "Simple test runner starting...")
+
+;; Add test directory to load path
+(github.com:glojurelang:glojure:pkg:runtime.AddLoadPath (os.DirFS "test"))
+
+;; Try to load a simple test namespace
+(println "Loading test namespace...")
+(require 'glojure.test-glojure.basic)
+
+;; Run the tests
+(println "Running tests...")
+(let [results (t/run-tests 'glojure.test-glojure.basic)]
+  (println "Results:" results)
+  (if (t/successful? results)
+    (println "SUCCESS!")
+    (do 
+      (println "FAILURE!")
+      (os.Exit 1))))

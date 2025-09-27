@@ -1,0 +1,8 @@
+;; Test the test runner
+(require 'glojure.test-runner)
+
+(println "Testing the test runner...")
+(glojure.test-runner/run-tests 
+  {:dirs ["test/glojure"]
+   :verbose true
+   :namespace-pattern #".*basic.*"})

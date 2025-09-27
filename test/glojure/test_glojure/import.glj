@@ -6,5 +6,5 @@
 (deftest Import
   (is (= "bar" (TrimPrefix "foobar" "foo"))))
 
-(run-tests)
+;; (run-tests) - commented out for test runner
 

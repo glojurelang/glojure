@@ -252,4 +252,4 @@
                25 :twentyfive 26 :twentysix 27 :twentyseven 28 :twentyeight 29 :twentynine
                :other))))))
 
-(run-tests)
+;; (run-tests) - commented out for test runner

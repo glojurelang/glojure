@@ -43,4 +43,4 @@
       (is (= [2 2 2] @a)))))
 
 
-(run-tests)
+;; (run-tests) - commented out for test runner

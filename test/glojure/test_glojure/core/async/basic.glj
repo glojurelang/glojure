@@ -62,4 +62,4 @@
                 x))]
     (is (not (nil? err)) "duplicate ports should throw")))
 
-(run-tests)
+;; (run-tests) - commented out for test runner

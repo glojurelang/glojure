@@ -108,4 +108,4 @@
   (is (:foo (meta ^:foo #{})))
   (is (:foo (meta ^:foo {}))))
 
-(run-tests)
+;; ;; (run-tests) - commented out for test runner - commented out for test runner
