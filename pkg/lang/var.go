@@ -100,7 +100,8 @@ func NewVar(ns *Namespace, sym *Symbol) *Var {
 		watches: emptyMap,
 	}
 	v.root.Store(Box{val: &UnboundVar{v: v}})
-	v.meta.Store(NewBox(emptyMap))
+	v.meta.Store(NewBox(emptyMap)) // Initialize for SetMeta to work
+	v.SetMeta(emptyMap) // This will add :name and :ns metadata
 	return v
 }
 
@@ -167,6 +168,8 @@ func (v *Var) Meta() IPersistentMap {
 
 func (v *Var) SetMeta(meta IPersistentMap) {
 	// TODO: ResetMeta
+	// Ensure these basis keys (matching Clojure's Var.java)
+	meta = Assoc(meta, KWName, v.sym).(IPersistentMap)
 	meta = Assoc(meta, KWNS, v.ns).(IPersistentMap)
 	v.meta.Store(NewBox(meta))
 }
