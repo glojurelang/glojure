@@ -146,12 +146,16 @@
 
 (defmethod report-results :edn
   [_ results output]
-  (prn results))
+  (prn results)
+  (when (or (> (:fail results) 0) (> (:error results) 0))
+    (os.Exit 1)))
 
 (defmethod report-results :junit
   [_ results output]
   ;; TODO: Implement JUnit XML output
-  (println "JUnit format not yet implemented"))
+  (println "JUnit format not yet implemented")
+  (when (or (> (:fail results) 0) (> (:error results) 0))
+    (os.Exit 1)))
 
 (defn run-tests
   "Main entry point for running tests"
@@ -213,7 +217,11 @@
                                         :verbose verbose})))
         
         ;; Report results
-        (report-results format @test-results output)))))
+        (report-results format @test-results output)
+        
+        ;; Ensure we exit with success if we get here
+        ;; (report-results should have already exited with 1 if there were failures)
+        (os.Exit 0)))))
 
 ;; Default run function for command-line usage
 (defn -main [& args]

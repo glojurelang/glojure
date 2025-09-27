@@ -69,6 +69,8 @@ GLJ-IMPORTS=$(foreach platform,$(GO-PLATFORMS) \
 GLJ-BINS=$(foreach platform,$(GO-PLATFORMS) \
 	   ,bin/$(platform)/glj$(if $(findstring wasm,$(platform)),.wasm,))
 
+TEST-RUNNER-BIN := bin/glj-test
+
 GO-CMD := go$(GO-VERSION)
 
 ALL-TARGETS := \
@@ -156,7 +158,7 @@ bin/%/glj.wasm: \
 vet:
 	go vet ./...
 
-.PHONY: test
+.PHONY: test test-runner
 # vet is disabled until we fix errors in generated code
 test: test-glj test-suite  # vet
 
@@ -168,6 +170,23 @@ test-suite: $(GLJ-CMD)
 			--expect-failures 38 \
 			--expect-errors 151 \
 			2>/dev/null
+
+# Build the test runner
+$(TEST-RUNNER-BIN): cmd/glj-test/main.go pkg/stdlib/glojure/test_runner.glj
+	go build -o $@ ./cmd/glj-test
+
+# Run tests with the new test runner
+test-runner: 
+	go run ./cmd/glj-test --dir test/glojure --verbose
+
+# Run specific test namespace with test runner
+test-ns:
+	@if [ -z "$(NS)" ]; then \
+		echo "Usage: make test-ns NS=pattern"; \
+		echo "Example: make test-ns NS=basic"; \
+		exit 1; \
+	fi
+	go run ./cmd/glj-test --dir test/glojure --namespace ".*$(NS).*" --verbose
 
 $(TEST-GLJ-TARGETS): $(GLJ-CMD)
 	$< $(basename $@)
