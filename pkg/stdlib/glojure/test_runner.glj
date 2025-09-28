@@ -167,11 +167,14 @@
          verbose false
          list-only false}}]
   
-  ;; Add parent directory of test directories to load path
+  ;; Add directories to load path
   ;; For "test/glojure" we add "test" to the load path
-  (let [parent-dirs (set (map #(first (str/split % #"/")) dirs))]
-    (doseq [dir parent-dirs]
-      (github.com:glojurelang:glojure:pkg:runtime.AddLoadPath (os.DirFS dir))))
+  ;; For "." we add "." directly
+  (doseq [dir dirs]
+    (if (= dir ".")
+      (github.com:glojurelang:glojure:pkg:runtime.AddLoadPath (os.DirFS "."))
+      (let [parent-dir (first (str/split dir #"/"))]
+        (github.com:glojurelang:glojure:pkg:runtime.AddLoadPath (os.DirFS parent-dir)))))
   
   ;; Find test namespaces
   (let [all-namespaces (find-test-namespaces dirs)
@@ -223,6 +226,84 @@
         ;; (report-results should have already exited with 1 if there were failures)
         (os.Exit 0)))))
 
+(defn parse-args
+  "Parse command-line arguments into options map"
+  [args]
+  (loop [args args
+         opts {:dirs ["test"]
+               :format :console}]
+    (if (empty? args)
+      opts
+      (let [arg (first args)
+            remaining (rest args)]
+        (case arg
+          ("--dir" "-d")
+          (recur (rest remaining)
+                 (assoc opts :dirs [(first remaining)]))
+          
+          ("--dirs")
+          (recur (rest remaining)
+                 (assoc opts :dirs (str/split (first remaining) #",")))
+          
+          ("--namespace" "-n")
+          (recur (rest remaining)
+                 (assoc opts :namespace-pattern (re-pattern (first remaining))))
+          
+          ("--format" "-f")
+          (recur (rest remaining)
+                 (assoc opts :format (keyword (first remaining))))
+          
+          ("--output" "-o")
+          (recur (rest remaining)
+                 (assoc opts :output (first remaining)))
+          
+          ("--fail-fast")
+          (recur remaining
+                 (assoc opts :fail-fast true))
+          
+          ("--verbose" "-v")
+          (recur remaining
+                 (assoc opts :verbose true))
+          
+          ("--list" "-l")
+          (recur remaining
+                 (assoc opts :list-only true))
+          
+          ("--include")
+          (recur (rest remaining)
+                 (update opts :includes (fnil conj []) (keyword (first remaining))))
+          
+          ("--exclude")
+          (recur (rest remaining)
+                 (update opts :excludes (fnil conj []) (keyword (first remaining))))
+          
+          ("--help" "-h")
+          (do
+            (println "Glojure Test Runner")
+            (println)
+            (println "Usage: glj -m glojure.test-runner [options]")
+            (println)
+            (println "Options:")
+            (println "  --dir DIR, -d DIR          Test directory (default: test)")
+            (println "  --dirs DIRS                Comma-separated test directories")
+            (println "  --namespace PATTERN, -n    Namespace pattern regex")
+            (println "  --format FORMAT, -f        Output format (console, tap, json, edn)")
+            (println "  --output FILE, -o          Output file (default: stdout)")
+            (println "  --fail-fast                Stop on first failure")
+            (println "  --verbose, -v              Verbose output")
+            (println "  --list, -l                 List test namespaces only")
+            (println "  --include META             Include tests with metadata")
+            (println "  --exclude META             Exclude tests with metadata")
+            (println "  --help, -h                 Show this help")
+            (os.Exit 0))
+          
+          ;; Unknown argument
+          (do
+            (println "Unknown argument:" arg)
+            (println "Use --help for usage information")
+            (os.Exit 1)))))))
+
 ;; Default run function for command-line usage
 (defn -main [& args]
-  (run-tests {}))
+  (let [opts (parse-args args)]
+    (run-tests opts)))

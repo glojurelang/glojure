@@ -67,7 +67,7 @@ GLJ-IMPORTS=$(foreach platform,$(GO-PLATFORMS) \
 GLJ-BINS=$(foreach platform,$(GO-PLATFORMS) \
 	   ,bin/$(platform)/glj$(if $(findstring wasm,$(platform)),.wasm,))
 
-TEST-RUNNER-BIN := bin/glj-test
+# TEST-RUNNER-BIN no longer needed - using glj -m instead
 
 GO-CMD := go$(GO-VERSION)
 
@@ -184,8 +184,8 @@ vet:
 test: test-glj test-suite  # vet
 
 # Run tests in test/glojure/test_glojure using the new test runner
-test-glj:
-	go run ./cmd/glj-test --dir test/glojure --format console
+test-glj: $(GLJ-CMD)
+	$(GLJ-CMD) -m glojure.test-runner --dir test/glojure --format console
 
 test-suite: $(GLJ-CMD)
 	cd $(TEST-SUITE-DIR) && \
@@ -194,34 +194,32 @@ test-suite: $(GLJ-CMD)
 			--expect-errors 151 \
 			2>/dev/null
 
-# Build the test runner
-$(TEST-RUNNER-BIN): cmd/glj-test/main.go pkg/stdlib/glojure/test_runner.glj
-	go build -o $@ ./cmd/glj-test
+# Test runner now integrated into glj with -m flag
 
 # Run all tests with verbose output
-test-verbose: 
-	go run ./cmd/glj-test --dir test/glojure --verbose
+test-verbose: $(GLJ-CMD)
+	$(GLJ-CMD) -m glojure.test-runner --dir test/glojure --verbose
 
 # Run specific test namespace with test runner
-test-ns:
+test-ns: $(GLJ-CMD)
 	@if [ -z "$(NS)" ]; then \
 		echo "Usage: make test-ns NS=pattern"; \
 		echo "Example: make test-ns NS=basic"; \
 		exit 1; \
 	fi
-	go run ./cmd/glj-test --dir test/glojure --namespace ".*$(NS).*" --verbose
+	$(GLJ-CMD) -m glojure.test-runner --dir test/glojure --namespace ".*$(NS).*" --verbose
 
 # Run tests with TAP format output (useful for CI)
-test-tap:
-	go run ./cmd/glj-test --dir test/glojure --format tap
+test-tap: $(GLJ-CMD)
+	$(GLJ-CMD) -m glojure.test-runner --dir test/glojure --format tap
 
 # Run tests with JSON format output
-test-json:
-	go run ./cmd/glj-test --dir test/glojure --format json
+test-json: $(GLJ-CMD)
+	$(GLJ-CMD) -m glojure.test-runner --dir test/glojure --format json
 
 # List all test namespaces without running them
-test-list:
-	go run ./cmd/glj-test --dir test/glojure --list
+test-list: $(GLJ-CMD)
+	$(GLJ-CMD) -m glojure.test-runner --dir test/glojure --list
 
 # Old per-file test targets removed - using test runner instead
 

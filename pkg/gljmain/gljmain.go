@@ -23,15 +23,17 @@ Usage: glj [options] [file]
 
 Options:
   -e <expr>        Evaluate expression from command line
+  -m <namespace>   Run -main function of namespace with args
   -h, --help       Show this help message
   --version        Show version information
 
 Examples:
-  glj                   # Start REPL
-  glj -e "(+ 1 2)"      # Evaluate expression
-  glj script.glj        # Run script file
-  glj --version         # Show version
-  glj --help            # Show this help
+  glj                             # Start REPL
+  glj -e "(+ 1 2)"                # Evaluate expression
+  glj -m glojure.test-runner      # Run test runner
+  glj script.glj                  # Run script file
+  glj --version                   # Show version
+  glj --help                      # Show this help
 
 For more information, visit: https://github.com/glojurelang/glojure
 `, runtime.Version)
@@ -47,6 +49,50 @@ func Main(args []string) {
 		return
 	} else if args[0] == "--help" || args[0] == "-h" {
 		printHelp()
+		return
+	} else if args[0] == "-m" || args[0] == "--main" {
+		// Call the -main function from a namespace with string arguments
+		if len(args) < 2 {
+			log.Fatal("glj: -m requires a namespace name")
+		}
+		mainNS := args[1]
+		mainArgs := args[2:]
+		
+		// Set command line args
+		core := lang.FindNamespace(lang.NewSymbol("clojure.core"))
+		core.FindInternedVar(lang.NewSymbol("*command-line-args*")).BindRoot(lang.Seq(mainArgs))
+		
+		// Require the namespace  
+		nsSym := lang.NewSymbol(mainNS)
+		requireVar := core.FindInternedVar(lang.NewSymbol("require"))
+		result := requireVar.Invoke(nsSym)
+		if err, ok := result.(error); ok {
+			log.Fatalf("Failed to require namespace %s: %v", mainNS, err)
+		}
+		
+		// Find the namespace
+		ns := lang.FindNamespace(nsSym)
+		if ns == nil {
+			log.Fatalf("Namespace %s not found after require", mainNS)
+		}
+		
+		// Find and call the -main function
+		mainVar := ns.FindInternedVar(lang.NewSymbol("-main"))
+		if mainVar == nil {
+			log.Fatalf("No -main function found in namespace %s", mainNS)
+		}
+		
+		// Convert args to Clojure values
+		var clojureArgs []interface{}
+		for _, arg := range mainArgs {
+			clojureArgs = append(clojureArgs, arg)
+		}
+		
+		// Call -main with the arguments
+		result = mainVar.Invoke(clojureArgs...)
+		if err, ok := result.(error); ok {
+			log.Fatalf("Error calling -main: %v", err)
+		}
 		return
 	} else if args[0] == "-e" {
 		// Evaluate expression from command line
