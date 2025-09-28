@@ -35,6 +35,14 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "clojure.core.async"
 func LoadNS() {
+	// Check if already AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.core.async")); ns != nil {
+		if meta := ns.Meta(); meta != nil {
+			if aotLoaded := meta.ValAt(lang.NewKeyword("aot-loaded")); aotLoaded != nil {
+				return // Already loaded, skip reinitialization
+			}
+		}
+	}
 	sym__AMP_ := lang.NewSymbol("&")
 	sym__STAR_ := lang.NewSymbol("*")
 	sym__LT__BANG_ := lang.NewSymbol("<!")
@@ -139,6 +147,7 @@ func LoadNS() {
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
 	kw_macro := lang.NewKeyword("macro")
+	kw_name := lang.NewKeyword("name")
 	kw_ns := lang.NewKeyword("ns")
 	kw_priority := lang.NewKeyword("priority")
 	kw_private := lang.NewKeyword("private")
@@ -259,7 +268,7 @@ func LoadNS() {
 	_ = ns
 	// >!
 	{
-		tmp0 := sym__GT__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(44), kw_column, int(7), kw_end_DASH_line, int(44), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "puts a val into port. nil values are not allowed. Will park if no buffer space is available.\n  Returns true, or throws if port is already closed.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym__GT__BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "puts a val into port. nil values are not allowed. Will park if no buffer space is available.\n  Returns true, or throws if port is already closed.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym__GT__BANG_, kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(44), kw_end_DASH_line, int(44))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -279,7 +288,7 @@ func LoadNS() {
 	}
 	// >!!
 	{
-		tmp0 := sym__GT__BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(51), kw_column, int(6), kw_end_DASH_line, int(51), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym__GT__BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(51), kw_column, int(6), kw_end_DASH_line, int(51), kw_end_DASH_column, int(8), kw_name, sym__GT__BANG__BANG_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -299,7 +308,7 @@ func LoadNS() {
 	}
 	// chan
 	{
-		tmp0 := sym_chan.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(18), kw_column, int(7), kw_end_DASH_line, int(18), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_buf_DASH_or_DASH_n), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform, sym_ex_DASH_handler)), kw_doc, "Creates a channel with an optional buffer, an optional transducer\n  (like (map f), (filter p) etc or a composition thereof), and an\n  optional exception-handler.  If buf-or-n is a number, will create\n  and use a fixed buffer of that size. If a transducer is supplied a\n  buffer must be specified. ex-handler must be a fn of one argument -\n  if an exception occurs during transformation it will be called with\n  the Throwable as an argument, and any non-nil return value will be\n  placed in the channel.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_chan.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_buf_DASH_or_DASH_n), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform, sym_ex_DASH_handler)), kw_doc, "Creates a channel with an optional buffer, an optional transducer\n  (like (map f), (filter p) etc or a composition thereof), and an\n  optional exception-handler.  If buf-or-n is a number, will create\n  and use a fixed buffer of that size. If a transducer is supplied a\n  buffer must be specified. ex-handler must be a fn of one argument -\n  if an exception occurs during transformation it will be called with\n  the Throwable as an argument, and any non-nil return value will be\n  placed in the channel.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_chan, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(18), kw_end_DASH_line, int(18))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -369,7 +378,7 @@ func LoadNS() {
 	}
 	// close!
 	{
-		tmp0 := sym_close_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_chan)), kw_doc, "Closes a channel. The channel will no longer accept any puts (they\n  will be ignored). Data in the channel remains available for taking,\n  until exhausted, after which takes will return nil. If there are any\n  pending takes, they will be dispatched with nil. Closing a closed\n  channel will throw an exception.\n\n  Logically closing happens after all puts have been\n  delivered. Therefore, any blocked or parked puts will remain\n  blocked/parked until a taker releases them.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_close_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_chan)), kw_doc, "Closes a channel. The channel will no longer accept any puts (they\n  will be ignored). Data in the channel remains available for taking,\n  until exhausted, after which takes will return nil. If there are any\n  pending takes, they will be dispatched with nil. Closing a closed\n  channel will throw an exception.\n\n  Logically closing happens after all puts have been\n  delivered. Therefore, any blocked or parked puts will remain\n  blocked/parked until a taker releases them.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_close_BANG_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(53), kw_end_DASH_line, int(53))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -386,7 +395,7 @@ func LoadNS() {
 	}
 	// default-case
 	{
-		tmp0 := sym_default_DASH_case.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(100), kw_column, int(8), kw_end_DASH_line, int(100), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_default_DASH_case.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_default_DASH_case, kw_end_DASH_column, int(19), kw_column, int(8), kw_line, int(100), kw_end_DASH_line, int(100), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -436,7 +445,7 @@ func LoadNS() {
 	}
 	// <!
 	{
-		tmp0 := sym__LT__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(35), kw_column, int(7), kw_end_DASH_line, int(35), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "takes a val from port. Will return nil if closed. Will park if\n  nothing is available.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym__LT__BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "takes a val from port. Will return nil if closed. Will park if\n  nothing is available.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym__LT__BANG_, kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(35), kw_end_DASH_line, int(35))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -470,7 +479,7 @@ func LoadNS() {
 	}
 	// <!!
 	{
-		tmp0 := sym__LT__BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(42), kw_column, int(6), kw_end_DASH_line, int(42), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym__LT__BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(42), kw_column, int(6), kw_end_DASH_line, int(42), kw_end_DASH_column, int(8), kw_name, sym__LT__BANG__BANG_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -504,7 +513,7 @@ func LoadNS() {
 	}
 	// alt!
 	{
-		tmp0 := sym_alt_BANG_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_clauses)), kw_doc, "Makes a single choice between one of several channel operations,\n  as if by alts!, returning the value of the result expr corresponding\n  to the operation completed.\n\n  Each clause takes the form of:\n\n  channel-op[s] result-expr\n\n  where channel-ops is one of:\n\n  take-port - a single port to take\n  [take-port | [put-port put-val] ...] - a vector of ports as per alts!\n  :default | :priority - an option for alts!\n\n  and result-expr is either a list beginning with a vector, whereupon that\n  vector will be treated as a binding for the [val port] return of the\n  operation, else any other expression.\n\n  (alt!\n    [c t] ([val ch] (foo ch val))\n    x ([v] v)\n    [[out val]] :wrote\n    :default 42)\n\n  Each option may appear at most once. The choice and parking\n  characteristics are those of alts!.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(250), kw_end_DASH_line, int(250))).(*lang.Symbol)
+		tmp0 := sym_alt_BANG_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_clauses)), kw_doc, "Makes a single choice between one of several channel operations,\n  as if by alts!, returning the value of the result expr corresponding\n  to the operation completed.\n\n  Each clause takes the form of:\n\n  channel-op[s] result-expr\n\n  where channel-ops is one of:\n\n  take-port - a single port to take\n  [take-port | [put-port put-val] ...] - a vector of ports as per alts!\n  :default | :priority - an option for alts!\n\n  and result-expr is either a list beginning with a vector, whereupon that\n  vector will be treated as a binding for the [val port] return of the\n  operation, else any other expression.\n\n  (alt!\n    [c t] ([val ch] (foo ch val))\n    x ([v] v)\n    [[out val]] :wrote\n    :default 42)\n\n  Each option may appear at most once. The choice and parking\n  characteristics are those of alts!.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_alt_BANG_, kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(250), kw_end_DASH_line, int(250))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -533,7 +542,7 @@ func LoadNS() {
 	}
 	// alt!!
 	{
-		tmp0 := sym_alt_BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(281), kw_column, int(11), kw_end_DASH_line, int(281), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_macro, true)).(*lang.Symbol)
+		tmp0 := sym_alt_BANG__BANG_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_alt_BANG__BANG_, kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(281), kw_end_DASH_line, int(281))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -566,7 +575,7 @@ func LoadNS() {
 	}
 	// alts!
 	{
-		tmp0 := sym_alts_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(185), kw_column, int(7), kw_end_DASH_line, int(185), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym__AMP_, lang.NewMap(kw_as, sym_opts))), kw_doc, "Completes at most one of several channel operations. Must ports is a\n  vector of channel endpoints, which can be either a channel to take\n  from or a vector of [channel-to-put-to val-to-put], in any\n  combination.  Takes will be made as if by <!, and puts will be made\n  as if by >!. Unless the :priority option is true, if more than one\n  port operation is ready a non-deterministic choice will be made. If\n  no operation is ready and a :default value is\n  supplied, [default-val :default] will be returned, otherwise alts!\n  will park until the first operation to become ready\n  completes. Returns [val port] of the completed operation, where val\n  is the value taken for takes, and true for puts.\n\n  opts are passed as :key val ... Supported options:\n\n  :default val - the value to use if none of the operations are immediately ready\n  :priority true - (default nil) when true, the operations will be tried in order.\n\n  Note: there is no guarantee that the port exps or val exprs will be\n  used, nor in what order should they be, so they should not be\n  depended upon for side effects.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_alts_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym__AMP_, lang.NewMap(kw_as, sym_opts))), kw_doc, "Completes at most one of several channel operations. Must ports is a\n  vector of channel endpoints, which can be either a channel to take\n  from or a vector of [channel-to-put-to val-to-put], in any\n  combination.  Takes will be made as if by <!, and puts will be made\n  as if by >!. Unless the :priority option is true, if more than one\n  port operation is ready a non-deterministic choice will be made. If\n  no operation is ready and a :default value is\n  supplied, [default-val :default] will be returned, otherwise alts!\n  will park until the first operation to become ready\n  completes. Returns [val port] of the completed operation, where val\n  is the value taken for takes, and true for puts.\n\n  opts are passed as :key val ... Supported options:\n\n  :default val - the value to use if none of the operations are immediately ready\n  :priority true - (default nil) when true, the operations will be tried in order.\n\n  Note: there is no guarantee that the port exps or val exprs will be\n  used, nor in what order should they be, so they should not be\n  depended upon for side effects.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_alts_BANG_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(185), kw_end_DASH_line, int(185))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -634,7 +643,7 @@ func LoadNS() {
 	}
 	// alts!!
 	{
-		tmp0 := sym_alts_BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(210), kw_column, int(6), kw_end_DASH_line, int(210), kw_end_DASH_column, int(11), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_alts_BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(210), kw_column, int(6), kw_end_DASH_line, int(210), kw_end_DASH_column, int(11), kw_name, sym_alts_BANG__BANG_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -702,7 +711,7 @@ func LoadNS() {
 	}
 	// check-unique-ports!
 	{
-		tmp0 := sym_check_DASH_unique_DASH_ports_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(158), kw_column, int(8), kw_end_DASH_line, int(158), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_ports)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_check_DASH_unique_DASH_ports_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ports)), kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_check_DASH_unique_DASH_ports_BANG_, kw_end_DASH_column, int(26), kw_column, int(8), kw_line, int(158), kw_end_DASH_line, int(158), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -765,7 +774,7 @@ func LoadNS() {
 	}
 	// do-alt
 	{
-		tmp0 := sym_do_DASH_alt.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(212), kw_column, int(7), kw_end_DASH_line, int(212), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_alts, sym_clauses)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_do_DASH_alt.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(212), kw_column, int(7), kw_end_DASH_line, int(212), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_alts, sym_clauses)), kw_name, sym_do_DASH_alt, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -1297,7 +1306,7 @@ func LoadNS() {
 	}
 	// do-alts
 	{
-		tmp0 := sym_do_DASH_alts.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym_opts)), kw_doc, "returns derefable [val port] if immediate, nil if enqueued", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(165), kw_end_DASH_line, int(165), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_do_DASH_alts.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym_opts)), kw_doc, "returns derefable [val port] if immediate, nil if enqueued", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_do_DASH_alts, kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(165), kw_end_DASH_line, int(165), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -1447,7 +1456,7 @@ func LoadNS() {
 	}
 	// go
 	{
-		tmp0 := sym_go.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Asynchronously executes the body, returning immediately to the\n  calling thread. Additionally, any visible calls to <!, >! and alt!/alts!\n  channel operations within the body will block (if necessary) by\n  'parking' the calling thread rather than tying up an OS thread (or\n  the only JS thread when in ClojureScript). Upon completion of the\n  operation, the body will be resumed.\n\n  Unlike in Clojure or ClojureScript, go blocks may (either directly\n  or indirectly) perform operations that may block indefinitely, as go\n  blocks are run on goroutines, which relinquish the thread of control\n  when parked.\n\n  Returns a channel which will receive the result of the body when\n  completed", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(67), kw_end_DASH_line, int(67))).(*lang.Symbol)
+		tmp0 := sym_go.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Asynchronously executes the body, returning immediately to the\n  calling thread. Additionally, any visible calls to <!, >! and alt!/alts!\n  channel operations within the body will block (if necessary) by\n  'parking' the calling thread rather than tying up an OS thread (or\n  the only JS thread when in ClojureScript). Upon completion of the\n  operation, the body will be resumed.\n\n  Unlike in Clojure or ClojureScript, go blocks may (either directly\n  or indirectly) perform operations that may block indefinitely, as go\n  blocks are run on goroutines, which relinquish the thread of control\n  when parked.\n\n  Returns a channel which will receive the result of the body when\n  completed", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_go, kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(67), kw_end_DASH_line, int(67))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -1593,7 +1602,7 @@ func LoadNS() {
 	}
 	// go-loop
 	{
-		tmp0 := sym_go_DASH_loop.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "Like (go (loop ...))", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(287), kw_end_DASH_line, int(287))).(*lang.Symbol)
+		tmp0 := sym_go_DASH_loop.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "Like (go (loop ...))", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_go_DASH_loop, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(287), kw_end_DASH_line, int(287))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -1638,7 +1647,7 @@ func LoadNS() {
 	}
 	// offer!
 	{
-		tmp0 := sym_offer_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(143), kw_column, int(7), kw_end_DASH_line, int(143), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Puts a val into port if it's possible to do so immediately.\n   nil values are not allowed. Never blocks. Returns true if offer succeeds.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_offer_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Puts a val into port if it's possible to do so immediately.\n   nil values are not allowed. Never blocks. Returns true if offer succeeds.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_offer_BANG_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(143), kw_end_DASH_line, int(143))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -1670,7 +1679,7 @@ func LoadNS() {
 	}
 	// pipe
 	{
-		tmp0 := sym_pipe.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(292), kw_column, int(7), kw_end_DASH_line, int(292), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(sym_from, sym_to), lang.NewVector(sym_from, sym_to, sym_close_QMARK_)), kw_doc, "Takes elements from the from channel and supplies them to the to\n  channel. By default, the to channel will be closed when the from\n  channel closes, but can be determined by the close?  parameter. Will\n  stop consuming the from channel if the to channel closes", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_pipe.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_from, sym_to), lang.NewVector(sym_from, sym_to, sym_close_QMARK_)), kw_doc, "Takes elements from the from channel and supplies them to the to\n  channel. By default, the to channel will be closed when the from\n  channel closes, but can be determined by the close?  parameter. Will\n  stop consuming the from channel if the to channel closes", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_pipe, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(292), kw_end_DASH_line, int(292))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -1771,7 +1780,7 @@ func LoadNS() {
 	}
 	// poll!
 	{
-		tmp0 := sym_poll_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(150), kw_column, int(7), kw_end_DASH_line, int(150), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Takes a val from port if it's possible to do so immediately.\n   Never blocks. Returns value if successful, nil otherwise.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_poll_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Takes a val from port if it's possible to do so immediately.\n   Never blocks. Returns value if successful, nil otherwise.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_poll_BANG_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(150), kw_end_DASH_line, int(150))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -1814,7 +1823,7 @@ func LoadNS() {
 	}
 	// port-case
 	{
-		tmp0 := sym_port_DASH_case.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port_DASH_or_DASH_put)), kw_doc, "Returns a *reflect.SelectCase for the given channel operation.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(106), kw_end_DASH_line, int(106), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_port_DASH_case.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port_DASH_or_DASH_put)), kw_doc, "Returns a *reflect.SelectCase for the given channel operation.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_port_DASH_case, kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(106), kw_end_DASH_line, int(106), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -1971,7 +1980,7 @@ func LoadNS() {
 	}
 	// timeout
 	{
-		tmp0 := sym_timeout.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(91), kw_column, int(7), kw_end_DASH_line, int(91), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_msecs)), kw_doc, "Returns a channel that will close after msecs", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_timeout.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_msecs)), kw_doc, "Returns a channel that will close after msecs", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_timeout, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(91), kw_end_DASH_line, int(91))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -2038,7 +2047,7 @@ func LoadNS() {
 	}
 	// try-put
 	{
-		tmp0 := sym_try_DASH_put.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Returns true if val was sent on the port, false if sending would\n  block", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(118), kw_end_DASH_line, int(118), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_try_DASH_put.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Returns true if val was sent on the port, false if sending would\n  block", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_try_DASH_put, kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(118), kw_end_DASH_line, int(118), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -2105,7 +2114,7 @@ func LoadNS() {
 	}
 	// try-take
 	{
-		tmp0 := sym_try_DASH_take.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Returns [val true] if val was received from the port, [nil false] if the channel was closed,\n  and nil if receiving would block.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(127), kw_end_DASH_line, int(127), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_try_DASH_take.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Returns [val true] if val was received from the port, [nil false] if the channel was closed,\n  and nil if receiving would block.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_name, sym_try_DASH_take, kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(127), kw_end_DASH_line, int(127), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -2287,5 +2296,15 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_try_DASH_take.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+	}
+
+	// Mark namespace as AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.core.async")); ns != nil {
+		// Set metadata directly
+		meta := ns.Meta()
+		if meta == nil {
+			meta = lang.NewMap()
+		}
+		ns.ResetMeta(meta.Assoc(lang.NewKeyword("aot-loaded"), true).(lang.IPersistentMap))
 	}
 }

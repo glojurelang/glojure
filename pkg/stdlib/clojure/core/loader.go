@@ -45,6 +45,14 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "clojure.core"
 func LoadNS() {
+	// Check if already AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.core")); ns != nil {
+		if meta := ns.Meta(); meta != nil {
+			if aotLoaded := meta.ValAt(lang.NewKeyword("aot-loaded")); aotLoaded != nil {
+				return // Already loaded, skip reinitialization
+			}
+		}
+	}
 	sym__PCT_ := lang.NewSymbol("%")
 	sym__AMP_ := lang.NewSymbol("&")
 	sym__AMP_env := lang.NewSymbol("&env")
@@ -2967,7 +2975,7 @@ func LoadNS() {
 	}
 	// >0?
 	{
-		tmp0 := sym__GT_0_QMARK_.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(965), kw_column, int(7), kw_end_DASH_line, int(965), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__GT_0_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__GT_0_QMARK_, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(965), kw_end_DASH_line, int(965), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -2988,7 +2996,7 @@ func LoadNS() {
 	}
 	// >1?
 	{
-		tmp0 := sym__GT_1_QMARK_.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(964), kw_column, int(7), kw_end_DASH_line, int(964), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__GT_1_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__GT_1_QMARK_, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(964), kw_end_DASH_line, int(964), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3009,7 +3017,7 @@ func LoadNS() {
 	}
 	// *1
 	{
-		tmp0 := sym__STAR_1.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(6260), kw_column, int(6), kw_end_DASH_line, int(6263), kw_end_DASH_column, int(3), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_1.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(6260), kw_column, int(6), kw_end_DASH_line, int(6263), kw_end_DASH_column, int(3), kw_name, sym__STAR_1, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_1 = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_1.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3018,7 +3026,7 @@ func LoadNS() {
 	}
 	// *2
 	{
-		tmp0 := sym__STAR_2.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(6265), kw_column, int(6), kw_end_DASH_line, int(6268), kw_end_DASH_column, int(3), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_2.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(6265), kw_column, int(6), kw_end_DASH_line, int(6268), kw_end_DASH_column, int(3), kw_name, sym__STAR_2, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_2 = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_2.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3027,7 +3035,7 @@ func LoadNS() {
 	}
 	// *3
 	{
-		tmp0 := sym__STAR_3.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(6270), kw_column, int(6), kw_end_DASH_line, int(6273), kw_end_DASH_column, int(3), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_3.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(6270), kw_column, int(6), kw_end_DASH_line, int(6273), kw_end_DASH_column, int(3), kw_name, sym__STAR_3, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_3 = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_3.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3036,7 +3044,7 @@ func LoadNS() {
 	}
 	// *agent*
 	{
-		tmp0 := sym__STAR_agent_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_agent_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_agent_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_agent_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_agent_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3044,7 +3052,7 @@ func LoadNS() {
 	}
 	// *assert*
 	{
-		tmp0 := sym__STAR_assert_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "When set to logical false, 'assert' will omit assertion checks in\n  compiled code. Defaults to true.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_assert_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_assert_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "When set to logical false, 'assert' will omit assertion checks in\n  compiled code. Defaults to true.")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_assert_STAR_ = ns.InternWithValue(tmp0, false, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_assert_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3052,7 +3060,7 @@ func LoadNS() {
 	}
 	// *command-line-args*
 	{
-		tmp0 := sym__STAR_command_DASH_line_DASH_args_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "A sequence of the supplied command line arguments, or nil if\n  none were supplied", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_command_DASH_line_DASH_args_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_command_DASH_line_DASH_args_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "A sequence of the supplied command line arguments, or nil if\n  none were supplied")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_command_DASH_line_DASH_args_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_command_DASH_line_DASH_args_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3060,7 +3068,7 @@ func LoadNS() {
 	}
 	// *compile-path*
 	{
-		tmp0 := sym__STAR_compile_DASH_path_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "Specifies the directory where 'compile' will write out .class\n  files. This directory must be in the classpath for 'compile' to\n  work.\n\n  Defaults to \"classes\"", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_compile_DASH_path_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_compile_DASH_path_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "Specifies the directory where 'compile' will write out .class\n  files. This directory must be in the classpath for 'compile' to\n  work.\n\n  Defaults to \"classes\"")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_compile_DASH_path_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_compile_DASH_path_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3068,7 +3076,7 @@ func LoadNS() {
 	}
 	// *compiler-options*
 	{
-		tmp0 := sym__STAR_compiler_DASH_options_STAR_.WithMeta(lang.NewMap(kw_added, "1.4", kw_doc, "A map of keys to options.\n  Note, when binding dynamically make sure to merge with previous value.\n  Supported options:\n  :elide-meta - a collection of metadata keys to elide during compilation.\n  :disable-locals-clearing - set to true to disable clearing, useful for using a debugger\n  :direct-linking - set to true to use direct static invocation of functions, rather than vars\n    Note that call sites compiled with direct linking will not be affected by var redefinition.\n    Use ^:redef (or ^:dynamic) on a var to prevent direct linking and allow redefinition.\n  See https://clojure.org/reference/compilation for more information.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_compiler_DASH_options_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_compiler_DASH_options_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.4", kw_doc, "A map of keys to options.\n  Note, when binding dynamically make sure to merge with previous value.\n  Supported options:\n  :elide-meta - a collection of metadata keys to elide during compilation.\n  :disable-locals-clearing - set to true to disable clearing, useful for using a debugger\n  :direct-linking - set to true to use direct static invocation of functions, rather than vars\n    Note that call sites compiled with direct linking will not be affected by var redefinition.\n    Use ^:redef (or ^:dynamic) on a var to prevent direct linking and allow redefinition.\n  See https://clojure.org/reference/compilation for more information.")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_compiler_DASH_options_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_compiler_DASH_options_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3076,7 +3084,7 @@ func LoadNS() {
 	}
 	// *data-readers*
 	{
-		tmp0 := sym__STAR_data_DASH_readers_STAR_.WithMeta(lang.NewMap(kw_doc, "Map from reader tag symbols to data reader Vars.\n\n  When Clojure starts, it searches for files named 'data_readers.clj'\n  and 'data_readers.cljc' at the root of the classpath. Each such file\n  must contain a literal map of symbols, like this:\n\n      {foo/bar my.project.foo/bar\n       foo/baz my.project/baz}\n\n  The first symbol in each pair is a tag that will be recognized by\n  the Clojure reader. The second symbol in the pair is the\n  fully-qualified name of a Var which will be invoked by the reader to\n  parse the form following the tag. For example, given the\n  data_readers.clj file above, the Clojure reader would parse this\n  form:\n\n      #foo/bar [1 2 3]\n\n  by invoking the Var #'my.project.foo/bar on the vector [1 2 3]. The\n  data reader function is invoked on the form AFTER it has been read\n  as a normal Clojure data structure by the reader.\n\n  Reader tags without namespace qualifiers are reserved for\n  Clojure. Default reader tags are defined in\n  clojure.core/default-data-readers but may be overridden in\n  data_readers.clj, data_readers.cljc, or by rebinding this Var.", kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(49), kw_column, int(6), kw_line, int(7786), kw_end_DASH_line, int(7786), kw_dynamic, true)).(*lang.Symbol)
+		tmp0 := sym__STAR_data_DASH_readers_STAR_.WithMeta(lang.NewMap(kw_doc, "Map from reader tag symbols to data reader Vars.\n\n  When Clojure starts, it searches for files named 'data_readers.clj'\n  and 'data_readers.cljc' at the root of the classpath. Each such file\n  must contain a literal map of symbols, like this:\n\n      {foo/bar my.project.foo/bar\n       foo/baz my.project/baz}\n\n  The first symbol in each pair is a tag that will be recognized by\n  the Clojure reader. The second symbol in the pair is the\n  fully-qualified name of a Var which will be invoked by the reader to\n  parse the form following the tag. For example, given the\n  data_readers.clj file above, the Clojure reader would parse this\n  form:\n\n      #foo/bar [1 2 3]\n\n  by invoking the Var #'my.project.foo/bar on the vector [1 2 3]. The\n  data reader function is invoked on the form AFTER it has been read\n  as a normal Clojure data structure by the reader.\n\n  Reader tags without namespace qualifiers are reserved for\n  Clojure. Default reader tags are defined in\n  clojure.core/default-data-readers but may be overridden in\n  data_readers.clj, data_readers.cljc, or by rebinding this Var.", kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__STAR_data_DASH_readers_STAR_, kw_end_DASH_column, int(49), kw_column, int(6), kw_line, int(7786), kw_end_DASH_line, int(7786), kw_dynamic, true)).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_data_DASH_readers_STAR_ = ns.InternWithValue(tmp0, lang.NewMap(), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_data_DASH_readers_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3085,7 +3093,7 @@ func LoadNS() {
 	}
 	// *default-data-reader-fn*
 	{
-		tmp0 := sym__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_.WithMeta(lang.NewMap(kw_doc, "When no data reader is found for a tag and *default-data-reader-fn*\n  is non-nil, it will be called with two arguments,\n  the tag and the value.  If *default-data-reader-fn* is nil (the\n  default), an exception will be thrown for the unknown tag.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(59), kw_column, int(6), kw_line, int(7815), kw_end_DASH_line, int(7815), kw_dynamic, true)).(*lang.Symbol)
+		tmp0 := sym__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_.WithMeta(lang.NewMap(kw_doc, "When no data reader is found for a tag and *default-data-reader-fn*\n  is non-nil, it will be called with two arguments,\n  the tag and the value.  If *default-data-reader-fn* is nil (the\n  default), an exception will be thrown for the unknown tag.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_, kw_end_DASH_column, int(59), kw_column, int(6), kw_line, int(7815), kw_end_DASH_line, int(7815), kw_dynamic, true)).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3094,7 +3102,7 @@ func LoadNS() {
 	}
 	// *e
 	{
-		tmp0 := sym__STAR_e.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(6275), kw_column, int(6), kw_end_DASH_line, int(6278), kw_end_DASH_column, int(3), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_e.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(6275), kw_column, int(6), kw_end_DASH_line, int(6278), kw_end_DASH_column, int(3), kw_name, sym__STAR_e, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_e = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_e.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3103,7 +3111,7 @@ func LoadNS() {
 	}
 	// *err*
 	{
-		tmp0 := sym__STAR_err_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "A java.io.Writer object representing standard error for print operations.\n\n  Defaults to System/err, wrapped in a PrintWriter", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_err_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_err_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "A java.io.Writer object representing standard error for print operations.\n\n  Defaults to System/err, wrapped in a PrintWriter")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_err_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_err_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3111,7 +3119,7 @@ func LoadNS() {
 	}
 	// *file*
 	{
-		tmp0 := sym__STAR_file_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "The path of the file being evaluated, as a String.\n\n  When there is no file, e.g. in the REPL, the value is not defined.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_file_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_file_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "The path of the file being evaluated, as a String.\n\n  When there is no file, e.g. in the REPL, the value is not defined.")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_file_STAR_ = ns.InternWithValue(tmp0, "NO_SOURCE_FILE", true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_file_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3119,7 +3127,7 @@ func LoadNS() {
 	}
 	// *flush-on-newline*
 	{
-		tmp0 := sym__STAR_flush_DASH_on_DASH_newline_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "When set to true, output will be flushed whenever a newline is printed.\n\n  Defaults to true.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_flush_DASH_on_DASH_newline_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_flush_DASH_on_DASH_newline_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "When set to true, output will be flushed whenever a newline is printed.\n\n  Defaults to true.")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_flush_DASH_on_DASH_newline_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_flush_DASH_on_DASH_newline_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3127,7 +3135,7 @@ func LoadNS() {
 	}
 	// *glojure-version*
 	{
-		tmp0 := sym__STAR_glojure_DASH_version_STAR_.WithMeta(lang.NewMap()).(*lang.Symbol)
+		tmp0 := sym__STAR_glojure_DASH_version_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_glojure_DASH_version_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_glojure_DASH_version_STAR_ = ns.InternWithValue(tmp0, lang.NewMap(kw_major, int(0), kw_minor, int(0), kw_incremental, int(0), kw_qualifier, nil), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_glojure_DASH_version_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3135,7 +3143,7 @@ func LoadNS() {
 	}
 	// *loaded-libs*
 	{
-		tmp0 := sym__STAR_loaded_DASH_libs_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(5809), kw_column, int(10), kw_end_DASH_line, int(5812), kw_end_DASH_column, int(15), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_loaded_DASH_libs_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(5809), kw_column, int(10), kw_end_DASH_line, int(5812), kw_end_DASH_column, int(15), kw_name, sym__STAR_loaded_DASH_libs_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_clojure_DOT_string, sym_user, sym_clojure_DOT_core_DOT_protocols, sym_glojure_DOT_go_DOT_io})))
 		var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
@@ -3145,7 +3153,7 @@ func LoadNS() {
 	}
 	// *loading-verbosely*
 	{
-		tmp0 := sym__STAR_loading_DASH_verbosely_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(5819), kw_column, int(10), kw_end_DASH_line, int(5822), kw_end_DASH_column, int(21), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_loading_DASH_verbosely_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(5819), kw_column, int(10), kw_end_DASH_line, int(5822), kw_end_DASH_column, int(21), kw_name, sym__STAR_loading_DASH_verbosely_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_ = ns.InternWithValue(tmp0, false, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3154,7 +3162,7 @@ func LoadNS() {
 	}
 	// *ns*
 	{
-		tmp0 := sym__STAR_ns_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "A clojure.lang.Namespace object representing the current namespace.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_ns_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_ns_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "A clojure.lang.Namespace object representing the current namespace.")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_ns_STAR_ = ns.InternWithValue(tmp0, lang.FindOrCreateNamespace(sym_clojure_DOT_core), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_ns_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3162,7 +3170,7 @@ func LoadNS() {
 	}
 	// *pending-paths*
 	{
-		tmp0 := sym__STAR_pending_DASH_paths_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(5814), kw_column, int(10), kw_end_DASH_line, int(5817), kw_end_DASH_column, int(17), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_pending_DASH_paths_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(5814), kw_column, int(10), kw_end_DASH_line, int(5817), kw_end_DASH_column, int(17), kw_name, sym__STAR_pending_DASH_paths_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_pending_DASH_paths_STAR_ = ns.InternWithValue(tmp0, lang.NewList(), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_pending_DASH_paths_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3171,7 +3179,7 @@ func LoadNS() {
 	}
 	// *print-dup*
 	{
-		tmp0 := sym__STAR_print_DASH_dup_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "When set to logical true, objects will be printed in a way that preserves\n  their type when read in later.\n\n  Defaults to false.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_print_DASH_dup_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_print_DASH_dup_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "When set to logical true, objects will be printed in a way that preserves\n  their type when read in later.\n\n  Defaults to false.")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_print_DASH_dup_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_print_DASH_dup_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3179,7 +3187,7 @@ func LoadNS() {
 	}
 	// *print-length*
 	{
-		tmp0 := sym__STAR_print_DASH_length_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core_print.glj", kw_line, int(14), kw_column, int(6), kw_end_DASH_line, int(23), kw_end_DASH_column, int(15), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_print_DASH_length_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core_print.glj", kw_line, int(14), kw_column, int(6), kw_end_DASH_line, int(23), kw_end_DASH_column, int(15), kw_name, sym__STAR_print_DASH_length_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_print_DASH_length_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_print_DASH_length_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3188,7 +3196,7 @@ func LoadNS() {
 	}
 	// *print-level*
 	{
-		tmp0 := sym__STAR_print_DASH_level_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core_print.glj", kw_line, int(25), kw_column, int(6), kw_end_DASH_line, int(35), kw_end_DASH_column, int(14), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_print_DASH_level_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core_print.glj", kw_line, int(25), kw_column, int(6), kw_end_DASH_line, int(35), kw_end_DASH_column, int(14), kw_name, sym__STAR_print_DASH_level_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_print_DASH_level_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_print_DASH_level_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3197,7 +3205,7 @@ func LoadNS() {
 	}
 	// *print-meta*
 	{
-		tmp0 := sym__STAR_print_DASH_meta_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "If set to logical true, when printing an object, its metadata will also\n  be printed in a form that can be read back by the reader.\n\n  Defaults to false.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_print_DASH_meta_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_print_DASH_meta_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "If set to logical true, when printing an object, its metadata will also\n  be printed in a form that can be read back by the reader.\n\n  Defaults to false.")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_print_DASH_meta_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_print_DASH_meta_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3205,7 +3213,7 @@ func LoadNS() {
 	}
 	// *print-namespace-maps*
 	{
-		tmp0 := sym__STAR_print_DASH_namespace_DASH_maps_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core_print.glj", kw_line, int(39), kw_column, int(6), kw_end_DASH_line, int(44), kw_end_DASH_column, int(23), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_print_DASH_namespace_DASH_maps_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core_print.glj", kw_line, int(39), kw_column, int(6), kw_end_DASH_line, int(44), kw_end_DASH_column, int(23), kw_name, sym__STAR_print_DASH_namespace_DASH_maps_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_print_DASH_namespace_DASH_maps_STAR_ = ns.InternWithValue(tmp0, false, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_print_DASH_namespace_DASH_maps_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3214,7 +3222,7 @@ func LoadNS() {
 	}
 	// *print-readably*
 	{
-		tmp0 := sym__STAR_print_DASH_readably_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "When set to logical false, strings and characters will be printed with\n  non-alphanumeric characters converted to the appropriate escape sequences.\n\n  Defaults to true", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_print_DASH_readably_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_print_DASH_readably_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "When set to logical false, strings and characters will be printed with\n  non-alphanumeric characters converted to the appropriate escape sequences.\n\n  Defaults to true")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_print_DASH_readably_STAR_ = ns.InternWithValue(tmp0, true, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_print_DASH_readably_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3222,7 +3230,7 @@ func LoadNS() {
 	}
 	// *read-eval*
 	{
-		tmp0 := sym__STAR_read_DASH_eval_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "Defaults to true (or value specified by system property, see below)\n  ***This setting implies that the full power of the reader is in play,\n  including syntax that can cause code to execute. It should never be\n  used with untrusted sources. See also: clojure.edn/read.***\n\n  When set to logical false in the thread-local binding,\n  the eval reader (#=) and record/type literal syntax are disabled in read/load.\n  Example (will fail): (binding [*read-eval* false] (read-string \"#=(* 2 21)\"))\n\n  The default binding can be controlled by the system property\n  'clojure.read.eval' System properties can be set on the command line\n  like this:\n\n  java -Dclojure.read.eval=false ...\n\n  The system property can also be set to 'unknown' via\n  -Dclojure.read.eval=unknown, in which case the default binding\n  is :unknown and all reads will fail in contexts where *read-eval*\n  has not been explicitly bound to either true or false. This setting\n  can be a useful diagnostic tool to ensure that all of your reads\n  occur in considered contexts. You can also accomplish this in a\n  particular scope by binding *read-eval* to :unknown\n  ", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_read_DASH_eval_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_read_DASH_eval_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "Defaults to true (or value specified by system property, see below)\n  ***This setting implies that the full power of the reader is in play,\n  including syntax that can cause code to execute. It should never be\n  used with untrusted sources. See also: clojure.edn/read.***\n\n  When set to logical false in the thread-local binding,\n  the eval reader (#=) and record/type literal syntax are disabled in read/load.\n  Example (will fail): (binding [*read-eval* false] (read-string \"#=(* 2 21)\"))\n\n  The default binding can be controlled by the system property\n  'clojure.read.eval' System properties can be set on the command line\n  like this:\n\n  java -Dclojure.read.eval=false ...\n\n  The system property can also be set to 'unknown' via\n  -Dclojure.read.eval=unknown, in which case the default binding\n  is :unknown and all reads will fail in contexts where *read-eval*\n  has not been explicitly bound to either true or false. This setting\n  can be a useful diagnostic tool to ensure that all of your reads\n  occur in considered contexts. You can also accomplish this in a\n  particular scope by binding *read-eval* to :unknown\n  ")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_read_DASH_eval_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_read_DASH_eval_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3230,7 +3238,7 @@ func LoadNS() {
 	}
 	// *repl*
 	{
-		tmp0 := sym__STAR_repl_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(6280), kw_column, int(6), kw_end_DASH_line, int(6283), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_repl_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(6280), kw_column, int(6), kw_end_DASH_line, int(6283), kw_end_DASH_column, int(8), kw_name, sym__STAR_repl_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_repl_STAR_ = ns.InternWithValue(tmp0, false, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_repl_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3239,7 +3247,7 @@ func LoadNS() {
 	}
 	// *unchecked-math*
 	{
-		tmp0 := sym__STAR_unchecked_DASH_math_STAR_.WithMeta(lang.NewMap(kw_added, "1.3", kw_doc, "While bound to true, compilations of +, -, *, inc, dec and the\n  coercions will be done without overflow checks. While bound\n  to :warn-on-boxed, same behavior as true, and a warning is emitted\n  when compilation uses boxed math. Default: false.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_unchecked_DASH_math_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_unchecked_DASH_math_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.3", kw_doc, "While bound to true, compilations of +, -, *, inc, dec and the\n  coercions will be done without overflow checks. While bound\n  to :warn-on-boxed, same behavior as true, and a warning is emitted\n  when compilation uses boxed math. Default: false.")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_unchecked_DASH_math_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3247,7 +3255,7 @@ func LoadNS() {
 	}
 	// *verbose-defrecords*
 	{
-		tmp0 := sym__STAR_verbose_DASH_defrecords_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core_print.glj", kw_line, int(37), kw_column, int(6), kw_end_DASH_line, int(37), kw_end_DASH_column, int(35), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_verbose_DASH_defrecords_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core_print.glj", kw_line, int(37), kw_column, int(6), kw_end_DASH_line, int(37), kw_end_DASH_column, int(35), kw_name, sym__STAR_verbose_DASH_defrecords_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_verbose_DASH_defrecords_STAR_ = ns.InternWithValue(tmp0, false, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_verbose_DASH_defrecords_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3256,7 +3264,7 @@ func LoadNS() {
 	}
 	// *warn-on-reflection*
 	{
-		tmp0 := sym__STAR_warn_DASH_on_DASH_reflection_STAR_.WithMeta(lang.NewMap(kw_added, "1.0", kw_doc, "When set to true, the compiler will emit warnings when reflection is\n  needed to resolve Java method calls or field accesses.\n\n  Defaults to false.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__STAR_warn_DASH_on_DASH_reflection_STAR_.WithMeta(lang.NewMap(kw_name, sym__STAR_warn_DASH_on_DASH_reflection_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_added, "1.0", kw_doc, "When set to true, the compiler will emit warnings when reflection is\n  needed to resolve Java method calls or field accesses.\n\n  Defaults to false.")).(*lang.Symbol)
 		var_clojure_DOT_core__STAR_warn_DASH_on_DASH_reflection_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_warn_DASH_on_DASH_reflection_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3264,7 +3272,7 @@ func LoadNS() {
 	}
 	// accessor
 	{
-		tmp0 := sym_accessor.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_key)), kw_doc, "Returns a fn that, given an instance of a structmap with the basis,\n  returns the value at the key.  The key must be in the basis. The\n  returned function should be (slightly) more efficient than using\n  get, but such use of accessors should be limited to known\n  performance-critical areas.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4069), kw_end_DASH_line, int(4069))).(*lang.Symbol)
+		tmp0 := sym_accessor.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_key)), kw_doc, "Returns a fn that, given an instance of a structmap with the basis,\n  returns the value at the key.  The key must be in the basis. The\n  returned function should be (slightly) more efficient than using\n  get, but such use of accessors should be limited to known\n  performance-critical areas.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_accessor, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4069), kw_end_DASH_line, int(4069))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -3283,7 +3291,7 @@ func LoadNS() {
 	}
 	// add-watch
 	{
-		tmp0 := sym_add_DASH_watch.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_reference, sym_key, sym_fn)), kw_doc, "Adds a watch function to an agent/atom/var/ref reference. The watch\n  fn must be a fn of 4 args: a key, the reference, its old-state, its\n  new-state. Whenever the reference's state might have been changed,\n  any registered watches will have their functions called. The watch fn\n  will be called synchronously, on the agent's thread if an agent,\n  before any pending sends if agent or ref. Note that an atom's or\n  ref's state may have changed again prior to the fn call, so use\n  old/new-state rather than derefing the reference. Note also that watch\n  fns may be called from multiple threads simultaneously. Var watchers\n  are triggered only by root binding changes, not thread-local\n  set!s. Keys must be unique per reference, and can be used to remove\n  the watch with remove-watch, but are otherwise considered opaque by\n  the watch mechanism.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2141), kw_end_DASH_line, int(2141))).(*lang.Symbol)
+		tmp0 := sym_add_DASH_watch.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_reference, sym_key, sym_fn)), kw_doc, "Adds a watch function to an agent/atom/var/ref reference. The watch\n  fn must be a fn of 4 args: a key, the reference, its old-state, its\n  new-state. Whenever the reference's state might have been changed,\n  any registered watches will have their functions called. The watch fn\n  will be called synchronously, on the agent's thread if an agent,\n  before any pending sends if agent or ref. Note that an atom's or\n  ref's state may have changed again prior to the fn call, so use\n  old/new-state rather than derefing the reference. Note also that watch\n  fns may be called from multiple threads simultaneously. Var watchers\n  are triggered only by root binding changes, not thread-local\n  set!s. Keys must be unique per reference, and can be used to remove\n  the watch with remove-watch, but are otherwise considered opaque by\n  the watch mechanism.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_add_DASH_watch, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2141), kw_end_DASH_line, int(2141))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -3308,7 +3316,7 @@ func LoadNS() {
 	}
 	// agent-error
 	{
-		tmp0 := sym_agent_DASH_error.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "Returns the exception thrown during an asynchronous action of the\n  agent if the agent is failed.  Returns nil if the agent is not\n  failed.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2166), kw_end_DASH_line, int(2166))).(*lang.Symbol)
+		tmp0 := sym_agent_DASH_error.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "Returns the exception thrown during an asynchronous action of the\n  agent if the agent is failed.  Returns nil if the agent is not\n  failed.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_agent_DASH_error, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2166), kw_end_DASH_line, int(2166))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3335,7 +3343,7 @@ func LoadNS() {
 	}
 	// all-ns
 	{
-		tmp0 := sym_all_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a sequence of all namespaces.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4145), kw_end_DASH_line, int(4145))).(*lang.Symbol)
+		tmp0 := sym_all_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a sequence of all namespaces.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_all_DASH_ns, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4145), kw_end_DASH_line, int(4145))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -3350,7 +3358,7 @@ func LoadNS() {
 	}
 	// alter
 	{
-		tmp0 := sym_alter.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref, sym_fun, sym__AMP_, sym_args)), kw_doc, "Must be called in a transaction. Sets the in-transaction-value of\n  ref to:\n\n  (apply fun in-transaction-value-of-ref args)\n\n  and returns the in-transaction-value of ref.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2434), kw_end_DASH_line, int(2434))).(*lang.Symbol)
+		tmp0 := sym_alter.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref, sym_fun, sym__AMP_, sym_args)), kw_doc, "Must be called in a transaction. Sets the in-transaction-value of\n  ref to:\n\n  (apply fun in-transaction-value-of-ref args)\n\n  and returns the in-transaction-value of ref.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_alter, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2434), kw_end_DASH_line, int(2434))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -3382,7 +3390,7 @@ func LoadNS() {
 	}
 	// alter-meta!
 	{
-		tmp0 := sym_alter_DASH_meta_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically sets the metadata for a namespace/var/ref/agent/atom to be:\n\n  (apply f its-current-meta args)\n\n  f must be free of side-effects", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2397), kw_end_DASH_line, int(2397))).(*lang.Symbol)
+		tmp0 := sym_alter_DASH_meta_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically sets the metadata for a namespace/var/ref/agent/atom to be:\n\n  (apply f its-current-meta args)\n\n  f must be free of side-effects", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_alter_DASH_meta_BANG_, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2397), kw_end_DASH_line, int(2397))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -3414,7 +3422,7 @@ func LoadNS() {
 	}
 	// alter-var-root
 	{
-		tmp0 := sym_alter_DASH_var_DASH_root.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically alters the root binding of var v by applying f to its\n  current value plus any args", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(5476), kw_end_DASH_line, int(5476))).(*lang.Symbol)
+		tmp0 := sym_alter_DASH_var_DASH_root.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically alters the root binding of var v by applying f to its\n  current value plus any args", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_alter_DASH_var_DASH_root, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(5476), kw_end_DASH_line, int(5476))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -3447,7 +3455,7 @@ func LoadNS() {
 	// any?
 	{
 		tmp1 := reflect.TypeOf(false)
-		tmp0 := sym_any_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true given any argument.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(539), kw_end_DASH_line, int(539))).(*lang.Symbol)
+		tmp0 := sym_any_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true given any argument.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_any_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(539), kw_end_DASH_line, int(539))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3464,7 +3472,7 @@ func LoadNS() {
 	}
 	// bit-clear
 	{
-		tmp0 := sym_bit_DASH_clear.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Clear bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(1338), kw_end_DASH_line, int(1338))).(*lang.Symbol)
+		tmp0 := sym_bit_DASH_clear.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Clear bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bit_DASH_clear, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(1338), kw_end_DASH_line, int(1338))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -3487,7 +3495,7 @@ func LoadNS() {
 	}
 	// bit-flip
 	{
-		tmp0 := sym_bit_DASH_flip.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Flip bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1350), kw_end_DASH_line, int(1350))).(*lang.Symbol)
+		tmp0 := sym_bit_DASH_flip.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Flip bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bit_DASH_flip, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1350), kw_end_DASH_line, int(1350))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -3510,7 +3518,7 @@ func LoadNS() {
 	}
 	// bit-set
 	{
-		tmp0 := sym_bit_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Set bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1344), kw_end_DASH_line, int(1344))).(*lang.Symbol)
+		tmp0 := sym_bit_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Set bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bit_DASH_set, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1344), kw_end_DASH_line, int(1344))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -3533,7 +3541,7 @@ func LoadNS() {
 	}
 	// bit-test
 	{
-		tmp0 := sym_bit_DASH_test.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Test bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1356), kw_end_DASH_line, int(1356))).(*lang.Symbol)
+		tmp0 := sym_bit_DASH_test.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Test bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bit_DASH_test, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1356), kw_end_DASH_line, int(1356))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -3556,7 +3564,7 @@ func LoadNS() {
 	}
 	// cast
 	{
-		tmp0 := sym_cast.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_c, sym_x)), kw_doc, "Throws a ClassCastException if x is not a c, else returns x.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(347), kw_end_DASH_line, int(347))).(*lang.Symbol)
+		tmp0 := sym_cast.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_c, sym_x)), kw_doc, "Throws a ClassCastException if x is not a c, else returns x.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_cast, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(347), kw_end_DASH_line, int(347))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -3580,7 +3588,7 @@ func LoadNS() {
 	// char-escape-string
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_char_DASH_escape_DASH_string.WithMeta(lang.NewMap(kw_tag, tmp1, kw_doc, "Returns escape string for char or nil if none", kw_file, "clojure/core_print.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(6), kw_line, int(214), kw_end_DASH_line, int(217))).(*lang.Symbol)
+		tmp0 := sym_char_DASH_escape_DASH_string.WithMeta(lang.NewMap(kw_tag, tmp1, kw_doc, "Returns escape string for char or nil if none", kw_file, "clojure/core_print.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_char_DASH_escape_DASH_string, kw_end_DASH_column, int(20), kw_column, int(6), kw_line, int(214), kw_end_DASH_line, int(217))).(*lang.Symbol)
 		var_clojure_DOT_core_char_DASH_escape_DASH_string = ns.InternWithValue(tmp0, lang.NewMap(lang.NewChar(10), "\\n", lang.NewChar(9), "\\t", lang.NewChar(13), "\\r", lang.NewChar(34), "\\\"", lang.NewChar(92), "\\\\", lang.NewChar(12), "\\f", lang.NewChar(8), "\\b"), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_char_DASH_escape_DASH_string.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3589,7 +3597,7 @@ func LoadNS() {
 	// char-name-string
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_char_DASH_name_DASH_string.WithMeta(lang.NewMap(kw_tag, tmp1, kw_doc, "Returns name string for char or nil if none", kw_file, "clojure/core_print.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(6), kw_line, int(335), kw_end_DASH_line, int(338))).(*lang.Symbol)
+		tmp0 := sym_char_DASH_name_DASH_string.WithMeta(lang.NewMap(kw_tag, tmp1, kw_doc, "Returns name string for char or nil if none", kw_file, "clojure/core_print.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_char_DASH_name_DASH_string, kw_end_DASH_column, int(17), kw_column, int(6), kw_line, int(335), kw_end_DASH_line, int(338))).(*lang.Symbol)
 		var_clojure_DOT_core_char_DASH_name_DASH_string = ns.InternWithValue(tmp0, lang.NewMap(lang.NewChar(10), "newline", lang.NewChar(9), "tab", lang.NewChar(32), "space", lang.NewChar(8), "backspace", lang.NewChar(12), "formfeed", lang.NewChar(13), "return"), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_char_DASH_name_DASH_string.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -3597,7 +3605,7 @@ func LoadNS() {
 	}
 	// chunk
 	{
-		tmp0 := sym_chunk.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(693), kw_column, int(7), kw_end_DASH_line, int(693), kw_end_DASH_column, int(41), kw_arglists, lang.NewList(lang.NewVector(sym_b)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunk.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_b)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_chunk, kw_end_DASH_column, int(41), kw_column, int(7), kw_line, int(693), kw_end_DASH_line, int(693))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3624,7 +3632,7 @@ func LoadNS() {
 	}
 	// chunk-append
 	{
-		tmp0 := sym_chunk_DASH_append.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(690), kw_column, int(7), kw_end_DASH_line, int(690), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_b, sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunk_DASH_append.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_b, sym_x)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_chunk_DASH_append, kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(690), kw_end_DASH_line, int(690))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -3647,7 +3655,7 @@ func LoadNS() {
 	}
 	// chunk-buffer
 	{
-		tmp0 := sym_chunk_DASH_buffer.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(687), kw_column, int(7), kw_end_DASH_line, int(687), kw_end_DASH_column, int(53), kw_arglists, lang.NewList(lang.NewVector(sym_capacity)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunk_DASH_buffer.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_capacity)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_chunk_DASH_buffer, kw_end_DASH_column, int(53), kw_column, int(7), kw_line, int(687), kw_end_DASH_line, int(687))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3664,7 +3672,7 @@ func LoadNS() {
 	}
 	// chunk-cons
 	{
-		tmp0 := sym_chunk_DASH_cons.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(705), kw_column, int(7), kw_end_DASH_line, int(705), kw_end_DASH_column, int(25), kw_arglists, lang.NewList(lang.NewVector(sym_chunk, sym_rest)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunk_DASH_cons.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_chunk, sym_rest)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_chunk_DASH_cons, kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(705), kw_end_DASH_line, int(705))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -3691,7 +3699,7 @@ func LoadNS() {
 	}
 	// chunk-first
 	{
-		tmp0 := sym_chunk_DASH_first.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(696), kw_column, int(7), kw_end_DASH_line, int(696), kw_end_DASH_column, int(48), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunk_DASH_first.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_chunk_DASH_first, kw_end_DASH_column, int(48), kw_column, int(7), kw_line, int(696), kw_end_DASH_line, int(696))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3718,7 +3726,7 @@ func LoadNS() {
 	}
 	// chunk-next
 	{
-		tmp0 := sym_chunk_DASH_next.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(702), kw_column, int(7), kw_end_DASH_line, int(702), kw_end_DASH_column, int(71), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunk_DASH_next.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_chunk_DASH_next, kw_end_DASH_column, int(71), kw_column, int(7), kw_line, int(702), kw_end_DASH_line, int(702))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3745,7 +3753,7 @@ func LoadNS() {
 	}
 	// chunk-rest
 	{
-		tmp0 := sym_chunk_DASH_rest.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(699), kw_column, int(7), kw_end_DASH_line, int(699), kw_end_DASH_column, int(71), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunk_DASH_rest.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_chunk_DASH_rest, kw_end_DASH_column, int(71), kw_column, int(7), kw_line, int(699), kw_end_DASH_line, int(699))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3772,7 +3780,7 @@ func LoadNS() {
 	}
 	// comment
 	{
-		tmp0 := sym_comment.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Ignores body, yields nil", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(4732), kw_end_DASH_line, int(4732))).(*lang.Symbol)
+		tmp0 := sym_comment.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Ignores body, yields nil", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_comment, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(4732), kw_end_DASH_line, int(4732))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -3799,7 +3807,7 @@ func LoadNS() {
 	}
 	// commute
 	{
-		tmp0 := sym_commute.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref, sym_fun, sym__AMP_, sym_args)), kw_doc, "Must be called in a transaction. Sets the in-transaction-value of\n  ref to:\n\n  (apply fun in-transaction-value-of-ref args)\n\n  and returns the in-transaction-value of ref.\n\n  At the commit point of the transaction, sets the value of ref to be:\n\n  (apply fun most-recently-committed-value-of-ref args)\n\n  Thus fun should be commutative, or, failing that, you must accept\n  last-one-in-wins behavior.  commute allows for more concurrency than\n  ref-set.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2413), kw_end_DASH_line, int(2413))).(*lang.Symbol)
+		tmp0 := sym_commute.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref, sym_fun, sym__AMP_, sym_args)), kw_doc, "Must be called in a transaction. Sets the in-transaction-value of\n  ref to:\n\n  (apply fun in-transaction-value-of-ref args)\n\n  and returns the in-transaction-value of ref.\n\n  At the commit point of the transaction, sets the value of ref to be:\n\n  (apply fun most-recently-committed-value-of-ref args)\n\n  Thus fun should be commutative, or, failing that, you must accept\n  last-one-in-wins behavior.  commute allows for more concurrency than\n  ref-set.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_commute, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2413), kw_end_DASH_line, int(2413))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -3831,7 +3839,7 @@ func LoadNS() {
 	}
 	// comparator
 	{
-		tmp0 := sym_comparator.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred)), kw_doc, "Returns an implementation of java.util.Comparator based upon pred.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3076), kw_end_DASH_line, int(3076))).(*lang.Symbol)
+		tmp0 := sym_comparator.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred)), kw_doc, "Returns an implementation of java.util.Comparator based upon pred.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_comparator, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3076), kw_end_DASH_line, int(3076))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3880,7 +3888,7 @@ func LoadNS() {
 	}
 	// compare-and-set!
 	{
-		tmp0 := sym_compare_DASH_and_DASH_set_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_oldval, sym_newval)), kw_doc, "Atomically sets the value of atom to newval if and only if the\n  current value of the atom is identical to oldval. Returns true if\n  set happened, else false", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(2359), kw_end_DASH_line, int(2359))).(*lang.Symbol)
+		tmp0 := sym_compare_DASH_and_DASH_set_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_oldval, sym_newval)), kw_doc, "Atomically sets the value of atom to newval if and only if the\n  current value of the atom is identical to oldval. Returns true if\n  set happened, else false", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_compare_DASH_and_DASH_set_BANG_, kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(2359), kw_end_DASH_line, int(2359))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -3905,7 +3913,7 @@ func LoadNS() {
 	}
 	// cons
 	{
-		tmp0 := sym_cons.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_seq)), kw_doc, "Returns a new seq where x is the first element and seq is\n    the rest.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(23), kw_end_DASH_line, int(29))).(*lang.Symbol)
+		tmp0 := sym_cons.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_seq)), kw_doc, "Returns a new seq where x is the first element and seq is\n    the rest.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_cons, kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(23), kw_end_DASH_line, int(29))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function cons
 			var v2 lang.FnFunc
@@ -3929,7 +3937,7 @@ func LoadNS() {
 	}
 	// constantly
 	{
-		tmp0 := sym_constantly.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns a function that takes any number of arguments and returns x.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1439), kw_end_DASH_line, int(1439))).(*lang.Symbol)
+		tmp0 := sym_constantly.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns a function that takes any number of arguments and returns x.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_constantly, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1439), kw_end_DASH_line, int(1439))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3964,7 +3972,7 @@ func LoadNS() {
 	}
 	// contains?
 	{
-		tmp0 := sym_contains_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_key)), kw_doc, "Returns true if key is present in the given collection, otherwise\n  returns false.  Note that for numerically indexed collections like\n  vectors and Java arrays, this tests if the numeric key is within the\n  range of indexes. 'contains?' operates constant or logarithmic time;\n  it will not perform a linear search for a value.  See also 'some'.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(1478), kw_end_DASH_line, int(1478))).(*lang.Symbol)
+		tmp0 := sym_contains_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_key)), kw_doc, "Returns true if key is present in the given collection, otherwise\n  returns false.  Note that for numerically indexed collections like\n  vectors and Java arrays, this tests if the numeric key is within the\n  range of indexes. 'contains?' operates constant or logarithmic time;\n  it will not perform a linear search for a value.  See also 'some'.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_contains_QMARK_, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(1478), kw_end_DASH_line, int(1478))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -3987,7 +3995,7 @@ func LoadNS() {
 	}
 	// create-ns
 	{
-		tmp0 := sym_create_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Create a new namespace named by the symbol if one doesn't already\n  exist, returns it or the already-existing namespace of the same\n  name.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4130), kw_end_DASH_line, int(4130))).(*lang.Symbol)
+		tmp0 := sym_create_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Create a new namespace named by the symbol if one doesn't already\n  exist, returns it or the already-existing namespace of the same\n  name.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_create_DASH_ns, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4130), kw_end_DASH_line, int(4130))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4004,7 +4012,7 @@ func LoadNS() {
 	}
 	// create-struct
 	{
-		tmp0 := sym_create_DASH_struct.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a structure basis object.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(4036), kw_end_DASH_line, int(4036))).(*lang.Symbol)
+		tmp0 := sym_create_DASH_struct.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a structure basis object.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_create_DASH_struct, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(4036), kw_end_DASH_line, int(4036))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -4028,7 +4036,7 @@ func LoadNS() {
 	}
 	// data-reader-urls
 	{
-		tmp0 := sym_data_DASH_reader_DASH_urls.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7822), kw_column, int(8), kw_end_DASH_line, int(7822), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_data_DASH_reader_DASH_urls.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_data_DASH_reader_DASH_urls, kw_end_DASH_column, int(23), kw_column, int(8), kw_line, int(7822), kw_end_DASH_line, int(7822), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -4042,7 +4050,7 @@ func LoadNS() {
 	}
 	// deliver
 	{
-		tmp0 := sym_deliver.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_promise, sym_val)), kw_doc, "Delivers the supplied value to the promise, releasing any pending\n  derefs. A subsequent call to deliver on a promise will have no effect.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7101), kw_end_DASH_line, int(7101))).(*lang.Symbol)
+		tmp0 := sym_deliver.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_promise, sym_val)), kw_doc, "Delivers the supplied value to the promise, releasing any pending\n  derefs. A subsequent call to deliver on a promise will have no effect.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_deliver, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7101), kw_end_DASH_line, int(7101))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -4062,7 +4070,7 @@ func LoadNS() {
 	// denominator
 	{
 		tmp1 := reflect.TypeOf((*big6.Int)(nil))
-		tmp0 := sym_denominator.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_r)), kw_doc, "Returns the denominator part of a Ratio.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3590), kw_end_DASH_line, int(3590))).(*lang.Symbol)
+		tmp0 := sym_denominator.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_r)), kw_doc, "Returns the denominator part of a Ratio.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_denominator, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3590), kw_end_DASH_line, int(3590))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4090,7 +4098,7 @@ func LoadNS() {
 	}
 	// deref-future
 	{
-		tmp0 := sym_deref_DASH_future.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(2295), kw_column, int(7), kw_end_DASH_line, int(2295), kw_end_DASH_column, int(28), kw_arglists, lang.NewList(lang.NewVector(sym_fut), lang.NewVector(sym_fut, sym_timeout_DASH_ms, sym_timeout_DASH_val)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_deref_DASH_future.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fut), lang.NewVector(sym_fut, sym_timeout_DASH_ms, sym_timeout_DASH_val)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_deref_DASH_future, kw_end_DASH_column, int(28), kw_column, int(7), kw_line, int(2295), kw_end_DASH_line, int(2295), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -4151,7 +4159,7 @@ func LoadNS() {
 	}
 	// ensure
 	{
-		tmp0 := sym_ensure.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref)), kw_doc, "Must be called in a transaction. Protects the ref from modification\n  by other transactions.  Returns the in-transaction-value of\n  ref. Allows for more concurrency than (ref-set ref @ref)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2479), kw_end_DASH_line, int(2479))).(*lang.Symbol)
+		tmp0 := sym_ensure.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref)), kw_doc, "Must be called in a transaction. Protects the ref from modification\n  by other transactions.  Returns the in-transaction-value of\n  ref. Allows for more concurrency than (ref-set ref @ref)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ensure, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2479), kw_end_DASH_line, int(2479))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4178,7 +4186,7 @@ func LoadNS() {
 	}
 	// enumeration-seq
 	{
-		tmp0 := sym_enumeration_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_e)), kw_doc, "Returns a seq on a java.util.Enumeration", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(5702), kw_end_DASH_line, int(5702))).(*lang.Symbol)
+		tmp0 := sym_enumeration_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_e)), kw_doc, "Returns a seq on a java.util.Enumeration", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_enumeration_DASH_seq, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(5702), kw_end_DASH_line, int(5702))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4195,7 +4203,7 @@ func LoadNS() {
 	}
 	// error-handler
 	{
-		tmp0 := sym_error_DASH_handler.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "Returns the error-handler of agent a, or nil if there is none.\n  See set-error-handler!", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(2201), kw_end_DASH_line, int(2201))).(*lang.Symbol)
+		tmp0 := sym_error_DASH_handler.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "Returns the error-handler of agent a, or nil if there is none.\n  See set-error-handler!", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_error_DASH_handler, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(2201), kw_end_DASH_line, int(2201))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4222,7 +4230,7 @@ func LoadNS() {
 	}
 	// error-mode
 	{
-		tmp0 := sym_error_DASH_mode.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "Returns the error-mode of agent a.  See set-error-mode!", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2226), kw_end_DASH_line, int(2226))).(*lang.Symbol)
+		tmp0 := sym_error_DASH_mode.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "Returns the error-mode of agent a.  See set-error-mode!", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_error_DASH_mode, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2226), kw_end_DASH_line, int(2226))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4249,7 +4257,7 @@ func LoadNS() {
 	}
 	// eval
 	{
-		tmp0 := sym_eval.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Evaluates the form data structure (not text!) and returns the result.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3202), kw_end_DASH_line, int(3202))).(*lang.Symbol)
+		tmp0 := sym_eval.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Evaluates the form data structure (not text!) and returns the result.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_eval, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3202), kw_end_DASH_line, int(3202))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4270,7 +4278,7 @@ func LoadNS() {
 	}
 	// ex-data
 	{
-		tmp0 := sym_ex_DASH_data.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ex)), kw_doc, "Returns exception data (a map) if ex is an IExceptionInfo.\n   Otherwise returns nil.", kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4805), kw_end_DASH_line, int(4805))).(*lang.Symbol)
+		tmp0 := sym_ex_DASH_data.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ex)), kw_doc, "Returns exception data (a map) if ex is an IExceptionInfo.\n   Otherwise returns nil.", kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ex_DASH_data, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4805), kw_end_DASH_line, int(4805))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4287,7 +4295,7 @@ func LoadNS() {
 	}
 	// ex-info
 	{
-		tmp0 := sym_ex_DASH_info.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_map), lang.NewVector(sym_msg, sym_map, sym_cause)), kw_doc, "Create an instance of ExceptionInfo, a RuntimeException subclass\n   that carries a map of additional data.", kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4802), kw_end_DASH_line, int(4802))).(*lang.Symbol)
+		tmp0 := sym_ex_DASH_info.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_map), lang.NewVector(sym_msg, sym_map, sym_cause)), kw_doc, "Create an instance of ExceptionInfo, a RuntimeException subclass\n   that carries a map of additional data.", kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ex_DASH_info, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4802), kw_end_DASH_line, int(4802))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -4321,7 +4329,7 @@ func LoadNS() {
 	// false?
 	{
 		tmp1 := reflect.TypeOf(false)
-		tmp0 := sym_false_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is the value false, false otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(506), kw_end_DASH_line, int(506))).(*lang.Symbol)
+		tmp0 := sym_false_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is the value false, false otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_false_QMARK_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(506), kw_end_DASH_line, int(506))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4339,7 +4347,7 @@ func LoadNS() {
 	}
 	// find
 	{
-		tmp0 := sym_find.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key)), kw_doc, "Returns the map entry for key, or nil if key not present.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1529), kw_end_DASH_line, int(1529))).(*lang.Symbol)
+		tmp0 := sym_find.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key)), kw_doc, "Returns the map entry for key, or nil if key not present.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_find, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1529), kw_end_DASH_line, int(1529))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -4362,7 +4370,7 @@ func LoadNS() {
 	}
 	// find-ns
 	{
-		tmp0 := sym_find_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Returns the namespace named by the symbol or nil if it doesn't exist.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4124), kw_end_DASH_line, int(4124))).(*lang.Symbol)
+		tmp0 := sym_find_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Returns the namespace named by the symbol or nil if it doesn't exist.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_find_DASH_ns, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4124), kw_end_DASH_line, int(4124))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4379,7 +4387,7 @@ func LoadNS() {
 	}
 	// find-var
 	{
-		tmp0 := sym_find_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Returns the global var named by the namespace-qualified symbol, or\n  nil if no var with that name.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2012), kw_end_DASH_line, int(2012))).(*lang.Symbol)
+		tmp0 := sym_find_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Returns the global var named by the namespace-qualified symbol, or\n  nil if no var with that name.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_find_DASH_var, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2012), kw_end_DASH_line, int(2012))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4400,7 +4408,7 @@ func LoadNS() {
 	}
 	// first
 	{
-		tmp0 := sym_first.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns the first item in the collection. Calls seq on its\n    argument. If coll is nil, returns nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(49), kw_end_DASH_line, int(54))).(*lang.Symbol)
+		tmp0 := sym_first.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns the first item in the collection. Calls seq on its\n    argument. If coll is nil, returns nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_first, kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(49), kw_end_DASH_line, int(54))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function first
 			var v2 lang.FnFunc
@@ -4422,7 +4430,7 @@ func LoadNS() {
 	}
 	// force
 	{
-		tmp0 := sym_force.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If x is a Delay, returns the (possibly cached) value of its expression, else returns x", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(756), kw_end_DASH_line, int(756))).(*lang.Symbol)
+		tmp0 := sym_force.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If x is a Delay, returns the (possibly cached) value of its expression, else returns x", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_force, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(756), kw_end_DASH_line, int(756))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4439,7 +4447,7 @@ func LoadNS() {
 	}
 	// future-cancel
 	{
-		tmp0 := sym_future_DASH_cancel.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Cancels the future, if possible.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7011), kw_end_DASH_line, int(7011))).(*lang.Symbol)
+		tmp0 := sym_future_DASH_cancel.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Cancels the future, if possible.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_future_DASH_cancel, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7011), kw_end_DASH_line, int(7011))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4460,7 +4468,7 @@ func LoadNS() {
 	}
 	// future-cancelled?
 	{
-		tmp0 := sym_future_DASH_cancelled_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns true if future f is cancelled", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(7017), kw_end_DASH_line, int(7017))).(*lang.Symbol)
+		tmp0 := sym_future_DASH_cancelled_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns true if future f is cancelled", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_future_DASH_cancelled_QMARK_, kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(7017), kw_end_DASH_line, int(7017))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4487,7 +4495,7 @@ func LoadNS() {
 	}
 	// future-done?
 	{
-		tmp0 := sym_future_DASH_done_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns true if future f is done", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(6530), kw_end_DASH_line, int(6530))).(*lang.Symbol)
+		tmp0 := sym_future_DASH_done_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns true if future f is done", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_future_DASH_done_QMARK_, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(6530), kw_end_DASH_line, int(6530))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4514,7 +4522,7 @@ func LoadNS() {
 	}
 	// gen-class
 	{
-		tmp0 := sym_gen_DASH_class.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5724), kw_column, int(10), kw_end_DASH_line, int(5724), kw_end_DASH_column, int(18), kw_declared, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_gen_DASH_class.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5724), kw_column, int(10), kw_end_DASH_line, int(5724), kw_end_DASH_column, int(18), kw_declared, true, kw_name, sym_gen_DASH_class, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core_gen_DASH_class = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_gen_DASH_class.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -4522,7 +4530,7 @@ func LoadNS() {
 	}
 	// get-method
 	{
-		tmp0 := sym_get_DASH_method.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val)), kw_doc, "Given a multimethod and a dispatch value, returns the dispatch fn\n  that would apply to that value, or nil if none apply and no default", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1814), kw_end_DASH_line, int(1814))).(*lang.Symbol)
+		tmp0 := sym_get_DASH_method.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val)), kw_doc, "Given a multimethod and a dispatch value, returns the dispatch fn\n  that would apply to that value, or nil if none apply and no default", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_get_DASH_method, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1814), kw_end_DASH_line, int(1814))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -4545,7 +4553,7 @@ func LoadNS() {
 	}
 	// get-thread-bindings
 	{
-		tmp0 := sym_get_DASH_thread_DASH_bindings.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Get a map with the Var/value pairs which is currently in effect for the\n  current thread.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(1936), kw_end_DASH_line, int(1936))).(*lang.Symbol)
+		tmp0 := sym_get_DASH_thread_DASH_bindings.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Get a map with the Var/value pairs which is currently in effect for the\n  current thread.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_get_DASH_thread_DASH_bindings, kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(1936), kw_end_DASH_line, int(1936))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -4560,7 +4568,7 @@ func LoadNS() {
 	}
 	// get-validator
 	{
-		tmp0 := sym_get_DASH_validator.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref)), kw_doc, "Gets the validator-fn for a var/ref/agent/atom.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(2391), kw_end_DASH_line, int(2391))).(*lang.Symbol)
+		tmp0 := sym_get_DASH_validator.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref)), kw_doc, "Gets the validator-fn for a var/ref/agent/atom.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_get_DASH_validator, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(2391), kw_end_DASH_line, int(2391))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4581,7 +4589,7 @@ func LoadNS() {
 	}
 	// global-hierarchy
 	{
-		tmp0 := sym_global_DASH_hierarchy.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(5505), kw_column, int(6), kw_end_DASH_line, int(5506), kw_end_DASH_column, int(21), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_global_DASH_hierarchy.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(5505), kw_column, int(6), kw_end_DASH_line, int(5506), kw_end_DASH_column, int(21), kw_name, sym_global_DASH_hierarchy, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core_global_DASH_hierarchy = ns.InternWithValue(tmp0, lang.NewMap(kw_parents, lang.NewMap(), kw_descendants, lang.NewMap(), kw_ancestors, lang.NewMap()), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_global_DASH_hierarchy.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -4589,7 +4597,7 @@ func LoadNS() {
 	}
 	// hash
 	{
-		tmp0 := sym_hash.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the hash code of its argument. Note this is the hash code\n  consistent with =, and thus is different than .hashCode for Integer,\n  Short, Byte and Clojure collections.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(5181), kw_end_DASH_line, int(5181))).(*lang.Symbol)
+		tmp0 := sym_hash.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the hash code of its argument. Note this is the hash code\n  consistent with =, and thus is different than .hashCode for Integer,\n  Short, Byte and Clojure collections.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_hash, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(5181), kw_end_DASH_line, int(5181))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4606,7 +4614,7 @@ func LoadNS() {
 	}
 	// hash-map
 	{
-		tmp0 := sym_hash_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_keyvals)), kw_doc, "keyval => key val\n  Returns a new hash map with supplied mappings.  If any keys are\n  equal, they are handled as if by repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(380), kw_end_DASH_line, int(380))).(*lang.Symbol)
+		tmp0 := sym_hash_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_keyvals)), kw_doc, "keyval => key val\n  Returns a new hash map with supplied mappings.  If any keys are\n  equal, they are handled as if by repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_hash_DASH_map, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(380), kw_end_DASH_line, int(380))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -4638,7 +4646,7 @@ func LoadNS() {
 	}
 	// hash-ordered-coll
 	{
-		tmp0 := sym_hash_DASH_ordered_DASH_coll.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns the hash code, consistent with =, for an external ordered\n   collection implementing Iterable.\n   See http://clojure.org/data_structures#hash for full algorithms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(5202), kw_end_DASH_line, int(5202))).(*lang.Symbol)
+		tmp0 := sym_hash_DASH_ordered_DASH_coll.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns the hash code, consistent with =, for an external ordered\n   collection implementing Iterable.\n   See http://clojure.org/data_structures#hash for full algorithms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_hash_DASH_ordered_DASH_coll, kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(5202), kw_end_DASH_line, int(5202))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4655,7 +4663,7 @@ func LoadNS() {
 	}
 	// hash-unordered-coll
 	{
-		tmp0 := sym_hash_DASH_unordered_DASH_coll.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns the hash code, consistent with =, for an external unordered\n   collection implementing Iterable. For maps, the iterator should\n   return map entries whose hash is computed as\n     (hash-ordered-coll [k v]).\n   See http://clojure.org/data_structures#hash for full algorithms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(5211), kw_end_DASH_line, int(5211))).(*lang.Symbol)
+		tmp0 := sym_hash_DASH_unordered_DASH_coll.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns the hash code, consistent with =, for an external unordered\n   collection implementing Iterable. For maps, the iterator should\n   return map entries whose hash is computed as\n     (hash-ordered-coll [k v]).\n   See http://clojure.org/data_structures#hash for full algorithms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_hash_DASH_unordered_DASH_coll, kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(5211), kw_end_DASH_line, int(5211))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4672,7 +4680,7 @@ func LoadNS() {
 	}
 	// identity
 	{
-		tmp0 := sym_identity.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns its argument.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1445), kw_end_DASH_line, int(1445))).(*lang.Symbol)
+		tmp0 := sym_identity.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns its argument.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_identity, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1445), kw_end_DASH_line, int(1445))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4688,7 +4696,7 @@ func LoadNS() {
 	}
 	// inst-ms
 	{
-		tmp0 := sym_inst_DASH_ms.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_inst)), kw_doc, "Return the number of milliseconds since January 1, 1970, 00:00:00 GMT", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6823), kw_end_DASH_line, int(6823))).(*lang.Symbol)
+		tmp0 := sym_inst_DASH_ms.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_inst)), kw_doc, "Return the number of milliseconds since January 1, 1970, 00:00:00 GMT", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_inst_DASH_ms, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6823), kw_end_DASH_line, int(6823))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4705,7 +4713,7 @@ func LoadNS() {
 	}
 	// inst?
 	{
-		tmp0 := sym_inst_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x satisfies Inst", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6829), kw_end_DASH_line, int(6829))).(*lang.Symbol)
+		tmp0 := sym_inst_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x satisfies Inst", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_inst_QMARK_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6829), kw_end_DASH_line, int(6829))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4721,7 +4729,7 @@ func LoadNS() {
 	}
 	// instance?
 	{
-		tmp0 := sym_instance_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_c, sym_x)), kw_doc, "Evaluates x and tests if it is an instance of the type\n    t. Returns true or false", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(2), kw_line, int(141), kw_end_DASH_line, int(145))).(*lang.Symbol)
+		tmp0 := sym_instance_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_c, sym_x)), kw_doc, "Evaluates x and tests if it is an instance of the type\n    t. Returns true or false", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_instance_QMARK_, kw_end_DASH_column, int(10), kw_column, int(2), kw_line, int(141), kw_end_DASH_line, int(145))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function instance?
 			var v2 lang.FnFunc
@@ -4745,7 +4753,7 @@ func LoadNS() {
 	}
 	// int?
 	{
-		tmp0 := sym_int_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1397), kw_end_DASH_line, int(1397))).(*lang.Symbol)
+		tmp0 := sym_int_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_int_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1397), kw_end_DASH_line, int(1397))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4913,7 +4921,7 @@ func LoadNS() {
 	}
 	// integer?
 	{
-		tmp0 := sym_integer_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is an integer", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1381), kw_end_DASH_line, int(1381))).(*lang.Symbol)
+		tmp0 := sym_integer_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is an integer", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_integer_QMARK_, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1381), kw_end_DASH_line, int(1381))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4930,7 +4938,7 @@ func LoadNS() {
 	}
 	// iterate
 	{
-		tmp0 := sym_iterate.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_x)), kw_doc, "Returns a lazy (infinite!) sequence of x, (f x), (f (f x)) etc.\n  f must be free of side-effects", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3010), kw_end_DASH_line, int(3010))).(*lang.Symbol)
+		tmp0 := sym_iterate.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_x)), kw_doc, "Returns a lazy (infinite!) sequence of x, (f x), (f (f x)) etc.\n  f must be free of side-effects", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_iterate, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3010), kw_end_DASH_line, int(3010))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -4949,7 +4957,7 @@ func LoadNS() {
 	}
 	// iterator-seq
 	{
-		tmp0 := sym_iterator_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iter)), kw_doc, "Returns a seq on a java.util.Iterator. Note that most collections\n  providing iterators implement Iterable and thus support seq directly.\n  Seqs cache values, thus iterator-seq should not be used on any\n  iterator that repeatedly returns the same mutable object.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(5692), kw_end_DASH_line, int(5692))).(*lang.Symbol)
+		tmp0 := sym_iterator_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iter)), kw_doc, "Returns a seq on a java.util.Iterator. Note that most collections\n  providing iterators implement Iterable and thus support seq directly.\n  Seqs cache values, thus iterator-seq should not be used on any\n  iterator that repeatedly returns the same mutable object.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_iterator_DASH_seq, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(5692), kw_end_DASH_line, int(5692))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4966,7 +4974,7 @@ func LoadNS() {
 	}
 	// key
 	{
-		tmp0 := sym_key.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_e)), kw_doc, "Returns the key of the map entry.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1562), kw_end_DASH_line, int(1562))).(*lang.Symbol)
+		tmp0 := sym_key.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_e)), kw_doc, "Returns the key of the map entry.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_key, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1562), kw_end_DASH_line, int(1562))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4987,7 +4995,7 @@ func LoadNS() {
 	}
 	// keys
 	{
-		tmp0 := sym_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map)), kw_doc, "Returns a sequence of the map's keys, in the same order as (seq map).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1550), kw_end_DASH_line, int(1550))).(*lang.Symbol)
+		tmp0 := sym_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map)), kw_doc, "Returns a sequence of the map's keys, in the same order as (seq map).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_keys, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1550), kw_end_DASH_line, int(1550))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5004,7 +5012,7 @@ func LoadNS() {
 	}
 	// keyword?
 	{
-		tmp0 := sym_keyword_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Keyword", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(565), kw_end_DASH_line, int(565))).(*lang.Symbol)
+		tmp0 := sym_keyword_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Keyword", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_keyword_QMARK_, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(565), kw_end_DASH_line, int(565))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5023,7 +5031,7 @@ func LoadNS() {
 	}
 	// line-seq
 	{
-		tmp0 := sym_line_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rdr)), kw_doc, "Returns the lines of text from rdr as a lazy sequence of strings.\n  rdr must implement java.io.BufferedReader.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(3067), kw_end_DASH_line, int(3067))).(*lang.Symbol)
+		tmp0 := sym_line_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rdr)), kw_doc, "Returns the lines of text from rdr as a lazy sequence of strings.\n  rdr must implement java.io.BufferedReader.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_line_DASH_seq, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(3067), kw_end_DASH_line, int(3067))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5079,7 +5087,7 @@ func LoadNS() {
 	}
 	// list
 	{
-		tmp0 := sym_list.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_items)), kw_doc, "Creates a new list containing the items.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(17), kw_end_DASH_line, int(20))).(*lang.Symbol)
+		tmp0 := sym_list.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_items)), kw_doc, "Creates a new list containing the items.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_list, kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(17), kw_end_DASH_line, int(20))).(*lang.Symbol)
 		var_clojure_DOT_core_list = ns.InternWithValue(tmp0, lang.NewList, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_list.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5087,7 +5095,7 @@ func LoadNS() {
 	}
 	// list?
 	{
-		tmp0 := sym_list_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IPersistentList", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6190), kw_end_DASH_line, int(6190))).(*lang.Symbol)
+		tmp0 := sym_list_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IPersistentList", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_list_QMARK_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6190), kw_end_DASH_line, int(6190))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5106,7 +5114,7 @@ func LoadNS() {
 	}
 	// load-reader
 	{
-		tmp0 := sym_load_DASH_reader.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rdr)), kw_doc, "Sequentially read and evaluate the set of forms contained in the\n  stream/file", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4080), kw_end_DASH_line, int(4080))).(*lang.Symbol)
+		tmp0 := sym_load_DASH_reader.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rdr)), kw_doc, "Sequentially read and evaluate the set of forms contained in the\n  stream/file", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_load_DASH_reader, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4080), kw_end_DASH_line, int(4080))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5127,7 +5135,7 @@ func LoadNS() {
 	}
 	// load-string
 	{
-		tmp0 := sym_load_DASH_string.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Sequentially read and evaluate the set of forms contained in the\n  string", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4087), kw_end_DASH_line, int(4087))).(*lang.Symbol)
+		tmp0 := sym_load_DASH_string.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Sequentially read and evaluate the set of forms contained in the\n  string", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_load_DASH_string, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4087), kw_end_DASH_line, int(4087))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5154,7 +5162,7 @@ func LoadNS() {
 	}
 	// macroexpand-1
 	{
-		tmp0 := sym_macroexpand_DASH_1.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "If form represents a macro form, returns its expansion,\n  else returns form.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(4016), kw_end_DASH_line, int(4016))).(*lang.Symbol)
+		tmp0 := sym_macroexpand_DASH_1.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "If form represents a macro form, returns its expansion,\n  else returns form.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_macroexpand_DASH_1, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(4016), kw_end_DASH_line, int(4016))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5175,7 +5183,7 @@ func LoadNS() {
 	}
 	// make-hierarchy
 	{
-		tmp0 := sym_make_DASH_hierarchy.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Creates a hierarchy object for use with derive, isa? etc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(5499), kw_end_DASH_line, int(5499))).(*lang.Symbol)
+		tmp0 := sym_make_DASH_hierarchy.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Creates a hierarchy object for use with derive, isa? etc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_make_DASH_hierarchy, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(5499), kw_end_DASH_line, int(5499))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -5213,7 +5221,7 @@ func LoadNS() {
 	}
 	// map-entry?
 	{
-		tmp0 := sym_map_DASH_entry_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a map entry", kw_file, "clojure/core.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1472), kw_end_DASH_line, int(1472))).(*lang.Symbol)
+		tmp0 := sym_map_DASH_entry_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a map entry", kw_file, "clojure/core.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_map_DASH_entry_QMARK_, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1472), kw_end_DASH_line, int(1472))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5232,7 +5240,7 @@ func LoadNS() {
 	}
 	// map?
 	{
-		tmp0 := sym_map_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x implements IPersistentMap", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(169), kw_end_DASH_line, int(173))).(*lang.Symbol)
+		tmp0 := sym_map_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x implements IPersistentMap", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_map_QMARK_, kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(169), kw_end_DASH_line, int(173))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function map?
 			var v2 lang.FnFunc
@@ -5256,7 +5264,7 @@ func LoadNS() {
 	}
 	// max-mask-bits
 	{
-		tmp0 := sym_max_DASH_mask_DASH_bits.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(6593), kw_column, int(6), kw_end_DASH_line, int(6593), kw_end_DASH_column, int(28), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_max_DASH_mask_DASH_bits.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(6593), kw_column, int(6), kw_end_DASH_line, int(6593), kw_end_DASH_column, int(28), kw_name, sym_max_DASH_mask_DASH_bits, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core_max_DASH_mask_DASH_bits = ns.InternWithValue(tmp0, int64(13), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_max_DASH_mask_DASH_bits.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5264,7 +5272,7 @@ func LoadNS() {
 	}
 	// max-switch-table-size
 	{
-		tmp0 := sym_max_DASH_switch_DASH_table_DASH_size.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(6594), kw_column, int(6), kw_end_DASH_line, int(6594), kw_end_DASH_column, int(36), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_max_DASH_switch_DASH_table_DASH_size.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(6594), kw_column, int(6), kw_end_DASH_line, int(6594), kw_end_DASH_column, int(36), kw_name, sym_max_DASH_switch_DASH_table_DASH_size, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core_max_DASH_switch_DASH_table_DASH_size = ns.InternWithValue(tmp0, int64(8192), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_max_DASH_switch_DASH_table_DASH_size.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5272,7 +5280,7 @@ func LoadNS() {
 	}
 	// meta
 	{
-		tmp0 := sym_meta.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_obj)), kw_doc, "Returns the metadata of obj, returns nil if there is no metadata.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(204), kw_end_DASH_line, int(208))).(*lang.Symbol)
+		tmp0 := sym_meta.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_obj)), kw_doc, "Returns the metadata of obj, returns nil if there is no metadata.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_meta, kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(204), kw_end_DASH_line, int(208))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function meta
 			var v2 lang.FnFunc
@@ -5312,7 +5320,7 @@ func LoadNS() {
 	}
 	// methods
 	{
-		tmp0 := sym_methods.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn)), kw_doc, "Given a multimethod, returns a map of dispatch values -> dispatch fns", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1808), kw_end_DASH_line, int(1808))).(*lang.Symbol)
+		tmp0 := sym_methods.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn)), kw_doc, "Given a multimethod, returns a map of dispatch values -> dispatch fns", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_methods, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1808), kw_end_DASH_line, int(1808))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5339,7 +5347,7 @@ func LoadNS() {
 	}
 	// mix-collection-hash
 	{
-		tmp0 := sym_mix_DASH_collection_DASH_hash.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_hash_DASH_basis, sym_count)), kw_doc, "Mix final collection hash for ordered or unordered collections.\n   hash-basis is the combined collection hash, count is the number\n   of elements included in the basis. Note this is the hash code\n   consistent with =, different from .hashCode.\n   See http://clojure.org/data_structures#hash for full algorithms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(5191), kw_end_DASH_line, int(5191))).(*lang.Symbol)
+		tmp0 := sym_mix_DASH_collection_DASH_hash.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_hash_DASH_basis, sym_count)), kw_doc, "Mix final collection hash for ordered or unordered collections.\n   hash-basis is the combined collection hash, count is the number\n   of elements included in the basis. Note this is the hash code\n   consistent with =, different from .hashCode.\n   See http://clojure.org/data_structures#hash for full algorithms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_mix_DASH_collection_DASH_hash, kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(5191), kw_end_DASH_line, int(5191))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -5358,7 +5366,7 @@ func LoadNS() {
 	}
 	// mk-bound-fn
 	{
-		tmp0 := sym_mk_DASH_bound_DASH_fn.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5119), kw_column, int(7), kw_end_DASH_line, int(5119), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_sc, sym_test, sym_key)), kw_private, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_mk_DASH_bound_DASH_fn.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sc, sym_test, sym_key)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_mk_DASH_bound_DASH_fn, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(5119), kw_end_DASH_line, int(5119), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -5413,7 +5421,7 @@ func LoadNS() {
 	// namespace
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_namespace.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the namespace String of a symbol or keyword, or nil if not present.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(1592), kw_end_DASH_line, int(1592))).(*lang.Symbol)
+		tmp0 := sym_namespace.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the namespace String of a symbol or keyword, or nil if not present.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_namespace, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(1592), kw_end_DASH_line, int(1592))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5436,7 +5444,7 @@ func LoadNS() {
 	// next
 	{
 		tmp1 := reflect.TypeOf((*lang.ISeq)(nil)).Elem()
-		tmp0 := sym_next.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a seq of the items after the first. Calls seq on its\n  argument.  If there are no more items, returns nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(57), kw_end_DASH_line, int(63))).(*lang.Symbol)
+		tmp0 := sym_next.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a seq of the items after the first. Calls seq on its\n  argument.  If there are no more items, returns nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_next, kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(57), kw_end_DASH_line, int(63))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		{ // function next
 			var v3 lang.FnFunc
@@ -5458,7 +5466,7 @@ func LoadNS() {
 	}
 	// nfirst
 	{
-		tmp0 := sym_nfirst.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Same as (next (first x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(2), kw_line, int(107), kw_end_DASH_line, int(111))).(*lang.Symbol)
+		tmp0 := sym_nfirst.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Same as (next (first x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_nfirst, kw_end_DASH_column, int(7), kw_column, int(2), kw_line, int(107), kw_end_DASH_line, int(111))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function nfirst
 			var v2 lang.FnFunc
@@ -5498,7 +5506,7 @@ func LoadNS() {
 			v3 = tmp2
 			_ = v3
 		}
-		tmp0 := sym_nil_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp2, kw_doc, "Returns true if x is nil, false otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(437), kw_end_DASH_line, int(437))).(*lang.Symbol)
+		tmp0 := sym_nil_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp2, kw_doc, "Returns true if x is nil, false otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_nil_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(437), kw_end_DASH_line, int(437))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5516,7 +5524,7 @@ func LoadNS() {
 	}
 	// nnext
 	{
-		tmp0 := sym_nnext.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Same as (next (next x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(121), kw_end_DASH_line, int(125))).(*lang.Symbol)
+		tmp0 := sym_nnext.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Same as (next (next x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_nnext, kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(121), kw_end_DASH_line, int(125))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function nnext
 			var v2 lang.FnFunc
@@ -5542,7 +5550,7 @@ func LoadNS() {
 	// not
 	{
 		tmp1 := reflect.TypeOf(false)
-		tmp0 := sym_not.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is logical false, false otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(525), kw_end_DASH_line, int(525))).(*lang.Symbol)
+		tmp0 := sym_not.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is logical false, false otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_not, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(525), kw_end_DASH_line, int(525))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5565,7 +5573,7 @@ func LoadNS() {
 	}
 	// number?
 	{
-		tmp0 := sym_number_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a Number", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3559), kw_end_DASH_line, int(3559))).(*lang.Symbol)
+		tmp0 := sym_number_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a Number", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_number_QMARK_, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3559), kw_end_DASH_line, int(3559))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5583,7 +5591,7 @@ func LoadNS() {
 	// numerator
 	{
 		tmp1 := reflect.TypeOf((*big6.Int)(nil))
-		tmp0 := sym_numerator.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_r)), kw_doc, "Returns the numerator part of a Ratio.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3582), kw_end_DASH_line, int(3582))).(*lang.Symbol)
+		tmp0 := sym_numerator.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_r)), kw_doc, "Returns the numerator part of a Ratio.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_numerator, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3582), kw_end_DASH_line, int(3582))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5611,7 +5619,7 @@ func LoadNS() {
 	}
 	// peek
 	{
-		tmp0 := sym_peek.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "For a list or queue, same as first, for a vector, same as, but much\n  more efficient than, last. If the collection is empty, returns nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1454), kw_end_DASH_line, int(1454))).(*lang.Symbol)
+		tmp0 := sym_peek.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "For a list or queue, same as first, for a vector, same as, but much\n  more efficient than, last. If the collection is empty, returns nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_peek, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1454), kw_end_DASH_line, int(1454))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5632,7 +5640,7 @@ func LoadNS() {
 	}
 	// persistent!
 	{
-		tmp0 := sym_persistent_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a new, persistent version of the transient collection, in\n  constant time. The transient collection cannot be used after this\n  call, any such use will throw an exception.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3349), kw_end_DASH_line, int(3349))).(*lang.Symbol)
+		tmp0 := sym_persistent_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a new, persistent version of the transient collection, in\n  constant time. The transient collection cannot be used after this\n  call, any such use will throw an exception.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_persistent_BANG_, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3349), kw_end_DASH_line, int(3349))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5659,7 +5667,7 @@ func LoadNS() {
 	}
 	// pop
 	{
-		tmp0 := sym_pop.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "For a list or queue, returns a new list/queue without the first\n  item, for a vector, returns a new vector without the last item. If\n  the collection is empty, throws an exception.  Note - not the same\n  as next/butlast.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1461), kw_end_DASH_line, int(1461))).(*lang.Symbol)
+		tmp0 := sym_pop.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "For a list or queue, returns a new list/queue without the first\n  item, for a vector, returns a new vector without the last item. If\n  the collection is empty, throws an exception.  Note - not the same\n  as next/butlast.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_pop, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1461), kw_end_DASH_line, int(1461))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5680,7 +5688,7 @@ func LoadNS() {
 	}
 	// pop!
 	{
-		tmp0 := sym_pop_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Removes the last item from a transient vector. If\n  the collection is empty, throws an exception. Returns coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3392), kw_end_DASH_line, int(3392))).(*lang.Symbol)
+		tmp0 := sym_pop_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Removes the last item from a transient vector. If\n  the collection is empty, throws an exception. Returns coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_pop_BANG_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3392), kw_end_DASH_line, int(3392))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5707,7 +5715,7 @@ func LoadNS() {
 	}
 	// pop-thread-bindings
 	{
-		tmp0 := sym_pop_DASH_thread_DASH_bindings.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Pop one set of bindings pushed with push-binding before. It is an error to\n  pop bindings without pushing before.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(1928), kw_end_DASH_line, int(1928))).(*lang.Symbol)
+		tmp0 := sym_pop_DASH_thread_DASH_bindings.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Pop one set of bindings pushed with push-binding before. It is an error to\n  pop bindings without pushing before.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_pop_DASH_thread_DASH_bindings, kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(1928), kw_end_DASH_line, int(1928))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -5722,7 +5730,7 @@ func LoadNS() {
 	}
 	// prefer-method
 	{
-		tmp0 := sym_prefer_DASH_method.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val_DASH_x, sym_dispatch_DASH_val_DASH_y)), kw_doc, "Causes the multimethod to prefer matches of dispatch-val-x over dispatch-val-y \n   when there is a conflict", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1800), kw_end_DASH_line, int(1800))).(*lang.Symbol)
+		tmp0 := sym_prefer_DASH_method.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val_DASH_x, sym_dispatch_DASH_val_DASH_y)), kw_doc, "Causes the multimethod to prefer matches of dispatch-val-x over dispatch-val-y \n   when there is a conflict", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_prefer_DASH_method, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1800), kw_end_DASH_line, int(1800))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -5747,7 +5755,7 @@ func LoadNS() {
 	}
 	// prefers
 	{
-		tmp0 := sym_prefers.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn)), kw_doc, "Given a multimethod, returns a map of preferred value -> set of other values", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1821), kw_end_DASH_line, int(1821))).(*lang.Symbol)
+		tmp0 := sym_prefers.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn)), kw_doc, "Given a multimethod, returns a map of preferred value -> set of other values", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_prefers, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1821), kw_end_DASH_line, int(1821))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5774,7 +5782,7 @@ func LoadNS() {
 	}
 	// print-initialized
 	{
-		tmp0 := sym_print_DASH_initialized.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core_print.glj", kw_line, int(520), kw_column, int(6), kw_end_DASH_line, int(520), kw_end_DASH_column, int(39), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_initialized.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core_print.glj", kw_line, int(520), kw_column, int(6), kw_end_DASH_line, int(520), kw_end_DASH_column, int(39), kw_name, sym_print_DASH_initialized, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core_print_DASH_initialized = ns.InternWithValue(tmp0, true, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_print_DASH_initialized.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5782,7 +5790,7 @@ func LoadNS() {
 	}
 	// push-thread-bindings
 	{
-		tmp0 := sym_push_DASH_thread_DASH_bindings.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_bindings)), kw_doc, "WARNING: This is a low-level function. Prefer high-level macros like\n  binding where ever possible.\n\n  Takes a map of Var/value pairs. Binds each Var to the associated value for\n  the current thread. Each call *MUST* be accompanied by a matching call to\n  pop-thread-bindings wrapped in a try-finally!\n  \n      (push-thread-bindings bindings)\n      (try\n        ...\n        (finally\n          (pop-thread-bindings)))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(1910), kw_end_DASH_line, int(1910))).(*lang.Symbol)
+		tmp0 := sym_push_DASH_thread_DASH_bindings.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_bindings)), kw_doc, "WARNING: This is a low-level function. Prefer high-level macros like\n  binding where ever possible.\n\n  Takes a map of Var/value pairs. Binds each Var to the associated value for\n  the current thread. Each call *MUST* be accompanied by a matching call to\n  pop-thread-bindings wrapped in a try-finally!\n  \n      (push-thread-bindings bindings)\n      (try\n        ...\n        (finally\n          (pop-thread-bindings)))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_push_DASH_thread_DASH_bindings, kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(1910), kw_end_DASH_line, int(1910))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5799,7 +5807,7 @@ func LoadNS() {
 	}
 	// random-uuid
 	{
-		tmp0 := sym_random_DASH_uuid.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a pseudo-randomly generated java.util.UUID instance (i.e. type 4).\n\n  See: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#randomUUID--", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6844), kw_end_DASH_line, int(6844))).(*lang.Symbol)
+		tmp0 := sym_random_DASH_uuid.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a pseudo-randomly generated java.util.UUID instance (i.e. type 4).\n\n  See: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#randomUUID--", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_random_DASH_uuid, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6844), kw_end_DASH_line, int(6844))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -5814,7 +5822,7 @@ func LoadNS() {
 	}
 	// ratio?
 	{
-		tmp0 := sym_ratio_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a Ratio", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3576), kw_end_DASH_line, int(3576))).(*lang.Symbol)
+		tmp0 := sym_ratio_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a Ratio", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ratio_QMARK_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3576), kw_end_DASH_line, int(3576))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5833,7 +5841,7 @@ func LoadNS() {
 	}
 	// rationalize
 	{
-		tmp0 := sym_rationalize.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_doc, "returns the rational value of num", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(1284), kw_end_DASH_line, int(1284))).(*lang.Symbol)
+		tmp0 := sym_rationalize.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_doc, "returns the rational value of num", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_rationalize, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(1284), kw_end_DASH_line, int(1284))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5855,7 +5863,7 @@ func LoadNS() {
 	// re-matcher
 	{
 		tmp1 := reflect.TypeOf((*lang.RegexpMatcher)(nil))
-		tmp0 := sym_re_DASH_matcher.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_re, sym_s)), kw_doc, "Returns an instance of java.util.regex.Matcher, for use, e.g. in\n  re-find.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4865), kw_end_DASH_line, int(4865))).(*lang.Symbol)
+		tmp0 := sym_re_DASH_matcher.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_re, sym_s)), kw_doc, "Returns an instance of java.util.regex.Matcher, for use, e.g. in\n  re-find.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_re_DASH_matcher, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4865), kw_end_DASH_line, int(4865))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -5876,7 +5884,7 @@ func LoadNS() {
 	// re-pattern
 	{
 		tmp1 := reflect.TypeOf((*regexp12.Regexp)(nil))
-		tmp0 := sym_re_DASH_pattern.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns an instance of java.util.regex.Pattern, for use, e.g. in\n  re-matcher.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4855), kw_end_DASH_line, int(4855))).(*lang.Symbol)
+		tmp0 := sym_re_DASH_pattern.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns an instance of java.util.regex.Pattern, for use, e.g. in\n  re-matcher.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_re_DASH_pattern, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4855), kw_end_DASH_line, int(4855))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5903,7 +5911,7 @@ func LoadNS() {
 	}
 	// read-string
 	{
-		tmp0 := sym_read_DASH_string.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s), lang.NewVector(sym_opts, sym_s)), kw_doc, "Reads one object from the string s. Optionally include reader\n  options, as specified in read.\n\n  Note that read-string can execute code (controlled by *read-eval*),\n  and as such should be used only with trusted sources.\n\n  For data structure interop use clojure.edn/read-string", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3805), kw_end_DASH_line, int(3805))).(*lang.Symbol)
+		tmp0 := sym_read_DASH_string.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s), lang.NewVector(sym_opts, sym_s)), kw_doc, "Reads one object from the string s. Optionally include reader\n  options, as specified in read.\n\n  Note that read-string can execute code (controlled by *read-eval*),\n  and as such should be used only with trusted sources.\n\n  For data structure interop use clojure.edn/read-string", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_read_DASH_string, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3805), kw_end_DASH_line, int(3805))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5932,7 +5940,7 @@ func LoadNS() {
 	}
 	// reader-conditional
 	{
-		tmp0 := sym_reader_DASH_conditional.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form, sym_splicing_QMARK_)), kw_doc, "Construct a data representation of a reader conditional.\n  If true, splicing? indicates read-cond-splicing.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(7774), kw_end_DASH_line, int(7774))).(*lang.Symbol)
+		tmp0 := sym_reader_DASH_conditional.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form, sym_splicing_QMARK_)), kw_doc, "Construct a data representation of a reader conditional.\n  If true, splicing? indicates read-cond-splicing.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reader_DASH_conditional, kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(7774), kw_end_DASH_line, int(7774))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -5951,7 +5959,7 @@ func LoadNS() {
 	}
 	// reader-conditional?
 	{
-		tmp0 := sym_reader_DASH_conditional_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_value)), kw_doc, "Return true if the value is the data representation of a reader conditional", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(7768), kw_end_DASH_line, int(7768))).(*lang.Symbol)
+		tmp0 := sym_reader_DASH_conditional_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_value)), kw_doc, "Return true if the value is the data representation of a reader conditional", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reader_DASH_conditional_QMARK_, kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(7768), kw_end_DASH_line, int(7768))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5969,7 +5977,7 @@ func LoadNS() {
 	}
 	// realized?
 	{
-		tmp0 := sym_realized_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if a value has been produced for a promise, delay, future or lazy sequence.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7551), kw_end_DASH_line, int(7551))).(*lang.Symbol)
+		tmp0 := sym_realized_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if a value has been produced for a promise, delay, future or lazy sequence.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_realized_QMARK_, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7551), kw_end_DASH_line, int(7551))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -5996,7 +6004,7 @@ func LoadNS() {
 	}
 	// reduced
 	{
-		tmp0 := sym_reduced.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Wraps x in a way such that a reduce will terminate with the value x", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2827), kw_end_DASH_line, int(2827))).(*lang.Symbol)
+		tmp0 := sym_reduced.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Wraps x in a way such that a reduce will terminate with the value x", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reduced, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2827), kw_end_DASH_line, int(2827))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6013,7 +6021,7 @@ func LoadNS() {
 	}
 	// ref-history-count
 	{
-		tmp0 := sym_ref_DASH_history_DASH_count.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref)), kw_doc, "Returns the history count of a ref", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(2454), kw_end_DASH_line, int(2454))).(*lang.Symbol)
+		tmp0 := sym_ref_DASH_history_DASH_count.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref)), kw_doc, "Returns the history count of a ref", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ref_DASH_history_DASH_count, kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(2454), kw_end_DASH_line, int(2454))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6040,7 +6048,7 @@ func LoadNS() {
 	}
 	// ref-max-history
 	{
-		tmp0 := sym_ref_DASH_max_DASH_history.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref), lang.NewVector(sym_ref, sym_n)), kw_doc, "Gets the max-history of a ref, or sets it and returns the ref", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2470), kw_end_DASH_line, int(2470))).(*lang.Symbol)
+		tmp0 := sym_ref_DASH_max_DASH_history.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref), lang.NewVector(sym_ref, sym_n)), kw_doc, "Gets the max-history of a ref, or sets it and returns the ref", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ref_DASH_max_DASH_history, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2470), kw_end_DASH_line, int(2470))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -6083,7 +6091,7 @@ func LoadNS() {
 	}
 	// ref-min-history
 	{
-		tmp0 := sym_ref_DASH_min_DASH_history.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref), lang.NewVector(sym_ref, sym_n)), kw_doc, "Gets the min-history of a ref, or sets it and returns the ref", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2461), kw_end_DASH_line, int(2461))).(*lang.Symbol)
+		tmp0 := sym_ref_DASH_min_DASH_history.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref), lang.NewVector(sym_ref, sym_n)), kw_doc, "Gets the min-history of a ref, or sets it and returns the ref", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ref_DASH_min_DASH_history, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2461), kw_end_DASH_line, int(2461))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -6126,7 +6134,7 @@ func LoadNS() {
 	}
 	// ref-set
 	{
-		tmp0 := sym_ref_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref, sym_val)), kw_doc, "Must be called in a transaction. Sets the value of ref.\n  Returns val.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2446), kw_end_DASH_line, int(2446))).(*lang.Symbol)
+		tmp0 := sym_ref_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref, sym_val)), kw_doc, "Must be called in a transaction. Sets the value of ref.\n  Returns val.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ref_DASH_set, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2446), kw_end_DASH_line, int(2446))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -6149,7 +6157,7 @@ func LoadNS() {
 	}
 	// release-pending-sends
 	{
-		tmp0 := sym_release_DASH_pending_DASH_sends.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Normally, actions sent directly or indirectly during another action\n  are held until the action completes (changes the agent's\n  state). This function can be used to dispatch any pending sent\n  actions immediately. This has no impact on actions sent during a\n  transaction, which are still held until commit. If no action is\n  occurring, does nothing. Returns the number of actions dispatched.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(2130), kw_end_DASH_line, int(2130))).(*lang.Symbol)
+		tmp0 := sym_release_DASH_pending_DASH_sends.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Normally, actions sent directly or indirectly during another action\n  are held until the action completes (changes the agent's\n  state). This function can be used to dispatch any pending sent\n  actions immediately. This has no impact on actions sent during a\n  transaction, which are still held until commit. If no action is\n  occurring, does nothing. Returns the number of actions dispatched.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_release_DASH_pending_DASH_sends, kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(2130), kw_end_DASH_line, int(2130))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -6164,7 +6172,7 @@ func LoadNS() {
 	}
 	// remove-all-methods
 	{
-		tmp0 := sym_remove_DASH_all_DASH_methods.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn)), kw_doc, "Removes all of the methods of multimethod.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(1786), kw_end_DASH_line, int(1786))).(*lang.Symbol)
+		tmp0 := sym_remove_DASH_all_DASH_methods.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn)), kw_doc, "Removes all of the methods of multimethod.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_remove_DASH_all_DASH_methods, kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(1786), kw_end_DASH_line, int(1786))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6191,7 +6199,7 @@ func LoadNS() {
 	}
 	// remove-method
 	{
-		tmp0 := sym_remove_DASH_method.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val)), kw_doc, "Removes the method of multimethod associated with dispatch-value.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1793), kw_end_DASH_line, int(1793))).(*lang.Symbol)
+		tmp0 := sym_remove_DASH_method.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val)), kw_doc, "Removes the method of multimethod associated with dispatch-value.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_remove_DASH_method, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1793), kw_end_DASH_line, int(1793))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -6214,7 +6222,7 @@ func LoadNS() {
 	}
 	// remove-ns
 	{
-		tmp0 := sym_remove_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Removes the namespace named by the symbol. Use with caution.\n  Cannot be used to remove the clojure namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4138), kw_end_DASH_line, int(4138))).(*lang.Symbol)
+		tmp0 := sym_remove_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Removes the namespace named by the symbol. Use with caution.\n  Cannot be used to remove the clojure namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_remove_DASH_ns, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4138), kw_end_DASH_line, int(4138))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6231,7 +6239,7 @@ func LoadNS() {
 	}
 	// remove-watch
 	{
-		tmp0 := sym_remove_DASH_watch.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_reference, sym_key)), kw_doc, "Removes a watch (set by add-watch) from a reference", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(2159), kw_end_DASH_line, int(2159))).(*lang.Symbol)
+		tmp0 := sym_remove_DASH_watch.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_reference, sym_key)), kw_doc, "Removes a watch (set by add-watch) from a reference", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_remove_DASH_watch, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(2159), kw_end_DASH_line, int(2159))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -6254,7 +6262,7 @@ func LoadNS() {
 	}
 	// repeat
 	{
-		tmp0 := sym_repeat.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_n, sym_x)), kw_doc, "Returns a lazy (infinite!, or length n if supplied) sequence of xs.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2996), kw_end_DASH_line, int(2996))).(*lang.Symbol)
+		tmp0 := sym_repeat.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_n, sym_x)), kw_doc, "Returns a lazy (infinite!, or length n if supplied) sequence of xs.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_repeat, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2996), kw_end_DASH_line, int(2996))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -6283,7 +6291,7 @@ func LoadNS() {
 	}
 	// reset!
 	{
-		tmp0 := sym_reset_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_newval)), kw_doc, "Sets the value of atom to newval without regard for the\n  current value. Returns newval.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2367), kw_end_DASH_line, int(2367))).(*lang.Symbol)
+		tmp0 := sym_reset_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_newval)), kw_doc, "Sets the value of atom to newval without regard for the\n  current value. Returns newval.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reset_BANG_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2367), kw_end_DASH_line, int(2367))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -6306,7 +6314,7 @@ func LoadNS() {
 	}
 	// reset-meta!
 	{
-		tmp0 := sym_reset_DASH_meta_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref, sym_metadata_DASH_map)), kw_doc, "Atomically resets the metadata for a namespace/var/ref/agent/atom", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2407), kw_end_DASH_line, int(2407))).(*lang.Symbol)
+		tmp0 := sym_reset_DASH_meta_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref, sym_metadata_DASH_map)), kw_doc, "Atomically resets the metadata for a namespace/var/ref/agent/atom", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reset_DASH_meta_BANG_, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2407), kw_end_DASH_line, int(2407))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -6329,7 +6337,7 @@ func LoadNS() {
 	}
 	// reset-vals!
 	{
-		tmp0 := sym_reset_DASH_vals_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_newval)), kw_doc, "Sets the value of atom to newval. Returns [old new], the value of the\n   atom before and after the reset.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2374), kw_end_DASH_line, int(2374))).(*lang.Symbol)
+		tmp0 := sym_reset_DASH_vals_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_newval)), kw_doc, "Sets the value of atom to newval. Returns [old new], the value of the\n   atom before and after the reset.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reset_DASH_vals_BANG_, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2374), kw_end_DASH_line, int(2374))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -6353,7 +6361,7 @@ func LoadNS() {
 	// rest
 	{
 		tmp1 := reflect.TypeOf((*lang.ISeq)(nil)).Elem()
-		tmp0 := sym_rest.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a possibly empty seq of the items after the first. Calls seq on its\n  argument.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(66), kw_end_DASH_line, int(72))).(*lang.Symbol)
+		tmp0 := sym_rest.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a possibly empty seq of the items after the first. Calls seq on its\n  argument.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_rest, kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(66), kw_end_DASH_line, int(72))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		{ // function rest
 			var v3 lang.FnFunc
@@ -6375,7 +6383,7 @@ func LoadNS() {
 	}
 	// reversible?
 	{
-		tmp0 := sym_reversible_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Reversible", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6249), kw_end_DASH_line, int(6249))).(*lang.Symbol)
+		tmp0 := sym_reversible_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Reversible", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reversible_QMARK_, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6249), kw_end_DASH_line, int(6249))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6393,7 +6401,7 @@ func LoadNS() {
 	}
 	// rseq
 	{
-		tmp0 := sym_rseq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rev)), kw_doc, "Returns, in constant time, a seq of the items in rev (which\n  can be a vector or sorted-map), in reverse order. If rev is empty returns nil", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1576), kw_end_DASH_line, int(1576))).(*lang.Symbol)
+		tmp0 := sym_rseq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rev)), kw_doc, "Returns, in constant time, a seq of the items in rev (which\n  can be a vector or sorted-map), in reverse order. If rev is empty returns nil", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_rseq, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1576), kw_end_DASH_line, int(1576))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6414,7 +6422,7 @@ func LoadNS() {
 	}
 	// second
 	{
-		tmp0 := sym_second.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Same as (first (next x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(2), kw_line, int(93), kw_end_DASH_line, int(97))).(*lang.Symbol)
+		tmp0 := sym_second.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Same as (first (next x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_second, kw_end_DASH_column, int(7), kw_column, int(2), kw_line, int(93), kw_end_DASH_line, int(97))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function second
 			var v2 lang.FnFunc
@@ -6440,7 +6448,7 @@ func LoadNS() {
 	// seq
 	{
 		tmp1 := reflect.TypeOf((*lang.ISeq)(nil)).Elem()
-		tmp0 := sym_seq.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a seq on the collection. If the collection is\n    empty, returns nil.  (seq nil) returns nil. seq also works on\n    Strings, native Java arrays (of reference types) and any objects\n    that implement Iterable. Note that seqs cache values, thus seq\n    should not be used on any Iterable whose iterator repeatedly\n    returns the same mutable object.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(4), kw_column, int(2), kw_line, int(128), kw_end_DASH_line, int(138))).(*lang.Symbol)
+		tmp0 := sym_seq.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a seq on the collection. If the collection is\n    empty, returns nil.  (seq nil) returns nil. seq also works on\n    Strings, native Java arrays (of reference types) and any objects\n    that implement Iterable. Note that seqs cache values, thus seq\n    should not be used on any Iterable whose iterator repeatedly\n    returns the same mutable object.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_seq, kw_end_DASH_column, int(4), kw_column, int(2), kw_line, int(128), kw_end_DASH_line, int(138))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		{ // function seq
 			var v3 lang.FnFunc
@@ -6462,7 +6470,7 @@ func LoadNS() {
 	}
 	// seq?
 	{
-		tmp0 := sym_seq_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x implements ISeq", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(148), kw_end_DASH_line, int(152))).(*lang.Symbol)
+		tmp0 := sym_seq_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x implements ISeq", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_seq_QMARK_, kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(148), kw_end_DASH_line, int(152))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function seq?
 			var v2 lang.FnFunc
@@ -6486,7 +6494,7 @@ func LoadNS() {
 	}
 	// seqable?
 	{
-		tmp0 := sym_seqable_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if the seq function is supported for x", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6196), kw_end_DASH_line, int(6196))).(*lang.Symbol)
+		tmp0 := sym_seqable_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if the seq function is supported for x", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_seqable_QMARK_, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6196), kw_end_DASH_line, int(6196))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6503,7 +6511,7 @@ func LoadNS() {
 	}
 	// sequential?
 	{
-		tmp0 := sym_sequential_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Sequential", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6221), kw_end_DASH_line, int(6221))).(*lang.Symbol)
+		tmp0 := sym_sequential_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Sequential", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_sequential_QMARK_, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6221), kw_end_DASH_line, int(6221))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6522,7 +6530,7 @@ func LoadNS() {
 	}
 	// set-agent-send-executor!
 	{
-		tmp0 := sym_set_DASH_agent_DASH_send_DASH_executor_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_executor)), kw_doc, "Sets the ExecutorService to be used by send", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(30), kw_column, int(7), kw_line, int(2086), kw_end_DASH_line, int(2086))).(*lang.Symbol)
+		tmp0 := sym_set_DASH_agent_DASH_send_DASH_executor_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_executor)), kw_doc, "Sets the ExecutorService to be used by send", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_set_DASH_agent_DASH_send_DASH_executor_BANG_, kw_end_DASH_column, int(30), kw_column, int(7), kw_line, int(2086), kw_end_DASH_line, int(2086))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6538,7 +6546,7 @@ func LoadNS() {
 	}
 	// set-agent-send-off-executor!
 	{
-		tmp0 := sym_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_executor)), kw_doc, "Sets the ExecutorService to be used by send-off", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(34), kw_column, int(7), kw_line, int(2092), kw_end_DASH_line, int(2092))).(*lang.Symbol)
+		tmp0 := sym_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_executor)), kw_doc, "Sets the ExecutorService to be used by send-off", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_, kw_end_DASH_column, int(34), kw_column, int(7), kw_line, int(2092), kw_end_DASH_line, int(2092))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6554,7 +6562,7 @@ func LoadNS() {
 	}
 	// set-error-handler!
 	{
-		tmp0 := sym_set_DASH_error_DASH_handler_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_handler_DASH_fn)), kw_doc, "Sets the error-handler of agent a to handler-fn.  If an action\n  being run by the agent throws an exception or doesn't pass the\n  validator fn, handler-fn will be called with two arguments: the\n  agent and the exception.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(2191), kw_end_DASH_line, int(2191))).(*lang.Symbol)
+		tmp0 := sym_set_DASH_error_DASH_handler_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_handler_DASH_fn)), kw_doc, "Sets the error-handler of agent a to handler-fn.  If an action\n  being run by the agent throws an exception or doesn't pass the\n  validator fn, handler-fn will be called with two arguments: the\n  agent and the exception.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_set_DASH_error_DASH_handler_BANG_, kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(2191), kw_end_DASH_line, int(2191))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -6577,7 +6585,7 @@ func LoadNS() {
 	}
 	// set-error-mode!
 	{
-		tmp0 := sym_set_DASH_error_DASH_mode_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_mode_DASH_keyword)), kw_doc, "Sets the error-mode of agent a to mode-keyword, which must be\n  either :fail or :continue.  If an action being run by the agent\n  throws an exception or doesn't pass the validator fn, an\n  error-handler may be called (see set-error-handler!), after which,\n  if the mode is :continue, the agent will continue as if neither the\n  action that caused the error nor the error itself ever happened.\n  \n  If the mode is :fail, the agent will become failed and will stop\n  accepting new 'send' and 'send-off' actions, and any previously\n  queued actions will be held until a 'restart-agent'.  Deref will\n  still work, returning the state of the agent before the error.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2209), kw_end_DASH_line, int(2209))).(*lang.Symbol)
+		tmp0 := sym_set_DASH_error_DASH_mode_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_mode_DASH_keyword)), kw_doc, "Sets the error-mode of agent a to mode-keyword, which must be\n  either :fail or :continue.  If an action being run by the agent\n  throws an exception or doesn't pass the validator fn, an\n  error-handler may be called (see set-error-handler!), after which,\n  if the mode is :continue, the agent will continue as if neither the\n  action that caused the error nor the error itself ever happened.\n  \n  If the mode is :fail, the agent will become failed and will stop\n  accepting new 'send' and 'send-off' actions, and any previously\n  queued actions will be held until a 'restart-agent'.  Deref will\n  still work, returning the state of the agent before the error.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_set_DASH_error_DASH_mode_BANG_, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2209), kw_end_DASH_line, int(2209))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -6600,7 +6608,7 @@ func LoadNS() {
 	}
 	// set-validator!
 	{
-		tmp0 := sym_set_DASH_validator_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref, sym_validator_DASH_fn)), kw_doc, "Sets the validator-fn for a var/ref/agent/atom. validator-fn must be nil or a\n  side-effect-free fn of one argument, which will be passed the intended\n  new state on any state change. If the new state is unacceptable, the\n  validator-fn should return false or throw an exception. If the current state (root\n  value if var) is not acceptable to the new validator, an exception\n  will be thrown and the validator will not be changed.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(2380), kw_end_DASH_line, int(2380))).(*lang.Symbol)
+		tmp0 := sym_set_DASH_validator_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref, sym_validator_DASH_fn)), kw_doc, "Sets the validator-fn for a var/ref/agent/atom. validator-fn must be nil or a\n  side-effect-free fn of one argument, which will be passed the intended\n  new state on any state change. If the new state is unacceptable, the\n  validator-fn should return false or throw an exception. If the current state (root\n  value if var) is not acceptable to the new validator, an exception\n  will be thrown and the validator will not be changed.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_set_DASH_validator_BANG_, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(2380), kw_end_DASH_line, int(2380))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -6623,7 +6631,7 @@ func LoadNS() {
 	}
 	// set?
 	{
-		tmp0 := sym_set_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IPersistentSet", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4097), kw_end_DASH_line, int(4097))).(*lang.Symbol)
+		tmp0 := sym_set_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IPersistentSet", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_set_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4097), kw_end_DASH_line, int(4097))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6642,7 +6650,7 @@ func LoadNS() {
 	}
 	// shutdown-agents
 	{
-		tmp0 := sym_shutdown_DASH_agents.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Initiates a shutdown of the thread pools that back the agent\n  system. Running actions will complete, but no new actions will be\n  accepted", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2251), kw_end_DASH_line, int(2251))).(*lang.Symbol)
+		tmp0 := sym_shutdown_DASH_agents.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Initiates a shutdown of the thread pools that back the agent\n  system. Running actions will complete, but no new actions will be\n  accepted", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_shutdown_DASH_agents, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2251), kw_end_DASH_line, int(2251))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -6657,7 +6665,7 @@ func LoadNS() {
 	}
 	// simple-keyword?
 	{
-		tmp0 := sym_simple_DASH_keyword_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a keyword without a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(1632), kw_end_DASH_line, int(1632))).(*lang.Symbol)
+		tmp0 := sym_simple_DASH_keyword_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a keyword without a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_simple_DASH_keyword_QMARK_, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(1632), kw_end_DASH_line, int(1632))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6692,7 +6700,7 @@ func LoadNS() {
 	}
 	// some
 	{
-		tmp0 := sym_some.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns the first logical true value of (pred x) for any x in coll,\n  else nil.  One common idiom is to use a set as pred, for example\n  this will return :fred if :fred is in the sequence, otherwise nil:\n  (some #{:fred} coll)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2683), kw_end_DASH_line, int(2683))).(*lang.Symbol)
+		tmp0 := sym_some.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns the first logical true value of (pred x) for any x in coll,\n  else nil.  One common idiom is to use a set as pred, for example\n  this will return :fred if :fred is in the sequence, otherwise nil:\n  (some #{:fred} coll)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_some, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2683), kw_end_DASH_line, int(2683))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -6755,7 +6763,7 @@ func LoadNS() {
 	// some?
 	{
 		tmp1 := reflect.TypeOf(false)
-		tmp0 := sym_some_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is not nil, false otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(532), kw_end_DASH_line, int(532))).(*lang.Symbol)
+		tmp0 := sym_some_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is not nil, false otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_some_QMARK_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(532), kw_end_DASH_line, int(532))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6776,7 +6784,7 @@ func LoadNS() {
 	}
 	// sorted-map
 	{
-		tmp0 := sym_sorted_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keyvals)), kw_doc, "keyval => key val\n  Returns a new sorted map with supplied mappings.  If any keys are\n  equal, they are handled as if by repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(399), kw_end_DASH_line, int(399))).(*lang.Symbol)
+		tmp0 := sym_sorted_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keyvals)), kw_doc, "keyval => key val\n  Returns a new sorted map with supplied mappings.  If any keys are\n  equal, they are handled as if by repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_sorted_DASH_map, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(399), kw_end_DASH_line, int(399))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -6800,7 +6808,7 @@ func LoadNS() {
 	}
 	// sorted-map-by
 	{
-		tmp0 := sym_sorted_DASH_map_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_comparator, sym__AMP_, sym_keyvals)), kw_doc, "keyval => key val\n  Returns a new sorted map with supplied mappings, using the supplied\n  comparator.  If any keys are equal, they are handled as if by\n  repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(408), kw_end_DASH_line, int(408))).(*lang.Symbol)
+		tmp0 := sym_sorted_DASH_map_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_comparator, sym__AMP_, sym_keyvals)), kw_doc, "keyval => key val\n  Returns a new sorted map with supplied mappings, using the supplied\n  comparator.  If any keys are equal, they are handled as if by\n  repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_sorted_DASH_map_DASH_by, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(408), kw_end_DASH_line, int(408))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -6826,7 +6834,7 @@ func LoadNS() {
 	}
 	// sorted-set
 	{
-		tmp0 := sym_sorted_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a new sorted set with supplied keys.  Any equal keys are\n  handled as if by repeated uses of conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(418), kw_end_DASH_line, int(418))).(*lang.Symbol)
+		tmp0 := sym_sorted_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a new sorted set with supplied keys.  Any equal keys are\n  handled as if by repeated uses of conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_sorted_DASH_set, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(418), kw_end_DASH_line, int(418))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -6850,7 +6858,7 @@ func LoadNS() {
 	}
 	// sorted-set-by
 	{
-		tmp0 := sym_sorted_DASH_set_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_comparator, sym__AMP_, sym_keys)), kw_doc, "Returns a new sorted set with supplied keys, using the supplied\n  comparator.  Any equal keys are handled as if by repeated uses of\n  conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(426), kw_end_DASH_line, int(426))).(*lang.Symbol)
+		tmp0 := sym_sorted_DASH_set_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_comparator, sym__AMP_, sym_keys)), kw_doc, "Returns a new sorted set with supplied keys, using the supplied\n  comparator.  Any equal keys are handled as if by repeated uses of\n  conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_sorted_DASH_set_DASH_by, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(426), kw_end_DASH_line, int(426))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -6876,7 +6884,7 @@ func LoadNS() {
 	}
 	// sorted?
 	{
-		tmp0 := sym_sorted_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Sorted", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6227), kw_end_DASH_line, int(6227))).(*lang.Symbol)
+		tmp0 := sym_sorted_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Sorted", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_sorted_QMARK_, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6227), kw_end_DASH_line, int(6227))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6894,7 +6902,7 @@ func LoadNS() {
 	}
 	// special-symbol?
 	{
-		tmp0 := sym_special_DASH_symbol_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns true if s names a special form", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(4984), kw_end_DASH_line, int(4984))).(*lang.Symbol)
+		tmp0 := sym_special_DASH_symbol_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns true if s names a special form", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_special_DASH_symbol_QMARK_, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(4984), kw_end_DASH_line, int(4984))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6923,7 +6931,7 @@ func LoadNS() {
 	}
 	// spread
 	{
-		tmp0 := sym_spread.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_arglist)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(634), kw_end_DASH_line, int(634), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_spread.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_arglist)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_spread, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(634), kw_end_DASH_line, int(634), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -6974,7 +6982,7 @@ func LoadNS() {
 	// str
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_str.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_ys)), kw_doc, "With no args, returns the empty string. With one arg x, returns\n  x.toString().  (str nil) returns the empty string. With more than\n  one arg, returns the concatenation of the str values of the args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(545), kw_end_DASH_line, int(545))).(*lang.Symbol)
+		tmp0 := sym_str.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_ys)), kw_doc, "With no args, returns the empty string. With one arg x, returns\n  x.toString().  (str nil) returns the empty string. With more than\n  one arg, returns the concatenation of the str values of the args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_str, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(545), kw_end_DASH_line, int(545))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -7067,7 +7075,7 @@ func LoadNS() {
 	}
 	// stream-reduce!
 	{
-		tmp0 := sym_stream_DASH_reduce_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_s), lang.NewVector(sym_f, sym_init, sym_s)), kw_doc, "Works like reduce but takes a java.util.stream.BaseStream as its source.\n  Honors 'reduced', is a terminal operation on the stream", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(6776), kw_end_DASH_line, int(6776))).(*lang.Symbol)
+		tmp0 := sym_stream_DASH_reduce_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_s), lang.NewVector(sym_f, sym_init, sym_s)), kw_doc, "Works like reduce but takes a java.util.stream.BaseStream as its source.\n  Honors 'reduced', is a terminal operation on the stream", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_stream_DASH_reduce_BANG_, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(6776), kw_end_DASH_line, int(6776))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -7122,7 +7130,7 @@ func LoadNS() {
 	}
 	// stream-seq!
 	{
-		tmp0 := sym_stream_DASH_seq_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_stream)), kw_doc, "Takes a java.util.stream.BaseStream instance s and returns a seq of its\n  contents. This is a terminal operation on the stream.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6785), kw_end_DASH_line, int(6785))).(*lang.Symbol)
+		tmp0 := sym_stream_DASH_seq_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_stream)), kw_doc, "Takes a java.util.stream.BaseStream instance s and returns a seq of its\n  contents. This is a terminal operation on the stream.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_stream_DASH_seq_BANG_, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6785), kw_end_DASH_line, int(6785))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7151,7 +7159,7 @@ func LoadNS() {
 	}
 	// stream-transduce!
 	{
-		tmp0 := sym_stream_DASH_transduce_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xform, sym_f, sym_stream), lang.NewVector(sym_xform, sym_f, sym_init, sym_stream)), kw_doc, "Works like transduce but takes a java.util.stream.BaseStream as its source.\n  This is a terminal operation on the stream.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(6792), kw_end_DASH_line, int(6792))).(*lang.Symbol)
+		tmp0 := sym_stream_DASH_transduce_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xform, sym_f, sym_stream), lang.NewVector(sym_xform, sym_f, sym_init, sym_stream)), kw_doc, "Works like transduce but takes a java.util.stream.BaseStream as its source.\n  This is a terminal operation on the stream.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_stream_DASH_transduce_BANG_, kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(6792), kw_end_DASH_line, int(6792))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -7203,7 +7211,7 @@ func LoadNS() {
 	}
 	// string?
 	{
-		tmp0 := sym_string_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a String", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(2), kw_line, int(162), kw_end_DASH_line, int(166))).(*lang.Symbol)
+		tmp0 := sym_string_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a String", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_string_QMARK_, kw_end_DASH_column, int(8), kw_column, int(2), kw_line, int(162), kw_end_DASH_line, int(166))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function string?
 			var v2 lang.FnFunc
@@ -7226,7 +7234,7 @@ func LoadNS() {
 	}
 	// struct
 	{
-		tmp0 := sym_struct.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_vals)), kw_doc, "Returns a new structmap instance with the keys of the\n  structure-basis. vals must be supplied for basis keys in order -\n  where values are not supplied they will default to nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4060), kw_end_DASH_line, int(4060))).(*lang.Symbol)
+		tmp0 := sym_struct.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_vals)), kw_doc, "Returns a new structmap instance with the keys of the\n  structure-basis. vals must be supplied for basis keys in order -\n  where values are not supplied they will default to nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_struct, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4060), kw_end_DASH_line, int(4060))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -7252,7 +7260,7 @@ func LoadNS() {
 	}
 	// struct-map
 	{
-		tmp0 := sym_struct_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_inits)), kw_doc, "Returns a new structmap instance with the keys of the\n  structure-basis. keyvals may contain all, some or none of the basis\n  keys - where values are not supplied they will default to nil.\n  keyvals can also contain keys not in the basis.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4050), kw_end_DASH_line, int(4050))).(*lang.Symbol)
+		tmp0 := sym_struct_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_inits)), kw_doc, "Returns a new structmap instance with the keys of the\n  structure-basis. keyvals may contain all, some or none of the basis\n  keys - where values are not supplied they will default to nil.\n  keyvals can also contain keys not in the basis.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_struct_DASH_map, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4050), kw_end_DASH_line, int(4050))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -7278,7 +7286,7 @@ func LoadNS() {
 	}
 	// subs
 	{
-		tmp0 := sym_subs.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_start), lang.NewVector(sym_s, sym_start, sym_end)), kw_doc, "Returns the substring of s beginning at start inclusive, and ending\n  at end (defaults to length of string), exclusive.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4997), kw_end_DASH_line, int(4997))).(*lang.Symbol)
+		tmp0 := sym_subs.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_start), lang.NewVector(sym_s, sym_start, sym_end)), kw_doc, "Returns the substring of s beginning at start inclusive, and ending\n  at end (defaults to length of string), exclusive.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_subs, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4997), kw_end_DASH_line, int(4997))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -7311,7 +7319,7 @@ func LoadNS() {
 	}
 	// swap!
 	{
-		tmp0 := sym_swap_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically swaps the value of atom to be:\n  (apply f current-value-of-atom args). Note that f may be called\n  multiple times, and thus should be free of side effects.  Returns\n  the value that was swapped in.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2342), kw_end_DASH_line, int(2342))).(*lang.Symbol)
+		tmp0 := sym_swap_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically swaps the value of atom to be:\n  (apply f current-value-of-atom args). Note that f may be called\n  multiple times, and thus should be free of side effects.  Returns\n  the value that was swapped in.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_swap_BANG_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2342), kw_end_DASH_line, int(2342))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -7343,7 +7351,7 @@ func LoadNS() {
 	}
 	// swap-vals!
 	{
-		tmp0 := sym_swap_DASH_vals_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically swaps the value of atom to be:\n  (apply f current-value-of-atom args). Note that f may be called\n  multiple times, and thus should be free of side effects.\n  Returns [old new], the value of the atom before and after the swap.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2351), kw_end_DASH_line, int(2351))).(*lang.Symbol)
+		tmp0 := sym_swap_DASH_vals_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically swaps the value of atom to be:\n  (apply f current-value-of-atom args). Note that f may be called\n  multiple times, and thus should be free of side effects.\n  Returns [old new], the value of the atom before and after the swap.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_swap_DASH_vals_BANG_, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2351), kw_end_DASH_line, int(2351))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -7375,7 +7383,7 @@ func LoadNS() {
 	}
 	// symbol?
 	{
-		tmp0 := sym_symbol_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Symbol", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(559), kw_end_DASH_line, int(559))).(*lang.Symbol)
+		tmp0 := sym_symbol_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Symbol", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_symbol_QMARK_, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(559), kw_end_DASH_line, int(559))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7394,7 +7402,7 @@ func LoadNS() {
 	}
 	// system-newline
 	{
-		tmp0 := sym_system_DASH_newline.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(3694), kw_column, int(6), kw_end_DASH_line, int(3694), kw_end_DASH_column, int(40), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_system_DASH_newline.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(3694), kw_column, int(6), kw_end_DASH_line, int(3694), kw_end_DASH_column, int(40), kw_name, sym_system_DASH_newline, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core_system_DASH_newline = ns.InternWithValue(tmp0, "\n", true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_system_DASH_newline.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7402,7 +7410,7 @@ func LoadNS() {
 	}
 	// tagged-literal
 	{
-		tmp0 := sym_tagged_DASH_literal.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag, sym_form)), kw_doc, "Construct a data representation of a tagged literal from a\n  tag symbol and a form.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(7761), kw_end_DASH_line, int(7761))).(*lang.Symbol)
+		tmp0 := sym_tagged_DASH_literal.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag, sym_form)), kw_doc, "Construct a data representation of a tagged literal from a\n  tag symbol and a form.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_tagged_DASH_literal, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(7761), kw_end_DASH_line, int(7761))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -7421,7 +7429,7 @@ func LoadNS() {
 	}
 	// tagged-literal?
 	{
-		tmp0 := sym_tagged_DASH_literal_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_value)), kw_doc, "Return true if the value is the data representation of a tagged literal", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(7755), kw_end_DASH_line, int(7755))).(*lang.Symbol)
+		tmp0 := sym_tagged_DASH_literal_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_value)), kw_doc, "Return true if the value is the data representation of a tagged literal", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_tagged_DASH_literal_QMARK_, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(7755), kw_end_DASH_line, int(7755))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7439,7 +7447,7 @@ func LoadNS() {
 	}
 	// take-while
 	{
-		tmp0 := sym_take_DASH_while.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of successive items from coll while\n  (pred item) returns logical true. pred must be free of side-effects.\n  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2879), kw_end_DASH_line, int(2879))).(*lang.Symbol)
+		tmp0 := sym_take_DASH_while.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of successive items from coll while\n  (pred item) returns logical true. pred must be free of side-effects.\n  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_take_DASH_while, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2879), kw_end_DASH_line, int(2879))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -7558,7 +7566,7 @@ func LoadNS() {
 	}
 	// tapset
 	{
-		tmp0 := sym_tapset.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(7874), kw_column, int(10), kw_end_DASH_line, int(7874), kw_end_DASH_column, int(25), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_tapset.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(7874), kw_column, int(10), kw_end_DASH_line, int(7874), kw_end_DASH_column, int(25), kw_name, sym_tapset, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		tmp1 := lang.NewAtom(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{})))
 		var_clojure_DOT_core_tapset = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
@@ -7567,7 +7575,7 @@ func LoadNS() {
 	}
 	// test
 	{
-		tmp0 := sym_test.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "test [v] finds fn at key :test in var metadata and calls it,\n  presuming failure will throw exception", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4845), kw_end_DASH_line, int(4845))).(*lang.Symbol)
+		tmp0 := sym_test.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "test [v] finds fn at key :test in var metadata and calls it,\n  presuming failure will throw exception", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_test, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4845), kw_end_DASH_line, int(4845))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7601,7 +7609,7 @@ func LoadNS() {
 	}
 	// the-ns
 	{
-		tmp0 := sym_the_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If passed a namespace, returns it. Else, when passed a symbol,\n  returns the namespace named by it, throwing an exception if not\n  found.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4151), kw_end_DASH_line, int(4151))).(*lang.Symbol)
+		tmp0 := sym_the_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If passed a namespace, returns it. Else, when passed a symbol,\n  returns the namespace named by it, throwing an exception if not\n  found.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_the_DASH_ns, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4151), kw_end_DASH_line, int(4151))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7644,7 +7652,7 @@ func LoadNS() {
 	}
 	// to-array
 	{
-		tmp0 := sym_to_DASH_array.WithMeta(lang.NewMap(kw_tag, "[Ljava.lang.Object;", kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns an array of Objects containing the contents of coll, which\n  can be any Collection.  Maps to java.util.Collection.toArray().", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(339), kw_end_DASH_line, int(339))).(*lang.Symbol)
+		tmp0 := sym_to_DASH_array.WithMeta(lang.NewMap(kw_tag, "[Ljava.lang.Object;", kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns an array of Objects containing the contents of coll, which\n  can be any Collection.  Maps to java.util.Collection.toArray().", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_to_DASH_array, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(339), kw_end_DASH_line, int(339))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7665,7 +7673,7 @@ func LoadNS() {
 	}
 	// transient
 	{
-		tmp0 := sym_transient.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a new, transient version of the collection, in constant time.\n\n  Transients support a parallel set of 'changing' operations, with similar names\n  followed by ! - assoc!, conj! etc. These do the same things as their persistent\n  counterparts except the return values are themselves transient.\n\n  Note in particular that transients are not designed to be bashed in-place. You\n  must capture and use the return value in the next call. In this way, they support\n  the same code structure as the functional persistent code they replace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3334), kw_end_DASH_line, int(3334))).(*lang.Symbol)
+		tmp0 := sym_transient.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a new, transient version of the collection, in constant time.\n\n  Transients support a parallel set of 'changing' operations, with similar names\n  followed by ! - assoc!, conj! etc. These do the same things as their persistent\n  counterparts except the return values are themselves transient.\n\n  Note in particular that transients are not designed to be bashed in-place. You\n  must capture and use the return value in the next call. In this way, they support\n  the same code structure as the functional persistent code they replace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_transient, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3334), kw_end_DASH_line, int(3334))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7693,7 +7701,7 @@ func LoadNS() {
 	// true?
 	{
 		tmp1 := reflect.TypeOf(false)
-		tmp0 := sym_true_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is the value true, false otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(513), kw_end_DASH_line, int(513))).(*lang.Symbol)
+		tmp0 := sym_true_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is the value true, false otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_true_QMARK_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(513), kw_end_DASH_line, int(513))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7711,7 +7719,7 @@ func LoadNS() {
 	}
 	// unquote
 	{
-		tmp0 := sym_unquote.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(13), kw_column, int(6), kw_end_DASH_line, int(13), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_unquote.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(13), kw_column, int(6), kw_end_DASH_line, int(13), kw_end_DASH_column, int(12), kw_name, sym_unquote, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core_unquote = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_unquote.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7719,7 +7727,7 @@ func LoadNS() {
 	}
 	// unquote-splicing
 	{
-		tmp0 := sym_unquote_DASH_splicing.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(14), kw_column, int(6), kw_end_DASH_line, int(14), kw_end_DASH_column, int(21), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_unquote_DASH_splicing.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(14), kw_column, int(6), kw_end_DASH_line, int(14), kw_end_DASH_column, int(21), kw_name, sym_unquote_DASH_splicing, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core_unquote_DASH_splicing = ns.Intern(tmp0)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_unquote_DASH_splicing.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7727,7 +7735,7 @@ func LoadNS() {
 	}
 	// uri?
 	{
-		tmp0 := sym_uri_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a java.net.URI", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7869), kw_end_DASH_line, int(7869))).(*lang.Symbol)
+		tmp0 := sym_uri_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a java.net.URI", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_uri_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7869), kw_end_DASH_line, int(7869))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7746,7 +7754,7 @@ func LoadNS() {
 	}
 	// uuid?
 	{
-		tmp0 := sym_uuid_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a java.util.UUID", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6839), kw_end_DASH_line, int(6839))).(*lang.Symbol)
+		tmp0 := sym_uuid_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a java.util.UUID", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_uuid_QMARK_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6839), kw_end_DASH_line, int(6839))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7765,7 +7773,7 @@ func LoadNS() {
 	}
 	// val
 	{
-		tmp0 := sym_val.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_e)), kw_doc, "Returns the value in the map entry.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1569), kw_end_DASH_line, int(1569))).(*lang.Symbol)
+		tmp0 := sym_val.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_e)), kw_doc, "Returns the value in the map entry.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_val, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1569), kw_end_DASH_line, int(1569))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7786,7 +7794,7 @@ func LoadNS() {
 	}
 	// vals
 	{
-		tmp0 := sym_vals.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map)), kw_doc, "Returns a sequence of the map's values, in the same order as (seq map).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1556), kw_end_DASH_line, int(1556))).(*lang.Symbol)
+		tmp0 := sym_vals.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map)), kw_doc, "Returns a sequence of the map's values, in the same order as (seq map).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_vals, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1556), kw_end_DASH_line, int(1556))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7803,7 +7811,7 @@ func LoadNS() {
 	}
 	// var-get
 	{
-		tmp0 := sym_var_DASH_get.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Gets the value in the var object", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4325), kw_end_DASH_line, int(4325))).(*lang.Symbol)
+		tmp0 := sym_var_DASH_get.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Gets the value in the var object", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_var_DASH_get, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4325), kw_end_DASH_line, int(4325))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7824,7 +7832,7 @@ func LoadNS() {
 	}
 	// var-set
 	{
-		tmp0 := sym_var_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_val)), kw_doc, "Sets the value in the var object to val. The var must be\n thread-locally bound.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4331), kw_end_DASH_line, int(4331))).(*lang.Symbol)
+		tmp0 := sym_var_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_val)), kw_doc, "Sets the value in the var object to val. The var must be\n thread-locally bound.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_var_DASH_set, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4331), kw_end_DASH_line, int(4331))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -7847,7 +7855,7 @@ func LoadNS() {
 	}
 	// var?
 	{
-		tmp0 := sym_var_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Returns true if v is of type clojure.lang.Var", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4991), kw_end_DASH_line, int(4991))).(*lang.Symbol)
+		tmp0 := sym_var_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Returns true if v is of type clojure.lang.Var", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_var_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4991), kw_end_DASH_line, int(4991))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -7866,7 +7874,7 @@ func LoadNS() {
 	}
 	// vector
 	{
-		tmp0 := sym_vector.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_a), lang.NewVector(sym_a, sym_b), lang.NewVector(sym_a, sym_b, sym_c), lang.NewVector(sym_a, sym_b, sym_c, sym_d), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e, sym_f), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e, sym_f, sym__AMP_, sym_args)), kw_doc, "Creates a new vector containing the args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(354), kw_end_DASH_line, int(354))).(*lang.Symbol)
+		tmp0 := sym_vector.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_a), lang.NewVector(sym_a, sym_b), lang.NewVector(sym_a, sym_b, sym_c), lang.NewVector(sym_a, sym_b, sym_c, sym_d), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e, sym_f), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e, sym_f, sym__AMP_, sym_args)), kw_doc, "Creates a new vector containing the args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_vector, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(354), kw_end_DASH_line, int(354))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -8012,7 +8020,7 @@ func LoadNS() {
 	}
 	// vector?
 	{
-		tmp0 := sym_vector_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x implements IPersistentVector", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(2), kw_line, int(176), kw_end_DASH_line, int(180))).(*lang.Symbol)
+		tmp0 := sym_vector_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x implements IPersistentVector", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_vector_QMARK_, kw_end_DASH_column, int(8), kw_column, int(2), kw_line, int(176), kw_end_DASH_line, int(180))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function vector?
 			var v2 lang.FnFunc
@@ -8037,7 +8045,7 @@ func LoadNS() {
 	// volatile!
 	{
 		tmp1 := reflect.TypeOf((*lang.Volatile)(nil)).Elem()
-		tmp0 := sym_volatile_BANG_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_val)), kw_doc, "Creates and returns a Volatile with an initial value of val.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2516), kw_end_DASH_line, int(2516))).(*lang.Symbol)
+		tmp0 := sym_volatile_BANG_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_val)), kw_doc, "Creates and returns a Volatile with an initial value of val.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_volatile_BANG_, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2516), kw_end_DASH_line, int(2516))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -8055,7 +8063,7 @@ func LoadNS() {
 	}
 	// volatile?
 	{
-		tmp0 := sym_volatile_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a volatile.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2539), kw_end_DASH_line, int(2539))).(*lang.Symbol)
+		tmp0 := sym_volatile_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a volatile.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_volatile_QMARK_, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2539), kw_end_DASH_line, int(2539))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -8074,7 +8082,7 @@ func LoadNS() {
 	}
 	// vreset!
 	{
-		tmp0 := sym_vreset_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_vol, sym_newval)), kw_doc, "Sets the value of volatile to newval without regard for the\n   current value. Returns newval.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2523), kw_end_DASH_line, int(2523))).(*lang.Symbol)
+		tmp0 := sym_vreset_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_vol, sym_newval)), kw_doc, "Sets the value of volatile to newval without regard for the\n   current value. Returns newval.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_vreset_BANG_, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2523), kw_end_DASH_line, int(2523))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -8097,7 +8105,7 @@ func LoadNS() {
 	}
 	// when
 	{
-		tmp0 := sym_when.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Evaluates test. If logical true, evaluates body in an implicit do.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(494), kw_end_DASH_line, int(494))).(*lang.Symbol)
+		tmp0 := sym_when.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Evaluates test. If logical true, evaluates body in an implicit do.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_when, kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(494), kw_end_DASH_line, int(494))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -8130,7 +8138,7 @@ func LoadNS() {
 	}
 	// when-not
 	{
-		tmp0 := sym_when_DASH_not.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Evaluates test. If logical false, evaluates body in an implicit do.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(500), kw_end_DASH_line, int(500))).(*lang.Symbol)
+		tmp0 := sym_when_DASH_not.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Evaluates test. If logical false, evaluates body in an implicit do.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_when_DASH_not, kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(500), kw_end_DASH_line, int(500))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -8163,7 +8171,7 @@ func LoadNS() {
 	}
 	// with-meta
 	{
-		tmp0 := sym_with_DASH_meta.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_obj, sym_m)), kw_doc, "Returns an object of the same type and value as obj, with\n    map m as its metadata.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(2), kw_line, int(213), kw_end_DASH_line, int(218))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_meta.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_obj, sym_m)), kw_doc, "Returns an object of the same type and value as obj, with\n    map m as its metadata.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_with_DASH_meta, kw_end_DASH_column, int(10), kw_column, int(2), kw_line, int(213), kw_end_DASH_line, int(218))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function with-meta
 			var v2 lang.FnFunc
@@ -8295,7 +8303,7 @@ func LoadNS() {
 	}
 	// agent-errors
 	{
-		tmp0 := sym_agent_DASH_errors.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "DEPRECATED: Use 'agent-error' instead.\n  Returns a sequence of the exceptions thrown during asynchronous\n  actions of the agent.", kw_file, "clojure/core.glj", kw_deprecated, "1.2", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(2233), kw_end_DASH_line, int(2233))).(*lang.Symbol)
+		tmp0 := sym_agent_DASH_errors.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "DEPRECATED: Use 'agent-error' instead.\n  Returns a sequence of the exceptions thrown during asynchronous\n  actions of the agent.", kw_file, "clojure/core.glj", kw_deprecated, "1.2", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_agent_DASH_errors, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(2233), kw_end_DASH_line, int(2233))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -8334,7 +8342,7 @@ func LoadNS() {
 	}
 	// alias
 	{
-		tmp0 := sym_alias.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_alias, sym_namespace_DASH_sym)), kw_doc, "Add an alias in the current namespace to another\n  namespace. Arguments are two symbols: the alias to be used, and\n  the symbolic name of the target namespace. Use :as in the ns macro in preference\n  to calling this directly.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(4262), kw_end_DASH_line, int(4262))).(*lang.Symbol)
+		tmp0 := sym_alias.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_alias, sym_namespace_DASH_sym)), kw_doc, "Add an alias in the current namespace to another\n  namespace. Arguments are two symbols: the alias to be used, and\n  the symbolic name of the target namespace. Use :as in the ns macro in preference\n  to calling this directly.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_alias, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(4262), kw_end_DASH_line, int(4262))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -8360,7 +8368,7 @@ func LoadNS() {
 	}
 	// assoc
 	{
-		tmp0 := sym_assoc.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key, sym_val), lang.NewVector(sym_map, sym_key, sym_val, sym__AMP_, sym_kvs)), kw_doc, "assoc[iate]. When applied to a map, returns a new map of the\n    same (hashed/sorted) type, that contains the mapping of key(s) to\n    val(s). When applied to a vector, returns a new vector that\n    contains val at index. Note - index must be <= (count vector).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(183), kw_end_DASH_line, int(190))).(*lang.Symbol)
+		tmp0 := sym_assoc.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key, sym_val), lang.NewVector(sym_map, sym_key, sym_val, sym__AMP_, sym_kvs)), kw_doc, "assoc[iate]. When applied to a map, returns a new map of the\n    same (hashed/sorted) type, that contains the mapping of key(s) to\n    val(s). When applied to a vector, returns a new vector that\n    contains val at index. Note - index must be <= (count vector).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_assoc, kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(183), kw_end_DASH_line, int(190))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function assoc
 			var v2 lang.FnFunc
@@ -8441,7 +8449,7 @@ func LoadNS() {
 	}
 	// assoc!
 	{
-		tmp0 := sym_assoc_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_key, sym_val), lang.NewVector(sym_coll, sym_key, sym_val, sym__AMP_, sym_kvs)), kw_doc, "When applied to a transient map, adds mapping of key(s) to\n  val(s). When applied to a transient vector, sets the val at index.\n  Note - index must be <= (count vector). Returns coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3368), kw_end_DASH_line, int(3368))).(*lang.Symbol)
+		tmp0 := sym_assoc_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_key, sym_val), lang.NewVector(sym_coll, sym_key, sym_val, sym__AMP_, sym_kvs)), kw_doc, "When applied to a transient map, adds mapping of key(s) to\n  val(s). When applied to a transient vector, sets the val at index.\n  Note - index must be <= (count vector). Returns coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_assoc_BANG_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3368), kw_end_DASH_line, int(3368))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -8516,7 +8524,7 @@ func LoadNS() {
 	}
 	// associative?
 	{
-		tmp0 := sym_associative_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Associative", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(6215), kw_end_DASH_line, int(6215))).(*lang.Symbol)
+		tmp0 := sym_associative_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Associative", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_associative_QMARK_, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(6215), kw_end_DASH_line, int(6215))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -8535,7 +8543,7 @@ func LoadNS() {
 	}
 	// bases
 	{
-		tmp0 := sym_bases.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_c)), kw_doc, "Returns the immediate superclass and direct interfaces of c, if any", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(5514), kw_end_DASH_line, int(5514))).(*lang.Symbol)
+		tmp0 := sym_bases.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_c)), kw_doc, "Returns the immediate superclass and direct interfaces of c, if any", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bases, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(5514), kw_end_DASH_line, int(5514))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -8576,7 +8584,7 @@ func LoadNS() {
 	}
 	// boolean?
 	{
-		tmp0 := sym_boolean_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Boolean", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(520), kw_end_DASH_line, int(520))).(*lang.Symbol)
+		tmp0 := sym_boolean_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Boolean", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_boolean_QMARK_, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(520), kw_end_DASH_line, int(520))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -8594,7 +8602,7 @@ func LoadNS() {
 	}
 	// char?
 	{
-		tmp0 := sym_char_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Character", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(155), kw_end_DASH_line, int(159))).(*lang.Symbol)
+		tmp0 := sym_char_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Character", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_char_QMARK_, kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(155), kw_end_DASH_line, int(159))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function char?
 			var v2 lang.FnFunc
@@ -8618,7 +8626,7 @@ func LoadNS() {
 	}
 	// chunked-seq?
 	{
-		tmp0 := sym_chunked_DASH_seq_QMARK_.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(710), kw_column, int(7), kw_end_DASH_line, int(710), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunked_DASH_seq_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_chunked_DASH_seq_QMARK_, kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(710), kw_end_DASH_line, int(710))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -8637,7 +8645,7 @@ func LoadNS() {
 	}
 	// class
 	{
-		tmp0 := sym_class.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the Class of x", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3460), kw_end_DASH_line, int(3460))).(*lang.Symbol)
+		tmp0 := sym_class.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the Class of x", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_class, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3460), kw_end_DASH_line, int(3460))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -8662,7 +8670,7 @@ func LoadNS() {
 	}
 	// class?
 	{
-		tmp0 := sym_class_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is an instance of Class", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5457), kw_end_DASH_line, int(5457))).(*lang.Symbol)
+		tmp0 := sym_class_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is an instance of Class", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_class_QMARK_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5457), kw_end_DASH_line, int(5457))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -8681,7 +8689,7 @@ func LoadNS() {
 	}
 	// coll?
 	{
-		tmp0 := sym_coll_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IPersistentCollection", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6184), kw_end_DASH_line, int(6184))).(*lang.Symbol)
+		tmp0 := sym_coll_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IPersistentCollection", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_coll_QMARK_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6184), kw_end_DASH_line, int(6184))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -8700,7 +8708,7 @@ func LoadNS() {
 	}
 	// completing
 	{
-		tmp0 := sym_completing.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_cf)), kw_doc, "Takes a reducing function f of 2 args and returns a fn suitable for\n  transduce by adding an arity-1 signature that calls cf (default -\n  identity) on the result argument.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(6885), kw_end_DASH_line, int(6885))).(*lang.Symbol)
+		tmp0 := sym_completing.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_cf)), kw_doc, "Takes a reducing function f of 2 args and returns a fn suitable for\n  transduce by adding an arity-1 signature that calls cf (default -\n  identity) on the result argument.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_completing, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(6885), kw_end_DASH_line, int(6885))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -8758,7 +8766,7 @@ func LoadNS() {
 	}
 	// concat
 	{
-		tmp0 := sym_concat.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_zs)), kw_doc, "Returns a lazy seq representing the concatenation of the elements in the supplied colls.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(713), kw_end_DASH_line, int(713))).(*lang.Symbol)
+		tmp0 := sym_concat.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_zs)), kw_doc, "Returns a lazy seq representing the concatenation of the elements in the supplied colls.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_concat, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(713), kw_end_DASH_line, int(713))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -8936,7 +8944,7 @@ func LoadNS() {
 	}
 	// cond
 	{
-		tmp0 := sym_cond.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_clauses)), kw_doc, "Takes a set of test/expr pairs. It evaluates each test one at a\n  time.  If a test returns logical true, cond evaluates and returns\n  the value of the corresponding expr and doesn't evaluate any of the\n  other tests or exprs. (cond) returns nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(571), kw_end_DASH_line, int(571))).(*lang.Symbol)
+		tmp0 := sym_cond.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_clauses)), kw_doc, "Takes a set of test/expr pairs. It evaluates each test one at a\n  time.  If a test returns logical true, cond evaluates and returns\n  the value of the corresponding expr and doesn't evaluate any of the\n  other tests or exprs. (cond) returns nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_cond, kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(571), kw_end_DASH_line, int(571))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -8989,7 +8997,7 @@ func LoadNS() {
 	}
 	// conj
 	{
-		tmp0 := sym_conj.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_coll), lang.NewVector(sym_coll, sym_x), lang.NewVector(sym_coll, sym_x, sym__AMP_, sym_xs)), kw_doc, "conj[oin]. Returns a new collection with the xs\n    'added'. (conj nil item) returns (item).\n    (conj coll) returns coll. (conj) returns [].\n    The 'addition' may happen at different 'places' depending\n    on the concrete type.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(75), kw_end_DASH_line, int(83))).(*lang.Symbol)
+		tmp0 := sym_conj.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_coll), lang.NewVector(sym_coll, sym_x), lang.NewVector(sym_coll, sym_x, sym__AMP_, sym_xs)), kw_doc, "conj[oin]. Returns a new collection with the xs\n    'added'. (conj nil item) returns (item).\n    (conj coll) returns coll. (conj) returns [].\n    The 'addition' may happen at different 'places' depending\n    on the concrete type.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_conj, kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(75), kw_end_DASH_line, int(83))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function conj
 			var v2 lang.FnFunc
@@ -9059,7 +9067,7 @@ func LoadNS() {
 	}
 	// conj!
 	{
-		tmp0 := sym_conj_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_coll), lang.NewVector(sym_coll, sym_x)), kw_doc, "Adds x to the transient collection, and return coll. The 'addition'\n  may happen at different 'places' depending on the concrete type.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3358), kw_end_DASH_line, int(3358))).(*lang.Symbol)
+		tmp0 := sym_conj_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_coll), lang.NewVector(sym_coll, sym_x)), kw_doc, "Adds x to the transient collection, and return coll. The 'addition'\n  may happen at different 'places' depending on the concrete type.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_conj_BANG_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3358), kw_end_DASH_line, int(3358))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -9131,7 +9139,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_count.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_inline, tmp1, kw_doc, "Returns the number of items in the collection. (count nil) returns\n  0.  Also works on strings, arrays, and Java Collections and Maps", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(869), kw_end_DASH_line, int(869))).(*lang.Symbol)
+		tmp0 := sym_count.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_inline, tmp1, kw_doc, "Returns the number of items in the collection. (count nil) returns\n  0.  Also works on strings, arrays, and Java Collections and Maps", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_count, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(869), kw_end_DASH_line, int(869))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -9148,7 +9156,7 @@ func LoadNS() {
 	}
 	// counted?
 	{
-		tmp0 := sym_counted_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements count in constant time", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6233), kw_end_DASH_line, int(6233))).(*lang.Symbol)
+		tmp0 := sym_counted_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements count in constant time", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_counted_QMARK_, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6233), kw_end_DASH_line, int(6233))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -9167,7 +9175,7 @@ func LoadNS() {
 	}
 	// cycle
 	{
-		tmp0 := sym_cycle.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a lazy (infinite!) sequence of repetitions of the items in coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2976), kw_end_DASH_line, int(2976))).(*lang.Symbol)
+		tmp0 := sym_cycle.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a lazy (infinite!) sequence of repetitions of the items in coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_cycle, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2976), kw_end_DASH_line, int(2976))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -9223,7 +9231,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_dec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one less than num. Does not auto-promote\n  longs, will throw on overflow. See also: dec'", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1149), kw_end_DASH_line, int(1149))).(*lang.Symbol)
+		tmp0 := sym_dec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one less than num. Does not auto-promote\n  longs, will throw on overflow. See also: dec'", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_dec, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1149), kw_end_DASH_line, int(1149))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -9274,7 +9282,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_dec_TICK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one less than num. Supports arbitrary precision.\n  See also: dec", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1142), kw_end_DASH_line, int(1142))).(*lang.Symbol)
+		tmp0 := sym_dec_TICK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one less than num. Supports arbitrary precision.\n  See also: dec", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_dec_TICK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1142), kw_end_DASH_line, int(1142))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -9295,7 +9303,7 @@ func LoadNS() {
 	}
 	// decimal?
 	{
-		tmp0 := sym_decimal_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a BigDecimal", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(3598), kw_end_DASH_line, int(3598))).(*lang.Symbol)
+		tmp0 := sym_decimal_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a BigDecimal", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_decimal_QMARK_, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(3598), kw_end_DASH_line, int(3598))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -9314,7 +9322,7 @@ func LoadNS() {
 	}
 	// defmethod
 	{
-		tmp0 := sym_defmethod.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val, sym__AMP_, sym_fn_DASH_tail)), kw_doc, "Creates and installs a new method of multimethod associated with dispatch-value. ", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(1780), kw_end_DASH_line, int(1780))).(*lang.Symbol)
+		tmp0 := sym_defmethod.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val, sym__AMP_, sym_fn_DASH_tail)), kw_doc, "Creates and installs a new method of multimethod associated with dispatch-value. ", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_defmethod, kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(1780), kw_end_DASH_line, int(1780))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -9373,7 +9381,7 @@ func LoadNS() {
 	}
 	// defstruct
 	{
-		tmp0 := sym_defstruct.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_keys)), kw_doc, "Same as (def name (create-struct keys...))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(4043), kw_end_DASH_line, int(4043))).(*lang.Symbol)
+		tmp0 := sym_defstruct.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_keys)), kw_doc, "Same as (def name (create-struct keys...))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_defstruct, kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(4043), kw_end_DASH_line, int(4043))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -9418,7 +9426,7 @@ func LoadNS() {
 	}
 	// delay?
 	{
-		tmp0 := sym_delay_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "returns true if x is a Delay created with delay", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(750), kw_end_DASH_line, int(750))).(*lang.Symbol)
+		tmp0 := sym_delay_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "returns true if x is a Delay created with delay", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_delay_QMARK_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(750), kw_end_DASH_line, int(750))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -9437,7 +9445,7 @@ func LoadNS() {
 	}
 	// deref
 	{
-		tmp0 := sym_deref.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref), lang.NewVector(sym_ref, sym_timeout_DASH_ms, sym_timeout_DASH_val)), kw_doc, "Also reader macro: @ref/@agent/@var/@atom/@delay/@future/@promise. Within a transaction,\n  returns the in-transaction-value of ref, else returns the\n  most-recently-committed value of ref. When applied to a var, agent\n  or atom, returns its current state. When applied to a delay, forces\n  it if not already forced. When applied to a future, will block if\n  computation not complete. When applied to a promise, will block\n  until a value is delivered.  The variant taking a timeout can be\n  used for blocking references (futures and promises), and will return\n  timeout-val if the timeout (in milliseconds) is reached before a\n  value is available. See also - realized?.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2303), kw_end_DASH_line, int(2303))).(*lang.Symbol)
+		tmp0 := sym_deref.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref), lang.NewVector(sym_ref, sym_timeout_DASH_ms, sym_timeout_DASH_val)), kw_doc, "Also reader macro: @ref/@agent/@var/@atom/@delay/@future/@promise. Within a transaction,\n  returns the in-transaction-value of ref, else returns the\n  most-recently-committed value of ref. When applied to a var, agent\n  or atom, returns its current state. When applied to a delay, forces\n  it if not already forced. When applied to a future, will block if\n  computation not complete. When applied to a promise, will block\n  until a value is delivered.  The variant taking a timeout can be\n  used for blocking references (futures and promises), and will return\n  timeout-val if the timeout (in milliseconds) is reached before a\n  value is available. See also - realized?.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_deref, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2303), kw_end_DASH_line, int(2303))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -9504,7 +9512,7 @@ func LoadNS() {
 	}
 	// disj
 	{
-		tmp0 := sym_disj.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_set), lang.NewVector(sym_set, sym_key), lang.NewVector(sym_set, sym_key, sym__AMP_, sym_ks)), kw_doc, "disj[oin]. Returns a new set of the same (hashed/sorted) type, that\n  does not contain key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1513), kw_end_DASH_line, int(1513))).(*lang.Symbol)
+		tmp0 := sym_disj.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_set), lang.NewVector(sym_set, sym_key), lang.NewVector(sym_set, sym_key, sym__AMP_, sym_ks)), kw_doc, "disj[oin]. Returns a new set of the same (hashed/sorted) type, that\n  does not contain key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_disj, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1513), kw_end_DASH_line, int(1513))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -9582,7 +9590,7 @@ func LoadNS() {
 	}
 	// disj!
 	{
-		tmp0 := sym_disj_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_set), lang.NewVector(sym_set, sym_key), lang.NewVector(sym_set, sym_key, sym__AMP_, sym_ks)), kw_doc, "disj[oin]. Returns a transient set of the same (hashed/sorted) type, that\n  does not contain key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3400), kw_end_DASH_line, int(3400))).(*lang.Symbol)
+		tmp0 := sym_disj_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_set), lang.NewVector(sym_set, sym_key), lang.NewVector(sym_set, sym_key, sym__AMP_, sym_ks)), kw_doc, "disj[oin]. Returns a transient set of the same (hashed/sorted) type, that\n  does not contain key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_disj_BANG_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3400), kw_end_DASH_line, int(3400))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -9653,7 +9661,7 @@ func LoadNS() {
 	}
 	// dissoc
 	{
-		tmp0 := sym_dissoc.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map), lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym__AMP_, sym_ks)), kw_doc, "dissoc[iate]. Returns a new map of the same (hashed/sorted) type,\n  that does not contain a mapping for key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(1499), kw_end_DASH_line, int(1499))).(*lang.Symbol)
+		tmp0 := sym_dissoc.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map), lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym__AMP_, sym_ks)), kw_doc, "dissoc[iate]. Returns a new map of the same (hashed/sorted) type,\n  that does not contain a mapping for key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_dissoc, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(1499), kw_end_DASH_line, int(1499))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -9721,7 +9729,7 @@ func LoadNS() {
 	}
 	// dissoc!
 	{
-		tmp0 := sym_dissoc_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym__AMP_, sym_ks)), kw_doc, "Returns a transient map that doesn't contain a mapping for key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3381), kw_end_DASH_line, int(3381))).(*lang.Symbol)
+		tmp0 := sym_dissoc_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym__AMP_, sym_ks)), kw_doc, "Returns a transient map that doesn't contain a mapping for key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_dissoc_BANG_, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3381), kw_end_DASH_line, int(3381))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -9788,7 +9796,7 @@ func LoadNS() {
 	}
 	// dosync
 	{
-		tmp0 := sym_dosync.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_exprs)), kw_doc, "Runs the exprs (in an implicit do) in a transaction that encompasses\n  exprs and any nested calls.  Starts a transaction if none is already\n  running on this thread. Any uncaught exception will abort the\n  transaction and flow out of dosync. The exprs may be run more than\n  once, but any effects on Refs will be atomic.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(5092), kw_end_DASH_line, int(5092))).(*lang.Symbol)
+		tmp0 := sym_dosync.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_exprs)), kw_doc, "Runs the exprs (in an implicit do) in a transaction that encompasses\n  exprs and any nested calls.  Starts a transaction if none is already\n  running on this thread. Any uncaught exception will abort the\n  transaction and flow out of dosync. The exprs may be run more than\n  once, but any effects on Refs will be atomic.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_dosync, kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(5092), kw_end_DASH_line, int(5092))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -9853,7 +9861,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_double.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to double", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3492), kw_end_DASH_line, int(3492))).(*lang.Symbol)
+		tmp0 := sym_double.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to double", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_double, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3492), kw_end_DASH_line, int(3492))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -9909,7 +9917,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_double_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of doubles", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(5333), kw_end_DASH_line, int(5333))).(*lang.Symbol)
+		tmp0 := sym_double_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of doubles", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_double_DASH_array, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(5333), kw_end_DASH_line, int(5333))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -9946,7 +9954,7 @@ func LoadNS() {
 	}
 	// double?
 	{
-		tmp0 := sym_double_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Double", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1420), kw_end_DASH_line, int(1420))).(*lang.Symbol)
+		tmp0 := sym_double_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Double", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_double_QMARK_, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1420), kw_end_DASH_line, int(1420))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -9988,7 +9996,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_doubles.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to double[]", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(12), kw_line, int(5394), kw_end_DASH_line, int(5394))).(*lang.Symbol)
+		tmp0 := sym_doubles.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to double[]", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_doubles, kw_end_DASH_column, int(18), kw_column, int(12), kw_line, int(5394), kw_end_DASH_line, int(5394))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -10009,7 +10017,7 @@ func LoadNS() {
 	}
 	// drop-while
 	{
-		tmp0 := sym_drop_DASH_while.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of the items in coll starting from the\n  first item for which (pred item) returns logical false.  Returns a\n  stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2949), kw_end_DASH_line, int(2949))).(*lang.Symbol)
+		tmp0 := sym_drop_DASH_while.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of the items in coll starting from the\n  first item for which (pred item) returns logical false.  Returns a\n  stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_drop_DASH_while, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2949), kw_end_DASH_line, int(2949))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -10183,7 +10191,7 @@ func LoadNS() {
 	}
 	// empty
 	{
-		tmp0 := sym_empty.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns an empty collection of the same category as coll, or nil", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(5257), kw_end_DASH_line, int(5257))).(*lang.Symbol)
+		tmp0 := sym_empty.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns an empty collection of the same category as coll, or nil", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_empty, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(5257), kw_end_DASH_line, int(5257))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -10219,7 +10227,7 @@ func LoadNS() {
 	// every?
 	{
 		tmp1 := reflect.TypeOf(false)
-		tmp0 := sym_every_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns true if (pred x) is logical true for every x in coll, else\n  false.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2663), kw_end_DASH_line, int(2663))).(*lang.Symbol)
+		tmp0 := sym_every_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns true if (pred x) is logical true for every x in coll, else\n  false.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_every_QMARK_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2663), kw_end_DASH_line, int(2663))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -10270,7 +10278,7 @@ func LoadNS() {
 	// ex-cause
 	{
 		tmp1 := reflect.TypeOf((*any)(nil)).Elem()
-		tmp0 := sym_ex_DASH_cause.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_ex)), kw_doc, "Returns the cause of ex if ex is a Throwable.\n  Otherwise returns nil.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4820), kw_end_DASH_line, int(4820))).(*lang.Symbol)
+		tmp0 := sym_ex_DASH_cause.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_ex)), kw_doc, "Returns the cause of ex if ex is a Throwable.\n  Otherwise returns nil.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ex_DASH_cause, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4820), kw_end_DASH_line, int(4820))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -10305,7 +10313,7 @@ func LoadNS() {
 	}
 	// ex-message
 	{
-		tmp0 := sym_ex_DASH_message.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ex)), kw_doc, "Returns the message attached to ex if ex is a Throwable.\n  Otherwise returns nil.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4812), kw_end_DASH_line, int(4812))).(*lang.Symbol)
+		tmp0 := sym_ex_DASH_message.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ex)), kw_doc, "Returns the message attached to ex if ex is a Throwable.\n  Otherwise returns nil.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ex_DASH_message, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4812), kw_end_DASH_line, int(4812))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -10339,7 +10347,7 @@ func LoadNS() {
 	}
 	// ffirst
 	{
-		tmp0 := sym_ffirst.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Same as (first (first x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(2), kw_line, int(100), kw_end_DASH_line, int(104))).(*lang.Symbol)
+		tmp0 := sym_ffirst.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Same as (first (first x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ffirst, kw_end_DASH_column, int(7), kw_column, int(2), kw_line, int(100), kw_end_DASH_line, int(104))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function ffirst
 			var v2 lang.FnFunc
@@ -10364,7 +10372,7 @@ func LoadNS() {
 	}
 	// filter-key
 	{
-		tmp0 := sym_filter_DASH_key.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_keyfn, sym_pred, sym_amap)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4114), kw_end_DASH_line, int(4116), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_filter_DASH_key.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_keyfn, sym_pred, sym_amap)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_filter_DASH_key, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4114), kw_end_DASH_line, int(4116), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -10444,7 +10452,7 @@ func LoadNS() {
 	// find-keyword
 	{
 		tmp1 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
-		tmp0 := sym_find_DASH_keyword.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_name), lang.NewVector(sym_ns, sym_name)), kw_doc, "Returns a Keyword with the given namespace and name if one already\n  exists.  This function will not intern a new keyword. If the keyword\n  has not already been interned, it will return nil.  Do not use :\n  in the keyword strings, it will be added automatically.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(620), kw_end_DASH_line, int(620))).(*lang.Symbol)
+		tmp0 := sym_find_DASH_keyword.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_name), lang.NewVector(sym_ns, sym_name)), kw_doc, "Returns a Keyword with the given namespace and name if one already\n  exists.  This function will not intern a new keyword. If the keyword\n  has not already been interned, it will return nil.  Do not use :\n  in the keyword strings, it will be added automatically.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_find_DASH_keyword, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(620), kw_end_DASH_line, int(620))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -10535,7 +10543,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_float.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to float", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3486), kw_end_DASH_line, int(3486))).(*lang.Symbol)
+		tmp0 := sym_float.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to float", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_float, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3486), kw_end_DASH_line, int(3486))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -10591,7 +10599,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_float_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of floats", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(5293), kw_end_DASH_line, int(5293))).(*lang.Symbol)
+		tmp0 := sym_float_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of floats", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_float_DASH_array, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(5293), kw_end_DASH_line, int(5293))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -10628,7 +10636,7 @@ func LoadNS() {
 	}
 	// float?
 	{
-		tmp0 := sym_float_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a floating point number", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3604), kw_end_DASH_line, int(3604))).(*lang.Symbol)
+		tmp0 := sym_float_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a floating point number", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_float_QMARK_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3604), kw_end_DASH_line, int(3604))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -10685,7 +10693,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_floats.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to float[]", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(12), kw_line, int(5384), kw_end_DASH_line, int(5384))).(*lang.Symbol)
+		tmp0 := sym_floats.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to float[]", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_floats, kw_end_DASH_column, int(17), kw_column, int(12), kw_line, int(5384), kw_end_DASH_line, int(5384))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -10706,7 +10714,7 @@ func LoadNS() {
 	}
 	// fn?
 	{
-		tmp0 := sym_fn_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements Fn, i.e. is an object created via fn.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(6208), kw_end_DASH_line, int(6208))).(*lang.Symbol)
+		tmp0 := sym_fn_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements Fn, i.e. is an object created via fn.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_fn_QMARK_, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(6208), kw_end_DASH_line, int(6208))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -10741,7 +10749,7 @@ func LoadNS() {
 	}
 	// fnext
 	{
-		tmp0 := sym_fnext.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Same as (first (next x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(114), kw_end_DASH_line, int(118))).(*lang.Symbol)
+		tmp0 := sym_fnext.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Same as (first (next x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_fnext, kw_end_DASH_column, int(6), kw_column, int(2), kw_line, int(114), kw_end_DASH_line, int(118))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function fnext
 			var v2 lang.FnFunc
@@ -10766,7 +10774,7 @@ func LoadNS() {
 	}
 	// future?
 	{
-		tmp0 := sym_future_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a future", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6524), kw_end_DASH_line, int(6524))).(*lang.Symbol)
+		tmp0 := sym_future_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a future", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_future_QMARK_, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6524), kw_end_DASH_line, int(6524))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -10784,7 +10792,7 @@ func LoadNS() {
 	}
 	// gensym
 	{
-		tmp0 := sym_gensym.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_prefix_DASH_string)), kw_doc, "Returns a new symbol with a unique name. If a prefix string is\n  supplied, the name is prefix# where # is some unique number. If\n  prefix is not supplied, the prefix is 'G__'.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(601), kw_end_DASH_line, int(601))).(*lang.Symbol)
+		tmp0 := sym_gensym.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_prefix_DASH_string)), kw_doc, "Returns a new symbol with a unique name. If a prefix string is\n  supplied, the name is prefix# where # is some unique number. If\n  prefix is not supplied, the prefix is 'G__'.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_gensym, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(601), kw_end_DASH_line, int(601))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -10862,7 +10870,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_get.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value mapped to key, not-found or nil if key not present\n  in associative collection, set, string, array, or ILookup instance.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(3), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1488), kw_end_DASH_line, int(1488))).(*lang.Symbol)
+		tmp0 := sym_get.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value mapped to key, not-found or nil if key not present\n  in associative collection, set, string, array, or ILookup instance.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(3), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_get, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1488), kw_end_DASH_line, int(1488))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -10895,7 +10903,7 @@ func LoadNS() {
 	}
 	// halt-when
 	{
-		tmp0 := sym_halt_DASH_when.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_retf)), kw_doc, "Returns a transducer that ends transduction when pred returns true\n  for an input. When retf is supplied it must be a fn of 2 arguments -\n  it will be passed the (completed) result so far and the input that\n  triggered the predicate, and its return value (if it does not throw\n  an exception) will be the return value of the transducer. If retf\n  is not supplied, the input that triggered the predicate will be\n  returned. If the predicate never returns true the transduction is\n  unaffected.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7649), kw_end_DASH_line, int(7649))).(*lang.Symbol)
+		tmp0 := sym_halt_DASH_when.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_retf)), kw_doc, "Returns a transducer that ends transduction when pred returns true\n  for an input. When retf is supplied it must be a fn of 2 arguments -\n  it will be passed the (completed) result so far and the input that\n  triggered the predicate, and its return value (if it does not throw\n  an exception) will be the return value of the transducer. If retf\n  is not supplied, the input that triggered the predicate will be\n  returned. If the predicate never returns true the transduction is\n  unaffected.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_halt_DASH_when, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7649), kw_end_DASH_line, int(7649))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -11011,7 +11019,7 @@ func LoadNS() {
 	}
 	// ident?
 	{
-		tmp0 := sym_ident_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol or keyword", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(1607), kw_end_DASH_line, int(1607))).(*lang.Symbol)
+		tmp0 := sym_ident_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol or keyword", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ident_QMARK_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(1607), kw_end_DASH_line, int(1607))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -11072,7 +11080,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_identical_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Tests if 2 arguments are the same object", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(770), kw_end_DASH_line, int(770))).(*lang.Symbol)
+		tmp0 := sym_identical_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Tests if 2 arguments are the same object", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_identical_QMARK_, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(770), kw_end_DASH_line, int(770))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -11091,7 +11099,7 @@ func LoadNS() {
 	}
 	// if-not
 	{
-		tmp0 := sym_if_DASH_not.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym_then), lang.NewVector(sym_test, sym_then, sym_else)), kw_doc, "Evaluates test. If logical false, evaluates and returns then expr, \n  otherwise else expr, if supplied, else nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(762), kw_end_DASH_line, int(762))).(*lang.Symbol)
+		tmp0 := sym_if_DASH_not.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym_then), lang.NewVector(sym_test, sym_then, sym_else)), kw_doc, "Evaluates test. If logical false, evaluates and returns then expr, \n  otherwise else expr, if supplied, else nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_if_DASH_not, kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(762), kw_end_DASH_line, int(762))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -11162,7 +11170,7 @@ func LoadNS() {
 	}
 	// ifn?
 	{
-		tmp0 := sym_ifn_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IFn. Note that many data structures\n  (e.g. sets and maps) implement IFn", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6201), kw_end_DASH_line, int(6201))).(*lang.Symbol)
+		tmp0 := sym_ifn_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IFn. Note that many data structures\n  (e.g. sets and maps) implement IFn", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ifn_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6201), kw_end_DASH_line, int(6201))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -11218,7 +11226,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_inc.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one greater than num. Does not auto-promote\n  longs, will throw on overflow. See also: inc'", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(917), kw_end_DASH_line, int(917))).(*lang.Symbol)
+		tmp0 := sym_inc.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one greater than num. Does not auto-promote\n  longs, will throw on overflow. See also: inc'", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_inc, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(917), kw_end_DASH_line, int(917))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -11269,7 +11277,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_inc_TICK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one greater than num. Supports arbitrary precision.\n  See also: inc", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(910), kw_end_DASH_line, int(910))).(*lang.Symbol)
+		tmp0 := sym_inc_TICK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one greater than num. Supports arbitrary precision.\n  See also: inc", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_inc_TICK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(910), kw_end_DASH_line, int(910))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -11290,7 +11298,7 @@ func LoadNS() {
 	}
 	// indexed?
 	{
-		tmp0 := sym_indexed_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return true if coll implements Indexed, indicating efficient lookup by index", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6255), kw_end_DASH_line, int(6255))).(*lang.Symbol)
+		tmp0 := sym_indexed_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return true if coll implements Indexed, indicating efficient lookup by index", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_indexed_QMARK_, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6255), kw_end_DASH_line, int(6255))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -11328,7 +11336,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_infinite_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_inline, tmp1, kw_doc, "Returns true if num is negative or positive infinity, else false", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1)})), kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7969), kw_end_DASH_line, int(7969))).(*lang.Symbol)
+		tmp0 := sym_infinite_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_inline, tmp1, kw_doc, "Returns true if num is negative or positive infinity, else false", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1)})), kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_infinite_QMARK_, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7969), kw_end_DASH_line, int(7969))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -11382,7 +11390,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to int", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(877), kw_end_DASH_line, int(877))).(*lang.Symbol)
+		tmp0 := sym_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to int", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_int, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(877), kw_end_DASH_line, int(877))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -11442,7 +11450,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_int_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of ints", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5348), kw_end_DASH_line, int(5348))).(*lang.Symbol)
+		tmp0 := sym_int_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of ints", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_int_DASH_array, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5348), kw_end_DASH_line, int(5348))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -11479,7 +11487,7 @@ func LoadNS() {
 	}
 	// intern
 	{
-		tmp0 := sym_intern.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_name), lang.NewVector(sym_ns, sym_name, sym_val)), kw_doc, "Finds or creates a var named by the symbol name in the namespace\n  ns (which can be a symbol or a namespace), setting its root binding\n  to val if supplied. The namespace must exist. The var will adopt any\n  metadata from the name symbol.  Returns the var.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6303), kw_end_DASH_line, int(6303))).(*lang.Symbol)
+		tmp0 := sym_intern.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_name), lang.NewVector(sym_ns, sym_name, sym_val)), kw_doc, "Finds or creates a var named by the symbol name in the namespace\n  ns (which can be a symbol or a namespace), setting its root binding\n  to val if supplied. The namespace must exist. The var will adopt any\n  metadata from the name symbol.  Returns the var.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_intern, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6303), kw_end_DASH_line, int(6303))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -11564,7 +11572,7 @@ func LoadNS() {
 	}
 	// into-array
 	{
-		tmp0 := sym_into_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_aseq), lang.NewVector(sym_type, sym_aseq)), kw_doc, "Returns an array with components set to the values in aseq. The array's\n  component type is type if provided, or the type of the first value in\n  aseq if present, or Object. All values in aseq must be compatible with\n  the component type. Class objects for the primitive types can be obtained\n  using, e.g., Integer/TYPE.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3443), kw_end_DASH_line, int(3443))).(*lang.Symbol)
+		tmp0 := sym_into_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_aseq), lang.NewVector(sym_type, sym_aseq)), kw_doc, "Returns an array with components set to the values in aseq. The array's\n  component type is type if provided, or the type of the first value in\n  aseq if present, or Object. All values in aseq must be compatible with\n  the component type. Class objects for the primitive types can be obtained\n  using, e.g., Integer/TYPE.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_into_DASH_array, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3443), kw_end_DASH_line, int(3443))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -11621,7 +11629,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_ints.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to int[]", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(12), kw_line, int(5389), kw_end_DASH_line, int(5389))).(*lang.Symbol)
+		tmp0 := sym_ints.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to int[]", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ints, kw_end_DASH_column, int(15), kw_column, int(12), kw_line, int(5389), kw_end_DASH_line, int(5389))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -11642,7 +11650,7 @@ func LoadNS() {
 	}
 	// io!
 	{
-		tmp0 := sym_io_BANG_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "If an io! block occurs in a transaction, throws an\n  IllegalStateException, else runs body in an implicit do. If the\n  first expression in body is a literal string, will use that as the\n  exception message.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(2503), kw_end_DASH_line, int(2503))).(*lang.Symbol)
+		tmp0 := sym_io_BANG_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "If an io! block occurs in a transaction, throws an\n  IllegalStateException, else runs body in an implicit do. If the\n  first expression in body is a literal string, will use that as the\n  exception message.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_io_BANG_, kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(2503), kw_end_DASH_line, int(2503))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -11754,7 +11762,7 @@ func LoadNS() {
 	// keyword
 	{
 		tmp1 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
-		tmp0 := sym_keyword.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_name), lang.NewVector(sym_ns, sym_name)), kw_doc, "Returns a Keyword with the given namespace and name.  Do not use :\n  in the keyword strings, it will be added automatically.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(611), kw_end_DASH_line, int(611))).(*lang.Symbol)
+		tmp0 := sym_keyword.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_name), lang.NewVector(sym_ns, sym_name)), kw_doc, "Returns a Keyword with the given namespace and name.  Do not use :\n  in the keyword strings, it will be added automatically.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_keyword, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(611), kw_end_DASH_line, int(611))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -11808,7 +11816,7 @@ func LoadNS() {
 	}
 	// last
 	{
-		tmp0 := sym_last.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return the last item in coll, in linear time", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(264), kw_end_DASH_line, int(268))).(*lang.Symbol)
+		tmp0 := sym_last.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return the last item in coll, in linear time", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_last, kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(264), kw_end_DASH_line, int(268))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function last
 			var v2 lang.FnFunc
@@ -11844,7 +11852,7 @@ func LoadNS() {
 	}
 	// libspec?
 	{
-		tmp0 := sym_libspec_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a libspec", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5840), kw_end_DASH_line, int(5840), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_libspec_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a libspec", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_libspec_QMARK_, kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5840), kw_end_DASH_line, int(5840), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -11911,7 +11919,7 @@ func LoadNS() {
 	}
 	// list*
 	{
-		tmp0 := sym_list_STAR_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_args), lang.NewVector(sym_a, sym_args), lang.NewVector(sym_a, sym_b, sym_args), lang.NewVector(sym_a, sym_b, sym_c, sym_args), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym__AMP_, sym_more)), kw_doc, "Creates a new seq containing the items prepended to the rest, the\n  last of which will be treated as a sequence.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(643), kw_end_DASH_line, int(643))).(*lang.Symbol)
+		tmp0 := sym_list_STAR_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_args), lang.NewVector(sym_a, sym_args), lang.NewVector(sym_a, sym_b, sym_args), lang.NewVector(sym_a, sym_b, sym_c, sym_args), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym__AMP_, sym_more)), kw_doc, "Creates a new seq containing the items prepended to the rest, the\n  last of which will be treated as a sequence.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_list_STAR_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(643), kw_end_DASH_line, int(643))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -11994,7 +12002,7 @@ func LoadNS() {
 	}
 	// loaded-libs
 	{
-		tmp0 := sym_loaded_DASH_libs.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a sorted set of symbols naming the currently loaded libs", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6082), kw_end_DASH_line, int(6082))).(*lang.Symbol)
+		tmp0 := sym_loaded_DASH_libs.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a sorted set of symbols naming the currently loaded libs", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_loaded_DASH_libs, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6082), kw_end_DASH_line, int(6082))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -12041,7 +12049,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_long.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to long", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3480), kw_end_DASH_line, int(3480))).(*lang.Symbol)
+		tmp0 := sym_long.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to long", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_long, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3480), kw_end_DASH_line, int(3480))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12097,7 +12105,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_long_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of longs", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(5356), kw_end_DASH_line, int(5356))).(*lang.Symbol)
+		tmp0 := sym_long_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of longs", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_long_DASH_array, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(5356), kw_end_DASH_line, int(5356))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -12158,7 +12166,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_longs.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to long[]", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(12), kw_line, int(5399), kw_end_DASH_line, int(5399))).(*lang.Symbol)
+		tmp0 := sym_longs.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to long[]", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_longs, kw_end_DASH_column, int(16), kw_column, int(12), kw_line, int(5399), kw_end_DASH_line, int(5399))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12179,7 +12187,7 @@ func LoadNS() {
 	}
 	// macroexpand
 	{
-		tmp0 := sym_macroexpand.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Repeatedly calls macroexpand-1 on form until it no longer\n  represents a macro form, then returns it.  Note neither\n  macroexpand-1 nor macroexpand expand macros in subforms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4024), kw_end_DASH_line, int(4024))).(*lang.Symbol)
+		tmp0 := sym_macroexpand.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Repeatedly calls macroexpand-1 on form until it no longer\n  represents a macro form, then returns it.  Note neither\n  macroexpand-1 nor macroexpand expand macros in subforms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_macroexpand, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4024), kw_end_DASH_line, int(4024))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12214,7 +12222,7 @@ func LoadNS() {
 	}
 	// maybe-destructured
 	{
-		tmp0 := sym_maybe_DASH_destructured.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(4513), kw_column, int(7), kw_end_DASH_line, int(4514), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_params, sym_body)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_maybe_DASH_destructured.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_params, sym_body)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_maybe_DASH_destructured, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(4513), kw_end_DASH_line, int(4514), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -12345,7 +12353,7 @@ func LoadNS() {
 	// name
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_name.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the name String of a string, symbol or keyword.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1584), kw_end_DASH_line, int(1584))).(*lang.Symbol)
+		tmp0 := sym_name.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the name String of a string, symbol or keyword.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_name, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1584), kw_end_DASH_line, int(1584))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12405,7 +12413,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_neg_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_inline, tmp1, kw_doc, "Returns true if num is less than zero, else false", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1261), kw_end_DASH_line, int(1261))).(*lang.Symbol)
+		tmp0 := sym_neg_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_inline, tmp1, kw_doc, "Returns true if num is less than zero, else false", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_neg_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1261), kw_end_DASH_line, int(1261))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12426,7 +12434,7 @@ func LoadNS() {
 	}
 	// not-empty
 	{
-		tmp0 := sym_not_DASH_empty.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "If coll is empty, returns nil, else coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5508), kw_end_DASH_line, int(5508))).(*lang.Symbol)
+		tmp0 := sym_not_DASH_empty.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "If coll is empty, returns nil, else coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_not_DASH_empty, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5508), kw_end_DASH_line, int(5508))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12449,7 +12457,7 @@ func LoadNS() {
 	}
 	// ns-aliases
 	{
-		tmp0 := sym_ns_DASH_aliases.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the aliases for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4272), kw_end_DASH_line, int(4272))).(*lang.Symbol)
+		tmp0 := sym_ns_DASH_aliases.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the aliases for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ns_DASH_aliases, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4272), kw_end_DASH_line, int(4272))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12478,7 +12486,7 @@ func LoadNS() {
 	}
 	// ns-map
 	{
-		tmp0 := sym_ns_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of all the mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4169), kw_end_DASH_line, int(4169))).(*lang.Symbol)
+		tmp0 := sym_ns_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of all the mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ns_DASH_map, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4169), kw_end_DASH_line, int(4169))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12507,7 +12515,7 @@ func LoadNS() {
 	}
 	// ns-name
 	{
-		tmp0 := sym_ns_DASH_name.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns the name of the namespace, a symbol.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4162), kw_end_DASH_line, int(4162))).(*lang.Symbol)
+		tmp0 := sym_ns_DASH_name.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns the name of the namespace, a symbol.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ns_DASH_name, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4162), kw_end_DASH_line, int(4162))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12536,7 +12544,7 @@ func LoadNS() {
 	}
 	// ns-resolve
 	{
-		tmp0 := sym_ns_DASH_resolve.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_sym), lang.NewVector(sym_ns, sym_env, sym_sym)), kw_doc, "Returns the var or Class to which a symbol will be resolved in the\n  namespace (unless found in the environment), else nil.  Note that\n  if the symbol is fully qualified, the var/Class to which it resolves\n  need not be present in the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4357), kw_end_DASH_line, int(4357))).(*lang.Symbol)
+		tmp0 := sym_ns_DASH_resolve.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_sym), lang.NewVector(sym_ns, sym_env, sym_sym)), kw_doc, "Returns the var or Class to which a symbol will be resolved in the\n  namespace (unless found in the environment), else nil.  Note that\n  if the symbol is fully qualified, the var/Class to which it resolves\n  need not be present in the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ns_DASH_resolve, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4357), kw_end_DASH_line, int(4357))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -12583,7 +12591,7 @@ func LoadNS() {
 	}
 	// ns-unalias
 	{
-		tmp0 := sym_ns_DASH_unalias.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_sym)), kw_doc, "Removes the alias for the symbol from the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4279), kw_end_DASH_line, int(4279))).(*lang.Symbol)
+		tmp0 := sym_ns_DASH_unalias.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_sym)), kw_doc, "Removes the alias for the symbol from the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ns_DASH_unalias, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4279), kw_end_DASH_line, int(4279))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -12608,7 +12616,7 @@ func LoadNS() {
 	}
 	// ns-unmap
 	{
-		tmp0 := sym_ns_DASH_unmap.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_sym)), kw_doc, "Removes the mappings for the symbol from the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4176), kw_end_DASH_line, int(4176))).(*lang.Symbol)
+		tmp0 := sym_ns_DASH_unmap.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_sym)), kw_doc, "Removes the mappings for the symbol from the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ns_DASH_unmap, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4176), kw_end_DASH_line, int(4176))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -12702,7 +12710,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_nth.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_index), lang.NewVector(sym_coll, sym_index, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value at the index. get returns nil if index out of\n  bounds, nth throws an exception unless not-found is supplied.  nth\n  also works for strings, Java arrays, regex Matchers and Lists, and,\n  in O(n) time, for sequences.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(3), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(884), kw_end_DASH_line, int(884))).(*lang.Symbol)
+		tmp0 := sym_nth.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_index), lang.NewVector(sym_coll, sym_index, sym_not_DASH_found)), kw_inline, tmp1, kw_doc, "Returns the value at the index. get returns nil if index out of\n  bounds, nth throws an exception unless not-found is supplied.  nth\n  also works for strings, Java arrays, regex Matchers and Lists, and,\n  in O(n) time, for sequences.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(3), int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_nth, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(884), kw_end_DASH_line, int(884))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -12773,7 +12781,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_num.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to Number", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(3473), kw_end_DASH_line, int(3473))).(*lang.Symbol)
+		tmp0 := sym_num.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to Number", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_num, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(3473), kw_end_DASH_line, int(3473))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12818,7 +12826,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_object_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of objects", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1)})), kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(5341), kw_end_DASH_line, int(5341))).(*lang.Symbol)
+		tmp0 := sym_object_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of objects", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1)})), kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_object_DASH_array, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(5341), kw_end_DASH_line, int(5341))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12839,7 +12847,7 @@ func LoadNS() {
 	}
 	// parse-impls
 	{
-		tmp0 := sym_parse_DASH_impls.WithMeta(lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(13), kw_column, int(8), kw_end_DASH_line, int(13), kw_end_DASH_column, int(18), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_specs)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_parse_DASH_impls.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_specs)), kw_file, "clojure/core_deftype.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_parse_DASH_impls, kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(13), kw_end_DASH_line, int(13), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12900,7 +12908,7 @@ func LoadNS() {
 	}
 	// parse-uuid
 	{
-		tmp0 := sym_parse_DASH_uuid.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse a string representing a UUID and return a java.util.UUID instance,\n  or nil if parse fails.\n\n  Grammar: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#toString--", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7938), kw_end_DASH_line, int(7938))).(*lang.Symbol)
+		tmp0 := sym_parse_DASH_uuid.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse a string representing a UUID and return a java.util.UUID instance,\n  or nil if parse fails.\n\n  Grammar: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#toString--", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_parse_DASH_uuid, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7938), kw_end_DASH_line, int(7938))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -12958,7 +12966,7 @@ func LoadNS() {
 	}
 	// parsing-err
 	{
-		tmp0 := sym_parsing_DASH_err.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_val)), kw_doc, "Construct message for parsing for non-string parsing error", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(7913), kw_end_DASH_line, int(7913), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_parsing_DASH_err.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_val)), kw_doc, "Construct message for parsing for non-string parsing error", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_parsing_DASH_err, kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(7913), kw_end_DASH_line, int(7913), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -13027,7 +13035,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_pos_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_inline, tmp1, kw_doc, "Returns true if num is greater than zero, else false", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1254), kw_end_DASH_line, int(1254))).(*lang.Symbol)
+		tmp0 := sym_pos_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_inline, tmp1, kw_doc, "Returns true if num is greater than zero, else false", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_pos_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1254), kw_end_DASH_line, int(1254))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -13048,7 +13056,7 @@ func LoadNS() {
 	}
 	// prependss
 	{
-		tmp0 := sym_prependss.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_coll)), kw_doc, "Prepends a symbol or a seq to coll", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(5849), kw_end_DASH_line, int(5849), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_prependss.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_coll)), kw_doc, "Prepends a symbol or a seq to coll", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_prependss, kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(5849), kw_end_DASH_line, int(5849), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -13078,7 +13086,7 @@ func LoadNS() {
 	}
 	// print-ctor
 	{
-		tmp0 := sym_print_DASH_ctor.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(95), kw_column, int(7), kw_end_DASH_line, int(95), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_print_DASH_args, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_ctor.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(95), kw_column, int(7), kw_end_DASH_line, int(95), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_print_DASH_args, sym_w)), kw_name, sym_print_DASH_ctor, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -13154,7 +13162,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_quot.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num, sym_div)), kw_inline, tmp1, kw_doc, "quot[ient] of dividing numerator by denominator.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1268), kw_end_DASH_line, int(1268))).(*lang.Symbol)
+		tmp0 := sym_quot.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num, sym_div)), kw_inline, tmp1, kw_doc, "quot[ient] of dividing numerator by denominator.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_quot, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1268), kw_end_DASH_line, int(1268))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -13177,7 +13185,7 @@ func LoadNS() {
 	}
 	// range
 	{
-		tmp0 := sym_range.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_end), lang.NewVector(sym_start, sym_end), lang.NewVector(sym_start, sym_end, sym_step)), kw_doc, "Returns a lazy seq of nums from start (inclusive) to end\n  (exclusive), by step, where start defaults to 0, step to 1, and end to\n  infinity. When step is equal to 0, returns an infinite sequence of\n  start. When start is equal to end, returns empty list.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3017), kw_end_DASH_line, int(3017))).(*lang.Symbol)
+		tmp0 := sym_range.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_end), lang.NewVector(sym_start, sym_end), lang.NewVector(sym_start, sym_end, sym_step)), kw_doc, "Returns a lazy seq of nums from start (inclusive) to end\n  (exclusive), by step, where start defaults to 0, step to 1, and end to\n  infinity. When step is equal to 0, returns an infinite sequence of\n  start. When start is equal to end, returns empty list.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_range, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3017), kw_end_DASH_line, int(3017))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -13292,7 +13300,7 @@ func LoadNS() {
 	}
 	// rational?
 	{
-		tmp0 := sym_rational_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a rational number", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3612), kw_end_DASH_line, int(3612))).(*lang.Symbol)
+		tmp0 := sym_rational_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a rational number", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_rational_QMARK_, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3612), kw_end_DASH_line, int(3612))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -13340,7 +13348,7 @@ func LoadNS() {
 	}
 	// reduce1
 	{
-		tmp0 := sym_reduce1.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(925), kw_column, int(7), kw_end_DASH_line, int(926), kw_end_DASH_column, int(9), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_val, sym_coll)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_reduce1.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_val, sym_coll)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reduce1, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(925), kw_end_DASH_line, int(926), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -13463,7 +13471,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_reduced_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns true if x is the result of a call to reduced", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1)})), kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2833), kw_end_DASH_line, int(2833))).(*lang.Symbol)
+		tmp0 := sym_reduced_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns true if x is the result of a call to reduced", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1)})), kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reduced_QMARK_, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2833), kw_end_DASH_line, int(2833))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -13480,7 +13488,7 @@ func LoadNS() {
 	}
 	// reductions
 	{
-		tmp0 := sym_reductions.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_init, sym_coll)), kw_doc, "Returns a lazy seq of the intermediate values of the reduction (as\n  per reduce) of coll by f, starting with init.", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7188), kw_end_DASH_line, int(7188))).(*lang.Symbol)
+		tmp0 := sym_reductions.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_init, sym_coll)), kw_doc, "Returns a lazy seq of the intermediate values of the reduction (as\n  per reduce) of coll by f, starting with init.", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reductions, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7188), kw_end_DASH_line, int(7188))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -13596,7 +13604,7 @@ func LoadNS() {
 	}
 	// refer-clojure
 	{
-		tmp0 := sym_refer_DASH_clojure.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_filters)), kw_doc, "Same as (refer 'clojure.core <filters>)", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(11), kw_line, int(5792), kw_end_DASH_line, int(5792))).(*lang.Symbol)
+		tmp0 := sym_refer_DASH_clojure.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_filters)), kw_doc, "Same as (refer 'clojure.core <filters>)", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_refer_DASH_clojure, kw_end_DASH_column, int(23), kw_column, int(11), kw_line, int(5792), kw_end_DASH_line, int(5792))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -13673,7 +13681,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_rem.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num, sym_div)), kw_inline, tmp1, kw_doc, "remainder of dividing numerator by denominator.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1276), kw_end_DASH_line, int(1276))).(*lang.Symbol)
+		tmp0 := sym_rem.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num, sym_div)), kw_inline, tmp1, kw_doc, "remainder of dividing numerator by denominator.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_rem, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1276), kw_end_DASH_line, int(1276))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -13696,7 +13704,7 @@ func LoadNS() {
 	}
 	// remove-tap
 	{
-		tmp0 := sym_remove_DASH_tap.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Remove f from the tap set.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7875), kw_end_DASH_line, int(7875))).(*lang.Symbol)
+		tmp0 := sym_remove_DASH_tap.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Remove f from the tap set.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_remove_DASH_tap, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7875), kw_end_DASH_line, int(7875))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -13717,7 +13725,7 @@ func LoadNS() {
 	}
 	// resolve
 	{
-		tmp0 := sym_resolve.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym), lang.NewVector(sym_env, sym_sym)), kw_doc, "same as (ns-resolve *ns* symbol) or (ns-resolve *ns* &env symbol)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4370), kw_end_DASH_line, int(4370))).(*lang.Symbol)
+		tmp0 := sym_resolve.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym), lang.NewVector(sym_env, sym_sym)), kw_doc, "same as (ns-resolve *ns* symbol) or (ns-resolve *ns* &env symbol)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_resolve, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4370), kw_end_DASH_line, int(4370))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -13750,7 +13758,7 @@ func LoadNS() {
 	}
 	// reverse
 	{
-		tmp0 := sym_reverse.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a seq of the items in coll in reverse order. Not lazy.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(942), kw_end_DASH_line, int(942))).(*lang.Symbol)
+		tmp0 := sym_reverse.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a seq of the items in coll in reverse order. Not lazy.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reverse, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(942), kw_end_DASH_line, int(942))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -13770,7 +13778,7 @@ func LoadNS() {
 	// root-resource
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_root_DASH_resource.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_lib)), kw_doc, "Returns the root directory path for a lib", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(8), kw_line, int(5856), kw_end_DASH_line, int(5856), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_root_DASH_resource.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_lib)), kw_doc, "Returns the root directory path for a lib", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_root_DASH_resource, kw_end_DASH_column, int(20), kw_column, int(8), kw_line, int(5856), kw_end_DASH_line, int(5856), kw_private, true)).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -13793,7 +13801,7 @@ func LoadNS() {
 	}
 	// select-keys
 	{
-		tmp0 := sym_select_DASH_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_keyseq)), kw_doc, "Returns a map containing only those entries in map whose key is in keys", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(1535), kw_end_DASH_line, int(1535))).(*lang.Symbol)
+		tmp0 := sym_select_DASH_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_keyseq)), kw_doc, "Returns a map containing only those entries in map whose key is in keys", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_select_DASH_keys, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(1535), kw_end_DASH_line, int(1535))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -13870,7 +13878,7 @@ func LoadNS() {
 	}
 	// seq-to-map-for-destructuring
 	{
-		tmp0 := sym_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Builds a map from a seq as described in\n  https://clojure.org/reference/special_forms#keyword-arguments", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(34), kw_column, int(7), kw_line, int(4389), kw_end_DASH_line, int(4389))).(*lang.Symbol)
+		tmp0 := sym_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Builds a map from a seq as described in\n  https://clojure.org/reference/special_forms#keyword-arguments", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring, kw_end_DASH_column, int(34), kw_column, int(7), kw_line, int(4389), kw_end_DASH_line, int(4389))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -13906,7 +13914,7 @@ func LoadNS() {
 	}
 	// set
 	{
-		tmp0 := sym_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a set of the distinct elements of coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(4103), kw_end_DASH_line, int(4103))).(*lang.Symbol)
+		tmp0 := sym_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a set of the distinct elements of coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_set, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(4103), kw_end_DASH_line, int(4103))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -14007,7 +14015,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_short.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to short", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3498), kw_end_DASH_line, int(3498))).(*lang.Symbol)
+		tmp0 := sym_short.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to short", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_short, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3498), kw_end_DASH_line, int(3498))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -14063,7 +14071,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_short_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of shorts", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(5325), kw_end_DASH_line, int(5325))).(*lang.Symbol)
+		tmp0 := sym_short_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of shorts", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_short_DASH_array, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(5325), kw_end_DASH_line, int(5325))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -14124,7 +14132,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_shorts.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to shorts[]", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(12), kw_line, int(5379), kw_end_DASH_line, int(5379))).(*lang.Symbol)
+		tmp0 := sym_shorts.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to shorts[]", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_shorts, kw_end_DASH_column, int(17), kw_column, int(12), kw_line, int(5379), kw_end_DASH_line, int(5379))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -14145,7 +14153,7 @@ func LoadNS() {
 	}
 	// shuffle
 	{
-		tmp0 := sym_shuffle.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return a random permutation of coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7292), kw_end_DASH_line, int(7292))).(*lang.Symbol)
+		tmp0 := sym_shuffle.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return a random permutation of coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_shuffle, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7292), kw_end_DASH_line, int(7292))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -14185,7 +14193,7 @@ func LoadNS() {
 	}
 	// simple-ident?
 	{
-		tmp0 := sym_simple_DASH_ident_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol or keyword without a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1612), kw_end_DASH_line, int(1612))).(*lang.Symbol)
+		tmp0 := sym_simple_DASH_ident_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol or keyword without a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_simple_DASH_ident_QMARK_, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1612), kw_end_DASH_line, int(1612))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -14220,7 +14228,7 @@ func LoadNS() {
 	}
 	// simple-symbol?
 	{
-		tmp0 := sym_simple_DASH_symbol_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol without a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(1622), kw_end_DASH_line, int(1622))).(*lang.Symbol)
+		tmp0 := sym_simple_DASH_symbol_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol without a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_simple_DASH_symbol_QMARK_, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(1622), kw_end_DASH_line, int(1622))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -14255,7 +14263,7 @@ func LoadNS() {
 	}
 	// some-fn
 	{
-		tmp0 := sym_some_DASH_fn.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_p), lang.NewVector(sym_p1, sym_p2), lang.NewVector(sym_p1, sym_p2, sym_p3), lang.NewVector(sym_p1, sym_p2, sym_p3, sym__AMP_, sym_ps)), kw_doc, "Takes a set of predicates and returns a function f that returns the first logical true value\n  returned by one of its composing predicates against any of its arguments, else it returns\n  logical false. Note that f is short-circuiting in that it will stop execution on the first\n  argument that triggers a logical true result against the original predicates.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7454), kw_end_DASH_line, int(7454))).(*lang.Symbol)
+		tmp0 := sym_some_DASH_fn.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_p), lang.NewVector(sym_p1, sym_p2), lang.NewVector(sym_p1, sym_p2, sym_p3), lang.NewVector(sym_p1, sym_p2, sym_p3, sym__AMP_, sym_ps)), kw_doc, "Takes a set of predicates and returns a function f that returns the first logical true value\n  returned by one of its composing predicates against any of its arguments, else it returns\n  logical false. Note that f is short-circuiting in that it will stop execution on the first\n  argument that triggers a logical true result against the original predicates.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_some_DASH_fn, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7454), kw_end_DASH_line, int(7454))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -15131,7 +15139,7 @@ func LoadNS() {
 	}
 	// split-with
 	{
-		tmp0 := sym_split_DASH_with.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a vector of [(take-while pred coll) (drop-while pred coll)]", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2989), kw_end_DASH_line, int(2989))).(*lang.Symbol)
+		tmp0 := sym_split_DASH_with.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a vector of [(take-while pred coll) (drop-while pred coll)]", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_split_DASH_with, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2989), kw_end_DASH_line, int(2989))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -15159,7 +15167,7 @@ func LoadNS() {
 	}
 	// stream-into!
 	{
-		tmp0 := sym_stream_DASH_into_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_to, sym_stream), lang.NewVector(sym_to, sym_xform, sym_stream)), kw_doc, "Returns a new coll consisting of coll with all of the items of the\n  stream conjoined. This is a terminal operation on the stream.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(6802), kw_end_DASH_line, int(6802))).(*lang.Symbol)
+		tmp0 := sym_stream_DASH_into_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_to, sym_stream), lang.NewVector(sym_to, sym_xform, sym_stream)), kw_doc, "Returns a new coll consisting of coll with all of the items of the\n  stream conjoined. This is a terminal operation on the stream.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_stream_DASH_into_BANG_, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(6802), kw_end_DASH_line, int(6802))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -15236,7 +15244,7 @@ func LoadNS() {
 	}
 	// subvec
 	{
-		tmp0 := sym_subvec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v, sym_start), lang.NewVector(sym_v, sym_start, sym_end)), kw_doc, "Returns a persistent vector of the items in vector from\n  start (inclusive) to end (exclusive).  If end is not supplied,\n  defaults to (count vector). This operation is O(1) and very fast, as\n  the resulting vector shares structure with the original and no\n  trimming is done.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3818), kw_end_DASH_line, int(3818))).(*lang.Symbol)
+		tmp0 := sym_subvec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v, sym_start), lang.NewVector(sym_v, sym_start, sym_end)), kw_doc, "Returns a persistent vector of the items in vector from\n  start (inclusive) to end (exclusive).  If end is not supplied,\n  defaults to (count vector). This operation is O(1) and very fast, as\n  the resulting vector shares structure with the original and no\n  trimming is done.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_subvec, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3818), kw_end_DASH_line, int(3818))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -15277,7 +15285,7 @@ func LoadNS() {
 	// symbol
 	{
 		tmp1 := reflect.TypeOf((*lang.Symbol)(nil))
-		tmp0 := sym_symbol.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_name), lang.NewVector(sym_ns, sym_name)), kw_doc, "Returns a Symbol with the given namespace and name. Arity-1 works\n  on strings, keywords, and vars.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(586), kw_end_DASH_line, int(586))).(*lang.Symbol)
+		tmp0 := sym_symbol.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_name), lang.NewVector(sym_ns, sym_name)), kw_doc, "Returns a Symbol with the given namespace and name. Arity-1 works\n  on strings, keywords, and vars.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_symbol, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(586), kw_end_DASH_line, int(586))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -15369,7 +15377,7 @@ func LoadNS() {
 	}
 	// thread-bound?
 	{
-		tmp0 := sym_thread_DASH_bound_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_vars)), kw_doc, "Returns true if all of the vars provided as arguments have thread-local bindings.\n   Implies that set!'ing the provided vars will succeed.  Returns true if no vars are provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5491), kw_end_DASH_line, int(5491))).(*lang.Symbol)
+		tmp0 := sym_thread_DASH_bound_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_vars)), kw_doc, "Returns true if all of the vars provided as arguments have thread-local bindings.\n   Implies that set!'ing the provided vars will succeed.  Returns true if no vars are provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_thread_DASH_bound_QMARK_, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5491), kw_end_DASH_line, int(5491))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -15417,7 +15425,7 @@ func LoadNS() {
 	}
 	// type
 	{
-		tmp0 := sym_type.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the :type metadata of x, or its Class if none", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3466), kw_end_DASH_line, int(3466))).(*lang.Symbol)
+		tmp0 := sym_type.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the :type metadata of x, or its Class if none", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_type, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3466), kw_end_DASH_line, int(3466))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -15486,7 +15494,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_add.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the sum of x and y, both long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1205), kw_end_DASH_line, int(1205))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_add.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the sum of x and y, both long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_add, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1205), kw_end_DASH_line, int(1205))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -15543,7 +15551,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_add_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the sum of x and y, both int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(1198), kw_end_DASH_line, int(1198))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_add_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the sum of x and y, both int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_add_DASH_int, kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(1198), kw_end_DASH_line, int(1198))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -15596,7 +15604,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_byte.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to byte. Subject to rounding or truncation.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(3516), kw_end_DASH_line, int(3516))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_byte.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to byte. Subject to rounding or truncation.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_byte, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(3516), kw_end_DASH_line, int(3516))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -15643,7 +15651,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_char.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to char. Subject to rounding or truncation.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(3528), kw_end_DASH_line, int(3528))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_char.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to char. Subject to rounding or truncation.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_char, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(3528), kw_end_DASH_line, int(3528))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -15694,7 +15702,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_dec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one less than x, a long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1177), kw_end_DASH_line, int(1177))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_dec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one less than x, a long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_dec, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1177), kw_end_DASH_line, int(1177))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -15745,7 +15753,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_dec_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one less than x, an int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(1170), kw_end_DASH_line, int(1170))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_dec_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one less than x, an int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_dec_DASH_int, kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(1170), kw_end_DASH_line, int(1170))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -15800,7 +15808,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_divide_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the division of x by y, both int.\n  Note - uses a primitive operator subject to truncation.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(1240), kw_end_DASH_line, int(1240))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_divide_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the division of x by y, both int.\n  Note - uses a primitive operator subject to truncation.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_divide_DASH_int, kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(1240), kw_end_DASH_line, int(1240))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -15853,7 +15861,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_double.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to double. Subject to rounding.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(3552), kw_end_DASH_line, int(3552))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_double.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to double. Subject to rounding.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_double, kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(3552), kw_end_DASH_line, int(3552))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -15900,7 +15908,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_float.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to float. Subject to rounding.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(3546), kw_end_DASH_line, int(3546))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_float.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to float. Subject to rounding.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_float, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(3546), kw_end_DASH_line, int(3546))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -15947,7 +15955,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_inc.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one greater than x, a long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1163), kw_end_DASH_line, int(1163))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_inc.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one greater than x, a long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_inc, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1163), kw_end_DASH_line, int(1163))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -15998,7 +16006,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_inc_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one greater than x, an int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(1156), kw_end_DASH_line, int(1156))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_inc_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns a number one greater than x, an int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_inc_DASH_int, kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(1156), kw_end_DASH_line, int(1156))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -16049,7 +16057,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to int. Subject to rounding or truncation.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(3534), kw_end_DASH_line, int(3534))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to int. Subject to rounding or truncation.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_int, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(3534), kw_end_DASH_line, int(3534))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -16096,7 +16104,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_long.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to long. Subject to rounding or truncation.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(3540), kw_end_DASH_line, int(3540))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_long.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to long. Subject to rounding or truncation.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_long, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(3540), kw_end_DASH_line, int(3540))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -16147,7 +16155,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_multiply.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the product of x and y, both long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(1233), kw_end_DASH_line, int(1233))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_multiply.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the product of x and y, both long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_multiply, kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(1233), kw_end_DASH_line, int(1233))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -16204,7 +16212,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_multiply_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the product of x and y, both int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(28), kw_column, int(7), kw_line, int(1226), kw_end_DASH_line, int(1226))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_multiply_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the product of x and y, both int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_multiply_DASH_int, kw_end_DASH_column, int(28), kw_column, int(7), kw_line, int(1226), kw_end_DASH_line, int(1226))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -16257,7 +16265,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_negate.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns the negation of x, a long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(1191), kw_end_DASH_line, int(1191))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_negate.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns the negation of x, a long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_negate, kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(1191), kw_end_DASH_line, int(1191))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -16308,7 +16316,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_negate_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns the negation of x, an int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(1184), kw_end_DASH_line, int(1184))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_negate_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Returns the negation of x, an int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_negate_DASH_int, kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(1184), kw_end_DASH_line, int(1184))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -16363,7 +16371,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_remainder_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the remainder of division of x by y, both int.\n  Note - uses a primitive operator subject to truncation.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(29), kw_column, int(7), kw_line, int(1247), kw_end_DASH_line, int(1247))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_remainder_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the remainder of division of x by y, both int.\n  Note - uses a primitive operator subject to truncation.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_remainder_DASH_int, kw_end_DASH_column, int(29), kw_column, int(7), kw_line, int(1247), kw_end_DASH_line, int(1247))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -16416,7 +16424,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_short.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to short. Subject to rounding or truncation.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(3522), kw_end_DASH_line, int(3522))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_short.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to short. Subject to rounding or truncation.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_short, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(3522), kw_end_DASH_line, int(3522))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -16467,7 +16475,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_subtract.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the difference of x and y, both long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(1219), kw_end_DASH_line, int(1219))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_subtract.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the difference of x and y, both long.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_subtract, kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(1219), kw_end_DASH_line, int(1219))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -16524,7 +16532,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unchecked_DASH_subtract_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the difference of x and y, both int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(28), kw_column, int(7), kw_line, int(1212), kw_end_DASH_line, int(1212))).(*lang.Symbol)
+		tmp0 := sym_unchecked_DASH_subtract_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Returns the difference of x and y, both int.\n  Note - uses a primitive operator subject to overflow.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unchecked_DASH_subtract_DASH_int, kw_end_DASH_column, int(28), kw_column, int(7), kw_line, int(1212), kw_end_DASH_line, int(1212))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -16547,7 +16555,7 @@ func LoadNS() {
 	}
 	// unreduced
 	{
-		tmp0 := sym_unreduced.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If x is reduced?, returns (deref x), else returns x", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2846), kw_end_DASH_line, int(2846))).(*lang.Symbol)
+		tmp0 := sym_unreduced.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If x is reduced?, returns (deref x), else returns x", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unreduced, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2846), kw_end_DASH_line, int(2846))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -16607,7 +16615,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_unsigned_DASH_bit_DASH_shift_DASH_right.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_inline, tmp1, kw_doc, "Bitwise shift right, without sign-extension.", kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(30), kw_column, int(7), kw_line, int(1375), kw_end_DASH_line, int(1375))).(*lang.Symbol)
+		tmp0 := sym_unsigned_DASH_bit_DASH_shift_DASH_right.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_inline, tmp1, kw_doc, "Bitwise shift right, without sign-extension.", kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_unsigned_DASH_bit_DASH_shift_DASH_right, kw_end_DASH_column, int(30), kw_column, int(7), kw_line, int(1375), kw_end_DASH_line, int(1375))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -16630,7 +16638,7 @@ func LoadNS() {
 	}
 	// vec
 	{
-		tmp0 := sym_vec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Creates a new vector containing the contents of coll. Java arrays\n  will be aliased and should not be modified.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(368), kw_end_DASH_line, int(368))).(*lang.Symbol)
+		tmp0 := sym_vec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Creates a new vector containing the contents of coll. Java arrays\n  will be aliased and should not be modified.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_vec, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(368), kw_end_DASH_line, int(368))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -16667,7 +16675,7 @@ func LoadNS() {
 	}
 	// vswap!
 	{
-		tmp0 := sym_vswap_BANG_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_vol, sym_f, sym__AMP_, sym_args)), kw_doc, "Non-atomically swaps the value of the volatile as if:\n   (apply f current-value-of-vol args). Returns the value that\n   was swapped in.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(2530), kw_end_DASH_line, int(2530))).(*lang.Symbol)
+		tmp0 := sym_vswap_BANG_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_vol, sym_f, sym__AMP_, sym_args)), kw_doc, "Non-atomically swaps the value of the volatile as if:\n   (apply f current-value-of-vol args). Returns the value that\n   was swapped in.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_vswap_BANG_, kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(2530), kw_end_DASH_line, int(2530))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -16769,7 +16777,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_zero_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_inline, tmp1, kw_doc, "Returns true if num is zero, else false", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(862), kw_end_DASH_line, int(862))).(*lang.Symbol)
+		tmp0 := sym_zero_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_inline, tmp1, kw_doc, "Returns true if num is zero, else false", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_zero_QMARK_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(862), kw_end_DASH_line, int(862))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -16790,7 +16798,7 @@ func LoadNS() {
 	}
 	// zipmap
 	{
-		tmp0 := sym_zipmap.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_keys, sym_vals)), kw_doc, "Returns a map with the keys mapped to the corresponding vals.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6575), kw_end_DASH_line, int(6575))).(*lang.Symbol)
+		tmp0 := sym_zipmap.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_keys, sym_vals)), kw_doc, "Returns a map with the keys mapped to the corresponding vals.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_zipmap, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6575), kw_end_DASH_line, int(6575))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -16893,7 +16901,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_NaN_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_inline, tmp1, kw_doc, "Returns true if num is NaN, else false", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1)})), kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7960), kw_end_DASH_line, int(7960))).(*lang.Symbol)
+		tmp0 := sym_NaN_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_inline, tmp1, kw_doc, "Returns true if num is NaN, else false", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1)})), kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_NaN_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7960), kw_end_DASH_line, int(7960))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -16910,7 +16918,7 @@ func LoadNS() {
 	}
 	// StackTraceElement->vec
 	{
-		tmp0 := sym_StackTraceElement_DASH__GT_vec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a StackTraceElement: [class method file line]", kw_file, "clojure/core_print.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(28), kw_column, int(7), kw_line, int(436), kw_end_DASH_line, int(436))).(*lang.Symbol)
+		tmp0 := sym_StackTraceElement_DASH__GT_vec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a StackTraceElement: [class method file line]", kw_file, "clojure/core_print.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_StackTraceElement_DASH__GT_vec, kw_end_DASH_column, int(28), kw_column, int(7), kw_line, int(436), kw_end_DASH_line, int(436))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -16980,7 +16988,7 @@ func LoadNS() {
 	}
 	// ->
 	{
-		tmp0 := sym__DASH__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Threads the expr through the forms. Inserts x as the\n  second item in the first form, making a list of it if it is not a\n  list already. If there are more forms, inserts the first form as the\n  second item in second form, etc.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(1674), kw_end_DASH_line, int(1674))).(*lang.Symbol)
+		tmp0 := sym__DASH__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Threads the expr through the forms. Inserts x as the\n  second item in the first form, making a list of it if it is not a\n  list already. If there are more forms, inserts the first form as the\n  second item in second form, etc.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__DASH__GT_, kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(1674), kw_end_DASH_line, int(1674))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -17072,7 +17080,7 @@ func LoadNS() {
 	}
 	// ->>
 	{
-		tmp0 := sym__DASH__GT__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Threads the expr through the forms. Inserts x as the\n  last item in the first form, making a list of it if it is not a\n  list already. If there are more forms, inserts the first form as the\n  last item in second form, etc.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(1690), kw_end_DASH_line, int(1690))).(*lang.Symbol)
+		tmp0 := sym__DASH__GT__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Threads the expr through the forms. Inserts x as the\n  last item in the first form, making a list of it if it is not a\n  list already. If there are more forms, inserts the first form as the\n  last item in second form, etc.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__DASH__GT__GT_, kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(1690), kw_end_DASH_line, int(1690))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -17164,7 +17172,7 @@ func LoadNS() {
 	}
 	// ..
 	{
-		tmp0 := sym__DOT__DOT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_form), lang.NewVector(sym_x, sym_form, sym__AMP_, sym_more)), kw_doc, "form => fieldName-symbol or (instanceMethodName-symbol args*)\n\n  Expands into a member access (.) of the first member on the first\n  argument, followed by the next member on the result, etc. For\n  instance:\n\n  (.. System (getProperties) (get \"os.name\"))\n\n  expands to:\n\n  (. (. System (getProperties)) (get \"os.name\"))\n\n  but is easier to write, read, and understand.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(1656), kw_end_DASH_line, int(1656))).(*lang.Symbol)
+		tmp0 := sym__DOT__DOT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_form), lang.NewVector(sym_x, sym_form, sym__AMP_, sym_more)), kw_doc, "form => fieldName-symbol or (instanceMethodName-symbol args*)\n\n  Expands into a member access (.) of the first member on the first\n  argument, followed by the next member on the result, etc. For\n  instance:\n\n  (.. System (getProperties) (get \"os.name\"))\n\n  expands to:\n\n  (. (. System (getProperties)) (get \"os.name\"))\n\n  but is easier to write, read, and understand.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__DOT__DOT_, kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(1656), kw_end_DASH_line, int(1656))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -17261,7 +17269,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym__EQ_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Equality. Returns true if x equals y, false if not. Same as\n  Java x.equals(y) except it also works for nil, and compares\n  numbers and collections in a type-independent manner.  Clojure's immutable data\n  structures define equals() (and thus =) as a value, not an identity,\n  comparison.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(778), kw_end_DASH_line, int(778))).(*lang.Symbol)
+		tmp0 := sym__EQ_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Equality. Returns true if x equals y, false if not. Same as\n  Java x.equals(y) except it also works for nil, and compares\n  numbers and collections in a type-independent manner.  Clojure's immutable data\n  structures define equals() (and thus =) as a value, not an identity,\n  comparison.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__EQ_, kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(778), kw_end_DASH_line, int(778))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -17362,7 +17370,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym__EQ__EQ_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns non-nil if nums all have the equivalent\n  value (type-independent), otherwise false", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(1095), kw_end_DASH_line, int(1095))).(*lang.Symbol)
+		tmp0 := sym__EQ__EQ_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns non-nil if nums all have the equivalent\n  value (type-independent), otherwise false", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__EQ__EQ_, kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(1095), kw_end_DASH_line, int(1095))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -17469,7 +17477,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym__GT_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns non-nil if nums are in monotonically decreasing order,\n  otherwise false.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(1065), kw_end_DASH_line, int(1065))).(*lang.Symbol)
+		tmp0 := sym__GT_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns non-nil if nums are in monotonically decreasing order,\n  otherwise false.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__GT_, kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(1065), kw_end_DASH_line, int(1065))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -17576,7 +17584,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym__GT__EQ_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns non-nil if nums are in monotonically non-increasing order,\n  otherwise false.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(1080), kw_end_DASH_line, int(1080))).(*lang.Symbol)
+		tmp0 := sym__GT__EQ_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns non-nil if nums are in monotonically non-increasing order,\n  otherwise false.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__GT__EQ_, kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(1080), kw_end_DASH_line, int(1080))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -17683,7 +17691,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym__LT_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns non-nil if nums are in monotonically increasing order,\n  otherwise false.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(895), kw_end_DASH_line, int(895))).(*lang.Symbol)
+		tmp0 := sym__LT_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns non-nil if nums are in monotonically increasing order,\n  otherwise false.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__LT_, kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(895), kw_end_DASH_line, int(895))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -17790,7 +17798,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym__LT__EQ_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns non-nil if nums are in monotonically non-decreasing order,\n  otherwise false.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(1050), kw_end_DASH_line, int(1050))).(*lang.Symbol)
+		tmp0 := sym__LT__EQ_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns non-nil if nums are in monotonically non-decreasing order,\n  otherwise false.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__LT__EQ_, kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(1050), kw_end_DASH_line, int(1050))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -18041,7 +18049,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym__PLUS_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the sum of nums. (+) returns 0. Does not auto-promote\n  longs, will throw on overflow. See also: +'", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(979), kw_end_DASH_line, int(979))).(*lang.Symbol)
+		tmp0 := sym__PLUS_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the sum of nums. (+) returns 0. Does not auto-promote\n  longs, will throw on overflow. See also: +'", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__PLUS_, kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(979), kw_end_DASH_line, int(979))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -18269,7 +18277,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym__PLUS__TICK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the sum of nums. (+') returns 0. Supports arbitrary precision.\n  See also: +", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(967), kw_end_DASH_line, int(967))).(*lang.Symbol)
+		tmp0 := sym__PLUS__TICK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the sum of nums. (+') returns 0. Supports arbitrary precision.\n  See also: +", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__PLUS__TICK_, kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(967), kw_end_DASH_line, int(967))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -18497,7 +18505,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym__SLASH_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "If no denominators are supplied, returns 1/numerator,\n  else returns numerator divided by all of the denominators.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(1015), kw_end_DASH_line, int(1015))).(*lang.Symbol)
+		tmp0 := sym__SLASH_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "If no denominators are supplied, returns 1/numerator,\n  else returns numerator divided by all of the denominators.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__SLASH_, kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(1015), kw_end_DASH_line, int(1015))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -18724,7 +18732,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym__STAR_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the product of nums. (*) returns 1. Does not auto-promote\n  longs, will throw on overflow. See also: *'", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(1003), kw_end_DASH_line, int(1003))).(*lang.Symbol)
+		tmp0 := sym__STAR_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the product of nums. (*) returns 1. Does not auto-promote\n  longs, will throw on overflow. See also: *'", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__STAR_, kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(1003), kw_end_DASH_line, int(1003))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -18952,7 +18960,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym__STAR__TICK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the product of nums. (*') returns 1. Supports arbitrary precision.\n  See also: *", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(991), kw_end_DASH_line, int(991))).(*lang.Symbol)
+		tmp0 := sym__STAR__TICK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the product of nums. (*') returns 1. Supports arbitrary precision.\n  See also: *", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__STAR__TICK_, kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(991), kw_end_DASH_line, int(991))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -19022,7 +19030,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_abs.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_inline, tmp1, kw_doc, "Returns the absolute value of a.\n  If a is Long/MIN_VALUE => Long/MIN_VALUE\n  If a is a double and zero => +0.0\n  If a is a double and ##Inf or ##-Inf => ##Inf\n  If a is a double and ##NaN => ##NaN", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1)})), kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1130), kw_end_DASH_line, int(1130))).(*lang.Symbol)
+		tmp0 := sym_abs.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_inline, tmp1, kw_doc, "Returns the absolute value of a.\n  If a is Long/MIN_VALUE => Long/MIN_VALUE\n  If a is a double and zero => +0.0\n  If a is a double and ##Inf or ##-Inf => ##Inf\n  If a is a double and ##NaN => ##NaN", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1)})), kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_abs, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1130), kw_end_DASH_line, int(1130))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -19069,7 +19077,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_aclone.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array)), kw_inline, tmp1, kw_doc, "Returns a clone of the Java array. Works on arrays of known\n  types.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3903), kw_end_DASH_line, int(3903))).(*lang.Symbol)
+		tmp0 := sym_aclone.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array)), kw_inline, tmp1, kw_doc, "Returns a clone of the Java array. Works on arrays of known\n  types.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_aclone, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3903), kw_end_DASH_line, int(3903))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -19090,7 +19098,7 @@ func LoadNS() {
 	}
 	// add-doc-and-meta
 	{
-		tmp0 := sym_add_DASH_doc_DASH_and_DASH_meta.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_docstring, sym_meta)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(26), kw_column, int(11), kw_line, int(6392), kw_end_DASH_line, int(6392), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_add_DASH_doc_DASH_and_DASH_meta.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_docstring, sym_meta)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_add_DASH_doc_DASH_and_DASH_meta, kw_end_DASH_column, int(26), kw_column, int(11), kw_line, int(6392), kw_end_DASH_line, int(6392), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 5)
@@ -19176,7 +19184,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_alength.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array)), kw_inline, tmp1, kw_doc, "Returns the length of the Java array. Works on arrays of all\n  types.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3896), kw_end_DASH_line, int(3896))).(*lang.Symbol)
+		tmp0 := sym_alength.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array)), kw_inline, tmp1, kw_doc, "Returns the length of the Java array. Works on arrays of all\n  types.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_alength, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3896), kw_end_DASH_line, int(3896))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -19197,7 +19205,7 @@ func LoadNS() {
 	}
 	// apply
 	{
-		tmp0 := sym_apply.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_args), lang.NewVector(sym_f, sym_x, sym_args), lang.NewVector(sym_f, sym_x, sym_y, sym_args), lang.NewVector(sym_f, sym_x, sym_y, sym_z, sym_args), lang.NewVector(sym_f, sym_a, sym_b, sym_c, sym_d, sym__AMP_, sym_args)), kw_doc, "Applies fn f to the argument list formed by prepending intervening arguments to args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(655), kw_end_DASH_line, int(655))).(*lang.Symbol)
+		tmp0 := sym_apply.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_args), lang.NewVector(sym_f, sym_x, sym_args), lang.NewVector(sym_f, sym_x, sym_y, sym_args), lang.NewVector(sym_f, sym_x, sym_y, sym_z, sym_args), lang.NewVector(sym_f, sym_a, sym_b, sym_c, sym_d, sym__AMP_, sym_args)), kw_doc, "Applies fn f to the argument list formed by prepending intervening arguments to args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_apply, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(655), kw_end_DASH_line, int(655))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -19289,7 +19297,7 @@ func LoadNS() {
 	}
 	// areduce
 	{
-		tmp0 := sym_areduce.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_idx, sym_ret, sym_init, sym_expr)), kw_doc, "Reduces an expression across an array a, using an index named idx,\n  and return value named ret, initialized to init, setting ret to the \n  evaluation of expr at each step, returning ret.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(5281), kw_end_DASH_line, int(5281))).(*lang.Symbol)
+		tmp0 := sym_areduce.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_idx, sym_ret, sym_init, sym_expr)), kw_doc, "Reduces an expression across an array a, using an index named idx,\n  and return value named ret, initialized to init, setting ret to the \n  evaluation of expr at each step, returning ret.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_areduce, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(5281), kw_end_DASH_line, int(5281))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 7)
@@ -19415,7 +19423,7 @@ func LoadNS() {
 	}
 	// array
 	{
-		tmp0 := sym_array.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(3456), kw_column, int(7), kw_end_DASH_line, int(3457), kw_end_DASH_column, int(7), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_items)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_items)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_array, kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(3456), kw_end_DASH_line, int(3457), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -19440,7 +19448,7 @@ func LoadNS() {
 	}
 	// assert
 	{
-		tmp0 := sym_assert.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_message)), kw_doc, "Evaluates expression x and throws an AssertionError with optional\n  message if x does not evaluate to logical true.\n\n  Assertion checks are omitted from compiled code if '*assert*' is\n  false.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(4829), kw_end_DASH_line, int(4829))).(*lang.Symbol)
+		tmp0 := sym_assert.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_message)), kw_doc, "Evaluates expression x and throws an AssertionError with optional\n  message if x does not evaluate to logical true.\n\n  Assertion checks are omitted from compiled code if '*assert*' is\n  false.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_assert, kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(4829), kw_end_DASH_line, int(4829))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -19599,7 +19607,7 @@ func LoadNS() {
 	}
 	// assert-args
 	{
-		tmp0 := sym_assert_DASH_args.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_pairs)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(38), kw_column, int(11), kw_line, int(1829), kw_end_DASH_line, int(1829), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_assert_DASH_args.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_pairs)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_assert_DASH_args, kw_end_DASH_column, int(38), kw_column, int(11), kw_line, int(1829), kw_end_DASH_line, int(1829), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -19726,7 +19734,7 @@ func LoadNS() {
 	}
 	// assoc-in
 	{
-		tmp0 := sym_assoc_DASH_in.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, lang.NewVector(sym_k, sym__AMP_, sym_ks), sym_v)), kw_doc, "Associates a value in a nested associative structure, where ks is a\n  sequence of keys and v is the new value and returns a new nested structure.\n  If any levels do not exist, hash-maps will be created.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6139), kw_end_DASH_line, int(6139))).(*lang.Symbol)
+		tmp0 := sym_assoc_DASH_in.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, lang.NewVector(sym_k, sym__AMP_, sym_ks), sym_v)), kw_doc, "Associates a value in a nested associative structure, where ks is a\n  sequence of keys and v is the new value and returns a new nested structure.\n  If any levels do not exist, hash-maps will be created.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_assoc_DASH_in, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6139), kw_end_DASH_line, int(6139))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -19789,7 +19797,7 @@ func LoadNS() {
 	// bigdec
 	{
 		tmp1 := reflect.TypeOf((*lang.BigDecimal)(nil))
-		tmp0 := sym_bigdec.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Coerce to BigDecimal", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3647), kw_end_DASH_line, int(3647))).(*lang.Symbol)
+		tmp0 := sym_bigdec.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Coerce to BigDecimal", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bigdec, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3647), kw_end_DASH_line, int(3647))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -19882,7 +19890,7 @@ func LoadNS() {
 	// bigint
 	{
 		tmp1 := reflect.TypeOf((*lang.BigInt)(nil))
-		tmp0 := sym_bigint.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Coerce to BigInt", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3619), kw_end_DASH_line, int(3619))).(*lang.Symbol)
+		tmp0 := sym_bigint.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Coerce to BigInt", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bigint, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3619), kw_end_DASH_line, int(3619))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -19993,7 +20001,7 @@ func LoadNS() {
 	// biginteger
 	{
 		tmp1 := reflect.TypeOf((*big6.Int)(nil))
-		tmp0 := sym_biginteger.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Coerce to BigInteger", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3633), kw_end_DASH_line, int(3633))).(*lang.Symbol)
+		tmp0 := sym_biginteger.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Coerce to BigInteger", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_biginteger, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3633), kw_end_DASH_line, int(3633))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -20116,7 +20124,7 @@ func LoadNS() {
 	}
 	// binding-conveyor-fn
 	{
-		tmp0 := sym_binding_DASH_conveyor_DASH_fn.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(2019), kw_end_DASH_line, int(2019), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_binding_DASH_conveyor_DASH_fn.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_binding_DASH_conveyor_DASH_fn, kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(2019), kw_end_DASH_line, int(2019), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -20379,7 +20387,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym_bit_DASH_and.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Bitwise and", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1300), kw_end_DASH_line, int(1300))).(*lang.Symbol)
+		tmp0 := sym_bit_DASH_and.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Bitwise and", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bit_DASH_and, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1300), kw_end_DASH_line, int(1300))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -20600,7 +20608,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym_bit_DASH_and_DASH_not.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Bitwise and with complement", kw_static, true, kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(1327), kw_end_DASH_line, int(1327))).(*lang.Symbol)
+		tmp0 := sym_bit_DASH_and_DASH_not.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Bitwise and with complement", kw_static, true, kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bit_DASH_and_DASH_not, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(1327), kw_end_DASH_line, int(1327))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -20673,7 +20681,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_bit_DASH_not.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Bitwise complement", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1293), kw_end_DASH_line, int(1293))).(*lang.Symbol)
+		tmp0 := sym_bit_DASH_not.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Bitwise complement", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bit_DASH_not, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1293), kw_end_DASH_line, int(1293))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -20872,7 +20880,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym_bit_DASH_or.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Bitwise or", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(1309), kw_end_DASH_line, int(1309))).(*lang.Symbol)
+		tmp0 := sym_bit_DASH_or.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Bitwise or", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bit_DASH_or, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(1309), kw_end_DASH_line, int(1309))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -20949,7 +20957,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_bit_DASH_shift_DASH_left.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_inline, tmp1, kw_doc, "Bitwise shift left", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(1363), kw_end_DASH_line, int(1363))).(*lang.Symbol)
+		tmp0 := sym_bit_DASH_shift_DASH_left.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_inline, tmp1, kw_doc, "Bitwise shift left", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bit_DASH_shift_DASH_left, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(1363), kw_end_DASH_line, int(1363))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -21006,7 +21014,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_bit_DASH_shift_DASH_right.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_inline, tmp1, kw_doc, "Bitwise shift right", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(1369), kw_end_DASH_line, int(1369))).(*lang.Symbol)
+		tmp0 := sym_bit_DASH_shift_DASH_right.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_inline, tmp1, kw_doc, "Bitwise shift right", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bit_DASH_shift_DASH_right, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(1369), kw_end_DASH_line, int(1369))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -21207,7 +21215,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym_bit_DASH_xor.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Bitwise exclusive or", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1318), kw_end_DASH_line, int(1318))).(*lang.Symbol)
+		tmp0 := sym_bit_DASH_xor.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Bitwise exclusive or", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bit_DASH_xor, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1318), kw_end_DASH_line, int(1318))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -21280,7 +21288,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_boolean.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to boolean", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1600), kw_end_DASH_line, int(1600))).(*lang.Symbol)
+		tmp0 := sym_boolean.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to boolean", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_boolean, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1600), kw_end_DASH_line, int(1600))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -21340,7 +21348,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_boolean_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of booleans", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5301), kw_end_DASH_line, int(5301))).(*lang.Symbol)
+		tmp0 := sym_boolean_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of booleans", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_boolean_DASH_array, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5301), kw_end_DASH_line, int(5301))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -21401,7 +21409,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_booleans.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to boolean[]", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(12), kw_line, int(5364), kw_end_DASH_line, int(5364))).(*lang.Symbol)
+		tmp0 := sym_booleans.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to boolean[]", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_booleans, kw_end_DASH_column, int(19), kw_column, int(12), kw_line, int(5364), kw_end_DASH_line, int(5364))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -21422,7 +21430,7 @@ func LoadNS() {
 	}
 	// bound-fn
 	{
-		tmp0 := sym_bound_DASH_fn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_fntail)), kw_doc, "Returns a function defined by the given fntail, which will install the\n  same bindings in effect as in the thread at the time bound-fn was called.\n  This may be used to define a helper function which runs on a different\n  thread, but needs the same bindings in place.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(2003), kw_end_DASH_line, int(2003))).(*lang.Symbol)
+		tmp0 := sym_bound_DASH_fn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_fntail)), kw_doc, "Returns a function defined by the given fntail, which will install the\n  same bindings in effect as in the thread at the time bound-fn was called.\n  This may be used to define a helper function which runs on a different\n  thread, but needs the same bindings in place.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bound_DASH_fn, kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(2003), kw_end_DASH_line, int(2003))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -21463,7 +21471,7 @@ func LoadNS() {
 	}
 	// bound?
 	{
-		tmp0 := sym_bound_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_vars)), kw_doc, "Returns true if all of the vars provided as arguments have any bound value, root or thread-local.\n   Implies that deref'ing the provided vars will succeed. Returns true if no vars are provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5483), kw_end_DASH_line, int(5483))).(*lang.Symbol)
+		tmp0 := sym_bound_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_vars)), kw_doc, "Returns true if all of the vars provided as arguments have any bound value, root or thread-local.\n   Implies that deref'ing the provided vars will succeed. Returns true if no vars are provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bound_QMARK_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5483), kw_end_DASH_line, int(5483))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -21511,7 +21519,7 @@ func LoadNS() {
 	}
 	// bounded-count
 	{
-		tmp0 := sym_bounded_DASH_count.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "If coll is counted? returns its count, else will count at most the first n\n  elements of coll using its seq", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7402), kw_end_DASH_line, int(7402))).(*lang.Symbol)
+		tmp0 := sym_bounded_DASH_count.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "If coll is counted? returns its count, else will count at most the first n\n  elements of coll using its seq", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bounded_DASH_count, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7402), kw_end_DASH_line, int(7402))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -21583,7 +21591,7 @@ func LoadNS() {
 	}
 	// butlast
 	{
-		tmp0 := sym_butlast.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return a seq of all but the last item in coll, in linear time", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(2), kw_line, int(274), kw_end_DASH_line, int(278))).(*lang.Symbol)
+		tmp0 := sym_butlast.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return a seq of all but the last item in coll, in linear time", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_butlast, kw_end_DASH_column, int(8), kw_column, int(2), kw_line, int(274), kw_end_DASH_line, int(278))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function butlast
 			var v2 lang.FnFunc
@@ -21680,7 +21688,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_byte.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to byte", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3504), kw_end_DASH_line, int(3504))).(*lang.Symbol)
+		tmp0 := sym_byte.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to byte", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_byte, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3504), kw_end_DASH_line, int(3504))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -21736,7 +21744,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_byte_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of bytes", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(5309), kw_end_DASH_line, int(5309))).(*lang.Symbol)
+		tmp0 := sym_byte_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of bytes", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_byte_DASH_array, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(5309), kw_end_DASH_line, int(5309))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -21797,7 +21805,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_bytes.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to bytes[]", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(12), kw_line, int(5369), kw_end_DASH_line, int(5369))).(*lang.Symbol)
+		tmp0 := sym_bytes.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to bytes[]", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bytes, kw_end_DASH_column, int(16), kw_column, int(12), kw_line, int(5369), kw_end_DASH_line, int(5369))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -21818,7 +21826,7 @@ func LoadNS() {
 	}
 	// bytes?
 	{
-		tmp0 := sym_bytes_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a byte array", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5404), kw_end_DASH_line, int(5404))).(*lang.Symbol)
+		tmp0 := sym_bytes_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a byte array", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bytes_QMARK_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5404), kw_end_DASH_line, int(5404))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -21894,7 +21902,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_char.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to char", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3510), kw_end_DASH_line, int(3510))).(*lang.Symbol)
+		tmp0 := sym_char.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_inline, tmp1, kw_doc, "Coerce to char", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_char, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3510), kw_end_DASH_line, int(3510))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -21954,7 +21962,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_char_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of chars", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(5317), kw_end_DASH_line, int(5317))).(*lang.Symbol)
+		tmp0 := sym_char_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_size_DASH_or_DASH_seq), lang.NewVector(sym_size, sym_init_DASH_val_DASH_or_DASH_seq)), kw_inline, tmp1, kw_doc, "Creates an array of chars", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(1), int64(2)})), kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_char_DASH_array, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(5317), kw_end_DASH_line, int(5317))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -22015,7 +22023,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_chars.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to chars[]", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(12), kw_line, int(5374), kw_end_DASH_line, int(5374))).(*lang.Symbol)
+		tmp0 := sym_chars.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xs)), kw_inline, tmp1, kw_doc, "Casts to chars[]", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_chars, kw_end_DASH_column, int(16), kw_column, int(12), kw_line, int(5374), kw_end_DASH_line, int(5374))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -22036,7 +22044,7 @@ func LoadNS() {
 	}
 	// comp
 	{
-		tmp0 := sym_comp.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_f), lang.NewVector(sym_f, sym_g), lang.NewVector(sym_f, sym_g, sym__AMP_, sym_fs)), kw_doc, "Takes a set of functions and returns a fn that is the composition\n  of those fns.  The returned fn takes a variable number of args,\n  applies the rightmost of fns to the args, the next\n  fn (right-to-left) to the result, etc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2548), kw_end_DASH_line, int(2548))).(*lang.Symbol)
+		tmp0 := sym_comp.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_f), lang.NewVector(sym_f, sym_g), lang.NewVector(sym_f, sym_g, sym__AMP_, sym_fs)), kw_doc, "Takes a set of functions and returns a fn that is the composition\n  of those fns.  The returned fn takes a variable number of args,\n  applies the rightmost of fns to the args, the next\n  fn (right-to-left) to the result, etc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_comp, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2548), kw_end_DASH_line, int(2548))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -22165,7 +22173,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_compare.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Comparator. Returns a negative number, zero, or a positive number\n  when x is logically 'less than', 'equal to', or 'greater than'\n  y. Same as Java x.compareTo(y) except it also works for nil, and\n  compares numbers and collections in a type-independent manner. x\n  must implement Comparable", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(826), kw_end_DASH_line, int(826))).(*lang.Symbol)
+		tmp0 := sym_compare.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y)), kw_inline, tmp1, kw_doc, "Comparator. Returns a negative number, zero, or a positive number\n  when x is logically 'less than', 'equal to', or 'greater than'\n  y. Same as Java x.compareTo(y) except it also works for nil, and\n  compares numbers and collections in a type-independent manner. x\n  must implement Comparable", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_compare, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(826), kw_end_DASH_line, int(826))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -22184,7 +22192,7 @@ func LoadNS() {
 	}
 	// complement
 	{
-		tmp0 := sym_complement.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Takes a fn f and returns a fn that takes the same arguments as f,\n  has the same effects, if any, and returns the opposite truth value.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1427), kw_end_DASH_line, int(1427))).(*lang.Symbol)
+		tmp0 := sym_complement.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Takes a fn f and returns a fn that takes the same arguments as f,\n  has the same effects, if any, and returns the opposite truth value.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_complement, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1427), kw_end_DASH_line, int(1427))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -22248,7 +22256,7 @@ func LoadNS() {
 	}
 	// data-reader-var
 	{
-		tmp0 := sym_data_DASH_reader_DASH_var.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7824), kw_column, int(8), kw_end_DASH_line, int(7824), kw_end_DASH_column, int(22), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_data_DASH_reader_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_data_DASH_reader_DASH_var, kw_end_DASH_column, int(22), kw_column, int(8), kw_line, int(7824), kw_end_DASH_line, int(7824), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -22276,7 +22284,7 @@ func LoadNS() {
 	}
 	// def-aset
 	{
-		tmp0 := sym_def_DASH_aset.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_method, sym_coerce)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(3), kw_line, int(3934), kw_end_DASH_line, int(3935), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_def_DASH_aset.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_method, sym_coerce)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_def_DASH_aset, kw_end_DASH_column, int(10), kw_column, int(3), kw_line, int(3934), kw_end_DASH_line, int(3935), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 5)
@@ -22473,7 +22481,7 @@ func LoadNS() {
 	}
 	// definline
 	{
-		tmp0 := sym_definline.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_decl)), kw_doc, "Experimental - like defmacro, except defines a named function whose\n  body is the expansion, calls to which may be expanded inline as if\n  it were a macro. Cannot be used with variadic (&) args.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(5245), kw_end_DASH_line, int(5245))).(*lang.Symbol)
+		tmp0 := sym_definline.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_decl)), kw_doc, "Experimental - like defmacro, except defines a named function whose\n  body is the expansion, calls to which may be expanded inline as if\n  it were a macro. Cannot be used with variadic (&) args.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_definline, kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(5245), kw_end_DASH_line, int(5245))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -22607,7 +22615,7 @@ func LoadNS() {
 	}
 	// defmacro
 	{
-		tmp0 := sym_defmacro.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewVector(sym_params_STAR_), sym_body), lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_body), sym__PLUS_, sym_attr_DASH_map_QMARK_)), kw_doc, "Like defn, but the resulting function name is declared as a\n  macro and will be used as a macro by the compiler when it is\n  called.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(2), kw_line, int(447), kw_end_DASH_line, int(453))).(*lang.Symbol)
+		tmp0 := sym_defmacro.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewVector(sym_params_STAR_), sym_body), lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_body), sym__PLUS_, sym_attr_DASH_map_QMARK_)), kw_doc, "Like defn, but the resulting function name is declared as a\n  macro and will be used as a macro by the compiler when it is\n  called.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_defmacro, kw_end_DASH_column, int(9), kw_column, int(2), kw_line, int(447), kw_end_DASH_line, int(453))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -22897,7 +22905,7 @@ func LoadNS() {
 	}
 	// defn-
 	{
-		tmp0 := sym_defn_DASH_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_decls)), kw_doc, "same as defn, yielding non-public def", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(4941), kw_end_DASH_line, int(4941))).(*lang.Symbol)
+		tmp0 := sym_defn_DASH_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_decls)), kw_doc, "same as defn, yielding non-public def", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_defn_DASH_, kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(4941), kw_end_DASH_line, int(4941))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -22934,7 +22942,7 @@ func LoadNS() {
 	}
 	// defonce
 	{
-		tmp0 := sym_defonce.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_expr)), kw_doc, "defs name to have the root value of the expr iff the named var has no root value,\n  else expr is unevaluated", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(5798), kw_end_DASH_line, int(5798))).(*lang.Symbol)
+		tmp0 := sym_defonce.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_expr)), kw_doc, "defs name to have the root value of the expr iff the named var has no root value,\n  else expr is unevaluated", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_defonce, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(5798), kw_end_DASH_line, int(5798))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 4)
@@ -23013,7 +23021,7 @@ func LoadNS() {
 	}
 	// delay
 	{
-		tmp0 := sym_delay.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions and yields a Delay object that will\n  invoke the body only the first time it is forced (with force or deref/@), and\n  will cache the result and return it on all subsequent force\n  calls. See also - realized?", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(741), kw_end_DASH_line, int(741))).(*lang.Symbol)
+		tmp0 := sym_delay.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions and yields a Delay object that will\n  invoke the body only the first time it is forced (with force or deref/@), and\n  will cache the result and return it on all subsequent force\n  calls. See also - realized?", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_delay, kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(741), kw_end_DASH_line, int(741))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -23050,7 +23058,7 @@ func LoadNS() {
 	}
 	// deref-as-map
 	{
-		tmp0 := sym_deref_DASH_as_DASH_map.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(408), kw_column, int(8), kw_end_DASH_line, int(408), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_deref_DASH_as_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_deref_DASH_as_DASH_map, kw_end_DASH_column, int(19), kw_column, int(8), kw_line, int(408), kw_end_DASH_line, int(408), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -23203,7 +23211,7 @@ func LoadNS() {
 	}
 	// descendants
 	{
-		tmp0 := sym_descendants.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag), lang.NewVector(sym_h, sym_tag)), kw_doc, "Returns the immediate and indirect children of tag, through a\n  relationship established via derive. h must be a hierarchy obtained\n  from make-hierarchy, if not supplied defaults to the global\n  hierarchy. Note: does not work on Java type inheritance\n  relationships.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(5585), kw_end_DASH_line, int(5585))).(*lang.Symbol)
+		tmp0 := sym_descendants.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag), lang.NewVector(sym_h, sym_tag)), kw_doc, "Returns the immediate and indirect children of tag, through a\n  relationship established via derive. h must be a hierarchy obtained\n  from make-hierarchy, if not supplied defaults to the global\n  hierarchy. Note: does not work on Java type inheritance\n  relationships.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_descendants, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(5585), kw_end_DASH_line, int(5585))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -23247,7 +23255,7 @@ func LoadNS() {
 	}
 	// distinct
 	{
-		tmp0 := sym_distinct.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_coll)), kw_doc, "Returns a lazy sequence of the elements of coll with duplicates removed.\n  Returns a stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(5045), kw_end_DASH_line, int(5045))).(*lang.Symbol)
+		tmp0 := sym_distinct.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_coll)), kw_doc, "Returns a lazy sequence of the elements of coll with duplicates removed.\n  Returns a stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_distinct, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(5045), kw_end_DASH_line, int(5045))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -23466,7 +23474,7 @@ func LoadNS() {
 	}
 	// dorun
 	{
-		tmp0 := sym_dorun.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_n, sym_coll)), kw_doc, "When lazy sequences are produced via functions that have side\n  effects, any effects other than those needed to produce the first\n  element in the seq do not occur until the seq is consumed. dorun can\n  be used to force any effects. Walks through the successive nexts of\n  the seq, does not retain the head and returns nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3115), kw_end_DASH_line, int(3115))).(*lang.Symbol)
+		tmp0 := sym_dorun.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_n, sym_coll)), kw_doc, "When lazy sequences are produced via functions that have side\n  effects, any effects other than those needed to produce the first\n  element in the seq do not occur until the seq is consumed. dorun can\n  be used to force any effects. Walks through the successive nexts of\n  the seq, does not retain the head and returns nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_dorun, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3115), kw_end_DASH_line, int(3115))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -23550,7 +23558,7 @@ func LoadNS() {
 	}
 	// dotimes
 	{
-		tmp0 := sym_dotimes.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => name n\n\n  Repeatedly executes body (presumably for side-effects) with name\n  bound to integers from 0 through n-1.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(3305), kw_end_DASH_line, int(3305))).(*lang.Symbol)
+		tmp0 := sym_dotimes.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => name n\n\n  Repeatedly executes body (presumably for side-effects) with name\n  bound to integers from 0 through n-1.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_dotimes, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(3305), kw_end_DASH_line, int(3305))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -23715,7 +23723,7 @@ func LoadNS() {
 	}
 	// drop
 	{
-		tmp0 := sym_drop.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a laziness-preserving sequence of all but the first n items in coll.\n  Returns a stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2900), kw_end_DASH_line, int(2900))).(*lang.Symbol)
+		tmp0 := sym_drop.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a laziness-preserving sequence of all but the first n items in coll.\n  Returns a stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_drop, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2900), kw_end_DASH_line, int(2900))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -23940,7 +23948,7 @@ func LoadNS() {
 	}
 	// elide-top-frames
 	{
-		tmp0 := sym_elide_DASH_top_DASH_frames.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(4793), kw_column, int(7), kw_end_DASH_line, int(4793), kw_end_DASH_column, int(32), kw_arglists, lang.NewList(lang.NewVector(sym_ex, sym_class_DASH_name)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_elide_DASH_top_DASH_frames.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ex, sym_class_DASH_name)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_elide_DASH_top_DASH_frames, kw_end_DASH_column, int(32), kw_column, int(7), kw_line, int(4793), kw_end_DASH_line, int(4793), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -24023,7 +24031,7 @@ func LoadNS() {
 	}
 	// empty?
 	{
-		tmp0 := sym_empty_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll has no items. To check the emptiness of a seq,\n  please use the idiom (seq x) rather than (not (empty? x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6239), kw_end_DASH_line, int(6239))).(*lang.Symbol)
+		tmp0 := sym_empty_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll has no items. To check the emptiness of a seq,\n  please use the idiom (seq x) rather than (not (empty? x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_empty_QMARK_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6239), kw_end_DASH_line, int(6239))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -24055,7 +24063,7 @@ func LoadNS() {
 	}
 	// ensure-reduced
 	{
-		tmp0 := sym_ensure_DASH_reduced.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If x is already reduced?, returns it, else returns (reduced x)", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(2840), kw_end_DASH_line, int(2840))).(*lang.Symbol)
+		tmp0 := sym_ensure_DASH_reduced.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If x is already reduced?, returns it, else returns (reduced x)", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ensure_DASH_reduced, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(2840), kw_end_DASH_line, int(2840))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -24081,7 +24089,7 @@ func LoadNS() {
 	}
 	// even?
 	{
-		tmp0 := sym_even_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is even, throws an exception if n is not an integer", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(1383), kw_end_DASH_line, int(1383))).(*lang.Symbol)
+		tmp0 := sym_even_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is even, throws an exception if n is not an integer", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_even_QMARK_, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(1383), kw_end_DASH_line, int(1383))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -24113,7 +24121,7 @@ func LoadNS() {
 	}
 	// every-pred
 	{
-		tmp0 := sym_every_DASH_pred.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_p), lang.NewVector(sym_p1, sym_p2), lang.NewVector(sym_p1, sym_p2, sym_p3), lang.NewVector(sym_p1, sym_p2, sym_p3, sym__AMP_, sym_ps)), kw_doc, "Takes a set of predicates and returns a function f that returns true if all of its\n  composing predicates return a logical true value against all of its arguments, else it returns\n  false. Note that f is short-circuiting in that it will stop execution on the first\n  argument that triggers a logical false result against the original predicates.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7414), kw_end_DASH_line, int(7414))).(*lang.Symbol)
+		tmp0 := sym_every_DASH_pred.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_p), lang.NewVector(sym_p1, sym_p2), lang.NewVector(sym_p1, sym_p2, sym_p3), lang.NewVector(sym_p1, sym_p2, sym_p3, sym__AMP_, sym_ps)), kw_doc, "Takes a set of predicates and returns a function f that returns true if all of its\n  composing predicates return a logical true value against all of its arguments, else it returns\n  false. Note that f is short-circuiting in that it will stop execution on the first\n  argument that triggers a logical false result against the original predicates.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_every_DASH_pred, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7414), kw_end_DASH_line, int(7414))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -25015,7 +25023,7 @@ func LoadNS() {
 	}
 	// filter
 	{
-		tmp0 := sym_filter.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of the items in coll for which\n  (pred item) returns logical true. pred must be free of side-effects.\n  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2784), kw_end_DASH_line, int(2784))).(*lang.Symbol)
+		tmp0 := sym_filter.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of the items in coll for which\n  (pred item) returns logical true. pred must be free of side-effects.\n  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_filter, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2784), kw_end_DASH_line, int(2784))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -25229,7 +25237,7 @@ func LoadNS() {
 	}
 	// fnil
 	{
-		tmp0 := sym_fnil.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_x), lang.NewVector(sym_f, sym_x, sym_y), lang.NewVector(sym_f, sym_x, sym_y, sym_z)), kw_doc, "Takes a function f, and returns a function that calls f, replacing\n  a nil first argument to f with the supplied value x. Higher arity\n  versions can replace arguments in the second and third\n  positions (y, z). Note that the function f can take any number of\n  arguments, not just the one(s) being nil-patched.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6550), kw_end_DASH_line, int(6550))).(*lang.Symbol)
+		tmp0 := sym_fnil.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_x), lang.NewVector(sym_f, sym_x, sym_y), lang.NewVector(sym_f, sym_x, sym_y, sym_z)), kw_doc, "Takes a function f, and returns a function that calls f, replacing\n  a nil first argument to f with the supplied value x. Higher arity\n  versions can replace arguments in the second and third\n  positions (y, z). Note that the function f can take any number of\n  arguments, not just the one(s) being nil-patched.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_fnil, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6550), kw_end_DASH_line, int(6550))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -25548,7 +25556,7 @@ func LoadNS() {
 	}
 	// format
 	{
-		tmp0 := sym_format.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fmt, sym__AMP_, sym_args)), kw_doc, "Formats a string using java.lang.String.format, see java.util.Formatter for format\n  string syntax", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5709), kw_end_DASH_line, int(5709))).(*lang.Symbol)
+		tmp0 := sym_format.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fmt, sym__AMP_, sym_args)), kw_doc, "Formats a string using java.lang.String.format, see java.util.Formatter for format\n  string syntax", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_format, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5709), kw_end_DASH_line, int(5709))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -25575,7 +25583,7 @@ func LoadNS() {
 	}
 	// future
 	{
-		tmp0 := sym_future.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions and yields a future object that will\n  invoke the body in another thread, and will cache the result and\n  return it on all subsequent calls to deref/@. If the computation has\n  not yet finished, calls to deref/@ will block, unless the variant of\n  deref with timeout is used. See also - realized?.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7001), kw_end_DASH_line, int(7001))).(*lang.Symbol)
+		tmp0 := sym_future.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions and yields a future object that will\n  invoke the body in another thread, and will cache the result and\n  return it on all subsequent calls to deref/@. If the computation has\n  not yet finished, calls to deref/@ will block, unless the variant of\n  deref with timeout is used. See also - realized?.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_future, kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7001), kw_end_DASH_line, int(7001))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -25625,7 +25633,7 @@ func LoadNS() {
 	}
 	// future-call
 	{
-		tmp0 := sym_future_DASH_call.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Takes a function of no args and yields a future object that will\n  invoke the function in another thread, and will cache the result and\n  return it on all subsequent calls to deref/@. If the computation has\n  not yet finished, calls to deref/@ will block, unless the variant\n  of deref with timeout is used. See also - realized?.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6995), kw_end_DASH_line, int(6995))).(*lang.Symbol)
+		tmp0 := sym_future_DASH_call.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Takes a function of no args and yields a future object that will\n  invoke the function in another thread, and will cache the result and\n  return it on all subsequent calls to deref/@. If the computation has\n  not yet finished, calls to deref/@ will block, unless the variant\n  of deref with timeout is used. See also - realized?.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_future_DASH_call, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6995), kw_end_DASH_line, int(6995))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -25654,7 +25662,7 @@ func LoadNS() {
 	}
 	// get-in
 	{
-		tmp0 := sym_get_DASH_in.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_ks), lang.NewVector(sym_m, sym_ks, sym_not_DASH_found)), kw_doc, "Returns the value in a nested associative structure,\n  where ks is a sequence of keys. Returns nil if the key\n  is not present, or the not-found value if supplied.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6120), kw_end_DASH_line, int(6120))).(*lang.Symbol)
+		tmp0 := sym_get_DASH_in.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_ks), lang.NewVector(sym_m, sym_ks, sym_not_DASH_found)), kw_doc, "Returns the value in a nested associative structure,\n  where ks is a sequence of keys. Returns nil if the key\n  is not present, or the not-found value if supplied.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_get_DASH_in, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6120), kw_end_DASH_line, int(6120))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -25752,7 +25760,7 @@ func LoadNS() {
 	}
 	// hash-set
 	{
-		tmp0 := sym_hash_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a new hash set with supplied keys.  Any equal keys are\n  handled as if by repeated uses of conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(390), kw_end_DASH_line, int(390))).(*lang.Symbol)
+		tmp0 := sym_hash_DASH_set.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a new hash set with supplied keys.  Any equal keys are\n  handled as if by repeated uses of conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_hash_DASH_set, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(390), kw_end_DASH_line, int(390))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -25785,7 +25793,7 @@ func LoadNS() {
 	}
 	// if-let
 	{
-		tmp0 := sym_if_DASH_let.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym_then), lang.NewVector(sym_bindings, sym_then, sym_else, sym__AMP_, sym_oldform)), kw_doc, "bindings => binding-form test\n\n  If test is true, evaluates then with binding-form bound to the value of \n  test, if not, yields else", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(1838), kw_end_DASH_line, int(1838))).(*lang.Symbol)
+		tmp0 := sym_if_DASH_let.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym_then), lang.NewVector(sym_bindings, sym_then, sym_else, sym__AMP_, sym_oldform)), kw_doc, "bindings => binding-form test\n\n  If test is true, evaluates then with binding-form bound to the value of \n  test, if not, yields else", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_if_DASH_let, kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(1838), kw_end_DASH_line, int(1838))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -25959,7 +25967,7 @@ func LoadNS() {
 	}
 	// if-some
 	{
-		tmp0 := sym_if_DASH_some.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym_then), lang.NewVector(sym_bindings, sym_then, sym_else, sym__AMP_, sym_oldform)), kw_doc, "bindings => binding-form test\n\n   If test is not nil, evaluates then with binding-form bound to the\n   value of test, if not, yields else", kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(1873), kw_end_DASH_line, int(1873))).(*lang.Symbol)
+		tmp0 := sym_if_DASH_some.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym_then), lang.NewVector(sym_bindings, sym_then, sym_else, sym__AMP_, sym_oldform)), kw_doc, "bindings => binding-form test\n\n   If test is not nil, evaluates then with binding-form bound to the\n   value of test, if not, yields else", kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_if_DASH_some, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(1873), kw_end_DASH_line, int(1873))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -26141,7 +26149,7 @@ func LoadNS() {
 	}
 	// into1
 	{
-		tmp0 := sym_into1.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_to, sym_from)), kw_doc, "Returns a new coll consisting of to-coll with all of the items of\n  from-coll conjoined.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(3415), kw_end_DASH_line, int(3415), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_into1.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_to, sym_from)), kw_doc, "Returns a new coll consisting of to-coll with all of the items of\n  from-coll conjoined.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_into1, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(3415), kw_end_DASH_line, int(3415), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -26178,7 +26186,7 @@ func LoadNS() {
 	}
 	// juxt
 	{
-		tmp0 := sym_juxt.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_g), lang.NewVector(sym_f, sym_g, sym_h), lang.NewVector(sym_f, sym_g, sym_h, sym__AMP_, sym_fs)), kw_doc, "Takes a set of functions and returns a fn that is the juxtaposition\n  of those fns.  The returned fn takes a variable number of args, and\n  returns a vector containing the result of applying each fn to the\n  args (left-to-right).\n  ((juxt a b c) x) => [(a x) (b x) (c x)]", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2567), kw_end_DASH_line, int(2567))).(*lang.Symbol)
+		tmp0 := sym_juxt.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_g), lang.NewVector(sym_f, sym_g, sym_h), lang.NewVector(sym_f, sym_g, sym_h, sym__AMP_, sym_fs)), kw_doc, "Takes a set of functions and returns a fn that is the juxtaposition\n  of those fns.  The returned fn takes a variable number of args, and\n  returns a vector containing the result of applying each fn to the\n  args (left-to-right).\n  ((juxt a b c) x) => [(a x) (b x) (c x)]", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_juxt, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2567), kw_end_DASH_line, int(2567))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -26666,7 +26674,7 @@ func LoadNS() {
 	}
 	// keep
 	{
-		tmp0 := sym_keep.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence of the non-nil results of (f item). Note,\n  this means false return values will be included.  f must be free of\n  side-effects.  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7331), kw_end_DASH_line, int(7331))).(*lang.Symbol)
+		tmp0 := sym_keep.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence of the non-nil results of (f item). Note,\n  this means false return values will be included.  f must be free of\n  side-effects.  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_keep, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7331), kw_end_DASH_line, int(7331))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -26893,7 +26901,7 @@ func LoadNS() {
 	}
 	// keep-indexed
 	{
-		tmp0 := sym_keep_DASH_indexed.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence of the non-nil results of (f index item). Note,\n  this means false return values will be included.  f must be free of\n  side-effects.  Returns a stateful transducer when no collection is\n  provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(7364), kw_end_DASH_line, int(7364))).(*lang.Symbol)
+		tmp0 := sym_keep_DASH_indexed.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence of the non-nil results of (f index item). Note,\n  this means false return values will be included.  f must be free of\n  side-effects.  Returns a stateful transducer when no collection is\n  provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_keep_DASH_indexed, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(7364), kw_end_DASH_line, int(7364))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -27178,7 +27186,7 @@ func LoadNS() {
 	}
 	// lazy-seq
 	{
-		tmp0 := sym_lazy_DASH_seq.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions that returns an ISeq or nil, and yields\n  a Seqable object that will invoke the body only the first time seq\n  is called, and will cache the result and return it on all subsequent\n  seq calls. See also - realized?", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(678), kw_end_DASH_line, int(678))).(*lang.Symbol)
+		tmp0 := sym_lazy_DASH_seq.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions that returns an ISeq or nil, and yields\n  a Seqable object that will invoke the body only the first time seq\n  is called, and will cache the result and return it on all subsequent\n  seq calls. See also - realized?", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_lazy_DASH_seq, kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(678), kw_end_DASH_line, int(678))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -27215,7 +27223,7 @@ func LoadNS() {
 	}
 	// locking
 	{
-		tmp0 := sym_locking.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_body)), kw_doc, "Executes exprs in an implicit do, while holding the monitor of x.\n  Will release the monitor of x in all circumstances.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(1642), kw_end_DASH_line, int(1642))).(*lang.Symbol)
+		tmp0 := sym_locking.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_body)), kw_doc, "Executes exprs in an implicit do, while holding the monitor of x.\n  Will release the monitor of x in all circumstances.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_locking, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(1642), kw_end_DASH_line, int(1642))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -27328,7 +27336,7 @@ func LoadNS() {
 	}
 	// map
 	{
-		tmp0 := sym_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_c1, sym_c2), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3, sym__AMP_, sym_colls)), kw_doc, "Returns a lazy sequence consisting of the result of applying f to\n  the set of first items of each coll, followed by applying f to the\n  set of second items in each coll, until any one of the colls is\n  exhausted.  Any remaining items in other colls are ignored. Function\n  f should accept number-of-colls arguments. Returns a transducer when\n  no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(2718), kw_end_DASH_line, int(2718))).(*lang.Symbol)
+		tmp0 := sym_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_c1, sym_c2), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3, sym__AMP_, sym_colls)), kw_doc, "Returns a lazy sequence consisting of the result of applying f to\n  the set of first items of each coll, followed by applying f to the\n  set of second items in each coll, until any one of the colls is\n  exhausted.  Any remaining items in other colls are ignored. Function\n  f should accept number-of-colls arguments. Returns a transducer when\n  no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_map, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(2718), kw_end_DASH_line, int(2718))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -27753,7 +27761,7 @@ func LoadNS() {
 	}
 	// map-indexed
 	{
-		tmp0 := sym_map_DASH_indexed.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence consisting of the result of applying f to 0\n  and the first item of coll, followed by applying f to 1 and the second\n  item in coll, etc, until coll is exhausted. Thus function f should\n  accept 2 arguments, index and item. Returns a stateful transducer when\n  no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7301), kw_end_DASH_line, int(7301))).(*lang.Symbol)
+		tmp0 := sym_map_DASH_indexed.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence consisting of the result of applying f to 0\n  and the first item of coll, followed by applying f to 1 and the second\n  item in coll, etc, until coll is exhausted. Thus function f should\n  accept 2 arguments, index and item. Returns a stateful transducer when\n  no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_map_DASH_indexed, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7301), kw_end_DASH_line, int(7301))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -28166,7 +28174,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym_max.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the greatest of the nums.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1110), kw_end_DASH_line, int(1110))).(*lang.Symbol)
+		tmp0 := sym_max.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the greatest of the nums.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_max, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1110), kw_end_DASH_line, int(1110))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -28213,7 +28221,7 @@ func LoadNS() {
 	}
 	// max-key
 	{
-		tmp0 := sym_max_DASH_key.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_k, sym_x), lang.NewVector(sym_k, sym_x, sym_y), lang.NewVector(sym_k, sym_x, sym_y, sym__AMP_, sym_more)), kw_doc, "Returns the x for which (k x), a number, is greatest.\n\n  If there are multiple such xs, the last one is returned.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5005), kw_end_DASH_line, int(5005))).(*lang.Symbol)
+		tmp0 := sym_max_DASH_key.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_k, sym_x), lang.NewVector(sym_k, sym_x, sym_y), lang.NewVector(sym_k, sym_x, sym_y, sym__AMP_, sym_more)), kw_doc, "Returns the x for which (k x), a number, is greatest.\n\n  If there are multiple such xs, the last one is returned.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_max_DASH_key, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5005), kw_end_DASH_line, int(5005))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -28370,7 +28378,7 @@ func LoadNS() {
 	}
 	// memfn
 	{
-		tmp0 := sym_memfn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_args)), kw_doc, "Expands into code that creates a fn that expects to be passed an\n  object and any args and calls the named instance method on the\n  object passing the args. Use when you want to treat a Java method as\n  a first-class fn. name may be type-hinted with the method receiver's\n  type in order to avoid reflective calls.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(3871), kw_end_DASH_line, int(3871))).(*lang.Symbol)
+		tmp0 := sym_memfn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_args)), kw_doc, "Expands into code that creates a fn that expects to be passed an\n  object and any args and calls the named instance method on the\n  object passing the args. Use when you want to treat a Java method as\n  a first-class fn. name may be type-hinted with the method receiver's\n  type in order to avoid reflective calls.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_memfn, kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(3871), kw_end_DASH_line, int(3871))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -28447,7 +28455,7 @@ func LoadNS() {
 	}
 	// merge
 	{
-		tmp0 := sym_merge.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_maps)), kw_doc, "Returns a map that consists of the rest of the maps conj-ed onto\n  the first.  If a key occurs in more than one map, the mapping from\n  the latter (left-to-right) will be the mapping in the result.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3039), kw_end_DASH_line, int(3039))).(*lang.Symbol)
+		tmp0 := sym_merge.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_maps)), kw_doc, "Returns a map that consists of the rest of the maps conj-ed onto\n  the first.  If a key occurs in more than one map, the mapping from\n  the latter (left-to-right) will be the mapping in the result.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_merge, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3039), kw_end_DASH_line, int(3039))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -28515,7 +28523,7 @@ func LoadNS() {
 	}
 	// merge-with
 	{
-		tmp0 := sym_merge_DASH_with.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym__AMP_, sym_maps)), kw_doc, "Returns a map that consists of the rest of the maps conj-ed onto\n  the first.  If a key occurs in more than one map, the mapping(s)\n  from the latter (left-to-right) will be combined with the mapping in\n  the result by calling (f val-in-result val-in-latter).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3049), kw_end_DASH_line, int(3049))).(*lang.Symbol)
+		tmp0 := sym_merge_DASH_with.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym__AMP_, sym_maps)), kw_doc, "Returns a map that consists of the rest of the maps conj-ed onto\n  the first.  If a key occurs in more than one map, the mapping(s)\n  from the latter (left-to-right) will be combined with the mapping in\n  the result by calling (f val-in-result val-in-latter).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_merge_DASH_with, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3049), kw_end_DASH_line, int(3049))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -28818,7 +28826,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym_min.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the least of the nums.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1120), kw_end_DASH_line, int(1120))).(*lang.Symbol)
+		tmp0 := sym_min.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "Returns the least of the nums.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_min, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1120), kw_end_DASH_line, int(1120))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -28865,7 +28873,7 @@ func LoadNS() {
 	}
 	// min-key
 	{
-		tmp0 := sym_min_DASH_key.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_k, sym_x), lang.NewVector(sym_k, sym_x, sym_y), lang.NewVector(sym_k, sym_x, sym_y, sym__AMP_, sym_more)), kw_doc, "Returns the x for which (k x), a number, is least.\n\n  If there are multiple such xs, the last one is returned.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5025), kw_end_DASH_line, int(5025))).(*lang.Symbol)
+		tmp0 := sym_min_DASH_key.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_k, sym_x), lang.NewVector(sym_k, sym_x, sym_y), lang.NewVector(sym_k, sym_x, sym_y, sym__AMP_, sym_more)), kw_doc, "Returns the x for which (k x), a number, is least.\n\n  If there are multiple such xs, the last one is returned.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_min_DASH_key, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5025), kw_end_DASH_line, int(5025))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -29022,7 +29030,7 @@ func LoadNS() {
 	}
 	// mod
 	{
-		tmp0 := sym_mod.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num, sym_div)), kw_doc, "Modulus of num and div. Truncates toward negative infinity.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(3566), kw_end_DASH_line, int(3566))).(*lang.Symbol)
+		tmp0 := sym_mod.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num, sym_div)), kw_doc, "Modulus of num and div. Truncates toward negative infinity.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_mod, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(3566), kw_end_DASH_line, int(3566))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -29078,7 +29086,7 @@ func LoadNS() {
 	}
 	// nary-inline
 	{
-		tmp0 := sym_nary_DASH_inline.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(950), kw_column, int(7), kw_end_DASH_line, int(950), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_op), lang.NewVector(sym_op, sym_unchecked_DASH_op)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_nary_DASH_inline.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_op), lang.NewVector(sym_op, sym_unchecked_DASH_op)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_nary_DASH_inline, kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(950), kw_end_DASH_line, int(950), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -29276,7 +29284,7 @@ func LoadNS() {
 	}
 	// nat-int?
 	{
-		tmp0 := sym_nat_DASH_int_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a non-negative fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1414), kw_end_DASH_line, int(1414))).(*lang.Symbol)
+		tmp0 := sym_nat_DASH_int_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a non-negative fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_nat_DASH_int_QMARK_, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1414), kw_end_DASH_line, int(1414))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -29311,7 +29319,7 @@ func LoadNS() {
 	}
 	// neg-int?
 	{
-		tmp0 := sym_neg_DASH_int_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a negative fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1408), kw_end_DASH_line, int(1408))).(*lang.Symbol)
+		tmp0 := sym_neg_DASH_int_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a negative fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_neg_DASH_int_QMARK_, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1408), kw_end_DASH_line, int(1408))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -29345,7 +29353,7 @@ func LoadNS() {
 	// not-any?
 	{
 		tmp1 := reflect.TypeOf(false)
-		tmp0 := sym_not_DASH_any_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns false if (pred x) is logical true for any x in coll,\n  else true.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(2), kw_line, int(2695), kw_end_DASH_line, int(2700))).(*lang.Symbol)
+		tmp0 := sym_not_DASH_any_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns false if (pred x) is logical true for any x in coll,\n  else true.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_not_DASH_any_QMARK_, kw_end_DASH_column, int(9), kw_column, int(2), kw_line, int(2695), kw_end_DASH_line, int(2700))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -29406,7 +29414,7 @@ func LoadNS() {
 	// not-every?
 	{
 		tmp1 := reflect.TypeOf(false)
-		tmp0 := sym_not_DASH_every_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns false if (pred x) is logical true for every x in\n  coll, else true.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(2), kw_line, int(2676), kw_end_DASH_line, int(2681))).(*lang.Symbol)
+		tmp0 := sym_not_DASH_every_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns false if (pred x) is logical true for every x in\n  coll, else true.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_not_DASH_every_QMARK_, kw_end_DASH_column, int(11), kw_column, int(2), kw_line, int(2676), kw_end_DASH_line, int(2681))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -29467,7 +29475,7 @@ func LoadNS() {
 	// not=
 	{
 		tmp1 := reflect.TypeOf(false)
-		tmp0 := sym_not_EQ_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_doc, "Same as (not (= obj1 obj2))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(814), kw_end_DASH_line, int(814))).(*lang.Symbol)
+		tmp0 := sym_not_EQ_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_doc, "Same as (not (= obj1 obj2))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_not_EQ_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(814), kw_end_DASH_line, int(814))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -29514,7 +29522,7 @@ func LoadNS() {
 	}
 	// ns-interns
 	{
-		tmp0 := sym_ns_DASH_interns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the intern mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4205), kw_end_DASH_line, int(4205))).(*lang.Symbol)
+		tmp0 := sym_ns_DASH_interns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the intern mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ns_DASH_interns, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4205), kw_end_DASH_line, int(4205))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -29585,7 +29593,7 @@ func LoadNS() {
 	}
 	// ns-publics
 	{
-		tmp0 := sym_ns_DASH_publics.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the public intern mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4187), kw_end_DASH_line, int(4187))).(*lang.Symbol)
+		tmp0 := sym_ns_DASH_publics.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the public intern mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ns_DASH_publics, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4187), kw_end_DASH_line, int(4187))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -29680,7 +29688,7 @@ func LoadNS() {
 	}
 	// ns-refers
 	{
-		tmp0 := sym_ns_DASH_refers.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the refer mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4252), kw_end_DASH_line, int(4252))).(*lang.Symbol)
+		tmp0 := sym_ns_DASH_refers.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the refer mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ns_DASH_refers, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4252), kw_end_DASH_line, int(4252))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -29751,7 +29759,7 @@ func LoadNS() {
 	}
 	// nthnext
 	{
-		tmp0 := sym_nthnext.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_n)), kw_doc, "Returns the nth next of coll, (seq coll) when n is 0.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3146), kw_end_DASH_line, int(3146))).(*lang.Symbol)
+		tmp0 := sym_nthnext.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_n)), kw_doc, "Returns the nth next of coll, (seq coll) when n is 0.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_nthnext, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3146), kw_end_DASH_line, int(3146))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -29846,7 +29854,7 @@ func LoadNS() {
 	}
 	// nthrest
 	{
-		tmp0 := sym_nthrest.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_n)), kw_doc, "Returns the nth rest of coll, coll when n is 0.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3160), kw_end_DASH_line, int(3160))).(*lang.Symbol)
+		tmp0 := sym_nthrest.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_n)), kw_doc, "Returns the nth rest of coll, coll when n is 0.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_nthrest, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3160), kw_end_DASH_line, int(3160))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -29968,7 +29976,7 @@ func LoadNS() {
 	}
 	// odd?
 	{
-		tmp0 := sym_odd_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is odd, throws an exception if n is not an integer", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1391), kw_end_DASH_line, int(1391))).(*lang.Symbol)
+		tmp0 := sym_odd_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is odd, throws an exception if n is not an integer", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_odd_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1391), kw_end_DASH_line, int(1391))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -29988,7 +29996,7 @@ func LoadNS() {
 	}
 	// or
 	{
-		tmp0 := sym_or.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_next)), kw_doc, "Evaluates exprs one at a time, from left to right. If a form\n  returns a logical true value, or returns that value and doesn't\n  evaluate any of the other expressions, otherwise it returns the\n  value of the last expression. (or) returns nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(849), kw_end_DASH_line, int(849))).(*lang.Symbol)
+		tmp0 := sym_or.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_next)), kw_doc, "Evaluates exprs one at a time, from left to right. If a form\n  returns a logical true value, or returns that value and doesn't\n  evaluate any of the other expressions, otherwise it returns the\n  value of the last expression. (or) returns nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_or, kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(849), kw_end_DASH_line, int(849))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -30070,7 +30078,7 @@ func LoadNS() {
 	}
 	// parents
 	{
-		tmp0 := sym_parents.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag), lang.NewVector(sym_h, sym_tag)), kw_doc, "Returns the immediate parents of tag, either via a Java type\n  inheritance relationship or a relationship established via derive. h\n  must be a hierarchy obtained from make-hierarchy, if not supplied\n  defaults to the global hierarchy", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5556), kw_end_DASH_line, int(5556))).(*lang.Symbol)
+		tmp0 := sym_parents.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag), lang.NewVector(sym_h, sym_tag)), kw_doc, "Returns the immediate parents of tag, either via a Java type\n  inheritance relationship or a relationship established via derive. h\n  must be a hierarchy obtained from make-hierarchy, if not supplied\n  defaults to the global hierarchy", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_parents, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5556), kw_end_DASH_line, int(5556))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -30126,7 +30134,7 @@ func LoadNS() {
 	}
 	// parse-boolean
 	{
-		tmp0 := sym_parse_DASH_boolean.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse strings \"true\" or \"false\" and return a boolean, or nil if invalid", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7949), kw_end_DASH_line, int(7949))).(*lang.Symbol)
+		tmp0 := sym_parse_DASH_boolean.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse strings \"true\" or \"false\" and return a boolean, or nil if invalid", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_parse_DASH_boolean, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7949), kw_end_DASH_line, int(7949))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -30178,7 +30186,7 @@ func LoadNS() {
 	}
 	// parse-double
 	{
-		tmp0 := sym_parse_DASH_double.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse string with floating point components and return a Double value,\n  or nil if parse fails.\n\n  Grammar: https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html#valueOf-java.lang.String-", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(7927), kw_end_DASH_line, int(7927))).(*lang.Symbol)
+		tmp0 := sym_parse_DASH_double.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse string with floating point components and return a Double value,\n  or nil if parse fails.\n\n  Grammar: https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html#valueOf-java.lang.String-", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_parse_DASH_double, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(7927), kw_end_DASH_line, int(7927))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -30220,7 +30228,7 @@ func LoadNS() {
 	}
 	// parse-long
 	{
-		tmp0 := sym_parse_DASH_long.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse string of decimal digits with optional leading -/+ and return a\n  Long value, or nil if parse fails", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7918), kw_end_DASH_line, int(7918))).(*lang.Symbol)
+		tmp0 := sym_parse_DASH_long.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse string of decimal digits with optional leading -/+ and return a\n  Long value, or nil if parse fails", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_parse_DASH_long, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7918), kw_end_DASH_line, int(7918))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -30262,7 +30270,7 @@ func LoadNS() {
 	}
 	// partial
 	{
-		tmp0 := sym_partial.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_arg1), lang.NewVector(sym_f, sym_arg1, sym_arg2), lang.NewVector(sym_f, sym_arg1, sym_arg2, sym_arg3), lang.NewVector(sym_f, sym_arg1, sym_arg2, sym_arg3, sym__AMP_, sym_more)), kw_doc, "Takes a function f and fewer than the normal arguments to f, and\n  returns a fn that takes a variable number of additional args. When\n  called, the returned function calls f with args + additional args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2605), kw_end_DASH_line, int(2605))).(*lang.Symbol)
+		tmp0 := sym_partial.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_arg1), lang.NewVector(sym_f, sym_arg1, sym_arg2), lang.NewVector(sym_f, sym_arg1, sym_arg2, sym_arg3), lang.NewVector(sym_f, sym_arg1, sym_arg2, sym_arg3, sym__AMP_, sym_more)), kw_doc, "Takes a function f and fewer than the normal arguments to f, and\n  returns a fn that takes a variable number of additional args. When\n  called, the returned function calls f with args + additional args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_partial, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2605), kw_end_DASH_line, int(2605))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -30497,7 +30505,7 @@ func LoadNS() {
 	}
 	// partition-by
 	{
-		tmp0 := sym_partition_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Applies f to each value in coll, splitting it each time f returns a\n   new value.  Returns a lazy seq of partitions.  Returns a stateful\n   transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(7134), kw_end_DASH_line, int(7134))).(*lang.Symbol)
+		tmp0 := sym_partition_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Applies f to each value in coll, splitting it each time f returns a\n   new value.  Returns a lazy seq of partitions.  Returns a stateful\n   transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_partition_DASH_by, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(7134), kw_end_DASH_line, int(7134))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -30811,7 +30819,7 @@ func LoadNS() {
 	}
 	// pmap
 	{
-		tmp0 := sym_pmap.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_coll, sym__AMP_, sym_colls)), kw_doc, "Like map, except f is applied in parallel. Semi-lazy in that the\n  parallel computation stays ahead of the consumption, but doesn't\n  realize the entire result unless required. Only useful for\n  computationally intensive functions where the time of f dominates\n  the coordination overhead.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7023), kw_end_DASH_line, int(7023))).(*lang.Symbol)
+		tmp0 := sym_pmap.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_coll, sym__AMP_, sym_colls)), kw_doc, "Like map, except f is applied in parallel. Semi-lazy in that the\n  parallel computation stays ahead of the consumption, but doesn't\n  realize the entire result unless required. Only useful for\n  computationally intensive functions where the time of f dominates\n  the coordination overhead.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_pmap, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7023), kw_end_DASH_line, int(7023))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -31049,7 +31057,7 @@ func LoadNS() {
 	}
 	// pos-int?
 	{
-		tmp0 := sym_pos_DASH_int_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a positive fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1402), kw_end_DASH_line, int(1402))).(*lang.Symbol)
+		tmp0 := sym_pos_DASH_int_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a positive fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_pos_DASH_int_QMARK_, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1402), kw_end_DASH_line, int(1402))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -31082,7 +31090,7 @@ func LoadNS() {
 	}
 	// preserving-reduced
 	{
-		tmp0 := sym_preserving_DASH_reduced.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(7630), kw_column, int(7), kw_end_DASH_line, int(7630), kw_end_DASH_column, int(34), kw_arglists, lang.NewList(lang.NewVector(sym_rf)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_preserving_DASH_reduced.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rf)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_preserving_DASH_reduced, kw_end_DASH_column, int(34), kw_column, int(7), kw_line, int(7630), kw_end_DASH_line, int(7630), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -31130,7 +31138,7 @@ func LoadNS() {
 	}
 	// print-sequential
 	{
-		tmp0 := sym_print_DASH_sequential.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(46), kw_column, int(8), kw_end_DASH_line, int(46), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_begin, sym_print_DASH_one, sym_sep, sym_end, sym_sequence, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_sequential.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_begin, sym_print_DASH_one, sym_sep, sym_end, sym_sequence, sym_w)), kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_print_DASH_sequential, kw_end_DASH_column, int(23), kw_column, int(8), kw_line, int(46), kw_end_DASH_line, int(46), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 6)
@@ -31463,7 +31471,7 @@ func LoadNS() {
 	}
 	// protocol?
 	{
-		tmp0 := sym_protocol_QMARK_.WithMeta(lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(110), kw_column, int(8), kw_end_DASH_line, int(110), kw_end_DASH_column, int(16), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_maybe_DASH_p)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_protocol_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_maybe_DASH_p)), kw_file, "clojure/core_deftype.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_protocol_QMARK_, kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(110), kw_end_DASH_line, int(110), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -31493,7 +31501,7 @@ func LoadNS() {
 	}
 	// pvalues
 	{
-		tmp0 := sym_pvalues.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_exprs)), kw_doc, "Returns a lazy sequence of the values of the exprs, which are\n  evaluated in parallel", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7055), kw_end_DASH_line, int(7055))).(*lang.Symbol)
+		tmp0 := sym_pvalues.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_exprs)), kw_doc, "Returns a lazy sequence of the values of the exprs, which are\n  evaluated in parallel", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_pvalues, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7055), kw_end_DASH_line, int(7055))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -31548,7 +31556,7 @@ func LoadNS() {
 	}
 	// qualified-ident?
 	{
-		tmp0 := sym_qualified_DASH_ident_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol or keyword with a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(1617), kw_end_DASH_line, int(1617))).(*lang.Symbol)
+		tmp0 := sym_qualified_DASH_ident_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol or keyword with a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_qualified_DASH_ident_QMARK_, kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(1617), kw_end_DASH_line, int(1617))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -31596,7 +31604,7 @@ func LoadNS() {
 	}
 	// qualified-keyword?
 	{
-		tmp0 := sym_qualified_DASH_keyword_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a keyword with a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(1637), kw_end_DASH_line, int(1637))).(*lang.Symbol)
+		tmp0 := sym_qualified_DASH_keyword_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a keyword with a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_qualified_DASH_keyword_QMARK_, kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(1637), kw_end_DASH_line, int(1637))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -31644,7 +31652,7 @@ func LoadNS() {
 	}
 	// qualified-symbol?
 	{
-		tmp0 := sym_qualified_DASH_symbol_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol with a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(1627), kw_end_DASH_line, int(1627))).(*lang.Symbol)
+		tmp0 := sym_qualified_DASH_symbol_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol with a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_qualified_DASH_symbol_QMARK_, kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(1627), kw_end_DASH_line, int(1627))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -31692,7 +31700,7 @@ func LoadNS() {
 	}
 	// rand
 	{
-		tmp0 := sym_rand.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_n)), kw_doc, "Returns a random floating point number between 0 (inclusive) and\n  n (default 1) (exclusive).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4927), kw_end_DASH_line, int(4927))).(*lang.Symbol)
+		tmp0 := sym_rand.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_n)), kw_doc, "Returns a random floating point number between 0 (inclusive) and\n  n (default 1) (exclusive).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_rand, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4927), kw_end_DASH_line, int(4927))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -31720,7 +31728,7 @@ func LoadNS() {
 	}
 	// rand-int
 	{
-		tmp0 := sym_rand_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns a random integer between 0 (inclusive) and n (exclusive).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4935), kw_end_DASH_line, int(4935))).(*lang.Symbol)
+		tmp0 := sym_rand_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns a random integer between 0 (inclusive) and n (exclusive).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_rand_DASH_int, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4935), kw_end_DASH_line, int(4935))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -31740,7 +31748,7 @@ func LoadNS() {
 	}
 	// rand-nth
 	{
-		tmp0 := sym_rand_DASH_nth.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return a random element of the (sequential) collection. Will have\n  the same performance characteristics as nth for the given\n  collection.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(7205), kw_end_DASH_line, int(7205))).(*lang.Symbol)
+		tmp0 := sym_rand_DASH_nth.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return a random element of the (sequential) collection. Will have\n  the same performance characteristics as nth for the given\n  collection.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_rand_DASH_nth, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(7205), kw_end_DASH_line, int(7205))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -31762,7 +31770,7 @@ func LoadNS() {
 	}
 	// random-sample
 	{
-		tmp0 := sym_random_DASH_sample.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_prob), lang.NewVector(sym_prob, sym_coll)), kw_doc, "Returns items from coll with random probability of prob (0.0 -\n  1.0).  Returns a transducer when no collection is provided.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7691), kw_end_DASH_line, int(7691))).(*lang.Symbol)
+		tmp0 := sym_random_DASH_sample.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_prob), lang.NewVector(sym_prob, sym_coll)), kw_doc, "Returns items from coll with random probability of prob (0.0 -\n  1.0).  Returns a transducer when no collection is provided.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_random_DASH_sample, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7691), kw_end_DASH_line, int(7691))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -31825,7 +31833,7 @@ func LoadNS() {
 	}
 	// re-groups
 	{
-		tmp0 := sym_re_DASH_groups.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Returns the groups from the most recent match/find. If there are no\n  nested groups, returns a string of the entire match. If there are\n  nested groups, returns a vector of the groups, the first element\n  being the entire match.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4874), kw_end_DASH_line, int(4874))).(*lang.Symbol)
+		tmp0 := sym_re_DASH_groups.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Returns the groups from the most recent match/find. If there are no\n  nested groups, returns a string of the entire match. If there are\n  nested groups, returns a vector of the groups, the first element\n  being the entire match.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_re_DASH_groups, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4874), kw_end_DASH_line, int(4874))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -31906,7 +31914,7 @@ func LoadNS() {
 	}
 	// re-matches
 	{
-		tmp0 := sym_re_DASH_matches.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_re, sym_s)), kw_doc, "Returns the match, if any, of string to pattern, using\n  java.util.regex.Matcher.matches().  Uses re-groups to return the\n  groups.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4902), kw_end_DASH_line, int(4902))).(*lang.Symbol)
+		tmp0 := sym_re_DASH_matches.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_re, sym_s)), kw_doc, "Returns the match, if any, of string to pattern, using\n  java.util.regex.Matcher.matches().  Uses re-groups to return the\n  groups.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_re_DASH_matches, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4902), kw_end_DASH_line, int(4902))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -31945,7 +31953,7 @@ func LoadNS() {
 	}
 	// re-seq
 	{
-		tmp0 := sym_re_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_re, sym_s)), kw_doc, "Returns a lazy sequence of successive matches of pattern in string,\n  using java.util.regex.Matcher.find(), each such match processed with\n  re-groups.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4890), kw_end_DASH_line, int(4890))).(*lang.Symbol)
+		tmp0 := sym_re_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_re, sym_s)), kw_doc, "Returns a lazy sequence of successive matches of pattern in string,\n  using java.util.regex.Matcher.find(), each such match processed with\n  re-groups.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_re_DASH_seq, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4890), kw_end_DASH_line, int(4890))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -32009,7 +32017,7 @@ func LoadNS() {
 	}
 	// refer
 	{
-		tmp0 := sym_refer.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns_DASH_sym, sym__AMP_, sym_filters)), kw_doc, "refers to all public vars of ns, subject to filters.\n  filters can include at most one each of:\n\n  :exclude list-of-symbols\n  :only list-of-symbols\n  :rename map-of-fromsymbol-tosymbol\n\n  For each public interned var in the namespace named by the symbol,\n  adds a mapping from the name of the var to the var to the current\n  namespace.  Throws an exception if name is already mapped to\n  something else in the current namespace. Filters can be used to\n  select a subset, via inclusion or exclusion, or to provide a mapping\n  to a symbol different from the var's name, in order to prevent\n  clashes. Use :use in the ns macro in preference to calling this directly.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(4215), kw_end_DASH_line, int(4215))).(*lang.Symbol)
+		tmp0 := sym_refer.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns_DASH_sym, sym__AMP_, sym_filters)), kw_doc, "refers to all public vars of ns, subject to filters.\n  filters can include at most one each of:\n\n  :exclude list-of-symbols\n  :only list-of-symbols\n  :rename map-of-fromsymbol-tosymbol\n\n  For each public interned var in the namespace named by the symbol,\n  adds a mapping from the name of the var to the var to the current\n  namespace.  Throws an exception if name is already mapped to\n  something else in the current namespace. Filters can be used to\n  select a subset, via inclusion or exclusion, or to provide a mapping\n  to a symbol different from the var's name, in order to prevent\n  clashes. Use :use in the ns macro in preference to calling this directly.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_refer, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(4215), kw_end_DASH_line, int(4215))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -32374,7 +32382,7 @@ func LoadNS() {
 	}
 	// remove
 	{
-		tmp0 := sym_remove.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of the items in coll for which\n  (pred item) returns logical false. pred must be free of side-effects.\n  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2817), kw_end_DASH_line, int(2817))).(*lang.Symbol)
+		tmp0 := sym_remove.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of the items in coll for which\n  (pred item) returns logical false. pred must be free of side-effects.\n  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_remove, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2817), kw_end_DASH_line, int(2817))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -32409,7 +32417,7 @@ func LoadNS() {
 	}
 	// replace
 	{
-		tmp0 := sym_replace.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_smap), lang.NewVector(sym_smap, sym_coll)), kw_doc, "Given a map of replacement pairs and a vector/collection, returns a\n  vector/seq with any elements = a key in smap replaced with the\n  corresponding val in smap.  Returns a transducer when no collection\n  is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5074), kw_end_DASH_line, int(5074))).(*lang.Symbol)
+		tmp0 := sym_replace.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_smap), lang.NewVector(sym_smap, sym_coll)), kw_doc, "Given a map of replacement pairs and a vector/collection, returns a\n  vector/seq with any elements = a key in smap replaced with the\n  corresponding val in smap.  Returns a transducer when no collection\n  is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_replace, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5074), kw_end_DASH_line, int(5074))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -32568,7 +32576,7 @@ func LoadNS() {
 	}
 	// restart-agent
 	{
-		tmp0 := sym_restart_DASH_agent.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_new_DASH_state, sym__AMP_, sym_options)), kw_doc, "When an agent is failed, changes the agent state to new-state and\n  then un-fails the agent so that sends are allowed again.  If\n  a :clear-actions true option is given, any actions queued on the\n  agent that were being held while it was failed will be discarded,\n  otherwise those held actions will proceed.  The new-state must pass\n  the validator if any, or restart will throw an exception and the\n  agent will remain failed with its old state and error.  Watchers, if\n  any, will NOT be notified of the new state.  Throws an exception if\n  the agent is not failed.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(2174), kw_end_DASH_line, int(2174))).(*lang.Symbol)
+		tmp0 := sym_restart_DASH_agent.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_new_DASH_state, sym__AMP_, sym_options)), kw_doc, "When an agent is failed, changes the agent state to new-state and\n  then un-fails the agent so that sends are allowed again.  If\n  a :clear-actions true option is given, any actions queued on the\n  agent that were being held while it was failed will be discarded,\n  otherwise those held actions will proceed.  The new-state must pass\n  the validator if any, or restart will throw an exception and the\n  agent will remain failed with its old state and error.  Watchers, if\n  any, will NOT be notified of the new state.  Throws an exception if\n  the agent is not failed.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_restart_DASH_agent, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(2174), kw_end_DASH_line, int(2174))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -32617,7 +32625,7 @@ func LoadNS() {
 	}
 	// root-directory
 	{
-		tmp0 := sym_root_DASH_directory.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib)), kw_doc, "Returns the root resource path for a lib", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(8), kw_line, int(5863), kw_end_DASH_line, int(5863), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_root_DASH_directory.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib)), kw_doc, "Returns the root resource path for a lib", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_root_DASH_directory, kw_end_DASH_column, int(21), kw_column, int(8), kw_line, int(5863), kw_end_DASH_line, int(5863), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -32645,7 +32653,7 @@ func LoadNS() {
 	}
 	// rsubseq
 	{
-		tmp0 := sym_rsubseq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sc, sym_test, sym_key), lang.NewVector(sym_sc, sym_start_DASH_test, sym_start_DASH_key, sym_end_DASH_test, sym_end_DASH_key)), kw_doc, "sc must be a sorted collection, test(s) one of <, <=, > or\n  >=. Returns a reverse seq of those entries with keys ek for\n  which (test (.. sc comparator (compare ek key)) 0) is true", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5142), kw_end_DASH_line, int(5142))).(*lang.Symbol)
+		tmp0 := sym_rsubseq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sc, sym_test, sym_key), lang.NewVector(sym_sc, sym_start_DASH_test, sym_start_DASH_key, sym_end_DASH_test, sym_end_DASH_key)), kw_doc, "sc must be a sorted collection, test(s) one of <, <=, > or\n  >=. Returns a reverse seq of those entries with keys ek for\n  which (test (.. sc comparator (compare ek key)) 0) is true", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_rsubseq, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5142), kw_end_DASH_line, int(5142))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -32801,7 +32809,7 @@ func LoadNS() {
 	}
 	// send-via
 	{
-		tmp0 := sym_send_DASH_via.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_executor, sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch an action to an agent. Returns the agent immediately.\n  Subsequently, in a thread supplied by executor, the state of the agent\n  will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2098), kw_end_DASH_line, int(2098))).(*lang.Symbol)
+		tmp0 := sym_send_DASH_via.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_executor, sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch an action to an agent. Returns the agent immediately.\n  Subsequently, in a thread supplied by executor, the state of the agent\n  will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_send_DASH_via, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2098), kw_end_DASH_line, int(2098))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -32856,7 +32864,7 @@ func LoadNS() {
 	}
 	// sequence
 	{
-		tmp0 := sym_sequence.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_xform, sym_coll), lang.NewVector(sym_xform, sym_coll, sym__AMP_, sym_colls)), kw_doc, "Coerces coll to a (possibly empty) sequence, if it is not already\n  one. Will not force a lazy seq. (sequence nil) yields (), When a\n  transducer is supplied, returns a lazy sequence of applications of\n  the transform to the items in coll(s), i.e. to the set of first\n  items of each coll, followed by the set of second\n  items in each coll, until any one of the colls is exhausted.  Any\n  remaining items in other colls are ignored. The transform should accept\n  number-of-colls arguments", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2638), kw_end_DASH_line, int(2638))).(*lang.Symbol)
+		tmp0 := sym_sequence.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_xform, sym_coll), lang.NewVector(sym_xform, sym_coll, sym__AMP_, sym_colls)), kw_doc, "Coerces coll to a (possibly empty) sequence, if it is not already\n  one. Will not force a lazy seq. (sequence nil) yields (), When a\n  transducer is supplied, returns a lazy sequence of applications of\n  the transform to the items in coll(s), i.e. to the set of first\n  items of each coll, followed by the set of second\n  items in each coll, until any one of the colls is exhausted.  Any\n  remaining items in other colls are ignored. The transform should accept\n  number-of-colls arguments", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_sequence, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2638), kw_end_DASH_line, int(2638))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -32964,7 +32972,7 @@ func LoadNS() {
 	}
 	// setup-reference
 	{
-		tmp0 := sym_setup_DASH_reference.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(2042), kw_column, int(7), kw_end_DASH_line, int(2043), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_r, sym_options)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_setup_DASH_reference.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_r, sym_options)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_setup_DASH_reference, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2042), kw_end_DASH_line, int(2043), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -33018,7 +33026,7 @@ func LoadNS() {
 	}
 	// shift-mask
 	{
-		tmp0 := sym_shift_DASH_mask.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6590), kw_column, int(8), kw_end_DASH_line, int(6590), kw_end_DASH_column, int(17), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_shift, sym_mask, sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_shift_DASH_mask.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_shift, sym_mask, sym_x)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_shift_DASH_mask, kw_end_DASH_column, int(17), kw_column, int(8), kw_line, int(6590), kw_end_DASH_line, int(6590), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -33042,7 +33050,7 @@ func LoadNS() {
 	}
 	// sort
 	{
-		tmp0 := sym_sort.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_comp, sym_coll)), kw_doc, "Returns a sorted sequence of the items in coll. If no comparator is\n  supplied, uses compare.  comparator must implement\n  java.util.Comparator.  Guaranteed to be stable: equal elements will\n  not be reordered.  If coll is a Java array, it will be modified.  To\n  avoid this, sort a copy of the array.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3084), kw_end_DASH_line, int(3084))).(*lang.Symbol)
+		tmp0 := sym_sort.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_comp, sym_coll)), kw_doc, "Returns a sorted sequence of the items in coll. If no comparator is\n  supplied, uses compare.  comparator must implement\n  java.util.Comparator.  Guaranteed to be stable: equal elements will\n  not be reordered.  If coll is a Java array, it will be modified.  To\n  avoid this, sort a copy of the array.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_sort, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3084), kw_end_DASH_line, int(3084))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -33097,7 +33105,7 @@ func LoadNS() {
 	}
 	// sort-by
 	{
-		tmp0 := sym_sort_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_keyfn, sym_coll), lang.NewVector(sym_keyfn, sym_comp, sym_coll)), kw_doc, "Returns a sorted sequence of the items in coll, where the sort\n  order is determined by comparing (keyfn item).  If no comparator is\n  supplied, uses compare.  comparator must implement\n  java.util.Comparator.  Guaranteed to be stable: equal elements will\n  not be reordered.  If coll is a Java array, it will be modified.  To\n  avoid this, sort a copy of the array.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3101), kw_end_DASH_line, int(3101))).(*lang.Symbol)
+		tmp0 := sym_sort_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_keyfn, sym_coll), lang.NewVector(sym_keyfn, sym_comp, sym_coll)), kw_doc, "Returns a sorted sequence of the items in coll, where the sort\n  order is determined by comparing (keyfn item).  If no comparator is\n  supplied, uses compare.  comparator must implement\n  java.util.Comparator.  Guaranteed to be stable: equal elements will\n  not be reordered.  If coll is a Java array, it will be modified.  To\n  avoid this, sort a copy of the array.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_sort_DASH_by, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3101), kw_end_DASH_line, int(3101))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -33150,7 +33158,7 @@ func LoadNS() {
 	}
 	// spit
 	{
-		tmp0 := sym_spit.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_content, sym__AMP_, sym_options)), kw_doc, "Opposite of slurp.  Opens f with writer, writes content, then\n  closes f. Options passed to clojure.java.io/writer.", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6986), kw_end_DASH_line, int(6986))).(*lang.Symbol)
+		tmp0 := sym_spit.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_content, sym__AMP_, sym_options)), kw_doc, "Opposite of slurp.  Opens f with writer, writes content, then\n  closes f. Options passed to clojure.java.io/writer.", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_spit, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6986), kw_end_DASH_line, int(6986))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -33207,7 +33215,7 @@ func LoadNS() {
 	}
 	// strip-ns
 	{
-		tmp0 := sym_strip_DASH_ns.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(255), kw_column, int(8), kw_end_DASH_line, int(255), kw_end_DASH_column, int(15), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_named)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_strip_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_named)), kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_strip_DASH_ns, kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(255), kw_end_DASH_line, int(255), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -33239,7 +33247,7 @@ func LoadNS() {
 	}
 	// subseq
 	{
-		tmp0 := sym_subseq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sc, sym_test, sym_key), lang.NewVector(sym_sc, sym_start_DASH_test, sym_start_DASH_key, sym_end_DASH_test, sym_end_DASH_key)), kw_doc, "sc must be a sorted collection, test(s) one of <, <=, > or\n  >=. Returns a seq of those entries with keys ek for\n  which (test (.. sc comparator (compare ek key)) 0) is true", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5125), kw_end_DASH_line, int(5125))).(*lang.Symbol)
+		tmp0 := sym_subseq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sc, sym_test, sym_key), lang.NewVector(sym_sc, sym_start_DASH_test, sym_start_DASH_key, sym_end_DASH_test, sym_end_DASH_key)), kw_doc, "sc must be a sorted collection, test(s) one of <, <=, > or\n  >=. Returns a seq of those entries with keys ek for\n  which (test (.. sc comparator (compare ek key)) 0) is true", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_subseq, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5125), kw_end_DASH_line, int(5125))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -33395,7 +33403,7 @@ func LoadNS() {
 	}
 	// supers
 	{
-		tmp0 := sym_supers.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_class)), kw_doc, "Returns the immediate and indirect superclasses and interfaces of c, if any", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5524), kw_end_DASH_line, int(5524))).(*lang.Symbol)
+		tmp0 := sym_supers.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_class)), kw_doc, "Returns the immediate and indirect superclasses and interfaces of c, if any", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_supers, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5524), kw_end_DASH_line, int(5524))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -33462,7 +33470,7 @@ func LoadNS() {
 	}
 	// sync
 	{
-		tmp0 := sym_sync.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_flags_DASH_ignored_DASH_for_DASH_now, sym__AMP_, sym_body)), kw_doc, "transaction-flags => TBD, pass nil for now\n\n  Runs the exprs (in an implicit do) in a transaction that encompasses\n  exprs and any nested calls.  Starts a transaction if none is already\n  running on this thread. Any uncaught exception will abort the\n  transaction and flow out of sync. The exprs may be run more than\n  once, but any effects on Refs will be atomic.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(2489), kw_end_DASH_line, int(2489))).(*lang.Symbol)
+		tmp0 := sym_sync.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_flags_DASH_ignored_DASH_for_DASH_now, sym__AMP_, sym_body)), kw_doc, "transaction-flags => TBD, pass nil for now\n\n  Runs the exprs (in an implicit do) in a transaction that encompasses\n  exprs and any nested calls.  Starts a transaction if none is already\n  running on this thread. Any uncaught exception will abort the\n  transaction and flow out of sync. The exprs may be run more than\n  once, but any effects on Refs will be atomic.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_sync, kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(2489), kw_end_DASH_line, int(2489))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -33524,7 +33532,7 @@ func LoadNS() {
 	}
 	// take
 	{
-		tmp0 := sym_take.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a lazy sequence of the first n items in coll, or all items if\n  there are fewer than n.  Returns a stateful transducer when\n  no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2852), kw_end_DASH_line, int(2852))).(*lang.Symbol)
+		tmp0 := sym_take.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a lazy sequence of the first n items in coll, or all items if\n  there are fewer than n.  Returns a stateful transducer when\n  no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_take, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2852), kw_end_DASH_line, int(2852))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -33697,7 +33705,7 @@ func LoadNS() {
 	}
 	// take-last
 	{
-		tmp0 := sym_take_DASH_last.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a seq of the last n items in coll.  Depending on the type\n  of coll may be no better than linear time.  For vectors, see also subvec.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2938), kw_end_DASH_line, int(2938))).(*lang.Symbol)
+		tmp0 := sym_take_DASH_last.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a seq of the last n items in coll.  Depending on the type\n  of coll may be no better than linear time.  For vectors, see also subvec.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_take_DASH_last, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2938), kw_end_DASH_line, int(2938))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -33748,7 +33756,7 @@ func LoadNS() {
 	}
 	// take-nth
 	{
-		tmp0 := sym_take_DASH_nth.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a lazy seq of every nth item in coll.  Returns a stateful\n  transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4286), kw_end_DASH_line, int(4286))).(*lang.Symbol)
+		tmp0 := sym_take_DASH_nth.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a lazy seq of every nth item in coll.  Returns a stateful\n  transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_take_DASH_nth, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4286), kw_end_DASH_line, int(4286))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -33894,7 +33902,7 @@ func LoadNS() {
 	}
 	// throw-if
 	{
-		tmp0 := sym_throw_DASH_if.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_fmt, sym__AMP_, sym_args)), kw_doc, "Throws a CompilerException with a message if pred is true", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5824), kw_end_DASH_line, int(5824), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_throw_DASH_if.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_fmt, sym__AMP_, sym_args)), kw_doc, "Throws a CompilerException with a message if pred is true", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_throw_DASH_if, kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5824), kw_end_DASH_line, int(5824), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -34021,7 +34029,7 @@ func LoadNS() {
 	}
 	// time
 	{
-		tmp0 := sym_time.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr)), kw_doc, "Evaluates expr and prints the time it took.  Returns the value of\n expr.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(3884), kw_end_DASH_line, int(3884))).(*lang.Symbol)
+		tmp0 := sym_time.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr)), kw_doc, "Evaluates expr and prints the time it took.  Returns the value of\n expr.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_time, kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(3884), kw_end_DASH_line, int(3884))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -34144,7 +34152,7 @@ func LoadNS() {
 	}
 	// trampoline
 	{
-		tmp0 := sym_trampoline.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym__AMP_, sym_args)), kw_doc, "trampoline can be used to convert algorithms requiring mutual\n  recursion without stack consumption. Calls f with supplied args, if\n  any. If f returns a fn, calls that fn with no arguments, and\n  continues to repeat, until the return value is not a fn, then\n  returns that non-fn value. Note that if you want to return a fn as a\n  final value, you must wrap it in some data structure and unpack it\n  after trampoline returns.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(6285), kw_end_DASH_line, int(6285))).(*lang.Symbol)
+		tmp0 := sym_trampoline.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym__AMP_, sym_args)), kw_doc, "trampoline can be used to convert algorithms requiring mutual\n  recursion without stack consumption. Calls f with supplied args, if\n  any. If f returns a fn, calls that fn with no arguments, and\n  continues to repeat, until the return value is not a fn, then\n  returns that non-fn value. Note that if you want to return a fn as a\n  final value, you must wrap it in some data structure and unpack it\n  after trampoline returns.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_trampoline, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(6285), kw_end_DASH_line, int(6285))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -34206,7 +34214,7 @@ func LoadNS() {
 	}
 	// update
 	{
-		tmp0 := sym_update.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_k, sym_f), lang.NewVector(sym_m, sym_k, sym_f, sym_x), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y, sym_z), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y, sym_z, sym__AMP_, sym_more)), kw_doc, "'Updates' a value in an associative structure, where k is a\n  key and f is a function that will take the old value\n  and any supplied args and return the new value, and returns a new\n  structure.  If the key does not exist, nil is passed as the old value.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6166), kw_end_DASH_line, int(6166))).(*lang.Symbol)
+		tmp0 := sym_update.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_k, sym_f), lang.NewVector(sym_m, sym_k, sym_f, sym_x), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y, sym_z), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y, sym_z, sym__AMP_, sym_more)), kw_doc, "'Updates' a value in an associative structure, where k is a\n  key and f is a function that will take the old value\n  and any supplied args and return the new value, and returns a new\n  structure.  If the key does not exist, nil is passed as the old value.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_update, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6166), kw_end_DASH_line, int(6166))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -34311,7 +34319,7 @@ func LoadNS() {
 	}
 	// update-in
 	{
-		tmp0 := sym_update_DASH_in.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_ks, sym_f, sym__AMP_, sym_args)), kw_doc, "'Updates' a value in a nested associative structure, where ks is a\n  sequence of keys and f is a function that will take the old value\n  and any supplied args and return the new value, and returns a new\n  nested structure.  If any levels do not exist, hash-maps will be\n  created.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(6150), kw_end_DASH_line, int(6150))).(*lang.Symbol)
+		tmp0 := sym_update_DASH_in.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_ks, sym_f, sym__AMP_, sym_args)), kw_doc, "'Updates' a value in a nested associative structure, where ks is a\n  sequence of keys and f is a function that will take the old value\n  and any supplied args and return the new value, and returns a new\n  nested structure.  If any levels do not exist, hash-maps will be\n  created.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_update_DASH_in, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(6150), kw_end_DASH_line, int(6150))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -34416,7 +34424,7 @@ func LoadNS() {
 	}
 	// vary-meta
 	{
-		tmp0 := sym_vary_DASH_meta.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_obj, sym_f, sym__AMP_, sym_args)), kw_doc, "Returns an object of the same type and value as obj, with\n  (apply f (meta obj) args) as its metadata.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(670), kw_end_DASH_line, int(670))).(*lang.Symbol)
+		tmp0 := sym_vary_DASH_meta.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_obj, sym_f, sym__AMP_, sym_args)), kw_doc, "Returns an object of the same type and value as obj, with\n  (apply f (meta obj) args) as its metadata.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_vary_DASH_meta, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(670), kw_end_DASH_line, int(670))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -34449,7 +34457,7 @@ func LoadNS() {
 	}
 	// when-first
 	{
-		tmp0 := sym_when_DASH_first.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => x xs\n\n  Roughly the same as (when (seq xs) (let [x (first xs)] body)) but xs is evaluated only once", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(11), kw_line, int(4621), kw_end_DASH_line, int(4621))).(*lang.Symbol)
+		tmp0 := sym_when_DASH_first.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => x xs\n\n  Roughly the same as (when (seq xs) (let [x (first xs)] body)) but xs is evaluated only once", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_when_DASH_first, kw_end_DASH_column, int(20), kw_column, int(11), kw_line, int(4621), kw_end_DASH_line, int(4621))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -34587,7 +34595,7 @@ func LoadNS() {
 	}
 	// when-let
 	{
-		tmp0 := sym_when_DASH_let.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => binding-form test\n\n  When test is true, evaluates body with binding-form bound to the value of test", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(1858), kw_end_DASH_line, int(1858))).(*lang.Symbol)
+		tmp0 := sym_when_DASH_let.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => binding-form test\n\n  When test is true, evaluates body with binding-form bound to the value of test", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_when_DASH_let, kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(1858), kw_end_DASH_line, int(1858))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -34714,7 +34722,7 @@ func LoadNS() {
 	}
 	// when-some
 	{
-		tmp0 := sym_when_DASH_some.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => binding-form test\n\n   When test is not nil, evaluates body with binding-form bound to the\n   value of test", kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(1893), kw_end_DASH_line, int(1893))).(*lang.Symbol)
+		tmp0 := sym_when_DASH_some.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => binding-form test\n\n   When test is not nil, evaluates body with binding-form bound to the\n   value of test", kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_when_DASH_some, kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(1893), kw_end_DASH_line, int(1893))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -34851,7 +34859,7 @@ func LoadNS() {
 	}
 	// while
 	{
-		tmp0 := sym_while.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Repeatedly executes body while test expression is true. Presumes\n  some side-effect will cause test to become false/nil. Returns nil", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6319), kw_end_DASH_line, int(6319))).(*lang.Symbol)
+		tmp0 := sym_while.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Repeatedly executes body while test expression is true. Presumes\n  some side-effect will cause test to become false/nil. Returns nil", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_while, kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6319), kw_end_DASH_line, int(6319))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -34913,7 +34921,7 @@ func LoadNS() {
 	}
 	// with-bindings
 	{
-		tmp0 := sym_with_DASH_bindings.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_binding_DASH_map, sym__AMP_, sym_body)), kw_doc, "Takes a map of Var/value pairs. Installs for the given Vars the associated\n  values as thread-local bindings. Then executes body. Pops the installed\n  bindings after body was evaluated. Returns the value of body.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(11), kw_line, int(1983), kw_end_DASH_line, int(1983))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_bindings.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_binding_DASH_map, sym__AMP_, sym_body)), kw_doc, "Takes a map of Var/value pairs. Installs for the given Vars the associated\n  values as thread-local bindings. Then executes body. Pops the installed\n  bindings after body was evaluated. Returns the value of body.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_with_DASH_bindings, kw_end_DASH_column, int(23), kw_column, int(11), kw_line, int(1983), kw_end_DASH_line, int(1983))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -34967,7 +34975,7 @@ func LoadNS() {
 	}
 	// with-bindings*
 	{
-		tmp0 := sym_with_DASH_bindings_STAR_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_binding_DASH_map, sym_f, sym__AMP_, sym_args)), kw_doc, "Takes a map of Var/value pairs. Installs for the given Vars the associated\n  values as thread-local bindings. Then calls f with the supplied arguments.\n  Pops the installed bindings after f returned. Returns whatever f returns.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(1970), kw_end_DASH_line, int(1970))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_bindings_STAR_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_binding_DASH_map, sym_f, sym__AMP_, sym_args)), kw_doc, "Takes a map of Var/value pairs. Installs for the given Vars the associated\n  values as thread-local bindings. Then calls f with the supplied arguments.\n  Pops the installed bindings after f returned. Returns whatever f returns.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_with_DASH_bindings_STAR_, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(1970), kw_end_DASH_line, int(1970))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -35008,7 +35016,7 @@ func LoadNS() {
 	}
 	// with-in-str
 	{
-		tmp0 := sym_with_DASH_in_DASH_str.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_body)), kw_doc, "Evaluates body in a context in which *in* is bound to a fresh\n  StringReader initialized with the string s.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(4748), kw_end_DASH_line, int(4748))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_in_DASH_str.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_body)), kw_doc, "Evaluates body in a context in which *in* is bound to a fresh\n  StringReader initialized with the string s.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_with_DASH_in_DASH_str, kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(4748), kw_end_DASH_line, int(4748))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -35095,7 +35103,7 @@ func LoadNS() {
 	}
 	// with-loading-context
 	{
-		tmp0 := sym_with_DASH_loading_DASH_context.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5726), kw_column, int(11), kw_end_DASH_line, int(5726), kw_end_DASH_column, int(30), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_macro, true)).(*lang.Symbol)
+		tmp0 := sym_with_DASH_loading_DASH_context.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_with_DASH_loading_DASH_context, kw_end_DASH_column, int(30), kw_column, int(11), kw_line, int(5726), kw_end_DASH_line, int(5726))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -35186,7 +35194,7 @@ func LoadNS() {
 	}
 	// with-open
 	{
-		tmp0 := sym_with_DASH_open.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => [name init ...]\n\n  Evaluates body in a try expression with names bound to the values\n  of the inits, and a finally clause that calls (.close name) on each\n  name in reverse order.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(3831), kw_end_DASH_line, int(3831))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_open.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => [name init ...]\n\n  Evaluates body in a try expression with names bound to the values\n  of the inits, and a finally clause that calls (.close name) on each\n  name in reverse order.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_with_DASH_open, kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(3831), kw_end_DASH_line, int(3831))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -35333,7 +35341,7 @@ func LoadNS() {
 	}
 	// with-out-str
 	{
-		tmp0 := sym_with_DASH_out_DASH_str.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Evaluates exprs in a context in which *out* is bound to a fresh\n  StringWriter.  Returns the string created by any nested printing\n  calls.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(22), kw_column, int(11), kw_line, int(4737), kw_end_DASH_line, int(4737))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_out_DASH_str.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Evaluates exprs in a context in which *out* is bound to a fresh\n  StringWriter.  Returns the string created by any nested printing\n  calls.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_with_DASH_out_DASH_str, kw_end_DASH_column, int(22), kw_column, int(11), kw_line, int(4737), kw_end_DASH_line, int(4737))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -35418,7 +35426,7 @@ func LoadNS() {
 	}
 	// with-precision
 	{
-		tmp0 := sym_with_DASH_precision.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_precision, sym__AMP_, sym_exprs)), kw_doc, "Sets the precision and rounding mode to be used for BigDecimal operations.\n\n  Usage: (with-precision 10 (/ 1M 3))\n  or:    (with-precision 10 :rounding HALF_DOWN (/ 1M 3))\n\n  The rounding mode is one of CEILING, FLOOR, HALF_UP, HALF_DOWN,\n  HALF_EVEN, UP, DOWN and UNNECESSARY; it defaults to HALF_UP.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(11), kw_line, int(5102), kw_end_DASH_line, int(5102))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_precision.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_precision, sym__AMP_, sym_exprs)), kw_doc, "Sets the precision and rounding mode to be used for BigDecimal operations.\n\n  Usage: (with-precision 10 (/ 1M 3))\n  or:    (with-precision 10 :rounding HALF_DOWN (/ 1M 3))\n\n  The rounding mode is one of CEILING, FLOOR, HALF_UP, HALF_DOWN,\n  HALF_EVEN, UP, DOWN and UNNECESSARY; it defaults to HALF_UP.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_with_DASH_precision, kw_end_DASH_column, int(24), kw_column, int(11), kw_line, int(5102), kw_end_DASH_line, int(5102))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -35535,7 +35543,7 @@ func LoadNS() {
 	}
 	// with-redefs
 	{
-		tmp0 := sym_with_DASH_redefs.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => var-symbol temp-value-expr\n\n  Temporarily redefines Vars while executing the body.  The\n  temp-value-exprs will be evaluated and each resulting value will\n  replace in parallel the root value of its Var.  After the body is\n  executed, the root values of all the Vars will be set back to their\n  old values.  These temporary changes will be visible in all threads.\n  Useful for mocking out functions during testing.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(7536), kw_end_DASH_line, int(7536))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_redefs.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => var-symbol temp-value-expr\n\n  Temporarily redefines Vars while executing the body.  The\n  temp-value-exprs will be evaluated and each resulting value will\n  replace in parallel the root value of its Var.  After the body is\n  executed, the root values of all the Vars will be set back to their\n  old values.  These temporary changes will be visible in all threads.\n  Useful for mocking out functions during testing.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_with_DASH_redefs, kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(7536), kw_end_DASH_line, int(7536))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -35613,7 +35621,7 @@ func LoadNS() {
 	}
 	// with-redefs-fn
 	{
-		tmp0 := sym_with_DASH_redefs_DASH_fn.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_binding_DASH_map, sym_func)), kw_doc, "Temporarily redefines Vars during a call to func.  Each val of\n  binding-map will replace the root value of its key which must be\n  a Var.  After func is called with no args, the root values of all\n  the Vars will be set back to their old values.  These temporary\n  changes will be visible in all threads.  Useful for mocking out\n  functions during testing.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(7516), kw_end_DASH_line, int(7516))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_redefs_DASH_fn.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_binding_DASH_map, sym_func)), kw_doc, "Temporarily redefines Vars during a call to func.  Each val of\n  binding-map will replace the root value of its key which must be\n  a Var.  After func is called with no args, the root values of all\n  the Vars will be set back to their old values.  These temporary\n  changes will be visible in all threads.  Useful for mocking out\n  functions during testing.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_with_DASH_redefs_DASH_fn, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(7516), kw_end_DASH_line, int(7516))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -36029,7 +36037,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym__DASH_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "If no ys are supplied, returns the negation of x, else subtracts\n  the ys from x and returns the result. Does not auto-promote\n  longs, will throw on overflow. See also: -'", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(1038), kw_end_DASH_line, int(1038))).(*lang.Symbol)
+		tmp0 := sym__DASH_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "If no ys are supplied, returns the negation of x, else subtracts\n  the ys from x and returns the result. Does not auto-promote\n  longs, will throw on overflow. See also: -'", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__DASH_, kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(1038), kw_end_DASH_line, int(1038))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -36256,7 +36264,7 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		tmp0 := sym__DASH__TICK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "If no ys are supplied, returns the negation of x, else subtracts\n  the ys from x and returns the result. Supports arbitrary precision.\n  See also: -", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(1026), kw_end_DASH_line, int(1026))).(*lang.Symbol)
+		tmp0 := sym__DASH__TICK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp1, kw_doc, "If no ys are supplied, returns the negation of x, else subtracts\n  the ys from x and returns the result. Supports arbitrary precision.\n  See also: -", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp2, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__DASH__TICK_, kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(1026), kw_end_DASH_line, int(1026))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -36305,7 +36313,7 @@ func LoadNS() {
 	}
 	// agent
 	{
-		tmp0 := sym_agent.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_state, sym__AMP_, sym_options)), kw_doc, "Creates and returns an agent with an initial value of state and\n  zero or more options (in any order):\n\n  :meta metadata-map\n\n  :validator validate-fn\n\n  :error-handler handler-fn\n\n  :error-mode mode-keyword\n\n  If metadata-map is supplied, it will become the metadata on the\n  agent. validate-fn must be nil or a side-effect-free fn of one\n  argument, which will be passed the intended new state on any state\n  change. If the new state is unacceptable, the validate-fn should\n  return false or throw an exception.  handler-fn is called if an\n  action throws an exception or if validate-fn rejects a new state --\n  see set-error-handler! for details.  The mode-keyword may be either\n  :continue (the default if an error-handler is given) or :fail (the\n  default if no error-handler is given) -- see set-error-mode! for\n  details.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2051), kw_end_DASH_line, int(2051))).(*lang.Symbol)
+		tmp0 := sym_agent.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_state, sym__AMP_, sym_options)), kw_doc, "Creates and returns an agent with an initial value of state and\n  zero or more options (in any order):\n\n  :meta metadata-map\n\n  :validator validate-fn\n\n  :error-handler handler-fn\n\n  :error-mode mode-keyword\n\n  If metadata-map is supplied, it will become the metadata on the\n  agent. validate-fn must be nil or a side-effect-free fn of one\n  argument, which will be passed the intended new state on any state\n  change. If the new state is unacceptable, the validate-fn should\n  return false or throw an exception.  handler-fn is called if an\n  action throws an exception or if validate-fn rejects a new state --\n  see set-error-handler! for details.  The mode-keyword may be either\n  :continue (the default if an error-handler is given) or :fail (the\n  default if no error-handler is given) -- see set-error-mode! for\n  details.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_agent, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2051), kw_end_DASH_line, int(2051))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -36429,7 +36437,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_aget.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx), lang.NewVector(sym_array, sym_idx, sym__AMP_, sym_idxs)), kw_inline, tmp1, kw_doc, "Returns the value at the index/indices. Works on Java arrays of all\n  types.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3910), kw_end_DASH_line, int(3910))).(*lang.Symbol)
+		tmp0 := sym_aget.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx), lang.NewVector(sym_array, sym_idx, sym__AMP_, sym_idxs)), kw_inline, tmp1, kw_doc, "Returns the value at the index/indices. Works on Java arrays of all\n  types.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(2)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_aget, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3910), kw_end_DASH_line, int(3910))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -36468,7 +36476,7 @@ func LoadNS() {
 	}
 	// amap
 	{
-		tmp0 := sym_amap.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_idx, sym_ret, sym_expr)), kw_doc, "Maps an expression across an array a, using an index named idx, and\n  return value named ret, initialized to a clone of a, then setting \n  each element of ret to the evaluation of expr, returning the new \n  array ret.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(5265), kw_end_DASH_line, int(5265))).(*lang.Symbol)
+		tmp0 := sym_amap.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_idx, sym_ret, sym_expr)), kw_doc, "Maps an expression across an array a, using an index named idx, and\n  return value named ret, initialized to a clone of a, then setting \n  each element of ret to the evaluation of expr, returning the new \n  array ret.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_amap, kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(5265), kw_end_DASH_line, int(5265))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 6)
@@ -36620,7 +36628,7 @@ func LoadNS() {
 	}
 	// ancestors
 	{
-		tmp0 := sym_ancestors.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag), lang.NewVector(sym_h, sym_tag)), kw_doc, "Returns the immediate and indirect parents of tag, either via a Java type\n  inheritance relationship or a relationship established via derive. h\n  must be a hierarchy obtained from make-hierarchy, if not supplied\n  defaults to the global hierarchy", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5569), kw_end_DASH_line, int(5569))).(*lang.Symbol)
+		tmp0 := sym_ancestors.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag), lang.NewVector(sym_h, sym_tag)), kw_doc, "Returns the immediate and indirect parents of tag, either via a Java type\n  inheritance relationship or a relationship established via derive. h\n  must be a hierarchy obtained from make-hierarchy, if not supplied\n  defaults to the global hierarchy", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ancestors, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5569), kw_end_DASH_line, int(5569))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -36703,7 +36711,7 @@ func LoadNS() {
 	}
 	// and
 	{
-		tmp0 := sym_and.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_next)), kw_doc, "Evaluates exprs one at a time, from left to right. If a form\n  returns logical false (nil or false), and returns that value and\n  doesn't evaluate any of the other expressions, otherwise it returns\n  the value of the last expr. (and) returns true.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(837), kw_end_DASH_line, int(837))).(*lang.Symbol)
+		tmp0 := sym_and.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_next)), kw_doc, "Evaluates exprs one at a time, from left to right. If a form\n  returns logical false (nil or false), and returns that value and\n  doesn't evaluate any of the other expressions, otherwise it returns\n  the value of the last expr. (and) returns true.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_and, kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(837), kw_end_DASH_line, int(837))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -36785,7 +36793,7 @@ func LoadNS() {
 	}
 	// array-map
 	{
-		tmp0 := sym_array_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_keyvals)), kw_doc, "Constructs an array-map. If any keys are equal, they are handled as\n  if by repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4377), kw_end_DASH_line, int(4377))).(*lang.Symbol)
+		tmp0 := sym_array_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_keyvals)), kw_doc, "Constructs an array-map. If any keys are equal, they are handled as\n  if by repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_array_DASH_map, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4377), kw_end_DASH_line, int(4377))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -36892,7 +36900,7 @@ func LoadNS() {
 			v2 = tmp1
 			_ = v2
 		}
-		tmp0 := sym_aset.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_inline, tmp1, kw_doc, "Sets the value at the index/indices. Works on Java arrays of\n  reference types. Returns val.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(3)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3921), kw_end_DASH_line, int(3921))).(*lang.Symbol)
+		tmp0 := sym_aset.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_inline, tmp1, kw_doc, "Sets the value at the index/indices. Works on Java arrays of\n  reference types. Returns val.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{int64(3)})), kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_aset, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3921), kw_end_DASH_line, int(3921))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -36936,7 +36944,7 @@ func LoadNS() {
 	}
 	// aset-boolean
 	{
-		tmp0 := sym_aset_DASH_boolean.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of boolean. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(3), kw_line, int(3955), kw_end_DASH_line, int(3957))).(*lang.Symbol)
+		tmp0 := sym_aset_DASH_boolean.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of boolean. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_aset_DASH_boolean, kw_end_DASH_column, int(14), kw_column, int(3), kw_line, int(3955), kw_end_DASH_line, int(3957))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -36986,7 +36994,7 @@ func LoadNS() {
 	}
 	// aset-byte
 	{
-		tmp0 := sym_aset_DASH_byte.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of byte. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(3), kw_line, int(3975), kw_end_DASH_line, int(3977))).(*lang.Symbol)
+		tmp0 := sym_aset_DASH_byte.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of byte. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_aset_DASH_byte, kw_end_DASH_column, int(11), kw_column, int(3), kw_line, int(3975), kw_end_DASH_line, int(3977))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37036,7 +37044,7 @@ func LoadNS() {
 	}
 	// aset-char
 	{
-		tmp0 := sym_aset_DASH_char.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of char. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(3), kw_line, int(3980), kw_end_DASH_line, int(3982))).(*lang.Symbol)
+		tmp0 := sym_aset_DASH_char.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of char. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_aset_DASH_char, kw_end_DASH_column, int(11), kw_column, int(3), kw_line, int(3980), kw_end_DASH_line, int(3982))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37086,7 +37094,7 @@ func LoadNS() {
 	}
 	// aset-double
 	{
-		tmp0 := sym_aset_DASH_double.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of double. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(3), kw_line, int(3965), kw_end_DASH_line, int(3967))).(*lang.Symbol)
+		tmp0 := sym_aset_DASH_double.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of double. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_aset_DASH_double, kw_end_DASH_column, int(13), kw_column, int(3), kw_line, int(3965), kw_end_DASH_line, int(3967))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37136,7 +37144,7 @@ func LoadNS() {
 	}
 	// aset-float
 	{
-		tmp0 := sym_aset_DASH_float.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of float. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(3), kw_line, int(3960), kw_end_DASH_line, int(3962))).(*lang.Symbol)
+		tmp0 := sym_aset_DASH_float.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of float. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_aset_DASH_float, kw_end_DASH_column, int(12), kw_column, int(3), kw_line, int(3960), kw_end_DASH_line, int(3962))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37186,7 +37194,7 @@ func LoadNS() {
 	}
 	// aset-int
 	{
-		tmp0 := sym_aset_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of int. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(3), kw_line, int(3945), kw_end_DASH_line, int(3947))).(*lang.Symbol)
+		tmp0 := sym_aset_DASH_int.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of int. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_aset_DASH_int, kw_end_DASH_column, int(10), kw_column, int(3), kw_line, int(3945), kw_end_DASH_line, int(3947))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37236,7 +37244,7 @@ func LoadNS() {
 	}
 	// aset-long
 	{
-		tmp0 := sym_aset_DASH_long.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of long. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(3), kw_line, int(3950), kw_end_DASH_line, int(3952))).(*lang.Symbol)
+		tmp0 := sym_aset_DASH_long.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of long. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_aset_DASH_long, kw_end_DASH_column, int(11), kw_column, int(3), kw_line, int(3950), kw_end_DASH_line, int(3952))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37286,7 +37294,7 @@ func LoadNS() {
 	}
 	// aset-short
 	{
-		tmp0 := sym_aset_DASH_short.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of short. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(3), kw_line, int(3970), kw_end_DASH_line, int(3972))).(*lang.Symbol)
+		tmp0 := sym_aset_DASH_short.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of short. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_aset_DASH_short, kw_end_DASH_column, int(12), kw_column, int(3), kw_line, int(3970), kw_end_DASH_line, int(3972))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37336,7 +37344,7 @@ func LoadNS() {
 	}
 	// assert-valid-fdecl
 	{
-		tmp0 := sym_assert_DASH_valid_DASH_fdecl.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fdecl)), kw_doc, "A good fdecl looks like (([a] ...) ([a b] ...)) near the end of defn.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(42), kw_column, int(8), kw_line, int(7494), kw_end_DASH_line, int(7494), kw_private, true, kw_dynamic, true)).(*lang.Symbol)
+		tmp0 := sym_assert_DASH_valid_DASH_fdecl.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fdecl)), kw_doc, "A good fdecl looks like (([a] ...) ([a b] ...)) near the end of defn.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_assert_DASH_valid_DASH_fdecl, kw_end_DASH_column, int(42), kw_column, int(8), kw_line, int(7494), kw_end_DASH_line, int(7494), kw_private, true, kw_dynamic, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -37439,7 +37447,7 @@ func LoadNS() {
 	}
 	// atom
 	{
-		tmp0 := sym_atom.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_options)), kw_doc, "Creates and returns an Atom with an initial value of x and zero or\n  more options (in any order):\n\n  :meta metadata-map\n\n  :validator validate-fn\n\n  If metadata-map is supplied, it will become the metadata on the\n  atom. validate-fn must be nil or a side-effect-free fn of one\n  argument, which will be passed the intended new state on any state\n  change. If the new state is unacceptable, the validate-fn should\n  return false or throw an exception.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2324), kw_end_DASH_line, int(2324))).(*lang.Symbol)
+		tmp0 := sym_atom.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_options)), kw_doc, "Creates and returns an Atom with an initial value of x and zero or\n  more options (in any order):\n\n  :meta metadata-map\n\n  :validator validate-fn\n\n  If metadata-map is supplied, it will become the metadata on the\n  atom. validate-fn must be nil or a side-effect-free fn of one\n  argument, which will be passed the intended new state on any state\n  change. If the new state is unacceptable, the validate-fn should\n  return false or throw an exception.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_atom, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2324), kw_end_DASH_line, int(2324))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37473,7 +37481,7 @@ func LoadNS() {
 	}
 	// binding
 	{
-		tmp0 := sym_binding.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => var-symbol init-expr\n\n  Creates new bindings for the (already-existing) vars, with the\n  supplied initial values, executes the exprs in an implicit do, then\n  re-establishes the bindings that existed before.  The new bindings\n  are made in parallel (unlike let); all init-exprs are evaluated\n  before the vars are bound to their new values.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(1944), kw_end_DASH_line, int(1944))).(*lang.Symbol)
+		tmp0 := sym_binding.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => var-symbol init-expr\n\n  Creates new bindings for the (already-existing) vars, with the\n  supplied initial values, executes the exprs in an implicit do, then\n  re-establishes the bindings that existed before.  The new bindings\n  are made in parallel (unlike let); all init-exprs are evaluated\n  before the vars are bound to their new values.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_binding, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(1944), kw_end_DASH_line, int(1944))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37666,7 +37674,7 @@ func LoadNS() {
 	}
 	// bound-fn*
 	{
-		tmp0 := sym_bound_DASH_fn_STAR_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns a function, which will install the same bindings in effect as in\n  the thread at the time bound-fn* was called and then call f with any given\n  arguments. This may be used to define a helper function which runs on a\n  different thread, but needs the same bindings in place.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(1991), kw_end_DASH_line, int(1991))).(*lang.Symbol)
+		tmp0 := sym_bound_DASH_fn_STAR_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns a function, which will install the same bindings in effect as in\n  the thread at the time bound-fn* was called and then call f with any given\n  arguments. This may be used to define a helper function which runs on a\n  different thread, but needs the same bindings in place.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_bound_DASH_fn_STAR_, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(1991), kw_end_DASH_line, int(1991))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -37713,7 +37721,7 @@ func LoadNS() {
 	}
 	// case-map
 	{
-		tmp0 := sym_case_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_case_DASH_f, sym_test_DASH_f, sym_tests, sym_thens)), kw_doc, "Transforms a sequence of test constants and a corresponding sequence of then\n  expressions into a sorted map to be consumed by case*. The form of the map\n  entries are {(case-f test) [(test-f test) then]}.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(6606), kw_end_DASH_line, int(6606), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_case_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_case_DASH_f, sym_test_DASH_f, sym_tests, sym_thens)), kw_doc, "Transforms a sequence of test constants and a corresponding sequence of then\n  expressions into a sorted map to be consumed by case*. The form of the map\n  entries are {(case-f test) [(test-f test) then]}.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_case_DASH_map, kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(6606), kw_end_DASH_line, int(6606), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 4)
@@ -37748,7 +37756,7 @@ func LoadNS() {
 	}
 	// check-valid-options
 	{
-		tmp0 := sym_check_DASH_valid_DASH_options.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_options, sym__AMP_, sym_valid_DASH_keys)), kw_doc, "Throws an exception if the given option map contains keys not listed\n  as valid, else returns nil.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(35), kw_column, int(7), kw_line, int(1708), kw_end_DASH_line, int(1708), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_check_DASH_valid_DASH_options.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_options, sym__AMP_, sym_valid_DASH_keys)), kw_doc, "Throws an exception if the given option map contains keys not listed\n  as valid, else returns nil.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_check_DASH_valid_DASH_options, kw_end_DASH_column, int(35), kw_column, int(7), kw_line, int(1708), kw_end_DASH_line, int(1708), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37812,7 +37820,7 @@ func LoadNS() {
 	}
 	// clear-agent-errors
 	{
-		tmp0 := sym_clear_DASH_agent_DASH_errors.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "DEPRECATED: Use 'restart-agent' instead.\n  Clears any exceptions thrown during asynchronous actions of the\n  agent, allowing subsequent actions to occur.", kw_file, "clojure/core.glj", kw_deprecated, "1.2", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(2243), kw_end_DASH_line, int(2243))).(*lang.Symbol)
+		tmp0 := sym_clear_DASH_agent_DASH_errors.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "DEPRECATED: Use 'restart-agent' instead.\n  Clears any exceptions thrown during asynchronous actions of the\n  agent, allowing subsequent actions to occur.", kw_file, "clojure/core.glj", kw_deprecated, "1.2", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_clear_DASH_agent_DASH_errors, kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(2243), kw_end_DASH_line, int(2243))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -37841,7 +37849,7 @@ func LoadNS() {
 	}
 	// declare
 	{
-		tmp0 := sym_declare.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_names)), kw_doc, "defs the supplied var names with no bindings, useful for making forward declarations.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(2767), kw_end_DASH_line, int(2767))).(*lang.Symbol)
+		tmp0 := sym_declare.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_names)), kw_doc, "defs the supplied var names with no bindings, useful for making forward declarations.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_declare, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(2767), kw_end_DASH_line, int(2767))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37893,7 +37901,7 @@ func LoadNS() {
 	}
 	// dedupe
 	{
-		tmp0 := sym_dedupe.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_coll)), kw_doc, "Returns a lazy sequence removing consecutive duplicates in coll.\n  Returns a transducer when no collection is provided.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(7673), kw_end_DASH_line, int(7673))).(*lang.Symbol)
+		tmp0 := sym_dedupe.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_coll)), kw_doc, "Returns a lazy sequence removing consecutive duplicates in coll.\n  Returns a transducer when no collection is provided.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_dedupe, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(7673), kw_end_DASH_line, int(7673))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -37989,7 +37997,7 @@ func LoadNS() {
 	}
 	// defmulti
 	{
-		tmp0 := sym_defmulti.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_docstring_QMARK_, sym_attr_DASH_map_QMARK_, sym_dispatch_DASH_fn, sym__AMP_, sym_options)), kw_doc, "Creates a new multimethod with the associated dispatch function.\n  The docstring and attr-map are optional.\n\n  Options are key-value pairs and may be one of:\n\n  :default\n\n  The default dispatch value, defaults to :default\n\n  :hierarchy\n\n  The value used for hierarchical dispatch (e.g. ::square is-a ::shape)\n\n  Hierarchies are type-like relationships that do not depend upon type\n  inheritance. By default Clojure's multimethods dispatch off of a\n  global hierarchy map.  However, a hierarchy relationship can be\n  created with the derive function used to augment the root ancestor\n  created with make-hierarchy.\n\n  Multimethods expect the value of the hierarchy option to be supplied as\n  a reference type e.g. a var (i.e. via the Var-quote dispatch macro #'\n  or the var special form).", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(1722), kw_end_DASH_line, int(1722))).(*lang.Symbol)
+		tmp0 := sym_defmulti.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_docstring_QMARK_, sym_attr_DASH_map_QMARK_, sym_dispatch_DASH_fn, sym__AMP_, sym_options)), kw_doc, "Creates a new multimethod with the associated dispatch function.\n  The docstring and attr-map are optional.\n\n  Options are key-value pairs and may be one of:\n\n  :default\n\n  The default dispatch value, defaults to :default\n\n  :hierarchy\n\n  The value used for hierarchical dispatch (e.g. ::square is-a ::shape)\n\n  Hierarchies are type-like relationships that do not depend upon type\n  inheritance. By default Clojure's multimethods dispatch off of a\n  global hierarchy map.  However, a hierarchy relationship can be\n  created with the derive function used to augment the root ancestor\n  created with make-hierarchy.\n\n  Multimethods expect the value of the hierarchy option to be supplied as\n  a reference type e.g. a var (i.e. via the Var-quote dispatch macro #'\n  or the var special form).", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_defmulti, kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(1722), kw_end_DASH_line, int(1722))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -38264,7 +38272,7 @@ func LoadNS() {
 	}
 	// defprotocol
 	{
-		tmp0 := sym_defprotocol.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_opts_PLUS_sigs)), kw_doc, "A protocol is a named set of named methods and their signatures:\n  (defprotocol AProtocolName\n\n    ;optional doc string\n    \"A doc string for AProtocol abstraction\"\n\n   ;options\n   :extend-via-metadata true\n\n  ;method signatures\n    (bar [this a b] \"bar docs\")\n    (baz [this a] [this a b] [this a b c] \"baz docs\"))\n\n  No implementations are provided. Docs can be specified for the\n  protocol overall and for each method. The above yields a set of\n  polymorphic functions and a protocol object. All are\n  namespace-qualified by the ns enclosing the definition The resulting\n  functions dispatch on the type of their first argument, which is\n  required and corresponds to the implicit target object ('this' in \n  Java parlance). defprotocol is dynamic, has no special compile-time \n  effect, and defines no new types or classes. Implementations of \n  the protocol methods can be provided using extend.\n\n  When :extend-via-metadata is true, values can extend protocols by\n  adding metadata where keys are fully-qualified protocol function\n  symbols and values are function implementations. Protocol\n  implementations are checked first for direct definitions (defrecord,\n  deftype, reify), then metadata definitions, then external\n  extensions (extend, extend-type, extend-protocol)\n\n  defprotocol will automatically generate a corresponding interface,\n  with the same name as the protocol, i.e. given a protocol:\n  my.ns/Protocol, an interface: my.ns.Protocol. The interface will\n  have methods corresponding to the protocol functions, and the\n  protocol will automatically work with instances of the interface.\n\n  Note that you should not use this interface with deftype or\n  reify, as they support the protocol directly:\n\n  (defprotocol P \n    (foo [this]) \n    (bar-me [this] [this y]))\n\n  (deftype Foo [a b c] \n   P\n    (foo [this] a)\n    (bar-me [this] b)\n    (bar-me [this y] (+ c y)))\n  \n  (bar-me (Foo. 1 2 3) 42)\n  => 45\n\n  (foo \n    (let [x 42]\n      (reify P \n        (foo [this] 17)\n        (bar-me [this] x)\n        (bar-me [this y] x))))\n  => 17", kw_file, "clojure/core_deftype.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(28), kw_end_DASH_line, int(28))).(*lang.Symbol)
+		tmp0 := sym_defprotocol.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_opts_PLUS_sigs)), kw_doc, "A protocol is a named set of named methods and their signatures:\n  (defprotocol AProtocolName\n\n    ;optional doc string\n    \"A doc string for AProtocol abstraction\"\n\n   ;options\n   :extend-via-metadata true\n\n  ;method signatures\n    (bar [this a b] \"bar docs\")\n    (baz [this a] [this a b] [this a b c] \"baz docs\"))\n\n  No implementations are provided. Docs can be specified for the\n  protocol overall and for each method. The above yields a set of\n  polymorphic functions and a protocol object. All are\n  namespace-qualified by the ns enclosing the definition The resulting\n  functions dispatch on the type of their first argument, which is\n  required and corresponds to the implicit target object ('this' in \n  Java parlance). defprotocol is dynamic, has no special compile-time \n  effect, and defines no new types or classes. Implementations of \n  the protocol methods can be provided using extend.\n\n  When :extend-via-metadata is true, values can extend protocols by\n  adding metadata where keys are fully-qualified protocol function\n  symbols and values are function implementations. Protocol\n  implementations are checked first for direct definitions (defrecord,\n  deftype, reify), then metadata definitions, then external\n  extensions (extend, extend-type, extend-protocol)\n\n  defprotocol will automatically generate a corresponding interface,\n  with the same name as the protocol, i.e. given a protocol:\n  my.ns/Protocol, an interface: my.ns.Protocol. The interface will\n  have methods corresponding to the protocol functions, and the\n  protocol will automatically work with instances of the interface.\n\n  Note that you should not use this interface with deftype or\n  reify, as they support the protocol directly:\n\n  (defprotocol P \n    (foo [this]) \n    (bar-me [this] [this y]))\n\n  (deftype Foo [a b c] \n   P\n    (foo [this] a)\n    (bar-me [this] b)\n    (bar-me [this y] (+ c y)))\n  \n  (bar-me (Foo. 1 2 3) 42)\n  => 45\n\n  (foo \n    (let [x 42]\n      (reify P \n        (foo [this] 17)\n        (bar-me [this] x)\n        (bar-me [this y] x))))\n  => 17", kw_file, "clojure/core_deftype.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_defprotocol, kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(28), kw_end_DASH_line, int(28))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -38581,7 +38589,7 @@ func LoadNS() {
 	// distinct?
 	{
 		tmp1 := reflect.TypeOf(false)
-		tmp0 := sym_distinct_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_doc, "Returns true if no two of the arguments are =", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5656), kw_end_DASH_line, int(5656))).(*lang.Symbol)
+		tmp0 := sym_distinct_QMARK_.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_doc, "Returns true if no two of the arguments are =", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_distinct_QMARK_, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5656), kw_end_DASH_line, int(5656))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -38741,7 +38749,7 @@ func LoadNS() {
 	}
 	// doall
 	{
-		tmp0 := sym_doall.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_n, sym_coll)), kw_doc, "When lazy sequences are produced via functions that have side\n  effects, any effects other than those needed to produce the first\n  element in the seq do not occur until the seq is consumed. doall can\n  be used to force any effects. Walks through the successive nexts of\n  the seq, retains the head and returns it, thus causing the entire\n  seq to reside in memory at one time.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3130), kw_end_DASH_line, int(3130))).(*lang.Symbol)
+		tmp0 := sym_doall.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_n, sym_coll)), kw_doc, "When lazy sequences are produced via functions that have side\n  effects, any effects other than those needed to produce the first\n  element in the seq do not occur until the seq is consumed. doall can\n  be used to force any effects. Walks through the successive nexts of\n  the seq, retains the head and returns it, thus causing the entire\n  seq to reside in memory at one time.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_doall, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3130), kw_end_DASH_line, int(3130))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -38774,7 +38782,7 @@ func LoadNS() {
 	}
 	// doseq
 	{
-		tmp0 := sym_doseq.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_seq_DASH_exprs, sym__AMP_, sym_body)), kw_doc, "Repeatedly executes body (presumably for side-effects) with\n  bindings and filtering as provided by \"for\".  Does not retain\n  the head of the sequence. Returns nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(3208), kw_end_DASH_line, int(3208))).(*lang.Symbol)
+		tmp0 := sym_doseq.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_seq_DASH_exprs, sym__AMP_, sym_body)), kw_doc, "Repeatedly executes body (presumably for side-effects) with\n  bindings and filtering as provided by \"for\".  Does not retain\n  the head of the sequence. Returns nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_doseq, kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(3208), kw_end_DASH_line, int(3208))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -39414,7 +39422,7 @@ func LoadNS() {
 	}
 	// doto
 	{
-		tmp0 := sym_doto.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Evaluates x then calls all of the methods and functions with the\n  value of x supplied at the front of the given arguments.  The forms\n  are evaluated in order.  Returns x.\n\n  (doto (new java.util.HashMap) (.put \"a\" 1) (.put \"b\" 2))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(3852), kw_end_DASH_line, int(3852))).(*lang.Symbol)
+		tmp0 := sym_doto.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Evaluates x then calls all of the methods and functions with the\n  value of x supplied at the front of the given arguments.  The forms\n  are evaluated in order.  Returns x.\n\n  (doto (new java.util.HashMap) (.put \"a\" 1) (.put \"b\" 2))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_doto, kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(3852), kw_end_DASH_line, int(3852))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -39519,7 +39527,7 @@ func LoadNS() {
 	}
 	// drop-last
 	{
-		tmp0 := sym_drop_DASH_last.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_n, sym_coll)), kw_doc, "Return a lazy sequence of all but the last n (default 1) items in coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2931), kw_end_DASH_line, int(2931))).(*lang.Symbol)
+		tmp0 := sym_drop_DASH_last.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_n, sym_coll)), kw_doc, "Return a lazy sequence of all but the last n (default 1) items in coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_drop_DASH_last, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2931), kw_end_DASH_line, int(2931))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -39566,7 +39574,7 @@ func LoadNS() {
 	}
 	// emit-extend-protocol
 	{
-		tmp0 := sym_emit_DASH_extend_DASH_protocol.WithMeta(lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(205), kw_column, int(8), kw_end_DASH_line, int(205), kw_end_DASH_column, int(27), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_p, sym_specs)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_emit_DASH_extend_DASH_protocol.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_p, sym_specs)), kw_file, "clojure/core_deftype.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_emit_DASH_extend_DASH_protocol, kw_end_DASH_column, int(27), kw_column, int(8), kw_line, int(205), kw_end_DASH_line, int(205), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -39640,7 +39648,7 @@ func LoadNS() {
 	}
 	// emit-hinted-impl
 	{
-		tmp0 := sym_emit_DASH_hinted_DASH_impl.WithMeta(lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(163), kw_column, int(8), kw_end_DASH_line, int(163), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_c, lang.NewVector(sym_p, sym_fs))), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_emit_DASH_hinted_DASH_impl.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_c, lang.NewVector(sym_p, sym_fs))), kw_file, "clojure/core_deftype.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_emit_DASH_hinted_DASH_impl, kw_end_DASH_column, int(23), kw_column, int(8), kw_line, int(163), kw_end_DASH_line, int(163), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -39831,7 +39839,7 @@ func LoadNS() {
 	}
 	// extend-protocol
 	{
-		tmp0 := sym_extend_DASH_protocol.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_p, sym__AMP_, sym_specs)), kw_doc, "Useful when you want to provide several implementations of the same\n  protocol all at once. Takes a single protocol and the implementation\n  of that protocol for one or more types.\n\n  (extend-protocol Protocol\n    AType\n      (foo [x] ...)\n      (bar [x y] ...)\n    BType\n      (foo [x] ...)\n      (bar [x y] ...)\n    AClass\n      (foo [x] ...)\n      (bar [x y] ...)\n    nil\n      (foo [x] ...)\n      (bar [x y] ...))\n\n  expands into:\n\n  (do\n   (clojure.core/extend-type AType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type BType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type AClass Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type nil Protocol \n     (foo [x] ...) \n     (bar [x y] ...)))", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(11), kw_line, int(212), kw_end_DASH_line, int(212))).(*lang.Symbol)
+		tmp0 := sym_extend_DASH_protocol.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_p, sym__AMP_, sym_specs)), kw_doc, "Useful when you want to provide several implementations of the same\n  protocol all at once. Takes a single protocol and the implementation\n  of that protocol for one or more types.\n\n  (extend-protocol Protocol\n    AType\n      (foo [x] ...)\n      (bar [x y] ...)\n    BType\n      (foo [x] ...)\n      (bar [x y] ...)\n    AClass\n      (foo [x] ...)\n      (bar [x y] ...)\n    nil\n      (foo [x] ...)\n      (bar [x y] ...))\n\n  expands into:\n\n  (do\n   (clojure.core/extend-type AType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type BType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type AClass Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type nil Protocol \n     (foo [x] ...) \n     (bar [x y] ...)))", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_extend_DASH_protocol, kw_end_DASH_column, int(25), kw_column, int(11), kw_line, int(212), kw_end_DASH_line, int(212))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -39862,7 +39870,7 @@ func LoadNS() {
 	}
 	// fits-table?
 	{
-		tmp0 := sym_fits_DASH_table_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ints)), kw_doc, "Returns true if the collection of ints can fit within the\n  max-table-switch-size, false otherwise.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(6617), kw_end_DASH_line, int(6617), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_fits_DASH_table_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ints)), kw_doc, "Returns true if the collection of ints can fit within the\n  max-table-switch-size, false otherwise.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_fits_DASH_table_QMARK_, kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(6617), kw_end_DASH_line, int(6617), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -39893,7 +39901,7 @@ func LoadNS() {
 	}
 	// fn
 	{
-		tmp0 := sym_fn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_sigs)), kw_doc, "params => positional-params*, or positional-params* & rest-param\n  positional-param => binding-form\n  rest-param => binding-form\n  binding-form => name, or destructuring-form\n\n  Defines a function.\n\n  See https://clojure.org/reference/special_forms#fn for more information", kw_forms, lang.NewVector(lang.NewList(sym_fn, sym_name_QMARK_, lang.NewVector(sym_params_STAR_), sym_exprs_STAR_), lang.NewList(sym_fn, sym_name_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_exprs_STAR_), sym__PLUS_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(4532), kw_end_DASH_line, int(4532), kw_special_DASH_form, true)).(*lang.Symbol)
+		tmp0 := sym_fn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_sigs)), kw_doc, "params => positional-params*, or positional-params* & rest-param\n  positional-param => binding-form\n  rest-param => binding-form\n  binding-form => name, or destructuring-form\n\n  Defines a function.\n\n  See https://clojure.org/reference/special_forms#fn for more information", kw_forms, lang.NewVector(lang.NewList(sym_fn, sym_name_QMARK_, lang.NewVector(sym_params_STAR_), sym_exprs_STAR_), lang.NewList(sym_fn, sym_name_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_exprs_STAR_), sym__PLUS_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_fn, kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(4532), kw_end_DASH_line, int(4532), kw_special_DASH_form, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -40268,7 +40276,7 @@ func LoadNS() {
 	}
 	// import
 	{
-		tmp0 := sym_import.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_import_DASH_symbols_DASH_or_DASH_lists)), kw_doc, "import-list => (package-symbol class-name-symbols*)\n\n  For each name in class-name-symbols, adds a mapping from name to the\n  class named by package.name to the current namespace. Use :import in the ns\n  macro in preference to calling this directly.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(3425), kw_end_DASH_line, int(3425))).(*lang.Symbol)
+		tmp0 := sym_import.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_import_DASH_symbols_DASH_or_DASH_lists)), kw_doc, "import-list => (package-symbol class-name-symbols*)\n\n  For each name in class-name-symbols, adds a mapping from name to the\n  class named by package.name to the current namespace. Use :import in the ns\n  macro in preference to calling this directly.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_import, kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(3425), kw_end_DASH_line, int(3425))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -40431,7 +40439,7 @@ func LoadNS() {
 	}
 	// interleave
 	{
-		tmp0 := sym_interleave.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_c1), lang.NewVector(sym_c1, sym_c2), lang.NewVector(sym_c1, sym_c2, sym__AMP_, sym_colls)), kw_doc, "Returns a lazy seq of the first item in each coll, then the second etc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4307), kw_end_DASH_line, int(4307))).(*lang.Symbol)
+		tmp0 := sym_interleave.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_c1), lang.NewVector(sym_c1, sym_c2), lang.NewVector(sym_c1, sym_c2, sym__AMP_, sym_colls)), kw_doc, "Returns a lazy seq of the first item in each coll, then the second etc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_interleave, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4307), kw_end_DASH_line, int(4307))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -40565,7 +40573,7 @@ func LoadNS() {
 	}
 	// interpose
 	{
-		tmp0 := sym_interpose.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sep), lang.NewVector(sym_sep, sym_coll)), kw_doc, "Returns a lazy seq of the elements of coll separated by sep.\n  Returns a stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5222), kw_end_DASH_line, int(5222))).(*lang.Symbol)
+		tmp0 := sym_interpose.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sep), lang.NewVector(sym_sep, sym_coll)), kw_doc, "Returns a lazy seq of the elements of coll separated by sep.\n  Returns a stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_interpose, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5222), kw_end_DASH_line, int(5222))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -40675,7 +40683,7 @@ func LoadNS() {
 	}
 	// isa?
 	{
-		tmp0 := sym_isa_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_child, sym_parent), lang.NewVector(sym_h, sym_child, sym_parent)), kw_doc, "Returns true if (= child parent), or child is directly or indirectly derived from\n  parent, either via a Java type inheritance relationship or a\n  relationship established via derive. h must be a hierarchy obtained\n  from make-hierarchy, if not supplied defaults to the global\n  hierarchy", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(5535), kw_end_DASH_line, int(5535))).(*lang.Symbol)
+		tmp0 := sym_isa_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_child, sym_parent), lang.NewVector(sym_h, sym_child, sym_parent)), kw_doc, "Returns true if (= child parent), or child is directly or indirectly derived from\n  parent, either via a Java type inheritance relationship or a\n  relationship established via derive. h must be a hierarchy obtained\n  from make-hierarchy, if not supplied defaults to the global\n  hierarchy", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_isa_QMARK_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(5535), kw_end_DASH_line, int(5535))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -40934,7 +40942,7 @@ func LoadNS() {
 	}
 	// lazy-cat
 	{
-		tmp0 := sym_lazy_DASH_cat.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_colls)), kw_doc, "Expands to code which yields a lazy sequence of the concatenation\n  of the supplied colls.  Each coll expr is not evaluated until it is\n  needed. \n\n  (lazy-cat xs ys zs) === (concat (lazy-seq xs) (lazy-seq ys) (lazy-seq zs))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(4635), kw_end_DASH_line, int(4635))).(*lang.Symbol)
+		tmp0 := sym_lazy_DASH_cat.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_colls)), kw_doc, "Expands to code which yields a lazy sequence of the concatenation\n  of the supplied colls.  Each coll expr is not evaluated until it is\n  needed. \n\n  (lazy-cat xs ys zs) === (concat (lazy-seq xs) (lazy-seq ys) (lazy-seq zs))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_lazy_DASH_cat, kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(4635), kw_end_DASH_line, int(4635))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -40983,7 +40991,7 @@ func LoadNS() {
 	}
 	// letfn
 	{
-		tmp0 := sym_letfn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_fnspecs, sym__AMP_, sym_body)), kw_doc, "fnspec ==> (fname [params*] exprs) or (fname ([params*] exprs)+)\n\n  Takes a vector of function specs and a body, and generates a set of\n  bindings of functions to their names. All of the names are available\n  in all of the definitions of the functions, as well as the body.", kw_forms, lang.NewVector(lang.NewList(sym_letfn, lang.NewVector(sym_fnspecs_STAR_), sym_exprs_STAR_)), kw_url, nil, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6537), kw_end_DASH_line, int(6537), kw_special_DASH_form, true)).(*lang.Symbol)
+		tmp0 := sym_letfn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_fnspecs, sym__AMP_, sym_body)), kw_doc, "fnspec ==> (fname [params*] exprs) or (fname ([params*] exprs)+)\n\n  Takes a vector of function specs and a body, and generates a set of\n  bindings of functions to their names. All of the names are available\n  in all of the definitions of the functions, as well as the body.", kw_forms, lang.NewVector(lang.NewList(sym_letfn, lang.NewVector(sym_fnspecs_STAR_), sym_exprs_STAR_)), kw_url, nil, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_letfn, kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6537), kw_end_DASH_line, int(6537), kw_special_DASH_form, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -41043,7 +41051,7 @@ func LoadNS() {
 	}
 	// lift-ns
 	{
-		tmp0 := sym_lift_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Returns [lifted-ns lifted-kvs] or nil if m can't be lifted.", kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(261), kw_end_DASH_line, int(261), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_lift_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Returns [lifted-ns lifted-kvs] or nil if m can't be lifted.", kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_lift_DASH_ns, kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(261), kw_end_DASH_line, int(261), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -41273,7 +41281,7 @@ func LoadNS() {
 	}
 	// make-array
 	{
-		tmp0 := sym_make_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_type, sym_len), lang.NewVector(sym_type, sym_dim, sym__AMP_, sym_more_DASH_dims)), kw_doc, "Creates and returns an array of instances of the specified class of\n  the specified dimension(s).  Note that a class object is required.\n  Class objects can be obtained by using their imported or\n  fully-qualified name.  Class objects for the primitive types can be\n  obtained using, e.g., Integer/TYPE.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3984), kw_end_DASH_line, int(3984))).(*lang.Symbol)
+		tmp0 := sym_make_DASH_array.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_type, sym_len), lang.NewVector(sym_type, sym_dim, sym__AMP_, sym_more_DASH_dims)), kw_doc, "Creates and returns an array of instances of the specified class of\n  the specified dimension(s).  Note that a class object is required.\n  Class objects can be obtained by using their imported or\n  fully-qualified name.  Class objects for the primitive types can be\n  obtained using, e.g., Integer/TYPE.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_make_DASH_array, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3984), kw_end_DASH_line, int(3984))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -41383,7 +41391,7 @@ func LoadNS() {
 	}
 	// maybe-min-hash
 	{
-		tmp0 := sym_maybe_DASH_min_DASH_hash.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_hashes)), kw_doc, "takes a collection of hashes and returns [shift mask] or nil if none found", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(8), kw_line, int(6596), kw_end_DASH_line, int(6596), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_maybe_DASH_min_DASH_hash.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_hashes)), kw_doc, "takes a collection of hashes and returns [shift mask] or nil if none found", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_maybe_DASH_min_DASH_hash, kw_end_DASH_column, int(21), kw_column, int(8), kw_line, int(6596), kw_end_DASH_line, int(6596), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -41730,7 +41738,7 @@ func LoadNS() {
 	}
 	// memoize
 	{
-		tmp0 := sym_memoize.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns a memoized version of a referentially transparent function. The\n  memoized version of the function keeps a cache of the mapping from arguments\n  to results and, when calls with the same arguments are repeated often, has\n  higher performance at the expense of higher memory use.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6329), kw_end_DASH_line, int(6329))).(*lang.Symbol)
+		tmp0 := sym_memoize.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns a memoized version of a referentially transparent function. The\n  memoized version of the function keeps a cache of the mapping from arguments\n  to results and, when calls with the same arguments are repeated often, has\n  higher performance at the expense of higher memory use.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_memoize, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6329), kw_end_DASH_line, int(6329))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -41819,7 +41827,7 @@ func LoadNS() {
 	}
 	// ns
 	{
-		tmp0 := sym_ns.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_docstring_QMARK_, sym_attr_DASH_map_QMARK_, sym_references_STAR_)), kw_doc, "Sets *ns* to the namespace named by name (unevaluated), creating it\n  if needed.  references can be zero or more of: (:refer-clojure ...)\n  (:require ...) (:use ...) (:import ...) (:load ...) (:gen-class)\n  with the syntax of refer-clojure/require/use/import/load/gen-class\n  respectively, except the arguments are unevaluated and need not be\n  quoted. (:gen-class ...), when supplied, defaults to :name\n  corresponding to the ns name, :main true, :impl-ns same as ns, and\n  :init-impl-ns true. All options of gen-class are\n  supported. The :gen-class directive is ignored when not\n  compiling. If :gen-class is not supplied, when compiled only an\n  nsname__init.class will be generated. If :refer-clojure is not used, a\n  default (refer 'clojure.core) is used.  Use of ns is preferred to\n  individual calls to in-ns/require/use/import:\n\n  (ns foo.bar\n    (:refer-clojure :exclude [ancestors printf])\n    (:require (clojure.contrib sql combinatorics))\n    (:use (my.lib this that))\n    (:import (java.util Date Timer Random)\n             (java.sql Connection Statement)))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(5734), kw_end_DASH_line, int(5734))).(*lang.Symbol)
+		tmp0 := sym_ns.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_docstring_QMARK_, sym_attr_DASH_map_QMARK_, sym_references_STAR_)), kw_doc, "Sets *ns* to the namespace named by name (unevaluated), creating it\n  if needed.  references can be zero or more of: (:refer-clojure ...)\n  (:require ...) (:use ...) (:import ...) (:load ...) (:gen-class)\n  with the syntax of refer-clojure/require/use/import/load/gen-class\n  respectively, except the arguments are unevaluated and need not be\n  quoted. (:gen-class ...), when supplied, defaults to :name\n  corresponding to the ns name, :main true, :impl-ns same as ns, and\n  :init-impl-ns true. All options of gen-class are\n  supported. The :gen-class directive is ignored when not\n  compiling. If :gen-class is not supplied, when compiled only an\n  nsname__init.class will be generated. If :refer-clojure is not used, a\n  default (refer 'clojure.core) is used.  Use of ns is preferred to\n  individual calls to in-ns/require/use/import:\n\n  (ns foo.bar\n    (:refer-clojure :exclude [ancestors printf])\n    (:require (clojure.contrib sql combinatorics))\n    (:use (my.lib this that))\n    (:import (java.util Date Timer Random)\n             (java.sql Connection Statement)))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ns, kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(5734), kw_end_DASH_line, int(5734))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -42295,7 +42303,7 @@ func LoadNS() {
 	}
 	// ns-imports
 	{
-		tmp0 := sym_ns_DASH_imports.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the import mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4198), kw_end_DASH_line, int(4198))).(*lang.Symbol)
+		tmp0 := sym_ns_DASH_imports.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the import mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ns_DASH_imports, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4198), kw_end_DASH_line, int(4198))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -42320,7 +42328,7 @@ func LoadNS() {
 	}
 	// partition
 	{
-		tmp0 := sym_partition.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll), lang.NewVector(sym_n, sym_step, sym_pad, sym_coll)), kw_doc, "Returns a lazy sequence of lists of n items each, at offsets step\n  apart. If step is not supplied, defaults to n, i.e. the partitions\n  do not overlap. If a pad collection is supplied, use its elements as\n  necessary to complete last partition upto n items. In case there are\n  not enough padding elements, return a partition with less than n items.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3176), kw_end_DASH_line, int(3176))).(*lang.Symbol)
+		tmp0 := sym_partition.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll), lang.NewVector(sym_n, sym_step, sym_pad, sym_coll)), kw_doc, "Returns a lazy sequence of lists of n items each, at offsets step\n  apart. If step is not supplied, defaults to n, i.e. the partitions\n  do not overlap. If a pad collection is supplied, use its elements as\n  necessary to complete last partition upto n items. In case there are\n  not enough padding elements, return a partition with less than n items.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_partition, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3176), kw_end_DASH_line, int(3176))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -42476,7 +42484,7 @@ func LoadNS() {
 	}
 	// partition-all
 	{
-		tmp0 := sym_partition_DASH_all.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll)), kw_doc, "Returns a lazy sequence of lists like partition, but may include\n  partitions with fewer than n items at the end.  Returns a stateful\n  transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7214), kw_end_DASH_line, int(7214))).(*lang.Symbol)
+		tmp0 := sym_partition_DASH_all.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll)), kw_doc, "Returns a lazy sequence of lists like partition, but may include\n  partitions with fewer than n items at the end.  Returns a stateful\n  transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_partition_DASH_all, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7214), kw_end_DASH_line, int(7214))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -42723,7 +42731,7 @@ func LoadNS() {
 	}
 	// pcalls
 	{
-		tmp0 := sym_pcalls.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_fns)), kw_doc, "Executes the no-arg fns in parallel, returning a lazy sequence of\n  their values", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(7048), kw_end_DASH_line, int(7048))).(*lang.Symbol)
+		tmp0 := sym_pcalls.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_fns)), kw_doc, "Executes the no-arg fns in parallel, returning a lazy sequence of\n  their values", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_pcalls, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(7048), kw_end_DASH_line, int(7048))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -42761,7 +42769,7 @@ func LoadNS() {
 	}
 	// prep-ints
 	{
-		tmp0 := sym_prep_DASH_ints.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tests, sym_thens)), kw_doc, "Takes a sequence of int-sized test constants and a corresponding sequence of\n  then expressions. Returns a tuple of [shift mask case-map switch-type] where\n  case-map is a map of int case values to [test then] tuples, and switch-type\n  is either :sparse or :compact.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(6623), kw_end_DASH_line, int(6623), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_prep_DASH_ints.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tests, sym_thens)), kw_doc, "Takes a sequence of int-sized test constants and a corresponding sequence of\n  then expressions. Returns a tuple of [shift mask case-map switch-type] where\n  case-map is a map of int case values to [test then] tuples, and switch-type\n  is either :sparse or :compact.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_prep_DASH_ints, kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(6623), kw_end_DASH_line, int(6623), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -42881,7 +42889,7 @@ func LoadNS() {
 	}
 	// print-prefix-map
 	{
-		tmp0 := sym_print_DASH_prefix_DASH_map.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(243), kw_column, int(8), kw_end_DASH_line, int(243), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_prefix, sym_kvs, sym_print_DASH_one, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_prefix_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_prefix, sym_kvs, sym_print_DASH_one, sym_w)), kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_print_DASH_prefix_DASH_map, kw_end_DASH_column, int(23), kw_column, int(8), kw_line, int(243), kw_end_DASH_line, int(243), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 4)
@@ -42943,7 +42951,7 @@ func LoadNS() {
 	}
 	// promise
 	{
-		tmp0 := sym_promise.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a promise object that can be read with deref/@, and set,\n  once only, with deliver. Calls to deref/@ prior to delivery will\n  block, unless the variant of deref with timeout is used. All\n  subsequent derefs will return the same delivered value without\n  blocking. See also - realized?.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7070), kw_end_DASH_line, int(7070))).(*lang.Symbol)
+		tmp0 := sym_promise.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a promise object that can be read with deref/@, and set,\n  once only, with deliver. Calls to deref/@ prior to delivery will\n  block, unless the variant of deref with timeout is used. All\n  subsequent derefs will return the same delivered value without\n  blocking. See also - realized?.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_promise, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7070), kw_end_DASH_line, int(7070))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -43087,7 +43095,7 @@ func LoadNS() {
 	}
 	// re-find
 	{
-		tmp0 := sym_re_DASH_find.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m), lang.NewVector(sym_re, sym_s)), kw_doc, "Returns the next regex match, if any, of string to pattern, using\n  java.util.regex.Matcher.find().  Uses re-groups to return the\n  groups.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4914), kw_end_DASH_line, int(4914))).(*lang.Symbol)
+		tmp0 := sym_re_DASH_find.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m), lang.NewVector(sym_re, sym_s)), kw_doc, "Returns the next regex match, if any, of string to pattern, using\n  java.util.regex.Matcher.find().  Uses re-groups to return the\n  groups.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_re_DASH_find, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4914), kw_end_DASH_line, int(4914))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -43137,7 +43145,7 @@ func LoadNS() {
 	}
 	// ref
 	{
-		tmp0 := sym_ref.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_options)), kw_doc, "Creates and returns a Ref with an initial value of x and zero or\n  more options (in any order):\n\n  :meta metadata-map\n\n  :validator validate-fn\n\n  :min-history (default 0)\n  :max-history (default 10)\n\n  If metadata-map is supplied, it will become the metadata on the\n  ref. validate-fn must be nil or a side-effect-free fn of one\n  argument, which will be passed the intended new state on any state\n  change. If the new state is unacceptable, the validate-fn should\n  return false or throw an exception. validate-fn will be called on\n  transaction commit, when all refs have their final values.\n\n  Normally refs accumulate history dynamically as needed to deal with\n  read demands. If you know in advance you will need history you can\n  set :min-history to ensure it will be available when first needed (instead\n  of after a read fault). History is limited, and the limit can be set\n  with :max-history.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(2259), kw_end_DASH_line, int(2259))).(*lang.Symbol)
+		tmp0 := sym_ref.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_options)), kw_doc, "Creates and returns a Ref with an initial value of x and zero or\n  more options (in any order):\n\n  :meta metadata-map\n\n  :validator validate-fn\n\n  :min-history (default 0)\n  :max-history (default 10)\n\n  If metadata-map is supplied, it will become the metadata on the\n  ref. validate-fn must be nil or a side-effect-free fn of one\n  argument, which will be passed the intended new state on any state\n  change. If the new state is unacceptable, the validate-fn should\n  return false or throw an exception. validate-fn will be called on\n  transaction commit, when all refs have their final values.\n\n  Normally refs accumulate history dynamically as needed to deal with\n  read demands. If you know in advance you will need history you can\n  set :min-history to ensure it will be available when first needed (instead\n  of after a read fault). History is limited, and the limit can be set\n  with :max-history.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_ref, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(2259), kw_end_DASH_line, int(2259))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -43210,7 +43218,7 @@ func LoadNS() {
 	}
 	// repeatedly
 	{
-		tmp0 := sym_repeatedly.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_n, sym_f)), kw_doc, "Takes a function of no args, presumably with side effects, and\n  returns an infinite (or length n if supplied) lazy sequence of calls\n  to it", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(5159), kw_end_DASH_line, int(5159))).(*lang.Symbol)
+		tmp0 := sym_repeatedly.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_n, sym_f)), kw_doc, "Takes a function of no args, presumably with side effects, and\n  returns an infinite (or length n if supplied) lazy sequence of calls\n  to it", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_repeatedly, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(5159), kw_end_DASH_line, int(5159))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -43252,7 +43260,7 @@ func LoadNS() {
 	}
 	// replicate
 	{
-		tmp0 := sym_replicate.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_x)), kw_doc, "DEPRECATED: Use 'repeat' instead.\n   Returns a lazy seq of n xs.", kw_file, "clojure/core.glj", kw_deprecated, "1.3", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3003), kw_end_DASH_line, int(3003))).(*lang.Symbol)
+		tmp0 := sym_replicate.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_x)), kw_doc, "DEPRECATED: Use 'repeat' instead.\n   Returns a lazy seq of n xs.", kw_file, "clojure/core.glj", kw_deprecated, "1.3", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_replicate, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3003), kw_end_DASH_line, int(3003))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -43274,7 +43282,7 @@ func LoadNS() {
 	}
 	// resultset-seq
 	{
-		tmp0 := sym_resultset_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rs)), kw_doc, "Creates and returns a lazy sequence of structmaps corresponding to\n  the rows in the java.sql.ResultSet rs", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5673), kw_end_DASH_line, int(5673))).(*lang.Symbol)
+		tmp0 := sym_resultset_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rs)), kw_doc, "Creates and returns a lazy sequence of structmaps corresponding to\n  the rows in the java.sql.ResultSet rs", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_resultset_DASH_seq, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5673), kw_end_DASH_line, int(5673))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -43464,7 +43472,7 @@ func LoadNS() {
 	}
 	// send
 	{
-		tmp0 := sym_send.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch an action to an agent. Returns the agent immediately.\n  Subsequently, in a thread from a thread pool, the state of the agent\n  will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2108), kw_end_DASH_line, int(2108))).(*lang.Symbol)
+		tmp0 := sym_send.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch an action to an agent. Returns the agent immediately.\n  Subsequently, in a thread from a thread pool, the state of the agent\n  will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_send, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2108), kw_end_DASH_line, int(2108))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -43494,7 +43502,7 @@ func LoadNS() {
 	}
 	// send-off
 	{
-		tmp0 := sym_send_DASH_off.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch a potentially blocking action to an agent. Returns the\n  agent immediately. Subsequently, in a separate thread, the state of\n  the agent will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2119), kw_end_DASH_line, int(2119))).(*lang.Symbol)
+		tmp0 := sym_send_DASH_off.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch a potentially blocking action to an agent. Returns the\n  agent immediately. Subsequently, in a separate thread, the state of\n  the agent will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_send_DASH_off, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2119), kw_end_DASH_line, int(2119))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -43524,7 +43532,7 @@ func LoadNS() {
 	}
 	// seque
 	{
-		tmp0 := sym_seque.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s), lang.NewVector(sym_n_DASH_or_DASH_q, sym_s)), kw_doc, "Creates a queued seq on another (presumably lazy) seq s. The queued\n  seq will produce a concrete seq in the background, and can get up to\n  n items ahead of the consumer. n-or-q can be an integer n buffer\n  size, or an instance of java.util.concurrent BlockingQueue. Note\n  that reading from a seque can block if the reader gets ahead of the\n  producer.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(5411), kw_end_DASH_line, int(5411))).(*lang.Symbol)
+		tmp0 := sym_seque.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s), lang.NewVector(sym_n_DASH_or_DASH_q, sym_s)), kw_doc, "Creates a queued seq on another (presumably lazy) seq s. The queued\n  seq will produce a concrete seq in the background, and can get up to\n  n items ahead of the consumer. n-or-q can be an integer n buffer\n  size, or an instance of java.util.concurrent BlockingQueue. Note\n  that reading from a seque can block if the reader gets ahead of the\n  producer.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_seque, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(5411), kw_end_DASH_line, int(5411))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -43857,7 +43865,7 @@ func LoadNS() {
 	}
 	// sigs
 	{
-		tmp0 := sym_sigs.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(225), kw_column, int(2), kw_end_DASH_line, int(226), kw_end_DASH_column, int(5), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_sigs.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(225), kw_column, int(2), kw_end_DASH_line, int(226), kw_end_DASH_column, int(5), kw_name, sym_sigs, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -44108,7 +44116,7 @@ func LoadNS() {
 	}
 	// some->
 	{
-		tmp0 := sym_some_DASH__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_forms)), kw_doc, "When expr is not nil, threads it into the first form (via ->),\n  and when that result is not nil, through the next etc", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7602), kw_end_DASH_line, int(7602))).(*lang.Symbol)
+		tmp0 := sym_some_DASH__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_forms)), kw_doc, "When expr is not nil, threads it into the first form (via ->),\n  and when that result is not nil, through the next etc", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_some_DASH__GT_, kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7602), kw_end_DASH_line, int(7602))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -44230,7 +44238,7 @@ func LoadNS() {
 	}
 	// some->>
 	{
-		tmp0 := sym_some_DASH__GT__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_forms)), kw_doc, "When expr is not nil, threads it into the first form (via ->>),\n  and when that result is not nil, through the next etc", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7616), kw_end_DASH_line, int(7616))).(*lang.Symbol)
+		tmp0 := sym_some_DASH__GT__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_forms)), kw_doc, "When expr is not nil, threads it into the first form (via ->>),\n  and when that result is not nil, through the next etc", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_some_DASH__GT__GT_, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7616), kw_end_DASH_line, int(7616))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -44352,7 +44360,7 @@ func LoadNS() {
 	}
 	// split-at
 	{
-		tmp0 := sym_split_DASH_at.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a vector of [(take n coll) (drop n coll)]", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2982), kw_end_DASH_line, int(2982))).(*lang.Symbol)
+		tmp0 := sym_split_DASH_at.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a vector of [(take n coll) (drop n coll)]", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_split_DASH_at, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2982), kw_end_DASH_line, int(2982))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -44380,7 +44388,7 @@ func LoadNS() {
 	}
 	// to-array-2d
 	{
-		tmp0 := sym_to_DASH_array_DASH_2d.WithMeta(lang.NewMap(kw_tag, "[[Ljava.lang.Object;", kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a (potentially-ragged) 2-dimensional array of Objects\n  containing the contents of coll, which can be any Collection of any\n  Collection.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4001), kw_end_DASH_line, int(4001))).(*lang.Symbol)
+		tmp0 := sym_to_DASH_array_DASH_2d.WithMeta(lang.NewMap(kw_tag, "[[Ljava.lang.Object;", kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a (potentially-ragged) 2-dimensional array of Objects\n  containing the contents of coll, which can be any Collection of any\n  Collection.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_to_DASH_array_DASH_2d, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4001), kw_end_DASH_line, int(4001))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -44452,7 +44460,7 @@ func LoadNS() {
 	}
 	// with-local-vars
 	{
-		tmp0 := sym_with_DASH_local_DASH_vars.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name_DASH_vals_DASH_vec, sym__AMP_, sym_body)), kw_doc, "varbinding=> symbol init-expr\n\n  Executes the exprs in a context in which the symbols are bound to\n  vars with per-thread bindings to the init-exprs.  The symbols refer\n  to the var objects themselves, and must be accessed with var-get and\n  var-set", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(11), kw_line, int(4338), kw_end_DASH_line, int(4338))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_local_DASH_vars.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name_DASH_vals_DASH_vec, sym__AMP_, sym_body)), kw_doc, "varbinding=> symbol init-expr\n\n  Executes the exprs in a context in which the symbols are bound to\n  vars with per-thread bindings to the init-exprs.  The symbols refer\n  to the var objects themselves, and must be accessed with var-get and\n  var-set", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_with_DASH_local_DASH_vars, kw_end_DASH_column, int(25), kw_column, int(11), kw_line, int(4338), kw_end_DASH_line, int(4338))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -44579,7 +44587,7 @@ func LoadNS() {
 	}
 	// Throwable->map
 	{
-		tmp0 := sym_Throwable_DASH__GT_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a Throwable with keys:\n    :cause - root cause message\n    :phase - error phase\n    :via - cause chain, with cause keys:\n             :type - exception class symbol\n             :message - exception message\n             :data - ex-data\n             :at - top stack element\n    :trace - root cause stack elements", kw_file, "clojure/core_print.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(442), kw_end_DASH_line, int(442))).(*lang.Symbol)
+		tmp0 := sym_Throwable_DASH__GT_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a Throwable with keys:\n    :cause - root cause message\n    :phase - error phase\n    :via - cause chain, with cause keys:\n             :type - exception class symbol\n             :message - exception message\n             :data - ex-data\n             :at - top stack element\n    :trace - root cause stack elements", kw_file, "clojure/core_print.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_Throwable_DASH__GT_map, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(442), kw_end_DASH_line, int(442))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -44919,7 +44927,7 @@ func LoadNS() {
 	}
 	// as->
 	{
-		tmp0 := sym_as_DASH__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym_name, sym__AMP_, sym_forms)), kw_doc, "Binds name to expr, evaluates the first form in the lexical context\n  of that binding, then binds name to that result, repeating for each\n  successive form, returning the result of the last form.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(7590), kw_end_DASH_line, int(7590))).(*lang.Symbol)
+		tmp0 := sym_as_DASH__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym_name, sym__AMP_, sym_forms)), kw_doc, "Binds name to expr, evaluates the first form in the lexical context\n  of that binding, then binds name to that result, repeating for each\n  successive form, returning the result of the last form.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_as_DASH__GT_, kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(7590), kw_end_DASH_line, int(7590))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -44987,7 +44995,7 @@ func LoadNS() {
 	}
 	// await
 	{
-		tmp0 := sym_await.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_agents)), kw_doc, "Blocks the current thread (indefinitely!) until all actions\n  dispatched thus far, from this thread or agent, to the agent(s) have\n  occurred.  Will block on failed agents.  Will never return if\n  a failed agent is restarted with :clear-actions true or shutdown-agents was called.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3266), kw_end_DASH_line, int(3266))).(*lang.Symbol)
+		tmp0 := sym_await.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_agents)), kw_doc, "Blocks the current thread (indefinitely!) until all actions\n  dispatched thus far, from this thread or agent, to the agent(s) have\n  occurred.  Will block on failed agents.  Will never return if\n  a failed agent is restarted with :clear-actions true or shutdown-agents was called.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_await, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3266), kw_end_DASH_line, int(3266))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -45189,7 +45197,7 @@ func LoadNS() {
 	}
 	// await1
 	{
-		tmp0 := sym_await1.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(3283), kw_column, int(7), kw_end_DASH_line, int(3283), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_await1.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_await1, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(3283), kw_end_DASH_line, int(3283))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -45226,7 +45234,7 @@ func LoadNS() {
 	}
 	// await-for
 	{
-		tmp0 := sym_await_DASH_for.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_timeout_DASH_ms, sym__AMP_, sym_agents)), kw_doc, "Blocks the current thread until all actions dispatched thus\n  far (from this thread or agent) to the agents have occurred, or the\n  timeout (in milliseconds) has elapsed. Returns logical false if\n  returning due to timeout, logical true otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3288), kw_end_DASH_line, int(3288))).(*lang.Symbol)
+		tmp0 := sym_await_DASH_for.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_timeout_DASH_ms, sym__AMP_, sym_agents)), kw_doc, "Blocks the current thread until all actions dispatched thus\n  far (from this thread or agent) to the agents have occurred, or the\n  timeout (in milliseconds) has elapsed. Returns logical false if\n  returning due to timeout, logical true otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_await_DASH_for, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3288), kw_end_DASH_line, int(3288))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -45441,7 +45449,7 @@ func LoadNS() {
 	}
 	// check-cyclic-dependency
 	{
-		tmp0 := sym_check_DASH_cyclic_DASH_dependency.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_path)), kw_doc, "Detects and rejects non-trivial cyclic load dependencies. The\n  exception message shows the dependency chain with the cycle\n  highlighted. Ignores the trivial case of a file attempting to load\n  itself because that can occur when a gen-class'd class loads its\n  implementation.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(30), kw_column, int(8), kw_line, int(5966), kw_end_DASH_line, int(5966), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_check_DASH_cyclic_DASH_dependency.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_path)), kw_doc, "Detects and rejects non-trivial cyclic load dependencies. The\n  exception message shows the dependency chain with the cycle\n  highlighted. Ignores the trivial case of a file attempting to load\n  itself because that can occur when a gen-class'd class loads its\n  implementation.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_check_DASH_cyclic_DASH_dependency, kw_end_DASH_column, int(30), kw_column, int(8), kw_line, int(5966), kw_end_DASH_line, int(5966), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -45517,7 +45525,7 @@ func LoadNS() {
 	}
 	// cond->
 	{
-		tmp0 := sym_cond_DASH__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression and a set of test/form pairs. Threads expr (via ->)\n  through each form for which the corresponding test\n  expression is true. Note that, unlike cond branching, cond-> threading does\n  not short circuit after the first true test expression.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7556), kw_end_DASH_line, int(7556))).(*lang.Symbol)
+		tmp0 := sym_cond_DASH__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression and a set of test/form pairs. Threads expr (via ->)\n  through each form for which the corresponding test\n  expression is true. Note that, unlike cond branching, cond-> threading does\n  not short circuit after the first true test expression.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_cond_DASH__GT_, kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7556), kw_end_DASH_line, int(7556))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -45650,7 +45658,7 @@ func LoadNS() {
 	}
 	// cond->>
 	{
-		tmp0 := sym_cond_DASH__GT__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression and a set of test/form pairs. Threads expr (via ->>)\n  through each form for which the corresponding test expression\n  is true.  Note that, unlike cond branching, cond->> threading does not short circuit\n  after the first true test expression.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7573), kw_end_DASH_line, int(7573))).(*lang.Symbol)
+		tmp0 := sym_cond_DASH__GT__GT_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression and a set of test/form pairs. Threads expr (via ->>)\n  through each form for which the corresponding test expression\n  is true.  Note that, unlike cond branching, cond->> threading does not short circuit\n  after the first true test expression.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_cond_DASH__GT__GT_, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7573), kw_end_DASH_line, int(7573))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -45783,7 +45791,7 @@ func LoadNS() {
 	}
 	// condp
 	{
-		tmp0 := sym_condp.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes a binary predicate, an expression, and a set of clauses.\n  Each clause can take the form of either:\n\n  test-expr result-expr\n\n  test-expr :>> result-fn\n\n  Note :>> is an ordinary keyword.\n\n  For each clause, (pred test-expr expr) is evaluated. If it returns\n  logical true, the clause is a match. If a binary clause matches, the\n  result-expr is returned, if a ternary clause matches, its result-fn,\n  which must be a unary function, is called with the result of the\n  predicate as its argument, the result of that call being the return\n  value of condp. A single default expression can follow the clauses,\n  and its value will be returned if no clause matches. If no default\n  expression is provided and no clause matches, an\n  IllegalArgumentException is thrown.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6345), kw_end_DASH_line, int(6345))).(*lang.Symbol)
+		tmp0 := sym_condp.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes a binary predicate, an expression, and a set of clauses.\n  Each clause can take the form of either:\n\n  test-expr result-expr\n\n  test-expr :>> result-fn\n\n  Note :>> is an ordinary keyword.\n\n  For each clause, (pred test-expr expr) is evaluated. If it returns\n  logical true, the clause is a match. If a binary clause matches, the\n  result-expr is returned, if a ternary clause matches, its result-fn,\n  which must be a unary function, is called with the result of the\n  predicate as its argument, the result of that call being the return\n  value of condp. A single default expression can follow the clauses,\n  and its value will be returned if no clause matches. If no default\n  expression is provided and no clause matches, an\n  IllegalArgumentException is thrown.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_condp, kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6345), kw_end_DASH_line, int(6345))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -46050,7 +46058,7 @@ func LoadNS() {
 	}
 	// defn
 	{
-		tmp0 := sym_defn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewVector(sym_params_STAR_), sym_prepost_DASH_map_QMARK_, sym_body), lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_prepost_DASH_map_QMARK_, sym_body), sym__PLUS_, sym_attr_DASH_map_QMARK_)), kw_doc, "Same as (def name (fn [params* ] exprs*)) or (def\n    name (fn ([params* ] exprs*)+)) with any doc-string or attrs added\n    to the var metadata. prepost-map defines a map with optional keys\n    :pre and :post that contain collections of pre or post conditions.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(286), kw_end_DASH_line, int(293))).(*lang.Symbol)
+		tmp0 := sym_defn.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewVector(sym_params_STAR_), sym_prepost_DASH_map_QMARK_, sym_body), lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_prepost_DASH_map_QMARK_, sym_body), sym__PLUS_, sym_attr_DASH_map_QMARK_)), kw_doc, "Same as (def name (fn [params* ] exprs*)) or (def\n    name (fn ([params* ] exprs*)+)) with any doc-string or attrs added\n    to the var metadata. prepost-map defines a map with optional keys\n    :pre and :post that contain collections of pre or post conditions.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_defn, kw_end_DASH_column, int(5), kw_column, int(2), kw_line, int(286), kw_end_DASH_line, int(293))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		{ // function defn
 			var v2 lang.FnFunc
@@ -46333,7 +46341,7 @@ func LoadNS() {
 	}
 	// destructure
 	{
-		tmp0 := sym_destructure.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4399), kw_column, int(7), kw_end_DASH_line, int(4399), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_bindings)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_destructure.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4399), kw_column, int(7), kw_end_DASH_line, int(4399), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_bindings)), kw_name, sym_destructure, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -47108,7 +47116,7 @@ func LoadNS() {
 	}
 	// extend
 	{
-		tmp0 := sym_extend.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atype, sym__AMP_, sym_proto_PLUS_mmaps)), kw_doc, "Implementations of protocol methods can be provided using the extend construct:\n\n  (extend AType\n    AProtocol\n     {:foo an-existing-fn\n      :bar (fn [a b] ...)\n      :baz (fn ([a]...) ([a b] ...)...)}\n    BProtocol \n      {...} \n    ...)\n \n  extend takes a type/class (or interface, see below), and one or more\n  protocol + method map pairs. It will extend the polymorphism of the\n  protocol's methods to call the supplied methods when an AType is\n  provided as the first argument. \n\n  Method maps are maps of the keyword-ized method names to ordinary\n  fns. This facilitates easy reuse of existing fns and fn maps, for\n  code reuse/mixins without derivation or composition. You can extend\n  an interface to a protocol. This is primarily to facilitate interop\n  with the host (e.g. Java) but opens the door to incidental multiple\n  inheritance of implementation since a class can inherit from more\n  than one interface, both of which extend the protocol. It is TBD how\n  to specify which impl to use. You can extend a protocol on nil.\n\n  If you are supplying the definitions explicitly (i.e. not reusing\n  exsting functions or mixin maps), you may find it more convenient to\n  use the extend-type or extend-protocol macros.\n\n  Note that multiple independent extend clauses can exist for the same\n  type, not all protocols need be defined in a single extend call.\n\n  See also:\n  extends?, satisfies?, extenders", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(116), kw_end_DASH_line, int(116))).(*lang.Symbol)
+		tmp0 := sym_extend.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atype, sym__AMP_, sym_proto_PLUS_mmaps)), kw_doc, "Implementations of protocol methods can be provided using the extend construct:\n\n  (extend AType\n    AProtocol\n     {:foo an-existing-fn\n      :bar (fn [a b] ...)\n      :baz (fn ([a]...) ([a b] ...)...)}\n    BProtocol \n      {...} \n    ...)\n \n  extend takes a type/class (or interface, see below), and one or more\n  protocol + method map pairs. It will extend the polymorphism of the\n  protocol's methods to call the supplied methods when an AType is\n  provided as the first argument. \n\n  Method maps are maps of the keyword-ized method names to ordinary\n  fns. This facilitates easy reuse of existing fns and fn maps, for\n  code reuse/mixins without derivation or composition. You can extend\n  an interface to a protocol. This is primarily to facilitate interop\n  with the host (e.g. Java) but opens the door to incidental multiple\n  inheritance of implementation since a class can inherit from more\n  than one interface, both of which extend the protocol. It is TBD how\n  to specify which impl to use. You can extend a protocol on nil.\n\n  If you are supplying the definitions explicitly (i.e. not reusing\n  exsting functions or mixin maps), you may find it more convenient to\n  use the extend-type or extend-protocol macros.\n\n  Note that multiple independent extend clauses can exist for the same\n  type, not all protocols need be defined in a single extend call.\n\n  See also:\n  extends?, satisfies?, extenders", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_extend, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(116), kw_end_DASH_line, int(116))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -47439,7 +47447,7 @@ func LoadNS() {
 	}
 	// for
 	{
-		tmp0 := sym_for.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_seq_DASH_exprs, sym_body_DASH_expr)), kw_doc, "List comprehension. Takes a vector of one or more\n   binding-form/collection-expr pairs, each followed by zero or more\n   modifiers, and yields a lazy sequence of evaluations of expr.\n   Collections are iterated in a nested fashion, rightmost fastest,\n   and nested coll-exprs can refer to bindings created in prior\n   binding-forms.  Supported modifiers are: :let [binding-form expr ...],\n   :while test, :when test.\n\n  (take 100 (for [x (range 100000000) y (range 1000000) :while (< y x)] [x y]))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(4645), kw_end_DASH_line, int(4645))).(*lang.Symbol)
+		tmp0 := sym_for.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_seq_DASH_exprs, sym_body_DASH_expr)), kw_doc, "List comprehension. Takes a vector of one or more\n   binding-form/collection-expr pairs, each followed by zero or more\n   modifiers, and yields a lazy sequence of evaluations of expr.\n   Collections are iterated in a nested fashion, rightmost fastest,\n   and nested coll-exprs can refer to bindings created in prior\n   binding-forms.  Supported modifiers are: :let [binding-form expr ...],\n   :while test, :when test.\n\n  (take 100 (for [x (range 100000000) y (range 1000000) :while (< y x)] [x y]))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_for, kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(4645), kw_end_DASH_line, int(4645))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 4)
@@ -48653,7 +48661,7 @@ func LoadNS() {
 	}
 	// let
 	{
-		tmp0 := sym_let.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => binding-form init-expr\n  binding-form => name, or destructuring-form\n  destructuring-form => map-destructure-form, or seq-destructure-form\n\n  Evaluates the exprs in a lexical context in which the symbols in\n  the binding-forms are bound to their respective init-exprs or parts\n  therein.\n\n  See https://clojure.org/reference/special_forms#binding-forms for\n  more information about destructuring.", kw_forms, lang.NewVector(lang.NewList(sym_let, lang.NewVector(sym_bindings_STAR_), sym_exprs_STAR_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(4495), kw_end_DASH_line, int(4495), kw_special_DASH_form, true)).(*lang.Symbol)
+		tmp0 := sym_let.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => binding-form init-expr\n  binding-form => name, or destructuring-form\n  destructuring-form => map-destructure-form, or seq-destructure-form\n\n  Evaluates the exprs in a lexical context in which the symbols in\n  the binding-forms are bound to their respective init-exprs or parts\n  therein.\n\n  See https://clojure.org/reference/special_forms#binding-forms for\n  more information about destructuring.", kw_forms, lang.NewVector(lang.NewList(sym_let, lang.NewVector(sym_bindings_STAR_), sym_exprs_STAR_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_let, kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(4495), kw_end_DASH_line, int(4495), kw_special_DASH_form, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -48728,7 +48736,7 @@ func LoadNS() {
 	}
 	// loop
 	{
-		tmp0 := sym_loop.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "Evaluates the exprs in a lexical context in which the symbols in\n  the binding-forms are bound to their respective init-exprs or parts\n  therein. Acts as a recur target.", kw_forms, lang.NewVector(lang.NewList(sym_loop, lang.NewVector(sym_bindings_STAR_), sym_exprs_STAR_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(4596), kw_end_DASH_line, int(4596), kw_special_DASH_form, true)).(*lang.Symbol)
+		tmp0 := sym_loop.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "Evaluates the exprs in a lexical context in which the symbols in\n  the binding-forms are bound to their respective init-exprs or parts\n  therein. Acts as a recur target.", kw_forms, lang.NewVector(lang.NewList(sym_loop, lang.NewVector(sym_bindings_STAR_), sym_exprs_STAR_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_loop, kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(4596), kw_end_DASH_line, int(4596), kw_special_DASH_form, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -48959,7 +48967,7 @@ func LoadNS() {
 	}
 	// print-map
 	{
-		tmp0 := sym_print_DASH_map.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(252), kw_column, int(8), kw_end_DASH_line, int(252), kw_end_DASH_column, int(16), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_print_DASH_one, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_print_DASH_one, sym_w)), kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_print_DASH_map, kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(252), kw_end_DASH_line, int(252), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -49221,7 +49229,7 @@ func LoadNS() {
 	}
 	// -protocols
 	{
-		tmp0 := sym__DASH_protocols.WithMeta(lang.NewMap(kw_private, true, kw_doc, "Private store of protocols. Go's reflection capabilities\n    don't yet support a native interface-based implementation, so\n    protocols are implemented in Glojure as maps from type to protocol\n    method implementations.", kw_file, "clojure/core_deftype.glj", kw_line, int(21), kw_column, int(3), kw_end_DASH_line, int(26), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym__DASH_protocols.WithMeta(lang.NewMap(kw_doc, "Private store of protocols. Go's reflection capabilities\n    don't yet support a native interface-based implementation, so\n    protocols are implemented in Glojure as maps from type to protocol\n    method implementations.", kw_file, "clojure/core_deftype.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym__DASH_protocols, kw_end_DASH_column, int(12), kw_column, int(3), kw_line, int(21), kw_end_DASH_line, int(26), kw_private, true)).(*lang.Symbol)
 		var tmp4 lang.FnFunc
 		tmp4 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -49508,7 +49516,7 @@ func LoadNS() {
 	}
 	// add-classpath
 	{
-		tmp0 := sym_add_DASH_classpath.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_url)), kw_doc, "DEPRECATED \n\n  Adds the url (String or URL object) to the classpath per\n  URLClassLoader.addURL", kw_file, "clojure/core.glj", kw_deprecated, "1.1", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5168), kw_end_DASH_line, int(5168))).(*lang.Symbol)
+		tmp0 := sym_add_DASH_classpath.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_url)), kw_doc, "DEPRECATED \n\n  Adds the url (String or URL object) to the classpath per\n  URLClassLoader.addURL", kw_file, "clojure/core.glj", kw_deprecated, "1.1", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_add_DASH_classpath, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5168), kw_end_DASH_line, int(5168))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -49528,7 +49536,7 @@ func LoadNS() {
 	}
 	// case
 	{
-		tmp0 := sym_case.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_e, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression, and a set of clauses.\n\n  Each clause can take the form of either:\n\n  test-constant result-expr\n\n  (test-constant1 ... test-constantN)  result-expr\n\n  The test-constants are not evaluated. They must be compile-time\n  literals, and need not be quoted.  If the expression is equal to a\n  test-constant, the corresponding result-expr is returned. A single\n  default expression can follow the clauses, and its value will be\n  returned if no clause matches. If no default expression is provided\n  and no clause matches, an IllegalArgumentException is thrown.\n\n  Unlike cond and condp, case does a constant-time dispatch, the\n  clauses are not considered sequentially.  All manner of constant\n  expressions are acceptable in case, including numbers, strings,\n  symbols, keywords, and (Clojure) composites thereof. Note that since\n  lists are used to group multiple constants that map to the same\n  expression, a vector can be used to match a list if needed. The\n  test-constants need not be all of the same type.", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(6704), kw_end_DASH_line, int(6704))).(*lang.Symbol)
+		tmp0 := sym_case.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_e, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression, and a set of clauses.\n\n  Each clause can take the form of either:\n\n  test-constant result-expr\n\n  (test-constant1 ... test-constantN)  result-expr\n\n  The test-constants are not evaluated. They must be compile-time\n  literals, and need not be quoted.  If the expression is equal to a\n  test-constant, the corresponding result-expr is returned. A single\n  default expression can follow the clauses, and its value will be\n  returned if no clause matches. If no default expression is provided\n  and no clause matches, an IllegalArgumentException is thrown.\n\n  Unlike cond and condp, case does a constant-time dispatch, the\n  clauses are not considered sequentially.  All manner of constant\n  expressions are acceptable in case, including numbers, strings,\n  symbols, keywords, and (Clojure) composites thereof. Note that since\n  lists are used to group multiple constants that map to the same\n  expression, a vector can be used to match a list if needed. The\n  test-constants need not be all of the same type.", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_case, kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(6704), kw_end_DASH_line, int(6704))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -50084,7 +50092,7 @@ func LoadNS() {
 	}
 	// cat
 	{
-		tmp0 := sym_cat.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rf)), kw_doc, "A transducer which concatenates the contents of each input, which must be a\n  collection, into the reduction.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(7637), kw_end_DASH_line, int(7637))).(*lang.Symbol)
+		tmp0 := sym_cat.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rf)), kw_doc, "A transducer which concatenates the contents of each input, which must be a\n  collection, into the reduction.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_cat, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(7637), kw_end_DASH_line, int(7637))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -50138,7 +50146,7 @@ func LoadNS() {
 	}
 	// mapcat
 	{
-		tmp0 := sym_mapcat.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym__AMP_, sym_colls)), kw_doc, "Returns the result of applying concat to the result of applying map\n  to f and colls.  Thus function f should return a collection. Returns\n  a transducer when no collections are provided", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2774), kw_end_DASH_line, int(2774))).(*lang.Symbol)
+		tmp0 := sym_mapcat.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym__AMP_, sym_colls)), kw_doc, "Returns the result of applying concat to the result of applying map\n  to f and colls.  Thus function f should return a collection. Returns\n  a transducer when no collections are provided", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_mapcat, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2774), kw_end_DASH_line, int(2774))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -50178,7 +50186,7 @@ func LoadNS() {
 	}
 	// merge-hash-collisions
 	{
-		tmp0 := sym_merge_DASH_hash_DASH_collisions.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_expr_DASH_sym, sym_default, sym_tests, sym_thens)), kw_doc, "Takes a case expression, default expression, and a sequence of test constants\n  and a corresponding sequence of then expressions. Returns a tuple of\n  [tests thens skip-check-set] where no tests have the same hash. Each set of\n  input test constants with the same hash is replaced with a single test\n  constant (the case int), and their respective thens are combined into:\n  (condp = expr\n    test-1 then-1\n    ...\n    test-n then-n\n    default).\n  The skip-check is a set of case ints for which post-switch equivalence\n  checking must not be done (the cases holding the above condp thens).", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(28), kw_column, int(8), kw_line, int(6639), kw_end_DASH_line, int(6639), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_merge_DASH_hash_DASH_collisions.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_expr_DASH_sym, sym_default, sym_tests, sym_thens)), kw_doc, "Takes a case expression, default expression, and a sequence of test constants\n  and a corresponding sequence of then expressions. Returns a tuple of\n  [tests thens skip-check-set] where no tests have the same hash. Each set of\n  input test constants with the same hash is replaced with a single test\n  constant (the case int), and their respective thens are combined into:\n  (condp = expr\n    test-1 then-1\n    ...\n    test-n then-n\n    default).\n  The skip-check is a set of case ints for which post-switch equivalence\n  checking must not be done (the cases holding the above condp thens).", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_merge_DASH_hash_DASH_collisions, kw_end_DASH_column, int(28), kw_column, int(8), kw_line, int(6639), kw_end_DASH_line, int(6639), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 4)
@@ -50456,7 +50464,7 @@ func LoadNS() {
 	}
 	// prep-hashes
 	{
-		tmp0 := sym_prep_DASH_hashes.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_expr_DASH_sym, sym_default, sym_tests, sym_thens)), kw_doc, "Takes a sequence of test constants and a corresponding sequence of then\n  expressions. Returns a tuple of [shift mask case-map switch-type skip-check]\n  where case-map is a map of int case values to [test then] tuples, switch-type\n  is either :sparse or :compact, and skip-check is a set of case ints for which\n  post-switch equivalence checking must not be done (occurs with hash\n  collisions).", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(6675), kw_end_DASH_line, int(6675), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_prep_DASH_hashes.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_expr_DASH_sym, sym_default, sym_tests, sym_thens)), kw_doc, "Takes a sequence of test constants and a corresponding sequence of then\n  expressions. Returns a tuple of [shift mask case-map switch-type skip-check]\n  where case-map is a map of int case values to [test then] tuples, switch-type\n  is either :sparse or :compact, and skip-check is a set of case ints for which\n  post-switch equivalence checking must not be done (occurs with hash\n  collisions).", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_prep_DASH_hashes, kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(6675), kw_end_DASH_line, int(6675), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 4)
@@ -50709,7 +50717,7 @@ func LoadNS() {
 	}
 	// tree-seq
 	{
-		tmp0 := sym_tree_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_branch_QMARK_, sym_children, sym_root)), kw_doc, "Returns a lazy sequence of the nodes in a tree, via a depth-first walk.\n   branch? must be a fn of one arg that returns true if passed a node\n   that can have children (but may not).  children must be a fn of one\n   arg that returns a sequence of the children. Will only be called on\n   nodes for which branch? returns true. Root is the root node of the\n  tree.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4947), kw_end_DASH_line, int(4947))).(*lang.Symbol)
+		tmp0 := sym_tree_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_branch_QMARK_, sym_children, sym_root)), kw_doc, "Returns a lazy sequence of the nodes in a tree, via a depth-first walk.\n   branch? must be a fn of one arg that returns true if passed a node\n   that can have children (but may not).  children must be a fn of one\n   arg that returns a sequence of the children. Will only be called on\n   nodes for which branch? returns true. Root is the root node of the\n  tree.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_tree_DASH_seq, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4947), kw_end_DASH_line, int(4947))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -50771,7 +50779,7 @@ func LoadNS() {
 	}
 	// xml-seq
 	{
-		tmp0 := sym_xml_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_root)), kw_doc, "A tree seq on the xml elements as per xml/parse", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4974), kw_end_DASH_line, int(4974))).(*lang.Symbol)
+		tmp0 := sym_xml_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_root)), kw_doc, "A tree seq on the xml elements as per xml/parse", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_xml_DASH_seq, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4974), kw_end_DASH_line, int(4974))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -50795,7 +50803,7 @@ func LoadNS() {
 	}
 	// emit-extend-type
 	{
-		tmp0 := sym_emit_DASH_extend_DASH_type.WithMeta(lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(175), kw_column, int(8), kw_end_DASH_line, int(175), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_c, sym_specs)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_emit_DASH_extend_DASH_type.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_c, sym_specs)), kw_file, "clojure/core_deftype.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_emit_DASH_extend_DASH_type, kw_end_DASH_column, int(23), kw_column, int(8), kw_line, int(175), kw_end_DASH_line, int(175), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -50835,7 +50843,7 @@ func LoadNS() {
 	}
 	// extend-type
 	{
-		tmp0 := sym_extend_DASH_type.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_t, sym__AMP_, sym_specs)), kw_doc, "A macro that expands into an extend call. Useful when you are\n  supplying the definitions explicitly inline, extend-type\n  automatically creates the maps required by extend.  Propagates the\n  class as a type hint on the first argument of all fns.\n\n  (extend-type MyType \n    Countable\n      (cnt [c] ...)\n    Foo\n      (bar [x y] ...)\n      (baz ([x] ...) ([x y & zs] ...)))\n\n  expands into:\n\n  (extend MyType\n   Countable\n     {:cnt (fn [c] ...)}\n   Foo\n     {:baz (fn ([x] ...) ([x y & zs] ...))\n      :bar (fn [x y] ...)})", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(180), kw_end_DASH_line, int(180))).(*lang.Symbol)
+		tmp0 := sym_extend_DASH_type.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_t, sym__AMP_, sym_specs)), kw_doc, "A macro that expands into an extend call. Useful when you are\n  supplying the definitions explicitly inline, extend-type\n  automatically creates the maps required by extend.  Propagates the\n  class as a type hint on the first argument of all fns.\n\n  (extend-type MyType \n    Countable\n      (cnt [c] ...)\n    Foo\n      (bar [x y] ...)\n      (baz ([x] ...) ([x y & zs] ...)))\n\n  expands into:\n\n  (extend MyType\n   Countable\n     {:cnt (fn [c] ...)}\n   Foo\n     {:baz (fn ([x] ...) ([x y & zs] ...))\n      :bar (fn [x y] ...)})", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_extend_DASH_type, kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(180), kw_end_DASH_line, int(180))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -50866,7 +50874,7 @@ func LoadNS() {
 	}
 	// file-seq
 	{
-		tmp0 := sym_file_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_dir)), kw_doc, "A tree seq on java.io.Files", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4964), kw_end_DASH_line, int(4964))).(*lang.Symbol)
+		tmp0 := sym_file_DASH_seq.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_dir)), kw_doc, "A tree seq on java.io.Files", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_file_DASH_seq, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4964), kw_end_DASH_line, int(4964))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -50920,7 +50928,7 @@ func LoadNS() {
 	}
 	// flatten
 	{
-		tmp0 := sym_flatten.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Takes any nested combination of sequential things (lists, vectors,\n  etc.) and returns their contents as a single, flat lazy sequence.\n  (flatten nil) returns an empty sequence.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7110), kw_end_DASH_line, int(7110))).(*lang.Symbol)
+		tmp0 := sym_flatten.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Takes any nested combination of sequential things (lists, vectors,\n  etc.) and returns their contents as a single, flat lazy sequence.\n  (flatten nil) returns an empty sequence.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_flatten, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7110), kw_end_DASH_line, int(7110))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -50947,7 +50955,7 @@ func LoadNS() {
 	}
 	// compile
 	{
-		tmp0 := sym_compile.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib)), kw_doc, "Compiles the namespace named by the symbol lib into a set of\n  classfiles. The source for the lib must be in a proper\n  classpath-relative directory. The output files will go into the\n  directory specified by *compile-path*, and that directory too must\n  be in the classpath.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6106), kw_end_DASH_line, int(6106))).(*lang.Symbol)
+		tmp0 := sym_compile.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib)), kw_doc, "Compiles the namespace named by the symbol lib into a set of\n  classfiles. The source for the lib must be in a proper\n  classpath-relative directory. The output files will go into the\n  directory specified by *compile-path*, and that directory too must\n  be in the classpath.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_compile, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6106), kw_end_DASH_line, int(6106))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -50985,7 +50993,7 @@ func LoadNS() {
 	}
 	// derive
 	{
-		tmp0 := sym_derive.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag, sym_parent), lang.NewVector(sym_h, sym_tag, sym_parent)), kw_doc, "Establishes a parent/child relationship between parent and\n  tag. Parent must be a namespace-qualified symbol or keyword and\n  child can be either a namespace-qualified symbol or keyword or a\n  class. h must be a hierarchy obtained from make-hierarchy, if not\n  supplied defaults to, and modifies, the global hierarchy.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5597), kw_end_DASH_line, int(5597))).(*lang.Symbol)
+		tmp0 := sym_derive.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag, sym_parent), lang.NewVector(sym_h, sym_tag, sym_parent)), kw_doc, "Establishes a parent/child relationship between parent and\n  tag. Parent must be a namespace-qualified symbol or keyword and\n  child can be either a namespace-qualified symbol or keyword or a\n  class. h must be a hierarchy obtained from make-hierarchy, if not\n  supplied defaults to, and modifies, the global hierarchy.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_derive, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5597), kw_end_DASH_line, int(5597))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -51163,7 +51171,7 @@ func LoadNS() {
 	}
 	// underive
 	{
-		tmp0 := sym_underive.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag, sym_parent), lang.NewVector(sym_h, sym_tag, sym_parent)), kw_doc, "Removes a parent/child relationship between parent and\n  tag. h must be a hierarchy obtained from make-hierarchy, if not\n  supplied defaults to, and modifies, the global hierarchy.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(5635), kw_end_DASH_line, int(5635))).(*lang.Symbol)
+		tmp0 := sym_underive.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag, sym_parent), lang.NewVector(sym_h, sym_tag, sym_parent)), kw_doc, "Removes a parent/child relationship between parent and\n  tag. h must be a hierarchy obtained from make-hierarchy, if not\n  supplied defaults to, and modifies, the global hierarchy.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_underive, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(5635), kw_end_DASH_line, int(5635))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -51304,7 +51312,7 @@ func LoadNS() {
 	}
 	// filterv
 	{
-		tmp0 := sym_filterv.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a vector of the items in coll for which\n  (pred item) returns logical true. pred must be free of side-effects.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6953), kw_end_DASH_line, int(6953))).(*lang.Symbol)
+		tmp0 := sym_filterv.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a vector of the items in coll for which\n  (pred item) returns logical true. pred must be free of side-effects.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_filterv, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6953), kw_end_DASH_line, int(6953))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -51357,7 +51365,7 @@ func LoadNS() {
 	}
 	// flush
 	{
-		tmp0 := sym_flush.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Flushes the output stream that is the current value of\n  *out*", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3705), kw_end_DASH_line, int(3705))).(*lang.Symbol)
+		tmp0 := sym_flush.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Flushes the output stream that is the current value of\n  *out*", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_flush, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3705), kw_end_DASH_line, int(3705))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -51378,7 +51386,7 @@ func LoadNS() {
 	}
 	// frequencies
 	{
-		tmp0 := sym_frequencies.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a map from distinct items in coll to the number of times\n  they appear.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7177), kw_end_DASH_line, int(7177))).(*lang.Symbol)
+		tmp0 := sym_frequencies.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a map from distinct items in coll to the number of times\n  they appear.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_frequencies, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7177), kw_end_DASH_line, int(7177))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -51426,7 +51434,7 @@ func LoadNS() {
 	}
 	// group-by
 	{
-		tmp0 := sym_group_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a map of the elements of coll keyed by the result of\n  f on each element. The value at each key will be a vector of the\n  corresponding elements, in the order they appeared in coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(7120), kw_end_DASH_line, int(7120))).(*lang.Symbol)
+		tmp0 := sym_group_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a map of the elements of coll keyed by the result of\n  f on each element. The value at each key will be a vector of the\n  corresponding elements, in the order they appeared in coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_group_DASH_by, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(7120), kw_end_DASH_line, int(7120))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -51490,7 +51498,7 @@ func LoadNS() {
 	}
 	// into
 	{
-		tmp0 := sym_into.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_to), lang.NewVector(sym_to, sym_from), lang.NewVector(sym_to, sym_xform, sym_from)), kw_doc, "Returns a new coll consisting of to with all of the items of\n  from conjoined. A transducer may be supplied.\n  (into x) returns x. (into) returns [].", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6914), kw_end_DASH_line, int(6914))).(*lang.Symbol)
+		tmp0 := sym_into.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_to), lang.NewVector(sym_to, sym_from), lang.NewVector(sym_to, sym_xform, sym_from)), kw_doc, "Returns a new coll consisting of to with all of the items of\n  from conjoined. A transducer may be supplied.\n  (into x) returns x. (into) returns [].", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_into, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6914), kw_end_DASH_line, int(6914))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -51613,7 +51621,7 @@ func LoadNS() {
 	}
 	// partitionv
 	{
-		tmp0 := sym_partitionv.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll), lang.NewVector(sym_n, sym_step, sym_pad, sym_coll)), kw_doc, "Returns a lazy sequence of vectors of n items each, at offsets step\n  apart. If step is not supplied, defaults to n, i.e. the partitions\n  do not overlap. If a pad collection is supplied, use its elements as\n  necessary to complete last partition upto n items. In case there are\n  not enough padding elements, return a partition with less than n items.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7254), kw_end_DASH_line, int(7254))).(*lang.Symbol)
+		tmp0 := sym_partitionv.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll), lang.NewVector(sym_n, sym_step, sym_pad, sym_coll)), kw_doc, "Returns a lazy sequence of vectors of n items each, at offsets step\n  apart. If step is not supplied, defaults to n, i.e. the partitions\n  do not overlap. If a pad collection is supplied, use its elements as\n  necessary to complete last partition upto n items. In case there are\n  not enough padding elements, return a partition with less than n items.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_partitionv, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7254), kw_end_DASH_line, int(7254))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -51789,7 +51797,7 @@ func LoadNS() {
 	}
 	// partitionv-all
 	{
-		tmp0 := sym_partitionv_DASH_all.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll)), kw_doc, "Returns a lazy sequence of vector partitions, but may include\n  partitions with fewer than n items at the end.\n  Returns a stateful transducer when no collection is provided.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(7277), kw_end_DASH_line, int(7277))).(*lang.Symbol)
+		tmp0 := sym_partitionv_DASH_all.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll)), kw_doc, "Returns a lazy sequence of vector partitions, but may include\n  partitions with fewer than n items at the end.\n  Returns a stateful transducer when no collection is provided.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_partitionv_DASH_all, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(7277), kw_end_DASH_line, int(7277))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -51878,7 +51886,7 @@ func LoadNS() {
 	}
 	// splitv-at
 	{
-		tmp0 := sym_splitv_DASH_at.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a vector of [(into [] (take n) coll) (drop n coll)]", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7248), kw_end_DASH_line, int(7248))).(*lang.Symbol)
+		tmp0 := sym_splitv_DASH_at.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a vector of [(into [] (take n) coll) (drop n coll)]", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_splitv_DASH_at, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7248), kw_end_DASH_line, int(7248))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -51914,7 +51922,7 @@ func LoadNS() {
 	}
 	// iteration
 	{
-		tmp0 := sym_iteration.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_step, sym__AMP_, lang.NewMap(kw_keys, lang.NewVector(sym_somef, sym_vf, sym_kf, sym_initk), kw_or, lang.NewMap(sym_vf, sym_identity, sym_kf, sym_identity, sym_somef, sym_some_QMARK_, sym_initk, nil)))), kw_doc, "Creates a seqable/reducible via repeated calls to step,\n  a function of some (continuation token) 'k'. The first call to step\n  will be passed initk, returning 'ret'. Iff (somef ret) is true,\n  (vf ret) will be included in the iteration, else iteration will\n  terminate and vf/kf will not be called. If (kf ret) is non-nil it\n  will be passed to the next step call, else iteration will terminate.\n\n  This can be used e.g. to consume APIs that return paginated or batched data.\n\n   step - (possibly impure) fn of 'k' -> 'ret'\n\n   :somef - fn of 'ret' -> logical true/false, default 'some?'\n   :vf - fn of 'ret' -> 'v', a value produced by the iteration, default 'identity'\n   :kf - fn of 'ret' -> 'next-k' or nil (signaling 'do not continue'), default 'identity'\n   :initk - the first value passed to step, default 'nil'\n\n  It is presumed that step with non-initk is unreproducible/non-idempotent.\n  If step with initk is unreproducible it is on the consumer to not consume twice.", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7708), kw_end_DASH_line, int(7708))).(*lang.Symbol)
+		tmp0 := sym_iteration.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_step, sym__AMP_, lang.NewMap(kw_keys, lang.NewVector(sym_somef, sym_vf, sym_kf, sym_initk), kw_or, lang.NewMap(sym_vf, sym_identity, sym_kf, sym_identity, sym_somef, sym_some_QMARK_, sym_initk, nil)))), kw_doc, "Creates a seqable/reducible via repeated calls to step,\n  a function of some (continuation token) 'k'. The first call to step\n  will be passed initk, returning 'ret'. Iff (somef ret) is true,\n  (vf ret) will be included in the iteration, else iteration will\n  terminate and vf/kf will not be called. If (kf ret) is non-nil it\n  will be passed to the next step call, else iteration will terminate.\n\n  This can be used e.g. to consume APIs that return paginated or batched data.\n\n   step - (possibly impure) fn of 'k' -> 'ret'\n\n   :somef - fn of 'ret' -> logical true/false, default 'some?'\n   :vf - fn of 'ret' -> 'v', a value produced by the iteration, default 'identity'\n   :kf - fn of 'ret' -> 'next-k' or nil (signaling 'do not continue'), default 'identity'\n   :initk - the first value passed to step, default 'nil'\n\n  It is presumed that step with non-initk is unreproducible/non-idempotent.\n  If step with initk is unreproducible it is on the consumer to not consume twice.", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_iteration, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7708), kw_end_DASH_line, int(7708))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -52144,7 +52152,7 @@ func LoadNS() {
 	}
 	// load
 	{
-		tmp0 := sym_load.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_paths)), kw_doc, "Loads Clojure code from resources in classpath. A path is interpreted as\n  classpath-relative if it begins with a slash or relative to the root\n  directory for the current namespace otherwise.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_redef, true, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6087), kw_end_DASH_line, int(6087))).(*lang.Symbol)
+		tmp0 := sym_load.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_paths)), kw_doc, "Loads Clojure code from resources in classpath. A path is interpreted as\n  classpath-relative if it begins with a slash or relative to the root\n  directory for the current namespace otherwise.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_load, kw_redef, true, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6087), kw_end_DASH_line, int(6087))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -52441,7 +52449,7 @@ func LoadNS() {
 	}
 	// load-one
 	{
-		tmp0 := sym_load_DASH_one.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib, sym_need_DASH_ns, sym_require)), kw_doc, "Loads a lib given its name. If need-ns, ensures that the associated\n  namespace exists after loading. If require, records the load so any\n  duplicate loads can be skipped.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5871), kw_end_DASH_line, int(5871), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_load_DASH_one.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib, sym_need_DASH_ns, sym_require)), kw_doc, "Loads a lib given its name. If need-ns, ensures that the associated\n  namespace exists after loading. If require, records the load so any\n  duplicate loads can be skipped.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_load_DASH_one, kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5871), kw_end_DASH_line, int(5871), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -52507,7 +52515,7 @@ func LoadNS() {
 	}
 	// load-all
 	{
-		tmp0 := sym_load_DASH_all.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib, sym_need_DASH_ns, sym_require)), kw_doc, "Loads a lib given its name and forces a load of any libs it directly or\n  indirectly loads. If need-ns, ensures that the associated namespace\n  exists after loading. If require, records the load so any duplicate loads\n  can be skipped.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5884), kw_end_DASH_line, int(5884), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_load_DASH_all.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib, sym_need_DASH_ns, sym_require)), kw_doc, "Loads a lib given its name and forces a load of any libs it directly or\n  indirectly loads. If need-ns, ensures that the associated namespace\n  exists after loading. If require, records the load so any duplicate loads\n  can be skipped.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_load_DASH_all, kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5884), kw_end_DASH_line, int(5884), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -52586,7 +52594,7 @@ func LoadNS() {
 	}
 	// load-data-reader-file
 	{
-		tmp0 := sym_load_DASH_data_DASH_reader_DASH_file.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7828), kw_column, int(8), kw_end_DASH_line, int(7828), kw_end_DASH_column, int(28), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_mappings, sym_url)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_load_DASH_data_DASH_reader_DASH_file.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_mappings, sym_url)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_load_DASH_data_DASH_reader_DASH_file, kw_end_DASH_column, int(28), kw_column, int(8), kw_line, int(7828), kw_end_DASH_line, int(7828), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -52834,7 +52842,7 @@ func LoadNS() {
 	}
 	// load-data-readers
 	{
-		tmp0 := sym_load_DASH_data_DASH_readers.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7857), kw_column, int(8), kw_end_DASH_line, int(7857), kw_end_DASH_column, int(24), kw_private, true, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_load_DASH_data_DASH_readers.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_load_DASH_data_DASH_readers, kw_end_DASH_column, int(24), kw_column, int(8), kw_line, int(7857), kw_end_DASH_line, int(7857), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -52868,7 +52876,7 @@ func LoadNS() {
 	}
 	// load-lib
 	{
-		tmp0 := sym_load_DASH_lib.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_prefix, sym_lib, sym__AMP_, sym_options)), kw_doc, "Loads a lib with options", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5896), kw_end_DASH_line, int(5896), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_load_DASH_lib.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_prefix, sym_lib, sym__AMP_, sym_options)), kw_doc, "Loads a lib with options", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_load_DASH_lib, kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5896), kw_end_DASH_line, int(5896), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -53431,7 +53439,7 @@ func LoadNS() {
 	}
 	// load-libs
 	{
-		tmp0 := sym_load_DASH_libs.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Loads libs, interpreting libspecs, prefix lists, and flags for\n  forwarding to load-lib", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(5943), kw_end_DASH_line, int(5943), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_load_DASH_libs.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Loads libs, interpreting libspecs, prefix lists, and flags for\n  forwarding to load-lib", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_load_DASH_libs, kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(5943), kw_end_DASH_line, int(5943), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54004,7 +54012,7 @@ func LoadNS() {
 	}
 	// require
 	{
-		tmp0 := sym_require.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Loads libs, skipping any that are already loaded. Each argument is\n  either a libspec that identifies a lib, a prefix list that identifies\n  multiple libs whose names share a common prefix, or a flag that modifies\n  how all the identified libs are loaded. Use :require in the ns macro\n  in preference to calling this directly.\n\n  Libs\n\n  A 'lib' is a named set of resources in classpath whose contents define a\n  library of Clojure code. Lib names are symbols and each lib is associated\n  with a Clojure namespace and a Java package that share its name. A lib's\n  name also locates its root directory within classpath using Java's\n  package name to classpath-relative path mapping. All resources in a lib\n  should be contained in the directory structure under its root directory.\n  All definitions a lib makes should be in its associated namespace.\n\n  'require loads a lib by loading its root resource. The root resource path\n  is derived from the lib name in the following manner:\n  Consider a lib named by the symbol 'x.y.z; it has the root directory\n  <classpath>/x/y/, and its root resource is <classpath>/x/y/z.clj, or\n  <classpath>/x/y/z.cljc if <classpath>/x/y/z.clj does not exist. The\n  root resource should contain code to create the lib's\n  namespace (usually by using the ns macro) and load any additional\n  lib resources.\n\n  Libspecs\n\n  A libspec is a lib name or a vector containing a lib name followed by\n  options expressed as sequential keywords and arguments.\n\n  Recognized options:\n  :as takes a symbol as its argument and makes that symbol an alias to the\n    lib's namespace in the current namespace.\n  :as-alias takes a symbol as its argument and aliases like :as, however\n    the lib will not be loaded. If the lib has not been loaded, a new\n    empty namespace will be created (as with create-ns).\n  :refer takes a list of symbols to refer from the namespace or the :all\n    keyword to bring in all public vars.\n\n  Prefix Lists\n\n  It's common for Clojure code to depend on several libs whose names have\n  the same prefix. When specifying libs, prefix lists can be used to reduce\n  repetition. A prefix list contains the shared prefix followed by libspecs\n  with the shared prefix removed from the lib names. After removing the\n  prefix, the names that remain must not contain any periods.\n\n  Flags\n\n  A flag is a keyword.\n  Recognized flags: :reload, :reload-all, :verbose\n  :reload forces loading of all the identified libs even if they are\n    already loaded (has no effect on libspecs using :as-alias)\n  :reload-all implies :reload and also forces loading of all libs that the\n    identified libs directly or indirectly load via require or use\n    (has no effect on libspecs using :as-alias)\n  :verbose triggers printing information about each load, alias, and refer\n\n  Example:\n\n  The following would load the libraries clojure.zip and clojure.set\n  abbreviated as 's'.\n\n  (require '(clojure zip [set :as s]))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5981), kw_end_DASH_line, int(5981))).(*lang.Symbol)
+		tmp0 := sym_require.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Loads libs, skipping any that are already loaded. Each argument is\n  either a libspec that identifies a lib, a prefix list that identifies\n  multiple libs whose names share a common prefix, or a flag that modifies\n  how all the identified libs are loaded. Use :require in the ns macro\n  in preference to calling this directly.\n\n  Libs\n\n  A 'lib' is a named set of resources in classpath whose contents define a\n  library of Clojure code. Lib names are symbols and each lib is associated\n  with a Clojure namespace and a Java package that share its name. A lib's\n  name also locates its root directory within classpath using Java's\n  package name to classpath-relative path mapping. All resources in a lib\n  should be contained in the directory structure under its root directory.\n  All definitions a lib makes should be in its associated namespace.\n\n  'require loads a lib by loading its root resource. The root resource path\n  is derived from the lib name in the following manner:\n  Consider a lib named by the symbol 'x.y.z; it has the root directory\n  <classpath>/x/y/, and its root resource is <classpath>/x/y/z.clj, or\n  <classpath>/x/y/z.cljc if <classpath>/x/y/z.clj does not exist. The\n  root resource should contain code to create the lib's\n  namespace (usually by using the ns macro) and load any additional\n  lib resources.\n\n  Libspecs\n\n  A libspec is a lib name or a vector containing a lib name followed by\n  options expressed as sequential keywords and arguments.\n\n  Recognized options:\n  :as takes a symbol as its argument and makes that symbol an alias to the\n    lib's namespace in the current namespace.\n  :as-alias takes a symbol as its argument and aliases like :as, however\n    the lib will not be loaded. If the lib has not been loaded, a new\n    empty namespace will be created (as with create-ns).\n  :refer takes a list of symbols to refer from the namespace or the :all\n    keyword to bring in all public vars.\n\n  Prefix Lists\n\n  It's common for Clojure code to depend on several libs whose names have\n  the same prefix. When specifying libs, prefix lists can be used to reduce\n  repetition. A prefix list contains the shared prefix followed by libspecs\n  with the shared prefix removed from the lib names. After removing the\n  prefix, the names that remain must not contain any periods.\n\n  Flags\n\n  A flag is a keyword.\n  Recognized flags: :reload, :reload-all, :verbose\n  :reload forces loading of all the identified libs even if they are\n    already loaded (has no effect on libspecs using :as-alias)\n  :reload-all implies :reload and also forces loading of all libs that the\n    identified libs directly or indirectly load via require or use\n    (has no effect on libspecs using :as-alias)\n  :verbose triggers printing information about each load, alias, and refer\n\n  Example:\n\n  The following would load the libraries clojure.zip and clojure.set\n  abbreviated as 's'.\n\n  (require '(clojure zip [set :as s]))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_require, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5981), kw_end_DASH_line, int(5981))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54030,7 +54038,7 @@ func LoadNS() {
 	}
 	// serialized-require
 	{
-		tmp0 := sym_serialized_DASH_require.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Like 'require', but serializes loading.\n  Interim function preferred over 'require' for known asynchronous loads.\n  Future changes may make these equivalent.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(8), kw_line, int(6051), kw_end_DASH_line, int(6051), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_serialized_DASH_require.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Like 'require', but serializes loading.\n  Interim function preferred over 'require' for known asynchronous loads.\n  Future changes may make these equivalent.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_serialized_DASH_require, kw_end_DASH_column, int(25), kw_column, int(8), kw_line, int(6051), kw_end_DASH_line, int(6051), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54084,7 +54092,7 @@ func LoadNS() {
 	}
 	// use
 	{
-		tmp0 := sym_use.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Like 'require, but also refers to each lib's namespace using\n  clojure.core/refer. Use :use in the ns macro in preference to calling\n  this directly.\n\n  'use accepts additional options in libspecs: :exclude, :only, :rename.\n  The arguments and semantics for :exclude, :only, and :rename are the same\n  as those documented for clojure.core/refer.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(6071), kw_end_DASH_line, int(6071))).(*lang.Symbol)
+		tmp0 := sym_use.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Like 'require, but also refers to each lib's namespace using\n  clojure.core/refer. Use :use in the ns macro in preference to calling\n  this directly.\n\n  'use accepts additional options in libspecs: :exclude, :only, :rename.\n  The arguments and semantics for :exclude, :only, and :rename are the same\n  as those documented for clojure.core/refer.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_use, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(6071), kw_end_DASH_line, int(6071))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54110,7 +54118,7 @@ func LoadNS() {
 	}
 	// requiring-resolve
 	{
-		tmp0 := sym_requiring_DASH_resolve.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Resolves namespace-qualified sym per 'resolve'. If initial resolve\nfails, attempts to require sym's namespace and retries.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(6060), kw_end_DASH_line, int(6060))).(*lang.Symbol)
+		tmp0 := sym_requiring_DASH_resolve.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Resolves namespace-qualified sym per 'resolve'. If initial resolve\nfails, attempts to require sym's namespace and retries.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_requiring_DASH_resolve, kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(6060), kw_end_DASH_line, int(6060))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -54161,7 +54169,7 @@ func LoadNS() {
 	}
 	// mapv
 	{
-		tmp0 := sym_mapv.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_c1, sym_c2), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3, sym__AMP_, sym_colls)), kw_doc, "Returns a vector consisting of the result of applying f to the\n  set of first items of each coll, followed by applying f to the set\n  of second items in each coll, until any one of the colls is\n  exhausted.  Any remaining items in other colls are ignored. Function\n  f should accept number-of-colls arguments.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6935), kw_end_DASH_line, int(6935))).(*lang.Symbol)
+		tmp0 := sym_mapv.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_c1, sym_c2), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3, sym__AMP_, sym_colls)), kw_doc, "Returns a vector consisting of the result of applying f to the\n  set of first items of each coll, followed by applying f to the set\n  of second items in each coll, until any one of the colls is\n  exhausted.  Any remaining items in other colls are ignored. Function\n  f should accept number-of-colls arguments.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_mapv, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6935), kw_end_DASH_line, int(6935))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54276,7 +54284,7 @@ func LoadNS() {
 	}
 	// newline
 	{
-		tmp0 := sym_newline.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Writes a platform-specific newline to *out*", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3697), kw_end_DASH_line, int(3697))).(*lang.Symbol)
+		tmp0 := sym_newline.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Writes a platform-specific newline to *out*", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_newline, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3697), kw_end_DASH_line, int(3697))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -54294,7 +54302,7 @@ func LoadNS() {
 	}
 	// normalize-slurp-opts
 	{
-		tmp0 := sym_normalize_DASH_slurp_DASH_opts.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6966), kw_column, int(8), kw_end_DASH_line, int(6966), kw_end_DASH_column, int(27), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_opts)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_normalize_DASH_slurp_DASH_opts.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_opts)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_normalize_DASH_slurp_DASH_opts, kw_end_DASH_column, int(27), kw_column, int(8), kw_line, int(6966), kw_end_DASH_line, int(6966), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -54331,7 +54339,7 @@ func LoadNS() {
 	}
 	// pr
 	{
-		tmp0 := sym_pr.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_more)), kw_doc, "Prints the object(s) to the output stream that is the current value\n  of *out*.  Prints the object(s), separated by spaces if there is\n  more than one.  By default, pr and prn print in a way that objects\n  can be read by the reader", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(3677), kw_end_DASH_line, int(3677), kw_dynamic, true)).(*lang.Symbol)
+		tmp0 := sym_pr.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_more)), kw_doc, "Prints the object(s) to the output stream that is the current value\n  of *out*.  Prints the object(s), separated by spaces if there is\n  more than one.  By default, pr and prn print in a way that objects\n  can be read by the reader", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_pr, kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(3677), kw_end_DASH_line, int(3677), kw_dynamic, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54405,7 +54413,7 @@ func LoadNS() {
 	// pr-str
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_pr_DASH_str.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_xs)), kw_doc, "pr to a string, returning it", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4757), kw_end_DASH_line, int(4757))).(*lang.Symbol)
+		tmp0 := sym_pr_DASH_str.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_xs)), kw_doc, "pr to a string, returning it", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_pr_DASH_str, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4757), kw_end_DASH_line, int(4757))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54462,7 +54470,7 @@ func LoadNS() {
 	}
 	// print
 	{
-		tmp0 := sym_print.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Prints the object(s) to the output stream that is the current value\n  of *out*.  print and println produce output for human consumption.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3724), kw_end_DASH_line, int(3724))).(*lang.Symbol)
+		tmp0 := sym_print.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Prints the object(s) to the output stream that is the current value\n  of *out*.  print and println produce output for human consumption.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_print, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3724), kw_end_DASH_line, int(3724))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54508,7 +54516,7 @@ func LoadNS() {
 	// print-str
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_print_DASH_str.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_xs)), kw_doc, "print to a string, returning it", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4775), kw_end_DASH_line, int(4775))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_str.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_xs)), kw_doc, "print to a string, returning it", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_print_DASH_str, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4775), kw_end_DASH_line, int(4775))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54565,7 +54573,7 @@ func LoadNS() {
 	}
 	// printf
 	{
-		tmp0 := sym_printf.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fmt, sym__AMP_, sym_args)), kw_doc, "Prints formatted output, as per format", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5717), kw_end_DASH_line, int(5717))).(*lang.Symbol)
+		tmp0 := sym_printf.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fmt, sym__AMP_, sym_args)), kw_doc, "Prints formatted output, as per format", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_printf, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5717), kw_end_DASH_line, int(5717))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54595,7 +54603,7 @@ func LoadNS() {
 	}
 	// prn
 	{
-		tmp0 := sym_prn.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Same as pr followed by (newline). Observes *flush-on-newline*", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(3714), kw_end_DASH_line, int(3714))).(*lang.Symbol)
+		tmp0 := sym_prn.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Same as pr followed by (newline). Observes *flush-on-newline*", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_prn, kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(3714), kw_end_DASH_line, int(3714))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54634,7 +54642,7 @@ func LoadNS() {
 	// prn-str
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_prn_DASH_str.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_xs)), kw_doc, "prn to a string, returning it", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4766), kw_end_DASH_line, int(4766))).(*lang.Symbol)
+		tmp0 := sym_prn_DASH_str.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_xs)), kw_doc, "prn to a string, returning it", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_prn_DASH_str, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4766), kw_end_DASH_line, int(4766))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54691,7 +54699,7 @@ func LoadNS() {
 	}
 	// println
 	{
-		tmp0 := sym_println.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Same as print followed by (newline)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3733), kw_end_DASH_line, int(3733))).(*lang.Symbol)
+		tmp0 := sym_println.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Same as print followed by (newline)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_println, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3733), kw_end_DASH_line, int(3733))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54737,7 +54745,7 @@ func LoadNS() {
 	// println-str
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_println_DASH_str.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_xs)), kw_doc, "println to a string, returning it", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4784), kw_end_DASH_line, int(4784))).(*lang.Symbol)
+		tmp0 := sym_println_DASH_str.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_xs)), kw_doc, "println to a string, returning it", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_println_DASH_str, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4784), kw_end_DASH_line, int(4784))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -54794,7 +54802,7 @@ func LoadNS() {
 	}
 	// pr-on
 	{
-		tmp0 := sym_pr_DASH_on.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_w)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3668), kw_end_DASH_line, int(3668), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_pr_DASH_on.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_w)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_pr_DASH_on, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3668), kw_end_DASH_line, int(3668), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -54824,7 +54832,7 @@ func LoadNS() {
 	}
 	// print-meta
 	{
-		tmp0 := sym_print_DASH_meta.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(70), kw_column, int(8), kw_end_DASH_line, int(70), kw_end_DASH_column, int(17), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_meta.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_print_DASH_meta, kw_end_DASH_column, int(17), kw_column, int(8), kw_line, int(70), kw_end_DASH_line, int(70), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -54947,7 +54955,7 @@ func LoadNS() {
 	}
 	// print-simple
 	{
-		tmp0 := sym_print_DASH_simple.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(81), kw_column, int(7), kw_end_DASH_line, int(81), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_simple.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(81), kw_column, int(7), kw_end_DASH_line, int(81), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_name, sym_print_DASH_simple, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -54971,7 +54979,7 @@ func LoadNS() {
 	}
 	// print-dup
 	{
-		tmp0 := sym_print_DASH_dup.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3666), kw_column, int(11), kw_end_DASH_line, int(3666), kw_end_DASH_column, int(19), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_dup.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3666), kw_column, int(11), kw_end_DASH_line, int(3666), kw_end_DASH_column, int(19), kw_name, sym_print_DASH_dup, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -55449,7 +55457,7 @@ func LoadNS() {
 	}
 	// print-method
 	{
-		tmp0 := sym_print_DASH_method.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3663), kw_column, int(11), kw_end_DASH_line, int(3663), kw_end_DASH_column, int(22), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_method.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3663), kw_column, int(11), kw_end_DASH_line, int(3663), kw_end_DASH_column, int(22), kw_name, sym_print_DASH_method, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -56440,7 +56448,7 @@ func LoadNS() {
 	}
 	// print-tagged-object
 	{
-		tmp0 := sym_print_DASH_tagged_DASH_object.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(102), kw_column, int(8), kw_end_DASH_line, int(102), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_rep, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_tagged_DASH_object.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_rep, sym_w)), kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_print_DASH_tagged_DASH_object, kw_end_DASH_column, int(26), kw_column, int(8), kw_line, int(102), kw_end_DASH_line, int(102), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -56525,7 +56533,7 @@ func LoadNS() {
 	}
 	// print-throwable
 	{
-		tmp0 := sym_print_DASH_throwable.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(478), kw_column, int(8), kw_end_DASH_line, int(478), kw_end_DASH_column, int(22), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_throwable.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_print_DASH_throwable, kw_end_DASH_column, int(22), kw_column, int(8), kw_line, int(478), kw_end_DASH_line, int(478), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -57035,7 +57043,7 @@ func LoadNS() {
 	}
 	// print-object
 	{
-		tmp0 := sym_print_DASH_object.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(115), kw_column, int(8), kw_end_DASH_line, int(115), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_object.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_print_DASH_object, kw_end_DASH_column, int(19), kw_column, int(8), kw_line, int(115), kw_end_DASH_line, int(115), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -57057,7 +57065,7 @@ func LoadNS() {
 	}
 	// read
 	{
-		tmp0 := sym_read.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_stream), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value, sym_recursive_QMARK_), lang.NewVector(sym_opts, sym_stream)), kw_doc, "Reads the next object from stream, which must be an instance of\n  java.io.PushbackReader or some derivee.  stream defaults to the\n  current value of *in*.\n\n  Opts is a persistent map with valid keys:\n    :read-cond - :allow to process reader conditionals, or\n                 :preserve to keep all branches\n    :features - persistent set of feature keywords for reader conditionals\n    :eof - on eof, return value unless :eofthrow, then throw.\n           if not specified, will throw\n\n  Note that read can execute code (controlled by *read-eval*),\n  and as such should be used only with trusted sources.\n\n  For data structure interop use clojure.edn/read", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3741), kw_end_DASH_line, int(3741))).(*lang.Symbol)
+		tmp0 := sym_read.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_stream), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value, sym_recursive_QMARK_), lang.NewVector(sym_opts, sym_stream)), kw_doc, "Reads the next object from stream, which must be an instance of\n  java.io.PushbackReader or some derivee.  stream defaults to the\n  current value of *in*.\n\n  Opts is a persistent map with valid keys:\n    :read-cond - :allow to process reader conditionals, or\n                 :preserve to keep all branches\n    :features - persistent set of feature keywords for reader conditionals\n    :eof - on eof, return value unless :eofthrow, then throw.\n           if not specified, will throw\n\n  Note that read can execute code (controlled by *read-eval*),\n  and as such should be used only with trusted sources.\n\n  For data structure interop use clojure.edn/read", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_read, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3741), kw_end_DASH_line, int(3741))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -57123,7 +57131,7 @@ func LoadNS() {
 	}
 	// read-line
 	{
-		tmp0 := sym_read_DASH_line.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Reads the next line from stream that is the current value of *in* .", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3796), kw_end_DASH_line, int(3796))).(*lang.Symbol)
+		tmp0 := sym_read_DASH_line.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Reads the next line from stream that is the current value of *in* .", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_read_DASH_line, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3796), kw_end_DASH_line, int(3796))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -57170,7 +57178,7 @@ func LoadNS() {
 	}
 	// read+string
 	{
-		tmp0 := sym_read_PLUS_string.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_stream), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value, sym_recursive_QMARK_), lang.NewVector(sym_opts, sym_stream)), kw_doc, "Like read, and taking the same args. stream must be a LineNumberingPushbackReader.\n  Returns a vector containing the object read and the (whitespace-trimmed) string read.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3770), kw_end_DASH_line, int(3770))).(*lang.Symbol)
+		tmp0 := sym_read_PLUS_string.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_stream), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value, sym_recursive_QMARK_), lang.NewVector(sym_opts, sym_stream)), kw_doc, "Like read, and taking the same args. stream must be a LineNumberingPushbackReader.\n  Returns a vector containing the object read and the (whitespace-trimmed) string read.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_read_PLUS_string, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3770), kw_end_DASH_line, int(3770))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -57382,7 +57390,7 @@ func LoadNS() {
 	}
 	// reduce
 	{
-		tmp0 := sym_reduce.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_val, sym_coll)), kw_doc, "f should be a function of 2 arguments. If val is not supplied,\n  returns the result of applying f to the first 2 items in coll, then\n  applying f to that result and the 3rd item, etc. If coll contains no\n  items, f must accept no arguments as well, and reduce returns the\n  result of calling f with no arguments.  If coll has only 1 item, it\n  is returned and f is not called.  If val is supplied, returns the\n  result of applying f to val and the first item in coll, then\n  applying f to that result and the 2nd item, etc. If coll contains no\n  items, returns val and f is not called.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6852), kw_end_DASH_line, int(6852))).(*lang.Symbol)
+		tmp0 := sym_reduce.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_val, sym_coll)), kw_doc, "f should be a function of 2 arguments. If val is not supplied,\n  returns the result of applying f to the first 2 items in coll, then\n  applying f to that result and the 3rd item, etc. If coll contains no\n  items, f must accept no arguments as well, and reduce returns the\n  result of calling f with no arguments.  If coll has only 1 item, it\n  is returned and f is not called.  If val is supplied, returns the\n  result of applying f to val and the first item in coll, then\n  applying f to that result and the 2nd item, etc. If coll contains no\n  items, returns val and f is not called.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reduce, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6852), kw_end_DASH_line, int(6852))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -57445,7 +57453,7 @@ func LoadNS() {
 	}
 	// run!
 	{
-		tmp0 := sym_run_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_proc, sym_coll)), kw_doc, "Runs the supplied procedure (via reduce), for purposes of side\n  effects, on successive items in the collection. Returns nil", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7700), kw_end_DASH_line, int(7700))).(*lang.Symbol)
+		tmp0 := sym_run_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_proc, sym_coll)), kw_doc, "Runs the supplied procedure (via reduce), for purposes of side\n  effects, on successive items in the collection. Returns nil", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_run_BANG_, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7700), kw_end_DASH_line, int(7700))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -57481,7 +57489,7 @@ func LoadNS() {
 	}
 	// reduce-kv
 	{
-		tmp0 := sym_reduce_DASH_kv.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_init, sym_coll)), kw_doc, "Reduces an associative collection. f should be a function of 3\n  arguments. Returns the result of applying f to init, the first key\n  and the first value in coll, then applying f to that result and the\n  2nd key and value, etc. If coll contains no entries, returns init\n  and f is not called. Note that reduce-kv is supported on vectors,\n  where the keys will be the ordinals.", kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(6874), kw_end_DASH_line, int(6874))).(*lang.Symbol)
+		tmp0 := sym_reduce_DASH_kv.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_init, sym_coll)), kw_doc, "Reduces an associative collection. f should be a function of 3\n  arguments. Returns the result of applying f to init, the first key\n  and the first value in coll, then applying f to that result and the\n  2nd key and value, etc. If coll contains no entries, returns init\n  and f is not called. Note that reduce-kv is supported on vectors,\n  where the keys will be the ordinals.", kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_reduce_DASH_kv, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(6874), kw_end_DASH_line, int(6874))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -57503,7 +57511,7 @@ func LoadNS() {
 	}
 	// update-keys
 	{
-		tmp0 := sym_update_DASH_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_f)), kw_doc, "m f => {(f k) v ...}\n\n  Given a map m and a function f of 1-argument, returns a new map whose\n  keys are the result of applying f to the keys of m, mapped to the\n  corresponding values of m.\n  f must return a unique key for each key of m, else the behavior is undefined.", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7898), kw_end_DASH_line, int(7898))).(*lang.Symbol)
+		tmp0 := sym_update_DASH_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_f)), kw_doc, "m f => {(f k) v ...}\n\n  Given a map m and a function f of 1-argument, returns a new map whose\n  keys are the result of applying f to the keys of m, mapped to the\n  corresponding values of m.\n  f must return a unique key for each key of m, else the behavior is undefined.", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_update_DASH_keys, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7898), kw_end_DASH_line, int(7898))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -57563,7 +57571,7 @@ func LoadNS() {
 	}
 	// update-vals
 	{
-		tmp0 := sym_update_DASH_vals.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_f)), kw_doc, "m f => {k (f v) ...}\n\n  Given a map m and a function f of 1-argument, returns a new map where the keys of m\n  are mapped to result of applying f to the corresponding values of m.", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7882), kw_end_DASH_line, int(7882))).(*lang.Symbol)
+		tmp0 := sym_update_DASH_vals.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_f)), kw_doc, "m f => {k (f v) ...}\n\n  Given a map m and a function f of 1-argument, returns a new map where the keys of m\n  are mapped to result of applying f to the corresponding values of m.", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_update_DASH_vals, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7882), kw_end_DASH_line, int(7882))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -57628,7 +57636,7 @@ func LoadNS() {
 	// slurp
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_slurp.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_f, sym__AMP_, sym_opts)), kw_doc, "Opens a reader on f and reads all its contents, returning a string.\n  See clojure.java.io/reader for a complete list of supported arguments.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6974), kw_end_DASH_line, int(6974))).(*lang.Symbol)
+		tmp0 := sym_slurp.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_f, sym__AMP_, sym_opts)), kw_doc, "Opens a reader on f and reads all its contents, returning a string.\n  See clojure.java.io/reader for a complete list of supported arguments.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_slurp, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6974), kw_end_DASH_line, int(6974))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -57699,7 +57707,7 @@ func LoadNS() {
 	}
 	// transduce
 	{
-		tmp0 := sym_transduce.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xform, sym_f, sym_coll), lang.NewVector(sym_xform, sym_f, sym_init, sym_coll)), kw_doc, "reduce with a transformation of f (xf). If init is not\n  supplied, (f) will be called to produce it. f should be a reducing\n  step function that accepts both 1 and 2 arguments, if it accepts\n  only 2 you can add the arity-1 with 'completing'. Returns the result\n  of applying (the transformed) xf to init and the first item in coll,\n  then applying xf to that result and the 2nd item, etc. If coll\n  contains no items, returns init and f is not called. Note that\n  certain transforms may inject or skip items.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(6897), kw_end_DASH_line, int(6897))).(*lang.Symbol)
+		tmp0 := sym_transduce.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xform, sym_f, sym_coll), lang.NewVector(sym_xform, sym_f, sym_init, sym_coll)), kw_doc, "reduce with a transformation of f (xf). If init is not\n  supplied, (f) will be called to produce it. f should be a reducing\n  step function that accepts both 1 and 2 arguments, if it accepts\n  only 2 you can add the arity-1 with 'completing'. Returns the result\n  of applying (the transformed) xf to init and the first item in coll,\n  then applying xf to that result and the 2nd item, etc. If coll\n  contains no items, returns init and f is not called. Note that\n  certain transforms may inject or skip items.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_name, sym_transduce, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(6897), kw_end_DASH_line, int(6897))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -57762,5 +57770,15 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_transduce.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+	}
+
+	// Mark namespace as AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.core")); ns != nil {
+		// Set metadata directly
+		meta := ns.Meta()
+		if meta == nil {
+			meta = lang.NewMap()
+		}
+		ns.ResetMeta(meta.Assoc(lang.NewKeyword("aot-loaded"), true).(lang.IPersistentMap))
 	}
 }

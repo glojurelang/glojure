@@ -236,6 +236,17 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 `)
 	initBuf.WriteString(fmt.Sprintf("// LoadNS initializes the namespace %q\n", ns.Name().String()))
 	initBuf.WriteString("func LoadNS() {\n")
+	
+	// Add idempotency check
+	initBuf.WriteString(fmt.Sprintf(`	// Check if already AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol(%q)); ns != nil {
+		if meta := ns.Meta(); meta != nil {
+			if aotLoaded := meta.ValAt(lang.NewKeyword("aot-loaded")); aotLoaded != nil {
+				return // Already loaded, skip reinitialization
+			}
+		}
+	}
+`, ns.Name().String()))
 
 	//////////////////////////
 	// Symbols
@@ -347,6 +358,19 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 		}
 	}
 
+	// Mark namespace as AOT-loaded
+	initBuf.WriteString(fmt.Sprintf(`	
+	// Mark namespace as AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol(%q)); ns != nil {
+		// Set metadata directly
+		meta := ns.Meta()
+		if meta == nil {
+			meta = lang.NewMap()
+		}
+		ns.ResetMeta(meta.Assoc(lang.NewKeyword("aot-loaded"), true).(lang.IPersistentMap))
+	}
+`, ns.Name().String()))
+	
 	// Closing brace for LoadNS
 	initBuf.WriteString("}\n")
 

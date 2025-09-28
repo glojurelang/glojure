@@ -37,6 +37,14 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "clojure.string"
 func LoadNS() {
+	// Check if already AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.string")); ns != nil {
+		if meta := ns.Meta(); meta != nil {
+			if aotLoaded := meta.ValAt(lang.NewKeyword("aot-loaded")); aotLoaded != nil {
+				return // Already loaded, skip reinitialization
+			}
+		}
+	}
 	sym__PLUS_ := lang.NewSymbol("+")
 	sym__LT_ := lang.NewSymbol("<")
 	sym__EQ_ := lang.NewSymbol("=")
@@ -110,6 +118,7 @@ func LoadNS() {
 	kw_end_DASH_line := lang.NewKeyword("end-line")
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
+	kw_name := lang.NewKeyword("name")
 	kw_ns := lang.NewKeyword("ns")
 	kw_private := lang.NewKeyword("private")
 	kw_rettag := lang.NewKeyword("rettag")
@@ -222,7 +231,7 @@ func LoadNS() {
 	_ = ns
 	// ends-with?
 	{
-		tmp0 := sym_ends_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s ends with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(309), kw_end_DASH_line, int(309))).(*lang.Symbol)
+		tmp0 := sym_ends_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s ends with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_ends_DASH_with_QMARK_, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(309), kw_end_DASH_line, int(309))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -242,7 +251,7 @@ func LoadNS() {
 	}
 	// includes?
 	{
-		tmp0 := sym_includes_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s includes substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(315), kw_end_DASH_line, int(315))).(*lang.Symbol)
+		tmp0 := sym_includes_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s includes substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_includes_QMARK_, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(315), kw_end_DASH_line, int(315))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -263,7 +272,7 @@ func LoadNS() {
 	// lower-case
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_lower_DASH_case.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all lower-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(188), kw_end_DASH_line, int(188))).(*lang.Symbol)
+		tmp0 := sym_lower_DASH_case.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all lower-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_lower_DASH_case, kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(188), kw_end_DASH_line, int(188))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -281,7 +290,7 @@ func LoadNS() {
 	}
 	// split
 	{
-		tmp0 := sym_split.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re), lang.NewVector(sym_s, sym_re, sym_limit)), kw_doc, "Splits string on a regular expression.  Optional argument limit is\n  the maximum number of parts. Not lazy. Returns vector of the parts.\n  Trailing empty strings are not returned - pass limit of -1 to return all.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(194), kw_end_DASH_line, int(194))).(*lang.Symbol)
+		tmp0 := sym_split.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re), lang.NewVector(sym_s, sym_re, sym_limit)), kw_doc, "Splits string on a regular expression.  Optional argument limit is\n  the maximum number of parts. Not lazy. Returns vector of the parts.\n  Trailing empty strings are not returned - pass limit of -1 to return all.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_split, kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(194), kw_end_DASH_line, int(194))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -324,7 +333,7 @@ func LoadNS() {
 	}
 	// starts-with?
 	{
-		tmp0 := sym_starts_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s starts with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(303), kw_end_DASH_line, int(303))).(*lang.Symbol)
+		tmp0 := sym_starts_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s starts with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_starts_DASH_with_QMARK_, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(303), kw_end_DASH_line, int(303))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -345,7 +354,7 @@ func LoadNS() {
 	// trim
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_trim.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from both ends of string.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(211), kw_end_DASH_line, int(211))).(*lang.Symbol)
+		tmp0 := sym_trim.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from both ends of string.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_trim, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(211), kw_end_DASH_line, int(211))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -364,7 +373,7 @@ func LoadNS() {
 	// trim-newline
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_trim_DASH_newline.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes all trailing newline \\n or return \\r characters from\n  string.  Similar to Perl's chomp.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(29), kw_column, int(7), kw_line, int(229), kw_end_DASH_line, int(229))).(*lang.Symbol)
+		tmp0 := sym_trim_DASH_newline.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes all trailing newline \\n or return \\r characters from\n  string.  Similar to Perl's chomp.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_trim_DASH_newline, kw_end_DASH_column, int(29), kw_column, int(7), kw_line, int(229), kw_end_DASH_line, int(229))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -383,7 +392,7 @@ func LoadNS() {
 	// triml
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_triml.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the left side of string.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(217), kw_end_DASH_line, int(217))).(*lang.Symbol)
+		tmp0 := sym_triml.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the left side of string.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_triml, kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(217), kw_end_DASH_line, int(217))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -402,7 +411,7 @@ func LoadNS() {
 	// trimr
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_trimr.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the right side of string.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(223), kw_end_DASH_line, int(223))).(*lang.Symbol)
+		tmp0 := sym_trimr.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the right side of string.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_trimr, kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(223), kw_end_DASH_line, int(223))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -421,7 +430,7 @@ func LoadNS() {
 	// upper-case
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_upper_DASH_case.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all upper-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(182), kw_end_DASH_line, int(182))).(*lang.Symbol)
+		tmp0 := sym_upper_DASH_case.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all upper-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_upper_DASH_case, kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(182), kw_end_DASH_line, int(182))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -439,7 +448,7 @@ func LoadNS() {
 	}
 	// blank?
 	{
-		tmp0 := sym_blank_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "True if s is nil, empty, or contains only whitespace.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(236), kw_end_DASH_line, int(236))).(*lang.Symbol)
+		tmp0 := sym_blank_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "True if s is nil, empty, or contains only whitespace.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_blank_QMARK_, kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(236), kw_end_DASH_line, int(236))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -496,7 +505,7 @@ func LoadNS() {
 	// capitalize
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_capitalize.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts first character of the string to upper-case, all other\n  characters to lower-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(171), kw_end_DASH_line, int(171))).(*lang.Symbol)
+		tmp0 := sym_capitalize.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts first character of the string to upper-case, all other\n  characters to lower-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_capitalize, kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(171), kw_end_DASH_line, int(171))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -541,7 +550,7 @@ func LoadNS() {
 	}
 	// check-string
 	{
-		tmp0 := sym_check_DASH_string.WithMeta(lang.NewMap(kw_file, "clojure/string.glj", kw_line, int(17), kw_column, int(8), kw_end_DASH_line, int(17), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_maybe_DASH_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))).(*lang.Symbol)
+		tmp0 := sym_check_DASH_string.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_maybe_DASH_s)), kw_file, "clojure/string.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_check_DASH_string, kw_end_DASH_column, int(19), kw_column, int(8), kw_line, int(17), kw_end_DASH_line, int(17), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -567,7 +576,7 @@ func LoadNS() {
 	// re-quote-replacement
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_re_DASH_quote_DASH_replacement.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_replacement)), kw_doc, "Given a replacement string that you wish to be a literal\n   replacement for a pattern match in replace or replace-first, do the\n   necessary escaping of special characters in the replacement.", kw_file, "clojure/string.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(37), kw_column, int(7), kw_line, int(29), kw_end_DASH_line, int(29))).(*lang.Symbol)
+		tmp0 := sym_re_DASH_quote_DASH_replacement.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_replacement)), kw_doc, "Given a replacement string that you wish to be a literal\n   replacement for a pattern match in replace or replace-first, do the\n   necessary escaping of special characters in the replacement.", kw_file, "clojure/string.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_re_DASH_quote_DASH_replacement, kw_end_DASH_column, int(37), kw_column, int(7), kw_line, int(29), kw_end_DASH_line, int(29))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -588,7 +597,7 @@ func LoadNS() {
 	// escape
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_escape.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_cmap)), kw_doc, "Return a new string, using cmap to escape each character ch\n   from s as follows:\n\n   If (cmap ch) is nil, append ch to the new string.\n   If (cmap ch) is non-nil, append (str (cmap ch)) instead.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(249), kw_end_DASH_line, int(249))).(*lang.Symbol)
+		tmp0 := sym_escape.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_cmap)), kw_doc, "Return a new string, using cmap to escape each character ch\n   from s as follows:\n\n   If (cmap ch) is nil, append ch to the new string.\n   If (cmap ch) is non-nil, append (str (cmap ch)) instead.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_escape, kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(249), kw_end_DASH_line, int(249))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -628,7 +637,7 @@ func LoadNS() {
 	}
 	// index-of
 	{
-		tmp0 := sym_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return index of value (string or char) in s, optionally searching\n  forward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(261), kw_end_DASH_line, int(261))).(*lang.Symbol)
+		tmp0 := sym_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return index of value (string or char) in s, optionally searching\n  forward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_index_DASH_of, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(261), kw_end_DASH_line, int(261))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -738,7 +747,7 @@ func LoadNS() {
 	// join
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_join.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_separator, sym_coll)), kw_doc, "Returns a string of all elements in coll, as returned by (seq coll),\n   separated by an optional separator.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(162), kw_end_DASH_line, int(162))).(*lang.Symbol)
+		tmp0 := sym_join.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_separator, sym_coll)), kw_doc, "Returns a string of all elements in coll, as returned by (seq coll),\n   separated by an optional separator.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_join, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(162), kw_end_DASH_line, int(162))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -775,7 +784,7 @@ func LoadNS() {
 	}
 	// last-index-of
 	{
-		tmp0 := sym_last_DASH_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return last index of value (string or char) in s, optionally\n  searching backward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(285), kw_end_DASH_line, int(285))).(*lang.Symbol)
+		tmp0 := sym_last_DASH_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return last index of value (string or char) in s, optionally\n  searching backward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_last_DASH_index_DASH_of, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(285), kw_end_DASH_line, int(285))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -868,7 +877,7 @@ func LoadNS() {
 	// replace
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_replace.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces all instance of match with replacement in s.\n\n   match/replacement can be:\n\n   string / string\n   char / char\n   pattern / (string or function of match).\n\n   See also replace-first.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace \"Almost Pig Latin\" #\"\\b(\\w)(\\w+)\\b\" \"$2$1ay\")\n   -> \"lmostAay igPay atinLay\"", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(52), kw_end_DASH_line, int(52))).(*lang.Symbol)
+		tmp0 := sym_replace.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces all instance of match with replacement in s.\n\n   match/replacement can be:\n\n   string / string\n   char / char\n   pattern / (string or function of match).\n\n   See also replace-first.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace \"Almost Pig Latin\" #\"\\b(\\w)(\\w+)\\b\" \"$2$1ay\")\n   -> \"lmostAay igPay atinLay\"", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_replace, kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(52), kw_end_DASH_line, int(52))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -949,7 +958,7 @@ func LoadNS() {
 	}
 	// replace-by
 	{
-		tmp0 := sym_replace_DASH_by.WithMeta(lang.NewMap(kw_file, "clojure/string.glj", kw_line, int(39), kw_column, int(8), kw_end_DASH_line, int(39), kw_end_DASH_column, int(17), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re, sym_f)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))).(*lang.Symbol)
+		tmp0 := sym_replace_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re, sym_f)), kw_file, "clojure/string.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_replace_DASH_by, kw_end_DASH_column, int(17), kw_column, int(8), kw_line, int(39), kw_end_DASH_line, int(39), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -1051,7 +1060,7 @@ func LoadNS() {
 	// replace-first
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_replace_DASH_first.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces the first instance of match with replacement in s.\n\n   match/replacement can be:\n\n   char / char\n   string / string\n   pattern / (string or function of match).\n\n   See also replace.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace-first \"swap first two words\"\n                                 #\"(\\w+)(\\s+)(\\w+)\" \"$3$2$1\")\n   -> \"first swap two words\"", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(30), kw_column, int(7), kw_line, int(114), kw_end_DASH_line, int(114))).(*lang.Symbol)
+		tmp0 := sym_replace_DASH_first.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces the first instance of match with replacement in s.\n\n   match/replacement can be:\n\n   char / char\n   string / string\n   pattern / (string or function of match).\n\n   See also replace.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace-first \"swap first two words\"\n                                 #\"(\\w+)(\\s+)(\\w+)\" \"$3$2$1\")\n   -> \"first swap two words\"", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_replace_DASH_first, kw_end_DASH_column, int(30), kw_column, int(7), kw_line, int(114), kw_end_DASH_line, int(114))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -1173,7 +1182,7 @@ func LoadNS() {
 	}
 	// replace-first-by
 	{
-		tmp0 := sym_replace_DASH_first_DASH_by.WithMeta(lang.NewMap(kw_file, "clojure/string.glj", kw_line, int(87), kw_column, int(8), kw_end_DASH_line, int(87), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re, sym_f)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))).(*lang.Symbol)
+		tmp0 := sym_replace_DASH_first_DASH_by.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re, sym_f)), kw_file, "clojure/string.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_replace_DASH_first_DASH_by, kw_end_DASH_column, int(23), kw_column, int(8), kw_line, int(87), kw_end_DASH_line, int(87), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -1249,7 +1258,7 @@ func LoadNS() {
 	}
 	// replace-first-char
 	{
-		tmp0 := sym_replace_DASH_first_DASH_char.WithMeta(lang.NewMap(kw_file, "clojure/string.glj", kw_line, int(98), kw_column, int(8), kw_end_DASH_line, int(98), kw_end_DASH_column, int(25), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replace)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))).(*lang.Symbol)
+		tmp0 := sym_replace_DASH_first_DASH_char.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replace)), kw_file, "clojure/string.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_replace_DASH_first_DASH_char, kw_end_DASH_column, int(25), kw_column, int(8), kw_line, int(98), kw_end_DASH_line, int(98), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -1299,7 +1308,7 @@ func LoadNS() {
 	}
 	// replace-first-str
 	{
-		tmp0 := sym_replace_DASH_first_DASH_str.WithMeta(lang.NewMap(kw_file, "clojure/string.glj", kw_line, int(106), kw_column, int(8), kw_end_DASH_line, int(106), kw_end_DASH_column, int(24), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replace)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))).(*lang.Symbol)
+		tmp0 := sym_replace_DASH_first_DASH_str.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replace)), kw_file, "clojure/string.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_replace_DASH_first_DASH_str, kw_end_DASH_column, int(24), kw_column, int(8), kw_line, int(106), kw_end_DASH_line, int(106), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -1350,7 +1359,7 @@ func LoadNS() {
 	// reverse
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_reverse.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns s with its characters reversed.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(23), kw_end_DASH_line, int(23))).(*lang.Symbol)
+		tmp0 := sym_reverse.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns s with its characters reversed.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_reverse, kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(23), kw_end_DASH_line, int(23))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -1374,7 +1383,7 @@ func LoadNS() {
 	}
 	// split-lines
 	{
-		tmp0 := sym_split_DASH_lines.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Splits s on \\n or \\r\\n. Trailing empty lines are not returned.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(204), kw_end_DASH_line, int(204))).(*lang.Symbol)
+		tmp0 := sym_split_DASH_lines.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Splits s on \\n or \\r\\n. Trailing empty lines are not returned.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_name, sym_split_DASH_lines, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(204), kw_end_DASH_line, int(204))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -1391,5 +1400,15 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_split_DASH_lines.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+	}
+
+	// Mark namespace as AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.string")); ns != nil {
+		// Set metadata directly
+		meta := ns.Meta()
+		if meta == nil {
+			meta = lang.NewMap()
+		}
+		ns.ResetMeta(meta.Assoc(lang.NewKeyword("aot-loaded"), true).(lang.IPersistentMap))
 	}
 }

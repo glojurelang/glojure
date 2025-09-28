@@ -38,6 +38,14 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "glojure.go.io"
 func LoadNS() {
+	// Check if already AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("glojure.go.io")); ns != nil {
+		if meta := ns.Meta(); meta != nil {
+			if aotLoaded := meta.ValAt(lang.NewKeyword("aot-loaded")); aotLoaded != nil {
+				return // Already loaded, skip reinitialization
+			}
+		}
+	}
 	sym__AMP_ := lang.NewSymbol("&")
 	sym__EQ_ := lang.NewSymbol("=")
 	sym_IOFactory := lang.NewSymbol("IOFactory")
@@ -106,6 +114,7 @@ func LoadNS() {
 	kw_make_DASH_reader := lang.NewKeyword("make-reader")
 	kw_make_DASH_writer := lang.NewKeyword("make-writer")
 	kw_multis := lang.NewKeyword("multis")
+	kw_name := lang.NewKeyword("name")
 	kw_ns := lang.NewKeyword("ns")
 	kw_on_DASH_interface := lang.NewKeyword("on-interface")
 	kw_private := lang.NewKeyword("private")
@@ -238,7 +247,7 @@ func LoadNS() {
 	}
 	// byte-array-type
 	{
-		tmp0 := sym_byte_DASH_array_DASH_type.WithMeta(lang.NewMap(kw_doc, "Type object for a Go primitive byte slice.", kw_private, true, kw_file, "glojure/go/io.glj", kw_line, int(16), kw_column, int(5), kw_end_DASH_line, int(19), kw_end_DASH_column, int(16), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
+		tmp0 := sym_byte_DASH_array_DASH_type.WithMeta(lang.NewMap(kw_doc, "Type object for a Go primitive byte slice.", kw_file, "glojure/go/io.glj", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_name, sym_byte_DASH_array_DASH_type, kw_end_DASH_column, int(16), kw_column, int(5), kw_line, int(16), kw_end_DASH_line, int(19), kw_private, true)).(*lang.Symbol)
 		tmp1 := reflect.TypeOf([]uint8(nil))
 		var_glojure_DOT_go_DOT_io_byte_DASH_array_DASH_type = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
@@ -956,7 +965,7 @@ func LoadNS() {
 	}
 	// IOFactory
 	{
-		tmp0 := sym_IOFactory.WithMeta(lang.NewMap(kw_added, "1.2", kw_file, "glojure/go/io.glj", kw_line, int(72), kw_column, int(14), kw_end_DASH_line, int(72), kw_end_DASH_column, int(38), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
+		tmp0 := sym_IOFactory.WithMeta(lang.NewMap(kw_added, "1.2", kw_file, "glojure/go/io.glj", kw_line, int(72), kw_column, int(14), kw_end_DASH_line, int(72), kw_end_DASH_column, int(38), kw_name, sym_IOFactory, kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -1353,7 +1362,7 @@ func LoadNS() {
 	}
 	// copy
 	{
-		tmp0 := sym_copy.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_input, sym_output, sym__AMP_, sym_opts)), kw_doc, "Copies input to output.  Returns nil or throws IOException.\n  Input may be an InputStream, Reader, File, byte[], char[], or String.\n  Output may be an OutputStream, Writer, or File.\n\n  Options are key/value pairs and may be one of\n\n    :buffer-size  buffer size to use, default is 1024.\n    :encoding     encoding to use if converting between\n                  byte and char streams.   \n\n  Does not close any streams except those it opens itself \n  (on a File).", kw_file, "glojure/go/io.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(391), kw_end_DASH_line, int(391))).(*lang.Symbol)
+		tmp0 := sym_copy.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_input, sym_output, sym__AMP_, sym_opts)), kw_doc, "Copies input to output.  Returns nil or throws IOException.\n  Input may be an InputStream, Reader, File, byte[], char[], or String.\n  Output may be an OutputStream, Writer, or File.\n\n  Options are key/value pairs and may be one of\n\n    :buffer-size  buffer size to use, default is 1024.\n    :encoding     encoding to use if converting between\n                  byte and char streams.   \n\n  Does not close any streams except those it opens itself \n  (on a File).", kw_file, "glojure/go/io.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_name, sym_copy, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(391), kw_end_DASH_line, int(391))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -1390,7 +1399,7 @@ func LoadNS() {
 	}
 	// default-streams-impl
 	{
-		tmp0 := sym_default_DASH_streams_DASH_impl.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(166), kw_column, int(6), kw_end_DASH_line, int(166), kw_end_DASH_column, int(25), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
+		tmp0 := sym_default_DASH_streams_DASH_impl.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(166), kw_column, int(6), kw_end_DASH_line, int(166), kw_end_DASH_column, int(25), kw_name, sym_default_DASH_streams_DASH_impl, kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -1454,7 +1463,7 @@ func LoadNS() {
 	}
 	// do-copy
 	{
-		tmp0 := sym_do_DASH_copy.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_input, sym_output, sym_opts)), kw_doc, "Internal helper for copy", kw_file, "glojure/go/io.glj", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_end_DASH_column, int(9), kw_column, int(3), kw_line, int(301), kw_end_DASH_line, int(304), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_do_DASH_copy.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_input, sym_output, sym_opts)), kw_doc, "Internal helper for copy", kw_file, "glojure/go/io.glj", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_name, sym_do_DASH_copy, kw_end_DASH_column, int(9), kw_column, int(3), kw_line, int(301), kw_end_DASH_line, int(304), kw_private, true)).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -1586,7 +1595,7 @@ func LoadNS() {
 	}
 	// go-try!
 	{
-		tmp0 := sym_go_DASH_try_BANG_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_call)), kw_file, "glojure/go/io.glj", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_end_DASH_column, int(27), kw_column, int(11), kw_line, int(21), kw_end_DASH_line, int(21), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_go_DASH_try_BANG_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_call)), kw_file, "glojure/go/io.glj", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_name, sym_go_DASH_try_BANG_, kw_end_DASH_column, int(27), kw_column, int(11), kw_line, int(21), kw_end_DASH_line, int(21), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -1772,7 +1781,7 @@ func LoadNS() {
 	}
 	// make-input-stream
 	{
-		tmp0 := sym_make_DASH_input_DASH_stream.WithMeta(lang.NewMap(kw_added, "1.2", kw_file, "glojure/go/io.glj", kw_line, int(86), kw_column, int(4), kw_end_DASH_line, int(86), kw_end_DASH_column, int(36), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
+		tmp0 := sym_make_DASH_input_DASH_stream.WithMeta(lang.NewMap(kw_added, "1.2", kw_file, "glojure/go/io.glj", kw_line, int(86), kw_column, int(4), kw_end_DASH_line, int(86), kw_end_DASH_column, int(36), kw_name, sym_make_DASH_input_DASH_stream, kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -1888,7 +1897,7 @@ func LoadNS() {
 	}
 	// make-output-stream
 	{
-		tmp0 := sym_make_DASH_output_DASH_stream.WithMeta(lang.NewMap(kw_added, "1.2", kw_file, "glojure/go/io.glj", kw_line, int(87), kw_column, int(4), kw_end_DASH_line, int(87), kw_end_DASH_column, int(37), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
+		tmp0 := sym_make_DASH_output_DASH_stream.WithMeta(lang.NewMap(kw_added, "1.2", kw_file, "glojure/go/io.glj", kw_line, int(87), kw_column, int(4), kw_end_DASH_line, int(87), kw_end_DASH_column, int(37), kw_name, sym_make_DASH_output_DASH_stream, kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -2004,7 +2013,7 @@ func LoadNS() {
 	}
 	// make-reader
 	{
-		tmp0 := sym_make_DASH_reader.WithMeta(lang.NewMap(kw_added, "1.2", kw_file, "glojure/go/io.glj", kw_line, int(84), kw_column, int(4), kw_end_DASH_line, int(84), kw_end_DASH_column, int(30), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
+		tmp0 := sym_make_DASH_reader.WithMeta(lang.NewMap(kw_added, "1.2", kw_file, "glojure/go/io.glj", kw_line, int(84), kw_column, int(4), kw_end_DASH_line, int(84), kw_end_DASH_column, int(30), kw_name, sym_make_DASH_reader, kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -2098,7 +2107,7 @@ func LoadNS() {
 	}
 	// make-writer
 	{
-		tmp0 := sym_make_DASH_writer.WithMeta(lang.NewMap(kw_added, "1.2", kw_file, "glojure/go/io.glj", kw_line, int(85), kw_column, int(4), kw_end_DASH_line, int(85), kw_end_DASH_column, int(30), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
+		tmp0 := sym_make_DASH_writer.WithMeta(lang.NewMap(kw_added, "1.2", kw_file, "glojure/go/io.glj", kw_line, int(85), kw_column, int(4), kw_end_DASH_line, int(85), kw_end_DASH_column, int(30), kw_name, sym_make_DASH_writer, kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -2193,7 +2202,7 @@ func LoadNS() {
 	// reader
 	{
 		tmp1 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
-		tmp0 := sym_reader.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_opts)), kw_doc, "Attempts to coerce its argument into an open io.Reader.\n\n   Default implementations are provided for Reader, BufferedReader,\n   InputStream, File, URI, URL, Socket, byte slices, rune slices,\n   and string.\n\n   If argument is a string, it tries to resolve it first as a URI, then\n   as a local file name.  URIs with a 'file' protocol are converted to\n   local file names.\n\n   Should be used inside with-open to ensure the io.Reader is properly\n   closed.", kw_file, "glojure/go/io.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(89), kw_end_DASH_line, int(89))).(*lang.Symbol)
+		tmp0 := sym_reader.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_opts)), kw_doc, "Attempts to coerce its argument into an open io.Reader.\n\n   Default implementations are provided for Reader, BufferedReader,\n   InputStream, File, URI, URL, Socket, byte slices, rune slices,\n   and string.\n\n   If argument is a string, it tries to resolve it first as a URI, then\n   as a local file name.  URIs with a 'file' protocol are converted to\n   local file names.\n\n   Should be used inside with-open to ensure the io.Reader is properly\n   closed.", kw_file, "glojure/go/io.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_name, sym_reader, kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(89), kw_end_DASH_line, int(89))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -2226,5 +2235,15 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_go_DOT_io_reader.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+	}
+
+	// Mark namespace as AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("glojure.go.io")); ns != nil {
+		// Set metadata directly
+		meta := ns.Meta()
+		if meta == nil {
+			meta = lang.NewMap()
+		}
+		ns.ResetMeta(meta.Assoc(lang.NewKeyword("aot-loaded"), true).(lang.IPersistentMap))
 	}
 }

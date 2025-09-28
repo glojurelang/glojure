@@ -37,6 +37,14 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "glojure.go.types"
 func LoadNS() {
+	// Check if already AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("glojure.go.types")); ns != nil {
+		if meta := ns.Meta(); meta != nil {
+			if aotLoaded := meta.ValAt(lang.NewKeyword("aot-loaded")); aotLoaded != nil {
+				return // Already loaded, skip reinitialization
+			}
+		}
+	}
 	sym__EQ_ := lang.NewSymbol("=")
 	sym_AstType := lang.NewSymbol("AstType")
 	sym_apply := lang.NewSymbol("apply")
@@ -78,6 +86,7 @@ func LoadNS() {
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
 	kw_multis := lang.NewKeyword("multis")
+	kw_name := lang.NewKeyword("name")
 	kw_ns := lang.NewKeyword("ns")
 	kw_on_DASH_interface := lang.NewKeyword("on-interface")
 	kw_private := lang.NewKeyword("private")
@@ -804,7 +813,7 @@ func LoadNS() {
 	}
 	// AstType
 	{
-		tmp0 := sym_AstType.WithMeta(lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(3), kw_column, int(14), kw_end_DASH_line, int(3), kw_end_DASH_column, int(20), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))).(*lang.Symbol)
+		tmp0 := sym_AstType.WithMeta(lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(3), kw_column, int(14), kw_end_DASH_line, int(3), kw_end_DASH_column, int(20), kw_name, sym_AstType, kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -965,7 +974,7 @@ func LoadNS() {
 	}
 	// ast->type
 	{
-		tmp0 := sym_ast_DASH__GT_type.WithMeta(lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(4), kw_column, int(4), kw_end_DASH_line, int(4), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))).(*lang.Symbol)
+		tmp0 := sym_ast_DASH__GT_type.WithMeta(lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(4), kw_column, int(4), kw_end_DASH_line, int(4), kw_end_DASH_column, int(12), kw_name, sym_ast_DASH__GT_type, kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -1125,7 +1134,7 @@ func LoadNS() {
 	}
 	// from-string
 	{
-		tmp0 := sym_from_DASH_string.WithMeta(lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(92), kw_column, int(7), kw_end_DASH_line, int(92), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_typ)), kw_doc, "Returns a Go type from a go type expression.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))).(*lang.Symbol)
+		tmp0 := sym_from_DASH_string.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_typ)), kw_doc, "Returns a Go type from a go type expression.", kw_file, "glojure/go/types.glj", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types), kw_name, sym_from_DASH_string, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(92), kw_end_DASH_line, int(92))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -1179,7 +1188,7 @@ func LoadNS() {
 	}
 	// struct-field
 	{
-		tmp0 := sym_struct_DASH_field.WithMeta(lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(6), kw_column, int(8), kw_end_DASH_line, int(6), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_type_DASH_ast), lang.NewVector(sym_type_DASH_ast, sym_name)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))).(*lang.Symbol)
+		tmp0 := sym_struct_DASH_field.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_type_DASH_ast), lang.NewVector(sym_type_DASH_ast, sym_name)), kw_file, "glojure/go/types.glj", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types), kw_name, sym_struct_DASH_field, kw_end_DASH_column, int(19), kw_column, int(8), kw_line, int(6), kw_end_DASH_line, int(6), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -1351,5 +1360,15 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_glojure_DOT_go_DOT_types_struct_DASH_field.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+	}
+
+	// Mark namespace as AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("glojure.go.types")); ns != nil {
+		// Set metadata directly
+		meta := ns.Meta()
+		if meta == nil {
+			meta = lang.NewMap()
+		}
+		ns.ResetMeta(meta.Assoc(lang.NewKeyword("aot-loaded"), true).(lang.IPersistentMap))
 	}
 }

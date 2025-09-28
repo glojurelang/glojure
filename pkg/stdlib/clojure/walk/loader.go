@@ -34,6 +34,14 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "clojure.walk"
 func LoadNS() {
+	// Check if already AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.walk")); ns != nil {
+		if meta := ns.Meta(); meta != nil {
+			if aotLoaded := meta.ValAt(lang.NewKeyword("aot-loaded")); aotLoaded != nil {
+				return // Already loaded, skip reinitialization
+			}
+		}
+	}
 	sym_apply := lang.NewSymbol("apply")
 	sym_clojure_DOT_core := lang.NewSymbol("clojure.core")
 	sym_clojure_DOT_walk := lang.NewSymbol("clojure.walk")
@@ -89,6 +97,7 @@ func LoadNS() {
 	kw_end_DASH_line := lang.NewKeyword("end-line")
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
+	kw_name := lang.NewKeyword("name")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
 	// var clojure.core/apply
@@ -175,7 +184,7 @@ func LoadNS() {
 	_ = ns
 	// keywordize-keys
 	{
-		tmp0 := sym_keywordize_DASH_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from strings to keywords.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(94), kw_end_DASH_line, int(94))).(*lang.Symbol)
+		tmp0 := sym_keywordize_DASH_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from strings to keywords.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_name, sym_keywordize_DASH_keys, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(94), kw_end_DASH_line, int(94))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -281,7 +290,7 @@ func LoadNS() {
 	}
 	// macroexpand-all
 	{
-		tmp0 := sym_macroexpand_DASH_all.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Recursively performs all possible macroexpansions in form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(126), kw_end_DASH_line, int(126))).(*lang.Symbol)
+		tmp0 := sym_macroexpand_DASH_all.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Recursively performs all possible macroexpansions in form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_name, sym_macroexpand_DASH_all, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(126), kw_end_DASH_line, int(126))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -321,7 +330,7 @@ func LoadNS() {
 	}
 	// postwalk
 	{
-		tmp0 := sym_postwalk.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Performs a depth-first, post-order traversal of form.  Calls f on\n  each sub-form, uses f's return value in place of the original.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(53), kw_end_DASH_line, int(53))).(*lang.Symbol)
+		tmp0 := sym_postwalk.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Performs a depth-first, post-order traversal of form.  Calls f on\n  each sub-form, uses f's return value in place of the original.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_name, sym_postwalk, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(53), kw_end_DASH_line, int(53))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -344,7 +353,7 @@ func LoadNS() {
 	}
 	// postwalk-demo
 	{
-		tmp0 := sym_postwalk_DASH_demo.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of postwalk by printing each form as it is\n  walked.  Returns form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(80), kw_end_DASH_line, int(80))).(*lang.Symbol)
+		tmp0 := sym_postwalk_DASH_demo.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of postwalk by printing each form as it is\n  walked.  Returns form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_name, sym_postwalk_DASH_demo, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(80), kw_end_DASH_line, int(80))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -380,7 +389,7 @@ func LoadNS() {
 	}
 	// postwalk-replace
 	{
-		tmp0 := sym_postwalk_DASH_replace.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the leaves of the tree first.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(118), kw_end_DASH_line, int(118))).(*lang.Symbol)
+		tmp0 := sym_postwalk_DASH_replace.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the leaves of the tree first.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_name, sym_postwalk_DASH_replace, kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(118), kw_end_DASH_line, int(118))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -421,7 +430,7 @@ func LoadNS() {
 	}
 	// prewalk
 	{
-		tmp0 := sym_prewalk.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Like postwalk, but does pre-order traversal.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(61), kw_end_DASH_line, int(61))).(*lang.Symbol)
+		tmp0 := sym_prewalk.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Like postwalk, but does pre-order traversal.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_name, sym_prewalk, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(61), kw_end_DASH_line, int(61))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -446,7 +455,7 @@ func LoadNS() {
 	}
 	// prewalk-demo
 	{
-		tmp0 := sym_prewalk_DASH_demo.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of prewalk by printing each form as it is\n  walked.  Returns form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(87), kw_end_DASH_line, int(87))).(*lang.Symbol)
+		tmp0 := sym_prewalk_DASH_demo.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of prewalk by printing each form as it is\n  walked.  Returns form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_name, sym_prewalk_DASH_demo, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(87), kw_end_DASH_line, int(87))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -482,7 +491,7 @@ func LoadNS() {
 	}
 	// prewalk-replace
 	{
-		tmp0 := sym_prewalk_DASH_replace.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the root of the tree first.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(110), kw_end_DASH_line, int(110))).(*lang.Symbol)
+		tmp0 := sym_prewalk_DASH_replace.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the root of the tree first.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_name, sym_prewalk_DASH_replace, kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(110), kw_end_DASH_line, int(110))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -523,7 +532,7 @@ func LoadNS() {
 	}
 	// stringify-keys
 	{
-		tmp0 := sym_stringify_DASH_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from keywords to strings.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(102), kw_end_DASH_line, int(102))).(*lang.Symbol)
+		tmp0 := sym_stringify_DASH_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from keywords to strings.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_name, sym_stringify_DASH_keys, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(102), kw_end_DASH_line, int(102))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -629,7 +638,7 @@ func LoadNS() {
 	}
 	// walk
 	{
-		tmp0 := sym_walk.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_inner, sym_outer, sym_form)), kw_doc, "Traverses form, an arbitrary data structure.  inner and outer are\n  functions.  Applies inner to each element of form, building up a\n  data structure of the same type, then applies outer to the result.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(35), kw_end_DASH_line, int(35))).(*lang.Symbol)
+		tmp0 := sym_walk.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_inner, sym_outer, sym_form)), kw_doc, "Traverses form, an arbitrary data structure.  inner and outer are\n  functions.  Applies inner to each element of form, building up a\n  data structure of the same type, then applies outer to the result.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_name, sym_walk, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(35), kw_end_DASH_line, int(35))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -748,5 +757,15 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_walk_walk.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+	}
+
+	// Mark namespace as AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.walk")); ns != nil {
+		// Set metadata directly
+		meta := ns.Meta()
+		if meta == nil {
+			meta = lang.NewMap()
+		}
+		ns.ResetMeta(meta.Assoc(lang.NewKeyword("aot-loaded"), true).(lang.IPersistentMap))
 	}
 }

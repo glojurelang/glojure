@@ -34,6 +34,14 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "clojure.template"
 func LoadNS() {
+	// Check if already AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.template")); ns != nil {
+		if meta := ns.Meta(); meta != nil {
+			if aotLoaded := meta.ValAt(lang.NewKeyword("aot-loaded")); aotLoaded != nil {
+				return // Already loaded, skip reinitialization
+			}
+		}
+	}
 	sym__AMP_ := lang.NewSymbol("&")
 	sym_apply_DASH_template := lang.NewSymbol("apply-template")
 	sym_argv := lang.NewSymbol("argv")
@@ -60,6 +68,7 @@ func LoadNS() {
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
 	kw_macro := lang.NewKeyword("macro")
+	kw_name := lang.NewKeyword("name")
 	kw_ns := lang.NewKeyword("ns")
 	kw_rettag := lang.NewKeyword("rettag")
 	// var clojure.core/concat
@@ -90,7 +99,7 @@ func LoadNS() {
 	_ = ns
 	// apply-template
 	{
-		tmp0 := sym_apply_DASH_template.WithMeta(lang.NewMap(kw_file, "clojure/template.glj", kw_line, int(30), kw_column, int(7), kw_end_DASH_line, int(30), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym_values)), kw_doc, "For use in macros.  argv is an argument list, as in defn.  expr is\n  a quoted expression using the symbols in argv.  values is a sequence\n  of values to be used for the arguments.\n\n  apply-template will recursively replace argument symbols in expr\n  with their corresponding values, returning a modified expr.\n\n  Example: (apply-template '[x] '(+ x x) '[2])\n           ;=> (+ 2 2)", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_template))).(*lang.Symbol)
+		tmp0 := sym_apply_DASH_template.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym_values)), kw_doc, "For use in macros.  argv is an argument list, as in defn.  expr is\n  a quoted expression using the symbols in argv.  values is a sequence\n  of values to be used for the arguments.\n\n  apply-template will recursively replace argument symbols in expr\n  with their corresponding values, returning a modified expr.\n\n  Example: (apply-template '[x] '(+ x x) '[2])\n           ;=> (+ 2 2)", kw_file, "clojure/template.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_template), kw_name, sym_apply_DASH_template, kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(30), kw_end_DASH_line, int(30))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -114,7 +123,7 @@ func LoadNS() {
 	}
 	// do-template
 	{
-		tmp0 := sym_do_DASH_template.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym__AMP_, sym_values)), kw_doc, "Repeatedly copies expr (in a do block) for each group of arguments\n  in values.  values are automatically partitioned by the number of\n  arguments in argv, an argument vector as in defn.\n\n  Example: (macroexpand '(do-template [x y] (+ y x) 2 4 3 5))\n           ;=> (do (+ 4 2) (+ 5 3))", kw_file, "clojure/template.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_template), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(45), kw_end_DASH_line, int(45))).(*lang.Symbol)
+		tmp0 := sym_do_DASH_template.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym__AMP_, sym_values)), kw_doc, "Repeatedly copies expr (in a do block) for each group of arguments\n  in values.  values are automatically partitioned by the number of\n  arguments in argv, an argument vector as in defn.\n\n  Example: (macroexpand '(do-template [x y] (+ y x) 2 4 3 5))\n           ;=> (do (+ 4 2) (+ 5 3))", kw_file, "clojure/template.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_template), kw_name, sym_do_DASH_template, kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(45), kw_end_DASH_line, int(45))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -175,5 +184,15 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_template_do_DASH_template.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+	}
+
+	// Mark namespace as AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.template")); ns != nil {
+		// Set metadata directly
+		meta := ns.Meta()
+		if meta == nil {
+			meta = lang.NewMap()
+		}
+		ns.ResetMeta(meta.Assoc(lang.NewKeyword("aot-loaded"), true).(lang.IPersistentMap))
 	}
 }

@@ -34,6 +34,14 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "clojure.uuid"
 func LoadNS() {
+	// Check if already AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.uuid")); ns != nil {
+		if meta := ns.Meta(); meta != nil {
+			if aotLoaded := meta.ValAt(lang.NewKeyword("aot-loaded")); aotLoaded != nil {
+				return // Already loaded, skip reinitialization
+			}
+		}
+	}
 	sym_clojure_DOT_core := lang.NewSymbol("clojure.core")
 	sym_clojure_DOT_uuid := lang.NewSymbol("clojure.uuid")
 	sym_default_DASH_uuid_DASH_reader := lang.NewSymbol("default-uuid-reader")
@@ -45,6 +53,7 @@ func LoadNS() {
 	kw_end_DASH_line := lang.NewKeyword("end-line")
 	kw_file := lang.NewKeyword("file")
 	kw_line := lang.NewKeyword("line")
+	kw_name := lang.NewKeyword("name")
 	kw_ns := lang.NewKeyword("ns")
 	kw_private := lang.NewKeyword("private")
 	kw_rettag := lang.NewKeyword("rettag")
@@ -60,7 +69,7 @@ func LoadNS() {
 	_ = ns
 	// default-uuid-reader
 	{
-		tmp0 := sym_default_DASH_uuid_DASH_reader.WithMeta(lang.NewMap(kw_file, "clojure/uuid.glj", kw_line, int(11), kw_column, int(8), kw_end_DASH_line, int(11), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_uuid))).(*lang.Symbol)
+		tmp0 := sym_default_DASH_uuid_DASH_reader.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_file, "clojure/uuid.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_uuid), kw_name, sym_default_DASH_uuid_DASH_reader, kw_end_DASH_column, int(26), kw_column, int(8), kw_line, int(11), kw_end_DASH_line, int(11), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -83,5 +92,15 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+	}
+
+	// Mark namespace as AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.uuid")); ns != nil {
+		// Set metadata directly
+		meta := ns.Meta()
+		if meta == nil {
+			meta = lang.NewMap()
+		}
+		ns.ResetMeta(meta.Assoc(lang.NewKeyword("aot-loaded"), true).(lang.IPersistentMap))
 	}
 }

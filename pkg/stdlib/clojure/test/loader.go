@@ -34,6 +34,14 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "clojure.test"
 func LoadNS() {
+	// Check if already AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.test")); ns != nil {
+		if meta := ns.Meta(); meta != nil {
+			if aotLoaded := meta.ValAt(lang.NewKeyword("aot-loaded")); aotLoaded != nil {
+				return // Already loaded, skip reinitialization
+			}
+		}
+	}
 	sym__AMP_ := lang.NewSymbol("&")
 	sym__STAR_err_STAR_ := lang.NewSymbol("*err*")
 	sym__STAR_initial_DASH_report_DASH_counters_STAR_ := lang.NewSymbol("*initial-report-counters*")
@@ -502,7 +510,7 @@ func LoadNS() {
 	_ = ns
 	// *initial-report-counters*
 	{
-		tmp0 := sym__STAR_initial_DASH_report_DASH_counters_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(263), kw_column, int(6), kw_end_DASH_line, int(263), kw_end_DASH_column, int(40), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
+		tmp0 := sym__STAR_initial_DASH_report_DASH_counters_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(263), kw_column, int(6), kw_end_DASH_line, int(263), kw_end_DASH_column, int(40), kw_name, sym__STAR_initial_DASH_report_DASH_counters_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
 		var_clojure_DOT_test__STAR_initial_DASH_report_DASH_counters_STAR_ = ns.InternWithValue(tmp0, lang.NewMap(kw_test, int64(0), kw_pass, int64(0), kw_fail, int64(0), kw_error, int64(0)), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test__STAR_initial_DASH_report_DASH_counters_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -511,7 +519,7 @@ func LoadNS() {
 	}
 	// *load-tests*
 	{
-		tmp0 := sym__STAR_load_DASH_tests_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(244), kw_column, int(10), kw_end_DASH_line, int(249), kw_end_DASH_column, int(14), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
+		tmp0 := sym__STAR_load_DASH_tests_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(244), kw_column, int(10), kw_end_DASH_line, int(249), kw_end_DASH_column, int(14), kw_name, sym__STAR_load_DASH_tests_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
 		var_clojure_DOT_test__STAR_load_DASH_tests_STAR_ = ns.InternWithValue(tmp0, true, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test__STAR_load_DASH_tests_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -520,7 +528,7 @@ func LoadNS() {
 	}
 	// *report-counters*
 	{
-		tmp0 := sym__STAR_report_DASH_counters_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(261), kw_column, int(6), kw_end_DASH_line, int(261), kw_end_DASH_column, int(32), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
+		tmp0 := sym__STAR_report_DASH_counters_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(261), kw_column, int(6), kw_end_DASH_line, int(261), kw_end_DASH_column, int(32), kw_name, sym__STAR_report_DASH_counters_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
 		var_clojure_DOT_test__STAR_report_DASH_counters_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test__STAR_report_DASH_counters_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -529,7 +537,7 @@ func LoadNS() {
 	}
 	// *stack-trace-depth*
 	{
-		tmp0 := sym__STAR_stack_DASH_trace_DASH_depth_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(251), kw_column, int(6), kw_end_DASH_line, int(256), kw_end_DASH_column, int(20), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
+		tmp0 := sym__STAR_stack_DASH_trace_DASH_depth_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(251), kw_column, int(6), kw_end_DASH_line, int(256), kw_end_DASH_column, int(20), kw_name, sym__STAR_stack_DASH_trace_DASH_depth_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
 		var_clojure_DOT_test__STAR_stack_DASH_trace_DASH_depth_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test__STAR_stack_DASH_trace_DASH_depth_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -538,7 +546,7 @@ func LoadNS() {
 	}
 	// *test-out*
 	{
-		tmp0 := sym__STAR_test_DASH_out_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(270), kw_column, int(6), kw_end_DASH_line, int(270), kw_end_DASH_column, int(32), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
+		tmp0 := sym__STAR_test_DASH_out_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(270), kw_column, int(6), kw_end_DASH_line, int(270), kw_end_DASH_column, int(32), kw_name, sym__STAR_test_DASH_out_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
 		var_clojure_DOT_test__STAR_test_DASH_out_STAR_ = ns.InternWithValue(tmp0, nil, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test__STAR_test_DASH_out_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -547,7 +555,7 @@ func LoadNS() {
 	}
 	// *testing-contexts*
 	{
-		tmp0 := sym__STAR_testing_DASH_contexts_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(268), kw_column, int(6), kw_end_DASH_line, int(268), kw_end_DASH_column, int(33), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
+		tmp0 := sym__STAR_testing_DASH_contexts_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(268), kw_column, int(6), kw_end_DASH_line, int(268), kw_end_DASH_column, int(33), kw_name, sym__STAR_testing_DASH_contexts_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
 		var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_ = ns.InternWithValue(tmp0, lang.NewList(), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -556,7 +564,7 @@ func LoadNS() {
 	}
 	// *testing-vars*
 	{
-		tmp0 := sym__STAR_testing_DASH_vars_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(266), kw_column, int(6), kw_end_DASH_line, int(266), kw_end_DASH_column, int(29), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
+		tmp0 := sym__STAR_testing_DASH_vars_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/test.glj", kw_line, int(266), kw_column, int(6), kw_end_DASH_line, int(266), kw_end_DASH_column, int(29), kw_name, sym__STAR_testing_DASH_vars_STAR_, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
 		var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_ = ns.InternWithValue(tmp0, lang.NewList(), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -565,7 +573,7 @@ func LoadNS() {
 	}
 	// compose-fixtures
 	{
-		tmp0 := sym_compose_DASH_fixtures.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f1, sym_f2)), kw_doc, "Composes two fixture functions, creating a new fixture function\n  that combines their behavior.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(680), kw_end_DASH_line, int(680))).(*lang.Symbol)
+		tmp0 := sym_compose_DASH_fixtures.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f1, sym_f2)), kw_doc, "Composes two fixture functions, creating a new fixture function\n  that combines their behavior.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_compose_DASH_fixtures, kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(680), kw_end_DASH_line, int(680))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -607,7 +615,7 @@ func LoadNS() {
 	}
 	// default-fixture
 	{
-		tmp0 := sym_default_DASH_fixture.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "The default, empty, fixture function.  Just calls its argument.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(22), kw_column, int(8), kw_line, int(674), kw_end_DASH_line, int(674), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_default_DASH_fixture.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "The default, empty, fixture function.  Just calls its argument.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_default_DASH_fixture, kw_end_DASH_column, int(22), kw_column, int(8), kw_line, int(674), kw_end_DASH_line, int(674), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -624,7 +632,7 @@ func LoadNS() {
 	}
 	// add-ns-meta
 	{
-		tmp0 := sym_add_DASH_ns_DASH_meta.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_key, sym_coll)), kw_doc, "Adds elements in coll to the current namespace metadata as the\n  value of key.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(654), kw_end_DASH_line, int(654), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_add_DASH_ns_DASH_meta.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_key, sym_coll)), kw_doc, "Adds elements in coll to the current namespace metadata as the\n  value of key.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_add_DASH_ns_DASH_meta, kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(654), kw_end_DASH_line, int(654), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -646,7 +654,7 @@ func LoadNS() {
 	}
 	// use-fixtures
 	{
-		tmp0 := sym_use_DASH_fixtures.WithMeta(lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(661), kw_column, int(11), kw_end_DASH_line, int(661), kw_end_DASH_column, int(22), kw_added, "1.1", kw_doc, "Wrap test runs in a fixture function to perform setup and\n  teardown. Using a fixture-type of :each wraps every test\n  individually, while :once wraps the whole run in a single function.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
+		tmp0 := sym_use_DASH_fixtures.WithMeta(lang.NewMap(kw_doc, "Wrap test runs in a fixture function to perform setup and\n  teardown. Using a fixture-type of :each wraps every test\n  individually, while :once wraps the whole run in a single function.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_use_DASH_fixtures, kw_end_DASH_column, int(22), kw_column, int(11), kw_line, int(661), kw_end_DASH_line, int(661))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -711,7 +719,7 @@ func LoadNS() {
 	}
 	// are
 	{
-		tmp0 := sym_are.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym__AMP_, sym_args)), kw_doc, "Checks multiple assertions with a template expression.\n  See clojure.template/do-template for an explanation of\n  templates.\n\n  Example: (are [x y] (= x y)  \n                2 (+ 1 1)\n                4 (* 2 2))\n  Expands to: \n           (do (is (= 2 (+ 1 1)))\n               (is (= 4 (* 2 2))))\n\n  Note: This breaks some reporting features, such as line numbers.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(563), kw_end_DASH_line, int(563))).(*lang.Symbol)
+		tmp0 := sym_are.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym__AMP_, sym_args)), kw_doc, "Checks multiple assertions with a template expression.\n  See clojure.template/do-template for an explanation of\n  templates.\n\n  Example: (are [x y] (= x y)  \n                2 (+ 1 1)\n                4 (* 2 2))\n  Expands to: \n           (do (is (= 2 (+ 1 1)))\n               (is (= 4 (* 2 2))))\n\n  Note: This breaks some reporting features, such as line numbers.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_are, kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(563), kw_end_DASH_line, int(563))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -839,7 +847,7 @@ func LoadNS() {
 	}
 	// assert-any
 	{
-		tmp0 := sym_assert_DASH_any.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_form)), kw_doc, "Returns generic assertion code for any test, including macros, Java\n  method calls, or isolated symbols.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(446), kw_end_DASH_line, int(446))).(*lang.Symbol)
+		tmp0 := sym_assert_DASH_any.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_form)), kw_doc, "Returns generic assertion code for any test, including macros, Java\n  method calls, or isolated symbols.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_assert_DASH_any, kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(446), kw_end_DASH_line, int(446))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -970,7 +978,7 @@ func LoadNS() {
 	}
 	// assert-expr
 	{
-		tmp0 := sym_assert_DASH_expr.WithMeta(lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(467), kw_column, int(11), kw_end_DASH_line, int(467), kw_end_DASH_column, int(21), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
+		tmp0 := sym_assert_DASH_expr.WithMeta(lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(467), kw_column, int(11), kw_end_DASH_line, int(467), kw_end_DASH_column, int(21), kw_name, sym_assert_DASH_expr, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -1610,7 +1618,7 @@ func LoadNS() {
 	}
 	// assert-predicate
 	{
-		tmp0 := sym_assert_DASH_predicate.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_form)), kw_doc, "Returns generic assertion code for any functional predicate.  The\n  'expected' argument to 'report' will contains the original form, the\n  'actual' argument will contain the form with all its sub-forms\n  evaluated.  If the predicate returns false, the 'actual' form will\n  be wrapped in (not...).", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(427), kw_end_DASH_line, int(427))).(*lang.Symbol)
+		tmp0 := sym_assert_DASH_predicate.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_form)), kw_doc, "Returns generic assertion code for any functional predicate.  The\n  'expected' argument to 'report' will contains the original form, the\n  'actual' argument will contain the form with all its sub-forms\n  evaluated.  If the predicate returns false, the 'actual' form will\n  be wrapped in (not...).", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_assert_DASH_predicate, kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(427), kw_end_DASH_line, int(427))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -1829,7 +1837,7 @@ func LoadNS() {
 	}
 	// deftest
 	{
-		tmp0 := sym_deftest.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_body)), kw_doc, "Defines a test function with no arguments.  Test functions may call\n  other tests, so tests may be composed.  If you compose tests, you\n  should also define a function named test-ns-hook; run-tests will\n  call test-ns-hook instead of testing all vars.\n\n  Note: Actually, the test body goes in the :test metadata on the var,\n  and the real function (the value of the var) calls test-var on\n  itself.\n\n  When *load-tests* is false, deftest is ignored.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(613), kw_end_DASH_line, int(613))).(*lang.Symbol)
+		tmp0 := sym_deftest.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_body)), kw_doc, "Defines a test function with no arguments.  Test functions may call\n  other tests, so tests may be composed.  If you compose tests, you\n  should also define a function named test-ns-hook; run-tests will\n  call test-ns-hook instead of testing all vars.\n\n  Note: Actually, the test body goes in the :test metadata on the var,\n  and the real function (the value of the var) calls test-var on\n  itself.\n\n  When *load-tests* is false, deftest is ignored.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_deftest, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(613), kw_end_DASH_line, int(613))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -1925,7 +1933,7 @@ func LoadNS() {
 	}
 	// deftest-
 	{
-		tmp0 := sym_deftest_DASH_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_body)), kw_doc, "Like deftest but creates a private var.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(630), kw_end_DASH_line, int(630))).(*lang.Symbol)
+		tmp0 := sym_deftest_DASH_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_body)), kw_doc, "Like deftest but creates a private var.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_deftest_DASH_, kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(630), kw_end_DASH_line, int(630))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -2021,7 +2029,7 @@ func LoadNS() {
 	}
 	// do-report
 	{
-		tmp0 := sym_do_DASH_report.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Add file and line information to a test result and call report.\n   If you are writing a custom assert-expr method, call this function\n   to pass test results to report.", kw_file, "clojure/test.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(350), kw_end_DASH_line, int(350))).(*lang.Symbol)
+		tmp0 := sym_do_DASH_report.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Add file and line information to a test result and call report.\n   If you are writing a custom assert-expr method, call this function\n   to pass test results to report.", kw_file, "clojure/test.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_do_DASH_report, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(350), kw_end_DASH_line, int(350))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -2084,7 +2092,7 @@ func LoadNS() {
 	}
 	// file-and-line
 	{
-		tmp0 := sym_file_DASH_and_DASH_line.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_exception, sym_depth)), kw_file, "clojure/test.glj", kw_deprecated, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(20), kw_column, int(8), kw_line, int(334), kw_end_DASH_line, int(334), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_file_DASH_and_DASH_line.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_exception, sym_depth)), kw_file, "clojure/test.glj", kw_deprecated, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_file_DASH_and_DASH_line, kw_end_DASH_column, int(20), kw_column, int(8), kw_line, int(334), kw_end_DASH_line, int(334), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 2)
@@ -2173,7 +2181,7 @@ func LoadNS() {
 	}
 	// file-position
 	{
-		tmp0 := sym_file_DASH_position.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns a vector [filename line-number] for the nth call up the\n  stack.\n\n  Deprecated in 1.2: The information needed for test reporting is\n  now on :file and :line keys in the result map.", kw_file, "clojure/test.glj", kw_deprecated, "1.2", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(281), kw_end_DASH_line, int(281))).(*lang.Symbol)
+		tmp0 := sym_file_DASH_position.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns a vector [filename line-number] for the nth call up the\n  stack.\n\n  Deprecated in 1.2: The information needed for test reporting is\n  now on :file and :line keys in the result map.", kw_file, "clojure/test.glj", kw_deprecated, "1.2", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_file_DASH_position, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(281), kw_end_DASH_line, int(281))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -2238,7 +2246,7 @@ func LoadNS() {
 	}
 	// function?
 	{
-		tmp0 := sym_function_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if argument is a function or a symbol that resolves to\n  a function (not a macro).", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(415), kw_end_DASH_line, int(415))).(*lang.Symbol)
+		tmp0 := sym_function_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if argument is a function or a symbol that resolves to\n  a function (not a macro).", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_function_QMARK_, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(415), kw_end_DASH_line, int(415))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -2326,7 +2334,7 @@ func LoadNS() {
 	}
 	// get-possibly-unbound-var
 	{
-		tmp0 := sym_get_DASH_possibly_DASH_unbound_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Like var-get but returns nil if the var is unbound.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(30), kw_column, int(7), kw_line, int(408), kw_end_DASH_line, int(408))).(*lang.Symbol)
+		tmp0 := sym_get_DASH_possibly_DASH_unbound_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Like var-get but returns nil if the var is unbound.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_get_DASH_possibly_DASH_unbound_DASH_var, kw_end_DASH_column, int(30), kw_column, int(7), kw_line, int(408), kw_end_DASH_line, int(408))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -2358,7 +2366,7 @@ func LoadNS() {
 	}
 	// inc-report-counter
 	{
-		tmp0 := sym_inc_DASH_report_DASH_counter.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_name)), kw_doc, "Increments the named counter in *report-counters*, a ref to a map.\n  Does nothing if *report-counters* is nil.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(313), kw_end_DASH_line, int(313))).(*lang.Symbol)
+		tmp0 := sym_inc_DASH_report_DASH_counter.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_name)), kw_doc, "Increments the named counter in *report-counters*, a ref to a map.\n  Does nothing if *report-counters* is nil.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_inc_DASH_report_DASH_counter, kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(313), kw_end_DASH_line, int(313))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -2403,7 +2411,7 @@ func LoadNS() {
 	}
 	// is
 	{
-		tmp0 := sym_is.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_form), lang.NewVector(sym_form, sym_msg)), kw_doc, "Generic assertion macro.  'form' is any predicate test.\n  'msg' is an optional message to attach to the assertion.\n  \n  Example: (is (= 4 (+ 2 2)) \"Two plus two should be 4\")\n\n  Special forms:\n\n  (is (thrown? c body)) checks that an instance of c is thrown from\n  body, fails if not; then returns the thing thrown.\n\n  (is (thrown-with-msg? c re body)) checks that an instance of c is\n  thrown AND that the message on the exception matches (with\n  re-find) the regular expression re.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(545), kw_end_DASH_line, int(545))).(*lang.Symbol)
+		tmp0 := sym_is.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_form), lang.NewVector(sym_form, sym_msg)), kw_doc, "Generic assertion macro.  'form' is any predicate test.\n  'msg' is an optional message to attach to the assertion.\n  \n  Example: (is (= 4 (+ 2 2)) \"Two plus two should be 4\")\n\n  Special forms:\n\n  (is (thrown? c body)) checks that an instance of c is thrown from\n  body, fails if not; then returns the thing thrown.\n\n  (is (thrown-with-msg? c re body)) checks that an instance of c is\n  thrown AND that the message on the exception matches (with\n  re-find) the regular expression re.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_is, kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(545), kw_end_DASH_line, int(545))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -2458,7 +2466,7 @@ func LoadNS() {
 	}
 	// join-fixtures
 	{
-		tmp0 := sym_join_DASH_fixtures.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fixtures)), kw_doc, "Composes a collection of fixtures, in order.  Always returns a valid\n  fixture function, even if the collection is empty.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(687), kw_end_DASH_line, int(687))).(*lang.Symbol)
+		tmp0 := sym_join_DASH_fixtures.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fixtures)), kw_doc, "Composes a collection of fixtures, in order.  Always returns a valid\n  fixture function, even if the collection is empty.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_join_DASH_fixtures, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(687), kw_end_DASH_line, int(687))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -2478,7 +2486,7 @@ func LoadNS() {
 	}
 	// report
 	{
-		tmp0 := sym_report.WithMeta(lang.NewMap(kw_doc, "Generic reporting function, may be overridden to plug in\n   different report formats (e.g., TAP, JUnit).  Assertions such as\n   'is' call 'report' to indicate results.  The argument given to\n   'report' will be a map with a :type key.  See the documentation at\n   the top of test_is.clj for more information on the types of\n   arguments for 'report'.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(8), kw_column, int(3), kw_line, int(324), kw_end_DASH_line, int(332), kw_dynamic, true)).(*lang.Symbol)
+		tmp0 := sym_report.WithMeta(lang.NewMap(kw_doc, "Generic reporting function, may be overridden to plug in\n   different report formats (e.g., TAP, JUnit).  Assertions such as\n   'is' call 'report' to indicate results.  The argument given to\n   'report' will be a map with a :type key.  See the documentation at\n   the top of test_is.clj for more information on the types of\n   arguments for 'report'.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_report, kw_end_DASH_column, int(8), kw_column, int(3), kw_line, int(324), kw_end_DASH_line, int(332), kw_dynamic, true)).(*lang.Symbol)
 		// MultiFn report
 		tmp1 := lang.NewMultiFn("report", kw_type, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp2 lang.FnFunc
@@ -2926,7 +2934,7 @@ func LoadNS() {
 	}
 	// run-all-tests
 	{
-		tmp0 := sym_run_DASH_all_DASH_tests.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_re)), kw_doc, "Runs all tests in all namespaces; prints results.\n  Optional argument is a regular expression; only namespaces with\n  names matching the regular expression (with re-matches) will be\n  tested.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(771), kw_end_DASH_line, int(771))).(*lang.Symbol)
+		tmp0 := sym_run_DASH_all_DASH_tests.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_re)), kw_doc, "Runs all tests in all namespaces; prints results.\n  Optional argument is a regular expression; only namespaces with\n  names matching the regular expression (with re-matches) will be\n  tested.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_run_DASH_all_DASH_tests, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(771), kw_end_DASH_line, int(771))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -2979,7 +2987,7 @@ func LoadNS() {
 	}
 	// run-test
 	{
-		tmp0 := sym_run_DASH_test.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test_DASH_symbol)), kw_doc, "Runs a single test.\n\n  Because the intent is to run a single test, there is no check for the namespace test-ns-hook.", kw_file, "clojure/test.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(804), kw_end_DASH_line, int(804))).(*lang.Symbol)
+		tmp0 := sym_run_DASH_test.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test_DASH_symbol)), kw_doc, "Runs a single test.\n\n  Because the intent is to run a single test, there is no check for the namespace test-ns-hook.", kw_file, "clojure/test.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_run_DASH_test, kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(804), kw_end_DASH_line, int(804))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 3)
@@ -3084,7 +3092,7 @@ func LoadNS() {
 	}
 	// run-test-var
 	{
-		tmp0 := sym_run_DASH_test_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Runs the tests for a single Var, with fixtures executed around the test, and summary output after.", kw_file, "clojure/test.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(788), kw_end_DASH_line, int(788))).(*lang.Symbol)
+		tmp0 := sym_run_DASH_test_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Runs the tests for a single Var, with fixtures executed around the test, and summary output after.", kw_file, "clojure/test.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_run_DASH_test_DASH_var, kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(788), kw_end_DASH_line, int(788))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3170,7 +3178,7 @@ func LoadNS() {
 	}
 	// run-tests
 	{
-		tmp0 := sym_run_DASH_tests.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_namespaces)), kw_doc, "Runs all tests in the given namespaces; prints results.\n  Defaults to current namespace if none given.  Returns a map\n  summarizing test results.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(759), kw_end_DASH_line, int(759))).(*lang.Symbol)
+		tmp0 := sym_run_DASH_tests.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_namespaces)), kw_doc, "Runs all tests in the given namespaces; prints results.\n  Defaults to current namespace if none given.  Returns a map\n  summarizing test results.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_run_DASH_tests, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(759), kw_end_DASH_line, int(759))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -3217,7 +3225,7 @@ func LoadNS() {
 	}
 	// set-test
 	{
-		tmp0 := sym_set_DASH_test.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_body)), kw_doc, "Experimental.\n  Sets :test metadata of the named var to a fn with the given body.\n  The var must already exist.  Does not modify the value of the var.\n\n  When *load-tests* is false, set-test is ignored.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(639), kw_end_DASH_line, int(639))).(*lang.Symbol)
+		tmp0 := sym_set_DASH_test.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_body)), kw_doc, "Experimental.\n  Sets :test metadata of the named var to a fn with the given body.\n  The var must already exist.  Does not modify the value of the var.\n\n  When *load-tests* is false, set-test is ignored.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_set_DASH_test, kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(639), kw_end_DASH_line, int(639))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -3289,7 +3297,7 @@ func LoadNS() {
 	}
 	// stacktrace-file-and-line
 	{
-		tmp0 := sym_stacktrace_DASH_file_DASH_and_DASH_line.WithMeta(lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(343), kw_column, int(8), kw_end_DASH_line, int(343), kw_end_DASH_column, int(31), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_stacktrace)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
+		tmp0 := sym_stacktrace_DASH_file_DASH_and_DASH_line.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_stacktrace)), kw_file, "clojure/test.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_stacktrace_DASH_file_DASH_and_DASH_line, kw_end_DASH_column, int(31), kw_column, int(8), kw_line, int(343), kw_end_DASH_line, int(343), kw_private, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3356,7 +3364,7 @@ func LoadNS() {
 	}
 	// successful?
 	{
-		tmp0 := sym_successful_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_summary)), kw_doc, "Returns true if the given test summary indicates all tests\n  were successful, false otherwise.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(780), kw_end_DASH_line, int(780))).(*lang.Symbol)
+		tmp0 := sym_successful_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_summary)), kw_doc, "Returns true if the given test summary indicates all tests\n  were successful, false otherwise.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_successful_QMARK_, kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(780), kw_end_DASH_line, int(780))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3391,7 +3399,7 @@ func LoadNS() {
 	}
 	// test-all-vars
 	{
-		tmp0 := sym_test_DASH_all_DASH_vars.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Calls test-vars on every var interned in the namespace, with fixtures.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(728), kw_end_DASH_line, int(728))).(*lang.Symbol)
+		tmp0 := sym_test_DASH_all_DASH_vars.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Calls test-vars on every var interned in the namespace, with fixtures.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_test_DASH_all_DASH_vars, kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(728), kw_end_DASH_line, int(728))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3413,7 +3421,7 @@ func LoadNS() {
 	}
 	// test-ns
 	{
-		tmp0 := sym_test_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "If the namespace defines a function named test-ns-hook, calls that.\n  Otherwise, calls test-all-vars on the namespace.  'ns' is a\n  namespace object or a symbol.\n\n  Internally binds *report-counters* to a ref initialized to\n  *initial-report-counters*.  Returns the final, dereferenced state of\n  *report-counters*.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(734), kw_end_DASH_line, int(734))).(*lang.Symbol)
+		tmp0 := sym_test_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "If the namespace defines a function named test-ns-hook, calls that.\n  Otherwise, calls test-all-vars on the namespace.  'ns' is a\n  namespace object or a symbol.\n\n  Internally binds *report-counters* to a ref initialized to\n  *initial-report-counters*.  Returns the final, dereferenced state of\n  *report-counters*.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_test_DASH_ns, kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(734), kw_end_DASH_line, int(734))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3515,7 +3523,7 @@ func LoadNS() {
 	}
 	// test-var
 	{
-		tmp0 := sym_test_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "If v has a function in its :test metadata, calls that function,\n  with *testing-vars* bound to (conj *testing-vars* v).", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(699), kw_end_DASH_line, int(699), kw_dynamic, true)).(*lang.Symbol)
+		tmp0 := sym_test_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "If v has a function in its :test metadata, calls that function,\n  with *testing-vars* bound to (conj *testing-vars* v).", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_test_DASH_var, kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(699), kw_end_DASH_line, int(699), kw_dynamic, true)).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3621,7 +3629,7 @@ func LoadNS() {
 	}
 	// test-vars
 	{
-		tmp0 := sym_test_DASH_vars.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_vars)), kw_doc, "Groups vars by their namespace and runs test-var on them with\n  appropriate fixtures applied.", kw_file, "clojure/test.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(714), kw_end_DASH_line, int(714))).(*lang.Symbol)
+		tmp0 := sym_test_DASH_vars.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_vars)), kw_doc, "Groups vars by their namespace and runs test-var on them with\n  appropriate fixtures applied.", kw_file, "clojure/test.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_test_DASH_vars, kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(714), kw_end_DASH_line, int(714))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4186,7 +4194,7 @@ func LoadNS() {
 	}
 	// testing
 	{
-		tmp0 := sym_testing.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_string, sym__AMP_, sym_body)), kw_doc, "Adds a new string to the list of testing contexts.  May be nested,\n  but must occur inside a test function (deftest).", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(588), kw_end_DASH_line, int(588))).(*lang.Symbol)
+		tmp0 := sym_testing.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_string, sym__AMP_, sym_body)), kw_doc, "Adds a new string to the list of testing contexts.  May be nested,\n  but must occur inside a test function (deftest).", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_testing, kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(588), kw_end_DASH_line, int(588))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -4244,7 +4252,7 @@ func LoadNS() {
 	}
 	// testing-contexts-str
 	{
-		tmp0 := sym_testing_DASH_contexts_DASH_str.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a string representation of the current test context. Joins\n  strings in *testing-contexts* with spaces.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(306), kw_end_DASH_line, int(306))).(*lang.Symbol)
+		tmp0 := sym_testing_DASH_contexts_DASH_str.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a string representation of the current test context. Joins\n  strings in *testing-contexts* with spaces.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_testing_DASH_contexts_DASH_str, kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(306), kw_end_DASH_line, int(306))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 0)
@@ -4266,7 +4274,7 @@ func LoadNS() {
 	}
 	// testing-vars-str
 	{
-		tmp0 := sym_testing_DASH_vars_DASH_str.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Returns a string representation of the current test.  Renders names\n  in *testing-vars* as a list, then the source file and line of\n  current assertion.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(293), kw_end_DASH_line, int(293))).(*lang.Symbol)
+		tmp0 := sym_testing_DASH_vars_DASH_str.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Returns a string representation of the current test.  Renders names\n  in *testing-vars* as a list, then the source file and line of\n  current assertion.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_testing_DASH_vars_DASH_str, kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(293), kw_end_DASH_line, int(293))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -4352,7 +4360,7 @@ func LoadNS() {
 	}
 	// try-expr
 	{
-		tmp0 := sym_try_DASH_expr.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_form)), kw_doc, "Used by the 'is' macro to catch unexpected exceptions.\n  You don't call this.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(529), kw_end_DASH_line, int(529))).(*lang.Symbol)
+		tmp0 := sym_try_DASH_expr.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_form)), kw_doc, "Used by the 'is' macro to catch unexpected exceptions.\n  You don't call this.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_try_DASH_expr, kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(529), kw_end_DASH_line, int(529))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 4)
@@ -4437,7 +4445,7 @@ func LoadNS() {
 	}
 	// with-test
 	{
-		tmp0 := sym_with_DASH_test.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_definition, sym__AMP_, sym_body)), kw_doc, "Takes any definition form (that returns a Var) as the first argument.\n  Remaining body goes in the :test metadata function for that Var.\n\n  When *load-tests* is false, only evaluates the definition, ignoring\n  the tests.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(600), kw_end_DASH_line, int(600))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_test.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_definition, sym__AMP_, sym_body)), kw_doc, "Takes any definition form (that returns a Var) as the first argument.\n  Remaining body goes in the :test metadata function for that Var.\n\n  When *load-tests* is false, only evaluates the definition, ignoring\n  the tests.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_with_DASH_test, kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(600), kw_end_DASH_line, int(600))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -4510,7 +4518,7 @@ func LoadNS() {
 	}
 	// with-test-out
 	{
-		tmp0 := sym_with_DASH_test_DASH_out.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Runs body with *out* bound to the value of *test-out*.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(23), kw_column, int(11), kw_line, int(272), kw_end_DASH_line, int(272))).(*lang.Symbol)
+		tmp0 := sym_with_DASH_test_DASH_out.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Runs body with *out* bound to the value of *test-out*.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_name, sym_with_DASH_test_DASH_out, kw_end_DASH_column, int(23), kw_column, int(11), kw_line, int(272), kw_end_DASH_line, int(272))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -4563,5 +4571,15 @@ func LoadNS() {
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_with_DASH_test_DASH_out.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
+	}
+
+	// Mark namespace as AOT-loaded
+	if ns := lang.FindNamespace(lang.NewSymbol("clojure.test")); ns != nil {
+		// Set metadata directly
+		meta := ns.Meta()
+		if meta == nil {
+			meta = lang.NewMap()
+		}
+		ns.ResetMeta(meta.Assoc(lang.NewKeyword("aot-loaded"), true).(lang.IPersistentMap))
 	}
 }

@@ -183,7 +183,7 @@ vet:
 # vet is disabled until we fix errors in generated code
 test: test-glj test-suite  # vet
 
-# Run tests in test/glojure/test_glojure using the new test runner
+# Run tests in test/glojure/test_glojure using the new test runner  
 test-glj: $(GLJ-CMD)
 	$(GLJ-CMD) -m glojure.test-runner --dir test/glojure --format console
 
