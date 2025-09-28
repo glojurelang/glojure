@@ -47,8 +47,6 @@ endif
 endif
 
 TEST-GLJ-DIR := test/glojure
-TEST-GLJ-FILES := $(shell find $(TEST-GLJ-DIR) -name '*.glj' | sort)
-TEST-GLJ-TARGETS := $(addsuffix .test,$(TEST-GLJ-FILES))
 TEST-SUITE-DIR := test/clojure-test-suite
 TEST-SUITE-FILE := test-glojure.glj
 
@@ -83,6 +81,29 @@ ALL-TARGETS := \
 
 #-------------------------------------------------------------------------------
 default: all
+
+.PHONY: help
+help:
+	@echo "Glojure Makefile targets:"
+	@echo ""
+	@echo "Building:"
+	@echo "  all                - Build everything"
+	@echo "  build              - Build glj for current platform"
+	@echo "  clean              - Remove built files"
+	@echo ""
+	@echo "Testing with new test runner:"
+	@echo "  test               - Run all tests (test-glj and test-suite)"
+	@echo "  test-glj           - Run tests in test/glojure/test_glojure"
+	@echo "  test-verbose       - Run tests with verbose output"
+	@echo "  test-ns NS=pattern - Run tests matching namespace pattern"
+	@echo "  test-tap           - Run tests with TAP format output"
+	@echo "  test-json          - Run tests with JSON format output"
+	@echo "  test-list          - List all test namespaces"
+	@echo ""
+	@echo "Examples:"
+	@echo "  make test-ns NS=string   - Run string tests"
+	@echo "  make test-ns NS=basic    - Run basic tests"
+	@echo "  make test-json           - Get JSON test results"
 
 # Dummy target for commands like:
 #   make all force=1
@@ -158,11 +179,13 @@ bin/%/glj.wasm: \
 vet:
 	go vet ./...
 
-.PHONY: test test-runner
+.PHONY: test test-glj test-verbose test-ns test-tap test-json test-list
 # vet is disabled until we fix errors in generated code
 test: test-glj test-suite  # vet
 
-test-glj: $(TEST-GLJ-TARGETS)
+# Run tests in test/glojure/test_glojure using the new test runner
+test-glj:
+	go run ./cmd/glj-test --dir test/glojure --format console
 
 test-suite: $(GLJ-CMD)
 	cd $(TEST-SUITE-DIR) && \
@@ -175,8 +198,8 @@ test-suite: $(GLJ-CMD)
 $(TEST-RUNNER-BIN): cmd/glj-test/main.go pkg/stdlib/glojure/test_runner.glj
 	go build -o $@ ./cmd/glj-test
 
-# Run tests with the new test runner
-test-runner: 
+# Run all tests with verbose output
+test-verbose: 
 	go run ./cmd/glj-test --dir test/glojure --verbose
 
 # Run specific test namespace with test runner
@@ -188,8 +211,19 @@ test-ns:
 	fi
 	go run ./cmd/glj-test --dir test/glojure --namespace ".*$(NS).*" --verbose
 
-$(TEST-GLJ-TARGETS): $(GLJ-CMD)
-	$< $(basename $@)
+# Run tests with TAP format output (useful for CI)
+test-tap:
+	go run ./cmd/glj-test --dir test/glojure --format tap
+
+# Run tests with JSON format output
+test-json:
+	go run ./cmd/glj-test --dir test/glojure --format json
+
+# List all test namespaces without running them
+test-list:
+	go run ./cmd/glj-test --dir test/glojure --list
+
+# Old per-file test targets removed - using test runner instead
 
 format:
 	@if go fmt ./... | grep -q ''; then \
