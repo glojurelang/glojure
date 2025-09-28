@@ -23,15 +23,21 @@ Usage: glj [options] [file]
 
 Options:
   -e <expr>        Evaluate expression from command line
+  --aot            Compile Glojure file to Go code (stdout)
   -h, --help       Show this help message
   --version        Show version information
 
+Environment Variables:
+  GLJPATH          Colon-separated PATH to search for .glj libraries
+
 Examples:
-  glj                   # Start REPL
-  glj -e "(+ 1 2)"      # Evaluate expression
-  glj script.glj        # Run script file
-  glj --version         # Show version
-  glj --help            # Show this help
+  glj                              # Start a Glojure REPL
+  glj script.glj          	       # Run script file
+  glj -e '(* 6 7)'                 # Evaluate expression
+  glj --aot file.glj               # Compile .glj file to Go code
+  glj --aot -e '(ns main)(defn …)' # Compile expression to Go code
+  glj --version                    # Show version
+  glj --help                       # Show this help
 
 For more information, visit: https://github.com/glojurelang/glojure
 `, runtime.Version)
@@ -47,6 +53,29 @@ func Main(args []string) {
 		return
 	} else if args[0] == "--help" || args[0] == "-h" {
 		printHelp()
+		return
+	} else if args[0] == "--aot" {
+		// AOT compile file or expression
+		if len(args) < 2 {
+			log.Fatal("glj: --aot requires a file path or -e expression")
+		}
+
+		if args[1] == "-e" {
+			// AOT compile expression
+			if len(args) < 3 {
+				log.Fatal("glj: --aot -e requires an expression")
+			}
+			expr := args[2]
+			if err := runtime.CompileAOTString(expr, "<string>"); err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			// AOT compile file
+			inputFile := args[1]
+			if err := runtime.CompileAOTFile(inputFile); err != nil {
+				log.Fatal(err)
+			}
+		}
 		return
 	} else if args[0] == "-e" {
 		// Evaluate expression from command line

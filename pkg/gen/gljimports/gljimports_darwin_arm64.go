@@ -3992,6 +3992,8 @@ func RegisterImports(_register func(string, interface{})) {
 	// package github.com/glojurelang/glojure/pkg/runtime
 	////////////////////////////////////////
 	_register("github.com/glojurelang/glojure/pkg/runtime.AddLoadPath", github_com_glojurelang_glojure_pkg_runtime.AddLoadPath)
+	_register("github.com/glojurelang/glojure/pkg/runtime.CompileAOTFile", github_com_glojurelang_glojure_pkg_runtime.CompileAOTFile)
+	_register("github.com/glojurelang/glojure/pkg/runtime.CompileAOTString", github_com_glojurelang_glojure_pkg_runtime.CompileAOTString)
 	_register("github.com/glojurelang/glojure/pkg/runtime.Compiler", github_com_glojurelang_glojure_pkg_runtime.Compiler)
 	_register("github.com/glojurelang/glojure/pkg/runtime.Debug", github_com_glojurelang_glojure_pkg_runtime.Debug)
 	_register("github.com/glojurelang/glojure/pkg/runtime.EvalOption", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.EvalOption)(nil)).Elem())
@@ -3999,6 +4001,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/runtime.*Fn", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.Fn)(nil)))
 	_register("github.com/glojurelang/glojure/pkg/runtime.Generator", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.Generator)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/runtime.*Generator", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.Generator)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/runtime.GetLoadPath", github_com_glojurelang_glojure_pkg_runtime.GetLoadPath)
 	_register("github.com/glojurelang/glojure/pkg/runtime.GetNSLoader", github_com_glojurelang_glojure_pkg_runtime.GetNSLoader)
 	_register("github.com/glojurelang/glojure/pkg/runtime.GetUseAOT", github_com_glojurelang_glojure_pkg_runtime.GetUseAOT)
 	_register("github.com/glojurelang/glojure/pkg/runtime.NewEnvironment", github_com_glojurelang_glojure_pkg_runtime.NewEnvironment)
