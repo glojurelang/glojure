@@ -3999,6 +3999,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/runtime.*Fn", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.Fn)(nil)))
 	_register("github.com/glojurelang/glojure/pkg/runtime.Generator", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.Generator)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/runtime.*Generator", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_runtime.Generator)(nil)))
+	_register("github.com/glojurelang/glojure/pkg/runtime.GetLoadPath", github_com_glojurelang_glojure_pkg_runtime.GetLoadPath)
 	_register("github.com/glojurelang/glojure/pkg/runtime.GetNSLoader", github_com_glojurelang_glojure_pkg_runtime.GetNSLoader)
 	_register("github.com/glojurelang/glojure/pkg/runtime.GetUseAOT", github_com_glojurelang_glojure_pkg_runtime.GetUseAOT)
 	_register("github.com/glojurelang/glojure/pkg/runtime.NewEnvironment", github_com_glojurelang_glojure_pkg_runtime.NewEnvironment)
