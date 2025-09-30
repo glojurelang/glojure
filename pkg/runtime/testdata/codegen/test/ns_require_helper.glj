@@ -1,0 +1,4 @@
+(ns test.helper)
+
+(defn double [x]
+  (* x 2))

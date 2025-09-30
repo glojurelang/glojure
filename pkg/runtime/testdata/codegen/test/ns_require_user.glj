@@ -1,0 +1,5 @@
+(ns test.user
+  (:require [test.helper :refer [double]]))
+
+(defn quadruple [x]
+  (double (double x)))

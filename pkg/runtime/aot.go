@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -75,9 +76,17 @@ func CompileAOTString(source string, filename string) error {
 		dashMain != nil &&
 		!dashMain.IsMacro()
 
+	// Extract module name from filename or environment variable
+	moduleName := os.Getenv("GLJ_AOT_MODULE")
+	if moduleName == "" {
+		base := filepath.Base(filename)
+		moduleName = strings.TrimSuffix(base, filepath.Ext(base))
+	}
+
 	// Generate Go code to a buffer
 	var codegenBuffer bytes.Buffer
 	gen := NewGenerator(&codegenBuffer)
+	gen.SetModuleName(moduleName)
 
 	if hasMainDashMain {
 		gen.addImport("os")
