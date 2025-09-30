@@ -27,12 +27,12 @@ that all Go values can be used as Glojure values and vice versa.
 ## Prerequisites
 
 Before you get started with Glojure, make sure you have installed
-and have knowledge of Go (version 1.19 or higher).
+and have knowledge of Go (version 1.24 or higher).
 
 ## Installation
 
 Glojure is currently available from source for all platforms where Go
-can run, and it requires at least go 1.19.
+can run, and it requires at least go 1.24.
 
 Install it with the `go install` command:
 ```
