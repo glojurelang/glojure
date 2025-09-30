@@ -38,8 +38,6 @@ For more information, visit: https://github.com/glojurelang/glojure
 }
 
 func Main(args []string) {
-	runtime.AddLoadPath(os.DirFS("."))
-
 	if len(args) == 0 {
 		repl.Start()
 	} else if args[0] == "--version" {
