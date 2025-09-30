@@ -163,6 +163,8 @@ test: test-glj test-suite  # vet
 test-glj: $(TEST-GLJ-TARGETS)
 
 test-suite: $(GLJ-CMD)
+	git submodule init
+	git submodule update
 	cd $(TEST-SUITE-DIR) && \
 		$(abspath $<) $(TEST-SUITE-FILE) \
 			--expect-failures 38 \
