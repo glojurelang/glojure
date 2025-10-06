@@ -1,6 +1,6 @@
 module github.com/glojurelang/glojure
 
-go 1.19
+go 1.24
 
 require (
 	bitbucket.org/pcastools/hash v1.0.5
