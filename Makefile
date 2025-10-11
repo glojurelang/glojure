@@ -4,7 +4,7 @@
 SHELL := bash
 
 GO-VERSION ?= 1.19.3
-CLOJURE-VERSION ?= 1.12.1
+CLOJURE-VERSION ?= 1.12.3
 
 CLOJURE-STDLIB-VERSION := clojure-$(CLOJURE-VERSION)
 STDLIB-ORIGINALS-DIR := scripts/rewrite-core/originals
