@@ -8,6 +8,7 @@ import (
 	"io"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -484,6 +485,10 @@ func (g *Generator) generateValue(value any) string {
 	case time.Duration:
 		alias := g.addImportWithAlias("time")
 		return fmt.Sprintf("%s.Duration(%d)", alias, int64(v))
+	case *regexp.Regexp:
+		alias := g.addImportWithAlias("regexp")
+		// Use MustCompile since we know the pattern is valid (it compiled successfully in the reader)
+		return fmt.Sprintf("%s.MustCompile(%#v)", alias, v.String())
 	case *lang.BigDecimal:
 		return g.generateBigDecimalValue(v)
 	case bool:
