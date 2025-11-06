@@ -145,6 +145,17 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 		versionVar.BindRoot(parseVersion(Version))
 	}
 
+	// Set the load path
+	loadPathVar := core.FindInternedVar(lang.NewSymbol("*load-path*"))
+	if loadPathVar != nil {
+		pathStrings := GetLoadPath()
+		pathValues := make([]any, len(pathStrings))
+		for i, path := range pathStrings {
+			pathValues[i] = path
+		}
+		loadPathVar.BindRoot(lang.NewVector(pathValues...))
+	}
+
 	lang.InternVar(core, lang.NewSymbol("load-file"), func(filename string) any {
 		buf, err := os.ReadFile(filename)
 		if err != nil {
