@@ -3,7 +3,7 @@
 
 SHELL := bash
 
-GO-VERSION ?= 1.19.3
+GO-VERSION ?= 1.24.0
 CLOJURE-VERSION ?= 1.12.1
 
 CLOJURE-STDLIB-VERSION := clojure-$(CLOJURE-VERSION)
@@ -60,6 +60,7 @@ GO-PLATFORMS := \
 	windows_arm \
 	windows_amd64 \
 	js_wasm \
+	wasip1_wasm \
 	$(EXTRA-GO-PLATFORMS)
 
 GLJ-IMPORTS=$(foreach platform,$(GO-PLATFORMS) \

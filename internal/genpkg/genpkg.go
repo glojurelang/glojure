@@ -89,6 +89,23 @@ func isEligibleForExport(object types.Object, packageName string) bool {
 		return false
 	}
 
+	// Reject generic types (types with type parameters)
+	if typeName, ok := object.(*types.TypeName); ok {
+		if named, ok := typeName.Type().(*types.Named); ok {
+			if named.TypeParams() != nil && named.TypeParams().Len() > 0 {
+				return false
+			}
+		}
+	}
+
+	// Reject generic functions (functions with type parameters)
+	if fn, ok := object.(*types.Func); ok {
+		sig := fn.Type().(*types.Signature)
+		if sig.TypeParams() != nil && sig.TypeParams().Len() > 0 {
+			return false
+		}
+	}
+
 	return true
 }
 
@@ -237,12 +254,6 @@ func getVarDeclaration(object *types.Var, globalName string, aliasName string) s
 }
 
 func getTypeNameDeclaration(object *types.TypeName, globalName string, aliasName string) string {
-	isGeneric := strings.HasSuffix(object.Type().String(), "]")
-
-	if isGeneric {
-		return ""
-	}
-
 	ret := fmt.Sprintf("_register(%q, reflect.TypeOf((*%s)(nil)).Elem())", globalName, aliasName)
 	if _, ok := object.Type().Underlying().(*types.Struct); ok {
 		// register with a * prepended to the name _within_ the package
