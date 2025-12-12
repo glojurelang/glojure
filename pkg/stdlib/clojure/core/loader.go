@@ -68,6 +68,7 @@ func LoadNS() {
 	sym__STAR_flush_DASH_on_DASH_newline_STAR_ := lang.NewSymbol("*flush-on-newline*")
 	sym__STAR_glojure_DASH_version_STAR_ := lang.NewSymbol("*glojure-version*")
 	sym__STAR_in_STAR_ := lang.NewSymbol("*in*")
+	sym__STAR_load_DASH_path_STAR_ := lang.NewSymbol("*load-path*")
 	sym__STAR_loaded_DASH_libs_STAR_ := lang.NewSymbol("*loaded-libs*")
 	sym__STAR_loading_DASH_verbosely_STAR_ := lang.NewSymbol("*loading-verbosely*")
 	sym__STAR_ns_STAR_ := lang.NewSymbol("*ns*")
@@ -1465,6 +1466,8 @@ func LoadNS() {
 	var_clojure_DOT_core__STAR_glojure_DASH_version_STAR_ := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_glojure_DASH_version_STAR_)
 	// var clojure.core/*in*
 	var_clojure_DOT_core__STAR_in_STAR_ := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_in_STAR_)
+	// var clojure.core/*load-path*
+	var_clojure_DOT_core__STAR_load_DASH_path_STAR_ := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_load_DASH_path_STAR_)
 	// var clojure.core/*loaded-libs*
 	var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_ := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_loaded_DASH_libs_STAR_)
 	// var clojure.core/*loading-verbosely*
@@ -3131,6 +3134,14 @@ func LoadNS() {
 		var_clojure_DOT_core__STAR_glojure_DASH_version_STAR_ = ns.InternWithValue(tmp0, lang.NewMap(kw_major, int(0), kw_minor, int(0), kw_incremental, int(0), kw_qualifier, nil), true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_glojure_DASH_version_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// *load-path*
+	{
+		tmp0 := sym__STAR_load_DASH_path_STAR_.WithMeta(lang.NewMap()).(*lang.Symbol)
+		var_clojure_DOT_core__STAR_load_DASH_path_STAR_ = ns.InternWithValue(tmp0, lang.NewVector("./pkg/stdlib", ".", "<StdLib>"), true)
+		if tmp0.Meta() != nil {
+			var_clojure_DOT_core__STAR_load_DASH_path_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// *loaded-libs*

@@ -29,18 +29,32 @@ var (
 
 	useAot = func() bool {
 		// default to true
-		gua := strings.ToLower(os.Getenv("GLOJURE_USE_AOT"))
+		gua := strings.ToLower(os.Getenv("GLJ_USE_AOT"))
 		return !(gua == "0" || gua == "false" || gua == "no" || gua == "off")
 	}()
 )
 
 func init() {
-	stdlibPath := os.Getenv("GLOJURE_STDLIB_PATH")
-	if stdlibPath != "" {
-		AddLoadPath(os.DirFS(stdlibPath))
-	} else {
-		AddLoadPath(stdlib.StdLib)
+	// Start with current directory
+	AddLoadPath(os.DirFS("."))
+
+	// Add GLJPATH directories if set
+	gljPath := os.Getenv("GLJPATH")
+	if gljPath != "" {
+		paths := strings.Split(gljPath, ":")
+		for i := len(paths) - 1; i >= 0; i-- {
+			path := paths[i]
+			if path != "" {
+				// Prepend each path so they appear in the correct order
+				loadPathLock.Lock()
+				loadPath = append([]fs.FS{os.DirFS(path)}, loadPath...)
+				loadPathLock.Unlock()
+			}
+		}
 	}
+
+	// Always add <StdLib> at the end
+	AddLoadPath(stdlib.StdLib)
 }
 
 func GetUseAOT() bool {
@@ -53,6 +67,28 @@ func AddLoadPath(fs fs.FS) {
 	defer loadPathLock.Unlock()
 
 	loadPath = append(loadPath, fs)
+}
+
+// GetLoadPath returns the current load path as a slice of strings.
+// This is used to expose the load path to Clojure code via the *load-path* dynamic variable.
+func GetLoadPath() []string {
+	loadPathLock.Lock()
+	defer loadPathLock.Unlock()
+
+	result := make([]string, len(loadPath))
+	for i, fs := range loadPath {
+		// Convert fs.FS to string representation
+		// os.DirFS returns a string type under the hood
+		if reflect.TypeOf(fs).Kind() == reflect.String {
+			result[i] = fmt.Sprintf("%s", fs)
+		} else if fs == stdlib.StdLib {
+			// For embedded filesystem (stdlib), use a special marker
+			result[i] = "<StdLib>"
+		} else {
+			result[i] = fmt.Sprintf("<%T>", fs)
+		}
+	}
+	return result
 }
 
 // RT is a struct with methods that map to Clojure's RT class' static
@@ -172,6 +208,7 @@ func (rt *RTMethods) Load(scriptBase string) {
 	loadPathLock.Lock()
 	lp := loadPath
 	loadPathLock.Unlock()
+	found := false
 	for _, fs := range lp {
 		for _, ext := range []string{".glj", ".cljc"} {
 			testFilename := scriptBase + ext
@@ -180,8 +217,12 @@ func (rt *RTMethods) Load(scriptBase string) {
 				buf = b
 				foundFS = fs
 				filename = testFilename
+				found = true
 				break
 			}
+		}
+		if found {
+			break
 		}
 	}
 	if filename == "" {

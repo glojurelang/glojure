@@ -102,8 +102,8 @@ generate:
 	go generate ./...
 
 aot: gocmd $(STDLIB-TARGETS)
-	GLOJURE_USE_AOT=false \
-	GLOJURE_STDLIB_PATH=./pkg/stdlib \
+	GLJ_USE_AOT=false \
+	GLJPATH=./pkg/stdlib \
 	$(GO-CMD) run -tags glj_no_aot_stdlib ./cmd/glj \
 	<<<"(map compile '[$(AOT-NAMESPACES)])"
 

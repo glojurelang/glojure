@@ -19,7 +19,7 @@ import (
 
 func TestCodegen(t *testing.T) {
 	if runtime.GetUseAOT() {
-		t.Skip("Skipping codegen tests with AOT enabled; run with GLOJURE_USE_AOT=0")
+		t.Skip("Skipping codegen tests with AOT enabled; run with GLJ_USE_AOT=0")
 	}
 
 	var testFiles []string
