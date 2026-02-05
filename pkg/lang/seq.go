@@ -43,6 +43,22 @@ func IsSeq(x interface{}) bool {
 	return ok
 }
 
+func CanSeq(x interface{}) bool {
+	switch x.(type) {
+	case *EmptyList, *LazySeq, ISeq, Seqable, string, nil:
+		return true
+	}
+	t := reflect.TypeOf(x)
+	if t == nil {
+		return true
+	}
+	switch t.Kind() {
+	case reflect.Slice, reflect.Array, reflect.Map:
+		return true
+	}
+	return false
+}
+
 func Seq(x interface{}) ISeq {
 	switch x := x.(type) {
 	case *EmptyList:

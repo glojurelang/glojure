@@ -6492,7 +6492,7 @@ func LoadNS() {
 			checkArity(args, 1)
 			v2 := args[0]
 			_ = v2
-			tmp3 := lang.Apply(nil, []any{v2})
+			tmp3 := lang.CanSeq(v2)
 			return tmp3
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
