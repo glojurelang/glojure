@@ -285,7 +285,14 @@ func (v *Var) Hash() uint32 {
 }
 
 func (v *Var) fn() IFn {
-	return v.Deref().(IFn)
+	val := v.Deref()
+	if _, ok := val.(*UnboundVar); ok {
+		panic(fmt.Errorf("cannot call unbound var: %s/%s", v.ns.Name(), v.sym.Name()))
+	}
+	if val == nil {
+		panic(fmt.Errorf("var %s/%s is bound to nil", v.ns.Name(), v.sym.Name()))
+	}
+	return val.(IFn)
 }
 
 func (v *Var) Invoke(args ...interface{}) interface{} {
