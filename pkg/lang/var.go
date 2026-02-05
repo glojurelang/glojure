@@ -289,11 +289,25 @@ func (v *Var) fn() IFn {
 }
 
 func (v *Var) Invoke(args ...interface{}) interface{} {
-	return v.fn().Invoke(args...)
+	if !v.IsBound() {
+		panic(fmt.Errorf("cannot call unbound var: %s/%s", v.ns.Name(), v.sym.Name()))
+	}
+	fn := v.fn()
+	if fn == nil {
+		panic(fmt.Errorf("var %s/%s is bound to nil", v.ns.Name(), v.sym.Name()))
+	}
+	return fn.Invoke(args...)
 }
 
 func (v *Var) ApplyTo(args ISeq) interface{} {
-	return v.fn().ApplyTo(args)
+	if !v.IsBound() {
+		panic(fmt.Errorf("cannot call unbound var: %s/%s", v.ns.Name(), v.sym.Name()))
+	}
+	fn := v.fn()
+	if fn == nil {
+		panic(fmt.Errorf("var %s/%s is bound to nil", v.ns.Name(), v.sym.Name()))
+	}
+	return fn.ApplyTo(args)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
