@@ -15,7 +15,11 @@ func Apply(fn interface{}, args []interface{}) interface{} {
 	}
 
 	if fn == nil {
-		panic(fmt.Errorf("cannot call nil"))
+		panic(fmt.Errorf("cannot call nil - this may be an unbound var or a function that returned nil"))
+	}
+
+	if uv, ok := fn.(*UnboundVar); ok {
+		panic(fmt.Errorf("cannot call unbound var: %s", uv.String()))
 	}
 
 	goVal := reflect.ValueOf(fn)
