@@ -1232,7 +1232,7 @@ func (r *Reader) readKeyword() (interface{}, error) {
 		sym += string(rn)
 	}
 	if sym == "" || sym == ":" || strings.Contains(sym[1:], ":") {
-		return nil, r.error("invalid keyword: :" + sym)
+		return nil, r.error("invalid keyword: :%s", sym)
 	}
 	if sym[0] == ':' {
 		// TODO: handle auto-resolving keywords with namespaces
@@ -1349,7 +1349,7 @@ func (r *Reader) hasFeature(feat any) (bool, error) {
 
 	// err on reserved features: else, none
 	if name == "else" || name == "none" {
-		return false, r.error(fmt.Sprintf("feature name %q is reserved", name))
+		return false, r.error("feature name %q is reserved", name)
 	}
 
 	switch name {

@@ -9,6 +9,9 @@ import (
 var (
 	Throwable = reflect.TypeOf((interface{})(nil))
 
+	// Exception types
+	IllegalStateException = reflect.TypeOf(&IllegalStateError{})
+
 	// TODO: convert use of 'matcher' in core.glj to fit go's
 	// regexps. This supresses errors but doesn't actually work.
 	Matcher = reflect.TypeOf(&regexp.Regexp{})

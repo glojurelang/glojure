@@ -2183,7 +2183,7 @@ func LoadNS() {
 			{ // let
 				// let binding "s"
 				tmp4 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp5 := new(lang.Throwable)
+				tmp5 := reflect.New(lang.Throwable).Interface()
 				tmp6, ok := lang.FieldOrMethod(tmp5, "getStackTrace")
 				if !ok {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp5, "getStackTrace")))

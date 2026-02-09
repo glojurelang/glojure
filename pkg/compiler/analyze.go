@@ -1842,7 +1842,7 @@ func second(x interface{}) interface{} {
 
 func exInfo(errStr string, _ interface{}) error {
 	// TODO
-	return fmt.Errorf(errStr)
+	return fmt.Errorf("%s", errStr)
 }
 
 func withRawForm(n *ast.Node, form interface{}) *ast.Node {
