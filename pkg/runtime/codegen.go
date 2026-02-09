@@ -148,10 +148,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 		// Non-interned = referred from another namespace
 		if !(vr.Namespace() == ns && lang.Equals(vr.Symbol(), name)) {
 			nsName := vr.Namespace().Name().String()
-			// Skip clojure.core - it's automatically referred
-			if nsName != "clojure.core" {
-				referredNSs[nsName] = true
-			}
+			referredNSs[nsName] = true
 		}
 	}
 
