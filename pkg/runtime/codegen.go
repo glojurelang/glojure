@@ -132,6 +132,56 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	// 2. Generate Go code for each var (this discovers lifted values)
 	mappings := ns.Mappings()
 
+	// Collect source namespaces that contribute referred vars (before processing interned vars)
+	referredNSs := make(map[string]bool)
+	for seq := mappings.Seq(); seq != nil; seq = seq.Next() {
+		entry := seq.First()
+		name, ok := lang.First(entry).(*lang.Symbol)
+		if !ok {
+			continue
+		}
+		second, _ := lang.Nth(entry, 1)
+		vr, ok := second.(*lang.Var)
+		if !ok {
+			continue
+		}
+		// Non-interned = referred from another namespace
+		if !(vr.Namespace() == ns && lang.Equals(vr.Symbol(), name)) {
+			nsName := vr.Namespace().Name().String()
+			// Skip clojure.core - it's automatically referred
+			if nsName != "clojure.core" {
+				referredNSs[nsName] = true
+			}
+		}
+	}
+
+	// Generate runtime code to refer public vars from each source namespace
+	for nsName := range referredNSs {
+		srcNSSym := g.allocSymVar(nsName)
+		g.writef("{ // refer %s\n", nsName)
+		g.writef("  srcNS := lang.FindOrCreateNamespace(%s)\n", srcNSSym)
+		g.writef("  for seq := srcNS.Mappings().Seq(); seq != nil; seq = seq.Next() {\n")
+		g.writef("    entry := seq.First()\n")
+		g.writef("    sym, _ := lang.First(entry).(*lang.Symbol)\n")
+		g.writef("    second, _ := lang.Nth(entry, 1)\n")
+		g.writef("    if vr, ok := second.(*lang.Var); ok && vr.Namespace() == srcNS {\n")
+		g.writef("      ns.Refer(sym, vr)\n")
+		g.writef("    }\n")
+		g.writef("  }\n")
+		g.writef("}\n")
+	}
+
+	// Generate alias setup
+	aliases := ns.Aliases()
+	for seq := aliases.Seq(); seq != nil; seq = seq.Next() {
+		entry := seq.First()
+		aliasSym := lang.First(entry).(*lang.Symbol)
+		targetNS, _ := lang.Nth(entry, 1)
+		g.writef("ns.AddAlias(%s, lang.FindOrCreateNamespace(%s))\n",
+			g.allocSymVar(aliasSym.String()),
+			g.allocSymVar(targetNS.(*lang.Namespace).Name().String()))
+	}
+
 	type namedVar struct {
 		name *lang.Symbol
 		vr   *lang.Var
