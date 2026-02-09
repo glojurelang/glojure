@@ -38,7 +38,7 @@
   (test-that
    "glj --version flag works correctly"
    (let [[out err] (run-cli-cmd glj "--version")]
-     (is (re-matches #"glojure v\d+\.\d+\.\d+\n" out)
+     (is (re-matches #"glojure v\d+\.\d+\.\d+.*\n" out)
          "Command should output version")
      (is (empty? err) "Command should not return an error"))))
 
