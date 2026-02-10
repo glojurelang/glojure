@@ -132,8 +132,14 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	// 2. Generate Go code for each var (this discovers lifted values)
 	mappings := ns.Mappings()
 
-	// Collect source namespaces that contribute referred vars (before processing interned vars)
-	referredNSs := make(map[string]bool)
+	// Collect exact referred vars from compile-time mappings
+	type referredVar struct {
+		symName string
+		srcNS   string
+		srcSym  string
+	}
+	var referredVars []referredVar
+
 	for seq := mappings.Seq(); seq != nil; seq = seq.Next() {
 		entry := seq.First()
 		name, ok := lang.First(entry).(*lang.Symbol)
@@ -147,23 +153,24 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 		}
 		// Non-interned = referred from another namespace
 		if !(vr.Namespace() == ns && lang.Equals(vr.Symbol(), name)) {
-			nsName := vr.Namespace().Name().String()
-			referredNSs[nsName] = true
+			referredVars = append(referredVars, referredVar{
+				symName: name.String(),
+				srcNS:   vr.Namespace().Name().String(),
+				srcSym:  vr.Symbol().String(),
+			})
 		}
 	}
 
-	// Generate runtime code to refer public vars from each source namespace
-	for nsName := range referredNSs {
-		srcNSSym := g.allocSymVar(nsName)
-		g.writef("{ // refer %s\n", nsName)
+	// Emit individual refer calls — no conflicts, no warnings
+	for _, rv := range referredVars {
+		symSym := g.allocSymVar(rv.symName)
+		srcNSSym := g.allocSymVar(rv.srcNS)
+		srcSymSym := g.allocSymVar(rv.srcSym)
+		g.writef("{ // refer %s/%s as %s\n", rv.srcNS, rv.srcSym, rv.symName)
 		g.writef("  srcNS := lang.FindOrCreateNamespace(%s)\n", srcNSSym)
-		g.writef("  for seq := srcNS.Mappings().Seq(); seq != nil; seq = seq.Next() {\n")
-		g.writef("    entry := seq.First()\n")
-		g.writef("    sym, _ := lang.First(entry).(*lang.Symbol)\n")
-		g.writef("    second, _ := lang.Nth(entry, 1)\n")
-		g.writef("    if vr, ok := second.(*lang.Var); ok && vr.Namespace() == srcNS {\n")
-		g.writef("      ns.Refer(sym, vr)\n")
-		g.writef("    }\n")
+		g.writef("  v := srcNS.Mappings().ValAt(%s)\n", srcSymSym)
+		g.writef("  if vr, ok := v.(*lang.Var); ok {\n")
+		g.writef("    ns.Refer(%s, vr)\n", symSym)
 		g.writef("  }\n")
 		g.writef("}\n")
 	}
