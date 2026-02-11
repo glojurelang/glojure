@@ -28,7 +28,12 @@ AOT-NAMESPACES := \
 OS-TYPE := $(shell bash -c 'echo $$OSTYPE')
 OS-NAME := \
   $(if $(findstring darwin,$(OS-TYPE))\
-	,macos,$(if $(findstring linux,$(OS-TYPE)),linux,))
+	,macos,$(if $(findstring linux,$(OS-TYPE))\
+	,linux,$(if $(findstring freebsd,$(OS-TYPE))\
+	,freebsd,$(if $(findstring netbsd,$(OS-TYPE))\
+	,netbsd,$(if $(findstring openbsd,$(OS-TYPE))\
+	,openbsd,$(if $(findstring dragonfly,$(OS-TYPE))\
+	,dragonfly,))))))
 ARCH-TYPE := $(shell bash -c 'echo $$MACHTYPE')
 ARCH-NAME := \
   $(if $(or $(findstring arm64,$(ARCH-TYPE)),\
@@ -42,6 +47,13 @@ OA-linux-arm64 := linux_arm64
 OA-linux-int64 := linux_amd64
 OA-macos-arm64 := darwin_arm64
 OA-macos-int64 := darwin_amd64
+OA-freebsd-arm64 := freebsd_arm64
+OA-freebsd-int64 := freebsd_amd64
+OA-openbsd-arm64 := openbsd_arm64
+OA-openbsd-int64 := openbsd_amd64
+OA-netbsd-arm64 := netbsd_arm64
+OA-netbsd-int64 := netbsd_amd64
+OA-dragonfly-int64 := dragonfly_amd64
 GLJ-CMD := bin/$(OA-$(OS-ARCH))/glj
 endif
 endif
@@ -57,8 +69,25 @@ GO-PLATFORMS := \
 	darwin_amd64 \
 	linux_arm64 \
 	linux_amd64 \
+	linux_arm \
+	linux_riscv64 \
+	linux_ppc64le \
+	linux_s390x \
+	linux_386 \
+	windows_arm64 \
 	windows_arm \
 	windows_amd64 \
+	windows_386 \
+	freebsd_arm64 \
+	freebsd_amd64 \
+	freebsd_386 \
+	openbsd_arm64 \
+	openbsd_amd64 \
+	netbsd_arm64 \
+	netbsd_amd64 \
+	dragonfly_amd64 \
+	solaris_amd64 \
+	illumos_amd64 \
 	js_wasm \
 	wasip1_wasm \
 	$(EXTRA-GO-PLATFORMS)
