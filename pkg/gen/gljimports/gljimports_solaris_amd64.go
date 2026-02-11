@@ -1,4 +1,4 @@
-//go:build amd64 && solaris
+//go:build amd64 && solaris && !illumos
 
 // GENERATED FILE. DO NOT EDIT.
 package gljimports
