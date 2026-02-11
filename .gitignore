@@ -5,3 +5,8 @@
 
 # useful to symlink in for context
 /clojure
+
+# Ingy dev
+/GNUmakefile
+/.cache
+/*.md
