@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"unsafe"
 
-	"github.com/glojurelang/glojure/internal/goid"
+	"github.com/ingydotnet/glojure/internal/goid"
 )
 
 type (

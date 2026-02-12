@@ -14,7 +14,7 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/ingydotnet/glojure/pkg/lang"
 	"github.com/kylelemons/godebug/diff"
 )
 

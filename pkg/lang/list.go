@@ -3,7 +3,7 @@ package lang
 import (
 	"reflect"
 
-	"github.com/glojurelang/glojure/internal/murmur3"
+	"github.com/ingydotnet/glojure/internal/murmur3"
 )
 
 // List is a list of values.

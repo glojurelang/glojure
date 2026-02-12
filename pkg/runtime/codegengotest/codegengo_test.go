@@ -11,7 +11,7 @@ import (
 	"testing"
 	"text/template"
 
-	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/ingydotnet/glojure/pkg/lang"
 )
 
 // TestMain is the entry point for running tests. We use it to ensure
@@ -97,9 +97,9 @@ func TestGeneratedGo(t *testing.T) {
 
 go 1.21
 
-require github.com/glojurelang/glojure v0.0.0
+require github.com/ingydotnet/glojure v0.0.0
 
-replace github.com/glojurelang/glojure => %s
+replace github.com/ingydotnet/glojure => %s
 `, projectRoot)
 			goModFile := filepath.Join(tempDir, "go.mod")
 			if err := ioutil.WriteFile(goModFile, []byte(goModContent), 0644); err != nil {
@@ -215,8 +215,8 @@ import (
 	"os"
 
 	testpkg "testprog/{{.PkgName}}"
-	"github.com/glojurelang/glojure/pkg/lang"
-  _ "github.com/glojurelang/glojure/pkg/glj"
+	"github.com/ingydotnet/glojure/pkg/lang"
+  _ "github.com/ingydotnet/glojure/pkg/glj"
 )
 
 func main() {

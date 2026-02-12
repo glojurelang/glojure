@@ -112,7 +112,7 @@
     (is (= "default" (case :unknown :foo "foo" :bar "bar" "default"))))
 
   (testing "No default throws exception"
-    (is (thrown? github.com:glojurelang:glojure:pkg:lang.*IllegalArgumentError
+    (is (thrown? github.com:ingydotnet:glojure:pkg:lang.*IllegalArgumentError
                  (case 99 1 :one 2 :two))))
 
   (testing "Default expression is evaluated"

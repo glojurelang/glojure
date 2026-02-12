@@ -1,8 +1,8 @@
 # Glojure
 
-![example workflow](https://github.com/glojurelang/glojure/actions/workflows/ci.yml/badge.svg)
+![example workflow](https://github.com/ingydotnet/glojure/actions/workflows/ci.yml/badge.svg)
 
-[Try it in your browser!](https://glojurelang.github.io/glojure/)
+[Try it in your browser!](https://ingydotnet.github.io/glojure/)
 
 <img alt="Gopher image" src="./doc/logo.png" width="512" />
 
@@ -36,7 +36,7 @@ can run, and it requires at least go 1.19.
 
 Install it with the `go install` command:
 ```
-$ go install github.com/glojurelang/glojure/cmd/glj@latest
+$ go install github.com/ingydotnet/glojure/cmd/glj@latest
 ```
 
 After installation, you can start the REPL (Read-Eval-Print-Loop) with
@@ -139,8 +139,8 @@ package main
 
 import (
     "fmt"
-    _ "github.com/glojurelang/glojure/pkg/glj"  // Initialize Glojure
-    "github.com/glojurelang/glojure/pkg/runtime"
+    _ "github.com/ingydotnet/glojure/pkg/glj"  // Initialize Glojure
+    "github.com/ingydotnet/glojure/pkg/runtime"
 )
 
 func main() {
@@ -162,8 +162,8 @@ package main
 
 import (
     "fmt"
-    "github.com/glojurelang/glojure/pkg/glj"
-    "github.com/glojurelang/glojure/pkg/runtime"
+    "github.com/ingydotnet/glojure/pkg/glj"
+    "github.com/ingydotnet/glojure/pkg/runtime"
 )
 
 // Define a Go function
@@ -195,7 +195,7 @@ When embedding Glojure, you can also expose your own Go packages or additional s
 
 ```go
 import (
-    _ "github.com/glojurelang/glojure/pkg/glj"
+    _ "github.com/ingydotnet/glojure/pkg/glj"
     _ "your.app/gljimports" // Your generated package map
 )
 
@@ -272,7 +272,7 @@ that will export a function that can be used to add the exports of
 additional packages to the Glojure package map.
 
 ```
-$ go run github.com/glojurelang/glojure/cmd/gen-import-interop \
+$ go run github.com/ingydotnet/glojure/cmd/gen-import-interop \
      -packages=:comma-separated-package-list: \
      > your/package/gljimports/my_package_map.go
 ```

@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/glojurelang/glojure/pkg/lang"
+import "github.com/ingydotnet/glojure/pkg/lang"
 
 type (
 	NodeOp int32

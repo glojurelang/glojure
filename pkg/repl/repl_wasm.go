@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/glojurelang/glojure/pkg/lang"
-	"github.com/glojurelang/glojure/pkg/reader"
-	"github.com/glojurelang/glojure/pkg/runtime"
+	"github.com/ingydotnet/glojure/pkg/lang"
+	"github.com/ingydotnet/glojure/pkg/reader"
+	"github.com/ingydotnet/glojure/pkg/runtime"
 )
 
 const debugMode = false

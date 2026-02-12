@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/glojurelang/glojure/pkg/ast"
-	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/ingydotnet/glojure/pkg/ast"
+	"github.com/ingydotnet/glojure/pkg/lang"
 )
 
 type Fn struct {

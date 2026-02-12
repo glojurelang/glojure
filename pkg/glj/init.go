@@ -5,10 +5,10 @@ import (
 	"os"
 
 	// Add the Go standard library to the pkgmap.
-	_ "github.com/glojurelang/glojure/pkg/gen/gljimports"
-	"github.com/glojurelang/glojure/pkg/lang"
+	_ "github.com/ingydotnet/glojure/pkg/gen/gljimports"
+	"github.com/ingydotnet/glojure/pkg/lang"
 
-	"github.com/glojurelang/glojure/pkg/runtime"
+	"github.com/ingydotnet/glojure/pkg/runtime"
 )
 
 func init() {

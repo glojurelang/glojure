@@ -6,8 +6,8 @@ import (
 	"os"
 
 	// Bootstrap the runtime
-	_ "github.com/glojurelang/glojure/pkg/glj"
-	"github.com/glojurelang/glojure/pkg/gljmain"
+	_ "github.com/ingydotnet/glojure/pkg/glj"
+	"github.com/ingydotnet/glojure/pkg/gljmain"
 )
 
 func main() {

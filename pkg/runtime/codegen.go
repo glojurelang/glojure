@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/glojurelang/glojure/pkg/ast"
-	"github.com/glojurelang/glojure/pkg/lang"
-	"github.com/glojurelang/glojure/pkg/pkgmap"
+	"github.com/ingydotnet/glojure/pkg/ast"
+	"github.com/ingydotnet/glojure/pkg/lang"
+	"github.com/ingydotnet/glojure/pkg/pkgmap"
 )
 
 // TODO
@@ -112,8 +112,8 @@ func NewGenerator(w io.Writer) *Generator {
 // Generate takes a namespace and generates Go code that populates the same namespace
 func (g *Generator) Generate(ns *lang.Namespace) error {
 	// add lang import
-	g.addImport("github.com/glojurelang/glojure/pkg/lang")
-	g.addImport("github.com/glojurelang/glojure/pkg/runtime")
+	g.addImport("github.com/ingydotnet/glojure/pkg/lang")
+	g.addImport("github.com/ingydotnet/glojure/pkg/runtime")
 	g.addImport("fmt")     // for error formatting
 	g.addImport("reflect") // for reflect.TypeOf
 

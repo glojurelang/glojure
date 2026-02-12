@@ -12,11 +12,11 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/glojurelang/glojure/pkg/lang"
-	"github.com/glojurelang/glojure/pkg/reader"
-	"github.com/glojurelang/glojure/pkg/stdlib"
+	"github.com/ingydotnet/glojure/pkg/lang"
+	"github.com/ingydotnet/glojure/pkg/reader"
+	"github.com/ingydotnet/glojure/pkg/stdlib"
 
-	. "github.com/glojurelang/glojure/pkg/lang"
+	. "github.com/ingydotnet/glojure/pkg/lang"
 )
 
 var (

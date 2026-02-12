@@ -7,7 +7,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/glojurelang/glojure/pkg/pkgmap"
+	"github.com/ingydotnet/glojure/pkg/pkgmap"
 )
 
 type Namespace struct {

@@ -9,11 +9,11 @@ import (
 	"os/exec"
 	"syscall"
 
-	"github.com/glojurelang/glojure/internal/deps"
+	"github.com/ingydotnet/glojure/internal/deps"
 
 	// Bootstrap the runtime
-	_ "github.com/glojurelang/glojure/pkg/glj"
-	"github.com/glojurelang/glojure/pkg/gljmain"
+	_ "github.com/ingydotnet/glojure/pkg/glj"
+	"github.com/ingydotnet/glojure/pkg/gljmain"
 )
 
 func main() {

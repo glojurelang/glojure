@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/glojurelang/glojure/pkg/lang"
-	"github.com/glojurelang/glojure/pkg/reader"
+	"github.com/ingydotnet/glojure/pkg/lang"
+	"github.com/ingydotnet/glojure/pkg/reader"
 )
 
 type (

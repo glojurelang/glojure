@@ -42,7 +42,7 @@ package main
 import (
 	"os"
 
-	"github.com/glojurelang/glojure/pkg/gljmain"
+	"github.com/ingydotnet/glojure/pkg/gljmain"
 
 	_ %q
 	_ "%s/glj/gljimports"

@@ -4,7 +4,7 @@ import (
 	"flag"
 	"strings"
 
-	"github.com/glojurelang/glojure/internal/genpkg"
+	"github.com/ingydotnet/glojure/internal/genpkg"
 )
 
 var defaultPackages = []string{
@@ -161,8 +161,8 @@ var defaultPackages = []string{
 	"unicode/utf8",
 	"unsafe",
 
-	"github.com/glojurelang/glojure/pkg/runtime",
-	"github.com/glojurelang/glojure/pkg/lang",
+	"github.com/ingydotnet/glojure/pkg/runtime",
+	"github.com/ingydotnet/glojure/pkg/lang",
 }
 
 var packagesFlag = flag.String(

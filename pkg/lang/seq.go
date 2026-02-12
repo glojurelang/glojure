@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/glojurelang/glojure/internal/seq"
+	"github.com/ingydotnet/glojure/internal/seq"
 )
 
 func First(x interface{}) interface{} {

@@ -7,11 +7,11 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/glojurelang/glojure/pkg/ast"
-	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/ingydotnet/glojure/pkg/ast"
+	"github.com/ingydotnet/glojure/pkg/lang"
 
 	// Make it easier to refer to global vars.
-	. "github.com/glojurelang/glojure/pkg/lang"
+	. "github.com/ingydotnet/glojure/pkg/lang"
 )
 
 var (

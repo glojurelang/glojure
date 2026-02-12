@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/glojurelang/glojure/internal/persistent/vector"
+	"github.com/ingydotnet/glojure/internal/persistent/vector"
 )
 
 // Vector is a vector of values.

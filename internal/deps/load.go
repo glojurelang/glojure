@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/glojurelang/glojure/pkg/lang"
-	"github.com/glojurelang/glojure/pkg/pkgmap"
-	"github.com/glojurelang/glojure/pkg/reader"
+	"github.com/ingydotnet/glojure/pkg/lang"
+	"github.com/ingydotnet/glojure/pkg/pkgmap"
+	"github.com/ingydotnet/glojure/pkg/reader"
 )
 
 func Load() (*Deps, error) {

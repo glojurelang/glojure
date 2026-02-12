@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/ingydotnet/glojure/pkg/lang"
 )
 
 var (

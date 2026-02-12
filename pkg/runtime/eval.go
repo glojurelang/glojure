@@ -3,8 +3,8 @@ package runtime
 import (
 	"fmt"
 
-	"github.com/glojurelang/glojure/pkg/compiler"
-	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/ingydotnet/glojure/pkg/compiler"
+	"github.com/ingydotnet/glojure/pkg/lang"
 )
 
 func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
