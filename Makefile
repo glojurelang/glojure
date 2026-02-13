@@ -193,11 +193,13 @@ test: test-glj test-suite  # vet
 test-glj: $(TEST-GLJ-TARGETS)
 
 test-suite: $(GLJ-CMD)
+ifneq (,$(wildcard $(TEST-SUITE-DIR)))
 	cd $(TEST-SUITE-DIR) && \
 		$(abspath $<) $(TEST-SUITE-FILE) \
 			--expect-failures 38 \
 			--expect-errors 151 \
 			2>/dev/null
+endif
 
 $(TEST-GLJ-TARGETS): $(GLJ-CMD)
 	$< $(basename $@)
