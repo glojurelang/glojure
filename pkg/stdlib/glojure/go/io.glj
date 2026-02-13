@@ -258,7 +258,7 @@
   (assoc default-streams-impl
     :make-input-stream (fn [^go/string x opts]
                          (let [[url err] (net:url.ParseRequestURI x)]
-                           (if err
+                           (if (or err (= "" (.Scheme url)))
                              (make-input-stream (go-try! os.Open x) opts)
                              (make-input-stream url opts))))
     :make-output-stream (fn [^go/string x opts]
