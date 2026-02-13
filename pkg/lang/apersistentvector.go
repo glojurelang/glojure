@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/ingydotnet/glojure/internal/murmur3"
+	"github.com/gloathub/glojure/internal/murmur3"
 )
 
 type (

@@ -1,6 +1,6 @@
 package runtime
 
-import "github.com/ingydotnet/glojure/pkg/lang"
+import "github.com/gloathub/glojure/pkg/lang"
 
 type scope struct {
 	parent *scope

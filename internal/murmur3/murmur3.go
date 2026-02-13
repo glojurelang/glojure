@@ -3,7 +3,7 @@ package murmur3
 import (
 	"math/bits"
 
-	"github.com/ingydotnet/glojure/internal/seq"
+	"github.com/gloathub/glojure/internal/seq"
 )
 
 const (

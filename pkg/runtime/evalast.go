@@ -7,12 +7,12 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/ingydotnet/glojure/pkg/ast"
-	"github.com/ingydotnet/glojure/pkg/lang"
-	"github.com/ingydotnet/glojure/pkg/pkgmap"
+	"github.com/gloathub/glojure/pkg/ast"
+	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/gloathub/glojure/pkg/pkgmap"
 
 	// Make it easier to refer to KW globals
-	. "github.com/ingydotnet/glojure/pkg/lang"
+	. "github.com/gloathub/glojure/pkg/lang"
 )
 
 var indent = 0

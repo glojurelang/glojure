@@ -22,7 +22,7 @@
   (ast->type
     [ast]
     (let [name (.Name ast)
-          typ (get github.com:ingydotnet:glojure:pkg:lang.BuiltinTypes name)]
+          typ (get github.com:gloathub:glojure:pkg:lang.BuiltinTypes name)]
       (when-not typ (throw (fmt.Errorf "unknown type %s" name)))
       typ))
 

@@ -1,6 +1,6 @@
 package reader
 
-import "github.com/ingydotnet/glojure/pkg/lang"
+import "github.com/gloathub/glojure/pkg/lang"
 
 type (
 	SymbolResolver interface {

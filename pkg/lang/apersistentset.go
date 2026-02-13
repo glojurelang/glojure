@@ -1,6 +1,6 @@
 package lang
 
-import "github.com/ingydotnet/glojure/internal/murmur3"
+import "github.com/gloathub/glojure/internal/murmur3"
 
 type (
 	APersistentSet interface {

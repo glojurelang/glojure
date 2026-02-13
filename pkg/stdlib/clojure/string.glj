@@ -9,15 +9,15 @@
 (ns clojure.string
   (:refer-clojure :exclude (replace reverse))
   (:import (regexp *Regexp)
-           #_(github.com:ingydotnet:glojure:pkg:lang ToString NewIllegalArgumentError Char CharAt)
-           (github.com:ingydotnet:glojure:pkg:lang)))
+           #_(github.com:gloathub:glojure:pkg:lang ToString NewIllegalArgumentError Char CharAt)
+           (github.com:gloathub:glojure:pkg:lang)))
 
 (set! *warn-on-reflection* true)
 
 (defn- check-string
   [maybe-s]
   (if (nil? maybe-s)
-    (throw (github.com:ingydotnet:glojure:pkg:lang.NewIllegalArgumentError "cannot call clojure.string function on nil"))
+    (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError "cannot call clojure.string function on nil"))
     maybe-s))
 
 (defn ^go/string reverse
@@ -46,7 +46,7 @@
             (do (.appendReplacement m buffer (re-quote-replacement (f (re-groups m))))
                 (recur (.find m)))
             (do (.appendTail m buffer)
-                (github.com:ingydotnet:glojure:pkg:lang.ToString buffer)))))
+                (github.com:gloathub:glojure:pkg:lang.ToString buffer)))))
       s)))
 
 (defn ^go/string replace
@@ -77,12 +77,12 @@
   [^go/string s match replacement]
   (let [s (check-string s)]
     (cond 
-     (instance? github.com:ingydotnet:glojure:pkg:lang.Char match) (strings.ReplaceAll s match replacement)
+     (instance? github.com:gloathub:glojure:pkg:lang.Char match) (strings.ReplaceAll s match replacement)
      (instance? go/string match) (strings.ReplaceAll s match replacement)
      (instance? *Regexp match) (if (instance? go/string replacement)
                                  (.replaceAllString ^*Regexp match s replacement)
                                  (replace-by s match replacement))
-     :else (throw (github.com:ingydotnet:glojure:pkg:lang.NewIllegalArgumentError (str "Invalid match arg: " match))))))
+     :else (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError (str "Invalid match arg: " match))))))
 
 (defn- replace-first-by
   [^go/string s ^*Regexp re f]
@@ -96,8 +96,8 @@
       s)))
 
 (defn- replace-first-char
-  [^go/string s ^github.com:ingydotnet:glojure:pkg:lang.Char match replace]
-  (let [s (github.com:ingydotnet:glojure:pkg:lang.ToString s)
+  [^go/string s ^github.com:gloathub:glojure:pkg:lang.Char match replace]
+  (let [s (github.com:gloathub:glojure:pkg:lang.ToString s)
         i (strings.Index s (int match))]
     (if (= -1 i)
       s
@@ -105,7 +105,7 @@
 
 (defn- replace-first-str
   [^go/string s ^go/string match ^go/string replace]
-  (let [^go/string s (github.com:ingydotnet:glojure:pkg:lang.ToString s)
+  (let [^go/string s (github.com:gloathub:glojure:pkg:lang.ToString s)
         i (strings.Index s match)]
     (if (= -1 i)
       s
@@ -140,11 +140,11 @@
   [^go/string s match replacement]
   (let [s (check-string s)]
     (cond
-     (instance? github.com:ingydotnet:glojure:pkg:lang.Char match)
+     (instance? github.com:gloathub:glojure:pkg:lang.Char match)
      (replace-first-char s match replacement)
      (instance? go/string match)
-     (replace-first-str s (github.com:ingydotnet:glojure:pkg:lang.ToString ^go/string match)
-                        (github.com:ingydotnet:glojure:pkg:lang.ToString ^go/string replacement))
+     (replace-first-str s (github.com:gloathub:glojure:pkg:lang.ToString ^go/string match)
+                        (github.com:gloathub:glojure:pkg:lang.ToString ^go/string replacement))
      (instance? *Regexp match)
      (if (instance? go/string replacement)
        (let [done (atom false)]
@@ -156,7 +156,7 @@
                                       (reset! done true)
                                       (.ReplaceAllString ^*Regexp match m replacement))))))
        (replace-first-by s match replacement))
-     :else (throw (github.com:ingydotnet:glojure:pkg:lang.NewIllegalArgumentError (str "Invalid match arg: " match))))))
+     :else (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError (str "Invalid match arg: " match))))))
 
 
 (defn ^go/string join
@@ -197,9 +197,9 @@
   Trailing empty strings are not returned - pass limit of -1 to return all."
   {:added "1.2"}
   ([^go/string s ^regexp.*Regexp re]
-     (github.com:ingydotnet:glojure:pkg:lang.CreateOwningLazilyPersistentVector (.split re s -1)))
+     (github.com:gloathub:glojure:pkg:lang.CreateOwningLazilyPersistentVector (.split re s -1)))
   ([ ^go/string s ^regexp.*Regexp re limit]
-     (github.com:ingydotnet:glojure:pkg:lang.CreateOwningLazilyPersistentVector (.split re s limit))))
+     (github.com:gloathub:glojure:pkg:lang.CreateOwningLazilyPersistentVector (.split re s limit))))
 
 (defn split-lines
   "Splits s on \\n or \\r\\n. Trailing empty lines are not returned."
@@ -241,7 +241,7 @@
     (loop [index (int 0)]
       (if (= (count s) index)
         true
-        (if (unicode.IsSpace (github.com:ingydotnet:glojure:pkg:lang.CharAt s index))
+        (if (unicode.IsSpace (github.com:gloathub:glojure:pkg:lang.CharAt s index))
           (recur (inc index))
           false)))
     true))
@@ -265,8 +265,8 @@
   ([^go/string s value]
   (let [s (check-string s)
         result ^long
-        (if (instance? github.com:ingydotnet:glojure:pkg:lang.Char value)
-          (strings.IndexRune s ^go/rune (go/rune ^github.com:ingydotnet:glojure:pkg:lang.Char value))
+        (if (instance? github.com:gloathub:glojure:pkg:lang.Char value)
+          (strings.IndexRune s ^go/rune (go/rune ^github.com:gloathub:glojure:pkg:lang.Char value))
           (strings.Index s ^go/string value))]
     (if (= result -1)
       nil
@@ -275,8 +275,8 @@
   (let [from-index (min (count s) (max 0 (unchecked-int from-index)))
         s (subs (check-string s) from-index)
         result ^long
-        (if (instance? github.com:ingydotnet:glojure:pkg:lang.Char value)
-          (strings.IndexRune s ^go/rune (go/rune ^github.com:ingydotnet:glojure:pkg:lang.Char value))
+        (if (instance? github.com:gloathub:glojure:pkg:lang.Char value)
+          (strings.IndexRune s ^go/rune (go/rune ^github.com:gloathub:glojure:pkg:lang.Char value))
           (strings.Index s ^go/string value))]
     (if (= result -1)
       nil
@@ -304,16 +304,16 @@
   "True if s starts with substr."
   {:added "1.8"}
   [^go/string s ^go/string substr]
-  (strings.HasPrefix (github.com:ingydotnet:glojure:pkg:lang.ToString s) substr))
+  (strings.HasPrefix (github.com:gloathub:glojure:pkg:lang.ToString s) substr))
 
 (defn ends-with?
   "True if s ends with substr."
   {:added "1.8"}
   [^go/string s ^go/string substr]
-  (strings.HasSuffix (github.com:ingydotnet:glojure:pkg:lang.ToString s) substr))
+  (strings.HasSuffix (github.com:gloathub:glojure:pkg:lang.ToString s) substr))
 
 (defn includes?
   "True if s includes substr."
   {:added "1.8"}
   [^go/string s ^go/string substr]
-  (strings.Contains (github.com:ingydotnet:glojure:pkg:lang.ToString s) substr))
+  (strings.Contains (github.com:gloathub:glojure:pkg:lang.ToString s) substr))

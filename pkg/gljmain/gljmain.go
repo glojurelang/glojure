@@ -8,12 +8,12 @@ import (
 	"strings"
 
 	// bootstrap the runtime
-	_ "github.com/ingydotnet/glojure/pkg/glj"
+	_ "github.com/gloathub/glojure/pkg/glj"
 
-	"github.com/ingydotnet/glojure/pkg/lang"
-	"github.com/ingydotnet/glojure/pkg/reader"
-	"github.com/ingydotnet/glojure/pkg/repl"
-	"github.com/ingydotnet/glojure/pkg/runtime"
+	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/gloathub/glojure/pkg/reader"
+	"github.com/gloathub/glojure/pkg/repl"
+	"github.com/gloathub/glojure/pkg/runtime"
 )
 
 func printHelp() {
@@ -33,7 +33,7 @@ Examples:
   glj --version         # Show version
   glj --help            # Show this help
 
-For more information, visit: https://github.com/ingydotnet/glojure
+For more information, visit: https://github.com/gloathub/glojure
 `, runtime.Version)
 }
 

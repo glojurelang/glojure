@@ -11,10 +11,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ingydotnet/glojure/pkg/glj"
-	"github.com/ingydotnet/glojure/pkg/lang"
-	"github.com/ingydotnet/glojure/pkg/reader"
-	"github.com/ingydotnet/glojure/pkg/runtime"
+	"github.com/gloathub/glojure/pkg/glj"
+	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/gloathub/glojure/pkg/reader"
+	"github.com/gloathub/glojure/pkg/runtime"
 )
 
 func TestCodegen(t *testing.T) {

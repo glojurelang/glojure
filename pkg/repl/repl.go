@@ -14,9 +14,9 @@ import (
 
 	"github.com/chzyer/readline"
 
-	"github.com/ingydotnet/glojure/pkg/lang"
-	"github.com/ingydotnet/glojure/pkg/reader"
-	"github.com/ingydotnet/glojure/pkg/runtime"
+	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/gloathub/glojure/pkg/reader"
+	"github.com/gloathub/glojure/pkg/runtime"
 
 	// pprof
 	"net/http"

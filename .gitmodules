@@ -1,3 +1,0 @@
-[submodule "test/clojure-test-suite"]
-	path = test/clojure-test-suite
-	url = git@github.com:ingydotnet/clojure-test-suite.git

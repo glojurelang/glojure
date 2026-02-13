@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/ingydotnet/glojure/pkg/lang"
+	"github.com/gloathub/glojure/pkg/lang"
 )
 
 var (

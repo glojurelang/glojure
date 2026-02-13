@@ -41,7 +41,7 @@ func (d *Deps) Embed() error {
 	"embed"
 	"io/fs"
 
-	"github.com/ingydotnet/glojure/pkg/runtime"
+	"github.com/gloathub/glojure/pkg/runtime"
 )
 
 `)
