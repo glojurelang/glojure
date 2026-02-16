@@ -229,6 +229,12 @@ release-dist:
 	$(foreach p,$(RELEASE-PLATFORMS), \
 	  tar -czf dist/glj-$(RELEASE_VER)-$(p).tar.gz -C bin/$(p) glj ;)
 
+remote ?= origin
+git-push:
+	$(eval HTTPS-URL := $(shell git remote get-url $(remote)))
+	$(eval SSH-URL := $(subst https://github.com/,git@github.com:,$(HTTPS-URL)))
+	git push $(SSH-URL) $(shell git rev-parse --abbrev-ref HEAD)
+
 release: release-dist $(GH)
 	$(eval RELEASE_VER := $(patsubst v%,%,$(VERSION)))
 	git tag -a v$(RELEASE_VER) -m "Release v$(RELEASE_VER)"
