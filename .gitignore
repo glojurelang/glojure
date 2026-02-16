@@ -1,4 +1,5 @@
-/bin
+/bin/
+/dist/
 /doc/repl/glj.wasm
 /report.html
 .direnv
@@ -7,6 +8,5 @@
 /clojure
 
 # Ingy dev
-/GNUmakefile
-/.cache
+/.cache/
 /*.md

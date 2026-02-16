@@ -1,10 +1,26 @@
-# Usage:
-#   make clean all test GO-VERSION=1.25.1
+M := .cache/makes
+$(shell [ -d $M ] || git clone -q https://github.com/makeplus/makes $M)
 
-SHELL := bash
+include $M/init.mk
 
 GO-VERSION ?= 1.24.0
 CLOJURE-VERSION ?= 1.12.1
+
+include $M/go.mk
+include $M/gh.mk
+include $M/clean.mk
+include $M/shell.mk
+
+MAKES-CLEAN := \
+  report.html \
+  bin/ \
+  scripts/rewrite-core/.cpcache/ \
+
+MAKES-DISTCLEAN += \
+  dist/ \
+  .clj-kondo/ \
+  .lsp/ \
+  .vscode/
 
 CLOJURE-STDLIB-VERSION := clojure-$(CLOJURE-VERSION)
 STDLIB-ORIGINALS-DIR := scripts/rewrite-core/originals
@@ -99,8 +115,6 @@ GLJ-IMPORTS=$(foreach platform,$(GO-PLATFORMS) \
 GLJ-BINS=$(foreach platform,$(GO-PLATFORMS) \
 	   ,bin/$(platform)/glj$(if $(findstring wasm,$(platform)),.wasm,))
 
-GO-CMD := go$(GO-VERSION)
-
 ALL-TARGETS := \
 	$(if $(force),update-clojure-sources) \
 	stdlib-targets \
@@ -110,8 +124,6 @@ ALL-TARGETS := \
 	glj-bins \
 
 #-------------------------------------------------------------------------------
-default: all
-
 # Dummy target for commands like:
 #   make all force=1
 #   make stdlib-targets force=1
@@ -119,21 +131,15 @@ force:
 
 all: $(ALL-TARGETS)
 
-gocmd:
-	@$(GO-CMD) version &> /dev/null || { \
-		(go install "golang.org/dl/$(GO-CMD)@latest" && \
-		$(GO-CMD) download > /dev/null && \
-		$(GO-CMD) version > /dev/null); }
-
 stdlib-targets: $(STDLIB-TARGETS)
 
-generate:
+generate: $(GO)
 	go generate ./...
 
-aot: gocmd $(STDLIB-TARGETS)
+aot: $(GO) $(STDLIB-TARGETS)
 	GLOJURE_USE_AOT=false \
 	GLOJURE_STDLIB_PATH=./pkg/stdlib \
-	$(GO-CMD) run -tags glj_no_aot_stdlib ./cmd/glj \
+	go run -tags glj_no_aot_stdlib ./cmd/glj \
 	<<<"(map compile '[$(AOT-NAMESPACES)])"
 
 glj-imports: $(GLJ-IMPORTS)
@@ -141,10 +147,6 @@ glj-imports: $(GLJ-IMPORTS)
 glj-bins: $(GLJ-BINS)
 
 build: $(GLJ-CMD)
-
-clean:
-	$(RM) report.html
-	$(RM) -r bin/ scripts/rewrite-core/.cpcache/
 
 pkg/gen/gljimports/gljimports_%.go: \
 		./scripts/gen-gljimports.sh \
@@ -154,7 +156,7 @@ pkg/gen/gljimports/gljimports_%.go: \
 		$(wildcard ./pkg/runtime/*.go) \
 		$(if $(force),force)
 	@echo "Generating $@"
-	./scripts/gen-gljimports.sh $@ $* $(GO-CMD)
+	./scripts/gen-gljimports.sh $@ $* go
 
 pkg/stdlib/clojure/%.glj: \
 		scripts/rewrite-core/originals/%.clj \
@@ -183,7 +185,7 @@ bin/%/glj.wasm: \
 	@mkdir -p $(dir $@)
 	scripts/build-glj.sh $@ $*
 
-vet:
+vet: $(GO)
 	go vet ./...
 
 .PHONY: test
@@ -204,7 +206,7 @@ endif
 $(TEST-GLJ-TARGETS): $(GLJ-CMD)
 	$< $(basename $@)
 
-format:
+format: $(GO)
 	@if go fmt ./... | grep -q ''; then \
 		echo "Files were formatted. Please commit the changes."; \
 		exit 1; \
@@ -213,3 +215,27 @@ format:
 update-clojure-sources:
 	scripts/rewrite-core/update-clojure-sources.sh \
 		$(CLOJURE-STDLIB-VERSION)
+
+RELEASE-PLATFORMS := linux_amd64 darwin_arm64
+
+RELEASE-BINS := $(foreach p,$(RELEASE-PLATFORMS),bin/$(p)/glj)
+
+release-dist:
+	@$(if $(filter command line,$(origin VERSION)),,\
+	  $(error VERSION is required on the command line))
+	$(eval RELEASE_VER := $(patsubst v%,%,$(VERSION)))
+	$(MAKE) stdlib-targets generate aot glj-imports $(RELEASE-BINS)
+	mkdir -p dist
+	$(foreach p,$(RELEASE-PLATFORMS), \
+	  tar -czf dist/glj-$(RELEASE_VER)-$(p).tar.gz -C bin/$(p) glj ;)
+
+release: release-dist $(GH)
+	$(eval RELEASE_VER := $(patsubst v%,%,$(VERSION)))
+	git tag -a v$(RELEASE_VER) -m "Release v$(RELEASE_VER)"
+	git push origin gloat
+	git push origin v$(RELEASE_VER)
+	gh release create v$(RELEASE_VER) \
+	  --repo gloathub/glojure \
+	  --title "v$(RELEASE_VER)" \
+	  --generate-notes \
+	  dist/glj-$(RELEASE_VER)-*.tar.gz

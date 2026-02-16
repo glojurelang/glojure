@@ -5,9 +5,9 @@ package core
 import (
 	errors5 "errors"
 	fmt "fmt"
-	uuid10 "github.com/google/uuid"
 	lang "github.com/gloathub/glojure/pkg/lang"
 	runtime "github.com/gloathub/glojure/pkg/runtime"
+	uuid10 "github.com/google/uuid"
 	math4 "math"
 	big6 "math/big"
 	rand13 "math/rand"
@@ -3720,7 +3720,7 @@ func LoadNS() {
 	}
 	// chunk-next
 	{
-		tmp0 := sym_chunk_DASH_next.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(702), kw_column, int(7), kw_end_DASH_line, int(702), kw_end_DASH_column, int(70), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunk_DASH_next.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(702), kw_column, int(7), kw_end_DASH_line, int(702), kw_end_DASH_column, int(68), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3747,7 +3747,7 @@ func LoadNS() {
 	}
 	// chunk-rest
 	{
-		tmp0 := sym_chunk_DASH_rest.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(699), kw_column, int(7), kw_end_DASH_line, int(699), kw_end_DASH_column, int(70), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunk_DASH_rest.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(699), kw_column, int(7), kw_end_DASH_line, int(699), kw_end_DASH_column, int(68), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -3920,7 +3920,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(lang.NewCons, []any{v3, v4})
 				return tmp5
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(29), kw_column, int(7), kw_end_DASH_line, int(29), kw_end_DASH_column, int(88))).(lang.FnFunc)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(29), kw_column, int(7), kw_end_DASH_line, int(29), kw_end_DASH_column, int(86))).(lang.FnFunc)
 			v2 = tmp1
 			_ = v2
 		}
@@ -4413,7 +4413,7 @@ func LoadNS() {
 				tmp4 := lang.Apply(lang.First, []any{v3})
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(54), kw_column, int(8), kw_end_DASH_line, int(54), kw_end_DASH_column, int(85))).(lang.FnFunc)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(54), kw_column, int(8), kw_end_DASH_line, int(54), kw_end_DASH_column, int(83))).(lang.FnFunc)
 			v2 = tmp1
 			_ = v2
 		}
@@ -4736,7 +4736,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(lang.HasType, []any{v3, v4})
 				return tmp5
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(145), kw_column, int(12), kw_end_DASH_line, int(145), kw_end_DASH_column, int(84))).(lang.FnFunc)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(145), kw_column, int(12), kw_end_DASH_line, int(145), kw_end_DASH_column, int(82))).(lang.FnFunc)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5247,7 +5247,7 @@ func LoadNS() {
 				tmp6 := lang.Apply(tmp4, []any{tmp5, v3})
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(173), kw_column, int(7), kw_end_DASH_line, int(173), kw_end_DASH_column, int(96))).(lang.FnFunc)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(173), kw_column, int(7), kw_end_DASH_line, int(173), kw_end_DASH_column, int(94))).(lang.FnFunc)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5449,7 +5449,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(lang.Next, []any{v4})
 				return tmp5
 			})
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(63), kw_column, int(7), kw_end_DASH_line, int(63), kw_end_DASH_column, int(76))).(lang.FnFunc)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(63), kw_column, int(7), kw_end_DASH_line, int(63), kw_end_DASH_column, int(74))).(lang.FnFunc)
 			v3 = tmp2
 			_ = v3
 		}
@@ -6366,7 +6366,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(lang.Rest, []any{v4})
 				return tmp5
 			})
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(72), kw_column, int(7), kw_end_DASH_line, int(72), kw_end_DASH_column, int(76))).(lang.FnFunc)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(72), kw_column, int(7), kw_end_DASH_line, int(72), kw_end_DASH_column, int(74))).(lang.FnFunc)
 			v3 = tmp2
 			_ = v3
 		}
@@ -6453,7 +6453,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(lang.Seq, []any{v4})
 				return tmp5
 			})
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(138), kw_column, int(6), kw_end_DASH_line, int(138), kw_end_DASH_column, int(124))).(lang.FnFunc)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(138), kw_column, int(6), kw_end_DASH_line, int(138), kw_end_DASH_column, int(120))).(lang.FnFunc)
 			v3 = tmp2
 			_ = v3
 		}
@@ -6477,7 +6477,7 @@ func LoadNS() {
 				tmp6 := lang.Apply(tmp4, []any{tmp5, v3})
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(152), kw_column, int(7), kw_end_DASH_line, int(152), kw_end_DASH_column, int(86))).(lang.FnFunc)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(152), kw_column, int(7), kw_end_DASH_line, int(152), kw_end_DASH_column, int(84))).(lang.FnFunc)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8027,7 +8027,7 @@ func LoadNS() {
 				tmp6 := lang.Apply(tmp4, []any{tmp5, v3})
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(180), kw_column, int(10), kw_end_DASH_line, int(180), kw_end_DASH_column, int(105))).(lang.FnFunc)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(180), kw_column, int(10), kw_end_DASH_line, int(180), kw_end_DASH_column, int(103))).(lang.FnFunc)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8609,7 +8609,7 @@ func LoadNS() {
 				tmp6 := lang.Apply(tmp4, []any{tmp5, v3})
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(159), kw_column, int(8), kw_end_DASH_line, int(159), kw_end_DASH_column, int(88))).(lang.FnFunc)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(159), kw_column, int(8), kw_end_DASH_line, int(159), kw_end_DASH_column, int(86))).(lang.FnFunc)
 			v2 = tmp1
 			_ = v2
 		}
@@ -9050,7 +9050,7 @@ func LoadNS() {
 					return tmp6
 				}
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(83), kw_column, int(7), kw_end_DASH_line, int(90), kw_end_DASH_column, int(66))).(lang.FnFunc)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(83), kw_column, int(7), kw_end_DASH_line, int(90), kw_end_DASH_column, int(64))).(lang.FnFunc)
 			v2 = tmp1
 			_ = v2
 		}
@@ -9343,7 +9343,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
 				tmp13 := lang.NewMap(kw_tag, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn)
-				tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(1784), kw_column, int(27), kw_end_DASH_line, int(1784), kw_end_DASH_column, int(81))
+				tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(1784), kw_column, int(27), kw_end_DASH_line, int(1784), kw_end_DASH_column, int(79))
 				tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -13931,7 +13931,7 @@ func LoadNS() {
 					tmp13 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_transient)
 					tmp15 := lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{}))
-					tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4111), kw_column, int(107), kw_end_DASH_line, int(4111), kw_end_DASH_column, int(109))
+					tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4111), kw_column, int(105), kw_end_DASH_line, int(4111), kw_end_DASH_column, int(107))
 					tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -15402,7 +15402,7 @@ func LoadNS() {
 					}
 					return tmp7
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5497), kw_column, int(11), kw_end_DASH_line, int(5497), kw_end_DASH_column, int(77))
+				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5497), kw_column, int(11), kw_end_DASH_line, int(5497), kw_end_DASH_column, int(75))
 				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -16694,7 +16694,7 @@ func LoadNS() {
 					// let binding "v"
 					tmp8 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
 					tmp9 := lang.NewMap(kw_tag, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Volatile)
-					tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2536), kw_column, int(26), kw_end_DASH_line, int(2536), kw_end_DASH_column, int(80))
+					tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2536), kw_column, int(26), kw_end_DASH_line, int(2536), kw_end_DASH_column, int(78))
 					tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -17998,7 +17998,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -18029,7 +18029,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -18226,7 +18226,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -18257,7 +18257,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -18454,7 +18454,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -18485,7 +18485,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -18681,7 +18681,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -18712,7 +18712,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -18909,7 +18909,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -18940,7 +18940,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -20336,7 +20336,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -20367,7 +20367,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -20557,7 +20557,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -20588,7 +20588,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -20829,7 +20829,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -20860,7 +20860,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -21164,7 +21164,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -21195,7 +21195,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -21496,7 +21496,7 @@ func LoadNS() {
 					}
 					return tmp7
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5489), kw_column, int(11), kw_end_DASH_line, int(5489), kw_end_DASH_column, int(68))
+				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5489), kw_column, int(11), kw_end_DASH_line, int(5489), kw_end_DASH_column, int(66))
 				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -23034,7 +23034,7 @@ func LoadNS() {
 				tmp5 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
 				tmp7 := lang.NewVector()
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(748), kw_column, int(100), kw_end_DASH_line, int(748), kw_end_DASH_column, int(101))
+				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(748), kw_column, int(98), kw_end_DASH_line, int(748), kw_end_DASH_column, int(99))
 				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -27199,7 +27199,7 @@ func LoadNS() {
 				tmp5 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
 				tmp7 := lang.NewVector()
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(685), kw_column, int(100), kw_end_DASH_line, int(685), kw_end_DASH_column, int(101))
+				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(685), kw_column, int(98), kw_end_DASH_line, int(685), kw_end_DASH_column, int(99))
 				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -28123,7 +28123,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -28154,7 +28154,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -28775,7 +28775,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -28806,7 +28806,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -29228,7 +29228,7 @@ func LoadNS() {
 								tmp35 := lang.Apply(tmp16, []any{tmp34})
 								return tmp35
 							})
-							tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+							tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 							tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
@@ -29259,7 +29259,7 @@ func LoadNS() {
 						return tmp8
 					}
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))
+				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))
 				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -35789,7 +35789,7 @@ func LoadNS() {
 					} // end let
 					return tmp7
 				})
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7525), kw_column, int(19), kw_end_DASH_line, int(7527), kw_end_DASH_column, int(92))
+				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7525), kw_column, int(19), kw_end_DASH_line, int(7527), kw_end_DASH_column, int(90))
 				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -35819,7 +35819,7 @@ func LoadNS() {
 					}
 					return tmp16
 				})
-				tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7529), kw_column, int(31), kw_end_DASH_line, int(7529), kw_end_DASH_column, int(91))
+				tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7529), kw_column, int(31), kw_end_DASH_line, int(7529), kw_end_DASH_column, int(89))
 				tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -35986,7 +35986,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -36017,7 +36017,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -36213,7 +36213,7 @@ func LoadNS() {
 						tmp32 := lang.Apply(tmp13, []any{tmp31})
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(87))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -36244,7 +36244,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(85))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
@@ -40346,7 +40346,7 @@ func LoadNS() {
 						tmp20 := lang.Apply(tmp19, []any{sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Import, v18})
 						return tmp20
 					})
-					tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3435), kw_column, int(17), kw_end_DASH_line, int(3435), kw_end_DASH_column, int(72))
+					tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3435), kw_column, int(17), kw_end_DASH_line, int(3435), kw_end_DASH_column, int(70))
 					tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -42929,7 +42929,7 @@ func LoadNS() {
 				} // end let
 				return tmp12
 			})
-			tmp10 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(246), kw_column, int(5), kw_end_DASH_line, int(247), kw_end_DASH_column, int(106))
+			tmp10 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(246), kw_column, int(5), kw_end_DASH_line, int(247), kw_end_DASH_column, int(104))
 			tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
@@ -46575,7 +46575,7 @@ func LoadNS() {
 									// let binding "gmapseq"
 									tmp25 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
 									tmp26 := lang.NewMap(kw_tag, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_ISeq)
-									tmp27 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4441), kw_column, int(52), kw_end_DASH_line, int(4441), kw_end_DASH_column, int(102))
+									tmp27 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4441), kw_column, int(52), kw_end_DASH_line, int(4441), kw_end_DASH_column, int(100))
 									tmp28, err := lang.WithMeta(tmp26, tmp27.(lang.IPersistentMap))
 									if err != nil {
 										panic(err)
@@ -47596,7 +47596,7 @@ func LoadNS() {
 						panic(tmp42)
 					}
 				})
-				tmp38 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4666), kw_column, int(13), kw_end_DASH_line, int(4666), kw_end_DASH_column, int(124))
+				tmp38 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4666), kw_column, int(13), kw_end_DASH_line, int(4666), kw_end_DASH_column, int(122))
 				tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -49556,7 +49556,7 @@ func LoadNS() {
 					tmp9 := lang.Apply(tmp8, nil)
 					tmp10 := reflect.TypeOf((*lang.Object)(nil)).Elem()
 					tmp11 := lang.NewMap(kw_tag, tmp10)
-					tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6730), kw_column, int(32), kw_end_DASH_line, int(6730), kw_end_DASH_column, int(83))
+					tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6730), kw_column, int(32), kw_end_DASH_line, int(6730), kw_end_DASH_column, int(81))
 					tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -50235,7 +50235,7 @@ func LoadNS() {
 							tmp21 := checkDerefVar(var_clojure_DOT_core_fnil)
 							tmp22 := checkDerefVar(var_clojure_DOT_core_conj)
 							tmp23 := lang.NewVector()
-							tmp24 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6656), kw_column, int(101), kw_end_DASH_line, int(6656), kw_end_DASH_column, int(102))
+							tmp24 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6656), kw_column, int(99), kw_end_DASH_line, int(6656), kw_end_DASH_column, int(100))
 							tmp25, err := lang.WithMeta(tmp23, tmp24.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
@@ -50246,7 +50246,7 @@ func LoadNS() {
 							tmp29 := checkDerefVar(var_clojure_DOT_core_first)
 							tmp30 := lang.Apply(tmp29, []any{v13})
 							tmp31 := lang.NewVector(tmp28, tmp30)
-							tmp32 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6656), kw_column, int(105), kw_end_DASH_line, int(6656), kw_end_DASH_column, int(127))
+							tmp32 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6656), kw_column, int(103), kw_end_DASH_line, int(6656), kw_end_DASH_column, int(125))
 							tmp33, err := lang.WithMeta(tmp31, tmp32.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
@@ -50481,7 +50481,7 @@ func LoadNS() {
 					tmp9 := lang.Apply(lang.Hash, []any{v8})
 					return tmp9
 				})
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6683), kw_column, int(18), kw_end_DASH_line, int(6683), kw_end_DASH_column, int(65))
+				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6683), kw_column, int(18), kw_end_DASH_line, int(6683), kw_end_DASH_column, int(63))
 				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -56667,7 +56667,7 @@ func LoadNS() {
 					tmp48 := lang.Apply(lang.WriteWriter, []any{v3, "}"})
 					return tmp48
 				})
-				tmp37 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(481), kw_column, int(19), kw_end_DASH_line, int(491), kw_end_DASH_column, int(72))
+				tmp37 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(481), kw_column, int(19), kw_end_DASH_line, int(491), kw_end_DASH_column, int(70))
 				tmp38, err := lang.WithMeta(tmp36, tmp37.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)

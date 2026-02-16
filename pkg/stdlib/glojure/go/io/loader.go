@@ -6013,7 +6013,7 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(245), kw_column, int(25), kw_end_DASH_line, int(248), kw_end_DASH_column, int(148))).(lang.FnFunc)
+		tmp0 = tmp0.WithMeta(lang.NewMap(kw_file, "glojure/go/io.glj", kw_line, int(245), kw_column, int(25), kw_end_DASH_line, int(248), kw_end_DASH_column, int(146))).(lang.FnFunc)
 		closed9 = tmp0
 	}
 	// IOFactory
