@@ -41,7 +41,34 @@ func Main(args []string) {
 	runtime.AddLoadPath(os.DirFS("."))
 
 	if len(args) == 0 {
-		repl.Start()
+		// Check if stdin is a terminal
+		fi, _ := os.Stdin.Stat()
+		if (fi.Mode() & os.ModeCharDevice) != 0 {
+			// Interactive terminal: start REPL
+			repl.Start()
+		} else {
+			// Piped input: evaluate and exit with proper error handling
+			env := lang.GlobalEnv
+			rdr := reader.New(bufio.NewReader(os.Stdin), reader.WithGetCurrentNS(func() *lang.Namespace {
+				return env.CurrentNamespace()
+			}))
+			for {
+				val, err := rdr.ReadOne()
+				if err == reader.ErrEOF {
+					break
+				}
+				if err != nil {
+					log.Fatal(err)
+				}
+				result, err := env.Eval(val)
+				if err != nil {
+					log.Fatal(err)
+				}
+				if !lang.IsNil(result) {
+					fmt.Println(lang.PrintString(result))
+				}
+			}
+		}
 	} else if args[0] == "--version" {
 		fmt.Printf("glojure v%s\n", runtime.Version)
 		return
