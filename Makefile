@@ -234,7 +234,7 @@ release: release-dist $(GH)
 	git tag -a v$(RELEASE_VER) -m "Release v$(RELEASE_VER)"
 	git push origin gloat
 	git push origin v$(RELEASE_VER)
-	gh release create v$(RELEASE_VER) \
+	$(GH-CMD) release create v$(RELEASE_VER) \
 	  --repo gloathub/glojure \
 	  --title "v$(RELEASE_VER)" \
 	  --generate-notes \
