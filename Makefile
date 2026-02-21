@@ -149,38 +149,38 @@ glj-bins: $(GLJ-BINS)
 build: $(GLJ-CMD)
 
 pkg/gen/gljimports/gljimports_%.go: \
-		./scripts/gen-gljimports.sh \
-		./cmd/gen-import-interop/main.go \
-		./internal/genpkg/genpkg.go \
-		$(wildcard ./pkg/lang/*.go) \
-		$(wildcard ./pkg/runtime/*.go) \
-		$(if $(force),force)
+	  ./scripts/gen-gljimports.sh \
+	  ./cmd/gen-import-interop/main.go \
+	  ./internal/genpkg/genpkg.go \
+	  $(wildcard ./pkg/lang/*.go) \
+	  $(wildcard ./pkg/runtime/*.go) \
+	  $(if $(force),force)
 	@echo "Generating $@"
 	./scripts/gen-gljimports.sh $@ $* go
 
 pkg/stdlib/clojure/%.glj: \
-		scripts/rewrite-core/originals/%.clj \
-		scripts/rewrite-core/run.sh \
-		scripts/rewrite-core/rewrite.clj \
-		$(if $(force),force)
+	  scripts/rewrite-core/originals/%.clj \
+	  scripts/rewrite-core/run.sh \
+	  scripts/rewrite-core/rewrite.clj \
+	  $(if $(force),force)
 	@echo "Rewriting $< to $@"
 	@mkdir -p $(dir $@)
 	scripts/rewrite-core/run.sh $< > $@
 
 bin/%/glj: generate \
-		$(wildcard ./cmd/glj/*.go) \
-		$(wildcard ./pkg/**/*.go) \
-		$(wildcard ./internal/**/*.go) \
-		$(if $(force),force)
+	  $(wildcard ./cmd/glj/*.go) \
+	  $(wildcard ./pkg/**/*.go) \
+	  $(wildcard ./internal/**/*.go) \
+	  $(if $(force),force)
 	@echo "Building $@"
 	@mkdir -p $(dir $@)
 	scripts/build-glj.sh $@ $*
 
 bin/%/glj.wasm: \
-		$(wildcard ./cmd/glj/*.go) \
-		$(wildcard ./pkg/**/*.go) \
-		$(wildcard ./internal/**/*.go) \
-		$(if $(force),force)
+	  $(wildcard ./cmd/glj/*.go) \
+	  $(wildcard ./pkg/**/*.go) \
+	  $(wildcard ./internal/**/*.go) \
+	  $(if $(force),force)
 	@echo "Building $@"
 	@mkdir -p $(dir $@)
 	scripts/build-glj.sh $@ $*
@@ -197,10 +197,10 @@ test-glj: $(TEST-GLJ-TARGETS)
 test-suite: $(GLJ-CMD)
 ifneq (,$(wildcard $(TEST-SUITE-DIR)))
 	cd $(TEST-SUITE-DIR) && \
-		$(abspath $<) $(TEST-SUITE-FILE) \
-			--expect-failures 38 \
-			--expect-errors 151 \
-			2>/dev/null
+	  $(abspath $<) $(TEST-SUITE-FILE) \
+	    --expect-failures 38 \
+	    --expect-errors 151 \
+	    2>/dev/null
 endif
 
 $(TEST-GLJ-TARGETS): $(GLJ-CMD)
@@ -208,13 +208,13 @@ $(TEST-GLJ-TARGETS): $(GLJ-CMD)
 
 format: $(GO)
 	@if go fmt ./... | grep -q ''; then \
-		echo "Files were formatted. Please commit the changes."; \
-		exit 1; \
+	  echo "Files were formatted. Please commit the changes."; \
+	  exit 1; \
 	fi
 
 update-clojure-sources:
 	scripts/rewrite-core/update-clojure-sources.sh \
-		$(CLOJURE-STDLIB-VERSION)
+	  $(CLOJURE-STDLIB-VERSION)
 
 RELEASE-PLATFORMS := linux_amd64 darwin_arm64
 
