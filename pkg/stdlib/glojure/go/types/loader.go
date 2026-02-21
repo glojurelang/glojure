@@ -6180,7 +6180,7 @@ func LoadNS() {
 			_ = tmp3
 			var tmp9 any
 			{ // let
-				// let binding "vec__1135"
+				// let binding "vec__809"
 				tmp10 := lang.Apply(parser5.ParseExpr, []any{v2})
 				var v11 any = tmp10
 				_ = v11

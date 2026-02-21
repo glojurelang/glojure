@@ -102,11 +102,12 @@ GO-PLATFORMS := \
 	netbsd_arm64 \
 	netbsd_amd64 \
 	dragonfly_amd64 \
-	solaris_amd64 \
-	illumos_amd64 \
 	js_wasm \
 	wasip1_wasm \
 	$(EXTRA-GO-PLATFORMS)
+
+# Disabled: solaris_amd64 (syscall.Syscall6 cross-compilation issue)
+# Disabled: illumos_amd64 (syscall.Syscall6 cross-compilation issue)
 
 GLJ-IMPORTS=$(foreach platform,$(GO-PLATFORMS) \
               ,pkg/gen/gljimports/gljimports_$(platform).go)

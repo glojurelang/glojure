@@ -7015,7 +7015,7 @@ func LoadNS() {
 			tmp3 := checkDerefVar(var_clojure_DOT_test_report)
 			var tmp4 any
 			{ // let
-				// let binding "G__1069"
+				// let binding "G__743"
 				tmp5 := lang.Apply(kw_type, []any{v2})
 				var v6 any = tmp5
 				_ = v6
@@ -8614,7 +8614,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "seq_1070"
+				// let binding "seq_744"
 				tmp4 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp5 := checkDerefVar(var_clojure_DOT_core_group_DASH_by)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_comp)
@@ -8624,13 +8624,13 @@ func LoadNS() {
 				tmp10 := lang.Apply(tmp4, []any{tmp9})
 				var v11 any = tmp10
 				_ = v11
-				// let binding "chunk_1071"
+				// let binding "chunk_745"
 				var v12 any = nil
 				_ = v12
-				// let binding "count_1072"
+				// let binding "count_746"
 				var v13 any = int64(0)
 				_ = v13
-				// let binding "i_1073"
+				// let binding "i_747"
 				var v14 any = int64(0)
 				_ = v14
 				for {
@@ -8640,7 +8640,7 @@ func LoadNS() {
 					if lang.IsTruthy(tmp17) {
 						var tmp18 any
 						{ // let
-							// let binding "vec__1074"
+							// let binding "vec__748"
 							tmp19, _ := lang.FieldOrMethod(v12, "nth")
 							if reflect.TypeOf(tmp19).Kind() != reflect.Func {
 								panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
@@ -8681,18 +8681,18 @@ func LoadNS() {
 									checkArity(args, 0)
 									var tmp42 any
 									{ // let
-										// let binding "seq_1077"
+										// let binding "seq_751"
 										tmp43 := checkDerefVar(var_clojure_DOT_core_seq)
 										tmp44 := lang.Apply(tmp43, []any{v27})
 										var v45 any = tmp44
 										_ = v45
-										// let binding "chunk_1078"
+										// let binding "chunk_752"
 										var v46 any = nil
 										_ = v46
-										// let binding "count_1079"
+										// let binding "count_753"
 										var v47 any = int64(0)
 										_ = v47
-										// let binding "i_1080"
+										// let binding "i_754"
 										var v48 any = int64(0)
 										_ = v48
 										for {
@@ -8757,7 +8757,7 @@ func LoadNS() {
 													if lang.IsTruthy(v56) {
 														var tmp58 any
 														{ // let
-															// let binding "seq_1077"
+															// let binding "seq_751"
 															var v59 any = v56
 															_ = v59
 															var tmp60 any
@@ -8883,7 +8883,7 @@ func LoadNS() {
 							if lang.IsTruthy(v22) {
 								var tmp24 any
 								{ // let
-									// let binding "seq_1070"
+									// let binding "seq_744"
 									var v25 any = v22
 									_ = v25
 									var tmp26 any
@@ -8919,7 +8919,7 @@ func LoadNS() {
 									} else {
 										var tmp30 any
 										{ // let
-											// let binding "vec__1081"
+											// let binding "vec__755"
 											tmp31 := checkDerefVar(var_clojure_DOT_core_first)
 											tmp32 := lang.Apply(tmp31, []any{v25})
 											var v33 any = tmp32
@@ -8957,18 +8957,18 @@ func LoadNS() {
 													checkArity(args, 0)
 													var tmp54 any
 													{ // let
-														// let binding "seq_1084"
+														// let binding "seq_758"
 														tmp55 := checkDerefVar(var_clojure_DOT_core_seq)
 														tmp56 := lang.Apply(tmp55, []any{v39})
 														var v57 any = tmp56
 														_ = v57
-														// let binding "chunk_1085"
+														// let binding "chunk_759"
 														var v58 any = nil
 														_ = v58
-														// let binding "count_1086"
+														// let binding "count_760"
 														var v59 any = int64(0)
 														_ = v59
-														// let binding "i_1087"
+														// let binding "i_761"
 														var v60 any = int64(0)
 														_ = v60
 														for {
@@ -9033,7 +9033,7 @@ func LoadNS() {
 																	if lang.IsTruthy(v68) {
 																		var tmp70 any
 																		{ // let
-																			// let binding "seq_1084"
+																			// let binding "seq_758"
 																			var v71 any = v68
 																			_ = v71
 																			var tmp72 any
@@ -9259,10 +9259,10 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "map__1068"
+				// let binding "map__742"
 				var v4 any = v2
 				_ = v4
-				// let binding "map__1068"
+				// let binding "map__742"
 				var tmp5 any
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
 				tmp7 := lang.Apply(tmp6, []any{v4})

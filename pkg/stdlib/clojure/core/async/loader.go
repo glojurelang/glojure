@@ -5470,7 +5470,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "vec__1018"
+				// let binding "vec__692"
 				tmp4 := lang.Apply(lang.Builtins["recv"], []any{v2})
 				var v5 any = tmp4
 				_ = v5
@@ -5504,7 +5504,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "vec__1018"
+				// let binding "vec__692"
 				tmp4 := lang.Apply(lang.Builtins["recv"], []any{v2})
 				var v5 any = tmp4
 				_ = v5
@@ -5608,10 +5608,10 @@ func LoadNS() {
 				_ = v3
 				var tmp4 any
 				{ // let
-					// let binding "map__1034"
+					// let binding "map__708"
 					var v5 any = v3
 					_ = v5
-					// let binding "map__1034"
+					// let binding "map__708"
 					var tmp6 any
 					tmp7 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
 					tmp8 := lang.Apply(tmp7, []any{v5})
@@ -5676,10 +5676,10 @@ func LoadNS() {
 				_ = v3
 				var tmp4 any
 				{ // let
-					// let binding "map__1034"
+					// let binding "map__708"
 					var v5 any = v3
 					_ = v5
-					// let binding "map__1034"
+					// let binding "map__708"
 					var tmp6 any
 					tmp7 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
 					tmp8 := lang.Apply(tmp7, []any{v5})
@@ -5835,7 +5835,7 @@ func LoadNS() {
 				tmp16 := lang.Apply(tmp15, []any{v11, v7})
 				var v17 any = tmp16
 				_ = v17
-				// let binding "vec__1035"
+				// let binding "vec__709"
 				tmp18 := checkDerefVar(var_clojure_DOT_core_reduce)
 				var tmp19 lang.FnFunc
 				tmp19 = lang.NewFnFunc(func(args ...any) any {
@@ -5846,7 +5846,7 @@ func LoadNS() {
 					_ = v21
 					var tmp22 any
 					{ // let
-						// let binding "vec__1040"
+						// let binding "vec__714"
 						var v23 any = v20
 						_ = v23
 						// let binding "clauses"
@@ -5859,7 +5859,7 @@ func LoadNS() {
 						tmp28 := lang.Apply(tmp27, []any{v23, int64(1), nil})
 						var v29 any = tmp28
 						_ = v29
-						// let binding "vec__1043"
+						// let binding "vec__717"
 						var v30 any = v21
 						_ = v30
 						// let binding "ports"
@@ -5891,7 +5891,7 @@ func LoadNS() {
 							}
 							var v44 any = tmp38
 							_ = v44
-							// let binding "vec__1046"
+							// let binding "vec__720"
 							tmp45 := checkDerefVar(var_clojure_DOT_core_reduce)
 							var tmp46 lang.FnFunc
 							tmp46 = lang.NewFnFunc(func(args ...any) any {
@@ -5902,7 +5902,7 @@ func LoadNS() {
 								_ = v48
 								var tmp49 any
 								{ // let
-									// let binding "vec__1050"
+									// let binding "vec__724"
 									var v50 any = v47
 									_ = v50
 									// let binding "ports"
@@ -5921,7 +5921,7 @@ func LoadNS() {
 									if lang.IsTruthy(tmp59) {
 										var tmp60 any
 										{ // let
-											// let binding "vec__1053"
+											// let binding "vec__727"
 											var v61 any = v48
 											_ = v61
 											// let binding "port"
@@ -6175,7 +6175,7 @@ func LoadNS() {
 					_ = v111
 					var tmp112 any
 					{ // let
-						// let binding "vec__1057"
+						// let binding "vec__731"
 						var v113 any = v111
 						_ = v113
 						// let binding "ports"
@@ -6378,7 +6378,7 @@ func LoadNS() {
 				tmp30 := lang.Apply(tmp29, nil)
 				var v31 any = tmp30
 				_ = v31
-				// let binding "vec__1030"
+				// let binding "vec__704"
 				tmp32 := checkDerefVar(var_clojure_DOT_core_map)
 				tmp33 := lang.Apply(tmp32, []any{lang.Builtins["deref"], v28})
 				tmp34 := lang.Apply(reflect.Select, []any{tmp33})
@@ -6810,7 +6810,7 @@ func LoadNS() {
 				tmp5 := lang.Apply(tmp4, []any{v2})
 				var v6 any = tmp5
 				_ = v6
-				// let binding "vec__1027"
+				// let binding "vec__701"
 				var v7 any = v6
 				_ = v7
 				// let binding "val"
@@ -7090,7 +7090,7 @@ func LoadNS() {
 				tmp12 := lang.Apply(tmp11, nil)
 				var v13 any = tmp12
 				_ = v13
-				// let binding "vec__1021"
+				// let binding "vec__695"
 				tmp14 := checkDerefVar(var_clojure_DOT_core_map)
 				tmp15 := lang.NewVector(v10, v13)
 				tmp16 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(124), kw_column, int(55), kw_end_DASH_line, int(124), kw_end_DASH_column, int(62))
@@ -7236,7 +7236,7 @@ func LoadNS() {
 				}
 				var v13 any = tmp12
 				_ = v13
-				// let binding "vec__1024"
+				// let binding "vec__698"
 				tmp14 := checkDerefVar(var_clojure_DOT_core_map)
 				tmp15 := lang.NewVector(v5, v11)
 				tmp16 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(138), kw_column, int(55), kw_end_DASH_line, int(138), kw_end_DASH_column, int(62))
