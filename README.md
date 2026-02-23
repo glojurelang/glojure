@@ -1,5 +1,21 @@
 # Glojure
 
+> **ABOUT THIS FORK**
+>
+> This is a temporary fork of the https://github.com/glojurelang/glojure
+> upstream Glojure language repo, where patches are being applied to support
+> the fast-moving needs of the [Gloat](https://gloathub.org) project.
+>
+> The intent is to get these changes merged upstream as soon as possible, have
+> Gloat use the upstream and retire this fork.
+>
+> The changes here include:
+>
+> * [Binary `glj` Releases](https://github.com/gloathub/glojure/releases) for
+>   Linux and macOS
+> * Go cross-compilation support for many more platforms
+> * Lots of small bug fixes
+
 ![example workflow](https://github.com/gloathub/glojure/actions/workflows/ci.yml/badge.svg)
 
 [Try it in your browser!](https://gloathub.github.io/glojure/)
