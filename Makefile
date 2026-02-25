@@ -217,7 +217,10 @@ update-clojure-sources:
 	scripts/rewrite-core/update-clojure-sources.sh \
 	  $(CLOJURE-STDLIB-VERSION)
 
-RELEASE-PLATFORMS := linux_amd64 darwin_arm64
+RELEASE-PLATFORMS := \
+  linux_amd64 \
+  linux_arm64 \
+  darwin_arm64 \
 
 RELEASE-BINS := $(foreach p,$(RELEASE-PLATFORMS),bin/$(p)/glj)
 
