@@ -32,6 +32,8 @@ var (
 		gua := strings.ToLower(os.Getenv("GLOJURE_USE_AOT"))
 		return !(gua == "0" || gua == "false" || gua == "no" || gua == "off")
 	}()
+
+	warnNotAot = os.Getenv("GLOJURE_WARN_NOT_AOT") == "1"
 )
 
 func init() {
@@ -186,6 +188,9 @@ func (rt *RTMethods) Load(scriptBase string) {
 	}
 	if filename == "" {
 		panic(fmt.Errorf("failed to load %s: not found in load path", scriptBase))
+	}
+	if warnNotAot {
+		fmt.Fprintf(os.Stderr, "WARNING: loading %s (not AOT)\n", filename)
 	}
 	ReadEval(string(buf), WithFilename(filename))
 
