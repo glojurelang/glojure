@@ -3845,6 +3845,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/gloathub/glojure/pkg/lang.*IllegalArgumentError", reflect.TypeOf((*github_com_gloathub_glojure_pkg_lang.IllegalArgumentError)(nil)))
 	_register("github.com/gloathub/glojure/pkg/lang.IllegalStateError", reflect.TypeOf((*github_com_gloathub_glojure_pkg_lang.IllegalStateError)(nil)).Elem())
 	_register("github.com/gloathub/glojure/pkg/lang.*IllegalStateError", reflect.TypeOf((*github_com_gloathub_glojure_pkg_lang.IllegalStateError)(nil)))
+	_register("github.com/gloathub/glojure/pkg/lang.IllegalStateException", github_com_gloathub_glojure_pkg_lang.IllegalStateException)
 	_register("github.com/gloathub/glojure/pkg/lang.Import", github_com_gloathub_glojure_pkg_lang.Import)
 	_register("github.com/gloathub/glojure/pkg/lang.Inc", github_com_gloathub_glojure_pkg_lang.Inc)
 	_register("github.com/gloathub/glojure/pkg/lang.IncP", github_com_gloathub_glojure_pkg_lang.IncP)

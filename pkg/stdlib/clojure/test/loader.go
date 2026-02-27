@@ -7321,17 +7321,18 @@ func LoadNS() {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						if lang.CatchMatches(r, lang.IllegalStateException) {
-							v4 := r
-							_ = v4
+						tmp4 := reflect.TypeOf((*lang.IllegalStateError)(nil))
+						if lang.CatchMatches(r, tmp4) {
+							v5 := r
+							_ = v5
 						} else {
 							panic(r)
 						}
 					}
 				}()
-				tmp4 := checkDerefVar(var_clojure_DOT_core_var_DASH_get)
-				tmp5 := lang.Apply(tmp4, []any{v2})
-				tmp3 = tmp5
+				tmp5 := checkDerefVar(var_clojure_DOT_core_var_DASH_get)
+				tmp6 := lang.Apply(tmp5, []any{v2})
+				tmp3 = tmp6
 			}()
 			return tmp3
 		})
