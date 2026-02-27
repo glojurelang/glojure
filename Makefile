@@ -239,13 +239,27 @@ git-push:
 	$(eval SSH-URL := $(subst https://github.com/,git@github.com:,$(HTTPS-URL)))
 	git push $(SSH-URL) $(shell git rev-parse --abbrev-ref HEAD)
 
-release: release-dist $(GH)
+release: $(GH)
+	@$(if $(filter command line,$(origin VERSION)),,\
+	  $(error VERSION is required on the command line))
 	$(eval RELEASE_VER := $(patsubst v%,%,$(VERSION)))
+	@echo "=== Release v$(RELEASE_VER) ==="
+	$(MAKE) clean
+	$(MAKE) stdlib-targets
+	$(MAKE) generate aot
+	$(MAKE) glj-imports force=1
+	$(MAKE) build
+	$(MAKE) test
+	git add -A
+	git diff --cached --quiet || \
+	  git commit -m "Builds for v$(RELEASE_VER)"
+	$(MAKE) release-dist VERSION=$(VERSION)
 	git tag -a v$(RELEASE_VER) -m "Release v$(RELEASE_VER)"
-	git push origin gloat
+	git push origin $(shell git rev-parse --abbrev-ref HEAD)
 	git push origin v$(RELEASE_VER)
 	$(GH-CMD) release create v$(RELEASE_VER) \
 	  --repo gloathub/glojure \
 	  --title "v$(RELEASE_VER)" \
 	  --generate-notes \
 	  dist/glj-$(RELEASE_VER)-*.tar.gz
+	@echo "=== Release v$(RELEASE_VER) complete ==="
