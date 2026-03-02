@@ -91,5 +91,12 @@ func CharLiteralFromRune(rn rune) string {
 }
 
 func CharAt(s string, idx int) Char {
-	return NewChar([]rune(s)[idx])
+	i := 0
+	for _, r := range s {
+		if i == idx {
+			return NewChar(r)
+		}
+		i++
+	}
+	panic(NewIndexOutOfBoundsError())
 }

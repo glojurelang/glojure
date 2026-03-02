@@ -137,7 +137,7 @@ func (v *SubVector) Pop() IPersistentStack {
 	if v.end-v.start == 1 {
 		return emptyVector
 	}
-	return NewSubVector(nil, v, 0, v.Count()-1)
+	return NewSubVector(nil, v.v, v.start, v.end-1)
 }
 
 func (v *SubVector) RSeq() ISeq {

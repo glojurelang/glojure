@@ -206,7 +206,10 @@ func (v *Vector) Pop() IPersistentStack {
 	if v.Count() == 1 {
 		return emptyVector
 	}
-	return NewSubVector(nil, v, 0, v.Count()-1)
+	return &Vector{
+		meta: v.meta,
+		vec:  v.vec.Pop(),
+	}
 }
 
 func (v *Vector) Meta() IPersistentMap {
