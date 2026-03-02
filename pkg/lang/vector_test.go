@@ -157,3 +157,52 @@ func TestCharAtOutOfBoundsPanics(t *testing.T) {
 	}()
 	CharAt("hi", 5)
 }
+
+// TestGoSliceStringOneArg verifies GoSlice string fast-path with one index.
+func TestGoSliceStringOneArg(t *testing.T) {
+	s := "hello"
+	got := GoSlice(s, 2)
+	if got != "llo" {
+		t.Errorf("GoSlice(%q, 2) = %q, want %q", s, got, "llo")
+	}
+}
+
+// TestGoSliceStringTwoArgs verifies GoSlice string fast-path with two indices.
+func TestGoSliceStringTwoArgs(t *testing.T) {
+	s := "hello"
+	got := GoSlice(s, 1, 4)
+	if got != "ell" {
+		t.Errorf("GoSlice(%q, 1, 4) = %q, want %q", s, got, "ell")
+	}
+}
+
+// TestGoSliceStringNilIndices verifies GoSlice handles nil indices as
+// 0 / len(s).
+func TestGoSliceStringNilIndices(t *testing.T) {
+	s := "hello"
+	got := GoSlice(s, nil, nil)
+	if got != "hello" {
+		t.Errorf("GoSlice(%q, nil, nil) = %q, want %q", s, got, "hello")
+	}
+}
+
+// TestGoSliceStringMatchesReflect verifies the string fast-path produces the
+// same result as the reflect path would for a []byte with same content.
+func TestGoSliceStringMatchesReflect(t *testing.T) {
+	cases := []struct {
+		s    string
+		i, j int
+	}{
+		{"abcdef", 0, 6},
+		{"abcdef", 2, 5},
+		{"abcdef", 0, 0},
+		{"abcdef", 3, 3},
+	}
+	for _, c := range cases {
+		got := GoSlice(c.s, c.i, c.j)
+		want := c.s[c.i:c.j]
+		if got != want {
+			t.Errorf("GoSlice(%q, %d, %d) = %q, want %q", c.s, c.i, c.j, got, want)
+		}
+	}
+}

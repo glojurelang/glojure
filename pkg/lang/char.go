@@ -91,12 +91,23 @@ func CharLiteralFromRune(rn rune) string {
 }
 
 func CharAt(s string, idx int) Char {
-	i := 0
-	for _, r := range s {
-		if i == idx {
-			return NewChar(r)
+	// Walk bytes, using single-byte increment for ASCII and
+	// utf8.DecodeRuneInString only for multi-byte characters.
+	bytePos := 0
+	for i := 0; i < idx; i++ {
+		if bytePos >= len(s) {
+			panic(NewIndexOutOfBoundsError())
 		}
-		i++
+		if s[bytePos] < 0x80 {
+			bytePos++
+		} else {
+			_, size := utf8.DecodeRuneInString(s[bytePos:])
+			bytePos += size
+		}
 	}
-	panic(NewIndexOutOfBoundsError())
+	if bytePos >= len(s) {
+		panic(NewIndexOutOfBoundsError())
+	}
+	r, _ := utf8.DecodeRuneInString(s[bytePos:])
+	return NewChar(r)
 }

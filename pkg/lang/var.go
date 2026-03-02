@@ -22,6 +22,9 @@ type (
 		dynamic      bool
 		dynamicBound atomic.Bool
 
+		// isMacroCached: 0=unknown, 1=false, 2=true
+		isMacroCached atomic.Int32
+
 		watches IPersistentMap
 
 		syncLock sync.Mutex
@@ -167,6 +170,7 @@ func (v *Var) Meta() IPersistentMap {
 
 func (v *Var) SetMeta(meta IPersistentMap) {
 	// TODO: ResetMeta
+	v.isMacroCached.Store(0) // invalidate IsMacro cache
 	meta = Assoc(meta, KWNS, v.ns).(IPersistentMap)
 	v.meta.Store(NewBox(meta))
 }
@@ -178,12 +182,18 @@ func (v *Var) AlterMeta(alter IFn, args ISeq) IPersistentMap {
 }
 
 func (v *Var) IsMacro() bool {
+	if cached := v.isMacroCached.Load(); cached != 0 {
+		return cached == 2
+	}
 	meta := v.Meta()
 	isMacro := meta.EntryAt(KWMacro)
-	if isMacro == nil {
-		return false
+	result := isMacro != nil && isMacro.Val() == true
+	if result {
+		v.isMacroCached.Store(2)
+	} else {
+		v.isMacroCached.Store(1)
 	}
-	return isMacro.Val() == true
+	return result
 }
 
 func (v *Var) SetMacro() {

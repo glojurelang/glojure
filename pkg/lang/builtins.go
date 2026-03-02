@@ -31,44 +31,105 @@ var (
 	}
 
 	Builtins = map[string]interface{}{
-		// Built-in functions
-		"append":  GoAppend,
-		"copy":    GoCopy,
-		"delete":  GoDelete,
-		"len":     GoLen,
-		"cap":     GoCap,
-		"make":    GoMake,
-		"new":     GoNew,
-		"complex": GoComplex,
-		"real":    GoReal,
-		"imag":    GoImag,
-		"close":   GoClose,
-		"panic":   GoPanic,
+		// Built-in functions — wrapped as FnFunc so Apply uses the
+		// IFn fast path instead of reflection.
+		"append": FnFunc(func(args ...any) any {
+			return GoAppend(args[0], args[1:]...)
+		}),
+		"copy": FnFunc(func(args ...any) any {
+			return GoCopy(args[0], args[1])
+		}),
+		"delete": FnFunc(func(args ...any) any {
+			GoDelete(args[0], args[1])
+			return nil
+		}),
+		"len": FnFunc(func(args ...any) any {
+			return GoLen(args[0])
+		}),
+		"cap": FnFunc(func(args ...any) any {
+			return GoCap(args[0])
+		}),
+		"make": FnFunc(func(args ...any) any {
+			return GoMake(args[0].(reflect.Type), args[1:]...)
+		}),
+		"new": FnFunc(func(args ...any) any {
+			return GoNew(args[0].(reflect.Type))
+		}),
+		"complex": FnFunc(func(args ...any) any {
+			return GoComplex(args[0], args[1])
+		}),
+		"real": FnFunc(func(args ...any) any {
+			return GoReal(args[0])
+		}),
+		"imag": FnFunc(func(args ...any) any {
+			return GoImag(args[0])
+		}),
+		"close": FnFunc(func(args ...any) any {
+			GoClose(args[0])
+			return nil
+		}),
+		"panic": FnFunc(func(args ...any) any {
+			GoPanic(args[0])
+			return nil // unreachable
+		}),
 		// recover can't be exposed this way, because it only works inside
 		// a deferred function. instead, try/catch should be used.
 
-		// Built-in type operators
-		"slice-of":  reflect.SliceOf, // sliceof(T) -> []T
-		"ptr-to":    reflect.PtrTo,   // ptrto(T) -> *T
-		"chan-of":   GoChanOf,        // chanof(dir, T) -> chan T
-		"<-chan-of": GoRecvChanOf,    // recvchanof(T) -> <-chan T
-		"chan<--of": GoSendChanOf,    // sendchanof(T) -> chan<- T
-		"map-of":    reflect.MapOf,   // mapof(K, V) -> map[K]V
-		"func-of":   reflect.FuncOf,
-		"array-of":  reflect.ArrayOf, // arrayof(n, T) -> [n]T
+		// Built-in type operators — wrapped as FnFunc.
+		"slice-of": FnFunc(func(args ...any) any { // sliceof(T) -> []T
+			return reflect.SliceOf(args[0].(reflect.Type))
+		}),
+		"ptr-to": FnFunc(func(args ...any) any { // ptrto(T) -> *T
+			return reflect.PtrTo(args[0].(reflect.Type))
+		}),
+		"chan-of": FnFunc(func(args ...any) any { // chanof(T) -> chan T
+			return GoChanOf(args[0].(reflect.Type))
+		}),
+		"<-chan-of": FnFunc(func(args ...any) any { // recvchanof(T) -> <-chan T
+			return GoRecvChanOf(args[0].(reflect.Type))
+		}),
+		"chan<--of": FnFunc(func(args ...any) any { // sendchanof(T) -> chan<- T
+			return GoSendChanOf(args[0].(reflect.Type))
+		}),
+		"map-of": FnFunc(func(args ...any) any { // mapof(K, V) -> map[K]V
+			return reflect.MapOf(args[0].(reflect.Type), args[1].(reflect.Type))
+		}),
+		"func-of": FnFunc(func(args ...any) any {
+			return reflect.FuncOf(args[0].([]reflect.Type), args[1].([]reflect.Type), args[2].(bool))
+		}),
+		"array-of": FnFunc(func(args ...any) any { // arrayof(n, T) -> [n]T
+			return reflect.ArrayOf(MustAsInt(args[0]), args[1].(reflect.Type))
+		}),
 
-		// Built-in operators
-		"deref": GoDeref, // deref(ptr) -> val
+		// Built-in operators — wrapped as FnFunc.
+		"deref": FnFunc(func(args ...any) any { // deref(ptr) -> val
+			return GoDeref(args[0])
+		}),
 		// TODO: addr will need some special handling, because it's not a
 		// function; it can only be applied to lvalues, which are not
 		// first-class in clojure. we'll need a special form to take the
 		// address of slice elements and struct fields.
-		"index":         GoIndex,       // index(slc, i) -> val
-		"slice":         GoSlice,       // slice(slc, i, j) -> slc[i:j]
-		"map-index":     GoMapIndex,    // mapindex(m, key) -> val
-		"set-map-index": GoSetMapIndex, // setmapindex(m, key, val) -> m[key] = val
-		"send":          GoSend,        // send(ch, val) -> ch <- val
-		"recv":          GoRecv,        // recv(ch) -> val, ok <- ch
+		"index": FnFunc(func(args ...any) any { // index(slc, i) -> val
+			return GoIndex(args[0], args[1])
+		}),
+		"slice": FnFunc(func(args ...any) any { // slice(slc, i, j) -> slc[i:j]
+			return GoSlice(args[0], args[1:]...)
+		}),
+		"map-index": FnFunc(func(args ...any) any { // mapindex(m, key) -> val
+			return GoMapIndex(args[0], args[1])
+		}),
+		"set-map-index": FnFunc(func(args ...any) any { // setmapindex(m, key, val) -> m[key] = val
+			GoSetMapIndex(args[0], args[1], args[2])
+			return nil
+		}),
+		"send": FnFunc(func(args ...any) any { // send(ch, val) -> ch <- val
+			GoSend(args[0], args[1])
+			return nil
+		}),
+		"recv": FnFunc(func(args ...any) any { // recv(ch) -> val, ok <- ch
+			val, ok := GoRecv(args[0])
+			return NewVector(val, ok)
+		}),
 	}
 )
 
@@ -201,20 +262,34 @@ func GoSetMapIndex(m, k, v interface{}) {
 }
 
 func GoSlice(slc interface{}, indices ...interface{}) interface{} {
-	slcVal := reflect.ValueOf(slc)
-	i := 0
-	j := slcVal.Len()
-
-	if len(indices) > 2 {
-		panic(fmt.Errorf("slice: too many indices %d", len(indices)))
-	}
 	if len(indices) == 0 {
 		panic(fmt.Errorf("slice: no indices"))
 	}
-	if len(indices) >= 1 {
+	if len(indices) > 2 {
+		panic(fmt.Errorf("slice: too many indices %d", len(indices)))
+	}
+
+	// Fast path for strings — avoid reflect overhead.
+	if s, ok := slc.(string); ok {
+		i := 0
 		if !IsNil(indices[0]) {
 			i = MustAsInt(indices[0])
 		}
+		if len(indices) == 2 {
+			j := len(s)
+			if !IsNil(indices[1]) {
+				j = MustAsInt(indices[1])
+			}
+			return s[i:j]
+		}
+		return s[i:]
+	}
+
+	slcVal := reflect.ValueOf(slc)
+	i := 0
+	j := slcVal.Len()
+	if !IsNil(indices[0]) {
+		i = MustAsInt(indices[0])
 	}
 	if len(indices) == 2 {
 		if !IsNil(indices[1]) {

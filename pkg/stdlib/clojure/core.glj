@@ -4860,7 +4860,7 @@
    :static true}
   [s] (if (instance? regexp.*Regexp s)
         s
-        (regexp.MustCompile s)))
+        (github.com:gloathub:glojure:pkg:lang.CachedCompileRegexp s)))
 
 (defn re-matcher
   "Returns an instance of java.util.regex.Matcher, for use, e.g. in

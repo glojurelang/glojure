@@ -3,8 +3,16 @@ package lang
 import (
 	"fmt"
 	"reflect"
+	"sync"
 	"unicode"
 )
+
+type fomKey struct {
+	ptr  uintptr
+	name string
+}
+
+var fomCache sync.Map // fomKey -> interface{}
 
 // FieldOrMethod returns the field or method of the given name on the
 // given value or pointer to a value, and a boolean indicating whether
@@ -14,6 +22,9 @@ import (
 // first letter of the name will be capitalized if it is not
 // already. This is because Go exports fields and methods that start
 // with a capital letter.
+//
+// Method results are cached and wrapped as FnFunc so that subsequent
+// Apply calls use the IFn fast path instead of reflection.
 func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 	if unicode.IsLower(rune(name[0])) {
 		name = string(unicode.ToUpper(rune(name[0]))) + string([]rune(name)[1:])
@@ -25,9 +36,27 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 		panic(fmt.Errorf("FieldOrMethod on nil value. field: %v", name))
 	}
 
+	// Cache for kinds that support Pointer() (ptr, func, map, slice, chan).
+	// Struct values can't use Pointer(), so we skip caching for those
+	// but still wrap methods as FnFunc.
+	canCache := false
+	var key fomKey
+	switch target.Kind() {
+	case reflect.Ptr, reflect.Func, reflect.Map, reflect.Slice, reflect.Chan, reflect.UnsafePointer:
+		canCache = true
+		key = fomKey{target.Pointer(), name}
+		if cached, ok := fomCache.Load(key); ok {
+			return cached, true
+		}
+	}
+
 	val := target.MethodByName(name)
 	if val.IsValid() {
-		return val.Interface(), true
+		result := wrapGoFunc(val.Interface())
+		if canCache {
+			fomCache.Store(key, result)
+		}
+		return result, true
 	}
 
 	// dereference the value if it's a pointer
@@ -45,6 +74,53 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 	}
 
 	return nil, false
+}
+
+// wrapGoFunc wraps a Go function value as FnFunc so that Apply uses
+// the IFn fast path. The wrapper still uses reflect.Value.Call
+// internally (unavoidable without codegen), but eliminates Apply's
+// redundant coerceGoValue loop.
+func wrapGoFunc(fn interface{}) FnFunc {
+	goVal := reflect.ValueOf(fn)
+	goType := goVal.Type()
+	numIn := goType.NumIn()
+	isVariadic := goType.IsVariadic()
+
+	return FnFunc(func(args ...any) any {
+		goArgs := make([]reflect.Value, len(args))
+		for i, arg := range args {
+			var targetType reflect.Type
+			if i < numIn-1 || !isVariadic {
+				if i < numIn {
+					targetType = goType.In(i)
+				} else {
+					// Extra args beyond declared params for non-variadic
+					// functions — let reflect.Call panic naturally.
+					goArgs[i] = reflect.ValueOf(arg)
+					continue
+				}
+			} else {
+				targetType = goType.In(numIn - 1).Elem()
+			}
+			coerced, err := coerceGoValue(targetType, arg)
+			if err != nil {
+				panic(fmt.Errorf("arg %d: %s", i, err))
+			}
+			goArgs[i] = coerced
+		}
+		results := goVal.Call(goArgs)
+		if len(results) == 0 {
+			return nil
+		}
+		if len(results) == 1 {
+			return results[0].Interface()
+		}
+		res := make([]interface{}, len(results))
+		for i, v := range results {
+			res[i] = v.Interface()
+		}
+		return NewVector(res...)
+	})
 }
 
 func SetField(target interface{}, name string, val interface{}) error {

@@ -3699,6 +3699,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/gloathub/glojure/pkg/lang.BuiltinTypes", github_com_gloathub_glojure_pkg_lang.BuiltinTypes)
 	_register("github.com/gloathub/glojure/pkg/lang.Builtins", github_com_gloathub_glojure_pkg_lang.Builtins)
 	_register("github.com/gloathub/glojure/pkg/lang.ByteCast", github_com_gloathub_glojure_pkg_lang.ByteCast)
+	_register("github.com/gloathub/glojure/pkg/lang.CachedCompileRegexp", github_com_gloathub_glojure_pkg_lang.CachedCompileRegexp)
 	_register("github.com/gloathub/glojure/pkg/lang.CanSeq", github_com_gloathub_glojure_pkg_lang.CanSeq)
 	_register("github.com/gloathub/glojure/pkg/lang.CatchMatches", github_com_gloathub_glojure_pkg_lang.CatchMatches)
 	_register("github.com/gloathub/glojure/pkg/lang.Category", reflect.TypeOf((*github_com_gloathub_glojure_pkg_lang.Category)(nil)).Elem())

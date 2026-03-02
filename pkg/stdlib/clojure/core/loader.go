@@ -5890,7 +5890,7 @@ func LoadNS() {
 			if lang.IsTruthy(tmp7) {
 				tmp4 = v3
 			} else {
-				tmp8 := lang.Apply(regexp12.MustCompile, []any{v3})
+				tmp8 := lang.Apply(lang.CachedCompileRegexp, []any{v3})
 				tmp4 = tmp8
 			}
 			return tmp4
