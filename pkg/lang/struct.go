@@ -76,16 +76,80 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 	return nil, false
 }
 
-// wrapGoFunc wraps a Go function value as FnFunc so that Apply uses
-// the IFn fast path. The wrapper still uses reflect.Value.Call
-// internally (unavoidable without codegen), but eliminates Apply's
-// redundant coerceGoValue loop.
-func wrapGoFunc(fn interface{}) FnFunc {
+// wrapGoFunc wraps a Go function value as IFn so that Apply uses
+// the IFn fast path. For common signatures, it creates a direct-call
+// FnFuncN wrapper with zero allocation per call. Exotic signatures
+// fall back to reflect.Value.Call wrapped as FnFunc.
+func wrapGoFunc(fn interface{}) IFn {
+	// Fast path: type-switch on common function signatures.
+	// The type assertion happens once at wrap time; all subsequent
+	// calls are direct Go function calls with no reflection.
+	switch f := fn.(type) {
+	// --- 0 args ---
+	case func() any:
+		return FnFunc0(func() any { return f() })
+	case func() int:
+		return FnFunc0(func() any { return f() })
+	case func() bool:
+		return FnFunc0(func() any { return f() })
+	case func():
+		return FnFunc0(func() any { f(); return nil })
+
+	// --- 1 arg, any param ---
+	case func(any) any:
+		return FnFunc1(func(a any) any { return f(a) })
+	case func(any) bool:
+		return FnFunc1(func(a any) any { return f(a) })
+	case func(any) int:
+		return FnFunc1(func(a any) any { return f(a) })
+	case func(any) int64:
+		return FnFunc1(func(a any) any { return f(a) })
+	case func(any) Char:
+		return FnFunc1(func(a any) any { return f(a) })
+	case func(any):
+		return FnFunc1(func(a any) any { f(a); return nil })
+
+	// --- 1 arg, typed param ---
+	case func(string) string:
+		return FnFunc1(func(a any) any { return f(a.(string)) })
+	case func(string):
+		return FnFunc1(func(a any) any { f(a.(string)); return nil })
+
+	// --- 2 args, all any ---
+	case func(any, any) any:
+		return FnFunc2(func(a, b any) any { return f(a, b) })
+	case func(any, any) bool:
+		return FnFunc2(func(a, b any) any { return f(a, b) })
+	case func(any, any) int:
+		return FnFunc2(func(a, b any) any { return f(a, b) })
+	case func(any, any) int64:
+		return FnFunc2(func(a, b any) any { return f(a, b) })
+	case func(any, any):
+		return FnFunc2(func(a, b any) any { f(a, b); return nil })
+
+	// --- 2 args, mixed typed ---
+	case func(any, int) any:
+		return FnFunc2(func(a, b any) any { return f(a, MustAsInt(b)) })
+
+	// --- 3 args ---
+	case func(any, any, any) any:
+		return FnFunc3(func(a, b, c any) any { return f(a, b, c) })
+	case func(any, int, any) any:
+		return FnFunc3(func(a, b, c any) any { return f(a, MustAsInt(b), c) })
+	case func(any, any, any):
+		return FnFunc3(func(a, b, c any) any { f(a, b, c); return nil })
+
+	// --- 4 args ---
+	case func(any, any, any, any) any:
+		return FnFunc4(func(a, b, c, d any) any { return f(a, b, c, d) })
+	}
+
+	// Slow path: reflect.Value.Call with coercion for signatures not
+	// covered by the type-switch above.
 	goVal := reflect.ValueOf(fn)
 	goType := goVal.Type()
 	numIn := goType.NumIn()
 	isVariadic := goType.IsVariadic()
-
 	return FnFunc(func(args ...any) any {
 		goArgs := make([]reflect.Value, len(args))
 		for i, arg := range args {
@@ -94,8 +158,6 @@ func wrapGoFunc(fn interface{}) FnFunc {
 				if i < numIn {
 					targetType = goType.In(i)
 				} else {
-					// Extra args beyond declared params for non-variadic
-					// functions — let reflect.Call panic naturally.
 					goArgs[i] = reflect.ValueOf(arg)
 					continue
 				}

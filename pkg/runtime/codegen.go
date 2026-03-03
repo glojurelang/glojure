@@ -913,13 +913,30 @@ func (g *Generator) generateFn(fn *Fn) string {
 	astNode := fn.ASTNode()
 	fnNode := astNode.Sub.(*ast.FnNode)
 
+	// Determine if we can use a fixed-arity FnFuncN (0-4 args, single method,
+	// non-variadic). fixedArity == -1 means fall back to FnFunc.
+	fixedArity := -1
+	if len(fnNode.Methods) == 1 && !fnNode.IsVariadic {
+		mn := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
+		if mn.FixedArity <= 4 {
+			fixedArity = mn.FixedArity
+		}
+	}
+
 	// Allocate a variable to return the function
 	fnVar := g.allocateTempVar()
 
+	// Declare with the appropriate type.
+	// FnFuncN for 0-4 arg non-variadic single-arity functions eliminates
+	// []any heap allocation at call sites that use ApplyN.
+	fnType := "lang.FnFunc"
+	if fixedArity >= 0 {
+		fnType = fmt.Sprintf("lang.FnFunc%d", fixedArity)
+	}
 	// declare it now to make sure it's in the scope of the caller
 	// we may add a nested scope to declare the function in to keep a
-	// scoped variable for the function itelf, if the function is named
-	g.writef("var %s lang.FnFunc\n", fnVar)
+	// scoped variable for the function itself, if the function is named
+	g.writef("var %s %s\n", fnVar, fnType)
 
 	// Push a new scope for the function definition
 	g.pushVarScope()
@@ -933,7 +950,7 @@ func (g *Generator) generateFn(fn *Fn) string {
 			defer g.writef("}\n")
 
 			namedFnVar := g.allocateLocal(fnName)
-			g.writef("var %s lang.FnFunc\n", namedFnVar)
+			g.writef("var %s %s\n", namedFnVar, fnType)
 			defer func() {
 				g.writeAssign(namedFnVar, fnVar)
 				g.writeAssign("_", namedFnVar) // Prevent unused variable warning
@@ -941,8 +958,20 @@ func (g *Generator) generateFn(fn *Fn) string {
 		}
 	}
 
-	// If there's only one method and it's not variadic, generate a simple function
-	if len(fnNode.Methods) == 1 && !fnNode.IsVariadic {
+	if fixedArity >= 0 {
+		// Single-arity 0-4: emit FnFuncN with direct named params
+		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
+		allParamNames := []string{"p0", "p1", "p2", "p3"}
+		paramNames := allParamNames[:fixedArity]
+		sig := ""
+		if fixedArity > 0 {
+			sig = strings.Join(paramNames, ", ") + " any"
+		}
+		g.writef("%s = lang.FnFunc%d(func(%s) any {\n", fnVar, fixedArity, sig)
+		g.generateFnMethodFixed(methodNode, paramNames)
+		g.writef("})\n")
+	} else if len(fnNode.Methods) == 1 && !fnNode.IsVariadic {
+		// Single-arity 5+: emit FnFunc with args slice
 		method := fnNode.Methods[0]
 		methodNode := method.Sub.(*ast.FnMethodNode)
 
@@ -995,7 +1024,7 @@ func (g *Generator) generateFn(fn *Fn) string {
 	// TODO: before merge, investigate this.
 	if meta := fn.Meta(); meta != nil {
 		metaVar := g.generateValue(meta)
-		g.writeAssign(fnVar, fmt.Sprintf("%s.WithMeta(%s).(lang.FnFunc)", fnVar, metaVar))
+		g.writeAssign(fnVar, fmt.Sprintf("%s.WithMeta(%s).(%s)", fnVar, metaVar, fnType))
 	}
 
 	// Return the function variable
@@ -1030,6 +1059,42 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 			g.writeAssign("_", paramVar) // Prevent unused variable warning
 			paramVars = append(paramVars, paramVar)
 		}
+	}
+
+	// Add a recur label
+	if methodNode.LoopID != nil && nodeRecurs(methodNode.Body, methodNode.LoopID.Name()) {
+		g.writef("recur_%s:\n", methodNode.LoopID.Name())
+
+		g.pushRecurContext(methodNode.LoopID, paramVars, true)
+		defer g.popRecurContext()
+	}
+
+	// Generate the body
+	bodyVar := g.generateASTNode(methodNode.Body)
+	if bodyVar != "" {
+		g.writef("return %s\n", bodyVar)
+	}
+	// If bodyVar is empty (e.g., from throw), no return is generated
+}
+
+// generateFnMethodFixed generates a function method body where parameters are
+// bound directly from named Go function params instead of indexing an args slice.
+// Used for FnFuncN (0-4 arity) functions to avoid []any allocation.
+// paramVarNames contains the Go parameter variable names (e.g. ["p0", "p1"]).
+func (g *Generator) generateFnMethodFixed(methodNode *ast.FnMethodNode, paramVarNames []string) {
+	// Push a new scope for the method body
+	g.pushVarScope()
+	defer g.popVarScope()
+
+	paramVars := make([]string, len(paramVarNames))
+
+	// Bind parameters directly from named Go function params
+	for i, param := range methodNode.Params {
+		paramNode := param.Sub.(*ast.BindingNode)
+		paramVar := g.allocateLocal(paramNode.Name.Name())
+		g.writef("%s := %s\n", paramVar, paramVarNames[i])
+		g.writeAssign("_", paramVar) // Prevent unused variable warning
+		paramVars[i] = paramVar
 	}
 
 	// Add a recur label
@@ -1201,10 +1266,20 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 	// Allocate a result variable for the invocation
 	resultVar := g.allocateTempVar()
 
-	// Emit the invocation
-	if len(argExprs) == 0 {
-		g.writef("%s := lang.Apply(%s, nil)\n", resultVar, fnExpr)
-	} else {
+	// Emit the invocation using fixed-arity Apply for 0-4 args to avoid []any alloc.
+	n := len(argExprs)
+	switch n {
+	case 0:
+		g.writef("%s := lang.Apply0(%s)\n", resultVar, fnExpr)
+	case 1:
+		g.writef("%s := lang.Apply1(%s, %s)\n", resultVar, fnExpr, argExprs[0])
+	case 2:
+		g.writef("%s := lang.Apply2(%s, %s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
+	case 3:
+		g.writef("%s := lang.Apply3(%s, %s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
+	case 4:
+		g.writef("%s := lang.Apply4(%s, %s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
+	default:
 		g.writef("%s := lang.Apply(%s, []any{%s})\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
 	}
 
@@ -1471,11 +1546,13 @@ func (g *Generator) generateLetFn(node *ast.Node) string {
 		name := bindingNode.Name
 		fn := bindingNode.Init
 
-		// Allocate a Go variable for the Clojure name
+		// Allocate a Go variable for the Clojure name.
+		// Use any so that FnFuncN assignments (from fixed-arity functions)
+		// are accepted without type mismatch; ApplyN's type switch handles dispatch.
 		g.writef("// letfn binding \"%s\"\n", name)
 		varName := g.allocateLocal(name.Name())
 		// declare the variable now to allow for recursion
-		g.writef("var %s lang.FnFunc\n", varName)
+		g.writef("var %s any\n", varName)
 		fnVar := g.generateASTNode(fn)
 		g.writeAssign(varName, fnVar)
 		g.writeAssign("_", varName) // Prevent unused variable warning
@@ -1790,7 +1867,21 @@ func (g *Generator) generateHostCall(node *ast.Node) string {
 	g.writef("}\n")
 
 	resultId := g.allocateTempVar()
-	g.writef("%s := lang.Apply(%s, []any{%s})\n", resultId, methodId, strings.Join(argIds, ", "))
+	n := len(argIds)
+	switch n {
+	case 0:
+		g.writef("%s := lang.Apply0(%s)\n", resultId, methodId)
+	case 1:
+		g.writef("%s := lang.Apply1(%s, %s)\n", resultId, methodId, argIds[0])
+	case 2:
+		g.writef("%s := lang.Apply2(%s, %s)\n", resultId, methodId, strings.Join(argIds, ", "))
+	case 3:
+		g.writef("%s := lang.Apply3(%s, %s)\n", resultId, methodId, strings.Join(argIds, ", "))
+	case 4:
+		g.writef("%s := lang.Apply4(%s, %s)\n", resultId, methodId, strings.Join(argIds, ", "))
+	default:
+		g.writef("%s := lang.Apply(%s, []any{%s})\n", resultId, methodId, strings.Join(argIds, ", "))
+	}
 
 	return resultId
 }

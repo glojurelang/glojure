@@ -72,6 +72,76 @@ func Apply(fn interface{}, args []interface{}) interface{} {
 	return NewVector(res...)
 }
 
+// Apply0 dispatches a zero-argument call, using FnFunc0 fast path when available.
+func Apply0(fn interface{}) any {
+	switch f := fn.(type) {
+	case FnFunc0:
+		return f()
+	case FnFunc:
+		return f()
+	case IFn:
+		return f.Invoke()
+	default:
+		return Apply(fn, nil)
+	}
+}
+
+// Apply1 dispatches a one-argument call, using FnFunc1 fast path when available.
+func Apply1(fn interface{}, a0 any) any {
+	switch f := fn.(type) {
+	case FnFunc1:
+		return f(a0)
+	case FnFunc:
+		return f(a0)
+	case IFn:
+		return f.Invoke(a0)
+	default:
+		return Apply(fn, []any{a0})
+	}
+}
+
+// Apply2 dispatches a two-argument call, using FnFunc2 fast path when available.
+func Apply2(fn interface{}, a0, a1 any) any {
+	switch f := fn.(type) {
+	case FnFunc2:
+		return f(a0, a1)
+	case FnFunc:
+		return f(a0, a1)
+	case IFn:
+		return f.Invoke(a0, a1)
+	default:
+		return Apply(fn, []any{a0, a1})
+	}
+}
+
+// Apply3 dispatches a three-argument call, using FnFunc3 fast path when available.
+func Apply3(fn interface{}, a0, a1, a2 any) any {
+	switch f := fn.(type) {
+	case FnFunc3:
+		return f(a0, a1, a2)
+	case FnFunc:
+		return f(a0, a1, a2)
+	case IFn:
+		return f.Invoke(a0, a1, a2)
+	default:
+		return Apply(fn, []any{a0, a1, a2})
+	}
+}
+
+// Apply4 dispatches a four-argument call, using FnFunc4 fast path when available.
+func Apply4(fn interface{}, a0, a1, a2, a3 any) any {
+	switch f := fn.(type) {
+	case FnFunc4:
+		return f(a0, a1, a2, a3)
+	case FnFunc:
+		return f(a0, a1, a2, a3)
+	case IFn:
+		return f.Invoke(a0, a1, a2, a3)
+	default:
+		return Apply(fn, []any{a0, a1, a2, a3})
+	}
+}
+
 func applyType(typ reflect.Type, args []interface{}) interface{} {
 	if len(args) == 0 {
 		return reflect.Zero(typ).Interface()

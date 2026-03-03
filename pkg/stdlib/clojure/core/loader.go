@@ -10712,27 +10712,14 @@ func LoadNS() {
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 1)
 			v2 := args[0]
-			_ = v2
-			var tmp3 any
-			{ // let
-				// let binding "or__0__auto__"
-				tmp4 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-				tmp5 := reflect.TypeOf((*runtime.Fn)(nil))
-				tmp6 := lang.Apply(tmp4, []any{tmp5, v2})
-				var v7 any = tmp6
-				_ = v7
-				var tmp8 any
-				if lang.IsTruthy(v7) {
-					tmp8 = v7
-				} else {
-					tmp9 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-					tmp10 := reflect.TypeOf(lang.FnFunc(nil))
-					tmp11 := lang.Apply(tmp9, []any{tmp10, v2})
-					tmp8 = tmp11
-				}
-				tmp3 = tmp8
-			} // end let
-			return tmp3
+			switch v2.(type) {
+			case *runtime.Fn, lang.FnFunc,
+				lang.FnFunc0, lang.FnFunc1, lang.FnFunc2,
+				lang.FnFunc3, lang.FnFunc4:
+				return true
+			default:
+				return nil
+			}
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_fn_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)

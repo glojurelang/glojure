@@ -31,103 +31,103 @@ var (
 	}
 
 	Builtins = map[string]interface{}{
-		// Built-in functions — wrapped as FnFunc so Apply uses the
-		// IFn fast path instead of reflection.
-		"append": FnFunc(func(args ...any) any {
+		// Built-in functions — wrapped as FnFuncN where arity is fixed
+		// so Apply uses the zero-allocation fast path.
+		"append": FnFunc(func(args ...any) any { // variadic: keep FnFunc
 			return GoAppend(args[0], args[1:]...)
 		}),
-		"copy": FnFunc(func(args ...any) any {
-			return GoCopy(args[0], args[1])
+		"copy": FnFunc2(func(a, b any) any {
+			return GoCopy(a, b)
 		}),
-		"delete": FnFunc(func(args ...any) any {
-			GoDelete(args[0], args[1])
+		"delete": FnFunc2(func(a, b any) any {
+			GoDelete(a, b)
 			return nil
 		}),
-		"len": FnFunc(func(args ...any) any {
-			return GoLen(args[0])
+		"len": FnFunc1(func(a any) any {
+			return GoLen(a)
 		}),
-		"cap": FnFunc(func(args ...any) any {
-			return GoCap(args[0])
+		"cap": FnFunc1(func(a any) any {
+			return GoCap(a)
 		}),
-		"make": FnFunc(func(args ...any) any {
+		"make": FnFunc(func(args ...any) any { // variadic: keep FnFunc
 			return GoMake(args[0].(reflect.Type), args[1:]...)
 		}),
-		"new": FnFunc(func(args ...any) any {
-			return GoNew(args[0].(reflect.Type))
+		"new": FnFunc1(func(a any) any {
+			return GoNew(a.(reflect.Type))
 		}),
-		"complex": FnFunc(func(args ...any) any {
-			return GoComplex(args[0], args[1])
+		"complex": FnFunc2(func(a, b any) any {
+			return GoComplex(a, b)
 		}),
-		"real": FnFunc(func(args ...any) any {
-			return GoReal(args[0])
+		"real": FnFunc1(func(a any) any {
+			return GoReal(a)
 		}),
-		"imag": FnFunc(func(args ...any) any {
-			return GoImag(args[0])
+		"imag": FnFunc1(func(a any) any {
+			return GoImag(a)
 		}),
-		"close": FnFunc(func(args ...any) any {
-			GoClose(args[0])
+		"close": FnFunc1(func(a any) any {
+			GoClose(a)
 			return nil
 		}),
-		"panic": FnFunc(func(args ...any) any {
-			GoPanic(args[0])
+		"panic": FnFunc1(func(a any) any {
+			GoPanic(a)
 			return nil // unreachable
 		}),
 		// recover can't be exposed this way, because it only works inside
 		// a deferred function. instead, try/catch should be used.
 
-		// Built-in type operators — wrapped as FnFunc.
-		"slice-of": FnFunc(func(args ...any) any { // sliceof(T) -> []T
-			return reflect.SliceOf(args[0].(reflect.Type))
+		// Built-in type operators — wrapped as FnFuncN.
+		"slice-of": FnFunc1(func(a any) any { // sliceof(T) -> []T
+			return reflect.SliceOf(a.(reflect.Type))
 		}),
-		"ptr-to": FnFunc(func(args ...any) any { // ptrto(T) -> *T
-			return reflect.PtrTo(args[0].(reflect.Type))
+		"ptr-to": FnFunc1(func(a any) any { // ptrto(T) -> *T
+			return reflect.PtrTo(a.(reflect.Type))
 		}),
-		"chan-of": FnFunc(func(args ...any) any { // chanof(T) -> chan T
-			return GoChanOf(args[0].(reflect.Type))
+		"chan-of": FnFunc1(func(a any) any { // chanof(T) -> chan T
+			return GoChanOf(a.(reflect.Type))
 		}),
-		"<-chan-of": FnFunc(func(args ...any) any { // recvchanof(T) -> <-chan T
-			return GoRecvChanOf(args[0].(reflect.Type))
+		"<-chan-of": FnFunc1(func(a any) any { // recvchanof(T) -> <-chan T
+			return GoRecvChanOf(a.(reflect.Type))
 		}),
-		"chan<--of": FnFunc(func(args ...any) any { // sendchanof(T) -> chan<- T
-			return GoSendChanOf(args[0].(reflect.Type))
+		"chan<--of": FnFunc1(func(a any) any { // sendchanof(T) -> chan<- T
+			return GoSendChanOf(a.(reflect.Type))
 		}),
-		"map-of": FnFunc(func(args ...any) any { // mapof(K, V) -> map[K]V
-			return reflect.MapOf(args[0].(reflect.Type), args[1].(reflect.Type))
+		"map-of": FnFunc2(func(a, b any) any { // mapof(K, V) -> map[K]V
+			return reflect.MapOf(a.(reflect.Type), b.(reflect.Type))
 		}),
-		"func-of": FnFunc(func(args ...any) any {
-			return reflect.FuncOf(args[0].([]reflect.Type), args[1].([]reflect.Type), args[2].(bool))
+		"func-of": FnFunc3(func(a, b, c any) any {
+			return reflect.FuncOf(a.([]reflect.Type), b.([]reflect.Type), c.(bool))
 		}),
-		"array-of": FnFunc(func(args ...any) any { // arrayof(n, T) -> [n]T
-			return reflect.ArrayOf(MustAsInt(args[0]), args[1].(reflect.Type))
+		"array-of": FnFunc2(func(a, b any) any { // arrayof(n, T) -> [n]T
+			return reflect.ArrayOf(MustAsInt(a), b.(reflect.Type))
 		}),
 
-		// Built-in operators — wrapped as FnFunc.
-		"deref": FnFunc(func(args ...any) any { // deref(ptr) -> val
-			return GoDeref(args[0])
+		// Built-in operators — wrapped as FnFuncN.
+		"deref": FnFunc1(func(a any) any { // deref(ptr) -> val
+			return GoDeref(a)
 		}),
 		// TODO: addr will need some special handling, because it's not a
 		// function; it can only be applied to lvalues, which are not
 		// first-class in clojure. we'll need a special form to take the
 		// address of slice elements and struct fields.
-		"index": FnFunc(func(args ...any) any { // index(slc, i) -> val
-			return GoIndex(args[0], args[1])
+		"index": FnFunc2(func(a, b any) any { // index(slc, i) -> val
+			return GoIndex(a, b)
 		}),
-		"slice": FnFunc(func(args ...any) any { // slice(slc, i, j) -> slc[i:j]
+		"slice": FnFunc(func(args ...any) any { // variadic: keep FnFunc
 			return GoSlice(args[0], args[1:]...)
 		}),
-		"map-index": FnFunc(func(args ...any) any { // mapindex(m, key) -> val
-			return GoMapIndex(args[0], args[1])
+		"map-index": FnFunc2(func(a, b any) any { // mapindex(m, key) -> val
+			return GoMapIndex(a, b)
 		}),
-		"set-map-index": FnFunc(func(args ...any) any { // setmapindex(m, key, val) -> m[key] = val
-			GoSetMapIndex(args[0], args[1], args[2])
+		"set-map-index": FnFunc3(func(a, b, c any) any { // setmapindex(m, key, val) -> m[key] = val
+			GoSetMapIndex(a, b, c)
 			return nil
 		}),
-		"send": FnFunc(func(args ...any) any { // send(ch, val) -> ch <- val
-			GoSend(args[0], args[1])
+		"send": FnFunc2(func(a, b any) any { // send(ch, val) -> ch <- val
+			GoSend(a, b)
 			return nil
 		}),
-		"recv": FnFunc(func(args ...any) any { // recv(ch) -> val, ok <- ch
-			val, ok := GoRecv(args[0])
+		"recv": FnFunc1(func(a any) any { // recv(ch) -> val, ok <- ch
+			val, ok := GoRecv(a)
 			return NewVector(val, ok)
 		}),
 	}
