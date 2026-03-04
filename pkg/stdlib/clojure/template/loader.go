@@ -5142,22 +5142,21 @@ func LoadNS() {
 	// apply-template
 	{
 		tmp0 := sym_apply_DASH_template.WithMeta(lang.NewMap(kw_file, "clojure/template.glj", kw_line, int(30), kw_column, int(7), kw_end_DASH_line, int(30), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym_values)), kw_doc, "For use in macros.  argv is an argument list, as in defn.  expr is\n  a quoted expression using the symbols in argv.  values is a sequence\n  of values to be used for the arguments.\n\n  apply-template will recursively replace argument symbols in expr\n  with their corresponding values, returning a modified expr.\n\n  Example: (apply-template '[x] '(+ x x) '[2])\n           ;=> (+ 2 2)", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_template))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 3)
-			v2 := args[0]
+		var tmp1 lang.FnFunc3
+		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			v4 := args[2]
+			v4 := p2
 			_ = v4
 			tmp5 := checkDerefVar(var_clojure_DOT_walk_postwalk_DASH_replace)
 			tmp6 := checkDerefVar(var_clojure_DOT_core_zipmap)
-			tmp7 := lang.Apply(tmp6, []any{v2, v4})
-			tmp8 := lang.Apply(tmp5, []any{tmp7, v3})
+			tmp7 := lang.Apply2(tmp6, v2, v4)
+			tmp8 := lang.Apply2(tmp5, tmp7, v3)
 			return tmp8
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_template_apply_DASH_template = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_template_apply_DASH_template.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5189,21 +5188,20 @@ func LoadNS() {
 				{ // let
 					// let binding "c"
 					tmp8 := checkDerefVar(var_clojure_DOT_core_count)
-					tmp9 := lang.Apply(tmp8, []any{v4})
+					tmp9 := lang.Apply1(tmp8, v4)
 					var v10 any = tmp9
 					_ = v10
 					tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp14 := lang.Apply(tmp13, []any{sym_do})
+					tmp14 := lang.Apply1(tmp13, sym_do)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_map)
-					var tmp16 lang.FnFunc
-					tmp16 = lang.NewFnFunc(func(args ...any) any {
-						checkArity(args, 1)
-						v17 := args[0]
+					var tmp16 lang.FnFunc1
+					tmp16 = lang.FnFunc1(func(p0 any) any {
+						v17 := p0
 						_ = v17
 						tmp18 := checkDerefVar(var_clojure_DOT_template_apply_DASH_template)
-						tmp19 := lang.Apply(tmp18, []any{v4, v5, v17})
+						tmp19 := lang.Apply3(tmp18, v4, v5, v17)
 						return tmp19
 					})
 					tmp17 := lang.NewMap(kw_file, "clojure/template.glj", kw_line, int(54), kw_column, int(17), kw_end_DASH_line, int(54), kw_end_DASH_column, int(53))
@@ -5212,10 +5210,10 @@ func LoadNS() {
 						panic(err)
 					}
 					tmp19 := checkDerefVar(var_clojure_DOT_core_partition)
-					tmp20 := lang.Apply(tmp19, []any{v10, v6})
-					tmp21 := lang.Apply(tmp15, []any{tmp18, tmp20})
-					tmp22 := lang.Apply(tmp12, []any{tmp14, tmp21})
-					tmp23 := lang.Apply(tmp11, []any{tmp22})
+					tmp20 := lang.Apply2(tmp19, v10, v6)
+					tmp21 := lang.Apply2(tmp15, tmp18, tmp20)
+					tmp22 := lang.Apply2(tmp12, tmp14, tmp21)
+					tmp23 := lang.Apply1(tmp11, tmp22)
 					tmp7 = tmp23
 				} // end let
 				return tmp7

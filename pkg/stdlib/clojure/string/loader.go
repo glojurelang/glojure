@@ -5240,18 +5240,17 @@ func LoadNS() {
 	// ends-with?
 	{
 		tmp0 := sym_ends_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s ends with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(309), kw_end_DASH_line, int(309))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply(lang.ToString, []any{v2})
-			tmp5 := lang.Apply(strings5.HasSuffix, []any{tmp4, v3})
+			tmp4 := lang.Apply1(lang.ToString, v2)
+			tmp5 := lang.Apply2(strings5.HasSuffix, tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_string_ends_DASH_with_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_ends_DASH_with_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5260,18 +5259,17 @@ func LoadNS() {
 	// includes?
 	{
 		tmp0 := sym_includes_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s includes substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(315), kw_end_DASH_line, int(315))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply(lang.ToString, []any{v2})
-			tmp5 := lang.Apply(strings5.Contains, []any{tmp4, v3})
+			tmp4 := lang.Apply1(lang.ToString, v2)
+			tmp5 := lang.Apply2(strings5.Contains, tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_string_includes_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_includes_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5281,16 +5279,15 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_lower_DASH_case.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all lower-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(188), kw_end_DASH_line, int(188))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v3 := args[0]
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
 			_ = v3
-			tmp4 := lang.Apply(strings5.ToLower, []any{v3})
+			tmp4 := lang.Apply1(strings5.ToLower, v3)
 			return tmp4
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
 		var_clojure_DOT_string_lower_DASH_case = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_lower_DASH_case.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5311,8 +5308,8 @@ func LoadNS() {
 				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("split is not a function")))
 				}
-				tmp5 := lang.Apply(tmp4, []any{v2, int64(-1)})
-				tmp6 := lang.Apply(lang.CreateOwningLazilyPersistentVector, []any{tmp5})
+				tmp5 := lang.Apply2(tmp4, v2, int64(-1))
+				tmp6 := lang.Apply1(lang.CreateOwningLazilyPersistentVector, tmp5)
 				return tmp6
 			case 3:
 				v2 := args[0]
@@ -5325,8 +5322,8 @@ func LoadNS() {
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("split is not a function")))
 				}
-				tmp6 := lang.Apply(tmp5, []any{v2, v4})
-				tmp7 := lang.Apply(lang.CreateOwningLazilyPersistentVector, []any{tmp6})
+				tmp6 := lang.Apply2(tmp5, v2, v4)
+				tmp7 := lang.Apply1(lang.CreateOwningLazilyPersistentVector, tmp6)
 				return tmp7
 			default:
 				checkArity(args, -1)
@@ -5342,18 +5339,17 @@ func LoadNS() {
 	// starts-with?
 	{
 		tmp0 := sym_starts_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s starts with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(303), kw_end_DASH_line, int(303))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply(lang.ToString, []any{v2})
-			tmp5 := lang.Apply(strings5.HasPrefix, []any{tmp4, v3})
+			tmp4 := lang.Apply1(lang.ToString, v2)
+			tmp5 := lang.Apply2(strings5.HasPrefix, tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_string_starts_DASH_with_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_starts_DASH_with_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5363,16 +5359,15 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_trim.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from both ends of string.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(211), kw_end_DASH_line, int(211))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v3 := args[0]
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
 			_ = v3
-			tmp4 := lang.Apply(strings5.TrimSpace, []any{v3})
+			tmp4 := lang.Apply1(strings5.TrimSpace, v3)
 			return tmp4
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
 		var_clojure_DOT_string_trim = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_trim.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5382,16 +5377,15 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_trim_DASH_newline.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes all trailing newline \\n or return \\r characters from\n  string.  Similar to Perl's chomp.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(29), kw_column, int(7), kw_line, int(229), kw_end_DASH_line, int(229))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v3 := args[0]
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
 			_ = v3
-			tmp4 := lang.Apply(strings5.TrimRight, []any{v3, "\r\n"})
+			tmp4 := lang.Apply2(strings5.TrimRight, v3, "\r\n")
 			return tmp4
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
 		var_clojure_DOT_string_trim_DASH_newline = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_trim_DASH_newline.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5401,16 +5395,15 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_triml.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the left side of string.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(217), kw_end_DASH_line, int(217))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v3 := args[0]
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
 			_ = v3
-			tmp4 := lang.Apply(strings5.TrimLeftFunc, []any{v3, unicode4.IsSpace})
+			tmp4 := lang.Apply2(strings5.TrimLeftFunc, v3, unicode4.IsSpace)
 			return tmp4
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
 		var_clojure_DOT_string_triml = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_triml.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5420,16 +5413,15 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_trimr.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the right side of string.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(223), kw_end_DASH_line, int(223))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v3 := args[0]
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
 			_ = v3
-			tmp4 := lang.Apply(strings5.TrimRightFunc, []any{v3, unicode4.IsSpace})
+			tmp4 := lang.Apply2(strings5.TrimRightFunc, v3, unicode4.IsSpace)
 			return tmp4
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
 		var_clojure_DOT_string_trimr = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_trimr.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5439,16 +5431,15 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_upper_DASH_case.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all upper-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(182), kw_end_DASH_line, int(182))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v3 := args[0]
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
 			_ = v3
-			tmp4 := lang.Apply(strings5.ToUpper, []any{v3})
+			tmp4 := lang.Apply1(strings5.ToUpper, v3)
 			return tmp4
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
 		var_clojure_DOT_string_upper_DASH_case = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_upper_DASH_case.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5457,10 +5448,9 @@ func LoadNS() {
 	// blank?
 	{
 		tmp0 := sym_blank_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "True if s is nil, empty, or contains only whitespace.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(236), kw_end_DASH_line, int(236))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			if lang.IsTruthy(v2) {
@@ -5468,24 +5458,24 @@ func LoadNS() {
 				{ // let
 					// let binding "index"
 					tmp5 := checkDerefVar(var_clojure_DOT_core_int)
-					tmp6 := lang.Apply(tmp5, []any{int64(0)})
+					tmp6 := lang.Apply1(tmp5, int64(0))
 					var v7 any = tmp6
 					_ = v7
 					for {
 						var tmp8 any
 						tmp9 := checkDerefVar(var_clojure_DOT_core__EQ_)
 						tmp10 := checkDerefVar(var_clojure_DOT_core_count)
-						tmp11 := lang.Apply(tmp10, []any{v2})
-						tmp12 := lang.Apply(tmp9, []any{tmp11, v7})
+						tmp11 := lang.Apply1(tmp10, v2)
+						tmp12 := lang.Apply2(tmp9, tmp11, v7)
 						if lang.IsTruthy(tmp12) {
 							tmp8 = true
 						} else {
 							var tmp13 any
-							tmp14 := lang.Apply(lang.CharAt, []any{v2, v7})
-							tmp15 := lang.Apply(unicode4.IsSpace, []any{tmp14})
+							tmp14 := lang.Apply2(lang.CharAt, v2, v7)
+							tmp15 := lang.Apply1(unicode4.IsSpace, tmp14)
 							if lang.IsTruthy(tmp15) {
 								tmp17 := checkDerefVar(var_clojure_DOT_core_inc)
-								tmp18 := lang.Apply(tmp17, []any{v7})
+								tmp18 := lang.Apply1(tmp17, v7)
 								var tmp16 any = tmp18
 								v7 = tmp16
 								continue
@@ -5504,7 +5494,7 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_string_blank_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_blank_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5514,35 +5504,34 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_capitalize.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts first character of the string to upper-case, all other\n  characters to lower-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(171), kw_end_DASH_line, int(171))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v3 := args[0]
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
 			_ = v3
 			var tmp4 any
 			{ // let
 				// let binding "s"
 				tmp5 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-				tmp6 := lang.Apply(tmp5, []any{v3})
+				tmp6 := lang.Apply1(tmp5, v3)
 				var v7 any = tmp6
 				_ = v7
 				var tmp8 any
 				tmp9 := checkDerefVar(var_clojure_DOT_core__LT_)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_count)
-				tmp11 := lang.Apply(tmp10, []any{v7})
-				tmp12 := lang.Apply(tmp9, []any{tmp11, int64(2)})
+				tmp11 := lang.Apply1(tmp10, v7)
+				tmp12 := lang.Apply2(tmp9, tmp11, int64(2))
 				if lang.IsTruthy(tmp12) {
-					tmp13 := lang.Apply(strings5.ToUpper, []any{v7})
+					tmp13 := lang.Apply1(strings5.ToUpper, v7)
 					tmp8 = tmp13
 				} else {
 					tmp14 := checkDerefVar(var_clojure_DOT_core_str)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_subs)
-					tmp16 := lang.Apply(tmp15, []any{v7, int64(0), int64(1)})
-					tmp17 := lang.Apply(strings5.ToUpper, []any{tmp16})
+					tmp16 := lang.Apply3(tmp15, v7, int64(0), int64(1))
+					tmp17 := lang.Apply1(strings5.ToUpper, tmp16)
 					tmp18 := checkDerefVar(var_clojure_DOT_core_subs)
-					tmp19 := lang.Apply(tmp18, []any{v7, int64(1)})
-					tmp20 := lang.Apply(strings5.ToLower, []any{tmp19})
-					tmp21 := lang.Apply(tmp14, []any{tmp17, tmp20})
+					tmp19 := lang.Apply2(tmp18, v7, int64(1))
+					tmp20 := lang.Apply1(strings5.ToLower, tmp19)
+					tmp21 := lang.Apply2(tmp14, tmp17, tmp20)
 					tmp8 = tmp21
 				}
 				tmp4 = tmp8
@@ -5550,7 +5539,7 @@ func LoadNS() {
 			return tmp4
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
 		var_clojure_DOT_string_capitalize = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_capitalize.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5559,23 +5548,22 @@ func LoadNS() {
 	// check-string
 	{
 		tmp0 := sym_check_DASH_string.WithMeta(lang.NewMap(kw_file, "clojure/string.glj", kw_line, int(17), kw_column, int(8), kw_end_DASH_line, int(17), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_maybe_DASH_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			tmp4 := checkDerefVar(var_clojure_DOT_core_nil_QMARK_)
-			tmp5 := lang.Apply(tmp4, []any{v2})
+			tmp5 := lang.Apply1(tmp4, v2)
 			if lang.IsTruthy(tmp5) {
-				tmp6 := lang.Apply(lang.NewIllegalArgumentError, []any{"cannot call clojure.string function on nil"})
+				tmp6 := lang.Apply1(lang.NewIllegalArgumentError, "cannot call clojure.string function on nil")
 				panic(tmp6)
 			} else {
 				tmp3 = v2
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_string_check_DASH_string = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_check_DASH_string.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5585,18 +5573,17 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_re_DASH_quote_DASH_replacement.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_replacement)), kw_doc, "Given a replacement string that you wish to be a literal\n   replacement for a pattern match in replace or replace-first, do the\n   necessary escaping of special characters in the replacement.", kw_file, "clojure/string.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(37), kw_column, int(7), kw_line, int(29), kw_end_DASH_line, int(29))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v3 := args[0]
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
 			_ = v3
 			tmp4 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-			tmp5 := lang.Apply(tmp4, []any{v3})
-			tmp6 := lang.Apply(strings5.ReplaceAll, []any{tmp5, "$", "$$"})
+			tmp5 := lang.Apply1(tmp4, v3)
+			tmp6 := lang.Apply3(strings5.ReplaceAll, tmp5, "$", "$$")
 			return tmp6
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
 		var_clojure_DOT_string_re_DASH_quote_DASH_replacement = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_re_DASH_quote_DASH_replacement.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5606,38 +5593,37 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_escape.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_cmap)), kw_doc, "Return a new string, using cmap to escape each character ch\n   from s as follows:\n\n   If (cmap ch) is nil, append ch to the new string.\n   If (cmap ch) is non-nil, append (str (cmap ch)) instead.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(249), kw_end_DASH_line, int(249))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v3 := args[0]
+		var tmp2 lang.FnFunc2
+		tmp2 = lang.FnFunc2(func(p0, p1 any) any {
+			v3 := p0
 			_ = v3
-			v4 := args[1]
+			v4 := p1
 			_ = v4
 			var tmp5 any
 			{ // let
 				// let binding "repls"
 				tmp6 := checkDerefVar(var_clojure_DOT_core_flatten)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp8 := lang.Apply(tmp7, []any{v4})
-				tmp9 := lang.Apply(tmp6, []any{tmp8})
+				tmp8 := lang.Apply1(tmp7, v4)
+				tmp9 := lang.Apply1(tmp6, tmp8)
 				var v10 any = tmp9
 				_ = v10
 				// let binding "replacer"
 				tmp11 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp12 := lang.Apply(tmp11, []any{strings5.NewReplacer, v10})
+				tmp12 := lang.Apply2(tmp11, strings5.NewReplacer, v10)
 				var v13 any = tmp12
 				_ = v13
 				tmp14, _ := lang.FieldOrMethod(v13, "Replace")
 				if reflect.TypeOf(tmp14).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Replace is not a function")))
 				}
-				tmp15 := lang.Apply(tmp14, []any{v3})
+				tmp15 := lang.Apply1(tmp14, v3)
 				tmp5 = tmp15
 			} // end let
 			return tmp5
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc2)
 		var_clojure_DOT_string_escape = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_escape.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5658,30 +5644,30 @@ func LoadNS() {
 				{ // let
 					// let binding "s"
 					tmp5 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-					tmp6 := lang.Apply(tmp5, []any{v2})
+					tmp6 := lang.Apply1(tmp5, v2)
 					var v7 any = tmp6
 					_ = v7
 					// let binding "result"
 					var tmp8 any
 					tmp9 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
 					tmp10 := reflect.TypeOf(lang.NewChar(0))
-					tmp11 := lang.Apply(tmp9, []any{tmp10, v3})
+					tmp11 := lang.Apply2(tmp9, tmp10, v3)
 					if lang.IsTruthy(tmp11) {
-						tmp12 := lang.Apply(lang.Builtins["rune"], []any{v3})
-						tmp13 := lang.Apply(strings5.IndexRune, []any{v7, tmp12})
+						tmp12 := lang.Apply1(lang.Builtins["rune"], v3)
+						tmp13 := lang.Apply2(strings5.IndexRune, v7, tmp12)
 						tmp8 = tmp13
 					} else {
-						tmp14 := lang.Apply(strings5.Index, []any{v7, v3})
+						tmp14 := lang.Apply2(strings5.Index, v7, v3)
 						tmp8 = tmp14
 					}
 					var v15 any = tmp8
 					_ = v15
 					var tmp16 any
 					tmp17 := checkDerefVar(var_clojure_DOT_core__EQ_)
-					tmp18 := lang.Apply(tmp17, []any{v15, int64(-1)})
+					tmp18 := lang.Apply2(tmp17, v15, int64(-1))
 					if lang.IsTruthy(tmp18) {
 					} else {
-						tmp19 := lang.Apply(lang.Builtins["int64"], []any{v15})
+						tmp19 := lang.Apply1(lang.Builtins["int64"], v15)
 						tmp16 = tmp19
 					}
 					tmp4 = tmp16
@@ -5699,43 +5685,43 @@ func LoadNS() {
 					// let binding "from-index"
 					tmp6 := checkDerefVar(var_clojure_DOT_core_min)
 					tmp7 := checkDerefVar(var_clojure_DOT_core_count)
-					tmp8 := lang.Apply(tmp7, []any{v2})
+					tmp8 := lang.Apply1(tmp7, v2)
 					tmp9 := checkDerefVar(var_clojure_DOT_core_max)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_int)
-					tmp11 := lang.Apply(tmp10, []any{v4})
-					tmp12 := lang.Apply(tmp9, []any{int64(0), tmp11})
-					tmp13 := lang.Apply(tmp6, []any{tmp8, tmp12})
+					tmp11 := lang.Apply1(tmp10, v4)
+					tmp12 := lang.Apply2(tmp9, int64(0), tmp11)
+					tmp13 := lang.Apply2(tmp6, tmp8, tmp12)
 					var v14 any = tmp13
 					_ = v14
 					// let binding "s"
 					tmp15 := checkDerefVar(var_clojure_DOT_core_subs)
 					tmp16 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-					tmp17 := lang.Apply(tmp16, []any{v2})
-					tmp18 := lang.Apply(tmp15, []any{tmp17, v14})
+					tmp17 := lang.Apply1(tmp16, v2)
+					tmp18 := lang.Apply2(tmp15, tmp17, v14)
 					var v19 any = tmp18
 					_ = v19
 					// let binding "result"
 					var tmp20 any
 					tmp21 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
 					tmp22 := reflect.TypeOf(lang.NewChar(0))
-					tmp23 := lang.Apply(tmp21, []any{tmp22, v3})
+					tmp23 := lang.Apply2(tmp21, tmp22, v3)
 					if lang.IsTruthy(tmp23) {
-						tmp24 := lang.Apply(lang.Builtins["rune"], []any{v3})
-						tmp25 := lang.Apply(strings5.IndexRune, []any{v19, tmp24})
+						tmp24 := lang.Apply1(lang.Builtins["rune"], v3)
+						tmp25 := lang.Apply2(strings5.IndexRune, v19, tmp24)
 						tmp20 = tmp25
 					} else {
-						tmp26 := lang.Apply(strings5.Index, []any{v19, v3})
+						tmp26 := lang.Apply2(strings5.Index, v19, v3)
 						tmp20 = tmp26
 					}
 					var v27 any = tmp20
 					_ = v27
 					var tmp28 any
 					tmp29 := checkDerefVar(var_clojure_DOT_core__EQ_)
-					tmp30 := lang.Apply(tmp29, []any{v27, int64(-1)})
+					tmp30 := lang.Apply2(tmp29, v27, int64(-1))
 					if lang.IsTruthy(tmp30) {
 					} else {
 						tmp31 := checkDerefVar(var_clojure_DOT_core__PLUS_)
-						tmp32 := lang.Apply(tmp31, []any{v27, v14})
+						tmp32 := lang.Apply2(tmp31, v27, v14)
 						tmp28 = tmp32
 					}
 					tmp5 = tmp28
@@ -5764,7 +5750,7 @@ func LoadNS() {
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp5 := checkDerefVar(var_clojure_DOT_core_str)
-				tmp6 := lang.Apply(tmp4, []any{tmp5, v3})
+				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			case 2:
 				v3 := args[0]
@@ -5773,10 +5759,10 @@ func LoadNS() {
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_map)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_str)
-				tmp7 := lang.Apply(tmp5, []any{tmp6, v4})
+				tmp7 := lang.Apply2(tmp5, tmp6, v4)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_str)
-				tmp9 := lang.Apply(tmp8, []any{v3})
-				tmp10 := lang.Apply(strings5.Join, []any{tmp7, tmp9})
+				tmp9 := lang.Apply1(tmp8, v3)
+				tmp10 := lang.Apply2(strings5.Join, tmp7, tmp9)
 				return tmp10
 			default:
 				checkArity(args, -1)
@@ -5805,21 +5791,21 @@ func LoadNS() {
 				{ // let
 					// let binding "s"
 					tmp5 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-					tmp6 := lang.Apply(tmp5, []any{v2})
+					tmp6 := lang.Apply1(tmp5, v2)
 					var v7 any = tmp6
 					_ = v7
 					// let binding "result"
 					tmp8 := checkDerefVar(var_clojure_DOT_core_str)
-					tmp9 := lang.Apply(tmp8, []any{v3})
-					tmp10 := lang.Apply(strings5.LastIndex, []any{v7, tmp9})
+					tmp9 := lang.Apply1(tmp8, v3)
+					tmp10 := lang.Apply2(strings5.LastIndex, v7, tmp9)
 					var v11 any = tmp10
 					_ = v11
 					var tmp12 any
 					tmp13 := checkDerefVar(var_clojure_DOT_core__EQ_)
-					tmp14 := lang.Apply(tmp13, []any{v11, int64(-1)})
+					tmp14 := lang.Apply2(tmp13, v11, int64(-1))
 					if lang.IsTruthy(tmp14) {
 					} else {
-						tmp15 := lang.Apply(lang.Builtins["int64"], []any{v11})
+						tmp15 := lang.Apply1(lang.Builtins["int64"], v11)
 						tmp12 = tmp15
 					}
 					tmp4 = tmp12
@@ -5837,35 +5823,35 @@ func LoadNS() {
 					// let binding "from-index"
 					tmp6 := checkDerefVar(var_clojure_DOT_core_min)
 					tmp7 := checkDerefVar(var_clojure_DOT_core_count)
-					tmp8 := lang.Apply(tmp7, []any{v2})
+					tmp8 := lang.Apply1(tmp7, v2)
 					tmp9 := checkDerefVar(var_clojure_DOT_core_max)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_inc)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_int)
-					tmp12 := lang.Apply(tmp11, []any{v4})
-					tmp13 := lang.Apply(tmp10, []any{tmp12})
-					tmp14 := lang.Apply(tmp9, []any{int64(0), tmp13})
-					tmp15 := lang.Apply(tmp6, []any{tmp8, tmp14})
+					tmp12 := lang.Apply1(tmp11, v4)
+					tmp13 := lang.Apply1(tmp10, tmp12)
+					tmp14 := lang.Apply2(tmp9, int64(0), tmp13)
+					tmp15 := lang.Apply2(tmp6, tmp8, tmp14)
 					var v16 any = tmp15
 					_ = v16
 					// let binding "s"
 					tmp17 := checkDerefVar(var_clojure_DOT_core_subs)
 					tmp18 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-					tmp19 := lang.Apply(tmp18, []any{v2})
-					tmp20 := lang.Apply(tmp17, []any{tmp19, int64(0), v16})
+					tmp19 := lang.Apply1(tmp18, v2)
+					tmp20 := lang.Apply3(tmp17, tmp19, int64(0), v16)
 					var v21 any = tmp20
 					_ = v21
 					// let binding "result"
 					tmp22 := checkDerefVar(var_clojure_DOT_core_str)
-					tmp23 := lang.Apply(tmp22, []any{v3})
-					tmp24 := lang.Apply(strings5.LastIndex, []any{v21, tmp23})
+					tmp23 := lang.Apply1(tmp22, v3)
+					tmp24 := lang.Apply2(strings5.LastIndex, v21, tmp23)
 					var v25 any = tmp24
 					_ = v25
 					var tmp26 any
 					tmp27 := checkDerefVar(var_clojure_DOT_core__EQ_)
-					tmp28 := lang.Apply(tmp27, []any{v25, int64(-1)})
+					tmp28 := lang.Apply2(tmp27, v25, int64(-1))
 					if lang.IsTruthy(tmp28) {
 					} else {
-						tmp29 := lang.Apply(lang.Builtins["int64"], []any{v25})
+						tmp29 := lang.Apply1(lang.Builtins["int64"], v25)
 						tmp26 = tmp29
 					}
 					tmp5 = tmp26
@@ -5886,55 +5872,54 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_replace.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces all instance of match with replacement in s.\n\n   match/replacement can be:\n\n   string / string\n   char / char\n   pattern / (string or function of match).\n\n   See also replace-first.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace \"Almost Pig Latin\" #\"\\b(\\w)(\\w+)\\b\" \"$2$1ay\")\n   -> \"lmostAay igPay atinLay\"", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(52), kw_end_DASH_line, int(52))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 3)
-			v3 := args[0]
+		var tmp2 lang.FnFunc3
+		tmp2 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v3 := p0
 			_ = v3
-			v4 := args[1]
+			v4 := p1
 			_ = v4
-			v5 := args[2]
+			v5 := p2
 			_ = v5
 			var tmp6 any
 			{ // let
 				// let binding "s"
 				tmp7 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-				tmp8 := lang.Apply(tmp7, []any{v3})
+				tmp8 := lang.Apply1(tmp7, v3)
 				var v9 any = tmp8
 				_ = v9
 				var tmp10 any
 				tmp11 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
 				tmp12 := reflect.TypeOf(lang.NewChar(0))
-				tmp13 := lang.Apply(tmp11, []any{tmp12, v4})
+				tmp13 := lang.Apply2(tmp11, tmp12, v4)
 				if lang.IsTruthy(tmp13) {
-					tmp14 := lang.Apply(strings5.ReplaceAll, []any{v9, v4, v5})
+					tmp14 := lang.Apply3(strings5.ReplaceAll, v9, v4, v5)
 					tmp10 = tmp14
 				} else {
 					var tmp15 any
 					tmp16 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-					tmp17 := lang.Apply(tmp16, []any{lang.Builtins["string"], v4})
+					tmp17 := lang.Apply2(tmp16, lang.Builtins["string"], v4)
 					if lang.IsTruthy(tmp17) {
-						tmp18 := lang.Apply(strings5.ReplaceAll, []any{v9, v4, v5})
+						tmp18 := lang.Apply3(strings5.ReplaceAll, v9, v4, v5)
 						tmp15 = tmp18
 					} else {
 						var tmp19 any
 						tmp20 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
 						tmp21 := reflect.TypeOf((*regexp6.Regexp)(nil))
-						tmp22 := lang.Apply(tmp20, []any{tmp21, v4})
+						tmp22 := lang.Apply2(tmp20, tmp21, v4)
 						if lang.IsTruthy(tmp22) {
 							var tmp23 any
 							tmp24 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-							tmp25 := lang.Apply(tmp24, []any{lang.Builtins["string"], v5})
+							tmp25 := lang.Apply2(tmp24, lang.Builtins["string"], v5)
 							if lang.IsTruthy(tmp25) {
 								tmp26, _ := lang.FieldOrMethod(v4, "replaceAllString")
 								if reflect.TypeOf(tmp26).Kind() != reflect.Func {
 									panic(lang.NewIllegalArgumentError(fmt.Sprintf("replaceAllString is not a function")))
 								}
-								tmp27 := lang.Apply(tmp26, []any{v9, v5})
+								tmp27 := lang.Apply2(tmp26, v9, v5)
 								tmp23 = tmp27
 							} else {
 								tmp28 := checkDerefVar(var_clojure_DOT_string_replace_DASH_by)
-								tmp29 := lang.Apply(tmp28, []any{v9, v4, v5})
+								tmp29 := lang.Apply3(tmp28, v9, v4, v5)
 								tmp23 = tmp29
 							}
 							tmp19 = tmp23
@@ -5942,8 +5927,8 @@ func LoadNS() {
 							var tmp30 any
 							if lang.IsTruthy(kw_else) {
 								tmp31 := checkDerefVar(var_clojure_DOT_core_str)
-								tmp32 := lang.Apply(tmp31, []any{"Invalid match arg: ", v4})
-								tmp33 := lang.Apply(lang.NewIllegalArgumentError, []any{tmp32})
+								tmp32 := lang.Apply2(tmp31, "Invalid match arg: ", v4)
+								tmp33 := lang.Apply1(lang.NewIllegalArgumentError, tmp32)
 								panic(tmp33)
 							} else {
 							}
@@ -5958,7 +5943,7 @@ func LoadNS() {
 			return tmp6
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc3)
 		var_clojure_DOT_string_replace = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_replace.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5967,20 +5952,19 @@ func LoadNS() {
 	// replace-by
 	{
 		tmp0 := sym_replace_DASH_by.WithMeta(lang.NewMap(kw_file, "clojure/string.glj", kw_line, int(39), kw_column, int(8), kw_end_DASH_line, int(39), kw_end_DASH_column, int(17), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re, sym_f)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 3)
-			v2 := args[0]
+		var tmp1 lang.FnFunc3
+		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			v4 := args[2]
+			v4 := p2
 			_ = v4
 			var tmp5 any
 			{ // let
 				// let binding "m"
 				tmp6 := checkDerefVar(var_clojure_DOT_core_re_DASH_matcher)
-				tmp7 := lang.Apply(tmp6, []any{v3, v2})
+				tmp7 := lang.Apply2(tmp6, v3, v2)
 				var v8 any = tmp7
 				_ = v8
 				var tmp9 any
@@ -6012,14 +5996,14 @@ func LoadNS() {
 								if lang.IsTruthy(v16) {
 									tmp18 := checkDerefVar(var_clojure_DOT_string_re_DASH_quote_DASH_replacement)
 									tmp19 := checkDerefVar(var_clojure_DOT_core_re_DASH_groups)
-									tmp20 := lang.Apply(tmp19, []any{v8})
-									tmp21 := lang.Apply(v4, []any{tmp20})
-									tmp22 := lang.Apply(tmp18, []any{tmp21})
+									tmp20 := lang.Apply1(tmp19, v8)
+									tmp21 := lang.Apply1(v4, tmp20)
+									tmp22 := lang.Apply1(tmp18, tmp21)
 									tmp23, _ := lang.FieldOrMethod(v8, "appendReplacement")
 									if reflect.TypeOf(tmp23).Kind() != reflect.Func {
 										panic(lang.NewIllegalArgumentError(fmt.Sprintf("appendReplacement is not a function")))
 									}
-									tmp24 := lang.Apply(tmp23, []any{v14, tmp22})
+									tmp24 := lang.Apply2(tmp23, v14, tmp22)
 									_ = tmp24
 									tmp26, ok := lang.FieldOrMethod(v8, "find")
 									if !ok {
@@ -6040,9 +6024,9 @@ func LoadNS() {
 									if reflect.TypeOf(tmp28).Kind() != reflect.Func {
 										panic(lang.NewIllegalArgumentError(fmt.Sprintf("appendTail is not a function")))
 									}
-									tmp29 := lang.Apply(tmp28, []any{v14})
+									tmp29 := lang.Apply1(tmp28, v14)
 									_ = tmp29
-									tmp30 := lang.Apply(lang.ToString, []any{v14})
+									tmp30 := lang.Apply1(lang.ToString, v14)
 									tmp17 = tmp30
 								}
 								tmp15 = tmp17
@@ -6059,7 +6043,7 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_string_replace_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_replace_DASH_by.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6069,76 +6053,74 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_replace_DASH_first.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces the first instance of match with replacement in s.\n\n   match/replacement can be:\n\n   char / char\n   string / string\n   pattern / (string or function of match).\n\n   See also replace.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace-first \"swap first two words\"\n                                 #\"(\\w+)(\\s+)(\\w+)\" \"$3$2$1\")\n   -> \"first swap two words\"", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(30), kw_column, int(7), kw_line, int(114), kw_end_DASH_line, int(114))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 3)
-			v3 := args[0]
+		var tmp2 lang.FnFunc3
+		tmp2 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v3 := p0
 			_ = v3
-			v4 := args[1]
+			v4 := p1
 			_ = v4
-			v5 := args[2]
+			v5 := p2
 			_ = v5
 			var tmp6 any
 			{ // let
 				// let binding "s"
 				tmp7 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-				tmp8 := lang.Apply(tmp7, []any{v3})
+				tmp8 := lang.Apply1(tmp7, v3)
 				var v9 any = tmp8
 				_ = v9
 				var tmp10 any
 				tmp11 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
 				tmp12 := reflect.TypeOf(lang.NewChar(0))
-				tmp13 := lang.Apply(tmp11, []any{tmp12, v4})
+				tmp13 := lang.Apply2(tmp11, tmp12, v4)
 				if lang.IsTruthy(tmp13) {
 					tmp14 := checkDerefVar(var_clojure_DOT_string_replace_DASH_first_DASH_char)
-					tmp15 := lang.Apply(tmp14, []any{v9, v4, v5})
+					tmp15 := lang.Apply3(tmp14, v9, v4, v5)
 					tmp10 = tmp15
 				} else {
 					var tmp16 any
 					tmp17 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-					tmp18 := lang.Apply(tmp17, []any{lang.Builtins["string"], v4})
+					tmp18 := lang.Apply2(tmp17, lang.Builtins["string"], v4)
 					if lang.IsTruthy(tmp18) {
 						tmp19 := checkDerefVar(var_clojure_DOT_string_replace_DASH_first_DASH_str)
-						tmp20 := lang.Apply(lang.ToString, []any{v4})
-						tmp21 := lang.Apply(lang.ToString, []any{v5})
-						tmp22 := lang.Apply(tmp19, []any{v9, tmp20, tmp21})
+						tmp20 := lang.Apply1(lang.ToString, v4)
+						tmp21 := lang.Apply1(lang.ToString, v5)
+						tmp22 := lang.Apply3(tmp19, v9, tmp20, tmp21)
 						tmp16 = tmp22
 					} else {
 						var tmp23 any
 						tmp24 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
 						tmp25 := reflect.TypeOf((*regexp6.Regexp)(nil))
-						tmp26 := lang.Apply(tmp24, []any{tmp25, v4})
+						tmp26 := lang.Apply2(tmp24, tmp25, v4)
 						if lang.IsTruthy(tmp26) {
 							var tmp27 any
 							tmp28 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-							tmp29 := lang.Apply(tmp28, []any{lang.Builtins["string"], v5})
+							tmp29 := lang.Apply2(tmp28, lang.Builtins["string"], v5)
 							if lang.IsTruthy(tmp29) {
 								var tmp30 any
 								{ // let
 									// let binding "done"
 									tmp31 := checkDerefVar(var_clojure_DOT_core_atom)
-									tmp32 := lang.Apply(tmp31, []any{false})
+									tmp32 := lang.Apply1(tmp31, false)
 									var v33 any = tmp32
 									_ = v33
-									var tmp34 lang.FnFunc
-									tmp34 = lang.NewFnFunc(func(args ...any) any {
-										checkArity(args, 1)
-										v35 := args[0]
+									var tmp34 lang.FnFunc1
+									tmp34 = lang.FnFunc1(func(p0 any) any {
+										v35 := p0
 										_ = v35
 										var tmp36 any
 										tmp37 := checkDerefVar(var_clojure_DOT_core_deref)
-										tmp38 := lang.Apply(tmp37, []any{v33})
+										tmp38 := lang.Apply1(tmp37, v33)
 										if lang.IsTruthy(tmp38) {
 											tmp36 = v35
 										} else {
 											tmp39 := checkDerefVar(var_clojure_DOT_core_reset_BANG_)
-											tmp40 := lang.Apply(tmp39, []any{v33, true})
+											tmp40 := lang.Apply2(tmp39, v33, true)
 											_ = tmp40
 											tmp41, _ := lang.FieldOrMethod(v4, "ReplaceAllString")
 											if reflect.TypeOf(tmp41).Kind() != reflect.Func {
 												panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReplaceAllString is not a function")))
 											}
-											tmp42 := lang.Apply(tmp41, []any{v35, v5})
+											tmp42 := lang.Apply2(tmp41, v35, v5)
 											tmp36 = tmp42
 										}
 										return tmp36
@@ -6152,13 +6134,13 @@ func LoadNS() {
 									if reflect.TypeOf(tmp37).Kind() != reflect.Func {
 										panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReplaceAllStringFunc is not a function")))
 									}
-									tmp38 := lang.Apply(tmp37, []any{v9, tmp36})
+									tmp38 := lang.Apply2(tmp37, v9, tmp36)
 									tmp30 = tmp38
 								} // end let
 								tmp27 = tmp30
 							} else {
 								tmp31 := checkDerefVar(var_clojure_DOT_string_replace_DASH_first_DASH_by)
-								tmp32 := lang.Apply(tmp31, []any{v9, v4, v5})
+								tmp32 := lang.Apply3(tmp31, v9, v4, v5)
 								tmp27 = tmp32
 							}
 							tmp23 = tmp27
@@ -6166,8 +6148,8 @@ func LoadNS() {
 							var tmp33 any
 							if lang.IsTruthy(kw_else) {
 								tmp34 := checkDerefVar(var_clojure_DOT_core_str)
-								tmp35 := lang.Apply(tmp34, []any{"Invalid match arg: ", v4})
-								tmp36 := lang.Apply(lang.NewIllegalArgumentError, []any{tmp35})
+								tmp35 := lang.Apply2(tmp34, "Invalid match arg: ", v4)
+								tmp36 := lang.Apply1(lang.NewIllegalArgumentError, tmp35)
 								panic(tmp36)
 							} else {
 							}
@@ -6182,7 +6164,7 @@ func LoadNS() {
 			return tmp6
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc3)
 		var_clojure_DOT_string_replace_DASH_first = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_replace_DASH_first.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6191,20 +6173,19 @@ func LoadNS() {
 	// replace-first-by
 	{
 		tmp0 := sym_replace_DASH_first_DASH_by.WithMeta(lang.NewMap(kw_file, "clojure/string.glj", kw_line, int(87), kw_column, int(8), kw_end_DASH_line, int(87), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re, sym_f)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 3)
-			v2 := args[0]
+		var tmp1 lang.FnFunc3
+		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			v4 := args[2]
+			v4 := p2
 			_ = v4
 			var tmp5 any
 			{ // let
 				// let binding "m"
 				tmp6 := checkDerefVar(var_clojure_DOT_core_re_DASH_matcher)
-				tmp7 := lang.Apply(tmp6, []any{v3, v2})
+				tmp7 := lang.Apply2(tmp6, v3, v2)
 				var v8 any = tmp7
 				_ = v8
 				var tmp9 any
@@ -6229,25 +6210,25 @@ func LoadNS() {
 						// let binding "rep"
 						tmp15 := checkDerefVar(var_clojure_DOT_string_re_DASH_quote_DASH_replacement)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_re_DASH_groups)
-						tmp17 := lang.Apply(tmp16, []any{v8})
-						tmp18 := lang.Apply(v4, []any{tmp17})
-						tmp19 := lang.Apply(tmp15, []any{tmp18})
+						tmp17 := lang.Apply1(tmp16, v8)
+						tmp18 := lang.Apply1(v4, tmp17)
+						tmp19 := lang.Apply1(tmp15, tmp18)
 						var v20 any = tmp19
 						_ = v20
 						tmp21, _ := lang.FieldOrMethod(v8, "appendReplacement")
 						if reflect.TypeOf(tmp21).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("appendReplacement is not a function")))
 						}
-						tmp22 := lang.Apply(tmp21, []any{v14, v20})
+						tmp22 := lang.Apply2(tmp21, v14, v20)
 						_ = tmp22
 						tmp23, _ := lang.FieldOrMethod(v8, "appendTail")
 						if reflect.TypeOf(tmp23).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("appendTail is not a function")))
 						}
-						tmp24 := lang.Apply(tmp23, []any{v14})
+						tmp24 := lang.Apply1(tmp23, v14)
 						_ = tmp24
 						tmp25 := checkDerefVar(var_clojure_DOT_core_str)
-						tmp26 := lang.Apply(tmp25, []any{v14})
+						tmp26 := lang.Apply1(tmp25, v14)
 						tmp12 = tmp26
 					} // end let
 					tmp9 = tmp12
@@ -6258,7 +6239,7 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_string_replace_DASH_first_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_replace_DASH_first_DASH_by.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6267,48 +6248,47 @@ func LoadNS() {
 	// replace-first-char
 	{
 		tmp0 := sym_replace_DASH_first_DASH_char.WithMeta(lang.NewMap(kw_file, "clojure/string.glj", kw_line, int(98), kw_column, int(8), kw_end_DASH_line, int(98), kw_end_DASH_column, int(25), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replace)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 3)
-			v2 := args[0]
+		var tmp1 lang.FnFunc3
+		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			v4 := args[2]
+			v4 := p2
 			_ = v4
 			var tmp5 any
 			{ // let
 				// let binding "s"
-				tmp6 := lang.Apply(lang.ToString, []any{v2})
+				tmp6 := lang.Apply1(lang.ToString, v2)
 				var v7 any = tmp6
 				_ = v7
 				// let binding "i"
 				tmp8 := checkDerefVar(var_clojure_DOT_core_int)
-				tmp9 := lang.Apply(tmp8, []any{v3})
-				tmp10 := lang.Apply(strings5.Index, []any{v7, tmp9})
+				tmp9 := lang.Apply1(tmp8, v3)
+				tmp10 := lang.Apply2(strings5.Index, v7, tmp9)
 				var v11 any = tmp10
 				_ = v11
 				var tmp12 any
 				tmp13 := checkDerefVar(var_clojure_DOT_core__EQ_)
-				tmp14 := lang.Apply(tmp13, []any{int64(-1), v11})
+				tmp14 := lang.Apply2(tmp13, int64(-1), v11)
 				if lang.IsTruthy(tmp14) {
 					tmp12 = v7
 				} else {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_str)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_subs)
-					tmp17 := lang.Apply(tmp16, []any{v7, int64(0), v11})
+					tmp17 := lang.Apply3(tmp16, v7, int64(0), v11)
 					tmp18 := checkDerefVar(var_clojure_DOT_core_subs)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_inc)
-					tmp20 := lang.Apply(tmp19, []any{v11})
-					tmp21 := lang.Apply(tmp18, []any{v7, tmp20})
-					tmp22 := lang.Apply(tmp15, []any{tmp17, v4, tmp21})
+					tmp20 := lang.Apply1(tmp19, v11)
+					tmp21 := lang.Apply2(tmp18, v7, tmp20)
+					tmp22 := lang.Apply3(tmp15, tmp17, v4, tmp21)
 					tmp12 = tmp22
 				}
 				tmp5 = tmp12
 			} // end let
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_string_replace_DASH_first_DASH_char = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_replace_DASH_first_DASH_char.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6317,48 +6297,47 @@ func LoadNS() {
 	// replace-first-str
 	{
 		tmp0 := sym_replace_DASH_first_DASH_str.WithMeta(lang.NewMap(kw_file, "clojure/string.glj", kw_line, int(106), kw_column, int(8), kw_end_DASH_line, int(106), kw_end_DASH_column, int(24), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replace)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 3)
-			v2 := args[0]
+		var tmp1 lang.FnFunc3
+		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			v4 := args[2]
+			v4 := p2
 			_ = v4
 			var tmp5 any
 			{ // let
 				// let binding "s"
-				tmp6 := lang.Apply(lang.ToString, []any{v2})
+				tmp6 := lang.Apply1(lang.ToString, v2)
 				var v7 any = tmp6
 				_ = v7
 				// let binding "i"
-				tmp8 := lang.Apply(strings5.Index, []any{v7, v3})
+				tmp8 := lang.Apply2(strings5.Index, v7, v3)
 				var v9 any = tmp8
 				_ = v9
 				var tmp10 any
 				tmp11 := checkDerefVar(var_clojure_DOT_core__EQ_)
-				tmp12 := lang.Apply(tmp11, []any{int64(-1), v9})
+				tmp12 := lang.Apply2(tmp11, int64(-1), v9)
 				if lang.IsTruthy(tmp12) {
 					tmp10 = v7
 				} else {
 					tmp13 := checkDerefVar(var_clojure_DOT_core_str)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_subs)
-					tmp15 := lang.Apply(tmp14, []any{v7, int64(0), v9})
+					tmp15 := lang.Apply3(tmp14, v7, int64(0), v9)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_subs)
 					tmp17 := checkDerefVar(var_clojure_DOT_core__PLUS_)
 					tmp18 := checkDerefVar(var_clojure_DOT_core_count)
-					tmp19 := lang.Apply(tmp18, []any{v3})
-					tmp20 := lang.Apply(tmp17, []any{v9, tmp19})
-					tmp21 := lang.Apply(tmp16, []any{v7, tmp20})
-					tmp22 := lang.Apply(tmp13, []any{tmp15, v4, tmp21})
+					tmp19 := lang.Apply1(tmp18, v3)
+					tmp20 := lang.Apply2(tmp17, v9, tmp19)
+					tmp21 := lang.Apply2(tmp16, v7, tmp20)
+					tmp22 := lang.Apply3(tmp13, tmp15, v4, tmp21)
 					tmp10 = tmp22
 				}
 				tmp5 = tmp10
 			} // end let
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_string_replace_DASH_first_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_replace_DASH_first_DASH_str.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6368,22 +6347,21 @@ func LoadNS() {
 	{
 		tmp1 := reflect.TypeOf("")
 		tmp0 := sym_reverse.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns s with its characters reversed.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(23), kw_end_DASH_line, int(23))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v3 := args[0]
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
 			_ = v3
 			tmp4 := checkDerefVar(var_clojure_DOT_core_apply)
 			tmp5 := checkDerefVar(var_clojure_DOT_core_str)
 			tmp6 := checkDerefVar(var_clojure_DOT_core_reverse)
 			tmp7 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-			tmp8 := lang.Apply(tmp7, []any{v3})
-			tmp9 := lang.Apply(tmp6, []any{tmp8})
-			tmp10 := lang.Apply(tmp4, []any{tmp5, tmp9})
+			tmp8 := lang.Apply1(tmp7, v3)
+			tmp9 := lang.Apply1(tmp6, tmp8)
+			tmp10 := lang.Apply2(tmp4, tmp5, tmp9)
 			return tmp10
 		})
 		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
 		var_clojure_DOT_string_reverse = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_reverse.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6392,18 +6370,17 @@ func LoadNS() {
 	// split-lines
 	{
 		tmp0 := sym_split_DASH_lines.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Splits s on \\n or \\r\\n. Trailing empty lines are not returned.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(204), kw_end_DASH_line, int(204))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_string_split)
 			tmp4 := checkDerefVar(var_clojure_DOT_core_re_DASH_pattern)
-			tmp5 := lang.Apply(tmp4, []any{"\\r?\\n"})
-			tmp6 := lang.Apply(tmp3, []any{v2, tmp5})
+			tmp5 := lang.Apply1(tmp4, "\\r?\\n")
+			tmp6 := lang.Apply2(tmp3, v2, tmp5)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_string_split_DASH_lines = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_split_DASH_lines.SetMeta(tmp0.Meta().(lang.IPersistentMap))

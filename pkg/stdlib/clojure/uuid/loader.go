@@ -5116,24 +5116,23 @@ func LoadNS() {
 	// default-uuid-reader
 	{
 		tmp0 := sym_default_DASH_uuid_DASH_reader.WithMeta(lang.NewMap(kw_file, "clojure/uuid.glj", kw_line, int(11), kw_column, int(8), kw_end_DASH_line, int(11), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_uuid))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			tmp4 := checkDerefVar(var_clojure_DOT_core_string_QMARK_)
-			tmp5 := lang.Apply(tmp4, []any{v2})
+			tmp5 := lang.Apply1(tmp4, v2)
 			if lang.IsTruthy(tmp5) {
-				tmp6 := lang.Apply(nil, []any{v2})
+				tmp6 := lang.Apply1(nil, v2)
 				tmp3 = tmp6
 			} else {
-				tmp7 := lang.Apply(lang.NewIllegalArgumentError, []any{"#uuid data reader expected string"})
+				tmp7 := lang.Apply1(lang.NewIllegalArgumentError, "#uuid data reader expected string")
 				panic(tmp7)
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader.SetMeta(tmp0.Meta().(lang.IPersistentMap))

@@ -5551,22 +5551,19 @@ func LoadNS() {
 	// compose-fixtures
 	{
 		tmp0 := sym_compose_DASH_fixtures.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f1, sym_f2)), kw_doc, "Composes two fixture functions, creating a new fixture function\n  that combines their behavior.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(680), kw_end_DASH_line, int(680))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			var tmp4 lang.FnFunc
-			tmp4 = lang.NewFnFunc(func(args ...any) any {
-				checkArity(args, 1)
-				v5 := args[0]
+			var tmp4 lang.FnFunc1
+			tmp4 = lang.FnFunc1(func(p0 any) any {
+				v5 := p0
 				_ = v5
-				var tmp6 lang.FnFunc
-				tmp6 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 0)
-					tmp7 := lang.Apply(v3, []any{v5})
+				var tmp6 lang.FnFunc0
+				tmp6 = lang.FnFunc0(func() any {
+					tmp7 := lang.Apply1(v3, v5)
 					return tmp7
 				})
 				tmp7 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(685), kw_column, int(15), kw_end_DASH_line, int(685), kw_end_DASH_column, int(28))
@@ -5574,7 +5571,7 @@ func LoadNS() {
 				if err != nil {
 					panic(err)
 				}
-				tmp9 := lang.Apply(v2, []any{tmp8})
+				tmp9 := lang.Apply1(v2, tmp8)
 				return tmp9
 			})
 			tmp5 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(685), kw_column, int(3), kw_end_DASH_line, int(685), kw_end_DASH_column, int(30))
@@ -5584,7 +5581,7 @@ func LoadNS() {
 			}
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_test_compose_DASH_fixtures = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_compose_DASH_fixtures.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5593,15 +5590,14 @@ func LoadNS() {
 	// default-fixture
 	{
 		tmp0 := sym_default_DASH_fixture.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "The default, empty, fixture function.  Just calls its argument.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(22), kw_column, int(8), kw_line, int(674), kw_end_DASH_line, int(674), kw_private, true)).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply(v2, nil)
+			tmp3 := lang.Apply0(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_default_DASH_fixture = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_default_DASH_fixture.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5610,20 +5606,19 @@ func LoadNS() {
 	// add-ns-meta
 	{
 		tmp0 := sym_add_DASH_ns_DASH_meta.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_key, sym_coll)), kw_doc, "Adds elements in coll to the current namespace metadata as the\n  value of key.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(654), kw_end_DASH_line, int(654), kw_private, true)).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			tmp4 := checkDerefVar(var_clojure_DOT_core_alter_DASH_meta_BANG_)
 			tmp5 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
 			tmp6 := checkDerefVar(var_clojure_DOT_core_assoc)
-			tmp7 := lang.Apply(tmp4, []any{tmp5, tmp6, v2, v3})
+			tmp7 := lang.Apply4(tmp4, tmp5, tmp6, v2, v3)
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_test_add_DASH_ns_DASH_meta = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_add_DASH_ns_DASH_meta.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5665,7 +5660,7 @@ func LoadNS() {
 				}
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_test_add_DASH_ns_DASH_meta)
-				tmp7 := lang.Apply(tmp6, []any{kw_clojure_DOT_test_SLASH_each_DASH_fixtures, v5})
+				tmp7 := lang.Apply2(tmp6, kw_clojure_DOT_test_SLASH_each_DASH_fixtures, v5)
 				return tmp7
 			}
 		})
@@ -5684,7 +5679,7 @@ func LoadNS() {
 				}
 				_ = v6
 				tmp7 := checkDerefVar(var_clojure_DOT_test_add_DASH_ns_DASH_meta)
-				tmp8 := lang.Apply(tmp7, []any{kw_clojure_DOT_test_SLASH_once_DASH_fixtures, v6})
+				tmp8 := lang.Apply2(tmp7, kw_clojure_DOT_test_SLASH_once_DASH_fixtures, v6)
 				return tmp8
 			}
 		})
@@ -5724,13 +5719,13 @@ func LoadNS() {
 					{ // let
 						// let binding "and__0__auto__"
 						tmp10 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
-						tmp11 := lang.Apply(tmp10, []any{v4})
+						tmp11 := lang.Apply1(tmp10, v4)
 						var v12 any = tmp11
 						_ = v12
 						var tmp13 any
 						if lang.IsTruthy(v12) {
 							tmp14 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
-							tmp15 := lang.Apply(tmp14, []any{v6})
+							tmp15 := lang.Apply1(tmp14, v6)
 							tmp13 = tmp15
 						} else {
 							tmp13 = v12
@@ -5748,8 +5743,8 @@ func LoadNS() {
 							// let binding "and__0__auto__"
 							tmp13 := checkDerefVar(var_clojure_DOT_core_pos_QMARK_)
 							tmp14 := checkDerefVar(var_clojure_DOT_core_count)
-							tmp15 := lang.Apply(tmp14, []any{v4})
-							tmp16 := lang.Apply(tmp13, []any{tmp15})
+							tmp15 := lang.Apply1(tmp14, v4)
+							tmp16 := lang.Apply1(tmp13, tmp15)
 							var v17 any = tmp16
 							_ = v17
 							var tmp18 any
@@ -5759,8 +5754,8 @@ func LoadNS() {
 									// let binding "and__0__auto__"
 									tmp20 := checkDerefVar(var_clojure_DOT_core_pos_QMARK_)
 									tmp21 := checkDerefVar(var_clojure_DOT_core_count)
-									tmp22 := lang.Apply(tmp21, []any{v6})
-									tmp23 := lang.Apply(tmp20, []any{tmp22})
+									tmp22 := lang.Apply1(tmp21, v6)
+									tmp23 := lang.Apply1(tmp20, tmp22)
 									var v24 any = tmp23
 									_ = v24
 									var tmp25 any
@@ -5768,11 +5763,11 @@ func LoadNS() {
 										tmp26 := checkDerefVar(var_clojure_DOT_core_zero_QMARK_)
 										tmp27 := checkDerefVar(var_clojure_DOT_core_mod)
 										tmp28 := checkDerefVar(var_clojure_DOT_core_count)
-										tmp29 := lang.Apply(tmp28, []any{v6})
+										tmp29 := lang.Apply1(tmp28, v6)
 										tmp30 := checkDerefVar(var_clojure_DOT_core_count)
-										tmp31 := lang.Apply(tmp30, []any{v4})
-										tmp32 := lang.Apply(tmp27, []any{tmp29, tmp31})
-										tmp33 := lang.Apply(tmp26, []any{tmp32})
+										tmp31 := lang.Apply1(tmp30, v4)
+										tmp32 := lang.Apply2(tmp27, tmp29, tmp31)
+										tmp33 := lang.Apply1(tmp26, tmp32)
 										tmp25 = tmp33
 									} else {
 										tmp25 = v24
@@ -5793,24 +5788,24 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply(tmp11, []any{sym_clojure_DOT_template_SLASH_do_DASH_template})
+					tmp12 := lang.Apply1(tmp11, sym_clojure_DOT_template_SLASH_do_DASH_template)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp14 := lang.Apply(tmp13, []any{v4})
+					tmp14 := lang.Apply1(tmp13, v4)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp19 := lang.Apply(tmp18, []any{sym_clojure_DOT_test_SLASH_is})
+					tmp19 := lang.Apply1(tmp18, sym_clojure_DOT_test_SLASH_is)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp21 := lang.Apply(tmp20, []any{v5})
-					tmp22 := lang.Apply(tmp17, []any{tmp19, tmp21})
-					tmp23 := lang.Apply(tmp16, []any{tmp22})
-					tmp24 := lang.Apply(tmp15, []any{tmp23})
-					tmp25 := lang.Apply(tmp10, []any{tmp12, tmp14, tmp24, v6})
-					tmp26 := lang.Apply(tmp9, []any{tmp25})
+					tmp21 := lang.Apply1(tmp20, v5)
+					tmp22 := lang.Apply2(tmp17, tmp19, tmp21)
+					tmp23 := lang.Apply1(tmp16, tmp22)
+					tmp24 := lang.Apply1(tmp15, tmp23)
+					tmp25 := lang.Apply4(tmp10, tmp12, tmp14, tmp24, v6)
+					tmp26 := lang.Apply1(tmp9, tmp25)
 					tmp7 = tmp26
 				} else {
-					tmp27 := lang.Apply(lang.NewIllegalArgumentError, []any{"The number of args doesn't match are's argv."})
+					tmp27 := lang.Apply1(lang.NewIllegalArgumentError, "The number of args doesn't match are's argv.")
 					panic(tmp27)
 				}
 				return tmp7
@@ -5825,129 +5820,128 @@ func LoadNS() {
 	// assert-any
 	{
 		tmp0 := sym_assert_DASH_any.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_form)), kw_doc, "Returns generic assertion code for any test, including macros, Java\n  method calls, or isolated symbols.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(446), kw_end_DASH_line, int(446))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			tmp4 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp5 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp6 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp7 := lang.Apply(tmp6, []any{sym_clojure_DOT_core_SLASH_let})
+			tmp7 := lang.Apply1(tmp6, sym_clojure_DOT_core_SLASH_let)
 			tmp8 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 			tmp10 := checkDerefVar(var_clojure_DOT_core_vector)
 			tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp13 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp14 := lang.Apply(tmp13, []any{sym_value__0__auto__})
+			tmp14 := lang.Apply1(tmp13, sym_value__0__auto__)
 			tmp15 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp16 := lang.Apply(tmp15, []any{v3})
-			tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16})
-			tmp18 := lang.Apply(tmp11, []any{tmp17})
-			tmp19 := lang.Apply(tmp9, []any{tmp10, tmp18})
-			tmp20 := lang.Apply(tmp8, []any{tmp19})
+			tmp16 := lang.Apply1(tmp15, v3)
+			tmp17 := lang.Apply2(tmp12, tmp14, tmp16)
+			tmp18 := lang.Apply1(tmp11, tmp17)
+			tmp19 := lang.Apply2(tmp9, tmp10, tmp18)
+			tmp20 := lang.Apply1(tmp8, tmp19)
 			tmp21 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp22 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp23 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp24 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp25 := lang.Apply(tmp24, []any{sym_if})
+			tmp25 := lang.Apply1(tmp24, sym_if)
 			tmp26 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp27 := lang.Apply(tmp26, []any{sym_value__0__auto__})
+			tmp27 := lang.Apply1(tmp26, sym_value__0__auto__)
 			tmp28 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp29 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp30 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp31 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp32 := lang.Apply(tmp31, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+			tmp32 := lang.Apply1(tmp31, sym_clojure_DOT_test_SLASH_do_DASH_report)
 			tmp33 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp34 := checkDerefVar(var_clojure_DOT_core_apply)
 			tmp35 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 			tmp36 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp37 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp38 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp39 := lang.Apply(tmp38, []any{kw_type})
+			tmp39 := lang.Apply1(tmp38, kw_type)
 			tmp40 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp41 := lang.Apply(tmp40, []any{kw_pass})
+			tmp41 := lang.Apply1(tmp40, kw_pass)
 			tmp42 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp43 := lang.Apply(tmp42, []any{kw_message})
+			tmp43 := lang.Apply1(tmp42, kw_message)
 			tmp44 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp45 := lang.Apply(tmp44, []any{v2})
+			tmp45 := lang.Apply1(tmp44, v2)
 			tmp46 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp47 := lang.Apply(tmp46, []any{kw_expected})
+			tmp47 := lang.Apply1(tmp46, kw_expected)
 			tmp48 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp49 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp50 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp51 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp52 := lang.Apply(tmp51, []any{sym_quote})
+			tmp52 := lang.Apply1(tmp51, sym_quote)
 			tmp53 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp54 := lang.Apply(tmp53, []any{v3})
-			tmp55 := lang.Apply(tmp50, []any{tmp52, tmp54})
-			tmp56 := lang.Apply(tmp49, []any{tmp55})
-			tmp57 := lang.Apply(tmp48, []any{tmp56})
+			tmp54 := lang.Apply1(tmp53, v3)
+			tmp55 := lang.Apply2(tmp50, tmp52, tmp54)
+			tmp56 := lang.Apply1(tmp49, tmp55)
+			tmp57 := lang.Apply1(tmp48, tmp56)
 			tmp58 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp59 := lang.Apply(tmp58, []any{kw_actual})
+			tmp59 := lang.Apply1(tmp58, kw_actual)
 			tmp60 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp61 := lang.Apply(tmp60, []any{sym_value__0__auto__})
+			tmp61 := lang.Apply1(tmp60, sym_value__0__auto__)
 			tmp62 := lang.Apply(tmp37, []any{tmp39, tmp41, tmp43, tmp45, tmp47, tmp57, tmp59, tmp61})
-			tmp63 := lang.Apply(tmp36, []any{tmp62})
-			tmp64 := lang.Apply(tmp34, []any{tmp35, tmp63})
-			tmp65 := lang.Apply(tmp33, []any{tmp64})
-			tmp66 := lang.Apply(tmp30, []any{tmp32, tmp65})
-			tmp67 := lang.Apply(tmp29, []any{tmp66})
-			tmp68 := lang.Apply(tmp28, []any{tmp67})
+			tmp63 := lang.Apply1(tmp36, tmp62)
+			tmp64 := lang.Apply2(tmp34, tmp35, tmp63)
+			tmp65 := lang.Apply1(tmp33, tmp64)
+			tmp66 := lang.Apply2(tmp30, tmp32, tmp65)
+			tmp67 := lang.Apply1(tmp29, tmp66)
+			tmp68 := lang.Apply1(tmp28, tmp67)
 			tmp69 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp70 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp71 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp72 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp73 := lang.Apply(tmp72, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+			tmp73 := lang.Apply1(tmp72, sym_clojure_DOT_test_SLASH_do_DASH_report)
 			tmp74 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp75 := checkDerefVar(var_clojure_DOT_core_apply)
 			tmp76 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 			tmp77 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp78 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp79 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp80 := lang.Apply(tmp79, []any{kw_type})
+			tmp80 := lang.Apply1(tmp79, kw_type)
 			tmp81 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp82 := lang.Apply(tmp81, []any{kw_fail})
+			tmp82 := lang.Apply1(tmp81, kw_fail)
 			tmp83 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp84 := lang.Apply(tmp83, []any{kw_message})
+			tmp84 := lang.Apply1(tmp83, kw_message)
 			tmp85 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp86 := lang.Apply(tmp85, []any{v2})
+			tmp86 := lang.Apply1(tmp85, v2)
 			tmp87 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp88 := lang.Apply(tmp87, []any{kw_expected})
+			tmp88 := lang.Apply1(tmp87, kw_expected)
 			tmp89 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp90 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp91 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp92 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp93 := lang.Apply(tmp92, []any{sym_quote})
+			tmp93 := lang.Apply1(tmp92, sym_quote)
 			tmp94 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp95 := lang.Apply(tmp94, []any{v3})
-			tmp96 := lang.Apply(tmp91, []any{tmp93, tmp95})
-			tmp97 := lang.Apply(tmp90, []any{tmp96})
-			tmp98 := lang.Apply(tmp89, []any{tmp97})
+			tmp95 := lang.Apply1(tmp94, v3)
+			tmp96 := lang.Apply2(tmp91, tmp93, tmp95)
+			tmp97 := lang.Apply1(tmp90, tmp96)
+			tmp98 := lang.Apply1(tmp89, tmp97)
 			tmp99 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp100 := lang.Apply(tmp99, []any{kw_actual})
+			tmp100 := lang.Apply1(tmp99, kw_actual)
 			tmp101 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp102 := lang.Apply(tmp101, []any{sym_value__0__auto__})
+			tmp102 := lang.Apply1(tmp101, sym_value__0__auto__)
 			tmp103 := lang.Apply(tmp78, []any{tmp80, tmp82, tmp84, tmp86, tmp88, tmp98, tmp100, tmp102})
-			tmp104 := lang.Apply(tmp77, []any{tmp103})
-			tmp105 := lang.Apply(tmp75, []any{tmp76, tmp104})
-			tmp106 := lang.Apply(tmp74, []any{tmp105})
-			tmp107 := lang.Apply(tmp71, []any{tmp73, tmp106})
-			tmp108 := lang.Apply(tmp70, []any{tmp107})
-			tmp109 := lang.Apply(tmp69, []any{tmp108})
-			tmp110 := lang.Apply(tmp23, []any{tmp25, tmp27, tmp68, tmp109})
-			tmp111 := lang.Apply(tmp22, []any{tmp110})
-			tmp112 := lang.Apply(tmp21, []any{tmp111})
+			tmp104 := lang.Apply1(tmp77, tmp103)
+			tmp105 := lang.Apply2(tmp75, tmp76, tmp104)
+			tmp106 := lang.Apply1(tmp74, tmp105)
+			tmp107 := lang.Apply2(tmp71, tmp73, tmp106)
+			tmp108 := lang.Apply1(tmp70, tmp107)
+			tmp109 := lang.Apply1(tmp69, tmp108)
+			tmp110 := lang.Apply4(tmp23, tmp25, tmp27, tmp68, tmp109)
+			tmp111 := lang.Apply1(tmp22, tmp110)
+			tmp112 := lang.Apply1(tmp21, tmp111)
 			tmp113 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp114 := lang.Apply(tmp113, []any{sym_value__0__auto__})
-			tmp115 := lang.Apply(tmp5, []any{tmp7, tmp20, tmp112, tmp114})
-			tmp116 := lang.Apply(tmp4, []any{tmp115})
+			tmp114 := lang.Apply1(tmp113, sym_value__0__auto__)
+			tmp115 := lang.Apply4(tmp5, tmp7, tmp20, tmp112, tmp114)
+			tmp116 := lang.Apply1(tmp4, tmp115)
 			return tmp116
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_test_assert_DASH_any = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_assert_DASH_any.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5956,25 +5950,24 @@ func LoadNS() {
 	// assert-expr
 	{
 		tmp0 := sym_assert_DASH_expr.WithMeta(lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(467), kw_column, int(11), kw_end_DASH_line, int(467), kw_end_DASH_column, int(21), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v3 := args[0]
+		var tmp2 lang.FnFunc2
+		tmp2 = lang.FnFunc2(func(p0, p1 any) any {
+			v3 := p0
 			_ = v3
-			v4 := args[1]
+			v4 := p1
 			_ = v4
 			var tmp5 any
 			tmp6 := checkDerefVar(var_clojure_DOT_core_nil_QMARK_)
-			tmp7 := lang.Apply(tmp6, []any{v4})
+			tmp7 := lang.Apply1(tmp6, v4)
 			if lang.IsTruthy(tmp7) {
 				tmp5 = kw_always_DASH_fail
 			} else {
 				var tmp8 any
 				tmp9 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-				tmp10 := lang.Apply(tmp9, []any{v4})
+				tmp10 := lang.Apply1(tmp9, v4)
 				if lang.IsTruthy(tmp10) {
 					tmp11 := checkDerefVar(var_clojure_DOT_core_first)
-					tmp12 := lang.Apply(tmp11, []any{v4})
+					tmp12 := lang.Apply1(tmp11, v4)
 					tmp8 = tmp12
 				} else {
 					var tmp13 any
@@ -5988,63 +5981,61 @@ func LoadNS() {
 			}
 			return tmp5
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(468), kw_column, int(3), kw_end_DASH_line, int(472), kw_end_DASH_column, int(22))).(lang.FnFunc)
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(468), kw_column, int(3), kw_end_DASH_line, int(472), kw_end_DASH_column, int(22))).(lang.FnFunc2)
 		// MultiFn assert-expr
 		tmp1 := lang.NewMultiFn("assert-expr", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp3 lang.FnFunc
-		tmp3 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v4 := args[0]
+		var tmp3 lang.FnFunc2
+		tmp3 = lang.FnFunc2(func(p0, p1 any) any {
+			v4 := p0
 			_ = v4
-			v5 := args[1]
+			v5 := p1
 			_ = v5
 			tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp9 := lang.Apply(tmp8, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+			tmp9 := lang.Apply1(tmp8, sym_clojure_DOT_test_SLASH_do_DASH_report)
 			tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp11 := checkDerefVar(var_clojure_DOT_core_apply)
 			tmp12 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 			tmp13 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp14 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp15 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp16 := lang.Apply(tmp15, []any{kw_type})
+			tmp16 := lang.Apply1(tmp15, kw_type)
 			tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp18 := lang.Apply(tmp17, []any{kw_fail})
+			tmp18 := lang.Apply1(tmp17, kw_fail)
 			tmp19 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp20 := lang.Apply(tmp19, []any{kw_message})
+			tmp20 := lang.Apply1(tmp19, kw_message)
 			tmp21 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp22 := lang.Apply(tmp21, []any{v4})
-			tmp23 := lang.Apply(tmp14, []any{tmp16, tmp18, tmp20, tmp22})
-			tmp24 := lang.Apply(tmp13, []any{tmp23})
-			tmp25 := lang.Apply(tmp11, []any{tmp12, tmp24})
-			tmp26 := lang.Apply(tmp10, []any{tmp25})
-			tmp27 := lang.Apply(tmp7, []any{tmp9, tmp26})
-			tmp28 := lang.Apply(tmp6, []any{tmp27})
+			tmp22 := lang.Apply1(tmp21, v4)
+			tmp23 := lang.Apply4(tmp14, tmp16, tmp18, tmp20, tmp22)
+			tmp24 := lang.Apply1(tmp13, tmp23)
+			tmp25 := lang.Apply2(tmp11, tmp12, tmp24)
+			tmp26 := lang.Apply1(tmp10, tmp25)
+			tmp27 := lang.Apply2(tmp7, tmp9, tmp26)
+			tmp28 := lang.Apply1(tmp6, tmp27)
 			return tmp28
 		})
 		tmp1.AddMethod(kw_always_DASH_fail, tmp3)
-		var tmp4 lang.FnFunc
-		tmp4 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v5 := args[0]
+		var tmp4 lang.FnFunc2
+		tmp4 = lang.FnFunc2(func(p0, p1 any) any {
+			v5 := p0
 			_ = v5
-			v6 := args[1]
+			v6 := p1
 			_ = v6
 			var tmp7 any
 			var tmp8 any
 			{ // let
 				// let binding "and__0__auto__"
 				tmp9 := checkDerefVar(var_clojure_DOT_core_sequential_QMARK_)
-				tmp10 := lang.Apply(tmp9, []any{v6})
+				tmp10 := lang.Apply1(tmp9, v6)
 				var v11 any = tmp10
 				_ = v11
 				var tmp12 any
 				if lang.IsTruthy(v11) {
 					tmp13 := checkDerefVar(var_clojure_DOT_test_function_QMARK_)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_first)
-					tmp15 := lang.Apply(tmp14, []any{v6})
-					tmp16 := lang.Apply(tmp13, []any{tmp15})
+					tmp15 := lang.Apply1(tmp14, v6)
+					tmp16 := lang.Apply1(tmp13, tmp15)
 					tmp12 = tmp16
 				} else {
 					tmp12 = v11
@@ -6053,536 +6044,533 @@ func LoadNS() {
 			} // end let
 			if lang.IsTruthy(tmp8) {
 				tmp9 := checkDerefVar(var_clojure_DOT_test_assert_DASH_predicate)
-				tmp10 := lang.Apply(tmp9, []any{v5, v6})
+				tmp10 := lang.Apply2(tmp9, v5, v6)
 				tmp7 = tmp10
 			} else {
 				tmp11 := checkDerefVar(var_clojure_DOT_test_assert_DASH_any)
-				tmp12 := lang.Apply(tmp11, []any{v5, v6})
+				tmp12 := lang.Apply2(tmp11, v5, v6)
 				tmp7 = tmp12
 			}
 			return tmp7
 		})
 		tmp1.AddMethod(kw_default, tmp4)
-		var tmp5 lang.FnFunc
-		tmp5 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v6 := args[0]
+		var tmp5 lang.FnFunc2
+		tmp5 = lang.FnFunc2(func(p0, p1 any) any {
+			v6 := p0
 			_ = v6
-			v7 := args[1]
+			v7 := p1
 			_ = v7
 			tmp8 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp9 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp11 := lang.Apply(tmp10, []any{sym_clojure_DOT_core_SLASH_let})
+			tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_let)
 			tmp12 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp13 := checkDerefVar(var_clojure_DOT_core_apply)
 			tmp14 := checkDerefVar(var_clojure_DOT_core_vector)
 			tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp18 := lang.Apply(tmp17, []any{sym_klass__0__auto__})
+			tmp18 := lang.Apply1(tmp17, sym_klass__0__auto__)
 			tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp20 := checkDerefVar(var_clojure_DOT_core_nth)
-			tmp21 := lang.Apply(tmp20, []any{v7, int64(1)})
-			tmp22 := lang.Apply(tmp19, []any{tmp21})
+			tmp21 := lang.Apply2(tmp20, v7, int64(1))
+			tmp22 := lang.Apply1(tmp19, tmp21)
 			tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp24 := lang.Apply(tmp23, []any{sym_object__1__auto__})
+			tmp24 := lang.Apply1(tmp23, sym_object__1__auto__)
 			tmp25 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp26 := checkDerefVar(var_clojure_DOT_core_nth)
-			tmp27 := lang.Apply(tmp26, []any{v7, int64(2)})
-			tmp28 := lang.Apply(tmp25, []any{tmp27})
-			tmp29 := lang.Apply(tmp16, []any{tmp18, tmp22, tmp24, tmp28})
-			tmp30 := lang.Apply(tmp15, []any{tmp29})
-			tmp31 := lang.Apply(tmp13, []any{tmp14, tmp30})
-			tmp32 := lang.Apply(tmp12, []any{tmp31})
+			tmp27 := lang.Apply2(tmp26, v7, int64(2))
+			tmp28 := lang.Apply1(tmp25, tmp27)
+			tmp29 := lang.Apply4(tmp16, tmp18, tmp22, tmp24, tmp28)
+			tmp30 := lang.Apply1(tmp15, tmp29)
+			tmp31 := lang.Apply2(tmp13, tmp14, tmp30)
+			tmp32 := lang.Apply1(tmp12, tmp31)
 			tmp33 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp34 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp35 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp36 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp37 := lang.Apply(tmp36, []any{sym_clojure_DOT_core_SLASH_let})
+			tmp37 := lang.Apply1(tmp36, sym_clojure_DOT_core_SLASH_let)
 			tmp38 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp39 := checkDerefVar(var_clojure_DOT_core_apply)
 			tmp40 := checkDerefVar(var_clojure_DOT_core_vector)
 			tmp41 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp42 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp43 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp44 := lang.Apply(tmp43, []any{sym_result__2__auto__})
+			tmp44 := lang.Apply1(tmp43, sym_result__2__auto__)
 			tmp45 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp46 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp47 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp48 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp49 := lang.Apply(tmp48, []any{sym_clojure_DOT_core_SLASH_instance_QMARK_})
+			tmp49 := lang.Apply1(tmp48, sym_clojure_DOT_core_SLASH_instance_QMARK_)
 			tmp50 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp51 := lang.Apply(tmp50, []any{sym_klass__0__auto__})
+			tmp51 := lang.Apply1(tmp50, sym_klass__0__auto__)
 			tmp52 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp53 := lang.Apply(tmp52, []any{sym_object__1__auto__})
-			tmp54 := lang.Apply(tmp47, []any{tmp49, tmp51, tmp53})
-			tmp55 := lang.Apply(tmp46, []any{tmp54})
-			tmp56 := lang.Apply(tmp45, []any{tmp55})
-			tmp57 := lang.Apply(tmp42, []any{tmp44, tmp56})
-			tmp58 := lang.Apply(tmp41, []any{tmp57})
-			tmp59 := lang.Apply(tmp39, []any{tmp40, tmp58})
-			tmp60 := lang.Apply(tmp38, []any{tmp59})
+			tmp53 := lang.Apply1(tmp52, sym_object__1__auto__)
+			tmp54 := lang.Apply3(tmp47, tmp49, tmp51, tmp53)
+			tmp55 := lang.Apply1(tmp46, tmp54)
+			tmp56 := lang.Apply1(tmp45, tmp55)
+			tmp57 := lang.Apply2(tmp42, tmp44, tmp56)
+			tmp58 := lang.Apply1(tmp41, tmp57)
+			tmp59 := lang.Apply2(tmp39, tmp40, tmp58)
+			tmp60 := lang.Apply1(tmp38, tmp59)
 			tmp61 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp62 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp63 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp64 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp65 := lang.Apply(tmp64, []any{sym_if})
+			tmp65 := lang.Apply1(tmp64, sym_if)
 			tmp66 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp67 := lang.Apply(tmp66, []any{sym_result__2__auto__})
+			tmp67 := lang.Apply1(tmp66, sym_result__2__auto__)
 			tmp68 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp69 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp70 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp71 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp72 := lang.Apply(tmp71, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+			tmp72 := lang.Apply1(tmp71, sym_clojure_DOT_test_SLASH_do_DASH_report)
 			tmp73 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp74 := checkDerefVar(var_clojure_DOT_core_apply)
 			tmp75 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 			tmp76 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp77 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp78 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp79 := lang.Apply(tmp78, []any{kw_type})
+			tmp79 := lang.Apply1(tmp78, kw_type)
 			tmp80 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp81 := lang.Apply(tmp80, []any{kw_pass})
+			tmp81 := lang.Apply1(tmp80, kw_pass)
 			tmp82 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp83 := lang.Apply(tmp82, []any{kw_message})
+			tmp83 := lang.Apply1(tmp82, kw_message)
 			tmp84 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp85 := lang.Apply(tmp84, []any{v6})
+			tmp85 := lang.Apply1(tmp84, v6)
 			tmp86 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp87 := lang.Apply(tmp86, []any{kw_expected})
+			tmp87 := lang.Apply1(tmp86, kw_expected)
 			tmp88 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp89 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp90 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp91 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp92 := lang.Apply(tmp91, []any{sym_quote})
+			tmp92 := lang.Apply1(tmp91, sym_quote)
 			tmp93 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp94 := lang.Apply(tmp93, []any{v7})
-			tmp95 := lang.Apply(tmp90, []any{tmp92, tmp94})
-			tmp96 := lang.Apply(tmp89, []any{tmp95})
-			tmp97 := lang.Apply(tmp88, []any{tmp96})
+			tmp94 := lang.Apply1(tmp93, v7)
+			tmp95 := lang.Apply2(tmp90, tmp92, tmp94)
+			tmp96 := lang.Apply1(tmp89, tmp95)
+			tmp97 := lang.Apply1(tmp88, tmp96)
 			tmp98 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp99 := lang.Apply(tmp98, []any{kw_actual})
+			tmp99 := lang.Apply1(tmp98, kw_actual)
 			tmp100 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp101 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp102 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp103 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp104 := lang.Apply(tmp103, []any{sym_clojure_DOT_core_SLASH_class})
+			tmp104 := lang.Apply1(tmp103, sym_clojure_DOT_core_SLASH_class)
 			tmp105 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp106 := lang.Apply(tmp105, []any{sym_object__1__auto__})
-			tmp107 := lang.Apply(tmp102, []any{tmp104, tmp106})
-			tmp108 := lang.Apply(tmp101, []any{tmp107})
-			tmp109 := lang.Apply(tmp100, []any{tmp108})
+			tmp106 := lang.Apply1(tmp105, sym_object__1__auto__)
+			tmp107 := lang.Apply2(tmp102, tmp104, tmp106)
+			tmp108 := lang.Apply1(tmp101, tmp107)
+			tmp109 := lang.Apply1(tmp100, tmp108)
 			tmp110 := lang.Apply(tmp77, []any{tmp79, tmp81, tmp83, tmp85, tmp87, tmp97, tmp99, tmp109})
-			tmp111 := lang.Apply(tmp76, []any{tmp110})
-			tmp112 := lang.Apply(tmp74, []any{tmp75, tmp111})
-			tmp113 := lang.Apply(tmp73, []any{tmp112})
-			tmp114 := lang.Apply(tmp70, []any{tmp72, tmp113})
-			tmp115 := lang.Apply(tmp69, []any{tmp114})
-			tmp116 := lang.Apply(tmp68, []any{tmp115})
+			tmp111 := lang.Apply1(tmp76, tmp110)
+			tmp112 := lang.Apply2(tmp74, tmp75, tmp111)
+			tmp113 := lang.Apply1(tmp73, tmp112)
+			tmp114 := lang.Apply2(tmp70, tmp72, tmp113)
+			tmp115 := lang.Apply1(tmp69, tmp114)
+			tmp116 := lang.Apply1(tmp68, tmp115)
 			tmp117 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp118 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp119 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp120 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp121 := lang.Apply(tmp120, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+			tmp121 := lang.Apply1(tmp120, sym_clojure_DOT_test_SLASH_do_DASH_report)
 			tmp122 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp123 := checkDerefVar(var_clojure_DOT_core_apply)
 			tmp124 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 			tmp125 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp126 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp127 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp128 := lang.Apply(tmp127, []any{kw_type})
+			tmp128 := lang.Apply1(tmp127, kw_type)
 			tmp129 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp130 := lang.Apply(tmp129, []any{kw_fail})
+			tmp130 := lang.Apply1(tmp129, kw_fail)
 			tmp131 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp132 := lang.Apply(tmp131, []any{kw_message})
+			tmp132 := lang.Apply1(tmp131, kw_message)
 			tmp133 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp134 := lang.Apply(tmp133, []any{v6})
+			tmp134 := lang.Apply1(tmp133, v6)
 			tmp135 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp136 := lang.Apply(tmp135, []any{kw_expected})
+			tmp136 := lang.Apply1(tmp135, kw_expected)
 			tmp137 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp138 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp139 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp140 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp141 := lang.Apply(tmp140, []any{sym_quote})
+			tmp141 := lang.Apply1(tmp140, sym_quote)
 			tmp142 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp143 := lang.Apply(tmp142, []any{v7})
-			tmp144 := lang.Apply(tmp139, []any{tmp141, tmp143})
-			tmp145 := lang.Apply(tmp138, []any{tmp144})
-			tmp146 := lang.Apply(tmp137, []any{tmp145})
+			tmp143 := lang.Apply1(tmp142, v7)
+			tmp144 := lang.Apply2(tmp139, tmp141, tmp143)
+			tmp145 := lang.Apply1(tmp138, tmp144)
+			tmp146 := lang.Apply1(tmp137, tmp145)
 			tmp147 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp148 := lang.Apply(tmp147, []any{kw_actual})
+			tmp148 := lang.Apply1(tmp147, kw_actual)
 			tmp149 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp150 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp151 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp152 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp153 := lang.Apply(tmp152, []any{sym_clojure_DOT_core_SLASH_class})
+			tmp153 := lang.Apply1(tmp152, sym_clojure_DOT_core_SLASH_class)
 			tmp154 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp155 := lang.Apply(tmp154, []any{sym_object__1__auto__})
-			tmp156 := lang.Apply(tmp151, []any{tmp153, tmp155})
-			tmp157 := lang.Apply(tmp150, []any{tmp156})
-			tmp158 := lang.Apply(tmp149, []any{tmp157})
+			tmp155 := lang.Apply1(tmp154, sym_object__1__auto__)
+			tmp156 := lang.Apply2(tmp151, tmp153, tmp155)
+			tmp157 := lang.Apply1(tmp150, tmp156)
+			tmp158 := lang.Apply1(tmp149, tmp157)
 			tmp159 := lang.Apply(tmp126, []any{tmp128, tmp130, tmp132, tmp134, tmp136, tmp146, tmp148, tmp158})
-			tmp160 := lang.Apply(tmp125, []any{tmp159})
-			tmp161 := lang.Apply(tmp123, []any{tmp124, tmp160})
-			tmp162 := lang.Apply(tmp122, []any{tmp161})
-			tmp163 := lang.Apply(tmp119, []any{tmp121, tmp162})
-			tmp164 := lang.Apply(tmp118, []any{tmp163})
-			tmp165 := lang.Apply(tmp117, []any{tmp164})
-			tmp166 := lang.Apply(tmp63, []any{tmp65, tmp67, tmp116, tmp165})
-			tmp167 := lang.Apply(tmp62, []any{tmp166})
-			tmp168 := lang.Apply(tmp61, []any{tmp167})
+			tmp160 := lang.Apply1(tmp125, tmp159)
+			tmp161 := lang.Apply2(tmp123, tmp124, tmp160)
+			tmp162 := lang.Apply1(tmp122, tmp161)
+			tmp163 := lang.Apply2(tmp119, tmp121, tmp162)
+			tmp164 := lang.Apply1(tmp118, tmp163)
+			tmp165 := lang.Apply1(tmp117, tmp164)
+			tmp166 := lang.Apply4(tmp63, tmp65, tmp67, tmp116, tmp165)
+			tmp167 := lang.Apply1(tmp62, tmp166)
+			tmp168 := lang.Apply1(tmp61, tmp167)
 			tmp169 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp170 := lang.Apply(tmp169, []any{sym_result__2__auto__})
-			tmp171 := lang.Apply(tmp35, []any{tmp37, tmp60, tmp168, tmp170})
-			tmp172 := lang.Apply(tmp34, []any{tmp171})
-			tmp173 := lang.Apply(tmp33, []any{tmp172})
-			tmp174 := lang.Apply(tmp9, []any{tmp11, tmp32, tmp173})
-			tmp175 := lang.Apply(tmp8, []any{tmp174})
+			tmp170 := lang.Apply1(tmp169, sym_result__2__auto__)
+			tmp171 := lang.Apply4(tmp35, tmp37, tmp60, tmp168, tmp170)
+			tmp172 := lang.Apply1(tmp34, tmp171)
+			tmp173 := lang.Apply1(tmp33, tmp172)
+			tmp174 := lang.Apply3(tmp9, tmp11, tmp32, tmp173)
+			tmp175 := lang.Apply1(tmp8, tmp174)
 			return tmp175
 		})
 		tmp1.AddMethod(sym_instance_QMARK_, tmp5)
-		var tmp6 lang.FnFunc
-		tmp6 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v7 := args[0]
+		var tmp6 lang.FnFunc2
+		tmp6 = lang.FnFunc2(func(p0, p1 any) any {
+			v7 := p0
 			_ = v7
-			v8 := args[1]
+			v8 := p1
 			_ = v8
 			var tmp9 any
 			{ // let
 				// let binding "klass"
 				tmp10 := checkDerefVar(var_clojure_DOT_core_second)
-				tmp11 := lang.Apply(tmp10, []any{v8})
+				tmp11 := lang.Apply1(tmp10, v8)
 				var v12 any = tmp11
 				_ = v12
 				// let binding "body"
 				tmp13 := checkDerefVar(var_clojure_DOT_core_nthnext)
-				tmp14 := lang.Apply(tmp13, []any{v8, int64(2)})
+				tmp14 := lang.Apply2(tmp13, v8, int64(2))
 				var v15 any = tmp14
 				_ = v15
 				tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp17 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp19 := lang.Apply(tmp18, []any{sym_try})
+				tmp19 := lang.Apply1(tmp18, sym_try)
 				tmp20 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp24 := lang.Apply(tmp23, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+				tmp24 := lang.Apply1(tmp23, sym_clojure_DOT_test_SLASH_do_DASH_report)
 				tmp25 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp26 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp27 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 				tmp28 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp29 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp30 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp31 := lang.Apply(tmp30, []any{kw_type})
+				tmp31 := lang.Apply1(tmp30, kw_type)
 				tmp32 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp33 := lang.Apply(tmp32, []any{kw_fail})
+				tmp33 := lang.Apply1(tmp32, kw_fail)
 				tmp34 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp35 := lang.Apply(tmp34, []any{kw_message})
+				tmp35 := lang.Apply1(tmp34, kw_message)
 				tmp36 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp37 := lang.Apply(tmp36, []any{v7})
+				tmp37 := lang.Apply1(tmp36, v7)
 				tmp38 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp39 := lang.Apply(tmp38, []any{kw_expected})
+				tmp39 := lang.Apply1(tmp38, kw_expected)
 				tmp40 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp41 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp42 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp43 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp44 := lang.Apply(tmp43, []any{sym_quote})
+				tmp44 := lang.Apply1(tmp43, sym_quote)
 				tmp45 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp46 := lang.Apply(tmp45, []any{v8})
-				tmp47 := lang.Apply(tmp42, []any{tmp44, tmp46})
-				tmp48 := lang.Apply(tmp41, []any{tmp47})
-				tmp49 := lang.Apply(tmp40, []any{tmp48})
+				tmp46 := lang.Apply1(tmp45, v8)
+				tmp47 := lang.Apply2(tmp42, tmp44, tmp46)
+				tmp48 := lang.Apply1(tmp41, tmp47)
+				tmp49 := lang.Apply1(tmp40, tmp48)
 				tmp50 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp51 := lang.Apply(tmp50, []any{kw_actual})
+				tmp51 := lang.Apply1(tmp50, kw_actual)
 				tmp52 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp53 := lang.Apply(tmp52, []any{nil})
+				tmp53 := lang.Apply1(tmp52, nil)
 				tmp54 := lang.Apply(tmp29, []any{tmp31, tmp33, tmp35, tmp37, tmp39, tmp49, tmp51, tmp53})
-				tmp55 := lang.Apply(tmp28, []any{tmp54})
-				tmp56 := lang.Apply(tmp26, []any{tmp27, tmp55})
-				tmp57 := lang.Apply(tmp25, []any{tmp56})
-				tmp58 := lang.Apply(tmp22, []any{tmp24, tmp57})
-				tmp59 := lang.Apply(tmp21, []any{tmp58})
-				tmp60 := lang.Apply(tmp20, []any{tmp59})
+				tmp55 := lang.Apply1(tmp28, tmp54)
+				tmp56 := lang.Apply2(tmp26, tmp27, tmp55)
+				tmp57 := lang.Apply1(tmp25, tmp56)
+				tmp58 := lang.Apply2(tmp22, tmp24, tmp57)
+				tmp59 := lang.Apply1(tmp21, tmp58)
+				tmp60 := lang.Apply1(tmp20, tmp59)
 				tmp61 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp62 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp63 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp64 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp65 := lang.Apply(tmp64, []any{sym_catch})
+				tmp65 := lang.Apply1(tmp64, sym_catch)
 				tmp66 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp67 := lang.Apply(tmp66, []any{v12})
+				tmp67 := lang.Apply1(tmp66, v12)
 				tmp68 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp69 := lang.Apply(tmp68, []any{sym_e__0__auto__})
+				tmp69 := lang.Apply1(tmp68, sym_e__0__auto__)
 				tmp70 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp71 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp72 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp73 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp74 := lang.Apply(tmp73, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+				tmp74 := lang.Apply1(tmp73, sym_clojure_DOT_test_SLASH_do_DASH_report)
 				tmp75 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp76 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp77 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 				tmp78 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp79 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp80 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp81 := lang.Apply(tmp80, []any{kw_type})
+				tmp81 := lang.Apply1(tmp80, kw_type)
 				tmp82 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp83 := lang.Apply(tmp82, []any{kw_pass})
+				tmp83 := lang.Apply1(tmp82, kw_pass)
 				tmp84 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp85 := lang.Apply(tmp84, []any{kw_message})
+				tmp85 := lang.Apply1(tmp84, kw_message)
 				tmp86 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp87 := lang.Apply(tmp86, []any{v7})
+				tmp87 := lang.Apply1(tmp86, v7)
 				tmp88 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp89 := lang.Apply(tmp88, []any{kw_expected})
+				tmp89 := lang.Apply1(tmp88, kw_expected)
 				tmp90 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp91 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp92 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp93 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp94 := lang.Apply(tmp93, []any{sym_quote})
+				tmp94 := lang.Apply1(tmp93, sym_quote)
 				tmp95 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp96 := lang.Apply(tmp95, []any{v8})
-				tmp97 := lang.Apply(tmp92, []any{tmp94, tmp96})
-				tmp98 := lang.Apply(tmp91, []any{tmp97})
-				tmp99 := lang.Apply(tmp90, []any{tmp98})
+				tmp96 := lang.Apply1(tmp95, v8)
+				tmp97 := lang.Apply2(tmp92, tmp94, tmp96)
+				tmp98 := lang.Apply1(tmp91, tmp97)
+				tmp99 := lang.Apply1(tmp90, tmp98)
 				tmp100 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp101 := lang.Apply(tmp100, []any{kw_actual})
+				tmp101 := lang.Apply1(tmp100, kw_actual)
 				tmp102 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp103 := lang.Apply(tmp102, []any{sym_e__0__auto__})
+				tmp103 := lang.Apply1(tmp102, sym_e__0__auto__)
 				tmp104 := lang.Apply(tmp79, []any{tmp81, tmp83, tmp85, tmp87, tmp89, tmp99, tmp101, tmp103})
-				tmp105 := lang.Apply(tmp78, []any{tmp104})
-				tmp106 := lang.Apply(tmp76, []any{tmp77, tmp105})
-				tmp107 := lang.Apply(tmp75, []any{tmp106})
-				tmp108 := lang.Apply(tmp72, []any{tmp74, tmp107})
-				tmp109 := lang.Apply(tmp71, []any{tmp108})
-				tmp110 := lang.Apply(tmp70, []any{tmp109})
+				tmp105 := lang.Apply1(tmp78, tmp104)
+				tmp106 := lang.Apply2(tmp76, tmp77, tmp105)
+				tmp107 := lang.Apply1(tmp75, tmp106)
+				tmp108 := lang.Apply2(tmp72, tmp74, tmp107)
+				tmp109 := lang.Apply1(tmp71, tmp108)
+				tmp110 := lang.Apply1(tmp70, tmp109)
 				tmp111 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp112 := lang.Apply(tmp111, []any{sym_e__0__auto__})
+				tmp112 := lang.Apply1(tmp111, sym_e__0__auto__)
 				tmp113 := lang.Apply(tmp63, []any{tmp65, tmp67, tmp69, tmp110, tmp112})
-				tmp114 := lang.Apply(tmp62, []any{tmp113})
-				tmp115 := lang.Apply(tmp61, []any{tmp114})
-				tmp116 := lang.Apply(tmp17, []any{tmp19, v15, tmp60, tmp115})
-				tmp117 := lang.Apply(tmp16, []any{tmp116})
+				tmp114 := lang.Apply1(tmp62, tmp113)
+				tmp115 := lang.Apply1(tmp61, tmp114)
+				tmp116 := lang.Apply4(tmp17, tmp19, v15, tmp60, tmp115)
+				tmp117 := lang.Apply1(tmp16, tmp116)
 				tmp9 = tmp117
 			} // end let
 			return tmp9
 		})
 		tmp1.AddMethod(sym_thrown_QMARK_, tmp6)
-		var tmp7 lang.FnFunc
-		tmp7 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v8 := args[0]
+		var tmp7 lang.FnFunc2
+		tmp7 = lang.FnFunc2(func(p0, p1 any) any {
+			v8 := p0
 			_ = v8
-			v9 := args[1]
+			v9 := p1
 			_ = v9
 			var tmp10 any
 			{ // let
 				// let binding "klass"
 				tmp11 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp12 := lang.Apply(tmp11, []any{v9, int64(1)})
+				tmp12 := lang.Apply2(tmp11, v9, int64(1))
 				var v13 any = tmp12
 				_ = v13
 				// let binding "re"
 				tmp14 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp15 := lang.Apply(tmp14, []any{v9, int64(2)})
+				tmp15 := lang.Apply2(tmp14, v9, int64(2))
 				var v16 any = tmp15
 				_ = v16
 				// let binding "body"
 				tmp17 := checkDerefVar(var_clojure_DOT_core_nthnext)
-				tmp18 := lang.Apply(tmp17, []any{v9, int64(3)})
+				tmp18 := lang.Apply2(tmp17, v9, int64(3))
 				var v19 any = tmp18
 				_ = v19
 				tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp22 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp23 := lang.Apply(tmp22, []any{sym_try})
+				tmp23 := lang.Apply1(tmp22, sym_try)
 				tmp24 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp25 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp26 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp28 := lang.Apply(tmp27, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+				tmp28 := lang.Apply1(tmp27, sym_clojure_DOT_test_SLASH_do_DASH_report)
 				tmp29 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp30 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp31 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 				tmp32 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp33 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp34 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp35 := lang.Apply(tmp34, []any{kw_type})
+				tmp35 := lang.Apply1(tmp34, kw_type)
 				tmp36 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp37 := lang.Apply(tmp36, []any{kw_fail})
+				tmp37 := lang.Apply1(tmp36, kw_fail)
 				tmp38 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp39 := lang.Apply(tmp38, []any{kw_message})
+				tmp39 := lang.Apply1(tmp38, kw_message)
 				tmp40 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp41 := lang.Apply(tmp40, []any{v8})
+				tmp41 := lang.Apply1(tmp40, v8)
 				tmp42 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp43 := lang.Apply(tmp42, []any{kw_expected})
+				tmp43 := lang.Apply1(tmp42, kw_expected)
 				tmp44 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp45 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp46 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp47 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp48 := lang.Apply(tmp47, []any{sym_quote})
+				tmp48 := lang.Apply1(tmp47, sym_quote)
 				tmp49 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp50 := lang.Apply(tmp49, []any{v9})
-				tmp51 := lang.Apply(tmp46, []any{tmp48, tmp50})
-				tmp52 := lang.Apply(tmp45, []any{tmp51})
-				tmp53 := lang.Apply(tmp44, []any{tmp52})
+				tmp50 := lang.Apply1(tmp49, v9)
+				tmp51 := lang.Apply2(tmp46, tmp48, tmp50)
+				tmp52 := lang.Apply1(tmp45, tmp51)
+				tmp53 := lang.Apply1(tmp44, tmp52)
 				tmp54 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp55 := lang.Apply(tmp54, []any{kw_actual})
+				tmp55 := lang.Apply1(tmp54, kw_actual)
 				tmp56 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp57 := lang.Apply(tmp56, []any{nil})
+				tmp57 := lang.Apply1(tmp56, nil)
 				tmp58 := lang.Apply(tmp33, []any{tmp35, tmp37, tmp39, tmp41, tmp43, tmp53, tmp55, tmp57})
-				tmp59 := lang.Apply(tmp32, []any{tmp58})
-				tmp60 := lang.Apply(tmp30, []any{tmp31, tmp59})
-				tmp61 := lang.Apply(tmp29, []any{tmp60})
-				tmp62 := lang.Apply(tmp26, []any{tmp28, tmp61})
-				tmp63 := lang.Apply(tmp25, []any{tmp62})
-				tmp64 := lang.Apply(tmp24, []any{tmp63})
+				tmp59 := lang.Apply1(tmp32, tmp58)
+				tmp60 := lang.Apply2(tmp30, tmp31, tmp59)
+				tmp61 := lang.Apply1(tmp29, tmp60)
+				tmp62 := lang.Apply2(tmp26, tmp28, tmp61)
+				tmp63 := lang.Apply1(tmp25, tmp62)
+				tmp64 := lang.Apply1(tmp24, tmp63)
 				tmp65 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp66 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp67 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp68 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp69 := lang.Apply(tmp68, []any{sym_catch})
+				tmp69 := lang.Apply1(tmp68, sym_catch)
 				tmp70 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp71 := lang.Apply(tmp70, []any{v13})
+				tmp71 := lang.Apply1(tmp70, v13)
 				tmp72 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp73 := lang.Apply(tmp72, []any{sym_e__0__auto__})
+				tmp73 := lang.Apply1(tmp72, sym_e__0__auto__)
 				tmp74 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp75 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp76 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp77 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp78 := lang.Apply(tmp77, []any{sym_clojure_DOT_core_SLASH_let})
+				tmp78 := lang.Apply1(tmp77, sym_clojure_DOT_core_SLASH_let)
 				tmp79 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp80 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp81 := checkDerefVar(var_clojure_DOT_core_vector)
 				tmp82 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp83 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp84 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp85 := lang.Apply(tmp84, []any{sym_m__1__auto__})
+				tmp85 := lang.Apply1(tmp84, sym_m__1__auto__)
 				tmp86 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp87 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp88 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp89 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp90 := lang.Apply(tmp89, []any{sym__DOT_getMessage})
+				tmp90 := lang.Apply1(tmp89, sym__DOT_getMessage)
 				tmp91 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp92 := lang.Apply(tmp91, []any{sym_e__0__auto__})
-				tmp93 := lang.Apply(tmp88, []any{tmp90, tmp92})
-				tmp94 := lang.Apply(tmp87, []any{tmp93})
-				tmp95 := lang.Apply(tmp86, []any{tmp94})
-				tmp96 := lang.Apply(tmp83, []any{tmp85, tmp95})
-				tmp97 := lang.Apply(tmp82, []any{tmp96})
-				tmp98 := lang.Apply(tmp80, []any{tmp81, tmp97})
-				tmp99 := lang.Apply(tmp79, []any{tmp98})
+				tmp92 := lang.Apply1(tmp91, sym_e__0__auto__)
+				tmp93 := lang.Apply2(tmp88, tmp90, tmp92)
+				tmp94 := lang.Apply1(tmp87, tmp93)
+				tmp95 := lang.Apply1(tmp86, tmp94)
+				tmp96 := lang.Apply2(tmp83, tmp85, tmp95)
+				tmp97 := lang.Apply1(tmp82, tmp96)
+				tmp98 := lang.Apply2(tmp80, tmp81, tmp97)
+				tmp99 := lang.Apply1(tmp79, tmp98)
 				tmp100 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp101 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp102 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp103 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp104 := lang.Apply(tmp103, []any{sym_if})
+				tmp104 := lang.Apply1(tmp103, sym_if)
 				tmp105 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp106 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp107 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp108 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp109 := lang.Apply(tmp108, []any{sym_clojure_DOT_core_SLASH_re_DASH_find})
+				tmp109 := lang.Apply1(tmp108, sym_clojure_DOT_core_SLASH_re_DASH_find)
 				tmp110 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp111 := lang.Apply(tmp110, []any{v16})
+				tmp111 := lang.Apply1(tmp110, v16)
 				tmp112 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp113 := lang.Apply(tmp112, []any{sym_m__1__auto__})
-				tmp114 := lang.Apply(tmp107, []any{tmp109, tmp111, tmp113})
-				tmp115 := lang.Apply(tmp106, []any{tmp114})
-				tmp116 := lang.Apply(tmp105, []any{tmp115})
+				tmp113 := lang.Apply1(tmp112, sym_m__1__auto__)
+				tmp114 := lang.Apply3(tmp107, tmp109, tmp111, tmp113)
+				tmp115 := lang.Apply1(tmp106, tmp114)
+				tmp116 := lang.Apply1(tmp105, tmp115)
 				tmp117 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp118 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp119 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp120 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp121 := lang.Apply(tmp120, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+				tmp121 := lang.Apply1(tmp120, sym_clojure_DOT_test_SLASH_do_DASH_report)
 				tmp122 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp123 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp124 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 				tmp125 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp126 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp127 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp128 := lang.Apply(tmp127, []any{kw_type})
+				tmp128 := lang.Apply1(tmp127, kw_type)
 				tmp129 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp130 := lang.Apply(tmp129, []any{kw_pass})
+				tmp130 := lang.Apply1(tmp129, kw_pass)
 				tmp131 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp132 := lang.Apply(tmp131, []any{kw_message})
+				tmp132 := lang.Apply1(tmp131, kw_message)
 				tmp133 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp134 := lang.Apply(tmp133, []any{v8})
+				tmp134 := lang.Apply1(tmp133, v8)
 				tmp135 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp136 := lang.Apply(tmp135, []any{kw_expected})
+				tmp136 := lang.Apply1(tmp135, kw_expected)
 				tmp137 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp138 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp139 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp140 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp141 := lang.Apply(tmp140, []any{sym_quote})
+				tmp141 := lang.Apply1(tmp140, sym_quote)
 				tmp142 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp143 := lang.Apply(tmp142, []any{v9})
-				tmp144 := lang.Apply(tmp139, []any{tmp141, tmp143})
-				tmp145 := lang.Apply(tmp138, []any{tmp144})
-				tmp146 := lang.Apply(tmp137, []any{tmp145})
+				tmp143 := lang.Apply1(tmp142, v9)
+				tmp144 := lang.Apply2(tmp139, tmp141, tmp143)
+				tmp145 := lang.Apply1(tmp138, tmp144)
+				tmp146 := lang.Apply1(tmp137, tmp145)
 				tmp147 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp148 := lang.Apply(tmp147, []any{kw_actual})
+				tmp148 := lang.Apply1(tmp147, kw_actual)
 				tmp149 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp150 := lang.Apply(tmp149, []any{sym_e__0__auto__})
+				tmp150 := lang.Apply1(tmp149, sym_e__0__auto__)
 				tmp151 := lang.Apply(tmp126, []any{tmp128, tmp130, tmp132, tmp134, tmp136, tmp146, tmp148, tmp150})
-				tmp152 := lang.Apply(tmp125, []any{tmp151})
-				tmp153 := lang.Apply(tmp123, []any{tmp124, tmp152})
-				tmp154 := lang.Apply(tmp122, []any{tmp153})
-				tmp155 := lang.Apply(tmp119, []any{tmp121, tmp154})
-				tmp156 := lang.Apply(tmp118, []any{tmp155})
-				tmp157 := lang.Apply(tmp117, []any{tmp156})
+				tmp152 := lang.Apply1(tmp125, tmp151)
+				tmp153 := lang.Apply2(tmp123, tmp124, tmp152)
+				tmp154 := lang.Apply1(tmp122, tmp153)
+				tmp155 := lang.Apply2(tmp119, tmp121, tmp154)
+				tmp156 := lang.Apply1(tmp118, tmp155)
+				tmp157 := lang.Apply1(tmp117, tmp156)
 				tmp158 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp159 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp160 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp161 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp162 := lang.Apply(tmp161, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+				tmp162 := lang.Apply1(tmp161, sym_clojure_DOT_test_SLASH_do_DASH_report)
 				tmp163 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp164 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp165 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 				tmp166 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp167 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp168 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp169 := lang.Apply(tmp168, []any{kw_type})
+				tmp169 := lang.Apply1(tmp168, kw_type)
 				tmp170 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp171 := lang.Apply(tmp170, []any{kw_fail})
+				tmp171 := lang.Apply1(tmp170, kw_fail)
 				tmp172 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp173 := lang.Apply(tmp172, []any{kw_message})
+				tmp173 := lang.Apply1(tmp172, kw_message)
 				tmp174 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp175 := lang.Apply(tmp174, []any{v8})
+				tmp175 := lang.Apply1(tmp174, v8)
 				tmp176 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp177 := lang.Apply(tmp176, []any{kw_expected})
+				tmp177 := lang.Apply1(tmp176, kw_expected)
 				tmp178 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp179 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp180 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp181 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp182 := lang.Apply(tmp181, []any{sym_quote})
+				tmp182 := lang.Apply1(tmp181, sym_quote)
 				tmp183 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp184 := lang.Apply(tmp183, []any{v9})
-				tmp185 := lang.Apply(tmp180, []any{tmp182, tmp184})
-				tmp186 := lang.Apply(tmp179, []any{tmp185})
-				tmp187 := lang.Apply(tmp178, []any{tmp186})
+				tmp184 := lang.Apply1(tmp183, v9)
+				tmp185 := lang.Apply2(tmp180, tmp182, tmp184)
+				tmp186 := lang.Apply1(tmp179, tmp185)
+				tmp187 := lang.Apply1(tmp178, tmp186)
 				tmp188 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp189 := lang.Apply(tmp188, []any{kw_actual})
+				tmp189 := lang.Apply1(tmp188, kw_actual)
 				tmp190 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp191 := lang.Apply(tmp190, []any{sym_e__0__auto__})
+				tmp191 := lang.Apply1(tmp190, sym_e__0__auto__)
 				tmp192 := lang.Apply(tmp167, []any{tmp169, tmp171, tmp173, tmp175, tmp177, tmp187, tmp189, tmp191})
-				tmp193 := lang.Apply(tmp166, []any{tmp192})
-				tmp194 := lang.Apply(tmp164, []any{tmp165, tmp193})
-				tmp195 := lang.Apply(tmp163, []any{tmp194})
-				tmp196 := lang.Apply(tmp160, []any{tmp162, tmp195})
-				tmp197 := lang.Apply(tmp159, []any{tmp196})
-				tmp198 := lang.Apply(tmp158, []any{tmp197})
-				tmp199 := lang.Apply(tmp102, []any{tmp104, tmp116, tmp157, tmp198})
-				tmp200 := lang.Apply(tmp101, []any{tmp199})
-				tmp201 := lang.Apply(tmp100, []any{tmp200})
-				tmp202 := lang.Apply(tmp76, []any{tmp78, tmp99, tmp201})
-				tmp203 := lang.Apply(tmp75, []any{tmp202})
-				tmp204 := lang.Apply(tmp74, []any{tmp203})
+				tmp193 := lang.Apply1(tmp166, tmp192)
+				tmp194 := lang.Apply2(tmp164, tmp165, tmp193)
+				tmp195 := lang.Apply1(tmp163, tmp194)
+				tmp196 := lang.Apply2(tmp160, tmp162, tmp195)
+				tmp197 := lang.Apply1(tmp159, tmp196)
+				tmp198 := lang.Apply1(tmp158, tmp197)
+				tmp199 := lang.Apply4(tmp102, tmp104, tmp116, tmp157, tmp198)
+				tmp200 := lang.Apply1(tmp101, tmp199)
+				tmp201 := lang.Apply1(tmp100, tmp200)
+				tmp202 := lang.Apply3(tmp76, tmp78, tmp99, tmp201)
+				tmp203 := lang.Apply1(tmp75, tmp202)
+				tmp204 := lang.Apply1(tmp74, tmp203)
 				tmp205 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp206 := lang.Apply(tmp205, []any{sym_e__0__auto__})
+				tmp206 := lang.Apply1(tmp205, sym_e__0__auto__)
 				tmp207 := lang.Apply(tmp67, []any{tmp69, tmp71, tmp73, tmp204, tmp206})
-				tmp208 := lang.Apply(tmp66, []any{tmp207})
-				tmp209 := lang.Apply(tmp65, []any{tmp208})
-				tmp210 := lang.Apply(tmp21, []any{tmp23, v19, tmp64, tmp209})
-				tmp211 := lang.Apply(tmp20, []any{tmp210})
+				tmp208 := lang.Apply1(tmp66, tmp207)
+				tmp209 := lang.Apply1(tmp65, tmp208)
+				tmp210 := lang.Apply4(tmp21, tmp23, v19, tmp64, tmp209)
+				tmp211 := lang.Apply1(tmp20, tmp210)
 				tmp10 = tmp211
 			} // end let
 			return tmp10
@@ -6596,217 +6584,216 @@ func LoadNS() {
 	// assert-predicate
 	{
 		tmp0 := sym_assert_DASH_predicate.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_form)), kw_doc, "Returns generic assertion code for any functional predicate.  The\n  'expected' argument to 'report' will contains the original form, the\n  'actual' argument will contain the form with all its sub-forms\n  evaluated.  If the predicate returns false, the 'actual' form will\n  be wrapped in (not...).", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(427), kw_end_DASH_line, int(427))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			var tmp4 any
 			{ // let
 				// let binding "args"
 				tmp5 := checkDerefVar(var_clojure_DOT_core_rest)
-				tmp6 := lang.Apply(tmp5, []any{v3})
+				tmp6 := lang.Apply1(tmp5, v3)
 				var v7 any = tmp6
 				_ = v7
 				// let binding "pred"
 				tmp8 := checkDerefVar(var_clojure_DOT_core_first)
-				tmp9 := lang.Apply(tmp8, []any{v3})
+				tmp9 := lang.Apply1(tmp8, v3)
 				var v10 any = tmp9
 				_ = v10
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_clojure_DOT_core_SLASH_let})
+				tmp14 := lang.Apply1(tmp13, sym_clojure_DOT_core_SLASH_let)
 				tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp16 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp17 := checkDerefVar(var_clojure_DOT_core_vector)
 				tmp18 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp19 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp21 := lang.Apply(tmp20, []any{sym_values__0__auto__})
+				tmp21 := lang.Apply1(tmp20, sym_values__0__auto__)
 				tmp22 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp23 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp24 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp26 := lang.Apply(tmp25, []any{sym_clojure_DOT_core_SLASH_list})
-				tmp27 := lang.Apply(tmp24, []any{tmp26, v7})
-				tmp28 := lang.Apply(tmp23, []any{tmp27})
-				tmp29 := lang.Apply(tmp22, []any{tmp28})
+				tmp26 := lang.Apply1(tmp25, sym_clojure_DOT_core_SLASH_list)
+				tmp27 := lang.Apply2(tmp24, tmp26, v7)
+				tmp28 := lang.Apply1(tmp23, tmp27)
+				tmp29 := lang.Apply1(tmp22, tmp28)
 				tmp30 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp31 := lang.Apply(tmp30, []any{sym_result__1__auto__})
+				tmp31 := lang.Apply1(tmp30, sym_result__1__auto__)
 				tmp32 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp33 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp34 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp35 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp36 := lang.Apply(tmp35, []any{sym_clojure_DOT_core_SLASH_apply})
+				tmp36 := lang.Apply1(tmp35, sym_clojure_DOT_core_SLASH_apply)
 				tmp37 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp38 := lang.Apply(tmp37, []any{v10})
+				tmp38 := lang.Apply1(tmp37, v10)
 				tmp39 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp40 := lang.Apply(tmp39, []any{sym_values__0__auto__})
-				tmp41 := lang.Apply(tmp34, []any{tmp36, tmp38, tmp40})
-				tmp42 := lang.Apply(tmp33, []any{tmp41})
-				tmp43 := lang.Apply(tmp32, []any{tmp42})
-				tmp44 := lang.Apply(tmp19, []any{tmp21, tmp29, tmp31, tmp43})
-				tmp45 := lang.Apply(tmp18, []any{tmp44})
-				tmp46 := lang.Apply(tmp16, []any{tmp17, tmp45})
-				tmp47 := lang.Apply(tmp15, []any{tmp46})
+				tmp40 := lang.Apply1(tmp39, sym_values__0__auto__)
+				tmp41 := lang.Apply3(tmp34, tmp36, tmp38, tmp40)
+				tmp42 := lang.Apply1(tmp33, tmp41)
+				tmp43 := lang.Apply1(tmp32, tmp42)
+				tmp44 := lang.Apply4(tmp19, tmp21, tmp29, tmp31, tmp43)
+				tmp45 := lang.Apply1(tmp18, tmp44)
+				tmp46 := lang.Apply2(tmp16, tmp17, tmp45)
+				tmp47 := lang.Apply1(tmp15, tmp46)
 				tmp48 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp49 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp50 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp51 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp52 := lang.Apply(tmp51, []any{sym_if})
+				tmp52 := lang.Apply1(tmp51, sym_if)
 				tmp53 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp54 := lang.Apply(tmp53, []any{sym_result__1__auto__})
+				tmp54 := lang.Apply1(tmp53, sym_result__1__auto__)
 				tmp55 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp56 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp57 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp58 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp59 := lang.Apply(tmp58, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+				tmp59 := lang.Apply1(tmp58, sym_clojure_DOT_test_SLASH_do_DASH_report)
 				tmp60 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp61 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp62 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 				tmp63 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp64 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp65 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp66 := lang.Apply(tmp65, []any{kw_type})
+				tmp66 := lang.Apply1(tmp65, kw_type)
 				tmp67 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp68 := lang.Apply(tmp67, []any{kw_pass})
+				tmp68 := lang.Apply1(tmp67, kw_pass)
 				tmp69 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp70 := lang.Apply(tmp69, []any{kw_message})
+				tmp70 := lang.Apply1(tmp69, kw_message)
 				tmp71 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp72 := lang.Apply(tmp71, []any{v2})
+				tmp72 := lang.Apply1(tmp71, v2)
 				tmp73 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp74 := lang.Apply(tmp73, []any{kw_expected})
+				tmp74 := lang.Apply1(tmp73, kw_expected)
 				tmp75 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp76 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp77 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp78 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp79 := lang.Apply(tmp78, []any{sym_quote})
+				tmp79 := lang.Apply1(tmp78, sym_quote)
 				tmp80 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp81 := lang.Apply(tmp80, []any{v3})
-				tmp82 := lang.Apply(tmp77, []any{tmp79, tmp81})
-				tmp83 := lang.Apply(tmp76, []any{tmp82})
-				tmp84 := lang.Apply(tmp75, []any{tmp83})
+				tmp81 := lang.Apply1(tmp80, v3)
+				tmp82 := lang.Apply2(tmp77, tmp79, tmp81)
+				tmp83 := lang.Apply1(tmp76, tmp82)
+				tmp84 := lang.Apply1(tmp75, tmp83)
 				tmp85 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp86 := lang.Apply(tmp85, []any{kw_actual})
+				tmp86 := lang.Apply1(tmp85, kw_actual)
 				tmp87 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp88 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp89 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp90 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp91 := lang.Apply(tmp90, []any{sym_clojure_DOT_core_SLASH_cons})
+				tmp91 := lang.Apply1(tmp90, sym_clojure_DOT_core_SLASH_cons)
 				tmp92 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp93 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp94 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp95 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp96 := lang.Apply(tmp95, []any{sym_quote})
+				tmp96 := lang.Apply1(tmp95, sym_quote)
 				tmp97 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp98 := lang.Apply(tmp97, []any{v10})
-				tmp99 := lang.Apply(tmp94, []any{tmp96, tmp98})
-				tmp100 := lang.Apply(tmp93, []any{tmp99})
-				tmp101 := lang.Apply(tmp92, []any{tmp100})
+				tmp98 := lang.Apply1(tmp97, v10)
+				tmp99 := lang.Apply2(tmp94, tmp96, tmp98)
+				tmp100 := lang.Apply1(tmp93, tmp99)
+				tmp101 := lang.Apply1(tmp92, tmp100)
 				tmp102 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp103 := lang.Apply(tmp102, []any{sym_values__0__auto__})
-				tmp104 := lang.Apply(tmp89, []any{tmp91, tmp101, tmp103})
-				tmp105 := lang.Apply(tmp88, []any{tmp104})
-				tmp106 := lang.Apply(tmp87, []any{tmp105})
+				tmp103 := lang.Apply1(tmp102, sym_values__0__auto__)
+				tmp104 := lang.Apply3(tmp89, tmp91, tmp101, tmp103)
+				tmp105 := lang.Apply1(tmp88, tmp104)
+				tmp106 := lang.Apply1(tmp87, tmp105)
 				tmp107 := lang.Apply(tmp64, []any{tmp66, tmp68, tmp70, tmp72, tmp74, tmp84, tmp86, tmp106})
-				tmp108 := lang.Apply(tmp63, []any{tmp107})
-				tmp109 := lang.Apply(tmp61, []any{tmp62, tmp108})
-				tmp110 := lang.Apply(tmp60, []any{tmp109})
-				tmp111 := lang.Apply(tmp57, []any{tmp59, tmp110})
-				tmp112 := lang.Apply(tmp56, []any{tmp111})
-				tmp113 := lang.Apply(tmp55, []any{tmp112})
+				tmp108 := lang.Apply1(tmp63, tmp107)
+				tmp109 := lang.Apply2(tmp61, tmp62, tmp108)
+				tmp110 := lang.Apply1(tmp60, tmp109)
+				tmp111 := lang.Apply2(tmp57, tmp59, tmp110)
+				tmp112 := lang.Apply1(tmp56, tmp111)
+				tmp113 := lang.Apply1(tmp55, tmp112)
 				tmp114 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp115 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp116 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp117 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp118 := lang.Apply(tmp117, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+				tmp118 := lang.Apply1(tmp117, sym_clojure_DOT_test_SLASH_do_DASH_report)
 				tmp119 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp120 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp121 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 				tmp122 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp123 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp124 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp125 := lang.Apply(tmp124, []any{kw_type})
+				tmp125 := lang.Apply1(tmp124, kw_type)
 				tmp126 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp127 := lang.Apply(tmp126, []any{kw_fail})
+				tmp127 := lang.Apply1(tmp126, kw_fail)
 				tmp128 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp129 := lang.Apply(tmp128, []any{kw_message})
+				tmp129 := lang.Apply1(tmp128, kw_message)
 				tmp130 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp131 := lang.Apply(tmp130, []any{v2})
+				tmp131 := lang.Apply1(tmp130, v2)
 				tmp132 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp133 := lang.Apply(tmp132, []any{kw_expected})
+				tmp133 := lang.Apply1(tmp132, kw_expected)
 				tmp134 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp135 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp136 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp137 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp138 := lang.Apply(tmp137, []any{sym_quote})
+				tmp138 := lang.Apply1(tmp137, sym_quote)
 				tmp139 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp140 := lang.Apply(tmp139, []any{v3})
-				tmp141 := lang.Apply(tmp136, []any{tmp138, tmp140})
-				tmp142 := lang.Apply(tmp135, []any{tmp141})
-				tmp143 := lang.Apply(tmp134, []any{tmp142})
+				tmp140 := lang.Apply1(tmp139, v3)
+				tmp141 := lang.Apply2(tmp136, tmp138, tmp140)
+				tmp142 := lang.Apply1(tmp135, tmp141)
+				tmp143 := lang.Apply1(tmp134, tmp142)
 				tmp144 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp145 := lang.Apply(tmp144, []any{kw_actual})
+				tmp145 := lang.Apply1(tmp144, kw_actual)
 				tmp146 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp147 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp148 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp149 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp150 := lang.Apply(tmp149, []any{sym_clojure_DOT_core_SLASH_list})
+				tmp150 := lang.Apply1(tmp149, sym_clojure_DOT_core_SLASH_list)
 				tmp151 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp152 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp153 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp154 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp155 := lang.Apply(tmp154, []any{sym_quote})
+				tmp155 := lang.Apply1(tmp154, sym_quote)
 				tmp156 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp157 := lang.Apply(tmp156, []any{sym_not})
-				tmp158 := lang.Apply(tmp153, []any{tmp155, tmp157})
-				tmp159 := lang.Apply(tmp152, []any{tmp158})
-				tmp160 := lang.Apply(tmp151, []any{tmp159})
+				tmp157 := lang.Apply1(tmp156, sym_not)
+				tmp158 := lang.Apply2(tmp153, tmp155, tmp157)
+				tmp159 := lang.Apply1(tmp152, tmp158)
+				tmp160 := lang.Apply1(tmp151, tmp159)
 				tmp161 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp162 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp163 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp164 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp165 := lang.Apply(tmp164, []any{sym_clojure_DOT_core_SLASH_cons})
+				tmp165 := lang.Apply1(tmp164, sym_clojure_DOT_core_SLASH_cons)
 				tmp166 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp167 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp168 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp169 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp170 := lang.Apply(tmp169, []any{sym_quote})
+				tmp170 := lang.Apply1(tmp169, sym_quote)
 				tmp171 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp172 := lang.Apply(tmp171, []any{v10})
-				tmp173 := lang.Apply(tmp168, []any{tmp170, tmp172})
-				tmp174 := lang.Apply(tmp167, []any{tmp173})
-				tmp175 := lang.Apply(tmp166, []any{tmp174})
+				tmp172 := lang.Apply1(tmp171, v10)
+				tmp173 := lang.Apply2(tmp168, tmp170, tmp172)
+				tmp174 := lang.Apply1(tmp167, tmp173)
+				tmp175 := lang.Apply1(tmp166, tmp174)
 				tmp176 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp177 := lang.Apply(tmp176, []any{sym_values__0__auto__})
-				tmp178 := lang.Apply(tmp163, []any{tmp165, tmp175, tmp177})
-				tmp179 := lang.Apply(tmp162, []any{tmp178})
-				tmp180 := lang.Apply(tmp161, []any{tmp179})
-				tmp181 := lang.Apply(tmp148, []any{tmp150, tmp160, tmp180})
-				tmp182 := lang.Apply(tmp147, []any{tmp181})
-				tmp183 := lang.Apply(tmp146, []any{tmp182})
+				tmp177 := lang.Apply1(tmp176, sym_values__0__auto__)
+				tmp178 := lang.Apply3(tmp163, tmp165, tmp175, tmp177)
+				tmp179 := lang.Apply1(tmp162, tmp178)
+				tmp180 := lang.Apply1(tmp161, tmp179)
+				tmp181 := lang.Apply3(tmp148, tmp150, tmp160, tmp180)
+				tmp182 := lang.Apply1(tmp147, tmp181)
+				tmp183 := lang.Apply1(tmp146, tmp182)
 				tmp184 := lang.Apply(tmp123, []any{tmp125, tmp127, tmp129, tmp131, tmp133, tmp143, tmp145, tmp183})
-				tmp185 := lang.Apply(tmp122, []any{tmp184})
-				tmp186 := lang.Apply(tmp120, []any{tmp121, tmp185})
-				tmp187 := lang.Apply(tmp119, []any{tmp186})
-				tmp188 := lang.Apply(tmp116, []any{tmp118, tmp187})
-				tmp189 := lang.Apply(tmp115, []any{tmp188})
-				tmp190 := lang.Apply(tmp114, []any{tmp189})
-				tmp191 := lang.Apply(tmp50, []any{tmp52, tmp54, tmp113, tmp190})
-				tmp192 := lang.Apply(tmp49, []any{tmp191})
-				tmp193 := lang.Apply(tmp48, []any{tmp192})
+				tmp185 := lang.Apply1(tmp122, tmp184)
+				tmp186 := lang.Apply2(tmp120, tmp121, tmp185)
+				tmp187 := lang.Apply1(tmp119, tmp186)
+				tmp188 := lang.Apply2(tmp116, tmp118, tmp187)
+				tmp189 := lang.Apply1(tmp115, tmp188)
+				tmp190 := lang.Apply1(tmp114, tmp189)
+				tmp191 := lang.Apply4(tmp50, tmp52, tmp54, tmp113, tmp190)
+				tmp192 := lang.Apply1(tmp49, tmp191)
+				tmp193 := lang.Apply1(tmp48, tmp192)
 				tmp194 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp195 := lang.Apply(tmp194, []any{sym_result__1__auto__})
-				tmp196 := lang.Apply(tmp12, []any{tmp14, tmp47, tmp193, tmp195})
-				tmp197 := lang.Apply(tmp11, []any{tmp196})
+				tmp195 := lang.Apply1(tmp194, sym_result__1__auto__)
+				tmp196 := lang.Apply4(tmp12, tmp14, tmp47, tmp193, tmp195)
+				tmp197 := lang.Apply1(tmp11, tmp196)
 				tmp4 = tmp197
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_test_assert_DASH_predicate = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_assert_DASH_predicate.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6838,64 +6825,64 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp9 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_def})
+					tmp11 := lang.Apply1(tmp10, sym_def)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_vary_DASH_meta)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_assoc)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply(tmp17, []any{sym_clojure_DOT_core_SLASH_fn})
+					tmp18 := lang.Apply1(tmp17, sym_clojure_DOT_core_SLASH_fn)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_apply)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_vector)
 					tmp22 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp23 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp24 := lang.Apply(tmp23, nil)
-					tmp25 := lang.Apply(tmp22, []any{tmp24})
-					tmp26 := lang.Apply(tmp20, []any{tmp21, tmp25})
-					tmp27 := lang.Apply(tmp19, []any{tmp26})
-					tmp28 := lang.Apply(tmp16, []any{tmp18, tmp27, v5})
-					tmp29 := lang.Apply(tmp15, []any{tmp28})
-					tmp30 := lang.Apply(tmp13, []any{v4, tmp14, kw_test, tmp29})
-					tmp31 := lang.Apply(tmp12, []any{tmp30})
+					tmp24 := lang.Apply0(tmp23)
+					tmp25 := lang.Apply1(tmp22, tmp24)
+					tmp26 := lang.Apply2(tmp20, tmp21, tmp25)
+					tmp27 := lang.Apply1(tmp19, tmp26)
+					tmp28 := lang.Apply3(tmp16, tmp18, tmp27, v5)
+					tmp29 := lang.Apply1(tmp15, tmp28)
+					tmp30 := lang.Apply4(tmp13, v4, tmp14, kw_test, tmp29)
+					tmp31 := lang.Apply1(tmp12, tmp30)
 					tmp32 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp33 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp34 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp35 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp36 := lang.Apply(tmp35, []any{sym_clojure_DOT_core_SLASH_fn})
+					tmp36 := lang.Apply1(tmp35, sym_clojure_DOT_core_SLASH_fn)
 					tmp37 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp38 := checkDerefVar(var_clojure_DOT_core_apply)
 					tmp39 := checkDerefVar(var_clojure_DOT_core_vector)
 					tmp40 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp41 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp42 := lang.Apply(tmp41, nil)
-					tmp43 := lang.Apply(tmp40, []any{tmp42})
-					tmp44 := lang.Apply(tmp38, []any{tmp39, tmp43})
-					tmp45 := lang.Apply(tmp37, []any{tmp44})
+					tmp42 := lang.Apply0(tmp41)
+					tmp43 := lang.Apply1(tmp40, tmp42)
+					tmp44 := lang.Apply2(tmp38, tmp39, tmp43)
+					tmp45 := lang.Apply1(tmp37, tmp44)
 					tmp46 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp47 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp48 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp49 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp50 := lang.Apply(tmp49, []any{sym_clojure_DOT_test_SLASH_test_DASH_var})
+					tmp50 := lang.Apply1(tmp49, sym_clojure_DOT_test_SLASH_test_DASH_var)
 					tmp51 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp52 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp53 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp54 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp55 := lang.Apply(tmp54, []any{sym_var})
+					tmp55 := lang.Apply1(tmp54, sym_var)
 					tmp56 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp57 := lang.Apply(tmp56, []any{v4})
-					tmp58 := lang.Apply(tmp53, []any{tmp55, tmp57})
-					tmp59 := lang.Apply(tmp52, []any{tmp58})
-					tmp60 := lang.Apply(tmp51, []any{tmp59})
-					tmp61 := lang.Apply(tmp48, []any{tmp50, tmp60})
-					tmp62 := lang.Apply(tmp47, []any{tmp61})
-					tmp63 := lang.Apply(tmp46, []any{tmp62})
-					tmp64 := lang.Apply(tmp34, []any{tmp36, tmp45, tmp63})
-					tmp65 := lang.Apply(tmp33, []any{tmp64})
-					tmp66 := lang.Apply(tmp32, []any{tmp65})
-					tmp67 := lang.Apply(tmp9, []any{tmp11, tmp31, tmp66})
-					tmp68 := lang.Apply(tmp8, []any{tmp67})
+					tmp57 := lang.Apply1(tmp56, v4)
+					tmp58 := lang.Apply2(tmp53, tmp55, tmp57)
+					tmp59 := lang.Apply1(tmp52, tmp58)
+					tmp60 := lang.Apply1(tmp51, tmp59)
+					tmp61 := lang.Apply2(tmp48, tmp50, tmp60)
+					tmp62 := lang.Apply1(tmp47, tmp61)
+					tmp63 := lang.Apply1(tmp46, tmp62)
+					tmp64 := lang.Apply3(tmp34, tmp36, tmp45, tmp63)
+					tmp65 := lang.Apply1(tmp33, tmp64)
+					tmp66 := lang.Apply1(tmp32, tmp65)
+					tmp67 := lang.Apply3(tmp9, tmp11, tmp31, tmp66)
+					tmp68 := lang.Apply1(tmp8, tmp67)
 					tmp6 = tmp68
 				} else {
 				}
@@ -6934,64 +6921,64 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp9 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_def})
+					tmp11 := lang.Apply1(tmp10, sym_def)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_vary_DASH_meta)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_assoc)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply(tmp17, []any{sym_clojure_DOT_core_SLASH_fn})
+					tmp18 := lang.Apply1(tmp17, sym_clojure_DOT_core_SLASH_fn)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_apply)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_vector)
 					tmp22 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp23 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp24 := lang.Apply(tmp23, nil)
-					tmp25 := lang.Apply(tmp22, []any{tmp24})
-					tmp26 := lang.Apply(tmp20, []any{tmp21, tmp25})
-					tmp27 := lang.Apply(tmp19, []any{tmp26})
-					tmp28 := lang.Apply(tmp16, []any{tmp18, tmp27, v5})
-					tmp29 := lang.Apply(tmp15, []any{tmp28})
+					tmp24 := lang.Apply0(tmp23)
+					tmp25 := lang.Apply1(tmp22, tmp24)
+					tmp26 := lang.Apply2(tmp20, tmp21, tmp25)
+					tmp27 := lang.Apply1(tmp19, tmp26)
+					tmp28 := lang.Apply3(tmp16, tmp18, tmp27, v5)
+					tmp29 := lang.Apply1(tmp15, tmp28)
 					tmp30 := lang.Apply(tmp13, []any{v4, tmp14, kw_test, tmp29, kw_private, true})
-					tmp31 := lang.Apply(tmp12, []any{tmp30})
+					tmp31 := lang.Apply1(tmp12, tmp30)
 					tmp32 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp33 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp34 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp35 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp36 := lang.Apply(tmp35, []any{sym_clojure_DOT_core_SLASH_fn})
+					tmp36 := lang.Apply1(tmp35, sym_clojure_DOT_core_SLASH_fn)
 					tmp37 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp38 := checkDerefVar(var_clojure_DOT_core_apply)
 					tmp39 := checkDerefVar(var_clojure_DOT_core_vector)
 					tmp40 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp41 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp42 := lang.Apply(tmp41, nil)
-					tmp43 := lang.Apply(tmp40, []any{tmp42})
-					tmp44 := lang.Apply(tmp38, []any{tmp39, tmp43})
-					tmp45 := lang.Apply(tmp37, []any{tmp44})
+					tmp42 := lang.Apply0(tmp41)
+					tmp43 := lang.Apply1(tmp40, tmp42)
+					tmp44 := lang.Apply2(tmp38, tmp39, tmp43)
+					tmp45 := lang.Apply1(tmp37, tmp44)
 					tmp46 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp47 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp48 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp49 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp50 := lang.Apply(tmp49, []any{sym_clojure_DOT_test_SLASH_test_DASH_var})
+					tmp50 := lang.Apply1(tmp49, sym_clojure_DOT_test_SLASH_test_DASH_var)
 					tmp51 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp52 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp53 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp54 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp55 := lang.Apply(tmp54, []any{sym_var})
+					tmp55 := lang.Apply1(tmp54, sym_var)
 					tmp56 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp57 := lang.Apply(tmp56, []any{v4})
-					tmp58 := lang.Apply(tmp53, []any{tmp55, tmp57})
-					tmp59 := lang.Apply(tmp52, []any{tmp58})
-					tmp60 := lang.Apply(tmp51, []any{tmp59})
-					tmp61 := lang.Apply(tmp48, []any{tmp50, tmp60})
-					tmp62 := lang.Apply(tmp47, []any{tmp61})
-					tmp63 := lang.Apply(tmp46, []any{tmp62})
-					tmp64 := lang.Apply(tmp34, []any{tmp36, tmp45, tmp63})
-					tmp65 := lang.Apply(tmp33, []any{tmp64})
-					tmp66 := lang.Apply(tmp32, []any{tmp65})
-					tmp67 := lang.Apply(tmp9, []any{tmp11, tmp31, tmp66})
-					tmp68 := lang.Apply(tmp8, []any{tmp67})
+					tmp57 := lang.Apply1(tmp56, v4)
+					tmp58 := lang.Apply2(tmp53, tmp55, tmp57)
+					tmp59 := lang.Apply1(tmp52, tmp58)
+					tmp60 := lang.Apply1(tmp51, tmp59)
+					tmp61 := lang.Apply2(tmp48, tmp50, tmp60)
+					tmp62 := lang.Apply1(tmp47, tmp61)
+					tmp63 := lang.Apply1(tmp46, tmp62)
+					tmp64 := lang.Apply3(tmp34, tmp36, tmp45, tmp63)
+					tmp65 := lang.Apply1(tmp33, tmp64)
+					tmp66 := lang.Apply1(tmp32, tmp65)
+					tmp67 := lang.Apply3(tmp9, tmp11, tmp31, tmp66)
+					tmp68 := lang.Apply1(tmp8, tmp67)
 					tmp6 = tmp68
 				} else {
 				}
@@ -7007,16 +6994,15 @@ func LoadNS() {
 	// do-report
 	{
 		tmp0 := sym_do_DASH_report.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Add file and line information to a test result and call report.\n   If you are writing a custom assert-expr method, call this function\n   to pass test results to report.", kw_file, "clojure/test.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(350), kw_end_DASH_line, int(350))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_test_report)
 			var tmp4 any
 			{ // let
 				// let binding "G__743"
-				tmp5 := lang.Apply(kw_type, []any{v2})
+				tmp5 := lang.Apply1(kw_type, v2)
 				var v6 any = tmp5
 				_ = v6
 				// case
@@ -7033,7 +7019,7 @@ func LoadNS() {
 						if err != nil {
 							panic(err)
 						}
-						tmp13 := lang.Apply(tmp9, []any{tmp12, v2})
+						tmp13 := lang.Apply2(tmp9, tmp12, v2)
 						tmp7 = tmp13
 					} else {
 						tmp7 = v2
@@ -7048,7 +7034,7 @@ func LoadNS() {
 						if err != nil {
 							panic(err)
 						}
-						tmp18 := lang.Apply(tmp14, []any{tmp17, v2})
+						tmp18 := lang.Apply2(tmp14, tmp17, v2)
 						tmp7 = tmp18
 					} else {
 						tmp7 = v2
@@ -7058,10 +7044,10 @@ func LoadNS() {
 				}
 				tmp4 = tmp7
 			} // end let
-			tmp5 := lang.Apply(tmp3, []any{tmp4})
+			tmp5 := lang.Apply1(tmp3, tmp4)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_do_DASH_report = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_do_DASH_report.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7070,12 +7056,11 @@ func LoadNS() {
 	// file-and-line
 	{
 		tmp0 := sym_file_DASH_and_DASH_line.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_exception, sym_depth)), kw_file, "clojure/test.glj", kw_deprecated, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(20), kw_column, int(8), kw_line, int(334), kw_end_DASH_line, int(334), kw_private, true)).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			var tmp4 any
 			{ // let
@@ -7096,14 +7081,14 @@ func LoadNS() {
 				var tmp8 any
 				tmp9 := checkDerefVar(var_clojure_DOT_core__LT_)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_count)
-				tmp11 := lang.Apply(tmp10, []any{v7})
-				tmp12 := lang.Apply(tmp9, []any{v3, tmp11})
+				tmp11 := lang.Apply1(tmp10, v7)
+				tmp12 := lang.Apply2(tmp9, v3, tmp11)
 				if lang.IsTruthy(tmp12) {
 					var tmp13 any
 					{ // let
 						// let binding "s"
 						tmp14 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp15 := lang.Apply(tmp14, []any{v7, v3})
+						tmp15 := lang.Apply2(tmp14, v7, v3)
 						var v16 any = tmp15
 						_ = v16
 						tmp17, ok := lang.FieldOrMethod(v16, "getFileName")
@@ -7150,7 +7135,7 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_test_file_DASH_and_DASH_line = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_file_DASH_and_DASH_line.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7159,10 +7144,9 @@ func LoadNS() {
 	// file-position
 	{
 		tmp0 := sym_file_DASH_position.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns a vector [filename line-number] for the nth call up the\n  stack.\n\n  Deprecated in 1.2: The information needed for test reporting is\n  now on :file and :line keys in the result map.", kw_file, "clojure/test.glj", kw_deprecated, "1.2", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(281), kw_end_DASH_line, int(281))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
@@ -7180,7 +7164,7 @@ func LoadNS() {
 				default:
 					tmp7 = tmp6
 				}
-				tmp8 := lang.Apply(tmp4, []any{tmp7, v2})
+				tmp8 := lang.Apply2(tmp4, tmp7, v2)
 				var v9 any = tmp8
 				_ = v9
 				tmp10, ok := lang.FieldOrMethod(v9, "getFileName")
@@ -7215,7 +7199,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_file_DASH_position = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_file_DASH_position.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7224,20 +7208,19 @@ func LoadNS() {
 	// function?
 	{
 		tmp0 := sym_function_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if argument is a function or a symbol that resolves to\n  a function (not a macro).", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(415), kw_end_DASH_line, int(415))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			tmp4 := checkDerefVar(var_clojure_DOT_core_symbol_QMARK_)
-			tmp5 := lang.Apply(tmp4, []any{v2})
+			tmp5 := lang.Apply1(tmp4, v2)
 			if lang.IsTruthy(tmp5) {
 				var tmp6 any
 				{ // let
 					// let binding "temp__0__auto__"
 					tmp7 := checkDerefVar(var_clojure_DOT_core_resolve)
-					tmp8 := lang.Apply(tmp7, []any{v2})
+					tmp8 := lang.Apply1(tmp7, v2)
 					var v9 any = tmp8
 					_ = v9
 					var tmp10 any
@@ -7251,7 +7234,7 @@ func LoadNS() {
 							{ // let
 								// let binding "temp__0__auto__"
 								tmp14 := checkDerefVar(var_clojure_DOT_test_get_DASH_possibly_DASH_unbound_DASH_var)
-								tmp15 := lang.Apply(tmp14, []any{v12})
+								tmp15 := lang.Apply1(tmp14, v12)
 								var v16 any = tmp15
 								_ = v16
 								var tmp17 any
@@ -7265,16 +7248,16 @@ func LoadNS() {
 										{ // let
 											// let binding "and__0__auto__"
 											tmp21 := checkDerefVar(var_clojure_DOT_core_fn_QMARK_)
-											tmp22 := lang.Apply(tmp21, []any{v19})
+											tmp22 := lang.Apply1(tmp21, v19)
 											var v23 any = tmp22
 											_ = v23
 											var tmp24 any
 											if lang.IsTruthy(v23) {
 												tmp25 := checkDerefVar(var_clojure_DOT_core_not)
 												tmp26 := checkDerefVar(var_clojure_DOT_core_meta)
-												tmp27 := lang.Apply(tmp26, []any{v12})
-												tmp28 := lang.Apply(kw_macro, []any{tmp27})
-												tmp29 := lang.Apply(tmp25, []any{tmp28})
+												tmp27 := lang.Apply1(tmp26, v12)
+												tmp28 := lang.Apply1(kw_macro, tmp27)
+												tmp29 := lang.Apply1(tmp25, tmp28)
 												tmp24 = tmp29
 											} else {
 												tmp24 = v23
@@ -7298,12 +7281,12 @@ func LoadNS() {
 				tmp3 = tmp6
 			} else {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_fn_QMARK_)
-				tmp8 := lang.Apply(tmp7, []any{v2})
+				tmp8 := lang.Apply1(tmp7, v2)
 				tmp3 = tmp8
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_function_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_function_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7312,10 +7295,9 @@ func LoadNS() {
 	// get-possibly-unbound-var
 	{
 		tmp0 := sym_get_DASH_possibly_DASH_unbound_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Like var-get but returns nil if the var is unbound.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(30), kw_column, int(7), kw_line, int(408), kw_end_DASH_line, int(408))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			func() {
@@ -7331,12 +7313,12 @@ func LoadNS() {
 					}
 				}()
 				tmp5 := checkDerefVar(var_clojure_DOT_core_var_DASH_get)
-				tmp6 := lang.Apply(tmp5, []any{v2})
+				tmp6 := lang.Apply1(tmp5, v2)
 				tmp3 = tmp6
 			}()
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_get_DASH_possibly_DASH_unbound_DASH_var = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_get_DASH_possibly_DASH_unbound_DASH_var.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7345,17 +7327,15 @@ func LoadNS() {
 	// inc-report-counter
 	{
 		tmp0 := sym_inc_DASH_report_DASH_counter.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_name)), kw_doc, "Increments the named counter in *report-counters*, a ref to a map.\n  Does nothing if *report-counters* is nil.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(313), kw_end_DASH_line, int(313))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			tmp4 := checkDerefVar(var_clojure_DOT_test__STAR_report_DASH_counters_STAR_)
 			if lang.IsTruthy(tmp4) {
-				var tmp5 lang.FnFunc
-				tmp5 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 0)
+				var tmp5 lang.FnFunc0
+				tmp5 = lang.FnFunc0(func() any {
 					tmp6 := checkDerefVar(var_clojure_DOT_core_commute)
 					tmp7 := checkDerefVar(var_clojure_DOT_test__STAR_report_DASH_counters_STAR_)
 					tmp8 := checkDerefVar(var_clojure_DOT_core_update_DASH_in)
@@ -7367,21 +7347,21 @@ func LoadNS() {
 					}
 					tmp12 := checkDerefVar(var_clojure_DOT_core_fnil)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_inc)
-					tmp14 := lang.Apply(tmp12, []any{tmp13, int64(0)})
-					tmp15 := lang.Apply(tmp6, []any{tmp7, tmp8, tmp11, tmp14})
+					tmp14 := lang.Apply2(tmp12, tmp13, int64(0))
+					tmp15 := lang.Apply4(tmp6, tmp7, tmp8, tmp11, tmp14)
 					return tmp15
 				})
 				tmp6, _ := lang.FieldOrMethod(lang.LockingTransaction, "RunInTransaction")
 				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("RunInTransaction is not a function")))
 				}
-				tmp7 := lang.Apply(tmp6, []any{tmp5})
+				tmp7 := lang.Apply1(tmp6, tmp5)
 				tmp3 = tmp7
 			} else {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_inc_DASH_report_DASH_counter = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_inc_DASH_report_DASH_counter.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7403,13 +7383,13 @@ func LoadNS() {
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp8 := lang.Apply(tmp7, []any{sym_clojure_DOT_test_SLASH_is})
+				tmp8 := lang.Apply1(tmp7, sym_clojure_DOT_test_SLASH_is)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply(tmp9, []any{v4})
+				tmp10 := lang.Apply1(tmp9, v4)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp12 := lang.Apply(tmp11, []any{nil})
-				tmp13 := lang.Apply(tmp6, []any{tmp8, tmp10, tmp12})
-				tmp14 := lang.Apply(tmp5, []any{tmp13})
+				tmp12 := lang.Apply1(tmp11, nil)
+				tmp13 := lang.Apply3(tmp6, tmp8, tmp10, tmp12)
+				tmp14 := lang.Apply1(tmp5, tmp13)
 				return tmp14
 			case 4:
 				v2 := args[0]
@@ -7423,13 +7403,13 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply(tmp8, []any{sym_clojure_DOT_test_SLASH_try_DASH_expr})
+				tmp9 := lang.Apply1(tmp8, sym_clojure_DOT_test_SLASH_try_DASH_expr)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp11 := lang.Apply(tmp10, []any{v5})
+				tmp11 := lang.Apply1(tmp10, v5)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp13 := lang.Apply(tmp12, []any{v4})
-				tmp14 := lang.Apply(tmp7, []any{tmp9, tmp11, tmp13})
-				tmp15 := lang.Apply(tmp6, []any{tmp14})
+				tmp13 := lang.Apply1(tmp12, v4)
+				tmp14 := lang.Apply3(tmp7, tmp9, tmp11, tmp13)
+				tmp15 := lang.Apply1(tmp6, tmp14)
 				return tmp15
 			default:
 				checkArity(args, -1)
@@ -7445,18 +7425,17 @@ func LoadNS() {
 	// join-fixtures
 	{
 		tmp0 := sym_join_DASH_fixtures.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fixtures)), kw_doc, "Composes a collection of fixtures, in order.  Always returns a valid\n  fixture function, even if the collection is empty.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(687), kw_end_DASH_line, int(687))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_core_reduce)
 			tmp4 := checkDerefVar(var_clojure_DOT_test_compose_DASH_fixtures)
 			tmp5 := checkDerefVar(var_clojure_DOT_test_default_DASH_fixture)
-			tmp6 := lang.Apply(tmp3, []any{tmp4, tmp5, v2})
+			tmp6 := lang.Apply3(tmp3, tmp4, tmp5, v2)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_join_DASH_fixtures = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_join_DASH_fixtures.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7467,10 +7446,9 @@ func LoadNS() {
 		tmp0 := sym_report.WithMeta(lang.NewMap(kw_doc, "Generic reporting function, may be overridden to plug in\n   different report formats (e.g., TAP, JUnit).  Assertions such as\n   'is' call 'report' to indicate results.  The argument given to\n   'report' will be a map with a :type key.  See the documentation at\n   the top of test_is.clj for more information on the types of\n   arguments for 'report'.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(8), kw_column, int(3), kw_line, int(324), kw_end_DASH_line, int(332), kw_dynamic, true)).(*lang.Symbol)
 		// MultiFn report
 		tmp1 := lang.NewMultiFn("report", kw_type, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v3 := args[0]
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
 			_ = v3
 			var tmp4 any
 			{ // let
@@ -7492,33 +7470,33 @@ func LoadNS() {
 					}
 					tmp8 = tmp11
 				} // end let
-				tmp9 := lang.Apply(tmp6, []any{tmp7, tmp8})
-				tmp10 := lang.Apply(tmp5, []any{tmp9})
+				tmp9 := lang.Apply2(tmp6, tmp7, tmp8)
+				tmp10 := lang.Apply1(tmp5, tmp9)
 				_ = tmp10
 				var tmp11 any
 				func() {
 					defer func() {
 						tmp12 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-						tmp13 := lang.Apply(tmp12, nil)
+						tmp13 := lang.Apply0(tmp12)
 						_ = tmp13
 					}()
 					tmp14 := checkDerefVar(var_clojure_DOT_test_inc_DASH_report_DASH_counter)
-					tmp15 := lang.Apply(tmp14, []any{kw_error})
+					tmp15 := lang.Apply1(tmp14, kw_error)
 					_ = tmp15
 					tmp16 := checkDerefVar(var_clojure_DOT_core_println)
 					tmp17 := checkDerefVar(var_clojure_DOT_test_testing_DASH_vars_DASH_str)
-					tmp18 := lang.Apply(tmp17, []any{v3})
-					tmp19 := lang.Apply(tmp16, []any{"\nERROR in", tmp18})
+					tmp18 := lang.Apply1(tmp17, v3)
+					tmp19 := lang.Apply2(tmp16, "\nERROR in", tmp18)
 					_ = tmp19
 					var tmp20 any
 					tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp22 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_)
-					tmp23 := lang.Apply(tmp21, []any{tmp22})
+					tmp23 := lang.Apply1(tmp21, tmp22)
 					if lang.IsTruthy(tmp23) {
 						tmp24 := checkDerefVar(var_clojure_DOT_core_println)
 						tmp25 := checkDerefVar(var_clojure_DOT_test_testing_DASH_contexts_DASH_str)
-						tmp26 := lang.Apply(tmp25, nil)
-						tmp27 := lang.Apply(tmp24, []any{tmp26})
+						tmp26 := lang.Apply0(tmp25)
+						tmp27 := lang.Apply1(tmp24, tmp26)
 						tmp20 = tmp27
 					} else {
 					}
@@ -7526,7 +7504,7 @@ func LoadNS() {
 					var tmp28 any
 					{ // let
 						// let binding "temp__0__auto__"
-						tmp29 := lang.Apply(kw_message, []any{v3})
+						tmp29 := lang.Apply1(kw_message, v3)
 						var v30 any = tmp29
 						_ = v30
 						var tmp31 any
@@ -7537,7 +7515,7 @@ func LoadNS() {
 								var v33 any = v30
 								_ = v33
 								tmp34 := checkDerefVar(var_clojure_DOT_core_println)
-								tmp35 := lang.Apply(tmp34, []any{v33})
+								tmp35 := lang.Apply1(tmp34, v33)
 								tmp32 = tmp35
 							} // end let
 							tmp31 = tmp32
@@ -7548,22 +7526,22 @@ func LoadNS() {
 					_ = tmp28
 					tmp29 := checkDerefVar(var_clojure_DOT_core_println)
 					tmp30 := checkDerefVar(var_clojure_DOT_core_pr_DASH_str)
-					tmp31 := lang.Apply(kw_expected, []any{v3})
-					tmp32 := lang.Apply(tmp30, []any{tmp31})
-					tmp33 := lang.Apply(tmp29, []any{"expected:", tmp32})
+					tmp31 := lang.Apply1(kw_expected, v3)
+					tmp32 := lang.Apply1(tmp30, tmp31)
+					tmp33 := lang.Apply2(tmp29, "expected:", tmp32)
 					_ = tmp33
 					tmp34 := checkDerefVar(var_clojure_DOT_core_print)
-					tmp35 := lang.Apply(tmp34, []any{"  actual: "})
+					tmp35 := lang.Apply1(tmp34, "  actual: ")
 					_ = tmp35
 					var tmp36 any
 					{ // let
 						// let binding "actual"
-						tmp37 := lang.Apply(kw_actual, []any{v3})
+						tmp37 := lang.Apply1(kw_actual, v3)
 						var v38 any = tmp37
 						_ = v38
 						var tmp39 any
 						tmp40 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-						tmp41 := lang.Apply(tmp40, []any{lang.Builtins["error"], v38})
+						tmp41 := lang.Apply2(tmp40, lang.Builtins["error"], v38)
 						if lang.IsTruthy(tmp41) {
 							tmp42 := checkDerefVar(var_clojure_DOT_core_prn)
 							tmp43, ok := lang.FieldOrMethod(v38, "Error")
@@ -7577,11 +7555,11 @@ func LoadNS() {
 							default:
 								tmp44 = tmp43
 							}
-							tmp45 := lang.Apply(tmp42, []any{tmp44})
+							tmp45 := lang.Apply1(tmp42, tmp44)
 							tmp39 = tmp45
 						} else {
 							tmp46 := checkDerefVar(var_clojure_DOT_core_prn)
-							tmp47 := lang.Apply(tmp46, []any{v38})
+							tmp47 := lang.Apply1(tmp46, v38)
 							tmp39 = tmp47
 						}
 						tmp36 = tmp39
@@ -7593,10 +7571,9 @@ func LoadNS() {
 			return tmp4
 		})
 		tmp1.AddMethod(kw_error, tmp2)
-		var tmp3 lang.FnFunc
-		tmp3 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v4 := args[0]
+		var tmp3 lang.FnFunc1
+		tmp3 = lang.FnFunc1(func(p0 any) any {
+			v4 := p0
 			_ = v4
 			var tmp5 any
 			{ // let
@@ -7618,29 +7595,29 @@ func LoadNS() {
 					}
 					tmp9 = tmp12
 				} // end let
-				tmp10 := lang.Apply(tmp7, []any{tmp8, tmp9})
-				tmp11 := lang.Apply(tmp6, []any{tmp10})
+				tmp10 := lang.Apply2(tmp7, tmp8, tmp9)
+				tmp11 := lang.Apply1(tmp6, tmp10)
 				_ = tmp11
 				var tmp12 any
 				func() {
 					defer func() {
 						tmp13 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-						tmp14 := lang.Apply(tmp13, nil)
+						tmp14 := lang.Apply0(tmp13)
 						_ = tmp14
 					}()
 					tmp15 := checkDerefVar(var_clojure_DOT_core_println)
-					tmp16 := lang.Apply(kw_test, []any{v4})
+					tmp16 := lang.Apply1(kw_test, v4)
 					tmp17 := checkDerefVar(var_clojure_DOT_core__PLUS_)
-					tmp18 := lang.Apply(kw_pass, []any{v4})
-					tmp19 := lang.Apply(kw_fail, []any{v4})
-					tmp20 := lang.Apply(kw_error, []any{v4})
-					tmp21 := lang.Apply(tmp17, []any{tmp18, tmp19, tmp20})
+					tmp18 := lang.Apply1(kw_pass, v4)
+					tmp19 := lang.Apply1(kw_fail, v4)
+					tmp20 := lang.Apply1(kw_error, v4)
+					tmp21 := lang.Apply3(tmp17, tmp18, tmp19, tmp20)
 					tmp22 := lang.Apply(tmp15, []any{"\nRan", tmp16, "tests containing", tmp21, "assertions."})
 					_ = tmp22
 					tmp23 := checkDerefVar(var_clojure_DOT_core_println)
-					tmp24 := lang.Apply(kw_fail, []any{v4})
-					tmp25 := lang.Apply(kw_error, []any{v4})
-					tmp26 := lang.Apply(tmp23, []any{tmp24, "failures,", tmp25, "errors."})
+					tmp24 := lang.Apply1(kw_fail, v4)
+					tmp25 := lang.Apply1(kw_error, v4)
+					tmp26 := lang.Apply4(tmp23, tmp24, "failures,", tmp25, "errors.")
 					tmp12 = tmp26
 				}()
 				tmp5 = tmp12
@@ -7648,10 +7625,9 @@ func LoadNS() {
 			return tmp5
 		})
 		tmp1.AddMethod(kw_summary, tmp3)
-		var tmp4 lang.FnFunc
-		tmp4 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v5 := args[0]
+		var tmp4 lang.FnFunc1
+		tmp4 = lang.FnFunc1(func(p0 any) any {
+			v5 := p0
 			_ = v5
 			var tmp6 any
 			{ // let
@@ -7673,21 +7649,21 @@ func LoadNS() {
 					}
 					tmp10 = tmp13
 				} // end let
-				tmp11 := lang.Apply(tmp8, []any{tmp9, tmp10})
-				tmp12 := lang.Apply(tmp7, []any{tmp11})
+				tmp11 := lang.Apply2(tmp8, tmp9, tmp10)
+				tmp12 := lang.Apply1(tmp7, tmp11)
 				_ = tmp12
 				var tmp13 any
 				func() {
 					defer func() {
 						tmp14 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-						tmp15 := lang.Apply(tmp14, nil)
+						tmp15 := lang.Apply0(tmp14)
 						_ = tmp15
 					}()
 					tmp16 := checkDerefVar(var_clojure_DOT_core_println)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_ns_DASH_name)
-					tmp18 := lang.Apply(kw_ns, []any{v5})
-					tmp19 := lang.Apply(tmp17, []any{tmp18})
-					tmp20 := lang.Apply(tmp16, []any{"\nTesting", tmp19})
+					tmp18 := lang.Apply1(kw_ns, v5)
+					tmp19 := lang.Apply1(tmp17, tmp18)
+					tmp20 := lang.Apply2(tmp16, "\nTesting", tmp19)
 					tmp13 = tmp20
 				}()
 				tmp6 = tmp13
@@ -7695,10 +7671,9 @@ func LoadNS() {
 			return tmp6
 		})
 		tmp1.AddMethod(kw_begin_DASH_test_DASH_ns, tmp4)
-		var tmp5 lang.FnFunc
-		tmp5 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v6 := args[0]
+		var tmp5 lang.FnFunc1
+		tmp5 = lang.FnFunc1(func(p0 any) any {
+			v6 := p0
 			_ = v6
 			var tmp7 any
 			{ // let
@@ -7720,18 +7695,18 @@ func LoadNS() {
 					}
 					tmp11 = tmp14
 				} // end let
-				tmp12 := lang.Apply(tmp9, []any{tmp10, tmp11})
-				tmp13 := lang.Apply(tmp8, []any{tmp12})
+				tmp12 := lang.Apply2(tmp9, tmp10, tmp11)
+				tmp13 := lang.Apply1(tmp8, tmp12)
 				_ = tmp13
 				var tmp14 any
 				func() {
 					defer func() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-						tmp16 := lang.Apply(tmp15, nil)
+						tmp16 := lang.Apply0(tmp15)
 						_ = tmp16
 					}()
 					tmp17 := checkDerefVar(var_clojure_DOT_test_inc_DASH_report_DASH_counter)
-					tmp18 := lang.Apply(tmp17, []any{kw_pass})
+					tmp18 := lang.Apply1(tmp17, kw_pass)
 					tmp14 = tmp18
 				}()
 				tmp7 = tmp14
@@ -7739,18 +7714,16 @@ func LoadNS() {
 			return tmp7
 		})
 		tmp1.AddMethod(kw_pass, tmp5)
-		var tmp6 lang.FnFunc
-		tmp6 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v7 := args[0]
+		var tmp6 lang.FnFunc1
+		tmp6 = lang.FnFunc1(func(p0 any) any {
+			v7 := p0
 			_ = v7
 			return nil
 		})
 		tmp1.AddMethod(kw_end_DASH_test_DASH_var, tmp6)
-		var tmp7 lang.FnFunc
-		tmp7 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v8 := args[0]
+		var tmp7 lang.FnFunc1
+		tmp7 = lang.FnFunc1(func(p0 any) any {
+			v8 := p0
 			_ = v8
 			var tmp9 any
 			{ // let
@@ -7772,18 +7745,18 @@ func LoadNS() {
 					}
 					tmp13 = tmp16
 				} // end let
-				tmp14 := lang.Apply(tmp11, []any{tmp12, tmp13})
-				tmp15 := lang.Apply(tmp10, []any{tmp14})
+				tmp14 := lang.Apply2(tmp11, tmp12, tmp13)
+				tmp15 := lang.Apply1(tmp10, tmp14)
 				_ = tmp15
 				var tmp16 any
 				func() {
 					defer func() {
 						tmp17 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-						tmp18 := lang.Apply(tmp17, nil)
+						tmp18 := lang.Apply0(tmp17)
 						_ = tmp18
 					}()
 					tmp19 := checkDerefVar(var_clojure_DOT_core_prn)
-					tmp20 := lang.Apply(tmp19, []any{v8})
+					tmp20 := lang.Apply1(tmp19, v8)
 					tmp16 = tmp20
 				}()
 				tmp9 = tmp16
@@ -7791,26 +7764,23 @@ func LoadNS() {
 			return tmp9
 		})
 		tmp1.AddMethod(kw_default, tmp7)
-		var tmp8 lang.FnFunc
-		tmp8 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v9 := args[0]
+		var tmp8 lang.FnFunc1
+		tmp8 = lang.FnFunc1(func(p0 any) any {
+			v9 := p0
 			_ = v9
 			return nil
 		})
 		tmp1.AddMethod(kw_end_DASH_test_DASH_ns, tmp8)
-		var tmp9 lang.FnFunc
-		tmp9 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v10 := args[0]
+		var tmp9 lang.FnFunc1
+		tmp9 = lang.FnFunc1(func(p0 any) any {
+			v10 := p0
 			_ = v10
 			return nil
 		})
 		tmp1.AddMethod(kw_begin_DASH_test_DASH_var, tmp9)
-		var tmp10 lang.FnFunc
-		tmp10 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v11 := args[0]
+		var tmp10 lang.FnFunc1
+		tmp10 = lang.FnFunc1(func(p0 any) any {
+			v11 := p0
 			_ = v11
 			var tmp12 any
 			{ // let
@@ -7832,33 +7802,33 @@ func LoadNS() {
 					}
 					tmp16 = tmp19
 				} // end let
-				tmp17 := lang.Apply(tmp14, []any{tmp15, tmp16})
-				tmp18 := lang.Apply(tmp13, []any{tmp17})
+				tmp17 := lang.Apply2(tmp14, tmp15, tmp16)
+				tmp18 := lang.Apply1(tmp13, tmp17)
 				_ = tmp18
 				var tmp19 any
 				func() {
 					defer func() {
 						tmp20 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-						tmp21 := lang.Apply(tmp20, nil)
+						tmp21 := lang.Apply0(tmp20)
 						_ = tmp21
 					}()
 					tmp22 := checkDerefVar(var_clojure_DOT_test_inc_DASH_report_DASH_counter)
-					tmp23 := lang.Apply(tmp22, []any{kw_fail})
+					tmp23 := lang.Apply1(tmp22, kw_fail)
 					_ = tmp23
 					tmp24 := checkDerefVar(var_clojure_DOT_core_println)
 					tmp25 := checkDerefVar(var_clojure_DOT_test_testing_DASH_vars_DASH_str)
-					tmp26 := lang.Apply(tmp25, []any{v11})
-					tmp27 := lang.Apply(tmp24, []any{"\nFAIL in", tmp26})
+					tmp26 := lang.Apply1(tmp25, v11)
+					tmp27 := lang.Apply2(tmp24, "\nFAIL in", tmp26)
 					_ = tmp27
 					var tmp28 any
 					tmp29 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp30 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_)
-					tmp31 := lang.Apply(tmp29, []any{tmp30})
+					tmp31 := lang.Apply1(tmp29, tmp30)
 					if lang.IsTruthy(tmp31) {
 						tmp32 := checkDerefVar(var_clojure_DOT_core_println)
 						tmp33 := checkDerefVar(var_clojure_DOT_test_testing_DASH_contexts_DASH_str)
-						tmp34 := lang.Apply(tmp33, nil)
-						tmp35 := lang.Apply(tmp32, []any{tmp34})
+						tmp34 := lang.Apply0(tmp33)
+						tmp35 := lang.Apply1(tmp32, tmp34)
 						tmp28 = tmp35
 					} else {
 					}
@@ -7866,7 +7836,7 @@ func LoadNS() {
 					var tmp36 any
 					{ // let
 						// let binding "temp__0__auto__"
-						tmp37 := lang.Apply(kw_message, []any{v11})
+						tmp37 := lang.Apply1(kw_message, v11)
 						var v38 any = tmp37
 						_ = v38
 						var tmp39 any
@@ -7877,7 +7847,7 @@ func LoadNS() {
 								var v41 any = v38
 								_ = v41
 								tmp42 := checkDerefVar(var_clojure_DOT_core_println)
-								tmp43 := lang.Apply(tmp42, []any{v41})
+								tmp43 := lang.Apply1(tmp42, v41)
 								tmp40 = tmp43
 							} // end let
 							tmp39 = tmp40
@@ -7888,15 +7858,15 @@ func LoadNS() {
 					_ = tmp36
 					tmp37 := checkDerefVar(var_clojure_DOT_core_println)
 					tmp38 := checkDerefVar(var_clojure_DOT_core_pr_DASH_str)
-					tmp39 := lang.Apply(kw_expected, []any{v11})
-					tmp40 := lang.Apply(tmp38, []any{tmp39})
-					tmp41 := lang.Apply(tmp37, []any{"expected:", tmp40})
+					tmp39 := lang.Apply1(kw_expected, v11)
+					tmp40 := lang.Apply1(tmp38, tmp39)
+					tmp41 := lang.Apply2(tmp37, "expected:", tmp40)
 					_ = tmp41
 					tmp42 := checkDerefVar(var_clojure_DOT_core_println)
 					tmp43 := checkDerefVar(var_clojure_DOT_core_pr_DASH_str)
-					tmp44 := lang.Apply(kw_actual, []any{v11})
-					tmp45 := lang.Apply(tmp43, []any{tmp44})
-					tmp46 := lang.Apply(tmp42, []any{"  actual:", tmp45})
+					tmp44 := lang.Apply1(kw_actual, v11)
+					tmp45 := lang.Apply1(tmp43, tmp44)
+					tmp46 := lang.Apply2(tmp42, "  actual:", tmp45)
 					tmp19 = tmp46
 				}()
 				tmp12 = tmp19
@@ -7920,8 +7890,8 @@ func LoadNS() {
 				tmp2 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp3 := checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
 				tmp4 := checkDerefVar(var_clojure_DOT_core_all_DASH_ns)
-				tmp5 := lang.Apply(tmp4, nil)
-				tmp6 := lang.Apply(tmp2, []any{tmp3, tmp5})
+				tmp5 := lang.Apply0(tmp4)
+				tmp6 := lang.Apply2(tmp2, tmp3, tmp5)
 				return tmp6
 			case 1:
 				v2 := args[0]
@@ -7929,17 +7899,16 @@ func LoadNS() {
 				tmp3 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp4 := checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
 				tmp5 := checkDerefVar(var_clojure_DOT_core_filter)
-				var tmp6 lang.FnFunc
-				tmp6 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v7 := args[0]
+				var tmp6 lang.FnFunc1
+				tmp6 = lang.FnFunc1(func(p0 any) any {
+					v7 := p0
 					_ = v7
 					tmp8 := checkDerefVar(var_clojure_DOT_core_re_DASH_matches)
 					tmp9 := checkDerefVar(var_clojure_DOT_core_name)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_ns_DASH_name)
-					tmp11 := lang.Apply(tmp10, []any{v7})
-					tmp12 := lang.Apply(tmp9, []any{tmp11})
-					tmp13 := lang.Apply(tmp8, []any{v2, tmp12})
+					tmp11 := lang.Apply1(tmp10, v7)
+					tmp12 := lang.Apply1(tmp9, tmp11)
+					tmp13 := lang.Apply2(tmp8, v2, tmp12)
 					return tmp13
 				})
 				tmp7 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(778), kw_column, int(34), kw_end_DASH_line, int(778), kw_end_DASH_column, int(68))
@@ -7948,9 +7917,9 @@ func LoadNS() {
 					panic(err)
 				}
 				tmp9 := checkDerefVar(var_clojure_DOT_core_all_DASH_ns)
-				tmp10 := lang.Apply(tmp9, nil)
-				tmp11 := lang.Apply(tmp5, []any{tmp8, tmp10})
-				tmp12 := lang.Apply(tmp3, []any{tmp4, tmp11})
+				tmp10 := lang.Apply0(tmp9)
+				tmp11 := lang.Apply2(tmp5, tmp8, tmp10)
+				tmp12 := lang.Apply2(tmp3, tmp4, tmp11)
 				return tmp12
 			default:
 				checkArity(args, -1)
@@ -7966,25 +7935,24 @@ func LoadNS() {
 	// run-test
 	{
 		tmp0 := sym_run_DASH_test.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test_DASH_symbol)), kw_doc, "Runs a single test.\n\n  Because the intent is to run a single test, there is no check for the namespace test-ns-hook.", kw_file, "clojure/test.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(804), kw_end_DASH_line, int(804))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 3)
-			v2 := args[0]
+		var tmp1 lang.FnFunc3
+		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			v4 := args[2]
+			v4 := p2
 			_ = v4
 			var tmp5 any
 			{ // let
 				// let binding "test-var"
 				tmp6 := checkDerefVar(var_clojure_DOT_core_resolve)
-				tmp7 := lang.Apply(tmp6, []any{v4})
+				tmp7 := lang.Apply1(tmp6, v4)
 				var v8 any = tmp7
 				_ = v8
 				var tmp9 any
 				tmp10 := checkDerefVar(var_clojure_DOT_core_nil_QMARK_)
-				tmp11 := lang.Apply(tmp10, []any{v8})
+				tmp11 := lang.Apply1(tmp10, v8)
 				if lang.IsTruthy(tmp11) {
 					var tmp12 any
 					{ // let
@@ -7992,18 +7960,18 @@ func LoadNS() {
 						tmp14 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 						tmp15 := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_out_STAR_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core__STAR_err_STAR_)
-						tmp17 := lang.Apply(tmp14, []any{tmp15, tmp16})
-						tmp18 := lang.Apply(tmp13, []any{tmp17})
+						tmp17 := lang.Apply2(tmp14, tmp15, tmp16)
+						tmp18 := lang.Apply1(tmp13, tmp17)
 						_ = tmp18
 						var tmp19 any
 						func() {
 							defer func() {
 								tmp20 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-								tmp21 := lang.Apply(tmp20, nil)
+								tmp21 := lang.Apply0(tmp20)
 								_ = tmp21
 							}()
 							tmp22 := checkDerefVar(var_clojure_DOT_core_println)
-							tmp23 := lang.Apply(tmp22, []any{"Unable to resolve", v4, "to a test function."})
+							tmp23 := lang.Apply3(tmp22, "Unable to resolve", v4, "to a test function.")
 							tmp19 = tmp23
 						}()
 						tmp12 = tmp19
@@ -8013,9 +7981,9 @@ func LoadNS() {
 					var tmp13 any
 					tmp14 := checkDerefVar(var_clojure_DOT_core_not)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_meta)
-					tmp16 := lang.Apply(tmp15, []any{v8})
-					tmp17 := lang.Apply(kw_test, []any{tmp16})
-					tmp18 := lang.Apply(tmp14, []any{tmp17})
+					tmp16 := lang.Apply1(tmp15, v8)
+					tmp17 := lang.Apply1(kw_test, tmp16)
+					tmp18 := lang.Apply1(tmp14, tmp17)
 					if lang.IsTruthy(tmp18) {
 						var tmp19 any
 						{ // let
@@ -8023,18 +7991,18 @@ func LoadNS() {
 							tmp21 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 							tmp22 := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_out_STAR_)
 							tmp23 := checkDerefVar(var_clojure_DOT_core__STAR_err_STAR_)
-							tmp24 := lang.Apply(tmp21, []any{tmp22, tmp23})
-							tmp25 := lang.Apply(tmp20, []any{tmp24})
+							tmp24 := lang.Apply2(tmp21, tmp22, tmp23)
+							tmp25 := lang.Apply1(tmp20, tmp24)
 							_ = tmp25
 							var tmp26 any
 							func() {
 								defer func() {
 									tmp27 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-									tmp28 := lang.Apply(tmp27, nil)
+									tmp28 := lang.Apply0(tmp27)
 									_ = tmp28
 								}()
 								tmp29 := checkDerefVar(var_clojure_DOT_core_println)
-								tmp30 := lang.Apply(tmp29, []any{v4, "is not a test."})
+								tmp30 := lang.Apply2(tmp29, v4, "is not a test.")
 								tmp26 = tmp30
 							}()
 							tmp19 = tmp26
@@ -8046,11 +8014,11 @@ func LoadNS() {
 							tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
 							tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
 							tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp24 := lang.Apply(tmp23, []any{sym_clojure_DOT_test_SLASH_run_DASH_test_DASH_var})
+							tmp24 := lang.Apply1(tmp23, sym_clojure_DOT_test_SLASH_run_DASH_test_DASH_var)
 							tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp26 := lang.Apply(tmp25, []any{v8})
-							tmp27 := lang.Apply(tmp22, []any{tmp24, tmp26})
-							tmp28 := lang.Apply(tmp21, []any{tmp27})
+							tmp26 := lang.Apply1(tmp25, v8)
+							tmp27 := lang.Apply2(tmp22, tmp24, tmp26)
+							tmp28 := lang.Apply1(tmp21, tmp27)
 							tmp20 = tmp28
 						} else {
 						}
@@ -8062,7 +8030,7 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_test_run_DASH_test = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_run_DASH_test.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -8071,10 +8039,9 @@ func LoadNS() {
 	// run-test-var
 	{
 		tmp0 := sym_run_DASH_test_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Runs the tests for a single Var, with fixtures executed around the test, and summary output after.", kw_file, "clojure/test.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(788), kw_end_DASH_line, int(788))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
@@ -8083,23 +8050,23 @@ func LoadNS() {
 				tmp6 := lang.InternVarName(sym_clojure_DOT_test, sym__STAR_report_DASH_counters_STAR_)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_ref)
 				tmp8 := checkDerefVar(var_clojure_DOT_test__STAR_initial_DASH_report_DASH_counters_STAR_)
-				tmp9 := lang.Apply(tmp7, []any{tmp8})
-				tmp10 := lang.Apply(tmp5, []any{tmp6, tmp9})
-				tmp11 := lang.Apply(tmp4, []any{tmp10})
+				tmp9 := lang.Apply1(tmp7, tmp8)
+				tmp10 := lang.Apply2(tmp5, tmp6, tmp9)
+				tmp11 := lang.Apply1(tmp4, tmp10)
 				_ = tmp11
 				var tmp12 any
 				func() {
 					defer func() {
 						tmp13 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-						tmp14 := lang.Apply(tmp13, nil)
+						tmp14 := lang.Apply0(tmp13)
 						_ = tmp14
 					}()
 					var tmp15 any
 					{ // let
 						// let binding "ns-obj"
 						tmp16 := checkDerefVar(var_clojure_DOT_core_meta)
-						tmp17 := lang.Apply(tmp16, []any{v2})
-						tmp18 := lang.Apply(kw_ns, []any{tmp17})
+						tmp17 := lang.Apply1(tmp16, v2)
+						tmp18 := lang.Apply1(kw_ns, tmp17)
 						var v19 any = tmp18
 						_ = v19
 						// let binding "summary"
@@ -8110,7 +8077,7 @@ func LoadNS() {
 						if err != nil {
 							panic(err)
 						}
-						tmp24 := lang.Apply(tmp20, []any{tmp23})
+						tmp24 := lang.Apply1(tmp20, tmp23)
 						_ = tmp24
 						tmp25 := checkDerefVar(var_clojure_DOT_test_test_DASH_vars)
 						tmp26 := lang.NewVector(v2)
@@ -8119,7 +8086,7 @@ func LoadNS() {
 						if err != nil {
 							panic(err)
 						}
-						tmp29 := lang.Apply(tmp25, []any{tmp28})
+						tmp29 := lang.Apply1(tmp25, tmp28)
 						_ = tmp29
 						tmp30 := checkDerefVar(var_clojure_DOT_test_do_DASH_report)
 						tmp31 := lang.NewMap(kw_type, kw_end_DASH_test_DASH_ns, kw_ns, v19)
@@ -8128,17 +8095,17 @@ func LoadNS() {
 						if err != nil {
 							panic(err)
 						}
-						tmp34 := lang.Apply(tmp30, []any{tmp33})
+						tmp34 := lang.Apply1(tmp30, tmp33)
 						_ = tmp34
 						tmp35 := checkDerefVar(var_clojure_DOT_core_assoc)
 						tmp36 := checkDerefVar(var_clojure_DOT_core_deref)
 						tmp37 := checkDerefVar(var_clojure_DOT_test__STAR_report_DASH_counters_STAR_)
-						tmp38 := lang.Apply(tmp36, []any{tmp37})
-						tmp39 := lang.Apply(tmp35, []any{tmp38, kw_type, kw_summary})
+						tmp38 := lang.Apply1(tmp36, tmp37)
+						tmp39 := lang.Apply3(tmp35, tmp38, kw_type, kw_summary)
 						var v40 any = tmp39
 						_ = v40
 						tmp41 := checkDerefVar(var_clojure_DOT_test_do_DASH_report)
-						tmp42 := lang.Apply(tmp41, []any{v40})
+						tmp42 := lang.Apply1(tmp41, v40)
 						_ = tmp42
 						tmp15 = v40
 					} // end let
@@ -8148,7 +8115,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_run_DASH_test_DASH_var = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_run_DASH_test_DASH_var.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -8163,7 +8130,7 @@ func LoadNS() {
 			case 0:
 				tmp2 := checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
 				tmp3 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
-				tmp4 := lang.Apply(tmp2, []any{tmp3})
+				tmp4 := lang.Apply1(tmp2, tmp3)
 				return tmp4
 			default:
 				checkArityGTE(args, 0)
@@ -8182,13 +8149,13 @@ func LoadNS() {
 					tmp7 := checkDerefVar(var_clojure_DOT_core__PLUS_)
 					tmp8 := checkDerefVar(var_clojure_DOT_core_map)
 					tmp9 := checkDerefVar(var_clojure_DOT_test_test_DASH_ns)
-					tmp10 := lang.Apply(tmp8, []any{tmp9, v2})
-					tmp11 := lang.Apply(tmp5, []any{tmp6, tmp7, tmp10})
-					tmp12 := lang.Apply(tmp4, []any{tmp11, kw_type, kw_summary})
+					tmp10 := lang.Apply2(tmp8, tmp9, v2)
+					tmp11 := lang.Apply3(tmp5, tmp6, tmp7, tmp10)
+					tmp12 := lang.Apply3(tmp4, tmp11, kw_type, kw_summary)
 					var v13 any = tmp12
 					_ = v13
 					tmp14 := checkDerefVar(var_clojure_DOT_test_do_DASH_report)
-					tmp15 := lang.Apply(tmp14, []any{v13})
+					tmp15 := lang.Apply1(tmp14, v13)
 					_ = tmp15
 					tmp3 = v13
 				} // end let
@@ -8227,40 +8194,40 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp9 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_clojure_DOT_core_SLASH_alter_DASH_meta_BANG_})
+					tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_alter_DASH_meta_BANG_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp16 := lang.Apply(tmp15, []any{sym_var})
+					tmp16 := lang.Apply1(tmp15, sym_var)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply(tmp17, []any{v4})
-					tmp19 := lang.Apply(tmp14, []any{tmp16, tmp18})
-					tmp20 := lang.Apply(tmp13, []any{tmp19})
-					tmp21 := lang.Apply(tmp12, []any{tmp20})
+					tmp18 := lang.Apply1(tmp17, v4)
+					tmp19 := lang.Apply2(tmp14, tmp16, tmp18)
+					tmp20 := lang.Apply1(tmp13, tmp19)
+					tmp21 := lang.Apply1(tmp12, tmp20)
 					tmp22 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp23 := lang.Apply(tmp22, []any{sym_clojure_DOT_core_SLASH_assoc})
+					tmp23 := lang.Apply1(tmp22, sym_clojure_DOT_core_SLASH_assoc)
 					tmp24 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp25 := lang.Apply(tmp24, []any{kw_test})
+					tmp25 := lang.Apply1(tmp24, kw_test)
 					tmp26 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp27 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp28 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp29 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp30 := lang.Apply(tmp29, []any{sym_clojure_DOT_core_SLASH_fn})
+					tmp30 := lang.Apply1(tmp29, sym_clojure_DOT_core_SLASH_fn)
 					tmp31 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp32 := checkDerefVar(var_clojure_DOT_core_apply)
 					tmp33 := checkDerefVar(var_clojure_DOT_core_vector)
 					tmp34 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp35 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp36 := lang.Apply(tmp35, nil)
-					tmp37 := lang.Apply(tmp34, []any{tmp36})
-					tmp38 := lang.Apply(tmp32, []any{tmp33, tmp37})
-					tmp39 := lang.Apply(tmp31, []any{tmp38})
-					tmp40 := lang.Apply(tmp28, []any{tmp30, tmp39, v5})
-					tmp41 := lang.Apply(tmp27, []any{tmp40})
-					tmp42 := lang.Apply(tmp26, []any{tmp41})
+					tmp36 := lang.Apply0(tmp35)
+					tmp37 := lang.Apply1(tmp34, tmp36)
+					tmp38 := lang.Apply2(tmp32, tmp33, tmp37)
+					tmp39 := lang.Apply1(tmp31, tmp38)
+					tmp40 := lang.Apply3(tmp28, tmp30, tmp39, v5)
+					tmp41 := lang.Apply1(tmp27, tmp40)
+					tmp42 := lang.Apply1(tmp26, tmp41)
 					tmp43 := lang.Apply(tmp9, []any{tmp11, tmp21, tmp23, tmp25, tmp42})
-					tmp44 := lang.Apply(tmp8, []any{tmp43})
+					tmp44 := lang.Apply1(tmp8, tmp43)
 					tmp6 = tmp44
 				} else {
 				}
@@ -8276,20 +8243,19 @@ func LoadNS() {
 	// stacktrace-file-and-line
 	{
 		tmp0 := sym_stacktrace_DASH_file_DASH_and_DASH_line.WithMeta(lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(343), kw_column, int(8), kw_end_DASH_line, int(343), kw_end_DASH_column, int(31), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_stacktrace)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			tmp4 := checkDerefVar(var_clojure_DOT_core_seq)
-			tmp5 := lang.Apply(tmp4, []any{v2})
+			tmp5 := lang.Apply1(tmp4, v2)
 			if lang.IsTruthy(tmp5) {
 				var tmp6 any
 				{ // let
 					// let binding "s"
 					tmp7 := checkDerefVar(var_clojure_DOT_core_first)
-					tmp8 := lang.Apply(tmp7, []any{v2})
+					tmp8 := lang.Apply1(tmp7, v2)
 					var v9 any = tmp8
 					_ = v9
 					tmp10, ok := lang.FieldOrMethod(v9, "getFileName")
@@ -8334,7 +8300,7 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_stacktrace_DASH_file_DASH_and_DASH_line = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_stacktrace_DASH_file_DASH_and_DASH_line.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -8343,24 +8309,23 @@ func LoadNS() {
 	// successful?
 	{
 		tmp0 := sym_successful_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_summary)), kw_doc, "Returns true if the given test summary indicates all tests\n  were successful, false otherwise.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(780), kw_end_DASH_line, int(780))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
 				// let binding "and__0__auto__"
 				tmp4 := checkDerefVar(var_clojure_DOT_core_zero_QMARK_)
-				tmp5 := lang.Apply(kw_fail, []any{v2, int64(0)})
-				tmp6 := lang.Apply(tmp4, []any{tmp5})
+				tmp5 := lang.Apply2(kw_fail, v2, int64(0))
+				tmp6 := lang.Apply1(tmp4, tmp5)
 				var v7 any = tmp6
 				_ = v7
 				var tmp8 any
 				if lang.IsTruthy(v7) {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_zero_QMARK_)
-					tmp10 := lang.Apply(kw_error, []any{v2, int64(0)})
-					tmp11 := lang.Apply(tmp9, []any{tmp10})
+					tmp10 := lang.Apply2(kw_error, v2, int64(0))
+					tmp11 := lang.Apply1(tmp9, tmp10)
 					tmp8 = tmp11
 				} else {
 					tmp8 = v7
@@ -8369,7 +8334,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_successful_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_successful_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -8378,20 +8343,19 @@ func LoadNS() {
 	// test-all-vars
 	{
 		tmp0 := sym_test_DASH_all_DASH_vars.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Calls test-vars on every var interned in the namespace, with fixtures.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(728), kw_end_DASH_line, int(728))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_test_test_DASH_vars)
 			tmp4 := checkDerefVar(var_clojure_DOT_core_vals)
 			tmp5 := checkDerefVar(var_clojure_DOT_core_ns_DASH_interns)
-			tmp6 := lang.Apply(tmp5, []any{v2})
-			tmp7 := lang.Apply(tmp4, []any{tmp6})
-			tmp8 := lang.Apply(tmp3, []any{tmp7})
+			tmp6 := lang.Apply1(tmp5, v2)
+			tmp7 := lang.Apply1(tmp4, tmp6)
+			tmp8 := lang.Apply1(tmp3, tmp7)
 			return tmp8
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_test_DASH_all_DASH_vars = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_test_DASH_all_DASH_vars.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -8400,10 +8364,9 @@ func LoadNS() {
 	// test-ns
 	{
 		tmp0 := sym_test_DASH_ns.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "If the namespace defines a function named test-ns-hook, calls that.\n  Otherwise, calls test-all-vars on the namespace.  'ns' is a\n  namespace object or a symbol.\n\n  Internally binds *report-counters* to a ref initialized to\n  *initial-report-counters*.  Returns the final, dereferenced state of\n  *report-counters*.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(734), kw_end_DASH_line, int(734))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
@@ -8412,22 +8375,22 @@ func LoadNS() {
 				tmp6 := lang.InternVarName(sym_clojure_DOT_test, sym__STAR_report_DASH_counters_STAR_)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_ref)
 				tmp8 := checkDerefVar(var_clojure_DOT_test__STAR_initial_DASH_report_DASH_counters_STAR_)
-				tmp9 := lang.Apply(tmp7, []any{tmp8})
-				tmp10 := lang.Apply(tmp5, []any{tmp6, tmp9})
-				tmp11 := lang.Apply(tmp4, []any{tmp10})
+				tmp9 := lang.Apply1(tmp7, tmp8)
+				tmp10 := lang.Apply2(tmp5, tmp6, tmp9)
+				tmp11 := lang.Apply1(tmp4, tmp10)
 				_ = tmp11
 				var tmp12 any
 				func() {
 					defer func() {
 						tmp13 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-						tmp14 := lang.Apply(tmp13, nil)
+						tmp14 := lang.Apply0(tmp13)
 						_ = tmp14
 					}()
 					var tmp15 any
 					{ // let
 						// let binding "ns-obj"
 						tmp16 := checkDerefVar(var_clojure_DOT_core_the_DASH_ns)
-						tmp17 := lang.Apply(tmp16, []any{v2})
+						tmp17 := lang.Apply1(tmp16, v2)
 						var v18 any = tmp17
 						_ = v18
 						tmp19 := checkDerefVar(var_clojure_DOT_test_do_DASH_report)
@@ -8437,7 +8400,7 @@ func LoadNS() {
 						if err != nil {
 							panic(err)
 						}
-						tmp23 := lang.Apply(tmp19, []any{tmp22})
+						tmp23 := lang.Apply1(tmp19, tmp22)
 						_ = tmp23
 						var tmp24 any
 						{ // let
@@ -8446,10 +8409,10 @@ func LoadNS() {
 							tmp26 := checkDerefVar(var_clojure_DOT_core_symbol)
 							tmp27 := checkDerefVar(var_clojure_DOT_core_str)
 							tmp28 := checkDerefVar(var_clojure_DOT_core_ns_DASH_name)
-							tmp29 := lang.Apply(tmp28, []any{v18})
-							tmp30 := lang.Apply(tmp27, []any{tmp29})
-							tmp31 := lang.Apply(tmp26, []any{tmp30, "test-ns-hook"})
-							tmp32 := lang.Apply(tmp25, []any{tmp31})
+							tmp29 := lang.Apply1(tmp28, v18)
+							tmp30 := lang.Apply1(tmp27, tmp29)
+							tmp31 := lang.Apply2(tmp26, tmp30, "test-ns-hook")
+							tmp32 := lang.Apply1(tmp25, tmp31)
 							var v33 any = tmp32
 							_ = v33
 							var tmp34 any
@@ -8460,14 +8423,14 @@ func LoadNS() {
 									var v36 any = v33
 									_ = v36
 									tmp37 := checkDerefVar(var_clojure_DOT_core_var_DASH_get)
-									tmp38 := lang.Apply(tmp37, []any{v36})
-									tmp39 := lang.Apply(tmp38, nil)
+									tmp38 := lang.Apply1(tmp37, v36)
+									tmp39 := lang.Apply0(tmp38)
 									tmp35 = tmp39
 								} // end let
 								tmp34 = tmp35
 							} else {
 								tmp36 := checkDerefVar(var_clojure_DOT_test_test_DASH_all_DASH_vars)
-								tmp37 := lang.Apply(tmp36, []any{v18})
+								tmp37 := lang.Apply1(tmp36, v18)
 								tmp34 = tmp37
 							}
 							tmp24 = tmp34
@@ -8480,20 +8443,20 @@ func LoadNS() {
 						if err != nil {
 							panic(err)
 						}
-						tmp29 := lang.Apply(tmp25, []any{tmp28})
+						tmp29 := lang.Apply1(tmp25, tmp28)
 						tmp15 = tmp29
 					} // end let
 					_ = tmp15
 					tmp16 := checkDerefVar(var_clojure_DOT_core_deref)
 					tmp17 := checkDerefVar(var_clojure_DOT_test__STAR_report_DASH_counters_STAR_)
-					tmp18 := lang.Apply(tmp16, []any{tmp17})
+					tmp18 := lang.Apply1(tmp16, tmp17)
 					tmp12 = tmp18
 				}()
 				tmp3 = tmp12
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_test_DASH_ns = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_test_DASH_ns.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -8502,17 +8465,16 @@ func LoadNS() {
 	// test-var
 	{
 		tmp0 := sym_test_DASH_var.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "If v has a function in its :test metadata, calls that function,\n  with *testing-vars* bound to (conj *testing-vars* v).", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(699), kw_end_DASH_line, int(699), kw_dynamic, true)).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
 				// let binding "temp__0__auto__"
 				tmp4 := checkDerefVar(var_clojure_DOT_core_meta)
-				tmp5 := lang.Apply(tmp4, []any{v2})
-				tmp6 := lang.Apply(kw_test, []any{tmp5})
+				tmp5 := lang.Apply1(tmp4, v2)
+				tmp6 := lang.Apply1(kw_test, tmp5)
 				var v7 any = tmp6
 				_ = v7
 				var tmp8 any
@@ -8529,15 +8491,15 @@ func LoadNS() {
 							tmp14 := lang.InternVarName(sym_clojure_DOT_test, sym__STAR_testing_DASH_vars_STAR_)
 							tmp15 := checkDerefVar(var_clojure_DOT_core_conj)
 							tmp16 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_)
-							tmp17 := lang.Apply(tmp15, []any{tmp16, v2})
-							tmp18 := lang.Apply(tmp13, []any{tmp14, tmp17})
-							tmp19 := lang.Apply(tmp12, []any{tmp18})
+							tmp17 := lang.Apply2(tmp15, tmp16, v2)
+							tmp18 := lang.Apply2(tmp13, tmp14, tmp17)
+							tmp19 := lang.Apply1(tmp12, tmp18)
 							_ = tmp19
 							var tmp20 any
 							func() {
 								defer func() {
 									tmp21 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-									tmp22 := lang.Apply(tmp21, nil)
+									tmp22 := lang.Apply0(tmp21)
 									_ = tmp22
 								}()
 								tmp23 := checkDerefVar(var_clojure_DOT_test_do_DASH_report)
@@ -8547,10 +8509,10 @@ func LoadNS() {
 								if err != nil {
 									panic(err)
 								}
-								tmp27 := lang.Apply(tmp23, []any{tmp26})
+								tmp27 := lang.Apply1(tmp23, tmp26)
 								_ = tmp27
 								tmp28 := checkDerefVar(var_clojure_DOT_test_inc_DASH_report_DASH_counter)
-								tmp29 := lang.Apply(tmp28, []any{kw_test})
+								tmp29 := lang.Apply1(tmp28, kw_test)
 								_ = tmp29
 								var tmp30 any
 								func() {
@@ -8566,14 +8528,14 @@ func LoadNS() {
 												if err != nil {
 													panic(err)
 												}
-												tmp36 := lang.Apply(tmp32, []any{tmp35})
+												tmp36 := lang.Apply1(tmp32, tmp35)
 												tmp30 = tmp36
 											} else {
 												panic(r)
 											}
 										}
 									}()
-									tmp31 := lang.Apply(v10, nil)
+									tmp31 := lang.Apply0(v10)
 									tmp30 = tmp31
 								}()
 								_ = tmp30
@@ -8584,7 +8546,7 @@ func LoadNS() {
 								if err != nil {
 									panic(err)
 								}
-								tmp36 := lang.Apply(tmp32, []any{tmp35})
+								tmp36 := lang.Apply1(tmp32, tmp35)
 								tmp20 = tmp36
 							}()
 							tmp11 = tmp20
@@ -8598,7 +8560,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_test_DASH_var = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_test_DASH_var.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -8608,10 +8570,9 @@ func LoadNS() {
 	// test-vars
 	{
 		tmp0 := sym_test_DASH_vars.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_vars)), kw_doc, "Groups vars by their namespace and runs test-var on them with\n  appropriate fixtures applied.", kw_file, "clojure/test.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(714), kw_end_DASH_line, int(714))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
@@ -8620,9 +8581,9 @@ func LoadNS() {
 				tmp5 := checkDerefVar(var_clojure_DOT_core_group_DASH_by)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_comp)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_meta)
-				tmp8 := lang.Apply(tmp6, []any{kw_ns, tmp7})
-				tmp9 := lang.Apply(tmp5, []any{tmp8, v2})
-				tmp10 := lang.Apply(tmp4, []any{tmp9})
+				tmp8 := lang.Apply2(tmp6, kw_ns, tmp7)
+				tmp9 := lang.Apply2(tmp5, tmp8, v2)
+				tmp10 := lang.Apply1(tmp4, tmp9)
 				var v11 any = tmp10
 				_ = v11
 				// let binding "chunk_745"
@@ -8637,7 +8598,7 @@ func LoadNS() {
 				for {
 					var tmp15 any
 					tmp16 := checkDerefVar(var_clojure_DOT_core__LT_)
-					tmp17 := lang.Apply(tmp16, []any{v14, v13})
+					tmp17 := lang.Apply2(tmp16, v14, v13)
 					if lang.IsTruthy(tmp17) {
 						var tmp18 any
 						{ // let
@@ -8646,17 +8607,17 @@ func LoadNS() {
 							if reflect.TypeOf(tmp19).Kind() != reflect.Func {
 								panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
 							}
-							tmp20 := lang.Apply(tmp19, []any{v14})
+							tmp20 := lang.Apply1(tmp19, v14)
 							var v21 any = tmp20
 							_ = v21
 							// let binding "ns"
 							tmp22 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp23 := lang.Apply(tmp22, []any{v21, int64(0), nil})
+							tmp23 := lang.Apply3(tmp22, v21, int64(0), nil)
 							var v24 any = tmp23
 							_ = v24
 							// let binding "vars"
 							tmp25 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp26 := lang.Apply(tmp25, []any{v21, int64(1), nil})
+							tmp26 := lang.Apply3(tmp25, v21, int64(1), nil)
 							var v27 any = tmp26
 							_ = v27
 							var tmp28 any
@@ -8664,27 +8625,26 @@ func LoadNS() {
 								// let binding "once-fixture-fn"
 								tmp29 := checkDerefVar(var_clojure_DOT_test_join_DASH_fixtures)
 								tmp30 := checkDerefVar(var_clojure_DOT_core_meta)
-								tmp31 := lang.Apply(tmp30, []any{v24})
-								tmp32 := lang.Apply(kw_clojure_DOT_test_SLASH_once_DASH_fixtures, []any{tmp31})
-								tmp33 := lang.Apply(tmp29, []any{tmp32})
+								tmp31 := lang.Apply1(tmp30, v24)
+								tmp32 := lang.Apply1(kw_clojure_DOT_test_SLASH_once_DASH_fixtures, tmp31)
+								tmp33 := lang.Apply1(tmp29, tmp32)
 								var v34 any = tmp33
 								_ = v34
 								// let binding "each-fixture-fn"
 								tmp35 := checkDerefVar(var_clojure_DOT_test_join_DASH_fixtures)
 								tmp36 := checkDerefVar(var_clojure_DOT_core_meta)
-								tmp37 := lang.Apply(tmp36, []any{v24})
-								tmp38 := lang.Apply(kw_clojure_DOT_test_SLASH_each_DASH_fixtures, []any{tmp37})
-								tmp39 := lang.Apply(tmp35, []any{tmp38})
+								tmp37 := lang.Apply1(tmp36, v24)
+								tmp38 := lang.Apply1(kw_clojure_DOT_test_SLASH_each_DASH_fixtures, tmp37)
+								tmp39 := lang.Apply1(tmp35, tmp38)
 								var v40 any = tmp39
 								_ = v40
-								var tmp41 lang.FnFunc
-								tmp41 = lang.NewFnFunc(func(args ...any) any {
-									checkArity(args, 0)
+								var tmp41 lang.FnFunc0
+								tmp41 = lang.FnFunc0(func() any {
 									var tmp42 any
 									{ // let
 										// let binding "seq_751"
 										tmp43 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp44 := lang.Apply(tmp43, []any{v27})
+										tmp44 := lang.Apply1(tmp43, v27)
 										var v45 any = tmp44
 										_ = v45
 										// let binding "chunk_752"
@@ -8699,7 +8659,7 @@ func LoadNS() {
 										for {
 											var tmp49 any
 											tmp50 := checkDerefVar(var_clojure_DOT_core__LT_)
-											tmp51 := lang.Apply(tmp50, []any{v48, v47})
+											tmp51 := lang.Apply2(tmp50, v48, v47)
 											if lang.IsTruthy(tmp51) {
 												var tmp52 any
 												{ // let
@@ -8708,19 +8668,18 @@ func LoadNS() {
 													if reflect.TypeOf(tmp53).Kind() != reflect.Func {
 														panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
 													}
-													tmp54 := lang.Apply(tmp53, []any{v48})
+													tmp54 := lang.Apply1(tmp53, v48)
 													var v55 any = tmp54
 													_ = v55
 													var tmp56 any
 													tmp57 := checkDerefVar(var_clojure_DOT_core_meta)
-													tmp58 := lang.Apply(tmp57, []any{v55})
-													tmp59 := lang.Apply(kw_test, []any{tmp58})
+													tmp58 := lang.Apply1(tmp57, v55)
+													tmp59 := lang.Apply1(kw_test, tmp58)
 													if lang.IsTruthy(tmp59) {
-														var tmp60 lang.FnFunc
-														tmp60 = lang.NewFnFunc(func(args ...any) any {
-															checkArity(args, 0)
+														var tmp60 lang.FnFunc0
+														tmp60 = lang.FnFunc0(func() any {
 															tmp61 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
-															tmp62 := lang.Apply(tmp61, []any{v55})
+															tmp62 := lang.Apply1(tmp61, v55)
 															return tmp62
 														})
 														tmp61 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(726), kw_column, int(31), kw_end_DASH_line, int(726), kw_end_DASH_column, int(50))
@@ -8728,7 +8687,7 @@ func LoadNS() {
 														if err != nil {
 															panic(err)
 														}
-														tmp63 := lang.Apply(v40, []any{tmp62})
+														tmp63 := lang.Apply1(v40, tmp62)
 														tmp56 = tmp63
 													} else {
 													}
@@ -8737,7 +8696,7 @@ func LoadNS() {
 													var tmp65 any = v46
 													var tmp66 any = v47
 													tmp68 := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_inc)
-													tmp69 := lang.Apply(tmp68, []any{v48})
+													tmp69 := lang.Apply1(tmp68, v48)
 													var tmp67 any = tmp69
 													v45 = tmp64
 													v46 = tmp65
@@ -8751,7 +8710,7 @@ func LoadNS() {
 												{ // let
 													// let binding "temp__0__auto__"
 													tmp54 := checkDerefVar(var_clojure_DOT_core_seq)
-													tmp55 := lang.Apply(tmp54, []any{v45})
+													tmp55 := lang.Apply1(tmp54, v45)
 													var v56 any = tmp55
 													_ = v56
 													var tmp57 any
@@ -8763,26 +8722,26 @@ func LoadNS() {
 															_ = v59
 															var tmp60 any
 															tmp61 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
-															tmp62 := lang.Apply(tmp61, []any{v59})
+															tmp62 := lang.Apply1(tmp61, v59)
 															if lang.IsTruthy(tmp62) {
 																var tmp63 any
 																{ // let
 																	// let binding "c__0__auto__"
 																	tmp64 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
-																	tmp65 := lang.Apply(tmp64, []any{v59})
+																	tmp65 := lang.Apply1(tmp64, v59)
 																	var v66 any = tmp65
 																	_ = v66
 																	tmp68 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
-																	tmp69 := lang.Apply(tmp68, []any{v59})
+																	tmp69 := lang.Apply1(tmp68, v59)
 																	var tmp67 any = tmp69
 																	var tmp70 any = v66
 																	tmp72 := checkDerefVar(var_clojure_DOT_core_int)
 																	tmp73 := checkDerefVar(var_clojure_DOT_core_count)
-																	tmp74 := lang.Apply(tmp73, []any{v66})
-																	tmp75 := lang.Apply(tmp72, []any{tmp74})
+																	tmp74 := lang.Apply1(tmp73, v66)
+																	tmp75 := lang.Apply1(tmp72, tmp74)
 																	var tmp71 any = tmp75
 																	tmp77 := checkDerefVar(var_clojure_DOT_core_int)
-																	tmp78 := lang.Apply(tmp77, []any{int64(0)})
+																	tmp78 := lang.Apply1(tmp77, int64(0))
 																	var tmp76 any = tmp78
 																	v45 = tmp67
 																	v46 = tmp70
@@ -8796,19 +8755,18 @@ func LoadNS() {
 																{ // let
 																	// let binding "v"
 																	tmp65 := checkDerefVar(var_clojure_DOT_core_first)
-																	tmp66 := lang.Apply(tmp65, []any{v59})
+																	tmp66 := lang.Apply1(tmp65, v59)
 																	var v67 any = tmp66
 																	_ = v67
 																	var tmp68 any
 																	tmp69 := checkDerefVar(var_clojure_DOT_core_meta)
-																	tmp70 := lang.Apply(tmp69, []any{v67})
-																	tmp71 := lang.Apply(kw_test, []any{tmp70})
+																	tmp70 := lang.Apply1(tmp69, v67)
+																	tmp71 := lang.Apply1(kw_test, tmp70)
 																	if lang.IsTruthy(tmp71) {
-																		var tmp72 lang.FnFunc
-																		tmp72 = lang.NewFnFunc(func(args ...any) any {
-																			checkArity(args, 0)
+																		var tmp72 lang.FnFunc0
+																		tmp72 = lang.FnFunc0(func() any {
 																			tmp73 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
-																			tmp74 := lang.Apply(tmp73, []any{v67})
+																			tmp74 := lang.Apply1(tmp73, v67)
 																			return tmp74
 																		})
 																		tmp73 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(726), kw_column, int(31), kw_end_DASH_line, int(726), kw_end_DASH_column, int(50))
@@ -8816,13 +8774,13 @@ func LoadNS() {
 																		if err != nil {
 																			panic(err)
 																		}
-																		tmp75 := lang.Apply(v40, []any{tmp74})
+																		tmp75 := lang.Apply1(v40, tmp74)
 																		tmp68 = tmp75
 																	} else {
 																	}
 																	_ = tmp68
 																	tmp77 := checkDerefVar(var_clojure_DOT_core_next)
-																	tmp78 := lang.Apply(tmp77, []any{v59})
+																	tmp78 := lang.Apply1(tmp77, v59)
 																	var tmp76 any = tmp78
 																	var tmp79 any = nil
 																	var tmp80 any = int64(0)
@@ -8855,7 +8813,7 @@ func LoadNS() {
 								if err != nil {
 									panic(err)
 								}
-								tmp44 := lang.Apply(v34, []any{tmp43})
+								tmp44 := lang.Apply1(v34, tmp43)
 								tmp28 = tmp44
 							} // end let
 							_ = tmp28
@@ -8863,7 +8821,7 @@ func LoadNS() {
 							var tmp30 any = v12
 							var tmp31 any = v13
 							tmp33 := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_inc)
-							tmp34 := lang.Apply(tmp33, []any{v14})
+							tmp34 := lang.Apply1(tmp33, v14)
 							var tmp32 any = tmp34
 							v11 = tmp29
 							v12 = tmp30
@@ -8877,7 +8835,7 @@ func LoadNS() {
 						{ // let
 							// let binding "temp__0__auto__"
 							tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp21 := lang.Apply(tmp20, []any{v11})
+							tmp21 := lang.Apply1(tmp20, v11)
 							var v22 any = tmp21
 							_ = v22
 							var tmp23 any
@@ -8889,26 +8847,26 @@ func LoadNS() {
 									_ = v25
 									var tmp26 any
 									tmp27 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
-									tmp28 := lang.Apply(tmp27, []any{v25})
+									tmp28 := lang.Apply1(tmp27, v25)
 									if lang.IsTruthy(tmp28) {
 										var tmp29 any
 										{ // let
 											// let binding "c__0__auto__"
 											tmp30 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
-											tmp31 := lang.Apply(tmp30, []any{v25})
+											tmp31 := lang.Apply1(tmp30, v25)
 											var v32 any = tmp31
 											_ = v32
 											tmp34 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
-											tmp35 := lang.Apply(tmp34, []any{v25})
+											tmp35 := lang.Apply1(tmp34, v25)
 											var tmp33 any = tmp35
 											var tmp36 any = v32
 											tmp38 := checkDerefVar(var_clojure_DOT_core_int)
 											tmp39 := checkDerefVar(var_clojure_DOT_core_count)
-											tmp40 := lang.Apply(tmp39, []any{v32})
-											tmp41 := lang.Apply(tmp38, []any{tmp40})
+											tmp40 := lang.Apply1(tmp39, v32)
+											tmp41 := lang.Apply1(tmp38, tmp40)
 											var tmp37 any = tmp41
 											tmp43 := checkDerefVar(var_clojure_DOT_core_int)
-											tmp44 := lang.Apply(tmp43, []any{int64(0)})
+											tmp44 := lang.Apply1(tmp43, int64(0))
 											var tmp42 any = tmp44
 											v11 = tmp33
 											v12 = tmp36
@@ -8922,17 +8880,17 @@ func LoadNS() {
 										{ // let
 											// let binding "vec__755"
 											tmp31 := checkDerefVar(var_clojure_DOT_core_first)
-											tmp32 := lang.Apply(tmp31, []any{v25})
+											tmp32 := lang.Apply1(tmp31, v25)
 											var v33 any = tmp32
 											_ = v33
 											// let binding "ns"
 											tmp34 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp35 := lang.Apply(tmp34, []any{v33, int64(0), nil})
+											tmp35 := lang.Apply3(tmp34, v33, int64(0), nil)
 											var v36 any = tmp35
 											_ = v36
 											// let binding "vars"
 											tmp37 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp38 := lang.Apply(tmp37, []any{v33, int64(1), nil})
+											tmp38 := lang.Apply3(tmp37, v33, int64(1), nil)
 											var v39 any = tmp38
 											_ = v39
 											var tmp40 any
@@ -8940,27 +8898,26 @@ func LoadNS() {
 												// let binding "once-fixture-fn"
 												tmp41 := checkDerefVar(var_clojure_DOT_test_join_DASH_fixtures)
 												tmp42 := checkDerefVar(var_clojure_DOT_core_meta)
-												tmp43 := lang.Apply(tmp42, []any{v36})
-												tmp44 := lang.Apply(kw_clojure_DOT_test_SLASH_once_DASH_fixtures, []any{tmp43})
-												tmp45 := lang.Apply(tmp41, []any{tmp44})
+												tmp43 := lang.Apply1(tmp42, v36)
+												tmp44 := lang.Apply1(kw_clojure_DOT_test_SLASH_once_DASH_fixtures, tmp43)
+												tmp45 := lang.Apply1(tmp41, tmp44)
 												var v46 any = tmp45
 												_ = v46
 												// let binding "each-fixture-fn"
 												tmp47 := checkDerefVar(var_clojure_DOT_test_join_DASH_fixtures)
 												tmp48 := checkDerefVar(var_clojure_DOT_core_meta)
-												tmp49 := lang.Apply(tmp48, []any{v36})
-												tmp50 := lang.Apply(kw_clojure_DOT_test_SLASH_each_DASH_fixtures, []any{tmp49})
-												tmp51 := lang.Apply(tmp47, []any{tmp50})
+												tmp49 := lang.Apply1(tmp48, v36)
+												tmp50 := lang.Apply1(kw_clojure_DOT_test_SLASH_each_DASH_fixtures, tmp49)
+												tmp51 := lang.Apply1(tmp47, tmp50)
 												var v52 any = tmp51
 												_ = v52
-												var tmp53 lang.FnFunc
-												tmp53 = lang.NewFnFunc(func(args ...any) any {
-													checkArity(args, 0)
+												var tmp53 lang.FnFunc0
+												tmp53 = lang.FnFunc0(func() any {
 													var tmp54 any
 													{ // let
 														// let binding "seq_758"
 														tmp55 := checkDerefVar(var_clojure_DOT_core_seq)
-														tmp56 := lang.Apply(tmp55, []any{v39})
+														tmp56 := lang.Apply1(tmp55, v39)
 														var v57 any = tmp56
 														_ = v57
 														// let binding "chunk_759"
@@ -8975,7 +8932,7 @@ func LoadNS() {
 														for {
 															var tmp61 any
 															tmp62 := checkDerefVar(var_clojure_DOT_core__LT_)
-															tmp63 := lang.Apply(tmp62, []any{v60, v59})
+															tmp63 := lang.Apply2(tmp62, v60, v59)
 															if lang.IsTruthy(tmp63) {
 																var tmp64 any
 																{ // let
@@ -8984,19 +8941,18 @@ func LoadNS() {
 																	if reflect.TypeOf(tmp65).Kind() != reflect.Func {
 																		panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
 																	}
-																	tmp66 := lang.Apply(tmp65, []any{v60})
+																	tmp66 := lang.Apply1(tmp65, v60)
 																	var v67 any = tmp66
 																	_ = v67
 																	var tmp68 any
 																	tmp69 := checkDerefVar(var_clojure_DOT_core_meta)
-																	tmp70 := lang.Apply(tmp69, []any{v67})
-																	tmp71 := lang.Apply(kw_test, []any{tmp70})
+																	tmp70 := lang.Apply1(tmp69, v67)
+																	tmp71 := lang.Apply1(kw_test, tmp70)
 																	if lang.IsTruthy(tmp71) {
-																		var tmp72 lang.FnFunc
-																		tmp72 = lang.NewFnFunc(func(args ...any) any {
-																			checkArity(args, 0)
+																		var tmp72 lang.FnFunc0
+																		tmp72 = lang.FnFunc0(func() any {
 																			tmp73 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
-																			tmp74 := lang.Apply(tmp73, []any{v67})
+																			tmp74 := lang.Apply1(tmp73, v67)
 																			return tmp74
 																		})
 																		tmp73 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(726), kw_column, int(31), kw_end_DASH_line, int(726), kw_end_DASH_column, int(50))
@@ -9004,7 +8960,7 @@ func LoadNS() {
 																		if err != nil {
 																			panic(err)
 																		}
-																		tmp75 := lang.Apply(v52, []any{tmp74})
+																		tmp75 := lang.Apply1(v52, tmp74)
 																		tmp68 = tmp75
 																	} else {
 																	}
@@ -9013,7 +8969,7 @@ func LoadNS() {
 																	var tmp77 any = v58
 																	var tmp78 any = v59
 																	tmp80 := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_inc)
-																	tmp81 := lang.Apply(tmp80, []any{v60})
+																	tmp81 := lang.Apply1(tmp80, v60)
 																	var tmp79 any = tmp81
 																	v57 = tmp76
 																	v58 = tmp77
@@ -9027,7 +8983,7 @@ func LoadNS() {
 																{ // let
 																	// let binding "temp__0__auto__"
 																	tmp66 := checkDerefVar(var_clojure_DOT_core_seq)
-																	tmp67 := lang.Apply(tmp66, []any{v57})
+																	tmp67 := lang.Apply1(tmp66, v57)
 																	var v68 any = tmp67
 																	_ = v68
 																	var tmp69 any
@@ -9039,26 +8995,26 @@ func LoadNS() {
 																			_ = v71
 																			var tmp72 any
 																			tmp73 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
-																			tmp74 := lang.Apply(tmp73, []any{v71})
+																			tmp74 := lang.Apply1(tmp73, v71)
 																			if lang.IsTruthy(tmp74) {
 																				var tmp75 any
 																				{ // let
 																					// let binding "c__0__auto__"
 																					tmp76 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
-																					tmp77 := lang.Apply(tmp76, []any{v71})
+																					tmp77 := lang.Apply1(tmp76, v71)
 																					var v78 any = tmp77
 																					_ = v78
 																					tmp80 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
-																					tmp81 := lang.Apply(tmp80, []any{v71})
+																					tmp81 := lang.Apply1(tmp80, v71)
 																					var tmp79 any = tmp81
 																					var tmp82 any = v78
 																					tmp84 := checkDerefVar(var_clojure_DOT_core_int)
 																					tmp85 := checkDerefVar(var_clojure_DOT_core_count)
-																					tmp86 := lang.Apply(tmp85, []any{v78})
-																					tmp87 := lang.Apply(tmp84, []any{tmp86})
+																					tmp86 := lang.Apply1(tmp85, v78)
+																					tmp87 := lang.Apply1(tmp84, tmp86)
 																					var tmp83 any = tmp87
 																					tmp89 := checkDerefVar(var_clojure_DOT_core_int)
-																					tmp90 := lang.Apply(tmp89, []any{int64(0)})
+																					tmp90 := lang.Apply1(tmp89, int64(0))
 																					var tmp88 any = tmp90
 																					v57 = tmp79
 																					v58 = tmp82
@@ -9072,19 +9028,18 @@ func LoadNS() {
 																				{ // let
 																					// let binding "v"
 																					tmp77 := checkDerefVar(var_clojure_DOT_core_first)
-																					tmp78 := lang.Apply(tmp77, []any{v71})
+																					tmp78 := lang.Apply1(tmp77, v71)
 																					var v79 any = tmp78
 																					_ = v79
 																					var tmp80 any
 																					tmp81 := checkDerefVar(var_clojure_DOT_core_meta)
-																					tmp82 := lang.Apply(tmp81, []any{v79})
-																					tmp83 := lang.Apply(kw_test, []any{tmp82})
+																					tmp82 := lang.Apply1(tmp81, v79)
+																					tmp83 := lang.Apply1(kw_test, tmp82)
 																					if lang.IsTruthy(tmp83) {
-																						var tmp84 lang.FnFunc
-																						tmp84 = lang.NewFnFunc(func(args ...any) any {
-																							checkArity(args, 0)
+																						var tmp84 lang.FnFunc0
+																						tmp84 = lang.FnFunc0(func() any {
 																							tmp85 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
-																							tmp86 := lang.Apply(tmp85, []any{v79})
+																							tmp86 := lang.Apply1(tmp85, v79)
 																							return tmp86
 																						})
 																						tmp85 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(726), kw_column, int(31), kw_end_DASH_line, int(726), kw_end_DASH_column, int(50))
@@ -9092,13 +9047,13 @@ func LoadNS() {
 																						if err != nil {
 																							panic(err)
 																						}
-																						tmp87 := lang.Apply(v52, []any{tmp86})
+																						tmp87 := lang.Apply1(v52, tmp86)
 																						tmp80 = tmp87
 																					} else {
 																					}
 																					_ = tmp80
 																					tmp89 := checkDerefVar(var_clojure_DOT_core_next)
-																					tmp90 := lang.Apply(tmp89, []any{v71})
+																					tmp90 := lang.Apply1(tmp89, v71)
 																					var tmp88 any = tmp90
 																					var tmp91 any = nil
 																					var tmp92 any = int64(0)
@@ -9131,12 +9086,12 @@ func LoadNS() {
 												if err != nil {
 													panic(err)
 												}
-												tmp56 := lang.Apply(v46, []any{tmp55})
+												tmp56 := lang.Apply1(v46, tmp55)
 												tmp40 = tmp56
 											} // end let
 											_ = tmp40
 											tmp42 := checkDerefVar(var_clojure_DOT_core_next)
-											tmp43 := lang.Apply(tmp42, []any{v25})
+											tmp43 := lang.Apply1(tmp42, v25)
 											var tmp41 any = tmp43
 											var tmp44 any = nil
 											var tmp45 any = int64(0)
@@ -9164,7 +9119,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_test_DASH_vars = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_test_DASH_vars.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -9193,32 +9148,32 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply(tmp8, []any{sym_clojure_DOT_core_SLASH_binding})
+				tmp9 := lang.Apply1(tmp8, sym_clojure_DOT_core_SLASH_binding)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_vector)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp14 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp15 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp16 := lang.Apply(tmp15, []any{sym_clojure_DOT_test_SLASH__STAR_testing_DASH_contexts_STAR_})
+				tmp16 := lang.Apply1(tmp15, sym_clojure_DOT_test_SLASH__STAR_testing_DASH_contexts_STAR_)
 				tmp17 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp18 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp19 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp21 := lang.Apply(tmp20, []any{sym_clojure_DOT_core_SLASH_conj})
+				tmp21 := lang.Apply1(tmp20, sym_clojure_DOT_core_SLASH_conj)
 				tmp22 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp23 := lang.Apply(tmp22, []any{sym_clojure_DOT_test_SLASH__STAR_testing_DASH_contexts_STAR_})
+				tmp23 := lang.Apply1(tmp22, sym_clojure_DOT_test_SLASH__STAR_testing_DASH_contexts_STAR_)
 				tmp24 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp25 := lang.Apply(tmp24, []any{v4})
-				tmp26 := lang.Apply(tmp19, []any{tmp21, tmp23, tmp25})
-				tmp27 := lang.Apply(tmp18, []any{tmp26})
-				tmp28 := lang.Apply(tmp17, []any{tmp27})
-				tmp29 := lang.Apply(tmp14, []any{tmp16, tmp28})
-				tmp30 := lang.Apply(tmp13, []any{tmp29})
-				tmp31 := lang.Apply(tmp11, []any{tmp12, tmp30})
-				tmp32 := lang.Apply(tmp10, []any{tmp31})
-				tmp33 := lang.Apply(tmp7, []any{tmp9, tmp32, v5})
-				tmp34 := lang.Apply(tmp6, []any{tmp33})
+				tmp25 := lang.Apply1(tmp24, v4)
+				tmp26 := lang.Apply3(tmp19, tmp21, tmp23, tmp25)
+				tmp27 := lang.Apply1(tmp18, tmp26)
+				tmp28 := lang.Apply1(tmp17, tmp27)
+				tmp29 := lang.Apply2(tmp14, tmp16, tmp28)
+				tmp30 := lang.Apply1(tmp13, tmp29)
+				tmp31 := lang.Apply2(tmp11, tmp12, tmp30)
+				tmp32 := lang.Apply1(tmp10, tmp31)
+				tmp33 := lang.Apply3(tmp7, tmp9, tmp32, v5)
+				tmp34 := lang.Apply1(tmp6, tmp33)
 				return tmp34
 			}
 		})
@@ -9231,20 +9186,19 @@ func LoadNS() {
 	// testing-contexts-str
 	{
 		tmp0 := sym_testing_DASH_contexts_DASH_str.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a string representation of the current test context. Joins\n  strings in *testing-contexts* with spaces.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(306), kw_end_DASH_line, int(306))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 0)
+		var tmp1 lang.FnFunc0
+		tmp1 = lang.FnFunc0(func() any {
 			tmp2 := checkDerefVar(var_clojure_DOT_core_apply)
 			tmp3 := checkDerefVar(var_clojure_DOT_core_str)
 			tmp4 := checkDerefVar(var_clojure_DOT_core_interpose)
 			tmp5 := checkDerefVar(var_clojure_DOT_core_reverse)
 			tmp6 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_)
-			tmp7 := lang.Apply(tmp5, []any{tmp6})
-			tmp8 := lang.Apply(tmp4, []any{" ", tmp7})
-			tmp9 := lang.Apply(tmp2, []any{tmp3, tmp8})
+			tmp7 := lang.Apply1(tmp5, tmp6)
+			tmp8 := lang.Apply2(tmp4, " ", tmp7)
+			tmp9 := lang.Apply2(tmp2, tmp3, tmp8)
 			return tmp9
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_test_testing_DASH_contexts_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_testing_DASH_contexts_DASH_str.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -9253,10 +9207,9 @@ func LoadNS() {
 	// testing-vars-str
 	{
 		tmp0 := sym_testing_DASH_vars_DASH_str.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Returns a string representation of the current test.  Renders names\n  in *testing-vars* as a list, then the source file and line of\n  current assertion.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(293), kw_end_DASH_line, int(293))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
@@ -9266,23 +9219,23 @@ func LoadNS() {
 				// let binding "map__742"
 				var tmp5 any
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-				tmp7 := lang.Apply(tmp6, []any{v4})
+				tmp7 := lang.Apply1(tmp6, v4)
 				if lang.IsTruthy(tmp7) {
 					var tmp8 any
 					tmp9 := checkDerefVar(var_clojure_DOT_core_next)
-					tmp10 := lang.Apply(tmp9, []any{v4})
+					tmp10 := lang.Apply1(tmp9, v4)
 					if lang.IsTruthy(tmp10) {
 						tmp11 := checkDerefVar(var_clojure_DOT_core_to_DASH_array)
-						tmp12 := lang.Apply(tmp11, []any{v4})
-						tmp13 := lang.Apply(lang.NewPersistentArrayMapAsIfByAssoc, []any{tmp12})
+						tmp12 := lang.Apply1(tmp11, v4)
+						tmp13 := lang.Apply1(lang.NewPersistentArrayMapAsIfByAssoc, tmp12)
 						tmp8 = tmp13
 					} else {
 						var tmp14 any
 						tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp16 := lang.Apply(tmp15, []any{v4})
+						tmp16 := lang.Apply1(tmp15, v4)
 						if lang.IsTruthy(tmp16) {
 							tmp17 := checkDerefVar(var_clojure_DOT_core_first)
-							tmp18 := lang.Apply(tmp17, []any{v4})
+							tmp18 := lang.Apply1(tmp17, v4)
 							tmp14 = tmp18
 						} else {
 						}
@@ -9296,25 +9249,24 @@ func LoadNS() {
 				_ = v19
 				// let binding "file"
 				tmp20 := checkDerefVar(var_clojure_DOT_core_get)
-				tmp21 := lang.Apply(tmp20, []any{v19, kw_file})
+				tmp21 := lang.Apply2(tmp20, v19, kw_file)
 				var v22 any = tmp21
 				_ = v22
 				// let binding "line"
 				tmp23 := checkDerefVar(var_clojure_DOT_core_get)
-				tmp24 := lang.Apply(tmp23, []any{v19, kw_line})
+				tmp24 := lang.Apply2(tmp23, v19, kw_line)
 				var v25 any = tmp24
 				_ = v25
 				tmp26 := checkDerefVar(var_clojure_DOT_core_str)
 				tmp27 := checkDerefVar(var_clojure_DOT_core_reverse)
 				tmp28 := checkDerefVar(var_clojure_DOT_core_map)
-				var tmp29 lang.FnFunc
-				tmp29 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v30 := args[0]
+				var tmp29 lang.FnFunc1
+				tmp29 = lang.FnFunc1(func(p0 any) any {
+					v30 := p0
 					_ = v30
 					tmp31 := checkDerefVar(var_clojure_DOT_core_meta)
-					tmp32 := lang.Apply(tmp31, []any{v30})
-					tmp33 := lang.Apply(kw_name, []any{tmp32})
+					tmp32 := lang.Apply1(tmp31, v30)
+					tmp33 := lang.Apply1(kw_name, tmp32)
 					return tmp33
 				})
 				tmp30 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(303), kw_column, int(20), kw_end_DASH_line, int(303), kw_end_DASH_column, int(36))
@@ -9323,14 +9275,14 @@ func LoadNS() {
 					panic(err)
 				}
 				tmp32 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_)
-				tmp33 := lang.Apply(tmp28, []any{tmp31, tmp32})
-				tmp34 := lang.Apply(tmp27, []any{tmp33})
+				tmp33 := lang.Apply2(tmp28, tmp31, tmp32)
+				tmp34 := lang.Apply1(tmp27, tmp33)
 				tmp35 := lang.Apply(tmp26, []any{tmp34, " (", v22, ":", v25, ")"})
 				tmp3 = tmp35
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_test_testing_DASH_vars_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_testing_DASH_vars_DASH_str.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -9339,83 +9291,82 @@ func LoadNS() {
 	// try-expr
 	{
 		tmp0 := sym_try_DASH_expr.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_form)), kw_doc, "Used by the 'is' macro to catch unexpected exceptions.\n  You don't call this.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(529), kw_end_DASH_line, int(529))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 4)
-			v2 := args[0]
+		var tmp1 lang.FnFunc4
+		tmp1 = lang.FnFunc4(func(p0, p1, p2, p3 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			v4 := args[2]
+			v4 := p2
 			_ = v4
-			v5 := args[3]
+			v5 := p3
 			_ = v5
 			tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp9 := lang.Apply(tmp8, []any{sym_try})
+			tmp9 := lang.Apply1(tmp8, sym_try)
 			tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp11 := checkDerefVar(var_clojure_DOT_test_assert_DASH_expr)
-			tmp12 := lang.Apply(tmp11, []any{v4, v5})
-			tmp13 := lang.Apply(tmp10, []any{tmp12})
+			tmp12 := lang.Apply2(tmp11, v4, v5)
+			tmp13 := lang.Apply1(tmp10, tmp12)
 			tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp18 := lang.Apply(tmp17, []any{sym_catch})
+			tmp18 := lang.Apply1(tmp17, sym_catch)
 			tmp19 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp20 := lang.Apply(tmp19, []any{sym_go_SLASH_any})
+			tmp20 := lang.Apply1(tmp19, sym_go_SLASH_any)
 			tmp21 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp22 := lang.Apply(tmp21, []any{sym_t__0__auto__})
+			tmp22 := lang.Apply1(tmp21, sym_t__0__auto__)
 			tmp23 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp24 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp25 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp26 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp27 := lang.Apply(tmp26, []any{sym_clojure_DOT_test_SLASH_do_DASH_report})
+			tmp27 := lang.Apply1(tmp26, sym_clojure_DOT_test_SLASH_do_DASH_report)
 			tmp28 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp29 := checkDerefVar(var_clojure_DOT_core_apply)
 			tmp30 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
 			tmp31 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp32 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp33 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp34 := lang.Apply(tmp33, []any{kw_type})
+			tmp34 := lang.Apply1(tmp33, kw_type)
 			tmp35 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp36 := lang.Apply(tmp35, []any{kw_error})
+			tmp36 := lang.Apply1(tmp35, kw_error)
 			tmp37 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp38 := lang.Apply(tmp37, []any{kw_message})
+			tmp38 := lang.Apply1(tmp37, kw_message)
 			tmp39 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp40 := lang.Apply(tmp39, []any{v4})
+			tmp40 := lang.Apply1(tmp39, v4)
 			tmp41 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp42 := lang.Apply(tmp41, []any{kw_expected})
+			tmp42 := lang.Apply1(tmp41, kw_expected)
 			tmp43 := checkDerefVar(var_clojure_DOT_core_list)
 			tmp44 := checkDerefVar(var_clojure_DOT_core_seq)
 			tmp45 := checkDerefVar(var_clojure_DOT_core_concat)
 			tmp46 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp47 := lang.Apply(tmp46, []any{sym_quote})
+			tmp47 := lang.Apply1(tmp46, sym_quote)
 			tmp48 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp49 := lang.Apply(tmp48, []any{v5})
-			tmp50 := lang.Apply(tmp45, []any{tmp47, tmp49})
-			tmp51 := lang.Apply(tmp44, []any{tmp50})
-			tmp52 := lang.Apply(tmp43, []any{tmp51})
+			tmp49 := lang.Apply1(tmp48, v5)
+			tmp50 := lang.Apply2(tmp45, tmp47, tmp49)
+			tmp51 := lang.Apply1(tmp44, tmp50)
+			tmp52 := lang.Apply1(tmp43, tmp51)
 			tmp53 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp54 := lang.Apply(tmp53, []any{kw_actual})
+			tmp54 := lang.Apply1(tmp53, kw_actual)
 			tmp55 := checkDerefVar(var_clojure_DOT_core_list)
-			tmp56 := lang.Apply(tmp55, []any{sym_t__0__auto__})
+			tmp56 := lang.Apply1(tmp55, sym_t__0__auto__)
 			tmp57 := lang.Apply(tmp32, []any{tmp34, tmp36, tmp38, tmp40, tmp42, tmp52, tmp54, tmp56})
-			tmp58 := lang.Apply(tmp31, []any{tmp57})
-			tmp59 := lang.Apply(tmp29, []any{tmp30, tmp58})
-			tmp60 := lang.Apply(tmp28, []any{tmp59})
-			tmp61 := lang.Apply(tmp25, []any{tmp27, tmp60})
-			tmp62 := lang.Apply(tmp24, []any{tmp61})
-			tmp63 := lang.Apply(tmp23, []any{tmp62})
-			tmp64 := lang.Apply(tmp16, []any{tmp18, tmp20, tmp22, tmp63})
-			tmp65 := lang.Apply(tmp15, []any{tmp64})
-			tmp66 := lang.Apply(tmp14, []any{tmp65})
-			tmp67 := lang.Apply(tmp7, []any{tmp9, tmp13, tmp66})
-			tmp68 := lang.Apply(tmp6, []any{tmp67})
+			tmp58 := lang.Apply1(tmp31, tmp57)
+			tmp59 := lang.Apply2(tmp29, tmp30, tmp58)
+			tmp60 := lang.Apply1(tmp28, tmp59)
+			tmp61 := lang.Apply2(tmp25, tmp27, tmp60)
+			tmp62 := lang.Apply1(tmp24, tmp61)
+			tmp63 := lang.Apply1(tmp23, tmp62)
+			tmp64 := lang.Apply4(tmp16, tmp18, tmp20, tmp22, tmp63)
+			tmp65 := lang.Apply1(tmp15, tmp64)
+			tmp66 := lang.Apply1(tmp14, tmp65)
+			tmp67 := lang.Apply3(tmp7, tmp9, tmp13, tmp66)
+			tmp68 := lang.Apply1(tmp6, tmp67)
 			return tmp68
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc4)
 		var_clojure_DOT_test_try_DASH_expr = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_test_try_DASH_expr.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -9447,40 +9398,40 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp9 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp11 := lang.Apply(tmp10, []any{sym_clojure_DOT_core_SLASH_doto})
+					tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_doto)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply(tmp12, []any{v4})
+					tmp13 := lang.Apply1(tmp12, v4)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply(tmp17, []any{sym_clojure_DOT_core_SLASH_alter_DASH_meta_BANG_})
+					tmp18 := lang.Apply1(tmp17, sym_clojure_DOT_core_SLASH_alter_DASH_meta_BANG_)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp20 := lang.Apply(tmp19, []any{sym_clojure_DOT_core_SLASH_assoc})
+					tmp20 := lang.Apply1(tmp19, sym_clojure_DOT_core_SLASH_assoc)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp22 := lang.Apply(tmp21, []any{kw_test})
+					tmp22 := lang.Apply1(tmp21, kw_test)
 					tmp23 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp24 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp25 := checkDerefVar(var_clojure_DOT_core_concat)
 					tmp26 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp27 := lang.Apply(tmp26, []any{sym_clojure_DOT_core_SLASH_fn})
+					tmp27 := lang.Apply1(tmp26, sym_clojure_DOT_core_SLASH_fn)
 					tmp28 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp29 := checkDerefVar(var_clojure_DOT_core_apply)
 					tmp30 := checkDerefVar(var_clojure_DOT_core_vector)
 					tmp31 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp32 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp33 := lang.Apply(tmp32, nil)
-					tmp34 := lang.Apply(tmp31, []any{tmp33})
-					tmp35 := lang.Apply(tmp29, []any{tmp30, tmp34})
-					tmp36 := lang.Apply(tmp28, []any{tmp35})
-					tmp37 := lang.Apply(tmp25, []any{tmp27, tmp36, v5})
-					tmp38 := lang.Apply(tmp24, []any{tmp37})
-					tmp39 := lang.Apply(tmp23, []any{tmp38})
-					tmp40 := lang.Apply(tmp16, []any{tmp18, tmp20, tmp22, tmp39})
-					tmp41 := lang.Apply(tmp15, []any{tmp40})
-					tmp42 := lang.Apply(tmp14, []any{tmp41})
-					tmp43 := lang.Apply(tmp9, []any{tmp11, tmp13, tmp42})
-					tmp44 := lang.Apply(tmp8, []any{tmp43})
+					tmp33 := lang.Apply0(tmp32)
+					tmp34 := lang.Apply1(tmp31, tmp33)
+					tmp35 := lang.Apply2(tmp29, tmp30, tmp34)
+					tmp36 := lang.Apply1(tmp28, tmp35)
+					tmp37 := lang.Apply3(tmp25, tmp27, tmp36, v5)
+					tmp38 := lang.Apply1(tmp24, tmp37)
+					tmp39 := lang.Apply1(tmp23, tmp38)
+					tmp40 := lang.Apply4(tmp16, tmp18, tmp20, tmp22, tmp39)
+					tmp41 := lang.Apply1(tmp15, tmp40)
+					tmp42 := lang.Apply1(tmp14, tmp41)
+					tmp43 := lang.Apply3(tmp9, tmp11, tmp13, tmp42)
+					tmp44 := lang.Apply1(tmp8, tmp43)
 					tmp6 = tmp44
 				} else {
 					tmp6 = v4
@@ -9515,32 +9466,32 @@ func LoadNS() {
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp8 := lang.Apply(tmp7, []any{sym_clojure_DOT_core_SLASH_binding})
+				tmp8 := lang.Apply1(tmp7, sym_clojure_DOT_core_SLASH_binding)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_vector)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_clojure_DOT_core_SLASH__STAR_out_STAR_})
+				tmp15 := lang.Apply1(tmp14, sym_clojure_DOT_core_SLASH__STAR_out_STAR_)
 				tmp16 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp17 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp18 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp19 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp20 := lang.Apply(tmp19, []any{sym_clojure_DOT_core_SLASH_or})
+				tmp20 := lang.Apply1(tmp19, sym_clojure_DOT_core_SLASH_or)
 				tmp21 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp22 := lang.Apply(tmp21, []any{sym_clojure_DOT_test_SLASH__STAR_test_DASH_out_STAR_})
+				tmp22 := lang.Apply1(tmp21, sym_clojure_DOT_test_SLASH__STAR_test_DASH_out_STAR_)
 				tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp24 := lang.Apply(tmp23, []any{sym_clojure_DOT_core_SLASH__STAR_out_STAR_})
-				tmp25 := lang.Apply(tmp18, []any{tmp20, tmp22, tmp24})
-				tmp26 := lang.Apply(tmp17, []any{tmp25})
-				tmp27 := lang.Apply(tmp16, []any{tmp26})
-				tmp28 := lang.Apply(tmp13, []any{tmp15, tmp27})
-				tmp29 := lang.Apply(tmp12, []any{tmp28})
-				tmp30 := lang.Apply(tmp10, []any{tmp11, tmp29})
-				tmp31 := lang.Apply(tmp9, []any{tmp30})
-				tmp32 := lang.Apply(tmp6, []any{tmp8, tmp31, v4})
-				tmp33 := lang.Apply(tmp5, []any{tmp32})
+				tmp24 := lang.Apply1(tmp23, sym_clojure_DOT_core_SLASH__STAR_out_STAR_)
+				tmp25 := lang.Apply3(tmp18, tmp20, tmp22, tmp24)
+				tmp26 := lang.Apply1(tmp17, tmp25)
+				tmp27 := lang.Apply1(tmp16, tmp26)
+				tmp28 := lang.Apply2(tmp13, tmp15, tmp27)
+				tmp29 := lang.Apply1(tmp12, tmp28)
+				tmp30 := lang.Apply2(tmp10, tmp11, tmp29)
+				tmp31 := lang.Apply1(tmp9, tmp30)
+				tmp32 := lang.Apply3(tmp6, tmp8, tmp31, v4)
+				tmp33 := lang.Apply1(tmp5, tmp32)
 				return tmp33
 			}
 		})

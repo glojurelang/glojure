@@ -5286,18 +5286,17 @@ func LoadNS() {
 	// >!
 	{
 		tmp0 := sym__GT__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(44), kw_column, int(7), kw_end_DASH_line, int(44), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "puts a val into port. nil values are not allowed. Will park if no buffer space is available.\n  Returns true, or throws if port is already closed.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply(lang.Builtins["send"], []any{v2, v3})
+			tmp4 := lang.Apply2(lang.Builtins["send"], v2, v3)
 			_ = tmp4
 			return true
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_DOT_async__GT__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async__GT__BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5306,18 +5305,17 @@ func LoadNS() {
 	// >!!
 	{
 		tmp0 := sym__GT__BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(51), kw_column, int(6), kw_end_DASH_line, int(51), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply(lang.Builtins["send"], []any{v2, v3})
+			tmp4 := lang.Apply2(lang.Builtins["send"], v2, v3)
 			_ = tmp4
 			return true
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_DOT_async__GT__BANG__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async__GT__BANG__BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5331,13 +5329,13 @@ func LoadNS() {
 			switch len(args) {
 			case 0:
 				tmp2 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				tmp3 := lang.Apply(tmp2, []any{nil})
+				tmp3 := lang.Apply1(tmp2, nil)
 				return tmp3
 			case 1:
 				v2 := args[0]
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				tmp4 := lang.Apply(tmp3, []any{v2, nil})
+				tmp4 := lang.Apply2(tmp3, v2, nil)
 				return tmp4
 			case 2:
 				v2 := args[0]
@@ -5345,7 +5343,7 @@ func LoadNS() {
 				v3 := args[1]
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				tmp5 := lang.Apply(tmp4, []any{v2, v3, nil})
+				tmp5 := lang.Apply3(tmp4, v2, v3, nil)
 				return tmp5
 			case 3:
 				v2 := args[0]
@@ -5361,12 +5359,12 @@ func LoadNS() {
 				_ = tmp5
 				var tmp6 any
 				if lang.IsTruthy(v3) {
-					tmp7 := lang.Apply(fmt.Errorf, []any{"xform and ex-handler not yet supported"})
+					tmp7 := lang.Apply1(fmt.Errorf, "xform and ex-handler not yet supported")
 					panic(tmp7)
 				} else {
 				}
 				_ = tmp6
-				tmp8 := lang.Apply(lang.Builtins["chan-of"], []any{lang.Builtins["any"]})
+				tmp8 := lang.Apply1(lang.Builtins["chan-of"], lang.Builtins["any"])
 				var tmp9 any
 				{ // let
 					// let binding "or__0__auto__"
@@ -5380,7 +5378,7 @@ func LoadNS() {
 					}
 					tmp9 = tmp11
 				} // end let
-				tmp10 := lang.Apply(lang.Builtins["make"], []any{tmp8, tmp9})
+				tmp10 := lang.Apply2(lang.Builtins["make"], tmp8, tmp9)
 				return tmp10
 			default:
 				checkArity(args, -1)
@@ -5396,15 +5394,14 @@ func LoadNS() {
 	// close!
 	{
 		tmp0 := sym_close_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_chan)), kw_doc, "Closes a channel. The channel will no longer accept any puts (they\n  will be ignored). Data in the channel remains available for taking,\n  until exhausted, after which takes will return nil. If there are any\n  pending takes, they will be dispatched with nil. Closing a closed\n  channel will throw an exception.\n\n  Logically closing happens after all puts have been\n  delivered. Therefore, any blocked or parked puts will remain\n  blocked/parked until a taker releases them.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply(lang.Builtins["close"], []any{v2})
+			tmp3 := lang.Apply1(lang.Builtins["close"], v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_DOT_async_close_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_close_BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5413,9 +5410,8 @@ func LoadNS() {
 	// default-case
 	{
 		tmp0 := sym_default_DASH_case.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(100), kw_column, int(8), kw_end_DASH_line, int(100), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 0)
+		var tmp1 lang.FnFunc0
+		tmp1 = lang.FnFunc0(func() any {
 			var tmp2 any
 			{ // let
 				// let binding "def"
@@ -5454,7 +5450,7 @@ func LoadNS() {
 			} // end let
 			return tmp2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_DOT_async_default_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_default_DASH_case.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5463,32 +5459,31 @@ func LoadNS() {
 	// <!
 	{
 		tmp0 := sym__LT__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(35), kw_column, int(7), kw_end_DASH_line, int(35), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "takes a val from port. Will return nil if closed. Will park if\n  nothing is available.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
 				// let binding "vec__692"
-				tmp4 := lang.Apply(lang.Builtins["recv"], []any{v2})
+				tmp4 := lang.Apply1(lang.Builtins["recv"], v2)
 				var v5 any = tmp4
 				_ = v5
 				// let binding "val"
 				tmp6 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp7 := lang.Apply(tmp6, []any{v5, int64(0), nil})
+				tmp7 := lang.Apply3(tmp6, v5, int64(0), nil)
 				var v8 any = tmp7
 				_ = v8
 				// let binding "_"
 				tmp9 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp10 := lang.Apply(tmp9, []any{v5, int64(1), nil})
+				tmp10 := lang.Apply3(tmp9, v5, int64(1), nil)
 				var v11 any = tmp10
 				_ = v11
 				tmp3 = v8
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_DOT_async__LT__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async__LT__BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5497,32 +5492,31 @@ func LoadNS() {
 	// <!!
 	{
 		tmp0 := sym__LT__BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(42), kw_column, int(6), kw_end_DASH_line, int(42), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
 				// let binding "vec__692"
-				tmp4 := lang.Apply(lang.Builtins["recv"], []any{v2})
+				tmp4 := lang.Apply1(lang.Builtins["recv"], v2)
 				var v5 any = tmp4
 				_ = v5
 				// let binding "val"
 				tmp6 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp7 := lang.Apply(tmp6, []any{v5, int64(0), nil})
+				tmp7 := lang.Apply3(tmp6, v5, int64(0), nil)
 				var v8 any = tmp7
 				_ = v8
 				// let binding "_"
 				tmp9 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp10 := lang.Apply(tmp9, []any{v5, int64(1), nil})
+				tmp10 := lang.Apply3(tmp9, v5, int64(1), nil)
 				var v11 any = tmp10
 				_ = v11
 				tmp3 = v8
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_DOT_async__LT__BANG__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async__LT__BANG__BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5547,7 +5541,7 @@ func LoadNS() {
 				}
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alt)
-				tmp6 := lang.Apply(tmp5, []any{sym_clojure_DOT_core_DOT_async_SLASH_alts_BANG_, v4})
+				tmp6 := lang.Apply2(tmp5, sym_clojure_DOT_core_DOT_async_SLASH_alts_BANG_, v4)
 				return tmp6
 			}
 		})
@@ -5578,9 +5572,9 @@ func LoadNS() {
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp8 := lang.Apply(tmp7, []any{sym_clojure_DOT_core_DOT_async_SLASH_alt_BANG_})
-				tmp9 := lang.Apply(tmp6, []any{tmp8, v4})
-				tmp10 := lang.Apply(tmp5, []any{tmp9})
+				tmp8 := lang.Apply1(tmp7, sym_clojure_DOT_core_DOT_async_SLASH_alt_BANG_)
+				tmp9 := lang.Apply2(tmp6, tmp8, v4)
+				tmp10 := lang.Apply1(tmp5, tmp9)
 				return tmp10
 			}
 		})
@@ -5614,23 +5608,23 @@ func LoadNS() {
 					// let binding "map__708"
 					var tmp6 any
 					tmp7 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-					tmp8 := lang.Apply(tmp7, []any{v5})
+					tmp8 := lang.Apply1(tmp7, v5)
 					if lang.IsTruthy(tmp8) {
 						var tmp9 any
 						tmp10 := checkDerefVar(var_clojure_DOT_core_next)
-						tmp11 := lang.Apply(tmp10, []any{v5})
+						tmp11 := lang.Apply1(tmp10, v5)
 						if lang.IsTruthy(tmp11) {
 							tmp12 := checkDerefVar(var_clojure_DOT_core_to_DASH_array)
-							tmp13 := lang.Apply(tmp12, []any{v5})
-							tmp14 := lang.Apply(lang.NewPersistentArrayMapAsIfByAssoc, []any{tmp13})
+							tmp13 := lang.Apply1(tmp12, v5)
+							tmp14 := lang.Apply1(lang.NewPersistentArrayMapAsIfByAssoc, tmp13)
 							tmp9 = tmp14
 						} else {
 							var tmp15 any
 							tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp17 := lang.Apply(tmp16, []any{v5})
+							tmp17 := lang.Apply1(tmp16, v5)
 							if lang.IsTruthy(tmp17) {
 								tmp18 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp19 := lang.Apply(tmp18, []any{v5})
+								tmp19 := lang.Apply1(tmp18, v5)
 								tmp15 = tmp19
 							} else {
 							}
@@ -5646,7 +5640,7 @@ func LoadNS() {
 					var v21 any = v20
 					_ = v21
 					tmp22 := checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
-					tmp23 := lang.Apply(tmp22, []any{v2, v21})
+					tmp23 := lang.Apply2(tmp22, v2, v21)
 					tmp4 = tmp23
 				} // end let
 				return tmp4
@@ -5682,23 +5676,23 @@ func LoadNS() {
 					// let binding "map__708"
 					var tmp6 any
 					tmp7 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-					tmp8 := lang.Apply(tmp7, []any{v5})
+					tmp8 := lang.Apply1(tmp7, v5)
 					if lang.IsTruthy(tmp8) {
 						var tmp9 any
 						tmp10 := checkDerefVar(var_clojure_DOT_core_next)
-						tmp11 := lang.Apply(tmp10, []any{v5})
+						tmp11 := lang.Apply1(tmp10, v5)
 						if lang.IsTruthy(tmp11) {
 							tmp12 := checkDerefVar(var_clojure_DOT_core_to_DASH_array)
-							tmp13 := lang.Apply(tmp12, []any{v5})
-							tmp14 := lang.Apply(lang.NewPersistentArrayMapAsIfByAssoc, []any{tmp13})
+							tmp13 := lang.Apply1(tmp12, v5)
+							tmp14 := lang.Apply1(lang.NewPersistentArrayMapAsIfByAssoc, tmp13)
 							tmp9 = tmp14
 						} else {
 							var tmp15 any
 							tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp17 := lang.Apply(tmp16, []any{v5})
+							tmp17 := lang.Apply1(tmp16, v5)
 							if lang.IsTruthy(tmp17) {
 								tmp18 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp19 := lang.Apply(tmp18, []any{v5})
+								tmp19 := lang.Apply1(tmp18, v5)
 								tmp15 = tmp19
 							} else {
 							}
@@ -5714,7 +5708,7 @@ func LoadNS() {
 					var v21 any = v20
 					_ = v21
 					tmp22 := checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
-					tmp23 := lang.Apply(tmp22, []any{v2, v21})
+					tmp23 := lang.Apply2(tmp22, v2, v21)
 					tmp4 = tmp23
 				} // end let
 				return tmp4
@@ -5729,25 +5723,23 @@ func LoadNS() {
 	// check-unique-ports!
 	{
 		tmp0 := sym_check_DASH_unique_DASH_ports_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(158), kw_column, int(8), kw_end_DASH_line, int(158), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_ports)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
 				// let binding "chans"
 				tmp4 := checkDerefVar(var_clojure_DOT_core_map)
-				var tmp5 lang.FnFunc
-				tmp5 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v6 := args[0]
+				var tmp5 lang.FnFunc1
+				tmp5 = lang.FnFunc1(func(p0 any) any {
+					v6 := p0
 					_ = v6
 					var tmp7 any
 					tmp8 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-					tmp9 := lang.Apply(tmp8, []any{v6})
+					tmp9 := lang.Apply1(tmp8, v6)
 					if lang.IsTruthy(tmp9) {
-						tmp10 := lang.Apply(v6, []any{int64(0)})
+						tmp10 := lang.Apply1(v6, int64(0))
 						tmp7 = tmp10
 					} else {
 						tmp7 = v6
@@ -5759,23 +5751,23 @@ func LoadNS() {
 				if err != nil {
 					panic(err)
 				}
-				tmp8 := lang.Apply(tmp4, []any{tmp7, v2})
+				tmp8 := lang.Apply2(tmp4, tmp7, v2)
 				var v9 any = tmp8
 				_ = v9
 				// let binding "s"
 				tmp10 := checkDerefVar(var_clojure_DOT_core_set)
-				tmp11 := lang.Apply(tmp10, []any{v9})
+				tmp11 := lang.Apply1(tmp10, v9)
 				var v12 any = tmp11
 				_ = v12
 				var tmp13 any
 				tmp14 := checkDerefVar(var_clojure_DOT_core_not_EQ_)
 				tmp15 := checkDerefVar(var_clojure_DOT_core_count)
-				tmp16 := lang.Apply(tmp15, []any{v12})
+				tmp16 := lang.Apply1(tmp15, v12)
 				tmp17 := checkDerefVar(var_clojure_DOT_core_count)
-				tmp18 := lang.Apply(tmp17, []any{v2})
-				tmp19 := lang.Apply(tmp14, []any{tmp16, tmp18})
+				tmp18 := lang.Apply1(tmp17, v2)
+				tmp19 := lang.Apply2(tmp14, tmp16, tmp18)
 				if lang.IsTruthy(tmp19) {
-					tmp20 := lang.Apply(fmt.Errorf, []any{"duplicate ports found in alt(s)! operation"})
+					tmp20 := lang.Apply1(fmt.Errorf, "duplicate ports found in alt(s)! operation")
 					panic(tmp20)
 				} else {
 				}
@@ -5783,7 +5775,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5792,30 +5784,28 @@ func LoadNS() {
 	// do-alt
 	{
 		tmp0 := sym_do_DASH_alt.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(212), kw_column, int(7), kw_end_DASH_line, int(212), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_alts, sym_clauses)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			var tmp4 any
 			{ // let
 				// let binding "clauses"
 				tmp5 := checkDerefVar(var_clojure_DOT_core_partition)
-				tmp6 := lang.Apply(tmp5, []any{int64(2), v3})
+				tmp6 := lang.Apply2(tmp5, int64(2), v3)
 				var v7 any = tmp6
 				_ = v7
 				// let binding "opt?"
-				var tmp8 lang.FnFunc
-				tmp8 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v9 := args[0]
+				var tmp8 lang.FnFunc1
+				tmp8 = lang.FnFunc1(func(p0 any) any {
+					v9 := p0
 					_ = v9
 					tmp10 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_first)
-					tmp12 := lang.Apply(tmp11, []any{v9})
-					tmp13 := lang.Apply(tmp10, []any{tmp12})
+					tmp12 := lang.Apply1(tmp11, v9)
+					tmp13 := lang.Apply1(tmp10, tmp12)
 					return tmp13
 				})
 				tmp9 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(215), kw_column, int(14), kw_end_DASH_line, int(215), kw_end_DASH_column, int(34))
@@ -5827,22 +5817,21 @@ func LoadNS() {
 				_ = v11
 				// let binding "opts"
 				tmp12 := checkDerefVar(var_clojure_DOT_core_filter)
-				tmp13 := lang.Apply(tmp12, []any{v11, v7})
+				tmp13 := lang.Apply2(tmp12, v11, v7)
 				var v14 any = tmp13
 				_ = v14
 				// let binding "clauses"
 				tmp15 := checkDerefVar(var_clojure_DOT_core_remove)
-				tmp16 := lang.Apply(tmp15, []any{v11, v7})
+				tmp16 := lang.Apply2(tmp15, v11, v7)
 				var v17 any = tmp16
 				_ = v17
 				// let binding "vec__709"
 				tmp18 := checkDerefVar(var_clojure_DOT_core_reduce)
-				var tmp19 lang.FnFunc
-				tmp19 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 2)
-					v20 := args[0]
+				var tmp19 lang.FnFunc2
+				tmp19 = lang.FnFunc2(func(p0, p1 any) any {
+					v20 := p0
 					_ = v20
-					v21 := args[1]
+					v21 := p1
 					_ = v21
 					var tmp22 any
 					{ // let
@@ -5851,12 +5840,12 @@ func LoadNS() {
 						_ = v23
 						// let binding "clauses"
 						tmp24 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp25 := lang.Apply(tmp24, []any{v23, int64(0), nil})
+						tmp25 := lang.Apply3(tmp24, v23, int64(0), nil)
 						var v26 any = tmp25
 						_ = v26
 						// let binding "bindings"
 						tmp27 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp28 := lang.Apply(tmp27, []any{v23, int64(1), nil})
+						tmp28 := lang.Apply3(tmp27, v23, int64(1), nil)
 						var v29 any = tmp28
 						_ = v29
 						// let binding "vec__717"
@@ -5864,12 +5853,12 @@ func LoadNS() {
 						_ = v30
 						// let binding "ports"
 						tmp31 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp32 := lang.Apply(tmp31, []any{v30, int64(0), nil})
+						tmp32 := lang.Apply3(tmp31, v30, int64(0), nil)
 						var v33 any = tmp32
 						_ = v33
 						// let binding "expr"
 						tmp34 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp35 := lang.Apply(tmp34, []any{v30, int64(1), nil})
+						tmp35 := lang.Apply3(tmp34, v30, int64(1), nil)
 						var v36 any = tmp35
 						_ = v36
 						var tmp37 any
@@ -5877,7 +5866,7 @@ func LoadNS() {
 							// let binding "ports"
 							var tmp38 any
 							tmp39 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-							tmp40 := lang.Apply(tmp39, []any{v33})
+							tmp40 := lang.Apply1(tmp39, v33)
 							if lang.IsTruthy(tmp40) {
 								tmp38 = v33
 							} else {
@@ -5893,12 +5882,11 @@ func LoadNS() {
 							_ = v44
 							// let binding "vec__720"
 							tmp45 := checkDerefVar(var_clojure_DOT_core_reduce)
-							var tmp46 lang.FnFunc
-							tmp46 = lang.NewFnFunc(func(args ...any) any {
-								checkArity(args, 2)
-								v47 := args[0]
+							var tmp46 lang.FnFunc2
+							tmp46 = lang.FnFunc2(func(p0, p1 any) any {
+								v47 := p0
 								_ = v47
-								v48 := args[1]
+								v48 := p1
 								_ = v48
 								var tmp49 any
 								{ // let
@@ -5907,17 +5895,17 @@ func LoadNS() {
 									_ = v50
 									// let binding "ports"
 									tmp51 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp52 := lang.Apply(tmp51, []any{v50, int64(0), nil})
+									tmp52 := lang.Apply3(tmp51, v50, int64(0), nil)
 									var v53 any = tmp52
 									_ = v53
 									// let binding "bindings"
 									tmp54 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp55 := lang.Apply(tmp54, []any{v50, int64(1), nil})
+									tmp55 := lang.Apply3(tmp54, v50, int64(1), nil)
 									var v56 any = tmp55
 									_ = v56
 									var tmp57 any
 									tmp58 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-									tmp59 := lang.Apply(tmp58, []any{v48})
+									tmp59 := lang.Apply1(tmp58, v48)
 									if lang.IsTruthy(tmp59) {
 										var tmp60 any
 										{ // let
@@ -5926,22 +5914,22 @@ func LoadNS() {
 											_ = v61
 											// let binding "port"
 											tmp62 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp63 := lang.Apply(tmp62, []any{v61, int64(0), nil})
+											tmp63 := lang.Apply3(tmp62, v61, int64(0), nil)
 											var v64 any = tmp63
 											_ = v64
 											// let binding "val"
 											tmp65 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp66 := lang.Apply(tmp65, []any{v61, int64(1), nil})
+											tmp66 := lang.Apply3(tmp65, v61, int64(1), nil)
 											var v67 any = tmp66
 											_ = v67
 											// let binding "gp"
 											tmp68 := checkDerefVar(var_clojure_DOT_core_gensym)
-											tmp69 := lang.Apply(tmp68, nil)
+											tmp69 := lang.Apply0(tmp68)
 											var v70 any = tmp69
 											_ = v70
 											// let binding "gv"
 											tmp71 := checkDerefVar(var_clojure_DOT_core_gensym)
-											tmp72 := lang.Apply(tmp71, nil)
+											tmp72 := lang.Apply0(tmp71)
 											var v73 any = tmp72
 											_ = v73
 											tmp74 := checkDerefVar(var_clojure_DOT_core_conj)
@@ -5951,7 +5939,7 @@ func LoadNS() {
 											if err != nil {
 												panic(err)
 											}
-											tmp78 := lang.Apply(tmp74, []any{v53, tmp77})
+											tmp78 := lang.Apply2(tmp74, v53, tmp77)
 											tmp79 := checkDerefVar(var_clojure_DOT_core_conj)
 											tmp80 := lang.NewVector(v70, v64)
 											tmp81 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(229), kw_column, int(62), kw_end_DASH_line, int(229), kw_end_DASH_column, int(70))
@@ -5965,7 +5953,7 @@ func LoadNS() {
 											if err != nil {
 												panic(err)
 											}
-											tmp86 := lang.Apply(tmp79, []any{v56, tmp82, tmp85})
+											tmp86 := lang.Apply3(tmp79, v56, tmp82, tmp85)
 											tmp87 := lang.NewVector(tmp78, tmp86)
 											tmp88 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(229), kw_column, int(25), kw_end_DASH_line, int(229), kw_end_DASH_column, int(81))
 											tmp89, err := lang.WithMeta(tmp87, tmp88.(lang.IPersistentMap))
@@ -5980,11 +5968,11 @@ func LoadNS() {
 										{ // let
 											// let binding "gp"
 											tmp62 := checkDerefVar(var_clojure_DOT_core_gensym)
-											tmp63 := lang.Apply(tmp62, nil)
+											tmp63 := lang.Apply0(tmp62)
 											var v64 any = tmp63
 											_ = v64
 											tmp65 := checkDerefVar(var_clojure_DOT_core_conj)
-											tmp66 := lang.Apply(tmp65, []any{v53, v64})
+											tmp66 := lang.Apply2(tmp65, v53, v64)
 											tmp67 := checkDerefVar(var_clojure_DOT_core_conj)
 											tmp68 := lang.NewVector(v64, v48)
 											tmp69 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(231), kw_column, int(57), kw_end_DASH_line, int(231), kw_end_DASH_column, int(65))
@@ -5992,7 +5980,7 @@ func LoadNS() {
 											if err != nil {
 												panic(err)
 											}
-											tmp71 := lang.Apply(tmp67, []any{v56, tmp70})
+											tmp71 := lang.Apply2(tmp67, v56, tmp70)
 											tmp72 := lang.NewVector(tmp66, tmp71)
 											tmp73 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(231), kw_column, int(25), kw_end_DASH_line, int(231), kw_end_DASH_column, int(67))
 											tmp74, err := lang.WithMeta(tmp72, tmp73.(lang.IPersistentMap))
@@ -6024,17 +6012,17 @@ func LoadNS() {
 							if err != nil {
 								panic(err)
 							}
-							tmp55 := lang.Apply(tmp45, []any{tmp48, tmp54, v44})
+							tmp55 := lang.Apply3(tmp45, tmp48, tmp54, v44)
 							var v56 any = tmp55
 							_ = v56
 							// let binding "ports"
 							tmp57 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp58 := lang.Apply(tmp57, []any{v56, int64(0), nil})
+							tmp58 := lang.Apply3(tmp57, v56, int64(0), nil)
 							var v59 any = tmp58
 							_ = v59
 							// let binding "bindings"
 							tmp60 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp61 := lang.Apply(tmp60, []any{v56, int64(1), nil})
+							tmp61 := lang.Apply3(tmp60, v56, int64(1), nil)
 							var v62 any = tmp61
 							_ = v62
 							tmp63 := checkDerefVar(var_clojure_DOT_core_conj)
@@ -6044,7 +6032,7 @@ func LoadNS() {
 							if err != nil {
 								panic(err)
 							}
-							tmp67 := lang.Apply(tmp63, []any{v26, tmp66})
+							tmp67 := lang.Apply2(tmp63, v26, tmp66)
 							tmp68 := lang.NewVector(tmp67, v62)
 							tmp69 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(233), kw_column, int(14), kw_end_DASH_line, int(233), kw_end_DASH_column, int(51))
 							tmp70, err := lang.WithMeta(tmp68, tmp69.(lang.IPersistentMap))
@@ -6080,33 +6068,33 @@ func LoadNS() {
 				if err != nil {
 					panic(err)
 				}
-				tmp31 := lang.Apply(tmp18, []any{tmp21, tmp30, v17})
+				tmp31 := lang.Apply3(tmp18, tmp21, tmp30, v17)
 				var v32 any = tmp31
 				_ = v32
 				// let binding "clauses"
 				tmp33 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp34 := lang.Apply(tmp33, []any{v32, int64(0), nil})
+				tmp34 := lang.Apply3(tmp33, v32, int64(0), nil)
 				var v35 any = tmp34
 				_ = v35
 				// let binding "bindings"
 				tmp36 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp37 := lang.Apply(tmp36, []any{v32, int64(1), nil})
+				tmp37 := lang.Apply3(tmp36, v32, int64(1), nil)
 				var v38 any = tmp37
 				_ = v38
 				// let binding "gch"
 				tmp39 := checkDerefVar(var_clojure_DOT_core_gensym)
-				tmp40 := lang.Apply(tmp39, []any{"ch"})
+				tmp40 := lang.Apply1(tmp39, "ch")
 				var v41 any = tmp40
 				_ = v41
 				// let binding "gret"
 				tmp42 := checkDerefVar(var_clojure_DOT_core_gensym)
-				tmp43 := lang.Apply(tmp42, []any{"ret"})
+				tmp43 := lang.Apply1(tmp42, "ret")
 				var v44 any = tmp43
 				_ = v44
 				tmp45 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp46 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp47 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp48 := lang.Apply(tmp47, []any{sym_clojure_DOT_core_SLASH_let})
+				tmp48 := lang.Apply1(tmp47, sym_clojure_DOT_core_SLASH_let)
 				tmp49 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp50 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp51 := checkDerefVar(var_clojure_DOT_core_vector)
@@ -6114,29 +6102,29 @@ func LoadNS() {
 				tmp53 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp54 := checkDerefVar(var_clojure_DOT_core_mapcat)
 				tmp55 := checkDerefVar(var_clojure_DOT_core_identity)
-				tmp56 := lang.Apply(tmp54, []any{tmp55, v38})
+				tmp56 := lang.Apply2(tmp54, tmp55, v38)
 				tmp57 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp58 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp59 := checkDerefVar(var_clojure_DOT_core_vector)
 				tmp60 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp61 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp62 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp63 := lang.Apply(tmp62, []any{sym_val__0__auto__})
+				tmp63 := lang.Apply1(tmp62, sym_val__0__auto__)
 				tmp64 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp65 := lang.Apply(tmp64, []any{v41})
+				tmp65 := lang.Apply1(tmp64, v41)
 				tmp66 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp67 := lang.Apply(tmp66, []any{kw_as})
+				tmp67 := lang.Apply1(tmp66, kw_as)
 				tmp68 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp69 := lang.Apply(tmp68, []any{v44})
-				tmp70 := lang.Apply(tmp61, []any{tmp63, tmp65, tmp67, tmp69})
-				tmp71 := lang.Apply(tmp60, []any{tmp70})
-				tmp72 := lang.Apply(tmp58, []any{tmp59, tmp71})
-				tmp73 := lang.Apply(tmp57, []any{tmp72})
+				tmp69 := lang.Apply1(tmp68, v44)
+				tmp70 := lang.Apply4(tmp61, tmp63, tmp65, tmp67, tmp69)
+				tmp71 := lang.Apply1(tmp60, tmp70)
+				tmp72 := lang.Apply2(tmp58, tmp59, tmp71)
+				tmp73 := lang.Apply1(tmp57, tmp72)
 				tmp74 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp75 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp76 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp77 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp78 := lang.Apply(tmp77, []any{v2})
+				tmp78 := lang.Apply1(tmp77, v2)
 				tmp79 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp80 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp81 := checkDerefVar(var_clojure_DOT_core_vector)
@@ -6146,32 +6134,31 @@ func LoadNS() {
 				tmp85 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp86 := checkDerefVar(var_clojure_DOT_core_map)
 				tmp87 := checkDerefVar(var_clojure_DOT_core_first)
-				tmp88 := lang.Apply(tmp86, []any{tmp87, v35})
-				tmp89 := lang.Apply(tmp84, []any{tmp85, tmp88})
-				tmp90 := lang.Apply(tmp83, []any{tmp89})
-				tmp91 := lang.Apply(tmp82, []any{tmp90})
-				tmp92 := lang.Apply(tmp80, []any{tmp81, tmp91})
-				tmp93 := lang.Apply(tmp79, []any{tmp92})
+				tmp88 := lang.Apply2(tmp86, tmp87, v35)
+				tmp89 := lang.Apply2(tmp84, tmp85, tmp88)
+				tmp90 := lang.Apply1(tmp83, tmp89)
+				tmp91 := lang.Apply1(tmp82, tmp90)
+				tmp92 := lang.Apply2(tmp80, tmp81, tmp91)
+				tmp93 := lang.Apply1(tmp79, tmp92)
 				tmp94 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp95 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp96 := lang.Apply(tmp94, []any{tmp95, v14})
-				tmp97 := lang.Apply(tmp76, []any{tmp78, tmp93, tmp96})
-				tmp98 := lang.Apply(tmp75, []any{tmp97})
-				tmp99 := lang.Apply(tmp74, []any{tmp98})
-				tmp100 := lang.Apply(tmp53, []any{tmp56, tmp73, tmp99})
-				tmp101 := lang.Apply(tmp52, []any{tmp100})
-				tmp102 := lang.Apply(tmp50, []any{tmp51, tmp101})
-				tmp103 := lang.Apply(tmp49, []any{tmp102})
+				tmp96 := lang.Apply2(tmp94, tmp95, v14)
+				tmp97 := lang.Apply3(tmp76, tmp78, tmp93, tmp96)
+				tmp98 := lang.Apply1(tmp75, tmp97)
+				tmp99 := lang.Apply1(tmp74, tmp98)
+				tmp100 := lang.Apply3(tmp53, tmp56, tmp73, tmp99)
+				tmp101 := lang.Apply1(tmp52, tmp100)
+				tmp102 := lang.Apply2(tmp50, tmp51, tmp101)
+				tmp103 := lang.Apply1(tmp49, tmp102)
 				tmp104 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp105 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp106 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp107 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp108 := lang.Apply(tmp107, []any{sym_clojure_DOT_core_SLASH_cond})
+				tmp108 := lang.Apply1(tmp107, sym_clojure_DOT_core_SLASH_cond)
 				tmp109 := checkDerefVar(var_clojure_DOT_core_mapcat)
-				var tmp110 lang.FnFunc
-				tmp110 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v111 := args[0]
+				var tmp110 lang.FnFunc1
+				tmp110 = lang.FnFunc1(func(p0 any) any {
+					v111 := p0
 					_ = v111
 					var tmp112 any
 					{ // let
@@ -6180,44 +6167,43 @@ func LoadNS() {
 						_ = v113
 						// let binding "ports"
 						tmp114 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp115 := lang.Apply(tmp114, []any{v113, int64(0), nil})
+						tmp115 := lang.Apply3(tmp114, v113, int64(0), nil)
 						var v116 any = tmp115
 						_ = v116
 						// let binding "expr"
 						tmp117 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp118 := lang.Apply(tmp117, []any{v113, int64(1), nil})
+						tmp118 := lang.Apply3(tmp117, v113, int64(1), nil)
 						var v119 any = tmp118
 						_ = v119
 						tmp120 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp121 := checkDerefVar(var_clojure_DOT_core_concat)
 						tmp122 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp123 := lang.Apply(tmp122, []any{sym_clojure_DOT_core_SLASH_or})
+						tmp123 := lang.Apply1(tmp122, sym_clojure_DOT_core_SLASH_or)
 						tmp124 := checkDerefVar(var_clojure_DOT_core_map)
-						var tmp125 lang.FnFunc
-						tmp125 = lang.NewFnFunc(func(args ...any) any {
-							checkArity(args, 1)
-							v126 := args[0]
+						var tmp125 lang.FnFunc1
+						tmp125 = lang.FnFunc1(func(p0 any) any {
+							v126 := p0
 							_ = v126
 							tmp127 := checkDerefVar(var_clojure_DOT_core_seq)
 							tmp128 := checkDerefVar(var_clojure_DOT_core_concat)
 							tmp129 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp130 := lang.Apply(tmp129, []any{sym_clojure_DOT_core_SLASH__EQ_})
+							tmp130 := lang.Apply1(tmp129, sym_clojure_DOT_core_SLASH__EQ_)
 							tmp131 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp132 := lang.Apply(tmp131, []any{v41})
+							tmp132 := lang.Apply1(tmp131, v41)
 							tmp133 := checkDerefVar(var_clojure_DOT_core_list)
 							var tmp134 any
 							tmp135 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-							tmp136 := lang.Apply(tmp135, []any{v126})
+							tmp136 := lang.Apply1(tmp135, v126)
 							if lang.IsTruthy(tmp136) {
 								tmp137 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp138 := lang.Apply(tmp137, []any{v126})
+								tmp138 := lang.Apply1(tmp137, v126)
 								tmp134 = tmp138
 							} else {
 								tmp134 = v126
 							}
-							tmp139 := lang.Apply(tmp133, []any{tmp134})
-							tmp140 := lang.Apply(tmp128, []any{tmp130, tmp132, tmp139})
-							tmp141 := lang.Apply(tmp127, []any{tmp140})
+							tmp139 := lang.Apply1(tmp133, tmp134)
+							tmp140 := lang.Apply3(tmp128, tmp130, tmp132, tmp139)
+							tmp141 := lang.Apply1(tmp127, tmp140)
 							return tmp141
 						})
 						tmp126 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(241), kw_column, int(39), kw_end_DASH_line, int(242), kw_end_DASH_column, int(84))
@@ -6225,23 +6211,23 @@ func LoadNS() {
 						if err != nil {
 							panic(err)
 						}
-						tmp128 := lang.Apply(tmp124, []any{tmp127, v116})
-						tmp129 := lang.Apply(tmp121, []any{tmp123, tmp128})
-						tmp130 := lang.Apply(tmp120, []any{tmp129})
+						tmp128 := lang.Apply2(tmp124, tmp127, v116)
+						tmp129 := lang.Apply2(tmp121, tmp123, tmp128)
+						tmp130 := lang.Apply1(tmp120, tmp129)
 						var tmp131 any
 						var tmp132 any
 						{ // let
 							// let binding "and__0__auto__"
 							tmp133 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-							tmp134 := lang.Apply(tmp133, []any{v119})
+							tmp134 := lang.Apply1(tmp133, v119)
 							var v135 any = tmp134
 							_ = v135
 							var tmp136 any
 							if lang.IsTruthy(v135) {
 								tmp137 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
 								tmp138 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp139 := lang.Apply(tmp138, []any{v119})
-								tmp140 := lang.Apply(tmp137, []any{tmp139})
+								tmp139 := lang.Apply1(tmp138, v119)
+								tmp140 := lang.Apply1(tmp137, tmp139)
 								tmp136 = tmp140
 							} else {
 								tmp136 = v135
@@ -6252,7 +6238,7 @@ func LoadNS() {
 							tmp133 := checkDerefVar(var_clojure_DOT_core_seq)
 							tmp134 := checkDerefVar(var_clojure_DOT_core_concat)
 							tmp135 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp136 := lang.Apply(tmp135, []any{sym_clojure_DOT_core_SLASH_let})
+							tmp136 := lang.Apply1(tmp135, sym_clojure_DOT_core_SLASH_let)
 							tmp137 := checkDerefVar(var_clojure_DOT_core_list)
 							tmp138 := checkDerefVar(var_clojure_DOT_core_apply)
 							tmp139 := checkDerefVar(var_clojure_DOT_core_vector)
@@ -6260,18 +6246,18 @@ func LoadNS() {
 							tmp141 := checkDerefVar(var_clojure_DOT_core_concat)
 							tmp142 := checkDerefVar(var_clojure_DOT_core_list)
 							tmp143 := checkDerefVar(var_clojure_DOT_core_first)
-							tmp144 := lang.Apply(tmp143, []any{v119})
-							tmp145 := lang.Apply(tmp142, []any{tmp144})
+							tmp144 := lang.Apply1(tmp143, v119)
+							tmp145 := lang.Apply1(tmp142, tmp144)
 							tmp146 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp147 := lang.Apply(tmp146, []any{v44})
-							tmp148 := lang.Apply(tmp141, []any{tmp145, tmp147})
-							tmp149 := lang.Apply(tmp140, []any{tmp148})
-							tmp150 := lang.Apply(tmp138, []any{tmp139, tmp149})
-							tmp151 := lang.Apply(tmp137, []any{tmp150})
+							tmp147 := lang.Apply1(tmp146, v44)
+							tmp148 := lang.Apply2(tmp141, tmp145, tmp147)
+							tmp149 := lang.Apply1(tmp140, tmp148)
+							tmp150 := lang.Apply2(tmp138, tmp139, tmp149)
+							tmp151 := lang.Apply1(tmp137, tmp150)
 							tmp152 := checkDerefVar(var_clojure_DOT_core_rest)
-							tmp153 := lang.Apply(tmp152, []any{v119})
-							tmp154 := lang.Apply(tmp134, []any{tmp136, tmp151, tmp153})
-							tmp155 := lang.Apply(tmp133, []any{tmp154})
+							tmp153 := lang.Apply1(tmp152, v119)
+							tmp154 := lang.Apply3(tmp134, tmp136, tmp151, tmp153)
+							tmp155 := lang.Apply1(tmp133, tmp154)
 							tmp131 = tmp155
 						} else {
 							tmp131 = v119
@@ -6291,31 +6277,31 @@ func LoadNS() {
 				if err != nil {
 					panic(err)
 				}
-				tmp113 := lang.Apply(tmp109, []any{tmp112, v35})
+				tmp113 := lang.Apply2(tmp109, tmp112, v35)
 				tmp114 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp115 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp116 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp117 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp118 := lang.Apply(tmp117, []any{sym_clojure_DOT_core_SLASH__EQ_})
+				tmp118 := lang.Apply1(tmp117, sym_clojure_DOT_core_SLASH__EQ_)
 				tmp119 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp120 := lang.Apply(tmp119, []any{v41})
+				tmp120 := lang.Apply1(tmp119, v41)
 				tmp121 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp122 := lang.Apply(tmp121, []any{kw_default})
-				tmp123 := lang.Apply(tmp116, []any{tmp118, tmp120, tmp122})
-				tmp124 := lang.Apply(tmp115, []any{tmp123})
-				tmp125 := lang.Apply(tmp114, []any{tmp124})
+				tmp122 := lang.Apply1(tmp121, kw_default)
+				tmp123 := lang.Apply3(tmp116, tmp118, tmp120, tmp122)
+				tmp124 := lang.Apply1(tmp115, tmp123)
+				tmp125 := lang.Apply1(tmp114, tmp124)
 				tmp126 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp127 := lang.Apply(tmp126, []any{sym_val__0__auto__})
-				tmp128 := lang.Apply(tmp106, []any{tmp108, tmp113, tmp125, tmp127})
-				tmp129 := lang.Apply(tmp105, []any{tmp128})
-				tmp130 := lang.Apply(tmp104, []any{tmp129})
-				tmp131 := lang.Apply(tmp46, []any{tmp48, tmp103, tmp130})
-				tmp132 := lang.Apply(tmp45, []any{tmp131})
+				tmp127 := lang.Apply1(tmp126, sym_val__0__auto__)
+				tmp128 := lang.Apply4(tmp106, tmp108, tmp113, tmp125, tmp127)
+				tmp129 := lang.Apply1(tmp105, tmp128)
+				tmp130 := lang.Apply1(tmp104, tmp129)
+				tmp131 := lang.Apply3(tmp46, tmp48, tmp103, tmp130)
+				tmp132 := lang.Apply1(tmp45, tmp131)
 				tmp4 = tmp132
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_DOT_async_do_DASH_alt = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_do_DASH_alt.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6324,49 +6310,48 @@ func LoadNS() {
 	// do-alts
 	{
 		tmp0 := sym_do_DASH_alts.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym_opts)), kw_doc, "returns derefable [val port] if immediate, nil if enqueued", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(165), kw_end_DASH_line, int(165), kw_private, true)).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_)
-			tmp5 := lang.Apply(tmp4, []any{v2})
+			tmp5 := lang.Apply1(tmp4, v2)
 			_ = tmp5
 			var tmp6 any
 			{ // let
 				// let binding "ports"
 				tmp7 := checkDerefVar(var_clojure_DOT_core_vec)
-				tmp8 := lang.Apply(tmp7, []any{v2})
+				tmp8 := lang.Apply1(tmp7, v2)
 				var v9 any = tmp8
 				_ = v9
 				// let binding "n"
 				tmp10 := checkDerefVar(var_clojure_DOT_core_count)
-				tmp11 := lang.Apply(tmp10, []any{v9})
+				tmp11 := lang.Apply1(tmp10, v9)
 				var v12 any = tmp11
 				_ = v12
 				// let binding "priority"
-				tmp13 := lang.Apply(kw_priority, []any{v3})
+				tmp13 := lang.Apply1(kw_priority, v3)
 				var v14 any = tmp13
 				_ = v14
 				// let binding "selects"
 				tmp15 := checkDerefVar(var_clojure_DOT_core_map)
 				tmp16 := checkDerefVar(var_clojure_DOT_core_DOT_async_port_DASH_case)
-				tmp17 := lang.Apply(tmp15, []any{tmp16, v9})
+				tmp17 := lang.Apply2(tmp15, tmp16, v9)
 				var v18 any = tmp17
 				_ = v18
 				// let binding "selects"
 				var tmp19 any
 				tmp20 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
-				tmp21 := lang.Apply(tmp20, []any{v3, kw_default})
+				tmp21 := lang.Apply2(tmp20, v3, kw_default)
 				if lang.IsTruthy(tmp21) {
 					tmp22 := checkDerefVar(var_clojure_DOT_core_conj)
 					tmp23 := checkDerefVar(var_clojure_DOT_core_vec)
-					tmp24 := lang.Apply(tmp23, []any{v18})
+					tmp24 := lang.Apply1(tmp23, v18)
 					tmp25 := checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
-					tmp26 := lang.Apply(tmp25, nil)
-					tmp27 := lang.Apply(tmp22, []any{tmp24, tmp26})
+					tmp26 := lang.Apply0(tmp25)
+					tmp27 := lang.Apply2(tmp22, tmp24, tmp26)
 					tmp19 = tmp27
 				} else {
 					tmp19 = v18
@@ -6375,40 +6360,40 @@ func LoadNS() {
 				_ = v28
 				// let binding "def"
 				tmp29 := checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
-				tmp30 := lang.Apply(tmp29, nil)
+				tmp30 := lang.Apply0(tmp29)
 				var v31 any = tmp30
 				_ = v31
 				// let binding "vec__704"
 				tmp32 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp33 := lang.Apply(tmp32, []any{lang.Builtins["deref"], v28})
-				tmp34 := lang.Apply(reflect.Select, []any{tmp33})
+				tmp33 := lang.Apply2(tmp32, lang.Builtins["deref"], v28)
+				tmp34 := lang.Apply1(reflect.Select, tmp33)
 				var v35 any = tmp34
 				_ = v35
 				// let binding "chosen-idx"
 				tmp36 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp37 := lang.Apply(tmp36, []any{v35, int64(0), nil})
+				tmp37 := lang.Apply3(tmp36, v35, int64(0), nil)
 				var v38 any = tmp37
 				_ = v38
 				// let binding "val"
 				tmp39 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp40 := lang.Apply(tmp39, []any{v35, int64(1), nil})
+				tmp40 := lang.Apply3(tmp39, v35, int64(1), nil)
 				var v41 any = tmp40
 				_ = v41
 				// let binding "ok"
 				tmp42 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp43 := lang.Apply(tmp42, []any{v35, int64(2), nil})
+				tmp43 := lang.Apply3(tmp42, v35, int64(2), nil)
 				var v44 any = tmp43
 				_ = v44
 				// let binding "chosen"
 				tmp45 := checkDerefVar(var_clojure_DOT_core_get)
-				tmp46 := lang.Apply(tmp45, []any{v9, v38})
+				tmp46 := lang.Apply2(tmp45, v9, v38)
 				var v47 any = tmp46
 				_ = v47
 				var tmp48 any
 				tmp49 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-				tmp50 := lang.Apply(tmp49, []any{v47})
+				tmp50 := lang.Apply1(tmp49, v47)
 				if lang.IsTruthy(tmp50) {
-					tmp51 := lang.Apply(v47, []any{int64(0)})
+					tmp51 := lang.Apply1(v47, int64(0))
 					tmp52 := lang.NewVector(true, tmp51)
 					tmp53 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(181), kw_column, int(24), kw_end_DASH_line, int(181), kw_end_DASH_column, int(40))
 					tmp54, err := lang.WithMeta(tmp52, tmp53.(lang.IPersistentMap))
@@ -6419,9 +6404,9 @@ func LoadNS() {
 				} else {
 					var tmp55 any
 					tmp56 := checkDerefVar(var_clojure_DOT_core__EQ_)
-					tmp57 := lang.Apply(tmp56, []any{v12, v38})
+					tmp57 := lang.Apply2(tmp56, v12, v38)
 					if lang.IsTruthy(tmp57) {
-						tmp58 := lang.Apply(kw_default, []any{v3})
+						tmp58 := lang.Apply1(kw_default, v3)
 						tmp59 := lang.NewVector(tmp58, kw_default)
 						tmp60 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(182), kw_column, int(24), kw_end_DASH_line, int(182), kw_end_DASH_column, int(49))
 						tmp61, err := lang.WithMeta(tmp59, tmp60.(lang.IPersistentMap))
@@ -6465,7 +6450,7 @@ func LoadNS() {
 			} // end let
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_DOT_async_do_DASH_alts = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_do_DASH_alts.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6492,102 +6477,102 @@ func LoadNS() {
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp8 := lang.Apply(tmp7, []any{sym_clojure_DOT_core_SLASH_let})
+				tmp8 := lang.Apply1(tmp7, sym_clojure_DOT_core_SLASH_let)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_vector)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp14 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp15 := lang.Apply(tmp14, []any{sym_c__0__auto__})
+				tmp15 := lang.Apply1(tmp14, sym_c__0__auto__)
 				tmp16 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp17 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp18 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp19 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp20 := lang.Apply(tmp19, []any{sym_clojure_DOT_core_DOT_async_SLASH_chan})
+				tmp20 := lang.Apply1(tmp19, sym_clojure_DOT_core_DOT_async_SLASH_chan)
 				tmp21 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp22 := lang.Apply(tmp21, []any{int64(1)})
-				tmp23 := lang.Apply(tmp18, []any{tmp20, tmp22})
-				tmp24 := lang.Apply(tmp17, []any{tmp23})
-				tmp25 := lang.Apply(tmp16, []any{tmp24})
+				tmp22 := lang.Apply1(tmp21, int64(1))
+				tmp23 := lang.Apply2(tmp18, tmp20, tmp22)
+				tmp24 := lang.Apply1(tmp17, tmp23)
+				tmp25 := lang.Apply1(tmp16, tmp24)
 				tmp26 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp27 := lang.Apply(tmp26, []any{sym_f__1__auto__})
+				tmp27 := lang.Apply1(tmp26, sym_f__1__auto__)
 				tmp28 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp29 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp30 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp31 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp32 := lang.Apply(tmp31, []any{sym_clojure_DOT_core_SLASH_fn})
+				tmp32 := lang.Apply1(tmp31, sym_clojure_DOT_core_SLASH_fn)
 				tmp33 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp34 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp35 := checkDerefVar(var_clojure_DOT_core_vector)
 				tmp36 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp37 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp38 := lang.Apply(tmp37, nil)
-				tmp39 := lang.Apply(tmp36, []any{tmp38})
-				tmp40 := lang.Apply(tmp34, []any{tmp35, tmp39})
-				tmp41 := lang.Apply(tmp33, []any{tmp40})
+				tmp38 := lang.Apply0(tmp37)
+				tmp39 := lang.Apply1(tmp36, tmp38)
+				tmp40 := lang.Apply2(tmp34, tmp35, tmp39)
+				tmp41 := lang.Apply1(tmp33, tmp40)
 				tmp42 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp43 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp44 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp45 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp46 := lang.Apply(tmp45, []any{sym_clojure_DOT_core_SLASH_let})
+				tmp46 := lang.Apply1(tmp45, sym_clojure_DOT_core_SLASH_let)
 				tmp47 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp48 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp49 := checkDerefVar(var_clojure_DOT_core_vector)
 				tmp50 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp51 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp52 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp53 := lang.Apply(tmp52, []any{sym_res__2__auto__})
+				tmp53 := lang.Apply1(tmp52, sym_res__2__auto__)
 				tmp54 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp55 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp56 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp57 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp58 := lang.Apply(tmp57, []any{sym_do})
-				tmp59 := lang.Apply(tmp56, []any{tmp58, v4})
-				tmp60 := lang.Apply(tmp55, []any{tmp59})
-				tmp61 := lang.Apply(tmp54, []any{tmp60})
-				tmp62 := lang.Apply(tmp51, []any{tmp53, tmp61})
-				tmp63 := lang.Apply(tmp50, []any{tmp62})
-				tmp64 := lang.Apply(tmp48, []any{tmp49, tmp63})
-				tmp65 := lang.Apply(tmp47, []any{tmp64})
+				tmp58 := lang.Apply1(tmp57, sym_do)
+				tmp59 := lang.Apply2(tmp56, tmp58, v4)
+				tmp60 := lang.Apply1(tmp55, tmp59)
+				tmp61 := lang.Apply1(tmp54, tmp60)
+				tmp62 := lang.Apply2(tmp51, tmp53, tmp61)
+				tmp63 := lang.Apply1(tmp50, tmp62)
+				tmp64 := lang.Apply2(tmp48, tmp49, tmp63)
+				tmp65 := lang.Apply1(tmp47, tmp64)
 				tmp66 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp67 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp68 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp69 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp70 := lang.Apply(tmp69, []any{sym_clojure_DOT_core_DOT_async_SLASH__GT__BANG_})
+				tmp70 := lang.Apply1(tmp69, sym_clojure_DOT_core_DOT_async_SLASH__GT__BANG_)
 				tmp71 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp72 := lang.Apply(tmp71, []any{sym_c__0__auto__})
+				tmp72 := lang.Apply1(tmp71, sym_c__0__auto__)
 				tmp73 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp74 := lang.Apply(tmp73, []any{sym_res__2__auto__})
-				tmp75 := lang.Apply(tmp68, []any{tmp70, tmp72, tmp74})
-				tmp76 := lang.Apply(tmp67, []any{tmp75})
-				tmp77 := lang.Apply(tmp66, []any{tmp76})
-				tmp78 := lang.Apply(tmp44, []any{tmp46, tmp65, tmp77})
-				tmp79 := lang.Apply(tmp43, []any{tmp78})
-				tmp80 := lang.Apply(tmp42, []any{tmp79})
-				tmp81 := lang.Apply(tmp30, []any{tmp32, tmp41, tmp80})
-				tmp82 := lang.Apply(tmp29, []any{tmp81})
-				tmp83 := lang.Apply(tmp28, []any{tmp82})
-				tmp84 := lang.Apply(tmp13, []any{tmp15, tmp25, tmp27, tmp83})
-				tmp85 := lang.Apply(tmp12, []any{tmp84})
-				tmp86 := lang.Apply(tmp10, []any{tmp11, tmp85})
-				tmp87 := lang.Apply(tmp9, []any{tmp86})
+				tmp74 := lang.Apply1(tmp73, sym_res__2__auto__)
+				tmp75 := lang.Apply3(tmp68, tmp70, tmp72, tmp74)
+				tmp76 := lang.Apply1(tmp67, tmp75)
+				tmp77 := lang.Apply1(tmp66, tmp76)
+				tmp78 := lang.Apply3(tmp44, tmp46, tmp65, tmp77)
+				tmp79 := lang.Apply1(tmp43, tmp78)
+				tmp80 := lang.Apply1(tmp42, tmp79)
+				tmp81 := lang.Apply3(tmp30, tmp32, tmp41, tmp80)
+				tmp82 := lang.Apply1(tmp29, tmp81)
+				tmp83 := lang.Apply1(tmp28, tmp82)
+				tmp84 := lang.Apply4(tmp13, tmp15, tmp25, tmp27, tmp83)
+				tmp85 := lang.Apply1(tmp12, tmp84)
+				tmp86 := lang.Apply2(tmp10, tmp11, tmp85)
+				tmp87 := lang.Apply1(tmp9, tmp86)
 				tmp88 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp89 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp90 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp91 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp92 := lang.Apply(tmp91, []any{sym_go_SLASH_go})
+				tmp92 := lang.Apply1(tmp91, sym_go_SLASH_go)
 				tmp93 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp94 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp95 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp96 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp97 := lang.Apply(tmp96, []any{sym_f__1__auto__})
-				tmp98 := lang.Apply(tmp95, []any{tmp97})
-				tmp99 := lang.Apply(tmp94, []any{tmp98})
-				tmp100 := lang.Apply(tmp93, []any{tmp99})
-				tmp101 := lang.Apply(tmp90, []any{tmp92, tmp100})
-				tmp102 := lang.Apply(tmp89, []any{tmp101})
-				tmp103 := lang.Apply(tmp88, []any{tmp102})
+				tmp97 := lang.Apply1(tmp96, sym_f__1__auto__)
+				tmp98 := lang.Apply1(tmp95, tmp97)
+				tmp99 := lang.Apply1(tmp94, tmp98)
+				tmp100 := lang.Apply1(tmp93, tmp99)
+				tmp101 := lang.Apply2(tmp90, tmp92, tmp100)
+				tmp102 := lang.Apply1(tmp89, tmp101)
+				tmp103 := lang.Apply1(tmp88, tmp102)
 				tmp104 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp105 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp106 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -6595,19 +6580,19 @@ func LoadNS() {
 				tmp108 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp109 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp110 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp111 := lang.Apply(tmp110, []any{sym_go_SLASH__LT__DASH_chan_DASH_of})
+				tmp111 := lang.Apply1(tmp110, sym_go_SLASH__LT__DASH_chan_DASH_of)
 				tmp112 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp113 := lang.Apply(tmp112, []any{sym_go_SLASH_any})
-				tmp114 := lang.Apply(tmp109, []any{tmp111, tmp113})
-				tmp115 := lang.Apply(tmp108, []any{tmp114})
-				tmp116 := lang.Apply(tmp107, []any{tmp115})
+				tmp113 := lang.Apply1(tmp112, sym_go_SLASH_any)
+				tmp114 := lang.Apply2(tmp109, tmp111, tmp113)
+				tmp115 := lang.Apply1(tmp108, tmp114)
+				tmp116 := lang.Apply1(tmp107, tmp115)
 				tmp117 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp118 := lang.Apply(tmp117, []any{sym_c__0__auto__})
-				tmp119 := lang.Apply(tmp106, []any{tmp116, tmp118})
-				tmp120 := lang.Apply(tmp105, []any{tmp119})
-				tmp121 := lang.Apply(tmp104, []any{tmp120})
-				tmp122 := lang.Apply(tmp6, []any{tmp8, tmp87, tmp103, tmp121})
-				tmp123 := lang.Apply(tmp5, []any{tmp122})
+				tmp118 := lang.Apply1(tmp117, sym_c__0__auto__)
+				tmp119 := lang.Apply2(tmp106, tmp116, tmp118)
+				tmp120 := lang.Apply1(tmp105, tmp119)
+				tmp121 := lang.Apply1(tmp104, tmp120)
+				tmp122 := lang.Apply4(tmp6, tmp8, tmp87, tmp103, tmp121)
+				tmp123 := lang.Apply1(tmp5, tmp122)
 				return tmp123
 			}
 		})
@@ -6640,19 +6625,19 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply(tmp8, []any{sym_clojure_DOT_core_DOT_async_SLASH_go})
+				tmp9 := lang.Apply1(tmp8, sym_clojure_DOT_core_DOT_async_SLASH_go)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp14 := lang.Apply(tmp13, []any{sym_clojure_DOT_core_SLASH_loop})
+				tmp14 := lang.Apply1(tmp13, sym_clojure_DOT_core_SLASH_loop)
 				tmp15 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp16 := lang.Apply(tmp15, []any{v4})
-				tmp17 := lang.Apply(tmp12, []any{tmp14, tmp16, v5})
-				tmp18 := lang.Apply(tmp11, []any{tmp17})
-				tmp19 := lang.Apply(tmp10, []any{tmp18})
-				tmp20 := lang.Apply(tmp7, []any{tmp9, tmp19})
-				tmp21 := lang.Apply(tmp6, []any{tmp20})
+				tmp16 := lang.Apply1(tmp15, v4)
+				tmp17 := lang.Apply3(tmp12, tmp14, tmp16, v5)
+				tmp18 := lang.Apply1(tmp11, tmp17)
+				tmp19 := lang.Apply1(tmp10, tmp18)
+				tmp20 := lang.Apply2(tmp7, tmp9, tmp19)
+				tmp21 := lang.Apply1(tmp6, tmp20)
 				return tmp21
 			}
 		})
@@ -6665,18 +6650,17 @@ func LoadNS() {
 	// offer!
 	{
 		tmp0 := sym_offer_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(143), kw_column, int(7), kw_end_DASH_line, int(143), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Puts a val into port if it's possible to do so immediately.\n   nil values are not allowed. Never blocks. Returns true if offer succeeds.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			var tmp4 any
 			{ // let
 				// let binding "ret"
 				tmp5 := checkDerefVar(var_clojure_DOT_core_DOT_async_try_DASH_put)
-				tmp6 := lang.Apply(tmp5, []any{v2, v3})
+				tmp6 := lang.Apply2(tmp5, v2, v3)
 				var v7 any = tmp6
 				_ = v7
 				var tmp8 any
@@ -6688,7 +6672,7 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_DOT_async_offer_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_offer_BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6706,7 +6690,7 @@ func LoadNS() {
 				v3 := args[1]
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_pipe)
-				tmp5 := lang.Apply(tmp4, []any{v2, v3, true})
+				tmp5 := lang.Apply3(tmp4, v2, v3, true)
 				return tmp5
 			case 3:
 				v2 := args[0]
@@ -6719,13 +6703,12 @@ func LoadNS() {
 				{ // let
 					// let binding "c__0__auto__"
 					tmp6 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-					tmp7 := lang.Apply(tmp6, []any{int64(1)})
+					tmp7 := lang.Apply1(tmp6, int64(1))
 					var v8 any = tmp7
 					_ = v8
 					// let binding "f__1__auto__"
-					var tmp9 lang.FnFunc
-					tmp9 = lang.NewFnFunc(func(args ...any) any {
-						checkArity(args, 0)
+					var tmp9 lang.FnFunc0
+					tmp9 = lang.FnFunc0(func() any {
 						var tmp10 any
 						{ // let
 							// let binding "res__2__auto__"
@@ -6736,17 +6719,17 @@ func LoadNS() {
 									{ // let
 										// let binding "v"
 										tmp13 := checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
-										tmp14 := lang.Apply(tmp13, []any{v2})
+										tmp14 := lang.Apply1(tmp13, v2)
 										var v15 any = tmp14
 										_ = v15
 										var tmp16 any
 										tmp17 := checkDerefVar(var_clojure_DOT_core_nil_QMARK_)
-										tmp18 := lang.Apply(tmp17, []any{v15})
+										tmp18 := lang.Apply1(tmp17, v15)
 										if lang.IsTruthy(tmp18) {
 											var tmp19 any
 											if lang.IsTruthy(v4) {
 												tmp20 := checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
-												tmp21 := lang.Apply(tmp20, []any{v3})
+												tmp21 := lang.Apply1(tmp20, v3)
 												tmp19 = tmp21
 											} else {
 											}
@@ -6754,7 +6737,7 @@ func LoadNS() {
 										} else {
 											var tmp22 any
 											tmp23 := checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
-											tmp24 := lang.Apply(tmp23, []any{v3, v15})
+											tmp24 := lang.Apply2(tmp23, v3, v15)
 											if lang.IsTruthy(tmp24) {
 												continue
 											} else {
@@ -6770,7 +6753,7 @@ func LoadNS() {
 							var v12 any = tmp11
 							_ = v12
 							tmp13 := checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
-							tmp14 := lang.Apply(tmp13, []any{v8, v12})
+							tmp14 := lang.Apply2(tmp13, v8, v12)
 							tmp10 = tmp14
 						} // end let
 						return tmp10
@@ -6778,8 +6761,8 @@ func LoadNS() {
 					var v10 any = tmp9
 					_ = v10
 					go lang.Apply(v10, []any{})
-					tmp11 := lang.Apply(lang.Builtins["<-chan-of"], []any{lang.Builtins["any"]})
-					tmp12 := lang.Apply(tmp11, []any{v8})
+					tmp11 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
+					tmp12 := lang.Apply1(tmp11, v8)
 					tmp5 = tmp12
 				} // end let
 				_ = tmp5
@@ -6798,16 +6781,15 @@ func LoadNS() {
 	// poll!
 	{
 		tmp0 := sym_poll_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(150), kw_column, int(7), kw_end_DASH_line, int(150), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Takes a val from port if it's possible to do so immediately.\n   Never blocks. Returns value if successful, nil otherwise.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
 				// let binding "res"
 				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_try_DASH_take)
-				tmp5 := lang.Apply(tmp4, []any{v2})
+				tmp5 := lang.Apply1(tmp4, v2)
 				var v6 any = tmp5
 				_ = v6
 				// let binding "vec__701"
@@ -6815,12 +6797,12 @@ func LoadNS() {
 				_ = v7
 				// let binding "val"
 				tmp8 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp9 := lang.Apply(tmp8, []any{v7, int64(0), nil})
+				tmp9 := lang.Apply3(tmp8, v7, int64(0), nil)
 				var v10 any = tmp9
 				_ = v10
 				// let binding "ok"
 				tmp11 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp12 := lang.Apply(tmp11, []any{v7, int64(1), nil})
+				tmp12 := lang.Apply3(tmp11, v7, int64(1), nil)
 				var v13 any = tmp12
 				_ = v13
 				var tmp14 any
@@ -6832,7 +6814,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_DOT_async_poll_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_poll_BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6841,19 +6823,18 @@ func LoadNS() {
 	// port-case
 	{
 		tmp0 := sym_port_DASH_case.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port_DASH_or_DASH_put)), kw_doc, "Returns a *reflect.SelectCase for the given channel operation.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(106), kw_end_DASH_line, int(106), kw_private, true)).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
 				// let binding "wport"
 				var tmp4 any
 				tmp5 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-				tmp6 := lang.Apply(tmp5, []any{v2})
+				tmp6 := lang.Apply1(tmp5, v2)
 				if lang.IsTruthy(tmp6) {
-					tmp7 := lang.Apply(v2, []any{int64(0)})
+					tmp7 := lang.Apply1(v2, int64(0))
 					tmp4 = tmp7
 				} else {
 				}
@@ -6878,8 +6859,8 @@ func LoadNS() {
 				// let binding "val"
 				var tmp11 any
 				if lang.IsTruthy(v8) {
-					tmp12 := lang.Apply(v2, []any{int64(1)})
-					tmp13 := lang.Apply(reflect.ValueOf, []any{tmp12})
+					tmp12 := lang.Apply1(v2, int64(1))
+					tmp13 := lang.Apply1(reflect.ValueOf, tmp12)
 					tmp11 = tmp13
 				} else {
 				}
@@ -6889,7 +6870,7 @@ func LoadNS() {
 				tmp15 := new(reflect.SelectCase)
 				var v16 any = tmp15
 				_ = v16
-				tmp17 := lang.Apply(reflect.ValueOf, []any{v10})
+				tmp17 := lang.Apply1(reflect.ValueOf, v10)
 				// set! host field
 				var tmp18 any
 				{
@@ -6989,7 +6970,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_DOT_async_port_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_port_DASH_case.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6998,48 +6979,46 @@ func LoadNS() {
 	// timeout
 	{
 		tmp0 := sym_timeout.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(91), kw_column, int(7), kw_end_DASH_line, int(91), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_msecs)), kw_doc, "Returns a channel that will close after msecs", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
 				// let binding "ret"
 				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				tmp5 := lang.Apply(tmp4, nil)
+				tmp5 := lang.Apply0(tmp4)
 				var v6 any = tmp5
 				_ = v6
 				// let binding "after"
 				tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_)
-				tmp8 := lang.Apply(lang.Builtins["int64"], []any{time4.Millisecond})
-				tmp9 := lang.Apply(tmp7, []any{v2, tmp8})
-				tmp10 := lang.Apply(time4.After, []any{tmp9})
+				tmp8 := lang.Apply1(lang.Builtins["int64"], time4.Millisecond)
+				tmp9 := lang.Apply2(tmp7, v2, tmp8)
+				tmp10 := lang.Apply1(time4.After, tmp9)
 				var v11 any = tmp10
 				_ = v11
 				var tmp12 any
 				{ // let
 					// let binding "c__0__auto__"
 					tmp13 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-					tmp14 := lang.Apply(tmp13, []any{int64(1)})
+					tmp14 := lang.Apply1(tmp13, int64(1))
 					var v15 any = tmp14
 					_ = v15
 					// let binding "f__1__auto__"
-					var tmp16 lang.FnFunc
-					tmp16 = lang.NewFnFunc(func(args ...any) any {
-						checkArity(args, 0)
+					var tmp16 lang.FnFunc0
+					tmp16 = lang.FnFunc0(func() any {
 						var tmp17 any
 						{ // let
 							// let binding "res__2__auto__"
 							tmp18 := checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
-							tmp19 := lang.Apply(tmp18, []any{v11})
+							tmp19 := lang.Apply1(tmp18, v11)
 							_ = tmp19
 							tmp20 := checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
-							tmp21 := lang.Apply(tmp20, []any{v6})
+							tmp21 := lang.Apply1(tmp20, v6)
 							var v22 any = tmp21
 							_ = v22
 							tmp23 := checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
-							tmp24 := lang.Apply(tmp23, []any{v15, v22})
+							tmp24 := lang.Apply2(tmp23, v15, v22)
 							tmp17 = tmp24
 						} // end let
 						return tmp17
@@ -7047,8 +7026,8 @@ func LoadNS() {
 					var v17 any = tmp16
 					_ = v17
 					go lang.Apply(v17, []any{})
-					tmp18 := lang.Apply(lang.Builtins["<-chan-of"], []any{lang.Builtins["any"]})
-					tmp19 := lang.Apply(tmp18, []any{v15})
+					tmp18 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
+					tmp19 := lang.Apply1(tmp18, v15)
 					tmp12 = tmp19
 				} // end let
 				_ = tmp12
@@ -7056,7 +7035,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_DOT_async_timeout = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_timeout.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7065,12 +7044,11 @@ func LoadNS() {
 	// try-put
 	{
 		tmp0 := sym_try_DASH_put.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Returns true if val was sent on the port, false if sending would\n  block", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(118), kw_end_DASH_line, int(118), kw_private, true)).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			var tmp4 any
 			{ // let
@@ -7082,12 +7060,12 @@ func LoadNS() {
 				if err != nil {
 					panic(err)
 				}
-				tmp9 := lang.Apply(tmp5, []any{tmp8})
+				tmp9 := lang.Apply1(tmp5, tmp8)
 				var v10 any = tmp9
 				_ = v10
 				// let binding "def"
 				tmp11 := checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
-				tmp12 := lang.Apply(tmp11, nil)
+				tmp12 := lang.Apply0(tmp11)
 				var v13 any = tmp12
 				_ = v13
 				// let binding "vec__695"
@@ -7098,32 +7076,32 @@ func LoadNS() {
 				if err != nil {
 					panic(err)
 				}
-				tmp18 := lang.Apply(tmp14, []any{lang.Builtins["deref"], tmp17})
-				tmp19 := lang.Apply(reflect.Select, []any{tmp18})
+				tmp18 := lang.Apply2(tmp14, lang.Builtins["deref"], tmp17)
+				tmp19 := lang.Apply1(reflect.Select, tmp18)
 				var v20 any = tmp19
 				_ = v20
 				// let binding "chosen"
 				tmp21 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp22 := lang.Apply(tmp21, []any{v20, int64(0), nil})
+				tmp22 := lang.Apply3(tmp21, v20, int64(0), nil)
 				var v23 any = tmp22
 				_ = v23
 				// let binding "val"
 				tmp24 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp25 := lang.Apply(tmp24, []any{v20, int64(1), nil})
+				tmp25 := lang.Apply3(tmp24, v20, int64(1), nil)
 				var v26 any = tmp25
 				_ = v26
 				// let binding "ok"
 				tmp27 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp28 := lang.Apply(tmp27, []any{v20, int64(2), nil})
+				tmp28 := lang.Apply3(tmp27, v20, int64(2), nil)
 				var v29 any = tmp28
 				_ = v29
 				tmp30 := checkDerefVar(var_clojure_DOT_core__EQ_)
-				tmp31 := lang.Apply(tmp30, []any{int64(0), v23})
+				tmp31 := lang.Apply2(tmp30, int64(0), v23)
 				tmp4 = tmp31
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_DOT_async_try_DASH_put = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_try_DASH_put.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -7132,10 +7110,9 @@ func LoadNS() {
 	// try-take
 	{
 		tmp0 := sym_try_DASH_take.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Returns [val true] if val was received from the port, [nil false] if the channel was closed,\n  and nil if receiving would block.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(127), kw_end_DASH_line, int(127), kw_private, true)).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
@@ -7172,7 +7149,7 @@ func LoadNS() {
 					tmp6 = reflect.SelectRecv
 				}
 				_ = tmp6
-				tmp7 := lang.Apply(reflect.ValueOf, []any{v2})
+				tmp7 := lang.Apply1(reflect.ValueOf, v2)
 				// set! host field
 				var tmp8 any
 				{
@@ -7244,28 +7221,28 @@ func LoadNS() {
 				if err != nil {
 					panic(err)
 				}
-				tmp18 := lang.Apply(tmp14, []any{lang.Builtins["deref"], tmp17})
-				tmp19 := lang.Apply(reflect.Select, []any{tmp18})
+				tmp18 := lang.Apply2(tmp14, lang.Builtins["deref"], tmp17)
+				tmp19 := lang.Apply1(reflect.Select, tmp18)
 				var v20 any = tmp19
 				_ = v20
 				// let binding "chosen"
 				tmp21 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp22 := lang.Apply(tmp21, []any{v20, int64(0), nil})
+				tmp22 := lang.Apply3(tmp21, v20, int64(0), nil)
 				var v23 any = tmp22
 				_ = v23
 				// let binding "val"
 				tmp24 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp25 := lang.Apply(tmp24, []any{v20, int64(1), nil})
+				tmp25 := lang.Apply3(tmp24, v20, int64(1), nil)
 				var v26 any = tmp25
 				_ = v26
 				// let binding "ok"
 				tmp27 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp28 := lang.Apply(tmp27, []any{v20, int64(2), nil})
+				tmp28 := lang.Apply3(tmp27, v20, int64(2), nil)
 				var v29 any = tmp28
 				_ = v29
 				var tmp30 any
 				tmp31 := checkDerefVar(var_clojure_DOT_core__EQ_)
-				tmp32 := lang.Apply(tmp31, []any{int64(1), v23})
+				tmp32 := lang.Apply2(tmp31, int64(1), v23)
 				if lang.IsTruthy(tmp32) {
 				} else {
 					var tmp33 any
@@ -7308,7 +7285,7 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_DOT_async_try_DASH_take = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_async_try_DASH_take.SetMeta(tmp0.Meta().(lang.IPersistentMap))

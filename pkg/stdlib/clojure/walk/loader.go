@@ -5204,18 +5204,16 @@ func LoadNS() {
 	// keywordize-keys
 	{
 		tmp0 := sym_keywordize_DASH_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from strings to keywords.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(94), kw_end_DASH_line, int(94))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
 				// let binding "f"
-				var tmp4 lang.FnFunc
-				tmp4 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v5 := args[0]
+				var tmp4 lang.FnFunc1
+				tmp4 = lang.FnFunc1(func(p0 any) any {
+					v5 := p0
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -5224,20 +5222,20 @@ func LoadNS() {
 						_ = v7
 						// let binding "k"
 						tmp8 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp9 := lang.Apply(tmp8, []any{v7, int64(0), nil})
+						tmp9 := lang.Apply3(tmp8, v7, int64(0), nil)
 						var v10 any = tmp9
 						_ = v10
 						// let binding "v"
 						tmp11 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp12 := lang.Apply(tmp11, []any{v7, int64(1), nil})
+						tmp12 := lang.Apply3(tmp11, v7, int64(1), nil)
 						var v13 any = tmp12
 						_ = v13
 						var tmp14 any
 						tmp15 := checkDerefVar(var_clojure_DOT_core_string_QMARK_)
-						tmp16 := lang.Apply(tmp15, []any{v10})
+						tmp16 := lang.Apply1(tmp15, v10)
 						if lang.IsTruthy(tmp16) {
 							tmp17 := checkDerefVar(var_clojure_DOT_core_keyword)
-							tmp18 := lang.Apply(tmp17, []any{v10})
+							tmp18 := lang.Apply1(tmp17, v10)
 							tmp19 := lang.NewVector(tmp18, v13)
 							tmp20 := lang.NewMap(kw_file, "clojure/walk.glj", kw_line, int(98), kw_column, int(39), kw_end_DASH_line, int(98), kw_end_DASH_column, int(53))
 							tmp21, err := lang.WithMeta(tmp19, tmp20.(lang.IPersistentMap))
@@ -5266,14 +5264,13 @@ func LoadNS() {
 				var v7 any = tmp6
 				_ = v7
 				tmp8 := checkDerefVar(var_clojure_DOT_walk_postwalk)
-				var tmp9 lang.FnFunc
-				tmp9 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v10 := args[0]
+				var tmp9 lang.FnFunc1
+				tmp9 = lang.FnFunc1(func(p0 any) any {
+					v10 := p0
 					_ = v10
 					var tmp11 any
 					tmp12 := checkDerefVar(var_clojure_DOT_core_map_QMARK_)
-					tmp13 := lang.Apply(tmp12, []any{v10})
+					tmp13 := lang.Apply1(tmp12, v10)
 					if lang.IsTruthy(tmp13) {
 						tmp14 := checkDerefVar(var_clojure_DOT_core_into)
 						tmp15 := lang.NewMap()
@@ -5283,8 +5280,8 @@ func LoadNS() {
 							panic(err)
 						}
 						tmp18 := checkDerefVar(var_clojure_DOT_core_map)
-						tmp19 := lang.Apply(tmp18, []any{v7, v10})
-						tmp20 := lang.Apply(tmp14, []any{tmp17, tmp19})
+						tmp19 := lang.Apply2(tmp18, v7, v10)
+						tmp20 := lang.Apply2(tmp14, tmp17, tmp19)
 						tmp11 = tmp20
 					} else {
 						tmp11 = v10
@@ -5296,12 +5293,12 @@ func LoadNS() {
 				if err != nil {
 					panic(err)
 				}
-				tmp12 := lang.Apply(tmp8, []any{tmp11, v2})
+				tmp12 := lang.Apply2(tmp8, tmp11, v2)
 				tmp3 = tmp12
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_walk_keywordize_DASH_keys = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_walk_keywordize_DASH_keys.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5310,23 +5307,21 @@ func LoadNS() {
 	// macroexpand-all
 	{
 		tmp0 := sym_macroexpand_DASH_all.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Recursively performs all possible macroexpansions in form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(126), kw_end_DASH_line, int(126))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_walk_prewalk)
-			var tmp4 lang.FnFunc
-			tmp4 = lang.NewFnFunc(func(args ...any) any {
-				checkArity(args, 1)
-				v5 := args[0]
+			var tmp4 lang.FnFunc1
+			tmp4 = lang.FnFunc1(func(p0 any) any {
+				v5 := p0
 				_ = v5
 				var tmp6 any
 				tmp7 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-				tmp8 := lang.Apply(tmp7, []any{v5})
+				tmp8 := lang.Apply1(tmp7, v5)
 				if lang.IsTruthy(tmp8) {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_macroexpand)
-					tmp10 := lang.Apply(tmp9, []any{v5})
+					tmp10 := lang.Apply1(tmp9, v5)
 					tmp6 = tmp10
 				} else {
 					tmp6 = v5
@@ -5338,10 +5333,10 @@ func LoadNS() {
 			if err != nil {
 				panic(err)
 			}
-			tmp7 := lang.Apply(tmp3, []any{tmp6, v2})
+			tmp7 := lang.Apply2(tmp3, tmp6, v2)
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_walk_macroexpand_DASH_all = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_walk_macroexpand_DASH_all.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5350,21 +5345,20 @@ func LoadNS() {
 	// postwalk
 	{
 		tmp0 := sym_postwalk.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Performs a depth-first, post-order traversal of form.  Calls f on\n  each sub-form, uses f's return value in place of the original.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(53), kw_end_DASH_line, int(53))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			tmp4 := checkDerefVar(var_clojure_DOT_walk_walk)
 			tmp5 := checkDerefVar(var_clojure_DOT_core_partial)
 			tmp6 := checkDerefVar(var_clojure_DOT_walk_postwalk)
-			tmp7 := lang.Apply(tmp5, []any{tmp6, v2})
-			tmp8 := lang.Apply(tmp4, []any{tmp7, v2, v3})
+			tmp7 := lang.Apply2(tmp5, tmp6, v2)
+			tmp8 := lang.Apply3(tmp4, tmp7, v2, v3)
 			return tmp8
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_walk_postwalk = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_walk_postwalk.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5373,22 +5367,20 @@ func LoadNS() {
 	// postwalk-demo
 	{
 		tmp0 := sym_postwalk_DASH_demo.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of postwalk by printing each form as it is\n  walked.  Returns form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(80), kw_end_DASH_line, int(80))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_walk_postwalk)
-			var tmp4 lang.FnFunc
-			tmp4 = lang.NewFnFunc(func(args ...any) any {
-				checkArity(args, 1)
-				v5 := args[0]
+			var tmp4 lang.FnFunc1
+			tmp4 = lang.FnFunc1(func(p0 any) any {
+				v5 := p0
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_print)
-				tmp7 := lang.Apply(tmp6, []any{"Walked: "})
+				tmp7 := lang.Apply1(tmp6, "Walked: ")
 				_ = tmp7
 				tmp8 := checkDerefVar(var_clojure_DOT_core_prn)
-				tmp9 := lang.Apply(tmp8, []any{v5})
+				tmp9 := lang.Apply1(tmp8, v5)
 				_ = tmp9
 				return v5
 			})
@@ -5397,10 +5389,10 @@ func LoadNS() {
 			if err != nil {
 				panic(err)
 			}
-			tmp7 := lang.Apply(tmp3, []any{tmp6, v2})
+			tmp7 := lang.Apply2(tmp3, tmp6, v2)
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_walk_postwalk_DASH_demo = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_walk_postwalk_DASH_demo.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5409,24 +5401,22 @@ func LoadNS() {
 	// postwalk-replace
 	{
 		tmp0 := sym_postwalk_DASH_replace.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the leaves of the tree first.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(118), kw_end_DASH_line, int(118))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			tmp4 := checkDerefVar(var_clojure_DOT_walk_postwalk)
-			var tmp5 lang.FnFunc
-			tmp5 = lang.NewFnFunc(func(args ...any) any {
-				checkArity(args, 1)
-				v6 := args[0]
+			var tmp5 lang.FnFunc1
+			tmp5 = lang.FnFunc1(func(p0 any) any {
+				v6 := p0
 				_ = v6
 				var tmp7 any
 				tmp8 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
-				tmp9 := lang.Apply(tmp8, []any{v2, v6})
+				tmp9 := lang.Apply2(tmp8, v2, v6)
 				if lang.IsTruthy(tmp9) {
-					tmp10 := lang.Apply(v2, []any{v6})
+					tmp10 := lang.Apply1(v2, v6)
 					tmp7 = tmp10
 				} else {
 					tmp7 = v6
@@ -5438,10 +5428,10 @@ func LoadNS() {
 			if err != nil {
 				panic(err)
 			}
-			tmp8 := lang.Apply(tmp4, []any{tmp7, v3})
+			tmp8 := lang.Apply2(tmp4, tmp7, v3)
 			return tmp8
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_walk_postwalk_DASH_replace = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_walk_postwalk_DASH_replace.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5450,23 +5440,22 @@ func LoadNS() {
 	// prewalk
 	{
 		tmp0 := sym_prewalk.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Like postwalk, but does pre-order traversal.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(61), kw_end_DASH_line, int(61))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			tmp4 := checkDerefVar(var_clojure_DOT_walk_walk)
 			tmp5 := checkDerefVar(var_clojure_DOT_core_partial)
 			tmp6 := checkDerefVar(var_clojure_DOT_walk_prewalk)
-			tmp7 := lang.Apply(tmp5, []any{tmp6, v2})
+			tmp7 := lang.Apply2(tmp5, tmp6, v2)
 			tmp8 := checkDerefVar(var_clojure_DOT_core_identity)
-			tmp9 := lang.Apply(v2, []any{v3})
-			tmp10 := lang.Apply(tmp4, []any{tmp7, tmp8, tmp9})
+			tmp9 := lang.Apply1(v2, v3)
+			tmp10 := lang.Apply3(tmp4, tmp7, tmp8, tmp9)
 			return tmp10
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_walk_prewalk = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_walk_prewalk.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5475,22 +5464,20 @@ func LoadNS() {
 	// prewalk-demo
 	{
 		tmp0 := sym_prewalk_DASH_demo.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of prewalk by printing each form as it is\n  walked.  Returns form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(87), kw_end_DASH_line, int(87))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_walk_prewalk)
-			var tmp4 lang.FnFunc
-			tmp4 = lang.NewFnFunc(func(args ...any) any {
-				checkArity(args, 1)
-				v5 := args[0]
+			var tmp4 lang.FnFunc1
+			tmp4 = lang.FnFunc1(func(p0 any) any {
+				v5 := p0
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_print)
-				tmp7 := lang.Apply(tmp6, []any{"Walked: "})
+				tmp7 := lang.Apply1(tmp6, "Walked: ")
 				_ = tmp7
 				tmp8 := checkDerefVar(var_clojure_DOT_core_prn)
-				tmp9 := lang.Apply(tmp8, []any{v5})
+				tmp9 := lang.Apply1(tmp8, v5)
 				_ = tmp9
 				return v5
 			})
@@ -5499,10 +5486,10 @@ func LoadNS() {
 			if err != nil {
 				panic(err)
 			}
-			tmp7 := lang.Apply(tmp3, []any{tmp6, v2})
+			tmp7 := lang.Apply2(tmp3, tmp6, v2)
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_walk_prewalk_DASH_demo = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_walk_prewalk_DASH_demo.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5511,24 +5498,22 @@ func LoadNS() {
 	// prewalk-replace
 	{
 		tmp0 := sym_prewalk_DASH_replace.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the root of the tree first.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(110), kw_end_DASH_line, int(110))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 2)
-			v2 := args[0]
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
 			tmp4 := checkDerefVar(var_clojure_DOT_walk_prewalk)
-			var tmp5 lang.FnFunc
-			tmp5 = lang.NewFnFunc(func(args ...any) any {
-				checkArity(args, 1)
-				v6 := args[0]
+			var tmp5 lang.FnFunc1
+			tmp5 = lang.FnFunc1(func(p0 any) any {
+				v6 := p0
 				_ = v6
 				var tmp7 any
 				tmp8 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
-				tmp9 := lang.Apply(tmp8, []any{v2, v6})
+				tmp9 := lang.Apply2(tmp8, v2, v6)
 				if lang.IsTruthy(tmp9) {
-					tmp10 := lang.Apply(v2, []any{v6})
+					tmp10 := lang.Apply1(v2, v6)
 					tmp7 = tmp10
 				} else {
 					tmp7 = v6
@@ -5540,10 +5525,10 @@ func LoadNS() {
 			if err != nil {
 				panic(err)
 			}
-			tmp8 := lang.Apply(tmp4, []any{tmp7, v3})
+			tmp8 := lang.Apply2(tmp4, tmp7, v3)
 			return tmp8
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_walk_prewalk_DASH_replace = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_walk_prewalk_DASH_replace.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5552,18 +5537,16 @@ func LoadNS() {
 	// stringify-keys
 	{
 		tmp0 := sym_stringify_DASH_keys.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from keywords to strings.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(102), kw_end_DASH_line, int(102))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 1)
-			v2 := args[0]
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
 				// let binding "f"
-				var tmp4 lang.FnFunc
-				tmp4 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v5 := args[0]
+				var tmp4 lang.FnFunc1
+				tmp4 = lang.FnFunc1(func(p0 any) any {
+					v5 := p0
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -5572,20 +5555,20 @@ func LoadNS() {
 						_ = v7
 						// let binding "k"
 						tmp8 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp9 := lang.Apply(tmp8, []any{v7, int64(0), nil})
+						tmp9 := lang.Apply3(tmp8, v7, int64(0), nil)
 						var v10 any = tmp9
 						_ = v10
 						// let binding "v"
 						tmp11 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp12 := lang.Apply(tmp11, []any{v7, int64(1), nil})
+						tmp12 := lang.Apply3(tmp11, v7, int64(1), nil)
 						var v13 any = tmp12
 						_ = v13
 						var tmp14 any
 						tmp15 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
-						tmp16 := lang.Apply(tmp15, []any{v10})
+						tmp16 := lang.Apply1(tmp15, v10)
 						if lang.IsTruthy(tmp16) {
 							tmp17 := checkDerefVar(var_clojure_DOT_core_name)
-							tmp18 := lang.Apply(tmp17, []any{v10})
+							tmp18 := lang.Apply1(tmp17, v10)
 							tmp19 := lang.NewVector(tmp18, v13)
 							tmp20 := lang.NewMap(kw_file, "clojure/walk.glj", kw_line, int(106), kw_column, int(40), kw_end_DASH_line, int(106), kw_end_DASH_column, int(51))
 							tmp21, err := lang.WithMeta(tmp19, tmp20.(lang.IPersistentMap))
@@ -5614,14 +5597,13 @@ func LoadNS() {
 				var v7 any = tmp6
 				_ = v7
 				tmp8 := checkDerefVar(var_clojure_DOT_walk_postwalk)
-				var tmp9 lang.FnFunc
-				tmp9 = lang.NewFnFunc(func(args ...any) any {
-					checkArity(args, 1)
-					v10 := args[0]
+				var tmp9 lang.FnFunc1
+				tmp9 = lang.FnFunc1(func(p0 any) any {
+					v10 := p0
 					_ = v10
 					var tmp11 any
 					tmp12 := checkDerefVar(var_clojure_DOT_core_map_QMARK_)
-					tmp13 := lang.Apply(tmp12, []any{v10})
+					tmp13 := lang.Apply1(tmp12, v10)
 					if lang.IsTruthy(tmp13) {
 						tmp14 := checkDerefVar(var_clojure_DOT_core_into)
 						tmp15 := lang.NewMap()
@@ -5631,8 +5613,8 @@ func LoadNS() {
 							panic(err)
 						}
 						tmp18 := checkDerefVar(var_clojure_DOT_core_map)
-						tmp19 := lang.Apply(tmp18, []any{v7, v10})
-						tmp20 := lang.Apply(tmp14, []any{tmp17, tmp19})
+						tmp19 := lang.Apply2(tmp18, v7, v10)
+						tmp20 := lang.Apply2(tmp14, tmp17, tmp19)
 						tmp11 = tmp20
 					} else {
 						tmp11 = v10
@@ -5644,12 +5626,12 @@ func LoadNS() {
 				if err != nil {
 					panic(err)
 				}
-				tmp12 := lang.Apply(tmp8, []any{tmp11, v2})
+				tmp12 := lang.Apply2(tmp8, tmp11, v2)
 				tmp3 = tmp12
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_walk_stringify_DASH_keys = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_walk_stringify_DASH_keys.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5658,77 +5640,75 @@ func LoadNS() {
 	// walk
 	{
 		tmp0 := sym_walk.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_inner, sym_outer, sym_form)), kw_doc, "Traverses form, an arbitrary data structure.  inner and outer are\n  functions.  Applies inner to each element of form, building up a\n  data structure of the same type, then applies outer to the result.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(35), kw_end_DASH_line, int(35))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			checkArity(args, 3)
-			v2 := args[0]
+		var tmp1 lang.FnFunc3
+		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
 			_ = v2
-			v3 := args[1]
+			v3 := p1
 			_ = v3
-			v4 := args[2]
+			v4 := p2
 			_ = v4
 			var tmp5 any
 			tmp6 := checkDerefVar(var_clojure_DOT_core_list_QMARK_)
-			tmp7 := lang.Apply(tmp6, []any{v4})
+			tmp7 := lang.Apply1(tmp6, v4)
 			if lang.IsTruthy(tmp7) {
 				tmp8 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp12 := lang.Apply(tmp11, []any{v2, v4})
-				tmp13 := lang.Apply(tmp9, []any{tmp10, tmp12})
+				tmp12 := lang.Apply2(tmp11, v2, v4)
+				tmp13 := lang.Apply2(tmp9, tmp10, tmp12)
 				tmp14 := checkDerefVar(var_clojure_DOT_core_meta)
-				tmp15 := lang.Apply(tmp14, []any{v4})
-				tmp16 := lang.Apply(tmp8, []any{tmp13, tmp15})
-				tmp17 := lang.Apply(v3, []any{tmp16})
+				tmp15 := lang.Apply1(tmp14, v4)
+				tmp16 := lang.Apply2(tmp8, tmp13, tmp15)
+				tmp17 := lang.Apply1(v3, tmp16)
 				tmp5 = tmp17
 			} else {
 				var tmp18 any
 				tmp19 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
 				tmp20 := reflect.TypeOf((*lang.IMapEntry)(nil)).Elem()
-				tmp21 := lang.Apply(tmp19, []any{tmp20, v4})
+				tmp21 := lang.Apply2(tmp19, tmp20, v4)
 				if lang.IsTruthy(tmp21) {
 					tmp22 := checkDerefVar(var_clojure_DOT_core_key)
-					tmp23 := lang.Apply(tmp22, []any{v4})
-					tmp24 := lang.Apply(v2, []any{tmp23})
+					tmp23 := lang.Apply1(tmp22, v4)
+					tmp24 := lang.Apply1(v2, tmp23)
 					tmp25 := checkDerefVar(var_clojure_DOT_core_val)
-					tmp26 := lang.Apply(tmp25, []any{v4})
-					tmp27 := lang.Apply(v2, []any{tmp26})
-					tmp28 := lang.Apply(nil, []any{tmp24, tmp27})
-					tmp29 := lang.Apply(v3, []any{tmp28})
+					tmp26 := lang.Apply1(tmp25, v4)
+					tmp27 := lang.Apply1(v2, tmp26)
+					tmp28 := lang.Apply2(nil, tmp24, tmp27)
+					tmp29 := lang.Apply1(v3, tmp28)
 					tmp18 = tmp29
 				} else {
 					var tmp30 any
 					tmp31 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-					tmp32 := lang.Apply(tmp31, []any{v4})
+					tmp32 := lang.Apply1(tmp31, v4)
 					if lang.IsTruthy(tmp32) {
 						tmp33 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
 						tmp34 := checkDerefVar(var_clojure_DOT_core_doall)
 						tmp35 := checkDerefVar(var_clojure_DOT_core_map)
-						tmp36 := lang.Apply(tmp35, []any{v2, v4})
-						tmp37 := lang.Apply(tmp34, []any{tmp36})
+						tmp36 := lang.Apply2(tmp35, v2, v4)
+						tmp37 := lang.Apply1(tmp34, tmp36)
 						tmp38 := checkDerefVar(var_clojure_DOT_core_meta)
-						tmp39 := lang.Apply(tmp38, []any{v4})
-						tmp40 := lang.Apply(tmp33, []any{tmp37, tmp39})
-						tmp41 := lang.Apply(v3, []any{tmp40})
+						tmp39 := lang.Apply1(tmp38, v4)
+						tmp40 := lang.Apply2(tmp33, tmp37, tmp39)
+						tmp41 := lang.Apply1(v3, tmp40)
 						tmp30 = tmp41
 					} else {
 						var tmp42 any
 						tmp43 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
 						tmp44 := reflect.TypeOf((*lang.IRecord)(nil)).Elem()
-						tmp45 := lang.Apply(tmp43, []any{tmp44, v4})
+						tmp45 := lang.Apply2(tmp43, tmp44, v4)
 						if lang.IsTruthy(tmp45) {
 							tmp46 := checkDerefVar(var_clojure_DOT_core_reduce)
-							var tmp47 lang.FnFunc
-							tmp47 = lang.NewFnFunc(func(args ...any) any {
-								checkArity(args, 2)
-								v48 := args[0]
+							var tmp47 lang.FnFunc2
+							tmp47 = lang.FnFunc2(func(p0, p1 any) any {
+								v48 := p0
 								_ = v48
-								v49 := args[1]
+								v49 := p1
 								_ = v49
 								tmp50 := checkDerefVar(var_clojure_DOT_core_conj)
-								tmp51 := lang.Apply(v2, []any{v49})
-								tmp52 := lang.Apply(tmp50, []any{v48, tmp51})
+								tmp51 := lang.Apply1(v2, v49)
+								tmp52 := lang.Apply2(tmp50, v48, tmp51)
 								return tmp52
 							})
 							tmp48 := lang.NewMap(kw_file, "clojure/walk.glj", kw_line, int(49), kw_column, int(21), kw_end_DASH_line, int(49), kw_end_DASH_column, int(49))
@@ -5736,26 +5716,26 @@ func LoadNS() {
 							if err != nil {
 								panic(err)
 							}
-							tmp50 := lang.Apply(tmp46, []any{tmp49, v4, v4})
-							tmp51 := lang.Apply(v3, []any{tmp50})
+							tmp50 := lang.Apply3(tmp46, tmp49, v4, v4)
+							tmp51 := lang.Apply1(v3, tmp50)
 							tmp42 = tmp51
 						} else {
 							var tmp52 any
 							tmp53 := checkDerefVar(var_clojure_DOT_core_coll_QMARK_)
-							tmp54 := lang.Apply(tmp53, []any{v4})
+							tmp54 := lang.Apply1(tmp53, v4)
 							if lang.IsTruthy(tmp54) {
 								tmp55 := checkDerefVar(var_clojure_DOT_core_into)
 								tmp56 := checkDerefVar(var_clojure_DOT_core_empty)
-								tmp57 := lang.Apply(tmp56, []any{v4})
+								tmp57 := lang.Apply1(tmp56, v4)
 								tmp58 := checkDerefVar(var_clojure_DOT_core_map)
-								tmp59 := lang.Apply(tmp58, []any{v2, v4})
-								tmp60 := lang.Apply(tmp55, []any{tmp57, tmp59})
-								tmp61 := lang.Apply(v3, []any{tmp60})
+								tmp59 := lang.Apply2(tmp58, v2, v4)
+								tmp60 := lang.Apply2(tmp55, tmp57, tmp59)
+								tmp61 := lang.Apply1(v3, tmp60)
 								tmp52 = tmp61
 							} else {
 								var tmp62 any
 								if lang.IsTruthy(kw_else) {
-									tmp63 := lang.Apply(v3, []any{v4})
+									tmp63 := lang.Apply1(v3, v4)
 									tmp62 = tmp63
 								} else {
 								}
@@ -5771,7 +5751,7 @@ func LoadNS() {
 			}
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_walk_walk = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_walk_walk.SetMeta(tmp0.Meta().(lang.IPersistentMap))
