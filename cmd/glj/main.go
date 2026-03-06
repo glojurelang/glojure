@@ -17,6 +17,13 @@ import (
 )
 
 func main() {
+	// Raise the open-file limit; dep type-checking opens many files.
+	var rl syscall.Rlimit
+	if syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rl) == nil && rl.Cur < 4096 {
+		rl.Cur = 4096
+		syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rl) //nolint:errcheck
+	}
+
 	dps, err := deps.Load()
 	if err != nil {
 		log.Fatal(err)
