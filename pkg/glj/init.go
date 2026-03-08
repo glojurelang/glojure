@@ -4,10 +4,7 @@ import (
 	"io"
 	"os"
 
-	// Add the Go standard library to the pkgmap.
-	_ "github.com/gloathub/glojure/pkg/gen/gljimports"
 	"github.com/gloathub/glojure/pkg/lang"
-
 	"github.com/gloathub/glojure/pkg/runtime"
 )
 
