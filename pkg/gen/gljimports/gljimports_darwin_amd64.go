@@ -129,7 +129,6 @@ import (
 	os_user "os/user"
 	path "path"
 	path_filepath "path/filepath"
-	plugin "plugin"
 	reflect "reflect"
 	regexp "regexp"
 	regexp_syntax "regexp/syntax"
@@ -6448,13 +6447,6 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("path/filepath.Walk", path_filepath.Walk)
 	_register("path/filepath.WalkDir", path_filepath.WalkDir)
 	_register("path/filepath.WalkFunc", reflect.TypeOf((*path_filepath.WalkFunc)(nil)).Elem())
-
-	// package plugin
-	////////////////////////////////////////
-	_register("plugin.Open", plugin.Open)
-	_register("plugin.Plugin", reflect.TypeOf((*plugin.Plugin)(nil)).Elem())
-	_register("plugin.*Plugin", reflect.TypeOf((*plugin.Plugin)(nil)))
-	_register("plugin.Symbol", reflect.TypeOf((*plugin.Symbol)(nil)).Elem())
 
 	// package reflect
 	////////////////////////////////////////
