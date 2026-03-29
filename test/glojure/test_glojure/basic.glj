@@ -108,4 +108,24 @@
   (is (:foo (meta ^:foo #{})))
   (is (:foo (meta ^:foo {}))))
 
+(deftest map-key-seq-reduce
+  (test-that "MapKeySeq implements reduce operations correctly"
+    (let [test-map {:a 1 :b 2 :c 3 :d 4 :e 5}]
+      ;; Test mapv on keys (this was the original failing case)
+      (is (= 5 (count (mapv identity (keys test-map)))))
+      (is (vector? (mapv identity (keys test-map))))
+      
+      ;; Test reduce on keys
+      (is (= 5 (reduce (fn [acc _] (inc acc)) 0 (keys test-map))))
+      
+      ;; Test mapv with transformation on keys
+      (is (= 5 (count (mapv str (keys test-map)))))
+      
+      ;; Test that vals still work correctly
+      (is (= 5 (count (mapv identity (vals test-map)))))
+      (is (= 15 (reduce + (vals test-map))))
+      
+      ;; Test with namespace map keys (the original bug report case)
+      (is (number? (count (mapv str (keys (ns-map *ns*)))))))))
+
 (run-tests)

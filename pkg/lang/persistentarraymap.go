@@ -51,7 +51,9 @@ var (
 	_ IReduceInit = (*MapSeq)(nil)
 	_ IDrop       = (*MapSeq)(nil)
 
-	_ ASeq = (*MapKeySeq)(nil)
+	_ ASeq        = (*MapKeySeq)(nil)
+	_ IReduce     = (*MapKeySeq)(nil)
+	_ IReduceInit = (*MapKeySeq)(nil)
 
 	_ ASeq        = (*MapValSeq)(nil)
 	_ IReduce     = (*MapValSeq)(nil)
@@ -561,6 +563,39 @@ func (s *MapKeySeq) Hash() uint32 {
 
 func (s *MapKeySeq) HashEq() uint32 {
 	return aseqHashEq(&s.hasheq, s)
+}
+
+func (s *MapKeySeq) Reduce(f IFn) any {
+	count := 0
+	var res any
+	first := true
+	for seq := Seq(s); seq != nil; seq = seq.Next() {
+		count++
+		if first {
+			res = seq.First()
+			first = false
+			continue
+		}
+		res = f.Invoke(res, seq.First())
+		if IsReduced(res) {
+			return res.(IDeref).Deref()
+		}
+	}
+	if count == 0 {
+		return f.Invoke()
+	}
+	return res
+}
+
+func (s *MapKeySeq) ReduceInit(f IFn, init any) any {
+	res := init
+	for seq := Seq(s); seq != nil; seq = seq.Next() {
+		res = f.Invoke(res, seq.First())
+		if IsReduced(res) {
+			return res.(IDeref).Deref()
+		}
+	}
+	return res
 }
 
 ////////////////////////////////////////////////////////////////////////////////
