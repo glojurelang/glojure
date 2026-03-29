@@ -130,7 +130,6 @@ var defaultPackages = []string{
 	"os/user",
 	"path",
 	"path/filepath",
-	"plugin",
 	"reflect",
 	"regexp",
 	"regexp/syntax",
