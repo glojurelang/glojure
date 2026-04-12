@@ -1,0 +1,4 @@
+[submodule "test/clojure-test-suite"]
+	path = test/clojure-test-suite
+	url = git@github.com:gloathub/clojure-test-suite.git
+	branch = glojure
