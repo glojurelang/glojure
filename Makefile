@@ -6,10 +6,18 @@ include $M/init.mk
 GO-VERSION ?= 1.24.0
 CLOJURE-VERSION ?= 1.12.1
 
+include $M/claude.mk
 include $M/go.mk
 include $M/gh.mk
 include $M/clean.mk
 include $M/shell.mk
+
+# Nono sandbox permissions for `make claude-nono`
+CLAUDE-NONO-OPTS += --allow $(ROOT)/.cache/.local/tmp
+CLAUDE-NONO-OPTS += --read /usr/bin
+CLAUDE-NONO-OPTS += --read /usr/libexec
+CLAUDE-NONO-OPTS += --read /usr/include
+CLAUDE-NONO-OPTS += --allow /tmp
 
 MAKES-CLEAN := \
   report.html \
