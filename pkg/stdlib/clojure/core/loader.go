@@ -6267,8 +6267,9 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-			tmp4 := lang.Apply2(tmp3, nil, v2)
-			return tmp4
+			tmp4 := reflect.TypeOf((*lang.Reversible)(nil)).Elem()
+			tmp5 := lang.Apply2(tmp3, tmp4, v2)
+			return tmp5
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_reversible_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -6372,7 +6373,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply1(nil, v2)
+			tmp3 := lang.CanSeq(v2)
 			return tmp3
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
@@ -6751,8 +6752,9 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-			tmp4 := lang.Apply2(tmp3, nil, v2)
-			return tmp4
+			tmp4 := reflect.TypeOf((*lang.Sorted)(nil)).Elem()
+			tmp5 := lang.Apply2(tmp3, tmp4, v2)
+			return tmp5
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_sorted_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)

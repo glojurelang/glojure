@@ -59,6 +59,16 @@ func CanSeq(x interface{}) bool {
 	return false
 }
 
+func IsReversible(x interface{}) bool {
+	_, ok := x.(Reversible)
+	return ok
+}
+
+func IsSorted(x interface{}) bool {
+	_, ok := x.(Sorted)
+	return ok
+}
+
 func Seq(x interface{}) ISeq {
 	switch x := x.(type) {
 	case *EmptyList:

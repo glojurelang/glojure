@@ -207,8 +207,8 @@ test-suite: $(GLJ-CMD)
 ifneq (,$(wildcard $(TEST-SUITE-DIR)))
 	cd $(TEST-SUITE-DIR) && \
 	  $(abspath $<) $(TEST-SUITE-FILE) \
-	    --expect-failures 38 \
-	    --expect-errors 151 \
+	    --expect-failures 43 \
+	    --expect-errors 42 \
 	    2>/dev/null
 endif
 

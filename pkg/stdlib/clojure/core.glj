@@ -6196,7 +6196,7 @@ fails, attempts to require sym's namespace and retries."
 (defn seqable?
   "Return true if the seq function is supported for x"
   {:added "1.9"}
-  [x] (clojure.lang.RT/canSeq x))
+  [x] (github.com:gloathub:glojure:pkg:lang.CanSeq x))
 
 (defn ifn?
   "Returns true if x implements IFn. Note that many data structures
@@ -6234,7 +6234,7 @@ fails, attempts to require sym's namespace and retries."
  "Returns true if coll implements Sorted"
  {:added "1.0"
    :static true}
-  [coll] (instance? clojure.lang.Sorted coll))
+  [coll] (instance? github.com:gloathub:glojure:pkg:lang.Sorted coll))
 
 (defn counted?
  "Returns true if coll implements count in constant time"
@@ -6256,7 +6256,7 @@ fails, attempts to require sym's namespace and retries."
  "Returns true if coll implements Reversible"
  {:added "1.0"
    :static true}
-  [coll] (instance? clojure.lang.Reversible coll))
+  [coll] (instance? github.com:gloathub:glojure:pkg:lang.Reversible coll))
 
 (defn indexed?
   "Return true if coll implements Indexed, indicating efficient lookup by index"

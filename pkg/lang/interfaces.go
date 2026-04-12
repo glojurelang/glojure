@@ -137,6 +137,13 @@ type (
 		RSeq() ISeq
 	}
 
+	Sorted interface {
+		Comparator() IFn
+		EntryKey(entry any) any
+		Seq(ascending bool) ISeq
+		SeqFrom(key any, ascending bool) ISeq
+	}
+
 	IPending interface {
 		IsRealized() bool
 	}
