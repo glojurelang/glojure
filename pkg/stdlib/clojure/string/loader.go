@@ -752,6 +752,8 @@ func LoadNS() {
 	var_clojure_DOT_core_min := lang.InternVarName(sym_clojure_DOT_core, sym_min)
 	// var clojure.core/nil?
 	var_clojure_DOT_core_nil_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_nil_QMARK_)
+	// var clojure.core/not=
+	var_clojure_DOT_core_not_EQ_ := lang.InternVarName(sym_clojure_DOT_core, sym_not_EQ_)
 	// var clojure.core/re-groups
 	var_clojure_DOT_core_re_DASH_groups := lang.InternVarName(sym_clojure_DOT_core, sym_re_DASH_groups)
 	// var clojure.core/re-matcher
@@ -5245,28 +5247,9 @@ func LoadNS() {
 			ns.Refer(sym_set, vr)
 		}
 	}
-	// ends-with?
-	{
-		tmp0 := sym_ends_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s ends with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(309), kw_end_DASH_line, int(309))).(*lang.Symbol)
-		var tmp1 lang.FnFunc2
-		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
-			v2 := p0
-			_ = v2
-			v3 := p1
-			_ = v3
-			tmp4 := lang.Apply1(lang.ToString, v2)
-			tmp5 := lang.Apply2(strings5.HasSuffix, tmp4, v3)
-			return tmp5
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
-		var_clojure_DOT_string_ends_DASH_with_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_string_ends_DASH_with_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// includes?
 	{
-		tmp0 := sym_includes_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s includes substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(315), kw_end_DASH_line, int(315))).(*lang.Symbol)
+		tmp0 := sym_includes_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s includes substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(323), kw_end_DASH_line, int(323))).(*lang.Symbol)
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
@@ -5324,25 +5307,6 @@ func LoadNS() {
 		var_clojure_DOT_string_split = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_split.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// starts-with?
-	{
-		tmp0 := sym_starts_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s starts with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(303), kw_end_DASH_line, int(303))).(*lang.Symbol)
-		var tmp1 lang.FnFunc2
-		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
-			v2 := p0
-			_ = v2
-			v3 := p1
-			_ = v3
-			tmp4 := lang.Apply1(lang.ToString, v2)
-			tmp5 := lang.Apply2(strings5.HasPrefix, tmp4, v3)
-			return tmp5
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
-		var_clojure_DOT_string_starts_DASH_with_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_string_starts_DASH_with_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// trim
@@ -5443,13 +5407,71 @@ func LoadNS() {
 							tmp8 = true
 						} else {
 							var tmp13 any
-							tmp14 := lang.Apply2(lang.CharAt, v2, v7)
-							tmp15 := lang.Apply1(unicode4.IsSpace, tmp14)
-							if lang.IsTruthy(tmp15) {
-								tmp17 := checkDerefVar(var_clojure_DOT_core_inc)
-								tmp18 := lang.Apply1(tmp17, v7)
-								var tmp16 any = tmp18
-								v7 = tmp16
+							var tmp14 any
+							{ // let
+								// let binding "c"
+								tmp15 := lang.Apply2(lang.CharAt, v2, v7)
+								var v16 any = tmp15
+								_ = v16
+								var tmp17 any
+								{ // let
+									// let binding "and__0__auto__"
+									tmp18 := lang.Apply1(unicode4.IsSpace, v16)
+									var v19 any = tmp18
+									_ = v19
+									var tmp20 any
+									if lang.IsTruthy(v19) {
+										var tmp21 any
+										{ // let
+											// let binding "and__0__auto__"
+											tmp22 := checkDerefVar(var_clojure_DOT_core_not_EQ_)
+											tmp23 := checkDerefVar(var_clojure_DOT_core_int)
+											tmp24 := lang.Apply1(tmp23, v16)
+											tmp25 := lang.Apply2(tmp22, tmp24, int64(160))
+											var v26 any = tmp25
+											_ = v26
+											var tmp27 any
+											if lang.IsTruthy(v26) {
+												var tmp28 any
+												{ // let
+													// let binding "and__0__auto__"
+													tmp29 := checkDerefVar(var_clojure_DOT_core_not_EQ_)
+													tmp30 := checkDerefVar(var_clojure_DOT_core_int)
+													tmp31 := lang.Apply1(tmp30, v16)
+													tmp32 := lang.Apply2(tmp29, tmp31, int64(8199))
+													var v33 any = tmp32
+													_ = v33
+													var tmp34 any
+													if lang.IsTruthy(v33) {
+														tmp35 := checkDerefVar(var_clojure_DOT_core_not_EQ_)
+														tmp36 := checkDerefVar(var_clojure_DOT_core_int)
+														tmp37 := lang.Apply1(tmp36, v16)
+														tmp38 := lang.Apply2(tmp35, tmp37, int64(8239))
+														tmp34 = tmp38
+													} else {
+														tmp34 = v33
+													}
+													tmp28 = tmp34
+												} // end let
+												tmp27 = tmp28
+											} else {
+												tmp27 = v26
+											}
+											tmp21 = tmp27
+										} // end let
+										tmp20 = tmp21
+									} else {
+										tmp20 = v19
+									}
+									tmp17 = tmp20
+								} // end let
+								tmp14 = tmp17
+							} // end let
+							if lang.IsTruthy(tmp14) {
+								tmp16 := checkDerefVar(var_clojure_DOT_core_inc)
+								tmp17 := lang.Apply1(tmp16, v7)
+								var tmp15 any = tmp17
+								v7 = tmp15
 								continue
 							} else {
 								tmp13 = false
@@ -5563,10 +5585,38 @@ func LoadNS() {
 			var_clojure_DOT_string_re_DASH_quote_DASH_replacement.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
+	// ends-with?
+	{
+		tmp0 := sym_ends_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s ends with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(315), kw_end_DASH_line, int(315))).(*lang.Symbol)
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			var tmp4 any
+			tmp5 := checkDerefVar(var_clojure_DOT_core_nil_QMARK_)
+			tmp6 := lang.Apply1(tmp5, v2)
+			if lang.IsTruthy(tmp6) {
+				tmp7 := lang.Apply1(lang.NewError, "argument to ends-with? must not be nil")
+				panic(tmp7)
+			} else {
+				tmp8 := lang.Apply1(lang.ToString, v2)
+				tmp9 := lang.Apply2(strings5.HasSuffix, tmp8, v3)
+				tmp4 = tmp9
+			}
+			return tmp4
+		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
+		var_clojure_DOT_string_ends_DASH_with_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_clojure_DOT_string_ends_DASH_with_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
 	// escape
 	{
 		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_escape.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_cmap)), kw_doc, "Return a new string, using cmap to escape each character ch\n   from s as follows:\n\n   If (cmap ch) is nil, append ch to the new string.\n   If (cmap ch) is non-nil, append (str (cmap ch)) instead.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(249), kw_end_DASH_line, int(249))).(*lang.Symbol)
+		tmp0 := sym_escape.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_cmap)), kw_doc, "Return a new string, using cmap to escape each character ch\n   from s as follows:\n\n   If (cmap ch) is nil, append ch to the new string.\n   If (cmap ch) is non-nil, append (str (cmap ch)) instead.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(253), kw_end_DASH_line, int(253))).(*lang.Symbol)
 		var tmp2 lang.FnFunc2
 		tmp2 = lang.FnFunc2(func(p0, p1 any) any {
 			v3 := p0
@@ -5605,7 +5655,7 @@ func LoadNS() {
 	}
 	// index-of
 	{
-		tmp0 := sym_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return index of value (string or char) in s, optionally searching\n  forward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(261), kw_end_DASH_line, int(261))).(*lang.Symbol)
+		tmp0 := sym_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return index of value (string or char) in s, optionally searching\n  forward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(265), kw_end_DASH_line, int(265))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5752,7 +5802,7 @@ func LoadNS() {
 	}
 	// last-index-of
 	{
-		tmp0 := sym_last_DASH_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return last index of value (string or char) in s, optionally\n  searching backward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(285), kw_end_DASH_line, int(285))).(*lang.Symbol)
+		tmp0 := sym_last_DASH_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return last index of value (string or char) in s, optionally\n  searching backward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(289), kw_end_DASH_line, int(289))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -6380,6 +6430,34 @@ func LoadNS() {
 		var_clojure_DOT_string_split_DASH_lines = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_split_DASH_lines.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// starts-with?
+	{
+		tmp0 := sym_starts_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s starts with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(307), kw_end_DASH_line, int(307))).(*lang.Symbol)
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			var tmp4 any
+			tmp5 := checkDerefVar(var_clojure_DOT_core_nil_QMARK_)
+			tmp6 := lang.Apply1(tmp5, v2)
+			if lang.IsTruthy(tmp6) {
+				tmp7 := lang.Apply1(lang.NewError, "argument to starts-with? must not be nil")
+				panic(tmp7)
+			} else {
+				tmp8 := lang.Apply1(lang.ToString, v2)
+				tmp9 := lang.Apply2(strings5.HasPrefix, tmp8, v3)
+				tmp4 = tmp9
+			}
+			return tmp4
+		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
+		var_clojure_DOT_string_starts_DASH_with_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
+		if tmp0.Meta() != nil {
+			var_clojure_DOT_string_starts_DASH_with_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// upper-case

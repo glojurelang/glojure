@@ -48,6 +48,10 @@ func NewBigDecimalFromInt64(x int64) *BigDecimal {
 	return &BigDecimal{val: new(big.Float).SetInt64(x)}
 }
 
+func NewBigDecimalFromBigInt(x *big.Int) *BigDecimal {
+	return &BigDecimal{val: new(big.Float).SetInt(x)}
+}
+
 func NewBigDecimalFromRatio(x *Ratio) *BigDecimal {
 	return &BigDecimal{val: new(big.Float).SetRat(x.val)}
 }

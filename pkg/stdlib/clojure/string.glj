@@ -241,7 +241,11 @@
     (loop [index (int 0)]
       (if (= (count s) index)
         true
-        (if (unicode.IsSpace (github.com:gloathub:glojure:pkg:lang.CharAt s index))
+        (if (let [c (github.com:gloathub:glojure:pkg:lang.CharAt s index)]
+              (and (unicode.IsSpace c)
+                   (not= (int c) 0x00A0)
+                   (not= (int c) 0x2007)
+                   (not= (int c) 0x202F)))
           (recur (inc index))
           false)))
     true))
@@ -304,13 +308,17 @@
   "True if s starts with substr."
   {:added "1.8"}
   [^go/string s ^go/string substr]
-  (strings.HasPrefix (github.com:gloathub:glojure:pkg:lang.ToString s) substr))
+  (if (nil? s)
+    (throw (github.com:gloathub:glojure:pkg:lang.NewError "argument to starts-with? must not be nil"))
+    (strings.HasPrefix (github.com:gloathub:glojure:pkg:lang.ToString s) substr)))
 
 (defn ends-with?
   "True if s ends with substr."
   {:added "1.8"}
   [^go/string s ^go/string substr]
-  (strings.HasSuffix (github.com:gloathub:glojure:pkg:lang.ToString s) substr))
+  (if (nil? s)
+    (throw (github.com:gloathub:glojure:pkg:lang.NewError "argument to ends-with? must not be nil"))
+    (strings.HasSuffix (github.com:gloathub:glojure:pkg:lang.ToString s) substr)))
 
 (defn includes?
   "True if s includes substr."

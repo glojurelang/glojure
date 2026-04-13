@@ -1598,7 +1598,8 @@
    :added "1.0"
    :static true}
   [^github.com:gloathub:glojure:pkg:lang.Named x]
-    (. x (Namespace)))
+    (let [ns (. x (Namespace))]
+      (if (= "" ns) nil ns)))
 
 (defn boolean
   "Coerce to boolean"
@@ -3631,7 +3632,12 @@
        (float? x)  (bigint (github.com:gloathub:glojure:pkg:lang.NewBigDecimalFromFloat64 (double x)))
        (ratio? x) (bigint (.bigIntegerValue ^github.com:gloathub:glojure:pkg:lang.*Ratio x))
        (number? x) (github.com:gloathub:glojure:pkg:lang.NewBigIntFromInt64 (long x))
-       :else (bigint (github.com:gloathub:glojure:pkg:lang.NewBigInt x))))
+       :else (let [result (github.com:gloathub:glojure:pkg:lang.NewBigInt (str x))
+                   v (first result)
+                   err (second result)]
+               (if err
+                 (throw (github.com:gloathub:glojure:pkg:lang.NewError (str "Cannot convert " x " to BigInt")))
+                 v))))
 
 (defn biginteger
   "Coerce to BigInteger"
@@ -3645,7 +3651,12 @@
        (float? x) (.toBigInteger (github.com:gloathub:glojure:pkg:lang.NewBigDecimalFromFloat64 (double x)))
        (ratio? x) (.bigIntegerValue ^github.com:gloathub:glojure:pkg:lang.*Ratio x)
        (number? x) (math:big.NewInt (long x))
-       :else (github.com:gloathub:glojure:pkg:lang.NewBigInt x)))
+       :else (let [result (github.com:gloathub:glojure:pkg:lang.NewBigInt (str x))
+                   v (first result)
+                   err (second result)]
+               (if err
+                 (throw (github.com:gloathub:glojure:pkg:lang.NewError (str "Cannot convert " x " to BigInteger")))
+                 (.toBigInteger ^github.com:gloathub:glojure:pkg:lang.*BigInt v)))))
 
 (defn bigdec
   "Coerce to BigDecimal"
@@ -3657,9 +3668,14 @@
        (float? x) (github.com:gloathub:glojure:pkg:lang.NewBigDecimalFromFloat64 (double x))
        (ratio? x) (github.com:gloathub:glojure:pkg:lang.NewBigDecimalFromRatio x)
        (instance? github.com:gloathub:glojure:pkg:lang.*BigInt x) (.toBigDecimal ^github.com:gloathub:glojure:pkg:lang.*BigInt x)
-       (instance? math:big.*Int x) (github.com:gloathub:glojure:pkg:lang.NewBigDecimal x)
+       (instance? math:big.*Int x) (github.com:gloathub:glojure:pkg:lang.NewBigDecimalFromBigInt x)
        (number? x) (github.com:gloathub:glojure:pkg:lang.NewBigDecimalFromInt64 (long x))
-       :else (github.com:gloathub:glojure:pkg:lang.NewBigDecimal x)))
+       :else (let [result (github.com:gloathub:glojure:pkg:lang.NewBigDecimal (str x))
+                   v (first result)
+                   err (second result)]
+               (if err
+                 (throw (github.com:gloathub:glojure:pkg:lang.NewError (str "Cannot convert " x " to BigDecimal")))
+                 v))))
 
 (def ^:dynamic ^{:private true} print-initialized false)
 
@@ -5607,14 +5623,19 @@
   supplied defaults to, and modifies, the global hierarchy."
   {:added "1.0"}
   ([tag parent]
-   (assert (namespace parent))
-   (assert (or (class? tag) (and (instance? github.com:gloathub:glojure:pkg:lang.Named tag) (namespace tag))))
+   (when-not (and (ident? parent) (namespace parent))
+     (throw (github.com:gloathub:glojure:pkg:lang.NewError (str "Assert failed: parent must be a namespace-qualified keyword or symbol: " parent))))
+   (when-not (or (class? tag) (and (ident? tag) (namespace tag)))
+     (throw (github.com:gloathub:glojure:pkg:lang.NewError (str "Assert failed: tag must be a namespace-qualified keyword or symbol or a class: " tag))))
 
    (alter-var-root #'global-hierarchy derive tag parent) nil)
   ([h tag parent]
-   (assert (not= tag parent))
-   (assert (or (class? tag) (instance? github.com:gloathub:glojure:pkg:lang.Named tag)))
-   (assert (instance? github.com:gloathub:glojure:pkg:lang.Named parent))
+   (when (= tag parent)
+     (throw (github.com:gloathub:glojure:pkg:lang.NewError (str "Assert failed: tag and parent cannot be equal: " tag))))
+   (when-not (or (class? tag) (ident? tag))
+     (throw (github.com:gloathub:glojure:pkg:lang.NewError (str "Assert failed: tag must be a keyword, symbol, or class: " tag))))
+   (when-not (ident? parent)
+     (throw (github.com:gloathub:glojure:pkg:lang.NewError (str "Assert failed: parent must be a keyword or symbol: " parent))))
 
    (let [tp (:parents h)
          td (:descendants h)
@@ -6857,7 +6878,13 @@ fails, attempts to require sym's namespace and retries."
 
   See: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#randomUUID--"
    :added "1.11"}
-  ^github.com:google:uuid.UUID [] (github.com:google:uuid.NewV7))
+  ^github.com:google:uuid.UUID []
+  (let [result (github.com:google:uuid.NewV7)
+        v (first result)
+        err (second result)]
+    (if err
+      (throw (github.com:gloathub:glojure:pkg:lang.NewError (str "Failed to generate UUID: " err)))
+      v)))
 
 ;; redefine reduce with internal-reduce
 (defn reduce
@@ -7953,9 +7980,11 @@ fails, attempts to require sym's namespace and retries."
   Grammar: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#toString--"
    :added "1.11"}
   ^github.com:google:uuid.UUID [^go/string s]
-  (try
-    (let [[uuid err] (github.com:google:uuid.Parse s)] (if err (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError (str "Error parsing UUID: " err))) uuid))
-    (catch github.com:gloathub:glojure:pkg:lang.*IllegalArgumentError _ nil)))
+  (if (string? s)
+    (try
+      (let [[uuid err] (github.com:google:uuid.Parse s)] (if err (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError (str "Error parsing UUID: " err))) uuid))
+      (catch github.com:gloathub:glojure:pkg:lang.*IllegalArgumentError _ nil))
+    (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError (str "Expected string, got " (class s))))))
 
 (defn parse-boolean
   {:doc "Parse strings \"true\" or \"false\" and return a boolean, or nil if invalid"
