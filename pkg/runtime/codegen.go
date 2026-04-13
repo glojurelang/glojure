@@ -93,7 +93,6 @@ var (
 		"#'clojure.core/add-load-path":   true,
 		"#'clojure.core/shuffle":         true,
 		"#'clojure.core/promise":         true,
-		"#'clojure.core/rem":             true,
 	}
 )
 

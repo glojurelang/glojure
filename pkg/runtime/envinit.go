@@ -146,16 +146,6 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 		versionVar.BindRoot(parseVersion(Version))
 	}
 
-	// Override rem to throw on NaN/Inf (mod calls Numbers.remainder
-	// directly and needs NaN/Inf to work, so the check is here not there).
-	lang.InternVar(core, lang.NewSymbol("rem"), lang.FnFunc(func(args ...any) any {
-		x, y := args[0], args[1]
-		if lang.IsNaN(x) || lang.IsNaN(y) || lang.IsInf(x) {
-			panic(lang.NewIllegalArgumentError("rem requires finite dividend and non-NaN arguments"))
-		}
-		return lang.Numbers.Remainder(x, y)
-	}), true)
-
 	// Override promise with a Go implementation since the Clojure version
 	// uses java.util.concurrent.CountDownLatch that doesn't exist in Go.
 	lang.InternVar(core, lang.NewSymbol("promise"), lang.FnFunc(func(args ...any) any {

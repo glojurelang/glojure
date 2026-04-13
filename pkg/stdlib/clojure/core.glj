@@ -1276,9 +1276,12 @@
 (defn rem
   "remainder of dividing numerator by denominator."
   {:added "1.0"
-   :static true
-   :inline (fn [x y] `(. github.com:gloathub:glojure:pkg:lang.Numbers (remainder ~x ~y)))}
+   :static true}
   [num div]
+    (when (or (and (float? num) (or (math.IsInf (go/float64 num) 0) (math.IsNaN (go/float64 num))))
+              (and (float? div) (math.IsNaN (go/float64 div))))
+      (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError
+              "rem requires finite dividend and non-NaN arguments")))
     (. github.com:gloathub:glojure:pkg:lang.Numbers (remainder num div)))
 
 (defn rationalize
@@ -3567,10 +3570,10 @@
   "Modulus of num and div. Truncates toward negative infinity."
   {:added "1.0"
    :static true}
-  [num div] 
-  (let [m (rem num div)] 
+  [num div]
+  (let [m (. github.com:gloathub:glojure:pkg:lang.Numbers (remainder num div))]
     (if (or (zero? m) (= (pos? num) (pos? div)))
-      m 
+      m
       (+ m div))))
 
 (defn ratio?
@@ -4999,8 +5002,10 @@
   at end (defaults to length of string), exclusive."
   {:added "1.0"
    :static true}
-  (^go/string [^go/string s start] (go/slice s start))
-  (^go/string [^go/string s start end] (go/slice s start end)))
+  (^go/string [^go/string s start]
+   (. github.com:gloathub:glojure:pkg:runtime.RT (Subs s start)))
+  (^go/string [^go/string s start end]
+   (. github.com:gloathub:glojure:pkg:runtime.RT (SubsEnd s start end))))
 
 (defn max-key
   "Returns the x for which (k x), a number, is greatest.

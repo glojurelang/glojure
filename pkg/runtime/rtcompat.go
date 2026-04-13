@@ -139,6 +139,22 @@ func (rt *RTMethods) Contains(coll, key any) bool {
 	panic(fmt.Errorf("contains? not supported on type: %T", coll))
 }
 
+func (rt *RTMethods) Subs(s string, start int) string {
+	runes := []rune(s)
+	if start < 0 || start > len(runes) {
+		panic(lang.NewIllegalArgumentError("String index out of range"))
+	}
+	return string(runes[start:])
+}
+
+func (rt *RTMethods) SubsEnd(s string, start, end int) string {
+	runes := []rune(s)
+	if start < 0 || start > len(runes) || end < start || end > len(runes) {
+		panic(lang.NewIllegalArgumentError("String index out of range"))
+	}
+	return string(runes[start:end])
+}
+
 func (rt *RTMethods) Subvec(v IPersistentVector, start, end int) IPersistentVector {
 	return Subvec(v, start, end)
 }
