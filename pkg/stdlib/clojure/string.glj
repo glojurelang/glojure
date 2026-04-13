@@ -172,8 +172,8 @@
   "Converts first character of the string to upper-case, all other
   characters to lower-case."
   {:added "1.2"}
-  [^go/string s]
-  (let [s (check-string s)]
+  [s]
+  (let [s ^go/string (str (check-string s))]
     (if (< (count s) 2)
       (strings.ToUpper s)
       (str (strings.ToUpper (subs s 0 1))
@@ -182,14 +182,14 @@
 (defn ^go/string upper-case
   "Converts string to all upper-case."
   {:added "1.2"}
-  [^go/string s]
-  (strings.ToUpper s))
+  [s]
+  (strings.ToUpper ^go/string (str (check-string s))))
 
 (defn ^go/string lower-case
   "Converts string to all lower-case."
   {:added "1.2"}
-  [^go/string s]
-  (strings.ToLower s))
+  [s]
+  (strings.ToLower ^go/string (str (check-string s))))
 
 (defn split
   "Splits string on a regular expression.  Optional argument limit is
