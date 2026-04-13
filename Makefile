@@ -12,13 +12,6 @@ include $M/gh.mk
 include $M/clean.mk
 include $M/shell.mk
 
-# Nono sandbox permissions for `make claude-nono`
-CLAUDE-NONO-OPTS += --allow $(ROOT)/.cache/.local/tmp
-CLAUDE-NONO-OPTS += --read /usr/bin
-CLAUDE-NONO-OPTS += --read /usr/libexec
-CLAUDE-NONO-OPTS += --read /usr/include
-CLAUDE-NONO-OPTS += --allow /tmp
-
 CLOJURE-STDLIB-VERSION := clojure-$(CLOJURE-VERSION)
 STDLIB-ORIGINALS-DIR := scripts/rewrite-core/originals
 STDLIB-ORIGINALS := $(wildcard $(STDLIB-ORIGINALS-DIR)/*.clj)
