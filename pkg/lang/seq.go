@@ -80,7 +80,10 @@ func Seq(x interface{}) ISeq {
 	case Seqable:
 		return x.Seq()
 	case string:
-		return NewStringSeq(x, 0)
+		if s := NewStringSeq(x, 0); s != nil {
+			return s
+		}
+		return nil
 	case nil:
 		return nil
 		// TODO: define an Iterable interface, and use it here.

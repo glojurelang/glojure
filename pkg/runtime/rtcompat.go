@@ -69,6 +69,9 @@ func (rt *RTMethods) NextID() int {
 }
 
 func (rt *RTMethods) Nth(x any, i int) any {
+	if lang.IsNil(x) {
+		return nil
+	}
 	return MustNth(x, i)
 }
 

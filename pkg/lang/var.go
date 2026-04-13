@@ -121,6 +121,10 @@ func (v *Var) Symbol() *Symbol {
 	return v.sym
 }
 
+func (v *Var) ToSymbol() *Symbol {
+	return InternSymbol(v.ns.Name().String(), v.sym.Name())
+}
+
 func (v *Var) String() string {
 	return "#'" + v.ns.Name().String() + "/" + v.sym.Name()
 }
