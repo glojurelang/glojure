@@ -3,6 +3,7 @@ package lang
 import (
 	"fmt"
 	"math/big"
+	"strings"
 
 	"bitbucket.org/pcastools/hash"
 )
@@ -63,7 +64,12 @@ func (n *BigDecimal) ToBigFloat() *big.Float {
 }
 
 func (n *BigDecimal) String() string {
-	return n.val.String()
+	s := n.val.Text('f', -1)
+	// Ensure decimal point is present (e.g. "0" → "0.0")
+	if !strings.Contains(s, ".") {
+		s += ".0"
+	}
+	return s
 }
 
 func (n *BigDecimal) Hash() uint32 {
