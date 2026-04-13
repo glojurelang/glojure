@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"math/big"
+	"reflect"
 )
 
 type Category int
@@ -95,6 +96,17 @@ func Ops(x any) ops {
 	case *BigDecimal:
 		return bigDecimalOps{}
 	default:
+		// Handle named types with numeric underlying kinds
+		// (e.g. time.Duration is int64 underneath)
+		v := reflect.ValueOf(x)
+		switch v.Kind() {
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			return int64Ops{}
+		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			return int64Ops{}
+		case reflect.Float32, reflect.Float64:
+			return float64Ops{}
+		}
 		panic(fmt.Sprintf("cannot convert %T to Ops", x))
 	}
 }
@@ -762,6 +774,15 @@ func AsInt64(x any) int64 {
 		i, _ := x.val.Int(nil)
 		return i.Int64()
 	default:
+		v := reflect.ValueOf(x)
+		switch v.Kind() {
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			return v.Int()
+		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			return int64(v.Uint())
+		case reflect.Float32, reflect.Float64:
+			return int64(v.Float())
+		}
 		panic(fmt.Errorf("cannot convert %T to int64", x))
 	}
 }

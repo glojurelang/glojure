@@ -681,6 +681,15 @@ func AsFloat64(x any) float64 {
 		f, _ := x.val.Float64()
 		return f
 	default:
+		v := reflect.ValueOf(x)
+		switch v.Kind() {
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			return float64(v.Int())
+		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			return float64(v.Uint())
+		case reflect.Float32, reflect.Float64:
+			return v.Float()
+		}
 		panic(fmt.Errorf("cannot convert %T to float64", x))
 	}
 }
@@ -805,12 +814,24 @@ func IncP(v any) any {
 
 func IsNumber(x any) bool {
 	switch x.(type) {
+	case Char:
+		return false
 	case int, int64, int32, int16, int8,
 		uint, uint64, uint32, uint16, uint8,
 		float64, float32,
 		*BigDecimal, *BigInt, *Ratio, *big.Int: // TODO: *big.Rat, *big.Float
 		return true
 	default:
+		if x == nil {
+			return false
+		}
+		v := reflect.ValueOf(x)
+		switch v.Kind() {
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+			reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
+			reflect.Float32, reflect.Float64:
+			return true
+		}
 		return false
 	}
 }

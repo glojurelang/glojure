@@ -99,6 +99,7 @@ func LoadNS() {
 	sym_accessor := lang.NewSymbol("accessor")
 	sym_aclone := lang.NewSymbol("aclone")
 	sym_add_DASH_classpath := lang.NewSymbol("add-classpath")
+	sym_add_DASH_load_DASH_path := lang.NewSymbol("add-load-path")
 	sym_add_DASH_ns_DASH_meta := lang.NewSymbol("add-ns-meta")
 	sym_add_DASH_watch := lang.NewSymbol("add-watch")
 	sym_agent := lang.NewSymbol("agent")
@@ -2849,6 +2850,13 @@ func LoadNS() {
 		v := srcNS.Mappings().ValAt(sym_dorun)
 		if vr, ok := v.(*lang.Var); ok {
 			ns.Refer(sym_dorun, vr)
+		}
+	}
+	{ // refer clojure.core/add-load-path as add-load-path
+		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
+		v := srcNS.Mappings().ValAt(sym_add_DASH_load_DASH_path)
+		if vr, ok := v.(*lang.Var); ok {
+			ns.Refer(sym_add_DASH_load_DASH_path, vr)
 		}
 	}
 	{ // refer clojure.core/assert as assert
@@ -7009,12 +7017,12 @@ func LoadNS() {
 				var tmp7 any
 				var tmp8 int64
 				tmp8 = int64(uint32(lang.IdentityHash(v6)>>2) & uint32(1))
-				// case entry 0 (key=1, collision=false)
-				if tmp8 == 1 {
-					if v6 == kw_fail {
+				// case entry 0 (key=0, collision=false)
+				if tmp8 == 0 {
+					if v6 == kw_error {
 						tmp9 := checkDerefVar(var_clojure_DOT_core_merge)
 						tmp10 := lang.NewMap()
-						tmp11 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(359), kw_column, int(18), kw_end_DASH_line, int(359), kw_end_DASH_column, int(19))
+						tmp11 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(360), kw_column, int(19), kw_end_DASH_line, int(360), kw_end_DASH_column, int(20))
 						tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
@@ -7024,12 +7032,12 @@ func LoadNS() {
 					} else {
 						tmp7 = v2
 					}
-					// case entry 1 (key=0, collision=false)
-				} else if tmp8 == 0 {
-					if v6 == kw_error {
+					// case entry 1 (key=1, collision=false)
+				} else if tmp8 == 1 {
+					if v6 == kw_fail {
 						tmp14 := checkDerefVar(var_clojure_DOT_core_merge)
 						tmp15 := lang.NewMap()
-						tmp16 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(360), kw_column, int(19), kw_end_DASH_line, int(360), kw_end_DASH_column, int(20))
+						tmp16 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(359), kw_column, int(18), kw_end_DASH_line, int(359), kw_end_DASH_column, int(19))
 						tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)

@@ -1076,7 +1076,6 @@ func LoadNS() {
 	sym_short_DASH_array := lang.NewSymbol("short-array")
 	sym_shortCast := lang.NewSymbol("shortCast")
 	sym_shorts := lang.NewSymbol("shorts")
-	sym_shuffle := lang.NewSymbol("shuffle")
 	sym_shutdown_DASH_agents := lang.NewSymbol("shutdown-agents")
 	sym_sigs := lang.NewSymbol("sigs")
 	sym_simple_DASH_ident_QMARK_ := lang.NewSymbol("simple-ident?")
@@ -2331,8 +2330,6 @@ func LoadNS() {
 	var_clojure_DOT_core_prn := lang.InternVarName(sym_clojure_DOT_core, sym_prn)
 	// var clojure.core/prn-str
 	var_clojure_DOT_core_prn_DASH_str := lang.InternVarName(sym_clojure_DOT_core, sym_prn_DASH_str)
-	// var clojure.core/promise
-	var_clojure_DOT_core_promise := lang.InternVarName(sym_clojure_DOT_core, sym_promise)
 	// var clojure.core/protocol?
 	var_clojure_DOT_core_protocol_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_protocol_QMARK_)
 	// var clojure.core/push-thread-bindings
@@ -2523,8 +2520,6 @@ func LoadNS() {
 	var_clojure_DOT_core_short_DASH_array := lang.InternVarName(sym_clojure_DOT_core, sym_short_DASH_array)
 	// var clojure.core/shorts
 	var_clojure_DOT_core_shorts := lang.InternVarName(sym_clojure_DOT_core, sym_shorts)
-	// var clojure.core/shuffle
-	var_clojure_DOT_core_shuffle := lang.InternVarName(sym_clojure_DOT_core, sym_shuffle)
 	// var clojure.core/shutdown-agents
 	var_clojure_DOT_core_shutdown_DASH_agents := lang.InternVarName(sym_clojure_DOT_core, sym_shutdown_DASH_agents)
 	// var clojure.core/sigs
@@ -3132,7 +3127,7 @@ func LoadNS() {
 	// *loaded-libs*
 	{
 		tmp0 := sym__STAR_loaded_DASH_libs_STAR_.WithMeta(lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(5809), kw_column, int(10), kw_end_DASH_line, int(5812), kw_end_DASH_column, int(15), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
-		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_clojure_DOT_string, sym_clojure_DOT_core_DOT_protocols, sym_glojure_DOT_go_DOT_io})))
+		tmp1 := lang.NewRef(lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{sym_clojure_DOT_core_DOT_protocols, sym_clojure_DOT_string, sym_glojure_DOT_go_DOT_io})))
 		var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6373,7 +6368,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.CanSeq(v2)
+			tmp3 := lang.Apply1(lang.CanSeq, v2)
 			return tmp3
 		})
 		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
@@ -13951,45 +13946,6 @@ func LoadNS() {
 		var_clojure_DOT_core_shorts = ns.InternWithValue(tmp0, tmp2, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_shorts.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// shuffle
-	{
-		tmp0 := sym_shuffle.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return a random permutation of coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7298), kw_end_DASH_line, int(7298))).(*lang.Symbol)
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			var tmp3 any
-			{ // let
-				// let binding "al"
-				tmp4 := checkDerefVar(var_clojure_DOT_core_to_DASH_array)
-				tmp5 := lang.Apply1(tmp4, v2)
-				tmp6 := lang.Apply1(lang.NewArrayList, tmp5)
-				var v7 any = tmp6
-				_ = v7
-				tmp8 := lang.Apply1(nil, v7)
-				_ = tmp8
-				tmp9, ok := lang.FieldOrMethod(v7, "toArray")
-				if !ok {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "toArray")))
-				}
-				var tmp10 any
-				switch reflect.TypeOf(tmp9).Kind() {
-				case reflect.Func:
-					tmp10 = lang.Apply(tmp9, nil)
-				default:
-					tmp10 = tmp9
-				}
-				tmp11 := lang.Apply1(nil, tmp10)
-				tmp3 = tmp11
-			} // end let
-			return tmp3
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
-		var_clojure_DOT_core_shuffle = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_shuffle.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// simple-ident?
@@ -29763,16 +29719,16 @@ func LoadNS() {
 					var tmp8 any
 					var tmp9 int64
 					tmp9 = int64(uint32(lang.Hash(v7)>>0) & uint32(1))
-					// case entry 0 (key=1, collision=false)
-					if tmp9 == 1 {
-						if lang.Equals(v7, "true") {
-							tmp8 = true
-						} else {
-						}
-						// case entry 1 (key=0, collision=false)
-					} else if tmp9 == 0 {
+					// case entry 0 (key=0, collision=false)
+					if tmp9 == 0 {
 						if lang.Equals(v7, "false") {
 							tmp8 = false
+						} else {
+						}
+						// case entry 1 (key=1, collision=false)
+					} else if tmp9 == 1 {
+						if lang.Equals(v7, "true") {
+							tmp8 = true
 						} else {
 						}
 					} else {
@@ -42434,149 +42390,6 @@ func LoadNS() {
 		var_clojure_DOT_core_print_DASH_prefix_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_print_DASH_prefix_DASH_map.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// promise
-	{
-		tmp0 := sym_promise.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a promise object that can be read with deref/@, and set,\n  once only, with deliver. Calls to deref/@ prior to delivery will\n  block, unless the variant of deref with timeout is used. All\n  subsequent derefs will return the same delivered value without\n  blocking. See also - realized?.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7076), kw_end_DASH_line, int(7076))).(*lang.Symbol)
-		var tmp1 lang.FnFunc0
-		tmp1 = lang.FnFunc0(func() any {
-			var tmp2 any
-			{ // let
-				// let binding "d"
-				tmp3 := lang.Apply1(nil, int64(1))
-				var v4 any = tmp3
-				_ = v4
-				// let binding "v"
-				tmp5 := checkDerefVar(var_clojure_DOT_core_atom)
-				tmp6 := lang.Apply1(tmp5, v4)
-				var v7 any = tmp6
-				_ = v7
-				tmp8 := reflect.TypeOf((*lang.IDeref)(nil)).Elem()
-				tmp9 := checkDerefVar(var_clojure_DOT_core_deref)
-				tmp10 := lang.NewVector(nil)
-				tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7089), kw_column, int(15), kw_end_DASH_line, int(7089), kw_end_DASH_column, int(17))
-				tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp13, ok := lang.FieldOrMethod(v4, "await")
-				if !ok {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "await")))
-				}
-				var tmp14 any
-				switch reflect.TypeOf(tmp13).Kind() {
-				case reflect.Func:
-					tmp14 = lang.Apply(tmp13, nil)
-				default:
-					tmp14 = tmp13
-				}
-				tmp15 := checkDerefVar(var_clojure_DOT_core_deref)
-				tmp16 := lang.Apply1(tmp15, v7)
-				tmp17 := lang.Apply3(tmp9, tmp12, tmp14, tmp16)
-				tmp18 := reflect.TypeOf((*lang.IBlockingDeref)(nil)).Elem()
-				tmp19 := checkDerefVar(var_clojure_DOT_core_deref)
-				tmp20 := lang.NewVector(nil, nil, nil)
-				tmp21 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7092), kw_column, int(9), kw_end_DASH_line, int(7092), kw_end_DASH_column, int(34))
-				tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var tmp23 any
-				tmp24, _ := lang.FieldOrMethod(v4, "await")
-				if reflect.TypeOf(tmp24).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("await is not a function")))
-				}
-				tmp25 := lang.Apply2(tmp24, nil, time7.Millisecond)
-				if lang.IsTruthy(tmp25) {
-					tmp26 := checkDerefVar(var_clojure_DOT_core_deref)
-					tmp27 := lang.Apply1(tmp26, v7)
-					tmp23 = tmp27
-				} else {
-				}
-				tmp28 := lang.Apply2(tmp19, tmp22, tmp23)
-				tmp29 := reflect.TypeOf((*lang.IPending)(nil)).Elem()
-				tmp30 := lang.NewVector(nil)
-				tmp31 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7097), kw_column, int(19), kw_end_DASH_line, int(7097), kw_end_DASH_column, int(24))
-				tmp32, err := lang.WithMeta(tmp30, tmp31.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp33 := checkDerefVar(var_clojure_DOT_core_zero_QMARK_)
-				tmp34, ok := lang.FieldOrMethod(v4, "getCount")
-				if !ok {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "getCount")))
-				}
-				var tmp35 any
-				switch reflect.TypeOf(tmp34).Kind() {
-				case reflect.Func:
-					tmp35 = lang.Apply(tmp34, nil)
-				default:
-					tmp35 = tmp34
-				}
-				tmp36 := lang.Apply1(tmp33, tmp35)
-				tmp37 := lang.Apply2(nil, tmp32, tmp36)
-				tmp38 := reflect.TypeOf((*lang.IFn)(nil)).Elem()
-				tmp39 := lang.NewVector(nil, nil)
-				tmp40 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7101), kw_column, int(7), kw_end_DASH_line, int(7101), kw_end_DASH_column, int(14))
-				tmp41, err := lang.WithMeta(tmp39, tmp40.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var tmp42 any
-				var tmp43 any
-				{ // let
-					// let binding "and__0__auto__"
-					tmp44 := checkDerefVar(var_clojure_DOT_core_pos_QMARK_)
-					tmp45, ok := lang.FieldOrMethod(v4, "getCount")
-					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "getCount")))
-					}
-					var tmp46 any
-					switch reflect.TypeOf(tmp45).Kind() {
-					case reflect.Func:
-						tmp46 = lang.Apply(tmp45, nil)
-					default:
-						tmp46 = tmp45
-					}
-					tmp47 := lang.Apply1(tmp44, tmp46)
-					var v48 any = tmp47
-					_ = v48
-					var tmp49 any
-					if lang.IsTruthy(v48) {
-						tmp50 := checkDerefVar(var_clojure_DOT_core_compare_DASH_and_DASH_set_BANG_)
-						tmp51 := lang.Apply3(tmp50, v7, v4, nil)
-						tmp49 = tmp51
-					} else {
-						tmp49 = v48
-					}
-					tmp43 = tmp49
-				} // end let
-				if lang.IsTruthy(tmp43) {
-					tmp44, ok := lang.FieldOrMethod(v4, "countDown")
-					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "countDown")))
-					}
-					var tmp45 any
-					switch reflect.TypeOf(tmp44).Kind() {
-					case reflect.Func:
-						tmp45 = lang.Apply(tmp44, nil)
-					default:
-						tmp45 = tmp44
-					}
-					_ = tmp45
-				} else {
-				}
-				tmp46 := lang.Apply2(nil, tmp41, tmp42)
-				tmp47 := lang.Apply(nil, []any{tmp8, tmp17, tmp18, tmp28, tmp29, tmp37, tmp38, tmp46})
-				tmp2 = tmp47
-			} // end let
-			return tmp2
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
-		var_clojure_DOT_core_promise = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_promise.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// re-find

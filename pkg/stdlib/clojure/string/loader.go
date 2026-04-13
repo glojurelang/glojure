@@ -93,6 +93,7 @@ func LoadNS() {
 	sym_accessor := lang.NewSymbol("accessor")
 	sym_aclone := lang.NewSymbol("aclone")
 	sym_add_DASH_classpath := lang.NewSymbol("add-classpath")
+	sym_add_DASH_load_DASH_path := lang.NewSymbol("add-load-path")
 	sym_add_DASH_watch := lang.NewSymbol("add-watch")
 	sym_agent := lang.NewSymbol("agent")
 	sym_agent_DASH_error := lang.NewSymbol("agent-error")
@@ -2617,6 +2618,13 @@ func LoadNS() {
 		v := srcNS.Mappings().ValAt(sym_dorun)
 		if vr, ok := v.(*lang.Var); ok {
 			ns.Refer(sym_dorun, vr)
+		}
+	}
+	{ // refer clojure.core/add-load-path as add-load-path
+		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
+		v := srcNS.Mappings().ValAt(sym_add_DASH_load_DASH_path)
+		if vr, ok := v.(*lang.Var); ok {
+			ns.Refer(sym_add_DASH_load_DASH_path, vr)
 		}
 	}
 	{ // refer clojure.core/assert as assert
@@ -5275,24 +5283,6 @@ func LoadNS() {
 			var_clojure_DOT_string_includes_QMARK_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
-	// lower-case
-	{
-		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_lower_DASH_case.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all lower-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(188), kw_end_DASH_line, int(188))).(*lang.Symbol)
-		var tmp2 lang.FnFunc1
-		tmp2 = lang.FnFunc1(func(p0 any) any {
-			v3 := p0
-			_ = v3
-			tmp4 := lang.Apply1(strings5.ToLower, v3)
-			return tmp4
-		})
-		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
-		var_clojure_DOT_string_lower_DASH_case = ns.InternWithValue(tmp0, tmp2, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_string_lower_DASH_case.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// split
 	{
 		tmp0 := sym_split.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re), lang.NewVector(sym_s, sym_re, sym_limit)), kw_doc, "Splits string on a regular expression.  Optional argument limit is\n  the maximum number of parts. Not lazy. Returns vector of the parts.\n  Trailing empty strings are not returned - pass limit of -1 to return all.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(194), kw_end_DASH_line, int(194))).(*lang.Symbol)
@@ -5427,24 +5417,6 @@ func LoadNS() {
 			var_clojure_DOT_string_trimr.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
-	// upper-case
-	{
-		tmp1 := reflect.TypeOf("")
-		tmp0 := sym_upper_DASH_case.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all upper-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(182), kw_end_DASH_line, int(182))).(*lang.Symbol)
-		var tmp2 lang.FnFunc1
-		tmp2 = lang.FnFunc1(func(p0 any) any {
-			v3 := p0
-			_ = v3
-			tmp4 := lang.Apply1(strings5.ToUpper, v3)
-			return tmp4
-		})
-		tmp3 := reflect.TypeOf("")
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
-		var_clojure_DOT_string_upper_DASH_case = ns.InternWithValue(tmp0, tmp2, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_string_upper_DASH_case.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
 	// blank?
 	{
 		tmp0 := sym_blank_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "True if s is nil, empty, or contains only whitespace.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(236), kw_end_DASH_line, int(236))).(*lang.Symbol)
@@ -5511,30 +5483,32 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "s"
-				tmp5 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-				tmp6 := lang.Apply1(tmp5, v3)
-				var v7 any = tmp6
-				_ = v7
-				var tmp8 any
-				tmp9 := checkDerefVar(var_clojure_DOT_core__LT_)
-				tmp10 := checkDerefVar(var_clojure_DOT_core_count)
-				tmp11 := lang.Apply1(tmp10, v7)
-				tmp12 := lang.Apply2(tmp9, tmp11, int64(2))
-				if lang.IsTruthy(tmp12) {
-					tmp13 := lang.Apply1(strings5.ToUpper, v7)
-					tmp8 = tmp13
+				tmp5 := checkDerefVar(var_clojure_DOT_core_str)
+				tmp6 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
+				tmp7 := lang.Apply1(tmp6, v3)
+				tmp8 := lang.Apply1(tmp5, tmp7)
+				var v9 any = tmp8
+				_ = v9
+				var tmp10 any
+				tmp11 := checkDerefVar(var_clojure_DOT_core__LT_)
+				tmp12 := checkDerefVar(var_clojure_DOT_core_count)
+				tmp13 := lang.Apply1(tmp12, v9)
+				tmp14 := lang.Apply2(tmp11, tmp13, int64(2))
+				if lang.IsTruthy(tmp14) {
+					tmp15 := lang.Apply1(strings5.ToUpper, v9)
+					tmp10 = tmp15
 				} else {
-					tmp14 := checkDerefVar(var_clojure_DOT_core_str)
-					tmp15 := checkDerefVar(var_clojure_DOT_core_subs)
-					tmp16 := lang.Apply3(tmp15, v7, int64(0), int64(1))
-					tmp17 := lang.Apply1(strings5.ToUpper, tmp16)
-					tmp18 := checkDerefVar(var_clojure_DOT_core_subs)
-					tmp19 := lang.Apply2(tmp18, v7, int64(1))
-					tmp20 := lang.Apply1(strings5.ToLower, tmp19)
-					tmp21 := lang.Apply2(tmp14, tmp17, tmp20)
-					tmp8 = tmp21
+					tmp16 := checkDerefVar(var_clojure_DOT_core_str)
+					tmp17 := checkDerefVar(var_clojure_DOT_core_subs)
+					tmp18 := lang.Apply3(tmp17, v9, int64(0), int64(1))
+					tmp19 := lang.Apply1(strings5.ToUpper, tmp18)
+					tmp20 := checkDerefVar(var_clojure_DOT_core_subs)
+					tmp21 := lang.Apply2(tmp20, v9, int64(1))
+					tmp22 := lang.Apply1(strings5.ToLower, tmp21)
+					tmp23 := lang.Apply2(tmp16, tmp19, tmp22)
+					tmp10 = tmp23
 				}
-				tmp4 = tmp8
+				tmp4 = tmp10
 			} // end let
 			return tmp4
 		})
@@ -5866,6 +5840,28 @@ func LoadNS() {
 		var_clojure_DOT_string_last_DASH_index_DASH_of = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_last_DASH_index_DASH_of.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// lower-case
+	{
+		tmp1 := reflect.TypeOf("")
+		tmp0 := sym_lower_DASH_case.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all lower-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(188), kw_end_DASH_line, int(188))).(*lang.Symbol)
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
+			_ = v3
+			tmp4 := checkDerefVar(var_clojure_DOT_core_str)
+			tmp5 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
+			tmp6 := lang.Apply1(tmp5, v3)
+			tmp7 := lang.Apply1(tmp4, tmp6)
+			tmp8 := lang.Apply1(strings5.ToLower, tmp7)
+			return tmp8
+		})
+		tmp3 := reflect.TypeOf("")
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
+		var_clojure_DOT_string_lower_DASH_case = ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			var_clojure_DOT_string_lower_DASH_case.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 	// replace
@@ -6384,6 +6380,28 @@ func LoadNS() {
 		var_clojure_DOT_string_split_DASH_lines = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_string_split_DASH_lines.SetMeta(tmp0.Meta().(lang.IPersistentMap))
+		}
+	}
+	// upper-case
+	{
+		tmp1 := reflect.TypeOf("")
+		tmp0 := sym_upper_DASH_case.WithMeta(lang.NewMap(kw_tag, tmp1, kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all upper-case.", kw_file, "clojure/string.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(182), kw_end_DASH_line, int(182))).(*lang.Symbol)
+		var tmp2 lang.FnFunc1
+		tmp2 = lang.FnFunc1(func(p0 any) any {
+			v3 := p0
+			_ = v3
+			tmp4 := checkDerefVar(var_clojure_DOT_core_str)
+			tmp5 := checkDerefVar(var_clojure_DOT_string_check_DASH_string)
+			tmp6 := lang.Apply1(tmp5, v3)
+			tmp7 := lang.Apply1(tmp4, tmp6)
+			tmp8 := lang.Apply1(strings5.ToUpper, tmp7)
+			return tmp8
+		})
+		tmp3 := reflect.TypeOf("")
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc1)
+		var_clojure_DOT_string_upper_DASH_case = ns.InternWithValue(tmp0, tmp2, true)
+		if tmp0.Meta() != nil {
+			var_clojure_DOT_string_upper_DASH_case.SetMeta(tmp0.Meta().(lang.IPersistentMap))
 		}
 	}
 }

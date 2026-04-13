@@ -156,6 +156,16 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 	// uses Java interop (java.util.Collections/shuffle) that doesn't exist.
 	lang.InternVar(core, lang.NewSymbol("shuffle"), lang.FnFunc(func(args ...any) any {
 		coll := args[0]
+		if lang.IsNil(coll) {
+			panic(lang.NewIllegalArgumentError("shuffle requires a collection, got nil"))
+		}
+		// Only accept seqable collections, not strings or maps
+		switch coll.(type) {
+		case string:
+			panic(lang.NewIllegalArgumentError("shuffle requires a collection, got string"))
+		case lang.IPersistentMap:
+			panic(lang.NewIllegalArgumentError("shuffle requires a collection, got map"))
+		}
 		// Convert to slice, shuffle, return vector
 		var elems []any
 		for s := lang.Seq(coll); s != nil; s = s.Next() {
