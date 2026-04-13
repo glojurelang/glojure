@@ -297,6 +297,7 @@ func (s *SortedSet) EntryKey(entry any) any {
 	return entry
 }
 
+
 func (s *SortedSet) ReduceInit(f IFn, init any) any {
 	ret := init
 	for seq := s.Seq(); seq != nil; seq = seq.Next() {
