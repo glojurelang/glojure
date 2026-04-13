@@ -3,11 +3,28 @@ package lang
 import (
 	"fmt"
 	"io"
+	"math"
 	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
 )
+
+func formatFloat(v float64) string {
+	if math.IsInf(v, 1) {
+		return "Infinity"
+	}
+	if math.IsInf(v, -1) {
+		return "-Infinity"
+	}
+	if math.IsNaN(v) {
+		return "NaN"
+	}
+	if v == float64(int64(v)) && !math.IsInf(v, 0) {
+		return fmt.Sprintf("%d.0", int64(v))
+	}
+	return strconv.FormatFloat(v, 'f', -1, 64)
+}
 
 // ToString converts a value to a string a la Java's .toString method.
 func ToString(v interface{}) string {
@@ -23,11 +40,10 @@ func ToString(v interface{}) string {
 			return "true"
 		}
 		return "false"
+	case float32:
+		return formatFloat(float64(v))
 	case float64:
-		if v == float64(int64(v)) {
-			return fmt.Sprintf("%d.0", int64(v))
-		}
-		return strconv.FormatFloat(v, 'f', -1, 64)
+		return formatFloat(v)
 	case uint64, uint32, uint16, uint8, uint, int64, int32, int16, int8, int:
 		return fmt.Sprintf("%d", v)
 	case *BigInt:
