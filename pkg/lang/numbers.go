@@ -82,6 +82,10 @@ func (nm *NumberMethods) Divide(x, y any) any {
 	}
 	yops := Ops(y)
 	if yops.IsZero(y) {
+		// Infinity divided by zero yields infinity (matches IEEE 754 / Clojure behavior)
+		if isInf(x) {
+			return x
+		}
 		panic(NewArithmeticError("divide by zero"))
 	}
 	return Ops(x).Combine(yops).Divide(x, y)
@@ -1011,6 +1015,17 @@ func isNaN(x any) bool {
 		return math.IsNaN(float64(x))
 	case float64:
 		return math.IsNaN(x)
+	default:
+		return false
+	}
+}
+
+func isInf(x any) bool {
+	switch x := x.(type) {
+	case float32:
+		return math.IsInf(float64(x), 0)
+	case float64:
+		return math.IsInf(x, 0)
 	default:
 		return false
 	}
