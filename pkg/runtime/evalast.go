@@ -301,8 +301,28 @@ func (env *environment) EvalASTMaybeHostForm(n *ast.Node) (interface{}, error) {
 	hostFormNode := n.Sub.(*ast.MaybeHostFormNode)
 	field := hostFormNode.Field
 
-	// TODO: should we support any version of this? Go doesn't have any notion of static
-	// vs instance fields.
+	// Try resolving as a namespace-qualified var. The analyzer may have
+	// classified this as a host form because the namespace alias wasn't
+	// registered at analysis time.
+	nsSym := lang.NewSymbol(hostFormNode.Class)
+	if ns := env.CurrentNamespace().LookupAlias(nsSym); ns != nil {
+		if vr := ns.FindInternedVar(lang.NewSymbol(field.Name())); vr != nil {
+			return vr.Get(), nil
+		}
+	}
+	// Also try as a full namespace name
+	if ns := lang.FindNamespace(nsSym); ns != nil {
+		if vr := ns.FindInternedVar(lang.NewSymbol(field.Name())); vr != nil {
+			return vr.Get(), nil
+		}
+	}
+
+	// Check if it's a Go package reference
+	v, ok := pkgmap.Get(hostFormNode.Class + "." + field.Name())
+	if ok {
+		return v, nil
+	}
+
 	panic("EvalASTMaybeHostForm: " + hostFormNode.Class + "/" + field.Name())
 }
 

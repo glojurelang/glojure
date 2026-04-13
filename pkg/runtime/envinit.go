@@ -145,6 +145,11 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 		versionVar.BindRoot(parseVersion(Version))
 	}
 
+	lang.InternVar(core, lang.NewSymbol("add-load-path"), func(path string) any {
+		AddLoadPath(os.DirFS(path))
+		return nil
+	}, true)
+
 	lang.InternVar(core, lang.NewSymbol("load-file"), func(filename string) any {
 		buf, err := os.ReadFile(filename)
 		if err != nil {
