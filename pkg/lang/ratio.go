@@ -94,7 +94,8 @@ func (r *Ratio) Quotient(other *Ratio) any {
 	yn, yd := other.Numerator(), other.Denominator()
 
 	qn := new(big.Int).Mul(xn, yd)
-	q := qn.Div(qn, xd.Mul(xd, yn))
+	qd := new(big.Int).Mul(xd, yn)
+	q := new(big.Int).Quo(qn, qd)
 	return NewBigIntFromGoBigInt(q)
 }
 

@@ -92,6 +92,9 @@ func (nm *NumberMethods) Divide(x, y any) any {
 }
 
 func (nm *NumberMethods) Quotient(x, y any) any {
+	if isNaN(x) || isNaN(y) || isInf(x) {
+		panic(NewIllegalArgumentError("quot requires finite dividend and non-NaN arguments"))
+	}
 	yops := Ops(y)
 	if yops.IsZero(y) {
 		panic(NewArithmeticError("divide by zero"))
@@ -100,14 +103,9 @@ func (nm *NumberMethods) Quotient(x, y any) any {
 }
 
 func (nm *NumberMethods) Remainder(x, y any) any {
-	if isNaN(x) {
-		return x
-	} else if isNaN(y) {
-		return y
-	}
 	yops := Ops(y)
 	if yops.IsZero(y) {
-		panic("divide by zero")
+		panic(NewArithmeticError("divide by zero"))
 	}
 	return Ops(x).Combine(yops).Remainder(x, y)
 }
@@ -1039,6 +1037,10 @@ func isNaN(x any) bool {
 	default:
 		return false
 	}
+}
+
+func IsInf(x any) bool {
+	return isInf(x)
 }
 
 func isInf(x any) bool {

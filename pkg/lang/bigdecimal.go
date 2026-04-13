@@ -117,7 +117,10 @@ func (n *BigDecimal) Divide(other *BigDecimal) *BigDecimal {
 }
 
 func (n *BigDecimal) Quotient(other *BigDecimal) *BigDecimal {
-	return &BigDecimal{val: new(big.Float).Quo(n.val, other.val)}
+	// Truncate toward zero (integer quotient)
+	quo := new(big.Float).Quo(n.val, other.val)
+	intQuo, _ := quo.Int(nil)
+	return &BigDecimal{val: new(big.Float).SetInt(intQuo)}
 }
 
 func (n *BigDecimal) Remainder(other *BigDecimal) *BigDecimal {
