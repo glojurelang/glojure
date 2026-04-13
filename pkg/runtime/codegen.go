@@ -90,6 +90,9 @@ var (
 		"#'clojure.core/*out*":           true,
 		"#'clojure.core/*compile-files*": true,
 		"#'clojure.core/load-file":       true,
+		"#'clojure.core/add-load-path":   true,
+		"#'clojure.core/shuffle":         true,
+		"#'clojure.core/promise":         true,
 	}
 )
 

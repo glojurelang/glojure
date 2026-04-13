@@ -169,13 +169,14 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 		return lang.NewVector(elems...)
 	}), true)
 
-	lang.InternVar(core, lang.NewSymbol("add-load-path"), func(path string) any {
-		AddLoadPath(os.DirFS(path))
+	lang.InternVar(core, lang.NewSymbol("add-load-path"), lang.FnFunc1(func(path any) any {
+		AddLoadPath(os.DirFS(path.(string)))
 		return nil
-	}, true)
+	}), true)
 
-	lang.InternVar(core, lang.NewSymbol("load-file"), func(filename string) any {
-		buf, err := os.ReadFile(filename)
+	lang.InternVar(core, lang.NewSymbol("load-file"), lang.FnFunc1(func(filename any) any {
+		fname := filename.(string)
+		buf, err := os.ReadFile(fname)
 		if err != nil {
 			panic(err)
 		}
@@ -187,8 +188,8 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 		lang.PushThreadBindings(lang.NewMap(kvs...))
 		defer lang.PopThreadBindings()
 
-		return ReadEval(string(buf), WithFilename(filename))
-	}, true)
+		return ReadEval(string(buf), WithFilename(fname))
+	}), true)
 
 	return env
 }
