@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"math/rand"
 	"os"
 	"runtime/debug"
 	"strconv"
@@ -144,6 +145,29 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 	if versionVar != nil {
 		versionVar.BindRoot(parseVersion(Version))
 	}
+
+	// Override promise with a Go implementation since the Clojure version
+	// uses java.util.concurrent.CountDownLatch that doesn't exist in Go.
+	lang.InternVar(core, lang.NewSymbol("promise"), lang.FnFunc(func(args ...any) any {
+		return NewPromise()
+	}), true)
+
+	// Override shuffle with a Go implementation since the Clojure version
+	// uses Java interop (java.util.Collections/shuffle) that doesn't exist.
+	lang.InternVar(core, lang.NewSymbol("shuffle"), lang.FnFunc(func(args ...any) any {
+		coll := args[0]
+		// Convert to slice, shuffle, return vector
+		var elems []any
+		for s := lang.Seq(coll); s != nil; s = s.Next() {
+			elems = append(elems, s.First())
+		}
+		// Fisher-Yates shuffle
+		for i := len(elems) - 1; i > 0; i-- {
+			j := int(rand.Int63n(int64(i + 1)))
+			elems[i], elems[j] = elems[j], elems[i]
+		}
+		return lang.NewVector(elems...)
+	}), true)
 
 	lang.InternVar(core, lang.NewSymbol("add-load-path"), func(path string) any {
 		AddLoadPath(os.DirFS(path))
