@@ -16,6 +16,16 @@ var (
 // class' static methods.
 type NumberMethods struct{}
 
+func (nm *NumberMethods) Num(x any) any {
+	if x == nil {
+		return nil
+	}
+	if IsNumber(x) {
+		return x
+	}
+	panic(NewIllegalArgumentError(fmt.Sprintf("cannot cast %T to Number", x)))
+}
+
 func (nm *NumberMethods) UncheckedAdd(x, y any) any {
 	return Ops(x).Combine(Ops(y)).UncheckedAdd(x, y)
 }
