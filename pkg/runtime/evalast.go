@@ -213,6 +213,31 @@ var (
 	Compiler = &evalCompiler{}
 )
 
+func (c *evalCompiler) Specials() *lang.Set {
+	return lang.NewSet(
+		lang.NewSymbol("def"),
+		lang.NewSymbol("if"),
+		lang.NewSymbol("do"),
+		lang.NewSymbol("let*"),
+		lang.NewSymbol("letfn*"),
+		lang.NewSymbol("loop*"),
+		lang.NewSymbol("recur"),
+		lang.NewSymbol("fn*"),
+		lang.NewSymbol("quote"),
+		lang.NewSymbol("var"),
+		lang.NewSymbol("set!"),
+		lang.NewSymbol("."),
+		lang.NewSymbol("try"),
+		lang.NewSymbol("throw"),
+		lang.NewSymbol("catch"),
+		lang.NewSymbol("finally"),
+		lang.NewSymbol("new"),
+		lang.NewSymbol("&"),
+		lang.NewSymbol("case*"),
+		lang.NewSymbol("deftype*"),
+	)
+}
+
 func (c *evalCompiler) Eval(form interface{}) interface{} {
 	res, err := lang.GlobalEnv.Eval(form)
 	if err != nil {

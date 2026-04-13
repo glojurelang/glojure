@@ -364,6 +364,10 @@ func (m *TransientMap) Assoc(k, v any) Associative {
 	return &TransientMap{IPersistentMap: m.IPersistentMap.Assoc(k, v).(IPersistentMap)}
 }
 
+func (m *TransientMap) Without(key any) IPersistentMap {
+	return &TransientMap{IPersistentMap: m.IPersistentMap.Without(key).(IPersistentMap)}
+}
+
 func (m *TransientMap) Persistent() IPersistentCollection {
 	return m.IPersistentMap
 }

@@ -180,6 +180,10 @@ func (s *TransientSet) Conj(v any) Conjer {
 	return &TransientSet{Set: s.Set.Cons(v).(*Set)}
 }
 
+func (s *TransientSet) Disjoin(v any) ITransientSet {
+	return &TransientSet{Set: s.Set.Disjoin(v).(*Set)}
+}
+
 func (s *TransientSet) Persistent() IPersistentCollection {
 	return s.Set
 }
