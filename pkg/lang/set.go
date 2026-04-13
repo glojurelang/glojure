@@ -15,13 +15,13 @@ type Set struct {
 type PersistentHashSet = Set
 
 func CreatePersistentTreeSet(keys ISeq) any {
-	// TODO: implement
-	return NewSet(seqToSlice(keys)...)
+	s := NewSet(seqToSlice(keys)...)
+	return &SortedSet{Set: *s}
 }
 
 func CreatePersistentTreeSetWithComparator(comparator IFn, keys ISeq) any {
-	// TODO: implement
-	return NewSet(seqToSlice(keys)...)
+	s := NewSet(seqToSlice(keys)...)
+	return &SortedSet{Set: *s, comparator: comparator}
 }
 
 func NewSet(vals ...any) *Set {
@@ -212,4 +212,113 @@ func (s *TransientSet) Disjoin(v any) ITransientSet {
 
 func (s *TransientSet) Persistent() IPersistentCollection {
 	return s.Set
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SortedSet
+
+// SortedSet wraps a Set and provides sorted iteration order.
+type SortedSet struct {
+	Set
+	comparator IFn // nil means default compare
+}
+
+type PersistentTreeSet = SortedSet
+
+func (s *SortedSet) sortedElements() []any {
+	elems := make([]any, 0, s.Count())
+	for seq := s.Set.Seq(); seq != nil; seq = seq.Next() {
+		elems = append(elems, seq.First())
+	}
+	if s.comparator != nil {
+		SortSlice(elems, s.comparator)
+	} else {
+		SortSlice(elems, FnFunc(func(args ...any) any {
+			return Compare(args[0], args[1])
+		}))
+	}
+	return elems
+}
+
+func (s *SortedSet) Seq() ISeq {
+	if s.Count() == 0 {
+		return nil
+	}
+	elems := s.sortedElements()
+	return NewSliceSeq(elems)
+}
+
+func (s *SortedSet) Cons(v any) Conser {
+	if s.Contains(v) {
+		return s
+	}
+	inner := s.Set.Cons(v).(*Set)
+	return &SortedSet{Set: *inner, comparator: s.comparator}
+}
+
+func (s *SortedSet) Disjoin(v any) IPersistentSet {
+	if !s.Contains(v) {
+		return s
+	}
+	inner := s.Set.Disjoin(v).(*Set)
+	return &SortedSet{Set: *inner, comparator: s.comparator}
+}
+
+func (s *SortedSet) Empty() IPersistentCollection {
+	return &SortedSet{Set: *emptySet, comparator: s.comparator}
+}
+
+func (s *SortedSet) WithMeta(meta IPersistentMap) any {
+	if meta == s.meta {
+		return s
+	}
+	cpy := *s
+	cpy.meta = meta
+	return &cpy
+}
+
+func (s *SortedSet) Rseq() ISeq {
+	if s.Count() == 0 {
+		return nil
+	}
+	elems := s.sortedElements()
+	// reverse
+	for i, j := 0, len(elems)-1; i < j; i, j = i+1, j-1 {
+		elems[i], elems[j] = elems[j], elems[i]
+	}
+	return NewSliceSeq(elems)
+}
+
+func (s *SortedSet) Comparator() IFn {
+	return s.comparator
+}
+
+func (s *SortedSet) EntryKey(entry any) any {
+	return entry
+}
+
+func (s *SortedSet) ReduceInit(f IFn, init any) any {
+	ret := init
+	for seq := s.Seq(); seq != nil; seq = seq.Next() {
+		ret = f.Invoke(ret, seq.First())
+		if IsReduced(ret) {
+			return ret.(*Reduced).Deref()
+		}
+	}
+	return ret
+}
+
+func (s *SortedSet) Reduce(f IFn) any {
+	seq := s.Seq()
+	if seq == nil {
+		return f.Invoke()
+	}
+	ret := seq.First()
+	for seq = seq.Next(); seq != nil; seq = seq.Next() {
+		ret = f.Invoke(ret, seq.First())
+		if IsReduced(ret) {
+			return ret.(*Reduced).Deref()
+		}
+	}
+	return ret
 }

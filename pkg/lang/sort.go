@@ -76,9 +76,8 @@ func Compare(x, y any) int {
 
 	// Handle strings (built-in type, doesn't implement Comparer)
 	if xStr, xOk := x.(string); xOk {
-		if yStr, yOk := y.(string); yOk {
-			return strings.Compare(xStr, yStr)
-		}
+		yStr := ToString(y)
+		return strings.Compare(xStr, yStr)
 	}
 
 	// Handle characters
@@ -93,6 +92,8 @@ func Compare(x, y any) int {
 		}
 	}
 
-	// Default error - cannot compare
-	panic(NewIllegalArgumentError(fmt.Sprintf("%T cannot be cast to Comparable", x)))
+	// Fallback: compare by string representation
+	xStr := ToString(x)
+	yStr := ToString(y)
+	return strings.Compare(xStr, yStr)
 }
