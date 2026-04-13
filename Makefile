@@ -19,17 +19,6 @@ CLAUDE-NONO-OPTS += --read /usr/libexec
 CLAUDE-NONO-OPTS += --read /usr/include
 CLAUDE-NONO-OPTS += --allow /tmp
 
-MAKES-CLEAN := \
-  report.html \
-  bin/ \
-  scripts/rewrite-core/.cpcache/ \
-
-MAKES-DISTCLEAN += \
-  dist/ \
-  .clj-kondo/ \
-  .lsp/ \
-  .vscode/
-
 CLOJURE-STDLIB-VERSION := clojure-$(CLOJURE-VERSION)
 STDLIB-ORIGINALS-DIR := scripts/rewrite-core/originals
 STDLIB-ORIGINALS := $(wildcard $(STDLIB-ORIGINALS-DIR)/*.clj)
@@ -85,8 +74,21 @@ endif
 TEST-GLJ-DIR := test/glojure
 TEST-GLJ-FILES := $(shell find $(TEST-GLJ-DIR) -name '*.glj' | sort)
 TEST-GLJ-TARGETS := $(addsuffix .test,$(TEST-GLJ-FILES))
+TEST-SUITE-REPO := git@github.com:gloathub/clojure-test-suite.git
 TEST-SUITE-DIR := test/clojure-test-suite
 TEST-SUITE-FILE := test-glojure.glj
+
+MAKES-CLEAN := \
+  report.html \
+  bin/ \
+  scripts/rewrite-core/.cpcache/ \
+  $(TEST-SUITE-DIR) \
+
+MAKES-DISTCLEAN += \
+  dist/ \
+  .clj-kondo/ \
+  .lsp/ \
+  .vscode/
 
 GO-PLATFORMS := \
 	darwin_arm64 \
@@ -203,14 +205,15 @@ test: test-glj test-suite  # vet
 
 test-glj: $(TEST-GLJ-TARGETS)
 
-test-suite: $(GLJ-CMD)
-ifneq (,$(wildcard $(TEST-SUITE-DIR)))
+$(TEST-SUITE-DIR):
+	git clone $(TEST-SUITE-REPO) $@
+
+test-suite: $(GLJ-CMD) $(TEST-SUITE-DIR)
 	cd $(TEST-SUITE-DIR) && \
 	  $(abspath $<) $(TEST-SUITE-FILE) \
-	    --expect-failures 43 \
-	    --expect-errors 42 \
+	    --expect-failures 105 \
+	    --expect-errors 163 \
 	    2>/dev/null
-endif
 
 $(TEST-GLJ-TARGETS): $(GLJ-CMD)
 	$< $(basename $@)

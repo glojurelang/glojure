@@ -1,5 +1,6 @@
 /bin/
 /dist/
+/test/clojure-test-suite/
 /doc/repl/glj.wasm
 /report.html
 .direnv
