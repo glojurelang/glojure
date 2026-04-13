@@ -167,6 +167,32 @@ func (s *Set) WithMeta(meta IPersistentMap) any {
 	return &cpy
 }
 
+func (s *Set) ReduceInit(f IFn, init any) any {
+	ret := init
+	for seq := s.Seq(); seq != nil; seq = seq.Next() {
+		ret = f.Invoke(ret, seq.First())
+		if IsReduced(ret) {
+			return ret.(*Reduced).Deref()
+		}
+	}
+	return ret
+}
+
+func (s *Set) Reduce(f IFn) any {
+	seq := s.Seq()
+	if seq == nil {
+		return f.Invoke()
+	}
+	ret := seq.First()
+	for seq = seq.Next(); seq != nil; seq = seq.Next() {
+		ret = f.Invoke(ret, seq.First())
+		if IsReduced(ret) {
+			return ret.(*Reduced).Deref()
+		}
+	}
+	return ret
+}
+
 func (s *Set) AsTransient() ITransientCollection {
 	// TODO: implement transients
 	return &TransientSet{Set: s}
