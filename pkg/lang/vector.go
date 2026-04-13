@@ -192,6 +192,12 @@ func (v *Vector) RSeq() ISeq {
 	return apersistentVectorRSeq(v)
 }
 
+// Rseq is an alias for RSeq, needed because FieldOrMethod capitalizes
+// only the first letter of "rseq" to get "Rseq", not "RSeq".
+func (v *Vector) Rseq() ISeq {
+	return v.RSeq()
+}
+
 func (v *Vector) Peek() any {
 	if v.Count() == 0 {
 		return nil

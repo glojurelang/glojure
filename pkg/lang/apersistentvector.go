@@ -371,7 +371,7 @@ func (s *apvRSeq) Next() ISeq {
 	if s.i <= 0 {
 		return nil
 	}
-	return newAPVSeq(s.v, s.i-1)
+	return newAPVRSeq(s.v, s.i-1)
 }
 
 func (s *apvRSeq) Index() int {
