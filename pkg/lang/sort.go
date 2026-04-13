@@ -76,8 +76,9 @@ func Compare(x, y any) int {
 
 	// Handle strings (built-in type, doesn't implement Comparer)
 	if xStr, xOk := x.(string); xOk {
-		yStr := ToString(y)
-		return strings.Compare(xStr, yStr)
+		if yStr, yOk := y.(string); yOk {
+			return strings.Compare(xStr, yStr)
+		}
 	}
 
 	// Handle characters
@@ -92,8 +93,18 @@ func Compare(x, y any) int {
 		}
 	}
 
-	// Fallback: compare by string representation
-	xStr := ToString(x)
-	yStr := ToString(y)
-	return strings.Compare(xStr, yStr)
+	// Default error - cannot compare
+	panic(NewIllegalArgumentError(fmt.Sprintf("%T cannot be cast to Comparable", x)))
+}
+
+// LenientCompare is like Compare but falls back to string comparison
+// for incompatible types instead of panicking. Used internally by
+// sorted collections that may contain mixed types.
+func LenientCompare(x, y any) (result int) {
+	defer func() {
+		if r := recover(); r != nil {
+			result = strings.Compare(ToString(x), ToString(y))
+		}
+	}()
+	return Compare(x, y)
 }

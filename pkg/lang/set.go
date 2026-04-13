@@ -234,7 +234,7 @@ func (s *SortedSet) sortedElements() []any {
 		SortSlice(elems, s.comparator)
 	} else {
 		SortSlice(elems, FnFunc(func(args ...any) any {
-			return Compare(args[0], args[1])
+			return LenientCompare(args[0], args[1])
 		}))
 	}
 	return elems

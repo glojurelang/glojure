@@ -29,7 +29,7 @@ func (s *SortedMap) sortedKeys() []any {
 		SortSlice(keys, s.comparator)
 	} else {
 		SortSlice(keys, FnFunc(func(args ...any) any {
-			return Compare(args[0], args[1])
+			return LenientCompare(args[0], args[1])
 		}))
 	}
 	return keys
