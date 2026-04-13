@@ -85,6 +85,15 @@ func Hash(x interface{}) uint32 {
 	case reflect.Func, reflect.Chan, reflect.Pointer, reflect.UnsafePointer, reflect.Map, reflect.Slice:
 		// hash of pointer
 		return hashPtr(reflect.ValueOf(x).Pointer())
+	case reflect.Array:
+		// Hash fixed-size arrays (e.g. uuid.UUID is [16]byte) by their string representation.
+		h := fnv.New32a()
+		h.Write([]byte(fmt.Sprintf("%v", x)))
+		return h.Sum32()
+	case reflect.Struct:
+		h := fnv.New32a()
+		h.Write([]byte(fmt.Sprintf("%v", x)))
+		return h.Sum32()
 	}
 
 	panic(fmt.Sprintf("Hash(%v [%T]) not implemented", x, x))

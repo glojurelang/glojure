@@ -971,6 +971,33 @@ func (r *Reader) readDispatch(eofOK bool, stopRune rune) (interface{}, error) {
 		}
 		return r.readExpr(eofOK, stopRune)
 	default:
+		if unicode.IsLetter(rn) {
+			// Tagged literal: #tag form
+			// Read the tag as a symbol and the next form as data.
+			r.rs.UnreadRune()
+			tag, err := r.readSymbol()
+			if err != nil {
+				return nil, err
+			}
+			form, err := r.readExpr(false, 0)
+			if err != nil {
+				return nil, err
+			}
+			// Check data readers
+			tagSym := tag.(*lang.Symbol)
+			dataReaders := lang.VarDataReaders.Deref()
+			if dataReaders != nil {
+				if m, ok := dataReaders.(lang.Associative); ok {
+					if fn := m.ValAt(tagSym); fn != nil {
+						if ifn, ok := fn.(lang.IFn); ok {
+							return ifn.Invoke(form), nil
+						}
+					}
+				}
+			}
+			// Return as a tagged literal vector [tag form]
+			return lang.NewVector(tagSym, form), nil
+		}
 		return nil, r.error("invalid dispatch character: %c", rn)
 	}
 }
