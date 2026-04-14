@@ -355,7 +355,9 @@
 (defmethod print-dup go/int64 [o w] (print-method o w))
 (defmethod print-dup go/float64 [o w] (print-method o w))
 (defmethod print-dup github.com:gloathub:glojure:pkg:lang.*Ratio [o w] (print-method o w))
-(defmethod print-dup github.com:gloathub:glojure:pkg:lang.*BigDecimal [o w] (print-method o w))
+(defmethod print-dup github.com:gloathub:glojure:pkg:lang.*BigDecimal [o w]
+  (github.com:gloathub:glojure:pkg:lang.WriteWriter w (.StripTrailingZeros ^github.com:gloathub:glojure:pkg:lang.*BigDecimal o))
+  (github.com:gloathub:glojure:pkg:lang.WriteWriter w "M"))
 (defmethod print-dup github.com:gloathub:glojure:pkg:lang.*BigInt [o w] (print-method o w))
 (defmethod print-dup github.com:gloathub:glojure:pkg:lang.*PersistentHashMap [o w] (print-method o w))
 (defmethod print-dup github.com:gloathub:glojure:pkg:lang.*PersistentHashSet [o w] (print-method o w))

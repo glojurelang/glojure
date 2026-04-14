@@ -76,6 +76,17 @@ func (n *BigDecimal) String() string {
 	return s
 }
 
+// StripTrailingZeros returns a string representation with trailing
+// fractional zeros removed (e.g. "1.0" → "1", "1.50" → "1.5").
+func (n *BigDecimal) StripTrailingZeros() string {
+	s := n.val.Text('f', -1)
+	if strings.Contains(s, ".") {
+		s = strings.TrimRight(s, "0")
+		s = strings.TrimRight(s, ".")
+	}
+	return s
+}
+
 func (n *BigDecimal) Hash() uint32 {
 	if n.val.Sign() == 0 {
 		return 0
