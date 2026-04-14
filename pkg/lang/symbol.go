@@ -7,9 +7,10 @@ import (
 )
 
 type Symbol struct {
-	meta IPersistentMap
-	ns   string
-	name string
+	meta  IPersistentMap
+	ns    string
+	name  string
+	hasNs bool // true when namespace was explicitly set (even to "")
 }
 
 var (
@@ -21,18 +22,21 @@ var (
 // NewSymbol creates a new symbol.
 func NewSymbol(s string) *Symbol {
 	ns, name := "", s
+	hasNs := false
 
 	idx := strings.Index(s, "/")
 	if idx != -1 && s != "/" && s[0] != '/' {
 		ns = s[:idx]
 		name = s[idx+1:]
+		hasNs = true
 	}
 	if !isValidSymbol(ns, name) {
 		panic(NewIllegalArgumentError("invalid symbol: " + s))
 	}
 	return &Symbol{
-		ns:   ns,
-		name: name,
+		ns:    ns,
+		name:  name,
+		hasNs: hasNs,
 	}
 }
 
@@ -40,16 +44,25 @@ func InternSymbol(ns, name any) *Symbol {
 	if ns == nil {
 		return NewSymbol(name.(string))
 	}
-	if ns, ok := ns.(string); ok {
-		if ns == "" {
-			return NewSymbol(name.(string))
-		}
+	nsStr := ns.(string)
+	if nsStr == "" {
+		// Explicitly empty namespace — distinct from nil/no namespace
+		sym := NewSymbol(name.(string))
+		sym.ns = ""
+		sym.hasNs = true
+		return sym
 	}
-	return NewSymbol(ns.(string) + "/" + name.(string))
+	return NewSymbol(nsStr + "/" + name.(string))
 }
 
 func (s *Symbol) Namespace() string {
 	return s.ns
+}
+
+// HasNamespace returns true if the symbol has an explicit namespace,
+// even if that namespace is the empty string.
+func (s *Symbol) HasNamespace() bool {
+	return s.hasNs || s.ns != ""
 }
 
 func (s *Symbol) Name() string {
@@ -123,7 +136,7 @@ func isValidSymbol(ns, name string) bool {
 }
 
 func (s *Symbol) String() string {
-	if s.ns == "" {
+	if s.ns == "" && !s.hasNs {
 		return s.name
 	}
 	return s.ns + "/" + s.name
@@ -140,7 +153,7 @@ func (s *Symbol) Equals(v any) bool {
 	if other == nil {
 		return false
 	}
-	return s.ns == other.ns && s.name == other.name
+	return s.ns == other.ns && s.name == other.name && s.hasNs == other.hasNs
 }
 
 func (s *Symbol) Meta() IPersistentMap {

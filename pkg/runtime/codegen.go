@@ -827,7 +827,7 @@ func (g *Generator) generateBigDecimalValue(bd *lang.BigDecimal) string {
 // generateSetValue generates Go code for a Clojure set
 func (g *Generator) generateSetValue(s lang.IPersistentSet) string {
 	var buf bytes.Buffer
-	buf.WriteString("lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{")
+	buf.WriteString("lang.NewSet(")
 
 	idx := 0
 
@@ -842,7 +842,7 @@ func (g *Generator) generateSetValue(s lang.IPersistentSet) string {
 		buf.WriteString(elementVar)
 	}
 
-	buf.WriteString("}))")
+	buf.WriteString(")")
 
 	return buf.String()
 }
@@ -1779,7 +1779,7 @@ func (g *Generator) generateSet(node *ast.Node) string {
 		itemIds[i] = itemId
 	}
 	setId := g.allocateTempVar()
-	g.writef("%s := lang.CreatePersistentTreeSet(lang.NewSliceSeq([]any{%s}))\n", setId, strings.Join(itemIds, ", "))
+	g.writef("%s := lang.NewSet(%s)\n", setId, strings.Join(itemIds, ", "))
 	return setId
 }
 

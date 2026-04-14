@@ -1599,9 +1599,12 @@
   {:tag go/string
    :added "1.0"
    :static true}
-  [^github.com:gloathub:glojure:pkg:lang.Named x]
-    (let [ns (. x (Namespace))]
-      (if (= "" ns) nil ns)))
+  [x]
+    (if (symbol? x)
+      (if (.HasNamespace ^github.com:gloathub:glojure:pkg:lang.*Symbol x)
+        (.Namespace ^github.com:gloathub:glojure:pkg:lang.*Symbol x)
+        nil)
+      (. x (Namespace))))
 
 (defn boolean
   "Coerce to boolean"

@@ -240,6 +240,18 @@ func coerceGoValue(targetType reflect.Type, val interface{}) (reflect.Value, err
 			}
 		}
 
+		// Coerce bool to integer types (Clojure treats booleans as valid repeat counts, etc.)
+		if b, ok := val.(bool); ok {
+			switch targetType.Kind() {
+			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+				var iv int64
+				if b {
+					iv = 1
+				}
+				return reflect.ValueOf(iv).Convert(targetType), nil
+			}
+		}
+
 		val := reflect.ValueOf(val)
 		if val.Type().ConvertibleTo(targetType) {
 			return val.Convert(targetType), nil
