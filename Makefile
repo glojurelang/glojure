@@ -204,7 +204,7 @@ $(TEST-SUITE-DIR):
 test-suite: $(GLJ-CMD) $(TEST-SUITE-DIR)
 	cd $(TEST-SUITE-DIR) && \
 	  $(abspath $<) $(TEST-SUITE-FILE) \
-	    --expect-failures 28 \
+	    --expect-failures 21 \
 	    --expect-errors 19 \
 	    $(if $(v),,2>/dev/null)
 

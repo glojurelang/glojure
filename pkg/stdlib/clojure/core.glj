@@ -1282,7 +1282,9 @@
               (and (float? div) (math.IsNaN (go/float64 div))))
       (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError
               "rem requires finite dividend and non-NaN arguments")))
-    (. github.com:gloathub:glojure:pkg:lang.Numbers (remainder num div)))
+    (if (and (float? div) (math.IsInf (go/float64 div) 0))
+      (math.NaN)
+      (. github.com:gloathub:glojure:pkg:lang.Numbers (remainder num div))))
 
 (defn rationalize
   "returns the rational value of num"

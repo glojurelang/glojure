@@ -277,6 +277,13 @@ func (s *SortedSet) WithMeta(meta IPersistentMap) any {
 	return &cpy
 }
 
+// RSeq satisfies the Reversible interface.
+func (s *SortedSet) RSeq() ISeq {
+	return s.Rseq()
+}
+
+// Rseq is an alias for RSeq, needed because FieldOrMethod capitalizes
+// only the first letter of "rseq" to get "Rseq", not "RSeq".
 func (s *SortedSet) Rseq() ISeq {
 	if s.Count() == 0 {
 		return nil

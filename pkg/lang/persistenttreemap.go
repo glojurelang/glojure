@@ -166,7 +166,13 @@ func (s *SortedMap) ReduceInit(f IFn, init any) any {
 	return ret
 }
 
-// Rseq for reversible?
+// RSeq satisfies the Reversible interface.
+func (s *SortedMap) RSeq() ISeq {
+	return s.Rseq()
+}
+
+// Rseq is an alias for RSeq, needed because FieldOrMethod capitalizes
+// only the first letter of "rseq" to get "Rseq", not "RSeq".
 func (s *SortedMap) Rseq() ISeq {
 	if s.m.Count() == 0 {
 		return nil

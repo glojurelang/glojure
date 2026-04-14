@@ -5,6 +5,7 @@ import (
 	"math"
 	"math/big"
 	"reflect"
+	"strconv"
 	"unicode/utf8"
 )
 
@@ -113,14 +114,26 @@ func (nm *NumberMethods) Remainder(x, y any) any {
 func (nm *NumberMethods) Rationalize(x any) any {
 	switch x := x.(type) {
 	case float32:
-		return nm.Rationalize(NewBigDecimalFromFloat64(float64(x)))
+		return nm.Rationalize(float64(x))
 	case float64:
-		return nm.Rationalize(NewBigDecimalFromFloat64(x))
-	case *BigDecimal:
-		bx := x.val
-		rat, _ := bx.Rat(nil)
+		// Use string representation to match Java's BigDecimal.valueOf(double)
+		// behavior, giving the "intended" decimal value (e.g. 1.1 → 11/10)
+		// rather than the exact binary representation.
+		s := strconv.FormatFloat(x, 'f', -1, 64)
+		rat := new(big.Rat)
+		rat.SetString(s)
 		if rat.IsInt() {
-			return NewBigIntFromGoBigInt(rat.Num())
+			return NewBigIntFromGoBigInt(new(big.Int).Set(rat.Num()))
+		}
+		return &Ratio{val: rat}
+	case *BigDecimal:
+		// Format to string to get the intended decimal value,
+		// avoiding exact binary representation artifacts.
+		s := x.val.Text('f', -1)
+		rat := new(big.Rat)
+		rat.SetString(s)
+		if rat.IsInt() {
+			return NewBigIntFromGoBigInt(new(big.Int).Set(rat.Num()))
 		}
 		return &Ratio{val: rat}
 	}
