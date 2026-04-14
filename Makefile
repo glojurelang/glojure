@@ -6,7 +6,6 @@ include $M/init.mk
 GO-VERSION ?= 1.24.0
 CLOJURE-VERSION ?= 1.12.1
 
-include $M/claude.mk
 include $M/go.mk
 include $M/gh.mk
 include $M/clean.mk
@@ -205,7 +204,7 @@ test-suite: $(GLJ-CMD) $(TEST-SUITE-DIR)
 	cd $(TEST-SUITE-DIR) && \
 	  $(abspath $<) $(TEST-SUITE-FILE) \
 	    --expect-failures 18 \
-	    --expect-errors 17 \
+	    --expect-errors 12 \
 	    $(if $(v),,2>/dev/null)
 
 $(TEST-GLJ-TARGETS): $(GLJ-CMD)

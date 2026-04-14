@@ -5225,7 +5225,7 @@ func LoadNS() {
 					_ = v5
 					var tmp6 any
 					{ // let
-						// let binding "vec__763"
+						// let binding "vec__771"
 						var v7 any = v5
 						_ = v7
 						// let binding "k"
@@ -5558,7 +5558,7 @@ func LoadNS() {
 					_ = v5
 					var tmp6 any
 					{ // let
-						// let binding "vec__767"
+						// let binding "vec__775"
 						var v7 any = v5
 						_ = v7
 						// let binding "k"

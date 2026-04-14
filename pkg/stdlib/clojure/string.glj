@@ -258,9 +258,15 @@
    If (cmap ch) is non-nil, append (str (cmap ch)) instead."
   {:added "1.2"}
   [^go/string s cmap]
-  (let [repls (flatten (seq cmap))
-        replacer (apply strings.NewReplacer repls)]
-    (.Replace replacer s)))
+  (when (nil? s)
+    (throw (github.com:gloathub:glojure:pkg:lang.NewError "s must not be nil")))
+  (let [sb (new strings.Builder)]
+    (doseq [c s]
+      (let [replacement (get cmap c)]
+        (if replacement
+          (.WriteString sb (str replacement))
+          (.WriteRune sb c))))
+    (.String sb)))
 
 (defn index-of
   "Return index of value (string or char) in s, optionally searching

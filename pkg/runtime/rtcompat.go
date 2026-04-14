@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"math"
 	"reflect"
 	"strings"
 	"sync"
@@ -155,8 +156,17 @@ func (rt *RTMethods) SubsEnd(s string, start, end int) string {
 	return string(runes[start:end])
 }
 
-func (rt *RTMethods) Subvec(v IPersistentVector, start, end int) IPersistentVector {
-	return Subvec(v, start, end)
+func (rt *RTMethods) Subvec(v IPersistentVector, start, end any) IPersistentVector {
+	return Subvec(v, subvecIndex(start), subvecIndex(end))
+}
+
+// subvecIndex converts a value to an int index for subvec, treating
+// NaN as 0 to match Clojure's behavior.
+func subvecIndex(x any) int {
+	if f, ok := x.(float64); ok && math.IsNaN(f) {
+		return 0
+	}
+	return IntCast(x)
 }
 
 func (rt *RTMethods) Find(coll, key any) any {

@@ -3,6 +3,8 @@ package lang
 import (
 	"fmt"
 	"math/big"
+	"strconv"
+	"strings"
 
 	"bitbucket.org/pcastools/hash"
 )
@@ -12,6 +14,18 @@ import (
 // mutable, and the core BigInt should not be.
 type BigInt struct {
 	val *big.Int
+}
+
+// BigIntStringFromFloat64 converts a float64 to its decimal string
+// representation with the fractional part truncated, suitable for
+// parsing as a BigInt. This preserves the exact decimal digits rather
+// than going through binary float representation.
+func BigIntStringFromFloat64(x float64) string {
+	s := strconv.FormatFloat(x, 'f', -1, 64)
+	if i := strings.Index(s, "."); i != -1 {
+		s = s[:i]
+	}
+	return s
 }
 
 // NewBigInt creates a new BigInt from a string.

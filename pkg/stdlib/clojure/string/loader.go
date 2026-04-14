@@ -732,12 +732,20 @@ func LoadNS() {
 	var_clojure_DOT_core_apply := lang.InternVarName(sym_clojure_DOT_core, sym_apply)
 	// var clojure.core/atom
 	var_clojure_DOT_core_atom := lang.InternVarName(sym_clojure_DOT_core, sym_atom)
+	// var clojure.core/chunk-first
+	var_clojure_DOT_core_chunk_DASH_first := lang.InternVarName(sym_clojure_DOT_core, sym_chunk_DASH_first)
+	// var clojure.core/chunk-rest
+	var_clojure_DOT_core_chunk_DASH_rest := lang.InternVarName(sym_clojure_DOT_core, sym_chunk_DASH_rest)
+	// var clojure.core/chunked-seq?
+	var_clojure_DOT_core_chunked_DASH_seq_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_chunked_DASH_seq_QMARK_)
 	// var clojure.core/count
 	var_clojure_DOT_core_count := lang.InternVarName(sym_clojure_DOT_core, sym_count)
 	// var clojure.core/deref
 	var_clojure_DOT_core_deref := lang.InternVarName(sym_clojure_DOT_core, sym_deref)
-	// var clojure.core/flatten
-	var_clojure_DOT_core_flatten := lang.InternVarName(sym_clojure_DOT_core, sym_flatten)
+	// var clojure.core/first
+	var_clojure_DOT_core_first := lang.InternVarName(sym_clojure_DOT_core, sym_first)
+	// var clojure.core/get
+	var_clojure_DOT_core_get := lang.InternVarName(sym_clojure_DOT_core, sym_get)
 	// var clojure.core/inc
 	var_clojure_DOT_core_inc := lang.InternVarName(sym_clojure_DOT_core, sym_inc)
 	// var clojure.core/instance?
@@ -750,6 +758,8 @@ func LoadNS() {
 	var_clojure_DOT_core_max := lang.InternVarName(sym_clojure_DOT_core, sym_max)
 	// var clojure.core/min
 	var_clojure_DOT_core_min := lang.InternVarName(sym_clojure_DOT_core, sym_min)
+	// var clojure.core/next
+	var_clojure_DOT_core_next := lang.InternVarName(sym_clojure_DOT_core, sym_next)
 	// var clojure.core/nil?
 	var_clojure_DOT_core_nil_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_nil_QMARK_)
 	// var clojure.core/not=
@@ -770,6 +780,8 @@ func LoadNS() {
 	var_clojure_DOT_core_str := lang.InternVarName(sym_clojure_DOT_core, sym_str)
 	// var clojure.core/subs
 	var_clojure_DOT_core_subs := lang.InternVarName(sym_clojure_DOT_core, sym_subs)
+	// var clojure.core/unchecked-inc
+	var_clojure_DOT_core_unchecked_DASH_inc := lang.InternVarName(sym_clojure_DOT_core, sym_unchecked_DASH_inc)
 	// var clojure.core/unchecked-int
 	var_clojure_DOT_core_unchecked_DASH_int := lang.InternVarName(sym_clojure_DOT_core, sym_unchecked_DASH_int)
 	// var clojure.string/blank?
@@ -5249,7 +5261,7 @@ func LoadNS() {
 	}
 	// includes?
 	{
-		tmp0 := sym_includes_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s includes substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(323), kw_end_DASH_line, int(323))).(*lang.Symbol)
+		tmp0 := sym_includes_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s includes substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(329), kw_end_DASH_line, int(329))).(*lang.Symbol)
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
@@ -5587,7 +5599,7 @@ func LoadNS() {
 	}
 	// ends-with?
 	{
-		tmp0 := sym_ends_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s ends with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(315), kw_end_DASH_line, int(315))).(*lang.Symbol)
+		tmp0 := sym_ends_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s ends with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(321), kw_end_DASH_line, int(321))).(*lang.Symbol)
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
@@ -5624,27 +5636,215 @@ func LoadNS() {
 			v4 := p1
 			_ = v4
 			var tmp5 any
+			tmp6 := checkDerefVar(var_clojure_DOT_core_nil_QMARK_)
+			tmp7 := lang.Apply1(tmp6, v3)
+			if lang.IsTruthy(tmp7) {
+				tmp8 := lang.Apply1(lang.NewError, "s must not be nil")
+				panic(tmp8)
+			} else {
+			}
+			_ = tmp5
+			var tmp9 any
 			{ // let
-				// let binding "repls"
-				tmp6 := checkDerefVar(var_clojure_DOT_core_flatten)
-				tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp8 := lang.Apply1(tmp7, v4)
-				tmp9 := lang.Apply1(tmp6, tmp8)
-				var v10 any = tmp9
-				_ = v10
-				// let binding "replacer"
-				tmp11 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp12 := lang.Apply2(tmp11, strings5.NewReplacer, v10)
-				var v13 any = tmp12
-				_ = v13
-				tmp14, _ := lang.FieldOrMethod(v13, "Replace")
-				if reflect.TypeOf(tmp14).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Replace is not a function")))
+				// let binding "sb"
+				tmp10 := new(strings5.Builder)
+				var v11 any = tmp10
+				_ = v11
+				var tmp12 any
+				{ // let
+					// let binding "seq_738"
+					tmp13 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp14 := lang.Apply1(tmp13, v3)
+					var v15 any = tmp14
+					_ = v15
+					// let binding "chunk_739"
+					var v16 any = nil
+					_ = v16
+					// let binding "count_740"
+					var v17 any = int64(0)
+					_ = v17
+					// let binding "i_741"
+					var v18 any = int64(0)
+					_ = v18
+					for {
+						var tmp19 any
+						tmp20 := checkDerefVar(var_clojure_DOT_core__LT_)
+						tmp21 := lang.Apply2(tmp20, v18, v17)
+						if lang.IsTruthy(tmp21) {
+							var tmp22 any
+							{ // let
+								// let binding "c"
+								tmp23, _ := lang.FieldOrMethod(v16, "nth")
+								if reflect.TypeOf(tmp23).Kind() != reflect.Func {
+									panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
+								}
+								tmp24 := lang.Apply1(tmp23, v18)
+								var v25 any = tmp24
+								_ = v25
+								var tmp26 any
+								{ // let
+									// let binding "replacement"
+									tmp27 := checkDerefVar(var_clojure_DOT_core_get)
+									tmp28 := lang.Apply2(tmp27, v4, v25)
+									var v29 any = tmp28
+									_ = v29
+									var tmp30 any
+									if lang.IsTruthy(v29) {
+										tmp31 := checkDerefVar(var_clojure_DOT_core_str)
+										tmp32 := lang.Apply1(tmp31, v29)
+										tmp33, _ := lang.FieldOrMethod(v11, "WriteString")
+										if reflect.TypeOf(tmp33).Kind() != reflect.Func {
+											panic(lang.NewIllegalArgumentError(fmt.Sprintf("WriteString is not a function")))
+										}
+										tmp34 := lang.Apply1(tmp33, tmp32)
+										tmp30 = tmp34
+									} else {
+										tmp35, _ := lang.FieldOrMethod(v11, "WriteRune")
+										if reflect.TypeOf(tmp35).Kind() != reflect.Func {
+											panic(lang.NewIllegalArgumentError(fmt.Sprintf("WriteRune is not a function")))
+										}
+										tmp36 := lang.Apply1(tmp35, v25)
+										tmp30 = tmp36
+									}
+									tmp26 = tmp30
+								} // end let
+								_ = tmp26
+								var tmp27 any = v15
+								var tmp28 any = v16
+								var tmp29 any = v17
+								tmp31 := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_inc)
+								tmp32 := lang.Apply1(tmp31, v18)
+								var tmp30 any = tmp32
+								v15 = tmp27
+								v16 = tmp28
+								v17 = tmp29
+								v18 = tmp30
+								continue
+							} // end let
+							tmp19 = tmp22
+						} else {
+							var tmp23 any
+							{ // let
+								// let binding "temp__0__auto__"
+								tmp24 := checkDerefVar(var_clojure_DOT_core_seq)
+								tmp25 := lang.Apply1(tmp24, v15)
+								var v26 any = tmp25
+								_ = v26
+								var tmp27 any
+								if lang.IsTruthy(v26) {
+									var tmp28 any
+									{ // let
+										// let binding "seq_738"
+										var v29 any = v26
+										_ = v29
+										var tmp30 any
+										tmp31 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
+										tmp32 := lang.Apply1(tmp31, v29)
+										if lang.IsTruthy(tmp32) {
+											var tmp33 any
+											{ // let
+												// let binding "c__0__auto__"
+												tmp34 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
+												tmp35 := lang.Apply1(tmp34, v29)
+												var v36 any = tmp35
+												_ = v36
+												tmp38 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
+												tmp39 := lang.Apply1(tmp38, v29)
+												var tmp37 any = tmp39
+												var tmp40 any = v36
+												tmp42 := checkDerefVar(var_clojure_DOT_core_int)
+												tmp43 := checkDerefVar(var_clojure_DOT_core_count)
+												tmp44 := lang.Apply1(tmp43, v36)
+												tmp45 := lang.Apply1(tmp42, tmp44)
+												var tmp41 any = tmp45
+												tmp47 := checkDerefVar(var_clojure_DOT_core_int)
+												tmp48 := lang.Apply1(tmp47, int64(0))
+												var tmp46 any = tmp48
+												v15 = tmp37
+												v16 = tmp40
+												v17 = tmp41
+												v18 = tmp46
+												continue
+											} // end let
+											tmp30 = tmp33
+										} else {
+											var tmp34 any
+											{ // let
+												// let binding "c"
+												tmp35 := checkDerefVar(var_clojure_DOT_core_first)
+												tmp36 := lang.Apply1(tmp35, v29)
+												var v37 any = tmp36
+												_ = v37
+												var tmp38 any
+												{ // let
+													// let binding "replacement"
+													tmp39 := checkDerefVar(var_clojure_DOT_core_get)
+													tmp40 := lang.Apply2(tmp39, v4, v37)
+													var v41 any = tmp40
+													_ = v41
+													var tmp42 any
+													if lang.IsTruthy(v41) {
+														tmp43 := checkDerefVar(var_clojure_DOT_core_str)
+														tmp44 := lang.Apply1(tmp43, v41)
+														tmp45, _ := lang.FieldOrMethod(v11, "WriteString")
+														if reflect.TypeOf(tmp45).Kind() != reflect.Func {
+															panic(lang.NewIllegalArgumentError(fmt.Sprintf("WriteString is not a function")))
+														}
+														tmp46 := lang.Apply1(tmp45, tmp44)
+														tmp42 = tmp46
+													} else {
+														tmp47, _ := lang.FieldOrMethod(v11, "WriteRune")
+														if reflect.TypeOf(tmp47).Kind() != reflect.Func {
+															panic(lang.NewIllegalArgumentError(fmt.Sprintf("WriteRune is not a function")))
+														}
+														tmp48 := lang.Apply1(tmp47, v37)
+														tmp42 = tmp48
+													}
+													tmp38 = tmp42
+												} // end let
+												_ = tmp38
+												tmp40 := checkDerefVar(var_clojure_DOT_core_next)
+												tmp41 := lang.Apply1(tmp40, v29)
+												var tmp39 any = tmp41
+												var tmp42 any = nil
+												var tmp43 any = int64(0)
+												var tmp44 any = int64(0)
+												v15 = tmp39
+												v16 = tmp42
+												v17 = tmp43
+												v18 = tmp44
+												continue
+											} // end let
+											tmp30 = tmp34
+										}
+										tmp28 = tmp30
+									} // end let
+									tmp27 = tmp28
+								} else {
+								}
+								tmp23 = tmp27
+							} // end let
+							tmp19 = tmp23
+						}
+						tmp12 = tmp19
+						break
+					}
+				} // end let
+				_ = tmp12
+				tmp13, ok := lang.FieldOrMethod(v11, "String")
+				if !ok {
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v11, "String")))
 				}
-				tmp15 := lang.Apply1(tmp14, v3)
-				tmp5 = tmp15
+				var tmp14 any
+				switch reflect.TypeOf(tmp13).Kind() {
+				case reflect.Func:
+					tmp14 = lang.Apply(tmp13, nil)
+				default:
+					tmp14 = tmp13
+				}
+				tmp9 = tmp14
 			} // end let
-			return tmp5
+			return tmp9
 		})
 		tmp3 := reflect.TypeOf("")
 		tmp2 = tmp2.WithMeta(lang.NewMap(kw_rettag, tmp3)).(lang.FnFunc2)
@@ -5655,7 +5855,7 @@ func LoadNS() {
 	}
 	// index-of
 	{
-		tmp0 := sym_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return index of value (string or char) in s, optionally searching\n  forward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(265), kw_end_DASH_line, int(265))).(*lang.Symbol)
+		tmp0 := sym_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return index of value (string or char) in s, optionally searching\n  forward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(271), kw_end_DASH_line, int(271))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5802,7 +6002,7 @@ func LoadNS() {
 	}
 	// last-index-of
 	{
-		tmp0 := sym_last_DASH_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return last index of value (string or char) in s, optionally\n  searching backward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(289), kw_end_DASH_line, int(289))).(*lang.Symbol)
+		tmp0 := sym_last_DASH_index_DASH_of.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return last index of value (string or char) in s, optionally\n  searching backward from from-index. Return nil if value not found.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(295), kw_end_DASH_line, int(295))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -6434,7 +6634,7 @@ func LoadNS() {
 	}
 	// starts-with?
 	{
-		tmp0 := sym_starts_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s starts with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(307), kw_end_DASH_line, int(307))).(*lang.Symbol)
+		tmp0 := sym_starts_DASH_with_QMARK_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s starts with substr.", kw_file, "clojure/string.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(313), kw_end_DASH_line, int(313))).(*lang.Symbol)
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0

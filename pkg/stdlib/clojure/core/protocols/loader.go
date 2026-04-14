@@ -5359,7 +5359,7 @@ func LoadNS() {
 			_ = v2
 			v3 := p2
 			_ = v3
-		recur_loop_2869:
+		recur_loop_2870:
 			var tmp4 any
 			{ // let
 				// let binding "temp__0__auto__"
@@ -5406,7 +5406,7 @@ func LoadNS() {
 									v1 = tmp25
 									v2 = tmp28
 									v3 = tmp29
-									goto recur_loop_2869
+									goto recur_loop_2870
 								}
 								tmp14 = tmp20
 							} // end let

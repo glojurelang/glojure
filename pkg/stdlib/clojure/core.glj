@@ -3634,7 +3634,13 @@
        (instance? github.com:gloathub:glojure:pkg:lang.*BigInt x) x
        (instance? math:big.*Int x) (github.com:gloathub:glojure:pkg:lang.NewBigIntFromGoBigInt x)
        (decimal? x) (bigint (.toBigInteger ^github.com:gloathub:glojure:pkg:lang.*BigDecimal x))
-       (float? x)  (bigint (github.com:gloathub:glojure:pkg:lang.NewBigDecimalFromFloat64 (double x)))
+       (float? x)  (let [result (github.com:gloathub:glojure:pkg:lang.NewBigInt
+                                   (github.com:gloathub:glojure:pkg:lang.BigIntStringFromFloat64 (double x)))
+                         v (first result)
+                         err (second result)]
+                     (if err
+                       (throw (github.com:gloathub:glojure:pkg:lang.NewError (str "Cannot convert " x " to BigInt")))
+                       v))
        (ratio? x) (bigint (.bigIntegerValue ^github.com:gloathub:glojure:pkg:lang.*Ratio x))
        (number? x) (github.com:gloathub:glojure:pkg:lang.NewBigIntFromInt64 (long x))
        :else (let [result (github.com:gloathub:glojure:pkg:lang.NewBigInt (str x))
