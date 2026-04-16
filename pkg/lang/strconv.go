@@ -164,7 +164,7 @@ func Print(x interface{}, w io.Writer) {
 			io.WriteString(w, CharLiteralFromRune(rune(c)))
 		}
 	} else if v, ok := x.(*BigDecimal); ok && readably {
-		io.WriteString(w, v.String())
+		io.WriteString(w, v.StripTrailingZeros())
 		io.WriteString(w, "M")
 	} else if v, ok := x.(*BigInt); ok && readably {
 		io.WriteString(w, v.String())

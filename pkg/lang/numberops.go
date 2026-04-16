@@ -303,8 +303,14 @@ func (o int64Ops) Equiv(x, y any) bool {
 	return AsInt64(x) == AsInt64(y)
 }
 func (o int64Ops) Abs(x any) any {
-	if AsInt64(x) < 0 {
-		return -AsInt64(x)
+	v := AsInt64(x)
+	if v == math.MinInt64 {
+		// Match Clojure: Long/MIN_VALUE => Long/MIN_VALUE
+		// (2's complement has no positive representation for this value)
+		return x
+	}
+	if v < 0 {
+		return -v
 	}
 	return x
 }
