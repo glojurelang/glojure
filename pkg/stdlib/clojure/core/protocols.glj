@@ -105,6 +105,11 @@
   (coll-reduce
    ([coll f] (seq-reduce coll f))
    ([coll f val] (seq-reduce coll f val)))
+
+  go/string
+  (coll-reduce
+   ([coll f] (seq-reduce coll f))
+   ([coll f val] (seq-reduce coll f val)))
   
   ;; Iterable
   ;; (coll-reduce

@@ -5265,7 +5265,7 @@ func LoadNS() {
 		})
 		closed1 = tmp0
 	}
-	var closed4 any
+	var closed5 any
 	{
 		var tmp0 lang.FnFunc1
 		tmp0 = lang.FnFunc1(func(p0 any) any {
@@ -5273,9 +5273,9 @@ func LoadNS() {
 			_ = v1
 			return nil
 		})
-		closed4 = tmp0
+		closed5 = tmp0
 	}
-	var closed5 any
+	var closed6 any
 	{
 		var tmp0 lang.FnFunc3
 		tmp0 = lang.FnFunc3(func(p0, p1, p2 any) any {
@@ -5287,7 +5287,7 @@ func LoadNS() {
 			_ = v3
 			return v3
 		})
-		closed5 = tmp0
+		closed6 = tmp0
 	}
 	var closed2 any
 	{
@@ -5349,7 +5349,37 @@ func LoadNS() {
 		})
 		closed3 = tmp0
 	}
-	var closed6 any
+	var closed4 any
+	{
+		var tmp0 lang.FnFunc
+		tmp0 = lang.NewFnFunc(func(args ...any) any {
+			switch len(args) {
+			case 2:
+				v1 := args[0]
+				_ = v1
+				v2 := args[1]
+				_ = v2
+				tmp3 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce)
+				tmp4 := lang.Apply2(tmp3, v1, v2)
+				return tmp4
+			case 3:
+				v1 := args[0]
+				_ = v1
+				v2 := args[1]
+				_ = v2
+				v3 := args[2]
+				_ = v3
+				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce)
+				tmp5 := lang.Apply3(tmp4, v1, v2, v3)
+				return tmp5
+			default:
+				checkArity(args, -1)
+				panic("unreachable")
+			}
+		})
+		closed4 = tmp0
+	}
+	var closed7 any
 	{
 		var tmp0 lang.FnFunc3
 		tmp0 = lang.FnFunc3(func(p0, p1, p2 any) any {
@@ -5359,7 +5389,7 @@ func LoadNS() {
 			_ = v2
 			v3 := p2
 			_ = v3
-		recur_loop_2870:
+		recur_loop_2874:
 			var tmp4 any
 			{ // let
 				// let binding "temp__0__auto__"
@@ -5406,7 +5436,7 @@ func LoadNS() {
 									v1 = tmp25
 									v2 = tmp28
 									v3 = tmp29
-									goto recur_loop_2870
+									goto recur_loop_2874
 								}
 								tmp14 = tmp20
 							} // end let
@@ -5426,9 +5456,9 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		closed6 = tmp0
+		closed7 = tmp0
 	}
-	var closed7 any
+	var closed8 any
 	{
 		var tmp0 lang.FnFunc3
 		tmp0 = lang.FnFunc3(func(p0, p1, p2 any) any {
@@ -5525,7 +5555,7 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		closed7 = tmp0
+		closed8 = tmp0
 	}
 	// CollReduce
 	{
@@ -5637,6 +5667,28 @@ func LoadNS() {
 			}
 		})
 		tmp2.AddMethod(tmp9, tmp10)
+		tmp11 := reflect.TypeOf("")
+		var tmp12 lang.FnFunc
+		tmp12 = lang.NewFnFunc(func(args ...any) any {
+			switch len(args) {
+			default:
+				checkArityGTE(args, 1)
+				v13 := args[0]
+				_ = v13
+				restArgs := args[1:]
+				var v14 any
+				if len(restArgs) > 0 {
+					v14 = lang.NewList(restArgs...)
+				}
+				_ = v14
+				tmp15 := checkDerefVar(var_clojure_DOT_core_apply)
+				tmp16 := checkDerefVar(var_clojure_DOT_core_cons)
+				tmp17 := lang.Apply2(tmp16, v13, v14)
+				tmp18 := lang.Apply2(tmp15, closed4, tmp17)
+				return tmp18
+			}
+		})
+		tmp2.AddMethod(tmp11, tmp12)
 		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_coll_DASH_reduce, tmp2), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_coll_DASH_reduce, lang.NewVector(sym_coll, sym_f), lang.NewVector(sym_coll, sym_f, sym_val)))))
 		var_clojure_DOT_core_DOT_protocols_CollReduce = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
@@ -5645,7 +5697,7 @@ func LoadNS() {
 	}
 	// Datafiable
 	{
-		tmp0 := sym_Datafiable.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(183), kw_column, int(14), kw_end_DASH_line, int(183), kw_end_DASH_column, int(23), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
+		tmp0 := sym_Datafiable.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(188), kw_column, int(14), kw_end_DASH_line, int(188), kw_end_DASH_column, int(23), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5682,7 +5734,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp9 := lang.Apply2(tmp8, v5, v6)
-				tmp10 := lang.Apply2(tmp7, closed4, tmp9)
+				tmp10 := lang.Apply2(tmp7, closed5, tmp9)
 				return tmp10
 			}
 		})
@@ -5695,7 +5747,7 @@ func LoadNS() {
 	}
 	// IKVReduce
 	{
-		tmp0 := sym_IKVReduce.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(176), kw_column, int(14), kw_end_DASH_line, int(176), kw_end_DASH_column, int(22), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
+		tmp0 := sym_IKVReduce.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(181), kw_column, int(14), kw_end_DASH_line, int(181), kw_end_DASH_column, int(22), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5761,7 +5813,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp9 := lang.Apply2(tmp8, v5, v6)
-				tmp10 := lang.Apply2(tmp7, closed5, tmp9)
+				tmp10 := lang.Apply2(tmp7, closed6, tmp9)
 				return tmp10
 			}
 		})
@@ -5783,7 +5835,7 @@ func LoadNS() {
 				tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp11 := lang.Apply2(tmp10, v7, v8)
-				tmp12 := lang.Apply2(tmp9, closed6, tmp11)
+				tmp12 := lang.Apply2(tmp9, closed7, tmp11)
 				return tmp12
 			}
 		})
@@ -5805,7 +5857,7 @@ func LoadNS() {
 				tmp11 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp13 := lang.Apply2(tmp12, v9, v10)
-				tmp14 := lang.Apply2(tmp11, closed7, tmp13)
+				tmp14 := lang.Apply2(tmp11, closed8, tmp13)
 				return tmp14
 			}
 		})
@@ -5818,7 +5870,7 @@ func LoadNS() {
 	}
 	// Navigable
 	{
-		tmp0 := sym_Navigable.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(195), kw_column, int(14), kw_end_DASH_line, int(195), kw_end_DASH_column, int(22), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
+		tmp0 := sym_Navigable.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(200), kw_column, int(14), kw_end_DASH_line, int(200), kw_end_DASH_column, int(22), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
 		var tmp3 lang.FnFunc
 		tmp3 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5955,6 +6007,28 @@ func LoadNS() {
 			}
 		})
 		tmp1.AddMethod(tmp8, tmp9)
+		tmp10 := reflect.TypeOf("")
+		var tmp11 lang.FnFunc
+		tmp11 = lang.NewFnFunc(func(args ...any) any {
+			switch len(args) {
+			default:
+				checkArityGTE(args, 1)
+				v12 := args[0]
+				_ = v12
+				restArgs := args[1:]
+				var v13 any
+				if len(restArgs) > 0 {
+					v13 = lang.NewList(restArgs...)
+				}
+				_ = v13
+				tmp14 := checkDerefVar(var_clojure_DOT_core_apply)
+				tmp15 := checkDerefVar(var_clojure_DOT_core_cons)
+				tmp16 := lang.Apply2(tmp15, v12, v13)
+				tmp17 := lang.Apply2(tmp14, closed4, tmp16)
+				return tmp17
+			}
+		})
+		tmp1.AddMethod(tmp10, tmp11)
 		var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -5962,7 +6036,7 @@ func LoadNS() {
 	}
 	// datafy
 	{
-		tmp0 := sym_datafy.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(186), kw_column, int(4), kw_end_DASH_line, int(186), kw_end_DASH_column, int(9), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
+		tmp0 := sym_datafy.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(191), kw_column, int(4), kw_end_DASH_line, int(191), kw_end_DASH_column, int(9), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -5999,7 +6073,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp8 := lang.Apply2(tmp7, v4, v5)
-				tmp9 := lang.Apply2(tmp6, closed4, tmp8)
+				tmp9 := lang.Apply2(tmp6, closed5, tmp8)
 				return tmp9
 			}
 		})
@@ -6083,7 +6157,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp8 := lang.Apply2(tmp7, v4, v5)
-				tmp9 := lang.Apply2(tmp6, closed5, tmp8)
+				tmp9 := lang.Apply2(tmp6, closed6, tmp8)
 				return tmp9
 			}
 		})
@@ -6105,7 +6179,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp10 := lang.Apply2(tmp9, v6, v7)
-				tmp11 := lang.Apply2(tmp8, closed6, tmp10)
+				tmp11 := lang.Apply2(tmp8, closed7, tmp10)
 				return tmp11
 			}
 		})
@@ -6127,7 +6201,7 @@ func LoadNS() {
 				tmp10 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp12 := lang.Apply2(tmp11, v8, v9)
-				tmp13 := lang.Apply2(tmp10, closed7, tmp12)
+				tmp13 := lang.Apply2(tmp10, closed8, tmp12)
 				return tmp13
 			}
 		})
@@ -6351,7 +6425,7 @@ func LoadNS() {
 	}
 	// kv-reduce
 	{
-		tmp0 := sym_kv_DASH_reduce.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(181), kw_column, int(4), kw_end_DASH_line, int(181), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
+		tmp0 := sym_kv_DASH_reduce.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(186), kw_column, int(4), kw_end_DASH_line, int(186), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -6445,7 +6519,7 @@ func LoadNS() {
 	}
 	// nav
 	{
-		tmp0 := sym_nav.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(198), kw_column, int(4), kw_end_DASH_line, int(198), kw_end_DASH_column, int(6), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
+		tmp0 := sym_nav.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(203), kw_column, int(4), kw_end_DASH_line, int(203), kw_end_DASH_column, int(6), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
 		var tmp2 lang.FnFunc
 		tmp2 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
