@@ -2788,7 +2788,11 @@
    :static true}
   ([f] (comp (map f) cat))
   ([f & colls]
-     (apply concat (apply map f colls))))
+     (let [step (fn step [s]
+                  (lazy-seq
+                    (when (seq s)
+                      (concat (first s) (step (rest s))))))]
+       (step (apply map f colls)))))
 
 (defn filter
   "Returns a lazy sequence of the items in coll for which
