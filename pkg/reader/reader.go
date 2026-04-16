@@ -12,6 +12,7 @@ import (
 	"unicode"
 
 	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/google/uuid"
 )
 
 var (
@@ -994,6 +995,18 @@ func (r *Reader) readDispatch(eofOK bool, stopRune rune) (interface{}, error) {
 						}
 					}
 				}
+			}
+			// Built-in tagged literals
+			if tagSym.Name() == "uuid" && tagSym.Namespace() == "" {
+				s, ok := form.(string)
+				if !ok {
+					return nil, r.error("#uuid requires a string argument")
+				}
+				u, err := uuid.Parse(s)
+				if err != nil {
+					return nil, r.error("invalid UUID string: %s", s)
+				}
+				return u, nil
 			}
 			// Return as a tagged literal vector [tag form]
 			return lang.NewVector(tagSym, form), nil

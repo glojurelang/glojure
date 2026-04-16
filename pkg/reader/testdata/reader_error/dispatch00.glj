@@ -1,7 +1,7 @@
-;;;ERROR: <unknown-file>:6:4: invalid dispatch character: w
+;;;ERROR: <unknown-file>:6:4: invalid dispatch character: =
 (
  1
  (2)
  true
- (#what)
+ (#=what)
  )
