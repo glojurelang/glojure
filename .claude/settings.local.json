@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -r \"true\\\\|false\" /home/ingy/src/glojure/pkg/lang/*.go)",
+      "Bash(grep -n \"APersistentSet\" /home/ingy/src/glojure/pkg/lang/*.go)"
+    ]
+  }
+}
