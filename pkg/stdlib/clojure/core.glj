@@ -413,7 +413,7 @@
   {:added "1.0"
    :static true}
   ([comparator & keyvals]
-   (clojure.lang.PersistentTreeMap/create comparator keyvals)))
+   (github.com:gloathub:glojure:pkg:lang.CreatePersistentTreeMapWithComparator comparator keyvals)))
 
 (defn sorted-set
   "Returns a new sorted set with supplied keys.  Any equal keys are
@@ -3380,9 +3380,13 @@
   Note - index must be <= (count vector). Returns coll."
   {:added "1.1"
    :static true}
-  ([^clojure.lang.ITransientAssociative coll key val] (.Assoc coll key val))
-  ([^clojure.lang.ITransientAssociative coll key val & kvs]
-   (let [ret (.Assoc coll key val)]
+  ([coll key val]
+   (when-not (instance? github.com:gloathub:glojure:pkg:lang.ITransientCollection coll)
+     (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError
+              "assoc! expects a transient collection")))
+   (.Assoc coll key val))
+  ([coll key val & kvs]
+   (let [ret (assoc! coll key val)]
      (if kvs
        (recur ret (first kvs) (second kvs) (nnext kvs))
        ret))))
@@ -3391,9 +3395,13 @@
   "Returns a transient map that doesn't contain a mapping for key(s)."
   {:added "1.1"
    :static true}
-  ([^clojure.lang.ITransientMap map key] (.without map key))
-  ([^clojure.lang.ITransientMap map key & ks]
-   (let [ret (.without map key)]
+  ([map key]
+   (when-not (instance? github.com:gloathub:glojure:pkg:lang.*TransientMap map)
+     (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError
+              "dissoc! expects a transient map")))
+   (.without map key))
+  ([map key & ks]
+   (let [ret (dissoc! map key)]
      (if ks
        (recur ret (first ks) (next ks))
        ret))))
@@ -3403,8 +3411,11 @@
   the collection is empty, throws an exception. Returns coll"
   {:added "1.1"
    :static true}
-  [^clojure.lang.ITransientVector coll] 
-  (.pop coll)) 
+  [coll]
+  (when-not (instance? github.com:gloathub:glojure:pkg:lang.ITransientVector coll)
+    (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError
+             "pop! expects a transient vector")))
+  (.pop coll))
 
 (defn disj!
   "disj[oin]. Returns a transient set of the same (hashed/sorted) type, that
@@ -3412,10 +3423,13 @@
   {:added "1.1"
    :static true}
   ([set] set)
-  ([^clojure.lang.ITransientSet set key]
+  ([set key]
+   (when-not (instance? github.com:gloathub:glojure:pkg:lang.*TransientSet set)
+     (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError
+              "disj! expects a transient set")))
    (. set (Disjoin key)))
-  ([^clojure.lang.ITransientSet set key & ks]
-   (let [ret (. set (Disjoin key))]
+  ([set key & ks]
+   (let [ret (disj! set key)]
      (if ks
        (recur ret (first ks) (next ks))
        ret))))
@@ -4409,7 +4423,7 @@
   if by repeated uses of assoc."
   {:added "1.0"
    :static true}
-  ([] (. clojure.lang.PersistentArrayMap EMPTY))
+  ([] (github.com:gloathub:glojure:pkg:lang.NewMap))
   ([& keyvals]
      (let [ary (to-array keyvals)]
        (if (odd? (alength ary))
@@ -4423,7 +4437,7 @@
   [s]
   (if (next s)
     (github.com:gloathub:glojure:pkg:lang.NewPersistentArrayMapAsIfByAssoc (to-array s))
-    (if (seq s) (first s) clojure.lang.PersistentArrayMap/EMPTY)))
+    (if (seq s) (first s) (github.com:gloathub:glojure:pkg:lang.NewMap))))
 
 ;;redefine let and loop  with destructuring
 (defn destructure [bindings]
@@ -4474,7 +4488,7 @@
                                       (conj gmap) (conj `(if (seq? ~gmap)
                                                            (if (next ~gmapseq)
                                                              (github.com:gloathub:glojure:pkg:lang.NewPersistentArrayMapAsIfByAssoc (to-array ~gmapseq))
-                                                             (if (seq ~gmapseq) (first ~gmapseq) clojure.lang.PersistentArrayMap/EMPTY))
+                                                             (if (seq ~gmapseq) (first ~gmapseq) (github.com:gloathub:glojure:pkg:lang.NewMap)))
                                                            ~gmap))
                                       ((fn [ret]
                                          (if (:as b)
@@ -6890,7 +6904,7 @@ fails, attempts to require sym's namespace and retries."
   See: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#randomUUID--"
    :added "1.11"}
   ^github.com:google:uuid.UUID []
-  (let [result (github.com:google:uuid.NewV7)
+  (let [result (github.com:google:uuid.NewRandom)
         v (first result)
         err (second result)]
     (if err

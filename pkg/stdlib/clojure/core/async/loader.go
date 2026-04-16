@@ -5635,6 +5635,8 @@ func LoadNS() {
 								tmp19 := lang.Apply1(tmp18, v5)
 								tmp15 = tmp19
 							} else {
+								tmp20 := lang.Apply0(lang.NewMap)
+								tmp15 = tmp20
 							}
 							tmp9 = tmp15
 						}
@@ -5642,14 +5644,14 @@ func LoadNS() {
 					} else {
 						tmp6 = v5
 					}
-					var v20 any = tmp6
-					_ = v20
-					// let binding "opts"
-					var v21 any = v20
+					var v21 any = tmp6
 					_ = v21
-					tmp22 := checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
-					tmp23 := lang.Apply2(tmp22, v2, v21)
-					tmp4 = tmp23
+					// let binding "opts"
+					var v22 any = v21
+					_ = v22
+					tmp23 := checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
+					tmp24 := lang.Apply2(tmp23, v2, v22)
+					tmp4 = tmp24
 				} // end let
 				return tmp4
 			}
@@ -5703,6 +5705,8 @@ func LoadNS() {
 								tmp19 := lang.Apply1(tmp18, v5)
 								tmp15 = tmp19
 							} else {
+								tmp20 := lang.Apply0(lang.NewMap)
+								tmp15 = tmp20
 							}
 							tmp9 = tmp15
 						}
@@ -5710,14 +5714,14 @@ func LoadNS() {
 					} else {
 						tmp6 = v5
 					}
-					var v20 any = tmp6
-					_ = v20
-					// let binding "opts"
-					var v21 any = v20
+					var v21 any = tmp6
 					_ = v21
-					tmp22 := checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
-					tmp23 := lang.Apply2(tmp22, v2, v21)
-					tmp4 = tmp23
+					// let binding "opts"
+					var v22 any = v21
+					_ = v22
+					tmp23 := checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
+					tmp24 := lang.Apply2(tmp23, v2, v22)
+					tmp4 = tmp24
 				} // end let
 				return tmp4
 			}

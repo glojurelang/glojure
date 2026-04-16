@@ -9246,6 +9246,8 @@ func LoadNS() {
 							tmp18 := lang.Apply1(tmp17, v4)
 							tmp14 = tmp18
 						} else {
+							tmp19 := lang.Apply0(lang.NewMap)
+							tmp14 = tmp19
 						}
 						tmp8 = tmp14
 					}
@@ -9253,40 +9255,40 @@ func LoadNS() {
 				} else {
 					tmp5 = v4
 				}
-				var v19 any = tmp5
-				_ = v19
+				var v20 any = tmp5
+				_ = v20
 				// let binding "file"
-				tmp20 := checkDerefVar(var_clojure_DOT_core_get)
-				tmp21 := lang.Apply2(tmp20, v19, kw_file)
-				var v22 any = tmp21
-				_ = v22
+				tmp21 := checkDerefVar(var_clojure_DOT_core_get)
+				tmp22 := lang.Apply2(tmp21, v20, kw_file)
+				var v23 any = tmp22
+				_ = v23
 				// let binding "line"
-				tmp23 := checkDerefVar(var_clojure_DOT_core_get)
-				tmp24 := lang.Apply2(tmp23, v19, kw_line)
-				var v25 any = tmp24
-				_ = v25
-				tmp26 := checkDerefVar(var_clojure_DOT_core_str)
-				tmp27 := checkDerefVar(var_clojure_DOT_core_reverse)
-				tmp28 := checkDerefVar(var_clojure_DOT_core_map)
-				var tmp29 lang.FnFunc1
-				tmp29 = lang.FnFunc1(func(p0 any) any {
-					v30 := p0
-					_ = v30
-					tmp31 := checkDerefVar(var_clojure_DOT_core_meta)
-					tmp32 := lang.Apply1(tmp31, v30)
-					tmp33 := lang.Apply1(kw_name, tmp32)
-					return tmp33
+				tmp24 := checkDerefVar(var_clojure_DOT_core_get)
+				tmp25 := lang.Apply2(tmp24, v20, kw_line)
+				var v26 any = tmp25
+				_ = v26
+				tmp27 := checkDerefVar(var_clojure_DOT_core_str)
+				tmp28 := checkDerefVar(var_clojure_DOT_core_reverse)
+				tmp29 := checkDerefVar(var_clojure_DOT_core_map)
+				var tmp30 lang.FnFunc1
+				tmp30 = lang.FnFunc1(func(p0 any) any {
+					v31 := p0
+					_ = v31
+					tmp32 := checkDerefVar(var_clojure_DOT_core_meta)
+					tmp33 := lang.Apply1(tmp32, v31)
+					tmp34 := lang.Apply1(kw_name, tmp33)
+					return tmp34
 				})
-				tmp30 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(303), kw_column, int(20), kw_end_DASH_line, int(303), kw_end_DASH_column, int(36))
-				tmp31, err := lang.WithMeta(tmp29, tmp30.(lang.IPersistentMap))
+				tmp31 := lang.NewMap(kw_file, "clojure/test.glj", kw_line, int(303), kw_column, int(20), kw_end_DASH_line, int(303), kw_end_DASH_column, int(36))
+				tmp32, err := lang.WithMeta(tmp30, tmp31.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp32 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_)
-				tmp33 := lang.Apply2(tmp28, tmp31, tmp32)
-				tmp34 := lang.Apply1(tmp27, tmp33)
-				tmp35 := lang.Apply(tmp26, []any{tmp34, " (", v22, ":", v25, ")"})
-				tmp3 = tmp35
+				tmp33 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_)
+				tmp34 := lang.Apply2(tmp29, tmp32, tmp33)
+				tmp35 := lang.Apply1(tmp28, tmp34)
+				tmp36 := lang.Apply(tmp27, []any{tmp35, " (", v23, ":", v26, ")"})
+				tmp3 = tmp36
 			} // end let
 			return tmp3
 		})
