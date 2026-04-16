@@ -47,7 +47,9 @@ var (
 func (e *EmptyList) xxx_sequential() {}
 
 func (e *EmptyList) Cons(x any) Conser {
-	return NewList(x)
+	l := ConsList(x, nil)
+	l.meta = e.meta
+	return l
 }
 
 func (e *EmptyList) Count() int {
@@ -225,7 +227,9 @@ func (l *List) Count() int {
 func (l *List) xxx_counted() {}
 
 func (l *List) Cons(x any) Conser {
-	return ConsList(x, l)
+	result := ConsList(x, l)
+	result.meta = l.meta
+	return result
 }
 
 func (l *List) String() string {

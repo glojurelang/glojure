@@ -162,7 +162,7 @@ func (t *Transient) Pop() *Transient {
 	t.ensureEditable()
 
 	if t.count == 0 {
-		return t
+		panic(errors.New("can't pop empty vector"))
 	}
 	if t.count == 1 {
 		t.count = 0

@@ -82,7 +82,7 @@ func (v *Vector) AssocN(i int, val any) IPersistentVector {
 	if i < 0 || i > v.Count() {
 		panic(NewIndexOutOfBoundsError())
 	}
-	return &Vector{vec: v.vec.Assoc(i, val)}
+	return &Vector{meta: v.meta, vec: v.vec.Assoc(i, val)}
 }
 
 func (v *Vector) ContainsKey(key any) bool {

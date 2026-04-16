@@ -200,17 +200,30 @@ func (s *Set) AsTransient() ITransientCollection {
 
 type TransientSet struct {
 	*Set
+	persisted bool
+}
+
+func (s *TransientSet) ensureEditable() {
+	if s.persisted {
+		panic(NewIllegalStateError("transient used after persistent! call"))
+	}
 }
 
 func (s *TransientSet) Conj(v any) Conjer {
-	return &TransientSet{Set: s.Set.Cons(v).(*Set)}
+	s.ensureEditable()
+	s.Set = s.Set.Cons(v).(*Set)
+	return s
 }
 
 func (s *TransientSet) Disjoin(v any) ITransientSet {
-	return &TransientSet{Set: s.Set.Disjoin(v).(*Set)}
+	s.ensureEditable()
+	s.Set = s.Set.Disjoin(v).(*Set)
+	return s
 }
 
 func (s *TransientSet) Persistent() IPersistentCollection {
+	s.ensureEditable()
+	s.persisted = true
 	return s.Set
 }
 

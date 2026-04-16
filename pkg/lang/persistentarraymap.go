@@ -326,6 +326,7 @@ func (m *Map) AsTransient() ITransientCollection {
 
 type TransientMap struct {
 	IPersistentMap
+	persisted bool
 }
 
 var (
@@ -335,6 +336,12 @@ var (
 	_ IReduce        = (*TransientMap)(nil)
 	_ IReduceInit    = (*TransientMap)(nil)
 )
+
+func (m *TransientMap) ensureEditable() {
+	if m.persisted {
+		panic(NewIllegalStateError("transient used after persistent! call"))
+	}
+}
 
 func (m *TransientMap) Meta() IPersistentMap {
 	return m.IPersistentMap.(IMeta).Meta()
@@ -357,18 +364,26 @@ func (m *TransientMap) ReduceInit(f IFn, init any) any {
 }
 
 func (m *TransientMap) Conj(v any) Conjer {
-	return &TransientMap{IPersistentMap: m.IPersistentMap.Cons(v).(IPersistentMap)}
+	m.ensureEditable()
+	m.IPersistentMap = m.IPersistentMap.Cons(v).(IPersistentMap)
+	return m
 }
 
 func (m *TransientMap) Assoc(k, v any) Associative {
-	return &TransientMap{IPersistentMap: m.IPersistentMap.Assoc(k, v).(IPersistentMap)}
+	m.ensureEditable()
+	m.IPersistentMap = m.IPersistentMap.Assoc(k, v).(IPersistentMap)
+	return m
 }
 
 func (m *TransientMap) Without(key any) IPersistentMap {
-	return &TransientMap{IPersistentMap: m.IPersistentMap.Without(key).(IPersistentMap)}
+	m.ensureEditable()
+	m.IPersistentMap = m.IPersistentMap.Without(key).(IPersistentMap)
+	return m
 }
 
 func (m *TransientMap) Persistent() IPersistentCollection {
+	m.ensureEditable()
+	m.persisted = true
 	return m.IPersistentMap
 }
 
