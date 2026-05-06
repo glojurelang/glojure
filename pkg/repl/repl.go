@@ -156,18 +156,37 @@ func Start(opts ...Option) {
 	histFile := historyFilePath()
 	rl.History.AddFromFile("glj", histFile)
 
+	ctrlCPressed := false
+
 	for {
 		line, err := rl.Readline()
 		if err != nil {
 			if errors.Is(err, readline.ErrInterrupt) {
-				fmt.Fprint(o.stdout, "\r\n")
+				if line != "" {
+					// Was editing: just cancel the input
+					ctrlCPressed = false
+					fmt.Fprintln(o.stdout)
+					continue
+				}
+				if ctrlCPressed {
+					fmt.Fprintln(o.stdout)
+					return
+				}
+				ctrlCPressed = true
+				fmt.Fprintln(o.stdout, "(To exit, press Ctrl+C again or Ctrl+D or type :repl/exit)")
 				continue
 			}
 			break
 		}
 
+		ctrlCPressed = false
+
 		if strings.TrimSpace(line) == "" {
 			continue
+		}
+
+		if strings.TrimSpace(line) == ":repl/exit" {
+			return
 		}
 
 		rdr := reader.New(strings.NewReader(line), reader.WithFilename("repl"), reader.WithGetCurrentNS(func() *lang.Namespace {
