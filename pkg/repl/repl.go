@@ -91,12 +91,20 @@ func Start(opts ...Option) {
 		return "... "
 	})
 
-	// AcceptMultiline: return false if expression is incomplete (needs more input)
+	// AcceptMultiline: return false if expression is incomplete (needs more input).
+	// Also insert a newline (instead of submitting) when the cursor is not at the
+	// end of the buffer, even if the expression is already complete.
 	rl.AcceptMultiline = func(line []rune) bool {
 		input := string(line)
 		if strings.TrimSpace(input) == "" {
 			return true
 		}
+
+		// Cursor not at end: always insert a newline
+		if rl.Cursor().Pos() < rl.Line().Len() {
+			return false
+		}
+
 		rdr := reader.New(
 			strings.NewReader(input),
 			reader.WithFilename("repl"),
