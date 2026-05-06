@@ -97,6 +97,27 @@ Hello from Glojure!
 nil
 ```
 
+#### REPL Features
+
+The interactive REPL includes:
+
+* **Vi and emacs editing modes** -- vi is the default; configure via
+  `~/.inputrc`
+* **Multiline editing** -- incomplete expressions continue on the next
+  line with auto-indent
+* **Tab completion** -- symbols, namespaces, and aliases with
+  descriptive labels
+* **Smart indentation** -- Tab inserts 2 spaces; Backspace removes a
+  full indent level
+* **Persistent history** -- saved to `~/.glj_history` across sessions
+* **Bracketed paste** -- paste blocks of code instantly
+* **Job control** -- Ctrl+Z suspends, `fg` resumes cleanly
+* **Interrupt** -- Ctrl+C cancels input or interrupts evaluation
+
+For the full REPL reference, see
+[doc/gloat-repl.md](https://github.com/gloathub/gloat/blob/main/doc/gloat-repl.md)
+or run `man gloat-repl`.
+
 **Evaluate expressions:**
 ```
 $ glj -e '(println "Hello, World!")'
