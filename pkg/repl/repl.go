@@ -20,6 +20,8 @@ import (
 	"github.com/reeflective/readline"
 	"github.com/reeflective/readline/inputrc"
 
+	goruntime "runtime"
+
 	"github.com/gloathub/glojure/pkg/lang"
 	"github.com/gloathub/glojure/pkg/reader"
 	"github.com/gloathub/glojure/pkg/runtime"
@@ -90,6 +92,18 @@ func Start(opts ...Option) {
 	fd := int(os.Stdin.Fd())
 	cookedState, _ := unix.IoctlGetTermios(fd, unix.TCGETS)
 	rl.Keymap.Register(map[string]func(){
+		"smart-backspace": func() {
+			pos := rl.Cursor().Pos()
+			line := rl.Line()
+			if pos >= 2 && (*line)[pos-1] == ' ' && (*line)[pos-2] == ' ' {
+				rl.Cursor().Dec()
+				rl.Cursor().Dec()
+				line.Cut(pos-2, pos)
+			} else if pos > 0 {
+				rl.Cursor().Dec()
+				line.CutRune(rl.Cursor().Pos())
+			}
+		},
 		"suspend": func() {
 			rawState, _ := unix.IoctlGetTermios(fd, unix.TCGETS)
 			unix.IoctlSetTermios(fd, unix.TCSETS, cookedState)
@@ -107,6 +121,10 @@ func Start(opts ...Option) {
 			fmt.Print(defaultPrompt())
 		},
 	})
+	backspace := inputrc.Unescape(`\C-?`)
+	for _, km := range rl.Config.Binds {
+		km[backspace] = inputrc.Bind{Action: "smart-backspace"}
+	}
 	ctrlZ := inputrc.Unescape(`\C-z`)
 	for _, km := range rl.Config.Binds {
 		km[ctrlZ] = inputrc.Bind{Action: "suspend"}
@@ -155,6 +173,8 @@ func Start(opts ...Option) {
 	// File-based history
 	histFile := historyFilePath()
 	rl.History.AddFromFile("glj", histFile)
+
+	printBanner(o.stdout)
 
 	ctrlCPressed := false
 
@@ -256,6 +276,16 @@ func evalWithInterrupt(o options, val interface{}) (string, error) {
 	}
 }
 
+func printBanner(w io.Writer) {
+	fmt.Fprintf(w, "Glojure v%s\n", runtime.Version)
+	goVersion := strings.TrimPrefix(goruntime.Version(), "go")
+	fmt.Fprintf(w, "Go %s %s/%s\n", goVersion, goruntime.GOOS, goruntime.GOARCH)
+	fmt.Fprintf(w, "    Docs: (doc function-name)\n")
+	fmt.Fprintf(w, "  Source: (source function-name)\n")
+	fmt.Fprintf(w, "    Exit: Ctrl+D or :repl/exit\n")
+	fmt.Fprintln(w)
+}
+
 func historyFilePath() string {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -275,6 +305,15 @@ func completeSymbol(o options, line []rune, cursor int) readline.Completions {
 	prefix := string(line[start:cursor])
 
 	if prefix == "" {
+		// Insert two spaces for indentation when cursor is after
+		// whitespace (or at line start) and the line isn't empty.
+		if len(line) > 0 && (cursor == 0 || line[cursor-1] == ' ' || line[cursor-1] == '\t' || line[cursor-1] == '\n') {
+			comps := readline.CompleteRaw([]readline.Completion{
+				{Value: "  "},
+			})
+			comps.PREFIX = ""
+			return comps
+		}
 		return readline.Completions{}
 	}
 
