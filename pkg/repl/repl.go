@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/reeflective/readline"
+	"github.com/reeflective/readline/inputrc"
 
 	"github.com/gloathub/glojure/pkg/lang"
 	"github.com/gloathub/glojure/pkg/reader"
@@ -75,6 +76,13 @@ func Start(opts ...Option) {
 
 	rl := readline.NewShell()
 	rl.Config.Vars["enable-bracketed-paste"] = true
+	rl.Config.Vars["menu-complete-display-prefix"] = true
+
+	// Bind Tab to menu-complete so all completions are shown in a menu
+	tabKey := inputrc.Unescape(`\C-i`)
+	for _, km := range rl.Config.Binds {
+		km[tabKey] = inputrc.Bind{Action: "menu-complete"}
+	}
 
 	rl.Prompt.Primary(func() string {
 		return defaultPrompt()
@@ -101,6 +109,11 @@ func Start(opts ...Option) {
 			return false
 		}
 		return true
+	}
+
+	// Tab completion for symbols, namespaces, and aliases
+	rl.Completer = func(line []rune, cursor int) readline.Completions {
+		return completeSymbol(o, line, cursor)
 	}
 
 	// File-based history
@@ -194,6 +207,113 @@ func historyFilePath() string {
 		return ".glj_history"
 	}
 	return filepath.Join(home, ".glj_history")
+}
+
+// completeSymbol provides tab completion for Clojure symbols.
+// It handles: bare symbols, namespace-qualified symbols (ns/sym),
+// alias-qualified symbols (alias/sym), and namespace names.
+func completeSymbol(o options, line []rune, cursor int) readline.Completions {
+	start := cursor
+	for start > 0 && isSymbolChar(line[start-1]) {
+		start--
+	}
+	prefix := string(line[start:cursor])
+
+	ns := o.env.CurrentNamespace()
+
+	if i := strings.IndexByte(prefix, '/'); i >= 0 {
+		nsPrefix := prefix[:i]
+		symPrefix := prefix[i+1:]
+		return completeQualified(ns, nsPrefix, symPrefix, prefix[:i+1])
+	}
+
+	var candidates []readline.Completion
+
+	// Symbols from current namespace mappings (includes refers)
+	mappings := ns.Mappings()
+	for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
+		sym := seq.First().(*lang.Symbol)
+		name := sym.Name()
+		if !strings.HasPrefix(name, prefix) {
+			continue
+		}
+		desc := ""
+		if v, ok := mappings.ValAt(sym).(*lang.Var); ok {
+			desc = v.Namespace().Name().Name()
+		}
+		candidates = append(candidates, readline.Completion{
+			Value:       name,
+			Display:     name,
+			Description: desc,
+		})
+	}
+
+	// Namespace aliases
+	for seq := lang.Seq(lang.Keys(ns.Aliases())); seq != nil; seq = seq.Next() {
+		name := seq.First().(*lang.Symbol).Name()
+		if strings.HasPrefix(name, prefix) {
+			candidates = append(candidates, readline.Completion{
+				Value:       name + "/",
+				Display:     name + "/",
+				Description: "alias",
+			})
+		}
+	}
+
+	// Full namespace names
+	for seq := lang.Seq(lang.AllNamespaces()); seq != nil; seq = seq.Next() {
+		name := seq.First().(*lang.Namespace).Name().Name()
+		if strings.HasPrefix(name, prefix) {
+			candidates = append(candidates, readline.Completion{
+				Value:       name + "/",
+				Display:     name + "/",
+				Description: "namespace",
+			})
+		}
+	}
+
+	comps := readline.CompleteRaw(candidates)
+	comps.PREFIX = prefix
+	return comps.NoSpace('/')
+}
+
+// completeQualified completes symbols within a specific namespace or alias.
+func completeQualified(curNS *lang.Namespace, nsName, symPrefix, insertPrefix string) readline.Completions {
+	aliasSym := lang.NewSymbol(nsName)
+	targetNS := curNS.LookupAlias(aliasSym)
+	if targetNS == nil {
+		targetNS = lang.FindNamespace(lang.NewSymbol(nsName))
+	}
+	if targetNS == nil {
+		return readline.Completions{}
+	}
+
+	var candidates []readline.Completion
+	nsDesc := targetNS.Name().Name()
+	mappings := targetNS.Mappings()
+	for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
+		sym := seq.First().(*lang.Symbol)
+		name := sym.Name()
+		if !strings.HasPrefix(name, symPrefix) {
+			continue
+		}
+		candidates = append(candidates, readline.Completion{
+			Value:       insertPrefix + name,
+			Display:     insertPrefix + name,
+			Description: nsDesc,
+		})
+	}
+
+	comps := readline.CompleteRaw(candidates)
+	comps.PREFIX = insertPrefix + symPrefix
+	return comps
+}
+
+func isSymbolChar(r rune) bool {
+	if r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' {
+		return true
+	}
+	return strings.ContainsRune(".*+!-_?/<>=$&%#", r)
 }
 
 func initEnv(stdout io.Writer) lang.Environment {
