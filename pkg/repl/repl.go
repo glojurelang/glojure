@@ -15,6 +15,8 @@ import (
 	"syscall"
 	"time"
 
+	"golang.org/x/sys/unix"
+
 	"github.com/reeflective/readline"
 	"github.com/reeflective/readline/inputrc"
 
@@ -82,6 +84,32 @@ func Start(opts ...Option) {
 	tabKey := inputrc.Unescape(`\C-i`)
 	for _, km := range rl.Config.Binds {
 		km[tabKey] = inputrc.Bind{Action: "menu-complete"}
+	}
+
+	// Ctrl-Z: suspend the process (like a normal shell).
+	fd := int(os.Stdin.Fd())
+	cookedState, _ := unix.IoctlGetTermios(fd, unix.TCGETS)
+	rl.Keymap.Register(map[string]func(){
+		"suspend": func() {
+			rawState, _ := unix.IoctlGetTermios(fd, unix.TCGETS)
+			unix.IoctlSetTermios(fd, unix.TCSETS, cookedState)
+			fmt.Print("\r\n")
+			// Reset to default so the kernel handles SIGTSTP directly.
+			// Wait for SIGCONT to know when fg has resumed us.
+			contCh := make(chan os.Signal, 1)
+			signal.Notify(contCh, syscall.SIGCONT)
+			signal.Reset(syscall.SIGTSTP)
+			syscall.Kill(syscall.Getpid(), syscall.SIGTSTP)
+			<-contCh
+			signal.Stop(contCh)
+			// Restore raw mode and redisplay prompt
+			unix.IoctlSetTermios(fd, unix.TCSETS, rawState)
+			fmt.Print(defaultPrompt())
+		},
+	})
+	ctrlZ := inputrc.Unescape(`\C-z`)
+	for _, km := range rl.Config.Binds {
+		km[ctrlZ] = inputrc.Bind{Action: "suspend"}
 	}
 
 	rl.Prompt.Primary(func() string {
