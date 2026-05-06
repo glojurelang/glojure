@@ -86,7 +86,7 @@ func Start(opts ...Option) {
 		return highlightSyntax(line, o.env)
 	}
 
-	// Ghost text: show the unique completion candidate as faded text.
+	// Ghost text: show the common prefix of all matching completions.
 	rl.SuggestFunc = func(line []rune) []rune {
 		if len(line) == 0 {
 			return nil
@@ -102,107 +102,69 @@ func Start(opts ...Option) {
 			return nil
 		}
 
+		var matches []string
+
 		// Keyword ghost text
 		if strings.HasPrefix(prefix, ":") {
 			kwPrefix := prefix[1:]
-			var match string
-			count := 0
 			for _, kw := range lang.AllKeywords() {
 				if strings.HasPrefix(kw, kwPrefix) {
-					match = kw
-					count++
-					if count > 1 {
-						return nil
-					}
+					matches = append(matches, kw[len(kwPrefix):])
 				}
 			}
-			if count == 1 {
-				result := make([]rune, len(line))
-				copy(result, line)
-				suffix := []rune(match[len(kwPrefix):])
-				return append(result, suffix...)
-			}
-			return nil
-		}
-
-		ns := o.env.CurrentNamespace()
-
-		// Qualified symbol (ns/prefix)
-		if i := strings.IndexByte(prefix, '/'); i >= 0 {
+		} else if i := strings.IndexByte(prefix, '/'); i >= 0 {
+			// Qualified symbol (ns/prefix)
 			nsName := prefix[:i]
 			symPrefix := prefix[i+1:]
+			ns := o.env.CurrentNamespace()
 			aliasSym := lang.NewSymbol(nsName)
 			targetNS := ns.LookupAlias(aliasSym)
 			if targetNS == nil {
 				targetNS = lang.FindNamespace(lang.NewSymbol(nsName))
 			}
-			if targetNS == nil {
-				return nil
-			}
-			var match string
-			count := 0
-			mappings := targetNS.Mappings()
-			for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
-				name := seq.First().(*lang.Symbol).Name()
-				if strings.HasPrefix(name, symPrefix) {
-					match = name
-					count++
-					if count > 1 {
-						return nil
+			if targetNS != nil {
+				mappings := targetNS.Mappings()
+				for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
+					name := seq.First().(*lang.Symbol).Name()
+					if strings.HasPrefix(name, symPrefix) {
+						matches = append(matches, name[len(symPrefix):])
 					}
 				}
 			}
-			if count == 1 {
-				result := make([]rune, len(line))
-				copy(result, line)
-				suffix := []rune(match[len(symPrefix):])
-				return append(result, suffix...)
+		} else {
+			// Unqualified symbol
+			ns := o.env.CurrentNamespace()
+			mappings := ns.Mappings()
+			for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
+				name := seq.First().(*lang.Symbol).Name()
+				if strings.HasPrefix(name, prefix) {
+					matches = append(matches, name[len(prefix):])
+				}
 			}
-			return nil
+			for seq := lang.Seq(lang.Keys(ns.Aliases())); seq != nil; seq = seq.Next() {
+				name := seq.First().(*lang.Symbol).Name()
+				if strings.HasPrefix(name, prefix) {
+					matches = append(matches, name[len(prefix):]+"/")
+				}
+			}
+			for seq := lang.Seq(lang.AllNamespaces()); seq != nil; seq = seq.Next() {
+				name := seq.First().(*lang.Namespace).Name().Name()
+				if strings.HasPrefix(name, prefix) {
+					matches = append(matches, name[len(prefix):]+"/")
+				}
+			}
 		}
 
-		// Unqualified symbol
-		var match string
-		count := 0
-		mappings := ns.Mappings()
-		for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
-			name := seq.First().(*lang.Symbol).Name()
-			if strings.HasPrefix(name, prefix) {
-				match = name
-				count++
-				if count > 1 {
-					return nil
-				}
-			}
+		if len(matches) == 0 {
+			return nil
 		}
-		// Also check aliases and namespaces
-		for seq := lang.Seq(lang.Keys(ns.Aliases())); seq != nil; seq = seq.Next() {
-			name := seq.First().(*lang.Symbol).Name()
-			if strings.HasPrefix(name, prefix) {
-				match = name + "/"
-				count++
-				if count > 1 {
-					return nil
-				}
-			}
+		suffix := commonPrefix(matches)
+		if suffix == "" {
+			return nil
 		}
-		for seq := lang.Seq(lang.AllNamespaces()); seq != nil; seq = seq.Next() {
-			name := seq.First().(*lang.Namespace).Name().Name()
-			if strings.HasPrefix(name, prefix) {
-				match = name + "/"
-				count++
-				if count > 1 {
-					return nil
-				}
-			}
-		}
-		if count == 1 {
-			result := make([]rune, len(line))
-			copy(result, line)
-			suffix := []rune(match[len(prefix):])
-			return append(result, suffix...)
-		}
-		return nil
+		result := make([]rune, len(line))
+		copy(result, line)
+		return append(result, []rune(suffix)...)
 	}
 
 	// Bind Tab to menu-complete so all completions are shown in a menu
@@ -746,6 +708,26 @@ func completeQualified(curNS *lang.Namespace, nsName, symPrefix, insertPrefix st
 	comps := readline.CompleteRaw(candidates)
 	comps.PREFIX = insertPrefix + symPrefix
 	return comps
+}
+
+// commonPrefix returns the longest common prefix of all strings.
+func commonPrefix(ss []string) string {
+	if len(ss) == 0 {
+		return ""
+	}
+	prefix := ss[0]
+	for _, s := range ss[1:] {
+		for i := range prefix {
+			if i >= len(s) || s[i] != prefix[i] {
+				prefix = prefix[:i]
+				break
+			}
+		}
+		if len(s) < len(prefix) {
+			prefix = prefix[:len(s)]
+		}
+	}
+	return prefix
 }
 
 func isSymbolChar(r rune) bool {
