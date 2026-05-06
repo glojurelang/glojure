@@ -3,6 +3,7 @@ package lang
 import (
 	"fmt"
 	"strings"
+	"sync"
 
 	"go4.org/intern"
 )
@@ -18,13 +19,31 @@ type Keyword struct {
 
 var (
 	_ Hasher = Keyword{}
+
+	keywordRegistry   = make(map[string]struct{})
+	keywordRegistryMu sync.RWMutex
 )
 
 func NewKeyword(s string) Keyword {
+	keywordRegistryMu.Lock()
+	keywordRegistry[s] = struct{}{}
+	keywordRegistryMu.Unlock()
+
 	return Keyword{
 		kw:   intern.GetByString(s),
 		hash: Hash(s) ^ keywordHashMask,
 	}
+}
+
+// AllKeywords returns all keyword strings that have been interned.
+func AllKeywords() []string {
+	keywordRegistryMu.RLock()
+	defer keywordRegistryMu.RUnlock()
+	result := make([]string, 0, len(keywordRegistry))
+	for k := range keywordRegistry {
+		result = append(result, k)
+	}
+	return result
 }
 
 func InternKeywordSymbol(s *Symbol) Keyword {

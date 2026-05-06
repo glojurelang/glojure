@@ -98,6 +98,29 @@ func Start(opts ...Option) {
 			return nil
 		}
 
+		// Keyword ghost text
+		if strings.HasPrefix(prefix, ":") {
+			kwPrefix := prefix[1:]
+			var match string
+			count := 0
+			for _, kw := range lang.AllKeywords() {
+				if strings.HasPrefix(kw, kwPrefix) {
+					match = kw
+					count++
+					if count > 1 {
+						return nil
+					}
+				}
+			}
+			if count == 1 {
+				result := make([]rune, len(line))
+				copy(result, line)
+				suffix := []rune(match[len(kwPrefix):])
+				return append(result, suffix...)
+			}
+			return nil
+		}
+
 		ns := o.env.CurrentNamespace()
 
 		// Qualified symbol (ns/prefix)
@@ -413,6 +436,23 @@ func completeSymbol(o options, line []rune, cursor int) readline.Completions {
 		return readline.Completions{}
 	}
 
+	// Keyword completion: prefix starts with ':'
+	if strings.HasPrefix(prefix, ":") {
+		kwPrefix := prefix[1:] // strip leading ':'
+		var candidates []readline.Completion
+		for _, kw := range lang.AllKeywords() {
+			if strings.HasPrefix(kw, kwPrefix) {
+				candidates = append(candidates, readline.Completion{
+					Value:   ":" + kw,
+					Display: ":" + kw,
+				})
+			}
+		}
+		comps := readline.CompleteRaw(candidates)
+		comps.PREFIX = prefix
+		return comps
+	}
+
 	ns := o.env.CurrentNamespace()
 
 	if i := strings.IndexByte(prefix, '/'); i >= 0 {
@@ -516,7 +556,7 @@ func isSymbolChar(r rune) bool {
 	if r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' {
 		return true
 	}
-	return strings.ContainsRune(".*+!-_?/<>=$&%#", r)
+	return strings.ContainsRune(".*+!-_?/<>=$&%#:", r)
 }
 
 func initEnv(stdout io.Writer) lang.Environment {
