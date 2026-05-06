@@ -7,10 +7,12 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"runtime/debug"
 	"runtime/pprof"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/reeflective/readline"
@@ -108,6 +110,10 @@ func Start(opts ...Option) {
 	for {
 		line, err := rl.Readline()
 		if err != nil {
+			if errors.Is(err, readline.ErrInterrupt) {
+				fmt.Fprint(o.stdout, "\r\n")
+				continue
+			}
 			break
 		}
 
@@ -126,26 +132,59 @@ func Start(opts ...Option) {
 		}
 
 		for _, val := range vals {
-			out, err := func() (out string, err error) {
-				defer func() {
-					if panicErr := recover(); panicErr != nil {
-						err = fmt.Errorf("panic: %v\nstacktrace:\n%s", panicErr, string(debug.Stack()))
-					}
-				}()
-
-				val, err := o.env.Eval(val)
-				runtime.Debug = false
-				if err != nil {
-					return "", err
-				}
-				return lang.PrintString(val), nil
-			}()
+			out, err := evalWithInterrupt(o, val)
 			if err != nil {
-				fmt.Fprintln(o.stdout, err)
+				fmt.Fprintf(o.stdout, "\r\n%s\r\n", err)
+				if err.Error() == "Interrupted" {
+					break
+				}
 				continue
 			}
 			fmt.Fprintln(o.stdout, out)
 		}
+	}
+}
+
+// evalWithInterrupt runs eval in a goroutine so SIGINT can interrupt it.
+// On Ctrl-C, the eval goroutine is abandoned and "Interrupted" is returned.
+func evalWithInterrupt(o options, val interface{}) (string, error) {
+	type result struct {
+		out string
+		err error
+	}
+
+	// Capture thread-local bindings (including *ns*) so the eval
+	// goroutine inherits them. Go goroutines don't share thread-local
+	// storage, so without this *ns* would revert to clojure.core.
+	bindings := lang.GetThreadBindings()
+
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, syscall.SIGINT)
+	defer signal.Stop(sigCh)
+
+	resCh := make(chan result, 1)
+	go func() {
+		lang.PushThreadBindings(bindings)
+		defer lang.PopThreadBindings()
+		defer func() {
+			if panicErr := recover(); panicErr != nil {
+				resCh <- result{"", fmt.Errorf("panic: %v\nstacktrace:\n%s", panicErr, string(debug.Stack()))}
+			}
+		}()
+		v, err := o.env.Eval(val)
+		runtime.Debug = false
+		if err != nil {
+			resCh <- result{"", err}
+			return
+		}
+		resCh <- result{lang.PrintString(v), nil}
+	}()
+
+	select {
+	case <-sigCh:
+		return "", fmt.Errorf("Interrupted")
+	case r := <-resCh:
+		return r.out, r.err
 	}
 }
 
