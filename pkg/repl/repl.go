@@ -227,6 +227,10 @@ func completeSymbol(o options, line []rune, cursor int) readline.Completions {
 	}
 	prefix := string(line[start:cursor])
 
+	if prefix == "" {
+		return readline.Completions{}
+	}
+
 	ns := o.env.CurrentNamespace()
 
 	if i := strings.IndexByte(prefix, '/'); i >= 0 {
