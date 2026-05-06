@@ -7,12 +7,13 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"runtime/debug"
 	"runtime/pprof"
 	"strings"
 	"time"
 
-	"github.com/chzyer/readline"
+	"github.com/reeflective/readline"
 
 	"github.com/gloathub/glojure/pkg/lang"
 	"github.com/gloathub/glojure/pkg/reader"
@@ -70,39 +71,60 @@ func Start(opts ...Option) {
 		return curNS + "=> "
 	}
 
-	rl, err := readline.NewEx(&readline.Config{
-		Prompt: defaultPrompt(),
-		//DisableAutoSaveHistory: true,
-		Stdin:  io.NopCloser(o.stdin),
-		Stdout: o.stdout,
-	})
-	if err != nil {
-		panic(err)
-	}
-	defer rl.Close()
+	rl := readline.NewShell()
+	rl.Config.Vars["enable-bracketed-paste"] = true
 
-	var expr string
+	rl.Prompt.Primary(func() string {
+		return defaultPrompt()
+	})
+	rl.Prompt.Secondary(func() string {
+		return "... "
+	})
+
+	// AcceptMultiline: return false if expression is incomplete (needs more input)
+	rl.AcceptMultiline = func(line []rune) bool {
+		input := string(line)
+		if strings.TrimSpace(input) == "" {
+			return true
+		}
+		rdr := reader.New(
+			strings.NewReader(input),
+			reader.WithFilename("repl"),
+			reader.WithGetCurrentNS(func() *lang.Namespace {
+				return o.env.CurrentNamespace()
+			}),
+		)
+		_, err := rdr.ReadAll()
+		if err != nil && errors.Is(err, io.EOF) {
+			return false
+		}
+		return true
+	}
+
+	// File-based history
+	histFile := historyFilePath()
+	rl.History.AddFromFile("glj", histFile)
 
 	for {
 		line, err := rl.Readline()
 		if err != nil {
 			break
 		}
-		expr += line + "\n"
 
-		rdr := reader.New(strings.NewReader(expr), reader.WithFilename("repl"), reader.WithGetCurrentNS(func() *lang.Namespace {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+
+		rdr := reader.New(strings.NewReader(line), reader.WithFilename("repl"), reader.WithGetCurrentNS(func() *lang.Namespace {
 			return o.env.CurrentNamespace()
 		}))
 
 		vals, err := rdr.ReadAll()
 		if err != nil {
-			if errors.Is(err, io.EOF) {
-				rl.SetPrompt("... ")
-				continue
-			}
 			fmt.Fprintln(o.stdout, err)
+			continue
 		}
-		expr = ""
+
 		for _, val := range vals {
 			out, err := func() (out string, err error) {
 				defer func() {
@@ -111,7 +133,6 @@ func Start(opts ...Option) {
 					}
 				}()
 
-				//runtime.Debug = true
 				val, err := o.env.Eval(val)
 				runtime.Debug = false
 				if err != nil {
@@ -125,23 +146,15 @@ func Start(opts ...Option) {
 			}
 			fmt.Fprintln(o.stdout, out)
 		}
-		rl.SetPrompt(defaultPrompt())
 	}
 }
 
-func readLine(r io.Reader) (string, error) {
-	var line string
-	for {
-		buf := make([]byte, 1)
-		if _, err := r.Read(buf); err != nil {
-			return "", err
-		}
-		if buf[0] == '\n' {
-			break
-		}
-		line += string(buf)
+func historyFilePath() string {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return ".glj_history"
 	}
-	return line, nil
+	return filepath.Join(home, ".glj_history")
 }
 
 func initEnv(stdout io.Writer) lang.Environment {
