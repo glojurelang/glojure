@@ -82,6 +82,10 @@ func Start(opts ...Option) {
 	rl.Config.Vars["enable-bracketed-paste"] = true
 	rl.Config.Vars["menu-complete-display-prefix"] = true
 
+	rl.SyntaxHighlighter = func(line []rune) string {
+		return highlightSyntax(line, o.env)
+	}
+
 	// Ghost text: show the unique completion candidate as faded text.
 	rl.SuggestFunc = func(line []rune) []rune {
 		if len(line) == 0 {
@@ -393,6 +397,198 @@ func evalWithInterrupt(o options, val interface{}) (string, error) {
 	case r := <-resCh:
 		return r.out, r.err
 	}
+}
+
+// ANSI color codes for syntax highlighting.
+const (
+	colorReset      = "\x1b[0m"
+	colorGreen      = "\x1b[32m"
+	colorCyan       = "\x1b[36m"
+	colorMagenta    = "\x1b[35m"
+	colorBlue       = "\x1b[38;5;69m"
+	colorBoldYellow = "\x1b[1;33m"
+	colorGray       = "\x1b[90m"
+)
+
+// specialForms is the set of Clojure special forms and commonly
+// highlighted macros, used for bold-yellow highlighting.
+var specialForms = map[string]bool{
+	"def": true, "defn": true, "defn-": true, "defmacro": true,
+	"defonce": true, "defmethod": true, "defmulti": true,
+	"defprotocol": true, "defrecord": true, "deftype": true,
+	"defstruct": true, "fn": true, "fn*": true, "let": true,
+	"let*": true, "loop": true, "recur": true, "if": true,
+	"if-let": true, "if-not": true, "when": true, "when-let": true,
+	"when-not": true, "when-first": true, "cond": true,
+	"condp": true, "case": true, "do": true, "quote": true,
+	"var": true, "try": true, "catch": true, "finally": true,
+	"throw": true, "ns": true, "require": true, "import": true,
+	"use": true, "refer": true, "in-ns": true, "for": true,
+	"doseq": true, "dotimes": true, "while": true, "binding": true,
+	"with-open": true, "with-local-vars": true,
+}
+
+// isClojureCoreSym returns true if the symbol resolves to a var in a
+// clojure.* namespace within the given environment.
+func isClojureCoreSym(env lang.Environment, token string) bool {
+	ns := env.CurrentNamespace()
+	sym := lang.NewSymbol(token)
+	v, ok := ns.Mappings().ValAt(sym).(*lang.Var)
+	if !ok {
+		return false
+	}
+	nsName := v.Namespace().Name().Name()
+	return strings.HasPrefix(nsName, "clojure.")
+}
+
+// highlightSyntax returns an ANSI-colored version of the input line
+// for Clojure syntax highlighting.
+func highlightSyntax(line []rune, env lang.Environment) string {
+	var buf strings.Builder
+	buf.Grow(len(line) * 2)
+	i := 0
+	n := len(line)
+
+	for i < n {
+		ch := line[i]
+
+		// String literal
+		if ch == '"' {
+			buf.WriteString(colorGreen)
+			buf.WriteRune(ch)
+			i++
+			for i < n {
+				c := line[i]
+				buf.WriteRune(c)
+				if c == '\\' && i+1 < n {
+					i++
+					buf.WriteRune(line[i])
+				} else if c == '"' {
+					break
+				}
+				i++
+			}
+			buf.WriteString(colorReset)
+			i++
+			continue
+		}
+
+		// Comment
+		if ch == ';' {
+			buf.WriteString(colorGray)
+			for i < n && line[i] != '\n' {
+				buf.WriteRune(line[i])
+				i++
+			}
+			buf.WriteString(colorReset)
+			continue
+		}
+
+		// Keyword
+		if ch == ':' && (i == 0 || !isSymbolChar(line[i-1])) {
+			start := i
+			i++ // skip ':'
+			if i < n && line[i] == ':' {
+				i++ // skip second ':' for ::keyword
+			}
+			for i < n && isSymbolChar(line[i]) {
+				i++
+			}
+			buf.WriteString(colorCyan)
+			buf.WriteString(string(line[start:i]))
+			buf.WriteString(colorReset)
+			continue
+		}
+
+		// Dispatch: #, characters, deref @, quote ', etc. -- pass through
+		if ch == '(' || ch == ')' || ch == '[' || ch == ']' ||
+			ch == '{' || ch == '}' || ch == '\'' || ch == '`' ||
+			ch == '@' || ch == '^' || ch == '~' || ch == '#' {
+			buf.WriteRune(ch)
+			i++
+			continue
+		}
+
+		// Whitespace
+		if ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' || ch == ',' {
+			buf.WriteRune(ch)
+			i++
+			continue
+		}
+
+		// Symbol or number token
+		start := i
+		for i < n && isSymbolChar(line[i]) {
+			i++
+		}
+		if i == start {
+			// Single non-symbol character, pass through
+			buf.WriteRune(ch)
+			i++
+			continue
+		}
+
+		token := string(line[start:i])
+
+		// Booleans and nil
+		if token == "true" || token == "false" || token == "nil" {
+			buf.WriteString(colorMagenta)
+			buf.WriteString(token)
+			buf.WriteString(colorReset)
+			continue
+		}
+
+		// Special forms
+		if specialForms[token] {
+			buf.WriteString(colorBoldYellow)
+			buf.WriteString(token)
+			buf.WriteString(colorReset)
+			continue
+		}
+
+		// Number: starts with digit, or starts with - followed by digit
+		if isNumber(token) {
+			buf.WriteString(colorMagenta)
+			buf.WriteString(token)
+			buf.WriteString(colorReset)
+			continue
+		}
+
+		// clojure.* core symbol
+		if isClojureCoreSym(env, token) {
+			buf.WriteString(colorBlue)
+			buf.WriteString(token)
+			buf.WriteString(colorReset)
+			continue
+		}
+
+		// Regular symbol -- no color
+		buf.WriteString(token)
+	}
+
+	return buf.String()
+}
+
+// isNumber returns true if the token looks like a Clojure number
+// (integer, float, ratio, hex, octal, radix, or bigint/bigdec).
+func isNumber(s string) bool {
+	if len(s) == 0 {
+		return false
+	}
+	i := 0
+	if s[0] == '-' || s[0] == '+' {
+		i++
+		if i >= len(s) {
+			return false
+		}
+	}
+	if s[i] < '0' || s[i] > '9' {
+		return false
+	}
+	// Starts with a digit after optional sign -- good enough for
+	// highlighting purposes. Covers 42, 3.14, 1/3, 0xFF, 2r101,
+	// 42N, 3.14M, etc.
+	return true
 }
 
 func printBanner(w io.Writer) {
