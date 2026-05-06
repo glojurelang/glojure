@@ -3662,6 +3662,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/gloathub/glojure/pkg/lang.Agent", reflect.TypeOf((*github_com_gloathub_glojure_pkg_lang.Agent)(nil)).Elem())
 	_register("github.com/gloathub/glojure/pkg/lang.*Agent", reflect.TypeOf((*github_com_gloathub_glojure_pkg_lang.Agent)(nil)))
 	_register("github.com/gloathub/glojure/pkg/lang.AgentSubmit", github_com_gloathub_glojure_pkg_lang.AgentSubmit)
+	_register("github.com/gloathub/glojure/pkg/lang.AllKeywords", github_com_gloathub_glojure_pkg_lang.AllKeywords)
 	_register("github.com/gloathub/glojure/pkg/lang.AllNamespaces", github_com_gloathub_glojure_pkg_lang.AllNamespaces)
 	_register("github.com/gloathub/glojure/pkg/lang.AppendWriter", github_com_gloathub_glojure_pkg_lang.AppendWriter)
 	_register("github.com/gloathub/glojure/pkg/lang.Apply", github_com_gloathub_glojure_pkg_lang.Apply)
