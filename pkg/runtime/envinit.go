@@ -13,9 +13,15 @@ import (
 	"github.com/gloathub/glojure/pkg/lang"
 )
 
+// version is set via -ldflags at build time.
+var version string
+
 var (
 	// The current version of Glojure
 	Version = func() string {
+		if version != "" {
+			return strings.TrimPrefix(version, "v")
+		}
 		info, ok := debug.ReadBuildInfo()
 		if !ok {
 			return "0.0.0"
@@ -23,7 +29,6 @@ var (
 		if info.Main.Version == "" || info.Main.Version == "(devel)" {
 			return "0.0.0"
 		}
-		// Trim any leading "v" from the version string
 		return strings.TrimPrefix(info.Main.Version, "v")
 	}()
 )

@@ -15,4 +15,9 @@ else
     BUILD_TAG="$ARCH && $OS"
 fi
 
-GOOS=$OS GOARCH=$ARCH go build -o $1 ./cmd/glj
+LDFLAGS=""
+if [ -n "$GLJ_VERSION" ]; then
+    LDFLAGS="-X github.com/gloathub/glojure/pkg/runtime.version=$GLJ_VERSION"
+fi
+
+GOOS=$OS GOARCH=$ARCH go build -ldflags "$LDFLAGS" -o $1 ./cmd/glj

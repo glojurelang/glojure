@@ -232,7 +232,7 @@ release-dist:
 	@$(if $(filter command line,$(origin VERSION)),,\
 	  $(error VERSION is required on the command line))
 	$(eval RELEASE_VER := $(patsubst v%,%,$(VERSION)))
-	$(MAKE) stdlib-targets generate aot glj-imports $(RELEASE-BINS)
+	GLJ_VERSION=v$(RELEASE_VER) $(MAKE) stdlib-targets generate aot glj-imports $(RELEASE-BINS)
 	mkdir -p dist
 	$(foreach p,$(RELEASE-PLATFORMS), \
 	  tar -czf dist/glj-$(RELEASE_VER)-$(p).tar.gz -C bin/$(p) glj ;)
@@ -252,7 +252,7 @@ release: $(GH)
 	$(MAKE) stdlib-targets
 	$(MAKE) generate aot
 	$(MAKE) glj-imports force=1
-	$(MAKE) build
+	GLJ_VERSION=v$(RELEASE_VER) $(MAKE) build
 	$(MAKE) test
 	git add -A
 	git diff --cached --quiet || \
