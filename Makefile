@@ -1,5 +1,6 @@
+R := https://github.com/makeplus/makes
 M := .cache/makes
-$(shell [ -d $M ] || git clone -q https://github.com/makeplus/makes $M)
+$(shell [ -d '$M' ] || git clone -q $R '$M')
 
 include $M/init.mk
 
