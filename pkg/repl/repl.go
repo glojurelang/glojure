@@ -82,6 +82,102 @@ func Start(opts ...Option) {
 	rl.Config.Vars["enable-bracketed-paste"] = true
 	rl.Config.Vars["menu-complete-display-prefix"] = true
 
+	// Ghost text: show the unique completion candidate as faded text.
+	rl.SuggestFunc = func(line []rune) []rune {
+		if len(line) == 0 {
+			return nil
+		}
+		// Extract symbol prefix at end of line.
+		end := len(line)
+		start := end
+		for start > 0 && isSymbolChar(line[start-1]) {
+			start--
+		}
+		prefix := string(line[start:end])
+		if prefix == "" {
+			return nil
+		}
+
+		ns := o.env.CurrentNamespace()
+
+		// Qualified symbol (ns/prefix)
+		if i := strings.IndexByte(prefix, '/'); i >= 0 {
+			nsName := prefix[:i]
+			symPrefix := prefix[i+1:]
+			aliasSym := lang.NewSymbol(nsName)
+			targetNS := ns.LookupAlias(aliasSym)
+			if targetNS == nil {
+				targetNS = lang.FindNamespace(lang.NewSymbol(nsName))
+			}
+			if targetNS == nil {
+				return nil
+			}
+			var match string
+			count := 0
+			mappings := targetNS.Mappings()
+			for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
+				name := seq.First().(*lang.Symbol).Name()
+				if strings.HasPrefix(name, symPrefix) {
+					match = name
+					count++
+					if count > 1 {
+						return nil
+					}
+				}
+			}
+			if count == 1 {
+				result := make([]rune, len(line))
+				copy(result, line)
+				suffix := []rune(match[len(symPrefix):])
+				return append(result, suffix...)
+			}
+			return nil
+		}
+
+		// Unqualified symbol
+		var match string
+		count := 0
+		mappings := ns.Mappings()
+		for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
+			name := seq.First().(*lang.Symbol).Name()
+			if strings.HasPrefix(name, prefix) {
+				match = name
+				count++
+				if count > 1 {
+					return nil
+				}
+			}
+		}
+		// Also check aliases and namespaces
+		for seq := lang.Seq(lang.Keys(ns.Aliases())); seq != nil; seq = seq.Next() {
+			name := seq.First().(*lang.Symbol).Name()
+			if strings.HasPrefix(name, prefix) {
+				match = name + "/"
+				count++
+				if count > 1 {
+					return nil
+				}
+			}
+		}
+		for seq := lang.Seq(lang.AllNamespaces()); seq != nil; seq = seq.Next() {
+			name := seq.First().(*lang.Namespace).Name().Name()
+			if strings.HasPrefix(name, prefix) {
+				match = name + "/"
+				count++
+				if count > 1 {
+					return nil
+				}
+			}
+		}
+		if count == 1 {
+			result := make([]rune, len(line))
+			copy(result, line)
+			suffix := []rune(match[len(prefix):])
+			return append(result, suffix...)
+		}
+		return nil
+	}
+
 	// Bind Tab to menu-complete so all completions are shown in a menu
 	tabKey := inputrc.Unescape(`\C-i`)
 	for _, km := range rl.Config.Binds {
@@ -372,7 +468,16 @@ func completeSymbol(o options, line []rune, cursor int) readline.Completions {
 
 	comps := readline.CompleteRaw(candidates)
 	comps.PREFIX = prefix
-	return comps.NoSpace('/')
+
+	// Only suppress trailing space after '/' when namespace/alias
+	// candidates are present, so that symbol completions like
+	// zero? don't have their last character trimmed on space.
+	for _, c := range candidates {
+		if strings.HasSuffix(c.Value, "/") {
+			return comps.NoSpace('/')
+		}
+	}
+	return comps
 }
 
 // completeQualified completes symbols within a specific namespace or alias.
