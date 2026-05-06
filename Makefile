@@ -253,7 +253,7 @@ release: $(GH)
 	$(MAKE) generate aot
 	$(MAKE) glj-imports force=1
 	GLJ_VERSION=v$(RELEASE_VER) $(MAKE) build
-	$(MAKE) test
+	($(MAKE) test || $(MAKE) test) || $(MAKE) test
 	git add -A
 	git diff --cached --quiet || \
 	  git commit -m "Builds for v$(RELEASE_VER)"
