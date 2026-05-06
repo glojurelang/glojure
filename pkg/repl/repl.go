@@ -175,7 +175,7 @@ func Start(opts ...Option) {
 
 	// Ctrl-Z: suspend the process (like a normal shell).
 	fd := int(os.Stdin.Fd())
-	cookedState, _ := unix.IoctlGetTermios(fd, unix.TCGETS)
+	cookedState, _ := unix.IoctlGetTermios(fd, ioctlGetTermios)
 	rl.Keymap.Register(map[string]func(){
 		"smart-backspace": func() {
 			pos := rl.Cursor().Pos()
@@ -190,8 +190,8 @@ func Start(opts ...Option) {
 			}
 		},
 		"suspend": func() {
-			rawState, _ := unix.IoctlGetTermios(fd, unix.TCGETS)
-			unix.IoctlSetTermios(fd, unix.TCSETS, cookedState)
+			rawState, _ := unix.IoctlGetTermios(fd, ioctlGetTermios)
+			unix.IoctlSetTermios(fd, ioctlSetTermios, cookedState)
 			fmt.Print("\r\n")
 			// Reset to default so the kernel handles SIGTSTP directly.
 			// Wait for SIGCONT to know when fg has resumed us.
@@ -202,7 +202,7 @@ func Start(opts ...Option) {
 			<-contCh
 			signal.Stop(contCh)
 			// Restore raw mode and redisplay prompt
-			unix.IoctlSetTermios(fd, unix.TCSETS, rawState)
+			unix.IoctlSetTermios(fd, ioctlSetTermios, rawState)
 			fmt.Print(defaultPrompt())
 		},
 	})
