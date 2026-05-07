@@ -105,6 +105,9 @@ GO-PLATFORMS := \
 	netbsd_arm64 \
 	netbsd_amd64 \
 	dragonfly_amd64 \
+	plan9_amd64 \
+	plan9_386 \
+	plan9_arm \
 	js_wasm \
 	wasip1_wasm \
 	$(EXTRA-GO-PLATFORMS)

@@ -8,15 +8,11 @@ import (
 	"io"
 	"os"
 	"os/exec"
-	"os/signal"
 	"path/filepath"
 	"runtime/debug"
 	"runtime/pprof"
 	"strings"
-	"syscall"
 	"time"
-
-	"golang.org/x/sys/unix"
 
 	"github.com/reeflective/readline"
 	"github.com/reeflective/readline/inputrc"
@@ -175,8 +171,7 @@ func Start(opts ...Option) {
 	}
 
 	// Ctrl-Z: suspend the process (like a normal shell).
-	fd := int(os.Stdin.Fd())
-	cookedState, _ := unix.IoctlGetTermios(fd, ioctlGetTermios)
+	ts := saveTermState()
 	hintActive := false
 	printText := ""
 	formatCmd := os.Getenv("GLJ_REPL_FORMATTER")
@@ -359,20 +354,7 @@ func Start(opts ...Option) {
 			}
 		},
 		"suspend": func() {
-			rawState, _ := unix.IoctlGetTermios(fd, ioctlGetTermios)
-			unix.IoctlSetTermios(fd, ioctlSetTermios, cookedState)
-			fmt.Print("\r\n")
-			// Reset to default so the kernel handles SIGTSTP directly.
-			// Wait for SIGCONT to know when fg has resumed us.
-			contCh := make(chan os.Signal, 1)
-			signal.Notify(contCh, syscall.SIGCONT)
-			signal.Reset(syscall.SIGTSTP)
-			syscall.Kill(syscall.Getpid(), syscall.SIGTSTP)
-			<-contCh
-			signal.Stop(contCh)
-			// Restore raw mode and redisplay prompt
-			unix.IoctlSetTermios(fd, ioctlSetTermios, rawState)
-			fmt.Print(defaultPrompt())
+			suspendProcess(ts, defaultPrompt)
 		},
 	})
 	backspace := inputrc.Unescape(`\C-?`)
@@ -587,9 +569,8 @@ func evalWithInterrupt(o options, val interface{}) (string, error) {
 	// storage, so without this *ns* would revert to clojure.core.
 	bindings := lang.GetThreadBindings()
 
-	sigCh := make(chan os.Signal, 1)
-	signal.Notify(sigCh, syscall.SIGINT)
-	defer signal.Stop(sigCh)
+	sigCh, stopSig := notifyInterrupt()
+	defer stopSig()
 
 	resCh := make(chan result, 1)
 	go func() {
