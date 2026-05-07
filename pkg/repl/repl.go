@@ -176,16 +176,16 @@ func Start(opts ...Option) {
 	// Ctrl-Z: suspend the process (like a normal shell).
 	fd := int(os.Stdin.Fd())
 	cookedState, _ := unix.IoctlGetTermios(fd, ioctlGetTermios)
-	docHintActive := false
+	hintActive := false
 
 	// Wrap vi-movement-mode: if doc hint is showing, just clear it
 	// and stay in insert mode instead of switching to normal mode.
 	origViMovementMode := rl.Keymap.Commands()["vi-movement-mode"]
 	rl.Keymap.Register(map[string]func(){
 		"vi-movement-mode": func() {
-			if docHintActive {
+			if hintActive {
 				rl.Hint.Reset()
-				docHintActive = false
+				hintActive = false
 				return
 			}
 			origViMovementMode()
@@ -279,7 +279,24 @@ func Start(opts ...Option) {
 				}
 			}
 			rl.Hint.SetTemporary(buf.String())
-			docHintActive = true
+			hintActive = true
+		},
+		"show-help": func() {
+			help := colorBoldYellow + "Key Bindings" + colorReset + "\r\n" +
+				"  " + colorCyan + "Ctrl+D" + colorReset + "    Show documentation for symbol under cursor\r\n" +
+				"  " + colorCyan + "Ctrl+H" + colorReset + "    Show this help\r\n" +
+				"  " + colorCyan + "Tab" + colorReset + "       Complete symbol or insert 2-space indent\r\n" +
+				"  " + colorCyan + "Ctrl+R" + colorReset + "    Reverse history search\r\n" +
+				"  " + colorCyan + "Ctrl+Z" + colorReset + "    Suspend (resume with fg)\r\n" +
+				"  " + colorCyan + "Ctrl+C" + colorReset + "    Cancel input; press twice to exit\r\n" +
+				"  " + colorCyan + "Ctrl+D" + colorReset + "    Exit (on empty prompt)\r\n" +
+				"  " + colorCyan + "Escape" + colorReset + "    Vi normal mode; dismiss hint\r\n" +
+				colorBoldYellow + "Commands" + colorReset + "\r\n" +
+				"  " + colorGreen + "(doc fn)" + colorReset + "       Show full documentation\r\n" +
+				"  " + colorGreen + "(source fn)" + colorReset + "    Show source code\r\n" +
+				"  " + colorGreen + ":repl/exit" + colorReset + "     Exit the REPL"
+			rl.Hint.SetTemporary(help)
+			hintActive = true
 		},
 		"smart-backspace": func() {
 			pos := rl.Cursor().Pos()
@@ -318,11 +335,13 @@ func Start(opts ...Option) {
 	for _, km := range rl.Config.Binds {
 		km[ctrlZ] = inputrc.Bind{Action: "suspend"}
 	}
-	// Bind C-d to show-doc in all vi keymaps
+	// Bind C-d to show-doc and C-h to show-help in all vi keymaps
 	ctrlD := inputrc.Unescape(`\C-d`)
+	ctrlH := inputrc.Unescape(`\C-h`)
 	for _, viKm := range []string{"vi", "vi-move", "vi-command", "vi-insert"} {
 		if km := rl.Config.Binds[viKm]; km != nil {
 			km[ctrlD] = inputrc.Bind{Action: "show-doc"}
+			km[ctrlH] = inputrc.Bind{Action: "show-help"}
 		}
 	}
 
