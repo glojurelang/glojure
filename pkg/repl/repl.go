@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"os/signal"
 	"path/filepath"
 	"runtime/debug"
@@ -178,6 +179,20 @@ func Start(opts ...Option) {
 	cookedState, _ := unix.IoctlGetTermios(fd, ioctlGetTermios)
 	hintActive := false
 	printText := ""
+	formatCmd := os.Getenv("GLJ_REPL_FORMATTER")
+	if formatCmd == "" {
+		formatCmd = "cat"
+	}
+
+	// Override editing mode from env var
+	if editor := os.Getenv("GLJ_REPL_EDITOR"); editor != "" {
+		switch editor {
+		case "vi":
+			rl.Keymap.SetMain("vi-insert")
+		case "emacs":
+			rl.Keymap.SetMain("emacs")
+		}
+	}
 
 	// Wrap vi-movement-mode: if doc hint is showing, just clear it
 	// and stay in insert mode instead of switching to normal mode.
@@ -294,23 +309,27 @@ func Start(opts ...Option) {
 			if isEmacs {
 				printKey = "C-x C-p"
 			}
-			help := colorBoldYellow + "Key Bindings" + colorReset + "\r\n" +
-				"  " + colorCyan + docKey + colorReset + strings.Repeat(" ", 10-len(docKey)) + "Show documentation for symbol under cursor\r\n" +
-				"  " + colorCyan + helpKey + colorReset + strings.Repeat(" ", 10-len(helpKey)) + "Show this help\r\n" +
-				"  " + colorCyan + printKey + colorReset + strings.Repeat(" ", 10-len(printKey)) + "Print current form (plain text)\r\n" +
-				"  " + colorCyan + "Tab" + colorReset + "       Complete symbol or insert 2-space indent\r\n" +
-				"  " + colorCyan + "C-r" + colorReset + "       Reverse history search\r\n" +
-				"  " + colorCyan + "C-z" + colorReset + "       Suspend (resume with fg)\r\n" +
-				"  " + colorCyan + "C-c" + colorReset + "       Cancel input; press twice to exit\r\n" +
-				"  " + colorCyan + "C-d" + colorReset + "       Exit (on empty prompt)\r\n"
+			help := colorBoldYellow + "Key Bindings" + colorReset + "\r\n"
 			if !isEmacs {
 				help += "  " + colorCyan + "Escape" + colorReset + "    Vi normal mode; dismiss hint\r\n"
 			}
+			help += "  " + colorCyan + "Tab" + colorReset + "       Complete symbol or insert 2-space indent\r\n" +
+				"  " + colorCyan + docKey + colorReset + strings.Repeat(" ", 10-len(docKey)) + "Show documentation for symbol under cursor\r\n" +
+				"  " + colorCyan + printKey + colorReset + strings.Repeat(" ", 10-len(printKey)) + "Format, print and clipboard\r\n" +
+				"  " + colorCyan + "C-r" + colorReset + "       Reverse history search\r\n" +
+				"  " + colorCyan + "C-z" + colorReset + "       Suspend (resume with fg)\r\n" +
+				"  " + colorCyan + "C-c" + colorReset + "       Cancel input; press twice to exit\r\n" +
+				"  " + colorCyan + "C-d" + colorReset + "       Exit (on empty prompt)\r\n" +
+				"  " + colorCyan + helpKey + colorReset + strings.Repeat(" ", 10-len(helpKey)) + "Show this help\r\n"
 			help += colorBoldYellow + "Commands" + colorReset + "\r\n" +
 				"  " + colorGreen + ":repl/help" + colorReset + "       Show this help\r\n" +
 				"  " + colorGreen + ":repl/vi" + colorReset + "         Switch to vi editing mode\r\n" +
 				"  " + colorGreen + ":repl/emacs" + colorReset + "      Switch to emacs editing mode\r\n" +
-				"  " + colorGreen + ":repl/exit" + colorReset + "       Exit the REPL"
+				"  " + colorGreen + ":repl/fmt cmd" + colorReset + "    Set format command (for C-p)\r\n" +
+				"  " + colorGreen + ":repl/exit" + colorReset + "       Exit the REPL\r\n" +
+				colorBoldYellow + "Current Settings" + colorReset + "\r\n" +
+				"  " + colorCyan + "Editor" + colorReset + "    " + func() string { if isEmacs { return "emacs" }; return "vi" }() + " mode\r\n" +
+				"  " + colorCyan + "Format" + colorReset + "    " + formatCmd
 			rl.Hint.SetTemporary(help)
 			hintActive = true
 		},
@@ -319,12 +338,13 @@ func Start(opts ...Option) {
 			if line == nil || line.Len() == 0 {
 				return
 			}
-			printText = strings.TrimRight(string(*line), " \t\n")
-			// Accept the line (saves to history), then signal the
-			// REPL loop via ErrInterrupt to print instead of eval.
+			raw := strings.TrimRight(string(*line), " \t\n")
+			printText = runFormat(formatCmd, raw)
+			copyToClipboard(printText)
+			// Replace buffer with formatted text so history saves it.
 			rl.Display.AcceptLine()
-			rl.History.Write(false)
-			rl.History.Accept(false, false, readline.ErrInterrupt)
+			line.Set([]rune(printText)...)
+			rl.History.Accept(false, false, nil)
 		},
 		"smart-backspace": func() {
 			pos := rl.Cursor().Pos()
@@ -439,13 +459,6 @@ func Start(opts ...Option) {
 		line, err := rl.Readline()
 		if err != nil {
 			if errors.Is(err, readline.ErrInterrupt) {
-				// show-print stashes text then triggers abort
-				if printText != "" {
-					fmt.Fprintln(o.stdout, printText)
-					printText = ""
-					ctrlCPressed = false
-					continue
-				}
 				if line != "" {
 					// Was editing: just cancel the input
 					ctrlCPressed = false
@@ -470,6 +483,13 @@ func Start(opts ...Option) {
 			rl.Keymap.SetMain("vi-insert")
 		}
 
+		// show-print: print formatted text instead of evaluating
+		if printText != "" {
+			fmt.Fprintln(o.stdout, printText)
+			printText = ""
+			continue
+		}
+
 		if strings.TrimSpace(line) == "" {
 			continue
 		}
@@ -488,6 +508,17 @@ func Start(opts ...Option) {
 			fmt.Fprintln(o.stdout, "Switched to emacs mode")
 			continue
 		}
+		if trimmed == ":repl/fmt" || strings.HasPrefix(trimmed, ":repl/fmt ") {
+			arg := strings.TrimPrefix(trimmed, ":repl/fmt")
+			arg = strings.TrimSpace(arg)
+			if arg == "" {
+				fmt.Fprintf(o.stdout, "Format command: %s\n", formatCmd)
+			} else {
+				formatCmd = arg
+				fmt.Fprintf(o.stdout, "Format command set to: %s\n", formatCmd)
+			}
+			continue
+		}
 		if trimmed == ":repl/help" {
 			isEmacs := strings.HasPrefix(string(rl.Keymap.Main()), "emacs")
 			docKey := "C-d"
@@ -499,21 +530,22 @@ func Start(opts ...Option) {
 				printKey = "C-x C-p"
 			}
 			fmt.Fprintln(o.stdout, "Key Bindings")
-			fmt.Fprintf(o.stdout, "  %-10sShow documentation for symbol under cursor\n", docKey)
-			fmt.Fprintf(o.stdout, "  %-10sShow this help\n", helpKey)
-			fmt.Fprintf(o.stdout, "  %-10sPrint current form (plain text)\n", printKey)
+			if !isEmacs {
+				fmt.Fprintln(o.stdout, "  Escape    Vi normal mode; dismiss hint")
+			}
 			fmt.Fprintln(o.stdout, "  Tab       Complete symbol or insert 2-space indent")
+			fmt.Fprintf(o.stdout, "  %-10sShow documentation for symbol under cursor\n", docKey)
+			fmt.Fprintf(o.stdout, "  %-10sFormat, print and clipboard\n", printKey)
 			fmt.Fprintln(o.stdout, "  C-r       Reverse history search")
 			fmt.Fprintln(o.stdout, "  C-z       Suspend (resume with fg)")
 			fmt.Fprintln(o.stdout, "  C-c       Cancel input; press twice to exit")
 			fmt.Fprintln(o.stdout, "  C-d       Exit (on empty prompt)")
-			if !isEmacs {
-				fmt.Fprintln(o.stdout, "  Escape    Vi normal mode; dismiss hint")
-			}
+			fmt.Fprintf(o.stdout, "  %-10sShow this help\n", helpKey)
 			fmt.Fprintln(o.stdout, "Commands")
 			fmt.Fprintln(o.stdout, "  :repl/help       Show this help")
 			fmt.Fprintln(o.stdout, "  :repl/vi         Switch to vi editing mode")
 			fmt.Fprintln(o.stdout, "  :repl/emacs      Switch to emacs editing mode")
+			fmt.Fprintln(o.stdout, "  :repl/fmt cmd     Set format command (for C-p)")
 			fmt.Fprintln(o.stdout, "  :repl/exit       Exit the REPL")
 			continue
 		}
@@ -757,6 +789,39 @@ func highlightSyntax(line []rune, env lang.Environment) string {
 
 // isNumber returns true if the token looks like a Clojure number
 // (integer, float, ratio, hex, octal, radix, or bigint/bigdec).
+func copyToClipboard(text string) {
+	// Try clipboard commands in order of preference.
+	for _, name := range []string{"xclip", "xsel", "wl-copy", "pbcopy"} {
+		path, err := exec.LookPath(name)
+		if err != nil {
+			continue
+		}
+		var cmd *exec.Cmd
+		switch name {
+		case "xclip":
+			cmd = exec.Command(path, "-selection", "clipboard")
+		case "xsel":
+			cmd = exec.Command(path, "--clipboard", "--input")
+		default:
+			cmd = exec.Command(path)
+		}
+		cmd.Stdin = strings.NewReader(text)
+		if cmd.Run() == nil {
+			return
+		}
+	}
+}
+
+func runFormat(cmdStr, text string) string {
+	cmd := exec.Command("sh", "-c", cmdStr)
+	cmd.Stdin = strings.NewReader(text)
+	out, err := cmd.Output()
+	if err != nil {
+		return text
+	}
+	return strings.TrimRight(string(out), "\n")
+}
+
 func isNumber(s string) bool {
 	if len(s) == 0 {
 		return false
@@ -823,7 +888,7 @@ func completeSymbol(o options, line []rune, cursor int) readline.Completions {
 
 	// REPL command completion: :repl/...
 	if strings.HasPrefix(prefix, ":repl/") {
-		replCmds := []string{":repl/exit", ":repl/help", ":repl/vi", ":repl/emacs"}
+		replCmds := []string{":repl/exit", ":repl/fmt", ":repl/help", ":repl/vi", ":repl/emacs"}
 		var candidates []readline.Completion
 		for _, cmd := range replCmds {
 			if strings.HasPrefix(cmd, prefix) {
