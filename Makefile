@@ -94,7 +94,6 @@ GO-PLATFORMS := \
 	linux_s390x \
 	linux_386 \
 	windows_arm64 \
-	windows_arm \
 	windows_amd64 \
 	windows_386 \
 	freebsd_arm64 \
@@ -112,6 +111,7 @@ GO-PLATFORMS := \
 	wasip1_wasm \
 	$(EXTRA-GO-PLATFORMS)
 
+# Disabled: windows_arm (Go 1.26 internal/runtime/syscall/windows cross-compilation issue)
 # Disabled: solaris_amd64 (syscall.Syscall6 cross-compilation issue)
 # Disabled: illumos_amd64 (syscall.Syscall6 cross-compilation issue)
 
@@ -240,6 +240,14 @@ release-dist:
 	mkdir -p dist
 	$(foreach p,$(RELEASE-PLATFORMS), \
 	  tar -czf dist/glj-$(RELEASE_VER)-$(p).tar.gz -C bin/$(p) glj ;)
+ifdef RELEASE-PLAN9-AMD64
+	@echo "Building Plan 9/amd64 binary (Go 1.24 + nospinbitmutex)"
+	mkdir -p bin/plan9_amd64
+	CGO_ENABLED=0 GOOS=plan9 GOARCH=amd64 \
+	  GOTOOLCHAIN=go1.24.0 GOEXPERIMENT=nospinbitmutex \
+	  go build -o bin/plan9_amd64/glj ./cmd/glj
+	tar -czf dist/glj-$(RELEASE_VER)-plan9_amd64.tar.gz -C bin/plan9_amd64 glj
+endif
 
 remote ?= origin
 git-push:
