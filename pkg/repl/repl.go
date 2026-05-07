@@ -177,6 +177,7 @@ func Start(opts ...Option) {
 	fd := int(os.Stdin.Fd())
 	cookedState, _ := unix.IoctlGetTermios(fd, ioctlGetTermios)
 	hintActive := false
+	printText := ""
 
 	// Wrap vi-movement-mode: if doc hint is showing, just clear it
 	// and stay in insert mode instead of switching to normal mode.
@@ -289,9 +290,14 @@ func Start(opts ...Option) {
 				docKey = "C-x C-d"
 				helpKey = "C-x C-h"
 			}
+			printKey := "C-p"
+			if isEmacs {
+				printKey = "C-x C-p"
+			}
 			help := colorBoldYellow + "Key Bindings" + colorReset + "\r\n" +
 				"  " + colorCyan + docKey + colorReset + strings.Repeat(" ", 10-len(docKey)) + "Show documentation for symbol under cursor\r\n" +
 				"  " + colorCyan + helpKey + colorReset + strings.Repeat(" ", 10-len(helpKey)) + "Show this help\r\n" +
+				"  " + colorCyan + printKey + colorReset + strings.Repeat(" ", 10-len(printKey)) + "Print current form (plain text)\r\n" +
 				"  " + colorCyan + "Tab" + colorReset + "       Complete symbol or insert 2-space indent\r\n" +
 				"  " + colorCyan + "C-r" + colorReset + "       Reverse history search\r\n" +
 				"  " + colorCyan + "C-z" + colorReset + "       Suspend (resume with fg)\r\n" +
@@ -307,6 +313,18 @@ func Start(opts ...Option) {
 				"  " + colorGreen + ":repl/exit" + colorReset + "       Exit the REPL"
 			rl.Hint.SetTemporary(help)
 			hintActive = true
+		},
+		"show-print": func() {
+			line := rl.Line()
+			if line == nil || line.Len() == 0 {
+				return
+			}
+			printText = strings.TrimRight(string(*line), " \t\n")
+			// Accept the line (saves to history), then signal the
+			// REPL loop via ErrInterrupt to print instead of eval.
+			rl.Display.AcceptLine()
+			rl.History.Write(false)
+			rl.History.Accept(false, false, readline.ErrInterrupt)
 		},
 		"smart-backspace": func() {
 			pos := rl.Cursor().Pos()
@@ -345,22 +363,26 @@ func Start(opts ...Option) {
 	for _, km := range rl.Config.Binds {
 		km[ctrlZ] = inputrc.Bind{Action: "suspend"}
 	}
-	// Bind C-d to show-doc and C-h to show-help in all vi keymaps
+	// Bind C-d, C-h, C-p in all vi keymaps
 	ctrlD := inputrc.Unescape(`\C-d`)
 	ctrlH := inputrc.Unescape(`\C-h`)
+	ctrlP := inputrc.Unescape(`\C-p`)
 	for _, viKm := range []string{"vi", "vi-move", "vi-command", "vi-insert"} {
 		if km := rl.Config.Binds[viKm]; km != nil {
 			km[ctrlD] = inputrc.Bind{Action: "show-doc"}
 			km[ctrlH] = inputrc.Bind{Action: "show-help"}
+			km[ctrlP] = inputrc.Bind{Action: "show-print"}
 		}
 	}
-	// Bind C-x C-d and C-x C-h in emacs mode (multi-key sequences
-	// in the main emacs keymap, matching how readline handles C-x prefix)
+	// Bind C-x C-d, C-x C-h, C-x C-p in emacs mode (multi-key
+	// sequences in the main emacs keymap)
 	if km := rl.Config.Binds["emacs"]; km != nil {
 		cxcd := inputrc.Unescape(`\C-x\C-d`)
 		cxch := inputrc.Unescape(`\C-x\C-h`)
+		cxcp := inputrc.Unescape(`\C-x\C-p`)
 		km[cxcd] = inputrc.Bind{Action: "show-doc"}
 		km[cxch] = inputrc.Bind{Action: "show-help"}
+		km[cxcp] = inputrc.Bind{Action: "show-print"}
 	}
 
 	rl.Prompt.Primary(func() string {
@@ -417,6 +439,13 @@ func Start(opts ...Option) {
 		line, err := rl.Readline()
 		if err != nil {
 			if errors.Is(err, readline.ErrInterrupt) {
+				// show-print stashes text then triggers abort
+				if printText != "" {
+					fmt.Fprintln(o.stdout, printText)
+					printText = ""
+					ctrlCPressed = false
+					continue
+				}
 				if line != "" {
 					// Was editing: just cancel the input
 					ctrlCPressed = false
@@ -463,13 +492,16 @@ func Start(opts ...Option) {
 			isEmacs := strings.HasPrefix(string(rl.Keymap.Main()), "emacs")
 			docKey := "C-d"
 			helpKey := "C-h"
+			printKey := "C-p"
 			if isEmacs {
 				docKey = "C-x C-d"
 				helpKey = "C-x C-h"
+				printKey = "C-x C-p"
 			}
 			fmt.Fprintln(o.stdout, "Key Bindings")
 			fmt.Fprintf(o.stdout, "  %-10sShow documentation for symbol under cursor\n", docKey)
 			fmt.Fprintf(o.stdout, "  %-10sShow this help\n", helpKey)
+			fmt.Fprintf(o.stdout, "  %-10sPrint current form (plain text)\n", printKey)
 			fmt.Fprintln(o.stdout, "  Tab       Complete symbol or insert 2-space indent")
 			fmt.Fprintln(o.stdout, "  C-r       Reverse history search")
 			fmt.Fprintln(o.stdout, "  C-z       Suspend (resume with fg)")
