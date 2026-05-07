@@ -242,11 +242,15 @@ release-dist:
 	  tar -czf dist/glj-$(RELEASE_VER)-$(p).tar.gz -C bin/$(p) glj ;)
 ifdef RELEASE-PLAN9-AMD64
 	@echo "Building Plan 9/amd64 binary (Go 1.24 + nospinbitmutex)"
+	GOTOOLCHAIN=go1.24.0 \
+	  ./scripts/gen-gljimports.sh \
+	  pkg/gen/gljimports/gljimports_plan9_amd64.go plan9_amd64 go
 	mkdir -p bin/plan9_amd64
 	CGO_ENABLED=0 GOOS=plan9 GOARCH=amd64 \
 	  GOTOOLCHAIN=go1.24.0 GOEXPERIMENT=nospinbitmutex \
 	  go build -o bin/plan9_amd64/glj ./cmd/glj
 	tar -czf dist/glj-$(RELEASE_VER)-plan9_amd64.tar.gz -C bin/plan9_amd64 glj
+	git checkout pkg/gen/gljimports/gljimports_plan9_amd64.go
 endif
 
 remote ?= origin
