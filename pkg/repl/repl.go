@@ -554,6 +554,9 @@ func isNumber(s string) bool {
 }
 
 func printBanner(w io.Writer) {
+	if os.Getenv("GLJ_REPL_NO_BANNER") != "" {
+		return
+	}
 	fmt.Fprintf(w, "Glojure v%s\n", runtime.Version)
 	goVersion := strings.TrimPrefix(goruntime.Version(), "go")
 	fmt.Fprintf(w, "Go %s %s/%s\n", goVersion, goruntime.GOOS, goruntime.GOARCH)
