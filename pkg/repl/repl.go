@@ -282,19 +282,29 @@ func Start(opts ...Option) {
 			hintActive = true
 		},
 		"show-help": func() {
+			isEmacs := strings.HasPrefix(string(rl.Keymap.Main()), "emacs")
+			docKey := "C-d"
+			helpKey := "C-h"
+			if isEmacs {
+				docKey = "C-x C-d"
+				helpKey = "C-x C-h"
+			}
 			help := colorBoldYellow + "Key Bindings" + colorReset + "\r\n" +
-				"  " + colorCyan + "Ctrl+D" + colorReset + "    Show documentation for symbol under cursor\r\n" +
-				"  " + colorCyan + "Ctrl+H" + colorReset + "    Show this help\r\n" +
+				"  " + colorCyan + docKey + colorReset + strings.Repeat(" ", 10-len(docKey)) + "Show documentation for symbol under cursor\r\n" +
+				"  " + colorCyan + helpKey + colorReset + strings.Repeat(" ", 10-len(helpKey)) + "Show this help\r\n" +
 				"  " + colorCyan + "Tab" + colorReset + "       Complete symbol or insert 2-space indent\r\n" +
-				"  " + colorCyan + "Ctrl+R" + colorReset + "    Reverse history search\r\n" +
-				"  " + colorCyan + "Ctrl+Z" + colorReset + "    Suspend (resume with fg)\r\n" +
-				"  " + colorCyan + "Ctrl+C" + colorReset + "    Cancel input; press twice to exit\r\n" +
-				"  " + colorCyan + "Ctrl+D" + colorReset + "    Exit (on empty prompt)\r\n" +
-				"  " + colorCyan + "Escape" + colorReset + "    Vi normal mode; dismiss hint\r\n" +
-				colorBoldYellow + "Commands" + colorReset + "\r\n" +
-				"  " + colorGreen + "(doc fn)" + colorReset + "       Show full documentation\r\n" +
-				"  " + colorGreen + "(source fn)" + colorReset + "    Show source code\r\n" +
-				"  " + colorGreen + ":repl/exit" + colorReset + "     Exit the REPL"
+				"  " + colorCyan + "C-r" + colorReset + "       Reverse history search\r\n" +
+				"  " + colorCyan + "C-z" + colorReset + "       Suspend (resume with fg)\r\n" +
+				"  " + colorCyan + "C-c" + colorReset + "       Cancel input; press twice to exit\r\n" +
+				"  " + colorCyan + "C-d" + colorReset + "       Exit (on empty prompt)\r\n"
+			if !isEmacs {
+				help += "  " + colorCyan + "Escape" + colorReset + "    Vi normal mode; dismiss hint\r\n"
+			}
+			help += colorBoldYellow + "Commands" + colorReset + "\r\n" +
+				"  " + colorGreen + ":repl/help" + colorReset + "       Show this help\r\n" +
+				"  " + colorGreen + ":repl/vi" + colorReset + "         Switch to vi editing mode\r\n" +
+				"  " + colorGreen + ":repl/emacs" + colorReset + "      Switch to emacs editing mode\r\n" +
+				"  " + colorGreen + ":repl/exit" + colorReset + "       Exit the REPL"
 			rl.Hint.SetTemporary(help)
 			hintActive = true
 		},
@@ -343,6 +353,14 @@ func Start(opts ...Option) {
 			km[ctrlD] = inputrc.Bind{Action: "show-doc"}
 			km[ctrlH] = inputrc.Bind{Action: "show-help"}
 		}
+	}
+	// Bind C-x C-d and C-x C-h in emacs mode (multi-key sequences
+	// in the main emacs keymap, matching how readline handles C-x prefix)
+	if km := rl.Config.Binds["emacs"]; km != nil {
+		cxcd := inputrc.Unescape(`\C-x\C-d`)
+		cxch := inputrc.Unescape(`\C-x\C-h`)
+		km[cxcd] = inputrc.Bind{Action: "show-doc"}
+		km[cxch] = inputrc.Bind{Action: "show-help"}
 	}
 
 	rl.Prompt.Primary(func() string {
@@ -418,15 +436,54 @@ func Start(opts ...Option) {
 
 		ctrlCPressed = false
 
-		// Switch back to vi insert mode after submitting
-		rl.Keymap.SetMain("vi-insert")
+		// Switch back to vi insert mode after submitting (only if in a vi mode)
+		if m := string(rl.Keymap.Main()); m == "vi-command" || m == "vi-move" || m == "vi" {
+			rl.Keymap.SetMain("vi-insert")
+		}
 
 		if strings.TrimSpace(line) == "" {
 			continue
 		}
 
-		if strings.TrimSpace(line) == ":repl/exit" {
+		trimmed := strings.TrimSpace(line)
+		if trimmed == ":repl/exit" {
 			return
+		}
+		if trimmed == ":repl/vi" {
+			rl.Keymap.SetMain("vi-insert")
+			fmt.Fprintln(o.stdout, "Switched to vi mode")
+			continue
+		}
+		if trimmed == ":repl/emacs" {
+			rl.Keymap.SetMain("emacs")
+			fmt.Fprintln(o.stdout, "Switched to emacs mode")
+			continue
+		}
+		if trimmed == ":repl/help" {
+			isEmacs := strings.HasPrefix(string(rl.Keymap.Main()), "emacs")
+			docKey := "C-d"
+			helpKey := "C-h"
+			if isEmacs {
+				docKey = "C-x C-d"
+				helpKey = "C-x C-h"
+			}
+			fmt.Fprintln(o.stdout, "Key Bindings")
+			fmt.Fprintf(o.stdout, "  %-10sShow documentation for symbol under cursor\n", docKey)
+			fmt.Fprintf(o.stdout, "  %-10sShow this help\n", helpKey)
+			fmt.Fprintln(o.stdout, "  Tab       Complete symbol or insert 2-space indent")
+			fmt.Fprintln(o.stdout, "  C-r       Reverse history search")
+			fmt.Fprintln(o.stdout, "  C-z       Suspend (resume with fg)")
+			fmt.Fprintln(o.stdout, "  C-c       Cancel input; press twice to exit")
+			fmt.Fprintln(o.stdout, "  C-d       Exit (on empty prompt)")
+			if !isEmacs {
+				fmt.Fprintln(o.stdout, "  Escape    Vi normal mode; dismiss hint")
+			}
+			fmt.Fprintln(o.stdout, "Commands")
+			fmt.Fprintln(o.stdout, "  :repl/help       Show this help")
+			fmt.Fprintln(o.stdout, "  :repl/vi         Switch to vi editing mode")
+			fmt.Fprintln(o.stdout, "  :repl/emacs      Switch to emacs editing mode")
+			fmt.Fprintln(o.stdout, "  :repl/exit       Exit the REPL")
+			continue
 		}
 
 		rdr := reader.New(strings.NewReader(line), reader.WithFilename("repl"), reader.WithGetCurrentNS(func() *lang.Namespace {
@@ -732,10 +789,36 @@ func completeSymbol(o options, line []rune, cursor int) readline.Completions {
 		return readline.Completions{}
 	}
 
+	// REPL command completion: :repl/...
+	if strings.HasPrefix(prefix, ":repl/") {
+		replCmds := []string{":repl/exit", ":repl/help", ":repl/vi", ":repl/emacs"}
+		var candidates []readline.Completion
+		for _, cmd := range replCmds {
+			if strings.HasPrefix(cmd, prefix) {
+				candidates = append(candidates, readline.Completion{
+					Value:       cmd,
+					Display:     cmd,
+					Description: "repl",
+				})
+			}
+		}
+		comps := readline.CompleteRaw(candidates)
+		comps.PREFIX = prefix
+		return comps
+	}
+
 	// Keyword completion: prefix starts with ':'
 	if strings.HasPrefix(prefix, ":") {
 		kwPrefix := prefix[1:] // strip leading ':'
 		var candidates []readline.Completion
+		// Include :repl/ as a completion candidate
+		if strings.HasPrefix("repl/", kwPrefix) {
+			candidates = append(candidates, readline.Completion{
+				Value:       ":repl/",
+				Display:     ":repl/",
+				Description: "repl",
+			})
+		}
 		for _, kw := range lang.AllKeywords() {
 			if strings.HasPrefix(kw, kwPrefix) {
 				candidates = append(candidates, readline.Completion{
