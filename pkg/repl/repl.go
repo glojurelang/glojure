@@ -176,7 +176,111 @@ func Start(opts ...Option) {
 	// Ctrl-Z: suspend the process (like a normal shell).
 	fd := int(os.Stdin.Fd())
 	cookedState, _ := unix.IoctlGetTermios(fd, ioctlGetTermios)
+	docHintActive := false
+
+	// Wrap vi-movement-mode: if doc hint is showing, just clear it
+	// and stay in insert mode instead of switching to normal mode.
+	origViMovementMode := rl.Keymap.Commands()["vi-movement-mode"]
 	rl.Keymap.Register(map[string]func(){
+		"vi-movement-mode": func() {
+			if docHintActive {
+				rl.Hint.Reset()
+				docHintActive = false
+				return
+			}
+			origViMovementMode()
+		},
+		"show-doc": func() {
+			defer func() { recover() }()
+			line := *rl.Line()
+			pos := rl.Cursor().Pos()
+			// On empty line, fall back to vi-eof-maybe (exit)
+			if len(line) == 0 {
+				if cmd := rl.Keymap.Commands()["vi-eof-maybe"]; cmd != nil {
+					cmd()
+				}
+				return
+			}
+			// Clamp pos to valid range
+			if pos >= len(line) {
+				pos = len(line) - 1
+			}
+			// Find symbol boundaries around cursor
+			start, end := pos, pos
+			for start > 0 && isSymbolChar(line[start-1]) {
+				start--
+			}
+			for end < len(line) && isSymbolChar(line[end]) {
+				end++
+			}
+			if start == end {
+				return
+			}
+			sym := string(line[start:end])
+			// Skip numbers and other non-symbol tokens
+			if isNumber(sym) || sym == "" {
+				return
+			}
+			// Resolve the symbol to a var
+			ns := o.env.CurrentNamespace()
+			var v *lang.Var
+			if i := strings.IndexByte(sym, '/'); i >= 0 {
+				nsName := sym[:i]
+				symName := sym[i+1:]
+				aliasSym := lang.NewSymbol(nsName)
+				targetNS := ns.LookupAlias(aliasSym)
+				if targetNS == nil {
+					targetNS = lang.FindNamespace(lang.NewSymbol(nsName))
+				}
+				if targetNS != nil {
+					v, _ = targetNS.Mappings().ValAt(lang.NewSymbol(symName)).(*lang.Var)
+				}
+			} else {
+				v, _ = ns.Mappings().ValAt(lang.NewSymbol(sym)).(*lang.Var)
+			}
+			if v == nil {
+				return
+			}
+			meta := v.Meta()
+			if meta == nil {
+				return
+			}
+			qualName := v.Namespace().Name().String() + "/" + v.Symbol().Name()
+			var buf strings.Builder
+			// ClojureDocs URL
+			nsName := v.Namespace().Name().String()
+			if strings.HasPrefix(nsName, "clojure.") {
+				symName := v.Symbol().Name()
+				urlName := strings.ReplaceAll(symName, "?", "_q")
+				urlName = strings.ReplaceAll(urlName, "!", "_e")
+				urlName = strings.ReplaceAll(urlName, "*", "_star")
+				buf.WriteString(colorCyan)
+				buf.WriteString("https://clojuredocs.org/clojure.core/" + urlName)
+				buf.WriteString(colorReset)
+				buf.WriteString("\r\n")
+			}
+			// Qualified name
+			buf.WriteString(colorBoldYellow)
+			buf.WriteString(qualName)
+			buf.WriteString(colorReset)
+			buf.WriteString("\r\n")
+			// Arglists
+			if arglists := meta.ValAt(lang.KWArglists); arglists != nil {
+				buf.WriteString(colorGreen)
+				buf.WriteString(lang.PrintString(arglists))
+				buf.WriteString(colorReset)
+				buf.WriteString("\r\n")
+			}
+			// Docstring
+			if doc := meta.ValAt(lang.KWDoc); doc != nil {
+				if docStr, ok := doc.(string); ok && docStr != "" {
+					buf.WriteString("  ")
+					buf.WriteString(strings.ReplaceAll(docStr, "\n", "\r\n  "))
+				}
+			}
+			rl.Hint.SetTemporary(buf.String())
+			docHintActive = true
+		},
 		"smart-backspace": func() {
 			pos := rl.Cursor().Pos()
 			line := rl.Line()
@@ -214,6 +318,13 @@ func Start(opts ...Option) {
 	for _, km := range rl.Config.Binds {
 		km[ctrlZ] = inputrc.Bind{Action: "suspend"}
 	}
+	// Bind C-d to show-doc in all vi keymaps
+	ctrlD := inputrc.Unescape(`\C-d`)
+	for _, viKm := range []string{"vi", "vi-move", "vi-command", "vi-insert"} {
+		if km := rl.Config.Binds[viKm]; km != nil {
+			km[ctrlD] = inputrc.Bind{Action: "show-doc"}
+		}
+	}
 
 	rl.Prompt.Primary(func() string {
 		return defaultPrompt()
@@ -231,8 +342,10 @@ func Start(opts ...Option) {
 			return true
 		}
 
-		// Cursor not at end: always insert a newline
-		if rl.Cursor().Pos() < rl.Line().Len() {
+		// Cursor not at end: insert a newline (unless in vi command mode,
+		// where Enter should always submit)
+		viCmd := string(rl.Keymap.Main()) == "vi-command"
+		if !viCmd && rl.Cursor().Pos() < rl.Line().Len() {
 			return false
 		}
 
@@ -285,6 +398,9 @@ func Start(opts ...Option) {
 		}
 
 		ctrlCPressed = false
+
+		// Switch back to vi insert mode after submitting
+		rl.Keymap.SetMain("vi-insert")
 
 		if strings.TrimSpace(line) == "" {
 			continue
