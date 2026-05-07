@@ -4,8 +4,8 @@ $(shell [ -d '$M' ] || git clone -q $R '$M')
 
 include $M/init.mk
 
-GO-VERSION ?= 1.24.0
-CLOJURE-VERSION ?= 1.12.1
+GO-VERSION ?= 1.26.2
+CLOJURE-VERSION ?= 1.12.4
 
 include $M/go.mk
 include $M/gh.mk
