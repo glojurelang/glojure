@@ -56,7 +56,7 @@ func printBanner(w io.Writer) {
 	}
 	goVersion := strings.TrimPrefix(goruntime.Version(), "go")
 	if noBanner == "" {
-		fmt.Fprintf(w, " Glojure: v%s\n", runtime.Version)
+		fmt.Fprintf(w, " Glojure: %s\n", runtime.Version)
 	}
 	fmt.Fprintf(w, "      Go: %s %s/%s\n", goVersion, goruntime.GOOS, goruntime.GOARCH)
 	fmt.Fprintf(w, "    Help: C-h or :repl/help\n")
@@ -109,13 +109,54 @@ func handleReplCommand(trimmed string, o *options) (handled, exit bool) {
 	if trimmed == ":repl/exit" {
 		return true, true
 	}
-	if trimmed == ":repl/help" {
-		fmt.Fprintln(o.stdout, "Commands")
-		fmt.Fprintln(o.stdout, "  :repl/help       Show this help")
-		fmt.Fprintln(o.stdout, "  :repl/exit       Exit the REPL")
-		return true, false
-	}
 	return false, false
+}
+
+// helpColors holds ANSI color codes for help output.
+// CLI sets these to real ANSI codes; WASM leaves them empty.
+type helpColors struct {
+	BoldYellow string
+	Cyan       string
+	Green      string
+	Reset      string
+}
+
+// noColors is used by WASM (no ANSI support).
+var noColors = helpColors{}
+
+// printHelp prints the REPL help text. editorMode is "vi" or "emacs",
+// formatCmd is the current format command (e.g. "cat").
+func printHelp(w io.Writer, editorMode, formatCmd string, c helpColors) {
+	isEmacs := editorMode == "emacs"
+	docKey := "C-d"
+	helpKey := "C-h"
+	printKey := "C-p"
+	if isEmacs {
+		docKey = "C-x C-d"
+		helpKey = "C-x C-h"
+		printKey = "C-x C-p"
+	}
+	fmt.Fprintf(w, "%sKey Bindings%s\n", c.BoldYellow, c.Reset)
+	if !isEmacs {
+		fmt.Fprintf(w, "  %sEscape%s    Vi normal mode; dismiss hint\n", c.Cyan, c.Reset)
+	}
+	fmt.Fprintf(w, "  %sTab%s       Complete symbol or insert 2-space indent\n", c.Cyan, c.Reset)
+	fmt.Fprintf(w, "  %s%-10s%sShow documentation for symbol under cursor\n", c.Cyan, docKey, c.Reset)
+	fmt.Fprintf(w, "  %s%-10s%sFormat, print and clipboard\n", c.Cyan, printKey, c.Reset)
+	fmt.Fprintf(w, "  %sC-r%s       Reverse history search\n", c.Cyan, c.Reset)
+	fmt.Fprintf(w, "  %sC-z%s       Suspend (resume with fg)\n", c.Cyan, c.Reset)
+	fmt.Fprintf(w, "  %sC-c%s       Cancel input; press twice to exit\n", c.Cyan, c.Reset)
+	fmt.Fprintf(w, "  %sC-d%s       Exit (on empty prompt)\n", c.Cyan, c.Reset)
+	fmt.Fprintf(w, "  %s%-10s%sShow this help\n", c.Cyan, helpKey, c.Reset)
+	fmt.Fprintf(w, "%sCommands%s\n", c.BoldYellow, c.Reset)
+	fmt.Fprintf(w, "  %s:repl/help%s       Show this help\n", c.Green, c.Reset)
+	fmt.Fprintf(w, "  %s:repl/vi%s         Switch to vi editing mode\n", c.Green, c.Reset)
+	fmt.Fprintf(w, "  %s:repl/emacs%s      Switch to emacs editing mode\n", c.Green, c.Reset)
+	fmt.Fprintf(w, "  %s:repl/fmt cmd%s    Set format command (for C-p)\n", c.Green, c.Reset)
+	fmt.Fprintf(w, "  %s:repl/exit%s       Exit the REPL\n", c.Green, c.Reset)
+	fmt.Fprintf(w, "%sCurrent Settings%s\n", c.BoldYellow, c.Reset)
+	fmt.Fprintf(w, "  %sEditor%s    %s mode\n", c.Cyan, c.Reset, editorMode)
+	fmt.Fprintf(w, "  %sFormat%s    %s\n", c.Cyan, c.Reset, formatCmd)
 }
 
 // readEvalPrint reads all forms from input, evals each with evalFn, and

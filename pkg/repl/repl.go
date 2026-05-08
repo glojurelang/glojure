@@ -441,33 +441,16 @@ func Start(opts ...Option) {
 
 		// CLI-specific commands (checked first so they can override shared ones)
 		if trimmed == ":repl/help" {
-			isEmacs := strings.HasPrefix(string(rl.Keymap.Main()), "emacs")
-			docKey := "C-d"
-			helpKey := "C-h"
-			printKey := "C-p"
-			if isEmacs {
-				docKey = "C-x C-d"
-				helpKey = "C-x C-h"
-				printKey = "C-x C-p"
+			editorMode := "vi"
+			if strings.HasPrefix(string(rl.Keymap.Main()), "emacs") {
+				editorMode = "emacs"
 			}
-			fmt.Fprintln(o.stdout, "Key Bindings")
-			if !isEmacs {
-				fmt.Fprintln(o.stdout, "  Escape    Vi normal mode; dismiss hint")
-			}
-			fmt.Fprintln(o.stdout, "  Tab       Complete symbol or insert 2-space indent")
-			fmt.Fprintf(o.stdout, "  %-10sShow documentation for symbol under cursor\n", docKey)
-			fmt.Fprintf(o.stdout, "  %-10sFormat, print and clipboard\n", printKey)
-			fmt.Fprintln(o.stdout, "  C-r       Reverse history search")
-			fmt.Fprintln(o.stdout, "  C-z       Suspend (resume with fg)")
-			fmt.Fprintln(o.stdout, "  C-c       Cancel input; press twice to exit")
-			fmt.Fprintln(o.stdout, "  C-d       Exit (on empty prompt)")
-			fmt.Fprintf(o.stdout, "  %-10sShow this help\n", helpKey)
-			fmt.Fprintln(o.stdout, "Commands")
-			fmt.Fprintln(o.stdout, "  :repl/help       Show this help")
-			fmt.Fprintln(o.stdout, "  :repl/vi         Switch to vi editing mode")
-			fmt.Fprintln(o.stdout, "  :repl/emacs      Switch to emacs editing mode")
-			fmt.Fprintln(o.stdout, "  :repl/fmt cmd     Set format command (for C-p)")
-			fmt.Fprintln(o.stdout, "  :repl/exit       Exit the REPL")
+			printHelp(o.stdout, editorMode, formatCmd, helpColors{
+				BoldYellow: colorBoldYellow,
+				Cyan:       colorCyan,
+				Green:      colorGreen,
+				Reset:      colorReset,
+			})
 			continue
 		}
 		if trimmed == ":repl/vi" {

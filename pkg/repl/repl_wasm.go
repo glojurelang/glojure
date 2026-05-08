@@ -26,18 +26,22 @@ func Start(opts ...Option) {
 		expr += line
 
 		if !isExpressionComplete(expr, o.env) {
-			fmt.Print("... ")
+			fmt.Print(strings.Repeat(" ", len(defaultPrompt(&o))))
 			continue
 		}
 
 		trimmed := strings.TrimSpace(expr)
 		if trimmed != "" {
-			handled, exit := handleReplCommand(trimmed, &o)
-			if exit {
-				return
-			}
-			if !handled {
-				readEvalPrint(expr, &o, evalSafe)
+			if trimmed == ":repl/help" {
+				printHelp(o.stdout, "vi", "cat", noColors)
+			} else {
+				handled, exit := handleReplCommand(trimmed, &o)
+				if exit {
+					return
+				}
+				if !handled {
+					readEvalPrint(expr, &o, evalSafe)
+				}
 			}
 		}
 
@@ -45,3 +49,5 @@ func Start(opts ...Option) {
 		fmt.Print(defaultPrompt(&o))
 	}
 }
+
+
