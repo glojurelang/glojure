@@ -27,7 +27,7 @@ Usage: glj [options] [file]
 
 Options:
   -e <expr>        Evaluate expression from command line
-  --nrepl          Start an nREPL server
+  --nrepl[=file]   Start an nREPL server (optionally write port to file)
   --port <port>    Port for nREPL server (default: auto)
   -h, --help       Show this help message
   --version        Show version information
@@ -36,8 +36,9 @@ Examples:
   glj                        # Start REPL
   glj -e "(+ 1 2)"           # Evaluate expression
   glj script.glj             # Run script file
-  glj --nrepl                # Start nREPL on random port
-  glj --nrepl --port 7888    # Start nREPL on port 7888
+  glj --nrepl                       # Start nREPL on random port
+  glj --nrepl --port 7888           # Start nREPL on specific port
+  glj --nrepl=.gloat/.nrepl-port    # Write port to file
   glj --version              # Show version
   glj --help                 # Show this help
 
@@ -83,8 +84,12 @@ func Main(args []string) {
 	} else if args[0] == "--help" || args[0] == "-h" {
 		printHelp()
 		return
-	} else if args[0] == "--nrepl" {
-		startNREPL(args[1:])
+	} else if args[0] == "--nrepl" || strings.HasPrefix(args[0], "--nrepl=") {
+		portFile := ""
+		if strings.HasPrefix(args[0], "--nrepl=") {
+			portFile = strings.TrimPrefix(args[0], "--nrepl=")
+		}
+		startNREPL(portFile, args[1:])
 		return
 	} else if args[0] == "-e" {
 		// Evaluate expression from command line
@@ -152,10 +157,9 @@ func Main(args []string) {
 	}
 }
 
-func startNREPL(args []string) {
+func startNREPL(portFile string, args []string) {
 	host := "localhost"
 	port := 0
-	portFile := ".gloat/.nrepl-port"
 
 	for i := 0; i < len(args); i++ {
 		switch args[i] {
@@ -175,12 +179,6 @@ func startNREPL(args []string) {
 			}
 			i++
 			host = args[i]
-		case "--port-file":
-			if i+1 >= len(args) {
-				log.Fatal("glj: --port-file requires a value")
-			}
-			i++
-			portFile = args[i]
 		default:
 			log.Fatalf("glj: unknown nrepl option: %s", args[i])
 		}
