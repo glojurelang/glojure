@@ -5,31 +5,22 @@ package repl
 import (
 	"errors"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime/debug"
-	"runtime/pprof"
 	"strings"
-	"time"
 
 	"github.com/reeflective/readline"
 	"github.com/reeflective/readline/inputrc"
 
-	goruntime "runtime"
-
 	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/reader"
 	"github.com/gloathub/glojure/pkg/runtime"
 
 	// pprof
 	"net/http"
 	_ "net/http/pprof"
 )
-
-const debugMode = false
-const cpuProfile = false
 
 func init() {
 	// start pprof
@@ -39,41 +30,12 @@ func init() {
 				fmt.Println("pprof start failed:", err)
 			}
 		}()
-		// shell command to examine pprof profile with a web ui:
-		// $ go tool pprof -http=:8080 http://localhost:6060/debug/pprof/profile
 	}
 }
 
 // Start starts the REPL.
 func Start(opts ...Option) {
-	o := options{
-		stdin:     os.Stdin,
-		stdout:    os.Stdout,
-		namespace: "user",
-	}
-	for _, opt := range opts {
-		opt(&o)
-	}
-
-	if o.env == nil {
-		o.env = initEnv(o.stdout)
-	}
-	{ // set namespace
-		_, err := o.env.Eval(lang.NewList(
-			lang.NewSymbol("ns"),
-			lang.NewSymbol(o.namespace),
-		))
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	defaultPrompt := func() string {
-		curNS := "?"
-		ns := o.env.CurrentNamespace()
-		curNS = ns.Name().String()
-		return curNS + "=> "
-	}
+	o := initOptions(opts)
 
 	rl := readline.NewShell()
 	rl.Config.Vars["enable-bracketed-paste"] = true
@@ -323,7 +285,12 @@ func Start(opts ...Option) {
 				"  " + colorGreen + ":repl/fmt cmd" + colorReset + "    Set format command (for C-p)\r\n" +
 				"  " + colorGreen + ":repl/exit" + colorReset + "       Exit the REPL\r\n" +
 				colorBoldYellow + "Current Settings" + colorReset + "\r\n" +
-				"  " + colorCyan + "Editor" + colorReset + "    " + func() string { if isEmacs { return "emacs" }; return "vi" }() + " mode\r\n" +
+				"  " + colorCyan + "Editor" + colorReset + "    " + func() string {
+				if isEmacs {
+					return "emacs"
+				}
+				return "vi"
+			}() + " mode\r\n" +
 				"  " + colorCyan + "Format" + colorReset + "    " + formatCmd
 			rl.Hint.SetTemporary(help)
 			hintActive = true
@@ -354,7 +321,7 @@ func Start(opts ...Option) {
 			}
 		},
 		"suspend": func() {
-			suspendProcess(ts, defaultPrompt)
+			suspendProcess(ts, func() string { return defaultPrompt(&o) })
 		},
 	})
 	backspace := inputrc.Unescape(`\C-?`)
@@ -388,7 +355,7 @@ func Start(opts ...Option) {
 	}
 
 	rl.Prompt.Primary(func() string {
-		return defaultPrompt()
+		return defaultPrompt(&o)
 	})
 	rl.Prompt.Secondary(func() string {
 		return "... "
@@ -410,18 +377,7 @@ func Start(opts ...Option) {
 			return false
 		}
 
-		rdr := reader.New(
-			strings.NewReader(input),
-			reader.WithFilename("repl"),
-			reader.WithGetCurrentNS(func() *lang.Namespace {
-				return o.env.CurrentNamespace()
-			}),
-		)
-		_, err := rdr.ReadAll()
-		if err != nil && errors.Is(err, io.EOF) {
-			return false
-		}
-		return true
+		return isExpressionComplete(input, o.env)
 	}
 
 	// Tab completion for symbols, namespaces, and aliases
@@ -436,6 +392,11 @@ func Start(opts ...Option) {
 	printBanner(o.stdout)
 
 	ctrlCPressed := false
+
+	// evalFn wraps evalSafe with SIGINT interrupt handling.
+	evalFn := func(o *options, val interface{}) (string, error) {
+		return evalWithInterrupt(*o, val)
+	}
 
 	for {
 		line, err := rl.Readline()
@@ -477,30 +438,8 @@ func Start(opts ...Option) {
 		}
 
 		trimmed := strings.TrimSpace(line)
-		if trimmed == ":repl/exit" {
-			return
-		}
-		if trimmed == ":repl/vi" {
-			rl.Keymap.SetMain("vi-insert")
-			fmt.Fprintln(o.stdout, "Switched to vi mode")
-			continue
-		}
-		if trimmed == ":repl/emacs" {
-			rl.Keymap.SetMain("emacs")
-			fmt.Fprintln(o.stdout, "Switched to emacs mode")
-			continue
-		}
-		if trimmed == ":repl/fmt" || strings.HasPrefix(trimmed, ":repl/fmt ") {
-			arg := strings.TrimPrefix(trimmed, ":repl/fmt")
-			arg = strings.TrimSpace(arg)
-			if arg == "" {
-				fmt.Fprintf(o.stdout, "Format command: %s\n", formatCmd)
-			} else {
-				formatCmd = arg
-				fmt.Fprintf(o.stdout, "Format command set to: %s\n", formatCmd)
-			}
-			continue
-		}
+
+		// CLI-specific commands (checked first so they can override shared ones)
 		if trimmed == ":repl/help" {
 			isEmacs := strings.HasPrefix(string(rl.Keymap.Main()), "emacs")
 			docKey := "C-d"
@@ -531,28 +470,38 @@ func Start(opts ...Option) {
 			fmt.Fprintln(o.stdout, "  :repl/exit       Exit the REPL")
 			continue
 		}
-
-		rdr := reader.New(strings.NewReader(line), reader.WithFilename("repl"), reader.WithGetCurrentNS(func() *lang.Namespace {
-			return o.env.CurrentNamespace()
-		}))
-
-		vals, err := rdr.ReadAll()
-		if err != nil {
-			fmt.Fprintln(o.stdout, err)
+		if trimmed == ":repl/vi" {
+			rl.Keymap.SetMain("vi-insert")
+			fmt.Fprintln(o.stdout, "Switched to vi mode")
+			continue
+		}
+		if trimmed == ":repl/emacs" {
+			rl.Keymap.SetMain("emacs")
+			fmt.Fprintln(o.stdout, "Switched to emacs mode")
+			continue
+		}
+		if trimmed == ":repl/fmt" || strings.HasPrefix(trimmed, ":repl/fmt ") {
+			arg := strings.TrimPrefix(trimmed, ":repl/fmt")
+			arg = strings.TrimSpace(arg)
+			if arg == "" {
+				fmt.Fprintf(o.stdout, "Format command: %s\n", formatCmd)
+			} else {
+				formatCmd = arg
+				fmt.Fprintf(o.stdout, "Format command set to: %s\n", formatCmd)
+			}
 			continue
 		}
 
-		for _, val := range vals {
-			out, err := evalWithInterrupt(o, val)
-			if err != nil {
-				fmt.Fprintf(o.stdout, "\r\n%s\r\n", err)
-				if err.Error() == "Interrupted" {
-					break
-				}
-				continue
-			}
-			fmt.Fprintln(o.stdout, out)
+		// Shared commands (:repl/exit, etc.)
+		handled, exit := handleReplCommand(trimmed, &o)
+		if exit {
+			return
 		}
+		if handled {
+			continue
+		}
+
+		readEvalPrint(line, &o, evalFn)
 	}
 }
 
@@ -768,8 +717,6 @@ func highlightSyntax(line []rune, env lang.Environment) string {
 	return buf.String()
 }
 
-// isNumber returns true if the token looks like a Clojure number
-// (integer, float, ratio, hex, octal, radix, or bigint/bigdec).
 func copyToClipboard(text string) {
 	// Try clipboard commands in order of preference.
 	for _, name := range []string{"xclip", "xsel", "wl-copy", "pbcopy"} {
@@ -801,39 +748,6 @@ func runFormat(cmdStr, text string) string {
 		return text
 	}
 	return strings.TrimRight(string(out), "\n")
-}
-
-func isNumber(s string) bool {
-	if len(s) == 0 {
-		return false
-	}
-	i := 0
-	if s[0] == '-' || s[0] == '+' {
-		i++
-		if i >= len(s) {
-			return false
-		}
-	}
-	if s[i] < '0' || s[i] > '9' {
-		return false
-	}
-	// Starts with a digit after optional sign -- good enough for
-	// highlighting purposes. Covers 42, 3.14, 1/3, 0xFF, 2r101,
-	// 42N, 3.14M, etc.
-	return true
-}
-
-func printBanner(w io.Writer) {
-	if os.Getenv("GLJ_REPL_NO_BANNER") != "" {
-		return
-	}
-	fmt.Fprintf(w, "Glojure v%s\n", runtime.Version)
-	goVersion := strings.TrimPrefix(goruntime.Version(), "go")
-	fmt.Fprintf(w, "Go %s %s/%s\n", goVersion, goruntime.GOOS, goruntime.GOARCH)
-	fmt.Fprintf(w, "    Docs: (doc function-name)\n")
-	fmt.Fprintf(w, "  Source: (source function-name)\n")
-	fmt.Fprintf(w, "    Exit: Ctrl+D or :repl/exit\n")
-	fmt.Fprintln(w)
 }
 
 func historyFilePath() string {
@@ -1007,57 +921,4 @@ func completeQualified(curNS *lang.Namespace, nsName, symPrefix, insertPrefix st
 	comps := readline.CompleteRaw(candidates)
 	comps.PREFIX = insertPrefix + symPrefix
 	return comps
-}
-
-// commonPrefix returns the longest common prefix of all strings.
-func commonPrefix(ss []string) string {
-	if len(ss) == 0 {
-		return ""
-	}
-	prefix := ss[0]
-	for _, s := range ss[1:] {
-		for i := range prefix {
-			if i >= len(s) || s[i] != prefix[i] {
-				prefix = prefix[:i]
-				break
-			}
-		}
-		if len(s) < len(prefix) {
-			prefix = prefix[:len(s)]
-		}
-	}
-	return prefix
-}
-
-func isSymbolChar(r rune) bool {
-	if r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' {
-		return true
-	}
-	return strings.ContainsRune(".*+!-_?/<>=$&%#:", r)
-}
-
-func initEnv(stdout io.Writer) lang.Environment {
-	if cpuProfile {
-		f, err := os.Create("./gljInitEnvCpu.prof")
-		if err != nil {
-			panic(err)
-		}
-		pprof.StartCPUProfile(f)
-		defer pprof.StopCPUProfile()
-	}
-	startTime := time.Now()
-
-	// TODO: clean up this code. copied from rtcompat.go.
-	kvs := make([]interface{}, 0, 3)
-	for _, vr := range []*lang.Var{lang.VarCurrentNS, lang.VarWarnOnReflection, lang.VarUncheckedMath, lang.VarDataReaders} {
-		kvs = append(kvs, vr, vr.Deref())
-	}
-	lang.PushThreadBindings(lang.NewMap(kvs...))
-
-	env := runtime.NewEnvironment(runtime.WithStdout(stdout))
-	if debugMode {
-		fmt.Printf("Environment created in %v\n", time.Since(startTime))
-	}
-
-	return env
 }
