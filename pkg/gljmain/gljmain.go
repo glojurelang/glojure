@@ -120,6 +120,8 @@ func Main(args []string) {
 		if !lang.IsNil(lastResult) {
 			fmt.Println(lang.PrintString(lastResult))
 		}
+	} else if strings.HasPrefix(args[0], "-") {
+		log.Fatalf("glj: unknown option: %s\nRun 'glj --help' for usage.", args[0])
 	} else {
 		// Execute file
 		file, err := os.Open(args[0])
