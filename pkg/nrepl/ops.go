@@ -53,6 +53,7 @@ func (s *Server) opDescribe(msg map[string]interface{}, conn net.Conn) {
 			"describe":    map[string]interface{}{},
 			"eval":        map[string]interface{}{},
 			"completions": map[string]interface{}{},
+			"info":        map[string]interface{}{},
 			"interrupt":   map[string]interface{}{},
 			"load-file":   map[string]interface{}{},
 			"ls-sessions": map[string]interface{}{},
@@ -257,6 +258,87 @@ func (s *Server) opCompletions(msg map[string]interface{}, conn net.Conn) {
 		"completions": completions,
 		"status":      []interface{}{"done"},
 	})
+}
+
+func (s *Server) opInfo(msg map[string]interface{}, conn net.Conn) {
+	sym := msgStr(msg, "sym")
+	sessionID := msgStr(msg, "session")
+	sess := s.getOrCreateSession(sessionID)
+
+	nsName := msgStr(msg, "ns")
+	if nsName == "" {
+		nsName = sess.NS
+	}
+
+	ns := lang.FindNamespace(lang.NewSymbol(nsName))
+	if ns == nil {
+		ns = lang.FindNamespace(lang.NewSymbol("user"))
+	}
+
+	noInfo := func() {
+		sendMsg(conn, map[string]interface{}{
+			"id":      msg["id"],
+			"session": sess.ID,
+			"status":  []interface{}{"no-info", "done"},
+		})
+	}
+
+	if sym == "" || ns == nil {
+		noInfo()
+		return
+	}
+
+	// Resolve the symbol to a var.
+	var vr *lang.Var
+	func() {
+		defer func() { recover() }()
+		symObj := lang.NewSymbol(sym)
+		if symObj.Namespace() != "" {
+			targetNS := lang.NamespaceFor(ns, symObj)
+			if targetNS != nil {
+				vr, _ = targetNS.GetMapping(lang.NewSymbol(symObj.Name())).(*lang.Var)
+			}
+		} else {
+			vr, _ = ns.GetMapping(symObj).(*lang.Var)
+		}
+	}()
+
+	if vr == nil {
+		noInfo()
+		return
+	}
+
+	resp := map[string]interface{}{
+		"id":      msg["id"],
+		"session": sess.ID,
+		"name":    vr.Symbol().Name(),
+		"ns":      vr.Namespace().Name().String(),
+		"status":  []interface{}{"done"},
+	}
+
+	meta := vr.Meta()
+	if meta != nil {
+		if doc, ok := meta.ValAt(lang.KWDoc).(string); ok && doc != "" {
+			resp["doc"] = doc
+		}
+		if arglists := meta.ValAt(lang.KWArglists); arglists != nil {
+			resp["arglists-str"] = lang.PrintString(arglists)
+		}
+		if file, ok := meta.ValAt(lang.KWFile).(string); ok && file != "" {
+			resp["file"] = file
+		}
+		if line := meta.ValAt(lang.KWLine); line != nil {
+			resp["line"] = line
+		}
+		if col := meta.ValAt(lang.KWColumn); col != nil {
+			resp["column"] = col
+		}
+	}
+	if vr.IsMacro() {
+		resp["macro"] = "true"
+	}
+
+	sendMsg(conn, resp)
 }
 
 func (s *Server) opInterrupt(msg map[string]interface{}, conn net.Conn) {

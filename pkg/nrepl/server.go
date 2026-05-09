@@ -132,6 +132,8 @@ func (s *Server) dispatch(msg map[string]interface{}, conn net.Conn) {
 		s.opEval(msg, conn)
 	case "completions":
 		s.opCompletions(msg, conn)
+	case "info":
+		s.opInfo(msg, conn)
 	case "interrupt":
 		s.opInterrupt(msg, conn)
 	case "load-file":
