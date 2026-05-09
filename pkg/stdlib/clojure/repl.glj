@@ -1,0 +1,112 @@
+;   Copyright (c) Rich Hickey. All rights reserved.
+;   The use and distribution terms for this software are covered by the
+;   Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+;   which can be found in the file epl-v10.html at the root of this distribution.
+;   By using this software in any fashion, you are agreeing to be bound by
+;   the terms of this license.
+;   You must not remove this notice, or any other, from this software.
+
+(ns clojure.repl)
+
+(def ^:dynamic *nrepl-port*
+  "When an nREPL server is running in this process, holds the port
+  number it is listening on. Otherwise nil."
+  nil)
+
+(defmacro doc
+  "Prints documentation for a var or special form given its name.
+  Prints the namespace-qualified name, arglists if present, and
+  the docstring."
+  {:added "1.0"}
+  [name]
+  `(clojure.repl/print-doc (var ~name)))
+
+(defn print-doc
+  "Prints a standard documentation block from a var.
+  Used by the doc macro."
+  {:added "1.0"}
+  [v]
+  (when v
+    (let [m (meta v)]
+      (println "-------------------------")
+      (println (str (.Name (.Namespace v)) "/"
+                    (.Name (.Symbol v))))
+      (when-let [arglists (:arglists m)]
+        (println arglists))
+      (when (:macro m)
+        (println "Macro"))
+      (when-let [doc (:doc m)]
+        (println " " doc)))))
+
+(defn find-doc
+  "Prints documentation for any var whose documentation or name
+  contains a match for re-string-or-pattern."
+  {:added "1.0"}
+  [re-string-or-pattern]
+  (let [re (re-pattern re-string-or-pattern)]
+    (doseq [ns (all-ns)
+            v (sort-by #(str %) (vals (ns-publics ns)))
+            :when (and (var? v)
+                       (or (re-find re (str (.Name (.Symbol v))))
+                           (when-let [doc (:doc (meta v))]
+                             (re-find re doc))))]
+      (print-doc v))))
+
+(defn apropos
+  "Given a regular expression or stringable thing, returns a seq of
+  all public definitions in all currently-loaded namespaces that
+  match the str-or-pattern."
+  {:added "1.0"}
+  [str-or-pattern]
+  (let [re (re-pattern (str str-or-pattern))]
+    (sort
+      (mapcat
+        (fn [ns]
+          (filter #(re-find re (str %))
+                  (keys (ns-publics ns))))
+        (all-ns)))))
+
+(defn dir-fn
+  "Returns a sorted seq of symbols naming public vars in a
+  namespace or its alias."
+  {:added "1.0"}
+  [ns]
+  (sort (map str (keys (ns-publics (the-ns ns))))))
+
+(defmacro dir
+  "Prints a sorted directory of public vars in a namespace."
+  {:added "1.0"}
+  [nsname]
+  `(doseq [v# (clojure.repl/dir-fn '~nsname)]
+     (println v#)))
+
+(defmacro source
+  "Prints, if found, the source code for the given symbol."
+  {:added "1.0"}
+  [n]
+  `(println (or (clojure.repl/source-fn '~n) "Source not found")))
+
+(defn source-fn
+  "Returns a string of the source code for the given symbol, if
+  it can be found. Returns nil if the source file cannot be read
+  or the var has no :file and :line metadata."
+  {:added "1.0"}
+  [x]
+  ;; Source lookup not yet implemented for Glojure.
+  ;; Vars carry :file and :line metadata but the source files
+  ;; are embedded and not easily read back at runtime yet.
+  nil)
+
+(defn pst
+  "Prints a stack trace of the exception, to the depth requested.
+  If none supplied, uses the root cause of the most recent repl
+  exception (*e), to a depth of 12."
+  {:added "1.0"}
+  ([] (pst *e))
+  ([e] (pst e 12))
+  ([e depth]
+   (when e
+     (println (str (type e) " " (.Error e)))
+     ;; Go stack traces are not easily decomposed like JVM ones.
+     ;; Print the error message for now.
+     )))
