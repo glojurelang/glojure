@@ -468,7 +468,7 @@ func Start(opts ...Option) {
 		}()
 		if err != nil {
 			if strings.HasPrefix(err.Error(), "readline panic:") {
-				fmt.Fprintln(o.stdout)
+				fmt.Fprintf(o.stdout, "PANIC: %s\n", err)
 				continue
 			}
 			if errors.Is(err, readline.ErrInterrupt) {
