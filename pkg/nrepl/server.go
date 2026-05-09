@@ -200,6 +200,12 @@ func (s *Server) removeSession(id string) {
 }
 
 func sendMsg(conn net.Conn, msg map[string]interface{}) {
+	// Strip nil values -- bencode can't encode nil.
+	for k, v := range msg {
+		if v == nil {
+			delete(msg, k)
+		}
+	}
 	data, err := BencodeEncode(msg)
 	if err != nil {
 		return
