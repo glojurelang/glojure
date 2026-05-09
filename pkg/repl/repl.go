@@ -49,13 +49,21 @@ func serverURL(srv *nrepl.Server) string {
 func Start(opts ...Option) {
 	o := initOptions(opts)
 
-	// Start embedded nREPL server for editor connectivity (local mode only).
+	// Start embedded nREPL server and connect to it as a client.
+	// This ensures the REPL experience is identical whether you run
+	// gloat --repl (embedded server) or gloat --repl=PORT (remote).
 	if o.nreplClient == nil {
 		srv, err := nrepl.Start("localhost", 0, "")
 		if err == nil {
 			o.nreplServer = srv
 			go srv.Serve()
 			defer srv.Stop()
+
+			client, err := nrepl.Connect("localhost", srv.Port())
+			if err == nil {
+				o.nreplClient = client
+				defer client.Close()
+			}
 		}
 	}
 
