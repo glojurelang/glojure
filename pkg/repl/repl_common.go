@@ -192,6 +192,7 @@ func printHelp(w io.Writer, editorMode, formatCmd, serverURL string, c helpColor
 	fmt.Fprintf(w, "  %s:repl/emacs%s      Switch to emacs editing mode\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "  %s:repl/fmt cmd%s    Set format command (for C-p)\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "  %s:repl/server%s     Show nREPL server URL\n", c.Green, c.Reset)
+	fmt.Fprintf(w, "  %s:repl/show-trace%s Toggle panic stack traces\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "  %s:repl/exit%s       Exit the REPL\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "%sCurrent Settings%s\n", c.BoldYellow, c.Reset)
 	fmt.Fprintf(w, "  %sEditor%s    %s mode\n", c.Cyan, c.Reset, editorMode)

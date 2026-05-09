@@ -190,6 +190,7 @@ func Start(opts ...Option) {
 	hintActive := false
 	printText := ""
 	formatCmd := os.Getenv("GLJ_REPL_FORMATTER")
+	showTrace := false
 	if formatCmd == "" {
 		formatCmd = "cat"
 	}
@@ -343,6 +344,7 @@ func Start(opts ...Option) {
 				"  " + colorGreen + ":repl/emacs" + colorReset + "      Switch to emacs editing mode\r\n" +
 				"  " + colorGreen + ":repl/fmt cmd" + colorReset + "    Set format command (for C-p)\r\n" +
 				"  " + colorGreen + ":repl/server" + colorReset + "     Show nREPL server URL\r\n" +
+				"  " + colorGreen + ":repl/show-trace" + colorReset + " Toggle panic stack traces\r\n" +
 				"  " + colorGreen + ":repl/exit" + colorReset + "       Exit the REPL\r\n" +
 				colorBoldYellow + "Current Settings" + colorReset + "\r\n" +
 				"  " + colorCyan + "Editor" + colorReset + "    " + func() string {
@@ -476,7 +478,11 @@ func Start(opts ...Option) {
 		func() {
 			defer func() {
 				if r := recover(); r != nil {
-					err = fmt.Errorf("readline panic: %v", r)
+					if showTrace {
+						err = fmt.Errorf("readline panic: %v\n%s", r, debug.Stack())
+					} else {
+						err = fmt.Errorf("readline panic: %v", r)
+					}
 				}
 			}()
 			line, err = rl.Readline()
@@ -566,6 +572,23 @@ func Start(opts ...Option) {
 					o.nreplServer.Port(), "localhost", url)
 			} else {
 				fmt.Fprintln(o.stdout, "No nREPL server running")
+			}
+			continue
+		}
+		if trimmed == ":repl/show-trace" || strings.HasPrefix(trimmed, ":repl/show-trace ") {
+			arg := strings.TrimPrefix(trimmed, ":repl/show-trace")
+			arg = strings.TrimSpace(arg)
+			switch arg {
+			case "":
+				fmt.Fprintf(o.stdout, "show-trace: %v\n", showTrace)
+			case "true":
+				showTrace = true
+				fmt.Fprintln(o.stdout, "Stack traces enabled")
+			case "false":
+				showTrace = false
+				fmt.Fprintln(o.stdout, "Stack traces disabled")
+			default:
+				fmt.Fprintln(o.stdout, "Usage: :repl/show-trace [true|false]")
 			}
 			continue
 		}
@@ -668,12 +691,31 @@ var specialForms = map[string]bool{
 
 // isClojureCoreSym returns true if the symbol resolves to a var in a
 // clojure.* namespace within the given environment.
-func isClojureCoreSym(env lang.Environment, token string) bool {
+func isClojureCoreSym(env lang.Environment, token string) (result bool) {
 	if env == nil {
 		return false
 	}
-	ns := env.CurrentNamespace()
+	defer func() {
+		if recover() != nil {
+			result = false
+		}
+	}()
 	sym := lang.NewSymbol(token)
+	if symNS := sym.Namespace(); symNS != "" {
+		// Qualified symbol: look up the namespace directly.
+		ns := lang.FindNamespace(lang.NewSymbol(symNS))
+		if ns == nil {
+			// Try as alias in current namespace.
+			ns = env.CurrentNamespace().LookupAlias(lang.NewSymbol(symNS))
+		}
+		if ns == nil {
+			return false
+		}
+		nsName := ns.Name().Name()
+		return strings.HasPrefix(nsName, "clojure.")
+	}
+	// Unqualified symbol: check current namespace mappings.
+	ns := env.CurrentNamespace()
 	v, ok := ns.Mappings().ValAt(sym).(*lang.Var)
 	if !ok {
 		return false
@@ -873,7 +915,7 @@ func completeRemote(o options, line []rune, cursor int) readline.Completions {
 
 	// REPL command completion
 	if strings.HasPrefix(prefix, ":repl/") {
-		replCmds := []string{":repl/exit", ":repl/fmt", ":repl/help", ":repl/server", ":repl/vi", ":repl/emacs"}
+		replCmds := []string{":repl/exit", ":repl/fmt", ":repl/help", ":repl/server", ":repl/show-trace", ":repl/vi", ":repl/emacs"}
 		var comps []readline.Completion
 		for _, cmd := range replCmds {
 			if strings.HasPrefix(cmd, prefix) {
@@ -1013,7 +1055,7 @@ func completeSymbol(o options, line []rune, cursor int) readline.Completions {
 
 	// REPL command completion: :repl/...
 	if strings.HasPrefix(prefix, ":repl/") {
-		replCmds := []string{":repl/exit", ":repl/fmt", ":repl/help", ":repl/server", ":repl/vi", ":repl/emacs"}
+		replCmds := []string{":repl/exit", ":repl/fmt", ":repl/help", ":repl/server", ":repl/show-trace", ":repl/vi", ":repl/emacs"}
 		var candidates []readline.Completion
 		for _, cmd := range replCmds {
 			if strings.HasPrefix(cmd, prefix) {

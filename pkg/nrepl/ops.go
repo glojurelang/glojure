@@ -3,7 +3,6 @@ package nrepl
 import (
 	"fmt"
 	"net"
-	"runtime/debug"
 	"strings"
 
 	"github.com/google/uuid"
@@ -120,7 +119,7 @@ func (s *Server) opEval(msg map[string]interface{}, conn net.Conn) {
 		defer lang.PopThreadBindings()
 		defer func() {
 			if r := recover(); r != nil {
-				evalErr = fmt.Errorf("panic: %v\nstacktrace:\n%s", r, string(debug.Stack()))
+				evalErr = fmt.Errorf("%v", r)
 			}
 		}()
 

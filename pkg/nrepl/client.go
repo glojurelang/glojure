@@ -80,9 +80,6 @@ func (c *Client) Eval(code string) (value, ns, out string, err error) {
 		if v, ok := resp["out"].(string); ok {
 			outBuf.WriteString(v)
 		}
-		if v, ok := resp["err"].(string); ok {
-			outBuf.WriteString(v)
-		}
 		if v, ok := resp["value"].(string); ok {
 			value = v
 		}
