@@ -3,7 +3,9 @@ package gljmain
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
+	"net"
 	"os"
 	"os/signal"
 	"strconv"
@@ -26,21 +28,22 @@ func printHelp() {
 Usage: glj [options] [file]
 
 Options:
-  -e <expr>        Evaluate expression from command line
-  --nrepl[=file]   Start an nREPL server (optionally write port to file)
-  --port <port>    Port for nREPL server (default: auto)
-  -h, --help       Show this help message
-  --version        Show version information
+  -e <expr>              Evaluate expression from command line
+  --nrepl[=VALUE]        Start nREPL server
+  --nrepl-connect H:P    Connect REPL to nREPL server
+  -h, --help             Show this help message
+  --version              Show version information
 
 Examples:
-  glj                        # Start REPL
-  glj -e "(+ 1 2)"           # Evaluate expression
-  glj script.glj             # Run script file
-  glj --nrepl                       # Start nREPL on random port
-  glj --nrepl --port 7888           # Start nREPL on specific port
-  glj --nrepl=.gloat/.nrepl-port    # Write port to file
-  glj --version              # Show version
-  glj --help                 # Show this help
+  glj                           # Start REPL
+  glj -e "(+ 1 2)"              # Evaluate expression
+  glj script.glj                # Run script file
+  glj --nrepl                   # Start nREPL on random port
+  glj --nrepl=7888              # Start nREPL on port 7888
+  glj --nrepl=0.0.0.0:7888      # Bind to all interfaces
+  glj --nrepl=.nrepl-port       # Write port to file
+  glj --version                 # Show version
+  glj --help                    # Show this help
 
 For more information, visit: https://github.com/gloathub/glojure
 `, runtime.Version)
@@ -85,11 +88,73 @@ func Main(args []string) {
 		printHelp()
 		return
 	} else if args[0] == "--nrepl" || strings.HasPrefix(args[0], "--nrepl=") {
+		host := "localhost"
+		port := 0
 		portFile := ""
 		if strings.HasPrefix(args[0], "--nrepl=") {
-			portFile = strings.TrimPrefix(args[0], "--nrepl=")
+			val := strings.TrimPrefix(args[0], "--nrepl=")
+			if isAllDigits(val) {
+				p, err := strconv.Atoi(val)
+				if err != nil {
+					log.Fatalf("glj: invalid port: %s", val)
+				}
+				port = p
+			} else if idx := strings.LastIndex(val, ":"); idx > 0 && isAllDigits(val[idx+1:]) {
+				host = val[:idx]
+				p, err := strconv.Atoi(val[idx+1:])
+				if err != nil {
+					log.Fatalf("glj: invalid port: %s", val[idx+1:])
+				}
+				port = p
+			} else if net.ParseIP(val) != nil {
+				host = val
+			} else {
+				portFile = val
+			}
 		}
-		startNREPL(portFile, args[1:])
+		startNREPL(host, port, portFile)
+		return
+	} else if args[0] == "--nrepl-connect" {
+		if len(args) < 2 {
+			log.Fatal("glj: --nrepl-connect requires HOST:PORT")
+		}
+		addr := args[1]
+		idx := strings.LastIndex(addr, ":")
+		if idx <= 0 || !isAllDigits(addr[idx+1:]) {
+			log.Fatalf("glj: invalid address: %s (expected HOST:PORT)", addr)
+		}
+		host := addr[:idx]
+		port, err := strconv.Atoi(addr[idx+1:])
+		if err != nil {
+			log.Fatalf("glj: invalid port: %s", addr[idx+1:])
+		}
+		client, err := nrepl.Connect(host, port)
+		if err != nil {
+			log.Fatalf("glj: failed to connect to nREPL at %s: %v", addr, err)
+		}
+		defer client.Close()
+
+		fi, _ := os.Stdin.Stat()
+		if (fi.Mode() & os.ModeCharDevice) != 0 {
+			// Interactive terminal: full readline REPL
+			repl.Start(repl.WithNREPLClient(client))
+		} else {
+			// Piped input: eval and exit
+			input, err := io.ReadAll(os.Stdin)
+			if err != nil {
+				log.Fatal(err)
+			}
+			value, _, out, evalErr := client.Eval(string(input))
+			if out != "" {
+				fmt.Print(out)
+			}
+			if evalErr != nil {
+				log.Fatal(evalErr)
+			}
+			if value != "" {
+				fmt.Println(value)
+			}
+		}
 		return
 	} else if args[0] == "-e" {
 		// Evaluate expression from command line
@@ -157,33 +222,19 @@ func Main(args []string) {
 	}
 }
 
-func startNREPL(portFile string, args []string) {
-	host := "localhost"
-	port := 0
-
-	for i := 0; i < len(args); i++ {
-		switch args[i] {
-		case "--port":
-			if i+1 >= len(args) {
-				log.Fatal("glj: --port requires a value")
-			}
-			i++
-			p, err := strconv.Atoi(args[i])
-			if err != nil {
-				log.Fatalf("glj: invalid port: %s", args[i])
-			}
-			port = p
-		case "--host":
-			if i+1 >= len(args) {
-				log.Fatal("glj: --host requires a value")
-			}
-			i++
-			host = args[i]
-		default:
-			log.Fatalf("glj: unknown nrepl option: %s", args[i])
+func isAllDigits(s string) bool {
+	if s == "" {
+		return false
+	}
+	for _, c := range s {
+		if c < '0' || c > '9' {
+			return false
 		}
 	}
+	return true
+}
 
+func startNREPL(host string, port int, portFile string) {
 	srv, err := nrepl.Start(host, port, portFile)
 	if err != nil {
 		log.Fatal(err)
