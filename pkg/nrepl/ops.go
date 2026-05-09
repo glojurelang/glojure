@@ -211,6 +211,19 @@ func (s *Server) opCompletions(msg map[string]interface{}, conn net.Conn) {
 		}
 	}
 
+	// Complete keywords.
+	if strings.HasPrefix(prefix, ":") {
+		kwPrefix := prefix[1:]
+		for _, kw := range lang.AllKeywords() {
+			if strings.HasPrefix(kw, kwPrefix) {
+				completions = append(completions, map[string]interface{}{
+					"candidate": ":" + kw,
+					"type":      "keyword",
+				})
+			}
+		}
+	}
+
 	// Complete namespace names.
 	for nsSeq := lang.AllNamespaces(); nsSeq != nil; nsSeq = nsSeq.Next() {
 		nsObj := nsSeq.First().(*lang.Namespace)
