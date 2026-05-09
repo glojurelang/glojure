@@ -456,8 +456,21 @@ func Start(opts ...Option) {
 	}
 
 	for {
-		line, err := rl.Readline()
+		var line string
+		var err error
+		func() {
+			defer func() {
+				if r := recover(); r != nil {
+					err = fmt.Errorf("readline panic: %v", r)
+				}
+			}()
+			line, err = rl.Readline()
+		}()
 		if err != nil {
+			if strings.HasPrefix(err.Error(), "readline panic:") {
+				fmt.Fprintln(o.stdout)
+				continue
+			}
 			if errors.Is(err, readline.ErrInterrupt) {
 				if line != "" {
 					// Was editing: just cancel the input
