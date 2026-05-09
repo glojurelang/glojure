@@ -63,93 +63,97 @@ func Start(opts ...Option) {
 	rl.Config.Vars["enable-bracketed-paste"] = true
 	rl.Config.Vars["menu-complete-display-prefix"] = true
 
-	if o.nreplClient == nil {
-		rl.SyntaxHighlighter = func(line []rune) string {
-			return highlightSyntax(line, o.env)
-		}
+	rl.SyntaxHighlighter = func(line []rune) string {
+		return highlightSyntax(line, o.env)
 	}
 
 	// Ghost text: show the common prefix of all matching completions.
-	if o.nreplClient == nil {
-		rl.SuggestFunc = func(line []rune) []rune {
-			if len(line) == 0 {
-				return nil
-			}
-			// Extract symbol prefix at end of line.
-			end := len(line)
-			start := end
-			for start > 0 && isSymbolChar(line[start-1]) {
-				start--
-			}
-			prefix := string(line[start:end])
-			if prefix == "" {
-				return nil
-			}
+	rl.SuggestFunc = func(line []rune) []rune {
+		if len(line) == 0 {
+			return nil
+		}
+		// Extract symbol prefix at end of line.
+		end := len(line)
+		start := end
+		for start > 0 && isSymbolChar(line[start-1]) {
+			start--
+		}
+		prefix := string(line[start:end])
+		if prefix == "" {
+			return nil
+		}
 
-			var matches []string
+		var matches []string
 
+		if o.nreplClient != nil {
+			// Client mode: use nREPL completions.
+			candidates, err := o.nreplClient.Completions(prefix, "")
+			if err == nil {
+				for _, c := range candidates {
+					matches = append(matches, strings.TrimPrefix(c, prefix))
+				}
+			}
+		} else if strings.HasPrefix(prefix, ":") {
 			// Keyword ghost text
-			if strings.HasPrefix(prefix, ":") {
-				kwPrefix := prefix[1:]
-				for _, kw := range lang.AllKeywords() {
-					if strings.HasPrefix(kw, kwPrefix) {
-						matches = append(matches, kw[len(kwPrefix):])
-					}
+			kwPrefix := prefix[1:]
+			for _, kw := range lang.AllKeywords() {
+				if strings.HasPrefix(kw, kwPrefix) {
+					matches = append(matches, kw[len(kwPrefix):])
 				}
-			} else if i := strings.IndexByte(prefix, '/'); i >= 0 {
-				// Qualified symbol (ns/prefix)
-				nsName := prefix[:i]
-				symPrefix := prefix[i+1:]
-				ns := o.env.CurrentNamespace()
-				aliasSym := lang.NewSymbol(nsName)
-				targetNS := ns.LookupAlias(aliasSym)
-				if targetNS == nil {
-					targetNS = lang.FindNamespace(lang.NewSymbol(nsName))
-				}
-				if targetNS != nil {
-					mappings := targetNS.Mappings()
-					for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
-						name := seq.First().(*lang.Symbol).Name()
-						if strings.HasPrefix(name, symPrefix) {
-							matches = append(matches, name[len(symPrefix):])
-						}
-					}
-				}
-			} else {
-				// Unqualified symbol
-				ns := o.env.CurrentNamespace()
-				mappings := ns.Mappings()
+			}
+		} else if i := strings.IndexByte(prefix, '/'); i >= 0 {
+			// Qualified symbol (ns/prefix)
+			nsName := prefix[:i]
+			symPrefix := prefix[i+1:]
+			ns := o.env.CurrentNamespace()
+			aliasSym := lang.NewSymbol(nsName)
+			targetNS := ns.LookupAlias(aliasSym)
+			if targetNS == nil {
+				targetNS = lang.FindNamespace(lang.NewSymbol(nsName))
+			}
+			if targetNS != nil {
+				mappings := targetNS.Mappings()
 				for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
 					name := seq.First().(*lang.Symbol).Name()
-					if strings.HasPrefix(name, prefix) {
-						matches = append(matches, name[len(prefix):])
-					}
-				}
-				for seq := lang.Seq(lang.Keys(ns.Aliases())); seq != nil; seq = seq.Next() {
-					name := seq.First().(*lang.Symbol).Name()
-					if strings.HasPrefix(name, prefix) {
-						matches = append(matches, name[len(prefix):]+"/")
-					}
-				}
-				for seq := lang.Seq(lang.AllNamespaces()); seq != nil; seq = seq.Next() {
-					name := seq.First().(*lang.Namespace).Name().Name()
-					if strings.HasPrefix(name, prefix) {
-						matches = append(matches, name[len(prefix):]+"/")
+					if strings.HasPrefix(name, symPrefix) {
+						matches = append(matches, name[len(symPrefix):])
 					}
 				}
 			}
-
-			if len(matches) == 0 {
-				return nil
+		} else {
+			// Unqualified symbol
+			ns := o.env.CurrentNamespace()
+			mappings := ns.Mappings()
+			for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
+				name := seq.First().(*lang.Symbol).Name()
+				if strings.HasPrefix(name, prefix) {
+					matches = append(matches, name[len(prefix):])
+				}
 			}
-			suffix := commonPrefix(matches)
-			if suffix == "" {
-				return nil
+			for seq := lang.Seq(lang.Keys(ns.Aliases())); seq != nil; seq = seq.Next() {
+				name := seq.First().(*lang.Symbol).Name()
+				if strings.HasPrefix(name, prefix) {
+					matches = append(matches, name[len(prefix):]+"/")
+				}
 			}
-			result := make([]rune, len(line))
-			copy(result, line)
-			return append(result, []rune(suffix)...)
+			for seq := lang.Seq(lang.AllNamespaces()); seq != nil; seq = seq.Next() {
+				name := seq.First().(*lang.Namespace).Name().Name()
+				if strings.HasPrefix(name, prefix) {
+					matches = append(matches, name[len(prefix):]+"/")
+				}
+			}
 		}
+
+		if len(matches) == 0 {
+			return nil
+		}
+		suffix := commonPrefix(matches)
+		if suffix == "" {
+			return nil
+		}
+		result := make([]rune, len(line))
+		copy(result, line)
+		return append(result, []rune(suffix)...)
 	}
 
 	// Bind Tab to menu-complete so all completions are shown in a menu
@@ -191,9 +195,6 @@ func Start(opts ...Option) {
 		},
 		"show-doc": func() {
 			defer func() { recover() }()
-			if o.nreplClient != nil {
-				return
-			}
 			line := *rl.Line()
 			pos := rl.Cursor().Pos()
 			// On empty line, fall back to vi-eof-maybe (exit)
@@ -223,6 +224,12 @@ func Start(opts ...Option) {
 			if isNumber(sym) || sym == "" {
 				return
 			}
+
+			if o.nreplClient != nil {
+				showDocRemote(o, rl, sym, &hintActive)
+				return
+			}
+
 			// Resolve the symbol to a var
 			ns := o.env.CurrentNamespace()
 			var v *lang.Var
@@ -626,6 +633,9 @@ var specialForms = map[string]bool{
 // isClojureCoreSym returns true if the symbol resolves to a var in a
 // clojure.* namespace within the given environment.
 func isClojureCoreSym(env lang.Environment, token string) bool {
+	if env == nil {
+		return false
+	}
 	ns := env.CurrentNamespace()
 	sym := lang.NewSymbol(token)
 	v, ok := ns.Mappings().ValAt(sym).(*lang.Var)
@@ -812,9 +822,19 @@ func completeRemote(o options, line []rune, cursor int) readline.Completions {
 		start--
 	}
 	prefix := string(line[start:cursor])
+
 	if prefix == "" {
+		// Insert two spaces for indentation (same as local completer).
+		if len(line) > 0 && (cursor == 0 || line[cursor-1] == ' ' || line[cursor-1] == '\t' || line[cursor-1] == '\n') {
+			comps := readline.CompleteRaw([]readline.Completion{
+				{Value: "  "},
+			})
+			comps.PREFIX = ""
+			return comps
+		}
 		return readline.CompleteValues()
 	}
+
 	candidates, err := o.nreplClient.Completions(prefix, "")
 	if err != nil || len(candidates) == 0 {
 		return readline.CompleteValues()
@@ -824,6 +844,57 @@ func completeRemote(o options, line []rune, cursor int) readline.Completions {
 		values[i] = strings.TrimPrefix(c, prefix)
 	}
 	return readline.CompleteValues(values...).Prefix(prefix)
+}
+
+// showDocRemote fetches documentation for a symbol via nREPL eval
+// and displays it as a hint.
+func showDocRemote(o options, rl *readline.Shell, sym string, hintActive *bool) {
+	// Use pr-str on meta to get a machine-readable result, then
+	// format it ourselves. But simpler: just eval a doc-like expression
+	// that returns a string we can display.
+	code := fmt.Sprintf(`(let [v (resolve '%s)]
+  (when v
+    (let [m (meta v)
+          ns-name (.Name (.Namespace v))
+          sym-name (.Name (.Symbol v))]
+      (str ns-name "/" sym-name "\n"
+        (when-let [al (:arglists m)] (str al "\n"))
+        (when (:macro m) "Macro\n")
+        (when-let [d (:doc m)] (str "  " d))))))`, sym)
+	value, _, _, err := o.nreplClient.Eval(code)
+	if err != nil || value == "" || value == "nil" {
+		return
+	}
+	// value is a quoted string like "clojure.core/map\n..."
+	// Unescape it (it comes back as a pr-str'd string with quotes).
+	if len(value) >= 2 && value[0] == '"' && value[len(value)-1] == '"' {
+		value = value[1 : len(value)-1]
+		value = strings.ReplaceAll(value, `\"`, `"`)
+		value = strings.ReplaceAll(value, `\\`, `\`)
+	}
+
+	lines := strings.Split(value, "\n")
+	var buf strings.Builder
+	for i, line := range lines {
+		if i == 0 {
+			// Qualified name
+			buf.WriteString(colorBoldYellow)
+			buf.WriteString(line)
+			buf.WriteString(colorReset)
+		} else if i == 1 && strings.HasPrefix(line, "(") {
+			// Arglists
+			buf.WriteString(colorGreen)
+			buf.WriteString(line)
+			buf.WriteString(colorReset)
+		} else {
+			buf.WriteString(line)
+		}
+		if i < len(lines)-1 {
+			buf.WriteString("\r\n")
+		}
+	}
+	rl.Hint.SetTemporary(buf.String())
+	*hintActive = true
 }
 
 // completeSymbol provides tab completion for Clojure symbols.
