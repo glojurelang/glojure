@@ -843,11 +843,6 @@ func completeRemote(o options, line []rune, cursor int) readline.Completions {
 		return readline.CompleteValues()
 	}
 
-	entries, err := o.nreplClient.Completions(prefix, "")
-	if err != nil || len(entries) == 0 {
-		return readline.CompleteValues()
-	}
-
 	// REPL command completion
 	if strings.HasPrefix(prefix, ":repl/") {
 		replCmds := []string{":repl/exit", ":repl/fmt", ":repl/help", ":repl/server", ":repl/vi", ":repl/emacs"}
@@ -864,6 +859,37 @@ func completeRemote(o options, line []rune, cursor int) readline.Completions {
 		result := readline.CompleteRaw(comps)
 		result.PREFIX = prefix
 		return result
+	}
+
+	// Keyword completion with :repl/ candidate
+	if strings.HasPrefix(prefix, ":") {
+		kwPrefix := prefix[1:]
+		var comps []readline.Completion
+		if strings.HasPrefix("repl/", kwPrefix) {
+			comps = append(comps, readline.Completion{
+				Value:       ":repl/",
+				Display:     ":repl/",
+				Description: "repl",
+			})
+		}
+		entries, err := o.nreplClient.Completions(prefix, "")
+		if err == nil {
+			for _, e := range entries {
+				comps = append(comps, readline.Completion{
+					Value:       e.Candidate,
+					Display:     e.Candidate,
+					Description: e.NS,
+				})
+			}
+		}
+		result := readline.CompleteRaw(comps)
+		result.PREFIX = prefix
+		return result
+	}
+
+	entries, err := o.nreplClient.Completions(prefix, "")
+	if err != nil || len(entries) == 0 {
+		return readline.CompleteValues()
 	}
 
 	comps := make([]readline.Completion, len(entries))
