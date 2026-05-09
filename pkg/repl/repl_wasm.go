@@ -12,7 +12,7 @@ import (
 // Start starts the REPL (WASM version).
 func Start(opts ...Option) {
 	o := initOptions(opts)
-	printBanner(o.stdout)
+	printBanner(o.stdout, "")
 
 	rl := bufio.NewReader(os.Stdin)
 	var expr string
@@ -33,7 +33,7 @@ func Start(opts ...Option) {
 		trimmed := strings.TrimSpace(expr)
 		if trimmed != "" {
 			if trimmed == ":repl/help" {
-				printHelp(o.stdout, "vi", "cat", noColors)
+				printHelp(o.stdout, "vi", "cat", "", noColors)
 			} else {
 				handled, exit := handleReplCommand(trimmed, &o)
 				if exit {

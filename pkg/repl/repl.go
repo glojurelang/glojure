@@ -15,6 +15,7 @@ import (
 	"github.com/reeflective/readline/inputrc"
 
 	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/gloathub/glojure/pkg/nrepl"
 	"github.com/gloathub/glojure/pkg/runtime"
 
 	// pprof
@@ -34,96 +35,121 @@ func init() {
 }
 
 // Start starts the REPL.
+func serverURL(srv *nrepl.Server) string {
+	if srv == nil {
+		return ""
+	}
+	host := srv.Host()
+	if host == "0.0.0.0" || host == "::" || host == "127.0.0.1" || host == "::1" {
+		host = "localhost"
+	}
+	return fmt.Sprintf("nrepl://%s:%d", host, srv.Port())
+}
+
 func Start(opts ...Option) {
 	o := initOptions(opts)
+
+	// Start embedded nREPL server for editor connectivity (local mode only).
+	if o.nreplClient == nil {
+		srv, err := nrepl.Start("localhost", 0, "")
+		if err == nil {
+			o.nreplServer = srv
+			go srv.Serve()
+			defer srv.Stop()
+		}
+	}
 
 	rl := readline.NewShell()
 	rl.Config.Vars["enable-bracketed-paste"] = true
 	rl.Config.Vars["menu-complete-display-prefix"] = true
 
-	rl.SyntaxHighlighter = func(line []rune) string {
-		return highlightSyntax(line, o.env)
+	if o.nreplClient == nil {
+		rl.SyntaxHighlighter = func(line []rune) string {
+			return highlightSyntax(line, o.env)
+		}
 	}
 
 	// Ghost text: show the common prefix of all matching completions.
-	rl.SuggestFunc = func(line []rune) []rune {
-		if len(line) == 0 {
-			return nil
-		}
-		// Extract symbol prefix at end of line.
-		end := len(line)
-		start := end
-		for start > 0 && isSymbolChar(line[start-1]) {
-			start--
-		}
-		prefix := string(line[start:end])
-		if prefix == "" {
-			return nil
-		}
+	if o.nreplClient == nil {
+		rl.SuggestFunc = func(line []rune) []rune {
+			if len(line) == 0 {
+				return nil
+			}
+			// Extract symbol prefix at end of line.
+			end := len(line)
+			start := end
+			for start > 0 && isSymbolChar(line[start-1]) {
+				start--
+			}
+			prefix := string(line[start:end])
+			if prefix == "" {
+				return nil
+			}
 
-		var matches []string
+			var matches []string
 
-		// Keyword ghost text
-		if strings.HasPrefix(prefix, ":") {
-			kwPrefix := prefix[1:]
-			for _, kw := range lang.AllKeywords() {
-				if strings.HasPrefix(kw, kwPrefix) {
-					matches = append(matches, kw[len(kwPrefix):])
+			// Keyword ghost text
+			if strings.HasPrefix(prefix, ":") {
+				kwPrefix := prefix[1:]
+				for _, kw := range lang.AllKeywords() {
+					if strings.HasPrefix(kw, kwPrefix) {
+						matches = append(matches, kw[len(kwPrefix):])
+					}
 				}
-			}
-		} else if i := strings.IndexByte(prefix, '/'); i >= 0 {
-			// Qualified symbol (ns/prefix)
-			nsName := prefix[:i]
-			symPrefix := prefix[i+1:]
-			ns := o.env.CurrentNamespace()
-			aliasSym := lang.NewSymbol(nsName)
-			targetNS := ns.LookupAlias(aliasSym)
-			if targetNS == nil {
-				targetNS = lang.FindNamespace(lang.NewSymbol(nsName))
-			}
-			if targetNS != nil {
-				mappings := targetNS.Mappings()
+			} else if i := strings.IndexByte(prefix, '/'); i >= 0 {
+				// Qualified symbol (ns/prefix)
+				nsName := prefix[:i]
+				symPrefix := prefix[i+1:]
+				ns := o.env.CurrentNamespace()
+				aliasSym := lang.NewSymbol(nsName)
+				targetNS := ns.LookupAlias(aliasSym)
+				if targetNS == nil {
+					targetNS = lang.FindNamespace(lang.NewSymbol(nsName))
+				}
+				if targetNS != nil {
+					mappings := targetNS.Mappings()
+					for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
+						name := seq.First().(*lang.Symbol).Name()
+						if strings.HasPrefix(name, symPrefix) {
+							matches = append(matches, name[len(symPrefix):])
+						}
+					}
+				}
+			} else {
+				// Unqualified symbol
+				ns := o.env.CurrentNamespace()
+				mappings := ns.Mappings()
 				for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
 					name := seq.First().(*lang.Symbol).Name()
-					if strings.HasPrefix(name, symPrefix) {
-						matches = append(matches, name[len(symPrefix):])
+					if strings.HasPrefix(name, prefix) {
+						matches = append(matches, name[len(prefix):])
+					}
+				}
+				for seq := lang.Seq(lang.Keys(ns.Aliases())); seq != nil; seq = seq.Next() {
+					name := seq.First().(*lang.Symbol).Name()
+					if strings.HasPrefix(name, prefix) {
+						matches = append(matches, name[len(prefix):]+"/")
+					}
+				}
+				for seq := lang.Seq(lang.AllNamespaces()); seq != nil; seq = seq.Next() {
+					name := seq.First().(*lang.Namespace).Name().Name()
+					if strings.HasPrefix(name, prefix) {
+						matches = append(matches, name[len(prefix):]+"/")
 					}
 				}
 			}
-		} else {
-			// Unqualified symbol
-			ns := o.env.CurrentNamespace()
-			mappings := ns.Mappings()
-			for seq := lang.Seq(lang.Keys(mappings)); seq != nil; seq = seq.Next() {
-				name := seq.First().(*lang.Symbol).Name()
-				if strings.HasPrefix(name, prefix) {
-					matches = append(matches, name[len(prefix):])
-				}
-			}
-			for seq := lang.Seq(lang.Keys(ns.Aliases())); seq != nil; seq = seq.Next() {
-				name := seq.First().(*lang.Symbol).Name()
-				if strings.HasPrefix(name, prefix) {
-					matches = append(matches, name[len(prefix):]+"/")
-				}
-			}
-			for seq := lang.Seq(lang.AllNamespaces()); seq != nil; seq = seq.Next() {
-				name := seq.First().(*lang.Namespace).Name().Name()
-				if strings.HasPrefix(name, prefix) {
-					matches = append(matches, name[len(prefix):]+"/")
-				}
-			}
-		}
 
-		if len(matches) == 0 {
-			return nil
+			if len(matches) == 0 {
+				return nil
+			}
+			suffix := commonPrefix(matches)
+			if suffix == "" {
+				return nil
+			}
+			result := make([]rune, len(line))
+			copy(result, line)
+			return append(result, []rune(suffix)...)
 		}
-		suffix := commonPrefix(matches)
-		if suffix == "" {
-			return nil
-		}
-		result := make([]rune, len(line))
-		copy(result, line)
-		return append(result, []rune(suffix)...)
 	}
 
 	// Bind Tab to menu-complete so all completions are shown in a menu
@@ -165,6 +191,9 @@ func Start(opts ...Option) {
 		},
 		"show-doc": func() {
 			defer func() { recover() }()
+			if o.nreplClient != nil {
+				return
+			}
 			line := *rl.Line()
 			pos := rl.Cursor().Pos()
 			// On empty line, fall back to vi-eof-maybe (exit)
@@ -283,6 +312,7 @@ func Start(opts ...Option) {
 				"  " + colorGreen + ":repl/vi" + colorReset + "         Switch to vi editing mode\r\n" +
 				"  " + colorGreen + ":repl/emacs" + colorReset + "      Switch to emacs editing mode\r\n" +
 				"  " + colorGreen + ":repl/fmt cmd" + colorReset + "    Set format command (for C-p)\r\n" +
+				"  " + colorGreen + ":repl/server" + colorReset + "     Show nREPL server URL\r\n" +
 				"  " + colorGreen + ":repl/exit" + colorReset + "       Exit the REPL\r\n" +
 				colorBoldYellow + "Current Settings" + colorReset + "\r\n" +
 				"  " + colorCyan + "Editor" + colorReset + "    " + func() string {
@@ -292,6 +322,9 @@ func Start(opts ...Option) {
 				return "vi"
 			}() + " mode\r\n" +
 				"  " + colorCyan + "Format" + colorReset + "    " + formatCmd
+			if surl := serverURL(o.nreplServer); surl != "" {
+				help += "\r\n  " + colorCyan + "Server" + colorReset + "    " + surl
+			}
 			rl.Hint.SetTemporary(help)
 			hintActive = true
 		},
@@ -355,6 +388,9 @@ func Start(opts ...Option) {
 	}
 
 	rl.Prompt.Primary(func() string {
+		if o.nreplClient != nil {
+			return o.nreplClient.NS() + "=> "
+		}
 		return defaultPrompt(&o)
 	})
 	rl.Prompt.Secondary(func() string {
@@ -377,11 +413,17 @@ func Start(opts ...Option) {
 			return false
 		}
 
+		if o.nreplClient != nil {
+			return isBalanced(input)
+		}
 		return isExpressionComplete(input, o.env)
 	}
 
 	// Tab completion for symbols, namespaces, and aliases
 	rl.Completer = func(line []rune, cursor int) readline.Completions {
+		if o.nreplClient != nil {
+			return completeRemote(o, line, cursor)
+		}
 		return completeSymbol(o, line, cursor)
 	}
 
@@ -389,7 +431,7 @@ func Start(opts ...Option) {
 	histFile := historyFilePath()
 	rl.History.AddFromFile("glj", histFile)
 
-	printBanner(o.stdout)
+	printBanner(o.stdout, serverURL(o.nreplServer))
 
 	ctrlCPressed := false
 
@@ -445,7 +487,7 @@ func Start(opts ...Option) {
 			if strings.HasPrefix(string(rl.Keymap.Main()), "emacs") {
 				editorMode = "emacs"
 			}
-			printHelp(o.stdout, editorMode, formatCmd, helpColors{
+			printHelp(o.stdout, editorMode, formatCmd, serverURL(o.nreplServer), helpColors{
 				BoldYellow: colorBoldYellow,
 				Cyan:       colorCyan,
 				Green:      colorGreen,
@@ -474,6 +516,16 @@ func Start(opts ...Option) {
 			}
 			continue
 		}
+		if trimmed == ":repl/server" {
+			if o.nreplServer != nil {
+				url := serverURL(o.nreplServer)
+				fmt.Fprintf(o.stdout, "nREPL server on port %d on host %s - %s\n",
+					o.nreplServer.Port(), "localhost", url)
+			} else {
+				fmt.Fprintln(o.stdout, "No nREPL server running")
+			}
+			continue
+		}
 
 		// Shared commands (:repl/exit, etc.)
 		handled, exit := handleReplCommand(trimmed, &o)
@@ -484,7 +536,19 @@ func Start(opts ...Option) {
 			continue
 		}
 
-		readEvalPrint(line, &o, evalFn)
+		if o.nreplClient != nil {
+			value, _, out, evalErr := o.nreplClient.Eval(line)
+			if out != "" {
+				fmt.Fprint(o.stdout, out)
+			}
+			if evalErr != nil {
+				fmt.Fprintln(o.stdout, evalErr)
+			} else if value != "" {
+				fmt.Fprintln(o.stdout, value)
+			}
+		} else {
+			readEvalPrint(line, &o, evalFn)
+		}
 	}
 }
 
@@ -741,6 +805,27 @@ func historyFilePath() string {
 	return filepath.Join(home, ".glj_history")
 }
 
+// completeRemote provides tab completion via the nREPL server.
+func completeRemote(o options, line []rune, cursor int) readline.Completions {
+	start := cursor
+	for start > 0 && isSymbolChar(line[start-1]) {
+		start--
+	}
+	prefix := string(line[start:cursor])
+	if prefix == "" {
+		return readline.CompleteValues()
+	}
+	candidates, err := o.nreplClient.Completions(prefix, "")
+	if err != nil || len(candidates) == 0 {
+		return readline.CompleteValues()
+	}
+	values := make([]string, len(candidates))
+	for i, c := range candidates {
+		values[i] = strings.TrimPrefix(c, prefix)
+	}
+	return readline.CompleteValues(values...).Prefix(prefix)
+}
+
 // completeSymbol provides tab completion for Clojure symbols.
 // It handles: bare symbols, namespace-qualified symbols (ns/sym),
 // alias-qualified symbols (alias/sym), and namespace names.
@@ -766,7 +851,7 @@ func completeSymbol(o options, line []rune, cursor int) readline.Completions {
 
 	// REPL command completion: :repl/...
 	if strings.HasPrefix(prefix, ":repl/") {
-		replCmds := []string{":repl/exit", ":repl/fmt", ":repl/help", ":repl/vi", ":repl/emacs"}
+		replCmds := []string{":repl/exit", ":repl/fmt", ":repl/help", ":repl/server", ":repl/vi", ":repl/emacs"}
 		var candidates []readline.Completion
 		for _, cmd := range replCmds {
 			if strings.HasPrefix(cmd, prefix) {

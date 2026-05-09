@@ -32,6 +32,10 @@ func initOptions(opts []Option) options {
 	for _, opt := range opts {
 		opt(&o)
 	}
+	// In nREPL client mode, the server handles eval -- skip local env.
+	if o.nreplClient != nil {
+		return o
+	}
 	if o.env == nil {
 		o.env = initEnv(o.stdout)
 	}
@@ -49,7 +53,7 @@ func defaultPrompt(o *options) string {
 	return o.env.CurrentNamespace().Name().String() + "=> "
 }
 
-func printBanner(w io.Writer) {
+func printBanner(w io.Writer, serverURL string) {
 	noBanner := os.Getenv("GLJ_REPL_NO_BANNER")
 	if noBanner == "all" {
 		return
@@ -59,9 +63,44 @@ func printBanner(w io.Writer) {
 		fmt.Fprintf(w, " Glojure: %s\n", runtime.Version)
 	}
 	fmt.Fprintf(w, "      Go: %s %s/%s\n", goVersion, goruntime.GOOS, goruntime.GOARCH)
+	if serverURL != "" {
+		fmt.Fprintf(w, "  Server: %s\n", serverURL)
+	}
 	fmt.Fprintf(w, "    Help: C-h or :repl/help\n")
 	fmt.Fprintf(w, "    Exit: C-d or :repl/exit\n")
 	fmt.Fprintln(w)
+}
+
+// isBalanced returns true if parentheses, brackets, and braces are balanced.
+// Used in nREPL client mode where we don't have a local reader.
+func isBalanced(input string) bool {
+	depth := 0
+	inString := false
+	escape := false
+	for _, r := range input {
+		if escape {
+			escape = false
+			continue
+		}
+		if r == '\\' && inString {
+			escape = true
+			continue
+		}
+		if r == '"' {
+			inString = !inString
+			continue
+		}
+		if inString {
+			continue
+		}
+		switch r {
+		case '(', '[', '{':
+			depth++
+		case ')', ']', '}':
+			depth--
+		}
+	}
+	return depth <= 0 && !inString
 }
 
 // isExpressionComplete returns true if input parses without hitting EOF
@@ -125,8 +164,9 @@ type helpColors struct {
 var noColors = helpColors{}
 
 // printHelp prints the REPL help text. editorMode is "vi" or "emacs",
-// formatCmd is the current format command (e.g. "cat").
-func printHelp(w io.Writer, editorMode, formatCmd string, c helpColors) {
+// formatCmd is the current format command (e.g. "cat"),
+// serverURL is the nREPL server URL (empty if no server).
+func printHelp(w io.Writer, editorMode, formatCmd, serverURL string, c helpColors) {
 	isEmacs := editorMode == "emacs"
 	docKey := "C-d"
 	helpKey := "C-h"
@@ -153,10 +193,14 @@ func printHelp(w io.Writer, editorMode, formatCmd string, c helpColors) {
 	fmt.Fprintf(w, "  %s:repl/vi%s         Switch to vi editing mode\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "  %s:repl/emacs%s      Switch to emacs editing mode\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "  %s:repl/fmt cmd%s    Set format command (for C-p)\n", c.Green, c.Reset)
+	fmt.Fprintf(w, "  %s:repl/server%s     Show nREPL server URL\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "  %s:repl/exit%s       Exit the REPL\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "%sCurrent Settings%s\n", c.BoldYellow, c.Reset)
 	fmt.Fprintf(w, "  %sEditor%s    %s mode\n", c.Cyan, c.Reset, editorMode)
 	fmt.Fprintf(w, "  %sFormat%s    %s\n", c.Cyan, c.Reset, formatCmd)
+	if serverURL != "" {
+		fmt.Fprintf(w, "  %sServer%s    %s\n", c.Cyan, c.Reset, serverURL)
+	}
 }
 
 // readEvalPrint reads all forms from input, evals each with evalFn, and

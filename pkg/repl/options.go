@@ -4,13 +4,16 @@ import (
 	"io"
 
 	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/gloathub/glojure/pkg/nrepl"
 )
 
 type options struct {
-	stdin     io.Reader
-	stdout    io.Writer
-	namespace string
-	env       lang.Environment
+	stdin       io.Reader
+	stdout      io.Writer
+	namespace   string
+	env         lang.Environment
+	nreplClient *nrepl.Client
+	nreplServer *nrepl.Server
 }
 
 // Option is a functional option for the REPL.
@@ -34,5 +37,13 @@ func WithStdout(w io.Writer) Option {
 func WithEnvironment(env lang.Environment) Option {
 	return func(o *options) {
 		o.env = env
+	}
+}
+
+// WithNREPLClient configures the REPL to send code to a remote
+// nREPL server instead of evaluating locally.
+func WithNREPLClient(c *nrepl.Client) Option {
+	return func(o *options) {
+		o.nreplClient = c
 	}
 }
