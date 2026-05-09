@@ -76,7 +76,9 @@ func Start(opts ...Option) {
 	}
 
 	// Ghost text: show the common prefix of all matching completions.
-	rl.SuggestFunc = func(line []rune) []rune {
+	rl.SuggestFunc = func(line []rune) (suggestion []rune) {
+		defer func() { recover() }()
+
 		if len(line) == 0 {
 			return nil
 		}
@@ -95,10 +97,23 @@ func Start(opts ...Option) {
 
 		if o.nreplClient != nil {
 			// Client mode: use nREPL completions.
-			entries, err := o.nreplClient.Completions(prefix, "")
-			if err == nil {
-				for _, e := range entries {
-					matches = append(matches, strings.TrimPrefix(e.Candidate, prefix))
+			// For qualified symbols (ns/sym), split and search the namespace.
+			if i := strings.IndexByte(prefix, '/'); i >= 0 {
+				nsName := prefix[:i]
+				symPrefix := prefix[i+1:]
+				// Ask server for completions of the symbol part within the namespace.
+				entries, err := o.nreplClient.Completions(symPrefix, nsName)
+				if err == nil {
+					for _, e := range entries {
+						matches = append(matches, strings.TrimPrefix(e.Candidate, symPrefix))
+					}
+				}
+			} else {
+				entries, err := o.nreplClient.Completions(prefix, "")
+				if err == nil {
+					for _, e := range entries {
+						matches = append(matches, strings.TrimPrefix(e.Candidate, prefix))
+					}
 				}
 			}
 		} else if strings.HasPrefix(prefix, ":") {

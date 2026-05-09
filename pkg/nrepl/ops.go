@@ -186,7 +186,19 @@ func (s *Server) opCompletions(msg map[string]interface{}, conn net.Conn) {
 
 	sess := s.getOrCreateSession(sessionID)
 
-	ns := lang.FindNamespace(lang.NewSymbol(sess.NS))
+	// Use the ns from the message if provided, otherwise session ns.
+	nsName := msgStr(msg, "ns")
+	if nsName == "" {
+		nsName = sess.NS
+	}
+	ns := lang.FindNamespace(lang.NewSymbol(nsName))
+	if ns == nil {
+		// Try resolving as an alias in the session namespace.
+		sessNS := lang.FindNamespace(lang.NewSymbol(sess.NS))
+		if sessNS != nil {
+			ns = sessNS.LookupAlias(lang.NewSymbol(nsName))
+		}
+	}
 	if ns == nil {
 		ns = lang.FindNamespace(lang.NewSymbol("user"))
 	}
