@@ -87,10 +87,10 @@ func Start(opts ...Option) {
 
 		if o.nreplClient != nil {
 			// Client mode: use nREPL completions.
-			candidates, err := o.nreplClient.Completions(prefix, "")
+			entries, err := o.nreplClient.Completions(prefix, "")
 			if err == nil {
-				for _, c := range candidates {
-					matches = append(matches, strings.TrimPrefix(c, prefix))
+				for _, e := range entries {
+					matches = append(matches, strings.TrimPrefix(e.Candidate, prefix))
 				}
 			}
 		} else if strings.HasPrefix(prefix, ":") {
@@ -835,15 +835,44 @@ func completeRemote(o options, line []rune, cursor int) readline.Completions {
 		return readline.CompleteValues()
 	}
 
-	candidates, err := o.nreplClient.Completions(prefix, "")
-	if err != nil || len(candidates) == 0 {
+	entries, err := o.nreplClient.Completions(prefix, "")
+	if err != nil || len(entries) == 0 {
 		return readline.CompleteValues()
 	}
-	values := make([]string, len(candidates))
-	for i, c := range candidates {
-		values[i] = strings.TrimPrefix(c, prefix)
+
+	// REPL command completion
+	if strings.HasPrefix(prefix, ":repl/") {
+		replCmds := []string{":repl/exit", ":repl/fmt", ":repl/help", ":repl/server", ":repl/vi", ":repl/emacs"}
+		var comps []readline.Completion
+		for _, cmd := range replCmds {
+			if strings.HasPrefix(cmd, prefix) {
+				comps = append(comps, readline.Completion{
+					Value:       cmd,
+					Display:     cmd,
+					Description: "repl",
+				})
+			}
+		}
+		result := readline.CompleteRaw(comps)
+		result.PREFIX = prefix
+		return result
 	}
-	return readline.CompleteValues(values...).Prefix(prefix)
+
+	comps := make([]readline.Completion, len(entries))
+	for i, e := range entries {
+		desc := e.NS
+		if e.Type == "namespace" {
+			desc = "namespace"
+		}
+		comps[i] = readline.Completion{
+			Value:       e.Candidate,
+			Display:     e.Candidate,
+			Description: desc,
+		}
+	}
+	result := readline.CompleteRaw(comps)
+	result.PREFIX = prefix
+	return result
 }
 
 // showDocRemote fetches documentation for a symbol via nREPL eval

@@ -105,8 +105,15 @@ func (c *Client) Eval(code string) (value, ns, out string, err error) {
 	return value, ns, outBuf.String(), err
 }
 
+// CompletionEntry holds a completion candidate with optional metadata.
+type CompletionEntry struct {
+	Candidate string
+	NS        string // namespace the symbol is defined in
+	Type      string // "namespace", "function", etc.
+}
+
 // Completions requests completions for prefix in the given namespace.
-func (c *Client) Completions(prefix, ns string) ([]string, error) {
+func (c *Client) Completions(prefix, ns string) ([]CompletionEntry, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -121,7 +128,7 @@ func (c *Client) Completions(prefix, ns string) ([]string, error) {
 		"session": c.session,
 	})
 
-	var result []string
+	var result []CompletionEntry
 	for {
 		resp, err := c.recv()
 		if err != nil {
@@ -132,7 +139,14 @@ func (c *Client) Completions(prefix, ns string) ([]string, error) {
 			for _, comp := range comps {
 				if m, ok := comp.(map[string]interface{}); ok {
 					if candidate, ok := m["candidate"].(string); ok {
-						result = append(result, candidate)
+						entry := CompletionEntry{Candidate: candidate}
+						if v, ok := m["ns"].(string); ok {
+							entry.NS = v
+						}
+						if v, ok := m["type"].(string); ok {
+							entry.Type = v
+						}
+						result = append(result, entry)
 					}
 				}
 			}
