@@ -32,19 +32,17 @@ func initOptions(opts []Option) options {
 	for _, opt := range opts {
 		opt(&o)
 	}
-	// In nREPL client mode, the server handles eval -- skip local env.
-	if o.nreplClient != nil {
-		return o
-	}
 	if o.env == nil {
 		o.env = initEnv(o.stdout)
 	}
-	_, err := o.env.Eval(lang.NewList(
-		lang.NewSymbol("ns"),
-		lang.NewSymbol(o.namespace),
-	))
-	if err != nil {
-		panic(err)
+	if o.nreplClient == nil {
+		_, err := o.env.Eval(lang.NewList(
+			lang.NewSymbol("ns"),
+			lang.NewSymbol(o.namespace),
+		))
+		if err != nil {
+			panic(err)
+		}
 	}
 	return o
 }
