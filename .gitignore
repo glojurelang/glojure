@@ -12,3 +12,5 @@
 # Ingy dev
 /.cache/
 /*.md
+/go.work
+/go.work.sum
