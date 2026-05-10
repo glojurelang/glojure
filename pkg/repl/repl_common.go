@@ -51,7 +51,7 @@ func defaultPrompt(o *options) string {
 	return o.env.CurrentNamespace().Name().String() + "=> "
 }
 
-func printBanner(w io.Writer, serverURL string) {
+func printBanner(w io.Writer, nreplURL, sreplURL string) {
 	noBanner := os.Getenv("GLJ_REPL_NO_BANNER")
 	if noBanner == "all" {
 		return
@@ -61,8 +61,11 @@ func printBanner(w io.Writer, serverURL string) {
 		fmt.Fprintf(w, " Glojure: %s\n", runtime.Version)
 	}
 	fmt.Fprintf(w, "      Go: %s %s/%s\n", goVersion, goruntime.GOOS, goruntime.GOARCH)
-	if serverURL != "" {
-		fmt.Fprintf(w, "  Server: %s\n", serverURL)
+	if nreplURL != "" {
+		fmt.Fprintf(w, "   nREPL: %s\n", nreplURL)
+	}
+	if sreplURL != "" {
+		fmt.Fprintf(w, "   sREPL: %s\n", sreplURL)
 	}
 	fmt.Fprintf(w, "    Help: C-h or :repl/help\n")
 	fmt.Fprintf(w, "    Exit: C-d or :repl/exit\n")
@@ -164,7 +167,7 @@ var noColors = helpColors{}
 // printHelp prints the REPL help text. editorMode is "vi" or "emacs",
 // formatCmd is the current format command (e.g. "cat"),
 // serverURL is the nREPL server URL (empty if no server).
-func printHelp(w io.Writer, editorMode, formatCmd, serverURL string, c helpColors) {
+func printHelp(w io.Writer, editorMode, formatCmd, nreplURL, sreplURL string, c helpColors) {
 	isEmacs := editorMode == "emacs"
 	docKey := "C-d"
 	helpKey := "C-h"
@@ -191,14 +194,17 @@ func printHelp(w io.Writer, editorMode, formatCmd, serverURL string, c helpColor
 	fmt.Fprintf(w, "  %s:repl/vi%s         Switch to vi editing mode\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "  %s:repl/emacs%s      Switch to emacs editing mode\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "  %s:repl/fmt cmd%s    Set format command (for C-p)\n", c.Green, c.Reset)
-	fmt.Fprintf(w, "  %s:repl/server%s     Show nREPL server URL\n", c.Green, c.Reset)
+	fmt.Fprintf(w, "  %s:repl/server%s     Show server URLs\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "  %s:repl/show-trace%s Toggle panic stack traces\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "  %s:repl/exit%s       Exit the REPL\n", c.Green, c.Reset)
 	fmt.Fprintf(w, "%sCurrent Settings%s\n", c.BoldYellow, c.Reset)
 	fmt.Fprintf(w, "  %sEditor%s    %s mode\n", c.Cyan, c.Reset, editorMode)
 	fmt.Fprintf(w, "  %sFormat%s    %s\n", c.Cyan, c.Reset, formatCmd)
-	if serverURL != "" {
-		fmt.Fprintf(w, "  %sServer%s    %s\n", c.Cyan, c.Reset, serverURL)
+	if nreplURL != "" {
+		fmt.Fprintf(w, "  %snREPL%s     %s\n", c.Cyan, c.Reset, nreplURL)
+	}
+	if sreplURL != "" {
+		fmt.Fprintf(w, "  %ssREPL%s     %s\n", c.Cyan, c.Reset, sreplURL)
 	}
 }
 

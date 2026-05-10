@@ -17,6 +17,7 @@ import (
 	"github.com/gloathub/glojure/pkg/lang"
 	"github.com/gloathub/glojure/pkg/nrepl"
 	"github.com/gloathub/glojure/pkg/runtime"
+	"github.com/gloathub/glojure/pkg/srepl"
 
 	// pprof
 	"net/http"
@@ -65,6 +66,19 @@ func Start(opts ...Option) {
 				defer client.Close()
 			}
 		}
+	}
+
+	// Start embedded socket REPL server.
+	sreplURL := ""
+	sreplSrv, err := srepl.Start("localhost", 0, "")
+	if err == nil {
+		go sreplSrv.Serve()
+		defer sreplSrv.Stop()
+		h := sreplSrv.Host()
+		if h == "0.0.0.0" || h == "::" || h == "127.0.0.1" || h == "::1" {
+			h = "localhost"
+		}
+		sreplURL = fmt.Sprintf("%s:%d", h, sreplSrv.Port())
 	}
 
 	rl := readline.NewShell()
@@ -343,7 +357,7 @@ func Start(opts ...Option) {
 				"  " + colorGreen + ":repl/vi" + colorReset + "         Switch to vi editing mode\r\n" +
 				"  " + colorGreen + ":repl/emacs" + colorReset + "      Switch to emacs editing mode\r\n" +
 				"  " + colorGreen + ":repl/fmt cmd" + colorReset + "    Set format command (for C-p)\r\n" +
-				"  " + colorGreen + ":repl/server" + colorReset + "     Show nREPL server URL\r\n" +
+				"  " + colorGreen + ":repl/server" + colorReset + "     Show server URLs\r\n" +
 				"  " + colorGreen + ":repl/show-trace" + colorReset + " Toggle panic stack traces\r\n" +
 				"  " + colorGreen + ":repl/exit" + colorReset + "       Exit the REPL\r\n" +
 				colorBoldYellow + "Current Settings" + colorReset + "\r\n" +
@@ -355,7 +369,10 @@ func Start(opts ...Option) {
 			}() + " mode\r\n" +
 				"  " + colorCyan + "Format" + colorReset + "    " + formatCmd
 			if surl := serverURL(o.nreplServer); surl != "" {
-				help += "\r\n  " + colorCyan + "Server" + colorReset + "    " + surl
+				help += "\r\n  " + colorCyan + "nREPL" + colorReset + "     " + surl
+			}
+			if sreplURL != "" {
+				help += "\r\n  " + colorCyan + "sREPL" + colorReset + "     " + sreplURL
 			}
 			rl.Hint.SetTemporary(help)
 			hintActive = true
@@ -463,7 +480,7 @@ func Start(opts ...Option) {
 	histFile := historyFilePath()
 	rl.History.AddFromFile("glj", histFile)
 
-	printBanner(o.stdout, serverURL(o.nreplServer))
+	printBanner(o.stdout, serverURL(o.nreplServer), sreplURL)
 
 	ctrlCPressed := false
 
@@ -536,7 +553,7 @@ func Start(opts ...Option) {
 			if strings.HasPrefix(string(rl.Keymap.Main()), "emacs") {
 				editorMode = "emacs"
 			}
-			printHelp(o.stdout, editorMode, formatCmd, serverURL(o.nreplServer), helpColors{
+			printHelp(o.stdout, editorMode, formatCmd, serverURL(o.nreplServer), sreplURL, helpColors{
 				BoldYellow: colorBoldYellow,
 				Cyan:       colorCyan,
 				Green:      colorGreen,
@@ -568,10 +585,13 @@ func Start(opts ...Option) {
 		if trimmed == ":repl/server" {
 			if o.nreplServer != nil {
 				url := serverURL(o.nreplServer)
-				fmt.Fprintf(o.stdout, "nREPL server on port %d on host %s - %s\n",
-					o.nreplServer.Port(), "localhost", url)
-			} else {
-				fmt.Fprintln(o.stdout, "No nREPL server running")
+				fmt.Fprintf(o.stdout, "nREPL: %s\n", url)
+			}
+			if sreplURL != "" {
+				fmt.Fprintf(o.stdout, "sREPL: %s\n", sreplURL)
+			}
+			if o.nreplServer == nil && sreplURL == "" {
+				fmt.Fprintln(o.stdout, "No servers running")
 			}
 			continue
 		}

@@ -20,6 +20,7 @@ import (
 	"github.com/gloathub/glojure/pkg/reader"
 	"github.com/gloathub/glojure/pkg/repl"
 	"github.com/gloathub/glojure/pkg/runtime"
+	"github.com/gloathub/glojure/pkg/srepl"
 )
 
 func printHelp() {
@@ -31,6 +32,7 @@ Options:
   -e <expr>              Evaluate expression from command line
   --nrepl[=VALUE]        Start nREPL server
   --nrepl-connect H:P    Connect REPL to nREPL server
+  --srepl[=VALUE]        Start socket REPL server
   -h, --help             Show this help message
   --version              Show version information
 
@@ -42,6 +44,8 @@ Examples:
   glj --nrepl=7888              # Start nREPL on port 7888
   glj --nrepl=0.0.0.0:7888      # Bind to all interfaces
   glj --nrepl=.nrepl-port       # Write port to file
+  glj --srepl                   # Start socket REPL on random port
+  glj --srepl=7777              # Start socket REPL on port 7777
   glj --version                 # Show version
   glj --help                    # Show this help
 
@@ -88,31 +92,12 @@ func Main(args []string) {
 		printHelp()
 		return
 	} else if args[0] == "--nrepl" || strings.HasPrefix(args[0], "--nrepl=") {
-		host := "localhost"
-		port := 0
-		portFile := ""
-		if strings.HasPrefix(args[0], "--nrepl=") {
-			val := strings.TrimPrefix(args[0], "--nrepl=")
-			if isAllDigits(val) {
-				p, err := strconv.Atoi(val)
-				if err != nil {
-					log.Fatalf("glj: invalid port: %s", val)
-				}
-				port = p
-			} else if idx := strings.LastIndex(val, ":"); idx > 0 && isAllDigits(val[idx+1:]) {
-				host = val[:idx]
-				p, err := strconv.Atoi(val[idx+1:])
-				if err != nil {
-					log.Fatalf("glj: invalid port: %s", val[idx+1:])
-				}
-				port = p
-			} else if net.ParseIP(val) != nil {
-				host = val
-			} else {
-				portFile = val
-			}
-		}
+		host, port, portFile := parseServerArg(args[0], "--nrepl")
 		startNREPL(host, port, portFile)
+		return
+	} else if args[0] == "--srepl" || strings.HasPrefix(args[0], "--srepl=") {
+		host, port, portFile := parseServerArg(args[0], "--srepl")
+		startSREPL(host, port, portFile)
 		return
 	} else if args[0] == "--nrepl-connect" {
 		if len(args) < 2 {
@@ -234,6 +219,35 @@ func isAllDigits(s string) bool {
 	return true
 }
 
+// parseServerArg extracts host, port, and port-file from a flag like
+// --nrepl=VALUE or --srepl=VALUE.  The prefix is e.g. "--nrepl".
+func parseServerArg(arg, prefix string) (host string, port int, portFile string) {
+	host = "localhost"
+	if !strings.HasPrefix(arg, prefix+"=") {
+		return
+	}
+	val := strings.TrimPrefix(arg, prefix+"=")
+	if isAllDigits(val) {
+		p, err := strconv.Atoi(val)
+		if err != nil {
+			log.Fatalf("glj: invalid port: %s", val)
+		}
+		port = p
+	} else if idx := strings.LastIndex(val, ":"); idx > 0 && isAllDigits(val[idx+1:]) {
+		host = val[:idx]
+		p, err := strconv.Atoi(val[idx+1:])
+		if err != nil {
+			log.Fatalf("glj: invalid port: %s", val[idx+1:])
+		}
+		port = p
+	} else if net.ParseIP(val) != nil {
+		host = val
+	} else {
+		portFile = val
+	}
+	return
+}
+
 func startNREPL(host string, port int, portFile string) {
 	srv, err := nrepl.Start(host, port, portFile)
 	if err != nil {
@@ -252,5 +266,25 @@ func startNREPL(host string, port int, portFile string) {
 	<-sigCh
 
 	fmt.Println("\nnREPL server shutting down...")
+	srv.Stop()
+}
+
+func startSREPL(host string, port int, portFile string) {
+	srv, err := srepl.Start(host, port, portFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	actualPort := srv.Port()
+	fmt.Printf("Socket REPL started on port %d on host %s - %s:%d\n",
+		actualPort, host, host, actualPort)
+
+	go srv.Serve()
+
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+	<-sigCh
+
+	fmt.Println("\nSocket REPL shutting down...")
 	srv.Stop()
 }
