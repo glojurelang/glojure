@@ -479,8 +479,15 @@ func Start(opts ...Option) {
 	}
 
 	// File-based history
-	histFile := historyFilePath()
-	rl.History.AddFromFile("glj", histFile)
+	histFile := o.historyFile
+	if histFile == "" {
+		histFile = historyFilePath()
+	}
+	if o.historyFmt == "jline" {
+		rl.History.AddFromJLineFile("glj", histFile)
+	} else {
+		rl.History.AddFromFile("glj", histFile)
+	}
 
 	printBanner(o.stdout, serverURL(o.nreplServer), sreplURL)
 

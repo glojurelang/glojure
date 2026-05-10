@@ -14,6 +14,8 @@ type options struct {
 	env         lang.Environment
 	nreplClient *nrepl.Client
 	nreplServer *nrepl.Server
+	historyFile string
+	historyFmt  string // "json" (default) or "jline"
 }
 
 // Option is a functional option for the REPL.
@@ -45,5 +47,14 @@ func WithEnvironment(env lang.Environment) Option {
 func WithNREPLClient(c *nrepl.Client) Option {
 	return func(o *options) {
 		o.nreplClient = c
+	}
+}
+
+// WithHistoryFile sets the history file path and format.
+// Format is "jline" for JLine format (Babashka/Leiningen), or empty for default JSON.
+func WithHistoryFile(path, format string) Option {
+	return func(o *options) {
+		o.historyFile = path
+		o.historyFmt = format
 	}
 }

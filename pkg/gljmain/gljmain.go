@@ -119,10 +119,26 @@ func Main(args []string) {
 		}
 		defer client.Close()
 
+		// Parse optional --history FILE [--history-fmt FMT]
+		var histFile, histFmt string
+		for i := 2; i < len(args); i++ {
+			if args[i] == "--history" && i+1 < len(args) {
+				histFile = args[i+1]
+				i++
+			} else if args[i] == "--history-fmt" && i+1 < len(args) {
+				histFmt = args[i+1]
+				i++
+			}
+		}
+
 		fi, _ := os.Stdin.Stat()
 		if (fi.Mode() & os.ModeCharDevice) != 0 {
 			// Interactive terminal: full readline REPL
-			repl.Start(repl.WithNREPLClient(client))
+			opts := []repl.Option{repl.WithNREPLClient(client)}
+			if histFile != "" {
+				opts = append(opts, repl.WithHistoryFile(histFile, histFmt))
+			}
+			repl.Start(opts...)
 		} else {
 			// Piped input: eval and exit
 			input, err := io.ReadAll(os.Stdin)
