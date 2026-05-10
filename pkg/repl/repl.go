@@ -68,17 +68,19 @@ func Start(opts ...Option) {
 		}
 	}
 
-	// Start embedded socket REPL server.
+	// Start embedded socket REPL server (skip when connecting to external).
 	sreplURL := ""
-	sreplSrv, err := srepl.Start("localhost", 0, "")
-	if err == nil {
-		go sreplSrv.Serve()
-		defer sreplSrv.Stop()
-		h := sreplSrv.Host()
-		if h == "0.0.0.0" || h == "::" || h == "127.0.0.1" || h == "::1" {
-			h = "localhost"
+	if o.nreplServer != nil {
+		sreplSrv, err := srepl.Start("localhost", 0, "")
+		if err == nil {
+			go sreplSrv.Serve()
+			defer sreplSrv.Stop()
+			h := sreplSrv.Host()
+			if h == "0.0.0.0" || h == "::" || h == "127.0.0.1" || h == "::1" {
+				h = "localhost"
+			}
+			sreplURL = fmt.Sprintf("%s:%d", h, sreplSrv.Port())
 		}
-		sreplURL = fmt.Sprintf("%s:%d", h, sreplSrv.Port())
 	}
 
 	rl := readline.NewShell()
