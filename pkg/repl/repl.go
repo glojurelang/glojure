@@ -671,6 +671,20 @@ const (
 	colorGray       = "\x1b[90m"
 )
 
+// Rainbow parentheses colors (Calva-style), cycling through depth levels.
+var rainbowColors = []string{
+	"\x1b[38;2;204;204;204m", // light gray (#ccc)
+	"\x1b[38;2;0;152;230m",   // blue (#0098e6)
+	"\x1b[38;2;225;109;109m", // salmon (#e16d6d)
+	"\x1b[38;2;63;164;85m",   // green (#3fa455)
+	"\x1b[38;2;201;104;230m", // purple (#c968e6)
+	"\x1b[38;2;153;153;153m", // gray (#999)
+	"\x1b[38;2;206;126;0m",   // orange (#ce7e00)
+}
+
+// Style for mismatched/unmatched closing brackets: white on red background.
+const colorMismatch = "\x1b[97;41m"
+
 // specialForms is the set of Clojure special forms and commonly
 // highlighted macros, used for bold-yellow highlighting.
 var specialForms = map[string]bool{
@@ -731,6 +745,7 @@ func highlightSyntax(line []rune, env lang.Environment) string {
 	buf.Grow(len(line) * 2)
 	i := 0
 	n := len(line)
+	var bracketStack []rune // tracks open bracket types for matching
 
 	for i < n {
 		ch := line[i]
@@ -783,9 +798,44 @@ func highlightSyntax(line []rune, env lang.Environment) string {
 			continue
 		}
 
+		// Opening brackets: rainbow color at current depth, then push
+		if ch == '(' || ch == '[' || ch == '{' {
+			depth := len(bracketStack)
+			buf.WriteString(rainbowColors[depth%len(rainbowColors)])
+			buf.WriteRune(ch)
+			buf.WriteString(colorReset)
+			bracketStack = append(bracketStack, ch)
+			i++
+			continue
+		}
+
+		// Closing brackets: check type match, pop, and color
+		if ch == ')' || ch == ']' || ch == '}' {
+			depth := len(bracketStack)
+			if depth == 0 {
+				// Unmatched closer
+				buf.WriteString(colorMismatch)
+			} else {
+				open := bracketStack[depth-1]
+				matched := (open == '(' && ch == ')') ||
+					(open == '[' && ch == ']') ||
+					(open == '{' && ch == '}')
+				if matched {
+					bracketStack = bracketStack[:depth-1]
+					buf.WriteString(rainbowColors[(depth-1)%len(rainbowColors)])
+				} else {
+					// Type mismatch
+					buf.WriteString(colorMismatch)
+				}
+			}
+			buf.WriteRune(ch)
+			buf.WriteString(colorReset)
+			i++
+			continue
+		}
+
 		// Dispatch: #, characters, deref @, quote ', etc. -- pass through
-		if ch == '(' || ch == ')' || ch == '[' || ch == ']' ||
-			ch == '{' || ch == '}' || ch == '\'' || ch == '`' ||
+		if ch == '\'' || ch == '`' ||
 			ch == '@' || ch == '^' || ch == '~' || ch == '#' {
 			buf.WriteRune(ch)
 			i++
