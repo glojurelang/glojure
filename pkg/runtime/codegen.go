@@ -2056,13 +2056,33 @@ func (g *Generator) addImportWithAlias(pkg string) string {
 	if alias, ok := g.imports[pkg]; ok {
 		return alias // Return existing alias
 	}
-	// Generate a new alias based on the last part of the package name
+	// Generate a new alias based on the last part of the package name.
+	// Sanitize the segment so it is a valid Go identifier: characters
+	// that are not letters, digits, or underscores become underscores,
+	// and a leading digit is prefixed with an underscore.
 	parts := strings.Split(pkg, "/")
-	// Use the last part of the package name and current import count
-	alias := fmt.Sprintf("%s%d", parts[len(parts)-1], len(g.imports))
+	alias := fmt.Sprintf("%s%d", sanitizeGoIdent(parts[len(parts)-1]), len(g.imports))
 	g.imports[pkg] = alias // Store the alias for this package
 
 	return alias
+}
+
+func sanitizeGoIdent(s string) string {
+	out := strings.Map(func(r rune) rune {
+		switch {
+		case r >= 'a' && r <= 'z',
+			r >= 'A' && r <= 'Z',
+			r >= '0' && r <= '9',
+			r == '_':
+			return r
+		default:
+			return '_'
+		}
+	}, s)
+	if len(out) > 0 && out[0] >= '0' && out[0] <= '9' {
+		out = "_" + out
+	}
+	return out
 }
 
 func (g *Generator) header(pkgName string) string {
