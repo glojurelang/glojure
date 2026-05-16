@@ -159,6 +159,8 @@ import (
 	unsafe "unsafe"
 )
 
+var _ = reflect.TypeOf
+
 func init() {
 	RegisterImports(pkgmap.Set)
 }
