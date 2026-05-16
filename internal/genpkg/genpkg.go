@@ -2,6 +2,7 @@ package genpkg
 
 import (
 	"fmt"
+	"go/build"
 	"go/constant"
 	"go/format"
 	"go/importer"
@@ -9,10 +10,24 @@ import (
 	"go/types"
 	"io"
 	"os"
+	"os/exec"
 	"sort"
 	"strconv"
 	"strings"
 )
+
+// Replace go/build's compile-time GOROOT (baked into glj at build time)
+// with whatever the on-PATH `go` reports, so the source importer and any
+// subsequent `go` exec resolve against the user's actual Go install.
+func init() {
+	out, err := exec.Command("go", "env", "GOROOT").Output()
+	if err != nil {
+		return
+	}
+	if goroot := strings.TrimSpace(string(out)); goroot != "" {
+		build.Default.GOROOT = goroot
+	}
+}
 
 type (
 	Options struct {
@@ -156,6 +171,10 @@ func createHeaderBuilder(packageNames []string) *strings.Builder {
 	}
 
 	builder.WriteString(")\n\n")
+
+	// Ensure reflect stays "used" even when no exported TypeNames
+	// reference it (e.g. an empty gljdeps.edn).
+	builder.WriteString("var _ = reflect.TypeOf\n\n")
 
 	builder.WriteString(`func init() {
 	RegisterImports(pkgmap.Set)

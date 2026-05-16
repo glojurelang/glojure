@@ -33,4 +33,4 @@ if [ -n "$GO_REPLACE" ]; then
     trap gowork_cleanup EXIT
 fi
 
-GOOS=$OS GOARCH=$ARCH go build -ldflags "$LDFLAGS" -o $1 ./cmd/glj
+GOOS=$OS GOARCH=$ARCH go build -trimpath -ldflags "$LDFLAGS" -o "$1" ./cmd/glj
