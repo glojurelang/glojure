@@ -16,6 +16,7 @@ import (
 
 	"github.com/gloathub/glojure/pkg/lang"
 	"github.com/gloathub/glojure/pkg/nrepl"
+	"github.com/gloathub/glojure/pkg/pkgmap"
 	"github.com/gloathub/glojure/pkg/runtime"
 	"github.com/gloathub/glojure/pkg/srepl"
 
@@ -1228,6 +1229,17 @@ func completeSymbol(o options, line []rune, cursor int) readline.Completions {
 		}
 	}
 
+	// Javacompat host classes (Math, System, ...) registered in pkgmap.
+	for _, hc := range pkgmap.HostClasses() {
+		if strings.HasPrefix(hc, prefix) {
+			candidates = append(candidates, readline.Completion{
+				Value:       hc + "/",
+				Display:     hc + "/",
+				Description: "host class",
+			})
+		}
+	}
+
 	comps := readline.CompleteRaw(candidates)
 	comps.PREFIX = prefix
 
@@ -1250,7 +1262,7 @@ func completeQualified(curNS *lang.Namespace, nsName, symPrefix, insertPrefix st
 		targetNS = lang.FindNamespace(lang.NewSymbol(nsName))
 	}
 	if targetNS == nil {
-		return readline.Completions{}
+		return completeHostClass(nsName, symPrefix, insertPrefix)
 	}
 
 	var candidates []readline.Completion
@@ -1269,6 +1281,31 @@ func completeQualified(curNS *lang.Namespace, nsName, symPrefix, insertPrefix st
 		})
 	}
 
+	comps := readline.CompleteRaw(candidates)
+	comps.PREFIX = insertPrefix + symPrefix
+	return comps
+}
+
+// completeHostClass completes members of a javacompat host class such as
+// Math/sqrt or System/getenv. It walks pkgmap for entries registered under
+// the bare class name and returns each as `Class/member`. Returns an empty
+// Completions if no such class is registered.
+func completeHostClass(nsName, symPrefix, insertPrefix string) readline.Completions {
+	names := pkgmap.PkgEntries(nsName)
+	if len(names) == 0 {
+		return readline.Completions{}
+	}
+	var candidates []readline.Completion
+	for _, name := range names {
+		if !strings.HasPrefix(name, symPrefix) {
+			continue
+		}
+		candidates = append(candidates, readline.Completion{
+			Value:       insertPrefix + name,
+			Display:     insertPrefix + name,
+			Description: nsName,
+		})
+	}
 	comps := readline.CompleteRaw(candidates)
 	comps.PREFIX = insertPrefix + symPrefix
 	return comps

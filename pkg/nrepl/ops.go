@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/gloathub/glojure/pkg/pkgmap"
 	"github.com/gloathub/glojure/pkg/reader"
 	"github.com/gloathub/glojure/pkg/runtime"
 )
@@ -245,6 +246,31 @@ func (s *Server) opCompletions(msg map[string]interface{}, conn net.Conn) {
 				"candidate": name,
 				"type":      "namespace",
 			})
+		}
+	}
+
+	// Complete javacompat host classes (Math, System, ...) and their
+	// members. For a bare prefix like "Ma" we offer "Math/"; for a
+	// qualified prefix like "Math/sq" we list matching entries.
+	if slash := strings.IndexByte(prefix, '/'); slash > 0 {
+		cls := prefix[:slash]
+		memberPrefix := prefix[slash+1:]
+		for _, name := range pkgmap.PkgEntries(cls) {
+			if strings.HasPrefix(name, memberPrefix) {
+				completions = append(completions, map[string]interface{}{
+					"candidate": cls + "/" + name,
+					"type":      "static-method",
+				})
+			}
+		}
+	} else {
+		for _, hc := range pkgmap.HostClasses() {
+			if strings.HasPrefix(hc, prefix) {
+				completions = append(completions, map[string]interface{}{
+					"candidate": hc + "/",
+					"type":      "class",
+				})
+			}
 		}
 	}
 
