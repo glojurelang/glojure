@@ -191,6 +191,20 @@
    'Math/toIntExact    'github.com:gloathub:glojure:pkg:javacompat:math.ToIntExact
    'Math/random        'github.com:gloathub:glojure:pkg:javacompat:math.Random})
 
+(def gojava-system-mappings
+  {'System/out               'github.com:gloathub:glojure:pkg:javacompat:system.Out
+   'System/err               'github.com:gloathub:glojure:pkg:javacompat:system.Err
+   'System/in                'github.com:gloathub:glojure:pkg:javacompat:system.In
+   'System/currentTimeMillis 'github.com:gloathub:glojure:pkg:javacompat:system.CurrentTimeMillis
+   'System/nanoTime          'github.com:gloathub:glojure:pkg:javacompat:system.NanoTime
+   'System/getenv            'github.com:gloathub:glojure:pkg:javacompat:system.Getenv
+   'System/getProperty       'github.com:gloathub:glojure:pkg:javacompat:system.GetProperty
+   'System/setProperty       'github.com:gloathub:glojure:pkg:javacompat:system.SetProperty
+   'System/clearProperty     'github.com:gloathub:glojure:pkg:javacompat:system.ClearProperty
+   'System/exit              'github.com:gloathub:glojure:pkg:javacompat:system.Exit
+   'System/lineSeparator     'github.com:gloathub:glojure:pkg:javacompat:system.LineSeparator
+   'System/gc                'github.com:gloathub:glojure:pkg:javacompat:system.Gc})
+
 (def other-mappings
   {'(. clojure.lang.Delay (force x)) '(github.com:gloathub:glojure:pkg:lang.ForceDelay x)
    '(or (instance? Long x)
@@ -242,6 +256,7 @@
     (create-simple-replacements type-mappings)
     (create-simple-replacements static-field-mappings)
     (create-simple-replacements gojava-math-mappings)
+    (create-simple-replacements gojava-system-mappings)
     (create-simple-replacements other-mappings)
 
     ;; Pattern-based clojure.lang replacements
