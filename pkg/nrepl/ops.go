@@ -251,11 +251,16 @@ func (s *Server) opCompletions(msg map[string]interface{}, conn net.Conn) {
 
 	// Complete javacompat host classes (Math, System, ...) and their
 	// members. For a bare prefix like "Ma" we offer "Math/"; for a
-	// qualified prefix like "Math/sq" we list matching entries.
+	// qualified prefix like "Math/sq" we list matching entries. A
+	// fully-qualified java.lang.X form is treated as the bare X.
 	if slash := strings.IndexByte(prefix, '/'); slash > 0 {
 		cls := prefix[:slash]
 		memberPrefix := prefix[slash+1:]
-		for _, name := range pkgmap.PkgEntries(cls) {
+		lookup := cls
+		if bare, ok := strings.CutPrefix(cls, "java.lang."); ok {
+			lookup = bare
+		}
+		for _, name := range pkgmap.PkgEntries(lookup) {
 			if strings.HasPrefix(name, memberPrefix) {
 				completions = append(completions, map[string]interface{}{
 					"candidate": cls + "/" + name,
@@ -264,10 +269,21 @@ func (s *Server) opCompletions(msg map[string]interface{}, conn net.Conn) {
 			}
 		}
 	} else {
+		// Only uppercase-leading host classes get the java.lang. prefix
+		// form, since pkgmap.HostClasses() also includes Go stdlib pkgs.
 		for _, hc := range pkgmap.HostClasses() {
 			if strings.HasPrefix(hc, prefix) {
 				completions = append(completions, map[string]interface{}{
 					"candidate": hc + "/",
+					"type":      "class",
+				})
+			}
+			if hc == "" || hc[0] < 'A' || hc[0] > 'Z' {
+				continue
+			}
+			if fq := "java.lang." + hc; strings.HasPrefix(fq, prefix) {
+				completions = append(completions, map[string]interface{}{
+					"candidate": fq + "/",
 					"type":      "class",
 				})
 			}

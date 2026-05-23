@@ -337,6 +337,15 @@ func (env *environment) EvalASTMaybeHostForm(n *ast.Node) (interface{}, error) {
 		return v, nil
 	}
 
+	// Fully-qualified java.lang.X form: strip the prefix and re-check.
+	// In standard Clojure, java.lang.* classes are auto-imported, so
+	// java.lang.Math/abs and Math/abs name the same thing.
+	if bare, ok2 := strings.CutPrefix(hostFormNode.Class, "java.lang."); ok2 {
+		if v, ok := pkgmap.Get(bare + "." + field.Name()); ok {
+			return v, nil
+		}
+	}
+
 	// Java class compatibility mappings
 	classMethod := hostFormNode.Class + "/" + field.Name()
 	if fn, ok := javaClassMethods[classMethod]; ok {

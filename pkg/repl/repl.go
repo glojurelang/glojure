@@ -1230,11 +1230,25 @@ func completeSymbol(o options, line []rune, cursor int) readline.Completions {
 	}
 
 	// Javacompat host classes (Math, System, ...) registered in pkgmap.
+	// Also offer the fully-qualified java.lang.<Class>/ form so users who
+	// type `java.lang.M<TAB>` get completions equivalent to bare `M<TAB>`.
+	// Only uppercase-leading entries are offered with the java.lang.
+	// prefix, since Go stdlib packages also live in HostClasses().
 	for _, hc := range pkgmap.HostClasses() {
 		if strings.HasPrefix(hc, prefix) {
 			candidates = append(candidates, readline.Completion{
 				Value:       hc + "/",
 				Display:     hc + "/",
+				Description: "host class",
+			})
+		}
+		if hc == "" || hc[0] < 'A' || hc[0] > 'Z' {
+			continue
+		}
+		if fq := "java.lang." + hc; strings.HasPrefix(fq, prefix) {
+			candidates = append(candidates, readline.Completion{
+				Value:       fq + "/",
+				Display:     fq + "/",
 				Description: "host class",
 			})
 		}
@@ -1289,9 +1303,14 @@ func completeQualified(curNS *lang.Namespace, nsName, symPrefix, insertPrefix st
 // completeHostClass completes members of a javacompat host class such as
 // Math/sqrt or System/getenv. It walks pkgmap for entries registered under
 // the bare class name and returns each as `Class/member`. Returns an empty
-// Completions if no such class is registered.
+// Completions if no such class is registered. A fully-qualified form like
+// java.lang.Math/sqrt is treated the same as Math/sqrt.
 func completeHostClass(nsName, symPrefix, insertPrefix string) readline.Completions {
-	names := pkgmap.PkgEntries(nsName)
+	lookup := nsName
+	if bare, ok := strings.CutPrefix(nsName, "java.lang."); ok {
+		lookup = bare
+	}
+	names := pkgmap.PkgEntries(lookup)
 	if len(names) == 0 {
 		return readline.Completions{}
 	}

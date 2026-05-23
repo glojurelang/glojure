@@ -283,6 +283,21 @@
   [mappings]
   (map (fn [[old new]] (sexpr-replace old new)) mappings))
 
+(defn java-lang-mappings
+  "Given a Class/member mapping, produce the parallel
+  java.lang.Class/member mapping. In standard Clojure java.lang.*
+  classes are auto-imported, so both forms must resolve to the same
+  bridge symbol."
+  [mappings]
+  (into {}
+        (map (fn [[old new]]
+               (let [ns (namespace old) nm (name old)
+                     fq (if ns
+                          (symbol (str "java.lang." ns) nm)
+                          (symbol (str "java.lang." nm)))]
+                 [fq new])))
+        mappings))
+
 (defn clojure-lang->glojure-pkg
   "Create replacement for clojure.lang.ClassName to glojure package equivalent"
   [class-name & {:keys [pointer? package] 
@@ -307,6 +322,10 @@
     (create-simple-replacements gojava-system-mappings)
     (create-simple-replacements gojava-integer-mappings)
     (create-simple-replacements gojava-long-mappings)
+    (create-simple-replacements (java-lang-mappings gojava-math-mappings))
+    (create-simple-replacements (java-lang-mappings gojava-system-mappings))
+    (create-simple-replacements (java-lang-mappings gojava-integer-mappings))
+    (create-simple-replacements (java-lang-mappings gojava-long-mappings))
     (create-simple-replacements other-mappings)
 
     ;; Pattern-based clojure.lang replacements
@@ -540,15 +559,18 @@
       (z/replace zloc (concat '(errors.New) (rest (rest (z/sexpr zloc))))))]
 
    ;; java.lang.Integer / java.lang.Long constructors -> javacompat valueOf
+   ;; Accept both bare `Integer.` and fully-qualified `java.lang.Integer.`.
    [(fn select [zloc] (and (z/list? zloc)
                            (let [expr (z/sexpr zloc)]
-                             (and (seq expr) (= 'Integer. (first expr))))))
+                             (and (seq expr)
+                                  (#{'Integer. 'java.lang.Integer.} (first expr))))))
     (fn visit [zloc]
       (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:integer.ValueOf)
                               (rest (z/sexpr zloc)))))]
    [(fn select [zloc] (and (z/list? zloc)
                            (let [expr (z/sexpr zloc)]
-                             (and (seq expr) (= 'Long. (first expr))))))
+                             (and (seq expr)
+                                  (#{'Long. 'java.lang.Long.} (first expr))))))
     (fn visit [zloc]
       (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:long.ValueOf)
                               (rest (z/sexpr zloc)))))]
