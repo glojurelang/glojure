@@ -141,6 +141,56 @@
    'Float/POSITIVE_INFINITY '(go/float32 (math.Inf 1))
    'Float/NEGATIVE_INFINITY '(go/float32 (math.Inf -1))})
 
+;; java.lang.Math via the javacompat bridge inside glojure. Each JVM-style
+;; Math/* symbol rewrites to a fully-qualified symbol in
+;; github.com/gloathub/glojure/pkg/javacompat/math, which forwards
+;; non-polymorphic methods to gojava and provides polymorphic dispatchers
+;; for the overloaded ones.
+(def gojava-math-mappings
+  {'Math/PI            'github.com:gloathub:glojure:pkg:javacompat:math.PI
+   'Math/E             'github.com:gloathub:glojure:pkg:javacompat:math.E
+   'Math/abs           'github.com:gloathub:glojure:pkg:javacompat:math.Abs
+   'Math/ceil          'github.com:gloathub:glojure:pkg:javacompat:math.Ceil
+   'Math/floor         'github.com:gloathub:glojure:pkg:javacompat:math.Floor
+   'Math/round         'github.com:gloathub:glojure:pkg:javacompat:math.Round
+   'Math/rint          'github.com:gloathub:glojure:pkg:javacompat:math.Rint
+   'Math/signum        'github.com:gloathub:glojure:pkg:javacompat:math.Signum
+   'Math/sqrt          'github.com:gloathub:glojure:pkg:javacompat:math.Sqrt
+   'Math/cbrt          'github.com:gloathub:glojure:pkg:javacompat:math.Cbrt
+   'Math/pow           'github.com:gloathub:glojure:pkg:javacompat:math.Pow
+   'Math/exp           'github.com:gloathub:glojure:pkg:javacompat:math.Exp
+   'Math/expm1         'github.com:gloathub:glojure:pkg:javacompat:math.Expm1
+   'Math/log           'github.com:gloathub:glojure:pkg:javacompat:math.Log
+   'Math/log10         'github.com:gloathub:glojure:pkg:javacompat:math.Log10
+   'Math/log1p         'github.com:gloathub:glojure:pkg:javacompat:math.Log1p
+   'Math/sin           'github.com:gloathub:glojure:pkg:javacompat:math.Sin
+   'Math/cos           'github.com:gloathub:glojure:pkg:javacompat:math.Cos
+   'Math/tan           'github.com:gloathub:glojure:pkg:javacompat:math.Tan
+   'Math/asin          'github.com:gloathub:glojure:pkg:javacompat:math.Asin
+   'Math/acos          'github.com:gloathub:glojure:pkg:javacompat:math.Acos
+   'Math/atan          'github.com:gloathub:glojure:pkg:javacompat:math.Atan
+   'Math/atan2         'github.com:gloathub:glojure:pkg:javacompat:math.Atan2
+   'Math/sinh          'github.com:gloathub:glojure:pkg:javacompat:math.Sinh
+   'Math/cosh          'github.com:gloathub:glojure:pkg:javacompat:math.Cosh
+   'Math/tanh          'github.com:gloathub:glojure:pkg:javacompat:math.Tanh
+   'Math/copySign      'github.com:gloathub:glojure:pkg:javacompat:math.CopySign
+   'Math/hypot         'github.com:gloathub:glojure:pkg:javacompat:math.Hypot
+   'Math/IEEEremainder 'github.com:gloathub:glojure:pkg:javacompat:math.IEEEremainder
+   'Math/toRadians     'github.com:gloathub:glojure:pkg:javacompat:math.ToRadians
+   'Math/toDegrees     'github.com:gloathub:glojure:pkg:javacompat:math.ToDegrees
+   'Math/max           'github.com:gloathub:glojure:pkg:javacompat:math.Max
+   'Math/min           'github.com:gloathub:glojure:pkg:javacompat:math.Min
+   'Math/floorDiv      'github.com:gloathub:glojure:pkg:javacompat:math.FloorDiv
+   'Math/floorMod      'github.com:gloathub:glojure:pkg:javacompat:math.FloorMod
+   'Math/addExact      'github.com:gloathub:glojure:pkg:javacompat:math.AddExact
+   'Math/subtractExact 'github.com:gloathub:glojure:pkg:javacompat:math.SubtractExact
+   'Math/multiplyExact 'github.com:gloathub:glojure:pkg:javacompat:math.MultiplyExact
+   'Math/negateExact   'github.com:gloathub:glojure:pkg:javacompat:math.NegateExact
+   'Math/incrementExact 'github.com:gloathub:glojure:pkg:javacompat:math.IncrementExact
+   'Math/decrementExact 'github.com:gloathub:glojure:pkg:javacompat:math.DecrementExact
+   'Math/toIntExact    'github.com:gloathub:glojure:pkg:javacompat:math.ToIntExact
+   'Math/random        'github.com:gloathub:glojure:pkg:javacompat:math.Random})
+
 (def other-mappings
   {'(. clojure.lang.Delay (force x)) '(github.com:gloathub:glojure:pkg:lang.ForceDelay x)
    '(or (instance? Long x)
@@ -191,6 +241,7 @@
     (create-simple-replacements namespace-mappings)
     (create-simple-replacements type-mappings)
     (create-simple-replacements static-field-mappings)
+    (create-simple-replacements gojava-math-mappings)
     (create-simple-replacements other-mappings)
 
     ;; Pattern-based clojure.lang replacements

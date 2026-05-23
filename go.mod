@@ -4,6 +4,7 @@ go 1.24
 
 require (
 	bitbucket.org/pcastools/hash v1.0.5
+	github.com/gloathub/gojava v0.0.0-00010101000000-000000000000
 	github.com/google/uuid v1.6.0
 	github.com/kylelemons/godebug v1.1.0
 	github.com/mitchellh/hashstructure/v2 v2.0.2
@@ -22,3 +23,5 @@ require (
 )
 
 replace github.com/reeflective/readline => github.com/gloathub/readline v0.0.0-20260510170839-c275bce11cb1
+
+replace github.com/gloathub/gojava => /home/ingy/src/gojava
