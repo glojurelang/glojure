@@ -14,6 +14,27 @@ type fomKey struct {
 
 var fomCache sync.Map // fomKey -> interface{}
 
+// StringMethod is the signature for JVM-style instance methods on
+// java.lang.String. The receiver is passed as the first argument and any
+// further arguments arrive in rest. Bridge implementations are
+// responsible for argument-count validation and type coercion.
+type StringMethod func(s string, rest ...any) any
+
+var stringMethods = map[string]StringMethod{}
+
+// RegisterStringMethod registers fn as the implementation of the given
+// JVM-style method name on java.lang.String (e.g. "length",
+// "toUpperCase", "substring"). Called from package init in the
+// javacompat layer; not safe for concurrent use after startup.
+func RegisterStringMethod(name string, fn StringMethod) {
+	stringMethods[name] = fn
+}
+
+func lookupStringMethod(name string) (StringMethod, bool) {
+	fn, ok := stringMethods[name]
+	return fn, ok
+}
+
 // FieldOrMethod returns the field or method of the given name on the
 // given value or pointer to a value, and a boolean indicating whether
 // the field or method was found. If the given value is a pointer, it
@@ -26,6 +47,22 @@ var fomCache sync.Map // fomKey -> interface{}
 // Method results are cached and wrapped as FnFunc so that subsequent
 // Apply calls use the IFn fast path instead of reflection.
 func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
+	// Strings have no Go-level methods; dispatch JVM-style names like
+	// toUpperCase, length, substring through the javacompat/string
+	// registry. The lookup is case-insensitive on the first letter so
+	// rewrite-core's lower-to-upper renames (e.g. .equals -> .Equals)
+	// still resolve. The returned IFn captures the receiver and accepts
+	// only the remaining arguments.
+	if s, isStr := v.(string); isStr {
+		lookup := name
+		if len(lookup) > 0 && unicode.IsUpper(rune(lookup[0])) {
+			lookup = string(unicode.ToLower(rune(lookup[0]))) + lookup[1:]
+		}
+		if fn, ok := lookupStringMethod(lookup); ok {
+			return FnFunc(func(args ...any) any { return fn(s, args...) }), true
+		}
+	}
+
 	if unicode.IsLower(rune(name[0])) {
 		name = string(unicode.ToUpper(rune(name[0]))) + string([]rune(name)[1:])
 	}

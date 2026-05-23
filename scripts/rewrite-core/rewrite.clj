@@ -253,6 +253,12 @@
    'Long/min                   'github.com:gloathub:glojure:pkg:javacompat:long.Min
    'Long/sum                   'github.com:gloathub:glojure:pkg:javacompat:long.Sum})
 
+(def gojava-string-mappings
+  {'String/format      'github.com:gloathub:glojure:pkg:javacompat:string.Format
+   'String/join        'github.com:gloathub:glojure:pkg:javacompat:string.Join
+   'String/valueOf     'github.com:gloathub:glojure:pkg:javacompat:string.ValueOf
+   'String/copyValueOf 'github.com:gloathub:glojure:pkg:javacompat:string.CopyValueOf})
+
 (def other-mappings
   {'(. clojure.lang.Delay (force x)) '(github.com:gloathub:glojure:pkg:lang.ForceDelay x)
    '(or (instance? Long x)
@@ -322,10 +328,12 @@
     (create-simple-replacements gojava-system-mappings)
     (create-simple-replacements gojava-integer-mappings)
     (create-simple-replacements gojava-long-mappings)
+    (create-simple-replacements gojava-string-mappings)
     (create-simple-replacements (java-lang-mappings gojava-math-mappings))
     (create-simple-replacements (java-lang-mappings gojava-system-mappings))
     (create-simple-replacements (java-lang-mappings gojava-integer-mappings))
     (create-simple-replacements (java-lang-mappings gojava-long-mappings))
+    (create-simple-replacements (java-lang-mappings gojava-string-mappings))
     (create-simple-replacements other-mappings)
 
     ;; Pattern-based clojure.lang replacements
@@ -573,6 +581,14 @@
                                   (#{'Long. 'java.lang.Long.} (first expr))))))
     (fn visit [zloc]
       (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:long.ValueOf)
+                              (rest (z/sexpr zloc)))))]
+   ;; (String. x) and (java.lang.String. x) -> valueOf-style coercion
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [expr (z/sexpr zloc)]
+                             (and (seq expr)
+                                  (#{'String. 'java.lang.String.} (first expr))))))
+    (fn visit [zloc]
+      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:string.ValueOf)
                               (rest (z/sexpr zloc)))))]
    ;; catch Exception
    [(fn select [zloc] (and (z/sexpr-able? zloc)
