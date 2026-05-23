@@ -134,8 +134,6 @@
 (def static-field-mappings
   {'clojure.lang.Namespace/all 'github.com:gloathub:glojure:pkg:lang.AllNamespaces
    'clojure.lang.Iterate/create 'github.com:gloathub:glojure:pkg:lang.CreateIterate
-   'Integer/MIN_VALUE 'math.MinInt
-   'Integer/MAX_VALUE 'math.MaxInt
    'Double/POSITIVE_INFINITY '(math.Inf 1)
    'Double/NEGATIVE_INFINITY '(math.Inf -1)
    'Float/POSITIVE_INFINITY '(go/float32 (math.Inf 1))
@@ -205,6 +203,56 @@
    'System/lineSeparator     'github.com:gloathub:glojure:pkg:javacompat:system.LineSeparator
    'System/gc                'github.com:gloathub:glojure:pkg:javacompat:system.Gc})
 
+(def gojava-integer-mappings
+  {'Integer/MIN_VALUE             'github.com:gloathub:glojure:pkg:javacompat:integer.MIN_VALUE
+   'Integer/MAX_VALUE             'github.com:gloathub:glojure:pkg:javacompat:integer.MAX_VALUE
+   'Integer/SIZE                  'github.com:gloathub:glojure:pkg:javacompat:integer.SIZE
+   'Integer/BYTES                 'github.com:gloathub:glojure:pkg:javacompat:integer.BYTES
+   'Integer/parseInt              'github.com:gloathub:glojure:pkg:javacompat:integer.ParseInt
+   'Integer/parseUnsignedInt      'github.com:gloathub:glojure:pkg:javacompat:integer.ParseUnsignedInt
+   'Integer/valueOf               'github.com:gloathub:glojure:pkg:javacompat:integer.ValueOf
+   'Integer/toString              'github.com:gloathub:glojure:pkg:javacompat:integer.ToString
+   'Integer/toBinaryString        'github.com:gloathub:glojure:pkg:javacompat:integer.ToBinaryString
+   'Integer/toOctalString         'github.com:gloathub:glojure:pkg:javacompat:integer.ToOctalString
+   'Integer/toHexString           'github.com:gloathub:glojure:pkg:javacompat:integer.ToHexString
+   'Integer/bitCount              'github.com:gloathub:glojure:pkg:javacompat:integer.BitCount
+   'Integer/numberOfLeadingZeros  'github.com:gloathub:glojure:pkg:javacompat:integer.NumberOfLeadingZeros
+   'Integer/numberOfTrailingZeros 'github.com:gloathub:glojure:pkg:javacompat:integer.NumberOfTrailingZeros
+   'Integer/highestOneBit         'github.com:gloathub:glojure:pkg:javacompat:integer.HighestOneBit
+   'Integer/lowestOneBit          'github.com:gloathub:glojure:pkg:javacompat:integer.LowestOneBit
+   'Integer/reverse               'github.com:gloathub:glojure:pkg:javacompat:integer.Reverse
+   'Integer/reverseBytes          'github.com:gloathub:glojure:pkg:javacompat:integer.ReverseBytes
+   'Integer/signum                'github.com:gloathub:glojure:pkg:javacompat:integer.Signum
+   'Integer/compare               'github.com:gloathub:glojure:pkg:javacompat:integer.Compare
+   'Integer/max                   'github.com:gloathub:glojure:pkg:javacompat:integer.Max
+   'Integer/min                   'github.com:gloathub:glojure:pkg:javacompat:integer.Min
+   'Integer/sum                   'github.com:gloathub:glojure:pkg:javacompat:integer.Sum})
+
+(def gojava-long-mappings
+  {'Long/MIN_VALUE             'github.com:gloathub:glojure:pkg:javacompat:long.MIN_VALUE
+   'Long/MAX_VALUE             'github.com:gloathub:glojure:pkg:javacompat:long.MAX_VALUE
+   'Long/SIZE                  'github.com:gloathub:glojure:pkg:javacompat:long.SIZE
+   'Long/BYTES                 'github.com:gloathub:glojure:pkg:javacompat:long.BYTES
+   'Long/parseLong             'github.com:gloathub:glojure:pkg:javacompat:long.ParseLong
+   'Long/parseUnsignedLong     'github.com:gloathub:glojure:pkg:javacompat:long.ParseUnsignedLong
+   'Long/valueOf               'github.com:gloathub:glojure:pkg:javacompat:long.ValueOf
+   'Long/toString              'github.com:gloathub:glojure:pkg:javacompat:long.ToString
+   'Long/toBinaryString        'github.com:gloathub:glojure:pkg:javacompat:long.ToBinaryString
+   'Long/toOctalString         'github.com:gloathub:glojure:pkg:javacompat:long.ToOctalString
+   'Long/toHexString           'github.com:gloathub:glojure:pkg:javacompat:long.ToHexString
+   'Long/bitCount              'github.com:gloathub:glojure:pkg:javacompat:long.BitCount
+   'Long/numberOfLeadingZeros  'github.com:gloathub:glojure:pkg:javacompat:long.NumberOfLeadingZeros
+   'Long/numberOfTrailingZeros 'github.com:gloathub:glojure:pkg:javacompat:long.NumberOfTrailingZeros
+   'Long/highestOneBit         'github.com:gloathub:glojure:pkg:javacompat:long.HighestOneBit
+   'Long/lowestOneBit          'github.com:gloathub:glojure:pkg:javacompat:long.LowestOneBit
+   'Long/reverse               'github.com:gloathub:glojure:pkg:javacompat:long.Reverse
+   'Long/reverseBytes          'github.com:gloathub:glojure:pkg:javacompat:long.ReverseBytes
+   'Long/signum                'github.com:gloathub:glojure:pkg:javacompat:long.Signum
+   'Long/compare               'github.com:gloathub:glojure:pkg:javacompat:long.Compare
+   'Long/max                   'github.com:gloathub:glojure:pkg:javacompat:long.Max
+   'Long/min                   'github.com:gloathub:glojure:pkg:javacompat:long.Min
+   'Long/sum                   'github.com:gloathub:glojure:pkg:javacompat:long.Sum})
+
 (def other-mappings
   {'(. clojure.lang.Delay (force x)) '(github.com:gloathub:glojure:pkg:lang.ForceDelay x)
    '(or (instance? Long x)
@@ -257,6 +305,8 @@
     (create-simple-replacements static-field-mappings)
     (create-simple-replacements gojava-math-mappings)
     (create-simple-replacements gojava-system-mappings)
+    (create-simple-replacements gojava-integer-mappings)
+    (create-simple-replacements gojava-long-mappings)
     (create-simple-replacements other-mappings)
 
     ;; Pattern-based clojure.lang replacements
@@ -488,6 +538,20 @@
                                   (= 'Exception (second expr))))))
     (fn visit [zloc]
       (z/replace zloc (concat '(errors.New) (rest (rest (z/sexpr zloc))))))]
+
+   ;; java.lang.Integer / java.lang.Long constructors -> javacompat valueOf
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [expr (z/sexpr zloc)]
+                             (and (seq expr) (= 'Integer. (first expr))))))
+    (fn visit [zloc]
+      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:integer.ValueOf)
+                              (rest (z/sexpr zloc)))))]
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [expr (z/sexpr zloc)]
+                             (and (seq expr) (= 'Long. (first expr))))))
+    (fn visit [zloc]
+      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:long.ValueOf)
+                              (rest (z/sexpr zloc)))))]
    ;; catch Exception
    [(fn select [zloc] (and (z/sexpr-able? zloc)
                            (= 'Exception (z/sexpr zloc))
