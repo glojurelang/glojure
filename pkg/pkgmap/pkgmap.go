@@ -126,11 +126,25 @@ func HostClassPackages() map[string]string {
 // Bridges call this once per class in init() so namespaces can seed
 // their import maps with `<short-name> -> <type>` entries, mirroring
 // real Clojure's auto-import of java.lang.* (plus any other registered
-// packages).
+// packages). The same value is also exported under the bare class name
+// (e.g. "Integer") and, if the class's Java package has been registered
+// via SetHostClassPackage, under the fully-qualified Java name (e.g.
+// "java.lang.Integer"), so EvalASTMaybeClass can resolve both forms
+// from any namespace whose mappings predate the bridge's init (notably
+// clojure.core).
 func SetHostClass(class string, t reflect.Type) {
 	hostClassTypeMtx.Lock()
-	defer hostClassTypeMtx.Unlock()
 	hostClassType[class] = t
+	hostClassTypeMtx.Unlock()
+
+	Set(class, t)
+
+	hostClassPkgMtx.RLock()
+	javaPkg, ok := hostClassPkg[class]
+	hostClassPkgMtx.RUnlock()
+	if ok {
+		Set(javaPkg+"."+class, t)
+	}
 }
 
 // HostClass returns the reflect.Type registered for the given class

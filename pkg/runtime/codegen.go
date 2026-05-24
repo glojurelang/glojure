@@ -493,6 +493,8 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 // returns the variable name or constant expression for the value
 func (g *Generator) generateValue(value any) string {
 	switch v := value.(type) {
+	case *lang.Class:
+		return g.generateClassValue(v)
 	case reflect.Type:
 		return g.generateTypeValue(v)
 	case *lang.Atom:
@@ -572,6 +574,17 @@ func (g *Generator) generateValue(value any) string {
 
 		panic(fmt.Sprintf("unsupported value type %T: %s", v, v))
 	}
+}
+
+// generateClassValue wraps the embedded reflect.Type in a fresh
+// lang.Class so the AOT-compiled binary preserves the JVM-style class
+// identity (and its FQ Java name) for symbols seeded by the host-class
+// import path (Math, Integer, java.lang.Integer, ...).
+func (g *Generator) generateClassValue(c *lang.Class) string {
+	typeExpr := g.generateTypeValue(c.Type)
+	resultId := g.allocateTempVar()
+	g.writef("%s := lang.NewClass(%s, %#v)\n", resultId, typeExpr, c.JavaName)
+	return resultId
 }
 
 func (g *Generator) generateTypeValue(t reflect.Type) string {
@@ -1810,6 +1823,9 @@ func (g *Generator) generateMaybeClass(node *ast.Node) string {
 	// the compiled code would succeed, because the import will cause the go toolchain
 	// to pull in the package.
 	if ok {
+		if c, ok := v.(*lang.Class); ok {
+			return g.generateClassValue(c)
+		}
 		if t, ok := v.(reflect.Type); ok {
 			return g.generateTypeValue(t)
 		}
