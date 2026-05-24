@@ -5,6 +5,7 @@ package double
 
 import (
 	"fmt"
+	"reflect"
 
 	jdouble "github.com/gloathub/gojava/double"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -69,6 +70,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Double."+jvmName, v)
 	pkgmap.SetHostClassPackage("Double", "java.lang")
+	pkgmap.SetHostClass("Double", reflect.TypeOf(float64(0)))
 }
 
 func init() {

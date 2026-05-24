@@ -15,6 +15,7 @@ package integer
 
 import (
 	"fmt"
+	"reflect"
 
 	jint "github.com/gloathub/gojava/integer"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -96,6 +97,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Integer."+jvmName, v)
 	pkgmap.SetHostClassPackage("Integer", "java.lang")
+	pkgmap.SetHostClass("Integer", reflect.TypeOf(int64(0)))
 }
 
 func init() {

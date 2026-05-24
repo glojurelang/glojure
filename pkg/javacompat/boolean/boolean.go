@@ -4,6 +4,7 @@ package boolean
 
 import (
 	"fmt"
+	"reflect"
 
 	jbool "github.com/gloathub/gojava/boolean"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -44,6 +45,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Boolean."+jvmName, v)
 	pkgmap.SetHostClassPackage("Boolean", "java.lang")
+	pkgmap.SetHostClass("Boolean", reflect.TypeOf(false))
 }
 
 func init() {

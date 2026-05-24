@@ -9,6 +9,7 @@ package uuid
 
 import (
 	"fmt"
+	"reflect"
 
 	juuid "github.com/gloathub/gojava/uuid"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -57,6 +58,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("UUID."+jvmName, v)
 	pkgmap.SetHostClassPackage("UUID", "java.util")
+	pkgmap.SetHostClass("UUID", reflect.TypeOf((*juuid.UUID)(nil)))
 }
 
 func init() {

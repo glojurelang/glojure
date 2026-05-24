@@ -6,6 +6,7 @@ package character
 
 import (
 	"fmt"
+	"reflect"
 
 	jchar "github.com/gloathub/gojava/character"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -64,6 +65,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Character."+jvmName, v)
 	pkgmap.SetHostClassPackage("Character", "java.lang")
+	pkgmap.SetHostClass("Character", reflect.TypeOf(lang.Char(0)))
 }
 
 func init() {

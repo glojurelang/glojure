@@ -14,6 +14,7 @@ package system
 
 import (
 	"fmt"
+	"reflect"
 
 	jsys "github.com/gloathub/gojava/system"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -21,6 +22,12 @@ import (
 )
 
 const pkg = "github.com/gloathub/glojure/pkg/javacompat/system"
+
+// System is the placeholder type registered as java.lang.System's
+// reflect.Type. System has private constructors in the JVM, so no
+// instances exist; the value just makes (ns-imports *ns*) include the
+// auto-imported class.
+type System struct{}
 
 // Stream values, exposed under System.out / System.err / System.in. They
 // carry the Go methods (Println, Print, Printf, Write, Flush, Read) that
@@ -103,6 +110,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("System."+jvmName, v)
 	pkgmap.SetHostClassPackage("System", "java.lang")
+	pkgmap.SetHostClass("System", reflect.TypeOf(System{}))
 }
 
 func init() {

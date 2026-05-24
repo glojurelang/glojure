@@ -11,6 +11,7 @@ package regex
 
 import (
 	"fmt"
+	"reflect"
 
 	jregex "github.com/gloathub/gojava/regex"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -72,6 +73,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Pattern."+jvmName, v)
 	pkgmap.SetHostClassPackage("Pattern", "java.util.regex")
+	pkgmap.SetHostClass("Pattern", reflect.TypeOf((*jregex.Pattern)(nil)))
 }
 
 func init() {

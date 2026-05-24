@@ -5,6 +5,7 @@ package long
 
 import (
 	"fmt"
+	"reflect"
 
 	jlong "github.com/gloathub/gojava/long"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -83,6 +84,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Long."+jvmName, v)
 	pkgmap.SetHostClassPackage("Long", "java.lang")
+	pkgmap.SetHostClass("Long", reflect.TypeOf(int64(0)))
 }
 
 func init() {

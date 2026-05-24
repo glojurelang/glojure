@@ -14,6 +14,7 @@ package math
 
 import (
 	"fmt"
+	"reflect"
 
 	jmath "github.com/gloathub/gojava/math"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -21,6 +22,12 @@ import (
 )
 
 const pkg = "github.com/gloathub/glojure/pkg/javacompat/math"
+
+// Math is the placeholder type registered as java.lang.Math's reflect.Type.
+// java.lang.Math is final with a private constructor in the JVM, so no
+// instances ever exist; the value here only needs to make
+// (instance? Class Math) succeed so (ns-imports *ns*) sees the import.
+type Math struct{}
 
 var (
 	PI = jmath.PI
@@ -152,6 +159,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Math."+jvmName, v)
 	pkgmap.SetHostClassPackage("Math", "java.lang")
+	pkgmap.SetHostClass("Math", reflect.TypeOf(Math{}))
 }
 
 func init() {

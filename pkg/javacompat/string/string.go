@@ -18,6 +18,7 @@ package string
 
 import (
 	"fmt"
+	"reflect"
 
 	jstr "github.com/gloathub/gojava/string"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -73,6 +74,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("String."+jvmName, v)
 	pkgmap.SetHostClassPackage("String", "java.lang")
+	pkgmap.SetHostClass("String", reflect.TypeOf(""))
 }
 
 func registerMethod(name string, fn lang.StringMethod) {

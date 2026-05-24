@@ -86,12 +86,22 @@ func NewNamespace(name *Symbol) *Namespace {
 		name: name,
 	}
 
-	ns.mappings.Store(NewBox(emptyMap))
+	ns.mappings.Store(NewBox(seedHostClassImports(emptyMap)))
 	ns.aliases.Store(NewBox(emptyMap))
 
-	// TODO: add default mappings (see RT.java in clojure)
-
 	return ns
+}
+
+// seedHostClassImports returns m extended with entries for every host
+// class registered in pkgmap. Mirrors real Clojure's auto-import of
+// java.lang.* (and other packages we publish) so (ns-imports *ns*)
+// returns a populated map.
+func seedHostClassImports(m IPersistentMap) IPersistentMap {
+	classes := pkgmap.HostClassTypes()
+	for name, t := range classes {
+		m = m.Assoc(NewSymbol(name), t).(IPersistentMap)
+	}
+	return m
 }
 
 func (ns *Namespace) String() string {

@@ -10,6 +10,7 @@ package instant
 
 import (
 	"fmt"
+	"reflect"
 
 	jinstant "github.com/gloathub/gojava/instant"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -59,6 +60,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Instant."+jvmName, v)
 	pkgmap.SetHostClassPackage("Instant", "java.time")
+	pkgmap.SetHostClass("Instant", reflect.TypeOf((*jinstant.Instant)(nil)))
 }
 
 func init() {

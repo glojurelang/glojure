@@ -7,6 +7,7 @@ package thread
 
 import (
 	"fmt"
+	"reflect"
 
 	jthread "github.com/gloathub/gojava/thread"
 	"github.com/gloathub/glojure/pkg/lang"
@@ -14,6 +15,12 @@ import (
 )
 
 const pkg = "github.com/gloathub/glojure/pkg/javacompat/thread"
+
+// Thread is the placeholder type registered as java.lang.Thread's
+// reflect.Type. We don't expose Thread instances yet (only static
+// sleep), so the value just makes (ns-imports *ns*) include the
+// auto-imported class.
+type Thread struct{}
 
 // Sleep mirrors java.lang.Thread.sleep. Accepts (millis) or (millis, nanos);
 // both arguments are coerced from any int-like value glojure may pass.
@@ -33,6 +40,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Thread."+jvmName, v)
 	pkgmap.SetHostClassPackage("Thread", "java.lang")
+	pkgmap.SetHostClass("Thread", reflect.TypeOf(Thread{}))
 }
 
 func init() {

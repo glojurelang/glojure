@@ -1,6 +1,7 @@
 package pkgmap
 
 import (
+	"reflect"
 	"strings"
 	"sync"
 )
@@ -12,6 +13,9 @@ var (
 
 	hostClassPkg    = map[string]string{}
 	hostClassPkgMtx sync.RWMutex
+
+	hostClassType    = map[string]reflect.Type{}
+	hostClassTypeMtx sync.RWMutex
 )
 
 // Set sets the value of the given package and export name.
@@ -113,6 +117,39 @@ func HostClassPackages() map[string]string {
 	defer hostClassPkgMtx.RUnlock()
 	out := make(map[string]string, len(hostClassPkg))
 	for k, v := range hostClassPkg {
+		out[k] = v
+	}
+	return out
+}
+
+// SetHostClass records the reflect.Type that represents a host class.
+// Bridges call this once per class in init() so namespaces can seed
+// their import maps with `<short-name> -> <type>` entries, mirroring
+// real Clojure's auto-import of java.lang.* (plus any other registered
+// packages).
+func SetHostClass(class string, t reflect.Type) {
+	hostClassTypeMtx.Lock()
+	defer hostClassTypeMtx.Unlock()
+	hostClassType[class] = t
+}
+
+// HostClass returns the reflect.Type registered for the given class
+// and whether it was found.
+func HostClass(class string) (reflect.Type, bool) {
+	hostClassTypeMtx.RLock()
+	defer hostClassTypeMtx.RUnlock()
+	t, ok := hostClassType[class]
+	return t, ok
+}
+
+// HostClassTypes returns a copy of the registered (class, type) map.
+// Used by lang.NewNamespace to seed each fresh namespace with the
+// auto-imported host classes so (ns-imports *ns*) is non-empty.
+func HostClassTypes() map[string]reflect.Type {
+	hostClassTypeMtx.RLock()
+	defer hostClassTypeMtx.RUnlock()
+	out := make(map[string]reflect.Type, len(hostClassType))
+	for k, v := range hostClassType {
 		out[k] = v
 	}
 	return out
