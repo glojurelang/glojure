@@ -9,6 +9,9 @@ var (
 	pkgMap = map[string]interface{}{}
 	// TODO: lock-free map
 	mtx sync.RWMutex
+
+	hostClassPkg    = map[string]string{}
+	hostClassPkgMtx sync.RWMutex
 )
 
 // Set sets the value of the given package and export name.
@@ -76,6 +79,41 @@ func HostClasses() []string {
 	out := make([]string, 0, len(seen))
 	for k := range seen {
 		out = append(out, k)
+	}
+	return out
+}
+
+// SetHostClassPackage records the Java package a host class lives in
+// (e.g. "java.lang" for Math, "java.time" for Instant). Bridges call
+// this once per class in init() so the REPL can offer the correct
+// fully-qualified name during tab completion. If a class is not
+// registered, callers should fall back to "java.lang".
+func SetHostClassPackage(class, javaPkg string) {
+	hostClassPkgMtx.Lock()
+	defer hostClassPkgMtx.Unlock()
+	hostClassPkg[class] = javaPkg
+}
+
+// HostClassPackage returns the Java package registered for the given
+// host class, or "java.lang" if none has been set.
+func HostClassPackage(class string) string {
+	hostClassPkgMtx.RLock()
+	defer hostClassPkgMtx.RUnlock()
+	if p, ok := hostClassPkg[class]; ok {
+		return p
+	}
+	return "java.lang"
+}
+
+// HostClassPackages returns a copy of the registered (class, javaPkg)
+// map. Used by the REPL to enumerate fully-qualified namespace prefixes
+// such as "java.time." or "java.util.regex." in tab completion.
+func HostClassPackages() map[string]string {
+	hostClassPkgMtx.RLock()
+	defer hostClassPkgMtx.RUnlock()
+	out := make(map[string]string, len(hostClassPkg))
+	for k, v := range hostClassPkg {
+		out[k] = v
 	}
 	return out
 }

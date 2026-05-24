@@ -63,6 +63,7 @@ func Compare(x, y any) int32 { return jchar.Compare(toRune(x), toRune(y)) }
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Character."+jvmName, v)
+	pkgmap.SetHostClassPackage("Character", "java.lang")
 }
 
 func init() {

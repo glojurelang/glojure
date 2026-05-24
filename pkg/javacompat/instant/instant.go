@@ -58,6 +58,7 @@ func OfEpochMilli(args ...any) *jinstant.Instant {
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Instant."+jvmName, v)
+	pkgmap.SetHostClassPackage("Instant", "java.time")
 }
 
 func init() {

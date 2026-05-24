@@ -72,6 +72,7 @@ func CopyValueOf(args ...any) string {
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("String."+jvmName, v)
+	pkgmap.SetHostClassPackage("String", "java.lang")
 }
 
 func registerMethod(name string, fn lang.StringMethod) {

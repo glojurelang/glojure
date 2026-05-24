@@ -71,6 +71,7 @@ func Quote(args ...any) string {
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Pattern."+jvmName, v)
+	pkgmap.SetHostClassPackage("Pattern", "java.util.regex")
 }
 
 func init() {

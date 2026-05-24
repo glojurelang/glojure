@@ -68,6 +68,7 @@ func Sum(a, b any) float64     { return jdouble.Sum(toFloat64(a), toFloat64(b)) 
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Double."+jvmName, v)
+	pkgmap.SetHostClassPackage("Double", "java.lang")
 }
 
 func init() {

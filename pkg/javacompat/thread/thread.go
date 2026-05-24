@@ -32,6 +32,7 @@ func Sleep(args ...any) any {
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Thread."+jvmName, v)
+	pkgmap.SetHostClassPackage("Thread", "java.lang")
 }
 
 func init() {

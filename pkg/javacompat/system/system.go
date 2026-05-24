@@ -102,6 +102,7 @@ func Gc() { jsys.Gc() }
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("System."+jvmName, v)
+	pkgmap.SetHostClassPackage("System", "java.lang")
 }
 
 func init() {

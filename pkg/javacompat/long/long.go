@@ -82,6 +82,7 @@ func Sum(a, b any) int64     { return jlong.Sum(toInt64(a), toInt64(b)) }
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Long."+jvmName, v)
+	pkgmap.SetHostClassPackage("Long", "java.lang")
 }
 
 func init() {

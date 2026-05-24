@@ -151,6 +151,7 @@ func ToIntExact(x any) any {
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Math."+jvmName, v)
+	pkgmap.SetHostClassPackage("Math", "java.lang")
 }
 
 func init() {

@@ -95,6 +95,7 @@ func Sum(a, b any) int32     { return jint.Sum(toInt32(a), toInt32(b)) }
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Integer."+jvmName, v)
+	pkgmap.SetHostClassPackage("Integer", "java.lang")
 }
 
 func init() {

@@ -56,6 +56,7 @@ func FromBits(args ...any) *juuid.UUID {
 func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("UUID."+jvmName, v)
+	pkgmap.SetHostClassPackage("UUID", "java.util")
 }
 
 func init() {
