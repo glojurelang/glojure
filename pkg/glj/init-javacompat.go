@@ -10,6 +10,8 @@ import (
 	_ "github.com/gloathub/glojure/pkg/javacompat/integer"
 	_ "github.com/gloathub/glojure/pkg/javacompat/long"
 	_ "github.com/gloathub/glojure/pkg/javacompat/math"
+	_ "github.com/gloathub/glojure/pkg/javacompat/regex"
 	_ "github.com/gloathub/glojure/pkg/javacompat/string"
 	_ "github.com/gloathub/glojure/pkg/javacompat/system"
+	_ "github.com/gloathub/glojure/pkg/javacompat/uuid"
 )

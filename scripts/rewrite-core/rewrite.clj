@@ -295,6 +295,21 @@
    'Boolean/logicalXor   'github.com:gloathub:glojure:pkg:javacompat:boolean.LogicalXor
    'Boolean/getBoolean   'github.com:gloathub:glojure:pkg:javacompat:boolean.GetBoolean})
 
+(def gojava-regex-mappings
+  {'Pattern/compile          'github.com:gloathub:glojure:pkg:javacompat:regex.Compile
+   'Pattern/matches          'github.com:gloathub:glojure:pkg:javacompat:regex.Matches
+   'Pattern/quote            'github.com:gloathub:glojure:pkg:javacompat:regex.Quote
+   'Pattern/CASE_INSENSITIVE 'github.com:gloathub:glojure:pkg:javacompat:regex.CASE_INSENSITIVE
+   'Pattern/MULTILINE        'github.com:gloathub:glojure:pkg:javacompat:regex.MULTILINE
+   'Pattern/LITERAL          'github.com:gloathub:glojure:pkg:javacompat:regex.LITERAL
+   'Pattern/DOTALL           'github.com:gloathub:glojure:pkg:javacompat:regex.DOTALL
+   'Pattern/UNICODE_CASE     'github.com:gloathub:glojure:pkg:javacompat:regex.UNICODE_CASE})
+
+(def gojava-uuid-mappings
+  {'UUID/randomUUID        'github.com:gloathub:glojure:pkg:javacompat:uuid.RandomUUID
+   'UUID/fromString        'github.com:gloathub:glojure:pkg:javacompat:uuid.FromString
+   'UUID/nameUUIDFromBytes 'github.com:gloathub:glojure:pkg:javacompat:uuid.NameUUIDFromBytes})
+
 (def gojava-character-mappings
   {'Character/MIN_VALUE       'github.com:gloathub:glojure:pkg:javacompat:character.MIN_VALUE
    'Character/MAX_VALUE       'github.com:gloathub:glojure:pkg:javacompat:character.MAX_VALUE
@@ -362,6 +377,21 @@
                  [fq new])))
         mappings))
 
+(defn java-package-mappings
+  "Given a Class/member mapping and a java.* package prefix (e.g.
+  \"java.util\", \"java.util.regex\"), produce the parallel fully
+  qualified mapping. Callers can write either the bare or qualified
+  form; both resolve to the same bridge symbol."
+  [prefix mappings]
+  (into {}
+        (map (fn [[old new]]
+               (let [ns (namespace old) nm (name old)
+                     fq (if ns
+                          (symbol (str prefix "." ns) nm)
+                          (symbol (str prefix "." nm)))]
+                 [fq new])))
+        mappings))
+
 (defn clojure-lang->glojure-pkg
   "Create replacement for clojure.lang.ClassName to glojure package equivalent"
   [class-name & {:keys [pointer? package] 
@@ -390,6 +420,8 @@
     (create-simple-replacements gojava-double-mappings)
     (create-simple-replacements gojava-boolean-mappings)
     (create-simple-replacements gojava-character-mappings)
+    (create-simple-replacements gojava-regex-mappings)
+    (create-simple-replacements gojava-uuid-mappings)
     (create-simple-replacements (java-lang-mappings gojava-math-mappings))
     (create-simple-replacements (java-lang-mappings gojava-system-mappings))
     (create-simple-replacements (java-lang-mappings gojava-integer-mappings))
@@ -398,6 +430,8 @@
     (create-simple-replacements (java-lang-mappings gojava-double-mappings))
     (create-simple-replacements (java-lang-mappings gojava-boolean-mappings))
     (create-simple-replacements (java-lang-mappings gojava-character-mappings))
+    (create-simple-replacements (java-package-mappings "java.util.regex" gojava-regex-mappings))
+    (create-simple-replacements (java-package-mappings "java.util" gojava-uuid-mappings))
     (create-simple-replacements other-mappings)
 
     ;; Pattern-based clojure.lang replacements
@@ -677,6 +711,22 @@
                                   (#{'Character. 'java.lang.Character.} (first expr))))))
     (fn visit [zloc]
       (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:character.ValueOf)
+                              (rest (z/sexpr zloc)))))]
+   ;; (Pattern. regex) -> compile
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [expr (z/sexpr zloc)]
+                             (and (seq expr)
+                                  (#{'Pattern. 'java.util.regex.Pattern.} (first expr))))))
+    (fn visit [zloc]
+      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:regex.Compile)
+                              (rest (z/sexpr zloc)))))]
+   ;; (UUID. msb lsb) -> fromBits
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [expr (z/sexpr zloc)]
+                             (and (seq expr)
+                                  (#{'UUID. 'java.util.UUID.} (first expr))))))
+    (fn visit [zloc]
+      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:uuid.FromBits)
                               (rest (z/sexpr zloc)))))]
    ;; catch Exception
    [(fn select [zloc] (and (z/sexpr-able? zloc)
