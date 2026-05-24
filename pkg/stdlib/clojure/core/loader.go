@@ -41071,66 +41071,68 @@ func LoadNS() {
 					_ = v8
 					// let binding "dimarray"
 					tmp9 := checkDerefVar(var_clojure_DOT_core_make_DASH_array)
-					tmp10, ok := lang.FieldOrMethod(nil, "TYPE")
+					tmp10 := reflect.TypeOf(int64(0))
+					tmp11 := lang.NewClass(tmp10, "java.lang.Integer")
+					tmp12, ok := lang.FieldOrMethod(tmp11, "TYPE")
 					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", nil, "TYPE")))
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp11, "TYPE")))
 					}
-					var tmp11 any
-					switch reflect.TypeOf(tmp10).Kind() {
+					var tmp13 any
+					switch reflect.TypeOf(tmp12).Kind() {
 					case reflect.Func:
-						tmp11 = lang.Apply(tmp10, nil)
+						tmp13 = lang.Apply(tmp12, nil)
 					default:
-						tmp11 = tmp10
+						tmp13 = tmp12
 					}
-					tmp12 := checkDerefVar(var_clojure_DOT_core_count)
-					tmp13 := lang.Apply1(tmp12, v8)
-					tmp14 := lang.Apply2(tmp9, tmp11, tmp13)
-					var v15 any = tmp14
-					_ = v15
-					var tmp16 any
+					tmp14 := checkDerefVar(var_clojure_DOT_core_count)
+					tmp15 := lang.Apply1(tmp14, v8)
+					tmp16 := lang.Apply2(tmp9, tmp13, tmp15)
+					var v17 any = tmp16
+					_ = v17
+					var tmp18 any
 					{ // let
 						// let binding "n__0__auto__"
-						tmp17 := checkDerefVar(var_clojure_DOT_core_long)
-						tmp18 := checkDerefVar(var_clojure_DOT_core_alength)
-						tmp19 := lang.Apply1(tmp18, v15)
-						tmp20 := lang.Apply1(tmp17, tmp19)
-						var v21 any = tmp20
-						_ = v21
-						var tmp22 any
+						tmp19 := checkDerefVar(var_clojure_DOT_core_long)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_alength)
+						tmp21 := lang.Apply1(tmp20, v17)
+						tmp22 := lang.Apply1(tmp19, tmp21)
+						var v23 any = tmp22
+						_ = v23
+						var tmp24 any
 						{ // let
 							// let binding "i"
-							var v23 any = int64(0)
-							_ = v23
+							var v25 any = int64(0)
+							_ = v25
 							for {
-								var tmp24 any
-								tmp25 := checkDerefVar(var_clojure_DOT_core__LT_)
-								tmp26 := lang.Apply2(tmp25, v23, v21)
-								if lang.IsTruthy(tmp26) {
-									tmp27 := checkDerefVar(var_clojure_DOT_core_aset_DASH_int)
-									tmp28 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp29 := lang.Apply2(tmp28, v8, v23)
-									tmp30 := lang.Apply3(tmp27, v15, v23, tmp29)
-									_ = tmp30
-									tmp32 := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_inc)
-									tmp33 := lang.Apply1(tmp32, v23)
-									var tmp31 any = tmp33
-									v23 = tmp31
+								var tmp26 any
+								tmp27 := checkDerefVar(var_clojure_DOT_core__LT_)
+								tmp28 := lang.Apply2(tmp27, v25, v23)
+								if lang.IsTruthy(tmp28) {
+									tmp29 := checkDerefVar(var_clojure_DOT_core_aset_DASH_int)
+									tmp30 := checkDerefVar(var_clojure_DOT_core_nth)
+									tmp31 := lang.Apply2(tmp30, v8, v25)
+									tmp32 := lang.Apply3(tmp29, v17, v25, tmp31)
+									_ = tmp32
+									tmp34 := checkDerefVar(var_clojure_DOT_core_unchecked_DASH_inc)
+									tmp35 := lang.Apply1(tmp34, v25)
+									var tmp33 any = tmp35
+									v25 = tmp33
 									continue
 								} else {
 								}
-								tmp22 = tmp24
+								tmp24 = tmp26
 								break
 							}
 						} // end let
-						tmp16 = tmp22
+						tmp18 = tmp24
 					} // end let
-					_ = tmp16
-					tmp17, _ := lang.FieldOrMethod(nil, "newInstance")
-					if reflect.TypeOf(tmp17).Kind() != reflect.Func {
+					_ = tmp18
+					tmp19, _ := lang.FieldOrMethod(nil, "newInstance")
+					if reflect.TypeOf(tmp19).Kind() != reflect.Func {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("newInstance is not a function")))
 					}
-					tmp18 := lang.Apply2(tmp17, v2, v15)
-					tmp5 = tmp18
+					tmp20 := lang.Apply2(tmp19, v2, v17)
+					tmp5 = tmp20
 				} // end let
 				return tmp5
 			}
