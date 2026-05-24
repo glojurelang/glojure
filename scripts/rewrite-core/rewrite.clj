@@ -332,6 +332,9 @@
    'Character/getNumericValue 'github.com:gloathub:glojure:pkg:javacompat:character.GetNumericValue
    'Character/compare         'github.com:gloathub:glojure:pkg:javacompat:character.Compare})
 
+(def gojava-thread-mappings
+  {'Thread/sleep 'github.com:gloathub:glojure:pkg:javacompat:thread.Sleep})
+
 (def other-mappings
   {'(. clojure.lang.Delay (force x)) '(github.com:gloathub:glojure:pkg:lang.ForceDelay x)
    '(or (instance? Long x)
@@ -422,6 +425,7 @@
     (create-simple-replacements gojava-character-mappings)
     (create-simple-replacements gojava-regex-mappings)
     (create-simple-replacements gojava-uuid-mappings)
+    (create-simple-replacements gojava-thread-mappings)
     (create-simple-replacements (java-lang-mappings gojava-math-mappings))
     (create-simple-replacements (java-lang-mappings gojava-system-mappings))
     (create-simple-replacements (java-lang-mappings gojava-integer-mappings))
@@ -430,6 +434,7 @@
     (create-simple-replacements (java-lang-mappings gojava-double-mappings))
     (create-simple-replacements (java-lang-mappings gojava-boolean-mappings))
     (create-simple-replacements (java-lang-mappings gojava-character-mappings))
+    (create-simple-replacements (java-lang-mappings gojava-thread-mappings))
     (create-simple-replacements (java-package-mappings "java.util.regex" gojava-regex-mappings))
     (create-simple-replacements (java-package-mappings "java.util" gojava-uuid-mappings))
     (create-simple-replacements other-mappings)
