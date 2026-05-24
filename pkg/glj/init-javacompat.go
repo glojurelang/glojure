@@ -7,6 +7,7 @@ import (
 	_ "github.com/gloathub/glojure/pkg/javacompat/boolean"
 	_ "github.com/gloathub/glojure/pkg/javacompat/character"
 	_ "github.com/gloathub/glojure/pkg/javacompat/double"
+	_ "github.com/gloathub/glojure/pkg/javacompat/instant"
 	_ "github.com/gloathub/glojure/pkg/javacompat/integer"
 	_ "github.com/gloathub/glojure/pkg/javacompat/long"
 	_ "github.com/gloathub/glojure/pkg/javacompat/math"

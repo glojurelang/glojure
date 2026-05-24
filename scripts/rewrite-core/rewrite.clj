@@ -335,6 +335,13 @@
 (def gojava-thread-mappings
   {'Thread/sleep 'github.com:gloathub:glojure:pkg:javacompat:thread.Sleep})
 
+(def gojava-instant-mappings
+  {'Instant/EPOCH         'github.com:gloathub:glojure:pkg:javacompat:instant.EPOCH
+   'Instant/now           'github.com:gloathub:glojure:pkg:javacompat:instant.Now
+   'Instant/parse         'github.com:gloathub:glojure:pkg:javacompat:instant.Parse
+   'Instant/ofEpochSecond 'github.com:gloathub:glojure:pkg:javacompat:instant.OfEpochSecond
+   'Instant/ofEpochMilli  'github.com:gloathub:glojure:pkg:javacompat:instant.OfEpochMilli})
+
 (def other-mappings
   {'(. clojure.lang.Delay (force x)) '(github.com:gloathub:glojure:pkg:lang.ForceDelay x)
    '(or (instance? Long x)
@@ -426,6 +433,7 @@
     (create-simple-replacements gojava-regex-mappings)
     (create-simple-replacements gojava-uuid-mappings)
     (create-simple-replacements gojava-thread-mappings)
+    (create-simple-replacements gojava-instant-mappings)
     (create-simple-replacements (java-lang-mappings gojava-math-mappings))
     (create-simple-replacements (java-lang-mappings gojava-system-mappings))
     (create-simple-replacements (java-lang-mappings gojava-integer-mappings))
@@ -437,6 +445,7 @@
     (create-simple-replacements (java-lang-mappings gojava-thread-mappings))
     (create-simple-replacements (java-package-mappings "java.util.regex" gojava-regex-mappings))
     (create-simple-replacements (java-package-mappings "java.util" gojava-uuid-mappings))
+    (create-simple-replacements (java-package-mappings "java.time" gojava-instant-mappings))
     (create-simple-replacements other-mappings)
 
     ;; Pattern-based clojure.lang replacements
