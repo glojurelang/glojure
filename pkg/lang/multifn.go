@@ -54,6 +54,27 @@ func registerWellKnownMethods(mf *MultiFn) {
 	}
 }
 
+// IsAutoRegisteredMethod reports whether (dispatchVal, method) is an
+// entry seeded by registerWellKnownMethods for a MultiFn named mfName.
+// AOT codegen uses this to skip re-emitting these entries: the compiled
+// binary's lang.NewMultiFn call seeds them automatically, and the method
+// values are opaque Go FnFuncs that codegen cannot serialize.
+func IsAutoRegisteredMethod(mfName string, dispatchVal any, method any) bool {
+	switch mfName {
+	case "print-method", "print-dup":
+		dv, ok := dispatchVal.(reflect.Type)
+		if !ok || dv != reflect.TypeOf((*Class)(nil)) {
+			return false
+		}
+		m, ok := method.(FnFunc)
+		if !ok {
+			return false
+		}
+		return reflect.ValueOf(m).Pointer() == reflect.ValueOf(classPrintMethod).Pointer()
+	}
+	return false
+}
+
 func (m *MultiFn) resetCache() {
 	m.methodCache = emptyMap
 	m.cachedHierarchy = m.hierarchy.Deref()

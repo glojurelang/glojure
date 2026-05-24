@@ -878,13 +878,20 @@ func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
 	g.writef("%s := lang.NewMultiFn(%#v, %s, %s, %s)\n",
 		mfVar, mf.GetName(), dispatchFnVar, defaultValVar, hierarchyVar)
 
-	// Add all methods from the method table
+	// Add all methods from the method table. Skip entries that
+	// lang.NewMultiFn already seeds via registerWellKnownMethods: their
+	// method values are opaque Go FnFuncs (un-generatable), and the
+	// compiled binary re-seeds them on construction.
 	methodTable := mf.GetMethodTable()
 	if methodTable != nil && methodTable.Count() > 0 {
 		for seq := lang.Seq(methodTable); seq != nil; seq = seq.Next() {
 			entry := seq.First().(lang.IMapEntry)
 			dispatchVal := entry.Key()
 			method := entry.Val()
+
+			if lang.IsAutoRegisteredMethod(mf.GetName(), dispatchVal, method) {
+				continue
+			}
 
 			dispatchValVar := g.generateValue(dispatchVal)
 			methodVar := g.generateValue(method)
