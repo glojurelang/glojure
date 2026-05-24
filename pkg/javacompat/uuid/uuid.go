@@ -58,7 +58,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("UUID."+jvmName, v)
 	pkgmap.SetHostClassPackage("UUID", "java.util")
-	pkgmap.SetHostClass("UUID", reflect.TypeOf((*juuid.UUID)(nil)))
+	pkgmap.SetHostClass("UUID", lang.NewClass(reflect.TypeOf((*juuid.UUID)(nil)), "java.util.UUID"))
 }
 
 func init() {

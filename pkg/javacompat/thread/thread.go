@@ -40,7 +40,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Thread."+jvmName, v)
 	pkgmap.SetHostClassPackage("Thread", "java.lang")
-	pkgmap.SetHostClass("Thread", reflect.TypeOf(Thread{}))
+	pkgmap.SetHostClass("Thread", lang.NewClass(reflect.TypeOf(Thread{}), "java.lang.Thread"))
 }
 
 func init() {

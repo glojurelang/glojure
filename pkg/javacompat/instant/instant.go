@@ -60,7 +60,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Instant."+jvmName, v)
 	pkgmap.SetHostClassPackage("Instant", "java.time")
-	pkgmap.SetHostClass("Instant", reflect.TypeOf((*jinstant.Instant)(nil)))
+	pkgmap.SetHostClass("Instant", lang.NewClass(reflect.TypeOf((*jinstant.Instant)(nil)), "java.time.Instant"))
 }
 
 func init() {

@@ -73,7 +73,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Pattern."+jvmName, v)
 	pkgmap.SetHostClassPackage("Pattern", "java.util.regex")
-	pkgmap.SetHostClass("Pattern", reflect.TypeOf((*jregex.Pattern)(nil)))
+	pkgmap.SetHostClass("Pattern", lang.NewClass(reflect.TypeOf((*jregex.Pattern)(nil)), "java.util.regex.Pattern"))
 }
 
 func init() {

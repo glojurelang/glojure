@@ -29,7 +29,7 @@ var (
 )
 
 func NewMultiFn(name string, dispatchFn IFn, defaultDispatchVal any, hierarchy IRef) *MultiFn {
-	return &MultiFn{
+	mf := &MultiFn{
 		name:               name,
 		dispatchFn:         dispatchFn,
 		defaultDispatchVal: defaultDispatchVal,
@@ -37,6 +37,20 @@ func NewMultiFn(name string, dispatchFn IFn, defaultDispatchVal any, hierarchy I
 		preferTable:        emptyMap,
 		methodCache:        emptyMap,
 		hierarchy:          hierarchy,
+	}
+	registerWellKnownMethods(mf)
+	return mf
+}
+
+// registerWellKnownMethods seeds a freshly created MultiFn with any
+// Go-side default methods that the stdlib alone can't supply. Currently
+// just installs a *Class print-method so host-class values seeded into
+// `(ns-imports *ns*)` print as their FQ Java name instead of falling
+// through to the catch-all Object handler.
+func registerWellKnownMethods(mf *MultiFn) {
+	switch mf.name {
+	case "print-method", "print-dup":
+		mf.AddMethod(reflect.TypeOf((*Class)(nil)), classPrintMethod)
 	}
 }
 

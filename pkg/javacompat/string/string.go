@@ -74,7 +74,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("String."+jvmName, v)
 	pkgmap.SetHostClassPackage("String", "java.lang")
-	pkgmap.SetHostClass("String", reflect.TypeOf(""))
+	pkgmap.SetHostClass("String", lang.NewClass(reflect.TypeOf(""), "java.lang.String"))
 }
 
 func registerMethod(name string, fn lang.StringMethod) {

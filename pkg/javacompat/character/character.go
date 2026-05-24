@@ -65,7 +65,7 @@ func register(jvmName, goName string, v any) {
 	pkgmap.Set(pkg+"."+goName, v)
 	pkgmap.Set("Character."+jvmName, v)
 	pkgmap.SetHostClassPackage("Character", "java.lang")
-	pkgmap.SetHostClass("Character", reflect.TypeOf(lang.Char(0)))
+	pkgmap.SetHostClass("Character", lang.NewClass(reflect.TypeOf(lang.Char(0)), "java.lang.Character"))
 }
 
 func init() {
