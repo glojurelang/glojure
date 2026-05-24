@@ -259,6 +259,64 @@
    'String/valueOf     'github.com:gloathub:glojure:pkg:javacompat:string.ValueOf
    'String/copyValueOf 'github.com:gloathub:glojure:pkg:javacompat:string.CopyValueOf})
 
+(def gojava-double-mappings
+  {'Double/MIN_VALUE           'github.com:gloathub:glojure:pkg:javacompat:double.MIN_VALUE
+   'Double/MAX_VALUE           'github.com:gloathub:glojure:pkg:javacompat:double.MAX_VALUE
+   'Double/MIN_NORMAL          'github.com:gloathub:glojure:pkg:javacompat:double.MIN_NORMAL
+   'Double/POSITIVE_INFINITY   'github.com:gloathub:glojure:pkg:javacompat:double.POSITIVE_INFINITY
+   'Double/NEGATIVE_INFINITY   'github.com:gloathub:glojure:pkg:javacompat:double.NEGATIVE_INFINITY
+   'Double/NaN                 'github.com:gloathub:glojure:pkg:javacompat:double.NaN
+   'Double/SIZE                'github.com:gloathub:glojure:pkg:javacompat:double.SIZE
+   'Double/BYTES               'github.com:gloathub:glojure:pkg:javacompat:double.BYTES
+   'Double/parseDouble         'github.com:gloathub:glojure:pkg:javacompat:double.ParseDouble
+   'Double/valueOf             'github.com:gloathub:glojure:pkg:javacompat:double.ValueOf
+   'Double/toString            'github.com:gloathub:glojure:pkg:javacompat:double.ToString
+   'Double/toHexString         'github.com:gloathub:glojure:pkg:javacompat:double.ToHexString
+   'Double/isNaN               'github.com:gloathub:glojure:pkg:javacompat:double.IsNaN
+   'Double/isInfinite          'github.com:gloathub:glojure:pkg:javacompat:double.IsInfinite
+   'Double/isFinite            'github.com:gloathub:glojure:pkg:javacompat:double.IsFinite
+   'Double/doubleToLongBits    'github.com:gloathub:glojure:pkg:javacompat:double.DoubleToLongBits
+   'Double/doubleToRawLongBits 'github.com:gloathub:glojure:pkg:javacompat:double.DoubleToRawLongBits
+   'Double/longBitsToDouble    'github.com:gloathub:glojure:pkg:javacompat:double.LongBitsToDouble
+   'Double/compare             'github.com:gloathub:glojure:pkg:javacompat:double.Compare
+   'Double/max                 'github.com:gloathub:glojure:pkg:javacompat:double.Max
+   'Double/min                 'github.com:gloathub:glojure:pkg:javacompat:double.Min
+   'Double/sum                 'github.com:gloathub:glojure:pkg:javacompat:double.Sum})
+
+(def gojava-boolean-mappings
+  {'Boolean/TRUE         'github.com:gloathub:glojure:pkg:javacompat:boolean.TRUE
+   'Boolean/FALSE        'github.com:gloathub:glojure:pkg:javacompat:boolean.FALSE
+   'Boolean/parseBoolean 'github.com:gloathub:glojure:pkg:javacompat:boolean.ParseBoolean
+   'Boolean/valueOf      'github.com:gloathub:glojure:pkg:javacompat:boolean.ValueOf
+   'Boolean/toString     'github.com:gloathub:glojure:pkg:javacompat:boolean.ToString
+   'Boolean/compare      'github.com:gloathub:glojure:pkg:javacompat:boolean.Compare
+   'Boolean/logicalAnd   'github.com:gloathub:glojure:pkg:javacompat:boolean.LogicalAnd
+   'Boolean/logicalOr    'github.com:gloathub:glojure:pkg:javacompat:boolean.LogicalOr
+   'Boolean/logicalXor   'github.com:gloathub:glojure:pkg:javacompat:boolean.LogicalXor
+   'Boolean/getBoolean   'github.com:gloathub:glojure:pkg:javacompat:boolean.GetBoolean})
+
+(def gojava-character-mappings
+  {'Character/MIN_VALUE       'github.com:gloathub:glojure:pkg:javacompat:character.MIN_VALUE
+   'Character/MAX_VALUE       'github.com:gloathub:glojure:pkg:javacompat:character.MAX_VALUE
+   'Character/MIN_RADIX       'github.com:gloathub:glojure:pkg:javacompat:character.MIN_RADIX
+   'Character/MAX_RADIX       'github.com:gloathub:glojure:pkg:javacompat:character.MAX_RADIX
+   'Character/valueOf         'github.com:gloathub:glojure:pkg:javacompat:character.ValueOf
+   'Character/isDigit         'github.com:gloathub:glojure:pkg:javacompat:character.IsDigit
+   'Character/isLetter        'github.com:gloathub:glojure:pkg:javacompat:character.IsLetter
+   'Character/isLetterOrDigit 'github.com:gloathub:glojure:pkg:javacompat:character.IsLetterOrDigit
+   'Character/isAlphabetic    'github.com:gloathub:glojure:pkg:javacompat:character.IsAlphabetic
+   'Character/isWhitespace    'github.com:gloathub:glojure:pkg:javacompat:character.IsWhitespace
+   'Character/isSpaceChar     'github.com:gloathub:glojure:pkg:javacompat:character.IsSpaceChar
+   'Character/isUpperCase     'github.com:gloathub:glojure:pkg:javacompat:character.IsUpperCase
+   'Character/isLowerCase     'github.com:gloathub:glojure:pkg:javacompat:character.IsLowerCase
+   'Character/toUpperCase     'github.com:gloathub:glojure:pkg:javacompat:character.ToUpperCase
+   'Character/toLowerCase     'github.com:gloathub:glojure:pkg:javacompat:character.ToLowerCase
+   'Character/toString        'github.com:gloathub:glojure:pkg:javacompat:character.ToString
+   'Character/digit           'github.com:gloathub:glojure:pkg:javacompat:character.Digit
+   'Character/forDigit        'github.com:gloathub:glojure:pkg:javacompat:character.ForDigit
+   'Character/getNumericValue 'github.com:gloathub:glojure:pkg:javacompat:character.GetNumericValue
+   'Character/compare         'github.com:gloathub:glojure:pkg:javacompat:character.Compare})
+
 (def other-mappings
   {'(. clojure.lang.Delay (force x)) '(github.com:gloathub:glojure:pkg:lang.ForceDelay x)
    '(or (instance? Long x)
@@ -329,11 +387,17 @@
     (create-simple-replacements gojava-integer-mappings)
     (create-simple-replacements gojava-long-mappings)
     (create-simple-replacements gojava-string-mappings)
+    (create-simple-replacements gojava-double-mappings)
+    (create-simple-replacements gojava-boolean-mappings)
+    (create-simple-replacements gojava-character-mappings)
     (create-simple-replacements (java-lang-mappings gojava-math-mappings))
     (create-simple-replacements (java-lang-mappings gojava-system-mappings))
     (create-simple-replacements (java-lang-mappings gojava-integer-mappings))
     (create-simple-replacements (java-lang-mappings gojava-long-mappings))
     (create-simple-replacements (java-lang-mappings gojava-string-mappings))
+    (create-simple-replacements (java-lang-mappings gojava-double-mappings))
+    (create-simple-replacements (java-lang-mappings gojava-boolean-mappings))
+    (create-simple-replacements (java-lang-mappings gojava-character-mappings))
     (create-simple-replacements other-mappings)
 
     ;; Pattern-based clojure.lang replacements
@@ -589,6 +653,30 @@
                                   (#{'String. 'java.lang.String.} (first expr))))))
     (fn visit [zloc]
       (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:string.ValueOf)
+                              (rest (z/sexpr zloc)))))]
+   ;; (Double. x) -> valueOf
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [expr (z/sexpr zloc)]
+                             (and (seq expr)
+                                  (#{'Double. 'java.lang.Double.} (first expr))))))
+    (fn visit [zloc]
+      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:double.ValueOf)
+                              (rest (z/sexpr zloc)))))]
+   ;; (Boolean. x) -> valueOf
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [expr (z/sexpr zloc)]
+                             (and (seq expr)
+                                  (#{'Boolean. 'java.lang.Boolean.} (first expr))))))
+    (fn visit [zloc]
+      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:boolean.ValueOf)
+                              (rest (z/sexpr zloc)))))]
+   ;; (Character. c) -> valueOf
+   [(fn select [zloc] (and (z/list? zloc)
+                           (let [expr (z/sexpr zloc)]
+                             (and (seq expr)
+                                  (#{'Character. 'java.lang.Character.} (first expr))))))
+    (fn visit [zloc]
+      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:character.ValueOf)
                               (rest (z/sexpr zloc)))))]
    ;; catch Exception
    [(fn select [zloc] (and (z/sexpr-able? zloc)
