@@ -4,7 +4,7 @@ go 1.24
 
 require (
 	bitbucket.org/pcastools/hash v1.0.5
-	github.com/gloathub/go-readline v0.2.0
+	github.com/gloathub/go-readline v0.1.1
 	github.com/gloathub/gojava v0.1.0
 	github.com/google/uuid v1.6.0
 	github.com/kylelemons/godebug v1.1.0

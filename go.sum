@@ -3,6 +3,8 @@ bitbucket.org/pcastools/hash v1.0.5/go.mod h1:PwZDvsw1oSN5uo9+r3ztepeAPUekYPBaax
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/gloathub/go-readline v0.1.1 h1:Tejzta2B59ICXBuUW5sqZXX1gMQviVh/AamNuSgaxzw=
+github.com/gloathub/go-readline v0.1.1/go.mod h1:tGKOYdPUF86jiKFCE+bHl6/RD4MQsIaZXQ3PBQZSCyU=
 github.com/gloathub/gojava v0.1.0 h1:lNxzOURH+dWzBxgIsiEwggMKpzo+s9U6/uyC7jMwaF8=
 github.com/gloathub/gojava v0.1.0/go.mod h1:5BolUlfQEVhISDwoCnchpGwFTE5upbi2965/m3WRQH8=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
