@@ -23,5 +23,3 @@ require (
 )
 
 replace github.com/reeflective/readline => github.com/gloathub/readline v0.0.0-20260510170839-c275bce11cb1
-
-replace github.com/gloathub/gojava => /home/ingy/src/gojava
