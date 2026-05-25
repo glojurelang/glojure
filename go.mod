@@ -22,4 +22,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/reeflective/readline => github.com/gloathub/readline v0.0.0-20260510170839-c275bce11cb1
+replace github.com/reeflective/readline => github.com/gloathub/go-readline v0.1.0
