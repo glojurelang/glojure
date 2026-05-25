@@ -11,8 +11,8 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/reeflective/readline"
-	"github.com/reeflective/readline/inputrc"
+	"github.com/gloathub/go-readline"
+	"github.com/gloathub/go-readline/inputrc"
 
 	"github.com/gloathub/glojure/pkg/lang"
 	"github.com/gloathub/glojure/pkg/nrepl"
