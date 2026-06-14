@@ -172,8 +172,8 @@ pkg/stdlib/clojure/%.glj: \
 	  scripts/rewrite-core/originals/%.clj \
 	  scripts/rewrite-core/run.sh \
 	  scripts/rewrite-core/rewrite.clj \
-	  $(CLOJURE) \
-	  $(if $(force),force)
+	  $(if $(force),force) \
+	  | $(CLOJURE)
 	@echo "Rewriting $< to $@"
 	@mkdir -p $(dir $@)
 	tmp=$@.tmp; \
