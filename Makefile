@@ -80,7 +80,7 @@ MAKES-CLEAN := \
   scripts/rewrite-core/.cpcache/ \
   $(TEST-SUITE-DIR) \
 
-MAKES-DISTCLEAN += \
+MAKES-REALCLEAN += \
   dist/ \
   .clj-kondo/ \
   .lsp/ \
