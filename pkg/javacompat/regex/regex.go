@@ -14,11 +14,11 @@ import (
 	"reflect"
 
 	jregex "github.com/gloathub/gojava/regex"
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-const pkg = "github.com/gloathub/glojure/pkg/javacompat/regex"
+const pkg = "github.com/glojurelang/glojure/pkg/javacompat/regex"
 
 const (
 	CASE_INSENSITIVE = jregex.CASE_INSENSITIVE

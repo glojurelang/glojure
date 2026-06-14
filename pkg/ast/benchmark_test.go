@@ -3,7 +3,7 @@ package ast
 import (
 	"testing"
 
-	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 )
 
 type (

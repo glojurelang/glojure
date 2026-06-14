@@ -13,11 +13,11 @@ import (
 	"reflect"
 
 	jinstant "github.com/gloathub/gojava/instant"
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-const pkg = "github.com/gloathub/glojure/pkg/javacompat/instant"
+const pkg = "github.com/glojurelang/glojure/pkg/javacompat/instant"
 
 // EPOCH mirrors Instant.EPOCH.
 var EPOCH = jinstant.EPOCH

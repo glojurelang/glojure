@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"sync/atomic"
 
-	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 )
 
 var (

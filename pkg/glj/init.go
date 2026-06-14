@@ -4,8 +4,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/runtime"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/runtime"
 )
 
 func init() {

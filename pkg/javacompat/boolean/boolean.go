@@ -7,11 +7,11 @@ import (
 	"reflect"
 
 	jbool "github.com/gloathub/gojava/boolean"
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-const pkg = "github.com/gloathub/glojure/pkg/javacompat/boolean"
+const pkg = "github.com/glojurelang/glojure/pkg/javacompat/boolean"
 
 const (
 	TRUE  = jbool.TRUE

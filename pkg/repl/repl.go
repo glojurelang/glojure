@@ -14,11 +14,11 @@ import (
 	"github.com/gloathub/go-readline"
 	"github.com/gloathub/go-readline/inputrc"
 
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/nrepl"
-	"github.com/gloathub/glojure/pkg/pkgmap"
-	"github.com/gloathub/glojure/pkg/runtime"
-	"github.com/gloathub/glojure/pkg/srepl"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/nrepl"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/runtime"
+	"github.com/glojurelang/glojure/pkg/srepl"
 
 	// pprof
 	"net/http"

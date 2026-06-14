@@ -10,11 +10,11 @@ import (
 	"reflect"
 
 	jthread "github.com/gloathub/gojava/thread"
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-const pkg = "github.com/gloathub/glojure/pkg/javacompat/thread"
+const pkg = "github.com/glojurelang/glojure/pkg/javacompat/thread"
 
 // Thread is the placeholder type registered as java.lang.Thread's
 // reflect.Type. We don't expose Thread instances yet (only static

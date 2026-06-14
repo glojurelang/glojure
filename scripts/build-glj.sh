@@ -17,7 +17,7 @@ fi
 
 LDFLAGS=""
 if [ -n "$GLJ_VERSION" ]; then
-    LDFLAGS="-X github.com/gloathub/glojure/pkg/runtime.version=$GLJ_VERSION"
+    LDFLAGS="-X github.com/glojurelang/glojure/pkg/runtime.version=$GLJ_VERSION"
 fi
 
 # When GO_REPLACE is set, create a temporary go.work file with replace

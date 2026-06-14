@@ -5,8 +5,8 @@ package core
 import (
 	errors5 "errors"
 	fmt "fmt"
-	lang "github.com/gloathub/glojure/pkg/lang"
-	runtime "github.com/gloathub/glojure/pkg/runtime"
+	lang "github.com/glojurelang/glojure/pkg/lang"
+	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	uuid10 "github.com/google/uuid"
 	math4 "math"
 	big6 "math/big"
@@ -631,26 +631,26 @@ func LoadNS() {
 	sym_get_DASH_thread_DASH_bindings := lang.NewSymbol("get-thread-bindings")
 	sym_get_DASH_validator := lang.NewSymbol("get-validator")
 	sym_gio := lang.NewSymbol("gio")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.*MultiFn")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_Var := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.*Var")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Abs := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.Abs")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_FindNamespace := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.FindNamespace")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_ISeq := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.ISeq")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Identical := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.Identical")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Import := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.Import")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_IsReduced := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.IsReduced")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_LockingTransaction := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.LockingTransaction")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewDelay := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.NewDelay")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewIllegalArgumentError := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewLazySeq := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.NewLazySeq")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMap := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.NewMap")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMultiFn := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.NewMultiFn")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewPersistentArrayMapAsIfByAssoc := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.NewPersistentArrayMapAsIfByAssoc")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.Numbers")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_PopThreadBindings := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.PopThreadBindings")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_PushThreadBindings := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.PushThreadBindings")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Volatile := lang.NewSymbol("github.com:gloathub:glojure:pkg:lang.Volatile")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT := lang.NewSymbol("github.com:gloathub:glojure:pkg:runtime.RT")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.*MultiFn")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_Var := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.*Var")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Abs := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Abs")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_FindNamespace := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.FindNamespace")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_ISeq := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.ISeq")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Identical := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Identical")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Import := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Import")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_IsReduced := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.IsReduced")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_LockingTransaction := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.LockingTransaction")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewDelay := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewDelay")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewIllegalArgumentError := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewLazySeq := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewLazySeq")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMap := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewMap")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMultiFn := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewMultiFn")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewPersistentArrayMapAsIfByAssoc := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewPersistentArrayMapAsIfByAssoc")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Numbers")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_PopThreadBindings := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.PopThreadBindings")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_PushThreadBindings := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.PushThreadBindings")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Volatile := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Volatile")
+	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT := lang.NewSymbol("github.com:glojurelang:glojure:pkg:runtime.RT")
 	sym_global_DASH_hierarchy := lang.NewSymbol("global-hierarchy")
 	sym_glojure_DOT_go_DOT_io := lang.NewSymbol("glojure.go.io")
 	sym_group_DASH_by := lang.NewSymbol("group-by")

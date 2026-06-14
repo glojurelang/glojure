@@ -3,8 +3,8 @@ package repl
 import (
 	"io"
 
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/nrepl"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/nrepl"
 )
 
 type options struct {

@@ -3,7 +3,7 @@ package glj
 import (
 	"testing"
 
-	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 )
 
 func TestGLJ(t *testing.T) {

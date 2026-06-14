@@ -12,7 +12,7 @@ import (
 	hash2 "bitbucket.org/pcastools/hash"
 	"github.com/mitchellh/hashstructure/v2"
 
-	"github.com/gloathub/glojure/internal/murmur3"
+	"github.com/glojurelang/glojure/internal/murmur3"
 )
 
 const (

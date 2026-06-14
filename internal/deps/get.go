@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/gloathub/glojure/internal/genpkg"
+	"github.com/glojurelang/glojure/internal/genpkg"
 )
 
 // Get gets the dependencies for the given package and generates a

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
 var (

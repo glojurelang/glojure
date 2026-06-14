@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/kylelemons/godebug/diff"
 )
 

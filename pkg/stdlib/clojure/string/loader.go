@@ -4,8 +4,8 @@ package string
 
 import (
 	fmt "fmt"
-	lang "github.com/gloathub/glojure/pkg/lang"
-	runtime "github.com/gloathub/glojure/pkg/runtime"
+	lang "github.com/glojurelang/glojure/pkg/lang"
+	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
 	regexp6 "regexp"
 	strings5 "strings"

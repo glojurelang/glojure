@@ -5,7 +5,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 )
 
 // Promise implements Clojure's promise semantics using Go sync primitives.

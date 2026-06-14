@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/google/uuid"
 )
 

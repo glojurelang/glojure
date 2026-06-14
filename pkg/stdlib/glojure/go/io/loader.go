@@ -4,8 +4,8 @@ package io
 
 import (
 	fmt "fmt"
-	lang "github.com/gloathub/glojure/pkg/lang"
-	runtime "github.com/gloathub/glojure/pkg/runtime"
+	lang "github.com/glojurelang/glojure/pkg/lang"
+	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	io4 "io"
 	http7 "net/http"
 	url5 "net/url"

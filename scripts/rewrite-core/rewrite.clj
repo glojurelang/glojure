@@ -118,22 +118,22 @@
    'Double 'go/float64
    'Float 'go/float32
    'Boolean 'go/bool
-   'Character 'github.com:gloathub:glojure:pkg:lang.Char
-   'java.lang.Character 'github.com:gloathub:glojure:pkg:lang.Char
+   'Character 'github.com:glojurelang:glojure:pkg:lang.Char
+   'java.lang.Character 'github.com:glojurelang:glojure:pkg:lang.Char
    'Throwable 'go/any
-   'Object 'github.com:gloathub:glojure:pkg:lang.Object
+   'Object 'github.com:glojurelang:glojure:pkg:lang.Object
    'BigInteger 'math:big.*Int
-   'BigDecimal 'github.com:gloathub:glojure:pkg:lang.*BigDecimal
+   'BigDecimal 'github.com:glojurelang:glojure:pkg:lang.*BigDecimal
    'CharSequence 'go/string
    'Class 'reflect.Type
-   'clojure.lang.Associative 'github.com:gloathub:glojure:pkg:lang.Associative
+   'clojure.lang.Associative 'github.com:glojurelang:glojure:pkg:lang.Associative
    'Pattern '*Regexp
-   'clojure.lang.Delay 'github.com:gloathub:glojure:pkg:lang.*Delay
+   'clojure.lang.Delay 'github.com:glojurelang:glojure:pkg:lang.*Delay
    })
 
 (def static-field-mappings
-  {'clojure.lang.Namespace/all 'github.com:gloathub:glojure:pkg:lang.AllNamespaces
-   'clojure.lang.Iterate/create 'github.com:gloathub:glojure:pkg:lang.CreateIterate
+  {'clojure.lang.Namespace/all 'github.com:glojurelang:glojure:pkg:lang.AllNamespaces
+   'clojure.lang.Iterate/create 'github.com:glojurelang:glojure:pkg:lang.CreateIterate
    'Double/POSITIVE_INFINITY '(math.Inf 1)
    'Double/NEGATIVE_INFINITY '(math.Inf -1)
    'Float/POSITIVE_INFINITY '(go/float32 (math.Inf 1))
@@ -141,209 +141,209 @@
 
 ;; java.lang.Math via the javacompat bridge inside glojure. Each JVM-style
 ;; Math/* symbol rewrites to a fully-qualified symbol in
-;; github.com/gloathub/glojure/pkg/javacompat/math, which forwards
+;; github.com/glojurelang/glojure/pkg/javacompat/math, which forwards
 ;; non-polymorphic methods to gojava and provides polymorphic dispatchers
 ;; for the overloaded ones.
 (def gojava-math-mappings
-  {'Math/PI            'github.com:gloathub:glojure:pkg:javacompat:math.PI
-   'Math/E             'github.com:gloathub:glojure:pkg:javacompat:math.E
-   'Math/abs           'github.com:gloathub:glojure:pkg:javacompat:math.Abs
-   'Math/ceil          'github.com:gloathub:glojure:pkg:javacompat:math.Ceil
-   'Math/floor         'github.com:gloathub:glojure:pkg:javacompat:math.Floor
-   'Math/round         'github.com:gloathub:glojure:pkg:javacompat:math.Round
-   'Math/rint          'github.com:gloathub:glojure:pkg:javacompat:math.Rint
-   'Math/signum        'github.com:gloathub:glojure:pkg:javacompat:math.Signum
-   'Math/sqrt          'github.com:gloathub:glojure:pkg:javacompat:math.Sqrt
-   'Math/cbrt          'github.com:gloathub:glojure:pkg:javacompat:math.Cbrt
-   'Math/pow           'github.com:gloathub:glojure:pkg:javacompat:math.Pow
-   'Math/exp           'github.com:gloathub:glojure:pkg:javacompat:math.Exp
-   'Math/expm1         'github.com:gloathub:glojure:pkg:javacompat:math.Expm1
-   'Math/log           'github.com:gloathub:glojure:pkg:javacompat:math.Log
-   'Math/log10         'github.com:gloathub:glojure:pkg:javacompat:math.Log10
-   'Math/log1p         'github.com:gloathub:glojure:pkg:javacompat:math.Log1p
-   'Math/sin           'github.com:gloathub:glojure:pkg:javacompat:math.Sin
-   'Math/cos           'github.com:gloathub:glojure:pkg:javacompat:math.Cos
-   'Math/tan           'github.com:gloathub:glojure:pkg:javacompat:math.Tan
-   'Math/asin          'github.com:gloathub:glojure:pkg:javacompat:math.Asin
-   'Math/acos          'github.com:gloathub:glojure:pkg:javacompat:math.Acos
-   'Math/atan          'github.com:gloathub:glojure:pkg:javacompat:math.Atan
-   'Math/atan2         'github.com:gloathub:glojure:pkg:javacompat:math.Atan2
-   'Math/sinh          'github.com:gloathub:glojure:pkg:javacompat:math.Sinh
-   'Math/cosh          'github.com:gloathub:glojure:pkg:javacompat:math.Cosh
-   'Math/tanh          'github.com:gloathub:glojure:pkg:javacompat:math.Tanh
-   'Math/copySign      'github.com:gloathub:glojure:pkg:javacompat:math.CopySign
-   'Math/hypot         'github.com:gloathub:glojure:pkg:javacompat:math.Hypot
-   'Math/IEEEremainder 'github.com:gloathub:glojure:pkg:javacompat:math.IEEEremainder
-   'Math/toRadians     'github.com:gloathub:glojure:pkg:javacompat:math.ToRadians
-   'Math/toDegrees     'github.com:gloathub:glojure:pkg:javacompat:math.ToDegrees
-   'Math/max           'github.com:gloathub:glojure:pkg:javacompat:math.Max
-   'Math/min           'github.com:gloathub:glojure:pkg:javacompat:math.Min
-   'Math/floorDiv      'github.com:gloathub:glojure:pkg:javacompat:math.FloorDiv
-   'Math/floorMod      'github.com:gloathub:glojure:pkg:javacompat:math.FloorMod
-   'Math/addExact      'github.com:gloathub:glojure:pkg:javacompat:math.AddExact
-   'Math/subtractExact 'github.com:gloathub:glojure:pkg:javacompat:math.SubtractExact
-   'Math/multiplyExact 'github.com:gloathub:glojure:pkg:javacompat:math.MultiplyExact
-   'Math/negateExact   'github.com:gloathub:glojure:pkg:javacompat:math.NegateExact
-   'Math/incrementExact 'github.com:gloathub:glojure:pkg:javacompat:math.IncrementExact
-   'Math/decrementExact 'github.com:gloathub:glojure:pkg:javacompat:math.DecrementExact
-   'Math/toIntExact    'github.com:gloathub:glojure:pkg:javacompat:math.ToIntExact
-   'Math/random        'github.com:gloathub:glojure:pkg:javacompat:math.Random})
+  {'Math/PI            'github.com:glojurelang:glojure:pkg:javacompat:math.PI
+   'Math/E             'github.com:glojurelang:glojure:pkg:javacompat:math.E
+   'Math/abs           'github.com:glojurelang:glojure:pkg:javacompat:math.Abs
+   'Math/ceil          'github.com:glojurelang:glojure:pkg:javacompat:math.Ceil
+   'Math/floor         'github.com:glojurelang:glojure:pkg:javacompat:math.Floor
+   'Math/round         'github.com:glojurelang:glojure:pkg:javacompat:math.Round
+   'Math/rint          'github.com:glojurelang:glojure:pkg:javacompat:math.Rint
+   'Math/signum        'github.com:glojurelang:glojure:pkg:javacompat:math.Signum
+   'Math/sqrt          'github.com:glojurelang:glojure:pkg:javacompat:math.Sqrt
+   'Math/cbrt          'github.com:glojurelang:glojure:pkg:javacompat:math.Cbrt
+   'Math/pow           'github.com:glojurelang:glojure:pkg:javacompat:math.Pow
+   'Math/exp           'github.com:glojurelang:glojure:pkg:javacompat:math.Exp
+   'Math/expm1         'github.com:glojurelang:glojure:pkg:javacompat:math.Expm1
+   'Math/log           'github.com:glojurelang:glojure:pkg:javacompat:math.Log
+   'Math/log10         'github.com:glojurelang:glojure:pkg:javacompat:math.Log10
+   'Math/log1p         'github.com:glojurelang:glojure:pkg:javacompat:math.Log1p
+   'Math/sin           'github.com:glojurelang:glojure:pkg:javacompat:math.Sin
+   'Math/cos           'github.com:glojurelang:glojure:pkg:javacompat:math.Cos
+   'Math/tan           'github.com:glojurelang:glojure:pkg:javacompat:math.Tan
+   'Math/asin          'github.com:glojurelang:glojure:pkg:javacompat:math.Asin
+   'Math/acos          'github.com:glojurelang:glojure:pkg:javacompat:math.Acos
+   'Math/atan          'github.com:glojurelang:glojure:pkg:javacompat:math.Atan
+   'Math/atan2         'github.com:glojurelang:glojure:pkg:javacompat:math.Atan2
+   'Math/sinh          'github.com:glojurelang:glojure:pkg:javacompat:math.Sinh
+   'Math/cosh          'github.com:glojurelang:glojure:pkg:javacompat:math.Cosh
+   'Math/tanh          'github.com:glojurelang:glojure:pkg:javacompat:math.Tanh
+   'Math/copySign      'github.com:glojurelang:glojure:pkg:javacompat:math.CopySign
+   'Math/hypot         'github.com:glojurelang:glojure:pkg:javacompat:math.Hypot
+   'Math/IEEEremainder 'github.com:glojurelang:glojure:pkg:javacompat:math.IEEEremainder
+   'Math/toRadians     'github.com:glojurelang:glojure:pkg:javacompat:math.ToRadians
+   'Math/toDegrees     'github.com:glojurelang:glojure:pkg:javacompat:math.ToDegrees
+   'Math/max           'github.com:glojurelang:glojure:pkg:javacompat:math.Max
+   'Math/min           'github.com:glojurelang:glojure:pkg:javacompat:math.Min
+   'Math/floorDiv      'github.com:glojurelang:glojure:pkg:javacompat:math.FloorDiv
+   'Math/floorMod      'github.com:glojurelang:glojure:pkg:javacompat:math.FloorMod
+   'Math/addExact      'github.com:glojurelang:glojure:pkg:javacompat:math.AddExact
+   'Math/subtractExact 'github.com:glojurelang:glojure:pkg:javacompat:math.SubtractExact
+   'Math/multiplyExact 'github.com:glojurelang:glojure:pkg:javacompat:math.MultiplyExact
+   'Math/negateExact   'github.com:glojurelang:glojure:pkg:javacompat:math.NegateExact
+   'Math/incrementExact 'github.com:glojurelang:glojure:pkg:javacompat:math.IncrementExact
+   'Math/decrementExact 'github.com:glojurelang:glojure:pkg:javacompat:math.DecrementExact
+   'Math/toIntExact    'github.com:glojurelang:glojure:pkg:javacompat:math.ToIntExact
+   'Math/random        'github.com:glojurelang:glojure:pkg:javacompat:math.Random})
 
 (def gojava-system-mappings
-  {'System/out               'github.com:gloathub:glojure:pkg:javacompat:system.Out
-   'System/err               'github.com:gloathub:glojure:pkg:javacompat:system.Err
-   'System/in                'github.com:gloathub:glojure:pkg:javacompat:system.In
-   'System/currentTimeMillis 'github.com:gloathub:glojure:pkg:javacompat:system.CurrentTimeMillis
-   'System/nanoTime          'github.com:gloathub:glojure:pkg:javacompat:system.NanoTime
-   'System/getenv            'github.com:gloathub:glojure:pkg:javacompat:system.Getenv
-   'System/getProperty       'github.com:gloathub:glojure:pkg:javacompat:system.GetProperty
-   'System/setProperty       'github.com:gloathub:glojure:pkg:javacompat:system.SetProperty
-   'System/clearProperty     'github.com:gloathub:glojure:pkg:javacompat:system.ClearProperty
-   'System/exit              'github.com:gloathub:glojure:pkg:javacompat:system.Exit
-   'System/lineSeparator     'github.com:gloathub:glojure:pkg:javacompat:system.LineSeparator
-   'System/gc                'github.com:gloathub:glojure:pkg:javacompat:system.Gc})
+  {'System/out               'github.com:glojurelang:glojure:pkg:javacompat:system.Out
+   'System/err               'github.com:glojurelang:glojure:pkg:javacompat:system.Err
+   'System/in                'github.com:glojurelang:glojure:pkg:javacompat:system.In
+   'System/currentTimeMillis 'github.com:glojurelang:glojure:pkg:javacompat:system.CurrentTimeMillis
+   'System/nanoTime          'github.com:glojurelang:glojure:pkg:javacompat:system.NanoTime
+   'System/getenv            'github.com:glojurelang:glojure:pkg:javacompat:system.Getenv
+   'System/getProperty       'github.com:glojurelang:glojure:pkg:javacompat:system.GetProperty
+   'System/setProperty       'github.com:glojurelang:glojure:pkg:javacompat:system.SetProperty
+   'System/clearProperty     'github.com:glojurelang:glojure:pkg:javacompat:system.ClearProperty
+   'System/exit              'github.com:glojurelang:glojure:pkg:javacompat:system.Exit
+   'System/lineSeparator     'github.com:glojurelang:glojure:pkg:javacompat:system.LineSeparator
+   'System/gc                'github.com:glojurelang:glojure:pkg:javacompat:system.Gc})
 
 (def gojava-integer-mappings
-  {'Integer/MIN_VALUE             'github.com:gloathub:glojure:pkg:javacompat:integer.MIN_VALUE
-   'Integer/MAX_VALUE             'github.com:gloathub:glojure:pkg:javacompat:integer.MAX_VALUE
-   'Integer/SIZE                  'github.com:gloathub:glojure:pkg:javacompat:integer.SIZE
-   'Integer/BYTES                 'github.com:gloathub:glojure:pkg:javacompat:integer.BYTES
-   'Integer/parseInt              'github.com:gloathub:glojure:pkg:javacompat:integer.ParseInt
-   'Integer/parseUnsignedInt      'github.com:gloathub:glojure:pkg:javacompat:integer.ParseUnsignedInt
-   'Integer/valueOf               'github.com:gloathub:glojure:pkg:javacompat:integer.ValueOf
-   'Integer/toString              'github.com:gloathub:glojure:pkg:javacompat:integer.ToString
-   'Integer/toBinaryString        'github.com:gloathub:glojure:pkg:javacompat:integer.ToBinaryString
-   'Integer/toOctalString         'github.com:gloathub:glojure:pkg:javacompat:integer.ToOctalString
-   'Integer/toHexString           'github.com:gloathub:glojure:pkg:javacompat:integer.ToHexString
-   'Integer/bitCount              'github.com:gloathub:glojure:pkg:javacompat:integer.BitCount
-   'Integer/numberOfLeadingZeros  'github.com:gloathub:glojure:pkg:javacompat:integer.NumberOfLeadingZeros
-   'Integer/numberOfTrailingZeros 'github.com:gloathub:glojure:pkg:javacompat:integer.NumberOfTrailingZeros
-   'Integer/highestOneBit         'github.com:gloathub:glojure:pkg:javacompat:integer.HighestOneBit
-   'Integer/lowestOneBit          'github.com:gloathub:glojure:pkg:javacompat:integer.LowestOneBit
-   'Integer/reverse               'github.com:gloathub:glojure:pkg:javacompat:integer.Reverse
-   'Integer/reverseBytes          'github.com:gloathub:glojure:pkg:javacompat:integer.ReverseBytes
-   'Integer/signum                'github.com:gloathub:glojure:pkg:javacompat:integer.Signum
-   'Integer/compare               'github.com:gloathub:glojure:pkg:javacompat:integer.Compare
-   'Integer/max                   'github.com:gloathub:glojure:pkg:javacompat:integer.Max
-   'Integer/min                   'github.com:gloathub:glojure:pkg:javacompat:integer.Min
-   'Integer/sum                   'github.com:gloathub:glojure:pkg:javacompat:integer.Sum})
+  {'Integer/MIN_VALUE             'github.com:glojurelang:glojure:pkg:javacompat:integer.MIN_VALUE
+   'Integer/MAX_VALUE             'github.com:glojurelang:glojure:pkg:javacompat:integer.MAX_VALUE
+   'Integer/SIZE                  'github.com:glojurelang:glojure:pkg:javacompat:integer.SIZE
+   'Integer/BYTES                 'github.com:glojurelang:glojure:pkg:javacompat:integer.BYTES
+   'Integer/parseInt              'github.com:glojurelang:glojure:pkg:javacompat:integer.ParseInt
+   'Integer/parseUnsignedInt      'github.com:glojurelang:glojure:pkg:javacompat:integer.ParseUnsignedInt
+   'Integer/valueOf               'github.com:glojurelang:glojure:pkg:javacompat:integer.ValueOf
+   'Integer/toString              'github.com:glojurelang:glojure:pkg:javacompat:integer.ToString
+   'Integer/toBinaryString        'github.com:glojurelang:glojure:pkg:javacompat:integer.ToBinaryString
+   'Integer/toOctalString         'github.com:glojurelang:glojure:pkg:javacompat:integer.ToOctalString
+   'Integer/toHexString           'github.com:glojurelang:glojure:pkg:javacompat:integer.ToHexString
+   'Integer/bitCount              'github.com:glojurelang:glojure:pkg:javacompat:integer.BitCount
+   'Integer/numberOfLeadingZeros  'github.com:glojurelang:glojure:pkg:javacompat:integer.NumberOfLeadingZeros
+   'Integer/numberOfTrailingZeros 'github.com:glojurelang:glojure:pkg:javacompat:integer.NumberOfTrailingZeros
+   'Integer/highestOneBit         'github.com:glojurelang:glojure:pkg:javacompat:integer.HighestOneBit
+   'Integer/lowestOneBit          'github.com:glojurelang:glojure:pkg:javacompat:integer.LowestOneBit
+   'Integer/reverse               'github.com:glojurelang:glojure:pkg:javacompat:integer.Reverse
+   'Integer/reverseBytes          'github.com:glojurelang:glojure:pkg:javacompat:integer.ReverseBytes
+   'Integer/signum                'github.com:glojurelang:glojure:pkg:javacompat:integer.Signum
+   'Integer/compare               'github.com:glojurelang:glojure:pkg:javacompat:integer.Compare
+   'Integer/max                   'github.com:glojurelang:glojure:pkg:javacompat:integer.Max
+   'Integer/min                   'github.com:glojurelang:glojure:pkg:javacompat:integer.Min
+   'Integer/sum                   'github.com:glojurelang:glojure:pkg:javacompat:integer.Sum})
 
 (def gojava-long-mappings
-  {'Long/MIN_VALUE             'github.com:gloathub:glojure:pkg:javacompat:long.MIN_VALUE
-   'Long/MAX_VALUE             'github.com:gloathub:glojure:pkg:javacompat:long.MAX_VALUE
-   'Long/SIZE                  'github.com:gloathub:glojure:pkg:javacompat:long.SIZE
-   'Long/BYTES                 'github.com:gloathub:glojure:pkg:javacompat:long.BYTES
-   'Long/parseLong             'github.com:gloathub:glojure:pkg:javacompat:long.ParseLong
-   'Long/parseUnsignedLong     'github.com:gloathub:glojure:pkg:javacompat:long.ParseUnsignedLong
-   'Long/valueOf               'github.com:gloathub:glojure:pkg:javacompat:long.ValueOf
-   'Long/toString              'github.com:gloathub:glojure:pkg:javacompat:long.ToString
-   'Long/toBinaryString        'github.com:gloathub:glojure:pkg:javacompat:long.ToBinaryString
-   'Long/toOctalString         'github.com:gloathub:glojure:pkg:javacompat:long.ToOctalString
-   'Long/toHexString           'github.com:gloathub:glojure:pkg:javacompat:long.ToHexString
-   'Long/bitCount              'github.com:gloathub:glojure:pkg:javacompat:long.BitCount
-   'Long/numberOfLeadingZeros  'github.com:gloathub:glojure:pkg:javacompat:long.NumberOfLeadingZeros
-   'Long/numberOfTrailingZeros 'github.com:gloathub:glojure:pkg:javacompat:long.NumberOfTrailingZeros
-   'Long/highestOneBit         'github.com:gloathub:glojure:pkg:javacompat:long.HighestOneBit
-   'Long/lowestOneBit          'github.com:gloathub:glojure:pkg:javacompat:long.LowestOneBit
-   'Long/reverse               'github.com:gloathub:glojure:pkg:javacompat:long.Reverse
-   'Long/reverseBytes          'github.com:gloathub:glojure:pkg:javacompat:long.ReverseBytes
-   'Long/signum                'github.com:gloathub:glojure:pkg:javacompat:long.Signum
-   'Long/compare               'github.com:gloathub:glojure:pkg:javacompat:long.Compare
-   'Long/max                   'github.com:gloathub:glojure:pkg:javacompat:long.Max
-   'Long/min                   'github.com:gloathub:glojure:pkg:javacompat:long.Min
-   'Long/sum                   'github.com:gloathub:glojure:pkg:javacompat:long.Sum})
+  {'Long/MIN_VALUE             'github.com:glojurelang:glojure:pkg:javacompat:long.MIN_VALUE
+   'Long/MAX_VALUE             'github.com:glojurelang:glojure:pkg:javacompat:long.MAX_VALUE
+   'Long/SIZE                  'github.com:glojurelang:glojure:pkg:javacompat:long.SIZE
+   'Long/BYTES                 'github.com:glojurelang:glojure:pkg:javacompat:long.BYTES
+   'Long/parseLong             'github.com:glojurelang:glojure:pkg:javacompat:long.ParseLong
+   'Long/parseUnsignedLong     'github.com:glojurelang:glojure:pkg:javacompat:long.ParseUnsignedLong
+   'Long/valueOf               'github.com:glojurelang:glojure:pkg:javacompat:long.ValueOf
+   'Long/toString              'github.com:glojurelang:glojure:pkg:javacompat:long.ToString
+   'Long/toBinaryString        'github.com:glojurelang:glojure:pkg:javacompat:long.ToBinaryString
+   'Long/toOctalString         'github.com:glojurelang:glojure:pkg:javacompat:long.ToOctalString
+   'Long/toHexString           'github.com:glojurelang:glojure:pkg:javacompat:long.ToHexString
+   'Long/bitCount              'github.com:glojurelang:glojure:pkg:javacompat:long.BitCount
+   'Long/numberOfLeadingZeros  'github.com:glojurelang:glojure:pkg:javacompat:long.NumberOfLeadingZeros
+   'Long/numberOfTrailingZeros 'github.com:glojurelang:glojure:pkg:javacompat:long.NumberOfTrailingZeros
+   'Long/highestOneBit         'github.com:glojurelang:glojure:pkg:javacompat:long.HighestOneBit
+   'Long/lowestOneBit          'github.com:glojurelang:glojure:pkg:javacompat:long.LowestOneBit
+   'Long/reverse               'github.com:glojurelang:glojure:pkg:javacompat:long.Reverse
+   'Long/reverseBytes          'github.com:glojurelang:glojure:pkg:javacompat:long.ReverseBytes
+   'Long/signum                'github.com:glojurelang:glojure:pkg:javacompat:long.Signum
+   'Long/compare               'github.com:glojurelang:glojure:pkg:javacompat:long.Compare
+   'Long/max                   'github.com:glojurelang:glojure:pkg:javacompat:long.Max
+   'Long/min                   'github.com:glojurelang:glojure:pkg:javacompat:long.Min
+   'Long/sum                   'github.com:glojurelang:glojure:pkg:javacompat:long.Sum})
 
 (def gojava-string-mappings
-  {'String/format      'github.com:gloathub:glojure:pkg:javacompat:string.Format
-   'String/join        'github.com:gloathub:glojure:pkg:javacompat:string.Join
-   'String/valueOf     'github.com:gloathub:glojure:pkg:javacompat:string.ValueOf
-   'String/copyValueOf 'github.com:gloathub:glojure:pkg:javacompat:string.CopyValueOf})
+  {'String/format      'github.com:glojurelang:glojure:pkg:javacompat:string.Format
+   'String/join        'github.com:glojurelang:glojure:pkg:javacompat:string.Join
+   'String/valueOf     'github.com:glojurelang:glojure:pkg:javacompat:string.ValueOf
+   'String/copyValueOf 'github.com:glojurelang:glojure:pkg:javacompat:string.CopyValueOf})
 
 (def gojava-double-mappings
-  {'Double/MIN_VALUE           'github.com:gloathub:glojure:pkg:javacompat:double.MIN_VALUE
-   'Double/MAX_VALUE           'github.com:gloathub:glojure:pkg:javacompat:double.MAX_VALUE
-   'Double/MIN_NORMAL          'github.com:gloathub:glojure:pkg:javacompat:double.MIN_NORMAL
-   'Double/POSITIVE_INFINITY   'github.com:gloathub:glojure:pkg:javacompat:double.POSITIVE_INFINITY
-   'Double/NEGATIVE_INFINITY   'github.com:gloathub:glojure:pkg:javacompat:double.NEGATIVE_INFINITY
-   'Double/NaN                 'github.com:gloathub:glojure:pkg:javacompat:double.NaN
-   'Double/SIZE                'github.com:gloathub:glojure:pkg:javacompat:double.SIZE
-   'Double/BYTES               'github.com:gloathub:glojure:pkg:javacompat:double.BYTES
-   'Double/parseDouble         'github.com:gloathub:glojure:pkg:javacompat:double.ParseDouble
-   'Double/valueOf             'github.com:gloathub:glojure:pkg:javacompat:double.ValueOf
-   'Double/toString            'github.com:gloathub:glojure:pkg:javacompat:double.ToString
-   'Double/toHexString         'github.com:gloathub:glojure:pkg:javacompat:double.ToHexString
-   'Double/isNaN               'github.com:gloathub:glojure:pkg:javacompat:double.IsNaN
-   'Double/isInfinite          'github.com:gloathub:glojure:pkg:javacompat:double.IsInfinite
-   'Double/isFinite            'github.com:gloathub:glojure:pkg:javacompat:double.IsFinite
-   'Double/doubleToLongBits    'github.com:gloathub:glojure:pkg:javacompat:double.DoubleToLongBits
-   'Double/doubleToRawLongBits 'github.com:gloathub:glojure:pkg:javacompat:double.DoubleToRawLongBits
-   'Double/longBitsToDouble    'github.com:gloathub:glojure:pkg:javacompat:double.LongBitsToDouble
-   'Double/compare             'github.com:gloathub:glojure:pkg:javacompat:double.Compare
-   'Double/max                 'github.com:gloathub:glojure:pkg:javacompat:double.Max
-   'Double/min                 'github.com:gloathub:glojure:pkg:javacompat:double.Min
-   'Double/sum                 'github.com:gloathub:glojure:pkg:javacompat:double.Sum})
+  {'Double/MIN_VALUE           'github.com:glojurelang:glojure:pkg:javacompat:double.MIN_VALUE
+   'Double/MAX_VALUE           'github.com:glojurelang:glojure:pkg:javacompat:double.MAX_VALUE
+   'Double/MIN_NORMAL          'github.com:glojurelang:glojure:pkg:javacompat:double.MIN_NORMAL
+   'Double/POSITIVE_INFINITY   'github.com:glojurelang:glojure:pkg:javacompat:double.POSITIVE_INFINITY
+   'Double/NEGATIVE_INFINITY   'github.com:glojurelang:glojure:pkg:javacompat:double.NEGATIVE_INFINITY
+   'Double/NaN                 'github.com:glojurelang:glojure:pkg:javacompat:double.NaN
+   'Double/SIZE                'github.com:glojurelang:glojure:pkg:javacompat:double.SIZE
+   'Double/BYTES               'github.com:glojurelang:glojure:pkg:javacompat:double.BYTES
+   'Double/parseDouble         'github.com:glojurelang:glojure:pkg:javacompat:double.ParseDouble
+   'Double/valueOf             'github.com:glojurelang:glojure:pkg:javacompat:double.ValueOf
+   'Double/toString            'github.com:glojurelang:glojure:pkg:javacompat:double.ToString
+   'Double/toHexString         'github.com:glojurelang:glojure:pkg:javacompat:double.ToHexString
+   'Double/isNaN               'github.com:glojurelang:glojure:pkg:javacompat:double.IsNaN
+   'Double/isInfinite          'github.com:glojurelang:glojure:pkg:javacompat:double.IsInfinite
+   'Double/isFinite            'github.com:glojurelang:glojure:pkg:javacompat:double.IsFinite
+   'Double/doubleToLongBits    'github.com:glojurelang:glojure:pkg:javacompat:double.DoubleToLongBits
+   'Double/doubleToRawLongBits 'github.com:glojurelang:glojure:pkg:javacompat:double.DoubleToRawLongBits
+   'Double/longBitsToDouble    'github.com:glojurelang:glojure:pkg:javacompat:double.LongBitsToDouble
+   'Double/compare             'github.com:glojurelang:glojure:pkg:javacompat:double.Compare
+   'Double/max                 'github.com:glojurelang:glojure:pkg:javacompat:double.Max
+   'Double/min                 'github.com:glojurelang:glojure:pkg:javacompat:double.Min
+   'Double/sum                 'github.com:glojurelang:glojure:pkg:javacompat:double.Sum})
 
 (def gojava-boolean-mappings
-  {'Boolean/TRUE         'github.com:gloathub:glojure:pkg:javacompat:boolean.TRUE
-   'Boolean/FALSE        'github.com:gloathub:glojure:pkg:javacompat:boolean.FALSE
-   'Boolean/parseBoolean 'github.com:gloathub:glojure:pkg:javacompat:boolean.ParseBoolean
-   'Boolean/valueOf      'github.com:gloathub:glojure:pkg:javacompat:boolean.ValueOf
-   'Boolean/toString     'github.com:gloathub:glojure:pkg:javacompat:boolean.ToString
-   'Boolean/compare      'github.com:gloathub:glojure:pkg:javacompat:boolean.Compare
-   'Boolean/logicalAnd   'github.com:gloathub:glojure:pkg:javacompat:boolean.LogicalAnd
-   'Boolean/logicalOr    'github.com:gloathub:glojure:pkg:javacompat:boolean.LogicalOr
-   'Boolean/logicalXor   'github.com:gloathub:glojure:pkg:javacompat:boolean.LogicalXor
-   'Boolean/getBoolean   'github.com:gloathub:glojure:pkg:javacompat:boolean.GetBoolean})
+  {'Boolean/TRUE         'github.com:glojurelang:glojure:pkg:javacompat:boolean.TRUE
+   'Boolean/FALSE        'github.com:glojurelang:glojure:pkg:javacompat:boolean.FALSE
+   'Boolean/parseBoolean 'github.com:glojurelang:glojure:pkg:javacompat:boolean.ParseBoolean
+   'Boolean/valueOf      'github.com:glojurelang:glojure:pkg:javacompat:boolean.ValueOf
+   'Boolean/toString     'github.com:glojurelang:glojure:pkg:javacompat:boolean.ToString
+   'Boolean/compare      'github.com:glojurelang:glojure:pkg:javacompat:boolean.Compare
+   'Boolean/logicalAnd   'github.com:glojurelang:glojure:pkg:javacompat:boolean.LogicalAnd
+   'Boolean/logicalOr    'github.com:glojurelang:glojure:pkg:javacompat:boolean.LogicalOr
+   'Boolean/logicalXor   'github.com:glojurelang:glojure:pkg:javacompat:boolean.LogicalXor
+   'Boolean/getBoolean   'github.com:glojurelang:glojure:pkg:javacompat:boolean.GetBoolean})
 
 (def gojava-regex-mappings
-  {'Pattern/compile          'github.com:gloathub:glojure:pkg:javacompat:regex.Compile
-   'Pattern/matches          'github.com:gloathub:glojure:pkg:javacompat:regex.Matches
-   'Pattern/quote            'github.com:gloathub:glojure:pkg:javacompat:regex.Quote
-   'Pattern/CASE_INSENSITIVE 'github.com:gloathub:glojure:pkg:javacompat:regex.CASE_INSENSITIVE
-   'Pattern/MULTILINE        'github.com:gloathub:glojure:pkg:javacompat:regex.MULTILINE
-   'Pattern/LITERAL          'github.com:gloathub:glojure:pkg:javacompat:regex.LITERAL
-   'Pattern/DOTALL           'github.com:gloathub:glojure:pkg:javacompat:regex.DOTALL
-   'Pattern/UNICODE_CASE     'github.com:gloathub:glojure:pkg:javacompat:regex.UNICODE_CASE})
+  {'Pattern/compile          'github.com:glojurelang:glojure:pkg:javacompat:regex.Compile
+   'Pattern/matches          'github.com:glojurelang:glojure:pkg:javacompat:regex.Matches
+   'Pattern/quote            'github.com:glojurelang:glojure:pkg:javacompat:regex.Quote
+   'Pattern/CASE_INSENSITIVE 'github.com:glojurelang:glojure:pkg:javacompat:regex.CASE_INSENSITIVE
+   'Pattern/MULTILINE        'github.com:glojurelang:glojure:pkg:javacompat:regex.MULTILINE
+   'Pattern/LITERAL          'github.com:glojurelang:glojure:pkg:javacompat:regex.LITERAL
+   'Pattern/DOTALL           'github.com:glojurelang:glojure:pkg:javacompat:regex.DOTALL
+   'Pattern/UNICODE_CASE     'github.com:glojurelang:glojure:pkg:javacompat:regex.UNICODE_CASE})
 
 (def gojava-uuid-mappings
-  {'UUID/randomUUID        'github.com:gloathub:glojure:pkg:javacompat:uuid.RandomUUID
-   'UUID/fromString        'github.com:gloathub:glojure:pkg:javacompat:uuid.FromString
-   'UUID/nameUUIDFromBytes 'github.com:gloathub:glojure:pkg:javacompat:uuid.NameUUIDFromBytes})
+  {'UUID/randomUUID        'github.com:glojurelang:glojure:pkg:javacompat:uuid.RandomUUID
+   'UUID/fromString        'github.com:glojurelang:glojure:pkg:javacompat:uuid.FromString
+   'UUID/nameUUIDFromBytes 'github.com:glojurelang:glojure:pkg:javacompat:uuid.NameUUIDFromBytes})
 
 (def gojava-character-mappings
-  {'Character/MIN_VALUE       'github.com:gloathub:glojure:pkg:javacompat:character.MIN_VALUE
-   'Character/MAX_VALUE       'github.com:gloathub:glojure:pkg:javacompat:character.MAX_VALUE
-   'Character/MIN_RADIX       'github.com:gloathub:glojure:pkg:javacompat:character.MIN_RADIX
-   'Character/MAX_RADIX       'github.com:gloathub:glojure:pkg:javacompat:character.MAX_RADIX
-   'Character/valueOf         'github.com:gloathub:glojure:pkg:javacompat:character.ValueOf
-   'Character/isDigit         'github.com:gloathub:glojure:pkg:javacompat:character.IsDigit
-   'Character/isLetter        'github.com:gloathub:glojure:pkg:javacompat:character.IsLetter
-   'Character/isLetterOrDigit 'github.com:gloathub:glojure:pkg:javacompat:character.IsLetterOrDigit
-   'Character/isAlphabetic    'github.com:gloathub:glojure:pkg:javacompat:character.IsAlphabetic
-   'Character/isWhitespace    'github.com:gloathub:glojure:pkg:javacompat:character.IsWhitespace
-   'Character/isSpaceChar     'github.com:gloathub:glojure:pkg:javacompat:character.IsSpaceChar
-   'Character/isUpperCase     'github.com:gloathub:glojure:pkg:javacompat:character.IsUpperCase
-   'Character/isLowerCase     'github.com:gloathub:glojure:pkg:javacompat:character.IsLowerCase
-   'Character/toUpperCase     'github.com:gloathub:glojure:pkg:javacompat:character.ToUpperCase
-   'Character/toLowerCase     'github.com:gloathub:glojure:pkg:javacompat:character.ToLowerCase
-   'Character/toString        'github.com:gloathub:glojure:pkg:javacompat:character.ToString
-   'Character/digit           'github.com:gloathub:glojure:pkg:javacompat:character.Digit
-   'Character/forDigit        'github.com:gloathub:glojure:pkg:javacompat:character.ForDigit
-   'Character/getNumericValue 'github.com:gloathub:glojure:pkg:javacompat:character.GetNumericValue
-   'Character/compare         'github.com:gloathub:glojure:pkg:javacompat:character.Compare})
+  {'Character/MIN_VALUE       'github.com:glojurelang:glojure:pkg:javacompat:character.MIN_VALUE
+   'Character/MAX_VALUE       'github.com:glojurelang:glojure:pkg:javacompat:character.MAX_VALUE
+   'Character/MIN_RADIX       'github.com:glojurelang:glojure:pkg:javacompat:character.MIN_RADIX
+   'Character/MAX_RADIX       'github.com:glojurelang:glojure:pkg:javacompat:character.MAX_RADIX
+   'Character/valueOf         'github.com:glojurelang:glojure:pkg:javacompat:character.ValueOf
+   'Character/isDigit         'github.com:glojurelang:glojure:pkg:javacompat:character.IsDigit
+   'Character/isLetter        'github.com:glojurelang:glojure:pkg:javacompat:character.IsLetter
+   'Character/isLetterOrDigit 'github.com:glojurelang:glojure:pkg:javacompat:character.IsLetterOrDigit
+   'Character/isAlphabetic    'github.com:glojurelang:glojure:pkg:javacompat:character.IsAlphabetic
+   'Character/isWhitespace    'github.com:glojurelang:glojure:pkg:javacompat:character.IsWhitespace
+   'Character/isSpaceChar     'github.com:glojurelang:glojure:pkg:javacompat:character.IsSpaceChar
+   'Character/isUpperCase     'github.com:glojurelang:glojure:pkg:javacompat:character.IsUpperCase
+   'Character/isLowerCase     'github.com:glojurelang:glojure:pkg:javacompat:character.IsLowerCase
+   'Character/toUpperCase     'github.com:glojurelang:glojure:pkg:javacompat:character.ToUpperCase
+   'Character/toLowerCase     'github.com:glojurelang:glojure:pkg:javacompat:character.ToLowerCase
+   'Character/toString        'github.com:glojurelang:glojure:pkg:javacompat:character.ToString
+   'Character/digit           'github.com:glojurelang:glojure:pkg:javacompat:character.Digit
+   'Character/forDigit        'github.com:glojurelang:glojure:pkg:javacompat:character.ForDigit
+   'Character/getNumericValue 'github.com:glojurelang:glojure:pkg:javacompat:character.GetNumericValue
+   'Character/compare         'github.com:glojurelang:glojure:pkg:javacompat:character.Compare})
 
 (def gojava-thread-mappings
-  {'Thread/sleep 'github.com:gloathub:glojure:pkg:javacompat:thread.Sleep})
+  {'Thread/sleep 'github.com:glojurelang:glojure:pkg:javacompat:thread.Sleep})
 
 (def gojava-instant-mappings
-  {'Instant/EPOCH         'github.com:gloathub:glojure:pkg:javacompat:instant.EPOCH
-   'Instant/now           'github.com:gloathub:glojure:pkg:javacompat:instant.Now
-   'Instant/parse         'github.com:gloathub:glojure:pkg:javacompat:instant.Parse
-   'Instant/ofEpochSecond 'github.com:gloathub:glojure:pkg:javacompat:instant.OfEpochSecond
-   'Instant/ofEpochMilli  'github.com:gloathub:glojure:pkg:javacompat:instant.OfEpochMilli})
+  {'Instant/EPOCH         'github.com:glojurelang:glojure:pkg:javacompat:instant.EPOCH
+   'Instant/now           'github.com:glojurelang:glojure:pkg:javacompat:instant.Now
+   'Instant/parse         'github.com:glojurelang:glojure:pkg:javacompat:instant.Parse
+   'Instant/ofEpochSecond 'github.com:glojurelang:glojure:pkg:javacompat:instant.OfEpochSecond
+   'Instant/ofEpochMilli  'github.com:glojurelang:glojure:pkg:javacompat:instant.OfEpochMilli})
 
 (def other-mappings
-  {'(. clojure.lang.Delay (force x)) '(github.com:gloathub:glojure:pkg:lang.ForceDelay x)
+  {'(. clojure.lang.Delay (force x)) '(github.com:glojurelang:glojure:pkg:lang.ForceDelay x)
    '(or (instance? Long x)
           (instance? Integer x)
           (instance? Short x)
@@ -362,9 +362,9 @@
 
    ;; intern
    '(clojure.lang.Var/intern (the-ns ns) name) '(.Intern (the-ns ns) name)
-   '(clojure.lang.Var/intern (the-ns ns) name val) '(github.com:gloathub:glojure:pkg:lang.InternVar (the-ns ns) name val true)
+   '(clojure.lang.Var/intern (the-ns ns) name val) '(github.com:glojurelang:glojure:pkg:lang.InternVar (the-ns ns) name val true)
    ;; create-ns
-   'clojure.lang.Namespace/findOrCreate 'github.com:gloathub:glojure:pkg:lang.FindOrCreateNamespace
+   'clojure.lang.Namespace/findOrCreate 'github.com:glojurelang:glojure:pkg:lang.FindOrCreateNamespace
    })
 
 (defn create-simple-replacements
@@ -406,7 +406,7 @@
   "Create replacement for clojure.lang.ClassName to glojure package equivalent"
   [class-name & {:keys [pointer? package] 
                  :or {pointer? false 
-                      package "github.com:gloathub:glojure:pkg:lang"}}]
+                      package "github.com:glojurelang:glojure:pkg:lang"}}]
   (sexpr-replace 
     (symbol (str "clojure.lang." class-name))
     (symbol (str package "." (when pointer? "*") class-name))))
@@ -464,13 +464,13 @@
        "BigInt" "BigDecimal"]
       :pointer? true)
 
-    [(clojure-lang->glojure-pkg "Fn" :pointer? true :package "github.com:gloathub:glojure:pkg:runtime")]
+    [(clojure-lang->glojure-pkg "Fn" :pointer? true :package "github.com:glojurelang:glojure:pkg:runtime")]
 
     ;; All other replacements remain as-is
     [
      ;; ===== Special Clojure.lang Replacements =====
      ;; These don't follow the standard pattern
-   (sexpr-replace '(. clojure.lang.PersistentList creator) 'github.com:gloathub:glojure:pkg:lang.NewList)
+   (sexpr-replace '(. clojure.lang.PersistentList creator) 'github.com:glojurelang:glojure:pkg:lang.NewList)
    (sexpr-replace '(setMacro) '(SetMacro))
 
 
@@ -480,27 +480,27 @@
 
    ;; ===== Range Constructors =====
    (sexpr-replace '(clojure.lang.LongRange/create end)
-                  '(github.com:gloathub:glojure:pkg:lang.NewLongRange 0 end 1))
+                  '(github.com:glojurelang:glojure:pkg:lang.NewLongRange 0 end 1))
    (sexpr-replace '(clojure.lang.LongRange/create start end)
-                  '(github.com:gloathub:glojure:pkg:lang.NewLongRange start end 1))
+                  '(github.com:glojurelang:glojure:pkg:lang.NewLongRange start end 1))
    (sexpr-replace '(clojure.lang.LongRange/create start end step)
-                  '(github.com:gloathub:glojure:pkg:lang.NewLongRange start end step))
+                  '(github.com:glojurelang:glojure:pkg:lang.NewLongRange start end step))
 
    (sexpr-replace '(clojure.lang.Range/create end)
-                  '(github.com:gloathub:glojure:pkg:lang.NewRange 0 end 1))
+                  '(github.com:glojurelang:glojure:pkg:lang.NewRange 0 end 1))
    (sexpr-replace '(clojure.lang.Range/create start end)
-                  '(github.com:gloathub:glojure:pkg:lang.NewRange start end 1))
+                  '(github.com:glojurelang:glojure:pkg:lang.NewRange start end 1))
    (sexpr-replace '(clojure.lang.Range/create start end step)
-                  '(github.com:gloathub:glojure:pkg:lang.NewRange start end step))
+                  '(github.com:glojurelang:glojure:pkg:lang.NewRange start end step))
 
 
    ;; ===== Collection Constructors =====
    (sexpr-replace '(. clojure.lang.PersistentHashMap (create keyvals))
-                  '(github.com:gloathub:glojure:pkg:lang.CreatePersistentHashMap keyvals))
+                  '(github.com:glojurelang:glojure:pkg:lang.CreatePersistentHashMap keyvals))
 
-   (sexpr-replace '(java.util.ArrayList. n) '(github.com:gloathub:glojure:pkg:lang.NewArrayList (to-array n)))
-   (sexpr-replace '(java.util.ArrayList. coll) '(github.com:gloathub:glojure:pkg:lang.NewArrayList (to-array coll)))
-   (sexpr-replace '(java.util.ArrayList.) '(new github.com:gloathub:glojure:pkg:lang.ArrayList))
+   (sexpr-replace '(java.util.ArrayList. n) '(github.com:glojurelang:glojure:pkg:lang.NewArrayList (to-array n)))
+   (sexpr-replace '(java.util.ArrayList. coll) '(github.com:glojurelang:glojure:pkg:lang.NewArrayList (to-array coll)))
+   (sexpr-replace '(java.util.ArrayList.) '(new github.com:glojurelang:glojure:pkg:lang.ArrayList))
 
    ;; ===== Other Constructors =====
 
@@ -513,9 +513,9 @@
    ;; replacement of the clojure.lang prefix.
 
    (sexpr-replace 'java.util.regex.Matcher
-                  'github.com:gloathub:glojure:pkg:lang.*RegexpMatcher)
+                  'github.com:glojurelang:glojure:pkg:lang.*RegexpMatcher)
    (sexpr-replace 'java.io.PrintWriter
-                  'github.com:gloathub:glojure:pkg:lang.PrintWriter)
+                  'github.com:glojurelang:glojure:pkg:lang.PrintWriter)
 
    ;; omit PrintWriter-on (defn PrintWriter-on ...)
    (omitp #(and (z/list? %)
@@ -523,48 +523,48 @@
                 (= 'PrintWriter-on (second (z/sexpr %)))))
 
    (sexpr-replace 'clojure.lang.IReduce
-                  'github.com:gloathub:glojure:pkg:lang.IReduce)
+                  'github.com:glojurelang:glojure:pkg:lang.IReduce)
    (sexpr-replace 'clojure.lang.IFn
-                  'github.com:gloathub:glojure:pkg:lang.IFn)
+                  'github.com:glojurelang:glojure:pkg:lang.IFn)
    (sexpr-replace 'clojure.lang.IPending
-                  'github.com:gloathub:glojure:pkg:lang.IPending)
+                  'github.com:glojurelang:glojure:pkg:lang.IPending)
    (sexpr-replace 'clojure.lang.MultiFn
-                  'github.com:gloathub:glojure:pkg:lang.*MultiFn)
+                  'github.com:glojurelang:glojure:pkg:lang.*MultiFn)
    (sexpr-replace 'clojure.lang.Volatile
-                  'github.com:gloathub:glojure:pkg:lang.Volatile)
+                  'github.com:glojurelang:glojure:pkg:lang.Volatile)
    (sexpr-replace 'clojure.lang.Volatile.
-                  'github.com:gloathub:glojure:pkg:lang.NewVolatile)
+                  'github.com:glojurelang:glojure:pkg:lang.NewVolatile)
    (sexpr-replace 'clojure.lang.IAtom
-                  'github.com:gloathub:glojure:pkg:lang.IAtom)
+                  'github.com:glojurelang:glojure:pkg:lang.IAtom)
    (sexpr-replace 'clojure.lang.IMapEntry
-                  'github.com:gloathub:glojure:pkg:lang.IMapEntry)
+                  'github.com:glojurelang:glojure:pkg:lang.IMapEntry)
 
    (sexpr-replace 'clojure.lang.PersistentHashMap
-                  'github.com:gloathub:glojure:pkg:lang.*PersistentHashMap)
+                  'github.com:glojurelang:glojure:pkg:lang.*PersistentHashMap)
    (sexpr-replace 'clojure.lang.PersistentHashSet
-                  'github.com:gloathub:glojure:pkg:lang.*PersistentHashSet)
+                  'github.com:glojurelang:glojure:pkg:lang.*PersistentHashSet)
    (sexpr-replace 'clojure.lang.PersistentVector
-                  'github.com:gloathub:glojure:pkg:lang.*PersistentVector)
+                  'github.com:glojurelang:glojure:pkg:lang.*PersistentVector)
    (sexpr-replace 'clojure.lang.LazySeq
-                  'github.com:gloathub:glojure:pkg:lang.*LazySeq)
+                  'github.com:glojurelang:glojure:pkg:lang.*LazySeq)
 
    (sexpr-replace '(clojure.lang.PersistentTreeMap/create keyvals)
-                  '(github.com:gloathub:glojure:pkg:lang.CreatePersistentTreeMap keyvals))
+                  '(github.com:glojurelang:glojure:pkg:lang.CreatePersistentTreeMap keyvals))
 
    (sexpr-replace '(clojure.lang.PersistentTreeSet/create keys)
-                  '(github.com:gloathub:glojure:pkg:lang.CreatePersistentTreeSet keys))
+                  '(github.com:glojurelang:glojure:pkg:lang.CreatePersistentTreeSet keys))
    (sexpr-replace '(clojure.lang.PersistentTreeSet/create comparator keys)
-                  '(github.com:gloathub:glojure:pkg:lang.CreatePersistentTreeSetWithComparator comparator keys))
+                  '(github.com:glojurelang:glojure:pkg:lang.CreatePersistentTreeSetWithComparator comparator keys))
    (sexpr-replace '(clojure.lang.PersistentHashSet/create keys)
-                  '(apply github.com:gloathub:glojure:pkg:lang.NewSet keys))
+                  '(apply github.com:glojurelang:glojure:pkg:lang.NewSet keys))
 
-   (sexpr-replace 'clojure.lang.Cycle/create 'github.com:gloathub:glojure:pkg:lang.NewCycle)
+   (sexpr-replace 'clojure.lang.Cycle/create 'github.com:glojurelang:glojure:pkg:lang.NewCycle)
 
    (sexpr-replace 'clojure.lang.PersistentArrayMap/createAsIfByAssoc
-                  'github.com:gloathub:glojure:pkg:lang.NewPersistentArrayMapAsIfByAssoc)
+                  'github.com:glojurelang:glojure:pkg:lang.NewPersistentArrayMapAsIfByAssoc)
 
 
-   (sexpr-replace 'java.util.Map$Entry 'github.com:gloathub:glojure:pkg:lang.MapEntry)
+   (sexpr-replace 'java.util.Map$Entry 'github.com:glojurelang:glojure:pkg:lang.MapEntry)
 
    (sexpr-replace 'java.net.URI 'net:url.URL)
 
@@ -573,7 +573,7 @@
    (sexpr-replace '(java.util.UUID/fromString s)
                   '(let [[uuid err] (github.com:google:uuid.Parse s)]
                      (if err
-                       (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError (str "Error parsing UUID: " err)))
+                       (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError (str "Error parsing UUID: " err)))
                        uuid)))
 
    (sexpr-replace '(java.util.UUID/randomUUID)
@@ -582,13 +582,13 @@
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
    ;; struct map
    (sexpr-replace '(. clojure.lang.PersistentStructMap (createSlotMap keys))
-                  '(github.com:gloathub:glojure:pkg:lang.CreatePersistentStructMapSlotMap keys))
+                  '(github.com:glojurelang:glojure:pkg:lang.CreatePersistentStructMapSlotMap keys))
    (sexpr-replace '(. clojure.lang.PersistentStructMap (create s inits))
-                  '(github.com:gloathub:glojure:pkg:lang.CreatePersistentStructMap s inits))
+                  '(github.com:glojurelang:glojure:pkg:lang.CreatePersistentStructMap s inits))
    (sexpr-replace '(. clojure.lang.PersistentStructMap (construct s vals))
-                  '(github.com:gloathub:glojure:pkg:lang.ConstructPersistentStructMap s vals))
+                  '(github.com:glojurelang:glojure:pkg:lang.ConstructPersistentStructMap s vals))
    (sexpr-replace '(. clojure.lang.PersistentStructMap (getAccessor s key))
-                  '(github.com:gloathub:glojure:pkg:lang.GetPersistentStructMapAccessor s key))
+                  '(github.com:glojurelang:glojure:pkg:lang.GetPersistentStructMapAccessor s key))
    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
    (sexpr-replace '(.. (name lib)
@@ -607,24 +607,24 @@
    (sexpr-replace "Evaluates x and tests if it is an instance of the class\n    c. Returns true or false"
                   "Evaluates x and tests if it is an instance of the type\n    t. Returns true or false")
    (sexpr-replace '(fn instance? [^Class c x] (. c (isInstance x)))
-                  '(fn instance? [t x] (github.com:gloathub:glojure:pkg:lang.HasType t x)))
+                  '(fn instance? [t x] (github.com:glojurelang:glojure:pkg:lang.HasType t x)))
 
 
   ;; Replace instance? checks for clojure.lang.Fn with OR expression checking both runtime.*Fn and IFn
   (sexpr-replace '(instance? clojure.lang.Fn x)
-                 '(or (instance? github.com:gloathub:glojure:pkg:runtime.*Fn x)
-                      (instance? github.com:gloathub:glojure:pkg:lang.FnFunc x)))
+                 '(or (instance? github.com:glojurelang:glojure:pkg:runtime.*Fn x)
+                      (instance? github.com:glojurelang:glojure:pkg:lang.FnFunc x)))
 
    ;; ===== Exception Handling =====
-   (sexpr-replace 'Exception. 'github.com:gloathub:glojure:pkg:lang.NewError)
+   (sexpr-replace 'Exception. 'github.com:glojurelang:glojure:pkg:lang.NewError)
 
-   (sexpr-replace 'IExceptionInfo 'github.com:gloathub:glojure:pkg:lang.IExceptionInfo)
+   (sexpr-replace 'IExceptionInfo 'github.com:glojurelang:glojure:pkg:lang.IExceptionInfo)
 
    (sexpr-replace '(when (instance? IExceptionInfo ex)
                      (.getData ^IExceptionInfo ex))
-                  '(github.com:gloathub:glojure:pkg:lang.GetExData ex))
+                  '(github.com:glojurelang:glojure:pkg:lang.GetExData ex))
    (sexpr-replace '(catch IllegalStateException e nil)
-                  '(catch github.com:gloathub:glojure:pkg:lang.IllegalStateException e nil))
+                  '(catch github.com:glojurelang:glojure:pkg:lang.IllegalStateException e nil))
 
    ;; Handle ExceptionInfo constructor with different arities
    [(fn select [zloc]
@@ -637,12 +637,12 @@
             arg-count (dec (count expr))]
         (cond
           (= arg-count 2) ; (ExceptionInfo. msg map)
-          (z/replace zloc (list 'github.com:gloathub:glojure:pkg:lang.NewExceptionInfo
+          (z/replace zloc (list 'github.com:glojurelang:glojure:pkg:lang.NewExceptionInfo
                                (nth expr 1)
                                (nth expr 2)))
 
           (= arg-count 3) ; (ExceptionInfo. msg map cause)
-          (z/replace zloc (list 'github.com:gloathub:glojure:pkg:lang.NewExceptionInfoWithCause
+          (z/replace zloc (list 'github.com:glojurelang:glojure:pkg:lang.NewExceptionInfoWithCause
                                (nth expr 1)
                                (nth expr 2)
                                (nth expr 3)))
@@ -662,14 +662,14 @@
    that carries a map of additional data."
                    {:added "1.4"}
                    ([msg map]
-                    (github.com:gloathub:glojure:pkg:lang.NewExceptionInfo msg map))
+                    (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfo msg map))
                    ([msg map cause]
-                    (github.com:gloathub:glojure:pkg:lang.NewExceptionInfoWithCause msg map cause)))))]
+                    (github.com:glojurelang:glojure:pkg:lang.NewExceptionInfoWithCause msg map cause)))))]
 
-   (sexpr-replace 'java.lang.UnsupportedOperationException. 'github.com:gloathub:glojure:pkg:lang.NewUnsupportedOperationError)
+   (sexpr-replace 'java.lang.UnsupportedOperationException. 'github.com:glojurelang:glojure:pkg:lang.NewUnsupportedOperationError)
 
-   (sexpr-replace 'IllegalArgumentException. 'github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError)
-   (sexpr-replace 'IllegalArgumentException 'github.com:gloathub:glojure:pkg:lang.*IllegalArgumentError)
+   (sexpr-replace 'IllegalArgumentException. 'github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError)
+   (sexpr-replace 'IllegalArgumentException 'github.com:glojurelang:glojure:pkg:lang.*IllegalArgumentError)
    ;; new Exception
    [(fn select [zloc] (and (z/list? zloc)
                            (let [expr (z/sexpr zloc)]
@@ -685,14 +685,14 @@
                              (and (seq expr)
                                   (#{'Integer. 'java.lang.Integer.} (first expr))))))
     (fn visit [zloc]
-      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:integer.ValueOf)
+      (z/replace zloc (concat '(github.com:glojurelang:glojure:pkg:javacompat:integer.ValueOf)
                               (rest (z/sexpr zloc)))))]
    [(fn select [zloc] (and (z/list? zloc)
                            (let [expr (z/sexpr zloc)]
                              (and (seq expr)
                                   (#{'Long. 'java.lang.Long.} (first expr))))))
     (fn visit [zloc]
-      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:long.ValueOf)
+      (z/replace zloc (concat '(github.com:glojurelang:glojure:pkg:javacompat:long.ValueOf)
                               (rest (z/sexpr zloc)))))]
    ;; (String. x) and (java.lang.String. x) -> valueOf-style coercion
    [(fn select [zloc] (and (z/list? zloc)
@@ -700,7 +700,7 @@
                              (and (seq expr)
                                   (#{'String. 'java.lang.String.} (first expr))))))
     (fn visit [zloc]
-      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:string.ValueOf)
+      (z/replace zloc (concat '(github.com:glojurelang:glojure:pkg:javacompat:string.ValueOf)
                               (rest (z/sexpr zloc)))))]
    ;; (Double. x) -> valueOf
    [(fn select [zloc] (and (z/list? zloc)
@@ -708,7 +708,7 @@
                              (and (seq expr)
                                   (#{'Double. 'java.lang.Double.} (first expr))))))
     (fn visit [zloc]
-      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:double.ValueOf)
+      (z/replace zloc (concat '(github.com:glojurelang:glojure:pkg:javacompat:double.ValueOf)
                               (rest (z/sexpr zloc)))))]
    ;; (Boolean. x) -> valueOf
    [(fn select [zloc] (and (z/list? zloc)
@@ -716,7 +716,7 @@
                              (and (seq expr)
                                   (#{'Boolean. 'java.lang.Boolean.} (first expr))))))
     (fn visit [zloc]
-      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:boolean.ValueOf)
+      (z/replace zloc (concat '(github.com:glojurelang:glojure:pkg:javacompat:boolean.ValueOf)
                               (rest (z/sexpr zloc)))))]
    ;; (Character. c) -> valueOf
    [(fn select [zloc] (and (z/list? zloc)
@@ -724,7 +724,7 @@
                              (and (seq expr)
                                   (#{'Character. 'java.lang.Character.} (first expr))))))
     (fn visit [zloc]
-      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:character.ValueOf)
+      (z/replace zloc (concat '(github.com:glojurelang:glojure:pkg:javacompat:character.ValueOf)
                               (rest (z/sexpr zloc)))))]
    ;; (Pattern. regex) -> compile
    [(fn select [zloc] (and (z/list? zloc)
@@ -732,7 +732,7 @@
                              (and (seq expr)
                                   (#{'Pattern. 'java.util.regex.Pattern.} (first expr))))))
     (fn visit [zloc]
-      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:regex.Compile)
+      (z/replace zloc (concat '(github.com:glojurelang:glojure:pkg:javacompat:regex.Compile)
                               (rest (z/sexpr zloc)))))]
    ;; (UUID. msb lsb) -> fromBits
    [(fn select [zloc] (and (z/list? zloc)
@@ -740,7 +740,7 @@
                              (and (seq expr)
                                   (#{'UUID. 'java.util.UUID.} (first expr))))))
     (fn visit [zloc]
-      (z/replace zloc (concat '(github.com:gloathub:glojure:pkg:javacompat:uuid.FromBits)
+      (z/replace zloc (concat '(github.com:glojurelang:glojure:pkg:javacompat:uuid.FromBits)
                               (rest (z/sexpr zloc)))))]
    ;; catch Exception
    [(fn select [zloc] (and (z/sexpr-able? zloc)
@@ -779,22 +779,22 @@
    ;; replace .withMeta
    [(fn select [zloc] (and (z/list? zloc) (= '.withMeta (first (z/sexpr zloc)))))
     (fn visit [zloc] (z/replace zloc
-                                `(let* [~'res (github.com:gloathub:glojure:pkg:lang.WithMeta ~@(rest (z/sexpr zloc)))]
+                                `(let* [~'res (github.com:glojurelang:glojure:pkg:lang.WithMeta ~@(rest (z/sexpr zloc)))]
                                    (if (~'res 1)
                                      (throw (~'res 1))
                                      (~'res 0)))))]
 
    ;; ===== RT Function Replacements =====
-   (RT-replace 'cons #(cons 'github.com:gloathub:glojure:pkg:lang.NewCons %))
-   (RT-replace 'first #(cons 'github.com:gloathub:glojure:pkg:lang.First %))
-   (RT-replace 'next #(cons 'github.com:gloathub:glojure:pkg:lang.Next %))
-   (RT-replace 'more #(cons 'github.com:gloathub:glojure:pkg:lang.Rest %))
+   (RT-replace 'cons #(cons 'github.com:glojurelang:glojure:pkg:lang.NewCons %))
+   (RT-replace 'first #(cons 'github.com:glojurelang:glojure:pkg:lang.First %))
+   (RT-replace 'next #(cons 'github.com:glojurelang:glojure:pkg:lang.Next %))
+   (RT-replace 'more #(cons 'github.com:glojurelang:glojure:pkg:lang.Rest %))
 
    [(fn select [zloc] (try
                         (and (symbol? (z/sexpr zloc))
                              (or
-                              (and (z/leftmost? zloc) (= 'github.com:gloathub:glojure:pkg:runtime.RT (-> zloc z/up z/left z/sexpr)))
-                              (= 'github.com:gloathub:glojure:pkg:runtime.RT (-> zloc z/left z/sexpr))))
+                              (and (z/leftmost? zloc) (= 'github.com:glojurelang:glojure:pkg:runtime.RT (-> zloc z/up z/left z/sexpr)))
+                              (= 'github.com:glojurelang:glojure:pkg:runtime.RT (-> zloc z/left z/sexpr))))
                         (catch Exception e false)))
     (fn visit [zloc] (z/replace zloc
                                 (let [sym (-> zloc z/sexpr str)]
@@ -802,20 +802,20 @@
 
    (sexpr-replace '.meta '.Meta)
    (sexpr-replace 'clojure.lang.IPersistentMap
-                  'github.com:gloathub:glojure:pkg:lang.IPersistentMap)
+                  'github.com:glojurelang:glojure:pkg:lang.IPersistentMap)
    (sexpr-replace 'clojure.lang.IPersistentVector
-                  'github.com:gloathub:glojure:pkg:lang.IPersistentVector)
+                  'github.com:glojurelang:glojure:pkg:lang.IPersistentVector)
    (sexpr-replace 'clojure.lang.IPersistentSet
-                  'github.com:gloathub:glojure:pkg:lang.IPersistentSet)
+                  'github.com:glojurelang:glojure:pkg:lang.IPersistentSet)
    (sexpr-replace 'clojure.lang.IMeta
-                  'github.com:gloathub:glojure:pkg:lang.IMeta)
+                  'github.com:glojurelang:glojure:pkg:lang.IMeta)
    (sexpr-replace 'clojure.lang.IReduceInit
-                  'github.com:gloathub:glojure:pkg:lang.IReduceInit)
+                  'github.com:glojurelang:glojure:pkg:lang.IReduceInit)
    (sexpr-replace 'clojure.lang.IObj
-                  'github.com:gloathub:glojure:pkg:lang.IObj)
+                  'github.com:glojurelang:glojure:pkg:lang.IObj)
 
-   (sexpr-replace 'clojure.lang.Reduced. 'github.com:gloathub:glojure:pkg:lang.NewReduced)
-   (sexpr-replace 'clojure.lang.RT/isReduced 'github.com:gloathub:glojure:pkg:lang.IsReduced)
+   (sexpr-replace 'clojure.lang.Reduced. 'github.com:glojurelang:glojure:pkg:lang.NewReduced)
+   (sexpr-replace 'clojure.lang.RT/isReduced 'github.com:glojurelang:glojure:pkg:lang.IsReduced)
 
    (sexpr-replace '.assoc '.Assoc)
 
@@ -823,7 +823,7 @@
    (sexpr-replace '(. Math (random)) '(math:rand.Float64))
 
    (sexpr-replace '(. clojure.lang.Var (find sym))
-                  '(. github.com:gloathub:glojure:pkg:runtime.RT (FindVar sym)))
+                  '(. github.com:glojurelang:glojure:pkg:runtime.RT (FindVar sym)))
 
    (sexpr-replace '(. x (get)) '(. x (Get)))
     (sexpr-replace '(. x (set val)) '(. x (Set val)))
@@ -868,7 +868,7 @@
                            (= 'data-reader-urls (second (z/sexpr zloc)))))
     (fn visit [zloc] (z/replace zloc '(defn- data-reader-urls [] ())))]
 
-   (sexpr-replace '(new clojure.lang.Atom x) '(github.com:gloathub:glojure:pkg:lang.NewAtom x))
+   (sexpr-replace '(new clojure.lang.Atom x) '(github.com:glojurelang:glojure:pkg:lang.NewAtom x))
    (omitp #(and (z/list? %)
                 (let [sexpr (z/sexpr %)]
                   (and (vector? (first sexpr))
@@ -876,28 +876,28 @@
                        (> (count (first sexpr)) 2)))))
    (sexpr-replace '([^clojure.lang.IAtom atom f] (.swap atom f))
                   '([atom f & args] (.swap atom f args)))
-   (sexpr-replace '(^github.com:gloathub:glojure:pkg:lang.IPersistentVector [^github.com:gloathub:glojure:pkg:lang.IAtom2 atom f] (.swapVals atom f))
+   (sexpr-replace '(^github.com:glojurelang:glojure:pkg:lang.IPersistentVector [^github.com:glojurelang:glojure:pkg:lang.IAtom2 atom f] (.swapVals atom f))
                   '([atom f & args] (.swapVals atom f args)))
 
    ;; ===== Agents =====
-   (sexpr-replace '(. clojure.lang.Agent shutdown) '(github.com:gloathub:glojure:pkg:lang.ShutdownAgents))
-   (sexpr-replace 'clojure.lang.Agent 'github.com:gloathub:glojure:pkg:lang.*Agent)
+   (sexpr-replace '(. clojure.lang.Agent shutdown) '(github.com:glojurelang:glojure:pkg:lang.ShutdownAgents))
+   (sexpr-replace 'clojure.lang.Agent 'github.com:glojurelang:glojure:pkg:lang.*Agent)
 
    ;; ===== Hashing Functions =====
    ;; TODO: these should likely be different
-   (sexpr-replace 'clojure.lang.Util/hash 'github.com:gloathub:glojure:pkg:lang.Hash)
+   (sexpr-replace 'clojure.lang.Util/hash 'github.com:glojurelang:glojure:pkg:lang.Hash)
    (sexpr-replace '(. clojure.lang.Util (hasheq x))
-                  '(github.com:gloathub:glojure:pkg:lang.HashEq x))
+                  '(github.com:glojurelang:glojure:pkg:lang.HashEq x))
 
-   (sexpr-replace 'System/identityHashCode 'github.com:gloathub:glojure:pkg:lang.IdentityHash)
+   (sexpr-replace 'System/identityHashCode 'github.com:glojurelang:glojure:pkg:lang.IdentityHash)
 
    (sexpr-replace '(String/format fmt (to-array args))
                   '(apply fmt.Sprintf fmt args))
 
    (sexpr-replace '(clojure.lang.Reflector/prepRet (.getComponentType (class array)) (. Array (get array idx)))
-                  '(github.com:gloathub:glojure:pkg:lang.Get array idx))
+                  '(github.com:glojurelang:glojure:pkg:lang.Get array idx))
 
-   (sexpr-replace '(. Array (set array idx val)) '(github.com:gloathub:glojure:pkg:lang.SliceSet array idx val))
+   (sexpr-replace '(. Array (set array idx val)) '(github.com:glojurelang:glojure:pkg:lang.SliceSet array idx val))
 
    ;; ===== Array Operations =====
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= '.reduce (z/sexpr zloc))))
@@ -908,33 +908,33 @@
                                     '.ReduceInit))))]
 
    (sexpr-replace 'clojure.lang.BigInt/valueOf
-                  'github.com:gloathub:glojure:pkg:lang.NewBigIntFromInt64)
+                  'github.com:glojurelang:glojure:pkg:lang.NewBigIntFromInt64)
    (sexpr-replace '(BigInteger/valueOf (long x))
                   '(math:big.NewInt (long x)))
-   (sexpr-replace '(BigInteger. x) '(github.com:gloathub:glojure:pkg:lang.NewBigInt x))
+   (sexpr-replace '(BigInteger. x) '(github.com:glojurelang:glojure:pkg:lang.NewBigInt x))
    (sexpr-replace '(BigDecimal/valueOf (long x))
-                  '(github.com:gloathub:glojure:pkg:lang.NewBigDecimalFromInt64 (long x)))
+                  '(github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromInt64 (long x)))
    (sexpr-replace '(. BigDecimal valueOf (double x))
-                  '(github.com:gloathub:glojure:pkg:lang.NewBigDecimalFromFloat64 (double x)))
+                  '(github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromFloat64 (double x)))
    (sexpr-replace '(BigDecimal. x)
-                  '(github.com:gloathub:glojure:pkg:lang.NewBigDecimal x))
+                  '(github.com:glojurelang:glojure:pkg:lang.NewBigDecimal x))
    (sexpr-replace '(/ (BigDecimal. (.numerator ^clojure.lang.Ratio x)) (.denominator ^clojure.lang.Ratio x))
-                  '(github.com:gloathub:glojure:pkg:lang.NewBigDecimalFromRatio x))
+                  '(github.com:glojurelang:glojure:pkg:lang.NewBigDecimalFromRatio x))
    (sexpr-replace 'clojure.lang.BigInt/fromBigInteger
-                  'github.com:gloathub:glojure:pkg:lang.NewBigIntFromGoBigInt)
+                  'github.com:glojurelang:glojure:pkg:lang.NewBigIntFromGoBigInt)
 
    (sexpr-replace '.equals '.Equals)
 
    (sexpr-replace '(clojure.lang.RT/load (.substring path 1))
-                  '(. github.com:gloathub:glojure:pkg:runtime.RT (Load (strings.TrimPrefix path "/"))))
+                  '(. github.com:glojurelang:glojure:pkg:runtime.RT (Load (strings.TrimPrefix path "/"))))
    (sexpr-replace '(. s (substring start)) '(go/slice s start))
    (sexpr-replace '(. s (substring start end)) '(go/slice s start end))
 
-   (sexpr-replace 'clojure.lang.RT/readString 'github.com:gloathub:glojure:pkg:runtime.RTReadString)
+   (sexpr-replace 'clojure.lang.RT/readString 'github.com:glojurelang:glojure:pkg:runtime.RTReadString)
 
    (sexpr-replace '.lastIndexOf 'strings.LastIndex)
 
-   (sexpr-replace 'clojure.lang.RT/conj 'github.com:gloathub:glojure:pkg:lang.Conj)
+   (sexpr-replace 'clojure.lang.RT/conj 'github.com:glojurelang:glojure:pkg:lang.Conj)
    (sexpr-replace 'withMeta 'WithMeta)
 
    (sexpr-replace '.asTransient '.AsTransient)
@@ -943,54 +943,54 @@
 
    ;; no need for a special name, as go doesn't have a
    ;; builtin "Equals"
-   (sexpr-replace 'clojure.lang.Util/equiv 'github.com:gloathub:glojure:pkg:lang.Equiv)
-   (sexpr-replace 'clojure.lang.Util/equals 'github.com:gloathub:glojure:pkg:lang.Equals)
-   (sexpr-replace '(. clojure.lang.Util (compare x y)) '(github.com:gloathub:glojure:pkg:lang.Compare x y))
+   (sexpr-replace 'clojure.lang.Util/equiv 'github.com:glojurelang:glojure:pkg:lang.Equiv)
+   (sexpr-replace 'clojure.lang.Util/equals 'github.com:glojurelang:glojure:pkg:lang.Equals)
+   (sexpr-replace '(. clojure.lang.Util (compare x y)) '(github.com:glojurelang:glojure:pkg:lang.Compare x y))
 
    (sexpr-replace '(. x (meta)) '(.Meta x))
 
-   (sexpr-replace 'clojure.lang.Symbol/intern 'github.com:gloathub:glojure:pkg:lang.NewSymbol)
-   (sexpr-replace '(clojure.lang.Symbol/intern ns name) '(github.com:gloathub:glojure:pkg:lang.InternSymbol ns name))
+   (sexpr-replace 'clojure.lang.Symbol/intern 'github.com:glojurelang:glojure:pkg:lang.NewSymbol)
+   (sexpr-replace '(clojure.lang.Symbol/intern ns name) '(github.com:glojurelang:glojure:pkg:lang.InternSymbol ns name))
 
    (sexpr-replace '(cond (keyword? name) name
                 (symbol? name) (clojure.lang.Keyword/intern ^clojure.lang.Symbol name)
                 (string? name) (clojure.lang.Keyword/intern ^String name))
                   '(cond (keyword? name) name
-                (symbol? name) (github.com:gloathub:glojure:pkg:lang.InternKeywordSymbol ^clojure.lang.Symbol name)
-                (string? name) (github.com:gloathub:glojure:pkg:lang.InternKeywordString ^String name)))
+                (symbol? name) (github.com:glojurelang:glojure:pkg:lang.InternKeywordSymbol ^clojure.lang.Symbol name)
+                (string? name) (github.com:glojurelang:glojure:pkg:lang.InternKeywordString ^String name)))
 
-   (sexpr-replace '(clojure.lang.Keyword/intern ns name) '(github.com:gloathub:glojure:pkg:lang.InternKeyword ns name))
+   (sexpr-replace '(clojure.lang.Keyword/intern ns name) '(github.com:glojurelang:glojure:pkg:lang.InternKeyword ns name))
 
-   (sexpr-replace '(clojure.lang.Util/identical x nil) '(github.com:gloathub:glojure:pkg:lang.IsNil x))
+   (sexpr-replace '(clojure.lang.Util/identical x nil) '(github.com:glojurelang:glojure:pkg:lang.IsNil x))
 
    (sexpr-replace '.get '.Get)
    (sexpr-replace '.getName '.Name)
-   (sexpr-replace '.concat 'github.com:gloathub:glojure:pkg:lang.ConcatStrings)
-   (sexpr-replace 'clojure.lang.RT/assoc 'github.com:gloathub:glojure:pkg:lang.Assoc)
-   (sexpr-replace 'clojure.lang.RT/subvec 'github.com:gloathub:glojure:pkg:lang.Subvec)
-   (sexpr-replace 'clojure.lang.Util/identical 'github.com:gloathub:glojure:pkg:lang.Identical)
+   (sexpr-replace '.concat 'github.com:glojurelang:glojure:pkg:lang.ConcatStrings)
+   (sexpr-replace 'clojure.lang.RT/assoc 'github.com:glojurelang:glojure:pkg:lang.Assoc)
+   (sexpr-replace 'clojure.lang.RT/subvec 'github.com:glojurelang:glojure:pkg:lang.Subvec)
+   (sexpr-replace 'clojure.lang.Util/identical 'github.com:glojurelang:glojure:pkg:lang.Identical)
 
    (sexpr-replace '(:import (java.util.regex Pattern Matcher) clojure.lang.LazilyPersistentVector)
                   '(:import (regexp *Regexp)))
    (sexpr-replace 'clojure.lang.LazilyPersistentVector/create
-                  'github.com:gloathub:glojure:pkg:lang.CreateLazilyPersistentVector)
+                  'github.com:glojurelang:glojure:pkg:lang.CreateLazilyPersistentVector)
    (sexpr-replace 'clojure.lang.LazilyPersistentVector/createOwning
-                  'github.com:gloathub:glojure:pkg:lang.CreateOwningLazilyPersistentVector)
+                  'github.com:glojurelang:glojure:pkg:lang.CreateOwningLazilyPersistentVector)
    (sexpr-replace 'LazilyPersistentVector/createOwning
-                  'github.com:gloathub:glojure:pkg:lang.CreateOwningLazilyPersistentVector)
+                  'github.com:glojurelang:glojure:pkg:lang.CreateOwningLazilyPersistentVector)
 
-   (sexpr-replace '(. clojure.lang.RT (seq coll)) '(github.com:gloathub:glojure:pkg:lang.Seq coll))
+   (sexpr-replace '(. clojure.lang.RT (seq coll)) '(github.com:glojurelang:glojure:pkg:lang.Seq coll))
    (sexpr-replace '(list 'new 'clojure.lang.LazySeq (list* '^{:once true} fn* [] body))
-                  '(list 'github.com:gloathub:glojure:pkg:lang.NewLazySeq (list* '^{:once true} fn* [] body)))
+                  '(list 'github.com:glojurelang:glojure:pkg:lang.NewLazySeq (list* '^{:once true} fn* [] body)))
    (sexpr-replace '(list 'new 'clojure.lang.Delay (list* '^{:once true} fn* [] body))
-                  '(list 'github.com:gloathub:glojure:pkg:lang.NewDelay (list* '^{:once true} fn* [] body)))
-   (sexpr-replace 'clojure.lang.RT/count 'github.com:gloathub:glojure:pkg:lang.Count)
+                  '(list 'github.com:glojurelang:glojure:pkg:lang.NewDelay (list* '^{:once true} fn* [] body)))
+   (sexpr-replace 'clojure.lang.RT/count 'github.com:glojurelang:glojure:pkg:lang.Count)
 
-   (sexpr-replace 'clojure.lang.IChunkedSeq 'github.com:gloathub:glojure:pkg:lang.IChunkedSeq)
+   (sexpr-replace 'clojure.lang.IChunkedSeq 'github.com:glojurelang:glojure:pkg:lang.IChunkedSeq)
    (sexpr-replace 'clojure.lang.ChunkBuffer.
-                  'github.com:gloathub:glojure:pkg:lang.NewChunkBuffer)
+                  'github.com:glojurelang:glojure:pkg:lang.NewChunkBuffer)
    (sexpr-replace 'clojure.lang.ChunkedCons.
-                  'github.com:gloathub:glojure:pkg:lang.NewChunkedCons)
+                  'github.com:glojurelang:glojure:pkg:lang.NewChunkedCons)
 
    ;; replace (. <fn-form> (applyTo <args>)) with (glojure.lang.Apply <fn-form> <args>)
    [(fn select [zloc] (and (z/list? zloc)
@@ -1002,17 +1002,17 @@
                               (= 'applyTo (first (nth sexpr 2)))))))
     (fn visit [zloc] (z/replace zloc
                                 (let [sexpr (z/sexpr zloc)]
-                                  `(github.com:gloathub:glojure:pkg:lang.Apply
+                                  `(github.com:glojurelang:glojure:pkg:lang.Apply
                                     ~(nth sexpr 1)
                                     ~(nth (nth sexpr 2) 1)))))]
 
-   (sexpr-replace '(. clojure.lang.RT (get map key)) '(github.com:gloathub:glojure:pkg:lang.Get map key))
-   (sexpr-replace '(. clojure.lang.RT (get map key not-found)) '(github.com:gloathub:glojure:pkg:lang.GetDefault map key not-found))
+   (sexpr-replace '(. clojure.lang.RT (get map key)) '(github.com:glojurelang:glojure:pkg:lang.Get map key))
+   (sexpr-replace '(. clojure.lang.RT (get map key not-found)) '(github.com:glojurelang:glojure:pkg:lang.GetDefault map key not-found))
 
    ;; TODO: replace these using the RT-replace function!
-   (sexpr-replace '(. clojure.lang.RT (keys map)) '(github.com:gloathub:glojure:pkg:lang.Keys map))
-   (sexpr-replace '(. clojure.lang.RT (vals map)) '(github.com:gloathub:glojure:pkg:lang.Vals map))
-   (sexpr-replace '(. clojure.lang.RT (seq map)) '(github.com:gloathub:glojure:pkg:lang.Seq map))
+   (sexpr-replace '(. clojure.lang.RT (keys map)) '(github.com:glojurelang:glojure:pkg:lang.Keys map))
+   (sexpr-replace '(. clojure.lang.RT (vals map)) '(github.com:glojurelang:glojure:pkg:lang.Vals map))
+   (sexpr-replace '(. clojure.lang.RT (seq map)) '(github.com:glojurelang:glojure:pkg:lang.Seq map))
 
    (sexpr-replace '(disjoin key) '(Disjoin key))
    (sexpr-replace
@@ -1028,8 +1028,8 @@
                  (next xs))
           (.String sb)))
       (new strings.Builder) (cons x ys)))
-   (sexpr-replace '(. x (toString)) '(github.com:gloathub:glojure:pkg:lang.ToString x))
-   (sexpr-replace '.toString 'github.com:gloathub:glojure:pkg:lang.ToString)
+   (sexpr-replace '(. x (toString)) '(github.com:glojurelang:glojure:pkg:lang.ToString x))
+   (sexpr-replace '.toString 'github.com:glojurelang:glojure:pkg:lang.ToString)
    (sexpr-replace 'getName 'Name)
    (sexpr-replace 'getNamespace 'Namespace)
    (sexpr-replace '.hasRoot '.HasRoot)
@@ -1044,10 +1044,10 @@
                               (= 'clojure.lang.MultiFn (second sexpr))))))
     (fn visit [zloc] (-> zloc
                          z/down
-                         (z/replace 'github.com:gloathub:glojure:pkg:lang.NewMultiFn)
+                         (z/replace 'github.com:glojurelang:glojure:pkg:lang.NewMultiFn)
                          z/right
                          z/remove))]
-   (sexpr-replace 'clojure.lang.MultiFn 'github.com:gloathub:glojure:pkg:lang.*MultiFn)
+   (sexpr-replace 'clojure.lang.MultiFn 'github.com:glojurelang:glojure:pkg:lang.*MultiFn)
    (sexpr-replace 'addMethod 'AddMethod)
    (sexpr-replace 'preferMethod 'PreferMethod)
 
@@ -1082,9 +1082,9 @@
 
 
    (sexpr-replace '(System/getProperty "line.separator") '"\\n")
-   (sexpr-replace 'clojure.lang.ISeq 'github.com:gloathub:glojure:pkg:lang.ISeq)
-   (sexpr-replace 'clojure.lang.IEditableCollection 'github.com:gloathub:glojure:pkg:lang.IEditableCollection)
-   (sexpr-replace 'clojure.core/import* 'github.com:gloathub:glojure:pkg:lang.Import)
+   (sexpr-replace 'clojure.lang.ISeq 'github.com:glojurelang:glojure:pkg:lang.ISeq)
+   (sexpr-replace 'clojure.lang.IEditableCollection 'github.com:glojurelang:glojure:pkg:lang.IEditableCollection)
+   (sexpr-replace 'clojure.core/import* 'github.com:glojurelang:glojure:pkg:lang.Import)
 
    ;; ===== Import Omissions =====
    (omit-forms '#{(import '(java.lang.reflect Array))
@@ -1097,15 +1097,15 @@
    (sexpr-replace '(.. Runtime getRuntime availableProcessors)
                   '(runtime.NumCPU))
 
-   (sexpr-replace 'clojure.lang.RT/longCast 'github.com:gloathub:glojure:pkg:lang.LongCast)
-   (sexpr-replace 'clojure.lang.RT/byteCast 'github.com:gloathub:glojure:pkg:lang.ByteCast)
-   (sexpr-replace 'clojure.lang.RT/uncheckedByteCast 'github.com:gloathub:glojure:pkg:lang.UncheckedByteCast)
-   (sexpr-replace 'clojure.lang.RT/shortCast 'github.com:gloathub:glojure:pkg:lang.ShortCast)
-   (sexpr-replace 'clojure.lang.RT/uncheckedShortCast 'github.com:gloathub:glojure:pkg:lang.UncheckedShortCast)
-   (sexpr-replace 'clojure.lang.RT/doubleCast 'github.com:gloathub:glojure:pkg:lang.AsFloat64) ;; todo: checked version
-   (sexpr-replace 'clojure.lang.RT/uncheckedDoubleCast 'github.com:gloathub:glojure:pkg:lang.AsFloat64)
-   (sexpr-replace 'clojure.lang.RT/floatCast 'github.com:gloathub:glojure:pkg:lang.FloatCast)
-   (sexpr-replace 'clojure.lang.RT/uncheckedFloatCast 'github.com:gloathub:glojure:pkg:lang.UncheckedFloatCast)
+   (sexpr-replace 'clojure.lang.RT/longCast 'github.com:glojurelang:glojure:pkg:lang.LongCast)
+   (sexpr-replace 'clojure.lang.RT/byteCast 'github.com:glojurelang:glojure:pkg:lang.ByteCast)
+   (sexpr-replace 'clojure.lang.RT/uncheckedByteCast 'github.com:glojurelang:glojure:pkg:lang.UncheckedByteCast)
+   (sexpr-replace 'clojure.lang.RT/shortCast 'github.com:glojurelang:glojure:pkg:lang.ShortCast)
+   (sexpr-replace 'clojure.lang.RT/uncheckedShortCast 'github.com:glojurelang:glojure:pkg:lang.UncheckedShortCast)
+   (sexpr-replace 'clojure.lang.RT/doubleCast 'github.com:glojurelang:glojure:pkg:lang.AsFloat64) ;; todo: checked version
+   (sexpr-replace 'clojure.lang.RT/uncheckedDoubleCast 'github.com:glojurelang:glojure:pkg:lang.AsFloat64)
+   (sexpr-replace 'clojure.lang.RT/floatCast 'github.com:glojurelang:glojure:pkg:lang.FloatCast)
+   (sexpr-replace 'clojure.lang.RT/uncheckedFloatCast 'github.com:glojurelang:glojure:pkg:lang.UncheckedFloatCast)
 
 
    ;; ===== Number Type Checks =====
@@ -1125,41 +1125,41 @@
                      {:added "1.0"
                       :static true}
                      [n]
-                     (github.com:gloathub:glojure:pkg:lang.IsInteger n))
+                     (github.com:glojurelang:glojure:pkg:lang.IsInteger n))
                   )
 
 
-   (sexpr-replace '(clojure.lang.RT/booleanCast x) '(. github.com:gloathub:glojure:pkg:runtime.RT (BooleanCast x)))
+   (sexpr-replace '(clojure.lang.RT/booleanCast x) '(. github.com:glojurelang:glojure:pkg:runtime.RT (BooleanCast x)))
    ;; TODO: meet unchecked behavior?
    (sexpr-replace 'clojure.lang.RT/uncheckedLongCast
-                  'github.com:gloathub:glojure:pkg:lang.UncheckedLongCast)
+                  'github.com:glojurelang:glojure:pkg:lang.UncheckedLongCast)
    (sexpr-replace 'clojure.lang.RT/uncheckedIntCast
-                  'github.com:gloathub:glojure:pkg:lang.UncheckedIntCast)
+                  'github.com:glojurelang:glojure:pkg:lang.UncheckedIntCast)
 
    [(fn select [zloc] (try
                         (and (symbol? (z/sexpr zloc))
                              (or
-                              (and (z/leftmost? zloc) (= 'github.com:gloathub:glojure:pkg:lang.Numbers (-> zloc z/up z/left z/sexpr)))
-                              (= 'github.com:gloathub:glojure:pkg:lang.Numbers (-> zloc z/left z/sexpr))))
+                              (and (z/leftmost? zloc) (= 'github.com:glojurelang:glojure:pkg:lang.Numbers (-> zloc z/up z/left z/sexpr)))
+                              (= 'github.com:glojurelang:glojure:pkg:lang.Numbers (-> zloc z/left z/sexpr))))
                         (catch Exception e false)))
     (fn visit [zloc] (z/replace zloc
                                 (let [sym (-> zloc z/sexpr str)]
                                   (symbol (str (first sym) (subs sym 1))))))]
    (sexpr-splice-replace 'clojure.lang.Numbers/gt
-                         ['.Gt 'github.com:gloathub:glojure:pkg:lang.Numbers])
+                         ['.Gt 'github.com:glojurelang:glojure:pkg:lang.Numbers])
 
-   (sexpr-replace 'clojure.lang.Numbers 'github.com:gloathub:glojure:pkg:lang.Numbers)
-   (sexpr-replace '(cast Number x) '(github.com:gloathub:glojure:pkg:lang.MustAsNumber x))
-   (sexpr-replace '(instance? Number x) '(github.com:gloathub:glojure:pkg:lang.IsNumber x))
+   (sexpr-replace 'clojure.lang.Numbers 'github.com:glojurelang:glojure:pkg:lang.Numbers)
+   (sexpr-replace '(cast Number x) '(github.com:glojurelang:glojure:pkg:lang.MustAsNumber x))
+   (sexpr-replace '(instance? Number x) '(github.com:glojurelang:glojure:pkg:lang.IsNumber x))
 
    (sexpr-replace '(. clojure.lang.Numbers (minus x))
                   '(* -1 x)) ;; TODO: unary minus
    (sexpr-replace '(. clojure.lang.Numbers (minusP x))
                   '(*' -1 x))
    (sexpr-replace 'clojure.lang.Numbers/isZero
-                  'github.com:gloathub:glojure:pkg:lang.IsZero)
+                  'github.com:glojurelang:glojure:pkg:lang.IsZero)
    (sexpr-replace 'clojure.lang.Numbers/abs
-                  'github.com:gloathub:glojure:pkg:lang.Abs)
+                  'github.com:glojurelang:glojure:pkg:lang.Abs)
 
    (sexpr-replace 'unchecked_add 'UncheckedAdd)
    (sexpr-replace 'unchecked_dec 'UncheckedDec)
@@ -1177,9 +1177,9 @@
    (replace-num-array 'boolean)
 
 
-   (sexpr-replace 'clojure.lang.Keyword 'github.com:gloathub:glojure:pkg:lang.Keyword)
+   (sexpr-replace 'clojure.lang.Keyword 'github.com:glojurelang:glojure:pkg:lang.Keyword)
 
-   (sexpr-replace 'clojure.lang.RT 'github.com:gloathub:glojure:pkg:runtime.RT)
+   (sexpr-replace 'clojure.lang.RT 'github.com:glojurelang:glojure:pkg:runtime.RT)
    (sexpr-replace '(nextID) '(NextID))
 
    ;; Replace Object_array with ObjectArray
@@ -1192,34 +1192,34 @@
                            (= 'clojure.lang.Symbol (second (z/sexpr zloc)))
                            (= 'intern (first (nth (z/sexpr zloc) 2)))
                            ))
-    (fn visit [zloc] (z/replace zloc `(github.com:gloathub:glojure:pkg:lang.NewSymbol ~@(rest (nth (z/sexpr zloc) 2)))))]
+    (fn visit [zloc] (z/replace zloc `(github.com:glojurelang:glojure:pkg:lang.NewSymbol ~@(rest (nth (z/sexpr zloc) 2)))))]
 
    [(fn select [zloc] (and (z/list? zloc)
                            (= 'nth (first (z/sexpr zloc)))
-                           (= 'github.com:gloathub:glojure:pkg:runtime.RT (z/sexpr (z/left zloc)))
+                           (= 'github.com:glojurelang:glojure:pkg:runtime.RT (z/sexpr (z/left zloc)))
                            ))
     (fn visit [zloc] (z/replace zloc `(~'Nth ~@(rest (z/sexpr zloc)))))]
 
    (sexpr-replace
     '(. clojure.lang.LazilyPersistentVector (create (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
-    '(github.com:gloathub:glojure:pkg:lang.CreateLazilyPersistentVector (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
+    '(github.com:glojurelang:glojure:pkg:lang.CreateLazilyPersistentVector (cons a (cons b (cons c (cons d (cons e (cons f args))))))))
 
-   (sexpr-replace 'clojure.lang.IDrop 'github.com:gloathub:glojure:pkg:lang.IDrop)
+   (sexpr-replace 'clojure.lang.IDrop 'github.com:glojurelang:glojure:pkg:lang.IDrop)
 
-   (sexpr-replace 'clojure.lang.Compiler 'github.com:gloathub:glojure:pkg:runtime.Compiler)
+   (sexpr-replace 'clojure.lang.Compiler 'github.com:glojurelang:glojure:pkg:runtime.Compiler)
    (sexpr-replace '(. clojure.lang.Compiler (eval form)) '(. clojure.lang.Compiler (Eval form)))
    (sexpr-replace '(clojure.lang.Compiler/maybeResolveIn (the-ns ns) sym)
-                  '(. github.com:gloathub:glojure:pkg:runtime.Compiler maybeResolveIn (the-ns ns) sym))
+                  '(. github.com:glojurelang:glojure:pkg:runtime.Compiler maybeResolveIn (the-ns ns) sym))
    (sexpr-replace 'clojure.lang.Compiler$CompilerException.
-                  'github.com:gloathub:glojure:pkg:lang.NewCompilerError)
+                  'github.com:glojurelang:glojure:pkg:lang.NewCompilerError)
 
    (sexpr-replace '.alterMeta '.AlterMeta)
 
-   (sexpr-replace 'clojure.lang.Ref 'github.com:gloathub:glojure:pkg:lang.*Ref)
-   (sexpr-replace 'clojure.lang.IDeref 'github.com:gloathub:glojure:pkg:lang.IDeref)
+   (sexpr-replace 'clojure.lang.Ref 'github.com:glojurelang:glojure:pkg:lang.*Ref)
+   (sexpr-replace 'clojure.lang.IDeref 'github.com:glojurelang:glojure:pkg:lang.IDeref)
 
-   (sexpr-replace '(new clojure.lang.Ref x) '(github.com:gloathub:glojure:pkg:lang.NewRef x))
-   (sexpr-replace 'clojure.lang.LockingTransaction 'github.com:gloathub:glojure:pkg:lang.LockingTransaction)
+   (sexpr-replace '(new clojure.lang.Ref x) '(github.com:glojurelang:glojure:pkg:lang.NewRef x))
+   (sexpr-replace 'clojure.lang.LockingTransaction 'github.com:glojurelang:glojure:pkg:lang.LockingTransaction)
    (sexpr-replace 'runInTransaction 'RunInTransaction)
 
    (sexpr-replace '(. e (getKey)) '(. e (GetKey)))
@@ -1228,16 +1228,16 @@
    (sexpr-replace '.deref '.Deref)
    (sexpr-replace '(. ref (commute fun args)) '(. ref (Commute fun args)))
 
-   (sexpr-replace 'clojure.lang.Named 'github.com:gloathub:glojure:pkg:lang.Named)
+   (sexpr-replace 'clojure.lang.Named 'github.com:glojurelang:glojure:pkg:lang.Named)
 
-   (sexpr-replace 'clojure.lang.Namespace/find 'github.com:gloathub:glojure:pkg:lang.FindNamespace)
+   (sexpr-replace 'clojure.lang.Namespace/find 'github.com:glojurelang:glojure:pkg:lang.FindNamespace)
    (sexpr-replace 'clojure.lang.Namespace/remove
-                  'github.com:gloathub:glojure:pkg:lang.RemoveNamespace)
+                  'github.com:glojurelang:glojure:pkg:lang.RemoveNamespace)
 
-   (sexpr-replace '(clojure.lang.Repeat/create x) '(github.com:gloathub:glojure:pkg:lang.NewRepeat x))
-   (sexpr-replace '(clojure.lang.Repeat/create n x) '(github.com:gloathub:glojure:pkg:lang.NewRepeatN n x))
+   (sexpr-replace '(clojure.lang.Repeat/create x) '(github.com:glojurelang:glojure:pkg:lang.NewRepeat x))
+   (sexpr-replace '(clojure.lang.Repeat/create n x) '(github.com:glojurelang:glojure:pkg:lang.NewRepeatN n x))
 
-   (sexpr-replace '.charAt 'github.com:gloathub:glojure:pkg:lang.CharAt)
+   (sexpr-replace '.charAt 'github.com:glojurelang:glojure:pkg:lang.CharAt)
 
    ;; ===== File Loading and Module Omissions =====
    ;;; TODO: implement load for embedded files!
@@ -1270,13 +1270,13 @@
 
    (sexpr-replace '.indexOf 'strings.Index)
 
-   (sexpr-replace 'clojure.lang.Counted 'github.com:gloathub:glojure:pkg:lang.Counted)
+   (sexpr-replace 'clojure.lang.Counted 'github.com:glojurelang:glojure:pkg:lang.Counted)
 
  
-   (sexpr-replace 'clojure.lang.Var 'github.com:gloathub:glojure:pkg:lang.*Var)
-   (sexpr-replace 'clojure.lang.Namespace 'github.com:gloathub:glojure:pkg:lang.*Namespace)
+   (sexpr-replace 'clojure.lang.Var 'github.com:glojurelang:glojure:pkg:lang.*Var)
+   (sexpr-replace 'clojure.lang.Namespace 'github.com:glojurelang:glojure:pkg:lang.*Namespace)
 
-   (sexpr-replace 'clojure.lang.Sequential 'github.com:gloathub:glojure:pkg:lang.Sequential)
+   (sexpr-replace 'clojure.lang.Sequential 'github.com:glojurelang:glojure:pkg:lang.Sequential)
 
    (sexpr-replace '(. *ns* (refer (or (rename sym) sym) v))
                   '(. *ns* (Refer (or (rename sym) sym) v)))
@@ -1286,19 +1286,19 @@
    (sexpr-replace '.isPublic '.IsPublic)
    (sexpr-replace '.addAlias '.AddAlias)
 
-   (sexpr-replace 'clojure.lang.Var/getThreadBindings 'github.com:gloathub:glojure:pkg:lang.GetThreadBindings)
+   (sexpr-replace 'clojure.lang.Var/getThreadBindings 'github.com:glojurelang:glojure:pkg:lang.GetThreadBindings)
    [(fn select [zloc] (and (z/sexpr-able? zloc) (= 'pushThreadBindings (z/sexpr zloc))))
     (fn visit [zloc] (z/replace (-> zloc z/up z/up)
-                                '(github.com:gloathub:glojure:pkg:lang.PushThreadBindings {})))]
-   (sexpr-replace '(. clojure.lang.Var (popThreadBindings)) '(github.com:gloathub:glojure:pkg:lang.PopThreadBindings))
-   (sexpr-replace 'clojure.lang.Var/popThreadBindings 'github.com:gloathub:glojure:pkg:lang.PopThreadBindings)
-   (sexpr-replace 'clojure.lang.Var/pushThreadBindings 'github.com:gloathub:glojure:pkg:lang.PushThreadBindings)
+                                '(github.com:glojurelang:glojure:pkg:lang.PushThreadBindings {})))]
+   (sexpr-replace '(. clojure.lang.Var (popThreadBindings)) '(github.com:glojurelang:glojure:pkg:lang.PopThreadBindings))
+   (sexpr-replace 'clojure.lang.Var/popThreadBindings 'github.com:glojurelang:glojure:pkg:lang.PopThreadBindings)
+   (sexpr-replace 'clojure.lang.Var/pushThreadBindings 'github.com:glojurelang:glojure:pkg:lang.PushThreadBindings)
 
    ;; support pmap
    (sexpr-replace 'clojure.lang.Var/cloneThreadBindingFrame
-                  'github.com:gloathub:glojure:pkg:lang.CloneThreadBindingFrame)
+                  'github.com:glojurelang:glojure:pkg:lang.CloneThreadBindingFrame)
    (sexpr-replace 'clojure.lang.Var/resetThreadBindingFrame
-                  'github.com:gloathub:glojure:pkg:lang.ResetThreadBindingFrame)
+                  'github.com:glojurelang:glojure:pkg:lang.ResetThreadBindingFrame)
    [(fn select [zloc] (and (z/list? zloc) (= 'future-call (second (z/sexpr zloc)))))
     (fn visit [zloc] (z/replace zloc
                                 '(defn future-call 
@@ -1311,14 +1311,14 @@
                                     :static true}
                                    [f]
                                    (let [f (binding-conveyor-fn f)
-                                         fut (github.com:gloathub:glojure:pkg:lang.AgentSubmit f)]
+                                         fut (github.com:glojurelang:glojure:pkg:lang.AgentSubmit f)]
                                      fut))))]
    (sexpr-replace 'java.util.concurrent.TimeUnit/MILLISECONDS
                   'time.Millisecond)
    (sexpr-replace 'java.util.concurrent.TimeoutException
-                  'github.com:gloathub:glojure:pkg:lang.TimeoutError)
+                  'github.com:glojurelang:glojure:pkg:lang.TimeoutError)
    (sexpr-replace 'clojure.lang.IBlockingDeref
-                  'github.com:gloathub:glojure:pkg:lang.IBlockingDeref)
+                  'github.com:glojurelang:glojure:pkg:lang.IBlockingDeref)
    [(fn select [zloc] (and (z/list? zloc)
                            (= '.deref (first (z/sexpr zloc)))
                            (= 4 (count (z/sexpr zloc)))))
@@ -1336,14 +1336,14 @@
     (fn visit [zloc] (z/replace (-> zloc z/up z/up) '(do)))]
 
    (sexpr-replace '(. x (getClass))
-                  '(github.com:gloathub:glojure:pkg:lang.TypeOf x))
+                  '(github.com:glojurelang:glojure:pkg:lang.TypeOf x))
 
    ;; ===== Core Print Replacements =====
 
 
    (sexpr-replace '(.isArray c) false)
    ;; (sexpr-replace '(print-method (.Name c) w) 'TODO)
-   ;; (sexpr-replace '(github.com:gloathub:glojure:pkg:lang.WriteWriter w (.Name c)) 'TODO)
+   ;; (sexpr-replace '(github.com:glojurelang:glojure:pkg:lang.WriteWriter w (.Name c)) 'TODO)
 
    (sexpr-replace '(prefer-method print-dup java.util.Map clojure.lang.Fn) '(do))
    (sexpr-replace '(prefer-method print-dup java.util.Collection clojure.lang.Fn) '(do))
@@ -1364,14 +1364,14 @@
     '(do))
 
    (sexpr-replace 'java.util.regex.Pattern 'regexp.*Regexp)
-   (sexpr-replace 'clojure.lang.BigInt 'github.com:gloathub:glojure:pkg:lang.*BigInt)
-   (sexpr-replace 'java.math.BigDecimal 'github.com:gloathub:glojure:pkg:lang.*BigDecimal)
+   (sexpr-replace 'clojure.lang.BigInt 'github.com:glojurelang:glojure:pkg:lang.*BigInt)
+   (sexpr-replace 'java.math.BigDecimal 'github.com:glojurelang:glojure:pkg:lang.*BigDecimal)
 
-   (sexpr-replace '.write 'github.com:gloathub:glojure:pkg:lang.WriteWriter)
-   (sexpr-replace '.append 'github.com:gloathub:glojure:pkg:lang.AppendWriter)
-   (sexpr-replace '(. *out* (append \space)) '(github.com:gloathub:glojure:pkg:lang.AppendWriter *out* \space))
+   (sexpr-replace '.write 'github.com:glojurelang:glojure:pkg:lang.WriteWriter)
+   (sexpr-replace '.append 'github.com:glojurelang:glojure:pkg:lang.AppendWriter)
+   (sexpr-replace '(. *out* (append \space)) '(github.com:glojurelang:glojure:pkg:lang.AppendWriter *out* \space))
    (sexpr-replace '(. *out* (append system-newline))
-                  '(github.com:gloathub:glojure:pkg:lang.AppendWriter *out* system-newline))
+                  '(github.com:glojurelang:glojure:pkg:lang.AppendWriter *out* system-newline))
    (sexpr-replace '(. *out* (flush)) '(. *out* (Sync)))
    (sexpr-replace '(def ^:dynamic *test-out* *out*)
                   '(def ^:dynamic *test-out* nil))
@@ -1410,7 +1410,7 @@
                                   (contains? #{'print-method 'print-dup} (second sexpr))
                                   (= (nth sexpr 2) 'Number)))))
     (fn visit [zloc]
-      (loop [ints '[go/int go/uint go/uint8 go/uint16 go/uint32 go/uint64 go/int8 go/int16 go/int32 go/int64 go/byte go/rune github.com:gloathub:glojure:pkg:lang.*Ratio]
+      (loop [ints '[go/int go/uint go/uint8 go/uint16 go/uint32 go/uint64 go/int8 go/int16 go/int32 go/int64 go/byte go/rune github.com:glojurelang:glojure:pkg:lang.*Ratio]
              zloc zloc]
         (if (empty? ints)
           (z/remove zloc)
@@ -1440,7 +1440,7 @@
                      (prn (.Error actual))
                      (prn actual)))
    (sexpr-replace '(new java.lang.Throwable)
-                  '(new github.com:gloathub:glojure:pkg:lang.Throwable))
+                  '(new github.com:glojurelang:glojure:pkg:lang.Throwable))
 
    ;; ===== Regular Expression Replacements =====
    (sexpr-replace '(.split re s)
@@ -1452,7 +1452,7 @@
    (sexpr-replace '(. java.util.regex.Pattern (compile s))
                   '(regexp.MustCompile s))
    (sexpr-replace '(. re (matcher s))
-                  '(github.com:gloathub:glojure:pkg:lang.NewRegexpMatcher re s))
+                  '(github.com:glojurelang:glojure:pkg:lang.NewRegexpMatcher re s))
 
    (sexpr-replace '(. m (group c)) '(. m (groupInt c)))
 
@@ -1461,7 +1461,7 @@
 
    ;; Arrays.sort replacement for Glojure sort function
    (sexpr-replace '(. java.util.Arrays (sort a comp))
-                  '(github.com:gloathub:glojure:pkg:lang.SortSlice a comp))
+                  '(github.com:glojurelang:glojure:pkg:lang.SortSlice a comp))
 
    ;; comparators are simple functions in Glojure
    (sexpr-replace '(. comp (compare (keyfn x) (keyfn y)))

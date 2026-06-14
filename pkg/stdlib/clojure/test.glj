@@ -287,7 +287,7 @@
   {:added "1.1"
    :deprecated "1.2"}
   [n]
-  (let [^StackTraceElement s (nth (.getStackTrace (new github.com:gloathub:glojure:pkg:lang.Throwable)) n)]
+  (let [^StackTraceElement s (nth (.getStackTrace (new github.com:glojurelang:glojure:pkg:lang.Throwable)) n)]
     [(.getFileName s) (.getLineNumber s)]))
 
 (defn testing-vars-str
@@ -410,7 +410,7 @@
   {:added "1.1"}
   [v]
   (try (var-get v)
-       (catch github.com:gloathub:glojure:pkg:lang.IllegalStateException e nil)))
+       (catch github.com:glojurelang:glojure:pkg:lang.IllegalStateException e nil)))
 
 (defn function?
   "Returns true if argument is a function or a symbol that resolves to
@@ -583,7 +583,7 @@
             (pos? (count args))
             (zero? (mod (count args) (count argv)))))
     `(temp/do-template ~argv (is ~expr) ~@args)
-    (throw (github.com:gloathub:glojure:pkg:lang.NewIllegalArgumentError "The number of args doesn't match are's argv."))))
+    (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError "The number of args doesn't match are's argv."))))
 
 (defmacro testing
   "Adds a new string to the list of testing contexts.  May be nested,

@@ -13,14 +13,14 @@ import (
 	"syscall"
 
 	// bootstrap the runtime
-	_ "github.com/gloathub/glojure/pkg/glj"
+	_ "github.com/glojurelang/glojure/pkg/glj"
 
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/nrepl"
-	"github.com/gloathub/glojure/pkg/reader"
-	"github.com/gloathub/glojure/pkg/repl"
-	"github.com/gloathub/glojure/pkg/runtime"
-	"github.com/gloathub/glojure/pkg/srepl"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/nrepl"
+	"github.com/glojurelang/glojure/pkg/reader"
+	"github.com/glojurelang/glojure/pkg/repl"
+	"github.com/glojurelang/glojure/pkg/runtime"
+	"github.com/glojurelang/glojure/pkg/srepl"
 )
 
 func printHelp() {
@@ -49,7 +49,7 @@ Examples:
   glj --version                 # Show version
   glj --help                    # Show this help
 
-For more information, visit: https://github.com/gloathub/glojure
+For more information, visit: https://github.com/glojurelang/glojure
 `, runtime.Version)
 }
 

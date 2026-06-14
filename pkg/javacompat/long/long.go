@@ -8,11 +8,11 @@ import (
 	"reflect"
 
 	jlong "github.com/gloathub/gojava/long"
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-const pkg = "github.com/gloathub/glojure/pkg/javacompat/long"
+const pkg = "github.com/glojurelang/glojure/pkg/javacompat/long"
 
 const (
 	MIN_VALUE = jlong.MIN_VALUE

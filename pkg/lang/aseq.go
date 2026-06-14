@@ -3,7 +3,7 @@ package lang
 import (
 	"reflect"
 
-	"github.com/gloathub/glojure/internal/murmur3"
+	"github.com/glojurelang/glojure/internal/murmur3"
 )
 
 type (

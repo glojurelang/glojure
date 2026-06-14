@@ -17,11 +17,11 @@ import (
 	"reflect"
 
 	jsys "github.com/gloathub/gojava/system"
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-const pkg = "github.com/gloathub/glojure/pkg/javacompat/system"
+const pkg = "github.com/glojurelang/glojure/pkg/javacompat/system"
 
 // System is the placeholder type registered as java.lang.System's
 // reflect.Type. System has private constructors in the JVM, so no

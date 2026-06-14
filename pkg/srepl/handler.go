@@ -6,8 +6,8 @@ import (
 	"net"
 	"strings"
 
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/reader"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/reader"
 )
 
 func (s *Server) handleConnection(conn net.Conn) {

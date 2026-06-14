@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/gloathub/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/lang"
 )
 
 // Server is a plain-text socket REPL server.

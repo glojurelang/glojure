@@ -8,11 +8,11 @@ import (
 	"reflect"
 
 	jdouble "github.com/gloathub/gojava/double"
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-const pkg = "github.com/gloathub/glojure/pkg/javacompat/double"
+const pkg = "github.com/glojurelang/glojure/pkg/javacompat/double"
 
 const (
 	SIZE  = jdouble.SIZE

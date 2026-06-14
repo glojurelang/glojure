@@ -1,4 +1,4 @@
-module github.com/gloathub/glojure
+module github.com/glojurelang/glojure
 
 go 1.24
 

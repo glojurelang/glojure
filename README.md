@@ -1,24 +1,8 @@
 # Glojure
 
-> **ABOUT THIS FORK**
->
-> This is a temporary fork of the https://github.com/glojurelang/glojure
-> upstream Glojure language repo, where patches are being applied to support
-> the fast-moving needs of the [Gloat](https://gloathub.org) project.
->
-> The intent is to get these changes merged upstream as soon as possible, have
-> Gloat use the upstream and retire this fork.
->
-> The changes here include:
->
-> * [Binary `glj` Releases](https://github.com/gloathub/glojure/releases) for
->   Linux and macOS
-> * Go cross-compilation support for many more platforms
-> * Lots of small bug fixes
+![example workflow](https://github.com/glojurelang/glojure/actions/workflows/ci.yml/badge.svg)
 
-![example workflow](https://github.com/gloathub/glojure/actions/workflows/ci.yml/badge.svg)
-
-[Try it in your browser!](https://gloathub.github.io/glojure/)
+[Try it in your browser!](https://glojurelang.github.io/glojure/)
 
 <img alt="Gopher image" src="./doc/logo.png" width="512" />
 
@@ -52,7 +36,7 @@ can run, and it requires at least go 1.24.
 
 Install it with the `go install` command:
 ```
-$ go install github.com/gloathub/glojure/cmd/glj@latest
+$ go install github.com/glojurelang/glojure/cmd/glj@latest
 ```
 
 After installation, you can start the REPL (Read-Eval-Print-Loop) with
@@ -114,10 +98,6 @@ The interactive REPL includes:
 * **Job control** -- Ctrl+Z suspends, `fg` resumes cleanly
 * **Interrupt** -- Ctrl+C cancels input or interrupts evaluation
 
-For the full REPL reference, see
-[doc/gloat-repl.md](https://github.com/gloathub/gloat/blob/main/doc/gloat-repl.md)
-or run `man gloat-repl`.
-
 **Evaluate expressions:**
 ```
 $ glj -e '(println "Hello, World!")'
@@ -176,8 +156,8 @@ package main
 
 import (
     "fmt"
-    _ "github.com/gloathub/glojure/pkg/glj"  // Initialize Glojure
-    "github.com/gloathub/glojure/pkg/runtime"
+    _ "github.com/glojurelang/glojure/pkg/glj"  // Initialize Glojure
+    "github.com/glojurelang/glojure/pkg/runtime"
 )
 
 func main() {
@@ -199,8 +179,8 @@ package main
 
 import (
     "fmt"
-    "github.com/gloathub/glojure/pkg/glj"
-    "github.com/gloathub/glojure/pkg/runtime"
+    "github.com/glojurelang/glojure/pkg/glj"
+    "github.com/glojurelang/glojure/pkg/runtime"
 )
 
 // Define a Go function
@@ -232,7 +212,7 @@ When embedding Glojure, you can also expose your own Go packages or additional s
 
 ```go
 import (
-    _ "github.com/gloathub/glojure/pkg/glj"
+    _ "github.com/glojurelang/glojure/pkg/glj"
     _ "your.app/gljimports" // Your generated package map
 )
 
@@ -309,7 +289,7 @@ that will export a function that can be used to add the exports of
 additional packages to the Glojure package map.
 
 ```
-$ go run github.com/gloathub/glojure/cmd/gen-import-interop \
+$ go run github.com/glojurelang/glojure/cmd/gen-import-interop \
      -packages=:comma-separated-package-list: \
      > your/package/gljimports/my_package_map.go
 ```

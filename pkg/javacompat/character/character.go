@@ -9,11 +9,11 @@ import (
 	"reflect"
 
 	jchar "github.com/gloathub/gojava/character"
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-const pkg = "github.com/gloathub/glojure/pkg/javacompat/character"
+const pkg = "github.com/glojurelang/glojure/pkg/javacompat/character"
 
 const (
 	MIN_RADIX = jchar.MIN_RADIX

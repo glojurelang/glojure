@@ -5,8 +5,8 @@ package values
 import (
 	hex4 "encoding/hex"
 	fmt "fmt"
-	lang "github.com/gloathub/glojure/pkg/lang"
-	runtime "github.com/gloathub/glojure/pkg/runtime"
+	lang "github.com/glojurelang/glojure/pkg/lang"
+	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	big5 "math/big"
 	reflect "reflect"
 )

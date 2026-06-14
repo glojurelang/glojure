@@ -17,11 +17,11 @@ import (
 	"reflect"
 
 	jmath "github.com/gloathub/gojava/math"
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-const pkg = "github.com/gloathub/glojure/pkg/javacompat/math"
+const pkg = "github.com/glojurelang/glojure/pkg/javacompat/math"
 
 // Math is the placeholder type registered as java.lang.Math's reflect.Type.
 // java.lang.Math is final with a private constructor in the JVM, so no

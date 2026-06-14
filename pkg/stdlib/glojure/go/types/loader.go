@@ -4,8 +4,8 @@ package types
 
 import (
 	fmt "fmt"
-	lang "github.com/gloathub/glojure/pkg/lang"
-	runtime "github.com/gloathub/glojure/pkg/runtime"
+	lang "github.com/glojurelang/glojure/pkg/lang"
+	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	ast4 "go/ast"
 	parser5 "go/parser"
 	reflect "reflect"

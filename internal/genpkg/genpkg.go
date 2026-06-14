@@ -157,7 +157,7 @@ func createHeaderBuilder(packageNames []string) *strings.Builder {
 		if packageName == "reflect" {
 			reflectImported = true
 		}
-		if packageName == "github.com/gloathub/glojure/pkg/pkgmap" {
+		if packageName == "github.com/glojurelang/glojure/pkg/pkgmap" {
 			pkgMapImported = true
 		}
 		aliasName := strings.NewReplacer(".", "_", "/", "_", "-", "_").Replace(packageName)
@@ -167,7 +167,7 @@ func createHeaderBuilder(packageNames []string) *strings.Builder {
 		builder.WriteString("\t\"reflect\"\n")
 	}
 	if !pkgMapImported {
-		builder.WriteString("\t\"github.com/gloathub/glojure/pkg/pkgmap\"\n")
+		builder.WriteString("\t\"github.com/glojurelang/glojure/pkg/pkgmap\"\n")
 	}
 
 	builder.WriteString(")\n\n")

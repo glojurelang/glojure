@@ -12,11 +12,11 @@ import (
 	"reflect"
 
 	juuid "github.com/gloathub/gojava/uuid"
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-const pkg = "github.com/gloathub/glojure/pkg/javacompat/uuid"
+const pkg = "github.com/glojurelang/glojure/pkg/javacompat/uuid"
 
 // RandomUUID mirrors UUID.randomUUID.
 func RandomUUID() *juuid.UUID { return juuid.RandomUUID() }

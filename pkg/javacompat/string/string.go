@@ -4,7 +4,7 @@
 //   - as a Go package-level value (used when gloat AOT-compiles a Clojure
 //     call site to a direct Go reference such as `compatstring.Format`);
 //   - through glojure's pkgmap under both `String.foo` and the fully
-//     qualified `github.com/gloathub/glojure/pkg/javacompat/string.Foo`
+//     qualified `github.com/glojurelang/glojure/pkg/javacompat/string.Foo`
 //     names (used by the REPL and any dynamic resolution path); and
 //   - for instance-style methods (`(.toUpperCase s)`, `(.length s)`,
 //     etc.) via lang.RegisterStringMethod, which the FieldOrMethod
@@ -21,11 +21,11 @@ import (
 	"reflect"
 
 	jstr "github.com/gloathub/gojava/string"
-	"github.com/gloathub/glojure/pkg/lang"
-	"github.com/gloathub/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-const pkg = "github.com/gloathub/glojure/pkg/javacompat/string"
+const pkg = "github.com/glojurelang/glojure/pkg/javacompat/string"
 
 // Static methods exposed as Go package-level functions for AOT use.
 
