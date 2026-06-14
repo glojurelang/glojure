@@ -284,13 +284,10 @@ release: $(GH)
 	git tag -a v$(RELEASE_VER) -m "Release v$(RELEASE_VER)"
 	git push $(remote) HEAD:$(release-branch)
 	git push $(remote) v$(RELEASE_VER)
-ifeq ($(release-branch),main)
-	$(GH-CMD) release create v$(RELEASE_VER) \
+	$(GH) release create v$(RELEASE_VER) \
 	  --repo glojurelang/glojure \
 	  --title "v$(RELEASE_VER)" \
+	  $(if $(findstring -rc,$(RELEASE_VER)),--prerelease,) \
 	  --generate-notes \
 	  dist/glj-$(RELEASE_VER)-*.tar.gz
-else
-	@echo "release-branch=$(release-branch): pushed branch and tag; skipping GitHub release"
-endif
 	@echo "=== Release v$(RELEASE_VER) complete ==="
