@@ -71,8 +71,11 @@ TEST-GLJ-DIR := test/glojure
 TEST-GLJ-FILES := $(shell find $(TEST-GLJ-DIR) -name '*.glj' | sort)
 TEST-GLJ-TARGETS := $(addsuffix .test,$(TEST-GLJ-FILES))
 TEST-SUITE-REPO := git@github.com:glojurelang/clojure-test-suite.git
+TEST-SUITE-BRANCH := glojure
 TEST-SUITE-DIR := test/clojure-test-suite
 TEST-SUITE-FILE := test-glojure.glj
+TEST-SUITE-EXPECT-FAILURES ?= 0
+TEST-SUITE-EXPECT-ERRORS ?= 0
 
 MAKES-CLEAN := \
   report.html \
@@ -208,13 +211,14 @@ test: test-glj test-suite  # vet
 test-glj: $(TEST-GLJ-TARGETS)
 
 $(TEST-SUITE-DIR):
-	git clone $(TEST-SUITE-REPO) $@
+	git clone --branch $(TEST-SUITE-BRANCH) $(TEST-SUITE-REPO) $@
 
 test-suite: $(GLJ-CMD) $(TEST-SUITE-DIR)
+	cd $(TEST-SUITE-DIR) && git checkout $(TEST-SUITE-BRANCH)
 	cd $(TEST-SUITE-DIR) && \
 	  $(abspath $<) $(TEST-SUITE-FILE) \
-	    --expect-failures 0 \
-	    --expect-errors 0 \
+	    $(if $(TEST-SUITE-EXPECT-FAILURES),--expect-failures $(TEST-SUITE-EXPECT-FAILURES)) \
+	    $(if $(TEST-SUITE-EXPECT-ERRORS),--expect-errors $(TEST-SUITE-EXPECT-ERRORS)) \
 	    $(if $(v),,2>/dev/null)
 
 $(TEST-GLJ-TARGETS): $(GLJ-CMD)
