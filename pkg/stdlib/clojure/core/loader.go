@@ -631,26 +631,26 @@ func LoadNS() {
 	sym_get_DASH_thread_DASH_bindings := lang.NewSymbol("get-thread-bindings")
 	sym_get_DASH_validator := lang.NewSymbol("get-validator")
 	sym_gio := lang.NewSymbol("gio")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.*MultiFn")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_Var := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.*Var")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Abs := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Abs")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_FindNamespace := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.FindNamespace")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_ISeq := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.ISeq")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Identical := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Identical")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Import := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Import")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_IsReduced := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.IsReduced")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_LockingTransaction := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.LockingTransaction")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewDelay := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewDelay")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewIllegalArgumentError := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewLazySeq := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewLazySeq")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMap := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewMap")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMultiFn := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewMultiFn")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewPersistentArrayMapAsIfByAssoc := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewPersistentArrayMapAsIfByAssoc")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Numbers")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_PopThreadBindings := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.PopThreadBindings")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_PushThreadBindings := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.PushThreadBindings")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Volatile := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Volatile")
-	sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT := lang.NewSymbol("github.com:glojurelang:glojure:pkg:runtime.RT")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.*MultiFn")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_Var := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.*Var")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Abs := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Abs")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_FindNamespace := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.FindNamespace")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_ISeq := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.ISeq")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Identical := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Identical")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Import := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Import")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_IsReduced := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.IsReduced")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_LockingTransaction := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.LockingTransaction")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewDelay := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewDelay")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewIllegalArgumentError := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewLazySeq := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewLazySeq")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMap := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewMap")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMultiFn := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewMultiFn")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewPersistentArrayMapAsIfByAssoc := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.NewPersistentArrayMapAsIfByAssoc")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Numbers")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_PopThreadBindings := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.PopThreadBindings")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_PushThreadBindings := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.PushThreadBindings")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Volatile := lang.NewSymbol("github.com:glojurelang:glojure:pkg:lang.Volatile")
+	sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT := lang.NewSymbol("github.com:glojurelang:glojure:pkg:runtime.RT")
 	sym_global_DASH_hierarchy := lang.NewSymbol("global-hierarchy")
 	sym_glojure_DOT_go_DOT_io := lang.NewSymbol("glojure.go.io")
 	sym_group_DASH_by := lang.NewSymbol("group-by")
@@ -3693,7 +3693,7 @@ func LoadNS() {
 	}
 	// chunk-next
 	{
-		tmp0 := sym_chunk_DASH_next.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(702), kw_column, int(7), kw_end_DASH_line, int(702), kw_end_DASH_column, int(68), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunk_DASH_next.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(702), kw_column, int(7), kw_end_DASH_line, int(702), kw_end_DASH_column, int(71), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -3719,7 +3719,7 @@ func LoadNS() {
 	}
 	// chunk-rest
 	{
-		tmp0 := sym_chunk_DASH_rest.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(699), kw_column, int(7), kw_end_DASH_line, int(699), kw_end_DASH_column, int(68), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_chunk_DASH_rest.WithMeta(lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(699), kw_column, int(7), kw_end_DASH_line, int(699), kw_end_DASH_column, int(71), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -3887,7 +3887,7 @@ func LoadNS() {
 				tmp5 := lang.Apply2(lang.NewCons, v3, v4)
 				return tmp5
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(29), kw_column, int(7), kw_end_DASH_line, int(29), kw_end_DASH_column, int(86))).(lang.FnFunc2)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(29), kw_column, int(7), kw_end_DASH_line, int(29), kw_end_DASH_column, int(89))).(lang.FnFunc2)
 			v2 = tmp1
 			_ = v2
 		}
@@ -4363,7 +4363,7 @@ func LoadNS() {
 				tmp4 := lang.Apply1(lang.First, v3)
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(54), kw_column, int(8), kw_end_DASH_line, int(54), kw_end_DASH_column, int(83))).(lang.FnFunc1)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(54), kw_column, int(8), kw_end_DASH_line, int(54), kw_end_DASH_column, int(86))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -4672,7 +4672,7 @@ func LoadNS() {
 				tmp5 := lang.Apply2(lang.HasType, v3, v4)
 				return tmp5
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(145), kw_column, int(12), kw_end_DASH_line, int(145), kw_end_DASH_column, int(82))).(lang.FnFunc2)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(145), kw_column, int(12), kw_end_DASH_line, int(145), kw_end_DASH_column, int(85))).(lang.FnFunc2)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5167,7 +5167,7 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(173), kw_column, int(7), kw_end_DASH_line, int(173), kw_end_DASH_column, int(94))).(lang.FnFunc1)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(173), kw_column, int(7), kw_end_DASH_line, int(173), kw_end_DASH_column, int(97))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5340,7 +5340,7 @@ func LoadNS() {
 				tmp5 := lang.Apply1(lang.Next, v4)
 				return tmp5
 			})
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(63), kw_column, int(7), kw_end_DASH_line, int(63), kw_end_DASH_column, int(74))).(lang.FnFunc1)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(63), kw_column, int(7), kw_end_DASH_line, int(63), kw_end_DASH_column, int(77))).(lang.FnFunc1)
 			v3 = tmp2
 			_ = v3
 		}
@@ -5383,7 +5383,7 @@ func LoadNS() {
 				v4 := p0
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp6 := lang.Apply3(tmp5, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Identical, v4, nil)
+				tmp6 := lang.Apply3(tmp5, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Identical, v4, nil)
 				return tmp6
 			})
 			v3 = tmp2
@@ -5613,7 +5613,7 @@ func LoadNS() {
 	}
 	// prefer-method
 	{
-		tmp0 := sym_prefer_DASH_method.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val_DASH_x, sym_dispatch_DASH_val_DASH_y)), kw_doc, "Causes the multimethod to prefer matches of dispatch-val-x over dispatch-val-y \n   when there is a conflict", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1809), kw_end_DASH_line, int(1809))).(*lang.Symbol)
+		tmp0 := sym_prefer_DASH_method.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val_DASH_x, sym_dispatch_DASH_val_DASH_y)), kw_doc, "Causes the multimethod to prefer matches of dispatch-val-x over dispatch-val-y\n   when there is a conflict", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1809), kw_end_DASH_line, int(1809))).(*lang.Symbol)
 		var tmp1 lang.FnFunc3
 		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
 			v2 := p0
@@ -5671,7 +5671,7 @@ func LoadNS() {
 	}
 	// push-thread-bindings
 	{
-		tmp0 := sym_push_DASH_thread_DASH_bindings.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_bindings)), kw_doc, "WARNING: This is a low-level function. Prefer high-level macros like\n  binding where ever possible.\n\n  Takes a map of Var/value pairs. Binds each Var to the associated value for\n  the current thread. Each call *MUST* be accompanied by a matching call to\n  pop-thread-bindings wrapped in a try-finally!\n  \n      (push-thread-bindings bindings)\n      (try\n        ...\n        (finally\n          (pop-thread-bindings)))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(1919), kw_end_DASH_line, int(1919))).(*lang.Symbol)
+		tmp0 := sym_push_DASH_thread_DASH_bindings.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_bindings)), kw_doc, "WARNING: This is a low-level function. Prefer high-level macros like\n  binding where ever possible.\n\n  Takes a map of Var/value pairs. Binds each Var to the associated value for\n  the current thread. Each call *MUST* be accompanied by a matching call to\n  pop-thread-bindings wrapped in a try-finally!\n\n      (push-thread-bindings bindings)\n      (try\n        ...\n        (finally\n          (pop-thread-bindings)))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(1919), kw_end_DASH_line, int(1919))).(*lang.Symbol)
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -6218,7 +6218,7 @@ func LoadNS() {
 				tmp5 := lang.Apply1(lang.Rest, v4)
 				return tmp5
 			})
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(72), kw_column, int(7), kw_end_DASH_line, int(72), kw_end_DASH_column, int(74))).(lang.FnFunc1)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(72), kw_column, int(7), kw_end_DASH_line, int(72), kw_end_DASH_column, int(77))).(lang.FnFunc1)
 			v3 = tmp2
 			_ = v3
 		}
@@ -6302,7 +6302,7 @@ func LoadNS() {
 				tmp5 := lang.Apply1(lang.Seq, v4)
 				return tmp5
 			})
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(138), kw_column, int(6), kw_end_DASH_line, int(138), kw_end_DASH_column, int(120))).(lang.FnFunc1)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(138), kw_column, int(6), kw_end_DASH_line, int(138), kw_end_DASH_column, int(126))).(lang.FnFunc1)
 			v3 = tmp2
 			_ = v3
 		}
@@ -6325,7 +6325,7 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(152), kw_column, int(7), kw_end_DASH_line, int(152), kw_end_DASH_column, int(84))).(lang.FnFunc1)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(152), kw_column, int(7), kw_end_DASH_line, int(152), kw_end_DASH_column, int(87))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6422,7 +6422,7 @@ func LoadNS() {
 	}
 	// set-error-mode!
 	{
-		tmp0 := sym_set_DASH_error_DASH_mode_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_mode_DASH_keyword)), kw_doc, "Sets the error-mode of agent a to mode-keyword, which must be\n  either :fail or :continue.  If an action being run by the agent\n  throws an exception or doesn't pass the validator fn, an\n  error-handler may be called (see set-error-handler!), after which,\n  if the mode is :continue, the agent will continue as if neither the\n  action that caused the error nor the error itself ever happened.\n  \n  If the mode is :fail, the agent will become failed and will stop\n  accepting new 'send' and 'send-off' actions, and any previously\n  queued actions will be held until a 'restart-agent'.  Deref will\n  still work, returning the state of the agent before the error.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2218), kw_end_DASH_line, int(2218))).(*lang.Symbol)
+		tmp0 := sym_set_DASH_error_DASH_mode_BANG_.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_mode_DASH_keyword)), kw_doc, "Sets the error-mode of agent a to mode-keyword, which must be\n  either :fail or :continue.  If an action being run by the agent\n  throws an exception or doesn't pass the validator fn, an\n  error-handler may be called (see set-error-handler!), after which,\n  if the mode is :continue, the agent will continue as if neither the\n  action that caused the error nor the error itself ever happened.\n\n  If the mode is :fail, the agent will become failed and will stop\n  accepting new 'send' and 'send-off' actions, and any previously\n  queued actions will be held until a 'restart-agent'.  Deref will\n  still work, returning the state of the agent before the error.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2218), kw_end_DASH_line, int(2218))).(*lang.Symbol)
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
@@ -7814,7 +7814,7 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(180), kw_column, int(10), kw_end_DASH_line, int(180), kw_end_DASH_column, int(103))).(lang.FnFunc1)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(180), kw_column, int(10), kw_end_DASH_line, int(180), kw_end_DASH_column, int(106))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8391,7 +8391,7 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(159), kw_column, int(8), kw_end_DASH_line, int(159), kw_end_DASH_column, int(86))).(lang.FnFunc1)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(159), kw_column, int(8), kw_end_DASH_line, int(159), kw_end_DASH_column, int(89))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8823,7 +8823,7 @@ func LoadNS() {
 					return tmp6
 				}
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(83), kw_column, int(7), kw_end_DASH_line, int(90), kw_end_DASH_column, int(64))).(lang.FnFunc)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(83), kw_column, int(7), kw_end_DASH_line, int(90), kw_end_DASH_column, int(67))).(lang.FnFunc)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8887,7 +8887,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -8968,7 +8968,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -9024,7 +9024,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -9106,8 +9106,8 @@ func LoadNS() {
 				tmp10 := lang.Apply1(tmp9, sym__DOT_)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
-				tmp13 := lang.NewMap(kw_tag, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn)
-				tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(1793), kw_column, int(27), kw_end_DASH_line, int(1793), kw_end_DASH_column, int(79))
+				tmp13 := lang.NewMap(kw_tag, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn)
+				tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(1793), kw_column, int(27), kw_end_DASH_line, int(1793), kw_end_DASH_column, int(82))
 				tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -9613,7 +9613,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -9665,7 +9665,7 @@ func LoadNS() {
 					tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp7 := lang.Apply1(tmp6, sym__DOT_)
 					tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_doubleArray)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -9751,7 +9751,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_doubles)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -10274,7 +10274,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -10333,7 +10333,7 @@ func LoadNS() {
 					tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp7 := lang.Apply1(tmp6, sym__DOT_)
 					tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_floatArray)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -10434,7 +10434,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_floats)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -10678,7 +10678,7 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp9 := lang.Apply1(tmp8, sym__DOT_)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp11 := lang.Apply1(tmp10, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+					tmp11 := lang.Apply1(tmp10, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -10924,7 +10924,7 @@ func LoadNS() {
 	}
 	// if-not
 	{
-		tmp0 := sym_if_DASH_not.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym_then), lang.NewVector(sym_test, sym_then, sym_else)), kw_doc, "Evaluates test. If logical false, evaluates and returns then expr, \n  otherwise else expr, if supplied, else nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(762), kw_end_DASH_line, int(762))).(*lang.Symbol)
+		tmp0 := sym_if_DASH_not.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym_then), lang.NewVector(sym_test, sym_then, sym_else)), kw_doc, "Evaluates test. If logical false, evaluates and returns then expr,\n  otherwise else expr, if supplied, else nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(762), kw_end_DASH_line, int(762))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -11024,7 +11024,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -11080,7 +11080,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -11181,7 +11181,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -11244,7 +11244,7 @@ func LoadNS() {
 					tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp7 := lang.Apply1(tmp6, sym__DOT_)
 					tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_intArray)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -11431,7 +11431,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_ints)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -11840,7 +11840,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -11892,7 +11892,7 @@ func LoadNS() {
 					tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp7 := lang.Apply1(tmp6, sym__DOT_)
 					tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_longArray)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -11961,7 +11961,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_longs)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -12254,7 +12254,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -12515,7 +12515,7 @@ func LoadNS() {
 					tmp8 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp9 := lang.Apply1(tmp8, sym__DOT_)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp11 := lang.Apply1(tmp10, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+					tmp11 := lang.Apply1(tmp10, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -12614,7 +12614,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -12663,7 +12663,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_ObjectArray)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -12874,7 +12874,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -12995,7 +12995,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -13351,7 +13351,7 @@ func LoadNS() {
 				tmp4 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp5 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp7 := lang.Apply1(tmp6, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_IsReduced)
+				tmp7 := lang.Apply1(tmp6, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_IsReduced)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp9 := lang.Apply1(tmp8, v3)
 				tmp10 := lang.Apply2(tmp5, tmp7, tmp9)
@@ -13878,7 +13878,7 @@ func LoadNS() {
 					tmp13 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_transient)
 					tmp15 := lang.NewSet()
-					tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4159), kw_column, int(105), kw_end_DASH_line, int(4159), kw_end_DASH_column, int(107))
+					tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4159), kw_column, int(108), kw_end_DASH_line, int(4159), kw_end_DASH_column, int(110))
 					tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -13930,7 +13930,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -13989,7 +13989,7 @@ func LoadNS() {
 					tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp7 := lang.Apply1(tmp6, sym__DOT_)
 					tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_shortArray)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -14058,7 +14058,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_shorts)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -15329,7 +15329,7 @@ func LoadNS() {
 					}
 					return tmp7
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5547), kw_column, int(11), kw_end_DASH_line, int(5547), kw_end_DASH_column, int(75))
+				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5547), kw_column, int(11), kw_end_DASH_line, int(5547), kw_end_DASH_column, int(78))
 				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -15393,7 +15393,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15448,7 +15448,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15501,7 +15501,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15546,7 +15546,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15595,7 +15595,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15644,7 +15644,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15695,7 +15695,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15748,7 +15748,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15793,7 +15793,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15838,7 +15838,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15887,7 +15887,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15936,7 +15936,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15981,7 +15981,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -16028,7 +16028,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -16083,7 +16083,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -16136,7 +16136,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -16185,7 +16185,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -16236,7 +16236,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -16289,7 +16289,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -16336,7 +16336,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -16391,7 +16391,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -16471,7 +16471,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -16573,8 +16573,8 @@ func LoadNS() {
 				{ // let
 					// let binding "v"
 					tmp8 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
-					tmp9 := lang.NewMap(kw_tag, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Volatile)
-					tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2545), kw_column, int(26), kw_end_DASH_line, int(2545), kw_end_DASH_column, int(78))
+					tmp9 := lang.NewMap(kw_tag, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Volatile)
+					tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2545), kw_column, int(26), kw_end_DASH_line, int(2545), kw_end_DASH_column, int(81))
 					tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -16632,7 +16632,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -17216,7 +17216,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -17322,7 +17322,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -17428,7 +17428,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -17534,7 +17534,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -17640,7 +17640,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -17756,7 +17756,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -17794,7 +17794,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -17848,7 +17848,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -17865,7 +17865,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -17875,7 +17875,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -17896,7 +17896,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -17982,7 +17982,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18020,7 +18020,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18074,7 +18074,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18091,7 +18091,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -18101,7 +18101,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18122,7 +18122,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -18208,7 +18208,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18246,7 +18246,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18300,7 +18300,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18317,7 +18317,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -18327,7 +18327,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18348,7 +18348,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -18433,7 +18433,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18471,7 +18471,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18525,7 +18525,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18542,7 +18542,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -18552,7 +18552,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18573,7 +18573,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -18659,7 +18659,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18697,7 +18697,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18751,7 +18751,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18768,7 +18768,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -18778,7 +18778,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -18799,7 +18799,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -18871,7 +18871,7 @@ func LoadNS() {
 				tmp4 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp5 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp7 := lang.Apply1(tmp6, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Abs)
+				tmp7 := lang.Apply1(tmp6, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Abs)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp9 := lang.Apply1(tmp8, v3)
 				tmp10 := lang.Apply2(tmp5, tmp7, tmp9)
@@ -18908,7 +18908,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -19013,7 +19013,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -19143,7 +19143,7 @@ func LoadNS() {
 	}
 	// areduce
 	{
-		tmp0 := sym_areduce.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_idx, sym_ret, sym_init, sym_expr)), kw_doc, "Reduces an expression across an array a, using an index named idx,\n  and return value named ret, initialized to init, setting ret to the \n  evaluation of expr at each step, returning ret.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(5331), kw_end_DASH_line, int(5331))).(*lang.Symbol)
+		tmp0 := sym_areduce.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_idx, sym_ret, sym_init, sym_expr)), kw_doc, "Reduces an expression across an array a, using an index named idx,\n  and return value named ret, initialized to init, setting ret to the\n  evaluation of expr at each step, returning ret.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(5331), kw_end_DASH_line, int(5331))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 7)
@@ -19491,7 +19491,7 @@ func LoadNS() {
 				tmp24 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp25 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp26 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp27 := lang.Apply1(tmp26, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewIllegalArgumentError)
+				tmp27 := lang.Apply1(tmp26, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewIllegalArgumentError)
 				tmp28 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp29 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp30 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20191,7 +20191,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20229,7 +20229,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20283,7 +20283,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20300,7 +20300,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -20310,7 +20310,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20331,7 +20331,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -20410,7 +20410,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20448,7 +20448,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20502,7 +20502,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20519,7 +20519,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -20529,7 +20529,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20550,7 +20550,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -20617,7 +20617,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20678,7 +20678,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20716,7 +20716,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20770,7 +20770,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20787,7 +20787,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -20797,7 +20797,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20818,7 +20818,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -20887,7 +20887,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -20942,7 +20942,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -21007,7 +21007,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -21045,7 +21045,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -21099,7 +21099,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -21116,7 +21116,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -21126,7 +21126,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -21147,7 +21147,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -21214,7 +21214,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -21270,7 +21270,7 @@ func LoadNS() {
 					tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp7 := lang.Apply1(tmp6, sym__DOT_)
 					tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_booleanArray)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -21339,7 +21339,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_booleans)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -21442,7 +21442,7 @@ func LoadNS() {
 					}
 					return tmp7
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5539), kw_column, int(11), kw_end_DASH_line, int(5539), kw_end_DASH_column, int(66))
+				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5539), kw_column, int(11), kw_end_DASH_line, int(5539), kw_end_DASH_column, int(69))
 				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -21600,7 +21600,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -21659,7 +21659,7 @@ func LoadNS() {
 					tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp7 := lang.Apply1(tmp6, sym__DOT_)
 					tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_byteArray)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -21728,7 +21728,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_bytes)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -21809,7 +21809,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -21872,7 +21872,7 @@ func LoadNS() {
 					tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp7 := lang.Apply1(tmp6, sym__DOT_)
 					tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_charArray)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -21941,7 +21941,7 @@ func LoadNS() {
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := lang.Apply1(tmp6, sym__DOT_)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+				tmp9 := lang.Apply1(tmp8, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp11 := lang.Apply1(tmp10, sym_clojure_DOT_core_SLASH_chars)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
@@ -22962,13 +22962,13 @@ func LoadNS() {
 				tmp5 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
 				tmp7 := lang.NewVector()
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(748), kw_column, int(98), kw_end_DASH_line, int(748), kw_end_DASH_column, int(99))
+				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(748), kw_column, int(101), kw_end_DASH_line, int(748), kw_end_DASH_column, int(102))
 				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
 				tmp10 := lang.Apply3(tmp6, sym_fn_STAR_, tmp9, v4)
-				tmp11 := lang.Apply2(tmp5, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewDelay, tmp10)
+				tmp11 := lang.Apply2(tmp5, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewDelay, tmp10)
 				return tmp11
 			}
 		})
@@ -25693,7 +25693,7 @@ func LoadNS() {
 	}
 	// if-let
 	{
-		tmp0 := sym_if_DASH_let.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym_then), lang.NewVector(sym_bindings, sym_then, sym_else, sym__AMP_, sym_oldform)), kw_doc, "bindings => binding-form test\n\n  If test is true, evaluates then with binding-form bound to the value of \n  test, if not, yields else", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(1847), kw_end_DASH_line, int(1847))).(*lang.Symbol)
+		tmp0 := sym_if_DASH_let.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym_then), lang.NewVector(sym_bindings, sym_then, sym_else, sym__AMP_, sym_oldform)), kw_doc, "bindings => binding-form test\n\n  If test is true, evaluates then with binding-form bound to the value of\n  test, if not, yields else", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(1847), kw_end_DASH_line, int(1847))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -27094,13 +27094,13 @@ func LoadNS() {
 				tmp5 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
 				tmp7 := lang.NewVector()
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(685), kw_column, int(98), kw_end_DASH_line, int(685), kw_end_DASH_column, int(99))
+				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(685), kw_column, int(101), kw_end_DASH_line, int(685), kw_end_DASH_column, int(102))
 				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
 				tmp10 := lang.Apply3(tmp6, sym_fn_STAR_, tmp9, v4)
-				tmp11 := lang.Apply2(tmp5, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewLazySeq, tmp10)
+				tmp11 := lang.Apply2(tmp5, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewLazySeq, tmp10)
 				return tmp11
 			}
 		})
@@ -27898,7 +27898,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -27936,7 +27936,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -27990,7 +27990,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -28007,7 +28007,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -28017,7 +28017,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -28038,7 +28038,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -28545,7 +28545,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -28583,7 +28583,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -28637,7 +28637,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -28654,7 +28654,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -28664,7 +28664,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -28685,7 +28685,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -28998,7 +28998,7 @@ func LoadNS() {
 							tmp12 := checkDerefVar(var_clojure_DOT_core_list)
 							tmp13 := lang.Apply1(tmp12, sym__DOT_)
 							tmp14 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp15 := lang.Apply1(tmp14, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+							tmp15 := lang.Apply1(tmp14, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 							tmp16 := checkDerefVar(var_clojure_DOT_core_list)
 							tmp17 := checkDerefVar(var_clojure_DOT_core_seq)
 							tmp18 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -29036,7 +29036,7 @@ func LoadNS() {
 							tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 							tmp14 := lang.Apply1(tmp13, sym__DOT_)
 							tmp15 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp16 := lang.Apply1(tmp15, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+							tmp16 := lang.Apply1(tmp15, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 							tmp17 := checkDerefVar(var_clojure_DOT_core_list)
 							tmp18 := checkDerefVar(var_clojure_DOT_core_seq)
 							tmp19 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -29090,7 +29090,7 @@ func LoadNS() {
 								tmp18 := checkDerefVar(var_clojure_DOT_core_list)
 								tmp19 := lang.Apply1(tmp18, sym__DOT_)
 								tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-								tmp21 := lang.Apply1(tmp20, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+								tmp21 := lang.Apply1(tmp20, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 								tmp22 := checkDerefVar(var_clojure_DOT_core_list)
 								tmp23 := checkDerefVar(var_clojure_DOT_core_seq)
 								tmp24 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -29107,7 +29107,7 @@ func LoadNS() {
 								tmp35 := lang.Apply1(tmp16, tmp34)
 								return tmp35
 							})
-							tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+							tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 							tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
@@ -29117,7 +29117,7 @@ func LoadNS() {
 							tmp18 := checkDerefVar(var_clojure_DOT_core_list)
 							tmp19 := lang.Apply1(tmp18, sym__DOT_)
 							tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp21 := lang.Apply1(tmp20, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+							tmp21 := lang.Apply1(tmp20, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 							tmp22 := checkDerefVar(var_clojure_DOT_core_list)
 							tmp23 := checkDerefVar(var_clojure_DOT_core_seq)
 							tmp24 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -29138,7 +29138,7 @@ func LoadNS() {
 						return tmp8
 					}
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))
+				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))
 				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -33314,7 +33314,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp9 := lang.Apply1(tmp8, sym__DOT_)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp11 := lang.Apply1(tmp10, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_LockingTransaction)
+				tmp11 := lang.Apply1(tmp10, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_LockingTransaction)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp14 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -34953,7 +34953,7 @@ func LoadNS() {
 				tmp24 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp25 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp26 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp27 := lang.Apply1(tmp26, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_PushThreadBindings)
+				tmp27 := lang.Apply1(tmp26, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_PushThreadBindings)
 				tmp28 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp29 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp30 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
@@ -34980,7 +34980,7 @@ func LoadNS() {
 				tmp51 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp52 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp53 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp54 := lang.Apply1(tmp53, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_PopThreadBindings)
+				tmp54 := lang.Apply1(tmp53, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_PopThreadBindings)
 				tmp55 := lang.Apply1(tmp52, tmp54)
 				tmp56 := lang.Apply1(tmp51, tmp55)
 				tmp57 := lang.Apply1(tmp50, tmp56)
@@ -35604,7 +35604,7 @@ func LoadNS() {
 					} // end let
 					return tmp7
 				})
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7592), kw_column, int(19), kw_end_DASH_line, int(7594), kw_end_DASH_column, int(90))
+				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7592), kw_column, int(19), kw_end_DASH_line, int(7594), kw_end_DASH_column, int(93))
 				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -35633,7 +35633,7 @@ func LoadNS() {
 					}
 					return tmp16
 				})
-				tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7596), kw_column, int(31), kw_end_DASH_line, int(7596), kw_end_DASH_column, int(89))
+				tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7596), kw_column, int(31), kw_end_DASH_line, int(7596), kw_end_DASH_column, int(92))
 				tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -35690,7 +35690,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -35728,7 +35728,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -35782,7 +35782,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -35799,7 +35799,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -35809,7 +35809,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -35830,7 +35830,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -35915,7 +35915,7 @@ func LoadNS() {
 					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp10 := lang.Apply1(tmp9, sym__DOT_)
 					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp13 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -35953,7 +35953,7 @@ func LoadNS() {
 					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp11 := lang.Apply1(tmp10, sym__DOT_)
 					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp13 := lang.Apply1(tmp12, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp16 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -36007,7 +36007,7 @@ func LoadNS() {
 						tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp16 := lang.Apply1(tmp15, sym__DOT_)
 						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+						tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -36024,7 +36024,7 @@ func LoadNS() {
 						tmp32 := lang.Apply1(tmp13, tmp31)
 						return tmp32
 					})
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(85))
+					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
 					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -36034,7 +36034,7 @@ func LoadNS() {
 					tmp15 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp16 := lang.Apply1(tmp15, sym__DOT_)
 					tmp17 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
+					tmp18 := lang.Apply1(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 					tmp19 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -36055,7 +36055,7 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(83))).(lang.FnFunc)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.FnFunc)
 		var tmp2 lang.FnFunc1
 		tmp2 = lang.FnFunc1(func(p0 any) any {
 			v3 := p0
@@ -36212,7 +36212,7 @@ func LoadNS() {
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp8 := lang.Apply1(tmp7, sym__DOT_)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp10 := lang.Apply1(tmp9, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -36279,7 +36279,7 @@ func LoadNS() {
 	}
 	// amap
 	{
-		tmp0 := sym_amap.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_idx, sym_ret, sym_expr)), kw_doc, "Maps an expression across an array a, using an index named idx, and\n  return value named ret, initialized to a clone of a, then setting \n  each element of ret to the evaluation of expr, returning the new \n  array ret.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(5315), kw_end_DASH_line, int(5315))).(*lang.Symbol)
+		tmp0 := sym_amap.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_idx, sym_ret, sym_expr)), kw_doc, "Maps an expression across an array a, using an index named idx, and\n  return value named ret, initialized to a clone of a, then setting\n  each element of ret to the evaluation of expr, returning the new\n  array ret.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(5315), kw_end_DASH_line, int(5315))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			checkArity(args, 6)
@@ -36661,7 +36661,7 @@ func LoadNS() {
 				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp9 := lang.Apply1(tmp8, sym__DOT_)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp11 := lang.Apply1(tmp10, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
+				tmp11 := lang.Apply1(tmp10, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp14 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -37988,7 +37988,7 @@ func LoadNS() {
 						tmp131 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp132 := lang.Apply1(tmp131, sym_clojure_DOT_core_SLASH_instance_QMARK_)
 						tmp133 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp134 := lang.Apply1(tmp133, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn)
+						tmp134 := lang.Apply1(tmp133, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_MultiFn)
 						tmp135 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp136 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp137 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -38016,7 +38016,7 @@ func LoadNS() {
 						tmp159 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp160 := checkDerefVar(var_clojure_DOT_core_concat)
 						tmp161 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp162 := lang.Apply1(tmp161, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMultiFn)
+						tmp162 := lang.Apply1(tmp161, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMultiFn)
 						tmp163 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp164 := checkDerefVar(var_clojure_DOT_core_name)
 						tmp165 := lang.Apply1(tmp164, v62)
@@ -40111,10 +40111,10 @@ func LoadNS() {
 						v18 := p0
 						_ = v18
 						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp20 := lang.Apply2(tmp19, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_Import, v18)
+						tmp20 := lang.Apply2(tmp19, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Import, v18)
 						return tmp20
 					})
-					tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3462), kw_column, int(17), kw_end_DASH_line, int(3462), kw_end_DASH_column, int(70))
+					tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3462), kw_column, int(17), kw_end_DASH_line, int(3462), kw_end_DASH_column, int(73))
 					tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -40697,7 +40697,7 @@ func LoadNS() {
 	}
 	// lazy-cat
 	{
-		tmp0 := sym_lazy_DASH_cat.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_colls)), kw_doc, "Expands to code which yields a lazy sequence of the concatenation\n  of the supplied colls.  Each coll expr is not evaluated until it is\n  needed. \n\n  (lazy-cat xs ys zs) === (concat (lazy-seq xs) (lazy-seq ys) (lazy-seq zs))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(4683), kw_end_DASH_line, int(4683))).(*lang.Symbol)
+		tmp0 := sym_lazy_DASH_cat.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_colls)), kw_doc, "Expands to code which yields a lazy sequence of the concatenation\n  of the supplied colls.  Each coll expr is not evaluated until it is\n  needed.\n\n  (lazy-cat xs ys zs) === (concat (lazy-seq xs) (lazy-seq ys) (lazy-seq zs))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(4683), kw_end_DASH_line, int(4683))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -41834,7 +41834,7 @@ func LoadNS() {
 						tmp103 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp104 := checkDerefVar(var_clojure_DOT_core_concat)
 						tmp105 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp106 := lang.Apply1(tmp105, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_FindNamespace)
+						tmp106 := lang.Apply1(tmp105, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_FindNamespace)
 						tmp107 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp108 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp109 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -42665,7 +42665,7 @@ func LoadNS() {
 				} // end let
 				return tmp12
 			})
-			tmp10 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(246), kw_column, int(5), kw_end_DASH_line, int(247), kw_end_DASH_column, int(104))
+			tmp10 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(246), kw_column, int(5), kw_end_DASH_line, int(247), kw_end_DASH_column, int(107))
 			tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
@@ -44092,7 +44092,7 @@ func LoadNS() {
 				tmp42 := checkDerefVar(var_clojure_DOT_core_take_DASH_nth)
 				tmp43 := lang.Apply2(tmp42, int64(2), v4)
 				tmp44 := checkDerefVar(var_clojure_DOT_core_repeat)
-				tmp45 := lang.Apply1(tmp44, lang.NewList(sym__DOT__DOT_, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_Var, sym_create, sym_setDynamic))
+				tmp45 := lang.Apply1(tmp44, lang.NewList(sym__DOT__DOT_, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT__STAR_Var, sym_create, sym_setDynamic))
 				tmp46 := lang.Apply2(tmp41, tmp43, tmp45)
 				tmp47 := lang.Apply1(tmp40, tmp46)
 				tmp48 := lang.Apply1(tmp39, tmp47)
@@ -44102,7 +44102,7 @@ func LoadNS() {
 				tmp52 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp53 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp54 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp55 := lang.Apply1(tmp54, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_PushThreadBindings)
+				tmp55 := lang.Apply1(tmp54, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_PushThreadBindings)
 				tmp56 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp57 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp58 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
@@ -44129,7 +44129,7 @@ func LoadNS() {
 				tmp79 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp80 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp81 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp82 := lang.Apply1(tmp81, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_PopThreadBindings)
+				tmp82 := lang.Apply1(tmp81, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_PopThreadBindings)
 				tmp83 := lang.Apply1(tmp80, tmp82)
 				tmp84 := lang.Apply1(tmp79, tmp83)
 				tmp85 := lang.Apply1(tmp78, tmp84)
@@ -45452,7 +45452,7 @@ func LoadNS() {
 									tmp55 := checkDerefVar(var_clojure_DOT_core_seq)
 									tmp56 := checkDerefVar(var_clojure_DOT_core_concat)
 									tmp57 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp58 := lang.Apply1(tmp57, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewIllegalArgumentError)
+									tmp58 := lang.Apply1(tmp57, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewIllegalArgumentError)
 									tmp59 := checkDerefVar(var_clojure_DOT_core_list)
 									tmp60 := checkDerefVar(var_clojure_DOT_core_seq)
 									tmp61 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -46131,8 +46131,8 @@ func LoadNS() {
 									_ = v24
 									// let binding "gmapseq"
 									tmp25 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
-									tmp26 := lang.NewMap(kw_tag, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_ISeq)
-									tmp27 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4489), kw_column, int(52), kw_end_DASH_line, int(4489), kw_end_DASH_column, int(100))
+									tmp26 := lang.NewMap(kw_tag, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_ISeq)
+									tmp27 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4489), kw_column, int(52), kw_end_DASH_line, int(4489), kw_end_DASH_column, int(103))
 									tmp28, err := lang.WithMeta(tmp26, tmp27.(lang.IPersistentMap))
 									if err != nil {
 										panic(err)
@@ -46208,7 +46208,7 @@ func LoadNS() {
 										tmp74 := checkDerefVar(var_clojure_DOT_core_seq)
 										tmp75 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp76 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp77 := lang.Apply1(tmp76, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewPersistentArrayMapAsIfByAssoc)
+										tmp77 := lang.Apply1(tmp76, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewPersistentArrayMapAsIfByAssoc)
 										tmp78 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp79 := checkDerefVar(var_clojure_DOT_core_seq)
 										tmp80 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -46251,7 +46251,7 @@ func LoadNS() {
 										tmp117 := checkDerefVar(var_clojure_DOT_core_seq)
 										tmp118 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp119 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp120 := lang.Apply1(tmp119, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMap)
+										tmp120 := lang.Apply1(tmp119, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMap)
 										tmp121 := lang.Apply1(tmp118, tmp120)
 										tmp122 := lang.Apply1(tmp117, tmp121)
 										tmp123 := lang.Apply1(tmp116, tmp122)
@@ -47147,7 +47147,7 @@ func LoadNS() {
 						panic(tmp42)
 					}
 				})
-				tmp38 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4714), kw_column, int(13), kw_end_DASH_line, int(4714), kw_end_DASH_column, int(122))
+				tmp38 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4714), kw_column, int(13), kw_end_DASH_line, int(4714), kw_end_DASH_column, int(125))
 				tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -49105,7 +49105,7 @@ func LoadNS() {
 	}
 	// add-classpath
 	{
-		tmp0 := sym_add_DASH_classpath.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_url)), kw_doc, "DEPRECATED \n\n  Adds the url (String or URL object) to the classpath per\n  URLClassLoader.addURL", kw_file, "clojure/core.glj", kw_deprecated, "1.1", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5218), kw_end_DASH_line, int(5218))).(*lang.Symbol)
+		tmp0 := sym_add_DASH_classpath.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_url)), kw_doc, "DEPRECATED\n\n  Adds the url (String or URL object) to the classpath per\n  URLClassLoader.addURL", kw_file, "clojure/core.glj", kw_deprecated, "1.1", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5218), kw_end_DASH_line, int(5218))).(*lang.Symbol)
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -49150,7 +49150,7 @@ func LoadNS() {
 					tmp9 := lang.Apply0(tmp8)
 					tmp10 := reflect.TypeOf((*lang.Object)(nil)).Elem()
 					tmp11 := lang.NewMap(kw_tag, tmp10)
-					tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6791), kw_column, int(32), kw_end_DASH_line, int(6791), kw_end_DASH_column, int(81))
+					tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6791), kw_column, int(32), kw_end_DASH_line, int(6791), kw_end_DASH_column, int(84))
 					tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -49177,7 +49177,7 @@ func LoadNS() {
 						tmp28 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp29 := checkDerefVar(var_clojure_DOT_core_concat)
 						tmp30 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp31 := lang.Apply1(tmp30, sym_github_DOT_com_COLON_gloathub_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewIllegalArgumentError)
+						tmp31 := lang.Apply1(tmp30, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewIllegalArgumentError)
 						tmp32 := checkDerefVar(var_clojure_DOT_core_list)
 						tmp33 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp34 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -49863,7 +49863,7 @@ func LoadNS() {
 							tmp21 := checkDerefVar(var_clojure_DOT_core_fnil)
 							tmp22 := checkDerefVar(var_clojure_DOT_core_conj)
 							tmp23 := lang.NewVector()
-							tmp24 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6717), kw_column, int(99), kw_end_DASH_line, int(6717), kw_end_DASH_column, int(100))
+							tmp24 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6717), kw_column, int(102), kw_end_DASH_line, int(6717), kw_end_DASH_column, int(103))
 							tmp25, err := lang.WithMeta(tmp23, tmp24.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
@@ -49874,7 +49874,7 @@ func LoadNS() {
 							tmp29 := checkDerefVar(var_clojure_DOT_core_first)
 							tmp30 := lang.Apply1(tmp29, v13)
 							tmp31 := lang.NewVector(tmp28, tmp30)
-							tmp32 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6717), kw_column, int(103), kw_end_DASH_line, int(6717), kw_end_DASH_column, int(125))
+							tmp32 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6717), kw_column, int(106), kw_end_DASH_line, int(6717), kw_end_DASH_column, int(128))
 							tmp33, err := lang.WithMeta(tmp31, tmp32.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
@@ -50103,7 +50103,7 @@ func LoadNS() {
 					tmp9 := lang.Apply1(lang.Hash, v8)
 					return tmp9
 				})
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6744), kw_column, int(18), kw_end_DASH_line, int(6744), kw_end_DASH_column, int(63))
+				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6744), kw_column, int(18), kw_end_DASH_line, int(6744), kw_end_DASH_column, int(66))
 				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -56316,7 +56316,7 @@ func LoadNS() {
 					tmp49 := lang.Apply2(lang.WriteWriter, v3, "}")
 					return tmp49
 				})
-				tmp38 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(483), kw_column, int(19), kw_end_DASH_line, int(493), kw_end_DASH_column, int(70))
+				tmp38 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(483), kw_column, int(19), kw_end_DASH_line, int(493), kw_end_DASH_column, int(73))
 				tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
