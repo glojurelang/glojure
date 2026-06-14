@@ -5,14 +5,17 @@ $(shell [ -d '$M' ] || git clone -q $R '$M')
 include $M/init.mk
 
 GO-VERSION ?= 1.24.0
-CLOJURE-VERSION ?= 1.12.4
+CLOJURE-CLI-VERSION ?= 1.12.4.1602
+CLOJURE-STDLIB-SOURCE-VERSION ?= 1.12.4
+CLOJURE-VERSION ?= $(CLOJURE-CLI-VERSION)
 
 include $M/go.mk
+include $M/clojure.mk
 include $M/gh.mk
 include $M/clean.mk
 include $M/shell.mk
 
-CLOJURE-STDLIB-VERSION := clojure-$(CLOJURE-VERSION)
+CLOJURE-STDLIB-VERSION := clojure-$(CLOJURE-STDLIB-SOURCE-VERSION)
 STDLIB-ORIGINALS-DIR := scripts/rewrite-core/originals
 STDLIB-ORIGINALS := $(wildcard $(STDLIB-ORIGINALS-DIR)/*.clj)
 STDLIB-NAMES := $(STDLIB-ORIGINALS:scripts/rewrite-core/originals/%=%)
@@ -169,10 +172,13 @@ pkg/stdlib/clojure/%.glj: \
 	  scripts/rewrite-core/originals/%.clj \
 	  scripts/rewrite-core/run.sh \
 	  scripts/rewrite-core/rewrite.clj \
+	  $(CLOJURE) \
 	  $(if $(force),force)
 	@echo "Rewriting $< to $@"
 	@mkdir -p $(dir $@)
-	scripts/rewrite-core/run.sh $< > $@
+	tmp=$@.tmp; \
+	  HOME="$(LOCAL-HOME)" CLJ="$(CLOJURE)" scripts/rewrite-core/run.sh $< > $$tmp && \
+	  mv $$tmp $@
 
 bin/%/glj: generate \
 	  $(wildcard ./cmd/glj/*.go) \

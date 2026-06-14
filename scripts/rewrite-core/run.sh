@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 # this script should be run from the root of the repository
 
 # Most mutations are implemented in rewrite.clj, but some are
@@ -7,6 +10,7 @@
 # discard file after defype for now
 
 cd scripts/rewrite-core
-clj -M ./rewrite.clj "../../$1" | \
+"${CLJ:-clj}" -M ./rewrite.clj "../../$1" | \
     sed 's/\^Number //g' | \
-    sed 's/:tag Number//g'
+    sed 's/:tag Number//g' | \
+    sed 's/[[:space:]]*$//'
