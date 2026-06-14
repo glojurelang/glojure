@@ -67,7 +67,7 @@ endif
 TEST-GLJ-DIR := test/glojure
 TEST-GLJ-FILES := $(shell find $(TEST-GLJ-DIR) -name '*.glj' | sort)
 TEST-GLJ-TARGETS := $(addsuffix .test,$(TEST-GLJ-FILES))
-TEST-SUITE-REPO := git@github.com:gloathub/clojure-test-suite.git
+TEST-SUITE-REPO := git@github.com:glojurelang/clojure-test-suite.git
 TEST-SUITE-DIR := test/clojure-test-suite
 TEST-SUITE-FILE := test-glojure.glj
 
@@ -250,6 +250,7 @@ ifdef RELEASE-PLAN9-AMD64
 endif
 
 remote ?= origin
+release-branch ?= main
 git-push:
 	$(eval HTTPS-URL := $(shell git remote get-url $(remote)))
 	$(eval SSH-URL := $(subst https://github.com/,git@github.com:,$(HTTPS-URL)))
@@ -271,11 +272,15 @@ release: $(GH)
 	  git commit -m "Builds for v$(RELEASE_VER)"
 	$(MAKE) release-dist VERSION=$(VERSION)
 	git tag -a v$(RELEASE_VER) -m "Release v$(RELEASE_VER)"
-	git push origin $(shell git rev-parse --abbrev-ref HEAD)
-	git push origin v$(RELEASE_VER)
+	git push $(remote) HEAD:$(release-branch)
+	git push $(remote) v$(RELEASE_VER)
+ifeq ($(release-branch),main)
 	$(GH-CMD) release create v$(RELEASE_VER) \
-	  --repo gloathub/glojure \
+	  --repo glojurelang/glojure \
 	  --title "v$(RELEASE_VER)" \
 	  --generate-notes \
 	  dist/glj-$(RELEASE_VER)-*.tar.gz
+else
+	@echo "release-branch=$(release-branch): pushed branch and tag; skipping GitHub release"
+endif
 	@echo "=== Release v$(RELEASE_VER) complete ==="
