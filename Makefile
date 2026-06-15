@@ -281,8 +281,14 @@ release: $(GH)
 	git diff --cached --quiet || \
 	  git commit -m "Builds for v$(RELEASE_VER)"
 	$(MAKE) release-dist VERSION=$(VERSION)
-	git tag -a v$(RELEASE_VER) -m "Release v$(RELEASE_VER)"
+	git tag -f -a v$(RELEASE_VER) -m "Release v$(RELEASE_VER)"
+ifeq ($(release-branch),main)
 	git push $(remote) HEAD:$(release-branch)
+else
+	git fetch $(remote) $(release-branch)
+	git push --force-with-lease=refs/heads/$(release-branch) \
+	  $(remote) HEAD:$(release-branch)
+endif
 	git push $(remote) v$(RELEASE_VER)
 	$(GH) release create v$(RELEASE_VER) \
 	  --repo glojurelang/glojure \
