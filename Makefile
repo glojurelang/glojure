@@ -70,7 +70,7 @@ endif
 TEST-GLJ-DIR := test/glojure
 TEST-GLJ-FILES := $(shell find $(TEST-GLJ-DIR) -name '*.glj' | sort)
 TEST-GLJ-TARGETS := $(addsuffix .test,$(TEST-GLJ-FILES))
-TEST-SUITE-REPO := git@github.com:glojurelang/clojure-test-suite.git
+TEST-SUITE-REPO := https://github.com/glojurelang/clojure-test-suite.git
 TEST-SUITE-BRANCH := glojure
 TEST-SUITE-DIR := test/clojure-test-suite
 TEST-SUITE-FILE := test-glojure.glj
