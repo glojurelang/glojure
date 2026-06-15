@@ -207,7 +207,7 @@ vet: $(GO)
 .PHONY: test
 # vet is disabled until we fix errors in generated code
 test: test-glj  # vet
-	($(MAKE) test-suite || $(MAKE) test-suite) || $(MAKE) test-suite
+	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
 
 test-glj: $(TEST-GLJ-TARGETS)
 
