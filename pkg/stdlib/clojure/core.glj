@@ -2788,6 +2788,16 @@
    :static true}
   ([f] (comp (map f) cat))
   ([f & colls]
+     (when-not (github.com:glojurelang:glojure:pkg:lang.CanApply f)
+       (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError
+               (str "mapcat expected a function, got " (class f)))))
+     (loop [cs colls]
+       (when (seq cs)
+         (let [coll (first cs)]
+           (when-not (github.com:glojurelang:glojure:pkg:lang.CanSeq coll)
+             (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError
+                     (str "mapcat expected a seqable collection, got " (class coll)))))
+           (recur (rest cs)))))
      (let [step (fn step [s]
                   (lazy-seq
                     (when (seq s)

@@ -5,6 +5,28 @@ import (
 	"reflect"
 )
 
+func CanApply(fn interface{}) bool {
+	if _, ok := fn.(IFn); ok {
+		return true
+	}
+	if _, ok := fn.(reflect.Type); ok {
+		return true
+	}
+	if fn == nil {
+		return false
+	}
+	if _, ok := fn.(*UnboundVar); ok {
+		return false
+	}
+
+	switch reflect.ValueOf(fn).Kind() {
+	case reflect.Func, reflect.Slice:
+		return true
+	default:
+		return false
+	}
+}
+
 func Apply(fn interface{}, args []interface{}) interface{} {
 	if applyer, ok := fn.(IFn); ok {
 		return applyer.Invoke(args...)
