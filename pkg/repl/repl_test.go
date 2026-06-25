@@ -86,6 +86,14 @@ func TestIsExplicitNewlineKey(t *testing.T) {
 	}
 }
 
+func TestTrimTrailingInputText(t *testing.T) {
+	got := trimTrailingInputText("  ;; comment  \n\t")
+	want := "  ;; comment"
+	if got != want {
+		t.Fatalf("trimTrailingInputText() = %q, want %q", got, want)
+	}
+}
+
 func TestSplitTopLevelForms(t *testing.T) {
 	input := `
 (def a 41)

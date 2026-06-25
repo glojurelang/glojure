@@ -501,10 +501,16 @@ func Start(opts ...Option) {
 			return false
 		}
 
+		accept := false
 		if o.nreplClient != nil {
-			return isBalanced(input)
+			accept = isBalanced(input)
+		} else {
+			accept = isExpressionComplete(input, o.env)
 		}
-		return isExpressionComplete(input, o.env)
+		if accept {
+			trimAcceptedInput(rl, input)
+		}
+		return accept
 	}
 
 	// Tab completion for symbols, namespaces, and aliases
@@ -1065,6 +1071,21 @@ func isExplicitNewlineKey(keys []rune) bool {
 		}
 	}
 	return false
+}
+
+func trimTrailingInputText(input string) string {
+	return strings.TrimRight(input, " \t\r\n")
+}
+
+func trimAcceptedInput(rl *readline.Shell, input string) {
+	trimmed := trimTrailingInputText(input)
+	if trimmed == input {
+		return
+	}
+	rl.Line().Set([]rune(trimmed)...)
+	if rl.Cursor().Pos() > rl.Line().Len() {
+		rl.Cursor().Set(rl.Line().Len())
+	}
 }
 
 func clearAcceptedLine(w interface{ Write([]byte) (int, error) }) {
