@@ -70,6 +70,26 @@ func TestIsURLLikeInput(t *testing.T) {
 	}
 }
 
+func TestSplitTopLevelForms(t *testing.T) {
+	input := `
+(def a 41)
+
+(println "x y")
+;; comment
+(inc a)
+`
+	got := splitTopLevelForms(input)
+	want := []string{`(def a 41)`, `(println "x y")`, `(inc a)`}
+	if len(got) != len(want) {
+		t.Fatalf("splitTopLevelForms() = %#v, want %#v", got, want)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("splitTopLevelForms()[%d] = %q, want %q", i, got[i], want[i])
+		}
+	}
+}
+
 func TestShareClipboardText(t *testing.T) {
 	got := shareClipboardText([]string{"(def a 1)", "(+ a 2)"})
 	want := "(def a 1)\n\n(+ a 2)"

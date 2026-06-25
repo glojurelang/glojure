@@ -534,6 +534,15 @@ func Start(opts ...Option) {
 		return evalWithInterrupt(*o, val)
 	}
 
+	rl.PasteHandler = func(text string) bool {
+		forms := splitTopLevelForms(text)
+		if len(forms) < 2 {
+			return false
+		}
+		replayPastedForms(forms, rl, &o, evalFn)
+		return true
+	}
+
 	for {
 		var line string
 		var err error
@@ -1042,9 +1051,32 @@ func clearAcceptedLine(w interface{ Write([]byte) (int, error) }) {
 	fmt.Fprint(w, "\x1b[1A\r\x1b[2K")
 }
 
+func clearActiveLine(w interface{ Write([]byte) (int, error) }) {
+	fmt.Fprint(w, "\r\x1b[2K")
+}
+
 func replayShareExpressions(exprs []string, rl *readline.Shell, o *options, evalFn EvalFunc) {
-	last := exprs[len(exprs)-1]
-	for _, expr := range exprs[:len(exprs)-1] {
+	replayForms(exprs, rl, o, evalFn)
+}
+
+func replayPastedForms(forms []string, rl *readline.Shell, o *options, evalFn EvalFunc) {
+	clearActiveLine(o.stdout)
+	replayEvaluatedForms(forms[:len(forms)-1], rl, o, evalFn)
+	last := forms[len(forms)-1]
+	rl.Line().Set([]rune(last)...)
+	rl.Cursor().Set(rl.Line().Len())
+	rl.Prompt.PrimaryPrint()
+	rl.Display.Refresh()
+}
+
+func replayForms(forms []string, rl *readline.Shell, o *options, evalFn EvalFunc) {
+	last := forms[len(forms)-1]
+	replayEvaluatedForms(forms[:len(forms)-1], rl, o, evalFn)
+	rl.SetNextLine(last)
+}
+
+func replayEvaluatedForms(forms []string, rl *readline.Shell, o *options, evalFn EvalFunc) {
+	for _, expr := range forms {
 		if strings.TrimSpace(expr) == "" {
 			continue
 		}
@@ -1052,7 +1084,108 @@ func replayShareExpressions(exprs []string, rl *readline.Shell, o *options, eval
 		rl.History.WriteLine(expr)
 		evalReplInput(expr, o, evalFn)
 	}
-	rl.SetNextLine(last)
+}
+
+func splitTopLevelForms(input string) []string {
+	input = strings.TrimSpace(input)
+	if input == "" {
+		return nil
+	}
+
+	var forms []string
+	start := -1
+	depth := 0
+	inString := false
+	escaped := false
+	inComment := false
+	inAtom := false
+
+	finish := func(end int) {
+		if start < 0 {
+			return
+		}
+		form := strings.TrimSpace(input[start:end])
+		if form != "" {
+			forms = append(forms, form)
+		}
+		start = -1
+		inAtom = false
+	}
+
+	for i, r := range input {
+		if inComment {
+			if r == '\n' {
+				inComment = false
+			}
+			continue
+		}
+		if inString {
+			if escaped {
+				escaped = false
+				continue
+			}
+			if r == '\\' {
+				escaped = true
+				continue
+			}
+			if r == '"' {
+				inString = false
+				if depth == 0 {
+					finish(i + len(string(r)))
+				}
+			}
+			continue
+		}
+
+		if start < 0 {
+			if r == ';' {
+				inComment = true
+				continue
+			}
+			if strings.ContainsRune(" \t\r\n,", r) {
+				continue
+			}
+			start = i
+		}
+
+		if inAtom {
+			if r == ';' || strings.ContainsRune(" \t\r\n,", r) {
+				finish(i)
+				if r == ';' {
+					inComment = true
+				}
+			}
+			continue
+		}
+
+		switch r {
+		case ';':
+			if depth == 0 {
+				finish(i)
+			}
+			inComment = true
+		case '"':
+			inString = true
+		case '(', '[', '{':
+			depth++
+		case ')', ']', '}':
+			if depth > 0 {
+				depth--
+			}
+			if depth == 0 {
+				finish(i + len(string(r)))
+			}
+		default:
+			if depth == 0 {
+				inAtom = true
+			}
+		}
+	}
+
+	if start >= 0 && depth == 0 && !inString {
+		finish(len(input))
+	}
+	return forms
 }
 
 func replPrompt(o *options) string {
