@@ -668,6 +668,7 @@ func Start(opts ...Option) {
 		}
 
 		if exprs, ok := shareExpressionsFromURL(trimmed); ok {
+			clearAcceptedLine(o.stdout)
 			replayShareExpressions(exprs, rl, &o, evalFn)
 			continue
 		}
@@ -1037,17 +1038,28 @@ func isURLLikeInput(text string) bool {
 		strings.HasPrefix(text, "#s:")
 }
 
+func clearAcceptedLine(w interface{ Write([]byte) (int, error) }) {
+	fmt.Fprint(w, "\x1b[1A\r\x1b[2K")
+}
+
 func replayShareExpressions(exprs []string, rl *readline.Shell, o *options, evalFn EvalFunc) {
 	last := exprs[len(exprs)-1]
 	for _, expr := range exprs[:len(exprs)-1] {
 		if strings.TrimSpace(expr) == "" {
 			continue
 		}
-		fmt.Fprintln(o.stdout, expr)
+		fmt.Fprintln(o.stdout, replPrompt(o)+highlightSyntax([]rune(expr), o.env))
 		rl.History.WriteLine(expr)
 		evalReplInput(expr, o, evalFn)
 	}
 	rl.SetNextLine(last)
+}
+
+func replPrompt(o *options) string {
+	if o.nreplClient != nil {
+		return o.nreplClient.NS() + "=> "
+	}
+	return defaultPrompt(o)
 }
 
 func evalReplInput(input string, o *options, evalFn EvalFunc) {
