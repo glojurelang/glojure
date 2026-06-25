@@ -359,6 +359,7 @@ func Start(opts ...Option) {
 				"  " + colorCyan + docKey + colorReset + strings.Repeat(" ", 10-len(docKey)) + "Show documentation for symbol under cursor\r\n" +
 				"  " + colorCyan + printKey + colorReset + strings.Repeat(" ", 10-len(printKey)) + "Format, print and clipboard\r\n" +
 				"  " + colorCyan + shareKey + colorReset + strings.Repeat(" ", 10-len(shareKey)) + "Share by URL; also copy selected forms\r\n" +
+				"  " + colorCyan + "C-j" + colorReset + "       Insert newline\r\n" +
 				"  " + colorCyan + "C-r" + colorReset + "       Reverse history search\r\n" +
 				"  " + colorCyan + "C-z" + colorReset + "       Suspend (resume with fg)\r\n" +
 				"  " + colorCyan + "C-c" + colorReset + "       Cancel input; press twice to exit\r\n" +
@@ -443,6 +444,9 @@ func Start(opts ...Option) {
 	ctrlZ := inputrc.Unescape(`\C-z`)
 	for _, km := range rl.Config.Binds {
 		km[ctrlZ] = inputrc.Bind{Action: "suspend"}
+		for _, key := range ctrlEnterKeys() {
+			km[key] = inputrc.Bind{Action: "accept-line"}
+		}
 	}
 	// Bind C-d, C-h, C-p, C-s in all vi keymaps
 	ctrlD := inputrc.Unescape(`\C-d`)
@@ -480,9 +484,9 @@ func Start(opts ...Option) {
 		return "... "
 	})
 
-	// AcceptMultiline: return false if expression is incomplete (needs more input).
-	// Also insert a newline (instead of submitting) when the cursor is not at the
-	// end of the buffer, even if the expression is already complete.
+	// AcceptMultiline returns false only for explicit newline insertion or
+	// incomplete input. Normal Enter submits complete forms from any cursor
+	// position.
 	rl.AcceptMultiline = func(line []rune) bool {
 		input := string(line)
 		if _, ok := shareExpressionsFromURL(input); ok {
@@ -493,10 +497,7 @@ func Start(opts ...Option) {
 			return true
 		}
 
-		// Cursor not at end: insert a newline (unless in vi command mode,
-		// where Enter should always submit)
-		viCmd := string(rl.Keymap.Main()) == "vi-command"
-		if !viCmd && rl.Cursor().Pos() < rl.Line().Len() {
+		if isExplicitNewlineKey(rl.Keys.Caller()) {
 			return false
 		}
 
@@ -1045,6 +1046,25 @@ func isURLLikeInput(text string) bool {
 		strings.HasPrefix(text, "https://") ||
 		strings.HasPrefix(text, shareBaseURL+"#s:") ||
 		strings.HasPrefix(text, "#s:")
+}
+
+func ctrlEnterKeys() []string {
+	return []string{
+		inputrc.Unescape(`\C-j`),
+		"\x1b[13;5u",
+		"\x1b[13;5~",
+		"\x1b[27;5;13~",
+	}
+}
+
+func isExplicitNewlineKey(keys []rune) bool {
+	got := string(keys)
+	for _, key := range ctrlEnterKeys() {
+		if got == key {
+			return true
+		}
+	}
+	return false
 }
 
 func clearAcceptedLine(w interface{ Write([]byte) (int, error) }) {

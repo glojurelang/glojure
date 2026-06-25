@@ -185,6 +185,7 @@ func printHelp(w io.Writer, editorMode, formatCmd, nreplURL, sreplURL string, c 
 	fmt.Fprintf(w, "  %s%-10s%sShow documentation for symbol under cursor\n", c.Cyan, docKey, c.Reset)
 	fmt.Fprintf(w, "  %s%-10s%sFormat, print and clipboard\n", c.Cyan, printKey, c.Reset)
 	fmt.Fprintf(w, "  %s%-10s%sShare by URL; also copy selected forms\n", c.Cyan, "C-s", c.Reset)
+	fmt.Fprintf(w, "  %sC-j%s       Insert newline\n", c.Cyan, c.Reset)
 	fmt.Fprintf(w, "  %sC-r%s       Reverse history search\n", c.Cyan, c.Reset)
 	fmt.Fprintf(w, "  %sC-z%s       Suspend (resume with fg)\n", c.Cyan, c.Reset)
 	fmt.Fprintf(w, "  %sC-c%s       Cancel input; press twice to exit\n", c.Cyan, c.Reset)

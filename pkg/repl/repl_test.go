@@ -2,7 +2,11 @@
 
 package repl
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/gloathub/go-readline/inputrc"
+)
 
 func TestDecodeRemoteDocValue(t *testing.T) {
 	got := decodeRemoteDocValue(`"clojure.core/mapv\n([f coll])\n  Returns a vector"`)
@@ -67,6 +71,18 @@ func TestIsURLLikeInput(t *testing.T) {
 
 	if isURLLikeInput("(println :ok)") {
 		t.Fatal("isURLLikeInput() = true, want false")
+	}
+}
+
+func TestIsExplicitNewlineKey(t *testing.T) {
+	for _, key := range ctrlEnterKeys() {
+		if !isExplicitNewlineKey([]rune(key)) {
+			t.Fatalf("isExplicitNewlineKey(%q) = false, want true", key)
+		}
+	}
+
+	if isExplicitNewlineKey([]rune(inputrc.Unescape(`\C-m`))) {
+		t.Fatal("isExplicitNewlineKey(C-m) = true, want false")
 	}
 }
 
