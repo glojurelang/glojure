@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -110,6 +111,9 @@ func Start(opts ...Option) {
 		}
 		prefix := string(line[start:end])
 		if prefix == "" {
+			return nil
+		}
+		if isURLLikeInput(string(line)) || isURLLikeInput(prefix) {
 			return nil
 		}
 
@@ -481,6 +485,10 @@ func Start(opts ...Option) {
 	// end of the buffer, even if the expression is already complete.
 	rl.AcceptMultiline = func(line []rune) bool {
 		input := string(line)
+		if _, ok := shareExpressionsFromURL(input); ok {
+			rl.History.SkipWrite()
+			return true
+		}
 		if strings.TrimSpace(input) == "" {
 			return true
 		}
@@ -659,19 +667,12 @@ func Start(opts ...Option) {
 			continue
 		}
 
-		if o.nreplClient != nil {
-			value, _, out, evalErr := o.nreplClient.Eval(line)
-			if out != "" {
-				fmt.Fprint(o.stdout, out)
-			}
-			if evalErr != nil {
-				fmt.Fprintln(o.stdout, evalErr)
-			} else if value != "" {
-				fmt.Fprintln(o.stdout, value)
-			}
-		} else {
-			readEvalPrint(line, &o, evalFn)
+		if exprs, ok := shareExpressionsFromURL(trimmed); ok {
+			replayShareExpressions(exprs, rl, &o, evalFn)
+			continue
 		}
+
+		evalReplInput(line, &o, evalFn)
 	}
 }
 
@@ -996,6 +997,75 @@ func shareClipboardText(exprs []string) string {
 	return strings.Join(exprs, "\n\n")
 }
 
+func shareExpressionsFromURL(text string) ([]string, bool) {
+	text = strings.TrimSpace(text)
+	if text == "" {
+		return nil, false
+	}
+
+	fragment := ""
+	if strings.HasPrefix(text, "#") {
+		fragment = strings.TrimPrefix(text, "#")
+	} else {
+		u, err := url.Parse(text)
+		if err != nil {
+			return nil, false
+		}
+		fragment = u.Fragment
+	}
+	if !strings.HasPrefix(fragment, "s:") {
+		return nil, false
+	}
+
+	data, err := base64.StdEncoding.DecodeString(strings.TrimPrefix(fragment, "s:"))
+	if err != nil {
+		return nil, false
+	}
+
+	var exprs []string
+	if err := json.Unmarshal(data, &exprs); err != nil || len(exprs) == 0 {
+		return nil, false
+	}
+	return exprs, true
+}
+
+func isURLLikeInput(text string) bool {
+	text = strings.TrimSpace(text)
+	return strings.HasPrefix(text, "http://") ||
+		strings.HasPrefix(text, "https://") ||
+		strings.HasPrefix(text, shareBaseURL+"#s:") ||
+		strings.HasPrefix(text, "#s:")
+}
+
+func replayShareExpressions(exprs []string, rl *readline.Shell, o *options, evalFn EvalFunc) {
+	last := exprs[len(exprs)-1]
+	for _, expr := range exprs[:len(exprs)-1] {
+		if strings.TrimSpace(expr) == "" {
+			continue
+		}
+		fmt.Fprintln(o.stdout, expr)
+		rl.History.WriteLine(expr)
+		evalReplInput(expr, o, evalFn)
+	}
+	rl.SetNextLine(last)
+}
+
+func evalReplInput(input string, o *options, evalFn EvalFunc) {
+	if o.nreplClient != nil {
+		value, _, out, evalErr := o.nreplClient.Eval(input)
+		if out != "" {
+			fmt.Fprint(o.stdout, out)
+		}
+		if evalErr != nil {
+			fmt.Fprintln(o.stdout, evalErr)
+		} else if value != "" {
+			fmt.Fprintln(o.stdout, value)
+		}
+	} else {
+		readEvalPrint(input, o, evalFn)
+	}
+}
+
 func runFormat(cmdStr, text string) string {
 	cmd := exec.Command("sh", "-c", cmdStr)
 	cmd.Stdin = strings.NewReader(text)
@@ -1016,6 +1086,10 @@ func historyFilePath() string {
 
 // completeRemote provides tab completion via the nREPL server.
 func completeRemote(o options, line []rune, cursor int) readline.Completions {
+	if isURLLikeInput(string(line)) {
+		return readline.CompleteValues()
+	}
+
 	start := cursor
 	for start > 0 && isSymbolChar(line[start-1]) {
 		start--

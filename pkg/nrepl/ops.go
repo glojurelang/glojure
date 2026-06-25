@@ -182,8 +182,18 @@ func (s *Server) opEval(msg map[string]interface{}, conn net.Conn) {
 }
 
 func (s *Server) opCompletions(msg map[string]interface{}, conn net.Conn) {
+	defer func() {
+		if recover() != nil {
+			sendCompletionMsg(conn, msg, msgStr(msg, "session"), nil)
+		}
+	}()
+
 	prefix := msgStr(msg, "prefix")
 	sessionID := msgStr(msg, "session")
+	if strings.HasPrefix(prefix, "http://") || strings.HasPrefix(prefix, "https://") {
+		sendCompletionMsg(conn, msg, sessionID, nil)
+		return
+	}
 
 	sess := s.getOrCreateSession(sessionID)
 
@@ -301,9 +311,16 @@ func (s *Server) opCompletions(msg map[string]interface{}, conn net.Conn) {
 		completions = []interface{}{}
 	}
 
+	sendCompletionMsg(conn, msg, sess.ID, completions)
+}
+
+func sendCompletionMsg(conn net.Conn, msg map[string]interface{}, sessionID string, completions []interface{}) {
+	if completions == nil {
+		completions = []interface{}{}
+	}
 	sendMsg(conn, map[string]interface{}{
 		"id":          msg["id"],
-		"session":     sess.ID,
+		"session":     sessionID,
 		"completions": completions,
 		"status":      []interface{}{"done"},
 	})

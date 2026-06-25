@@ -29,6 +29,47 @@ func TestShareURL(t *testing.T) {
 	}
 }
 
+func TestShareExpressionsFromURL(t *testing.T) {
+	url, err := shareURL([]string{"(def a 1)", "(+ a 2)"})
+	if err != nil {
+		t.Fatalf("shareURL() error = %v", err)
+	}
+
+	got, ok := shareExpressionsFromURL("  " + url + "  ")
+	if !ok {
+		t.Fatal("shareExpressionsFromURL() ok = false, want true")
+	}
+	want := []string{"(def a 1)", "(+ a 2)"}
+	if len(got) != len(want) {
+		t.Fatalf("shareExpressionsFromURL() = %#v, want %#v", got, want)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("shareExpressionsFromURL()[%d] = %q, want %q", i, got[i], want[i])
+		}
+	}
+
+	if _, ok := shareExpressionsFromURL("https://gloathub.org/repl#x:nope"); ok {
+		t.Fatal("shareExpressionsFromURL() ok = true, want false")
+	}
+}
+
+func TestIsURLLikeInput(t *testing.T) {
+	for _, input := range []string{
+		"https://gloathub.org/repl#s:abc",
+		"http://example.test/repl#s:abc",
+		"#s:abc",
+	} {
+		if !isURLLikeInput(input) {
+			t.Fatalf("isURLLikeInput(%q) = false, want true", input)
+		}
+	}
+
+	if isURLLikeInput("(println :ok)") {
+		t.Fatal("isURLLikeInput() = true, want false")
+	}
+}
+
 func TestShareClipboardText(t *testing.T) {
 	got := shareClipboardText([]string{"(def a 1)", "(+ a 2)"})
 	want := "(def a 1)\n\n(+ a 2)"
