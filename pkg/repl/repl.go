@@ -3,12 +3,15 @@
 package repl
 
 import (
+	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime/debug"
+	"strconv"
 	"strings"
 
 	"github.com/gloathub/go-readline"
@@ -340,6 +343,7 @@ func Start(opts ...Option) {
 				helpKey = "C-x C-h"
 			}
 			printKey := "C-p"
+			shareKey := "C-s"
 			if isEmacs {
 				printKey = "C-x C-p"
 			}
@@ -350,6 +354,7 @@ func Start(opts ...Option) {
 			help += "  " + colorCyan + "Tab" + colorReset + "       Complete symbol or insert 2-space indent\r\n" +
 				"  " + colorCyan + docKey + colorReset + strings.Repeat(" ", 10-len(docKey)) + "Show documentation for symbol under cursor\r\n" +
 				"  " + colorCyan + printKey + colorReset + strings.Repeat(" ", 10-len(printKey)) + "Format, print and clipboard\r\n" +
+				"  " + colorCyan + shareKey + colorReset + strings.Repeat(" ", 10-len(shareKey)) + "Share by URL; also copy selected forms\r\n" +
 				"  " + colorCyan + "C-r" + colorReset + "       Reverse history search\r\n" +
 				"  " + colorCyan + "C-z" + colorReset + "       Suspend (resume with fg)\r\n" +
 				"  " + colorCyan + "C-c" + colorReset + "       Cancel input; press twice to exit\r\n" +
@@ -393,6 +398,24 @@ func Start(opts ...Option) {
 			line.Set([]rune(printText)...)
 			rl.History.Accept(false, false, nil)
 		},
+		"show-share": func() {
+			exprs := rl.History.SliceFromCurrent(string(*rl.Line()))
+			if len(exprs) == 0 {
+				return
+			}
+			url, err := shareURL(exprs)
+			if err != nil {
+				rl.Hint.SetTemporary(err.Error())
+				hintActive = true
+				return
+			}
+			rl.Display.CursorBelowLine()
+			rl.History.ResetToEnd()
+			fmt.Fprintln(o.stdout, url)
+			copyToClipboard(shareClipboardText(exprs))
+			rl.Prompt.PrimaryPrint()
+			rl.Display.Refresh()
+		},
 		"smart-backspace": func() {
 			pos := rl.Cursor().Pos()
 			line := rl.Line()
@@ -417,15 +440,17 @@ func Start(opts ...Option) {
 	for _, km := range rl.Config.Binds {
 		km[ctrlZ] = inputrc.Bind{Action: "suspend"}
 	}
-	// Bind C-d, C-h, C-p in all vi keymaps
+	// Bind C-d, C-h, C-p, C-s in all vi keymaps
 	ctrlD := inputrc.Unescape(`\C-d`)
 	ctrlH := inputrc.Unescape(`\C-h`)
 	ctrlP := inputrc.Unescape(`\C-p`)
+	ctrlS := inputrc.Unescape(`\C-s`)
 	for _, viKm := range []string{"vi", "vi-move", "vi-command", "vi-insert"} {
 		if km := rl.Config.Binds[viKm]; km != nil {
 			km[ctrlD] = inputrc.Bind{Action: "show-doc"}
 			km[ctrlH] = inputrc.Bind{Action: "show-help"}
 			km[ctrlP] = inputrc.Bind{Action: "show-print"}
+			km[ctrlS] = inputrc.Bind{Action: "show-share"}
 		}
 	}
 	// Bind C-x C-d, C-x C-h, C-x C-p in emacs mode (multi-key
@@ -434,9 +459,11 @@ func Start(opts ...Option) {
 		cxcd := inputrc.Unescape(`\C-x\C-d`)
 		cxch := inputrc.Unescape(`\C-x\C-h`)
 		cxcp := inputrc.Unescape(`\C-x\C-p`)
+		cs := inputrc.Unescape(`\C-s`)
 		km[cxcd] = inputrc.Bind{Action: "show-doc"}
 		km[cxch] = inputrc.Bind{Action: "show-help"}
 		km[cxcp] = inputrc.Bind{Action: "show-print"}
+		km[cs] = inputrc.Bind{Action: "show-share"}
 	}
 
 	rl.Prompt.Primary(func() string {
@@ -955,6 +982,20 @@ func copyToClipboard(text string) {
 	}
 }
 
+const shareBaseURL = "https://gloathub.org/repl"
+
+func shareURL(exprs []string) (string, error) {
+	data, err := json.Marshal(exprs)
+	if err != nil {
+		return "", err
+	}
+	return shareBaseURL + "#s:" + base64.StdEncoding.EncodeToString(data), nil
+}
+
+func shareClipboardText(exprs []string) string {
+	return strings.Join(exprs, "\n\n")
+}
+
 func runFormat(cmdStr, text string) string {
 	cmd := exec.Command("sh", "-c", cmdStr)
 	cmd.Stdin = strings.NewReader(text)
@@ -1078,13 +1119,7 @@ func showDocRemote(o options, rl *readline.Shell, sym string, hintActive *bool) 
 	if err != nil || value == "" || value == "nil" {
 		return
 	}
-	// value is a quoted string like "clojure.core/map\n..."
-	// Unescape it (it comes back as a pr-str'd string with quotes).
-	if len(value) >= 2 && value[0] == '"' && value[len(value)-1] == '"' {
-		value = value[1 : len(value)-1]
-		value = strings.ReplaceAll(value, `\"`, `"`)
-		value = strings.ReplaceAll(value, `\\`, `\`)
-	}
+	value = decodeRemoteDocValue(value)
 
 	lines := strings.Split(value, "\n")
 	var buf strings.Builder
@@ -1108,6 +1143,25 @@ func showDocRemote(o options, rl *readline.Shell, sym string, hintActive *bool) 
 	}
 	rl.Hint.SetTemporary(buf.String())
 	*hintActive = true
+}
+
+func decodeRemoteDocValue(value string) string {
+	// value is a quoted string like "clojure.core/map\n...".
+	// Decode it so docstrings split and render on real lines.
+	if len(value) < 2 || value[0] != '"' || value[len(value)-1] != '"' {
+		return value
+	}
+	if unquoted, err := strconv.Unquote(value); err == nil {
+		return unquoted
+	}
+
+	value = value[1 : len(value)-1]
+	value = strings.ReplaceAll(value, `\"`, `"`)
+	value = strings.ReplaceAll(value, `\n`, "\n")
+	value = strings.ReplaceAll(value, `\r`, "\r")
+	value = strings.ReplaceAll(value, `\t`, "\t")
+	value = strings.ReplaceAll(value, `\\`, `\`)
+	return value
 }
 
 // completeSymbol provides tab completion for Clojure symbols.
