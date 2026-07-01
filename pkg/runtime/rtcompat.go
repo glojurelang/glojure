@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"math"
 	"os"
 	"path/filepath"
-	"math"
 	"reflect"
 	"strings"
 	"sync"
@@ -204,8 +204,12 @@ func (rt *RTMethods) Load(scriptBase string) {
 	lp := loadPath
 	loadPathLock.Unlock()
 	for _, fs := range lp {
-		for _, ext := range []string{".glj", ".cljc"} {
-			testFilename := scriptBase + ext
+		for _, testFilename := range []string{
+			scriptBase,
+			scriptBase + ".glj",
+			scriptBase + ".clj",
+			scriptBase + ".cljc",
+		} {
 			b, err := readFile(fs, testFilename)
 			if err == nil {
 				buf = b
