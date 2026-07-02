@@ -58,9 +58,9 @@ func printBanner(w io.Writer, nreplURL, sreplURL string) {
 	}
 	goVersion := strings.TrimPrefix(goruntime.Version(), "go")
 	if noBanner == "" {
-		fmt.Fprintf(w, " Glojure: %s\n", runtime.Version)
+		fmt.Fprintf(w, " Glojure: %s\n", vprefix(runtime.Version))
 	}
-	fmt.Fprintf(w, "      Go: %s %s/%s\n", goVersion, goruntime.GOOS, goruntime.GOARCH)
+	fmt.Fprintf(w, "      Go: %s %s/%s\n", vprefix(goVersion), goruntime.GOOS, goruntime.GOARCH)
 	if nreplURL != "" {
 		fmt.Fprintf(w, "   nREPL: %s\n", nreplURL)
 	}
@@ -70,6 +70,13 @@ func printBanner(w io.Writer, nreplURL, sreplURL string) {
 	fmt.Fprintf(w, "    Help: C-h or :repl/help\n")
 	fmt.Fprintf(w, "    Exit: C-d or :repl/exit\n")
 	fmt.Fprintln(w)
+}
+
+func vprefix(version string) string {
+	if strings.HasPrefix(version, "v") {
+		return version
+	}
+	return "v" + version
 }
 
 // isBalanced returns true if parentheses, brackets, and braces are balanced.

@@ -3,10 +3,26 @@
 package repl
 
 import (
+	"bytes"
+	"strings"
 	"testing"
 
 	"github.com/gloathub/go-readline/inputrc"
 )
+
+func TestPrintBannerVersionPrefixes(t *testing.T) {
+	var buf bytes.Buffer
+	t.Setenv("GLJ_REPL_NO_BANNER", "")
+	printBanner(&buf, "", "")
+
+	out := buf.String()
+	if !strings.Contains(out, " Glojure: v") {
+		t.Fatalf("printBanner() missing Glojure v-prefix:\n%s", out)
+	}
+	if !strings.Contains(out, "\n      Go: v") {
+		t.Fatalf("printBanner() missing Go v-prefix:\n%s", out)
+	}
+}
 
 func TestDecodeRemoteDocValue(t *testing.T) {
 	got := decodeRemoteDocValue(`"clojure.core/mapv\n([f coll])\n  Returns a vector"`)
