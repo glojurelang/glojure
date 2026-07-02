@@ -188,9 +188,11 @@ func (rt *RTMethods) Load(scriptBase string) {
 	PushThreadBindings(NewMap(kvs...))
 	defer PopThreadBindings()
 
+	resourceBase := strings.ReplaceAll(strings.TrimPrefix(scriptBase, "/"), ".", "/")
+
 	if useAot {
 		// check nsloaders
-		if loader := GetNSLoader(strings.TrimPrefix(scriptBase, "/")); loader != nil {
+		if loader := GetNSLoader(resourceBase); loader != nil {
 			loader()
 			return
 		}
@@ -205,10 +207,9 @@ func (rt *RTMethods) Load(scriptBase string) {
 	loadPathLock.Unlock()
 	for _, fs := range lp {
 		for _, testFilename := range []string{
-			scriptBase,
-			scriptBase + ".glj",
-			scriptBase + ".clj",
-			scriptBase + ".cljc",
+			resourceBase + ".glj",
+			resourceBase + ".clj",
+			resourceBase + ".cljc",
 		} {
 			b, err := readFile(fs, testFilename)
 			if err == nil {

@@ -189,6 +189,16 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 		return nil
 	}), true)
 
+	lang.InternVar(core, lang.NewSymbol("load"), lang.FnFunc(func(paths ...any) any {
+		if len(paths) == 0 {
+			panic("Wrong number of args passed to: clojure.core/load")
+		}
+		for _, path := range paths {
+			RT.Load(path.(string))
+		}
+		return nil
+	}), true)
+
 	lang.InternVar(core, lang.NewSymbol("load-file"), lang.FnFunc1(func(filename any) any {
 		fname := filename.(string)
 		buf, err := os.ReadFile(fname)

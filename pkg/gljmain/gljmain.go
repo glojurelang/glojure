@@ -8,6 +8,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"syscall"
@@ -54,7 +55,11 @@ For more information, visit: https://github.com/glojurelang/glojure
 }
 
 func Main(args []string) {
-	runtime.AddLoadPath(os.DirFS("."))
+	for _, path := range filepath.SplitList(os.Getenv("GLJ_CLASSPATH")) {
+		if path != "" {
+			runtime.AddLoadPath(os.DirFS(path))
+		}
+	}
 
 	if len(args) == 0 {
 		// Check if stdin is a terminal
