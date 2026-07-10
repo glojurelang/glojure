@@ -37,6 +37,39 @@ func TestDecodeRemoteDocValue(t *testing.T) {
 	}
 }
 
+func TestRemoteDocHasDetail(t *testing.T) {
+	tests := []struct {
+		name  string
+		value string
+		want  bool
+	}{
+		{
+			name:  "qualified name only",
+			value: "clojure.core/println\n",
+			want:  false,
+		},
+		{
+			name:  "arglists",
+			value: "clojure.core/println\n([x])",
+			want:  true,
+		},
+		{
+			name:  "docstring",
+			value: "clojure.core/println\n  Prints a value",
+			want:  true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := remoteDocHasDetail(tt.value)
+			if got != tt.want {
+				t.Fatalf("remoteDocHasDetail(%q) = %v, want %v", tt.value, got, tt.want)
+			}
+		})
+	}
+}
+
 func TestShareURL(t *testing.T) {
 	got, err := shareURL([]string{"(def a 1)", "(+ a 2)"})
 	if err != nil {

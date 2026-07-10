@@ -274,69 +274,12 @@ func Start(opts ...Option) {
 			}
 
 			if o.nreplClient != nil {
-				showDocRemote(o, rl, sym, &hintActive)
-				return
+				if showDocRemote(o, rl, sym, &hintActive) {
+					return
+				}
 			}
 
-			// Resolve the symbol to a var
-			ns := o.env.CurrentNamespace()
-			var v *lang.Var
-			if i := strings.IndexByte(sym, '/'); i >= 0 {
-				nsName := sym[:i]
-				symName := sym[i+1:]
-				aliasSym := lang.NewSymbol(nsName)
-				targetNS := ns.LookupAlias(aliasSym)
-				if targetNS == nil {
-					targetNS = lang.FindNamespace(lang.NewSymbol(nsName))
-				}
-				if targetNS != nil {
-					v, _ = targetNS.Mappings().ValAt(lang.NewSymbol(symName)).(*lang.Var)
-				}
-			} else {
-				v, _ = ns.Mappings().ValAt(lang.NewSymbol(sym)).(*lang.Var)
-			}
-			if v == nil {
-				return
-			}
-			meta := v.Meta()
-			if meta == nil {
-				return
-			}
-			qualName := v.Namespace().Name().String() + "/" + v.Symbol().Name()
-			var buf strings.Builder
-			// ClojureDocs URL
-			nsName := v.Namespace().Name().String()
-			if strings.HasPrefix(nsName, "clojure.") {
-				symName := v.Symbol().Name()
-				urlName := strings.ReplaceAll(symName, "?", "_q")
-				urlName = strings.ReplaceAll(urlName, "!", "_e")
-				urlName = strings.ReplaceAll(urlName, "*", "_star")
-				buf.WriteString(colorCyan)
-				buf.WriteString("https://clojuredocs.org/clojure.core/" + urlName)
-				buf.WriteString(colorReset)
-				buf.WriteString("\r\n")
-			}
-			// Qualified name
-			buf.WriteString(colorBoldYellow)
-			buf.WriteString(qualName)
-			buf.WriteString(colorReset)
-			buf.WriteString("\r\n")
-			// Arglists
-			if arglists := meta.ValAt(lang.KWArglists); arglists != nil {
-				buf.WriteString(colorGreen)
-				buf.WriteString(lang.PrintString(arglists))
-				buf.WriteString(colorReset)
-				buf.WriteString("\r\n")
-			}
-			// Docstring
-			if doc := meta.ValAt(lang.KWDoc); doc != nil {
-				if docStr, ok := doc.(string); ok && docStr != "" {
-					buf.WriteString("  ")
-					buf.WriteString(strings.ReplaceAll(docStr, "\n", "\r\n  "))
-				}
-			}
-			rl.Hint.SetTemporary(buf.String())
-			hintActive = true
+			hintActive = showDocLocal(o, rl, sym)
 		},
 		"show-help": func() {
 			isEmacs := strings.HasPrefix(string(rl.Keymap.Main()), "emacs")
@@ -1360,14 +1303,79 @@ func completeRemote(o options, line []rune, cursor int) readline.Completions {
 	return result
 }
 
+func showDocLocal(o options, rl *readline.Shell, sym string) bool {
+	v := resolveLocalVar(o.env.CurrentNamespace(), sym)
+	if v == nil {
+		return false
+	}
+	meta := v.Meta()
+	if meta == nil {
+		return false
+	}
+	qualName := v.Namespace().Name().String() + "/" + v.Symbol().Name()
+	var buf strings.Builder
+	// ClojureDocs URL
+	nsName := v.Namespace().Name().String()
+	if strings.HasPrefix(nsName, "clojure.") {
+		symName := v.Symbol().Name()
+		urlName := strings.ReplaceAll(symName, "?", "_q")
+		urlName = strings.ReplaceAll(urlName, "!", "_e")
+		urlName = strings.ReplaceAll(urlName, "*", "_star")
+		buf.WriteString(colorCyan)
+		buf.WriteString("https://clojuredocs.org/clojure.core/" + urlName)
+		buf.WriteString(colorReset)
+		buf.WriteString("\r\n")
+	}
+	// Qualified name
+	buf.WriteString(colorBoldYellow)
+	buf.WriteString(qualName)
+	buf.WriteString(colorReset)
+	buf.WriteString("\r\n")
+	// Arglists
+	if arglists := meta.ValAt(lang.KWArglists); arglists != nil {
+		buf.WriteString(colorGreen)
+		buf.WriteString(lang.PrintString(arglists))
+		buf.WriteString(colorReset)
+		buf.WriteString("\r\n")
+	}
+	// Docstring
+	if doc := meta.ValAt(lang.KWDoc); doc != nil {
+		if docStr, ok := doc.(string); ok && docStr != "" {
+			buf.WriteString("  ")
+			buf.WriteString(strings.ReplaceAll(docStr, "\n", "\r\n  "))
+		}
+	}
+	rl.Hint.SetTemporary(buf.String())
+	return true
+}
+
+func resolveLocalVar(ns *lang.Namespace, sym string) *lang.Var {
+	if i := strings.IndexByte(sym, '/'); i >= 0 {
+		nsName := sym[:i]
+		symName := sym[i+1:]
+		aliasSym := lang.NewSymbol(nsName)
+		targetNS := ns.LookupAlias(aliasSym)
+		if targetNS == nil {
+			targetNS = lang.FindNamespace(lang.NewSymbol(nsName))
+		}
+		if targetNS != nil {
+			v, _ := targetNS.Mappings().ValAt(lang.NewSymbol(symName)).(*lang.Var)
+			return v
+		}
+		return nil
+	}
+	v, _ := ns.Mappings().ValAt(lang.NewSymbol(sym)).(*lang.Var)
+	return v
+}
+
 // showDocRemote fetches documentation for a symbol via nREPL eval
 // and displays it as a hint.
-func showDocRemote(o options, rl *readline.Shell, sym string, hintActive *bool) {
+func showDocRemote(o options, rl *readline.Shell, sym string, hintActive *bool) bool {
 	// Use portable var metadata instead of runtime-specific Var methods.
-	code := fmt.Sprintf(`(let [v (resolve '%s)]
-  (when v
-    (let [m (meta v)
-          ns-name (str (:ns m))
+	code := fmt.Sprintf(`(let [v (resolve '%s)
+      m (when v (meta v))]
+  (when m
+    (let [ns-name (str (:ns m))
           sym-name (str (:name m))]
       (str ns-name "/" sym-name "\n"
         (when-let [al (:arglists m)] (str al "\n"))
@@ -1375,9 +1383,15 @@ func showDocRemote(o options, rl *readline.Shell, sym string, hintActive *bool) 
         (when-let [d (:doc m)] (str "  " d))))))`, sym)
 	value, _, _, err := o.nreplClient.Eval(code)
 	if err != nil || value == "" || value == "nil" {
-		return
+		return false
 	}
 	value = decodeRemoteDocValue(value)
+	if strings.TrimSpace(value) == "" {
+		return false
+	}
+	if !remoteDocHasDetail(value) {
+		return false
+	}
 
 	lines := strings.Split(value, "\n")
 	var buf strings.Builder
@@ -1401,6 +1415,17 @@ func showDocRemote(o options, rl *readline.Shell, sym string, hintActive *bool) 
 	}
 	rl.Hint.SetTemporary(buf.String())
 	*hintActive = true
+	return true
+}
+
+func remoteDocHasDetail(value string) bool {
+	for i, line := range strings.Split(value, "\n") {
+		if i == 0 || strings.TrimSpace(line) == "" {
+			continue
+		}
+		return true
+	}
+	return false
 }
 
 func decodeRemoteDocValue(value string) string {
