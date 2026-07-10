@@ -1363,14 +1363,12 @@ func completeRemote(o options, line []rune, cursor int) readline.Completions {
 // showDocRemote fetches documentation for a symbol via nREPL eval
 // and displays it as a hint.
 func showDocRemote(o options, rl *readline.Shell, sym string, hintActive *bool) {
-	// Use pr-str on meta to get a machine-readable result, then
-	// format it ourselves. But simpler: just eval a doc-like expression
-	// that returns a string we can display.
+	// Use portable var metadata instead of runtime-specific Var methods.
 	code := fmt.Sprintf(`(let [v (resolve '%s)]
   (when v
     (let [m (meta v)
-          ns-name (.Name (.Namespace v))
-          sym-name (.Name (.Symbol v))]
+          ns-name (str (:ns m))
+          sym-name (str (:name m))]
       (str ns-name "/" sym-name "\n"
         (when-let [al (:arglists m)] (str al "\n"))
         (when (:macro m) "Macro\n")
