@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"hash"
-	"hash/fnv"
 	"math/big"
 	"reflect"
 	"unsafe"
@@ -62,9 +61,7 @@ func Hash(x interface{}) uint32 {
 	case Hasher:
 		return x.Hash()
 	case string:
-		h := fnv.New32a()
-		h.Write([]byte(x))
-		return h.Sum32()
+		return hashStringFNV1a(x)
 	case reflect.Type:
 		h := getHash()
 		h.Write([]byte(x.String()))
@@ -87,13 +84,9 @@ func Hash(x interface{}) uint32 {
 		return hashPtr(reflect.ValueOf(x).Pointer())
 	case reflect.Array:
 		// Hash fixed-size arrays (e.g. uuid.UUID is [16]byte) by their string representation.
-		h := fnv.New32a()
-		h.Write([]byte(fmt.Sprintf("%v", x)))
-		return h.Sum32()
+		return hashStringFNV1a(fmt.Sprintf("%v", x))
 	case reflect.Struct:
-		h := fnv.New32a()
-		h.Write([]byte(fmt.Sprintf("%v", x)))
-		return h.Sum32()
+		return hashStringFNV1a(fmt.Sprintf("%v", x))
 	}
 
 	panic(fmt.Sprintf("Hash(%v [%T]) not implemented", x, x))
@@ -110,7 +103,58 @@ func IdentityHash(x interface{}) uint32 {
 }
 
 func getHash() hash.Hash32 {
-	return fnv.New32a()
+	return newFNV32a()
+}
+
+const (
+	fnv32Offset = uint32(2166136261)
+	fnv32Prime  = uint32(16777619)
+)
+
+func hashStringFNV1a(s string) uint32 {
+	hash := fnv32Offset
+	for i := 0; i < len(s); i++ {
+		hash ^= uint32(s[i])
+		hash *= fnv32Prime
+	}
+	return hash
+}
+
+type fnv32a uint32
+
+func newFNV32a() hash.Hash32 {
+	h := fnv32a(fnv32Offset)
+	return &h
+}
+
+func (h *fnv32a) Write(p []byte) (int, error) {
+	hash := uint32(*h)
+	for _, b := range p {
+		hash ^= uint32(b)
+		hash *= fnv32Prime
+	}
+	*h = fnv32a(hash)
+	return len(p), nil
+}
+
+func (h *fnv32a) Sum(b []byte) []byte {
+	return binary.BigEndian.AppendUint32(b, uint32(*h))
+}
+
+func (h *fnv32a) Reset() {
+	*h = fnv32a(fnv32Offset)
+}
+
+func (h *fnv32a) Size() int {
+	return 4
+}
+
+func (h *fnv32a) BlockSize() int {
+	return 1
+}
+
+func (h *fnv32a) Sum32() uint32 {
+	return uint32(*h)
 }
 
 func hashOrdered(seq ISeq) uint32 {

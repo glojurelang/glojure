@@ -1,6 +1,7 @@
 package lang
 
 import (
+	"sync/atomic"
 	"testing"
 )
 
@@ -91,4 +92,30 @@ func TestThreadBindingFrameIsSnapshot(t *testing.T) {
 		t.Fatalf("parent binding changed to %v", got)
 	}
 	<-done
+}
+
+func TestVarLazyMeta(t *testing.T) {
+	ns := FindOrCreateNamespace(NewSymbol("test.lazy-meta"))
+	v := InternVarReplaceRoot(ns, NewSymbol("value"), nil)
+	var calls atomic.Int32
+	v.SetMetaLazy(func() IPersistentMap {
+		calls.Add(1)
+		return NewMap(KWDoc, "lazy")
+	})
+
+	if calls.Load() != 0 {
+		t.Fatal("metadata factory ran eagerly")
+	}
+	for range 2 {
+		meta := v.Meta()
+		if meta.ValAt(KWDoc) != "lazy" {
+			t.Fatalf("metadata doc = %v", meta.ValAt(KWDoc))
+		}
+		if meta.ValAt(KWNS) != ns {
+			t.Fatalf("metadata namespace = %v, want %v", meta.ValAt(KWNS), ns)
+		}
+	}
+	if calls.Load() != 1 {
+		t.Fatalf("metadata factory ran %d times, want 1", calls.Load())
+	}
 }

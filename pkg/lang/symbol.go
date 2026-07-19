@@ -10,6 +10,7 @@ type Symbol struct {
 	meta  IPersistentMap
 	ns    string
 	name  string
+	hash  uint32
 	hasNs bool // true when namespace was explicitly set (even to "")
 }
 
@@ -48,8 +49,24 @@ func newSymbol(s string) *Symbol {
 	return &Symbol{
 		ns:    ns,
 		name:  name,
+		hash:  hashSymbol(ns, name),
 		hasNs: hasNs,
 	}
+}
+
+func hashSymbol(ns, name string) uint32 {
+	hash := fnv32Offset
+	for i := 0; i < len(ns); i++ {
+		hash ^= uint32(ns[i])
+		hash *= fnv32Prime
+	}
+	hash ^= uint32('/')
+	hash *= fnv32Prime
+	for i := 0; i < len(name); i++ {
+		hash ^= uint32(name[i])
+		hash *= fnv32Prime
+	}
+	return hash ^ symbolHashMask
 }
 
 func InternSymbol(ns, name any) *Symbol {
@@ -183,9 +200,7 @@ func (s *Symbol) WithMeta(meta IPersistentMap) any {
 }
 
 func (s *Symbol) Hash() uint32 {
-	h := getHash()
-	h.Write([]byte(s.ns + "/" + s.name))
-	return h.Sum32() ^ symbolHashMask
+	return s.hash
 }
 
 func (s *Symbol) Invoke(args ...any) any {

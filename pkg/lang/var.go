@@ -34,6 +34,12 @@ type (
 		v *Var
 	}
 
+	lazyVarMeta struct {
+		once sync.Once
+		fn   func() IPersistentMap
+		meta IPersistentMap
+	}
+
 	varBindings map[*Var]*Box
 	glStorage   struct {
 		bindings []varBindings
@@ -169,7 +175,16 @@ func (v *Var) Set(val interface{}) interface{} {
 }
 
 func (v *Var) Meta() IPersistentMap {
-	return v.meta.Load().(*Box).val.(IPersistentMap)
+	value := v.meta.Load().(*Box).val
+	if lazy, ok := value.(*lazyVarMeta); ok {
+		lazy.once.Do(func() {
+			lazy.meta = lazy.fn()
+			lazy.meta = lazy.meta.Assoc(KWNS, v.ns).(IPersistentMap)
+			lazy.fn = nil
+		})
+		return lazy.meta
+	}
+	return value.(IPersistentMap)
 }
 
 func (v *Var) SetMeta(meta IPersistentMap) {
@@ -177,6 +192,14 @@ func (v *Var) SetMeta(meta IPersistentMap) {
 	v.isMacroCached.Store(0) // invalidate IsMacro cache
 	meta = Assoc(meta, KWNS, v.ns).(IPersistentMap)
 	v.meta.Store(NewBox(meta))
+}
+
+// SetMetaLazy defers construction of immutable metadata until it is observed.
+// Generated AOT loaders use this for docstrings, arglists, and source metadata
+// that most programs never inspect.
+func (v *Var) SetMetaLazy(fn func() IPersistentMap) {
+	v.isMacroCached.Store(0)
+	v.meta.Store(NewBox(&lazyVarMeta{fn: fn}))
 }
 
 func (v *Var) AlterMeta(alter IFn, args ISeq) IPersistentMap {

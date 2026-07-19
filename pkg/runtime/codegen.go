@@ -454,14 +454,9 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	meta := vr.Meta()
 	varSym := g.allocateTempVar()
 	var isDynamic bool
-	if lang.IsNil(meta) {
-		g.writef("%s := %s\n", varSym, g.allocSymVar(name.String()))
-	} else {
-		metaVariable := g.generateValue(meta)
-		g.writef("%s := %s.WithMeta(%s).(*lang.Symbol)\n", varSym, g.allocSymVar(name.String()), metaVariable)
-		if RT.BooleanCast(lang.Get(meta, lang.KWDynamic)) {
-			isDynamic = true
-		}
+	g.writef("%s := %s\n", varSym, g.allocSymVar(name.String()))
+	if !lang.IsNil(meta) && RT.BooleanCast(lang.Get(meta, lang.KWDynamic)) {
+		isDynamic = true
 	}
 
 	// check if the var has a value
@@ -480,9 +475,12 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 
 	// Set metadata on the var if the symbol has metadata
 	if meta != nil {
-		g.writef("if %s.Meta() != nil {\n", varSym)
-		g.writef("\t%s.SetMeta(%s.Meta().(lang.IPersistentMap))\n", varVar, varSym)
-		g.writef("}\n")
+		g.writef("%s.SetMetaLazy(func() lang.IPersistentMap {\n", varVar)
+		g.pushVarScope()
+		metaVariable := g.generateValue(meta)
+		g.writef("\treturn %s\n", metaVariable)
+		g.popVarScope()
+		g.writef("})\n")
 	}
 	if isDynamic {
 		g.writef("%s.SetDynamic()\n", varVar)
@@ -2017,6 +2015,12 @@ func (g *Generator) generateHostCall(node *ast.Node) string {
 	}
 
 	methodName := method.Name()
+	if directMethod, ok := directHostMethod(tgt, methodName, len(args)); ok {
+		resultId := g.allocateTempVar()
+		g.writef("%s := %s.%s(%s)\n", resultId, tgtId, directMethod, strings.Join(argIds, ", "))
+		return resultId
+	}
+
 	methodId := g.allocateTempVar()
 	g.writef("%s, _ := lang.FieldOrMethod(%s, %q)\n", methodId, tgtId, methodName)
 	g.writef("if reflect.TypeOf(%s).Kind() != reflect.Func {\n", methodId)
@@ -2041,6 +2045,32 @@ func (g *Generator) generateHostCall(node *ast.Node) string {
 	}
 
 	return resultId
+}
+
+func directHostMethod(target *ast.Node, name string, arity int) (string, bool) {
+	if target.Op != ast.OpConst || name == "" {
+		return "", false
+	}
+	value := target.Sub.(*ast.ConstNode).Value
+	typ := reflect.TypeOf(value)
+	if typ == nil {
+		return "", false
+	}
+	if name[0] >= 'a' && name[0] <= 'z' {
+		name = string(name[0]-'a'+'A') + name[1:]
+	}
+	method, ok := typ.MethodByName(name)
+	if !ok || method.Type.IsVariadic() ||
+		method.Type.NumIn() != arity+1 || method.Type.NumOut() != 1 {
+		return "", false
+	}
+	anyType := reflect.TypeFor[any]()
+	for i := 1; i < method.Type.NumIn(); i++ {
+		if method.Type.In(i) != anyType {
+			return "", false
+		}
+	}
+	return method.Name, true
 }
 
 func (g *Generator) generateHostInterop(node *ast.Node) string {
