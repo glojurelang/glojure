@@ -13,6 +13,13 @@ import (
 const numbersHostExport = "github.com:glojurelang:glojure:pkg:lang.Numbers"
 
 func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
+	return env.macroexpand1(form, env.CurrentNamespace())
+}
+
+func (env *environment) macroexpand1(
+	form interface{},
+	currentNS *lang.Namespace,
+) (interface{}, error) {
 	seq, ok := form.(lang.ISeq)
 	if !ok {
 		return form, nil
@@ -29,10 +36,10 @@ func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 		fieldSym := lang.NewSymbol(sym.String()[1:])
 		// rewrite the expression to a dot expression
 		dotExpr := lang.NewCons(SymbolDot, lang.NewCons(seq.Next().First(), lang.NewCons(fieldSym, seq.Next().Next())))
-		return env.Macroexpand1(dotExpr)
+		return env.macroexpand1(dotExpr, currentNS)
 	}
 
-	macroVar := env.asMacro(sym)
+	macroVar := env.asMacroInNamespace(sym, currentNS)
 	if macroVar == nil {
 		return form, nil
 	}
@@ -61,10 +68,13 @@ func (env *environment) Eval(n interface{}) (interface{}, error) {
 }
 
 func (env *environment) evalInternal(n interface{}) (interface{}, error) {
+	currentNS := env.CurrentNamespace()
 	analyzer := &compiler.Analyzer{
-		Macroexpand1: env.Macroexpand1,
+		Macroexpand1: func(form interface{}) (interface{}, error) {
+			return env.macroexpand1(form, currentNS)
+		},
 		CreateVar: func(sym *lang.Symbol, e compiler.Env) (interface{}, error) {
-			vr := env.CurrentNamespace().Intern(sym)
+			vr := currentNS.Intern(sym)
 			return vr, nil
 		},
 		IsVar: func(v interface{}) bool {
@@ -85,7 +95,7 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 		},
 	}
 	astNode, err := analyzer.Analyze(n, lang.NewMap(
-		lang.KWNS, env.CurrentNamespace().Name(),
+		lang.KWNS, currentNS.Name(),
 	))
 	if err != nil {
 		return nil, err
@@ -95,17 +105,21 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 
 // Helpers
 
-func (env *environment) lookupVar(sym *lang.Symbol, internNew, registerMacro bool) (*lang.Var, error) {
+func (env *environment) lookupVarInNamespace(
+	sym *lang.Symbol,
+	internNew, registerMacro bool,
+	currentNS *lang.Namespace,
+) (*lang.Var, error) {
 	// Translated from clojure's Compiler.java
 	var result *lang.Var
 	switch {
 	case sym.Namespace() != "":
-		ns := env.namespaceForSymbol(sym)
+		ns := lang.NamespaceFor(currentNS, sym)
 		if ns == nil {
 			return nil, env.errorf(sym, "unable to resolve %s", sym)
 		}
 		nameSym := lang.NewSymbol(sym.Name())
-		if internNew && ns == env.CurrentNamespace() {
+		if internNew && ns == currentNS {
 			result = ns.Intern(nameSym)
 		} else {
 			result = ns.FindInternedVar(nameSym)
@@ -116,11 +130,11 @@ func (env *environment) lookupVar(sym *lang.Symbol, internNew, registerMacro boo
 		result = env.inNamespaceVar
 	default:
 		// is it mapped?
-		v := env.CurrentNamespace().GetMapping(sym)
+		v := currentNS.GetMapping(sym)
 		if v == nil {
 			// introduce a new var in the current ns
 			if internNew {
-				result = env.CurrentNamespace().Intern(lang.NewSymbol(sym.Name()))
+				result = currentNS.Intern(lang.NewSymbol(sym.Name()))
 			}
 		} else if v, ok := v.(*lang.Var); ok {
 			result = v
@@ -134,16 +148,12 @@ func (env *environment) lookupVar(sym *lang.Symbol, internNew, registerMacro boo
 	return result, nil
 }
 
-func (env *environment) namespaceForSymbol(sym *lang.Symbol) *lang.Namespace {
-	return lang.NamespaceFor(env.CurrentNamespace(), sym)
-}
-
 func (env *environment) registerVar(v *lang.Var) {
 	// TODO: implement
 }
 
-func (env *environment) asMacro(sym *lang.Symbol) *lang.Var {
-	vr, err := env.lookupVar(sym, false, false)
+func (env *environment) asMacroInNamespace(sym *lang.Symbol, currentNS *lang.Namespace) *lang.Var {
+	vr, err := env.lookupVarInNamespace(sym, false, false, currentNS)
 	if vr == nil || err != nil {
 		return nil
 	}
