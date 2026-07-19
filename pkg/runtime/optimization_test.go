@@ -38,6 +38,19 @@ func TestRTGetCompatibilityMethod(t *testing.T) {
 	}
 }
 
+func TestRTCollectionMethodsResolveDirectly(t *testing.T) {
+	nth, ok := lang.FieldOrMethod(RT, "Nth")
+	if !ok {
+		t.Fatal("RT.Nth was not resolved")
+	}
+	if _, ok := nth.(lang.FnFunc2); !ok {
+		t.Fatalf("RT.Nth resolved to %T, want lang.FnFunc2", nth)
+	}
+	if got := lang.Apply2(nth, lang.NewVector(int64(7)), int64(0)); got != int64(7) {
+		t.Fatalf("RT.Nth result = %v, want 7", got)
+	}
+}
+
 func TestNativeCoreAddApplyToReducibleSequence(t *testing.T) {
 	args := lang.NewLongRange(0, 1_000, 1)
 

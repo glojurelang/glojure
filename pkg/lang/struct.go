@@ -21,6 +21,13 @@ type fieldOrMethodResolver interface {
 	fieldOrMethod(name string) (interface{}, bool)
 }
 
+// FieldOrMethodResolver lets packages built on lang provide direct method
+// dispatch for runtime-owned values without manufacturing bound methods
+// through reflect.
+type FieldOrMethodResolver interface {
+	ResolveFieldOrMethod(name string) (interface{}, bool)
+}
+
 // StringMethod is the signature for JVM-style instance methods on
 // java.lang.String. The receiver is passed as the first argument and any
 // further arguments arrive in rest. Bridge implementations are
@@ -54,6 +61,11 @@ func lookupStringMethod(name string) (StringMethod, bool) {
 // Method results are cached and wrapped as FnFunc so that subsequent
 // Apply calls use the IFn fast path instead of reflection.
 func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
+	if resolver, ok := v.(FieldOrMethodResolver); ok {
+		if result, found := resolver.ResolveFieldOrMethod(name); found {
+			return result, true
+		}
+	}
 	if resolver, ok := v.(fieldOrMethodResolver); ok {
 		if result, found := resolver.fieldOrMethod(name); found {
 			return result, true

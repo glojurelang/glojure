@@ -65,6 +65,45 @@ type RTMethods struct {
 	id atomic.Int32
 }
 
+// ResolveFieldOrMethod keeps the collection accessors used by rewritten
+// clojure.core forms on direct Go calls instead of reflected bound methods.
+func (rt *RTMethods) ResolveFieldOrMethod(name string) (interface{}, bool) {
+	switch strings.ToLower(name) {
+	case "nth":
+		return lang.FnFunc2(func(x, i any) any {
+			return rt.Nth(x, lang.MustAsInt(i))
+		}), true
+	case "nthdefault":
+		return lang.FnFunc3(func(x, i, def any) any {
+			return rt.NthDefault(x, lang.MustAsInt(i), def)
+		}), true
+	case "get":
+		return lang.FnFunc(func(args ...any) any {
+			if len(args) < 2 {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf(
+					"wrong number of arguments: expected at least 2, got %d",
+					len(args),
+				)))
+			}
+			return rt.Get(args[0], args[1], args[2:]...)
+		}), true
+	case "contains":
+		return lang.FnFunc2(func(coll, key any) any {
+			return rt.Contains(coll, key)
+		}), true
+	case "dissoc":
+		return lang.FnFunc2(func(coll, key any) any {
+			return rt.Dissoc(coll, key)
+		}), true
+	case "find":
+		return lang.FnFunc2(func(coll, key any) any {
+			return rt.Find(coll, key)
+		}), true
+	default:
+		return nil, false
+	}
+}
+
 func (rt *RTMethods) NextID() int {
 	return int(rt.id.Add(1))
 }
