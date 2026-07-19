@@ -1,13 +1,11 @@
 package runtime
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"io/fs"
 	"math"
 	"os"
-	"path/filepath"
 	"reflect"
 	"strings"
 	"sync"
@@ -304,42 +302,6 @@ func (rt *RTMethods) Load(scriptBase string) {
 	}
 
 	compileNSToFile(foundFS, scriptBase)
-}
-
-// compileNSToFile compiles the given namespace to a Go source file,
-// given a fs.FS and the script base name (without extension).
-func compileNSToFile(fs fs.FS, scriptBase string) {
-	// check if the found FS is writable
-	// we use the fact that os.DirFS(".") is just a named string type under the hood
-	if reflect.TypeOf(fs).Kind() != reflect.String {
-		panic(fmt.Errorf("cannot compile %s: filesystem is not writable", scriptBase))
-	}
-	fsDir := fmt.Sprintf("%s", fs)
-	generateNamespaceAOT(fsDir, VarCurrentNS.Deref().(*Namespace))
-}
-
-func generateNamespaceAOT(fsDir string, ns *Namespace) {
-	path := nsToPath(ns.Name().Name())
-	targetDir := filepath.Join(fsDir, path)
-	targetFile := filepath.Join(targetDir, "loader.go")
-
-	fmt.Printf("Compiling %s to %s\n", ns.Name(), targetFile)
-	// ensure directory exists
-	err := os.MkdirAll(targetDir, 0755)
-	if err != nil {
-		panic(err)
-	}
-
-	var buf bytes.Buffer
-	gen := NewGenerator(&buf)
-	if err = gen.Generate(ns); err != nil {
-		os.WriteFile(targetFile, buf.Bytes(), 0644)
-		panic(fmt.Errorf("failed to generate code for namespace %s: %w", ns.Name(), err))
-	}
-	err = os.WriteFile(targetFile, buf.Bytes(), 0644)
-	if err != nil {
-		panic(fmt.Errorf("failed to write generated code to %s: %w", targetFile, err))
-	}
 }
 
 func readFile(fs fs.FS, filename string) ([]byte, error) {

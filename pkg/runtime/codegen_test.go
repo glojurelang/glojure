@@ -1,3 +1,5 @@
+//go:build !glj_aot_runtime
+
 package runtime_test
 
 import (

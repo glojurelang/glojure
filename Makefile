@@ -204,10 +204,13 @@ bin/%/glj.wasm: \
 vet: $(GO)
 	go vet ./...
 
-.PHONY: test
+.PHONY: test test-aot-runtime
 # vet is disabled until we fix errors in generated code
-test: test-glj  # vet
+test: test-aot-runtime test-glj  # vet
 	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
+
+test-aot-runtime:
+	go test -tags glj_aot_runtime ./pkg/glj ./pkg/gljmain ./pkg/runtime
 
 test-glj: $(TEST-GLJ-TARGETS)
 

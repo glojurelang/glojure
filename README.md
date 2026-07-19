@@ -150,6 +150,33 @@ This is useful when you want to:
 - Mix Go's performance with Clojure's expressiveness
 - Control the execution environment (custom I/O, sandboxing)
 
+#### Compact AOT executables
+
+Applications that ship precompiled namespace loaders can omit development-only
+runtime features:
+
+```sh
+go build -trimpath -tags glj_aot_runtime -ldflags="-s -w" ./cmd/myapp
+```
+
+The `glj_aot_runtime` tag retains evaluation, `clojure.core`, and the I/O
+support required by core functions such as `slurp` and `spit`. It omits the Go
+source generator, the broad default Go export registry, and precompiled loaders
+for optional namespaces. Import every precompiled application or optional
+standard-library namespace used by the executable:
+
+```go
+import (
+    _ "example.com/myapp/generated/example/app"
+    _ "github.com/glojurelang/glojure/pkg/stdlib/clojure/string"
+)
+```
+
+Programs that dynamically access the default Go exports can opt back in with a
+blank import of `github.com/glojurelang/glojure/pkg/gen/gljimports`. Generate
+new loaders with a normal development build; compact runtime builds
+intentionally reject `(compile ...)`.
+
 **Basic embedding example:**
 ```go
 package main

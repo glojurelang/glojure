@@ -1,4 +1,4 @@
-//go:build !glj_no_aot_stdlib
+//go:build !glj_no_aot_stdlib && !glj_aot_runtime
 
 package glj
 
