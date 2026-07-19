@@ -33,6 +33,26 @@ type localSlot struct {
 	numericKind numericKind
 }
 
+const (
+	minCachedInt64 = -128
+	maxCachedInt64 = 4096
+)
+
+var cachedInt64Values = func() []interface{} {
+	values := make([]interface{}, maxCachedInt64-minCachedInt64+1)
+	for i := range values {
+		values[i] = int64(i + minCachedInt64)
+	}
+	return values
+}()
+
+func boxInt64(value int64) interface{} {
+	if value >= minCachedInt64 && value <= maxCachedInt64 {
+		return cachedInt64Values[value-minCachedInt64]
+	}
+	return value
+}
+
 func compileEval(n *ast.Node) evalFn {
 	evaluator := (threadedEvalCompiler{}).compile(n)
 	if evaluator == nil {
@@ -337,13 +357,13 @@ func compileNumberCall(call *ast.HostCallNode, args []evalFn) evalFn {
 				if n, ok := value.(int64); ok {
 					switch name {
 					case "inc":
-						return checkedInt64Add(n, 1), nil
+						return boxInt64(checkedInt64Add(n, 1)), nil
 					case "dec":
-						return checkedInt64Sub(n, 1), nil
+						return boxInt64(checkedInt64Sub(n, 1)), nil
 					case "unchecked_inc":
-						return n + 1, nil
+						return boxInt64(n + 1), nil
 					default:
-						return n - 1, nil
+						return boxInt64(n - 1), nil
 					}
 				}
 				return lang.Apply1(call.ResolvedMethod, value), nil
@@ -392,21 +412,21 @@ func compileNumberCall(call *ast.HostCallNode, args []evalFn) evalFn {
 			if aok && bok {
 				switch name {
 				case "add":
-					return checkedInt64Add(ai, bi), nil
+					return boxInt64(checkedInt64Add(ai, bi)), nil
 				case "uncheckedadd":
-					return ai + bi, nil
+					return boxInt64(ai + bi), nil
 				case "minus":
-					return checkedInt64Sub(ai, bi), nil
+					return boxInt64(checkedInt64Sub(ai, bi)), nil
 				case "unchecked_minus":
-					return ai - bi, nil
+					return boxInt64(ai - bi), nil
 				case "multiply":
-					return checkedInt64Multiply(ai, bi), nil
+					return boxInt64(checkedInt64Multiply(ai, bi)), nil
 				case "unchecked_multiply":
-					return ai * bi, nil
+					return boxInt64(ai * bi), nil
 				case "quotient":
-					return checkedInt64Quotient(ai, bi), nil
+					return boxInt64(checkedInt64Quotient(ai, bi)), nil
 				case "remainder":
-					return checkedInt64Remainder(ai, bi), nil
+					return boxInt64(checkedInt64Remainder(ai, bi)), nil
 				case "lt":
 					return ai < bi, nil
 				case "lte":

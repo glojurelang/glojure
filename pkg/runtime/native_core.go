@@ -322,6 +322,7 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 		})
 	}
 	installFixedArityCoreFunction(core, "map", 2, lang.FnFunc2(nativeMapSeq))
+	installFixedArityCoreFunction(core, "mapv", 2, lang.FnFunc2(nativeMapv))
 	installFixedArityCoreFunction(core, "filter", 2, lang.FnFunc2(nativeFilterSeq))
 	installFixedArityCoreFunction(core, "take", 2, lang.FnFunc2(nativeTakeSeq))
 }
@@ -346,6 +347,24 @@ func installFixedArityCoreFunction(
 		fixed[0], fixed[1], fixed[2], fixed[3], fixed[4],
 		original, 0,
 	))
+}
+
+func nativeMapv(fn, coll interface{}) interface{} {
+	initial := lang.NewVector().AsTransient()
+	reducer := lang.FnFunc2(func(result, value interface{}) interface{} {
+		transient := result.(lang.ITransientCollection)
+		transient.Conj(lang.Apply1(fn, value))
+		return transient
+	})
+	var result interface{} = initial
+	if reducible, ok := coll.(lang.IReduceInit); ok {
+		result = reducible.ReduceInit(reducer, initial)
+	} else {
+		for seq := lang.Seq(coll); seq != nil; seq = seq.Next() {
+			result = reducer(result, seq.First())
+		}
+	}
+	return result.(lang.ITransientCollection).Persistent()
 }
 
 func nativeMapSeq(fn, coll interface{}) interface{} {

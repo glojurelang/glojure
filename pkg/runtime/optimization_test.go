@@ -8,6 +8,8 @@ import (
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
+var boxedInt64Sink interface{}
+
 func TestScopeDefineReplacesEquivalentSymbol(t *testing.T) {
 	s := newScope()
 	first := lang.NewSymbol("value")
@@ -257,5 +259,31 @@ func TestNativeCoreUpdateInPreservesCollectionAndVarSemantics(t *testing.T) {
 	)
 	if got := lang.Get(lang.Get(created, outer), inner); got != int64(7) {
 		t.Fatalf("created value = %v, want 7", got)
+	}
+}
+
+func TestBoxInt64CachesCommonValues(t *testing.T) {
+	for _, value := range []int64{minCachedInt64, 0, maxCachedInt64, maxCachedInt64 + 1} {
+		if got := boxInt64(value); got != value {
+			t.Fatalf("boxInt64(%d) = %v", value, got)
+		}
+	}
+	if got := testing.AllocsPerRun(1_000, func() {
+		boxedInt64Sink = boxInt64(42)
+	}); got != 0 {
+		t.Fatalf("boxInt64 cached value allocated %v objects per call, want 0", got)
+	}
+}
+
+func TestNativeMapvPreservesOrder(t *testing.T) {
+	got := nativeMapv(
+		lang.FnFunc1(func(value any) any {
+			return lang.Numbers.Multiply(value, int64(2))
+		}),
+		lang.NewLongRange(0, 5, 1),
+	)
+	want := lang.NewVector(int64(0), int64(2), int64(4), int64(6), int64(8))
+	if !lang.Equals(got, want) {
+		t.Fatalf("mapv result = %v, want %v", got, want)
 	}
 }
