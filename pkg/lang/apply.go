@@ -117,6 +117,16 @@ func Apply1(fn interface{}, a0 any) any {
 		return f(a0)
 	case FnFunc:
 		return f(a0)
+	case func(any) any:
+		return f(a0)
+	case func(any) bool:
+		return f(a0)
+	case func(any) int:
+		return f(a0)
+	case func(any) int64:
+		return f(a0)
+	case func(any) float64:
+		return f(a0)
 	case FixedArityFn1:
 		return f.Invoke1(a0)
 	case IFn:
@@ -132,6 +142,14 @@ func Apply2(fn interface{}, a0, a1 any) any {
 	case FnFunc2:
 		return f(a0, a1)
 	case FnFunc:
+		return f(a0, a1)
+	case func(any, any) any:
+		return f(a0, a1)
+	case func(any, any) bool:
+		return f(a0, a1)
+	case func(any, any) int:
+		return f(a0, a1)
+	case func(any, any) int64:
 		return f(a0, a1)
 	case FixedArityFn2:
 		return f.Invoke2(a0, a1)

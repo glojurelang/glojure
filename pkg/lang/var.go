@@ -422,14 +422,30 @@ func CloneThreadBindingFrame() any {
 	if bindings == nil {
 		return nil
 	}
-	// deref the pointer to copy the struct
-	derefBindings := *bindings
-	return &derefBindings
+	return cloneGLStorage(bindings)
 }
 
 func ResetThreadBindingFrame(frame any) {
 	gid := getGoroutineID()
 	glsBindingsMtx.Lock()
 	defer glsBindingsMtx.Unlock()
-	glsBindings[gid] = frame.(*glStorage)
+	if frame == nil {
+		delete(glsBindings, gid)
+		return
+	}
+	glsBindings[gid] = cloneGLStorage(frame.(*glStorage))
+}
+
+func cloneGLStorage(storage *glStorage) *glStorage {
+	clone := &glStorage{
+		bindings: make([]varBindings, len(storage.bindings)),
+	}
+	for i, bindings := range storage.bindings {
+		frame := make(varBindings, len(bindings))
+		for vr, box := range bindings {
+			frame[vr] = &Box{val: box.val}
+		}
+		clone.bindings[i] = frame
+	}
+	return clone
 }

@@ -18,6 +18,7 @@ type (
 	LongChunk struct {
 		start, step int64
 		count       int
+		nthFn       FnFunc1
 	}
 )
 
@@ -183,9 +184,16 @@ func (r *LongRange) WithMeta(meta IPersistentMap) any {
 ////////////////////////////////////////////////////////////////////////////////
 
 func (r *LongRange) Reduce(f IFn) any {
+	if reducer, ok := f.(Int64Reducer); ok {
+		ret := r.start
+		for i := r.start + r.step; i < r.end; i += r.step {
+			ret = reducer.ReduceInt64(ret, i)
+		}
+		return ret
+	}
 	var ret any = r.start
 	for i := r.start + r.step; i < r.end; i += r.step {
-		ret = f.Invoke(ret, i)
+		ret = Apply2(f, ret, i)
 		if IsReduced(ret) {
 			return ret.(IDeref).Deref()
 		}
@@ -194,9 +202,17 @@ func (r *LongRange) Reduce(f IFn) any {
 }
 
 func (r *LongRange) ReduceInit(f IFn, init any) any {
+	if reducer, ok := f.(Int64Reducer); ok {
+		if ret, ok := init.(int64); ok {
+			for i := r.start; i < r.end; i += r.step {
+				ret = reducer.ReduceInt64(ret, i)
+			}
+			return ret
+		}
+	}
 	var ret any = init
 	for i := r.start; i < r.end; i += r.step {
-		ret = f.Invoke(ret, i)
+		ret = Apply2(f, ret, i)
 		if IsReduced(ret) {
 			return ret.(IDeref).Deref()
 		}
@@ -219,11 +235,13 @@ func (r *LongRange) Drop(n int) Sequential {
 // LongChunk
 
 func NewLongChunk(start, step int64, count int) *LongChunk {
-	return &LongChunk{
+	chunk := &LongChunk{
 		start: start,
 		step:  step,
 		count: count,
 	}
+	chunk.nthFn = func(i any) any { return chunk.Nth(MustAsInt(i)) }
+	return chunk
 }
 
 func (c *LongChunk) First() any {
@@ -245,6 +263,20 @@ func (c *LongChunk) Count() int {
 	return c.count
 }
 
+func (c *LongChunk) fieldOrMethod(name string) (interface{}, bool) {
+	switch name {
+	case "nth", "Nth":
+		return c.nthFn, true
+	case "nthDefault", "NthDefault":
+		return FnFunc2(func(i, notFound any) any {
+			return c.NthDefault(MustAsInt(i), notFound)
+		}), true
+	case "count", "Count":
+		return FnFunc0(func() any { return c.Count() }), true
+	}
+	return nil, false
+}
+
 func (c *LongChunk) xxx_counted() {}
 
 func (c *LongChunk) DropFirst() IChunk {
@@ -258,7 +290,7 @@ func (c *LongChunk) ReduceInit(f IFn, init any) any {
 	x := c.start
 	ret := init
 	for i := 0; i < c.count; i++ {
-		ret = f.Invoke(ret, x)
+		ret = Apply2(f, ret, x)
 		if IsReduced(ret) {
 			return ret.(IDeref).Deref()
 		}

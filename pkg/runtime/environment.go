@@ -30,6 +30,7 @@ type (
 		recurTarget interface{}
 		recurErr    *lang.RecurError
 		fnFrame     *fnFrame
+		loopFrame   *loopFrame
 
 		// some well-known vars
 		namespaceVar   *lang.Var // ns

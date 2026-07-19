@@ -34,664 +34,664 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "clojure.core.protocols"
 func LoadNS() {
-	sym__STAR_ := lang.NewSymbol("*")
-	sym__STAR__TICK_ := lang.NewSymbol("*'")
-	sym__STAR_1 := lang.NewSymbol("*1")
-	sym__STAR_2 := lang.NewSymbol("*2")
-	sym__STAR_3 := lang.NewSymbol("*3")
-	sym__STAR_agent_STAR_ := lang.NewSymbol("*agent*")
-	sym__STAR_assert_STAR_ := lang.NewSymbol("*assert*")
-	sym__STAR_command_DASH_line_DASH_args_STAR_ := lang.NewSymbol("*command-line-args*")
-	sym__STAR_compile_DASH_files_STAR_ := lang.NewSymbol("*compile-files*")
-	sym__STAR_compile_DASH_path_STAR_ := lang.NewSymbol("*compile-path*")
-	sym__STAR_compiler_DASH_options_STAR_ := lang.NewSymbol("*compiler-options*")
-	sym__STAR_data_DASH_readers_STAR_ := lang.NewSymbol("*data-readers*")
-	sym__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_ := lang.NewSymbol("*default-data-reader-fn*")
-	sym__STAR_e := lang.NewSymbol("*e")
-	sym__STAR_err_STAR_ := lang.NewSymbol("*err*")
-	sym__STAR_file_STAR_ := lang.NewSymbol("*file*")
-	sym__STAR_flush_DASH_on_DASH_newline_STAR_ := lang.NewSymbol("*flush-on-newline*")
-	sym__STAR_glojure_DASH_version_STAR_ := lang.NewSymbol("*glojure-version*")
-	sym__STAR_in_STAR_ := lang.NewSymbol("*in*")
-	sym__STAR_loaded_DASH_libs_STAR_ := lang.NewSymbol("*loaded-libs*")
-	sym__STAR_loading_DASH_verbosely_STAR_ := lang.NewSymbol("*loading-verbosely*")
-	sym__STAR_ns_STAR_ := lang.NewSymbol("*ns*")
-	sym__STAR_out_STAR_ := lang.NewSymbol("*out*")
-	sym__STAR_pending_DASH_paths_STAR_ := lang.NewSymbol("*pending-paths*")
-	sym__STAR_print_DASH_dup_STAR_ := lang.NewSymbol("*print-dup*")
-	sym__STAR_print_DASH_length_STAR_ := lang.NewSymbol("*print-length*")
-	sym__STAR_print_DASH_level_STAR_ := lang.NewSymbol("*print-level*")
-	sym__STAR_print_DASH_meta_STAR_ := lang.NewSymbol("*print-meta*")
-	sym__STAR_print_DASH_namespace_DASH_maps_STAR_ := lang.NewSymbol("*print-namespace-maps*")
-	sym__STAR_print_DASH_readably_STAR_ := lang.NewSymbol("*print-readably*")
-	sym__STAR_read_DASH_eval_STAR_ := lang.NewSymbol("*read-eval*")
-	sym__STAR_repl_STAR_ := lang.NewSymbol("*repl*")
-	sym__STAR_unchecked_DASH_math_STAR_ := lang.NewSymbol("*unchecked-math*")
-	sym__STAR_verbose_DASH_defrecords_STAR_ := lang.NewSymbol("*verbose-defrecords*")
-	sym__STAR_warn_DASH_on_DASH_reflection_STAR_ := lang.NewSymbol("*warn-on-reflection*")
-	sym__PLUS_ := lang.NewSymbol("+")
-	sym__PLUS__TICK_ := lang.NewSymbol("+'")
-	sym__DASH_ := lang.NewSymbol("-")
-	sym__DASH__TICK_ := lang.NewSymbol("-'")
-	sym__DASH__GT_ := lang.NewSymbol("->")
-	sym__DASH__GT__GT_ := lang.NewSymbol("->>")
-	sym__DOT__DOT_ := lang.NewSymbol("..")
-	sym__SLASH_ := lang.NewSymbol("/")
-	sym__LT_ := lang.NewSymbol("<")
-	sym__LT__EQ_ := lang.NewSymbol("<=")
-	sym__EQ_ := lang.NewSymbol("=")
-	sym__EQ__EQ_ := lang.NewSymbol("==")
-	sym__GT_ := lang.NewSymbol(">")
-	sym__GT__EQ_ := lang.NewSymbol(">=")
-	sym_CollReduce := lang.NewSymbol("CollReduce")
-	sym_Datafiable := lang.NewSymbol("Datafiable")
-	sym_IKVReduce := lang.NewSymbol("IKVReduce")
-	sym_InternalReduce := lang.NewSymbol("InternalReduce")
-	sym_NaN_QMARK_ := lang.NewSymbol("NaN?")
-	sym_Navigable := lang.NewSymbol("Navigable")
-	sym_StackTraceElement_DASH__GT_vec := lang.NewSymbol("StackTraceElement->vec")
-	sym_Throwable_DASH__GT_map := lang.NewSymbol("Throwable->map")
-	sym_abs := lang.NewSymbol("abs")
-	sym_accessor := lang.NewSymbol("accessor")
-	sym_aclone := lang.NewSymbol("aclone")
-	sym_add_DASH_classpath := lang.NewSymbol("add-classpath")
-	sym_add_DASH_load_DASH_path := lang.NewSymbol("add-load-path")
-	sym_add_DASH_watch := lang.NewSymbol("add-watch")
-	sym_agent := lang.NewSymbol("agent")
-	sym_agent_DASH_error := lang.NewSymbol("agent-error")
-	sym_agent_DASH_errors := lang.NewSymbol("agent-errors")
-	sym_aget := lang.NewSymbol("aget")
-	sym_alength := lang.NewSymbol("alength")
-	sym_alias := lang.NewSymbol("alias")
-	sym_all_DASH_ns := lang.NewSymbol("all-ns")
-	sym_alter := lang.NewSymbol("alter")
-	sym_alter_DASH_meta_BANG_ := lang.NewSymbol("alter-meta!")
-	sym_alter_DASH_var_DASH_root := lang.NewSymbol("alter-var-root")
-	sym_amap := lang.NewSymbol("amap")
-	sym_ancestors := lang.NewSymbol("ancestors")
-	sym_and := lang.NewSymbol("and")
-	sym_any_QMARK_ := lang.NewSymbol("any?")
-	sym_apply := lang.NewSymbol("apply")
-	sym_areduce := lang.NewSymbol("areduce")
-	sym_array_DASH_map := lang.NewSymbol("array-map")
-	sym_as_DASH__GT_ := lang.NewSymbol("as->")
-	sym_aset := lang.NewSymbol("aset")
-	sym_aset_DASH_boolean := lang.NewSymbol("aset-boolean")
-	sym_aset_DASH_byte := lang.NewSymbol("aset-byte")
-	sym_aset_DASH_char := lang.NewSymbol("aset-char")
-	sym_aset_DASH_double := lang.NewSymbol("aset-double")
-	sym_aset_DASH_float := lang.NewSymbol("aset-float")
-	sym_aset_DASH_int := lang.NewSymbol("aset-int")
-	sym_aset_DASH_long := lang.NewSymbol("aset-long")
-	sym_aset_DASH_short := lang.NewSymbol("aset-short")
-	sym_assert := lang.NewSymbol("assert")
-	sym_assoc := lang.NewSymbol("assoc")
-	sym_assoc_BANG_ := lang.NewSymbol("assoc!")
-	sym_assoc_DASH_in := lang.NewSymbol("assoc-in")
-	sym_associative_QMARK_ := lang.NewSymbol("associative?")
-	sym_atom := lang.NewSymbol("atom")
-	sym_await := lang.NewSymbol("await")
-	sym_await_DASH_for := lang.NewSymbol("await-for")
-	sym_await1 := lang.NewSymbol("await1")
-	sym_bases := lang.NewSymbol("bases")
-	sym_bigdec := lang.NewSymbol("bigdec")
-	sym_bigint := lang.NewSymbol("bigint")
-	sym_biginteger := lang.NewSymbol("biginteger")
-	sym_binding := lang.NewSymbol("binding")
-	sym_bit_DASH_and := lang.NewSymbol("bit-and")
-	sym_bit_DASH_and_DASH_not := lang.NewSymbol("bit-and-not")
-	sym_bit_DASH_clear := lang.NewSymbol("bit-clear")
-	sym_bit_DASH_flip := lang.NewSymbol("bit-flip")
-	sym_bit_DASH_not := lang.NewSymbol("bit-not")
-	sym_bit_DASH_or := lang.NewSymbol("bit-or")
-	sym_bit_DASH_set := lang.NewSymbol("bit-set")
-	sym_bit_DASH_shift_DASH_left := lang.NewSymbol("bit-shift-left")
-	sym_bit_DASH_shift_DASH_right := lang.NewSymbol("bit-shift-right")
-	sym_bit_DASH_test := lang.NewSymbol("bit-test")
-	sym_bit_DASH_xor := lang.NewSymbol("bit-xor")
-	sym_boolean := lang.NewSymbol("boolean")
-	sym_boolean_DASH_array := lang.NewSymbol("boolean-array")
-	sym_boolean_QMARK_ := lang.NewSymbol("boolean?")
-	sym_booleans := lang.NewSymbol("booleans")
-	sym_bound_DASH_fn := lang.NewSymbol("bound-fn")
-	sym_bound_DASH_fn_STAR_ := lang.NewSymbol("bound-fn*")
-	sym_bound_QMARK_ := lang.NewSymbol("bound?")
-	sym_bounded_DASH_count := lang.NewSymbol("bounded-count")
-	sym_butlast := lang.NewSymbol("butlast")
-	sym_byte := lang.NewSymbol("byte")
-	sym_byte_DASH_array := lang.NewSymbol("byte-array")
-	sym_bytes := lang.NewSymbol("bytes")
-	sym_bytes_QMARK_ := lang.NewSymbol("bytes?")
-	sym_case := lang.NewSymbol("case")
-	sym_cast := lang.NewSymbol("cast")
-	sym_cat := lang.NewSymbol("cat")
-	sym_char := lang.NewSymbol("char")
-	sym_char_DASH_array := lang.NewSymbol("char-array")
-	sym_char_DASH_escape_DASH_string := lang.NewSymbol("char-escape-string")
-	sym_char_DASH_name_DASH_string := lang.NewSymbol("char-name-string")
-	sym_char_QMARK_ := lang.NewSymbol("char?")
-	sym_chars := lang.NewSymbol("chars")
-	sym_chunk := lang.NewSymbol("chunk")
-	sym_chunk_DASH_append := lang.NewSymbol("chunk-append")
-	sym_chunk_DASH_buffer := lang.NewSymbol("chunk-buffer")
-	sym_chunk_DASH_cons := lang.NewSymbol("chunk-cons")
-	sym_chunk_DASH_first := lang.NewSymbol("chunk-first")
-	sym_chunk_DASH_next := lang.NewSymbol("chunk-next")
-	sym_chunk_DASH_rest := lang.NewSymbol("chunk-rest")
-	sym_chunked_DASH_seq_QMARK_ := lang.NewSymbol("chunked-seq?")
-	sym_class := lang.NewSymbol("class")
-	sym_class_QMARK_ := lang.NewSymbol("class?")
-	sym_clear_DASH_agent_DASH_errors := lang.NewSymbol("clear-agent-errors")
-	sym_clojure_DOT_core := lang.NewSymbol("clojure.core")
-	sym_clojure_DOT_core_DOT_protocols := lang.NewSymbol("clojure.core.protocols")
-	sym_coll := lang.NewSymbol("coll")
-	sym_coll_DASH_reduce := lang.NewSymbol("coll-reduce")
-	sym_coll_QMARK_ := lang.NewSymbol("coll?")
-	sym_comment := lang.NewSymbol("comment")
-	sym_commute := lang.NewSymbol("commute")
-	sym_comp := lang.NewSymbol("comp")
-	sym_comparator := lang.NewSymbol("comparator")
-	sym_compare := lang.NewSymbol("compare")
-	sym_compare_DASH_and_DASH_set_BANG_ := lang.NewSymbol("compare-and-set!")
-	sym_compile := lang.NewSymbol("compile")
-	sym_complement := lang.NewSymbol("complement")
-	sym_completing := lang.NewSymbol("completing")
-	sym_concat := lang.NewSymbol("concat")
-	sym_cond := lang.NewSymbol("cond")
-	sym_cond_DASH__GT_ := lang.NewSymbol("cond->")
-	sym_cond_DASH__GT__GT_ := lang.NewSymbol("cond->>")
-	sym_condp := lang.NewSymbol("condp")
-	sym_conj := lang.NewSymbol("conj")
-	sym_conj_BANG_ := lang.NewSymbol("conj!")
-	sym_cons := lang.NewSymbol("cons")
-	sym_constantly := lang.NewSymbol("constantly")
-	sym_contains_QMARK_ := lang.NewSymbol("contains?")
-	sym_count := lang.NewSymbol("count")
-	sym_counted_QMARK_ := lang.NewSymbol("counted?")
-	sym_create_DASH_ns := lang.NewSymbol("create-ns")
-	sym_create_DASH_struct := lang.NewSymbol("create-struct")
-	sym_cycle := lang.NewSymbol("cycle")
-	sym_datafy := lang.NewSymbol("datafy")
-	sym_dec := lang.NewSymbol("dec")
-	sym_dec_TICK_ := lang.NewSymbol("dec'")
-	sym_decimal_QMARK_ := lang.NewSymbol("decimal?")
-	sym_declare := lang.NewSymbol("declare")
-	sym_dedupe := lang.NewSymbol("dedupe")
-	sym_definline := lang.NewSymbol("definline")
-	sym_defmacro := lang.NewSymbol("defmacro")
-	sym_defmethod := lang.NewSymbol("defmethod")
-	sym_defmulti := lang.NewSymbol("defmulti")
-	sym_defn := lang.NewSymbol("defn")
-	sym_defn_DASH_ := lang.NewSymbol("defn-")
-	sym_defonce := lang.NewSymbol("defonce")
-	sym_defprotocol := lang.NewSymbol("defprotocol")
-	sym_defstruct := lang.NewSymbol("defstruct")
-	sym_delay := lang.NewSymbol("delay")
-	sym_delay_QMARK_ := lang.NewSymbol("delay?")
-	sym_deliver := lang.NewSymbol("deliver")
-	sym_denominator := lang.NewSymbol("denominator")
-	sym_deref := lang.NewSymbol("deref")
-	sym_derive := lang.NewSymbol("derive")
-	sym_descendants := lang.NewSymbol("descendants")
-	sym_destructure := lang.NewSymbol("destructure")
-	sym_disj := lang.NewSymbol("disj")
-	sym_disj_BANG_ := lang.NewSymbol("disj!")
-	sym_dissoc := lang.NewSymbol("dissoc")
-	sym_dissoc_BANG_ := lang.NewSymbol("dissoc!")
-	sym_distinct := lang.NewSymbol("distinct")
-	sym_distinct_QMARK_ := lang.NewSymbol("distinct?")
-	sym_doall := lang.NewSymbol("doall")
-	sym_dorun := lang.NewSymbol("dorun")
-	sym_doseq := lang.NewSymbol("doseq")
-	sym_dosync := lang.NewSymbol("dosync")
-	sym_dotimes := lang.NewSymbol("dotimes")
-	sym_doto := lang.NewSymbol("doto")
-	sym_double := lang.NewSymbol("double")
-	sym_double_DASH_array := lang.NewSymbol("double-array")
-	sym_double_QMARK_ := lang.NewSymbol("double?")
-	sym_doubles := lang.NewSymbol("doubles")
-	sym_drop := lang.NewSymbol("drop")
-	sym_drop_DASH_last := lang.NewSymbol("drop-last")
-	sym_drop_DASH_while := lang.NewSymbol("drop-while")
-	sym_empty := lang.NewSymbol("empty")
-	sym_empty_QMARK_ := lang.NewSymbol("empty?")
-	sym_ensure := lang.NewSymbol("ensure")
-	sym_ensure_DASH_reduced := lang.NewSymbol("ensure-reduced")
-	sym_enumeration_DASH_seq := lang.NewSymbol("enumeration-seq")
-	sym_error_DASH_handler := lang.NewSymbol("error-handler")
-	sym_error_DASH_mode := lang.NewSymbol("error-mode")
-	sym_eval := lang.NewSymbol("eval")
-	sym_even_QMARK_ := lang.NewSymbol("even?")
-	sym_every_DASH_pred := lang.NewSymbol("every-pred")
-	sym_every_QMARK_ := lang.NewSymbol("every?")
-	sym_ex_DASH_cause := lang.NewSymbol("ex-cause")
-	sym_ex_DASH_data := lang.NewSymbol("ex-data")
-	sym_ex_DASH_info := lang.NewSymbol("ex-info")
-	sym_ex_DASH_message := lang.NewSymbol("ex-message")
-	sym_extend := lang.NewSymbol("extend")
-	sym_extend_DASH_protocol := lang.NewSymbol("extend-protocol")
-	sym_extend_DASH_type := lang.NewSymbol("extend-type")
-	sym_f := lang.NewSymbol("f")
-	sym_false_QMARK_ := lang.NewSymbol("false?")
-	sym_ffirst := lang.NewSymbol("ffirst")
-	sym_file_DASH_seq := lang.NewSymbol("file-seq")
-	sym_filter := lang.NewSymbol("filter")
-	sym_filterv := lang.NewSymbol("filterv")
-	sym_find := lang.NewSymbol("find")
-	sym_find_DASH_keyword := lang.NewSymbol("find-keyword")
-	sym_find_DASH_ns := lang.NewSymbol("find-ns")
-	sym_find_DASH_var := lang.NewSymbol("find-var")
-	sym_first := lang.NewSymbol("first")
-	sym_flatten := lang.NewSymbol("flatten")
-	sym_float := lang.NewSymbol("float")
-	sym_float_DASH_array := lang.NewSymbol("float-array")
-	sym_float_QMARK_ := lang.NewSymbol("float?")
-	sym_floats := lang.NewSymbol("floats")
-	sym_flush := lang.NewSymbol("flush")
-	sym_fn := lang.NewSymbol("fn")
-	sym_fn_QMARK_ := lang.NewSymbol("fn?")
-	sym_fnext := lang.NewSymbol("fnext")
-	sym_fnil := lang.NewSymbol("fnil")
-	sym_for := lang.NewSymbol("for")
-	sym_force := lang.NewSymbol("force")
-	sym_format := lang.NewSymbol("format")
-	sym_frequencies := lang.NewSymbol("frequencies")
-	sym_future := lang.NewSymbol("future")
-	sym_future_DASH_call := lang.NewSymbol("future-call")
-	sym_future_DASH_cancel := lang.NewSymbol("future-cancel")
-	sym_future_DASH_cancelled_QMARK_ := lang.NewSymbol("future-cancelled?")
-	sym_future_DASH_done_QMARK_ := lang.NewSymbol("future-done?")
-	sym_future_QMARK_ := lang.NewSymbol("future?")
-	sym_gen_DASH_class := lang.NewSymbol("gen-class")
-	sym_gensym := lang.NewSymbol("gensym")
-	sym_get := lang.NewSymbol("get")
-	sym_get_DASH_in := lang.NewSymbol("get-in")
-	sym_get_DASH_method := lang.NewSymbol("get-method")
-	sym_get_DASH_thread_DASH_bindings := lang.NewSymbol("get-thread-bindings")
-	sym_get_DASH_validator := lang.NewSymbol("get-validator")
-	sym_global_DASH_hierarchy := lang.NewSymbol("global-hierarchy")
-	sym_group_DASH_by := lang.NewSymbol("group-by")
-	sym_halt_DASH_when := lang.NewSymbol("halt-when")
-	sym_hash := lang.NewSymbol("hash")
-	sym_hash_DASH_map := lang.NewSymbol("hash-map")
-	sym_hash_DASH_ordered_DASH_coll := lang.NewSymbol("hash-ordered-coll")
-	sym_hash_DASH_set := lang.NewSymbol("hash-set")
-	sym_hash_DASH_unordered_DASH_coll := lang.NewSymbol("hash-unordered-coll")
-	sym_ident_QMARK_ := lang.NewSymbol("ident?")
-	sym_identical_QMARK_ := lang.NewSymbol("identical?")
-	sym_identity := lang.NewSymbol("identity")
-	sym_if_DASH_let := lang.NewSymbol("if-let")
-	sym_if_DASH_not := lang.NewSymbol("if-not")
-	sym_if_DASH_some := lang.NewSymbol("if-some")
-	sym_ifn_QMARK_ := lang.NewSymbol("ifn?")
-	sym_import := lang.NewSymbol("import")
-	sym_in_DASH_ns := lang.NewSymbol("in-ns")
-	sym_inc := lang.NewSymbol("inc")
-	sym_inc_TICK_ := lang.NewSymbol("inc'")
-	sym_indexed_QMARK_ := lang.NewSymbol("indexed?")
-	sym_infinite_QMARK_ := lang.NewSymbol("infinite?")
-	sym_init := lang.NewSymbol("init")
-	sym_inst_DASH_ms := lang.NewSymbol("inst-ms")
-	sym_inst_QMARK_ := lang.NewSymbol("inst?")
-	sym_instance_QMARK_ := lang.NewSymbol("instance?")
-	sym_int := lang.NewSymbol("int")
-	sym_int_DASH_array := lang.NewSymbol("int-array")
-	sym_int_QMARK_ := lang.NewSymbol("int?")
-	sym_integer_QMARK_ := lang.NewSymbol("integer?")
-	sym_interface_DASH_or_DASH_naive_DASH_reduce := lang.NewSymbol("interface-or-naive-reduce")
-	sym_interleave := lang.NewSymbol("interleave")
-	sym_intern := lang.NewSymbol("intern")
-	sym_internal_DASH_reduce := lang.NewSymbol("internal-reduce")
-	sym_interpose := lang.NewSymbol("interpose")
-	sym_into := lang.NewSymbol("into")
-	sym_into_DASH_array := lang.NewSymbol("into-array")
-	sym_ints := lang.NewSymbol("ints")
-	sym_io_BANG_ := lang.NewSymbol("io!")
-	sym_isa_QMARK_ := lang.NewSymbol("isa?")
-	sym_iter_DASH_reduce := lang.NewSymbol("iter-reduce")
-	sym_iterate := lang.NewSymbol("iterate")
-	sym_iteration := lang.NewSymbol("iteration")
-	sym_iterator_DASH_seq := lang.NewSymbol("iterator-seq")
-	sym_juxt := lang.NewSymbol("juxt")
-	sym_k := lang.NewSymbol("k")
-	sym_keep := lang.NewSymbol("keep")
-	sym_keep_DASH_indexed := lang.NewSymbol("keep-indexed")
-	sym_key := lang.NewSymbol("key")
-	sym_keys := lang.NewSymbol("keys")
-	sym_keyword := lang.NewSymbol("keyword")
-	sym_keyword_QMARK_ := lang.NewSymbol("keyword?")
-	sym_kv_DASH_reduce := lang.NewSymbol("kv-reduce")
-	sym_last := lang.NewSymbol("last")
-	sym_lazy_DASH_cat := lang.NewSymbol("lazy-cat")
-	sym_lazy_DASH_seq := lang.NewSymbol("lazy-seq")
-	sym_let := lang.NewSymbol("let")
-	sym_letfn := lang.NewSymbol("letfn")
-	sym_line_DASH_seq := lang.NewSymbol("line-seq")
-	sym_list := lang.NewSymbol("list")
-	sym_list_STAR_ := lang.NewSymbol("list*")
-	sym_list_QMARK_ := lang.NewSymbol("list?")
-	sym_load := lang.NewSymbol("load")
-	sym_load_DASH_file := lang.NewSymbol("load-file")
-	sym_load_DASH_reader := lang.NewSymbol("load-reader")
-	sym_load_DASH_string := lang.NewSymbol("load-string")
-	sym_loaded_DASH_libs := lang.NewSymbol("loaded-libs")
-	sym_locking := lang.NewSymbol("locking")
-	sym_long := lang.NewSymbol("long")
-	sym_long_DASH_array := lang.NewSymbol("long-array")
-	sym_longs := lang.NewSymbol("longs")
-	sym_loop := lang.NewSymbol("loop")
-	sym_macroexpand := lang.NewSymbol("macroexpand")
-	sym_macroexpand_DASH_1 := lang.NewSymbol("macroexpand-1")
-	sym_make_DASH_array := lang.NewSymbol("make-array")
-	sym_make_DASH_hierarchy := lang.NewSymbol("make-hierarchy")
-	sym_map := lang.NewSymbol("map")
-	sym_map_DASH_entry_QMARK_ := lang.NewSymbol("map-entry?")
-	sym_map_DASH_indexed := lang.NewSymbol("map-indexed")
-	sym_map_QMARK_ := lang.NewSymbol("map?")
-	sym_mapcat := lang.NewSymbol("mapcat")
-	sym_mapv := lang.NewSymbol("mapv")
-	sym_max := lang.NewSymbol("max")
-	sym_max_DASH_key := lang.NewSymbol("max-key")
-	sym_memfn := lang.NewSymbol("memfn")
-	sym_memoize := lang.NewSymbol("memoize")
-	sym_merge := lang.NewSymbol("merge")
-	sym_merge_DASH_with := lang.NewSymbol("merge-with")
-	sym_meta := lang.NewSymbol("meta")
-	sym_methods := lang.NewSymbol("methods")
-	sym_min := lang.NewSymbol("min")
-	sym_min_DASH_key := lang.NewSymbol("min-key")
-	sym_mix_DASH_collection_DASH_hash := lang.NewSymbol("mix-collection-hash")
-	sym_mod := lang.NewSymbol("mod")
-	sym_naive_DASH_seq_DASH_reduce := lang.NewSymbol("naive-seq-reduce")
-	sym_name := lang.NewSymbol("name")
-	sym_namespace := lang.NewSymbol("namespace")
-	sym_nat_DASH_int_QMARK_ := lang.NewSymbol("nat-int?")
-	sym_nav := lang.NewSymbol("nav")
-	sym_neg_DASH_int_QMARK_ := lang.NewSymbol("neg-int?")
-	sym_neg_QMARK_ := lang.NewSymbol("neg?")
-	sym_newline := lang.NewSymbol("newline")
-	sym_next := lang.NewSymbol("next")
-	sym_nfirst := lang.NewSymbol("nfirst")
-	sym_nil_QMARK_ := lang.NewSymbol("nil?")
-	sym_nnext := lang.NewSymbol("nnext")
-	sym_not := lang.NewSymbol("not")
-	sym_not_DASH_any_QMARK_ := lang.NewSymbol("not-any?")
-	sym_not_DASH_empty := lang.NewSymbol("not-empty")
-	sym_not_DASH_every_QMARK_ := lang.NewSymbol("not-every?")
-	sym_not_EQ_ := lang.NewSymbol("not=")
-	sym_ns := lang.NewSymbol("ns")
-	sym_ns_DASH_aliases := lang.NewSymbol("ns-aliases")
-	sym_ns_DASH_imports := lang.NewSymbol("ns-imports")
-	sym_ns_DASH_interns := lang.NewSymbol("ns-interns")
-	sym_ns_DASH_map := lang.NewSymbol("ns-map")
-	sym_ns_DASH_name := lang.NewSymbol("ns-name")
-	sym_ns_DASH_publics := lang.NewSymbol("ns-publics")
-	sym_ns_DASH_refers := lang.NewSymbol("ns-refers")
-	sym_ns_DASH_resolve := lang.NewSymbol("ns-resolve")
-	sym_ns_DASH_unalias := lang.NewSymbol("ns-unalias")
-	sym_ns_DASH_unmap := lang.NewSymbol("ns-unmap")
-	sym_nth := lang.NewSymbol("nth")
-	sym_nthnext := lang.NewSymbol("nthnext")
-	sym_nthrest := lang.NewSymbol("nthrest")
-	sym_num := lang.NewSymbol("num")
-	sym_number_QMARK_ := lang.NewSymbol("number?")
-	sym_numerator := lang.NewSymbol("numerator")
-	sym_o := lang.NewSymbol("o")
-	sym_object_DASH_array := lang.NewSymbol("object-array")
-	sym_odd_QMARK_ := lang.NewSymbol("odd?")
-	sym_or := lang.NewSymbol("or")
-	sym_parents := lang.NewSymbol("parents")
-	sym_parse_DASH_boolean := lang.NewSymbol("parse-boolean")
-	sym_parse_DASH_double := lang.NewSymbol("parse-double")
-	sym_parse_DASH_long := lang.NewSymbol("parse-long")
-	sym_parse_DASH_uuid := lang.NewSymbol("parse-uuid")
-	sym_partial := lang.NewSymbol("partial")
-	sym_partition := lang.NewSymbol("partition")
-	sym_partition_DASH_all := lang.NewSymbol("partition-all")
-	sym_partition_DASH_by := lang.NewSymbol("partition-by")
-	sym_partitionv := lang.NewSymbol("partitionv")
-	sym_partitionv_DASH_all := lang.NewSymbol("partitionv-all")
-	sym_pcalls := lang.NewSymbol("pcalls")
-	sym_peek := lang.NewSymbol("peek")
-	sym_persistent_BANG_ := lang.NewSymbol("persistent!")
-	sym_pmap := lang.NewSymbol("pmap")
-	sym_pop := lang.NewSymbol("pop")
-	sym_pop_BANG_ := lang.NewSymbol("pop!")
-	sym_pop_DASH_thread_DASH_bindings := lang.NewSymbol("pop-thread-bindings")
-	sym_pos_DASH_int_QMARK_ := lang.NewSymbol("pos-int?")
-	sym_pos_QMARK_ := lang.NewSymbol("pos?")
-	sym_pr := lang.NewSymbol("pr")
-	sym_pr_DASH_str := lang.NewSymbol("pr-str")
-	sym_prefer_DASH_method := lang.NewSymbol("prefer-method")
-	sym_prefers := lang.NewSymbol("prefers")
-	sym_print := lang.NewSymbol("print")
-	sym_print_DASH_ctor := lang.NewSymbol("print-ctor")
-	sym_print_DASH_dup := lang.NewSymbol("print-dup")
-	sym_print_DASH_method := lang.NewSymbol("print-method")
-	sym_print_DASH_simple := lang.NewSymbol("print-simple")
-	sym_print_DASH_str := lang.NewSymbol("print-str")
-	sym_printf := lang.NewSymbol("printf")
-	sym_println := lang.NewSymbol("println")
-	sym_println_DASH_str := lang.NewSymbol("println-str")
-	sym_prn := lang.NewSymbol("prn")
-	sym_prn_DASH_str := lang.NewSymbol("prn-str")
-	sym_promise := lang.NewSymbol("promise")
-	sym_push_DASH_thread_DASH_bindings := lang.NewSymbol("push-thread-bindings")
-	sym_pvalues := lang.NewSymbol("pvalues")
-	sym_qualified_DASH_ident_QMARK_ := lang.NewSymbol("qualified-ident?")
-	sym_qualified_DASH_keyword_QMARK_ := lang.NewSymbol("qualified-keyword?")
-	sym_qualified_DASH_symbol_QMARK_ := lang.NewSymbol("qualified-symbol?")
-	sym_quot := lang.NewSymbol("quot")
-	sym_rand := lang.NewSymbol("rand")
-	sym_rand_DASH_int := lang.NewSymbol("rand-int")
-	sym_rand_DASH_nth := lang.NewSymbol("rand-nth")
-	sym_random_DASH_sample := lang.NewSymbol("random-sample")
-	sym_random_DASH_uuid := lang.NewSymbol("random-uuid")
-	sym_range := lang.NewSymbol("range")
-	sym_ratio_QMARK_ := lang.NewSymbol("ratio?")
-	sym_rational_QMARK_ := lang.NewSymbol("rational?")
-	sym_rationalize := lang.NewSymbol("rationalize")
-	sym_re_DASH_find := lang.NewSymbol("re-find")
-	sym_re_DASH_groups := lang.NewSymbol("re-groups")
-	sym_re_DASH_matcher := lang.NewSymbol("re-matcher")
-	sym_re_DASH_matches := lang.NewSymbol("re-matches")
-	sym_re_DASH_pattern := lang.NewSymbol("re-pattern")
-	sym_re_DASH_seq := lang.NewSymbol("re-seq")
-	sym_read := lang.NewSymbol("read")
-	sym_read_PLUS_string := lang.NewSymbol("read+string")
-	sym_read_DASH_line := lang.NewSymbol("read-line")
-	sym_read_DASH_string := lang.NewSymbol("read-string")
-	sym_reader_DASH_conditional := lang.NewSymbol("reader-conditional")
-	sym_reader_DASH_conditional_QMARK_ := lang.NewSymbol("reader-conditional?")
-	sym_realized_QMARK_ := lang.NewSymbol("realized?")
-	sym_reduce := lang.NewSymbol("reduce")
-	sym_reduce_DASH_kv := lang.NewSymbol("reduce-kv")
-	sym_reduced := lang.NewSymbol("reduced")
-	sym_reduced_QMARK_ := lang.NewSymbol("reduced?")
-	sym_reductions := lang.NewSymbol("reductions")
-	sym_ref := lang.NewSymbol("ref")
-	sym_ref_DASH_history_DASH_count := lang.NewSymbol("ref-history-count")
-	sym_ref_DASH_max_DASH_history := lang.NewSymbol("ref-max-history")
-	sym_ref_DASH_min_DASH_history := lang.NewSymbol("ref-min-history")
-	sym_ref_DASH_set := lang.NewSymbol("ref-set")
-	sym_refer := lang.NewSymbol("refer")
-	sym_refer_DASH_clojure := lang.NewSymbol("refer-clojure")
-	sym_release_DASH_pending_DASH_sends := lang.NewSymbol("release-pending-sends")
-	sym_rem := lang.NewSymbol("rem")
-	sym_remove := lang.NewSymbol("remove")
-	sym_remove_DASH_all_DASH_methods := lang.NewSymbol("remove-all-methods")
-	sym_remove_DASH_method := lang.NewSymbol("remove-method")
-	sym_remove_DASH_ns := lang.NewSymbol("remove-ns")
-	sym_remove_DASH_tap := lang.NewSymbol("remove-tap")
-	sym_remove_DASH_watch := lang.NewSymbol("remove-watch")
-	sym_repeat := lang.NewSymbol("repeat")
-	sym_repeatedly := lang.NewSymbol("repeatedly")
-	sym_replace := lang.NewSymbol("replace")
-	sym_replicate := lang.NewSymbol("replicate")
-	sym_require := lang.NewSymbol("require")
-	sym_requiring_DASH_resolve := lang.NewSymbol("requiring-resolve")
-	sym_reset_BANG_ := lang.NewSymbol("reset!")
-	sym_reset_DASH_meta_BANG_ := lang.NewSymbol("reset-meta!")
-	sym_reset_DASH_vals_BANG_ := lang.NewSymbol("reset-vals!")
-	sym_resolve := lang.NewSymbol("resolve")
-	sym_rest := lang.NewSymbol("rest")
-	sym_restart_DASH_agent := lang.NewSymbol("restart-agent")
-	sym_resultset_DASH_seq := lang.NewSymbol("resultset-seq")
-	sym_reverse := lang.NewSymbol("reverse")
-	sym_reversible_QMARK_ := lang.NewSymbol("reversible?")
-	sym_rseq := lang.NewSymbol("rseq")
-	sym_rsubseq := lang.NewSymbol("rsubseq")
-	sym_run_BANG_ := lang.NewSymbol("run!")
-	sym_s := lang.NewSymbol("s")
-	sym_second := lang.NewSymbol("second")
-	sym_select_DASH_keys := lang.NewSymbol("select-keys")
-	sym_send := lang.NewSymbol("send")
-	sym_send_DASH_off := lang.NewSymbol("send-off")
-	sym_send_DASH_via := lang.NewSymbol("send-via")
-	sym_seq := lang.NewSymbol("seq")
-	sym_seq_DASH_reduce := lang.NewSymbol("seq-reduce")
-	sym_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring := lang.NewSymbol("seq-to-map-for-destructuring")
-	sym_seq_QMARK_ := lang.NewSymbol("seq?")
-	sym_seqable_QMARK_ := lang.NewSymbol("seqable?")
-	sym_seque := lang.NewSymbol("seque")
-	sym_sequence := lang.NewSymbol("sequence")
-	sym_sequential_QMARK_ := lang.NewSymbol("sequential?")
-	sym_set := lang.NewSymbol("set")
-	sym_set_DASH_agent_DASH_send_DASH_executor_BANG_ := lang.NewSymbol("set-agent-send-executor!")
-	sym_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_ := lang.NewSymbol("set-agent-send-off-executor!")
-	sym_set_DASH_error_DASH_handler_BANG_ := lang.NewSymbol("set-error-handler!")
-	sym_set_DASH_error_DASH_mode_BANG_ := lang.NewSymbol("set-error-mode!")
-	sym_set_DASH_validator_BANG_ := lang.NewSymbol("set-validator!")
-	sym_set_QMARK_ := lang.NewSymbol("set?")
-	sym_short := lang.NewSymbol("short")
-	sym_short_DASH_array := lang.NewSymbol("short-array")
-	sym_shorts := lang.NewSymbol("shorts")
-	sym_shuffle := lang.NewSymbol("shuffle")
-	sym_shutdown_DASH_agents := lang.NewSymbol("shutdown-agents")
-	sym_simple_DASH_ident_QMARK_ := lang.NewSymbol("simple-ident?")
-	sym_simple_DASH_keyword_QMARK_ := lang.NewSymbol("simple-keyword?")
-	sym_simple_DASH_symbol_QMARK_ := lang.NewSymbol("simple-symbol?")
-	sym_slurp := lang.NewSymbol("slurp")
-	sym_some := lang.NewSymbol("some")
-	sym_some_DASH__GT_ := lang.NewSymbol("some->")
-	sym_some_DASH__GT__GT_ := lang.NewSymbol("some->>")
-	sym_some_DASH_fn := lang.NewSymbol("some-fn")
-	sym_some_QMARK_ := lang.NewSymbol("some?")
-	sym_sort := lang.NewSymbol("sort")
-	sym_sort_DASH_by := lang.NewSymbol("sort-by")
-	sym_sorted_DASH_map := lang.NewSymbol("sorted-map")
-	sym_sorted_DASH_map_DASH_by := lang.NewSymbol("sorted-map-by")
-	sym_sorted_DASH_set := lang.NewSymbol("sorted-set")
-	sym_sorted_DASH_set_DASH_by := lang.NewSymbol("sorted-set-by")
-	sym_sorted_QMARK_ := lang.NewSymbol("sorted?")
-	sym_special_DASH_symbol_QMARK_ := lang.NewSymbol("special-symbol?")
-	sym_spit := lang.NewSymbol("spit")
-	sym_split_DASH_at := lang.NewSymbol("split-at")
-	sym_split_DASH_with := lang.NewSymbol("split-with")
-	sym_splitv_DASH_at := lang.NewSymbol("splitv-at")
-	sym_start := lang.NewSymbol("start")
-	sym_str := lang.NewSymbol("str")
-	sym_stream_DASH_into_BANG_ := lang.NewSymbol("stream-into!")
-	sym_stream_DASH_reduce_BANG_ := lang.NewSymbol("stream-reduce!")
-	sym_stream_DASH_seq_BANG_ := lang.NewSymbol("stream-seq!")
-	sym_stream_DASH_transduce_BANG_ := lang.NewSymbol("stream-transduce!")
-	sym_string_QMARK_ := lang.NewSymbol("string?")
-	sym_struct := lang.NewSymbol("struct")
-	sym_struct_DASH_map := lang.NewSymbol("struct-map")
-	sym_subs := lang.NewSymbol("subs")
-	sym_subseq := lang.NewSymbol("subseq")
-	sym_subvec := lang.NewSymbol("subvec")
-	sym_supers := lang.NewSymbol("supers")
-	sym_swap_BANG_ := lang.NewSymbol("swap!")
-	sym_swap_DASH_vals_BANG_ := lang.NewSymbol("swap-vals!")
-	sym_symbol := lang.NewSymbol("symbol")
-	sym_symbol_QMARK_ := lang.NewSymbol("symbol?")
-	sym_sync := lang.NewSymbol("sync")
-	sym_tagged_DASH_literal := lang.NewSymbol("tagged-literal")
-	sym_tagged_DASH_literal_QMARK_ := lang.NewSymbol("tagged-literal?")
-	sym_take := lang.NewSymbol("take")
-	sym_take_DASH_last := lang.NewSymbol("take-last")
-	sym_take_DASH_nth := lang.NewSymbol("take-nth")
-	sym_take_DASH_while := lang.NewSymbol("take-while")
-	sym_test := lang.NewSymbol("test")
-	sym_the_DASH_ns := lang.NewSymbol("the-ns")
-	sym_thread_DASH_bound_QMARK_ := lang.NewSymbol("thread-bound?")
-	sym_time := lang.NewSymbol("time")
-	sym_to_DASH_array := lang.NewSymbol("to-array")
-	sym_to_DASH_array_DASH_2d := lang.NewSymbol("to-array-2d")
-	sym_trampoline := lang.NewSymbol("trampoline")
-	sym_transduce := lang.NewSymbol("transduce")
-	sym_transient := lang.NewSymbol("transient")
-	sym_tree_DASH_seq := lang.NewSymbol("tree-seq")
-	sym_true_QMARK_ := lang.NewSymbol("true?")
-	sym_type := lang.NewSymbol("type")
-	sym_unchecked_DASH_add := lang.NewSymbol("unchecked-add")
-	sym_unchecked_DASH_add_DASH_int := lang.NewSymbol("unchecked-add-int")
-	sym_unchecked_DASH_byte := lang.NewSymbol("unchecked-byte")
-	sym_unchecked_DASH_char := lang.NewSymbol("unchecked-char")
-	sym_unchecked_DASH_dec := lang.NewSymbol("unchecked-dec")
-	sym_unchecked_DASH_dec_DASH_int := lang.NewSymbol("unchecked-dec-int")
-	sym_unchecked_DASH_divide_DASH_int := lang.NewSymbol("unchecked-divide-int")
-	sym_unchecked_DASH_double := lang.NewSymbol("unchecked-double")
-	sym_unchecked_DASH_float := lang.NewSymbol("unchecked-float")
-	sym_unchecked_DASH_inc := lang.NewSymbol("unchecked-inc")
-	sym_unchecked_DASH_inc_DASH_int := lang.NewSymbol("unchecked-inc-int")
-	sym_unchecked_DASH_int := lang.NewSymbol("unchecked-int")
-	sym_unchecked_DASH_long := lang.NewSymbol("unchecked-long")
-	sym_unchecked_DASH_multiply := lang.NewSymbol("unchecked-multiply")
-	sym_unchecked_DASH_multiply_DASH_int := lang.NewSymbol("unchecked-multiply-int")
-	sym_unchecked_DASH_negate := lang.NewSymbol("unchecked-negate")
-	sym_unchecked_DASH_negate_DASH_int := lang.NewSymbol("unchecked-negate-int")
-	sym_unchecked_DASH_remainder_DASH_int := lang.NewSymbol("unchecked-remainder-int")
-	sym_unchecked_DASH_short := lang.NewSymbol("unchecked-short")
-	sym_unchecked_DASH_subtract := lang.NewSymbol("unchecked-subtract")
-	sym_unchecked_DASH_subtract_DASH_int := lang.NewSymbol("unchecked-subtract-int")
-	sym_underive := lang.NewSymbol("underive")
-	sym_unquote := lang.NewSymbol("unquote")
-	sym_unquote_DASH_splicing := lang.NewSymbol("unquote-splicing")
-	sym_unreduced := lang.NewSymbol("unreduced")
-	sym_unsigned_DASH_bit_DASH_shift_DASH_right := lang.NewSymbol("unsigned-bit-shift-right")
-	sym_update := lang.NewSymbol("update")
-	sym_update_DASH_in := lang.NewSymbol("update-in")
-	sym_update_DASH_keys := lang.NewSymbol("update-keys")
-	sym_update_DASH_vals := lang.NewSymbol("update-vals")
-	sym_uri_QMARK_ := lang.NewSymbol("uri?")
-	sym_use := lang.NewSymbol("use")
-	sym_uuid_QMARK_ := lang.NewSymbol("uuid?")
-	sym_v := lang.NewSymbol("v")
-	sym_val := lang.NewSymbol("val")
-	sym_vals := lang.NewSymbol("vals")
-	sym_var_DASH_get := lang.NewSymbol("var-get")
-	sym_var_DASH_set := lang.NewSymbol("var-set")
-	sym_var_QMARK_ := lang.NewSymbol("var?")
-	sym_vary_DASH_meta := lang.NewSymbol("vary-meta")
-	sym_vec := lang.NewSymbol("vec")
-	sym_vector := lang.NewSymbol("vector")
-	sym_vector_QMARK_ := lang.NewSymbol("vector?")
-	sym_volatile_BANG_ := lang.NewSymbol("volatile!")
-	sym_volatile_QMARK_ := lang.NewSymbol("volatile?")
-	sym_vreset_BANG_ := lang.NewSymbol("vreset!")
-	sym_vswap_BANG_ := lang.NewSymbol("vswap!")
-	sym_when := lang.NewSymbol("when")
-	sym_when_DASH_first := lang.NewSymbol("when-first")
-	sym_when_DASH_let := lang.NewSymbol("when-let")
-	sym_when_DASH_not := lang.NewSymbol("when-not")
-	sym_when_DASH_some := lang.NewSymbol("when-some")
-	sym_while := lang.NewSymbol("while")
-	sym_with_DASH_bindings := lang.NewSymbol("with-bindings")
-	sym_with_DASH_bindings_STAR_ := lang.NewSymbol("with-bindings*")
-	sym_with_DASH_in_DASH_str := lang.NewSymbol("with-in-str")
-	sym_with_DASH_loading_DASH_context := lang.NewSymbol("with-loading-context")
-	sym_with_DASH_local_DASH_vars := lang.NewSymbol("with-local-vars")
-	sym_with_DASH_meta := lang.NewSymbol("with-meta")
-	sym_with_DASH_open := lang.NewSymbol("with-open")
-	sym_with_DASH_out_DASH_str := lang.NewSymbol("with-out-str")
-	sym_with_DASH_precision := lang.NewSymbol("with-precision")
-	sym_with_DASH_redefs := lang.NewSymbol("with-redefs")
-	sym_with_DASH_redefs_DASH_fn := lang.NewSymbol("with-redefs-fn")
-	sym_xml_DASH_seq := lang.NewSymbol("xml-seq")
-	sym_zero_QMARK_ := lang.NewSymbol("zero?")
-	sym_zipmap := lang.NewSymbol("zipmap")
+	sym__STAR_ := lang.NewSymbolUnchecked("*")
+	sym__STAR__TICK_ := lang.NewSymbolUnchecked("*'")
+	sym__STAR_1 := lang.NewSymbolUnchecked("*1")
+	sym__STAR_2 := lang.NewSymbolUnchecked("*2")
+	sym__STAR_3 := lang.NewSymbolUnchecked("*3")
+	sym__STAR_agent_STAR_ := lang.NewSymbolUnchecked("*agent*")
+	sym__STAR_assert_STAR_ := lang.NewSymbolUnchecked("*assert*")
+	sym__STAR_command_DASH_line_DASH_args_STAR_ := lang.NewSymbolUnchecked("*command-line-args*")
+	sym__STAR_compile_DASH_files_STAR_ := lang.NewSymbolUnchecked("*compile-files*")
+	sym__STAR_compile_DASH_path_STAR_ := lang.NewSymbolUnchecked("*compile-path*")
+	sym__STAR_compiler_DASH_options_STAR_ := lang.NewSymbolUnchecked("*compiler-options*")
+	sym__STAR_data_DASH_readers_STAR_ := lang.NewSymbolUnchecked("*data-readers*")
+	sym__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_ := lang.NewSymbolUnchecked("*default-data-reader-fn*")
+	sym__STAR_e := lang.NewSymbolUnchecked("*e")
+	sym__STAR_err_STAR_ := lang.NewSymbolUnchecked("*err*")
+	sym__STAR_file_STAR_ := lang.NewSymbolUnchecked("*file*")
+	sym__STAR_flush_DASH_on_DASH_newline_STAR_ := lang.NewSymbolUnchecked("*flush-on-newline*")
+	sym__STAR_glojure_DASH_version_STAR_ := lang.NewSymbolUnchecked("*glojure-version*")
+	sym__STAR_in_STAR_ := lang.NewSymbolUnchecked("*in*")
+	sym__STAR_loaded_DASH_libs_STAR_ := lang.NewSymbolUnchecked("*loaded-libs*")
+	sym__STAR_loading_DASH_verbosely_STAR_ := lang.NewSymbolUnchecked("*loading-verbosely*")
+	sym__STAR_ns_STAR_ := lang.NewSymbolUnchecked("*ns*")
+	sym__STAR_out_STAR_ := lang.NewSymbolUnchecked("*out*")
+	sym__STAR_pending_DASH_paths_STAR_ := lang.NewSymbolUnchecked("*pending-paths*")
+	sym__STAR_print_DASH_dup_STAR_ := lang.NewSymbolUnchecked("*print-dup*")
+	sym__STAR_print_DASH_length_STAR_ := lang.NewSymbolUnchecked("*print-length*")
+	sym__STAR_print_DASH_level_STAR_ := lang.NewSymbolUnchecked("*print-level*")
+	sym__STAR_print_DASH_meta_STAR_ := lang.NewSymbolUnchecked("*print-meta*")
+	sym__STAR_print_DASH_namespace_DASH_maps_STAR_ := lang.NewSymbolUnchecked("*print-namespace-maps*")
+	sym__STAR_print_DASH_readably_STAR_ := lang.NewSymbolUnchecked("*print-readably*")
+	sym__STAR_read_DASH_eval_STAR_ := lang.NewSymbolUnchecked("*read-eval*")
+	sym__STAR_repl_STAR_ := lang.NewSymbolUnchecked("*repl*")
+	sym__STAR_unchecked_DASH_math_STAR_ := lang.NewSymbolUnchecked("*unchecked-math*")
+	sym__STAR_verbose_DASH_defrecords_STAR_ := lang.NewSymbolUnchecked("*verbose-defrecords*")
+	sym__STAR_warn_DASH_on_DASH_reflection_STAR_ := lang.NewSymbolUnchecked("*warn-on-reflection*")
+	sym__PLUS_ := lang.NewSymbolUnchecked("+")
+	sym__PLUS__TICK_ := lang.NewSymbolUnchecked("+'")
+	sym__DASH_ := lang.NewSymbolUnchecked("-")
+	sym__DASH__TICK_ := lang.NewSymbolUnchecked("-'")
+	sym__DASH__GT_ := lang.NewSymbolUnchecked("->")
+	sym__DASH__GT__GT_ := lang.NewSymbolUnchecked("->>")
+	sym__DOT__DOT_ := lang.NewSymbolUnchecked("..")
+	sym__SLASH_ := lang.NewSymbolUnchecked("/")
+	sym__LT_ := lang.NewSymbolUnchecked("<")
+	sym__LT__EQ_ := lang.NewSymbolUnchecked("<=")
+	sym__EQ_ := lang.NewSymbolUnchecked("=")
+	sym__EQ__EQ_ := lang.NewSymbolUnchecked("==")
+	sym__GT_ := lang.NewSymbolUnchecked(">")
+	sym__GT__EQ_ := lang.NewSymbolUnchecked(">=")
+	sym_CollReduce := lang.NewSymbolUnchecked("CollReduce")
+	sym_Datafiable := lang.NewSymbolUnchecked("Datafiable")
+	sym_IKVReduce := lang.NewSymbolUnchecked("IKVReduce")
+	sym_InternalReduce := lang.NewSymbolUnchecked("InternalReduce")
+	sym_NaN_QMARK_ := lang.NewSymbolUnchecked("NaN?")
+	sym_Navigable := lang.NewSymbolUnchecked("Navigable")
+	sym_StackTraceElement_DASH__GT_vec := lang.NewSymbolUnchecked("StackTraceElement->vec")
+	sym_Throwable_DASH__GT_map := lang.NewSymbolUnchecked("Throwable->map")
+	sym_abs := lang.NewSymbolUnchecked("abs")
+	sym_accessor := lang.NewSymbolUnchecked("accessor")
+	sym_aclone := lang.NewSymbolUnchecked("aclone")
+	sym_add_DASH_classpath := lang.NewSymbolUnchecked("add-classpath")
+	sym_add_DASH_load_DASH_path := lang.NewSymbolUnchecked("add-load-path")
+	sym_add_DASH_watch := lang.NewSymbolUnchecked("add-watch")
+	sym_agent := lang.NewSymbolUnchecked("agent")
+	sym_agent_DASH_error := lang.NewSymbolUnchecked("agent-error")
+	sym_agent_DASH_errors := lang.NewSymbolUnchecked("agent-errors")
+	sym_aget := lang.NewSymbolUnchecked("aget")
+	sym_alength := lang.NewSymbolUnchecked("alength")
+	sym_alias := lang.NewSymbolUnchecked("alias")
+	sym_all_DASH_ns := lang.NewSymbolUnchecked("all-ns")
+	sym_alter := lang.NewSymbolUnchecked("alter")
+	sym_alter_DASH_meta_BANG_ := lang.NewSymbolUnchecked("alter-meta!")
+	sym_alter_DASH_var_DASH_root := lang.NewSymbolUnchecked("alter-var-root")
+	sym_amap := lang.NewSymbolUnchecked("amap")
+	sym_ancestors := lang.NewSymbolUnchecked("ancestors")
+	sym_and := lang.NewSymbolUnchecked("and")
+	sym_any_QMARK_ := lang.NewSymbolUnchecked("any?")
+	sym_apply := lang.NewSymbolUnchecked("apply")
+	sym_areduce := lang.NewSymbolUnchecked("areduce")
+	sym_array_DASH_map := lang.NewSymbolUnchecked("array-map")
+	sym_as_DASH__GT_ := lang.NewSymbolUnchecked("as->")
+	sym_aset := lang.NewSymbolUnchecked("aset")
+	sym_aset_DASH_boolean := lang.NewSymbolUnchecked("aset-boolean")
+	sym_aset_DASH_byte := lang.NewSymbolUnchecked("aset-byte")
+	sym_aset_DASH_char := lang.NewSymbolUnchecked("aset-char")
+	sym_aset_DASH_double := lang.NewSymbolUnchecked("aset-double")
+	sym_aset_DASH_float := lang.NewSymbolUnchecked("aset-float")
+	sym_aset_DASH_int := lang.NewSymbolUnchecked("aset-int")
+	sym_aset_DASH_long := lang.NewSymbolUnchecked("aset-long")
+	sym_aset_DASH_short := lang.NewSymbolUnchecked("aset-short")
+	sym_assert := lang.NewSymbolUnchecked("assert")
+	sym_assoc := lang.NewSymbolUnchecked("assoc")
+	sym_assoc_BANG_ := lang.NewSymbolUnchecked("assoc!")
+	sym_assoc_DASH_in := lang.NewSymbolUnchecked("assoc-in")
+	sym_associative_QMARK_ := lang.NewSymbolUnchecked("associative?")
+	sym_atom := lang.NewSymbolUnchecked("atom")
+	sym_await := lang.NewSymbolUnchecked("await")
+	sym_await_DASH_for := lang.NewSymbolUnchecked("await-for")
+	sym_await1 := lang.NewSymbolUnchecked("await1")
+	sym_bases := lang.NewSymbolUnchecked("bases")
+	sym_bigdec := lang.NewSymbolUnchecked("bigdec")
+	sym_bigint := lang.NewSymbolUnchecked("bigint")
+	sym_biginteger := lang.NewSymbolUnchecked("biginteger")
+	sym_binding := lang.NewSymbolUnchecked("binding")
+	sym_bit_DASH_and := lang.NewSymbolUnchecked("bit-and")
+	sym_bit_DASH_and_DASH_not := lang.NewSymbolUnchecked("bit-and-not")
+	sym_bit_DASH_clear := lang.NewSymbolUnchecked("bit-clear")
+	sym_bit_DASH_flip := lang.NewSymbolUnchecked("bit-flip")
+	sym_bit_DASH_not := lang.NewSymbolUnchecked("bit-not")
+	sym_bit_DASH_or := lang.NewSymbolUnchecked("bit-or")
+	sym_bit_DASH_set := lang.NewSymbolUnchecked("bit-set")
+	sym_bit_DASH_shift_DASH_left := lang.NewSymbolUnchecked("bit-shift-left")
+	sym_bit_DASH_shift_DASH_right := lang.NewSymbolUnchecked("bit-shift-right")
+	sym_bit_DASH_test := lang.NewSymbolUnchecked("bit-test")
+	sym_bit_DASH_xor := lang.NewSymbolUnchecked("bit-xor")
+	sym_boolean := lang.NewSymbolUnchecked("boolean")
+	sym_boolean_DASH_array := lang.NewSymbolUnchecked("boolean-array")
+	sym_boolean_QMARK_ := lang.NewSymbolUnchecked("boolean?")
+	sym_booleans := lang.NewSymbolUnchecked("booleans")
+	sym_bound_DASH_fn := lang.NewSymbolUnchecked("bound-fn")
+	sym_bound_DASH_fn_STAR_ := lang.NewSymbolUnchecked("bound-fn*")
+	sym_bound_QMARK_ := lang.NewSymbolUnchecked("bound?")
+	sym_bounded_DASH_count := lang.NewSymbolUnchecked("bounded-count")
+	sym_butlast := lang.NewSymbolUnchecked("butlast")
+	sym_byte := lang.NewSymbolUnchecked("byte")
+	sym_byte_DASH_array := lang.NewSymbolUnchecked("byte-array")
+	sym_bytes := lang.NewSymbolUnchecked("bytes")
+	sym_bytes_QMARK_ := lang.NewSymbolUnchecked("bytes?")
+	sym_case := lang.NewSymbolUnchecked("case")
+	sym_cast := lang.NewSymbolUnchecked("cast")
+	sym_cat := lang.NewSymbolUnchecked("cat")
+	sym_char := lang.NewSymbolUnchecked("char")
+	sym_char_DASH_array := lang.NewSymbolUnchecked("char-array")
+	sym_char_DASH_escape_DASH_string := lang.NewSymbolUnchecked("char-escape-string")
+	sym_char_DASH_name_DASH_string := lang.NewSymbolUnchecked("char-name-string")
+	sym_char_QMARK_ := lang.NewSymbolUnchecked("char?")
+	sym_chars := lang.NewSymbolUnchecked("chars")
+	sym_chunk := lang.NewSymbolUnchecked("chunk")
+	sym_chunk_DASH_append := lang.NewSymbolUnchecked("chunk-append")
+	sym_chunk_DASH_buffer := lang.NewSymbolUnchecked("chunk-buffer")
+	sym_chunk_DASH_cons := lang.NewSymbolUnchecked("chunk-cons")
+	sym_chunk_DASH_first := lang.NewSymbolUnchecked("chunk-first")
+	sym_chunk_DASH_next := lang.NewSymbolUnchecked("chunk-next")
+	sym_chunk_DASH_rest := lang.NewSymbolUnchecked("chunk-rest")
+	sym_chunked_DASH_seq_QMARK_ := lang.NewSymbolUnchecked("chunked-seq?")
+	sym_class := lang.NewSymbolUnchecked("class")
+	sym_class_QMARK_ := lang.NewSymbolUnchecked("class?")
+	sym_clear_DASH_agent_DASH_errors := lang.NewSymbolUnchecked("clear-agent-errors")
+	sym_clojure_DOT_core := lang.NewSymbolUnchecked("clojure.core")
+	sym_clojure_DOT_core_DOT_protocols := lang.NewSymbolUnchecked("clojure.core.protocols")
+	sym_coll := lang.NewSymbolUnchecked("coll")
+	sym_coll_DASH_reduce := lang.NewSymbolUnchecked("coll-reduce")
+	sym_coll_QMARK_ := lang.NewSymbolUnchecked("coll?")
+	sym_comment := lang.NewSymbolUnchecked("comment")
+	sym_commute := lang.NewSymbolUnchecked("commute")
+	sym_comp := lang.NewSymbolUnchecked("comp")
+	sym_comparator := lang.NewSymbolUnchecked("comparator")
+	sym_compare := lang.NewSymbolUnchecked("compare")
+	sym_compare_DASH_and_DASH_set_BANG_ := lang.NewSymbolUnchecked("compare-and-set!")
+	sym_compile := lang.NewSymbolUnchecked("compile")
+	sym_complement := lang.NewSymbolUnchecked("complement")
+	sym_completing := lang.NewSymbolUnchecked("completing")
+	sym_concat := lang.NewSymbolUnchecked("concat")
+	sym_cond := lang.NewSymbolUnchecked("cond")
+	sym_cond_DASH__GT_ := lang.NewSymbolUnchecked("cond->")
+	sym_cond_DASH__GT__GT_ := lang.NewSymbolUnchecked("cond->>")
+	sym_condp := lang.NewSymbolUnchecked("condp")
+	sym_conj := lang.NewSymbolUnchecked("conj")
+	sym_conj_BANG_ := lang.NewSymbolUnchecked("conj!")
+	sym_cons := lang.NewSymbolUnchecked("cons")
+	sym_constantly := lang.NewSymbolUnchecked("constantly")
+	sym_contains_QMARK_ := lang.NewSymbolUnchecked("contains?")
+	sym_count := lang.NewSymbolUnchecked("count")
+	sym_counted_QMARK_ := lang.NewSymbolUnchecked("counted?")
+	sym_create_DASH_ns := lang.NewSymbolUnchecked("create-ns")
+	sym_create_DASH_struct := lang.NewSymbolUnchecked("create-struct")
+	sym_cycle := lang.NewSymbolUnchecked("cycle")
+	sym_datafy := lang.NewSymbolUnchecked("datafy")
+	sym_dec := lang.NewSymbolUnchecked("dec")
+	sym_dec_TICK_ := lang.NewSymbolUnchecked("dec'")
+	sym_decimal_QMARK_ := lang.NewSymbolUnchecked("decimal?")
+	sym_declare := lang.NewSymbolUnchecked("declare")
+	sym_dedupe := lang.NewSymbolUnchecked("dedupe")
+	sym_definline := lang.NewSymbolUnchecked("definline")
+	sym_defmacro := lang.NewSymbolUnchecked("defmacro")
+	sym_defmethod := lang.NewSymbolUnchecked("defmethod")
+	sym_defmulti := lang.NewSymbolUnchecked("defmulti")
+	sym_defn := lang.NewSymbolUnchecked("defn")
+	sym_defn_DASH_ := lang.NewSymbolUnchecked("defn-")
+	sym_defonce := lang.NewSymbolUnchecked("defonce")
+	sym_defprotocol := lang.NewSymbolUnchecked("defprotocol")
+	sym_defstruct := lang.NewSymbolUnchecked("defstruct")
+	sym_delay := lang.NewSymbolUnchecked("delay")
+	sym_delay_QMARK_ := lang.NewSymbolUnchecked("delay?")
+	sym_deliver := lang.NewSymbolUnchecked("deliver")
+	sym_denominator := lang.NewSymbolUnchecked("denominator")
+	sym_deref := lang.NewSymbolUnchecked("deref")
+	sym_derive := lang.NewSymbolUnchecked("derive")
+	sym_descendants := lang.NewSymbolUnchecked("descendants")
+	sym_destructure := lang.NewSymbolUnchecked("destructure")
+	sym_disj := lang.NewSymbolUnchecked("disj")
+	sym_disj_BANG_ := lang.NewSymbolUnchecked("disj!")
+	sym_dissoc := lang.NewSymbolUnchecked("dissoc")
+	sym_dissoc_BANG_ := lang.NewSymbolUnchecked("dissoc!")
+	sym_distinct := lang.NewSymbolUnchecked("distinct")
+	sym_distinct_QMARK_ := lang.NewSymbolUnchecked("distinct?")
+	sym_doall := lang.NewSymbolUnchecked("doall")
+	sym_dorun := lang.NewSymbolUnchecked("dorun")
+	sym_doseq := lang.NewSymbolUnchecked("doseq")
+	sym_dosync := lang.NewSymbolUnchecked("dosync")
+	sym_dotimes := lang.NewSymbolUnchecked("dotimes")
+	sym_doto := lang.NewSymbolUnchecked("doto")
+	sym_double := lang.NewSymbolUnchecked("double")
+	sym_double_DASH_array := lang.NewSymbolUnchecked("double-array")
+	sym_double_QMARK_ := lang.NewSymbolUnchecked("double?")
+	sym_doubles := lang.NewSymbolUnchecked("doubles")
+	sym_drop := lang.NewSymbolUnchecked("drop")
+	sym_drop_DASH_last := lang.NewSymbolUnchecked("drop-last")
+	sym_drop_DASH_while := lang.NewSymbolUnchecked("drop-while")
+	sym_empty := lang.NewSymbolUnchecked("empty")
+	sym_empty_QMARK_ := lang.NewSymbolUnchecked("empty?")
+	sym_ensure := lang.NewSymbolUnchecked("ensure")
+	sym_ensure_DASH_reduced := lang.NewSymbolUnchecked("ensure-reduced")
+	sym_enumeration_DASH_seq := lang.NewSymbolUnchecked("enumeration-seq")
+	sym_error_DASH_handler := lang.NewSymbolUnchecked("error-handler")
+	sym_error_DASH_mode := lang.NewSymbolUnchecked("error-mode")
+	sym_eval := lang.NewSymbolUnchecked("eval")
+	sym_even_QMARK_ := lang.NewSymbolUnchecked("even?")
+	sym_every_DASH_pred := lang.NewSymbolUnchecked("every-pred")
+	sym_every_QMARK_ := lang.NewSymbolUnchecked("every?")
+	sym_ex_DASH_cause := lang.NewSymbolUnchecked("ex-cause")
+	sym_ex_DASH_data := lang.NewSymbolUnchecked("ex-data")
+	sym_ex_DASH_info := lang.NewSymbolUnchecked("ex-info")
+	sym_ex_DASH_message := lang.NewSymbolUnchecked("ex-message")
+	sym_extend := lang.NewSymbolUnchecked("extend")
+	sym_extend_DASH_protocol := lang.NewSymbolUnchecked("extend-protocol")
+	sym_extend_DASH_type := lang.NewSymbolUnchecked("extend-type")
+	sym_f := lang.NewSymbolUnchecked("f")
+	sym_false_QMARK_ := lang.NewSymbolUnchecked("false?")
+	sym_ffirst := lang.NewSymbolUnchecked("ffirst")
+	sym_file_DASH_seq := lang.NewSymbolUnchecked("file-seq")
+	sym_filter := lang.NewSymbolUnchecked("filter")
+	sym_filterv := lang.NewSymbolUnchecked("filterv")
+	sym_find := lang.NewSymbolUnchecked("find")
+	sym_find_DASH_keyword := lang.NewSymbolUnchecked("find-keyword")
+	sym_find_DASH_ns := lang.NewSymbolUnchecked("find-ns")
+	sym_find_DASH_var := lang.NewSymbolUnchecked("find-var")
+	sym_first := lang.NewSymbolUnchecked("first")
+	sym_flatten := lang.NewSymbolUnchecked("flatten")
+	sym_float := lang.NewSymbolUnchecked("float")
+	sym_float_DASH_array := lang.NewSymbolUnchecked("float-array")
+	sym_float_QMARK_ := lang.NewSymbolUnchecked("float?")
+	sym_floats := lang.NewSymbolUnchecked("floats")
+	sym_flush := lang.NewSymbolUnchecked("flush")
+	sym_fn := lang.NewSymbolUnchecked("fn")
+	sym_fn_QMARK_ := lang.NewSymbolUnchecked("fn?")
+	sym_fnext := lang.NewSymbolUnchecked("fnext")
+	sym_fnil := lang.NewSymbolUnchecked("fnil")
+	sym_for := lang.NewSymbolUnchecked("for")
+	sym_force := lang.NewSymbolUnchecked("force")
+	sym_format := lang.NewSymbolUnchecked("format")
+	sym_frequencies := lang.NewSymbolUnchecked("frequencies")
+	sym_future := lang.NewSymbolUnchecked("future")
+	sym_future_DASH_call := lang.NewSymbolUnchecked("future-call")
+	sym_future_DASH_cancel := lang.NewSymbolUnchecked("future-cancel")
+	sym_future_DASH_cancelled_QMARK_ := lang.NewSymbolUnchecked("future-cancelled?")
+	sym_future_DASH_done_QMARK_ := lang.NewSymbolUnchecked("future-done?")
+	sym_future_QMARK_ := lang.NewSymbolUnchecked("future?")
+	sym_gen_DASH_class := lang.NewSymbolUnchecked("gen-class")
+	sym_gensym := lang.NewSymbolUnchecked("gensym")
+	sym_get := lang.NewSymbolUnchecked("get")
+	sym_get_DASH_in := lang.NewSymbolUnchecked("get-in")
+	sym_get_DASH_method := lang.NewSymbolUnchecked("get-method")
+	sym_get_DASH_thread_DASH_bindings := lang.NewSymbolUnchecked("get-thread-bindings")
+	sym_get_DASH_validator := lang.NewSymbolUnchecked("get-validator")
+	sym_global_DASH_hierarchy := lang.NewSymbolUnchecked("global-hierarchy")
+	sym_group_DASH_by := lang.NewSymbolUnchecked("group-by")
+	sym_halt_DASH_when := lang.NewSymbolUnchecked("halt-when")
+	sym_hash := lang.NewSymbolUnchecked("hash")
+	sym_hash_DASH_map := lang.NewSymbolUnchecked("hash-map")
+	sym_hash_DASH_ordered_DASH_coll := lang.NewSymbolUnchecked("hash-ordered-coll")
+	sym_hash_DASH_set := lang.NewSymbolUnchecked("hash-set")
+	sym_hash_DASH_unordered_DASH_coll := lang.NewSymbolUnchecked("hash-unordered-coll")
+	sym_ident_QMARK_ := lang.NewSymbolUnchecked("ident?")
+	sym_identical_QMARK_ := lang.NewSymbolUnchecked("identical?")
+	sym_identity := lang.NewSymbolUnchecked("identity")
+	sym_if_DASH_let := lang.NewSymbolUnchecked("if-let")
+	sym_if_DASH_not := lang.NewSymbolUnchecked("if-not")
+	sym_if_DASH_some := lang.NewSymbolUnchecked("if-some")
+	sym_ifn_QMARK_ := lang.NewSymbolUnchecked("ifn?")
+	sym_import := lang.NewSymbolUnchecked("import")
+	sym_in_DASH_ns := lang.NewSymbolUnchecked("in-ns")
+	sym_inc := lang.NewSymbolUnchecked("inc")
+	sym_inc_TICK_ := lang.NewSymbolUnchecked("inc'")
+	sym_indexed_QMARK_ := lang.NewSymbolUnchecked("indexed?")
+	sym_infinite_QMARK_ := lang.NewSymbolUnchecked("infinite?")
+	sym_init := lang.NewSymbolUnchecked("init")
+	sym_inst_DASH_ms := lang.NewSymbolUnchecked("inst-ms")
+	sym_inst_QMARK_ := lang.NewSymbolUnchecked("inst?")
+	sym_instance_QMARK_ := lang.NewSymbolUnchecked("instance?")
+	sym_int := lang.NewSymbolUnchecked("int")
+	sym_int_DASH_array := lang.NewSymbolUnchecked("int-array")
+	sym_int_QMARK_ := lang.NewSymbolUnchecked("int?")
+	sym_integer_QMARK_ := lang.NewSymbolUnchecked("integer?")
+	sym_interface_DASH_or_DASH_naive_DASH_reduce := lang.NewSymbolUnchecked("interface-or-naive-reduce")
+	sym_interleave := lang.NewSymbolUnchecked("interleave")
+	sym_intern := lang.NewSymbolUnchecked("intern")
+	sym_internal_DASH_reduce := lang.NewSymbolUnchecked("internal-reduce")
+	sym_interpose := lang.NewSymbolUnchecked("interpose")
+	sym_into := lang.NewSymbolUnchecked("into")
+	sym_into_DASH_array := lang.NewSymbolUnchecked("into-array")
+	sym_ints := lang.NewSymbolUnchecked("ints")
+	sym_io_BANG_ := lang.NewSymbolUnchecked("io!")
+	sym_isa_QMARK_ := lang.NewSymbolUnchecked("isa?")
+	sym_iter_DASH_reduce := lang.NewSymbolUnchecked("iter-reduce")
+	sym_iterate := lang.NewSymbolUnchecked("iterate")
+	sym_iteration := lang.NewSymbolUnchecked("iteration")
+	sym_iterator_DASH_seq := lang.NewSymbolUnchecked("iterator-seq")
+	sym_juxt := lang.NewSymbolUnchecked("juxt")
+	sym_k := lang.NewSymbolUnchecked("k")
+	sym_keep := lang.NewSymbolUnchecked("keep")
+	sym_keep_DASH_indexed := lang.NewSymbolUnchecked("keep-indexed")
+	sym_key := lang.NewSymbolUnchecked("key")
+	sym_keys := lang.NewSymbolUnchecked("keys")
+	sym_keyword := lang.NewSymbolUnchecked("keyword")
+	sym_keyword_QMARK_ := lang.NewSymbolUnchecked("keyword?")
+	sym_kv_DASH_reduce := lang.NewSymbolUnchecked("kv-reduce")
+	sym_last := lang.NewSymbolUnchecked("last")
+	sym_lazy_DASH_cat := lang.NewSymbolUnchecked("lazy-cat")
+	sym_lazy_DASH_seq := lang.NewSymbolUnchecked("lazy-seq")
+	sym_let := lang.NewSymbolUnchecked("let")
+	sym_letfn := lang.NewSymbolUnchecked("letfn")
+	sym_line_DASH_seq := lang.NewSymbolUnchecked("line-seq")
+	sym_list := lang.NewSymbolUnchecked("list")
+	sym_list_STAR_ := lang.NewSymbolUnchecked("list*")
+	sym_list_QMARK_ := lang.NewSymbolUnchecked("list?")
+	sym_load := lang.NewSymbolUnchecked("load")
+	sym_load_DASH_file := lang.NewSymbolUnchecked("load-file")
+	sym_load_DASH_reader := lang.NewSymbolUnchecked("load-reader")
+	sym_load_DASH_string := lang.NewSymbolUnchecked("load-string")
+	sym_loaded_DASH_libs := lang.NewSymbolUnchecked("loaded-libs")
+	sym_locking := lang.NewSymbolUnchecked("locking")
+	sym_long := lang.NewSymbolUnchecked("long")
+	sym_long_DASH_array := lang.NewSymbolUnchecked("long-array")
+	sym_longs := lang.NewSymbolUnchecked("longs")
+	sym_loop := lang.NewSymbolUnchecked("loop")
+	sym_macroexpand := lang.NewSymbolUnchecked("macroexpand")
+	sym_macroexpand_DASH_1 := lang.NewSymbolUnchecked("macroexpand-1")
+	sym_make_DASH_array := lang.NewSymbolUnchecked("make-array")
+	sym_make_DASH_hierarchy := lang.NewSymbolUnchecked("make-hierarchy")
+	sym_map := lang.NewSymbolUnchecked("map")
+	sym_map_DASH_entry_QMARK_ := lang.NewSymbolUnchecked("map-entry?")
+	sym_map_DASH_indexed := lang.NewSymbolUnchecked("map-indexed")
+	sym_map_QMARK_ := lang.NewSymbolUnchecked("map?")
+	sym_mapcat := lang.NewSymbolUnchecked("mapcat")
+	sym_mapv := lang.NewSymbolUnchecked("mapv")
+	sym_max := lang.NewSymbolUnchecked("max")
+	sym_max_DASH_key := lang.NewSymbolUnchecked("max-key")
+	sym_memfn := lang.NewSymbolUnchecked("memfn")
+	sym_memoize := lang.NewSymbolUnchecked("memoize")
+	sym_merge := lang.NewSymbolUnchecked("merge")
+	sym_merge_DASH_with := lang.NewSymbolUnchecked("merge-with")
+	sym_meta := lang.NewSymbolUnchecked("meta")
+	sym_methods := lang.NewSymbolUnchecked("methods")
+	sym_min := lang.NewSymbolUnchecked("min")
+	sym_min_DASH_key := lang.NewSymbolUnchecked("min-key")
+	sym_mix_DASH_collection_DASH_hash := lang.NewSymbolUnchecked("mix-collection-hash")
+	sym_mod := lang.NewSymbolUnchecked("mod")
+	sym_naive_DASH_seq_DASH_reduce := lang.NewSymbolUnchecked("naive-seq-reduce")
+	sym_name := lang.NewSymbolUnchecked("name")
+	sym_namespace := lang.NewSymbolUnchecked("namespace")
+	sym_nat_DASH_int_QMARK_ := lang.NewSymbolUnchecked("nat-int?")
+	sym_nav := lang.NewSymbolUnchecked("nav")
+	sym_neg_DASH_int_QMARK_ := lang.NewSymbolUnchecked("neg-int?")
+	sym_neg_QMARK_ := lang.NewSymbolUnchecked("neg?")
+	sym_newline := lang.NewSymbolUnchecked("newline")
+	sym_next := lang.NewSymbolUnchecked("next")
+	sym_nfirst := lang.NewSymbolUnchecked("nfirst")
+	sym_nil_QMARK_ := lang.NewSymbolUnchecked("nil?")
+	sym_nnext := lang.NewSymbolUnchecked("nnext")
+	sym_not := lang.NewSymbolUnchecked("not")
+	sym_not_DASH_any_QMARK_ := lang.NewSymbolUnchecked("not-any?")
+	sym_not_DASH_empty := lang.NewSymbolUnchecked("not-empty")
+	sym_not_DASH_every_QMARK_ := lang.NewSymbolUnchecked("not-every?")
+	sym_not_EQ_ := lang.NewSymbolUnchecked("not=")
+	sym_ns := lang.NewSymbolUnchecked("ns")
+	sym_ns_DASH_aliases := lang.NewSymbolUnchecked("ns-aliases")
+	sym_ns_DASH_imports := lang.NewSymbolUnchecked("ns-imports")
+	sym_ns_DASH_interns := lang.NewSymbolUnchecked("ns-interns")
+	sym_ns_DASH_map := lang.NewSymbolUnchecked("ns-map")
+	sym_ns_DASH_name := lang.NewSymbolUnchecked("ns-name")
+	sym_ns_DASH_publics := lang.NewSymbolUnchecked("ns-publics")
+	sym_ns_DASH_refers := lang.NewSymbolUnchecked("ns-refers")
+	sym_ns_DASH_resolve := lang.NewSymbolUnchecked("ns-resolve")
+	sym_ns_DASH_unalias := lang.NewSymbolUnchecked("ns-unalias")
+	sym_ns_DASH_unmap := lang.NewSymbolUnchecked("ns-unmap")
+	sym_nth := lang.NewSymbolUnchecked("nth")
+	sym_nthnext := lang.NewSymbolUnchecked("nthnext")
+	sym_nthrest := lang.NewSymbolUnchecked("nthrest")
+	sym_num := lang.NewSymbolUnchecked("num")
+	sym_number_QMARK_ := lang.NewSymbolUnchecked("number?")
+	sym_numerator := lang.NewSymbolUnchecked("numerator")
+	sym_o := lang.NewSymbolUnchecked("o")
+	sym_object_DASH_array := lang.NewSymbolUnchecked("object-array")
+	sym_odd_QMARK_ := lang.NewSymbolUnchecked("odd?")
+	sym_or := lang.NewSymbolUnchecked("or")
+	sym_parents := lang.NewSymbolUnchecked("parents")
+	sym_parse_DASH_boolean := lang.NewSymbolUnchecked("parse-boolean")
+	sym_parse_DASH_double := lang.NewSymbolUnchecked("parse-double")
+	sym_parse_DASH_long := lang.NewSymbolUnchecked("parse-long")
+	sym_parse_DASH_uuid := lang.NewSymbolUnchecked("parse-uuid")
+	sym_partial := lang.NewSymbolUnchecked("partial")
+	sym_partition := lang.NewSymbolUnchecked("partition")
+	sym_partition_DASH_all := lang.NewSymbolUnchecked("partition-all")
+	sym_partition_DASH_by := lang.NewSymbolUnchecked("partition-by")
+	sym_partitionv := lang.NewSymbolUnchecked("partitionv")
+	sym_partitionv_DASH_all := lang.NewSymbolUnchecked("partitionv-all")
+	sym_pcalls := lang.NewSymbolUnchecked("pcalls")
+	sym_peek := lang.NewSymbolUnchecked("peek")
+	sym_persistent_BANG_ := lang.NewSymbolUnchecked("persistent!")
+	sym_pmap := lang.NewSymbolUnchecked("pmap")
+	sym_pop := lang.NewSymbolUnchecked("pop")
+	sym_pop_BANG_ := lang.NewSymbolUnchecked("pop!")
+	sym_pop_DASH_thread_DASH_bindings := lang.NewSymbolUnchecked("pop-thread-bindings")
+	sym_pos_DASH_int_QMARK_ := lang.NewSymbolUnchecked("pos-int?")
+	sym_pos_QMARK_ := lang.NewSymbolUnchecked("pos?")
+	sym_pr := lang.NewSymbolUnchecked("pr")
+	sym_pr_DASH_str := lang.NewSymbolUnchecked("pr-str")
+	sym_prefer_DASH_method := lang.NewSymbolUnchecked("prefer-method")
+	sym_prefers := lang.NewSymbolUnchecked("prefers")
+	sym_print := lang.NewSymbolUnchecked("print")
+	sym_print_DASH_ctor := lang.NewSymbolUnchecked("print-ctor")
+	sym_print_DASH_dup := lang.NewSymbolUnchecked("print-dup")
+	sym_print_DASH_method := lang.NewSymbolUnchecked("print-method")
+	sym_print_DASH_simple := lang.NewSymbolUnchecked("print-simple")
+	sym_print_DASH_str := lang.NewSymbolUnchecked("print-str")
+	sym_printf := lang.NewSymbolUnchecked("printf")
+	sym_println := lang.NewSymbolUnchecked("println")
+	sym_println_DASH_str := lang.NewSymbolUnchecked("println-str")
+	sym_prn := lang.NewSymbolUnchecked("prn")
+	sym_prn_DASH_str := lang.NewSymbolUnchecked("prn-str")
+	sym_promise := lang.NewSymbolUnchecked("promise")
+	sym_push_DASH_thread_DASH_bindings := lang.NewSymbolUnchecked("push-thread-bindings")
+	sym_pvalues := lang.NewSymbolUnchecked("pvalues")
+	sym_qualified_DASH_ident_QMARK_ := lang.NewSymbolUnchecked("qualified-ident?")
+	sym_qualified_DASH_keyword_QMARK_ := lang.NewSymbolUnchecked("qualified-keyword?")
+	sym_qualified_DASH_symbol_QMARK_ := lang.NewSymbolUnchecked("qualified-symbol?")
+	sym_quot := lang.NewSymbolUnchecked("quot")
+	sym_rand := lang.NewSymbolUnchecked("rand")
+	sym_rand_DASH_int := lang.NewSymbolUnchecked("rand-int")
+	sym_rand_DASH_nth := lang.NewSymbolUnchecked("rand-nth")
+	sym_random_DASH_sample := lang.NewSymbolUnchecked("random-sample")
+	sym_random_DASH_uuid := lang.NewSymbolUnchecked("random-uuid")
+	sym_range := lang.NewSymbolUnchecked("range")
+	sym_ratio_QMARK_ := lang.NewSymbolUnchecked("ratio?")
+	sym_rational_QMARK_ := lang.NewSymbolUnchecked("rational?")
+	sym_rationalize := lang.NewSymbolUnchecked("rationalize")
+	sym_re_DASH_find := lang.NewSymbolUnchecked("re-find")
+	sym_re_DASH_groups := lang.NewSymbolUnchecked("re-groups")
+	sym_re_DASH_matcher := lang.NewSymbolUnchecked("re-matcher")
+	sym_re_DASH_matches := lang.NewSymbolUnchecked("re-matches")
+	sym_re_DASH_pattern := lang.NewSymbolUnchecked("re-pattern")
+	sym_re_DASH_seq := lang.NewSymbolUnchecked("re-seq")
+	sym_read := lang.NewSymbolUnchecked("read")
+	sym_read_PLUS_string := lang.NewSymbolUnchecked("read+string")
+	sym_read_DASH_line := lang.NewSymbolUnchecked("read-line")
+	sym_read_DASH_string := lang.NewSymbolUnchecked("read-string")
+	sym_reader_DASH_conditional := lang.NewSymbolUnchecked("reader-conditional")
+	sym_reader_DASH_conditional_QMARK_ := lang.NewSymbolUnchecked("reader-conditional?")
+	sym_realized_QMARK_ := lang.NewSymbolUnchecked("realized?")
+	sym_reduce := lang.NewSymbolUnchecked("reduce")
+	sym_reduce_DASH_kv := lang.NewSymbolUnchecked("reduce-kv")
+	sym_reduced := lang.NewSymbolUnchecked("reduced")
+	sym_reduced_QMARK_ := lang.NewSymbolUnchecked("reduced?")
+	sym_reductions := lang.NewSymbolUnchecked("reductions")
+	sym_ref := lang.NewSymbolUnchecked("ref")
+	sym_ref_DASH_history_DASH_count := lang.NewSymbolUnchecked("ref-history-count")
+	sym_ref_DASH_max_DASH_history := lang.NewSymbolUnchecked("ref-max-history")
+	sym_ref_DASH_min_DASH_history := lang.NewSymbolUnchecked("ref-min-history")
+	sym_ref_DASH_set := lang.NewSymbolUnchecked("ref-set")
+	sym_refer := lang.NewSymbolUnchecked("refer")
+	sym_refer_DASH_clojure := lang.NewSymbolUnchecked("refer-clojure")
+	sym_release_DASH_pending_DASH_sends := lang.NewSymbolUnchecked("release-pending-sends")
+	sym_rem := lang.NewSymbolUnchecked("rem")
+	sym_remove := lang.NewSymbolUnchecked("remove")
+	sym_remove_DASH_all_DASH_methods := lang.NewSymbolUnchecked("remove-all-methods")
+	sym_remove_DASH_method := lang.NewSymbolUnchecked("remove-method")
+	sym_remove_DASH_ns := lang.NewSymbolUnchecked("remove-ns")
+	sym_remove_DASH_tap := lang.NewSymbolUnchecked("remove-tap")
+	sym_remove_DASH_watch := lang.NewSymbolUnchecked("remove-watch")
+	sym_repeat := lang.NewSymbolUnchecked("repeat")
+	sym_repeatedly := lang.NewSymbolUnchecked("repeatedly")
+	sym_replace := lang.NewSymbolUnchecked("replace")
+	sym_replicate := lang.NewSymbolUnchecked("replicate")
+	sym_require := lang.NewSymbolUnchecked("require")
+	sym_requiring_DASH_resolve := lang.NewSymbolUnchecked("requiring-resolve")
+	sym_reset_BANG_ := lang.NewSymbolUnchecked("reset!")
+	sym_reset_DASH_meta_BANG_ := lang.NewSymbolUnchecked("reset-meta!")
+	sym_reset_DASH_vals_BANG_ := lang.NewSymbolUnchecked("reset-vals!")
+	sym_resolve := lang.NewSymbolUnchecked("resolve")
+	sym_rest := lang.NewSymbolUnchecked("rest")
+	sym_restart_DASH_agent := lang.NewSymbolUnchecked("restart-agent")
+	sym_resultset_DASH_seq := lang.NewSymbolUnchecked("resultset-seq")
+	sym_reverse := lang.NewSymbolUnchecked("reverse")
+	sym_reversible_QMARK_ := lang.NewSymbolUnchecked("reversible?")
+	sym_rseq := lang.NewSymbolUnchecked("rseq")
+	sym_rsubseq := lang.NewSymbolUnchecked("rsubseq")
+	sym_run_BANG_ := lang.NewSymbolUnchecked("run!")
+	sym_s := lang.NewSymbolUnchecked("s")
+	sym_second := lang.NewSymbolUnchecked("second")
+	sym_select_DASH_keys := lang.NewSymbolUnchecked("select-keys")
+	sym_send := lang.NewSymbolUnchecked("send")
+	sym_send_DASH_off := lang.NewSymbolUnchecked("send-off")
+	sym_send_DASH_via := lang.NewSymbolUnchecked("send-via")
+	sym_seq := lang.NewSymbolUnchecked("seq")
+	sym_seq_DASH_reduce := lang.NewSymbolUnchecked("seq-reduce")
+	sym_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring := lang.NewSymbolUnchecked("seq-to-map-for-destructuring")
+	sym_seq_QMARK_ := lang.NewSymbolUnchecked("seq?")
+	sym_seqable_QMARK_ := lang.NewSymbolUnchecked("seqable?")
+	sym_seque := lang.NewSymbolUnchecked("seque")
+	sym_sequence := lang.NewSymbolUnchecked("sequence")
+	sym_sequential_QMARK_ := lang.NewSymbolUnchecked("sequential?")
+	sym_set := lang.NewSymbolUnchecked("set")
+	sym_set_DASH_agent_DASH_send_DASH_executor_BANG_ := lang.NewSymbolUnchecked("set-agent-send-executor!")
+	sym_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_ := lang.NewSymbolUnchecked("set-agent-send-off-executor!")
+	sym_set_DASH_error_DASH_handler_BANG_ := lang.NewSymbolUnchecked("set-error-handler!")
+	sym_set_DASH_error_DASH_mode_BANG_ := lang.NewSymbolUnchecked("set-error-mode!")
+	sym_set_DASH_validator_BANG_ := lang.NewSymbolUnchecked("set-validator!")
+	sym_set_QMARK_ := lang.NewSymbolUnchecked("set?")
+	sym_short := lang.NewSymbolUnchecked("short")
+	sym_short_DASH_array := lang.NewSymbolUnchecked("short-array")
+	sym_shorts := lang.NewSymbolUnchecked("shorts")
+	sym_shuffle := lang.NewSymbolUnchecked("shuffle")
+	sym_shutdown_DASH_agents := lang.NewSymbolUnchecked("shutdown-agents")
+	sym_simple_DASH_ident_QMARK_ := lang.NewSymbolUnchecked("simple-ident?")
+	sym_simple_DASH_keyword_QMARK_ := lang.NewSymbolUnchecked("simple-keyword?")
+	sym_simple_DASH_symbol_QMARK_ := lang.NewSymbolUnchecked("simple-symbol?")
+	sym_slurp := lang.NewSymbolUnchecked("slurp")
+	sym_some := lang.NewSymbolUnchecked("some")
+	sym_some_DASH__GT_ := lang.NewSymbolUnchecked("some->")
+	sym_some_DASH__GT__GT_ := lang.NewSymbolUnchecked("some->>")
+	sym_some_DASH_fn := lang.NewSymbolUnchecked("some-fn")
+	sym_some_QMARK_ := lang.NewSymbolUnchecked("some?")
+	sym_sort := lang.NewSymbolUnchecked("sort")
+	sym_sort_DASH_by := lang.NewSymbolUnchecked("sort-by")
+	sym_sorted_DASH_map := lang.NewSymbolUnchecked("sorted-map")
+	sym_sorted_DASH_map_DASH_by := lang.NewSymbolUnchecked("sorted-map-by")
+	sym_sorted_DASH_set := lang.NewSymbolUnchecked("sorted-set")
+	sym_sorted_DASH_set_DASH_by := lang.NewSymbolUnchecked("sorted-set-by")
+	sym_sorted_QMARK_ := lang.NewSymbolUnchecked("sorted?")
+	sym_special_DASH_symbol_QMARK_ := lang.NewSymbolUnchecked("special-symbol?")
+	sym_spit := lang.NewSymbolUnchecked("spit")
+	sym_split_DASH_at := lang.NewSymbolUnchecked("split-at")
+	sym_split_DASH_with := lang.NewSymbolUnchecked("split-with")
+	sym_splitv_DASH_at := lang.NewSymbolUnchecked("splitv-at")
+	sym_start := lang.NewSymbolUnchecked("start")
+	sym_str := lang.NewSymbolUnchecked("str")
+	sym_stream_DASH_into_BANG_ := lang.NewSymbolUnchecked("stream-into!")
+	sym_stream_DASH_reduce_BANG_ := lang.NewSymbolUnchecked("stream-reduce!")
+	sym_stream_DASH_seq_BANG_ := lang.NewSymbolUnchecked("stream-seq!")
+	sym_stream_DASH_transduce_BANG_ := lang.NewSymbolUnchecked("stream-transduce!")
+	sym_string_QMARK_ := lang.NewSymbolUnchecked("string?")
+	sym_struct := lang.NewSymbolUnchecked("struct")
+	sym_struct_DASH_map := lang.NewSymbolUnchecked("struct-map")
+	sym_subs := lang.NewSymbolUnchecked("subs")
+	sym_subseq := lang.NewSymbolUnchecked("subseq")
+	sym_subvec := lang.NewSymbolUnchecked("subvec")
+	sym_supers := lang.NewSymbolUnchecked("supers")
+	sym_swap_BANG_ := lang.NewSymbolUnchecked("swap!")
+	sym_swap_DASH_vals_BANG_ := lang.NewSymbolUnchecked("swap-vals!")
+	sym_symbol := lang.NewSymbolUnchecked("symbol")
+	sym_symbol_QMARK_ := lang.NewSymbolUnchecked("symbol?")
+	sym_sync := lang.NewSymbolUnchecked("sync")
+	sym_tagged_DASH_literal := lang.NewSymbolUnchecked("tagged-literal")
+	sym_tagged_DASH_literal_QMARK_ := lang.NewSymbolUnchecked("tagged-literal?")
+	sym_take := lang.NewSymbolUnchecked("take")
+	sym_take_DASH_last := lang.NewSymbolUnchecked("take-last")
+	sym_take_DASH_nth := lang.NewSymbolUnchecked("take-nth")
+	sym_take_DASH_while := lang.NewSymbolUnchecked("take-while")
+	sym_test := lang.NewSymbolUnchecked("test")
+	sym_the_DASH_ns := lang.NewSymbolUnchecked("the-ns")
+	sym_thread_DASH_bound_QMARK_ := lang.NewSymbolUnchecked("thread-bound?")
+	sym_time := lang.NewSymbolUnchecked("time")
+	sym_to_DASH_array := lang.NewSymbolUnchecked("to-array")
+	sym_to_DASH_array_DASH_2d := lang.NewSymbolUnchecked("to-array-2d")
+	sym_trampoline := lang.NewSymbolUnchecked("trampoline")
+	sym_transduce := lang.NewSymbolUnchecked("transduce")
+	sym_transient := lang.NewSymbolUnchecked("transient")
+	sym_tree_DASH_seq := lang.NewSymbolUnchecked("tree-seq")
+	sym_true_QMARK_ := lang.NewSymbolUnchecked("true?")
+	sym_type := lang.NewSymbolUnchecked("type")
+	sym_unchecked_DASH_add := lang.NewSymbolUnchecked("unchecked-add")
+	sym_unchecked_DASH_add_DASH_int := lang.NewSymbolUnchecked("unchecked-add-int")
+	sym_unchecked_DASH_byte := lang.NewSymbolUnchecked("unchecked-byte")
+	sym_unchecked_DASH_char := lang.NewSymbolUnchecked("unchecked-char")
+	sym_unchecked_DASH_dec := lang.NewSymbolUnchecked("unchecked-dec")
+	sym_unchecked_DASH_dec_DASH_int := lang.NewSymbolUnchecked("unchecked-dec-int")
+	sym_unchecked_DASH_divide_DASH_int := lang.NewSymbolUnchecked("unchecked-divide-int")
+	sym_unchecked_DASH_double := lang.NewSymbolUnchecked("unchecked-double")
+	sym_unchecked_DASH_float := lang.NewSymbolUnchecked("unchecked-float")
+	sym_unchecked_DASH_inc := lang.NewSymbolUnchecked("unchecked-inc")
+	sym_unchecked_DASH_inc_DASH_int := lang.NewSymbolUnchecked("unchecked-inc-int")
+	sym_unchecked_DASH_int := lang.NewSymbolUnchecked("unchecked-int")
+	sym_unchecked_DASH_long := lang.NewSymbolUnchecked("unchecked-long")
+	sym_unchecked_DASH_multiply := lang.NewSymbolUnchecked("unchecked-multiply")
+	sym_unchecked_DASH_multiply_DASH_int := lang.NewSymbolUnchecked("unchecked-multiply-int")
+	sym_unchecked_DASH_negate := lang.NewSymbolUnchecked("unchecked-negate")
+	sym_unchecked_DASH_negate_DASH_int := lang.NewSymbolUnchecked("unchecked-negate-int")
+	sym_unchecked_DASH_remainder_DASH_int := lang.NewSymbolUnchecked("unchecked-remainder-int")
+	sym_unchecked_DASH_short := lang.NewSymbolUnchecked("unchecked-short")
+	sym_unchecked_DASH_subtract := lang.NewSymbolUnchecked("unchecked-subtract")
+	sym_unchecked_DASH_subtract_DASH_int := lang.NewSymbolUnchecked("unchecked-subtract-int")
+	sym_underive := lang.NewSymbolUnchecked("underive")
+	sym_unquote := lang.NewSymbolUnchecked("unquote")
+	sym_unquote_DASH_splicing := lang.NewSymbolUnchecked("unquote-splicing")
+	sym_unreduced := lang.NewSymbolUnchecked("unreduced")
+	sym_unsigned_DASH_bit_DASH_shift_DASH_right := lang.NewSymbolUnchecked("unsigned-bit-shift-right")
+	sym_update := lang.NewSymbolUnchecked("update")
+	sym_update_DASH_in := lang.NewSymbolUnchecked("update-in")
+	sym_update_DASH_keys := lang.NewSymbolUnchecked("update-keys")
+	sym_update_DASH_vals := lang.NewSymbolUnchecked("update-vals")
+	sym_uri_QMARK_ := lang.NewSymbolUnchecked("uri?")
+	sym_use := lang.NewSymbolUnchecked("use")
+	sym_uuid_QMARK_ := lang.NewSymbolUnchecked("uuid?")
+	sym_v := lang.NewSymbolUnchecked("v")
+	sym_val := lang.NewSymbolUnchecked("val")
+	sym_vals := lang.NewSymbolUnchecked("vals")
+	sym_var_DASH_get := lang.NewSymbolUnchecked("var-get")
+	sym_var_DASH_set := lang.NewSymbolUnchecked("var-set")
+	sym_var_QMARK_ := lang.NewSymbolUnchecked("var?")
+	sym_vary_DASH_meta := lang.NewSymbolUnchecked("vary-meta")
+	sym_vec := lang.NewSymbolUnchecked("vec")
+	sym_vector := lang.NewSymbolUnchecked("vector")
+	sym_vector_QMARK_ := lang.NewSymbolUnchecked("vector?")
+	sym_volatile_BANG_ := lang.NewSymbolUnchecked("volatile!")
+	sym_volatile_QMARK_ := lang.NewSymbolUnchecked("volatile?")
+	sym_vreset_BANG_ := lang.NewSymbolUnchecked("vreset!")
+	sym_vswap_BANG_ := lang.NewSymbolUnchecked("vswap!")
+	sym_when := lang.NewSymbolUnchecked("when")
+	sym_when_DASH_first := lang.NewSymbolUnchecked("when-first")
+	sym_when_DASH_let := lang.NewSymbolUnchecked("when-let")
+	sym_when_DASH_not := lang.NewSymbolUnchecked("when-not")
+	sym_when_DASH_some := lang.NewSymbolUnchecked("when-some")
+	sym_while := lang.NewSymbolUnchecked("while")
+	sym_with_DASH_bindings := lang.NewSymbolUnchecked("with-bindings")
+	sym_with_DASH_bindings_STAR_ := lang.NewSymbolUnchecked("with-bindings*")
+	sym_with_DASH_in_DASH_str := lang.NewSymbolUnchecked("with-in-str")
+	sym_with_DASH_loading_DASH_context := lang.NewSymbolUnchecked("with-loading-context")
+	sym_with_DASH_local_DASH_vars := lang.NewSymbolUnchecked("with-local-vars")
+	sym_with_DASH_meta := lang.NewSymbolUnchecked("with-meta")
+	sym_with_DASH_open := lang.NewSymbolUnchecked("with-open")
+	sym_with_DASH_out_DASH_str := lang.NewSymbolUnchecked("with-out-str")
+	sym_with_DASH_precision := lang.NewSymbolUnchecked("with-precision")
+	sym_with_DASH_redefs := lang.NewSymbolUnchecked("with-redefs")
+	sym_with_DASH_redefs_DASH_fn := lang.NewSymbolUnchecked("with-redefs-fn")
+	sym_xml_DASH_seq := lang.NewSymbolUnchecked("xml-seq")
+	sym_zero_QMARK_ := lang.NewSymbolUnchecked("zero?")
+	sym_zipmap := lang.NewSymbolUnchecked("zipmap")
 	kw_arglists := lang.NewKeyword("arglists")
 	kw_coll_DASH_reduce := lang.NewKeyword("coll-reduce")
 	kw_column := lang.NewKeyword("column")
@@ -761,8 +761,6 @@ func LoadNS() {
 	var_clojure_DOT_core_instance_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_instance_QMARK_)
 	// var clojure.core/next
 	var_clojure_DOT_core_next := lang.InternVarName(sym_clojure_DOT_core, sym_next)
-	// var clojure.core/reduced?
-	var_clojure_DOT_core_reduced_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_reduced_QMARK_)
 	// var clojure.core/seq
 	var_clojure_DOT_core_seq := lang.InternVarName(sym_clojure_DOT_core, sym_seq)
 	// reference fmt to avoid unused import error
@@ -5204,40 +5202,43 @@ func LoadNS() {
 	}
 	var closed0 any
 	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 2:
-				v1 := args[0]
+		var tmp0 lang.ArityFn
+		tmp0 = lang.NewArityFn(
+			nil,
+			nil,
+			lang.FnFunc2(func(p0, p1 any) any {
+				v1 := p0
 				_ = v1
-				v2 := args[1]
+				v2 := p1
 				_ = v2
 				tmp3 := lang.Apply0(v2)
 				return tmp3
-			case 3:
-				v1 := args[0]
+			}),
+			lang.FnFunc3(func(p0, p1, p2 any) any {
+				v1 := p0
 				_ = v1
-				v2 := args[1]
+				v2 := p1
 				_ = v2
-				v3 := args[2]
+				v3 := p2
 				_ = v3
 				return v3
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
+			}),
+			nil,
+			nil,
+			0,
+		)
 		closed0 = tmp0
 	}
 	var closed1 any
 	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 2:
-				v1 := args[0]
+		var tmp0 lang.ArityFn
+		tmp0 = lang.NewArityFn(
+			nil,
+			nil,
+			lang.FnFunc2(func(p0, p1 any) any {
+				v1 := p0
 				_ = v1
-				v2 := args[1]
+				v2 := p1
 				_ = v2
 				tmp3, _ := lang.FieldOrMethod(v1, "Reduce")
 				if reflect.TypeOf(tmp3).Kind() != reflect.Func {
@@ -5245,12 +5246,13 @@ func LoadNS() {
 				}
 				tmp4 := lang.Apply1(tmp3, v2)
 				return tmp4
-			case 3:
-				v1 := args[0]
+			}),
+			lang.FnFunc3(func(p0, p1, p2 any) any {
+				v1 := p0
 				_ = v1
-				v2 := args[1]
+				v2 := p1
 				_ = v2
-				v3 := args[2]
+				v3 := p2
 				_ = v3
 				tmp4, _ := lang.FieldOrMethod(v1, "ReduceInit")
 				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
@@ -5258,11 +5260,11 @@ func LoadNS() {
 				}
 				tmp5 := lang.Apply2(tmp4, v2, v3)
 				return tmp5
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
+			}),
+			nil,
+			nil,
+			0,
+		)
 		closed1 = tmp0
 	}
 	var closed5 any
@@ -5291,92 +5293,98 @@ func LoadNS() {
 	}
 	var closed2 any
 	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 2:
-				v1 := args[0]
+		var tmp0 lang.ArityFn
+		tmp0 = lang.NewArityFn(
+			nil,
+			nil,
+			lang.FnFunc2(func(p0, p1 any) any {
+				v1 := p0
 				_ = v1
-				v2 := args[1]
+				v2 := p1
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce)
 				tmp4 := lang.Apply2(tmp3, v1, v2)
 				return tmp4
-			case 3:
-				v1 := args[0]
+			}),
+			lang.FnFunc3(func(p0, p1, p2 any) any {
+				v1 := p0
 				_ = v1
-				v2 := args[1]
+				v2 := p1
 				_ = v2
-				v3 := args[2]
+				v3 := p2
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce)
 				tmp5 := lang.Apply3(tmp4, v1, v2, v3)
 				return tmp5
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
+			}),
+			nil,
+			nil,
+			0,
+		)
 		closed2 = tmp0
 	}
 	var closed3 any
 	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 2:
-				v1 := args[0]
+		var tmp0 lang.ArityFn
+		tmp0 = lang.NewArityFn(
+			nil,
+			nil,
+			lang.FnFunc2(func(p0, p1 any) any {
+				v1 := p0
 				_ = v1
-				v2 := args[1]
+				v2 := p1
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce)
 				tmp4 := lang.Apply2(tmp3, v1, v2)
 				return tmp4
-			case 3:
-				v1 := args[0]
+			}),
+			lang.FnFunc3(func(p0, p1, p2 any) any {
+				v1 := p0
 				_ = v1
-				v2 := args[1]
+				v2 := p1
 				_ = v2
-				v3 := args[2]
+				v3 := p2
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce)
 				tmp5 := lang.Apply3(tmp4, v1, v2, v3)
 				return tmp5
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
+			}),
+			nil,
+			nil,
+			0,
+		)
 		closed3 = tmp0
 	}
 	var closed4 any
 	{
-		var tmp0 lang.FnFunc
-		tmp0 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 2:
-				v1 := args[0]
+		var tmp0 lang.ArityFn
+		tmp0 = lang.NewArityFn(
+			nil,
+			nil,
+			lang.FnFunc2(func(p0, p1 any) any {
+				v1 := p0
 				_ = v1
-				v2 := args[1]
+				v2 := p1
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce)
 				tmp4 := lang.Apply2(tmp3, v1, v2)
 				return tmp4
-			case 3:
-				v1 := args[0]
+			}),
+			lang.FnFunc3(func(p0, p1, p2 any) any {
+				v1 := p0
 				_ = v1
-				v2 := args[1]
+				v2 := p1
 				_ = v2
-				v3 := args[2]
+				v3 := p2
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce)
 				tmp5 := lang.Apply3(tmp4, v1, v2, v3)
 				return tmp5
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
+			}),
+			nil,
+			nil,
+			0,
+		)
 		closed4 = tmp0
 	}
 	var closed7 any
@@ -5421,21 +5429,20 @@ func LoadNS() {
 								var v19 any = tmp18
 								_ = v19
 								var tmp20 any
-								tmp21 := checkDerefVar(var_clojure_DOT_core_reduced_QMARK_)
-								tmp22 := lang.Apply1(tmp21, v19)
-								if lang.IsTruthy(tmp22) {
-									tmp23 := checkDerefVar(var_clojure_DOT_core_deref)
-									tmp24 := lang.Apply1(tmp23, v19)
-									tmp20 = tmp24
+								tmp21 := lang.IsReduced(v19)
+								if lang.IsTruthy(tmp21) {
+									tmp22 := checkDerefVar(var_clojure_DOT_core_deref)
+									tmp23 := lang.Apply1(tmp22, v19)
+									tmp20 = tmp23
 								} else {
-									tmp26 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_next)
-									tmp27 := lang.Apply1(tmp26, v10)
-									var tmp25 any = tmp27
-									var tmp28 any = v2
-									var tmp29 any = v19
-									v1 = tmp25
-									v2 = tmp28
-									v3 = tmp29
+									tmp25 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_next)
+									tmp26 := lang.Apply1(tmp25, v10)
+									var tmp24 any = tmp26
+									var tmp27 any = v2
+									var tmp28 any = v19
+									v1 = tmp24
+									v2 = tmp27
+									v3 = tmp28
 									goto recur_loop_2880
 								}
 								tmp14 = tmp20
@@ -5514,23 +5521,22 @@ func LoadNS() {
 										var v27 any = tmp26
 										_ = v27
 										var tmp28 any
-										tmp29 := checkDerefVar(var_clojure_DOT_core_reduced_QMARK_)
-										tmp30 := lang.Apply1(tmp29, v27)
-										if lang.IsTruthy(tmp30) {
-											tmp31 := checkDerefVar(var_clojure_DOT_core_deref)
-											tmp32 := lang.Apply1(tmp31, v27)
-											tmp28 = tmp32
+										tmp29 := lang.IsReduced(v27)
+										if lang.IsTruthy(tmp29) {
+											tmp30 := checkDerefVar(var_clojure_DOT_core_deref)
+											tmp31 := lang.Apply1(tmp30, v27)
+											tmp28 = tmp31
 										} else {
-											var tmp33 any = v7
-											tmp35 := checkDerefVar(var_clojure_DOT_core_next)
-											tmp36 := lang.Apply1(tmp35, v17)
-											var tmp34 any = tmp36
-											var tmp37 any = v9
-											var tmp38 any = v27
-											v7 = tmp33
-											v8 = tmp34
-											v9 = tmp37
-											v10 = tmp38
+											var tmp32 any = v7
+											tmp34 := checkDerefVar(var_clojure_DOT_core_next)
+											tmp35 := lang.Apply1(tmp34, v17)
+											var tmp33 any = tmp35
+											var tmp36 any = v9
+											var tmp37 any = v27
+											v7 = tmp32
+											v8 = tmp33
+											v9 = tmp36
+											v10 = tmp37
 											continue
 										}
 										tmp23 = tmp28
@@ -6214,13 +6220,14 @@ func LoadNS() {
 	// iter-reduce
 	{
 		tmp0 := sym_iter_DASH_reduce.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(33), kw_column, int(8), kw_end_DASH_line, int(33), kw_end_DASH_column, int(18), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_f), lang.NewVector(sym_coll, sym_f, sym_val)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 2:
-				v2 := args[0]
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			lang.FnFunc2(func(p0, p1 any) any {
+				v2 := p0
 				_ = v2
-				v3 := args[1]
+				v3 := p1
 				_ = v3
 				var tmp4 any
 				{ // let
@@ -6299,15 +6306,14 @@ func LoadNS() {
 										var v22 any = tmp21
 										_ = v22
 										var tmp23 any
-										tmp24 := checkDerefVar(var_clojure_DOT_core_reduced_QMARK_)
-										tmp25 := lang.Apply1(tmp24, v22)
-										if lang.IsTruthy(tmp25) {
-											tmp26 := checkDerefVar(var_clojure_DOT_core_deref)
-											tmp27 := lang.Apply1(tmp26, v22)
-											tmp23 = tmp27
+										tmp24 := lang.IsReduced(v22)
+										if lang.IsTruthy(tmp24) {
+											tmp25 := checkDerefVar(var_clojure_DOT_core_deref)
+											tmp26 := lang.Apply1(tmp25, v22)
+											tmp23 = tmp26
 										} else {
-											var tmp28 any = v22
-											v14 = tmp28
+											var tmp27 any = v22
+											v14 = tmp27
 											continue
 										}
 										tmp18 = tmp23
@@ -6328,12 +6334,13 @@ func LoadNS() {
 					tmp4 = tmp8
 				} // end let
 				return tmp4
-			case 3:
-				v2 := args[0]
+			}),
+			lang.FnFunc3(func(p0, p1, p2 any) any {
+				v2 := p0
 				_ = v2
-				v3 := args[1]
+				v3 := p1
 				_ = v3
-				v4 := args[2]
+				v4 := p2
 				_ = v4
 				var tmp5 any
 				{ // let
@@ -6388,15 +6395,14 @@ func LoadNS() {
 									var v18 any = tmp17
 									_ = v18
 									var tmp19 any
-									tmp20 := checkDerefVar(var_clojure_DOT_core_reduced_QMARK_)
-									tmp21 := lang.Apply1(tmp20, v18)
-									if lang.IsTruthy(tmp21) {
-										tmp22 := checkDerefVar(var_clojure_DOT_core_deref)
-										tmp23 := lang.Apply1(tmp22, v18)
-										tmp19 = tmp23
+									tmp20 := lang.IsReduced(v18)
+									if lang.IsTruthy(tmp20) {
+										tmp21 := checkDerefVar(var_clojure_DOT_core_deref)
+										tmp22 := lang.Apply1(tmp21, v18)
+										tmp19 = tmp22
 									} else {
-										var tmp24 any = v18
-										v10 = tmp24
+										var tmp23 any = v18
+										v10 = tmp23
 										continue
 									}
 									tmp14 = tmp19
@@ -6412,12 +6418,12 @@ func LoadNS() {
 					tmp5 = tmp9
 				} // end let
 				return tmp5
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+			}),
+			nil,
+			nil,
+			0,
+		)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_DOT_protocols_iter_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_protocols_iter_DASH_reduce.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -6484,19 +6490,18 @@ func LoadNS() {
 							var v15 any = tmp14
 							_ = v15
 							var tmp16 any
-							tmp17 := checkDerefVar(var_clojure_DOT_core_reduced_QMARK_)
-							tmp18 := lang.Apply1(tmp17, v15)
-							if lang.IsTruthy(tmp18) {
-								tmp19 := checkDerefVar(var_clojure_DOT_core_deref)
-								tmp20 := lang.Apply1(tmp19, v15)
-								tmp16 = tmp20
+							tmp17 := lang.IsReduced(v15)
+							if lang.IsTruthy(tmp17) {
+								tmp18 := checkDerefVar(var_clojure_DOT_core_deref)
+								tmp19 := lang.Apply1(tmp18, v15)
+								tmp16 = tmp19
 							} else {
-								tmp22 := checkDerefVar(var_clojure_DOT_core_next)
-								tmp23 := lang.Apply1(tmp22, v8)
-								var tmp21 any = tmp23
-								var tmp24 any = v15
-								v8 = tmp21
-								v9 = tmp24
+								tmp21 := checkDerefVar(var_clojure_DOT_core_next)
+								tmp22 := lang.Apply1(tmp21, v8)
+								var tmp20 any = tmp22
+								var tmp23 any = v15
+								v8 = tmp20
+								v9 = tmp23
 								continue
 							}
 							tmp11 = tmp16
@@ -6548,13 +6553,14 @@ func LoadNS() {
 	// seq-reduce
 	{
 		tmp0 := sym_seq_DASH_reduce.WithMeta(lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(24), kw_column, int(8), kw_end_DASH_line, int(24), kw_end_DASH_column, int(17), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_f), lang.NewVector(sym_coll, sym_f, sym_val)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 2:
-				v2 := args[0]
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			lang.FnFunc2(func(p0, p1 any) any {
+				v2 := p0
 				_ = v2
-				v3 := args[1]
+				v3 := p1
 				_ = v3
 				var tmp4 any
 				{ // let
@@ -6586,12 +6592,13 @@ func LoadNS() {
 					tmp4 = tmp8
 				} // end let
 				return tmp4
-			case 3:
-				v2 := args[0]
+			}),
+			lang.FnFunc3(func(p0, p1, p2 any) any {
+				v2 := p0
 				_ = v2
-				v3 := args[1]
+				v3 := p1
 				_ = v3
-				v4 := args[2]
+				v4 := p2
 				_ = v4
 				var tmp5 any
 				{ // let
@@ -6605,12 +6612,12 @@ func LoadNS() {
 					tmp5 = tmp10
 				} // end let
 				return tmp5
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+			}),
+			nil,
+			nil,
+			0,
+		)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce.SetMeta(tmp0.Meta().(lang.IPersistentMap))

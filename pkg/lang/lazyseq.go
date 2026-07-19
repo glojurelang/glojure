@@ -36,6 +36,8 @@ var (
 	_ Sequential            = (*LazySeq)(nil)
 	_ IPersistentCollection = (*LazySeq)(nil)
 	_ IHashEq               = (*LazySeq)(nil)
+	_ IReduce               = (*LazySeq)(nil)
+	_ IReduceInit           = (*LazySeq)(nil)
 )
 
 func (s *LazySeq) xxx_sequential() {}
@@ -136,6 +138,32 @@ func (s *LazySeq) Count() int {
 		c++
 	}
 	return c
+}
+
+func (s *LazySeq) Reduce(f IFn) interface{} {
+	seq := s.Seq()
+	if seq == nil {
+		return Apply0(f)
+	}
+	ret := seq.First()
+	for seq = seq.Next(); seq != nil; seq = seq.Next() {
+		ret = Apply2(f, ret, seq.First())
+		if IsReduced(ret) {
+			return ret.(IDeref).Deref()
+		}
+	}
+	return ret
+}
+
+func (s *LazySeq) ReduceInit(f IFn, init interface{}) interface{} {
+	ret := init
+	for seq := s.Seq(); seq != nil; seq = seq.Next() {
+		ret = Apply2(f, ret, seq.First())
+		if IsReduced(ret) {
+			return ret.(IDeref).Deref()
+		}
+	}
+	return ret
 }
 
 func (s *LazySeq) Meta() IPersistentMap {

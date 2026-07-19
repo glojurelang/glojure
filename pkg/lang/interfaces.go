@@ -53,6 +53,12 @@ type (
 		ReduceInit(f IFn, init any) any
 	}
 
+	// Int64Reducer is an optional unboxed reduction fast path for reducers
+	// whose semantics guarantee an int64 result for two int64 inputs.
+	Int64Reducer interface {
+		ReduceInt64(acc, value int64) int64
+	}
+
 	IKVReduce interface {
 		KVReduce(f IFn, init any) any
 	}

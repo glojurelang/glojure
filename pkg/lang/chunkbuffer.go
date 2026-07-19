@@ -4,6 +4,7 @@ type (
 	ChunkBuffer struct {
 		buffer []interface{}
 		end    int
+		addFn  FnFunc1
 	}
 )
 
@@ -12,10 +13,15 @@ var (
 )
 
 func NewChunkBuffer(capacity int) *ChunkBuffer {
-	return &ChunkBuffer{
+	cb := &ChunkBuffer{
 		buffer: make([]interface{}, capacity),
 		end:    0,
 	}
+	cb.addFn = func(item any) any {
+		cb.Add(item)
+		return nil
+	}
+	return cb
 }
 
 func (cb *ChunkBuffer) Add(item interface{}) {
@@ -37,6 +43,18 @@ func (cb *ChunkBuffer) Chunk() IChunk {
 
 func (cb *ChunkBuffer) Count() int {
 	return cb.end
+}
+
+func (cb *ChunkBuffer) fieldOrMethod(name string) (interface{}, bool) {
+	switch name {
+	case "add", "Add":
+		return cb.addFn, true
+	case "chunk", "Chunk":
+		return FnFunc0(func() any { return cb.Chunk() }), true
+	case "count", "Count":
+		return FnFunc0(func() any { return cb.Count() }), true
+	}
+	return nil, false
 }
 
 func (cb *ChunkBuffer) xxx_counted() {}

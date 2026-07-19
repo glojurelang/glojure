@@ -146,6 +146,7 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 
 	// Set the glojure version
 	core := lang.FindNamespace(lang.NewSymbol("clojure.core"))
+	installNativeCoreFunctions(core)
 	versionVar := core.FindInternedVar(lang.NewSymbol("*glojure-version*"))
 	if versionVar != nil {
 		versionVar.BindRoot(parseVersion(Version))

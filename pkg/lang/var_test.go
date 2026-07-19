@@ -64,3 +64,31 @@ func TestIsMacroCacheInvalidatedByAlterMeta(t *testing.T) {
 		t.Error("IsMacro() = false after AlterMeta with :macro true")
 	}
 }
+
+func TestThreadBindingFrameIsSnapshot(t *testing.T) {
+	ns := FindOrCreateNamespace(NewSymbol("test.binding-frame"))
+	v := InternVarReplaceRoot(ns, NewSymbol("*value*"), "root").SetDynamic()
+	PushThreadBindings(NewMap(v, "captured"))
+	defer PopThreadBindings()
+
+	frame := CloneThreadBindingFrame()
+	v.Set("parent")
+
+	result := make(chan any, 1)
+	done := make(chan struct{})
+	go func() {
+		ResetThreadBindingFrame(frame)
+		defer PopThreadBindings()
+		result <- v.Get()
+		v.Set("child")
+		close(done)
+	}()
+
+	if got := <-result; got != "captured" {
+		t.Fatalf("cloned binding = %v, want captured", got)
+	}
+	if got := v.Get(); got != "parent" {
+		t.Fatalf("parent binding changed to %v", got)
+	}
+	<-done
+}

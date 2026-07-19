@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -12,7 +13,42 @@ import (
 // else, preserving EvalAST as the complete semantic fallback.
 type evalFn func(*environment) (interface{}, error)
 
+type threadedEvalCompiler struct {
+	localSlots map[*lang.Symbol]localSlot
+}
+
+type localSlot struct {
+	index int
+	loop  bool
+}
+
 func compileEval(n *ast.Node) evalFn {
+	return (threadedEvalCompiler{}).compile(n)
+}
+
+func compileMethodEval(body *ast.Node, params []*ast.Node) evalFn {
+	slots := make(map[*lang.Symbol]localSlot, min(len(params), len(fnFrame{}.args)))
+	for i, param := range params {
+		if i == len(fnFrame{}.args) {
+			break
+		}
+		slots[param.Sub.(*ast.BindingNode).Name] = localSlot{index: i}
+	}
+	return (threadedEvalCompiler{localSlots: slots}).compile(body)
+}
+
+func compileLoopEval(body *ast.Node, bindings []*ast.Node) evalFn {
+	slots := make(map[*lang.Symbol]localSlot, min(len(bindings), len(loopFrame{}.args)))
+	for i, binding := range bindings {
+		if i == len(loopFrame{}.args) {
+			break
+		}
+		slots[binding.Sub.(*ast.BindingNode).Name] = localSlot{index: i, loop: true}
+	}
+	return (threadedEvalCompiler{localSlots: slots}).compile(body)
+}
+
+func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 	switch n.Op {
 	case ast.OpConst:
 		value := n.Sub.(*ast.ConstNode).Value
@@ -20,8 +56,19 @@ func compileEval(n *ast.Node) evalFn {
 
 	case ast.OpLocal:
 		sym := n.Sub.(*ast.LocalNode).Name
+		if slot, ok := c.localSlots[sym]; ok {
+			if slot.loop {
+				return func(env *environment) (interface{}, error) {
+					return env.loopFrame.args[slot.index], nil
+				}
+			}
+			return func(env *environment) (interface{}, error) {
+				return env.fnFrame.args[slot.index], nil
+			}
+		}
+		name := sym.String()
 		return func(env *environment) (interface{}, error) {
-			value, ok := env.scope.lookup(sym)
+			value, ok := env.scope.lookupName(name)
 			if !ok {
 				return nil, env.errorf(n.Form, "unable to resolve local symbol: %s", sym)
 			}
@@ -37,9 +84,9 @@ func compileEval(n *ast.Node) evalFn {
 
 	case ast.OpIf:
 		ifNode := n.Sub.(*ast.IfNode)
-		test := compileEval(ifNode.Test)
-		then := compileEval(ifNode.Then)
-		els := compileEval(ifNode.Else)
+		test := c.compile(ifNode.Test)
+		then := c.compile(ifNode.Then)
+		els := c.compile(ifNode.Else)
 		if test == nil || then == nil || els == nil {
 			return nil
 		}
@@ -58,12 +105,12 @@ func compileEval(n *ast.Node) evalFn {
 		doNode := n.Sub.(*ast.DoNode)
 		statements := make([]evalFn, len(doNode.Statements))
 		for i, statement := range doNode.Statements {
-			statements[i] = compileEval(statement)
+			statements[i] = c.compile(statement)
 			if statements[i] == nil {
 				return nil
 			}
 		}
-		ret := compileEval(doNode.Ret)
+		ret := c.compile(doNode.Ret)
 		if ret == nil {
 			return nil
 		}
@@ -81,18 +128,61 @@ func compileEval(n *ast.Node) evalFn {
 		if hostCall.ResolvedMethod == nil {
 			return nil
 		}
-		args := compileEvalArgs(hostCall.Args)
+		args := c.compileArgs(hostCall.Args)
 		if args == nil {
 			return nil
+		}
+		if numeric := compileNumberCall(hostCall, args); numeric != nil {
+			return numeric
 		}
 		return compileResolvedCall(hostCall.ResolvedMethod, args)
 
 	case ast.OpInvoke:
 		invoke := n.Sub.(*ast.InvokeNode)
-		fn := compileEval(invoke.Fn)
-		args := compileEvalArgs(invoke.Args)
+		fn := c.compile(invoke.Fn)
+		args := c.compileArgs(invoke.Args)
 		if fn == nil || args == nil {
 			return nil
+		}
+		if invoke.Fn.Op == ast.OpVar && len(args) == 1 {
+			vr := invoke.Fn.Sub.(*ast.VarNode).Var
+			arg := args[0]
+			return func(env *environment) (res interface{}, err error) {
+				defer env.recoverInvoke(n, &res, &err)
+				fnValue := vr.Get()
+				a0, err := arg(env)
+				if err != nil {
+					return nil, err
+				}
+				if direct, ok := fnValue.(*Fn); ok {
+					return direct.Invoke1(a0), nil
+				}
+				return lang.Apply1(fnValue, a0), nil
+			}
+		}
+		if invoke.Fn.Op == ast.OpVar && len(args) == 3 {
+			vr := invoke.Fn.Sub.(*ast.VarNode).Var
+			arg0, arg1, arg2 := args[0], args[1], args[2]
+			return func(env *environment) (res interface{}, err error) {
+				defer env.recoverInvoke(n, &res, &err)
+				fnValue := vr.Get()
+				a0, err := arg0(env)
+				if err != nil {
+					return nil, err
+				}
+				a1, err := arg1(env)
+				if err != nil {
+					return nil, err
+				}
+				a2, err := arg2(env)
+				if err != nil {
+					return nil, err
+				}
+				if direct, ok := fnValue.(*Fn); ok {
+					return direct.Invoke3(a0, a1, a2), nil
+				}
+				return lang.Apply3(fnValue, a0, a1, a2), nil
+			}
 		}
 		return func(env *environment) (res interface{}, err error) {
 			defer env.recoverInvoke(n, &res, &err)
@@ -102,15 +192,132 @@ func compileEval(n *ast.Node) evalFn {
 			}
 			return evalCompiledCall(env, fnValue, args)
 		}
+
+	case ast.OpRecur:
+		recur := n.Sub.(*ast.RecurNode)
+		exprs := c.compileArgs(recur.Exprs)
+		if exprs == nil {
+			return nil
+		}
+		return func(env *environment) (interface{}, error) {
+			recurErr := env.recurErr
+			if recurErr == nil {
+				recurErr = &lang.RecurError{Target: env.recurTarget}
+			}
+			if cap(recurErr.Args) < len(exprs) {
+				recurErr.Args = make([]interface{}, len(exprs))
+			} else {
+				recurErr.Args = recurErr.Args[:len(exprs)]
+			}
+
+			target := env.recurTarget
+			previousErr := env.recurErr
+			env.recurTarget = nil
+			env.recurErr = nil
+			for i, expr := range exprs {
+				value, err := expr(env)
+				if err != nil {
+					env.recurTarget = target
+					env.recurErr = previousErr
+					return nil, err
+				}
+				recurErr.Args[i] = value
+			}
+			env.recurTarget = target
+			env.recurErr = previousErr
+			return nil, recurErr
+		}
 	}
 	return nil
 }
 
-func compileEvalArgs(nodes []*ast.Node) []evalFn {
+func compileNumberCall(call *ast.HostCallNode, args []evalFn) evalFn {
+	if !isNumbersCall(call) {
+		return nil
+	}
+	name := strings.ToLower(call.Method.Name())
+	if len(args) == 1 {
+		arg := args[0]
+		switch name {
+		case "inc", "unchecked_inc", "dec", "uncheckeddec", "unchecked_dec":
+			return func(env *environment) (interface{}, error) {
+				value, err := arg(env)
+				if err != nil {
+					return nil, err
+				}
+				if n, ok := value.(int64); ok {
+					switch name {
+					case "inc":
+						return checkedInt64Add(n, 1), nil
+					case "dec":
+						return checkedInt64Sub(n, 1), nil
+					case "unchecked_inc":
+						return n + 1, nil
+					default:
+						return n - 1, nil
+					}
+				}
+				return lang.Apply1(call.ResolvedMethod, value), nil
+			}
+		}
+		return nil
+	}
+	if len(args) != 2 {
+		return nil
+	}
+
+	left, right := args[0], args[1]
+	switch name {
+	case "add", "uncheckedadd", "minus", "unchecked_minus",
+		"multiply", "unchecked_multiply", "lt", "lte", "gt", "gte", "equiv":
+		return func(env *environment) (interface{}, error) {
+			a, err := left(env)
+			if err != nil {
+				return nil, err
+			}
+			b, err := right(env)
+			if err != nil {
+				return nil, err
+			}
+			ai, aok := a.(int64)
+			bi, bok := b.(int64)
+			if aok && bok {
+				switch name {
+				case "add":
+					return checkedInt64Add(ai, bi), nil
+				case "uncheckedadd":
+					return ai + bi, nil
+				case "minus":
+					return checkedInt64Sub(ai, bi), nil
+				case "unchecked_minus":
+					return ai - bi, nil
+				case "multiply":
+					return checkedInt64Multiply(ai, bi), nil
+				case "unchecked_multiply":
+					return ai * bi, nil
+				case "lt":
+					return ai < bi, nil
+				case "lte":
+					return ai <= bi, nil
+				case "gt":
+					return ai > bi, nil
+				case "gte":
+					return ai >= bi, nil
+				case "equiv":
+					return ai == bi, nil
+				}
+			}
+			return lang.Apply2(call.ResolvedMethod, a, b), nil
+		}
+	}
+	return nil
+}
+
+func (c threadedEvalCompiler) compileArgs(nodes []*ast.Node) []evalFn {
 	// Keep a non-nil empty slice so zero-argument calls remain compilable.
 	args := make([]evalFn, len(nodes))
 	for i, node := range nodes {
-		args[i] = compileEval(node)
+		args[i] = c.compile(node)
 		if args[i] == nil {
 			return nil
 		}
@@ -157,11 +364,17 @@ func compileResolvedCall(fn interface{}, args []evalFn) evalFn {
 func evalCompiledCall(env *environment, fn interface{}, args []evalFn) (interface{}, error) {
 	switch len(args) {
 	case 0:
+		if direct, ok := fn.(*Fn); ok {
+			return direct.Invoke0(), nil
+		}
 		return lang.Apply0(fn), nil
 	case 1:
 		a0, err := args[0](env)
 		if err != nil {
 			return nil, err
+		}
+		if direct, ok := fn.(*Fn); ok {
+			return direct.Invoke1(a0), nil
 		}
 		return lang.Apply1(fn, a0), nil
 	case 2:
@@ -172,6 +385,9 @@ func evalCompiledCall(env *environment, fn interface{}, args []evalFn) (interfac
 		a1, err := args[1](env)
 		if err != nil {
 			return nil, err
+		}
+		if direct, ok := fn.(*Fn); ok {
+			return direct.Invoke2(a0, a1), nil
 		}
 		return lang.Apply2(fn, a0, a1), nil
 	case 3:
@@ -186,6 +402,9 @@ func evalCompiledCall(env *environment, fn interface{}, args []evalFn) (interfac
 		a2, err := args[2](env)
 		if err != nil {
 			return nil, err
+		}
+		if direct, ok := fn.(*Fn); ok {
+			return direct.Invoke3(a0, a1, a2), nil
 		}
 		return lang.Apply3(fn, a0, a1, a2), nil
 	case 4:
@@ -204,6 +423,9 @@ func evalCompiledCall(env *environment, fn interface{}, args []evalFn) (interfac
 		a3, err := args[3](env)
 		if err != nil {
 			return nil, err
+		}
+		if direct, ok := fn.(*Fn); ok {
+			return direct.Invoke4(a0, a1, a2, a3), nil
 		}
 		return lang.Apply4(fn, a0, a1, a2, a3), nil
 	default:

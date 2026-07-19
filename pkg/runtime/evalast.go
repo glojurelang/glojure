@@ -713,21 +713,43 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 		return newEnv.EvalAST(letNode.Body)
 	}
 
+	if loop := compileInt64Loop(letNode); loop != nil {
+		if result, ok := loop.run(bindNameVals); ok {
+			return result, nil
+		}
+	}
+
 	rt := lang.NewRecurTarget()
 	recurEnv := newEnv.WithRecurTarget(rt).(*environment)
 	recurEnv.recurErr = &lang.RecurError{
 		Target: rt,
 		Args:   make([]interface{}, len(bindNameVals)/2),
 	}
+	evaluator := compileLoopEval(letNode.Body, bindings)
+	var frame loopFrame
+	if evaluator != nil {
+		recurEnv.loopFrame = &frame
+	}
 
 Recur:
 	for i := 0; i < len(bindNameVals); i += 2 {
 		name := bindNameVals[i].(*lang.Symbol)
 		val := bindNameVals[i+1]
-		newEnv.BindLocal(name, val)
+		slot := i / 2
+		if evaluator != nil && slot < len(frame.args) {
+			frame.args[slot] = val
+		} else {
+			newEnv.BindLocal(name, val)
+		}
 	}
 
-	res, err := recurEnv.EvalAST(letNode.Body)
+	var res interface{}
+	var err error
+	if evaluator != nil {
+		res, err = evaluator(recurEnv)
+	} else {
+		res, err = recurEnv.EvalAST(letNode.Body)
+	}
 	if err == recurEnv.recurErr {
 		newVals := recurEnv.recurErr.Args
 		if len(newVals) != len(bindNameVals)/2 {

@@ -5,10 +5,14 @@ import (
 	"encoding/hex"
 	"fmt"
 	"go/format"
+	"go/token"
 	"io"
+	"math"
+	"net/http"
 	"path/filepath"
 	"reflect"
 	"regexp"
+	goruntime "runtime"
 	"sort"
 	"strings"
 	"time"
@@ -304,7 +308,7 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 	sort.Strings(symbolNames) // Sort for deterministic output
 	for _, sym := range symbolNames {
 		varName := g.symbolVariables[sym]
-		initBuf.WriteString(fmt.Sprintf("%s := lang.NewSymbol(%q)\n", varName, sym))
+		initBuf.WriteString(fmt.Sprintf("%s := lang.NewSymbolUnchecked(%q)\n", varName, sym))
 	}
 
 	//////////////////////////
@@ -508,6 +512,21 @@ func (g *Generator) generateValue(value any) string {
 		return fmt.Sprintf("lang.FindOrCreateNamespace(%s).FindInternedVar(%s)", g.allocSymVar(ns.Name().String()), g.allocSymVar(sym.String()))
 	case *lang.Namespace:
 		return fmt.Sprintf("lang.FindOrCreateNamespace(%s)", g.allocSymVar(v.Name().String()))
+	case *lang.NumberMethods:
+		// Numbers is a stateless, package-level host-method receiver.
+		return "lang.Numbers"
+	case *lang.LockingTransactor:
+		return "lang.LockingTransaction"
+	case *http.Client:
+		if v == http.DefaultClient {
+			return g.addImportWithAlias("net/http") + ".DefaultClient"
+		}
+		panic("cannot generate a non-default HTTP client")
+	case *RTMethods:
+		// RT is the package-level host-method receiver used by core forms.
+		return "runtime.RT"
+	case *evalCompiler:
+		return "runtime.Compiler"
 	case *Fn:
 		return g.generateFn(v)
 	case lang.FnFunc:
@@ -569,10 +588,42 @@ func (g *Generator) generateValue(value any) string {
 		}
 
 		if fname, ok := getWellKnownFunctionName(v); ok {
+			if fname == "math.IsNaN" {
+				return g.addImportWithAlias("math") + ".IsNaN"
+			}
 			return fname
 		}
 
-		panic(fmt.Sprintf("unsupported value type %T: %s", v, v))
+		if rv := reflect.ValueOf(v); rv.IsValid() && rv.Kind() == reflect.Func {
+			if fn := goruntime.FuncForPC(rv.Pointer()); fn != nil {
+				const langPrefix = "github.com/glojurelang/glojure/pkg/lang."
+				if name := strings.TrimPrefix(fn.Name(), langPrefix); name != fn.Name() && token.IsIdentifier(name) {
+					return "lang." + name
+				}
+				if name := strings.TrimPrefix(fn.Name(), "math."); name != fn.Name() && token.IsIdentifier(name) {
+					return g.addImportWithAlias("math") + "." + name
+				}
+				if pkgName, name, ok := strings.Cut(fn.Name(), "."); ok &&
+					token.IsIdentifier(name) &&
+					map[string]bool{
+						"errors":  true,
+						"fmt":     true,
+						"sort":    true,
+						"strings": true,
+					}[pkgName] {
+					return g.addImportWithAlias(pkgName) + "." + name
+				}
+				if dot := strings.LastIndexByte(fn.Name(), '.'); dot > 0 {
+					pkgPath, name := fn.Name()[:dot], fn.Name()[dot+1:]
+					pkgBase := pkgPath[strings.LastIndexByte(pkgPath, '/')+1:]
+					if !strings.ContainsRune(pkgBase, '.') && token.IsIdentifier(name) {
+						return g.addImportWithAlias(pkgPath) + "." + name
+					}
+				}
+				panic(fmt.Sprintf("unsupported function value %T (%s)", v, fn.Name()))
+			}
+		}
+		panic(fmt.Sprintf("unsupported value type %T: %v", v, v))
 	}
 }
 
@@ -945,6 +996,16 @@ func (g *Generator) generateFn(fn *Fn) string {
 			fixedArity = mn.FixedArity
 		}
 	}
+	multiFixed := len(fnNode.Methods) > 1
+	if multiFixed {
+		for _, method := range fnNode.Methods {
+			mn := method.Sub.(*ast.FnMethodNode)
+			if !mn.IsVariadic && mn.FixedArity > 4 {
+				multiFixed = false
+				break
+			}
+		}
+	}
 
 	// Allocate a variable to return the function
 	fnVar := g.allocateTempVar()
@@ -955,6 +1016,8 @@ func (g *Generator) generateFn(fn *Fn) string {
 	fnType := "lang.FnFunc"
 	if fixedArity >= 0 {
 		fnType = fmt.Sprintf("lang.FnFunc%d", fixedArity)
+	} else if multiFixed {
+		fnType = "lang.ArityFn"
 	}
 	// declare it now to make sure it's in the scope of the caller
 	// we may add a nested scope to declare the function in to keep a
@@ -993,6 +1056,43 @@ func (g *Generator) generateFn(fn *Fn) string {
 		g.writef("%s = lang.FnFunc%d(func(%s) any {\n", fnVar, fixedArity, sig)
 		g.generateFnMethodFixed(methodNode, paramNames)
 		g.writef("})\n")
+	} else if multiFixed {
+		var fixedMethods [5]*ast.FnMethodNode
+		var variadicMethod *ast.FnMethodNode
+		for _, method := range fnNode.Methods {
+			methodNode := method.Sub.(*ast.FnMethodNode)
+			if methodNode.IsVariadic {
+				variadicMethod = methodNode
+			} else {
+				fixedMethods[methodNode.FixedArity] = methodNode
+			}
+		}
+
+		g.writef("%s = lang.NewArityFn(\n", fnVar)
+		allParamNames := []string{"p0", "p1", "p2", "p3"}
+		for arity, methodNode := range fixedMethods {
+			if methodNode == nil {
+				g.writef("nil,\n")
+				continue
+			}
+			paramNames := allParamNames[:arity]
+			sig := ""
+			if arity > 0 {
+				sig = strings.Join(paramNames, ", ") + " any"
+			}
+			g.writef("lang.FnFunc%d(func(%s) any {\n", arity, sig)
+			g.generateFnMethodFixed(methodNode, paramNames)
+			g.writef("}),\n")
+		}
+		if variadicMethod == nil {
+			g.writef("nil,\n0,\n")
+		} else {
+			g.writef("lang.FnFunc(func(args ...any) any {\n")
+			g.writef("checkArityGTE(args, %d)\n", variadicMethod.FixedArity)
+			g.generateFnMethod(variadicMethod, "args")
+			g.writef("}),\n%d,\n", variadicMethod.FixedArity)
+		}
+		g.writef(")\n")
 	} else if len(fnNode.Methods) == 1 && !fnNode.IsVariadic {
 		// Single-arity 5+: emit FnFunc with args slice
 		method := fnNode.Methods[0]
@@ -1277,8 +1377,35 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
 
-	// Generate the function expression
-	fnExpr := g.generateASTNode(invokeNode.Fn)
+	// A package-level Go function whose parameters are all `any` can be
+	// emitted as a direct call. This preserves static return types such as
+	// ISeq while avoiding reflection in lang.Apply.
+	var fnExpr string
+	directCall := false
+	if invokeNode.Fn.Op == ast.OpConst {
+		value := invokeNode.Fn.Sub.(*ast.ConstNode).Value
+		if typ := reflect.TypeOf(value); typ != nil &&
+			typ.Kind() == reflect.Func &&
+			!typ.IsVariadic() &&
+			typ.NumIn() == len(invokeNode.Args) &&
+			typ.NumOut() == 1 {
+			anyType := reflect.TypeOf((*any)(nil)).Elem()
+			directCall = true
+			for i := 0; i < typ.NumIn(); i++ {
+				if typ.In(i) != anyType {
+					directCall = false
+					break
+				}
+			}
+			if directCall {
+				fnExpr = g.generateValue(value)
+			}
+		}
+	}
+	if !directCall {
+		// Generate the general function expression before its arguments.
+		fnExpr = g.generateASTNode(invokeNode.Fn)
+	}
 
 	// Generate the arguments
 	var argExprs []string
@@ -1288,6 +1415,10 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 
 	// Allocate a result variable for the invocation
 	resultVar := g.allocateTempVar()
+	if directCall {
+		g.writef("%s := %s(%s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
+		return resultVar
+	}
 
 	// Emit the invocation using fixed-arity Apply for 0-4 args to avoid []any alloc.
 	n := len(argExprs)
@@ -2403,7 +2534,10 @@ var (
 	}
 
 	wellKnownFunctions = map[uintptr]string{
-		reflect.ValueOf(lang.NewList).Pointer(): "lang.NewList",
+		reflect.ValueOf(lang.NewList).Pointer():      "lang.NewList",
+		reflect.ValueOf(lang.MustAsNumber).Pointer(): "lang.MustAsNumber",
+		reflect.ValueOf(lang.Equiv).Pointer():        "lang.Equiv",
+		reflect.ValueOf(math.IsNaN).Pointer():        "math.IsNaN",
 	}
 )
 

@@ -4,7 +4,8 @@ import "errors"
 
 type (
 	SliceChunk struct {
-		slc []interface{}
+		slc   []interface{}
+		nthFn FnFunc1
 	}
 )
 
@@ -13,9 +14,11 @@ var (
 )
 
 func NewSliceChunk(slc []interface{}) *SliceChunk {
-	return &SliceChunk{
+	chunk := &SliceChunk{
 		slc: slc,
 	}
+	chunk.nthFn = func(i any) any { return chunk.Nth(MustAsInt(i)) }
+	return chunk
 }
 
 func (sc *SliceChunk) Count() int {
@@ -40,6 +43,20 @@ func (sc *SliceChunk) NthDefault(i int, def interface{}) interface{} {
 		return sc.Nth(i)
 	}
 	return def
+}
+
+func (sc *SliceChunk) fieldOrMethod(name string) (interface{}, bool) {
+	switch name {
+	case "nth", "Nth":
+		return sc.nthFn, true
+	case "nthDefault", "NthDefault":
+		return FnFunc2(func(i, notFound any) any {
+			return sc.NthDefault(MustAsInt(i), notFound)
+		}), true
+	case "count", "Count":
+		return FnFunc0(func() any { return sc.Count() }), true
+	}
+	return nil, false
 }
 
 func (sc *SliceChunk) ReduceInit(fn IFn, init interface{}) interface{} {

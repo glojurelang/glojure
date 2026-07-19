@@ -16,7 +16,37 @@ var (
 
 	hostClassType    = map[string]reflect.Type{}
 	hostClassTypeMtx sync.RWMutex
+
+	loaderMtx     sync.Mutex
+	importsLoader func(func(string, interface{}))
+	importsLoaded bool
 )
+
+// SetLoader installs the generated import registrar. The full registry is
+// populated on first lookup so programs that only use AOT-compiled namespaces
+// do not build thousands of unused map entries during process startup.
+func SetLoader(loader func(func(string, interface{}))) {
+	loaderMtx.Lock()
+	defer loaderMtx.Unlock()
+	if importsLoader != nil {
+		panic("pkgmap import loader already set")
+	}
+	importsLoader = loader
+}
+
+func ensureImportsLoaded() {
+	loaderMtx.Lock()
+	if importsLoaded || importsLoader == nil {
+		loaderMtx.Unlock()
+		return
+	}
+	loader := importsLoader
+	// Mark the load in progress before invoking the registrar. This keeps a
+	// registration callback that performs a lookup from recursing.
+	importsLoaded = true
+	loaderMtx.Unlock()
+	loader(Set)
+}
 
 // Set sets the value of the given package and export name.
 func Set(export string, value interface{}) {
@@ -31,6 +61,7 @@ func Set(export string, value interface{}) {
 // Get returns the value of the given package and export name and
 // whether it was found.
 func Get(export string) (interface{}, bool) {
+	ensureImportsLoaded()
 	pkg, name := SplitExport(export)
 
 	mtx.RLock()
@@ -66,6 +97,7 @@ func UnmungePkg(pkg string) string {
 // pkg containing either a colon or a dot. Used by REPL tab completion
 // to discover javacompat host-class symbols.
 func HostClasses() []string {
+	ensureImportsLoaded()
 	mtx.RLock()
 	defer mtx.RUnlock()
 	seen := map[string]struct{}{}
@@ -174,6 +206,7 @@ func HostClassTypes() map[string]reflect.Type {
 // the javacompat math bridge ("abs", "sqrt", "PI", ...). Returns nil
 // if the pkg has no entries.
 func PkgEntries(pkg string) []string {
+	ensureImportsLoaded()
 	prefix := mungePkg(pkg) + "."
 	mtx.RLock()
 	defer mtx.RUnlock()

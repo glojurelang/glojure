@@ -21,6 +21,21 @@ var (
 
 // NewSymbol creates a new symbol.
 func NewSymbol(s string) *Symbol {
+	sym := newSymbol(s)
+	if !isValidSymbol(sym.ns, sym.name) {
+		panic(NewIllegalArgumentError("invalid symbol: " + s))
+	}
+	return sym
+}
+
+// NewSymbolUnchecked constructs a symbol without revalidating its spelling.
+// It is intended for generated code whose symbol literals were already
+// validated by the reader at compile time.
+func NewSymbolUnchecked(s string) *Symbol {
+	return newSymbol(s)
+}
+
+func newSymbol(s string) *Symbol {
 	ns, name := "", s
 	hasNs := false
 
@@ -29,9 +44,6 @@ func NewSymbol(s string) *Symbol {
 		ns = s[:idx]
 		name = s[idx+1:]
 		hasNs = true
-	}
-	if !isValidSymbol(ns, name) {
-		panic(NewIllegalArgumentError("invalid symbol: " + s))
 	}
 	return &Symbol{
 		ns:    ns,
