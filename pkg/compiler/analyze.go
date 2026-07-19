@@ -1149,6 +1149,14 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (*ast.Node, error) {
 			Args:           argNodes,
 			ResolvedMethod: resolvedMethod,
 		}
+		if value, ok := foldLiteralNumberCall(n.Sub.(*ast.HostCallNode)); ok {
+			folded, err := a.analyzeConst(value, env)
+			if err != nil {
+				return nil, err
+			}
+			folded.Form = form
+			return folded, nil
+		}
 		return n, nil
 	case isField:
 		n := ast.MakeNode(ast.OpHostField, form)

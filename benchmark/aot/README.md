@@ -19,6 +19,8 @@ By default, the runner builds one from the current checkout with
 
 The fixtures deliberately cover optimization gaps:
 
+- `constant-arithmetic.glj`: repeated arithmetic containing a constant
+  subexpression, through a direct function call.
 - `float-kernel.glj`: repeated floating-point arithmetic through a direct
   function call.
 - `reduce-pipeline.glj`: reduction over lazy `map` and `filter` producers.

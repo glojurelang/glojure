@@ -1,0 +1,16 @@
+(ns bench.constant-arithmetic)
+
+(defn configured-step [value]
+  (+ value
+     (* (+ 2 3)
+        (- 11 4))))
+
+(defn run []
+  (loop [i 0
+         total 0]
+    (if (= i 1000000)
+      total
+      (recur (inc i)
+             (configured-step total)))))
+
+(def expected 35000000)
