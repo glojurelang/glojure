@@ -1,0 +1,19 @@
+(ns bench.float-kernel)
+
+(defn polynomial [x]
+  (let [x2 (* x x)
+        x3 (* x2 x)
+        x4 (* x3 x)]
+    (+ 1.0
+       (* 0.5 x)
+       (* 0.25 x2)
+       (* 0.125 x3)
+       (* 0.0625 x4))))
+
+(defn run []
+  (loop [i 0
+         total 0.0]
+    (if (= i 1000000)
+      total
+      (recur (inc i)
+             (+ total (polynomial (+ 0.5 (* 0.000001 i))))))))

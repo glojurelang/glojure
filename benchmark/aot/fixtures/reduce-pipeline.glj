@@ -1,0 +1,8 @@
+(ns bench.reduce-pipeline)
+
+(defn run []
+  (reduce +
+          0
+          (map inc
+               (filter odd?
+                       (range 1000000)))))
