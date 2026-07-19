@@ -8,6 +8,10 @@ import (
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
+// Core numeric inline forms resolve this export during analysis. Keep the
+// compiler intrinsic independent of the large, optional Go export registry.
+const numbersHostExport = "github.com:glojurelang:glojure:pkg:lang.Numbers"
+
 func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 	seq, ok := form.(lang.ISeq)
 	if !ok {
@@ -73,7 +77,11 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 		},
 		FindNamespace: lang.FindNamespace,
 		ResolveHost: func(sym *lang.Symbol) (interface{}, bool) {
-			return pkgmap.Get(sym.String())
+			export := sym.String()
+			if export == numbersHostExport {
+				return lang.Numbers, true
+			}
+			return pkgmap.Get(export)
 		},
 	}
 	astNode, err := analyzer.Analyze(n, lang.NewMap(
