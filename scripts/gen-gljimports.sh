@@ -2,15 +2,29 @@
 
 set -e
 
+OUTPUT_FILE=$1
+PLATFORM=$2
+GO=$3
+
+EXPECTED_GO_VERSION=$(awk '$1 == "go" {
+    split($2, version, ".")
+    print "go" version[1] "." version[2]
+    exit
+}' go.mod)
+ACTUAL_GO_VERSION=$("$GO" env GOVERSION)
+case "$ACTUAL_GO_VERSION" in
+    "$EXPECTED_GO_VERSION".*) ;;
+    *)
+        echo "gljimports must be generated with ${EXPECTED_GO_VERSION}.x; got ${ACTUAL_GO_VERSION}" >&2
+        exit 1
+        ;;
+esac
+
 # make a temp directory with mktemp and build the project there
 DIR=$(mktemp -d)
 EXE="${DIR}/gen-import-interop"
 
-go build -o "${EXE}" ./cmd/gen-import-interop
-
-OUTPUT_FILE=$1
-PLATFORM=$2
-GO=$3
+"$GO" build -o "${EXE}" ./cmd/gen-import-interop
 
 IFS='_' read -ra OS_ARCH <<< "$PLATFORM"
 
