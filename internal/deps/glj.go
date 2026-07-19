@@ -43,6 +43,7 @@ import (
 	"os"
 
 	"github.com/glojurelang/glojure/pkg/gljmain"
+	_ "github.com/glojurelang/glojure/pkg/gljmain/interactive"
 
 	_ %q
 	_ "%s/glj/gljimports"
