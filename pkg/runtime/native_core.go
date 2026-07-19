@@ -325,7 +325,9 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	installFixedArityCoreFunction(core, "mapv", 2, lang.FnFunc2(nativeMapv))
 	installFixedArityCoreFunction(core, "filter", 2, lang.FnFunc2(nativeFilterSeq))
 	installFixedArityCoreFunction(core, "take", 2, lang.FnFunc2(nativeTakeSeq))
-	installFixedArityCoreFunction(core, "mod", 2, lang.FnFunc2(nativeMod))
+	if mod := core.FindInternedVar(lang.NewSymbol("mod")); mod != nil {
+		mod.BindRoot(lang.FnFunc2(nativeMod))
+	}
 }
 
 func installFixedArityCoreFunction(

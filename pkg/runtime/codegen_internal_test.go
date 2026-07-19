@@ -26,6 +26,30 @@ func TestDirectHostMethod(t *testing.T) {
 	}
 }
 
+func TestDirectHostCallConvertsIntegerArguments(t *testing.T) {
+	target := &ast.Node{
+		Op: ast.OpConst,
+		Sub: &ast.ConstNode{
+			Value: RT,
+		},
+	}
+
+	method, args, ok := directHostCall(
+		target,
+		"Nth",
+		[]string{"collection", "index"},
+	)
+	if !ok || method != "Nth" {
+		t.Fatalf("directHostCall(Nth) = %q, %v, %v", method, args, ok)
+	}
+	if got, want := args[0], "collection"; got != want {
+		t.Fatalf("collection argument = %q, want %q", got, want)
+	}
+	if got, want := args[1], "lang.IntCast(index)"; got != want {
+		t.Fatalf("index argument = %q, want %q", got, want)
+	}
+}
+
 func TestLoadedNamespacesUseFreshRuntimeState(t *testing.T) {
 	core := lang.FindOrCreateNamespace(lang.NewSymbol("clojure.core"))
 	loadedLibs := core.Intern(lang.NewSymbol("*loaded-libs*"))

@@ -317,7 +317,6 @@ func LoadNS() {
 	sym_clojure_DOT_core_SLASH_bound_DASH_fn_STAR_ := lang.NewSymbolUnchecked("clojure.core/bound-fn*")
 	sym_clojure_DOT_core_SLASH_byteArray := lang.NewSymbolUnchecked("clojure.core/byteArray")
 	sym_clojure_DOT_core_SLASH_bytes := lang.NewSymbolUnchecked("clojure.core/bytes")
-	sym_clojure_DOT_core_SLASH_c := lang.NewSymbolUnchecked("clojure.core/c")
 	sym_clojure_DOT_core_SLASH_charArray := lang.NewSymbolUnchecked("clojure.core/charArray")
 	sym_clojure_DOT_core_SLASH_chars := lang.NewSymbolUnchecked("clojure.core/chars")
 	sym_clojure_DOT_core_SLASH_chunk := lang.NewSymbolUnchecked("clojure.core/chunk")
@@ -358,7 +357,6 @@ func LoadNS() {
 	sym_clojure_DOT_core_SLASH_gt := lang.NewSymbolUnchecked("clojure.core/gt")
 	sym_clojure_DOT_core_SLASH_gte := lang.NewSymbolUnchecked("clojure.core/gte")
 	sym_clojure_DOT_core_SLASH_hash_DASH_map := lang.NewSymbolUnchecked("clojure.core/hash-map")
-	sym_clojure_DOT_core_SLASH_i := lang.NewSymbolUnchecked("clojure.core/i")
 	sym_clojure_DOT_core_SLASH_identical := lang.NewSymbolUnchecked("clojure.core/identical")
 	sym_clojure_DOT_core_SLASH_if_DASH_let := lang.NewSymbolUnchecked("clojure.core/if-let")
 	sym_clojure_DOT_core_SLASH_if_DASH_not := lang.NewSymbolUnchecked("clojure.core/if-not")
@@ -384,7 +382,6 @@ func LoadNS() {
 	sym_clojure_DOT_core_SLASH_merge := lang.NewSymbolUnchecked("clojure.core/merge")
 	sym_clojure_DOT_core_SLASH_meta := lang.NewSymbolUnchecked("clojure.core/meta")
 	sym_clojure_DOT_core_SLASH_next := lang.NewSymbolUnchecked("clojure.core/next")
-	sym_clojure_DOT_core_SLASH_nf := lang.NewSymbolUnchecked("clojure.core/nf")
 	sym_clojure_DOT_core_SLASH_nil_QMARK_ := lang.NewSymbolUnchecked("clojure.core/nil?")
 	sym_clojure_DOT_core_SLASH_not := lang.NewSymbolUnchecked("clojure.core/not")
 	sym_clojure_DOT_core_SLASH_nth := lang.NewSymbolUnchecked("clojure.core/nth")
@@ -420,7 +417,6 @@ func LoadNS() {
 	sym_clojure_DOT_core_SLASH_unchecked_int_subtract := lang.NewSymbolUnchecked("clojure.core/unchecked_int_subtract")
 	sym_clojure_DOT_core_SLASH_unchecked_minus := lang.NewSymbolUnchecked("clojure.core/unchecked_minus")
 	sym_clojure_DOT_core_SLASH_unchecked_multiply := lang.NewSymbolUnchecked("clojure.core/unchecked_multiply")
-	sym_clojure_DOT_core_SLASH_unquote := lang.NewSymbolUnchecked("clojure.core/unquote")
 	sym_clojure_DOT_core_SLASH_unquote_DASH_splicing := lang.NewSymbolUnchecked("clojure.core/unquote-splicing")
 	sym_clojure_DOT_core_SLASH_unsignedShiftRight := lang.NewSymbolUnchecked("clojure.core/unsignedShiftRight")
 	sym_clojure_DOT_core_SLASH_when := lang.NewSymbolUnchecked("clojure.core/when")
@@ -13195,12 +13191,8 @@ func LoadNS() {
 				_ = v2
 				v3 := p1
 				_ = v3
-				tmp4, _ := lang.FieldOrMethod(runtime.RT, "Nth")
-				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Nth is not a function")))
-				}
-				tmp5 := lang.Apply2(tmp4, v2, v3)
-				return tmp5
+				tmp4 := runtime.RT.Nth(v2, lang.IntCast(v3))
+				return tmp4
 			}),
 			lang.FnFunc3(func(p0, p1, p2 any) any {
 				v2 := p0
@@ -13209,12 +13201,8 @@ func LoadNS() {
 				_ = v3
 				v4 := p2
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(runtime.RT, "NthDefault")
-				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("NthDefault is not a function")))
-				}
-				tmp6 := lang.Apply3(tmp5, v2, v3, v4)
-				return tmp6
+				tmp5 := runtime.RT.NthDefault(v2, lang.IntCast(v3), v4)
+				return tmp5
 			}),
 			nil,
 			nil,
@@ -13238,53 +13226,14 @@ func LoadNS() {
 						_ = v5
 						var v6 any = rest
 						_ = v6
-						tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp8 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp10 := lang.Apply1(tmp9, sym__DOT_)
-						tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp12 := lang.Apply1(tmp11, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT)
-						tmp13 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym_clojure_DOT_core_SLASH_Nth)
-						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp22 := lang.Apply1(tmp21, sym_clojure_DOT_core_SLASH_unquote)
-						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, sym_clojure_DOT_core_SLASH_c)
-						tmp25 := lang.Apply2(tmp20, tmp22, tmp24)
-						tmp26 := lang.Apply1(tmp19, tmp25)
-						tmp27 := lang.Apply1(tmp18, tmp26)
-						tmp28 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp29 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp30 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp31 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp32 := lang.Apply1(tmp31, sym_clojure_DOT_core_SLASH_unquote)
-						tmp33 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp34 := lang.Apply1(tmp33, sym_clojure_DOT_core_SLASH_i)
-						tmp35 := lang.Apply2(tmp30, tmp32, tmp34)
-						tmp36 := lang.Apply1(tmp29, tmp35)
-						tmp37 := lang.Apply1(tmp28, tmp36)
-						tmp38 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp39 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp40 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp41 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp42 := lang.Apply1(tmp41, sym_clojure_DOT_core_SLASH_unquote_DASH_splicing)
-						tmp43 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp44 := lang.Apply1(tmp43, sym_clojure_DOT_core_SLASH_nf)
-						tmp45 := lang.Apply2(tmp40, tmp42, tmp44)
-						tmp46 := lang.Apply1(tmp39, tmp45)
-						tmp47 := lang.Apply1(tmp38, tmp46)
-						tmp48 := lang.Apply4(tmp15, tmp17, tmp27, tmp37, tmp47)
-						tmp49 := lang.Apply1(tmp14, tmp48)
-						tmp50 := lang.Apply1(tmp13, tmp49)
-						tmp51 := lang.Apply3(tmp8, tmp10, tmp12, tmp50)
-						tmp52 := lang.Apply1(tmp7, tmp51)
-						return tmp52
+						tmp7 := lang.NewCons(v5, v6)
+						tmp8 := lang.NewCons(v4, tmp7)
+						tmp9 := lang.NewCons(sym_clojure_DOT_core_SLASH_Nth, tmp8)
+						return lang.NewList(
+							sym__DOT_,
+							sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_runtime_DOT_RT,
+							tmp9,
+						)
 					}),
 					2,
 				)

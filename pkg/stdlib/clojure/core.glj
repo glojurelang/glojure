@@ -886,7 +886,7 @@
   bounds, nth throws an exception unless not-found is supplied.  nth
   also works for strings, Java arrays, regex Matchers and Lists, and,
   in O(n) time, for sequences."
-  {:inline (fn  [c i & nf] `(. github.com:glojurelang:glojure:pkg:runtime.RT (Nth (unquote c) (unquote i) (unquote-splicing nf))))
+  {:inline (fn  [c i & nf] `(. github.com:glojurelang:glojure:pkg:runtime.RT (Nth ~c ~i ~@nf)))
    :inline-arities #{2 3}
    :added "1.0"}
   ([coll index] (. github.com:glojurelang:glojure:pkg:runtime.RT (Nth coll index)))

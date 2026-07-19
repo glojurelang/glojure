@@ -2166,9 +2166,9 @@ func (g *Generator) generateHostCall(node *ast.Node) string {
 	}
 
 	methodName := method.Name()
-	if directMethod, ok := directHostMethod(tgt, methodName, len(args)); ok {
+	if directMethod, directArgs, ok := directHostCall(tgt, methodName, argIds); ok {
 		resultId := g.allocateTempVar()
-		g.writef("%s := %s.%s(%s)\n", resultId, tgtId, directMethod, strings.Join(argIds, ", "))
+		g.writef("%s := %s.%s(%s)\n", resultId, tgtId, directMethod, strings.Join(directArgs, ", "))
 		return resultId
 	}
 
@@ -2199,29 +2199,57 @@ func (g *Generator) generateHostCall(node *ast.Node) string {
 }
 
 func directHostMethod(target *ast.Node, name string, arity int) (string, bool) {
-	if target.Op != ast.OpConst || name == "" {
+	args := make([]string, arity)
+	for i := range args {
+		args[i] = fmt.Sprintf("arg%d", i)
+	}
+	method, converted, ok := directHostCall(target, name, args)
+	if !ok {
 		return "", false
+	}
+	for i := range args {
+		if converted[i] != args[i] {
+			return "", false
+		}
+	}
+	return method, true
+}
+
+func directHostCall(
+	target *ast.Node,
+	name string,
+	args []string,
+) (string, []string, bool) {
+	if target.Op != ast.OpConst || name == "" {
+		return "", nil, false
 	}
 	value := target.Sub.(*ast.ConstNode).Value
 	typ := reflect.TypeOf(value)
 	if typ == nil {
-		return "", false
+		return "", nil, false
 	}
 	if name[0] >= 'a' && name[0] <= 'z' {
 		name = string(name[0]-'a'+'A') + name[1:]
 	}
 	method, ok := typ.MethodByName(name)
 	if !ok || method.Type.IsVariadic() ||
-		method.Type.NumIn() != arity+1 || method.Type.NumOut() != 1 {
-		return "", false
+		method.Type.NumIn() != len(args)+1 || method.Type.NumOut() != 1 {
+		return "", nil, false
 	}
 	anyType := reflect.TypeFor[any]()
+	intType := reflect.TypeFor[int]()
+	converted := make([]string, len(args))
 	for i := 1; i < method.Type.NumIn(); i++ {
-		if method.Type.In(i) != anyType {
-			return "", false
+		switch method.Type.In(i) {
+		case anyType:
+			converted[i-1] = args[i-1]
+		case intType:
+			converted[i-1] = "lang.IntCast(" + args[i-1] + ")"
+		default:
+			return "", nil, false
 		}
 	}
-	return method.Name, true
+	return method.Name, converted, true
 }
 
 func (g *Generator) generateHostInterop(node *ast.Node) string {
