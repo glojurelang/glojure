@@ -181,6 +181,12 @@ func compileInt64Expr(n *ast.Node, slots map[*lang.Symbol]int) int64Expr {
 				}
 				return checkedInt64Multiply(a, b)
 			})
+
+		case "quotient":
+			return compileInt64Binary(call.Args, slots, checkedInt64Quotient)
+
+		case "remainder":
+			return compileInt64Binary(call.Args, slots, checkedInt64Remainder)
 		}
 	}
 	return nil
@@ -262,4 +268,18 @@ func checkedInt64Multiply(a, b int64) int64 {
 		return result
 	}
 	panic(lang.NewArithmeticError("integer overflow"))
+}
+
+func checkedInt64Quotient(a, b int64) int64 {
+	if b == 0 {
+		panic(lang.NewArithmeticError("divide by zero"))
+	}
+	return a / b
+}
+
+func checkedInt64Remainder(a, b int64) int64 {
+	if b == 0 {
+		panic(lang.NewArithmeticError("divide by zero"))
+	}
+	return a % b
 }

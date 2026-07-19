@@ -287,6 +287,24 @@ func compileNumberCall(call *ast.HostCallNode, args []evalFn) evalFn {
 				}
 				return lang.Apply1(call.ResolvedMethod, value), nil
 			}
+		case "iszero", "ispos", "isneg":
+			return func(env *environment) (interface{}, error) {
+				value, err := arg(env)
+				if err != nil {
+					return nil, err
+				}
+				if n, ok := value.(int64); ok {
+					switch name {
+					case "iszero":
+						return n == 0, nil
+					case "ispos":
+						return n > 0, nil
+					default:
+						return n < 0, nil
+					}
+				}
+				return lang.Apply1(call.ResolvedMethod, value), nil
+			}
 		}
 		return nil
 	}
@@ -297,7 +315,8 @@ func compileNumberCall(call *ast.HostCallNode, args []evalFn) evalFn {
 	left, right := args[0], args[1]
 	switch name {
 	case "add", "uncheckedadd", "minus", "unchecked_minus",
-		"multiply", "unchecked_multiply", "lt", "lte", "gt", "gte", "equiv":
+		"multiply", "unchecked_multiply", "quotient", "remainder",
+		"lt", "lte", "gt", "gte", "equiv":
 		return func(env *environment) (interface{}, error) {
 			a, err := left(env)
 			if err != nil {
@@ -323,6 +342,10 @@ func compileNumberCall(call *ast.HostCallNode, args []evalFn) evalFn {
 					return checkedInt64Multiply(ai, bi), nil
 				case "unchecked_multiply":
 					return ai * bi, nil
+				case "quotient":
+					return checkedInt64Quotient(ai, bi), nil
+				case "remainder":
+					return checkedInt64Remainder(ai, bi), nil
 				case "lt":
 					return ai < bi, nil
 				case "lte":
