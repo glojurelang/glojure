@@ -142,6 +142,12 @@ func wrapGoFunc(fn interface{}) IFn {
 		return FnFunc0(func() any { return f() })
 	case func() bool:
 		return FnFunc0(func() any { return f() })
+	case func() IPersistentCollection:
+		return FnFunc0(func() any { return f() })
+	case func() ITransientCollection:
+		return FnFunc0(func() any { return f() })
+	case func() IPersistentMap:
+		return FnFunc0(func() any { return f() })
 	case func():
 		return FnFunc0(func() any { f(); return nil })
 
@@ -156,6 +162,8 @@ func wrapGoFunc(fn interface{}) IFn {
 		return FnFunc1(func(a any) any { return f(a) })
 	case func(any) Char:
 		return FnFunc1(func(a any) any { return f(a) })
+	case func(any) Conjer:
+		return FnFunc1(func(a any) any { return f(a) })
 	case func(any):
 		return FnFunc1(func(a any) any { f(a); return nil })
 
@@ -164,6 +172,13 @@ func wrapGoFunc(fn interface{}) IFn {
 		return FnFunc1(func(a any) any { return f(a.(string)) })
 	case func(string):
 		return FnFunc1(func(a any) any { f(a.(string)); return nil })
+	case func(IPersistentMap) any:
+		return FnFunc1(func(a any) any {
+			if a == nil {
+				return f(nil)
+			}
+			return f(a.(IPersistentMap))
+		})
 
 	// --- 2 args, all any ---
 	case func(any, any) any:
@@ -176,6 +191,10 @@ func wrapGoFunc(fn interface{}) IFn {
 		return FnFunc2(func(a, b any) any { return f(a, b) })
 	case func(any, any):
 		return FnFunc2(func(a, b any) any { f(a, b); return nil })
+	case func(int, int) any:
+		return FnFunc2(func(a, b any) any { return f(MustAsInt(a), MustAsInt(b)) })
+	case func(IFn, any) any:
+		return FnFunc2(func(a, b any) any { return f(a.(IFn), b) })
 
 	// --- 2 args, mixed typed ---
 	case func(any, int) any:
@@ -192,6 +211,18 @@ func wrapGoFunc(fn interface{}) IFn {
 	// --- 4 args ---
 	case func(any, any, any, any) any:
 		return FnFunc4(func(a, b, c, d any) any { return f(a, b, c, d) })
+
+	// --- variadic args ---
+	case func(any, any, ...any) any:
+		return FnFunc(func(args ...any) any {
+			if len(args) < 2 {
+				panic(NewIllegalArgumentError(fmt.Sprintf(
+					"wrong number of arguments: expected at least 2, got %d",
+					len(args),
+				)))
+			}
+			return f(args[0], args[1], args[2:]...)
+		})
 	}
 
 	// Slow path: reflect.Value.Call with coercion for signatures not

@@ -132,3 +132,45 @@ func TestWrapGoFuncVoidReturn(t *testing.T) {
 		t.Errorf("void function returned %v, want nil", result)
 	}
 }
+
+func TestWrapGoFuncDirectRuntimeSignatures(t *testing.T) {
+	vector := NewVector(1, 2)
+	transient := vector.AsTransient()
+	persistentMap := NewMap(NewKeyword("answer"), int64(42))
+
+	tests := []struct {
+		name string
+		fn   interface{}
+		args []any
+		want any
+	}{
+		{"persistent collection", func() IPersistentCollection { return vector }, nil, vector},
+		{"transient collection", func() ITransientCollection { return transient }, nil, transient},
+		{"persistent map", func() IPersistentMap { return persistentMap }, nil, persistentMap},
+		{"persistent map argument", func(m IPersistentMap) any { return m.Count() }, []any{persistentMap}, 1},
+		{"nil persistent map argument", func(m IPersistentMap) any { return m == nil }, []any{nil}, true},
+		{"conjer result", func(x any) Conjer { return transient.Conj(x) }, []any{3}, transient},
+		{
+			"IFn argument",
+			func(f IFn, x any) any { return f.Invoke(x) },
+			[]any{FnFunc1(func(x any) any { return x }), "value"},
+			"value",
+		},
+		{
+			"variadic arguments",
+			func(a, b any, rest ...any) any { return len(rest) + MustAsInt(a) + MustAsInt(b) },
+			[]any{1, 2, 3, 4},
+			5,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fn := wrapGoFunc(tt.fn)
+			got := fn.Invoke(tt.args...)
+			if got != tt.want {
+				t.Errorf("got %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
