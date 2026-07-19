@@ -123,6 +123,34 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 			return ret(env)
 		}
 
+	case ast.OpLet:
+		letNode := n.Sub.(*ast.LetNode)
+		names := make([]*lang.Symbol, len(letNode.Bindings))
+		inits := make([]evalFn, len(letNode.Bindings))
+		for i, binding := range letNode.Bindings {
+			bindingNode := binding.Sub.(*ast.BindingNode)
+			names[i] = bindingNode.Name
+			inits[i] = c.compile(bindingNode.Init)
+			if inits[i] == nil {
+				return nil
+			}
+		}
+		body := c.compile(letNode.Body)
+		if body == nil {
+			return nil
+		}
+		return func(env *environment) (interface{}, error) {
+			letEnv := env.PushScope().(*environment)
+			for i, init := range inits {
+				value, err := init(letEnv)
+				if err != nil {
+					return nil, err
+				}
+				letEnv.BindLocal(names[i], value)
+			}
+			return body(letEnv)
+		}
+
 	case ast.OpHostCall:
 		hostCall := n.Sub.(*ast.HostCallNode)
 		if hostCall.ResolvedMethod == nil {
