@@ -49,6 +49,11 @@ func TestRTCollectionMethodsResolveDirectly(t *testing.T) {
 	if got := lang.Apply2(nth, lang.NewVector(int64(7)), int64(0)); got != int64(7) {
 		t.Fatalf("RT.Nth result = %v, want 7", got)
 	}
+	if got := testing.AllocsPerRun(1_000, func() {
+		_, _ = lang.FieldOrMethod(RT, "nth")
+	}); got != 0 {
+		t.Fatalf("cached RT.Nth resolution allocated %v objects per call, want 0", got)
+	}
 }
 
 func TestNativeCoreAddApplyToReducibleSequence(t *testing.T) {

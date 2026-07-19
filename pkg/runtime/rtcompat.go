@@ -62,23 +62,31 @@ func AddLoadPath(fs fs.FS) {
 // methods. This approach is used to make translation of core.clj to
 // Glojure easier.
 type RTMethods struct {
-	id atomic.Int32
+	id                  atomic.Int32
+	resolvedMethodsOnce sync.Once
+	resolvedMethods     rtResolvedMethods
+}
+
+type rtResolvedMethods struct {
+	nth        interface{}
+	nthDefault interface{}
+	get        interface{}
+	contains   interface{}
+	dissoc     interface{}
+	find       interface{}
 }
 
 // ResolveFieldOrMethod keeps the collection accessors used by rewritten
 // clojure.core forms on direct Go calls instead of reflected bound methods.
 func (rt *RTMethods) ResolveFieldOrMethod(name string) (interface{}, bool) {
-	switch strings.ToLower(name) {
-	case "nth":
-		return lang.FnFunc2(func(x, i any) any {
+	rt.resolvedMethodsOnce.Do(func() {
+		rt.resolvedMethods.nth = lang.FnFunc2(func(x, i any) any {
 			return rt.Nth(x, lang.MustAsInt(i))
-		}), true
-	case "nthdefault":
-		return lang.FnFunc3(func(x, i, def any) any {
+		})
+		rt.resolvedMethods.nthDefault = lang.FnFunc3(func(x, i, def any) any {
 			return rt.NthDefault(x, lang.MustAsInt(i), def)
-		}), true
-	case "get":
-		return lang.FnFunc(func(args ...any) any {
+		})
+		getVariadic := lang.FnFunc(func(args ...any) any {
 			if len(args) < 2 {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf(
 					"wrong number of arguments: expected at least 2, got %d",
@@ -86,19 +94,32 @@ func (rt *RTMethods) ResolveFieldOrMethod(name string) (interface{}, bool) {
 				)))
 			}
 			return rt.Get(args[0], args[1], args[2:]...)
-		}), true
-	case "contains":
-		return lang.FnFunc2(func(coll, key any) any {
+		})
+		rt.resolvedMethods.get = getVariadic
+		rt.resolvedMethods.contains = lang.FnFunc2(func(coll, key any) any {
 			return rt.Contains(coll, key)
-		}), true
-	case "dissoc":
-		return lang.FnFunc2(func(coll, key any) any {
+		})
+		rt.resolvedMethods.dissoc = lang.FnFunc2(func(coll, key any) any {
 			return rt.Dissoc(coll, key)
-		}), true
-	case "find":
-		return lang.FnFunc2(func(coll, key any) any {
+		})
+		rt.resolvedMethods.find = lang.FnFunc2(func(coll, key any) any {
 			return rt.Find(coll, key)
-		}), true
+		})
+	})
+
+	switch name {
+	case "nth", "Nth":
+		return rt.resolvedMethods.nth, true
+	case "nthdefault", "nthDefault", "NthDefault":
+		return rt.resolvedMethods.nthDefault, true
+	case "get", "Get":
+		return rt.resolvedMethods.get, true
+	case "contains", "Contains":
+		return rt.resolvedMethods.contains, true
+	case "dissoc", "Dissoc":
+		return rt.resolvedMethods.dissoc, true
+	case "find", "Find":
+		return rt.resolvedMethods.find, true
 	default:
 		return nil, false
 	}
