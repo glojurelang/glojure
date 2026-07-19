@@ -1165,16 +1165,27 @@ func (g *Generator) generateFn(fn *Fn) string {
 		g.writef("})\n")
 	}
 
-	// Handle metadata if present
-	// NB: we've got metadata with :rettag on our function, but clojure's functions have no metadata...
-	// TODO: before merge, investigate this.
-	if meta := fn.Meta(); meta != nil {
+	// defn uses :rettag to communicate a return hint to the compiler. It is
+	// not runtime function metadata, so do not serialize it into the AOT
+	// value. Preserve any metadata explicitly attached to the function.
+	if meta := runtimeFunctionMeta(fn.Meta()); meta != nil {
 		metaVar := g.generateValue(meta)
 		g.writeAssign(fnVar, fmt.Sprintf("%s.WithMeta(%s).(%s)", fnVar, metaVar, fnType))
 	}
 
 	// Return the function variable
 	return fnVar
+}
+
+func runtimeFunctionMeta(meta lang.IPersistentMap) lang.IPersistentMap {
+	if meta == nil {
+		return nil
+	}
+	meta = meta.Without(lang.NewKeyword("rettag"))
+	if meta.Count() == 0 {
+		return nil
+	}
+	return meta
 }
 
 // generateFnMethod generates the body of a function method

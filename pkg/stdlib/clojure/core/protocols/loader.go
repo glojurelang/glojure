@@ -709,7 +709,6 @@ func LoadNS() {
 	kw_ns := lang.NewKeyword("ns")
 	kw_on_DASH_interface := lang.NewKeyword("on-interface")
 	kw_private := lang.NewKeyword("private")
-	kw_rettag := lang.NewKeyword("rettag")
 	kw_sigs := lang.NewKeyword("sigs")
 	// var clojure.core.protocols/CollReduce
 	var_clojure_DOT_core_DOT_protocols_CollReduce := lang.InternVarName(sym_clojure_DOT_core_DOT_protocols, sym_CollReduce)
@@ -2325,7 +2324,6 @@ func LoadNS() {
 			}
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_f, sym_val)), kw_doc, "Reduces via IReduceInit if possible, else naively.", kw_file, "clojure/core/protocols.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols), kw_end_DASH_column, int(32), kw_column, int(8), kw_line, int(68), kw_end_DASH_line, int(68), kw_private, true)
@@ -2630,7 +2628,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_DOT_protocols_iter_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_iter_DASH_reduce.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(33), kw_column, int(8), kw_end_DASH_line, int(33), kw_end_DASH_column, int(18), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_f), lang.NewVector(sym_coll, sym_f, sym_val)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))
@@ -2723,7 +2720,6 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_f, sym_val)), kw_doc, "Reduces a seq, ignoring any opportunities to switch to a more\n  specialized implementation.", kw_file, "clojure/core/protocols.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols), kw_end_DASH_column, int(23), kw_column, int(8), kw_line, int(55), kw_end_DASH_line, int(55), kw_private, true)
@@ -2824,7 +2820,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_seq_DASH_reduce.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core/protocols.glj", kw_line, int(24), kw_column, int(8), kw_end_DASH_line, int(24), kw_end_DASH_column, int(17), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_f), lang.NewVector(sym_coll, sym_f, sym_val)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_protocols))

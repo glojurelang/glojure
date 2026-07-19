@@ -38,3 +38,24 @@ func TestLoadedNamespacesUseFreshRuntimeState(t *testing.T) {
 		t.Fatalf("*loaded-libs* initializer = %q, want %q", initializer, want)
 	}
 }
+
+func TestRuntimeFunctionMeta(t *testing.T) {
+	foo := lang.NewKeyword("foo")
+	bar := lang.NewKeyword("bar")
+	retTag := lang.NewKeyword("rettag")
+
+	if got := runtimeFunctionMeta(nil); got != nil {
+		t.Fatalf("nil metadata became %v", got)
+	}
+	if got := runtimeFunctionMeta(lang.NewMap(retTag, nil)); got != nil {
+		t.Fatalf("compiler-only metadata became %v", got)
+	}
+
+	explicit := lang.NewMap(foo, bar)
+	if got := runtimeFunctionMeta(explicit); !lang.Equals(got, explicit) {
+		t.Fatalf("explicit metadata became %v, want %v", got, explicit)
+	}
+	if got := runtimeFunctionMeta(lang.NewMap(retTag, nil, foo, bar)); !lang.Equals(got, explicit) {
+		t.Fatalf("mixed metadata became %v, want %v", got, explicit)
+	}
+}

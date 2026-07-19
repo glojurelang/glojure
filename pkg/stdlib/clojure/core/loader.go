@@ -2903,8 +2903,6 @@ func LoadNS() {
 			}
 			return tmp2
 		})
-		tmp1 := reflect.TypeOf(false)
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_rettag, tmp1)).(lang.FnFunc1)
 		closed25 = tmp0
 	}
 	var closed3 any
@@ -2970,7 +2968,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Gt(v2, int64(0))
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core__GT_0_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__GT_0_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(965), kw_column, int(7), kw_end_DASH_line, int(965), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -2986,7 +2983,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Gt(v2, int64(1))
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core__GT_1_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__GT_1_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(964), kw_column, int(7), kw_end_DASH_line, int(964), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -3121,8 +3117,7 @@ func LoadNS() {
 	// *loaded-libs*
 	{
 		tmp0 := sym__STAR_loaded_DASH_libs_STAR_
-		tmp1 := lang.NewRef(lang.NewSet())
-		var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_ = ns.InternWithValue(tmp0, lang.NewRef(lang.NewSet()), true)
 		var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(5874), kw_column, int(10), kw_end_DASH_line, int(5877), kw_end_DASH_column, int(15), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
@@ -3259,7 +3254,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(lang.GetPersistentStructMapAccessor, v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_accessor = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_accessor.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_key)), kw_doc, "Returns a fn that, given an instance of a structmap with the basis,\n  returns the value at the key.  The key must be in the basis. The\n  returned function should be (slightly) more efficient than using\n  get, but such use of accessors should be limited to known\n  performance-critical areas.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4127), kw_end_DASH_line, int(4127))
@@ -3283,7 +3277,6 @@ func LoadNS() {
 			tmp6 := lang.Apply2(tmp5, v3, v4)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_add_DASH_watch = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_add_DASH_watch.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_reference, sym_key, sym_fn)), kw_doc, "Adds a watch function to an agent/atom/var/ref reference. The watch\n  fn must be a fn of 4 args: a key, the reference, its old-state, its\n  new-state. Whenever the reference's state might have been changed,\n  any registered watches will have their functions called. The watch fn\n  will be called synchronously, on the agent's thread if an agent,\n  before any pending sends if agent or ref. Note that an atom's or\n  ref's state may have changed again prior to the fn call, so use\n  old/new-state rather than derefing the reference. Note also that watch\n  fns may be called from multiple threads simultaneously. Var watchers\n  are triggered only by root binding changes, not thread-local\n  set!s. Keys must be unique per reference, and can be used to remove\n  the watch with remove-watch, but are otherwise considered opaque by\n  the watch mechanism.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2150), kw_end_DASH_line, int(2150))
@@ -3309,7 +3302,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_agent_DASH_error = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_agent_DASH_error.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "Returns the exception thrown during an asynchronous action of the\n  agent if the agent is failed.  Returns nil if the agent is not\n  failed.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2175), kw_end_DASH_line, int(2175))
@@ -3323,7 +3315,6 @@ func LoadNS() {
 			tmp2 := lang.AllNamespaces()
 			return tmp2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_all_DASH_ns = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_all_DASH_ns.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a sequence of all namespaces.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4203), kw_end_DASH_line, int(4203))
@@ -3355,7 +3346,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_alter = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_alter.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref, sym_fun, sym__AMP_, sym_args)), kw_doc, "Must be called in a transaction. Sets the in-transaction-value of\n  ref to:\n\n  (apply fun in-transaction-value-of-ref args)\n\n  and returns the in-transaction-value of ref.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2443), kw_end_DASH_line, int(2443))
@@ -3387,7 +3377,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_alter_DASH_meta_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_alter_DASH_meta_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically sets the metadata for a namespace/var/ref/agent/atom to be:\n\n  (apply f its-current-meta args)\n\n  f must be free of side-effects", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2406), kw_end_DASH_line, int(2406))
@@ -3419,7 +3408,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_alter_DASH_var_DASH_root = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_alter_DASH_var_DASH_root.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically alters the root binding of var v by applying f to its\n  current value plus any args", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(5536), kw_end_DASH_line, int(5536))
@@ -3434,8 +3422,6 @@ func LoadNS() {
 			_ = v2
 			return true
 		})
-		tmp2 := reflect.TypeOf(false)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_any_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_any_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -3454,7 +3440,6 @@ func LoadNS() {
 			tmp4 := lang.Numbers.ClearBit(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_bit_DASH_clear = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bit_DASH_clear.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Clear bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(1343), kw_end_DASH_line, int(1343))
@@ -3472,7 +3457,6 @@ func LoadNS() {
 			tmp4 := lang.Numbers.FlipBit(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_bit_DASH_flip = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bit_DASH_flip.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Flip bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1355), kw_end_DASH_line, int(1355))
@@ -3490,7 +3474,6 @@ func LoadNS() {
 			tmp4 := lang.Numbers.SetBit(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_bit_DASH_set = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bit_DASH_set.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Set bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1349), kw_end_DASH_line, int(1349))
@@ -3508,7 +3491,6 @@ func LoadNS() {
 			tmp4 := lang.Numbers.TestBit(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_bit_DASH_test = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bit_DASH_test.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_n)), kw_doc, "Test bit at index n", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1361), kw_end_DASH_line, int(1361))
@@ -3530,7 +3512,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_cast = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_cast.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_c, sym_x)), kw_doc, "Throws a ClassCastException if x is not a c, else returns x.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(347), kw_end_DASH_line, int(347))
@@ -3574,7 +3555,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_chunk = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_chunk.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(693), kw_column, int(7), kw_end_DASH_line, int(693), kw_end_DASH_column, int(41), kw_arglists, lang.NewList(lang.NewVector(sym_b)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -3596,7 +3576,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_chunk_DASH_append = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_chunk_DASH_append.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(690), kw_column, int(7), kw_end_DASH_line, int(690), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_b, sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -3612,7 +3591,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(lang.NewChunkBuffer, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_chunk_DASH_buffer = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_chunk_DASH_buffer.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(687), kw_column, int(7), kw_end_DASH_line, int(687), kw_end_DASH_column, int(53), kw_arglists, lang.NewList(lang.NewVector(sym_capacity)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -3638,7 +3616,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_chunk_DASH_cons = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_chunk_DASH_cons.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(705), kw_column, int(7), kw_end_DASH_line, int(705), kw_end_DASH_column, int(25), kw_arglists, lang.NewList(lang.NewVector(sym_chunk, sym_rest)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -3664,7 +3641,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_chunk_DASH_first = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_chunk_DASH_first.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(696), kw_column, int(7), kw_end_DASH_line, int(696), kw_end_DASH_column, int(48), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -3690,7 +3666,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_chunk_DASH_next = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_chunk_DASH_next.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(702), kw_column, int(7), kw_end_DASH_line, int(702), kw_end_DASH_column, int(71), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -3716,7 +3691,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_chunk_DASH_rest = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_chunk_DASH_rest.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(699), kw_column, int(7), kw_end_DASH_line, int(699), kw_end_DASH_column, int(71), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -3739,7 +3713,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_class = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_class.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the Class of x", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3497), kw_end_DASH_line, int(3497))
@@ -3766,7 +3739,6 @@ func LoadNS() {
 				return nil
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_comment = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_comment.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Ignores body, yields nil", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(4790), kw_end_DASH_line, int(4790))
@@ -3798,7 +3770,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_commute = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_commute.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref, sym_fun, sym__AMP_, sym_args)), kw_doc, "Must be called in a transaction. Sets the in-transaction-value of\n  ref to:\n\n  (apply fun in-transaction-value-of-ref args)\n\n  and returns the in-transaction-value of ref.\n\n  At the commit point of the transaction, sets the value of ref to be:\n\n  (apply fun most-recently-committed-value-of-ref args)\n\n  Thus fun should be commutative, or, failing that, you must accept\n  last-one-in-wins behavior.  commute allows for more concurrency than\n  ref-set.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2422), kw_end_DASH_line, int(2422))
@@ -3845,7 +3816,6 @@ func LoadNS() {
 			}
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_comparator = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_comparator.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred)), kw_doc, "Returns an implementation of java.util.Comparator based upon pred.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3099), kw_end_DASH_line, int(3099))
@@ -3869,7 +3839,6 @@ func LoadNS() {
 			tmp6 := lang.Apply2(tmp5, v3, v4)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_compare_DASH_and_DASH_set_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_compare_DASH_and_DASH_set_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_oldval, sym_newval)), kw_doc, "Atomically sets the value of atom to newval if and only if the\n  current value of the atom is identical to oldval. Returns true if\n  set happened, else false", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(2368), kw_end_DASH_line, int(2368))
@@ -3889,7 +3858,6 @@ func LoadNS() {
 				tmp5 := lang.NewCons(v3, v4)
 				return tmp5
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(29), kw_column, int(7), kw_end_DASH_line, int(29), kw_end_DASH_column, int(89))).(lang.FnFunc2)
 			v2 = tmp1
 			_ = v2
 		}
@@ -3926,7 +3894,6 @@ func LoadNS() {
 			}
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_constantly = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_constantly.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns a function that takes any number of arguments and returns x.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1444), kw_end_DASH_line, int(1444))
@@ -3944,7 +3911,6 @@ func LoadNS() {
 			tmp4 := runtime.RT.Contains(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_contains_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_contains_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_key)), kw_doc, "Returns true if key is present in the given collection, otherwise\n  returns false.  Note that for numerically indexed collections like\n  vectors and Java arrays, this tests if the numeric key is within the\n  range of indexes. 'contains?' operates constant or logarithmic time;\n  it will not perform a linear search for a value.  See also 'some'.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(1483), kw_end_DASH_line, int(1483))
@@ -3960,7 +3926,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(lang.FindOrCreateNamespace, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_create_DASH_ns = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_create_DASH_ns.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Create a new namespace named by the symbol if one doesn't already\n  exist, returns it or the already-existing namespace of the same\n  name.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4188), kw_end_DASH_line, int(4188))
@@ -3984,7 +3949,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_create_DASH_struct = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_create_DASH_struct.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a structure basis object.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(4094), kw_end_DASH_line, int(4094))
@@ -3997,7 +3961,6 @@ func LoadNS() {
 		tmp1 = lang.FnFunc0(func() any {
 			return lang.NewList()
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_data_DASH_reader_DASH_urls = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_data_DASH_reader_DASH_urls.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7900), kw_column, int(8), kw_end_DASH_line, int(7900), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -4015,7 +3978,6 @@ func LoadNS() {
 			tmp4 := lang.Apply1(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_deliver = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_deliver.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_promise, sym_val)), kw_doc, "Delivers the supplied value to the promise, releasing any pending\n  derefs. A subsequent call to deliver on a promise will have no effect.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7179), kw_end_DASH_line, int(7179))
@@ -4041,8 +4003,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp2 := reflect.TypeOf((*big6.Int)(nil))
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_denominator = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_denominator.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*big6.Int)(nil))
@@ -4106,7 +4066,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_deref_DASH_future = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_deref_DASH_future.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(2304), kw_column, int(7), kw_end_DASH_line, int(2304), kw_end_DASH_column, int(28), kw_arglists, lang.NewList(lang.NewVector(sym_fut), lang.NewVector(sym_fut, sym_timeout_DASH_ms, sym_timeout_DASH_val)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -4132,7 +4091,6 @@ func LoadNS() {
 			tmp6 := lang.Apply0(tmp5)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ensure = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ensure.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref)), kw_doc, "Must be called in a transaction. Protects the ref from modification\n  by other transactions.  Returns the in-transaction-value of\n  ref. Allows for more concurrency than (ref-set ref @ref)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2488), kw_end_DASH_line, int(2488))
@@ -4148,7 +4106,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(nil, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_enumeration_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_enumeration_DASH_seq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_e)), kw_doc, "Returns a seq on a java.util.Enumeration", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(5767), kw_end_DASH_line, int(5767))
@@ -4174,7 +4131,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_error_DASH_handler = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_error_DASH_handler.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "Returns the error-handler of agent a, or nil if there is none.\n  See set-error-handler!", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(2210), kw_end_DASH_line, int(2210))
@@ -4200,7 +4156,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_error_DASH_mode = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_error_DASH_mode.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "Returns the error-mode of agent a.  See set-error-mode!", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2235), kw_end_DASH_line, int(2235))
@@ -4216,7 +4171,6 @@ func LoadNS() {
 			tmp3 := runtime.Compiler.Eval(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_eval = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_eval.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Evaluates the form data structure (not text!) and returns the result.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3225), kw_end_DASH_line, int(3225))
@@ -4232,7 +4186,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(lang.GetExData, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ex_DASH_data = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ex_DASH_data.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ex)), kw_doc, "Returns exception data (a map) if ex is an IExceptionInfo.\n   Otherwise returns nil.", kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4863), kw_end_DASH_line, int(4863))
@@ -4267,7 +4220,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_ex_DASH_info = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ex_DASH_info.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_map), lang.NewVector(sym_msg, sym_map, sym_cause)), kw_doc, "Create an instance of ExceptionInfo, a RuntimeException subclass\n   that carries a map of additional data.", kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4860), kw_end_DASH_line, int(4860))
@@ -4283,8 +4235,6 @@ func LoadNS() {
 			tmp3 := lang.Identical(v2, false)
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf(false)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_false_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_false_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -4303,7 +4253,6 @@ func LoadNS() {
 			tmp4 := runtime.RT.Find(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_find = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_find.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key)), kw_doc, "Returns the map entry for key, or nil if key not present.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1534), kw_end_DASH_line, int(1534))
@@ -4319,7 +4268,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(lang.FindNamespace, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_find_DASH_ns = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_find_DASH_ns.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Returns the namespace named by the symbol or nil if it doesn't exist.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4182), kw_end_DASH_line, int(4182))
@@ -4339,7 +4287,6 @@ func LoadNS() {
 			tmp4 := lang.Apply1(tmp3, v2)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_find_DASH_var = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_find_DASH_var.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Returns the global var named by the namespace-qualified symbol, or\n  nil if no var with that name.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2021), kw_end_DASH_line, int(2021))
@@ -4357,7 +4304,6 @@ func LoadNS() {
 				tmp4 := lang.First(v3)
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(54), kw_column, int(8), kw_end_DASH_line, int(54), kw_end_DASH_column, int(86))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -4376,7 +4322,6 @@ func LoadNS() {
 			tmp3 := lang.ForceDelay(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_force = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_force.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If x is a Delay, returns the (possibly cached) value of its expression, else returns x", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(756), kw_end_DASH_line, int(756))
@@ -4396,7 +4341,6 @@ func LoadNS() {
 			tmp4 := lang.Apply1(tmp3, true)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_future_DASH_cancel = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_future_DASH_cancel.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Cancels the future, if possible.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7089), kw_end_DASH_line, int(7089))
@@ -4422,7 +4366,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_future_DASH_cancelled_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_future_DASH_cancelled_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns true if future f is cancelled", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(7095), kw_end_DASH_line, int(7095))
@@ -4448,7 +4391,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_future_DASH_done_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_future_DASH_done_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns true if future f is done", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(6602), kw_end_DASH_line, int(6602))
@@ -4478,7 +4420,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_get_DASH_method = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_get_DASH_method.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val)), kw_doc, "Given a multimethod and a dispatch value, returns the dispatch fn\n  that would apply to that value, or nil if none apply and no default", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1823), kw_end_DASH_line, int(1823))
@@ -4492,7 +4433,6 @@ func LoadNS() {
 			tmp2 := lang.GetThreadBindings()
 			return tmp2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_get_DASH_thread_DASH_bindings = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_get_DASH_thread_DASH_bindings.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Get a map with the Var/value pairs which is currently in effect for the\n  current thread.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(1945), kw_end_DASH_line, int(1945))
@@ -4512,7 +4452,6 @@ func LoadNS() {
 			tmp4 := lang.Apply0(tmp3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_get_DASH_validator = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_get_DASH_validator.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref)), kw_doc, "Gets the validator-fn for a var/ref/agent/atom.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(2400), kw_end_DASH_line, int(2400))
@@ -4536,7 +4475,6 @@ func LoadNS() {
 			tmp3 := lang.HashEq(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_hash = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_hash.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the hash code of its argument. Note this is the hash code\n  consistent with =, and thus is different than .hashCode for Integer,\n  Short, Byte and Clojure collections.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(5241), kw_end_DASH_line, int(5241))
@@ -4573,7 +4511,6 @@ func LoadNS() {
 			}),
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_hash_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_hash_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_keyvals)), kw_doc, "keyval => key val\n  Returns a new hash map with supplied mappings.  If any keys are\n  equal, they are handled as if by repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(380), kw_end_DASH_line, int(380))
@@ -4589,7 +4526,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(nil, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_hash_DASH_ordered_DASH_coll = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_hash_DASH_ordered_DASH_coll.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns the hash code, consistent with =, for an external ordered\n   collection implementing Iterable.\n   See http://clojure.org/data_structures#hash for full algorithms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(5262), kw_end_DASH_line, int(5262))
@@ -4605,7 +4541,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(nil, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_hash_DASH_unordered_DASH_coll = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_hash_DASH_unordered_DASH_coll.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns the hash code, consistent with =, for an external unordered\n   collection implementing Iterable. For maps, the iterator should\n   return map entries whose hash is computed as\n     (hash-ordered-coll [k v]).\n   See http://clojure.org/data_structures#hash for full algorithms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(5271), kw_end_DASH_line, int(5271))
@@ -4620,7 +4555,6 @@ func LoadNS() {
 			_ = v2
 			return v2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_identity = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_identity.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns its argument.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1450), kw_end_DASH_line, int(1450))
@@ -4636,7 +4570,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(nil, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_inst_DASH_ms = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_inst_DASH_ms.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_inst)), kw_doc, "Return the number of milliseconds since January 1, 1970, 00:00:00 GMT", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6895), kw_end_DASH_line, int(6895))
@@ -4651,7 +4584,6 @@ func LoadNS() {
 			_ = v2
 			return nil
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_inst_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_inst_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x satisfies Inst", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6901), kw_end_DASH_line, int(6901))
@@ -4671,7 +4603,6 @@ func LoadNS() {
 				tmp5 := lang.Apply2(lang.HasType, v3, v4)
 				return tmp5
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(145), kw_column, int(12), kw_end_DASH_line, int(145), kw_end_DASH_column, int(85))).(lang.FnFunc2)
 			v2 = tmp1
 			_ = v2
 		}
@@ -4841,7 +4772,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_int_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_int_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1402), kw_end_DASH_line, int(1402))
@@ -4857,7 +4787,6 @@ func LoadNS() {
 			tmp3 := lang.IsInteger(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_integer_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_integer_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is an integer", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1386), kw_end_DASH_line, int(1386))
@@ -4875,7 +4804,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(lang.CreateIterate, v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_iterate = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_iterate.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_x)), kw_doc, "Returns a lazy (infinite!) sequence of x, (f x), (f (f x)) etc.\n  f must be free of side-effects", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3033), kw_end_DASH_line, int(3033))
@@ -4891,7 +4819,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(nil, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_iterator_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_iterator_DASH_seq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iter)), kw_doc, "Returns a seq on a java.util.Iterator. Note that most collections\n  providing iterators implement Iterable and thus support seq directly.\n  Seqs cache values, thus iterator-seq should not be used on any\n  iterator that repeatedly returns the same mutable object.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(5757), kw_end_DASH_line, int(5757))
@@ -4911,7 +4838,6 @@ func LoadNS() {
 			tmp4 := lang.Apply0(tmp3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_key = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_key.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_e)), kw_doc, "Returns the key of the map entry.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1567), kw_end_DASH_line, int(1567))
@@ -4927,7 +4853,6 @@ func LoadNS() {
 			tmp3 := lang.Keys(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_keys = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_keys.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map)), kw_doc, "Returns a sequence of the map's keys, in the same order as (seq map).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1555), kw_end_DASH_line, int(1555))
@@ -4945,7 +4870,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_keyword_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_keyword_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Keyword", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(565), kw_end_DASH_line, int(565))
@@ -4999,7 +4923,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_line_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_line_DASH_seq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rdr)), kw_doc, "Returns the lines of text from rdr as a lazy sequence of strings.\n  rdr must implement java.io.BufferedReader.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(3090), kw_end_DASH_line, int(3090))
@@ -5025,7 +4948,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_list_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_list_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IPersistentList", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6255), kw_end_DASH_line, int(6255))
@@ -5045,7 +4967,6 @@ func LoadNS() {
 			tmp4 := lang.Apply1(tmp3, v2)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_load_DASH_reader = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load_DASH_reader.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rdr)), kw_doc, "Sequentially read and evaluate the set of forms contained in the\n  stream/file", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4138), kw_end_DASH_line, int(4138))
@@ -5071,7 +4992,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_load_DASH_string = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load_DASH_string.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Sequentially read and evaluate the set of forms contained in the\n  string", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4145), kw_end_DASH_line, int(4145))
@@ -5087,7 +5007,6 @@ func LoadNS() {
 			tmp3 := runtime.Compiler.Macroexpand1(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_macroexpand_DASH_1 = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_macroexpand_DASH_1.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "If form represents a macro form, returns its expansion,\n  else returns form.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(4074), kw_end_DASH_line, int(4074))
@@ -5124,7 +5043,6 @@ func LoadNS() {
 			}
 			return tmp13
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_make_DASH_hierarchy = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_make_DASH_hierarchy.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Creates a hierarchy object for use with derive, isa? etc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(5559), kw_end_DASH_line, int(5559))
@@ -5142,7 +5060,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_map_DASH_entry_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_map_DASH_entry_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a map entry", kw_file, "clojure/core.glj", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1477), kw_end_DASH_line, int(1477))
@@ -5162,7 +5079,6 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(173), kw_column, int(7), kw_end_DASH_line, int(173), kw_end_DASH_column, int(97))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5217,7 +5133,6 @@ func LoadNS() {
 				}
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(208), kw_column, int(7), kw_end_DASH_line, int(210), kw_end_DASH_column, int(21))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5246,7 +5161,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_methods = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_methods.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn)), kw_doc, "Given a multimethod, returns a map of dispatch values -> dispatch fns", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1817), kw_end_DASH_line, int(1817))
@@ -5264,7 +5178,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(nil, v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_mix_DASH_collection_DASH_hash = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_mix_DASH_collection_DASH_hash.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_hash_DASH_basis, sym_count)), kw_doc, "Mix final collection hash for ordered or unordered collections.\n   hash-basis is the combined collection hash, count is the number\n   of elements included in the basis. Note this is the hash code\n   consistent with =, different from .hashCode.\n   See http://clojure.org/data_structures#hash for full algorithms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(5251), kw_end_DASH_line, int(5251))
@@ -5316,7 +5229,6 @@ func LoadNS() {
 			}
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_mk_DASH_bound_DASH_fn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_mk_DASH_bound_DASH_fn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5179), kw_column, int(7), kw_end_DASH_line, int(5179), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_sc, sym_test, sym_key)), kw_private, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -5347,7 +5259,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_neg_DASH_int_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_neg_DASH_int_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a negative fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1413), kw_end_DASH_line, int(1413))
@@ -5365,7 +5276,6 @@ func LoadNS() {
 				tmp4 := lang.Next(v3)
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(63), kw_column, int(7), kw_end_DASH_line, int(63), kw_end_DASH_column, int(77))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5390,7 +5300,6 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(111), kw_column, int(9), kw_end_DASH_line, int(111), kw_end_DASH_column, int(49))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5409,8 +5318,6 @@ func LoadNS() {
 			tmp3 := lang.IsNil(v2)
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf(false)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_nil_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_nil_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -5445,7 +5352,6 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(125), kw_column, int(8), kw_end_DASH_line, int(125), kw_end_DASH_column, int(46))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5469,8 +5375,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf(false)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_not = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_not.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -5487,7 +5391,6 @@ func LoadNS() {
 			tmp3 := lang.IsNumber(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_number_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_number_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a Number", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3596), kw_end_DASH_line, int(3596))
@@ -5513,8 +5416,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp2 := reflect.TypeOf((*big6.Int)(nil))
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_numerator = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_numerator.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*big6.Int)(nil))
@@ -5531,7 +5432,6 @@ func LoadNS() {
 			tmp3 := runtime.RT.Peek(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_peek = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_peek.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "For a list or queue, same as first, for a vector, same as, but much\n  more efficient than, last. If the collection is empty, returns nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1459), kw_end_DASH_line, int(1459))
@@ -5557,7 +5457,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_persistent_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_persistent_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a new, persistent version of the transient collection, in\n  constant time. The transient collection cannot be used after this\n  call, any such use will throw an exception.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3372), kw_end_DASH_line, int(3372))
@@ -5573,7 +5472,6 @@ func LoadNS() {
 			tmp3 := runtime.RT.Pop(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_pop = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pop.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "For a list or queue, returns a new list/queue without the first\n  item, for a vector, returns a new vector without the last item. If\n  the collection is empty, throws an exception.  Note - not the same\n  as next/butlast.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1466), kw_end_DASH_line, int(1466))
@@ -5609,7 +5507,6 @@ func LoadNS() {
 			}
 			return tmp9
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_pop_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pop_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Removes the last item from a transient vector. If\n  the collection is empty, throws an exception. Returns coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3423), kw_end_DASH_line, int(3423))
@@ -5623,7 +5520,6 @@ func LoadNS() {
 			tmp2 := lang.Apply0(lang.PopThreadBindings)
 			return tmp2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_pop_DASH_thread_DASH_bindings = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pop_DASH_thread_DASH_bindings.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Pop one set of bindings pushed with push-binding before. It is an error to\n  pop bindings without pushing before.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(1937), kw_end_DASH_line, int(1937))
@@ -5654,7 +5550,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_pos_DASH_int_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pos_DASH_int_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a positive fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1407), kw_end_DASH_line, int(1407))
@@ -5678,7 +5573,6 @@ func LoadNS() {
 			tmp6 := lang.Apply2(tmp5, v3, v4)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_prefer_DASH_method = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_prefer_DASH_method.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val_DASH_x, sym_dispatch_DASH_val_DASH_y)), kw_doc, "Causes the multimethod to prefer matches of dispatch-val-x over dispatch-val-y\n   when there is a conflict", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1809), kw_end_DASH_line, int(1809))
@@ -5704,7 +5598,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_prefers = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_prefers.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn)), kw_doc, "Given a multimethod, returns a map of preferred value -> set of other values", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1830), kw_end_DASH_line, int(1830))
@@ -5745,7 +5638,6 @@ func LoadNS() {
 			tmp13 := lang.Apply2(lang.WriteWriter, v4, ")")
 			return tmp13
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_print_DASH_ctor = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_ctor.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(95), kw_column, int(7), kw_end_DASH_line, int(95), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_print_DASH_args, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -5769,7 +5661,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(lang.PushThreadBindings, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_push_DASH_thread_DASH_bindings = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_push_DASH_thread_DASH_bindings.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_bindings)), kw_doc, "WARNING: This is a low-level function. Prefer high-level macros like\n  binding where ever possible.\n\n  Takes a map of Var/value pairs. Binds each Var to the associated value for\n  the current thread. Each call *MUST* be accompanied by a matching call to\n  pop-thread-bindings wrapped in a try-finally!\n\n      (push-thread-bindings bindings)\n      (try\n        ...\n        (finally\n          (pop-thread-bindings)))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(26), kw_column, int(7), kw_line, int(1919), kw_end_DASH_line, int(1919))
@@ -5798,7 +5689,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_rand = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_rand.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_n)), kw_doc, "Returns a random floating point number between 0 (inclusive) and\n  n (default 1) (exclusive).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4985), kw_end_DASH_line, int(4985))
@@ -5816,7 +5706,6 @@ func LoadNS() {
 			tmp5 := runtime.RT.IntCast(tmp4)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_rand_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_rand_DASH_int.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns a random integer between 0 (inclusive) and n (exclusive).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4993), kw_end_DASH_line, int(4993))
@@ -5834,7 +5723,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ratio_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ratio_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a Ratio", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3613), kw_end_DASH_line, int(3613))
@@ -5850,7 +5738,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Rationalize(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_rationalize = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_rationalize.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num)), kw_doc, "returns the rational value of num", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(1289), kw_end_DASH_line, int(1289))
@@ -5868,8 +5755,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(lang.NewRegexpMatcher, v2, v3)
 			return tmp4
 		})
-		tmp2 := reflect.TypeOf((*lang.RegexpMatcher)(nil))
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc2)
 		var_clojure_DOT_core_re_DASH_matcher = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_re_DASH_matcher.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*lang.RegexpMatcher)(nil))
@@ -5895,8 +5780,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf((*regexp12.Regexp)(nil))
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_re_DASH_pattern = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_re_DASH_pattern.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*regexp12.Regexp)(nil))
@@ -5928,7 +5811,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_read_DASH_string = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_read_DASH_string.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s), lang.NewVector(sym_opts, sym_s)), kw_doc, "Reads one object from the string s. Optionally include reader\n  options, as specified in read.\n\n  Note that read-string can execute code (controlled by *read-eval*),\n  and as such should be used only with trusted sources.\n\n  For data structure interop use clojure.edn/read-string", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3863), kw_end_DASH_line, int(3863))
@@ -5946,7 +5828,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(nil, v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_reader_DASH_conditional = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reader_DASH_conditional.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form, sym_splicing_QMARK_)), kw_doc, "Construct a data representation of a reader conditional.\n  If true, splicing? indicates read-cond-splicing.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(7852), kw_end_DASH_line, int(7852))
@@ -5963,7 +5844,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(tmp3, nil, v2)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_reader_DASH_conditional_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reader_DASH_conditional_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_value)), kw_doc, "Return true if the value is the data representation of a reader conditional", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(7846), kw_end_DASH_line, int(7846))
@@ -5989,7 +5869,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_realized_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_realized_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if a value has been produced for a promise, delay, future or lazy sequence.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7629), kw_end_DASH_line, int(7629))
@@ -6005,7 +5884,6 @@ func LoadNS() {
 			tmp3 := lang.NewReduced(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_reduced = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reduced.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Wraps x in a way such that a reduce will terminate with the value x", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2850), kw_end_DASH_line, int(2850))
@@ -6031,7 +5909,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ref_DASH_history_DASH_count = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ref_DASH_history_DASH_count.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref)), kw_doc, "Returns the history count of a ref", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(2463), kw_end_DASH_line, int(2463))
@@ -6076,7 +5953,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_ref_DASH_max_DASH_history = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ref_DASH_max_DASH_history.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref), lang.NewVector(sym_ref, sym_n)), kw_doc, "Gets the max-history of a ref, or sets it and returns the ref", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2479), kw_end_DASH_line, int(2479))
@@ -6121,7 +5997,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_ref_DASH_min_DASH_history = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ref_DASH_min_DASH_history.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref), lang.NewVector(sym_ref, sym_n)), kw_doc, "Gets the min-history of a ref, or sets it and returns the ref", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2470), kw_end_DASH_line, int(2470))
@@ -6143,7 +6018,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_ref_DASH_set = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ref_DASH_set.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref, sym_val)), kw_doc, "Must be called in a transaction. Sets the value of ref.\n  Returns val.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2455), kw_end_DASH_line, int(2455))
@@ -6157,7 +6031,6 @@ func LoadNS() {
 			tmp2 := lang.Apply0(nil)
 			return tmp2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_release_DASH_pending_DASH_sends = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_release_DASH_pending_DASH_sends.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Normally, actions sent directly or indirectly during another action\n  are held until the action completes (changes the agent's\n  state). This function can be used to dispatch any pending sent\n  actions immediately. This has no impact on actions sent during a\n  transaction, which are still held until commit. If no action is\n  occurring, does nothing. Returns the number of actions dispatched.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(27), kw_column, int(7), kw_line, int(2139), kw_end_DASH_line, int(2139))
@@ -6183,7 +6056,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_remove_DASH_all_DASH_methods = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_remove_DASH_all_DASH_methods.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn)), kw_doc, "Removes all of the methods of multimethod.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(1795), kw_end_DASH_line, int(1795))
@@ -6205,7 +6077,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_remove_DASH_method = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_remove_DASH_method.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val)), kw_doc, "Removes the method of multimethod associated with dispatch-value.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1802), kw_end_DASH_line, int(1802))
@@ -6221,7 +6092,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(lang.RemoveNamespace, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_remove_DASH_ns = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_remove_DASH_ns.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Removes the namespace named by the symbol. Use with caution.\n  Cannot be used to remove the clojure namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4196), kw_end_DASH_line, int(4196))
@@ -6243,7 +6113,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_remove_DASH_watch = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_remove_DASH_watch.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_reference, sym_key)), kw_doc, "Removes a watch (set by add-watch) from a reference", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(2168), kw_end_DASH_line, int(2168))
@@ -6274,7 +6143,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_repeat = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_repeat.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_n, sym_x)), kw_doc, "Returns a lazy (infinite!, or length n if supplied) sequence of xs.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3019), kw_end_DASH_line, int(3019))
@@ -6296,7 +6164,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_reset_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reset_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_newval)), kw_doc, "Sets the value of atom to newval without regard for the\n  current value. Returns newval.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2376), kw_end_DASH_line, int(2376))
@@ -6318,7 +6185,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_reset_DASH_meta_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reset_DASH_meta_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref, sym_metadata_DASH_map)), kw_doc, "Atomically resets the metadata for a namespace/var/ref/agent/atom", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2416), kw_end_DASH_line, int(2416))
@@ -6340,7 +6206,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_reset_DASH_vals_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reset_DASH_vals_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_newval)), kw_doc, "Sets the value of atom to newval. Returns [old new], the value of the\n   atom before and after the reset.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2383), kw_end_DASH_line, int(2383))
@@ -6358,7 +6223,6 @@ func LoadNS() {
 				tmp4 := lang.Rest(v3)
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(72), kw_column, int(7), kw_end_DASH_line, int(72), kw_end_DASH_column, int(77))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6380,7 +6244,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_reversible_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reversible_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Reversible", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6321), kw_end_DASH_line, int(6321))
@@ -6400,7 +6263,6 @@ func LoadNS() {
 			tmp4 := lang.Apply0(tmp3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_rseq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_rseq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rev)), kw_doc, "Returns, in constant time, a seq of the items in rev (which\n  can be a vector or sorted-map), in reverse order. If rev is empty returns nil", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1581), kw_end_DASH_line, int(1581))
@@ -6421,7 +6283,6 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(97), kw_column, int(9), kw_end_DASH_line, int(97), kw_end_DASH_column, int(49))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6442,7 +6303,6 @@ func LoadNS() {
 				tmp4 := lang.Seq(v3)
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(138), kw_column, int(6), kw_end_DASH_line, int(138), kw_end_DASH_column, int(126))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6466,7 +6326,6 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(152), kw_column, int(7), kw_end_DASH_line, int(152), kw_end_DASH_column, int(87))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6485,7 +6344,6 @@ func LoadNS() {
 			tmp3 := lang.CanSeq(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_seqable_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_seqable_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if the seq function is supported for x", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6261), kw_end_DASH_line, int(6261))
@@ -6503,7 +6361,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_sequential_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sequential_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Sequential", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6293), kw_end_DASH_line, int(6293))
@@ -6518,7 +6375,6 @@ func LoadNS() {
 			_ = v2
 			return "unimplemented: set! target type"
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_executor_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_executor_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_executor)), kw_doc, "Sets the ExecutorService to be used by send", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(30), kw_column, int(7), kw_line, int(2095), kw_end_DASH_line, int(2095))
@@ -6533,7 +6389,6 @@ func LoadNS() {
 			_ = v2
 			return "unimplemented: set! target type"
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_executor)), kw_doc, "Sets the ExecutorService to be used by send-off", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(34), kw_column, int(7), kw_line, int(2101), kw_end_DASH_line, int(2101))
@@ -6555,7 +6410,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_set_DASH_error_DASH_handler_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_set_DASH_error_DASH_handler_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_handler_DASH_fn)), kw_doc, "Sets the error-handler of agent a to handler-fn.  If an action\n  being run by the agent throws an exception or doesn't pass the\n  validator fn, handler-fn will be called with two arguments: the\n  agent and the exception.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(2200), kw_end_DASH_line, int(2200))
@@ -6577,7 +6431,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_set_DASH_error_DASH_mode_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_set_DASH_error_DASH_mode_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_mode_DASH_keyword)), kw_doc, "Sets the error-mode of agent a to mode-keyword, which must be\n  either :fail or :continue.  If an action being run by the agent\n  throws an exception or doesn't pass the validator fn, an\n  error-handler may be called (see set-error-handler!), after which,\n  if the mode is :continue, the agent will continue as if neither the\n  action that caused the error nor the error itself ever happened.\n\n  If the mode is :fail, the agent will become failed and will stop\n  accepting new 'send' and 'send-off' actions, and any previously\n  queued actions will be held until a 'restart-agent'.  Deref will\n  still work, returning the state of the agent before the error.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2218), kw_end_DASH_line, int(2218))
@@ -6599,7 +6452,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_set_DASH_validator_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_set_DASH_validator_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref, sym_validator_DASH_fn)), kw_doc, "Sets the validator-fn for a var/ref/agent/atom. validator-fn must be nil or a\n  side-effect-free fn of one argument, which will be passed the intended\n  new state on any state change. If the new state is unacceptable, the\n  validator-fn should return false or throw an exception. If the current state (root\n  value if var) is not acceptable to the new validator, an exception\n  will be thrown and the validator will not be changed.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(2389), kw_end_DASH_line, int(2389))
@@ -6617,7 +6469,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_set_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_set_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IPersistentSet", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4155), kw_end_DASH_line, int(4155))
@@ -6638,7 +6489,6 @@ func LoadNS() {
 			tmp6 := lang.Numbers.And(tmp5, v3)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_shift_DASH_mask = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_shift_DASH_mask.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6662), kw_column, int(8), kw_end_DASH_line, int(6662), kw_end_DASH_column, int(17), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_shift, sym_mask, sym_x)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -6652,7 +6502,6 @@ func LoadNS() {
 			tmp2 := lang.Apply0(lang.ShutdownAgents)
 			return tmp2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_shutdown_DASH_agents = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_shutdown_DASH_agents.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Initiates a shutdown of the thread pools that back the agent\n  system. Running actions will complete, but no new actions will be\n  accepted", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(2260), kw_end_DASH_line, int(2260))
@@ -6713,7 +6562,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_some = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_some.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns the first logical true value of (pred x) for any x in coll,\n  else nil.  One common idiom is to use a set as pred, for example\n  this will return :fred if :fred is in the sequence, otherwise nil:\n  (some #{:fred} coll)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2692), kw_end_DASH_line, int(2692))
@@ -6731,8 +6579,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp3, tmp4)
 			return tmp5
 		})
-		tmp2 := reflect.TypeOf(false)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_some_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_some_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -6757,7 +6603,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_sorted_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sorted_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keyvals)), kw_doc, "keyval => key val\n  Returns a new sorted map with supplied mappings.  If any keys are\n  equal, they are handled as if by repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(399), kw_end_DASH_line, int(399))
@@ -6783,7 +6628,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_sorted_DASH_map_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sorted_DASH_map_DASH_by.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_comparator, sym__AMP_, sym_keyvals)), kw_doc, "keyval => key val\n  Returns a new sorted map with supplied mappings, using the supplied\n  comparator.  If any keys are equal, they are handled as if by\n  repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(408), kw_end_DASH_line, int(408))
@@ -6807,7 +6651,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_sorted_DASH_set = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sorted_DASH_set.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a new sorted set with supplied keys.  Any equal keys are\n  handled as if by repeated uses of conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(418), kw_end_DASH_line, int(418))
@@ -6833,7 +6676,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_sorted_DASH_set_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sorted_DASH_set_DASH_by.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_comparator, sym__AMP_, sym_keys)), kw_doc, "Returns a new sorted set with supplied keys, using the supplied\n  comparator.  Any equal keys are handled as if by repeated uses of\n  conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(426), kw_end_DASH_line, int(426))
@@ -6851,7 +6693,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_sorted_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sorted_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Sorted", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6299), kw_end_DASH_line, int(6299))
@@ -6879,7 +6720,6 @@ func LoadNS() {
 			tmp6 := lang.Apply2(tmp3, tmp5, v2)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_special_DASH_symbol_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_special_DASH_symbol_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns true if s names a special form", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(5042), kw_end_DASH_line, int(5042))
@@ -6926,7 +6766,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_spread = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_spread.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_arglist)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(634), kw_end_DASH_line, int(634), kw_private, true)
@@ -7022,8 +6861,6 @@ func LoadNS() {
 			}),
 			1,
 		)
-		tmp2 := reflect.TypeOf("")
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.ArityFn)
 		var_clojure_DOT_core_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_str.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -7081,7 +6918,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_stream_DASH_reduce_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_stream_DASH_reduce_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_s), lang.NewVector(sym_f, sym_init, sym_s)), kw_doc, "Works like reduce but takes a java.util.stream.BaseStream as its source.\n  Honors 'reduced', is a terminal operation on the stream", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(6848), kw_end_DASH_line, int(6848))
@@ -7109,7 +6945,6 @@ func LoadNS() {
 			tmp6 := lang.Apply1(tmp3, tmp5)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_stream_DASH_seq_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_stream_DASH_seq_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_stream)), kw_doc, "Takes a java.util.stream.BaseStream instance s and returns a seq of its\n  contents. This is a terminal operation on the stream.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6857), kw_end_DASH_line, int(6857))
@@ -7163,7 +6998,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_stream_DASH_transduce_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_stream_DASH_transduce_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xform, sym_f, sym_stream), lang.NewVector(sym_xform, sym_f, sym_init, sym_stream)), kw_doc, "Works like transduce but takes a java.util.stream.BaseStream as its source.\n  This is a terminal operation on the stream.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(6864), kw_end_DASH_line, int(6864))
@@ -7182,7 +7016,6 @@ func LoadNS() {
 				tmp5 := lang.Apply2(tmp4, lang.Builtins["string"], v3)
 				return tmp5
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(166), kw_column, int(10), kw_end_DASH_line, int(166), kw_end_DASH_column, int(58))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -7211,7 +7044,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_struct = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_struct.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_vals)), kw_doc, "Returns a new structmap instance with the keys of the\n  structure-basis. vals must be supplied for basis keys in order -\n  where values are not supplied they will default to nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4118), kw_end_DASH_line, int(4118))
@@ -7237,7 +7069,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_struct_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_struct_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_inits)), kw_doc, "Returns a new structmap instance with the keys of the\n  structure-basis. keyvals may contain all, some or none of the basis\n  keys - where values are not supplied they will default to nil.\n  keyvals can also contain keys not in the basis.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4108), kw_end_DASH_line, int(4108))
@@ -7280,7 +7111,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_subs = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_subs.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_start), lang.NewVector(sym_s, sym_start, sym_end)), kw_doc, "Returns the substring of s beginning at start inclusive, and ending\n  at end (defaults to length of string), exclusive.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(5055), kw_end_DASH_line, int(5055))
@@ -7312,7 +7142,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_swap_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_swap_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically swaps the value of atom to be:\n  (apply f current-value-of-atom args). Note that f may be called\n  multiple times, and thus should be free of side effects.  Returns\n  the value that was swapped in.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2351), kw_end_DASH_line, int(2351))
@@ -7344,7 +7173,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_swap_DASH_vals_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_swap_DASH_vals_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically swaps the value of atom to be:\n  (apply f current-value-of-atom args). Note that f may be called\n  multiple times, and thus should be free of side effects.\n  Returns [old new], the value of the atom before and after the swap.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2360), kw_end_DASH_line, int(2360))
@@ -7362,7 +7190,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_symbol_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_symbol_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Symbol", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(559), kw_end_DASH_line, int(559))
@@ -7388,7 +7215,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(nil, v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_tagged_DASH_literal = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_tagged_DASH_literal.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag, sym_form)), kw_doc, "Construct a data representation of a tagged literal from a\n  tag symbol and a form.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(7839), kw_end_DASH_line, int(7839))
@@ -7405,7 +7231,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(tmp3, nil, v2)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_tagged_DASH_literal_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_tagged_DASH_literal_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_value)), kw_doc, "Return true if the value is the data representation of a tagged literal", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(7833), kw_end_DASH_line, int(7833))
@@ -7526,7 +7351,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_take_DASH_while = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_take_DASH_while.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of successive items from coll while\n  (pred item) returns logical true. pred must be free of side-effects.\n  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2902), kw_end_DASH_line, int(2902))
@@ -7568,7 +7392,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_test = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_test.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "test [v] finds fn at key :test in var metadata and calls it,\n  presuming failure will throw exception", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(4903), kw_end_DASH_line, int(4903))
@@ -7610,7 +7433,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_the_DASH_ns = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_the_DASH_ns.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If passed a namespace, returns it. Else, when passed a symbol,\n  returns the namespace named by it, throwing an exception if not\n  found.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4209), kw_end_DASH_line, int(4209))
@@ -7626,7 +7448,6 @@ func LoadNS() {
 			tmp3 := runtime.RT.ToArray(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, "[Ljava.lang.Object;")).(lang.FnFunc1)
 		var_clojure_DOT_core_to_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_to_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_tag, "[Ljava.lang.Object;", kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns an array of Objects containing the contents of coll, which\n  can be any Collection.  Maps to java.util.Collection.toArray().", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(339), kw_end_DASH_line, int(339))
@@ -7652,7 +7473,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_transient = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_transient.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a new, transient version of the collection, in constant time.\n\n  Transients support a parallel set of 'changing' operations, with similar names\n  followed by ! - assoc!, conj! etc. These do the same things as their persistent\n  counterparts except the return values are themselves transient.\n\n  Note in particular that transients are not designed to be bashed in-place. You\n  must capture and use the return value in the next call. In this way, they support\n  the same code structure as the functional persistent code they replace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3357), kw_end_DASH_line, int(3357))
@@ -7668,8 +7488,6 @@ func LoadNS() {
 			tmp3 := lang.Identical(v2, true)
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf(false)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_true_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_true_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -7707,7 +7525,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_type = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_type.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns the :type metadata of x, or its Class if none", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3503), kw_end_DASH_line, int(3503))
@@ -7741,7 +7558,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_uri_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_uri_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a java.net.URI", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7947), kw_end_DASH_line, int(7947))
@@ -7759,7 +7575,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_uuid_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_uuid_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a java.util.UUID", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6911), kw_end_DASH_line, int(6911))
@@ -7779,7 +7594,6 @@ func LoadNS() {
 			tmp4 := lang.Apply0(tmp3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_val = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_val.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_e)), kw_doc, "Returns the value in the map entry.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1574), kw_end_DASH_line, int(1574))
@@ -7795,7 +7609,6 @@ func LoadNS() {
 			tmp3 := lang.Vals(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_vals = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_vals.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map)), kw_doc, "Returns a sequence of the map's values, in the same order as (seq map).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1561), kw_end_DASH_line, int(1561))
@@ -7815,7 +7628,6 @@ func LoadNS() {
 			tmp4 := lang.Apply0(tmp3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_var_DASH_get = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_var_DASH_get.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Gets the value in the var object", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4383), kw_end_DASH_line, int(4383))
@@ -7837,7 +7649,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_var_DASH_set = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_var_DASH_set.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_val)), kw_doc, "Sets the value in the var object to val. The var must be\n thread-locally bound.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4389), kw_end_DASH_line, int(4389))
@@ -7855,7 +7666,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_var_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_var_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Returns true if v is of type clojure.lang.Var", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(5049), kw_end_DASH_line, int(5049))
@@ -8001,7 +7811,6 @@ func LoadNS() {
 				return tmp21
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_vector = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_vector.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_a), lang.NewVector(sym_a, sym_b), lang.NewVector(sym_a, sym_b, sym_c), lang.NewVector(sym_a, sym_b, sym_c, sym_d), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e, sym_f), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e, sym_f, sym__AMP_, sym_args)), kw_doc, "Creates a new vector containing the args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(354), kw_end_DASH_line, int(354))
@@ -8021,7 +7830,6 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(180), kw_column, int(10), kw_end_DASH_line, int(180), kw_end_DASH_column, int(106))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8040,8 +7848,6 @@ func LoadNS() {
 			tmp3 := lang.NewVolatile(v2)
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf((*lang.Volatile)(nil)).Elem()
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_volatile_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_volatile_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*lang.Volatile)(nil)).Elem()
@@ -8060,7 +7866,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_volatile_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_volatile_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a volatile.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2548), kw_end_DASH_line, int(2548))
@@ -8082,7 +7887,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(tmp4, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_vreset_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_vreset_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_vol, sym_newval)), kw_doc, "Sets the value of volatile to newval without regard for the\n   current value. Returns newval.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2532), kw_end_DASH_line, int(2532))
@@ -8115,7 +7919,6 @@ func LoadNS() {
 				return tmp9
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_when = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_when.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Evaluates test. If logical true, evaluates body in an implicit do.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(494), kw_end_DASH_line, int(494))
@@ -8148,7 +7951,6 @@ func LoadNS() {
 				return tmp9
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_when_DASH_not = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_when_DASH_not.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Evaluates test. If logical false, evaluates body in an implicit do.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(500), kw_end_DASH_line, int(500))
@@ -8172,7 +7974,6 @@ func LoadNS() {
 				tmp6 := lang.Apply1(tmp5, v4)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(218), kw_column, int(12), kw_end_DASH_line, int(219), kw_end_DASH_column, int(32))).(lang.FnFunc2)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8235,7 +8036,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		closed26 = tmp0
 	}
 	var closed27 any
@@ -8278,8 +8078,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 := reflect.TypeOf(false)
-		tmp0 = tmp0.WithMeta(lang.NewMap(kw_rettag, tmp1)).(lang.FnFunc2)
 		closed27 = tmp0
 	}
 	// agent-errors
@@ -8314,7 +8112,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_agent_DASH_errors = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_agent_DASH_errors.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "DEPRECATED: Use 'agent-error' instead.\n  Returns a sequence of the exceptions thrown during asynchronous\n  actions of the agent.", kw_file, "clojure/core.glj", kw_deprecated, "1.2", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(2242), kw_end_DASH_line, int(2242))
@@ -8339,7 +8136,6 @@ func LoadNS() {
 			tmp8 := lang.Apply2(tmp7, v2, tmp6)
 			return tmp8
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_alias = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_alias.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_alias, sym_namespace_DASH_sym)), kw_doc, "Add an alias in the current namespace to another\n  namespace. Arguments are two symbols: the alias to be used, and\n  the symbolic name of the target namespace. Use :as in the ns macro in preference\n  to calling this directly.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(4320), kw_end_DASH_line, int(4320))
@@ -8422,7 +8218,6 @@ func LoadNS() {
 				}),
 				3,
 			)
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(191), kw_column, int(2), kw_end_DASH_line, int(200), kw_end_DASH_column, int(15))).(lang.ArityFn)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8512,7 +8307,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_assoc_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_assoc_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_key, sym_val), lang.NewVector(sym_coll, sym_key, sym_val, sym__AMP_, sym_kvs)), kw_doc, "When applied to a transient map, adds mapping of key(s) to\n  val(s). When applied to a transient vector, sets the val at index.\n  Note - index must be <= (count vector). Returns coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3391), kw_end_DASH_line, int(3391))
@@ -8576,7 +8370,6 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_assoc_DASH_in = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_assoc_DASH_in.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, lang.NewVector(sym_k, sym__AMP_, sym_ks), sym_v)), kw_doc, "Associates a value in a nested associative structure, where ks is a\n  sequence of keys and v is the new value and returns a new nested structure.\n  If any levels do not exist, hash-maps will be created.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6204), kw_end_DASH_line, int(6204))
@@ -8594,7 +8387,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_associative_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_associative_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements Associative", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(6287), kw_end_DASH_line, int(6287))
@@ -8634,7 +8426,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_bases = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bases.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_c)), kw_doc, "Returns the immediate superclass and direct interfaces of c, if any", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(5574), kw_end_DASH_line, int(5574))
@@ -8651,7 +8442,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(tmp3, lang.Builtins["bool"], v2)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_boolean_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_boolean_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Boolean", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(520), kw_end_DASH_line, int(520))
@@ -8671,7 +8461,6 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(159), kw_column, int(8), kw_end_DASH_line, int(159), kw_end_DASH_column, int(89))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8692,7 +8481,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_chunked_DASH_seq_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_chunked_DASH_seq_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(710), kw_column, int(7), kw_end_DASH_line, int(710), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -8710,7 +8498,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_class_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_class_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is an instance of Class", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5517), kw_end_DASH_line, int(5517))
@@ -8728,7 +8515,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_coll_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_coll_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IPersistentCollection", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(6249), kw_end_DASH_line, int(6249))
@@ -8790,7 +8576,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_completing = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_completing.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_cf)), kw_doc, "Takes a reducing function f of 2 args and returns a fn suitable for\n  transduce by adding an arity-1 signature that calls cf (default -\n  identity) on the result argument.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(6963), kw_end_DASH_line, int(6963))
@@ -8968,7 +8753,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_concat = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_concat.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_zs)), kw_doc, "Returns a lazy seq representing the concatenation of the elements in the supplied colls.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(713), kw_end_DASH_line, int(713))
@@ -9021,7 +8805,6 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_cond = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_cond.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_clauses)), kw_doc, "Takes a set of test/expr pairs. It evaluates each test one at a\n  time.  If a test returns logical true, cond evaluates and returns\n  the value of the corresponding expr and doesn't evaluate any of the\n  other tests or exprs. (cond) returns nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(571), kw_end_DASH_line, int(571))
@@ -9093,7 +8876,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(83), kw_column, int(7), kw_end_DASH_line, int(90), kw_end_DASH_column, int(67))).(lang.ArityFn)
 			v2 = tmp1
 			_ = v2
 		}
@@ -9140,7 +8922,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_conj_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_conj_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_coll), lang.NewVector(sym_coll, sym_x)), kw_doc, "Adds x to the transient collection, and return coll. The 'addition'\n  may happen at different 'places' depending on the concrete type.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3381), kw_end_DASH_line, int(3381))
@@ -9156,7 +8937,6 @@ func LoadNS() {
 			tmp3 := lang.Count(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_count = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_count.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -9203,7 +8983,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_counted_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_counted_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll implements count in constant time", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6305), kw_end_DASH_line, int(6305))
@@ -9221,7 +9000,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(lang.NewCycle, tmp4)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_cycle = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_cycle.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a lazy (infinite!) sequence of repetitions of the items in coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2999), kw_end_DASH_line, int(2999))
@@ -9237,7 +9015,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Dec(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_dec = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_dec.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -9289,7 +9066,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.DecP(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_dec_TICK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_dec_TICK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -9336,7 +9112,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_decimal_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_decimal_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a BigDecimal", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(3635), kw_end_DASH_line, int(3635))
@@ -9395,7 +9170,6 @@ func LoadNS() {
 				return tmp31
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_defmethod = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defmethod.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val, sym__AMP_, sym_fn_DASH_tail)), kw_doc, "Creates and installs a new method of multimethod associated with dispatch-value. ", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(1789), kw_end_DASH_line, int(1789))
@@ -9440,7 +9214,6 @@ func LoadNS() {
 				return tmp21
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_defstruct = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defstruct.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_keys)), kw_doc, "Same as (def name (create-struct keys...))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(4101), kw_end_DASH_line, int(4101))
@@ -9458,7 +9231,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_delay_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_delay_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "returns true if x is a Delay created with delay", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(750), kw_end_DASH_line, int(750))
@@ -9527,7 +9299,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_deref = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_deref.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref), lang.NewVector(sym_ref, sym_timeout_DASH_ms, sym_timeout_DASH_val)), kw_doc, "Also reader macro: @ref/@agent/@var/@atom/@delay/@future/@promise. Within a transaction,\n  returns the in-transaction-value of ref, else returns the\n  most-recently-committed value of ref. When applied to a var, agent\n  or atom, returns its current state. When applied to a delay, forces\n  it if not already forced. When applied to a future, will block if\n  computation not complete. When applied to a promise, will block\n  until a value is delivered.  The variant taking a timeout can be\n  used for blocking references (futures and promises), and will return\n  timeout-val if the timeout (in milliseconds) is reached before a\n  value is available. See also - realized?.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2312), kw_end_DASH_line, int(2312))
@@ -9610,7 +9381,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_disj = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_disj.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_set), lang.NewVector(sym_set, sym_key), lang.NewVector(sym_set, sym_key, sym__AMP_, sym_ks)), kw_doc, "disj[oin]. Returns a new set of the same (hashed/sorted) type, that\n  does not contain key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1518), kw_end_DASH_line, int(1518))
@@ -9693,7 +9463,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_disj_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_disj_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_set), lang.NewVector(sym_set, sym_key), lang.NewVector(sym_set, sym_key, sym__AMP_, sym_ks)), kw_doc, "disj[oin]. Returns a transient set of the same (hashed/sorted) type, that\n  does not contain key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3434), kw_end_DASH_line, int(3434))
@@ -9762,7 +9531,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_dissoc = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_dissoc.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map), lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym__AMP_, sym_ks)), kw_doc, "dissoc[iate]. Returns a new map of the same (hashed/sorted) type,\n  that does not contain a mapping for key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(1504), kw_end_DASH_line, int(1504))
@@ -9841,7 +9609,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_dissoc_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_dissoc_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_key), lang.NewVector(sym_map, sym_key, sym__AMP_, sym_ks)), kw_doc, "Returns a transient map that doesn't contain a mapping for key(s).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3408), kw_end_DASH_line, int(3408))
@@ -9925,7 +9692,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_dorun = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_dorun.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_n, sym_coll)), kw_doc, "When lazy sequences are produced via functions that have side\n  effects, any effects other than those needed to produce the first\n  element in the seq do not occur until the seq is consumed. dorun can\n  be used to force any effects. Walks through the successive nexts of\n  the seq, does not retain the head and returns nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3138), kw_end_DASH_line, int(3138))
@@ -9960,7 +9726,6 @@ func LoadNS() {
 				return tmp12
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_dosync = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_dosync.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_exprs)), kw_doc, "Runs the exprs (in an implicit do) in a transaction that encompasses\n  exprs and any nested calls.  Starts a transaction if none is already\n  running on this thread. Any uncaught exception will abort the\n  transaction and flow out of dosync. The exprs may be run more than\n  once, but any effects on Refs will be atomic.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(5152), kw_end_DASH_line, int(5152))
@@ -9976,7 +9741,6 @@ func LoadNS() {
 			tmp3 := lang.AsFloat64(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_double = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_double.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -10040,7 +9804,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_double_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_double_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc
@@ -10096,7 +9859,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(tmp3, lang.Builtins["float64"], v2)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_double_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_double_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a Double", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1425), kw_end_DASH_line, int(1425))
@@ -10112,7 +9874,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Doubles(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_doubles = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_doubles.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -10356,7 +10117,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_drop = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_drop.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a laziness-preserving sequence of all but the first n items in coll.\n  Returns a stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2923), kw_end_DASH_line, int(2923))
@@ -10531,7 +10291,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_drop_DASH_while = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_drop_DASH_while.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of the items in coll starting from the\n  first item for which (pred item) returns logical false.  Returns a\n  stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2972), kw_end_DASH_line, int(2972))
@@ -10565,7 +10324,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_empty = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_empty.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns an empty collection of the same category as coll, or nil", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(5317), kw_end_DASH_line, int(5317))
@@ -10595,7 +10353,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_empty_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_empty_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns true if coll has no items. To check the emptiness of a seq,\n  please use the idiom (seq x) rather than (not (empty? x))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6311), kw_end_DASH_line, int(6311))
@@ -10619,7 +10376,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ensure_DASH_reduced = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ensure_DASH_reduced.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If x is already reduced?, returns it, else returns (reduced x)", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(2863), kw_end_DASH_line, int(2863))
@@ -10648,7 +10404,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_even_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_even_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is even, throws an exception if n is not an integer", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(1388), kw_end_DASH_line, int(1388))
@@ -10695,8 +10450,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp2 := reflect.TypeOf(false)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc2)
 		var_clojure_DOT_core_every_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_every_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -10730,8 +10483,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf((*any)(nil)).Elem()
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_ex_DASH_cause = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ex_DASH_cause.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*any)(nil)).Elem()
@@ -10765,7 +10516,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ex_DASH_message = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ex_DASH_message.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ex)), kw_doc, "Returns the message attached to ex if ex is a Throwable.\n  Otherwise returns nil.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4870), kw_end_DASH_line, int(4870))
@@ -10786,7 +10536,6 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(104), kw_column, int(9), kw_end_DASH_line, int(104), kw_end_DASH_column, int(50))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -11003,7 +10752,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_filter = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_filter.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of the items in coll for which\n  (pred item) returns logical true. pred must be free of side-effects.\n  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2807), kw_end_DASH_line, int(2807))
@@ -11081,7 +10829,6 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_filter_DASH_key = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_filter_DASH_key.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_keyfn, sym_pred, sym_amap)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4172), kw_end_DASH_line, int(4174), kw_private, true)
@@ -11136,8 +10883,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp2 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.ArityFn)
 		var_clojure_DOT_core_find_DASH_keyword = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_find_DASH_keyword.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
@@ -11154,7 +10899,6 @@ func LoadNS() {
 			tmp3 := lang.FloatCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_float = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_float.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -11225,7 +10969,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_float_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_float_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc
@@ -11296,7 +11039,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_float_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_float_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a floating point number", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3641), kw_end_DASH_line, int(3641))
@@ -11312,7 +11054,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Floats(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_floats = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_floats.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -11465,7 +11206,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_fn_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_fn_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements Fn, i.e. is an object created via fn.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(6273), kw_end_DASH_line, int(6273))
@@ -11486,7 +11226,6 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(118), kw_column, int(8), kw_end_DASH_line, int(118), kw_end_DASH_column, int(47))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -11506,7 +11245,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(tmp3, nil, v2)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_future_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_future_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a future", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6596), kw_end_DASH_line, int(6596))
@@ -11539,7 +11277,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_gensym = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_gensym.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_prefix_DASH_string)), kw_doc, "Returns a new symbol with a unique name. If a prefix string is\n  supplied, the name is prefix# where # is some unique number. If\n  prefix is not supplied, the prefix is 'G__'.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(601), kw_end_DASH_line, int(601))
@@ -11574,7 +11311,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_get = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_get.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc
@@ -11736,7 +11472,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_halt_DASH_when = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_halt_DASH_when.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_retf)), kw_doc, "Returns a transducer that ends transduction when pred returns true\n  for an input. When retf is supplied it must be a fn of 2 arguments -\n  it will be passed the (completed) result so far and the input that\n  triggered the predicate, and its return value (if it does not throw\n  an exception) will be the return value of the transducer. If retf\n  is not supplied, the input that triggered the predicate will be\n  returned. If the predicate never returns true the transduction is\n  unaffected.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7727), kw_end_DASH_line, int(7727))
@@ -11768,7 +11503,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ident_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ident_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol or keyword", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(1616), kw_end_DASH_line, int(1616))
@@ -11786,7 +11520,6 @@ func LoadNS() {
 			tmp4 := lang.Identical(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_identical_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_identical_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -11884,7 +11617,6 @@ func LoadNS() {
 				panic("unreachable")
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_if_DASH_not = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_if_DASH_not.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym_then), lang.NewVector(sym_test, sym_then, sym_else)), kw_doc, "Evaluates test. If logical false, evaluates and returns then expr,\n  otherwise else expr, if supplied, else nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(762), kw_end_DASH_line, int(762))
@@ -11902,7 +11634,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp3, tmp4, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ifn_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ifn_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x implements IFn. Note that many data structures\n  (e.g. sets and maps) implement IFn", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6266), kw_end_DASH_line, int(6266))
@@ -11918,7 +11649,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Inc(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_inc = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_inc.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -11970,7 +11700,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.IncP(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_inc_TICK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_inc_TICK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -12016,7 +11745,6 @@ func LoadNS() {
 			tmp4 := lang.Apply2(tmp3, nil, v2)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_indexed_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_indexed_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return true if coll implements Indexed, indicating efficient lookup by index", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(6327), kw_end_DASH_line, int(6327))
@@ -12032,7 +11760,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(nil, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_infinite_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_infinite_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -12067,7 +11794,6 @@ func LoadNS() {
 			tmp3 := runtime.RT.IntCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_int.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -12138,7 +11864,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_int_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_int_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc
@@ -12264,7 +11989,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_intern = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_intern.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_name), lang.NewVector(sym_ns, sym_name, sym_val)), kw_doc, "Finds or creates a var named by the symbol name in the namespace\n  ns (which can be a symbol or a namespace), setting its root binding\n  to val if supplied. The namespace must exist. The var will adopt any\n  metadata from the name symbol.  Returns the var.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6375), kw_end_DASH_line, int(6375))
@@ -12299,7 +12023,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_into_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_into_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_aseq), lang.NewVector(sym_type, sym_aseq)), kw_doc, "Returns an array with components set to the values in aseq. The array's\n  component type is type if provided, or the type of the first value in\n  aseq if present, or Object. All values in aseq must be compatible with\n  the component type. Class objects for the primitive types can be obtained\n  using, e.g., Integer/TYPE.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3480), kw_end_DASH_line, int(3480))
@@ -12315,7 +12038,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Ints(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ints = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ints.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -12449,7 +12171,6 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_io_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_io_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "If an io! block occurs in a transaction, throws an\n  IllegalStateException, else runs body in an implicit do. If the\n  first expression in body is a literal string, will use that as the\n  exception message.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(2512), kw_end_DASH_line, int(2512))
@@ -12504,8 +12225,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp2 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.ArityFn)
 		var_clojure_DOT_core_keyword = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_keyword.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
@@ -12538,7 +12257,6 @@ func LoadNS() {
 				}
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(268), kw_column, int(7), kw_end_DASH_line, int(271), kw_end_DASH_column, int(21))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -12606,7 +12324,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_libspec_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_libspec_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if x is a libspec", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5905), kw_end_DASH_line, int(5905), kw_private, true)
@@ -12694,7 +12411,6 @@ func LoadNS() {
 			}),
 			4,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_list_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_list_STAR_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_args), lang.NewVector(sym_a, sym_args), lang.NewVector(sym_a, sym_b, sym_args), lang.NewVector(sym_a, sym_b, sym_c, sym_args), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym__AMP_, sym_more)), kw_doc, "Creates a new seq containing the items prepended to the rest, the\n  last of which will be treated as a sequence.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(643), kw_end_DASH_line, int(643))
@@ -12710,7 +12426,6 @@ func LoadNS() {
 			tmp4 := lang.Apply1(tmp2, tmp3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_loaded_DASH_libs = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_loaded_DASH_libs.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a sorted set of symbols naming the currently loaded libs", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6147), kw_end_DASH_line, int(6147))
@@ -12726,7 +12441,6 @@ func LoadNS() {
 			tmp3 := lang.LongCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_long = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_long.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -12790,7 +12504,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_long_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_long_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc
@@ -12845,7 +12558,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Longs(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_longs = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_longs.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -12902,7 +12614,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_macroexpand = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_macroexpand.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Repeatedly calls macroexpand-1 on form until it no longer\n  represents a macro form, then returns it.  Note neither\n  macroexpand-1 nor macroexpand expand macros in subforms.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4082), kw_end_DASH_line, int(4082))
@@ -13131,7 +12842,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_map_DASH_indexed = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_map_DASH_indexed.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence consisting of the result of applying f to 0\n  and the first item of coll, followed by applying f to 1 and the second\n  item in coll, etc, until coll is exhausted. Thus function f should\n  accept 2 arguments, index and item. Returns a stateful transducer when\n  no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7379), kw_end_DASH_line, int(7379))
@@ -13260,7 +12970,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_maybe_DASH_destructured = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_maybe_DASH_destructured.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(4571), kw_column, int(7), kw_end_DASH_line, int(4572), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_params, sym_body)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -13288,8 +12997,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf("")
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_name = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_name.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -13345,8 +13052,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf("")
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_namespace = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_namespace.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -13380,7 +13085,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_nat_DASH_int_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_nat_DASH_int_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a non-negative fixed precision integer", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(1419), kw_end_DASH_line, int(1419))
@@ -13396,7 +13100,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.IsNeg(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_neg_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_neg_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -13447,7 +13150,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_not_DASH_empty = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_not_DASH_empty.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "If coll is empty, returns nil, else coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5568), kw_end_DASH_line, int(5568))
@@ -13475,7 +13177,6 @@ func LoadNS() {
 			}
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ns_DASH_aliases = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns_DASH_aliases.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the aliases for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4330), kw_end_DASH_line, int(4330))
@@ -13503,7 +13204,6 @@ func LoadNS() {
 			}
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ns_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of all the mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4227), kw_end_DASH_line, int(4227))
@@ -13531,7 +13231,6 @@ func LoadNS() {
 			}
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ns_DASH_name = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns_DASH_name.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns the name of the namespace, a symbol.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4220), kw_end_DASH_line, int(4220))
@@ -13580,7 +13279,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_ns_DASH_resolve = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns_DASH_resolve.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_sym), lang.NewVector(sym_ns, sym_env, sym_sym)), kw_doc, "Returns the var or Class to which a symbol will be resolved in the\n  namespace (unless found in the environment), else nil.  Note that\n  if the symbol is fully qualified, the var/Class to which it resolves\n  need not be present in the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4415), kw_end_DASH_line, int(4415))
@@ -13604,7 +13302,6 @@ func LoadNS() {
 			tmp7 := lang.Apply1(tmp6, v3)
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_ns_DASH_unalias = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns_DASH_unalias.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_sym)), kw_doc, "Removes the alias for the symbol from the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4337), kw_end_DASH_line, int(4337))
@@ -13628,7 +13325,6 @@ func LoadNS() {
 			tmp7 := lang.Apply1(tmp6, v3)
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_ns_DASH_unmap = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns_DASH_unmap.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns, sym_sym)), kw_doc, "Removes the mappings for the symbol from the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4234), kw_end_DASH_line, int(4234))
@@ -13671,7 +13367,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_nth = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_nth.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc
@@ -13831,7 +13526,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_nthnext = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_nthnext.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_n)), kw_doc, "Returns the nth next of coll, (seq coll) when n is 0.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3169), kw_end_DASH_line, int(3169))
@@ -13949,7 +13643,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_nthrest = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_nthrest.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll, sym_n)), kw_doc, "Returns the nth rest of coll, coll when n is 0.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3183), kw_end_DASH_line, int(3183))
@@ -13965,7 +13658,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Num(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_num = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_num.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -14010,7 +13702,6 @@ func LoadNS() {
 			tmp3 := runtime.RT.ObjectArray(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_object_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_object_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -14052,7 +13743,6 @@ func LoadNS() {
 			tmp6 := lang.Apply1(tmp3, tmp5)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_odd_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_odd_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is odd, throws an exception if n is not an integer", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(1396), kw_end_DASH_line, int(1396))
@@ -14112,7 +13802,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_parse_DASH_impls = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_parse_DASH_impls.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(13), kw_column, int(8), kw_end_DASH_line, int(13), kw_end_DASH_column, int(18), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_specs)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -14182,7 +13871,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_parse_DASH_uuid = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_parse_DASH_uuid.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse a string representing a UUID and return a java.util.UUID instance,\n  or nil if parse fails.\n\n  Grammar: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#toString--", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(8016), kw_end_DASH_line, int(8016))
@@ -14219,7 +13907,6 @@ func LoadNS() {
 			tmp10 := lang.Apply2(tmp3, "Expected string, got ", tmp4)
 			return tmp10
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_parsing_DASH_err = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_parsing_DASH_err.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_val)), kw_doc, "Construct message for parsing for non-string parsing error", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(7991), kw_end_DASH_line, int(7991), kw_private, true)
@@ -14235,7 +13922,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.IsPos(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_pos_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pos_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -14293,7 +13979,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_prependss = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_prependss.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_coll)), kw_doc, "Prepends a symbol or a seq to coll", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(5914), kw_end_DASH_line, int(5914), kw_private, true)
@@ -14338,7 +14023,6 @@ func LoadNS() {
 			}
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_preserving_DASH_reduced = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_preserving_DASH_reduced.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(7708), kw_column, int(7), kw_end_DASH_line, int(7708), kw_end_DASH_column, int(34), kw_arglists, lang.NewList(lang.NewVector(sym_rf)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -14667,7 +14351,6 @@ func LoadNS() {
 			} // end let
 			return tmp8
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_print_DASH_sequential = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_sequential.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(46), kw_column, int(8), kw_end_DASH_line, int(46), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_begin, sym_print_DASH_one, sym_sep, sym_end, sym_sequence, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -14695,7 +14378,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_protocol_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_protocol_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(110), kw_column, int(8), kw_end_DASH_line, int(110), kw_end_DASH_column, int(16), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_maybe_DASH_p)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -14741,7 +14423,6 @@ func LoadNS() {
 			tmp4 := runtime.RT.BooleanCast(tmp3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_qualified_DASH_ident_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_qualified_DASH_ident_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol or keyword with a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(1626), kw_end_DASH_line, int(1626))
@@ -14787,7 +14468,6 @@ func LoadNS() {
 			tmp4 := runtime.RT.BooleanCast(tmp3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_qualified_DASH_keyword_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_qualified_DASH_keyword_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a keyword with a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(1646), kw_end_DASH_line, int(1646))
@@ -14833,7 +14513,6 @@ func LoadNS() {
 			tmp4 := runtime.RT.BooleanCast(tmp3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_qualified_DASH_symbol_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_qualified_DASH_symbol_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol with a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(1636), kw_end_DASH_line, int(1636))
@@ -14851,7 +14530,6 @@ func LoadNS() {
 			tmp4 := lang.Numbers.Quotient(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_quot = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_quot.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -14905,7 +14583,6 @@ func LoadNS() {
 			tmp8 := lang.Apply2(tmp3, v2, tmp7)
 			return tmp8
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_rand_DASH_nth = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_rand_DASH_nth.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Return a random element of the (sequential) collection. Will have\n  the same performance characteristics as nth for the given\n  collection.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(7283), kw_end_DASH_line, int(7283))
@@ -14966,7 +14643,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_random_DASH_sample = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_random_DASH_sample.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_prob), lang.NewVector(sym_prob, sym_coll)), kw_doc, "Returns items from coll with random probability of prob (0.0 -\n  1.0).  Returns a transducer when no collection is provided.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7769), kw_end_DASH_line, int(7769))
@@ -15006,7 +14682,6 @@ func LoadNS() {
 			} // end let
 			return tmp2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_random_DASH_uuid = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_random_DASH_uuid.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a pseudo-randomly generated java.util.UUID instance (i.e. type 4).\n\n  See: https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html#randomUUID--", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(6916), kw_end_DASH_line, int(6916))
@@ -15123,7 +14798,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_range = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_range.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_end), lang.NewVector(sym_start, sym_end), lang.NewVector(sym_start, sym_end, sym_step)), kw_doc, "Returns a lazy seq of nums from start (inclusive) to end\n  (exclusive), by step, where start defaults to 0, step to 1, and end to\n  infinity. When step is equal to 0, returns an infinite sequence of\n  start. When start is equal to end, returns empty list.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3040), kw_end_DASH_line, int(3040))
@@ -15170,7 +14844,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_rational_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_rational_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns true if n is a rational number", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3649), kw_end_DASH_line, int(3649))
@@ -15247,7 +14920,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_re_DASH_groups = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_re_DASH_groups.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Returns the groups from the most recent match/find. If there are no\n  nested groups, returns a string of the entire match. If there are\n  nested groups, returns a vector of the groups, the first element\n  being the entire match.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4932), kw_end_DASH_line, int(4932))
@@ -15285,7 +14957,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_re_DASH_matches = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_re_DASH_matches.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_re, sym_s)), kw_doc, "Returns the match, if any, of string to pattern, using\n  java.util.regex.Matcher.matches().  Uses re-groups to return the\n  groups.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4960), kw_end_DASH_line, int(4960))
@@ -15346,7 +15017,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_re_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_re_DASH_seq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_re, sym_s)), kw_doc, "Returns a lazy sequence of successive matches of pattern in string,\n  using java.util.regex.Matcher.find(), each such match processed with\n  re-groups.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4948), kw_end_DASH_line, int(4948))
@@ -15451,7 +15121,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_reduce1 = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reduce1.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(925), kw_column, int(7), kw_end_DASH_line, int(926), kw_end_DASH_column, int(9), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_val, sym_coll)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -15467,7 +15136,6 @@ func LoadNS() {
 			tmp3 := lang.IsReduced(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_reduced_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reduced_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -15601,7 +15269,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_reductions = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reductions.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_init, sym_coll)), kw_doc, "Returns a lazy seq of the intermediate values of the reduction (as\n  per reduce) of coll by f, starting with init.", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7266), kw_end_DASH_line, int(7266))
@@ -15644,7 +15311,6 @@ func LoadNS() {
 				return tmp20
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_refer_DASH_clojure = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_refer_DASH_clojure.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_filters)), kw_doc, "Same as (refer 'clojure.core <filters>)", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(11), kw_line, int(5857), kw_end_DASH_line, int(5857))
@@ -15755,7 +15421,6 @@ func LoadNS() {
 			}
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_rem = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_rem.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num, sym_div)), kw_doc, "remainder of dividing numerator by denominator.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1276), kw_end_DASH_line, int(1276))
@@ -15775,7 +15440,6 @@ func LoadNS() {
 			_ = tmp6
 			return nil
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_remove_DASH_tap = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_remove_DASH_tap.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Remove f from the tap set.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7953), kw_end_DASH_line, int(7953))
@@ -15810,7 +15474,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_resolve = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_resolve.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym), lang.NewVector(sym_env, sym_sym)), kw_doc, "same as (ns-resolve *ns* symbol) or (ns-resolve *ns* &env symbol)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4428), kw_end_DASH_line, int(4428))
@@ -15828,7 +15491,6 @@ func LoadNS() {
 			tmp5 := lang.Apply3(tmp3, tmp4, lang.NewList(), v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_reverse = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reverse.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a seq of the items in coll in reverse order. Not lazy.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(942), kw_end_DASH_line, int(942))
@@ -15849,8 +15511,6 @@ func LoadNS() {
 			tmp8 := lang.Apply2(tmp3, lang.NewChar(47), tmp7)
 			return tmp8
 		})
-		tmp2 := reflect.TypeOf("")
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_root_DASH_resource = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_root_DASH_resource.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -15923,7 +15583,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_select_DASH_keys = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_select_DASH_keys.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_map, sym_keyseq)), kw_doc, "Returns a map containing only those entries in map whose key is in keys", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(1540), kw_end_DASH_line, int(1540))
@@ -15960,7 +15619,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Builds a map from a seq as described in\n  https://clojure.org/reference/special_forms#keyword-arguments", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(34), kw_column, int(7), kw_line, int(4447), kw_end_DASH_line, int(4447))
@@ -16023,7 +15681,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_set = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_set.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a set of the distinct elements of coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(4161), kw_end_DASH_line, int(4161))
@@ -16039,7 +15696,6 @@ func LoadNS() {
 			tmp3 := lang.ShortCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_short = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_short.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -16110,7 +15766,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_short_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_short_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc
@@ -16165,7 +15820,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Shorts(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_shorts = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_shorts.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -16221,7 +15875,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_simple_DASH_ident_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_simple_DASH_ident_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol or keyword without a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(1621), kw_end_DASH_line, int(1621))
@@ -16254,7 +15907,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_simple_DASH_keyword_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_simple_DASH_keyword_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a keyword without a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(1641), kw_end_DASH_line, int(1641))
@@ -16287,7 +15939,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_simple_DASH_symbol_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_simple_DASH_symbol_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a symbol without a namespace", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(1631), kw_end_DASH_line, int(1631))
@@ -17182,7 +16833,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_some_DASH_fn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_some_DASH_fn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_p), lang.NewVector(sym_p1, sym_p2), lang.NewVector(sym_p1, sym_p2, sym_p3), lang.NewVector(sym_p1, sym_p2, sym_p3, sym__AMP_, sym_ps)), kw_doc, "Takes a set of predicates and returns a function f that returns the first logical true value\n  returned by one of its composing predicates against any of its arguments, else it returns\n  logical false. Note that f is short-circuiting in that it will stop execution on the first\n  argument that triggers a logical true result against the original predicates.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7532), kw_end_DASH_line, int(7532))
@@ -17209,7 +16859,6 @@ func LoadNS() {
 			}
 			return tmp10
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_split_DASH_with = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_split_DASH_with.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a vector of [(take-while pred coll) (drop-while pred coll)]", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3012), kw_end_DASH_line, int(3012))
@@ -17288,7 +16937,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_stream_DASH_into_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_stream_DASH_into_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_to, sym_stream), lang.NewVector(sym_to, sym_xform, sym_stream)), kw_doc, "Returns a new coll consisting of coll with all of the items of the\n  stream conjoined. This is a terminal operation on the stream.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(6874), kw_end_DASH_line, int(6874))
@@ -17330,7 +16978,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_subvec = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_subvec.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v, sym_start), lang.NewVector(sym_v, sym_start, sym_end)), kw_doc, "Returns a persistent vector of the items in vector from\n  start (inclusive) to end (exclusive).  If end is not supplied,\n  defaults to (count vector). This operation is O(1) and very fast, as\n  the resulting vector shares structure with the original and no\n  trimming is done.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(3876), kw_end_DASH_line, int(3876))
@@ -17423,8 +17070,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp2 := reflect.TypeOf((*lang.Symbol)(nil))
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.ArityFn)
 		var_clojure_DOT_core_symbol = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_symbol.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*lang.Symbol)(nil))
@@ -17595,7 +17240,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_take = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_take.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a lazy sequence of the first n items in coll, or all items if\n  there are fewer than n.  Returns a stateful transducer when\n  no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2875), kw_end_DASH_line, int(2875))
@@ -17645,7 +17289,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_take_DASH_last = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_take_DASH_last.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a seq of the last n items in coll.  Depending on the type\n  of coll may be no better than linear time.  For vectors, see also subvec.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2961), kw_end_DASH_line, int(2961))
@@ -17791,7 +17434,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_take_DASH_nth = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_take_DASH_nth.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a lazy seq of every nth item in coll.  Returns a stateful\n  transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(4344), kw_end_DASH_line, int(4344))
@@ -17838,7 +17480,6 @@ func LoadNS() {
 				return tmp7
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_thread_DASH_bound_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_thread_DASH_bound_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_vars)), kw_doc, "Returns true if all of the vars provided as arguments have thread-local bindings.\n   Implies that set!'ing the provided vars will succeed.  Returns true if no vars are provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5551), kw_end_DASH_line, int(5551))
@@ -17856,7 +17497,6 @@ func LoadNS() {
 			tmp4 := lang.Numbers.UncheckedAdd(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_unchecked_DASH_add = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_add.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -17911,7 +17551,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp4, v2, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_unchecked_DASH_add_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_add_DASH_int.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -17960,7 +17599,6 @@ func LoadNS() {
 			tmp3 := lang.UncheckedByteCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_byte = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_byte.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18005,7 +17643,6 @@ func LoadNS() {
 			tmp3 := runtime.RT.UncheckedCharCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_char = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_char.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18050,7 +17687,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.UncheckedDec(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_dec = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_dec.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18099,7 +17735,6 @@ func LoadNS() {
 			tmp4 := lang.Apply1(tmp3, v2)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_dec_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_dec_DASH_int.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18150,7 +17785,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp4, v2, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_unchecked_DASH_divide_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_divide_DASH_int.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -18199,7 +17833,6 @@ func LoadNS() {
 			tmp3 := lang.AsFloat64(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_double = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_double.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18244,7 +17877,6 @@ func LoadNS() {
 			tmp3 := lang.UncheckedFloatCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_float = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_float.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18289,7 +17921,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Unchecked_inc(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_inc = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_inc.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18338,7 +17969,6 @@ func LoadNS() {
 			tmp4 := lang.Apply1(tmp3, v2)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_inc_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_inc_DASH_int.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18383,7 +18013,6 @@ func LoadNS() {
 			tmp3 := lang.UncheckedIntCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_int.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18428,7 +18057,6 @@ func LoadNS() {
 			tmp3 := lang.UncheckedLongCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_long = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_long.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18475,7 +18103,6 @@ func LoadNS() {
 			tmp4 := lang.Numbers.Unchecked_multiply(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_unchecked_DASH_multiply = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_multiply.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -18530,7 +18157,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp4, v2, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_unchecked_DASH_multiply_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_multiply_DASH_int.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -18579,7 +18205,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Unchecked_negate(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_negate = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_negate.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18628,7 +18253,6 @@ func LoadNS() {
 			tmp4 := lang.Apply1(tmp3, v2)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_negate_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_negate_DASH_int.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18679,7 +18303,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp4, v2, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_unchecked_DASH_remainder_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_remainder_DASH_int.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -18728,7 +18351,6 @@ func LoadNS() {
 			tmp3 := lang.UncheckedShortCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unchecked_DASH_short = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_short.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -18775,7 +18397,6 @@ func LoadNS() {
 			tmp4 := lang.Numbers.Unchecked_minus(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_unchecked_DASH_subtract = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_subtract.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -18830,7 +18451,6 @@ func LoadNS() {
 			tmp5 := lang.Apply2(tmp4, v2, v3)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_unchecked_DASH_subtract_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unchecked_DASH_subtract_DASH_int.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -18887,7 +18507,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_unreduced = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unreduced.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "If x is reduced?, returns (deref x), else returns x", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2869), kw_end_DASH_line, int(2869))
@@ -18905,7 +18524,6 @@ func LoadNS() {
 			tmp4 := lang.Numbers.UnsignedShiftRight(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_unsigned_DASH_bit_DASH_shift_DASH_right = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_unsigned_DASH_bit_DASH_shift_DASH_right.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -18974,7 +18592,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_vec = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_vec.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Creates a new vector containing the contents of coll. Java arrays\n  will be aliased and should not be modified.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(368), kw_end_DASH_line, int(368))
@@ -19046,7 +18663,6 @@ func LoadNS() {
 				return tmp7
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_vswap_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_vswap_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_vol, sym_f, sym__AMP_, sym_args)), kw_doc, "Non-atomically swaps the value of the volatile as if:\n   (apply f current-value-of-vol args). Returns the value that\n   was swapped in.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(2539), kw_end_DASH_line, int(2539))
@@ -19062,7 +18678,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.IsZero(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_zero_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_zero_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -19173,7 +18788,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_zipmap = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_zipmap.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_keys, sym_vals)), kw_doc, "Returns a map with the keys mapped to the corresponding vals.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6647), kw_end_DASH_line, int(6647))
@@ -19189,7 +18803,6 @@ func LoadNS() {
 			tmp3 := lang.Apply1(math4.IsNaN, v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_NaN_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_NaN_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -19277,7 +18890,6 @@ func LoadNS() {
 			}
 			return tmp17
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_StackTraceElement_DASH__GT_vec = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_StackTraceElement_DASH__GT_vec.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a StackTraceElement: [class method file line]", kw_file, "clojure/core_print.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(28), kw_column, int(7), kw_line, int(438), kw_end_DASH_line, int(438))
@@ -19325,7 +18937,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__DASH_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__DASH_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -19496,7 +19107,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -19504,7 +19114,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(0))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "If no ys are supplied, returns the negation of x, else subtracts\n  the ys from x and returns the result. Does not auto-promote\n  longs, will throw on overflow. See also: -'", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(1038), kw_end_DASH_line, int(1038))
 		})
 	}
@@ -19594,7 +19203,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core__DASH__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__DASH__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Threads the expr through the forms. Inserts x as the\n  second item in the first form, making a list of it if it is not a\n  list already. If there are more forms, inserts the first form as the\n  second item in second form, etc.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(1683), kw_end_DASH_line, int(1683))
@@ -19686,7 +19294,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core__DASH__GT__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__DASH__GT__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Threads the expr through the forms. Inserts x as the\n  last item in the first form, making a list of it if it is not a\n  list already. If there are more forms, inserts the first form as the\n  last item in second form, etc.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(1699), kw_end_DASH_line, int(1699))
@@ -19734,7 +19341,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__DASH__TICK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__DASH__TICK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -19905,7 +19511,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -19913,7 +19518,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(0))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "If no ys are supplied, returns the negation of x, else subtracts\n  the ys from x and returns the result. Supports arbitrary precision.\n  See also: -", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(1026), kw_end_DASH_line, int(1026))
 		})
 	}
@@ -19985,7 +19589,6 @@ func LoadNS() {
 			}),
 			4,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__DOT__DOT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__DOT__DOT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_form), lang.NewVector(sym_x, sym_form, sym__AMP_, sym_more)), kw_doc, "form => fieldName-symbol or (instanceMethodName-symbol args*)\n\n  Expands into a member access (.) of the first member on the first\n  argument, followed by the next member on the result, etc. For\n  instance:\n\n  (.. System (getProperties) (get \"os.name\"))\n\n  expands to:\n\n  (. (. System (getProperties)) (get \"os.name\"))\n\n  but is easier to write, read, and understand.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(1665), kw_end_DASH_line, int(1665))
@@ -20057,7 +19660,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__EQ_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__EQ_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -20156,7 +19758,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__EQ__EQ_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__EQ__EQ_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -20261,7 +19862,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -20366,7 +19966,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__GT__EQ_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__GT__EQ_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -20471,7 +20070,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__LT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__LT_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -20576,7 +20174,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__LT__EQ_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__LT__EQ_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -20659,7 +20256,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__PLUS_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__PLUS_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -20830,7 +20426,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -20838,7 +20433,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(1))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "Returns the sum of nums. (+) returns 0. Does not auto-promote\n  longs, will throw on overflow. See also: +'", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(979), kw_end_DASH_line, int(979))
 		})
 	}
@@ -20886,7 +20480,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__PLUS__TICK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__PLUS__TICK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -21057,7 +20650,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -21065,7 +20657,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(1))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "Returns the sum of nums. (+') returns 0. Supports arbitrary precision.\n  See also: +", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(967), kw_end_DASH_line, int(967))
 		})
 	}
@@ -21111,7 +20702,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__SLASH_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__SLASH_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -21282,7 +20872,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -21290,7 +20879,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(1))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "If no denominators are supplied, returns 1/numerator,\n  else returns numerator divided by all of the denominators.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(1015), kw_end_DASH_line, int(1015))
 		})
 	}
@@ -21338,7 +20926,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__STAR_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -21509,7 +21096,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -21517,7 +21103,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(1))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "Returns the product of nums. (*) returns 1. Does not auto-promote\n  longs, will throw on overflow. See also: *'", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(7), kw_column, int(7), kw_line, int(1003), kw_end_DASH_line, int(1003))
 		})
 	}
@@ -21565,7 +21150,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core__STAR__TICK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__STAR__TICK_.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -21736,7 +21320,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -21744,7 +21327,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(1))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "Returns the product of nums. (*') returns 1. Supports arbitrary precision.\n  See also: *", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(991), kw_end_DASH_line, int(991))
 		})
 	}
@@ -21758,7 +21340,6 @@ func LoadNS() {
 			tmp3 := lang.Abs(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_abs = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_abs.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -21793,7 +21374,6 @@ func LoadNS() {
 			tmp3 := runtime.RT.Aclone(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_aclone = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_aclone.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -21878,7 +21458,6 @@ func LoadNS() {
 			tmp38 := lang.Apply1(tmp7, tmp37)
 			return tmp38
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_add_DASH_doc_DASH_and_DASH_meta = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_add_DASH_doc_DASH_and_DASH_meta.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_docstring, sym_meta)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(26), kw_column, int(11), kw_line, int(6464), kw_end_DASH_line, int(6464), kw_private, true)
@@ -21894,7 +21473,6 @@ func LoadNS() {
 			tmp3 := runtime.RT.Alength(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_alength = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_alength.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -22015,7 +21593,6 @@ func LoadNS() {
 				return tmp18
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_apply = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_apply.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_args), lang.NewVector(sym_f, sym_x, sym_args), lang.NewVector(sym_f, sym_x, sym_y, sym_args), lang.NewVector(sym_f, sym_x, sym_y, sym_z, sym_args), lang.NewVector(sym_f, sym_a, sym_b, sym_c, sym_d, sym__AMP_, sym_args)), kw_doc, "Applies fn f to the argument list formed by prepending intervening arguments to args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(655), kw_end_DASH_line, int(655))
@@ -22141,7 +21718,6 @@ func LoadNS() {
 			tmp106 := lang.Apply1(tmp9, tmp105)
 			return tmp106
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_areduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_areduce.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_idx, sym_ret, sym_init, sym_expr)), kw_doc, "Reduces an expression across an array a, using an index named idx,\n  and return value named ret, initialized to init, setting ret to the\n  evaluation of expr at each step, returning ret.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(5341), kw_end_DASH_line, int(5341))
@@ -22166,7 +21742,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_array.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(3493), kw_column, int(7), kw_end_DASH_line, int(3494), kw_end_DASH_column, int(7), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_items)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -22221,7 +21796,6 @@ func LoadNS() {
 			}),
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_array_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_array_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_keyvals)), kw_doc, "Constructs an array-map. If any keys are equal, they are handled as\n  if by repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4435), kw_end_DASH_line, int(4435))
@@ -22382,7 +21956,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_assert = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_assert.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_message)), kw_doc, "Evaluates expression x and throws an AssertionError with optional\n  message if x does not evaluate to logical true.\n\n  Assertion checks are omitted from compiled code if '*assert*' is\n  false.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(4887), kw_end_DASH_line, int(4887))
@@ -22509,7 +22082,6 @@ func LoadNS() {
 				return tmp89
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_assert_DASH_args = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_assert_DASH_args.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_pairs)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(38), kw_column, int(11), kw_line, int(1838), kw_end_DASH_line, int(1838), kw_private, true)
@@ -22627,8 +22199,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf((*lang.BigDecimal)(nil))
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_bigdec = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bigdec.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*lang.BigDecimal)(nil))
@@ -22788,8 +22358,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf((*lang.BigInt)(nil))
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_bigint = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bigint.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*lang.BigInt)(nil))
@@ -22950,8 +22518,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp2 := reflect.TypeOf((*big6.Int)(nil))
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc1)
 		var_clojure_DOT_core_biginteger = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_biginteger.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*big6.Int)(nil))
@@ -23144,7 +22710,6 @@ func LoadNS() {
 				return tmp32
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_binding = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_binding.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => var-symbol init-expr\n\n  Creates new bindings for the (already-existing) vars, with the\n  supplied initial values, executes the exprs in an implicit do, then\n  re-establishes the bindings that existed before.  The new bindings\n  are made in parallel (unlike let); all init-exprs are evaluated\n  before the vars are bound to their new values.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(1953), kw_end_DASH_line, int(1953))
@@ -23233,7 +22798,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_binding_DASH_conveyor_DASH_fn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_binding_DASH_conveyor_DASH_fn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(7), kw_line, int(2028), kw_end_DASH_line, int(2028), kw_private, true)
@@ -23276,7 +22840,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_bit_DASH_and = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bit_DASH_and.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -23447,7 +23010,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -23455,7 +23017,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(1))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "Bitwise and", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1305), kw_end_DASH_line, int(1305))
 		})
 	}
@@ -23496,7 +23057,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_bit_DASH_and_DASH_not = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bit_DASH_and_DASH_not.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -23667,7 +23227,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -23675,7 +23234,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(1))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "Bitwise and with complement", kw_static, true, kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(1332), kw_end_DASH_line, int(1332))
 		})
 	}
@@ -23689,7 +23247,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Not(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_bit_DASH_not = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bit_DASH_not.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -23761,7 +23318,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_bit_DASH_or = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bit_DASH_or.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -23932,7 +23488,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -23940,7 +23495,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(1))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "Bitwise or", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(1314), kw_end_DASH_line, int(1314))
 		})
 	}
@@ -23956,7 +23510,6 @@ func LoadNS() {
 			tmp4 := lang.Numbers.ShiftLeft(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_bit_DASH_shift_DASH_left = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bit_DASH_shift_DASH_left.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -24007,7 +23560,6 @@ func LoadNS() {
 			tmp4 := lang.Numbers.ShiftRight(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_bit_DASH_shift_DASH_right = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bit_DASH_shift_DASH_right.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -24083,7 +23635,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_bit_DASH_xor = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bit_DASH_xor.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -24254,7 +23805,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -24262,7 +23812,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(1))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "Bitwise exclusive or", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(1323), kw_end_DASH_line, int(1323))
 		})
 	}
@@ -24276,7 +23825,6 @@ func LoadNS() {
 			tmp3 := runtime.RT.BooleanCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_boolean = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_boolean.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -24340,7 +23888,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_boolean_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_boolean_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc
@@ -24395,7 +23942,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Booleans(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_booleans = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_booleans.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -24459,7 +24005,6 @@ func LoadNS() {
 				return tmp18
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_bound_DASH_fn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bound_DASH_fn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_fntail)), kw_doc, "Returns a function defined by the given fntail, which will install the\n  same bindings in effect as in the thread at the time bound-fn was called.\n  This may be used to define a helper function which runs on a different\n  thread, but needs the same bindings in place.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(2012), kw_end_DASH_line, int(2012))
@@ -24506,7 +24051,6 @@ func LoadNS() {
 				return tmp7
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_bound_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bound_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_vars)), kw_doc, "Returns true if all of the vars provided as arguments have any bound value, root or thread-local.\n   Implies that deref'ing the provided vars will succeed. Returns true if no vars are provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5543), kw_end_DASH_line, int(5543))
@@ -24575,7 +24119,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_bounded_DASH_count = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bounded_DASH_count.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "If coll is counted? returns its count, else will count at most the first n\n  elements of coll using its seq", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7480), kw_end_DASH_line, int(7480))
@@ -24631,7 +24174,6 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(278), kw_column, int(10), kw_end_DASH_line, int(282), kw_end_DASH_column, int(27))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -24650,7 +24192,6 @@ func LoadNS() {
 			tmp3 := lang.ByteCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_byte = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_byte.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -24721,7 +24262,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_byte_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_byte_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc
@@ -24776,7 +24316,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Bytes(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_bytes = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bytes.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -24836,7 +24375,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_bytes_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bytes_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Return true if x is a byte array", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5464), kw_end_DASH_line, int(5464))
@@ -24852,7 +24390,6 @@ func LoadNS() {
 			tmp3 := runtime.RT.CharCast(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_char = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_char.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -24923,7 +24460,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_char_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_char_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc
@@ -24978,7 +24514,6 @@ func LoadNS() {
 			tmp3 := lang.Numbers.Chars(v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_chars = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_chars.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc1
@@ -25112,7 +24647,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_comp = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_comp.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_f), lang.NewVector(sym_f, sym_g), lang.NewVector(sym_f, sym_g, sym__AMP_, sym_fs)), kw_doc, "Takes a set of functions and returns a fn that is the composition\n  of those fns.  The returned fn takes a variable number of args,\n  applies the rightmost of fns to the args, the next\n  fn (right-to-left) to the result, etc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2557), kw_end_DASH_line, int(2557))
@@ -25130,7 +24664,6 @@ func LoadNS() {
 			tmp4 := lang.Compare(v2, v3)
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_compare = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_compare.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -25225,7 +24758,6 @@ func LoadNS() {
 			}
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_complement = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_complement.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Takes a fn f and returns a fn that takes the same arguments as f,\n  has the same effects, if any, and returns the opposite truth value.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(1432), kw_end_DASH_line, int(1432))
@@ -25252,7 +24784,6 @@ func LoadNS() {
 			tmp14 := lang.Apply2(tmp3, tmp9, tmp13)
 			return tmp14
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_data_DASH_reader_DASH_var = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_data_DASH_reader_DASH_var.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7902), kw_column, int(8), kw_end_DASH_line, int(7902), kw_end_DASH_column, int(22), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -25449,7 +24980,6 @@ func LoadNS() {
 			tmp179 := lang.Apply1(tmp7, tmp178)
 			return tmp179
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_def_DASH_aset = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_def_DASH_aset.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_method, sym_coerce)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(3), kw_line, int(3992), kw_end_DASH_line, int(3993), kw_private, true)
@@ -25583,7 +25113,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_definline = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_definline.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_decl)), kw_doc, "Experimental - like defmacro, except defines a named function whose\n  body is the expansion, calls to which may be expanded inline as if\n  it were a macro. Cannot be used with variadic (&) args.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(5305), kw_end_DASH_line, int(5305))
@@ -25870,7 +25399,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(453), kw_column, int(11), kw_end_DASH_line, int(489), kw_end_DASH_column, int(40))).(lang.FnFunc)
 		var_clojure_DOT_core_defmacro = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defmacro.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewVector(sym_params_STAR_), sym_body), lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_body), sym__PLUS_, sym_attr_DASH_map_QMARK_)), kw_doc, "Like defn, but the resulting function name is declared as a\n  macro and will be used as a macro by the compiler when it is\n  called.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(2), kw_line, int(447), kw_end_DASH_line, int(453))
@@ -25907,7 +25435,6 @@ func LoadNS() {
 				return tmp13
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_defn_DASH_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defn_DASH_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_decls)), kw_doc, "same as defn, yielding non-public def", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(4999), kw_end_DASH_line, int(4999))
@@ -25985,7 +25512,6 @@ func LoadNS() {
 			tmp62 := lang.Apply1(tmp6, tmp61)
 			return tmp62
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc4)
 		var_clojure_DOT_core_defonce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defonce.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_expr)), kw_doc, "defs name to have the root value of the expr iff the named var has no root value,\n  else expr is unevaluated", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(5863), kw_end_DASH_line, int(5863))
@@ -26022,7 +25548,6 @@ func LoadNS() {
 				return tmp11
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_delay = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_delay.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions and yields a Delay object that will\n  invoke the body only the first time it is forced (with force or deref/@), and\n  will cache the result and return it on all subsequent force\n  calls. See also - realized?", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(741), kw_end_DASH_line, int(741))
@@ -26174,7 +25699,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_deref_DASH_as_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_deref_DASH_as_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(410), kw_column, int(8), kw_end_DASH_line, int(410), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -26223,7 +25747,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_descendants = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_descendants.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag), lang.NewVector(sym_h, sym_tag)), kw_doc, "Returns the immediate and indirect children of tag, through a\n  relationship established via derive. h must be a hierarchy obtained\n  from make-hierarchy, if not supplied defaults to the global\n  hierarchy. Note: does not work on Java type inheritance\n  relationships.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(5645), kw_end_DASH_line, int(5645))
@@ -26442,7 +25965,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_distinct = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_distinct.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_coll)), kw_doc, "Returns a lazy sequence of the elements of coll with duplicates removed.\n  Returns a stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(5105), kw_end_DASH_line, int(5105))
@@ -26477,7 +25999,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_doall = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_doall.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_n, sym_coll)), kw_doc, "When lazy sequences are produced via functions that have side\n  effects, any effects other than those needed to produce the first\n  element in the seq do not occur until the seq is consumed. doall can\n  be used to force any effects. Walks through the successive nexts of\n  the seq, retains the head and returns it, thus causing the entire\n  seq to reside in memory at one time.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3153), kw_end_DASH_line, int(3153))
@@ -27116,7 +26637,6 @@ func LoadNS() {
 				return tmp32
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_doseq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_doseq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_seq_DASH_exprs, sym__AMP_, sym_body)), kw_doc, "Repeatedly executes body (presumably for side-effects) with\n  bindings and filtering as provided by \"for\".  Does not retain\n  the head of the sequence. Returns nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(3231), kw_end_DASH_line, int(3231))
@@ -27281,7 +26801,6 @@ func LoadNS() {
 				return tmp32
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_dotimes = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_dotimes.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => name n\n\n  Repeatedly executes body (presumably for side-effects) with name\n  bound to integers from 0 through n-1.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(3328), kw_end_DASH_line, int(3328))
@@ -27362,7 +26881,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_elide_DASH_top_DASH_frames = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_elide_DASH_top_DASH_frames.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(4851), kw_column, int(7), kw_end_DASH_line, int(4851), kw_end_DASH_column, int(32), kw_arglists, lang.NewList(lang.NewVector(sym_ex, sym_class_DASH_name)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -28270,7 +27788,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_every_DASH_pred = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_every_DASH_pred.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_p), lang.NewVector(sym_p1, sym_p2), lang.NewVector(sym_p1, sym_p2, sym_p3), lang.NewVector(sym_p1, sym_p2, sym_p3, sym__AMP_, sym_ps)), kw_doc, "Takes a set of predicates and returns a function f that returns true if all of its\n  composing predicates return a logical true value against all of its arguments, else it returns\n  false. Note that f is short-circuiting in that it will stop execution on the first\n  argument that triggers a logical false result against the original predicates.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7492), kw_end_DASH_line, int(7492))
@@ -28588,7 +28105,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_fnil = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_fnil.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_x), lang.NewVector(sym_f, sym_x, sym_y), lang.NewVector(sym_f, sym_x, sym_y, sym_z)), kw_doc, "Takes a function f, and returns a function that calls f, replacing\n  a nil first argument to f with the supplied value x. Higher arity\n  versions can replace arguments in the second and third\n  positions (y, z). Note that the function f can take any number of\n  arguments, not just the one(s) being nil-patched.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6622), kw_end_DASH_line, int(6622))
@@ -28615,7 +28131,6 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_format = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_format.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fmt, sym__AMP_, sym_args)), kw_doc, "Formats a string using java.lang.String.format, see java.util.Formatter for format\n  string syntax", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5774), kw_end_DASH_line, int(5774))
@@ -28665,7 +28180,6 @@ func LoadNS() {
 				return tmp27
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_future = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_future.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions and yields a future object that will\n  invoke the body in another thread, and will cache the result and\n  return it on all subsequent calls to deref/@. If the computation has\n  not yet finished, calls to deref/@ will block, unless the variant of\n  deref with timeout is used. See also - realized?.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7079), kw_end_DASH_line, int(7079))
@@ -28693,7 +28207,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_future_DASH_call = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_future_DASH_call.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Takes a function of no args and yields a future object that will\n  invoke the function in another thread, and will cache the result and\n  return it on all subsequent calls to deref/@. If the computation has\n  not yet finished, calls to deref/@ will block, unless the variant\n  of deref with timeout is used. See also - realized?.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7073), kw_end_DASH_line, int(7073))
@@ -28796,7 +28309,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_get_DASH_in = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_get_DASH_in.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_ks), lang.NewVector(sym_m, sym_ks, sym_not_DASH_found)), kw_doc, "Returns the value in a nested associative structure,\n  where ks is a sequence of keys. Returns nil if the key\n  is not present, or the not-found value if supplied.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6185), kw_end_DASH_line, int(6185))
@@ -28834,7 +28346,6 @@ func LoadNS() {
 			}),
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_hash_DASH_set = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_hash_DASH_set.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a new hash set with supplied keys.  Any equal keys are\n  handled as if by repeated uses of conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(390), kw_end_DASH_line, int(390))
@@ -29012,7 +28523,6 @@ func LoadNS() {
 			}),
 			5,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_if_DASH_let = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_if_DASH_let.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym_then), lang.NewVector(sym_bindings, sym_then, sym_else, sym__AMP_, sym_oldform)), kw_doc, "bindings => binding-form test\n\n  If test is true, evaluates then with binding-form bound to the value of\n  test, if not, yields else", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(1847), kw_end_DASH_line, int(1847))
@@ -29198,7 +28708,6 @@ func LoadNS() {
 			}),
 			5,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_if_DASH_some = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_if_DASH_some.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym_then), lang.NewVector(sym_bindings, sym_then, sym_else, sym__AMP_, sym_oldform)), kw_doc, "bindings => binding-form test\n\n   If test is not nil, evaluates then with binding-form bound to the\n   value of test, if not, yields else", kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(1882), kw_end_DASH_line, int(1882))
@@ -29234,7 +28743,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_into1 = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_into1.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_to, sym_from)), kw_doc, "Returns a new coll consisting of to-coll with all of the items of\n  from-coll conjoined.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(3452), kw_end_DASH_line, int(3452), kw_private, true)
@@ -29742,7 +29250,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_juxt = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_juxt.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_g), lang.NewVector(sym_f, sym_g, sym_h), lang.NewVector(sym_f, sym_g, sym_h, sym__AMP_, sym_fs)), kw_doc, "Takes a set of functions and returns a fn that is the juxtaposition\n  of those fns.  The returned fn takes a variable number of args, and\n  returns a vector containing the result of applying each fn to the\n  args (left-to-right).\n  ((juxt a b c) x) => [(a x) (b x) (c x)]", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2576), kw_end_DASH_line, int(2576))
@@ -29966,7 +29473,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_keep = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_keep.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence of the non-nil results of (f item). Note,\n  this means false return values will be included.  f must be free of\n  side-effects.  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7409), kw_end_DASH_line, int(7409))
@@ -30242,7 +29748,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_keep_DASH_indexed = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_keep_DASH_indexed.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a lazy sequence of the non-nil results of (f index item). Note,\n  this means false return values will be included.  f must be free of\n  side-effects.  Returns a stateful transducer when no collection is\n  provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(7442), kw_end_DASH_line, int(7442))
@@ -30279,7 +29784,6 @@ func LoadNS() {
 				return tmp11
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_lazy_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_lazy_DASH_seq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions that returns an ISeq or nil, and yields\n  a Seqable object that will invoke the body only the first time seq\n  is called, and will cache the result and return it on all subsequent\n  seq calls. See also - realized?", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(678), kw_end_DASH_line, int(678))
@@ -30392,7 +29896,6 @@ func LoadNS() {
 				return tmp89
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_locking = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_locking.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_body)), kw_doc, "Executes exprs in an implicit do, while holding the monitor of x.\n  Will release the monitor of x in all circumstances.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(1651), kw_end_DASH_line, int(1651))
@@ -30817,7 +30320,6 @@ func LoadNS() {
 			}),
 			4,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_c1, sym_c2), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3, sym__AMP_, sym_colls)), kw_doc, "Returns a lazy sequence consisting of the result of applying f to\n  the set of first items of each coll, followed by applying f to the\n  set of second items in each coll, until any one of the colls is\n  exhausted.  Any remaining items in other colls are ignored. Function\n  f should accept number-of-colls arguments. Returns a transducer when\n  no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(2727), kw_end_DASH_line, int(2727))
@@ -30864,7 +30366,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_max = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_max.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -31035,7 +30536,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -31043,7 +30543,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(1))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "Returns the greatest of the nums.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1110), kw_end_DASH_line, int(1110))
 		})
 	}
@@ -31200,7 +30699,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_max_DASH_key = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_max_DASH_key.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_k, sym_x), lang.NewVector(sym_k, sym_x, sym_y), lang.NewVector(sym_k, sym_x, sym_y, sym__AMP_, sym_more)), kw_doc, "Returns the x for which (k x), a number, is greatest.\n\n  If there are multiple such xs, the last one is returned.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5065), kw_end_DASH_line, int(5065))
@@ -31277,7 +30775,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_memfn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_memfn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_args)), kw_doc, "Expands into code that creates a fn that expects to be passed an\n  object and any args and calls the named instance method on the\n  object passing the args. Use when you want to treat a Java method as\n  a first-class fn. name may be type-hinted with the method receiver's\n  type in order to avoid reflective calls.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(3929), kw_end_DASH_line, int(3929))
@@ -31344,7 +30841,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_merge = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_merge.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_maps)), kw_doc, "Returns a map that consists of the rest of the maps conj-ed onto\n  the first.  If a key occurs in more than one map, the mapping from\n  the latter (left-to-right) will be the mapping in the result.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3062), kw_end_DASH_line, int(3062))
@@ -31470,7 +30966,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_merge_DASH_with = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_merge_DASH_with.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym__AMP_, sym_maps)), kw_doc, "Returns a map that consists of the rest of the maps conj-ed onto\n  the first.  If a key occurs in more than one map, the mapping(s)\n  from the latter (left-to-right) will be combined with the mapping in\n  the result by calling (f val-in-result val-in-latter).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3072), kw_end_DASH_line, int(3072))
@@ -31517,7 +31012,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_min = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_min.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.ArityFn
@@ -31688,7 +31182,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -31696,7 +31189,6 @@ func LoadNS() {
 				tmp5 := lang.Numbers.Gt(v4, int64(1))
 				return tmp5
 			})
-			tmp3 = tmp3.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym_y), lang.NewVector(sym_x, sym_y, sym__AMP_, sym_more)), kw_inline, tmp2, kw_doc, "Returns the least of the nums.", kw_file, "clojure/core.glj", kw_inline_DASH_arities, tmp3, kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(1120), kw_end_DASH_line, int(1120))
 		})
 	}
@@ -31853,7 +31345,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_min_DASH_key = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_min_DASH_key.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_k, sym_x), lang.NewVector(sym_k, sym_x, sym_y), lang.NewVector(sym_k, sym_x, sym_y, sym__AMP_, sym_more)), kw_doc, "Returns the x for which (k x), a number, is least.\n\n  If there are multiple such xs, the last one is returned.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5085), kw_end_DASH_line, int(5085))
@@ -31903,7 +31394,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_mod = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_mod.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_num, sym_div)), kw_doc, "Modulus of num and div. Truncates toward negative infinity.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(3603), kw_end_DASH_line, int(3603))
@@ -32107,7 +31597,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_nary_DASH_inline = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_nary_DASH_inline.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(950), kw_column, int(7), kw_end_DASH_line, int(950), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_op), lang.NewVector(sym_op, sym_unchecked_DASH_op)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -32172,7 +31661,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2567), kw_column, int(6), kw_end_DASH_line, int(2572), kw_end_DASH_column, int(49))).(lang.ArityFn)
 		var_clojure_DOT_core_not_DASH_any_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_not_DASH_any_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -32238,7 +31726,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2567), kw_column, int(6), kw_end_DASH_line, int(2572), kw_end_DASH_column, int(49))).(lang.ArityFn)
 		var_clojure_DOT_core_not_DASH_every_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_not_DASH_every_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -32290,8 +31777,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp2 := reflect.TypeOf(false)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.ArityFn)
 		var_clojure_DOT_core_not_EQ_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_not_EQ_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -32361,7 +31846,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ns_DASH_interns = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns_DASH_interns.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the intern mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4263), kw_end_DASH_line, int(4263))
@@ -32454,7 +31938,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ns_DASH_publics = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns_DASH_publics.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the public intern mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4245), kw_end_DASH_line, int(4245))
@@ -32523,7 +32006,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ns_DASH_refers = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns_DASH_refers.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the refer mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(4310), kw_end_DASH_line, int(4310))
@@ -32610,7 +32092,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_or = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_or.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_next)), kw_doc, "Evaluates exprs one at a time, from left to right. If a form\n  returns a logical true value, or returns that value and doesn't\n  evaluate any of the other expressions, otherwise it returns the\n  value of the last expression. (or) returns nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(849), kw_end_DASH_line, int(849))
@@ -32671,7 +32152,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_parents = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_parents.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag), lang.NewVector(sym_h, sym_tag)), kw_doc, "Returns the immediate parents of tag, either via a Java type\n  inheritance relationship or a relationship established via derive. h\n  must be a hierarchy obtained from make-hierarchy, if not supplied\n  defaults to the global hierarchy", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5616), kw_end_DASH_line, int(5616))
@@ -32722,7 +32202,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_parse_DASH_boolean = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_parse_DASH_boolean.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse strings \"true\" or \"false\" and return a boolean, or nil if invalid", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(8029), kw_end_DASH_line, int(8029))
@@ -32763,7 +32242,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_parse_DASH_double = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_parse_DASH_double.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse string with floating point components and return a Double value,\n  or nil if parse fails.\n\n  Grammar: https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html#valueOf-java.lang.String-", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(8005), kw_end_DASH_line, int(8005))
@@ -32804,7 +32282,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_parse_DASH_long = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_parse_DASH_long.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Parse string of decimal digits with optional leading -/+ and return a\n  Long value, or nil if parse fails", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7996), kw_end_DASH_line, int(7996))
@@ -33059,7 +32536,6 @@ func LoadNS() {
 			}),
 			4,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_partial = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_partial.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_arg1), lang.NewVector(sym_f, sym_arg1, sym_arg2), lang.NewVector(sym_f, sym_arg1, sym_arg2, sym_arg3), lang.NewVector(sym_f, sym_arg1, sym_arg2, sym_arg3, sym__AMP_, sym_more)), kw_doc, "Takes a function f and fewer than the normal arguments to f, and\n  returns a fn that takes a variable number of additional args. When\n  called, the returned function calls f with args + additional args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2614), kw_end_DASH_line, int(2614))
@@ -33215,7 +32691,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_partition = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_partition.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll), lang.NewVector(sym_n, sym_step, sym_pad, sym_coll)), kw_doc, "Returns a lazy sequence of lists of n items each, at offsets step\n  apart. If step is not supplied, defaults to n, i.e. the partitions\n  do not overlap. If a pad collection is supplied, use its elements as\n  necessary to complete last partition upto n items. In case there are\n  not enough padding elements, return a partition with less than n items.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3199), kw_end_DASH_line, int(3199))
@@ -33464,7 +32939,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_partition_DASH_all = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_partition_DASH_all.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll)), kw_doc, "Returns a lazy sequence of lists like partition, but may include\n  partitions with fewer than n items at the end.  Returns a stateful\n  transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(7292), kw_end_DASH_line, int(7292))
@@ -33778,7 +33252,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_partition_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_partition_DASH_by.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym_coll)), kw_doc, "Applies f to each value in coll, splitting it each time f returns a\n   new value.  Returns a lazy seq of partitions.  Returns a stateful\n   transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(7212), kw_end_DASH_line, int(7212))
@@ -33799,7 +33272,7 @@ func LoadNS() {
 				var tmp4 any
 				{ // let
 					// let binding "n"
-					tmp5 := runtime11.NumCPU()
+					tmp5 := lang.Apply0(runtime11.NumCPU)
 					tmp6 := lang.Numbers.Add(int64(2), tmp5)
 					var v7 any = tmp6
 					_ = v7
@@ -34013,7 +33486,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_pmap = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pmap.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_coll, sym__AMP_, sym_colls)), kw_doc, "Like map, except f is applied in parallel. Semi-lazy in that the\n  parallel computation stays ahead of the consumption, but doesn't\n  realize the entire result unless required. Only useful for\n  computationally intensive functions where the time of f dominates\n  the coordination overhead.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7101), kw_end_DASH_line, int(7101))
@@ -34073,7 +33545,6 @@ func LoadNS() {
 			tmp12 := lang.Apply(tmp6, []any{tmp8, tmp11, ", ", "}", v3, v5})
 			return tmp12
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc4)
 		var_clojure_DOT_core_print_DASH_prefix_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_prefix_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(243), kw_column, int(8), kw_end_DASH_line, int(243), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_prefix, sym_kvs, sym_print_DASH_one, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -34127,7 +33598,6 @@ func LoadNS() {
 				return tmp15
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_pvalues = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pvalues.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_exprs)), kw_doc, "Returns a lazy sequence of the values of the exprs, which are\n  evaluated in parallel", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7133), kw_end_DASH_line, int(7133))
@@ -34179,7 +33649,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_re_DASH_find = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_re_DASH_find.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m), lang.NewVector(sym_re, sym_s)), kw_doc, "Returns the next regex match, if any, of string to pattern, using\n  java.util.regex.Matcher.find().  Uses re-groups to return the\n  groups.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(4972), kw_end_DASH_line, int(4972))
@@ -34540,7 +34009,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_refer = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_refer.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns_DASH_sym, sym__AMP_, sym_filters)), kw_doc, "refers to all public vars of ns, subject to filters.\n  filters can include at most one each of:\n\n  :exclude list-of-symbols\n  :only list-of-symbols\n  :rename map-of-fromsymbol-tosymbol\n\n  For each public interned var in the namespace named by the symbol,\n  adds a mapping from the name of the var to the var to the current\n  namespace.  Throws an exception if name is already mapped to\n  something else in the current namespace. Filters can be used to\n  select a subset, via inclusion or exclusion, or to provide a mapping\n  to a symbol different from the var's name, in order to prevent\n  clashes. Use :use in the ns macro in preference to calling this directly.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(4273), kw_end_DASH_line, int(4273))
@@ -34577,7 +34045,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_remove = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_remove.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred), lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a lazy sequence of the items in coll for which\n  (pred item) returns logical false. pred must be free of side-effects.\n  Returns a transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2840), kw_end_DASH_line, int(2840))
@@ -34620,7 +34087,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_repeatedly = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_repeatedly.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_n, sym_f)), kw_doc, "Takes a function of no args, presumably with side effects, and\n  returns an infinite (or length n if supplied) lazy sequence of calls\n  to it", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(5219), kw_end_DASH_line, int(5219))
@@ -34778,7 +34244,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_replace = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_replace.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_smap), lang.NewVector(sym_smap, sym_coll)), kw_doc, "Given a map of replacement pairs and a vector/collection, returns a\n  vector/seq with any elements = a key in smap replaced with the\n  corresponding val in smap.  Returns a transducer when no collection\n  is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5134), kw_end_DASH_line, int(5134))
@@ -34799,7 +34264,6 @@ func LoadNS() {
 			tmp7 := lang.Apply2(tmp4, v2, tmp6)
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_replicate = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_replicate.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_x)), kw_doc, "DEPRECATED: Use 'repeat' instead.\n   Returns a lazy seq of n xs.", kw_file, "clojure/core.glj", kw_deprecated, "1.3", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3026), kw_end_DASH_line, int(3026))
@@ -34848,7 +34312,6 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_restart_DASH_agent = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_restart_DASH_agent.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_new_DASH_state, sym__AMP_, sym_options)), kw_doc, "When an agent is failed, changes the agent state to new-state and\n  then un-fails the agent so that sends are allowed again.  If\n  a :clear-actions true option is given, any actions queued on the\n  agent that were being held while it was failed will be discarded,\n  otherwise those held actions will proceed.  The new-state must pass\n  the validator if any, or restart will throw an exception and the\n  agent will remain failed with its old state and error.  Watchers, if\n  any, will NOT be notified of the new state.  Throws an exception if\n  the agent is not failed.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(2183), kw_end_DASH_line, int(2183))
@@ -34875,7 +34338,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_root_DASH_directory = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_root_DASH_directory.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib)), kw_doc, "Returns the root resource path for a lib", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(8), kw_line, int(5928), kw_end_DASH_line, int(5928), kw_private, true)
@@ -35031,7 +34493,6 @@ func LoadNS() {
 				panic("unreachable")
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_rsubseq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_rsubseq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sc, sym_test, sym_key), lang.NewVector(sym_sc, sym_start_DASH_test, sym_start_DASH_key, sym_end_DASH_test, sym_end_DASH_key)), kw_doc, "sc must be a sorted collection, test(s) one of <, <=, > or\n  >=. Returns a reverse seq of those entries with keys ek for\n  which (test (.. sc comparator (compare ek key)) 0) is true", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5202), kw_end_DASH_line, int(5202))
@@ -35086,7 +34547,6 @@ func LoadNS() {
 				return tmp8
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_send_DASH_via = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_send_DASH_via.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_executor, sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch an action to an agent. Returns the agent immediately.\n  Subsequently, in a thread supplied by executor, the state of the agent\n  will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2107), kw_end_DASH_line, int(2107))
@@ -35198,7 +34658,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_sequence = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sequence.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_xform, sym_coll), lang.NewVector(sym_xform, sym_coll, sym__AMP_, sym_colls)), kw_doc, "Coerces coll to a (possibly empty) sequence, if it is not already\n  one. Will not force a lazy seq. (sequence nil) yields (), When a\n  transducer is supplied, returns a lazy sequence of applications of\n  the transform to the items in coll(s), i.e. to the set of first\n  items of each coll, followed by the set of second\n  items in each coll, until any one of the colls is exhausted.  Any\n  remaining items in other colls are ignored. The transform should accept\n  number-of-colls arguments", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2647), kw_end_DASH_line, int(2647))
@@ -35251,7 +34710,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_setup_DASH_reference = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_setup_DASH_reference.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(2051), kw_column, int(7), kw_end_DASH_line, int(2052), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_r, sym_options)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -35308,7 +34766,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_sort = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sort.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_comp, sym_coll)), kw_doc, "Returns a sorted sequence of the items in coll. If no comparator is\n  supplied, uses compare.  comparator must implement\n  java.util.Comparator.  Guaranteed to be stable: equal elements will\n  not be reordered.  If coll is a Java array, it will be modified.  To\n  avoid this, sort a copy of the array.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3107), kw_end_DASH_line, int(3107))
@@ -35362,7 +34819,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_sort_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sort_DASH_by.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_keyfn, sym_coll), lang.NewVector(sym_keyfn, sym_comp, sym_coll)), kw_doc, "Returns a sorted sequence of the items in coll, where the sort\n  order is determined by comparing (keyfn item).  If no comparator is\n  supplied, uses compare.  comparator must implement\n  java.util.Comparator.  Guaranteed to be stable: equal elements will\n  not be reordered.  If coll is a Java array, it will be modified.  To\n  avoid this, sort a copy of the array.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3124), kw_end_DASH_line, int(3124))
@@ -35419,7 +34875,6 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_spit = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_spit.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_content, sym__AMP_, sym_options)), kw_doc, "Opposite of slurp.  Opens f with writer, writes content, then\n  closes f. Options passed to clojure.java.io/writer.", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7064), kw_end_DASH_line, int(7064))
@@ -35446,7 +34901,6 @@ func LoadNS() {
 			}
 			return tmp10
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_split_DASH_at = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_split_DASH_at.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a vector of [(take n coll) (drop n coll)]", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(3005), kw_end_DASH_line, int(3005))
@@ -35477,7 +34931,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_strip_DASH_ns = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_strip_DASH_ns.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(255), kw_column, int(8), kw_end_DASH_line, int(255), kw_end_DASH_column, int(15), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_named)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -35633,7 +35086,6 @@ func LoadNS() {
 				panic("unreachable")
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_subseq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_subseq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sc, sym_test, sym_key), lang.NewVector(sym_sc, sym_start_DASH_test, sym_start_DASH_key, sym_end_DASH_test, sym_end_DASH_key)), kw_doc, "sc must be a sorted collection, test(s) one of <, <=, > or\n  >=. Returns a seq of those entries with keys ek for\n  which (test (.. sc comparator (compare ek key)) 0) is true", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5185), kw_end_DASH_line, int(5185))
@@ -35699,7 +35151,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_supers = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_supers.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_class)), kw_doc, "Returns the immediate and indirect superclasses and interfaces of c, if any", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5584), kw_end_DASH_line, int(5584))
@@ -35761,7 +35212,6 @@ func LoadNS() {
 				return tmp38
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_sync = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sync.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_flags_DASH_ignored_DASH_for_DASH_now, sym__AMP_, sym_body)), kw_doc, "transaction-flags => TBD, pass nil for now\n\n  Runs the exprs (in an implicit do) in a transaction that encompasses\n  exprs and any nested calls.  Starts a transaction if none is already\n  running on this thread. Any uncaught exception will abort the\n  transaction and flow out of sync. The exprs may be run more than\n  once, but any effects on Refs will be atomic.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(2498), kw_end_DASH_line, int(2498))
@@ -35887,7 +35337,6 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_throw_DASH_if = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_throw_DASH_if.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_fmt, sym__AMP_, sym_args)), kw_doc, "Throws a CompilerException with a message if pred is true", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5889), kw_end_DASH_line, int(5889), kw_private, true)
@@ -36009,7 +35458,6 @@ func LoadNS() {
 			tmp107 := lang.Apply1(tmp5, tmp106)
 			return tmp107
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_time = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_time.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr)), kw_doc, "Evaluates expr and prints the time it took.  Returns the value of\n expr.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(3942), kw_end_DASH_line, int(3942))
@@ -36075,7 +35523,6 @@ func LoadNS() {
 			}),
 			1,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_trampoline = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_trampoline.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym__AMP_, sym_args)), kw_doc, "trampoline can be used to convert algorithms requiring mutual\n  recursion without stack consumption. Calls f with supplied args, if\n  any. If f returns a fn, calls that fn with no arguments, and\n  continues to repeat, until the return value is not a fn, then\n  returns that non-fn value. Note that if you want to return a fn as a\n  final value, you must wrap it in some data structure and unpack it\n  after trampoline returns.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(6357), kw_end_DASH_line, int(6357))
@@ -36195,7 +35642,6 @@ func LoadNS() {
 				return tmp14
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_update = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_update.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_k, sym_f), lang.NewVector(sym_m, sym_k, sym_f, sym_x), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y, sym_z), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y, sym_z, sym__AMP_, sym_more)), kw_doc, "'Updates' a value in an associative structure, where k is a\n  key and f is a function that will take the old value\n  and any supplied args and return the new value, and returns a new\n  structure.  If the key does not exist, nil is passed as the old value.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6231), kw_end_DASH_line, int(6231))
@@ -36305,7 +35751,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_update_DASH_in = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_update_DASH_in.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_ks, sym_f, sym__AMP_, sym_args)), kw_doc, "'Updates' a value in a nested associative structure, where ks is a\n  sequence of keys and f is a function that will take the old value\n  and any supplied args and return the new value, and returns a new\n  nested structure.  If any levels do not exist, hash-maps will be\n  created.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(6215), kw_end_DASH_line, int(6215))
@@ -36338,7 +35783,6 @@ func LoadNS() {
 				return tmp10
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_vary_DASH_meta = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_vary_DASH_meta.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_obj, sym_f, sym__AMP_, sym_args)), kw_doc, "Returns an object of the same type and value as obj, with\n  (apply f (meta obj) args) as its metadata.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(670), kw_end_DASH_line, int(670))
@@ -36476,7 +35920,6 @@ func LoadNS() {
 				return tmp32
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_when_DASH_first = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_when_DASH_first.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => x xs\n\n  Roughly the same as (when (seq xs) (let [x (first xs)] body)) but xs is evaluated only once", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(11), kw_line, int(4679), kw_end_DASH_line, int(4679))
@@ -36603,7 +36046,6 @@ func LoadNS() {
 				return tmp32
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_when_DASH_let = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_when_DASH_let.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => binding-form test\n\n  When test is true, evaluates body with binding-form bound to the value of test", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(1867), kw_end_DASH_line, int(1867))
@@ -36740,7 +36182,6 @@ func LoadNS() {
 				return tmp32
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_when_DASH_some = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_when_DASH_some.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => binding-form test\n\n   When test is not nil, evaluates body with binding-form bound to the\n   value of test", kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(1902), kw_end_DASH_line, int(1902))
@@ -36802,7 +36243,6 @@ func LoadNS() {
 				return tmp38
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_while = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_while.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Repeatedly executes body while test expression is true. Presumes\n  some side-effect will cause test to become false/nil. Returns nil", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6391), kw_end_DASH_line, int(6391))
@@ -36856,7 +36296,6 @@ func LoadNS() {
 				return tmp30
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_with_DASH_bindings = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_bindings.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_binding_DASH_map, sym__AMP_, sym_body)), kw_doc, "Takes a map of Var/value pairs. Installs for the given Vars the associated\n  values as thread-local bindings. Then executes body. Pops the installed\n  bindings after body was evaluated. Returns the value of body.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(11), kw_line, int(1992), kw_end_DASH_line, int(1992))
@@ -36897,7 +36336,6 @@ func LoadNS() {
 				return tmp7
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_with_DASH_bindings_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_bindings_STAR_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_binding_DASH_map, sym_f, sym__AMP_, sym_args)), kw_doc, "Takes a map of Var/value pairs. Installs for the given Vars the associated\n  values as thread-local bindings. Then calls f with the supplied arguments.\n  Pops the installed bindings after f returned. Returns whatever f returns.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(1979), kw_end_DASH_line, int(1979))
@@ -36984,7 +36422,6 @@ func LoadNS() {
 				return tmp63
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_with_DASH_in_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_in_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_body)), kw_doc, "Evaluates body in a context in which *in* is bound to a fresh\n  StringReader initialized with the string s.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(4806), kw_end_DASH_line, int(4806))
@@ -37075,7 +36512,6 @@ func LoadNS() {
 				return tmp68
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_with_DASH_loading_DASH_context = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_loading_DASH_context.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5791), kw_column, int(11), kw_end_DASH_line, int(5791), kw_end_DASH_column, int(30), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_macro, true)
@@ -37222,7 +36658,6 @@ func LoadNS() {
 				return tmp32
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_with_DASH_open = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_open.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => [name init ...]\n\n  Evaluates body in a try expression with names bound to the values\n  of the inits, and a finally clause that calls (.close name) on each\n  name in reverse order.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(3889), kw_end_DASH_line, int(3889))
@@ -37307,7 +36742,6 @@ func LoadNS() {
 				return tmp62
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_with_DASH_out_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_out_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Evaluates exprs in a context in which *out* is bound to a fresh\n  StringWriter.  Returns the string created by any nested printing\n  calls.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(22), kw_column, int(11), kw_line, int(4795), kw_end_DASH_line, int(4795))
@@ -37424,7 +36858,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_with_DASH_precision = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_precision.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_precision, sym__AMP_, sym_exprs)), kw_doc, "Sets the precision and rounding mode to be used for BigDecimal operations.\n\n  Usage: (with-precision 10 (/ 1M 3))\n  or:    (with-precision 10 :rounding HALF_DOWN (/ 1M 3))\n\n  The rounding mode is one of CEILING, FLOOR, HALF_UP, HALF_DOWN,\n  HALF_EVEN, UP, DOWN and UNNECESSARY; it defaults to HALF_UP.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(11), kw_line, int(5162), kw_end_DASH_line, int(5162))
@@ -37501,7 +36934,6 @@ func LoadNS() {
 				return tmp43
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_with_DASH_redefs = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_redefs.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => var-symbol temp-value-expr\n\n  Temporarily redefines Vars while executing the body.  The\n  temp-value-exprs will be evaluated and each resulting value will\n  replace in parallel the root value of its Var.  After the body is\n  executed, the root values of all the Vars will be set back to their\n  old values.  These temporary changes will be visible in all threads.\n  Useful for mocking out functions during testing.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(7614), kw_end_DASH_line, int(7614))
@@ -37732,7 +37164,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_with_DASH_redefs_DASH_fn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_redefs_DASH_fn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_binding_DASH_map, sym_func)), kw_doc, "Temporarily redefines Vars during a call to func.  Each val of\n  binding-map will replace the root value of its key which must be\n  a Var.  After func is called with no args, the root values of all\n  the Vars will be set back to their old values.  These temporary\n  changes will be visible in all threads.  Useful for mocking out\n  functions during testing.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(7594), kw_end_DASH_line, int(7594))
@@ -37815,7 +37246,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_agent = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_agent.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_state, sym__AMP_, sym_options)), kw_doc, "Creates and returns an agent with an initial value of state and\n  zero or more options (in any order):\n\n  :meta metadata-map\n\n  :validator validate-fn\n\n  :error-handler handler-fn\n\n  :error-mode mode-keyword\n\n  If metadata-map is supplied, it will become the metadata on the\n  agent. validate-fn must be nil or a side-effect-free fn of one\n  argument, which will be passed the intended new state on any state\n  change. If the new state is unacceptable, the validate-fn should\n  return false or throw an exception.  handler-fn is called if an\n  action throws an exception or if validate-fn rejects a new state --\n  see set-error-handler! for details.  The mode-keyword may be either\n  :continue (the default if an error-handler is given) or :fail (the\n  default if no error-handler is given) -- see set-error-mode! for\n  details.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2060), kw_end_DASH_line, int(2060))
@@ -37859,7 +37289,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_aget = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_aget.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc2
@@ -38052,7 +37481,6 @@ func LoadNS() {
 			tmp133 := lang.Apply1(tmp8, tmp132)
 			return tmp133
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_amap = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_amap.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_idx, sym_ret, sym_expr)), kw_doc, "Maps an expression across an array a, using an index named idx, and\n  return value named ret, initialized to a clone of a, then setting\n  each element of ret to the evaluation of expr, returning the new\n  array ret.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(5325), kw_end_DASH_line, int(5325))
@@ -38142,7 +37570,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_ancestors = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ancestors.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag), lang.NewVector(sym_h, sym_tag)), kw_doc, "Returns the immediate and indirect parents of tag, either via a Java type\n  inheritance relationship or a relationship established via derive. h\n  must be a hierarchy obtained from make-hierarchy, if not supplied\n  defaults to the global hierarchy", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5629), kw_end_DASH_line, int(5629))
@@ -38229,7 +37656,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_and = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_and.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_next)), kw_doc, "Evaluates exprs one at a time, from left to right. If a form\n  returns logical false (nil or false), and returns that value and\n  doesn't evaluate any of the other expressions, otherwise it returns\n  the value of the last expr. (and) returns true.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(837), kw_end_DASH_line, int(837))
@@ -38278,7 +37704,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_aset = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_aset.SetMetaLazy(func() lang.IPersistentMap {
 			var tmp2 lang.FnFunc3
@@ -38377,7 +37802,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_aset_DASH_boolean = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_aset_DASH_boolean.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of boolean. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(3), kw_line, int(4013), kw_end_DASH_line, int(4015))
@@ -38431,7 +37855,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_aset_DASH_byte = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_aset_DASH_byte.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of byte. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(3), kw_line, int(4033), kw_end_DASH_line, int(4035))
@@ -38485,7 +37908,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_aset_DASH_char = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_aset_DASH_char.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of char. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(3), kw_line, int(4038), kw_end_DASH_line, int(4040))
@@ -38540,7 +37962,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_aset_DASH_double = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_aset_DASH_double.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of double. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(3), kw_line, int(4023), kw_end_DASH_line, int(4025))
@@ -38595,7 +38016,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_aset_DASH_float = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_aset_DASH_float.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of float. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(3), kw_line, int(4018), kw_end_DASH_line, int(4020))
@@ -38649,7 +38069,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_aset_DASH_int = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_aset_DASH_int.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of int. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(3), kw_line, int(4003), kw_end_DASH_line, int(4005))
@@ -38704,7 +38123,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_aset_DASH_long = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_aset_DASH_long.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of long. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(3), kw_line, int(4008), kw_end_DASH_line, int(4010))
@@ -38759,7 +38177,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_aset_DASH_short = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_aset_DASH_short.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_array, sym_idx, sym_val), lang.NewVector(sym_array, sym_idx, sym_idx2, sym__AMP_, sym_idxv)), kw_doc, "Sets the value at the index/indices. Works on arrays of short. Returns val.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(3), kw_line, int(4028), kw_end_DASH_line, int(4030))
@@ -38858,7 +38275,6 @@ func LoadNS() {
 			} // end let
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_assert_DASH_valid_DASH_fdecl = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_assert_DASH_valid_DASH_fdecl.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fdecl)), kw_doc, "A good fdecl looks like (([a] ...) ([a b] ...)) near the end of defn.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(42), kw_column, int(8), kw_line, int(7572), kw_end_DASH_line, int(7572), kw_private, true, kw_dynamic, true)
@@ -38898,7 +38314,6 @@ func LoadNS() {
 			}),
 			1,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_atom = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_atom.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_options)), kw_doc, "Creates and returns an Atom with an initial value of x and zero or\n  more options (in any order):\n\n  :meta metadata-map\n\n  :validator validate-fn\n\n  If metadata-map is supplied, it will become the metadata on the\n  atom. validate-fn must be nil or a side-effect-free fn of one\n  argument, which will be passed the intended new state on any state\n  change. If the new state is unacceptable, the validate-fn should\n  return false or throw an exception.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2333), kw_end_DASH_line, int(2333))
@@ -38944,7 +38359,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_bound_DASH_fn_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bound_DASH_fn_STAR_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns a function, which will install the same bindings in effect as in\n  the thread at the time bound-fn* was called and then call f with any given\n  arguments. This may be used to define a helper function which runs on a\n  different thread, but needs the same bindings in place.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2000), kw_end_DASH_line, int(2000))
@@ -38978,7 +38392,6 @@ func LoadNS() {
 			tmp18 := lang.Apply2(tmp6, tmp8, tmp17)
 			return tmp18
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc4)
 		var_clojure_DOT_core_case_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_case_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_case_DASH_f, sym_test_DASH_f, sym_tests, sym_thens)), kw_doc, "Transforms a sequence of test constants and a corresponding sequence of then\n  expressions into a sorted map to be consumed by case*. The form of the map\n  entries are {(case-f test) [(test-f test) then]}.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(6678), kw_end_DASH_line, int(6678), kw_private, true)
@@ -39041,7 +38454,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_check_DASH_valid_DASH_options = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_check_DASH_valid_DASH_options.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_options, sym__AMP_, sym_valid_DASH_keys)), kw_doc, "Throws an exception if the given option map contains keys not listed\n  as valid, else returns nil.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(35), kw_column, int(7), kw_line, int(1717), kw_end_DASH_line, int(1717), kw_private, true)
@@ -39069,7 +38481,6 @@ func LoadNS() {
 			tmp6 := lang.Apply2(tmp3, v2, tmp5)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_clear_DASH_agent_DASH_errors = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_clear_DASH_agent_DASH_errors.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_doc, "DEPRECATED: Use 'restart-agent' instead.\n  Clears any exceptions thrown during asynchronous actions of the\n  agent, allowing subsequent actions to occur.", kw_file, "clojure/core.glj", kw_deprecated, "1.2", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(7), kw_line, int(2252), kw_end_DASH_line, int(2252))
@@ -39335,7 +38746,6 @@ func LoadNS() {
 				return tmp7
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_condp = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_condp.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes a binary predicate, an expression, and a set of clauses.\n  Each clause can take the form of either:\n\n  test-expr result-expr\n\n  test-expr :>> result-fn\n\n  Note :>> is an ordinary keyword.\n\n  For each clause, (pred test-expr expr) is evaluated. If it returns\n  logical true, the clause is a match. If a binary clause matches, the\n  result-expr is returned, if a ternary clause matches, its result-fn,\n  which must be a unary function, is called with the result of the\n  predicate as its argument, the result of that call being the return\n  value of condp. A single default expression can follow the clauses,\n  and its value will be returned if no clause matches. If no default\n  expression is provided and no clause matches, an\n  IllegalArgumentException is thrown.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6417), kw_end_DASH_line, int(6417))
@@ -39386,7 +38796,6 @@ func LoadNS() {
 				return tmp15
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_declare = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_declare.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_names)), kw_doc, "defs the supplied var names with no bindings, useful for making forward declarations.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(2776), kw_end_DASH_line, int(2776))
@@ -39485,7 +38894,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_dedupe = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_dedupe.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_coll)), kw_doc, "Returns a lazy sequence removing consecutive duplicates in coll.\n  Returns a transducer when no collection is provided.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(7751), kw_end_DASH_line, int(7751))
@@ -39766,7 +39174,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_defmulti = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defmulti.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_docstring_QMARK_, sym_attr_DASH_map_QMARK_, sym_dispatch_DASH_fn, sym__AMP_, sym_options)), kw_doc, "Creates a new multimethod with the associated dispatch function.\n  The docstring and attr-map are optional.\n\n  Options are key-value pairs and may be one of:\n\n  :default\n\n  The default dispatch value, defaults to :default\n\n  :hierarchy\n\n  The value used for hierarchical dispatch (e.g. ::square is-a ::shape)\n\n  Hierarchies are type-like relationships that do not depend upon type\n  inheritance. By default Clojure's multimethods dispatch off of a\n  global hierarchy map.  However, a hierarchy relationship can be\n  created with the derive function used to augment the root ancestor\n  created with make-hierarchy.\n\n  Multimethods expect the value of the hierarchy option to be supplied as\n  a reference type e.g. a var (i.e. via the Var-quote dispatch macro #'\n  or the var special form).", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(1731), kw_end_DASH_line, int(1731))
@@ -40079,7 +39486,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_defprotocol = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defprotocol.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_opts_PLUS_sigs)), kw_doc, "A protocol is a named set of named methods and their signatures:\n  (defprotocol AProtocolName\n\n    ;optional doc string\n    \"A doc string for AProtocol abstraction\"\n\n   ;options\n   :extend-via-metadata true\n\n  ;method signatures\n    (bar [this a b] \"bar docs\")\n    (baz [this a] [this a b] [this a b c] \"baz docs\"))\n\n  No implementations are provided. Docs can be specified for the\n  protocol overall and for each method. The above yields a set of\n  polymorphic functions and a protocol object. All are\n  namespace-qualified by the ns enclosing the definition The resulting\n  functions dispatch on the type of their first argument, which is\n  required and corresponds to the implicit target object ('this' in \n  Java parlance). defprotocol is dynamic, has no special compile-time \n  effect, and defines no new types or classes. Implementations of \n  the protocol methods can be provided using extend.\n\n  When :extend-via-metadata is true, values can extend protocols by\n  adding metadata where keys are fully-qualified protocol function\n  symbols and values are function implementations. Protocol\n  implementations are checked first for direct definitions (defrecord,\n  deftype, reify), then metadata definitions, then external\n  extensions (extend, extend-type, extend-protocol)\n\n  defprotocol will automatically generate a corresponding interface,\n  with the same name as the protocol, i.e. given a protocol:\n  my.ns/Protocol, an interface: my.ns.Protocol. The interface will\n  have methods corresponding to the protocol functions, and the\n  protocol will automatically work with instances of the interface.\n\n  Note that you should not use this interface with deftype or\n  reify, as they support the protocol directly:\n\n  (defprotocol P \n    (foo [this]) \n    (bar-me [this] [this y]))\n\n  (deftype Foo [a b c] \n   P\n    (foo [this] a)\n    (bar-me [this] b)\n    (bar-me [this y] (+ c y)))\n  \n  (bar-me (Foo. 1 2 3) 42)\n  => 45\n\n  (foo \n    (let [x 42]\n      (reify P \n        (foo [this] 17)\n        (bar-me [this] x)\n        (bar-me [this y] x))))\n  => 17", kw_file, "clojure/core_deftype.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(28), kw_end_DASH_line, int(28))
@@ -40848,7 +40254,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_destructure = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_destructure.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4457), kw_column, int(7), kw_end_DASH_line, int(4457), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_bindings)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -41012,8 +40417,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp2 := reflect.TypeOf(false)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.ArityFn)
 		var_clojure_DOT_core_distinct_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_distinct_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -41118,7 +40521,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_doto = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_doto.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Evaluates x then calls all of the methods and functions with the\n  value of x supplied at the front of the given arguments.  The forms\n  are evaluated in order.  Returns x.\n\n  (doto (new java.util.HashMap) (.put \"a\" 1) (.put \"b\" 2))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(3910), kw_end_DASH_line, int(3910))
@@ -41166,7 +40568,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_drop_DASH_last = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_drop_DASH_last.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_n, sym_coll)), kw_doc, "Return a lazy sequence of all but the last n (default 1) items in coll", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(2954), kw_end_DASH_line, int(2954))
@@ -41238,7 +40639,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_emit_DASH_extend_DASH_protocol = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_emit_DASH_extend_DASH_protocol.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(205), kw_column, int(8), kw_end_DASH_line, int(205), kw_end_DASH_column, int(27), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_p, sym_specs)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -41424,7 +40824,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_emit_DASH_hinted_DASH_impl = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_emit_DASH_hinted_DASH_impl.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(163), kw_column, int(8), kw_end_DASH_line, int(163), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_c, lang.NewVector(sym_p, sym_fs))), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -41749,7 +41148,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_extend = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_extend.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atype, sym__AMP_, sym_proto_PLUS_mmaps)), kw_doc, "Implementations of protocol methods can be provided using the extend construct:\n\n  (extend AType\n    AProtocol\n     {:foo an-existing-fn\n      :bar (fn [a b] ...)\n      :baz (fn ([a]...) ([a b] ...)...)}\n    BProtocol \n      {...} \n    ...)\n \n  extend takes a type/class (or interface, see below), and one or more\n  protocol + method map pairs. It will extend the polymorphism of the\n  protocol's methods to call the supplied methods when an AType is\n  provided as the first argument. \n\n  Method maps are maps of the keyword-ized method names to ordinary\n  fns. This facilitates easy reuse of existing fns and fn maps, for\n  code reuse/mixins without derivation or composition. You can extend\n  an interface to a protocol. This is primarily to facilitate interop\n  with the host (e.g. Java) but opens the door to incidental multiple\n  inheritance of implementation since a class can inherit from more\n  than one interface, both of which extend the protocol. It is TBD how\n  to specify which impl to use. You can extend a protocol on nil.\n\n  If you are supplying the definitions explicitly (i.e. not reusing\n  exsting functions or mixin maps), you may find it more convenient to\n  use the extend-type or extend-protocol macros.\n\n  Note that multiple independent extend clauses can exist for the same\n  type, not all protocols need be defined in a single extend call.\n\n  See also:\n  extends?, satisfies?, extenders", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(116), kw_end_DASH_line, int(116))
@@ -41780,7 +41178,6 @@ func LoadNS() {
 				return tmp7
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_extend_DASH_protocol = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_extend_DASH_protocol.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_p, sym__AMP_, sym_specs)), kw_doc, "Useful when you want to provide several implementations of the same\n  protocol all at once. Takes a single protocol and the implementation\n  of that protocol for one or more types.\n\n  (extend-protocol Protocol\n    AType\n      (foo [x] ...)\n      (bar [x y] ...)\n    BType\n      (foo [x] ...)\n      (bar [x y] ...)\n    AClass\n      (foo [x] ...)\n      (bar [x y] ...)\n    nil\n      (foo [x] ...)\n      (bar [x y] ...))\n\n  expands into:\n\n  (do\n   (clojure.core/extend-type AType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type BType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type AClass Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type nil Protocol \n     (foo [x] ...) \n     (bar [x y] ...)))", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(11), kw_line, int(212), kw_end_DASH_line, int(212))
@@ -41808,7 +41205,6 @@ func LoadNS() {
 			tmp15 := lang.Numbers.Lt(tmp13, tmp14)
 			return tmp15
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_fits_DASH_table_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_fits_DASH_table_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ints)), kw_doc, "Returns true if the collection of ints can fit within the\n  max-table-switch-size, false otherwise.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(6689), kw_end_DASH_line, int(6689), kw_private, true)
@@ -42179,7 +41575,6 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_fn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_fn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_sigs)), kw_doc, "params => positional-params*, or positional-params* & rest-param\n  positional-param => binding-form\n  rest-param => binding-form\n  binding-form => name, or destructuring-form\n\n  Defines a function.\n\n  See https://clojure.org/reference/special_forms#fn for more information", kw_forms, lang.NewVector(lang.NewList(sym_fn, sym_name_QMARK_, lang.NewVector(sym_params_STAR_), sym_exprs_STAR_), lang.NewList(sym_fn, sym_name_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_exprs_STAR_), sym__PLUS_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(4590), kw_end_DASH_line, int(4590), kw_special_DASH_form, true)
@@ -43387,7 +42782,6 @@ func LoadNS() {
 			} // end let
 			return tmp32
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc4)
 		var_clojure_DOT_core_for = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_for.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_seq_DASH_exprs, sym_body_DASH_expr)), kw_doc, "List comprehension. Takes a vector of one or more\n   binding-form/collection-expr pairs, each followed by zero or more\n   modifiers, and yields a lazy sequence of evaluations of expr.\n   Collections are iterated in a nested fashion, rightmost fastest,\n   and nested coll-exprs can refer to bindings created in prior\n   binding-forms.  Supported modifiers are: :let [binding-form expr ...],\n   :while test, :when test.\n\n  (take 100 (for [x (range 100000000) y (range 1000000) :while (< y x)] [x y]))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(4703), kw_end_DASH_line, int(4703))
@@ -43546,7 +42940,6 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_import = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_import.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_import_DASH_symbols_DASH_or_DASH_lists)), kw_doc, "import-list => (package-symbol class-name-symbols*)\n\n  For each name in class-name-symbols, adds a mapping from name to the\n  class named by package.name to the current namespace. Use :import in the ns\n  macro in preference to calling this directly.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(3462), kw_end_DASH_line, int(3462))
@@ -43682,7 +43075,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_interleave = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_interleave.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_c1), lang.NewVector(sym_c1, sym_c2), lang.NewVector(sym_c1, sym_c2, sym__AMP_, sym_colls)), kw_doc, "Returns a lazy seq of the first item in each coll, then the second etc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4365), kw_end_DASH_line, int(4365))
@@ -43794,7 +43186,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_interpose = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_interpose.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sep), lang.NewVector(sym_sep, sym_coll)), kw_doc, "Returns a lazy seq of the elements of coll separated by sep.\n  Returns a stateful transducer when no collection is provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(5282), kw_end_DASH_line, int(5282))
@@ -44053,7 +43444,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_isa_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_isa_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_child, sym_parent), lang.NewVector(sym_h, sym_child, sym_parent)), kw_doc, "Returns true if (= child parent), or child is directly or indirectly derived from\n  parent, either via a Java type inheritance relationship or a\n  relationship established via derive. h must be a hierarchy obtained\n  from make-hierarchy, if not supplied defaults to the global\n  hierarchy", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(5595), kw_end_DASH_line, int(5595))
@@ -44101,7 +43491,6 @@ func LoadNS() {
 				return tmp15
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_lazy_DASH_cat = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_lazy_DASH_cat.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_colls)), kw_doc, "Expands to code which yields a lazy sequence of the concatenation\n  of the supplied colls.  Each coll expr is not evaluated until it is\n  needed.\n\n  (lazy-cat xs ys zs) === (concat (lazy-seq xs) (lazy-seq ys) (lazy-seq zs))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(4693), kw_end_DASH_line, int(4693))
@@ -44176,7 +43565,6 @@ func LoadNS() {
 				return tmp41
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_let = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_let.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => binding-form init-expr\n  binding-form => name, or destructuring-form\n  destructuring-form => map-destructure-form, or seq-destructure-form\n\n  Evaluates the exprs in a lexical context in which the symbols in\n  the binding-forms are bound to their respective init-exprs or parts\n  therein.\n\n  See https://clojure.org/reference/special_forms#binding-forms for\n  more information about destructuring.", kw_forms, lang.NewVector(lang.NewList(sym_let, lang.NewVector(sym_bindings_STAR_), sym_exprs_STAR_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(4553), kw_end_DASH_line, int(4553), kw_special_DASH_form, true)
@@ -44235,7 +43623,6 @@ func LoadNS() {
 				return tmp25
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_letfn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_letfn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_fnspecs, sym__AMP_, sym_body)), kw_doc, "fnspec ==> (fname [params*] exprs) or (fname ([params*] exprs)+)\n\n  Takes a vector of function specs and a body, and generates a set of\n  bindings of functions to their names. All of the names are available\n  in all of the definitions of the functions, as well as the body.", kw_forms, lang.NewVector(lang.NewList(sym_letfn, lang.NewVector(sym_fnspecs_STAR_), sym_exprs_STAR_)), kw_url, nil, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6609), kw_end_DASH_line, int(6609), kw_special_DASH_form, true)
@@ -44464,7 +43851,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_lift_DASH_ns = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_lift_DASH_ns.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Returns [lifted-ns lifted-kvs] or nil if m can't be lifted.", kw_file, "clojure/core_print.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(261), kw_end_DASH_line, int(261), kw_private, true)
@@ -44693,7 +44079,6 @@ func LoadNS() {
 				return tmp32
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_loop = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_loop.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "Evaluates the exprs in a lexical context in which the symbols in\n  the binding-forms are bound to their respective init-exprs or parts\n  therein. Acts as a recur target.", kw_forms, lang.NewVector(lang.NewList(sym_loop, lang.NewVector(sym_bindings_STAR_), sym_exprs_STAR_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(4654), kw_end_DASH_line, int(4654), kw_special_DASH_form, true)
@@ -44806,7 +44191,6 @@ func LoadNS() {
 			}),
 			2,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_make_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_make_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_type, sym_len), lang.NewVector(sym_type, sym_dim, sym__AMP_, sym_more_DASH_dims)), kw_doc, "Creates and returns an array of instances of the specified class of\n  the specified dimension(s).  Note that a class object is required.\n  Class objects can be obtained by using their imported or\n  fully-qualified name.  Class objects for the primitive types can be\n  obtained using, e.g., Integer/TYPE.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4042), kw_end_DASH_line, int(4042))
@@ -45138,7 +44522,6 @@ func LoadNS() {
 			tmp10 := lang.Apply1(tmp3, tmp9)
 			return tmp10
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_maybe_DASH_min_DASH_hash = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_maybe_DASH_min_DASH_hash.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_hashes)), kw_doc, "takes a collection of hashes and returns [shift mask] or nil if none found", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(8), kw_line, int(6668), kw_end_DASH_line, int(6668), kw_private, true)
@@ -45226,7 +44609,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_memoize = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_memoize.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "Returns a memoized version of a referentially transparent function. The\n  memoized version of the function keeps a cache of the mapping from arguments\n  to results and, when calls with the same arguments are repeated often, has\n  higher performance at the expense of higher memory use.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6401), kw_end_DASH_line, int(6401))
@@ -45697,7 +45079,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_ns = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_docstring_QMARK_, sym_attr_DASH_map_QMARK_, sym_references_STAR_)), kw_doc, "Sets *ns* to the namespace named by name (unevaluated), creating it\n  if needed.  references can be zero or more of: (:refer-clojure ...)\n  (:require ...) (:use ...) (:import ...) (:load ...) (:gen-class)\n  with the syntax of refer-clojure/require/use/import/load/gen-class\n  respectively, except the arguments are unevaluated and need not be\n  quoted. (:gen-class ...), when supplied, defaults to :name\n  corresponding to the ns name, :main true, :impl-ns same as ns, and\n  :init-impl-ns true. All options of gen-class are\n  supported. The :gen-class directive is ignored when not\n  compiling. If :gen-class is not supplied, when compiled only an\n  nsname__init.class will be generated. If :refer-clojure is not used, a\n  default (refer 'clojure.core) is used.  Use of ns is preferred to\n  individual calls to in-ns/require/use/import:\n\n  (ns foo.bar\n    (:refer-clojure :exclude [ancestors printf])\n    (:require (clojure.contrib sql combinatorics))\n    (:use (my.lib this that))\n    (:import (java.util Date Timer Random)\n             (java.sql Connection Statement)))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(5799), kw_end_DASH_line, int(5799))
@@ -45721,7 +45102,6 @@ func LoadNS() {
 			tmp11 := lang.Apply3(tmp3, tmp4, tmp8, tmp10)
 			return tmp11
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_ns_DASH_imports = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns_DASH_imports.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Returns a map of the import mappings for the namespace.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4256), kw_end_DASH_line, int(4256))
@@ -45758,7 +45138,6 @@ func LoadNS() {
 				return tmp7
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_pcalls = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pcalls.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_fns)), kw_doc, "Executes the no-arg fns in parallel, returning a lazy sequence of\n  their values", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(7126), kw_end_DASH_line, int(7126))
@@ -45874,7 +45253,6 @@ func LoadNS() {
 			}
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_prep_DASH_ints = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_prep_DASH_ints.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tests, sym_thens)), kw_doc, "Takes a sequence of int-sized test constants and a corresponding sequence of\n  then expressions. Returns a tuple of [shift mask case-map switch-type] where\n  case-map is a map of int case values to [test then] tuples, and switch-type\n  is either :sparse or :compact.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(6695), kw_end_DASH_line, int(6695), kw_private, true)
@@ -45895,7 +45273,6 @@ func LoadNS() {
 			tmp6 := lang.Apply4(tmp5, nil, v2, v3, v4)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_print_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(252), kw_column, int(8), kw_end_DASH_line, int(252), kw_end_DASH_column, int(16), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_print_DASH_one, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -45973,7 +45350,6 @@ func LoadNS() {
 			}),
 			1,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_ref = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ref.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_options)), kw_doc, "Creates and returns a Ref with an initial value of x and zero or\n  more options (in any order):\n\n  :meta metadata-map\n\n  :validator validate-fn\n\n  :min-history (default 0)\n  :max-history (default 10)\n\n  If metadata-map is supplied, it will become the metadata on the\n  ref. validate-fn must be nil or a side-effect-free fn of one\n  argument, which will be passed the intended new state on any state\n  change. If the new state is unacceptable, the validate-fn should\n  return false or throw an exception. validate-fn will be called on\n  transaction commit, when all refs have their final values.\n\n  Normally refs accumulate history dynamically as needed to deal with\n  read demands. If you know in advance you will need history you can\n  set :min-history to ensure it will be available when first needed (instead\n  of after a read fault). History is limited, and the limit can be set\n  with :max-history.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(2268), kw_end_DASH_line, int(2268))
@@ -46156,7 +45532,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_resultset_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_resultset_DASH_seq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rs)), kw_doc, "Creates and returns a lazy sequence of structmaps corresponding to\n  the rows in the java.sql.ResultSet rs", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5738), kw_end_DASH_line, int(5738))
@@ -46186,7 +45561,6 @@ func LoadNS() {
 				return tmp7
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_send = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_send.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch an action to an agent. Returns the agent immediately.\n  Subsequently, in a thread from a thread pool, the state of the agent\n  will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2117), kw_end_DASH_line, int(2117))
@@ -46216,7 +45590,6 @@ func LoadNS() {
 				return tmp7
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_send_DASH_off = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_send_DASH_off.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch a potentially blocking action to an agent. Returns the\n  agent immediately. Subsequently, in a separate thread, the state of\n  the agent will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2128), kw_end_DASH_line, int(2128))
@@ -46544,7 +45917,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_seque = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_seque.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s), lang.NewVector(sym_n_DASH_or_DASH_q, sym_s)), kw_doc, "Creates a queued seq on another (presumably lazy) seq s. The queued\n  seq will produce a concrete seq in the background, and can get up to\n  n items ahead of the consumer. n-or-q can be an integer n buffer\n  size, or an instance of java.util.concurrent BlockingQueue. Note\n  that reading from a seque can block if the reader gets ahead of the\n  producer.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(5471), kw_end_DASH_line, int(5471))
@@ -46792,7 +46164,6 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(227), kw_column, int(2), kw_end_DASH_line, int(260), kw_end_DASH_column, int(43))).(lang.FnFunc1)
 		var_clojure_DOT_core_sigs = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sigs.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(225), kw_column, int(2), kw_end_DASH_line, int(226), kw_end_DASH_column, int(5), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -46913,7 +46284,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_some_DASH__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_some_DASH__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_forms)), kw_doc, "When expr is not nil, threads it into the first form (via ->),\n  and when that result is not nil, through the next etc", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7680), kw_end_DASH_line, int(7680))
@@ -47034,7 +46404,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_some_DASH__GT__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_some_DASH__GT__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_forms)), kw_doc, "When expr is not nil, threads it into the first form (via ->>),\n  and when that result is not nil, through the next etc", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7694), kw_end_DASH_line, int(7694))
@@ -47104,7 +46473,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, "[[Ljava.lang.Object;")).(lang.FnFunc1)
 		var_clojure_DOT_core_to_DASH_array_DASH_2d = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_to_DASH_array_DASH_2d.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_tag, "[[Ljava.lang.Object;", kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a (potentially-ragged) 2-dimensional array of Objects\n  containing the contents of coll, which can be any Collection of any\n  Collection.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(4059), kw_end_DASH_line, int(4059))
@@ -47231,7 +46599,6 @@ func LoadNS() {
 				return tmp93
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_with_DASH_local_DASH_vars = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_local_DASH_vars.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name_DASH_vals_DASH_vec, sym__AMP_, sym_body)), kw_doc, "varbinding=> symbol init-expr\n\n  Executes the exprs in a context in which the symbols are bound to\n  vars with per-thread bindings to the init-exprs.  The symbols refer\n  to the var objects themselves, and must be accessed with var-get and\n  var-set", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(11), kw_line, int(4396), kw_end_DASH_line, int(4396))
@@ -47567,7 +46934,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_Throwable_DASH__GT_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_Throwable_DASH__GT_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a Throwable with keys:\n    :cause - root cause message\n    :phase - error phase\n    :via - cause chain, with cause keys:\n             :type - exception class symbol\n             :message - exception message\n             :data - ex-data\n             :at - top stack element\n    :trace - root cause stack elements", kw_file, "clojure/core_print.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(444), kw_end_DASH_line, int(444))
@@ -47635,7 +47001,6 @@ func LoadNS() {
 				return tmp38
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_as_DASH__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_as_DASH__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym_name, sym__AMP_, sym_forms)), kw_doc, "Binds name to expr, evaluates the first form in the lexical context\n  of that binding, then binds name to that result, repeating for each\n  successive form, returning the result of the last form.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(7668), kw_end_DASH_line, int(7668))
@@ -47832,7 +47197,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_await = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_await.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_agents)), kw_doc, "Blocks the current thread (indefinitely!) until all actions\n  dispatched thus far, from this thread or agent, to the agent(s) have\n  occurred.  Will block on failed agents.  Will never return if\n  a failed agent is restarted with :clear-actions true or shutdown-agents was called.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3289), kw_end_DASH_line, int(3289))
@@ -47867,7 +47231,6 @@ func LoadNS() {
 			_ = tmp3
 			return v2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_await1 = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_await1.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(3306), kw_column, int(7), kw_end_DASH_line, int(3306), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -48077,7 +47440,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_await_DASH_for = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_await_DASH_for.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_timeout_DASH_ms, sym__AMP_, sym_agents)), kw_doc, "Blocks the current thread until all actions dispatched thus\n  far (from this thread or agent) to the agents have occurred, or the\n  timeout (in milliseconds) has elapsed. Returns logical false if\n  returning due to timeout, logical true otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3311), kw_end_DASH_line, int(3311))
@@ -48151,7 +47513,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_check_DASH_cyclic_DASH_dependency = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_check_DASH_cyclic_DASH_dependency.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_path)), kw_doc, "Detects and rejects non-trivial cyclic load dependencies. The\n  exception message shows the dependency chain with the cycle\n  highlighted. Ignores the trivial case of a file attempting to load\n  itself because that can occur when a gen-class'd class loads its\n  implementation.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(30), kw_column, int(8), kw_line, int(6031), kw_end_DASH_line, int(6031), kw_private, true)
@@ -48283,7 +47644,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_cond_DASH__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_cond_DASH__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression and a set of test/form pairs. Threads expr (via ->)\n  through each form for which the corresponding test\n  expression is true. Note that, unlike cond branching, cond-> threading does\n  not short circuit after the first true test expression.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7634), kw_end_DASH_line, int(7634))
@@ -48415,7 +47775,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_cond_DASH__GT__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_cond_DASH__GT__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression and a set of test/form pairs. Threads expr (via ->>)\n  through each form for which the corresponding test expression\n  is true.  Note that, unlike cond branching, cond->> threading does not short circuit\n  after the first true test expression.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7651), kw_end_DASH_line, int(7651))
@@ -48695,7 +48054,6 @@ func LoadNS() {
 					return tmp12
 				}
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(293), kw_column, int(7), kw_end_DASH_line, int(335), kw_end_DASH_column, int(58))).(lang.FnFunc)
 			v2 = tmp1
 			_ = v2
 		}
@@ -49298,7 +48656,6 @@ func LoadNS() {
 			tmp5 := lang.Apply1(nil, v2)
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_add_DASH_classpath = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_add_DASH_classpath.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_url)), kw_doc, "DEPRECATED\n\n  Adds the url (String or URL object) to the classpath per\n  URLClassLoader.addURL", kw_file, "clojure/core.glj", kw_deprecated, "1.1", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5228), kw_end_DASH_line, int(5228))
@@ -49849,7 +49206,6 @@ func LoadNS() {
 				return tmp6
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_case = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_case.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_e, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression, and a set of clauses.\n\n  Each clause can take the form of either:\n\n  test-constant result-expr\n\n  (test-constant1 ... test-constantN)  result-expr\n\n  The test-constants are not evaluated. They must be compile-time\n  literals, and need not be quoted.  If the expression is equal to a\n  test-constant, the corresponding result-expr is returned. A single\n  default expression can follow the clauses, and its value will be\n  returned if no clause matches. If no default expression is provided\n  and no clause matches, an IllegalArgumentException is thrown.\n\n  Unlike cond and condp, case does a constant-time dispatch, the\n  clauses are not considered sequentially.  All manner of constant\n  expressions are acceptable in case, including numbers, strings,\n  symbols, keywords, and (Clojure) composites thereof. Note that since\n  lists are used to group multiple constants that map to the same\n  expression, a vector can be used to match a list if needed. The\n  test-constants need not be all of the same type.", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(6776), kw_end_DASH_line, int(6776))
@@ -49904,7 +49260,6 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_cat = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_cat.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_rf)), kw_doc, "A transducer which concatenates the contents of each input, which must be a\n  collection, into the reduction.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(7715), kw_end_DASH_line, int(7715))
@@ -50044,7 +49399,6 @@ func LoadNS() {
 			}),
 			1,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_mapcat = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_mapcat.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f), lang.NewVector(sym_f, sym__AMP_, sym_colls)), kw_doc, "Returns the result of applying concat to the result of applying map\n  to f and colls.  Thus function f should return a collection. Returns\n  a transducer when no collections are provided", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(2783), kw_end_DASH_line, int(2783))
@@ -50315,7 +49669,6 @@ func LoadNS() {
 			} // end let
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc4)
 		var_clojure_DOT_core_merge_DASH_hash_DASH_collisions = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_merge_DASH_hash_DASH_collisions.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_expr_DASH_sym, sym_default, sym_tests, sym_thens)), kw_doc, "Takes a case expression, default expression, and a sequence of test constants\n  and a corresponding sequence of then expressions. Returns a tuple of\n  [tests thens skip-check-set] where no tests have the same hash. Each set of\n  input test constants with the same hash is replaced with a single test\n  constant (the case int), and their respective thens are combined into:\n  (condp = expr\n    test-1 then-1\n    ...\n    test-n then-n\n    default).\n  The skip-check is a set of case ints for which post-switch equivalence\n  checking must not be done (the cases holding the above condp thens).", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(28), kw_column, int(8), kw_line, int(6711), kw_end_DASH_line, int(6711), kw_private, true)
@@ -50561,7 +49914,6 @@ func LoadNS() {
 			} // end let
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc4)
 		var_clojure_DOT_core_prep_DASH_hashes = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_prep_DASH_hashes.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_expr_DASH_sym, sym_default, sym_tests, sym_thens)), kw_doc, "Takes a sequence of test constants and a corresponding sequence of then\n  expressions. Returns a tuple of [shift mask case-map switch-type skip-check]\n  where case-map is a map of int case values to [test then] tuples, switch-type\n  is either :sparse or :compact, and skip-check is a set of case ints for which\n  post-switch equivalence checking must not be done (occurs with hash\n  collisions).", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(8), kw_line, int(6747), kw_end_DASH_line, int(6747), kw_private, true)
@@ -50620,7 +49972,6 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_tree_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_tree_DASH_seq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_branch_QMARK_, sym_children, sym_root)), kw_doc, "Returns a lazy sequence of the nodes in a tree, via a depth-first walk.\n   branch? must be a fn of one arg that returns true if passed a node\n   that can have children (but may not).  children must be a fn of one\n   arg that returns a sequence of the children. Will only be called on\n   nodes for which branch? returns true. Root is the root node of the\n  tree.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(5005), kw_end_DASH_line, int(5005))
@@ -50643,7 +49994,6 @@ func LoadNS() {
 			tmp10 := lang.Apply3(tmp3, tmp6, tmp9, v2)
 			return tmp10
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_xml_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_xml_DASH_seq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_root)), kw_doc, "A tree seq on the xml elements as per xml/parse", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5032), kw_end_DASH_line, int(5032))
@@ -50682,7 +50032,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_emit_DASH_extend_DASH_type = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_emit_DASH_extend_DASH_type.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(175), kw_column, int(8), kw_end_DASH_line, int(175), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_c, sym_specs)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -50713,7 +50062,6 @@ func LoadNS() {
 				return tmp7
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_extend_DASH_type = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_extend_DASH_type.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_t, sym__AMP_, sym_specs)), kw_doc, "A macro that expands into an extend call. Useful when you are\n  supplying the definitions explicitly inline, extend-type\n  automatically creates the maps required by extend.  Propagates the\n  class as a type hint on the first argument of all fns.\n\n  (extend-type MyType \n    Countable\n      (cnt [c] ...)\n    Foo\n      (bar [x y] ...)\n      (baz ([x] ...) ([x y & zs] ...)))\n\n  expands into:\n\n  (extend MyType\n   Countable\n     {:cnt (fn [c] ...)}\n   Foo\n     {:baz (fn ([x] ...) ([x y & zs] ...))\n      :bar (fn [x y] ...)})", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(180), kw_end_DASH_line, int(180))
@@ -50764,7 +50112,6 @@ func LoadNS() {
 			tmp10 := lang.Apply3(tmp3, tmp6, tmp9, v2)
 			return tmp10
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_file_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_file_DASH_seq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_dir)), kw_doc, "A tree seq on java.io.Files", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(5022), kw_end_DASH_line, int(5022))
@@ -50790,7 +50137,6 @@ func LoadNS() {
 			tmp13 := lang.Apply2(tmp3, tmp6, tmp12)
 			return tmp13
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_flatten = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_flatten.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Takes any nested combination of sequential things (lists, vectors,\n  etc.) and returns their contents as a single, flat lazy sequence.\n  (flatten nil) returns an empty sequence.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7188), kw_end_DASH_line, int(7188))
@@ -50827,7 +50173,6 @@ func LoadNS() {
 			_ = tmp3
 			return v2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_compile = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_compile.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib)), kw_doc, "Compiles the namespace named by the symbol lib into a set of\n  classfiles. The source for the lib must be in a proper\n  classpath-relative directory. The output files will go into the\n  directory specified by *compile-path*, and that directory too must\n  be in the classpath.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6171), kw_end_DASH_line, int(6171))
@@ -51127,7 +50472,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_derive = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_derive.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag, sym_parent), lang.NewVector(sym_h, sym_tag, sym_parent)), kw_doc, "Establishes a parent/child relationship between parent and\n  tag. Parent must be a namespace-qualified symbol or keyword and\n  child can be either a namespace-qualified symbol or keyword or a\n  class. h must be a hierarchy obtained from make-hierarchy, if not\n  supplied defaults to, and modifies, the global hierarchy.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5657), kw_end_DASH_line, int(5657))
@@ -51268,7 +50612,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_underive = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_underive.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_tag, sym_parent), lang.NewVector(sym_h, sym_tag, sym_parent)), kw_doc, "Removes a parent/child relationship between parent and\n  tag. h must be a hierarchy obtained from make-hierarchy, if not\n  supplied defaults to, and modifies, the global hierarchy.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(5700), kw_end_DASH_line, int(5700))
@@ -51319,7 +50662,6 @@ func LoadNS() {
 			tmp15 := lang.Apply1(tmp4, tmp14)
 			return tmp15
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_filterv = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_filterv.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_coll)), kw_doc, "Returns a vector of the items in coll for which\n  (pred item) returns logical true. pred must be free of side-effects.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(7031), kw_end_DASH_line, int(7031))
@@ -51339,7 +50681,6 @@ func LoadNS() {
 			_ = tmp4
 			return nil
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_flush = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_flush.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Flushes the output stream that is the current value of\n  *out*", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3763), kw_end_DASH_line, int(3763))
@@ -51387,7 +50728,6 @@ func LoadNS() {
 			tmp14 := lang.Apply1(tmp3, tmp13)
 			return tmp14
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_frequencies = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_frequencies.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_coll)), kw_doc, "Returns a map from distinct items in coll to the number of times\n  they appear.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7255), kw_end_DASH_line, int(7255))
@@ -51452,7 +50792,6 @@ func LoadNS() {
 			tmp15 := lang.Apply1(tmp4, tmp14)
 			return tmp15
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_group_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_group_DASH_by.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll)), kw_doc, "Returns a map of the elements of coll keyed by the result of\n  f on each element. The value at each key will be a vector of the\n  corresponding elements, in the order they appeared in coll.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(7198), kw_end_DASH_line, int(7198))
@@ -51579,7 +50918,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_into = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_into.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_to), lang.NewVector(sym_to, sym_from), lang.NewVector(sym_to, sym_xform, sym_from)), kw_doc, "Returns a new coll consisting of to with all of the items of\n  from conjoined. A transducer may be supplied.\n  (into x) returns x. (into) returns [].", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6992), kw_end_DASH_line, int(6992))
@@ -51755,7 +51093,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_partitionv = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_partitionv.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll), lang.NewVector(sym_n, sym_step, sym_pad, sym_coll)), kw_doc, "Returns a lazy sequence of vectors of n items each, at offsets step\n  apart. If step is not supplied, defaults to n, i.e. the partitions\n  do not overlap. If a pad collection is supplied, use its elements as\n  necessary to complete last partition upto n items. In case there are\n  not enough padding elements, return a partition with less than n items.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(7332), kw_end_DASH_line, int(7332))
@@ -51845,7 +51182,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_partitionv_DASH_all = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_partitionv_DASH_all.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n), lang.NewVector(sym_n, sym_coll), lang.NewVector(sym_n, sym_step, sym_coll)), kw_doc, "Returns a lazy sequence of vector partitions, but may include\n  partitions with fewer than n items at the end.\n  Returns a stateful transducer when no collection is provided.", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(7355), kw_end_DASH_line, int(7355))
@@ -51880,7 +51216,6 @@ func LoadNS() {
 			}
 			return tmp15
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_splitv_DASH_at = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_splitv_DASH_at.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_n, sym_coll)), kw_doc, "Returns a vector of [(into [] (take n) coll) (drop n coll)]", kw_file, "clojure/core.glj", kw_added, "1.12", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7326), kw_end_DASH_line, int(7326))
@@ -52119,7 +51454,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_iteration = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_iteration.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_step, sym__AMP_, lang.NewMap(kw_keys, lang.NewVector(sym_somef, sym_vf, sym_kf, sym_initk), kw_or, lang.NewMap(sym_vf, sym_identity, sym_kf, sym_identity, sym_somef, sym_some_QMARK_, sym_initk, nil)))), kw_doc, "Creates a seqable/reducible via repeated calls to step,\n  a function of some (continuation token) 'k'. The first call to step\n  will be passed initk, returning 'ret'. Iff (somef ret) is true,\n  (vf ret) will be included in the iteration, else iteration will\n  terminate and vf/kf will not be called. If (kf ret) is non-nil it\n  will be passed to the next step call, else iteration will terminate.\n\n  This can be used e.g. to consume APIs that return paginated or batched data.\n\n   step - (possibly impure) fn of 'k' -> 'ret'\n\n   :somef - fn of 'ret' -> logical true/false, default 'some?'\n   :vf - fn of 'ret' -> 'v', a value produced by the iteration, default 'identity'\n   :kf - fn of 'ret' -> 'next-k' or nil (signaling 'do not continue'), default 'identity'\n   :initk - the first value passed to step, default 'nil'\n\n  It is presumed that step with non-initk is unreproducible/non-idempotent.\n  If step with initk is unreproducible it is on the consumer to not consume twice.", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7786), kw_end_DASH_line, int(7786))
@@ -52412,7 +51746,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_load = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_paths)), kw_doc, "Loads Clojure code from resources in classpath. A path is interpreted as\n  classpath-relative if it begins with a slash or relative to the root\n  directory for the current namespace otherwise.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_redef, true, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6152), kw_end_DASH_line, int(6152))
@@ -52476,7 +51809,6 @@ func LoadNS() {
 			}
 			return tmp14
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_load_DASH_one = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load_DASH_one.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib, sym_need_DASH_ns, sym_require)), kw_doc, "Loads a lib given its name. If need-ns, ensures that the associated\n  namespace exists after loading. If require, records the load so any\n  duplicate loads can be skipped.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5936), kw_end_DASH_line, int(5936), kw_private, true)
@@ -52552,7 +51884,6 @@ func LoadNS() {
 			tmp7 := lang.Apply1(tmp6, tmp5)
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_load_DASH_all = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load_DASH_all.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_lib, sym_need_DASH_ns, sym_require)), kw_doc, "Loads a lib given its name and forces a load of any libs it directly or\n  indirectly loads. If need-ns, ensures that the associated namespace\n  exists after loading. If require, records the load so any duplicate loads\n  can be skipped.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5949), kw_end_DASH_line, int(5949), kw_private, true)
@@ -52798,7 +52129,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_load_DASH_data_DASH_reader_DASH_file = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load_DASH_data_DASH_reader_DASH_file.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7906), kw_column, int(8), kw_end_DASH_line, int(7906), kw_end_DASH_column, int(28), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_mappings, sym_url)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -52830,7 +52160,6 @@ func LoadNS() {
 			tmp7 := lang.Apply2(tmp2, tmp3, tmp6)
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_load_DASH_data_DASH_readers = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load_DASH_data_DASH_readers.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7935), kw_column, int(8), kw_end_DASH_line, int(7935), kw_end_DASH_column, int(24), kw_private, true, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -53409,7 +52738,6 @@ func LoadNS() {
 				return tmp10
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_load_DASH_lib = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load_DASH_lib.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_prefix, sym_lib, sym__AMP_, sym_options)), kw_doc, "Loads a lib with options", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5961), kw_end_DASH_line, int(5961), kw_private, true)
@@ -53968,7 +53296,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_load_DASH_libs = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load_DASH_libs.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Loads libs, interpreting libspecs, prefix lists, and flags for\n  forwarding to load-lib", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(6008), kw_end_DASH_line, int(6008), kw_private, true)
@@ -53994,7 +53321,6 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_require = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_require.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Loads libs, skipping any that are already loaded. Each argument is\n  either a libspec that identifies a lib, a prefix list that identifies\n  multiple libs whose names share a common prefix, or a flag that modifies\n  how all the identified libs are loaded. Use :require in the ns macro\n  in preference to calling this directly.\n\n  Libs\n\n  A 'lib' is a named set of resources in classpath whose contents define a\n  library of Clojure code. Lib names are symbols and each lib is associated\n  with a Clojure namespace and a Java package that share its name. A lib's\n  name also locates its root directory within classpath using Java's\n  package name to classpath-relative path mapping. All resources in a lib\n  should be contained in the directory structure under its root directory.\n  All definitions a lib makes should be in its associated namespace.\n\n  'require loads a lib by loading its root resource. The root resource path\n  is derived from the lib name in the following manner:\n  Consider a lib named by the symbol 'x.y.z; it has the root directory\n  <classpath>/x/y/, and its root resource is <classpath>/x/y/z.clj, or\n  <classpath>/x/y/z.cljc if <classpath>/x/y/z.clj does not exist. The\n  root resource should contain code to create the lib's\n  namespace (usually by using the ns macro) and load any additional\n  lib resources.\n\n  Libspecs\n\n  A libspec is a lib name or a vector containing a lib name followed by\n  options expressed as sequential keywords and arguments.\n\n  Recognized options:\n  :as takes a symbol as its argument and makes that symbol an alias to the\n    lib's namespace in the current namespace.\n  :as-alias takes a symbol as its argument and aliases like :as, however\n    the lib will not be loaded. If the lib has not been loaded, a new\n    empty namespace will be created (as with create-ns).\n  :refer takes a list of symbols to refer from the namespace or the :all\n    keyword to bring in all public vars.\n\n  Prefix Lists\n\n  It's common for Clojure code to depend on several libs whose names have\n  the same prefix. When specifying libs, prefix lists can be used to reduce\n  repetition. A prefix list contains the shared prefix followed by libspecs\n  with the shared prefix removed from the lib names. After removing the\n  prefix, the names that remain must not contain any periods.\n\n  Flags\n\n  A flag is a keyword.\n  Recognized flags: :reload, :reload-all, :verbose\n  :reload forces loading of all the identified libs even if they are\n    already loaded (has no effect on libspecs using :as-alias)\n  :reload-all implies :reload and also forces loading of all libs that the\n    identified libs directly or indirectly load via require or use\n    (has no effect on libspecs using :as-alias)\n  :verbose triggers printing information about each load, alias, and refer\n\n  Example:\n\n  The following would load the libraries clojure.zip and clojure.set\n  abbreviated as 's'.\n\n  (require '(clojure zip [set :as s]))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6046), kw_end_DASH_line, int(6046))
@@ -54048,7 +53374,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_serialized_DASH_require = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_serialized_DASH_require.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Like 'require', but serializes loading.\n  Interim function preferred over 'require' for known asynchronous loads.\n  Future changes may make these equivalent.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(8), kw_line, int(6116), kw_end_DASH_line, int(6116), kw_private, true)
@@ -54074,7 +53399,6 @@ func LoadNS() {
 				return tmp5
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_use = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_use.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Like 'require, but also refers to each lib's namespace using\n  clojure.core/refer. Use :use in the ns macro in preference to calling\n  this directly.\n\n  'use accepts additional options in libspecs: :exclude, :only, :rename.\n  The arguments and semantics for :exclude, :only, and :rename are the same\n  as those documented for clojure.core/refer.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(6136), kw_end_DASH_line, int(6136))
@@ -54124,7 +53448,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_requiring_DASH_resolve = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_requiring_DASH_resolve.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sym)), kw_doc, "Resolves namespace-qualified sym per 'resolve'. If initial resolve\nfails, attempts to require sym's namespace and retries.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(6125), kw_end_DASH_line, int(6125))
@@ -54243,7 +53566,6 @@ func LoadNS() {
 			}),
 			4,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_mapv = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_mapv.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_c1, sym_c2), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3), lang.NewVector(sym_f, sym_c1, sym_c2, sym_c3, sym__AMP_, sym_colls)), kw_doc, "Returns a vector consisting of the result of applying f to the\n  set of first items of each coll, followed by applying f to the set\n  of second items in each coll, until any one of the colls is\n  exhausted.  Any remaining items in other colls are ignored. Function\n  f should accept number-of-colls arguments.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7013), kw_end_DASH_line, int(7013))
@@ -54260,7 +53582,6 @@ func LoadNS() {
 			_ = tmp4
 			return nil
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_newline = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_newline.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Writes a platform-specific newline to *out*", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3755), kw_end_DASH_line, int(3755))
@@ -54296,7 +53617,6 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
 		var_clojure_DOT_core_normalize_DASH_slurp_DASH_opts = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_normalize_DASH_slurp_DASH_opts.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7044), kw_column, int(8), kw_end_DASH_line, int(7044), kw_end_DASH_column, int(27), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_opts)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -54373,7 +53693,6 @@ func LoadNS() {
 			}),
 			1,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_pr = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pr.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_x), lang.NewVector(sym_x, sym__AMP_, sym_more)), kw_doc, "Prints the object(s) to the output stream that is the current value\n  of *out*.  Prints the object(s), separated by spaces if there is\n  more than one.  By default, pr and prn print in a way that objects\n  can be read by the reader", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(8), kw_column, int(7), kw_line, int(3735), kw_end_DASH_line, int(3735), kw_dynamic, true)
@@ -54431,8 +53750,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp2 := reflect.TypeOf("")
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc)
 		var_clojure_DOT_core_pr_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pr_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -54478,7 +53795,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_print = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Prints the object(s) to the output stream that is the current value\n  of *out*.  print and println produce output for human consumption.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3782), kw_end_DASH_line, int(3782))
@@ -54535,8 +53851,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp2 := reflect.TypeOf("")
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc)
 		var_clojure_DOT_core_print_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -54567,7 +53881,6 @@ func LoadNS() {
 				return tmp8
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_printf = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_printf.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fmt, sym__AMP_, sym_args)), kw_doc, "Prints formatted output, as per format", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5782), kw_end_DASH_line, int(5782))
@@ -54605,7 +53918,6 @@ func LoadNS() {
 				return tmp8
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_prn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_prn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Same as pr followed by (newline). Observes *flush-on-newline*", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(3772), kw_end_DASH_line, int(3772))
@@ -54662,8 +53974,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp2 := reflect.TypeOf("")
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc)
 		var_clojure_DOT_core_prn_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_prn_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -54709,7 +54019,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
 		var_clojure_DOT_core_println = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_println.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Same as print followed by (newline)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3791), kw_end_DASH_line, int(3791))
@@ -54766,8 +54075,6 @@ func LoadNS() {
 				return tmp3
 			}
 		})
-		tmp2 := reflect.TypeOf("")
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc)
 		var_clojure_DOT_core_println_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_println_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -54797,7 +54104,6 @@ func LoadNS() {
 			_ = tmp4
 			return nil
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_pr_DASH_on = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pr_DASH_on.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_x, sym_w)), kw_static, true, kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3726), kw_end_DASH_line, int(3726), kw_private, true)
@@ -54918,7 +54224,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_print_DASH_meta = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_meta.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(70), kw_column, int(8), kw_end_DASH_line, int(70), kw_end_DASH_column, int(17), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -54941,7 +54246,6 @@ func LoadNS() {
 			tmp8 := lang.Apply2(lang.WriteWriter, v3, tmp7)
 			return tmp8
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_print_DASH_simple = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_simple.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(81), kw_column, int(7), kw_end_DASH_line, int(81), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -54960,7 +54264,6 @@ func LoadNS() {
 			tmp6 := lang.Apply1(tmp5, v3)
 			return tmp6
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3724), kw_column, int(21), kw_end_DASH_line, int(3724), kw_end_DASH_column, int(45))).(lang.FnFunc2)
 		// MultiFn print-dup
 		tmp1 := lang.NewMultiFn("print-dup", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc2
@@ -55447,7 +54750,6 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3721), kw_column, int(24), kw_end_DASH_line, int(3723), kw_end_DASH_column, int(58))).(lang.FnFunc2)
 		// MultiFn print-method
 		tmp1 := lang.NewMultiFn("print-method", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc2
@@ -56449,7 +55751,6 @@ func LoadNS() {
 			tmp20 := lang.Apply2(lang.WriteWriter, v4, "]")
 			return tmp20
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_print_DASH_tagged_DASH_object = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_tagged_DASH_object.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(102), kw_column, int(8), kw_end_DASH_line, int(102), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_rep, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -56963,7 +56264,6 @@ func LoadNS() {
 			tmp6 := lang.Apply2(lang.WriteWriter, v3, "}")
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_print_DASH_throwable = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_throwable.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(480), kw_column, int(8), kw_end_DASH_line, int(480), kw_end_DASH_column, int(22), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -56984,7 +56284,6 @@ func LoadNS() {
 			tmp7 := lang.Apply3(tmp4, v2, tmp6, v3)
 			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_print_DASH_object = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_object.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(115), kw_column, int(8), kw_end_DASH_line, int(115), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -57051,7 +56350,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_read = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_read.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_stream), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value, sym_recursive_QMARK_), lang.NewVector(sym_opts, sym_stream)), kw_doc, "Reads the next object from stream, which must be an instance of\n  java.io.PushbackReader or some derivee.  stream defaults to the\n  current value of *in*.\n\n  Opts is a persistent map with valid keys:\n    :read-cond - :allow to process reader conditionals, or\n                 :preserve to keep all branches\n    :features - persistent set of feature keywords for reader conditionals\n    :eof - on eof, return value unless :eofthrow, then throw.\n           if not specified, will throw\n\n  Note that read can execute code (controlled by *read-eval*),\n  and as such should be used only with trusted sources.\n\n  For data structure interop use clojure.edn/read", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(3799), kw_end_DASH_line, int(3799))
@@ -57097,7 +56395,6 @@ func LoadNS() {
 			}
 			return tmp2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
 		var_clojure_DOT_core_read_DASH_line = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_read_DASH_line.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Reads the next line from stream that is the current value of *in* .", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3854), kw_end_DASH_line, int(3854))
@@ -57311,7 +56608,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_read_PLUS_string = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_read_PLUS_string.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_stream), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value), lang.NewVector(sym_stream, sym_eof_DASH_error_QMARK_, sym_eof_DASH_value, sym_recursive_QMARK_), lang.NewVector(sym_opts, sym_stream)), kw_doc, "Like read, and taking the same args. stream must be a LineNumberingPushbackReader.\n  Returns a vector containing the object read and the (whitespace-trimmed) string read.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(3828), kw_end_DASH_line, int(3828))
@@ -57376,7 +56672,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reduce.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_coll), lang.NewVector(sym_f, sym_val, sym_coll)), kw_doc, "f should be a function of 2 arguments. If val is not supplied,\n  returns the result of applying f to the first 2 items in coll, then\n  applying f to that result and the 3rd item, etc. If coll contains no\n  items, f must accept no arguments as well, and reduce returns the\n  result of calling f with no arguments.  If coll has only 1 item, it\n  is returned and f is not called.  If val is supplied, returns the\n  result of applying f to val and the first item in coll, then\n  applying f to that result and the 2nd item, etc. If coll contains no\n  items, returns val and f is not called.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6930), kw_end_DASH_line, int(6930))
@@ -57410,7 +56705,6 @@ func LoadNS() {
 			_ = tmp8
 			return nil
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_run_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_run_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_proc, sym_coll)), kw_doc, "Runs the supplied procedure (via reduce), for purposes of side\n  effects, on successive items in the collection. Returns nil", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7778), kw_end_DASH_line, int(7778))
@@ -57431,7 +56725,6 @@ func LoadNS() {
 			tmp6 := lang.Apply3(tmp5, v4, v2, v3)
 			return tmp6
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc3)
 		var_clojure_DOT_core_reduce_DASH_kv = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_reduce_DASH_kv.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_init, sym_coll)), kw_doc, "Reduces an associative collection. f should be a function of 3\n  arguments. Returns the result of applying f to init, the first key\n  and the first value in coll, then applying f to that result and the\n  2nd key and value, etc. If coll contains no entries, returns init\n  and f is not called. Note that reduce-kv is supported on vectors,\n  where the keys will be the ordinals.", kw_file, "clojure/core.glj", kw_added, "1.4", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(6952), kw_end_DASH_line, int(6952))
@@ -57489,7 +56782,6 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_update_DASH_keys = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_update_DASH_keys.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_f)), kw_doc, "m f => {(f k) v ...}\n\n  Given a map m and a function f of 1-argument, returns a new map whose\n  keys are the result of applying f to the keys of m, mapped to the\n  corresponding values of m.\n  f must return a unique key for each key of m, else the behavior is undefined.", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7976), kw_end_DASH_line, int(7976))
@@ -57551,7 +56843,6 @@ func LoadNS() {
 			tmp25 := lang.Apply2(tmp4, tmp22, tmp24)
 			return tmp25
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
 		var_clojure_DOT_core_update_DASH_vals = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_update_DASH_vals.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_f)), kw_doc, "m f => {k (f v) ...}\n\n  Given a map m and a function f of 1-argument, returns a new map where the keys of m\n  are mapped to result of applying f to the corresponding values of m.", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(7960), kw_end_DASH_line, int(7960))
@@ -57622,8 +56913,6 @@ func LoadNS() {
 				return tmp4
 			}
 		})
-		tmp2 := reflect.TypeOf("")
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, tmp2)).(lang.FnFunc)
 		var_clojure_DOT_core_slurp = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_slurp.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -57692,7 +56981,6 @@ func LoadNS() {
 			nil,
 			0,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.ArityFn)
 		var_clojure_DOT_core_transduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_transduce.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_xform, sym_f, sym_coll), lang.NewVector(sym_xform, sym_f, sym_init, sym_coll)), kw_doc, "reduce with a transformation of f (xf). If init is not\n  supplied, (f) will be called to produce it. f should be a reducing\n  step function that accepts both 1 and 2 arguments, if it accepts\n  only 2 you can add the arity-1 with 'completing'. Returns the result\n  of applying (the transformed) xf to init and the first item in coll,\n  then applying xf to that result and the 2nd item, etc. If coll\n  contains no items, returns init and f is not called. Note that\n  certain transforms may inject or skip items.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(6975), kw_end_DASH_line, int(6975))
