@@ -992,7 +992,8 @@
    (sexpr-replace 'clojure.lang.ChunkedCons.
                   'github.com:glojurelang:glojure:pkg:lang.NewChunkedCons)
 
-   ;; replace (. <fn-form> (applyTo <args>)) with (glojure.lang.Apply <fn-form> <args>)
+   ;; replace (. <fn-form> (applyTo <args>)) with
+   ;; (glojure.lang.ApplySeq <fn-form> <args>)
    [(fn select [zloc] (and (z/list? zloc)
                            (let [sexpr (z/sexpr zloc)]
                              (and
@@ -1002,7 +1003,7 @@
                               (= 'applyTo (first (nth sexpr 2)))))))
     (fn visit [zloc] (z/replace zloc
                                 (let [sexpr (z/sexpr zloc)]
-                                  `(github.com:glojurelang:glojure:pkg:lang.Apply
+                                  `(github.com:glojurelang:glojure:pkg:lang.ApplySeq
                                     ~(nth sexpr 1)
                                     ~(nth (nth sexpr 2) 1)))))]
 

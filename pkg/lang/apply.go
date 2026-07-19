@@ -94,6 +94,17 @@ func Apply(fn interface{}, args []interface{}) interface{} {
 	return NewVector(res...)
 }
 
+// ApplySeq applies an argument sequence without first realizing it into a Go
+// slice when the target implements IFn. This is the natural dispatch path for
+// Clojure's apply and lets function implementations consume reducible or lazy
+// argument sequences directly.
+func ApplySeq(fn interface{}, args ISeq) interface{} {
+	if applyer, ok := fn.(IFn); ok {
+		return applyer.ApplyTo(args)
+	}
+	return Apply(fn, seqToSlice(args))
+}
+
 // Apply0 dispatches a zero-argument call, using FnFunc0 fast path when available.
 func Apply0(fn interface{}) any {
 	switch f := fn.(type) {

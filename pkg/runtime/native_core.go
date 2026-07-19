@@ -36,6 +36,18 @@ func (fn nativeCoreAdd) ApplyTo(args lang.ISeq) interface{} {
 	if args == nil {
 		return int64(0)
 	}
+	if reducible, ok := args.(lang.IReduce); ok {
+		if counted, ok := args.(lang.Counted); ok {
+			switch counted.Count() {
+			case 0:
+				return int64(0)
+			case 1:
+				return lang.MustAsNumber(args.First())
+			default:
+				return reducible.Reduce(fn)
+			}
+		}
+	}
 	first := args.First()
 	args = args.Next()
 	if args == nil {

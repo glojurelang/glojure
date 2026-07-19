@@ -246,6 +246,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.Apply2", github_com_glojurelang_glojure_pkg_lang.Apply2)
 	_register("github.com/glojurelang/glojure/pkg/lang.Apply3", github_com_glojurelang_glojure_pkg_lang.Apply3)
 	_register("github.com/glojurelang/glojure/pkg/lang.Apply4", github_com_glojurelang_glojure_pkg_lang.Apply4)
+	_register("github.com/glojurelang/glojure/pkg/lang.ApplySeq", github_com_glojurelang_glojure_pkg_lang.ApplySeq)
 	_register("github.com/glojurelang/glojure/pkg/lang.ArithmeticError", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ArithmeticError)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.*ArithmeticError", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ArithmeticError)(nil)))
 	_register("github.com/glojurelang/glojure/pkg/lang.ArityFn", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.ArityFn)(nil)).Elem())

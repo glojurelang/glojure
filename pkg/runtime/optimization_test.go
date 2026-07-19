@@ -1,6 +1,7 @@
 package runtime
 
 import (
+	"math"
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -34,5 +35,23 @@ func TestRTGetCompatibilityMethod(t *testing.T) {
 	missing := lang.NewKeyword("missing")
 	if got := lang.Apply3(get, m, missing, int64(7)); got != int64(7) {
 		t.Fatalf("RT.Get missing key = %v, want 7", got)
+	}
+}
+
+func TestNativeCoreAddApplyToReducibleSequence(t *testing.T) {
+	args := lang.NewLongRange(0, 1_000, 1)
+
+	if got := (nativeCoreAdd{}).ApplyTo(args); got != int64(499_500) {
+		t.Fatalf("sum = %v, want 499500", got)
+	}
+}
+
+func TestNativeCoreAddApplyToPreservesUnaryNegativeZero(t *testing.T) {
+	negativeZero := math.Copysign(0, -1)
+	args := lang.NewList(negativeZero)
+
+	got := (nativeCoreAdd{}).ApplyTo(args).(float64)
+	if !math.Signbit(got) {
+		t.Fatalf("unary sum = %v, want negative zero", got)
 	}
 }

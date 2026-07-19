@@ -21520,7 +21520,7 @@ func LoadNS() {
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp5 := lang.Apply1(tmp4, v3)
-				tmp6 := lang.Apply2(lang.Apply, v2, tmp5)
+				tmp6 := lang.Apply2(lang.ApplySeq, v2, tmp5)
 				return tmp6
 			case 3:
 				v2 := args[0]
@@ -21531,7 +21531,7 @@ func LoadNS() {
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
 				tmp6 := lang.Apply2(tmp5, v3, v4)
-				tmp7 := lang.Apply2(lang.Apply, v2, tmp6)
+				tmp7 := lang.Apply2(lang.ApplySeq, v2, tmp6)
 				return tmp7
 			case 4:
 				v2 := args[0]
@@ -21544,7 +21544,7 @@ func LoadNS() {
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
 				tmp7 := lang.Apply3(tmp6, v3, v4, v5)
-				tmp8 := lang.Apply2(lang.Apply, v2, tmp7)
+				tmp8 := lang.Apply2(lang.ApplySeq, v2, tmp7)
 				return tmp8
 			case 5:
 				v2 := args[0]
@@ -21559,7 +21559,7 @@ func LoadNS() {
 				_ = v6
 				tmp7 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
 				tmp8 := lang.Apply4(tmp7, v3, v4, v5, v6)
-				tmp9 := lang.Apply2(lang.Apply, v2, tmp8)
+				tmp9 := lang.Apply2(lang.ApplySeq, v2, tmp8)
 				return tmp9
 			default:
 				checkArityGTE(args, 5)
@@ -21589,7 +21589,7 @@ func LoadNS() {
 				tmp15 := lang.Apply2(tmp10, v5, tmp14)
 				tmp16 := lang.Apply2(tmp9, v4, tmp15)
 				tmp17 := lang.Apply2(tmp8, v3, tmp16)
-				tmp18 := lang.Apply2(lang.Apply, v2, tmp17)
+				tmp18 := lang.Apply2(lang.ApplySeq, v2, tmp17)
 				return tmp18
 			}
 		})

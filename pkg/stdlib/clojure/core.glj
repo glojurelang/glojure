@@ -657,15 +657,15 @@
   {:added "1.0"
    :static true}
   ([^github.com:glojurelang:glojure:pkg:lang.IFn f args]
-     (github.com:glojurelang:glojure:pkg:lang.Apply f (seq args)))
+     (github.com:glojurelang:glojure:pkg:lang.ApplySeq f (seq args)))
   ([^github.com:glojurelang:glojure:pkg:lang.IFn f x args]
-     (github.com:glojurelang:glojure:pkg:lang.Apply f (list* x args)))
+     (github.com:glojurelang:glojure:pkg:lang.ApplySeq f (list* x args)))
   ([^github.com:glojurelang:glojure:pkg:lang.IFn f x y args]
-     (github.com:glojurelang:glojure:pkg:lang.Apply f (list* x y args)))
+     (github.com:glojurelang:glojure:pkg:lang.ApplySeq f (list* x y args)))
   ([^github.com:glojurelang:glojure:pkg:lang.IFn f x y z args]
-     (github.com:glojurelang:glojure:pkg:lang.Apply f (list* x y z args)))
+     (github.com:glojurelang:glojure:pkg:lang.ApplySeq f (list* x y z args)))
   ([^github.com:glojurelang:glojure:pkg:lang.IFn f a b c d & args]
-     (github.com:glojurelang:glojure:pkg:lang.Apply f (cons a (cons b (cons c (cons d (spread args))))))))
+     (github.com:glojurelang:glojure:pkg:lang.ApplySeq f (cons a (cons b (cons c (cons d (spread args))))))))
 
 (defn vary-meta
  "Returns an object of the same type and value as obj, with
