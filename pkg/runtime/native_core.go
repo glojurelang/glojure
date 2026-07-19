@@ -114,12 +114,212 @@ func (fn nativeCoreSubtract) ApplyTo(args lang.ISeq) interface{} {
 	return result
 }
 
+// nativeCoreApply keeps Clojure's public apply semantics while routing the
+// common fixed-leading-argument cases directly to the target function.
+type nativeCoreApply struct{}
+
+func (fn nativeCoreApply) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 2:
+		return fn.Invoke2(args[0], args[1])
+	case 3:
+		return fn.Invoke3(args[0], args[1], args[2])
+	case 4:
+		return fn.Invoke4(args[0], args[1], args[2], args[3])
+	case 5:
+		return fn.invoke5(args[0], args[1], args[2], args[3], args[4])
+	default:
+		if len(args) < 2 {
+			panic(lang.NewIllegalArgumentError("apply requires at least 2 arguments"))
+		}
+		return applyWithLeading(args[0], args[1:len(args)-1], args[len(args)-1])
+	}
+}
+
+func (nativeCoreApply) Invoke2(fn, args interface{}) interface{} {
+	return lang.ApplySeq(fn, lang.Seq(args))
+}
+
+func (nativeCoreApply) Invoke3(fn, x, args interface{}) interface{} {
+	tail := lang.Seq(args)
+	if tail == nil {
+		return lang.Apply1(fn, x)
+	}
+	second := tail.First()
+	tail = tail.Next()
+	if tail == nil {
+		return lang.Apply2(fn, x, second)
+	}
+	return lang.ApplySeq(fn, lang.NewCons(x, lang.NewCons(second, tail)))
+}
+
+func (nativeCoreApply) Invoke4(fn, x, y, args interface{}) interface{} {
+	tail := lang.Seq(args)
+	if tail == nil {
+		return lang.Apply2(fn, x, y)
+	}
+	third := tail.First()
+	tail = tail.Next()
+	if tail == nil {
+		return lang.Apply3(fn, x, y, third)
+	}
+	return lang.ApplySeq(fn, lang.NewCons(x, lang.NewCons(y, lang.NewCons(third, tail))))
+}
+
+func (nativeCoreApply) invoke5(fn, x, y, z, args interface{}) interface{} {
+	tail := lang.Seq(args)
+	if tail == nil {
+		return lang.Apply3(fn, x, y, z)
+	}
+	fourth := tail.First()
+	tail = tail.Next()
+	if tail == nil {
+		return lang.Apply4(fn, x, y, z, fourth)
+	}
+	return lang.ApplySeq(
+		fn,
+		lang.NewCons(x, lang.NewCons(y, lang.NewCons(z, lang.NewCons(fourth, tail)))),
+	)
+}
+
+func (fn nativeCoreApply) ApplyTo(args lang.ISeq) interface{} {
+	values := make([]interface{}, 0, lang.BoundedLength(args, 6))
+	for ; args != nil; args = args.Next() {
+		values = append(values, args.First())
+	}
+	return fn.Invoke(values...)
+}
+
+func applyWithLeading(fn interface{}, leading []interface{}, tail interface{}) interface{} {
+	args := lang.Seq(tail)
+	for i := len(leading) - 1; i >= 0; i-- {
+		args = lang.NewCons(leading[i], args)
+	}
+	return lang.ApplySeq(fn, args)
+}
+
+type nativeCoreUpdateIn struct {
+	assoc *lang.Var
+	apply *lang.Var
+}
+
+func (fn nativeCoreUpdateIn) Invoke(args ...interface{}) interface{} {
+	if len(args) < 3 {
+		panic(lang.NewIllegalArgumentError("update-in requires at least 3 arguments"))
+	}
+	return nativeUpdateIn(args[0], args[1], args[2], args[3:], fn.assoc.Get(), fn.apply.Get())
+}
+
+func (fn nativeCoreUpdateIn) Invoke3(m, keys, updateFn interface{}) interface{} {
+	return nativeUpdateIn(m, keys, updateFn, nil, fn.assoc.Get(), fn.apply.Get())
+}
+
+func (fn nativeCoreUpdateIn) Invoke4(m, keys, updateFn, arg interface{}) interface{} {
+	return nativeUpdateIn(m, keys, updateFn, []interface{}{arg}, fn.assoc.Get(), fn.apply.Get())
+}
+
+func (fn nativeCoreUpdateIn) ApplyTo(args lang.ISeq) interface{} {
+	if lang.BoundedLength(args, 3) < 3 {
+		return fn.Invoke()
+	}
+	m := args.First()
+	args = args.Next()
+	keys := args.First()
+	args = args.Next()
+	updateFn := args.First()
+	args = args.Next()
+	if args == nil {
+		return fn.Invoke3(m, keys, updateFn)
+	}
+	first := args.First()
+	args = args.Next()
+	if args == nil {
+		return fn.Invoke4(m, keys, updateFn, first)
+	}
+	rest := []interface{}{first}
+	for ; args != nil; args = args.Next() {
+		rest = append(rest, args.First())
+	}
+	return nativeUpdateIn(m, keys, updateFn, rest, fn.assoc.Get(), fn.apply.Get())
+}
+
+func nativeUpdateIn(
+	m, keys, fn interface{},
+	args []interface{},
+	assocFn, applyFn interface{},
+) interface{} {
+	if vector, ok := keys.(lang.IPersistentVector); ok {
+		return nativeUpdateInVector(m, vector, 0, fn, args, assocFn, applyFn)
+	}
+	return nativeUpdateInSeq(m, lang.Seq(keys), fn, args, assocFn, applyFn)
+}
+
+func nativeUpdateInVector(
+	m interface{},
+	keys lang.IPersistentVector,
+	index int,
+	fn interface{},
+	args []interface{},
+	assocFn, applyFn interface{},
+) interface{} {
+	var key interface{}
+	if index < keys.Count() {
+		key = keys.Nth(index)
+	}
+	current := lang.Get(m, key)
+	if index+1 < keys.Count() {
+		current = nativeUpdateInVector(current, keys, index+1, fn, args, assocFn, applyFn)
+	} else {
+		current = applyUpdateInFunction(applyFn, fn, current, args)
+	}
+	return lang.Apply3(assocFn, m, key, current)
+}
+
+func nativeUpdateInSeq(
+	m interface{},
+	keys lang.ISeq,
+	fn interface{},
+	args []interface{},
+	assocFn, applyFn interface{},
+) interface{} {
+	var key interface{}
+	var remaining lang.ISeq
+	if keys != nil {
+		key = keys.First()
+		remaining = keys.Next()
+	}
+	current := lang.Get(m, key)
+	if remaining != nil {
+		current = nativeUpdateInSeq(current, remaining, fn, args, assocFn, applyFn)
+	} else {
+		current = applyUpdateInFunction(applyFn, fn, current, args)
+	}
+	return lang.Apply3(assocFn, m, key, current)
+}
+
+func applyUpdateInFunction(applyFn, fn, current interface{}, args []interface{}) interface{} {
+	var argSeq lang.ISeq
+	if len(args) != 0 {
+		argSeq = lang.NewList(args...)
+	}
+	return lang.Apply3(applyFn, fn, current, argSeq)
+}
+
 func installNativeCoreFunctions(core *lang.Namespace) {
 	if add := core.FindInternedVar(lang.NewSymbol("+")); add != nil {
 		add.BindRoot(nativeCoreAdd{})
 	}
 	if subtract := core.FindInternedVar(lang.NewSymbol("-")); subtract != nil {
 		subtract.BindRoot(nativeCoreSubtract{})
+	}
+	if apply := core.FindInternedVar(lang.NewSymbol("apply")); apply != nil {
+		apply.BindRoot(nativeCoreApply{})
+	}
+	if updateIn := core.FindInternedVar(lang.NewSymbol("update-in")); updateIn != nil {
+		updateIn.BindRoot(nativeCoreUpdateIn{
+			assoc: core.FindInternedVar(lang.NewSymbol("assoc")),
+			apply: core.FindInternedVar(lang.NewSymbol("apply")),
+		})
 	}
 	installFixedArityCoreFunction(core, "map", 2, lang.FnFunc2(nativeMapSeq))
 	installFixedArityCoreFunction(core, "filter", 2, lang.FnFunc2(nativeFilterSeq))

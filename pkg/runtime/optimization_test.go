@@ -138,3 +138,124 @@ func TestNativeCoreSubtractApplyToPreservesArities(t *testing.T) {
 	}()
 	fn.ApplyTo(nil)
 }
+
+func TestNativeCoreApplyPreservesLeadingArguments(t *testing.T) {
+	capture := lang.FnFunc(func(args ...any) any {
+		return lang.NewVector(args...)
+	})
+	apply := nativeCoreApply{}
+
+	tests := []struct {
+		name string
+		got  any
+		want any
+	}{
+		{
+			name: "no leading arguments",
+			got:  apply.Invoke2(capture, lang.NewVector(int64(1), int64(2))),
+			want: lang.NewVector(int64(1), int64(2)),
+		},
+		{
+			name: "one leading argument",
+			got:  apply.Invoke3(capture, int64(1), lang.NewVector(int64(2), int64(3))),
+			want: lang.NewVector(int64(1), int64(2), int64(3)),
+		},
+		{
+			name: "two leading arguments",
+			got:  apply.Invoke4(capture, int64(1), int64(2), lang.NewVector(int64(3), int64(4))),
+			want: lang.NewVector(int64(1), int64(2), int64(3), int64(4)),
+		},
+		{
+			name: "variadic leading arguments",
+			got: apply.Invoke(
+				capture,
+				int64(1),
+				int64(2),
+				int64(3),
+				int64(4),
+				lang.NewVector(int64(5), int64(6)),
+			),
+			want: lang.NewVector(int64(1), int64(2), int64(3), int64(4), int64(5), int64(6)),
+		},
+		{
+			name: "apply-to",
+			got: apply.ApplyTo(lang.NewList(
+				capture,
+				int64(1),
+				int64(2),
+				lang.NewVector(int64(3), int64(4)),
+			)),
+			want: lang.NewVector(int64(1), int64(2), int64(3), int64(4)),
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if !lang.Equals(test.got, test.want) {
+				t.Fatalf("apply result = %v, want %v", test.got, test.want)
+			}
+		})
+	}
+}
+
+func TestNativeCoreUpdateInPreservesCollectionAndVarSemantics(t *testing.T) {
+	testNS := lang.FindOrCreateNamespace(lang.NewSymbol("runtime.native-core-test"))
+	assocCalls := 0
+	applyCalls := 0
+	assocVar := lang.NewVarWithRoot(
+		testNS,
+		lang.NewSymbol("assoc"),
+		lang.FnFunc3(func(m, key, value any) any {
+			assocCalls++
+			return lang.Assoc(m, key, value)
+		}),
+	)
+	applyVar := lang.NewVarWithRoot(
+		testNS,
+		lang.NewSymbol("apply"),
+		lang.FnFunc3(func(fn, value, args any) any {
+			applyCalls++
+			return lang.ApplySeq(fn, lang.NewCons(value, lang.Seq(args)))
+		}),
+	)
+	updateIn := nativeCoreUpdateIn{assoc: assocVar, apply: applyVar}
+
+	outer := lang.NewKeyword("outer")
+	inner := lang.NewKeyword("inner")
+	original := lang.NewMap(outer, lang.NewMap(inner, int64(2)))
+	add := lang.FnFunc2(func(a, b any) any {
+		return lang.Numbers.Add(a, b)
+	})
+
+	updated := updateIn.Invoke4(
+		original,
+		lang.NewVector(outer, inner),
+		add,
+		int64(3),
+	)
+	if got := lang.Get(lang.Get(updated, outer), inner); got != int64(5) {
+		t.Fatalf("updated value = %v, want 5", got)
+	}
+	if got := lang.Get(lang.Get(original, outer), inner); got != int64(2) {
+		t.Fatalf("original value changed to %v", got)
+	}
+	if assocCalls != 2 {
+		t.Fatalf("assoc Var called %d times, want 2", assocCalls)
+	}
+	if applyCalls != 1 {
+		t.Fatalf("apply Var called %d times, want 1", applyCalls)
+	}
+
+	created := updateIn.Invoke3(
+		nil,
+		lang.NewList(outer, inner),
+		lang.FnFunc1(func(value any) any {
+			if value != nil {
+				t.Fatalf("missing leaf value = %v, want nil", value)
+			}
+			return int64(7)
+		}),
+	)
+	if got := lang.Get(lang.Get(created, outer), inner); got != int64(7) {
+		t.Fatalf("created value = %v, want 7", got)
+	}
+}
