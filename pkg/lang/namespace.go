@@ -13,11 +13,18 @@ import (
 type Namespace struct {
 	name *Symbol
 
-	// atomic references to maps
-	mappings atomic.Value
-	aliases  atomic.Value
+	mappingsMtx      sync.RWMutex
+	mappings         map[string]namespaceMapping
+	mappingsSnapshot IPersistentMap
+
+	aliases atomic.Value
 
 	meta IPersistentMap
+}
+
+type namespaceMapping struct {
+	sym *Symbol
+	val interface{}
 }
 
 var (
@@ -83,25 +90,25 @@ func NamespaceFor(inns *Namespace, sym *Symbol) *Namespace {
 
 func NewNamespace(name *Symbol) *Namespace {
 	ns := &Namespace{
-		name: name,
+		name:     name,
+		mappings: make(map[string]namespaceMapping),
 	}
 
-	ns.mappings.Store(NewBox(seedHostClassImports(emptyMap)))
+	seedHostClassImports(ns.mappings)
 	ns.aliases.Store(NewBox(emptyMap))
 
 	return ns
 }
 
-// seedHostClassImports returns m extended with entries for every host
-// class registered in pkgmap. Mirrors real Clojure's auto-import of
+// seedHostClassImports adds entries for every host class registered in
+// pkgmap. Mirrors real Clojure's auto-import of
 // java.lang.* (and other packages we publish) so (ns-imports *ns*)
 // returns a populated map.
-func seedHostClassImports(m IPersistentMap) IPersistentMap {
-	classes := pkgmap.HostClassTypes()
-	for name, t := range classes {
-		m = m.Assoc(NewSymbol(name), t).(IPersistentMap)
+func seedHostClassImports(m map[string]namespaceMapping) {
+	for name, typ := range pkgmap.HostClassTypes() {
+		sym := NewSymbol(name)
+		m[sym.String()] = namespaceMapping{sym: sym, val: typ}
 	}
-	return m
 }
 
 func (ns *Namespace) String() string {
@@ -112,12 +119,19 @@ func (ns *Namespace) Name() *Symbol {
 	return ns.name
 }
 
-func (ns *Namespace) mappingsBox() *Box {
-	return ns.mappings.Load().(*Box)
-}
-
 func (ns *Namespace) Mappings() IPersistentMap {
-	return ns.mappingsBox().val.(IPersistentMap)
+	ns.mappingsMtx.Lock()
+	defer ns.mappingsMtx.Unlock()
+
+	if ns.mappingsSnapshot != nil {
+		return ns.mappingsSnapshot
+	}
+	kvs := make([]interface{}, 0, 2*len(ns.mappings))
+	for _, mapping := range ns.mappings {
+		kvs = append(kvs, mapping.sym, mapping.val)
+	}
+	ns.mappingsSnapshot = NewPersistentHashMap(kvs...)
+	return ns.mappingsSnapshot
 }
 
 func (ns *Namespace) aliasesBox() *Box {
@@ -138,33 +152,25 @@ func (ns *Namespace) Intern(sym *Symbol) *Var {
 	if sym.Namespace() != "" {
 		panic(fmt.Errorf("can't intern qualified name: %s", sym))
 	}
-	mb := ns.mappingsBox()
+	ns.mappingsMtx.Lock()
+	defer ns.mappingsMtx.Unlock()
 
-	var v *Var
-	var o interface{}
-	for {
-		o = mb.val.(IPersistentMap).ValAt(sym)
-		if o != nil {
-			break
-		}
-
-		if v == nil {
-			v = NewVar(ns, sym)
-		}
-		newMap := mb.val.(IPersistentMap).Assoc(sym, v)
-		ns.mappings.CompareAndSwap(mb, NewBox(newMap))
-		mb = ns.mappingsBox()
+	key := sym.String()
+	mapping, exists := ns.mappings[key]
+	if !exists {
+		v := NewVar(ns, sym)
+		ns.mappings[key] = namespaceMapping{sym: sym, val: v}
+		ns.mappingsSnapshot = nil
+		return v
 	}
+	o := mapping.val
 	if ns.isInternedMapping(sym, o) {
 		return o.(*Var)
 	}
-	if v == nil {
-		v = NewVar(ns, sym)
-	}
+	v := NewVar(ns, sym)
 	if ns.checkReplacement(sym, o, v) {
-		for !ns.mappings.CompareAndSwap(mb, NewBox(mb.val.(IPersistentMap).Assoc(sym, v))) {
-			mb = ns.mappingsBox()
-		}
+		ns.mappings[key] = namespaceMapping{sym: sym, val: v}
+		ns.mappingsSnapshot = nil
 		return v
 	}
 
@@ -224,13 +230,16 @@ func (ns *Namespace) Unmap(sym *Symbol) {
 }
 
 func (ns *Namespace) GetMapping(sym *Symbol) interface{} {
-	m := ns.Mappings()
-	return m.ValAt(sym)
+	ns.mappingsMtx.RLock()
+	defer ns.mappingsMtx.RUnlock()
+	return ns.mappings[sym.String()].val
 }
 
 func (ns *Namespace) FindInternedVar(sym *Symbol) *Var {
-	m := ns.Mappings()
-	v := m.ValAt(sym)
+	ns.mappingsMtx.RLock()
+	defer ns.mappingsMtx.RUnlock()
+
+	v := ns.mappings[sym.String()].val
 	if v == nil {
 		return nil
 	}
@@ -289,17 +298,17 @@ func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 		panic(fmt.Errorf("can't refer to nil (%s)", sym))
 	}
 
-	mb := ns.mappingsBox()
-	var o interface{}
-	for {
-		o = mb.val.(IPersistentMap).ValAt(sym)
-		if o != nil {
-			break
-		}
-		newMap := mb.val.(IPersistentMap).Assoc(sym, v)
-		ns.mappings.CompareAndSwap(mb, NewBox(newMap))
-		mb = ns.mappingsBox()
+	ns.mappingsMtx.Lock()
+	defer ns.mappingsMtx.Unlock()
+
+	key := sym.String()
+	mapping, exists := ns.mappings[key]
+	if !exists {
+		ns.mappings[key] = namespaceMapping{sym: sym, val: v}
+		ns.mappingsSnapshot = nil
+		return v
 	}
+	o := mapping.val
 	if ns.isInternedMapping(sym, o) {
 		return o.(*Var)
 	}
@@ -317,9 +326,8 @@ func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 	}
 
 	if ns.checkReplacement(sym, o, v) {
-		for !ns.mappings.CompareAndSwap(mb, NewBox(mb.val.(IPersistentMap).Assoc(sym, v))) {
-			mb = ns.mappingsBox()
-		}
+		ns.mappings[key] = namespaceMapping{sym: sym, val: v}
+		ns.mappingsSnapshot = nil
 		return v
 	}
 
