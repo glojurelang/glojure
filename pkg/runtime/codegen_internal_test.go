@@ -419,10 +419,10 @@ func TestAnalyzeFloat64AOTMixedLoopAndCrossCall(t *testing.T) {
 		t.Fatal("mixed int64/float64 loop was not specialized")
 	}
 
-	analyzer := float64AOTAnalyzer{
-		analysis: &float64AOTAnalysis{target: runTarget},
-		targets:  targets,
-	}
+	analyzer := newFloat64AOTAnalyzer(
+		&float64AOTAnalysis{target: runTarget},
+		targets,
+	)
 	mixedEquality := aotTestInvoke(
 		lang.NSCore.Intern(lang.NewSymbol("=")),
 		aotTestInt(9007199254740993),

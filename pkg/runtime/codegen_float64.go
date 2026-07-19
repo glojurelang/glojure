@@ -23,11 +23,6 @@ type float64AOTAnalysis struct {
 	usesSelf bool
 }
 
-type float64AOTAnalyzer struct {
-	analysis *float64AOTAnalysis
-	targets  map[*lang.Var]*aotSpecializationTarget
-}
-
 func analyzeFloat64AOTFunction(
 	target *aotSpecializationTarget,
 	method *ast.FnMethodNode,
@@ -40,7 +35,7 @@ func analyzeFloat64AOTFunction(
 		target: target,
 		arity:  method.FixedArity,
 	}
-	analyzer := float64AOTAnalyzer{analysis: analysis, targets: targets}
+	analyzer := newFloat64AOTAnalyzer(analysis, targets)
 	locals := make(map[*lang.Symbol]aotPrimitiveType, method.FixedArity)
 	for _, param := range method.Params {
 		locals[param.Sub.(*ast.BindingNode).Name] = float64AOTPrimitive
@@ -51,238 +46,24 @@ func analyzeFloat64AOTFunction(
 	return analysis
 }
 
-func (a *float64AOTAnalyzer) exprType(
-	node *ast.Node,
-	locals map[*lang.Symbol]aotPrimitiveType,
-) aotPrimitiveType {
-	node = unwrapAOTDo(node)
-	switch node.Op {
-	case ast.OpConst:
-		switch node.Sub.(*ast.ConstNode).Value.(type) {
-		case int64:
-			return int64AOTPrimitive
-		case float64:
-			return float64AOTPrimitive
-		case bool:
-			return boolAOTPrimitive
-		}
-
-	case ast.OpLocal:
-		return locals[node.Sub.(*ast.LocalNode).Name]
-
-	case ast.OpLet:
-		letNode := node.Sub.(*ast.LetNode)
-		nested := cloneAOTTypes(locals)
-		for _, binding := range letNode.Bindings {
-			bindingNode := binding.Sub.(*ast.BindingNode)
-			typ := a.exprType(bindingNode.Init, nested)
-			if typ == invalidAOTPrimitive {
-				return invalidAOTPrimitive
-			}
-			nested[bindingNode.Name] = typ
-		}
-		return a.exprType(letNode.Body, nested)
-
-	case ast.OpLoop:
-		loop := node.Sub.(*ast.LetNode)
-		nested := cloneAOTTypes(locals)
-		bindingTypes := make([]aotPrimitiveType, len(loop.Bindings))
-		for i, binding := range loop.Bindings {
-			bindingNode := binding.Sub.(*ast.BindingNode)
-			typ := a.exprType(bindingNode.Init, nested)
-			if typ != int64AOTPrimitive && typ != float64AOTPrimitive {
-				return invalidAOTPrimitive
-			}
-			bindingTypes[i] = typ
-			nested[bindingNode.Name] = typ
-		}
-		if a.loopTail(
-			loop.Body,
-			nested,
-			loop.LoopID,
-			bindingTypes,
-			float64AOTPrimitive,
-		) {
-			return float64AOTPrimitive
-		}
-
-	case ast.OpIf:
-		ifNode := node.Sub.(*ast.IfNode)
-		if a.exprType(ifNode.Test, locals) != boolAOTPrimitive {
-			return invalidAOTPrimitive
-		}
-		thenType := a.exprType(ifNode.Then, locals)
-		if thenType != invalidAOTPrimitive &&
-			a.exprType(ifNode.Else, locals) == thenType {
-			return thenType
-		}
-
-	case ast.OpHostCall:
-		return a.hostCallType(node.Sub.(*ast.HostCallNode), locals)
-
-	case ast.OpInvoke:
-		return a.invokeType(node.Sub.(*ast.InvokeNode), locals)
+func newFloat64AOTAnalyzer(
+	analysis *float64AOTAnalysis,
+	targets map[*lang.Var]*aotSpecializationTarget,
+) *primitiveAOTAnalyzer {
+	return &primitiveAOTAnalyzer{
+		target:     analysis.target,
+		arity:      analysis.arity,
+		paramType:  float64AOTPrimitive,
+		resultType: float64AOTPrimitive,
+		allowFloat: true,
+		targets:    targets,
+		markUsesSelf: func() {
+			analysis.usesSelf = true
+		},
+		hasTypedTarget: func(target *aotSpecializationTarget) bool {
+			return target.float64Analysis != nil
+		},
 	}
-	return invalidAOTPrimitive
-}
-
-func (a *float64AOTAnalyzer) loopTail(
-	node *ast.Node,
-	locals map[*lang.Symbol]aotPrimitiveType,
-	loopID *lang.Symbol,
-	bindingTypes []aotPrimitiveType,
-	resultType aotPrimitiveType,
-) bool {
-	node = unwrapAOTDo(node)
-	switch node.Op {
-	case ast.OpRecur:
-		recur := node.Sub.(*ast.RecurNode)
-		if !lang.Equals(recur.LoopID, loopID) ||
-			len(recur.Exprs) != len(bindingTypes) {
-			return false
-		}
-		for i, expr := range recur.Exprs {
-			if a.exprType(expr, locals) != bindingTypes[i] {
-				return false
-			}
-		}
-		return true
-
-	case ast.OpIf:
-		ifNode := node.Sub.(*ast.IfNode)
-		return a.exprType(ifNode.Test, locals) == boolAOTPrimitive &&
-			a.loopTail(ifNode.Then, locals, loopID, bindingTypes, resultType) &&
-			a.loopTail(ifNode.Else, locals, loopID, bindingTypes, resultType)
-
-	case ast.OpLet:
-		letNode := node.Sub.(*ast.LetNode)
-		nested := cloneAOTTypes(locals)
-		for _, binding := range letNode.Bindings {
-			bindingNode := binding.Sub.(*ast.BindingNode)
-			typ := a.exprType(bindingNode.Init, nested)
-			if typ == invalidAOTPrimitive {
-				return false
-			}
-			nested[bindingNode.Name] = typ
-		}
-		return a.loopTail(
-			letNode.Body,
-			nested,
-			loopID,
-			bindingTypes,
-			resultType,
-		)
-	}
-	return a.exprType(node, locals) == resultType
-}
-
-func (a *float64AOTAnalyzer) hostCallType(
-	call *ast.HostCallNode,
-	locals map[*lang.Symbol]aotPrimitiveType,
-) aotPrimitiveType {
-	if !isNumbersCall(call) {
-		return invalidAOTPrimitive
-	}
-	name := strings.ToLower(call.Method.Name())
-	if len(call.Args) == 1 {
-		typ := a.exprType(call.Args[0], locals)
-		switch name {
-		case "inc", "unchecked_inc", "dec", "uncheckeddec", "unchecked_dec",
-			"minus", "unchecked_minus":
-			if isNumericAOTPrimitive(typ) {
-				return typ
-			}
-		case "iszero", "ispos", "isneg":
-			if isNumericAOTPrimitive(typ) {
-				return boolAOTPrimitive
-			}
-		}
-		return invalidAOTPrimitive
-	}
-	if len(call.Args) != 2 {
-		return invalidAOTPrimitive
-	}
-	left := a.exprType(call.Args[0], locals)
-	right := a.exprType(call.Args[1], locals)
-	if !isNumericAOTPrimitive(left) || !isNumericAOTPrimitive(right) {
-		return invalidAOTPrimitive
-	}
-	switch name {
-	case "add", "uncheckedadd", "minus", "unchecked_minus",
-		"multiply", "unchecked_multiply":
-		return promotedAOTNumericType(left, right)
-	case "divide":
-		if left == float64AOTPrimitive || right == float64AOTPrimitive {
-			return float64AOTPrimitive
-		}
-	case "quotient", "remainder":
-		if left == int64AOTPrimitive && right == int64AOTPrimitive {
-			return int64AOTPrimitive
-		}
-	case "lt", "lte", "gt", "gte", "equiv":
-		// Clojure's mixed integer/floating comparison rules retain more
-		// precision than converting an arbitrary int64 to float64. Keep those
-		// cases on the generic path.
-		if left == right {
-			return boolAOTPrimitive
-		}
-	}
-	return invalidAOTPrimitive
-}
-
-func (a *float64AOTAnalyzer) invokeType(
-	invoke *ast.InvokeNode,
-	locals map[*lang.Symbol]aotPrimitiveType,
-) aotPrimitiveType {
-	if invoke.Fn.Op != ast.OpVar {
-		return invalidAOTPrimitive
-	}
-	vr := invoke.Fn.Sub.(*ast.VarNode).Var
-	if vr == a.analysis.target.vr &&
-		a.allFloat64(invoke.Args, locals, a.analysis.arity) {
-		a.analysis.usesSelf = true
-		return float64AOTPrimitive
-	}
-	if target := a.targets[vr]; target != nil &&
-		target.float64Analysis != nil &&
-		a.allFloat64(invoke.Args, locals, target.arity) {
-		return float64AOTPrimitive
-	}
-	if vr.String() == "#'clojure.core/=" && len(invoke.Args) == 2 {
-		left := a.exprType(invoke.Args[0], locals)
-		right := a.exprType(invoke.Args[1], locals)
-		if isNumericAOTPrimitive(left) && left == right {
-			return boolAOTPrimitive
-		}
-	}
-	return invalidAOTPrimitive
-}
-
-func (a *float64AOTAnalyzer) allFloat64(
-	args []*ast.Node,
-	locals map[*lang.Symbol]aotPrimitiveType,
-	arity int,
-) bool {
-	if len(args) != arity {
-		return false
-	}
-	for _, arg := range args {
-		if a.exprType(arg, locals) != float64AOTPrimitive {
-			return false
-		}
-	}
-	return true
-}
-
-func isNumericAOTPrimitive(typ aotPrimitiveType) bool {
-	return typ == int64AOTPrimitive || typ == float64AOTPrimitive
-}
-
-func promotedAOTNumericType(left, right aotPrimitiveType) aotPrimitiveType {
-	if left == float64AOTPrimitive || right == float64AOTPrimitive {
-		return float64AOTPrimitive
-	}
-	return int64AOTPrimitive
 }
 
 type float64AOTEmitter struct {
@@ -670,9 +451,6 @@ func (e *float64AOTEmitter) emitInvoke(
 	return result
 }
 
-func (e *float64AOTEmitter) analyzer() *float64AOTAnalyzer {
-	return &float64AOTAnalyzer{
-		analysis: e.analysis,
-		targets:  e.g.aotCallTargets,
-	}
+func (e *float64AOTEmitter) analyzer() *primitiveAOTAnalyzer {
+	return newFloat64AOTAnalyzer(e.analysis, e.g.aotCallTargets)
 }

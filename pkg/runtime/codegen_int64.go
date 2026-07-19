@@ -17,15 +17,6 @@ import (
 // itself. The ordinary generated function remains as the fallback for every
 // other input type.
 
-type aotPrimitiveType uint8
-
-const (
-	invalidAOTPrimitive aotPrimitiveType = iota
-	int64AOTPrimitive
-	float64AOTPrimitive
-	boolAOTPrimitive
-)
-
 type int64AOTAnalysis struct {
 	target             *aotSpecializationTarget
 	arity              int
@@ -33,11 +24,6 @@ type int64AOTAnalysis struct {
 	uncheckedHostCalls map[*ast.HostCallNode]bool
 	guardInt32Params   bool
 	guardInt32Loops    map[*ast.LetNode]bool
-}
-
-type int64AOTAnalyzer struct {
-	analysis *int64AOTAnalysis
-	targets  map[*lang.Var]*aotSpecializationTarget
 }
 
 func analyzeInt64AOTFunction(
@@ -53,10 +39,7 @@ func analyzeInt64AOTFunction(
 		arity:              method.FixedArity,
 		uncheckedHostCalls: make(map[*ast.HostCallNode]bool),
 	}
-	analyzer := int64AOTAnalyzer{
-		analysis: analysis,
-		targets:  targets,
-	}
+	analyzer := newInt64AOTAnalyzer(analysis, targets)
 	locals := make(map[*lang.Symbol]aotPrimitiveType, method.FixedArity)
 	for _, param := range method.Params {
 		locals[param.Sub.(*ast.BindingNode).Name] = int64AOTPrimitive
@@ -67,216 +50,23 @@ func analyzeInt64AOTFunction(
 	return analysis
 }
 
-func (a *int64AOTAnalyzer) exprType(
-	node *ast.Node,
-	locals map[*lang.Symbol]aotPrimitiveType,
-) aotPrimitiveType {
-	node = unwrapAOTDo(node)
-	switch node.Op {
-	case ast.OpConst:
-		switch node.Sub.(*ast.ConstNode).Value.(type) {
-		case int64:
-			return int64AOTPrimitive
-		case bool:
-			return boolAOTPrimitive
-		default:
-			return invalidAOTPrimitive
-		}
-
-	case ast.OpLocal:
-		return locals[node.Sub.(*ast.LocalNode).Name]
-
-	case ast.OpLet:
-		letNode := node.Sub.(*ast.LetNode)
-		nested := cloneAOTTypes(locals)
-		for _, binding := range letNode.Bindings {
-			bindingNode := binding.Sub.(*ast.BindingNode)
-			typ := a.exprType(bindingNode.Init, nested)
-			if typ == invalidAOTPrimitive {
-				return invalidAOTPrimitive
-			}
-			nested[bindingNode.Name] = typ
-		}
-		return a.exprType(letNode.Body, nested)
-
-	case ast.OpLoop:
-		loop := node.Sub.(*ast.LetNode)
-		nested := cloneAOTTypes(locals)
-		for _, binding := range loop.Bindings {
-			bindingNode := binding.Sub.(*ast.BindingNode)
-			if a.exprType(bindingNode.Init, nested) != int64AOTPrimitive {
-				return invalidAOTPrimitive
-			}
-			nested[bindingNode.Name] = int64AOTPrimitive
-		}
-		if a.loopTail(loop.Body, nested, loop.LoopID, len(loop.Bindings)) {
-			return int64AOTPrimitive
-		}
-		return invalidAOTPrimitive
-
-	case ast.OpIf:
-		ifNode := node.Sub.(*ast.IfNode)
-		if a.exprType(ifNode.Test, locals) != boolAOTPrimitive {
-			return invalidAOTPrimitive
-		}
-		thenType := a.exprType(ifNode.Then, locals)
-		if thenType == invalidAOTPrimitive ||
-			a.exprType(ifNode.Else, locals) != thenType {
-			return invalidAOTPrimitive
-		}
-		return thenType
-
-	case ast.OpHostCall:
-		return a.hostCallType(node.Sub.(*ast.HostCallNode), locals)
-
-	case ast.OpInvoke:
-		return a.invokeType(node.Sub.(*ast.InvokeNode), locals)
+func newInt64AOTAnalyzer(
+	analysis *int64AOTAnalysis,
+	targets map[*lang.Var]*aotSpecializationTarget,
+) *primitiveAOTAnalyzer {
+	return &primitiveAOTAnalyzer{
+		target:     analysis.target,
+		arity:      analysis.arity,
+		paramType:  int64AOTPrimitive,
+		resultType: int64AOTPrimitive,
+		targets:    targets,
+		markUsesSelf: func() {
+			analysis.usesSelf = true
+		},
+		hasTypedTarget: func(target *aotSpecializationTarget) bool {
+			return target.int64Analysis != nil
+		},
 	}
-	return invalidAOTPrimitive
-}
-
-func (a *int64AOTAnalyzer) loopTail(
-	node *ast.Node,
-	locals map[*lang.Symbol]aotPrimitiveType,
-	loopID *lang.Symbol,
-	arity int,
-) bool {
-	node = unwrapAOTDo(node)
-	switch node.Op {
-	case ast.OpRecur:
-		recur := node.Sub.(*ast.RecurNode)
-		if !lang.Equals(recur.LoopID, loopID) || len(recur.Exprs) != arity {
-			return false
-		}
-		for _, expr := range recur.Exprs {
-			if a.exprType(expr, locals) != int64AOTPrimitive {
-				return false
-			}
-		}
-		return true
-
-	case ast.OpIf:
-		ifNode := node.Sub.(*ast.IfNode)
-		return a.exprType(ifNode.Test, locals) == boolAOTPrimitive &&
-			a.loopTail(ifNode.Then, locals, loopID, arity) &&
-			a.loopTail(ifNode.Else, locals, loopID, arity)
-
-	case ast.OpLet:
-		letNode := node.Sub.(*ast.LetNode)
-		nested := cloneAOTTypes(locals)
-		for _, binding := range letNode.Bindings {
-			bindingNode := binding.Sub.(*ast.BindingNode)
-			typ := a.exprType(bindingNode.Init, nested)
-			if typ == invalidAOTPrimitive {
-				return false
-			}
-			nested[bindingNode.Name] = typ
-		}
-		return a.loopTail(letNode.Body, nested, loopID, arity)
-	}
-	return a.exprType(node, locals) == int64AOTPrimitive
-}
-
-func (a *int64AOTAnalyzer) hostCallType(
-	call *ast.HostCallNode,
-	locals map[*lang.Symbol]aotPrimitiveType,
-) aotPrimitiveType {
-	if !isNumbersCall(call) {
-		return invalidAOTPrimitive
-	}
-	name := strings.ToLower(call.Method.Name())
-	if len(call.Args) == 1 {
-		switch name {
-		case "inc", "unchecked_inc", "dec", "uncheckeddec", "unchecked_dec",
-			"minus", "unchecked_minus":
-			if a.exprType(call.Args[0], locals) == int64AOTPrimitive {
-				return int64AOTPrimitive
-			}
-		case "iszero", "ispos", "isneg":
-			if a.exprType(call.Args[0], locals) == int64AOTPrimitive {
-				return boolAOTPrimitive
-			}
-		}
-		return invalidAOTPrimitive
-	}
-	switch name {
-	case "add", "uncheckedadd", "minus", "unchecked_minus",
-		"multiply", "unchecked_multiply", "quotient", "remainder":
-		if a.allInt64(call.Args, locals, 2) {
-			return int64AOTPrimitive
-		}
-	case "lt", "lte", "gt", "gte", "equiv":
-		if a.allInt64(call.Args, locals, 2) {
-			return boolAOTPrimitive
-		}
-	}
-	return invalidAOTPrimitive
-}
-
-func (a *int64AOTAnalyzer) invokeType(
-	invoke *ast.InvokeNode,
-	locals map[*lang.Symbol]aotPrimitiveType,
-) aotPrimitiveType {
-	if invoke.Fn.Op != ast.OpVar {
-		return invalidAOTPrimitive
-	}
-	vr := invoke.Fn.Sub.(*ast.VarNode).Var
-	if vr == a.analysis.target.vr &&
-		a.allInt64(invoke.Args, locals, a.analysis.arity) {
-		a.analysis.usesSelf = true
-		return int64AOTPrimitive
-	}
-	if target := a.targets[vr]; target != nil &&
-		target.int64Analysis != nil &&
-		a.allInt64(invoke.Args, locals, target.arity) {
-		return int64AOTPrimitive
-	}
-	if vr.String() == "#'clojure.core/=" && a.allInt64(invoke.Args, locals, 2) {
-		return boolAOTPrimitive
-	}
-	return invalidAOTPrimitive
-}
-
-func (a *int64AOTAnalyzer) allInt64(
-	args []*ast.Node,
-	locals map[*lang.Symbol]aotPrimitiveType,
-	arity int,
-) bool {
-	if len(args) != arity {
-		return false
-	}
-	for _, arg := range args {
-		if a.exprType(arg, locals) != int64AOTPrimitive {
-			return false
-		}
-	}
-	return true
-}
-
-func cloneAOTTypes(
-	locals map[*lang.Symbol]aotPrimitiveType,
-) map[*lang.Symbol]aotPrimitiveType {
-	copy := make(map[*lang.Symbol]aotPrimitiveType, len(locals))
-	for symbol, typ := range locals {
-		copy[symbol] = typ
-	}
-	return copy
-}
-
-func unwrapAOTDo(node *ast.Node) *ast.Node {
-	if node.Op != ast.OpDo {
-		return node
-	}
-	doNode := node.Sub.(*ast.DoNode)
-	if len(doNode.Statements) != 0 {
-		return node
-	}
-	return doNode.Ret
-}
-
-type aotTypedLocal struct {
-	name string
-	typ  aotPrimitiveType
 }
 
 type int64AOTEmitter struct {
@@ -397,10 +187,10 @@ func (e *int64AOTEmitter) emitExpr(
 
 	case ast.OpIf:
 		ifNode := node.Sub.(*ast.IfNode)
-		typ := (&int64AOTAnalyzer{
-			analysis: e.analysis,
-			targets:  e.g.aotCallTargets,
-		}).exprType(node, aotLocalTypes(locals))
+		typ := newInt64AOTAnalyzer(
+			e.analysis,
+			e.g.aotCallTargets,
+		).exprType(node, aotLocalTypes(locals))
 		result := e.g.allocateTempVar()
 		e.g.writef("var %s %s\n", result, aotGoType(typ))
 		test := e.emitExpr(ifNode.Test, locals)
@@ -426,12 +216,9 @@ func (e *int64AOTEmitter) emitLet(
 	letNode *ast.LetNode,
 	locals map[*lang.Symbol]aotTypedLocal,
 ) string {
-	analyzer := int64AOTAnalyzer{
-		analysis: e.analysis,
-		targets:  e.g.aotCallTargets,
-	}
+	analyzer := newInt64AOTAnalyzer(e.analysis, e.g.aotCallTargets)
 	typ := analyzer.exprType(letNode.Body, aotLocalTypesAfterBindings(
-		&analyzer, letNode.Bindings, aotLocalTypes(locals),
+		analyzer, letNode.Bindings, aotLocalTypes(locals),
 	))
 	result := e.g.allocateTempVar()
 	e.g.writef("var %s %s\n", result, aotGoType(typ))
@@ -532,10 +319,7 @@ func (e *int64AOTEmitter) emitLoopTail(
 		letNode := node.Sub.(*ast.LetNode)
 		e.g.writef("{\n")
 		nested := cloneAOTLocals(locals)
-		analyzer := int64AOTAnalyzer{
-			analysis: e.analysis,
-			targets:  e.g.aotCallTargets,
-		}
+		analyzer := newInt64AOTAnalyzer(e.analysis, e.g.aotCallTargets)
 		for _, binding := range letNode.Bindings {
 			bindingNode := binding.Sub.(*ast.BindingNode)
 			value := e.emitExpr(bindingNode.Init, nested)
@@ -693,7 +477,7 @@ func aotLocalTypes(
 }
 
 func aotLocalTypesAfterBindings(
-	analyzer *int64AOTAnalyzer,
+	analyzer *primitiveAOTAnalyzer,
 	bindings []*ast.Node,
 	locals map[*lang.Symbol]aotPrimitiveType,
 ) map[*lang.Symbol]aotPrimitiveType {
@@ -702,15 +486,4 @@ func aotLocalTypesAfterBindings(
 		locals[bindingNode.Name] = analyzer.exprType(bindingNode.Init, locals)
 	}
 	return locals
-}
-
-func aotGoType(typ aotPrimitiveType) string {
-	switch typ {
-	case float64AOTPrimitive:
-		return "float64"
-	case boolAOTPrimitive:
-		return "bool"
-	default:
-		return "int64"
-	}
 }
