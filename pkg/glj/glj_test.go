@@ -1,6 +1,8 @@
 package glj
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -12,6 +14,17 @@ func TestGLJ(t *testing.T) {
 	res := lang.PrintString(mp.Invoke(inc, Read("[1 2 3]")))
 	if res != "(2 3 4)" {
 		t.Errorf("Expected (2 3 4), got %v", res)
+	}
+}
+
+func TestCoreSlurpLazilyLoadsIONamespace(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "input.txt")
+	if err := os.WriteFile(path, []byte("lazy io"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	if got := Var("clojure.core", "slurp").Invoke(path); got != "lazy io" {
+		t.Fatalf("slurp returned %v, want %q", got, "lazy io")
 	}
 }
 

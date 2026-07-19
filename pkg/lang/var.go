@@ -81,9 +81,17 @@ var (
 	glsBindings    = make(map[int64]*glStorage)
 	glsBindingsMtx sync.RWMutex
 
+	unboundVarResolver atomic.Value
+
 	_ IRef = (*Var)(nil)
 	_ IFn  = (*Var)(nil)
 )
+
+// SetUnboundVarResolver installs the runtime hook used to load an AOT
+// namespace when one of its Vars is first dereferenced.
+func SetUnboundVarResolver(resolver func(*Var)) {
+	unboundVarResolver.Store(resolver)
+}
 
 func InternVarReplaceRoot(ns *Namespace, sym *Symbol, root interface{}) *Var {
 	return InternVar(ns, sym, root, true)
@@ -152,7 +160,15 @@ func (v *Var) IsBound() bool {
 }
 
 func (v *Var) getRoot() interface{} {
-	return v.root.Load().(Box).val
+	root := v.root.Load().(Box).val
+	if _, unbound := root.(*UnboundVar); !unbound {
+		return root
+	}
+	if resolver, ok := unboundVarResolver.Load().(func(*Var)); ok {
+		resolver(v)
+		root = v.root.Load().(Box).val
+	}
+	return root
 }
 
 func (v *Var) Get() interface{} {

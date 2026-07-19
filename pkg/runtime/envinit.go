@@ -136,12 +136,10 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 	// Add stdlib
 	RT.Load("clojure/core")
 
-	// Workaround to ensure namespaces that are required by core are loaded.
-	// TODO: AOT should identify this dependency and generate code to load it.
+	// These namespaces must initialize before the native core overrides below.
 	if useAot {
 		RT.Load("clojure/core/protocols")
 		RT.Load("clojure/string")
-		RT.Load("glojure/go/io")
 	}
 
 	// Set the glojure version
