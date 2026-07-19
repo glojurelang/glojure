@@ -119,3 +119,31 @@ func TestVarLazyMeta(t *testing.T) {
 		t.Fatalf("metadata factory ran %d times, want 1", calls.Load())
 	}
 }
+
+func TestVarRootVersionChangesWithRoot(t *testing.T) {
+	ns := FindOrCreateNamespace(NewSymbol("lang.var-root-version-test"))
+	vr := NewVar(ns, NewSymbol("value"))
+	unboundVersion := vr.RootVersion()
+
+	vr.BindRoot(int64(1))
+	firstVersion := vr.RootVersion()
+	if firstVersion == unboundVersion {
+		t.Fatal("binding the first root did not change its version")
+	}
+
+	vr.BindRoot(int64(1))
+	secondVersion := vr.RootVersion()
+	if secondVersion == firstVersion {
+		t.Fatal("rebinding an equal root did not change its version")
+	}
+
+	vr.AlterRoot(FnFunc1(func(value any) any {
+		return value.(int64) + 1
+	}), nil)
+	if vr.RootVersion() == secondVersion {
+		t.Fatal("altering the root did not change its version")
+	}
+	if got := vr.Get(); got != int64(2) {
+		t.Fatalf("altered root = %v, want 2", got)
+	}
+}

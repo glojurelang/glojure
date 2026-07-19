@@ -59,3 +59,136 @@ func TestRuntimeFunctionMeta(t *testing.T) {
 		t.Fatalf("mixed metadata became %v, want %v", got, explicit)
 	}
 }
+
+func TestAnalyzeInt64AOTRecursiveFunction(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.int64-analysis"))
+	vr := ns.Intern(lang.NewSymbol("fib"))
+	n := lang.NewSymbol("n")
+	localN := aotTestLocal(n)
+
+	body := aotTestIf(
+		aotTestNumbersCall("Lte", localN, aotTestInt(1)),
+		localN,
+		aotTestNumbersCall(
+			"Add",
+			aotTestInvoke(vr, aotTestNumbersCall("Minus", localN, aotTestInt(1))),
+			aotTestInvoke(vr, aotTestNumbersCall("Minus", localN, aotTestInt(2))),
+		),
+	)
+	method := &ast.FnMethodNode{
+		Params:     []*ast.Node{aotTestBinding(n, nil)},
+		FixedArity: 1,
+		Body:       body,
+	}
+	analysis := analyzeInt64AOTFunction(
+		&aotSpecializationTarget{vr: vr},
+		method,
+	)
+	if analysis == nil {
+		t.Fatal("int64 recursive function was not specialized")
+	}
+	if !analysis.usesSelf {
+		t.Fatal("recursive function did not request a root-version guard")
+	}
+
+	floatBody := aotTestIf(
+		aotTestNumbersCall("Lte", localN, aotTestInt(1)),
+		aotTestConst(float64(1)),
+		localN,
+	)
+	method.Body = floatBody
+	if analysis := analyzeInt64AOTFunction(
+		&aotSpecializationTarget{vr: vr},
+		method,
+	); analysis != nil {
+		t.Fatal("mixed float function unexpectedly received an int64 specialization")
+	}
+}
+
+func TestAnalyzeInt64AOTLoop(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.int64-loop-analysis"))
+	vr := ns.Intern(lang.NewSymbol("sum-loop"))
+	i := lang.NewSymbol("i")
+	sum := lang.NewSymbol("sum")
+	loopID := lang.NewSymbol("loop-id")
+
+	recur := ast.MakeNode(ast.OpRecur, nil)
+	recur.Sub = &ast.RecurNode{
+		LoopID: loopID,
+		Exprs: []*ast.Node{
+			aotTestNumbersCall("Inc", aotTestLocal(i)),
+			aotTestNumbersCall("Add", aotTestLocal(sum), aotTestLocal(i)),
+		},
+	}
+	loop := ast.MakeNode(ast.OpLoop, nil)
+	loop.Sub = &ast.LetNode{
+		LoopID: loopID,
+		Bindings: []*ast.Node{
+			aotTestBinding(i, aotTestInt(0)),
+			aotTestBinding(sum, aotTestInt(0)),
+		},
+		Body: aotTestIf(
+			aotTestNumbersCall("Lt", aotTestLocal(i), aotTestInt(10)),
+			recur,
+			aotTestLocal(sum),
+		),
+	}
+	method := &ast.FnMethodNode{Body: loop}
+	analysis := analyzeInt64AOTFunction(
+		&aotSpecializationTarget{vr: vr},
+		method,
+	)
+	if analysis == nil {
+		t.Fatal("int64 loop was not specialized")
+	}
+	if analysis.usesSelf {
+		t.Fatal("non-recursive loop unnecessarily requested a root-version guard")
+	}
+}
+
+func aotTestBinding(name *lang.Symbol, init *ast.Node) *ast.Node {
+	node := ast.MakeNode(ast.OpBinding, nil)
+	node.Sub = &ast.BindingNode{Name: name, Init: init}
+	return node
+}
+
+func aotTestLocal(name *lang.Symbol) *ast.Node {
+	node := ast.MakeNode(ast.OpLocal, nil)
+	node.Sub = &ast.LocalNode{Name: name}
+	return node
+}
+
+func aotTestConst(value any) *ast.Node {
+	node := ast.MakeNode(ast.OpConst, nil)
+	node.Sub = &ast.ConstNode{Value: value}
+	return node
+}
+
+func aotTestInt(value int64) *ast.Node {
+	return aotTestConst(value)
+}
+
+func aotTestNumbersCall(name string, args ...*ast.Node) *ast.Node {
+	node := ast.MakeNode(ast.OpHostCall, nil)
+	node.Sub = &ast.HostCallNode{
+		Target:         aotTestConst(lang.Numbers),
+		Method:         lang.NewSymbol(name),
+		Args:           args,
+		ResolvedMethod: true,
+	}
+	return node
+}
+
+func aotTestInvoke(vr *lang.Var, args ...*ast.Node) *ast.Node {
+	fn := ast.MakeNode(ast.OpVar, nil)
+	fn.Sub = &ast.VarNode{Var: vr}
+	node := ast.MakeNode(ast.OpInvoke, nil)
+	node.Sub = &ast.InvokeNode{Fn: fn, Args: args}
+	return node
+}
+
+func aotTestIf(test, then, otherwise *ast.Node) *ast.Node {
+	node := ast.MakeNode(ast.OpIf, nil)
+	node.Sub = &ast.IfNode{Test: test, Then: then, Else: otherwise}
+	return node
+}

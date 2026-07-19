@@ -64,6 +64,12 @@ type valueInit struct {
 	deps map[string]struct{} // Set of var/value names this value depends on
 }
 
+type aotSpecializationTarget struct {
+	vr             *lang.Var
+	fn             *Fn
+	rootVersionVar string
+}
+
 // Generator handles the conversion of AST nodes to Go code
 type Generator struct {
 	originalWriter io.Writer
@@ -85,6 +91,10 @@ type Generator struct {
 	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
 	liftedCounter int                        // Counter for closed0, closed1...
 	currentFnEnv  lang.Environment           // Current function's captured env
+
+	// specializationTarget is non-nil only while generating the root function
+	// value for a Var. Nested function literals retain the generic code path.
+	specializationTarget *aotSpecializationTarget
 }
 
 var (
@@ -469,6 +479,7 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 
 	g.pushVarScope()
 	defer g.popVarScope()
+	defer func() { g.specializationTarget = nil }()
 
 	g.writef("// %s\n", name.String())
 	g.writef("{\n")
@@ -493,7 +504,17 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 			valChan <- vr.Get()
 		}()
 		v := <-valChan
-		g.writef("%s = %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, g.generateValue(v))
+		if fn, ok := v.(*Fn); ok {
+			g.specializationTarget = &aotSpecializationTarget{
+				vr: vr,
+				fn: fn,
+			}
+		}
+		valueExpr := g.generateValue(v)
+		g.writef("%s = %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, valueExpr)
+		if target := g.specializationTarget; target != nil && target.rootVersionVar != "" {
+			g.writef("%s = %s.RootVersion()\n", target.rootVersionVar, varVar)
+		}
 	} else {
 		g.writef("%s = %s.Intern(%s)\n", varVar, nsVariableName, varSym)
 	}
@@ -1071,13 +1092,15 @@ func (g *Generator) generateFn(fn *Fn) string {
 		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
 		allParamNames := []string{"p0", "p1", "p2", "p3"}
 		paramNames := allParamNames[:fixedArity]
-		sig := ""
-		if fixedArity > 0 {
-			sig = strings.Join(paramNames, ", ") + " any"
+		if !g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
+			sig := ""
+			if fixedArity > 0 {
+				sig = strings.Join(paramNames, ", ") + " any"
+			}
+			g.writef("%s = lang.FnFunc%d(func(%s) any {\n", fnVar, fixedArity, sig)
+			g.generateFnMethodFixed(methodNode, paramNames)
+			g.writef("})\n")
 		}
-		g.writef("%s = lang.FnFunc%d(func(%s) any {\n", fnVar, fixedArity, sig)
-		g.generateFnMethodFixed(methodNode, paramNames)
-		g.writef("})\n")
 	} else if arityDispatch {
 		var fixedMethods [5]*ast.FnMethodNode
 		var fixedOther []*ast.FnMethodNode

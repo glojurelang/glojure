@@ -244,30 +244,15 @@ func isNumbersCall(call *ast.HostCallNode) bool {
 }
 
 func checkedInt64Add(a, b int64) int64 {
-	result := a + b
-	if (result > a) == (b > 0) {
-		return result
-	}
-	panic(lang.NewArithmeticError("integer overflow"))
+	return lang.CheckedAddInt64(a, b)
 }
 
 func checkedInt64Sub(a, b int64) int64 {
-	result := a - b
-	if (result < a) == (b > 0) {
-		return result
-	}
-	panic(lang.NewArithmeticError("integer overflow"))
+	return lang.CheckedSubInt64(a, b)
 }
 
 func checkedInt64Multiply(a, b int64) int64 {
-	if a == 0 || b == 0 {
-		return 0
-	}
-	result := a * b
-	if (result < 0) == ((a < 0) != (b < 0)) && result/b == a {
-		return result
-	}
-	panic(lang.NewArithmeticError("integer overflow"))
+	return lang.CheckedMultiplyInt64(a, b)
 }
 
 func checkedInt64Quotient(a, b int64) int64 {

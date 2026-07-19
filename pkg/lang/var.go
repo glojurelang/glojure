@@ -34,6 +34,18 @@ type (
 		v *Var
 	}
 
+	// VarRootVersion is an opaque identity for one root binding. Generated
+	// optimized code uses it to verify that a Var still has the root it was
+	// compiled against before taking a direct-call path.
+	VarRootVersion struct {
+		marker byte
+	}
+
+	varRoot struct {
+		val     interface{}
+		version *VarRootVersion
+	}
+
 	lazyVarMeta struct {
 		once sync.Once
 		fn   func() IPersistentMap
@@ -116,7 +128,10 @@ func NewVar(ns *Namespace, sym *Symbol) *Var {
 		sym:     sym,
 		watches: emptyMap,
 	}
-	v.root.Store(Box{val: &UnboundVar{v: v}})
+	v.root.Store(varRoot{
+		val:     &UnboundVar{v: v},
+		version: &VarRootVersion{},
+	})
 	v.meta.Store(NewBox(emptyMap))
 	return v
 }
@@ -144,15 +159,18 @@ func (v *Var) String() string {
 }
 
 func (v *Var) HasRoot() bool {
-	box := v.root.Load().(Box)
-	_, ok := box.val.(*UnboundVar)
+	root := v.root.Load().(varRoot)
+	_, ok := root.val.(*UnboundVar)
 	return !ok
 }
 
 func (v *Var) BindRoot(root interface{}) {
 	// TODO: handle metadata correctly
-	old := v.root.Swap(Box{val: root})
-	v.notifyWatches(old.(Box).val, root)
+	old := v.root.Swap(varRoot{
+		val:     root,
+		version: &VarRootVersion{},
+	})
+	v.notifyWatches(old.(varRoot).val, root)
 }
 
 func (v *Var) IsBound() bool {
@@ -160,15 +178,21 @@ func (v *Var) IsBound() bool {
 }
 
 func (v *Var) getRoot() interface{} {
-	root := v.root.Load().(Box).val
+	root := v.root.Load().(varRoot).val
 	if _, unbound := root.(*UnboundVar); !unbound {
 		return root
 	}
 	if resolver, ok := unboundVarResolver.Load().(func(*Var)); ok {
 		resolver(v)
-		root = v.root.Load().(Box).val
+		root = v.root.Load().(varRoot).val
 	}
 	return root
+}
+
+// RootVersion returns the identity of the current root binding. The returned
+// pointer changes atomically whenever BindRoot or AlterRoot installs a root.
+func (v *Var) RootVersion() *VarRootVersion {
+	return v.root.Load().(varRoot).version
 }
 
 func (v *Var) Get() interface{} {
@@ -291,8 +315,11 @@ func (v *Var) AlterRoot(alter IFn, args ISeq) interface{} {
 
 	oldRoot := v.Get()
 	newRoot := alter.ApplyTo(NewCons(oldRoot, args))
-	// TODO: validate, ++rev
-	v.root.Store(Box{val: newRoot})
+	// TODO: validate
+	v.root.Store(varRoot{
+		val:     newRoot,
+		version: &VarRootVersion{},
+	})
 	v.notifyWatches(oldRoot, newRoot)
 	return newRoot
 }
