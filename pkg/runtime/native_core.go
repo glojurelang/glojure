@@ -406,6 +406,11 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	if mod := core.FindInternedVar(lang.NewSymbol("mod")); mod != nil {
 		mod.BindRoot(lang.FnFunc2(nativeMod))
 	}
+	recordDefaultCoreRoots(
+		core,
+		"+", "dec", "even?", "filter", "identity", "inc", "map",
+		"neg?", "odd?", "pos?", "range", "reduce", "zero?",
+	)
 }
 
 func installFixedArityCoreFunction(

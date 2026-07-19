@@ -1558,7 +1558,13 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 // generateInvoke generates code for an Invoke node
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
+	if plan := analyzeAOTReducePipeline(invokeNode); plan != nil {
+		return g.generateAOTReducePipeline(invokeNode, plan)
+	}
+	return g.generateInvokeDefault(invokeNode)
+}
 
+func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	// A package-level Go function whose parameters are all `any` can be
 	// emitted as a direct call. This preserves static return types such as
 	// ISeq while avoiding reflection in lang.Apply.

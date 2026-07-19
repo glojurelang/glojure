@@ -55,10 +55,11 @@ func main() {
 	compileFixtures(root, temp, glj, fixtures)
 	writeBenchmark(temp, fixtures)
 	run(temp, nil, "go", "mod", "tidy")
+	run(temp, nil, "go", "test", "-run", "^TestAOTSemantics$", "./...")
 
 	args := []string{
 		"test",
-		"-run", "^TestAOTSemantics$",
+		"-run", "^$",
 		"-bench", *filter,
 		"-benchmem",
 		"-count", strconv.Itoa(*count),
@@ -179,6 +180,14 @@ func writeBenchmark(temp string, fixtures []fixture) {
 	source.WriteString("\tdefer polynomial.BindRoot(original)\n")
 	source.WriteString("\tif got := lang.Apply1(caller, float64(2)); !lang.Equals(got, float64(42)) {\n")
 	source.WriteString("\t\tt.Fatalf(\"call-polynomial ignored Var redefinition: got %v, want 42.0\", got)\n")
+	source.WriteString("\t}\n")
+	source.WriteString("\tpolynomial.BindRoot(original)\n")
+	source.WriteString("\tincVar := lang.FindNamespace(lang.NewSymbol(\"clojure.core\")).FindInternedVar(lang.NewSymbol(\"inc\"))\n")
+	source.WriteString("\toriginalInc := incVar.Get()\n")
+	source.WriteString("\tincVar.BindRoot(lang.FnFunc1(func(value any) any { return value }))\n")
+	source.WriteString("\tdefer incVar.BindRoot(originalInc)\n")
+	source.WriteString("\tif got := reduce_pipelineRun.Invoke(); !lang.Equals(got, int64(250000000000)) {\n")
+	source.WriteString("\t\tt.Fatalf(\"reduce pipeline ignored Var redefinition: got %v, want 250000000000\", got)\n")
 	source.WriteString("\t}\n")
 	source.WriteString("}\n\n")
 	for _, fixture := range fixtures {

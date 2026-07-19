@@ -433,6 +433,52 @@ func TestAnalyzeFloat64AOTMixedLoopAndCrossCall(t *testing.T) {
 	}
 }
 
+func TestAnalyzeAOTReducePipeline(t *testing.T) {
+	core := lang.NSCore
+	coreVar := func(name string) *lang.Var {
+		return core.Intern(lang.NewSymbol(name))
+	}
+	rangeCall := aotTestInvoke(coreVar("range"), aotTestInt(100))
+	filterCall := aotTestInvoke(
+		coreVar("filter"),
+		aotTestVar(coreVar("odd?")),
+		rangeCall,
+	)
+	mapCall := aotTestInvoke(
+		coreVar("map"),
+		aotTestVar(coreVar("inc")),
+		filterCall,
+	)
+	reduce := aotTestInvoke(
+		coreVar("reduce"),
+		aotTestVar(coreVar("+")),
+		aotTestInt(0),
+		mapCall,
+	).Sub.(*ast.InvokeNode)
+
+	plan := analyzeAOTReducePipeline(reduce)
+	if plan == nil {
+		t.Fatal("safe integer range pipeline was not fused")
+	}
+	want := []ReducePipelineTransformKind{
+		ReducePipelineFilterOdd,
+		ReducePipelineMapInc,
+	}
+	if len(plan.transforms) != len(want) {
+		t.Fatalf("transform count = %d, want %d", len(plan.transforms), len(want))
+	}
+	for i, transform := range plan.transforms {
+		if transform.kind != want[i] {
+			t.Fatalf("transform %d = %v, want %v", i, transform.kind, want[i])
+		}
+	}
+
+	rangeCall.Sub.(*ast.InvokeNode).Args[0] = aotTestLocal(lang.NewSymbol("n"))
+	if plan := analyzeAOTReducePipeline(reduce); plan != nil {
+		t.Fatal("pipeline with an unproven range bound was fused")
+	}
+}
+
 func aotTestBinding(name *lang.Symbol, init *ast.Node) *ast.Node {
 	node := ast.MakeNode(ast.OpBinding, nil)
 	node.Sub = &ast.BindingNode{Name: name, Init: init}
@@ -467,10 +513,14 @@ func aotTestNumbersCall(name string, args ...*ast.Node) *ast.Node {
 }
 
 func aotTestInvoke(vr *lang.Var, args ...*ast.Node) *ast.Node {
-	fn := ast.MakeNode(ast.OpVar, nil)
-	fn.Sub = &ast.VarNode{Var: vr}
 	node := ast.MakeNode(ast.OpInvoke, nil)
-	node.Sub = &ast.InvokeNode{Fn: fn, Args: args}
+	node.Sub = &ast.InvokeNode{Fn: aotTestVar(vr), Args: args}
+	return node
+}
+
+func aotTestVar(vr *lang.Var) *ast.Node {
+	node := ast.MakeNode(ast.OpVar, nil)
+	node.Sub = &ast.VarNode{Var: vr}
 	return node
 }
 

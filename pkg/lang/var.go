@@ -285,6 +285,10 @@ func (v *Var) SetDynamic() *Var {
 	return v
 }
 
+func (v *Var) IsDynamic() bool {
+	return v.dynamic
+}
+
 func (v *Var) Deref() interface{} {
 	if b := v.getDynamicBinding(); b != nil {
 		return b.val
