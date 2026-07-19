@@ -348,6 +348,91 @@ func TestAnalyzeInt64AOTAcrossVarCall(t *testing.T) {
 	}
 }
 
+func TestAnalyzeFloat64AOTMixedLoopAndCrossCall(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.float64-analysis"))
+	polynomialVar := ns.Intern(lang.NewSymbol("polynomial"))
+	runVar := ns.Intern(lang.NewSymbol("run"))
+	x := lang.NewSymbol("x")
+	i := lang.NewSymbol("i")
+	total := lang.NewSymbol("total")
+	loopID := lang.NewSymbol("float-loop")
+
+	polynomialTarget := &aotSpecializationTarget{vr: polynomialVar, arity: 1}
+	runTarget := &aotSpecializationTarget{vr: runVar, arity: 0}
+	targets := map[*lang.Var]*aotSpecializationTarget{
+		polynomialVar: polynomialTarget,
+		runVar:        runTarget,
+	}
+	polynomialMethod := &ast.FnMethodNode{
+		Params:     []*ast.Node{aotTestBinding(x, nil)},
+		FixedArity: 1,
+		Body: aotTestNumbersCall(
+			"Add",
+			aotTestNumbersCall("Multiply", aotTestLocal(x), aotTestLocal(x)),
+			aotTestConst(float64(0.5)),
+		),
+	}
+	polynomialTarget.float64Analysis = analyzeFloat64AOTFunction(
+		polynomialTarget,
+		polynomialMethod,
+		targets,
+	)
+	if polynomialTarget.float64Analysis == nil {
+		t.Fatal("float64 callee was not specialized")
+	}
+
+	recur := ast.MakeNode(ast.OpRecur, nil)
+	recur.Sub = &ast.RecurNode{
+		LoopID: loopID,
+		Exprs: []*ast.Node{
+			aotTestNumbersCall("Inc", aotTestLocal(i)),
+			aotTestNumbersCall(
+				"Add",
+				aotTestLocal(total),
+				aotTestInvoke(polynomialVar, aotTestConst(float64(1.5))),
+			),
+		},
+	}
+	loop := ast.MakeNode(ast.OpLoop, nil)
+	loop.Sub = &ast.LetNode{
+		LoopID: loopID,
+		Bindings: []*ast.Node{
+			aotTestBinding(i, aotTestInt(0)),
+			aotTestBinding(total, aotTestConst(float64(0))),
+		},
+		Body: aotTestIf(
+			aotTestInvoke(
+				lang.NSCore.Intern(lang.NewSymbol("=")),
+				aotTestLocal(i),
+				aotTestInt(10),
+			),
+			aotTestLocal(total),
+			recur,
+		),
+	}
+	runMethod := &ast.FnMethodNode{Body: loop}
+	if analysis := analyzeFloat64AOTFunction(
+		runTarget,
+		runMethod,
+		targets,
+	); analysis == nil {
+		t.Fatal("mixed int64/float64 loop was not specialized")
+	}
+
+	analyzer := float64AOTAnalyzer{
+		analysis: &float64AOTAnalysis{target: runTarget},
+		targets:  targets,
+	}
+	mixedEquality := aotTestInvoke(
+		lang.NSCore.Intern(lang.NewSymbol("=")),
+		aotTestInt(9007199254740993),
+		aotTestConst(float64(9007199254740992)),
+	)
+	if typ := analyzer.exprType(mixedEquality, nil); typ != invalidAOTPrimitive {
+		t.Fatalf("mixed numeric equality received unsafe primitive type %v", typ)
+	}
+}
+
 func aotTestBinding(name *lang.Symbol, init *ast.Node) *ast.Node {
 	node := ast.MakeNode(ast.OpBinding, nil)
 	node.Sub = &ast.BindingNode{Name: name, Init: init}

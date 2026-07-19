@@ -43,6 +43,7 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 			arity:          method.FixedArity,
 			directFnVar:    fmt.Sprintf("aotDirectFn%d", index),
 			int64FnVar:     fmt.Sprintf("aotInt64Fn%d", index),
+			float64FnVar:   fmt.Sprintf("aotFloat64Fn%d", index),
 			rootVersionVar: fmt.Sprintf("aotRootVersion%d", index),
 		}
 		g.aotCallTargets[vr] = target
@@ -87,21 +88,60 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 		method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
 		target.int64Analysis.proveSafeOperations(method)
 	}
+	for {
+		changed := false
+		for _, named := range vars {
+			target := g.aotCallTargets[named.vr]
+			if target == nil || target.int64Analysis != nil ||
+				target.float64Analysis != nil {
+				continue
+			}
+			fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
+			method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
+			analysis := analyzeFloat64AOTFunction(
+				target,
+				method,
+				g.aotCallTargets,
+			)
+			if analysis == nil {
+				continue
+			}
+			target.float64Analysis = analysis
+			changed = true
+		}
+		if !changed {
+			break
+		}
+	}
 	for _, named := range vars {
 		target := g.aotCallTargets[named.vr]
-		if target == nil || target.int64Analysis == nil {
+		if target == nil {
 			continue
 		}
-		params := make([]string, target.arity)
-		for i := range params {
-			params[i] = "int64"
+		if target.int64Analysis != nil {
+			params := make([]string, target.arity)
+			for i := range params {
+				params[i] = "int64"
+			}
+			fmt.Fprintf(
+				&g.aotDeclarations,
+				"var %s func(%s) (int64, bool)\n",
+				target.int64FnVar,
+				strings.Join(params, ", "),
+			)
 		}
-		fmt.Fprintf(
-			&g.aotDeclarations,
-			"var %s func(%s) (int64, bool)\n",
-			target.int64FnVar,
-			strings.Join(params, ", "),
-		)
+		if target.float64Analysis != nil {
+			params := make([]string, target.arity)
+			for i := range params {
+				params[i] = "float64"
+			}
+			fmt.Fprintf(
+				&g.aotDeclarations,
+				"var %s func(%s) (float64, bool)\n",
+				target.float64FnVar,
+				strings.Join(params, ", "),
+			)
+		}
 	}
 	if len(g.aotCallTargets) > 0 {
 		g.aotDeclarations.WriteByte('\n')

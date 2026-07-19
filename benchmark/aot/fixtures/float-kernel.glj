@@ -10,6 +10,9 @@
        (* 0.125 x3)
        (* 0.0625 x4))))
 
+(defn call-polynomial [x]
+  (polynomial x))
+
 (defn run []
   (loop [i 0
          total 0.0]
@@ -17,3 +20,5 @@
       total
       (recur (inc i)
              (+ total (polynomial (+ 0.5 (* 0.000001 i))))))))
+
+(def expected 2021613.7239585253)

@@ -58,7 +58,7 @@ func main() {
 
 	args := []string{
 		"test",
-		"-run", "^$",
+		"-run", "^TestAOTSemantics$",
 		"-bench", *filter,
 		"-benchmem",
 		"-count", strconv.Itoa(*count),
@@ -152,6 +152,35 @@ func writeBenchmark(temp string, fixtures []fixture) {
 	}
 	source.WriteString(")\n\n")
 	source.WriteString("var benchmarkResult any\n\n")
+	source.WriteString("func TestAOTSemantics(t *testing.T) {\n")
+	for _, fixture := range fixtures {
+		fmt.Fprintf(&source, "\t%s.LoadNS()\n", fixture.alias)
+		fmt.Fprintf(&source, "\t%sNS := lang.FindNamespace(lang.NewSymbol(%q))\n",
+			fixture.alias, fixture.nsName)
+		fmt.Fprintf(&source, "\t%sRun := %sNS.FindInternedVar(lang.NewSymbol(\"run\")).Get().(lang.IFn)\n",
+			fixture.alias, fixture.alias)
+		fmt.Fprintf(&source, "\t%sExpected := %sNS.FindInternedVar(lang.NewSymbol(\"expected\")).Get()\n",
+			fixture.alias, fixture.alias)
+		fmt.Fprintf(&source, "\tif got := %sRun.Invoke(); !lang.Equals(got, %sExpected) {\n",
+			fixture.alias, fixture.alias)
+		fmt.Fprintf(&source, "\t\tt.Fatalf(%q, got, %sExpected)\n",
+			fixture.nsName+" run = %v, want %v", fixture.alias)
+		source.WriteString("\t}\n")
+	}
+	source.WriteString("\tpolynomial := float_kernelNS.FindInternedVar(lang.NewSymbol(\"polynomial\"))\n")
+	source.WriteString("\tcaller := float_kernelNS.FindInternedVar(lang.NewSymbol(\"call-polynomial\")).Get().(lang.IFn)\n")
+	source.WriteString("\tfor _, input := range []any{float64(2), int64(2)} {\n")
+	source.WriteString("\t\tif got := lang.Apply1(caller, input); !lang.Equals(got, float64(5)) {\n")
+	source.WriteString("\t\t\tt.Fatalf(\"call-polynomial(%T(2)) = %v, want 5.0\", input, got)\n")
+	source.WriteString("\t\t}\n")
+	source.WriteString("\t}\n")
+	source.WriteString("\toriginal := polynomial.Get()\n")
+	source.WriteString("\tpolynomial.BindRoot(lang.FnFunc1(func(any) any { return float64(42) }))\n")
+	source.WriteString("\tdefer polynomial.BindRoot(original)\n")
+	source.WriteString("\tif got := lang.Apply1(caller, float64(2)); !lang.Equals(got, float64(42)) {\n")
+	source.WriteString("\t\tt.Fatalf(\"call-polynomial ignored Var redefinition: got %v, want 42.0\", got)\n")
+	source.WriteString("\t}\n")
+	source.WriteString("}\n\n")
 	for _, fixture := range fixtures {
 		benchmarkName := exportedName(strings.TrimPrefix(fixture.nsName, "bench."))
 		fmt.Fprintf(&source, "func Benchmark%s(b *testing.B) {\n", benchmarkName)

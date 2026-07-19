@@ -78,13 +78,15 @@ type valueInit struct {
 }
 
 type aotSpecializationTarget struct {
-	vr             *lang.Var
-	fn             *Fn
-	arity          int
-	directFnVar    string
-	int64FnVar     string
-	int64Analysis  *int64AOTAnalysis
-	rootVersionVar string
+	vr              *lang.Var
+	fn              *Fn
+	arity           int
+	directFnVar     string
+	int64FnVar      string
+	int64Analysis   *int64AOTAnalysis
+	float64FnVar    string
+	float64Analysis *float64AOTAnalysis
+	rootVersionVar  string
 }
 
 // Generator handles the conversion of AST nodes to Go code
@@ -1175,7 +1177,8 @@ func (g *Generator) generateFn(fn *Fn) string {
 		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
 		allParamNames := []string{"p0", "p1", "p2", "p3"}
 		paramNames := allParamNames[:fixedArity]
-		if !g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
+		if !g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
+			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
 			sig := ""
 			if fixedArity > 0 {
 				sig = strings.Join(paramNames, ", ") + " any"
