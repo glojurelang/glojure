@@ -28,7 +28,11 @@ type (
 
 	ArrayNode struct {
 		count int
-		array []Node
+		array []*nodeSlot
+	}
+
+	nodeSlot struct {
+		node Node
 	}
 
 	NodeSeq struct {
@@ -42,7 +46,7 @@ type (
 
 	ArrayNodeSeq struct {
 		meta  IPersistentMap
-		nodes []Node
+		nodes []*nodeSlot
 		i     int
 		s     ISeq
 	}
@@ -76,7 +80,7 @@ type (
 	}
 
 	ArrayNodeIterator struct {
-		array      []Node
+		array      []*nodeSlot
 		i          int
 		nestedIter MapIterator
 	}
@@ -315,17 +319,17 @@ func (b *BitmapIndexedNode) assoc(shift uint, hash uint32, key any, val any, add
 	} else {
 		n := bitCount(b.bitmap)
 		if n >= 16 {
-			nodes := make([]Node, 32)
+			nodes := make([]*nodeSlot, 32)
 			jdx := mask(hash, shift)
-			nodes[jdx] = emptyIndexedNode.assoc(shift+5, hash, key, val, addedLeaf)
+			nodes[jdx] = &nodeSlot{node: emptyIndexedNode.assoc(shift+5, hash, key, val, addedLeaf)}
 			j := 0
 			var i uint
 			for i = 0; i < 32; i++ {
 				if (b.bitmap>>i)&1 != 0 {
 					if node, ok := b.array[j+1].(Node); ok {
-						nodes[i] = node
+						nodes[i] = &nodeSlot{node: node}
 					} else {
-						nodes[i] = emptyIndexedNode.assoc(shift+5, HashEq(b.array[j]), b.array[j], b.array[j+1], addedLeaf)
+						nodes[i] = &nodeSlot{node: emptyIndexedNode.assoc(shift+5, HashEq(b.array[j]), b.array[j], b.array[j+1], addedLeaf)}
 					}
 					j += 2
 				}
@@ -579,13 +583,14 @@ func (n *ArrayNode) iter() MapIterator {
 
 func (n *ArrayNode) assoc(shift uint, hash uint32, key any, val any, addedLeaf *Box) Node {
 	idx := mask(hash, shift)
-	node := n.array[idx]
-	if node == nil {
+	slot := n.array[idx]
+	if slot == nil {
 		return &ArrayNode{
 			count: n.count + 1,
 			array: cloneAndSetNode(n.array, int(idx), emptyIndexedNode.assoc(shift+5, hash, key, val, addedLeaf)),
 		}
 	}
+	node := slot.node
 	nn := node.assoc(shift+5, hash, key, val, addedLeaf)
 	if nn == node {
 		return n
@@ -598,10 +603,11 @@ func (n *ArrayNode) assoc(shift uint, hash uint32, key any, val any, addedLeaf *
 
 func (n *ArrayNode) without(shift uint, hash uint32, key any) Node {
 	idx := mask(hash, shift)
-	node := n.array[idx]
-	if node == nil {
+	slot := n.array[idx]
+	if slot == nil {
 		return n
 	}
+	node := slot.node
 	nn := node.without(shift+5, hash, key)
 	if nn == node {
 		return n
@@ -624,11 +630,11 @@ func (n *ArrayNode) without(shift uint, hash uint32, key any) Node {
 
 func (n *ArrayNode) find(shift uint, hash uint32, key any) (foundKey, value any, found bool) {
 	idx := mask(hash, shift)
-	node := n.array[idx]
-	if node == nil {
+	slot := n.array[idx]
+	if slot == nil {
 		return nil, nil, false
 	}
-	return node.find(shift+5, hash, key)
+	return slot.node.find(shift+5, hash, key)
 }
 
 func (n *ArrayNode) nodeSeq() ISeq {
@@ -641,15 +647,15 @@ func (n *ArrayNode) pack(idx uint) Node {
 	bitmap := 0
 	var i uint
 	for i = 0; i < idx; i++ {
-		if n.array[i] != nil {
-			newArray[j] = n.array[i]
+		if slot := n.array[i]; slot != nil {
+			newArray[j] = slot.node
 			bitmap |= 1 << i
 			j += 2
 		}
 	}
 	for i = idx + 1; i < uint(len(n.array)); i++ {
-		if n.array[i] != nil {
-			newArray[j] = n.array[i]
+		if slot := n.array[i]; slot != nil {
+			newArray[j] = slot.node
 			bitmap |= 1 << i
 			j += 2
 		}
@@ -740,7 +746,7 @@ func (n *HashCollisionNode) nodeSeq() ISeq {
 ////////////////////////////////////////////////////////////////////////////////
 // ArrayNodeSeq
 
-func newArrayNodeSeq(nodes []Node, i int, s ISeq) ISeq {
+func newArrayNodeSeq(nodes []*nodeSlot, i int, s ISeq) ISeq {
 	if s != nil {
 		return &ArrayNodeSeq{
 			nodes: nodes,
@@ -749,8 +755,8 @@ func newArrayNodeSeq(nodes []Node, i int, s ISeq) ISeq {
 		}
 	}
 	for j := i; j < len(nodes); j++ {
-		if nodes[j] != nil {
-			ns := nodes[j].nodeSeq()
+		if slot := nodes[j]; slot != nil {
+			ns := slot.node.nodeSeq()
 			if ns != nil {
 				return &ArrayNodeSeq{
 					nodes: nodes,
@@ -841,10 +847,10 @@ func (iter *ArrayNodeIterator) HasNext() bool {
 			}
 		}
 		if iter.i < len(iter.array) {
-			node := iter.array[iter.i]
+			slot := iter.array[iter.i]
 			iter.i++
-			if node != nil {
-				iter.nestedIter = node.iter()
+			if slot != nil {
+				iter.nestedIter = slot.node.iter()
 			}
 		} else {
 			return false
@@ -896,10 +902,14 @@ func cloneAndSet2(array []any, i int, a any, j int, b any) []any {
 	return res
 }
 
-func cloneAndSetNode(array []Node, i int, a Node) []Node {
-	res := make([]Node, len(array), cap(array))
+func cloneAndSetNode(array []*nodeSlot, i int, a Node) []*nodeSlot {
+	res := make([]*nodeSlot, len(array), cap(array))
 	copy(res, array)
-	res[i] = a
+	if a == nil {
+		res[i] = nil
+	} else {
+		res[i] = &nodeSlot{node: a}
+	}
 	return res
 }
 
