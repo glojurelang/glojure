@@ -5,6 +5,8 @@ import (
 	"math"
 )
 
+const longRangeChunkSize = 32
+
 type (
 	LongRange struct {
 		meta   IPersistentMap
@@ -117,15 +119,29 @@ func (r *LongRange) More() ISeq {
 }
 
 func (r *LongRange) ChunkedFirst() IChunk {
-	return NewLongChunk(r.start, r.step, r.count)
+	return NewLongChunk(r.start, r.step, min(r.count, longRangeChunkSize))
 }
 
 func (r *LongRange) ChunkedNext() ISeq {
-	return nil
+	more := r.ChunkedMore()
+	if more == emptyList {
+		return nil
+	}
+	return more
 }
 
 func (r *LongRange) ChunkedMore() ISeq {
-	return emptyList
+	chunkCount := min(r.count, longRangeChunkSize)
+	if chunkCount == r.count {
+		return emptyList
+	}
+	return &LongRange{
+		meta:  r.meta,
+		start: r.start + int64(chunkCount)*r.step,
+		end:   r.end,
+		step:  r.step,
+		count: r.count - chunkCount,
+	}
 }
 
 func (r *LongRange) Cons(o any) Conser {
