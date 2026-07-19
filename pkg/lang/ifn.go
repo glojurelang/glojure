@@ -2,6 +2,15 @@ package lang
 
 import "fmt"
 
+// FixedArityFnN are optional fast-call interfaces. IFn implementations can
+// provide them to avoid constructing a variadic argument slice at hot call
+// sites while retaining Invoke for general application.
+type FixedArityFn0 interface{ Invoke0() any }
+type FixedArityFn1 interface{ Invoke1(any) any }
+type FixedArityFn2 interface{ Invoke2(any, any) any }
+type FixedArityFn3 interface{ Invoke3(any, any, any) any }
+type FixedArityFn4 interface{ Invoke4(any, any, any, any) any }
+
 // FnFunc is a wrapped Go function that implements the IFn interface.
 type FnFunc func(args ...any) any
 
@@ -47,11 +56,13 @@ func (f FnFunc0) Invoke(args ...any) any {
 	return f()
 }
 
+func (f FnFunc0) Invoke0() any { return f() }
+
 func (f FnFunc0) ApplyTo(args ISeq) any {
 	return f()
 }
 
-func (f FnFunc0) Meta() IPersistentMap        { return nil }
+func (f FnFunc0) Meta() IPersistentMap          { return nil }
 func (f FnFunc0) WithMeta(_ IPersistentMap) any { return f }
 
 // FnFunc1 is a one-argument function implementing IFn with no []any allocation.
@@ -66,11 +77,13 @@ func (f FnFunc1) Invoke(args ...any) any {
 	return f(args[0])
 }
 
+func (f FnFunc1) Invoke1(a0 any) any { return f(a0) }
+
 func (f FnFunc1) ApplyTo(args ISeq) any {
 	return f.Invoke(seqToSlice(args)...)
 }
 
-func (f FnFunc1) Meta() IPersistentMap        { return nil }
+func (f FnFunc1) Meta() IPersistentMap          { return nil }
 func (f FnFunc1) WithMeta(_ IPersistentMap) any { return f }
 
 // FnFunc2 is a two-argument function implementing IFn with no []any allocation.
@@ -85,11 +98,13 @@ func (f FnFunc2) Invoke(args ...any) any {
 	return f(args[0], args[1])
 }
 
+func (f FnFunc2) Invoke2(a0, a1 any) any { return f(a0, a1) }
+
 func (f FnFunc2) ApplyTo(args ISeq) any {
 	return f.Invoke(seqToSlice(args)...)
 }
 
-func (f FnFunc2) Meta() IPersistentMap        { return nil }
+func (f FnFunc2) Meta() IPersistentMap          { return nil }
 func (f FnFunc2) WithMeta(_ IPersistentMap) any { return f }
 
 // FnFunc3 is a three-argument function implementing IFn with no []any allocation.
@@ -104,11 +119,13 @@ func (f FnFunc3) Invoke(args ...any) any {
 	return f(args[0], args[1], args[2])
 }
 
+func (f FnFunc3) Invoke3(a0, a1, a2 any) any { return f(a0, a1, a2) }
+
 func (f FnFunc3) ApplyTo(args ISeq) any {
 	return f.Invoke(seqToSlice(args)...)
 }
 
-func (f FnFunc3) Meta() IPersistentMap        { return nil }
+func (f FnFunc3) Meta() IPersistentMap          { return nil }
 func (f FnFunc3) WithMeta(_ IPersistentMap) any { return f }
 
 // FnFunc4 is a four-argument function implementing IFn with no []any allocation.
@@ -123,9 +140,11 @@ func (f FnFunc4) Invoke(args ...any) any {
 	return f(args[0], args[1], args[2], args[3])
 }
 
+func (f FnFunc4) Invoke4(a0, a1, a2, a3 any) any { return f(a0, a1, a2, a3) }
+
 func (f FnFunc4) ApplyTo(args ISeq) any {
 	return f.Invoke(seqToSlice(args)...)
 }
 
-func (f FnFunc4) Meta() IPersistentMap        { return nil }
+func (f FnFunc4) Meta() IPersistentMap          { return nil }
 func (f FnFunc4) WithMeta(_ IPersistentMap) any { return f }

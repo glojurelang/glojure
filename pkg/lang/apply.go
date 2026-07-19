@@ -101,6 +101,8 @@ func Apply0(fn interface{}) any {
 		return f()
 	case FnFunc:
 		return f()
+	case FixedArityFn0:
+		return f.Invoke0()
 	case IFn:
 		return f.Invoke()
 	default:
@@ -115,6 +117,8 @@ func Apply1(fn interface{}, a0 any) any {
 		return f(a0)
 	case FnFunc:
 		return f(a0)
+	case FixedArityFn1:
+		return f.Invoke1(a0)
 	case IFn:
 		return f.Invoke(a0)
 	default:
@@ -129,6 +133,8 @@ func Apply2(fn interface{}, a0, a1 any) any {
 		return f(a0, a1)
 	case FnFunc:
 		return f(a0, a1)
+	case FixedArityFn2:
+		return f.Invoke2(a0, a1)
 	case IFn:
 		return f.Invoke(a0, a1)
 	default:
@@ -143,6 +149,8 @@ func Apply3(fn interface{}, a0, a1, a2 any) any {
 		return f(a0, a1, a2)
 	case FnFunc:
 		return f(a0, a1, a2)
+	case FixedArityFn3:
+		return f.Invoke3(a0, a1, a2)
 	case IFn:
 		return f.Invoke(a0, a1, a2)
 	default:
@@ -157,6 +165,8 @@ func Apply4(fn interface{}, a0, a1, a2, a3 any) any {
 		return f(a0, a1, a2, a3)
 	case FnFunc:
 		return f(a0, a1, a2, a3)
+	case FixedArityFn4:
+		return f.Invoke4(a0, a1, a2, a3)
 	case IFn:
 		return f.Invoke(a0, a1, a2, a3)
 	default:

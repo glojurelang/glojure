@@ -362,28 +362,26 @@ func (env *environment) EvalASTHostCall(n *ast.Node) (interface{}, error) {
 	method := hostCallNode.Method
 	args := hostCallNode.Args
 
-	tgtVal, err := env.EvalAST(tgt)
-	if err != nil {
-		return nil, err
-	}
-	var argVals []interface{}
-	for _, arg := range args {
-		argVal, err := env.EvalAST(arg)
+	methodVal := hostCallNode.ResolvedMethod
+	var tgtVal interface{}
+	if methodVal == nil {
+		var err error
+		tgtVal, err = env.EvalAST(tgt)
 		if err != nil {
 			return nil, err
 		}
-		argVals = append(argVals, argVal)
-	}
-	methodVal, ok := lang.FieldOrMethod(tgtVal, method.Name())
-	if !ok {
-		return nil, fmt.Errorf("no such field or method on %v (%T): %s", tgtVal, tgtVal, method)
+		var ok bool
+		methodVal, ok = lang.FieldOrMethod(tgtVal, method.Name())
+		if !ok {
+			return nil, fmt.Errorf("no such field or method on %v (%T): %s", tgtVal, tgtVal, method)
+		}
 	}
 	// if the field is not a function, return an error
 	if reflect.TypeOf(methodVal).Kind() != reflect.Func {
 		return nil, errors.New("not a method: " + lang.ToString(tgtVal) + "." + method.Name())
 	}
 
-	return lang.Apply(methodVal, argVals), nil
+	return env.evalASTApply(methodVal, args)
 }
 
 func (env *environment) EvalASTHostInterop(n *ast.Node) (interface{}, error) {
@@ -457,6 +455,9 @@ func (env *environment) EvalASTWithMeta(n *ast.Node) (interface{}, error) {
 }
 
 func (env *environment) EvalASTFn(n *ast.Node) (interface{}, error) {
+	if env.fnFrame != nil {
+		env.fnFrame.captured = true
+	}
 	return NewFn(n, env), nil
 }
 
@@ -708,6 +709,17 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 	}
 	boundNames = nil // free memory
 
+	if !isLoop {
+		return newEnv.EvalAST(letNode.Body)
+	}
+
+	rt := lang.NewRecurTarget()
+	recurEnv := newEnv.WithRecurTarget(rt).(*environment)
+	recurEnv.recurErr = &lang.RecurError{
+		Target: rt,
+		Args:   make([]interface{}, len(bindNameVals)/2),
+	}
+
 Recur:
 	for i := 0; i < len(bindNameVals); i += 2 {
 		name := bindNameVals[i].(*lang.Symbol)
@@ -715,13 +727,9 @@ Recur:
 		newEnv.BindLocal(name, val)
 	}
 
-	rt := lang.NewRecurTarget()
-	recurEnv := newEnv.WithRecurTarget(rt).(*environment)
-	recurErr := &lang.RecurError{Target: rt}
-
 	res, err := recurEnv.EvalAST(letNode.Body)
-	if isLoop && errors.As(err, &recurErr) {
-		newVals := recurErr.Args
+	if err == recurEnv.recurErr {
+		newVals := recurEnv.recurErr.Args
 		if len(newVals) != len(bindNameVals)/2 {
 			return nil, env.errorf(n, "invalid recur, expected %d arguments, got %d", len(bindNameVals)/2, len(newVals))
 		}
@@ -764,55 +772,37 @@ func (env *environment) EvalASTRecur(n *ast.Node) (interface{}, error) {
 	recurNode := n.Sub.(*ast.RecurNode)
 
 	exprs := recurNode.Exprs
-	vals := make([]interface{}, 0, lang.Count(exprs))
-	noRecurEnv := env.WithRecurTarget(nil).(*environment)
-	for _, expr := range exprs {
-		val, err := noRecurEnv.EvalAST(expr)
+	recurErr := env.recurErr
+	if recurErr == nil {
+		recurErr = &lang.RecurError{Target: env.recurTarget}
+	}
+	if cap(recurErr.Args) < len(exprs) {
+		recurErr.Args = make([]interface{}, len(exprs))
+	} else {
+		recurErr.Args = recurErr.Args[:len(exprs)]
+	}
+
+	target := env.recurTarget
+	previousErr := env.recurErr
+	env.recurTarget = nil
+	env.recurErr = nil
+	defer func() {
+		env.recurTarget = target
+		env.recurErr = previousErr
+	}()
+	for i, expr := range exprs {
+		val, err := env.EvalAST(expr)
 		if err != nil {
 			return nil, err
 		}
-		vals = append(vals, val)
+		recurErr.Args[i] = val
 	}
-	return nil, &lang.RecurError{
-		Target: env.recurTarget,
-		Args:   vals,
-	}
+	return nil, recurErr
 }
 
 func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) {
 	invokeNode := n.Sub.(*ast.InvokeNode)
-	defer func() {
-		meta := invokeNode.Meta
-		var gljFrame string
-		if r := recover(); r != nil {
-			// TODO: dynamically set pr-on to nil to avoid infinite
-			// recursion; need to use go-only stringification for errors.
-			gljFrame = fmt.Sprintf("%s:%d:%d:\t%s", lang.Get(meta, KWFile), lang.Get(meta, KWLine), lang.Get(meta, KWColumn), n.Form)
-			if rErr, ok := r.(error); ok {
-				if errors.Is(rErr, &RTEvalError{}) {
-					var evalErr *RTEvalError
-					errors.As(rErr, &evalErr)
-					evalErr.GLJStack = append(evalErr.GLJStack, gljFrame) // TODO: copy
-					if evalErr.GoStack == "" {
-						evalErr.GoStack = string(debug.Stack())
-					}
-					err = evalErr
-				} else {
-					err = &RTEvalError{
-						Err:      rErr,
-						GLJStack: []string{gljFrame},
-						GoStack:  string(debug.Stack()),
-					}
-				}
-			} else {
-				err = &RTEvalError{
-					Err:      fmt.Errorf("%v", r),
-					GLJStack: []string{gljFrame},
-					GoStack:  string(debug.Stack()),
-				}
-			}
-		}
-	}()
+	defer env.recoverInvoke(n, &res, &err)
 
 	fn := invokeNode.Fn
 	args := invokeNode.Args
@@ -821,16 +811,109 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 		return nil, err
 	}
 
-	var argVals []interface{}
-	for _, arg := range args {
-		argVal, err := env.EvalAST(arg)
+	return env.evalASTApply(fnVal, args)
+}
+
+func (env *environment) recoverInvoke(n *ast.Node, res *interface{}, err *error) {
+	r := recover()
+	if r == nil {
+		return
+	}
+	invokeNode := n.Sub.(*ast.InvokeNode)
+	meta := invokeNode.Meta
+	gljFrame := fmt.Sprintf("%s:%d:%d:\t%s", lang.Get(meta, KWFile), lang.Get(meta, KWLine), lang.Get(meta, KWColumn), n.Form)
+	*res = nil
+	if rErr, ok := r.(error); ok {
+		if errors.Is(rErr, &RTEvalError{}) {
+			var evalErr *RTEvalError
+			errors.As(rErr, &evalErr)
+			evalErr.GLJStack = append(evalErr.GLJStack, gljFrame) // TODO: copy
+			if evalErr.GoStack == "" {
+				evalErr.GoStack = string(debug.Stack())
+			}
+			*err = evalErr
+		} else {
+			*err = &RTEvalError{
+				Err:      rErr,
+				GLJStack: []string{gljFrame},
+				GoStack:  string(debug.Stack()),
+			}
+		}
+	} else {
+		*err = &RTEvalError{
+			Err:      fmt.Errorf("%v", r),
+			GLJStack: []string{gljFrame},
+			GoStack:  string(debug.Stack()),
+		}
+	}
+}
+
+// evalASTApply evaluates call arguments and uses the fixed-arity dispatch
+// paths for the common cases. Besides avoiding a temporary []any, this lets
+// native FnFuncN implementations bypass their variadic IFn adapters.
+func (env *environment) evalASTApply(fn interface{}, args []*ast.Node) (interface{}, error) {
+	switch len(args) {
+	case 0:
+		return lang.Apply0(fn), nil
+	case 1:
+		a0, err := env.EvalAST(args[0])
 		if err != nil {
 			return nil, err
 		}
-		argVals = append(argVals, argVal)
+		return lang.Apply1(fn, a0), nil
+	case 2:
+		a0, err := env.EvalAST(args[0])
+		if err != nil {
+			return nil, err
+		}
+		a1, err := env.EvalAST(args[1])
+		if err != nil {
+			return nil, err
+		}
+		return lang.Apply2(fn, a0, a1), nil
+	case 3:
+		a0, err := env.EvalAST(args[0])
+		if err != nil {
+			return nil, err
+		}
+		a1, err := env.EvalAST(args[1])
+		if err != nil {
+			return nil, err
+		}
+		a2, err := env.EvalAST(args[2])
+		if err != nil {
+			return nil, err
+		}
+		return lang.Apply3(fn, a0, a1, a2), nil
+	case 4:
+		a0, err := env.EvalAST(args[0])
+		if err != nil {
+			return nil, err
+		}
+		a1, err := env.EvalAST(args[1])
+		if err != nil {
+			return nil, err
+		}
+		a2, err := env.EvalAST(args[2])
+		if err != nil {
+			return nil, err
+		}
+		a3, err := env.EvalAST(args[3])
+		if err != nil {
+			return nil, err
+		}
+		return lang.Apply4(fn, a0, a1, a2, a3), nil
+	default:
+		argVals := make([]interface{}, len(args))
+		for i, arg := range args {
+			argVal, err := env.EvalAST(arg)
+			if err != nil {
+				return nil, err
+			}
+			argVals[i] = argVal
+		}
+		return lang.Apply(fn, argVals), nil
 	}
-
-	return lang.Apply(fnVal, argVals), nil
 }
 
 func (env *environment) EvalASTVar(n *ast.Node) (interface{}, error) {

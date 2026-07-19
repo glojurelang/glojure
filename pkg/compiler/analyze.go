@@ -35,6 +35,7 @@ type (
 		Gensym func(prefix string) *Symbol
 
 		FindNamespace func(sym *lang.Symbol) *lang.Namespace
+		ResolveHost   func(sym *lang.Symbol) (interface{}, bool)
 	}
 )
 
@@ -114,6 +115,17 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 				Value: v,
 			}
 		} else {
+			if a.ResolveHost != nil {
+				if value, ok := a.ResolveHost(form); ok {
+					n.Op = ast.OpConst
+					n.Sub = &ast.ConstNode{
+						Type:  classifyType(value),
+						Value: value,
+					}
+					return n, nil
+				}
+			}
+
 			maybeClass := form.Namespace()
 			if maybeClass != "" {
 				if maybeClass == "go" {
@@ -438,6 +450,39 @@ func (a *Analyzer) parseInvoke(form interface{}, env Env) (*ast.Node, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// Match Clojure's compiler behavior for Vars carrying :inline metadata.
+	// The inliner receives the unevaluated argument forms and returns a form
+	// that is analyzed in place of the original invocation.
+	if fnExpr.Op == ast.OpVar {
+		vr := fnExpr.Sub.(*ast.VarNode).Var
+		meta := vr.Meta()
+		inliner := Get(meta, KWInline)
+		arity := Count(args)
+		arities := Get(meta, KWInlineArities)
+		arityAllowed := arities == nil
+		if set, ok := arities.(IPersistentSet); ok {
+			arityAllowed = set.Contains(int64(arity))
+		} else if CanApply(arities) {
+			arityAllowed = BooleanCast(Apply1(arities, int64(arity)))
+		}
+		if inliner != nil && arityAllowed {
+			rawArgs := make([]interface{}, 0, arity)
+			for seq := Seq(args); seq != nil; seq = seq.Next() {
+				rawArgs = append(rawArgs, seq.First())
+			}
+			expanded := Apply(inliner, rawArgs)
+			// A few inherited core definitions still use explicit
+			// (unquote ...) forms that Glojure's reader leaves behind.
+			// Falling back to the Var call preserves their semantics while
+			// allowing well-formed inline definitions onto the fast path.
+			if !containsResidualUnquote(expanded) &&
+				inlineExpansionSupported(expanded, a.ResolveHost) {
+				return a.analyzeForm(expanded, env)
+			}
+		}
+	}
+
 	argsExprs := make([]*ast.Node, 0, Count(args))
 	for seq := Seq(args); seq != nil; seq = seq.Next() {
 		n, err := a.analyzeForm(seq.First(), fenv)
@@ -457,6 +502,102 @@ func (a *Analyzer) parseInvoke(form interface{}, env Env) (*ast.Node, error) {
 		Args: argsExprs,
 	}
 	return n, nil
+}
+
+func containsResidualUnquote(form interface{}) bool {
+	if sym, ok := form.(*Symbol); ok {
+		return sym.Name() == "unquote" || sym.Name() == "unquote-splicing"
+	}
+	if _, ok := form.(string); ok {
+		return false
+	}
+	if !CanSeq(form) {
+		return false
+	}
+	for seq := Seq(form); seq != nil; seq = seq.Next() {
+		if containsResidualUnquote(seq.First()) {
+			return true
+		}
+	}
+	return false
+}
+
+func inlineExpansionSupported(
+	form interface{},
+	resolveHost func(*Symbol) (interface{}, bool),
+) bool {
+	if _, ok := form.(string); ok {
+		return true
+	}
+	if !CanSeq(form) {
+		return true
+	}
+
+	seq := Seq(form)
+	if seq != nil {
+		if op, ok := seq.First().(*Symbol); ok && op.Name() == "." {
+			targetSeq := seq.Next()
+			if targetSeq == nil {
+				return false
+			}
+			callSeq := targetSeq.Next()
+			if callSeq == nil {
+				return false
+			}
+			if target, ok := targetSeq.First().(*Symbol); ok {
+				if resolveHost == nil {
+					return false
+				}
+				targetValue, ok := resolveHost(target)
+				if !ok {
+					return false
+				}
+				methodForm := callSeq.First()
+				if !CanSeq(methodForm) {
+					return false
+				}
+				methodSeq := Seq(methodForm)
+				if methodSeq == nil {
+					return false
+				}
+				method, ok := methodSeq.First().(*Symbol)
+				if !ok {
+					return false
+				}
+				methodValue, ok := lang.FieldOrMethod(targetValue, method.Name())
+				if !ok || !supportsInlineArity(methodValue, Count(methodForm)-1) {
+					return false
+				}
+			}
+		}
+	}
+
+	for ; seq != nil; seq = seq.Next() {
+		if !inlineExpansionSupported(seq.First(), resolveHost) {
+			return false
+		}
+	}
+	return true
+}
+
+func supportsInlineArity(fn interface{}, arity int) bool {
+	switch fn.(type) {
+	case FnFunc0:
+		return arity == 0
+	case FnFunc1:
+		return arity == 1
+	case FnFunc2:
+		return arity == 2
+	case FnFunc3:
+		return arity == 3
+	case FnFunc4:
+		return arity == 4
+	default:
+		// General IFn and reflected variadic adapters enforce their own
+		// arities. Fixed adapters above are the only cases where analysis
+		// can prove an expansion invalid.
+		return true
+	}
 }
 
 // (defn parse-do
@@ -993,12 +1134,20 @@ func (a *Analyzer) parseDot(form interface{}, env Env) (*ast.Node, error) {
 			argNodes = append(argNodes, argNode)
 		}
 
+		method := NewSymbol(First(mOrF).(*Symbol).Name())
+		var resolvedMethod interface{}
+		if targetExpr.Op == ast.OpConst {
+			targetValue := targetExpr.Sub.(*ast.ConstNode).Value
+			resolvedMethod, _ = lang.FieldOrMethod(targetValue, method.Name())
+		}
+
 		n := ast.MakeNode(ast.OpHostCall, form)
 		n.Env = env
 		n.Sub = &ast.HostCallNode{
-			Target: targetExpr,
-			Method: NewSymbol(First(mOrF).(*Symbol).Name()),
-			Args:   argNodes,
+			Target:         targetExpr,
+			Method:         method,
+			Args:           argNodes,
+			ResolvedMethod: resolvedMethod,
 		}
 		return n, nil
 	case isField:

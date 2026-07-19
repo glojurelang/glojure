@@ -140,6 +140,15 @@ func (rt *RTMethods) Contains(coll, key any) bool {
 	panic(fmt.Errorf("contains? not supported on type: %T", coll))
 }
 
+// Get provides the clojure.lang.RT-compatible entry point referenced by the
+// inherited inline definition of clojure.core/get.
+func (rt *RTMethods) Get(coll, key any, notFound ...any) any {
+	if len(notFound) == 0 {
+		return Get(coll, key)
+	}
+	return GetDefault(coll, key, notFound[0])
+}
+
 func (rt *RTMethods) Subs(s string, start int) string {
 	runes := []rune(s)
 	if start < 0 || start > len(runes) {

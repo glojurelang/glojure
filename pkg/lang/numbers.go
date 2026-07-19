@@ -10,12 +10,108 @@ import (
 )
 
 var (
-	Numbers = &NumberMethods{} // eventually make these static; this will prevent inlining
+	Numbers = &NumberMethods{}
+
+	numberMethodFns = buildNumberMethodFns()
 )
 
 // NumberMethods is a struct with methods that map to Clojure's Number
 // class' static methods.
 type NumberMethods struct{}
+
+func buildNumberMethodFns() map[string]interface{} {
+	methods := map[string]interface{}{
+		"Num":                numberMethod1((*NumberMethods).Num),
+		"UncheckedAdd":       numberMethod2((*NumberMethods).UncheckedAdd),
+		"UncheckedDec":       numberMethod1((*NumberMethods).UncheckedDec),
+		"Add":                numberMethod2((*NumberMethods).Add),
+		"AddP":               numberMethod2((*NumberMethods).AddP),
+		"Minus":              numberMethod2((*NumberMethods).Minus),
+		"MinusP":             numberMethod2((*NumberMethods).MinusP),
+		"Unchecked_minus":    numberMethod2((*NumberMethods).Unchecked_minus),
+		"Unchecked_negate":   numberMethod1((*NumberMethods).Unchecked_negate),
+		"Multiply":           numberMethod2((*NumberMethods).Multiply),
+		"MultiplyP":          numberMethod2((*NumberMethods).MultiplyP),
+		"Unchecked_multiply": numberMethod2((*NumberMethods).Unchecked_multiply),
+		"Divide":             numberMethod2((*NumberMethods).Divide),
+		"Quotient":           numberMethod2((*NumberMethods).Quotient),
+		"Remainder":          numberMethod2((*NumberMethods).Remainder),
+		"Rationalize":        numberMethod1((*NumberMethods).Rationalize),
+		"And":                numberMethod2((*NumberMethods).And),
+		"AndNot":             numberMethod2((*NumberMethods).AndNot),
+		"Not":                numberMethod1((*NumberMethods).Not),
+		"Or":                 numberMethod2((*NumberMethods).Or),
+		"Xor":                numberMethod2((*NumberMethods).Xor),
+		"SetBit":             numberMethod2((*NumberMethods).SetBit),
+		"IsZero":             numberMethod1Bool((*NumberMethods).IsZero),
+		"IsPos":              numberMethod1Bool((*NumberMethods).IsPos),
+		"IsNeg":              numberMethod1Bool((*NumberMethods).IsNeg),
+		"Inc":                numberMethod1((*NumberMethods).Inc),
+		"IncP":               numberMethod1((*NumberMethods).IncP),
+		"Unchecked_inc":      numberMethod1((*NumberMethods).Unchecked_inc),
+		"Dec":                numberMethod1((*NumberMethods).Dec),
+		"DecP":               numberMethod1((*NumberMethods).DecP),
+		"ClearBit":           numberMethod2Int64((*NumberMethods).ClearBit),
+		"ShiftLeft":          numberMethod2Int64((*NumberMethods).ShiftLeft),
+		"ShiftRight":         numberMethod2Int64((*NumberMethods).ShiftRight),
+		"UnsignedShiftRight": numberMethod2Int64((*NumberMethods).UnsignedShiftRight),
+		"FlipBit":            numberMethod2Int64((*NumberMethods).FlipBit),
+		"TestBit":            numberMethod2Bool((*NumberMethods).TestBit),
+		"Max":                numberMethod2((*NumberMethods).Max),
+		"Min":                numberMethod2((*NumberMethods).Min),
+		"Lt":                 numberMethod2Bool((*NumberMethods).Lt),
+		"Gt":                 numberMethod2Bool((*NumberMethods).Gt),
+		"Lte":                numberMethod2Bool((*NumberMethods).Lte),
+		"Gte":                numberMethod2Bool((*NumberMethods).Gte),
+		"Equiv":              numberMethod2Bool((*NumberMethods).Equiv),
+		"Compare":            numberMethod2Int((*NumberMethods).Compare),
+	}
+
+	value := reflect.ValueOf(Numbers)
+	typ := value.Type()
+	for i := 0; i < typ.NumMethod(); i++ {
+		method := typ.Method(i)
+		if _, ok := methods[method.Name]; !ok {
+			methods[method.Name] = wrapGoFunc(value.Method(i).Interface())
+		}
+	}
+	return methods
+}
+
+func numberMethod1(fn func(*NumberMethods, any) any) FnFunc1 {
+	return func(x any) any { return fn(Numbers, x) }
+}
+
+func numberMethod1Bool(fn func(*NumberMethods, any) bool) FnFunc1 {
+	return func(x any) any { return fn(Numbers, x) }
+}
+
+func numberMethod2(fn func(*NumberMethods, any, any) any) FnFunc2 {
+	return func(x, y any) any { return fn(Numbers, x, y) }
+}
+
+func numberMethod2Bool(fn func(*NumberMethods, any, any) bool) FnFunc2 {
+	return func(x, y any) any { return fn(Numbers, x, y) }
+}
+
+func numberMethod2Int(fn func(*NumberMethods, any, any) int) FnFunc2 {
+	return func(x, y any) any { return fn(Numbers, x, y) }
+}
+
+func numberMethod2Int64(fn func(*NumberMethods, any, any) int64) FnFunc2 {
+	return func(x, y any) any { return fn(Numbers, x, y) }
+}
+
+func (nm *NumberMethods) fieldOrMethod(name string) (interface{}, bool) {
+	if len(name) > 0 {
+		first := name[0]
+		if first >= 'a' && first <= 'z' {
+			name = string(first-'a'+'A') + name[1:]
+		}
+	}
+	result, ok := numberMethodFns[name]
+	return result, ok
+}
 
 func (nm *NumberMethods) Num(x any) any {
 	if x == nil {
@@ -40,6 +136,11 @@ func (nm *NumberMethods) UncheckedIntDivide(x, y int) any {
 }
 
 func (nm *NumberMethods) Add(x, y any) any {
+	if a, ok := x.(int64); ok {
+		if b, ok := y.(int64); ok {
+			return int64Ops{}.Add(a, b)
+		}
+	}
 	return Ops(x).Combine(Ops(y)).Add(x, y)
 }
 
@@ -48,6 +149,11 @@ func (nm *NumberMethods) AddP(x, y any) any {
 }
 
 func (nm *NumberMethods) Minus(x, y any) any {
+	if a, ok := x.(int64); ok {
+		if b, ok := y.(int64); ok {
+			return int64Ops{}.Sub(a, b)
+		}
+	}
 	return Ops(x).Combine(Ops(y)).Sub(x, y)
 }
 
@@ -64,6 +170,11 @@ func (nm *NumberMethods) Unchecked_negate(x any) any {
 }
 
 func (nm *NumberMethods) Multiply(x, y any) any {
+	if a, ok := x.(int64); ok {
+		if b, ok := y.(int64); ok {
+			return int64Ops{}.Multiply(a, b)
+		}
+	}
 	return Ops(x).Combine(Ops(y)).Multiply(x, y)
 }
 
@@ -239,18 +350,38 @@ func (nm *NumberMethods) Min(x, y any) any {
 }
 
 func (nm *NumberMethods) Lt(x, y any) bool {
+	if a, ok := x.(int64); ok {
+		if b, ok := y.(int64); ok {
+			return a < b
+		}
+	}
 	return Ops(x).Combine(Ops(y)).LT(x, y)
 }
 
 func (nm *NumberMethods) Gt(x, y any) bool {
+	if a, ok := x.(int64); ok {
+		if b, ok := y.(int64); ok {
+			return a > b
+		}
+	}
 	return Ops(x).Combine(Ops(y)).GT(x, y)
 }
 
 func (nm *NumberMethods) Lte(x, y any) bool {
+	if a, ok := x.(int64); ok {
+		if b, ok := y.(int64); ok {
+			return a <= b
+		}
+	}
 	return Ops(x).Combine(Ops(y)).LTE(x, y)
 }
 
 func (nm *NumberMethods) Gte(x, y any) bool {
+	if a, ok := x.(int64); ok {
+		if b, ok := y.(int64); ok {
+			return a >= b
+		}
+	}
 	return Ops(x).Combine(Ops(y)).GTE(x, y)
 }
 

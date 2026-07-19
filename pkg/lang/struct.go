@@ -14,6 +14,13 @@ type fomKey struct {
 
 var fomCache sync.Map // fomKey -> interface{}
 
+// fieldOrMethodResolver lets runtime-owned values provide a pre-resolved
+// method table. It keeps hot host interop off the reflection and sync.Map
+// paths while leaving the general Go interop behavior unchanged.
+type fieldOrMethodResolver interface {
+	fieldOrMethod(name string) (interface{}, bool)
+}
+
 // StringMethod is the signature for JVM-style instance methods on
 // java.lang.String. The receiver is passed as the first argument and any
 // further arguments arrive in rest. Bridge implementations are
@@ -47,6 +54,12 @@ func lookupStringMethod(name string) (StringMethod, bool) {
 // Method results are cached and wrapped as FnFunc so that subsequent
 // Apply calls use the IFn fast path instead of reflection.
 func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
+	if resolver, ok := v.(fieldOrMethodResolver); ok {
+		if result, found := resolver.fieldOrMethod(name); found {
+			return result, true
+		}
+	}
+
 	// Strings have no Go-level methods; dispatch JVM-style names like
 	// toUpperCase, length, substring through the javacompat/string
 	// registry. The lookup is case-insensitive on the first letter so

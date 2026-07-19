@@ -5,6 +5,7 @@ import (
 
 	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
 func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
@@ -71,6 +72,9 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 			return lang.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
 		},
 		FindNamespace: lang.FindNamespace,
+		ResolveHost: func(sym *lang.Symbol) (interface{}, bool) {
+			return pkgmap.Get(sym.String())
+		},
 	}
 	astNode, err := analyzer.Analyze(n, lang.NewMap(
 		lang.KWNS, env.CurrentNamespace().Name(),

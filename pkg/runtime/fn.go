@@ -3,6 +3,7 @@ package runtime
 import (
 	"errors"
 	"fmt"
+	"sync"
 
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -13,6 +14,23 @@ type Fn struct {
 
 	astNode *ast.Node
 	env     lang.Environment
+	frames  *sync.Pool
+
+	methodsByArity map[int]*ast.Node
+	variadicMethod *ast.Node
+	methodRecurs   map[*ast.Node]bool
+	methodEvals    map[*ast.Node]evalFn
+	singleMethod   *ast.Node
+	singleRecurs   bool
+	singleEval     evalFn
+}
+
+type fnFrame struct {
+	env      environment
+	scope    scope
+	recur    lang.RecurTarget
+	recurErr lang.RecurError
+	captured bool
 }
 
 var (
@@ -20,7 +38,40 @@ var (
 )
 
 func NewFn(astNode *ast.Node, env lang.Environment) *Fn {
-	return &Fn{astNode: astNode, env: env}
+	pool := &sync.Pool{
+		New: func() interface{} {
+			return &fnFrame{
+				scope: scope{syms: make(map[string]interface{})},
+			}
+		},
+	}
+	fn := &Fn{
+		astNode:        astNode,
+		env:            env,
+		frames:         pool,
+		methodsByArity: make(map[int]*ast.Node),
+		methodRecurs:   make(map[*ast.Node]bool),
+		methodEvals:    make(map[*ast.Node]evalFn),
+	}
+	fnNode := astNode.Sub.(*ast.FnNode)
+	for _, method := range fnNode.Methods {
+		methodNode := method.Sub.(*ast.FnMethodNode)
+		if methodNode.IsVariadic {
+			fn.variadicMethod = method
+		} else {
+			fn.methodsByArity[methodNode.FixedArity] = method
+		}
+		if methodNode.LoopID != nil {
+			fn.methodRecurs[method] = nodeRecurs(methodNode.Body, methodNode.LoopID.Name())
+		}
+		fn.methodEvals[method] = compileEval(methodNode.Body)
+	}
+	if len(fnNode.Methods) == 1 {
+		fn.singleMethod = fnNode.Methods[0]
+		fn.singleRecurs = fn.methodRecurs[fn.singleMethod]
+		fn.singleEval = fn.methodEvals[fn.singleMethod]
+	}
+	return fn
 }
 
 func (fn *Fn) Meta() lang.IPersistentMap {
@@ -44,9 +95,36 @@ func (fn *Fn) GetEnvironment() lang.Environment {
 }
 
 func (fn *Fn) Invoke(args ...interface{}) interface{} {
+	return fn.invoke(args)
+}
+
+func (fn *Fn) Invoke0() interface{} {
+	return fn.invoke(nil)
+}
+
+func (fn *Fn) Invoke1(a0 interface{}) interface{} {
+	args := [1]interface{}{a0}
+	return fn.invoke(args[:])
+}
+
+func (fn *Fn) Invoke2(a0, a1 interface{}) interface{} {
+	args := [2]interface{}{a0, a1}
+	return fn.invoke(args[:])
+}
+
+func (fn *Fn) Invoke3(a0, a1, a2 interface{}) interface{} {
+	args := [3]interface{}{a0, a1, a2}
+	return fn.invoke(args[:])
+}
+
+func (fn *Fn) Invoke4(a0, a1, a2, a3 interface{}) interface{} {
+	args := [4]interface{}{a0, a1, a2, a3}
+	return fn.invoke(args[:])
+}
+
+func (fn *Fn) invoke(args []interface{}) interface{} {
 	fnNode := fn.astNode.Sub.(*ast.FnNode)
 
-	methods := fnNode.Methods
 	variadic := fnNode.IsVariadic
 	maxArity := fnNode.MaxFixedArity
 
@@ -54,12 +132,32 @@ func (fn *Fn) Invoke(args ...interface{}) interface{} {
 		panic(lang.NewIllegalArgumentError(fmt.Sprintf("too many arguments (%d)", len(args))))
 	}
 
-	method, err := fn.findMethod(methods, args)
+	method, err := fn.findMethod(args)
 	if err != nil {
 		panic(err)
 	}
 
-	fnEnv := fn.env.PushScope()
+	baseEnv, ok := fn.env.(*environment)
+	if !ok {
+		panic(fmt.Errorf("unsupported function environment %T", fn.env))
+	}
+	frame := fn.frames.Get().(*fnFrame)
+	frame.captured = false
+	frame.env = *baseEnv
+	frame.env.scope = &frame.scope
+	frame.env.fnFrame = frame
+	frame.scope.parent = baseEnv.scope
+	clear(frame.scope.syms)
+	fnEnv := &frame.env
+	defer func() {
+		if !frame.captured {
+			frame.scope.parent = nil
+			frame.env.scope = nil
+			frame.env.fnFrame = nil
+			fn.frames.Put(frame)
+		}
+	}()
+
 	if fnNode.Local != nil {
 		localNode := fnNode.Local.Sub.(*ast.BindingNode)
 		fnEnv.BindLocal(localNode.Name, fn)
@@ -98,43 +196,75 @@ Recur:
 		fnEnv.BindLocal(paramNode.Name, nil)
 	}
 
-	rt := lang.NewRecurTarget()
-	recurEnv := fnEnv.WithRecurTarget(rt)
-	recurErr := &lang.RecurError{Target: rt}
-	res, err := recurEnv.EvalAST(body)
-	if errors.As(err, &recurErr) {
-		if len(recurErr.Args) != arity {
-			panic("wrong number of arguments to recur")
-		}
-		bindingRestValue = nil
-		bindingValues = recurErr.Args[:fixedArity]
-		if len(recurErr.Args) > fixedArity {
-			bindingRestValue = recurErr.Args[fixedArity]
-		}
-		goto Recur
+	recurEnv := fnEnv
+	var rt interface{}
+	methodRecurs := fn.singleMethod == method && fn.singleRecurs ||
+		fn.singleMethod != method && fn.methodRecurs[method]
+	if methodRecurs {
+		rt = &frame.recur
+		recurEnv.recurTarget = rt
+		frame.recurErr.Target = rt
+		recurEnv.recurErr = &frame.recurErr
+	} else {
+		recurEnv.recurTarget = nil
+		recurEnv.recurErr = nil
+	}
+	evaluator := fn.methodEvals[method]
+	if fn.singleMethod == method {
+		evaluator = fn.singleEval
+	}
+	var res interface{}
+	err = nil
+	if evaluator != nil {
+		res, err = evaluator(recurEnv)
+	} else {
+		res, err = recurEnv.EvalAST(body)
 	}
 	if err != nil {
+		recurErr, isRecur := asRecurError(err)
+		if isRecur && recurErr.Target == rt {
+			if len(recurErr.Args) != arity {
+				panic("wrong number of arguments to recur")
+			}
+			bindingRestValue = nil
+			bindingValues = recurErr.Args[:fixedArity]
+			if len(recurErr.Args) > fixedArity {
+				bindingRestValue = recurErr.Args[fixedArity]
+			}
+			goto Recur
+		}
 		panic(errorWithStack(err, lang.StackFrame{})) // TODO: think through error stacks
 	}
 	return res
 }
 
-func (fn *Fn) findMethod(methods []*ast.Node, args []interface{}) (*ast.Node, error) {
-	var variadicMethod *ast.Node
-	for _, method := range methods {
-		methodNode := method.Sub.(*ast.FnMethodNode)
-		if methodNode.IsVariadic {
-			variadicMethod = method
-			continue
+func (fn *Fn) findMethod(args []interface{}) (*ast.Node, error) {
+	if fn.singleMethod != nil {
+		methodNode := fn.singleMethod.Sub.(*ast.FnMethodNode)
+		if len(args) == methodNode.FixedArity ||
+			methodNode.IsVariadic && len(args) >= methodNode.FixedArity {
+			return fn.singleMethod, nil
 		}
-		if methodNode.FixedArity == len(args) {
-			return method, nil
-		}
-	}
-	if variadicMethod == nil || len(args) < variadicMethod.Sub.(*ast.FnMethodNode).FixedArity {
 		return nil, lang.NewIllegalArgumentError(fmt.Sprintf("wrong number of arguments (%d)", len(args)))
 	}
-	return variadicMethod, nil
+	if method := fn.methodsByArity[len(args)]; method != nil {
+		return method, nil
+	}
+	if fn.variadicMethod == nil || len(args) < fn.variadicMethod.Sub.(*ast.FnMethodNode).FixedArity {
+		return nil, lang.NewIllegalArgumentError(fmt.Sprintf("wrong number of arguments (%d)", len(args)))
+	}
+	return fn.variadicMethod, nil
+}
+
+func asRecurError(err error) (*lang.RecurError, bool) {
+	if recurErr, ok := err.(*lang.RecurError); ok {
+		return recurErr, true
+	}
+	var recurErr *lang.RecurError
+	if errors.As(err, &recurErr) {
+		return recurErr, true
+	}
+	return nil, false
 }
 
 func (fn *Fn) ApplyTo(args lang.ISeq) interface{} {

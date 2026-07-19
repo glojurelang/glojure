@@ -28,6 +28,8 @@ type (
 		scope *scope
 
 		recurTarget interface{}
+		recurErr    *lang.RecurError
+		fnFrame     *fnFrame
 
 		// some well-known vars
 		namespaceVar   *lang.Var // ns

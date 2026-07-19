@@ -143,9 +143,10 @@ type (
 	}
 
 	HostCallNode struct {
-		Target *Node
-		Method *lang.Symbol
-		Args   []*Node
+		Target         *Node
+		Method         *lang.Symbol
+		Args           []*Node
+		ResolvedMethod interface{}
 	}
 
 	HostFieldNode struct {
