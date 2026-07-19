@@ -14,7 +14,7 @@ type (
 	Var struct {
 		ns   *Namespace
 		sym  *Symbol
-		root atomic.Value
+		root atomic.Pointer[varRoot]
 
 		meta atomic.Value
 
@@ -128,7 +128,7 @@ func NewVar(ns *Namespace, sym *Symbol) *Var {
 		sym:     sym,
 		watches: emptyMap,
 	}
-	v.root.Store(varRoot{
+	v.root.Store(&varRoot{
 		val:     &UnboundVar{v: v},
 		version: &VarRootVersion{},
 	})
@@ -159,18 +159,18 @@ func (v *Var) String() string {
 }
 
 func (v *Var) HasRoot() bool {
-	root := v.root.Load().(varRoot)
+	root := v.root.Load()
 	_, ok := root.val.(*UnboundVar)
 	return !ok
 }
 
 func (v *Var) BindRoot(root interface{}) {
 	// TODO: handle metadata correctly
-	old := v.root.Swap(varRoot{
+	old := v.root.Swap(&varRoot{
 		val:     root,
 		version: &VarRootVersion{},
 	})
-	v.notifyWatches(old.(varRoot).val, root)
+	v.notifyWatches(old.val, root)
 }
 
 func (v *Var) IsBound() bool {
@@ -178,13 +178,13 @@ func (v *Var) IsBound() bool {
 }
 
 func (v *Var) getRoot() interface{} {
-	root := v.root.Load().(varRoot).val
+	root := v.root.Load().val
 	if _, unbound := root.(*UnboundVar); !unbound {
 		return root
 	}
 	if resolver, ok := unboundVarResolver.Load().(func(*Var)); ok {
 		resolver(v)
-		root = v.root.Load().(varRoot).val
+		root = v.root.Load().val
 	}
 	return root
 }
@@ -192,7 +192,7 @@ func (v *Var) getRoot() interface{} {
 // RootVersion returns the identity of the current root binding. The returned
 // pointer changes atomically whenever BindRoot or AlterRoot installs a root.
 func (v *Var) RootVersion() *VarRootVersion {
-	return v.root.Load().(varRoot).version
+	return v.root.Load().version
 }
 
 func (v *Var) Get() interface{} {
@@ -316,7 +316,7 @@ func (v *Var) AlterRoot(alter IFn, args ISeq) interface{} {
 	oldRoot := v.Get()
 	newRoot := alter.ApplyTo(NewCons(oldRoot, args))
 	// TODO: validate
-	v.root.Store(varRoot{
+	v.root.Store(&varRoot{
 		val:     newRoot,
 		version: &VarRootVersion{},
 	})
