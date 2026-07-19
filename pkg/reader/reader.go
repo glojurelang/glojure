@@ -300,19 +300,12 @@ func (r *Reader) error(format string, args ...interface{}) error {
 	}
 }
 
-// popSection returns the last section read, ending at the current
-// input, and pops it off the stack.
-func (r *Reader) popSection() lang.IPersistentMap {
+// popSection returns the start of the last section read and pops it off the
+// stack. Source metadata is constructed only when the value can carry it.
+func (r *Reader) popSection() pos {
 	top := r.posStack[len(r.posStack)-1]
 	r.posStack = r.posStack[:len(r.posStack)-1]
-
-	return lang.NewMap(
-		lang.KWFile, r.rs.filename,
-		lang.KWLine, top.Line,
-		lang.KWColumn, top.Column,
-		lang.KWEndLine, r.rs.pos().Line,
-		lang.KWEndColumn, r.rs.pos().Column,
-	)
+	return top
 }
 
 // pushSection pushes a new section onto the stack, starting at the
@@ -384,13 +377,25 @@ func (r *Reader) read(eofOK bool, stopRune rune) (expr any, err error) {
 
 	r.pushSection()
 	defer func() {
-		s := r.popSection()
+		start := r.popSection()
 		obj, ok := expr.(lang.IObj)
 		if !ok {
 			return
 		}
+		end := r.rs.pos()
+		section := lang.NewMap(
+			lang.KWFile, r.rs.filename,
+			lang.KWLine, start.Line,
+			lang.KWColumn, start.Column,
+			lang.KWEndLine, end.Line,
+			lang.KWEndColumn, end.Column,
+		)
 		meta := obj.Meta()
-		for seq := lang.Seq(s); seq != nil; seq = seq.Next() {
+		if meta == nil || meta.Count() == 0 {
+			expr = obj.WithMeta(section)
+			return
+		}
+		for seq := section.Seq(); seq != nil; seq = seq.Next() {
 			entry := seq.First().(lang.IMapEntry)
 			meta = lang.Assoc(meta, entry.Key(), entry.Val()).(lang.IPersistentMap)
 		}
