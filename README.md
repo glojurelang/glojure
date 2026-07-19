@@ -267,8 +267,10 @@ The following standard library packages are included by default:
 - `os`
 - `os/exec`
 - `os/signal`
-- `regexp`
+- `path/filepath`
 - `reflect`
+- `regexp`
+- `runtime/debug`
 - `sort`
 - `strconv`
 - `strings`
