@@ -60,9 +60,66 @@ func (fn nativeCoreAdd) ApplyTo(args lang.ISeq) interface{} {
 	return result
 }
 
+type nativeCoreSubtract struct{}
+
+func (nativeCoreSubtract) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 0:
+		panic(lang.NewIllegalArgumentError("wrong number of arguments (0)"))
+	case 1:
+		return lang.Numbers.Multiply(int64(-1), args[0])
+	case 2:
+		return lang.Numbers.Minus(args[0], args[1])
+	default:
+		result := lang.Numbers.Minus(args[0], args[1])
+		for _, arg := range args[2:] {
+			result = lang.Numbers.Minus(result, arg)
+		}
+		return result
+	}
+}
+
+func (nativeCoreSubtract) Invoke1(a interface{}) interface{} {
+	return lang.Numbers.Multiply(int64(-1), a)
+}
+
+func (nativeCoreSubtract) Invoke2(a, b interface{}) interface{} {
+	return lang.Numbers.Minus(a, b)
+}
+
+func (nativeCoreSubtract) ReduceInt64(a, b int64) int64 {
+	return checkedInt64Sub(a, b)
+}
+
+func (fn nativeCoreSubtract) ApplyTo(args lang.ISeq) interface{} {
+	if args == nil {
+		return fn.Invoke()
+	}
+	first := args.First()
+	args = args.Next()
+	if args == nil {
+		return fn.Invoke1(first)
+	}
+	result := fn.Invoke2(first, args.First())
+	args = args.Next()
+	if args == nil {
+		return result
+	}
+	if reducible, ok := args.(lang.IReduceInit); ok {
+		return reducible.ReduceInit(fn, result)
+	}
+	for ; args != nil; args = args.Next() {
+		result = fn.Invoke2(result, args.First())
+	}
+	return result
+}
+
 func installNativeCoreFunctions(core *lang.Namespace) {
 	if add := core.FindInternedVar(lang.NewSymbol("+")); add != nil {
 		add.BindRoot(nativeCoreAdd{})
+	}
+	if subtract := core.FindInternedVar(lang.NewSymbol("-")); subtract != nil {
+		subtract.BindRoot(nativeCoreSubtract{})
 	}
 	installFixedArityCoreFunction(core, "map", 2, lang.FnFunc2(nativeMapSeq))
 	installFixedArityCoreFunction(core, "filter", 2, lang.FnFunc2(nativeFilterSeq))

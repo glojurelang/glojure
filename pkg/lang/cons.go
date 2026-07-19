@@ -9,7 +9,9 @@ type Cons struct {
 }
 
 var (
-	_ ASeq = (*Cons)(nil)
+	_ ASeq        = (*Cons)(nil)
+	_ IReduce     = (*Cons)(nil)
+	_ IReduceInit = (*Cons)(nil)
 )
 
 func NewCons(x any, xs any) ISeq {
@@ -86,4 +88,26 @@ func (c *Cons) HashEq() uint32 {
 
 func (c *Cons) String() string {
 	return aseqString(c)
+}
+
+func (c *Cons) Reduce(f IFn) any {
+	ret := c.First()
+	for seq := c.Next(); seq != nil; seq = seq.Next() {
+		ret = Apply2(f, ret, seq.First())
+		if IsReduced(ret) {
+			return ret.(IDeref).Deref()
+		}
+	}
+	return ret
+}
+
+func (c *Cons) ReduceInit(f IFn, init any) any {
+	ret := init
+	for seq := ISeq(c); seq != nil; seq = seq.Next() {
+		ret = Apply2(f, ret, seq.First())
+		if IsReduced(ret) {
+			return ret.(IDeref).Deref()
+		}
+	}
+	return ret
 }

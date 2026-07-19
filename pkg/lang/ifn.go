@@ -16,6 +16,7 @@ type FnFunc func(args ...any) any
 
 var (
 	_ IFn = FnFunc(nil)
+	_ IFn = VariadicFn{}
 	_ IFn = FnFunc0(nil)
 	_ IFn = FnFunc1(nil)
 	_ IFn = FnFunc2(nil)
@@ -42,6 +43,65 @@ func (f FnFunc) Meta() IPersistentMap {
 func (f FnFunc) WithMeta(meta IPersistentMap) any {
 	// no-op
 	return f
+}
+
+// VariadicFn keeps the ordinary variadic Go call path while allowing ApplyTo
+// to pass an argument sequence to a Clojure variadic method without realizing
+// its rest arguments.
+type VariadicFn struct {
+	meta          IPersistentMap
+	requiredArity int
+	doInvoke      func(fixed []any, rest ISeq) any
+}
+
+func NewVariadicFn(
+	requiredArity int,
+	doInvoke func(fixed []any, rest ISeq) any,
+) VariadicFn {
+	return VariadicFn{
+		requiredArity: requiredArity,
+		doInvoke:      doInvoke,
+	}
+}
+
+func (f VariadicFn) Invoke(args ...any) any {
+	if len(args) < f.requiredArity {
+		panic(NewIllegalArgumentError(fmt.Sprintf(
+			"wrong number of arguments: expected at least %d, got %d",
+			f.requiredArity, len(args),
+		)))
+	}
+	var rest ISeq
+	if len(args) > f.requiredArity {
+		rest = NewList(args[f.requiredArity:]...)
+	}
+	return f.doInvoke(args[:f.requiredArity], rest)
+}
+
+func (f VariadicFn) ApplyTo(args ISeq) any {
+	if arity := BoundedLength(args, f.requiredArity); arity < f.requiredArity {
+		panic(NewIllegalArgumentError(fmt.Sprintf(
+			"wrong number of arguments: expected at least %d, got %d",
+			f.requiredArity, arity,
+		)))
+	}
+	fixed := make([]any, f.requiredArity)
+	rest := args
+	for i := range fixed {
+		fixed[i] = rest.First()
+		rest = rest.Next()
+	}
+	return f.doInvoke(fixed, rest)
+}
+
+func (f VariadicFn) Meta() IPersistentMap {
+	return f.meta
+}
+
+func (f VariadicFn) WithMeta(meta IPersistentMap) any {
+	copy := f
+	copy.meta = meta
+	return copy
 }
 
 // FnFunc0 is a zero-argument function implementing IFn with no []any allocation.

@@ -223,6 +223,21 @@ func (fn *Fn) invoke(args []interface{}) interface{} {
 		panic(err)
 	}
 
+	methodNode := method.Sub.(*ast.FnMethodNode)
+	bindingValues := args[:methodNode.FixedArity]
+	var bindingRestValue interface{}
+	if methodNode.IsVariadic && len(args) > methodNode.FixedArity {
+		bindingRestValue = lang.NewList(args[methodNode.FixedArity:]...)
+	}
+	return fn.invokeMethod(method, bindingValues, bindingRestValue)
+}
+
+func (fn *Fn) invokeMethod(
+	method *ast.Node,
+	bindingValues []interface{},
+	bindingRestValue interface{},
+) interface{} {
+	fnNode := fn.astNode.Sub.(*ast.FnNode)
 	baseEnv, ok := fn.env.(*environment)
 	if !ok {
 		panic(fmt.Errorf("unsupported function environment %T", fn.env))
@@ -251,13 +266,9 @@ func (fn *Fn) invoke(args []interface{}) interface{} {
 	methodVariadic := methodNode.IsVariadic
 	body := methodNode.Body
 
-	bindingValues := args[:fixedArity]
-
 	arity := fixedArity
-	var bindingRestValue interface{}
-	if len(args) > len(bindingValues) {
+	if bindingRestValue != nil {
 		arity++
-		bindingRestValue = lang.NewList(args[len(bindingValues):]...)
 	}
 
 Recur:
@@ -305,7 +316,7 @@ Recur:
 		evaluator = fn.singleEval
 	}
 	var res interface{}
-	err = nil
+	var err error
 	if evaluator != nil {
 		res, err = evaluator(recurEnv)
 	} else {
@@ -359,7 +370,34 @@ func asRecurError(err error) (*lang.RecurError, bool) {
 }
 
 func (fn *Fn) ApplyTo(args lang.ISeq) interface{} {
-	return fn.Invoke(seqToSlice(args)...)
+	fnNode := fn.astNode.Sub.(*ast.FnNode)
+	limit := fnNode.MaxFixedArity + 1
+	if fn.variadicMethod != nil {
+		limit = fn.variadicMethod.Sub.(*ast.FnMethodNode).FixedArity + 1
+	}
+	arity := lang.BoundedLength(args, limit)
+
+	method := fn.methodsByArity[arity]
+	if method == nil && fn.variadicMethod != nil &&
+		arity >= fn.variadicMethod.Sub.(*ast.FnMethodNode).FixedArity {
+		method = fn.variadicMethod
+	}
+	if method == nil {
+		panic(lang.NewIllegalArgumentError(fmt.Sprintf("wrong number of arguments (%d)", arity)))
+	}
+
+	methodNode := method.Sub.(*ast.FnMethodNode)
+	bindingValues := make([]interface{}, methodNode.FixedArity)
+	rest := args
+	for i := range bindingValues {
+		bindingValues[i] = rest.First()
+		rest = rest.Next()
+	}
+	var bindingRestValue interface{}
+	if methodNode.IsVariadic {
+		bindingRestValue = rest
+	}
+	return fn.invokeMethod(method, bindingValues, bindingRestValue)
 }
 
 func errorWithStack(err error, stackFrame lang.StackFrame) error {

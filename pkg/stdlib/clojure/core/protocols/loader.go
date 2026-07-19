@@ -1772,134 +1772,134 @@ func LoadNS() {
 	// CollReduce
 	{
 		tmp0 := sym_CollReduce
-		var tmp3 lang.FnFunc
-		tmp3 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp3 lang.ArityFn
+		tmp3 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v4 := args[0]
 				_ = v4
-				restArgs := args[1:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp7 := lang.Apply1(tmp6, v4)
 				return tmp7
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn coll-reduce
 		tmp2 := lang.NewMultiFn("coll-reduce", tmp3, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp4 lang.FnFunc
-		tmp4 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp4 lang.ArityFn
+		tmp4 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v5 := args[0]
 				_ = v5
-				restArgs := args[1:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				tmp7 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp9 := lang.Apply2(tmp8, v5, v6)
 				tmp10 := lang.Apply2(tmp7, closed0, tmp9)
 				return tmp10
-			}
-		})
+			}),
+			1,
+		)
 		tmp2.AddMethod(nil, tmp4)
 		tmp5 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
-		var tmp6 lang.FnFunc
-		tmp6 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp6 lang.ArityFn
+		tmp6 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v7 := args[0]
 				_ = v7
-				restArgs := args[1:]
-				var v8 any
-				if len(restArgs) > 0 {
-					v8 = lang.NewList(restArgs...)
-				}
+				var v8 any = rest
 				_ = v8
 				tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp11 := lang.Apply2(tmp10, v7, v8)
 				tmp12 := lang.Apply2(tmp9, closed1, tmp11)
 				return tmp12
-			}
-		})
+			}),
+			1,
+		)
 		tmp2.AddMethod(tmp5, tmp6)
 		tmp7 := reflect.TypeOf((*lang.LazySeq)(nil))
-		var tmp8 lang.FnFunc
-		tmp8 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp8 lang.ArityFn
+		tmp8 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v9 := args[0]
 				_ = v9
-				restArgs := args[1:]
-				var v10 any
-				if len(restArgs) > 0 {
-					v10 = lang.NewList(restArgs...)
-				}
+				var v10 any = rest
 				_ = v10
 				tmp11 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp13 := lang.Apply2(tmp12, v9, v10)
 				tmp14 := lang.Apply2(tmp11, closed2, tmp13)
 				return tmp14
-			}
-		})
+			}),
+			1,
+		)
 		tmp2.AddMethod(tmp7, tmp8)
 		tmp9 := reflect.TypeOf((*lang.Vector)(nil))
-		var tmp10 lang.FnFunc
-		tmp10 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp10 lang.ArityFn
+		tmp10 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v11 := args[0]
 				_ = v11
-				restArgs := args[1:]
-				var v12 any
-				if len(restArgs) > 0 {
-					v12 = lang.NewList(restArgs...)
-				}
+				var v12 any = rest
 				_ = v12
 				tmp13 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp14 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp15 := lang.Apply2(tmp14, v11, v12)
 				tmp16 := lang.Apply2(tmp13, closed3, tmp15)
 				return tmp16
-			}
-		})
+			}),
+			1,
+		)
 		tmp2.AddMethod(tmp9, tmp10)
 		tmp11 := reflect.TypeOf("")
-		var tmp12 lang.FnFunc
-		tmp12 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp12 lang.ArityFn
+		tmp12 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v13 := args[0]
 				_ = v13
-				restArgs := args[1:]
-				var v14 any
-				if len(restArgs) > 0 {
-					v14 = lang.NewList(restArgs...)
-				}
+				var v14 any = rest
 				_ = v14
 				tmp15 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp16 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp17 := lang.Apply2(tmp16, v13, v14)
 				tmp18 := lang.Apply2(tmp15, closed4, tmp17)
 				return tmp18
-			}
-		})
+			}),
+			1,
+		)
 		tmp2.AddMethod(tmp11, tmp12)
 		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_coll_DASH_reduce, tmp2), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_coll_DASH_reduce, lang.NewVector(sym_coll, sym_f), lang.NewVector(sym_coll, sym_f, sym_val)))))
 		var_clojure_DOT_core_DOT_protocols_CollReduce = ns.InternWithValue(tmp0, tmp1, true)
@@ -1910,46 +1910,46 @@ func LoadNS() {
 	// Datafiable
 	{
 		tmp0 := sym_Datafiable
-		var tmp3 lang.FnFunc
-		tmp3 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp3 lang.ArityFn
+		tmp3 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v4 := args[0]
 				_ = v4
-				restArgs := args[1:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp7 := lang.Apply1(tmp6, v4)
 				return tmp7
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn datafy
 		tmp2 := lang.NewMultiFn("datafy", tmp3, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp4 lang.FnFunc
-		tmp4 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp4 lang.ArityFn
+		tmp4 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v5 := args[0]
 				_ = v5
-				restArgs := args[1:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				tmp7 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp9 := lang.Apply2(tmp8, v5, v6)
 				tmp10 := lang.Apply2(tmp7, closed5, tmp9)
 				return tmp10
-			}
-		})
+			}),
+			1,
+		)
 		tmp2.AddMethod(nil, tmp4)
 		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_datafy, tmp2), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_datafy, lang.NewVector(sym_o), "return a representation of o as data (default identity)"))))
 		var_clojure_DOT_core_DOT_protocols_Datafiable = ns.InternWithValue(tmp0, tmp1, true)
@@ -1960,24 +1960,24 @@ func LoadNS() {
 	// IKVReduce
 	{
 		tmp0 := sym_IKVReduce
-		var tmp3 lang.FnFunc
-		tmp3 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp3 lang.ArityFn
+		tmp3 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v4 := args[0]
 				_ = v4
-				restArgs := args[1:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp7 := lang.Apply1(tmp6, v4)
 				return tmp7
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn kv-reduce
 		tmp2 := lang.NewMultiFn("kv-reduce", tmp3, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_kv_DASH_reduce, tmp2), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_kv_DASH_reduce, lang.NewVector(sym_amap, sym_f, sym_init)))))
@@ -1989,90 +1989,90 @@ func LoadNS() {
 	// InternalReduce
 	{
 		tmp0 := sym_InternalReduce
-		var tmp3 lang.FnFunc
-		tmp3 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp3 lang.ArityFn
+		tmp3 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v4 := args[0]
 				_ = v4
-				restArgs := args[1:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp7 := lang.Apply1(tmp6, v4)
 				return tmp7
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn internal-reduce
 		tmp2 := lang.NewMultiFn("internal-reduce", tmp3, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp4 lang.FnFunc
-		tmp4 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp4 lang.ArityFn
+		tmp4 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v5 := args[0]
 				_ = v5
-				restArgs := args[1:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				tmp7 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp9 := lang.Apply2(tmp8, v5, v6)
 				tmp10 := lang.Apply2(tmp7, closed6, tmp9)
 				return tmp10
-			}
-		})
+			}),
+			1,
+		)
 		tmp2.AddMethod(nil, tmp4)
 		tmp5 := reflect.TypeOf((*lang.IChunkedSeq)(nil)).Elem()
-		var tmp6 lang.FnFunc
-		tmp6 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp6 lang.ArityFn
+		tmp6 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v7 := args[0]
 				_ = v7
-				restArgs := args[1:]
-				var v8 any
-				if len(restArgs) > 0 {
-					v8 = lang.NewList(restArgs...)
-				}
+				var v8 any = rest
 				_ = v8
 				tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp11 := lang.Apply2(tmp10, v7, v8)
 				tmp12 := lang.Apply2(tmp9, closed7, tmp11)
 				return tmp12
-			}
-		})
+			}),
+			1,
+		)
 		tmp2.AddMethod(tmp5, tmp6)
 		tmp7 := reflect.TypeOf((*lang.Object)(nil)).Elem()
-		var tmp8 lang.FnFunc
-		tmp8 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp8 lang.ArityFn
+		tmp8 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v9 := args[0]
 				_ = v9
-				restArgs := args[1:]
-				var v10 any
-				if len(restArgs) > 0 {
-					v10 = lang.NewList(restArgs...)
-				}
+				var v10 any = rest
 				_ = v10
 				tmp11 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp12 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp13 := lang.Apply2(tmp12, v9, v10)
 				tmp14 := lang.Apply2(tmp11, closed8, tmp13)
 				return tmp14
-			}
-		})
+			}),
+			1,
+		)
 		tmp2.AddMethod(tmp7, tmp8)
 		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_internal_DASH_reduce, tmp2), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_internal_DASH_reduce, lang.NewVector(sym_seq, sym_f, sym_start)))))
 		var_clojure_DOT_core_DOT_protocols_InternalReduce = ns.InternWithValue(tmp0, tmp1, true)
@@ -2083,24 +2083,24 @@ func LoadNS() {
 	// Navigable
 	{
 		tmp0 := sym_Navigable
-		var tmp3 lang.FnFunc
-		tmp3 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp3 lang.ArityFn
+		tmp3 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v4 := args[0]
 				_ = v4
-				restArgs := args[1:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp7 := lang.Apply1(tmp6, v4)
 				return tmp7
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn nav
 		tmp2 := lang.NewMultiFn("nav", tmp3, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp1 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_nav, tmp2), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_nav, lang.NewVector(sym_coll, sym_k, sym_v), "return (possibly transformed) v in the context of coll and k (a key/index or nil),\ndefaults to returning v."))))
@@ -2112,134 +2112,134 @@ func LoadNS() {
 	// coll-reduce
 	{
 		tmp0 := sym_coll_DASH_reduce
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp2 lang.ArityFn
+		tmp2 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v3 := args[0]
 				_ = v3
-				restArgs := args[1:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp6 := lang.Apply1(tmp5, v3)
 				return tmp6
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn coll-reduce
 		tmp1 := lang.NewMultiFn("coll-reduce", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp3 lang.FnFunc
-		tmp3 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp3 lang.ArityFn
+		tmp3 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v4 := args[0]
 				_ = v4
-				restArgs := args[1:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp8 := lang.Apply2(tmp7, v4, v5)
 				tmp9 := lang.Apply2(tmp6, closed0, tmp8)
 				return tmp9
-			}
-		})
+			}),
+			1,
+		)
 		tmp1.AddMethod(nil, tmp3)
 		tmp4 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
-		var tmp5 lang.FnFunc
-		tmp5 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp5 lang.ArityFn
+		tmp5 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v6 := args[0]
 				_ = v6
-				restArgs := args[1:]
-				var v7 any
-				if len(restArgs) > 0 {
-					v7 = lang.NewList(restArgs...)
-				}
+				var v7 any = rest
 				_ = v7
 				tmp8 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp10 := lang.Apply2(tmp9, v6, v7)
 				tmp11 := lang.Apply2(tmp8, closed1, tmp10)
 				return tmp11
-			}
-		})
+			}),
+			1,
+		)
 		tmp1.AddMethod(tmp4, tmp5)
 		tmp6 := reflect.TypeOf((*lang.LazySeq)(nil))
-		var tmp7 lang.FnFunc
-		tmp7 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp7 lang.ArityFn
+		tmp7 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v8 := args[0]
 				_ = v8
-				restArgs := args[1:]
-				var v9 any
-				if len(restArgs) > 0 {
-					v9 = lang.NewList(restArgs...)
-				}
+				var v9 any = rest
 				_ = v9
 				tmp10 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp12 := lang.Apply2(tmp11, v8, v9)
 				tmp13 := lang.Apply2(tmp10, closed2, tmp12)
 				return tmp13
-			}
-		})
+			}),
+			1,
+		)
 		tmp1.AddMethod(tmp6, tmp7)
 		tmp8 := reflect.TypeOf((*lang.Vector)(nil))
-		var tmp9 lang.FnFunc
-		tmp9 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp9 lang.ArityFn
+		tmp9 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v10 := args[0]
 				_ = v10
-				restArgs := args[1:]
-				var v11 any
-				if len(restArgs) > 0 {
-					v11 = lang.NewList(restArgs...)
-				}
+				var v11 any = rest
 				_ = v11
 				tmp12 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp14 := lang.Apply2(tmp13, v10, v11)
 				tmp15 := lang.Apply2(tmp12, closed3, tmp14)
 				return tmp15
-			}
-		})
+			}),
+			1,
+		)
 		tmp1.AddMethod(tmp8, tmp9)
 		tmp10 := reflect.TypeOf("")
-		var tmp11 lang.FnFunc
-		tmp11 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp11 lang.ArityFn
+		tmp11 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v12 := args[0]
 				_ = v12
-				restArgs := args[1:]
-				var v13 any
-				if len(restArgs) > 0 {
-					v13 = lang.NewList(restArgs...)
-				}
+				var v13 any = rest
 				_ = v13
 				tmp14 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp15 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp16 := lang.Apply2(tmp15, v12, v13)
 				tmp17 := lang.Apply2(tmp14, closed4, tmp16)
 				return tmp17
-			}
-		})
+			}),
+			1,
+		)
 		tmp1.AddMethod(tmp10, tmp11)
 		var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce.SetMetaLazy(func() lang.IPersistentMap {
@@ -2249,46 +2249,46 @@ func LoadNS() {
 	// datafy
 	{
 		tmp0 := sym_datafy
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp2 lang.ArityFn
+		tmp2 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v3 := args[0]
 				_ = v3
-				restArgs := args[1:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp6 := lang.Apply1(tmp5, v3)
 				return tmp6
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn datafy
 		tmp1 := lang.NewMultiFn("datafy", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp3 lang.FnFunc
-		tmp3 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp3 lang.ArityFn
+		tmp3 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v4 := args[0]
 				_ = v4
-				restArgs := args[1:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp8 := lang.Apply2(tmp7, v4, v5)
 				tmp9 := lang.Apply2(tmp6, closed5, tmp8)
 				return tmp9
-			}
-		})
+			}),
+			1,
+		)
 		tmp1.AddMethod(nil, tmp3)
 		var_clojure_DOT_core_DOT_protocols_datafy = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_datafy.SetMetaLazy(func() lang.IPersistentMap {
@@ -2332,90 +2332,90 @@ func LoadNS() {
 	// internal-reduce
 	{
 		tmp0 := sym_internal_DASH_reduce
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp2 lang.ArityFn
+		tmp2 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v3 := args[0]
 				_ = v3
-				restArgs := args[1:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp6 := lang.Apply1(tmp5, v3)
 				return tmp6
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn internal-reduce
 		tmp1 := lang.NewMultiFn("internal-reduce", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp3 lang.FnFunc
-		tmp3 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp3 lang.ArityFn
+		tmp3 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v4 := args[0]
 				_ = v4
-				restArgs := args[1:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp8 := lang.Apply2(tmp7, v4, v5)
 				tmp9 := lang.Apply2(tmp6, closed6, tmp8)
 				return tmp9
-			}
-		})
+			}),
+			1,
+		)
 		tmp1.AddMethod(nil, tmp3)
 		tmp4 := reflect.TypeOf((*lang.IChunkedSeq)(nil)).Elem()
-		var tmp5 lang.FnFunc
-		tmp5 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp5 lang.ArityFn
+		tmp5 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v6 := args[0]
 				_ = v6
-				restArgs := args[1:]
-				var v7 any
-				if len(restArgs) > 0 {
-					v7 = lang.NewList(restArgs...)
-				}
+				var v7 any = rest
 				_ = v7
 				tmp8 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp10 := lang.Apply2(tmp9, v6, v7)
 				tmp11 := lang.Apply2(tmp8, closed7, tmp10)
 				return tmp11
-			}
-		})
+			}),
+			1,
+		)
 		tmp1.AddMethod(tmp4, tmp5)
 		tmp6 := reflect.TypeOf((*lang.Object)(nil)).Elem()
-		var tmp7 lang.FnFunc
-		tmp7 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp7 lang.ArityFn
+		tmp7 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v8 := args[0]
 				_ = v8
-				restArgs := args[1:]
-				var v9 any
-				if len(restArgs) > 0 {
-					v9 = lang.NewList(restArgs...)
-				}
+				var v9 any = rest
 				_ = v9
 				tmp10 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp12 := lang.Apply2(tmp11, v8, v9)
 				tmp13 := lang.Apply2(tmp10, closed8, tmp12)
 				return tmp13
-			}
-		})
+			}),
+			1,
+		)
 		tmp1.AddMethod(tmp6, tmp7)
 		var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce.SetMetaLazy(func() lang.IPersistentMap {
@@ -2636,24 +2636,24 @@ func LoadNS() {
 	// kv-reduce
 	{
 		tmp0 := sym_kv_DASH_reduce
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp2 lang.ArityFn
+		tmp2 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v3 := args[0]
 				_ = v3
-				restArgs := args[1:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp6 := lang.Apply1(tmp5, v3)
 				return tmp6
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn kv-reduce
 		tmp1 := lang.NewMultiFn("kv-reduce", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var_clojure_DOT_core_DOT_protocols_kv_DASH_reduce = ns.InternWithValue(tmp0, tmp1, true)
@@ -2728,24 +2728,24 @@ func LoadNS() {
 	// nav
 	{
 		tmp0 := sym_nav
-		var tmp2 lang.FnFunc
-		tmp2 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp2 lang.ArityFn
+		tmp2 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v3 := args[0]
 				_ = v3
-				restArgs := args[1:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp6 := lang.Apply1(tmp5, v3)
 				return tmp6
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn nav
 		tmp1 := lang.NewMultiFn("nav", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var_clojure_DOT_core_DOT_protocols_nav = ns.InternWithValue(tmp0, tmp1, true)

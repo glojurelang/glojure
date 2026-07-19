@@ -8,6 +8,8 @@ import "fmt"
 type ArityFn struct {
 	meta        IPersistentMap
 	fixed       [5]IFn
+	fixedOther  map[int]IFn
+	maxFixed    int
 	variadic    IFn
 	minVariadic int
 }
@@ -17,18 +19,54 @@ func NewArityFn(
 	variadic IFn,
 	minVariadic int,
 ) ArityFn {
-	return ArityFn{
+	f := ArityFn{
 		fixed:       [5]IFn{fn0, fn1, fn2, fn3, fn4},
 		variadic:    variadic,
 		minVariadic: minVariadic,
 	}
+	for arity, method := range f.fixed {
+		if method != nil {
+			f.maxFixed = arity
+		}
+	}
+	return f
+}
+
+func NewArityFnMethods(
+	fixed map[int]IFn,
+	variadic IFn,
+	minVariadic int,
+) ArityFn {
+	f := ArityFn{
+		variadic:    variadic,
+		minVariadic: minVariadic,
+	}
+	for arity, method := range fixed {
+		if arity < len(f.fixed) {
+			f.fixed[arity] = method
+		} else {
+			if f.fixedOther == nil {
+				f.fixedOther = make(map[int]IFn)
+			}
+			f.fixedOther[arity] = method
+		}
+		if arity > f.maxFixed {
+			f.maxFixed = arity
+		}
+	}
+	return f
+}
+
+func (f ArityFn) fixedMethod(arity int) IFn {
+	if arity < len(f.fixed) {
+		return f.fixed[arity]
+	}
+	return f.fixedOther[arity]
 }
 
 func (f ArityFn) Invoke(args ...any) any {
-	if len(args) < len(f.fixed) {
-		if method := f.fixed[len(args)]; method != nil {
-			return method.Invoke(args...)
-		}
+	if method := f.fixedMethod(len(args)); method != nil {
+		return method.Invoke(args...)
 	}
 	if f.variadic != nil && len(args) >= f.minVariadic {
 		return f.variadic.Invoke(args...)
@@ -72,7 +110,20 @@ func (f ArityFn) Invoke4(a0, a1, a2, a3 any) any {
 }
 
 func (f ArityFn) ApplyTo(args ISeq) any {
-	return f.Invoke(seqToSlice(args)...)
+	original := args
+	limit := f.maxFixed + 1
+	if f.variadic != nil && f.minVariadic+1 > limit {
+		limit = f.minVariadic + 1
+	}
+	arity := BoundedLength(args, limit)
+
+	if method := f.fixedMethod(arity); method != nil {
+		return method.ApplyTo(args)
+	}
+	if f.variadic != nil && arity >= f.minVariadic {
+		return f.variadic.ApplyTo(original)
+	}
+	panic(NewIllegalArgumentError(fmt.Sprintf("wrong number of arguments (%d)", arity)))
 }
 
 func (f ArityFn) Meta() IPersistentMap {

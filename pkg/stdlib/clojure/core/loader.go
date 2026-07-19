@@ -3323,20 +3323,19 @@ func LoadNS() {
 	// alter
 	{
 		tmp0 := sym_alter
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5, _ := lang.FieldOrMethod(v2, "alter")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
@@ -3344,8 +3343,9 @@ func LoadNS() {
 				}
 				tmp6 := lang.Apply2(tmp5, v3, v4)
 				return tmp6
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_alter = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_alter.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref, sym_fun, sym__AMP_, sym_args)), kw_doc, "Must be called in a transaction. Sets the in-transaction-value of\n  ref to:\n\n  (apply fun in-transaction-value-of-ref args)\n\n  and returns the in-transaction-value of ref.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2443), kw_end_DASH_line, int(2443))
@@ -3354,20 +3354,19 @@ func LoadNS() {
 	// alter-meta!
 	{
 		tmp0 := sym_alter_DASH_meta_BANG_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5, _ := lang.FieldOrMethod(v2, "AlterMeta")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
@@ -3375,8 +3374,9 @@ func LoadNS() {
 				}
 				tmp6 := lang.Apply2(tmp5, v3, v4)
 				return tmp6
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_alter_DASH_meta_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_alter_DASH_meta_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_iref, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically sets the metadata for a namespace/var/ref/agent/atom to be:\n\n  (apply f its-current-meta args)\n\n  f must be free of side-effects", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(7), kw_line, int(2406), kw_end_DASH_line, int(2406))
@@ -3385,20 +3385,19 @@ func LoadNS() {
 	// alter-var-root
 	{
 		tmp0 := sym_alter_DASH_var_DASH_root
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5, _ := lang.FieldOrMethod(v2, "alterRoot")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
@@ -3406,8 +3405,9 @@ func LoadNS() {
 				}
 				tmp6 := lang.Apply2(tmp5, v3, v4)
 				return tmp6
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_alter_DASH_var_DASH_root = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_alter_DASH_var_DASH_root.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_v, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically alters the root binding of var v by applying f to its\n  current value plus any args", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(5536), kw_end_DASH_line, int(5536))
@@ -3721,24 +3721,24 @@ func LoadNS() {
 	// comment
 	{
 		tmp0 := sym_comment
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				return nil
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_comment = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_comment.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Ignores body, yields nil", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(4790), kw_end_DASH_line, int(4790))
@@ -3747,20 +3747,19 @@ func LoadNS() {
 	// commute
 	{
 		tmp0 := sym_commute
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5, _ := lang.FieldOrMethod(v2, "Commute")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
@@ -3768,8 +3767,9 @@ func LoadNS() {
 				}
 				tmp6 := lang.Apply2(tmp5, v3, v4)
 				return tmp6
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_commute = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_commute.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ref, sym_fun, sym__AMP_, sym_args)), kw_doc, "Must be called in a transaction. Sets the in-transaction-value of\n  ref to:\n\n  (apply fun in-transaction-value-of-ref args)\n\n  and returns the in-transaction-value of ref.\n\n  At the commit point of the transaction, sets the value of ref to be:\n\n  (apply fun most-recently-committed-value-of-ref args)\n\n  Thus fun should be commutative, or, failing that, you must accept\n  last-one-in-wins behavior.  commute allows for more concurrency than\n  ref-set.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(2422), kw_end_DASH_line, int(2422))
@@ -3858,6 +3858,7 @@ func LoadNS() {
 				tmp5 := lang.NewCons(v3, v4)
 				return tmp5
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(29), kw_column, int(7), kw_end_DASH_line, int(29), kw_end_DASH_column, int(89))).(lang.FnFunc2)
 			v2 = tmp1
 			_ = v2
 		}
@@ -3873,20 +3874,20 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			var tmp3 lang.FnFunc
-			tmp3 = lang.NewFnFunc(func(args ...any) any {
-				switch len(args) {
-				default:
-					checkArityGTE(args, 0)
-					restArgs := args[0:]
-					var v4 any
-					if len(restArgs) > 0 {
-						v4 = lang.NewList(restArgs...)
-					}
+			var tmp3 lang.ArityFn
+			tmp3 = lang.NewArityFn(
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+				lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+					var v4 any = rest
 					_ = v4
 					return v2
-				}
-			})
+				}),
+				0,
+			)
 			tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(1448), kw_column, int(7), kw_end_DASH_line, int(1448), kw_end_DASH_column, int(21))
 			tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
 			if err != nil {
@@ -3934,21 +3935,21 @@ func LoadNS() {
 	// create-struct
 	{
 		tmp0 := sym_create_DASH_struct
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := lang.Apply1(lang.CreatePersistentStructMapSlotMap, v2)
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_create_DASH_struct = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_create_DASH_struct.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a structure basis object.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(4094), kw_end_DASH_line, int(4094))
@@ -4304,6 +4305,7 @@ func LoadNS() {
 				tmp4 := lang.First(v3)
 				return tmp4
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(54), kw_column, int(8), kw_end_DASH_line, int(54), kw_end_DASH_column, int(86))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -4498,13 +4500,8 @@ func LoadNS() {
 			nil,
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := lang.CreatePersistentHashMap(v2)
 				return tmp3
@@ -4603,6 +4600,7 @@ func LoadNS() {
 				tmp5 := lang.Apply2(lang.HasType, v3, v4)
 				return tmp5
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(145), kw_column, int(12), kw_end_DASH_line, int(145), kw_end_DASH_column, int(85))).(lang.FnFunc2)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5079,6 +5077,7 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(173), kw_column, int(7), kw_end_DASH_line, int(173), kw_end_DASH_column, int(97))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5133,6 +5132,7 @@ func LoadNS() {
 				}
 				return tmp4
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(208), kw_column, int(7), kw_end_DASH_line, int(210), kw_end_DASH_column, int(21))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5276,6 +5276,7 @@ func LoadNS() {
 				tmp4 := lang.Next(v3)
 				return tmp4
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(63), kw_column, int(7), kw_end_DASH_line, int(63), kw_end_DASH_column, int(77))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5300,6 +5301,7 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(111), kw_column, int(9), kw_end_DASH_line, int(111), kw_end_DASH_column, int(49))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5352,6 +5354,7 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(125), kw_column, int(8), kw_end_DASH_line, int(125), kw_end_DASH_column, int(46))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6223,6 +6226,7 @@ func LoadNS() {
 				tmp4 := lang.Rest(v3)
 				return tmp4
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(72), kw_column, int(7), kw_end_DASH_line, int(72), kw_end_DASH_column, int(77))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6283,6 +6287,7 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(97), kw_column, int(9), kw_end_DASH_line, int(97), kw_end_DASH_column, int(49))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6303,6 +6308,7 @@ func LoadNS() {
 				tmp4 := lang.Seq(v3)
 				return tmp4
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(138), kw_column, int(6), kw_end_DASH_line, int(138), kw_end_DASH_column, int(126))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6326,6 +6332,7 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(152), kw_column, int(7), kw_end_DASH_line, int(152), kw_end_DASH_column, int(87))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6588,21 +6595,21 @@ func LoadNS() {
 	// sorted-map
 	{
 		tmp0 := sym_sorted_DASH_map
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := lang.CreatePersistentTreeMap(v2)
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_sorted_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sorted_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keyvals)), kw_doc, "keyval => key val\n  Returns a new sorted map with supplied mappings.  If any keys are\n  equal, they are handled as if by repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(399), kw_end_DASH_line, int(399))
@@ -6611,23 +6618,23 @@ func LoadNS() {
 	// sorted-map-by
 	{
 		tmp0 := sym_sorted_DASH_map_DASH_by
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				tmp4 := lang.Apply2(lang.CreatePersistentTreeMapWithComparator, v2, v3)
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_sorted_DASH_map_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sorted_DASH_map_DASH_by.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_comparator, sym__AMP_, sym_keyvals)), kw_doc, "keyval => key val\n  Returns a new sorted map with supplied mappings, using the supplied\n  comparator.  If any keys are equal, they are handled as if by\n  repeated uses of assoc.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(408), kw_end_DASH_line, int(408))
@@ -6636,21 +6643,21 @@ func LoadNS() {
 	// sorted-set
 	{
 		tmp0 := sym_sorted_DASH_set
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := lang.Apply1(lang.CreatePersistentTreeSet, v2)
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_sorted_DASH_set = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sorted_DASH_set.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_keys)), kw_doc, "Returns a new sorted set with supplied keys.  Any equal keys are\n  handled as if by repeated uses of conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(418), kw_end_DASH_line, int(418))
@@ -6659,23 +6666,23 @@ func LoadNS() {
 	// sorted-set-by
 	{
 		tmp0 := sym_sorted_DASH_set_DASH_by
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				tmp4 := lang.Apply2(lang.CreatePersistentTreeSetWithComparator, v2, v3)
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_sorted_DASH_set_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sorted_DASH_set_DASH_by.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_comparator, sym__AMP_, sym_keys)), kw_doc, "Returns a new sorted set with supplied keys, using the supplied\n  comparator.  Any equal keys are handled as if by repeated uses of\n  conj.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(426), kw_end_DASH_line, int(426))
@@ -6795,15 +6802,10 @@ func LoadNS() {
 			nil,
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 1)
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 lang.FnFunc2
 				tmp4 = lang.FnFunc2(func(p0, p1 any) any {
@@ -7016,6 +7018,7 @@ func LoadNS() {
 				tmp5 := lang.Apply2(tmp4, lang.Builtins["string"], v3)
 				return tmp5
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(166), kw_column, int(10), kw_end_DASH_line, int(166), kw_end_DASH_column, int(58))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -7027,23 +7030,23 @@ func LoadNS() {
 	// struct
 	{
 		tmp0 := sym_struct
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				tmp4 := lang.Apply2(lang.ConstructPersistentStructMap, v2, v3)
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_struct = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_struct.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_vals)), kw_doc, "Returns a new structmap instance with the keys of the\n  structure-basis. vals must be supplied for basis keys in order -\n  where values are not supplied they will default to nil.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(4118), kw_end_DASH_line, int(4118))
@@ -7052,23 +7055,23 @@ func LoadNS() {
 	// struct-map
 	{
 		tmp0 := sym_struct_DASH_map
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				tmp4 := lang.Apply2(lang.CreatePersistentStructMap, v2, v3)
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_struct_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_struct_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_inits)), kw_doc, "Returns a new structmap instance with the keys of the\n  structure-basis. keyvals may contain all, some or none of the basis\n  keys - where values are not supplied they will default to nil.\n  keyvals can also contain keys not in the basis.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(4108), kw_end_DASH_line, int(4108))
@@ -7119,20 +7122,19 @@ func LoadNS() {
 	// swap!
 	{
 		tmp0 := sym_swap_BANG_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5, _ := lang.FieldOrMethod(v2, "swap")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
@@ -7140,8 +7142,9 @@ func LoadNS() {
 				}
 				tmp6 := lang.Apply2(tmp5, v3, v4)
 				return tmp6
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_swap_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_swap_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically swaps the value of atom to be:\n  (apply f current-value-of-atom args). Note that f may be called\n  multiple times, and thus should be free of side effects.  Returns\n  the value that was swapped in.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2351), kw_end_DASH_line, int(2351))
@@ -7150,20 +7153,19 @@ func LoadNS() {
 	// swap-vals!
 	{
 		tmp0 := sym_swap_DASH_vals_BANG_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5, _ := lang.FieldOrMethod(v2, "swapVals")
 				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
@@ -7171,8 +7173,9 @@ func LoadNS() {
 				}
 				tmp6 := lang.Apply2(tmp5, v3, v4)
 				return tmp6
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_swap_DASH_vals_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_swap_DASH_vals_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atom, sym_f, sym__AMP_, sym_args)), kw_doc, "Atomically swaps the value of atom to be:\n  (apply f current-value-of-atom args). Note that f may be called\n  multiple times, and thus should be free of side effects.\n  Returns [old new], the value of the atom before and after the swap.", kw_file, "clojure/core.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(2360), kw_end_DASH_line, int(2360))
@@ -7674,88 +7677,118 @@ func LoadNS() {
 	// vector
 	{
 		tmp0 := sym_vector
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 0:
-				tmp2 := lang.NewVector()
-				tmp3 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(358), kw_column, int(7), kw_end_DASH_line, int(358), kw_end_DASH_column, int(8))
-				tmp4, err := lang.WithMeta(tmp2, tmp3.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp4
-			case 1:
-				v2 := args[0]
-				_ = v2
-				tmp3 := lang.NewVector(v2)
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(359), kw_column, int(8), kw_end_DASH_line, int(359), kw_end_DASH_column, int(10))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
-			case 2:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				tmp4 := lang.NewVector(v2, v3)
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(360), kw_column, int(10), kw_end_DASH_line, int(360), kw_end_DASH_column, int(14))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp6
-			case 3:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				tmp5 := lang.NewVector(v2, v3, v4)
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(361), kw_column, int(12), kw_end_DASH_line, int(361), kw_end_DASH_column, int(18))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp7
-			case 4:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				tmp6 := lang.NewVector(v2, v3, v4, v5)
-				tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(362), kw_column, int(14), kw_end_DASH_line, int(362), kw_end_DASH_column, int(22))
-				tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp8
-			case 5:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				v6 := args[4]
-				_ = v6
-				tmp7 := lang.NewVector(v2, v3, v4, v5, v6)
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(363), kw_column, int(15), kw_end_DASH_line, int(363), kw_end_DASH_column, int(25))
-				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp9
-			case 6:
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFnMethods(
+			map[int]lang.IFn{
+				0: lang.FnFunc0(func() any {
+					tmp2 := lang.NewVector()
+					tmp3 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(358), kw_column, int(7), kw_end_DASH_line, int(358), kw_end_DASH_column, int(8))
+					tmp4, err := lang.WithMeta(tmp2, tmp3.(lang.IPersistentMap))
+					if err != nil {
+						panic(err)
+					}
+					return tmp4
+				}),
+				1: lang.FnFunc1(func(p0 any) any {
+					v2 := p0
+					_ = v2
+					tmp3 := lang.NewVector(v2)
+					tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(359), kw_column, int(8), kw_end_DASH_line, int(359), kw_end_DASH_column, int(10))
+					tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
+					if err != nil {
+						panic(err)
+					}
+					return tmp5
+				}),
+				2: lang.FnFunc2(func(p0, p1 any) any {
+					v2 := p0
+					_ = v2
+					v3 := p1
+					_ = v3
+					tmp4 := lang.NewVector(v2, v3)
+					tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(360), kw_column, int(10), kw_end_DASH_line, int(360), kw_end_DASH_column, int(14))
+					tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
+					if err != nil {
+						panic(err)
+					}
+					return tmp6
+				}),
+				3: lang.FnFunc3(func(p0, p1, p2 any) any {
+					v2 := p0
+					_ = v2
+					v3 := p1
+					_ = v3
+					v4 := p2
+					_ = v4
+					tmp5 := lang.NewVector(v2, v3, v4)
+					tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(361), kw_column, int(12), kw_end_DASH_line, int(361), kw_end_DASH_column, int(18))
+					tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
+					if err != nil {
+						panic(err)
+					}
+					return tmp7
+				}),
+				4: lang.FnFunc4(func(p0, p1, p2, p3 any) any {
+					v2 := p0
+					_ = v2
+					v3 := p1
+					_ = v3
+					v4 := p2
+					_ = v4
+					v5 := p3
+					_ = v5
+					tmp6 := lang.NewVector(v2, v3, v4, v5)
+					tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(362), kw_column, int(14), kw_end_DASH_line, int(362), kw_end_DASH_column, int(22))
+					tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
+					if err != nil {
+						panic(err)
+					}
+					return tmp8
+				}),
+				5: lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 5)
+					v2 := args[0]
+					_ = v2
+					v3 := args[1]
+					_ = v3
+					v4 := args[2]
+					_ = v4
+					v5 := args[3]
+					_ = v5
+					v6 := args[4]
+					_ = v6
+					tmp7 := lang.NewVector(v2, v3, v4, v5, v6)
+					tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(363), kw_column, int(15), kw_end_DASH_line, int(363), kw_end_DASH_column, int(25))
+					tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
+					if err != nil {
+						panic(err)
+					}
+					return tmp9
+				}),
+				6: lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 6)
+					v2 := args[0]
+					_ = v2
+					v3 := args[1]
+					_ = v3
+					v4 := args[2]
+					_ = v4
+					v5 := args[3]
+					_ = v5
+					v6 := args[4]
+					_ = v6
+					v7 := args[5]
+					_ = v7
+					tmp8 := lang.NewVector(v2, v3, v4, v5, v6, v7)
+					tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(364), kw_column, int(17), kw_end_DASH_line, int(364), kw_end_DASH_column, int(29))
+					tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
+					if err != nil {
+						panic(err)
+					}
+					return tmp10
+				}),
+			},
+			lang.NewVariadicFn(6, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -7768,32 +7801,7 @@ func LoadNS() {
 				_ = v6
 				v7 := args[5]
 				_ = v7
-				tmp8 := lang.NewVector(v2, v3, v4, v5, v6, v7)
-				tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(364), kw_column, int(17), kw_end_DASH_line, int(364), kw_end_DASH_column, int(29))
-				tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp10
-			default:
-				checkArityGTE(args, 6)
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				v6 := args[4]
-				_ = v6
-				v7 := args[5]
-				_ = v7
-				restArgs := args[6:]
-				var v8 any
-				if len(restArgs) > 0 {
-					v8 = lang.NewList(restArgs...)
-				}
+				var v8 any = rest
 				_ = v8
 				tmp9 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_cons)
@@ -7809,8 +7817,9 @@ func LoadNS() {
 				tmp20 := lang.Apply2(tmp9, v2, tmp19)
 				tmp21 := lang.CreateLazilyPersistentVector(tmp20)
 				return tmp21
-			}
-		})
+			}),
+			6,
+		)
 		var_clojure_DOT_core_vector = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_vector.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_a), lang.NewVector(sym_a, sym_b), lang.NewVector(sym_a, sym_b, sym_c), lang.NewVector(sym_a, sym_b, sym_c, sym_d), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e, sym_f), lang.NewVector(sym_a, sym_b, sym_c, sym_d, sym_e, sym_f, sym__AMP_, sym_args)), kw_doc, "Creates a new vector containing the args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(354), kw_end_DASH_line, int(354))
@@ -7830,6 +7839,7 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(180), kw_column, int(10), kw_end_DASH_line, int(180), kw_end_DASH_column, int(106))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -7895,30 +7905,30 @@ func LoadNS() {
 	// when
 	{
 		tmp0 := sym_when
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp8 := lang.Apply2(tmp7, sym_do, v5)
 				tmp9 := lang.Apply3(tmp6, sym_if, v4, tmp8)
 				return tmp9
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_when = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_when.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Evaluates test. If logical true, evaluates body in an implicit do.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(494), kw_end_DASH_line, int(494))
@@ -7927,30 +7937,30 @@ func LoadNS() {
 	// when-not
 	{
 		tmp0 := sym_when_DASH_not
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp8 := lang.Apply2(tmp7, sym_do, v5)
 				tmp9 := lang.Apply4(tmp6, sym_if, v4, nil, tmp8)
 				return tmp9
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_when_DASH_not = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_when_DASH_not.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Evaluates test. If logical false, evaluates body in an implicit do.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(500), kw_end_DASH_line, int(500))
@@ -7974,6 +7984,7 @@ func LoadNS() {
 				tmp6 := lang.Apply1(tmp5, v4)
 				return tmp6
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(218), kw_column, int(12), kw_end_DASH_line, int(219), kw_end_DASH_column, int(32))).(lang.FnFunc2)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8162,19 +8173,14 @@ func LoadNS() {
 					return tmp6
 				}),
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 3)
+				lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
 					v5 := args[2]
 					_ = v5
-					restArgs := args[3:]
-					var v6 any
-					if len(restArgs) > 0 {
-						v6 = lang.NewList(restArgs...)
-					}
+					var v6 any = rest
 					_ = v6
 				recur_loop_1625:
 					var tmp7 any
@@ -8218,6 +8224,7 @@ func LoadNS() {
 				}),
 				3,
 			)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(191), kw_column, int(2), kw_end_DASH_line, int(200), kw_end_DASH_column, int(15))).(lang.ArityFn)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8259,19 +8266,14 @@ func LoadNS() {
 				return tmp11
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 			recur_loop_2212:
 				var tmp6 any
@@ -8461,6 +8463,7 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(159), kw_column, int(8), kw_end_DASH_line, int(159), kw_end_DASH_column, int(89))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8657,17 +8660,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				{ // let
@@ -8761,20 +8759,19 @@ func LoadNS() {
 	// cond
 	{
 		tmp0 := sym_cond
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				if lang.IsTruthy(v4) {
@@ -8803,8 +8800,9 @@ func LoadNS() {
 				} else {
 				}
 				return tmp5
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_cond = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_cond.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_clauses)), kw_doc, "Takes a set of test/expr pairs. It evaluates each test one at a\n  time.  If a test returns logical true, cond evaluates and returns\n  the value of the corresponding expr and doesn't evaluate any of the\n  other tests or exprs. (cond) returns nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(571), kw_end_DASH_line, int(571))
@@ -8841,17 +8839,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 				recur_loop_1611:
 					var tmp6 any
@@ -8876,6 +8869,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(83), kw_column, int(7), kw_end_DASH_line, int(90), kw_end_DASH_column, int(67))).(lang.ArityFn)
 			v2 = tmp1
 			_ = v2
 		}
@@ -9120,11 +9114,14 @@ func LoadNS() {
 	// defmethod
 	{
 		tmp0 := sym_defmethod
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 4)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(4, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -9133,11 +9130,7 @@ func LoadNS() {
 				_ = v4
 				v5 := args[3]
 				_ = v5
-				restArgs := args[4:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -9168,8 +9161,9 @@ func LoadNS() {
 				tmp30 := lang.Apply(tmp8, []any{tmp10, tmp17, tmp19, tmp21, tmp29})
 				tmp31 := lang.Apply1(tmp7, tmp30)
 				return tmp31
-			}
-		})
+			}),
+			4,
+		)
 		var_clojure_DOT_core_defmethod = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defmethod.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_multifn, sym_dispatch_DASH_val, sym__AMP_, sym_fn_DASH_tail)), kw_doc, "Creates and installs a new method of multimethod associated with dispatch-value. ", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(1789), kw_end_DASH_line, int(1789))
@@ -9178,22 +9172,21 @@ func LoadNS() {
 	// defstruct
 	{
 		tmp0 := sym_defstruct
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -9212,8 +9205,9 @@ func LoadNS() {
 				tmp20 := lang.Apply3(tmp7, tmp9, tmp11, tmp19)
 				tmp21 := lang.Apply1(tmp6, tmp20)
 				return tmp21
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_defstruct = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defstruct.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_keys)), kw_doc, "Same as (def name (create-struct keys...))", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(4101), kw_end_DASH_line, int(4101))
@@ -9334,17 +9328,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 			recur_loop_1904:
 				var tmp5 any
@@ -9421,17 +9410,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 			recur_loop_2218:
 				var tmp5 any
@@ -9489,17 +9473,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 			recur_loop_1901:
 				var tmp5 any
@@ -9567,17 +9546,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 			recur_loop_2214:
 				var tmp5 any
@@ -9700,20 +9674,19 @@ func LoadNS() {
 	// dosync
 	{
 		tmp0 := sym_dosync
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -9724,8 +9697,9 @@ func LoadNS() {
 				tmp11 := lang.Apply3(tmp6, tmp8, tmp10, v4)
 				tmp12 := lang.Apply1(tmp5, tmp11)
 				return tmp12
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_dosync = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_dosync.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_exprs)), kw_doc, "Runs the exprs (in an implicit do) in a transaction that encompasses\n  exprs and any nested calls.  Starts a transaction if none is already\n  running on this thread. Any uncaught exception will abort the\n  transaction and flow out of dosync. The exprs may be run more than\n  once, but any effects on Refs will be atomic.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(5152), kw_end_DASH_line, int(5152))
@@ -9806,18 +9780,17 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_double_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_double_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
-			var tmp2 lang.FnFunc
+			var tmp2 lang.ArityFn
 			{ // function double-array__inliner
-				var v3 lang.FnFunc
-				tmp2 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v4 any
-						if len(restArgs) > 0 {
-							v4 = lang.NewList(restArgs...)
-						}
+				var v3 lang.ArityFn
+				tmp2 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v4 any = rest
 						_ = v4
 						tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -9840,8 +9813,9 @@ func LoadNS() {
 						tmp23 := lang.Apply4(tmp6, tmp8, tmp10, tmp12, tmp22)
 						tmp24 := lang.Apply1(tmp5, tmp23)
 						return tmp24
-					}
-				})
+					}),
+					0,
+				)
 				v3 = tmp2
 				_ = v3
 			}
@@ -10536,6 +10510,7 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(104), kw_column, int(9), kw_end_DASH_line, int(104), kw_end_DASH_column, int(50))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -10971,18 +10946,17 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_float_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_float_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
-			var tmp2 lang.FnFunc
+			var tmp2 lang.ArityFn
 			{ // function float-array__inliner
-				var v3 lang.FnFunc
-				tmp2 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v4 any
-						if len(restArgs) > 0 {
-							v4 = lang.NewList(restArgs...)
-						}
+				var v3 lang.ArityFn
+				tmp2 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v4 any = rest
 						_ = v4
 						tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -11005,8 +10979,9 @@ func LoadNS() {
 						tmp23 := lang.Apply4(tmp6, tmp8, tmp10, tmp12, tmp22)
 						tmp24 := lang.Apply1(tmp5, tmp23)
 						return tmp24
-					}
-				})
+					}),
+					0,
+				)
 				v3 = tmp2
 				_ = v3
 			}
@@ -11226,6 +11201,7 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(118), kw_column, int(8), kw_end_DASH_line, int(118), kw_end_DASH_column, int(47))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -11313,22 +11289,21 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_get = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_get.SetMetaLazy(func() lang.IPersistentMap {
-			var tmp2 lang.FnFunc
+			var tmp2 lang.ArityFn
 			{ // function get__inliner
-				var v3 lang.FnFunc
-				tmp2 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 2)
+				var v3 lang.ArityFn
+				tmp2 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 						v4 := args[0]
 						_ = v4
 						v5 := args[1]
 						_ = v5
-						restArgs := args[2:]
-						var v6 any
-						if len(restArgs) > 0 {
-							v6 = lang.NewList(restArgs...)
-						}
+						var v6 any = rest
 						_ = v6
 						tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp8 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -11351,8 +11326,9 @@ func LoadNS() {
 						tmp25 := lang.Apply3(tmp8, tmp10, tmp12, tmp24)
 						tmp26 := lang.Apply1(tmp7, tmp25)
 						return tmp26
-					}
-				})
+					}),
+					2,
+				)
 				v3 = tmp2
 				_ = v3
 			}
@@ -11555,68 +11531,70 @@ func LoadNS() {
 	// if-not
 	{
 		tmp0 := sym_if_DASH_not
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 4:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp8 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp9 := lang.Apply1(tmp8, sym_clojure_DOT_core_SLASH_if_DASH_not)
-				tmp10 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp11 := lang.Apply1(tmp10, v4)
-				tmp12 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp13 := lang.Apply1(tmp12, v5)
-				tmp14 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp15 := lang.Apply1(tmp14, nil)
-				tmp16 := lang.Apply4(tmp7, tmp9, tmp11, tmp13, tmp15)
-				tmp17 := lang.Apply1(tmp6, tmp16)
-				return tmp17
-			case 5:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				v6 := args[4]
-				_ = v6
-				tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp8 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp9 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp10 := lang.Apply1(tmp9, sym_if)
-				tmp11 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp14 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp15 := lang.Apply1(tmp14, sym_clojure_DOT_core_SLASH_not)
-				tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp17 := lang.Apply1(tmp16, v4)
-				tmp18 := lang.Apply2(tmp13, tmp15, tmp17)
-				tmp19 := lang.Apply1(tmp12, tmp18)
-				tmp20 := lang.Apply1(tmp11, tmp19)
-				tmp21 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp22 := lang.Apply1(tmp21, v5)
-				tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp24 := lang.Apply1(tmp23, v6)
-				tmp25 := lang.Apply4(tmp8, tmp10, tmp20, tmp22, tmp24)
-				tmp26 := lang.Apply1(tmp7, tmp25)
-				return tmp26
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFnMethods(
+			map[int]lang.IFn{
+				4: lang.FnFunc4(func(p0, p1, p2, p3 any) any {
+					v2 := p0
+					_ = v2
+					v3 := p1
+					_ = v3
+					v4 := p2
+					_ = v4
+					v5 := p3
+					_ = v5
+					tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp8 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp9 := lang.Apply1(tmp8, sym_clojure_DOT_core_SLASH_if_DASH_not)
+					tmp10 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp11 := lang.Apply1(tmp10, v4)
+					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp13 := lang.Apply1(tmp12, v5)
+					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp15 := lang.Apply1(tmp14, nil)
+					tmp16 := lang.Apply4(tmp7, tmp9, tmp11, tmp13, tmp15)
+					tmp17 := lang.Apply1(tmp6, tmp16)
+					return tmp17
+				}),
+				5: lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 5)
+					v2 := args[0]
+					_ = v2
+					v3 := args[1]
+					_ = v3
+					v4 := args[2]
+					_ = v4
+					v5 := args[3]
+					_ = v5
+					v6 := args[4]
+					_ = v6
+					tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp8 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp9 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp10 := lang.Apply1(tmp9, sym_if)
+					tmp11 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp15 := lang.Apply1(tmp14, sym_clojure_DOT_core_SLASH_not)
+					tmp16 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp17 := lang.Apply1(tmp16, v4)
+					tmp18 := lang.Apply2(tmp13, tmp15, tmp17)
+					tmp19 := lang.Apply1(tmp12, tmp18)
+					tmp20 := lang.Apply1(tmp11, tmp19)
+					tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp22 := lang.Apply1(tmp21, v5)
+					tmp23 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp24 := lang.Apply1(tmp23, v6)
+					tmp25 := lang.Apply4(tmp8, tmp10, tmp20, tmp22, tmp24)
+					tmp26 := lang.Apply1(tmp7, tmp25)
+					return tmp26
+				}),
+			},
+			nil,
+			0,
+		)
 		var_clojure_DOT_core_if_DASH_not = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_if_DASH_not.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym_then), lang.NewVector(sym_test, sym_then, sym_else)), kw_doc, "Evaluates test. If logical false, evaluates and returns then expr,\n  otherwise else expr, if supplied, else nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(762), kw_end_DASH_line, int(762))
@@ -11866,18 +11844,17 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_int_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_int_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
-			var tmp2 lang.FnFunc
+			var tmp2 lang.ArityFn
 			{ // function int-array__inliner
-				var v3 lang.FnFunc
-				tmp2 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v4 any
-						if len(restArgs) > 0 {
-							v4 = lang.NewList(restArgs...)
-						}
+				var v3 lang.ArityFn
+				tmp2 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v4 any = rest
 						_ = v4
 						tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -11900,8 +11877,9 @@ func LoadNS() {
 						tmp23 := lang.Apply4(tmp6, tmp8, tmp10, tmp12, tmp22)
 						tmp24 := lang.Apply1(tmp5, tmp23)
 						return tmp24
-					}
-				})
+					}),
+					0,
+				)
 				v3 = tmp2
 				_ = v3
 			}
@@ -12069,20 +12047,19 @@ func LoadNS() {
 	// io!
 	{
 		tmp0 := sym_io_BANG_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				{ // let
@@ -12169,8 +12146,9 @@ func LoadNS() {
 					tmp5 = tmp60
 				} // end let
 				return tmp5
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_io_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_io_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "If an io! block occurs in a transaction, throws an\n  IllegalStateException, else runs body in an implicit do. If the\n  first expression in body is a literal string, will use that as the\n  exception message.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(2512), kw_end_DASH_line, int(2512))
@@ -12257,6 +12235,7 @@ func LoadNS() {
 				}
 				return tmp4
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(268), kw_column, int(7), kw_end_DASH_line, int(271), kw_end_DASH_column, int(21))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -12381,8 +12360,7 @@ func LoadNS() {
 				tmp11 := lang.Apply2(tmp6, v2, tmp10)
 				return tmp11
 			}),
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 4)
+			lang.NewVariadicFn(4, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -12391,11 +12369,7 @@ func LoadNS() {
 				_ = v4
 				v5 := args[3]
 				_ = v5
-				restArgs := args[4:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
@@ -12506,18 +12480,17 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_long_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_long_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
-			var tmp2 lang.FnFunc
+			var tmp2 lang.ArityFn
 			{ // function long-array__inliner
-				var v3 lang.FnFunc
-				tmp2 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v4 any
-						if len(restArgs) > 0 {
-							v4 = lang.NewList(restArgs...)
-						}
+				var v3 lang.ArityFn
+				tmp2 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v4 any = rest
 						_ = v4
 						tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -12540,8 +12513,9 @@ func LoadNS() {
 						tmp23 := lang.Apply4(tmp6, tmp8, tmp10, tmp12, tmp22)
 						tmp24 := lang.Apply1(tmp5, tmp23)
 						return tmp24
-					}
-				})
+					}),
+					0,
+				)
 				v3 = tmp2
 				_ = v3
 			}
@@ -13369,22 +13343,21 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_nth = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_nth.SetMetaLazy(func() lang.IPersistentMap {
-			var tmp2 lang.FnFunc
+			var tmp2 lang.ArityFn
 			{ // function nth__inliner
-				var v3 lang.FnFunc
-				tmp2 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 2)
+				var v3 lang.ArityFn
+				tmp2 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 						v4 := args[0]
 						_ = v4
 						v5 := args[1]
 						_ = v5
-						restArgs := args[2:]
-						var v6 any
-						if len(restArgs) > 0 {
-							v6 = lang.NewList(restArgs...)
-						}
+						var v6 any = rest
 						_ = v6
 						tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp8 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -13433,8 +13406,9 @@ func LoadNS() {
 						tmp51 := lang.Apply3(tmp8, tmp10, tmp12, tmp50)
 						tmp52 := lang.Apply1(tmp7, tmp51)
 						return tmp52
-					}
-				})
+					}),
+					2,
+				)
 				v3 = tmp2
 				_ = v3
 			}
@@ -15277,20 +15251,19 @@ func LoadNS() {
 	// refer-clojure
 	{
 		tmp0 := sym_refer_DASH_clojure
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15309,8 +15282,9 @@ func LoadNS() {
 				tmp19 := lang.Apply3(tmp6, tmp8, tmp18, v4)
 				tmp20 := lang.Apply1(tmp5, tmp19)
 				return tmp20
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_refer_DASH_clojure = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_refer_DASH_clojure.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_filters)), kw_doc, "Same as (refer 'clojure.core <filters>)", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(11), kw_line, int(5857), kw_end_DASH_line, int(5857))
@@ -15768,18 +15742,17 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_short_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_short_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
-			var tmp2 lang.FnFunc
+			var tmp2 lang.ArityFn
 			{ // function short-array__inliner
-				var v3 lang.FnFunc
-				tmp2 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v4 any
-						if len(restArgs) > 0 {
-							v4 = lang.NewList(restArgs...)
-						}
+				var v3 lang.ArityFn
+				tmp2 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v4 any = rest
 						_ = v4
 						tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -15802,8 +15775,9 @@ func LoadNS() {
 						tmp23 := lang.Apply4(tmp6, tmp8, tmp10, tmp12, tmp22)
 						tmp24 := lang.Apply1(tmp5, tmp23)
 						return tmp24
-					}
-				})
+					}),
+					0,
+				)
 				v3 = tmp2
 				_ = v3
 			}
@@ -16027,19 +16001,14 @@ func LoadNS() {
 							return tmp8
 						}),
 						nil,
-						lang.FnFunc(func(args ...any) any {
-							checkArityGTE(args, 3)
+						lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 							v5 := args[0]
 							_ = v5
 							v6 := args[1]
 							_ = v6
 							v7 := args[2]
 							_ = v7
-							restArgs := args[3:]
-							var v8 any
-							if len(restArgs) > 0 {
-								v8 = lang.NewList(restArgs...)
-							}
+							var v8 any = rest
 							_ = v8
 							var tmp9 any
 							{ // let
@@ -16234,19 +16203,14 @@ func LoadNS() {
 							return tmp9
 						}),
 						nil,
-						lang.FnFunc(func(args ...any) any {
-							checkArityGTE(args, 3)
+						lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 							v6 := args[0]
 							_ = v6
 							v7 := args[1]
 							_ = v7
 							v8 := args[2]
 							_ = v8
-							restArgs := args[3:]
-							var v9 any
-							if len(restArgs) > 0 {
-								v9 = lang.NewList(restArgs...)
-							}
+							var v9 any = rest
 							_ = v9
 							var tmp10 any
 							{ // let
@@ -16553,19 +16517,14 @@ func LoadNS() {
 							return tmp10
 						}),
 						nil,
-						lang.FnFunc(func(args ...any) any {
-							checkArityGTE(args, 3)
+						lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 							v7 := args[0]
 							_ = v7
 							v8 := args[1]
 							_ = v8
 							v9 := args[2]
 							_ = v9
-							restArgs := args[3:]
-							var v10 any
-							if len(restArgs) > 0 {
-								v10 = lang.NewList(restArgs...)
-							}
+							var v10 any = rest
 							_ = v10
 							var tmp11 any
 							{ // let
@@ -16638,19 +16597,14 @@ func LoadNS() {
 				return tmp7
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -16772,19 +16726,14 @@ func LoadNS() {
 								return tmp19
 							}),
 							nil,
-							lang.FnFunc(func(args ...any) any {
-								checkArityGTE(args, 3)
+							lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 								v12 := args[0]
 								_ = v12
 								v13 := args[1]
 								_ = v13
 								v14 := args[2]
 								_ = v14
-								restArgs := args[3:]
-								var v15 any
-								if len(restArgs) > 0 {
-									v15 = lang.NewList(restArgs...)
-								}
+								var v15 any = rest
 								_ = v15
 								var tmp16 any
 								{ // let
@@ -17442,16 +17391,15 @@ func LoadNS() {
 	// thread-bound?
 	{
 		tmp0 := sym_thread_DASH_bound_QMARK_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_every_QMARK_)
 				var tmp4 lang.FnFunc1
@@ -17478,8 +17426,9 @@ func LoadNS() {
 				}
 				tmp7 := lang.Apply2(tmp3, tmp6, v2)
 				return tmp7
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_thread_DASH_bound_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_thread_DASH_bound_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_vars)), kw_doc, "Returns true if all of the vars provided as arguments have thread-local bindings.\n   Implies that set!'ing the provided vars will succeed.  Returns true if no vars are provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(5551), kw_end_DASH_line, int(5551))
@@ -18600,11 +18549,14 @@ func LoadNS() {
 	// vswap!
 	{
 		tmp0 := sym_vswap_BANG_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 4)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(4, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -18613,11 +18565,7 @@ func LoadNS() {
 				_ = v4
 				v5 := args[3]
 				_ = v5
-				restArgs := args[4:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				var tmp7 any
 				{ // let
@@ -18661,8 +18609,9 @@ func LoadNS() {
 					tmp7 = tmp39
 				} // end let
 				return tmp7
-			}
-		})
+			}),
+			4,
+		)
 		var_clojure_DOT_core_vswap_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_vswap_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_vol, sym_f, sym__AMP_, sym_args)), kw_doc, "Non-atomically swaps the value of the volatile as if:\n   (apply f current-value-of-vol args). Returns the value that\n   was swapped in.", kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(2539), kw_end_DASH_line, int(2539))
@@ -18917,17 +18866,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core__DASH_)
@@ -19022,17 +18966,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -19107,6 +19046,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -19120,22 +19060,21 @@ func LoadNS() {
 	// ->
 	{
 		tmp0 := sym__DASH__GT_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -19201,8 +19140,9 @@ func LoadNS() {
 					}
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core__DASH__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__DASH__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Threads the expr through the forms. Inserts x as the\n  second item in the first form, making a list of it if it is not a\n  list already. If there are more forms, inserts the first form as the\n  second item in second form, etc.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(1683), kw_end_DASH_line, int(1683))
@@ -19211,22 +19151,21 @@ func LoadNS() {
 	// ->>
 	{
 		tmp0 := sym__DASH__GT__GT_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -19292,8 +19231,9 @@ func LoadNS() {
 					}
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core__DASH__GT__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__DASH__GT__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Threads the expr through the forms. Inserts x as the\n  last item in the first form, making a list of it if it is not a\n  list already. If there are more forms, inserts the first form as the\n  last item in second form, etc.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(1699), kw_end_DASH_line, int(1699))
@@ -19321,17 +19261,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core__DASH__TICK_)
@@ -19426,17 +19361,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -19511,6 +19441,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -19551,8 +19482,7 @@ func LoadNS() {
 				tmp15 := lang.Apply1(tmp6, tmp14)
 				return tmp15
 			}),
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 4)
+			lang.NewVariadicFn(4, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -19561,11 +19491,7 @@ func LoadNS() {
 				_ = v4
 				v5 := args[3]
 				_ = v5
-				restArgs := args[4:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -19615,17 +19541,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 			recur_loop_1727:
 				var tmp5 any
@@ -19713,17 +19634,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 			recur_loop_1807:
 				var tmp5 any
@@ -19817,17 +19733,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 			recur_loop_1799:
 				var tmp5 any
@@ -19921,17 +19832,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 			recur_loop_1803:
 				var tmp5 any
@@ -20025,17 +19931,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 			recur_loop_1751:
 				var tmp5 any
@@ -20129,17 +20030,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 			recur_loop_1795:
 				var tmp5 any
@@ -20236,17 +20132,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core__PLUS_)
@@ -20341,17 +20232,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -20426,6 +20312,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -20460,17 +20347,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core__PLUS__TICK_)
@@ -20565,17 +20447,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -20650,6 +20527,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -20682,17 +20560,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core__SLASH_)
@@ -20787,17 +20660,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -20872,6 +20740,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -20906,17 +20775,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core__STAR_)
@@ -21011,17 +20875,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -21096,6 +20955,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -21130,17 +20990,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core__STAR__TICK_)
@@ -21235,17 +21090,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -21320,6 +21170,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -21510,43 +21361,64 @@ func LoadNS() {
 	// apply
 	{
 		tmp0 := sym_apply
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 2:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				tmp4 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp5 := lang.Apply1(tmp4, v3)
-				tmp6 := lang.Apply2(lang.ApplySeq, v2, tmp5)
-				return tmp6
-			case 3:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				tmp5 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
-				tmp6 := lang.Apply2(tmp5, v3, v4)
-				tmp7 := lang.Apply2(lang.ApplySeq, v2, tmp6)
-				return tmp7
-			case 4:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				tmp6 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
-				tmp7 := lang.Apply3(tmp6, v3, v4, v5)
-				tmp8 := lang.Apply2(lang.ApplySeq, v2, tmp7)
-				return tmp8
-			case 5:
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFnMethods(
+			map[int]lang.IFn{
+				2: lang.FnFunc2(func(p0, p1 any) any {
+					v2 := p0
+					_ = v2
+					v3 := p1
+					_ = v3
+					tmp4 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp5 := lang.Apply1(tmp4, v3)
+					tmp6 := lang.Apply2(lang.ApplySeq, v2, tmp5)
+					return tmp6
+				}),
+				3: lang.FnFunc3(func(p0, p1, p2 any) any {
+					v2 := p0
+					_ = v2
+					v3 := p1
+					_ = v3
+					v4 := p2
+					_ = v4
+					tmp5 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
+					tmp6 := lang.Apply2(tmp5, v3, v4)
+					tmp7 := lang.Apply2(lang.ApplySeq, v2, tmp6)
+					return tmp7
+				}),
+				4: lang.FnFunc4(func(p0, p1, p2, p3 any) any {
+					v2 := p0
+					_ = v2
+					v3 := p1
+					_ = v3
+					v4 := p2
+					_ = v4
+					v5 := p3
+					_ = v5
+					tmp6 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
+					tmp7 := lang.Apply3(tmp6, v3, v4, v5)
+					tmp8 := lang.Apply2(lang.ApplySeq, v2, tmp7)
+					return tmp8
+				}),
+				5: lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 5)
+					v2 := args[0]
+					_ = v2
+					v3 := args[1]
+					_ = v3
+					v4 := args[2]
+					_ = v4
+					v5 := args[3]
+					_ = v5
+					v6 := args[4]
+					_ = v6
+					tmp7 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
+					tmp8 := lang.Apply4(tmp7, v3, v4, v5, v6)
+					tmp9 := lang.Apply2(lang.ApplySeq, v2, tmp8)
+					return tmp9
+				}),
+			},
+			lang.NewVariadicFn(5, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -21557,27 +21429,7 @@ func LoadNS() {
 				_ = v5
 				v6 := args[4]
 				_ = v6
-				tmp7 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
-				tmp8 := lang.Apply4(tmp7, v3, v4, v5, v6)
-				tmp9 := lang.Apply2(lang.ApplySeq, v2, tmp8)
-				return tmp9
-			default:
-				checkArityGTE(args, 5)
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				v6 := args[4]
-				_ = v6
-				restArgs := args[5:]
-				var v7 any
-				if len(restArgs) > 0 {
-					v7 = lang.NewList(restArgs...)
-				}
+				var v7 any = rest
 				_ = v7
 				tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_cons)
@@ -21591,8 +21443,9 @@ func LoadNS() {
 				tmp17 := lang.Apply2(tmp8, v3, tmp16)
 				tmp18 := lang.Apply2(lang.ApplySeq, v2, tmp17)
 				return tmp18
-			}
-		})
+			}),
+			5,
+		)
 		var_clojure_DOT_core_apply = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_apply.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_args), lang.NewVector(sym_f, sym_x, sym_args), lang.NewVector(sym_f, sym_x, sym_y, sym_args), lang.NewVector(sym_f, sym_x, sym_y, sym_z, sym_args), lang.NewVector(sym_f, sym_a, sym_b, sym_c, sym_d, sym__AMP_, sym_args)), kw_doc, "Applies fn f to the argument list formed by prepending intervening arguments to args.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(655), kw_end_DASH_line, int(655))
@@ -21726,22 +21579,22 @@ func LoadNS() {
 	// array
 	{
 		tmp0 := sym_array
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_into_DASH_array)
 				tmp4 := lang.Apply1(tmp3, v2)
 				return tmp4
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_array.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(3493), kw_column, int(7), kw_end_DASH_line, int(3494), kw_end_DASH_column, int(7), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_items)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -21760,13 +21613,8 @@ func LoadNS() {
 			nil,
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				{ // let
@@ -21964,20 +21812,19 @@ func LoadNS() {
 	// assert-args
 	{
 		tmp0 := sym_assert_DASH_args
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -22080,8 +21927,9 @@ func LoadNS() {
 				tmp88 := lang.Apply3(tmp6, tmp8, tmp84, tmp87)
 				tmp89 := lang.Apply1(tmp5, tmp88)
 				return tmp89
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_assert_DASH_args = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_assert_DASH_args.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_pairs)), kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(38), kw_column, int(11), kw_line, int(1838), kw_end_DASH_line, int(1838), kw_private, true)
@@ -22527,22 +22375,21 @@ func LoadNS() {
 	// binding
 	{
 		tmp0 := sym_binding
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				tmp7 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -22708,8 +22555,9 @@ func LoadNS() {
 					tmp32 = tmp92
 				} // end let
 				return tmp32
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_binding = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_binding.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => var-symbol init-expr\n\n  Creates new bindings for the (already-existing) vars, with the\n  supplied initial values, executes the exprs in an implicit do, then\n  re-establishes the bindings that existed before.  The new bindings\n  are made in parallel (unlike let); all init-exprs are evaluated\n  before the vars are bound to their new values.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(1953), kw_end_DASH_line, int(1953))
@@ -22767,19 +22615,14 @@ func LoadNS() {
 						return tmp11
 					}),
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 3)
+					lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 						v7 := args[0]
 						_ = v7
 						v8 := args[1]
 						_ = v8
 						v9 := args[2]
 						_ = v9
-						restArgs := args[3:]
-						var v10 any
-						if len(restArgs) > 0 {
-							v10 = lang.NewList(restArgs...)
-						}
+						var v10 any = rest
 						_ = v10
 						tmp11 := lang.Apply1(lang.ResetThreadBindingFrame, v5)
 						_ = tmp11
@@ -22820,17 +22663,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_bit_DASH_and)
@@ -22925,17 +22763,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -23010,6 +22843,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -23037,17 +22871,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_bit_DASH_and_DASH_not)
@@ -23142,17 +22971,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -23227,6 +23051,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -23298,17 +23123,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_bit_DASH_or)
@@ -23403,17 +23223,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -23488,6 +23303,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -23615,17 +23431,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_bit_DASH_xor)
@@ -23720,17 +23531,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -23805,6 +23611,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -23890,18 +23697,17 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_boolean_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_boolean_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
-			var tmp2 lang.FnFunc
+			var tmp2 lang.ArityFn
 			{ // function boolean-array__inliner
-				var v3 lang.FnFunc
-				tmp2 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v4 any
-						if len(restArgs) > 0 {
-							v4 = lang.NewList(restArgs...)
-						}
+				var v3 lang.ArityFn
+				tmp2 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v4 any = rest
 						_ = v4
 						tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -23924,8 +23730,9 @@ func LoadNS() {
 						tmp23 := lang.Apply4(tmp6, tmp8, tmp10, tmp12, tmp22)
 						tmp24 := lang.Apply1(tmp5, tmp23)
 						return tmp24
-					}
-				})
+					}),
+					0,
+				)
 				v3 = tmp2
 				_ = v3
 			}
@@ -23973,20 +23780,19 @@ func LoadNS() {
 	// bound-fn
 	{
 		tmp0 := sym_bound_DASH_fn
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -24003,8 +23809,9 @@ func LoadNS() {
 				tmp17 := lang.Apply2(tmp6, tmp8, tmp16)
 				tmp18 := lang.Apply1(tmp5, tmp17)
 				return tmp18
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_bound_DASH_fn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bound_DASH_fn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_fntail)), kw_doc, "Returns a function defined by the given fntail, which will install the\n  same bindings in effect as in the thread at the time bound-fn was called.\n  This may be used to define a helper function which runs on a different\n  thread, but needs the same bindings in place.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(2012), kw_end_DASH_line, int(2012))
@@ -24013,16 +23820,15 @@ func LoadNS() {
 	// bound?
 	{
 		tmp0 := sym_bound_QMARK_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_every_QMARK_)
 				var tmp4 lang.FnFunc1
@@ -24049,8 +23855,9 @@ func LoadNS() {
 				}
 				tmp7 := lang.Apply2(tmp3, tmp6, v2)
 				return tmp7
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_bound_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_bound_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_vars)), kw_doc, "Returns true if all of the vars provided as arguments have any bound value, root or thread-local.\n   Implies that deref'ing the provided vars will succeed. Returns true if no vars are provided.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5543), kw_end_DASH_line, int(5543))
@@ -24174,6 +23981,7 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			})
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(278), kw_column, int(10), kw_end_DASH_line, int(282), kw_end_DASH_column, int(27))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -24264,18 +24072,17 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_byte_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_byte_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
-			var tmp2 lang.FnFunc
+			var tmp2 lang.ArityFn
 			{ // function byte-array__inliner
-				var v3 lang.FnFunc
-				tmp2 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v4 any
-						if len(restArgs) > 0 {
-							v4 = lang.NewList(restArgs...)
-						}
+				var v3 lang.ArityFn
+				tmp2 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v4 any = rest
 						_ = v4
 						tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -24298,8 +24105,9 @@ func LoadNS() {
 						tmp23 := lang.Apply4(tmp6, tmp8, tmp10, tmp12, tmp22)
 						tmp24 := lang.Apply1(tmp5, tmp23)
 						return tmp24
-					}
-				})
+					}),
+					0,
+				)
 				v3 = tmp2
 				_ = v3
 			}
@@ -24462,18 +24270,17 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_char_DASH_array = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_char_DASH_array.SetMetaLazy(func() lang.IPersistentMap {
-			var tmp2 lang.FnFunc
+			var tmp2 lang.ArityFn
 			{ // function char-array__inliner
-				var v3 lang.FnFunc
-				tmp2 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v4 any
-						if len(restArgs) > 0 {
-							v4 = lang.NewList(restArgs...)
-						}
+				var v3 lang.ArityFn
+				tmp2 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v4 any = rest
 						_ = v4
 						tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -24496,8 +24303,9 @@ func LoadNS() {
 						tmp23 := lang.Apply4(tmp6, tmp8, tmp10, tmp12, tmp22)
 						tmp24 := lang.Apply1(tmp5, tmp23)
 						return tmp24
-					}
-				})
+					}),
+					0,
+				)
 				v3 = tmp2
 				_ = v3
 			}
@@ -24596,19 +24404,14 @@ func LoadNS() {
 						return tmp9
 					}),
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 3)
+					lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 						v5 := args[0]
 						_ = v5
 						v6 := args[1]
 						_ = v6
 						v7 := args[2]
 						_ = v7
-						restArgs := args[3:]
-						var v8 any
-						if len(restArgs) > 0 {
-							v8 = lang.NewList(restArgs...)
-						}
+						var v8 any = rest
 						_ = v8
 						tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 						tmp10 := lang.Apply(tmp9, []any{v3, v5, v6, v7, v8})
@@ -24626,17 +24429,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_comp)
@@ -24731,17 +24529,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v4 := args[0]
 					_ = v4
 					v5 := args[1]
 					_ = v5
-					restArgs := args[2:]
-					var v6 any
-					if len(restArgs) > 0 {
-						v6 = lang.NewList(restArgs...)
-					}
+					var v6 any = rest
 					_ = v6
 					tmp7 := checkDerefVar(var_clojure_DOT_core_not)
 					tmp8 := checkDerefVar(var_clojure_DOT_core_apply)
@@ -24988,22 +24781,21 @@ func LoadNS() {
 	// definline
 	{
 		tmp0 := sym_definline
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -25111,8 +24903,9 @@ func LoadNS() {
 					tmp6 = tmp97
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_definline = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_definline.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_decl)), kw_doc, "Experimental - like defmacro, except defines a named function whose\n  body is the expansion, calls to which may be expanded inline as if\n  it were a macro. Cannot be used with variadic (&) args.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(5305), kw_end_DASH_line, int(5305))
@@ -25121,22 +24914,21 @@ func LoadNS() {
 	// defmacro
 	{
 		tmp0 := sym_defmacro
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -25397,8 +25189,10 @@ func LoadNS() {
 					tmp6 = tmp45
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(453), kw_column, int(11), kw_end_DASH_line, int(489), kw_end_DASH_column, int(40))).(lang.ArityFn)
 		var_clojure_DOT_core_defmacro = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defmacro.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewVector(sym_params_STAR_), sym_body), lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_body), sym__PLUS_, sym_attr_DASH_map_QMARK_)), kw_doc, "Like defn, but the resulting function name is declared as a\n  macro and will be used as a macro by the compiler when it is\n  called.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(2), kw_line, int(447), kw_end_DASH_line, int(453))
@@ -25407,22 +25201,21 @@ func LoadNS() {
 	// defn-
 	{
 		tmp0 := sym_defn_DASH_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
@@ -25433,8 +25226,9 @@ func LoadNS() {
 				tmp12 := lang.Apply2(tmp7, v4, tmp11)
 				tmp13 := lang.Apply3(tmp6, sym_clojure_DOT_core_SLASH_defn, tmp12, v5)
 				return tmp13
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_defn_DASH_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defn_DASH_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_decls)), kw_doc, "same as defn, yielding non-public def", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(4999), kw_end_DASH_line, int(4999))
@@ -25520,20 +25314,19 @@ func LoadNS() {
 	// delay
 	{
 		tmp0 := sym_delay
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
@@ -25546,8 +25339,9 @@ func LoadNS() {
 				tmp10 := lang.Apply3(tmp6, sym_fn_STAR_, tmp9, v4)
 				tmp11 := lang.Apply2(tmp5, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewDelay, tmp10)
 				return tmp11
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_delay = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_delay.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions and yields a Delay object that will\n  invoke the body only the first time it is forced (with force or deref/@), and\n  will cache the result and return it on all subsequent force\n  calls. See also - realized?", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(741), kw_end_DASH_line, int(741))
@@ -26007,22 +25801,21 @@ func LoadNS() {
 	// doseq
 	{
 		tmp0 := sym_doseq
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				tmp7 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -26635,8 +26428,9 @@ func LoadNS() {
 					tmp32 = tmp41
 				} // end let
 				return tmp32
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_doseq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_doseq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_seq_DASH_exprs, sym__AMP_, sym_body)), kw_doc, "Repeatedly executes body (presumably for side-effects) with\n  bindings and filtering as provided by \"for\".  Does not retain\n  the head of the sequence. Returns nil.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(3231), kw_end_DASH_line, int(3231))
@@ -26645,22 +26439,21 @@ func LoadNS() {
 	// dotimes
 	{
 		tmp0 := sym_dotimes
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				tmp7 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -26799,8 +26592,9 @@ func LoadNS() {
 					tmp32 = tmp124
 				} // end let
 				return tmp32
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_dotimes = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_dotimes.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => name n\n\n  Repeatedly executes body (presumably for side-effects) with name\n  bound to integers from 0 through n-1.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(3328), kw_end_DASH_line, int(3328))
@@ -26972,19 +26766,14 @@ func LoadNS() {
 							return tmp9
 						}),
 						nil,
-						lang.FnFunc(func(args ...any) any {
-							checkArityGTE(args, 3)
+						lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 							v5 := args[0]
 							_ = v5
 							v6 := args[1]
 							_ = v6
 							v7 := args[2]
 							_ = v7
-							restArgs := args[3:]
-							var v8 any
-							if len(restArgs) > 0 {
-								v8 = lang.NewList(restArgs...)
-							}
+							var v8 any = rest
 							_ = v8
 							var tmp9 any
 							{ // let
@@ -27183,19 +26972,14 @@ func LoadNS() {
 							return tmp10
 						}),
 						nil,
-						lang.FnFunc(func(args ...any) any {
-							checkArityGTE(args, 3)
+						lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 							v6 := args[0]
 							_ = v6
 							v7 := args[1]
 							_ = v7
 							v8 := args[2]
 							_ = v8
-							restArgs := args[3:]
-							var v9 any
-							if len(restArgs) > 0 {
-								v9 = lang.NewList(restArgs...)
-							}
+							var v9 any = rest
 							_ = v9
 							var tmp10 any
 							{ // let
@@ -27506,19 +27290,14 @@ func LoadNS() {
 							return tmp11
 						}),
 						nil,
-						lang.FnFunc(func(args ...any) any {
-							checkArityGTE(args, 3)
+						lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 							v7 := args[0]
 							_ = v7
 							v8 := args[1]
 							_ = v8
 							v9 := args[2]
 							_ = v9
-							restArgs := args[3:]
-							var v10 any
-							if len(restArgs) > 0 {
-								v10 = lang.NewList(restArgs...)
-							}
+							var v10 any = rest
 							_ = v10
 							var tmp11 any
 							{ // let
@@ -27592,19 +27371,14 @@ func LoadNS() {
 				return tmp7
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -27726,19 +27500,14 @@ func LoadNS() {
 								return tmp19
 							}),
 							nil,
-							lang.FnFunc(func(args ...any) any {
-								checkArityGTE(args, 3)
+							lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 								v12 := args[0]
 								_ = v12
 								v13 := args[1]
 								_ = v13
 								v14 := args[2]
 								_ = v14
-								restArgs := args[3:]
-								var v15 any
-								if len(restArgs) > 0 {
-									v15 = lang.NewList(restArgs...)
-								}
+								var v15 any = rest
 								_ = v15
 								var tmp16 any
 								{ // let
@@ -27854,19 +27623,14 @@ func LoadNS() {
 						return tmp10
 					}),
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 3)
+					lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 						v5 := args[0]
 						_ = v5
 						v6 := args[1]
 						_ = v6
 						v7 := args[2]
 						_ = v7
-						restArgs := args[3:]
-						var v8 any
-						if len(restArgs) > 0 {
-							v8 = lang.NewList(restArgs...)
-						}
+						var v8 any = rest
 						_ = v8
 						tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 						var tmp10 any
@@ -27946,19 +27710,14 @@ func LoadNS() {
 						return tmp13
 					}),
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 3)
+					lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 						v6 := args[0]
 						_ = v6
 						v7 := args[1]
 						_ = v7
 						v8 := args[2]
 						_ = v8
-						restArgs := args[3:]
-						var v9 any
-						if len(restArgs) > 0 {
-							v9 = lang.NewList(restArgs...)
-						}
+						var v9 any = rest
 						_ = v9
 						tmp10 := checkDerefVar(var_clojure_DOT_core_apply)
 						var tmp11 any
@@ -28054,19 +27813,14 @@ func LoadNS() {
 						return tmp16
 					}),
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 3)
+					lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 						v7 := args[0]
 						_ = v7
 						v8 := args[1]
 						_ = v8
 						v9 := args[2]
 						_ = v9
-						restArgs := args[3:]
-						var v10 any
-						if len(restArgs) > 0 {
-							v10 = lang.NewList(restArgs...)
-						}
+						var v10 any = rest
 						_ = v10
 						tmp11 := checkDerefVar(var_clojure_DOT_core_apply)
 						var tmp12 any
@@ -28113,24 +27867,24 @@ func LoadNS() {
 	// format
 	{
 		tmp0 := sym_format
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp5 := lang.Apply3(tmp4, fmt.Sprintf, v2, v3)
 				return tmp5
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_format = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_format.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fmt, sym__AMP_, sym_args)), kw_doc, "Formats a string using java.lang.String.format, see java.util.Formatter for format\n  string syntax", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5774), kw_end_DASH_line, int(5774))
@@ -28139,20 +27893,19 @@ func LoadNS() {
 	// future
 	{
 		tmp0 := sym_future
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -28178,8 +27931,9 @@ func LoadNS() {
 				tmp26 := lang.Apply2(tmp6, tmp8, tmp25)
 				tmp27 := lang.Apply1(tmp5, tmp26)
 				return tmp27
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_future = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_future.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions and yields a future object that will\n  invoke the body in another thread, and will cache the result and\n  return it on all subsequent calls to deref/@. If the computation has\n  not yet finished, calls to deref/@ will block, unless the variant of\n  deref with timeout is used. See also - realized?.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7079), kw_end_DASH_line, int(7079))
@@ -28332,13 +28086,8 @@ func LoadNS() {
 			nil,
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp4 := lang.Apply2(tmp3, lang.NewSet, v2)
@@ -28383,8 +28132,7 @@ func LoadNS() {
 				tmp17 := lang.Apply1(tmp6, tmp16)
 				return tmp17
 			}),
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 5)
+			lang.NewVariadicFn(5, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -28395,11 +28143,7 @@ func LoadNS() {
 				_ = v5
 				v6 := args[4]
 				_ = v6
-				restArgs := args[5:]
-				var v7 any
-				if len(restArgs) > 0 {
-					v7 = lang.NewList(restArgs...)
-				}
+				var v7 any = rest
 				_ = v7
 				var tmp8 any
 				tmp9 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -28560,8 +28304,7 @@ func LoadNS() {
 				tmp17 := lang.Apply1(tmp6, tmp16)
 				return tmp17
 			}),
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 5)
+			lang.NewVariadicFn(5, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -28572,11 +28315,7 @@ func LoadNS() {
 				_ = v5
 				v6 := args[4]
 				_ = v6
-				restArgs := args[5:]
-				var v7 any
-				if len(restArgs) > 0 {
-					v7 = lang.NewList(restArgs...)
-				}
+				var v7 any = rest
 				_ = v7
 				var tmp8 any
 				tmp9 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -28812,19 +28551,14 @@ func LoadNS() {
 						return tmp10
 					}),
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 3)
+					lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 						v4 := args[0]
 						_ = v4
 						v5 := args[1]
 						_ = v5
 						v6 := args[2]
 						_ = v6
-						restArgs := args[3:]
-						var v7 any
-						if len(restArgs) > 0 {
-							v7 = lang.NewList(restArgs...)
-						}
+						var v7 any = rest
 						_ = v7
 						tmp8 := checkDerefVar(var_clojure_DOT_core_apply)
 						tmp9 := lang.Apply(tmp8, []any{v2, v4, v5, v6, v7})
@@ -28909,19 +28643,14 @@ func LoadNS() {
 						return tmp12
 					}),
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 3)
+					lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 						v5 := args[0]
 						_ = v5
 						v6 := args[1]
 						_ = v6
 						v7 := args[2]
 						_ = v7
-						restArgs := args[3:]
-						var v8 any
-						if len(restArgs) > 0 {
-							v8 = lang.NewList(restArgs...)
-						}
+						var v8 any = rest
 						_ = v8
 						tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 						tmp10 := lang.Apply(tmp9, []any{v2, v5, v6, v7, v8})
@@ -29014,19 +28743,14 @@ func LoadNS() {
 						return tmp14
 					}),
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 3)
+					lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 						v6 := args[0]
 						_ = v6
 						v7 := args[1]
 						_ = v7
 						v8 := args[2]
 						_ = v8
-						restArgs := args[3:]
-						var v9 any
-						if len(restArgs) > 0 {
-							v9 = lang.NewList(restArgs...)
-						}
+						var v9 any = rest
 						_ = v9
 						tmp10 := checkDerefVar(var_clojure_DOT_core_apply)
 						tmp11 := lang.Apply(tmp10, []any{v2, v6, v7, v8, v9})
@@ -29052,19 +28776,14 @@ func LoadNS() {
 				return tmp7
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -29196,19 +28915,14 @@ func LoadNS() {
 							return tmp21
 						}),
 						nil,
-						lang.FnFunc(func(args ...any) any {
-							checkArityGTE(args, 3)
+						lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 							v11 := args[0]
 							_ = v11
 							v12 := args[1]
 							_ = v12
 							v13 := args[2]
 							_ = v13
-							restArgs := args[3:]
-							var v14 any
-							if len(restArgs) > 0 {
-								v14 = lang.NewList(restArgs...)
-							}
+							var v14 any = rest
 							_ = v14
 							tmp15 := checkDerefVar(var_clojure_DOT_core_reduce1)
 							var tmp16 lang.FnFunc2
@@ -29756,20 +29470,19 @@ func LoadNS() {
 	// lazy-seq
 	{
 		tmp0 := sym_lazy_DASH_seq
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_list)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
@@ -29782,8 +29495,9 @@ func LoadNS() {
 				tmp10 := lang.Apply3(tmp6, sym_fn_STAR_, tmp9, v4)
 				tmp11 := lang.Apply2(tmp5, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewLazySeq, tmp10)
 				return tmp11
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_lazy_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_lazy_DASH_seq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Takes a body of expressions that returns an ISeq or nil, and yields\n  a Seqable object that will invoke the body only the first time seq\n  is called, and will cache the result and return it on all subsequent\n  seq calls. See also - realized?", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(678), kw_end_DASH_line, int(678))
@@ -29792,22 +29506,21 @@ func LoadNS() {
 	// locking
 	{
 		tmp0 := sym_locking
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -29894,8 +29607,9 @@ func LoadNS() {
 				tmp88 := lang.Apply3(tmp7, tmp9, tmp22, tmp87)
 				tmp89 := lang.Apply1(tmp6, tmp88)
 				return tmp89
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_locking = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_locking.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_body)), kw_doc, "Executes exprs in an implicit do, while holding the monitor of x.\n  Will release the monitor of x in all circumstances.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(1651), kw_end_DASH_line, int(1651))
@@ -29937,17 +29651,12 @@ func LoadNS() {
 						}),
 						nil,
 						nil,
-						lang.FnFunc(func(args ...any) any {
-							checkArityGTE(args, 2)
+						lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 							v6 := args[0]
 							_ = v6
 							v7 := args[1]
 							_ = v7
-							restArgs := args[2:]
-							var v8 any
-							if len(restArgs) > 0 {
-								v8 = lang.NewList(restArgs...)
-							}
+							var v8 any = rest
 							_ = v8
 							tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 							tmp10 := lang.Apply3(tmp9, v2, v7, v8)
@@ -30227,8 +29936,7 @@ func LoadNS() {
 				tmp7 := lang.Apply1(lang.NewLazySeq, tmp6)
 				return tmp7
 			}),
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 4)
+			lang.NewVariadicFn(4, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -30237,11 +29945,7 @@ func LoadNS() {
 				_ = v4
 				v5 := args[3]
 				_ = v5
-				restArgs := args[4:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				var tmp7 any
 				{ // let
@@ -30346,17 +30050,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_max)
@@ -30451,17 +30150,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -30536,6 +30230,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -30579,19 +30274,14 @@ func LoadNS() {
 				return tmp5
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -30707,22 +30397,21 @@ func LoadNS() {
 	// memfn
 	{
 		tmp0 := sym_memfn
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -30773,8 +30462,9 @@ func LoadNS() {
 					tmp6 = tmp48
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_memfn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_memfn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_args)), kw_doc, "Expands into code that creates a fn that expects to be passed an\n  object and any args and calls the named instance method on the\n  object passing the args. Use when you want to treat a Java method as\n  a first-class fn. name may be type-hinted with the method receiver's\n  type in order to avoid reflective calls.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(3929), kw_end_DASH_line, int(3929))
@@ -30783,16 +30473,15 @@ func LoadNS() {
 	// merge
 	{
 		tmp0 := sym_merge
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				tmp4 := checkDerefVar(var_clojure_DOT_core_some)
@@ -30839,8 +30528,9 @@ func LoadNS() {
 				} else {
 				}
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_merge = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_merge.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_maps)), kw_doc, "Returns a map that consists of the rest of the maps conj-ed onto\n  the first.  If a key occurs in more than one map, the mapping from\n  the latter (left-to-right) will be the mapping in the result.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3062), kw_end_DASH_line, int(3062))
@@ -30849,18 +30539,17 @@ func LoadNS() {
 	// merge-with
 	{
 		tmp0 := sym_merge_DASH_with
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				tmp5 := checkDerefVar(var_clojure_DOT_core_some)
@@ -30964,8 +30653,9 @@ func LoadNS() {
 				} else {
 				}
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_merge_DASH_with = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_merge_DASH_with.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym__AMP_, sym_maps)), kw_doc, "Returns a map that consists of the rest of the maps conj-ed onto\n  the first.  If a key occurs in more than one map, the mapping(s)\n  from the latter (left-to-right) will be combined with the mapping in\n  the result by calling (f val-in-result val-in-latter).", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(7), kw_line, int(3072), kw_end_DASH_line, int(3072))
@@ -30992,17 +30682,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_reduce1)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_min)
@@ -31097,17 +30782,12 @@ func LoadNS() {
 				}),
 				nil,
 				nil,
-				lang.FnFunc(func(args ...any) any {
-					checkArityGTE(args, 2)
+				lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
-					restArgs := args[2:]
-					var v5 any
-					if len(restArgs) > 0 {
-						v5 = lang.NewList(restArgs...)
-					}
+					var v5 any = rest
 					_ = v5
 					var tmp6 any
 					{ // let
@@ -31182,6 +30862,7 @@ func LoadNS() {
 				}),
 				2,
 			)
+			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -31225,19 +30906,14 @@ func LoadNS() {
 				return tmp5
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -31500,17 +31176,12 @@ func LoadNS() {
 					}),
 					nil,
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 2)
+					lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 						v5 := args[0]
 						_ = v5
 						v6 := args[1]
 						_ = v6
-						restArgs := args[2:]
-						var v7 any
-						if len(restArgs) > 0 {
-							v7 = lang.NewList(restArgs...)
-						}
+						var v7 any = rest
 						_ = v7
 						var tmp8 any
 						{ // let
@@ -31640,19 +31311,14 @@ func LoadNS() {
 				return tmp6
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := lang.Apply(tmp6, []any{closed26, v2, v3, v4, v5})
@@ -31661,6 +31327,7 @@ func LoadNS() {
 			}),
 			3,
 		)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2567), kw_column, int(6), kw_end_DASH_line, int(2572), kw_end_DASH_column, int(49))).(lang.ArityFn)
 		var_clojure_DOT_core_not_DASH_any_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_not_DASH_any_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -31705,19 +31372,14 @@ func LoadNS() {
 				return tmp6
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := lang.Apply(tmp6, []any{closed27, v2, v3, v4, v5})
@@ -31726,6 +31388,7 @@ func LoadNS() {
 			}),
 			3,
 		)
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2567), kw_column, int(6), kw_end_DASH_line, int(2572), kw_end_DASH_column, int(49))).(lang.ArityFn)
 		var_clojure_DOT_core_not_DASH_every_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_not_DASH_every_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -31756,17 +31419,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_not)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
@@ -32035,19 +31693,14 @@ func LoadNS() {
 				return v4
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -32334,19 +31987,14 @@ func LoadNS() {
 						return tmp8
 					}),
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 3)
+					lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 						v5 := args[0]
 						_ = v5
 						v6 := args[1]
 						_ = v6
 						v7 := args[2]
 						_ = v7
-						restArgs := args[3:]
-						var v8 any
-						if len(restArgs) > 0 {
-							v8 = lang.NewList(restArgs...)
-						}
+						var v8 any = rest
 						_ = v8
 						tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 						tmp10 := lang.Apply(tmp9, []any{v2, v3, v5, v6, v7, v8})
@@ -32399,19 +32047,14 @@ func LoadNS() {
 						return tmp9
 					}),
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 3)
+					lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 						v6 := args[0]
 						_ = v6
 						v7 := args[1]
 						_ = v7
 						v8 := args[2]
 						_ = v8
-						restArgs := args[3:]
-						var v9 any
-						if len(restArgs) > 0 {
-							v9 = lang.NewList(restArgs...)
-						}
+						var v9 any = rest
 						_ = v9
 						tmp10 := checkDerefVar(var_clojure_DOT_core_apply)
 						tmp11 := lang.Apply(tmp10, []any{v2, v3, v4, v6, v7, v8, v9})
@@ -32466,19 +32109,14 @@ func LoadNS() {
 						return tmp10
 					}),
 					nil,
-					lang.FnFunc(func(args ...any) any {
-						checkArityGTE(args, 3)
+					lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 						v7 := args[0]
 						_ = v7
 						v8 := args[1]
 						_ = v8
 						v9 := args[2]
 						_ = v9
-						restArgs := args[3:]
-						var v10 any
-						if len(restArgs) > 0 {
-							v10 = lang.NewList(restArgs...)
-						}
+						var v10 any = rest
 						_ = v10
 						tmp11 := checkDerefVar(var_clojure_DOT_core_apply)
 						tmp12 := lang.Apply(tmp11, []any{v2, v3, v4, v5, v7, v8, v9, v10})
@@ -32493,8 +32131,7 @@ func LoadNS() {
 				}
 				return tmp8
 			}),
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 4)
+			lang.NewVariadicFn(4, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -32503,30 +32140,26 @@ func LoadNS() {
 				_ = v4
 				v5 := args[3]
 				_ = v5
-				restArgs := args[4:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
-				var tmp7 lang.FnFunc
-				tmp7 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v8 any
-						if len(restArgs) > 0 {
-							v8 = lang.NewList(restArgs...)
-						}
+				var tmp7 lang.ArityFn
+				tmp7 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v8 any = rest
 						_ = v8
 						tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 						tmp10 := checkDerefVar(var_clojure_DOT_core_concat)
 						tmp11 := lang.Apply2(tmp10, v6, v8)
 						tmp12 := lang.Apply(tmp9, []any{v2, v3, v4, v5, tmp11})
 						return tmp12
-					}
-				})
+					}),
+					0,
+				)
 				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2643), kw_column, int(4), kw_end_DASH_line, int(2643), kw_end_DASH_column, int(60))
 				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 				if err != nil {
@@ -33397,17 +33030,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				{ // let
@@ -33553,20 +33181,19 @@ func LoadNS() {
 	// pvalues
 	{
 		tmp0 := sym_pvalues
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -33596,8 +33223,9 @@ func LoadNS() {
 				tmp14 := lang.Apply2(tmp6, tmp8, tmp13)
 				tmp15 := lang.Apply1(tmp5, tmp14)
 				return tmp15
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_pvalues = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pvalues.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_exprs)), kw_doc, "Returns a lazy sequence of the values of the exprs, which are\n  evaluated in parallel", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7133), kw_end_DASH_line, int(7133))
@@ -33657,18 +33285,17 @@ func LoadNS() {
 	// refer
 	{
 		tmp0 := sym_refer
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				{ // let
@@ -34007,8 +33634,9 @@ func LoadNS() {
 					tmp4 = tmp31
 				} // end let
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_refer = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_refer.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ns_DASH_sym, sym__AMP_, sym_filters)), kw_doc, "refers to all public vars of ns, subject to filters.\n  filters can include at most one each of:\n\n  :exclude list-of-symbols\n  :only list-of-symbols\n  :rename map-of-fromsymbol-tosymbol\n\n  For each public interned var in the namespace named by the symbol,\n  adds a mapping from the name of the var to the var to the current\n  namespace.  Throws an exception if name is already mapped to\n  something else in the current namespace. Filters can be used to\n  select a subset, via inclusion or exclusion, or to provide a mapping\n  to a symbol different from the var's name, in order to prevent\n  clashes. Use :use in the ns macro in preference to calling this directly.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(4273), kw_end_DASH_line, int(4273))
@@ -34272,20 +33900,19 @@ func LoadNS() {
 	// restart-agent
 	{
 		tmp0 := sym_restart_DASH_agent
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				{ // let
@@ -34310,8 +33937,9 @@ func LoadNS() {
 					tmp5 = tmp13
 				} // end let
 				return tmp5
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_restart_DASH_agent = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_restart_DASH_agent.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_new_DASH_state, sym__AMP_, sym_options)), kw_doc, "When an agent is failed, changes the agent state to new-state and\n  then un-fails the agent so that sends are allowed again.  If\n  a :clear-actions true option is given, any actions queued on the\n  agent that were being held while it was failed will be discarded,\n  otherwise those held actions will proceed.  The new-state must pass\n  the validator if any, or restart will throw an exception and the\n  agent will remain failed with its old state and error.  Watchers, if\n  any, will NOT be notified of the new state.  Throws an exception if\n  the agent is not failed.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(2183), kw_end_DASH_line, int(2183))
@@ -34346,153 +33974,155 @@ func LoadNS() {
 	// rsubseq
 	{
 		tmp0 := sym_rsubseq
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 3:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				var tmp5 any
-				{ // let
-					// let binding "include"
-					tmp6 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
-					tmp7 := lang.Apply3(tmp6, v2, v3, v4)
-					var v8 any = tmp7
-					_ = v8
-					var tmp9 any
-					tmp10 := checkDerefVar(var_clojure_DOT_core__LT__EQ_)
-					tmp11 := checkDerefVar(var_clojure_DOT_core__LT_)
-					tmp12 := lang.NewSet(tmp10, tmp11)
-					tmp13 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5210), kw_column, int(11), kw_end_DASH_line, int(5210), kw_end_DASH_column, int(17))
-					tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp15 := lang.Apply1(tmp14, v3)
-					if lang.IsTruthy(tmp15) {
-						var tmp16 any
-						{ // let
-							// let binding "temp__0__auto__"
-							tmp17, _ := lang.FieldOrMethod(v2, "seqFrom")
-							if reflect.TypeOf(tmp17).Kind() != reflect.Func {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("seqFrom is not a function")))
-							}
-							tmp18 := lang.Apply2(tmp17, v4, false)
-							var v19 any = tmp18
-							_ = v19
-							var tmp20 any
-							if lang.IsTruthy(v19) {
-								var tmp21 any
-								{ // let
-									// let binding "vec__443"
-									var v22 any = v19
-									_ = v22
-									// let binding "e"
-									tmp23 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp24 := lang.Apply3(tmp23, v22, int64(0), nil)
-									var v25 any = tmp24
-									_ = v25
-									// let binding "s"
-									var v26 any = v22
-									_ = v26
-									var tmp27 any
-									tmp28 := lang.Apply1(v8, v25)
-									if lang.IsTruthy(tmp28) {
-										tmp27 = v26
-									} else {
-										tmp29 := checkDerefVar(var_clojure_DOT_core_next)
-										tmp30 := lang.Apply1(tmp29, v26)
-										tmp27 = tmp30
-									}
-									tmp21 = tmp27
-								} // end let
-								tmp20 = tmp21
-							} else {
-							}
-							tmp16 = tmp20
-						} // end let
-						tmp9 = tmp16
-					} else {
-						tmp17 := checkDerefVar(var_clojure_DOT_core_take_DASH_while)
-						tmp18, _ := lang.FieldOrMethod(v2, "seq")
-						if reflect.TypeOf(tmp18).Kind() != reflect.Func {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("seq is not a function")))
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFnMethods(
+			map[int]lang.IFn{
+				3: lang.FnFunc3(func(p0, p1, p2 any) any {
+					v2 := p0
+					_ = v2
+					v3 := p1
+					_ = v3
+					v4 := p2
+					_ = v4
+					var tmp5 any
+					{ // let
+						// let binding "include"
+						tmp6 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
+						tmp7 := lang.Apply3(tmp6, v2, v3, v4)
+						var v8 any = tmp7
+						_ = v8
+						var tmp9 any
+						tmp10 := checkDerefVar(var_clojure_DOT_core__LT__EQ_)
+						tmp11 := checkDerefVar(var_clojure_DOT_core__LT_)
+						tmp12 := lang.NewSet(tmp10, tmp11)
+						tmp13 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5210), kw_column, int(11), kw_end_DASH_line, int(5210), kw_end_DASH_column, int(17))
+						tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
+						if err != nil {
+							panic(err)
 						}
-						tmp19 := lang.Apply1(tmp18, false)
-						tmp20 := lang.Apply2(tmp17, v8, tmp19)
-						tmp9 = tmp20
-					}
-					tmp5 = tmp9
-				} // end let
-				return tmp5
-			case 5:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				v6 := args[4]
-				_ = v6
-				var tmp7 any
-				{ // let
-					// let binding "temp__0__auto__"
-					tmp8, _ := lang.FieldOrMethod(v2, "seqFrom")
-					if reflect.TypeOf(tmp8).Kind() != reflect.Func {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("seqFrom is not a function")))
-					}
-					tmp9 := lang.Apply2(tmp8, v6, false)
-					var v10 any = tmp9
-					_ = v10
-					var tmp11 any
-					if lang.IsTruthy(v10) {
-						var tmp12 any
-						{ // let
-							// let binding "vec__446"
-							var v13 any = v10
-							_ = v13
-							// let binding "e"
-							tmp14 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp15 := lang.Apply3(tmp14, v13, int64(0), nil)
-							var v16 any = tmp15
-							_ = v16
-							// let binding "s"
-							var v17 any = v13
-							_ = v17
-							tmp18 := checkDerefVar(var_clojure_DOT_core_take_DASH_while)
-							tmp19 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
-							tmp20 := lang.Apply3(tmp19, v2, v3, v4)
-							var tmp21 any
-							tmp22 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
-							tmp23 := lang.Apply3(tmp22, v2, v5, v6)
-							tmp24 := lang.Apply1(tmp23, v16)
-							if lang.IsTruthy(tmp24) {
-								tmp21 = v17
-							} else {
-								tmp25 := checkDerefVar(var_clojure_DOT_core_next)
-								tmp26 := lang.Apply1(tmp25, v17)
-								tmp21 = tmp26
+						tmp15 := lang.Apply1(tmp14, v3)
+						if lang.IsTruthy(tmp15) {
+							var tmp16 any
+							{ // let
+								// let binding "temp__0__auto__"
+								tmp17, _ := lang.FieldOrMethod(v2, "seqFrom")
+								if reflect.TypeOf(tmp17).Kind() != reflect.Func {
+									panic(lang.NewIllegalArgumentError(fmt.Sprintf("seqFrom is not a function")))
+								}
+								tmp18 := lang.Apply2(tmp17, v4, false)
+								var v19 any = tmp18
+								_ = v19
+								var tmp20 any
+								if lang.IsTruthy(v19) {
+									var tmp21 any
+									{ // let
+										// let binding "vec__443"
+										var v22 any = v19
+										_ = v22
+										// let binding "e"
+										tmp23 := checkDerefVar(var_clojure_DOT_core_nth)
+										tmp24 := lang.Apply3(tmp23, v22, int64(0), nil)
+										var v25 any = tmp24
+										_ = v25
+										// let binding "s"
+										var v26 any = v22
+										_ = v26
+										var tmp27 any
+										tmp28 := lang.Apply1(v8, v25)
+										if lang.IsTruthy(tmp28) {
+											tmp27 = v26
+										} else {
+											tmp29 := checkDerefVar(var_clojure_DOT_core_next)
+											tmp30 := lang.Apply1(tmp29, v26)
+											tmp27 = tmp30
+										}
+										tmp21 = tmp27
+									} // end let
+									tmp20 = tmp21
+								} else {
+								}
+								tmp16 = tmp20
+							} // end let
+							tmp9 = tmp16
+						} else {
+							tmp17 := checkDerefVar(var_clojure_DOT_core_take_DASH_while)
+							tmp18, _ := lang.FieldOrMethod(v2, "seq")
+							if reflect.TypeOf(tmp18).Kind() != reflect.Func {
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("seq is not a function")))
 							}
-							tmp27 := lang.Apply2(tmp18, tmp20, tmp21)
-							tmp12 = tmp27
-						} // end let
-						tmp11 = tmp12
-					} else {
-					}
-					tmp7 = tmp11
-				} // end let
-				return tmp7
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
+							tmp19 := lang.Apply1(tmp18, false)
+							tmp20 := lang.Apply2(tmp17, v8, tmp19)
+							tmp9 = tmp20
+						}
+						tmp5 = tmp9
+					} // end let
+					return tmp5
+				}),
+				5: lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 5)
+					v2 := args[0]
+					_ = v2
+					v3 := args[1]
+					_ = v3
+					v4 := args[2]
+					_ = v4
+					v5 := args[3]
+					_ = v5
+					v6 := args[4]
+					_ = v6
+					var tmp7 any
+					{ // let
+						// let binding "temp__0__auto__"
+						tmp8, _ := lang.FieldOrMethod(v2, "seqFrom")
+						if reflect.TypeOf(tmp8).Kind() != reflect.Func {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("seqFrom is not a function")))
+						}
+						tmp9 := lang.Apply2(tmp8, v6, false)
+						var v10 any = tmp9
+						_ = v10
+						var tmp11 any
+						if lang.IsTruthy(v10) {
+							var tmp12 any
+							{ // let
+								// let binding "vec__446"
+								var v13 any = v10
+								_ = v13
+								// let binding "e"
+								tmp14 := checkDerefVar(var_clojure_DOT_core_nth)
+								tmp15 := lang.Apply3(tmp14, v13, int64(0), nil)
+								var v16 any = tmp15
+								_ = v16
+								// let binding "s"
+								var v17 any = v13
+								_ = v17
+								tmp18 := checkDerefVar(var_clojure_DOT_core_take_DASH_while)
+								tmp19 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
+								tmp20 := lang.Apply3(tmp19, v2, v3, v4)
+								var tmp21 any
+								tmp22 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
+								tmp23 := lang.Apply3(tmp22, v2, v5, v6)
+								tmp24 := lang.Apply1(tmp23, v16)
+								if lang.IsTruthy(tmp24) {
+									tmp21 = v17
+								} else {
+									tmp25 := checkDerefVar(var_clojure_DOT_core_next)
+									tmp26 := lang.Apply1(tmp25, v17)
+									tmp21 = tmp26
+								}
+								tmp27 := lang.Apply2(tmp18, tmp20, tmp21)
+								tmp12 = tmp27
+							} // end let
+							tmp11 = tmp12
+						} else {
+						}
+						tmp7 = tmp11
+					} // end let
+					return tmp7
+				}),
+			},
+			nil,
+			0,
+		)
 		var_clojure_DOT_core_rsubseq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_rsubseq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sc, sym_test, sym_key), lang.NewVector(sym_sc, sym_start_DASH_test, sym_start_DASH_key, sym_end_DASH_test, sym_end_DASH_key)), kw_doc, "sc must be a sorted collection, test(s) one of <, <=, > or\n  >=. Returns a reverse seq of those entries with keys ek for\n  which (test (.. sc comparator (compare ek key)) 0) is true", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(5202), kw_end_DASH_line, int(5202))
@@ -34501,22 +34131,21 @@ func LoadNS() {
 	// send-via
 	{
 		tmp0 := sym_send_DASH_via
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -34545,8 +34174,9 @@ func LoadNS() {
 				}
 				tmp8 := lang.Apply3(tmp7, tmp6, v5, v2)
 				return tmp8
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_send_DASH_via = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_send_DASH_via.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_executor, sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch an action to an agent. Returns the agent immediately.\n  Subsequently, in a thread supplied by executor, the state of the agent\n  will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2107), kw_end_DASH_line, int(2107))
@@ -34611,17 +34241,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				{ // let
@@ -34827,20 +34452,19 @@ func LoadNS() {
 	// spit
 	{
 		tmp0 := sym_spit
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				{ // let
@@ -34873,8 +34497,9 @@ func LoadNS() {
 					tmp5 = tmp9
 				} // end let
 				return tmp5
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_spit = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_spit.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_content, sym__AMP_, sym_options)), kw_doc, "Opposite of slurp.  Opens f with writer, writes content, then\n  closes f. Options passed to clojure.java.io/writer.", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(7064), kw_end_DASH_line, int(7064))
@@ -34939,153 +34564,155 @@ func LoadNS() {
 	// subseq
 	{
 		tmp0 := sym_subseq
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 3:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				var tmp5 any
-				{ // let
-					// let binding "include"
-					tmp6 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
-					tmp7 := lang.Apply3(tmp6, v2, v3, v4)
-					var v8 any = tmp7
-					_ = v8
-					var tmp9 any
-					tmp10 := checkDerefVar(var_clojure_DOT_core__GT_)
-					tmp11 := checkDerefVar(var_clojure_DOT_core__GT__EQ_)
-					tmp12 := lang.NewSet(tmp10, tmp11)
-					tmp13 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5193), kw_column, int(11), kw_end_DASH_line, int(5193), kw_end_DASH_column, int(17))
-					tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp15 := lang.Apply1(tmp14, v3)
-					if lang.IsTruthy(tmp15) {
-						var tmp16 any
-						{ // let
-							// let binding "temp__0__auto__"
-							tmp17, _ := lang.FieldOrMethod(v2, "seqFrom")
-							if reflect.TypeOf(tmp17).Kind() != reflect.Func {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("seqFrom is not a function")))
-							}
-							tmp18 := lang.Apply2(tmp17, v4, true)
-							var v19 any = tmp18
-							_ = v19
-							var tmp20 any
-							if lang.IsTruthy(v19) {
-								var tmp21 any
-								{ // let
-									// let binding "vec__437"
-									var v22 any = v19
-									_ = v22
-									// let binding "e"
-									tmp23 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp24 := lang.Apply3(tmp23, v22, int64(0), nil)
-									var v25 any = tmp24
-									_ = v25
-									// let binding "s"
-									var v26 any = v22
-									_ = v26
-									var tmp27 any
-									tmp28 := lang.Apply1(v8, v25)
-									if lang.IsTruthy(tmp28) {
-										tmp27 = v26
-									} else {
-										tmp29 := checkDerefVar(var_clojure_DOT_core_next)
-										tmp30 := lang.Apply1(tmp29, v26)
-										tmp27 = tmp30
-									}
-									tmp21 = tmp27
-								} // end let
-								tmp20 = tmp21
-							} else {
-							}
-							tmp16 = tmp20
-						} // end let
-						tmp9 = tmp16
-					} else {
-						tmp17 := checkDerefVar(var_clojure_DOT_core_take_DASH_while)
-						tmp18, _ := lang.FieldOrMethod(v2, "seq")
-						if reflect.TypeOf(tmp18).Kind() != reflect.Func {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("seq is not a function")))
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFnMethods(
+			map[int]lang.IFn{
+				3: lang.FnFunc3(func(p0, p1, p2 any) any {
+					v2 := p0
+					_ = v2
+					v3 := p1
+					_ = v3
+					v4 := p2
+					_ = v4
+					var tmp5 any
+					{ // let
+						// let binding "include"
+						tmp6 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
+						tmp7 := lang.Apply3(tmp6, v2, v3, v4)
+						var v8 any = tmp7
+						_ = v8
+						var tmp9 any
+						tmp10 := checkDerefVar(var_clojure_DOT_core__GT_)
+						tmp11 := checkDerefVar(var_clojure_DOT_core__GT__EQ_)
+						tmp12 := lang.NewSet(tmp10, tmp11)
+						tmp13 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5193), kw_column, int(11), kw_end_DASH_line, int(5193), kw_end_DASH_column, int(17))
+						tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
+						if err != nil {
+							panic(err)
 						}
-						tmp19 := lang.Apply1(tmp18, true)
-						tmp20 := lang.Apply2(tmp17, v8, tmp19)
-						tmp9 = tmp20
-					}
-					tmp5 = tmp9
-				} // end let
-				return tmp5
-			case 5:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				v6 := args[4]
-				_ = v6
-				var tmp7 any
-				{ // let
-					// let binding "temp__0__auto__"
-					tmp8, _ := lang.FieldOrMethod(v2, "seqFrom")
-					if reflect.TypeOf(tmp8).Kind() != reflect.Func {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("seqFrom is not a function")))
-					}
-					tmp9 := lang.Apply2(tmp8, v4, true)
-					var v10 any = tmp9
-					_ = v10
-					var tmp11 any
-					if lang.IsTruthy(v10) {
-						var tmp12 any
-						{ // let
-							// let binding "vec__440"
-							var v13 any = v10
-							_ = v13
-							// let binding "e"
-							tmp14 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp15 := lang.Apply3(tmp14, v13, int64(0), nil)
-							var v16 any = tmp15
-							_ = v16
-							// let binding "s"
-							var v17 any = v13
-							_ = v17
-							tmp18 := checkDerefVar(var_clojure_DOT_core_take_DASH_while)
-							tmp19 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
-							tmp20 := lang.Apply3(tmp19, v2, v5, v6)
-							var tmp21 any
-							tmp22 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
-							tmp23 := lang.Apply3(tmp22, v2, v3, v4)
-							tmp24 := lang.Apply1(tmp23, v16)
-							if lang.IsTruthy(tmp24) {
-								tmp21 = v17
-							} else {
-								tmp25 := checkDerefVar(var_clojure_DOT_core_next)
-								tmp26 := lang.Apply1(tmp25, v17)
-								tmp21 = tmp26
+						tmp15 := lang.Apply1(tmp14, v3)
+						if lang.IsTruthy(tmp15) {
+							var tmp16 any
+							{ // let
+								// let binding "temp__0__auto__"
+								tmp17, _ := lang.FieldOrMethod(v2, "seqFrom")
+								if reflect.TypeOf(tmp17).Kind() != reflect.Func {
+									panic(lang.NewIllegalArgumentError(fmt.Sprintf("seqFrom is not a function")))
+								}
+								tmp18 := lang.Apply2(tmp17, v4, true)
+								var v19 any = tmp18
+								_ = v19
+								var tmp20 any
+								if lang.IsTruthy(v19) {
+									var tmp21 any
+									{ // let
+										// let binding "vec__437"
+										var v22 any = v19
+										_ = v22
+										// let binding "e"
+										tmp23 := checkDerefVar(var_clojure_DOT_core_nth)
+										tmp24 := lang.Apply3(tmp23, v22, int64(0), nil)
+										var v25 any = tmp24
+										_ = v25
+										// let binding "s"
+										var v26 any = v22
+										_ = v26
+										var tmp27 any
+										tmp28 := lang.Apply1(v8, v25)
+										if lang.IsTruthy(tmp28) {
+											tmp27 = v26
+										} else {
+											tmp29 := checkDerefVar(var_clojure_DOT_core_next)
+											tmp30 := lang.Apply1(tmp29, v26)
+											tmp27 = tmp30
+										}
+										tmp21 = tmp27
+									} // end let
+									tmp20 = tmp21
+								} else {
+								}
+								tmp16 = tmp20
+							} // end let
+							tmp9 = tmp16
+						} else {
+							tmp17 := checkDerefVar(var_clojure_DOT_core_take_DASH_while)
+							tmp18, _ := lang.FieldOrMethod(v2, "seq")
+							if reflect.TypeOf(tmp18).Kind() != reflect.Func {
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("seq is not a function")))
 							}
-							tmp27 := lang.Apply2(tmp18, tmp20, tmp21)
-							tmp12 = tmp27
-						} // end let
-						tmp11 = tmp12
-					} else {
-					}
-					tmp7 = tmp11
-				} // end let
-				return tmp7
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
+							tmp19 := lang.Apply1(tmp18, true)
+							tmp20 := lang.Apply2(tmp17, v8, tmp19)
+							tmp9 = tmp20
+						}
+						tmp5 = tmp9
+					} // end let
+					return tmp5
+				}),
+				5: lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 5)
+					v2 := args[0]
+					_ = v2
+					v3 := args[1]
+					_ = v3
+					v4 := args[2]
+					_ = v4
+					v5 := args[3]
+					_ = v5
+					v6 := args[4]
+					_ = v6
+					var tmp7 any
+					{ // let
+						// let binding "temp__0__auto__"
+						tmp8, _ := lang.FieldOrMethod(v2, "seqFrom")
+						if reflect.TypeOf(tmp8).Kind() != reflect.Func {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("seqFrom is not a function")))
+						}
+						tmp9 := lang.Apply2(tmp8, v4, true)
+						var v10 any = tmp9
+						_ = v10
+						var tmp11 any
+						if lang.IsTruthy(v10) {
+							var tmp12 any
+							{ // let
+								// let binding "vec__440"
+								var v13 any = v10
+								_ = v13
+								// let binding "e"
+								tmp14 := checkDerefVar(var_clojure_DOT_core_nth)
+								tmp15 := lang.Apply3(tmp14, v13, int64(0), nil)
+								var v16 any = tmp15
+								_ = v16
+								// let binding "s"
+								var v17 any = v13
+								_ = v17
+								tmp18 := checkDerefVar(var_clojure_DOT_core_take_DASH_while)
+								tmp19 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
+								tmp20 := lang.Apply3(tmp19, v2, v5, v6)
+								var tmp21 any
+								tmp22 := checkDerefVar(var_clojure_DOT_core_mk_DASH_bound_DASH_fn)
+								tmp23 := lang.Apply3(tmp22, v2, v3, v4)
+								tmp24 := lang.Apply1(tmp23, v16)
+								if lang.IsTruthy(tmp24) {
+									tmp21 = v17
+								} else {
+									tmp25 := checkDerefVar(var_clojure_DOT_core_next)
+									tmp26 := lang.Apply1(tmp25, v17)
+									tmp21 = tmp26
+								}
+								tmp27 := lang.Apply2(tmp18, tmp20, tmp21)
+								tmp12 = tmp27
+							} // end let
+							tmp11 = tmp12
+						} else {
+						}
+						tmp7 = tmp11
+					} // end let
+					return tmp7
+				}),
+			},
+			nil,
+			0,
+		)
 		var_clojure_DOT_core_subseq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_subseq.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_sc, sym_test, sym_key), lang.NewVector(sym_sc, sym_start_DASH_test, sym_start_DASH_key, sym_end_DASH_test, sym_end_DASH_key)), kw_doc, "sc must be a sorted collection, test(s) one of <, <=, > or\n  >=. Returns a seq of those entries with keys ek for\n  which (test (.. sc comparator (compare ek key)) 0) is true", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5185), kw_end_DASH_line, int(5185))
@@ -35159,22 +34786,21 @@ func LoadNS() {
 	// sync
 	{
 		tmp0 := sym_sync
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -35210,8 +34836,9 @@ func LoadNS() {
 				tmp37 := lang.Apply3(tmp7, tmp9, tmp11, tmp36)
 				tmp38 := lang.Apply1(tmp6, tmp37)
 				return tmp38
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_sync = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sync.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_flags_DASH_ignored_DASH_for_DASH_now, sym__AMP_, sym_body)), kw_doc, "transaction-flags => TBD, pass nil for now\n\n  Runs the exprs (in an implicit do) in a transaction that encompasses\n  exprs and any nested calls.  Starts a transaction if none is already\n  running on this thread. Any uncaught exception will abort the\n  transaction and flow out of sync. The exprs may be run more than\n  once, but any effects on Refs will be atomic.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(2498), kw_end_DASH_line, int(2498))
@@ -35220,20 +34847,19 @@ func LoadNS() {
 	// throw-if
 	{
 		tmp0 := sym_throw_DASH_if
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				if lang.IsTruthy(v2) {
@@ -35335,8 +34961,9 @@ func LoadNS() {
 				} else {
 				}
 				return tmp5
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_throw_DASH_if = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_throw_DASH_if.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_fmt, sym__AMP_, sym_args)), kw_doc, "Throws a CompilerException with a message if pred is true", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5889), kw_end_DASH_line, int(5889), kw_private, true)
@@ -35496,15 +35123,10 @@ func LoadNS() {
 			nil,
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 1)
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_trampoline)
 				var tmp5 lang.FnFunc0
@@ -35531,64 +35153,93 @@ func LoadNS() {
 	// update
 	{
 		tmp0 := sym_update
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 3:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				tmp5 := checkDerefVar(var_clojure_DOT_core_assoc)
-				tmp6, _ := lang.FieldOrMethod(runtime.RT, "Get")
-				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
-				}
-				tmp7 := lang.Apply2(tmp6, v2, v3)
-				tmp8 := lang.Apply1(v4, tmp7)
-				tmp9 := lang.Apply3(tmp5, v2, v3, tmp8)
-				return tmp9
-			case 4:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				tmp6 := checkDerefVar(var_clojure_DOT_core_assoc)
-				tmp7, _ := lang.FieldOrMethod(runtime.RT, "Get")
-				if reflect.TypeOf(tmp7).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
-				}
-				tmp8 := lang.Apply2(tmp7, v2, v3)
-				tmp9 := lang.Apply2(v4, tmp8, v5)
-				tmp10 := lang.Apply3(tmp6, v2, v3, tmp9)
-				return tmp10
-			case 5:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				v6 := args[4]
-				_ = v6
-				tmp7 := checkDerefVar(var_clojure_DOT_core_assoc)
-				tmp8, _ := lang.FieldOrMethod(runtime.RT, "Get")
-				if reflect.TypeOf(tmp8).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
-				}
-				tmp9 := lang.Apply2(tmp8, v2, v3)
-				tmp10 := lang.Apply3(v4, tmp9, v5, v6)
-				tmp11 := lang.Apply3(tmp7, v2, v3, tmp10)
-				return tmp11
-			case 6:
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFnMethods(
+			map[int]lang.IFn{
+				3: lang.FnFunc3(func(p0, p1, p2 any) any {
+					v2 := p0
+					_ = v2
+					v3 := p1
+					_ = v3
+					v4 := p2
+					_ = v4
+					tmp5 := checkDerefVar(var_clojure_DOT_core_assoc)
+					tmp6, _ := lang.FieldOrMethod(runtime.RT, "Get")
+					if reflect.TypeOf(tmp6).Kind() != reflect.Func {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
+					}
+					tmp7 := lang.Apply2(tmp6, v2, v3)
+					tmp8 := lang.Apply1(v4, tmp7)
+					tmp9 := lang.Apply3(tmp5, v2, v3, tmp8)
+					return tmp9
+				}),
+				4: lang.FnFunc4(func(p0, p1, p2, p3 any) any {
+					v2 := p0
+					_ = v2
+					v3 := p1
+					_ = v3
+					v4 := p2
+					_ = v4
+					v5 := p3
+					_ = v5
+					tmp6 := checkDerefVar(var_clojure_DOT_core_assoc)
+					tmp7, _ := lang.FieldOrMethod(runtime.RT, "Get")
+					if reflect.TypeOf(tmp7).Kind() != reflect.Func {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
+					}
+					tmp8 := lang.Apply2(tmp7, v2, v3)
+					tmp9 := lang.Apply2(v4, tmp8, v5)
+					tmp10 := lang.Apply3(tmp6, v2, v3, tmp9)
+					return tmp10
+				}),
+				5: lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 5)
+					v2 := args[0]
+					_ = v2
+					v3 := args[1]
+					_ = v3
+					v4 := args[2]
+					_ = v4
+					v5 := args[3]
+					_ = v5
+					v6 := args[4]
+					_ = v6
+					tmp7 := checkDerefVar(var_clojure_DOT_core_assoc)
+					tmp8, _ := lang.FieldOrMethod(runtime.RT, "Get")
+					if reflect.TypeOf(tmp8).Kind() != reflect.Func {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
+					}
+					tmp9 := lang.Apply2(tmp8, v2, v3)
+					tmp10 := lang.Apply3(v4, tmp9, v5, v6)
+					tmp11 := lang.Apply3(tmp7, v2, v3, tmp10)
+					return tmp11
+				}),
+				6: lang.NewFnFunc(func(args ...any) any {
+					checkArity(args, 6)
+					v2 := args[0]
+					_ = v2
+					v3 := args[1]
+					_ = v3
+					v4 := args[2]
+					_ = v4
+					v5 := args[3]
+					_ = v5
+					v6 := args[4]
+					_ = v6
+					v7 := args[5]
+					_ = v7
+					tmp8 := checkDerefVar(var_clojure_DOT_core_assoc)
+					tmp9, _ := lang.FieldOrMethod(runtime.RT, "Get")
+					if reflect.TypeOf(tmp9).Kind() != reflect.Func {
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
+					}
+					tmp10 := lang.Apply2(tmp9, v2, v3)
+					tmp11 := lang.Apply4(v4, tmp10, v5, v6, v7)
+					tmp12 := lang.Apply3(tmp8, v2, v3, tmp11)
+					return tmp12
+				}),
+			},
+			lang.NewVariadicFn(6, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -35601,34 +35252,7 @@ func LoadNS() {
 				_ = v6
 				v7 := args[5]
 				_ = v7
-				tmp8 := checkDerefVar(var_clojure_DOT_core_assoc)
-				tmp9, _ := lang.FieldOrMethod(runtime.RT, "Get")
-				if reflect.TypeOf(tmp9).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
-				}
-				tmp10 := lang.Apply2(tmp9, v2, v3)
-				tmp11 := lang.Apply4(v4, tmp10, v5, v6, v7)
-				tmp12 := lang.Apply3(tmp8, v2, v3, tmp11)
-				return tmp12
-			default:
-				checkArityGTE(args, 6)
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				v5 := args[3]
-				_ = v5
-				v6 := args[4]
-				_ = v6
-				v7 := args[5]
-				_ = v7
-				restArgs := args[6:]
-				var v8 any
-				if len(restArgs) > 0 {
-					v8 = lang.NewList(restArgs...)
-				}
+				var v8 any = rest
 				_ = v8
 				tmp9 := checkDerefVar(var_clojure_DOT_core_assoc)
 				tmp10 := checkDerefVar(var_clojure_DOT_core_apply)
@@ -35640,8 +35264,9 @@ func LoadNS() {
 				tmp13 := lang.Apply(tmp10, []any{v4, tmp12, v5, v6, v7, v8})
 				tmp14 := lang.Apply3(tmp9, v2, v3, tmp13)
 				return tmp14
-			}
-		})
+			}),
+			6,
+		)
 		var_clojure_DOT_core_update = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_update.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_k, sym_f), lang.NewVector(sym_m, sym_k, sym_f, sym_x), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y, sym_z), lang.NewVector(sym_m, sym_k, sym_f, sym_x, sym_y, sym_z, sym__AMP_, sym_more)), kw_doc, "'Updates' a value in an associative structure, where k is a\n  key and f is a function that will take the old value\n  and any supplied args and return the new value, and returns a new\n  structure.  If the key does not exist, nil is passed as the old value.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(6231), kw_end_DASH_line, int(6231))
@@ -35650,22 +35275,21 @@ func LoadNS() {
 	// update-in
 	{
 		tmp0 := sym_update_DASH_in
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -35749,8 +35373,9 @@ func LoadNS() {
 					tmp6 = tmp11
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_update_DASH_in = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_update_DASH_in.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m, sym_ks, sym_f, sym__AMP_, sym_args)), kw_doc, "'Updates' a value in a nested associative structure, where ks is a\n  sequence of keys and f is a function that will take the old value\n  and any supplied args and return the new value, and returns a new\n  nested structure.  If any levels do not exist, hash-maps will be\n  created.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(6215), kw_end_DASH_line, int(6215))
@@ -35759,20 +35384,19 @@ func LoadNS() {
 	// vary-meta
 	{
 		tmp0 := sym_vary_DASH_meta
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
@@ -35781,8 +35405,9 @@ func LoadNS() {
 				tmp9 := lang.Apply3(tmp6, v3, tmp8, v4)
 				tmp10 := lang.Apply2(tmp5, v2, tmp9)
 				return tmp10
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_vary_DASH_meta = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_vary_DASH_meta.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_obj, sym_f, sym__AMP_, sym_args)), kw_doc, "Returns an object of the same type and value as obj, with\n  (apply f (meta obj) args) as its metadata.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(670), kw_end_DASH_line, int(670))
@@ -35791,22 +35416,21 @@ func LoadNS() {
 	// when-first
 	{
 		tmp0 := sym_when_DASH_first
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				tmp7 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -35918,8 +35542,9 @@ func LoadNS() {
 					tmp32 = tmp95
 				} // end let
 				return tmp32
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_when_DASH_first = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_when_DASH_first.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => x xs\n\n  Roughly the same as (when (seq xs) (let [x (first xs)] body)) but xs is evaluated only once", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(11), kw_line, int(4679), kw_end_DASH_line, int(4679))
@@ -35928,22 +35553,21 @@ func LoadNS() {
 	// when-let
 	{
 		tmp0 := sym_when_DASH_let
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				tmp7 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -36044,8 +35668,9 @@ func LoadNS() {
 					tmp32 = tmp86
 				} // end let
 				return tmp32
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_when_DASH_let = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_when_DASH_let.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => binding-form test\n\n  When test is true, evaluates body with binding-form bound to the value of test", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(1867), kw_end_DASH_line, int(1867))
@@ -36054,22 +35679,21 @@ func LoadNS() {
 	// when-some
 	{
 		tmp0 := sym_when_DASH_some
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				tmp7 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -36180,8 +35804,9 @@ func LoadNS() {
 					tmp32 = tmp96
 				} // end let
 				return tmp32
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_when_DASH_some = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_when_DASH_some.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => binding-form test\n\n   When test is not nil, evaluates body with binding-form bound to the\n   value of test", kw_file, "clojure/core.glj", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(1902), kw_end_DASH_line, int(1902))
@@ -36190,22 +35815,21 @@ func LoadNS() {
 	// while
 	{
 		tmp0 := sym_while
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -36241,8 +35865,9 @@ func LoadNS() {
 				tmp37 := lang.Apply3(tmp7, tmp9, tmp18, tmp36)
 				tmp38 := lang.Apply1(tmp6, tmp37)
 				return tmp38
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_while = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_while.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_test, sym__AMP_, sym_body)), kw_doc, "Repeatedly executes body while test expression is true. Presumes\n  some side-effect will cause test to become false/nil. Returns nil", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6391), kw_end_DASH_line, int(6391))
@@ -36251,22 +35876,21 @@ func LoadNS() {
 	// with-bindings
 	{
 		tmp0 := sym_with_DASH_bindings
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -36294,8 +35918,9 @@ func LoadNS() {
 				tmp29 := lang.Apply3(tmp7, tmp9, tmp11, tmp28)
 				tmp30 := lang.Apply1(tmp6, tmp29)
 				return tmp30
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_with_DASH_bindings = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_bindings.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_binding_DASH_map, sym__AMP_, sym_body)), kw_doc, "Takes a map of Var/value pairs. Installs for the given Vars the associated\n  values as thread-local bindings. Then executes body. Pops the installed\n  bindings after body was evaluated. Returns the value of body.", kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(23), kw_column, int(11), kw_line, int(1992), kw_end_DASH_line, int(1992))
@@ -36304,20 +35929,19 @@ func LoadNS() {
 	// with-bindings*
 	{
 		tmp0 := sym_with_DASH_bindings_STAR_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_push_DASH_thread_DASH_bindings)
 				tmp6 := lang.Apply1(tmp5, v2)
@@ -36334,8 +35958,9 @@ func LoadNS() {
 					tmp7 = tmp11
 				}()
 				return tmp7
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_with_DASH_bindings_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_bindings_STAR_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_binding_DASH_map, sym_f, sym__AMP_, sym_args)), kw_doc, "Takes a map of Var/value pairs. Installs for the given Vars the associated\n  values as thread-local bindings. Then calls f with the supplied arguments.\n  Pops the installed bindings after f returned. Returns whatever f returns.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(1979), kw_end_DASH_line, int(1979))
@@ -36344,22 +35969,21 @@ func LoadNS() {
 	// with-in-str
 	{
 		tmp0 := sym_with_DASH_in_DASH_str
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -36420,8 +36044,9 @@ func LoadNS() {
 				tmp62 := lang.Apply3(tmp7, tmp9, tmp40, tmp61)
 				tmp63 := lang.Apply1(tmp6, tmp62)
 				return tmp63
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_with_DASH_in_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_in_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym__AMP_, sym_body)), kw_doc, "Evaluates body in a context in which *in* is bound to a fresh\n  StringReader initialized with the string s.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(4806), kw_end_DASH_line, int(4806))
@@ -36430,20 +36055,19 @@ func LoadNS() {
 	// with-loading-context
 	{
 		tmp0 := sym_with_DASH_loading_DASH_context
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -36510,8 +36134,9 @@ func LoadNS() {
 				tmp67 := lang.Apply1(tmp6, tmp66)
 				tmp68 := lang.Apply1(tmp5, tmp67)
 				return tmp68
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_with_DASH_loading_DASH_context = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_loading_DASH_context.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5791), kw_column, int(11), kw_end_DASH_line, int(5791), kw_end_DASH_column, int(30), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_macro, true)
@@ -36520,22 +36145,21 @@ func LoadNS() {
 	// with-open
 	{
 		tmp0 := sym_with_DASH_open
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				tmp7 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -36656,8 +36280,9 @@ func LoadNS() {
 					tmp32 = tmp43
 				}
 				return tmp32
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_with_DASH_open = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_open.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "bindings => [name init ...]\n\n  Evaluates body in a try expression with names bound to the values\n  of the inits, and a finally clause that calls (.close name) on each\n  name in reverse order.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(19), kw_column, int(11), kw_line, int(3889), kw_end_DASH_line, int(3889))
@@ -36666,20 +36291,19 @@ func LoadNS() {
 	// with-out-str
 	{
 		tmp0 := sym_with_DASH_out_DASH_str
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -36740,8 +36364,9 @@ func LoadNS() {
 				tmp61 := lang.Apply3(tmp6, tmp8, tmp29, tmp60)
 				tmp62 := lang.Apply1(tmp5, tmp61)
 				return tmp62
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_with_DASH_out_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_out_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Evaluates exprs in a context in which *out* is bound to a fresh\n  StringWriter.  Returns the string created by any nested printing\n  calls.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(22), kw_column, int(11), kw_line, int(4795), kw_end_DASH_line, int(4795))
@@ -36750,22 +36375,21 @@ func LoadNS() {
 	// with-precision
 	{
 		tmp0 := sym_with_DASH_precision
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -36856,8 +36480,9 @@ func LoadNS() {
 					tmp6 = tmp73
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_with_DASH_precision = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_precision.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_precision, sym__AMP_, sym_exprs)), kw_doc, "Sets the precision and rounding mode to be used for BigDecimal operations.\n\n  Usage: (with-precision 10 (/ 1M 3))\n  or:    (with-precision 10 :rounding HALF_DOWN (/ 1M 3))\n\n  The rounding mode is one of CEILING, FLOOR, HALF_UP, HALF_DOWN,\n  HALF_EVEN, UP, DOWN and UNNECESSARY; it defaults to HALF_UP.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(24), kw_column, int(11), kw_line, int(5162), kw_end_DASH_line, int(5162))
@@ -36866,22 +36491,21 @@ func LoadNS() {
 	// with-redefs
 	{
 		tmp0 := sym_with_DASH_redefs
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -36932,8 +36556,9 @@ func LoadNS() {
 				tmp42 := lang.Apply3(tmp7, tmp9, tmp24, tmp41)
 				tmp43 := lang.Apply1(tmp6, tmp42)
 				return tmp43
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_with_DASH_redefs = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_redefs.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => var-symbol temp-value-expr\n\n  Temporarily redefines Vars while executing the body.  The\n  temp-value-exprs will be evaluated and each resulting value will\n  replace in parallel the root value of its Var.  After the body is\n  executed, the root values of all the Vars will be set back to their\n  old values.  These temporary changes will be visible in all threads.\n  Useful for mocking out functions during testing.", kw_file, "clojure/core.glj", kw_added, "1.3", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(7614), kw_end_DASH_line, int(7614))
@@ -37172,18 +36797,17 @@ func LoadNS() {
 	// agent
 	{
 		tmp0 := sym_agent
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				{ // let
@@ -37244,8 +36868,9 @@ func LoadNS() {
 					tmp4 = v7
 				} // end let
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_agent = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_agent.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_state, sym__AMP_, sym_options)), kw_doc, "Creates and returns an agent with an initial value of state and\n  zero or more options (in any order):\n\n  :meta metadata-map\n\n  :validator validate-fn\n\n  :error-handler handler-fn\n\n  :error-mode mode-keyword\n\n  If metadata-map is supplied, it will become the metadata on the\n  agent. validate-fn must be nil or a side-effect-free fn of one\n  argument, which will be passed the intended new state on any state\n  change. If the new state is unacceptable, the validate-fn should\n  return false or throw an exception.  handler-fn is called if an\n  action throws an exception or if validate-fn rejects a new state --\n  see set-error-handler! for details.  The mode-keyword may be either\n  :continue (the default if an error-handler is given) or :fail (the\n  default if no error-handler is given) -- see set-error-mode! for\n  details.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(2060), kw_end_DASH_line, int(2060))
@@ -37268,17 +36893,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_aget)
@@ -37599,19 +37219,14 @@ func LoadNS() {
 				return v4
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -37681,19 +37296,14 @@ func LoadNS() {
 				return v4
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_aset)
@@ -37779,19 +37389,14 @@ func LoadNS() {
 				return v4
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_aset_DASH_boolean)
@@ -37832,19 +37437,14 @@ func LoadNS() {
 				return v4
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_aset_DASH_byte)
@@ -37885,19 +37485,14 @@ func LoadNS() {
 				return v4
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_aset_DASH_char)
@@ -37939,19 +37534,14 @@ func LoadNS() {
 				return v4
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_aset_DASH_double)
@@ -37993,19 +37583,14 @@ func LoadNS() {
 				return v4
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_aset_DASH_float)
@@ -38046,19 +37631,14 @@ func LoadNS() {
 				return v4
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_aset_DASH_int)
@@ -38100,19 +37680,14 @@ func LoadNS() {
 				return v4
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_aset_DASH_long)
@@ -38154,19 +37729,14 @@ func LoadNS() {
 				return v4
 			}),
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 3)
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_aset_DASH_short)
@@ -38296,15 +37866,10 @@ func LoadNS() {
 			nil,
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 1)
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_setup_DASH_reference)
 				tmp5 := checkDerefVar(var_clojure_DOT_core_atom)
@@ -38333,23 +37898,23 @@ func LoadNS() {
 				tmp5 := lang.Apply0(tmp4)
 				var v6 any = tmp5
 				_ = v6
-				var tmp7 lang.FnFunc
-				tmp7 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v8 any
-						if len(restArgs) > 0 {
-							v8 = lang.NewList(restArgs...)
-						}
+				var tmp7 lang.ArityFn
+				tmp7 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v8 any = rest
 						_ = v8
 						tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
 						tmp10 := checkDerefVar(var_clojure_DOT_core_with_DASH_bindings_STAR_)
 						tmp11 := lang.Apply4(tmp9, tmp10, v6, v2, v8)
 						return tmp11
-					}
-				})
+					}),
+					0,
+				)
 				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2009), kw_column, int(5), kw_end_DASH_line, int(2010), kw_end_DASH_column, int(45))
 				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 				if err != nil {
@@ -38400,18 +37965,17 @@ func LoadNS() {
 	// check-valid-options
 	{
 		tmp0 := sym_check_DASH_valid_DASH_options
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
@@ -38452,8 +38016,9 @@ func LoadNS() {
 				} else {
 				}
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_check_DASH_valid_DASH_options = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_check_DASH_valid_DASH_options.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_options, sym__AMP_, sym_valid_DASH_keys)), kw_doc, "Throws an exception if the given option map contains keys not listed\n  as valid, else returns nil.", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(35), kw_column, int(7), kw_line, int(1717), kw_end_DASH_line, int(1717), kw_private, true)
@@ -38489,11 +38054,14 @@ func LoadNS() {
 	// condp
 	{
 		tmp0 := sym_condp
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 4)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(4, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -38502,11 +38070,7 @@ func LoadNS() {
 				_ = v4
 				v5 := args[3]
 				_ = v5
-				restArgs := args[4:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				var tmp7 any
 				{ // let
@@ -38744,8 +38308,9 @@ func LoadNS() {
 					tmp7 = tmp43
 				} // end let
 				return tmp7
-			}
-		})
+			}),
+			4,
+		)
 		var_clojure_DOT_core_condp = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_condp.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_pred, sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes a binary predicate, an expression, and a set of clauses.\n  Each clause can take the form of either:\n\n  test-expr result-expr\n\n  test-expr :>> result-fn\n\n  Note :>> is an ordinary keyword.\n\n  For each clause, (pred test-expr expr) is evaluated. If it returns\n  logical true, the clause is a match. If a binary clause matches, the\n  result-expr is returned, if a ternary clause matches, its result-fn,\n  which must be a unary function, is called with the result of the\n  predicate as its argument, the result of that call being the return\n  value of condp. A single default expression can follow the clauses,\n  and its value will be returned if no clause matches. If no default\n  expression is provided and no clause matches, an\n  IllegalArgumentException is thrown.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6417), kw_end_DASH_line, int(6417))
@@ -38754,20 +38319,19 @@ func LoadNS() {
 	// declare
 	{
 		tmp0 := sym_declare
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -38794,8 +38358,9 @@ func LoadNS() {
 				tmp14 := lang.Apply2(tmp6, tmp8, tmp13)
 				tmp15 := lang.Apply1(tmp5, tmp14)
 				return tmp15
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_declare = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_declare.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_names)), kw_doc, "defs the supplied var names with no bindings, useful for making forward declarations.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(2776), kw_end_DASH_line, int(2776))
@@ -38902,22 +38467,21 @@ func LoadNS() {
 	// defmulti
 	{
 		tmp0 := sym_defmulti
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -39172,8 +38736,9 @@ func LoadNS() {
 					tmp6 = tmp69
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_defmulti = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defmulti.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_docstring_QMARK_, sym_attr_DASH_map_QMARK_, sym_dispatch_DASH_fn, sym__AMP_, sym_options)), kw_doc, "Creates a new multimethod with the associated dispatch function.\n  The docstring and attr-map are optional.\n\n  Options are key-value pairs and may be one of:\n\n  :default\n\n  The default dispatch value, defaults to :default\n\n  :hierarchy\n\n  The value used for hierarchical dispatch (e.g. ::square is-a ::shape)\n\n  Hierarchies are type-like relationships that do not depend upon type\n  inheritance. By default Clojure's multimethods dispatch off of a\n  global hierarchy map.  However, a hierarchy relationship can be\n  created with the derive function used to augment the root ancestor\n  created with make-hierarchy.\n\n  Multimethods expect the value of the hierarchy option to be supplied as\n  a reference type e.g. a var (i.e. via the Var-quote dispatch macro #'\n  or the var special form).", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(1731), kw_end_DASH_line, int(1731))
@@ -39182,22 +38747,21 @@ func LoadNS() {
 	// defprotocol
 	{
 		tmp0 := sym_defprotocol
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -39484,8 +39048,9 @@ func LoadNS() {
 					tmp6 = tmp133
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_defprotocol = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defprotocol.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_opts_PLUS_sigs)), kw_doc, "A protocol is a named set of named methods and their signatures:\n  (defprotocol AProtocolName\n\n    ;optional doc string\n    \"A doc string for AProtocol abstraction\"\n\n   ;options\n   :extend-via-metadata true\n\n  ;method signatures\n    (bar [this a b] \"bar docs\")\n    (baz [this a] [this a b] [this a b c] \"baz docs\"))\n\n  No implementations are provided. Docs can be specified for the\n  protocol overall and for each method. The above yields a set of\n  polymorphic functions and a protocol object. All are\n  namespace-qualified by the ns enclosing the definition The resulting\n  functions dispatch on the type of their first argument, which is\n  required and corresponds to the implicit target object ('this' in \n  Java parlance). defprotocol is dynamic, has no special compile-time \n  effect, and defines no new types or classes. Implementations of \n  the protocol methods can be provided using extend.\n\n  When :extend-via-metadata is true, values can extend protocols by\n  adding metadata where keys are fully-qualified protocol function\n  symbols and values are function implementations. Protocol\n  implementations are checked first for direct definitions (defrecord,\n  deftype, reify), then metadata definitions, then external\n  extensions (extend, extend-type, extend-protocol)\n\n  defprotocol will automatically generate a corresponding interface,\n  with the same name as the protocol, i.e. given a protocol:\n  my.ns/Protocol, an interface: my.ns.Protocol. The interface will\n  have methods corresponding to the protocol functions, and the\n  protocol will automatically work with instances of the interface.\n\n  Note that you should not use this interface with deftype or\n  reify, as they support the protocol directly:\n\n  (defprotocol P \n    (foo [this]) \n    (bar-me [this] [this y]))\n\n  (deftype Foo [a b c] \n   P\n    (foo [this] a)\n    (bar-me [this] b)\n    (bar-me [this y] (+ c y)))\n  \n  (bar-me (Foo. 1 2 3) 42)\n  => 45\n\n  (foo \n    (let [x 42]\n      (reify P \n        (foo [this] 17)\n        (bar-me [this] x)\n        (bar-me [this y] x))))\n  => 17", kw_file, "clojure/core_deftype.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(28), kw_end_DASH_line, int(28))
@@ -40283,17 +39848,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				tmp6 := checkDerefVar(var_clojure_DOT_core_not_EQ_)
@@ -40426,22 +39986,21 @@ func LoadNS() {
 	// doto
 	{
 		tmp0 := sym_doto
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -40519,8 +40078,9 @@ func LoadNS() {
 					tmp6 = tmp35
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_doto = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_doto.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_forms)), kw_doc, "Evaluates x then calls all of the methods and functions with the\n  value of x supplied at the front of the given arguments.  The forms\n  are evaluated in order.  Returns x.\n\n  (doto (new java.util.HashMap) (.put \"a\" 1) (.put \"b\" 2))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(3910), kw_end_DASH_line, int(3910))
@@ -40832,18 +40392,17 @@ func LoadNS() {
 	// extend
 	{
 		tmp0 := sym_extend
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				{ // let
@@ -40930,26 +40489,26 @@ func LoadNS() {
 											panic(err)
 										}
 										tmp49 := lang.Apply2(tmp43, tmp45, tmp48)
-										var tmp50 lang.FnFunc
-										tmp50 = lang.NewFnFunc(func(args ...any) any {
-											switch len(args) {
-											default:
-												checkArityGTE(args, 1)
+										var tmp50 lang.ArityFn
+										tmp50 = lang.NewArityFn(
+											nil,
+											nil,
+											nil,
+											nil,
+											nil,
+											lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 												v51 := args[0]
 												_ = v51
-												restArgs := args[1:]
-												var v52 any
-												if len(restArgs) > 0 {
-													v52 = lang.NewList(restArgs...)
-												}
+												var v52 any = rest
 												_ = v52
 												tmp53 := checkDerefVar(var_clojure_DOT_core_apply)
 												tmp54 := checkDerefVar(var_clojure_DOT_core_cons)
 												tmp55 := lang.Apply2(tmp54, v51, v52)
 												tmp56 := lang.Apply2(tmp53, v42, tmp55)
 												return tmp56
-											}
-										})
+											}),
+											1,
+										)
 										tmp51, _ := lang.FieldOrMethod(tmp49, "AddMethod")
 										if reflect.TypeOf(tmp51).Kind() != reflect.Func {
 											panic(lang.NewIllegalArgumentError(fmt.Sprintf("AddMethod is not a function")))
@@ -41082,26 +40641,26 @@ func LoadNS() {
 															panic(err)
 														}
 														tmp61 := lang.Apply2(tmp55, tmp57, tmp60)
-														var tmp62 lang.FnFunc
-														tmp62 = lang.NewFnFunc(func(args ...any) any {
-															switch len(args) {
-															default:
-																checkArityGTE(args, 1)
+														var tmp62 lang.ArityFn
+														tmp62 = lang.NewArityFn(
+															nil,
+															nil,
+															nil,
+															nil,
+															nil,
+															lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 																v63 := args[0]
 																_ = v63
-																restArgs := args[1:]
-																var v64 any
-																if len(restArgs) > 0 {
-																	v64 = lang.NewList(restArgs...)
-																}
+																var v64 any = rest
 																_ = v64
 																tmp65 := checkDerefVar(var_clojure_DOT_core_apply)
 																tmp66 := checkDerefVar(var_clojure_DOT_core_cons)
 																tmp67 := lang.Apply2(tmp66, v63, v64)
 																tmp68 := lang.Apply2(tmp65, v54, tmp67)
 																return tmp68
-															}
-														})
+															}),
+															1,
+														)
 														tmp63, _ := lang.FieldOrMethod(tmp61, "AddMethod")
 														if reflect.TypeOf(tmp63).Kind() != reflect.Func {
 															panic(lang.NewIllegalArgumentError(fmt.Sprintf("AddMethod is not a function")))
@@ -41146,8 +40705,9 @@ func LoadNS() {
 					}
 				} // end let
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_extend = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_extend.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_atype, sym__AMP_, sym_proto_PLUS_mmaps)), kw_doc, "Implementations of protocol methods can be provided using the extend construct:\n\n  (extend AType\n    AProtocol\n     {:foo an-existing-fn\n      :bar (fn [a b] ...)\n      :baz (fn ([a]...) ([a b] ...)...)}\n    BProtocol \n      {...} \n    ...)\n \n  extend takes a type/class (or interface, see below), and one or more\n  protocol + method map pairs. It will extend the polymorphism of the\n  protocol's methods to call the supplied methods when an AType is\n  provided as the first argument. \n\n  Method maps are maps of the keyword-ized method names to ordinary\n  fns. This facilitates easy reuse of existing fns and fn maps, for\n  code reuse/mixins without derivation or composition. You can extend\n  an interface to a protocol. This is primarily to facilitate interop\n  with the host (e.g. Java) but opens the door to incidental multiple\n  inheritance of implementation since a class can inherit from more\n  than one interface, both of which extend the protocol. It is TBD how\n  to specify which impl to use. You can extend a protocol on nil.\n\n  If you are supplying the definitions explicitly (i.e. not reusing\n  exsting functions or mixin maps), you may find it more convenient to\n  use the extend-type or extend-protocol macros.\n\n  Note that multiple independent extend clauses can exist for the same\n  type, not all protocols need be defined in a single extend call.\n\n  See also:\n  extends?, satisfies?, extenders", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(116), kw_end_DASH_line, int(116))
@@ -41156,28 +40716,28 @@ func LoadNS() {
 	// extend-protocol
 	{
 		tmp0 := sym_extend_DASH_protocol
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_emit_DASH_extend_DASH_protocol)
 				tmp7 := lang.Apply2(tmp6, v4, v5)
 				return tmp7
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_extend_DASH_protocol = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_extend_DASH_protocol.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_p, sym__AMP_, sym_specs)), kw_doc, "Useful when you want to provide several implementations of the same\n  protocol all at once. Takes a single protocol and the implementation\n  of that protocol for one or more types.\n\n  (extend-protocol Protocol\n    AType\n      (foo [x] ...)\n      (bar [x y] ...)\n    BType\n      (foo [x] ...)\n      (bar [x y] ...)\n    AClass\n      (foo [x] ...)\n      (bar [x y] ...)\n    nil\n      (foo [x] ...)\n      (bar [x y] ...))\n\n  expands into:\n\n  (do\n   (clojure.core/extend-type AType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type BType Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type AClass Protocol \n     (foo [x] ...) \n     (bar [x y] ...))\n   (clojure.core/extend-type nil Protocol \n     (foo [x] ...) \n     (bar [x y] ...)))", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(11), kw_line, int(212), kw_end_DASH_line, int(212))
@@ -41213,20 +40773,19 @@ func LoadNS() {
 	// fn
 	{
 		tmp0 := sym_fn
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				{ // let
@@ -41573,8 +41132,9 @@ func LoadNS() {
 					tmp5 = tmp56
 				} // end let
 				return tmp5
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_fn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_fn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_sigs)), kw_doc, "params => positional-params*, or positional-params* & rest-param\n  positional-param => binding-form\n  rest-param => binding-form\n  binding-form => name, or destructuring-form\n\n  Defines a function.\n\n  See https://clojure.org/reference/special_forms#fn for more information", kw_forms, lang.NewVector(lang.NewList(sym_fn, sym_name_QMARK_, lang.NewVector(sym_params_STAR_), sym_exprs_STAR_), lang.NewList(sym_fn, sym_name_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_exprs_STAR_), sym__PLUS_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(4590), kw_end_DASH_line, int(4590), kw_special_DASH_form, true)
@@ -41716,24 +41276,24 @@ func LoadNS() {
 				var v36 any = tmp35
 				_ = v36
 				// let binding "err"
-				var tmp37 lang.FnFunc
-				tmp37 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v38 any
-						if len(restArgs) > 0 {
-							v38 = lang.NewList(restArgs...)
-						}
+				var tmp37 lang.ArityFn
+				tmp37 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v38 any = rest
 						_ = v38
 						tmp39 := checkDerefVar(var_clojure_DOT_core_apply)
 						tmp40 := checkDerefVar(var_clojure_DOT_core_str)
 						tmp41 := lang.Apply2(tmp39, tmp40, v38)
 						tmp42 := lang.Apply1(lang.NewIllegalArgumentError, tmp41)
 						panic(tmp42)
-					}
-				})
+					}),
+					0,
+				)
 				tmp38 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4724), kw_column, int(13), kw_end_DASH_line, int(4724), kw_end_DASH_column, int(125))
 				tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
 				if err != nil {
@@ -42790,20 +42350,19 @@ func LoadNS() {
 	// import
 	{
 		tmp0 := sym_import
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				{ // let
@@ -42938,8 +42497,9 @@ func LoadNS() {
 					tmp5 = tmp30
 				} // end let
 				return tmp5
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_import = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_import.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_import_DASH_symbols_DASH_or_DASH_lists)), kw_doc, "import-list => (package-symbol class-name-symbols*)\n\n  For each name in class-name-symbols, adds a mapping from name to the\n  class named by package.name to the current namespace. Use :import in the ns\n  macro in preference to calling this directly.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(3462), kw_end_DASH_line, int(3462))
@@ -43023,17 +42583,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 lang.FnFunc0
 				tmp5 = lang.FnFunc0(func() any {
@@ -43452,20 +43007,19 @@ func LoadNS() {
 	// lazy-cat
 	{
 		tmp0 := sym_lazy_DASH_cat
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -43489,8 +43043,9 @@ func LoadNS() {
 				tmp14 := lang.Apply2(tmp6, tmp8, tmp13)
 				tmp15 := lang.Apply1(tmp5, tmp14)
 				return tmp15
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_lazy_DASH_cat = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_lazy_DASH_cat.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_colls)), kw_doc, "Expands to code which yields a lazy sequence of the concatenation\n  of the supplied colls.  Each coll expr is not evaluated until it is\n  needed.\n\n  (lazy-cat xs ys zs) === (concat (lazy-seq xs) (lazy-seq ys) (lazy-seq zs))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(18), kw_column, int(11), kw_line, int(4693), kw_end_DASH_line, int(4693))
@@ -43499,22 +43054,21 @@ func LoadNS() {
 	// let
 	{
 		tmp0 := sym_let
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				tmp7 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -43563,8 +43117,9 @@ func LoadNS() {
 				tmp40 := lang.Apply3(tmp33, tmp35, tmp39, v5)
 				tmp41 := lang.Apply1(tmp32, tmp40)
 				return tmp41
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_let = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_let.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "binding => binding-form init-expr\n  binding-form => name, or destructuring-form\n  destructuring-form => map-destructure-form, or seq-destructure-form\n\n  Evaluates the exprs in a lexical context in which the symbols in\n  the binding-forms are bound to their respective init-exprs or parts\n  therein.\n\n  See https://clojure.org/reference/special_forms#binding-forms for\n  more information about destructuring.", kw_forms, lang.NewVector(lang.NewList(sym_let, lang.NewVector(sym_bindings_STAR_), sym_exprs_STAR_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(4553), kw_end_DASH_line, int(4553), kw_special_DASH_form, true)
@@ -43573,22 +43128,21 @@ func LoadNS() {
 	// letfn
 	{
 		tmp0 := sym_letfn
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -43621,8 +43175,9 @@ func LoadNS() {
 				tmp24 := lang.Apply3(tmp7, tmp9, tmp23, v5)
 				tmp25 := lang.Apply1(tmp6, tmp24)
 				return tmp25
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_letfn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_letfn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_fnspecs, sym__AMP_, sym_body)), kw_doc, "fnspec ==> (fname [params*] exprs) or (fname ([params*] exprs)+)\n\n  Takes a vector of function specs and a body, and generates a set of\n  bindings of functions to their names. All of the names are available\n  in all of the definitions of the functions, as well as the body.", kw_forms, lang.NewVector(lang.NewList(sym_letfn, lang.NewVector(sym_fnspecs_STAR_), sym_exprs_STAR_)), kw_url, nil, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(11), kw_line, int(6609), kw_end_DASH_line, int(6609), kw_special_DASH_form, true)
@@ -43859,22 +43414,21 @@ func LoadNS() {
 	// loop
 	{
 		tmp0 := sym_loop
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				tmp7 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -44077,8 +43631,9 @@ func LoadNS() {
 					tmp32 = tmp36
 				} // end let
 				return tmp32
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_loop = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_loop.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "Evaluates the exprs in a lexical context in which the symbols in\n  the binding-forms are bound to their respective init-exprs or parts\n  therein. Acts as a recur target.", kw_forms, lang.NewVector(lang.NewList(sym_loop, lang.NewVector(sym_bindings_STAR_), sym_exprs_STAR_)), kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(4654), kw_end_DASH_line, int(4654), kw_special_DASH_form, true)
@@ -44106,17 +43661,12 @@ func LoadNS() {
 			}),
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 2)
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				var tmp5 any
 				{ // let
@@ -44547,16 +44097,15 @@ func LoadNS() {
 				tmp8 := lang.Apply1(tmp4, tmp7)
 				var v9 any = tmp8
 				_ = v9
-				var tmp10 lang.FnFunc
-				tmp10 = lang.NewFnFunc(func(args ...any) any {
-					switch len(args) {
-					default:
-						checkArityGTE(args, 0)
-						restArgs := args[0:]
-						var v11 any
-						if len(restArgs) > 0 {
-							v11 = lang.NewList(restArgs...)
-						}
+				var tmp10 lang.ArityFn
+				tmp10 = lang.NewArityFn(
+					nil,
+					nil,
+					nil,
+					nil,
+					nil,
+					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+						var v11 any = rest
 						_ = v11
 						var tmp12 any
 						{ // let
@@ -44598,8 +44147,9 @@ func LoadNS() {
 							tmp12 = tmp18
 						} // end let
 						return tmp12
-					}
-				})
+					}),
+					0,
+				)
 				tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6410), kw_column, int(5), kw_end_DASH_line, int(6415), kw_end_DASH_column, int(16))
 				tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 				if err != nil {
@@ -44617,22 +44167,21 @@ func LoadNS() {
 	// ns
 	{
 		tmp0 := sym_ns
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -45077,8 +44626,9 @@ func LoadNS() {
 					tmp6 = tmp259
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_ns = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_ns.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_docstring_QMARK_, sym_attr_DASH_map_QMARK_, sym_references_STAR_)), kw_doc, "Sets *ns* to the namespace named by name (unevaluated), creating it\n  if needed.  references can be zero or more of: (:refer-clojure ...)\n  (:require ...) (:use ...) (:import ...) (:load ...) (:gen-class)\n  with the syntax of refer-clojure/require/use/import/load/gen-class\n  respectively, except the arguments are unevaluated and need not be\n  quoted. (:gen-class ...), when supplied, defaults to :name\n  corresponding to the ns name, :main true, :impl-ns same as ns, and\n  :init-impl-ns true. All options of gen-class are\n  supported. The :gen-class directive is ignored when not\n  compiling. If :gen-class is not supplied, when compiled only an\n  nsname__init.class will be generated. If :refer-clojure is not used, a\n  default (refer 'clojure.core) is used.  Use of ns is preferred to\n  individual calls to in-ns/require/use/import:\n\n  (ns foo.bar\n    (:refer-clojure :exclude [ancestors printf])\n    (:require (clojure.contrib sql combinatorics))\n    (:use (my.lib this that))\n    (:import (java.util Date Timer Random)\n             (java.sql Connection Statement)))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(5799), kw_end_DASH_line, int(5799))
@@ -45110,16 +44660,15 @@ func LoadNS() {
 	// pcalls
 	{
 		tmp0 := sym_pcalls
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_pmap)
 				var tmp4 lang.FnFunc1
@@ -45136,8 +44685,9 @@ func LoadNS() {
 				}
 				tmp7 := lang.Apply2(tmp3, tmp6, v2)
 				return tmp7
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_pcalls = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pcalls.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_fns)), kw_doc, "Executes the no-arg fns in parallel, returning a lazy sequence of\n  their values", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(7126), kw_end_DASH_line, int(7126))
@@ -45293,15 +44843,10 @@ func LoadNS() {
 			nil,
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 1)
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				{ // let
@@ -45540,27 +45085,27 @@ func LoadNS() {
 	// send
 	{
 		tmp0 := sym_send
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_send_DASH_via)
 				tmp7 := lang.Apply(tmp5, []any{tmp6, nil, v2, v3, v4})
 				return tmp7
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_send = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_send.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch an action to an agent. Returns the agent immediately.\n  Subsequently, in a thread from a thread pool, the state of the agent\n  will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(2117), kw_end_DASH_line, int(2117))
@@ -45569,27 +45114,27 @@ func LoadNS() {
 	// send-off
 	{
 		tmp0 := sym_send_DASH_off
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_send_DASH_via)
 				tmp7 := lang.Apply(tmp5, []any{tmp6, nil, v2, v3, v4})
 				return tmp7
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_send_DASH_off = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_send_DASH_off.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_a, sym_f, sym__AMP_, sym_args)), kw_doc, "Dispatch a potentially blocking action to an agent. Returns the\n  agent immediately. Subsequently, in a separate thread, the state of\n  the agent will be set to the value of:\n\n  (apply action-fn state-of-agent args)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(2128), kw_end_DASH_line, int(2128))
@@ -46164,6 +45709,7 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
+		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(227), kw_column, int(2), kw_end_DASH_line, int(260), kw_end_DASH_column, int(43))).(lang.FnFunc1)
 		var_clojure_DOT_core_sigs = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sigs.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(225), kw_column, int(2), kw_end_DASH_line, int(226), kw_end_DASH_column, int(5), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -46172,22 +45718,21 @@ func LoadNS() {
 	// some->
 	{
 		tmp0 := sym_some_DASH__GT_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -46282,8 +45827,9 @@ func LoadNS() {
 					tmp6 = tmp47
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_some_DASH__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_some_DASH__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_forms)), kw_doc, "When expr is not nil, threads it into the first form (via ->),\n  and when that result is not nil, through the next etc", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7680), kw_end_DASH_line, int(7680))
@@ -46292,22 +45838,21 @@ func LoadNS() {
 	// some->>
 	{
 		tmp0 := sym_some_DASH__GT__GT_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -46402,8 +45947,9 @@ func LoadNS() {
 					tmp6 = tmp47
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_some_DASH__GT__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_some_DASH__GT__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_forms)), kw_doc, "When expr is not nil, threads it into the first form (via ->>),\n  and when that result is not nil, through the next etc", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7694), kw_end_DASH_line, int(7694))
@@ -46481,22 +46027,21 @@ func LoadNS() {
 	// with-local-vars
 	{
 		tmp0 := sym_with_DASH_local_DASH_vars
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				tmp7 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
@@ -46597,8 +46142,9 @@ func LoadNS() {
 				tmp92 := lang.Apply4(tmp33, tmp35, tmp50, tmp67, tmp91)
 				tmp93 := lang.Apply1(tmp32, tmp92)
 				return tmp93
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_with_DASH_local_DASH_vars = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_with_DASH_local_DASH_vars.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name_DASH_vals_DASH_vec, sym__AMP_, sym_body)), kw_doc, "varbinding=> symbol init-expr\n\n  Executes the exprs in a context in which the symbols are bound to\n  vars with per-thread bindings to the init-exprs.  The symbols refer\n  to the var objects themselves, and must be accessed with var-get and\n  var-set", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(11), kw_line, int(4396), kw_end_DASH_line, int(4396))
@@ -46942,11 +46488,14 @@ func LoadNS() {
 	// as->
 	{
 		tmp0 := sym_as_DASH__GT_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 4)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(4, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -46955,11 +46504,7 @@ func LoadNS() {
 				_ = v4
 				v5 := args[3]
 				_ = v5
-				restArgs := args[4:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp8 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -46999,8 +46544,9 @@ func LoadNS() {
 				tmp37 := lang.Apply3(tmp8, tmp10, tmp29, tmp36)
 				tmp38 := lang.Apply1(tmp7, tmp37)
 				return tmp38
-			}
-		})
+			}),
+			4,
+		)
 		var_clojure_DOT_core_as_DASH__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_as_DASH__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym_name, sym__AMP_, sym_forms)), kw_doc, "Binds name to expr, evaluates the first form in the lexical context\n  of that binding, then binds name to that result, repeating for each\n  successive form, returning the result of the last form.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(7668), kw_end_DASH_line, int(7668))
@@ -47009,16 +46555,15 @@ func LoadNS() {
 	// await
 	{
 		tmp0 := sym_await
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				tmp4 := lang.Apply0(nil)
@@ -47195,8 +46740,9 @@ func LoadNS() {
 					tmp3 = tmp8
 				}
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_await = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_await.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_agents)), kw_doc, "Blocks the current thread (indefinitely!) until all actions\n  dispatched thus far, from this thread or agent, to the agent(s) have\n  occurred.  Will block on failed agents.  Will never return if\n  a failed agent is restarted with :clear-actions true or shutdown-agents was called.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3289), kw_end_DASH_line, int(3289))
@@ -47239,18 +46785,17 @@ func LoadNS() {
 	// await-for
 	{
 		tmp0 := sym_await_DASH_for
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				tmp5 := lang.Apply0(nil)
@@ -47438,8 +46983,9 @@ func LoadNS() {
 					tmp4 = tmp9
 				}
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_await_DASH_for = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_await_DASH_for.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_timeout_DASH_ms, sym__AMP_, sym_agents)), kw_doc, "Blocks the current thread until all actions dispatched thus\n  far (from this thread or agent) to the agents have occurred, or the\n  timeout (in milliseconds) has elapsed. Returns logical false if\n  returning due to timeout, logical true otherwise.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(3311), kw_end_DASH_line, int(3311))
@@ -47521,22 +47067,21 @@ func LoadNS() {
 	// cond->
 	{
 		tmp0 := sym_cond_DASH__GT_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -47642,8 +47187,9 @@ func LoadNS() {
 					tmp6 = tmp49
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_cond_DASH__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_cond_DASH__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression and a set of test/form pairs. Threads expr (via ->)\n  through each form for which the corresponding test\n  expression is true. Note that, unlike cond branching, cond-> threading does\n  not short circuit after the first true test expression.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(11), kw_line, int(7634), kw_end_DASH_line, int(7634))
@@ -47652,22 +47198,21 @@ func LoadNS() {
 	// cond->>
 	{
 		tmp0 := sym_cond_DASH__GT__GT_
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -47773,8 +47318,9 @@ func LoadNS() {
 					tmp6 = tmp49
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_cond_DASH__GT__GT_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_cond_DASH__GT__GT_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_expr, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression and a set of test/form pairs. Threads expr (via ->>)\n  through each form for which the corresponding test expression\n  is true.  Note that, unlike cond branching, cond->> threading does not short circuit\n  after the first true test expression.", kw_file, "clojure/core.glj", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(7651), kw_end_DASH_line, int(7651))
@@ -47783,24 +47329,23 @@ func LoadNS() {
 	// defn
 	{
 		tmp0 := sym_defn
-		var tmp1 lang.FnFunc
+		var tmp1 lang.ArityFn
 		{ // function defn
-			var v2 lang.FnFunc
-			tmp1 = lang.NewFnFunc(func(args ...any) any {
-				switch len(args) {
-				default:
-					checkArityGTE(args, 3)
+			var v2 lang.ArityFn
+			tmp1 = lang.NewArityFn(
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+				lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 					v3 := args[0]
 					_ = v3
 					v4 := args[1]
 					_ = v4
 					v5 := args[2]
 					_ = v5
-					restArgs := args[3:]
-					var v6 any
-					if len(restArgs) > 0 {
-						v6 = lang.NewList(restArgs...)
-					}
+					var v6 any = rest
 					_ = v6
 					var tmp7 any
 					tmp8 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
@@ -48052,8 +47597,10 @@ func LoadNS() {
 						tmp12 = tmp113
 					} // end let
 					return tmp12
-				}
-			})
+				}),
+				3,
+			)
+			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(293), kw_column, int(7), kw_end_DASH_line, int(335), kw_end_DASH_column, int(58))).(lang.ArityFn)
 			v2 = tmp1
 			_ = v2
 		}
@@ -48337,303 +47884,303 @@ func LoadNS() {
 	// -protocols
 	{
 		tmp0 := sym__DASH_protocols
-		var tmp4 lang.FnFunc
-		tmp4 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp4 lang.ArityFn
+		tmp4 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v5 := args[0]
 				_ = v5
-				restArgs := args[1:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				tmp7 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp8 := lang.Apply1(tmp7, v5)
 				return tmp8
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn coll-reduce
 		tmp3 := lang.NewMultiFn("coll-reduce", tmp4, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp5 lang.FnFunc
-		tmp5 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp5 lang.ArityFn
+		tmp5 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v6 := args[0]
 				_ = v6
-				restArgs := args[1:]
-				var v7 any
-				if len(restArgs) > 0 {
-					v7 = lang.NewList(restArgs...)
-				}
+				var v7 any = rest
 				_ = v7
 				tmp8 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp9 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp10 := lang.Apply2(tmp9, v6, v7)
 				tmp11 := lang.Apply2(tmp8, closed9, tmp10)
 				return tmp11
-			}
-		})
+			}),
+			1,
+		)
 		tmp3.AddMethod(nil, tmp5)
 		tmp6 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
-		var tmp7 lang.FnFunc
-		tmp7 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp7 lang.ArityFn
+		tmp7 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v8 := args[0]
 				_ = v8
-				restArgs := args[1:]
-				var v9 any
-				if len(restArgs) > 0 {
-					v9 = lang.NewList(restArgs...)
-				}
+				var v9 any = rest
 				_ = v9
 				tmp10 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp11 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp12 := lang.Apply2(tmp11, v8, v9)
 				tmp13 := lang.Apply2(tmp10, closed10, tmp12)
 				return tmp13
-			}
-		})
+			}),
+			1,
+		)
 		tmp3.AddMethod(tmp6, tmp7)
 		tmp8 := reflect.TypeOf((*lang.LazySeq)(nil))
-		var tmp9 lang.FnFunc
-		tmp9 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp9 lang.ArityFn
+		tmp9 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v10 := args[0]
 				_ = v10
-				restArgs := args[1:]
-				var v11 any
-				if len(restArgs) > 0 {
-					v11 = lang.NewList(restArgs...)
-				}
+				var v11 any = rest
 				_ = v11
 				tmp12 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp13 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp14 := lang.Apply2(tmp13, v10, v11)
 				tmp15 := lang.Apply2(tmp12, closed11, tmp14)
 				return tmp15
-			}
-		})
+			}),
+			1,
+		)
 		tmp3.AddMethod(tmp8, tmp9)
 		tmp10 := reflect.TypeOf((*lang.Vector)(nil))
-		var tmp11 lang.FnFunc
-		tmp11 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp11 lang.ArityFn
+		tmp11 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v12 := args[0]
 				_ = v12
-				restArgs := args[1:]
-				var v13 any
-				if len(restArgs) > 0 {
-					v13 = lang.NewList(restArgs...)
-				}
+				var v13 any = rest
 				_ = v13
 				tmp14 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp15 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp16 := lang.Apply2(tmp15, v12, v13)
 				tmp17 := lang.Apply2(tmp14, closed12, tmp16)
 				return tmp17
-			}
-		})
+			}),
+			1,
+		)
 		tmp3.AddMethod(tmp10, tmp11)
 		tmp12 := reflect.TypeOf("")
-		var tmp13 lang.FnFunc
-		tmp13 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp13 lang.ArityFn
+		tmp13 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v14 := args[0]
 				_ = v14
-				restArgs := args[1:]
-				var v15 any
-				if len(restArgs) > 0 {
-					v15 = lang.NewList(restArgs...)
-				}
+				var v15 any = rest
 				_ = v15
 				tmp16 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp17 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp18 := lang.Apply2(tmp17, v14, v15)
 				tmp19 := lang.Apply2(tmp16, closed13, tmp18)
 				return tmp19
-			}
-		})
+			}),
+			1,
+		)
 		tmp3.AddMethod(tmp12, tmp13)
 		tmp2 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_coll_DASH_reduce, tmp3), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_coll_DASH_reduce, lang.NewVector(sym_coll, sym_f), lang.NewVector(sym_coll, sym_f, sym_val)))))
-		var tmp16 lang.FnFunc
-		tmp16 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp16 lang.ArityFn
+		tmp16 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v17 := args[0]
 				_ = v17
-				restArgs := args[1:]
-				var v18 any
-				if len(restArgs) > 0 {
-					v18 = lang.NewList(restArgs...)
-				}
+				var v18 any = rest
 				_ = v18
 				tmp19 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp20 := lang.Apply1(tmp19, v17)
 				return tmp20
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn internal-reduce
 		tmp15 := lang.NewMultiFn("internal-reduce", tmp16, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp17 lang.FnFunc
-		tmp17 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp17 lang.ArityFn
+		tmp17 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v18 := args[0]
 				_ = v18
-				restArgs := args[1:]
-				var v19 any
-				if len(restArgs) > 0 {
-					v19 = lang.NewList(restArgs...)
-				}
+				var v19 any = rest
 				_ = v19
 				tmp20 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp21 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp22 := lang.Apply2(tmp21, v18, v19)
 				tmp23 := lang.Apply2(tmp20, closed14, tmp22)
 				return tmp23
-			}
-		})
+			}),
+			1,
+		)
 		tmp15.AddMethod(nil, tmp17)
 		tmp18 := reflect.TypeOf((*lang.IChunkedSeq)(nil)).Elem()
-		var tmp19 lang.FnFunc
-		tmp19 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp19 lang.ArityFn
+		tmp19 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v20 := args[0]
 				_ = v20
-				restArgs := args[1:]
-				var v21 any
-				if len(restArgs) > 0 {
-					v21 = lang.NewList(restArgs...)
-				}
+				var v21 any = rest
 				_ = v21
 				tmp22 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp23 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp24 := lang.Apply2(tmp23, v20, v21)
 				tmp25 := lang.Apply2(tmp22, closed15, tmp24)
 				return tmp25
-			}
-		})
+			}),
+			1,
+		)
 		tmp15.AddMethod(tmp18, tmp19)
 		tmp20 := reflect.TypeOf((*lang.Object)(nil)).Elem()
-		var tmp21 lang.FnFunc
-		tmp21 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp21 lang.ArityFn
+		tmp21 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v22 := args[0]
 				_ = v22
-				restArgs := args[1:]
-				var v23 any
-				if len(restArgs) > 0 {
-					v23 = lang.NewList(restArgs...)
-				}
+				var v23 any = rest
 				_ = v23
 				tmp24 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp25 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp26 := lang.Apply2(tmp25, v22, v23)
 				tmp27 := lang.Apply2(tmp24, closed16, tmp26)
 				return tmp27
-			}
-		})
+			}),
+			1,
+		)
 		tmp15.AddMethod(tmp20, tmp21)
 		tmp14 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_internal_DASH_reduce, tmp15), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_internal_DASH_reduce, lang.NewVector(sym_seq, sym_f, sym_start)))))
-		var tmp24 lang.FnFunc
-		tmp24 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp24 lang.ArityFn
+		tmp24 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v25 := args[0]
 				_ = v25
-				restArgs := args[1:]
-				var v26 any
-				if len(restArgs) > 0 {
-					v26 = lang.NewList(restArgs...)
-				}
+				var v26 any = rest
 				_ = v26
 				tmp27 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp28 := lang.Apply1(tmp27, v25)
 				return tmp28
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn kv-reduce
 		tmp23 := lang.NewMultiFn("kv-reduce", tmp24, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp22 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_kv_DASH_reduce, tmp23), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_kv_DASH_reduce, lang.NewVector(sym_amap, sym_f, sym_init)))))
-		var tmp27 lang.FnFunc
-		tmp27 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp27 lang.ArityFn
+		tmp27 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v28 := args[0]
 				_ = v28
-				restArgs := args[1:]
-				var v29 any
-				if len(restArgs) > 0 {
-					v29 = lang.NewList(restArgs...)
-				}
+				var v29 any = rest
 				_ = v29
 				tmp30 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp31 := lang.Apply1(tmp30, v28)
 				return tmp31
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn datafy
 		tmp26 := lang.NewMultiFn("datafy", tmp27, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		var tmp28 lang.FnFunc
-		tmp28 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp28 lang.ArityFn
+		tmp28 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v29 := args[0]
 				_ = v29
-				restArgs := args[1:]
-				var v30 any
-				if len(restArgs) > 0 {
-					v30 = lang.NewList(restArgs...)
-				}
+				var v30 any = rest
 				_ = v30
 				tmp31 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp32 := checkDerefVar(var_clojure_DOT_core_cons)
 				tmp33 := lang.Apply2(tmp32, v29, v30)
 				tmp34 := lang.Apply2(tmp31, closed17, tmp33)
 				return tmp34
-			}
-		})
+			}),
+			1,
+		)
 		tmp26.AddMethod(nil, tmp28)
 		tmp25 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_datafy, tmp26), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_datafy, lang.NewVector(sym_o), "return a representation of o as data (default identity)"))))
-		var tmp31 lang.FnFunc
-		tmp31 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp31 lang.ArityFn
+		tmp31 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v32 := args[0]
 				_ = v32
-				restArgs := args[1:]
-				var v33 any
-				if len(restArgs) > 0 {
-					v33 = lang.NewList(restArgs...)
-				}
+				var v33 any = rest
 				_ = v33
 				tmp34 := checkDerefVar(var_clojure_DOT_core_class)
 				tmp35 := lang.Apply1(tmp34, v32)
 				return tmp35
-			}
-		})
+			}),
+			1,
+		)
 		// MultiFn nav
 		tmp30 := lang.NewMultiFn("nav", tmp31, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		tmp29 := lang.NewAtom(lang.NewMap(kw_multis, lang.NewMap(kw_nav, tmp30), kw_on_DASH_interface, true, kw_sigs, lang.NewList(lang.NewList(sym_nav, lang.NewVector(sym_coll, sym_k, sym_v), "return (possibly transformed) v in the context of coll and k (a key/index or nil),\ndefaults to returning v."))))
@@ -48664,22 +48211,21 @@ func LoadNS() {
 	// case
 	{
 		tmp0 := sym_case
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				var tmp6 any
 				{ // let
@@ -49204,8 +48750,9 @@ func LoadNS() {
 					tmp6 = tmp50
 				} // end let
 				return tmp6
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_case = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_case.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_e, sym__AMP_, sym_clauses)), kw_doc, "Takes an expression, and a set of clauses.\n\n  Each clause can take the form of either:\n\n  test-constant result-expr\n\n  (test-constant1 ... test-constantN)  result-expr\n\n  The test-constants are not evaluated. They must be compile-time\n  literals, and need not be quoted.  If the expression is equal to a\n  test-constant, the corresponding result-expr is returned. A single\n  default expression can follow the clauses, and its value will be\n  returned if no clause matches. If no default expression is provided\n  and no clause matches, an IllegalArgumentException is thrown.\n\n  Unlike cond and condp, case does a constant-time dispatch, the\n  clauses are not considered sequentially.  All manner of constant\n  expressions are acceptable in case, including numbers, strings,\n  symbols, keywords, and (Clojure) composites thereof. Note that since\n  lists are used to group multiple constants that map to the same\n  expression, a vector can be used to match a list if needed. The\n  test-constants need not be all of the same type.", kw_file, "clojure/core.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(6776), kw_end_DASH_line, int(6776))
@@ -49284,15 +48831,10 @@ func LoadNS() {
 			nil,
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 1)
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				tmp5 := lang.CanApply(v2)
@@ -50040,28 +49582,28 @@ func LoadNS() {
 	// extend-type
 	{
 		tmp0 := sym_extend_DASH_type
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_emit_DASH_extend_DASH_type)
 				tmp7 := lang.Apply2(tmp6, v4, v5)
 				return tmp7
-			}
-		})
+			}),
+			3,
+		)
 		var_clojure_DOT_core_extend_DASH_type = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_extend_DASH_type.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_t, sym__AMP_, sym_specs)), kw_doc, "A macro that expands into an extend call. Useful when you are\n  supplying the definitions explicitly inline, extend-type\n  automatically creates the maps required by extend.  Propagates the\n  class as a type hint on the first argument of all fns.\n\n  (extend-type MyType \n    Countable\n      (cnt [c] ...)\n    Foo\n      (bar [x y] ...)\n      (baz ([x] ...) ([x y & zs] ...)))\n\n  expands into:\n\n  (extend MyType\n   Countable\n     {:cnt (fn [c] ...)}\n   Foo\n     {:baz (fn ([x] ...) ([x y & zs] ...))\n      :bar (fn [x y] ...)})", kw_file, "clojure/core_deftype.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(21), kw_column, int(11), kw_line, int(180), kw_end_DASH_line, int(180))
@@ -51224,18 +50766,17 @@ func LoadNS() {
 	// iteration
 	{
 		tmp0 := sym_iteration
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				{ // let
@@ -51452,8 +50993,9 @@ func LoadNS() {
 					tmp4 = tmp54
 				} // end let
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_iteration = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_iteration.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_step, sym__AMP_, lang.NewMap(kw_keys, lang.NewVector(sym_somef, sym_vf, sym_kf, sym_initk), kw_or, lang.NewMap(sym_vf, sym_identity, sym_kf, sym_identity, sym_somef, sym_some_QMARK_, sym_initk, nil)))), kw_doc, "Creates a seqable/reducible via repeated calls to step,\n  a function of some (continuation token) 'k'. The first call to step\n  will be passed initk, returning 'ret'. Iff (somef ret) is true,\n  (vf ret) will be included in the iteration, else iteration will\n  terminate and vf/kf will not be called. If (kf ret) is non-nil it\n  will be passed to the next step call, else iteration will terminate.\n\n  This can be used e.g. to consume APIs that return paginated or batched data.\n\n   step - (possibly impure) fn of 'k' -> 'ret'\n\n   :somef - fn of 'ret' -> logical true/false, default 'some?'\n   :vf - fn of 'ret' -> 'v', a value produced by the iteration, default 'identity'\n   :kf - fn of 'ret' -> 'next-k' or nil (signaling 'do not continue'), default 'identity'\n   :initk - the first value passed to step, default 'nil'\n\n  It is presumed that step with non-initk is unreproducible/non-idempotent.\n  If step with initk is unreproducible it is on the consumer to not consume twice.", kw_file, "clojure/core.glj", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(7), kw_line, int(7786), kw_end_DASH_line, int(7786))
@@ -51462,16 +51004,15 @@ func LoadNS() {
 	// load
 	{
 		tmp0 := sym_load
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				{ // let
@@ -51744,8 +51285,9 @@ func LoadNS() {
 					}
 				} // end let
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_load = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_paths)), kw_doc, "Loads Clojure code from resources in classpath. A path is interpreted as\n  classpath-relative if it begins with a slash or relative to the root\n  directory for the current namespace otherwise.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_redef, true, kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(6152), kw_end_DASH_line, int(6152))
@@ -52168,20 +51710,19 @@ func LoadNS() {
 	// load-lib
 	{
 		tmp0 := sym_load_DASH_lib
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_throw_DASH_if)
 				var tmp6 any
@@ -52736,8 +52277,9 @@ func LoadNS() {
 					tmp10 = tmp91
 				} // end let
 				return tmp10
-			}
-		})
+			}),
+			2,
+		)
 		var_clojure_DOT_core_load_DASH_lib = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load_DASH_lib.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_prefix, sym_lib, sym__AMP_, sym_options)), kw_doc, "Loads a lib with options", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(5961), kw_end_DASH_line, int(5961), kw_private, true)
@@ -52746,16 +52288,15 @@ func LoadNS() {
 	// load-libs
 	{
 		tmp0 := sym_load_DASH_libs
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				{ // let
@@ -53294,8 +52835,9 @@ func LoadNS() {
 					tmp3 = tmp26
 				} // end let
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_load_DASH_libs = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load_DASH_libs.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Loads libs, interpreting libspecs, prefix lists, and flags for\n  forwarding to load-lib", kw_file, "clojure/core.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(6008), kw_end_DASH_line, int(6008), kw_private, true)
@@ -53304,23 +52846,23 @@ func LoadNS() {
 	// require
 	{
 		tmp0 := sym_require
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp4 := checkDerefVar(var_clojure_DOT_core_load_DASH_libs)
 				tmp5 := lang.Apply3(tmp3, tmp4, kw_require, v2)
 				return tmp5
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_require = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_require.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Loads libs, skipping any that are already loaded. Each argument is\n  either a libspec that identifies a lib, a prefix list that identifies\n  multiple libs whose names share a common prefix, or a flag that modifies\n  how all the identified libs are loaded. Use :require in the ns macro\n  in preference to calling this directly.\n\n  Libs\n\n  A 'lib' is a named set of resources in classpath whose contents define a\n  library of Clojure code. Lib names are symbols and each lib is associated\n  with a Clojure namespace and a Java package that share its name. A lib's\n  name also locates its root directory within classpath using Java's\n  package name to classpath-relative path mapping. All resources in a lib\n  should be contained in the directory structure under its root directory.\n  All definitions a lib makes should be in its associated namespace.\n\n  'require loads a lib by loading its root resource. The root resource path\n  is derived from the lib name in the following manner:\n  Consider a lib named by the symbol 'x.y.z; it has the root directory\n  <classpath>/x/y/, and its root resource is <classpath>/x/y/z.clj, or\n  <classpath>/x/y/z.cljc if <classpath>/x/y/z.clj does not exist. The\n  root resource should contain code to create the lib's\n  namespace (usually by using the ns macro) and load any additional\n  lib resources.\n\n  Libspecs\n\n  A libspec is a lib name or a vector containing a lib name followed by\n  options expressed as sequential keywords and arguments.\n\n  Recognized options:\n  :as takes a symbol as its argument and makes that symbol an alias to the\n    lib's namespace in the current namespace.\n  :as-alias takes a symbol as its argument and aliases like :as, however\n    the lib will not be loaded. If the lib has not been loaded, a new\n    empty namespace will be created (as with create-ns).\n  :refer takes a list of symbols to refer from the namespace or the :all\n    keyword to bring in all public vars.\n\n  Prefix Lists\n\n  It's common for Clojure code to depend on several libs whose names have\n  the same prefix. When specifying libs, prefix lists can be used to reduce\n  repetition. A prefix list contains the shared prefix followed by libspecs\n  with the shared prefix removed from the lib names. After removing the\n  prefix, the names that remain must not contain any periods.\n\n  Flags\n\n  A flag is a keyword.\n  Recognized flags: :reload, :reload-all, :verbose\n  :reload forces loading of all the identified libs even if they are\n    already loaded (has no effect on libspecs using :as-alias)\n  :reload-all implies :reload and also forces loading of all libs that the\n    identified libs directly or indirectly load via require or use\n    (has no effect on libspecs using :as-alias)\n  :verbose triggers printing information about each load, alias, and refer\n\n  Example:\n\n  The following would load the libraries clojure.zip and clojure.set\n  abbreviated as 's'.\n\n  (require '(clojure zip [set :as s]))", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(6046), kw_end_DASH_line, int(6046))
@@ -53329,16 +52871,15 @@ func LoadNS() {
 	// serialized-require
 	{
 		tmp0 := sym_serialized_DASH_require
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				{ // let
@@ -53372,8 +52913,9 @@ func LoadNS() {
 					tmp3 = tmp5
 				} // end let
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_serialized_DASH_require = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_serialized_DASH_require.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Like 'require', but serializes loading.\n  Interim function preferred over 'require' for known asynchronous loads.\n  Future changes may make these equivalent.", kw_file, "clojure/core.glj", kw_added, "1.10", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(25), kw_column, int(8), kw_line, int(6116), kw_end_DASH_line, int(6116), kw_private, true)
@@ -53382,23 +52924,23 @@ func LoadNS() {
 	// use
 	{
 		tmp0 := sym_use
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp4 := checkDerefVar(var_clojure_DOT_core_load_DASH_libs)
 				tmp5 := lang.Apply4(tmp3, tmp4, kw_require, kw_use, v2)
 				return tmp5
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_use = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_use.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_doc, "Like 'require, but also refers to each lib's namespace using\n  clojure.core/refer. Use :use in the ns macro in preference to calling\n  this directly.\n\n  'use accepts additional options in libspecs: :exclude, :only, :rename.\n  The arguments and semantics for :exclude, :only, and :rename are the same\n  as those documented for clojure.core/refer.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(6136), kw_end_DASH_line, int(6136))
@@ -53535,8 +53077,7 @@ func LoadNS() {
 				tmp12 := lang.Apply2(tmp6, tmp9, tmp11)
 				return tmp12
 			}),
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 4)
+			lang.NewVariadicFn(4, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
@@ -53545,11 +53086,7 @@ func LoadNS() {
 				_ = v4
 				v5 := args[3]
 				_ = v5
-				restArgs := args[4:]
-				var v6 any
-				if len(restArgs) > 0 {
-					v6 = lang.NewList(restArgs...)
-				}
+				var v6 any = rest
 				_ = v6
 				tmp7 := checkDerefVar(var_clojure_DOT_core_into)
 				tmp8 := lang.NewVector()
@@ -53641,15 +53178,10 @@ func LoadNS() {
 			nil,
 			nil,
 			nil,
-			lang.FnFunc(func(args ...any) any {
-				checkArityGTE(args, 1)
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 			recur_loop_2274:
 				tmp4 := checkDerefVar(var_clojure_DOT_core_pr)
@@ -53702,16 +53234,15 @@ func LoadNS() {
 	// pr-str
 	{
 		tmp0 := sym_pr_DASH_str
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				{ // let
@@ -53748,8 +53279,9 @@ func LoadNS() {
 					tmp3 = tmp7
 				} // end let
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_pr_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_pr_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -53759,16 +53291,15 @@ func LoadNS() {
 	// print
 	{
 		tmp0 := sym_print
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				{ // let
@@ -53793,8 +53324,9 @@ func LoadNS() {
 					tmp3 = tmp9
 				} // end let
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_print = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Prints the object(s) to the output stream that is the current value\n  of *out*.  print and println produce output for human consumption.", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(11), kw_column, int(7), kw_line, int(3782), kw_end_DASH_line, int(3782))
@@ -53803,16 +53335,15 @@ func LoadNS() {
 	// print-str
 	{
 		tmp0 := sym_print_DASH_str
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				{ // let
@@ -53849,8 +53380,9 @@ func LoadNS() {
 					tmp3 = tmp7
 				} // end let
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_print_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -53860,18 +53392,17 @@ func LoadNS() {
 	// printf
 	{
 		tmp0 := sym_printf
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_print)
 				tmp5 := checkDerefVar(var_clojure_DOT_core_apply)
@@ -53879,8 +53410,9 @@ func LoadNS() {
 				tmp7 := lang.Apply3(tmp5, tmp6, v2, v3)
 				tmp8 := lang.Apply1(tmp4, tmp7)
 				return tmp8
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_printf = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_printf.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_fmt, sym__AMP_, sym_args)), kw_doc, "Prints formatted output, as per format", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(12), kw_column, int(7), kw_line, int(5782), kw_end_DASH_line, int(5782))
@@ -53889,16 +53421,15 @@ func LoadNS() {
 	// prn
 	{
 		tmp0 := sym_prn
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_apply)
 				tmp4 := checkDerefVar(var_clojure_DOT_core_pr)
@@ -53916,8 +53447,9 @@ func LoadNS() {
 				} else {
 				}
 				return tmp8
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_prn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_prn.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Same as pr followed by (newline). Observes *flush-on-newline*", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(7), kw_line, int(3772), kw_end_DASH_line, int(3772))
@@ -53926,16 +53458,15 @@ func LoadNS() {
 	// prn-str
 	{
 		tmp0 := sym_prn_DASH_str
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				{ // let
@@ -53972,8 +53503,9 @@ func LoadNS() {
 					tmp3 = tmp7
 				} // end let
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_prn_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_prn_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -53983,16 +53515,15 @@ func LoadNS() {
 	// println
 	{
 		tmp0 := sym_println
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				{ // let
@@ -54017,8 +53548,9 @@ func LoadNS() {
 					tmp3 = tmp9
 				} // end let
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_println = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_println.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_more)), kw_doc, "Same as print followed by (newline)", kw_static, true, kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(3791), kw_end_DASH_line, int(3791))
@@ -54027,16 +53559,15 @@ func LoadNS() {
 	// println-str
 	{
 		tmp0 := sym_println_DASH_str
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 0)
-				restArgs := args[0:]
-				var v2 any
-				if len(restArgs) > 0 {
-					v2 = lang.NewList(restArgs...)
-				}
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
+				var v2 any = rest
 				_ = v2
 				var tmp3 any
 				{ // let
@@ -54073,8 +53604,9 @@ func LoadNS() {
 					tmp3 = tmp7
 				} // end let
 				return tmp3
-			}
-		})
+			}),
+			0,
+		)
 		var_clojure_DOT_core_println_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_println_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
@@ -54264,6 +53796,7 @@ func LoadNS() {
 			tmp6 := lang.Apply1(tmp5, v3)
 			return tmp6
 		})
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3724), kw_column, int(21), kw_end_DASH_line, int(3724), kw_end_DASH_column, int(45))).(lang.FnFunc2)
 		// MultiFn print-dup
 		tmp1 := lang.NewMultiFn("print-dup", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc2
@@ -54750,6 +54283,7 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
+		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3721), kw_column, int(24), kw_end_DASH_line, int(3723), kw_end_DASH_column, int(58))).(lang.FnFunc2)
 		// MultiFn print-method
 		tmp1 := lang.NewMultiFn("print-method", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc2
@@ -56851,18 +56385,17 @@ func LoadNS() {
 	// slurp
 	{
 		tmp0 := sym_slurp
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				{ // let
@@ -56911,8 +56444,9 @@ func LoadNS() {
 					tmp4 = tmp11
 				} // end let
 				return tmp4
-			}
-		})
+			}),
+			1,
+		)
 		var_clojure_DOT_core_slurp = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_slurp.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")

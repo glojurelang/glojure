@@ -55,3 +55,27 @@ func TestNativeCoreAddApplyToPreservesUnaryNegativeZero(t *testing.T) {
 		t.Fatalf("unary sum = %v, want negative zero", got)
 	}
 }
+
+func TestNativeCoreSubtractApplyToReducibleSequence(t *testing.T) {
+	args := lang.NewLongRange(0, 1_000, 1)
+
+	if got := (nativeCoreSubtract{}).ApplyTo(args); got != int64(-499_500) {
+		t.Fatalf("difference = %v, want -499500", got)
+	}
+}
+
+func TestNativeCoreSubtractApplyToPreservesArities(t *testing.T) {
+	fn := nativeCoreSubtract{}
+	if got := fn.ApplyTo(lang.NewList(int64(5))); got != int64(-5) {
+		t.Fatalf("unary difference = %v, want -5", got)
+	}
+	if got := fn.ApplyTo(lang.NewList(int64(9), int64(4))); got != int64(5) {
+		t.Fatalf("binary difference = %v, want 5", got)
+	}
+	defer func() {
+		if recover() == nil {
+			t.Fatal("zero-arity subtraction did not panic")
+		}
+	}()
+	fn.ApplyTo(nil)
+}

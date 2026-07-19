@@ -1019,14 +1019,13 @@ func (g *Generator) generateFn(fn *Fn) string {
 			fixedArity = mn.FixedArity
 		}
 	}
-	multiFixed := len(fnNode.Methods) > 1
-	if multiFixed {
-		for _, method := range fnNode.Methods {
-			mn := method.Sub.(*ast.FnMethodNode)
-			if !mn.IsVariadic && mn.FixedArity > 4 {
-				multiFixed = false
-				break
-			}
+	arityDispatch := len(fnNode.Methods) > 1 || fnNode.IsVariadic
+	smallFixed := true
+	for _, method := range fnNode.Methods {
+		mn := method.Sub.(*ast.FnMethodNode)
+		if !mn.IsVariadic && mn.FixedArity > 4 {
+			smallFixed = false
+			break
 		}
 	}
 
@@ -1039,7 +1038,7 @@ func (g *Generator) generateFn(fn *Fn) string {
 	fnType := "lang.FnFunc"
 	if fixedArity >= 0 {
 		fnType = fmt.Sprintf("lang.FnFunc%d", fixedArity)
-	} else if multiFixed {
+	} else if arityDispatch {
 		fnType = "lang.ArityFn"
 	}
 	// declare it now to make sure it's in the scope of the caller
@@ -1079,40 +1078,52 @@ func (g *Generator) generateFn(fn *Fn) string {
 		g.writef("%s = lang.FnFunc%d(func(%s) any {\n", fnVar, fixedArity, sig)
 		g.generateFnMethodFixed(methodNode, paramNames)
 		g.writef("})\n")
-	} else if multiFixed {
+	} else if arityDispatch {
 		var fixedMethods [5]*ast.FnMethodNode
+		var fixedOther []*ast.FnMethodNode
 		var variadicMethod *ast.FnMethodNode
 		for _, method := range fnNode.Methods {
 			methodNode := method.Sub.(*ast.FnMethodNode)
 			if methodNode.IsVariadic {
 				variadicMethod = methodNode
-			} else {
+			} else if methodNode.FixedArity < len(fixedMethods) {
 				fixedMethods[methodNode.FixedArity] = methodNode
+			} else {
+				fixedOther = append(fixedOther, methodNode)
 			}
 		}
 
-		g.writef("%s = lang.NewArityFn(\n", fnVar)
-		allParamNames := []string{"p0", "p1", "p2", "p3"}
-		for arity, methodNode := range fixedMethods {
-			if methodNode == nil {
-				g.writef("nil,\n")
-				continue
+		if smallFixed {
+			g.writef("%s = lang.NewArityFn(\n", fnVar)
+			for _, methodNode := range fixedMethods {
+				if methodNode == nil {
+					g.writef("nil,\n")
+					continue
+				}
+				g.generateFixedMethodFn(methodNode)
 			}
-			paramNames := allParamNames[:arity]
-			sig := ""
-			if arity > 0 {
-				sig = strings.Join(paramNames, ", ") + " any"
+		} else {
+			g.writef("%s = lang.NewArityFnMethods(\n", fnVar)
+			g.writef("map[int]lang.IFn{\n")
+			for arity, methodNode := range fixedMethods {
+				if methodNode == nil {
+					continue
+				}
+				g.writef("%d: ", arity)
+				g.generateFixedMethodFn(methodNode)
 			}
-			g.writef("lang.FnFunc%d(func(%s) any {\n", arity, sig)
-			g.generateFnMethodFixed(methodNode, paramNames)
-			g.writef("}),\n")
+			for _, methodNode := range fixedOther {
+				g.writef("%d: ", methodNode.FixedArity)
+				g.generateFixedMethodFn(methodNode)
+			}
+			g.writef("},\n")
 		}
 		if variadicMethod == nil {
 			g.writef("nil,\n0,\n")
 		} else {
-			g.writef("lang.FnFunc(func(args ...any) any {\n")
-			g.writef("checkArityGTE(args, %d)\n", variadicMethod.FixedArity)
-			g.generateFnMethod(variadicMethod, "args")
+			g.writef("lang.NewVariadicFn(%d, func(args []any, rest lang.ISeq) any {\n",
+				variadicMethod.FixedArity)
+			g.generateFnMethodSplit(variadicMethod, "args", "rest")
 			g.writef("}),\n%d,\n", variadicMethod.FixedArity)
 		}
 		g.writef(")\n")
@@ -1130,39 +1141,6 @@ func (g *Generator) generateFn(fn *Fn) string {
 		g.generateFnMethod(methodNode, "args")
 
 		g.writef("})\n")
-	} else {
-		// Multiple arities or variadic - need to dispatch
-		g.writef("%s = lang.NewFnFunc(func(args ...any) any {\n", fnVar)
-		g.writef("  switch len(args) {\n")
-
-		// Generate cases for fixed arity methods
-		var variadicMethod *ast.Node
-		for _, method := range fnNode.Methods {
-			methodNode := method.Sub.(*ast.FnMethodNode)
-			if methodNode.IsVariadic {
-				variadicMethod = method
-				continue
-			}
-
-			g.writef("  case %d:\n", methodNode.FixedArity)
-			g.generateFnMethod(methodNode, "args")
-		}
-
-		// Generate default case for variadic method
-		if variadicMethod != nil {
-			variadicMethodNode := variadicMethod.Sub.(*ast.FnMethodNode)
-			g.writef("  default:\n")
-			g.writef("checkArityGTE(args, %d)\n", variadicMethodNode.FixedArity)
-			g.generateFnMethod(variadicMethodNode, "args")
-		} else {
-			// No variadic method - error on any other arity
-			g.writef("  default:\n")
-			g.writef("    checkArity(args, -1)\n")
-			g.writef("    panic(\"unreachable\")\n")
-		}
-
-		g.writef("  }\n")
-		g.writef("})\n")
 	}
 
 	// defn uses :rettag to communicate a return hint to the compiler. It is
@@ -1175,6 +1153,27 @@ func (g *Generator) generateFn(fn *Fn) string {
 
 	// Return the function variable
 	return fnVar
+}
+
+func (g *Generator) generateFixedMethodFn(methodNode *ast.FnMethodNode) {
+	arity := methodNode.FixedArity
+	if arity <= 4 {
+		allParamNames := []string{"p0", "p1", "p2", "p3"}
+		paramNames := allParamNames[:arity]
+		sig := ""
+		if arity > 0 {
+			sig = strings.Join(paramNames, ", ") + " any"
+		}
+		g.writef("lang.FnFunc%d(func(%s) any {\n", arity, sig)
+		g.generateFnMethodFixed(methodNode, paramNames)
+		g.writef("}),\n")
+		return
+	}
+
+	g.writef("lang.NewFnFunc(func(args ...any) any {\n")
+	g.writef("checkArity(args, %d)\n", arity)
+	g.generateFnMethod(methodNode, "args")
+	g.writef("}),\n")
 }
 
 func runtimeFunctionMeta(meta lang.IPersistentMap) lang.IPersistentMap {
@@ -1232,6 +1231,46 @@ func (g *Generator) generateFnMethod(methodNode *ast.FnMethodNode, argsVar strin
 		g.writef("return %s\n", bodyVar)
 	}
 	// If bodyVar is empty (e.g., from throw), no return is generated
+}
+
+// generateFnMethodSplit generates a variadic method body with its fixed
+// parameters in a slice and its rest parameter already represented as an ISeq.
+func (g *Generator) generateFnMethodSplit(
+	methodNode *ast.FnMethodNode,
+	fixedVar string,
+	restVar string,
+) {
+	g.pushVarScope()
+	defer g.popVarScope()
+
+	paramVars := make([]string, methodNode.FixedArity)
+
+	for i, param := range methodNode.Params {
+		paramNode := param.Sub.(*ast.BindingNode)
+		paramVar := g.allocateLocal(paramNode.Name.Name())
+
+		if i < methodNode.FixedArity {
+			g.writef("%s := %s[%d]\n", paramVar, fixedVar, i)
+			g.writeAssign("_", paramVar)
+			paramVars[i] = paramVar
+		} else {
+			g.writef("var %s any = %s\n", paramVar, restVar)
+			g.writeAssign("_", paramVar)
+			paramVars = append(paramVars, paramVar)
+		}
+	}
+
+	if methodNode.LoopID != nil && nodeRecurs(methodNode.Body, methodNode.LoopID.Name()) {
+		g.writef("recur_%s:\n", methodNode.LoopID.Name())
+
+		g.pushRecurContext(methodNode.LoopID, paramVars, true)
+		defer g.popRecurContext()
+	}
+
+	bodyVar := g.generateASTNode(methodNode.Body)
+	if bodyVar != "" {
+		g.writef("return %s\n", bodyVar)
+	}
 }
 
 // generateFnMethodFixed generates a function method body where parameters are

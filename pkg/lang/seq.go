@@ -109,6 +109,16 @@ func seqToSlice(s ISeq) []interface{} {
 	return res
 }
 
+// BoundedLength returns the number of elements in s, stopping at limit.
+// A result equal to limit means the sequence has at least that many elements.
+func BoundedLength(s ISeq, limit int) int {
+	n := 0
+	for seq := s; seq != nil && n < limit; seq = seq.Next() {
+		n++
+	}
+	return n
+}
+
 type seqSeq struct {
 	ISeq
 }
