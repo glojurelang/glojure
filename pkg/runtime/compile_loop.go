@@ -20,6 +20,24 @@ type compiledInt64Loop struct {
 type int64Expr func(*[4]int64) int64
 type int64BoolExpr func(*[4]int64) bool
 
+type compiledLoopPlan struct {
+	numeric   *compiledInt64Loop
+	evaluator evalFn
+}
+
+func (env *environment) getCompiledLoopPlan(n *ast.Node) *compiledLoopPlan {
+	if cached, ok := env.loopPlans.Load(n); ok {
+		return cached.(*compiledLoopPlan)
+	}
+	letNode := n.Sub.(*ast.LetNode)
+	plan := &compiledLoopPlan{
+		numeric:   compileInt64Loop(letNode),
+		evaluator: compileLoopEval(letNode.Body, letNode.Bindings),
+	}
+	actual, _ := env.loopPlans.LoadOrStore(n, plan)
+	return actual.(*compiledLoopPlan)
+}
+
 func compileInt64Loop(letNode *ast.LetNode) *compiledInt64Loop {
 	if len(letNode.Bindings) == 0 || len(letNode.Bindings) > 4 {
 		return nil

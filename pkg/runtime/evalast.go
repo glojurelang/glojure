@@ -713,8 +713,9 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 		return newEnv.EvalAST(letNode.Body)
 	}
 
-	if loop := compileInt64Loop(letNode); loop != nil {
-		if result, ok := loop.run(bindNameVals); ok {
+	plan := env.getCompiledLoopPlan(n)
+	if plan.numeric != nil {
+		if result, ok := plan.numeric.run(bindNameVals); ok {
 			return result, nil
 		}
 	}
@@ -725,7 +726,7 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 		Target: rt,
 		Args:   make([]interface{}, len(bindNameVals)/2),
 	}
-	evaluator := compileLoopEval(letNode.Body, bindings)
+	evaluator := plan.evaluator
 	var frame loopFrame
 	if evaluator != nil {
 		recurEnv.loopFrame = &frame

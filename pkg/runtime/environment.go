@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"sync"
 	"sync/atomic"
 
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -31,6 +32,7 @@ type (
 		recurErr    *lang.RecurError
 		fnFrame     *fnFrame
 		loopFrame   *loopFrame
+		loopPlans   *sync.Map
 
 		// some well-known vars
 		namespaceVar   *lang.Var // ns
@@ -48,10 +50,11 @@ type (
 
 func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment {
 	e := &environment{
-		ctx:    ctx,
-		scope:  newScope(),
-		stdout: stdout,
-		stderr: stderr,
+		ctx:       ctx,
+		scope:     newScope(),
+		loopPlans: &sync.Map{},
+		stdout:    stdout,
+		stderr:    stderr,
 	}
 	coreNS := lang.NSCore
 
