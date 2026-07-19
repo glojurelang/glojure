@@ -5663,7 +5663,7 @@ func LoadNS() {
 	}
 	// print-initialized
 	{
-		tmp0 := sym_print_DASH_initialized.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core_print.glj", kw_line, int(522), kw_column, int(6), kw_end_DASH_line, int(522), kw_end_DASH_column, int(39), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_initialized.WithMeta(lang.NewMap(kw_private, true, kw_file, "clojure/core_print.glj", kw_line, int(520), kw_column, int(6), kw_end_DASH_line, int(520), kw_end_DASH_column, int(39), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var_clojure_DOT_core_print_DASH_initialized = ns.InternWithValue(tmp0, true, true)
 		if tmp0.Meta() != nil {
 			var_clojure_DOT_core_print_DASH_initialized.SetMeta(tmp0.Meta().(lang.IPersistentMap))
@@ -12478,9 +12478,9 @@ func LoadNS() {
 			_ = v3
 			tmp4 := checkDerefVar(var_clojure_DOT_core_the_DASH_ns)
 			tmp5 := lang.Apply1(tmp4, v2)
-			tmp6, _ := lang.FieldOrMethod(tmp5, "unmap")
+			tmp6, _ := lang.FieldOrMethod(tmp5, "Unmap")
 			if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("unmap is not a function")))
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Unmap is not a function")))
 			}
 			tmp7 := lang.Apply1(tmp6, v3)
 			return tmp7
@@ -16787,7 +16787,7 @@ func LoadNS() {
 	}
 	// StackTraceElement->vec
 	{
-		tmp0 := sym_StackTraceElement_DASH__GT_vec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a StackTraceElement: [class method file line]", kw_file, "clojure/core_print.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(28), kw_column, int(7), kw_line, int(438), kw_end_DASH_line, int(438))).(*lang.Symbol)
+		tmp0 := sym_StackTraceElement_DASH__GT_vec.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a StackTraceElement: [class method file line]", kw_file, "clojure/core_print.glj", kw_added, "1.9", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(28), kw_column, int(7), kw_line, int(436), kw_end_DASH_line, int(436))).(*lang.Symbol)
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -16841,7 +16841,7 @@ func LoadNS() {
 				tmp14 = tmp13
 			}
 			tmp15 := lang.NewVector(tmp6, tmp10, tmp12, tmp14)
-			tmp16 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(442), kw_column, int(3), kw_end_DASH_line, int(442), kw_end_DASH_column, int(94))
+			tmp16 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(440), kw_column, int(3), kw_end_DASH_line, int(440), kw_end_DASH_column, int(94))
 			tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
@@ -22980,7 +22980,7 @@ func LoadNS() {
 	}
 	// deref-as-map
 	{
-		tmp0 := sym_deref_DASH_as_DASH_map.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(410), kw_column, int(8), kw_end_DASH_line, int(410), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_deref_DASH_as_DASH_map.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(408), kw_column, int(8), kw_end_DASH_line, int(408), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -23031,7 +23031,7 @@ func LoadNS() {
 									v8 := r
 									_ = v8
 									tmp9 := lang.NewVector(true, v8)
-									tmp10 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(417), kw_column, int(18), kw_end_DASH_line, int(417), kw_end_DASH_column, int(25))
+									tmp10 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(415), kw_column, int(18), kw_end_DASH_line, int(415), kw_end_DASH_column, int(25))
 									tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
 									if err != nil {
 										panic(err)
@@ -23045,7 +23045,7 @@ func LoadNS() {
 						tmp8 := checkDerefVar(var_clojure_DOT_core_deref)
 						tmp9 := lang.Apply1(tmp8, v2)
 						tmp10 := lang.NewVector(false, tmp9)
-						tmp11 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(415), kw_column, int(16), kw_end_DASH_line, int(415), kw_end_DASH_column, int(32))
+						tmp11 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(413), kw_column, int(16), kw_end_DASH_line, int(413), kw_end_DASH_column, int(32))
 						tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
@@ -23115,7 +23115,7 @@ func LoadNS() {
 					tmp20 = tmp22
 				}
 				tmp24 := lang.NewMap(kw_status, tmp20, kw_val, v19)
-				tmp25 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(418), kw_column, int(5), kw_end_DASH_line, int(431), kw_end_DASH_column, int(14))
+				tmp25 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(416), kw_column, int(5), kw_end_DASH_line, int(429), kw_end_DASH_column, int(14))
 				tmp26, err := lang.WithMeta(tmp24, tmp25.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -44152,7 +44152,7 @@ func LoadNS() {
 	}
 	// Throwable->map
 	{
-		tmp0 := sym_Throwable_DASH__GT_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a Throwable with keys:\n    :cause - root cause message\n    :phase - error phase\n    :via - cause chain, with cause keys:\n             :type - exception class symbol\n             :message - exception message\n             :data - ex-data\n             :at - top stack element\n    :trace - root cause stack elements", kw_file, "clojure/core_print.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(444), kw_end_DASH_line, int(444))).(*lang.Symbol)
+		tmp0 := sym_Throwable_DASH__GT_map.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_o)), kw_doc, "Constructs a data representation for a Throwable with keys:\n    :cause - root cause message\n    :phase - error phase\n    :via - cause chain, with cause keys:\n             :type - exception class symbol\n             :message - exception message\n             :data - ex-data\n             :at - top stack element\n    :trace - root cause stack elements", kw_file, "clojure/core_print.glj", kw_added, "1.7", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(442), kw_end_DASH_line, int(442))).(*lang.Symbol)
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -44181,7 +44181,7 @@ func LoadNS() {
 					}
 					tmp12 := lang.Apply1(tmp7, tmp11)
 					tmp13 := lang.NewMap(kw_type, tmp12)
-					tmp14 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(457), kw_column, int(23), kw_end_DASH_line, int(457), kw_end_DASH_column, int(56))
+					tmp14 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(455), kw_column, int(23), kw_end_DASH_line, int(455), kw_end_DASH_column, int(56))
 					tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -44210,7 +44210,7 @@ func LoadNS() {
 								var v22 any = v19
 								_ = v22
 								tmp23 := lang.NewMap(kw_message, v22)
-								tmp24 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(459), kw_column, int(20), kw_end_DASH_line, int(459), kw_end_DASH_column, int(33))
+								tmp24 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(457), kw_column, int(20), kw_end_DASH_line, int(457), kw_end_DASH_column, int(33))
 								tmp25, err := lang.WithMeta(tmp23, tmp24.(lang.IPersistentMap))
 								if err != nil {
 									panic(err)
@@ -44237,7 +44237,7 @@ func LoadNS() {
 								var v23 any = v20
 								_ = v23
 								tmp24 := lang.NewMap(kw_data, v23)
-								tmp25 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(461), kw_column, int(20), kw_end_DASH_line, int(461), kw_end_DASH_column, int(29))
+								tmp25 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(459), kw_column, int(20), kw_end_DASH_line, int(459), kw_end_DASH_column, int(29))
 								tmp26, err := lang.WithMeta(tmp24, tmp25.(lang.IPersistentMap))
 								if err != nil {
 									panic(err)
@@ -44276,7 +44276,7 @@ func LoadNS() {
 							tmp29 := lang.Apply2(tmp28, v21, int64(0))
 							tmp30 := lang.Apply1(tmp27, tmp29)
 							tmp31 := lang.NewMap(kw_at, tmp30)
-							tmp32 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(464), kw_column, int(22), kw_end_DASH_line, int(464), kw_end_DASH_column, int(63))
+							tmp32 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(462), kw_column, int(22), kw_end_DASH_line, int(462), kw_end_DASH_column, int(63))
 							tmp33, err := lang.WithMeta(tmp31, tmp32.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
@@ -44289,7 +44289,7 @@ func LoadNS() {
 					tmp19 := lang.Apply4(tmp6, tmp15, tmp16, tmp17, tmp18)
 					return tmp19
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(456), kw_column, int(14), kw_end_DASH_line, int(464), kw_end_DASH_column, int(67))
+				tmp5 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(454), kw_column, int(14), kw_end_DASH_line, int(462), kw_end_DASH_column, int(67))
 				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -44301,7 +44301,7 @@ func LoadNS() {
 				{ // let
 					// let binding "via"
 					tmp9 := lang.NewVector()
-					tmp10 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(465), kw_column, int(24), kw_end_DASH_line, int(465), kw_end_DASH_column, int(25))
+					tmp10 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(463), kw_column, int(24), kw_end_DASH_line, int(463), kw_end_DASH_column, int(25))
 					tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
@@ -44381,7 +44381,7 @@ func LoadNS() {
 				tmp24 := lang.Apply2(tmp19, tmp20, tmp23)
 				tmp25 := lang.Apply1(tmp18, tmp24)
 				tmp26 := lang.NewMap(kw_via, tmp17, kw_trace, tmp25)
-				tmp27 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(470), kw_column, int(12), kw_end_DASH_line, int(472), kw_end_DASH_column, int(68))
+				tmp27 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(468), kw_column, int(12), kw_end_DASH_line, int(470), kw_end_DASH_column, int(68))
 				tmp28, err := lang.WithMeta(tmp26, tmp27.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
@@ -44410,7 +44410,7 @@ func LoadNS() {
 							var v35 any = v32
 							_ = v35
 							tmp36 := lang.NewMap(kw_cause, v35)
-							tmp37 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(474), kw_column, int(9), kw_end_DASH_line, int(474), kw_end_DASH_column, int(25))
+							tmp37 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(472), kw_column, int(9), kw_end_DASH_line, int(472), kw_end_DASH_column, int(25))
 							tmp38, err := lang.WithMeta(tmp36, tmp37.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
@@ -44437,7 +44437,7 @@ func LoadNS() {
 							var v36 any = v33
 							_ = v36
 							tmp37 := lang.NewMap(kw_data, v36)
-							tmp38 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(476), kw_column, int(9), kw_end_DASH_line, int(476), kw_end_DASH_column, int(20))
+							tmp38 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(474), kw_column, int(9), kw_end_DASH_line, int(474), kw_end_DASH_column, int(20))
 							tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
@@ -44465,7 +44465,7 @@ func LoadNS() {
 							var v38 any = v35
 							_ = v38
 							tmp39 := lang.NewMap(kw_phase, v38)
-							tmp40 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(478), kw_column, int(9), kw_end_DASH_line, int(478), kw_end_DASH_column, int(22))
+							tmp40 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(476), kw_column, int(9), kw_end_DASH_line, int(476), kw_end_DASH_column, int(22))
 							tmp41, err := lang.WithMeta(tmp39, tmp40.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
@@ -55104,21 +55104,9 @@ func LoadNS() {
 			_ = v42
 			v43 := p1
 			_ = v43
-			tmp44, ok := lang.FieldOrMethod(v42, "StripTrailingZeros")
-			if !ok {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v42, "StripTrailingZeros")))
-			}
-			var tmp45 any
-			switch reflect.TypeOf(tmp44).Kind() {
-			case reflect.Func:
-				tmp45 = lang.Apply(tmp44, nil)
-			default:
-				tmp45 = tmp44
-			}
-			tmp46 := lang.Apply2(lang.WriteWriter, v43, tmp45)
-			_ = tmp46
-			tmp47 := lang.Apply2(lang.WriteWriter, v43, "M")
-			return tmp47
+			tmp44 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
+			tmp45 := lang.Apply2(tmp44, v42, v43)
+			return tmp45
 		})
 		tmp1.AddMethod(tmp40, tmp41)
 		tmp42 := reflect.TypeOf((*lang.BigInt)(nil))
@@ -56231,7 +56219,7 @@ func LoadNS() {
 	}
 	// print-throwable
 	{
-		tmp0 := sym_print_DASH_throwable.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(480), kw_column, int(8), kw_end_DASH_line, int(480), kw_end_DASH_column, int(22), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
+		tmp0 := sym_print_DASH_throwable.WithMeta(lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(478), kw_column, int(8), kw_end_DASH_line, int(478), kw_end_DASH_column, int(22), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_o, sym_w)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))).(*lang.Symbol)
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
@@ -56371,7 +56359,7 @@ func LoadNS() {
 					tmp49 := lang.Apply2(lang.WriteWriter, v3, "}")
 					return tmp49
 				})
-				tmp38 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(483), kw_column, int(19), kw_end_DASH_line, int(493), kw_end_DASH_column, int(73))
+				tmp38 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(481), kw_column, int(19), kw_end_DASH_line, int(491), kw_end_DASH_column, int(73))
 				tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)

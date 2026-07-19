@@ -1,0 +1,24 @@
+(ns glojure.test-glojure.ns-libs
+  (:use clojure.test))
+
+(deftest ns-unmap-interned-var
+  (let [scratch (create-ns 'glojure.test-glojure.ns-libs-scratch)]
+    (intern scratch 'foo 1)
+    (is (contains? (ns-map scratch) 'foo))
+    (ns-unmap scratch 'foo)
+    (is (not (contains? (ns-map scratch) 'foo)))
+    ;; unmapping an absent symbol is a no-op
+    (ns-unmap scratch 'foo)
+    (is (not (contains? (ns-map scratch) 'foo)))))
+
+(deftest ns-unmap-referred-var
+  (let [scratch (create-ns 'glojure.test-glojure.ns-libs-scratch)]
+    (.Refer scratch 'referred #'clojure.core/inc)
+    (is (contains? (ns-map scratch) 'referred))
+    (ns-unmap scratch 'referred)
+    (is (not (contains? (ns-map scratch) 'referred)))))
+
+(deftest ns-unmap-qualified-symbol
+  (is (thrown? go/any (ns-unmap *ns* 'clojure.core/inc))))
+
+(run-tests)

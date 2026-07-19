@@ -210,6 +210,19 @@ func (ns *Namespace) InternWithValue(sym *Symbol, value interface{}, replaceRoot
 	return v
 }
 
+// Unmap removes the mapping for the symbol from the namespace.
+func (ns *Namespace) Unmap(sym *Symbol) {
+	if sym.Namespace() != "" {
+		panic(NewIllegalArgumentError("Can't unintern namespace-qualified symbol"))
+	}
+	mb := ns.mappingsBox()
+	for mb.val.(IPersistentMap).ContainsKey(sym) {
+		newMap := mb.val.(IPersistentMap).Without(sym)
+		ns.mappings.CompareAndSwap(mb, NewBox(newMap))
+		mb = ns.mappingsBox()
+	}
+}
+
 func (ns *Namespace) GetMapping(sym *Symbol) interface{} {
 	m := ns.Mappings()
 	return m.ValAt(sym)

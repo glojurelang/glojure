@@ -10,7 +10,7 @@
 
 (defn- default-uuid-reader [form]
   (if (string? form)
-    (java.util.UUID/fromString form)
+    (github.com:glojurelang:glojure:pkg:javacompat:uuid.FromString form)
     (throw (github.com:glojurelang:glojure:pkg:lang.NewIllegalArgumentError "#uuid data reader expected string"))))
 
 (defmethod print-method github.com:google:uuid.UUID [uuid ^io.Writer w]

@@ -18,7 +18,7 @@
 ;; * December 9, 2008: first version
 
 
-(ns 
+(ns
   ^{:author "Stuart Sierra",
      :doc "This file defines a generic tree walker for Clojure data
 structures.  It takes any data structure (list, vector, map, set,

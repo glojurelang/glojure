@@ -51,5 +51,5 @@
            ;=> (do (+ 4 2) (+ 5 3))"
   [argv expr & values]
   (let [c (count argv)]
-    `(do ~@(map (fn [a] (apply-template argv expr a)) 
+    `(do ~@(map (fn [a] (apply-template argv expr a))
                 (partition c values)))))

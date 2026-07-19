@@ -4236,7 +4236,7 @@
   {:added "1.0"
    :static true}
   [ns sym]
-  (.unmap (the-ns ns) sym))
+  (.Unmap (the-ns ns) sym))
 
 ;(defn export [syms]
 ;  (doseq [sym syms]

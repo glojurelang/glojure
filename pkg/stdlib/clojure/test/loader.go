@@ -5699,7 +5699,7 @@ func LoadNS() {
 	}
 	// are
 	{
-		tmp0 := sym_are.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym__AMP_, sym_args)), kw_doc, "Checks multiple assertions with a template expression.\n  See clojure.template/do-template for an explanation of\n  templates.\n\n  Example: (are [x y] (= x y)  \n                2 (+ 1 1)\n                4 (* 2 2))\n  Expands to: \n           (do (is (= 2 (+ 1 1)))\n               (is (= 4 (* 2 2))))\n\n  Note: This breaks some reporting features, such as line numbers.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(563), kw_end_DASH_line, int(563))).(*lang.Symbol)
+		tmp0 := sym_are.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym__AMP_, sym_args)), kw_doc, "Checks multiple assertions with a template expression.\n  See clojure.template/do-template for an explanation of\n  templates.\n\n  Example: (are [x y] (= x y)\n                2 (+ 1 1)\n                4 (* 2 2))\n  Expands to:\n           (do (is (= 2 (+ 1 1)))\n               (is (= 4 (* 2 2))))\n\n  Note: This breaks some reporting features, such as line numbers.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(13), kw_column, int(11), kw_line, int(563), kw_end_DASH_line, int(563))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {
@@ -7377,7 +7377,7 @@ func LoadNS() {
 	}
 	// is
 	{
-		tmp0 := sym_is.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_form), lang.NewVector(sym_form, sym_msg)), kw_doc, "Generic assertion macro.  'form' is any predicate test.\n  'msg' is an optional message to attach to the assertion.\n  \n  Example: (is (= 4 (+ 2 2)) \"Two plus two should be 4\")\n\n  Special forms:\n\n  (is (thrown? c body)) checks that an instance of c is thrown from\n  body, fails if not; then returns the thing thrown.\n\n  (is (thrown-with-msg? c re body)) checks that an instance of c is\n  thrown AND that the message on the exception matches (with\n  re-find) the regular expression re.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(545), kw_end_DASH_line, int(545))).(*lang.Symbol)
+		tmp0 := sym_is.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_form), lang.NewVector(sym_form, sym_msg)), kw_doc, "Generic assertion macro.  'form' is any predicate test.\n  'msg' is an optional message to attach to the assertion.\n\n  Example: (is (= 4 (+ 2 2)) \"Two plus two should be 4\")\n\n  Special forms:\n\n  (is (thrown? c body)) checks that an instance of c is thrown from\n  body, fails if not; then returns the thing thrown.\n\n  (is (thrown-with-msg? c re body)) checks that an instance of c is\n  thrown AND that the message on the exception matches (with\n  re-find) the regular expression re.", kw_file, "clojure/test.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(545), kw_end_DASH_line, int(545))).(*lang.Symbol)
 		var tmp1 lang.FnFunc
 		tmp1 = lang.NewFnFunc(func(args ...any) any {
 			switch len(args) {

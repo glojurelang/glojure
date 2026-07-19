@@ -4,6 +4,7 @@ package uuid
 
 import (
 	fmt "fmt"
+	uuid4 "github.com/glojurelang/glojure/pkg/javacompat/uuid"
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
@@ -5132,7 +5133,7 @@ func LoadNS() {
 			tmp4 := checkDerefVar(var_clojure_DOT_core_string_QMARK_)
 			tmp5 := lang.Apply1(tmp4, v2)
 			if lang.IsTruthy(tmp5) {
-				tmp6 := lang.Apply1(nil, v2)
+				tmp6 := lang.Apply1(uuid4.FromString, v2)
 				tmp3 = tmp6
 			} else {
 				tmp7 := lang.Apply1(lang.NewIllegalArgumentError, "#uuid data reader expected string")

@@ -1282,6 +1282,7 @@
                   '(. *ns* (Refer (or (rename sym) sym) v)))
 
    (sexpr-replace '.getMappings '.Mappings)
+   (sexpr-replace '.unmap '.Unmap)
    (sexpr-replace '.ns '.Namespace)
    (sexpr-replace '.isPublic '.IsPublic)
    (sexpr-replace '.addAlias '.AddAlias)
