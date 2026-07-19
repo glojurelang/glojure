@@ -325,6 +325,7 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	installFixedArityCoreFunction(core, "mapv", 2, lang.FnFunc2(nativeMapv))
 	installFixedArityCoreFunction(core, "filter", 2, lang.FnFunc2(nativeFilterSeq))
 	installFixedArityCoreFunction(core, "take", 2, lang.FnFunc2(nativeTakeSeq))
+	installFixedArityCoreFunction(core, "mod", 2, lang.FnFunc2(nativeMod))
 }
 
 func installFixedArityCoreFunction(
@@ -365,6 +366,25 @@ func nativeMapv(fn, coll interface{}) interface{} {
 		}
 	}
 	return result.(lang.ITransientCollection).Persistent()
+}
+
+func nativeMod(num, div interface{}) interface{} {
+	if numerator, ok := num.(int64); ok {
+		if divisor, ok := div.(int64); ok {
+			remainder := checkedInt64Remainder(numerator, divisor)
+			if remainder == 0 || numerator > 0 == (divisor > 0) {
+				return boxInt64(remainder)
+			}
+			return boxInt64(checkedInt64Add(remainder, divisor))
+		}
+	}
+
+	remainder := lang.Numbers.Remainder(num, div)
+	if lang.Numbers.IsZero(remainder) ||
+		lang.Numbers.IsPos(num) == lang.Numbers.IsPos(div) {
+		return remainder
+	}
+	return lang.Numbers.Add(remainder, div)
 }
 
 func nativeMapSeq(fn, coll interface{}) interface{} {

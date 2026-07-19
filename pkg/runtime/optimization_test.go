@@ -309,6 +309,25 @@ func TestBoxInt64CachesCommonValues(t *testing.T) {
 	}
 }
 
+func TestNativeModMatchesFloorModSemantics(t *testing.T) {
+	tests := []struct {
+		num  interface{}
+		div  interface{}
+		want interface{}
+	}{
+		{num: int64(5), div: int64(3), want: int64(2)},
+		{num: int64(-5), div: int64(3), want: int64(1)},
+		{num: int64(5), div: int64(-3), want: int64(-1)},
+		{num: int64(-5), div: int64(-3), want: int64(-2)},
+		{num: float64(-5.5), div: float64(3), want: float64(0.5)},
+	}
+	for _, test := range tests {
+		if got := nativeMod(test.num, test.div); !lang.Equals(got, test.want) {
+			t.Errorf("mod(%v, %v) = %v, want %v", test.num, test.div, got, test.want)
+		}
+	}
+}
+
 func TestNativeMapvPreservesOrder(t *testing.T) {
 	got := nativeMapv(
 		lang.FnFunc1(func(value any) any {
