@@ -129,7 +129,7 @@ func (env *environment) lookup(sym *lang.Symbol) (res interface{}, ok bool) {
 	if ns == nil {
 		return nil, false
 	}
-	vr := ns.Mappings().ValAt(sym)
+	vr := ns.GetMapping(sym)
 	if vr == nil {
 		return nil, false
 	}

@@ -168,17 +168,28 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 		}
 	}
 
-	// Emit individual refer calls — no conflicts, no warnings
+	// Emit one batch per source namespace so generated loaders do not build a
+	// complete persistent mapping snapshot or lock the source for every Var.
+	referredByNamespace := make(map[string][]referredVar)
+	var referredNamespaces []string
 	for _, rv := range referredVars {
-		symSym := g.allocSymVar(rv.symName)
-		srcNSSym := g.allocSymVar(rv.srcNS)
-		srcSymSym := g.allocSymVar(rv.srcSym)
-		g.writef("{ // refer %s/%s as %s\n", rv.srcNS, rv.srcSym, rv.symName)
+		if _, ok := referredByNamespace[rv.srcNS]; !ok {
+			referredNamespaces = append(referredNamespaces, rv.srcNS)
+		}
+		referredByNamespace[rv.srcNS] = append(referredByNamespace[rv.srcNS], rv)
+	}
+	for _, srcNS := range referredNamespaces {
+		refs := referredByNamespace[srcNS]
+		srcNSSym := g.allocSymVar(srcNS)
+		g.writef("{ // refer vars from %s\n", srcNS)
 		g.writef("  srcNS := lang.FindOrCreateNamespace(%s)\n", srcNSSym)
-		g.writef("  v := srcNS.Mappings().ValAt(%s)\n", srcSymSym)
-		g.writef("  if vr, ok := v.(*lang.Var); ok {\n")
-		g.writef("    ns.Refer(%s, vr)\n", symSym)
-		g.writef("  }\n")
+		g.writef("  ns.ReferAll(srcNS, []lang.NamespaceReference{\n")
+		for _, rv := range refs {
+			symSym := g.allocSymVar(rv.symName)
+			srcSymSym := g.allocSymVar(rv.srcSym)
+			g.writef("    {Alias: %s, Source: %s},\n", symSym, srcSymSym)
+		}
+		g.writef("  })\n")
 		g.writef("}\n")
 	}
 

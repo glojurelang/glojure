@@ -27,6 +27,12 @@ type namespaceMapping struct {
 	val interface{}
 }
 
+// NamespaceReference describes a Var imported from another namespace.
+type NamespaceReference struct {
+	Alias  *Symbol
+	Source *Symbol
+}
+
 var (
 	SymbolCoreNamespace = NewSymbol("clojure.core")
 
@@ -288,6 +294,25 @@ func (ns *Namespace) Import(export string, v interface{}) interface{} {
 // namespace, to this namespace.
 func (ns *Namespace) Refer(sym *Symbol, v *Var) *Var {
 	return ns.reference(sym, v).(*Var)
+}
+
+// ReferAll adds a batch of references from src. Source mappings are collected
+// under one read lock before the target namespace is changed.
+func (ns *Namespace) ReferAll(src *Namespace, refs []NamespaceReference) {
+	vars := make([]*Var, len(refs))
+	src.mappingsMtx.RLock()
+	for i, ref := range refs {
+		if v, ok := src.mappings[ref.Source.String()].val.(*Var); ok {
+			vars[i] = v
+		}
+	}
+	src.mappingsMtx.RUnlock()
+
+	for i, v := range vars {
+		if v != nil {
+			ns.Refer(refs[i].Alias, v)
+		}
+	}
 }
 
 func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {

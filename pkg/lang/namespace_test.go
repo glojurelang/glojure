@@ -28,6 +28,29 @@ func TestNamespaceMappingsAreSnapshots(t *testing.T) {
 	}
 }
 
+func TestNamespaceReferAll(t *testing.T) {
+	source := NewNamespace(NewSymbol("refer-all-source"))
+	first := source.Intern(NewSymbol("first"))
+	second := source.Intern(NewSymbol("second"))
+	target := NewNamespace(NewSymbol("refer-all-target"))
+
+	target.ReferAll(source, []NamespaceReference{
+		{Alias: NewSymbol("renamed"), Source: NewSymbol("first")},
+		{Alias: NewSymbol("second"), Source: NewSymbol("second")},
+		{Alias: NewSymbol("missing"), Source: NewSymbol("missing")},
+	})
+
+	if got := target.GetMapping(NewSymbol("renamed")); got != first {
+		t.Fatalf("renamed mapping = %v, want %v", got, first)
+	}
+	if got := target.GetMapping(NewSymbol("second")); got != second {
+		t.Fatalf("second mapping = %v, want %v", got, second)
+	}
+	if got := target.GetMapping(NewSymbol("missing")); got != nil {
+		t.Fatalf("missing mapping = %v, want nil", got)
+	}
+}
+
 func TestNamespaceConcurrentIntern(t *testing.T) {
 	ns := NewNamespace(NewSymbol("test.namespace-concurrent-intern"))
 	const goroutines = 32
