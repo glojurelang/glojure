@@ -730,6 +730,7 @@ func (env *environment) EvalASTLet(n *ast.Node, isLoop bool) (interface{}, error
 	var frame loopFrame
 	if evaluator != nil {
 		recurEnv.loopFrame = &frame
+		recurEnv.evalFrame = &frame.eval
 	}
 
 Recur:

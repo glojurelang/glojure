@@ -14,16 +14,34 @@ import (
 type evalFn func(*environment) (interface{}, error)
 
 type threadedEvalCompiler struct {
-	localSlots map[*lang.Symbol]localSlot
+	localSlots  map[*lang.Symbol]localSlot
+	nextLetSlot int
 }
+
+type localSlotKind uint8
+
+const (
+	fnLocalSlot localSlotKind = iota
+	loopLocalSlot
+	letLocalSlot
+)
 
 type localSlot struct {
 	index int
-	loop  bool
+	kind  localSlotKind
 }
 
 func compileEval(n *ast.Node) evalFn {
-	return (threadedEvalCompiler{}).compile(n)
+	evaluator := (threadedEvalCompiler{}).compile(n)
+	if evaluator == nil {
+		return nil
+	}
+	return func(env *environment) (interface{}, error) {
+		var frame evalFrame
+		evalEnv := *env
+		evalEnv.evalFrame = &frame
+		return evaluator(&evalEnv)
+	}
 }
 
 func compileMethodEval(body *ast.Node, params []*ast.Node) evalFn {
@@ -43,7 +61,7 @@ func compileLoopEval(body *ast.Node, bindings []*ast.Node) evalFn {
 		if i == len(loopFrame{}.args) {
 			break
 		}
-		slots[binding.Sub.(*ast.BindingNode).Name] = localSlot{index: i, loop: true}
+		slots[binding.Sub.(*ast.BindingNode).Name] = localSlot{index: i, kind: loopLocalSlot}
 	}
 	return (threadedEvalCompiler{localSlots: slots}).compile(body)
 }
@@ -57,13 +75,19 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 	case ast.OpLocal:
 		sym := n.Sub.(*ast.LocalNode).Name
 		if slot, ok := c.localSlots[sym]; ok {
-			if slot.loop {
+			switch slot.kind {
+			case loopLocalSlot:
 				return func(env *environment) (interface{}, error) {
 					return env.loopFrame.args[slot.index], nil
 				}
-			}
-			return func(env *environment) (interface{}, error) {
-				return env.fnFrame.args[slot.index], nil
+			case letLocalSlot:
+				return func(env *environment) (interface{}, error) {
+					return env.evalFrame.args[slot.index], nil
+				}
+			default:
+				return func(env *environment) (interface{}, error) {
+					return env.fnFrame.args[slot.index], nil
+				}
 			}
 		}
 		name := sym.String()
@@ -125,30 +149,38 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 
 	case ast.OpLet:
 		letNode := n.Sub.(*ast.LetNode)
-		names := make([]*lang.Symbol, len(letNode.Bindings))
 		inits := make([]evalFn, len(letNode.Bindings))
+		slots := make([]int, len(letNode.Bindings))
+		letCompiler := c
 		for i, binding := range letNode.Bindings {
 			bindingNode := binding.Sub.(*ast.BindingNode)
-			names[i] = bindingNode.Name
-			inits[i] = c.compile(bindingNode.Init)
+			inits[i] = letCompiler.compile(bindingNode.Init)
 			if inits[i] == nil {
 				return nil
 			}
+			if letCompiler.nextLetSlot == len(evalFrame{}.args) {
+				return nil
+			}
+			slots[i] = letCompiler.nextLetSlot
+			letCompiler = letCompiler.withLocalSlot(
+				bindingNode.Name,
+				localSlot{index: slots[i], kind: letLocalSlot},
+			)
+			letCompiler.nextLetSlot++
 		}
-		body := c.compile(letNode.Body)
+		body := letCompiler.compile(letNode.Body)
 		if body == nil {
 			return nil
 		}
 		return func(env *environment) (interface{}, error) {
-			letEnv := env.PushScope().(*environment)
 			for i, init := range inits {
-				value, err := init(letEnv)
+				value, err := init(env)
 				if err != nil {
 					return nil, err
 				}
-				letEnv.BindLocal(names[i], value)
+				env.evalFrame.args[slots[i]] = value
 			}
-			return body(letEnv)
+			return body(env)
 		}
 
 	case ast.OpHostCall:
@@ -257,6 +289,16 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 		}
 	}
 	return nil
+}
+
+func (c threadedEvalCompiler) withLocalSlot(sym *lang.Symbol, slot localSlot) threadedEvalCompiler {
+	slots := make(map[*lang.Symbol]localSlot, len(c.localSlots)+1)
+	for existing, existingSlot := range c.localSlots {
+		slots[existing] = existingSlot
+	}
+	slots[sym] = slot
+	c.localSlots = slots
+	return c
 }
 
 func compileNumberCall(call *ast.HostCallNode, args []evalFn) evalFn {

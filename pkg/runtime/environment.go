@@ -32,6 +32,7 @@ type (
 		recurErr    *lang.RecurError
 		fnFrame     *fnFrame
 		loopFrame   *loopFrame
+		evalFrame   *evalFrame
 		loopPlans   *sync.Map
 
 		// some well-known vars

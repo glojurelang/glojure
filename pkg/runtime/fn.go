@@ -34,6 +34,7 @@ type fnFrame struct {
 	env      environment
 	scope    scope
 	args     [4]interface{}
+	eval     evalFrame
 	recur    lang.RecurTarget
 	recurErr lang.RecurError
 	captured bool
@@ -41,6 +42,11 @@ type fnFrame struct {
 
 type loopFrame struct {
 	args [4]interface{}
+	eval evalFrame
+}
+
+type evalFrame struct {
+	args [8]interface{}
 }
 
 var (
@@ -195,6 +201,7 @@ func (fn *Fn) acquireFrame() *fnFrame {
 	frame.env = *baseEnv
 	frame.env.scope = &frame.scope
 	frame.env.fnFrame = frame
+	frame.env.evalFrame = &frame.eval
 	frame.env.recurTarget = nil
 	frame.env.recurErr = nil
 	frame.scope.reset(baseEnv.scope)
@@ -205,6 +212,8 @@ func (fn *Fn) releaseFrame(frame *fnFrame) {
 	frame.scope.parent = nil
 	frame.env.scope = nil
 	frame.env.fnFrame = nil
+	frame.env.evalFrame = nil
+	clear(frame.eval.args[:])
 	fn.frames.Put(frame)
 }
 
@@ -247,6 +256,7 @@ func (fn *Fn) invokeMethod(
 	frame.env = *baseEnv
 	frame.env.scope = &frame.scope
 	frame.env.fnFrame = frame
+	frame.env.evalFrame = &frame.eval
 	frame.scope.reset(baseEnv.scope)
 	fnEnv := &frame.env
 	defer func() {
