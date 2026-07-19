@@ -25,6 +25,11 @@ func CheckedSubInt64(a, b int64) int64 {
 // CheckedMultiplyInt64 implements Clojure's overflowing fixed-width integer
 // multiplication without converting through interface values.
 func CheckedMultiplyInt64(a, b int64) int64 {
+	// The product of two signed 32-bit values always fits in int64. This common
+	// case avoids computing the high half solely to prove sign extension.
+	if int64(int32(a)) == a && int64(int32(b)) == b {
+		return a * b
+	}
 	unsignedA, unsignedB := uint64(a), uint64(b)
 	high, low := bits.Mul64(unsignedA, unsignedB)
 	high -= uint64(a>>63) & unsignedB

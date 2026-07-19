@@ -21,6 +21,13 @@ func TestCheckedInt64Arithmetic(t *testing.T) {
 	if got := CheckedMultiplyInt64(math.MinInt64, 1); got != math.MinInt64 {
 		t.Fatalf("CheckedMultiplyInt64(MinInt64, 1) = %d", got)
 	}
+	if got := CheckedMultiplyInt64(math.MinInt32, math.MinInt32); got != 1<<62 {
+		t.Fatalf("CheckedMultiplyInt64(MinInt32, MinInt32) = %d", got)
+	}
+	if got := CheckedMultiplyInt64(math.MaxInt32, math.MaxInt32); got !=
+		int64(math.MaxInt32)*int64(math.MaxInt32) {
+		t.Fatalf("CheckedMultiplyInt64(MaxInt32, MaxInt32) = %d", got)
+	}
 	if got := CheckedNegateInt64(42); got != -42 {
 		t.Fatalf("CheckedNegateInt64(42) = %d", got)
 	}
