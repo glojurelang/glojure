@@ -46,3 +46,29 @@ func TestContainsResidualUnquote(t *testing.T) {
 		t.Fatal("expected residual unquote to be detected")
 	}
 }
+
+func TestRuntimeFunctionFormMeta(t *testing.T) {
+	userKey := lang.NewKeyword("user")
+	userValue := lang.NewKeyword("value")
+
+	if got := runtimeFunctionFormMeta(nil); got != nil {
+		t.Fatalf("nil metadata became %v", got)
+	}
+
+	sourceMeta := lang.NewMap(
+		lang.KWFile, "source.glj",
+		lang.KWLine, 10,
+		lang.KWColumn, 20,
+		lang.KWEndLine, 11,
+		lang.KWEndColumn, 30,
+	)
+	if got := runtimeFunctionFormMeta(sourceMeta); got != nil {
+		t.Fatalf("source metadata became runtime metadata: %v", got)
+	}
+
+	mixed := lang.Assoc(sourceMeta, userKey, userValue).(lang.IPersistentMap)
+	want := lang.NewMap(userKey, userValue)
+	if got := runtimeFunctionFormMeta(mixed); !lang.Equals(got, want) {
+		t.Fatalf("mixed metadata became %v, want %v", got, want)
+	}
+}

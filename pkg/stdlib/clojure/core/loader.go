@@ -3809,12 +3809,7 @@ func LoadNS() {
 				}
 				return tmp6
 			})
-			tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3104), kw_column, int(5), kw_end_DASH_line, int(3105), kw_end_DASH_column, int(48))
-			tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			return tmp5
+			return tmp3
 		})
 		var_clojure_DOT_core_comparator = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_comparator.SetMetaLazy(func() lang.IPersistentMap {
@@ -3858,7 +3853,6 @@ func LoadNS() {
 				tmp5 := lang.NewCons(v3, v4)
 				return tmp5
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(29), kw_column, int(7), kw_end_DASH_line, int(29), kw_end_DASH_column, int(89))).(lang.FnFunc2)
 			v2 = tmp1
 			_ = v2
 		}
@@ -3888,12 +3882,7 @@ func LoadNS() {
 				}),
 				0,
 			)
-			tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(1448), kw_column, int(7), kw_end_DASH_line, int(1448), kw_end_DASH_column, int(21))
-			tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			return tmp5
+			return tmp3
 		})
 		var_clojure_DOT_core_constantly = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_constantly.SetMetaLazy(func() lang.IPersistentMap {
@@ -4305,7 +4294,6 @@ func LoadNS() {
 				tmp4 := lang.First(v3)
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(54), kw_column, int(8), kw_end_DASH_line, int(54), kw_end_DASH_column, int(86))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -4600,7 +4588,6 @@ func LoadNS() {
 				tmp5 := lang.Apply2(lang.HasType, v3, v4)
 				return tmp5
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(145), kw_column, int(12), kw_end_DASH_line, int(145), kw_end_DASH_column, int(85))).(lang.FnFunc2)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5077,7 +5064,6 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(173), kw_column, int(7), kw_end_DASH_line, int(173), kw_end_DASH_column, int(97))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5132,7 +5118,6 @@ func LoadNS() {
 				}
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(208), kw_column, int(7), kw_end_DASH_line, int(210), kw_end_DASH_column, int(21))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5222,12 +5207,7 @@ func LoadNS() {
 				tmp13 := lang.Apply2(v3, tmp12, int64(0))
 				return tmp13
 			})
-			tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5182), kw_column, int(3), kw_end_DASH_line, int(5183), kw_end_DASH_column, int(64))
-			tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			return tmp7
+			return tmp5
 		})
 		var_clojure_DOT_core_mk_DASH_bound_DASH_fn = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_mk_DASH_bound_DASH_fn.SetMetaLazy(func() lang.IPersistentMap {
@@ -5276,7 +5256,6 @@ func LoadNS() {
 				tmp4 := lang.Next(v3)
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(63), kw_column, int(7), kw_end_DASH_line, int(63), kw_end_DASH_column, int(77))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5301,7 +5280,6 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(111), kw_column, int(9), kw_end_DASH_line, int(111), kw_end_DASH_column, int(49))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -5354,7 +5332,6 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(125), kw_column, int(8), kw_end_DASH_line, int(125), kw_end_DASH_column, int(46))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6226,7 +6203,6 @@ func LoadNS() {
 				tmp4 := lang.Rest(v3)
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(72), kw_column, int(7), kw_end_DASH_line, int(72), kw_end_DASH_column, int(77))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6287,7 +6263,6 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(97), kw_column, int(9), kw_end_DASH_line, int(97), kw_end_DASH_column, int(49))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6308,7 +6283,6 @@ func LoadNS() {
 				tmp4 := lang.Seq(v3)
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(138), kw_column, int(6), kw_end_DASH_line, int(138), kw_end_DASH_column, int(126))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6332,7 +6306,6 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(152), kw_column, int(7), kw_end_DASH_line, int(152), kw_end_DASH_column, int(87))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -6849,17 +6822,12 @@ func LoadNS() {
 					}
 					return tmp7
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(556), kw_column, int(7), kw_end_DASH_line, int(556), kw_end_DASH_column, int(127))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp7 := reflect.TypeOf((*strings8.Builder)(nil)).Elem()
-				tmp8 := reflect.New(tmp7).Interface()
-				tmp9 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp10 := lang.Apply2(tmp9, v2, v3)
-				tmp11 := lang.Apply2(tmp6, tmp8, tmp10)
-				return tmp11
+				tmp5 := reflect.TypeOf((*strings8.Builder)(nil)).Elem()
+				tmp6 := reflect.New(tmp5).Interface()
+				tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
+				tmp8 := lang.Apply2(tmp7, v2, v3)
+				tmp9 := lang.Apply2(tmp4, tmp6, tmp8)
+				return tmp9
 			}),
 			1,
 		)
@@ -7018,7 +6986,6 @@ func LoadNS() {
 				tmp5 := lang.Apply2(tmp4, lang.Builtins["string"], v3)
 				return tmp5
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(166), kw_column, int(10), kw_end_DASH_line, int(166), kw_end_DASH_column, int(58))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -7286,19 +7253,9 @@ func LoadNS() {
 						nil,
 						0,
 					)
-					tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2910), kw_column, int(8), kw_end_DASH_line, int(2916), kw_end_DASH_column, int(33))
-					tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					return tmp7
+					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2909), kw_column, int(6), kw_end_DASH_line, int(2916), kw_end_DASH_column, int(34))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -7839,7 +7796,6 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(180), kw_column, int(10), kw_end_DASH_line, int(180), kw_end_DASH_column, int(106))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -7984,7 +7940,6 @@ func LoadNS() {
 				tmp6 := lang.Apply1(tmp5, v4)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(218), kw_column, int(12), kw_end_DASH_line, int(219), kw_end_DASH_column, int(32))).(lang.FnFunc2)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8224,7 +8179,6 @@ func LoadNS() {
 				}),
 				3,
 			)
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(191), kw_column, int(2), kw_end_DASH_line, int(200), kw_end_DASH_column, int(15))).(lang.ArityFn)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8463,7 +8417,6 @@ func LoadNS() {
 				tmp6 := lang.Apply2(tmp4, tmp5, v3)
 				return tmp6
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(159), kw_column, int(8), kw_end_DASH_line, int(159), kw_end_DASH_column, int(89))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -8567,12 +8520,7 @@ func LoadNS() {
 					nil,
 					0,
 				)
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6970), kw_column, int(6), kw_end_DASH_line, int(6973), kw_end_DASH_column, int(23))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp6
+				return tmp4
 			}),
 			nil,
 			nil,
@@ -8735,17 +8683,12 @@ func LoadNS() {
 						v7 = tmp6
 						_ = v7
 					}
-					tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(728), kw_column, int(16), kw_end_DASH_line, int(737), kw_end_DASH_column, int(56))
-					tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v9 any = tmp8
-					_ = v9
-					tmp10 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp11 := lang.Apply2(tmp10, v2, v3)
-					tmp12 := lang.Apply2(v9, tmp11, v4)
-					tmp5 = tmp12
+					var v7 any = tmp6
+					_ = v7
+					tmp8 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp9 := lang.Apply2(tmp8, v2, v3)
+					tmp10 := lang.Apply2(v7, tmp9, v4)
+					tmp5 = tmp10
 				} // end let
 				return tmp5
 			}),
@@ -8869,7 +8812,6 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(83), kw_column, int(7), kw_end_DASH_line, int(90), kw_end_DASH_column, int(67))).(lang.ArityFn)
 			v2 = tmp1
 			_ = v2
 		}
@@ -9955,21 +9897,11 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2931), kw_column, int(10), kw_end_DASH_line, int(2939), kw_end_DASH_column, int(39))
-						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp5 = tmp11
+						tmp5 = tmp9
 					} // end let
 					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2929), kw_column, int(6), kw_end_DASH_line, int(2939), kw_end_DASH_column, int(41))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -10067,20 +9999,15 @@ func LoadNS() {
 							} // end let
 							return tmp13
 						})
-						tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2947), kw_column, int(19), kw_end_DASH_line, int(2951), kw_end_DASH_column, int(28))
-						tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						var v13 any = tmp12
-						_ = v13
-						var tmp14 lang.FnFunc0
-						tmp14 = lang.FnFunc0(func() any {
-							tmp15 := lang.Apply2(v13, v2, v3)
-							return tmp15
+						var v11 any = tmp10
+						_ = v11
+						var tmp12 lang.FnFunc0
+						tmp12 = lang.FnFunc0(func() any {
+							tmp13 := lang.Apply2(v11, v2, v3)
+							return tmp13
 						})
-						tmp15 := lang.Apply1(lang.NewLazySeq, tmp14)
-						tmp9 = tmp15
+						tmp13 := lang.Apply1(lang.NewLazySeq, tmp12)
+						tmp9 = tmp13
 					} // end let
 					tmp4 = tmp9
 				}
@@ -10173,21 +10100,11 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2981), kw_column, int(10), kw_end_DASH_line, int(2990), kw_end_DASH_column, int(42))
-						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp5 = tmp11
+						tmp5 = tmp9
 					} // end let
 					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2979), kw_column, int(6), kw_end_DASH_line, int(2990), kw_end_DASH_column, int(44))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -10243,20 +10160,15 @@ func LoadNS() {
 						} // end let
 						return tmp8
 					})
-					tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2992), kw_column, int(17), kw_end_DASH_line, int(2996), kw_end_DASH_column, int(26))
-					tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v8 any = tmp7
-					_ = v8
-					var tmp9 lang.FnFunc0
-					tmp9 = lang.FnFunc0(func() any {
-						tmp10 := lang.Apply2(v8, v2, v3)
-						return tmp10
+					var v6 any = tmp5
+					_ = v6
+					var tmp7 lang.FnFunc0
+					tmp7 = lang.FnFunc0(func() any {
+						tmp8 := lang.Apply2(v6, v2, v3)
+						return tmp8
 					})
-					tmp10 := lang.Apply1(lang.NewLazySeq, tmp9)
-					tmp4 = tmp10
+					tmp8 := lang.Apply1(lang.NewLazySeq, tmp7)
+					tmp4 = tmp8
 				} // end let
 				return tmp4
 			}),
@@ -10510,7 +10422,6 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(104), kw_column, int(9), kw_end_DASH_line, int(104), kw_end_DASH_column, int(50))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -10564,19 +10475,9 @@ func LoadNS() {
 						nil,
 						0,
 					)
-					tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2815), kw_column, int(7), kw_end_DASH_line, int(2821), kw_end_DASH_column, int(22))
-					tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					return tmp7
+					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2814), kw_column, int(5), kw_end_DASH_line, int(2821), kw_end_DASH_column, int(23))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -11201,7 +11102,6 @@ func LoadNS() {
 				tmp7 := lang.Apply1(tmp4, tmp6)
 				return tmp7
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(118), kw_column, int(8), kw_end_DASH_line, int(118), kw_end_DASH_column, int(47))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -11429,19 +11329,9 @@ func LoadNS() {
 						nil,
 						0,
 					)
-					tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7740), kw_column, int(8), kw_end_DASH_line, int(7749), kw_end_DASH_column, int(34))
-					tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					return tmp8
+					return tmp6
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7739), kw_column, int(6), kw_end_DASH_line, int(7749), kw_end_DASH_column, int(35))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp6
+				return tmp4
 			}),
 			nil,
 			nil,
@@ -12235,7 +12125,6 @@ func LoadNS() {
 				}
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(268), kw_column, int(7), kw_end_DASH_line, int(271), kw_end_DASH_column, int(21))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -12656,21 +12545,11 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7390), kw_column, int(8), kw_end_DASH_line, int(7394), kw_end_DASH_column, int(48))
-						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp5 = tmp11
+						tmp5 = tmp9
 					} // end let
 					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7388), kw_column, int(4), kw_end_DASH_line, int(7394), kw_end_DASH_column, int(50))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -13990,12 +13869,7 @@ func LoadNS() {
 				} // end let
 				return tmp6
 			})
-			tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7710), kw_column, int(3), kw_end_DASH_line, int(7713), kw_end_DASH_column, int(12))
-			tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			return tmp5
+			return tmp3
 		})
 		var_clojure_DOT_core_preserving_DASH_reduced = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_preserving_DASH_reduced.SetMetaLazy(func() lang.IPersistentMap {
@@ -14581,13 +14455,8 @@ func LoadNS() {
 					tmp8 := lang.Numbers.Lt(tmp7, v2)
 					return tmp8
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7774), kw_column, int(14), kw_end_DASH_line, int(7774), kw_end_DASH_column, int(37))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp7 := lang.Apply1(tmp3, tmp6)
-				return tmp7
+				tmp5 := lang.Apply1(tmp3, tmp4)
+				return tmp5
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -14604,13 +14473,8 @@ func LoadNS() {
 					tmp9 := lang.Numbers.Lt(tmp8, v2)
 					return tmp9
 				})
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7776), kw_column, int(14), kw_end_DASH_line, int(7776), kw_end_DASH_column, int(37))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp8 := lang.Apply2(tmp4, tmp7, v3)
-				return tmp8
+				tmp6 := lang.Apply2(tmp4, tmp5, v3)
+				return tmp6
 			}),
 			nil,
 			nil,
@@ -14981,13 +14845,8 @@ func LoadNS() {
 					v9 = tmp8
 					_ = v9
 				}
-				tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4956), kw_column, int(6), kw_end_DASH_line, int(4958), kw_end_DASH_column, int(49))
-				tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp11 := lang.Apply0(tmp10)
-				tmp4 = tmp11
+				tmp9 := lang.Apply0(tmp8)
+				tmp4 = tmp9
 			} // end let
 			return tmp4
 		})
@@ -16033,12 +15892,7 @@ func LoadNS() {
 					v4 = tmp3
 					_ = v4
 				}
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7539), kw_column, int(6), kw_end_DASH_line, int(7545), kw_end_DASH_column, int(43))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -16244,13 +16098,8 @@ func LoadNS() {
 										} // end let
 										return tmp17
 									})
-									tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7553), kw_column, int(34), kw_end_DASH_line, int(7553), kw_end_DASH_column, int(52))
-									tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
-									if err != nil {
-										panic(err)
-									}
-									tmp18 := lang.Apply2(tmp14, tmp17, v9)
-									tmp13 = tmp18
+									tmp16 := lang.Apply2(tmp14, tmp15, v9)
+									tmp13 = tmp16
 								}
 								tmp10 = tmp13
 							} // end let
@@ -16261,12 +16110,7 @@ func LoadNS() {
 					v5 = tmp4
 					_ = v5
 				}
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7547), kw_column, int(6), kw_end_DASH_line, int(7553), kw_end_DASH_column, int(61))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp6
+				return tmp4
 			}),
 			lang.FnFunc3(func(p0, p1, p2 any) any {
 				v2 := p0
@@ -16572,13 +16416,8 @@ func LoadNS() {
 										} // end let
 										return tmp18
 									})
-									tmp17 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7561), kw_column, int(34), kw_end_DASH_line, int(7561), kw_end_DASH_column, int(59))
-									tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
-									if err != nil {
-										panic(err)
-									}
-									tmp19 := lang.Apply2(tmp15, tmp18, v10)
-									tmp14 = tmp19
+									tmp17 := lang.Apply2(tmp15, tmp16, v10)
+									tmp14 = tmp17
 								}
 								tmp11 = tmp14
 							} // end let
@@ -16589,12 +16428,7 @@ func LoadNS() {
 					v6 = tmp5
 					_ = v6
 				}
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7555), kw_column, int(6), kw_end_DASH_line, int(7561), kw_end_DASH_column, int(68))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp7
+				return tmp5
 			}),
 			nil,
 			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
@@ -16631,13 +16465,8 @@ func LoadNS() {
 									tmp16 := lang.Apply1(v15, v12)
 									return tmp16
 								})
-								tmp15 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7566), kw_column, int(21), kw_end_DASH_line, int(7566), kw_end_DASH_column, int(26))
-								tmp16, err := lang.WithMeta(tmp14, tmp15.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp17 := lang.Apply2(tmp13, tmp16, v9)
-								return tmp17
+								tmp15 := lang.Apply2(tmp13, tmp14, v9)
+								return tmp15
 							}),
 							lang.FnFunc2(func(p0, p1 any) any {
 								v12 := p0
@@ -16666,13 +16495,8 @@ func LoadNS() {
 									} // end let
 									return tmp17
 								})
-								tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7567), kw_column, int(23), kw_end_DASH_line, int(7567), kw_end_DASH_column, int(39))
-								tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp18 := lang.Apply2(tmp14, tmp17, v9)
-								return tmp18
+								tmp16 := lang.Apply2(tmp14, tmp15, v9)
+								return tmp16
 							}),
 							lang.FnFunc3(func(p0, p1, p2 any) any {
 								v12 := p0
@@ -16717,13 +16541,8 @@ func LoadNS() {
 									} // end let
 									return tmp18
 								})
-								tmp17 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7568), kw_column, int(25), kw_end_DASH_line, int(7568), kw_end_DASH_column, int(47))
-								tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp19 := lang.Apply2(tmp15, tmp18, v9)
-								return tmp19
+								tmp17 := lang.Apply2(tmp15, tmp16, v9)
+								return tmp17
 							}),
 							nil,
 							lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
@@ -16754,13 +16573,8 @@ func LoadNS() {
 											tmp24 := lang.Apply2(tmp23, v22, v15)
 											return tmp24
 										})
-										tmp22 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7570), kw_column, int(36), kw_end_DASH_line, int(7570), kw_end_DASH_column, int(49))
-										tmp23, err := lang.WithMeta(tmp21, tmp22.(lang.IPersistentMap))
-										if err != nil {
-											panic(err)
-										}
-										tmp24 := lang.Apply2(tmp20, tmp23, v9)
-										tmp19 = tmp24
+										tmp22 := lang.Apply2(tmp20, tmp21, v9)
+										tmp19 = tmp22
 									}
 									tmp16 = tmp19
 								} // end let
@@ -16771,12 +16585,7 @@ func LoadNS() {
 						v11 = tmp10
 						_ = v11
 					}
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7564), kw_column, int(8), kw_end_DASH_line, int(7570), kw_end_DASH_column, int(56))
-					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp6 = tmp12
+					tmp6 = tmp10
 				} // end let
 				return tmp6
 			}),
@@ -17120,21 +16929,11 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2884), kw_column, int(10), kw_end_DASH_line, int(2895), kw_end_DASH_column, int(28))
-						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp5 = tmp11
+						tmp5 = tmp9
 					} // end let
 					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2882), kw_column, int(6), kw_end_DASH_line, int(2895), kw_end_DASH_column, int(30))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -17321,21 +17120,11 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4352), kw_column, int(10), kw_end_DASH_line, int(4359), kw_end_DASH_column, int(28))
-						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp5 = tmp11
+						tmp5 = tmp9
 					} // end let
 					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4350), kw_column, int(6), kw_end_DASH_line, int(4359), kw_end_DASH_column, int(30))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -17419,13 +17208,8 @@ func LoadNS() {
 					}
 					return tmp7
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5557), kw_column, int(11), kw_end_DASH_line, int(5557), kw_end_DASH_column, int(78))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp7 := lang.Apply2(tmp3, tmp6, v2)
-				return tmp7
+				tmp5 := lang.Apply2(tmp3, tmp4, v2)
+				return tmp5
 			}),
 			0,
 		)
@@ -19014,39 +18798,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -19409,39 +19187,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -20280,39 +20052,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -20495,39 +20261,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -20708,39 +20468,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -20923,39 +20677,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -21138,39 +20886,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -22489,70 +22231,65 @@ func LoadNS() {
 						} // end let
 						return tmp35
 					})
-					tmp34 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(1966), kw_column, int(17), kw_end_DASH_line, int(1971), kw_end_DASH_column, int(34))
-					tmp35, err := lang.WithMeta(tmp33, tmp34.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v36 any = tmp35
-					_ = v36
-					tmp37 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp38 := checkDerefVar(var_clojure_DOT_core_concat)
+					var v34 any = tmp33
+					_ = v34
+					tmp35 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp36 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp37 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp38 := lang.Apply1(tmp37, sym_clojure_DOT_core_SLASH_let)
 					tmp39 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp40 := lang.Apply1(tmp39, sym_clojure_DOT_core_SLASH_let)
-					tmp41 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp42 := checkDerefVar(var_clojure_DOT_core_apply)
-					tmp43 := checkDerefVar(var_clojure_DOT_core_vector)
-					tmp44 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp45 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp46 := lang.Apply0(tmp45)
-					tmp47 := lang.Apply1(tmp44, tmp46)
-					tmp48 := lang.Apply2(tmp42, tmp43, tmp47)
-					tmp49 := lang.Apply1(tmp41, tmp48)
-					tmp50 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp51 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp52 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp40 := checkDerefVar(var_clojure_DOT_core_apply)
+					tmp41 := checkDerefVar(var_clojure_DOT_core_vector)
+					tmp42 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp43 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp44 := lang.Apply0(tmp43)
+					tmp45 := lang.Apply1(tmp42, tmp44)
+					tmp46 := lang.Apply2(tmp40, tmp41, tmp45)
+					tmp47 := lang.Apply1(tmp39, tmp46)
+					tmp48 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp49 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp50 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp51 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp52 := lang.Apply1(tmp51, sym_clojure_DOT_core_SLASH_push_DASH_thread_DASH_bindings)
 					tmp53 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp54 := lang.Apply1(tmp53, sym_clojure_DOT_core_SLASH_push_DASH_thread_DASH_bindings)
-					tmp55 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp56 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp57 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp58 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp59 := lang.Apply1(tmp58, sym_clojure_DOT_core_SLASH_hash_DASH_map)
-					tmp60 := lang.Apply1(v36, v4)
-					tmp61 := lang.Apply2(tmp57, tmp59, tmp60)
-					tmp62 := lang.Apply1(tmp56, tmp61)
-					tmp63 := lang.Apply1(tmp55, tmp62)
-					tmp64 := lang.Apply2(tmp52, tmp54, tmp63)
-					tmp65 := lang.Apply1(tmp51, tmp64)
-					tmp66 := lang.Apply1(tmp50, tmp65)
-					tmp67 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp68 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp69 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp54 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp55 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp56 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp57 := lang.Apply1(tmp56, sym_clojure_DOT_core_SLASH_hash_DASH_map)
+					tmp58 := lang.Apply1(v34, v4)
+					tmp59 := lang.Apply2(tmp55, tmp57, tmp58)
+					tmp60 := lang.Apply1(tmp54, tmp59)
+					tmp61 := lang.Apply1(tmp53, tmp60)
+					tmp62 := lang.Apply2(tmp50, tmp52, tmp61)
+					tmp63 := lang.Apply1(tmp49, tmp62)
+					tmp64 := lang.Apply1(tmp48, tmp63)
+					tmp65 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp66 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp67 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp68 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp69 := lang.Apply1(tmp68, sym_try)
 					tmp70 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp71 := lang.Apply1(tmp70, sym_try)
-					tmp72 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp73 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp74 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp71 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp72 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp73 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp74 := lang.Apply1(tmp73, sym_finally)
 					tmp75 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp76 := lang.Apply1(tmp75, sym_finally)
-					tmp77 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp78 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp79 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp80 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp81 := lang.Apply1(tmp80, sym_clojure_DOT_core_SLASH_pop_DASH_thread_DASH_bindings)
-					tmp82 := lang.Apply1(tmp79, tmp81)
-					tmp83 := lang.Apply1(tmp78, tmp82)
-					tmp84 := lang.Apply1(tmp77, tmp83)
-					tmp85 := lang.Apply2(tmp74, tmp76, tmp84)
-					tmp86 := lang.Apply1(tmp73, tmp85)
-					tmp87 := lang.Apply1(tmp72, tmp86)
-					tmp88 := lang.Apply3(tmp69, tmp71, v5, tmp87)
-					tmp89 := lang.Apply1(tmp68, tmp88)
-					tmp90 := lang.Apply1(tmp67, tmp89)
-					tmp91 := lang.Apply4(tmp38, tmp40, tmp49, tmp66, tmp90)
-					tmp92 := lang.Apply1(tmp37, tmp91)
-					tmp32 = tmp92
+					tmp76 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp77 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp78 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp79 := lang.Apply1(tmp78, sym_clojure_DOT_core_SLASH_pop_DASH_thread_DASH_bindings)
+					tmp80 := lang.Apply1(tmp77, tmp79)
+					tmp81 := lang.Apply1(tmp76, tmp80)
+					tmp82 := lang.Apply1(tmp75, tmp81)
+					tmp83 := lang.Apply2(tmp72, tmp74, tmp82)
+					tmp84 := lang.Apply1(tmp71, tmp83)
+					tmp85 := lang.Apply1(tmp70, tmp84)
+					tmp86 := lang.Apply3(tmp67, tmp69, v5, tmp85)
+					tmp87 := lang.Apply1(tmp66, tmp86)
+					tmp88 := lang.Apply1(tmp65, tmp87)
+					tmp89 := lang.Apply4(tmp36, tmp38, tmp47, tmp64, tmp88)
+					tmp90 := lang.Apply1(tmp35, tmp89)
+					tmp32 = tmp90
 				} // end let
 				return tmp32
 			}),
@@ -22632,12 +22369,7 @@ func LoadNS() {
 					}),
 					3,
 				)
-				tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2033), kw_column, int(5), kw_end_DASH_line, int(2048), kw_end_DASH_column, int(31))
-				tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp3 = tmp8
+				tmp3 = tmp6
 			} // end let
 			return tmp3
 		})
@@ -22811,39 +22543,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -23019,39 +22745,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -23271,39 +22991,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -23579,39 +23293,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -23848,13 +23556,8 @@ func LoadNS() {
 					}
 					return tmp7
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5549), kw_column, int(11), kw_end_DASH_line, int(5549), kw_end_DASH_column, int(69))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp7 := lang.Apply2(tmp3, tmp6, v2)
-				return tmp7
+				tmp5 := lang.Apply2(tmp3, tmp4, v2)
+				return tmp5
 			}),
 			0,
 		)
@@ -23981,7 +23684,6 @@ func LoadNS() {
 				} // end let
 				return tmp4
 			})
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(278), kw_column, int(10), kw_end_DASH_line, int(282), kw_end_DASH_column, int(27))).(lang.FnFunc1)
 			v2 = tmp1
 			_ = v2
 		}
@@ -24420,12 +24122,7 @@ func LoadNS() {
 					}),
 					3,
 				)
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2567), kw_column, int(6), kw_end_DASH_line, int(2572), kw_end_DASH_column, int(49))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp6
+				return tmp4
 			}),
 			nil,
 			nil,
@@ -24544,12 +24241,7 @@ func LoadNS() {
 				}),
 				2,
 			)
-			tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(1438), kw_column, int(3), kw_end_DASH_line, int(1442), kw_end_DASH_column, int(40))
-			tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			return tmp5
+			return tmp3
 		})
 		var_clojure_DOT_core_complement = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_complement.SetMetaLazy(func() lang.IPersistentMap {
@@ -25073,126 +24765,115 @@ func LoadNS() {
 						} // end let
 						return tmp21
 					})
-					tmp20 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(471), kw_column, int(38), kw_end_DASH_line, int(473), kw_end_DASH_column, int(87))
-					tmp21, err := lang.WithMeta(tmp19, tmp20.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v22 any = tmp21
-					_ = v22
+					var v20 any = tmp19
+					_ = v20
 					// let binding "add-args"
-					var tmp23 lang.FnFunc2
-					tmp23 = lang.FnFunc2(func(p0, p1 any) any {
-						v24 := p0
-						_ = v24
-						v25 := p1
-						_ = v25
+					var tmp21 lang.FnFunc2
+					tmp21 = lang.FnFunc2(func(p0, p1 any) any {
+						v22 := p0
+						_ = v22
+						v23 := p1
+						_ = v23
 					recur_loop_1662:
-						var tmp26 any
-						tmp27 := lang.Identical(v25, nil)
-						if lang.IsTruthy(tmp27) {
-							tmp26 = v24
+						var tmp24 any
+						tmp25 := lang.Identical(v23, nil)
+						if lang.IsTruthy(tmp25) {
+							tmp24 = v22
 						} else {
-							var tmp28 any
+							var tmp26 any
 							{ // let
 								// let binding "d"
-								tmp29 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp30 := lang.Apply1(tmp29, v25)
-								var v31 any = tmp30
-								_ = v31
-								var tmp32 any
-								tmp33 := checkDerefVar(var_clojure_DOT_core_map_QMARK_)
-								tmp34 := lang.Apply1(tmp33, v31)
-								if lang.IsTruthy(tmp34) {
-									tmp35 := checkDerefVar(var_clojure_DOT_core_conj)
-									tmp36 := lang.Apply2(tmp35, v24, v31)
-									tmp32 = tmp36
+								tmp27 := checkDerefVar(var_clojure_DOT_core_first)
+								tmp28 := lang.Apply1(tmp27, v23)
+								var v29 any = tmp28
+								_ = v29
+								var tmp30 any
+								tmp31 := checkDerefVar(var_clojure_DOT_core_map_QMARK_)
+								tmp32 := lang.Apply1(tmp31, v29)
+								if lang.IsTruthy(tmp32) {
+									tmp33 := checkDerefVar(var_clojure_DOT_core_conj)
+									tmp34 := lang.Apply2(tmp33, v22, v29)
+									tmp30 = tmp34
 								} else {
-									tmp38 := checkDerefVar(var_clojure_DOT_core_conj)
-									tmp39 := lang.Apply1(v22, v31)
-									tmp40 := lang.Apply2(tmp38, v24, tmp39)
-									var tmp37 any = tmp40
-									tmp42 := checkDerefVar(var_clojure_DOT_core_next)
-									tmp43 := lang.Apply1(tmp42, v25)
-									var tmp41 any = tmp43
-									v24 = tmp37
-									v25 = tmp41
+									tmp36 := checkDerefVar(var_clojure_DOT_core_conj)
+									tmp37 := lang.Apply1(v20, v29)
+									tmp38 := lang.Apply2(tmp36, v22, tmp37)
+									var tmp35 any = tmp38
+									tmp40 := checkDerefVar(var_clojure_DOT_core_next)
+									tmp41 := lang.Apply1(tmp40, v23)
+									var tmp39 any = tmp41
+									v22 = tmp35
+									v23 = tmp39
 									goto recur_loop_1662
 								}
-								tmp28 = tmp32
+								tmp26 = tmp30
 							} // end let
-							tmp26 = tmp28
+							tmp24 = tmp26
 						}
-						return tmp26
+						return tmp24
 					})
-					tmp24 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(474), kw_column, int(29), kw_end_DASH_line, int(480), kw_end_DASH_column, int(90))
-					tmp25, err := lang.WithMeta(tmp23, tmp24.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v26 any = tmp25
-					_ = v26
+					var v22 any = tmp21
+					_ = v22
 					// let binding "fdecl"
-					tmp27 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp28 := lang.NewVector()
-					tmp29 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(481), kw_column, int(41), kw_end_DASH_line, int(481), kw_end_DASH_column, int(42))
-					tmp30, err := lang.WithMeta(tmp28, tmp29.(lang.IPersistentMap))
+					tmp23 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp24 := lang.NewVector()
+					tmp25 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(481), kw_column, int(41), kw_end_DASH_line, int(481), kw_end_DASH_column, int(42))
+					tmp26, err := lang.WithMeta(tmp24, tmp25.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
 					}
-					tmp31 := lang.Apply2(v26, tmp30, v18)
-					tmp32 := lang.Apply1(tmp27, tmp31)
-					var v33 any = tmp32
-					_ = v33
+					tmp27 := lang.Apply2(v22, tmp26, v18)
+					tmp28 := lang.Apply1(tmp23, tmp27)
+					var v29 any = tmp28
+					_ = v29
 					// let binding "decl"
-					var tmp34 any
+					var tmp30 any
 					{ // let
 						// let binding "p"
-						var v35 any = v8
-						_ = v35
+						var v31 any = v8
+						_ = v31
 						// let binding "d"
-						var v36 any = v33
-						_ = v36
+						var v32 any = v29
+						_ = v32
 						for {
-							var tmp37 any
-							if lang.IsTruthy(v35) {
-								tmp39 := checkDerefVar(var_clojure_DOT_core_next)
-								tmp40 := lang.Apply1(tmp39, v35)
-								var tmp38 any = tmp40
-								tmp42 := checkDerefVar(var_clojure_DOT_core_cons)
-								tmp43 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp44 := lang.Apply1(tmp43, v35)
-								tmp45 := lang.Apply2(tmp42, tmp44, v36)
-								var tmp41 any = tmp45
-								v35 = tmp38
-								v36 = tmp41
+							var tmp33 any
+							if lang.IsTruthy(v31) {
+								tmp35 := checkDerefVar(var_clojure_DOT_core_next)
+								tmp36 := lang.Apply1(tmp35, v31)
+								var tmp34 any = tmp36
+								tmp38 := checkDerefVar(var_clojure_DOT_core_cons)
+								tmp39 := checkDerefVar(var_clojure_DOT_core_first)
+								tmp40 := lang.Apply1(tmp39, v31)
+								tmp41 := lang.Apply2(tmp38, tmp40, v32)
+								var tmp37 any = tmp41
+								v31 = tmp34
+								v32 = tmp37
 								continue
 							} else {
-								tmp37 = v36
+								tmp33 = v32
 							}
-							tmp34 = tmp37
+							tmp30 = tmp33
 							break
 						}
 					} // end let
-					var v35 any = tmp34
-					_ = v35
+					var v31 any = tmp30
+					_ = v31
+					tmp32 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp33 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp34 := lang.Apply2(tmp33, sym_clojure_DOT_core_SLASH_defn, v31)
+					tmp35 := checkDerefVar(var_clojure_DOT_core_list)
 					tmp36 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp37 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp38 := lang.Apply2(tmp37, sym_clojure_DOT_core_SLASH_defn, v35)
+					tmp37 := lang.Apply2(tmp36, sym_var, v4)
+					tmp38 := lang.Apply3(tmp35, sym__DOT_, tmp37, lang.NewList(sym_SetMacro))
 					tmp39 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp40 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp41 := lang.Apply2(tmp40, sym_var, v4)
-					tmp42 := lang.Apply3(tmp39, sym__DOT_, tmp41, lang.NewList(sym_SetMacro))
-					tmp43 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp44 := lang.Apply2(tmp43, sym_var, v4)
-					tmp45 := lang.Apply4(tmp36, sym_do, tmp38, tmp42, tmp44)
-					tmp6 = tmp45
+					tmp40 := lang.Apply2(tmp39, sym_var, v4)
+					tmp41 := lang.Apply4(tmp32, sym_do, tmp34, tmp38, tmp40)
+					tmp6 = tmp41
 				} // end let
 				return tmp6
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(453), kw_column, int(11), kw_end_DASH_line, int(489), kw_end_DASH_column, int(40))).(lang.ArityFn)
 		var_clojure_DOT_core_defmacro = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_defmacro.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewVector(sym_params_STAR_), sym_body), lang.NewVector(sym_name, sym_doc_DASH_string_QMARK_, sym_attr_DASH_map_QMARK_, lang.NewList(lang.NewVector(sym_params_STAR_), sym_body), sym__PLUS_, sym_attr_DASH_map_QMARK_)), kw_doc, "Like defn, but the resulting function name is declared as a\n  macro and will be used as a macro by the compiler when it is\n  called.", kw_file, "clojure/core.glj", kw_added, "1.0", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core), kw_end_DASH_column, int(9), kw_column, int(2), kw_line, int(447), kw_end_DASH_line, int(453))
@@ -25623,21 +25304,11 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5113), kw_column, int(8), kw_end_DASH_line, int(5120), kw_end_DASH_column, int(37))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp4 = tmp13
+						tmp4 = tmp11
 					} // end let
 					return tmp4
 				})
-				tmp3 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5111), kw_column, int(4), kw_end_DASH_line, int(5120), kw_end_DASH_column, int(39))
-				tmp4, err := lang.WithMeta(tmp2, tmp3.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp4
+				return tmp2
 			}),
 			lang.FnFunc1(func(p0 any) any {
 				v2 := p0
@@ -25721,13 +25392,8 @@ func LoadNS() {
 									} // end let
 									return tmp12
 								})
-								tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5124), kw_column, int(20), kw_end_DASH_line, int(5128), kw_end_DASH_column, int(66))
-								tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp12 := lang.Apply2(tmp11, v6, v7)
-								return tmp12
+								tmp10 := lang.Apply2(tmp9, v6, v7)
+								return tmp10
 							})
 							tmp9 := lang.Apply1(lang.NewLazySeq, tmp8)
 							return tmp9
@@ -25735,21 +25401,16 @@ func LoadNS() {
 						v5 = tmp4
 						_ = v5
 					}
-					tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5122), kw_column, int(15), kw_end_DASH_line, int(5129), kw_end_DASH_column, int(29))
-					tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
+					var v5 any = tmp4
+					_ = v5
+					tmp6 := lang.NewSet()
+					tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5130), kw_column, int(17), kw_end_DASH_line, int(5130), kw_end_DASH_column, int(19))
+					tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
 					}
-					var v7 any = tmp6
-					_ = v7
-					tmp8 := lang.NewSet()
-					tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5130), kw_column, int(17), kw_end_DASH_line, int(5130), kw_end_DASH_column, int(19))
-					tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp11 := lang.Apply2(v7, v2, tmp10)
-					tmp3 = tmp11
+					tmp9 := lang.Apply2(v5, v2, tmp8)
+					tmp3 = tmp9
 				} // end let
 				return tmp3
 			}),
@@ -26413,19 +26074,14 @@ func LoadNS() {
 						v34 = tmp33
 						_ = v34
 					}
-					tmp34 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3240), kw_column, int(14), kw_end_DASH_line, int(3286), kw_end_DASH_column, int(72))
-					tmp35, err := lang.WithMeta(tmp33, tmp34.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v36 any = tmp35
-					_ = v36
-					tmp37 := checkDerefVar(var_clojure_DOT_core_nth)
-					tmp38 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp39 := lang.Apply1(tmp38, v4)
-					tmp40 := lang.Apply2(v36, nil, tmp39)
-					tmp41 := lang.Apply2(tmp37, tmp40, int64(1))
-					tmp32 = tmp41
+					var v34 any = tmp33
+					_ = v34
+					tmp35 := checkDerefVar(var_clojure_DOT_core_nth)
+					tmp36 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp37 := lang.Apply1(tmp36, v4)
+					tmp38 := lang.Apply2(v34, nil, tmp37)
+					tmp39 := lang.Apply2(tmp35, tmp38, int64(1))
+					tmp32 = tmp39
 				} // end let
 				return tmp32
 			}),
@@ -26653,22 +26309,17 @@ func LoadNS() {
 							tmp18 := lang.Apply2(tmp15, v3, tmp17)
 							return tmp18
 						})
-						tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4858), kw_column, int(25), kw_end_DASH_line, int(4858), kw_end_DASH_column, int(77))
-						tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp16 := lang.Apply2(tmp12, tmp15, v7)
-						tmp17 := lang.Apply2(tmp11, nil, tmp16)
-						tmp10 = tmp17
+						tmp14 := lang.Apply2(tmp12, tmp13, v7)
+						tmp15 := lang.Apply2(tmp11, nil, tmp14)
+						tmp10 = tmp15
 					} else {
 					}
-					tmp18, _ := lang.FieldOrMethod(v9, "setStackTrace")
-					if reflect.TypeOf(tmp18).Kind() != reflect.Func {
+					tmp16, _ := lang.FieldOrMethod(v9, "setStackTrace")
+					if reflect.TypeOf(tmp16).Kind() != reflect.Func {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("setStackTrace is not a function")))
 					}
-					tmp19 := lang.Apply1(tmp18, tmp10)
-					_ = tmp19
+					tmp17 := lang.Apply1(tmp16, tmp10)
+					_ = tmp17
 					tmp8 = v9
 				} // end let
 				tmp4 = tmp8
@@ -26799,12 +26450,7 @@ func LoadNS() {
 					v4 = tmp3
 					_ = v4
 				}
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7499), kw_column, int(6), kw_end_DASH_line, int(7505), kw_end_DASH_column, int(56))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -27011,13 +26657,8 @@ func LoadNS() {
 										} // end let
 										return tmp17
 									})
-									tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7513), kw_column, int(46), kw_end_DASH_line, int(7513), kw_end_DASH_column, int(65))
-									tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
-									if err != nil {
-										panic(err)
-									}
-									tmp18 := lang.Apply2(tmp14, tmp17, v9)
-									tmp13 = tmp18
+									tmp16 := lang.Apply2(tmp14, tmp15, v9)
+									tmp13 = tmp16
 								} else {
 									tmp13 = v12
 								}
@@ -27031,12 +26672,7 @@ func LoadNS() {
 					v5 = tmp4
 					_ = v5
 				}
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7507), kw_column, int(6), kw_end_DASH_line, int(7513), kw_end_DASH_column, int(75))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp6
+				return tmp4
 			}),
 			lang.FnFunc3(func(p0, p1, p2 any) any {
 				v2 := p0
@@ -27343,13 +26979,8 @@ func LoadNS() {
 										} // end let
 										return tmp18
 									})
-									tmp17 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7521), kw_column, int(46), kw_end_DASH_line, int(7521), kw_end_DASH_column, int(72))
-									tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
-									if err != nil {
-										panic(err)
-									}
-									tmp19 := lang.Apply2(tmp15, tmp18, v10)
-									tmp14 = tmp19
+									tmp17 := lang.Apply2(tmp15, tmp16, v10)
+									tmp14 = tmp17
 								} else {
 									tmp14 = v13
 								}
@@ -27363,12 +26994,7 @@ func LoadNS() {
 					v6 = tmp5
 					_ = v6
 				}
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7515), kw_column, int(6), kw_end_DASH_line, int(7521), kw_end_DASH_column, int(82))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp7
+				return tmp5
 			}),
 			nil,
 			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
@@ -27405,13 +27031,8 @@ func LoadNS() {
 									tmp16 := lang.Apply1(v15, v12)
 									return tmp16
 								})
-								tmp15 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7526), kw_column, int(23), kw_end_DASH_line, int(7526), kw_end_DASH_column, int(28))
-								tmp16, err := lang.WithMeta(tmp14, tmp15.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp17 := lang.Apply2(tmp13, tmp16, v9)
-								return tmp17
+								tmp15 := lang.Apply2(tmp13, tmp14, v9)
+								return tmp15
 							}),
 							lang.FnFunc2(func(p0, p1 any) any {
 								v12 := p0
@@ -27440,13 +27061,8 @@ func LoadNS() {
 									} // end let
 									return tmp17
 								})
-								tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7527), kw_column, int(25), kw_end_DASH_line, int(7527), kw_end_DASH_column, int(42))
-								tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp18 := lang.Apply2(tmp14, tmp17, v9)
-								return tmp18
+								tmp16 := lang.Apply2(tmp14, tmp15, v9)
+								return tmp16
 							}),
 							lang.FnFunc3(func(p0, p1, p2 any) any {
 								v12 := p0
@@ -27491,13 +27107,8 @@ func LoadNS() {
 									} // end let
 									return tmp18
 								})
-								tmp17 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7528), kw_column, int(27), kw_end_DASH_line, int(7528), kw_end_DASH_column, int(50))
-								tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp19 := lang.Apply2(tmp15, tmp18, v9)
-								return tmp19
+								tmp17 := lang.Apply2(tmp15, tmp16, v9)
+								return tmp17
 							}),
 							nil,
 							lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
@@ -27526,13 +27137,8 @@ func LoadNS() {
 											tmp24 := lang.Apply2(tmp23, v22, v15)
 											return tmp24
 										})
-										tmp22 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7530), kw_column, int(48), kw_end_DASH_line, int(7530), kw_end_DASH_column, int(63))
-										tmp23, err := lang.WithMeta(tmp21, tmp22.(lang.IPersistentMap))
-										if err != nil {
-											panic(err)
-										}
-										tmp24 := lang.Apply2(tmp20, tmp23, v9)
-										tmp19 = tmp24
+										tmp22 := lang.Apply2(tmp20, tmp21, v9)
+										tmp19 = tmp22
 									} else {
 										tmp19 = v18
 									}
@@ -27546,12 +27152,7 @@ func LoadNS() {
 						v11 = tmp10
 						_ = v11
 					}
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7524), kw_column, int(8), kw_end_DASH_line, int(7530), kw_end_DASH_column, int(71))
-					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp6 = tmp12
+					tmp6 = tmp10
 				} // end let
 				return tmp6
 			}),
@@ -27645,12 +27246,7 @@ func LoadNS() {
 					}),
 					3,
 				)
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6631), kw_column, int(4), kw_end_DASH_line, int(6635), kw_end_DASH_column, int(55))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp6
+				return tmp4
 			}),
 			lang.FnFunc3(func(p0, p1, p2 any) any {
 				v2 := p0
@@ -27739,12 +27335,7 @@ func LoadNS() {
 					}),
 					3,
 				)
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6637), kw_column, int(4), kw_end_DASH_line, int(6640), kw_end_DASH_column, int(71))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp7
+				return tmp5
 			}),
 			lang.FnFunc4(func(p0, p1, p2, p3 any) any {
 				v2 := p0
@@ -27849,12 +27440,7 @@ func LoadNS() {
 					}),
 					3,
 				)
-				tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6642), kw_column, int(4), kw_end_DASH_line, int(6645), kw_end_DASH_column, int(87))
-				tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp8
+				return tmp6
 			}),
 			nil,
 			0,
@@ -28572,12 +28158,7 @@ func LoadNS() {
 					}),
 					3,
 				)
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2585), kw_column, int(6), kw_end_DASH_line, int(2590), kw_end_DASH_column, int(47))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -28666,12 +28247,7 @@ func LoadNS() {
 					}),
 					3,
 				)
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2592), kw_column, int(6), kw_end_DASH_line, int(2597), kw_end_DASH_column, int(68))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp6
+				return tmp4
 			}),
 			lang.FnFunc3(func(p0, p1, p2 any) any {
 				v2 := p0
@@ -28768,12 +28344,7 @@ func LoadNS() {
 					}),
 					3,
 				)
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2599), kw_column, int(6), kw_end_DASH_line, int(2604), kw_end_DASH_column, int(89))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp7
+				return tmp5
 			}),
 			nil,
 			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
@@ -28807,19 +28378,14 @@ func LoadNS() {
 								tmp17 := lang.Apply2(tmp15, v13, tmp16)
 								return tmp17
 							})
-							tmp13 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2608), kw_column, int(23), kw_end_DASH_line, int(2608), kw_end_DASH_column, int(37))
-							tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
+							tmp13 := lang.NewVector()
+							tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2608), kw_column, int(39), kw_end_DASH_line, int(2608), kw_end_DASH_column, int(40))
+							tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp15 := lang.NewVector()
-							tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2608), kw_column, int(39), kw_end_DASH_line, int(2608), kw_end_DASH_column, int(40))
-							tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp18 := lang.Apply3(tmp11, tmp14, tmp17, v9)
-							return tmp18
+							tmp16 := lang.Apply3(tmp11, tmp12, tmp15, v9)
+							return tmp16
 						}),
 						lang.FnFunc1(func(p0 any) any {
 							v11 := p0
@@ -28836,19 +28402,14 @@ func LoadNS() {
 								tmp18 := lang.Apply2(tmp16, v14, tmp17)
 								return tmp18
 							})
-							tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2609), kw_column, int(24), kw_end_DASH_line, int(2609), kw_end_DASH_column, int(40))
-							tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
+							tmp14 := lang.NewVector()
+							tmp15 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2609), kw_column, int(42), kw_end_DASH_line, int(2609), kw_end_DASH_column, int(43))
+							tmp16, err := lang.WithMeta(tmp14, tmp15.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp16 := lang.NewVector()
-							tmp17 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2609), kw_column, int(42), kw_end_DASH_line, int(2609), kw_end_DASH_column, int(43))
-							tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp19 := lang.Apply3(tmp12, tmp15, tmp18, v9)
-							return tmp19
+							tmp17 := lang.Apply3(tmp12, tmp13, tmp16, v9)
+							return tmp17
 						}),
 						lang.FnFunc2(func(p0, p1 any) any {
 							v11 := p0
@@ -28867,19 +28428,14 @@ func LoadNS() {
 								tmp19 := lang.Apply2(tmp17, v15, tmp18)
 								return tmp19
 							})
-							tmp15 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2610), kw_column, int(26), kw_end_DASH_line, int(2610), kw_end_DASH_column, int(44))
-							tmp16, err := lang.WithMeta(tmp14, tmp15.(lang.IPersistentMap))
+							tmp15 := lang.NewVector()
+							tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2610), kw_column, int(46), kw_end_DASH_line, int(2610), kw_end_DASH_column, int(47))
+							tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp17 := lang.NewVector()
-							tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2610), kw_column, int(46), kw_end_DASH_line, int(2610), kw_end_DASH_column, int(47))
-							tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp20 := lang.Apply3(tmp13, tmp16, tmp19, v9)
-							return tmp20
+							tmp18 := lang.Apply3(tmp13, tmp14, tmp17, v9)
+							return tmp18
 						}),
 						lang.FnFunc3(func(p0, p1, p2 any) any {
 							v11 := p0
@@ -28900,19 +28456,14 @@ func LoadNS() {
 								tmp20 := lang.Apply2(tmp18, v16, tmp19)
 								return tmp20
 							})
-							tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2611), kw_column, int(28), kw_end_DASH_line, int(2611), kw_end_DASH_column, int(48))
-							tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
+							tmp16 := lang.NewVector()
+							tmp17 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2611), kw_column, int(50), kw_end_DASH_line, int(2611), kw_end_DASH_column, int(51))
+							tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp18 := lang.NewVector()
-							tmp19 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2611), kw_column, int(50), kw_end_DASH_line, int(2611), kw_end_DASH_column, int(51))
-							tmp20, err := lang.WithMeta(tmp18, tmp19.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp21 := lang.Apply3(tmp14, tmp17, tmp20, v9)
-							return tmp21
+							tmp19 := lang.Apply3(tmp14, tmp15, tmp18, v9)
+							return tmp19
 						}),
 						nil,
 						lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
@@ -28937,28 +28488,18 @@ func LoadNS() {
 								tmp22 := lang.Apply2(tmp19, v17, tmp21)
 								return tmp22
 							})
-							tmp17 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2612), kw_column, int(35), kw_end_DASH_line, int(2612), kw_end_DASH_column, int(66))
-							tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
+							tmp17 := lang.NewVector()
+							tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2612), kw_column, int(68), kw_end_DASH_line, int(2612), kw_end_DASH_column, int(69))
+							tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp19 := lang.NewVector()
-							tmp20 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2612), kw_column, int(68), kw_end_DASH_line, int(2612), kw_end_DASH_column, int(69))
-							tmp21, err := lang.WithMeta(tmp19, tmp20.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp22 := lang.Apply3(tmp15, tmp18, tmp21, v9)
-							return tmp22
+							tmp20 := lang.Apply3(tmp15, tmp16, tmp19, v9)
+							return tmp20
 						}),
 						3,
 					)
-					tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2607), kw_column, int(8), kw_end_DASH_line, int(2612), kw_end_DASH_column, int(75))
-					tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp6 = tmp12
+					tmp6 = tmp10
 				} // end let
 				return tmp6
 			}),
@@ -29022,19 +28563,9 @@ func LoadNS() {
 						nil,
 						0,
 					)
-					tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7417), kw_column, int(6), kw_end_DASH_line, int(7424), kw_end_DASH_column, int(31))
-					tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					return tmp7
+					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7416), kw_column, int(4), kw_end_DASH_line, int(7424), kw_end_DASH_column, int(32))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -29272,21 +28803,11 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7452), kw_column, int(8), kw_end_DASH_line, int(7460), kw_end_DASH_column, int(33))
-						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp5 = tmp11
+						tmp5 = tmp9
 					} // end let
 					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7450), kw_column, int(4), kw_end_DASH_line, int(7460), kw_end_DASH_column, int(35))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -29665,19 +29186,9 @@ func LoadNS() {
 						}),
 						2,
 					)
-					tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2738), kw_column, int(7), kw_end_DASH_line, int(2744), kw_end_DASH_column, int(47))
-					tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					return tmp7
+					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2737), kw_column, int(5), kw_end_DASH_line, int(2744), kw_end_DASH_column, int(48))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -29993,32 +29504,22 @@ func LoadNS() {
 						v9 = tmp8
 						_ = v9
 					}
-					tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2769), kw_column, int(15), kw_end_DASH_line, int(2773), kw_end_DASH_column, int(68))
-					tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v11 any = tmp10
-					_ = v11
-					tmp12 := checkDerefVar(var_clojure_DOT_core_map)
-					var tmp13 lang.FnFunc1
-					tmp13 = lang.FnFunc1(func(p0 any) any {
-						v14 := p0
-						_ = v14
-						tmp15 := checkDerefVar(var_clojure_DOT_core_apply)
-						tmp16 := lang.Apply2(tmp15, v2, v14)
-						return tmp16
+					var v9 any = tmp8
+					_ = v9
+					tmp10 := checkDerefVar(var_clojure_DOT_core_map)
+					var tmp11 lang.FnFunc1
+					tmp11 = lang.FnFunc1(func(p0 any) any {
+						v12 := p0
+						_ = v12
+						tmp13 := checkDerefVar(var_clojure_DOT_core_apply)
+						tmp14 := lang.Apply2(tmp13, v2, v12)
+						return tmp14
 					})
-					tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2774), kw_column, int(11), kw_end_DASH_line, int(2774), kw_end_DASH_column, int(22))
-					tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp16 := checkDerefVar(var_clojure_DOT_core_conj)
-					tmp17 := lang.Apply4(tmp16, v6, v5, v4, v3)
-					tmp18 := lang.Apply1(v11, tmp17)
-					tmp19 := lang.Apply2(tmp12, tmp15, tmp18)
-					tmp7 = tmp19
+					tmp12 := checkDerefVar(var_clojure_DOT_core_conj)
+					tmp13 := lang.Apply4(tmp12, v6, v5, v4, v3)
+					tmp14 := lang.Apply1(v9, tmp13)
+					tmp15 := lang.Apply2(tmp10, tmp11, tmp14)
+					tmp7 = tmp15
 				} // end let
 				return tmp7
 			}),
@@ -30198,39 +29699,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -30518,13 +30013,8 @@ func LoadNS() {
 						tmp13 := lang.Apply2(tmp11, tmp12, v10)
 						return tmp13
 					})
-					tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3070), kw_column, int(14), kw_end_DASH_line, int(3070), kw_end_DASH_column, int(34))
-					tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp11 := lang.Apply2(tmp7, tmp10, v2)
-					tmp3 = tmp11
+					tmp9 := lang.Apply2(tmp7, tmp8, v2)
+					tmp3 = tmp9
 				} else {
 				}
 				return tmp3
@@ -30599,55 +30089,45 @@ func LoadNS() {
 							} // end let
 							return tmp12
 						})
-						tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3081), kw_column, int(23), kw_end_DASH_line, int(3085), kw_end_DASH_column, int(23))
-						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						var v12 any = tmp11
-						_ = v12
+						var v10 any = tmp9
+						_ = v10
 						// let binding "merge2"
-						var tmp13 lang.FnFunc2
-						tmp13 = lang.FnFunc2(func(p0, p1 any) any {
-							v14 := p0
-							_ = v14
-							v15 := p1
-							_ = v15
-							tmp16 := checkDerefVar(var_clojure_DOT_core_reduce1)
-							var tmp17 any
+						var tmp11 lang.FnFunc2
+						tmp11 = lang.FnFunc2(func(p0, p1 any) any {
+							v12 := p0
+							_ = v12
+							v13 := p1
+							_ = v13
+							tmp14 := checkDerefVar(var_clojure_DOT_core_reduce1)
+							var tmp15 any
 							{ // let
 								// let binding "or__0__auto__"
-								var v18 any = v14
-								_ = v18
-								var tmp19 any
-								if lang.IsTruthy(v18) {
-									tmp19 = v18
+								var v16 any = v12
+								_ = v16
+								var tmp17 any
+								if lang.IsTruthy(v16) {
+									tmp17 = v16
 								} else {
-									tmp20 := lang.NewMap()
-									tmp21 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3087), kw_column, int(34), kw_end_DASH_line, int(3087), kw_end_DASH_column, int(35))
-									tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
+									tmp18 := lang.NewMap()
+									tmp19 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3087), kw_column, int(34), kw_end_DASH_line, int(3087), kw_end_DASH_column, int(35))
+									tmp20, err := lang.WithMeta(tmp18, tmp19.(lang.IPersistentMap))
 									if err != nil {
 										panic(err)
 									}
-									tmp19 = tmp22
+									tmp17 = tmp20
 								}
-								tmp17 = tmp19
+								tmp15 = tmp17
 							} // end let
-							tmp18 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp19 := lang.Apply1(tmp18, v15)
-							tmp20 := lang.Apply3(tmp16, v12, tmp17, tmp19)
-							return tmp20
+							tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp17 := lang.Apply1(tmp16, v13)
+							tmp18 := lang.Apply3(tmp14, v10, tmp15, tmp17)
+							return tmp18
 						})
-						tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3086), kw_column, int(18), kw_end_DASH_line, int(3087), kw_end_DASH_column, int(47))
-						tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						var v16 any = tmp15
-						_ = v16
-						tmp17 := checkDerefVar(var_clojure_DOT_core_reduce1)
-						tmp18 := lang.Apply2(tmp17, v16, v3)
-						tmp8 = tmp18
+						var v12 any = tmp11
+						_ = v12
+						tmp13 := checkDerefVar(var_clojure_DOT_core_reduce1)
+						tmp14 := lang.Apply2(tmp13, v12, v3)
+						tmp8 = tmp14
 					} // end let
 					tmp4 = tmp8
 				} else {
@@ -30830,39 +30310,33 @@ func LoadNS() {
 							tmp33 := lang.Apply1(tmp14, tmp32)
 							return tmp33
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp14 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp15 := lang.Apply1(tmp14, sym__DOT_)
 						tmp16 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp17 := lang.Apply1(tmp16, sym__DOT_)
+						tmp17 := lang.Apply1(tmp16, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 						tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp22 := lang.Apply1(tmp21, v9)
 						tmp23 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp24 := lang.Apply1(tmp23, v9)
+						tmp24 := lang.Apply1(tmp23, v3)
 						tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp26 := lang.Apply1(tmp25, v3)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp28 := lang.Apply1(tmp27, v4)
-						tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
-						tmp30 := lang.Apply1(tmp21, tmp29)
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
-						tmp33 := lang.Apply1(tmp14, tmp32)
-						tmp34 := lang.Apply3(tmp10, tmp13, tmp33, v5)
-						tmp6 = tmp34
+						tmp26 := lang.Apply1(tmp25, v4)
+						tmp27 := lang.Apply3(tmp20, tmp22, tmp24, tmp26)
+						tmp28 := lang.Apply1(tmp19, tmp27)
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						tmp30 := lang.Apply3(tmp13, tmp15, tmp17, tmp29)
+						tmp31 := lang.Apply1(tmp12, tmp30)
+						tmp32 := lang.Apply3(tmp10, tmp11, tmp31, v5)
+						tmp6 = tmp32
 					} // end let
 					return tmp6
 				}),
 				2,
 			)
-			tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))).(lang.ArityFn)
 			var tmp3 lang.FnFunc1
 			tmp3 = lang.FnFunc1(func(p0 any) any {
 				v4 := p0
@@ -31224,44 +30698,34 @@ func LoadNS() {
 								tmp35 := lang.Apply1(tmp16, tmp34)
 								return tmp35
 							})
-							tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(961), kw_column, int(14), kw_end_DASH_line, int(961), kw_end_DASH_column, int(88))
-							tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp17 := checkDerefVar(var_clojure_DOT_core_concat)
+							tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+							tmp16 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp17 := lang.Apply1(tmp16, sym__DOT_)
 							tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp19 := lang.Apply1(tmp18, sym__DOT_)
+							tmp19 := lang.Apply1(tmp18, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
 							tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp21 := lang.Apply1(tmp20, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Numbers)
-							tmp22 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp23 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp24 := checkDerefVar(var_clojure_DOT_core_concat)
+							tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+							tmp23 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp24 := lang.Apply1(tmp23, v11)
 							tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp26 := lang.Apply1(tmp25, v11)
+							tmp26 := lang.Apply1(tmp25, v5)
 							tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp28 := lang.Apply1(tmp27, v5)
-							tmp29 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp30 := lang.Apply1(tmp29, v6)
-							tmp31 := lang.Apply3(tmp24, tmp26, tmp28, tmp30)
-							tmp32 := lang.Apply1(tmp23, tmp31)
-							tmp33 := lang.Apply1(tmp22, tmp32)
-							tmp34 := lang.Apply3(tmp17, tmp19, tmp21, tmp33)
-							tmp35 := lang.Apply1(tmp16, tmp34)
-							tmp36 := lang.Apply3(tmp12, tmp15, tmp35, v7)
-							tmp8 = tmp36
+							tmp28 := lang.Apply1(tmp27, v6)
+							tmp29 := lang.Apply3(tmp22, tmp24, tmp26, tmp28)
+							tmp30 := lang.Apply1(tmp21, tmp29)
+							tmp31 := lang.Apply1(tmp20, tmp30)
+							tmp32 := lang.Apply3(tmp15, tmp17, tmp19, tmp31)
+							tmp33 := lang.Apply1(tmp14, tmp32)
+							tmp34 := lang.Apply3(tmp12, tmp13, tmp33, v7)
+							tmp8 = tmp34
 						} // end let
 						return tmp8
 					}),
 					2,
 				)
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(953), kw_column, int(6), kw_end_DASH_line, int(962), kw_end_DASH_column, int(86))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp6
+				return tmp4
 			}),
 			nil,
 			nil,
@@ -31327,7 +30791,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2567), kw_column, int(6), kw_end_DASH_line, int(2572), kw_end_DASH_column, int(49))).(lang.ArityFn)
 		var_clojure_DOT_core_not_DASH_any_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_not_DASH_any_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -31388,7 +30851,6 @@ func LoadNS() {
 			}),
 			3,
 		)
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2567), kw_column, int(6), kw_end_DASH_line, int(2572), kw_end_DASH_column, int(49))).(lang.ArityFn)
 		var_clojure_DOT_core_not_DASH_every_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_not_DASH_every_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf(false)
@@ -31492,15 +30954,10 @@ func LoadNS() {
 					} // end let
 					return tmp11
 				})
-				tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4269), kw_column, int(21), kw_end_DASH_line, int(4270), kw_end_DASH_column, int(56))
-				tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp12 := checkDerefVar(var_clojure_DOT_core_ns_DASH_map)
-				tmp13 := lang.Apply1(tmp12, v6)
-				tmp14 := lang.Apply3(tmp7, tmp8, tmp11, tmp13)
-				tmp3 = tmp14
+				tmp10 := checkDerefVar(var_clojure_DOT_core_ns_DASH_map)
+				tmp11 := lang.Apply1(tmp10, v6)
+				tmp12 := lang.Apply3(tmp7, tmp8, tmp9, tmp11)
+				tmp3 = tmp12
 			} // end let
 			return tmp3
 		})
@@ -31584,15 +31041,10 @@ func LoadNS() {
 					} // end let
 					return tmp11
 				})
-				tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4251), kw_column, int(21), kw_end_DASH_line, int(4253), kw_end_DASH_column, int(48))
-				tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp12 := checkDerefVar(var_clojure_DOT_core_ns_DASH_map)
-				tmp13 := lang.Apply1(tmp12, v6)
-				tmp14 := lang.Apply3(tmp7, tmp8, tmp11, tmp13)
-				tmp3 = tmp14
+				tmp10 := checkDerefVar(var_clojure_DOT_core_ns_DASH_map)
+				tmp11 := lang.Apply1(tmp10, v6)
+				tmp12 := lang.Apply3(tmp7, tmp8, tmp9, tmp11)
+				tmp3 = tmp12
 			} // end let
 			return tmp3
 		})
@@ -31652,15 +31104,10 @@ func LoadNS() {
 					} // end let
 					return tmp11
 				})
-				tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4316), kw_column, int(21), kw_end_DASH_line, int(4317), kw_end_DASH_column, int(59))
-				tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp12 := checkDerefVar(var_clojure_DOT_core_ns_DASH_map)
-				tmp13 := lang.Apply1(tmp12, v6)
-				tmp14 := lang.Apply3(tmp7, tmp8, tmp11, tmp13)
-				tmp3 = tmp14
+				tmp10 := checkDerefVar(var_clojure_DOT_core_ns_DASH_map)
+				tmp11 := lang.Apply1(tmp10, v6)
+				tmp12 := lang.Apply3(tmp7, tmp8, tmp9, tmp11)
+				tmp3 = tmp12
 			} // end let
 			return tmp3
 		})
@@ -32002,12 +31449,7 @@ func LoadNS() {
 					}),
 					3,
 				)
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2622), kw_column, int(4), kw_end_DASH_line, int(2627), kw_end_DASH_column, int(48))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp6
+				return tmp4
 			}),
 			lang.FnFunc3(func(p0, p1, p2 any) any {
 				v2 := p0
@@ -32062,12 +31504,7 @@ func LoadNS() {
 					}),
 					3,
 				)
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2629), kw_column, int(4), kw_end_DASH_line, int(2634), kw_end_DASH_column, int(53))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp7
+				return tmp5
 			}),
 			lang.FnFunc4(func(p0, p1, p2, p3 any) any {
 				v2 := p0
@@ -32124,12 +31561,7 @@ func LoadNS() {
 					}),
 					3,
 				)
-				tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2636), kw_column, int(4), kw_end_DASH_line, int(2641), kw_end_DASH_column, int(58))
-				tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp8
+				return tmp6
 			}),
 			lang.NewVariadicFn(4, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
@@ -32160,12 +31592,7 @@ func LoadNS() {
 					}),
 					0,
 				)
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2643), kw_column, int(4), kw_end_DASH_line, int(2643), kw_end_DASH_column, int(60))
-				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp9
+				return tmp7
 			}),
 			4,
 		)
@@ -32491,21 +31918,11 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7301), kw_column, int(8), kw_end_DASH_line, int(7317), kw_end_DASH_column, int(23))
-						tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp5 = tmp12
+						tmp5 = tmp10
 					} // end let
 					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7299), kw_column, int(4), kw_end_DASH_line, int(7317), kw_end_DASH_column, int(25))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -32782,21 +32199,11 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp13 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7222), kw_column, int(7), kw_end_DASH_line, int(7246), kw_end_DASH_column, int(28))
-						tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp5 = tmp14
+						tmp5 = tmp12
 					} // end let
 					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7219), kw_column, int(3), kw_end_DASH_line, int(7246), kw_end_DASH_column, int(30))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -32842,31 +32249,26 @@ func LoadNS() {
 										tmp24 := lang.Apply2(tmp22, v17, tmp23)
 										return tmp24
 									})
-									tmp21 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7252), kw_column, int(41), kw_end_DASH_line, int(7252), kw_end_DASH_column, int(53))
-									tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
-									if err != nil {
-										panic(err)
-									}
-									tmp23 := checkDerefVar(var_clojure_DOT_core_next)
-									tmp24 := lang.Apply1(tmp23, v11)
-									tmp25 := lang.Apply2(tmp19, tmp22, tmp24)
-									tmp26 := lang.Apply2(tmp18, v15, tmp25)
-									var v27 any = tmp26
-									_ = v27
-									tmp28 := checkDerefVar(var_clojure_DOT_core_cons)
-									tmp29 := checkDerefVar(var_clojure_DOT_core_partition_DASH_by)
-									var tmp30 lang.FnFunc0
-									tmp30 = lang.FnFunc0(func() any {
-										tmp31 := checkDerefVar(var_clojure_DOT_core_drop)
-										tmp32 := checkDerefVar(var_clojure_DOT_core_count)
-										tmp33 := lang.Apply1(tmp32, v27)
-										tmp34 := lang.Apply2(tmp31, tmp33, v11)
-										return tmp34
+									tmp21 := checkDerefVar(var_clojure_DOT_core_next)
+									tmp22 := lang.Apply1(tmp21, v11)
+									tmp23 := lang.Apply2(tmp19, tmp20, tmp22)
+									tmp24 := lang.Apply2(tmp18, v15, tmp23)
+									var v25 any = tmp24
+									_ = v25
+									tmp26 := checkDerefVar(var_clojure_DOT_core_cons)
+									tmp27 := checkDerefVar(var_clojure_DOT_core_partition_DASH_by)
+									var tmp28 lang.FnFunc0
+									tmp28 = lang.FnFunc0(func() any {
+										tmp29 := checkDerefVar(var_clojure_DOT_core_drop)
+										tmp30 := checkDerefVar(var_clojure_DOT_core_count)
+										tmp31 := lang.Apply1(tmp30, v25)
+										tmp32 := lang.Apply2(tmp29, tmp31, v11)
+										return tmp32
 									})
-									tmp31 := lang.Apply1(lang.NewLazySeq, tmp30)
-									tmp32 := lang.Apply2(tmp29, v2, tmp31)
-									tmp33 := lang.Apply2(tmp28, v27, tmp32)
-									tmp12 = tmp33
+									tmp29 := lang.Apply1(lang.NewLazySeq, tmp28)
+									tmp30 := lang.Apply2(tmp27, v2, tmp29)
+									tmp31 := lang.Apply2(tmp26, v25, tmp30)
+									tmp12 = tmp31
 								} // end let
 								tmp10 = tmp12
 							} // end let
@@ -32924,107 +32326,97 @@ func LoadNS() {
 						tmp13 := lang.Apply1(tmp11, tmp12)
 						return tmp13
 					})
-					tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7111), kw_column, int(20), kw_end_DASH_line, int(7111), kw_end_DASH_column, int(34))
-					tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp12 := lang.Apply2(tmp8, tmp11, v3)
-					var v13 any = tmp12
-					_ = v13
+					tmp10 := lang.Apply2(tmp8, tmp9, v3)
+					var v11 any = tmp10
+					_ = v11
 					// let binding "step"
-					var tmp14 lang.FnFunc2
+					var tmp12 lang.FnFunc2
 					{ // function step
-						var v15 lang.FnFunc2
-						tmp14 = lang.FnFunc2(func(p0, p1 any) any {
-							v16 := p0
-							_ = v16
-							v17 := p1
-							_ = v17
-							var tmp18 any
+						var v13 lang.FnFunc2
+						tmp12 = lang.FnFunc2(func(p0, p1 any) any {
+							v14 := p0
+							_ = v14
+							v15 := p1
+							_ = v15
+							var tmp16 any
 							{ // let
 								// let binding "vec__665"
-								var v19 any = v16
-								_ = v19
+								var v17 any = v14
+								_ = v17
 								// let binding "seq__666"
-								tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
-								tmp21 := lang.Apply1(tmp20, v19)
-								var v22 any = tmp21
-								_ = v22
+								tmp18 := checkDerefVar(var_clojure_DOT_core_seq)
+								tmp19 := lang.Apply1(tmp18, v17)
+								var v20 any = tmp19
+								_ = v20
 								// let binding "first__667"
-								tmp23 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp24 := lang.Apply1(tmp23, v22)
-								var v25 any = tmp24
-								_ = v25
+								tmp21 := checkDerefVar(var_clojure_DOT_core_first)
+								tmp22 := lang.Apply1(tmp21, v20)
+								var v23 any = tmp22
+								_ = v23
 								// let binding "seq__666"
-								tmp26 := checkDerefVar(var_clojure_DOT_core_next)
-								tmp27 := lang.Apply1(tmp26, v22)
-								var v28 any = tmp27
-								_ = v28
+								tmp24 := checkDerefVar(var_clojure_DOT_core_next)
+								tmp25 := lang.Apply1(tmp24, v20)
+								var v26 any = tmp25
+								_ = v26
 								// let binding "x"
-								var v29 any = v25
-								_ = v29
+								var v27 any = v23
+								_ = v27
 								// let binding "xs"
-								var v30 any = v28
-								_ = v30
+								var v28 any = v26
+								_ = v28
 								// let binding "vs"
-								var v31 any = v19
-								_ = v31
-								var tmp32 lang.FnFunc0
-								tmp32 = lang.FnFunc0(func() any {
-									var tmp33 any
+								var v29 any = v17
+								_ = v29
+								var tmp30 lang.FnFunc0
+								tmp30 = lang.FnFunc0(func() any {
+									var tmp31 any
 									{ // let
 										// let binding "temp__0__auto__"
-										tmp34 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp35 := lang.Apply1(tmp34, v17)
-										var v36 any = tmp35
-										_ = v36
-										var tmp37 any
-										if lang.IsTruthy(v36) {
-											var tmp38 any
+										tmp32 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp33 := lang.Apply1(tmp32, v15)
+										var v34 any = tmp33
+										_ = v34
+										var tmp35 any
+										if lang.IsTruthy(v34) {
+											var tmp36 any
 											{ // let
 												// let binding "s"
-												var v39 any = v36
-												_ = v39
-												tmp40 := checkDerefVar(var_clojure_DOT_core_cons)
-												tmp41 := checkDerefVar(var_clojure_DOT_core_deref)
-												tmp42 := lang.Apply1(tmp41, v29)
-												tmp43 := checkDerefVar(var_clojure_DOT_core_rest)
-												tmp44 := lang.Apply1(tmp43, v39)
-												tmp45 := lang.Apply2(v15, v30, tmp44)
-												tmp46 := lang.Apply2(tmp40, tmp42, tmp45)
-												tmp38 = tmp46
+												var v37 any = v34
+												_ = v37
+												tmp38 := checkDerefVar(var_clojure_DOT_core_cons)
+												tmp39 := checkDerefVar(var_clojure_DOT_core_deref)
+												tmp40 := lang.Apply1(tmp39, v27)
+												tmp41 := checkDerefVar(var_clojure_DOT_core_rest)
+												tmp42 := lang.Apply1(tmp41, v37)
+												tmp43 := lang.Apply2(v13, v28, tmp42)
+												tmp44 := lang.Apply2(tmp38, tmp40, tmp43)
+												tmp36 = tmp44
 											} // end let
-											tmp37 = tmp38
+											tmp35 = tmp36
 										} else {
-											tmp39 := checkDerefVar(var_clojure_DOT_core_map)
-											tmp40 := checkDerefVar(var_clojure_DOT_core_deref)
-											tmp41 := lang.Apply2(tmp39, tmp40, v31)
-											tmp37 = tmp41
+											tmp37 := checkDerefVar(var_clojure_DOT_core_map)
+											tmp38 := checkDerefVar(var_clojure_DOT_core_deref)
+											tmp39 := lang.Apply2(tmp37, tmp38, v29)
+											tmp35 = tmp39
 										}
-										tmp33 = tmp37
+										tmp31 = tmp35
 									} // end let
-									return tmp33
+									return tmp31
 								})
-								tmp33 := lang.Apply1(lang.NewLazySeq, tmp32)
-								tmp18 = tmp33
+								tmp31 := lang.Apply1(lang.NewLazySeq, tmp30)
+								tmp16 = tmp31
 							} // end let
-							return tmp18
+							return tmp16
 						})
-						v15 = tmp14
-						_ = v15
+						v13 = tmp12
+						_ = v13
 					}
-					tmp15 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7112), kw_column, int(15), kw_end_DASH_line, int(7116), kw_end_DASH_column, int(36))
-					tmp16, err := lang.WithMeta(tmp14, tmp15.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v17 any = tmp16
-					_ = v17
-					tmp18 := checkDerefVar(var_clojure_DOT_core_drop)
-					tmp19 := lang.Apply2(tmp18, v7, v13)
-					tmp20 := lang.Apply2(v17, v13, tmp19)
-					tmp4 = tmp20
+					var v13 any = tmp12
+					_ = v13
+					tmp14 := checkDerefVar(var_clojure_DOT_core_drop)
+					tmp15 := lang.Apply2(tmp14, v7, v11)
+					tmp16 := lang.Apply2(v13, v11, tmp15)
+					tmp4 = tmp16
 				} // end let
 				return tmp4
 			}),
@@ -33083,32 +32475,22 @@ func LoadNS() {
 						v7 = tmp6
 						_ = v7
 					}
-					tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7119), kw_column, int(15), kw_end_DASH_line, int(7123), kw_end_DASH_column, int(67))
-					tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v9 any = tmp8
-					_ = v9
-					tmp10 := checkDerefVar(var_clojure_DOT_core_pmap)
-					var tmp11 lang.FnFunc1
-					tmp11 = lang.FnFunc1(func(p0 any) any {
-						v12 := p0
-						_ = v12
-						tmp13 := checkDerefVar(var_clojure_DOT_core_apply)
-						tmp14 := lang.Apply2(tmp13, v2, v12)
-						return tmp14
+					var v7 any = tmp6
+					_ = v7
+					tmp8 := checkDerefVar(var_clojure_DOT_core_pmap)
+					var tmp9 lang.FnFunc1
+					tmp9 = lang.FnFunc1(func(p0 any) any {
+						v10 := p0
+						_ = v10
+						tmp11 := checkDerefVar(var_clojure_DOT_core_apply)
+						tmp12 := lang.Apply2(tmp11, v2, v10)
+						return tmp12
 					})
-					tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7124), kw_column, int(12), kw_end_DASH_line, int(7124), kw_end_DASH_column, int(23))
-					tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp14 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp15 := lang.Apply2(tmp14, v3, v4)
-					tmp16 := lang.Apply1(v9, tmp15)
-					tmp17 := lang.Apply2(tmp10, tmp13, tmp16)
-					tmp5 = tmp17
+					tmp10 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp11 := lang.Apply2(tmp10, v3, v4)
+					tmp12 := lang.Apply1(v7, tmp11)
+					tmp13 := lang.Apply2(tmp8, tmp9, tmp12)
+					tmp5 = tmp13
 				} // end let
 				return tmp5
 			}),
@@ -33165,13 +32547,8 @@ func LoadNS() {
 				} // end let
 				return tmp12
 			})
-			tmp10 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(246), kw_column, int(5), kw_end_DASH_line, int(247), kw_end_DASH_column, int(107))
-			tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp12 := lang.Apply(tmp6, []any{tmp8, tmp11, ", ", "}", v3, v5})
-			return tmp12
+			tmp10 := lang.Apply(tmp6, []any{tmp8, tmp9, ", ", "}", v3, v5})
+			return tmp10
 		})
 		var_clojure_DOT_core_print_DASH_prefix_DASH_map = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_print_DASH_prefix_DASH_map.SetMetaLazy(func() lang.IPersistentMap {
@@ -33214,15 +32591,10 @@ func LoadNS() {
 					tmp16 := lang.Apply3(tmp12, sym_clojure_DOT_core_SLASH_fn, tmp15, v11)
 					return tmp16
 				})
-				tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7139), kw_column, int(19), kw_end_DASH_line, int(7139), kw_end_DASH_column, int(34))
-				tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp13 := lang.Apply2(tmp9, tmp12, v4)
-				tmp14 := lang.Apply2(tmp6, tmp8, tmp13)
-				tmp15 := lang.Apply1(tmp5, tmp14)
-				return tmp15
+				tmp11 := lang.Apply2(tmp9, tmp10, v4)
+				tmp12 := lang.Apply2(tmp6, tmp8, tmp11)
+				tmp13 := lang.Apply1(tmp5, tmp12)
+				return tmp13
 			}),
 			2,
 		)
@@ -33760,13 +33132,8 @@ func LoadNS() {
 					} // end let
 					return tmp6
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5142), kw_column, int(11), kw_end_DASH_line, int(5142), kw_end_DASH_column, int(47))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp7 := lang.Apply1(tmp3, tmp6)
-				return tmp7
+				tmp5 := lang.Apply1(tmp3, tmp4)
+				return tmp5
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -33814,56 +33181,46 @@ func LoadNS() {
 						} // end let
 						return tmp11
 					})
-					tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5145), kw_column, int(17), kw_end_DASH_line, int(5148), kw_end_DASH_column, int(23))
-					tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp11 := checkDerefVar(var_clojure_DOT_core_range)
-					tmp12 := checkDerefVar(var_clojure_DOT_core_count)
-					tmp13 := lang.Apply1(tmp12, v3)
-					tmp14 := lang.Apply1(tmp11, tmp13)
-					tmp15 := lang.Apply3(tmp7, tmp10, v3, tmp14)
-					tmp4 = tmp15
+					tmp9 := checkDerefVar(var_clojure_DOT_core_range)
+					tmp10 := checkDerefVar(var_clojure_DOT_core_count)
+					tmp11 := lang.Apply1(tmp10, v3)
+					tmp12 := lang.Apply1(tmp9, tmp11)
+					tmp13 := lang.Apply3(tmp7, tmp8, v3, tmp12)
+					tmp4 = tmp13
 				} else {
-					tmp16 := checkDerefVar(var_clojure_DOT_core_map)
-					var tmp17 lang.FnFunc1
-					tmp17 = lang.FnFunc1(func(p0 any) any {
-						v18 := p0
-						_ = v18
-						var tmp19 any
+					tmp14 := checkDerefVar(var_clojure_DOT_core_map)
+					var tmp15 lang.FnFunc1
+					tmp15 = lang.FnFunc1(func(p0 any) any {
+						v16 := p0
+						_ = v16
+						var tmp17 any
 						{ // let
 							// let binding "temp__0__auto__"
-							tmp20 := checkDerefVar(var_clojure_DOT_core_find)
-							tmp21 := lang.Apply2(tmp20, v2, v18)
-							var v22 any = tmp21
-							_ = v22
-							var tmp23 any
-							if lang.IsTruthy(v22) {
-								var tmp24 any
+							tmp18 := checkDerefVar(var_clojure_DOT_core_find)
+							tmp19 := lang.Apply2(tmp18, v2, v16)
+							var v20 any = tmp19
+							_ = v20
+							var tmp21 any
+							if lang.IsTruthy(v20) {
+								var tmp22 any
 								{ // let
 									// let binding "e"
-									var v25 any = v22
-									_ = v25
-									tmp26 := checkDerefVar(var_clojure_DOT_core_val)
-									tmp27 := lang.Apply1(tmp26, v25)
-									tmp24 = tmp27
+									var v23 any = v20
+									_ = v23
+									tmp24 := checkDerefVar(var_clojure_DOT_core_val)
+									tmp25 := lang.Apply1(tmp24, v23)
+									tmp22 = tmp25
 								} // end let
-								tmp23 = tmp24
+								tmp21 = tmp22
 							} else {
-								tmp23 = v18
+								tmp21 = v16
 							}
-							tmp19 = tmp23
+							tmp17 = tmp21
 						} // end let
-						return tmp19
+						return tmp17
 					})
-					tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5150), kw_column, int(13), kw_end_DASH_line, int(5150), kw_end_DASH_column, int(49))
-					tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp20 := lang.Apply2(tmp16, tmp19, v3)
-					tmp4 = tmp20
+					tmp16 := lang.Apply2(tmp14, tmp15, v3)
+					tmp4 = tmp16
 				}
 				return tmp4
 			}),
@@ -34259,25 +33616,20 @@ func LoadNS() {
 						tmp9 := lang.Apply1(nil, v8)
 						return tmp9
 					})
-					tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2669), kw_column, int(17), kw_end_DASH_line, int(2669), kw_end_DASH_column, int(41))
-					tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp10 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp11 := lang.Apply2(tmp10, v3, v4)
-					tmp12 := lang.Apply2(tmp6, tmp9, tmp11)
-					tmp13 := lang.Apply2(nil, v2, tmp12)
-					tmp14 := lang.Apply1(nil, tmp13)
-					var v15 any = tmp14
-					_ = v15
-					var tmp16 any
-					if lang.IsTruthy(v15) {
-						tmp16 = v15
+					tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp9 := lang.Apply2(tmp8, v3, v4)
+					tmp10 := lang.Apply2(tmp6, tmp7, tmp9)
+					tmp11 := lang.Apply2(nil, v2, tmp10)
+					tmp12 := lang.Apply1(nil, tmp11)
+					var v13 any = tmp12
+					_ = v13
+					var tmp14 any
+					if lang.IsTruthy(v13) {
+						tmp14 = v13
 					} else {
-						tmp16 = lang.NewList()
+						tmp14 = lang.NewList()
 					}
-					tmp5 = tmp16
+					tmp5 = tmp14
 				} // end let
 				return tmp5
 			}),
@@ -34432,13 +33784,8 @@ func LoadNS() {
 					tmp11 := lang.Apply2(v3, tmp9, tmp10)
 					return tmp11
 				})
-				tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3136), kw_column, int(10), kw_end_DASH_line, int(3136), kw_end_DASH_column, int(46))
-				tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp9 := lang.Apply2(tmp5, tmp8, v4)
-				return tmp9
+				tmp7 := lang.Apply2(tmp5, tmp6, v4)
+				return tmp7
 			}),
 			nil,
 			nil,
@@ -34909,29 +34256,35 @@ func LoadNS() {
 							tmp21 := lang.Apply2(tmp18, tmp20, "doInvoke")
 							return tmp21
 						})
-						tmp17 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5896), kw_column, int(19), kw_end_DASH_line, int(5896), kw_end_DASH_column, int(74))
-						tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						var v19 any = tmp18
-						_ = v19
+						var v17 any = tmp16
+						_ = v17
 						// let binding "trace"
-						tmp20 := checkDerefVar(var_clojure_DOT_core_into_DASH_array)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_drop)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_drop_DASH_while)
-						tmp23 := lang.Apply2(tmp22, v19, v15)
-						tmp24 := lang.Apply2(tmp21, int64(2), tmp23)
-						tmp25 := lang.Apply2(tmp20, nil, tmp24)
-						var v26 any = tmp25
-						_ = v26
-						tmp27, _ := lang.FieldOrMethod(v12, "setStackTrace")
-						if reflect.TypeOf(tmp27).Kind() != reflect.Func {
+						tmp18 := checkDerefVar(var_clojure_DOT_core_into_DASH_array)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_drop)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_drop_DASH_while)
+						tmp21 := lang.Apply2(tmp20, v17, v15)
+						tmp22 := lang.Apply2(tmp19, int64(2), tmp21)
+						tmp23 := lang.Apply2(tmp18, nil, tmp22)
+						var v24 any = tmp23
+						_ = v24
+						tmp25, _ := lang.FieldOrMethod(v12, "setStackTrace")
+						if reflect.TypeOf(tmp25).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("setStackTrace is not a function")))
 						}
-						tmp28 := lang.Apply1(tmp27, v26)
-						_ = tmp28
-						tmp29 := checkDerefVar(var_clojure_DOT_core__STAR_file_STAR_)
+						tmp26 := lang.Apply1(tmp25, v24)
+						_ = tmp26
+						tmp27 := checkDerefVar(var_clojure_DOT_core__STAR_file_STAR_)
+						tmp28, ok := lang.FieldOrMethod(nil, "Deref")
+						if !ok {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", nil, "Deref")))
+						}
+						var tmp29 any
+						switch reflect.TypeOf(tmp28).Kind() {
+						case reflect.Func:
+							tmp29 = lang.Apply(tmp28, nil)
+						default:
+							tmp29 = tmp28
+						}
 						tmp30, ok := lang.FieldOrMethod(nil, "Deref")
 						if !ok {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", nil, "Deref")))
@@ -34943,19 +34296,8 @@ func LoadNS() {
 						default:
 							tmp31 = tmp30
 						}
-						tmp32, ok := lang.FieldOrMethod(nil, "Deref")
-						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", nil, "Deref")))
-						}
-						var tmp33 any
-						switch reflect.TypeOf(tmp32).Kind() {
-						case reflect.Func:
-							tmp33 = lang.Apply(tmp32, nil)
-						default:
-							tmp33 = tmp32
-						}
-						tmp34 := lang.Apply4(lang.NewCompilerError, tmp29, tmp31, tmp33, v12)
-						panic(tmp34)
+						tmp32 := lang.Apply4(lang.NewCompilerError, tmp27, tmp29, tmp31, v12)
+						panic(tmp32)
 					} // end let
 					tmp5 = tmp6
 				} else {
@@ -35135,13 +34477,8 @@ func LoadNS() {
 					tmp7 := lang.Apply2(tmp6, v2, v3)
 					return tmp7
 				})
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6373), kw_column, int(18), kw_end_DASH_line, int(6373), kw_end_DASH_column, int(32))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp8 := lang.Apply1(tmp4, tmp7)
-				return tmp8
+				tmp6 := lang.Apply1(tmp4, tmp5)
+				return tmp6
 			}),
 			1,
 		)
@@ -35362,15 +34699,10 @@ func LoadNS() {
 						v8 = tmp7
 						_ = v8
 					}
-					tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6224), kw_column, int(15), kw_end_DASH_line, int(6228), kw_end_DASH_column, int(59))
-					tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v10 any = tmp9
-					_ = v10
-					tmp11 := lang.Apply4(v10, v2, v3, v4, v5)
-					tmp6 = tmp11
+					var v8 any = tmp7
+					_ = v8
+					tmp9 := lang.Apply4(v8, v2, v3, v4, v5)
+					tmp6 = tmp9
 				} // end let
 				return tmp6
 			}),
@@ -36522,40 +35854,35 @@ func LoadNS() {
 					tmp16 := lang.Apply2(tmp15, sym_var, v14)
 					return tmp16
 				})
-				tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7625), kw_column, int(34), kw_end_DASH_line, int(7625), kw_end_DASH_column, int(47))
-				tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp16 := checkDerefVar(var_clojure_DOT_core_take_DASH_nth)
-				tmp17 := lang.Apply2(tmp16, int64(2), v4)
-				tmp18 := lang.Apply2(tmp12, tmp15, tmp17)
-				tmp19 := checkDerefVar(var_clojure_DOT_core_take_DASH_nth)
-				tmp20 := checkDerefVar(var_clojure_DOT_core_next)
-				tmp21 := lang.Apply1(tmp20, v4)
-				tmp22 := lang.Apply2(tmp19, int64(2), tmp21)
-				tmp23 := lang.Apply2(tmp11, tmp18, tmp22)
-				tmp24 := lang.Apply1(tmp10, tmp23)
-				tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp26 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp27 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp14 := checkDerefVar(var_clojure_DOT_core_take_DASH_nth)
+				tmp15 := lang.Apply2(tmp14, int64(2), v4)
+				tmp16 := lang.Apply2(tmp12, tmp13, tmp15)
+				tmp17 := checkDerefVar(var_clojure_DOT_core_take_DASH_nth)
+				tmp18 := checkDerefVar(var_clojure_DOT_core_next)
+				tmp19 := lang.Apply1(tmp18, v4)
+				tmp20 := lang.Apply2(tmp17, int64(2), tmp19)
+				tmp21 := lang.Apply2(tmp11, tmp16, tmp20)
+				tmp22 := lang.Apply1(tmp10, tmp21)
+				tmp23 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp24 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp25 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp26 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp27 := lang.Apply1(tmp26, sym_clojure_DOT_core_SLASH_fn)
 				tmp28 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp29 := lang.Apply1(tmp28, sym_clojure_DOT_core_SLASH_fn)
-				tmp30 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp31 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp32 := checkDerefVar(var_clojure_DOT_core_vector)
-				tmp33 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp34 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp35 := lang.Apply0(tmp34)
-				tmp36 := lang.Apply1(tmp33, tmp35)
-				tmp37 := lang.Apply2(tmp31, tmp32, tmp36)
-				tmp38 := lang.Apply1(tmp30, tmp37)
-				tmp39 := lang.Apply3(tmp27, tmp29, tmp38, v5)
-				tmp40 := lang.Apply1(tmp26, tmp39)
-				tmp41 := lang.Apply1(tmp25, tmp40)
-				tmp42 := lang.Apply3(tmp7, tmp9, tmp24, tmp41)
-				tmp43 := lang.Apply1(tmp6, tmp42)
-				return tmp43
+				tmp29 := checkDerefVar(var_clojure_DOT_core_apply)
+				tmp30 := checkDerefVar(var_clojure_DOT_core_vector)
+				tmp31 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp32 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp33 := lang.Apply0(tmp32)
+				tmp34 := lang.Apply1(tmp31, tmp33)
+				tmp35 := lang.Apply2(tmp29, tmp30, tmp34)
+				tmp36 := lang.Apply1(tmp28, tmp35)
+				tmp37 := lang.Apply3(tmp25, tmp27, tmp36, v5)
+				tmp38 := lang.Apply1(tmp24, tmp37)
+				tmp39 := lang.Apply1(tmp23, tmp38)
+				tmp40 := lang.Apply3(tmp7, tmp9, tmp22, tmp39)
+				tmp41 := lang.Apply1(tmp6, tmp40)
+				return tmp41
 			}),
 			3,
 		)
@@ -36734,58 +36061,48 @@ func LoadNS() {
 					} // end let
 					return tmp7
 				})
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7603), kw_column, int(19), kw_end_DASH_line, int(7605), kw_end_DASH_column, int(93))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v8 any = tmp7
-				_ = v8
+				var v6 any = tmp5
+				_ = v6
 				// let binding "old-vals"
-				tmp9 := checkDerefVar(var_clojure_DOT_core_zipmap)
-				tmp10 := checkDerefVar(var_clojure_DOT_core_keys)
-				tmp11 := lang.Apply1(tmp10, v2)
-				tmp12 := checkDerefVar(var_clojure_DOT_core_map)
-				var tmp13 lang.FnFunc1
-				tmp13 = lang.FnFunc1(func(p0 any) any {
-					v14 := p0
-					_ = v14
-					tmp15, ok := lang.FieldOrMethod(v14, "getRawRoot")
+				tmp7 := checkDerefVar(var_clojure_DOT_core_zipmap)
+				tmp8 := checkDerefVar(var_clojure_DOT_core_keys)
+				tmp9 := lang.Apply1(tmp8, v2)
+				tmp10 := checkDerefVar(var_clojure_DOT_core_map)
+				var tmp11 lang.FnFunc1
+				tmp11 = lang.FnFunc1(func(p0 any) any {
+					v12 := p0
+					_ = v12
+					tmp13, ok := lang.FieldOrMethod(v12, "getRawRoot")
 					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v14, "getRawRoot")))
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v12, "getRawRoot")))
 					}
-					var tmp16 any
-					switch reflect.TypeOf(tmp15).Kind() {
+					var tmp14 any
+					switch reflect.TypeOf(tmp13).Kind() {
 					case reflect.Func:
-						tmp16 = lang.Apply(tmp15, nil)
+						tmp14 = lang.Apply(tmp13, nil)
 					default:
-						tmp16 = tmp15
+						tmp14 = tmp13
 					}
-					return tmp16
+					return tmp14
 				})
-				tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7607), kw_column, int(31), kw_end_DASH_line, int(7607), kw_end_DASH_column, int(92))
-				tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp16 := checkDerefVar(var_clojure_DOT_core_keys)
-				tmp17 := lang.Apply1(tmp16, v2)
-				tmp18 := lang.Apply2(tmp12, tmp15, tmp17)
-				tmp19 := lang.Apply2(tmp9, tmp11, tmp18)
-				var v20 any = tmp19
-				_ = v20
-				var tmp21 any
+				tmp12 := checkDerefVar(var_clojure_DOT_core_keys)
+				tmp13 := lang.Apply1(tmp12, v2)
+				tmp14 := lang.Apply2(tmp10, tmp11, tmp13)
+				tmp15 := lang.Apply2(tmp7, tmp9, tmp14)
+				var v16 any = tmp15
+				_ = v16
+				var tmp17 any
 				func() {
 					defer func() {
-						tmp22 := lang.Apply1(v8, v20)
-						_ = tmp22
+						tmp18 := lang.Apply1(v6, v16)
+						_ = tmp18
 					}()
-					tmp23 := lang.Apply1(v8, v2)
-					_ = tmp23
-					tmp24 := lang.Apply0(v3)
-					tmp21 = tmp24
+					tmp19 := lang.Apply1(v6, v2)
+					_ = tmp19
+					tmp20 := lang.Apply0(v3)
+					tmp17 = tmp20
 				}()
-				tmp4 = tmp21
+				tmp4 = tmp17
 			} // end let
 			return tmp4
 		})
@@ -37166,15 +36483,10 @@ func LoadNS() {
 								tmp27 := lang.Apply2(tmp26, tmp25, v24)
 								return tmp27
 							})
-							tmp24 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5642), kw_column, int(32), kw_end_DASH_line, int(5642), kw_end_DASH_column, int(54))
-							tmp25, err := lang.WithMeta(tmp23, tmp24.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp26 := lang.Apply2(tmp22, tmp25, v18)
-							tmp27 := lang.Apply2(tmp21, v9, tmp26)
-							tmp28 := lang.Apply3(tmp19, tmp20, v18, tmp27)
-							tmp13 = tmp28
+							tmp24 := lang.Apply2(tmp22, tmp23, v18)
+							tmp25 := lang.Apply2(tmp21, v9, tmp24)
+							tmp26 := lang.Apply3(tmp19, tmp20, v18, tmp25)
+							tmp13 = tmp26
 						} // end let
 						tmp10 = tmp13
 					} else {
@@ -37803,45 +37115,35 @@ func LoadNS() {
 					}
 					return tmp11
 				})
-				tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7578), kw_column, int(20), kw_end_DASH_line, int(7587), kw_end_DASH_column, int(59))
-				tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp12 := lang.Apply2(tmp8, tmp11, v2)
-				var v13 any = tmp12
-				_ = v13
+				tmp10 := lang.Apply2(tmp8, tmp9, v2)
+				var v11 any = tmp10
+				_ = v11
 				// let binding "bad-args"
-				tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp15 := checkDerefVar(var_clojure_DOT_core_remove)
-				var tmp16 lang.FnFunc1
-				tmp16 = lang.FnFunc1(func(p0 any) any {
-					v17 := p0
-					_ = v17
-					tmp18 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-					tmp19 := lang.Apply1(tmp18, v17)
-					return tmp19
+				tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp13 := checkDerefVar(var_clojure_DOT_core_remove)
+				var tmp14 lang.FnFunc1
+				tmp14 = lang.FnFunc1(func(p0 any) any {
+					v15 := p0
+					_ = v15
+					tmp16 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
+					tmp17 := lang.Apply1(tmp16, v15)
+					return tmp17
 				})
-				tmp17 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7589), kw_column, int(31), kw_end_DASH_line, int(7589), kw_end_DASH_column, int(42))
-				tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp19 := lang.Apply2(tmp15, tmp18, v13)
-				tmp20 := lang.Apply1(tmp14, tmp19)
-				var v21 any = tmp20
-				_ = v21
-				var tmp22 any
-				if lang.IsTruthy(v21) {
-					tmp23 := checkDerefVar(var_clojure_DOT_core_str)
-					tmp24 := checkDerefVar(var_clojure_DOT_core_first)
-					tmp25 := lang.Apply1(tmp24, v21)
-					tmp26 := lang.Apply3(tmp23, "Parameter declaration \"", tmp25, "\" should be a vector")
-					tmp27 := lang.Apply1(lang.NewIllegalArgumentError, tmp26)
-					panic(tmp27)
+				tmp15 := lang.Apply2(tmp13, tmp14, v11)
+				tmp16 := lang.Apply1(tmp12, tmp15)
+				var v17 any = tmp16
+				_ = v17
+				var tmp18 any
+				if lang.IsTruthy(v17) {
+					tmp19 := checkDerefVar(var_clojure_DOT_core_str)
+					tmp20 := checkDerefVar(var_clojure_DOT_core_first)
+					tmp21 := lang.Apply1(tmp20, v17)
+					tmp22 := lang.Apply3(tmp19, "Parameter declaration \"", tmp21, "\" should be a vector")
+					tmp23 := lang.Apply1(lang.NewIllegalArgumentError, tmp22)
+					panic(tmp23)
 				} else {
 				}
-				tmp7 = tmp22
+				tmp7 = tmp18
 			} // end let
 			return tmp7
 		})
@@ -37915,12 +37217,7 @@ func LoadNS() {
 					}),
 					0,
 				)
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2009), kw_column, int(5), kw_end_DASH_line, int(2010), kw_end_DASH_column, int(45))
-				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp3 = tmp9
+				tmp3 = tmp7
 			} // end let
 			return tmp3
 		})
@@ -38002,17 +37299,12 @@ func LoadNS() {
 						tmp23 := lang.Apply2(tmp22, ", ", v21)
 						return tmp23
 					})
-					tmp21 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(1726), kw_column, int(16), kw_end_DASH_line, int(1726), kw_end_DASH_column, int(28))
-					tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp23 := checkDerefVar(var_clojure_DOT_core_rest)
-					tmp24 := lang.Apply1(tmp23, v3)
-					tmp25 := lang.Apply2(tmp19, tmp22, tmp24)
-					tmp26 := lang.Apply4(tmp15, tmp16, "Only these options are valid: ", tmp18, tmp25)
-					tmp27 := lang.Apply1(lang.NewIllegalArgumentError, tmp26)
-					panic(tmp27)
+					tmp21 := checkDerefVar(var_clojure_DOT_core_rest)
+					tmp22 := lang.Apply1(tmp21, v3)
+					tmp23 := lang.Apply2(tmp19, tmp20, tmp22)
+					tmp24 := lang.Apply4(tmp15, tmp16, "Only these options are valid: ", tmp18, tmp23)
+					tmp25 := lang.Apply1(lang.NewIllegalArgumentError, tmp24)
+					panic(tmp25)
 				} else {
 				}
 				return tmp4
@@ -38272,40 +37564,35 @@ func LoadNS() {
 						v15 = tmp14
 						_ = v15
 					}
-					tmp15 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6441), kw_column, int(14), kw_end_DASH_line, int(6453), kw_end_DASH_column, int(53))
-					tmp16, err := lang.WithMeta(tmp14, tmp15.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v17 any = tmp16
-					_ = v17
-					tmp18 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp19 := checkDerefVar(var_clojure_DOT_core_concat)
+					var v15 any = tmp14
+					_ = v15
+					tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp17 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp18 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp19 := lang.Apply1(tmp18, sym_clojure_DOT_core_SLASH_let)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp21 := lang.Apply1(tmp20, sym_clojure_DOT_core_SLASH_let)
-					tmp22 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp23 := checkDerefVar(var_clojure_DOT_core_apply)
-					tmp24 := checkDerefVar(var_clojure_DOT_core_vector)
-					tmp25 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp26 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp21 := checkDerefVar(var_clojure_DOT_core_apply)
+					tmp22 := checkDerefVar(var_clojure_DOT_core_vector)
+					tmp23 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp24 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp25 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp26 := lang.Apply1(tmp25, v10)
 					tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp28 := lang.Apply1(tmp27, v10)
+					tmp28 := lang.Apply1(tmp27, v4)
 					tmp29 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp30 := lang.Apply1(tmp29, v4)
+					tmp30 := lang.Apply1(tmp29, v13)
 					tmp31 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp32 := lang.Apply1(tmp31, v13)
-					tmp33 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp34 := lang.Apply1(tmp33, v5)
-					tmp35 := lang.Apply4(tmp26, tmp28, tmp30, tmp32, tmp34)
-					tmp36 := lang.Apply1(tmp25, tmp35)
-					tmp37 := lang.Apply2(tmp23, tmp24, tmp36)
-					tmp38 := lang.Apply1(tmp22, tmp37)
-					tmp39 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp40 := lang.Apply3(v17, v10, v13, v6)
-					tmp41 := lang.Apply1(tmp39, tmp40)
-					tmp42 := lang.Apply3(tmp19, tmp21, tmp38, tmp41)
-					tmp43 := lang.Apply1(tmp18, tmp42)
-					tmp7 = tmp43
+					tmp32 := lang.Apply1(tmp31, v5)
+					tmp33 := lang.Apply4(tmp24, tmp26, tmp28, tmp30, tmp32)
+					tmp34 := lang.Apply1(tmp23, tmp33)
+					tmp35 := lang.Apply2(tmp21, tmp22, tmp34)
+					tmp36 := lang.Apply1(tmp20, tmp35)
+					tmp37 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp38 := lang.Apply3(v15, v10, v13, v6)
+					tmp39 := lang.Apply1(tmp37, tmp38)
+					tmp40 := lang.Apply3(tmp17, tmp19, tmp36, tmp39)
+					tmp41 := lang.Apply1(tmp16, tmp40)
+					tmp7 = tmp41
 				} // end let
 				return tmp7
 			}),
@@ -38349,15 +37636,10 @@ func LoadNS() {
 					tmp16 := lang.Apply2(tmp12, sym_def, tmp15)
 					return tmp16
 				})
-				tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2779), kw_column, int(25), kw_end_DASH_line, int(2779), kw_end_DASH_column, int(71))
-				tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp13 := lang.Apply2(tmp9, tmp12, v4)
-				tmp14 := lang.Apply2(tmp6, tmp8, tmp13)
-				tmp15 := lang.Apply1(tmp5, tmp14)
-				return tmp15
+				tmp11 := lang.Apply2(tmp9, tmp10, v4)
+				tmp12 := lang.Apply2(tmp6, tmp8, tmp11)
+				tmp13 := lang.Apply1(tmp5, tmp12)
+				return tmp13
 			}),
 			2,
 		)
@@ -38428,21 +37710,11 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7758), kw_column, int(8), kw_end_DASH_line, int(7766), kw_end_DASH_column, int(37))
-						tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp4 = tmp10
+						tmp4 = tmp8
 					} // end let
 					return tmp4
 				})
-				tmp3 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7756), kw_column, int(4), kw_end_DASH_line, int(7766), kw_end_DASH_column, int(39))
-				tmp4, err := lang.WithMeta(tmp2, tmp3.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp4
+				return tmp2
 			}),
 			lang.FnFunc1(func(p0 any) any {
 				v2 := p0
@@ -38802,250 +38074,235 @@ func LoadNS() {
 						tmp25 := lang.Apply1(tmp22, tmp24)
 						return tmp25
 					})
-					tmp21 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(92), kw_column, int(26), kw_end_DASH_line, int(92), kw_end_DASH_column, int(40))
-					tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp23 := lang.Apply2(tmp19, tmp22, v18)
-					var v24 any = tmp23
-					_ = v24
+					tmp21 := lang.Apply2(tmp19, tmp20, v18)
+					var v22 any = tmp21
+					_ = v22
 					// let binding "sigs"
-					tmp25 := checkDerefVar(var_clojure_DOT_core_drop_DASH_while)
-					var tmp26 lang.FnFunc1
-					tmp26 = lang.FnFunc1(func(p0 any) any {
-						v27 := p0
-						_ = v27
-						tmp28 := checkDerefVar(var_clojure_DOT_core_not)
-						tmp29 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-						tmp30 := lang.Apply1(tmp29, v27)
-						tmp31 := lang.Apply1(tmp28, tmp30)
-						return tmp31
+					tmp23 := checkDerefVar(var_clojure_DOT_core_drop_DASH_while)
+					var tmp24 lang.FnFunc1
+					tmp24 = lang.FnFunc1(func(p0 any) any {
+						v25 := p0
+						_ = v25
+						tmp26 := checkDerefVar(var_clojure_DOT_core_not)
+						tmp27 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
+						tmp28 := lang.Apply1(tmp27, v25)
+						tmp29 := lang.Apply1(tmp26, tmp28)
+						return tmp29
 					})
-					tmp27 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(93), kw_column, int(26), kw_end_DASH_line, int(93), kw_end_DASH_column, int(40))
-					tmp28, err := lang.WithMeta(tmp26, tmp27.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp29 := lang.Apply2(tmp25, tmp28, v18)
-					var v30 any = tmp29
-					_ = v30
+					tmp25 := lang.Apply2(tmp23, tmp24, v18)
+					var v26 any = tmp25
+					_ = v26
 					// let binding "opts"
-					var tmp31 any
-					tmp32 := checkDerefVar(var_clojure_DOT_core__EQ_)
-					tmp33 := lang.Apply2(tmp32, v30, v24)
-					if lang.IsTruthy(tmp33) {
+					var tmp27 any
+					tmp28 := checkDerefVar(var_clojure_DOT_core__EQ_)
+					tmp29 := lang.Apply2(tmp28, v26, v22)
+					if lang.IsTruthy(tmp29) {
 					} else {
-						tmp31 = v24
+						tmp27 = v22
 					}
-					var v34 any = tmp31
-					_ = v34
-					tmp35 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp36 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp37 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp38 := lang.Apply1(tmp37, sym_do)
-					tmp39 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp40 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp41 := checkDerefVar(var_clojure_DOT_core_concat)
+					var v30 any = tmp27
+					_ = v30
+					tmp31 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp32 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp33 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp34 := lang.Apply1(tmp33, sym_do)
+					tmp35 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp36 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp37 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp38 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp39 := lang.Apply1(tmp38, sym_def)
+					tmp40 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp41 := lang.Apply1(tmp40, v4)
 					tmp42 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp43 := lang.Apply1(tmp42, sym_def)
-					tmp44 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp45 := lang.Apply1(tmp44, v4)
-					tmp46 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp47 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp48 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp49 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp50 := lang.Apply1(tmp49, sym_clojure_DOT_core_SLASH_atom)
-					tmp51 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp52 := checkDerefVar(var_clojure_DOT_core_apply)
-					tmp53 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
-					tmp54 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp55 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp43 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp44 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp45 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp46 := lang.Apply1(tmp45, sym_clojure_DOT_core_SLASH_atom)
+					tmp47 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp48 := checkDerefVar(var_clojure_DOT_core_apply)
+					tmp49 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
+					tmp50 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp51 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp52 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp53 := lang.Apply1(tmp52, kw_on_DASH_interface)
+					tmp54 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp55 := lang.Apply1(tmp54, true)
 					tmp56 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp57 := lang.Apply1(tmp56, kw_on_DASH_interface)
+					tmp57 := lang.Apply1(tmp56, kw_sigs)
 					tmp58 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp59 := lang.Apply1(tmp58, true)
-					tmp60 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp61 := lang.Apply1(tmp60, kw_sigs)
-					tmp62 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp63 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp64 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp65 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp66 := lang.Apply1(tmp65, sym_quote)
-					tmp67 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp68 := lang.Apply1(tmp67, v30)
-					tmp69 := lang.Apply2(tmp64, tmp66, tmp68)
-					tmp70 := lang.Apply1(tmp63, tmp69)
-					tmp71 := lang.Apply1(tmp62, tmp70)
-					tmp72 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp73 := lang.Apply1(tmp72, kw_multis)
-					tmp74 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp75 := checkDerefVar(var_clojure_DOT_core_apply)
-					tmp76 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
-					tmp77 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp78 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp79 := lang.Apply0(tmp78)
-					tmp80 := lang.Apply1(tmp77, tmp79)
-					tmp81 := lang.Apply2(tmp75, tmp76, tmp80)
-					tmp82 := lang.Apply1(tmp74, tmp81)
-					tmp83 := lang.Apply(tmp55, []any{tmp57, tmp59, tmp61, tmp71, tmp73, tmp82})
-					tmp84 := lang.Apply1(tmp54, tmp83)
-					tmp85 := lang.Apply2(tmp52, tmp53, tmp84)
-					tmp86 := lang.Apply1(tmp51, tmp85)
-					tmp87 := lang.Apply2(tmp48, tmp50, tmp86)
-					tmp88 := lang.Apply1(tmp47, tmp87)
-					tmp89 := lang.Apply1(tmp46, tmp88)
-					tmp90 := lang.Apply3(tmp41, tmp43, tmp45, tmp89)
-					tmp91 := lang.Apply1(tmp40, tmp90)
-					tmp92 := lang.Apply1(tmp39, tmp91)
-					tmp93 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp94 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp95 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp59 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp60 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp61 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp62 := lang.Apply1(tmp61, sym_quote)
+					tmp63 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp64 := lang.Apply1(tmp63, v26)
+					tmp65 := lang.Apply2(tmp60, tmp62, tmp64)
+					tmp66 := lang.Apply1(tmp59, tmp65)
+					tmp67 := lang.Apply1(tmp58, tmp66)
+					tmp68 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp69 := lang.Apply1(tmp68, kw_multis)
+					tmp70 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp71 := checkDerefVar(var_clojure_DOT_core_apply)
+					tmp72 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
+					tmp73 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp74 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp75 := lang.Apply0(tmp74)
+					tmp76 := lang.Apply1(tmp73, tmp75)
+					tmp77 := lang.Apply2(tmp71, tmp72, tmp76)
+					tmp78 := lang.Apply1(tmp70, tmp77)
+					tmp79 := lang.Apply(tmp51, []any{tmp53, tmp55, tmp57, tmp67, tmp69, tmp78})
+					tmp80 := lang.Apply1(tmp50, tmp79)
+					tmp81 := lang.Apply2(tmp48, tmp49, tmp80)
+					tmp82 := lang.Apply1(tmp47, tmp81)
+					tmp83 := lang.Apply2(tmp44, tmp46, tmp82)
+					tmp84 := lang.Apply1(tmp43, tmp83)
+					tmp85 := lang.Apply1(tmp42, tmp84)
+					tmp86 := lang.Apply3(tmp37, tmp39, tmp41, tmp85)
+					tmp87 := lang.Apply1(tmp36, tmp86)
+					tmp88 := lang.Apply1(tmp35, tmp87)
+					tmp89 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp90 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp91 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp92 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp93 := lang.Apply1(tmp92, sym_clojure_DOT_core_SLASH_swap_BANG_)
+					tmp94 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp95 := lang.Apply1(tmp94, sym_clojure_DOT_core_SLASH__DASH_protocols)
 					tmp96 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp97 := lang.Apply1(tmp96, sym_clojure_DOT_core_SLASH_swap_BANG_)
+					tmp97 := lang.Apply1(tmp96, sym_clojure_DOT_core_SLASH_assoc)
 					tmp98 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp99 := lang.Apply1(tmp98, sym_clojure_DOT_core_SLASH__DASH_protocols)
-					tmp100 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp101 := lang.Apply1(tmp100, sym_clojure_DOT_core_SLASH_assoc)
-					tmp102 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp103 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp104 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp105 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp106 := lang.Apply1(tmp105, sym_quote)
-					tmp107 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp108 := lang.Apply1(tmp107, v4)
-					tmp109 := lang.Apply2(tmp104, tmp106, tmp108)
-					tmp110 := lang.Apply1(tmp103, tmp109)
-					tmp111 := lang.Apply1(tmp102, tmp110)
-					tmp112 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp113 := lang.Apply1(tmp112, v4)
-					tmp114 := lang.Apply(tmp95, []any{tmp97, tmp99, tmp101, tmp111, tmp113})
-					tmp115 := lang.Apply1(tmp94, tmp114)
-					tmp116 := lang.Apply1(tmp93, tmp115)
-					tmp117 := checkDerefVar(var_clojure_DOT_core_map)
-					var tmp118 lang.FnFunc1
-					tmp118 = lang.FnFunc1(func(p0 any) any {
-						v119 := p0
-						_ = v119
-						tmp120 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp121 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp122 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp123 := lang.Apply1(tmp122, sym_do)
-						tmp124 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp125 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp126 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp127 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp128 := lang.Apply1(tmp127, sym_clojure_DOT_core_SLASH_defmulti)
+					tmp99 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp100 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp101 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp102 := lang.Apply1(tmp101, sym_quote)
+					tmp103 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp104 := lang.Apply1(tmp103, v4)
+					tmp105 := lang.Apply2(tmp100, tmp102, tmp104)
+					tmp106 := lang.Apply1(tmp99, tmp105)
+					tmp107 := lang.Apply1(tmp98, tmp106)
+					tmp108 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp109 := lang.Apply1(tmp108, v4)
+					tmp110 := lang.Apply(tmp91, []any{tmp93, tmp95, tmp97, tmp107, tmp109})
+					tmp111 := lang.Apply1(tmp90, tmp110)
+					tmp112 := lang.Apply1(tmp89, tmp111)
+					tmp113 := checkDerefVar(var_clojure_DOT_core_map)
+					var tmp114 lang.FnFunc1
+					tmp114 = lang.FnFunc1(func(p0 any) any {
+						v115 := p0
+						_ = v115
+						tmp116 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp117 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp118 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp119 := lang.Apply1(tmp118, sym_do)
+						tmp120 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp121 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp122 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp123 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp124 := lang.Apply1(tmp123, sym_clojure_DOT_core_SLASH_defmulti)
+						tmp125 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp126 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp127 := lang.Apply1(tmp126, v115)
+						tmp128 := lang.Apply1(tmp125, tmp127)
 						tmp129 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp130 := checkDerefVar(var_clojure_DOT_core_first)
-						tmp131 := lang.Apply1(tmp130, v119)
-						tmp132 := lang.Apply1(tmp129, tmp131)
-						tmp133 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp134 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp135 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp136 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp137 := lang.Apply1(tmp136, sym_clojure_DOT_core_SLASH_fn)
-						tmp138 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp139 := checkDerefVar(var_clojure_DOT_core_apply)
-						tmp140 := checkDerefVar(var_clojure_DOT_core_vector)
-						tmp141 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp142 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp130 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp131 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp132 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp133 := lang.Apply1(tmp132, sym_clojure_DOT_core_SLASH_fn)
+						tmp134 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp135 := checkDerefVar(var_clojure_DOT_core_apply)
+						tmp136 := checkDerefVar(var_clojure_DOT_core_vector)
+						tmp137 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp138 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp139 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp140 := lang.Apply1(tmp139, sym_this)
+						tmp141 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp142 := lang.Apply1(tmp141, sym__AMP_)
 						tmp143 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp144 := lang.Apply1(tmp143, sym_this)
-						tmp145 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp146 := lang.Apply1(tmp145, sym__AMP_)
-						tmp147 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp148 := lang.Apply1(tmp147, sym_args)
-						tmp149 := lang.Apply3(tmp142, tmp144, tmp146, tmp148)
-						tmp150 := lang.Apply1(tmp141, tmp149)
-						tmp151 := lang.Apply2(tmp139, tmp140, tmp150)
-						tmp152 := lang.Apply1(tmp138, tmp151)
-						tmp153 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp154 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp155 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp156 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp157 := lang.Apply1(tmp156, sym_clojure_DOT_core_SLASH_class)
-						tmp158 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp159 := lang.Apply1(tmp158, sym_this)
-						tmp160 := lang.Apply2(tmp155, tmp157, tmp159)
-						tmp161 := lang.Apply1(tmp154, tmp160)
-						tmp162 := lang.Apply1(tmp153, tmp161)
-						tmp163 := lang.Apply3(tmp135, tmp137, tmp152, tmp162)
-						tmp164 := lang.Apply1(tmp134, tmp163)
-						tmp165 := lang.Apply1(tmp133, tmp164)
-						tmp166 := lang.Apply3(tmp126, tmp128, tmp132, tmp165)
-						tmp167 := lang.Apply1(tmp125, tmp166)
-						tmp168 := lang.Apply1(tmp124, tmp167)
-						tmp169 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp170 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp171 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp144 := lang.Apply1(tmp143, sym_args)
+						tmp145 := lang.Apply3(tmp138, tmp140, tmp142, tmp144)
+						tmp146 := lang.Apply1(tmp137, tmp145)
+						tmp147 := lang.Apply2(tmp135, tmp136, tmp146)
+						tmp148 := lang.Apply1(tmp134, tmp147)
+						tmp149 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp150 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp151 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp152 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp153 := lang.Apply1(tmp152, sym_clojure_DOT_core_SLASH_class)
+						tmp154 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp155 := lang.Apply1(tmp154, sym_this)
+						tmp156 := lang.Apply2(tmp151, tmp153, tmp155)
+						tmp157 := lang.Apply1(tmp150, tmp156)
+						tmp158 := lang.Apply1(tmp149, tmp157)
+						tmp159 := lang.Apply3(tmp131, tmp133, tmp148, tmp158)
+						tmp160 := lang.Apply1(tmp130, tmp159)
+						tmp161 := lang.Apply1(tmp129, tmp160)
+						tmp162 := lang.Apply3(tmp122, tmp124, tmp128, tmp161)
+						tmp163 := lang.Apply1(tmp121, tmp162)
+						tmp164 := lang.Apply1(tmp120, tmp163)
+						tmp165 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp166 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp167 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp168 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp169 := lang.Apply1(tmp168, sym_clojure_DOT_core_SLASH_swap_BANG_)
+						tmp170 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp171 := lang.Apply1(tmp170, v4)
 						tmp172 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp173 := lang.Apply1(tmp172, sym_clojure_DOT_core_SLASH_swap_BANG_)
+						tmp173 := lang.Apply1(tmp172, sym_clojure_DOT_core_SLASH_assoc_DASH_in)
 						tmp174 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp175 := lang.Apply1(tmp174, v4)
-						tmp176 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp177 := lang.Apply1(tmp176, sym_clojure_DOT_core_SLASH_assoc_DASH_in)
-						tmp178 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp179 := checkDerefVar(var_clojure_DOT_core_apply)
-						tmp180 := checkDerefVar(var_clojure_DOT_core_vector)
-						tmp181 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp182 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp183 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp184 := lang.Apply1(tmp183, kw_multis)
-						tmp185 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp186 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp187 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp188 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp189 := lang.Apply1(tmp188, sym_clojure_DOT_core_SLASH_keyword)
-						tmp190 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp191 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp192 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp193 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp194 := lang.Apply1(tmp193, sym_quote)
-						tmp195 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp196 := checkDerefVar(var_clojure_DOT_core_first)
-						tmp197 := lang.Apply1(tmp196, v119)
-						tmp198 := lang.Apply1(tmp195, tmp197)
-						tmp199 := lang.Apply2(tmp192, tmp194, tmp198)
-						tmp200 := lang.Apply1(tmp191, tmp199)
-						tmp201 := lang.Apply1(tmp190, tmp200)
-						tmp202 := lang.Apply2(tmp187, tmp189, tmp201)
-						tmp203 := lang.Apply1(tmp186, tmp202)
-						tmp204 := lang.Apply1(tmp185, tmp203)
-						tmp205 := lang.Apply2(tmp182, tmp184, tmp204)
-						tmp206 := lang.Apply1(tmp181, tmp205)
-						tmp207 := lang.Apply2(tmp179, tmp180, tmp206)
-						tmp208 := lang.Apply1(tmp178, tmp207)
-						tmp209 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp210 := checkDerefVar(var_clojure_DOT_core_first)
-						tmp211 := lang.Apply1(tmp210, v119)
-						tmp212 := lang.Apply1(tmp209, tmp211)
-						tmp213 := lang.Apply(tmp171, []any{tmp173, tmp175, tmp177, tmp208, tmp212})
-						tmp214 := lang.Apply1(tmp170, tmp213)
-						tmp215 := lang.Apply1(tmp169, tmp214)
-						tmp216 := lang.Apply3(tmp121, tmp123, tmp168, tmp215)
-						tmp217 := lang.Apply1(tmp120, tmp216)
-						return tmp217
+						tmp175 := checkDerefVar(var_clojure_DOT_core_apply)
+						tmp176 := checkDerefVar(var_clojure_DOT_core_vector)
+						tmp177 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp178 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp179 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp180 := lang.Apply1(tmp179, kw_multis)
+						tmp181 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp182 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp183 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp184 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp185 := lang.Apply1(tmp184, sym_clojure_DOT_core_SLASH_keyword)
+						tmp186 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp187 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp188 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp189 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp190 := lang.Apply1(tmp189, sym_quote)
+						tmp191 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp192 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp193 := lang.Apply1(tmp192, v115)
+						tmp194 := lang.Apply1(tmp191, tmp193)
+						tmp195 := lang.Apply2(tmp188, tmp190, tmp194)
+						tmp196 := lang.Apply1(tmp187, tmp195)
+						tmp197 := lang.Apply1(tmp186, tmp196)
+						tmp198 := lang.Apply2(tmp183, tmp185, tmp197)
+						tmp199 := lang.Apply1(tmp182, tmp198)
+						tmp200 := lang.Apply1(tmp181, tmp199)
+						tmp201 := lang.Apply2(tmp178, tmp180, tmp200)
+						tmp202 := lang.Apply1(tmp177, tmp201)
+						tmp203 := lang.Apply2(tmp175, tmp176, tmp202)
+						tmp204 := lang.Apply1(tmp174, tmp203)
+						tmp205 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp206 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp207 := lang.Apply1(tmp206, v115)
+						tmp208 := lang.Apply1(tmp205, tmp207)
+						tmp209 := lang.Apply(tmp167, []any{tmp169, tmp171, tmp173, tmp204, tmp208})
+						tmp210 := lang.Apply1(tmp166, tmp209)
+						tmp211 := lang.Apply1(tmp165, tmp210)
+						tmp212 := lang.Apply3(tmp117, tmp119, tmp164, tmp211)
+						tmp213 := lang.Apply1(tmp116, tmp212)
+						return tmp213
 					})
-					tmp119 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(102), kw_column, int(13), kw_end_DASH_line, int(104), kw_end_DASH_column, int(90))
-					tmp120, err := lang.WithMeta(tmp118, tmp119.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp121 := lang.Apply2(tmp117, tmp120, v30)
-					tmp122 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp123 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp124 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp125 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp126 := lang.Apply1(tmp125, sym_var)
-					tmp127 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp128 := lang.Apply1(tmp127, v4)
-					tmp129 := lang.Apply2(tmp124, tmp126, tmp128)
-					tmp130 := lang.Apply1(tmp123, tmp129)
-					tmp131 := lang.Apply1(tmp122, tmp130)
-					tmp132 := lang.Apply(tmp36, []any{tmp38, tmp92, tmp116, tmp121, tmp131})
-					tmp133 := lang.Apply1(tmp35, tmp132)
-					tmp6 = tmp133
+					tmp115 := lang.Apply2(tmp113, tmp114, v26)
+					tmp116 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp117 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp118 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp119 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp120 := lang.Apply1(tmp119, sym_var)
+					tmp121 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp122 := lang.Apply1(tmp121, v4)
+					tmp123 := lang.Apply2(tmp118, tmp120, tmp122)
+					tmp124 := lang.Apply1(tmp117, tmp123)
+					tmp125 := lang.Apply1(tmp116, tmp124)
+					tmp126 := lang.Apply(tmp32, []any{tmp34, tmp88, tmp112, tmp115, tmp125})
+					tmp127 := lang.Apply1(tmp31, tmp126)
+					tmp6 = tmp127
 				} // end let
 				return tmp6
 			}),
@@ -39267,555 +38524,505 @@ func LoadNS() {
 								} // end let
 								return tmp17
 							})
-							tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4461), kw_column, int(20), kw_end_DASH_line, int(4495), kw_end_DASH_column, int(34))
-							tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							var v16 any = tmp15
-							_ = v16
+							var v14 any = tmp13
+							_ = v14
 							// let binding "pmap"
-							var tmp17 lang.FnFunc3
-							tmp17 = lang.FnFunc3(func(p0, p1, p2 any) any {
-								v18 := p0
+							var tmp15 lang.FnFunc3
+							tmp15 = lang.FnFunc3(func(p0, p1, p2 any) any {
+								v16 := p0
+								_ = v16
+								v17 := p1
+								_ = v17
+								v18 := p2
 								_ = v18
-								v19 := p1
-								_ = v19
-								v20 := p2
-								_ = v20
-								var tmp21 any
+								var tmp19 any
 								{ // let
 									// let binding "gmap"
-									tmp22 := checkDerefVar(var_clojure_DOT_core_gensym)
-									tmp23 := lang.Apply1(tmp22, "map__")
-									var v24 any = tmp23
-									_ = v24
+									tmp20 := checkDerefVar(var_clojure_DOT_core_gensym)
+									tmp21 := lang.Apply1(tmp20, "map__")
+									var v22 any = tmp21
+									_ = v22
 									// let binding "gmapseq"
-									tmp25 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
-									tmp26 := lang.NewMap(kw_tag, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_ISeq)
-									tmp27 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4499), kw_column, int(52), kw_end_DASH_line, int(4499), kw_end_DASH_column, int(103))
-									tmp28, err := lang.WithMeta(tmp26, tmp27.(lang.IPersistentMap))
+									tmp23 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
+									tmp24 := lang.NewMap(kw_tag, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_ISeq)
+									tmp25 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4499), kw_column, int(52), kw_end_DASH_line, int(4499), kw_end_DASH_column, int(103))
+									tmp26, err := lang.WithMeta(tmp24, tmp25.(lang.IPersistentMap))
 									if err != nil {
 										panic(err)
 									}
-									tmp29 := lang.Apply2(tmp25, v24, tmp28)
+									tmp27 := lang.Apply2(tmp23, v22, tmp26)
+									var v28 any = tmp27
+									_ = v28
+									// let binding "defaults"
+									tmp29 := lang.Apply1(kw_or, v17)
 									var v30 any = tmp29
 									_ = v30
-									// let binding "defaults"
-									tmp31 := lang.Apply1(kw_or, v19)
-									var v32 any = tmp31
-									_ = v32
-									var tmp33 any
+									var tmp31 any
 									{ // let
 										// let binding "ret"
-										var tmp34 lang.FnFunc1
-										tmp34 = lang.FnFunc1(func(p0 any) any {
-											v35 := p0
-											_ = v35
-											var tmp36 any
-											tmp37 := lang.Apply1(kw_as, v19)
-											if lang.IsTruthy(tmp37) {
-												tmp38 := checkDerefVar(var_clojure_DOT_core_conj)
-												tmp39 := lang.Apply1(kw_as, v19)
-												tmp40 := lang.Apply3(tmp38, v35, tmp39, v24)
-												tmp36 = tmp40
+										var tmp32 lang.FnFunc1
+										tmp32 = lang.FnFunc1(func(p0 any) any {
+											v33 := p0
+											_ = v33
+											var tmp34 any
+											tmp35 := lang.Apply1(kw_as, v17)
+											if lang.IsTruthy(tmp35) {
+												tmp36 := checkDerefVar(var_clojure_DOT_core_conj)
+												tmp37 := lang.Apply1(kw_as, v17)
+												tmp38 := lang.Apply3(tmp36, v33, tmp37, v22)
+												tmp34 = tmp38
 											} else {
-												tmp36 = v35
+												tmp34 = v33
 											}
-											return tmp36
+											return tmp34
 										})
-										tmp35 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4507), kw_column, int(40), kw_end_DASH_line, int(4510), kw_end_DASH_column, int(48))
-										tmp36, err := lang.WithMeta(tmp34, tmp35.(lang.IPersistentMap))
-										if err != nil {
-											panic(err)
-										}
-										tmp37 := checkDerefVar(var_clojure_DOT_core_conj)
-										tmp38 := checkDerefVar(var_clojure_DOT_core_conj)
-										tmp39 := checkDerefVar(var_clojure_DOT_core_conj)
-										tmp40 := checkDerefVar(var_clojure_DOT_core_conj)
-										tmp41 := lang.Apply2(tmp40, v18, v24)
-										tmp42 := lang.Apply2(tmp39, tmp41, v20)
-										tmp43 := lang.Apply2(tmp38, tmp42, v24)
-										tmp44 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp45 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp46 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp47 := lang.Apply1(tmp46, sym_if)
-										tmp48 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp49 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp50 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp51 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp52 := lang.Apply1(tmp51, sym_clojure_DOT_core_SLASH_seq_QMARK_)
-										tmp53 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp54 := lang.Apply1(tmp53, v24)
-										tmp55 := lang.Apply2(tmp50, tmp52, tmp54)
-										tmp56 := lang.Apply1(tmp49, tmp55)
-										tmp57 := lang.Apply1(tmp48, tmp56)
-										tmp58 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp59 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp60 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp61 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp62 := lang.Apply1(tmp61, sym_if)
-										tmp63 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp64 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp65 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp66 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp67 := lang.Apply1(tmp66, sym_clojure_DOT_core_SLASH_next)
-										tmp68 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp69 := lang.Apply1(tmp68, v30)
-										tmp70 := lang.Apply2(tmp65, tmp67, tmp69)
-										tmp71 := lang.Apply1(tmp64, tmp70)
-										tmp72 := lang.Apply1(tmp63, tmp71)
-										tmp73 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp74 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp75 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp76 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp77 := lang.Apply1(tmp76, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewPersistentArrayMapAsIfByAssoc)
-										tmp78 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp79 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp80 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp81 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp82 := lang.Apply1(tmp81, sym_clojure_DOT_core_SLASH_to_DASH_array)
-										tmp83 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp84 := lang.Apply1(tmp83, v30)
-										tmp85 := lang.Apply2(tmp80, tmp82, tmp84)
-										tmp86 := lang.Apply1(tmp79, tmp85)
-										tmp87 := lang.Apply1(tmp78, tmp86)
-										tmp88 := lang.Apply2(tmp75, tmp77, tmp87)
-										tmp89 := lang.Apply1(tmp74, tmp88)
-										tmp90 := lang.Apply1(tmp73, tmp89)
-										tmp91 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp92 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp93 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp94 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp95 := lang.Apply1(tmp94, sym_if)
-										tmp96 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp97 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp98 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp99 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp100 := lang.Apply1(tmp99, sym_clojure_DOT_core_SLASH_seq)
-										tmp101 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp102 := lang.Apply1(tmp101, v30)
-										tmp103 := lang.Apply2(tmp98, tmp100, tmp102)
-										tmp104 := lang.Apply1(tmp97, tmp103)
-										tmp105 := lang.Apply1(tmp96, tmp104)
-										tmp106 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp107 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp108 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp109 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp110 := lang.Apply1(tmp109, sym_clojure_DOT_core_SLASH_first)
-										tmp111 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp112 := lang.Apply1(tmp111, v30)
-										tmp113 := lang.Apply2(tmp108, tmp110, tmp112)
-										tmp114 := lang.Apply1(tmp107, tmp113)
-										tmp115 := lang.Apply1(tmp106, tmp114)
-										tmp116 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp117 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp118 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp119 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp120 := lang.Apply1(tmp119, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMap)
-										tmp121 := lang.Apply1(tmp118, tmp120)
-										tmp122 := lang.Apply1(tmp117, tmp121)
-										tmp123 := lang.Apply1(tmp116, tmp122)
-										tmp124 := lang.Apply4(tmp93, tmp95, tmp105, tmp115, tmp123)
-										tmp125 := lang.Apply1(tmp92, tmp124)
-										tmp126 := lang.Apply1(tmp91, tmp125)
-										tmp127 := lang.Apply4(tmp60, tmp62, tmp72, tmp90, tmp126)
-										tmp128 := lang.Apply1(tmp59, tmp127)
-										tmp129 := lang.Apply1(tmp58, tmp128)
-										tmp130 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp131 := lang.Apply1(tmp130, v24)
-										tmp132 := lang.Apply4(tmp45, tmp47, tmp57, tmp129, tmp131)
-										tmp133 := lang.Apply1(tmp44, tmp132)
-										tmp134 := lang.Apply2(tmp37, tmp43, tmp133)
-										tmp135 := lang.Apply1(tmp36, tmp134)
-										var v136 any = tmp135
-										_ = v136
+										tmp33 := checkDerefVar(var_clojure_DOT_core_conj)
+										tmp34 := checkDerefVar(var_clojure_DOT_core_conj)
+										tmp35 := checkDerefVar(var_clojure_DOT_core_conj)
+										tmp36 := checkDerefVar(var_clojure_DOT_core_conj)
+										tmp37 := lang.Apply2(tmp36, v16, v22)
+										tmp38 := lang.Apply2(tmp35, tmp37, v18)
+										tmp39 := lang.Apply2(tmp34, tmp38, v22)
+										tmp40 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp41 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp42 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp43 := lang.Apply1(tmp42, sym_if)
+										tmp44 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp45 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp46 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp47 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp48 := lang.Apply1(tmp47, sym_clojure_DOT_core_SLASH_seq_QMARK_)
+										tmp49 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp50 := lang.Apply1(tmp49, v22)
+										tmp51 := lang.Apply2(tmp46, tmp48, tmp50)
+										tmp52 := lang.Apply1(tmp45, tmp51)
+										tmp53 := lang.Apply1(tmp44, tmp52)
+										tmp54 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp55 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp56 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp57 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp58 := lang.Apply1(tmp57, sym_if)
+										tmp59 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp60 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp61 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp62 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp63 := lang.Apply1(tmp62, sym_clojure_DOT_core_SLASH_next)
+										tmp64 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp65 := lang.Apply1(tmp64, v28)
+										tmp66 := lang.Apply2(tmp61, tmp63, tmp65)
+										tmp67 := lang.Apply1(tmp60, tmp66)
+										tmp68 := lang.Apply1(tmp59, tmp67)
+										tmp69 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp70 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp71 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp72 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp73 := lang.Apply1(tmp72, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewPersistentArrayMapAsIfByAssoc)
+										tmp74 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp75 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp76 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp77 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp78 := lang.Apply1(tmp77, sym_clojure_DOT_core_SLASH_to_DASH_array)
+										tmp79 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp80 := lang.Apply1(tmp79, v28)
+										tmp81 := lang.Apply2(tmp76, tmp78, tmp80)
+										tmp82 := lang.Apply1(tmp75, tmp81)
+										tmp83 := lang.Apply1(tmp74, tmp82)
+										tmp84 := lang.Apply2(tmp71, tmp73, tmp83)
+										tmp85 := lang.Apply1(tmp70, tmp84)
+										tmp86 := lang.Apply1(tmp69, tmp85)
+										tmp87 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp88 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp89 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp90 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp91 := lang.Apply1(tmp90, sym_if)
+										tmp92 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp93 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp94 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp95 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp96 := lang.Apply1(tmp95, sym_clojure_DOT_core_SLASH_seq)
+										tmp97 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp98 := lang.Apply1(tmp97, v28)
+										tmp99 := lang.Apply2(tmp94, tmp96, tmp98)
+										tmp100 := lang.Apply1(tmp93, tmp99)
+										tmp101 := lang.Apply1(tmp92, tmp100)
+										tmp102 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp103 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp104 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp105 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp106 := lang.Apply1(tmp105, sym_clojure_DOT_core_SLASH_first)
+										tmp107 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp108 := lang.Apply1(tmp107, v28)
+										tmp109 := lang.Apply2(tmp104, tmp106, tmp108)
+										tmp110 := lang.Apply1(tmp103, tmp109)
+										tmp111 := lang.Apply1(tmp102, tmp110)
+										tmp112 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp113 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp114 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp115 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp116 := lang.Apply1(tmp115, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_NewMap)
+										tmp117 := lang.Apply1(tmp114, tmp116)
+										tmp118 := lang.Apply1(tmp113, tmp117)
+										tmp119 := lang.Apply1(tmp112, tmp118)
+										tmp120 := lang.Apply4(tmp89, tmp91, tmp101, tmp111, tmp119)
+										tmp121 := lang.Apply1(tmp88, tmp120)
+										tmp122 := lang.Apply1(tmp87, tmp121)
+										tmp123 := lang.Apply4(tmp56, tmp58, tmp68, tmp86, tmp122)
+										tmp124 := lang.Apply1(tmp55, tmp123)
+										tmp125 := lang.Apply1(tmp54, tmp124)
+										tmp126 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp127 := lang.Apply1(tmp126, v22)
+										tmp128 := lang.Apply4(tmp41, tmp43, tmp53, tmp125, tmp127)
+										tmp129 := lang.Apply1(tmp40, tmp128)
+										tmp130 := lang.Apply2(tmp33, tmp39, tmp129)
+										tmp131 := lang.Apply1(tmp32, tmp130)
+										var v132 any = tmp131
+										_ = v132
 										// let binding "bes"
-										var tmp137 any
+										var tmp133 any
 										{ // let
 											// let binding "transforms"
-											tmp138 := checkDerefVar(var_clojure_DOT_core_reduce1)
-											var tmp139 lang.FnFunc2
-											tmp139 = lang.FnFunc2(func(p0, p1 any) any {
-												v140 := p0
-												_ = v140
-												v141 := p1
-												_ = v141
-												var tmp142 any
-												tmp143 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
-												tmp144 := lang.Apply1(tmp143, v141)
-												if lang.IsTruthy(tmp144) {
-													var tmp145 any
+											tmp134 := checkDerefVar(var_clojure_DOT_core_reduce1)
+											var tmp135 lang.FnFunc2
+											tmp135 = lang.FnFunc2(func(p0, p1 any) any {
+												v136 := p0
+												_ = v136
+												v137 := p1
+												_ = v137
+												var tmp138 any
+												tmp139 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
+												tmp140 := lang.Apply1(tmp139, v137)
+												if lang.IsTruthy(tmp140) {
+													var tmp141 any
 													{ // let
 														// let binding "mkns"
-														tmp146 := checkDerefVar(var_clojure_DOT_core_namespace)
-														tmp147 := lang.Apply1(tmp146, v141)
-														var v148 any = tmp147
-														_ = v148
+														tmp142 := checkDerefVar(var_clojure_DOT_core_namespace)
+														tmp143 := lang.Apply1(tmp142, v137)
+														var v144 any = tmp143
+														_ = v144
 														// let binding "mkn"
-														tmp149 := checkDerefVar(var_clojure_DOT_core_name)
-														tmp150 := lang.Apply1(tmp149, v141)
-														var v151 any = tmp150
-														_ = v151
-														var tmp152 any
-														tmp153 := checkDerefVar(var_clojure_DOT_core__EQ_)
-														tmp154 := lang.Apply2(tmp153, v151, "keys")
-														if lang.IsTruthy(tmp154) {
-															tmp155 := checkDerefVar(var_clojure_DOT_core_assoc)
-															var tmp156 lang.FnFunc1
-															tmp156 = lang.FnFunc1(func(p0 any) any {
-																v157 := p0
-																_ = v157
-																tmp158 := checkDerefVar(var_clojure_DOT_core_keyword)
-																var tmp159 any
+														tmp145 := checkDerefVar(var_clojure_DOT_core_name)
+														tmp146 := lang.Apply1(tmp145, v137)
+														var v147 any = tmp146
+														_ = v147
+														var tmp148 any
+														tmp149 := checkDerefVar(var_clojure_DOT_core__EQ_)
+														tmp150 := lang.Apply2(tmp149, v147, "keys")
+														if lang.IsTruthy(tmp150) {
+															tmp151 := checkDerefVar(var_clojure_DOT_core_assoc)
+															var tmp152 lang.FnFunc1
+															tmp152 = lang.FnFunc1(func(p0 any) any {
+																v153 := p0
+																_ = v153
+																tmp154 := checkDerefVar(var_clojure_DOT_core_keyword)
+																var tmp155 any
 																{ // let
 																	// let binding "or__0__auto__"
-																	var v160 any = v148
-																	_ = v160
-																	var tmp161 any
-																	if lang.IsTruthy(v160) {
-																		tmp161 = v160
+																	var v156 any = v144
+																	_ = v156
+																	var tmp157 any
+																	if lang.IsTruthy(v156) {
+																		tmp157 = v156
 																	} else {
-																		tmp162 := checkDerefVar(var_clojure_DOT_core_namespace)
-																		tmp163 := lang.Apply1(tmp162, v157)
-																		tmp161 = tmp163
+																		tmp158 := checkDerefVar(var_clojure_DOT_core_namespace)
+																		tmp159 := lang.Apply1(tmp158, v153)
+																		tmp157 = tmp159
 																	}
-																	tmp159 = tmp161
+																	tmp155 = tmp157
 																} // end let
-																tmp160 := checkDerefVar(var_clojure_DOT_core_name)
-																tmp161 := lang.Apply1(tmp160, v157)
-																tmp162 := lang.Apply2(tmp158, tmp159, tmp161)
-																return tmp162
+																tmp156 := checkDerefVar(var_clojure_DOT_core_name)
+																tmp157 := lang.Apply1(tmp156, v153)
+																tmp158 := lang.Apply2(tmp154, tmp155, tmp157)
+																return tmp158
 															})
-															tmp157 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4517), kw_column, int(93), kw_end_DASH_line, int(4517), kw_end_DASH_column, int(135))
-															tmp158, err := lang.WithMeta(tmp156, tmp157.(lang.IPersistentMap))
-															if err != nil {
-																panic(err)
-															}
-															tmp159 := lang.Apply3(tmp155, v140, v141, tmp158)
-															tmp152 = tmp159
+															tmp153 := lang.Apply3(tmp151, v136, v137, tmp152)
+															tmp148 = tmp153
 														} else {
-															var tmp160 any
-															tmp161 := checkDerefVar(var_clojure_DOT_core__EQ_)
-															tmp162 := lang.Apply2(tmp161, v151, "syms")
-															if lang.IsTruthy(tmp162) {
-																tmp163 := checkDerefVar(var_clojure_DOT_core_assoc)
-																var tmp164 lang.FnFunc1
-																tmp164 = lang.FnFunc1(func(p0 any) any {
-																	v165 := p0
-																	_ = v165
-																	tmp166 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp167 := checkDerefVar(var_clojure_DOT_core_symbol)
-																	var tmp168 any
+															var tmp154 any
+															tmp155 := checkDerefVar(var_clojure_DOT_core__EQ_)
+															tmp156 := lang.Apply2(tmp155, v147, "syms")
+															if lang.IsTruthy(tmp156) {
+																tmp157 := checkDerefVar(var_clojure_DOT_core_assoc)
+																var tmp158 lang.FnFunc1
+																tmp158 = lang.FnFunc1(func(p0 any) any {
+																	v159 := p0
+																	_ = v159
+																	tmp160 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp161 := checkDerefVar(var_clojure_DOT_core_symbol)
+																	var tmp162 any
 																	{ // let
 																		// let binding "or__0__auto__"
-																		var v169 any = v148
-																		_ = v169
-																		var tmp170 any
-																		if lang.IsTruthy(v169) {
-																			tmp170 = v169
+																		var v163 any = v144
+																		_ = v163
+																		var tmp164 any
+																		if lang.IsTruthy(v163) {
+																			tmp164 = v163
 																		} else {
-																			tmp171 := checkDerefVar(var_clojure_DOT_core_namespace)
-																			tmp172 := lang.Apply1(tmp171, v165)
-																			tmp170 = tmp172
+																			tmp165 := checkDerefVar(var_clojure_DOT_core_namespace)
+																			tmp166 := lang.Apply1(tmp165, v159)
+																			tmp164 = tmp166
 																		}
-																		tmp168 = tmp170
+																		tmp162 = tmp164
 																	} // end let
-																	tmp169 := checkDerefVar(var_clojure_DOT_core_name)
-																	tmp170 := lang.Apply1(tmp169, v165)
-																	tmp171 := lang.Apply2(tmp167, tmp168, tmp170)
-																	tmp172 := lang.Apply2(tmp166, sym_quote, tmp171)
-																	return tmp172
+																	tmp163 := checkDerefVar(var_clojure_DOT_core_name)
+																	tmp164 := lang.Apply1(tmp163, v159)
+																	tmp165 := lang.Apply2(tmp161, tmp162, tmp164)
+																	tmp166 := lang.Apply2(tmp160, sym_quote, tmp165)
+																	return tmp166
 																})
-																tmp165 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4518), kw_column, int(93), kw_end_DASH_line, int(4518), kw_end_DASH_column, int(148))
-																tmp166, err := lang.WithMeta(tmp164, tmp165.(lang.IPersistentMap))
-																if err != nil {
-																	panic(err)
-																}
-																tmp167 := lang.Apply3(tmp163, v140, v141, tmp166)
-																tmp160 = tmp167
+																tmp159 := lang.Apply3(tmp157, v136, v137, tmp158)
+																tmp154 = tmp159
 															} else {
-																var tmp168 any
-																tmp169 := checkDerefVar(var_clojure_DOT_core__EQ_)
-																tmp170 := lang.Apply2(tmp169, v151, "strs")
-																if lang.IsTruthy(tmp170) {
-																	tmp171 := checkDerefVar(var_clojure_DOT_core_assoc)
-																	tmp172 := checkDerefVar(var_clojure_DOT_core_str)
-																	tmp173 := lang.Apply3(tmp171, v140, v141, tmp172)
-																	tmp168 = tmp173
+																var tmp160 any
+																tmp161 := checkDerefVar(var_clojure_DOT_core__EQ_)
+																tmp162 := lang.Apply2(tmp161, v147, "strs")
+																if lang.IsTruthy(tmp162) {
+																	tmp163 := checkDerefVar(var_clojure_DOT_core_assoc)
+																	tmp164 := checkDerefVar(var_clojure_DOT_core_str)
+																	tmp165 := lang.Apply3(tmp163, v136, v137, tmp164)
+																	tmp160 = tmp165
 																} else {
-																	var tmp174 any
+																	var tmp166 any
 																	if lang.IsTruthy(kw_else) {
-																		tmp174 = v140
+																		tmp166 = v136
 																	} else {
 																	}
-																	tmp168 = tmp174
+																	tmp160 = tmp166
 																}
-																tmp160 = tmp168
+																tmp154 = tmp160
 															}
-															tmp152 = tmp160
+															tmp148 = tmp154
 														}
-														tmp145 = tmp152
+														tmp141 = tmp148
 													} // end let
-													tmp142 = tmp145
+													tmp138 = tmp141
 												} else {
-													tmp142 = v140
+													tmp138 = v136
 												}
-												return tmp142
+												return tmp138
 											})
-											tmp140 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4513), kw_column, int(45), kw_end_DASH_line, int(4521), kw_end_DASH_column, int(60))
-											tmp141, err := lang.WithMeta(tmp139, tmp140.(lang.IPersistentMap))
+											tmp136 := lang.NewMap()
+											tmp137 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4522), kw_column, int(45), kw_end_DASH_line, int(4522), kw_end_DASH_column, int(46))
+											tmp138, err := lang.WithMeta(tmp136, tmp137.(lang.IPersistentMap))
 											if err != nil {
 												panic(err)
 											}
-											tmp142 := lang.NewMap()
-											tmp143 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4522), kw_column, int(45), kw_end_DASH_line, int(4522), kw_end_DASH_column, int(46))
-											tmp144, err := lang.WithMeta(tmp142, tmp143.(lang.IPersistentMap))
-											if err != nil {
-												panic(err)
-											}
-											tmp145 := checkDerefVar(var_clojure_DOT_core_keys)
-											tmp146 := lang.Apply1(tmp145, v19)
-											tmp147 := lang.Apply3(tmp138, tmp141, tmp144, tmp146)
-											var v148 any = tmp147
-											_ = v148
-											tmp149 := checkDerefVar(var_clojure_DOT_core_reduce1)
-											var tmp150 lang.FnFunc2
-											tmp150 = lang.FnFunc2(func(p0, p1 any) any {
-												v151 := p0
-												_ = v151
-												v152 := p1
-												_ = v152
-												tmp153 := checkDerefVar(var_clojure_DOT_core_reduce1)
-												var tmp154 lang.FnFunc2
-												tmp154 = lang.FnFunc2(func(p0, p1 any) any {
-													v155 := p0
-													_ = v155
-													v156 := p1
-													_ = v156
-													tmp157 := checkDerefVar(var_clojure_DOT_core_assoc)
-													tmp158 := checkDerefVar(var_clojure_DOT_core_val)
-													tmp159 := lang.Apply1(tmp158, v152)
-													tmp160 := lang.Apply1(tmp159, v156)
-													tmp161 := lang.Apply3(tmp157, v155, v156, tmp160)
-													return tmp161
+											tmp139 := checkDerefVar(var_clojure_DOT_core_keys)
+											tmp140 := lang.Apply1(tmp139, v17)
+											tmp141 := lang.Apply3(tmp134, tmp135, tmp138, tmp140)
+											var v142 any = tmp141
+											_ = v142
+											tmp143 := checkDerefVar(var_clojure_DOT_core_reduce1)
+											var tmp144 lang.FnFunc2
+											tmp144 = lang.FnFunc2(func(p0, p1 any) any {
+												v145 := p0
+												_ = v145
+												v146 := p1
+												_ = v146
+												tmp147 := checkDerefVar(var_clojure_DOT_core_reduce1)
+												var tmp148 lang.FnFunc2
+												tmp148 = lang.FnFunc2(func(p0, p1 any) any {
+													v149 := p0
+													_ = v149
+													v150 := p1
+													_ = v150
+													tmp151 := checkDerefVar(var_clojure_DOT_core_assoc)
+													tmp152 := checkDerefVar(var_clojure_DOT_core_val)
+													tmp153 := lang.Apply1(tmp152, v146)
+													tmp154 := lang.Apply1(tmp153, v150)
+													tmp155 := lang.Apply3(tmp151, v149, v150, tmp154)
+													return tmp155
 												})
-												tmp155 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4526), kw_column, int(52), kw_end_DASH_line, int(4526), kw_end_DASH_column, int(82))
-												tmp156, err := lang.WithMeta(tmp154, tmp155.(lang.IPersistentMap))
-												if err != nil {
-													panic(err)
-												}
-												tmp157 := checkDerefVar(var_clojure_DOT_core_dissoc)
-												tmp158 := checkDerefVar(var_clojure_DOT_core_key)
-												tmp159 := lang.Apply1(tmp158, v152)
-												tmp160 := lang.Apply2(tmp157, v151, tmp159)
-												tmp161 := checkDerefVar(var_clojure_DOT_core_key)
-												tmp162 := lang.Apply1(tmp161, v152)
-												tmp163 := lang.Apply1(tmp162, v151)
-												tmp164 := lang.Apply3(tmp153, tmp156, tmp160, tmp163)
-												return tmp164
+												tmp149 := checkDerefVar(var_clojure_DOT_core_dissoc)
+												tmp150 := checkDerefVar(var_clojure_DOT_core_key)
+												tmp151 := lang.Apply1(tmp150, v146)
+												tmp152 := lang.Apply2(tmp149, v145, tmp151)
+												tmp153 := checkDerefVar(var_clojure_DOT_core_key)
+												tmp154 := lang.Apply1(tmp153, v146)
+												tmp155 := lang.Apply1(tmp154, v145)
+												tmp156 := lang.Apply3(tmp147, tmp148, tmp152, tmp155)
+												return tmp156
 											})
-											tmp151 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4525), kw_column, int(41), kw_end_DASH_line, int(4528), kw_end_DASH_column, int(70))
-											tmp152, err := lang.WithMeta(tmp150, tmp151.(lang.IPersistentMap))
-											if err != nil {
-												panic(err)
-											}
-											tmp153 := checkDerefVar(var_clojure_DOT_core_dissoc)
-											tmp154 := lang.Apply3(tmp153, v19, kw_as, kw_or)
-											tmp155 := lang.Apply3(tmp149, tmp152, tmp154, v148)
-											tmp137 = tmp155
+											tmp145 := checkDerefVar(var_clojure_DOT_core_dissoc)
+											tmp146 := lang.Apply3(tmp145, v17, kw_as, kw_or)
+											tmp147 := lang.Apply3(tmp143, tmp144, tmp146, v142)
+											tmp133 = tmp147
 										} // end let
-										var v138 any = tmp137
-										_ = v138
+										var v134 any = tmp133
+										_ = v134
 										for {
-											var tmp139 any
-											tmp140 := checkDerefVar(var_clojure_DOT_core_seq)
-											tmp141 := lang.Apply1(tmp140, v138)
-											if lang.IsTruthy(tmp141) {
-												var tmp142 any
+											var tmp135 any
+											tmp136 := checkDerefVar(var_clojure_DOT_core_seq)
+											tmp137 := lang.Apply1(tmp136, v134)
+											if lang.IsTruthy(tmp137) {
+												var tmp138 any
 												{ // let
 													// let binding "bb"
-													tmp143 := checkDerefVar(var_clojure_DOT_core_key)
-													tmp144 := checkDerefVar(var_clojure_DOT_core_first)
-													tmp145 := lang.Apply1(tmp144, v138)
-													tmp146 := lang.Apply1(tmp143, tmp145)
-													var v147 any = tmp146
-													_ = v147
+													tmp139 := checkDerefVar(var_clojure_DOT_core_key)
+													tmp140 := checkDerefVar(var_clojure_DOT_core_first)
+													tmp141 := lang.Apply1(tmp140, v134)
+													tmp142 := lang.Apply1(tmp139, tmp141)
+													var v143 any = tmp142
+													_ = v143
 													// let binding "bk"
-													tmp148 := checkDerefVar(var_clojure_DOT_core_val)
-													tmp149 := checkDerefVar(var_clojure_DOT_core_first)
-													tmp150 := lang.Apply1(tmp149, v138)
-													tmp151 := lang.Apply1(tmp148, tmp150)
-													var v152 any = tmp151
-													_ = v152
+													tmp144 := checkDerefVar(var_clojure_DOT_core_val)
+													tmp145 := checkDerefVar(var_clojure_DOT_core_first)
+													tmp146 := lang.Apply1(tmp145, v134)
+													tmp147 := lang.Apply1(tmp144, tmp146)
+													var v148 any = tmp147
+													_ = v148
 													// let binding "local"
-													var tmp153 any
-													tmp154 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-													tmp155 := reflect.TypeOf((*lang.Named)(nil)).Elem()
-													tmp156 := lang.Apply2(tmp154, tmp155, v147)
-													if lang.IsTruthy(tmp156) {
-														tmp157 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
-														tmp158 := checkDerefVar(var_clojure_DOT_core_symbol)
-														tmp159 := checkDerefVar(var_clojure_DOT_core_name)
-														tmp160 := lang.Apply1(tmp159, v147)
-														tmp161 := lang.Apply2(tmp158, nil, tmp160)
-														tmp162 := checkDerefVar(var_clojure_DOT_core_meta)
-														tmp163 := lang.Apply1(tmp162, v147)
-														tmp164 := lang.Apply2(tmp157, tmp161, tmp163)
-														tmp153 = tmp164
+													var tmp149 any
+													tmp150 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+													tmp151 := reflect.TypeOf((*lang.Named)(nil)).Elem()
+													tmp152 := lang.Apply2(tmp150, tmp151, v143)
+													if lang.IsTruthy(tmp152) {
+														tmp153 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
+														tmp154 := checkDerefVar(var_clojure_DOT_core_symbol)
+														tmp155 := checkDerefVar(var_clojure_DOT_core_name)
+														tmp156 := lang.Apply1(tmp155, v143)
+														tmp157 := lang.Apply2(tmp154, nil, tmp156)
+														tmp158 := checkDerefVar(var_clojure_DOT_core_meta)
+														tmp159 := lang.Apply1(tmp158, v143)
+														tmp160 := lang.Apply2(tmp153, tmp157, tmp159)
+														tmp149 = tmp160
 													} else {
-														tmp153 = v147
+														tmp149 = v143
 													}
-													var v165 any = tmp153
-													_ = v165
+													var v161 any = tmp149
+													_ = v161
 													// let binding "bv"
-													var tmp166 any
-													tmp167 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
-													tmp168 := lang.Apply2(tmp167, v32, v165)
-													if lang.IsTruthy(tmp168) {
-														tmp169 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp170 := lang.Apply1(v32, v165)
-														tmp171 := lang.Apply4(tmp169, sym_clojure_DOT_core_SLASH_get, v24, v152, tmp170)
-														tmp166 = tmp171
+													var tmp162 any
+													tmp163 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
+													tmp164 := lang.Apply2(tmp163, v30, v161)
+													if lang.IsTruthy(tmp164) {
+														tmp165 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp166 := lang.Apply1(v30, v161)
+														tmp167 := lang.Apply4(tmp165, sym_clojure_DOT_core_SLASH_get, v22, v148, tmp166)
+														tmp162 = tmp167
 													} else {
-														tmp172 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp173 := lang.Apply3(tmp172, sym_clojure_DOT_core_SLASH_get, v24, v152)
-														tmp166 = tmp173
+														tmp168 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp169 := lang.Apply3(tmp168, sym_clojure_DOT_core_SLASH_get, v22, v148)
+														tmp162 = tmp169
 													}
-													var v174 any = tmp166
-													_ = v174
-													var tmp176 any
-													tmp177 := checkDerefVar(var_clojure_DOT_core_ident_QMARK_)
-													tmp178 := lang.Apply1(tmp177, v147)
-													if lang.IsTruthy(tmp178) {
-														tmp179 := checkDerefVar(var_clojure_DOT_core_conj)
-														tmp180 := lang.Apply3(tmp179, v136, v165, v174)
-														tmp176 = tmp180
+													var v170 any = tmp162
+													_ = v170
+													var tmp172 any
+													tmp173 := checkDerefVar(var_clojure_DOT_core_ident_QMARK_)
+													tmp174 := lang.Apply1(tmp173, v143)
+													if lang.IsTruthy(tmp174) {
+														tmp175 := checkDerefVar(var_clojure_DOT_core_conj)
+														tmp176 := lang.Apply3(tmp175, v132, v161, v170)
+														tmp172 = tmp176
 													} else {
-														tmp181 := lang.Apply3(v8, v136, v147, v174)
-														tmp176 = tmp181
+														tmp177 := lang.Apply3(v8, v132, v143, v170)
+														tmp172 = tmp177
 													}
-													var tmp175 any = tmp176
-													tmp183 := checkDerefVar(var_clojure_DOT_core_next)
-													tmp184 := lang.Apply1(tmp183, v138)
-													var tmp182 any = tmp184
-													v136 = tmp175
-													v138 = tmp182
+													var tmp171 any = tmp172
+													tmp179 := checkDerefVar(var_clojure_DOT_core_next)
+													tmp180 := lang.Apply1(tmp179, v134)
+													var tmp178 any = tmp180
+													v132 = tmp171
+													v134 = tmp178
 													continue
 												} // end let
-												tmp139 = tmp142
+												tmp135 = tmp138
 											} else {
-												tmp139 = v136
+												tmp135 = v132
 											}
-											tmp33 = tmp139
+											tmp31 = tmp135
 											break
 										}
 									} // end let
-									tmp21 = tmp33
+									tmp19 = tmp31
 								} // end let
-								return tmp21
+								return tmp19
 							})
-							tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4497), kw_column, int(20), kw_end_DASH_line, int(4542), kw_end_DASH_column, int(34))
-							tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							var v20 any = tmp19
-							_ = v20
-							var tmp21 any
-							tmp22 := checkDerefVar(var_clojure_DOT_core_symbol_QMARK_)
-							tmp23 := lang.Apply1(tmp22, v10)
-							if lang.IsTruthy(tmp23) {
-								tmp24 := checkDerefVar(var_clojure_DOT_core_conj)
-								tmp25 := checkDerefVar(var_clojure_DOT_core_conj)
-								tmp26 := lang.Apply2(tmp25, v9, v10)
-								tmp27 := lang.Apply2(tmp24, tmp26, v11)
-								tmp21 = tmp27
+							var v16 any = tmp15
+							_ = v16
+							var tmp17 any
+							tmp18 := checkDerefVar(var_clojure_DOT_core_symbol_QMARK_)
+							tmp19 := lang.Apply1(tmp18, v10)
+							if lang.IsTruthy(tmp19) {
+								tmp20 := checkDerefVar(var_clojure_DOT_core_conj)
+								tmp21 := checkDerefVar(var_clojure_DOT_core_conj)
+								tmp22 := lang.Apply2(tmp21, v9, v10)
+								tmp23 := lang.Apply2(tmp20, tmp22, v11)
+								tmp17 = tmp23
 							} else {
-								var tmp28 any
-								tmp29 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-								tmp30 := lang.Apply1(tmp29, v10)
-								if lang.IsTruthy(tmp30) {
-									tmp31 := lang.Apply3(v16, v9, v10, v11)
-									tmp28 = tmp31
+								var tmp24 any
+								tmp25 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
+								tmp26 := lang.Apply1(tmp25, v10)
+								if lang.IsTruthy(tmp26) {
+									tmp27 := lang.Apply3(v14, v9, v10, v11)
+									tmp24 = tmp27
 								} else {
-									var tmp32 any
-									tmp33 := checkDerefVar(var_clojure_DOT_core_map_QMARK_)
-									tmp34 := lang.Apply1(tmp33, v10)
-									if lang.IsTruthy(tmp34) {
-										tmp35 := lang.Apply3(v20, v9, v10, v11)
-										tmp32 = tmp35
+									var tmp28 any
+									tmp29 := checkDerefVar(var_clojure_DOT_core_map_QMARK_)
+									tmp30 := lang.Apply1(tmp29, v10)
+									if lang.IsTruthy(tmp30) {
+										tmp31 := lang.Apply3(v16, v9, v10, v11)
+										tmp28 = tmp31
 									} else {
-										var tmp36 any
+										var tmp32 any
 										if lang.IsTruthy(kw_else) {
-											tmp37 := checkDerefVar(var_clojure_DOT_core_str)
-											tmp38 := lang.Apply2(tmp37, "Unsupported binding form: ", v10)
-											tmp39 := lang.Apply1(errors5.New, tmp38)
-											panic(tmp39)
+											tmp33 := checkDerefVar(var_clojure_DOT_core_str)
+											tmp34 := lang.Apply2(tmp33, "Unsupported binding form: ", v10)
+											tmp35 := lang.Apply1(errors5.New, tmp34)
+											panic(tmp35)
 										} else {
 										}
-										tmp32 = tmp36
+										tmp28 = tmp32
 									}
-									tmp28 = tmp32
+									tmp24 = tmp28
 								}
-								tmp21 = tmp28
+								tmp17 = tmp24
 							}
-							tmp12 = tmp21
+							tmp12 = tmp17
 						} // end let
 						return tmp12
 					})
 					v8 = tmp7
 					_ = v8
 				}
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4459), kw_column, int(12), kw_end_DASH_line, int(4547), kw_end_DASH_column, int(82))
-				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
+				var v8 any = tmp7
+				_ = v8
+				// let binding "process-entry"
+				var tmp9 lang.FnFunc2
+				tmp9 = lang.FnFunc2(func(p0, p1 any) any {
+					v10 := p0
+					_ = v10
+					v11 := p1
+					_ = v11
+					tmp12 := checkDerefVar(var_clojure_DOT_core_first)
+					tmp13 := lang.Apply1(tmp12, v11)
+					tmp14 := checkDerefVar(var_clojure_DOT_core_second)
+					tmp15 := lang.Apply1(tmp14, v11)
+					tmp16 := lang.Apply3(v8, v10, tmp13, tmp15)
+					return tmp16
+				})
 				var v10 any = tmp9
 				_ = v10
-				// let binding "process-entry"
-				var tmp11 lang.FnFunc2
-				tmp11 = lang.FnFunc2(func(p0, p1 any) any {
-					v12 := p0
-					_ = v12
-					v13 := p1
-					_ = v13
-					tmp14 := checkDerefVar(var_clojure_DOT_core_first)
-					tmp15 := lang.Apply1(tmp14, v13)
-					tmp16 := checkDerefVar(var_clojure_DOT_core_second)
-					tmp17 := lang.Apply1(tmp16, v13)
-					tmp18 := lang.Apply3(v10, v12, tmp15, tmp17)
-					return tmp18
-				})
-				tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4548), kw_column, int(23), kw_end_DASH_line, int(4548), kw_end_DASH_column, int(66))
-				tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v14 any = tmp13
-				_ = v14
-				var tmp15 any
-				tmp16 := checkDerefVar(var_clojure_DOT_core_every_QMARK_)
-				tmp17 := checkDerefVar(var_clojure_DOT_core_symbol_QMARK_)
-				tmp18 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp19 := checkDerefVar(var_clojure_DOT_core_first)
-				tmp20 := lang.Apply2(tmp18, tmp19, v6)
-				tmp21 := lang.Apply2(tmp16, tmp17, tmp20)
-				if lang.IsTruthy(tmp21) {
-					tmp15 = v2
+				var tmp11 any
+				tmp12 := checkDerefVar(var_clojure_DOT_core_every_QMARK_)
+				tmp13 := checkDerefVar(var_clojure_DOT_core_symbol_QMARK_)
+				tmp14 := checkDerefVar(var_clojure_DOT_core_map)
+				tmp15 := checkDerefVar(var_clojure_DOT_core_first)
+				tmp16 := lang.Apply2(tmp14, tmp15, v6)
+				tmp17 := lang.Apply2(tmp12, tmp13, tmp16)
+				if lang.IsTruthy(tmp17) {
+					tmp11 = v2
 				} else {
-					tmp22 := checkDerefVar(var_clojure_DOT_core_reduce1)
-					tmp23 := lang.NewVector()
-					tmp24 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4551), kw_column, int(30), kw_end_DASH_line, int(4551), kw_end_DASH_column, int(31))
-					tmp25, err := lang.WithMeta(tmp23, tmp24.(lang.IPersistentMap))
+					tmp18 := checkDerefVar(var_clojure_DOT_core_reduce1)
+					tmp19 := lang.NewVector()
+					tmp20 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4551), kw_column, int(30), kw_end_DASH_line, int(4551), kw_end_DASH_column, int(31))
+					tmp21, err := lang.WithMeta(tmp19, tmp20.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
 					}
-					tmp26 := lang.Apply3(tmp22, v14, tmp25, v6)
-					tmp15 = tmp26
+					tmp22 := lang.Apply3(tmp18, v10, tmp21, v6)
+					tmp11 = tmp22
 				}
-				tmp3 = tmp15
+				tmp3 = tmp11
 			} // end let
 			return tmp3
 		})
@@ -40065,17 +39272,12 @@ func LoadNS() {
 						tmp56 := lang.Apply2(tmp30, tmp31, tmp55)
 						return tmp56
 					})
-					tmp29 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3920), kw_column, int(17), kw_end_DASH_line, int(3925), kw_end_DASH_column, int(30))
-					tmp30, err := lang.WithMeta(tmp28, tmp29.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp31 := lang.Apply2(tmp27, tmp30, v5)
-					tmp32 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp33 := lang.Apply1(tmp32, v9)
-					tmp34 := lang.Apply4(tmp11, tmp13, tmp26, tmp31, tmp33)
-					tmp35 := lang.Apply1(tmp10, tmp34)
-					tmp6 = tmp35
+					tmp29 := lang.Apply2(tmp27, tmp28, v5)
+					tmp30 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp31 := lang.Apply1(tmp30, v9)
+					tmp32 := lang.Apply4(tmp11, tmp13, tmp26, tmp29, tmp31)
+					tmp33 := lang.Apply1(tmp10, tmp32)
+					tmp6 = tmp33
 				} // end let
 				return tmp6
 			}),
@@ -40113,15 +39315,10 @@ func LoadNS() {
 					_ = v7
 					return v6
 				})
-				tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2959), kw_column, int(18), kw_end_DASH_line, int(2959), kw_end_DASH_column, int(29))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp8 := checkDerefVar(var_clojure_DOT_core_drop)
-				tmp9 := lang.Apply2(tmp8, v2, v3)
-				tmp10 := lang.Apply3(tmp4, tmp7, v3, tmp9)
-				return tmp10
+				tmp6 := checkDerefVar(var_clojure_DOT_core_drop)
+				tmp7 := lang.Apply2(tmp6, v2, v3)
+				tmp8 := lang.Apply3(tmp4, tmp5, v3, tmp7)
+				return tmp8
 			}),
 			nil,
 			nil,
@@ -40187,15 +39384,10 @@ func LoadNS() {
 					} // end let
 					return tmp15
 				})
-				tmp14 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(208), kw_column, int(15), kw_end_DASH_line, int(209), kw_end_DASH_column, int(42))
-				tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp16 := lang.Apply2(tmp12, tmp15, v7)
-				tmp17 := lang.Apply2(tmp9, tmp11, tmp16)
-				tmp18 := lang.Apply1(tmp8, tmp17)
-				tmp4 = tmp18
+				tmp14 := lang.Apply2(tmp12, tmp13, v7)
+				tmp15 := lang.Apply2(tmp9, tmp11, tmp14)
+				tmp16 := lang.Apply1(tmp8, tmp15)
+				tmp4 = tmp16
 			} // end let
 			return tmp4
 		})
@@ -40316,69 +39508,49 @@ func LoadNS() {
 								} // end let
 								return tmp27
 							})
-							tmp26 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(168), kw_column, int(23), kw_end_DASH_line, int(170), kw_end_DASH_column, int(36))
-							tmp27, err := lang.WithMeta(tmp25, tmp26.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp28 := lang.Apply2(tmp24, tmp27, v23)
-							tmp15 = tmp28
+							tmp26 := lang.Apply2(tmp24, tmp25, v23)
+							tmp15 = tmp26
 						} // end let
 						return tmp15
 					})
-					tmp14 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(164), kw_column, int(14), kw_end_DASH_line, int(171), kw_end_DASH_column, int(30))
-					tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v16 any = tmp15
-					_ = v16
-					tmp17 := checkDerefVar(var_clojure_DOT_core_zipmap)
-					tmp18 := checkDerefVar(var_clojure_DOT_core_map)
-					var tmp19 lang.FnFunc1
-					tmp19 = lang.FnFunc1(func(p0 any) any {
-						v20 := p0
-						_ = v20
-						tmp21 := checkDerefVar(var_clojure_DOT_core_keyword)
-						tmp22 := checkDerefVar(var_clojure_DOT_core_name)
-						tmp23 := checkDerefVar(var_clojure_DOT_core_first)
-						tmp24 := lang.Apply1(tmp23, v20)
-						tmp25 := lang.Apply1(tmp22, tmp24)
-						tmp26 := lang.Apply1(tmp21, tmp25)
+					var v14 any = tmp13
+					_ = v14
+					tmp15 := checkDerefVar(var_clojure_DOT_core_zipmap)
+					tmp16 := checkDerefVar(var_clojure_DOT_core_map)
+					var tmp17 lang.FnFunc1
+					tmp17 = lang.FnFunc1(func(p0 any) any {
+						v18 := p0
+						_ = v18
+						tmp19 := checkDerefVar(var_clojure_DOT_core_keyword)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_name)
+						tmp21 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp22 := lang.Apply1(tmp21, v18)
+						tmp23 := lang.Apply1(tmp20, tmp22)
+						tmp24 := lang.Apply1(tmp19, tmp23)
+						return tmp24
+					})
+					tmp18 := lang.Apply2(tmp16, tmp17, v11)
+					tmp19 := checkDerefVar(var_clojure_DOT_core_map)
+					var tmp20 lang.FnFunc1
+					tmp20 = lang.FnFunc1(func(p0 any) any {
+						v21 := p0
+						_ = v21
+						tmp22 := checkDerefVar(var_clojure_DOT_core_cons)
+						tmp23 := checkDerefVar(var_clojure_DOT_core_drop)
+						tmp24 := lang.Apply2(tmp23, int64(1), v21)
+						tmp25 := lang.Apply1(v14, tmp24)
+						tmp26 := lang.Apply2(tmp22, sym_clojure_DOT_core_SLASH_fn, tmp25)
 						return tmp26
 					})
-					tmp20 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(172), kw_column, int(21), kw_end_DASH_line, int(172), kw_end_DASH_column, int(46))
-					tmp21, err := lang.WithMeta(tmp19, tmp20.(lang.IPersistentMap))
+					tmp21 := lang.Apply2(tmp19, tmp20, v11)
+					tmp22 := lang.Apply2(tmp15, tmp18, tmp21)
+					tmp23 := lang.NewVector(v8, tmp22)
+					tmp24 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(172), kw_column, int(5), kw_end_DASH_line, int(173), kw_end_DASH_column, int(55))
+					tmp25, err := lang.WithMeta(tmp23, tmp24.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
 					}
-					tmp22 := lang.Apply2(tmp18, tmp21, v11)
-					tmp23 := checkDerefVar(var_clojure_DOT_core_map)
-					var tmp24 lang.FnFunc1
-					tmp24 = lang.FnFunc1(func(p0 any) any {
-						v25 := p0
-						_ = v25
-						tmp26 := checkDerefVar(var_clojure_DOT_core_cons)
-						tmp27 := checkDerefVar(var_clojure_DOT_core_drop)
-						tmp28 := lang.Apply2(tmp27, int64(1), v25)
-						tmp29 := lang.Apply1(v16, tmp28)
-						tmp30 := lang.Apply2(tmp26, sym_clojure_DOT_core_SLASH_fn, tmp29)
-						return tmp30
-					})
-					tmp25 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(173), kw_column, int(21), kw_end_DASH_line, int(173), kw_end_DASH_column, int(49))
-					tmp26, err := lang.WithMeta(tmp24, tmp25.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp27 := lang.Apply2(tmp23, tmp26, v11)
-					tmp28 := lang.Apply2(tmp17, tmp22, tmp27)
-					tmp29 := lang.NewVector(v8, tmp28)
-					tmp30 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(172), kw_column, int(5), kw_end_DASH_line, int(173), kw_end_DASH_column, int(55))
-					tmp31, err := lang.WithMeta(tmp29, tmp30.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp12 = tmp31
+					tmp12 = tmp25
 				} // end let
 				tmp4 = tmp12
 			} // end let
@@ -40518,22 +39690,17 @@ func LoadNS() {
 									} // end let
 									return tmp35
 								})
-								tmp33 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(156), kw_column, int(14), kw_end_DASH_line, int(160), kw_end_DASH_column, int(45))
-								tmp34, err := lang.WithMeta(tmp32, tmp33.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp35 := lang.Apply3(tmp31, tmp34, nil, v24)
-								_ = tmp35
-								var tmp36 any = v9
-								var tmp37 any = v10
-								var tmp38 any = v11
-								tmp40 := lang.Numbers.Unchecked_inc(v12)
-								var tmp39 any = tmp40
-								v9 = tmp36
-								v10 = tmp37
-								v11 = tmp38
-								v12 = tmp39
+								tmp33 := lang.Apply3(tmp31, tmp32, nil, v24)
+								_ = tmp33
+								var tmp34 any = v9
+								var tmp35 any = v10
+								var tmp36 any = v11
+								tmp38 := lang.Numbers.Unchecked_inc(v12)
+								var tmp37 any = tmp38
+								v9 = tmp34
+								v10 = tmp35
+								v11 = tmp36
+								v12 = tmp37
 								continue
 							} // end let
 							tmp13 = tmp15
@@ -40670,23 +39837,18 @@ func LoadNS() {
 													} // end let
 													return tmp47
 												})
-												tmp45 := lang.NewMap(kw_file, "clojure/core_deftype.glj", kw_line, int(156), kw_column, int(14), kw_end_DASH_line, int(160), kw_end_DASH_column, int(45))
-												tmp46, err := lang.WithMeta(tmp44, tmp45.(lang.IPersistentMap))
-												if err != nil {
-													panic(err)
-												}
-												tmp47 := lang.Apply3(tmp43, tmp46, nil, v36)
-												_ = tmp47
-												tmp49 := checkDerefVar(var_clojure_DOT_core_next)
-												tmp50 := lang.Apply1(tmp49, v22)
-												var tmp48 any = tmp50
-												var tmp51 any = nil
-												var tmp52 any = int64(0)
-												var tmp53 any = int64(0)
-												v9 = tmp48
-												v10 = tmp51
-												v11 = tmp52
-												v12 = tmp53
+												tmp45 := lang.Apply3(tmp43, tmp44, nil, v36)
+												_ = tmp45
+												tmp47 := checkDerefVar(var_clojure_DOT_core_next)
+												tmp48 := lang.Apply1(tmp47, v22)
+												var tmp46 any = tmp48
+												var tmp49 any = nil
+												var tmp50 any = int64(0)
+												var tmp51 any = int64(0)
+												v9 = tmp46
+												v10 = tmp49
+												v11 = tmp50
+												v12 = tmp51
 												continue
 											} // end let
 											tmp23 = tmp27
@@ -41046,90 +40208,75 @@ func LoadNS() {
 									tmp138 := lang.Apply1(tmp131, tmp137)
 									return tmp138
 								})
-								tmp130 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4639), kw_column, int(41), kw_end_DASH_line, int(4639), kw_end_DASH_column, int(62))
-								tmp131, err := lang.WithMeta(tmp129, tmp130.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp132 := lang.Apply2(tmp128, tmp131, v94)
-								tmp133 := checkDerefVar(var_clojure_DOT_core_list)
-								tmp134 := lang.Apply1(tmp133, sym__PCT_)
-								tmp135 := lang.Apply4(tmp100, tmp102, tmp127, tmp132, tmp134)
-								tmp136 := lang.Apply1(tmp99, tmp135)
-								tmp137 := lang.Apply1(tmp98, tmp136)
-								tmp138 := lang.Apply1(tmp97, tmp137)
-								tmp139 := lang.Apply1(tmp96, tmp138)
-								tmp95 = tmp139
+								tmp130 := lang.Apply2(tmp128, tmp129, v94)
+								tmp131 := checkDerefVar(var_clojure_DOT_core_list)
+								tmp132 := lang.Apply1(tmp131, sym__PCT_)
+								tmp133 := lang.Apply4(tmp100, tmp102, tmp127, tmp130, tmp132)
+								tmp134 := lang.Apply1(tmp99, tmp133)
+								tmp135 := lang.Apply1(tmp98, tmp134)
+								tmp136 := lang.Apply1(tmp97, tmp135)
+								tmp137 := lang.Apply1(tmp96, tmp136)
+								tmp95 = tmp137
 							} else {
 								tmp95 = v88
 							}
-							var v140 any = tmp95
-							_ = v140
+							var v138 any = tmp95
+							_ = v138
 							// let binding "body"
-							var tmp141 any
+							var tmp139 any
 							if lang.IsTruthy(v92) {
-								tmp142 := checkDerefVar(var_clojure_DOT_core_concat)
-								tmp143 := checkDerefVar(var_clojure_DOT_core_map)
-								var tmp144 lang.FnFunc1
-								tmp144 = lang.FnFunc1(func(p0 any) any {
-									v145 := p0
-									_ = v145
-									tmp146 := checkDerefVar(var_clojure_DOT_core_seq)
-									tmp147 := checkDerefVar(var_clojure_DOT_core_concat)
+								tmp140 := checkDerefVar(var_clojure_DOT_core_concat)
+								tmp141 := checkDerefVar(var_clojure_DOT_core_map)
+								var tmp142 lang.FnFunc1
+								tmp142 = lang.FnFunc1(func(p0 any) any {
+									v143 := p0
+									_ = v143
+									tmp144 := checkDerefVar(var_clojure_DOT_core_seq)
+									tmp145 := checkDerefVar(var_clojure_DOT_core_concat)
+									tmp146 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp147 := lang.Apply1(tmp146, sym_clojure_DOT_core_SLASH_assert)
 									tmp148 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp149 := lang.Apply1(tmp148, sym_clojure_DOT_core_SLASH_assert)
-									tmp150 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp151 := lang.Apply1(tmp150, v145)
-									tmp152 := lang.Apply2(tmp147, tmp149, tmp151)
-									tmp153 := lang.Apply1(tmp146, tmp152)
-									return tmp153
+									tmp149 := lang.Apply1(tmp148, v143)
+									tmp150 := lang.Apply2(tmp145, tmp147, tmp149)
+									tmp151 := lang.Apply1(tmp144, tmp150)
+									return tmp151
 								})
-								tmp145 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4643), kw_column, int(44), kw_end_DASH_line, int(4643), kw_end_DASH_column, int(65))
-								tmp146, err := lang.WithMeta(tmp144, tmp145.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp147 := lang.Apply2(tmp143, tmp146, v92)
-								tmp148 := lang.Apply2(tmp142, tmp147, v140)
-								tmp141 = tmp148
+								tmp143 := lang.Apply2(tmp141, tmp142, v92)
+								tmp144 := lang.Apply2(tmp140, tmp143, v138)
+								tmp139 = tmp144
 							} else {
-								tmp141 = v140
+								tmp139 = v138
 							}
-							var v149 any = tmp141
-							_ = v149
-							tmp150 := checkDerefVar(var_clojure_DOT_core_maybe_DASH_destructured)
-							tmp151 := lang.Apply2(tmp150, v62, v149)
-							tmp51 = tmp151
+							var v145 any = tmp139
+							_ = v145
+							tmp146 := checkDerefVar(var_clojure_DOT_core_maybe_DASH_destructured)
+							tmp147 := lang.Apply2(tmp146, v62, v145)
+							tmp51 = tmp147
 						} // end let
 						return tmp51
 					})
-					tmp42 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4615), kw_column, int(16), kw_end_DASH_line, int(4646), kw_end_DASH_column, int(53))
-					tmp43, err := lang.WithMeta(tmp41, tmp42.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v44 any = tmp43
-					_ = v44
+					var v42 any = tmp41
+					_ = v42
 					// let binding "new-sigs"
-					tmp45 := checkDerefVar(var_clojure_DOT_core_map)
-					tmp46 := lang.Apply2(tmp45, v44, v40)
-					var v47 any = tmp46
-					_ = v47
-					tmp48 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
-					var tmp49 any
+					tmp43 := checkDerefVar(var_clojure_DOT_core_map)
+					tmp44 := lang.Apply2(tmp43, v42, v40)
+					var v45 any = tmp44
+					_ = v45
+					tmp46 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
+					var tmp47 any
 					if lang.IsTruthy(v13) {
-						tmp50 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
-						tmp51 := lang.Apply3(tmp50, sym_fn_STAR_, v13, v47)
-						tmp49 = tmp51
+						tmp48 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
+						tmp49 := lang.Apply3(tmp48, sym_fn_STAR_, v13, v45)
+						tmp47 = tmp49
 					} else {
-						tmp52 := checkDerefVar(var_clojure_DOT_core_cons)
-						tmp53 := lang.Apply2(tmp52, sym_fn_STAR_, v47)
-						tmp49 = tmp53
+						tmp50 := checkDerefVar(var_clojure_DOT_core_cons)
+						tmp51 := lang.Apply2(tmp50, sym_fn_STAR_, v45)
+						tmp47 = tmp51
 					}
-					tmp54 := checkDerefVar(var_clojure_DOT_core_meta)
-					tmp55 := lang.Apply1(tmp54, v2)
-					tmp56 := lang.Apply2(tmp48, tmp49, tmp55)
-					tmp5 = tmp56
+					tmp52 := checkDerefVar(var_clojure_DOT_core_meta)
+					tmp53 := lang.Apply1(tmp52, v2)
+					tmp54 := lang.Apply2(tmp46, tmp47, tmp53)
+					tmp5 = tmp54
 				} // end let
 				return tmp5
 			}),
@@ -41252,1093 +40399,1063 @@ func LoadNS() {
 						} // end let
 						return tmp39
 					})
-					tmp37 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4719), kw_column, int(30), kw_end_DASH_line, int(4722), kw_end_DASH_column, int(53))
-					tmp38, err := lang.WithMeta(tmp36, tmp37.(lang.IPersistentMap))
+					tmp37 := lang.NewVector()
+					tmp38 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4723), kw_column, int(29), kw_end_DASH_line, int(4723), kw_end_DASH_column, int(30))
+					tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
 					}
-					tmp39 := lang.NewVector()
-					tmp40 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4723), kw_column, int(29), kw_end_DASH_line, int(4723), kw_end_DASH_column, int(30))
-					tmp41, err := lang.WithMeta(tmp39, tmp40.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp42 := checkDerefVar(var_clojure_DOT_core_partition)
-					tmp43 := lang.Apply2(tmp42, int64(2), v34)
-					tmp44 := lang.Apply3(tmp35, tmp38, tmp41, tmp43)
-					return tmp44
+					tmp40 := checkDerefVar(var_clojure_DOT_core_partition)
+					tmp41 := lang.Apply2(tmp40, int64(2), v34)
+					tmp42 := lang.Apply3(tmp35, tmp36, tmp39, tmp41)
+					return tmp42
 				})
-				tmp34 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4718), kw_column, int(19), kw_end_DASH_line, int(4723), kw_end_DASH_column, int(56))
-				tmp35, err := lang.WithMeta(tmp33, tmp34.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v36 any = tmp35
-				_ = v36
+				var v34 any = tmp33
+				_ = v34
 				// let binding "err"
-				var tmp37 lang.ArityFn
-				tmp37 = lang.NewArityFn(
+				var tmp35 lang.ArityFn
+				tmp35 = lang.NewArityFn(
 					nil,
 					nil,
 					nil,
 					nil,
 					nil,
 					lang.NewVariadicFn(0, func(args []any, rest lang.ISeq) any {
-						var v38 any = rest
-						_ = v38
-						tmp39 := checkDerefVar(var_clojure_DOT_core_apply)
-						tmp40 := checkDerefVar(var_clojure_DOT_core_str)
-						tmp41 := lang.Apply2(tmp39, tmp40, v38)
-						tmp42 := lang.Apply1(lang.NewIllegalArgumentError, tmp41)
-						panic(tmp42)
+						var v36 any = rest
+						_ = v36
+						tmp37 := checkDerefVar(var_clojure_DOT_core_apply)
+						tmp38 := checkDerefVar(var_clojure_DOT_core_str)
+						tmp39 := lang.Apply2(tmp37, tmp38, v36)
+						tmp40 := lang.Apply1(lang.NewIllegalArgumentError, tmp39)
+						panic(tmp40)
 					}),
 					0,
 				)
-				tmp38 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4724), kw_column, int(13), kw_end_DASH_line, int(4724), kw_end_DASH_column, int(125))
-				tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v40 any = tmp39
-				_ = v40
+				var v36 any = tmp35
+				_ = v36
 				// let binding "emit-bind"
-				var tmp41 lang.FnFunc1
+				var tmp37 lang.FnFunc1
 				{ // function emit-bind
-					var v42 lang.FnFunc1
-					tmp41 = lang.FnFunc1(func(p0 any) any {
-						v43 := p0
-						_ = v43
-						var tmp44 any
+					var v38 lang.FnFunc1
+					tmp37 = lang.FnFunc1(func(p0 any) any {
+						v39 := p0
+						_ = v39
+						var tmp40 any
 						{ // let
 							// let binding "vec__397"
-							var v45 any = v43
-							_ = v45
+							var v41 any = v39
+							_ = v41
 							// let binding "seq__398"
-							tmp46 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp47 := lang.Apply1(tmp46, v45)
-							var v48 any = tmp47
-							_ = v48
+							tmp42 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp43 := lang.Apply1(tmp42, v41)
+							var v44 any = tmp43
+							_ = v44
 							// let binding "first__399"
-							tmp49 := checkDerefVar(var_clojure_DOT_core_first)
-							tmp50 := lang.Apply1(tmp49, v48)
-							var v51 any = tmp50
-							_ = v51
+							tmp45 := checkDerefVar(var_clojure_DOT_core_first)
+							tmp46 := lang.Apply1(tmp45, v44)
+							var v47 any = tmp46
+							_ = v47
 							// let binding "seq__398"
-							tmp52 := checkDerefVar(var_clojure_DOT_core_next)
-							tmp53 := lang.Apply1(tmp52, v48)
+							tmp48 := checkDerefVar(var_clojure_DOT_core_next)
+							tmp49 := lang.Apply1(tmp48, v44)
+							var v50 any = tmp49
+							_ = v50
+							// let binding "vec__400"
+							var v51 any = v47
+							_ = v51
+							// let binding "seq__401"
+							tmp52 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp53 := lang.Apply1(tmp52, v51)
 							var v54 any = tmp53
 							_ = v54
-							// let binding "vec__400"
-							var v55 any = v51
-							_ = v55
-							// let binding "seq__401"
-							tmp56 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp57 := lang.Apply1(tmp56, v55)
-							var v58 any = tmp57
-							_ = v58
 							// let binding "first__402"
-							tmp59 := checkDerefVar(var_clojure_DOT_core_first)
-							tmp60 := lang.Apply1(tmp59, v58)
-							var v61 any = tmp60
-							_ = v61
+							tmp55 := checkDerefVar(var_clojure_DOT_core_first)
+							tmp56 := lang.Apply1(tmp55, v54)
+							var v57 any = tmp56
+							_ = v57
 							// let binding "seq__401"
-							tmp62 := checkDerefVar(var_clojure_DOT_core_next)
-							tmp63 := lang.Apply1(tmp62, v58)
+							tmp58 := checkDerefVar(var_clojure_DOT_core_next)
+							tmp59 := lang.Apply1(tmp58, v54)
+							var v60 any = tmp59
+							_ = v60
+							// let binding "bind"
+							var v61 any = v57
+							_ = v61
+							// let binding "first__402"
+							tmp62 := checkDerefVar(var_clojure_DOT_core_first)
+							tmp63 := lang.Apply1(tmp62, v60)
 							var v64 any = tmp63
 							_ = v64
-							// let binding "bind"
-							var v65 any = v61
-							_ = v65
-							// let binding "first__402"
-							tmp66 := checkDerefVar(var_clojure_DOT_core_first)
-							tmp67 := lang.Apply1(tmp66, v64)
-							var v68 any = tmp67
-							_ = v68
 							// let binding "seq__401"
-							tmp69 := checkDerefVar(var_clojure_DOT_core_next)
-							tmp70 := lang.Apply1(tmp69, v64)
-							var v71 any = tmp70
-							_ = v71
+							tmp65 := checkDerefVar(var_clojure_DOT_core_next)
+							tmp66 := lang.Apply1(tmp65, v60)
+							var v67 any = tmp66
+							_ = v67
 							// let binding "expr"
-							var v72 any = v68
-							_ = v72
+							var v68 any = v64
+							_ = v68
 							// let binding "mod-pairs"
-							var v73 any = v71
-							_ = v73
+							var v69 any = v67
+							_ = v69
 							// let binding "vec__403"
-							var v74 any = v54
-							_ = v74
+							var v70 any = v50
+							_ = v70
 							// let binding "vec__406"
-							tmp75 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp76 := lang.Apply3(tmp75, v74, int64(0), nil)
-							var v77 any = tmp76
-							_ = v77
+							tmp71 := checkDerefVar(var_clojure_DOT_core_nth)
+							tmp72 := lang.Apply3(tmp71, v70, int64(0), nil)
+							var v73 any = tmp72
+							_ = v73
 							// let binding "_"
-							tmp78 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp79 := lang.Apply3(tmp78, v77, int64(0), nil)
-							var v80 any = tmp79
-							_ = v80
+							tmp74 := checkDerefVar(var_clojure_DOT_core_nth)
+							tmp75 := lang.Apply3(tmp74, v73, int64(0), nil)
+							var v76 any = tmp75
+							_ = v76
 							// let binding "next-expr"
-							tmp81 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp82 := lang.Apply3(tmp81, v77, int64(1), nil)
-							var v83 any = tmp82
-							_ = v83
+							tmp77 := checkDerefVar(var_clojure_DOT_core_nth)
+							tmp78 := lang.Apply3(tmp77, v73, int64(1), nil)
+							var v79 any = tmp78
+							_ = v79
 							// let binding "next-groups"
-							var v84 any = v74
-							_ = v84
-							var tmp85 any
+							var v80 any = v70
+							_ = v80
+							var tmp81 any
 							{ // let
 								// let binding "giter"
-								tmp86 := checkDerefVar(var_clojure_DOT_core_gensym)
-								tmp87 := lang.Apply1(tmp86, "iter__")
-								var v88 any = tmp87
-								_ = v88
+								tmp82 := checkDerefVar(var_clojure_DOT_core_gensym)
+								tmp83 := lang.Apply1(tmp82, "iter__")
+								var v84 any = tmp83
+								_ = v84
 								// let binding "gxs"
-								tmp89 := checkDerefVar(var_clojure_DOT_core_gensym)
-								tmp90 := lang.Apply1(tmp89, "s__")
-								var v91 any = tmp90
-								_ = v91
+								tmp85 := checkDerefVar(var_clojure_DOT_core_gensym)
+								tmp86 := lang.Apply1(tmp85, "s__")
+								var v87 any = tmp86
+								_ = v87
 								// let binding "do-mod"
-								var tmp92 lang.FnFunc1
+								var tmp88 lang.FnFunc1
 								{ // function do-mod
-									var v93 lang.FnFunc1
-									tmp92 = lang.FnFunc1(func(p0 any) any {
-										v94 := p0
-										_ = v94
-										var tmp95 any
+									var v89 lang.FnFunc1
+									tmp88 = lang.FnFunc1(func(p0 any) any {
+										v90 := p0
+										_ = v90
+										var tmp91 any
 										{ // let
 											// let binding "vec__410"
-											var v96 any = v94
-											_ = v96
+											var v92 any = v90
+											_ = v92
 											// let binding "seq__411"
-											tmp97 := checkDerefVar(var_clojure_DOT_core_seq)
-											tmp98 := lang.Apply1(tmp97, v96)
-											var v99 any = tmp98
-											_ = v99
+											tmp93 := checkDerefVar(var_clojure_DOT_core_seq)
+											tmp94 := lang.Apply1(tmp93, v92)
+											var v95 any = tmp94
+											_ = v95
 											// let binding "first__412"
-											tmp100 := checkDerefVar(var_clojure_DOT_core_first)
-											tmp101 := lang.Apply1(tmp100, v99)
-											var v102 any = tmp101
-											_ = v102
+											tmp96 := checkDerefVar(var_clojure_DOT_core_first)
+											tmp97 := lang.Apply1(tmp96, v95)
+											var v98 any = tmp97
+											_ = v98
 											// let binding "seq__411"
-											tmp103 := checkDerefVar(var_clojure_DOT_core_next)
-											tmp104 := lang.Apply1(tmp103, v99)
+											tmp99 := checkDerefVar(var_clojure_DOT_core_next)
+											tmp100 := lang.Apply1(tmp99, v95)
+											var v101 any = tmp100
+											_ = v101
+											// let binding "vec__413"
+											var v102 any = v98
+											_ = v102
+											// let binding "k"
+											tmp103 := checkDerefVar(var_clojure_DOT_core_nth)
+											tmp104 := lang.Apply3(tmp103, v102, int64(0), nil)
 											var v105 any = tmp104
 											_ = v105
-											// let binding "vec__413"
-											var v106 any = v102
-											_ = v106
-											// let binding "k"
-											tmp107 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp108 := lang.Apply3(tmp107, v106, int64(0), nil)
-											var v109 any = tmp108
-											_ = v109
 											// let binding "v"
-											tmp110 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp111 := lang.Apply3(tmp110, v106, int64(1), nil)
-											var v112 any = tmp111
-											_ = v112
+											tmp106 := checkDerefVar(var_clojure_DOT_core_nth)
+											tmp107 := lang.Apply3(tmp106, v102, int64(1), nil)
+											var v108 any = tmp107
+											_ = v108
 											// let binding "pair"
-											var v113 any = v106
-											_ = v113
+											var v109 any = v102
+											_ = v109
 											// let binding "etc"
-											var v114 any = v105
-											_ = v114
-											var tmp115 any
-											tmp116 := checkDerefVar(var_clojure_DOT_core__EQ_)
-											tmp117 := lang.Apply2(tmp116, v109, kw_let)
-											if lang.IsTruthy(tmp117) {
-												tmp118 := checkDerefVar(var_clojure_DOT_core_seq)
-												tmp119 := checkDerefVar(var_clojure_DOT_core_concat)
+											var v110 any = v101
+											_ = v110
+											var tmp111 any
+											tmp112 := checkDerefVar(var_clojure_DOT_core__EQ_)
+											tmp113 := lang.Apply2(tmp112, v105, kw_let)
+											if lang.IsTruthy(tmp113) {
+												tmp114 := checkDerefVar(var_clojure_DOT_core_seq)
+												tmp115 := checkDerefVar(var_clojure_DOT_core_concat)
+												tmp116 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp117 := lang.Apply1(tmp116, sym_clojure_DOT_core_SLASH_let)
+												tmp118 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp119 := lang.Apply1(tmp118, v108)
 												tmp120 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp121 := lang.Apply1(tmp120, sym_clojure_DOT_core_SLASH_let)
-												tmp122 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp123 := lang.Apply1(tmp122, v112)
-												tmp124 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp125 := lang.Apply1(v93, v114)
-												tmp126 := lang.Apply1(tmp124, tmp125)
-												tmp127 := lang.Apply3(tmp119, tmp121, tmp123, tmp126)
-												tmp128 := lang.Apply1(tmp118, tmp127)
-												tmp115 = tmp128
+												tmp121 := lang.Apply1(v89, v110)
+												tmp122 := lang.Apply1(tmp120, tmp121)
+												tmp123 := lang.Apply3(tmp115, tmp117, tmp119, tmp122)
+												tmp124 := lang.Apply1(tmp114, tmp123)
+												tmp111 = tmp124
 											} else {
-												var tmp129 any
-												tmp130 := checkDerefVar(var_clojure_DOT_core__EQ_)
-												tmp131 := lang.Apply2(tmp130, v109, kw_while)
-												if lang.IsTruthy(tmp131) {
-													tmp132 := checkDerefVar(var_clojure_DOT_core_seq)
-													tmp133 := checkDerefVar(var_clojure_DOT_core_concat)
+												var tmp125 any
+												tmp126 := checkDerefVar(var_clojure_DOT_core__EQ_)
+												tmp127 := lang.Apply2(tmp126, v105, kw_while)
+												if lang.IsTruthy(tmp127) {
+													tmp128 := checkDerefVar(var_clojure_DOT_core_seq)
+													tmp129 := checkDerefVar(var_clojure_DOT_core_concat)
+													tmp130 := checkDerefVar(var_clojure_DOT_core_list)
+													tmp131 := lang.Apply1(tmp130, sym_clojure_DOT_core_SLASH_when)
+													tmp132 := checkDerefVar(var_clojure_DOT_core_list)
+													tmp133 := lang.Apply1(tmp132, v108)
 													tmp134 := checkDerefVar(var_clojure_DOT_core_list)
-													tmp135 := lang.Apply1(tmp134, sym_clojure_DOT_core_SLASH_when)
-													tmp136 := checkDerefVar(var_clojure_DOT_core_list)
-													tmp137 := lang.Apply1(tmp136, v112)
-													tmp138 := checkDerefVar(var_clojure_DOT_core_list)
-													tmp139 := lang.Apply1(v93, v114)
-													tmp140 := lang.Apply1(tmp138, tmp139)
-													tmp141 := lang.Apply3(tmp133, tmp135, tmp137, tmp140)
-													tmp142 := lang.Apply1(tmp132, tmp141)
-													tmp129 = tmp142
+													tmp135 := lang.Apply1(v89, v110)
+													tmp136 := lang.Apply1(tmp134, tmp135)
+													tmp137 := lang.Apply3(tmp129, tmp131, tmp133, tmp136)
+													tmp138 := lang.Apply1(tmp128, tmp137)
+													tmp125 = tmp138
 												} else {
-													var tmp143 any
-													tmp144 := checkDerefVar(var_clojure_DOT_core__EQ_)
-													tmp145 := lang.Apply2(tmp144, v109, kw_when)
-													if lang.IsTruthy(tmp145) {
-														tmp146 := checkDerefVar(var_clojure_DOT_core_seq)
-														tmp147 := checkDerefVar(var_clojure_DOT_core_concat)
+													var tmp139 any
+													tmp140 := checkDerefVar(var_clojure_DOT_core__EQ_)
+													tmp141 := lang.Apply2(tmp140, v105, kw_when)
+													if lang.IsTruthy(tmp141) {
+														tmp142 := checkDerefVar(var_clojure_DOT_core_seq)
+														tmp143 := checkDerefVar(var_clojure_DOT_core_concat)
+														tmp144 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp145 := lang.Apply1(tmp144, sym_if)
+														tmp146 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp147 := lang.Apply1(tmp146, v108)
 														tmp148 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp149 := lang.Apply1(tmp148, sym_if)
-														tmp150 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp151 := lang.Apply1(tmp150, v112)
-														tmp152 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp153 := lang.Apply1(v93, v114)
-														tmp154 := lang.Apply1(tmp152, tmp153)
-														tmp155 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp156 := checkDerefVar(var_clojure_DOT_core_seq)
-														tmp157 := checkDerefVar(var_clojure_DOT_core_concat)
-														tmp158 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp159 := lang.Apply1(tmp158, sym_recur)
-														tmp160 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp161 := checkDerefVar(var_clojure_DOT_core_seq)
-														tmp162 := checkDerefVar(var_clojure_DOT_core_concat)
-														tmp163 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp164 := lang.Apply1(tmp163, sym_clojure_DOT_core_SLASH_rest)
-														tmp165 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp166 := lang.Apply1(tmp165, v91)
-														tmp167 := lang.Apply2(tmp162, tmp164, tmp166)
-														tmp168 := lang.Apply1(tmp161, tmp167)
-														tmp169 := lang.Apply1(tmp160, tmp168)
-														tmp170 := lang.Apply2(tmp157, tmp159, tmp169)
-														tmp171 := lang.Apply1(tmp156, tmp170)
-														tmp172 := lang.Apply1(tmp155, tmp171)
-														tmp173 := lang.Apply4(tmp147, tmp149, tmp151, tmp154, tmp172)
-														tmp174 := lang.Apply1(tmp146, tmp173)
-														tmp143 = tmp174
+														tmp149 := lang.Apply1(v89, v110)
+														tmp150 := lang.Apply1(tmp148, tmp149)
+														tmp151 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp152 := checkDerefVar(var_clojure_DOT_core_seq)
+														tmp153 := checkDerefVar(var_clojure_DOT_core_concat)
+														tmp154 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp155 := lang.Apply1(tmp154, sym_recur)
+														tmp156 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp157 := checkDerefVar(var_clojure_DOT_core_seq)
+														tmp158 := checkDerefVar(var_clojure_DOT_core_concat)
+														tmp159 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp160 := lang.Apply1(tmp159, sym_clojure_DOT_core_SLASH_rest)
+														tmp161 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp162 := lang.Apply1(tmp161, v87)
+														tmp163 := lang.Apply2(tmp158, tmp160, tmp162)
+														tmp164 := lang.Apply1(tmp157, tmp163)
+														tmp165 := lang.Apply1(tmp156, tmp164)
+														tmp166 := lang.Apply2(tmp153, tmp155, tmp165)
+														tmp167 := lang.Apply1(tmp152, tmp166)
+														tmp168 := lang.Apply1(tmp151, tmp167)
+														tmp169 := lang.Apply4(tmp143, tmp145, tmp147, tmp150, tmp168)
+														tmp170 := lang.Apply1(tmp142, tmp169)
+														tmp139 = tmp170
 													} else {
-														var tmp175 any
-														tmp176 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
-														tmp177 := lang.Apply1(tmp176, v109)
-														if lang.IsTruthy(tmp177) {
-															tmp178 := lang.Apply2(v40, "Invalid 'for' keyword ", v109)
-															tmp175 = tmp178
+														var tmp171 any
+														tmp172 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
+														tmp173 := lang.Apply1(tmp172, v105)
+														if lang.IsTruthy(tmp173) {
+															tmp174 := lang.Apply2(v36, "Invalid 'for' keyword ", v105)
+															tmp171 = tmp174
 														} else {
-															var tmp179 any
-															if lang.IsTruthy(v84) {
-																tmp180 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp181 := checkDerefVar(var_clojure_DOT_core_concat)
-																tmp182 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp183 := lang.Apply1(tmp182, sym_clojure_DOT_core_SLASH_let)
-																tmp184 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp185 := checkDerefVar(var_clojure_DOT_core_apply)
-																tmp186 := checkDerefVar(var_clojure_DOT_core_vector)
-																tmp187 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp188 := checkDerefVar(var_clojure_DOT_core_concat)
-																tmp189 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp190 := lang.Apply1(tmp189, sym_iterys__0__auto__)
-																tmp191 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp192 := lang.Apply1(v42, v84)
-																tmp193 := lang.Apply1(tmp191, tmp192)
-																tmp194 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp195 := lang.Apply1(tmp194, sym_fs__1__auto__)
-																tmp196 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp197 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp198 := checkDerefVar(var_clojure_DOT_core_concat)
-																tmp199 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp200 := lang.Apply1(tmp199, sym_clojure_DOT_core_SLASH_seq)
-																tmp201 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp202 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp203 := checkDerefVar(var_clojure_DOT_core_concat)
-																tmp204 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp205 := lang.Apply1(tmp204, sym_iterys__0__auto__)
-																tmp206 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp207 := lang.Apply1(tmp206, v83)
-																tmp208 := lang.Apply2(tmp203, tmp205, tmp207)
-																tmp209 := lang.Apply1(tmp202, tmp208)
-																tmp210 := lang.Apply1(tmp201, tmp209)
-																tmp211 := lang.Apply2(tmp198, tmp200, tmp210)
-																tmp212 := lang.Apply1(tmp197, tmp211)
-																tmp213 := lang.Apply1(tmp196, tmp212)
-																tmp214 := lang.Apply4(tmp188, tmp190, tmp193, tmp195, tmp213)
-																tmp215 := lang.Apply1(tmp187, tmp214)
-																tmp216 := lang.Apply2(tmp185, tmp186, tmp215)
-																tmp217 := lang.Apply1(tmp184, tmp216)
-																tmp218 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp219 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp220 := checkDerefVar(var_clojure_DOT_core_concat)
+															var tmp175 any
+															if lang.IsTruthy(v80) {
+																tmp176 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp177 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp178 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp179 := lang.Apply1(tmp178, sym_clojure_DOT_core_SLASH_let)
+																tmp180 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp181 := checkDerefVar(var_clojure_DOT_core_apply)
+																tmp182 := checkDerefVar(var_clojure_DOT_core_vector)
+																tmp183 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp184 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp185 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp186 := lang.Apply1(tmp185, sym_iterys__0__auto__)
+																tmp187 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp188 := lang.Apply1(v38, v80)
+																tmp189 := lang.Apply1(tmp187, tmp188)
+																tmp190 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp191 := lang.Apply1(tmp190, sym_fs__1__auto__)
+																tmp192 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp193 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp194 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp195 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp196 := lang.Apply1(tmp195, sym_clojure_DOT_core_SLASH_seq)
+																tmp197 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp198 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp199 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp200 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp201 := lang.Apply1(tmp200, sym_iterys__0__auto__)
+																tmp202 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp203 := lang.Apply1(tmp202, v79)
+																tmp204 := lang.Apply2(tmp199, tmp201, tmp203)
+																tmp205 := lang.Apply1(tmp198, tmp204)
+																tmp206 := lang.Apply1(tmp197, tmp205)
+																tmp207 := lang.Apply2(tmp194, tmp196, tmp206)
+																tmp208 := lang.Apply1(tmp193, tmp207)
+																tmp209 := lang.Apply1(tmp192, tmp208)
+																tmp210 := lang.Apply4(tmp184, tmp186, tmp189, tmp191, tmp209)
+																tmp211 := lang.Apply1(tmp183, tmp210)
+																tmp212 := lang.Apply2(tmp181, tmp182, tmp211)
+																tmp213 := lang.Apply1(tmp180, tmp212)
+																tmp214 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp215 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp216 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp217 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp218 := lang.Apply1(tmp217, sym_if)
+																tmp219 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp220 := lang.Apply1(tmp219, sym_fs__1__auto__)
 																tmp221 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp222 := lang.Apply1(tmp221, sym_if)
-																tmp223 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp224 := lang.Apply1(tmp223, sym_fs__1__auto__)
-																tmp225 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp226 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp227 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp222 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp223 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp224 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp225 := lang.Apply1(tmp224, sym_clojure_DOT_core_SLASH_concat)
+																tmp226 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp227 := lang.Apply1(tmp226, sym_fs__1__auto__)
 																tmp228 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp229 := lang.Apply1(tmp228, sym_clojure_DOT_core_SLASH_concat)
-																tmp230 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp231 := lang.Apply1(tmp230, sym_fs__1__auto__)
-																tmp232 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp233 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp234 := checkDerefVar(var_clojure_DOT_core_concat)
-																tmp235 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp236 := lang.Apply1(tmp235, v88)
-																tmp237 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp238 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp239 := checkDerefVar(var_clojure_DOT_core_concat)
-																tmp240 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp241 := lang.Apply1(tmp240, sym_clojure_DOT_core_SLASH_rest)
-																tmp242 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp243 := lang.Apply1(tmp242, v91)
-																tmp244 := lang.Apply2(tmp239, tmp241, tmp243)
-																tmp245 := lang.Apply1(tmp238, tmp244)
-																tmp246 := lang.Apply1(tmp237, tmp245)
-																tmp247 := lang.Apply2(tmp234, tmp236, tmp246)
-																tmp248 := lang.Apply1(tmp233, tmp247)
-																tmp249 := lang.Apply1(tmp232, tmp248)
-																tmp250 := lang.Apply3(tmp227, tmp229, tmp231, tmp249)
-																tmp251 := lang.Apply1(tmp226, tmp250)
-																tmp252 := lang.Apply1(tmp225, tmp251)
-																tmp253 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp254 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp255 := checkDerefVar(var_clojure_DOT_core_concat)
-																tmp256 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp257 := lang.Apply1(tmp256, sym_recur)
-																tmp258 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp259 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp260 := checkDerefVar(var_clojure_DOT_core_concat)
-																tmp261 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp262 := lang.Apply1(tmp261, sym_clojure_DOT_core_SLASH_rest)
-																tmp263 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp264 := lang.Apply1(tmp263, v91)
-																tmp265 := lang.Apply2(tmp260, tmp262, tmp264)
-																tmp266 := lang.Apply1(tmp259, tmp265)
-																tmp267 := lang.Apply1(tmp258, tmp266)
-																tmp268 := lang.Apply2(tmp255, tmp257, tmp267)
-																tmp269 := lang.Apply1(tmp254, tmp268)
-																tmp270 := lang.Apply1(tmp253, tmp269)
-																tmp271 := lang.Apply4(tmp220, tmp222, tmp224, tmp252, tmp270)
-																tmp272 := lang.Apply1(tmp219, tmp271)
-																tmp273 := lang.Apply1(tmp218, tmp272)
-																tmp274 := lang.Apply3(tmp181, tmp183, tmp217, tmp273)
-																tmp275 := lang.Apply1(tmp180, tmp274)
-																tmp179 = tmp275
+																tmp229 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp230 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp231 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp232 := lang.Apply1(tmp231, v84)
+																tmp233 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp234 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp235 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp236 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp237 := lang.Apply1(tmp236, sym_clojure_DOT_core_SLASH_rest)
+																tmp238 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp239 := lang.Apply1(tmp238, v87)
+																tmp240 := lang.Apply2(tmp235, tmp237, tmp239)
+																tmp241 := lang.Apply1(tmp234, tmp240)
+																tmp242 := lang.Apply1(tmp233, tmp241)
+																tmp243 := lang.Apply2(tmp230, tmp232, tmp242)
+																tmp244 := lang.Apply1(tmp229, tmp243)
+																tmp245 := lang.Apply1(tmp228, tmp244)
+																tmp246 := lang.Apply3(tmp223, tmp225, tmp227, tmp245)
+																tmp247 := lang.Apply1(tmp222, tmp246)
+																tmp248 := lang.Apply1(tmp221, tmp247)
+																tmp249 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp250 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp251 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp252 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp253 := lang.Apply1(tmp252, sym_recur)
+																tmp254 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp255 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp256 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp257 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp258 := lang.Apply1(tmp257, sym_clojure_DOT_core_SLASH_rest)
+																tmp259 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp260 := lang.Apply1(tmp259, v87)
+																tmp261 := lang.Apply2(tmp256, tmp258, tmp260)
+																tmp262 := lang.Apply1(tmp255, tmp261)
+																tmp263 := lang.Apply1(tmp254, tmp262)
+																tmp264 := lang.Apply2(tmp251, tmp253, tmp263)
+																tmp265 := lang.Apply1(tmp250, tmp264)
+																tmp266 := lang.Apply1(tmp249, tmp265)
+																tmp267 := lang.Apply4(tmp216, tmp218, tmp220, tmp248, tmp266)
+																tmp268 := lang.Apply1(tmp215, tmp267)
+																tmp269 := lang.Apply1(tmp214, tmp268)
+																tmp270 := lang.Apply3(tmp177, tmp179, tmp213, tmp269)
+																tmp271 := lang.Apply1(tmp176, tmp270)
+																tmp175 = tmp271
 															} else {
-																var tmp276 any
+																var tmp272 any
 																if lang.IsTruthy(kw_else) {
-																	tmp277 := checkDerefVar(var_clojure_DOT_core_seq)
-																	tmp278 := checkDerefVar(var_clojure_DOT_core_concat)
+																	tmp273 := checkDerefVar(var_clojure_DOT_core_seq)
+																	tmp274 := checkDerefVar(var_clojure_DOT_core_concat)
+																	tmp275 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp276 := lang.Apply1(tmp275, sym_clojure_DOT_core_SLASH_cons)
+																	tmp277 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp278 := lang.Apply1(tmp277, v5)
 																	tmp279 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp280 := lang.Apply1(tmp279, sym_clojure_DOT_core_SLASH_cons)
-																	tmp281 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp282 := lang.Apply1(tmp281, v5)
-																	tmp283 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp284 := checkDerefVar(var_clojure_DOT_core_seq)
-																	tmp285 := checkDerefVar(var_clojure_DOT_core_concat)
-																	tmp286 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp287 := lang.Apply1(tmp286, v88)
-																	tmp288 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp289 := checkDerefVar(var_clojure_DOT_core_seq)
-																	tmp290 := checkDerefVar(var_clojure_DOT_core_concat)
-																	tmp291 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp292 := lang.Apply1(tmp291, sym_clojure_DOT_core_SLASH_rest)
-																	tmp293 := checkDerefVar(var_clojure_DOT_core_list)
-																	tmp294 := lang.Apply1(tmp293, v91)
-																	tmp295 := lang.Apply2(tmp290, tmp292, tmp294)
-																	tmp296 := lang.Apply1(tmp289, tmp295)
-																	tmp297 := lang.Apply1(tmp288, tmp296)
-																	tmp298 := lang.Apply2(tmp285, tmp287, tmp297)
-																	tmp299 := lang.Apply1(tmp284, tmp298)
-																	tmp300 := lang.Apply1(tmp283, tmp299)
-																	tmp301 := lang.Apply3(tmp278, tmp280, tmp282, tmp300)
-																	tmp302 := lang.Apply1(tmp277, tmp301)
-																	tmp276 = tmp302
+																	tmp280 := checkDerefVar(var_clojure_DOT_core_seq)
+																	tmp281 := checkDerefVar(var_clojure_DOT_core_concat)
+																	tmp282 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp283 := lang.Apply1(tmp282, v84)
+																	tmp284 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp285 := checkDerefVar(var_clojure_DOT_core_seq)
+																	tmp286 := checkDerefVar(var_clojure_DOT_core_concat)
+																	tmp287 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp288 := lang.Apply1(tmp287, sym_clojure_DOT_core_SLASH_rest)
+																	tmp289 := checkDerefVar(var_clojure_DOT_core_list)
+																	tmp290 := lang.Apply1(tmp289, v87)
+																	tmp291 := lang.Apply2(tmp286, tmp288, tmp290)
+																	tmp292 := lang.Apply1(tmp285, tmp291)
+																	tmp293 := lang.Apply1(tmp284, tmp292)
+																	tmp294 := lang.Apply2(tmp281, tmp283, tmp293)
+																	tmp295 := lang.Apply1(tmp280, tmp294)
+																	tmp296 := lang.Apply1(tmp279, tmp295)
+																	tmp297 := lang.Apply3(tmp274, tmp276, tmp278, tmp296)
+																	tmp298 := lang.Apply1(tmp273, tmp297)
+																	tmp272 = tmp298
 																} else {
 																}
-																tmp179 = tmp276
+																tmp175 = tmp272
 															}
-															tmp175 = tmp179
+															tmp171 = tmp175
 														}
-														tmp143 = tmp175
+														tmp139 = tmp171
 													}
-													tmp129 = tmp143
+													tmp125 = tmp139
 												}
-												tmp115 = tmp129
+												tmp111 = tmp125
 											}
-											tmp95 = tmp115
+											tmp91 = tmp111
 										} // end let
-										return tmp95
+										return tmp91
 									})
-									v93 = tmp92
-									_ = v93
+									v89 = tmp88
+									_ = v89
 								}
-								tmp93 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4729), kw_column, int(34), kw_end_DASH_line, int(4744), kw_end_DASH_column, int(73))
-								tmp94, err := lang.WithMeta(tmp92, tmp93.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								var v95 any = tmp94
-								_ = v95
-								var tmp96 any
-								if lang.IsTruthy(v84) {
-									tmp97 := checkDerefVar(var_clojure_DOT_core_seq)
-									tmp98 := checkDerefVar(var_clojure_DOT_core_concat)
-									tmp99 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp100 := lang.Apply1(tmp99, sym_clojure_DOT_core_SLASH_fn)
-									tmp101 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp102 := lang.Apply1(tmp101, v88)
-									tmp103 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp104 := checkDerefVar(var_clojure_DOT_core_apply)
-									tmp105 := checkDerefVar(var_clojure_DOT_core_vector)
-									tmp106 := checkDerefVar(var_clojure_DOT_core_seq)
-									tmp107 := checkDerefVar(var_clojure_DOT_core_concat)
+								var v89 any = tmp88
+								_ = v89
+								var tmp90 any
+								if lang.IsTruthy(v80) {
+									tmp91 := checkDerefVar(var_clojure_DOT_core_seq)
+									tmp92 := checkDerefVar(var_clojure_DOT_core_concat)
+									tmp93 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp94 := lang.Apply1(tmp93, sym_clojure_DOT_core_SLASH_fn)
+									tmp95 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp96 := lang.Apply1(tmp95, v84)
+									tmp97 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp98 := checkDerefVar(var_clojure_DOT_core_apply)
+									tmp99 := checkDerefVar(var_clojure_DOT_core_vector)
+									tmp100 := checkDerefVar(var_clojure_DOT_core_seq)
+									tmp101 := checkDerefVar(var_clojure_DOT_core_concat)
+									tmp102 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp103 := lang.Apply1(tmp102, v87)
+									tmp104 := lang.Apply1(tmp101, tmp103)
+									tmp105 := lang.Apply1(tmp100, tmp104)
+									tmp106 := lang.Apply2(tmp98, tmp99, tmp105)
+									tmp107 := lang.Apply1(tmp97, tmp106)
 									tmp108 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp109 := lang.Apply1(tmp108, v91)
-									tmp110 := lang.Apply1(tmp107, tmp109)
-									tmp111 := lang.Apply1(tmp106, tmp110)
-									tmp112 := lang.Apply2(tmp104, tmp105, tmp111)
-									tmp113 := lang.Apply1(tmp103, tmp112)
-									tmp114 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp115 := checkDerefVar(var_clojure_DOT_core_seq)
-									tmp116 := checkDerefVar(var_clojure_DOT_core_concat)
-									tmp117 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp118 := lang.Apply1(tmp117, sym_clojure_DOT_core_SLASH_lazy_DASH_seq)
-									tmp119 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp120 := checkDerefVar(var_clojure_DOT_core_seq)
-									tmp121 := checkDerefVar(var_clojure_DOT_core_concat)
-									tmp122 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp123 := lang.Apply1(tmp122, sym_clojure_DOT_core_SLASH_loop)
-									tmp124 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp125 := checkDerefVar(var_clojure_DOT_core_apply)
-									tmp126 := checkDerefVar(var_clojure_DOT_core_vector)
-									tmp127 := checkDerefVar(var_clojure_DOT_core_seq)
-									tmp128 := checkDerefVar(var_clojure_DOT_core_concat)
-									tmp129 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp130 := lang.Apply1(tmp129, v91)
+									tmp109 := checkDerefVar(var_clojure_DOT_core_seq)
+									tmp110 := checkDerefVar(var_clojure_DOT_core_concat)
+									tmp111 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp112 := lang.Apply1(tmp111, sym_clojure_DOT_core_SLASH_lazy_DASH_seq)
+									tmp113 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp114 := checkDerefVar(var_clojure_DOT_core_seq)
+									tmp115 := checkDerefVar(var_clojure_DOT_core_concat)
+									tmp116 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp117 := lang.Apply1(tmp116, sym_clojure_DOT_core_SLASH_loop)
+									tmp118 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp119 := checkDerefVar(var_clojure_DOT_core_apply)
+									tmp120 := checkDerefVar(var_clojure_DOT_core_vector)
+									tmp121 := checkDerefVar(var_clojure_DOT_core_seq)
+									tmp122 := checkDerefVar(var_clojure_DOT_core_concat)
+									tmp123 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp124 := lang.Apply1(tmp123, v87)
+									tmp125 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp126 := lang.Apply1(tmp125, v87)
+									tmp127 := lang.Apply2(tmp122, tmp124, tmp126)
+									tmp128 := lang.Apply1(tmp121, tmp127)
+									tmp129 := lang.Apply2(tmp119, tmp120, tmp128)
+									tmp130 := lang.Apply1(tmp118, tmp129)
 									tmp131 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp132 := lang.Apply1(tmp131, v91)
-									tmp133 := lang.Apply2(tmp128, tmp130, tmp132)
-									tmp134 := lang.Apply1(tmp127, tmp133)
-									tmp135 := lang.Apply2(tmp125, tmp126, tmp134)
-									tmp136 := lang.Apply1(tmp124, tmp135)
-									tmp137 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp138 := checkDerefVar(var_clojure_DOT_core_seq)
-									tmp139 := checkDerefVar(var_clojure_DOT_core_concat)
-									tmp140 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp141 := lang.Apply1(tmp140, sym_clojure_DOT_core_SLASH_when_DASH_first)
-									tmp142 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp143 := checkDerefVar(var_clojure_DOT_core_apply)
-									tmp144 := checkDerefVar(var_clojure_DOT_core_vector)
-									tmp145 := checkDerefVar(var_clojure_DOT_core_seq)
-									tmp146 := checkDerefVar(var_clojure_DOT_core_concat)
-									tmp147 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp148 := lang.Apply1(tmp147, v65)
+									tmp132 := checkDerefVar(var_clojure_DOT_core_seq)
+									tmp133 := checkDerefVar(var_clojure_DOT_core_concat)
+									tmp134 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp135 := lang.Apply1(tmp134, sym_clojure_DOT_core_SLASH_when_DASH_first)
+									tmp136 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp137 := checkDerefVar(var_clojure_DOT_core_apply)
+									tmp138 := checkDerefVar(var_clojure_DOT_core_vector)
+									tmp139 := checkDerefVar(var_clojure_DOT_core_seq)
+									tmp140 := checkDerefVar(var_clojure_DOT_core_concat)
+									tmp141 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp142 := lang.Apply1(tmp141, v61)
+									tmp143 := checkDerefVar(var_clojure_DOT_core_list)
+									tmp144 := lang.Apply1(tmp143, v87)
+									tmp145 := lang.Apply2(tmp140, tmp142, tmp144)
+									tmp146 := lang.Apply1(tmp139, tmp145)
+									tmp147 := lang.Apply2(tmp137, tmp138, tmp146)
+									tmp148 := lang.Apply1(tmp136, tmp147)
 									tmp149 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp150 := lang.Apply1(tmp149, v91)
-									tmp151 := lang.Apply2(tmp146, tmp148, tmp150)
-									tmp152 := lang.Apply1(tmp145, tmp151)
-									tmp153 := lang.Apply2(tmp143, tmp144, tmp152)
-									tmp154 := lang.Apply1(tmp142, tmp153)
-									tmp155 := checkDerefVar(var_clojure_DOT_core_list)
-									tmp156 := lang.Apply1(v95, v73)
-									tmp157 := lang.Apply1(tmp155, tmp156)
-									tmp158 := lang.Apply3(tmp139, tmp141, tmp154, tmp157)
-									tmp159 := lang.Apply1(tmp138, tmp158)
-									tmp160 := lang.Apply1(tmp137, tmp159)
-									tmp161 := lang.Apply3(tmp121, tmp123, tmp136, tmp160)
-									tmp162 := lang.Apply1(tmp120, tmp161)
-									tmp163 := lang.Apply1(tmp119, tmp162)
-									tmp164 := lang.Apply2(tmp116, tmp118, tmp163)
-									tmp165 := lang.Apply1(tmp115, tmp164)
-									tmp166 := lang.Apply1(tmp114, tmp165)
-									tmp167 := lang.Apply4(tmp98, tmp100, tmp102, tmp113, tmp166)
-									tmp168 := lang.Apply1(tmp97, tmp167)
-									tmp96 = tmp168
+									tmp150 := lang.Apply1(v89, v69)
+									tmp151 := lang.Apply1(tmp149, tmp150)
+									tmp152 := lang.Apply3(tmp133, tmp135, tmp148, tmp151)
+									tmp153 := lang.Apply1(tmp132, tmp152)
+									tmp154 := lang.Apply1(tmp131, tmp153)
+									tmp155 := lang.Apply3(tmp115, tmp117, tmp130, tmp154)
+									tmp156 := lang.Apply1(tmp114, tmp155)
+									tmp157 := lang.Apply1(tmp113, tmp156)
+									tmp158 := lang.Apply2(tmp110, tmp112, tmp157)
+									tmp159 := lang.Apply1(tmp109, tmp158)
+									tmp160 := lang.Apply1(tmp108, tmp159)
+									tmp161 := lang.Apply4(tmp92, tmp94, tmp96, tmp107, tmp160)
+									tmp162 := lang.Apply1(tmp91, tmp161)
+									tmp90 = tmp162
 								} else {
-									var tmp169 any
+									var tmp163 any
 									{ // let
 										// let binding "gi"
-										tmp170 := checkDerefVar(var_clojure_DOT_core_gensym)
-										tmp171 := lang.Apply1(tmp170, "i__")
-										var v172 any = tmp171
-										_ = v172
+										tmp164 := checkDerefVar(var_clojure_DOT_core_gensym)
+										tmp165 := lang.Apply1(tmp164, "i__")
+										var v166 any = tmp165
+										_ = v166
 										// let binding "gb"
-										tmp173 := checkDerefVar(var_clojure_DOT_core_gensym)
-										tmp174 := lang.Apply1(tmp173, "b__")
-										var v175 any = tmp174
-										_ = v175
+										tmp167 := checkDerefVar(var_clojure_DOT_core_gensym)
+										tmp168 := lang.Apply1(tmp167, "b__")
+										var v169 any = tmp168
+										_ = v169
 										// let binding "do-cmod"
-										var tmp176 lang.FnFunc1
+										var tmp170 lang.FnFunc1
 										{ // function do-cmod
-											var v177 lang.FnFunc1
-											tmp176 = lang.FnFunc1(func(p0 any) any {
-												v178 := p0
-												_ = v178
-												var tmp179 any
+											var v171 lang.FnFunc1
+											tmp170 = lang.FnFunc1(func(p0 any) any {
+												v172 := p0
+												_ = v172
+												var tmp173 any
 												{ // let
 													// let binding "vec__417"
-													var v180 any = v178
+													var v174 any = v172
+													_ = v174
+													// let binding "seq__418"
+													tmp175 := checkDerefVar(var_clojure_DOT_core_seq)
+													tmp176 := lang.Apply1(tmp175, v174)
+													var v177 any = tmp176
+													_ = v177
+													// let binding "first__419"
+													tmp178 := checkDerefVar(var_clojure_DOT_core_first)
+													tmp179 := lang.Apply1(tmp178, v177)
+													var v180 any = tmp179
 													_ = v180
 													// let binding "seq__418"
-													tmp181 := checkDerefVar(var_clojure_DOT_core_seq)
-													tmp182 := lang.Apply1(tmp181, v180)
+													tmp181 := checkDerefVar(var_clojure_DOT_core_next)
+													tmp182 := lang.Apply1(tmp181, v177)
 													var v183 any = tmp182
 													_ = v183
-													// let binding "first__419"
-													tmp184 := checkDerefVar(var_clojure_DOT_core_first)
-													tmp185 := lang.Apply1(tmp184, v183)
-													var v186 any = tmp185
-													_ = v186
-													// let binding "seq__418"
-													tmp187 := checkDerefVar(var_clojure_DOT_core_next)
-													tmp188 := lang.Apply1(tmp187, v183)
-													var v189 any = tmp188
-													_ = v189
 													// let binding "vec__420"
-													var v190 any = v186
-													_ = v190
+													var v184 any = v180
+													_ = v184
 													// let binding "k"
-													tmp191 := checkDerefVar(var_clojure_DOT_core_nth)
-													tmp192 := lang.Apply3(tmp191, v190, int64(0), nil)
-													var v193 any = tmp192
-													_ = v193
+													tmp185 := checkDerefVar(var_clojure_DOT_core_nth)
+													tmp186 := lang.Apply3(tmp185, v184, int64(0), nil)
+													var v187 any = tmp186
+													_ = v187
 													// let binding "v"
-													tmp194 := checkDerefVar(var_clojure_DOT_core_nth)
-													tmp195 := lang.Apply3(tmp194, v190, int64(1), nil)
-													var v196 any = tmp195
-													_ = v196
+													tmp188 := checkDerefVar(var_clojure_DOT_core_nth)
+													tmp189 := lang.Apply3(tmp188, v184, int64(1), nil)
+													var v190 any = tmp189
+													_ = v190
 													// let binding "pair"
-													var v197 any = v190
-													_ = v197
+													var v191 any = v184
+													_ = v191
 													// let binding "etc"
-													var v198 any = v189
-													_ = v198
-													var tmp199 any
-													tmp200 := checkDerefVar(var_clojure_DOT_core__EQ_)
-													tmp201 := lang.Apply2(tmp200, v193, kw_let)
-													if lang.IsTruthy(tmp201) {
-														tmp202 := checkDerefVar(var_clojure_DOT_core_seq)
-														tmp203 := checkDerefVar(var_clojure_DOT_core_concat)
-														tmp204 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp205 := lang.Apply1(tmp204, sym_clojure_DOT_core_SLASH_let)
-														tmp206 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp207 := lang.Apply1(tmp206, v196)
-														tmp208 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp209 := lang.Apply1(v177, v198)
-														tmp210 := lang.Apply1(tmp208, tmp209)
-														tmp211 := lang.Apply3(tmp203, tmp205, tmp207, tmp210)
-														tmp212 := lang.Apply1(tmp202, tmp211)
-														tmp199 = tmp212
+													var v192 any = v183
+													_ = v192
+													var tmp193 any
+													tmp194 := checkDerefVar(var_clojure_DOT_core__EQ_)
+													tmp195 := lang.Apply2(tmp194, v187, kw_let)
+													if lang.IsTruthy(tmp195) {
+														tmp196 := checkDerefVar(var_clojure_DOT_core_seq)
+														tmp197 := checkDerefVar(var_clojure_DOT_core_concat)
+														tmp198 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp199 := lang.Apply1(tmp198, sym_clojure_DOT_core_SLASH_let)
+														tmp200 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp201 := lang.Apply1(tmp200, v190)
+														tmp202 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp203 := lang.Apply1(v171, v192)
+														tmp204 := lang.Apply1(tmp202, tmp203)
+														tmp205 := lang.Apply3(tmp197, tmp199, tmp201, tmp204)
+														tmp206 := lang.Apply1(tmp196, tmp205)
+														tmp193 = tmp206
 													} else {
-														var tmp213 any
-														tmp214 := checkDerefVar(var_clojure_DOT_core__EQ_)
-														tmp215 := lang.Apply2(tmp214, v193, kw_while)
-														if lang.IsTruthy(tmp215) {
-															tmp216 := checkDerefVar(var_clojure_DOT_core_seq)
-															tmp217 := checkDerefVar(var_clojure_DOT_core_concat)
-															tmp218 := checkDerefVar(var_clojure_DOT_core_list)
-															tmp219 := lang.Apply1(tmp218, sym_clojure_DOT_core_SLASH_when)
-															tmp220 := checkDerefVar(var_clojure_DOT_core_list)
-															tmp221 := lang.Apply1(tmp220, v196)
-															tmp222 := checkDerefVar(var_clojure_DOT_core_list)
-															tmp223 := lang.Apply1(v177, v198)
-															tmp224 := lang.Apply1(tmp222, tmp223)
-															tmp225 := lang.Apply3(tmp217, tmp219, tmp221, tmp224)
-															tmp226 := lang.Apply1(tmp216, tmp225)
-															tmp213 = tmp226
+														var tmp207 any
+														tmp208 := checkDerefVar(var_clojure_DOT_core__EQ_)
+														tmp209 := lang.Apply2(tmp208, v187, kw_while)
+														if lang.IsTruthy(tmp209) {
+															tmp210 := checkDerefVar(var_clojure_DOT_core_seq)
+															tmp211 := checkDerefVar(var_clojure_DOT_core_concat)
+															tmp212 := checkDerefVar(var_clojure_DOT_core_list)
+															tmp213 := lang.Apply1(tmp212, sym_clojure_DOT_core_SLASH_when)
+															tmp214 := checkDerefVar(var_clojure_DOT_core_list)
+															tmp215 := lang.Apply1(tmp214, v190)
+															tmp216 := checkDerefVar(var_clojure_DOT_core_list)
+															tmp217 := lang.Apply1(v171, v192)
+															tmp218 := lang.Apply1(tmp216, tmp217)
+															tmp219 := lang.Apply3(tmp211, tmp213, tmp215, tmp218)
+															tmp220 := lang.Apply1(tmp210, tmp219)
+															tmp207 = tmp220
 														} else {
-															var tmp227 any
-															tmp228 := checkDerefVar(var_clojure_DOT_core__EQ_)
-															tmp229 := lang.Apply2(tmp228, v193, kw_when)
-															if lang.IsTruthy(tmp229) {
-																tmp230 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp231 := checkDerefVar(var_clojure_DOT_core_concat)
-																tmp232 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp233 := lang.Apply1(tmp232, sym_if)
-																tmp234 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp235 := lang.Apply1(tmp234, v196)
+															var tmp221 any
+															tmp222 := checkDerefVar(var_clojure_DOT_core__EQ_)
+															tmp223 := lang.Apply2(tmp222, v187, kw_when)
+															if lang.IsTruthy(tmp223) {
+																tmp224 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp225 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp226 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp227 := lang.Apply1(tmp226, sym_if)
+																tmp228 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp229 := lang.Apply1(tmp228, v190)
+																tmp230 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp231 := lang.Apply1(v171, v192)
+																tmp232 := lang.Apply1(tmp230, tmp231)
+																tmp233 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp234 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp235 := checkDerefVar(var_clojure_DOT_core_concat)
 																tmp236 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp237 := lang.Apply1(v177, v198)
-																tmp238 := lang.Apply1(tmp236, tmp237)
-																tmp239 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp240 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp241 := checkDerefVar(var_clojure_DOT_core_concat)
-																tmp242 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp243 := lang.Apply1(tmp242, sym_recur)
-																tmp244 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp245 := checkDerefVar(var_clojure_DOT_core_seq)
-																tmp246 := checkDerefVar(var_clojure_DOT_core_concat)
-																tmp247 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp248 := lang.Apply1(tmp247, sym_clojure_DOT_core_SLASH_unchecked_DASH_inc)
-																tmp249 := checkDerefVar(var_clojure_DOT_core_list)
-																tmp250 := lang.Apply1(tmp249, v172)
-																tmp251 := lang.Apply2(tmp246, tmp248, tmp250)
-																tmp252 := lang.Apply1(tmp245, tmp251)
-																tmp253 := lang.Apply1(tmp244, tmp252)
-																tmp254 := lang.Apply2(tmp241, tmp243, tmp253)
-																tmp255 := lang.Apply1(tmp240, tmp254)
-																tmp256 := lang.Apply1(tmp239, tmp255)
-																tmp257 := lang.Apply4(tmp231, tmp233, tmp235, tmp238, tmp256)
-																tmp258 := lang.Apply1(tmp230, tmp257)
-																tmp227 = tmp258
+																tmp237 := lang.Apply1(tmp236, sym_recur)
+																tmp238 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp239 := checkDerefVar(var_clojure_DOT_core_seq)
+																tmp240 := checkDerefVar(var_clojure_DOT_core_concat)
+																tmp241 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp242 := lang.Apply1(tmp241, sym_clojure_DOT_core_SLASH_unchecked_DASH_inc)
+																tmp243 := checkDerefVar(var_clojure_DOT_core_list)
+																tmp244 := lang.Apply1(tmp243, v166)
+																tmp245 := lang.Apply2(tmp240, tmp242, tmp244)
+																tmp246 := lang.Apply1(tmp239, tmp245)
+																tmp247 := lang.Apply1(tmp238, tmp246)
+																tmp248 := lang.Apply2(tmp235, tmp237, tmp247)
+																tmp249 := lang.Apply1(tmp234, tmp248)
+																tmp250 := lang.Apply1(tmp233, tmp249)
+																tmp251 := lang.Apply4(tmp225, tmp227, tmp229, tmp232, tmp250)
+																tmp252 := lang.Apply1(tmp224, tmp251)
+																tmp221 = tmp252
 															} else {
-																var tmp259 any
-																tmp260 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
-																tmp261 := lang.Apply1(tmp260, v193)
-																if lang.IsTruthy(tmp261) {
-																	tmp262 := lang.Apply2(v40, "Invalid 'for' keyword ", v193)
-																	tmp259 = tmp262
+																var tmp253 any
+																tmp254 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
+																tmp255 := lang.Apply1(tmp254, v187)
+																if lang.IsTruthy(tmp255) {
+																	tmp256 := lang.Apply2(v36, "Invalid 'for' keyword ", v187)
+																	tmp253 = tmp256
 																} else {
-																	var tmp263 any
+																	var tmp257 any
 																	if lang.IsTruthy(kw_else) {
-																		tmp264 := checkDerefVar(var_clojure_DOT_core_seq)
-																		tmp265 := checkDerefVar(var_clojure_DOT_core_concat)
-																		tmp266 := checkDerefVar(var_clojure_DOT_core_list)
-																		tmp267 := lang.Apply1(tmp266, sym_do)
-																		tmp268 := checkDerefVar(var_clojure_DOT_core_list)
-																		tmp269 := checkDerefVar(var_clojure_DOT_core_seq)
-																		tmp270 := checkDerefVar(var_clojure_DOT_core_concat)
-																		tmp271 := checkDerefVar(var_clojure_DOT_core_list)
-																		tmp272 := lang.Apply1(tmp271, sym_clojure_DOT_core_SLASH_chunk_DASH_append)
-																		tmp273 := checkDerefVar(var_clojure_DOT_core_list)
-																		tmp274 := lang.Apply1(tmp273, v175)
-																		tmp275 := checkDerefVar(var_clojure_DOT_core_list)
-																		tmp276 := lang.Apply1(tmp275, v5)
-																		tmp277 := lang.Apply3(tmp270, tmp272, tmp274, tmp276)
-																		tmp278 := lang.Apply1(tmp269, tmp277)
-																		tmp279 := lang.Apply1(tmp268, tmp278)
-																		tmp280 := checkDerefVar(var_clojure_DOT_core_list)
-																		tmp281 := checkDerefVar(var_clojure_DOT_core_seq)
-																		tmp282 := checkDerefVar(var_clojure_DOT_core_concat)
-																		tmp283 := checkDerefVar(var_clojure_DOT_core_list)
-																		tmp284 := lang.Apply1(tmp283, sym_recur)
-																		tmp285 := checkDerefVar(var_clojure_DOT_core_list)
-																		tmp286 := checkDerefVar(var_clojure_DOT_core_seq)
-																		tmp287 := checkDerefVar(var_clojure_DOT_core_concat)
-																		tmp288 := checkDerefVar(var_clojure_DOT_core_list)
-																		tmp289 := lang.Apply1(tmp288, sym_clojure_DOT_core_SLASH_unchecked_DASH_inc)
-																		tmp290 := checkDerefVar(var_clojure_DOT_core_list)
-																		tmp291 := lang.Apply1(tmp290, v172)
-																		tmp292 := lang.Apply2(tmp287, tmp289, tmp291)
-																		tmp293 := lang.Apply1(tmp286, tmp292)
-																		tmp294 := lang.Apply1(tmp285, tmp293)
-																		tmp295 := lang.Apply2(tmp282, tmp284, tmp294)
-																		tmp296 := lang.Apply1(tmp281, tmp295)
-																		tmp297 := lang.Apply1(tmp280, tmp296)
-																		tmp298 := lang.Apply3(tmp265, tmp267, tmp279, tmp297)
-																		tmp299 := lang.Apply1(tmp264, tmp298)
-																		tmp263 = tmp299
+																		tmp258 := checkDerefVar(var_clojure_DOT_core_seq)
+																		tmp259 := checkDerefVar(var_clojure_DOT_core_concat)
+																		tmp260 := checkDerefVar(var_clojure_DOT_core_list)
+																		tmp261 := lang.Apply1(tmp260, sym_do)
+																		tmp262 := checkDerefVar(var_clojure_DOT_core_list)
+																		tmp263 := checkDerefVar(var_clojure_DOT_core_seq)
+																		tmp264 := checkDerefVar(var_clojure_DOT_core_concat)
+																		tmp265 := checkDerefVar(var_clojure_DOT_core_list)
+																		tmp266 := lang.Apply1(tmp265, sym_clojure_DOT_core_SLASH_chunk_DASH_append)
+																		tmp267 := checkDerefVar(var_clojure_DOT_core_list)
+																		tmp268 := lang.Apply1(tmp267, v169)
+																		tmp269 := checkDerefVar(var_clojure_DOT_core_list)
+																		tmp270 := lang.Apply1(tmp269, v5)
+																		tmp271 := lang.Apply3(tmp264, tmp266, tmp268, tmp270)
+																		tmp272 := lang.Apply1(tmp263, tmp271)
+																		tmp273 := lang.Apply1(tmp262, tmp272)
+																		tmp274 := checkDerefVar(var_clojure_DOT_core_list)
+																		tmp275 := checkDerefVar(var_clojure_DOT_core_seq)
+																		tmp276 := checkDerefVar(var_clojure_DOT_core_concat)
+																		tmp277 := checkDerefVar(var_clojure_DOT_core_list)
+																		tmp278 := lang.Apply1(tmp277, sym_recur)
+																		tmp279 := checkDerefVar(var_clojure_DOT_core_list)
+																		tmp280 := checkDerefVar(var_clojure_DOT_core_seq)
+																		tmp281 := checkDerefVar(var_clojure_DOT_core_concat)
+																		tmp282 := checkDerefVar(var_clojure_DOT_core_list)
+																		tmp283 := lang.Apply1(tmp282, sym_clojure_DOT_core_SLASH_unchecked_DASH_inc)
+																		tmp284 := checkDerefVar(var_clojure_DOT_core_list)
+																		tmp285 := lang.Apply1(tmp284, v166)
+																		tmp286 := lang.Apply2(tmp281, tmp283, tmp285)
+																		tmp287 := lang.Apply1(tmp280, tmp286)
+																		tmp288 := lang.Apply1(tmp279, tmp287)
+																		tmp289 := lang.Apply2(tmp276, tmp278, tmp288)
+																		tmp290 := lang.Apply1(tmp275, tmp289)
+																		tmp291 := lang.Apply1(tmp274, tmp290)
+																		tmp292 := lang.Apply3(tmp259, tmp261, tmp273, tmp291)
+																		tmp293 := lang.Apply1(tmp258, tmp292)
+																		tmp257 = tmp293
 																	} else {
 																	}
-																	tmp259 = tmp263
+																	tmp253 = tmp257
 																}
-																tmp227 = tmp259
+																tmp221 = tmp253
 															}
-															tmp213 = tmp227
+															tmp207 = tmp221
 														}
-														tmp199 = tmp213
+														tmp193 = tmp207
 													}
-													tmp179 = tmp199
+													tmp173 = tmp193
 												} // end let
-												return tmp179
+												return tmp173
 											})
-											v177 = tmp176
-											_ = v177
+											v171 = tmp170
+											_ = v171
 										}
-										tmp177 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4755), kw_column, int(39), kw_end_DASH_line, int(4767), kw_end_DASH_column, int(79))
-										tmp178, err := lang.WithMeta(tmp176, tmp177.(lang.IPersistentMap))
-										if err != nil {
-											panic(err)
-										}
-										var v179 any = tmp178
-										_ = v179
-										tmp180 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp181 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp182 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp183 := lang.Apply1(tmp182, sym_clojure_DOT_core_SLASH_fn)
-										tmp184 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp185 := lang.Apply1(tmp184, v88)
-										tmp186 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp187 := checkDerefVar(var_clojure_DOT_core_apply)
-										tmp188 := checkDerefVar(var_clojure_DOT_core_vector)
-										tmp189 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp190 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp191 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp192 := lang.Apply1(tmp191, v91)
-										tmp193 := lang.Apply1(tmp190, tmp192)
-										tmp194 := lang.Apply1(tmp189, tmp193)
-										tmp195 := lang.Apply2(tmp187, tmp188, tmp194)
-										tmp196 := lang.Apply1(tmp186, tmp195)
+										var v171 any = tmp170
+										_ = v171
+										tmp172 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp173 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp174 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp175 := lang.Apply1(tmp174, sym_clojure_DOT_core_SLASH_fn)
+										tmp176 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp177 := lang.Apply1(tmp176, v84)
+										tmp178 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp179 := checkDerefVar(var_clojure_DOT_core_apply)
+										tmp180 := checkDerefVar(var_clojure_DOT_core_vector)
+										tmp181 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp182 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp183 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp184 := lang.Apply1(tmp183, v87)
+										tmp185 := lang.Apply1(tmp182, tmp184)
+										tmp186 := lang.Apply1(tmp181, tmp185)
+										tmp187 := lang.Apply2(tmp179, tmp180, tmp186)
+										tmp188 := lang.Apply1(tmp178, tmp187)
+										tmp189 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp190 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp191 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp192 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp193 := lang.Apply1(tmp192, sym_clojure_DOT_core_SLASH_lazy_DASH_seq)
+										tmp194 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp195 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp196 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp197 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp198 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp199 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp200 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp201 := lang.Apply1(tmp200, sym_clojure_DOT_core_SLASH_lazy_DASH_seq)
-										tmp202 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp203 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp204 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp205 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp206 := lang.Apply1(tmp205, sym_clojure_DOT_core_SLASH_loop)
-										tmp207 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp208 := checkDerefVar(var_clojure_DOT_core_apply)
-										tmp209 := checkDerefVar(var_clojure_DOT_core_vector)
-										tmp210 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp211 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp198 := lang.Apply1(tmp197, sym_clojure_DOT_core_SLASH_loop)
+										tmp199 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp200 := checkDerefVar(var_clojure_DOT_core_apply)
+										tmp201 := checkDerefVar(var_clojure_DOT_core_vector)
+										tmp202 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp203 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp204 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp205 := lang.Apply1(tmp204, v87)
+										tmp206 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp207 := lang.Apply1(tmp206, v87)
+										tmp208 := lang.Apply2(tmp203, tmp205, tmp207)
+										tmp209 := lang.Apply1(tmp202, tmp208)
+										tmp210 := lang.Apply2(tmp200, tmp201, tmp209)
+										tmp211 := lang.Apply1(tmp199, tmp210)
 										tmp212 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp213 := lang.Apply1(tmp212, v91)
-										tmp214 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp215 := lang.Apply1(tmp214, v91)
-										tmp216 := lang.Apply2(tmp211, tmp213, tmp215)
-										tmp217 := lang.Apply1(tmp210, tmp216)
-										tmp218 := lang.Apply2(tmp208, tmp209, tmp217)
-										tmp219 := lang.Apply1(tmp207, tmp218)
-										tmp220 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp221 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp222 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp223 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp224 := lang.Apply1(tmp223, sym_clojure_DOT_core_SLASH_when_DASH_let)
-										tmp225 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp226 := checkDerefVar(var_clojure_DOT_core_apply)
-										tmp227 := checkDerefVar(var_clojure_DOT_core_vector)
-										tmp228 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp229 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp230 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp231 := lang.Apply1(tmp230, v91)
-										tmp232 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp233 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp234 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp235 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp236 := lang.Apply1(tmp235, sym_clojure_DOT_core_SLASH_seq)
-										tmp237 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp238 := lang.Apply1(tmp237, v91)
-										tmp239 := lang.Apply2(tmp234, tmp236, tmp238)
-										tmp240 := lang.Apply1(tmp233, tmp239)
-										tmp241 := lang.Apply1(tmp232, tmp240)
-										tmp242 := lang.Apply2(tmp229, tmp231, tmp241)
-										tmp243 := lang.Apply1(tmp228, tmp242)
-										tmp244 := lang.Apply2(tmp226, tmp227, tmp243)
-										tmp245 := lang.Apply1(tmp225, tmp244)
+										tmp213 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp214 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp215 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp216 := lang.Apply1(tmp215, sym_clojure_DOT_core_SLASH_when_DASH_let)
+										tmp217 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp218 := checkDerefVar(var_clojure_DOT_core_apply)
+										tmp219 := checkDerefVar(var_clojure_DOT_core_vector)
+										tmp220 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp221 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp222 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp223 := lang.Apply1(tmp222, v87)
+										tmp224 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp225 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp226 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp227 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp228 := lang.Apply1(tmp227, sym_clojure_DOT_core_SLASH_seq)
+										tmp229 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp230 := lang.Apply1(tmp229, v87)
+										tmp231 := lang.Apply2(tmp226, tmp228, tmp230)
+										tmp232 := lang.Apply1(tmp225, tmp231)
+										tmp233 := lang.Apply1(tmp224, tmp232)
+										tmp234 := lang.Apply2(tmp221, tmp223, tmp233)
+										tmp235 := lang.Apply1(tmp220, tmp234)
+										tmp236 := lang.Apply2(tmp218, tmp219, tmp235)
+										tmp237 := lang.Apply1(tmp217, tmp236)
+										tmp238 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp239 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp240 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp241 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp242 := lang.Apply1(tmp241, sym_if)
+										tmp243 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp244 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp245 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp246 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp247 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp248 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp249 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp250 := lang.Apply1(tmp249, sym_if)
-										tmp251 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp252 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp253 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp254 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp255 := lang.Apply1(tmp254, sym_clojure_DOT_core_SLASH_chunked_DASH_seq_QMARK_)
+										tmp247 := lang.Apply1(tmp246, sym_clojure_DOT_core_SLASH_chunked_DASH_seq_QMARK_)
+										tmp248 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp249 := lang.Apply1(tmp248, v87)
+										tmp250 := lang.Apply2(tmp245, tmp247, tmp249)
+										tmp251 := lang.Apply1(tmp244, tmp250)
+										tmp252 := lang.Apply1(tmp243, tmp251)
+										tmp253 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp254 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp255 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp256 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp257 := lang.Apply1(tmp256, v91)
-										tmp258 := lang.Apply2(tmp253, tmp255, tmp257)
-										tmp259 := lang.Apply1(tmp252, tmp258)
-										tmp260 := lang.Apply1(tmp251, tmp259)
-										tmp261 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp262 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp263 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp264 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp265 := lang.Apply1(tmp264, sym_clojure_DOT_core_SLASH_let)
-										tmp266 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp267 := checkDerefVar(var_clojure_DOT_core_apply)
-										tmp268 := checkDerefVar(var_clojure_DOT_core_vector)
-										tmp269 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp270 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp271 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp272 := lang.Apply1(tmp271, sym_c__0__auto__)
-										tmp273 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp274 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp275 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp276 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp277 := lang.Apply1(tmp276, sym_clojure_DOT_core_SLASH_chunk_DASH_first)
-										tmp278 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp279 := lang.Apply1(tmp278, v91)
-										tmp280 := lang.Apply2(tmp275, tmp277, tmp279)
-										tmp281 := lang.Apply1(tmp274, tmp280)
-										tmp282 := lang.Apply1(tmp273, tmp281)
-										tmp283 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp284 := lang.Apply1(tmp283, sym_size__1__auto__)
+										tmp257 := lang.Apply1(tmp256, sym_clojure_DOT_core_SLASH_let)
+										tmp258 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp259 := checkDerefVar(var_clojure_DOT_core_apply)
+										tmp260 := checkDerefVar(var_clojure_DOT_core_vector)
+										tmp261 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp262 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp263 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp264 := lang.Apply1(tmp263, sym_c__0__auto__)
+										tmp265 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp266 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp267 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp268 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp269 := lang.Apply1(tmp268, sym_clojure_DOT_core_SLASH_chunk_DASH_first)
+										tmp270 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp271 := lang.Apply1(tmp270, v87)
+										tmp272 := lang.Apply2(tmp267, tmp269, tmp271)
+										tmp273 := lang.Apply1(tmp266, tmp272)
+										tmp274 := lang.Apply1(tmp265, tmp273)
+										tmp275 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp276 := lang.Apply1(tmp275, sym_size__1__auto__)
+										tmp277 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp278 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp279 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp280 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp281 := lang.Apply1(tmp280, sym_clojure_DOT_core_SLASH_int)
+										tmp282 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp283 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp284 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp285 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp286 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp287 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp288 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp289 := lang.Apply1(tmp288, sym_clojure_DOT_core_SLASH_int)
-										tmp290 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp291 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp292 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp293 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp294 := lang.Apply1(tmp293, sym_clojure_DOT_core_SLASH_count)
+										tmp286 := lang.Apply1(tmp285, sym_clojure_DOT_core_SLASH_count)
+										tmp287 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp288 := lang.Apply1(tmp287, sym_c__0__auto__)
+										tmp289 := lang.Apply2(tmp284, tmp286, tmp288)
+										tmp290 := lang.Apply1(tmp283, tmp289)
+										tmp291 := lang.Apply1(tmp282, tmp290)
+										tmp292 := lang.Apply2(tmp279, tmp281, tmp291)
+										tmp293 := lang.Apply1(tmp278, tmp292)
+										tmp294 := lang.Apply1(tmp277, tmp293)
 										tmp295 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp296 := lang.Apply1(tmp295, sym_c__0__auto__)
-										tmp297 := lang.Apply2(tmp292, tmp294, tmp296)
-										tmp298 := lang.Apply1(tmp291, tmp297)
-										tmp299 := lang.Apply1(tmp290, tmp298)
-										tmp300 := lang.Apply2(tmp287, tmp289, tmp299)
-										tmp301 := lang.Apply1(tmp286, tmp300)
-										tmp302 := lang.Apply1(tmp285, tmp301)
-										tmp303 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp304 := lang.Apply1(tmp303, v175)
-										tmp305 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp306 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp307 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp308 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp309 := lang.Apply1(tmp308, sym_clojure_DOT_core_SLASH_chunk_DASH_buffer)
-										tmp310 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp311 := lang.Apply1(tmp310, sym_size__1__auto__)
-										tmp312 := lang.Apply2(tmp307, tmp309, tmp311)
-										tmp313 := lang.Apply1(tmp306, tmp312)
-										tmp314 := lang.Apply1(tmp305, tmp313)
-										tmp315 := lang.Apply(tmp270, []any{tmp272, tmp282, tmp284, tmp302, tmp304, tmp314})
-										tmp316 := lang.Apply1(tmp269, tmp315)
-										tmp317 := lang.Apply2(tmp267, tmp268, tmp316)
-										tmp318 := lang.Apply1(tmp266, tmp317)
+										tmp296 := lang.Apply1(tmp295, v169)
+										tmp297 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp298 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp299 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp300 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp301 := lang.Apply1(tmp300, sym_clojure_DOT_core_SLASH_chunk_DASH_buffer)
+										tmp302 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp303 := lang.Apply1(tmp302, sym_size__1__auto__)
+										tmp304 := lang.Apply2(tmp299, tmp301, tmp303)
+										tmp305 := lang.Apply1(tmp298, tmp304)
+										tmp306 := lang.Apply1(tmp297, tmp305)
+										tmp307 := lang.Apply(tmp262, []any{tmp264, tmp274, tmp276, tmp294, tmp296, tmp306})
+										tmp308 := lang.Apply1(tmp261, tmp307)
+										tmp309 := lang.Apply2(tmp259, tmp260, tmp308)
+										tmp310 := lang.Apply1(tmp258, tmp309)
+										tmp311 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp312 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp313 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp314 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp315 := lang.Apply1(tmp314, sym_if)
+										tmp316 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp317 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp318 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp319 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp320 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp321 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp322 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp323 := lang.Apply1(tmp322, sym_if)
-										tmp324 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp325 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp326 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp327 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp328 := lang.Apply1(tmp327, sym_clojure_DOT_core_SLASH_loop)
-										tmp329 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp330 := checkDerefVar(var_clojure_DOT_core_apply)
-										tmp331 := checkDerefVar(var_clojure_DOT_core_vector)
-										tmp332 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp333 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp334 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp335 := lang.Apply1(tmp334, v172)
-										tmp336 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp337 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp338 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp339 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp340 := lang.Apply1(tmp339, sym_clojure_DOT_core_SLASH_int)
-										tmp341 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp342 := lang.Apply1(tmp341, int64(0))
-										tmp343 := lang.Apply2(tmp338, tmp340, tmp342)
-										tmp344 := lang.Apply1(tmp337, tmp343)
-										tmp345 := lang.Apply1(tmp336, tmp344)
-										tmp346 := lang.Apply2(tmp333, tmp335, tmp345)
-										tmp347 := lang.Apply1(tmp332, tmp346)
-										tmp348 := lang.Apply2(tmp330, tmp331, tmp347)
-										tmp349 := lang.Apply1(tmp329, tmp348)
+										tmp320 := lang.Apply1(tmp319, sym_clojure_DOT_core_SLASH_loop)
+										tmp321 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp322 := checkDerefVar(var_clojure_DOT_core_apply)
+										tmp323 := checkDerefVar(var_clojure_DOT_core_vector)
+										tmp324 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp325 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp326 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp327 := lang.Apply1(tmp326, v166)
+										tmp328 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp329 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp330 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp331 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp332 := lang.Apply1(tmp331, sym_clojure_DOT_core_SLASH_int)
+										tmp333 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp334 := lang.Apply1(tmp333, int64(0))
+										tmp335 := lang.Apply2(tmp330, tmp332, tmp334)
+										tmp336 := lang.Apply1(tmp329, tmp335)
+										tmp337 := lang.Apply1(tmp328, tmp336)
+										tmp338 := lang.Apply2(tmp325, tmp327, tmp337)
+										tmp339 := lang.Apply1(tmp324, tmp338)
+										tmp340 := lang.Apply2(tmp322, tmp323, tmp339)
+										tmp341 := lang.Apply1(tmp321, tmp340)
+										tmp342 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp343 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp344 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp345 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp346 := lang.Apply1(tmp345, sym_if)
+										tmp347 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp348 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp349 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp350 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp351 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp352 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp353 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp354 := lang.Apply1(tmp353, sym_if)
-										tmp355 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp356 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp357 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp358 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp359 := lang.Apply1(tmp358, sym_clojure_DOT_core_SLASH__LT_)
-										tmp360 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp361 := lang.Apply1(tmp360, v172)
+										tmp351 := lang.Apply1(tmp350, sym_clojure_DOT_core_SLASH__LT_)
+										tmp352 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp353 := lang.Apply1(tmp352, v166)
+										tmp354 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp355 := lang.Apply1(tmp354, sym_size__1__auto__)
+										tmp356 := lang.Apply3(tmp349, tmp351, tmp353, tmp355)
+										tmp357 := lang.Apply1(tmp348, tmp356)
+										tmp358 := lang.Apply1(tmp347, tmp357)
+										tmp359 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp360 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp361 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp362 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp363 := lang.Apply1(tmp362, sym_size__1__auto__)
-										tmp364 := lang.Apply3(tmp357, tmp359, tmp361, tmp363)
-										tmp365 := lang.Apply1(tmp356, tmp364)
-										tmp366 := lang.Apply1(tmp355, tmp365)
-										tmp367 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp368 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp369 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp370 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp371 := lang.Apply1(tmp370, sym_clojure_DOT_core_SLASH_let)
-										tmp372 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp373 := checkDerefVar(var_clojure_DOT_core_apply)
-										tmp374 := checkDerefVar(var_clojure_DOT_core_vector)
-										tmp375 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp376 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp377 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp378 := lang.Apply1(tmp377, v65)
-										tmp379 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp380 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp381 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp382 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp383 := lang.Apply1(tmp382, sym__DOT_nth)
-										tmp384 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp385 := lang.Apply1(tmp384, sym_c__0__auto__)
-										tmp386 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp387 := lang.Apply1(tmp386, v172)
-										tmp388 := lang.Apply3(tmp381, tmp383, tmp385, tmp387)
-										tmp389 := lang.Apply1(tmp380, tmp388)
-										tmp390 := lang.Apply1(tmp379, tmp389)
-										tmp391 := lang.Apply2(tmp376, tmp378, tmp390)
-										tmp392 := lang.Apply1(tmp375, tmp391)
-										tmp393 := lang.Apply2(tmp373, tmp374, tmp392)
-										tmp394 := lang.Apply1(tmp372, tmp393)
-										tmp395 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp396 := lang.Apply1(v179, v73)
-										tmp397 := lang.Apply1(tmp395, tmp396)
-										tmp398 := lang.Apply3(tmp369, tmp371, tmp394, tmp397)
-										tmp399 := lang.Apply1(tmp368, tmp398)
-										tmp400 := lang.Apply1(tmp367, tmp399)
+										tmp363 := lang.Apply1(tmp362, sym_clojure_DOT_core_SLASH_let)
+										tmp364 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp365 := checkDerefVar(var_clojure_DOT_core_apply)
+										tmp366 := checkDerefVar(var_clojure_DOT_core_vector)
+										tmp367 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp368 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp369 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp370 := lang.Apply1(tmp369, v61)
+										tmp371 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp372 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp373 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp374 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp375 := lang.Apply1(tmp374, sym__DOT_nth)
+										tmp376 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp377 := lang.Apply1(tmp376, sym_c__0__auto__)
+										tmp378 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp379 := lang.Apply1(tmp378, v166)
+										tmp380 := lang.Apply3(tmp373, tmp375, tmp377, tmp379)
+										tmp381 := lang.Apply1(tmp372, tmp380)
+										tmp382 := lang.Apply1(tmp371, tmp381)
+										tmp383 := lang.Apply2(tmp368, tmp370, tmp382)
+										tmp384 := lang.Apply1(tmp367, tmp383)
+										tmp385 := lang.Apply2(tmp365, tmp366, tmp384)
+										tmp386 := lang.Apply1(tmp364, tmp385)
+										tmp387 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp388 := lang.Apply1(v171, v69)
+										tmp389 := lang.Apply1(tmp387, tmp388)
+										tmp390 := lang.Apply3(tmp361, tmp363, tmp386, tmp389)
+										tmp391 := lang.Apply1(tmp360, tmp390)
+										tmp392 := lang.Apply1(tmp359, tmp391)
+										tmp393 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp394 := lang.Apply1(tmp393, true)
+										tmp395 := lang.Apply4(tmp344, tmp346, tmp358, tmp392, tmp394)
+										tmp396 := lang.Apply1(tmp343, tmp395)
+										tmp397 := lang.Apply1(tmp342, tmp396)
+										tmp398 := lang.Apply3(tmp318, tmp320, tmp341, tmp397)
+										tmp399 := lang.Apply1(tmp317, tmp398)
+										tmp400 := lang.Apply1(tmp316, tmp399)
 										tmp401 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp402 := lang.Apply1(tmp401, true)
-										tmp403 := lang.Apply4(tmp352, tmp354, tmp366, tmp400, tmp402)
-										tmp404 := lang.Apply1(tmp351, tmp403)
-										tmp405 := lang.Apply1(tmp350, tmp404)
-										tmp406 := lang.Apply3(tmp326, tmp328, tmp349, tmp405)
-										tmp407 := lang.Apply1(tmp325, tmp406)
-										tmp408 := lang.Apply1(tmp324, tmp407)
+										tmp402 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp403 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp404 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp405 := lang.Apply1(tmp404, sym_clojure_DOT_core_SLASH_chunk_DASH_cons)
+										tmp406 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp407 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp408 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp409 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp410 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp411 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp412 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp413 := lang.Apply1(tmp412, sym_clojure_DOT_core_SLASH_chunk_DASH_cons)
-										tmp414 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp415 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp416 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp417 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp418 := lang.Apply1(tmp417, sym_clojure_DOT_core_SLASH_chunk)
+										tmp410 := lang.Apply1(tmp409, sym_clojure_DOT_core_SLASH_chunk)
+										tmp411 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp412 := lang.Apply1(tmp411, v169)
+										tmp413 := lang.Apply2(tmp408, tmp410, tmp412)
+										tmp414 := lang.Apply1(tmp407, tmp413)
+										tmp415 := lang.Apply1(tmp406, tmp414)
+										tmp416 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp417 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp418 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp419 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp420 := lang.Apply1(tmp419, v175)
-										tmp421 := lang.Apply2(tmp416, tmp418, tmp420)
-										tmp422 := lang.Apply1(tmp415, tmp421)
-										tmp423 := lang.Apply1(tmp414, tmp422)
+										tmp420 := lang.Apply1(tmp419, v84)
+										tmp421 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp422 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp423 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp424 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp425 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp426 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp427 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp428 := lang.Apply1(tmp427, v88)
-										tmp429 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp430 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp431 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp432 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp433 := lang.Apply1(tmp432, sym_clojure_DOT_core_SLASH_chunk_DASH_rest)
-										tmp434 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp435 := lang.Apply1(tmp434, v91)
-										tmp436 := lang.Apply2(tmp431, tmp433, tmp435)
-										tmp437 := lang.Apply1(tmp430, tmp436)
-										tmp438 := lang.Apply1(tmp429, tmp437)
-										tmp439 := lang.Apply2(tmp426, tmp428, tmp438)
-										tmp440 := lang.Apply1(tmp425, tmp439)
-										tmp441 := lang.Apply1(tmp424, tmp440)
-										tmp442 := lang.Apply3(tmp411, tmp413, tmp423, tmp441)
-										tmp443 := lang.Apply1(tmp410, tmp442)
-										tmp444 := lang.Apply1(tmp409, tmp443)
+										tmp425 := lang.Apply1(tmp424, sym_clojure_DOT_core_SLASH_chunk_DASH_rest)
+										tmp426 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp427 := lang.Apply1(tmp426, v87)
+										tmp428 := lang.Apply2(tmp423, tmp425, tmp427)
+										tmp429 := lang.Apply1(tmp422, tmp428)
+										tmp430 := lang.Apply1(tmp421, tmp429)
+										tmp431 := lang.Apply2(tmp418, tmp420, tmp430)
+										tmp432 := lang.Apply1(tmp417, tmp431)
+										tmp433 := lang.Apply1(tmp416, tmp432)
+										tmp434 := lang.Apply3(tmp403, tmp405, tmp415, tmp433)
+										tmp435 := lang.Apply1(tmp402, tmp434)
+										tmp436 := lang.Apply1(tmp401, tmp435)
+										tmp437 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp438 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp439 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp440 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp441 := lang.Apply1(tmp440, sym_clojure_DOT_core_SLASH_chunk_DASH_cons)
+										tmp442 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp443 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp444 := checkDerefVar(var_clojure_DOT_core_concat)
 										tmp445 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp446 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp447 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp448 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp449 := lang.Apply1(tmp448, sym_clojure_DOT_core_SLASH_chunk_DASH_cons)
-										tmp450 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp451 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp452 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp453 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp454 := lang.Apply1(tmp453, sym_clojure_DOT_core_SLASH_chunk)
-										tmp455 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp456 := lang.Apply1(tmp455, v175)
-										tmp457 := lang.Apply2(tmp452, tmp454, tmp456)
-										tmp458 := lang.Apply1(tmp451, tmp457)
-										tmp459 := lang.Apply1(tmp450, tmp458)
-										tmp460 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp461 := lang.Apply1(tmp460, nil)
-										tmp462 := lang.Apply3(tmp447, tmp449, tmp459, tmp461)
-										tmp463 := lang.Apply1(tmp446, tmp462)
-										tmp464 := lang.Apply1(tmp445, tmp463)
-										tmp465 := lang.Apply4(tmp321, tmp323, tmp408, tmp444, tmp464)
-										tmp466 := lang.Apply1(tmp320, tmp465)
-										tmp467 := lang.Apply1(tmp319, tmp466)
-										tmp468 := lang.Apply3(tmp263, tmp265, tmp318, tmp467)
-										tmp469 := lang.Apply1(tmp262, tmp468)
-										tmp470 := lang.Apply1(tmp261, tmp469)
-										tmp471 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp472 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp473 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp474 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp475 := lang.Apply1(tmp474, sym_clojure_DOT_core_SLASH_let)
-										tmp476 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp477 := checkDerefVar(var_clojure_DOT_core_apply)
-										tmp478 := checkDerefVar(var_clojure_DOT_core_vector)
-										tmp479 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp480 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp481 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp482 := lang.Apply1(tmp481, v65)
-										tmp483 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp484 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp485 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp486 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp487 := lang.Apply1(tmp486, sym_clojure_DOT_core_SLASH_first)
-										tmp488 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp489 := lang.Apply1(tmp488, v91)
-										tmp490 := lang.Apply2(tmp485, tmp487, tmp489)
-										tmp491 := lang.Apply1(tmp484, tmp490)
-										tmp492 := lang.Apply1(tmp483, tmp491)
-										tmp493 := lang.Apply2(tmp480, tmp482, tmp492)
-										tmp494 := lang.Apply1(tmp479, tmp493)
-										tmp495 := lang.Apply2(tmp477, tmp478, tmp494)
-										tmp496 := lang.Apply1(tmp476, tmp495)
-										tmp497 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp498 := lang.Apply1(v95, v73)
-										tmp499 := lang.Apply1(tmp497, tmp498)
-										tmp500 := lang.Apply3(tmp473, tmp475, tmp496, tmp499)
-										tmp501 := lang.Apply1(tmp472, tmp500)
-										tmp502 := lang.Apply1(tmp471, tmp501)
-										tmp503 := lang.Apply4(tmp248, tmp250, tmp260, tmp470, tmp502)
-										tmp504 := lang.Apply1(tmp247, tmp503)
-										tmp505 := lang.Apply1(tmp246, tmp504)
-										tmp506 := lang.Apply3(tmp222, tmp224, tmp245, tmp505)
-										tmp507 := lang.Apply1(tmp221, tmp506)
-										tmp508 := lang.Apply1(tmp220, tmp507)
-										tmp509 := lang.Apply3(tmp204, tmp206, tmp219, tmp508)
-										tmp510 := lang.Apply1(tmp203, tmp509)
-										tmp511 := lang.Apply1(tmp202, tmp510)
-										tmp512 := lang.Apply2(tmp199, tmp201, tmp511)
-										tmp513 := lang.Apply1(tmp198, tmp512)
-										tmp514 := lang.Apply1(tmp197, tmp513)
-										tmp515 := lang.Apply4(tmp181, tmp183, tmp185, tmp196, tmp514)
-										tmp516 := lang.Apply1(tmp180, tmp515)
-										tmp169 = tmp516
+										tmp446 := lang.Apply1(tmp445, sym_clojure_DOT_core_SLASH_chunk)
+										tmp447 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp448 := lang.Apply1(tmp447, v169)
+										tmp449 := lang.Apply2(tmp444, tmp446, tmp448)
+										tmp450 := lang.Apply1(tmp443, tmp449)
+										tmp451 := lang.Apply1(tmp442, tmp450)
+										tmp452 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp453 := lang.Apply1(tmp452, nil)
+										tmp454 := lang.Apply3(tmp439, tmp441, tmp451, tmp453)
+										tmp455 := lang.Apply1(tmp438, tmp454)
+										tmp456 := lang.Apply1(tmp437, tmp455)
+										tmp457 := lang.Apply4(tmp313, tmp315, tmp400, tmp436, tmp456)
+										tmp458 := lang.Apply1(tmp312, tmp457)
+										tmp459 := lang.Apply1(tmp311, tmp458)
+										tmp460 := lang.Apply3(tmp255, tmp257, tmp310, tmp459)
+										tmp461 := lang.Apply1(tmp254, tmp460)
+										tmp462 := lang.Apply1(tmp253, tmp461)
+										tmp463 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp464 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp465 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp466 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp467 := lang.Apply1(tmp466, sym_clojure_DOT_core_SLASH_let)
+										tmp468 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp469 := checkDerefVar(var_clojure_DOT_core_apply)
+										tmp470 := checkDerefVar(var_clojure_DOT_core_vector)
+										tmp471 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp472 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp473 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp474 := lang.Apply1(tmp473, v61)
+										tmp475 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp476 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp477 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp478 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp479 := lang.Apply1(tmp478, sym_clojure_DOT_core_SLASH_first)
+										tmp480 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp481 := lang.Apply1(tmp480, v87)
+										tmp482 := lang.Apply2(tmp477, tmp479, tmp481)
+										tmp483 := lang.Apply1(tmp476, tmp482)
+										tmp484 := lang.Apply1(tmp475, tmp483)
+										tmp485 := lang.Apply2(tmp472, tmp474, tmp484)
+										tmp486 := lang.Apply1(tmp471, tmp485)
+										tmp487 := lang.Apply2(tmp469, tmp470, tmp486)
+										tmp488 := lang.Apply1(tmp468, tmp487)
+										tmp489 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp490 := lang.Apply1(v89, v69)
+										tmp491 := lang.Apply1(tmp489, tmp490)
+										tmp492 := lang.Apply3(tmp465, tmp467, tmp488, tmp491)
+										tmp493 := lang.Apply1(tmp464, tmp492)
+										tmp494 := lang.Apply1(tmp463, tmp493)
+										tmp495 := lang.Apply4(tmp240, tmp242, tmp252, tmp462, tmp494)
+										tmp496 := lang.Apply1(tmp239, tmp495)
+										tmp497 := lang.Apply1(tmp238, tmp496)
+										tmp498 := lang.Apply3(tmp214, tmp216, tmp237, tmp497)
+										tmp499 := lang.Apply1(tmp213, tmp498)
+										tmp500 := lang.Apply1(tmp212, tmp499)
+										tmp501 := lang.Apply3(tmp196, tmp198, tmp211, tmp500)
+										tmp502 := lang.Apply1(tmp195, tmp501)
+										tmp503 := lang.Apply1(tmp194, tmp502)
+										tmp504 := lang.Apply2(tmp191, tmp193, tmp503)
+										tmp505 := lang.Apply1(tmp190, tmp504)
+										tmp506 := lang.Apply1(tmp189, tmp505)
+										tmp507 := lang.Apply4(tmp173, tmp175, tmp177, tmp188, tmp506)
+										tmp508 := lang.Apply1(tmp172, tmp507)
+										tmp163 = tmp508
 									} // end let
-									tmp96 = tmp169
+									tmp90 = tmp163
 								}
-								tmp85 = tmp96
+								tmp81 = tmp90
 							} // end let
-							tmp44 = tmp85
+							tmp40 = tmp81
 						} // end let
-						return tmp44
+						return tmp40
 					})
-					v42 = tmp41
-					_ = v42
+					v38 = tmp37
+					_ = v38
 				}
-				tmp42 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4725), kw_column, int(19), kw_end_DASH_line, int(4786), kw_end_DASH_column, int(68))
-				tmp43, err := lang.WithMeta(tmp41, tmp42.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v44 any = tmp43
-				_ = v44
-				tmp45 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp46 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp47 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp48 := lang.Apply1(tmp47, sym_clojure_DOT_core_SLASH_let)
-				tmp49 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp50 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp51 := checkDerefVar(var_clojure_DOT_core_vector)
-				tmp52 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp53 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp54 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp55 := lang.Apply1(tmp54, sym_iter__0__auto__)
-				tmp56 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp57 := lang.Apply1(v36, v4)
-				tmp58 := lang.Apply1(v44, tmp57)
-				tmp59 := lang.Apply1(tmp56, tmp58)
-				tmp60 := lang.Apply2(tmp53, tmp55, tmp59)
-				tmp61 := lang.Apply1(tmp52, tmp60)
-				tmp62 := lang.Apply2(tmp50, tmp51, tmp61)
-				tmp63 := lang.Apply1(tmp49, tmp62)
-				tmp64 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp65 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp66 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp67 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp68 := lang.Apply1(tmp67, sym_iter__0__auto__)
-				tmp69 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp70 := checkDerefVar(var_clojure_DOT_core_second)
-				tmp71 := lang.Apply1(tmp70, v4)
-				tmp72 := lang.Apply1(tmp69, tmp71)
-				tmp73 := lang.Apply2(tmp66, tmp68, tmp72)
-				tmp74 := lang.Apply1(tmp65, tmp73)
-				tmp75 := lang.Apply1(tmp64, tmp74)
-				tmp76 := lang.Apply3(tmp46, tmp48, tmp63, tmp75)
-				tmp77 := lang.Apply1(tmp45, tmp76)
-				tmp32 = tmp77
+				var v38 any = tmp37
+				_ = v38
+				tmp39 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp40 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp41 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp42 := lang.Apply1(tmp41, sym_clojure_DOT_core_SLASH_let)
+				tmp43 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp44 := checkDerefVar(var_clojure_DOT_core_apply)
+				tmp45 := checkDerefVar(var_clojure_DOT_core_vector)
+				tmp46 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp47 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp48 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp49 := lang.Apply1(tmp48, sym_iter__0__auto__)
+				tmp50 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp51 := lang.Apply1(v34, v4)
+				tmp52 := lang.Apply1(v38, tmp51)
+				tmp53 := lang.Apply1(tmp50, tmp52)
+				tmp54 := lang.Apply2(tmp47, tmp49, tmp53)
+				tmp55 := lang.Apply1(tmp46, tmp54)
+				tmp56 := lang.Apply2(tmp44, tmp45, tmp55)
+				tmp57 := lang.Apply1(tmp43, tmp56)
+				tmp58 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp59 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp60 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp61 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp62 := lang.Apply1(tmp61, sym_iter__0__auto__)
+				tmp63 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp64 := checkDerefVar(var_clojure_DOT_core_second)
+				tmp65 := lang.Apply1(tmp64, v4)
+				tmp66 := lang.Apply1(tmp63, tmp65)
+				tmp67 := lang.Apply2(tmp60, tmp62, tmp66)
+				tmp68 := lang.Apply1(tmp59, tmp67)
+				tmp69 := lang.Apply1(tmp58, tmp68)
+				tmp70 := lang.Apply3(tmp40, tmp42, tmp57, tmp69)
+				tmp71 := lang.Apply1(tmp39, tmp70)
+				tmp32 = tmp71
 			} // end let
 			return tmp32
 		})
@@ -42401,100 +41518,80 @@ func LoadNS() {
 						}
 						return tmp9
 					})
-					tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3470), kw_column, int(20), kw_end_DASH_line, int(3470), kw_end_DASH_column, int(73))
-					tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp10 := lang.Apply2(tmp6, tmp9, v4)
-					var v11 any = tmp10
-					_ = v11
-					tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp13 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp14 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp15 := lang.Apply1(tmp14, sym_do)
-					tmp16 := checkDerefVar(var_clojure_DOT_core_map)
-					var tmp17 lang.FnFunc1
-					tmp17 = lang.FnFunc1(func(p0 any) any {
+					tmp8 := lang.Apply2(tmp6, tmp7, v4)
+					var v9 any = tmp8
+					_ = v9
+					tmp10 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp11 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp12 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp13 := lang.Apply1(tmp12, sym_do)
+					tmp14 := checkDerefVar(var_clojure_DOT_core_map)
+					var tmp15 lang.FnFunc1
+					tmp15 = lang.FnFunc1(func(p0 any) any {
+						v16 := p0
+						_ = v16
+						tmp17 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp18 := lang.Apply2(tmp17, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Import, v16)
+						return tmp18
+					})
+					tmp16 := checkDerefVar(var_clojure_DOT_core_reduce1)
+					var tmp17 lang.FnFunc2
+					tmp17 = lang.FnFunc2(func(p0, p1 any) any {
 						v18 := p0
 						_ = v18
-						tmp19 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp20 := lang.Apply2(tmp19, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_Import, v18)
-						return tmp20
-					})
-					tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3472), kw_column, int(17), kw_end_DASH_line, int(3472), kw_end_DASH_column, int(73))
-					tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp20 := checkDerefVar(var_clojure_DOT_core_reduce1)
-					var tmp21 lang.FnFunc2
-					tmp21 = lang.FnFunc2(func(p0, p1 any) any {
-						v22 := p0
-						_ = v22
-						v23 := p1
-						_ = v23
-						var tmp24 any
-						tmp25 := checkDerefVar(var_clojure_DOT_core_symbol_QMARK_)
-						tmp26 := lang.Apply1(tmp25, v23)
-						if lang.IsTruthy(tmp26) {
-							tmp27 := checkDerefVar(var_clojure_DOT_core_conj)
-							tmp28 := checkDerefVar(var_clojure_DOT_core_name)
-							tmp29 := lang.Apply1(tmp28, v23)
-							tmp30 := lang.Apply2(tmp27, v22, tmp29)
-							tmp24 = tmp30
+						v19 := p1
+						_ = v19
+						var tmp20 any
+						tmp21 := checkDerefVar(var_clojure_DOT_core_symbol_QMARK_)
+						tmp22 := lang.Apply1(tmp21, v19)
+						if lang.IsTruthy(tmp22) {
+							tmp23 := checkDerefVar(var_clojure_DOT_core_conj)
+							tmp24 := checkDerefVar(var_clojure_DOT_core_name)
+							tmp25 := lang.Apply1(tmp24, v19)
+							tmp26 := lang.Apply2(tmp23, v18, tmp25)
+							tmp20 = tmp26
 						} else {
-							var tmp31 any
+							var tmp27 any
 							{ // let
 								// let binding "p"
-								tmp32 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp33 := lang.Apply1(tmp32, v23)
-								var v34 any = tmp33
-								_ = v34
+								tmp28 := checkDerefVar(var_clojure_DOT_core_first)
+								tmp29 := lang.Apply1(tmp28, v19)
+								var v30 any = tmp29
+								_ = v30
 								// let binding "cs"
-								tmp35 := checkDerefVar(var_clojure_DOT_core_rest)
-								tmp36 := lang.Apply1(tmp35, v23)
-								var v37 any = tmp36
-								_ = v37
-								tmp38 := checkDerefVar(var_clojure_DOT_core_into1)
-								tmp39 := checkDerefVar(var_clojure_DOT_core_map)
-								var tmp40 lang.FnFunc1
-								tmp40 = lang.FnFunc1(func(p0 any) any {
-									v41 := p0
-									_ = v41
-									tmp42 := checkDerefVar(var_clojure_DOT_core_str)
-									tmp43 := lang.Apply3(tmp42, v34, ".", v41)
-									return tmp43
+								tmp31 := checkDerefVar(var_clojure_DOT_core_rest)
+								tmp32 := lang.Apply1(tmp31, v19)
+								var v33 any = tmp32
+								_ = v33
+								tmp34 := checkDerefVar(var_clojure_DOT_core_into1)
+								tmp35 := checkDerefVar(var_clojure_DOT_core_map)
+								var tmp36 lang.FnFunc1
+								tmp36 = lang.FnFunc1(func(p0 any) any {
+									v37 := p0
+									_ = v37
+									tmp38 := checkDerefVar(var_clojure_DOT_core_str)
+									tmp39 := lang.Apply3(tmp38, v30, ".", v37)
+									return tmp39
 								})
-								tmp41 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3477), kw_column, int(45), kw_end_DASH_line, int(3477), kw_end_DASH_column, int(58))
-								tmp42, err := lang.WithMeta(tmp40, tmp41.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp43 := lang.Apply2(tmp39, tmp42, v37)
-								tmp44 := lang.Apply2(tmp38, v22, tmp43)
-								tmp31 = tmp44
+								tmp37 := lang.Apply2(tmp35, tmp36, v33)
+								tmp38 := lang.Apply2(tmp34, v18, tmp37)
+								tmp27 = tmp38
 							} // end let
-							tmp24 = tmp31
+							tmp20 = tmp27
 						}
-						return tmp24
+						return tmp20
 					})
-					tmp22 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3473), kw_column, int(26), kw_end_DASH_line, int(3477), kw_end_DASH_column, int(66))
-					tmp23, err := lang.WithMeta(tmp21, tmp22.(lang.IPersistentMap))
+					tmp18 := lang.NewVector()
+					tmp19 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3478), kw_column, int(25), kw_end_DASH_line, int(3478), kw_end_DASH_column, int(26))
+					tmp20, err := lang.WithMeta(tmp18, tmp19.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
 					}
-					tmp24 := lang.NewVector()
-					tmp25 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3478), kw_column, int(25), kw_end_DASH_line, int(3478), kw_end_DASH_column, int(26))
-					tmp26, err := lang.WithMeta(tmp24, tmp25.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp27 := lang.Apply3(tmp20, tmp23, tmp26, v11)
-					tmp28 := lang.Apply2(tmp16, tmp19, tmp27)
-					tmp29 := lang.Apply2(tmp13, tmp15, tmp28)
-					tmp30 := lang.Apply1(tmp12, tmp29)
-					tmp5 = tmp30
+					tmp21 := lang.Apply3(tmp16, tmp17, tmp20, v9)
+					tmp22 := lang.Apply2(tmp14, tmp15, tmp21)
+					tmp23 := lang.Apply2(tmp11, tmp13, tmp22)
+					tmp24 := lang.Apply1(tmp10, tmp23)
+					tmp5 = tmp24
 				} // end let
 				return tmp5
 			}),
@@ -42707,21 +41804,11 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5290), kw_column, int(8), kw_end_DASH_line, int(5301), kw_end_DASH_column, int(35))
-						tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp5 = tmp11
+						tmp5 = tmp9
 					} // end let
 					return tmp5
 				})
-				tmp4 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5288), kw_column, int(4), kw_end_DASH_line, int(5301), kw_end_DASH_column, int(37))
-				tmp5, err := lang.WithMeta(tmp3, tmp4.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				return tmp5
+				return tmp3
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -42861,15 +41948,10 @@ func LoadNS() {
 														tmp33 := lang.Apply2(tmp30, tmp32, v4)
 														return tmp33
 													})
-													tmp29 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5608), kw_column, int(34), kw_end_DASH_line, int(5608), kw_end_DASH_column, int(71))
-													tmp30, err := lang.WithMeta(tmp28, tmp29.(lang.IPersistentMap))
-													if err != nil {
-														panic(err)
-													}
-													tmp31 := checkDerefVar(var_clojure_DOT_core_supers)
-													tmp32 := lang.Apply1(tmp31, v3)
-													tmp33 := lang.Apply2(tmp27, tmp30, tmp32)
-													tmp26 = tmp33
+													tmp29 := checkDerefVar(var_clojure_DOT_core_supers)
+													tmp30 := lang.Apply1(tmp29, v3)
+													tmp31 := lang.Apply2(tmp27, tmp28, tmp30)
+													tmp26 = tmp31
 												} else {
 													tmp26 = v25
 												}
@@ -43034,15 +42116,10 @@ func LoadNS() {
 					tmp13 := lang.Apply2(tmp12, sym_clojure_DOT_core_SLASH_lazy_DASH_seq, v11)
 					return tmp13
 				})
-				tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4701), kw_column, int(19), kw_end_DASH_line, int(4701), kw_end_DASH_column, int(37))
-				tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp13 := lang.Apply2(tmp9, tmp12, v4)
-				tmp14 := lang.Apply2(tmp6, tmp8, tmp13)
-				tmp15 := lang.Apply1(tmp5, tmp14)
-				return tmp15
+				tmp11 := lang.Apply2(tmp9, tmp10, v4)
+				tmp12 := lang.Apply2(tmp6, tmp8, tmp11)
+				tmp13 := lang.Apply1(tmp5, tmp12)
+				return tmp13
 			}),
 			2,
 		)
@@ -43163,18 +42240,13 @@ func LoadNS() {
 					tmp20 := lang.Apply2(tmp19, sym_clojure_DOT_core_SLASH_fn, v18)
 					return tmp20
 				})
-				tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6619), kw_column, int(35), kw_end_DASH_line, int(6619), kw_end_DASH_column, int(47))
-				tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp20 := lang.Apply2(tmp16, tmp19, v4)
-				tmp21 := lang.Apply2(tmp12, tmp15, tmp20)
-				tmp22 := lang.Apply1(tmp11, tmp21)
-				tmp23 := lang.Apply1(tmp10, tmp22)
-				tmp24 := lang.Apply3(tmp7, tmp9, tmp23, v5)
-				tmp25 := lang.Apply1(tmp6, tmp24)
-				return tmp25
+				tmp18 := lang.Apply2(tmp16, tmp17, v4)
+				tmp19 := lang.Apply2(tmp12, tmp15, tmp18)
+				tmp20 := lang.Apply1(tmp11, tmp19)
+				tmp21 := lang.Apply1(tmp10, tmp20)
+				tmp22 := lang.Apply3(tmp7, tmp9, tmp21, v5)
+				tmp23 := lang.Apply1(tmp6, tmp22)
+				return tmp23
 			}),
 			3,
 		)
@@ -43519,112 +42591,102 @@ func LoadNS() {
 								}
 								return tmp59
 							})
-							tmp58 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4668), kw_column, int(23), kw_end_DASH_line, int(4668), kw_end_DASH_column, int(58))
-							tmp59, err := lang.WithMeta(tmp57, tmp58.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp60 := lang.Apply2(tmp56, tmp59, v55)
-							var v61 any = tmp60
-							_ = v61
+							tmp58 := lang.Apply2(tmp56, tmp57, v55)
+							var v59 any = tmp58
+							_ = v59
 							// let binding "bfs"
-							tmp62 := checkDerefVar(var_clojure_DOT_core_reduce1)
-							var tmp63 lang.FnFunc2
-							tmp63 = lang.FnFunc2(func(p0, p1 any) any {
-								v64 := p0
-								_ = v64
-								v65 := p1
-								_ = v65
-								var tmp66 any
+							tmp60 := checkDerefVar(var_clojure_DOT_core_reduce1)
+							var tmp61 lang.FnFunc2
+							tmp61 = lang.FnFunc2(func(p0, p1 any) any {
+								v62 := p0
+								_ = v62
+								v63 := p1
+								_ = v63
+								var tmp64 any
 								{ // let
 									// let binding "vec__386"
-									var v67 any = v65
-									_ = v67
+									var v65 any = v63
+									_ = v65
 									// let binding "b"
-									tmp68 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp69 := lang.Apply3(tmp68, v67, int64(0), nil)
-									var v70 any = tmp69
-									_ = v70
+									tmp66 := checkDerefVar(var_clojure_DOT_core_nth)
+									tmp67 := lang.Apply3(tmp66, v65, int64(0), nil)
+									var v68 any = tmp67
+									_ = v68
 									// let binding "v"
-									tmp71 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp72 := lang.Apply3(tmp71, v67, int64(1), nil)
-									var v73 any = tmp72
-									_ = v73
+									tmp69 := checkDerefVar(var_clojure_DOT_core_nth)
+									tmp70 := lang.Apply3(tmp69, v65, int64(1), nil)
+									var v71 any = tmp70
+									_ = v71
 									// let binding "g"
-									tmp74 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp75 := lang.Apply3(tmp74, v67, int64(2), nil)
-									var v76 any = tmp75
-									_ = v76
-									var tmp77 any
-									tmp78 := checkDerefVar(var_clojure_DOT_core_symbol_QMARK_)
-									tmp79 := lang.Apply1(tmp78, v70)
-									if lang.IsTruthy(tmp79) {
-										tmp80 := checkDerefVar(var_clojure_DOT_core_conj)
-										tmp81 := lang.Apply3(tmp80, v64, v76, v73)
-										tmp77 = tmp81
+									tmp72 := checkDerefVar(var_clojure_DOT_core_nth)
+									tmp73 := lang.Apply3(tmp72, v65, int64(2), nil)
+									var v74 any = tmp73
+									_ = v74
+									var tmp75 any
+									tmp76 := checkDerefVar(var_clojure_DOT_core_symbol_QMARK_)
+									tmp77 := lang.Apply1(tmp76, v68)
+									if lang.IsTruthy(tmp77) {
+										tmp78 := checkDerefVar(var_clojure_DOT_core_conj)
+										tmp79 := lang.Apply3(tmp78, v62, v74, v71)
+										tmp75 = tmp79
 									} else {
-										tmp82 := checkDerefVar(var_clojure_DOT_core_conj)
-										tmp83 := lang.Apply(tmp82, []any{v64, v76, v73, v70, v76})
-										tmp77 = tmp83
+										tmp80 := checkDerefVar(var_clojure_DOT_core_conj)
+										tmp81 := lang.Apply(tmp80, []any{v62, v74, v71, v68, v74})
+										tmp75 = tmp81
 									}
-									tmp66 = tmp77
+									tmp64 = tmp75
 								} // end let
-								return tmp66
+								return tmp64
 							})
-							tmp64 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4669), kw_column, int(28), kw_end_DASH_line, int(4672), kw_end_DASH_column, int(50))
-							tmp65, err := lang.WithMeta(tmp63, tmp64.(lang.IPersistentMap))
+							tmp62 := lang.NewVector()
+							tmp63 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4673), kw_column, int(27), kw_end_DASH_line, int(4673), kw_end_DASH_column, int(28))
+							tmp64, err := lang.WithMeta(tmp62, tmp63.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp66 := lang.NewVector()
-							tmp67 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(4673), kw_column, int(27), kw_end_DASH_line, int(4673), kw_end_DASH_column, int(28))
-							tmp68, err := lang.WithMeta(tmp66, tmp67.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp69 := checkDerefVar(var_clojure_DOT_core_map)
-							tmp70 := checkDerefVar(var_clojure_DOT_core_vector)
-							tmp71 := lang.Apply4(tmp69, tmp70, v55, v52, v61)
-							tmp72 := lang.Apply3(tmp62, tmp65, tmp68, tmp71)
-							var v73 any = tmp72
-							_ = v73
-							tmp74 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp75 := checkDerefVar(var_clojure_DOT_core_concat)
+							tmp65 := checkDerefVar(var_clojure_DOT_core_map)
+							tmp66 := checkDerefVar(var_clojure_DOT_core_vector)
+							tmp67 := lang.Apply4(tmp65, tmp66, v55, v52, v59)
+							tmp68 := lang.Apply3(tmp60, tmp61, tmp64, tmp67)
+							var v69 any = tmp68
+							_ = v69
+							tmp70 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp71 := checkDerefVar(var_clojure_DOT_core_concat)
+							tmp72 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp73 := lang.Apply1(tmp72, sym_clojure_DOT_core_SLASH_let)
+							tmp74 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp75 := lang.Apply1(tmp74, v69)
 							tmp76 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp77 := lang.Apply1(tmp76, sym_clojure_DOT_core_SLASH_let)
-							tmp78 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp79 := lang.Apply1(tmp78, v73)
-							tmp80 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp81 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp82 := checkDerefVar(var_clojure_DOT_core_concat)
-							tmp83 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp84 := lang.Apply1(tmp83, sym_loop_STAR_)
-							tmp85 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp86 := checkDerefVar(var_clojure_DOT_core_vec)
-							tmp87 := checkDerefVar(var_clojure_DOT_core_interleave)
-							tmp88 := lang.Apply2(tmp87, v61, v61)
-							tmp89 := lang.Apply1(tmp86, tmp88)
-							tmp90 := lang.Apply1(tmp85, tmp89)
-							tmp91 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp92 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp93 := checkDerefVar(var_clojure_DOT_core_concat)
-							tmp94 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp95 := lang.Apply1(tmp94, sym_clojure_DOT_core_SLASH_let)
-							tmp96 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp97 := checkDerefVar(var_clojure_DOT_core_vec)
-							tmp98 := checkDerefVar(var_clojure_DOT_core_interleave)
-							tmp99 := lang.Apply2(tmp98, v55, v61)
-							tmp100 := lang.Apply1(tmp97, tmp99)
-							tmp101 := lang.Apply1(tmp96, tmp100)
-							tmp102 := lang.Apply3(tmp93, tmp95, tmp101, v5)
-							tmp103 := lang.Apply1(tmp92, tmp102)
-							tmp104 := lang.Apply1(tmp91, tmp103)
-							tmp105 := lang.Apply3(tmp82, tmp84, tmp90, tmp104)
-							tmp106 := lang.Apply1(tmp81, tmp105)
-							tmp107 := lang.Apply1(tmp80, tmp106)
-							tmp108 := lang.Apply3(tmp75, tmp77, tmp79, tmp107)
-							tmp109 := lang.Apply1(tmp74, tmp108)
-							tmp47 = tmp109
+							tmp77 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp78 := checkDerefVar(var_clojure_DOT_core_concat)
+							tmp79 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp80 := lang.Apply1(tmp79, sym_loop_STAR_)
+							tmp81 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp82 := checkDerefVar(var_clojure_DOT_core_vec)
+							tmp83 := checkDerefVar(var_clojure_DOT_core_interleave)
+							tmp84 := lang.Apply2(tmp83, v59, v59)
+							tmp85 := lang.Apply1(tmp82, tmp84)
+							tmp86 := lang.Apply1(tmp81, tmp85)
+							tmp87 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp88 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp89 := checkDerefVar(var_clojure_DOT_core_concat)
+							tmp90 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp91 := lang.Apply1(tmp90, sym_clojure_DOT_core_SLASH_let)
+							tmp92 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp93 := checkDerefVar(var_clojure_DOT_core_vec)
+							tmp94 := checkDerefVar(var_clojure_DOT_core_interleave)
+							tmp95 := lang.Apply2(tmp94, v55, v59)
+							tmp96 := lang.Apply1(tmp93, tmp95)
+							tmp97 := lang.Apply1(tmp92, tmp96)
+							tmp98 := lang.Apply3(tmp89, tmp91, tmp97, v5)
+							tmp99 := lang.Apply1(tmp88, tmp98)
+							tmp100 := lang.Apply1(tmp87, tmp99)
+							tmp101 := lang.Apply3(tmp78, tmp80, tmp86, tmp100)
+							tmp102 := lang.Apply1(tmp77, tmp101)
+							tmp103 := lang.Apply1(tmp76, tmp102)
+							tmp104 := lang.Apply3(tmp71, tmp73, tmp75, tmp103)
+							tmp105 := lang.Apply1(tmp70, tmp104)
+							tmp47 = tmp105
 						} // end let
 						tmp36 = tmp47
 					}
@@ -43785,292 +42847,277 @@ func LoadNS() {
 						tmp21 := lang.Apply3(tmp20, v11, v14, v19)
 						return tmp21
 					})
-					tmp19 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6673), kw_column, int(37), kw_end_DASH_line, int(6673), kw_end_DASH_column, int(55))
-					tmp20, err := lang.WithMeta(tmp18, tmp19.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp21 := lang.Apply2(tmp17, tmp20, v2)
-					tmp22 := lang.Apply2(tmp15, tmp16, tmp21)
-					tmp7 = tmp22
+					tmp19 := lang.Apply2(tmp17, tmp18, v2)
+					tmp20 := lang.Apply2(tmp15, tmp16, tmp19)
+					tmp7 = tmp20
 				} // end let
 				return tmp7
 			})
-			tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6672), kw_column, int(13), kw_end_DASH_line, int(6673), kw_end_DASH_column, int(65))
-			tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			var tmp8 any
+			var tmp6 any
 			{ // let
 				// let binding "iter__0__auto__"
-				var tmp9 lang.FnFunc1
+				var tmp7 lang.FnFunc1
 				{ // function iter__523
-					var v10 lang.FnFunc1
-					tmp9 = lang.FnFunc1(func(p0 any) any {
-						v11 := p0
-						_ = v11
-						var tmp12 lang.FnFunc0
-						tmp12 = lang.FnFunc0(func() any {
-							var tmp13 any
+					var v8 lang.FnFunc1
+					tmp7 = lang.FnFunc1(func(p0 any) any {
+						v9 := p0
+						_ = v9
+						var tmp10 lang.FnFunc0
+						tmp10 = lang.FnFunc0(func() any {
+							var tmp11 any
 							{ // let
 								// let binding "s__524"
-								var v14 any = v11
-								_ = v14
+								var v12 any = v9
+								_ = v12
 								for {
-									var tmp15 any
+									var tmp13 any
 									{ // let
 										// let binding "temp__0__auto__"
-										tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp17 := lang.Apply1(tmp16, v14)
-										var v18 any = tmp17
-										_ = v18
-										var tmp19 any
-										if lang.IsTruthy(v18) {
-											var tmp20 any
+										tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp15 := lang.Apply1(tmp14, v12)
+										var v16 any = tmp15
+										_ = v16
+										var tmp17 any
+										if lang.IsTruthy(v16) {
+											var tmp18 any
 											{ // let
 												// let binding "xs__0__auto__"
-												var v21 any = v18
-												_ = v21
-												var tmp22 any
+												var v19 any = v16
+												_ = v19
+												var tmp20 any
 												{ // let
 													// let binding "mask"
-													tmp23 := checkDerefVar(var_clojure_DOT_core_first)
-													tmp24 := lang.Apply1(tmp23, v21)
-													var v25 any = tmp24
-													_ = v25
-													var tmp26 any
+													tmp21 := checkDerefVar(var_clojure_DOT_core_first)
+													tmp22 := lang.Apply1(tmp21, v19)
+													var v23 any = tmp22
+													_ = v23
+													var tmp24 any
 													{ // let
 														// let binding "iterys__0__auto__"
-														var tmp27 lang.FnFunc1
+														var tmp25 lang.FnFunc1
 														{ // function iter__525
-															var v28 lang.FnFunc1
-															tmp27 = lang.FnFunc1(func(p0 any) any {
-																v29 := p0
-																_ = v29
-																var tmp30 lang.FnFunc0
-																tmp30 = lang.FnFunc0(func() any {
-																	var tmp31 any
+															var v26 lang.FnFunc1
+															tmp25 = lang.FnFunc1(func(p0 any) any {
+																v27 := p0
+																_ = v27
+																var tmp28 lang.FnFunc0
+																tmp28 = lang.FnFunc0(func() any {
+																	var tmp29 any
 																	{ // let
 																		// let binding "s__526"
-																		var v32 any = v29
-																		_ = v32
+																		var v30 any = v27
+																		_ = v30
 																		for {
-																			var tmp33 any
+																			var tmp31 any
 																			{ // let
 																				// let binding "temp__0__auto__"
-																				tmp34 := checkDerefVar(var_clojure_DOT_core_seq)
-																				tmp35 := lang.Apply1(tmp34, v32)
-																				var v36 any = tmp35
-																				_ = v36
-																				var tmp37 any
-																				if lang.IsTruthy(v36) {
-																					var tmp38 any
+																				tmp32 := checkDerefVar(var_clojure_DOT_core_seq)
+																				tmp33 := lang.Apply1(tmp32, v30)
+																				var v34 any = tmp33
+																				_ = v34
+																				var tmp35 any
+																				if lang.IsTruthy(v34) {
+																					var tmp36 any
 																					{ // let
 																						// let binding "s__526"
-																						var v39 any = v36
-																						_ = v39
-																						var tmp40 any
-																						tmp41 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
-																						tmp42 := lang.Apply1(tmp41, v39)
-																						if lang.IsTruthy(tmp42) {
-																							var tmp43 any
+																						var v37 any = v34
+																						_ = v37
+																						var tmp38 any
+																						tmp39 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
+																						tmp40 := lang.Apply1(tmp39, v37)
+																						if lang.IsTruthy(tmp40) {
+																							var tmp41 any
 																							{ // let
 																								// let binding "c__0__auto__"
-																								tmp44 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
-																								tmp45 := lang.Apply1(tmp44, v39)
-																								var v46 any = tmp45
-																								_ = v46
+																								tmp42 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
+																								tmp43 := lang.Apply1(tmp42, v37)
+																								var v44 any = tmp43
+																								_ = v44
 																								// let binding "size__1__auto__"
-																								tmp47 := checkDerefVar(var_clojure_DOT_core_count)
-																								tmp48 := lang.Apply1(tmp47, v46)
-																								tmp49 := runtime.RT.IntCast(tmp48)
-																								var v50 any = tmp49
-																								_ = v50
+																								tmp45 := checkDerefVar(var_clojure_DOT_core_count)
+																								tmp46 := lang.Apply1(tmp45, v44)
+																								tmp47 := runtime.RT.IntCast(tmp46)
+																								var v48 any = tmp47
+																								_ = v48
 																								// let binding "b__528"
-																								tmp51 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_buffer)
-																								tmp52 := lang.Apply1(tmp51, v50)
-																								var v53 any = tmp52
-																								_ = v53
-																								var tmp54 any
-																								var tmp55 any
+																								tmp49 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_buffer)
+																								tmp50 := lang.Apply1(tmp49, v48)
+																								var v51 any = tmp50
+																								_ = v51
+																								var tmp52 any
+																								var tmp53 any
 																								{ // let
 																									// let binding "i__527"
-																									tmp56 := runtime.RT.IntCast(int64(0))
-																									var v57 any = tmp56
-																									_ = v57
+																									tmp54 := runtime.RT.IntCast(int64(0))
+																									var v55 any = tmp54
+																									_ = v55
 																									for {
-																										var tmp58 any
-																										tmp59 := lang.Numbers.Lt(v57, v50)
-																										if lang.IsTruthy(tmp59) {
-																											var tmp60 any
+																										var tmp56 any
+																										tmp57 := lang.Numbers.Lt(v55, v48)
+																										if lang.IsTruthy(tmp57) {
+																											var tmp58 any
 																											{ // let
 																												// let binding "shift"
-																												tmp61, _ := lang.FieldOrMethod(v46, "nth")
-																												if reflect.TypeOf(tmp61).Kind() != reflect.Func {
+																												tmp59, _ := lang.FieldOrMethod(v44, "nth")
+																												if reflect.TypeOf(tmp59).Kind() != reflect.Func {
 																													panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
 																												}
-																												tmp62 := lang.Apply1(tmp61, v57)
-																												var v63 any = tmp62
-																												_ = v63
-																												tmp64 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_append)
-																												tmp65 := lang.NewVector(v63, v25)
-																												tmp66 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6676), kw_column, int(15), kw_end_DASH_line, int(6676), kw_end_DASH_column, int(26))
-																												tmp67, err := lang.WithMeta(tmp65, tmp66.(lang.IPersistentMap))
+																												tmp60 := lang.Apply1(tmp59, v55)
+																												var v61 any = tmp60
+																												_ = v61
+																												tmp62 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_append)
+																												tmp63 := lang.NewVector(v61, v23)
+																												tmp64 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6676), kw_column, int(15), kw_end_DASH_line, int(6676), kw_end_DASH_column, int(26))
+																												tmp65, err := lang.WithMeta(tmp63, tmp64.(lang.IPersistentMap))
 																												if err != nil {
 																													panic(err)
 																												}
-																												tmp68 := lang.Apply2(tmp64, v53, tmp67)
-																												_ = tmp68
-																												tmp70 := lang.Numbers.Unchecked_inc(v57)
-																												var tmp69 any = tmp70
-																												v57 = tmp69
+																												tmp66 := lang.Apply2(tmp62, v51, tmp65)
+																												_ = tmp66
+																												tmp68 := lang.Numbers.Unchecked_inc(v55)
+																												var tmp67 any = tmp68
+																												v55 = tmp67
 																												continue
 																											} // end let
-																											tmp58 = tmp60
+																											tmp56 = tmp58
 																										} else {
-																											tmp58 = true
+																											tmp56 = true
 																										}
-																										tmp55 = tmp58
+																										tmp53 = tmp56
 																										break
 																									}
 																								} // end let
-																								if lang.IsTruthy(tmp55) {
-																									tmp56 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_cons)
-																									tmp57 := checkDerefVar(var_clojure_DOT_core_chunk)
-																									tmp58 := lang.Apply1(tmp57, v53)
-																									tmp59 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
-																									tmp60 := lang.Apply1(tmp59, v39)
-																									tmp61 := lang.Apply1(v28, tmp60)
-																									tmp62 := lang.Apply2(tmp56, tmp58, tmp61)
-																									tmp54 = tmp62
+																								if lang.IsTruthy(tmp53) {
+																									tmp54 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_cons)
+																									tmp55 := checkDerefVar(var_clojure_DOT_core_chunk)
+																									tmp56 := lang.Apply1(tmp55, v51)
+																									tmp57 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
+																									tmp58 := lang.Apply1(tmp57, v37)
+																									tmp59 := lang.Apply1(v26, tmp58)
+																									tmp60 := lang.Apply2(tmp54, tmp56, tmp59)
+																									tmp52 = tmp60
 																								} else {
-																									tmp63 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_cons)
-																									tmp64 := checkDerefVar(var_clojure_DOT_core_chunk)
-																									tmp65 := lang.Apply1(tmp64, v53)
-																									tmp66 := lang.Apply2(tmp63, tmp65, nil)
-																									tmp54 = tmp66
+																									tmp61 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_cons)
+																									tmp62 := checkDerefVar(var_clojure_DOT_core_chunk)
+																									tmp63 := lang.Apply1(tmp62, v51)
+																									tmp64 := lang.Apply2(tmp61, tmp63, nil)
+																									tmp52 = tmp64
 																								}
-																								tmp43 = tmp54
+																								tmp41 = tmp52
 																							} // end let
-																							tmp40 = tmp43
+																							tmp38 = tmp41
 																						} else {
-																							var tmp44 any
+																							var tmp42 any
 																							{ // let
 																								// let binding "shift"
-																								tmp45 := checkDerefVar(var_clojure_DOT_core_first)
-																								tmp46 := lang.Apply1(tmp45, v39)
-																								var v47 any = tmp46
-																								_ = v47
-																								tmp48 := checkDerefVar(var_clojure_DOT_core_cons)
-																								tmp49 := lang.NewVector(v47, v25)
-																								tmp50 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6676), kw_column, int(15), kw_end_DASH_line, int(6676), kw_end_DASH_column, int(26))
-																								tmp51, err := lang.WithMeta(tmp49, tmp50.(lang.IPersistentMap))
+																								tmp43 := checkDerefVar(var_clojure_DOT_core_first)
+																								tmp44 := lang.Apply1(tmp43, v37)
+																								var v45 any = tmp44
+																								_ = v45
+																								tmp46 := checkDerefVar(var_clojure_DOT_core_cons)
+																								tmp47 := lang.NewVector(v45, v23)
+																								tmp48 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6676), kw_column, int(15), kw_end_DASH_line, int(6676), kw_end_DASH_column, int(26))
+																								tmp49, err := lang.WithMeta(tmp47, tmp48.(lang.IPersistentMap))
 																								if err != nil {
 																									panic(err)
 																								}
-																								tmp52 := checkDerefVar(var_clojure_DOT_core_rest)
-																								tmp53 := lang.Apply1(tmp52, v39)
-																								tmp54 := lang.Apply1(v28, tmp53)
-																								tmp55 := lang.Apply2(tmp48, tmp51, tmp54)
-																								tmp44 = tmp55
+																								tmp50 := checkDerefVar(var_clojure_DOT_core_rest)
+																								tmp51 := lang.Apply1(tmp50, v37)
+																								tmp52 := lang.Apply1(v26, tmp51)
+																								tmp53 := lang.Apply2(tmp46, tmp49, tmp52)
+																								tmp42 = tmp53
 																							} // end let
-																							tmp40 = tmp44
+																							tmp38 = tmp42
 																						}
-																						tmp38 = tmp40
+																						tmp36 = tmp38
 																					} // end let
-																					tmp37 = tmp38
+																					tmp35 = tmp36
 																				} else {
 																				}
-																				tmp33 = tmp37
+																				tmp31 = tmp35
 																			} // end let
-																			tmp31 = tmp33
+																			tmp29 = tmp31
 																			break
 																		}
 																	} // end let
-																	return tmp31
+																	return tmp29
 																})
-																tmp31 := lang.Apply1(lang.NewLazySeq, tmp30)
-																return tmp31
+																tmp29 := lang.Apply1(lang.NewLazySeq, tmp28)
+																return tmp29
 															})
-															v28 = tmp27
-															_ = v28
+															v26 = tmp25
+															_ = v26
 														}
-														var v28 any = tmp27
-														_ = v28
+														var v26 any = tmp25
+														_ = v26
 														// let binding "fs__1__auto__"
-														tmp29 := checkDerefVar(var_clojure_DOT_core_seq)
-														tmp30 := checkDerefVar(var_clojure_DOT_core_range)
-														tmp31 := lang.Apply2(tmp30, int64(0), int64(31))
-														tmp32 := lang.Apply1(v28, tmp31)
-														tmp33 := lang.Apply1(tmp29, tmp32)
-														var v34 any = tmp33
-														_ = v34
-														var tmp35 any
-														if lang.IsTruthy(v34) {
-															tmp36 := checkDerefVar(var_clojure_DOT_core_concat)
-															tmp37 := checkDerefVar(var_clojure_DOT_core_rest)
-															tmp38 := lang.Apply1(tmp37, v14)
-															tmp39 := lang.Apply1(v10, tmp38)
-															tmp40 := lang.Apply2(tmp36, v34, tmp39)
-															tmp35 = tmp40
+														tmp27 := checkDerefVar(var_clojure_DOT_core_seq)
+														tmp28 := checkDerefVar(var_clojure_DOT_core_range)
+														tmp29 := lang.Apply2(tmp28, int64(0), int64(31))
+														tmp30 := lang.Apply1(v26, tmp29)
+														tmp31 := lang.Apply1(tmp27, tmp30)
+														var v32 any = tmp31
+														_ = v32
+														var tmp33 any
+														if lang.IsTruthy(v32) {
+															tmp34 := checkDerefVar(var_clojure_DOT_core_concat)
+															tmp35 := checkDerefVar(var_clojure_DOT_core_rest)
+															tmp36 := lang.Apply1(tmp35, v12)
+															tmp37 := lang.Apply1(v8, tmp36)
+															tmp38 := lang.Apply2(tmp34, v32, tmp37)
+															tmp33 = tmp38
 														} else {
-															tmp42 := checkDerefVar(var_clojure_DOT_core_rest)
-															tmp43 := lang.Apply1(tmp42, v14)
-															var tmp41 any = tmp43
-															v14 = tmp41
+															tmp40 := checkDerefVar(var_clojure_DOT_core_rest)
+															tmp41 := lang.Apply1(tmp40, v12)
+															var tmp39 any = tmp41
+															v12 = tmp39
 															continue
 														}
-														tmp26 = tmp35
+														tmp24 = tmp33
 													} // end let
-													tmp22 = tmp26
+													tmp20 = tmp24
 												} // end let
-												tmp20 = tmp22
+												tmp18 = tmp20
 											} // end let
-											tmp19 = tmp20
+											tmp17 = tmp18
 										} else {
 										}
-										tmp15 = tmp19
+										tmp13 = tmp17
 									} // end let
-									tmp13 = tmp15
+									tmp11 = tmp13
 									break
 								}
 							} // end let
-							return tmp13
+							return tmp11
 						})
-						tmp13 := lang.Apply1(lang.NewLazySeq, tmp12)
-						return tmp13
+						tmp11 := lang.Apply1(lang.NewLazySeq, tmp10)
+						return tmp11
 					})
-					v10 = tmp9
-					_ = v10
+					v8 = tmp7
+					_ = v8
 				}
-				var v10 any = tmp9
-				_ = v10
-				tmp11 := checkDerefVar(var_clojure_DOT_core_map)
-				var tmp12 lang.FnFunc1
-				tmp12 = lang.FnFunc1(func(p0 any) any {
-					v13 := p0
-					_ = v13
-					tmp14 := lang.Numbers.ShiftLeft(int64(1), v13)
-					tmp15 := lang.Numbers.Dec(tmp14)
-					return tmp15
+				var v8 any = tmp7
+				_ = v8
+				tmp9 := checkDerefVar(var_clojure_DOT_core_map)
+				var tmp10 lang.FnFunc1
+				tmp10 = lang.FnFunc1(func(p0 any) any {
+					v11 := p0
+					_ = v11
+					tmp12 := lang.Numbers.ShiftLeft(int64(1), v11)
+					tmp13 := lang.Numbers.Dec(tmp12)
+					return tmp13
 				})
-				tmp13 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6674), kw_column, int(29), kw_end_DASH_line, int(6674), kw_end_DASH_column, int(55))
-				tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp15 := checkDerefVar(var_clojure_DOT_core_range)
-				tmp16 := checkDerefVar(var_clojure_DOT_core_max_DASH_mask_DASH_bits)
-				tmp17 := lang.Numbers.Inc(tmp16)
-				tmp18 := lang.Apply2(tmp15, int64(1), tmp17)
-				tmp19 := lang.Apply2(tmp11, tmp14, tmp18)
-				tmp20 := lang.Apply1(v10, tmp19)
-				tmp8 = tmp20
+				tmp11 := checkDerefVar(var_clojure_DOT_core_range)
+				tmp12 := checkDerefVar(var_clojure_DOT_core_max_DASH_mask_DASH_bits)
+				tmp13 := lang.Numbers.Inc(tmp12)
+				tmp14 := lang.Apply2(tmp11, int64(1), tmp13)
+				tmp15 := lang.Apply2(tmp9, tmp10, tmp14)
+				tmp16 := lang.Apply1(v8, tmp15)
+				tmp6 = tmp16
 			} // end let
-			tmp9 := lang.Apply2(tmp4, tmp7, tmp8)
-			tmp10 := lang.Apply1(tmp3, tmp9)
-			return tmp10
+			tmp7 := lang.Apply2(tmp4, tmp5, tmp6)
+			tmp8 := lang.Apply1(tmp3, tmp7)
+			return tmp8
 		})
 		var_clojure_DOT_core_maybe_DASH_min_DASH_hash = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_maybe_DASH_min_DASH_hash.SetMetaLazy(func() lang.IPersistentMap {
@@ -44150,12 +43197,7 @@ func LoadNS() {
 					}),
 					0,
 				)
-				tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6410), kw_column, int(5), kw_end_DASH_line, int(6415), kw_end_DASH_column, int(16))
-				tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp3 = tmp12
+				tmp3 = tmp10
 			} // end let
 			return tmp3
 		})
@@ -44233,397 +43275,372 @@ func LoadNS() {
 								tmp34 := lang.Apply2(tmp33, sym_quote, v32)
 								return tmp34
 							})
-							tmp32 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5826), kw_column, int(21), kw_end_DASH_line, int(5826), kw_end_DASH_column, int(36))
-							tmp33, err := lang.WithMeta(tmp31, tmp32.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp34 := lang.Apply2(tmp30, tmp33, v21)
-							tmp35 := lang.Apply2(tmp23, tmp29, tmp34)
-							tmp36 := lang.Apply1(tmp22, tmp35)
-							tmp9 = tmp36
+							tmp32 := lang.Apply2(tmp30, tmp31, v21)
+							tmp33 := lang.Apply2(tmp23, tmp29, tmp32)
+							tmp34 := lang.Apply1(tmp22, tmp33)
+							tmp9 = tmp34
 						} // end let
 						return tmp9
 					})
-					tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5824), kw_column, int(9), kw_end_DASH_line, int(5826), kw_end_DASH_column, int(44))
-					tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v10 any = tmp9
-					_ = v10
+					var v8 any = tmp7
+					_ = v8
 					// let binding "docstring"
-					var tmp11 any
-					tmp12 := checkDerefVar(var_clojure_DOT_core_string_QMARK_)
-					tmp13 := checkDerefVar(var_clojure_DOT_core_first)
-					tmp14 := lang.Apply1(tmp13, v5)
-					tmp15 := lang.Apply1(tmp12, tmp14)
-					if lang.IsTruthy(tmp15) {
-						tmp16 := checkDerefVar(var_clojure_DOT_core_first)
-						tmp17 := lang.Apply1(tmp16, v5)
-						tmp11 = tmp17
+					var tmp9 any
+					tmp10 := checkDerefVar(var_clojure_DOT_core_string_QMARK_)
+					tmp11 := checkDerefVar(var_clojure_DOT_core_first)
+					tmp12 := lang.Apply1(tmp11, v5)
+					tmp13 := lang.Apply1(tmp10, tmp12)
+					if lang.IsTruthy(tmp13) {
+						tmp14 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp15 := lang.Apply1(tmp14, v5)
+						tmp9 = tmp15
 					} else {
 					}
-					var v18 any = tmp11
-					_ = v18
+					var v16 any = tmp9
+					_ = v16
 					// let binding "references"
-					var tmp19 any
-					if lang.IsTruthy(v18) {
-						tmp20 := checkDerefVar(var_clojure_DOT_core_next)
-						tmp21 := lang.Apply1(tmp20, v5)
-						tmp19 = tmp21
+					var tmp17 any
+					if lang.IsTruthy(v16) {
+						tmp18 := checkDerefVar(var_clojure_DOT_core_next)
+						tmp19 := lang.Apply1(tmp18, v5)
+						tmp17 = tmp19
 					} else {
-						tmp19 = v5
+						tmp17 = v5
 					}
-					var v22 any = tmp19
-					_ = v22
+					var v20 any = tmp17
+					_ = v20
 					// let binding "name"
-					var tmp23 any
-					if lang.IsTruthy(v18) {
-						tmp24 := checkDerefVar(var_clojure_DOT_core_vary_DASH_meta)
-						tmp25 := checkDerefVar(var_clojure_DOT_core_assoc)
-						tmp26 := lang.Apply4(tmp24, v4, tmp25, kw_doc, v18)
-						tmp23 = tmp26
+					var tmp21 any
+					if lang.IsTruthy(v16) {
+						tmp22 := checkDerefVar(var_clojure_DOT_core_vary_DASH_meta)
+						tmp23 := checkDerefVar(var_clojure_DOT_core_assoc)
+						tmp24 := lang.Apply4(tmp22, v4, tmp23, kw_doc, v16)
+						tmp21 = tmp24
 					} else {
-						tmp23 = v4
+						tmp21 = v4
 					}
-					var v27 any = tmp23
-					_ = v27
+					var v25 any = tmp21
+					_ = v25
 					// let binding "metadata"
-					var tmp28 any
-					tmp29 := checkDerefVar(var_clojure_DOT_core_map_QMARK_)
-					tmp30 := checkDerefVar(var_clojure_DOT_core_first)
-					tmp31 := lang.Apply1(tmp30, v22)
-					tmp32 := lang.Apply1(tmp29, tmp31)
-					if lang.IsTruthy(tmp32) {
-						tmp33 := checkDerefVar(var_clojure_DOT_core_first)
-						tmp34 := lang.Apply1(tmp33, v22)
-						tmp28 = tmp34
+					var tmp26 any
+					tmp27 := checkDerefVar(var_clojure_DOT_core_map_QMARK_)
+					tmp28 := checkDerefVar(var_clojure_DOT_core_first)
+					tmp29 := lang.Apply1(tmp28, v20)
+					tmp30 := lang.Apply1(tmp27, tmp29)
+					if lang.IsTruthy(tmp30) {
+						tmp31 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp32 := lang.Apply1(tmp31, v20)
+						tmp26 = tmp32
 					} else {
 					}
-					var v35 any = tmp28
-					_ = v35
+					var v33 any = tmp26
+					_ = v33
 					// let binding "references"
-					var tmp36 any
-					if lang.IsTruthy(v35) {
-						tmp37 := checkDerefVar(var_clojure_DOT_core_next)
-						tmp38 := lang.Apply1(tmp37, v22)
-						tmp36 = tmp38
+					var tmp34 any
+					if lang.IsTruthy(v33) {
+						tmp35 := checkDerefVar(var_clojure_DOT_core_next)
+						tmp36 := lang.Apply1(tmp35, v20)
+						tmp34 = tmp36
 					} else {
-						tmp36 = v22
+						tmp34 = v20
 					}
-					var v39 any = tmp36
-					_ = v39
+					var v37 any = tmp34
+					_ = v37
 					// let binding "name"
-					var tmp40 any
-					if lang.IsTruthy(v35) {
-						tmp41 := checkDerefVar(var_clojure_DOT_core_vary_DASH_meta)
-						tmp42 := checkDerefVar(var_clojure_DOT_core_merge)
-						tmp43 := lang.Apply3(tmp41, v27, tmp42, v35)
-						tmp40 = tmp43
+					var tmp38 any
+					if lang.IsTruthy(v33) {
+						tmp39 := checkDerefVar(var_clojure_DOT_core_vary_DASH_meta)
+						tmp40 := checkDerefVar(var_clojure_DOT_core_merge)
+						tmp41 := lang.Apply3(tmp39, v25, tmp40, v33)
+						tmp38 = tmp41
 					} else {
-						tmp40 = v27
+						tmp38 = v25
 					}
-					var v44 any = tmp40
-					_ = v44
+					var v42 any = tmp38
+					_ = v42
 					// let binding "gen-class-clause"
-					tmp45 := checkDerefVar(var_clojure_DOT_core_first)
-					tmp46 := checkDerefVar(var_clojure_DOT_core_filter)
-					var tmp47 lang.FnFunc1
-					tmp47 = lang.FnFunc1(func(p0 any) any {
-						v48 := p0
-						_ = v48
-						tmp49 := checkDerefVar(var_clojure_DOT_core__EQ_)
-						tmp50 := checkDerefVar(var_clojure_DOT_core_first)
-						tmp51 := lang.Apply1(tmp50, v48)
-						tmp52 := lang.Apply2(tmp49, kw_gen_DASH_class, tmp51)
-						return tmp52
+					tmp43 := checkDerefVar(var_clojure_DOT_core_first)
+					tmp44 := checkDerefVar(var_clojure_DOT_core_filter)
+					var tmp45 lang.FnFunc1
+					tmp45 = lang.FnFunc1(func(p0 any) any {
+						v46 := p0
+						_ = v46
+						tmp47 := checkDerefVar(var_clojure_DOT_core__EQ_)
+						tmp48 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp49 := lang.Apply1(tmp48, v46)
+						tmp50 := lang.Apply2(tmp47, kw_gen_DASH_class, tmp49)
+						return tmp50
 					})
-					tmp48 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5837), kw_column, int(41), kw_end_DASH_line, int(5837), kw_end_DASH_column, int(65))
-					tmp49, err := lang.WithMeta(tmp47, tmp48.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp50 := lang.Apply2(tmp46, tmp49, v39)
-					tmp51 := lang.Apply1(tmp45, tmp50)
-					var v52 any = tmp51
-					_ = v52
+					tmp46 := lang.Apply2(tmp44, tmp45, v37)
+					tmp47 := lang.Apply1(tmp43, tmp46)
+					var v48 any = tmp47
+					_ = v48
 					// let binding "gen-class-call"
-					var tmp53 any
-					if lang.IsTruthy(v52) {
-						tmp54 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
-						tmp55 := checkDerefVar(var_clojure_DOT_core_str)
-						tmp56 := lang.Apply1(tmp55, v44)
-						tmp57, _ := lang.FieldOrMethod(tmp56, "replace")
-						if reflect.TypeOf(tmp57).Kind() != reflect.Func {
+					var tmp49 any
+					if lang.IsTruthy(v48) {
+						tmp50 := checkDerefVar(var_clojure_DOT_core_list_STAR_)
+						tmp51 := checkDerefVar(var_clojure_DOT_core_str)
+						tmp52 := lang.Apply1(tmp51, v42)
+						tmp53, _ := lang.FieldOrMethod(tmp52, "replace")
+						if reflect.TypeOf(tmp53).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("replace is not a function")))
 						}
-						tmp58 := lang.Apply2(tmp57, lang.NewChar(45), lang.NewChar(95))
-						tmp59 := checkDerefVar(var_clojure_DOT_core_next)
-						tmp60 := lang.Apply1(tmp59, v52)
-						tmp61 := lang.Apply(tmp54, []any{sym_clojure_DOT_core_SLASH_gen_DASH_class, kw_name, tmp58, kw_impl_DASH_ns, v44, kw_main, true, tmp60})
-						tmp53 = tmp61
+						tmp54 := lang.Apply2(tmp53, lang.NewChar(45), lang.NewChar(95))
+						tmp55 := checkDerefVar(var_clojure_DOT_core_next)
+						tmp56 := lang.Apply1(tmp55, v48)
+						tmp57 := lang.Apply(tmp50, []any{sym_clojure_DOT_core_SLASH_gen_DASH_class, kw_name, tmp54, kw_impl_DASH_ns, v42, kw_main, true, tmp56})
+						tmp49 = tmp57
 					} else {
 					}
-					var v62 any = tmp53
-					_ = v62
+					var v58 any = tmp49
+					_ = v58
 					// let binding "references"
-					tmp63 := checkDerefVar(var_clojure_DOT_core_remove)
-					var tmp64 lang.FnFunc1
-					tmp64 = lang.FnFunc1(func(p0 any) any {
-						v65 := p0
-						_ = v65
-						tmp66 := checkDerefVar(var_clojure_DOT_core__EQ_)
-						tmp67 := checkDerefVar(var_clojure_DOT_core_first)
-						tmp68 := lang.Apply1(tmp67, v65)
-						tmp69 := lang.Apply2(tmp66, kw_gen_DASH_class, tmp68)
-						return tmp69
+					tmp59 := checkDerefVar(var_clojure_DOT_core_remove)
+					var tmp60 lang.FnFunc1
+					tmp60 = lang.FnFunc1(func(p0 any) any {
+						v61 := p0
+						_ = v61
+						tmp62 := checkDerefVar(var_clojure_DOT_core__EQ_)
+						tmp63 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp64 := lang.Apply1(tmp63, v61)
+						tmp65 := lang.Apply2(tmp62, kw_gen_DASH_class, tmp64)
+						return tmp65
 					})
-					tmp65 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5841), kw_column, int(28), kw_end_DASH_line, int(5841), kw_end_DASH_column, int(52))
-					tmp66, err := lang.WithMeta(tmp64, tmp65.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp67 := lang.Apply2(tmp63, tmp66, v39)
-					var v68 any = tmp67
-					_ = v68
+					tmp61 := lang.Apply2(tmp59, tmp60, v37)
+					var v62 any = tmp61
+					_ = v62
 					// let binding "name-metadata"
-					tmp69 := checkDerefVar(var_clojure_DOT_core_meta)
-					tmp70 := lang.Apply1(tmp69, v44)
-					var v71 any = tmp70
-					_ = v71
-					tmp72 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp73 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp74 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp75 := lang.Apply1(tmp74, sym_do)
-					tmp76 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp77 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp78 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp79 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp80 := lang.Apply1(tmp79, sym_clojure_DOT_core_SLASH_in_DASH_ns)
-					tmp81 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp82 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp83 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp84 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp85 := lang.Apply1(tmp84, sym_quote)
-					tmp86 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp87 := lang.Apply1(tmp86, v44)
-					tmp88 := lang.Apply2(tmp83, tmp85, tmp87)
-					tmp89 := lang.Apply1(tmp82, tmp88)
-					tmp90 := lang.Apply1(tmp81, tmp89)
-					tmp91 := lang.Apply2(tmp78, tmp80, tmp90)
-					tmp92 := lang.Apply1(tmp77, tmp91)
-					tmp93 := lang.Apply1(tmp76, tmp92)
-					var tmp94 any
-					if lang.IsTruthy(v71) {
-						tmp95 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp96 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp97 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp98 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp99 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp100 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp101 := lang.Apply1(tmp100, sym__DOT_ResetMeta)
-						tmp102 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp103 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp104 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp105 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp106 := lang.Apply1(tmp105, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_FindNamespace)
-						tmp107 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp108 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp109 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp110 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp111 := lang.Apply1(tmp110, sym_quote)
-						tmp112 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp113 := lang.Apply1(tmp112, v44)
-						tmp114 := lang.Apply2(tmp109, tmp111, tmp113)
-						tmp115 := lang.Apply1(tmp108, tmp114)
-						tmp116 := lang.Apply1(tmp107, tmp115)
-						tmp117 := lang.Apply2(tmp104, tmp106, tmp116)
-						tmp118 := lang.Apply1(tmp103, tmp117)
-						tmp119 := lang.Apply1(tmp102, tmp118)
-						tmp120 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp121 := lang.Apply1(tmp120, v71)
-						tmp122 := lang.Apply3(tmp99, tmp101, tmp119, tmp121)
-						tmp123 := lang.Apply1(tmp98, tmp122)
-						tmp124 := lang.Apply1(tmp97, tmp123)
-						tmp125 := lang.Apply1(tmp96, tmp124)
-						tmp126 := lang.Apply1(tmp95, tmp125)
-						tmp94 = tmp126
+					tmp63 := checkDerefVar(var_clojure_DOT_core_meta)
+					tmp64 := lang.Apply1(tmp63, v42)
+					var v65 any = tmp64
+					_ = v65
+					tmp66 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp67 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp68 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp69 := lang.Apply1(tmp68, sym_do)
+					tmp70 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp71 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp72 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp73 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp74 := lang.Apply1(tmp73, sym_clojure_DOT_core_SLASH_in_DASH_ns)
+					tmp75 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp76 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp77 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp78 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp79 := lang.Apply1(tmp78, sym_quote)
+					tmp80 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp81 := lang.Apply1(tmp80, v42)
+					tmp82 := lang.Apply2(tmp77, tmp79, tmp81)
+					tmp83 := lang.Apply1(tmp76, tmp82)
+					tmp84 := lang.Apply1(tmp75, tmp83)
+					tmp85 := lang.Apply2(tmp72, tmp74, tmp84)
+					tmp86 := lang.Apply1(tmp71, tmp85)
+					tmp87 := lang.Apply1(tmp70, tmp86)
+					var tmp88 any
+					if lang.IsTruthy(v65) {
+						tmp89 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp90 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp91 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp92 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp93 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp94 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp95 := lang.Apply1(tmp94, sym__DOT_ResetMeta)
+						tmp96 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp97 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp98 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp99 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp100 := lang.Apply1(tmp99, sym_github_DOT_com_COLON_glojurelang_COLON_glojure_COLON_pkg_COLON_lang_DOT_FindNamespace)
+						tmp101 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp102 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp103 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp104 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp105 := lang.Apply1(tmp104, sym_quote)
+						tmp106 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp107 := lang.Apply1(tmp106, v42)
+						tmp108 := lang.Apply2(tmp103, tmp105, tmp107)
+						tmp109 := lang.Apply1(tmp102, tmp108)
+						tmp110 := lang.Apply1(tmp101, tmp109)
+						tmp111 := lang.Apply2(tmp98, tmp100, tmp110)
+						tmp112 := lang.Apply1(tmp97, tmp111)
+						tmp113 := lang.Apply1(tmp96, tmp112)
+						tmp114 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp115 := lang.Apply1(tmp114, v65)
+						tmp116 := lang.Apply3(tmp93, tmp95, tmp113, tmp115)
+						tmp117 := lang.Apply1(tmp92, tmp116)
+						tmp118 := lang.Apply1(tmp91, tmp117)
+						tmp119 := lang.Apply1(tmp90, tmp118)
+						tmp120 := lang.Apply1(tmp89, tmp119)
+						tmp88 = tmp120
 					} else {
 					}
-					tmp127 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp128 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp129 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp130 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp131 := lang.Apply1(tmp130, sym_clojure_DOT_core_SLASH_with_DASH_loading_DASH_context)
-					var tmp132 any
-					if lang.IsTruthy(v62) {
-						tmp133 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp134 := lang.Apply1(tmp133, v62)
-						tmp132 = tmp134
+					tmp121 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp122 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp123 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp124 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp125 := lang.Apply1(tmp124, sym_clojure_DOT_core_SLASH_with_DASH_loading_DASH_context)
+					var tmp126 any
+					if lang.IsTruthy(v58) {
+						tmp127 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp128 := lang.Apply1(tmp127, v58)
+						tmp126 = tmp128
 					} else {
 					}
-					var tmp135 any
-					var tmp136 any
+					var tmp129 any
+					var tmp130 any
 					{ // let
 						// let binding "and__0__auto__"
-						tmp137 := checkDerefVar(var_clojure_DOT_core_not_EQ_)
-						tmp138 := lang.Apply2(tmp137, v44, sym_clojure_DOT_core)
-						var v139 any = tmp138
-						_ = v139
-						var tmp140 any
-						if lang.IsTruthy(v139) {
-							tmp141 := checkDerefVar(var_clojure_DOT_core_not_DASH_any_QMARK_)
-							var tmp142 lang.FnFunc1
-							tmp142 = lang.FnFunc1(func(p0 any) any {
-								v143 := p0
-								_ = v143
-								tmp144 := checkDerefVar(var_clojure_DOT_core__EQ_)
-								tmp145 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp146 := lang.Apply1(tmp145, v143)
-								tmp147 := lang.Apply2(tmp144, kw_refer_DASH_clojure, tmp146)
-								return tmp147
+						tmp131 := checkDerefVar(var_clojure_DOT_core_not_EQ_)
+						tmp132 := lang.Apply2(tmp131, v42, sym_clojure_DOT_core)
+						var v133 any = tmp132
+						_ = v133
+						var tmp134 any
+						if lang.IsTruthy(v133) {
+							tmp135 := checkDerefVar(var_clojure_DOT_core_not_DASH_any_QMARK_)
+							var tmp136 lang.FnFunc1
+							tmp136 = lang.FnFunc1(func(p0 any) any {
+								v137 := p0
+								_ = v137
+								tmp138 := checkDerefVar(var_clojure_DOT_core__EQ_)
+								tmp139 := checkDerefVar(var_clojure_DOT_core_first)
+								tmp140 := lang.Apply1(tmp139, v137)
+								tmp141 := lang.Apply2(tmp138, kw_refer_DASH_clojure, tmp140)
+								return tmp141
 							})
-							tmp143 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5850), kw_column, int(58), kw_end_DASH_line, int(5850), kw_end_DASH_column, int(86))
-							tmp144, err := lang.WithMeta(tmp142, tmp143.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp145 := lang.Apply2(tmp141, tmp144, v68)
-							tmp140 = tmp145
+							tmp137 := lang.Apply2(tmp135, tmp136, v62)
+							tmp134 = tmp137
 						} else {
-							tmp140 = v139
+							tmp134 = v133
 						}
-						tmp136 = tmp140
+						tmp130 = tmp134
 					} // end let
-					if lang.IsTruthy(tmp136) {
-						tmp137 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp138 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp139 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp140 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp141 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp142 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp143 := lang.Apply1(tmp142, sym_clojure_DOT_core_SLASH_refer)
-						tmp144 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp145 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp146 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp147 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp148 := lang.Apply1(tmp147, sym_quote)
-						tmp149 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp150 := lang.Apply1(tmp149, sym_clojure_DOT_core)
-						tmp151 := lang.Apply2(tmp146, tmp148, tmp150)
-						tmp152 := lang.Apply1(tmp145, tmp151)
-						tmp153 := lang.Apply1(tmp144, tmp152)
-						tmp154 := lang.Apply2(tmp141, tmp143, tmp153)
-						tmp155 := lang.Apply1(tmp140, tmp154)
-						tmp156 := lang.Apply1(tmp139, tmp155)
-						tmp157 := lang.Apply1(tmp138, tmp156)
-						tmp158 := lang.Apply1(tmp137, tmp157)
-						tmp135 = tmp158
+					if lang.IsTruthy(tmp130) {
+						tmp131 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp132 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp133 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp134 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp135 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp136 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp137 := lang.Apply1(tmp136, sym_clojure_DOT_core_SLASH_refer)
+						tmp138 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp139 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp140 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp141 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp142 := lang.Apply1(tmp141, sym_quote)
+						tmp143 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp144 := lang.Apply1(tmp143, sym_clojure_DOT_core)
+						tmp145 := lang.Apply2(tmp140, tmp142, tmp144)
+						tmp146 := lang.Apply1(tmp139, tmp145)
+						tmp147 := lang.Apply1(tmp138, tmp146)
+						tmp148 := lang.Apply2(tmp135, tmp137, tmp147)
+						tmp149 := lang.Apply1(tmp134, tmp148)
+						tmp150 := lang.Apply1(tmp133, tmp149)
+						tmp151 := lang.Apply1(tmp132, tmp150)
+						tmp152 := lang.Apply1(tmp131, tmp151)
+						tmp129 = tmp152
 					} else {
 					}
-					tmp159 := checkDerefVar(var_clojure_DOT_core_map)
-					tmp160 := lang.Apply2(tmp159, v10, v68)
-					tmp161 := lang.Apply4(tmp129, tmp131, tmp132, tmp135, tmp160)
-					tmp162 := lang.Apply1(tmp128, tmp161)
-					tmp163 := lang.Apply1(tmp127, tmp162)
-					tmp164 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp165 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp166 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp167 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp168 := lang.Apply1(tmp167, sym_if)
-					tmp169 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp170 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp171 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp172 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp173 := lang.Apply1(tmp172, sym__DOT_Equals)
-					tmp174 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp175 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp176 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp177 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp178 := lang.Apply1(tmp177, sym_quote)
-					tmp179 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp180 := lang.Apply1(tmp179, v44)
-					tmp181 := lang.Apply2(tmp176, tmp178, tmp180)
-					tmp182 := lang.Apply1(tmp175, tmp181)
-					tmp183 := lang.Apply1(tmp174, tmp182)
-					tmp184 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp185 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp186 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp187 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp188 := lang.Apply1(tmp187, sym_quote)
-					tmp189 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp190 := lang.Apply1(tmp189, sym_clojure_DOT_core)
-					tmp191 := lang.Apply2(tmp186, tmp188, tmp190)
-					tmp192 := lang.Apply1(tmp185, tmp191)
-					tmp193 := lang.Apply1(tmp184, tmp192)
-					tmp194 := lang.Apply3(tmp171, tmp173, tmp183, tmp193)
-					tmp195 := lang.Apply1(tmp170, tmp194)
-					tmp196 := lang.Apply1(tmp169, tmp195)
-					tmp197 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp198 := lang.Apply1(tmp197, nil)
-					tmp199 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp200 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp201 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp202 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp203 := lang.Apply1(tmp202, sym_do)
-					tmp204 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp205 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp206 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp207 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp208 := lang.Apply1(tmp207, sym_clojure_DOT_core_SLASH_dosync)
-					tmp209 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp210 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp211 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp212 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp213 := lang.Apply1(tmp212, sym_clojure_DOT_core_SLASH_commute)
-					tmp214 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp215 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp216 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp217 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp218 := lang.Apply1(tmp217, sym_clojure_DOT_core_SLASH_deref)
-					tmp219 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp220 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp221 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp222 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp223 := lang.Apply1(tmp222, sym_var)
-					tmp224 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp225 := lang.Apply1(tmp224, sym_clojure_DOT_core_SLASH__STAR_loaded_DASH_libs_STAR_)
-					tmp226 := lang.Apply2(tmp221, tmp223, tmp225)
-					tmp227 := lang.Apply1(tmp220, tmp226)
-					tmp228 := lang.Apply1(tmp219, tmp227)
-					tmp229 := lang.Apply2(tmp216, tmp218, tmp228)
-					tmp230 := lang.Apply1(tmp215, tmp229)
-					tmp231 := lang.Apply1(tmp214, tmp230)
-					tmp232 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp233 := lang.Apply1(tmp232, sym_clojure_DOT_core_SLASH_conj)
-					tmp234 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp235 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp236 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp237 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp238 := lang.Apply1(tmp237, sym_quote)
-					tmp239 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp240 := lang.Apply1(tmp239, v44)
-					tmp241 := lang.Apply2(tmp236, tmp238, tmp240)
-					tmp242 := lang.Apply1(tmp235, tmp241)
-					tmp243 := lang.Apply1(tmp234, tmp242)
-					tmp244 := lang.Apply4(tmp211, tmp213, tmp231, tmp233, tmp243)
-					tmp245 := lang.Apply1(tmp210, tmp244)
-					tmp246 := lang.Apply1(tmp209, tmp245)
-					tmp247 := lang.Apply2(tmp206, tmp208, tmp246)
-					tmp248 := lang.Apply1(tmp205, tmp247)
-					tmp249 := lang.Apply1(tmp204, tmp248)
-					tmp250 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp251 := lang.Apply1(tmp250, nil)
-					tmp252 := lang.Apply3(tmp201, tmp203, tmp249, tmp251)
-					tmp253 := lang.Apply1(tmp200, tmp252)
-					tmp254 := lang.Apply1(tmp199, tmp253)
-					tmp255 := lang.Apply4(tmp166, tmp168, tmp196, tmp198, tmp254)
-					tmp256 := lang.Apply1(tmp165, tmp255)
-					tmp257 := lang.Apply1(tmp164, tmp256)
-					tmp258 := lang.Apply(tmp73, []any{tmp75, tmp93, tmp94, tmp163, tmp257})
-					tmp259 := lang.Apply1(tmp72, tmp258)
-					tmp6 = tmp259
+					tmp153 := checkDerefVar(var_clojure_DOT_core_map)
+					tmp154 := lang.Apply2(tmp153, v8, v62)
+					tmp155 := lang.Apply4(tmp123, tmp125, tmp126, tmp129, tmp154)
+					tmp156 := lang.Apply1(tmp122, tmp155)
+					tmp157 := lang.Apply1(tmp121, tmp156)
+					tmp158 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp159 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp160 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp161 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp162 := lang.Apply1(tmp161, sym_if)
+					tmp163 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp164 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp165 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp166 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp167 := lang.Apply1(tmp166, sym__DOT_Equals)
+					tmp168 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp169 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp170 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp171 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp172 := lang.Apply1(tmp171, sym_quote)
+					tmp173 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp174 := lang.Apply1(tmp173, v42)
+					tmp175 := lang.Apply2(tmp170, tmp172, tmp174)
+					tmp176 := lang.Apply1(tmp169, tmp175)
+					tmp177 := lang.Apply1(tmp168, tmp176)
+					tmp178 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp179 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp180 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp181 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp182 := lang.Apply1(tmp181, sym_quote)
+					tmp183 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp184 := lang.Apply1(tmp183, sym_clojure_DOT_core)
+					tmp185 := lang.Apply2(tmp180, tmp182, tmp184)
+					tmp186 := lang.Apply1(tmp179, tmp185)
+					tmp187 := lang.Apply1(tmp178, tmp186)
+					tmp188 := lang.Apply3(tmp165, tmp167, tmp177, tmp187)
+					tmp189 := lang.Apply1(tmp164, tmp188)
+					tmp190 := lang.Apply1(tmp163, tmp189)
+					tmp191 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp192 := lang.Apply1(tmp191, nil)
+					tmp193 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp194 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp195 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp196 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp197 := lang.Apply1(tmp196, sym_do)
+					tmp198 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp199 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp200 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp201 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp202 := lang.Apply1(tmp201, sym_clojure_DOT_core_SLASH_dosync)
+					tmp203 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp204 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp205 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp206 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp207 := lang.Apply1(tmp206, sym_clojure_DOT_core_SLASH_commute)
+					tmp208 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp209 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp210 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp211 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp212 := lang.Apply1(tmp211, sym_clojure_DOT_core_SLASH_deref)
+					tmp213 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp214 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp215 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp216 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp217 := lang.Apply1(tmp216, sym_var)
+					tmp218 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp219 := lang.Apply1(tmp218, sym_clojure_DOT_core_SLASH__STAR_loaded_DASH_libs_STAR_)
+					tmp220 := lang.Apply2(tmp215, tmp217, tmp219)
+					tmp221 := lang.Apply1(tmp214, tmp220)
+					tmp222 := lang.Apply1(tmp213, tmp221)
+					tmp223 := lang.Apply2(tmp210, tmp212, tmp222)
+					tmp224 := lang.Apply1(tmp209, tmp223)
+					tmp225 := lang.Apply1(tmp208, tmp224)
+					tmp226 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp227 := lang.Apply1(tmp226, sym_clojure_DOT_core_SLASH_conj)
+					tmp228 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp229 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp230 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp231 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp232 := lang.Apply1(tmp231, sym_quote)
+					tmp233 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp234 := lang.Apply1(tmp233, v42)
+					tmp235 := lang.Apply2(tmp230, tmp232, tmp234)
+					tmp236 := lang.Apply1(tmp229, tmp235)
+					tmp237 := lang.Apply1(tmp228, tmp236)
+					tmp238 := lang.Apply4(tmp205, tmp207, tmp225, tmp227, tmp237)
+					tmp239 := lang.Apply1(tmp204, tmp238)
+					tmp240 := lang.Apply1(tmp203, tmp239)
+					tmp241 := lang.Apply2(tmp200, tmp202, tmp240)
+					tmp242 := lang.Apply1(tmp199, tmp241)
+					tmp243 := lang.Apply1(tmp198, tmp242)
+					tmp244 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp245 := lang.Apply1(tmp244, nil)
+					tmp246 := lang.Apply3(tmp195, tmp197, tmp243, tmp245)
+					tmp247 := lang.Apply1(tmp194, tmp246)
+					tmp248 := lang.Apply1(tmp193, tmp247)
+					tmp249 := lang.Apply4(tmp160, tmp162, tmp190, tmp192, tmp248)
+					tmp250 := lang.Apply1(tmp159, tmp249)
+					tmp251 := lang.Apply1(tmp158, tmp250)
+					tmp252 := lang.Apply(tmp67, []any{tmp69, tmp87, tmp88, tmp157, tmp251})
+					tmp253 := lang.Apply1(tmp66, tmp252)
+					tmp6 = tmp253
 				} // end let
 				return tmp6
 			}),
@@ -44678,13 +43695,8 @@ func LoadNS() {
 					tmp6 := lang.Apply0(v5)
 					return tmp6
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7131), kw_column, int(17), kw_end_DASH_line, int(7131), kw_end_DASH_column, int(20))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp7 := lang.Apply2(tmp3, tmp6, v2)
-				return tmp7
+				tmp5 := lang.Apply2(tmp3, tmp4, v2)
+				return tmp5
 			}),
 			0,
 		)
@@ -44782,20 +43794,15 @@ func LoadNS() {
 							tmp37 := lang.Apply3(tmp35, v19, v22, tmp36)
 							return tmp37
 						})
-						tmp34 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6709), kw_column, int(31), kw_end_DASH_line, int(6709), kw_end_DASH_column, int(62))
-						tmp35, err := lang.WithMeta(tmp33, tmp34.(lang.IPersistentMap))
+						tmp34 := checkDerefVar(var_clojure_DOT_core_int)
+						tmp35 := lang.Apply4(tmp32, tmp33, tmp34, v2, v3)
+						tmp36 := lang.NewVector(v19, v22, tmp35, kw_compact)
+						tmp37 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6709), kw_column, int(9), kw_end_DASH_line, int(6709), kw_end_DASH_column, int(89))
+						tmp38, err := lang.WithMeta(tmp36, tmp37.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
 						}
-						tmp36 := checkDerefVar(var_clojure_DOT_core_int)
-						tmp37 := lang.Apply4(tmp32, tmp35, tmp36, v2, v3)
-						tmp38 := lang.NewVector(v19, v22, tmp37, kw_compact)
-						tmp39 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6709), kw_column, int(9), kw_end_DASH_line, int(6709), kw_end_DASH_column, int(89))
-						tmp40, err := lang.WithMeta(tmp38, tmp39.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp23 = tmp40
+						tmp23 = tmp38
 					}
 					tmp14 = tmp23
 				} // end let
@@ -44950,130 +43957,105 @@ func LoadNS() {
 					}
 					return tmp20
 				})
-				tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5745), kw_column, int(35), kw_end_DASH_line, int(5745), kw_end_DASH_column, int(62))
-				tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp20 := lang.Apply2(tmp15, tmp16, tmp19)
-				tmp21 := checkDerefVar(var_clojure_DOT_core_map)
-				var tmp22 lang.FnFunc1
-				tmp22 = lang.FnFunc1(func(p0 any) any {
-					v23 := p0
-					_ = v23
-					tmp24, _ := lang.FieldOrMethod(v6, "getColumnLabel")
-					if reflect.TypeOf(tmp24).Kind() != reflect.Func {
+				tmp18 := lang.Apply2(tmp15, tmp16, tmp17)
+				tmp19 := checkDerefVar(var_clojure_DOT_core_map)
+				var tmp20 lang.FnFunc1
+				tmp20 = lang.FnFunc1(func(p0 any) any {
+					v21 := p0
+					_ = v21
+					tmp22, _ := lang.FieldOrMethod(v6, "getColumnLabel")
+					if reflect.TypeOf(tmp22).Kind() != reflect.Func {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("getColumnLabel is not a function")))
 					}
-					tmp25 := lang.Apply1(tmp24, v23)
-					return tmp25
+					tmp23 := lang.Apply1(tmp22, v21)
+					return tmp23
 				})
-				tmp23 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5746), kw_column, int(26), kw_end_DASH_line, int(5746), kw_end_DASH_column, int(63))
-				tmp24, err := lang.WithMeta(tmp22, tmp23.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp25 := lang.Apply2(tmp21, tmp24, v13)
-				tmp26 := lang.Apply2(tmp14, tmp20, tmp25)
-				var v27 any = tmp26
-				_ = v27
+				tmp21 := lang.Apply2(tmp19, tmp20, v13)
+				tmp22 := lang.Apply2(tmp14, tmp18, tmp21)
+				var v23 any = tmp22
+				_ = v23
 				// let binding "check-keys"
-				var tmp28 any
+				var tmp24 any
 				{ // let
 					// let binding "or__0__auto__"
-					tmp29 := checkDerefVar(var_clojure_DOT_core_apply)
-					tmp30 := checkDerefVar(var_clojure_DOT_core_distinct_QMARK_)
-					tmp31 := lang.Apply2(tmp29, tmp30, v27)
-					var v32 any = tmp31
-					_ = v32
-					var tmp33 any
-					if lang.IsTruthy(v32) {
-						tmp33 = v32
+					tmp25 := checkDerefVar(var_clojure_DOT_core_apply)
+					tmp26 := checkDerefVar(var_clojure_DOT_core_distinct_QMARK_)
+					tmp27 := lang.Apply2(tmp25, tmp26, v23)
+					var v28 any = tmp27
+					_ = v28
+					var tmp29 any
+					if lang.IsTruthy(v28) {
+						tmp29 = v28
 					} else {
-						tmp34 := lang.Apply1(lang.NewError, "ResultSet must have unique column labels")
-						panic(tmp34)
+						tmp30 := lang.Apply1(lang.NewError, "ResultSet must have unique column labels")
+						panic(tmp30)
 					}
-					tmp28 = tmp33
+					tmp24 = tmp29
 				} // end let
+				var v25 any = tmp24
+				_ = v25
+				// let binding "row-struct"
+				tmp26 := checkDerefVar(var_clojure_DOT_core_apply)
+				tmp27 := checkDerefVar(var_clojure_DOT_core_create_DASH_struct)
+				tmp28 := lang.Apply2(tmp26, tmp27, v23)
 				var v29 any = tmp28
 				_ = v29
-				// let binding "row-struct"
-				tmp30 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp31 := checkDerefVar(var_clojure_DOT_core_create_DASH_struct)
-				tmp32 := lang.Apply2(tmp30, tmp31, v27)
-				var v33 any = tmp32
-				_ = v33
 				// let binding "row-values"
-				var tmp34 lang.FnFunc0
-				tmp34 = lang.FnFunc0(func() any {
-					tmp35 := checkDerefVar(var_clojure_DOT_core_map)
-					var tmp36 lang.FnFunc1
-					tmp36 = lang.FnFunc1(func(p0 any) any {
-						v37 := p0
-						_ = v37
-						tmp38, _ := lang.FieldOrMethod(v2, "getObject")
-						if reflect.TypeOf(tmp38).Kind() != reflect.Func {
+				var tmp30 lang.FnFunc0
+				tmp30 = lang.FnFunc0(func() any {
+					tmp31 := checkDerefVar(var_clojure_DOT_core_map)
+					var tmp32 lang.FnFunc1
+					tmp32 = lang.FnFunc1(func(p0 any) any {
+						v33 := p0
+						_ = v33
+						tmp34, _ := lang.FieldOrMethod(v2, "getObject")
+						if reflect.TypeOf(tmp34).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("getObject is not a function")))
 						}
-						tmp39 := lang.Apply1(tmp38, v37)
-						return tmp39
+						tmp35 := lang.Apply1(tmp34, v33)
+						return tmp35
 					})
-					tmp37 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5751), kw_column, int(34), kw_end_DASH_line, int(5751), kw_end_DASH_column, int(71))
-					tmp38, err := lang.WithMeta(tmp36, tmp37.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp39 := lang.Apply2(tmp35, tmp38, v13)
-					return tmp39
+					tmp33 := lang.Apply2(tmp31, tmp32, v13)
+					return tmp33
 				})
-				tmp35 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5751), kw_column, int(22), kw_end_DASH_line, int(5751), kw_end_DASH_column, int(78))
-				tmp36, err := lang.WithMeta(tmp34, tmp35.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v37 any = tmp36
-				_ = v37
+				var v31 any = tmp30
+				_ = v31
 				// let binding "rows"
-				var tmp38 lang.FnFunc0
+				var tmp32 lang.FnFunc0
 				{ // function thisfn
-					var v39 lang.FnFunc0
-					tmp38 = lang.FnFunc0(func() any {
-						var tmp40 any
-						tmp41, _ := lang.FieldOrMethod(v2, "next")
-						if reflect.TypeOf(tmp41).Kind() != reflect.Func {
+					var v33 lang.FnFunc0
+					tmp32 = lang.FnFunc0(func() any {
+						var tmp34 any
+						tmp35, _ := lang.FieldOrMethod(v2, "next")
+						if reflect.TypeOf(tmp35).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("next is not a function")))
 						}
-						tmp42 := lang.Apply0(tmp41)
-						if lang.IsTruthy(tmp42) {
-							tmp43 := checkDerefVar(var_clojure_DOT_core_cons)
-							tmp44 := checkDerefVar(var_clojure_DOT_core_apply)
-							tmp45 := checkDerefVar(var_clojure_DOT_core_struct)
-							tmp46 := lang.Apply0(v37)
-							tmp47 := lang.Apply3(tmp44, tmp45, v33, tmp46)
-							var tmp48 lang.FnFunc0
-							tmp48 = lang.FnFunc0(func() any {
-								tmp49 := lang.Apply0(v39)
-								return tmp49
+						tmp36 := lang.Apply0(tmp35)
+						if lang.IsTruthy(tmp36) {
+							tmp37 := checkDerefVar(var_clojure_DOT_core_cons)
+							tmp38 := checkDerefVar(var_clojure_DOT_core_apply)
+							tmp39 := checkDerefVar(var_clojure_DOT_core_struct)
+							tmp40 := lang.Apply0(v31)
+							tmp41 := lang.Apply3(tmp38, tmp39, v29, tmp40)
+							var tmp42 lang.FnFunc0
+							tmp42 = lang.FnFunc0(func() any {
+								tmp43 := lang.Apply0(v33)
+								return tmp43
 							})
-							tmp49 := lang.Apply1(lang.NewLazySeq, tmp48)
-							tmp50 := lang.Apply2(tmp43, tmp47, tmp49)
-							tmp40 = tmp50
+							tmp43 := lang.Apply1(lang.NewLazySeq, tmp42)
+							tmp44 := lang.Apply2(tmp37, tmp41, tmp43)
+							tmp34 = tmp44
 						} else {
 						}
-						return tmp40
+						return tmp34
 					})
-					v39 = tmp38
-					_ = v39
+					v33 = tmp32
+					_ = v33
 				}
-				tmp39 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5752), kw_column, int(16), kw_end_DASH_line, int(5754), kw_end_DASH_column, int(86))
-				tmp40, err := lang.WithMeta(tmp38, tmp39.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v41 any = tmp40
-				_ = v41
-				tmp42 := lang.Apply0(v41)
-				tmp3 = tmp42
+				var v33 any = tmp32
+				_ = v33
+				tmp34 := lang.Apply0(v33)
+				tmp3 = tmp34
 			} // end let
 			return tmp3
 		})
@@ -45219,241 +44201,226 @@ func LoadNS() {
 						}
 						return tmp24
 					})
-					tmp22 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5487), kw_column, int(20), kw_end_DASH_line, int(5490), kw_end_DASH_column, int(26))
-					tmp23, err := lang.WithMeta(tmp21, tmp22.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v24 any = tmp23
-					_ = v24
+					var v22 any = tmp21
+					_ = v22
 					// let binding "fill"
-					var tmp25 lang.FnFunc1
-					tmp25 = lang.FnFunc1(func(p0 any) any {
-						v26 := p0
-						_ = v26
-						var tmp27 any
-						if lang.IsTruthy(v26) {
-							var tmp28 any
-							tmp29 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-							tmp30 := lang.Apply2(tmp29, nil, v26)
-							if lang.IsTruthy(tmp30) {
-								tmp31 := lang.Apply2(v24, v10, v26)
-								tmp28 = tmp31
+					var tmp23 lang.FnFunc1
+					tmp23 = lang.FnFunc1(func(p0 any) any {
+						v24 := p0
+						_ = v24
+						var tmp25 any
+						if lang.IsTruthy(v24) {
+							var tmp26 any
+							tmp27 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+							tmp28 := lang.Apply2(tmp27, nil, v24)
+							if lang.IsTruthy(tmp28) {
+								tmp29 := lang.Apply2(v22, v10, v24)
+								tmp26 = tmp29
 							} else {
-								var tmp32 any
+								var tmp30 any
 								func() {
 									defer func() {
 										if r := recover(); r != nil {
 											if lang.CatchMatches(r, lang.Builtins["any"]) {
-												v33 := r
-												_ = v33
-												tmp34 := lang.Apply2(v24, v10, v33)
-												tmp32 = tmp34
+												v31 := r
+												_ = v31
+												tmp32 := lang.Apply2(v22, v10, v31)
+												tmp30 = tmp32
 											} else {
 												panic(r)
 											}
 										}
 									}()
-									var tmp33 any
+									var tmp31 any
 									{ // let
 										// let binding "G__458"
-										tmp34 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp35 := lang.Apply1(tmp34, v26)
-										var v36 any = tmp35
-										_ = v36
+										tmp32 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp33 := lang.Apply1(tmp32, v24)
+										var v34 any = tmp33
+										_ = v34
 										// let binding "vec__459"
-										var v37 any = v36
-										_ = v37
+										var v35 any = v34
+										_ = v35
 										// let binding "seq__460"
-										tmp38 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp39 := lang.Apply1(tmp38, v37)
-										var v40 any = tmp39
-										_ = v40
+										tmp36 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp37 := lang.Apply1(tmp36, v35)
+										var v38 any = tmp37
+										_ = v38
 										// let binding "first__461"
-										tmp41 := checkDerefVar(var_clojure_DOT_core_first)
-										tmp42 := lang.Apply1(tmp41, v40)
-										var v43 any = tmp42
-										_ = v43
+										tmp39 := checkDerefVar(var_clojure_DOT_core_first)
+										tmp40 := lang.Apply1(tmp39, v38)
+										var v41 any = tmp40
+										_ = v41
 										// let binding "seq__460"
-										tmp44 := checkDerefVar(var_clojure_DOT_core_next)
-										tmp45 := lang.Apply1(tmp44, v40)
-										var v46 any = tmp45
-										_ = v46
+										tmp42 := checkDerefVar(var_clojure_DOT_core_next)
+										tmp43 := lang.Apply1(tmp42, v38)
+										var v44 any = tmp43
+										_ = v44
 										// let binding "x"
-										var v47 any = v43
-										_ = v47
+										var v45 any = v41
+										_ = v45
 										// let binding "xs"
-										var v48 any = v46
-										_ = v48
+										var v46 any = v44
+										_ = v46
 										// let binding "s"
-										var v49 any = v37
-										_ = v49
-										var tmp50 any
+										var v47 any = v35
+										_ = v47
+										var tmp48 any
 										{ // let
 											// let binding "G__458"
-											var v51 any = v36
-											_ = v51
+											var v49 any = v34
+											_ = v49
 											for {
-												var tmp52 any
+												var tmp50 any
 												{ // let
 													// let binding "vec__462"
-													var v53 any = v51
-													_ = v53
+													var v51 any = v49
+													_ = v51
 													// let binding "seq__463"
-													tmp54 := checkDerefVar(var_clojure_DOT_core_seq)
-													tmp55 := lang.Apply1(tmp54, v53)
-													var v56 any = tmp55
-													_ = v56
+													tmp52 := checkDerefVar(var_clojure_DOT_core_seq)
+													tmp53 := lang.Apply1(tmp52, v51)
+													var v54 any = tmp53
+													_ = v54
 													// let binding "first__464"
-													tmp57 := checkDerefVar(var_clojure_DOT_core_first)
-													tmp58 := lang.Apply1(tmp57, v56)
-													var v59 any = tmp58
-													_ = v59
+													tmp55 := checkDerefVar(var_clojure_DOT_core_first)
+													tmp56 := lang.Apply1(tmp55, v54)
+													var v57 any = tmp56
+													_ = v57
 													// let binding "seq__463"
-													tmp60 := checkDerefVar(var_clojure_DOT_core_next)
-													tmp61 := lang.Apply1(tmp60, v56)
-													var v62 any = tmp61
-													_ = v62
+													tmp58 := checkDerefVar(var_clojure_DOT_core_next)
+													tmp59 := lang.Apply1(tmp58, v54)
+													var v60 any = tmp59
+													_ = v60
 													// let binding "x"
-													var v63 any = v59
-													_ = v63
+													var v61 any = v57
+													_ = v61
 													// let binding "xs"
-													var v64 any = v62
-													_ = v64
+													var v62 any = v60
+													_ = v62
 													// let binding "s"
-													var v65 any = v53
-													_ = v65
-													var tmp66 any
-													if lang.IsTruthy(v65) {
-														var tmp67 any
-														var tmp68 any
-														tmp69 := lang.Identical(v63, nil)
-														if lang.IsTruthy(tmp69) {
-															tmp68 = v15
+													var v63 any = v51
+													_ = v63
+													var tmp64 any
+													if lang.IsTruthy(v63) {
+														var tmp65 any
+														var tmp66 any
+														tmp67 := lang.Identical(v61, nil)
+														if lang.IsTruthy(tmp67) {
+															tmp66 = v15
 														} else {
-															tmp68 = v63
+															tmp66 = v61
 														}
-														tmp70, _ := lang.FieldOrMethod(v10, "offer")
-														if reflect.TypeOf(tmp70).Kind() != reflect.Func {
+														tmp68, _ := lang.FieldOrMethod(v10, "offer")
+														if reflect.TypeOf(tmp68).Kind() != reflect.Func {
 															panic(lang.NewIllegalArgumentError(fmt.Sprintf("offer is not a function")))
 														}
-														tmp71 := lang.Apply1(tmp70, tmp68)
-														if lang.IsTruthy(tmp71) {
-															var tmp72 any = v64
-															v51 = tmp72
+														tmp69 := lang.Apply1(tmp68, tmp66)
+														if lang.IsTruthy(tmp69) {
+															var tmp70 any = v62
+															v49 = tmp70
 															continue
 														} else {
-															tmp67 = v65
+															tmp65 = v63
 														}
-														tmp66 = tmp67
+														tmp64 = tmp65
 													} else {
-														var tmp73 any
-														tmp74, _ := lang.FieldOrMethod(v10, "offer")
-														if reflect.TypeOf(tmp74).Kind() != reflect.Func {
+														var tmp71 any
+														tmp72, _ := lang.FieldOrMethod(v10, "offer")
+														if reflect.TypeOf(tmp72).Kind() != reflect.Func {
 															panic(lang.NewIllegalArgumentError(fmt.Sprintf("offer is not a function")))
 														}
-														tmp75 := lang.Apply1(tmp74, v10)
-														if lang.IsTruthy(tmp75) {
+														tmp73 := lang.Apply1(tmp72, v10)
+														if lang.IsTruthy(tmp73) {
 														} else {
-															tmp73 = lang.NewList()
+															tmp71 = lang.NewList()
 														}
-														tmp66 = tmp73
+														tmp64 = tmp71
 													}
-													tmp52 = tmp66
+													tmp50 = tmp64
 												} // end let
-												tmp50 = tmp52
+												tmp48 = tmp50
 												break
 											}
 										} // end let
-										tmp33 = tmp50
+										tmp31 = tmp48
 									} // end let
-									tmp32 = tmp33
+									tmp30 = tmp31
 								}()
-								tmp28 = tmp32
+								tmp26 = tmp30
 							}
-							tmp27 = tmp28
+							tmp25 = tmp26
 						} else {
 						}
-						return tmp27
+						return tmp25
 					})
-					tmp26 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5491), kw_column, int(15), kw_end_DASH_line, int(5504), kw_end_DASH_column, int(44))
-					tmp27, err := lang.WithMeta(tmp25, tmp26.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v28 any = tmp27
-					_ = v28
+					var v24 any = tmp23
+					_ = v24
 					// let binding "drain"
-					var tmp29 lang.FnFunc0
+					var tmp25 lang.FnFunc0
 					{ // function drain
-						var v30 lang.FnFunc0
-						tmp29 = lang.FnFunc0(func() any {
-							var tmp31 lang.FnFunc0
-							tmp31 = lang.FnFunc0(func() any {
-								var tmp32 any
+						var v26 lang.FnFunc0
+						tmp25 = lang.FnFunc0(func() any {
+							var tmp27 lang.FnFunc0
+							tmp27 = lang.FnFunc0(func() any {
+								var tmp28 any
 								{ // let
 									// let binding "x"
-									tmp33, ok := lang.FieldOrMethod(v10, "take")
+									tmp29, ok := lang.FieldOrMethod(v10, "take")
 									if !ok {
 										panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v10, "take")))
 									}
-									var tmp34 any
-									switch reflect.TypeOf(tmp33).Kind() {
+									var tmp30 any
+									switch reflect.TypeOf(tmp29).Kind() {
 									case reflect.Func:
-										tmp34 = lang.Apply(tmp33, nil)
+										tmp30 = lang.Apply(tmp29, nil)
 									default:
-										tmp34 = tmp33
+										tmp30 = tmp29
 									}
-									var v35 any = tmp34
-									_ = v35
-									var tmp36 any
-									tmp37 := checkDerefVar(var_clojure_DOT_core_identical_QMARK_)
-									tmp38 := lang.Apply2(tmp37, v35, v10)
-									if lang.IsTruthy(tmp38) {
-										tmp39 := checkDerefVar(var_clojure_DOT_core_deref)
-										tmp40 := lang.Apply1(tmp39, v20)
-										_ = tmp40
+									var v31 any = tmp30
+									_ = v31
+									var tmp32 any
+									tmp33 := checkDerefVar(var_clojure_DOT_core_identical_QMARK_)
+									tmp34 := lang.Apply2(tmp33, v31, v10)
+									if lang.IsTruthy(tmp34) {
+										tmp35 := checkDerefVar(var_clojure_DOT_core_deref)
+										tmp36 := lang.Apply1(tmp35, v20)
+										_ = tmp36
 									} else {
-										tmp41 := checkDerefVar(var_clojure_DOT_core_send_DASH_off)
-										tmp42 := lang.Apply2(tmp41, v20, v28)
-										_ = tmp42
-										tmp43 := checkDerefVar(var_clojure_DOT_core_release_DASH_pending_DASH_sends)
-										tmp44 := lang.Apply0(tmp43)
-										_ = tmp44
-										tmp45 := checkDerefVar(var_clojure_DOT_core_cons)
-										var tmp46 any
-										tmp47 := checkDerefVar(var_clojure_DOT_core_identical_QMARK_)
-										tmp48 := lang.Apply2(tmp47, v35, v15)
-										if lang.IsTruthy(tmp48) {
+										tmp37 := checkDerefVar(var_clojure_DOT_core_send_DASH_off)
+										tmp38 := lang.Apply2(tmp37, v20, v24)
+										_ = tmp38
+										tmp39 := checkDerefVar(var_clojure_DOT_core_release_DASH_pending_DASH_sends)
+										tmp40 := lang.Apply0(tmp39)
+										_ = tmp40
+										tmp41 := checkDerefVar(var_clojure_DOT_core_cons)
+										var tmp42 any
+										tmp43 := checkDerefVar(var_clojure_DOT_core_identical_QMARK_)
+										tmp44 := lang.Apply2(tmp43, v31, v15)
+										if lang.IsTruthy(tmp44) {
 										} else {
-											tmp46 = v35
+											tmp42 = v31
 										}
-										tmp49 := lang.Apply0(v30)
-										tmp50 := lang.Apply2(tmp45, tmp46, tmp49)
-										tmp36 = tmp50
+										tmp45 := lang.Apply0(v26)
+										tmp46 := lang.Apply2(tmp41, tmp42, tmp45)
+										tmp32 = tmp46
 									}
-									tmp32 = tmp36
+									tmp28 = tmp32
 								} // end let
-								return tmp32
+								return tmp28
 							})
-							tmp32 := lang.Apply1(lang.NewLazySeq, tmp31)
-							return tmp32
+							tmp28 := lang.Apply1(lang.NewLazySeq, tmp27)
+							return tmp28
 						})
-						v30 = tmp29
-						_ = v30
+						v26 = tmp25
+						_ = v26
 					}
-					tmp30 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5505), kw_column, int(16), kw_end_DASH_line, int(5513), kw_end_DASH_column, int(73))
-					tmp31, err := lang.WithMeta(tmp29, tmp30.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v32 any = tmp31
-					_ = v32
-					tmp33 := checkDerefVar(var_clojure_DOT_core_send_DASH_off)
-					tmp34 := lang.Apply2(tmp33, v20, v28)
-					_ = tmp34
-					tmp35 := lang.Apply0(v32)
-					tmp4 = tmp35
+					var v26 any = tmp25
+					_ = v26
+					tmp27 := checkDerefVar(var_clojure_DOT_core_send_DASH_off)
+					tmp28 := lang.Apply2(tmp27, v20, v24)
+					_ = tmp28
+					tmp29 := lang.Apply0(v26)
+					tmp4 = tmp29
 				} // end let
 				return tmp4
 			}),
@@ -45554,162 +44521,151 @@ func LoadNS() {
 					} // end let
 					return tmp8
 				})
-				tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(230), kw_column, int(10), kw_end_DASH_line, int(241), kw_end_DASH_column, int(25))
-				tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v9 any = tmp8
-				_ = v9
+				var v7 any = tmp6
+				_ = v7
 				// let binding "resolve-tag"
-				var tmp10 lang.FnFunc1
-				tmp10 = lang.FnFunc1(func(p0 any) any {
-					v11 := p0
-					_ = v11
-					var tmp12 any
+				var tmp8 lang.FnFunc1
+				tmp8 = lang.FnFunc1(func(p0 any) any {
+					v9 := p0
+					_ = v9
+					var tmp10 any
 					{ // let
 						// let binding "m"
-						tmp13 := checkDerefVar(var_clojure_DOT_core_meta)
-						tmp14 := lang.Apply1(tmp13, v11)
+						tmp11 := checkDerefVar(var_clojure_DOT_core_meta)
+						tmp12 := lang.Apply1(tmp11, v9)
+						var v13 any = tmp12
+						_ = v13
+						// let binding "tag"
+						tmp14 := lang.Apply1(kw_tag, v13)
 						var v15 any = tmp14
 						_ = v15
-						// let binding "tag"
-						tmp16 := lang.Apply1(kw_tag, v15)
-						var v17 any = tmp16
-						_ = v17
-						var tmp18 any
-						tmp19 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-						tmp20 := reflect.TypeOf((*lang.Symbol)(nil))
-						tmp21 := lang.Apply2(tmp19, tmp20, v17)
-						if lang.IsTruthy(tmp21) {
-							var tmp22 any
-							tmp23, ok := lang.FieldOrMethod(v17, "Name")
+						var tmp16 any
+						tmp17 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+						tmp18 := reflect.TypeOf((*lang.Symbol)(nil))
+						tmp19 := lang.Apply2(tmp17, tmp18, v15)
+						if lang.IsTruthy(tmp19) {
+							var tmp20 any
+							tmp21, ok := lang.FieldOrMethod(v15, "Name")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v17, "Name")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v15, "Name")))
 							}
-							var tmp24 any
-							switch reflect.TypeOf(tmp23).Kind() {
+							var tmp22 any
+							switch reflect.TypeOf(tmp21).Kind() {
 							case reflect.Func:
-								tmp24 = lang.Apply(tmp23, nil)
+								tmp22 = lang.Apply(tmp21, nil)
 							default:
-								tmp24 = tmp23
+								tmp22 = tmp21
 							}
-							tmp25 := lang.Apply2(strings8.Index, tmp24, ".")
-							tmp26 := lang.Equiv(tmp25, int64(-1))
-							if lang.IsTruthy(tmp26) {
-								var tmp27 any
-								tmp28 := lang.Equals(nil, nil)
-								if lang.IsTruthy(tmp28) {
-									var tmp29 any
+							tmp23 := lang.Apply2(strings8.Index, tmp22, ".")
+							tmp24 := lang.Equiv(tmp23, int64(-1))
+							if lang.IsTruthy(tmp24) {
+								var tmp25 any
+								tmp26 := lang.Equals(nil, nil)
+								if lang.IsTruthy(tmp26) {
+									var tmp27 any
 									{ // let
 										// let binding "c"
-										var v30 any = nil
-										_ = v30
-										var tmp31 any
-										if lang.IsTruthy(v30) {
-											tmp32 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
-											tmp33 := checkDerefVar(var_clojure_DOT_core_assoc)
-											tmp34, ok := lang.FieldOrMethod(v30, "Name")
+										var v28 any = nil
+										_ = v28
+										var tmp29 any
+										if lang.IsTruthy(v28) {
+											tmp30 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
+											tmp31 := checkDerefVar(var_clojure_DOT_core_assoc)
+											tmp32, ok := lang.FieldOrMethod(v28, "Name")
 											if !ok {
-												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v30, "Name")))
+												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v28, "Name")))
 											}
-											var tmp35 any
-											switch reflect.TypeOf(tmp34).Kind() {
+											var tmp33 any
+											switch reflect.TypeOf(tmp32).Kind() {
 											case reflect.Func:
-												tmp35 = lang.Apply(tmp34, nil)
+												tmp33 = lang.Apply(tmp32, nil)
 											default:
-												tmp35 = tmp34
+												tmp33 = tmp32
 											}
-											tmp36 := lang.Apply1(lang.NewSymbol, tmp35)
-											tmp37 := lang.Apply3(tmp33, v15, kw_tag, tmp36)
-											tmp38 := lang.Apply2(tmp32, v11, tmp37)
-											tmp31 = tmp38
+											tmp34 := lang.Apply1(lang.NewSymbol, tmp33)
+											tmp35 := lang.Apply3(tmp31, v13, kw_tag, tmp34)
+											tmp36 := lang.Apply2(tmp30, v9, tmp35)
+											tmp29 = tmp36
 										} else {
-											tmp31 = v11
+											tmp29 = v9
 										}
-										tmp29 = tmp31
+										tmp27 = tmp29
 									} // end let
-									tmp27 = tmp29
+									tmp25 = tmp27
 								} else {
-									tmp27 = v11
+									tmp25 = v9
 								}
-								tmp22 = tmp27
+								tmp20 = tmp25
 							} else {
-								tmp22 = v11
+								tmp20 = v9
 							}
-							tmp18 = tmp22
+							tmp16 = tmp20
 						} else {
-							tmp18 = v11
+							tmp16 = v9
 						}
-						tmp12 = tmp18
+						tmp10 = tmp16
 					} // end let
-					return tmp12
+					return tmp10
 				})
-				tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(242), kw_column, int(22), kw_end_DASH_line, int(254), kw_end_DASH_column, int(37))
-				tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v13 any = tmp12
-				_ = v13
-				var tmp14 any
-				tmp15 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-				tmp16 := checkDerefVar(var_clojure_DOT_core_first)
-				tmp17 := lang.Apply1(tmp16, v2)
-				tmp18 := lang.Apply1(tmp15, tmp17)
-				if lang.IsTruthy(tmp18) {
-					var tmp19 any
+				var v9 any = tmp8
+				_ = v9
+				var tmp10 any
+				tmp11 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
+				tmp12 := checkDerefVar(var_clojure_DOT_core_first)
+				tmp13 := lang.Apply1(tmp12, v2)
+				tmp14 := lang.Apply1(tmp11, tmp13)
+				if lang.IsTruthy(tmp14) {
+					var tmp15 any
 					{ // let
 						// let binding "ret"
-						tmp20 := lang.NewVector()
-						tmp21 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(256), kw_column, int(19), kw_end_DASH_line, int(256), kw_end_DASH_column, int(20))
-						tmp22, err := lang.WithMeta(tmp20, tmp21.(lang.IPersistentMap))
+						tmp16 := lang.NewVector()
+						tmp17 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(256), kw_column, int(19), kw_end_DASH_line, int(256), kw_end_DASH_column, int(20))
+						tmp18, err := lang.WithMeta(tmp16, tmp17.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
 						}
-						var v23 any = tmp22
-						_ = v23
+						var v19 any = tmp18
+						_ = v19
 						// let binding "fdecls"
-						var v24 any = v2
-						_ = v24
+						var v20 any = v2
+						_ = v20
 						for {
-							var tmp25 any
-							if lang.IsTruthy(v24) {
-								tmp27 := checkDerefVar(var_clojure_DOT_core_conj)
-								tmp28 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp29 := lang.Apply1(tmp28, v24)
-								tmp30 := lang.Apply1(v9, tmp29)
-								tmp31 := lang.Apply1(v13, tmp30)
-								tmp32 := lang.Apply2(tmp27, v23, tmp31)
-								var tmp26 any = tmp32
-								tmp34 := checkDerefVar(var_clojure_DOT_core_next)
-								tmp35 := lang.Apply1(tmp34, v24)
-								var tmp33 any = tmp35
-								v23 = tmp26
-								v24 = tmp33
+							var tmp21 any
+							if lang.IsTruthy(v20) {
+								tmp23 := checkDerefVar(var_clojure_DOT_core_conj)
+								tmp24 := checkDerefVar(var_clojure_DOT_core_first)
+								tmp25 := lang.Apply1(tmp24, v20)
+								tmp26 := lang.Apply1(v7, tmp25)
+								tmp27 := lang.Apply1(v9, tmp26)
+								tmp28 := lang.Apply2(tmp23, v19, tmp27)
+								var tmp22 any = tmp28
+								tmp30 := checkDerefVar(var_clojure_DOT_core_next)
+								tmp31 := lang.Apply1(tmp30, v20)
+								var tmp29 any = tmp31
+								v19 = tmp22
+								v20 = tmp29
 								continue
 							} else {
-								tmp36 := checkDerefVar(var_clojure_DOT_core_seq)
-								tmp37 := lang.Apply1(tmp36, v23)
-								tmp25 = tmp37
+								tmp32 := checkDerefVar(var_clojure_DOT_core_seq)
+								tmp33 := lang.Apply1(tmp32, v19)
+								tmp21 = tmp33
 							}
-							tmp19 = tmp25
+							tmp15 = tmp21
 							break
 						}
 					} // end let
-					tmp14 = tmp19
+					tmp10 = tmp15
 				} else {
-					tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp21 := lang.Apply1(v9, v2)
-					tmp22 := lang.Apply1(v13, tmp21)
-					tmp23 := lang.Apply1(tmp20, tmp22)
-					tmp14 = tmp23
+					tmp16 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp17 := lang.Apply1(v7, v2)
+					tmp18 := lang.Apply1(v9, tmp17)
+					tmp19 := lang.Apply1(tmp16, tmp18)
+					tmp10 = tmp19
 				}
-				tmp5 = tmp14
+				tmp5 = tmp10
 			} // end let
 			return tmp5
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(227), kw_column, int(2), kw_end_DASH_line, int(260), kw_end_DASH_column, int(43))).(lang.FnFunc1)
 		var_clojure_DOT_core_sigs = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_sigs.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_private, true, kw_file, "clojure/core.glj", kw_line, int(225), kw_column, int(2), kw_end_DASH_line, int(226), kw_end_DASH_column, int(5), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
@@ -45779,52 +44735,47 @@ func LoadNS() {
 						tmp42 := lang.Apply1(tmp13, tmp41)
 						return tmp42
 					})
-					tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7686), kw_column, int(20), kw_end_DASH_line, int(7686), kw_end_DASH_column, int(64))
-					tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp14 := lang.Apply2(tmp10, tmp13, v5)
-					var v15 any = tmp14
-					_ = v15
-					tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp17 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp12 := lang.Apply2(tmp10, tmp11, v5)
+					var v13 any = tmp12
+					_ = v13
+					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp16 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp17 := lang.Apply1(tmp16, sym_clojure_DOT_core_SLASH_let)
 					tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp19 := lang.Apply1(tmp18, sym_clojure_DOT_core_SLASH_let)
-					tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp21 := checkDerefVar(var_clojure_DOT_core_apply)
-					tmp22 := checkDerefVar(var_clojure_DOT_core_vector)
-					tmp23 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp24 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp19 := checkDerefVar(var_clojure_DOT_core_apply)
+					tmp20 := checkDerefVar(var_clojure_DOT_core_vector)
+					tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp23 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp24 := lang.Apply1(tmp23, v9)
 					tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp26 := lang.Apply1(tmp25, v9)
-					tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp28 := lang.Apply1(tmp27, v4)
-					tmp29 := checkDerefVar(var_clojure_DOT_core_interleave)
-					tmp30 := checkDerefVar(var_clojure_DOT_core_repeat)
-					tmp31 := lang.Apply1(tmp30, v9)
-					tmp32 := checkDerefVar(var_clojure_DOT_core_butlast)
-					tmp33 := lang.Apply1(tmp32, v15)
-					tmp34 := lang.Apply2(tmp29, tmp31, tmp33)
-					tmp35 := lang.Apply3(tmp24, tmp26, tmp28, tmp34)
-					tmp36 := lang.Apply1(tmp23, tmp35)
-					tmp37 := lang.Apply2(tmp21, tmp22, tmp36)
-					tmp38 := lang.Apply1(tmp20, tmp37)
-					tmp39 := checkDerefVar(var_clojure_DOT_core_list)
-					var tmp40 any
-					tmp41 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
-					tmp42 := lang.Apply1(tmp41, v15)
-					if lang.IsTruthy(tmp42) {
-						tmp40 = v9
+					tmp26 := lang.Apply1(tmp25, v4)
+					tmp27 := checkDerefVar(var_clojure_DOT_core_interleave)
+					tmp28 := checkDerefVar(var_clojure_DOT_core_repeat)
+					tmp29 := lang.Apply1(tmp28, v9)
+					tmp30 := checkDerefVar(var_clojure_DOT_core_butlast)
+					tmp31 := lang.Apply1(tmp30, v13)
+					tmp32 := lang.Apply2(tmp27, tmp29, tmp31)
+					tmp33 := lang.Apply3(tmp22, tmp24, tmp26, tmp32)
+					tmp34 := lang.Apply1(tmp21, tmp33)
+					tmp35 := lang.Apply2(tmp19, tmp20, tmp34)
+					tmp36 := lang.Apply1(tmp18, tmp35)
+					tmp37 := checkDerefVar(var_clojure_DOT_core_list)
+					var tmp38 any
+					tmp39 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
+					tmp40 := lang.Apply1(tmp39, v13)
+					if lang.IsTruthy(tmp40) {
+						tmp38 = v9
 					} else {
-						tmp43 := checkDerefVar(var_clojure_DOT_core_last)
-						tmp44 := lang.Apply1(tmp43, v15)
-						tmp40 = tmp44
+						tmp41 := checkDerefVar(var_clojure_DOT_core_last)
+						tmp42 := lang.Apply1(tmp41, v13)
+						tmp38 = tmp42
 					}
-					tmp45 := lang.Apply1(tmp39, tmp40)
-					tmp46 := lang.Apply3(tmp17, tmp19, tmp38, tmp45)
-					tmp47 := lang.Apply1(tmp16, tmp46)
-					tmp6 = tmp47
+					tmp43 := lang.Apply1(tmp37, tmp38)
+					tmp44 := lang.Apply3(tmp15, tmp17, tmp36, tmp43)
+					tmp45 := lang.Apply1(tmp14, tmp44)
+					tmp6 = tmp45
 				} // end let
 				return tmp6
 			}),
@@ -45899,52 +44850,47 @@ func LoadNS() {
 						tmp42 := lang.Apply1(tmp13, tmp41)
 						return tmp42
 					})
-					tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7700), kw_column, int(20), kw_end_DASH_line, int(7700), kw_end_DASH_column, int(65))
-					tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp14 := lang.Apply2(tmp10, tmp13, v5)
-					var v15 any = tmp14
-					_ = v15
-					tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp17 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp12 := lang.Apply2(tmp10, tmp11, v5)
+					var v13 any = tmp12
+					_ = v13
+					tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp15 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp16 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp17 := lang.Apply1(tmp16, sym_clojure_DOT_core_SLASH_let)
 					tmp18 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp19 := lang.Apply1(tmp18, sym_clojure_DOT_core_SLASH_let)
-					tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp21 := checkDerefVar(var_clojure_DOT_core_apply)
-					tmp22 := checkDerefVar(var_clojure_DOT_core_vector)
-					tmp23 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp24 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp19 := checkDerefVar(var_clojure_DOT_core_apply)
+					tmp20 := checkDerefVar(var_clojure_DOT_core_vector)
+					tmp21 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp22 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp23 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp24 := lang.Apply1(tmp23, v9)
 					tmp25 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp26 := lang.Apply1(tmp25, v9)
-					tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp28 := lang.Apply1(tmp27, v4)
-					tmp29 := checkDerefVar(var_clojure_DOT_core_interleave)
-					tmp30 := checkDerefVar(var_clojure_DOT_core_repeat)
-					tmp31 := lang.Apply1(tmp30, v9)
-					tmp32 := checkDerefVar(var_clojure_DOT_core_butlast)
-					tmp33 := lang.Apply1(tmp32, v15)
-					tmp34 := lang.Apply2(tmp29, tmp31, tmp33)
-					tmp35 := lang.Apply3(tmp24, tmp26, tmp28, tmp34)
-					tmp36 := lang.Apply1(tmp23, tmp35)
-					tmp37 := lang.Apply2(tmp21, tmp22, tmp36)
-					tmp38 := lang.Apply1(tmp20, tmp37)
-					tmp39 := checkDerefVar(var_clojure_DOT_core_list)
-					var tmp40 any
-					tmp41 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
-					tmp42 := lang.Apply1(tmp41, v15)
-					if lang.IsTruthy(tmp42) {
-						tmp40 = v9
+					tmp26 := lang.Apply1(tmp25, v4)
+					tmp27 := checkDerefVar(var_clojure_DOT_core_interleave)
+					tmp28 := checkDerefVar(var_clojure_DOT_core_repeat)
+					tmp29 := lang.Apply1(tmp28, v9)
+					tmp30 := checkDerefVar(var_clojure_DOT_core_butlast)
+					tmp31 := lang.Apply1(tmp30, v13)
+					tmp32 := lang.Apply2(tmp27, tmp29, tmp31)
+					tmp33 := lang.Apply3(tmp22, tmp24, tmp26, tmp32)
+					tmp34 := lang.Apply1(tmp21, tmp33)
+					tmp35 := lang.Apply2(tmp19, tmp20, tmp34)
+					tmp36 := lang.Apply1(tmp18, tmp35)
+					tmp37 := checkDerefVar(var_clojure_DOT_core_list)
+					var tmp38 any
+					tmp39 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
+					tmp40 := lang.Apply1(tmp39, v13)
+					if lang.IsTruthy(tmp40) {
+						tmp38 = v9
 					} else {
-						tmp43 := checkDerefVar(var_clojure_DOT_core_last)
-						tmp44 := lang.Apply1(tmp43, v15)
-						tmp40 = tmp44
+						tmp41 := checkDerefVar(var_clojure_DOT_core_last)
+						tmp42 := lang.Apply1(tmp41, v13)
+						tmp38 = tmp42
 					}
-					tmp45 := lang.Apply1(tmp39, tmp40)
-					tmp46 := lang.Apply3(tmp17, tmp19, tmp38, tmp45)
-					tmp47 := lang.Apply1(tmp16, tmp46)
-					tmp6 = tmp47
+					tmp43 := lang.Apply1(tmp37, tmp38)
+					tmp44 := lang.Apply3(tmp15, tmp17, tmp36, tmp43)
+					tmp45 := lang.Apply1(tmp14, tmp44)
+					tmp6 = tmp45
 				} // end let
 				return tmp6
 			}),
@@ -46287,155 +45233,178 @@ func LoadNS() {
 					tmp19 := lang.Apply4(tmp6, tmp15, tmp16, tmp17, tmp18)
 					return tmp19
 				})
-				tmp5 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(456), kw_column, int(14), kw_end_DASH_line, int(464), kw_end_DASH_column, int(67))
-				tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v7 any = tmp6
-				_ = v7
+				var v5 any = tmp4
+				_ = v5
 				// let binding "via"
-				var tmp8 any
+				var tmp6 any
 				{ // let
 					// let binding "via"
-					tmp9 := lang.NewVector()
-					tmp10 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(465), kw_column, int(24), kw_end_DASH_line, int(465), kw_end_DASH_column, int(25))
-					tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
+					tmp7 := lang.NewVector()
+					tmp8 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(465), kw_column, int(24), kw_end_DASH_line, int(465), kw_end_DASH_column, int(25))
+					tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
 					}
-					var v12 any = tmp11
-					_ = v12
+					var v10 any = tmp9
+					_ = v10
 					// let binding "t"
-					var v13 any = v2
-					_ = v13
+					var v11 any = v2
+					_ = v11
 					for {
-						var tmp14 any
-						if lang.IsTruthy(v13) {
-							tmp16 := checkDerefVar(var_clojure_DOT_core_conj)
-							tmp17 := lang.Apply2(tmp16, v12, v13)
-							var tmp15 any = tmp17
-							tmp19, ok := lang.FieldOrMethod(v13, "getCause")
+						var tmp12 any
+						if lang.IsTruthy(v11) {
+							tmp14 := checkDerefVar(var_clojure_DOT_core_conj)
+							tmp15 := lang.Apply2(tmp14, v10, v11)
+							var tmp13 any = tmp15
+							tmp17, ok := lang.FieldOrMethod(v11, "getCause")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v13, "getCause")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v11, "getCause")))
 							}
-							var tmp20 any
-							switch reflect.TypeOf(tmp19).Kind() {
+							var tmp18 any
+							switch reflect.TypeOf(tmp17).Kind() {
 							case reflect.Func:
-								tmp20 = lang.Apply(tmp19, nil)
+								tmp18 = lang.Apply(tmp17, nil)
 							default:
-								tmp20 = tmp19
+								tmp18 = tmp17
 							}
-							var tmp18 any = tmp20
-							v12 = tmp15
-							v13 = tmp18
+							var tmp16 any = tmp18
+							v10 = tmp13
+							v11 = tmp16
 							continue
 						} else {
-							tmp14 = v12
+							tmp12 = v10
 						}
-						tmp8 = tmp14
+						tmp6 = tmp12
 						break
 					}
 				} // end let
-				var v9 any = tmp8
-				_ = v9
+				var v7 any = tmp6
+				_ = v7
 				// let binding "root"
-				tmp10 := checkDerefVar(var_clojure_DOT_core_peek)
-				tmp11 := lang.Apply1(tmp10, v9)
-				var v12 any = tmp11
-				_ = v12
-				tmp13 := checkDerefVar(var_clojure_DOT_core_merge)
-				tmp14 := checkDerefVar(var_clojure_DOT_core_vec)
-				tmp15 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp16 := lang.Apply2(tmp15, v7, v9)
-				tmp17 := lang.Apply1(tmp14, tmp16)
-				tmp18 := checkDerefVar(var_clojure_DOT_core_vec)
-				tmp19 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp20 := checkDerefVar(var_clojure_DOT_core_StackTraceElement_DASH__GT_vec)
-				var tmp21 any
+				tmp8 := checkDerefVar(var_clojure_DOT_core_peek)
+				tmp9 := lang.Apply1(tmp8, v7)
+				var v10 any = tmp9
+				_ = v10
+				tmp11 := checkDerefVar(var_clojure_DOT_core_merge)
+				tmp12 := checkDerefVar(var_clojure_DOT_core_vec)
+				tmp13 := checkDerefVar(var_clojure_DOT_core_map)
+				tmp14 := lang.Apply2(tmp13, v5, v7)
+				tmp15 := lang.Apply1(tmp12, tmp14)
+				tmp16 := checkDerefVar(var_clojure_DOT_core_vec)
+				tmp17 := checkDerefVar(var_clojure_DOT_core_map)
+				tmp18 := checkDerefVar(var_clojure_DOT_core_StackTraceElement_DASH__GT_vec)
+				var tmp19 any
 				{ // let
 					// let binding "or__0__auto__"
-					var v22 any = v12
-					_ = v22
-					var tmp23 any
-					if lang.IsTruthy(v22) {
-						tmp23 = v22
+					var v20 any = v10
+					_ = v20
+					var tmp21 any
+					if lang.IsTruthy(v20) {
+						tmp21 = v20
 					} else {
-						tmp23 = v2
+						tmp21 = v2
 					}
-					tmp21 = tmp23
+					tmp19 = tmp21
 				} // end let
-				tmp22, ok := lang.FieldOrMethod(tmp21, "getStackTrace")
+				tmp20, ok := lang.FieldOrMethod(tmp19, "getStackTrace")
 				if !ok {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp21, "getStackTrace")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp19, "getStackTrace")))
 				}
-				var tmp23 any
-				switch reflect.TypeOf(tmp22).Kind() {
+				var tmp21 any
+				switch reflect.TypeOf(tmp20).Kind() {
 				case reflect.Func:
-					tmp23 = lang.Apply(tmp22, nil)
+					tmp21 = lang.Apply(tmp20, nil)
 				default:
-					tmp23 = tmp22
+					tmp21 = tmp20
 				}
-				tmp24 := lang.Apply2(tmp19, tmp20, tmp23)
-				tmp25 := lang.Apply1(tmp18, tmp24)
-				tmp26 := lang.NewMap(kw_via, tmp17, kw_trace, tmp25)
-				tmp27 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(470), kw_column, int(12), kw_end_DASH_line, int(472), kw_end_DASH_column, int(68))
-				tmp28, err := lang.WithMeta(tmp26, tmp27.(lang.IPersistentMap))
+				tmp22 := lang.Apply2(tmp17, tmp18, tmp21)
+				tmp23 := lang.Apply1(tmp16, tmp22)
+				tmp24 := lang.NewMap(kw_via, tmp15, kw_trace, tmp23)
+				tmp25 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(470), kw_column, int(12), kw_end_DASH_line, int(472), kw_end_DASH_column, int(68))
+				tmp26, err := lang.WithMeta(tmp24, tmp25.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				var tmp29 any
+				var tmp27 any
 				{ // let
 					// let binding "temp__0__auto__"
-					tmp30, ok := lang.FieldOrMethod(v12, "getLocalizedMessage")
+					tmp28, ok := lang.FieldOrMethod(v10, "getLocalizedMessage")
 					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v12, "getLocalizedMessage")))
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v10, "getLocalizedMessage")))
 					}
-					var tmp31 any
-					switch reflect.TypeOf(tmp30).Kind() {
+					var tmp29 any
+					switch reflect.TypeOf(tmp28).Kind() {
 					case reflect.Func:
-						tmp31 = lang.Apply(tmp30, nil)
+						tmp29 = lang.Apply(tmp28, nil)
 					default:
-						tmp31 = tmp30
+						tmp29 = tmp28
 					}
-					var v32 any = tmp31
-					_ = v32
-					var tmp33 any
-					if lang.IsTruthy(v32) {
-						var tmp34 any
+					var v30 any = tmp29
+					_ = v30
+					var tmp31 any
+					if lang.IsTruthy(v30) {
+						var tmp32 any
 						{ // let
 							// let binding "root-msg"
-							var v35 any = v32
-							_ = v35
-							tmp36 := lang.NewMap(kw_cause, v35)
-							tmp37 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(474), kw_column, int(9), kw_end_DASH_line, int(474), kw_end_DASH_column, int(25))
-							tmp38, err := lang.WithMeta(tmp36, tmp37.(lang.IPersistentMap))
+							var v33 any = v30
+							_ = v33
+							tmp34 := lang.NewMap(kw_cause, v33)
+							tmp35 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(474), kw_column, int(9), kw_end_DASH_line, int(474), kw_end_DASH_column, int(25))
+							tmp36, err := lang.WithMeta(tmp34, tmp35.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp34 = tmp38
+							tmp32 = tmp36
 						} // end let
-						tmp33 = tmp34
+						tmp31 = tmp32
 					} else {
 					}
-					tmp29 = tmp33
+					tmp27 = tmp31
 				} // end let
-				var tmp30 any
+				var tmp28 any
 				{ // let
 					// let binding "temp__0__auto__"
-					tmp31 := checkDerefVar(var_clojure_DOT_core_ex_DASH_data)
-					tmp32 := lang.Apply1(tmp31, v12)
+					tmp29 := checkDerefVar(var_clojure_DOT_core_ex_DASH_data)
+					tmp30 := lang.Apply1(tmp29, v10)
+					var v31 any = tmp30
+					_ = v31
+					var tmp32 any
+					if lang.IsTruthy(v31) {
+						var tmp33 any
+						{ // let
+							// let binding "data"
+							var v34 any = v31
+							_ = v34
+							tmp35 := lang.NewMap(kw_data, v34)
+							tmp36 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(476), kw_column, int(9), kw_end_DASH_line, int(476), kw_end_DASH_column, int(20))
+							tmp37, err := lang.WithMeta(tmp35, tmp36.(lang.IPersistentMap))
+							if err != nil {
+								panic(err)
+							}
+							tmp33 = tmp37
+						} // end let
+						tmp32 = tmp33
+					} else {
+					}
+					tmp28 = tmp32
+				} // end let
+				var tmp29 any
+				{ // let
+					// let binding "temp__0__auto__"
+					tmp30 := checkDerefVar(var_clojure_DOT_core_ex_DASH_data)
+					tmp31 := lang.Apply1(tmp30, v2)
+					tmp32 := lang.Apply1(kw_clojure_DOT_error_SLASH_phase, tmp31)
 					var v33 any = tmp32
 					_ = v33
 					var tmp34 any
 					if lang.IsTruthy(v33) {
 						var tmp35 any
 						{ // let
-							// let binding "data"
+							// let binding "phase"
 							var v36 any = v33
 							_ = v36
-							tmp37 := lang.NewMap(kw_data, v36)
-							tmp38 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(476), kw_column, int(9), kw_end_DASH_line, int(476), kw_end_DASH_column, int(20))
+							tmp37 := lang.NewMap(kw_phase, v36)
+							tmp38 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(478), kw_column, int(9), kw_end_DASH_line, int(478), kw_end_DASH_column, int(22))
 							tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
@@ -46445,38 +45414,10 @@ func LoadNS() {
 						tmp34 = tmp35
 					} else {
 					}
-					tmp30 = tmp34
+					tmp29 = tmp34
 				} // end let
-				var tmp31 any
-				{ // let
-					// let binding "temp__0__auto__"
-					tmp32 := checkDerefVar(var_clojure_DOT_core_ex_DASH_data)
-					tmp33 := lang.Apply1(tmp32, v2)
-					tmp34 := lang.Apply1(kw_clojure_DOT_error_SLASH_phase, tmp33)
-					var v35 any = tmp34
-					_ = v35
-					var tmp36 any
-					if lang.IsTruthy(v35) {
-						var tmp37 any
-						{ // let
-							// let binding "phase"
-							var v38 any = v35
-							_ = v38
-							tmp39 := lang.NewMap(kw_phase, v38)
-							tmp40 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(478), kw_column, int(9), kw_end_DASH_line, int(478), kw_end_DASH_column, int(22))
-							tmp41, err := lang.WithMeta(tmp39, tmp40.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp37 = tmp41
-						} // end let
-						tmp36 = tmp37
-					} else {
-					}
-					tmp31 = tmp36
-				} // end let
-				tmp32 := lang.Apply4(tmp13, tmp28, tmp29, tmp30, tmp31)
-				tmp3 = tmp32
+				tmp30 := lang.Apply4(tmp11, tmp26, tmp27, tmp28, tmp29)
+				tmp3 = tmp30
 			} // end let
 			return tmp3
 		})
@@ -46596,146 +45537,141 @@ func LoadNS() {
 							_ = tmp14
 							return v12
 						})
-						tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3301), kw_column, int(22), kw_end_DASH_line, int(3301), kw_end_DASH_column, int(61))
-						tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						var v14 any = tmp13
-						_ = v14
-						var tmp15 any
+						var v12 any = tmp11
+						_ = v12
+						var tmp13 any
 						{ // let
 							// let binding "seq_370"
-							tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp17 := lang.Apply1(tmp16, v2)
-							var v18 any = tmp17
-							_ = v18
+							tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp15 := lang.Apply1(tmp14, v2)
+							var v16 any = tmp15
+							_ = v16
 							// let binding "chunk_371"
-							var v19 any = nil
-							_ = v19
+							var v17 any = nil
+							_ = v17
 							// let binding "count_372"
-							var v20 any = int64(0)
-							_ = v20
+							var v18 any = int64(0)
+							_ = v18
 							// let binding "i_373"
-							var v21 any = int64(0)
-							_ = v21
+							var v19 any = int64(0)
+							_ = v19
 							for {
-								var tmp22 any
-								tmp23 := lang.Numbers.Lt(v21, v20)
-								if lang.IsTruthy(tmp23) {
-									var tmp24 any
+								var tmp20 any
+								tmp21 := lang.Numbers.Lt(v19, v18)
+								if lang.IsTruthy(tmp21) {
+									var tmp22 any
 									{ // let
 										// let binding "agent"
-										tmp25, _ := lang.FieldOrMethod(v19, "nth")
-										if reflect.TypeOf(tmp25).Kind() != reflect.Func {
+										tmp23, _ := lang.FieldOrMethod(v17, "nth")
+										if reflect.TypeOf(tmp23).Kind() != reflect.Func {
 											panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
 										}
-										tmp26 := lang.Apply1(tmp25, v21)
-										var v27 any = tmp26
-										_ = v27
-										tmp28 := checkDerefVar(var_clojure_DOT_core_send)
-										tmp29 := lang.Apply2(tmp28, v27, v14)
-										_ = tmp29
+										tmp24 := lang.Apply1(tmp23, v19)
+										var v25 any = tmp24
+										_ = v25
+										tmp26 := checkDerefVar(var_clojure_DOT_core_send)
+										tmp27 := lang.Apply2(tmp26, v25, v12)
+										_ = tmp27
+										var tmp28 any = v16
+										var tmp29 any = v17
 										var tmp30 any = v18
-										var tmp31 any = v19
-										var tmp32 any = v20
-										tmp34 := lang.Numbers.Unchecked_inc(v21)
-										var tmp33 any = tmp34
+										tmp32 := lang.Numbers.Unchecked_inc(v19)
+										var tmp31 any = tmp32
+										v16 = tmp28
+										v17 = tmp29
 										v18 = tmp30
 										v19 = tmp31
-										v20 = tmp32
-										v21 = tmp33
 										continue
 									} // end let
-									tmp22 = tmp24
+									tmp20 = tmp22
 								} else {
-									var tmp25 any
+									var tmp23 any
 									{ // let
 										// let binding "temp__0__auto__"
-										tmp26 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp27 := lang.Apply1(tmp26, v18)
-										var v28 any = tmp27
-										_ = v28
-										var tmp29 any
-										if lang.IsTruthy(v28) {
-											var tmp30 any
+										tmp24 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp25 := lang.Apply1(tmp24, v16)
+										var v26 any = tmp25
+										_ = v26
+										var tmp27 any
+										if lang.IsTruthy(v26) {
+											var tmp28 any
 											{ // let
 												// let binding "seq_370"
-												var v31 any = v28
-												_ = v31
-												var tmp32 any
-												tmp33 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
-												tmp34 := lang.Apply1(tmp33, v31)
-												if lang.IsTruthy(tmp34) {
-													var tmp35 any
+												var v29 any = v26
+												_ = v29
+												var tmp30 any
+												tmp31 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
+												tmp32 := lang.Apply1(tmp31, v29)
+												if lang.IsTruthy(tmp32) {
+													var tmp33 any
 													{ // let
 														// let binding "c__0__auto__"
-														tmp36 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
-														tmp37 := lang.Apply1(tmp36, v31)
-														var v38 any = tmp37
-														_ = v38
-														tmp40 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
-														tmp41 := lang.Apply1(tmp40, v31)
-														var tmp39 any = tmp41
-														var tmp42 any = v38
-														tmp44 := checkDerefVar(var_clojure_DOT_core_count)
-														tmp45 := lang.Apply1(tmp44, v38)
-														tmp46 := runtime.RT.IntCast(tmp45)
-														var tmp43 any = tmp46
-														tmp48 := runtime.RT.IntCast(int64(0))
-														var tmp47 any = tmp48
-														v18 = tmp39
-														v19 = tmp42
-														v20 = tmp43
-														v21 = tmp47
+														tmp34 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
+														tmp35 := lang.Apply1(tmp34, v29)
+														var v36 any = tmp35
+														_ = v36
+														tmp38 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
+														tmp39 := lang.Apply1(tmp38, v29)
+														var tmp37 any = tmp39
+														var tmp40 any = v36
+														tmp42 := checkDerefVar(var_clojure_DOT_core_count)
+														tmp43 := lang.Apply1(tmp42, v36)
+														tmp44 := runtime.RT.IntCast(tmp43)
+														var tmp41 any = tmp44
+														tmp46 := runtime.RT.IntCast(int64(0))
+														var tmp45 any = tmp46
+														v16 = tmp37
+														v17 = tmp40
+														v18 = tmp41
+														v19 = tmp45
 														continue
 													} // end let
-													tmp32 = tmp35
+													tmp30 = tmp33
 												} else {
-													var tmp36 any
+													var tmp34 any
 													{ // let
 														// let binding "agent"
-														tmp37 := checkDerefVar(var_clojure_DOT_core_first)
-														tmp38 := lang.Apply1(tmp37, v31)
-														var v39 any = tmp38
-														_ = v39
-														tmp40 := checkDerefVar(var_clojure_DOT_core_send)
-														tmp41 := lang.Apply2(tmp40, v39, v14)
-														_ = tmp41
-														tmp43 := checkDerefVar(var_clojure_DOT_core_next)
-														tmp44 := lang.Apply1(tmp43, v31)
-														var tmp42 any = tmp44
-														var tmp45 any = nil
-														var tmp46 any = int64(0)
-														var tmp47 any = int64(0)
-														v18 = tmp42
+														tmp35 := checkDerefVar(var_clojure_DOT_core_first)
+														tmp36 := lang.Apply1(tmp35, v29)
+														var v37 any = tmp36
+														_ = v37
+														tmp38 := checkDerefVar(var_clojure_DOT_core_send)
+														tmp39 := lang.Apply2(tmp38, v37, v12)
+														_ = tmp39
+														tmp41 := checkDerefVar(var_clojure_DOT_core_next)
+														tmp42 := lang.Apply1(tmp41, v29)
+														var tmp40 any = tmp42
+														var tmp43 any = nil
+														var tmp44 any = int64(0)
+														var tmp45 any = int64(0)
+														v16 = tmp40
+														v17 = tmp43
+														v18 = tmp44
 														v19 = tmp45
-														v20 = tmp46
-														v21 = tmp47
 														continue
 													} // end let
-													tmp32 = tmp36
+													tmp30 = tmp34
 												}
-												tmp30 = tmp32
+												tmp28 = tmp30
 											} // end let
-											tmp29 = tmp30
+											tmp27 = tmp28
 										} else {
 										}
-										tmp25 = tmp29
+										tmp23 = tmp27
 									} // end let
-									tmp22 = tmp25
+									tmp20 = tmp23
 								}
-								tmp15 = tmp22
+								tmp13 = tmp20
 								break
 							}
 						} // end let
-						_ = tmp15
-						tmp16, _ := lang.FieldOrMethod(v10, "await")
-						if reflect.TypeOf(tmp16).Kind() != reflect.Func {
+						_ = tmp13
+						tmp14, _ := lang.FieldOrMethod(v10, "await")
+						if reflect.TypeOf(tmp14).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("await is not a function")))
 						}
-						tmp17 := lang.Apply0(tmp16)
-						tmp8 = tmp17
+						tmp15 := lang.Apply0(tmp14)
+						tmp8 = tmp15
 					} // end let
 					tmp3 = tmp8
 				}
@@ -46828,157 +45764,152 @@ func LoadNS() {
 							_ = tmp15
 							return v13
 						})
-						tmp13 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3323), kw_column, int(23), kw_end_DASH_line, int(3323), kw_end_DASH_column, int(62))
-						tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						var v15 any = tmp14
-						_ = v15
-						var tmp16 any
+						var v13 any = tmp12
+						_ = v13
+						var tmp14 any
 						{ // let
 							// let binding "seq_374"
-							tmp17 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp18 := lang.Apply1(tmp17, v3)
-							var v19 any = tmp18
-							_ = v19
+							tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp16 := lang.Apply1(tmp15, v3)
+							var v17 any = tmp16
+							_ = v17
 							// let binding "chunk_375"
-							var v20 any = nil
-							_ = v20
+							var v18 any = nil
+							_ = v18
 							// let binding "count_376"
-							var v21 any = int64(0)
-							_ = v21
+							var v19 any = int64(0)
+							_ = v19
 							// let binding "i_377"
-							var v22 any = int64(0)
-							_ = v22
+							var v20 any = int64(0)
+							_ = v20
 							for {
-								var tmp23 any
-								tmp24 := lang.Numbers.Lt(v22, v21)
-								if lang.IsTruthy(tmp24) {
-									var tmp25 any
+								var tmp21 any
+								tmp22 := lang.Numbers.Lt(v20, v19)
+								if lang.IsTruthy(tmp22) {
+									var tmp23 any
 									{ // let
 										// let binding "agent"
-										tmp26, _ := lang.FieldOrMethod(v20, "nth")
-										if reflect.TypeOf(tmp26).Kind() != reflect.Func {
+										tmp24, _ := lang.FieldOrMethod(v18, "nth")
+										if reflect.TypeOf(tmp24).Kind() != reflect.Func {
 											panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
 										}
-										tmp27 := lang.Apply1(tmp26, v22)
-										var v28 any = tmp27
-										_ = v28
-										tmp29 := checkDerefVar(var_clojure_DOT_core_send)
-										tmp30 := lang.Apply2(tmp29, v28, v15)
-										_ = tmp30
+										tmp25 := lang.Apply1(tmp24, v20)
+										var v26 any = tmp25
+										_ = v26
+										tmp27 := checkDerefVar(var_clojure_DOT_core_send)
+										tmp28 := lang.Apply2(tmp27, v26, v13)
+										_ = tmp28
+										var tmp29 any = v17
+										var tmp30 any = v18
 										var tmp31 any = v19
-										var tmp32 any = v20
-										var tmp33 any = v21
-										tmp35 := lang.Numbers.Unchecked_inc(v22)
-										var tmp34 any = tmp35
+										tmp33 := lang.Numbers.Unchecked_inc(v20)
+										var tmp32 any = tmp33
+										v17 = tmp29
+										v18 = tmp30
 										v19 = tmp31
 										v20 = tmp32
-										v21 = tmp33
-										v22 = tmp34
 										continue
 									} // end let
-									tmp23 = tmp25
+									tmp21 = tmp23
 								} else {
-									var tmp26 any
+									var tmp24 any
 									{ // let
 										// let binding "temp__0__auto__"
-										tmp27 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp28 := lang.Apply1(tmp27, v19)
-										var v29 any = tmp28
-										_ = v29
-										var tmp30 any
-										if lang.IsTruthy(v29) {
-											var tmp31 any
+										tmp25 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp26 := lang.Apply1(tmp25, v17)
+										var v27 any = tmp26
+										_ = v27
+										var tmp28 any
+										if lang.IsTruthy(v27) {
+											var tmp29 any
 											{ // let
 												// let binding "seq_374"
-												var v32 any = v29
-												_ = v32
-												var tmp33 any
-												tmp34 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
-												tmp35 := lang.Apply1(tmp34, v32)
-												if lang.IsTruthy(tmp35) {
-													var tmp36 any
+												var v30 any = v27
+												_ = v30
+												var tmp31 any
+												tmp32 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
+												tmp33 := lang.Apply1(tmp32, v30)
+												if lang.IsTruthy(tmp33) {
+													var tmp34 any
 													{ // let
 														// let binding "c__0__auto__"
-														tmp37 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
-														tmp38 := lang.Apply1(tmp37, v32)
-														var v39 any = tmp38
-														_ = v39
-														tmp41 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
-														tmp42 := lang.Apply1(tmp41, v32)
-														var tmp40 any = tmp42
-														var tmp43 any = v39
-														tmp45 := checkDerefVar(var_clojure_DOT_core_count)
-														tmp46 := lang.Apply1(tmp45, v39)
-														tmp47 := runtime.RT.IntCast(tmp46)
-														var tmp44 any = tmp47
-														tmp49 := runtime.RT.IntCast(int64(0))
-														var tmp48 any = tmp49
-														v19 = tmp40
-														v20 = tmp43
-														v21 = tmp44
-														v22 = tmp48
+														tmp35 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
+														tmp36 := lang.Apply1(tmp35, v30)
+														var v37 any = tmp36
+														_ = v37
+														tmp39 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
+														tmp40 := lang.Apply1(tmp39, v30)
+														var tmp38 any = tmp40
+														var tmp41 any = v37
+														tmp43 := checkDerefVar(var_clojure_DOT_core_count)
+														tmp44 := lang.Apply1(tmp43, v37)
+														tmp45 := runtime.RT.IntCast(tmp44)
+														var tmp42 any = tmp45
+														tmp47 := runtime.RT.IntCast(int64(0))
+														var tmp46 any = tmp47
+														v17 = tmp38
+														v18 = tmp41
+														v19 = tmp42
+														v20 = tmp46
 														continue
 													} // end let
-													tmp33 = tmp36
+													tmp31 = tmp34
 												} else {
-													var tmp37 any
+													var tmp35 any
 													{ // let
 														// let binding "agent"
-														tmp38 := checkDerefVar(var_clojure_DOT_core_first)
-														tmp39 := lang.Apply1(tmp38, v32)
-														var v40 any = tmp39
-														_ = v40
-														tmp41 := checkDerefVar(var_clojure_DOT_core_send)
-														tmp42 := lang.Apply2(tmp41, v40, v15)
-														_ = tmp42
-														tmp44 := checkDerefVar(var_clojure_DOT_core_next)
-														tmp45 := lang.Apply1(tmp44, v32)
-														var tmp43 any = tmp45
-														var tmp46 any = nil
-														var tmp47 any = int64(0)
-														var tmp48 any = int64(0)
-														v19 = tmp43
+														tmp36 := checkDerefVar(var_clojure_DOT_core_first)
+														tmp37 := lang.Apply1(tmp36, v30)
+														var v38 any = tmp37
+														_ = v38
+														tmp39 := checkDerefVar(var_clojure_DOT_core_send)
+														tmp40 := lang.Apply2(tmp39, v38, v13)
+														_ = tmp40
+														tmp42 := checkDerefVar(var_clojure_DOT_core_next)
+														tmp43 := lang.Apply1(tmp42, v30)
+														var tmp41 any = tmp43
+														var tmp44 any = nil
+														var tmp45 any = int64(0)
+														var tmp46 any = int64(0)
+														v17 = tmp41
+														v18 = tmp44
+														v19 = tmp45
 														v20 = tmp46
-														v21 = tmp47
-														v22 = tmp48
 														continue
 													} // end let
-													tmp33 = tmp37
+													tmp31 = tmp35
 												}
-												tmp31 = tmp33
+												tmp29 = tmp31
 											} // end let
-											tmp30 = tmp31
+											tmp28 = tmp29
 										} else {
 										}
-										tmp26 = tmp30
+										tmp24 = tmp28
 									} // end let
-									tmp23 = tmp26
+									tmp21 = tmp24
 								}
-								tmp16 = tmp23
+								tmp14 = tmp21
 								break
 							}
 						} // end let
-						_ = tmp16
-						tmp17, ok := lang.FieldOrMethod(nil, "MILLISECONDS")
+						_ = tmp14
+						tmp15, ok := lang.FieldOrMethod(nil, "MILLISECONDS")
 						if !ok {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", nil, "MILLISECONDS")))
 						}
-						var tmp18 any
-						switch reflect.TypeOf(tmp17).Kind() {
+						var tmp16 any
+						switch reflect.TypeOf(tmp15).Kind() {
 						case reflect.Func:
-							tmp18 = lang.Apply(tmp17, nil)
+							tmp16 = lang.Apply(tmp15, nil)
 						default:
-							tmp18 = tmp17
+							tmp16 = tmp15
 						}
-						tmp19, _ := lang.FieldOrMethod(v11, "await")
-						if reflect.TypeOf(tmp19).Kind() != reflect.Func {
+						tmp17, _ := lang.FieldOrMethod(v11, "await")
+						if reflect.TypeOf(tmp17).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("await is not a function")))
 						}
-						tmp20 := lang.Apply2(tmp19, v2, tmp18)
-						tmp9 = tmp20
+						tmp18 := lang.Apply2(tmp17, v2, tmp16)
+						tmp9 = tmp18
 					} // end let
 					tmp4 = tmp9
 				}
@@ -47031,28 +45962,23 @@ func LoadNS() {
 						}
 						return tmp16
 					})
-					tmp15 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6039), kw_column, int(24), kw_end_DASH_line, int(6039), kw_end_DASH_column, int(59))
-					tmp16, err := lang.WithMeta(tmp14, tmp15.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp17 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp18 := checkDerefVar(var_clojure_DOT_core__STAR_pending_DASH_paths_STAR_)
-					tmp19 := lang.Apply2(tmp17, v2, tmp18)
-					tmp20 := lang.Apply2(tmp13, tmp16, tmp19)
-					var v21 any = tmp20
-					_ = v21
+					tmp15 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp16 := checkDerefVar(var_clojure_DOT_core__STAR_pending_DASH_paths_STAR_)
+					tmp17 := lang.Apply2(tmp15, v2, tmp16)
+					tmp18 := lang.Apply2(tmp13, tmp14, tmp17)
+					var v19 any = tmp18
+					_ = v19
 					// let binding "chain"
-					tmp22 := checkDerefVar(var_clojure_DOT_core_apply)
-					tmp23 := checkDerefVar(var_clojure_DOT_core_str)
-					tmp24 := checkDerefVar(var_clojure_DOT_core_interpose)
-					tmp25 := lang.Apply2(tmp24, "->", v21)
-					tmp26 := lang.Apply2(tmp22, tmp23, tmp25)
-					var v27 any = tmp26
-					_ = v27
-					tmp28 := checkDerefVar(var_clojure_DOT_core_throw_DASH_if)
-					tmp29 := lang.Apply3(tmp28, true, "Cyclic load dependency: %s", v27)
-					tmp12 = tmp29
+					tmp20 := checkDerefVar(var_clojure_DOT_core_apply)
+					tmp21 := checkDerefVar(var_clojure_DOT_core_str)
+					tmp22 := checkDerefVar(var_clojure_DOT_core_interpose)
+					tmp23 := lang.Apply2(tmp22, "->", v19)
+					tmp24 := lang.Apply2(tmp20, tmp21, tmp23)
+					var v25 any = tmp24
+					_ = v25
+					tmp26 := checkDerefVar(var_clojure_DOT_core_throw_DASH_if)
+					tmp27 := lang.Apply3(tmp26, true, "Cyclic load dependency: %s", v25)
+					tmp12 = tmp27
 				} // end let
 				tmp3 = tmp12
 			} else {
@@ -47137,54 +46063,49 @@ func LoadNS() {
 						} // end let
 						return tmp13
 					})
-					tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7643), kw_column, int(20), kw_end_DASH_line, int(7643), kw_end_DASH_column, int(66))
-					tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp14 := checkDerefVar(var_clojure_DOT_core_partition)
-					tmp15 := lang.Apply2(tmp14, int64(2), v5)
-					tmp16 := lang.Apply2(tmp10, tmp13, tmp15)
-					var v17 any = tmp16
-					_ = v17
-					tmp18 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp19 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp12 := checkDerefVar(var_clojure_DOT_core_partition)
+					tmp13 := lang.Apply2(tmp12, int64(2), v5)
+					tmp14 := lang.Apply2(tmp10, tmp11, tmp13)
+					var v15 any = tmp14
+					_ = v15
+					tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp17 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp18 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp19 := lang.Apply1(tmp18, sym_clojure_DOT_core_SLASH_let)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp21 := lang.Apply1(tmp20, sym_clojure_DOT_core_SLASH_let)
-					tmp22 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp23 := checkDerefVar(var_clojure_DOT_core_apply)
-					tmp24 := checkDerefVar(var_clojure_DOT_core_vector)
-					tmp25 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp26 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp21 := checkDerefVar(var_clojure_DOT_core_apply)
+					tmp22 := checkDerefVar(var_clojure_DOT_core_vector)
+					tmp23 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp24 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp25 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp26 := lang.Apply1(tmp25, v9)
 					tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp28 := lang.Apply1(tmp27, v9)
-					tmp29 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp30 := lang.Apply1(tmp29, v4)
-					tmp31 := checkDerefVar(var_clojure_DOT_core_interleave)
-					tmp32 := checkDerefVar(var_clojure_DOT_core_repeat)
-					tmp33 := lang.Apply1(tmp32, v9)
-					tmp34 := checkDerefVar(var_clojure_DOT_core_butlast)
-					tmp35 := lang.Apply1(tmp34, v17)
-					tmp36 := lang.Apply2(tmp31, tmp33, tmp35)
-					tmp37 := lang.Apply3(tmp26, tmp28, tmp30, tmp36)
-					tmp38 := lang.Apply1(tmp25, tmp37)
-					tmp39 := lang.Apply2(tmp23, tmp24, tmp38)
-					tmp40 := lang.Apply1(tmp22, tmp39)
-					tmp41 := checkDerefVar(var_clojure_DOT_core_list)
-					var tmp42 any
-					tmp43 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
-					tmp44 := lang.Apply1(tmp43, v17)
-					if lang.IsTruthy(tmp44) {
-						tmp42 = v9
+					tmp28 := lang.Apply1(tmp27, v4)
+					tmp29 := checkDerefVar(var_clojure_DOT_core_interleave)
+					tmp30 := checkDerefVar(var_clojure_DOT_core_repeat)
+					tmp31 := lang.Apply1(tmp30, v9)
+					tmp32 := checkDerefVar(var_clojure_DOT_core_butlast)
+					tmp33 := lang.Apply1(tmp32, v15)
+					tmp34 := lang.Apply2(tmp29, tmp31, tmp33)
+					tmp35 := lang.Apply3(tmp24, tmp26, tmp28, tmp34)
+					tmp36 := lang.Apply1(tmp23, tmp35)
+					tmp37 := lang.Apply2(tmp21, tmp22, tmp36)
+					tmp38 := lang.Apply1(tmp20, tmp37)
+					tmp39 := checkDerefVar(var_clojure_DOT_core_list)
+					var tmp40 any
+					tmp41 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
+					tmp42 := lang.Apply1(tmp41, v15)
+					if lang.IsTruthy(tmp42) {
+						tmp40 = v9
 					} else {
-						tmp45 := checkDerefVar(var_clojure_DOT_core_last)
-						tmp46 := lang.Apply1(tmp45, v17)
-						tmp42 = tmp46
+						tmp43 := checkDerefVar(var_clojure_DOT_core_last)
+						tmp44 := lang.Apply1(tmp43, v15)
+						tmp40 = tmp44
 					}
-					tmp47 := lang.Apply1(tmp41, tmp42)
-					tmp48 := lang.Apply3(tmp19, tmp21, tmp40, tmp47)
-					tmp49 := lang.Apply1(tmp18, tmp48)
-					tmp6 = tmp49
+					tmp45 := lang.Apply1(tmp39, tmp40)
+					tmp46 := lang.Apply3(tmp17, tmp19, tmp38, tmp45)
+					tmp47 := lang.Apply1(tmp16, tmp46)
+					tmp6 = tmp47
 				} // end let
 				return tmp6
 			}),
@@ -47268,54 +46189,49 @@ func LoadNS() {
 						} // end let
 						return tmp13
 					})
-					tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7660), kw_column, int(20), kw_end_DASH_line, int(7660), kw_end_DASH_column, int(67))
-					tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp14 := checkDerefVar(var_clojure_DOT_core_partition)
-					tmp15 := lang.Apply2(tmp14, int64(2), v5)
-					tmp16 := lang.Apply2(tmp10, tmp13, tmp15)
-					var v17 any = tmp16
-					_ = v17
-					tmp18 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp19 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp12 := checkDerefVar(var_clojure_DOT_core_partition)
+					tmp13 := lang.Apply2(tmp12, int64(2), v5)
+					tmp14 := lang.Apply2(tmp10, tmp11, tmp13)
+					var v15 any = tmp14
+					_ = v15
+					tmp16 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp17 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp18 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp19 := lang.Apply1(tmp18, sym_clojure_DOT_core_SLASH_let)
 					tmp20 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp21 := lang.Apply1(tmp20, sym_clojure_DOT_core_SLASH_let)
-					tmp22 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp23 := checkDerefVar(var_clojure_DOT_core_apply)
-					tmp24 := checkDerefVar(var_clojure_DOT_core_vector)
-					tmp25 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp26 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp21 := checkDerefVar(var_clojure_DOT_core_apply)
+					tmp22 := checkDerefVar(var_clojure_DOT_core_vector)
+					tmp23 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp24 := checkDerefVar(var_clojure_DOT_core_concat)
+					tmp25 := checkDerefVar(var_clojure_DOT_core_list)
+					tmp26 := lang.Apply1(tmp25, v9)
 					tmp27 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp28 := lang.Apply1(tmp27, v9)
-					tmp29 := checkDerefVar(var_clojure_DOT_core_list)
-					tmp30 := lang.Apply1(tmp29, v4)
-					tmp31 := checkDerefVar(var_clojure_DOT_core_interleave)
-					tmp32 := checkDerefVar(var_clojure_DOT_core_repeat)
-					tmp33 := lang.Apply1(tmp32, v9)
-					tmp34 := checkDerefVar(var_clojure_DOT_core_butlast)
-					tmp35 := lang.Apply1(tmp34, v17)
-					tmp36 := lang.Apply2(tmp31, tmp33, tmp35)
-					tmp37 := lang.Apply3(tmp26, tmp28, tmp30, tmp36)
-					tmp38 := lang.Apply1(tmp25, tmp37)
-					tmp39 := lang.Apply2(tmp23, tmp24, tmp38)
-					tmp40 := lang.Apply1(tmp22, tmp39)
-					tmp41 := checkDerefVar(var_clojure_DOT_core_list)
-					var tmp42 any
-					tmp43 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
-					tmp44 := lang.Apply1(tmp43, v17)
-					if lang.IsTruthy(tmp44) {
-						tmp42 = v9
+					tmp28 := lang.Apply1(tmp27, v4)
+					tmp29 := checkDerefVar(var_clojure_DOT_core_interleave)
+					tmp30 := checkDerefVar(var_clojure_DOT_core_repeat)
+					tmp31 := lang.Apply1(tmp30, v9)
+					tmp32 := checkDerefVar(var_clojure_DOT_core_butlast)
+					tmp33 := lang.Apply1(tmp32, v15)
+					tmp34 := lang.Apply2(tmp29, tmp31, tmp33)
+					tmp35 := lang.Apply3(tmp24, tmp26, tmp28, tmp34)
+					tmp36 := lang.Apply1(tmp23, tmp35)
+					tmp37 := lang.Apply2(tmp21, tmp22, tmp36)
+					tmp38 := lang.Apply1(tmp20, tmp37)
+					tmp39 := checkDerefVar(var_clojure_DOT_core_list)
+					var tmp40 any
+					tmp41 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
+					tmp42 := lang.Apply1(tmp41, v15)
+					if lang.IsTruthy(tmp42) {
+						tmp40 = v9
 					} else {
-						tmp45 := checkDerefVar(var_clojure_DOT_core_last)
-						tmp46 := lang.Apply1(tmp45, v17)
-						tmp42 = tmp46
+						tmp43 := checkDerefVar(var_clojure_DOT_core_last)
+						tmp44 := lang.Apply1(tmp43, v15)
+						tmp40 = tmp44
 					}
-					tmp47 := lang.Apply1(tmp41, tmp42)
-					tmp48 := lang.Apply3(tmp19, tmp21, tmp40, tmp47)
-					tmp49 := lang.Apply1(tmp18, tmp48)
-					tmp6 = tmp49
+					tmp45 := lang.Apply1(tmp39, tmp40)
+					tmp46 := lang.Apply3(tmp17, tmp19, tmp38, tmp45)
+					tmp47 := lang.Apply1(tmp16, tmp46)
+					tmp6 = tmp47
 				} // end let
 				return tmp6
 			}),
@@ -47600,7 +46516,6 @@ func LoadNS() {
 				}),
 				3,
 			)
-			tmp1 = tmp1.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(293), kw_column, int(7), kw_end_DASH_line, int(335), kw_end_DASH_column, int(58))).(lang.ArityFn)
 			v2 = tmp1
 			_ = v2
 		}
@@ -48348,402 +47263,382 @@ func LoadNS() {
 								v80 = tmp79
 								_ = v80
 							}
-							tmp80 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6809), kw_column, int(24), kw_end_DASH_line, int(6812), kw_end_DASH_column, int(48))
-							tmp81, err := lang.WithMeta(tmp79, tmp80.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							var v82 any = tmp81
-							_ = v82
+							var v80 any = tmp79
+							_ = v80
 							// let binding "pairs"
-							tmp83 := checkDerefVar(var_clojure_DOT_core_reduce1)
-							var tmp84 lang.FnFunc2
-							tmp84 = lang.FnFunc2(func(p0, p1 any) any {
-								v85 := p0
-								_ = v85
-								v86 := p1
-								_ = v86
-								var tmp87 any
+							tmp81 := checkDerefVar(var_clojure_DOT_core_reduce1)
+							var tmp82 lang.FnFunc2
+							tmp82 = lang.FnFunc2(func(p0, p1 any) any {
+								v83 := p0
+								_ = v83
+								v84 := p1
+								_ = v84
+								var tmp85 any
 								{ // let
 									// let binding "vec__546"
-									var v88 any = v86
-									_ = v88
+									var v86 any = v84
+									_ = v86
 									// let binding "test"
-									tmp89 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp90 := lang.Apply3(tmp89, v88, int64(0), nil)
-									var v91 any = tmp90
-									_ = v91
+									tmp87 := checkDerefVar(var_clojure_DOT_core_nth)
+									tmp88 := lang.Apply3(tmp87, v86, int64(0), nil)
+									var v89 any = tmp88
+									_ = v89
 									// let binding "expr"
-									tmp92 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp93 := lang.Apply3(tmp92, v88, int64(1), nil)
-									var v94 any = tmp93
-									_ = v94
-									var tmp95 any
-									tmp96 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-									tmp97 := lang.Apply1(tmp96, v91)
-									if lang.IsTruthy(tmp97) {
-										tmp98 := checkDerefVar(var_clojure_DOT_core_reduce1)
-										var tmp99 lang.FnFunc2
-										tmp99 = lang.FnFunc2(func(p0, p1 any) any {
-											v100 := p0
-											_ = v100
-											v101 := p1
-											_ = v101
-											tmp102 := lang.Apply3(v82, v100, v101, v94)
-											return tmp102
+									tmp90 := checkDerefVar(var_clojure_DOT_core_nth)
+									tmp91 := lang.Apply3(tmp90, v86, int64(1), nil)
+									var v92 any = tmp91
+									_ = v92
+									var tmp93 any
+									tmp94 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
+									tmp95 := lang.Apply1(tmp94, v89)
+									if lang.IsTruthy(tmp95) {
+										tmp96 := checkDerefVar(var_clojure_DOT_core_reduce1)
+										var tmp97 lang.FnFunc2
+										tmp97 = lang.FnFunc2(func(p0, p1 any) any {
+											v98 := p0
+											_ = v98
+											v99 := p1
+											_ = v99
+											tmp100 := lang.Apply3(v80, v98, v99, v92)
+											return tmp100
 										})
-										tmp100 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6816), kw_column, int(37), kw_end_DASH_line, int(6816), kw_end_DASH_column, int(60))
-										tmp101, err := lang.WithMeta(tmp99, tmp100.(lang.IPersistentMap))
-										if err != nil {
-											panic(err)
-										}
-										tmp102 := lang.Apply3(tmp98, tmp101, v85, v91)
-										tmp95 = tmp102
+										tmp98 := lang.Apply3(tmp96, tmp97, v83, v89)
+										tmp93 = tmp98
 									} else {
-										tmp103 := lang.Apply3(v82, v85, v91, v94)
-										tmp95 = tmp103
+										tmp99 := lang.Apply3(v80, v83, v89, v92)
+										tmp93 = tmp99
 									}
-									tmp87 = tmp95
+									tmp85 = tmp93
 								} // end let
-								return tmp87
+								return tmp85
 							})
-							tmp85 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6814), kw_column, int(24), kw_end_DASH_line, int(6817), kw_end_DASH_column, int(53))
-							tmp86, err := lang.WithMeta(tmp84, tmp85.(lang.IPersistentMap))
+							tmp83 := lang.NewMap()
+							tmp84 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6818), kw_column, int(24), kw_end_DASH_line, int(6818), kw_end_DASH_column, int(25))
+							tmp85, err := lang.WithMeta(tmp83, tmp84.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp87 := lang.NewMap()
-							tmp88 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6818), kw_column, int(24), kw_end_DASH_line, int(6818), kw_end_DASH_column, int(25))
-							tmp89, err := lang.WithMeta(tmp87, tmp88.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp90 := lang.Apply3(tmp83, tmp86, tmp89, v78)
-							var v91 any = tmp90
-							_ = v91
+							tmp86 := lang.Apply3(tmp81, tmp82, tmp85, v78)
+							var v87 any = tmp86
+							_ = v87
 							// let binding "tests"
-							tmp92 := checkDerefVar(var_clojure_DOT_core_keys)
-							tmp93 := lang.Apply1(tmp92, v91)
-							var v94 any = tmp93
-							_ = v94
+							tmp88 := checkDerefVar(var_clojure_DOT_core_keys)
+							tmp89 := lang.Apply1(tmp88, v87)
+							var v90 any = tmp89
+							_ = v90
 							// let binding "thens"
-							tmp95 := checkDerefVar(var_clojure_DOT_core_vals)
-							tmp96 := lang.Apply1(tmp95, v91)
-							var v97 any = tmp96
-							_ = v97
+							tmp91 := checkDerefVar(var_clojure_DOT_core_vals)
+							tmp92 := lang.Apply1(tmp91, v87)
+							var v93 any = tmp92
+							_ = v93
 							// let binding "mode"
-							var tmp98 any
-							tmp99 := checkDerefVar(var_clojure_DOT_core_every_QMARK_)
-							var tmp100 lang.FnFunc1
-							tmp100 = lang.FnFunc1(func(p0 any) any {
-								v101 := p0
-								_ = v101
-								var tmp102 any
+							var tmp94 any
+							tmp95 := checkDerefVar(var_clojure_DOT_core_every_QMARK_)
+							var tmp96 lang.FnFunc1
+							tmp96 = lang.FnFunc1(func(p0 any) any {
+								v97 := p0
+								_ = v97
+								var tmp98 any
 								{ // let
 									// let binding "and__0__auto__"
-									tmp103 := checkDerefVar(var_clojure_DOT_core_integer_QMARK_)
-									tmp104 := lang.Apply1(tmp103, v101)
-									var v105 any = tmp104
-									_ = v105
-									var tmp106 any
-									if lang.IsTruthy(v105) {
-										tmp107 := checkDerefVar(var_clojure_DOT_core__LT__EQ_)
-										tmp108 := lang.Apply3(tmp107, int(-9223372036854775808), v101, int(9223372036854775807))
-										tmp106 = tmp108
+									tmp99 := checkDerefVar(var_clojure_DOT_core_integer_QMARK_)
+									tmp100 := lang.Apply1(tmp99, v97)
+									var v101 any = tmp100
+									_ = v101
+									var tmp102 any
+									if lang.IsTruthy(v101) {
+										tmp103 := checkDerefVar(var_clojure_DOT_core__LT__EQ_)
+										tmp104 := lang.Apply3(tmp103, int(-9223372036854775808), v97, int(9223372036854775807))
+										tmp102 = tmp104
 									} else {
-										tmp106 = v105
+										tmp102 = v101
 									}
-									tmp102 = tmp106
+									tmp98 = tmp102
 								} // end let
-								return tmp102
+								return tmp98
 							})
-							tmp101 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6822), kw_column, int(28), kw_end_DASH_line, int(6822), kw_end_DASH_column, int(77))
-							tmp102, err := lang.WithMeta(tmp100, tmp101.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp103 := lang.Apply2(tmp99, tmp102, v94)
-							if lang.IsTruthy(tmp103) {
-								tmp98 = kw_ints
+							tmp97 := lang.Apply2(tmp95, tmp96, v90)
+							if lang.IsTruthy(tmp97) {
+								tmp94 = kw_ints
 							} else {
-								var tmp104 any
-								tmp105 := checkDerefVar(var_clojure_DOT_core_every_QMARK_)
-								tmp106 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
-								tmp107 := lang.Apply2(tmp105, tmp106, v94)
-								if lang.IsTruthy(tmp107) {
-									tmp104 = kw_identity
+								var tmp98 any
+								tmp99 := checkDerefVar(var_clojure_DOT_core_every_QMARK_)
+								tmp100 := checkDerefVar(var_clojure_DOT_core_keyword_QMARK_)
+								tmp101 := lang.Apply2(tmp99, tmp100, v90)
+								if lang.IsTruthy(tmp101) {
+									tmp98 = kw_identity
 								} else {
-									var tmp108 any
+									var tmp102 any
 									if lang.IsTruthy(kw_else) {
-										tmp108 = kw_hashes
+										tmp102 = kw_hashes
 									} else {
 									}
-									tmp104 = tmp108
+									tmp98 = tmp102
 								}
-								tmp98 = tmp104
+								tmp94 = tmp98
 							}
-							var v109 any = tmp98
-							_ = v109
-							var tmp110 any
+							var v103 any = tmp94
+							_ = v103
+							var tmp104 any
 							{ // let
 								// let binding "pred__549"
-								tmp111 := checkDerefVar(var_clojure_DOT_core__EQ_)
-								var v112 any = tmp111
-								_ = v112
+								tmp105 := checkDerefVar(var_clojure_DOT_core__EQ_)
+								var v106 any = tmp105
+								_ = v106
 								// let binding "expr__550"
-								var v113 any = v109
-								_ = v113
-								var tmp114 any
-								tmp115 := lang.Apply2(v112, kw_ints, v113)
-								if lang.IsTruthy(tmp115) {
-									var tmp116 any
+								var v107 any = v103
+								_ = v107
+								var tmp108 any
+								tmp109 := lang.Apply2(v106, kw_ints, v107)
+								if lang.IsTruthy(tmp109) {
+									var tmp110 any
 									{ // let
 										// let binding "vec__551"
-										tmp117 := checkDerefVar(var_clojure_DOT_core_prep_DASH_ints)
-										tmp118 := lang.Apply2(tmp117, v94, v97)
+										tmp111 := checkDerefVar(var_clojure_DOT_core_prep_DASH_ints)
+										tmp112 := lang.Apply2(tmp111, v90, v93)
+										var v113 any = tmp112
+										_ = v113
+										// let binding "shift"
+										tmp114 := checkDerefVar(var_clojure_DOT_core_nth)
+										tmp115 := lang.Apply3(tmp114, v113, int64(0), nil)
+										var v116 any = tmp115
+										_ = v116
+										// let binding "mask"
+										tmp117 := checkDerefVar(var_clojure_DOT_core_nth)
+										tmp118 := lang.Apply3(tmp117, v113, int64(1), nil)
 										var v119 any = tmp118
 										_ = v119
-										// let binding "shift"
+										// let binding "imap"
 										tmp120 := checkDerefVar(var_clojure_DOT_core_nth)
-										tmp121 := lang.Apply3(tmp120, v119, int64(0), nil)
+										tmp121 := lang.Apply3(tmp120, v113, int64(2), nil)
 										var v122 any = tmp121
 										_ = v122
-										// let binding "mask"
+										// let binding "switch-type"
 										tmp123 := checkDerefVar(var_clojure_DOT_core_nth)
-										tmp124 := lang.Apply3(tmp123, v119, int64(1), nil)
+										tmp124 := lang.Apply3(tmp123, v113, int64(3), nil)
 										var v125 any = tmp124
 										_ = v125
-										// let binding "imap"
-										tmp126 := checkDerefVar(var_clojure_DOT_core_nth)
-										tmp127 := lang.Apply3(tmp126, v119, int64(2), nil)
-										var v128 any = tmp127
-										_ = v128
-										// let binding "switch-type"
-										tmp129 := checkDerefVar(var_clojure_DOT_core_nth)
-										tmp130 := lang.Apply3(tmp129, v119, int64(3), nil)
-										var v131 any = tmp130
-										_ = v131
-										tmp132 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp133 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp134 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp135 := lang.Apply1(tmp134, sym_clojure_DOT_core_SLASH_let)
-										tmp136 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp137 := checkDerefVar(var_clojure_DOT_core_apply)
-										tmp138 := checkDerefVar(var_clojure_DOT_core_vector)
-										tmp139 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp140 := checkDerefVar(var_clojure_DOT_core_concat)
-										tmp141 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp142 := lang.Apply1(tmp141, v15)
+										tmp126 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp127 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp128 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp129 := lang.Apply1(tmp128, sym_clojure_DOT_core_SLASH_let)
+										tmp130 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp131 := checkDerefVar(var_clojure_DOT_core_apply)
+										tmp132 := checkDerefVar(var_clojure_DOT_core_vector)
+										tmp133 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp134 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp135 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp136 := lang.Apply1(tmp135, v15)
+										tmp137 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp138 := lang.Apply1(tmp137, v4)
+										tmp139 := lang.Apply2(tmp134, tmp136, tmp138)
+										tmp140 := lang.Apply1(tmp133, tmp139)
+										tmp141 := lang.Apply2(tmp131, tmp132, tmp140)
+										tmp142 := lang.Apply1(tmp130, tmp141)
 										tmp143 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp144 := lang.Apply1(tmp143, v4)
-										tmp145 := lang.Apply2(tmp140, tmp142, tmp144)
-										tmp146 := lang.Apply1(tmp139, tmp145)
-										tmp147 := lang.Apply2(tmp137, tmp138, tmp146)
-										tmp148 := lang.Apply1(tmp136, tmp147)
-										tmp149 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp150 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp151 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp144 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp145 := checkDerefVar(var_clojure_DOT_core_concat)
+										tmp146 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp147 := lang.Apply1(tmp146, sym_case_STAR_)
+										tmp148 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp149 := lang.Apply1(tmp148, v15)
+										tmp150 := checkDerefVar(var_clojure_DOT_core_list)
+										tmp151 := lang.Apply1(tmp150, v116)
 										tmp152 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp153 := lang.Apply1(tmp152, sym_case_STAR_)
+										tmp153 := lang.Apply1(tmp152, v119)
 										tmp154 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp155 := lang.Apply1(tmp154, v15)
+										tmp155 := lang.Apply1(tmp154, v49)
 										tmp156 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp157 := lang.Apply1(tmp156, v122)
 										tmp158 := checkDerefVar(var_clojure_DOT_core_list)
 										tmp159 := lang.Apply1(tmp158, v125)
 										tmp160 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp161 := lang.Apply1(tmp160, v49)
-										tmp162 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp163 := lang.Apply1(tmp162, v128)
-										tmp164 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp165 := lang.Apply1(tmp164, v131)
-										tmp166 := checkDerefVar(var_clojure_DOT_core_list)
-										tmp167 := lang.Apply1(tmp166, kw_int)
-										tmp168 := lang.Apply(tmp151, []any{tmp153, tmp155, tmp157, tmp159, tmp161, tmp163, tmp165, tmp167})
-										tmp169 := lang.Apply1(tmp150, tmp168)
-										tmp170 := lang.Apply1(tmp149, tmp169)
-										tmp171 := lang.Apply3(tmp133, tmp135, tmp148, tmp170)
-										tmp172 := lang.Apply1(tmp132, tmp171)
-										tmp116 = tmp172
+										tmp161 := lang.Apply1(tmp160, kw_int)
+										tmp162 := lang.Apply(tmp145, []any{tmp147, tmp149, tmp151, tmp153, tmp155, tmp157, tmp159, tmp161})
+										tmp163 := lang.Apply1(tmp144, tmp162)
+										tmp164 := lang.Apply1(tmp143, tmp163)
+										tmp165 := lang.Apply3(tmp127, tmp129, tmp142, tmp164)
+										tmp166 := lang.Apply1(tmp126, tmp165)
+										tmp110 = tmp166
 									} // end let
-									tmp114 = tmp116
+									tmp108 = tmp110
 								} else {
-									var tmp117 any
-									tmp118 := lang.Apply2(v112, kw_hashes, v113)
-									if lang.IsTruthy(tmp118) {
-										var tmp119 any
+									var tmp111 any
+									tmp112 := lang.Apply2(v106, kw_hashes, v107)
+									if lang.IsTruthy(tmp112) {
+										var tmp113 any
 										{ // let
 											// let binding "vec__554"
-											tmp120 := checkDerefVar(var_clojure_DOT_core_prep_DASH_hashes)
-											tmp121 := lang.Apply4(tmp120, v15, v49, v94, v97)
+											tmp114 := checkDerefVar(var_clojure_DOT_core_prep_DASH_hashes)
+											tmp115 := lang.Apply4(tmp114, v15, v49, v90, v93)
+											var v116 any = tmp115
+											_ = v116
+											// let binding "shift"
+											tmp117 := checkDerefVar(var_clojure_DOT_core_nth)
+											tmp118 := lang.Apply3(tmp117, v116, int64(0), nil)
+											var v119 any = tmp118
+											_ = v119
+											// let binding "mask"
+											tmp120 := checkDerefVar(var_clojure_DOT_core_nth)
+											tmp121 := lang.Apply3(tmp120, v116, int64(1), nil)
 											var v122 any = tmp121
 											_ = v122
-											// let binding "shift"
+											// let binding "imap"
 											tmp123 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp124 := lang.Apply3(tmp123, v122, int64(0), nil)
+											tmp124 := lang.Apply3(tmp123, v116, int64(2), nil)
 											var v125 any = tmp124
 											_ = v125
-											// let binding "mask"
+											// let binding "switch-type"
 											tmp126 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp127 := lang.Apply3(tmp126, v122, int64(1), nil)
+											tmp127 := lang.Apply3(tmp126, v116, int64(3), nil)
 											var v128 any = tmp127
 											_ = v128
-											// let binding "imap"
+											// let binding "skip-check"
 											tmp129 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp130 := lang.Apply3(tmp129, v122, int64(2), nil)
+											tmp130 := lang.Apply3(tmp129, v116, int64(4), nil)
 											var v131 any = tmp130
 											_ = v131
-											// let binding "switch-type"
-											tmp132 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp133 := lang.Apply3(tmp132, v122, int64(3), nil)
-											var v134 any = tmp133
-											_ = v134
-											// let binding "skip-check"
-											tmp135 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp136 := lang.Apply3(tmp135, v122, int64(4), nil)
-											var v137 any = tmp136
-											_ = v137
-											tmp138 := checkDerefVar(var_clojure_DOT_core_seq)
-											tmp139 := checkDerefVar(var_clojure_DOT_core_concat)
-											tmp140 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp141 := lang.Apply1(tmp140, sym_clojure_DOT_core_SLASH_let)
-											tmp142 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp143 := checkDerefVar(var_clojure_DOT_core_apply)
-											tmp144 := checkDerefVar(var_clojure_DOT_core_vector)
-											tmp145 := checkDerefVar(var_clojure_DOT_core_seq)
-											tmp146 := checkDerefVar(var_clojure_DOT_core_concat)
-											tmp147 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp148 := lang.Apply1(tmp147, v15)
+											tmp132 := checkDerefVar(var_clojure_DOT_core_seq)
+											tmp133 := checkDerefVar(var_clojure_DOT_core_concat)
+											tmp134 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp135 := lang.Apply1(tmp134, sym_clojure_DOT_core_SLASH_let)
+											tmp136 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp137 := checkDerefVar(var_clojure_DOT_core_apply)
+											tmp138 := checkDerefVar(var_clojure_DOT_core_vector)
+											tmp139 := checkDerefVar(var_clojure_DOT_core_seq)
+											tmp140 := checkDerefVar(var_clojure_DOT_core_concat)
+											tmp141 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp142 := lang.Apply1(tmp141, v15)
+											tmp143 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp144 := lang.Apply1(tmp143, v4)
+											tmp145 := lang.Apply2(tmp140, tmp142, tmp144)
+											tmp146 := lang.Apply1(tmp139, tmp145)
+											tmp147 := lang.Apply2(tmp137, tmp138, tmp146)
+											tmp148 := lang.Apply1(tmp136, tmp147)
 											tmp149 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp150 := lang.Apply1(tmp149, v4)
-											tmp151 := lang.Apply2(tmp146, tmp148, tmp150)
-											tmp152 := lang.Apply1(tmp145, tmp151)
-											tmp153 := lang.Apply2(tmp143, tmp144, tmp152)
-											tmp154 := lang.Apply1(tmp142, tmp153)
-											tmp155 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp156 := checkDerefVar(var_clojure_DOT_core_seq)
-											tmp157 := checkDerefVar(var_clojure_DOT_core_concat)
+											tmp150 := checkDerefVar(var_clojure_DOT_core_seq)
+											tmp151 := checkDerefVar(var_clojure_DOT_core_concat)
+											tmp152 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp153 := lang.Apply1(tmp152, sym_case_STAR_)
+											tmp154 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp155 := lang.Apply1(tmp154, v15)
+											tmp156 := checkDerefVar(var_clojure_DOT_core_list)
+											tmp157 := lang.Apply1(tmp156, v119)
 											tmp158 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp159 := lang.Apply1(tmp158, sym_case_STAR_)
+											tmp159 := lang.Apply1(tmp158, v122)
 											tmp160 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp161 := lang.Apply1(tmp160, v15)
+											tmp161 := lang.Apply1(tmp160, v49)
 											tmp162 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp163 := lang.Apply1(tmp162, v125)
 											tmp164 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp165 := lang.Apply1(tmp164, v128)
 											tmp166 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp167 := lang.Apply1(tmp166, v49)
+											tmp167 := lang.Apply1(tmp166, kw_hash_DASH_equiv)
 											tmp168 := checkDerefVar(var_clojure_DOT_core_list)
 											tmp169 := lang.Apply1(tmp168, v131)
-											tmp170 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp171 := lang.Apply1(tmp170, v134)
-											tmp172 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp173 := lang.Apply1(tmp172, kw_hash_DASH_equiv)
-											tmp174 := checkDerefVar(var_clojure_DOT_core_list)
-											tmp175 := lang.Apply1(tmp174, v137)
-											tmp176 := lang.Apply(tmp157, []any{tmp159, tmp161, tmp163, tmp165, tmp167, tmp169, tmp171, tmp173, tmp175})
-											tmp177 := lang.Apply1(tmp156, tmp176)
-											tmp178 := lang.Apply1(tmp155, tmp177)
-											tmp179 := lang.Apply3(tmp139, tmp141, tmp154, tmp178)
-											tmp180 := lang.Apply1(tmp138, tmp179)
-											tmp119 = tmp180
+											tmp170 := lang.Apply(tmp151, []any{tmp153, tmp155, tmp157, tmp159, tmp161, tmp163, tmp165, tmp167, tmp169})
+											tmp171 := lang.Apply1(tmp150, tmp170)
+											tmp172 := lang.Apply1(tmp149, tmp171)
+											tmp173 := lang.Apply3(tmp133, tmp135, tmp148, tmp172)
+											tmp174 := lang.Apply1(tmp132, tmp173)
+											tmp113 = tmp174
 										} // end let
-										tmp117 = tmp119
+										tmp111 = tmp113
 									} else {
-										var tmp120 any
-										tmp121 := lang.Apply2(v112, kw_identity, v113)
-										if lang.IsTruthy(tmp121) {
-											var tmp122 any
+										var tmp114 any
+										tmp115 := lang.Apply2(v106, kw_identity, v107)
+										if lang.IsTruthy(tmp115) {
+											var tmp116 any
 											{ // let
 												// let binding "vec__557"
-												tmp123 := checkDerefVar(var_clojure_DOT_core_prep_DASH_hashes)
-												tmp124 := lang.Apply4(tmp123, v15, v49, v94, v97)
+												tmp117 := checkDerefVar(var_clojure_DOT_core_prep_DASH_hashes)
+												tmp118 := lang.Apply4(tmp117, v15, v49, v90, v93)
+												var v119 any = tmp118
+												_ = v119
+												// let binding "shift"
+												tmp120 := checkDerefVar(var_clojure_DOT_core_nth)
+												tmp121 := lang.Apply3(tmp120, v119, int64(0), nil)
+												var v122 any = tmp121
+												_ = v122
+												// let binding "mask"
+												tmp123 := checkDerefVar(var_clojure_DOT_core_nth)
+												tmp124 := lang.Apply3(tmp123, v119, int64(1), nil)
 												var v125 any = tmp124
 												_ = v125
-												// let binding "shift"
+												// let binding "imap"
 												tmp126 := checkDerefVar(var_clojure_DOT_core_nth)
-												tmp127 := lang.Apply3(tmp126, v125, int64(0), nil)
+												tmp127 := lang.Apply3(tmp126, v119, int64(2), nil)
 												var v128 any = tmp127
 												_ = v128
-												// let binding "mask"
+												// let binding "switch-type"
 												tmp129 := checkDerefVar(var_clojure_DOT_core_nth)
-												tmp130 := lang.Apply3(tmp129, v125, int64(1), nil)
+												tmp130 := lang.Apply3(tmp129, v119, int64(3), nil)
 												var v131 any = tmp130
 												_ = v131
-												// let binding "imap"
+												// let binding "skip-check"
 												tmp132 := checkDerefVar(var_clojure_DOT_core_nth)
-												tmp133 := lang.Apply3(tmp132, v125, int64(2), nil)
+												tmp133 := lang.Apply3(tmp132, v119, int64(4), nil)
 												var v134 any = tmp133
 												_ = v134
-												// let binding "switch-type"
-												tmp135 := checkDerefVar(var_clojure_DOT_core_nth)
-												tmp136 := lang.Apply3(tmp135, v125, int64(3), nil)
-												var v137 any = tmp136
-												_ = v137
-												// let binding "skip-check"
-												tmp138 := checkDerefVar(var_clojure_DOT_core_nth)
-												tmp139 := lang.Apply3(tmp138, v125, int64(4), nil)
-												var v140 any = tmp139
-												_ = v140
-												tmp141 := checkDerefVar(var_clojure_DOT_core_seq)
-												tmp142 := checkDerefVar(var_clojure_DOT_core_concat)
-												tmp143 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp144 := lang.Apply1(tmp143, sym_clojure_DOT_core_SLASH_let)
-												tmp145 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp146 := checkDerefVar(var_clojure_DOT_core_apply)
-												tmp147 := checkDerefVar(var_clojure_DOT_core_vector)
-												tmp148 := checkDerefVar(var_clojure_DOT_core_seq)
-												tmp149 := checkDerefVar(var_clojure_DOT_core_concat)
-												tmp150 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp151 := lang.Apply1(tmp150, v15)
+												tmp135 := checkDerefVar(var_clojure_DOT_core_seq)
+												tmp136 := checkDerefVar(var_clojure_DOT_core_concat)
+												tmp137 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp138 := lang.Apply1(tmp137, sym_clojure_DOT_core_SLASH_let)
+												tmp139 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp140 := checkDerefVar(var_clojure_DOT_core_apply)
+												tmp141 := checkDerefVar(var_clojure_DOT_core_vector)
+												tmp142 := checkDerefVar(var_clojure_DOT_core_seq)
+												tmp143 := checkDerefVar(var_clojure_DOT_core_concat)
+												tmp144 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp145 := lang.Apply1(tmp144, v15)
+												tmp146 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp147 := lang.Apply1(tmp146, v4)
+												tmp148 := lang.Apply2(tmp143, tmp145, tmp147)
+												tmp149 := lang.Apply1(tmp142, tmp148)
+												tmp150 := lang.Apply2(tmp140, tmp141, tmp149)
+												tmp151 := lang.Apply1(tmp139, tmp150)
 												tmp152 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp153 := lang.Apply1(tmp152, v4)
-												tmp154 := lang.Apply2(tmp149, tmp151, tmp153)
-												tmp155 := lang.Apply1(tmp148, tmp154)
-												tmp156 := lang.Apply2(tmp146, tmp147, tmp155)
-												tmp157 := lang.Apply1(tmp145, tmp156)
-												tmp158 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp159 := checkDerefVar(var_clojure_DOT_core_seq)
-												tmp160 := checkDerefVar(var_clojure_DOT_core_concat)
+												tmp153 := checkDerefVar(var_clojure_DOT_core_seq)
+												tmp154 := checkDerefVar(var_clojure_DOT_core_concat)
+												tmp155 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp156 := lang.Apply1(tmp155, sym_case_STAR_)
+												tmp157 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp158 := lang.Apply1(tmp157, v15)
+												tmp159 := checkDerefVar(var_clojure_DOT_core_list)
+												tmp160 := lang.Apply1(tmp159, v122)
 												tmp161 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp162 := lang.Apply1(tmp161, sym_case_STAR_)
+												tmp162 := lang.Apply1(tmp161, v125)
 												tmp163 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp164 := lang.Apply1(tmp163, v15)
+												tmp164 := lang.Apply1(tmp163, v49)
 												tmp165 := checkDerefVar(var_clojure_DOT_core_list)
 												tmp166 := lang.Apply1(tmp165, v128)
 												tmp167 := checkDerefVar(var_clojure_DOT_core_list)
 												tmp168 := lang.Apply1(tmp167, v131)
 												tmp169 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp170 := lang.Apply1(tmp169, v49)
+												tmp170 := lang.Apply1(tmp169, kw_hash_DASH_identity)
 												tmp171 := checkDerefVar(var_clojure_DOT_core_list)
 												tmp172 := lang.Apply1(tmp171, v134)
-												tmp173 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp174 := lang.Apply1(tmp173, v137)
-												tmp175 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp176 := lang.Apply1(tmp175, kw_hash_DASH_identity)
-												tmp177 := checkDerefVar(var_clojure_DOT_core_list)
-												tmp178 := lang.Apply1(tmp177, v140)
-												tmp179 := lang.Apply(tmp160, []any{tmp162, tmp164, tmp166, tmp168, tmp170, tmp172, tmp174, tmp176, tmp178})
-												tmp180 := lang.Apply1(tmp159, tmp179)
-												tmp181 := lang.Apply1(tmp158, tmp180)
-												tmp182 := lang.Apply3(tmp142, tmp144, tmp157, tmp181)
-												tmp183 := lang.Apply1(tmp141, tmp182)
-												tmp122 = tmp183
+												tmp173 := lang.Apply(tmp154, []any{tmp156, tmp158, tmp160, tmp162, tmp164, tmp166, tmp168, tmp170, tmp172})
+												tmp174 := lang.Apply1(tmp153, tmp173)
+												tmp175 := lang.Apply1(tmp152, tmp174)
+												tmp176 := lang.Apply3(tmp136, tmp138, tmp151, tmp175)
+												tmp177 := lang.Apply1(tmp135, tmp176)
+												tmp116 = tmp177
 											} // end let
-											tmp120 = tmp122
+											tmp114 = tmp116
 										} else {
-											tmp123 := checkDerefVar(var_clojure_DOT_core_str)
-											tmp124 := lang.Apply2(tmp123, "No matching clause: ", v113)
-											tmp125 := lang.Apply1(lang.NewIllegalArgumentError, tmp124)
-											panic(tmp125)
+											tmp117 := checkDerefVar(var_clojure_DOT_core_str)
+											tmp118 := lang.Apply2(tmp117, "No matching clause: ", v107)
+											tmp119 := lang.Apply1(lang.NewIllegalArgumentError, tmp118)
+											panic(tmp119)
 										}
-										tmp117 = tmp120
+										tmp111 = tmp114
 									}
-									tmp114 = tmp117
+									tmp108 = tmp111
 								}
-								tmp110 = tmp114
+								tmp104 = tmp108
 							} // end let
-							tmp75 = tmp110
+							tmp75 = tmp104
 						} // end let
 						tmp50 = tmp75
 					}
@@ -48798,12 +47693,7 @@ func LoadNS() {
 					nil,
 					0,
 				)
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7721), kw_column, int(5), kw_end_DASH_line, int(7725), kw_end_DASH_column, int(36))
-				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp3 = tmp9
+				tmp3 = tmp7
 			} // end let
 			return tmp3
 		})
@@ -48924,18 +47814,13 @@ func LoadNS() {
 						v14 = tmp13
 						_ = v14
 					}
-					tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(2801), kw_column, int(17), kw_end_DASH_line, int(2804), kw_end_DASH_column, int(59))
-					tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v16 any = tmp15
-					_ = v16
-					tmp17 := checkDerefVar(var_clojure_DOT_core_apply)
-					tmp18 := checkDerefVar(var_clojure_DOT_core_map)
-					tmp19 := lang.Apply3(tmp17, tmp18, v2, v3)
-					tmp20 := lang.Apply1(v16, tmp19)
-					tmp12 = tmp20
+					var v14 any = tmp13
+					_ = v14
+					tmp15 := checkDerefVar(var_clojure_DOT_core_apply)
+					tmp16 := checkDerefVar(var_clojure_DOT_core_map)
+					tmp17 := lang.Apply3(tmp15, tmp16, v2, v3)
+					tmp18 := lang.Apply1(v14, tmp17)
+					tmp12 = tmp18
 				} // end let
 				return tmp12
 			}),
@@ -49070,144 +47955,124 @@ func LoadNS() {
 							}
 							return tmp25
 						})
-						tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6732), kw_column, int(47), kw_end_DASH_line, int(6732), kw_end_DASH_column, int(94))
-						tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp18 := lang.Apply2(tmp14, tmp17, v12)
-						var v19 any = tmp18
-						_ = v19
+						tmp16 := lang.Apply2(tmp14, tmp15, v12)
+						var v17 any = tmp16
+						_ = v17
 						// let binding "expr"
-						tmp20 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp21 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp18 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp19 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp20 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp21 := lang.Apply1(tmp20, sym_clojure_DOT_core_SLASH_condp)
 						tmp22 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp23 := lang.Apply1(tmp22, sym_clojure_DOT_core_SLASH_condp)
+						tmp23 := lang.Apply1(tmp22, sym_clojure_DOT_core_SLASH__EQ_)
 						tmp24 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp25 := lang.Apply1(tmp24, sym_clojure_DOT_core_SLASH__EQ_)
+						tmp25 := lang.Apply1(tmp24, v2)
 						tmp26 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp27 := lang.Apply1(tmp26, v2)
-						tmp28 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp29 := lang.Apply1(tmp28, v3)
-						tmp30 := lang.Apply(tmp21, []any{tmp23, tmp25, tmp27, v19, tmp29})
-						tmp31 := lang.Apply1(tmp20, tmp30)
-						var v32 any = tmp31
-						_ = v32
-						tmp33 := checkDerefVar(var_clojure_DOT_core_assoc)
-						tmp34 := lang.Apply3(tmp33, v10, v11, v32)
-						tmp13 = tmp34
+						tmp27 := lang.Apply1(tmp26, v3)
+						tmp28 := lang.Apply(tmp19, []any{tmp21, tmp23, tmp25, v17, tmp27})
+						tmp29 := lang.Apply1(tmp18, tmp28)
+						var v30 any = tmp29
+						_ = v30
+						tmp31 := checkDerefVar(var_clojure_DOT_core_assoc)
+						tmp32 := lang.Apply3(tmp31, v10, v11, v30)
+						tmp13 = tmp32
 					} // end let
 					return tmp13
 				})
-				tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6731), kw_column, int(21), kw_end_DASH_line, int(6734), kw_end_DASH_column, int(42))
-				tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v12 any = tmp11
-				_ = v12
+				var v10 any = tmp9
+				_ = v10
 				// let binding "hmap"
-				tmp13 := checkDerefVar(var_clojure_DOT_core_reduce1)
-				var tmp14 lang.FnFunc2
-				tmp14 = lang.FnFunc2(func(p0, p1 any) any {
-					v15 := p0
-					_ = v15
-					v16 := p1
-					_ = v16
-					var tmp17 any
+				tmp11 := checkDerefVar(var_clojure_DOT_core_reduce1)
+				var tmp12 lang.FnFunc2
+				tmp12 = lang.FnFunc2(func(p0, p1 any) any {
+					v13 := p0
+					_ = v13
+					v14 := p1
+					_ = v14
+					var tmp15 any
 					{ // let
 						// let binding "vec__533"
-						var v18 any = v16
-						_ = v18
+						var v16 any = v14
+						_ = v16
 						// let binding "h"
-						tmp19 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp20 := lang.Apply3(tmp19, v18, int64(0), nil)
-						var v21 any = tmp20
-						_ = v21
+						tmp17 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp18 := lang.Apply3(tmp17, v16, int64(0), nil)
+						var v19 any = tmp18
+						_ = v19
 						// let binding "bucket"
-						tmp22 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp23 := lang.Apply3(tmp22, v18, int64(1), nil)
-						var v24 any = tmp23
-						_ = v24
-						var tmp25 any
-						tmp26 := checkDerefVar(var_clojure_DOT_core_count)
-						tmp27 := lang.Apply1(tmp26, v24)
-						tmp28 := lang.Numbers.Equiv(int64(1), tmp27)
-						if lang.IsTruthy(tmp28) {
-							tmp29 := checkDerefVar(var_clojure_DOT_core_assoc)
-							tmp30 := checkDerefVar(var_clojure_DOT_core_ffirst)
-							tmp31 := lang.Apply1(tmp30, v24)
-							tmp32 := checkDerefVar(var_clojure_DOT_core_second)
-							tmp33 := checkDerefVar(var_clojure_DOT_core_first)
-							tmp34 := lang.Apply1(tmp33, v24)
-							tmp35 := lang.Apply1(tmp32, tmp34)
-							tmp36 := lang.Apply3(tmp29, v15, tmp31, tmp35)
-							tmp25 = tmp36
+						tmp20 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp21 := lang.Apply3(tmp20, v16, int64(1), nil)
+						var v22 any = tmp21
+						_ = v22
+						var tmp23 any
+						tmp24 := checkDerefVar(var_clojure_DOT_core_count)
+						tmp25 := lang.Apply1(tmp24, v22)
+						tmp26 := lang.Numbers.Equiv(int64(1), tmp25)
+						if lang.IsTruthy(tmp26) {
+							tmp27 := checkDerefVar(var_clojure_DOT_core_assoc)
+							tmp28 := checkDerefVar(var_clojure_DOT_core_ffirst)
+							tmp29 := lang.Apply1(tmp28, v22)
+							tmp30 := checkDerefVar(var_clojure_DOT_core_second)
+							tmp31 := checkDerefVar(var_clojure_DOT_core_first)
+							tmp32 := lang.Apply1(tmp31, v22)
+							tmp33 := lang.Apply1(tmp30, tmp32)
+							tmp34 := lang.Apply3(tmp27, v13, tmp29, tmp33)
+							tmp23 = tmp34
 						} else {
-							tmp37 := lang.Apply3(v12, v15, v21, v24)
-							tmp25 = tmp37
+							tmp35 := lang.Apply3(v10, v13, v19, v22)
+							tmp23 = tmp35
 						}
-						tmp17 = tmp25
+						tmp15 = tmp23
 					} // end let
-					return tmp17
+					return tmp15
 				})
-				tmp15 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6736), kw_column, int(16), kw_end_DASH_line, int(6739), kw_end_DASH_column, int(45))
-				tmp16, err := lang.WithMeta(tmp14, tmp15.(lang.IPersistentMap))
+				tmp13 := lang.NewMap()
+				tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6740), kw_column, int(16), kw_end_DASH_line, int(6740), kw_end_DASH_column, int(17))
+				tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp17 := lang.NewMap()
-				tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6740), kw_column, int(16), kw_end_DASH_line, int(6740), kw_end_DASH_column, int(17))
-				tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp20 := lang.Apply3(tmp13, tmp16, tmp19, v8)
-				var v21 any = tmp20
-				_ = v21
+				tmp16 := lang.Apply3(tmp11, tmp12, tmp15, v8)
+				var v17 any = tmp16
+				_ = v17
 				// let binding "skip-check"
-				tmp22 := checkDerefVar(var_clojure_DOT_core_into1)
-				tmp23 := lang.NewSet()
-				tmp24 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6744), kw_column, int(29), kw_end_DASH_line, int(6744), kw_end_DASH_column, int(31))
-				tmp25, err := lang.WithMeta(tmp23, tmp24.(lang.IPersistentMap))
+				tmp18 := checkDerefVar(var_clojure_DOT_core_into1)
+				tmp19 := lang.NewSet()
+				tmp20 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6744), kw_column, int(29), kw_end_DASH_line, int(6744), kw_end_DASH_column, int(31))
+				tmp21, err := lang.WithMeta(tmp19, tmp20.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp26 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp27 := checkDerefVar(var_clojure_DOT_core_first)
-				tmp28 := checkDerefVar(var_clojure_DOT_core_filter)
-				var tmp29 lang.FnFunc1
-				tmp29 = lang.FnFunc1(func(p0 any) any {
-					v30 := p0
-					_ = v30
-					tmp31 := checkDerefVar(var_clojure_DOT_core_count)
-					tmp32 := checkDerefVar(var_clojure_DOT_core_second)
-					tmp33 := lang.Apply1(tmp32, v30)
-					tmp34 := lang.Apply1(tmp31, tmp33)
-					tmp35 := lang.Numbers.Lt(int64(1), tmp34)
-					return tmp35
+				tmp22 := checkDerefVar(var_clojure_DOT_core_map)
+				tmp23 := checkDerefVar(var_clojure_DOT_core_first)
+				tmp24 := checkDerefVar(var_clojure_DOT_core_filter)
+				var tmp25 lang.FnFunc1
+				tmp25 = lang.FnFunc1(func(p0 any) any {
+					v26 := p0
+					_ = v26
+					tmp27 := checkDerefVar(var_clojure_DOT_core_count)
+					tmp28 := checkDerefVar(var_clojure_DOT_core_second)
+					tmp29 := lang.Apply1(tmp28, v26)
+					tmp30 := lang.Apply1(tmp27, tmp29)
+					tmp31 := lang.Numbers.Lt(int64(1), tmp30)
+					return tmp31
 				})
-				tmp30 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6742), kw_column, int(30), kw_end_DASH_line, int(6742), kw_end_DASH_column, int(54))
-				tmp31, err := lang.WithMeta(tmp29, tmp30.(lang.IPersistentMap))
+				tmp26 := lang.Apply2(tmp24, tmp25, v8)
+				tmp27 := lang.Apply2(tmp22, tmp23, tmp26)
+				tmp28 := lang.Apply2(tmp18, tmp21, tmp27)
+				var v29 any = tmp28
+				_ = v29
+				tmp30 := checkDerefVar(var_clojure_DOT_core_keys)
+				tmp31 := lang.Apply1(tmp30, v17)
+				tmp32 := checkDerefVar(var_clojure_DOT_core_vals)
+				tmp33 := lang.Apply1(tmp32, v17)
+				tmp34 := lang.NewVector(tmp31, tmp33, v29)
+				tmp35 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6745), kw_column, int(5), kw_end_DASH_line, int(6745), kw_end_DASH_column, int(40))
+				tmp36, err := lang.WithMeta(tmp34, tmp35.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp32 := lang.Apply2(tmp28, tmp31, v8)
-				tmp33 := lang.Apply2(tmp26, tmp27, tmp32)
-				tmp34 := lang.Apply2(tmp22, tmp25, tmp33)
-				var v35 any = tmp34
-				_ = v35
-				tmp36 := checkDerefVar(var_clojure_DOT_core_keys)
-				tmp37 := lang.Apply1(tmp36, v21)
-				tmp38 := checkDerefVar(var_clojure_DOT_core_vals)
-				tmp39 := lang.Apply1(tmp38, v21)
-				tmp40 := lang.NewVector(tmp37, tmp39, v35)
-				tmp41 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6745), kw_column, int(5), kw_end_DASH_line, int(6745), kw_end_DASH_column, int(40))
-				tmp42, err := lang.WithMeta(tmp40, tmp41.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp6 = tmp42
+				tmp6 = tmp36
 			} // end let
 			return tmp6
 		})
@@ -49239,220 +48104,205 @@ func LoadNS() {
 					tmp9 := lang.Hash(v8)
 					return tmp9
 				})
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6755), kw_column, int(18), kw_end_DASH_line, int(6755), kw_end_DASH_column, int(66))
-				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v10 any = tmp9
-				_ = v10
+				var v8 any = tmp7
+				_ = v8
 				// let binding "hashes"
-				tmp11 := checkDerefVar(var_clojure_DOT_core_into1)
-				tmp12 := lang.NewSet()
-				tmp13 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6756), kw_column, int(23), kw_end_DASH_line, int(6756), kw_end_DASH_column, int(25))
-				tmp14, err := lang.WithMeta(tmp12, tmp13.(lang.IPersistentMap))
+				tmp9 := checkDerefVar(var_clojure_DOT_core_into1)
+				tmp10 := lang.NewSet()
+				tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6756), kw_column, int(23), kw_end_DASH_line, int(6756), kw_end_DASH_column, int(25))
+				tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp15 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp16 := lang.Apply2(tmp15, v10, v4)
-				tmp17 := lang.Apply2(tmp11, tmp14, tmp16)
-				var v18 any = tmp17
-				_ = v18
-				var tmp19 any
+				tmp13 := checkDerefVar(var_clojure_DOT_core_map)
+				tmp14 := lang.Apply2(tmp13, v8, v4)
+				tmp15 := lang.Apply2(tmp9, tmp12, tmp14)
+				var v16 any = tmp15
+				_ = v16
+				var tmp17 any
+				tmp18 := checkDerefVar(var_clojure_DOT_core_count)
+				tmp19 := lang.Apply1(tmp18, v4)
 				tmp20 := checkDerefVar(var_clojure_DOT_core_count)
-				tmp21 := lang.Apply1(tmp20, v4)
-				tmp22 := checkDerefVar(var_clojure_DOT_core_count)
-				tmp23 := lang.Apply1(tmp22, v18)
-				tmp24 := lang.Numbers.Equiv(tmp21, tmp23)
-				if lang.IsTruthy(tmp24) {
-					var tmp25 any
-					tmp26 := checkDerefVar(var_clojure_DOT_core_fits_DASH_table_QMARK_)
-					tmp27 := lang.Apply1(tmp26, v18)
-					if lang.IsTruthy(tmp27) {
-						tmp28 := checkDerefVar(var_clojure_DOT_core_case_DASH_map)
-						tmp29 := checkDerefVar(var_clojure_DOT_core_identity)
-						tmp30 := lang.Apply4(tmp28, v10, tmp29, v4, v5)
-						tmp31 := lang.NewVector(int64(0), int64(0), tmp30, kw_compact)
-						tmp32 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6760), kw_column, int(9), kw_end_DASH_line, int(6760), kw_end_DASH_column, int(63))
-						tmp33, err := lang.WithMeta(tmp31, tmp32.(lang.IPersistentMap))
+				tmp21 := lang.Apply1(tmp20, v16)
+				tmp22 := lang.Numbers.Equiv(tmp19, tmp21)
+				if lang.IsTruthy(tmp22) {
+					var tmp23 any
+					tmp24 := checkDerefVar(var_clojure_DOT_core_fits_DASH_table_QMARK_)
+					tmp25 := lang.Apply1(tmp24, v16)
+					if lang.IsTruthy(tmp25) {
+						tmp26 := checkDerefVar(var_clojure_DOT_core_case_DASH_map)
+						tmp27 := checkDerefVar(var_clojure_DOT_core_identity)
+						tmp28 := lang.Apply4(tmp26, v8, tmp27, v4, v5)
+						tmp29 := lang.NewVector(int64(0), int64(0), tmp28, kw_compact)
+						tmp30 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6760), kw_column, int(9), kw_end_DASH_line, int(6760), kw_end_DASH_column, int(63))
+						tmp31, err := lang.WithMeta(tmp29, tmp30.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
 						}
-						tmp25 = tmp33
+						tmp23 = tmp31
 					} else {
-						var tmp34 any
+						var tmp32 any
 						{ // let
 							// let binding "vec__536"
-							var tmp35 any
+							var tmp33 any
 							{ // let
 								// let binding "or__0__auto__"
-								tmp36 := checkDerefVar(var_clojure_DOT_core_maybe_DASH_min_DASH_hash)
-								tmp37 := lang.Apply1(tmp36, v18)
-								var v38 any = tmp37
-								_ = v38
-								var tmp39 any
-								if lang.IsTruthy(v38) {
-									tmp39 = v38
+								tmp34 := checkDerefVar(var_clojure_DOT_core_maybe_DASH_min_DASH_hash)
+								tmp35 := lang.Apply1(tmp34, v16)
+								var v36 any = tmp35
+								_ = v36
+								var tmp37 any
+								if lang.IsTruthy(v36) {
+									tmp37 = v36
 								} else {
-									tmp40 := lang.NewVector(int64(0), int64(0))
-									tmp41 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6761), kw_column, int(56), kw_end_DASH_line, int(6761), kw_end_DASH_column, int(60))
-									tmp42, err := lang.WithMeta(tmp40, tmp41.(lang.IPersistentMap))
+									tmp38 := lang.NewVector(int64(0), int64(0))
+									tmp39 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6761), kw_column, int(56), kw_end_DASH_line, int(6761), kw_end_DASH_column, int(60))
+									tmp40, err := lang.WithMeta(tmp38, tmp39.(lang.IPersistentMap))
 									if err != nil {
 										panic(err)
 									}
-									tmp39 = tmp42
+									tmp37 = tmp40
 								}
-								tmp35 = tmp39
+								tmp33 = tmp37
 							} // end let
-							var v36 any = tmp35
-							_ = v36
+							var v34 any = tmp33
+							_ = v34
 							// let binding "shift"
-							tmp37 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp38 := lang.Apply3(tmp37, v36, int64(0), nil)
-							var v39 any = tmp38
-							_ = v39
+							tmp35 := checkDerefVar(var_clojure_DOT_core_nth)
+							tmp36 := lang.Apply3(tmp35, v34, int64(0), nil)
+							var v37 any = tmp36
+							_ = v37
 							// let binding "mask"
-							tmp40 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp41 := lang.Apply3(tmp40, v36, int64(1), nil)
-							var v42 any = tmp41
-							_ = v42
-							var tmp43 any
-							tmp44 := lang.Numbers.IsZero(v42)
-							if lang.IsTruthy(tmp44) {
-								tmp45 := checkDerefVar(var_clojure_DOT_core_case_DASH_map)
-								tmp46 := checkDerefVar(var_clojure_DOT_core_identity)
-								tmp47 := lang.Apply4(tmp45, v10, tmp46, v4, v5)
-								tmp48 := lang.NewVector(int64(0), int64(0), tmp47, kw_sparse)
-								tmp49 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6764), kw_column, int(13), kw_end_DASH_line, int(6764), kw_end_DASH_column, int(66))
-								tmp50, err := lang.WithMeta(tmp48, tmp49.(lang.IPersistentMap))
+							tmp38 := checkDerefVar(var_clojure_DOT_core_nth)
+							tmp39 := lang.Apply3(tmp38, v34, int64(1), nil)
+							var v40 any = tmp39
+							_ = v40
+							var tmp41 any
+							tmp42 := lang.Numbers.IsZero(v40)
+							if lang.IsTruthy(tmp42) {
+								tmp43 := checkDerefVar(var_clojure_DOT_core_case_DASH_map)
+								tmp44 := checkDerefVar(var_clojure_DOT_core_identity)
+								tmp45 := lang.Apply4(tmp43, v8, tmp44, v4, v5)
+								tmp46 := lang.NewVector(int64(0), int64(0), tmp45, kw_sparse)
+								tmp47 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6764), kw_column, int(13), kw_end_DASH_line, int(6764), kw_end_DASH_column, int(66))
+								tmp48, err := lang.WithMeta(tmp46, tmp47.(lang.IPersistentMap))
 								if err != nil {
 									panic(err)
 								}
-								tmp43 = tmp50
+								tmp41 = tmp48
 							} else {
-								tmp51 := checkDerefVar(var_clojure_DOT_core_case_DASH_map)
-								var tmp52 lang.FnFunc1
-								tmp52 = lang.FnFunc1(func(p0 any) any {
-									v53 := p0
-									_ = v53
-									tmp54 := checkDerefVar(var_clojure_DOT_core_shift_DASH_mask)
-									tmp55 := lang.Apply1(v10, v53)
-									tmp56 := lang.Apply3(tmp54, v39, v42, tmp55)
-									return tmp56
+								tmp49 := checkDerefVar(var_clojure_DOT_core_case_DASH_map)
+								var tmp50 lang.FnFunc1
+								tmp50 = lang.FnFunc1(func(p0 any) any {
+									v51 := p0
+									_ = v51
+									tmp52 := checkDerefVar(var_clojure_DOT_core_shift_DASH_mask)
+									tmp53 := lang.Apply1(v8, v51)
+									tmp54 := lang.Apply3(tmp52, v37, v40, tmp53)
+									return tmp54
 								})
-								tmp53 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6766), kw_column, int(35), kw_end_DASH_line, int(6766), kw_end_DASH_column, int(71))
-								tmp54, err := lang.WithMeta(tmp52, tmp53.(lang.IPersistentMap))
+								tmp51 := checkDerefVar(var_clojure_DOT_core_identity)
+								tmp52 := lang.Apply4(tmp49, tmp50, tmp51, v4, v5)
+								tmp53 := lang.NewVector(v37, v40, tmp52, kw_compact)
+								tmp54 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6766), kw_column, int(13), kw_end_DASH_line, int(6766), kw_end_DASH_column, int(103))
+								tmp55, err := lang.WithMeta(tmp53, tmp54.(lang.IPersistentMap))
 								if err != nil {
 									panic(err)
 								}
-								tmp55 := checkDerefVar(var_clojure_DOT_core_identity)
-								tmp56 := lang.Apply4(tmp51, tmp54, tmp55, v4, v5)
-								tmp57 := lang.NewVector(v39, v42, tmp56, kw_compact)
-								tmp58 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6766), kw_column, int(13), kw_end_DASH_line, int(6766), kw_end_DASH_column, int(103))
-								tmp59, err := lang.WithMeta(tmp57, tmp58.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp43 = tmp59
+								tmp41 = tmp55
 							}
-							tmp34 = tmp43
+							tmp32 = tmp41
 						} // end let
-						tmp25 = tmp34
+						tmp23 = tmp32
 					}
-					tmp19 = tmp25
+					tmp17 = tmp23
 				} else {
-					var tmp35 any
+					var tmp33 any
 					{ // let
 						// let binding "vec__539"
-						tmp36 := checkDerefVar(var_clojure_DOT_core_merge_DASH_hash_DASH_collisions)
-						tmp37 := lang.Apply4(tmp36, v2, v3, v4, v5)
-						var v38 any = tmp37
-						_ = v38
+						tmp34 := checkDerefVar(var_clojure_DOT_core_merge_DASH_hash_DASH_collisions)
+						tmp35 := lang.Apply4(tmp34, v2, v3, v4, v5)
+						var v36 any = tmp35
+						_ = v36
 						// let binding "tests"
-						tmp39 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp40 := lang.Apply3(tmp39, v38, int64(0), nil)
-						var v41 any = tmp40
-						_ = v41
+						tmp37 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp38 := lang.Apply3(tmp37, v36, int64(0), nil)
+						var v39 any = tmp38
+						_ = v39
 						// let binding "thens"
-						tmp42 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp43 := lang.Apply3(tmp42, v38, int64(1), nil)
-						var v44 any = tmp43
-						_ = v44
+						tmp40 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp41 := lang.Apply3(tmp40, v36, int64(1), nil)
+						var v42 any = tmp41
+						_ = v42
 						// let binding "skip-check"
-						tmp45 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp46 := lang.Apply3(tmp45, v38, int64(2), nil)
-						var v47 any = tmp46
-						_ = v47
+						tmp43 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp44 := lang.Apply3(tmp43, v36, int64(2), nil)
+						var v45 any = tmp44
+						_ = v45
 						// let binding "vec__542"
-						tmp48 := checkDerefVar(var_clojure_DOT_core_prep_DASH_hashes)
-						tmp49 := lang.Apply4(tmp48, v2, v3, v41, v44)
-						var v50 any = tmp49
-						_ = v50
+						tmp46 := checkDerefVar(var_clojure_DOT_core_prep_DASH_hashes)
+						tmp47 := lang.Apply4(tmp46, v2, v3, v39, v42)
+						var v48 any = tmp47
+						_ = v48
 						// let binding "shift"
-						tmp51 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp52 := lang.Apply3(tmp51, v50, int64(0), nil)
-						var v53 any = tmp52
-						_ = v53
+						tmp49 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp50 := lang.Apply3(tmp49, v48, int64(0), nil)
+						var v51 any = tmp50
+						_ = v51
 						// let binding "mask"
-						tmp54 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp55 := lang.Apply3(tmp54, v50, int64(1), nil)
-						var v56 any = tmp55
-						_ = v56
+						tmp52 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp53 := lang.Apply3(tmp52, v48, int64(1), nil)
+						var v54 any = tmp53
+						_ = v54
 						// let binding "case-map"
-						tmp57 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp58 := lang.Apply3(tmp57, v50, int64(2), nil)
-						var v59 any = tmp58
-						_ = v59
+						tmp55 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp56 := lang.Apply3(tmp55, v48, int64(2), nil)
+						var v57 any = tmp56
+						_ = v57
 						// let binding "switch-type"
-						tmp60 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp61 := lang.Apply3(tmp60, v50, int64(3), nil)
-						var v62 any = tmp61
-						_ = v62
+						tmp58 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp59 := lang.Apply3(tmp58, v48, int64(3), nil)
+						var v60 any = tmp59
+						_ = v60
 						// let binding "skip-check"
-						var tmp63 any
-						tmp64 := lang.Numbers.IsZero(v56)
-						if lang.IsTruthy(tmp64) {
-							tmp63 = v47
+						var tmp61 any
+						tmp62 := lang.Numbers.IsZero(v54)
+						if lang.IsTruthy(tmp62) {
+							tmp61 = v45
 						} else {
-							tmp65 := checkDerefVar(var_clojure_DOT_core_into1)
-							tmp66 := lang.NewSet()
-							tmp67 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6772), kw_column, int(33), kw_end_DASH_line, int(6772), kw_end_DASH_column, int(35))
-							tmp68, err := lang.WithMeta(tmp66, tmp67.(lang.IPersistentMap))
+							tmp63 := checkDerefVar(var_clojure_DOT_core_into1)
+							tmp64 := lang.NewSet()
+							tmp65 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6772), kw_column, int(33), kw_end_DASH_line, int(6772), kw_end_DASH_column, int(35))
+							tmp66, err := lang.WithMeta(tmp64, tmp65.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp69 := checkDerefVar(var_clojure_DOT_core_map)
-							var tmp70 lang.FnFunc1
-							tmp70 = lang.FnFunc1(func(p0 any) any {
-								v71 := p0
-								_ = v71
-								tmp72 := checkDerefVar(var_clojure_DOT_core_shift_DASH_mask)
-								tmp73 := lang.Apply3(tmp72, v53, v56, v71)
-								return tmp73
+							tmp67 := checkDerefVar(var_clojure_DOT_core_map)
+							var tmp68 lang.FnFunc1
+							tmp68 = lang.FnFunc1(func(p0 any) any {
+								v69 := p0
+								_ = v69
+								tmp70 := checkDerefVar(var_clojure_DOT_core_shift_DASH_mask)
+								tmp71 := lang.Apply3(tmp70, v51, v54, v69)
+								return tmp71
 							})
-							tmp71 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6772), kw_column, int(42), kw_end_DASH_line, int(6772), kw_end_DASH_column, int(67))
-							tmp72, err := lang.WithMeta(tmp70, tmp71.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp73 := lang.Apply2(tmp69, tmp72, v47)
-							tmp74 := lang.Apply2(tmp65, tmp68, tmp73)
-							tmp63 = tmp74
+							tmp69 := lang.Apply2(tmp67, tmp68, v45)
+							tmp70 := lang.Apply2(tmp63, tmp66, tmp69)
+							tmp61 = tmp70
 						}
-						var v75 any = tmp63
-						_ = v75
-						tmp76 := lang.NewVector(v53, v56, v59, v62, v75)
-						tmp77 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6773), kw_column, int(9), kw_end_DASH_line, int(6773), kw_end_DASH_column, int(52))
-						tmp78, err := lang.WithMeta(tmp76, tmp77.(lang.IPersistentMap))
+						var v71 any = tmp61
+						_ = v71
+						tmp72 := lang.NewVector(v51, v54, v57, v60, v71)
+						tmp73 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(6773), kw_column, int(9), kw_end_DASH_line, int(6773), kw_end_DASH_column, int(52))
+						tmp74, err := lang.WithMeta(tmp72, tmp73.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
 						}
-						tmp35 = tmp78
+						tmp33 = tmp74
 					} // end let
-					tmp19 = tmp35
+					tmp17 = tmp33
 				}
-				tmp6 = tmp19
+				tmp6 = tmp17
 			} // end let
 			return tmp6
 		})
@@ -49502,15 +48352,10 @@ func LoadNS() {
 					v7 = tmp6
 					_ = v7
 				}
-				tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5015), kw_column, int(15), kw_end_DASH_line, int(5019), kw_end_DASH_column, int(53))
-				tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v9 any = tmp8
-				_ = v9
-				tmp10 := lang.Apply1(v9, v4)
-				tmp5 = tmp10
+				var v7 any = tmp6
+				_ = v7
+				tmp8 := lang.Apply1(v7, v4)
+				tmp5 = tmp8
 			} // end let
 			return tmp5
 		})
@@ -49628,31 +48473,21 @@ func LoadNS() {
 				tmp7 := lang.Apply0(tmp6)
 				return tmp7
 			})
-			tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5028), kw_column, int(6), kw_end_DASH_line, int(5028), kw_end_DASH_column, int(47))
-			tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			var tmp7 lang.FnFunc1
-			tmp7 = lang.FnFunc1(func(p0 any) any {
-				v8 := p0
-				_ = v8
-				tmp9 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp10, _ := lang.FieldOrMethod(v8, "listFiles")
-				if reflect.TypeOf(tmp10).Kind() != reflect.Func {
+			var tmp5 lang.FnFunc1
+			tmp5 = lang.FnFunc1(func(p0 any) any {
+				v6 := p0
+				_ = v6
+				tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp8, _ := lang.FieldOrMethod(v6, "listFiles")
+				if reflect.TypeOf(tmp8).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("listFiles is not a function")))
 				}
-				tmp11 := lang.Apply0(tmp10)
-				tmp12 := lang.Apply1(tmp9, tmp11)
-				return tmp12
+				tmp9 := lang.Apply0(tmp8)
+				tmp10 := lang.Apply1(tmp7, tmp9)
+				return tmp10
 			})
-			tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5029), kw_column, int(6), kw_end_DASH_line, int(5029), kw_end_DASH_column, int(51))
-			tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp10 := lang.Apply3(tmp3, tmp6, tmp9, v2)
-			return tmp10
+			tmp6 := lang.Apply3(tmp3, tmp4, tmp5, v2)
+			return tmp6
 		})
 		var_clojure_DOT_core_file_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_file_DASH_seq.SetMetaLazy(func() lang.IPersistentMap {
@@ -49917,96 +48752,86 @@ func LoadNS() {
 							tmp51 := lang.Apply3(tmp39, v37, v38, tmp50)
 							return tmp51
 						})
-						tmp37 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5683), kw_column, int(24), kw_end_DASH_line, int(5685), kw_end_DASH_column, int(98))
-						tmp38, err := lang.WithMeta(tmp36, tmp37.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp39 := checkDerefVar(var_clojure_DOT_core_cons)
-						tmp40 := lang.Apply1(v32, v31)
-						tmp41 := lang.Apply2(tmp39, v31, tmp40)
-						tmp42 := lang.Apply3(tmp35, tmp38, v30, tmp41)
-						return tmp42
+						tmp37 := checkDerefVar(var_clojure_DOT_core_cons)
+						tmp38 := lang.Apply1(v32, v31)
+						tmp39 := lang.Apply2(tmp37, v31, tmp38)
+						tmp40 := lang.Apply3(tmp35, tmp36, v30, tmp39)
+						return tmp40
 					})
-					tmp30 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5682), kw_column, int(13), kw_end_DASH_line, int(5686), kw_end_DASH_column, int(56))
-					tmp31, err := lang.WithMeta(tmp29, tmp30.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var v32 any = tmp31
-					_ = v32
-					var tmp33 any
+					var v30 any = tmp29
+					_ = v30
+					var tmp31 any
 					{ // let
 						// let binding "or__0__auto__"
-						var tmp34 any
-						tmp35 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
-						tmp36 := lang.Apply1(v24, v3)
-						tmp37 := lang.Apply2(tmp35, tmp36, v4)
-						if lang.IsTruthy(tmp37) {
+						var tmp32 any
+						tmp33 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
+						tmp34 := lang.Apply1(v24, v3)
+						tmp35 := lang.Apply2(tmp33, tmp34, v4)
+						if lang.IsTruthy(tmp35) {
 						} else {
-							var tmp38 any
-							tmp39 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
-							tmp40 := lang.Apply1(v28, v3)
-							tmp41 := lang.Apply2(tmp39, tmp40, v4)
-							if lang.IsTruthy(tmp41) {
-								tmp42 := checkDerefVar(var_clojure_DOT_core_print_DASH_str)
-								tmp43 := lang.Apply4(tmp42, v3, "already has", v4, "as ancestor")
-								tmp44 := lang.Apply1(lang.NewError, tmp43)
-								panic(tmp44)
+							var tmp36 any
+							tmp37 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
+							tmp38 := lang.Apply1(v28, v3)
+							tmp39 := lang.Apply2(tmp37, tmp38, v4)
+							if lang.IsTruthy(tmp39) {
+								tmp40 := checkDerefVar(var_clojure_DOT_core_print_DASH_str)
+								tmp41 := lang.Apply4(tmp40, v3, "already has", v4, "as ancestor")
+								tmp42 := lang.Apply1(lang.NewError, tmp41)
+								panic(tmp42)
 							} else {
 							}
-							_ = tmp38
-							var tmp45 any
-							tmp46 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
-							tmp47 := lang.Apply1(v28, v4)
-							tmp48 := lang.Apply2(tmp46, tmp47, v3)
-							if lang.IsTruthy(tmp48) {
-								tmp49 := checkDerefVar(var_clojure_DOT_core_print_DASH_str)
-								tmp50 := lang.Apply(tmp49, []any{"Cyclic derivation:", v4, "has", v3, "as ancestor"})
-								tmp51 := lang.Apply1(lang.NewError, tmp50)
-								panic(tmp51)
+							_ = tmp36
+							var tmp43 any
+							tmp44 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
+							tmp45 := lang.Apply1(v28, v4)
+							tmp46 := lang.Apply2(tmp44, tmp45, v3)
+							if lang.IsTruthy(tmp46) {
+								tmp47 := checkDerefVar(var_clojure_DOT_core_print_DASH_str)
+								tmp48 := lang.Apply(tmp47, []any{"Cyclic derivation:", v4, "has", v3, "as ancestor"})
+								tmp49 := lang.Apply1(lang.NewError, tmp48)
+								panic(tmp49)
 							} else {
 							}
-							_ = tmp45
-							tmp52 := checkDerefVar(var_clojure_DOT_core_assoc)
-							tmp53 := lang.Apply1(kw_parents, v2)
-							tmp54 := checkDerefVar(var_clojure_DOT_core_conj)
-							tmp55 := lang.NewSet()
-							tmp56 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5693), kw_column, int(61), kw_end_DASH_line, int(5693), kw_end_DASH_column, int(63))
-							tmp57, err := lang.WithMeta(tmp55, tmp56.(lang.IPersistentMap))
+							_ = tmp43
+							tmp50 := checkDerefVar(var_clojure_DOT_core_assoc)
+							tmp51 := lang.Apply1(kw_parents, v2)
+							tmp52 := checkDerefVar(var_clojure_DOT_core_conj)
+							tmp53 := lang.NewSet()
+							tmp54 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5693), kw_column, int(61), kw_end_DASH_line, int(5693), kw_end_DASH_column, int(63))
+							tmp55, err := lang.WithMeta(tmp53, tmp54.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp58, _ := lang.FieldOrMethod(runtime.RT, "Get")
-							if reflect.TypeOf(tmp58).Kind() != reflect.Func {
+							tmp56, _ := lang.FieldOrMethod(runtime.RT, "Get")
+							if reflect.TypeOf(tmp56).Kind() != reflect.Func {
 								panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
 							}
-							tmp59 := lang.Apply3(tmp58, v24, v3, tmp57)
-							tmp60 := lang.Apply2(tmp54, tmp59, v4)
-							tmp61 := lang.Apply3(tmp52, tmp53, v3, tmp60)
-							tmp62 := lang.Apply1(kw_ancestors, v2)
-							tmp63 := lang.Apply(v32, []any{tmp62, v3, v26, v4, v28})
-							tmp64 := lang.Apply1(kw_descendants, v2)
-							tmp65 := lang.Apply(v32, []any{tmp64, v4, v28, v3, v26})
-							tmp66 := lang.NewMap(kw_parents, tmp61, kw_ancestors, tmp63, kw_descendants, tmp65)
-							tmp67 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5693), kw_column, int(9), kw_end_DASH_line, int(5695), kw_end_DASH_column, int(61))
-							tmp68, err := lang.WithMeta(tmp66, tmp67.(lang.IPersistentMap))
+							tmp57 := lang.Apply3(tmp56, v24, v3, tmp55)
+							tmp58 := lang.Apply2(tmp52, tmp57, v4)
+							tmp59 := lang.Apply3(tmp50, tmp51, v3, tmp58)
+							tmp60 := lang.Apply1(kw_ancestors, v2)
+							tmp61 := lang.Apply(v30, []any{tmp60, v3, v26, v4, v28})
+							tmp62 := lang.Apply1(kw_descendants, v2)
+							tmp63 := lang.Apply(v30, []any{tmp62, v4, v28, v3, v26})
+							tmp64 := lang.NewMap(kw_parents, tmp59, kw_ancestors, tmp61, kw_descendants, tmp63)
+							tmp65 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5693), kw_column, int(9), kw_end_DASH_line, int(5695), kw_end_DASH_column, int(61))
+							tmp66, err := lang.WithMeta(tmp64, tmp65.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp34 = tmp68
+							tmp32 = tmp66
 						}
-						var v69 any = tmp34
-						_ = v69
-						var tmp70 any
-						if lang.IsTruthy(v69) {
-							tmp70 = v69
+						var v67 any = tmp32
+						_ = v67
+						var tmp68 any
+						if lang.IsTruthy(v67) {
+							tmp68 = v67
 						} else {
-							tmp70 = v2
+							tmp68 = v2
 						}
-						tmp33 = tmp70
+						tmp31 = tmp68
 					} // end let
-					tmp22 = tmp33
+					tmp22 = tmp31
 				} // end let
 				return tmp22
 			}),
@@ -50104,49 +48929,39 @@ func LoadNS() {
 						tmp38 := lang.Apply2(tmp29, tmp31, tmp37)
 						return tmp38
 					})
-					tmp28 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5713), kw_column, int(28), kw_end_DASH_line, int(5713), kw_end_DASH_column, int(70))
-					tmp29, err := lang.WithMeta(tmp27, tmp28.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp30 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp31 := lang.Apply1(tmp30, v24)
-					tmp32 := lang.Apply2(tmp26, tmp29, tmp31)
-					tmp33 := lang.Apply1(tmp25, tmp32)
-					var v34 any = tmp33
-					_ = v34
-					var tmp35 any
-					tmp36 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
-					tmp37 := lang.Apply1(v7, v3)
-					tmp38 := lang.Apply2(tmp36, tmp37, v4)
-					if lang.IsTruthy(tmp38) {
-						tmp39 := checkDerefVar(var_clojure_DOT_core_reduce1)
-						var tmp40 lang.FnFunc2
-						tmp40 = lang.FnFunc2(func(p0, p1 any) any {
-							v41 := p0
-							_ = v41
-							v42 := p1
-							_ = v42
-							tmp43 := checkDerefVar(var_clojure_DOT_core_apply)
-							tmp44 := checkDerefVar(var_clojure_DOT_core_derive)
-							tmp45 := lang.Apply3(tmp43, tmp44, v41, v42)
-							return tmp45
+					tmp28 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp29 := lang.Apply1(tmp28, v24)
+					tmp30 := lang.Apply2(tmp26, tmp27, tmp29)
+					tmp31 := lang.Apply1(tmp25, tmp30)
+					var v32 any = tmp31
+					_ = v32
+					var tmp33 any
+					tmp34 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
+					tmp35 := lang.Apply1(v7, v3)
+					tmp36 := lang.Apply2(tmp34, tmp35, v4)
+					if lang.IsTruthy(tmp36) {
+						tmp37 := checkDerefVar(var_clojure_DOT_core_reduce1)
+						var tmp38 lang.FnFunc2
+						tmp38 = lang.FnFunc2(func(p0, p1 any) any {
+							v39 := p0
+							_ = v39
+							v40 := p1
+							_ = v40
+							tmp41 := checkDerefVar(var_clojure_DOT_core_apply)
+							tmp42 := checkDerefVar(var_clojure_DOT_core_derive)
+							tmp43 := lang.Apply3(tmp41, tmp42, v39, v40)
+							return tmp43
 						})
-						tmp41 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5716), kw_column, int(11), kw_end_DASH_line, int(5716), kw_end_DASH_column, int(31))
-						tmp42, err := lang.WithMeta(tmp40, tmp41.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp43 := checkDerefVar(var_clojure_DOT_core_make_DASH_hierarchy)
-						tmp44 := lang.Apply0(tmp43)
-						tmp45 := checkDerefVar(var_clojure_DOT_core_partition)
-						tmp46 := lang.Apply2(tmp45, int64(2), v34)
-						tmp47 := lang.Apply3(tmp39, tmp42, tmp44, tmp46)
-						tmp35 = tmp47
+						tmp39 := checkDerefVar(var_clojure_DOT_core_make_DASH_hierarchy)
+						tmp40 := lang.Apply0(tmp39)
+						tmp41 := checkDerefVar(var_clojure_DOT_core_partition)
+						tmp42 := lang.Apply2(tmp41, int64(2), v32)
+						tmp43 := lang.Apply3(tmp37, tmp38, tmp40, tmp42)
+						tmp33 = tmp43
 					} else {
-						tmp35 = v2
+						tmp33 = v2
 					}
-					tmp5 = tmp35
+					tmp5 = tmp33
 				} // end let
 				return tmp5
 			}),
@@ -50187,22 +49002,17 @@ func LoadNS() {
 				}
 				return tmp9
 			})
-			tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7037), kw_column, int(15), kw_end_DASH_line, int(7037), kw_end_DASH_column, int(52))
-			tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
+			tmp7 := checkDerefVar(var_clojure_DOT_core_transient)
+			tmp8 := lang.NewVector()
+			tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7038), kw_column, int(26), kw_end_DASH_line, int(7038), kw_end_DASH_column, int(27))
+			tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
 			}
-			tmp9 := checkDerefVar(var_clojure_DOT_core_transient)
-			tmp10 := lang.NewVector()
-			tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7038), kw_column, int(26), kw_end_DASH_line, int(7038), kw_end_DASH_column, int(27))
-			tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp13 := lang.Apply1(tmp9, tmp12)
-			tmp14 := lang.Apply3(tmp5, tmp8, tmp13, v3)
-			tmp15 := lang.Apply1(tmp4, tmp14)
-			return tmp15
+			tmp11 := lang.Apply1(tmp7, tmp10)
+			tmp12 := lang.Apply3(tmp5, tmp6, tmp11, v3)
+			tmp13 := lang.Apply1(tmp4, tmp12)
+			return tmp13
 		})
 		var_clojure_DOT_core_filterv = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_filterv.SetMetaLazy(func() lang.IPersistentMap {
@@ -50253,22 +49063,17 @@ func LoadNS() {
 				tmp12 := lang.Apply3(tmp8, v6, v7, tmp11)
 				return tmp12
 			})
-			tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7262), kw_column, int(12), kw_end_DASH_line, int(7263), kw_end_DASH_column, int(54))
-			tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
+			tmp6 := checkDerefVar(var_clojure_DOT_core_transient)
+			tmp7 := lang.NewMap()
+			tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7264), kw_column, int(23), kw_end_DASH_line, int(7264), kw_end_DASH_column, int(24))
+			tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
 			}
-			tmp8 := checkDerefVar(var_clojure_DOT_core_transient)
-			tmp9 := lang.NewMap()
-			tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7264), kw_column, int(23), kw_end_DASH_line, int(7264), kw_end_DASH_column, int(24))
-			tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp12 := lang.Apply1(tmp8, tmp11)
-			tmp13 := lang.Apply3(tmp4, tmp7, tmp12, v2)
-			tmp14 := lang.Apply1(tmp3, tmp13)
-			return tmp14
+			tmp10 := lang.Apply1(tmp6, tmp9)
+			tmp11 := lang.Apply3(tmp4, tmp5, tmp10, v2)
+			tmp12 := lang.Apply1(tmp3, tmp11)
+			return tmp12
 		})
 		var_clojure_DOT_core_frequencies = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_frequencies.SetMetaLazy(func() lang.IPersistentMap {
@@ -50317,22 +49122,17 @@ func LoadNS() {
 				} // end let
 				return tmp9
 			})
-			tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7207), kw_column, int(5), kw_end_DASH_line, int(7209), kw_end_DASH_column, int(48))
-			tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
+			tmp7 := checkDerefVar(var_clojure_DOT_core_transient)
+			tmp8 := lang.NewMap()
+			tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7210), kw_column, int(16), kw_end_DASH_line, int(7210), kw_end_DASH_column, int(17))
+			tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
 			if err != nil {
 				panic(err)
 			}
-			tmp9 := checkDerefVar(var_clojure_DOT_core_transient)
-			tmp10 := lang.NewMap()
-			tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7210), kw_column, int(16), kw_end_DASH_line, int(7210), kw_end_DASH_column, int(17))
-			tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp13 := lang.Apply1(tmp9, tmp12)
-			tmp14 := lang.Apply3(tmp5, tmp8, tmp13, v3)
-			tmp15 := lang.Apply1(tmp4, tmp14)
-			return tmp15
+			tmp11 := lang.Apply1(tmp7, tmp10)
+			tmp12 := lang.Apply3(tmp5, tmp6, tmp11, v3)
+			tmp13 := lang.Apply1(tmp4, tmp12)
+			return tmp13
 		})
 		var_clojure_DOT_core_group_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_group_DASH_by.SetMetaLazy(func() lang.IPersistentMap {
@@ -50434,18 +49234,13 @@ func LoadNS() {
 							nil,
 							0,
 						)
-						tmp14 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7007), kw_column, int(17), kw_end_DASH_line, int(7009), kw_end_DASH_column, int(44))
-						tmp15, err := lang.WithMeta(tmp13, tmp14.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						var v16 any = tmp15
-						_ = v16
-						tmp17 := checkDerefVar(var_clojure_DOT_core_transduce)
-						tmp18 := checkDerefVar(var_clojure_DOT_core_transient)
-						tmp19 := lang.Apply1(tmp18, v2)
-						tmp20 := lang.Apply4(tmp17, v3, v16, tmp19, v4)
-						tmp9 = tmp20
+						var v14 any = tmp13
+						_ = v14
+						tmp15 := checkDerefVar(var_clojure_DOT_core_transduce)
+						tmp16 := checkDerefVar(var_clojure_DOT_core_transient)
+						tmp17 := lang.Apply1(tmp16, v2)
+						tmp18 := lang.Apply4(tmp15, v3, v14, tmp17, v4)
+						tmp9 = tmp18
 					} // end let
 					tmp5 = tmp9
 				} else {
@@ -50906,91 +49701,86 @@ func LoadNS() {
 						v42 = tmp41
 						_ = v42
 					}
-					tmp42 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7814), kw_column, int(10), kw_end_DASH_line, int(7818), kw_end_DASH_column, int(51))
-					tmp43, err := lang.WithMeta(tmp41, tmp42.(lang.IPersistentMap))
+					tmp42 := lang.Apply1(v2, v36)
+					tmp43 := lang.Apply1(tmp41, tmp42)
+					tmp44 := lang.Apply2(tmp37, tmp40, tmp43)
+					tmp45 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
+					tmp46 := checkDerefVar(var_clojure_DOT_core_reduce)
+					tmp47 := lang.NewVector(nil, nil, nil)
+					tmp48 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7821), kw_column, int(12), kw_end_DASH_line, int(7821), kw_end_DASH_column, int(22))
+					tmp49, err := lang.WithMeta(tmp47, tmp48.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
 					}
-					tmp44 := lang.Apply1(v2, v36)
-					tmp45 := lang.Apply1(tmp43, tmp44)
-					tmp46 := lang.Apply2(tmp37, tmp40, tmp45)
-					tmp47 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
-					tmp48 := checkDerefVar(var_clojure_DOT_core_reduce)
-					tmp49 := lang.NewVector(nil, nil, nil)
-					tmp50 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7821), kw_column, int(12), kw_end_DASH_line, int(7821), kw_end_DASH_column, int(22))
-					tmp51, err := lang.WithMeta(tmp49, tmp50.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					var tmp52 any
+					var tmp50 any
 					{ // let
 						// let binding "acc"
-						var v53 any = nil
-						_ = v53
+						var v51 any = nil
+						_ = v51
 						// let binding "ret"
-						tmp54 := lang.Apply1(v2, v36)
-						var v55 any = tmp54
-						_ = v55
+						tmp52 := lang.Apply1(v2, v36)
+						var v53 any = tmp52
+						_ = v53
 						for {
-							var tmp56 any
-							tmp57 := lang.Apply1(v25, v55)
-							if lang.IsTruthy(tmp57) {
-								var tmp58 any
+							var tmp54 any
+							tmp55 := lang.Apply1(v25, v53)
+							if lang.IsTruthy(tmp55) {
+								var tmp56 any
 								{ // let
 									// let binding "acc"
-									tmp59 := lang.Apply1(v29, v55)
-									tmp60 := lang.Apply2(nil, v53, tmp59)
-									var v61 any = tmp60
-									_ = v61
-									var tmp62 any
-									tmp63 := lang.IsReduced(v61)
-									if lang.IsTruthy(tmp63) {
-										tmp64 := checkDerefVar(var_clojure_DOT_core_deref)
-										tmp65 := lang.Apply1(tmp64, v61)
-										tmp62 = tmp65
+									tmp57 := lang.Apply1(v29, v53)
+									tmp58 := lang.Apply2(nil, v51, tmp57)
+									var v59 any = tmp58
+									_ = v59
+									var tmp60 any
+									tmp61 := lang.IsReduced(v59)
+									if lang.IsTruthy(tmp61) {
+										tmp62 := checkDerefVar(var_clojure_DOT_core_deref)
+										tmp63 := lang.Apply1(tmp62, v59)
+										tmp60 = tmp63
 									} else {
-										var tmp66 any
+										var tmp64 any
 										{ // let
 											// let binding "temp__0__auto__"
-											tmp67 := lang.Apply1(v33, v55)
-											var v68 any = tmp67
-											_ = v68
-											var tmp69 any
-											tmp70 := lang.Identical(v68, nil)
-											if lang.IsTruthy(tmp70) {
-												tmp69 = v61
+											tmp65 := lang.Apply1(v33, v53)
+											var v66 any = tmp65
+											_ = v66
+											var tmp67 any
+											tmp68 := lang.Identical(v66, nil)
+											if lang.IsTruthy(tmp68) {
+												tmp67 = v59
 											} else {
-												var tmp71 any
+												var tmp69 any
 												{ // let
 													// let binding "k"
-													var v72 any = v68
-													_ = v72
-													var tmp73 any = v61
-													tmp75 := lang.Apply1(v2, v72)
-													var tmp74 any = tmp75
-													v53 = tmp73
-													v55 = tmp74
+													var v70 any = v66
+													_ = v70
+													var tmp71 any = v59
+													tmp73 := lang.Apply1(v2, v70)
+													var tmp72 any = tmp73
+													v51 = tmp71
+													v53 = tmp72
 													continue
 												} // end let
-												tmp69 = tmp71
+												tmp67 = tmp69
 											}
-											tmp66 = tmp69
+											tmp64 = tmp67
 										} // end let
-										tmp62 = tmp66
+										tmp60 = tmp64
 									}
-									tmp58 = tmp62
+									tmp56 = tmp60
 								} // end let
-								tmp56 = tmp58
+								tmp54 = tmp56
 							} else {
-								tmp56 = v53
+								tmp54 = v51
 							}
-							tmp52 = tmp56
+							tmp50 = tmp54
 							break
 						}
 					} // end let
-					tmp53 := lang.Apply2(tmp48, tmp51, tmp52)
-					tmp54 := lang.Apply4(nil, nil, tmp46, tmp47, tmp53)
-					tmp4 = tmp54
+					tmp51 := lang.Apply2(tmp46, tmp49, tmp50)
+					tmp52 := lang.Apply4(nil, nil, tmp44, tmp45, tmp51)
+					tmp4 = tmp52
 				} // end let
 				return tmp4
 			}),
@@ -51382,42 +50172,37 @@ func LoadNS() {
 					tmp13 := lang.Apply3(tmp11, tmp12, v9, v10)
 					return tmp13
 				})
-				tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5956), kw_column, int(27), kw_end_DASH_line, int(5956), kw_end_DASH_column, int(47))
-				tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var tmp11 any
+				var tmp9 any
 				{ // let
-					tmp12 := checkDerefVar(var_clojure_DOT_core_push_DASH_thread_DASH_bindings)
-					tmp13 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
-					tmp14 := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_loaded_DASH_libs_STAR_)
-					tmp15 := checkDerefVar(var_clojure_DOT_core_ref)
-					tmp16 := checkDerefVar(var_clojure_DOT_core_sorted_DASH_set)
-					tmp17 := lang.Apply0(tmp16)
-					tmp18 := lang.Apply1(tmp15, tmp17)
-					tmp19 := lang.Apply2(tmp13, tmp14, tmp18)
-					tmp20 := lang.Apply1(tmp12, tmp19)
-					_ = tmp20
-					var tmp21 any
+					tmp10 := checkDerefVar(var_clojure_DOT_core_push_DASH_thread_DASH_bindings)
+					tmp11 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
+					tmp12 := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_loaded_DASH_libs_STAR_)
+					tmp13 := checkDerefVar(var_clojure_DOT_core_ref)
+					tmp14 := checkDerefVar(var_clojure_DOT_core_sorted_DASH_set)
+					tmp15 := lang.Apply0(tmp14)
+					tmp16 := lang.Apply1(tmp13, tmp15)
+					tmp17 := lang.Apply2(tmp11, tmp12, tmp16)
+					tmp18 := lang.Apply1(tmp10, tmp17)
+					_ = tmp18
+					var tmp19 any
 					func() {
 						defer func() {
-							tmp22 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-							tmp23 := lang.Apply0(tmp22)
-							_ = tmp23
+							tmp20 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
+							tmp21 := lang.Apply0(tmp20)
+							_ = tmp21
 						}()
-						tmp24 := checkDerefVar(var_clojure_DOT_core_load_DASH_one)
-						tmp25 := lang.Apply3(tmp24, v2, v3, v4)
-						_ = tmp25
-						tmp26 := checkDerefVar(var_clojure_DOT_core_deref)
-						tmp27 := checkDerefVar(var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_)
-						tmp28 := lang.Apply1(tmp26, tmp27)
-						tmp21 = tmp28
+						tmp22 := checkDerefVar(var_clojure_DOT_core_load_DASH_one)
+						tmp23 := lang.Apply3(tmp22, v2, v3, v4)
+						_ = tmp23
+						tmp24 := checkDerefVar(var_clojure_DOT_core_deref)
+						tmp25 := checkDerefVar(var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_)
+						tmp26 := lang.Apply1(tmp24, tmp25)
+						tmp19 = tmp26
 					}()
-					tmp11 = tmp21
+					tmp9 = tmp19
 				} // end let
-				tmp12 := lang.Apply3(tmp6, tmp7, tmp10, tmp11)
-				return tmp12
+				tmp10 := lang.Apply3(tmp6, tmp7, tmp8, tmp9)
+				return tmp10
 			})
 			tmp6, _ := lang.FieldOrMethod(lang.LockingTransaction, "RunInTransaction")
 			if reflect.TypeOf(tmp6).Kind() != reflect.Func {
@@ -51653,13 +50438,8 @@ func LoadNS() {
 									} // end let
 									return tmp56
 								})
-								tmp54 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7919), kw_column, int(10), kw_end_DASH_line, int(7931), kw_end_DASH_column, int(32))
-								tmp55, err := lang.WithMeta(tmp53, tmp54.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp56 := lang.Apply3(tmp52, tmp55, v2, v39)
-								tmp24 = tmp56
+								tmp54 := lang.Apply3(tmp52, tmp53, v2, v39)
+								tmp24 = tmp54
 							} // end let
 							tmp21 = tmp24
 						}()
@@ -51694,13 +50474,8 @@ func LoadNS() {
 				tmp10 := lang.Apply3(tmp6, tmp7, v5, tmp9)
 				return tmp10
 			})
-			tmp5 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7937), kw_column, int(19), kw_end_DASH_line, int(7939), kw_end_DASH_column, int(57))
-			tmp6, err := lang.WithMeta(tmp4, tmp5.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp7 := lang.Apply2(tmp2, tmp3, tmp6)
-			return tmp7
+			tmp5 := lang.Apply2(tmp2, tmp3, tmp4)
+			return tmp5
 		})
 		var_clojure_DOT_core_load_DASH_data_DASH_readers = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_load_DASH_data_DASH_readers.SetMetaLazy(func() lang.IPersistentMap {
@@ -51918,20 +50693,15 @@ func LoadNS() {
 											tmp82 := lang.Apply1(tmp81, v78)
 											return tmp82
 										})
-										tmp78 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(5975), kw_column, int(48), kw_end_DASH_line, int(5975), kw_end_DASH_column, int(88))
-										tmp79, err := lang.WithMeta(tmp77, tmp78.(lang.IPersistentMap))
-										if err != nil {
-											panic(err)
-										}
-										tmp76 = tmp79
+										tmp76 = tmp77
 									} else {
-										var tmp80 any
+										var tmp78 any
 										if lang.IsTruthy(kw_else) {
-											tmp81 := checkDerefVar(var_clojure_DOT_core_load_DASH_one)
-											tmp80 = tmp81
+											tmp79 := checkDerefVar(var_clojure_DOT_core_load_DASH_one)
+											tmp78 = tmp79
 										} else {
 										}
-										tmp76 = tmp80
+										tmp76 = tmp78
 									}
 									tmp74 = tmp76
 								}
@@ -51942,339 +50712,339 @@ func LoadNS() {
 						}
 						tmp67 = tmp69
 					}
-					var v82 any = tmp67
-					_ = v82
+					var v80 any = tmp67
+					_ = v80
 					// let binding "filter-opts"
-					tmp83 := checkDerefVar(var_clojure_DOT_core_select_DASH_keys)
-					tmp84 := lang.Apply2(tmp83, v20, lang.NewList(kw_exclude, kw_only, kw_rename, kw_refer))
-					var v85 any = tmp84
-					_ = v85
+					tmp81 := checkDerefVar(var_clojure_DOT_core_select_DASH_keys)
+					tmp82 := lang.Apply2(tmp81, v20, lang.NewList(kw_exclude, kw_only, kw_rename, kw_refer))
+					var v83 any = tmp82
+					_ = v83
 					// let binding "undefined-on-entry"
-					tmp86 := checkDerefVar(var_clojure_DOT_core_not)
-					tmp87 := checkDerefVar(var_clojure_DOT_core_find_DASH_ns)
-					tmp88 := lang.Apply1(tmp87, v16)
-					tmp89 := lang.Apply1(tmp86, tmp88)
-					var v90 any = tmp89
-					_ = v90
-					var tmp91 any
+					tmp84 := checkDerefVar(var_clojure_DOT_core_not)
+					tmp85 := checkDerefVar(var_clojure_DOT_core_find_DASH_ns)
+					tmp86 := lang.Apply1(tmp85, v16)
+					tmp87 := lang.Apply1(tmp84, tmp86)
+					var v88 any = tmp87
+					_ = v88
+					var tmp89 any
 					{ // let
-						tmp92 := checkDerefVar(var_clojure_DOT_core_push_DASH_thread_DASH_bindings)
-						tmp93 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
-						tmp94 := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_loading_DASH_verbosely_STAR_)
-						var tmp95 any
+						tmp90 := checkDerefVar(var_clojure_DOT_core_push_DASH_thread_DASH_bindings)
+						tmp91 := checkDerefVar(var_clojure_DOT_core_hash_DASH_map)
+						tmp92 := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_loading_DASH_verbosely_STAR_)
+						var tmp93 any
 						{ // let
 							// let binding "or__0__auto__"
-							tmp96 := checkDerefVar(var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_)
-							var v97 any = tmp96
-							_ = v97
-							var tmp98 any
-							if lang.IsTruthy(v97) {
-								tmp98 = v97
+							tmp94 := checkDerefVar(var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_)
+							var v95 any = tmp94
+							_ = v95
+							var tmp96 any
+							if lang.IsTruthy(v95) {
+								tmp96 = v95
 							} else {
-								tmp98 = v55
+								tmp96 = v55
 							}
-							tmp95 = tmp98
+							tmp93 = tmp96
 						} // end let
-						tmp96 := lang.Apply2(tmp93, tmp94, tmp95)
-						tmp97 := lang.Apply1(tmp92, tmp96)
-						_ = tmp97
-						var tmp98 any
+						tmp94 := lang.Apply2(tmp91, tmp92, tmp93)
+						tmp95 := lang.Apply1(tmp90, tmp94)
+						_ = tmp95
+						var tmp96 any
 						func() {
 							defer func() {
-								tmp99 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
-								tmp100 := lang.Apply0(tmp99)
-								_ = tmp100
+								tmp97 := checkDerefVar(var_clojure_DOT_core_pop_DASH_thread_DASH_bindings)
+								tmp98 := lang.Apply0(tmp97)
+								_ = tmp98
 							}()
-							var tmp101 any
-							if lang.IsTruthy(v82) {
-								var tmp102 any
+							var tmp99 any
+							if lang.IsTruthy(v80) {
+								var tmp100 any
 								func() {
 									defer func() {
 										if r := recover(); r != nil {
 											if lang.CatchMatches(r, lang.Builtins["any"]) {
-												v103 := r
-												_ = v103
-												var tmp104 any
-												if lang.IsTruthy(v90) {
-													tmp105 := checkDerefVar(var_clojure_DOT_core_remove_DASH_ns)
-													tmp106 := lang.Apply1(tmp105, v16)
-													tmp104 = tmp106
+												v101 := r
+												_ = v101
+												var tmp102 any
+												if lang.IsTruthy(v88) {
+													tmp103 := checkDerefVar(var_clojure_DOT_core_remove_DASH_ns)
+													tmp104 := lang.Apply1(tmp103, v16)
+													tmp102 = tmp104
 												} else {
 												}
-												_ = tmp104
-												panic(v103)
+												_ = tmp102
+												panic(v101)
 											} else {
 												panic(r)
 											}
 										}
 									}()
-									tmp103 := lang.Apply3(v82, v16, v66, v49)
-									tmp102 = tmp103
+									tmp101 := lang.Apply3(v80, v16, v66, v49)
+									tmp100 = tmp101
 								}()
-								tmp101 = tmp102
+								tmp99 = tmp100
 							} else {
-								tmp104 := checkDerefVar(var_clojure_DOT_core_throw_DASH_if)
-								var tmp105 any
+								tmp102 := checkDerefVar(var_clojure_DOT_core_throw_DASH_if)
+								var tmp103 any
 								{ // let
 									// let binding "and__0__auto__"
-									var v106 any = v66
-									_ = v106
-									var tmp107 any
-									if lang.IsTruthy(v106) {
-										tmp108 := checkDerefVar(var_clojure_DOT_core_not)
-										tmp109 := checkDerefVar(var_clojure_DOT_core_find_DASH_ns)
-										tmp110 := lang.Apply1(tmp109, v16)
-										tmp111 := lang.Apply1(tmp108, tmp110)
-										tmp107 = tmp111
+									var v104 any = v66
+									_ = v104
+									var tmp105 any
+									if lang.IsTruthy(v104) {
+										tmp106 := checkDerefVar(var_clojure_DOT_core_not)
+										tmp107 := checkDerefVar(var_clojure_DOT_core_find_DASH_ns)
+										tmp108 := lang.Apply1(tmp107, v16)
+										tmp109 := lang.Apply1(tmp106, tmp108)
+										tmp105 = tmp109
 									} else {
-										tmp107 = v106
+										tmp105 = v104
 									}
-									tmp105 = tmp107
+									tmp103 = tmp105
 								} // end let
-								tmp106 := lang.Apply3(tmp104, tmp105, "namespace '%s' not found", v16)
-								tmp101 = tmp106
+								tmp104 := lang.Apply3(tmp102, tmp103, "namespace '%s' not found", v16)
+								tmp99 = tmp104
 							}
-							_ = tmp101
-							var tmp107 any
-							var tmp108 any
+							_ = tmp99
+							var tmp105 any
+							var tmp106 any
 							{ // let
 								// let binding "and__0__auto__"
-								var v109 any = v66
-								_ = v109
-								var tmp110 any
-								if lang.IsTruthy(v109) {
-									tmp111 := checkDerefVar(var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_)
-									tmp110 = tmp111
+								var v107 any = v66
+								_ = v107
+								var tmp108 any
+								if lang.IsTruthy(v107) {
+									tmp109 := checkDerefVar(var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_)
+									tmp108 = tmp109
 								} else {
-									tmp110 = v109
+									tmp108 = v107
 								}
-								tmp108 = tmp110
+								tmp106 = tmp108
 							} // end let
-							if lang.IsTruthy(tmp108) {
-								tmp109 := checkDerefVar(var_clojure_DOT_core_printf)
-								tmp110 := checkDerefVar(var_clojure_DOT_core_ns_DASH_name)
-								tmp111 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
-								tmp112 := lang.Apply1(tmp110, tmp111)
-								tmp113 := lang.Apply2(tmp109, "(clojure.core/in-ns '%s)\n", tmp112)
-								tmp107 = tmp113
+							if lang.IsTruthy(tmp106) {
+								tmp107 := checkDerefVar(var_clojure_DOT_core_printf)
+								tmp108 := checkDerefVar(var_clojure_DOT_core_ns_DASH_name)
+								tmp109 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
+								tmp110 := lang.Apply1(tmp108, tmp109)
+								tmp111 := lang.Apply2(tmp107, "(clojure.core/in-ns '%s)\n", tmp110)
+								tmp105 = tmp111
 							} else {
 							}
-							_ = tmp107
-							var tmp114 any
+							_ = tmp105
+							var tmp112 any
 							if lang.IsTruthy(v40) {
-								var tmp115 any
-								tmp116 := checkDerefVar(var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_)
-								if lang.IsTruthy(tmp116) {
-									tmp117 := checkDerefVar(var_clojure_DOT_core_printf)
-									tmp118 := lang.Apply3(tmp117, "(clojure.core/alias '%s '%s)\n", v40, v16)
-									tmp115 = tmp118
+								var tmp113 any
+								tmp114 := checkDerefVar(var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_)
+								if lang.IsTruthy(tmp114) {
+									tmp115 := checkDerefVar(var_clojure_DOT_core_printf)
+									tmp116 := lang.Apply3(tmp115, "(clojure.core/alias '%s '%s)\n", v40, v16)
+									tmp113 = tmp116
 								} else {
 								}
-								_ = tmp115
-								tmp119 := checkDerefVar(var_clojure_DOT_core_alias)
-								tmp120 := lang.Apply2(tmp119, v40, v16)
-								tmp114 = tmp120
+								_ = tmp113
+								tmp117 := checkDerefVar(var_clojure_DOT_core_alias)
+								tmp118 := lang.Apply2(tmp117, v40, v16)
+								tmp112 = tmp118
 							} else {
 							}
-							_ = tmp114
-							var tmp121 any
+							_ = tmp112
+							var tmp119 any
 							if lang.IsTruthy(v58) {
-								var tmp122 any
-								tmp123 := checkDerefVar(var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_)
-								if lang.IsTruthy(tmp123) {
-									tmp124 := checkDerefVar(var_clojure_DOT_core_printf)
-									tmp125 := lang.Apply3(tmp124, "(clojure.core/alias '%s '%s)\n", v58, v16)
-									tmp122 = tmp125
+								var tmp120 any
+								tmp121 := checkDerefVar(var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_)
+								if lang.IsTruthy(tmp121) {
+									tmp122 := checkDerefVar(var_clojure_DOT_core_printf)
+									tmp123 := lang.Apply3(tmp122, "(clojure.core/alias '%s '%s)\n", v58, v16)
+									tmp120 = tmp123
 								} else {
 								}
-								_ = tmp122
-								tmp126 := checkDerefVar(var_clojure_DOT_core_alias)
-								tmp127 := lang.Apply2(tmp126, v58, v16)
-								tmp121 = tmp127
+								_ = tmp120
+								tmp124 := checkDerefVar(var_clojure_DOT_core_alias)
+								tmp125 := lang.Apply2(tmp124, v58, v16)
+								tmp119 = tmp125
 							} else {
 							}
-							_ = tmp121
-							var tmp128 any
-							var tmp129 any
+							_ = tmp119
+							var tmp126 any
+							var tmp127 any
 							{ // let
 								// let binding "or__0__auto__"
-								var v130 any = v52
-								_ = v130
-								var tmp131 any
-								if lang.IsTruthy(v130) {
-									tmp131 = v130
+								var v128 any = v52
+								_ = v128
+								var tmp129 any
+								if lang.IsTruthy(v128) {
+									tmp129 = v128
 								} else {
-									tmp132 := lang.Apply1(kw_refer, v85)
-									tmp131 = tmp132
+									tmp130 := lang.Apply1(kw_refer, v83)
+									tmp129 = tmp130
 								}
-								tmp129 = tmp131
+								tmp127 = tmp129
 							} // end let
-							if lang.IsTruthy(tmp129) {
-								var tmp130 any
-								tmp131 := checkDerefVar(var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_)
-								if lang.IsTruthy(tmp131) {
-									tmp132 := checkDerefVar(var_clojure_DOT_core_printf)
-									tmp133 := lang.Apply2(tmp132, "(clojure.core/refer '%s", v16)
-									_ = tmp133
-									var tmp134 any
+							if lang.IsTruthy(tmp127) {
+								var tmp128 any
+								tmp129 := checkDerefVar(var_clojure_DOT_core__STAR_loading_DASH_verbosely_STAR_)
+								if lang.IsTruthy(tmp129) {
+									tmp130 := checkDerefVar(var_clojure_DOT_core_printf)
+									tmp131 := lang.Apply2(tmp130, "(clojure.core/refer '%s", v16)
+									_ = tmp131
+									var tmp132 any
 									{ // let
 										// let binding "seq_480"
-										tmp135 := checkDerefVar(var_clojure_DOT_core_seq)
-										tmp136 := lang.Apply1(tmp135, v85)
-										var v137 any = tmp136
-										_ = v137
+										tmp133 := checkDerefVar(var_clojure_DOT_core_seq)
+										tmp134 := lang.Apply1(tmp133, v83)
+										var v135 any = tmp134
+										_ = v135
 										// let binding "chunk_481"
-										var v138 any = nil
-										_ = v138
+										var v136 any = nil
+										_ = v136
 										// let binding "count_482"
-										var v139 any = int64(0)
-										_ = v139
+										var v137 any = int64(0)
+										_ = v137
 										// let binding "i_483"
-										var v140 any = int64(0)
-										_ = v140
+										var v138 any = int64(0)
+										_ = v138
 										for {
-											var tmp141 any
-											tmp142 := lang.Numbers.Lt(v140, v139)
-											if lang.IsTruthy(tmp142) {
-												var tmp143 any
+											var tmp139 any
+											tmp140 := lang.Numbers.Lt(v138, v137)
+											if lang.IsTruthy(tmp140) {
+												var tmp141 any
 												{ // let
 													// let binding "opt"
-													tmp144, _ := lang.FieldOrMethod(v138, "nth")
-													if reflect.TypeOf(tmp144).Kind() != reflect.Func {
+													tmp142, _ := lang.FieldOrMethod(v136, "nth")
+													if reflect.TypeOf(tmp142).Kind() != reflect.Func {
 														panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
 													}
-													tmp145 := lang.Apply1(tmp144, v140)
-													var v146 any = tmp145
-													_ = v146
-													tmp147 := checkDerefVar(var_clojure_DOT_core_printf)
-													tmp148 := checkDerefVar(var_clojure_DOT_core_key)
-													tmp149 := lang.Apply1(tmp148, v146)
-													tmp150 := checkDerefVar(var_clojure_DOT_core_print_DASH_str)
-													tmp151 := checkDerefVar(var_clojure_DOT_core_val)
-													tmp152 := lang.Apply1(tmp151, v146)
-													tmp153 := lang.Apply1(tmp150, tmp152)
-													tmp154 := lang.Apply3(tmp147, " %s '%s", tmp149, tmp153)
-													_ = tmp154
+													tmp143 := lang.Apply1(tmp142, v138)
+													var v144 any = tmp143
+													_ = v144
+													tmp145 := checkDerefVar(var_clojure_DOT_core_printf)
+													tmp146 := checkDerefVar(var_clojure_DOT_core_key)
+													tmp147 := lang.Apply1(tmp146, v144)
+													tmp148 := checkDerefVar(var_clojure_DOT_core_print_DASH_str)
+													tmp149 := checkDerefVar(var_clojure_DOT_core_val)
+													tmp150 := lang.Apply1(tmp149, v144)
+													tmp151 := lang.Apply1(tmp148, tmp150)
+													tmp152 := lang.Apply3(tmp145, " %s '%s", tmp147, tmp151)
+													_ = tmp152
+													var tmp153 any = v135
+													var tmp154 any = v136
 													var tmp155 any = v137
-													var tmp156 any = v138
-													var tmp157 any = v139
-													tmp159 := lang.Numbers.Unchecked_inc(v140)
-													var tmp158 any = tmp159
+													tmp157 := lang.Numbers.Unchecked_inc(v138)
+													var tmp156 any = tmp157
+													v135 = tmp153
+													v136 = tmp154
 													v137 = tmp155
 													v138 = tmp156
-													v139 = tmp157
-													v140 = tmp158
 													continue
 												} // end let
-												tmp141 = tmp143
+												tmp139 = tmp141
 											} else {
-												var tmp144 any
+												var tmp142 any
 												{ // let
 													// let binding "temp__0__auto__"
-													tmp145 := checkDerefVar(var_clojure_DOT_core_seq)
-													tmp146 := lang.Apply1(tmp145, v137)
-													var v147 any = tmp146
-													_ = v147
-													var tmp148 any
-													if lang.IsTruthy(v147) {
-														var tmp149 any
+													tmp143 := checkDerefVar(var_clojure_DOT_core_seq)
+													tmp144 := lang.Apply1(tmp143, v135)
+													var v145 any = tmp144
+													_ = v145
+													var tmp146 any
+													if lang.IsTruthy(v145) {
+														var tmp147 any
 														{ // let
 															// let binding "seq_480"
-															var v150 any = v147
-															_ = v150
-															var tmp151 any
-															tmp152 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
-															tmp153 := lang.Apply1(tmp152, v150)
-															if lang.IsTruthy(tmp153) {
-																var tmp154 any
+															var v148 any = v145
+															_ = v148
+															var tmp149 any
+															tmp150 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
+															tmp151 := lang.Apply1(tmp150, v148)
+															if lang.IsTruthy(tmp151) {
+																var tmp152 any
 																{ // let
 																	// let binding "c__0__auto__"
-																	tmp155 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
-																	tmp156 := lang.Apply1(tmp155, v150)
-																	var v157 any = tmp156
-																	_ = v157
-																	tmp159 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
-																	tmp160 := lang.Apply1(tmp159, v150)
-																	var tmp158 any = tmp160
-																	var tmp161 any = v157
-																	tmp163 := checkDerefVar(var_clojure_DOT_core_count)
-																	tmp164 := lang.Apply1(tmp163, v157)
-																	tmp165 := runtime.RT.IntCast(tmp164)
-																	var tmp162 any = tmp165
-																	tmp167 := runtime.RT.IntCast(int64(0))
-																	var tmp166 any = tmp167
-																	v137 = tmp158
-																	v138 = tmp161
-																	v139 = tmp162
-																	v140 = tmp166
+																	tmp153 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
+																	tmp154 := lang.Apply1(tmp153, v148)
+																	var v155 any = tmp154
+																	_ = v155
+																	tmp157 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
+																	tmp158 := lang.Apply1(tmp157, v148)
+																	var tmp156 any = tmp158
+																	var tmp159 any = v155
+																	tmp161 := checkDerefVar(var_clojure_DOT_core_count)
+																	tmp162 := lang.Apply1(tmp161, v155)
+																	tmp163 := runtime.RT.IntCast(tmp162)
+																	var tmp160 any = tmp163
+																	tmp165 := runtime.RT.IntCast(int64(0))
+																	var tmp164 any = tmp165
+																	v135 = tmp156
+																	v136 = tmp159
+																	v137 = tmp160
+																	v138 = tmp164
 																	continue
 																} // end let
-																tmp151 = tmp154
+																tmp149 = tmp152
 															} else {
-																var tmp155 any
+																var tmp153 any
 																{ // let
 																	// let binding "opt"
-																	tmp156 := checkDerefVar(var_clojure_DOT_core_first)
-																	tmp157 := lang.Apply1(tmp156, v150)
-																	var v158 any = tmp157
-																	_ = v158
-																	tmp159 := checkDerefVar(var_clojure_DOT_core_printf)
-																	tmp160 := checkDerefVar(var_clojure_DOT_core_key)
-																	tmp161 := lang.Apply1(tmp160, v158)
-																	tmp162 := checkDerefVar(var_clojure_DOT_core_print_DASH_str)
-																	tmp163 := checkDerefVar(var_clojure_DOT_core_val)
-																	tmp164 := lang.Apply1(tmp163, v158)
-																	tmp165 := lang.Apply1(tmp162, tmp164)
-																	tmp166 := lang.Apply3(tmp159, " %s '%s", tmp161, tmp165)
-																	_ = tmp166
-																	tmp168 := checkDerefVar(var_clojure_DOT_core_next)
-																	tmp169 := lang.Apply1(tmp168, v150)
-																	var tmp167 any = tmp169
-																	var tmp170 any = nil
-																	var tmp171 any = int64(0)
-																	var tmp172 any = int64(0)
-																	v137 = tmp167
+																	tmp154 := checkDerefVar(var_clojure_DOT_core_first)
+																	tmp155 := lang.Apply1(tmp154, v148)
+																	var v156 any = tmp155
+																	_ = v156
+																	tmp157 := checkDerefVar(var_clojure_DOT_core_printf)
+																	tmp158 := checkDerefVar(var_clojure_DOT_core_key)
+																	tmp159 := lang.Apply1(tmp158, v156)
+																	tmp160 := checkDerefVar(var_clojure_DOT_core_print_DASH_str)
+																	tmp161 := checkDerefVar(var_clojure_DOT_core_val)
+																	tmp162 := lang.Apply1(tmp161, v156)
+																	tmp163 := lang.Apply1(tmp160, tmp162)
+																	tmp164 := lang.Apply3(tmp157, " %s '%s", tmp159, tmp163)
+																	_ = tmp164
+																	tmp166 := checkDerefVar(var_clojure_DOT_core_next)
+																	tmp167 := lang.Apply1(tmp166, v148)
+																	var tmp165 any = tmp167
+																	var tmp168 any = nil
+																	var tmp169 any = int64(0)
+																	var tmp170 any = int64(0)
+																	v135 = tmp165
+																	v136 = tmp168
+																	v137 = tmp169
 																	v138 = tmp170
-																	v139 = tmp171
-																	v140 = tmp172
 																	continue
 																} // end let
-																tmp151 = tmp155
+																tmp149 = tmp153
 															}
-															tmp149 = tmp151
+															tmp147 = tmp149
 														} // end let
-														tmp148 = tmp149
+														tmp146 = tmp147
 													} else {
 													}
-													tmp144 = tmp148
+													tmp142 = tmp146
 												} // end let
-												tmp141 = tmp144
+												tmp139 = tmp142
 											}
-											tmp134 = tmp141
+											tmp132 = tmp139
 											break
 										}
 									} // end let
-									_ = tmp134
-									tmp135 := checkDerefVar(var_clojure_DOT_core_printf)
-									tmp136 := lang.Apply1(tmp135, ")\n")
-									tmp130 = tmp136
+									_ = tmp132
+									tmp133 := checkDerefVar(var_clojure_DOT_core_printf)
+									tmp134 := lang.Apply1(tmp133, ")\n")
+									tmp128 = tmp134
 								} else {
 								}
-								_ = tmp130
-								tmp137 := checkDerefVar(var_clojure_DOT_core_apply)
-								tmp138 := checkDerefVar(var_clojure_DOT_core_refer)
-								tmp139 := checkDerefVar(var_clojure_DOT_core_mapcat)
-								tmp140 := checkDerefVar(var_clojure_DOT_core_seq)
-								tmp141 := lang.Apply2(tmp139, tmp140, v85)
-								tmp142 := lang.Apply3(tmp137, tmp138, v16, tmp141)
-								tmp128 = tmp142
+								_ = tmp128
+								tmp135 := checkDerefVar(var_clojure_DOT_core_apply)
+								tmp136 := checkDerefVar(var_clojure_DOT_core_refer)
+								tmp137 := checkDerefVar(var_clojure_DOT_core_mapcat)
+								tmp138 := checkDerefVar(var_clojure_DOT_core_seq)
+								tmp139 := lang.Apply2(tmp137, tmp138, v83)
+								tmp140 := lang.Apply3(tmp135, tmp136, v16, tmp139)
+								tmp126 = tmp140
 							} else {
 							}
-							tmp98 = tmp128
+							tmp96 = tmp126
 						}()
-						tmp91 = tmp98
+						tmp89 = tmp96
 					} // end let
-					tmp10 = tmp91
+					tmp10 = tmp89
 				} // end let
 				return tmp10
 			}),
@@ -53020,22 +51790,17 @@ func LoadNS() {
 					tmp11 := lang.Apply2(tmp9, v7, tmp10)
 					return tmp11
 				})
-				tmp7 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7022), kw_column, int(18), kw_end_DASH_line, int(7022), kw_end_DASH_column, int(43))
-				tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
+				tmp7 := checkDerefVar(var_clojure_DOT_core_transient)
+				tmp8 := lang.NewVector()
+				tmp9 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7022), kw_column, int(56), kw_end_DASH_line, int(7022), kw_end_DASH_column, int(57))
+				tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp9 := checkDerefVar(var_clojure_DOT_core_transient)
-				tmp10 := lang.NewVector()
-				tmp11 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7022), kw_column, int(56), kw_end_DASH_line, int(7022), kw_end_DASH_column, int(57))
-				tmp12, err := lang.WithMeta(tmp10, tmp11.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp13 := lang.Apply1(tmp9, tmp12)
-				tmp14 := lang.Apply3(tmp5, tmp8, tmp13, v3)
-				tmp15 := lang.Apply1(tmp4, tmp14)
-				return tmp15
+				tmp11 := lang.Apply1(tmp7, tmp10)
+				tmp12 := lang.Apply3(tmp5, tmp6, tmp11, v3)
+				tmp13 := lang.Apply1(tmp4, tmp12)
+				return tmp13
 			}),
 			lang.FnFunc3(func(p0, p1, p2 any) any {
 				v2 := p0
@@ -53796,7 +52561,6 @@ func LoadNS() {
 			tmp6 := lang.Apply1(tmp5, v3)
 			return tmp6
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3724), kw_column, int(21), kw_end_DASH_line, int(3724), kw_end_DASH_column, int(45))).(lang.FnFunc2)
 		// MultiFn print-dup
 		tmp1 := lang.NewMultiFn("print-dup", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc2
@@ -54210,13 +52974,8 @@ func LoadNS() {
 				_ = v51
 				return nil
 			})
-			tmp50 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(167), kw_column, int(17), kw_end_DASH_line, int(167), kw_end_DASH_column, int(26))
-			tmp51, err := lang.WithMeta(tmp49, tmp50.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp52 := lang.Apply3(tmp48, v46, tmp51, v47)
-			return tmp52
+			tmp50 := lang.Apply3(tmp48, v46, tmp49, v47)
+			return tmp50
 		})
 		tmp1.AddMethod(tmp44, tmp45)
 		tmp46 := reflect.TypeOf((*lang.ISeq)(nil)).Elem()
@@ -54283,7 +53042,6 @@ func LoadNS() {
 			} // end let
 			return tmp5
 		})
-		tmp2 = tmp2.WithMeta(lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(3721), kw_column, int(24), kw_end_DASH_line, int(3723), kw_end_DASH_column, int(58))).(lang.FnFunc2)
 		// MultiFn print-method
 		tmp1 := lang.NewMultiFn("print-method", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
 		var tmp3 lang.FnFunc2
@@ -54426,18 +53184,13 @@ func LoadNS() {
 					tmp28 := lang.Apply2(tmp27, v26, kw_type)
 					return tmp28
 				})
-				tmp26 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(87), kw_column, int(32), kw_end_DASH_line, int(87), kw_end_DASH_column, int(48))
-				tmp27, err := lang.WithMeta(tmp25, tmp26.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp28 := lang.Apply2(tmp24, v17, tmp27)
-				tmp29 := lang.Apply2(tmp23, tmp28, v18)
-				tmp19 = tmp29
+				tmp26 := lang.Apply2(tmp24, v17, tmp25)
+				tmp27 := lang.Apply2(tmp23, tmp26, v18)
+				tmp19 = tmp27
 			} else {
-				tmp30 := checkDerefVar(var_clojure_DOT_core_print_DASH_simple)
-				tmp31 := lang.Apply2(tmp30, v17, v18)
-				tmp19 = tmp31
+				tmp28 := checkDerefVar(var_clojure_DOT_core_print_DASH_simple)
+				tmp29 := lang.Apply2(tmp28, v17, v18)
+				tmp19 = tmp29
 			}
 			return tmp19
 		})
@@ -55444,355 +54197,350 @@ func LoadNS() {
 					tmp49 := lang.Apply2(lang.WriteWriter, v3, "}")
 					return tmp49
 				})
-				tmp38 := lang.NewMap(kw_file, "clojure/core_print.glj", kw_line, int(483), kw_column, int(19), kw_end_DASH_line, int(493), kw_end_DASH_column, int(73))
-				tmp39, err := lang.WithMeta(tmp37, tmp38.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v40 any = tmp39
-				_ = v40
-				tmp41 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
-				tmp42 := lang.Apply2(tmp41, v27, v3)
-				_ = tmp42
-				var tmp43 any
+				var v38 any = tmp37
+				_ = v38
+				tmp39 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
+				tmp40 := lang.Apply2(tmp39, v27, v3)
+				_ = tmp40
+				var tmp41 any
 				if lang.IsTruthy(v30) {
-					tmp44 := lang.Apply2(lang.WriteWriter, v3, "\n :data ")
-					_ = tmp44
-					tmp45 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
-					tmp46 := lang.Apply2(tmp45, v30, v3)
-					tmp43 = tmp46
+					tmp42 := lang.Apply2(lang.WriteWriter, v3, "\n :data ")
+					_ = tmp42
+					tmp43 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
+					tmp44 := lang.Apply2(tmp43, v30, v3)
+					tmp41 = tmp44
 				} else {
 				}
-				_ = tmp43
-				var tmp47 any
+				_ = tmp41
+				var tmp45 any
 				if lang.IsTruthy(v33) {
-					tmp48 := lang.Apply2(lang.WriteWriter, v3, "\n :via\n [")
-					_ = tmp48
-					var tmp49 any
+					tmp46 := lang.Apply2(lang.WriteWriter, v3, "\n :via\n [")
+					_ = tmp46
+					var tmp47 any
 					{ // let
 						// let binding "temp__0__auto__"
-						tmp50 := checkDerefVar(var_clojure_DOT_core_first)
-						tmp51 := lang.Apply1(tmp50, v33)
-						var v52 any = tmp51
-						_ = v52
-						var tmp53 any
-						if lang.IsTruthy(v52) {
-							var tmp54 any
+						tmp48 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp49 := lang.Apply1(tmp48, v33)
+						var v50 any = tmp49
+						_ = v50
+						var tmp51 any
+						if lang.IsTruthy(v50) {
+							var tmp52 any
 							{ // let
 								// let binding "fv"
-								var v55 any = v52
-								_ = v55
-								tmp56 := lang.Apply1(v40, v55)
-								_ = tmp56
-								var tmp57 any
+								var v53 any = v50
+								_ = v53
+								tmp54 := lang.Apply1(v38, v53)
+								_ = tmp54
+								var tmp55 any
 								{ // let
 									// let binding "seq_623"
-									tmp58 := checkDerefVar(var_clojure_DOT_core_seq)
-									tmp59 := checkDerefVar(var_clojure_DOT_core_rest)
-									tmp60 := lang.Apply1(tmp59, v33)
-									tmp61 := lang.Apply1(tmp58, tmp60)
-									var v62 any = tmp61
-									_ = v62
+									tmp56 := checkDerefVar(var_clojure_DOT_core_seq)
+									tmp57 := checkDerefVar(var_clojure_DOT_core_rest)
+									tmp58 := lang.Apply1(tmp57, v33)
+									tmp59 := lang.Apply1(tmp56, tmp58)
+									var v60 any = tmp59
+									_ = v60
 									// let binding "chunk_624"
-									var v63 any = nil
-									_ = v63
+									var v61 any = nil
+									_ = v61
 									// let binding "count_625"
-									var v64 any = int64(0)
-									_ = v64
+									var v62 any = int64(0)
+									_ = v62
 									// let binding "i_626"
-									var v65 any = int64(0)
-									_ = v65
+									var v63 any = int64(0)
+									_ = v63
 									for {
-										var tmp66 any
-										tmp67 := lang.Numbers.Lt(v65, v64)
-										if lang.IsTruthy(tmp67) {
-											var tmp68 any
+										var tmp64 any
+										tmp65 := lang.Numbers.Lt(v63, v62)
+										if lang.IsTruthy(tmp65) {
+											var tmp66 any
 											{ // let
 												// let binding "v"
-												tmp69, _ := lang.FieldOrMethod(v63, "nth")
-												if reflect.TypeOf(tmp69).Kind() != reflect.Func {
+												tmp67, _ := lang.FieldOrMethod(v61, "nth")
+												if reflect.TypeOf(tmp67).Kind() != reflect.Func {
 													panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
 												}
-												tmp70 := lang.Apply1(tmp69, v65)
-												var v71 any = tmp70
-												_ = v71
-												tmp72 := lang.Apply2(lang.WriteWriter, v3, "\n  ")
-												_ = tmp72
-												tmp73 := lang.Apply1(v40, v71)
-												_ = tmp73
+												tmp68 := lang.Apply1(tmp67, v63)
+												var v69 any = tmp68
+												_ = v69
+												tmp70 := lang.Apply2(lang.WriteWriter, v3, "\n  ")
+												_ = tmp70
+												tmp71 := lang.Apply1(v38, v69)
+												_ = tmp71
+												var tmp72 any = v60
+												var tmp73 any = v61
 												var tmp74 any = v62
-												var tmp75 any = v63
-												var tmp76 any = v64
-												tmp78 := lang.Numbers.Unchecked_inc(v65)
-												var tmp77 any = tmp78
+												tmp76 := lang.Numbers.Unchecked_inc(v63)
+												var tmp75 any = tmp76
+												v60 = tmp72
+												v61 = tmp73
 												v62 = tmp74
 												v63 = tmp75
-												v64 = tmp76
-												v65 = tmp77
 												continue
 											} // end let
-											tmp66 = tmp68
+											tmp64 = tmp66
 										} else {
-											var tmp69 any
+											var tmp67 any
 											{ // let
 												// let binding "temp__0__auto__"
-												tmp70 := checkDerefVar(var_clojure_DOT_core_seq)
-												tmp71 := lang.Apply1(tmp70, v62)
-												var v72 any = tmp71
-												_ = v72
-												var tmp73 any
-												if lang.IsTruthy(v72) {
-													var tmp74 any
+												tmp68 := checkDerefVar(var_clojure_DOT_core_seq)
+												tmp69 := lang.Apply1(tmp68, v60)
+												var v70 any = tmp69
+												_ = v70
+												var tmp71 any
+												if lang.IsTruthy(v70) {
+													var tmp72 any
 													{ // let
 														// let binding "seq_623"
-														var v75 any = v72
-														_ = v75
-														var tmp76 any
-														tmp77 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
-														tmp78 := lang.Apply1(tmp77, v75)
-														if lang.IsTruthy(tmp78) {
-															var tmp79 any
+														var v73 any = v70
+														_ = v73
+														var tmp74 any
+														tmp75 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
+														tmp76 := lang.Apply1(tmp75, v73)
+														if lang.IsTruthy(tmp76) {
+															var tmp77 any
 															{ // let
 																// let binding "c__0__auto__"
-																tmp80 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
-																tmp81 := lang.Apply1(tmp80, v75)
-																var v82 any = tmp81
-																_ = v82
-																tmp84 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
-																tmp85 := lang.Apply1(tmp84, v75)
-																var tmp83 any = tmp85
-																var tmp86 any = v82
-																tmp88 := checkDerefVar(var_clojure_DOT_core_count)
-																tmp89 := lang.Apply1(tmp88, v82)
-																tmp90 := runtime.RT.IntCast(tmp89)
-																var tmp87 any = tmp90
-																tmp92 := runtime.RT.IntCast(int64(0))
-																var tmp91 any = tmp92
-																v62 = tmp83
-																v63 = tmp86
-																v64 = tmp87
-																v65 = tmp91
+																tmp78 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
+																tmp79 := lang.Apply1(tmp78, v73)
+																var v80 any = tmp79
+																_ = v80
+																tmp82 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
+																tmp83 := lang.Apply1(tmp82, v73)
+																var tmp81 any = tmp83
+																var tmp84 any = v80
+																tmp86 := checkDerefVar(var_clojure_DOT_core_count)
+																tmp87 := lang.Apply1(tmp86, v80)
+																tmp88 := runtime.RT.IntCast(tmp87)
+																var tmp85 any = tmp88
+																tmp90 := runtime.RT.IntCast(int64(0))
+																var tmp89 any = tmp90
+																v60 = tmp81
+																v61 = tmp84
+																v62 = tmp85
+																v63 = tmp89
 																continue
 															} // end let
-															tmp76 = tmp79
+															tmp74 = tmp77
 														} else {
-															var tmp80 any
+															var tmp78 any
 															{ // let
 																// let binding "v"
-																tmp81 := checkDerefVar(var_clojure_DOT_core_first)
-																tmp82 := lang.Apply1(tmp81, v75)
-																var v83 any = tmp82
-																_ = v83
-																tmp84 := lang.Apply2(lang.WriteWriter, v3, "\n  ")
-																_ = tmp84
-																tmp85 := lang.Apply1(v40, v83)
-																_ = tmp85
-																tmp87 := checkDerefVar(var_clojure_DOT_core_next)
-																tmp88 := lang.Apply1(tmp87, v75)
-																var tmp86 any = tmp88
-																var tmp89 any = nil
-																var tmp90 any = int64(0)
-																var tmp91 any = int64(0)
-																v62 = tmp86
+																tmp79 := checkDerefVar(var_clojure_DOT_core_first)
+																tmp80 := lang.Apply1(tmp79, v73)
+																var v81 any = tmp80
+																_ = v81
+																tmp82 := lang.Apply2(lang.WriteWriter, v3, "\n  ")
+																_ = tmp82
+																tmp83 := lang.Apply1(v38, v81)
+																_ = tmp83
+																tmp85 := checkDerefVar(var_clojure_DOT_core_next)
+																tmp86 := lang.Apply1(tmp85, v73)
+																var tmp84 any = tmp86
+																var tmp87 any = nil
+																var tmp88 any = int64(0)
+																var tmp89 any = int64(0)
+																v60 = tmp84
+																v61 = tmp87
+																v62 = tmp88
 																v63 = tmp89
-																v64 = tmp90
-																v65 = tmp91
 																continue
 															} // end let
-															tmp76 = tmp80
+															tmp74 = tmp78
 														}
-														tmp74 = tmp76
+														tmp72 = tmp74
 													} // end let
-													tmp73 = tmp74
+													tmp71 = tmp72
 												} else {
 												}
-												tmp69 = tmp73
+												tmp67 = tmp71
 											} // end let
-											tmp66 = tmp69
+											tmp64 = tmp67
 										}
-										tmp57 = tmp66
+										tmp55 = tmp64
 										break
 									}
 								} // end let
-								tmp54 = tmp57
+								tmp52 = tmp55
 							} // end let
-							tmp53 = tmp54
+							tmp51 = tmp52
 						} else {
 						}
-						tmp49 = tmp53
+						tmp47 = tmp51
 					} // end let
-					_ = tmp49
-					tmp50 := lang.Apply2(lang.WriteWriter, v3, "]")
-					tmp47 = tmp50
+					_ = tmp47
+					tmp48 := lang.Apply2(lang.WriteWriter, v3, "]")
+					tmp45 = tmp48
 				} else {
 				}
-				_ = tmp47
-				var tmp51 any
+				_ = tmp45
+				var tmp49 any
 				if lang.IsTruthy(v36) {
-					tmp52 := lang.Apply2(lang.WriteWriter, v3, "\n :trace\n [")
-					_ = tmp52
-					var tmp53 any
+					tmp50 := lang.Apply2(lang.WriteWriter, v3, "\n :trace\n [")
+					_ = tmp50
+					var tmp51 any
 					{ // let
 						// let binding "temp__0__auto__"
-						tmp54 := checkDerefVar(var_clojure_DOT_core_first)
-						tmp55 := lang.Apply1(tmp54, v36)
-						var v56 any = tmp55
-						_ = v56
-						var tmp57 any
-						if lang.IsTruthy(v56) {
-							var tmp58 any
+						tmp52 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp53 := lang.Apply1(tmp52, v36)
+						var v54 any = tmp53
+						_ = v54
+						var tmp55 any
+						if lang.IsTruthy(v54) {
+							var tmp56 any
 							{ // let
 								// let binding "ft"
-								var v59 any = v56
-								_ = v59
-								tmp60 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
-								tmp61 := lang.Apply2(tmp60, v59, v3)
-								_ = tmp61
-								var tmp62 any
+								var v57 any = v54
+								_ = v57
+								tmp58 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
+								tmp59 := lang.Apply2(tmp58, v57, v3)
+								_ = tmp59
+								var tmp60 any
 								{ // let
 									// let binding "seq_627"
-									tmp63 := checkDerefVar(var_clojure_DOT_core_seq)
-									tmp64 := checkDerefVar(var_clojure_DOT_core_rest)
-									tmp65 := lang.Apply1(tmp64, v36)
-									tmp66 := lang.Apply1(tmp63, tmp65)
-									var v67 any = tmp66
-									_ = v67
+									tmp61 := checkDerefVar(var_clojure_DOT_core_seq)
+									tmp62 := checkDerefVar(var_clojure_DOT_core_rest)
+									tmp63 := lang.Apply1(tmp62, v36)
+									tmp64 := lang.Apply1(tmp61, tmp63)
+									var v65 any = tmp64
+									_ = v65
 									// let binding "chunk_628"
-									var v68 any = nil
-									_ = v68
+									var v66 any = nil
+									_ = v66
 									// let binding "count_629"
-									var v69 any = int64(0)
-									_ = v69
+									var v67 any = int64(0)
+									_ = v67
 									// let binding "i_630"
-									var v70 any = int64(0)
-									_ = v70
+									var v68 any = int64(0)
+									_ = v68
 									for {
-										var tmp71 any
-										tmp72 := lang.Numbers.Lt(v70, v69)
-										if lang.IsTruthy(tmp72) {
-											var tmp73 any
+										var tmp69 any
+										tmp70 := lang.Numbers.Lt(v68, v67)
+										if lang.IsTruthy(tmp70) {
+											var tmp71 any
 											{ // let
 												// let binding "t"
-												tmp74, _ := lang.FieldOrMethod(v68, "nth")
-												if reflect.TypeOf(tmp74).Kind() != reflect.Func {
+												tmp72, _ := lang.FieldOrMethod(v66, "nth")
+												if reflect.TypeOf(tmp72).Kind() != reflect.Func {
 													panic(lang.NewIllegalArgumentError(fmt.Sprintf("nth is not a function")))
 												}
-												tmp75 := lang.Apply1(tmp74, v70)
-												var v76 any = tmp75
-												_ = v76
-												tmp77 := lang.Apply2(lang.WriteWriter, v3, "\n  ")
+												tmp73 := lang.Apply1(tmp72, v68)
+												var v74 any = tmp73
+												_ = v74
+												tmp75 := lang.Apply2(lang.WriteWriter, v3, "\n  ")
+												_ = tmp75
+												tmp76 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
+												tmp77 := lang.Apply2(tmp76, v74, v3)
 												_ = tmp77
-												tmp78 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
-												tmp79 := lang.Apply2(tmp78, v76, v3)
-												_ = tmp79
+												var tmp78 any = v65
+												var tmp79 any = v66
 												var tmp80 any = v67
-												var tmp81 any = v68
-												var tmp82 any = v69
-												tmp84 := lang.Numbers.Unchecked_inc(v70)
-												var tmp83 any = tmp84
+												tmp82 := lang.Numbers.Unchecked_inc(v68)
+												var tmp81 any = tmp82
+												v65 = tmp78
+												v66 = tmp79
 												v67 = tmp80
 												v68 = tmp81
-												v69 = tmp82
-												v70 = tmp83
 												continue
 											} // end let
-											tmp71 = tmp73
+											tmp69 = tmp71
 										} else {
-											var tmp74 any
+											var tmp72 any
 											{ // let
 												// let binding "temp__0__auto__"
-												tmp75 := checkDerefVar(var_clojure_DOT_core_seq)
-												tmp76 := lang.Apply1(tmp75, v67)
-												var v77 any = tmp76
-												_ = v77
-												var tmp78 any
-												if lang.IsTruthy(v77) {
-													var tmp79 any
+												tmp73 := checkDerefVar(var_clojure_DOT_core_seq)
+												tmp74 := lang.Apply1(tmp73, v65)
+												var v75 any = tmp74
+												_ = v75
+												var tmp76 any
+												if lang.IsTruthy(v75) {
+													var tmp77 any
 													{ // let
 														// let binding "seq_627"
-														var v80 any = v77
-														_ = v80
-														var tmp81 any
-														tmp82 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
-														tmp83 := lang.Apply1(tmp82, v80)
-														if lang.IsTruthy(tmp83) {
-															var tmp84 any
+														var v78 any = v75
+														_ = v78
+														var tmp79 any
+														tmp80 := checkDerefVar(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
+														tmp81 := lang.Apply1(tmp80, v78)
+														if lang.IsTruthy(tmp81) {
+															var tmp82 any
 															{ // let
 																// let binding "c__0__auto__"
-																tmp85 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
-																tmp86 := lang.Apply1(tmp85, v80)
-																var v87 any = tmp86
-																_ = v87
-																tmp89 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
-																tmp90 := lang.Apply1(tmp89, v80)
-																var tmp88 any = tmp90
-																var tmp91 any = v87
-																tmp93 := checkDerefVar(var_clojure_DOT_core_count)
-																tmp94 := lang.Apply1(tmp93, v87)
-																tmp95 := runtime.RT.IntCast(tmp94)
-																var tmp92 any = tmp95
-																tmp97 := runtime.RT.IntCast(int64(0))
-																var tmp96 any = tmp97
-																v67 = tmp88
-																v68 = tmp91
-																v69 = tmp92
-																v70 = tmp96
+																tmp83 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_first)
+																tmp84 := lang.Apply1(tmp83, v78)
+																var v85 any = tmp84
+																_ = v85
+																tmp87 := checkDerefVar(var_clojure_DOT_core_chunk_DASH_rest)
+																tmp88 := lang.Apply1(tmp87, v78)
+																var tmp86 any = tmp88
+																var tmp89 any = v85
+																tmp91 := checkDerefVar(var_clojure_DOT_core_count)
+																tmp92 := lang.Apply1(tmp91, v85)
+																tmp93 := runtime.RT.IntCast(tmp92)
+																var tmp90 any = tmp93
+																tmp95 := runtime.RT.IntCast(int64(0))
+																var tmp94 any = tmp95
+																v65 = tmp86
+																v66 = tmp89
+																v67 = tmp90
+																v68 = tmp94
 																continue
 															} // end let
-															tmp81 = tmp84
+															tmp79 = tmp82
 														} else {
-															var tmp85 any
+															var tmp83 any
 															{ // let
 																// let binding "t"
-																tmp86 := checkDerefVar(var_clojure_DOT_core_first)
-																tmp87 := lang.Apply1(tmp86, v80)
-																var v88 any = tmp87
-																_ = v88
-																tmp89 := lang.Apply2(lang.WriteWriter, v3, "\n  ")
+																tmp84 := checkDerefVar(var_clojure_DOT_core_first)
+																tmp85 := lang.Apply1(tmp84, v78)
+																var v86 any = tmp85
+																_ = v86
+																tmp87 := lang.Apply2(lang.WriteWriter, v3, "\n  ")
+																_ = tmp87
+																tmp88 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
+																tmp89 := lang.Apply2(tmp88, v86, v3)
 																_ = tmp89
-																tmp90 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
-																tmp91 := lang.Apply2(tmp90, v88, v3)
-																_ = tmp91
-																tmp93 := checkDerefVar(var_clojure_DOT_core_next)
-																tmp94 := lang.Apply1(tmp93, v80)
-																var tmp92 any = tmp94
-																var tmp95 any = nil
-																var tmp96 any = int64(0)
-																var tmp97 any = int64(0)
-																v67 = tmp92
+																tmp91 := checkDerefVar(var_clojure_DOT_core_next)
+																tmp92 := lang.Apply1(tmp91, v78)
+																var tmp90 any = tmp92
+																var tmp93 any = nil
+																var tmp94 any = int64(0)
+																var tmp95 any = int64(0)
+																v65 = tmp90
+																v66 = tmp93
+																v67 = tmp94
 																v68 = tmp95
-																v69 = tmp96
-																v70 = tmp97
 																continue
 															} // end let
-															tmp81 = tmp85
+															tmp79 = tmp83
 														}
-														tmp79 = tmp81
+														tmp77 = tmp79
 													} // end let
-													tmp78 = tmp79
+													tmp76 = tmp77
 												} else {
 												}
-												tmp74 = tmp78
+												tmp72 = tmp76
 											} // end let
-											tmp71 = tmp74
+											tmp69 = tmp72
 										}
-										tmp62 = tmp71
+										tmp60 = tmp69
 										break
 									}
 								} // end let
-								tmp58 = tmp62
+								tmp56 = tmp60
 							} // end let
-							tmp57 = tmp58
+							tmp55 = tmp56
 						} else {
 						}
-						tmp53 = tmp57
+						tmp51 = tmp55
 					} // end let
-					_ = tmp53
-					tmp54 := lang.Apply2(lang.WriteWriter, v3, "]")
-					tmp51 = tmp54
+					_ = tmp51
+					tmp52 := lang.Apply2(lang.WriteWriter, v3, "]")
+					tmp49 = tmp52
 				} else {
 				}
-				tmp5 = tmp51
+				tmp5 = tmp49
 			} // end let
 			_ = tmp5
 			tmp6 := lang.Apply2(lang.WriteWriter, v3, "}")
@@ -56230,13 +54978,8 @@ func LoadNS() {
 				tmp8 := lang.Apply1(v2, v7)
 				return tmp8
 			})
-			tmp6 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7783), kw_column, int(11), kw_end_DASH_line, int(7783), kw_end_DASH_column, int(20))
-			tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			tmp8 := lang.Apply3(tmp4, tmp7, nil, v3)
-			_ = tmp8
+			tmp6 := lang.Apply3(tmp4, tmp5, nil, v3)
+			_ = tmp6
 			return nil
 		})
 		var_clojure_DOT_core_run_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -56291,28 +55034,23 @@ func LoadNS() {
 					tmp13 := lang.Apply3(tmp11, v8, tmp12, v10)
 					return tmp13
 				})
-				tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7986), kw_column, int(25), kw_end_DASH_line, int(7986), kw_end_DASH_column, int(59))
-				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
+				tmp8 := checkDerefVar(var_clojure_DOT_core_transient)
+				tmp9 := lang.NewMap()
+				tmp10 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7987), kw_column, int(36), kw_end_DASH_line, int(7987), kw_end_DASH_column, int(37))
+				tmp11, err := lang.WithMeta(tmp9, tmp10.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp10 := checkDerefVar(var_clojure_DOT_core_transient)
-				tmp11 := lang.NewMap()
-				tmp12 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7987), kw_column, int(36), kw_end_DASH_line, int(7987), kw_end_DASH_column, int(37))
-				tmp13, err := lang.WithMeta(tmp11, tmp12.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp14 := lang.Apply1(tmp10, tmp13)
-				tmp15 := lang.Apply3(tmp6, tmp9, tmp14, v2)
-				tmp16 := lang.Apply1(tmp5, tmp15)
-				var v17 any = tmp16
-				_ = v17
-				tmp18 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
-				tmp19 := checkDerefVar(var_clojure_DOT_core_meta)
-				tmp20 := lang.Apply1(tmp19, v2)
-				tmp21 := lang.Apply2(tmp18, v17, tmp20)
-				tmp4 = tmp21
+				tmp12 := lang.Apply1(tmp8, tmp11)
+				tmp13 := lang.Apply3(tmp6, tmp7, tmp12, v2)
+				tmp14 := lang.Apply1(tmp5, tmp13)
+				var v15 any = tmp14
+				_ = v15
+				tmp16 := checkDerefVar(var_clojure_DOT_core_with_DASH_meta)
+				tmp17 := checkDerefVar(var_clojure_DOT_core_meta)
+				tmp18 := lang.Apply1(tmp17, v2)
+				tmp19 := lang.Apply2(tmp16, v15, tmp18)
+				tmp4 = tmp19
 			} // end let
 			return tmp4
 		})
@@ -56346,36 +55084,31 @@ func LoadNS() {
 				tmp13 := lang.Apply3(tmp11, v8, v9, tmp12)
 				return tmp13
 			})
-			tmp8 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7969), kw_column, int(17), kw_end_DASH_line, int(7969), kw_end_DASH_column, int(51))
-			tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
-			if err != nil {
-				panic(err)
-			}
-			var tmp10 any
-			tmp11 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-			tmp12 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
-			tmp13 := lang.Apply2(tmp11, tmp12, v2)
-			if lang.IsTruthy(tmp13) {
-				tmp14 := checkDerefVar(var_clojure_DOT_core_transient)
-				tmp15 := lang.Apply1(tmp14, v2)
-				tmp10 = tmp15
+			var tmp8 any
+			tmp9 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+			tmp10 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
+			tmp11 := lang.Apply2(tmp9, tmp10, v2)
+			if lang.IsTruthy(tmp11) {
+				tmp12 := checkDerefVar(var_clojure_DOT_core_transient)
+				tmp13 := lang.Apply1(tmp12, v2)
+				tmp8 = tmp13
 			} else {
-				tmp16 := checkDerefVar(var_clojure_DOT_core_transient)
-				tmp17 := lang.NewMap()
-				tmp18 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7972), kw_column, int(30), kw_end_DASH_line, int(7972), kw_end_DASH_column, int(31))
-				tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
+				tmp14 := checkDerefVar(var_clojure_DOT_core_transient)
+				tmp15 := lang.NewMap()
+				tmp16 := lang.NewMap(kw_file, "clojure/core.glj", kw_line, int(7972), kw_column, int(30), kw_end_DASH_line, int(7972), kw_end_DASH_column, int(31))
+				tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp20 := lang.Apply1(tmp16, tmp19)
-				tmp10 = tmp20
+				tmp18 := lang.Apply1(tmp14, tmp17)
+				tmp8 = tmp18
 			}
-			tmp21 := lang.Apply3(tmp6, tmp9, tmp10, v2)
-			tmp22 := lang.Apply1(tmp5, tmp21)
-			tmp23 := checkDerefVar(var_clojure_DOT_core_meta)
-			tmp24 := lang.Apply1(tmp23, v2)
-			tmp25 := lang.Apply2(tmp4, tmp22, tmp24)
-			return tmp25
+			tmp19 := lang.Apply3(tmp6, tmp7, tmp8, v2)
+			tmp20 := lang.Apply1(tmp5, tmp19)
+			tmp21 := checkDerefVar(var_clojure_DOT_core_meta)
+			tmp22 := lang.Apply1(tmp21, v2)
+			tmp23 := lang.Apply2(tmp4, tmp20, tmp22)
+			return tmp23
 		})
 		var_clojure_DOT_core_update_DASH_vals = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_update_DASH_vals.SetMetaLazy(func() lang.IPersistentMap {
