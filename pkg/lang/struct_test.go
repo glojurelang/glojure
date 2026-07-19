@@ -174,3 +174,33 @@ func TestWrapGoFuncDirectRuntimeSignatures(t *testing.T) {
 		})
 	}
 }
+
+func TestTransientProtocolMethodsResolveDirectlyAndCache(t *testing.T) {
+	vector := NewVector(1, 2)
+	asTransient, ok := FieldOrMethod(vector, "AsTransient")
+	if !ok {
+		t.Fatal("AsTransient was not resolved")
+	}
+	transient := Apply0(asTransient)
+
+	conj, ok := FieldOrMethod(transient, "Conj")
+	if !ok {
+		t.Fatal("Conj was not resolved")
+	}
+	Apply1(conj, 3)
+
+	persistent, ok := FieldOrMethod(transient, "Persistent")
+	if !ok {
+		t.Fatal("Persistent was not resolved")
+	}
+	result := Apply0(persistent).(IPersistentCollection)
+	if result.Count() != 3 {
+		t.Fatalf("persistent collection count = %d, want 3", result.Count())
+	}
+
+	if got := testing.AllocsPerRun(1_000, func() {
+		_, _ = FieldOrMethod(transient, "Conj")
+	}); got != 0 {
+		t.Fatalf("cached Conj resolution allocated %v objects per call, want 0", got)
+	}
+}

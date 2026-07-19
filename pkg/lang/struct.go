@@ -112,6 +112,13 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 		}
 	}
 
+	if result, ok := directProtocolMethod(v, name); ok {
+		if canCache {
+			fomCache.Store(key, result)
+		}
+		return result, true
+	}
+
 	val := target.MethodByName(name)
 	if val.IsValid() {
 		result := wrapGoFunc(val.Interface())
@@ -135,6 +142,30 @@ func FieldOrMethod(v interface{}, name string) (interface{}, bool) {
 		return val.Interface(), true
 	}
 
+	return nil, false
+}
+
+func directProtocolMethod(v interface{}, name string) (IFn, bool) {
+	switch name {
+	case "Conj":
+		if transient, ok := v.(Conjer); ok {
+			return FnFunc1(func(value any) any {
+				return transient.Conj(value)
+			}), true
+		}
+	case "Persistent":
+		if transient, ok := v.(ITransientCollection); ok {
+			return FnFunc0(func() any {
+				return transient.Persistent()
+			}), true
+		}
+	case "AsTransient":
+		if editable, ok := v.(IEditableCollection); ok {
+			return FnFunc0(func() any {
+				return editable.AsTransient()
+			}), true
+		}
+	}
 	return nil, false
 }
 
