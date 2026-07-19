@@ -1,3 +1,5 @@
+//go:build !glj_aot_runtime
+
 // Package stdlib provides the standard library for the mratlang language.
 package stdlib
 

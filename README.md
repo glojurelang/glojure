@@ -161,9 +161,10 @@ go build -trimpath -tags glj_aot_runtime -ldflags="-s -w" ./cmd/myapp
 
 The `glj_aot_runtime` tag retains evaluation, `clojure.core`, and file I/O
 support required by core functions such as `slurp` and `spit`. It omits the Go
-source generator, the broad default Go export registry, HTTP URL I/O, and
-precompiled loaders for optional namespaces. Import every precompiled
-application or optional standard-library namespace used by the executable:
+source generator, the broad default Go export registry, fallback standard
+library source, HTTP URL I/O, and precompiled loaders for optional namespaces.
+Import every precompiled application or optional standard-library namespace
+used by the executable:
 
 ```go
 import (
