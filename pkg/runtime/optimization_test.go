@@ -99,6 +99,40 @@ func TestNumericLoopRegionSpecializesFloat64AndFallsBack(t *testing.T) {
 	}
 }
 
+func TestFixedArityTwoFunctionUsesCompiledParameterSlots(t *testing.T) {
+	first := lang.NewSymbol("first")
+	second := lang.NewSymbol("second")
+	params := []*ast.Node{
+		{Op: ast.OpBinding, Sub: &ast.BindingNode{Name: first}},
+		{Op: ast.OpBinding, Sub: &ast.BindingNode{Name: second}},
+	}
+	method := &ast.Node{
+		Op: ast.OpFnMethod,
+		Sub: &ast.FnMethodNode{
+			Params:     params,
+			FixedArity: 2,
+			Body:       &ast.Node{Op: ast.OpLocal, Sub: &ast.LocalNode{Name: second}},
+		},
+	}
+	fn := NewFn(
+		&ast.Node{
+			Op: ast.OpFn,
+			Sub: &ast.FnNode{
+				MaxFixedArity: 2,
+				Methods:       []*ast.Node{method},
+			},
+		},
+		&environment{scope: newScope()},
+	)
+
+	if got := fn.Invoke2("ignored", int64(42)); got != int64(42) {
+		t.Fatalf("first invocation = %v, want 42", got)
+	}
+	if got := fn.Invoke2("ignored again", int64(7)); got != int64(7) {
+		t.Fatalf("reused invocation = %v, want 7", got)
+	}
+}
+
 func TestNativeCoreAddApplyToReducibleSequence(t *testing.T) {
 	args := lang.NewLongRange(0, 1_000, 1)
 

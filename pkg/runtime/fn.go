@@ -92,6 +92,14 @@ func NewFn(astNode *ast.Node, env lang.Environment) *Fn {
 				fn.singleLocal = fnNode.Local.Sub.(*ast.BindingNode).Name
 			}
 		}
+		if !methodNode.IsVariadic && methodNode.FixedArity == 2 {
+			fn.singleArity = 2
+			fn.singleParam0 = methodNode.Params[0].Sub.(*ast.BindingNode).Name
+			fn.singleParam1 = methodNode.Params[1].Sub.(*ast.BindingNode).Name
+			if fnNode.Local != nil {
+				fn.singleLocal = fnNode.Local.Sub.(*ast.BindingNode).Name
+			}
+		}
 		if !methodNode.IsVariadic && methodNode.FixedArity == 3 {
 			fn.singleArity = 3
 			fn.singleParam0 = methodNode.Params[0].Sub.(*ast.BindingNode).Name
@@ -142,6 +150,9 @@ func (fn *Fn) Invoke1(a0 interface{}) interface{} {
 }
 
 func (fn *Fn) Invoke2(a0, a1 interface{}) interface{} {
+	if fn.singleArity == 2 && fn.singleEval != nil && !fn.singleRecurs {
+		return fn.invokeSingle2(a0, a1)
+	}
 	args := [2]interface{}{a0, a1}
 	return fn.invoke(args[:])
 }
@@ -167,6 +178,22 @@ func (fn *Fn) invokeSingle1(a0 interface{}) interface{} {
 		frame.env.BindLocal(fn.singleLocal, fn)
 	}
 	frame.args[0] = a0
+	res, err := fn.singleEval(&frame.env)
+	if err != nil {
+		panic(errorWithStack(err, lang.StackFrame{}))
+	}
+	return res
+}
+
+func (fn *Fn) invokeSingle2(a0, a1 interface{}) interface{} {
+	frame := fn.acquireFrame()
+	defer fn.releaseFrame(frame)
+
+	if fn.singleLocal != nil {
+		frame.env.BindLocal(fn.singleLocal, fn)
+	}
+	frame.args[0] = a0
+	frame.args[1] = a1
 	res, err := fn.singleEval(&frame.env)
 	if err != nil {
 		panic(errorWithStack(err, lang.StackFrame{}))

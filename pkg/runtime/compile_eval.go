@@ -259,6 +259,26 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 				return lang.Apply1(fnValue, a0), nil
 			}
 		}
+		if invoke.Fn.Op == ast.OpVar && len(args) == 2 {
+			vr := invoke.Fn.Sub.(*ast.VarNode).Var
+			arg0, arg1 := args[0], args[1]
+			return func(env *environment) (res interface{}, err error) {
+				defer env.recoverInvoke(n, &res, &err)
+				fnValue := vr.Get()
+				a0, err := arg0(env)
+				if err != nil {
+					return nil, err
+				}
+				a1, err := arg1(env)
+				if err != nil {
+					return nil, err
+				}
+				if direct, ok := fnValue.(*Fn); ok {
+					return direct.Invoke2(a0, a1), nil
+				}
+				return lang.Apply2(fnValue, a0, a1), nil
+			}
+		}
 		if invoke.Fn.Op == ast.OpVar && len(args) == 3 {
 			vr := invoke.Fn.Sub.(*ast.VarNode).Var
 			arg0, arg1, arg2 := args[0], args[1], args[2]
