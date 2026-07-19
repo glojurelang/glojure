@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"github.com/glojurelang/glojure/pkg/pkgmap"
+	"github.com/glojurelang/glojure/pkg/runtime"
 	"github.com/google/uuid"
 )
 
@@ -18,6 +19,7 @@ func init() {
 	pkgmap.Set("net/url.*URL", reflect.TypeOf((*url.URL)(nil)))
 	pkgmap.Set("net/url.Parse", url.Parse)
 	pkgmap.Set("net/url.ParseRequestURI", url.ParseRequestURI)
+	pkgmap.Set("github.com/glojurelang/glojure/pkg/runtime.OpenURL", runtime.OpenURL)
 
 	pkgmap.Set("github.com/google/uuid.UUID", reflect.TypeOf(uuid.UUID{}))
 	pkgmap.Set("github.com/google/uuid.Parse", uuid.Parse)

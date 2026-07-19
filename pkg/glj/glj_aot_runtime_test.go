@@ -3,6 +3,8 @@
 package glj
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/runtime"
@@ -24,4 +26,15 @@ func TestCompactRuntimeNamespaceLoaders(t *testing.T) {
 			t.Errorf("optional namespace loader %q is linked", resource)
 		}
 	}
+}
+
+func TestCompactRuntimeDoesNotLinkHTTPURLSupport(t *testing.T) {
+	defer func() {
+		recovered := recover()
+		if recovered == nil || !strings.Contains(fmt.Sprint(recovered), "no URL opener is linked") {
+			t.Fatalf("slurp panic = %v, want missing URL opener error", recovered)
+		}
+	}()
+
+	Var("clojure.core", "slurp").Invoke("https://example.com/data")
 }

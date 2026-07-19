@@ -233,14 +233,9 @@
                          (make-input-stream
                           (if (= "file" (.scheme x))
                             (as-file x)
-                            (let [req (go-try! net:http.NewRequest net:http.MethodGet (.String x) nil)
-                                  res (go-try! . net:http.DefaultClient Do req)
-                                  status (.StatusCode res)
-                                  body (.Body res)]
-                              (when (not= 200 status)
-                                (. body Close)
-                                (throw (fmt.Errorf "http error: %s" status)))
-                              body))
+                            (go-try!
+                             github.com:glojurelang:glojure:pkg:runtime.OpenURL
+                             x))
                           opts))
     :make-output-stream (fn [^net:url.*URL x opts]
                           (if (= "file" (.scheme x))
@@ -449,4 +444,3 @@
 ;;   {:added "1.2"}
 ;;   ([n] (resource n (.getContextClassLoader (Thread/currentThread))))
 ;;   ([n ^ClassLoader loader] (.getResource loader n)))
-
