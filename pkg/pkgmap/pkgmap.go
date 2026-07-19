@@ -17,35 +17,43 @@ var (
 	hostClassType    = map[string]reflect.Type{}
 	hostClassTypeMtx sync.RWMutex
 
-	loaderMtx     sync.Mutex
-	importsLoader func(func(string, interface{}))
-	importsLoaded bool
+	loaderMtx      sync.Mutex
+	importsLoaders []func(func(string, interface{}))
+	importsLoaded  bool
 )
 
-// SetLoader installs the generated import registrar. The full registry is
+// SetLoader installs a generated import registrar. The full registry is
 // populated on first lookup so programs that only use AOT-compiled namespaces
 // do not build thousands of unused map entries during process startup.
 func SetLoader(loader func(func(string, interface{}))) {
 	loaderMtx.Lock()
-	defer loaderMtx.Unlock()
-	if importsLoader != nil {
-		panic("pkgmap import loader already set")
+	if !importsLoaded {
+		importsLoaders = append(importsLoaders, loader)
+		loaderMtx.Unlock()
+		return
 	}
-	importsLoader = loader
+	loaderMtx.Unlock()
+
+	// A registrar installed after the first lookup must become visible
+	// immediately. This also keeps dynamically loaded package maps working.
+	loader(Set)
 }
 
 func ensureImportsLoaded() {
 	loaderMtx.Lock()
-	if importsLoaded || importsLoader == nil {
+	if importsLoaded || len(importsLoaders) == 0 {
 		loaderMtx.Unlock()
 		return
 	}
-	loader := importsLoader
+	loaders := importsLoaders
+	importsLoaders = nil
 	// Mark the load in progress before invoking the registrar. This keeps a
 	// registration callback that performs a lookup from recursing.
 	importsLoaded = true
 	loaderMtx.Unlock()
-	loader(Set)
+	for _, loader := range loaders {
+		loader(Set)
+	}
 }
 
 // Set sets the value of the given package and export name.
