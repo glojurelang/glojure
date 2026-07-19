@@ -83,6 +83,7 @@ func TestAnalyzeInt64AOTRecursiveFunction(t *testing.T) {
 	analysis := analyzeInt64AOTFunction(
 		&aotSpecializationTarget{vr: vr},
 		method,
+		nil,
 	)
 	if analysis == nil {
 		t.Fatal("int64 recursive function was not specialized")
@@ -100,6 +101,7 @@ func TestAnalyzeInt64AOTRecursiveFunction(t *testing.T) {
 	if analysis := analyzeInt64AOTFunction(
 		&aotSpecializationTarget{vr: vr},
 		method,
+		nil,
 	); analysis != nil {
 		t.Fatal("mixed float function unexpectedly received an int64 specialization")
 	}
@@ -137,12 +139,64 @@ func TestAnalyzeInt64AOTLoop(t *testing.T) {
 	analysis := analyzeInt64AOTFunction(
 		&aotSpecializationTarget{vr: vr},
 		method,
+		nil,
 	)
 	if analysis == nil {
 		t.Fatal("int64 loop was not specialized")
 	}
 	if analysis.usesSelf {
 		t.Fatal("non-recursive loop unnecessarily requested a root-version guard")
+	}
+}
+
+func TestAnalyzeInt64AOTAcrossVarCall(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.int64-cross-call"))
+	calleeVar := ns.Intern(lang.NewSymbol("callee"))
+	callerVar := ns.Intern(lang.NewSymbol("caller"))
+	n := lang.NewSymbol("n")
+
+	calleeTarget := &aotSpecializationTarget{vr: calleeVar, arity: 1}
+	calleeMethod := &ast.FnMethodNode{
+		Params:     []*ast.Node{aotTestBinding(n, nil)},
+		FixedArity: 1,
+		Body: aotTestNumbersCall(
+			"Add",
+			aotTestLocal(n),
+			aotTestInt(1),
+		),
+	}
+	targets := map[*lang.Var]*aotSpecializationTarget{
+		calleeVar: calleeTarget,
+		callerVar: {vr: callerVar, arity: 1},
+	}
+
+	callerMethod := &ast.FnMethodNode{
+		Params:     []*ast.Node{aotTestBinding(n, nil)},
+		FixedArity: 1,
+		Body:       aotTestInvoke(calleeVar, aotTestLocal(n)),
+	}
+	if analysis := analyzeInt64AOTFunction(
+		targets[callerVar],
+		callerMethod,
+		targets,
+	); analysis != nil {
+		t.Fatal("caller specialized before its callee had a primitive path")
+	}
+
+	calleeTarget.int64Analysis = analyzeInt64AOTFunction(
+		calleeTarget,
+		calleeMethod,
+		targets,
+	)
+	if calleeTarget.int64Analysis == nil {
+		t.Fatal("callee did not receive a primitive path")
+	}
+	if analysis := analyzeInt64AOTFunction(
+		targets[callerVar],
+		callerMethod,
+		targets,
+	); analysis == nil {
+		t.Fatal("caller did not specialize after its callee")
 	}
 }
 

@@ -31,11 +31,13 @@ type int64AOTAnalysis struct {
 
 type int64AOTAnalyzer struct {
 	analysis *int64AOTAnalysis
+	targets  map[*lang.Var]*aotSpecializationTarget
 }
 
 func analyzeInt64AOTFunction(
 	target *aotSpecializationTarget,
 	method *ast.FnMethodNode,
+	targets map[*lang.Var]*aotSpecializationTarget,
 ) *int64AOTAnalysis {
 	if target == nil || method.IsVariadic || method.FixedArity > 4 {
 		return nil
@@ -44,7 +46,10 @@ func analyzeInt64AOTFunction(
 		target: target,
 		arity:  method.FixedArity,
 	}
-	analyzer := int64AOTAnalyzer{analysis: analysis}
+	analyzer := int64AOTAnalyzer{
+		analysis: analysis,
+		targets:  targets,
+	}
 	locals := make(map[*lang.Symbol]aotPrimitiveType, method.FixedArity)
 	for _, param := range method.Params {
 		locals[param.Sub.(*ast.BindingNode).Name] = int64AOTPrimitive
@@ -214,6 +219,11 @@ func (a *int64AOTAnalyzer) invokeType(
 		a.analysis.usesSelf = true
 		return int64AOTPrimitive
 	}
+	if target := a.targets[vr]; target != nil &&
+		target.int64Analysis != nil &&
+		a.allInt64(invoke.Args, locals, target.arity) {
+		return int64AOTPrimitive
+	}
 	if vr.String() == "#'clojure.core/=" && a.allInt64(invoke.Args, locals, 2) {
 		return boolAOTPrimitive
 	}
@@ -263,10 +273,9 @@ type aotTypedLocal struct {
 }
 
 type int64AOTEmitter struct {
-	g           *Generator
-	analysis    *int64AOTAnalysis
-	helper      string
-	rootVersion string
+	g        *Generator
+	analysis *int64AOTAnalysis
+	helper   string
 }
 
 func (g *Generator) generateInt64SpecializedFixedFn(
@@ -279,16 +288,9 @@ func (g *Generator) generateInt64SpecializedFixedFn(
 	if target == nil || target.fn != fn {
 		return false
 	}
-	analysis := analyzeInt64AOTFunction(target, method)
+	analysis := target.int64Analysis
 	if analysis == nil {
 		return false
-	}
-
-	var rootVersion string
-	if analysis.usesSelf {
-		rootVersion = g.allocateTempVar()
-		g.writef("var %s *lang.VarRootVersion\n", rootVersion)
-		target.rootVersionVar = rootVersion
 	}
 
 	helper := g.allocateTempVar()
@@ -313,19 +315,19 @@ func (g *Generator) generateInt64SpecializedFixedFn(
 			target.vr.Namespace().Name().String(),
 			target.vr.Symbol().String(),
 		)
-		g.writef("if %s.RootVersion() != %s {\n", varName, rootVersion)
+		g.writef("if %s.RootVersion() != %s {\n", varName, target.rootVersionVar)
 		g.writef("return 0, false\n")
 		g.writef("}\n")
 	}
 	emitter := int64AOTEmitter{
-		g:           g,
-		analysis:    analysis,
-		helper:      helper,
-		rootVersion: rootVersion,
+		g:        g,
+		analysis: analysis,
+		helper:   helper,
 	}
 	result := emitter.emitExpr(method.Body, locals)
 	g.writef("return %s, true\n", result)
 	g.writef("}\n")
+	g.writef("%s = %s\n", target.int64FnVar, helper)
 
 	arity := method.FixedArity
 	signature := ""
@@ -385,7 +387,10 @@ func (e *int64AOTEmitter) emitExpr(
 
 	case ast.OpIf:
 		ifNode := node.Sub.(*ast.IfNode)
-		typ := (&int64AOTAnalyzer{analysis: e.analysis}).exprType(node, aotLocalTypes(locals))
+		typ := (&int64AOTAnalyzer{
+			analysis: e.analysis,
+			targets:  e.g.aotCallTargets,
+		}).exprType(node, aotLocalTypes(locals))
 		result := e.g.allocateTempVar()
 		e.g.writef("var %s %s\n", result, aotGoType(typ))
 		test := e.emitExpr(ifNode.Test, locals)
@@ -411,7 +416,10 @@ func (e *int64AOTEmitter) emitLet(
 	letNode *ast.LetNode,
 	locals map[*lang.Symbol]aotTypedLocal,
 ) string {
-	analyzer := int64AOTAnalyzer{analysis: e.analysis}
+	analyzer := int64AOTAnalyzer{
+		analysis: e.analysis,
+		targets:  e.g.aotCallTargets,
+	}
 	typ := analyzer.exprType(letNode.Body, aotLocalTypesAfterBindings(
 		&analyzer, letNode.Bindings, aotLocalTypes(locals),
 	))
@@ -498,7 +506,10 @@ func (e *int64AOTEmitter) emitLoopTail(
 		letNode := node.Sub.(*ast.LetNode)
 		e.g.writef("{\n")
 		nested := cloneAOTLocals(locals)
-		analyzer := int64AOTAnalyzer{analysis: e.analysis}
+		analyzer := int64AOTAnalyzer{
+			analysis: e.analysis,
+			targets:  e.g.aotCallTargets,
+		}
 		for _, binding := range letNode.Bindings {
 			bindingNode := binding.Sub.(*ast.BindingNode)
 			value := e.emitExpr(bindingNode.Init, nested)
@@ -593,10 +604,23 @@ func (e *int64AOTEmitter) emitInvoke(
 	if vr.String() == "#'clojure.core/=" {
 		return "(" + args[0] + " == " + args[1] + ")"
 	}
+	helper := e.helper
+	if vr != e.analysis.target.vr {
+		target := e.g.aotCallTargets[vr]
+		varName := e.g.allocVarVar(
+			vr.Namespace().Name().String(),
+			vr.Symbol().String(),
+		)
+		e.g.writef("if %s.RootVersion() != %s {\n",
+			varName, target.rootVersionVar)
+		e.g.writef("return 0, false\n")
+		e.g.writef("}\n")
+		helper = target.int64FnVar
+	}
 	result := e.g.allocateTempVar()
 	ok := e.g.allocateTempVar()
 	e.g.writef("%s, %s := %s(%s)\n",
-		result, ok, e.helper, strings.Join(args, ", "))
+		result, ok, helper, strings.Join(args, ", "))
 	e.g.writef("if !%s {\n", ok)
 	e.g.writef("return 0, false\n")
 	e.g.writef("}\n")

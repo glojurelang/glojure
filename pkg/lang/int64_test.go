@@ -15,6 +15,12 @@ func TestCheckedInt64Arithmetic(t *testing.T) {
 	if got := CheckedMultiplyInt64(6, 7); got != 42 {
 		t.Fatalf("CheckedMultiplyInt64(6, 7) = %d", got)
 	}
+	if got := CheckedMultiplyInt64(-6, 7); got != -42 {
+		t.Fatalf("CheckedMultiplyInt64(-6, 7) = %d", got)
+	}
+	if got := CheckedMultiplyInt64(math.MinInt64, 1); got != math.MinInt64 {
+		t.Fatalf("CheckedMultiplyInt64(MinInt64, 1) = %d", got)
+	}
 	if got := CheckedNegateInt64(42); got != -42 {
 		t.Fatalf("CheckedNegateInt64(42) = %d", got)
 	}
@@ -22,6 +28,7 @@ func TestCheckedInt64Arithmetic(t *testing.T) {
 	assertArithmeticPanic(t, func() { CheckedAddInt64(math.MaxInt64, 1) })
 	assertArithmeticPanic(t, func() { CheckedSubInt64(math.MinInt64, 1) })
 	assertArithmeticPanic(t, func() { CheckedMultiplyInt64(math.MaxInt64, 2) })
+	assertArithmeticPanic(t, func() { CheckedMultiplyInt64(math.MinInt64, -1) })
 	assertArithmeticPanic(t, func() { CheckedNegateInt64(math.MinInt64) })
 }
 

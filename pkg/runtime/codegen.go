@@ -58,6 +58,11 @@ type varInfo struct {
 	sym string
 }
 
+type namedVar struct {
+	name *lang.Symbol
+	vr   *lang.Var
+}
+
 type valueInit struct {
 	name string              // Name of the variable or var being initialized
 	buf  bytes.Buffer        // Buffer holding the initialization code
@@ -67,6 +72,10 @@ type valueInit struct {
 type aotSpecializationTarget struct {
 	vr             *lang.Var
 	fn             *Fn
+	arity          int
+	directFnVar    string
+	int64FnVar     string
+	int64Analysis  *int64AOTAnalysis
 	rootVersionVar string
 }
 
@@ -86,6 +95,9 @@ type Generator struct {
 	kwVariables     map[string]string  // set of all generated keywords to minimize allocations
 
 	valueInits []*valueInit // map of value initializations
+
+	aotDeclarations bytes.Buffer
+	aotCallTargets  map[*lang.Var]*aotSpecializationTarget
 
 	// Fields for handling closures
 	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
@@ -130,6 +142,7 @@ func NewGenerator(w io.Writer) *Generator {
 		kwVariables:     make(map[string]string),
 		liftedValues:    make(map[liftedKey]*liftedValue),
 		liftedCounter:   0,
+		aotCallTargets:  make(map[*lang.Var]*aotSpecializationTarget),
 	}
 }
 
@@ -226,10 +239,6 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 			g.allocSymVar(targetNS.(*lang.Namespace).Name().String()))
 	}
 
-	type namedVar struct {
-		name *lang.Symbol
-		vr   *lang.Var
-	}
 	var internedVars []namedVar
 
 	for seq := mappings.Seq(); seq != nil; seq = seq.Next() {
@@ -256,6 +265,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	sort.Slice(internedVars, func(i, j int) bool {
 		return internedVars[i].name.String() < internedVars[j].name.String()
 	})
+	g.prepareAOTCallTargets(internedVars)
 	for _, nv := range internedVars {
 		if isRuntimeOwnedVar(nv.vr) {
 			// Skip runtime-owned vars
@@ -449,6 +459,7 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 
 	// Prepare the final source
 	sourceBytes := []byte(g.header(mungeID(getLastNSPart(ns.Name().String())))) // File header with package and imports
+	sourceBytes = append(sourceBytes, g.aotDeclarations.Bytes()...)             // Package-level AOT call caches
 	sourceBytes = append(sourceBytes, initBuf.Bytes()...)                       // The complete init function
 
 	// Format the generated code
@@ -504,13 +515,13 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 			valChan <- vr.Get()
 		}()
 		v := <-valChan
-		if fn, ok := v.(*Fn); ok {
-			g.specializationTarget = &aotSpecializationTarget{
-				vr: vr,
-				fn: fn,
-			}
+		if target := g.aotCallTargets[vr]; target != nil {
+			g.specializationTarget = target
 		}
 		valueExpr := g.generateValue(v)
+		if target := g.specializationTarget; target != nil {
+			g.writef("%s = %s\n", target.directFnVar, valueExpr)
+		}
 		g.writef("%s = %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, valueExpr)
 		if target := g.specializationTarget; target != nil && target.rootVersionVar != "" {
 			g.writef("%s = %s.RootVersion()\n", target.rootVersionVar, varVar)
@@ -1478,6 +1489,7 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 	// ISeq while avoiding reflection in lang.Apply.
 	var fnExpr string
 	directCall := false
+	aotTarget := g.aotInvokeTarget(invokeNode)
 	if invokeNode.Fn.Op == ast.OpConst {
 		value := invokeNode.Fn.Sub.(*ast.ConstNode).Value
 		if typ := reflect.TypeOf(value); typ != nil &&
@@ -1498,9 +1510,29 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 			}
 		}
 	}
-	if !directCall {
+	if !directCall && aotTarget == nil {
 		// Generate the general function expression before its arguments.
 		fnExpr = g.generateASTNode(invokeNode.Fn)
+	}
+
+	var aotFast, aotFallbackFn string
+	if aotTarget != nil {
+		varNode := invokeNode.Fn.Sub.(*ast.VarNode)
+		varID := g.allocVarVar(
+			varNode.Var.Namespace().Name().String(),
+			varNode.Var.Symbol().String(),
+		)
+		if g.currentValueInit != nil && varID != g.currentValueInit.name {
+			g.currentValueInit.deps[varID] = struct{}{}
+		}
+		aotFast = g.allocateTempVar()
+		g.writef("%s := %s.RootVersion() == %s && !%s.IsMacro()\n",
+			aotFast, varID, aotTarget.rootVersionVar, varID)
+		aotFallbackFn = g.allocateTempVar()
+		g.writef("var %s any\n", aotFallbackFn)
+		g.writef("if !%s {\n", aotFast)
+		g.writef("%s = checkDerefVar(%s)\n", aotFallbackFn, varID)
+		g.writef("}\n")
 	}
 
 	// Generate the arguments
@@ -1515,26 +1547,47 @@ func (g *Generator) generateInvoke(node *ast.Node) string {
 		g.writef("%s := %s(%s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
 		return resultVar
 	}
+	if aotTarget != nil {
+		g.writef("var %s any\n", resultVar)
+		g.writef("if %s {\n", aotFast)
+		g.writef("%s = %s(%s)\n",
+			resultVar, aotTarget.directFnVar, strings.Join(argExprs, ", "))
+		g.writef("} else {\n")
+		g.generateApply(resultVar, aotFallbackFn, argExprs, false)
+		g.writef("}\n")
+		return resultVar
+	}
 
 	// Emit the invocation using fixed-arity Apply for 0-4 args to avoid []any alloc.
+	g.generateApply(resultVar, fnExpr, argExprs, true)
+	return resultVar
+}
+
+func (g *Generator) generateApply(
+	resultVar string,
+	fnExpr string,
+	argExprs []string,
+	declare bool,
+) {
+	operator := "="
+	if declare {
+		operator = ":="
+	}
 	n := len(argExprs)
 	switch n {
 	case 0:
-		g.writef("%s := lang.Apply0(%s)\n", resultVar, fnExpr)
+		g.writef("%s %s lang.Apply0(%s)\n", resultVar, operator, fnExpr)
 	case 1:
-		g.writef("%s := lang.Apply1(%s, %s)\n", resultVar, fnExpr, argExprs[0])
+		g.writef("%s %s lang.Apply1(%s, %s)\n", resultVar, operator, fnExpr, argExprs[0])
 	case 2:
-		g.writef("%s := lang.Apply2(%s, %s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
+		g.writef("%s %s lang.Apply2(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 	case 3:
-		g.writef("%s := lang.Apply3(%s, %s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
+		g.writef("%s %s lang.Apply3(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 	case 4:
-		g.writef("%s := lang.Apply4(%s, %s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
+		g.writef("%s %s lang.Apply4(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 	default:
-		g.writef("%s := lang.Apply(%s, []any{%s})\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
+		g.writef("%s %s lang.Apply(%s, []any{%s})\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 	}
-
-	// Return the result variable
-	return resultVar
 }
 
 // generateDo generates code for a Do node
