@@ -5,5 +5,9 @@ import (
 	"embed"
 )
 
-//go:embed glojure clojure
+// Embed only Glojure source. Embedding the directories themselves also includes
+// generated loader Go files, which are already compiled into AOT-enabled
+// executables and are not runtime load-path resources.
+//
+//go:embed */*.glj */*/*.glj */*/*/*.glj
 var StdLib embed.FS
