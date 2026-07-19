@@ -64,11 +64,38 @@ func (env *environment) applyMacro(fn lang.IFn, form lang.ISeq) (interface{}, er
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
-	return env.evalInternal(n)
+	if directSelfEvaluating(n) {
+		return n, nil
+	}
+	currentNS := env.CurrentNamespace()
+	if result, ok, err := env.evalDirectInvoke(n, currentNS); ok {
+		return result, err
+	}
+	return env.evalInternalInNamespace(n, currentNS)
+}
+
+func directSelfEvaluating(form interface{}) bool {
+	switch form.(type) {
+	case *lang.Symbol,
+		lang.IPersistentVector,
+		lang.IPersistentMap,
+		lang.IPersistentSet,
+		lang.ISeq:
+		return false
+	default:
+		return true
+	}
 }
 
 func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 	currentNS := env.CurrentNamespace()
+	return env.evalInternalInNamespace(n, currentNS)
+}
+
+func (env *environment) evalInternalInNamespace(
+	n interface{},
+	currentNS *lang.Namespace,
+) (interface{}, error) {
 	analyzer := &compiler.Analyzer{
 		Macroexpand1: func(form interface{}) (interface{}, error) {
 			return env.macroexpand1(form, currentNS)
@@ -101,6 +128,90 @@ func (env *environment) evalInternal(n interface{}) (interface{}, error) {
 		return nil, err
 	}
 	return env.EvalAST(astNode)
+}
+
+func (env *environment) evalDirectInvoke(
+	form interface{},
+	currentNS *lang.Namespace,
+) (result interface{}, ok bool, err error) {
+	seq, ok := form.(lang.ISeq)
+	if !ok || seq == nil {
+		return nil, false, nil
+	}
+	op, ok := seq.First().(*lang.Symbol)
+	if !ok {
+		return nil, false, nil
+	}
+	vr := directInvokeVar(currentNS, op)
+	if vr == nil || vr.IsMacro() {
+		return nil, false, nil
+	}
+	fn, callable := vr.Get().(lang.IFn)
+	if !callable {
+		return nil, false, nil
+	}
+
+	var args [4]interface{}
+	arity := 0
+	for argSeq := seq.Next(); argSeq != nil; argSeq = argSeq.Next() {
+		if arity == len(args) {
+			return nil, false, nil
+		}
+		value, constant := directInvokeConstant(argSeq.First())
+		if !constant {
+			return nil, false, nil
+		}
+		args[arity] = value
+		arity++
+	}
+
+	ok = true
+	defer env.recoverDirectInvoke(form, &result, &err)
+	switch arity {
+	case 0:
+		result = lang.Apply0(fn)
+	case 1:
+		result = lang.Apply1(fn, args[0])
+	case 2:
+		result = lang.Apply2(fn, args[0], args[1])
+	case 3:
+		result = lang.Apply3(fn, args[0], args[1], args[2])
+	case 4:
+		result = lang.Apply4(fn, args[0], args[1], args[2], args[3])
+	}
+	return result, true, nil
+}
+
+func directInvokeVar(currentNS *lang.Namespace, sym *lang.Symbol) *lang.Var {
+	if sym.Namespace() == "" {
+		vr, _ := currentNS.GetMapping(sym).(*lang.Var)
+		return vr
+	}
+	ns := lang.NamespaceFor(currentNS, sym)
+	if ns == nil {
+		return nil
+	}
+	vr := ns.FindInternedVar(lang.NewSymbol(sym.Name()))
+	if vr == nil || ns != currentNS && !vr.IsPublic() {
+		return nil
+	}
+	return vr
+}
+
+func directInvokeConstant(form interface{}) (interface{}, bool) {
+	seq, ok := form.(lang.ISeq)
+	if !ok || seq == nil {
+		return nil, false
+	}
+	op, ok := seq.First().(*lang.Symbol)
+	if !ok || op.String() != "quote" && op.String() != "clojure.core/quote" {
+		return nil, false
+	}
+	args := seq.Next()
+	if args == nil || args.Next() != nil {
+		return nil, false
+	}
+	return args.First(), true
 }
 
 // Helpers

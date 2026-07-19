@@ -839,13 +839,33 @@ func (env *environment) EvalASTInvoke(n *ast.Node) (res interface{}, err error) 
 }
 
 func (env *environment) recoverInvoke(n *ast.Node, res *interface{}, err *error) {
-	r := recover()
+	invokeNode := n.Sub.(*ast.InvokeNode)
+	env.recoverInvokeForm(recover(), invokeNode.Meta, n.Form, res, err)
+}
+
+func (env *environment) recoverDirectInvoke(
+	form interface{},
+	res *interface{},
+	err *error,
+) {
+	var meta lang.IPersistentMap
+	if obj, ok := form.(lang.IObj); ok {
+		meta = obj.Meta()
+	}
+	env.recoverInvokeForm(recover(), meta, form, res, err)
+}
+
+func (env *environment) recoverInvokeForm(
+	r interface{},
+	meta lang.IPersistentMap,
+	form interface{},
+	res *interface{},
+	err *error,
+) {
 	if r == nil {
 		return
 	}
-	invokeNode := n.Sub.(*ast.InvokeNode)
-	meta := invokeNode.Meta
-	gljFrame := fmt.Sprintf("%s:%d:%d:\t%s", lang.Get(meta, KWFile), lang.Get(meta, KWLine), lang.Get(meta, KWColumn), n.Form)
+	gljFrame := fmt.Sprintf("%s:%d:%d:\t%s", lang.Get(meta, KWFile), lang.Get(meta, KWLine), lang.Get(meta, KWColumn), form)
 	*res = nil
 	if rErr, ok := r.(error); ok {
 		if errors.Is(rErr, &RTEvalError{}) {

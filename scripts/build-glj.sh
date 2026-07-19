@@ -15,9 +15,9 @@ else
     BUILD_TAG="$ARCH && $OS"
 fi
 
-LDFLAGS=""
+LDFLAGS="-s -w"
 if [ -n "$GLJ_VERSION" ]; then
-    LDFLAGS="-X github.com/glojurelang/glojure/pkg/runtime.version=$GLJ_VERSION"
+    LDFLAGS="$LDFLAGS -X github.com/glojurelang/glojure/pkg/runtime.version=$GLJ_VERSION"
 fi
 
 # When GO_REPLACE is set, create a temporary go.work file with replace

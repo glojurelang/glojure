@@ -28,6 +28,8 @@ type int64AOTAnalysis struct {
 	arity              int
 	usesSelf           bool
 	uncheckedHostCalls map[*ast.HostCallNode]bool
+	guardInt32Params   bool
+	guardInt32Loops    map[*ast.LetNode]bool
 }
 
 type int64AOTAnalyzer struct {
@@ -312,6 +314,9 @@ func (g *Generator) generateInt64SpecializedFixedFn(
 		helper, strings.Join(typedSignature, ", "))
 	g.writef("%s = func(%s) (int64, bool) {\n",
 		helper, strings.Join(typedSignature, ", "))
+	if analysis.guardInt32Params {
+		g.writeInt32AOTFallbackGuards(typedParams)
+	}
 	if analysis.usesSelf {
 		varName := g.allocVarVar(
 			target.vr.Namespace().Name().String(),
@@ -466,10 +471,26 @@ func (e *int64AOTEmitter) emitLoop(
 	}
 	e.g.writef("%s:\n", label)
 	e.g.writef("for {\n")
+	if e.analysis.guardInt32Loops[loop] {
+		names := make([]string, len(bindings))
+		for i, binding := range bindings {
+			names[i] = binding.name
+		}
+		e.g.writeInt32AOTFallbackGuards(names)
+	}
 	e.emitLoopTail(loop.Body, nested, loop.LoopID, bindings, result, label)
 	e.g.writef("}\n")
 	e.g.writef("}\n")
 	return result
+}
+
+func (g *Generator) writeInt32AOTFallbackGuards(names []string) {
+	for _, name := range names {
+		g.writef("if %s < -2147483647 || %s > 2147483647 {\n",
+			name, name)
+		g.writef("return 0, false\n")
+		g.writef("}\n")
+	}
 }
 
 func (e *int64AOTEmitter) emitLoopTail(

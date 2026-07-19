@@ -21,7 +21,8 @@ func exactInt64AOTInterval(value int64) int64AOTInterval {
 }
 
 type int64AOTRangeAnalyzer struct {
-	analysis *int64AOTAnalysis
+	analysis         *int64AOTAnalysis
+	speculativeInt32 bool
 }
 
 func (a *int64AOTAnalysis) proveSafeOperations(method *ast.FnMethodNode) {
@@ -30,6 +31,42 @@ func (a *int64AOTAnalysis) proveSafeOperations(method *ast.FnMethodNode) {
 		locals[param.Sub.(*ast.BindingNode).Name] = int64AOTInterval{}
 	}
 	(&int64AOTRangeAnalyzer{analysis: a}).expr(method.Body, locals)
+
+	speculative := *a
+	speculative.uncheckedHostCalls = cloneUncheckedInt64AOTCalls(
+		a.uncheckedHostCalls,
+	)
+	speculative.guardInt32Loops = make(map[*ast.LetNode]bool)
+	for _, param := range method.Params {
+		locals[param.Sub.(*ast.BindingNode).Name] = int32AOTInterval()
+	}
+	(&int64AOTRangeAnalyzer{
+		analysis:         &speculative,
+		speculativeInt32: true,
+	}).expr(method.Body, locals)
+	if len(speculative.uncheckedHostCalls) > len(a.uncheckedHostCalls) {
+		a.uncheckedHostCalls = speculative.uncheckedHostCalls
+		a.guardInt32Params = method.FixedArity > 0
+		a.guardInt32Loops = speculative.guardInt32Loops
+	}
+}
+
+func int32AOTInterval() int64AOTInterval {
+	return int64AOTInterval{
+		min:   -math.MaxInt32,
+		max:   math.MaxInt32,
+		known: true,
+	}
+}
+
+func cloneUncheckedInt64AOTCalls(
+	calls map[*ast.HostCallNode]bool,
+) map[*ast.HostCallNode]bool {
+	clone := make(map[*ast.HostCallNode]bool, len(calls))
+	for call, unchecked := range calls {
+		clone[call] = unchecked
+	}
+	return clone
 }
 
 func (a *int64AOTRangeAnalyzer) expr(
@@ -189,6 +226,16 @@ func (a *int64AOTRangeAnalyzer) loop(
 		bindingNode := binding.Sub.(*ast.BindingNode)
 		names[i] = bindingNode.Name
 		initial[bindingNode.Name] = a.expr(bindingNode.Init, initial)
+	}
+
+	if a.speculativeInt32 {
+		guarded := cloneInt64AOTIntervals(initial)
+		for _, name := range names {
+			guarded[name] = int32AOTInterval()
+		}
+		a.analysis.guardInt32Loops[loop] = true
+		a.loopTail(loop.Body, guarded, loop.LoopID)
+		return
 	}
 
 	bounded := detectBoundedInt64AOTLoop(loop, initial, names)
