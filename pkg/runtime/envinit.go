@@ -136,12 +136,6 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 	// Add stdlib
 	RT.Load("clojure/core")
 
-	// These namespaces must initialize before the native core overrides below.
-	if useAot {
-		RT.Load("clojure/core/protocols")
-		RT.Load("clojure/string")
-	}
-
 	// Set the glojure version
 	core := lang.FindNamespace(lang.NewSymbol("clojure.core"))
 	installNativeCoreFunctions(core)

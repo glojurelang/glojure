@@ -25,3 +25,16 @@ func TestDirectHostMethod(t *testing.T) {
 		t.Fatalf("wrong arity unexpectedly resolved directly as %q", got)
 	}
 }
+
+func TestLoadedNamespacesUseFreshRuntimeState(t *testing.T) {
+	core := lang.FindOrCreateNamespace(lang.NewSymbol("clojure.core"))
+	loadedLibs := core.Intern(lang.NewSymbol("*loaded-libs*"))
+
+	initializer, ok := runtimeStateInitializer(loadedLibs)
+	if !ok {
+		t.Fatal("*loaded-libs* does not have a runtime-state initializer")
+	}
+	if want := "lang.NewRef(lang.NewSet())"; initializer != want {
+		t.Fatalf("*loaded-libs* initializer = %q, want %q", initializer, want)
+	}
+}

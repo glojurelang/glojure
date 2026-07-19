@@ -98,6 +98,13 @@ var (
 		"#'clojure.core/shuffle":         true,
 		"#'clojure.core/promise":         true,
 	}
+
+	runtimeStateInitializers = map[string]string{
+		// Loaded namespaces are process-local state. Serializing the compiler
+		// process's set makes a fresh AOT process skip namespaces it has not
+		// actually loaded.
+		"#'clojure.core/*loaded-libs*": "lang.NewRef(lang.NewSet())",
+	}
 )
 
 // NewGenerator creates a new code generator
@@ -114,6 +121,11 @@ func NewGenerator(w io.Writer) *Generator {
 		liftedValues:    make(map[liftedKey]*liftedValue),
 		liftedCounter:   0,
 	}
+}
+
+func runtimeStateInitializer(vr *lang.Var) (string, bool) {
+	initializer, ok := runtimeStateInitializers[vr.String()]
+	return initializer, ok
 }
 
 // Generate takes a namespace and generates Go code that populates the same namespace
@@ -471,7 +483,9 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 	}
 
 	// check if the var has a value
-	if vr.IsBound() {
+	if initializer, ok := runtimeStateInitializer(vr); ok {
+		g.writef("%s = %s.InternWithValue(%s, %s, true)\n", varVar, nsVariableName, varSym, initializer)
+	} else if vr.IsBound() {
 		// we call Get() on a new goroutine to ensure we get the root value in the case
 		// of dynamic vars
 		valChan := make(chan any)

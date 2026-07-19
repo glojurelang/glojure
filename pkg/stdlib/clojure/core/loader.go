@@ -435,7 +435,6 @@ func LoadNS() {
 	sym_clojure_DOT_lang_DOT_LineNumberingPushbackReader_DOT_ := lang.NewSymbolUnchecked("clojure.lang.LineNumberingPushbackReader.")
 	sym_clojure_DOT_lang_DOT_LockingTransaction_SLASH_isRunning := lang.NewSymbolUnchecked("clojure.lang.LockingTransaction/isRunning")
 	sym_clojure_DOT_lang_DOT_Util := lang.NewSymbolUnchecked("clojure.lang.Util")
-	sym_clojure_DOT_string := lang.NewSymbolUnchecked("clojure.string")
 	sym_close := lang.NewSymbolUnchecked("close")
 	sym_coerce := lang.NewSymbolUnchecked("coerce")
 	sym_coll := lang.NewSymbolUnchecked("coll")
@@ -3122,7 +3121,7 @@ func LoadNS() {
 	// *loaded-libs*
 	{
 		tmp0 := sym__STAR_loaded_DASH_libs_STAR_
-		tmp1 := lang.NewRef(lang.NewSet(sym_clojure_DOT_core_DOT_protocols, sym_clojure_DOT_string, sym_glojure_DOT_go_DOT_io))
+		tmp1 := lang.NewRef(lang.NewSet())
 		var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core__STAR_loaded_DASH_libs_STAR_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_dynamic, true, kw_file, "clojure/core.glj", kw_line, int(5874), kw_column, int(10), kw_end_DASH_line, int(5877), kw_end_DASH_column, int(15), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
