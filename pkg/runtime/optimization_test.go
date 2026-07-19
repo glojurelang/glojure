@@ -4,6 +4,7 @@ import (
 	"math"
 	"testing"
 
+	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
@@ -53,6 +54,46 @@ func TestRTCollectionMethodsResolveDirectly(t *testing.T) {
 		_, _ = lang.FieldOrMethod(RT, "nth")
 	}); got != 0 {
 		t.Fatalf("cached RT.Nth resolution allocated %v objects per call, want 0", got)
+	}
+}
+
+func TestNumericLoopRegionSpecializesFloat64AndFallsBack(t *testing.T) {
+	x := lang.NewSymbol("x")
+	local := &ast.Node{Op: ast.OpLocal, Sub: &ast.LocalNode{Name: x}}
+	constant := &ast.Node{Op: ast.OpConst, Sub: &ast.ConstNode{Value: float64(1.5)}}
+	call := &ast.HostCallNode{
+		Target: &ast.Node{
+			Op:  ast.OpConst,
+			Sub: &ast.ConstNode{Value: lang.Numbers},
+		},
+		Method:         lang.NewSymbol("add"),
+		Args:           []*ast.Node{local, constant},
+		ResolvedMethod: lang.FnFunc2(func(a, b any) any { return lang.Numbers.Add(a, b) }),
+	}
+	compiler := threadedEvalCompiler{
+		typedLoop: true,
+		localSlots: map[*lang.Symbol]localSlot{
+			x: {
+				index:       0,
+				kind:        loopLocalSlot,
+				numericKind: float64NumericKind,
+			},
+		},
+	}
+	evaluator := compiler.compileNumericRegion(call, func(*environment) (interface{}, error) {
+		return "fallback", nil
+	})
+	frame := loopFrame{}
+	env := &environment{loopFrame: &frame}
+
+	frame.args[0] = float64(2.5)
+	if got, err := evaluator(env); err != nil || got != float64(4) {
+		t.Fatalf("float region result = (%v, %v), want (4, nil)", got, err)
+	}
+
+	frame.args[0] = int64(2)
+	if got, err := evaluator(env); err != nil || got != "fallback" {
+		t.Fatalf("mismatched region result = (%v, %v), want (fallback, nil)", got, err)
 	}
 }
 

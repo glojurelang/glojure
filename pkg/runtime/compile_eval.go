@@ -16,6 +16,7 @@ type evalFn func(*environment) (interface{}, error)
 type threadedEvalCompiler struct {
 	localSlots  map[*lang.Symbol]localSlot
 	nextLetSlot int
+	typedLoop   bool
 }
 
 type localSlotKind uint8
@@ -27,8 +28,9 @@ const (
 )
 
 type localSlot struct {
-	index int
-	kind  localSlotKind
+	index       int
+	kind        localSlotKind
+	numericKind numericKind
 }
 
 func compileEval(n *ast.Node) evalFn {
@@ -57,13 +59,19 @@ func compileMethodEval(body *ast.Node, params []*ast.Node) evalFn {
 
 func compileLoopEval(body *ast.Node, bindings []*ast.Node) evalFn {
 	slots := make(map[*lang.Symbol]localSlot, min(len(bindings), len(loopFrame{}.args)))
+	compiler := threadedEvalCompiler{localSlots: slots, typedLoop: true}
 	for i, binding := range bindings {
 		if i == len(loopFrame{}.args) {
 			break
 		}
-		slots[binding.Sub.(*ast.BindingNode).Name] = localSlot{index: i, kind: loopLocalSlot}
+		bindingNode := binding.Sub.(*ast.BindingNode)
+		slots[bindingNode.Name] = localSlot{
+			index:       i,
+			kind:        loopLocalSlot,
+			numericKind: compiler.inferNumericKind(bindingNode.Init),
+		}
 	}
-	return (threadedEvalCompiler{localSlots: slots}).compile(body)
+	return compiler.compile(body)
 }
 
 func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
@@ -162,9 +170,17 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 				return nil
 			}
 			slots[i] = letCompiler.nextLetSlot
+			numericKind := unknownNumericKind
+			if letCompiler.typedLoop {
+				numericKind = letCompiler.inferNumericKind(bindingNode.Init)
+			}
 			letCompiler = letCompiler.withLocalSlot(
 				bindingNode.Name,
-				localSlot{index: slots[i], kind: letLocalSlot},
+				localSlot{
+					index:       slots[i],
+					kind:        letLocalSlot,
+					numericKind: numericKind,
+				},
 			)
 			letCompiler.nextLetSlot++
 		}
@@ -193,6 +209,9 @@ func (c threadedEvalCompiler) compile(n *ast.Node) evalFn {
 			return nil
 		}
 		if numeric := compileNumberCall(hostCall, args); numeric != nil {
+			if c.typedLoop {
+				return c.compileNumericRegion(hostCall, numeric)
+			}
 			return numeric
 		}
 		return compileResolvedCall(hostCall.ResolvedMethod, args)
