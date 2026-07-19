@@ -5,7 +5,8 @@ import (
 )
 
 const (
-	hashmapThreshold = 16
+	hashmapThreshold   = 16
+	arrayMapInlineSize = 8
 )
 
 type (
@@ -15,6 +16,7 @@ type (
 		hash, hasheq uint32
 
 		keyVals []any
+		inline  [arrayMapInlineSize]any
 	}
 
 	MapSeq struct {
@@ -78,12 +80,14 @@ func NewMap(keyVals ...any) IPersistentMap {
 		return NewPersistentHashMap(keyVals...)
 	}
 
-	kv := make([]any, len(keyVals))
-	copy(kv, keyVals)
-
-	return &Map{
-		keyVals: kv,
+	m := &Map{}
+	if len(keyVals) <= len(m.inline) {
+		copy(m.inline[:], keyVals)
+		m.keyVals = m.inline[:len(keyVals)]
+	} else {
+		m.keyVals = append([]any(nil), keyVals...)
 	}
+	return m
 }
 
 func NewPersistentArrayMapAsIfByAssoc(init []any) IPersistentMap {
@@ -187,8 +191,11 @@ func (m *Map) EntryAt(k any) IMapEntry {
 
 func (m *Map) clone() *Map {
 	cpy := *m
-	cpy.keyVals = make([]any, len(m.keyVals))
-	copy(cpy.keyVals, m.keyVals)
+	if len(m.keyVals) <= len(cpy.inline) {
+		cpy.keyVals = cpy.inline[:len(m.keyVals)]
+	} else {
+		cpy.keyVals = append([]any(nil), m.keyVals...)
+	}
 	return &cpy
 }
 
@@ -253,6 +260,9 @@ func (m *Map) WithMeta(meta IPersistentMap) any {
 		return m
 	}
 	cpy := *m
+	if len(m.keyVals) <= len(cpy.inline) {
+		cpy.keyVals = cpy.inline[:len(m.keyVals)]
+	}
 	cpy.meta = meta
 	return &cpy
 }
