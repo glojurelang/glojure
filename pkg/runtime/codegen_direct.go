@@ -81,6 +81,15 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 		if target == nil || target.int64Analysis == nil {
 			continue
 		}
+		fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
+		method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
+		target.int64Analysis.proveSafeOperations(method)
+	}
+	for _, named := range vars {
+		target := g.aotCallTargets[named.vr]
+		if target == nil || target.int64Analysis == nil {
+			continue
+		}
 		params := make([]string, target.arity)
 		for i := range params {
 			params[i] = "int64"

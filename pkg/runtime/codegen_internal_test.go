@@ -1,6 +1,7 @@
 package runtime
 
 import (
+	"math"
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/ast"
@@ -138,12 +139,14 @@ func TestAnalyzeInt64AOTLoop(t *testing.T) {
 	sum := lang.NewSymbol("sum")
 	loopID := lang.NewSymbol("loop-id")
 
+	inc := aotTestNumbersCall("Inc", aotTestLocal(i))
+	add := aotTestNumbersCall("Add", aotTestLocal(sum), aotTestLocal(i))
 	recur := ast.MakeNode(ast.OpRecur, nil)
 	recur.Sub = &ast.RecurNode{
 		LoopID: loopID,
 		Exprs: []*ast.Node{
-			aotTestNumbersCall("Inc", aotTestLocal(i)),
-			aotTestNumbersCall("Add", aotTestLocal(sum), aotTestLocal(i)),
+			inc,
+			add,
 		},
 	}
 	loop := ast.MakeNode(ast.OpLoop, nil)
@@ -170,6 +173,58 @@ func TestAnalyzeInt64AOTLoop(t *testing.T) {
 	}
 	if analysis.usesSelf {
 		t.Fatal("non-recursive loop unnecessarily requested a root-version guard")
+	}
+	analysis.proveSafeOperations(method)
+	if !analysis.uncheckedHostCalls[inc.Sub.(*ast.HostCallNode)] {
+		t.Fatal("bounded induction increment retained an overflow check")
+	}
+	if !analysis.uncheckedHostCalls[add.Sub.(*ast.HostCallNode)] {
+		t.Fatal("bounded accumulator addition retained an overflow check")
+	}
+}
+
+func TestInt64AOTRangeProofRetainsPossibleOverflow(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.int64-overflow-proof"))
+	vr := ns.Intern(lang.NewSymbol("unsafe-loop"))
+	i := lang.NewSymbol("i")
+	sum := lang.NewSymbol("sum")
+	loopID := lang.NewSymbol("loop-id")
+
+	inc := aotTestNumbersCall("Inc", aotTestLocal(i))
+	add := aotTestNumbersCall("Add", aotTestLocal(sum), aotTestLocal(i))
+	recur := ast.MakeNode(ast.OpRecur, nil)
+	recur.Sub = &ast.RecurNode{
+		LoopID: loopID,
+		Exprs:  []*ast.Node{inc, add},
+	}
+	loop := ast.MakeNode(ast.OpLoop, nil)
+	loop.Sub = &ast.LetNode{
+		LoopID: loopID,
+		Bindings: []*ast.Node{
+			aotTestBinding(i, aotTestInt(1)),
+			aotTestBinding(sum, aotTestInt(math.MaxInt64)),
+		},
+		Body: aotTestIf(
+			aotTestNumbersCall("Lt", aotTestLocal(i), aotTestInt(2)),
+			recur,
+			aotTestLocal(sum),
+		),
+	}
+	method := &ast.FnMethodNode{Body: loop}
+	analysis := analyzeInt64AOTFunction(
+		&aotSpecializationTarget{vr: vr},
+		method,
+		nil,
+	)
+	if analysis == nil {
+		t.Fatal("int64 loop was not specialized")
+	}
+	analysis.proveSafeOperations(method)
+	if !analysis.uncheckedHostCalls[inc.Sub.(*ast.HostCallNode)] {
+		t.Fatal("safe induction increment retained an overflow check")
+	}
+	if analysis.uncheckedHostCalls[add.Sub.(*ast.HostCallNode)] {
+		t.Fatal("possibly overflowing accumulator addition lost its check")
 	}
 }
 

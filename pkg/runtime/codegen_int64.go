@@ -24,9 +24,10 @@ const (
 )
 
 type int64AOTAnalysis struct {
-	target   *aotSpecializationTarget
-	arity    int
-	usesSelf bool
+	target             *aotSpecializationTarget
+	arity              int
+	usesSelf           bool
+	uncheckedHostCalls map[*ast.HostCallNode]bool
 }
 
 type int64AOTAnalyzer struct {
@@ -43,8 +44,9 @@ func analyzeInt64AOTFunction(
 		return nil
 	}
 	analysis := &int64AOTAnalysis{
-		target: target,
-		arity:  method.FixedArity,
+		target:             target,
+		arity:              method.FixedArity,
+		uncheckedHostCalls: make(map[*ast.HostCallNode]bool),
 	}
 	analyzer := int64AOTAnalyzer{
 		analysis: analysis,
@@ -539,17 +541,27 @@ func (e *int64AOTEmitter) emitHostCall(
 		args[i] = e.emitExpr(arg, locals)
 	}
 	name := strings.ToLower(call.Method.Name())
+	unchecked := e.analysis.uncheckedHostCalls[call]
 	if len(args) == 1 {
 		switch name {
 		case "inc":
+			if unchecked {
+				return "(" + args[0] + " + 1)"
+			}
 			return "lang.CheckedAddInt64(" + args[0] + ", 1)"
 		case "unchecked_inc":
 			return "(" + args[0] + " + 1)"
 		case "dec":
+			if unchecked {
+				return "(" + args[0] + " - 1)"
+			}
 			return "lang.CheckedSubInt64(" + args[0] + ", 1)"
 		case "uncheckeddec", "unchecked_dec":
 			return "(" + args[0] + " - 1)"
 		case "minus":
+			if unchecked {
+				return "(-" + args[0] + ")"
+			}
 			return "lang.CheckedNegateInt64(" + args[0] + ")"
 		case "unchecked_minus":
 			return "(-" + args[0] + ")"
@@ -563,14 +575,23 @@ func (e *int64AOTEmitter) emitHostCall(
 	}
 	switch name {
 	case "add":
+		if unchecked {
+			return "(" + args[0] + " + " + args[1] + ")"
+		}
 		return "lang.CheckedAddInt64(" + args[0] + ", " + args[1] + ")"
 	case "uncheckedadd":
 		return "(" + args[0] + " + " + args[1] + ")"
 	case "minus":
+		if unchecked {
+			return "(" + args[0] + " - " + args[1] + ")"
+		}
 		return "lang.CheckedSubInt64(" + args[0] + ", " + args[1] + ")"
 	case "unchecked_minus":
 		return "(" + args[0] + " - " + args[1] + ")"
 	case "multiply":
+		if unchecked {
+			return "(" + args[0] + " * " + args[1] + ")"
+		}
 		return "lang.CheckedMultiplyInt64(" + args[0] + ", " + args[1] + ")"
 	case "unchecked_multiply":
 		return "(" + args[0] + " * " + args[1] + ")"
