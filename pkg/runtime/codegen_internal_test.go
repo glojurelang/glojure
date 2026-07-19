@@ -276,6 +276,25 @@ func TestInt64AOTFallbackGuardEmission(t *testing.T) {
 	}
 }
 
+func TestSnapshotAOTReferencesUsesCompactExclusions(t *testing.T) {
+	source := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.snapshot-source"))
+	for _, name := range []string{"first", "second", "excluded"} {
+		source.Intern(lang.NewSymbol(name))
+	}
+	refs := []aotReferredVar{
+		{symName: "first", srcNS: source.Name().String(), srcSym: "first"},
+		{symName: "second", srcNS: source.Name().String(), srcSym: "second"},
+	}
+
+	snapshot, exclusions := snapshotAOTReferences(source.Name().String(), refs)
+	if !snapshot {
+		t.Fatal("dense reference set did not use a shared snapshot")
+	}
+	if len(exclusions) != 1 || exclusions[0] != "excluded" {
+		t.Fatalf("snapshot exclusions = %v, want [excluded]", exclusions)
+	}
+}
+
 func TestAnalyzeInt64AOTAcrossVarCall(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.int64-cross-call"))
 	calleeVar := ns.Intern(lang.NewSymbol("callee"))

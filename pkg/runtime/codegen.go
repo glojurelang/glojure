@@ -63,6 +63,12 @@ type namedVar struct {
 	vr   *lang.Var
 }
 
+type aotReferredVar struct {
+	symName string
+	srcNS   string
+	srcSym  string
+}
+
 type valueInit struct {
 	name string              // Name of the variable or var being initialized
 	buf  bytes.Buffer        // Buffer holding the initialization code
@@ -174,13 +180,8 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	// 2. Generate Go code for each var (this discovers lifted values)
 	mappings := ns.Mappings()
 
-	// Collect exact referred vars from compile-time mappings
-	type referredVar struct {
-		symName string
-		srcNS   string
-		srcSym  string
-	}
-	var referredVars []referredVar
+	// Collect exact referred vars from compile-time mappings.
+	var referredVars []aotReferredVar
 
 	for seq := mappings.Seq(); seq != nil; seq = seq.Next() {
 		entry := seq.First()
@@ -195,7 +196,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 		}
 		// Non-interned = referred from another namespace
 		if !(vr.Namespace() == ns && lang.Equals(vr.Symbol(), name)) {
-			referredVars = append(referredVars, referredVar{
+			referredVars = append(referredVars, aotReferredVar{
 				symName: name.String(),
 				srcNS:   vr.Namespace().Name().String(),
 				srcSym:  vr.Symbol().String(),
@@ -205,7 +206,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 
 	// Emit one batch per source namespace so generated loaders do not build a
 	// complete persistent mapping snapshot or lock the source for every Var.
-	referredByNamespace := make(map[string][]referredVar)
+	referredByNamespace := make(map[string][]aotReferredVar)
 	var referredNamespaces []string
 	for _, rv := range referredVars {
 		if _, ok := referredByNamespace[rv.srcNS]; !ok {
@@ -213,18 +214,45 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 		}
 		referredByNamespace[rv.srcNS] = append(referredByNamespace[rv.srcNS], rv)
 	}
+	sort.Strings(referredNamespaces)
 	for _, srcNS := range referredNamespaces {
 		refs := referredByNamespace[srcNS]
+		sort.Slice(refs, func(i, j int) bool {
+			if refs[i].symName == refs[j].symName {
+				return refs[i].srcSym < refs[j].srcSym
+			}
+			return refs[i].symName < refs[j].symName
+		})
+		snapshot, exclusions := snapshotAOTReferences(srcNS, refs)
+		explicit := refs
+		if snapshot {
+			explicit = make([]aotReferredVar, 0, len(refs))
+			for _, ref := range refs {
+				if ref.symName != ref.srcSym {
+					explicit = append(explicit, ref)
+				}
+			}
+		}
+
 		srcNSSym := g.allocSymVar(srcNS)
 		g.writef("{ // refer vars from %s\n", srcNS)
 		g.writef("  srcNS := lang.FindOrCreateNamespace(%s)\n", srcNSSym)
-		g.writef("  ns.ReferAll(srcNS, []lang.NamespaceReference{\n")
-		for _, rv := range refs {
-			symSym := g.allocSymVar(rv.symName)
-			srcSymSym := g.allocSymVar(rv.srcSym)
-			g.writef("    {Alias: %s, Source: %s},\n", symSym, srcSymSym)
+		if snapshot {
+			g.writef("  ns.ReferAllSnapshot(srcNS, []string{\n")
+			for _, exclusion := range exclusions {
+				g.writef("    %q,\n", exclusion)
+			}
+			g.writef("  })\n")
 		}
-		g.writef("  })\n")
+		if len(explicit) != 0 {
+			g.writef("  ns.ReferAll(srcNS, []lang.NamespaceReference{\n")
+			for _, rv := range explicit {
+				symSym := g.allocSymVar(rv.symName)
+				srcSymSym := g.allocSymVar(rv.srcSym)
+				g.writef("    {Alias: %s, Source: %s},\n", symSym, srcSymSym)
+			}
+			g.writef("  })\n")
+		}
 		g.writef("}\n")
 	}
 
@@ -473,6 +501,48 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 	// Write formatted code to the original writer
 	_, err = g.originalWriter.Write(formatted)
 	return err
+}
+
+func snapshotAOTReferences(
+	sourceName string,
+	refs []aotReferredVar,
+) (bool, []string) {
+	source := lang.FindNamespace(lang.NewSymbol(sourceName))
+	if source == nil {
+		return false, nil
+	}
+	direct := make(map[string]struct{}, len(refs))
+	for _, ref := range refs {
+		if ref.symName == ref.srcSym {
+			direct[ref.symName] = struct{}{}
+		}
+	}
+	if len(direct) == 0 {
+		return false, nil
+	}
+
+	var exclusions []string
+	for seq := source.Mappings().Seq(); seq != nil; seq = seq.Next() {
+		entry := seq.First()
+		name, ok := lang.First(entry).(*lang.Symbol)
+		if !ok {
+			continue
+		}
+		value, _ := lang.Nth(entry, 1)
+		vr, ok := value.(*lang.Var)
+		if !ok || vr.Namespace() != source ||
+			vr.Symbol().String() != name.String() {
+			continue
+		}
+		if _, included := direct[name.String()]; !included {
+			exclusions = append(exclusions, name.String())
+		}
+	}
+	if len(exclusions) >= len(direct) {
+		return false, nil
+	}
+	sort.Strings(exclusions)
+	return true, exclusions
 }
 
 ////////////////////////////////////////////////////////////////////////////////

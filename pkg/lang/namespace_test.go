@@ -51,6 +51,34 @@ func TestNamespaceReferAll(t *testing.T) {
 	}
 }
 
+func TestNamespaceReferAllSnapshotIsLazyAndStable(t *testing.T) {
+	source := NewNamespace(NewSymbol("refer-snapshot-source"))
+	first := source.Intern(NewSymbol("first"))
+	source.Intern(NewSymbol("excluded"))
+	target := NewNamespace(NewSymbol("refer-snapshot-target"))
+
+	target.ReferAllSnapshot(source, []string{"excluded"})
+	if got := target.GetMapping(NewSymbol("first")); got != first {
+		t.Fatalf("snapshot first mapping = %v, want %v", got, first)
+	}
+	if got := target.GetMapping(NewSymbol("excluded")); got != nil {
+		t.Fatalf("snapshot excluded mapping = %v, want nil", got)
+	}
+	if got := target.Mappings().ValAt(NewSymbol("first")); got != first {
+		t.Fatalf("materialized first mapping = %v, want %v", got, first)
+	}
+
+	late := source.Intern(NewSymbol("late"))
+	if got := target.GetMapping(NewSymbol("late")); got != nil {
+		t.Fatalf("captured snapshot changed after source mutation: %v", got)
+	}
+
+	target.ReferAllSnapshot(source, []string{"excluded"})
+	if got := target.GetMapping(NewSymbol("late")); got != late {
+		t.Fatalf("refreshed snapshot late mapping = %v, want %v", got, late)
+	}
+}
+
 func TestNamespaceConcurrentIntern(t *testing.T) {
 	ns := NewNamespace(NewSymbol("test.namespace-concurrent-intern"))
 	const goroutines = 32

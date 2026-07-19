@@ -13,9 +13,11 @@ import (
 type Namespace struct {
 	name *Symbol
 
-	mappingsMtx      sync.RWMutex
-	mappings         map[string]namespaceMapping
-	mappingsSnapshot IPersistentMap
+	mappingsMtx        sync.RWMutex
+	mappings           map[string]namespaceMapping
+	mappingsShared     bool
+	referenceSnapshots []namespaceReferenceSnapshot
+	mappingsSnapshot   IPersistentMap
 
 	aliases atomic.Value
 
@@ -25,6 +27,12 @@ type Namespace struct {
 type namespaceMapping struct {
 	sym *Symbol
 	val interface{}
+}
+
+type namespaceReferenceSnapshot struct {
+	source   *Namespace
+	mappings map[string]namespaceMapping
+	excluded map[string]struct{}
 }
 
 // NamespaceReference describes a Var imported from another namespace.
@@ -132,8 +140,25 @@ func (ns *Namespace) Mappings() IPersistentMap {
 	if ns.mappingsSnapshot != nil {
 		return ns.mappingsSnapshot
 	}
-	kvs := make([]interface{}, 0, 2*len(ns.mappings))
+	visible := make(map[string]namespaceMapping, len(ns.mappings))
+	for _, snapshot := range ns.referenceSnapshots {
+		for key, mapping := range snapshot.mappings {
+			if _, excluded := snapshot.excluded[key]; excluded {
+				continue
+			}
+			vr, ok := mapping.val.(*Var)
+			if !ok || vr.Namespace() != snapshot.source ||
+				vr.Symbol().String() != key {
+				continue
+			}
+			visible[key] = mapping
+		}
+	}
 	for _, mapping := range ns.mappings {
+		visible[mapping.sym.String()] = mapping
+	}
+	kvs := make([]interface{}, 0, 2*len(visible))
+	for _, mapping := range visible {
 		kvs = append(kvs, mapping.sym, mapping.val)
 	}
 	ns.mappingsSnapshot = NewPersistentHashMap(kvs...)
@@ -162,9 +187,10 @@ func (ns *Namespace) Intern(sym *Symbol) *Var {
 	defer ns.mappingsMtx.Unlock()
 
 	key := sym.String()
-	mapping, exists := ns.mappings[key]
+	mapping, exists := ns.visibleMappingLocked(key)
 	if !exists {
 		v := NewVar(ns, sym)
+		ns.ensureMappingsMutableLocked()
 		ns.mappings[key] = namespaceMapping{sym: sym, val: v}
 		ns.mappingsSnapshot = nil
 		return v
@@ -175,6 +201,7 @@ func (ns *Namespace) Intern(sym *Symbol) *Var {
 	}
 	v := NewVar(ns, sym)
 	if ns.checkReplacement(sym, o, v) {
+		ns.ensureMappingsMutableLocked()
 		ns.mappings[key] = namespaceMapping{sym: sym, val: v}
 		ns.mappingsSnapshot = nil
 		return v
@@ -238,7 +265,8 @@ func (ns *Namespace) Unmap(sym *Symbol) {
 func (ns *Namespace) GetMapping(sym *Symbol) interface{} {
 	ns.mappingsMtx.RLock()
 	defer ns.mappingsMtx.RUnlock()
-	return ns.mappings[sym.String()].val
+	mapping, _ := ns.visibleMappingLocked(sym.String())
+	return mapping.val
 }
 
 func (ns *Namespace) FindInternedVar(sym *Symbol) *Var {
@@ -315,6 +343,35 @@ func (ns *Namespace) ReferAll(src *Namespace, refs []NamespaceReference) {
 	}
 }
 
+// ReferAllSnapshot installs a shared, immutable view of src's interned Vars,
+// excluding the supplied unqualified names. Generated AOT namespaces use this
+// for broad refers such as clojure.core: lookups remain lazy, while a later
+// mutation of src uses copy-on-write and cannot change the captured view.
+func (ns *Namespace) ReferAllSnapshot(src *Namespace, excluded []string) {
+	mappings := src.shareMappings()
+	excludedSet := make(map[string]struct{}, len(excluded))
+	for _, name := range excluded {
+		excludedSet[name] = struct{}{}
+	}
+
+	ns.mappingsMtx.Lock()
+	defer ns.mappingsMtx.Unlock()
+	snapshot := namespaceReferenceSnapshot{
+		source:   src,
+		mappings: mappings,
+		excluded: excludedSet,
+	}
+	for i := range ns.referenceSnapshots {
+		if ns.referenceSnapshots[i].source == src {
+			ns.referenceSnapshots[i] = snapshot
+			ns.mappingsSnapshot = nil
+			return
+		}
+	}
+	ns.referenceSnapshots = append(ns.referenceSnapshots, snapshot)
+	ns.mappingsSnapshot = nil
+}
+
 func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 	if sym.Namespace() != "" {
 		panic(fmt.Errorf("can't intern qualified name: %s", sym))
@@ -327,8 +384,9 @@ func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 	defer ns.mappingsMtx.Unlock()
 
 	key := sym.String()
-	mapping, exists := ns.mappings[key]
+	mapping, exists := ns.visibleMappingLocked(key)
 	if !exists {
+		ns.ensureMappingsMutableLocked()
 		ns.mappings[key] = namespaceMapping{sym: sym, val: v}
 		ns.mappingsSnapshot = nil
 		return v
@@ -351,12 +409,74 @@ func (ns *Namespace) reference(sym *Symbol, v interface{}) interface{} {
 	}
 
 	if ns.checkReplacement(sym, o, v) {
+		ns.ensureMappingsMutableLocked()
 		ns.mappings[key] = namespaceMapping{sym: sym, val: v}
 		ns.mappingsSnapshot = nil
 		return v
 	}
 
 	return o
+}
+
+func (ns *Namespace) visibleMappingLocked(key string) (namespaceMapping, bool) {
+	if mapping, exists := ns.mappings[key]; exists {
+		return mapping, true
+	}
+	for i := len(ns.referenceSnapshots) - 1; i >= 0; i-- {
+		snapshot := ns.referenceSnapshots[i]
+		if _, excluded := snapshot.excluded[key]; excluded {
+			continue
+		}
+		mapping, exists := snapshot.mappings[key]
+		if !exists {
+			continue
+		}
+		vr, ok := mapping.val.(*Var)
+		if ok && vr.Namespace() == snapshot.source &&
+			vr.Symbol().String() == key {
+			return mapping, true
+		}
+	}
+	return namespaceMapping{}, false
+}
+
+func (ns *Namespace) ensureMappingsMutableLocked() {
+	if !ns.mappingsShared {
+		return
+	}
+	mappings := make(map[string]namespaceMapping, len(ns.mappings))
+	for key, mapping := range ns.mappings {
+		mappings[key] = mapping
+	}
+	ns.mappings = mappings
+	ns.mappingsShared = false
+}
+
+func (ns *Namespace) shareMappings() map[string]namespaceMapping {
+	ns.mappingsMtx.Lock()
+	defer ns.mappingsMtx.Unlock()
+	if len(ns.referenceSnapshots) == 0 {
+		ns.mappingsShared = true
+		return ns.mappings
+	}
+
+	visible := make(map[string]namespaceMapping, len(ns.mappings))
+	for _, snapshot := range ns.referenceSnapshots {
+		for key, mapping := range snapshot.mappings {
+			if _, excluded := snapshot.excluded[key]; excluded {
+				continue
+			}
+			vr, ok := mapping.val.(*Var)
+			if ok && vr.Namespace() == snapshot.source &&
+				vr.Symbol().String() == key {
+				visible[key] = mapping
+			}
+		}
+	}
+	for key, mapping := range ns.mappings {
+		visible[key] = mapping
+	}
+	return visible
 }
 
 func (ns *Namespace) Meta() IPersistentMap {
