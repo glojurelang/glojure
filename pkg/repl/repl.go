@@ -23,22 +23,7 @@ import (
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 	"github.com/glojurelang/glojure/pkg/runtime"
 	"github.com/glojurelang/glojure/pkg/srepl"
-
-	// pprof
-	"net/http"
-	_ "net/http/pprof"
 )
-
-func init() {
-	// start pprof
-	if debugMode {
-		go func() {
-			if err := http.ListenAndServe("localhost:6060", nil); err != nil {
-				fmt.Println("pprof start failed:", err)
-			}
-		}()
-	}
-}
 
 // Start starts the REPL.
 func serverURL(srv *nrepl.Server) string {

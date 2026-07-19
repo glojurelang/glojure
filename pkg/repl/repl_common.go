@@ -7,17 +7,12 @@ import (
 	"os"
 	goruntime "runtime"
 	"runtime/debug"
-	"runtime/pprof"
 	"strings"
-	"time"
 
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/reader"
 	"github.com/glojurelang/glojure/pkg/runtime"
 )
-
-const debugMode = false
-const cpuProfile = false
 
 // EvalFunc is the signature for eval functions passed to readEvalPrint.
 // CLI wraps evalSafe with signal handling; WASM uses evalSafe directly.
@@ -243,16 +238,6 @@ func readEvalPrint(input string, o *options, evalFn EvalFunc) {
 }
 
 func initEnv(stdout io.Writer) lang.Environment {
-	if cpuProfile {
-		f, err := os.Create("./gljInitEnvCpu.prof")
-		if err != nil {
-			panic(err)
-		}
-		pprof.StartCPUProfile(f)
-		defer pprof.StopCPUProfile()
-	}
-	startTime := time.Now()
-
 	kvs := make([]interface{}, 0, 3)
 	for _, vr := range []*lang.Var{lang.VarCurrentNS, lang.VarWarnOnReflection, lang.VarUncheckedMath, lang.VarDataReaders} {
 		kvs = append(kvs, vr, vr.Deref())
@@ -260,10 +245,6 @@ func initEnv(stdout io.Writer) lang.Environment {
 	lang.PushThreadBindings(lang.NewMap(kvs...))
 
 	env := runtime.NewEnvironment(runtime.WithStdout(stdout))
-	if debugMode {
-		fmt.Printf("Environment created in %v\n", time.Since(startTime))
-	}
-
 	return env
 }
 
