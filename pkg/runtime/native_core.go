@@ -1,6 +1,10 @@
 package runtime
 
-import "github.com/glojurelang/glojure/pkg/lang"
+import (
+	"strings"
+
+	"github.com/glojurelang/glojure/pkg/lang"
+)
 
 // nativeCoreAdd preserves clojure.core/+'s public arities while giving
 // reducers a fixed-arity entry point that avoids a variadic dispatch on every
@@ -243,6 +247,68 @@ func (fn nativeCoreUpdateIn) ApplyTo(args lang.ISeq) interface{} {
 	return nativeUpdateIn(m, keys, updateFn, rest, fn.assoc.Get(), fn.apply.Get())
 }
 
+type nativeCoreRequire struct {
+	fallback         lang.IFn
+	load             *lang.Var
+	loadedLibs       *lang.Var
+	loadingVerbosely *lang.Var
+	contains         *lang.Var
+	conj             *lang.Var
+}
+
+func (fn nativeCoreRequire) Invoke(args ...interface{}) interface{} {
+	if len(args) == 1 {
+		return fn.Invoke1(args[0])
+	}
+	return fn.fallback.Invoke(args...)
+}
+
+func (fn nativeCoreRequire) Invoke1(arg interface{}) interface{} {
+	lib, ok := arg.(*lang.Symbol)
+	if !ok {
+		return lang.Apply1(fn.fallback, arg)
+	}
+	loadedLibs, ok := fn.loadedLibs.Get().(*lang.Ref)
+	if !ok {
+		return lang.Apply1(fn.fallback, arg)
+	}
+	if lang.IsTruthy(lang.Apply2(fn.contains.Get(), loadedLibs.Deref(), lib)) {
+		return nil
+	}
+
+	undefinedOnEntry := lang.FindNamespace(lib) == nil
+	defer func() {
+		if value := recover(); value != nil {
+			if undefinedOnEntry {
+				lang.RemoveNamespace(lib)
+			}
+			panic(value)
+		}
+	}()
+
+	loadingVerbosely := fn.loadingVerbosely.Deref()
+	if !lang.IsTruthy(loadingVerbosely) {
+		loadingVerbosely = nil
+	}
+	lang.PushThreadBindings(lang.NewMap(fn.loadingVerbosely, loadingVerbosely))
+	defer lang.PopThreadBindings()
+
+	resource := "/" + strings.NewReplacer("-", "_", ".", "/").Replace(lib.Name())
+	lang.Apply1(fn.load.Get(), resource)
+	lang.LockingTransaction.RunInTransaction(lang.FnFunc0(func() interface{} {
+		loadedLibs.Commute(fn.conj.Get().(lang.IFn), lang.NewList(lib))
+		return nil
+	}))
+	return nil
+}
+
+func (fn nativeCoreRequire) ApplyTo(args lang.ISeq) interface{} {
+	if args != nil && args.Next() == nil {
+		return fn.Invoke1(args.First())
+	}
+	return fn.fallback.ApplyTo(args)
+}
+
 func nativeUpdateIn(
 	m, keys, fn interface{},
 	args []interface{},
@@ -320,6 +386,18 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 			assoc: core.FindInternedVar(lang.NewSymbol("assoc")),
 			apply: core.FindInternedVar(lang.NewSymbol("apply")),
 		})
+	}
+	if require := core.FindInternedVar(lang.NewSymbol("require")); require != nil {
+		if fallback, ok := require.Get().(lang.IFn); ok {
+			require.BindRoot(nativeCoreRequire{
+				fallback:         fallback,
+				load:             core.FindInternedVar(lang.NewSymbol("load")),
+				loadedLibs:       core.FindInternedVar(lang.NewSymbol("*loaded-libs*")),
+				loadingVerbosely: core.FindInternedVar(lang.NewSymbol("*loading-verbosely*")),
+				contains:         core.FindInternedVar(lang.NewSymbol("contains?")),
+				conj:             core.FindInternedVar(lang.NewSymbol("conj")),
+			})
+		}
 	}
 	installFixedArityCoreFunction(core, "map", 2, lang.FnFunc2(nativeMapSeq))
 	installFixedArityCoreFunction(core, "mapv", 2, lang.FnFunc2(nativeMapv))

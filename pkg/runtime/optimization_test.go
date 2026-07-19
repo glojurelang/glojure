@@ -175,6 +175,148 @@ func TestNativeCoreSubtractApplyToPreservesArities(t *testing.T) {
 	fn.ApplyTo(nil)
 }
 
+func TestNativeCoreRequireFastPathPreservesRuntimeSemantics(t *testing.T) {
+	ns := lang.NewNamespace(lang.NewSymbol("runtime.native-require-test"))
+	loadedRef := lang.NewRef(lang.NewSet())
+	loadedLibs := lang.NewVarWithRoot(
+		ns,
+		lang.NewSymbol("*loaded-libs*"),
+		loadedRef,
+	).SetDynamic()
+	loadingVerbosely := lang.NewVarWithRoot(
+		ns,
+		lang.NewSymbol("*loading-verbosely*"),
+		false,
+	).SetDynamic()
+	loadCalls := 0
+	var loadedResource string
+	var loadingVerboselyDuringLoad interface{}
+	load := lang.NewVarWithRoot(
+		ns,
+		lang.NewSymbol("load"),
+		lang.FnFunc1(func(resource interface{}) interface{} {
+			loadCalls++
+			loadedResource = resource.(string)
+			loadingVerboselyDuringLoad = loadingVerbosely.Deref()
+			loadingVerbosely.Set(true)
+			lang.FindOrCreateNamespace(lang.NewSymbol("native-require.lib-name"))
+			return nil
+		}),
+	)
+	contains := lang.NewVarWithRoot(
+		ns,
+		lang.NewSymbol("contains?"),
+		lang.FnFunc2(func(coll, value interface{}) interface{} {
+			return coll.(*lang.Set).Contains(value)
+		}),
+	)
+	conj := lang.NewVarWithRoot(
+		ns,
+		lang.NewSymbol("conj"),
+		lang.FnFunc2(func(coll, value interface{}) interface{} {
+			return coll.(*lang.Set).Cons(value)
+		}),
+	)
+	fallbackCalls := 0
+	fallback := lang.FnFunc(func(args ...interface{}) interface{} {
+		fallbackCalls++
+		return "fallback"
+	})
+	require := nativeCoreRequire{
+		fallback:         fallback,
+		load:             load,
+		loadedLibs:       loadedLibs,
+		loadingVerbosely: loadingVerbosely,
+		contains:         contains,
+		conj:             conj,
+	}
+	lib := lang.NewSymbol("native-require.lib-name")
+	defer lang.RemoveNamespace(lib)
+
+	if got := require.Invoke1(lib); got != nil {
+		t.Fatalf("require result = %v, want nil", got)
+	}
+	if loadedResource != "/native_require/lib_name" {
+		t.Fatalf("loaded resource = %q, want /native_require/lib_name", loadedResource)
+	}
+	if loadCalls != 1 {
+		t.Fatalf("load calls = %d, want 1", loadCalls)
+	}
+	if loadingVerbosely.Deref() != false {
+		t.Fatalf("*loading-verbosely* leaked value %v", loadingVerbosely.Deref())
+	}
+	if loadingVerboselyDuringLoad != nil {
+		t.Fatalf(
+			"*loading-verbosely* during load = %v, want nil",
+			loadingVerboselyDuringLoad,
+		)
+	}
+	if !loadedRef.Deref().(*lang.Set).Contains(lib) {
+		t.Fatal("required lib was not recorded")
+	}
+	if got := require.Invoke1(lib); got != nil || loadCalls != 1 {
+		t.Fatalf("second require = %v with %d load calls, want nil and 1", got, loadCalls)
+	}
+	if got := require.Invoke1(lang.NewVector(lib)); got != "fallback" ||
+		fallbackCalls != 1 {
+		t.Fatalf("non-symbol require = %v with %d fallback calls", got, fallbackCalls)
+	}
+}
+
+func TestNativeCoreRequireRemovesNewNamespaceAfterLoadFailure(t *testing.T) {
+	ns := lang.NewNamespace(lang.NewSymbol("runtime.native-require-failure-test"))
+	lib := lang.NewSymbol("native-require.failure")
+	loadedLibs := lang.NewVarWithRoot(
+		ns,
+		lang.NewSymbol("*loaded-libs*"),
+		lang.NewRef(lang.NewSet()),
+	).SetDynamic()
+	loadingVerbosely := lang.NewVarWithRoot(
+		ns,
+		lang.NewSymbol("*loading-verbosely*"),
+		false,
+	).SetDynamic()
+	require := nativeCoreRequire{
+		fallback: lang.FnFunc(func(args ...interface{}) interface{} {
+			return nil
+		}),
+		load: lang.NewVarWithRoot(
+			ns,
+			lang.NewSymbol("load"),
+			lang.FnFunc1(func(interface{}) interface{} {
+				lang.FindOrCreateNamespace(lib)
+				panic("load failed")
+			}),
+		),
+		loadedLibs:       loadedLibs,
+		loadingVerbosely: loadingVerbosely,
+		contains: lang.NewVarWithRoot(
+			ns,
+			lang.NewSymbol("contains?"),
+			lang.FnFunc2(func(coll, value interface{}) interface{} {
+				return coll.(*lang.Set).Contains(value)
+			}),
+		),
+		conj: lang.NewVarWithRoot(
+			ns,
+			lang.NewSymbol("conj"),
+			lang.FnFunc2(func(coll, value interface{}) interface{} {
+				return coll.(*lang.Set).Cons(value)
+			}),
+		),
+	}
+
+	defer func() {
+		if recovered := recover(); recovered != "load failed" {
+			t.Fatalf("recovered %v, want load failed", recovered)
+		}
+		if got := lang.FindNamespace(lib); got != nil {
+			t.Fatalf("failed require left namespace %v", got)
+		}
+	}()
+	require.Invoke1(lib)
+}
+
 func TestNativeCoreApplyPreservesLeadingArguments(t *testing.T) {
 	capture := lang.FnFunc(func(args ...any) any {
 		return lang.NewVector(args...)
