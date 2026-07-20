@@ -65,3 +65,25 @@ func TestReducePipelineFallsBackAfterTakeRedefinition(t *testing.T) {
 		t.Fatalf("result with redefined take = %v, want 7", got)
 	}
 }
+
+func TestReducePipelineRejectsTakeBelowFilter(t *testing.T) {
+	got := ReadEval(`
+		(defn test-map-filter-inner-take []
+		  (reduce + 0
+		    (filter odd?
+		      (take 2
+		        (map inc (range 10))))))
+		(test-map-filter-inner-take)`)
+	if got != int64(1) {
+		t.Fatalf("inner take pipeline = %v, want 1", got)
+	}
+	fn := lang.GlobalEnv.CurrentNamespace().
+		FindInternedVar(lang.NewSymbol("test-map-filter-inner-take")).
+		Get().(*Fn)
+	body := fn.ASTNode().Sub.(*ast.FnNode).
+		Methods[0].Sub.(*ast.FnMethodNode).Body
+	reduce := body.Sub.(*ast.DoNode).Ret.Sub.(*ast.InvokeNode)
+	if plan := analyzeReducePipeline(reduce); plan != nil {
+		t.Fatal("pipeline moved an inner take past an outer filter")
+	}
+}

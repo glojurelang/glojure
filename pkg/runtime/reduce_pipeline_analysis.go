@@ -123,7 +123,9 @@ func analyzePipelineSource(
 
 	source, transforms, takeLimit, guards, ok :=
 		analyzePipelineSource(invoke.Args[1])
-	if !ok {
+	// A take nested below another transform cannot be represented by the
+	// pipeline's single output limit. Keep those forms on the general path.
+	if !ok || takeLimit >= 0 {
 		return nil, nil, -1, nil, false
 	}
 	transforms = append(transforms, reducePipelineTransform{

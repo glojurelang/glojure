@@ -1,7 +1,8 @@
 # Interpreter optimization benchmarks
 
-These Go benchmarks load Glojure source once, outside the timed region, then
-measure repeated execution through the interpreter:
+These Go benchmarks measure repeated execution through the interpreter. Most
+load Glojure source once outside the timed region; benchmarks whose names
+start with `Load` include reading, analysis, and execution:
 
 ```sh
 go test ./benchmark/interpreter -bench . -benchmem -count 5 -benchtime 2s
@@ -19,3 +20,5 @@ surrounding loop.
 `let-go-map-filter` and `let-go-tak` reproduce the two official let-go
 interpreter workloads that are closest to Glojure. Keeping them in-process
 removes executable startup noise while profiling and validating changes.
+`BenchmarkLoadLetGoMapFilter` separately exercises the cold source path used
+by short-lived CLI programs.

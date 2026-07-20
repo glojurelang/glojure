@@ -408,7 +408,7 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	}
 	recordDefaultCoreRoots(
 		core,
-		"+", "dec", "even?", "filter", "identity", "inc", "map",
+		"*", "+", "dec", "even?", "filter", "identity", "inc", "map",
 		"neg?", "odd?", "pos?", "range", "reduce", "zero?",
 		"take",
 	)
