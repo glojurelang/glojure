@@ -33,24 +33,8 @@ type localSlot struct {
 	numericKind numericKind
 }
 
-const (
-	minCachedInt64 = -128
-	maxCachedInt64 = 4096
-)
-
-var cachedInt64Values = func() []interface{} {
-	values := make([]interface{}, maxCachedInt64-minCachedInt64+1)
-	for i := range values {
-		values[i] = int64(i + minCachedInt64)
-	}
-	return values
-}()
-
 func boxInt64(value int64) interface{} {
-	if value >= minCachedInt64 && value <= maxCachedInt64 {
-		return cachedInt64Values[value-minCachedInt64]
-	}
-	return value
+	return lang.BoxInt64(value)
 }
 
 func compileEval(n *ast.Node) evalFn {

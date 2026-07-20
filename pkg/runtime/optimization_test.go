@@ -439,7 +439,7 @@ func TestNativeCoreUpdateInPreservesCollectionAndVarSemantics(t *testing.T) {
 }
 
 func TestBoxInt64CachesCommonValues(t *testing.T) {
-	for _, value := range []int64{minCachedInt64, 0, maxCachedInt64, maxCachedInt64 + 1} {
+	for _, value := range []int64{-128, 0, 4096, 4097} {
 		if got := boxInt64(value); got != value {
 			t.Fatalf("boxInt64(%d) = %v", value, got)
 		}

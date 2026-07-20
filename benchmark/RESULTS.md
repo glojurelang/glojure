@@ -7,6 +7,8 @@ benchmarks; allocations are reported by Go's benchmark harness.
 | --- | ---: | ---: | ---: |
 | AOT float kernel | 232 ms, ~17.0M allocs | 1.265 ms, 1 alloc | ~183× |
 | AOT reduce pipeline | 95 ms, ~5.87M allocs | 1.905 ms, 48 allocs | ~50× |
+| Boxed common-int arithmetic | 18.1 ns, 19 B, 2 allocs | 1.98 ns, 0 B, 0 allocs | ~9.1× |
+| AOT Game of Life | 982.22 ms, ~31.1M allocs | 686.85 ms, ~1.57M allocs | ~1.43× |
 | Interpreter constant arithmetic | 113.27 ms | 101.99 ms | ~10% |
 | Interpreter constant branch | 304.61 ms, ~20.0M allocs | 59.45 ms, 6 allocs | ~5.1× |
 
@@ -29,15 +31,16 @@ The longer native-application suite produces these startup-inclusive medians:
 
 | Workload | Glojure AOT | let-go AOT | Glojure / let-go |
 | --- | ---: | ---: | ---: |
-| batched `fib(35)` | 754.55 ms | 1.280 s | 0.590 |
-| let-go compute-bound | 258.61 ms | 1.136 s | 0.228 |
-| event analytics | 1.318 s | 2.153 s | 0.612 |
-| Game of Life | 982.22 ms | 964.31 ms | 1.019 |
+| batched `fib(35)` | 769.64 ms | 1.322 s | 0.582 |
+| let-go compute-bound | 224.68 ms | 1.202 s | 0.187 |
+| event analytics | 1.315 s | 2.280 s | 0.577 |
+| Game of Life | 686.85 ms | 1.015 s | 0.676 |
 
 The stripped selectors containing all four workloads are 11.94 MiB for
 Glojure and 15.73 MiB for let-go. These measurements used Glojure commit
-`3526d53`, let-go commit `9dd835e`, Go 1.24.0 for Glojure, and let-go's
-required Go 1.26.0 toolchain on the same Apple M4 Max.
+`a26005b` plus the shared boxed-integer cache change, let-go commit `9dd835e`,
+Go 1.24.0 for Glojure, and let-go's required Go 1.26.0 toolchain on the same
+Apple M4 Max.
 
 These numbers are a development snapshot, not portable performance
 guarantees. Re-run the harnesses in `benchmark/aot`, `benchmark/interpreter`,

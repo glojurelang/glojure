@@ -138,7 +138,7 @@ func (nm *NumberMethods) UncheckedIntDivide(x, y int) any {
 func (nm *NumberMethods) Add(x, y any) any {
 	if a, ok := x.(int64); ok {
 		if b, ok := y.(int64); ok {
-			return int64Ops{}.Add(a, b)
+			return BoxInt64(CheckedAddInt64(a, b))
 		}
 	}
 	return Ops(x).Combine(Ops(y)).Add(x, y)
@@ -151,7 +151,7 @@ func (nm *NumberMethods) AddP(x, y any) any {
 func (nm *NumberMethods) Minus(x, y any) any {
 	if a, ok := x.(int64); ok {
 		if b, ok := y.(int64); ok {
-			return int64Ops{}.Sub(a, b)
+			return BoxInt64(CheckedSubInt64(a, b))
 		}
 	}
 	return Ops(x).Combine(Ops(y)).Sub(x, y)
@@ -172,7 +172,7 @@ func (nm *NumberMethods) Unchecked_negate(x any) any {
 func (nm *NumberMethods) Multiply(x, y any) any {
 	if a, ok := x.(int64); ok {
 		if b, ok := y.(int64); ok {
-			return int64Ops{}.Multiply(a, b)
+			return BoxInt64(CheckedMultiplyInt64(a, b))
 		}
 	}
 	return Ops(x).Combine(Ops(y)).Multiply(x, y)

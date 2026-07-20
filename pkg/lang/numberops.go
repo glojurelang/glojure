@@ -176,7 +176,7 @@ func (o int64Ops) Add(x, y any) any {
 	a, b := AsInt64(x), AsInt64(y)
 	c := a + b
 	if (c > a) == (b > 0) {
-		return c
+		return BoxInt64(c)
 	}
 	panic(NewArithmeticError("integer overflow"))
 }
@@ -188,24 +188,24 @@ func (o int64Ops) AddP(x, y any) any { // TODO: implement
 		return bigIntOps{}.Add(x, y)
 	}
 
-	return ret
+	return BoxInt64(ret)
 }
 func (o int64Ops) UncheckedAdd(x, y any) any {
-	return AsInt64(x) + AsInt64(y)
+	return BoxInt64(AsInt64(x) + AsInt64(y))
 }
 func (o int64Ops) UncheckedDec(x any) any {
-	return AsInt64(x) - 1
+	return BoxInt64(AsInt64(x) - 1)
 }
 func (o int64Ops) Sub(x, y any) any {
 	a, b := AsInt64(x), AsInt64(y)
 	c := a - b
 	if (c < a) == (b > 0) {
-		return c
+		return BoxInt64(c)
 	}
 	panic(NewArithmeticError("integer overflow"))
 }
 func (o int64Ops) UncheckedSub(x, y any) any {
-	return AsInt64(x) - AsInt64(y)
+	return BoxInt64(AsInt64(x) - AsInt64(y))
 }
 func (o int64Ops) Multiply(x, y any) any {
 	a, b := AsInt64(x), AsInt64(y)
@@ -215,7 +215,7 @@ func (o int64Ops) Multiply(x, y any) any {
 	c := a * b
 	if (c < 0) == ((a < 0) != (b < 0)) {
 		if c/b == a {
-			return c
+			return BoxInt64(c)
 		}
 	}
 	panic(NewArithmeticError("integer overflow"))
@@ -230,10 +230,10 @@ func (o int64Ops) MultiplyP(x, y any) any {
 	if yInt != 0 && ret/yInt != xInt {
 		return bigIntOps{}.Multiply(x, y)
 	}
-	return ret
+	return BoxInt64(ret)
 }
 func (o int64Ops) UncheckedMultiply(x, y any) any {
-	return AsInt64(x) * AsInt64(y)
+	return BoxInt64(AsInt64(x) * AsInt64(y))
 }
 func gcd(u, v int64) int64 {
 	for v != 0 {
