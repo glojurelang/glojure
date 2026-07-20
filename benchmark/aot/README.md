@@ -23,6 +23,8 @@ The fixtures deliberately cover optimization gaps:
   subexpression, through a direct function call.
 - `float-kernel.glj`: repeated floating-point arithmetic through a direct
   function call.
+- `letgo-map-filter.glj`: let-go's exact map/filter/take benchmark, including
+  its anonymous integer-square callback.
 - `reduce-pipeline.glj`: reduction over lazy `map` and `filter` producers.
 
 Run a baseline before changing the compiler and compare it with the same

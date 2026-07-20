@@ -59,6 +59,18 @@ type (
 		ReduceInt64(acc, value int64) int64
 	}
 
+	// Int64ReductionStepper is an optional unboxed reduction path that can
+	// terminate early without manufacturing a boxed Reduced value.
+	Int64ReductionStepper interface {
+		ReduceInt64Step(acc, value int64) (result int64, reduced bool)
+	}
+
+	// Int64StepReducible is an optional unboxed reduction path for sources
+	// that can stop when an Int64ReductionStepper signals completion.
+	Int64StepReducible interface {
+		ReduceInt64Steps(reducer Int64ReductionStepper, initial int64) int64
+	}
+
 	IKVReduce interface {
 		KVReduce(f IFn, init any) any
 	}

@@ -1558,7 +1558,7 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 // generateInvoke generates code for an Invoke node
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
-	if plan := analyzeAOTReducePipeline(invokeNode); plan != nil {
+	if plan := analyzeReducePipeline(invokeNode); plan != nil {
 		return g.generateAOTReducePipeline(invokeNode, plan)
 	}
 	return g.generateInvokeDefault(invokeNode)

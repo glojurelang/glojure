@@ -433,7 +433,7 @@ func TestAnalyzeFloat64AOTMixedLoopAndCrossCall(t *testing.T) {
 	}
 }
 
-func TestAnalyzeAOTReducePipeline(t *testing.T) {
+func TestAnalyzeReducePipeline(t *testing.T) {
 	core := lang.NSCore
 	coreVar := func(name string) *lang.Var {
 		return core.Intern(lang.NewSymbol(name))
@@ -456,7 +456,7 @@ func TestAnalyzeAOTReducePipeline(t *testing.T) {
 		mapCall,
 	).Sub.(*ast.InvokeNode)
 
-	plan := analyzeAOTReducePipeline(reduce)
+	plan := analyzeReducePipeline(reduce)
 	if plan == nil {
 		t.Fatal("safe integer range pipeline was not fused")
 	}
@@ -474,7 +474,7 @@ func TestAnalyzeAOTReducePipeline(t *testing.T) {
 	}
 
 	rangeCall.Sub.(*ast.InvokeNode).Args[0] = aotTestLocal(lang.NewSymbol("n"))
-	if plan := analyzeAOTReducePipeline(reduce); plan != nil {
+	if plan := analyzeReducePipeline(reduce); plan != nil {
 		t.Fatal("pipeline with an unproven range bound was fused")
 	}
 }

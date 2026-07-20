@@ -410,6 +410,7 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 		core,
 		"+", "dec", "even?", "filter", "identity", "inc", "map",
 		"neg?", "odd?", "pos?", "range", "reduce", "zero?",
+		"take",
 	)
 }
 

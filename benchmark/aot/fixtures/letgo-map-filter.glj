@@ -1,0 +1,10 @@
+(ns bench.letgo-map-filter)
+
+(defn run []
+  (reduce + 0
+          (take 100
+                (filter even?
+                        (map #(* % %)
+                             (range 10000))))))
+
+(def expected 1313400)

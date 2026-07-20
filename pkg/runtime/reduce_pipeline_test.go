@@ -14,9 +14,53 @@ func TestReducePipeline(t *testing.T) {
 			ReducePipelineFilterOdd,
 			ReducePipelineMapInc,
 		},
+		-1,
 	)
 	if result != int64(30) {
 		t.Fatalf("ReducePipeline = %v, want 30", result)
+	}
+}
+
+func TestReducePipelineSquareAndTake(t *testing.T) {
+	result := ReduceInt64Pipeline(
+		int64(0),
+		lang.NewLongRange(0, 10_000, 1),
+		[]ReducePipelineTransformKind{
+			ReducePipelineMapSquare,
+			ReducePipelineFilterEven,
+		},
+		100,
+	)
+	if result != int64(1_313_400) {
+		t.Fatalf("ReducePipeline = %v, want 1313400", result)
+	}
+}
+
+func TestReducePipelineTakeZeroDoesNotRealizeSource(t *testing.T) {
+	source := lang.NewLazySeq(func() interface{} {
+		t.Fatal("take zero realized its source")
+		return nil
+	})
+	result := ReduceInt64Pipeline(
+		int64(7),
+		source,
+		[]ReducePipelineTransformKind{ReducePipelineMapSquare},
+		0,
+	)
+	if result != int64(7) {
+		t.Fatalf("ReducePipeline = %v, want 7", result)
+	}
+}
+
+func TestReducePipelineTakeStopsNonRangeSource(t *testing.T) {
+	result := ReduceInt64Pipeline(
+		int64(0),
+		lang.NewList(int64(1), int64(2), int64(3)),
+		[]ReducePipelineTransformKind{ReducePipelineMapIdentity},
+		2,
+	)
+	if result != int64(3) {
+		t.Fatalf("ReducePipeline = %v, want 3", result)
 	}
 }
 

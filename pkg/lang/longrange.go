@@ -20,19 +20,19 @@ type (
 	LongChunk struct {
 		start, step int64
 		count       int
-		nthFn       FnFunc1
 	}
 )
 
 var (
-	_ ISeq        = (*LongRange)(nil)
-	_ Sequential  = (*LongRange)(nil)
-	_ IReduce     = (*LongRange)(nil)
-	_ IReduceInit = (*LongRange)(nil)
-	_ ASeq        = (*LongRange)(nil)
-	_ IDrop       = (*LongRange)(nil)
-	_ IChunkedSeq = (*LongRange)(nil)
-	_ Counted     = (*LongRange)(nil)
+	_ ISeq               = (*LongRange)(nil)
+	_ Sequential         = (*LongRange)(nil)
+	_ IReduce            = (*LongRange)(nil)
+	_ IReduceInit        = (*LongRange)(nil)
+	_ Int64StepReducible = (*LongRange)(nil)
+	_ ASeq               = (*LongRange)(nil)
+	_ IDrop              = (*LongRange)(nil)
+	_ IChunkedSeq        = (*LongRange)(nil)
+	_ Counted            = (*LongRange)(nil)
 
 	_ IChunk      = (*LongChunk)(nil)
 	_ IReduceInit = (*LongChunk)(nil)
@@ -236,6 +236,25 @@ func (r *LongRange) ReduceInit(f IFn, init any) any {
 	return ret
 }
 
+func (r *LongRange) ReduceInt64Steps(
+	reducer Int64ReductionStepper,
+	initial int64,
+) int64 {
+	result := initial
+	value := r.start
+	for index := 0; index < r.count; index++ {
+		var reduced bool
+		result, reduced = reducer.ReduceInt64Step(result, value)
+		if reduced {
+			return result
+		}
+		if index+1 < r.count {
+			value += r.step
+		}
+	}
+	return result
+}
+
 func (r *LongRange) Drop(n int) Sequential {
 	if n < 0 {
 		return r
@@ -251,13 +270,11 @@ func (r *LongRange) Drop(n int) Sequential {
 // LongChunk
 
 func NewLongChunk(start, step int64, count int) *LongChunk {
-	chunk := &LongChunk{
+	return &LongChunk{
 		start: start,
 		step:  step,
 		count: count,
 	}
-	chunk.nthFn = func(i any) any { return chunk.Nth(MustAsInt(i)) }
-	return chunk
 }
 
 func (c *LongChunk) First() any {
@@ -282,7 +299,9 @@ func (c *LongChunk) Count() int {
 func (c *LongChunk) fieldOrMethod(name string) (interface{}, bool) {
 	switch name {
 	case "nth", "Nth":
-		return c.nthFn, true
+		return FnFunc1(func(i any) any {
+			return c.Nth(MustAsInt(i))
+		}), true
 	case "nthDefault", "NthDefault":
 		return FnFunc2(func(i, notFound any) any {
 			return c.NthDefault(MustAsInt(i), notFound)

@@ -2,6 +2,19 @@ package lang
 
 import "testing"
 
+type stoppingInt64Reducer struct {
+	FnFunc2
+	calls     int
+	stopAfter int
+}
+
+func (r *stoppingInt64Reducer) ReduceInt64Step(
+	acc, value int64,
+) (int64, bool) {
+	r.calls++
+	return acc + value, r.calls == r.stopAfter
+}
+
 func TestLongRangeChunksAreBounded(t *testing.T) {
 	r := NewLongRange(0, 100, 1).(*LongRange)
 
@@ -46,5 +59,17 @@ func TestDescendingLongRangeChunksAreBounded(t *testing.T) {
 	more := r.ChunkedMore().(*LongRange)
 	if got := more.First(); got != int64(68) {
 		t.Fatalf("first value after first chunk = %v, want 68", got)
+	}
+}
+
+func TestLongRangeInt64StepsCanStopDescendingReduction(t *testing.T) {
+	r := NewLongRange(10, 0, -2).(*LongRange)
+	reducer := &stoppingInt64Reducer{stopAfter: 3}
+	got := r.ReduceInt64Steps(reducer, int64(0))
+	if got != int64(24) {
+		t.Fatalf("ReduceInt64Steps = %v, want 24", got)
+	}
+	if reducer.calls != 3 {
+		t.Fatalf("reducer calls = %d, want 3", reducer.calls)
 	}
 }

@@ -15,3 +15,7 @@ startup.
 `constant-branch` measures whether a literal predicate inside a numeric loop
 prevents the interpreter's existing typed-loop compiler from recognizing the
 surrounding loop.
+
+`let-go-map-filter` and `let-go-tak` reproduce the two official let-go
+interpreter workloads that are closest to Glojure. Keeping them in-process
+removes executable startup noise while profiling and validating changes.
