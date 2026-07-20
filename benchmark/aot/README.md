@@ -28,3 +28,8 @@ The fixtures deliberately cover optimization gaps:
 Run a baseline before changing the compiler and compare it with the same
 command afterward. The reported allocation counts are particularly useful for
 checking unboxing and sequence fusion.
+
+For startup-inclusive, cross-runtime workloads designed to run for roughly one
+second or longer in at least one runtime, use the
+[long-running AOT suite](long/README.md). It builds the same Clojure fixtures
+as native Glojure and let-go applications and compares their median wall times.

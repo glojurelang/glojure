@@ -25,6 +25,20 @@ wall-clock ratios, where a value below 1.0 favors Glojure:
 | game of life | 0.670 |
 | Mandelbrot | 0.855 |
 
+The longer native-application suite produces these startup-inclusive medians:
+
+| Workload | Glojure AOT | let-go AOT | Glojure / let-go |
+| --- | ---: | ---: | ---: |
+| batched `fib(35)` | 754.55 ms | 1.280 s | 0.590 |
+| let-go compute-bound | 258.61 ms | 1.136 s | 0.228 |
+| event analytics | 1.318 s | 2.153 s | 0.612 |
+| Game of Life | 982.22 ms | 964.31 ms | 1.019 |
+
+The stripped selectors containing all four workloads are 11.94 MiB for
+Glojure and 15.73 MiB for let-go. These measurements used Glojure commit
+`3526d53`, let-go commit `9dd835e`, Go 1.24.0 for Glojure, and let-go's
+required Go 1.26.0 toolchain on the same Apple M4 Max.
+
 These numbers are a development snapshot, not portable performance
 guarantees. Re-run the harnesses in `benchmark/aot`, `benchmark/interpreter`,
 and `benchmark/portable` when comparing later compiler changes.
