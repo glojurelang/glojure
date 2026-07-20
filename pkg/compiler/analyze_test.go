@@ -86,6 +86,39 @@ func TestFoldLiteralNumberCallLeavesTrapAtRuntime(t *testing.T) {
 	}
 }
 
+func TestFoldLiteralIf(t *testing.T) {
+	analyzer := &Analyzer{}
+	tests := []struct {
+		name string
+		test interface{}
+		want int64
+	}{
+		{name: "truthy", test: int64(0), want: 1},
+		{name: "false", test: false, want: 2},
+		{name: "nil", test: nil, want: 2},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			form := lang.NewList(
+				lang.NewSymbol("if"),
+				test.test,
+				int64(1),
+				int64(2),
+			)
+			node, err := analyzer.parseIf(form, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if node.Op != ast.OpConst {
+				t.Fatalf("folded if op = %v, want OpConst", node.Op)
+			}
+			if got := node.Sub.(*ast.ConstNode).Value; got != test.want {
+				t.Fatalf("folded if = %v, want %v", got, test.want)
+			}
+		})
+	}
+}
+
 func TestContainsResidualUnquote(t *testing.T) {
 	form := lang.NewList(
 		lang.NewSymbol("."),

@@ -11,3 +11,7 @@ go test ./benchmark/interpreter -bench . -benchmem -count 5 -benchtime 2s
 subexpression through a function call. It is intended to show whether shared
 compiler optimizations improve interpreted execution rather than parsing or
 startup.
+
+`constant-branch` measures whether a literal predicate inside a numeric loop
+prevents the interpreter's existing typed-loop compiler from recognizing the
+surrounding loop.

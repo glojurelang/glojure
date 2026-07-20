@@ -8,6 +8,7 @@ benchmarks; allocations are reported by Go's benchmark harness.
 | AOT float kernel | 232 ms, ~17.0M allocs | 1.265 ms, 1 alloc | ~183× |
 | AOT reduce pipeline | 95 ms, ~5.87M allocs | 1.905 ms, 48 allocs | ~50× |
 | Interpreter constant arithmetic | 113.27 ms | 101.99 ms | ~10% |
+| Interpreter constant branch | 304.61 ms, ~20.0M allocs | 59.45 ms, 6 allocs | ~5.1× |
 
 The AOT baselines were captured before primitive float specialization and
 integer pipeline fusion. The interpreter comparison uses

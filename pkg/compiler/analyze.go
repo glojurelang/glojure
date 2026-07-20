@@ -690,6 +690,12 @@ func (a *Analyzer) parseIf(form interface{}, env Env) (*ast.Node, error) {
 	if err != nil {
 		return nil, err
 	}
+	if testExpr.Op == ast.OpConst {
+		if IsTruthy(testExpr.Sub.(*ast.ConstNode).Value) {
+			return withRawForm(thenExpr, form), nil
+		}
+		return withRawForm(elseExpr, form), nil
+	}
 	n := ast.MakeNode(ast.OpIf, form)
 	n.Env = env
 	n.Sub = &ast.IfNode{
