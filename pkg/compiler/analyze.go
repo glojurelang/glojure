@@ -119,8 +119,9 @@ func (a *Analyzer) analyzeSymbol(form *Symbol, env Env) (*ast.Node, error) {
 				if value, ok := a.ResolveHost(form); ok {
 					n.Op = ast.OpConst
 					n.Sub = &ast.ConstNode{
-						Type:  classifyType(value),
-						Value: value,
+						Type:       classifyType(value),
+						Value:      value,
+						HostSymbol: form,
 					}
 					return n, nil
 				}

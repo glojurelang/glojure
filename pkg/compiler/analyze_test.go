@@ -7,6 +7,52 @@ import (
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
+func TestResolvedHostConstantsRetainTheirSymbols(t *testing.T) {
+	nsSym := lang.NewSymbol("compiler.resolved-host-test")
+	ns := lang.FindOrCreateNamespace(nsSym)
+	t.Cleanup(func() { lang.RemoveNamespace(nsSym) })
+
+	fnSym := lang.NewSymbol("example.com:host.Adapter")
+	constantSym := lang.NewSymbol("example.com:host.Constant")
+	analyzer := &Analyzer{
+		Macroexpand1:  func(form interface{}) (interface{}, error) { return form, nil },
+		FindNamespace: func(*lang.Symbol) *lang.Namespace { return ns },
+		ResolveHost: func(sym *lang.Symbol) (interface{}, bool) {
+			switch sym.String() {
+			case fnSym.String():
+				return lang.FnFunc(func(...any) any { return nil }), true
+			case constantSym.String():
+				return int64(42), true
+			default:
+				return nil, false
+			}
+		},
+	}
+	env := lang.NewMap(KWNS, nsSym).(Env)
+
+	fnNode, err := analyzer.analyzeSymbol(fnSym, env)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if fnNode.Op != ast.OpConst {
+		t.Fatalf("resolved host function op = %v, want OpConst", fnNode.Op)
+	}
+	if got := fnNode.Sub.(*ast.ConstNode).HostSymbol; !lang.Equals(got, fnSym) {
+		t.Fatalf("resolved host function symbol = %v, want %v", got, fnSym)
+	}
+
+	constantNode, err := analyzer.analyzeSymbol(constantSym, env)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if constantNode.Op != ast.OpConst {
+		t.Fatalf("resolved host constant op = %v, want OpConst", constantNode.Op)
+	}
+	if got := constantNode.Sub.(*ast.ConstNode).HostSymbol; !lang.Equals(got, constantSym) {
+		t.Fatalf("resolved host constant symbol = %v, want %v", got, constantSym)
+	}
+}
+
 func TestInlineExpansionSupportedChecksHostMethodArity(t *testing.T) {
 	resolveNumbers := func(sym *lang.Symbol) (interface{}, bool) {
 		if sym.String() == "test/Numbers" {

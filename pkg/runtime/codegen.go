@@ -1149,7 +1149,11 @@ func (g *Generator) generateMultiFn(mf *lang.MultiFn) string {
 }
 
 func (g *Generator) generateFnFunc(fn lang.FnFunc) string {
-	panic("cannot generate opaque go function values")
+	name := "unknown"
+	if runtimeFn := goruntime.FuncForPC(reflect.ValueOf(fn).Pointer()); runtimeFn != nil {
+		name = runtimeFn.Name()
+	}
+	panic(fmt.Sprintf("cannot generate opaque go function value %s", name))
 }
 
 func (g *Generator) generateFn(fn *Fn) string {
@@ -1485,6 +1489,16 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		return g.generateThrow(node)
 	case ast.OpConst:
 		constNode := node.Sub.(*ast.ConstNode)
+		if constNode.HostSymbol != nil {
+			// Host classes are synthetic JVM-compatible values, not Go
+			// package exports (for example java.lang.Math). Preserve their
+			// class identity instead of attempting to import the Java name.
+			switch constNode.Value.(type) {
+			case *lang.Class, reflect.Type:
+			default:
+				return g.generateGoExportedName(constNode.HostSymbol.FullName())
+			}
+		}
 		return g.generateValue(constNode.Value)
 	case ast.OpVector:
 		return g.generateVector(node)

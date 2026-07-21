@@ -36,9 +36,10 @@ type (
 	}
 
 	ConstNode struct {
-		Type  lang.Keyword
-		Value interface{}
-		Meta  *Node
+		Type       lang.Keyword
+		Value      interface{}
+		Meta       *Node
+		HostSymbol *lang.Symbol
 	}
 
 	GoBuiltinNode struct {

@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"math"
 	"os"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -37,6 +38,42 @@ func TestGenerateStandardFileHandles(t *testing.T) {
 		if got := generator.generateValue(handle); got != want {
 			t.Errorf("generated standard file handle = %q, want %q", got, want)
 		}
+	}
+}
+
+func TestGenerateResolvedHostReference(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+	node := ast.MakeNode(ast.OpConst, nil)
+	node.Sub = &ast.ConstNode{
+		Value:      new(int),
+		HostSymbol: lang.NewSymbol("example.com:host.Value"),
+	}
+
+	if got, want := generator.generateASTNode(node), "host0.Value"; got != want {
+		t.Fatalf("generated host reference = %q, want %q", got, want)
+	}
+	if got, want := generator.imports["example.com/host"], "host0"; got != want {
+		t.Fatalf("host import alias = %q, want %q", got, want)
+	}
+}
+
+func TestGenerateResolvedHostClassValue(t *testing.T) {
+	var output bytes.Buffer
+	generator := NewGenerator(&output)
+	node := ast.MakeNode(ast.OpConst, nil)
+	node.Sub = &ast.ConstNode{
+		Value:      lang.NewClass(reflect.TypeOf(int64(0)), "java.lang.Long"),
+		HostSymbol: lang.NewSymbol("java.lang.Long"),
+	}
+
+	if got := generator.generateASTNode(node); got == "nil" {
+		t.Fatal("resolved host class generated nil")
+	}
+	if got := output.String(); !strings.Contains(got, `"java.lang.Long"`) {
+		t.Fatalf("generated host class did not retain Java identity: %s", got)
+	}
+	if _, ok := generator.imports["java.lang"]; ok {
+		t.Fatal("resolved host class generated a java.lang import")
 	}
 }
 
