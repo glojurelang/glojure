@@ -4,13 +4,41 @@ package runtime
 
 import (
 	"bytes"
+	"io/fs"
 	"math"
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
+
+func TestGenerateNamedScalarValue(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+
+	got := generator.generateValue(fs.ModeSymlink)
+	if want := "fs0.FileMode(134217728)"; got != want {
+		t.Fatalf("generated fs.FileMode = %q, want %q", got, want)
+	}
+	if got := generator.imports["io/fs"]; got != "fs0" {
+		t.Fatalf("io/fs import alias = %q, want %q", got, "fs0")
+	}
+}
+
+func TestGenerateStandardFileHandles(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+
+	for handle, want := range map[*os.File]string{
+		os.Stdin:  "os0.Stdin",
+		os.Stdout: "os0.Stdout",
+		os.Stderr: "os0.Stderr",
+	} {
+		if got := generator.generateValue(handle); got != want {
+			t.Errorf("generated standard file handle = %q, want %q", got, want)
+		}
+	}
+}
 
 func TestDirectHostMethod(t *testing.T) {
 	target := &ast.Node{

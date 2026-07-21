@@ -11,6 +11,7 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"os"
 	"path/filepath"
 	"reflect"
 	"regexp"
@@ -651,6 +652,18 @@ func (g *Generator) generateValue(value any) string {
 			return g.addImportWithAlias("net/http") + ".DefaultClient"
 		}
 		panic("cannot generate a non-default HTTP client")
+	case *os.File:
+		alias := g.addImportWithAlias("os")
+		switch v {
+		case os.Stdin:
+			return alias + ".Stdin"
+		case os.Stdout:
+			return alias + ".Stdout"
+		case os.Stderr:
+			return alias + ".Stderr"
+		default:
+			panic("cannot generate a non-standard file handle")
+		}
 	case *RTMethods:
 		// RT is the package-level host-method receiver used by core forms.
 		return "runtime.RT"
@@ -723,7 +736,12 @@ func (g *Generator) generateValue(value any) string {
 			return fname
 		}
 
-		if rv := reflect.ValueOf(v); rv.IsValid() && rv.Kind() == reflect.Func {
+		rv := reflect.ValueOf(v)
+		if scalar, ok := g.generateNamedScalarValue(rv); ok {
+			return scalar
+		}
+
+		if rv.IsValid() && rv.Kind() == reflect.Func {
 			if fn := goruntime.FuncForPC(rv.Pointer()); fn != nil {
 				const langPrefix = "github.com/glojurelang/glojure/pkg/lang."
 				if name := strings.TrimPrefix(fn.Name(), langPrefix); name != fn.Name() && token.IsIdentifier(name) {
@@ -753,6 +771,33 @@ func (g *Generator) generateValue(value any) string {
 			}
 		}
 		panic(fmt.Sprintf("unsupported value type %T: %v", v, v))
+	}
+}
+
+// generateNamedScalarValue emits constants whose Go type has a name, such as
+// fs.FileMode. Host symbols resolve to their exact Go values during analysis,
+// so AOT generation must preserve both the scalar value and its named type.
+func (g *Generator) generateNamedScalarValue(v reflect.Value) (string, bool) {
+	if !v.IsValid() || v.Type().Name() == "" {
+		return "", false
+	}
+
+	typeName := g.getTypeString(v.Type())
+	switch v.Kind() {
+	case reflect.Bool:
+		return fmt.Sprintf("%s(%t)", typeName, v.Bool()), true
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return fmt.Sprintf("%s(%d)", typeName, v.Int()), true
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return fmt.Sprintf("%s(%d)", typeName, v.Uint()), true
+	case reflect.Float32, reflect.Float64:
+		return fmt.Sprintf("%s(%g)", typeName, v.Float()), true
+	case reflect.Complex64, reflect.Complex128:
+		return fmt.Sprintf("%s(%g)", typeName, v.Complex()), true
+	case reflect.String:
+		return fmt.Sprintf("%s(%q)", typeName, v.String()), true
+	default:
+		return "", false
 	}
 }
 
