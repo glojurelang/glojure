@@ -10,6 +10,8 @@ CLOJURE-STDLIB-SOURCE-VERSION ?= 1.12.4
 CLOJURE-VERSION ?= $(CLOJURE-CLI-VERSION)
 
 include $M/go.mk
+include $M/perl.mk
+CLOJURE-DEPS += $(PERL)
 include $M/clojure.mk
 include $M/gh.mk
 include $M/clean.mk

@@ -3,6 +3,8 @@
 package glj
 
 import (
+	"go/ast"
+	"go/parser"
 	"net/url"
 	"reflect"
 
@@ -15,6 +17,17 @@ import (
 // standard library. Production builds use the generated AOT loaders and do not
 // need these bootstrap-only exports in their default interop registry.
 func init() {
+	pkgmap.Set("go/ast.*Ident", reflect.TypeOf((*ast.Ident)(nil)))
+	pkgmap.Set("go/ast.*ArrayType", reflect.TypeOf((*ast.ArrayType)(nil)))
+	pkgmap.Set("go/ast.*MapType", reflect.TypeOf((*ast.MapType)(nil)))
+	pkgmap.Set("go/ast.*ChanType", reflect.TypeOf((*ast.ChanType)(nil)))
+	pkgmap.Set("go/ast.*FuncType", reflect.TypeOf((*ast.FuncType)(nil)))
+	pkgmap.Set("go/ast.*Ellipsis", reflect.TypeOf((*ast.Ellipsis)(nil)))
+	pkgmap.Set("go/ast.*StructType", reflect.TypeOf((*ast.StructType)(nil)))
+	pkgmap.Set("go/ast.SEND", ast.SEND)
+	pkgmap.Set("go/ast.RECV", ast.RECV)
+	pkgmap.Set("go/parser.ParseExpr", parser.ParseExpr)
+
 	pkgmap.Set("net/url.URL", reflect.TypeOf((*url.URL)(nil)).Elem())
 	pkgmap.Set("net/url.*URL", reflect.TypeOf((*url.URL)(nil)))
 	pkgmap.Set("net/url.Parse", url.Parse)

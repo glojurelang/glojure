@@ -10,6 +10,37 @@ import (
 	time4 "time"
 )
 
+var aotDirectFn0 lang.FnFunc1
+var aotRootVersion0 *lang.VarRootVersion
+var aotDirectFn1 lang.FnFunc1
+var aotRootVersion1 *lang.VarRootVersion
+var aotDirectFn2 lang.FnFunc2
+var aotRootVersion2 *lang.VarRootVersion
+var aotDirectFn3 lang.FnFunc2
+var aotRootVersion3 *lang.VarRootVersion
+var aotDirectFn4 lang.FnFunc1
+var aotRootVersion4 *lang.VarRootVersion
+var aotDirectFn5 lang.FnFunc1
+var aotRootVersion5 *lang.VarRootVersion
+var aotDirectFn6 lang.FnFunc0
+var aotRootVersion6 *lang.VarRootVersion
+var aotDirectFn7 lang.FnFunc2
+var aotRootVersion7 *lang.VarRootVersion
+var aotDirectFn8 lang.FnFunc2
+var aotRootVersion8 *lang.VarRootVersion
+var aotDirectFn9 lang.FnFunc2
+var aotRootVersion9 *lang.VarRootVersion
+var aotDirectFn10 lang.FnFunc1
+var aotRootVersion10 *lang.VarRootVersion
+var aotDirectFn11 lang.FnFunc1
+var aotRootVersion11 *lang.VarRootVersion
+var aotDirectFn12 lang.FnFunc1
+var aotRootVersion12 *lang.VarRootVersion
+var aotDirectFn13 lang.FnFunc2
+var aotRootVersion13 *lang.VarRootVersion
+var aotDirectFn14 lang.FnFunc1
+var aotRootVersion14 *lang.VarRootVersion
+
 func init() {
 	runtime.RegisterNSLoader("clojure/core/async", LoadNS)
 }
@@ -35,707 +66,102 @@ func checkArityGTE(args []any, min int) {
 
 // LoadNS initializes the namespace "clojure.core.async"
 func LoadNS() {
-	sym__AMP_ := lang.NewSymbol("&")
-	sym__STAR_ := lang.NewSymbol("*")
-	sym__STAR__TICK_ := lang.NewSymbol("*'")
-	sym__STAR_1 := lang.NewSymbol("*1")
-	sym__STAR_2 := lang.NewSymbol("*2")
-	sym__STAR_3 := lang.NewSymbol("*3")
-	sym__STAR_agent_STAR_ := lang.NewSymbol("*agent*")
-	sym__STAR_assert_STAR_ := lang.NewSymbol("*assert*")
-	sym__STAR_command_DASH_line_DASH_args_STAR_ := lang.NewSymbol("*command-line-args*")
-	sym__STAR_compile_DASH_files_STAR_ := lang.NewSymbol("*compile-files*")
-	sym__STAR_compile_DASH_path_STAR_ := lang.NewSymbol("*compile-path*")
-	sym__STAR_compiler_DASH_options_STAR_ := lang.NewSymbol("*compiler-options*")
-	sym__STAR_data_DASH_readers_STAR_ := lang.NewSymbol("*data-readers*")
-	sym__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_ := lang.NewSymbol("*default-data-reader-fn*")
-	sym__STAR_e := lang.NewSymbol("*e")
-	sym__STAR_err_STAR_ := lang.NewSymbol("*err*")
-	sym__STAR_file_STAR_ := lang.NewSymbol("*file*")
-	sym__STAR_flush_DASH_on_DASH_newline_STAR_ := lang.NewSymbol("*flush-on-newline*")
-	sym__STAR_glojure_DASH_version_STAR_ := lang.NewSymbol("*glojure-version*")
-	sym__STAR_in_STAR_ := lang.NewSymbol("*in*")
-	sym__STAR_loaded_DASH_libs_STAR_ := lang.NewSymbol("*loaded-libs*")
-	sym__STAR_loading_DASH_verbosely_STAR_ := lang.NewSymbol("*loading-verbosely*")
-	sym__STAR_ns_STAR_ := lang.NewSymbol("*ns*")
-	sym__STAR_out_STAR_ := lang.NewSymbol("*out*")
-	sym__STAR_pending_DASH_paths_STAR_ := lang.NewSymbol("*pending-paths*")
-	sym__STAR_print_DASH_dup_STAR_ := lang.NewSymbol("*print-dup*")
-	sym__STAR_print_DASH_length_STAR_ := lang.NewSymbol("*print-length*")
-	sym__STAR_print_DASH_level_STAR_ := lang.NewSymbol("*print-level*")
-	sym__STAR_print_DASH_meta_STAR_ := lang.NewSymbol("*print-meta*")
-	sym__STAR_print_DASH_namespace_DASH_maps_STAR_ := lang.NewSymbol("*print-namespace-maps*")
-	sym__STAR_print_DASH_readably_STAR_ := lang.NewSymbol("*print-readably*")
-	sym__STAR_read_DASH_eval_STAR_ := lang.NewSymbol("*read-eval*")
-	sym__STAR_repl_STAR_ := lang.NewSymbol("*repl*")
-	sym__STAR_unchecked_DASH_math_STAR_ := lang.NewSymbol("*unchecked-math*")
-	sym__STAR_verbose_DASH_defrecords_STAR_ := lang.NewSymbol("*verbose-defrecords*")
-	sym__STAR_warn_DASH_on_DASH_reflection_STAR_ := lang.NewSymbol("*warn-on-reflection*")
-	sym__PLUS_ := lang.NewSymbol("+")
-	sym__PLUS__TICK_ := lang.NewSymbol("+'")
-	sym__DASH_ := lang.NewSymbol("-")
-	sym__DASH__TICK_ := lang.NewSymbol("-'")
-	sym__DASH__GT_ := lang.NewSymbol("->")
-	sym__DASH__GT__GT_ := lang.NewSymbol("->>")
-	sym__DOT__DOT_ := lang.NewSymbol("..")
-	sym__SLASH_ := lang.NewSymbol("/")
-	sym__LT_ := lang.NewSymbol("<")
-	sym__LT__BANG_ := lang.NewSymbol("<!")
-	sym__LT__BANG__BANG_ := lang.NewSymbol("<!!")
-	sym__LT__EQ_ := lang.NewSymbol("<=")
-	sym__EQ_ := lang.NewSymbol("=")
-	sym__EQ__EQ_ := lang.NewSymbol("==")
-	sym__GT_ := lang.NewSymbol(">")
-	sym__GT__BANG_ := lang.NewSymbol(">!")
-	sym__GT__BANG__BANG_ := lang.NewSymbol(">!!")
-	sym__GT__EQ_ := lang.NewSymbol(">=")
-	sym_NaN_QMARK_ := lang.NewSymbol("NaN?")
-	sym_StackTraceElement_DASH__GT_vec := lang.NewSymbol("StackTraceElement->vec")
-	sym_Throwable_DASH__GT_map := lang.NewSymbol("Throwable->map")
-	sym_abs := lang.NewSymbol("abs")
-	sym_accessor := lang.NewSymbol("accessor")
-	sym_aclone := lang.NewSymbol("aclone")
-	sym_add_DASH_classpath := lang.NewSymbol("add-classpath")
-	sym_add_DASH_load_DASH_path := lang.NewSymbol("add-load-path")
-	sym_add_DASH_watch := lang.NewSymbol("add-watch")
-	sym_agent := lang.NewSymbol("agent")
-	sym_agent_DASH_error := lang.NewSymbol("agent-error")
-	sym_agent_DASH_errors := lang.NewSymbol("agent-errors")
-	sym_aget := lang.NewSymbol("aget")
-	sym_alength := lang.NewSymbol("alength")
-	sym_alias := lang.NewSymbol("alias")
-	sym_all_DASH_ns := lang.NewSymbol("all-ns")
-	sym_alt_BANG_ := lang.NewSymbol("alt!")
-	sym_alt_BANG__BANG_ := lang.NewSymbol("alt!!")
-	sym_alter := lang.NewSymbol("alter")
-	sym_alter_DASH_meta_BANG_ := lang.NewSymbol("alter-meta!")
-	sym_alter_DASH_var_DASH_root := lang.NewSymbol("alter-var-root")
-	sym_alts := lang.NewSymbol("alts")
-	sym_alts_BANG_ := lang.NewSymbol("alts!")
-	sym_alts_BANG__BANG_ := lang.NewSymbol("alts!!")
-	sym_amap := lang.NewSymbol("amap")
-	sym_ancestors := lang.NewSymbol("ancestors")
-	sym_and := lang.NewSymbol("and")
-	sym_any_QMARK_ := lang.NewSymbol("any?")
-	sym_apply := lang.NewSymbol("apply")
-	sym_areduce := lang.NewSymbol("areduce")
-	sym_args := lang.NewSymbol("args")
-	sym_array_DASH_map := lang.NewSymbol("array-map")
-	sym_as_DASH__GT_ := lang.NewSymbol("as->")
-	sym_aset := lang.NewSymbol("aset")
-	sym_aset_DASH_boolean := lang.NewSymbol("aset-boolean")
-	sym_aset_DASH_byte := lang.NewSymbol("aset-byte")
-	sym_aset_DASH_char := lang.NewSymbol("aset-char")
-	sym_aset_DASH_double := lang.NewSymbol("aset-double")
-	sym_aset_DASH_float := lang.NewSymbol("aset-float")
-	sym_aset_DASH_int := lang.NewSymbol("aset-int")
-	sym_aset_DASH_long := lang.NewSymbol("aset-long")
-	sym_aset_DASH_short := lang.NewSymbol("aset-short")
-	sym_assert := lang.NewSymbol("assert")
-	sym_assoc := lang.NewSymbol("assoc")
-	sym_assoc_BANG_ := lang.NewSymbol("assoc!")
-	sym_assoc_DASH_in := lang.NewSymbol("assoc-in")
-	sym_associative_QMARK_ := lang.NewSymbol("associative?")
-	sym_atom := lang.NewSymbol("atom")
-	sym_await := lang.NewSymbol("await")
-	sym_await_DASH_for := lang.NewSymbol("await-for")
-	sym_await1 := lang.NewSymbol("await1")
-	sym_bases := lang.NewSymbol("bases")
-	sym_bigdec := lang.NewSymbol("bigdec")
-	sym_bigint := lang.NewSymbol("bigint")
-	sym_biginteger := lang.NewSymbol("biginteger")
-	sym_binding := lang.NewSymbol("binding")
-	sym_bindings := lang.NewSymbol("bindings")
-	sym_bit_DASH_and := lang.NewSymbol("bit-and")
-	sym_bit_DASH_and_DASH_not := lang.NewSymbol("bit-and-not")
-	sym_bit_DASH_clear := lang.NewSymbol("bit-clear")
-	sym_bit_DASH_flip := lang.NewSymbol("bit-flip")
-	sym_bit_DASH_not := lang.NewSymbol("bit-not")
-	sym_bit_DASH_or := lang.NewSymbol("bit-or")
-	sym_bit_DASH_set := lang.NewSymbol("bit-set")
-	sym_bit_DASH_shift_DASH_left := lang.NewSymbol("bit-shift-left")
-	sym_bit_DASH_shift_DASH_right := lang.NewSymbol("bit-shift-right")
-	sym_bit_DASH_test := lang.NewSymbol("bit-test")
-	sym_bit_DASH_xor := lang.NewSymbol("bit-xor")
-	sym_body := lang.NewSymbol("body")
-	sym_boolean := lang.NewSymbol("boolean")
-	sym_boolean_DASH_array := lang.NewSymbol("boolean-array")
-	sym_boolean_QMARK_ := lang.NewSymbol("boolean?")
-	sym_booleans := lang.NewSymbol("booleans")
-	sym_bound_DASH_fn := lang.NewSymbol("bound-fn")
-	sym_bound_DASH_fn_STAR_ := lang.NewSymbol("bound-fn*")
-	sym_bound_QMARK_ := lang.NewSymbol("bound?")
-	sym_bounded_DASH_count := lang.NewSymbol("bounded-count")
-	sym_buf_DASH_or_DASH_n := lang.NewSymbol("buf-or-n")
-	sym_butlast := lang.NewSymbol("butlast")
-	sym_byte := lang.NewSymbol("byte")
-	sym_byte_DASH_array := lang.NewSymbol("byte-array")
-	sym_bytes := lang.NewSymbol("bytes")
-	sym_bytes_QMARK_ := lang.NewSymbol("bytes?")
-	sym_c__0__auto__ := lang.NewSymbol("c__0__auto__")
-	sym_case := lang.NewSymbol("case")
-	sym_cast := lang.NewSymbol("cast")
-	sym_cat := lang.NewSymbol("cat")
-	sym_chan := lang.NewSymbol("chan")
-	sym_char := lang.NewSymbol("char")
-	sym_char_DASH_array := lang.NewSymbol("char-array")
-	sym_char_DASH_escape_DASH_string := lang.NewSymbol("char-escape-string")
-	sym_char_DASH_name_DASH_string := lang.NewSymbol("char-name-string")
-	sym_char_QMARK_ := lang.NewSymbol("char?")
-	sym_chars := lang.NewSymbol("chars")
-	sym_check_DASH_unique_DASH_ports_BANG_ := lang.NewSymbol("check-unique-ports!")
-	sym_chunk := lang.NewSymbol("chunk")
-	sym_chunk_DASH_append := lang.NewSymbol("chunk-append")
-	sym_chunk_DASH_buffer := lang.NewSymbol("chunk-buffer")
-	sym_chunk_DASH_cons := lang.NewSymbol("chunk-cons")
-	sym_chunk_DASH_first := lang.NewSymbol("chunk-first")
-	sym_chunk_DASH_next := lang.NewSymbol("chunk-next")
-	sym_chunk_DASH_rest := lang.NewSymbol("chunk-rest")
-	sym_chunked_DASH_seq_QMARK_ := lang.NewSymbol("chunked-seq?")
-	sym_class := lang.NewSymbol("class")
-	sym_class_QMARK_ := lang.NewSymbol("class?")
-	sym_clauses := lang.NewSymbol("clauses")
-	sym_clear_DASH_agent_DASH_errors := lang.NewSymbol("clear-agent-errors")
-	sym_clojure_DOT_core := lang.NewSymbol("clojure.core")
-	sym_clojure_DOT_core_DOT_async := lang.NewSymbol("clojure.core.async")
-	sym_clojure_DOT_core_DOT_async_SLASH__GT__BANG_ := lang.NewSymbol("clojure.core.async/>!")
-	sym_clojure_DOT_core_DOT_async_SLASH_alt_BANG_ := lang.NewSymbol("clojure.core.async/alt!")
-	sym_clojure_DOT_core_DOT_async_SLASH_alts_BANG_ := lang.NewSymbol("clojure.core.async/alts!")
-	sym_clojure_DOT_core_DOT_async_SLASH_chan := lang.NewSymbol("clojure.core.async/chan")
-	sym_clojure_DOT_core_DOT_async_SLASH_go := lang.NewSymbol("clojure.core.async/go")
-	sym_clojure_DOT_core_SLASH__EQ_ := lang.NewSymbol("clojure.core/=")
-	sym_clojure_DOT_core_SLASH_cond := lang.NewSymbol("clojure.core/cond")
-	sym_clojure_DOT_core_SLASH_fn := lang.NewSymbol("clojure.core/fn")
-	sym_clojure_DOT_core_SLASH_let := lang.NewSymbol("clojure.core/let")
-	sym_clojure_DOT_core_SLASH_loop := lang.NewSymbol("clojure.core/loop")
-	sym_clojure_DOT_core_SLASH_or := lang.NewSymbol("clojure.core/or")
-	sym_close_BANG_ := lang.NewSymbol("close!")
-	sym_close_QMARK_ := lang.NewSymbol("close?")
-	sym_coll_QMARK_ := lang.NewSymbol("coll?")
-	sym_comment := lang.NewSymbol("comment")
-	sym_commute := lang.NewSymbol("commute")
-	sym_comp := lang.NewSymbol("comp")
-	sym_comparator := lang.NewSymbol("comparator")
-	sym_compare := lang.NewSymbol("compare")
-	sym_compare_DASH_and_DASH_set_BANG_ := lang.NewSymbol("compare-and-set!")
-	sym_compile := lang.NewSymbol("compile")
-	sym_complement := lang.NewSymbol("complement")
-	sym_completing := lang.NewSymbol("completing")
-	sym_concat := lang.NewSymbol("concat")
-	sym_cond := lang.NewSymbol("cond")
-	sym_cond_DASH__GT_ := lang.NewSymbol("cond->")
-	sym_cond_DASH__GT__GT_ := lang.NewSymbol("cond->>")
-	sym_condp := lang.NewSymbol("condp")
-	sym_conj := lang.NewSymbol("conj")
-	sym_conj_BANG_ := lang.NewSymbol("conj!")
-	sym_cons := lang.NewSymbol("cons")
-	sym_constantly := lang.NewSymbol("constantly")
-	sym_contains_QMARK_ := lang.NewSymbol("contains?")
-	sym_core := lang.NewSymbol("core")
-	sym_count := lang.NewSymbol("count")
-	sym_counted_QMARK_ := lang.NewSymbol("counted?")
-	sym_create_DASH_ns := lang.NewSymbol("create-ns")
-	sym_create_DASH_struct := lang.NewSymbol("create-struct")
-	sym_cycle := lang.NewSymbol("cycle")
-	sym_dec := lang.NewSymbol("dec")
-	sym_dec_TICK_ := lang.NewSymbol("dec'")
-	sym_decimal_QMARK_ := lang.NewSymbol("decimal?")
-	sym_declare := lang.NewSymbol("declare")
-	sym_dedupe := lang.NewSymbol("dedupe")
-	sym_default_DASH_case := lang.NewSymbol("default-case")
-	sym_definline := lang.NewSymbol("definline")
-	sym_defmacro := lang.NewSymbol("defmacro")
-	sym_defmethod := lang.NewSymbol("defmethod")
-	sym_defmulti := lang.NewSymbol("defmulti")
-	sym_defn := lang.NewSymbol("defn")
-	sym_defn_DASH_ := lang.NewSymbol("defn-")
-	sym_defonce := lang.NewSymbol("defonce")
-	sym_defprotocol := lang.NewSymbol("defprotocol")
-	sym_defstruct := lang.NewSymbol("defstruct")
-	sym_delay := lang.NewSymbol("delay")
-	sym_delay_QMARK_ := lang.NewSymbol("delay?")
-	sym_deliver := lang.NewSymbol("deliver")
-	sym_denominator := lang.NewSymbol("denominator")
-	sym_deref := lang.NewSymbol("deref")
-	sym_derive := lang.NewSymbol("derive")
-	sym_descendants := lang.NewSymbol("descendants")
-	sym_destructure := lang.NewSymbol("destructure")
-	sym_disj := lang.NewSymbol("disj")
-	sym_disj_BANG_ := lang.NewSymbol("disj!")
-	sym_dissoc := lang.NewSymbol("dissoc")
-	sym_dissoc_BANG_ := lang.NewSymbol("dissoc!")
-	sym_distinct := lang.NewSymbol("distinct")
-	sym_distinct_QMARK_ := lang.NewSymbol("distinct?")
-	sym_do := lang.NewSymbol("do")
-	sym_do_DASH_alt := lang.NewSymbol("do-alt")
-	sym_do_DASH_alts := lang.NewSymbol("do-alts")
-	sym_doall := lang.NewSymbol("doall")
-	sym_dorun := lang.NewSymbol("dorun")
-	sym_doseq := lang.NewSymbol("doseq")
-	sym_dosync := lang.NewSymbol("dosync")
-	sym_dotimes := lang.NewSymbol("dotimes")
-	sym_doto := lang.NewSymbol("doto")
-	sym_double := lang.NewSymbol("double")
-	sym_double_DASH_array := lang.NewSymbol("double-array")
-	sym_double_QMARK_ := lang.NewSymbol("double?")
-	sym_doubles := lang.NewSymbol("doubles")
-	sym_drop := lang.NewSymbol("drop")
-	sym_drop_DASH_last := lang.NewSymbol("drop-last")
-	sym_drop_DASH_while := lang.NewSymbol("drop-while")
-	sym_empty := lang.NewSymbol("empty")
-	sym_empty_QMARK_ := lang.NewSymbol("empty?")
-	sym_ensure := lang.NewSymbol("ensure")
-	sym_ensure_DASH_reduced := lang.NewSymbol("ensure-reduced")
-	sym_enumeration_DASH_seq := lang.NewSymbol("enumeration-seq")
-	sym_error_DASH_handler := lang.NewSymbol("error-handler")
-	sym_error_DASH_mode := lang.NewSymbol("error-mode")
-	sym_eval := lang.NewSymbol("eval")
-	sym_even_QMARK_ := lang.NewSymbol("even?")
-	sym_every_DASH_pred := lang.NewSymbol("every-pred")
-	sym_every_QMARK_ := lang.NewSymbol("every?")
-	sym_ex_DASH_cause := lang.NewSymbol("ex-cause")
-	sym_ex_DASH_data := lang.NewSymbol("ex-data")
-	sym_ex_DASH_handler := lang.NewSymbol("ex-handler")
-	sym_ex_DASH_info := lang.NewSymbol("ex-info")
-	sym_ex_DASH_message := lang.NewSymbol("ex-message")
-	sym_extend := lang.NewSymbol("extend")
-	sym_extend_DASH_protocol := lang.NewSymbol("extend-protocol")
-	sym_extend_DASH_type := lang.NewSymbol("extend-type")
-	sym_f__1__auto__ := lang.NewSymbol("f__1__auto__")
-	sym_false_QMARK_ := lang.NewSymbol("false?")
-	sym_ffirst := lang.NewSymbol("ffirst")
-	sym_file_DASH_seq := lang.NewSymbol("file-seq")
-	sym_filter := lang.NewSymbol("filter")
-	sym_filterv := lang.NewSymbol("filterv")
-	sym_find := lang.NewSymbol("find")
-	sym_find_DASH_keyword := lang.NewSymbol("find-keyword")
-	sym_find_DASH_ns := lang.NewSymbol("find-ns")
-	sym_find_DASH_var := lang.NewSymbol("find-var")
-	sym_first := lang.NewSymbol("first")
-	sym_flatten := lang.NewSymbol("flatten")
-	sym_float := lang.NewSymbol("float")
-	sym_float_DASH_array := lang.NewSymbol("float-array")
-	sym_float_QMARK_ := lang.NewSymbol("float?")
-	sym_floats := lang.NewSymbol("floats")
-	sym_flush := lang.NewSymbol("flush")
-	sym_fn := lang.NewSymbol("fn")
-	sym_fn_QMARK_ := lang.NewSymbol("fn?")
-	sym_fnext := lang.NewSymbol("fnext")
-	sym_fnil := lang.NewSymbol("fnil")
-	sym_for := lang.NewSymbol("for")
-	sym_force := lang.NewSymbol("force")
-	sym_format := lang.NewSymbol("format")
-	sym_frequencies := lang.NewSymbol("frequencies")
-	sym_from := lang.NewSymbol("from")
-	sym_future := lang.NewSymbol("future")
-	sym_future_DASH_call := lang.NewSymbol("future-call")
-	sym_future_DASH_cancel := lang.NewSymbol("future-cancel")
-	sym_future_DASH_cancelled_QMARK_ := lang.NewSymbol("future-cancelled?")
-	sym_future_DASH_done_QMARK_ := lang.NewSymbol("future-done?")
-	sym_future_QMARK_ := lang.NewSymbol("future?")
-	sym_gen_DASH_class := lang.NewSymbol("gen-class")
-	sym_gensym := lang.NewSymbol("gensym")
-	sym_get := lang.NewSymbol("get")
-	sym_get_DASH_in := lang.NewSymbol("get-in")
-	sym_get_DASH_method := lang.NewSymbol("get-method")
-	sym_get_DASH_thread_DASH_bindings := lang.NewSymbol("get-thread-bindings")
-	sym_get_DASH_validator := lang.NewSymbol("get-validator")
-	sym_go := lang.NewSymbol("go")
-	sym_go_DASH_loop := lang.NewSymbol("go-loop")
-	sym_go_SLASH__LT__DASH_chan_DASH_of := lang.NewSymbol("go/<-chan-of")
-	sym_go_SLASH_any := lang.NewSymbol("go/any")
-	sym_go_SLASH_go := lang.NewSymbol("go/go")
-	sym_group_DASH_by := lang.NewSymbol("group-by")
-	sym_halt_DASH_when := lang.NewSymbol("halt-when")
-	sym_hash := lang.NewSymbol("hash")
-	sym_hash_DASH_map := lang.NewSymbol("hash-map")
-	sym_hash_DASH_ordered_DASH_coll := lang.NewSymbol("hash-ordered-coll")
-	sym_hash_DASH_set := lang.NewSymbol("hash-set")
-	sym_hash_DASH_unordered_DASH_coll := lang.NewSymbol("hash-unordered-coll")
-	sym_ident_QMARK_ := lang.NewSymbol("ident?")
-	sym_identical_QMARK_ := lang.NewSymbol("identical?")
-	sym_identity := lang.NewSymbol("identity")
-	sym_if_DASH_let := lang.NewSymbol("if-let")
-	sym_if_DASH_not := lang.NewSymbol("if-not")
-	sym_if_DASH_some := lang.NewSymbol("if-some")
-	sym_ifn_QMARK_ := lang.NewSymbol("ifn?")
-	sym_import := lang.NewSymbol("import")
-	sym_in_DASH_ns := lang.NewSymbol("in-ns")
-	sym_inc := lang.NewSymbol("inc")
-	sym_inc_TICK_ := lang.NewSymbol("inc'")
-	sym_indexed_QMARK_ := lang.NewSymbol("indexed?")
-	sym_infinite_QMARK_ := lang.NewSymbol("infinite?")
-	sym_inst_DASH_ms := lang.NewSymbol("inst-ms")
-	sym_inst_QMARK_ := lang.NewSymbol("inst?")
-	sym_instance_QMARK_ := lang.NewSymbol("instance?")
-	sym_int := lang.NewSymbol("int")
-	sym_int_DASH_array := lang.NewSymbol("int-array")
-	sym_int_QMARK_ := lang.NewSymbol("int?")
-	sym_integer_QMARK_ := lang.NewSymbol("integer?")
-	sym_interleave := lang.NewSymbol("interleave")
-	sym_intern := lang.NewSymbol("intern")
-	sym_interpose := lang.NewSymbol("interpose")
-	sym_into := lang.NewSymbol("into")
-	sym_into_DASH_array := lang.NewSymbol("into-array")
-	sym_ints := lang.NewSymbol("ints")
-	sym_io_BANG_ := lang.NewSymbol("io!")
-	sym_isa_QMARK_ := lang.NewSymbol("isa?")
-	sym_iterate := lang.NewSymbol("iterate")
-	sym_iteration := lang.NewSymbol("iteration")
-	sym_iterator_DASH_seq := lang.NewSymbol("iterator-seq")
-	sym_juxt := lang.NewSymbol("juxt")
-	sym_keep := lang.NewSymbol("keep")
-	sym_keep_DASH_indexed := lang.NewSymbol("keep-indexed")
-	sym_key := lang.NewSymbol("key")
-	sym_keys := lang.NewSymbol("keys")
-	sym_keyword := lang.NewSymbol("keyword")
-	sym_keyword_QMARK_ := lang.NewSymbol("keyword?")
-	sym_last := lang.NewSymbol("last")
-	sym_lazy_DASH_cat := lang.NewSymbol("lazy-cat")
-	sym_lazy_DASH_seq := lang.NewSymbol("lazy-seq")
-	sym_let := lang.NewSymbol("let")
-	sym_letfn := lang.NewSymbol("letfn")
-	sym_line_DASH_seq := lang.NewSymbol("line-seq")
-	sym_list := lang.NewSymbol("list")
-	sym_list_STAR_ := lang.NewSymbol("list*")
-	sym_list_QMARK_ := lang.NewSymbol("list?")
-	sym_load := lang.NewSymbol("load")
-	sym_load_DASH_file := lang.NewSymbol("load-file")
-	sym_load_DASH_reader := lang.NewSymbol("load-reader")
-	sym_load_DASH_string := lang.NewSymbol("load-string")
-	sym_loaded_DASH_libs := lang.NewSymbol("loaded-libs")
-	sym_locking := lang.NewSymbol("locking")
-	sym_long := lang.NewSymbol("long")
-	sym_long_DASH_array := lang.NewSymbol("long-array")
-	sym_longs := lang.NewSymbol("longs")
-	sym_loop := lang.NewSymbol("loop")
-	sym_macroexpand := lang.NewSymbol("macroexpand")
-	sym_macroexpand_DASH_1 := lang.NewSymbol("macroexpand-1")
-	sym_make_DASH_array := lang.NewSymbol("make-array")
-	sym_make_DASH_hierarchy := lang.NewSymbol("make-hierarchy")
-	sym_map := lang.NewSymbol("map")
-	sym_map_DASH_entry_QMARK_ := lang.NewSymbol("map-entry?")
-	sym_map_DASH_indexed := lang.NewSymbol("map-indexed")
-	sym_map_QMARK_ := lang.NewSymbol("map?")
-	sym_mapcat := lang.NewSymbol("mapcat")
-	sym_mapv := lang.NewSymbol("mapv")
-	sym_max := lang.NewSymbol("max")
-	sym_max_DASH_key := lang.NewSymbol("max-key")
-	sym_memfn := lang.NewSymbol("memfn")
-	sym_memoize := lang.NewSymbol("memoize")
-	sym_merge := lang.NewSymbol("merge")
-	sym_merge_DASH_with := lang.NewSymbol("merge-with")
-	sym_meta := lang.NewSymbol("meta")
-	sym_methods := lang.NewSymbol("methods")
-	sym_min := lang.NewSymbol("min")
-	sym_min_DASH_key := lang.NewSymbol("min-key")
-	sym_mix_DASH_collection_DASH_hash := lang.NewSymbol("mix-collection-hash")
-	sym_mod := lang.NewSymbol("mod")
-	sym_msecs := lang.NewSymbol("msecs")
-	sym_name := lang.NewSymbol("name")
-	sym_namespace := lang.NewSymbol("namespace")
-	sym_nat_DASH_int_QMARK_ := lang.NewSymbol("nat-int?")
-	sym_neg_DASH_int_QMARK_ := lang.NewSymbol("neg-int?")
-	sym_neg_QMARK_ := lang.NewSymbol("neg?")
-	sym_newline := lang.NewSymbol("newline")
-	sym_next := lang.NewSymbol("next")
-	sym_nfirst := lang.NewSymbol("nfirst")
-	sym_nil_QMARK_ := lang.NewSymbol("nil?")
-	sym_nnext := lang.NewSymbol("nnext")
-	sym_not := lang.NewSymbol("not")
-	sym_not_DASH_any_QMARK_ := lang.NewSymbol("not-any?")
-	sym_not_DASH_empty := lang.NewSymbol("not-empty")
-	sym_not_DASH_every_QMARK_ := lang.NewSymbol("not-every?")
-	sym_not_EQ_ := lang.NewSymbol("not=")
-	sym_ns := lang.NewSymbol("ns")
-	sym_ns_DASH_aliases := lang.NewSymbol("ns-aliases")
-	sym_ns_DASH_imports := lang.NewSymbol("ns-imports")
-	sym_ns_DASH_interns := lang.NewSymbol("ns-interns")
-	sym_ns_DASH_map := lang.NewSymbol("ns-map")
-	sym_ns_DASH_name := lang.NewSymbol("ns-name")
-	sym_ns_DASH_publics := lang.NewSymbol("ns-publics")
-	sym_ns_DASH_refers := lang.NewSymbol("ns-refers")
-	sym_ns_DASH_resolve := lang.NewSymbol("ns-resolve")
-	sym_ns_DASH_unalias := lang.NewSymbol("ns-unalias")
-	sym_ns_DASH_unmap := lang.NewSymbol("ns-unmap")
-	sym_nth := lang.NewSymbol("nth")
-	sym_nthnext := lang.NewSymbol("nthnext")
-	sym_nthrest := lang.NewSymbol("nthrest")
-	sym_num := lang.NewSymbol("num")
-	sym_number_QMARK_ := lang.NewSymbol("number?")
-	sym_numerator := lang.NewSymbol("numerator")
-	sym_object_DASH_array := lang.NewSymbol("object-array")
-	sym_odd_QMARK_ := lang.NewSymbol("odd?")
-	sym_offer_BANG_ := lang.NewSymbol("offer!")
-	sym_opts := lang.NewSymbol("opts")
-	sym_or := lang.NewSymbol("or")
-	sym_parents := lang.NewSymbol("parents")
-	sym_parse_DASH_boolean := lang.NewSymbol("parse-boolean")
-	sym_parse_DASH_double := lang.NewSymbol("parse-double")
-	sym_parse_DASH_long := lang.NewSymbol("parse-long")
-	sym_parse_DASH_uuid := lang.NewSymbol("parse-uuid")
-	sym_partial := lang.NewSymbol("partial")
-	sym_partition := lang.NewSymbol("partition")
-	sym_partition_DASH_all := lang.NewSymbol("partition-all")
-	sym_partition_DASH_by := lang.NewSymbol("partition-by")
-	sym_partitionv := lang.NewSymbol("partitionv")
-	sym_partitionv_DASH_all := lang.NewSymbol("partitionv-all")
-	sym_pcalls := lang.NewSymbol("pcalls")
-	sym_peek := lang.NewSymbol("peek")
-	sym_persistent_BANG_ := lang.NewSymbol("persistent!")
-	sym_pipe := lang.NewSymbol("pipe")
-	sym_pmap := lang.NewSymbol("pmap")
-	sym_poll_BANG_ := lang.NewSymbol("poll!")
-	sym_pop := lang.NewSymbol("pop")
-	sym_pop_BANG_ := lang.NewSymbol("pop!")
-	sym_pop_DASH_thread_DASH_bindings := lang.NewSymbol("pop-thread-bindings")
-	sym_port := lang.NewSymbol("port")
-	sym_port_DASH_case := lang.NewSymbol("port-case")
-	sym_port_DASH_or_DASH_put := lang.NewSymbol("port-or-put")
-	sym_ports := lang.NewSymbol("ports")
-	sym_pos_DASH_int_QMARK_ := lang.NewSymbol("pos-int?")
-	sym_pos_QMARK_ := lang.NewSymbol("pos?")
-	sym_pr := lang.NewSymbol("pr")
-	sym_pr_DASH_str := lang.NewSymbol("pr-str")
-	sym_prefer_DASH_method := lang.NewSymbol("prefer-method")
-	sym_prefers := lang.NewSymbol("prefers")
-	sym_print := lang.NewSymbol("print")
-	sym_print_DASH_ctor := lang.NewSymbol("print-ctor")
-	sym_print_DASH_dup := lang.NewSymbol("print-dup")
-	sym_print_DASH_method := lang.NewSymbol("print-method")
-	sym_print_DASH_simple := lang.NewSymbol("print-simple")
-	sym_print_DASH_str := lang.NewSymbol("print-str")
-	sym_printf := lang.NewSymbol("printf")
-	sym_println := lang.NewSymbol("println")
-	sym_println_DASH_str := lang.NewSymbol("println-str")
-	sym_prn := lang.NewSymbol("prn")
-	sym_prn_DASH_str := lang.NewSymbol("prn-str")
-	sym_promise := lang.NewSymbol("promise")
-	sym_push_DASH_thread_DASH_bindings := lang.NewSymbol("push-thread-bindings")
-	sym_pvalues := lang.NewSymbol("pvalues")
-	sym_qualified_DASH_ident_QMARK_ := lang.NewSymbol("qualified-ident?")
-	sym_qualified_DASH_keyword_QMARK_ := lang.NewSymbol("qualified-keyword?")
-	sym_qualified_DASH_symbol_QMARK_ := lang.NewSymbol("qualified-symbol?")
-	sym_quot := lang.NewSymbol("quot")
-	sym_rand := lang.NewSymbol("rand")
-	sym_rand_DASH_int := lang.NewSymbol("rand-int")
-	sym_rand_DASH_nth := lang.NewSymbol("rand-nth")
-	sym_random_DASH_sample := lang.NewSymbol("random-sample")
-	sym_random_DASH_uuid := lang.NewSymbol("random-uuid")
-	sym_range := lang.NewSymbol("range")
-	sym_ratio_QMARK_ := lang.NewSymbol("ratio?")
-	sym_rational_QMARK_ := lang.NewSymbol("rational?")
-	sym_rationalize := lang.NewSymbol("rationalize")
-	sym_re_DASH_find := lang.NewSymbol("re-find")
-	sym_re_DASH_groups := lang.NewSymbol("re-groups")
-	sym_re_DASH_matcher := lang.NewSymbol("re-matcher")
-	sym_re_DASH_matches := lang.NewSymbol("re-matches")
-	sym_re_DASH_pattern := lang.NewSymbol("re-pattern")
-	sym_re_DASH_seq := lang.NewSymbol("re-seq")
-	sym_read := lang.NewSymbol("read")
-	sym_read_PLUS_string := lang.NewSymbol("read+string")
-	sym_read_DASH_line := lang.NewSymbol("read-line")
-	sym_read_DASH_string := lang.NewSymbol("read-string")
-	sym_reader_DASH_conditional := lang.NewSymbol("reader-conditional")
-	sym_reader_DASH_conditional_QMARK_ := lang.NewSymbol("reader-conditional?")
-	sym_realized_QMARK_ := lang.NewSymbol("realized?")
-	sym_reduce := lang.NewSymbol("reduce")
-	sym_reduce_DASH_kv := lang.NewSymbol("reduce-kv")
-	sym_reduced := lang.NewSymbol("reduced")
-	sym_reduced_QMARK_ := lang.NewSymbol("reduced?")
-	sym_reductions := lang.NewSymbol("reductions")
-	sym_ref := lang.NewSymbol("ref")
-	sym_ref_DASH_history_DASH_count := lang.NewSymbol("ref-history-count")
-	sym_ref_DASH_max_DASH_history := lang.NewSymbol("ref-max-history")
-	sym_ref_DASH_min_DASH_history := lang.NewSymbol("ref-min-history")
-	sym_ref_DASH_set := lang.NewSymbol("ref-set")
-	sym_refer := lang.NewSymbol("refer")
-	sym_refer_DASH_clojure := lang.NewSymbol("refer-clojure")
-	sym_release_DASH_pending_DASH_sends := lang.NewSymbol("release-pending-sends")
-	sym_rem := lang.NewSymbol("rem")
-	sym_remove := lang.NewSymbol("remove")
-	sym_remove_DASH_all_DASH_methods := lang.NewSymbol("remove-all-methods")
-	sym_remove_DASH_method := lang.NewSymbol("remove-method")
-	sym_remove_DASH_ns := lang.NewSymbol("remove-ns")
-	sym_remove_DASH_tap := lang.NewSymbol("remove-tap")
-	sym_remove_DASH_watch := lang.NewSymbol("remove-watch")
-	sym_repeat := lang.NewSymbol("repeat")
-	sym_repeatedly := lang.NewSymbol("repeatedly")
-	sym_replace := lang.NewSymbol("replace")
-	sym_replicate := lang.NewSymbol("replicate")
-	sym_require := lang.NewSymbol("require")
-	sym_requiring_DASH_resolve := lang.NewSymbol("requiring-resolve")
-	sym_res__2__auto__ := lang.NewSymbol("res__2__auto__")
-	sym_reset_BANG_ := lang.NewSymbol("reset!")
-	sym_reset_DASH_meta_BANG_ := lang.NewSymbol("reset-meta!")
-	sym_reset_DASH_vals_BANG_ := lang.NewSymbol("reset-vals!")
-	sym_resolve := lang.NewSymbol("resolve")
-	sym_rest := lang.NewSymbol("rest")
-	sym_restart_DASH_agent := lang.NewSymbol("restart-agent")
-	sym_resultset_DASH_seq := lang.NewSymbol("resultset-seq")
-	sym_reverse := lang.NewSymbol("reverse")
-	sym_reversible_QMARK_ := lang.NewSymbol("reversible?")
-	sym_rseq := lang.NewSymbol("rseq")
-	sym_rsubseq := lang.NewSymbol("rsubseq")
-	sym_run_BANG_ := lang.NewSymbol("run!")
-	sym_second := lang.NewSymbol("second")
-	sym_select_DASH_keys := lang.NewSymbol("select-keys")
-	sym_send := lang.NewSymbol("send")
-	sym_send_DASH_off := lang.NewSymbol("send-off")
-	sym_send_DASH_via := lang.NewSymbol("send-via")
-	sym_seq := lang.NewSymbol("seq")
-	sym_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring := lang.NewSymbol("seq-to-map-for-destructuring")
-	sym_seq_QMARK_ := lang.NewSymbol("seq?")
-	sym_seqable_QMARK_ := lang.NewSymbol("seqable?")
-	sym_seque := lang.NewSymbol("seque")
-	sym_sequence := lang.NewSymbol("sequence")
-	sym_sequential_QMARK_ := lang.NewSymbol("sequential?")
-	sym_set := lang.NewSymbol("set")
-	sym_set_DASH_agent_DASH_send_DASH_executor_BANG_ := lang.NewSymbol("set-agent-send-executor!")
-	sym_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_ := lang.NewSymbol("set-agent-send-off-executor!")
-	sym_set_DASH_error_DASH_handler_BANG_ := lang.NewSymbol("set-error-handler!")
-	sym_set_DASH_error_DASH_mode_BANG_ := lang.NewSymbol("set-error-mode!")
-	sym_set_DASH_validator_BANG_ := lang.NewSymbol("set-validator!")
-	sym_set_QMARK_ := lang.NewSymbol("set?")
-	sym_short := lang.NewSymbol("short")
-	sym_short_DASH_array := lang.NewSymbol("short-array")
-	sym_shorts := lang.NewSymbol("shorts")
-	sym_shuffle := lang.NewSymbol("shuffle")
-	sym_shutdown_DASH_agents := lang.NewSymbol("shutdown-agents")
-	sym_simple_DASH_ident_QMARK_ := lang.NewSymbol("simple-ident?")
-	sym_simple_DASH_keyword_QMARK_ := lang.NewSymbol("simple-keyword?")
-	sym_simple_DASH_symbol_QMARK_ := lang.NewSymbol("simple-symbol?")
-	sym_slurp := lang.NewSymbol("slurp")
-	sym_some := lang.NewSymbol("some")
-	sym_some_DASH__GT_ := lang.NewSymbol("some->")
-	sym_some_DASH__GT__GT_ := lang.NewSymbol("some->>")
-	sym_some_DASH_fn := lang.NewSymbol("some-fn")
-	sym_some_QMARK_ := lang.NewSymbol("some?")
-	sym_sort := lang.NewSymbol("sort")
-	sym_sort_DASH_by := lang.NewSymbol("sort-by")
-	sym_sorted_DASH_map := lang.NewSymbol("sorted-map")
-	sym_sorted_DASH_map_DASH_by := lang.NewSymbol("sorted-map-by")
-	sym_sorted_DASH_set := lang.NewSymbol("sorted-set")
-	sym_sorted_DASH_set_DASH_by := lang.NewSymbol("sorted-set-by")
-	sym_sorted_QMARK_ := lang.NewSymbol("sorted?")
-	sym_special_DASH_symbol_QMARK_ := lang.NewSymbol("special-symbol?")
-	sym_spit := lang.NewSymbol("spit")
-	sym_split_DASH_at := lang.NewSymbol("split-at")
-	sym_split_DASH_with := lang.NewSymbol("split-with")
-	sym_splitv_DASH_at := lang.NewSymbol("splitv-at")
-	sym_str := lang.NewSymbol("str")
-	sym_stream_DASH_into_BANG_ := lang.NewSymbol("stream-into!")
-	sym_stream_DASH_reduce_BANG_ := lang.NewSymbol("stream-reduce!")
-	sym_stream_DASH_seq_BANG_ := lang.NewSymbol("stream-seq!")
-	sym_stream_DASH_transduce_BANG_ := lang.NewSymbol("stream-transduce!")
-	sym_string_QMARK_ := lang.NewSymbol("string?")
-	sym_struct := lang.NewSymbol("struct")
-	sym_struct_DASH_map := lang.NewSymbol("struct-map")
-	sym_subs := lang.NewSymbol("subs")
-	sym_subseq := lang.NewSymbol("subseq")
-	sym_subvec := lang.NewSymbol("subvec")
-	sym_supers := lang.NewSymbol("supers")
-	sym_swap_BANG_ := lang.NewSymbol("swap!")
-	sym_swap_DASH_vals_BANG_ := lang.NewSymbol("swap-vals!")
-	sym_symbol := lang.NewSymbol("symbol")
-	sym_symbol_QMARK_ := lang.NewSymbol("symbol?")
-	sym_sync := lang.NewSymbol("sync")
-	sym_tagged_DASH_literal := lang.NewSymbol("tagged-literal")
-	sym_tagged_DASH_literal_QMARK_ := lang.NewSymbol("tagged-literal?")
-	sym_take := lang.NewSymbol("take")
-	sym_take_DASH_last := lang.NewSymbol("take-last")
-	sym_take_DASH_nth := lang.NewSymbol("take-nth")
-	sym_take_DASH_while := lang.NewSymbol("take-while")
-	sym_test := lang.NewSymbol("test")
-	sym_the_DASH_ns := lang.NewSymbol("the-ns")
-	sym_thread_DASH_bound_QMARK_ := lang.NewSymbol("thread-bound?")
-	sym_time := lang.NewSymbol("time")
-	sym_timeout := lang.NewSymbol("timeout")
-	sym_to := lang.NewSymbol("to")
-	sym_to_DASH_array := lang.NewSymbol("to-array")
-	sym_to_DASH_array_DASH_2d := lang.NewSymbol("to-array-2d")
-	sym_trampoline := lang.NewSymbol("trampoline")
-	sym_transduce := lang.NewSymbol("transduce")
-	sym_transient := lang.NewSymbol("transient")
-	sym_tree_DASH_seq := lang.NewSymbol("tree-seq")
-	sym_true_QMARK_ := lang.NewSymbol("true?")
-	sym_try_DASH_put := lang.NewSymbol("try-put")
-	sym_try_DASH_take := lang.NewSymbol("try-take")
-	sym_type := lang.NewSymbol("type")
-	sym_unchecked_DASH_add := lang.NewSymbol("unchecked-add")
-	sym_unchecked_DASH_add_DASH_int := lang.NewSymbol("unchecked-add-int")
-	sym_unchecked_DASH_byte := lang.NewSymbol("unchecked-byte")
-	sym_unchecked_DASH_char := lang.NewSymbol("unchecked-char")
-	sym_unchecked_DASH_dec := lang.NewSymbol("unchecked-dec")
-	sym_unchecked_DASH_dec_DASH_int := lang.NewSymbol("unchecked-dec-int")
-	sym_unchecked_DASH_divide_DASH_int := lang.NewSymbol("unchecked-divide-int")
-	sym_unchecked_DASH_double := lang.NewSymbol("unchecked-double")
-	sym_unchecked_DASH_float := lang.NewSymbol("unchecked-float")
-	sym_unchecked_DASH_inc := lang.NewSymbol("unchecked-inc")
-	sym_unchecked_DASH_inc_DASH_int := lang.NewSymbol("unchecked-inc-int")
-	sym_unchecked_DASH_int := lang.NewSymbol("unchecked-int")
-	sym_unchecked_DASH_long := lang.NewSymbol("unchecked-long")
-	sym_unchecked_DASH_multiply := lang.NewSymbol("unchecked-multiply")
-	sym_unchecked_DASH_multiply_DASH_int := lang.NewSymbol("unchecked-multiply-int")
-	sym_unchecked_DASH_negate := lang.NewSymbol("unchecked-negate")
-	sym_unchecked_DASH_negate_DASH_int := lang.NewSymbol("unchecked-negate-int")
-	sym_unchecked_DASH_remainder_DASH_int := lang.NewSymbol("unchecked-remainder-int")
-	sym_unchecked_DASH_short := lang.NewSymbol("unchecked-short")
-	sym_unchecked_DASH_subtract := lang.NewSymbol("unchecked-subtract")
-	sym_unchecked_DASH_subtract_DASH_int := lang.NewSymbol("unchecked-subtract-int")
-	sym_underive := lang.NewSymbol("underive")
-	sym_unquote := lang.NewSymbol("unquote")
-	sym_unquote_DASH_splicing := lang.NewSymbol("unquote-splicing")
-	sym_unreduced := lang.NewSymbol("unreduced")
-	sym_unsigned_DASH_bit_DASH_shift_DASH_right := lang.NewSymbol("unsigned-bit-shift-right")
-	sym_update := lang.NewSymbol("update")
-	sym_update_DASH_in := lang.NewSymbol("update-in")
-	sym_update_DASH_keys := lang.NewSymbol("update-keys")
-	sym_update_DASH_vals := lang.NewSymbol("update-vals")
-	sym_uri_QMARK_ := lang.NewSymbol("uri?")
-	sym_use := lang.NewSymbol("use")
-	sym_uuid_QMARK_ := lang.NewSymbol("uuid?")
-	sym_val := lang.NewSymbol("val")
-	sym_val__0__auto__ := lang.NewSymbol("val__0__auto__")
-	sym_vals := lang.NewSymbol("vals")
-	sym_var_DASH_get := lang.NewSymbol("var-get")
-	sym_var_DASH_set := lang.NewSymbol("var-set")
-	sym_var_QMARK_ := lang.NewSymbol("var?")
-	sym_vary_DASH_meta := lang.NewSymbol("vary-meta")
-	sym_vec := lang.NewSymbol("vec")
-	sym_vector := lang.NewSymbol("vector")
-	sym_vector_QMARK_ := lang.NewSymbol("vector?")
-	sym_volatile_BANG_ := lang.NewSymbol("volatile!")
-	sym_volatile_QMARK_ := lang.NewSymbol("volatile?")
-	sym_vreset_BANG_ := lang.NewSymbol("vreset!")
-	sym_vswap_BANG_ := lang.NewSymbol("vswap!")
-	sym_when := lang.NewSymbol("when")
-	sym_when_DASH_first := lang.NewSymbol("when-first")
-	sym_when_DASH_let := lang.NewSymbol("when-let")
-	sym_when_DASH_not := lang.NewSymbol("when-not")
-	sym_when_DASH_some := lang.NewSymbol("when-some")
-	sym_while := lang.NewSymbol("while")
-	sym_with_DASH_bindings := lang.NewSymbol("with-bindings")
-	sym_with_DASH_bindings_STAR_ := lang.NewSymbol("with-bindings*")
-	sym_with_DASH_in_DASH_str := lang.NewSymbol("with-in-str")
-	sym_with_DASH_loading_DASH_context := lang.NewSymbol("with-loading-context")
-	sym_with_DASH_local_DASH_vars := lang.NewSymbol("with-local-vars")
-	sym_with_DASH_meta := lang.NewSymbol("with-meta")
-	sym_with_DASH_open := lang.NewSymbol("with-open")
-	sym_with_DASH_out_DASH_str := lang.NewSymbol("with-out-str")
-	sym_with_DASH_precision := lang.NewSymbol("with-precision")
-	sym_with_DASH_redefs := lang.NewSymbol("with-redefs")
-	sym_with_DASH_redefs_DASH_fn := lang.NewSymbol("with-redefs-fn")
-	sym_xform := lang.NewSymbol("xform")
-	sym_xml_DASH_seq := lang.NewSymbol("xml-seq")
-	sym_zero_QMARK_ := lang.NewSymbol("zero?")
-	sym_zipmap := lang.NewSymbol("zipmap")
+	sym__AMP_ := lang.NewSymbolUnchecked("&")
+	sym__LT__BANG_ := lang.NewSymbolUnchecked("<!")
+	sym__LT__BANG__BANG_ := lang.NewSymbolUnchecked("<!!")
+	sym__EQ_ := lang.NewSymbolUnchecked("=")
+	sym__GT__BANG_ := lang.NewSymbolUnchecked(">!")
+	sym__GT__BANG__BANG_ := lang.NewSymbolUnchecked(">!!")
+	sym_alt_BANG_ := lang.NewSymbolUnchecked("alt!")
+	sym_alt_BANG__BANG_ := lang.NewSymbolUnchecked("alt!!")
+	sym_alts := lang.NewSymbolUnchecked("alts")
+	sym_alts_BANG_ := lang.NewSymbolUnchecked("alts!")
+	sym_alts_BANG__BANG_ := lang.NewSymbolUnchecked("alts!!")
+	sym_apply := lang.NewSymbolUnchecked("apply")
+	sym_args := lang.NewSymbolUnchecked("args")
+	sym_bindings := lang.NewSymbolUnchecked("bindings")
+	sym_body := lang.NewSymbolUnchecked("body")
+	sym_buf_DASH_or_DASH_n := lang.NewSymbolUnchecked("buf-or-n")
+	sym_c__0__auto__ := lang.NewSymbolUnchecked("c__0__auto__")
+	sym_chan := lang.NewSymbolUnchecked("chan")
+	sym_check_DASH_unique_DASH_ports_BANG_ := lang.NewSymbolUnchecked("check-unique-ports!")
+	sym_clauses := lang.NewSymbolUnchecked("clauses")
+	sym_clojure_DOT_core := lang.NewSymbolUnchecked("clojure.core")
+	sym_clojure_DOT_core_DOT_async := lang.NewSymbolUnchecked("clojure.core.async")
+	sym_clojure_DOT_core_DOT_async_SLASH__GT__BANG_ := lang.NewSymbolUnchecked("clojure.core.async/>!")
+	sym_clojure_DOT_core_DOT_async_SLASH_alt_BANG_ := lang.NewSymbolUnchecked("clojure.core.async/alt!")
+	sym_clojure_DOT_core_DOT_async_SLASH_alts_BANG_ := lang.NewSymbolUnchecked("clojure.core.async/alts!")
+	sym_clojure_DOT_core_DOT_async_SLASH_chan := lang.NewSymbolUnchecked("clojure.core.async/chan")
+	sym_clojure_DOT_core_DOT_async_SLASH_go := lang.NewSymbolUnchecked("clojure.core.async/go")
+	sym_clojure_DOT_core_SLASH__EQ_ := lang.NewSymbolUnchecked("clojure.core/=")
+	sym_clojure_DOT_core_SLASH_cond := lang.NewSymbolUnchecked("clojure.core/cond")
+	sym_clojure_DOT_core_SLASH_fn := lang.NewSymbolUnchecked("clojure.core/fn")
+	sym_clojure_DOT_core_SLASH_let := lang.NewSymbolUnchecked("clojure.core/let")
+	sym_clojure_DOT_core_SLASH_loop := lang.NewSymbolUnchecked("clojure.core/loop")
+	sym_clojure_DOT_core_SLASH_or := lang.NewSymbolUnchecked("clojure.core/or")
+	sym_close_BANG_ := lang.NewSymbolUnchecked("close!")
+	sym_close_QMARK_ := lang.NewSymbolUnchecked("close?")
+	sym_concat := lang.NewSymbolUnchecked("concat")
+	sym_conj := lang.NewSymbolUnchecked("conj")
+	sym_contains_QMARK_ := lang.NewSymbolUnchecked("contains?")
+	sym_core := lang.NewSymbolUnchecked("core")
+	sym_count := lang.NewSymbolUnchecked("count")
+	sym_default_DASH_case := lang.NewSymbolUnchecked("default-case")
+	sym_do := lang.NewSymbolUnchecked("do")
+	sym_do_DASH_alt := lang.NewSymbolUnchecked("do-alt")
+	sym_do_DASH_alts := lang.NewSymbolUnchecked("do-alts")
+	sym_ex_DASH_handler := lang.NewSymbolUnchecked("ex-handler")
+	sym_f__1__auto__ := lang.NewSymbolUnchecked("f__1__auto__")
+	sym_filter := lang.NewSymbolUnchecked("filter")
+	sym_first := lang.NewSymbolUnchecked("first")
+	sym_from := lang.NewSymbolUnchecked("from")
+	sym_gensym := lang.NewSymbolUnchecked("gensym")
+	sym_go := lang.NewSymbolUnchecked("go")
+	sym_go_DASH_loop := lang.NewSymbolUnchecked("go-loop")
+	sym_go_SLASH__LT__DASH_chan_DASH_of := lang.NewSymbolUnchecked("go/<-chan-of")
+	sym_go_SLASH_any := lang.NewSymbolUnchecked("go/any")
+	sym_go_SLASH_go := lang.NewSymbolUnchecked("go/go")
+	sym_identity := lang.NewSymbolUnchecked("identity")
+	sym_keyword_QMARK_ := lang.NewSymbolUnchecked("keyword?")
+	sym_list := lang.NewSymbolUnchecked("list")
+	sym_map := lang.NewSymbolUnchecked("map")
+	sym_mapcat := lang.NewSymbolUnchecked("mapcat")
+	sym_msecs := lang.NewSymbolUnchecked("msecs")
+	sym_next := lang.NewSymbolUnchecked("next")
+	sym_not_EQ_ := lang.NewSymbolUnchecked("not=")
+	sym_nth := lang.NewSymbolUnchecked("nth")
+	sym_offer_BANG_ := lang.NewSymbolUnchecked("offer!")
+	sym_opts := lang.NewSymbolUnchecked("opts")
+	sym_partition := lang.NewSymbolUnchecked("partition")
+	sym_pipe := lang.NewSymbolUnchecked("pipe")
+	sym_poll_BANG_ := lang.NewSymbolUnchecked("poll!")
+	sym_port := lang.NewSymbolUnchecked("port")
+	sym_port_DASH_case := lang.NewSymbolUnchecked("port-case")
+	sym_port_DASH_or_DASH_put := lang.NewSymbolUnchecked("port-or-put")
+	sym_ports := lang.NewSymbolUnchecked("ports")
+	sym_reduce := lang.NewSymbolUnchecked("reduce")
+	sym_remove := lang.NewSymbolUnchecked("remove")
+	sym_res__2__auto__ := lang.NewSymbolUnchecked("res__2__auto__")
+	sym_rest := lang.NewSymbolUnchecked("rest")
+	sym_seq := lang.NewSymbolUnchecked("seq")
+	sym_seq_QMARK_ := lang.NewSymbolUnchecked("seq?")
+	sym_set := lang.NewSymbolUnchecked("set")
+	sym_timeout := lang.NewSymbolUnchecked("timeout")
+	sym_to := lang.NewSymbolUnchecked("to")
+	sym_to_DASH_array := lang.NewSymbolUnchecked("to-array")
+	sym_try_DASH_put := lang.NewSymbolUnchecked("try-put")
+	sym_try_DASH_take := lang.NewSymbolUnchecked("try-take")
+	sym_val := lang.NewSymbolUnchecked("val")
+	sym_val__0__auto__ := lang.NewSymbolUnchecked("val__0__auto__")
+	sym_vec := lang.NewSymbolUnchecked("vec")
+	sym_vector := lang.NewSymbolUnchecked("vector")
+	sym_vector_QMARK_ := lang.NewSymbolUnchecked("vector?")
+	sym_xform := lang.NewSymbolUnchecked("xform")
 	kw_arglists := lang.NewKeyword("arglists")
 	kw_as := lang.NewKeyword("as")
 	kw_column := lang.NewKeyword("column")
 	kw_default := lang.NewKeyword("default")
 	kw_doc := lang.NewKeyword("doc")
-	kw_else := lang.NewKeyword("else")
 	kw_end_DASH_column := lang.NewKeyword("end-column")
 	kw_end_DASH_line := lang.NewKeyword("end-line")
 	kw_file := lang.NewKeyword("file")
@@ -744,7 +170,6 @@ func LoadNS() {
 	kw_ns := lang.NewKeyword("ns")
 	kw_priority := lang.NewKeyword("priority")
 	kw_private := lang.NewKeyword("private")
-	kw_rettag := lang.NewKeyword("rettag")
 	// var clojure.core.async/>!
 	var_clojure_DOT_core_DOT_async__GT__BANG_ := lang.InternVarName(sym_clojure_DOT_core_DOT_async, sym__GT__BANG_)
 	// var clojure.core.async/>!!
@@ -793,8 +218,6 @@ func LoadNS() {
 	var_clojure_DOT_core_DOT_async_try_DASH_take := lang.InternVarName(sym_clojure_DOT_core_DOT_async, sym_try_DASH_take)
 	// var clojure.core/=
 	var_clojure_DOT_core__EQ_ := lang.InternVarName(sym_clojure_DOT_core, sym__EQ_)
-	// var clojure.core/*
-	var_clojure_DOT_core__STAR_ := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_)
 	// var clojure.core/apply
 	var_clojure_DOT_core_apply := lang.InternVarName(sym_clojure_DOT_core, sym_apply)
 	// var clojure.core/concat
@@ -811,8 +234,6 @@ func LoadNS() {
 	var_clojure_DOT_core_first := lang.InternVarName(sym_clojure_DOT_core, sym_first)
 	// var clojure.core/gensym
 	var_clojure_DOT_core_gensym := lang.InternVarName(sym_clojure_DOT_core, sym_gensym)
-	// var clojure.core/get
-	var_clojure_DOT_core_get := lang.InternVarName(sym_clojure_DOT_core, sym_get)
 	// var clojure.core/identity
 	var_clojure_DOT_core_identity := lang.InternVarName(sym_clojure_DOT_core, sym_identity)
 	// var clojure.core/keyword?
@@ -825,8 +246,6 @@ func LoadNS() {
 	var_clojure_DOT_core_mapcat := lang.InternVarName(sym_clojure_DOT_core, sym_mapcat)
 	// var clojure.core/next
 	var_clojure_DOT_core_next := lang.InternVarName(sym_clojure_DOT_core, sym_next)
-	// var clojure.core/nil?
-	var_clojure_DOT_core_nil_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_nil_QMARK_)
 	// var clojure.core/not=
 	var_clojure_DOT_core_not_EQ_ := lang.InternVarName(sym_clojure_DOT_core, sym_not_EQ_)
 	// var clojure.core/nth
@@ -859,4441 +278,83 @@ func LoadNS() {
 	_ = reflect.TypeOf
 	ns := lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async)
 	_ = ns
-	{ // refer clojure.core/with-open as with-open
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_with_DASH_open)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_with_DASH_open, vr)
-		}
-	}
-	{ // refer clojure.core/ns as ns
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ns)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ns, vr)
-		}
-	}
-	{ // refer clojure.core/peek as peek
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_peek)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_peek, vr)
-		}
-	}
-	{ // refer clojure.core/butlast as butlast
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_butlast)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_butlast, vr)
-		}
-	}
-	{ // refer clojure.core/find as find
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_find)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_find, vr)
-		}
-	}
-	{ // refer clojure.core/= as =
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__EQ_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__EQ_, vr)
-		}
-	}
-	{ // refer clojure.core/rand-int as rand-int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_rand_DASH_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_rand_DASH_int, vr)
-		}
-	}
-	{ // refer clojure.core/fnext as fnext
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_fnext)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_fnext, vr)
-		}
-	}
-	{ // refer clojure.core/error-handler as error-handler
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_error_DASH_handler)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_error_DASH_handler, vr)
-		}
-	}
-	{ // refer clojure.core/zero? as zero?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_zero_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_zero_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/use as use
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_use)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_use, vr)
-		}
-	}
-	{ // refer clojure.core/amap as amap
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_amap)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_amap, vr)
-		}
-	}
-	{ // refer clojure.core/ns-unalias as ns-unalias
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ns_DASH_unalias)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ns_DASH_unalias, vr)
-		}
-	}
-	{ // refer clojure.core/chunked-seq? as chunked-seq?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_chunked_DASH_seq_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_chunked_DASH_seq_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/some-fn as some-fn
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_some_DASH_fn)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_some_DASH_fn, vr)
-		}
-	}
-	{ // refer clojure.core/parse-double as parse-double
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_parse_DASH_double)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_parse_DASH_double, vr)
-		}
-	}
-	{ // refer clojure.core/short as short
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_short)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_short, vr)
-		}
-	}
-	{ // refer clojure.core/disj as disj
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_disj)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_disj, vr)
-		}
-	}
-	{ // refer clojure.core/map as map
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_map)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_map, vr)
-		}
-	}
-	{ // refer clojure.core/chunk-first as chunk-first
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_chunk_DASH_first)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_chunk_DASH_first, vr)
-		}
-	}
-	{ // refer clojure.core/NaN? as NaN?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_NaN_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_NaN_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/partitionv-all as partitionv-all
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_partitionv_DASH_all)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_partitionv_DASH_all, vr)
-		}
-	}
-	{ // refer clojure.core/error-mode as error-mode
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_error_DASH_mode)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_error_DASH_mode, vr)
-		}
-	}
-	{ // refer clojure.core/bigdec as bigdec
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bigdec)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bigdec, vr)
-		}
-	}
-	{ // refer clojure.core/transient as transient
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_transient)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_transient, vr)
-		}
-	}
-	{ // refer clojure.core/StackTraceElement->vec as StackTraceElement->vec
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_StackTraceElement_DASH__GT_vec)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_StackTraceElement_DASH__GT_vec, vr)
-		}
-	}
-	{ // refer clojure.core/conj as conj
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_conj)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_conj, vr)
-		}
-	}
-	{ // refer clojure.core/remove-watch as remove-watch
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_remove_DASH_watch)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_remove_DASH_watch, vr)
-		}
-	}
-	{ // refer clojure.core/ensure as ensure
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ensure)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ensure, vr)
-		}
-	}
-	{ // refer clojure.core/+' as +'
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__PLUS__TICK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__PLUS__TICK_, vr)
-		}
-	}
-	{ // refer clojure.core/await as await
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_await)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_await, vr)
-		}
-	}
-	{ // refer clojure.core/array-map as array-map
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_array_DASH_map)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_array_DASH_map, vr)
-		}
-	}
-	{ // refer clojure.core/long as long
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_long)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_long, vr)
-		}
-	}
-	{ // refer clojure.core/filter as filter
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_filter)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_filter, vr)
-		}
-	}
-	{ // refer clojure.core/sorted-set-by as sorted-set-by
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_sorted_DASH_set_DASH_by)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_sorted_DASH_set_DASH_by, vr)
-		}
-	}
-	{ // refer clojure.core/ns-resolve as ns-resolve
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ns_DASH_resolve)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ns_DASH_resolve, vr)
-		}
-	}
-	{ // refer clojure.core/add-watch as add-watch
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_add_DASH_watch)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_add_DASH_watch, vr)
-		}
-	}
-	{ // refer clojure.core/conj! as conj!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_conj_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_conj_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/re-matches as re-matches
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_re_DASH_matches)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_re_DASH_matches, vr)
-		}
-	}
-	{ // refer clojure.core/aset-int as aset-int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_aset_DASH_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_aset_DASH_int, vr)
-		}
-	}
-	{ // refer clojure.core/read-line as read-line
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_read_DASH_line)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_read_DASH_line, vr)
-		}
-	}
-	{ // refer clojure.core/with-bindings* as with-bindings*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_with_DASH_bindings_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_with_DASH_bindings_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/memfn as memfn
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_memfn)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_memfn, vr)
-		}
-	}
-	{ // refer clojure.core/inst? as inst?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_inst_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_inst_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/*e as *e
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_e)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_e, vr)
-		}
-	}
-	{ // refer clojure.core/set? as set?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_set_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_set_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/simple-keyword? as simple-keyword?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_simple_DASH_keyword_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_simple_DASH_keyword_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/dotimes as dotimes
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_dotimes)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_dotimes, vr)
-		}
-	}
-	{ // refer clojure.core/aset as aset
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_aset)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_aset, vr)
-		}
-	}
-	{ // refer clojure.core/*default-data-reader-fn* as *default-data-reader-fn*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_default_DASH_data_DASH_reader_DASH_fn_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/*in* as *in*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_in_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_in_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/disj! as disj!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_disj_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_disj_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/all-ns as all-ns
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_all_DASH_ns)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_all_DASH_ns, vr)
-		}
-	}
-	{ // refer clojure.core/not as not
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_not)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_not, vr)
-		}
-	}
-	{ // refer clojure.core/biginteger as biginteger
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_biginteger)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_biginteger, vr)
-		}
-	}
-	{ // refer clojure.core/uuid? as uuid?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_uuid_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_uuid_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/.. as ..
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__DOT__DOT_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__DOT__DOT_, vr)
-		}
-	}
-	{ // refer clojure.core/not-every? as not-every?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_not_DASH_every_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_not_DASH_every_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/remove as remove
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_remove)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_remove, vr)
-		}
-	}
-	{ // refer clojure.core/rem as rem
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_rem)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_rem, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-int as unchecked-int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_int, vr)
-		}
-	}
-	{ // refer clojure.core/print-ctor as print-ctor
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_print_DASH_ctor)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_print_DASH_ctor, vr)
-		}
-	}
-	{ // refer clojure.core/ex-info as ex-info
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ex_DASH_info)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ex_DASH_info, vr)
-		}
-	}
-	{ // refer clojure.core/aset-boolean as aset-boolean
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_aset_DASH_boolean)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_aset_DASH_boolean, vr)
-		}
-	}
-	{ // refer clojure.core/get-thread-bindings as get-thread-bindings
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_get_DASH_thread_DASH_bindings)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_get_DASH_thread_DASH_bindings, vr)
-		}
-	}
-	{ // refer clojure.core/re-groups as re-groups
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_re_DASH_groups)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_re_DASH_groups, vr)
-		}
-	}
-	{ // refer clojure.core/await-for as await-for
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_await_DASH_for)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_await_DASH_for, vr)
-		}
-	}
-	{ // refer clojure.core/mix-collection-hash as mix-collection-hash
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_mix_DASH_collection_DASH_hash)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_mix_DASH_collection_DASH_hash, vr)
-		}
-	}
-	{ // refer clojure.core/distinct as distinct
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_distinct)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_distinct, vr)
-		}
-	}
-	{ // refer clojure.core/seq-to-map-for-destructuring as seq-to-map-for-destructuring
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_seq_DASH_to_DASH_map_DASH_for_DASH_destructuring, vr)
-		}
-	}
-	{ // refer clojure.core/take-while as take-while
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_take_DASH_while)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_take_DASH_while, vr)
-		}
-	}
-	{ // refer clojure.core/restart-agent as restart-agent
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_restart_DASH_agent)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_restart_DASH_agent, vr)
-		}
-	}
-	{ // refer clojure.core/println-str as println-str
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_println_DASH_str)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_println_DASH_str, vr)
-		}
-	}
-	{ // refer clojure.core/when-some as when-some
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_when_DASH_some)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_when_DASH_some, vr)
-		}
-	}
-	{ // refer clojure.core/shutdown-agents as shutdown-agents
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_shutdown_DASH_agents)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_shutdown_DASH_agents, vr)
-		}
-	}
-	{ // refer clojure.core/uri? as uri?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_uri_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_uri_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/pop as pop
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_pop)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_pop, vr)
-		}
-	}
-	{ // refer clojure.core/rsubseq as rsubseq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_rsubseq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_rsubseq, vr)
-		}
-	}
-	{ // refer clojure.core/io! as io!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_io_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_io_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/*data-readers* as *data-readers*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_data_DASH_readers_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_data_DASH_readers_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/clear-agent-errors as clear-agent-errors
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_clear_DASH_agent_DASH_errors)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_clear_DASH_agent_DASH_errors, vr)
-		}
-	}
-	{ // refer clojure.core/re-find as re-find
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_re_DASH_find)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_re_DASH_find, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-subtract as unchecked-subtract
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_subtract)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_subtract, vr)
-		}
-	}
-	{ // refer clojure.core/assoc as assoc
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_assoc)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_assoc, vr)
-		}
-	}
-	{ // refer clojure.core/*3 as *3
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_3)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_3, vr)
-		}
-	}
-	{ // refer clojure.core/coll? as coll?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_coll_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_coll_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/printf as printf
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_printf)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_printf, vr)
-		}
-	}
-	{ // refer clojure.core/name as name
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_name)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_name, vr)
-		}
-	}
-	{ // refer clojure.core/iteration as iteration
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_iteration)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_iteration, vr)
-		}
-	}
-	{ // refer clojure.core/count as count
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_count)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_count, vr)
-		}
-	}
-	{ // refer clojure.core/reduced? as reduced?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reduced_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reduced_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-multiply-int as unchecked-multiply-int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_multiply_DASH_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_multiply_DASH_int, vr)
-		}
-	}
-	{ // refer clojure.core/sync as sync
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_sync)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_sync, vr)
-		}
-	}
-	{ // refer clojure.core/keyword as keyword
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_keyword)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_keyword, vr)
-		}
-	}
-	{ // refer clojure.core/number? as number?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_number_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_number_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/read-string as read-string
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_read_DASH_string)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_read_DASH_string, vr)
-		}
-	}
-	{ // refer clojure.core/identity as identity
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_identity)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_identity, vr)
-		}
-	}
-	{ // refer clojure.core/split-at as split-at
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_split_DASH_at)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_split_DASH_at, vr)
-		}
-	}
-	{ // refer clojure.core/first as first
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_first)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_first, vr)
-		}
-	}
-	{ // refer clojure.core/qualified-symbol? as qualified-symbol?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_qualified_DASH_symbol_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_qualified_DASH_symbol_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/var? as var?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_var_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_var_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/if-some as if-some
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_if_DASH_some)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_if_DASH_some, vr)
-		}
-	}
-	{ // refer clojure.core/hash-unordered-coll as hash-unordered-coll
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_hash_DASH_unordered_DASH_coll)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_hash_DASH_unordered_DASH_coll, vr)
-		}
-	}
-	{ // refer clojure.core/rest as rest
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_rest)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_rest, vr)
-		}
-	}
-	{ // refer clojure.core/* as *
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/map-indexed as map-indexed
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_map_DASH_indexed)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_map_DASH_indexed, vr)
-		}
-	}
-	{ // refer clojure.core/mapcat as mapcat
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_mapcat)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_mapcat, vr)
-		}
-	}
-	{ // refer clojure.core/chunk-buffer as chunk-buffer
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_chunk_DASH_buffer)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_chunk_DASH_buffer, vr)
-		}
-	}
-	{ // refer clojure.core/contains? as contains?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_contains_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_contains_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/thread-bound? as thread-bound?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_thread_DASH_bound_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_thread_DASH_bound_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/struct-map as struct-map
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_struct_DASH_map)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_struct_DASH_map, vr)
-		}
-	}
-	{ // refer clojure.core/distinct? as distinct?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_distinct_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_distinct_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/keep-indexed as keep-indexed
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_keep_DASH_indexed)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_keep_DASH_indexed, vr)
-		}
-	}
-	{ // refer clojure.core/*print-dup* as *print-dup*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_print_DASH_dup_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_print_DASH_dup_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/ensure-reduced as ensure-reduced
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ensure_DASH_reduced)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ensure_DASH_reduced, vr)
-		}
-	}
-	{ // refer clojure.core/repeatedly as repeatedly
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_repeatedly)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_repeatedly, vr)
-		}
-	}
-	{ // refer clojure.core/find-ns as find-ns
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_find_DASH_ns)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_find_DASH_ns, vr)
-		}
-	}
-	{ // refer clojure.core/*print-meta* as *print-meta*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_print_DASH_meta_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_print_DASH_meta_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/set-error-handler! as set-error-handler!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_set_DASH_error_DASH_handler_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_set_DASH_error_DASH_handler_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/add-classpath as add-classpath
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_add_DASH_classpath)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_add_DASH_classpath, vr)
-		}
-	}
-	{ // refer clojure.core/ns-unmap as ns-unmap
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ns_DASH_unmap)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ns_DASH_unmap, vr)
-		}
-	}
-	{ // refer clojure.core/even? as even?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_even_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_even_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/booleans as booleans
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_booleans)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_booleans, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-negate-int as unchecked-negate-int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_negate_DASH_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_negate_DASH_int, vr)
-		}
-	}
-	{ // refer clojure.core/compile as compile
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_compile)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_compile, vr)
-		}
-	}
-	{ // refer clojure.core/unquote as unquote
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unquote)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unquote, vr)
-		}
-	}
-	{ // refer clojure.core/ref-set as ref-set
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ref_DASH_set)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ref_DASH_set, vr)
-		}
-	}
-	{ // refer clojure.core/identical? as identical?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_identical_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_identical_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/type as type
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_type)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_type, vr)
-		}
-	}
-	{ // refer clojure.core/prefer-method as prefer-method
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_prefer_DASH_method)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_prefer_DASH_method, vr)
-		}
-	}
-	{ // refer clojure.core/sorted-set as sorted-set
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_sorted_DASH_set)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_sorted_DASH_set, vr)
-		}
-	}
-	{ // refer clojure.core/*out* as *out*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_out_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_out_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/get-in as get-in
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_get_DASH_in)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_get_DASH_in, vr)
-		}
-	}
-	{ // refer clojure.core/nfirst as nfirst
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_nfirst)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_nfirst, vr)
-		}
-	}
-	{ // refer clojure.core/var-get as var-get
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_var_DASH_get)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_var_DASH_get, vr)
-		}
-	}
-	{ // refer clojure.core/load as load
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_load)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_load, vr)
-		}
-	}
-	{ // refer clojure.core/rand-nth as rand-nth
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_rand_DASH_nth)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_rand_DASH_nth, vr)
-		}
-	}
-	{ // refer clojure.core/class as class
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_class)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_class, vr)
-		}
-	}
-	{ // refer clojure.core/seqable? as seqable?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_seqable_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_seqable_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/future? as future?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_future_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_future_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/denominator as denominator
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_denominator)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_denominator, vr)
-		}
-	}
-	{ // refer clojure.core/when-let as when-let
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_when_DASH_let)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_when_DASH_let, vr)
-		}
-	}
-	{ // refer clojure.core/completing as completing
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_completing)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_completing, vr)
-		}
-	}
-	{ // refer clojure.core/resolve as resolve
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_resolve)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_resolve, vr)
-		}
-	}
-	{ // refer clojure.core/set-agent-send-off-executor! as set-agent-send-off-executor!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_set_DASH_agent_DASH_send_DASH_off_DASH_executor_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/nil? as nil?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_nil_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_nil_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/*loading-verbosely* as *loading-verbosely*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_loading_DASH_verbosely_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_loading_DASH_verbosely_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/vector? as vector?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_vector_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_vector_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/doto as doto
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_doto)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_doto, vr)
-		}
-	}
-	{ // refer clojure.core/*loaded-libs* as *loaded-libs*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_loaded_DASH_libs_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_loaded_DASH_libs_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/intern as intern
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_intern)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_intern, vr)
-		}
-	}
-	{ // refer clojure.core/persistent! as persistent!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_persistent_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_persistent_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/print-simple as print-simple
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_print_DASH_simple)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_print_DASH_simple, vr)
-		}
-	}
-	{ // refer clojure.core/bound-fn as bound-fn
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bound_DASH_fn)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bound_DASH_fn, vr)
-		}
-	}
-	{ // refer clojure.core/volatile! as volatile!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_volatile_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_volatile_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/if-let as if-let
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_if_DASH_let)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_if_DASH_let, vr)
-		}
-	}
-	{ // refer clojure.core/*repl* as *repl*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_repl_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_repl_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/send-via as send-via
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_send_DASH_via)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_send_DASH_via, vr)
-		}
-	}
-	{ // refer clojure.core/->> as ->>
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__DASH__GT__GT_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__DASH__GT__GT_, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-char as unchecked-char
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_char)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_char, vr)
-		}
-	}
-	{ // refer clojure.core/bit-or as bit-or
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bit_DASH_or)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bit_DASH_or, vr)
-		}
-	}
-	{ // refer clojure.core/rational? as rational?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_rational_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_rational_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/bigint as bigint
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bigint)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bigint, vr)
-		}
-	}
-	{ // refer clojure.core/bit-and-not as bit-and-not
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bit_DASH_and_DASH_not)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bit_DASH_and_DASH_not, vr)
-		}
-	}
-	{ // refer clojure.core/unreduced as unreduced
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unreduced)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unreduced, vr)
-		}
-	}
-	{ // refer clojure.core/str as str
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_str)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_str, vr)
-		}
-	}
-	{ // refer clojure.core/shorts as shorts
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_shorts)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_shorts, vr)
-		}
-	}
-	{ // refer clojure.core/delay as delay
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_delay)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_delay, vr)
-		}
-	}
-	{ // refer clojure.core/tagged-literal? as tagged-literal?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_tagged_DASH_literal_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_tagged_DASH_literal_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/pop-thread-bindings as pop-thread-bindings
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_pop_DASH_thread_DASH_bindings)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_pop_DASH_thread_DASH_bindings, vr)
-		}
-	}
-	{ // refer clojure.core/unquote-splicing as unquote-splicing
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unquote_DASH_splicing)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unquote_DASH_splicing, vr)
-		}
-	}
-	{ // refer clojure.core/*unchecked-math* as *unchecked-math*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_unchecked_DASH_math_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_unchecked_DASH_math_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/ref-max-history as ref-max-history
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ref_DASH_max_DASH_history)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ref_DASH_max_DASH_history, vr)
-		}
-	}
-	{ // refer clojure.core/as-> as as->
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_as_DASH__GT_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_as_DASH__GT_, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-float as unchecked-float
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_float)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_float, vr)
-		}
-	}
-	{ // refer clojure.core/select-keys as select-keys
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_select_DASH_keys)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_select_DASH_keys, vr)
-		}
-	}
-	{ // refer clojure.core/longs as longs
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_longs)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_longs, vr)
-		}
-	}
-	{ // refer clojure.core/realized? as realized?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_realized_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_realized_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/float? as float?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_float_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_float_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/interpose as interpose
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_interpose)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_interpose, vr)
-		}
-	}
-	{ // refer clojure.core/get-validator as get-validator
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_get_DASH_validator)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_get_DASH_validator, vr)
-		}
-	}
-	{ // refer clojure.core/flush as flush
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_flush)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_flush, vr)
-		}
-	}
-	{ // refer clojure.core/byte-array as byte-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_byte_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_byte_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/sorted? as sorted?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_sorted_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_sorted_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/chunk-rest as chunk-rest
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_chunk_DASH_rest)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_chunk_DASH_rest, vr)
-		}
-	}
-	{ // refer clojure.core/int? as int?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_int_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_int_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/spit as spit
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_spit)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_spit, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-add as unchecked-add
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_add)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_add, vr)
-		}
-	}
-	{ // refer clojure.core/float-array as float-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_float_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_float_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/reduced as reduced
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reduced)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reduced, vr)
-		}
-	}
-	{ // refer clojure.core/doubles as doubles
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_doubles)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_doubles, vr)
-		}
-	}
-	{ // refer clojure.core/bases as bases
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bases)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bases, vr)
-		}
-	}
-	{ // refer clojure.core/get-method as get-method
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_get_DASH_method)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_get_DASH_method, vr)
-		}
-	}
-	{ // refer clojure.core/cycle as cycle
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_cycle)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_cycle, vr)
-		}
-	}
-	{ // refer clojure.core/iterate as iterate
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_iterate)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_iterate, vr)
-		}
-	}
-	{ // refer clojure.core/create-struct as create-struct
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_create_DASH_struct)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_create_DASH_struct, vr)
-		}
-	}
-	{ // refer clojure.core/string? as string?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_string_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_string_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/defstruct as defstruct
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_defstruct)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_defstruct, vr)
-		}
-	}
-	{ // refer clojure.core/reset-meta! as reset-meta!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reset_DASH_meta_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reset_DASH_meta_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/reset! as reset!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reset_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reset_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/eval as eval
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_eval)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_eval, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-byte as unchecked-byte
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_byte)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_byte, vr)
-		}
-	}
-	{ // refer clojure.core/swap-vals! as swap-vals!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_swap_DASH_vals_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_swap_DASH_vals_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/comment as comment
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_comment)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_comment, vr)
-		}
-	}
-	{ // refer clojure.core/next as next
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_next)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_next, vr)
-		}
-	}
-	{ // refer clojure.core/quot as quot
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_quot)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_quot, vr)
-		}
-	}
-	{ // refer clojure.core/with-redefs-fn as with-redefs-fn
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_with_DASH_redefs_DASH_fn)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_with_DASH_redefs_DASH_fn, vr)
-		}
-	}
-	{ // refer clojure.core/inc' as inc'
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_inc_TICK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_inc_TICK_, vr)
-		}
-	}
-	{ // refer clojure.core/gensym as gensym
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_gensym)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_gensym, vr)
-		}
-	}
-	{ // refer clojure.core/rseq as rseq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_rseq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_rseq, vr)
-		}
-	}
-	{ // refer clojure.core/class? as class?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_class_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_class_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/chars as chars
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_chars)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_chars, vr)
-		}
-	}
-	{ // refer clojure.core/with-bindings as with-bindings
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_with_DASH_bindings)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_with_DASH_bindings, vr)
-		}
-	}
-	{ // refer clojure.core/stream-seq! as stream-seq!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_stream_DASH_seq_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_stream_DASH_seq_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/hash-ordered-coll as hash-ordered-coll
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_hash_DASH_ordered_DASH_coll)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_hash_DASH_ordered_DASH_coll, vr)
-		}
-	}
-	{ // refer clojure.core/import as import
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_import)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_import, vr)
-		}
-	}
-	{ // refer clojure.core/requiring-resolve as requiring-resolve
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_requiring_DASH_resolve)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_requiring_DASH_resolve, vr)
-		}
-	}
-	{ // refer clojure.core/empty as empty
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_empty)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_empty, vr)
-		}
-	}
-	{ // refer clojure.core/vals as vals
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_vals)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_vals, vr)
-		}
-	}
-	{ // refer clojure.core/fn as fn
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_fn)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_fn, vr)
-		}
-	}
-	{ // refer clojure.core/complement as complement
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_complement)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_complement, vr)
-		}
-	}
-	{ // refer clojure.core/remove-tap as remove-tap
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_remove_DASH_tap)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_remove_DASH_tap, vr)
-		}
-	}
-	{ // refer clojure.core/prn as prn
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_prn)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_prn, vr)
-		}
-	}
-	{ // refer clojure.core/parse-long as parse-long
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_parse_DASH_long)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_parse_DASH_long, vr)
-		}
-	}
-	{ // refer clojure.core/map-entry? as map-entry?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_map_DASH_entry_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_map_DASH_entry_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/cond as cond
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_cond)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_cond, vr)
-		}
-	}
-	{ // refer clojure.core/reduce-kv as reduce-kv
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reduce_DASH_kv)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reduce_DASH_kv, vr)
-		}
-	}
-	{ // refer clojure.core/supers as supers
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_supers)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_supers, vr)
-		}
-	}
-	{ // refer clojure.core/update-vals as update-vals
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_update_DASH_vals)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_update_DASH_vals, vr)
-		}
-	}
-	{ // refer clojure.core/vreset! as vreset!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_vreset_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_vreset_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/cat as cat
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_cat)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_cat, vr)
-		}
-	}
-	{ // refer clojure.core/ex-data as ex-data
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ex_DASH_data)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ex_DASH_data, vr)
-		}
-	}
-	{ // refer clojure.core/last as last
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_last)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_last, vr)
-		}
-	}
-	{ // refer clojure.core/newline as newline
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_newline)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_newline, vr)
-		}
-	}
-	{ // refer clojure.core/not= as not=
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_not_EQ_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_not_EQ_, vr)
-		}
-	}
-	{ // refer clojure.core/char as char
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_char)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_char, vr)
-		}
-	}
-	{ // refer clojure.core/read+string as read+string
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_read_PLUS_string)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_read_PLUS_string, vr)
-		}
-	}
-	{ // refer clojure.core/vector as vector
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_vector)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_vector, vr)
-		}
-	}
-	{ // refer clojure.core/gen-class as gen-class
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_gen_DASH_class)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_gen_DASH_class, vr)
-		}
-	}
-	{ // refer clojure.core/lazy-cat as lazy-cat
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_lazy_DASH_cat)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_lazy_DASH_cat, vr)
-		}
-	}
-	{ // refer clojure.core/-> as ->
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__DASH__GT_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__DASH__GT_, vr)
-		}
-	}
-	{ // refer clojure.core/Throwable->map as Throwable->map
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_Throwable_DASH__GT_map)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_Throwable_DASH__GT_map, vr)
-		}
-	}
-	{ // refer clojure.core/unsigned-bit-shift-right as unsigned-bit-shift-right
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unsigned_DASH_bit_DASH_shift_DASH_right)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unsigned_DASH_bit_DASH_shift_DASH_right, vr)
-		}
-	}
-	{ // refer clojure.core/extend-type as extend-type
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_extend_DASH_type)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_extend_DASH_type, vr)
-		}
-	}
-	{ // refer clojure.core/take as take
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_take)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_take, vr)
-		}
-	}
-	{ // refer clojure.core/*read-eval* as *read-eval*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_read_DASH_eval_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_read_DASH_eval_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/trampoline as trampoline
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_trampoline)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_trampoline, vr)
-		}
-	}
-	{ // refer clojure.core/val as val
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_val)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_val, vr)
-		}
-	}
-	{ // refer clojure.core/split-with as split-with
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_split_DASH_with)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_split_DASH_with, vr)
-		}
-	}
-	{ // refer clojure.core/for as for
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_for)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_for, vr)
-		}
-	}
-	{ // refer clojure.core/derive as derive
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_derive)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_derive, vr)
-		}
-	}
-	{ // refer clojure.core/future as future
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_future)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_future, vr)
-		}
-	}
-	{ // refer clojure.core/cond->> as cond->>
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_cond_DASH__GT__GT_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_cond_DASH__GT__GT_, vr)
-		}
-	}
-	{ // refer clojure.core/pmap as pmap
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_pmap)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_pmap, vr)
-		}
-	}
-	{ // refer clojure.core/defonce as defonce
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_defonce)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_defonce, vr)
-		}
-	}
-	{ // refer clojure.core/dorun as dorun
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_dorun)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_dorun, vr)
-		}
-	}
-	{ // refer clojure.core/add-load-path as add-load-path
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_add_DASH_load_DASH_path)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_add_DASH_load_DASH_path, vr)
-		}
-	}
-	{ // refer clojure.core/assert as assert
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_assert)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_assert, vr)
-		}
-	}
-	{ // refer clojure.core/assoc! as assoc!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_assoc_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_assoc_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/tagged-literal as tagged-literal
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_tagged_DASH_literal)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_tagged_DASH_literal, vr)
-		}
-	}
-	{ // refer clojure.core/pop! as pop!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_pop_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_pop_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/into-array as into-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_into_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_into_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/set-validator! as set-validator!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_set_DASH_validator_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_set_DASH_validator_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/char-name-string as char-name-string
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_char_DASH_name_DASH_string)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_char_DASH_name_DASH_string, vr)
-		}
-	}
-	{ // refer clojure.core/char-escape-string as char-escape-string
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_char_DASH_escape_DASH_string)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_char_DASH_escape_DASH_string, vr)
-		}
-	}
-	{ // refer clojure.core/byte as byte
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_byte)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_byte, vr)
-		}
-	}
-	{ // refer clojure.core/ints as ints
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ints)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ints, vr)
-		}
-	}
-	{ // refer clojure.core/*print-length* as *print-length*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_print_DASH_length_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_print_DASH_length_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/reduce as reduce
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reduce)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reduce, vr)
-		}
-	}
-	{ // refer clojure.core/qualified-ident? as qualified-ident?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_qualified_DASH_ident_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_qualified_DASH_ident_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/double? as double?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_double_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_double_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/agent-error as agent-error
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_agent_DASH_error)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_agent_DASH_error, vr)
-		}
-	}
-	{ // refer clojure.core/float as float
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_float)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_float, vr)
-		}
-	}
-	{ // refer clojure.core/alter-meta! as alter-meta!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_alter_DASH_meta_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_alter_DASH_meta_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/ns-name as ns-name
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ns_DASH_name)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ns_DASH_name, vr)
-		}
-	}
-	{ // refer clojure.core/find-keyword as find-keyword
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_find_DASH_keyword)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_find_DASH_keyword, vr)
-		}
-	}
-	{ // refer clojure.core/time as time
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_time)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_time, vr)
-		}
-	}
-	{ // refer clojure.core/partial as partial
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_partial)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_partial, vr)
-		}
-	}
-	{ // refer clojure.core/*1 as *1
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_1)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_1, vr)
-		}
-	}
-	{ // refer clojure.core/fnil as fnil
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_fnil)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_fnil, vr)
-		}
-	}
-	{ // refer clojure.core/chunk-cons as chunk-cons
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_chunk_DASH_cons)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_chunk_DASH_cons, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-negate as unchecked-negate
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_negate)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_negate, vr)
-		}
-	}
-	{ // refer clojure.core/char? as char?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_char_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_char_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/fn? as fn?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_fn_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_fn_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/true? as true?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_true_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_true_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/in-ns as in-ns
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_in_DASH_ns)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_in_DASH_ns, vr)
-		}
-	}
-	{ // refer clojure.core/ref-min-history as ref-min-history
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ref_DASH_min_DASH_history)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ref_DASH_min_DASH_history, vr)
-		}
-	}
-	{ // refer clojure.core/decimal? as decimal?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_decimal_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_decimal_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/create-ns as create-ns
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_create_DASH_ns)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_create_DASH_ns, vr)
-		}
-	}
-	{ // refer clojure.core/symbol as symbol
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_symbol)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_symbol, vr)
-		}
-	}
-	{ // refer clojure.core/bit-shift-left as bit-shift-left
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bit_DASH_shift_DASH_left)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bit_DASH_shift_DASH_left, vr)
-		}
-	}
-	{ // refer clojure.core/random-sample as random-sample
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_random_DASH_sample)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_random_DASH_sample, vr)
-		}
-	}
-	{ // refer clojure.core/subvec as subvec
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_subvec)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_subvec, vr)
-		}
-	}
-	{ // refer clojure.core/ffirst as ffirst
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ffirst)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ffirst, vr)
-		}
-	}
-	{ // refer clojure.core/read as read
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_read)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_read, vr)
-		}
-	}
-	{ // refer clojure.core/partition-by as partition-by
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_partition_DASH_by)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_partition_DASH_by, vr)
-		}
-	}
-	{ // refer clojure.core/num as num
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_num)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_num, vr)
-		}
-	}
-	{ // refer clojure.core/dec as dec
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_dec)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_dec, vr)
-		}
-	}
-	{ // refer clojure.core/file-seq as file-seq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_file_DASH_seq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_file_DASH_seq, vr)
-		}
-	}
-	{ // refer clojure.core/aset-char as aset-char
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_aset_DASH_char)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_aset_DASH_char, vr)
-		}
-	}
-	{ // refer clojure.core/every? as every?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_every_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_every_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/chunk-append as chunk-append
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_chunk_DASH_append)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_chunk_DASH_append, vr)
-		}
-	}
-	{ // refer clojure.core/remove-ns as remove-ns
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_remove_DASH_ns)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_remove_DASH_ns, vr)
-		}
-	}
-	{ // refer clojure.core/boolean as boolean
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_boolean)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_boolean, vr)
-		}
-	}
-	{ // refer clojure.core/deref as deref
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_deref)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_deref, vr)
-		}
-	}
-	{ // refer clojure.core/reversible? as reversible?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reversible_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reversible_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/partitionv as partitionv
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_partitionv)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_partitionv, vr)
-		}
-	}
-	{ // refer clojure.core/alter as alter
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_alter)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_alter, vr)
-		}
-	}
-	{ // refer clojure.core/require as require
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_require)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_require, vr)
-		}
-	}
-	{ // refer clojure.core/hash-map as hash-map
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_hash_DASH_map)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_hash_DASH_map, vr)
-		}
-	}
-	{ // refer clojure.core/zipmap as zipmap
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_zipmap)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_zipmap, vr)
-		}
-	}
-	{ // refer clojure.core/cond-> as cond->
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_cond_DASH__GT_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_cond_DASH__GT_, vr)
-		}
-	}
-	{ // refer clojure.core/with-out-str as with-out-str
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_with_DASH_out_DASH_str)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_with_DASH_out_DASH_str, vr)
-		}
-	}
-	{ // refer clojure.core/with-loading-context as with-loading-context
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_with_DASH_loading_DASH_context)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_with_DASH_loading_DASH_context, vr)
-		}
-	}
-	{ // refer clojure.core/print as print
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_print)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_print, vr)
-		}
-	}
-	{ // refer clojure.core/ex-message as ex-message
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ex_DASH_message)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ex_DASH_message, vr)
-		}
-	}
-	{ // refer clojure.core/replicate as replicate
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_replicate)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_replicate, vr)
-		}
-	}
-	{ // refer clojure.core/prefers as prefers
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_prefers)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_prefers, vr)
-		}
-	}
-	{ // refer clojure.core/- as -
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__DASH_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__DASH_, vr)
-		}
-	}
-	{ // refer clojure.core/with-meta as with-meta
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_with_DASH_meta)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_with_DASH_meta, vr)
-		}
-	}
-	{ // refer clojure.core/aset-byte as aset-byte
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_aset_DASH_byte)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_aset_DASH_byte, vr)
-		}
-	}
-	{ // refer clojure.core/flatten as flatten
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_flatten)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_flatten, vr)
-		}
-	}
-	{ // refer clojure.core/future-call as future-call
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_future_DASH_call)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_future_DASH_call, vr)
-		}
-	}
-	{ // refer clojure.core/pr as pr
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_pr)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_pr, vr)
-		}
-	}
-	{ // refer clojure.core/re-matcher as re-matcher
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_re_DASH_matcher)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_re_DASH_matcher, vr)
-		}
-	}
-	{ // refer clojure.core/take-last as take-last
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_take_DASH_last)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_take_DASH_last, vr)
-		}
-	}
-	{ // refer clojure.core/sort-by as sort-by
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_sort_DASH_by)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_sort_DASH_by, vr)
-		}
-	}
-	{ // refer clojure.core/*pending-paths* as *pending-paths*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_pending_DASH_paths_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_pending_DASH_paths_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/*print-readably* as *print-readably*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_print_DASH_readably_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_print_DASH_readably_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/bit-test as bit-test
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bit_DASH_test)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bit_DASH_test, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-add-int as unchecked-add-int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_add_DASH_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_add_DASH_int, vr)
-		}
-	}
-	{ // refer clojure.core/declare as declare
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_declare)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_declare, vr)
-		}
-	}
-	{ // refer clojure.core/prn-str as prn-str
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_prn_DASH_str)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_prn_DASH_str, vr)
-		}
-	}
-	{ // refer clojure.core/send-off as send-off
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_send_DASH_off)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_send_DASH_off, vr)
-		}
-	}
-	{ // refer clojure.core/swap! as swap!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_swap_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_swap_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/ancestors as ancestors
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ancestors)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ancestors, vr)
-		}
-	}
-	{ // refer clojure.core/hash-set as hash-set
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_hash_DASH_set)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_hash_DASH_set, vr)
-		}
-	}
-	{ // refer clojure.core/reset-vals! as reset-vals!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reset_DASH_vals_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reset_DASH_vals_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/interleave as interleave
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_interleave)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_interleave, vr)
-		}
-	}
-	{ // refer clojure.core/bit-shift-right as bit-shift-right
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bit_DASH_shift_DASH_right)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bit_DASH_shift_DASH_right, vr)
-		}
-	}
-	{ // refer clojure.core/symbol? as symbol?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_symbol_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_symbol_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/chunk as chunk
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_chunk)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_chunk, vr)
-		}
-	}
-	{ // refer clojure.core/remove-all-methods as remove-all-methods
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_remove_DASH_all_DASH_methods)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_remove_DASH_all_DASH_methods, vr)
-		}
-	}
-	{ // refer clojure.core/ns-refers as ns-refers
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ns_DASH_refers)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ns_DASH_refers, vr)
-		}
-	}
-	{ // refer clojure.core/subseq as subseq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_subseq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_subseq, vr)
-		}
-	}
-	{ // refer clojure.core/await1 as await1
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_await1)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_await1, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-inc-int as unchecked-inc-int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_inc_DASH_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_inc_DASH_int, vr)
-		}
-	}
-	{ // refer clojure.core/to-array as to-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_to_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_to_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/range as range
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_range)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_range, vr)
-		}
-	}
-	{ // refer clojure.core/qualified-keyword? as qualified-keyword?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_qualified_DASH_keyword_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_qualified_DASH_keyword_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/agent as agent
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_agent)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_agent, vr)
-		}
-	}
-	{ // refer clojure.core/release-pending-sends as release-pending-sends
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_release_DASH_pending_DASH_sends)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_release_DASH_pending_DASH_sends, vr)
-		}
-	}
-	{ // refer clojure.core/*print-namespace-maps* as *print-namespace-maps*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_print_DASH_namespace_DASH_maps_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_print_DASH_namespace_DASH_maps_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/double-array as double-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_double_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_double_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/bound? as bound?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bound_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bound_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-inc as unchecked-inc
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_inc)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_inc, vr)
-		}
-	}
-	{ // refer clojure.core/struct as struct
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_struct)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_struct, vr)
-		}
-	}
-	{ // refer clojure.core/boolean? as boolean?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_boolean_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_boolean_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/print-str as print-str
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_print_DASH_str)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_print_DASH_str, vr)
-		}
-	}
-	{ // refer clojure.core/stream-into! as stream-into!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_stream_DASH_into_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_stream_DASH_into_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/filterv as filterv
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_filterv)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_filterv, vr)
-		}
-	}
-	{ // refer clojure.core/min as min
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_min)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_min, vr)
-		}
-	}
-	{ // refer clojure.core/lazy-seq as lazy-seq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_lazy_DASH_seq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_lazy_DASH_seq, vr)
-		}
-	}
-	{ // refer clojure.core/nthrest as nthrest
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_nthrest)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_nthrest, vr)
-		}
-	}
-	{ // refer clojure.core/*command-line-args* as *command-line-args*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_command_DASH_line_DASH_args_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_command_DASH_line_DASH_args_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/descendants as descendants
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_descendants)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_descendants, vr)
-		}
-	}
-	{ // refer clojure.core/mapv as mapv
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_mapv)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_mapv, vr)
-		}
-	}
-	{ // refer clojure.core/doseq as doseq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_doseq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_doseq, vr)
-		}
-	}
-	{ // refer clojure.core/abs as abs
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_abs)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_abs, vr)
-		}
-	}
-	{ // refer clojure.core/aclone as aclone
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_aclone)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_aclone, vr)
-		}
-	}
-	{ // refer clojure.core/ns-publics as ns-publics
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ns_DASH_publics)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ns_DASH_publics, vr)
-		}
-	}
-	{ // refer clojure.core/alias as alias
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_alias)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_alias, vr)
-		}
-	}
-	{ // refer clojure.core/set-agent-send-executor! as set-agent-send-executor!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_set_DASH_agent_DASH_send_DASH_executor_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_set_DASH_agent_DASH_send_DASH_executor_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/get as get
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_get)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_get, vr)
-		}
-	}
-	{ // refer clojure.core/second as second
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_second)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_second, vr)
-		}
-	}
-	{ // refer clojure.core/delay? as delay?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_delay_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_delay_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/*2 as *2
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_2)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_2, vr)
-		}
-	}
-	{ // refer clojure.core/*warn-on-reflection* as *warn-on-reflection*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_warn_DASH_on_DASH_reflection_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_warn_DASH_on_DASH_reflection_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/boolean-array as boolean-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_boolean_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_boolean_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/list as list
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_list)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_list, vr)
-		}
-	}
-	{ // refer clojure.core/-' as -'
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__DASH__TICK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__DASH__TICK_, vr)
-		}
-	}
-	{ // refer clojure.core/replace as replace
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_replace)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_replace, vr)
-		}
-	}
-	{ // refer clojure.core/*agent* as *agent*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_agent_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_agent_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/object-array as object-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_object_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_object_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/find-var as find-var
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_find_DASH_var)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_find_DASH_var, vr)
-		}
-	}
-	{ // refer clojure.core/bit-and as bit-and
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bit_DASH_and)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bit_DASH_and, vr)
-		}
-	}
-	{ // refer clojure.core/ident? as ident?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ident_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ident_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/any? as any?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_any_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_any_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/merge-with as merge-with
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_merge_DASH_with)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_merge_DASH_with, vr)
-		}
-	}
-	{ // refer clojure.core/if-not as if-not
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_if_DASH_not)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_if_DASH_not, vr)
-		}
-	}
-	{ // refer clojure.core/extend-protocol as extend-protocol
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_extend_DASH_protocol)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_extend_DASH_protocol, vr)
-		}
-	}
-	{ // refer clojure.core/bit-not as bit-not
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bit_DASH_not)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bit_DASH_not, vr)
-		}
-	}
-	{ // refer clojure.core/subs as subs
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_subs)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_subs, vr)
-		}
-	}
-	{ // refer clojure.core/alength as alength
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_alength)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_alength, vr)
-		}
-	}
-	{ // refer clojure.core/dedupe as dedupe
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_dedupe)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_dedupe, vr)
-		}
-	}
-	{ // refer clojure.core/bounded-count as bounded-count
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bounded_DASH_count)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bounded_DASH_count, vr)
-		}
-	}
-	{ // refer clojure.core/neg-int? as neg-int?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_neg_DASH_int_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_neg_DASH_int_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/when-first as when-first
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_when_DASH_first)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_when_DASH_first, vr)
-		}
-	}
-	{ // refer clojure.core/comp as comp
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_comp)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_comp, vr)
-		}
-	}
-	{ // refer clojure.core/namespace as namespace
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_namespace)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_namespace, vr)
-		}
-	}
-	{ // refer clojure.core/format as format
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_format)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_format, vr)
-		}
-	}
-	{ // refer clojure.core/vary-meta as vary-meta
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_vary_DASH_meta)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_vary_DASH_meta, vr)
-		}
-	}
-	{ // refer clojure.core/nth as nth
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_nth)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_nth, vr)
-		}
-	}
-	{ // refer clojure.core/min-key as min-key
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_min_DASH_key)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_min_DASH_key, vr)
-		}
-	}
-	{ // refer clojure.core/future-cancelled? as future-cancelled?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_future_DASH_cancelled_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_future_DASH_cancelled_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/long-array as long-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_long_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_long_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-remainder-int as unchecked-remainder-int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_remainder_DASH_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_remainder_DASH_int, vr)
-		}
-	}
-	{ // refer clojure.core/to-array-2d as to-array-2d
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_to_DASH_array_DASH_2d)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_to_DASH_array_DASH_2d, vr)
-		}
-	}
-	{ // refer clojure.core/with-redefs as with-redefs
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_with_DASH_redefs)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_with_DASH_redefs, vr)
-		}
-	}
-	{ // refer clojure.core/vec as vec
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_vec)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_vec, vr)
-		}
-	}
-	{ // refer clojure.core/ns-aliases as ns-aliases
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ns_DASH_aliases)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ns_DASH_aliases, vr)
-		}
-	}
-	{ // refer clojure.core/aset-long as aset-long
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_aset_DASH_long)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_aset_DASH_long, vr)
-		}
-	}
-	{ // refer clojure.core/== as ==
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__EQ__EQ_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__EQ__EQ_, vr)
-		}
-	}
-	{ // refer clojure.core/*assert* as *assert*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_assert_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_assert_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/*verbose-defrecords* as *verbose-defrecords*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_verbose_DASH_defrecords_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_verbose_DASH_defrecords_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/simple-symbol? as simple-symbol?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_simple_DASH_symbol_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_simple_DASH_symbol_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/short-array as short-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_short_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_short_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/dissoc! as dissoc!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_dissoc_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_dissoc_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/ref as ref
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ref)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ref, vr)
-		}
-	}
-	{ // refer clojure.core/areduce as areduce
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_areduce)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_areduce, vr)
-		}
-	}
-	{ // refer clojure.core/int as int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_int, vr)
-		}
-	}
-	{ // refer clojure.core/+ as +
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__PLUS_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__PLUS_, vr)
-		}
-	}
-	{ // refer clojure.core/assoc-in as assoc-in
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_assoc_DASH_in)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_assoc_DASH_in, vr)
-		}
-	}
-	{ // refer clojure.core/seque as seque
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_seque)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_seque, vr)
-		}
-	}
-	{ // refer clojure.core/load-file as load-file
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_load_DASH_file)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_load_DASH_file, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-dec as unchecked-dec
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_dec)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_dec, vr)
-		}
-	}
-	{ // refer clojure.core/volatile? as volatile?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_volatile_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_volatile_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/parse-uuid as parse-uuid
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_parse_DASH_uuid)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_parse_DASH_uuid, vr)
-		}
-	}
-	{ // refer clojure.core/*ns* as *ns*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_ns_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_ns_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/resultset-seq as resultset-seq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_resultset_DASH_seq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_resultset_DASH_seq, vr)
-		}
-	}
-	{ // refer clojure.core/aget as aget
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_aget)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_aget, vr)
-		}
-	}
-	{ // refer clojure.core/sequence as sequence
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_sequence)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_sequence, vr)
-		}
-	}
-	{ // refer clojure.core/drop-while as drop-while
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_drop_DASH_while)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_drop_DASH_while, vr)
-		}
-	}
-	{ // refer clojure.core/chunk-next as chunk-next
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_chunk_DASH_next)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_chunk_DASH_next, vr)
-		}
-	}
-	{ // refer clojure.core/list? as list?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_list_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_list_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/int-array as int-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_int_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_int_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/aset-double as aset-double
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_aset_DASH_double)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_aset_DASH_double, vr)
-		}
-	}
-	{ // refer clojure.core/promise as promise
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_promise)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_promise, vr)
-		}
-	}
-	{ // refer clojure.core/associative? as associative?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_associative_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_associative_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/push-thread-bindings as push-thread-bindings
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_push_DASH_thread_DASH_bindings)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_push_DASH_thread_DASH_bindings, vr)
-		}
-	}
-	{ // refer clojure.core/comparator as comparator
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_comparator)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_comparator, vr)
-		}
-	}
-	{ // refer clojure.core/partition-all as partition-all
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_partition_DASH_all)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_partition_DASH_all, vr)
-		}
-	}
-	{ // refer clojure.core/*print-level* as *print-level*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_print_DASH_level_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_print_DASH_level_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/merge as merge
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_merge)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_merge, vr)
-		}
-	}
-	{ // refer clojure.core/take-nth as take-nth
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_take_DASH_nth)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_take_DASH_nth, vr)
-		}
-	}
-	{ // refer clojure.core/false? as false?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_false_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_false_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/sort as sort
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_sort)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_sort, vr)
-		}
-	}
-	{ // refer clojure.core/max-key as max-key
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_max_DASH_key)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_max_DASH_key, vr)
-		}
-	}
-	{ // refer clojure.core/some as some
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_some)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_some, vr)
-		}
-	}
-	{ // refer clojure.core/make-hierarchy as make-hierarchy
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_make_DASH_hierarchy)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_make_DASH_hierarchy, vr)
-		}
-	}
-	{ // refer clojure.core/stream-reduce! as stream-reduce!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_stream_DASH_reduce_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_stream_DASH_reduce_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/bytes? as bytes?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bytes_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bytes_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/when-not as when-not
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_when_DASH_not)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_when_DASH_not, vr)
-		}
-	}
-	{ // refer clojure.core/seq? as seq?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_seq_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_seq_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/underive as underive
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_underive)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_underive, vr)
-		}
-	}
-	{ // refer clojure.core/vswap! as vswap!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_vswap_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_vswap_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/set-error-mode! as set-error-mode!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_set_DASH_error_DASH_mode_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_set_DASH_error_DASH_mode_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/char-array as char-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_char_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_char_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/memoize as memoize
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_memoize)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_memoize, vr)
-		}
-	}
-	{ // refer clojure.core/when as when
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_when)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_when, vr)
-		}
-	}
-	{ // refer clojure.core/ratio? as ratio?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ratio_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ratio_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/slurp as slurp
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_slurp)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_slurp, vr)
-		}
-	}
-	{ // refer clojure.core/ifn? as ifn?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ifn_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ifn_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/drop-last as drop-last
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_drop_DASH_last)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_drop_DASH_last, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-subtract-int as unchecked-subtract-int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_subtract_DASH_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_subtract_DASH_int, vr)
-		}
-	}
-	{ // refer clojure.core/stream-transduce! as stream-transduce!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_stream_DASH_transduce_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_stream_DASH_transduce_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-short as unchecked-short
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_short)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_short, vr)
-		}
-	}
-	{ // refer clojure.core/bit-clear as bit-clear
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bit_DASH_clear)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bit_DASH_clear, vr)
-		}
-	}
-	{ // refer clojure.core/some->> as some->>
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_some_DASH__GT__GT_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_some_DASH__GT__GT_, vr)
-		}
-	}
-	{ // refer clojure.core/update-in as update-in
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_update_DASH_in)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_update_DASH_in, vr)
-		}
-	}
-	{ // refer clojure.core/not-any? as not-any?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_not_DASH_any_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_not_DASH_any_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/reader-conditional? as reader-conditional?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reader_DASH_conditional_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reader_DASH_conditional_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/xml-seq as xml-seq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_xml_DASH_seq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_xml_DASH_seq, vr)
-		}
-	}
-	{ // refer clojure.core/group-by as group-by
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_group_DASH_by)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_group_DASH_by, vr)
-		}
-	}
-	{ // refer clojure.core/numerator as numerator
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_numerator)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_numerator, vr)
-		}
-	}
-	{ // refer clojure.core/defn as defn
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_defn)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_defn, vr)
-		}
-	}
-	{ // refer clojure.core/pos-int? as pos-int?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_pos_DASH_int_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_pos_DASH_int_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/special-symbol? as special-symbol?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_special_DASH_symbol_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_special_DASH_symbol_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/ns-interns as ns-interns
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ns_DASH_interns)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ns_DASH_interns, vr)
-		}
-	}
-	{ // refer clojure.core/pos? as pos?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_pos_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_pos_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/repeat as repeat
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_repeat)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_repeat, vr)
-		}
-	}
-	{ // refer clojure.core/bound-fn* as bound-fn*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bound_DASH_fn_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bound_DASH_fn_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/*' as *'
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR__TICK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR__TICK_, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-multiply as unchecked-multiply
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_multiply)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_multiply, vr)
-		}
-	}
-	{ // refer clojure.core/<= as <=
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__LT__EQ_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__LT__EQ_, vr)
-		}
-	}
-	{ // refer clojure.core/nnext as nnext
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_nnext)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_nnext, vr)
-		}
-	}
-	{ // refer clojure.core/ex-cause as ex-cause
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ex_DASH_cause)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ex_DASH_cause, vr)
-		}
-	}
-	{ // refer clojure.core/counted? as counted?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_counted_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_counted_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/bit-xor as bit-xor
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bit_DASH_xor)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bit_DASH_xor, vr)
-		}
-	}
-	{ // refer clojure.core/re-seq as re-seq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_re_DASH_seq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_re_DASH_seq, vr)
-		}
-	}
-	{ // refer clojure.core/remove-method as remove-method
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_remove_DASH_method)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_remove_DASH_method, vr)
-		}
-	}
-	{ // refer clojure.core/parse-boolean as parse-boolean
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_parse_DASH_boolean)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_parse_DASH_boolean, vr)
-		}
-	}
-	{ // refer clojure.core/max as max
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_max)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_max, vr)
-		}
-	}
-	{ // refer clojure.core/*compiler-options* as *compiler-options*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_compiler_DASH_options_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_compiler_DASH_options_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/> as >
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__GT_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__GT_, vr)
-		}
-	}
-	{ // refer clojure.core/aset-float as aset-float
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_aset_DASH_float)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_aset_DASH_float, vr)
-		}
-	}
-	{ // refer clojure.core/defmethod as defmethod
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_defmethod)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_defmethod, vr)
-		}
-	}
-	{ // refer clojure.core/sorted-map as sorted-map
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_sorted_DASH_map)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_sorted_DASH_map, vr)
-		}
-	}
-	{ // refer clojure.core/reductions as reductions
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reductions)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reductions, vr)
-		}
-	}
-	{ // refer clojure.core/reverse as reverse
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reverse)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reverse, vr)
-		}
-	}
-	{ // refer clojure.core/ref-history-count as ref-history-count
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ref_DASH_history_DASH_count)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ref_DASH_history_DASH_count, vr)
-		}
-	}
-	{ // refer clojure.core/*file* as *file*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_file_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_file_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/make-array as make-array
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_make_DASH_array)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_make_DASH_array, vr)
-		}
-	}
-	{ // refer clojure.core/re-pattern as re-pattern
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_re_DASH_pattern)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_re_DASH_pattern, vr)
-		}
-	}
-	{ // refer clojure.core/into as into
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_into)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_into, vr)
-		}
-	}
-	{ // refer clojure.core/list* as list*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_list_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_list_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/pvalues as pvalues
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_pvalues)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_pvalues, vr)
-		}
-	}
-	{ // refer clojure.core/macroexpand-1 as macroexpand-1
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_macroexpand_DASH_1)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_macroexpand_DASH_1, vr)
-		}
-	}
-	{ // refer clojure.core/methods as methods
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_methods)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_methods, vr)
-		}
-	}
-	{ // refer clojure.core/*compile-path* as *compile-path*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_compile_DASH_path_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_compile_DASH_path_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/keep as keep
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_keep)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_keep, vr)
-		}
-	}
-	{ // refer clojure.core/or as or
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_or)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_or, vr)
-		}
-	}
-	{ // refer clojure.core/deliver as deliver
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_deliver)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_deliver, vr)
-		}
-	}
-	{ // refer clojure.core/some? as some?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_some_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_some_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/atom as atom
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_atom)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_atom, vr)
-		}
-	}
-	{ // refer clojure.core/*err* as *err*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_err_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_err_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/enumeration-seq as enumeration-seq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_enumeration_DASH_seq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_enumeration_DASH_seq, vr)
-		}
-	}
-	{ // refer clojure.core/while as while
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_while)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_while, vr)
-		}
-	}
-	{ // refer clojure.core/meta as meta
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_meta)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_meta, vr)
-		}
-	}
-	{ // refer clojure.core/dec' as dec'
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_dec_TICK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_dec_TICK_, vr)
-		}
-	}
-	{ // refer clojure.core/println as println
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_println)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_println, vr)
-		}
-	}
-	{ // refer clojure.core/drop as drop
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_drop)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_drop, vr)
-		}
-	}
-	{ // refer clojure.core/the-ns as the-ns
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_the_DASH_ns)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_the_DASH_ns, vr)
-		}
-	}
-	{ // refer clojure.core// as /
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__SLASH_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__SLASH_, vr)
-		}
-	}
-	{ // refer clojure.core/binding as binding
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_binding)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_binding, vr)
-		}
-	}
-	{ // refer clojure.core/double as double
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_double)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_double, vr)
-		}
-	}
-	{ // refer clojure.core/*compile-files* as *compile-files*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_compile_DASH_files_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_compile_DASH_files_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/defmacro as defmacro
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_defmacro)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_defmacro, vr)
-		}
-	}
-	{ // refer clojure.core/cons as cons
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_cons)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_cons, vr)
-		}
-	}
-	{ // refer clojure.core/splitv-at as splitv-at
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_splitv_DASH_at)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_splitv_DASH_at, vr)
-		}
-	}
-	{ // refer clojure.core/future-cancel as future-cancel
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_future_DASH_cancel)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_future_DASH_cancel, vr)
-		}
-	}
-	{ // refer clojure.core/iterator-seq as iterator-seq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_iterator_DASH_seq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_iterator_DASH_seq, vr)
-		}
-	}
-	{ // refer clojure.core/var-set as var-set
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_var_DASH_set)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_var_DASH_set, vr)
-		}
-	}
-	{ // refer clojure.core/update-keys as update-keys
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_update_DASH_keys)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_update_DASH_keys, vr)
-		}
-	}
-	{ // refer clojure.core/extend as extend
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_extend)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_extend, vr)
-		}
-	}
-	{ // refer clojure.core/sorted-map-by as sorted-map-by
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_sorted_DASH_map_DASH_by)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_sorted_DASH_map_DASH_by, vr)
-		}
-	}
-	{ // refer clojure.core/hash as hash
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_hash)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_hash, vr)
-		}
-	}
-	{ // refer clojure.core/run! as run!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_run_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_run_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/line-seq as line-seq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_line_DASH_seq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_line_DASH_seq, vr)
-		}
-	}
-	{ // refer clojure.core/mod as mod
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_mod)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_mod, vr)
-		}
-	}
-	{ // refer clojure.core/sequential? as sequential?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_sequential_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_sequential_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/case as case
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_case)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_case, vr)
-		}
-	}
-	{ // refer clojure.core/instance? as instance?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_instance_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_instance_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/isa? as isa?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_isa_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_isa_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/keys as keys
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_keys)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_keys, vr)
-		}
-	}
-	{ // refer clojure.core/nat-int? as nat-int?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_nat_DASH_int_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_nat_DASH_int_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/destructure as destructure
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_destructure)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_destructure, vr)
-		}
-	}
-	{ // refer clojure.core/loaded-libs as loaded-libs
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_loaded_DASH_libs)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_loaded_DASH_libs, vr)
-		}
-	}
-	{ // refer clojure.core/load-reader as load-reader
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_load_DASH_reader)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_load_DASH_reader, vr)
-		}
-	}
-	{ // refer clojure.core/defmulti as defmulti
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_defmulti)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_defmulti, vr)
-		}
-	}
-	{ // refer clojure.core/ns-map as ns-map
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ns_DASH_map)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ns_DASH_map, vr)
-		}
-	}
-	{ // refer clojure.core/compare as compare
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_compare)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_compare, vr)
-		}
-	}
-	{ // refer clojure.core/future-done? as future-done?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_future_DASH_done_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_future_DASH_done_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/inst-ms as inst-ms
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_inst_DASH_ms)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_inst_DASH_ms, vr)
-		}
-	}
-	{ // refer clojure.core/accessor as accessor
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_accessor)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_accessor, vr)
-		}
-	}
-	{ // refer clojure.core/agent-errors as agent-errors
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_agent_DASH_errors)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_agent_DASH_errors, vr)
-		}
-	}
-	{ // refer clojure.core/rand as rand
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_rand)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_rand, vr)
-		}
-	}
-	{ // refer clojure.core/integer? as integer?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_integer_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_integer_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/cast as cast
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_cast)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_cast, vr)
-		}
-	}
-	{ // refer clojure.core/print-method as print-method
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_print_DASH_method)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_print_DASH_method, vr)
-		}
-	}
-	{ // refer clojure.core/dissoc as dissoc
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_dissoc)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_dissoc, vr)
-		}
-	}
-	{ // refer clojure.core/map? as map?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_map_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_map_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/*flush-on-newline* as *flush-on-newline*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_flush_DASH_on_DASH_newline_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_flush_DASH_on_DASH_newline_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/defprotocol as defprotocol
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_defprotocol)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_defprotocol, vr)
-		}
-	}
-	{ // refer clojure.core/print-dup as print-dup
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_print_DASH_dup)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_print_DASH_dup, vr)
-		}
-	}
-	{ // refer clojure.core/force as force
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_force)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_force, vr)
-		}
-	}
-	{ // refer clojure.core/*glojure-version* as *glojure-version*
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__STAR_glojure_DASH_version_STAR_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__STAR_glojure_DASH_version_STAR_, vr)
-		}
-	}
-	{ // refer clojure.core/with-local-vars as with-local-vars
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_with_DASH_local_DASH_vars)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_with_DASH_local_DASH_vars, vr)
-		}
-	}
-	{ // refer clojure.core/constantly as constantly
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_constantly)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_constantly, vr)
-		}
-	}
-	{ // refer clojure.core/refer-clojure as refer-clojure
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_refer_DASH_clojure)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_refer_DASH_clojure, vr)
-		}
-	}
-	{ // refer clojure.core/nthnext as nthnext
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_nthnext)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_nthnext, vr)
-		}
-	}
-	{ // refer clojure.core/floats as floats
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_floats)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_floats, vr)
-		}
-	}
-	{ // refer clojure.core/neg? as neg?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_neg_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_neg_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/alter-var-root as alter-var-root
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_alter_DASH_var_DASH_root)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_alter_DASH_var_DASH_root, vr)
-		}
-	}
-	{ // refer clojure.core/seq as seq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_seq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_seq, vr)
-		}
-	}
-	{ // refer clojure.core/some-> as some->
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_some_DASH__GT_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_some_DASH__GT_, vr)
-		}
-	}
-	{ // refer clojure.core/bytes as bytes
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bytes)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bytes, vr)
-		}
-	}
-	{ // refer clojure.core/key as key
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_key)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_key, vr)
-		}
-	}
-	{ // refer clojure.core/definline as definline
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_definline)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_definline, vr)
-		}
-	}
-	{ // refer clojure.core/frequencies as frequencies
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_frequencies)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_frequencies, vr)
-		}
-	}
-	{ // refer clojure.core/load-string as load-string
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_load_DASH_string)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_load_DASH_string, vr)
-		}
-	}
-	{ // refer clojure.core/with-in-str as with-in-str
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_with_DASH_in_DASH_str)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_with_DASH_in_DASH_str, vr)
-		}
-	}
-	{ // refer clojure.core/simple-ident? as simple-ident?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_simple_DASH_ident_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_simple_DASH_ident_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/empty? as empty?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_empty_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_empty_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/indexed? as indexed?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_indexed_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_indexed_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/aset-short as aset-short
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_aset_DASH_short)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_aset_DASH_short, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-divide-int as unchecked-divide-int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_divide_DASH_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_divide_DASH_int, vr)
-		}
-	}
-	{ // refer clojure.core/loop as loop
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_loop)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_loop, vr)
-		}
-	}
-	{ // refer clojure.core/tree-seq as tree-seq
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_tree_DASH_seq)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_tree_DASH_seq, vr)
-		}
-	}
-	{ // refer clojure.core/odd? as odd?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_odd_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_odd_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-double as unchecked-double
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_double)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_double, vr)
-		}
-	}
-	{ // refer clojure.core/partition as partition
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_partition)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_partition, vr)
-		}
-	}
-	{ // refer clojure.core/defn- as defn-
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_defn_DASH_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_defn_DASH_, vr)
-		}
-	}
-	{ // refer clojure.core/bit-set as bit-set
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bit_DASH_set)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bit_DASH_set, vr)
-		}
-	}
-	{ // refer clojure.core/halt-when as halt-when
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_halt_DASH_when)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_halt_DASH_when, vr)
-		}
-	}
-	{ // refer clojure.core/reader-conditional as reader-conditional
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_reader_DASH_conditional)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_reader_DASH_conditional, vr)
-		}
-	}
-	{ // refer clojure.core/dosync as dosync
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_dosync)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_dosync, vr)
-		}
-	}
-	{ // refer clojure.core/send as send
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_send)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_send, vr)
-		}
-	}
-	{ // refer clojure.core/refer as refer
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_refer)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_refer, vr)
-		}
-	}
-	{ // refer clojure.core/>= as >=
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__GT__EQ_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__GT__EQ_, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-dec-int as unchecked-dec-int
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_dec_DASH_int)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_dec_DASH_int, vr)
-		}
-	}
-	{ // refer clojure.core/let as let
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_let)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_let, vr)
-		}
-	}
-	{ // refer clojure.core/not-empty as not-empty
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_not_DASH_empty)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_not_DASH_empty, vr)
-		}
-	}
-	{ // refer clojure.core/and as and
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_and)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_and, vr)
-		}
-	}
-	{ // refer clojure.core/shuffle as shuffle
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_shuffle)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_shuffle, vr)
-		}
-	}
-	{ // refer clojure.core/every-pred as every-pred
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_every_DASH_pred)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_every_DASH_pred, vr)
-		}
-	}
-	{ // refer clojure.core/compare-and-set! as compare-and-set!
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_compare_DASH_and_DASH_set_BANG_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_compare_DASH_and_DASH_set_BANG_, vr)
-		}
-	}
-	{ // refer clojure.core/with-precision as with-precision
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_with_DASH_precision)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_with_DASH_precision, vr)
-		}
-	}
-	{ // refer clojure.core/transduce as transduce
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_transduce)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_transduce, vr)
-		}
-	}
-	{ // refer clojure.core/parents as parents
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_parents)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_parents, vr)
-		}
-	}
-	{ // refer clojure.core/random-uuid as random-uuid
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_random_DASH_uuid)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_random_DASH_uuid, vr)
-		}
-	}
-	{ // refer clojure.core/juxt as juxt
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_juxt)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_juxt, vr)
-		}
-	}
-	{ // refer clojure.core/unchecked-long as unchecked-long
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_unchecked_DASH_long)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_unchecked_DASH_long, vr)
-		}
-	}
-	{ // refer clojure.core/bit-flip as bit-flip
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_bit_DASH_flip)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_bit_DASH_flip, vr)
-		}
-	}
-	{ // refer clojure.core/infinite? as infinite?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_infinite_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_infinite_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/pcalls as pcalls
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_pcalls)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_pcalls, vr)
-		}
-	}
-	{ // refer clojure.core/locking as locking
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_locking)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_locking, vr)
-		}
-	}
-	{ // refer clojure.core/update as update
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_update)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_update, vr)
-		}
-	}
-	{ // refer clojure.core/letfn as letfn
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_letfn)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_letfn, vr)
-		}
-	}
-	{ // refer clojure.core/commute as commute
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_commute)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_commute, vr)
-		}
-	}
-	{ // refer clojure.core/keyword? as keyword?
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_keyword_QMARK_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_keyword_QMARK_, vr)
-		}
-	}
-	{ // refer clojure.core/macroexpand as macroexpand
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_macroexpand)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_macroexpand, vr)
-		}
-	}
-	{ // refer clojure.core/concat as concat
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_concat)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_concat, vr)
-		}
-	}
-	{ // refer clojure.core/doall as doall
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_doall)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_doall, vr)
-		}
-	}
-	{ // refer clojure.core/pr-str as pr-str
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_pr_DASH_str)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_pr_DASH_str, vr)
-		}
-	}
-	{ // refer clojure.core/condp as condp
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_condp)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_condp, vr)
-		}
-	}
-	{ // refer clojure.core/ns-imports as ns-imports
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_ns_DASH_imports)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_ns_DASH_imports, vr)
-		}
-	}
-	{ // refer clojure.core/rationalize as rationalize
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_rationalize)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_rationalize, vr)
-		}
-	}
-	{ // refer clojure.core/apply as apply
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_apply)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_apply, vr)
-		}
-	}
-	{ // refer clojure.core/inc as inc
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_inc)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_inc, vr)
-		}
-	}
-	{ // refer clojure.core/test as test
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_test)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_test, vr)
-		}
-	}
-	{ // refer clojure.core/< as <
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym__LT_)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym__LT_, vr)
-		}
-	}
-	{ // refer clojure.core/set as set
-		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
-		v := srcNS.Mappings().ValAt(sym_set)
-		if vr, ok := v.(*lang.Var); ok {
-			ns.Refer(sym_set, vr)
-		}
+	{ // refer vars from clojure.core
+		srcNS := lang.FindOrCreateNamespace(sym_clojure_DOT_core)
+		ns.ReferAllSnapshot(srcNS, []string{
+			"-protocols",
+			">0?",
+			">1?",
+			"add-doc-and-meta",
+			"array",
+			"assert-args",
+			"assert-valid-fdecl",
+			"binding-conveyor-fn",
+			"case-map",
+			"check-cyclic-dependency",
+			"check-valid-options",
+			"data-reader-urls",
+			"data-reader-var",
+			"def-aset",
+			"deref-as-map",
+			"deref-future",
+			"elide-top-frames",
+			"emit-extend-protocol",
+			"emit-extend-type",
+			"emit-hinted-impl",
+			"filter-key",
+			"fits-table?",
+			"global-hierarchy",
+			"into1",
+			"libspec?",
+			"lift-ns",
+			"load-all",
+			"load-data-reader-file",
+			"load-data-readers",
+			"load-lib",
+			"load-libs",
+			"load-one",
+			"max-mask-bits",
+			"max-switch-table-size",
+			"maybe-destructured",
+			"maybe-min-hash",
+			"merge-hash-collisions",
+			"mk-bound-fn",
+			"nary-inline",
+			"normalize-slurp-opts",
+			"parse-impls",
+			"parsing-err",
+			"pr-on",
+			"prep-hashes",
+			"prep-ints",
+			"prependss",
+			"preserving-reduced",
+			"print-initialized",
+			"print-map",
+			"print-meta",
+			"print-object",
+			"print-prefix-map",
+			"print-sequential",
+			"print-tagged-object",
+			"print-throwable",
+			"protocol?",
+			"reduce1",
+			"root-directory",
+			"root-resource",
+			"serialized-require",
+			"setup-reference",
+			"shift-mask",
+			"sigs",
+			"spread",
+			"strip-ns",
+			"system-newline",
+			"tapset",
+			"throw-if",
+		})
 	}
 	ns.AddAlias(sym_core, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 	// >!
 	{
-		tmp0 := sym__GT__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(44), kw_column, int(7), kw_end_DASH_line, int(44), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "puts a val into port. nil values are not allowed. Will park if no buffer space is available.\n  Returns true, or throws if port is already closed.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym__GT__BANG_
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
@@ -5304,15 +365,16 @@ func LoadNS() {
 			_ = tmp4
 			return true
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
+		aotDirectFn2 = tmp1
 		var_clojure_DOT_core_DOT_async__GT__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async__GT__BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion2 = var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion()
+		var_clojure_DOT_core_DOT_async__GT__BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(44), kw_column, int(7), kw_end_DASH_line, int(44), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "puts a val into port. nil values are not allowed. Will park if no buffer space is available.\n  Returns true, or throws if port is already closed.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// >!!
 	{
-		tmp0 := sym__GT__BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(51), kw_column, int(6), kw_end_DASH_line, int(51), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym__GT__BANG__BANG_
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
@@ -5323,42 +385,45 @@ func LoadNS() {
 			_ = tmp4
 			return true
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
+		aotDirectFn3 = tmp1
 		var_clojure_DOT_core_DOT_async__GT__BANG__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async__GT__BANG__BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion3 = var_clojure_DOT_core_DOT_async__GT__BANG__BANG_.RootVersion()
+		var_clojure_DOT_core_DOT_async__GT__BANG__BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(51), kw_column, int(6), kw_end_DASH_line, int(51), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// chan
 	{
-		tmp0 := sym_chan.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(18), kw_column, int(7), kw_end_DASH_line, int(18), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_buf_DASH_or_DASH_n), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform, sym_ex_DASH_handler)), kw_doc, "Creates a channel with an optional buffer, an optional transducer\n  (like (map f), (filter p) etc or a composition thereof), and an\n  optional exception-handler.  If buf-or-n is a number, will create\n  and use a fixed buffer of that size. If a transducer is supplied a\n  buffer must be specified. ex-handler must be a fn of one argument -\n  if an exception occurs during transformation it will be called with\n  the Throwable as an argument, and any non-nil return value will be\n  placed in the channel.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 0:
+		tmp0 := sym_chan
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			lang.FnFunc0(func() any {
 				tmp2 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
 				tmp3 := lang.Apply1(tmp2, nil)
 				return tmp3
-			case 1:
-				v2 := args[0]
+			}),
+			lang.FnFunc1(func(p0 any) any {
+				v2 := p0
 				_ = v2
 				tmp3 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
 				tmp4 := lang.Apply2(tmp3, v2, nil)
 				return tmp4
-			case 2:
-				v2 := args[0]
+			}),
+			lang.FnFunc2(func(p0, p1 any) any {
+				v2 := p0
 				_ = v2
-				v3 := args[1]
+				v3 := p1
 				_ = v3
 				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
 				tmp5 := lang.Apply3(tmp4, v2, v3, nil)
 				return tmp5
-			case 3:
-				v2 := args[0]
+			}),
+			lang.FnFunc3(func(p0, p1, p2 any) any {
+				v2 := p0
 				_ = v2
-				v3 := args[1]
+				v3 := p1
 				_ = v3
-				v4 := args[2]
+				v4 := p2
 				_ = v4
 				var tmp5 any
 				if lang.IsTruthy(v3) {
@@ -5388,20 +453,19 @@ func LoadNS() {
 				} // end let
 				tmp10 := lang.Apply2(lang.Builtins["make"], tmp8, tmp9)
 				return tmp10
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+			}),
+			nil,
+			nil,
+			0,
+		)
 		var_clojure_DOT_core_DOT_async_chan = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_chan.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		var_clojure_DOT_core_DOT_async_chan.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(18), kw_column, int(7), kw_end_DASH_line, int(18), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_buf_DASH_or_DASH_n), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform, sym_ex_DASH_handler)), kw_doc, "Creates a channel with an optional buffer, an optional transducer\n  (like (map f), (filter p) etc or a composition thereof), and an\n  optional exception-handler.  If buf-or-n is a number, will create\n  and use a fixed buffer of that size. If a transducer is supplied a\n  buffer must be specified. ex-handler must be a fn of one argument -\n  if an exception occurs during transformation it will be called with\n  the Throwable as an argument, and any non-nil return value will be\n  placed in the channel.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// close!
 	{
-		tmp0 := sym_close_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_chan)), kw_doc, "Closes a channel. The channel will no longer accept any puts (they\n  will be ignored). Data in the channel remains available for taking,\n  until exhausted, after which takes will return nil. If there are any\n  pending takes, they will be dispatched with nil. Closing a closed\n  channel will throw an exception.\n\n  Logically closing happens after all puts have been\n  delivered. Therefore, any blocked or parked puts will remain\n  blocked/parked until a taker releases them.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_close_BANG_
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -5409,27 +473,29 @@ func LoadNS() {
 			tmp3 := lang.Apply1(lang.Builtins["close"], v2)
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
+		aotDirectFn5 = tmp1
 		var_clojure_DOT_core_DOT_async_close_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_close_BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion5 = var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion()
+		var_clojure_DOT_core_DOT_async_close_BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_chan)), kw_doc, "Closes a channel. The channel will no longer accept any puts (they\n  will be ignored). Data in the channel remains available for taking,\n  until exhausted, after which takes will return nil. If there are any\n  pending takes, they will be dispatched with nil. Closing a closed\n  channel will throw an exception.\n\n  Logically closing happens after all puts have been\n  delivered. Therefore, any blocked or parked puts will remain\n  blocked/parked until a taker releases them.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// default-case
 	{
-		tmp0 := sym_default_DASH_case.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(100), kw_column, int(8), kw_end_DASH_line, int(100), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_default_DASH_case
 		var tmp1 lang.FnFunc0
 		tmp1 = lang.FnFunc0(func() any {
 			var tmp2 any
 			{ // let
 				// let binding "def"
-				tmp3 := new(reflect.SelectCase)
-				var v4 any = tmp3
-				_ = v4
+				tmp3 := reflect.TypeOf((*reflect.SelectCase)(nil)).Elem()
+				tmp4 := reflect.New(tmp3).Interface()
+				var v5 any = tmp4
+				_ = v5
 				// set! host field
-				var tmp5 any
+				var tmp6 any
 				{
-					targetV := reflect.ValueOf(v4)
+					targetV := reflect.ValueOf(v5)
 					if targetV.Kind() == reflect.Ptr {
 						targetV = targetV.Elem()
 					}
@@ -5451,29 +517,30 @@ func LoadNS() {
 					} else {
 						fieldVal.Set(valV)
 					}
-					tmp5 = reflect.SelectDefault
+					tmp6 = reflect.SelectDefault
 				}
-				_ = tmp5
-				tmp2 = v4
+				_ = tmp6
+				tmp2 = v5
 			} // end let
 			return tmp2
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc0)
+		aotDirectFn6 = tmp1
 		var_clojure_DOT_core_DOT_async_default_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_default_DASH_case.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion6 = var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion()
+		var_clojure_DOT_core_DOT_async_default_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(100), kw_column, int(8), kw_end_DASH_line, int(100), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// <!
 	{
-		tmp0 := sym__LT__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(35), kw_column, int(7), kw_end_DASH_line, int(35), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "takes a val from port. Will return nil if closed. Will park if\n  nothing is available.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym__LT__BANG_
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "vec__696"
+				// let binding "vec__690"
 				tmp4 := lang.Apply1(lang.Builtins["recv"], v2)
 				var v5 any = tmp4
 				_ = v5
@@ -5491,22 +558,251 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
+		aotDirectFn0 = tmp1
 		var_clojure_DOT_core_DOT_async__LT__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async__LT__BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion0 = var_clojure_DOT_core_DOT_async__LT__BANG_.RootVersion()
+		var_clojure_DOT_core_DOT_async__LT__BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(35), kw_column, int(7), kw_end_DASH_line, int(35), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "takes a val from port. Will return nil if closed. Will park if\n  nothing is available.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
+	}
+	// pipe
+	{
+		tmp0 := sym_pipe
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			lang.FnFunc2(func(p0, p1 any) any {
+				v2 := p0
+				_ = v2
+				v3 := p1
+				_ = v3
+				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_pipe)
+				tmp5 := lang.Apply3(tmp4, v2, v3, true)
+				return tmp5
+			}),
+			lang.FnFunc3(func(p0, p1, p2 any) any {
+				v2 := p0
+				_ = v2
+				v3 := p1
+				_ = v3
+				v4 := p2
+				_ = v4
+				var tmp5 any
+				{ // let
+					// let binding "c__0__auto__"
+					tmp6 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+					tmp7 := lang.Apply1(tmp6, int64(1))
+					var v8 any = tmp7
+					_ = v8
+					// let binding "f__1__auto__"
+					var tmp9 lang.FnFunc0
+					tmp9 = lang.FnFunc0(func() any {
+						var tmp10 any
+						{ // let
+							// let binding "res__2__auto__"
+							var tmp11 any
+							{ // let
+								for {
+									var tmp12 any
+									{ // let
+										// let binding "v"
+										tmp13 := var_clojure_DOT_core_DOT_async__LT__BANG_.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_async__LT__BANG_.IsMacro()
+										var tmp14 any
+										if !tmp13 {
+											tmp14 = checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
+										}
+										var tmp15 any
+										if tmp13 {
+											tmp15 = aotDirectFn0(v2)
+										} else {
+											tmp15 = lang.Apply1(tmp14, v2)
+										}
+										var v16 any = tmp15
+										_ = v16
+										var tmp17 any
+										tmp18 := lang.Identical(v16, nil)
+										if lang.IsTruthy(tmp18) {
+											var tmp19 any
+											if lang.IsTruthy(v4) {
+												tmp20 := var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion() == aotRootVersion5 && !var_clojure_DOT_core_DOT_async_close_BANG_.IsMacro()
+												var tmp21 any
+												if !tmp20 {
+													tmp21 = checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
+												}
+												var tmp22 any
+												if tmp20 {
+													tmp22 = aotDirectFn5(v3)
+												} else {
+													tmp22 = lang.Apply1(tmp21, v3)
+												}
+												tmp19 = tmp22
+											} else {
+											}
+											tmp17 = tmp19
+										} else {
+											var tmp23 any
+											tmp24 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
+											var tmp25 any
+											if !tmp24 {
+												tmp25 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
+											}
+											var tmp26 any
+											if tmp24 {
+												tmp26 = aotDirectFn2(v3, v16)
+											} else {
+												tmp26 = lang.Apply2(tmp25, v3, v16)
+											}
+											if lang.IsTruthy(tmp26) {
+												continue
+											} else {
+											}
+											tmp17 = tmp23
+										}
+										tmp12 = tmp17
+									} // end let
+									tmp11 = tmp12
+									break
+								}
+							} // end let
+							var v12 any = tmp11
+							_ = v12
+							tmp13 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
+							var tmp14 any
+							if !tmp13 {
+								tmp14 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
+							}
+							var tmp15 any
+							if tmp13 {
+								tmp15 = aotDirectFn2(v8, v12)
+							} else {
+								tmp15 = lang.Apply2(tmp14, v8, v12)
+							}
+							tmp10 = tmp15
+						} // end let
+						return tmp10
+					})
+					var v10 any = tmp9
+					_ = v10
+					go lang.Apply(v10, []any{})
+					tmp11 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
+					tmp12 := lang.Apply1(tmp11, v8)
+					tmp5 = tmp12
+				} // end let
+				_ = tmp5
+				return v3
+			}),
+			nil,
+			nil,
+			0,
+		)
+		var_clojure_DOT_core_DOT_async_pipe = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_core_DOT_async_pipe.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(292), kw_column, int(7), kw_end_DASH_line, int(292), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(sym_from, sym_to), lang.NewVector(sym_from, sym_to, sym_close_QMARK_)), kw_doc, "Takes elements from the from channel and supplies them to the to\n  channel. By default, the to channel will be closed when the from\n  channel closes, but can be determined by the close?  parameter. Will\n  stop consuming the from channel if the to channel closes", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
+	}
+	// timeout
+	{
+		tmp0 := sym_timeout
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			var tmp3 any
+			{ // let
+				// let binding "ret"
+				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+				tmp5 := lang.Apply0(tmp4)
+				var v6 any = tmp5
+				_ = v6
+				// let binding "after"
+				tmp7 := lang.Apply1(lang.Builtins["int64"], time4.Millisecond)
+				tmp8 := lang.Numbers.Multiply(v2, tmp7)
+				tmp9 := lang.Apply1(time4.After, tmp8)
+				var v10 any = tmp9
+				_ = v10
+				var tmp11 any
+				{ // let
+					// let binding "c__0__auto__"
+					tmp12 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+					tmp13 := lang.Apply1(tmp12, int64(1))
+					var v14 any = tmp13
+					_ = v14
+					// let binding "f__1__auto__"
+					var tmp15 lang.FnFunc0
+					tmp15 = lang.FnFunc0(func() any {
+						var tmp16 any
+						{ // let
+							// let binding "res__2__auto__"
+							tmp17 := var_clojure_DOT_core_DOT_async__LT__BANG_.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_async__LT__BANG_.IsMacro()
+							var tmp18 any
+							if !tmp17 {
+								tmp18 = checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
+							}
+							var tmp19 any
+							if tmp17 {
+								tmp19 = aotDirectFn0(v10)
+							} else {
+								tmp19 = lang.Apply1(tmp18, v10)
+							}
+							_ = tmp19
+							tmp20 := var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion() == aotRootVersion5 && !var_clojure_DOT_core_DOT_async_close_BANG_.IsMacro()
+							var tmp21 any
+							if !tmp20 {
+								tmp21 = checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
+							}
+							var tmp22 any
+							if tmp20 {
+								tmp22 = aotDirectFn5(v6)
+							} else {
+								tmp22 = lang.Apply1(tmp21, v6)
+							}
+							var v23 any = tmp22
+							_ = v23
+							tmp24 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
+							var tmp25 any
+							if !tmp24 {
+								tmp25 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
+							}
+							var tmp26 any
+							if tmp24 {
+								tmp26 = aotDirectFn2(v14, v23)
+							} else {
+								tmp26 = lang.Apply2(tmp25, v14, v23)
+							}
+							tmp16 = tmp26
+						} // end let
+						return tmp16
+					})
+					var v16 any = tmp15
+					_ = v16
+					go lang.Apply(v16, []any{})
+					tmp17 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
+					tmp18 := lang.Apply1(tmp17, v14)
+					tmp11 = tmp18
+				} // end let
+				_ = tmp11
+				tmp3 = v6
+			} // end let
+			return tmp3
+		})
+		aotDirectFn12 = tmp1
+		var_clojure_DOT_core_DOT_async_timeout = ns.InternWithValue(tmp0, tmp1, true)
+		aotRootVersion12 = var_clojure_DOT_core_DOT_async_timeout.RootVersion()
+		var_clojure_DOT_core_DOT_async_timeout.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(91), kw_column, int(7), kw_end_DASH_line, int(91), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_msecs)), kw_doc, "Returns a channel that will close after msecs", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// <!!
 	{
-		tmp0 := sym__LT__BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(42), kw_column, int(6), kw_end_DASH_line, int(42), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym__LT__BANG__BANG_
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "vec__696"
+				// let binding "vec__690"
 				tmp4 := lang.Apply1(lang.Builtins["recv"], v2)
 				var v5 any = tmp4
 				_ = v5
@@ -5524,58 +820,66 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
+		aotDirectFn1 = tmp1
 		var_clojure_DOT_core_DOT_async__LT__BANG__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async__LT__BANG__BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion1 = var_clojure_DOT_core_DOT_async__LT__BANG__BANG_.RootVersion()
+		var_clojure_DOT_core_DOT_async__LT__BANG__BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(42), kw_column, int(6), kw_end_DASH_line, int(42), kw_end_DASH_column, int(8), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// alt!
 	{
-		tmp0 := sym_alt_BANG_.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_clauses)), kw_doc, "Makes a single choice between one of several channel operations,\n  as if by alts!, returning the value of the result expr corresponding\n  to the operation completed.\n\n  Each clause takes the form of:\n\n  channel-op[s] result-expr\n\n  where channel-ops is one of:\n\n  take-port - a single port to take\n  [take-port | [put-port put-val] ...] - a vector of ports as per alts!\n  :default | :priority - an option for alts!\n\n  and result-expr is either a list beginning with a vector, whereupon that\n  vector will be treated as a binding for the [val port] return of the\n  operation, else any other expression.\n\n  (alt!\n    [c t] ([val ch] (foo ch val))\n    x ([v] v)\n    [[out val]] :wrote\n    :default 42)\n\n  Each option may appear at most once. The choice and parking\n  characteristics are those of alts!.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(250), kw_end_DASH_line, int(250))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		tmp0 := sym_alt_BANG_
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
-				tmp5 := checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alt)
-				tmp6 := lang.Apply2(tmp5, sym_clojure_DOT_core_DOT_async_SLASH_alts_BANG_, v4)
-				return tmp6
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+				tmp5 := var_clojure_DOT_core_DOT_async_do_DASH_alt.RootVersion() == aotRootVersion7 && !var_clojure_DOT_core_DOT_async_do_DASH_alt.IsMacro()
+				var tmp6 any
+				if !tmp5 {
+					tmp6 = checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alt)
+				}
+				var tmp7 any
+				if tmp5 {
+					tmp7 = aotDirectFn7(sym_clojure_DOT_core_DOT_async_SLASH_alts_BANG_, v4)
+				} else {
+					tmp7 = lang.Apply2(tmp6, sym_clojure_DOT_core_DOT_async_SLASH_alts_BANG_, v4)
+				}
+				return tmp7
+			}),
+			2,
+		)
 		var_clojure_DOT_core_DOT_async_alt_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_alt_BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		var_clojure_DOT_core_DOT_async_alt_BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_clauses)), kw_doc, "Makes a single choice between one of several channel operations,\n  as if by alts!, returning the value of the result expr corresponding\n  to the operation completed.\n\n  Each clause takes the form of:\n\n  channel-op[s] result-expr\n\n  where channel-ops is one of:\n\n  take-port - a single port to take\n  [take-port | [put-port put-val] ...] - a vector of ports as per alts!\n  :default | :priority - an option for alts!\n\n  and result-expr is either a list beginning with a vector, whereupon that\n  vector will be treated as a binding for the [val port] return of the\n  operation, else any other expression.\n\n  (alt!\n    [c t] ([val ch] (foo ch val))\n    x ([v] v)\n    [[out val]] :wrote\n    :default 42)\n\n  Each option may appear at most once. The choice and parking\n  characteristics are those of alts!.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(250), kw_end_DASH_line, int(250))
+		})
 	}
 	// alt!!
 	{
-		tmp0 := sym_alt_BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(281), kw_column, int(11), kw_end_DASH_line, int(281), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_macro, true)).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		tmp0 := sym_alt_BANG__BANG_
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -5584,36 +888,35 @@ func LoadNS() {
 				tmp9 := lang.Apply2(tmp6, tmp8, v4)
 				tmp10 := lang.Apply1(tmp5, tmp9)
 				return tmp10
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+			}),
+			2,
+		)
 		var_clojure_DOT_core_DOT_async_alt_BANG__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_alt_BANG__BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		var_clojure_DOT_core_DOT_async_alt_BANG__BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(281), kw_column, int(11), kw_end_DASH_line, int(281), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_macro, true)
+		})
 	}
 	// alts!
 	{
-		tmp0 := sym_alts_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(185), kw_column, int(7), kw_end_DASH_line, int(185), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym__AMP_, lang.NewMap(kw_as, sym_opts))), kw_doc, "Completes at most one of several channel operations. Must ports is a\n  vector of channel endpoints, which can be either a channel to take\n  from or a vector of [channel-to-put-to val-to-put], in any\n  combination.  Takes will be made as if by <!, and puts will be made\n  as if by >!. Unless the :priority option is true, if more than one\n  port operation is ready a non-deterministic choice will be made. If\n  no operation is ready and a :default value is\n  supplied, [default-val :default] will be returned, otherwise alts!\n  will park until the first operation to become ready\n  completes. Returns [val port] of the completed operation, where val\n  is the value taken for takes, and true for puts.\n\n  opts are passed as :key val ... Supported options:\n\n  :default val - the value to use if none of the operations are immediately ready\n  :priority true - (default nil) when true, the operations will be tried in order.\n\n  Note: there is no guarantee that the port exps or val exprs will be\n  used, nor in what order should they be, so they should not be\n  depended upon for side effects.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		tmp0 := sym_alts_BANG_
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				{ // let
-					// let binding "map__712"
+					// let binding "map__706"
 					var v5 any = v3
 					_ = v5
-					// let binding "map__712"
+					// let binding "map__706"
 					var tmp6 any
 					tmp7 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
 					tmp8 := lang.Apply1(tmp7, v5)
@@ -5649,41 +952,49 @@ func LoadNS() {
 					// let binding "opts"
 					var v22 any = v21
 					_ = v22
-					tmp23 := checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
-					tmp24 := lang.Apply2(tmp23, v2, v22)
-					tmp4 = tmp24
+					tmp23 := var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion() == aotRootVersion8 && !var_clojure_DOT_core_DOT_async_do_DASH_alts.IsMacro()
+					var tmp24 any
+					if !tmp23 {
+						tmp24 = checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
+					}
+					var tmp25 any
+					if tmp23 {
+						tmp25 = aotDirectFn8(v2, v22)
+					} else {
+						tmp25 = lang.Apply2(tmp24, v2, v22)
+					}
+					tmp4 = tmp25
 				} // end let
 				return tmp4
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+			}),
+			1,
+		)
 		var_clojure_DOT_core_DOT_async_alts_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_alts_BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		var_clojure_DOT_core_DOT_async_alts_BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(185), kw_column, int(7), kw_end_DASH_line, int(185), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym__AMP_, lang.NewMap(kw_as, sym_opts))), kw_doc, "Completes at most one of several channel operations. Must ports is a\n  vector of channel endpoints, which can be either a channel to take\n  from or a vector of [channel-to-put-to val-to-put], in any\n  combination.  Takes will be made as if by <!, and puts will be made\n  as if by >!. Unless the :priority option is true, if more than one\n  port operation is ready a non-deterministic choice will be made. If\n  no operation is ready and a :default value is\n  supplied, [default-val :default] will be returned, otherwise alts!\n  will park until the first operation to become ready\n  completes. Returns [val port] of the completed operation, where val\n  is the value taken for takes, and true for puts.\n\n  opts are passed as :key val ... Supported options:\n\n  :default val - the value to use if none of the operations are immediately ready\n  :priority true - (default nil) when true, the operations will be tried in order.\n\n  Note: there is no guarantee that the port exps or val exprs will be\n  used, nor in what order should they be, so they should not be\n  depended upon for side effects.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// alts!!
 	{
-		tmp0 := sym_alts_BANG__BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(210), kw_column, int(6), kw_end_DASH_line, int(210), kw_end_DASH_column, int(11), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 1)
+		tmp0 := sym_alts_BANG__BANG_
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
-				restArgs := args[1:]
-				var v3 any
-				if len(restArgs) > 0 {
-					v3 = lang.NewList(restArgs...)
-				}
+				var v3 any = rest
 				_ = v3
 				var tmp4 any
 				{ // let
-					// let binding "map__712"
+					// let binding "map__706"
 					var v5 any = v3
 					_ = v5
-					// let binding "map__712"
+					// let binding "map__706"
 					var tmp6 any
 					tmp7 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
 					tmp8 := lang.Apply1(tmp7, v5)
@@ -5719,22 +1030,31 @@ func LoadNS() {
 					// let binding "opts"
 					var v22 any = v21
 					_ = v22
-					tmp23 := checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
-					tmp24 := lang.Apply2(tmp23, v2, v22)
-					tmp4 = tmp24
+					tmp23 := var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion() == aotRootVersion8 && !var_clojure_DOT_core_DOT_async_do_DASH_alts.IsMacro()
+					var tmp24 any
+					if !tmp23 {
+						tmp24 = checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
+					}
+					var tmp25 any
+					if tmp23 {
+						tmp25 = aotDirectFn8(v2, v22)
+					} else {
+						tmp25 = lang.Apply2(tmp24, v2, v22)
+					}
+					tmp4 = tmp25
 				} // end let
 				return tmp4
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+			}),
+			1,
+		)
 		var_clojure_DOT_core_DOT_async_alts_BANG__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_alts_BANG__BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		var_clojure_DOT_core_DOT_async_alts_BANG__BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(210), kw_column, int(6), kw_end_DASH_line, int(210), kw_end_DASH_column, int(11), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// check-unique-ports!
 	{
-		tmp0 := sym_check_DASH_unique_DASH_ports_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(158), kw_column, int(8), kw_end_DASH_line, int(158), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_ports)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_check_DASH_unique_DASH_ports_BANG_
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -5758,44 +1078,40 @@ func LoadNS() {
 					}
 					return tmp7
 				})
-				tmp6 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(160), kw_column, int(20), kw_end_DASH_line, int(160), kw_end_DASH_column, int(44))
-				tmp7, err := lang.WithMeta(tmp5, tmp6.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp8 := lang.Apply2(tmp4, tmp7, v2)
-				var v9 any = tmp8
-				_ = v9
+				tmp6 := lang.Apply2(tmp4, tmp5, v2)
+				var v7 any = tmp6
+				_ = v7
 				// let binding "s"
-				tmp10 := checkDerefVar(var_clojure_DOT_core_set)
-				tmp11 := lang.Apply1(tmp10, v9)
-				var v12 any = tmp11
-				_ = v12
-				var tmp13 any
-				tmp14 := checkDerefVar(var_clojure_DOT_core_not_EQ_)
+				tmp8 := checkDerefVar(var_clojure_DOT_core_set)
+				tmp9 := lang.Apply1(tmp8, v7)
+				var v10 any = tmp9
+				_ = v10
+				var tmp11 any
+				tmp12 := checkDerefVar(var_clojure_DOT_core_not_EQ_)
+				tmp13 := checkDerefVar(var_clojure_DOT_core_count)
+				tmp14 := lang.Apply1(tmp13, v10)
 				tmp15 := checkDerefVar(var_clojure_DOT_core_count)
-				tmp16 := lang.Apply1(tmp15, v12)
-				tmp17 := checkDerefVar(var_clojure_DOT_core_count)
-				tmp18 := lang.Apply1(tmp17, v2)
-				tmp19 := lang.Apply2(tmp14, tmp16, tmp18)
-				if lang.IsTruthy(tmp19) {
-					tmp20 := lang.Apply1(fmt.Errorf, "duplicate ports found in alt(s)! operation")
-					panic(tmp20)
+				tmp16 := lang.Apply1(tmp15, v2)
+				tmp17 := lang.Apply2(tmp12, tmp14, tmp16)
+				if lang.IsTruthy(tmp17) {
+					tmp18 := lang.Apply1(fmt.Errorf, "duplicate ports found in alt(s)! operation")
+					panic(tmp18)
 				} else {
 				}
-				tmp3 = tmp13
+				tmp3 = tmp11
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
+		aotDirectFn4 = tmp1
 		var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion4 = var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.RootVersion()
+		var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(158), kw_column, int(8), kw_end_DASH_line, int(158), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_ports)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// do-alt
 	{
-		tmp0 := sym_do_DASH_alt.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(212), kw_column, int(7), kw_end_DASH_line, int(212), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_alts, sym_clauses)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_do_DASH_alt
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
@@ -5820,671 +1136,672 @@ func LoadNS() {
 					tmp13 := lang.Apply1(tmp10, tmp12)
 					return tmp13
 				})
-				tmp9 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(215), kw_column, int(14), kw_end_DASH_line, int(215), kw_end_DASH_column, int(34))
-				tmp10, err := lang.WithMeta(tmp8, tmp9.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				var v11 any = tmp10
-				_ = v11
+				var v9 any = tmp8
+				_ = v9
 				// let binding "opts"
-				tmp12 := checkDerefVar(var_clojure_DOT_core_filter)
-				tmp13 := lang.Apply2(tmp12, v11, v7)
-				var v14 any = tmp13
-				_ = v14
+				tmp10 := checkDerefVar(var_clojure_DOT_core_filter)
+				tmp11 := lang.Apply2(tmp10, v9, v7)
+				var v12 any = tmp11
+				_ = v12
 				// let binding "clauses"
-				tmp15 := checkDerefVar(var_clojure_DOT_core_remove)
-				tmp16 := lang.Apply2(tmp15, v11, v7)
-				var v17 any = tmp16
-				_ = v17
-				// let binding "vec__713"
-				tmp18 := checkDerefVar(var_clojure_DOT_core_reduce)
-				var tmp19 lang.FnFunc2
-				tmp19 = lang.FnFunc2(func(p0, p1 any) any {
-					v20 := p0
-					_ = v20
-					v21 := p1
-					_ = v21
-					var tmp22 any
+				tmp13 := checkDerefVar(var_clojure_DOT_core_remove)
+				tmp14 := lang.Apply2(tmp13, v9, v7)
+				var v15 any = tmp14
+				_ = v15
+				// let binding "vec__707"
+				tmp16 := checkDerefVar(var_clojure_DOT_core_reduce)
+				var tmp17 lang.FnFunc2
+				tmp17 = lang.FnFunc2(func(p0, p1 any) any {
+					v18 := p0
+					_ = v18
+					v19 := p1
+					_ = v19
+					var tmp20 any
 					{ // let
-						// let binding "vec__718"
-						var v23 any = v20
-						_ = v23
+						// let binding "vec__712"
+						var v21 any = v18
+						_ = v21
 						// let binding "clauses"
-						tmp24 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp25 := lang.Apply3(tmp24, v23, int64(0), nil)
-						var v26 any = tmp25
-						_ = v26
+						tmp22 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp23 := lang.Apply3(tmp22, v21, int64(0), nil)
+						var v24 any = tmp23
+						_ = v24
 						// let binding "bindings"
-						tmp27 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp28 := lang.Apply3(tmp27, v23, int64(1), nil)
-						var v29 any = tmp28
-						_ = v29
-						// let binding "vec__721"
-						var v30 any = v21
-						_ = v30
+						tmp25 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp26 := lang.Apply3(tmp25, v21, int64(1), nil)
+						var v27 any = tmp26
+						_ = v27
+						// let binding "vec__715"
+						var v28 any = v19
+						_ = v28
 						// let binding "ports"
-						tmp31 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp32 := lang.Apply3(tmp31, v30, int64(0), nil)
-						var v33 any = tmp32
-						_ = v33
+						tmp29 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp30 := lang.Apply3(tmp29, v28, int64(0), nil)
+						var v31 any = tmp30
+						_ = v31
 						// let binding "expr"
-						tmp34 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp35 := lang.Apply3(tmp34, v30, int64(1), nil)
-						var v36 any = tmp35
-						_ = v36
-						var tmp37 any
+						tmp32 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp33 := lang.Apply3(tmp32, v28, int64(1), nil)
+						var v34 any = tmp33
+						_ = v34
+						var tmp35 any
 						{ // let
 							// let binding "ports"
-							var tmp38 any
-							tmp39 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-							tmp40 := lang.Apply1(tmp39, v33)
-							if lang.IsTruthy(tmp40) {
-								tmp38 = v33
+							var tmp36 any
+							tmp37 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
+							tmp38 := lang.Apply1(tmp37, v31)
+							if lang.IsTruthy(tmp38) {
+								tmp36 = v31
 							} else {
-								tmp41 := lang.NewVector(v33)
-								tmp42 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(221), kw_column, int(50), kw_end_DASH_line, int(221), kw_end_DASH_column, int(56))
-								tmp43, err := lang.WithMeta(tmp41, tmp42.(lang.IPersistentMap))
+								tmp39 := lang.NewVector(v31)
+								tmp40 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(221), kw_column, int(50), kw_end_DASH_line, int(221), kw_end_DASH_column, int(56))
+								tmp41, err := lang.WithMeta(tmp39, tmp40.(lang.IPersistentMap))
 								if err != nil {
 									panic(err)
 								}
-								tmp38 = tmp43
+								tmp36 = tmp41
 							}
-							var v44 any = tmp38
-							_ = v44
-							// let binding "vec__724"
-							tmp45 := checkDerefVar(var_clojure_DOT_core_reduce)
-							var tmp46 lang.FnFunc2
-							tmp46 = lang.FnFunc2(func(p0, p1 any) any {
-								v47 := p0
-								_ = v47
-								v48 := p1
-								_ = v48
-								var tmp49 any
+							var v42 any = tmp36
+							_ = v42
+							// let binding "vec__718"
+							tmp43 := checkDerefVar(var_clojure_DOT_core_reduce)
+							var tmp44 lang.FnFunc2
+							tmp44 = lang.FnFunc2(func(p0, p1 any) any {
+								v45 := p0
+								_ = v45
+								v46 := p1
+								_ = v46
+								var tmp47 any
 								{ // let
-									// let binding "vec__728"
-									var v50 any = v47
-									_ = v50
+									// let binding "vec__722"
+									var v48 any = v45
+									_ = v48
 									// let binding "ports"
-									tmp51 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp52 := lang.Apply3(tmp51, v50, int64(0), nil)
-									var v53 any = tmp52
-									_ = v53
+									tmp49 := checkDerefVar(var_clojure_DOT_core_nth)
+									tmp50 := lang.Apply3(tmp49, v48, int64(0), nil)
+									var v51 any = tmp50
+									_ = v51
 									// let binding "bindings"
-									tmp54 := checkDerefVar(var_clojure_DOT_core_nth)
-									tmp55 := lang.Apply3(tmp54, v50, int64(1), nil)
-									var v56 any = tmp55
-									_ = v56
-									var tmp57 any
-									tmp58 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-									tmp59 := lang.Apply1(tmp58, v48)
-									if lang.IsTruthy(tmp59) {
-										var tmp60 any
+									tmp52 := checkDerefVar(var_clojure_DOT_core_nth)
+									tmp53 := lang.Apply3(tmp52, v48, int64(1), nil)
+									var v54 any = tmp53
+									_ = v54
+									var tmp55 any
+									tmp56 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
+									tmp57 := lang.Apply1(tmp56, v46)
+									if lang.IsTruthy(tmp57) {
+										var tmp58 any
 										{ // let
-											// let binding "vec__731"
-											var v61 any = v48
-											_ = v61
+											// let binding "vec__725"
+											var v59 any = v46
+											_ = v59
 											// let binding "port"
-											tmp62 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp63 := lang.Apply3(tmp62, v61, int64(0), nil)
-											var v64 any = tmp63
-											_ = v64
+											tmp60 := checkDerefVar(var_clojure_DOT_core_nth)
+											tmp61 := lang.Apply3(tmp60, v59, int64(0), nil)
+											var v62 any = tmp61
+											_ = v62
 											// let binding "val"
-											tmp65 := checkDerefVar(var_clojure_DOT_core_nth)
-											tmp66 := lang.Apply3(tmp65, v61, int64(1), nil)
-											var v67 any = tmp66
-											_ = v67
+											tmp63 := checkDerefVar(var_clojure_DOT_core_nth)
+											tmp64 := lang.Apply3(tmp63, v59, int64(1), nil)
+											var v65 any = tmp64
+											_ = v65
 											// let binding "gp"
-											tmp68 := checkDerefVar(var_clojure_DOT_core_gensym)
-											tmp69 := lang.Apply0(tmp68)
-											var v70 any = tmp69
-											_ = v70
+											tmp66 := checkDerefVar(var_clojure_DOT_core_gensym)
+											tmp67 := lang.Apply0(tmp66)
+											var v68 any = tmp67
+											_ = v68
 											// let binding "gv"
-											tmp71 := checkDerefVar(var_clojure_DOT_core_gensym)
-											tmp72 := lang.Apply0(tmp71)
-											var v73 any = tmp72
-											_ = v73
-											tmp74 := checkDerefVar(var_clojure_DOT_core_conj)
-											tmp75 := lang.NewVector(v70, v73)
-											tmp76 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(229), kw_column, int(38), kw_end_DASH_line, int(229), kw_end_DASH_column, int(44))
-											tmp77, err := lang.WithMeta(tmp75, tmp76.(lang.IPersistentMap))
+											tmp69 := checkDerefVar(var_clojure_DOT_core_gensym)
+											tmp70 := lang.Apply0(tmp69)
+											var v71 any = tmp70
+											_ = v71
+											tmp72 := checkDerefVar(var_clojure_DOT_core_conj)
+											tmp73 := lang.NewVector(v68, v71)
+											tmp74 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(229), kw_column, int(38), kw_end_DASH_line, int(229), kw_end_DASH_column, int(44))
+											tmp75, err := lang.WithMeta(tmp73, tmp74.(lang.IPersistentMap))
 											if err != nil {
 												panic(err)
 											}
-											tmp78 := lang.Apply2(tmp74, v53, tmp77)
-											tmp79 := checkDerefVar(var_clojure_DOT_core_conj)
-											tmp80 := lang.NewVector(v70, v64)
-											tmp81 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(229), kw_column, int(62), kw_end_DASH_line, int(229), kw_end_DASH_column, int(70))
-											tmp82, err := lang.WithMeta(tmp80, tmp81.(lang.IPersistentMap))
+											tmp76 := lang.Apply2(tmp72, v51, tmp75)
+											tmp77 := checkDerefVar(var_clojure_DOT_core_conj)
+											tmp78 := lang.NewVector(v68, v62)
+											tmp79 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(229), kw_column, int(62), kw_end_DASH_line, int(229), kw_end_DASH_column, int(70))
+											tmp80, err := lang.WithMeta(tmp78, tmp79.(lang.IPersistentMap))
 											if err != nil {
 												panic(err)
 											}
-											tmp83 := lang.NewVector(v73, v67)
-											tmp84 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(229), kw_column, int(72), kw_end_DASH_line, int(229), kw_end_DASH_column, int(79))
-											tmp85, err := lang.WithMeta(tmp83, tmp84.(lang.IPersistentMap))
+											tmp81 := lang.NewVector(v71, v65)
+											tmp82 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(229), kw_column, int(72), kw_end_DASH_line, int(229), kw_end_DASH_column, int(79))
+											tmp83, err := lang.WithMeta(tmp81, tmp82.(lang.IPersistentMap))
 											if err != nil {
 												panic(err)
 											}
-											tmp86 := lang.Apply3(tmp79, v56, tmp82, tmp85)
-											tmp87 := lang.NewVector(tmp78, tmp86)
-											tmp88 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(229), kw_column, int(25), kw_end_DASH_line, int(229), kw_end_DASH_column, int(81))
-											tmp89, err := lang.WithMeta(tmp87, tmp88.(lang.IPersistentMap))
+											tmp84 := lang.Apply3(tmp77, v54, tmp80, tmp83)
+											tmp85 := lang.NewVector(tmp76, tmp84)
+											tmp86 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(229), kw_column, int(25), kw_end_DASH_line, int(229), kw_end_DASH_column, int(81))
+											tmp87, err := lang.WithMeta(tmp85, tmp86.(lang.IPersistentMap))
 											if err != nil {
 												panic(err)
 											}
-											tmp60 = tmp89
+											tmp58 = tmp87
 										} // end let
-										tmp57 = tmp60
+										tmp55 = tmp58
 									} else {
-										var tmp61 any
+										var tmp59 any
 										{ // let
 											// let binding "gp"
-											tmp62 := checkDerefVar(var_clojure_DOT_core_gensym)
-											tmp63 := lang.Apply0(tmp62)
-											var v64 any = tmp63
-											_ = v64
+											tmp60 := checkDerefVar(var_clojure_DOT_core_gensym)
+											tmp61 := lang.Apply0(tmp60)
+											var v62 any = tmp61
+											_ = v62
+											tmp63 := checkDerefVar(var_clojure_DOT_core_conj)
+											tmp64 := lang.Apply2(tmp63, v51, v62)
 											tmp65 := checkDerefVar(var_clojure_DOT_core_conj)
-											tmp66 := lang.Apply2(tmp65, v53, v64)
-											tmp67 := checkDerefVar(var_clojure_DOT_core_conj)
-											tmp68 := lang.NewVector(v64, v48)
-											tmp69 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(231), kw_column, int(57), kw_end_DASH_line, int(231), kw_end_DASH_column, int(65))
-											tmp70, err := lang.WithMeta(tmp68, tmp69.(lang.IPersistentMap))
+											tmp66 := lang.NewVector(v62, v46)
+											tmp67 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(231), kw_column, int(57), kw_end_DASH_line, int(231), kw_end_DASH_column, int(65))
+											tmp68, err := lang.WithMeta(tmp66, tmp67.(lang.IPersistentMap))
 											if err != nil {
 												panic(err)
 											}
-											tmp71 := lang.Apply2(tmp67, v56, tmp70)
-											tmp72 := lang.NewVector(tmp66, tmp71)
-											tmp73 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(231), kw_column, int(25), kw_end_DASH_line, int(231), kw_end_DASH_column, int(67))
-											tmp74, err := lang.WithMeta(tmp72, tmp73.(lang.IPersistentMap))
+											tmp69 := lang.Apply2(tmp65, v54, tmp68)
+											tmp70 := lang.NewVector(tmp64, tmp69)
+											tmp71 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(231), kw_column, int(25), kw_end_DASH_line, int(231), kw_end_DASH_column, int(67))
+											tmp72, err := lang.WithMeta(tmp70, tmp71.(lang.IPersistentMap))
 											if err != nil {
 												panic(err)
 											}
-											tmp61 = tmp74
+											tmp59 = tmp72
 										} // end let
-										tmp57 = tmp61
+										tmp55 = tmp59
 									}
-									tmp49 = tmp57
+									tmp47 = tmp55
 								} // end let
-								return tmp49
+								return tmp47
 							})
-							tmp47 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(224), kw_column, int(19), kw_end_DASH_line, int(231), kw_end_DASH_column, int(70))
-							tmp48, err := lang.WithMeta(tmp46, tmp47.(lang.IPersistentMap))
+							tmp45 := lang.NewVector()
+							tmp46 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(232), kw_column, int(20), kw_end_DASH_line, int(232), kw_end_DASH_column, int(21))
+							tmp47, err := lang.WithMeta(tmp45, tmp46.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp49 := lang.NewVector()
-							tmp50 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(232), kw_column, int(20), kw_end_DASH_line, int(232), kw_end_DASH_column, int(21))
-							tmp51, err := lang.WithMeta(tmp49, tmp50.(lang.IPersistentMap))
+							tmp48 := lang.NewVector(tmp47, v27)
+							tmp49 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(232), kw_column, int(19), kw_end_DASH_line, int(232), kw_end_DASH_column, int(31))
+							tmp50, err := lang.WithMeta(tmp48, tmp49.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp52 := lang.NewVector(tmp51, v29)
-							tmp53 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(232), kw_column, int(19), kw_end_DASH_line, int(232), kw_end_DASH_column, int(31))
-							tmp54, err := lang.WithMeta(tmp52, tmp53.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp55 := lang.Apply3(tmp45, tmp48, tmp54, v44)
-							var v56 any = tmp55
-							_ = v56
+							tmp51 := lang.Apply3(tmp43, tmp44, tmp50, v42)
+							var v52 any = tmp51
+							_ = v52
 							// let binding "ports"
-							tmp57 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp58 := lang.Apply3(tmp57, v56, int64(0), nil)
-							var v59 any = tmp58
-							_ = v59
+							tmp53 := checkDerefVar(var_clojure_DOT_core_nth)
+							tmp54 := lang.Apply3(tmp53, v52, int64(0), nil)
+							var v55 any = tmp54
+							_ = v55
 							// let binding "bindings"
-							tmp60 := checkDerefVar(var_clojure_DOT_core_nth)
-							tmp61 := lang.Apply3(tmp60, v56, int64(1), nil)
-							var v62 any = tmp61
-							_ = v62
-							tmp63 := checkDerefVar(var_clojure_DOT_core_conj)
-							tmp64 := lang.NewVector(v59, v36)
-							tmp65 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(233), kw_column, int(29), kw_end_DASH_line, int(233), kw_end_DASH_column, int(40))
+							tmp56 := checkDerefVar(var_clojure_DOT_core_nth)
+							tmp57 := lang.Apply3(tmp56, v52, int64(1), nil)
+							var v58 any = tmp57
+							_ = v58
+							tmp59 := checkDerefVar(var_clojure_DOT_core_conj)
+							tmp60 := lang.NewVector(v55, v34)
+							tmp61 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(233), kw_column, int(29), kw_end_DASH_line, int(233), kw_end_DASH_column, int(40))
+							tmp62, err := lang.WithMeta(tmp60, tmp61.(lang.IPersistentMap))
+							if err != nil {
+								panic(err)
+							}
+							tmp63 := lang.Apply2(tmp59, v24, tmp62)
+							tmp64 := lang.NewVector(tmp63, v58)
+							tmp65 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(233), kw_column, int(14), kw_end_DASH_line, int(233), kw_end_DASH_column, int(51))
 							tmp66, err := lang.WithMeta(tmp64, tmp65.(lang.IPersistentMap))
 							if err != nil {
 								panic(err)
 							}
-							tmp67 := lang.Apply2(tmp63, v26, tmp66)
-							tmp68 := lang.NewVector(tmp67, v62)
-							tmp69 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(233), kw_column, int(14), kw_end_DASH_line, int(233), kw_end_DASH_column, int(51))
-							tmp70, err := lang.WithMeta(tmp68, tmp69.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp37 = tmp70
+							tmp35 = tmp66
 						} // end let
-						tmp22 = tmp37
+						tmp20 = tmp35
 					} // end let
-					return tmp22
+					return tmp20
 				})
-				tmp20 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(220), kw_column, int(10), kw_end_DASH_line, int(233), kw_end_DASH_column, int(53))
-				tmp21, err := lang.WithMeta(tmp19, tmp20.(lang.IPersistentMap))
+				tmp18 := lang.NewVector()
+				tmp19 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(234), kw_column, int(11), kw_end_DASH_line, int(234), kw_end_DASH_column, int(12))
+				tmp20, err := lang.WithMeta(tmp18, tmp19.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp22 := lang.NewVector()
-				tmp23 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(234), kw_column, int(11), kw_end_DASH_line, int(234), kw_end_DASH_column, int(12))
-				tmp24, err := lang.WithMeta(tmp22, tmp23.(lang.IPersistentMap))
+				tmp21 := lang.NewVector()
+				tmp22 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(234), kw_column, int(14), kw_end_DASH_line, int(234), kw_end_DASH_column, int(15))
+				tmp23, err := lang.WithMeta(tmp21, tmp22.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp25 := lang.NewVector()
-				tmp26 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(234), kw_column, int(14), kw_end_DASH_line, int(234), kw_end_DASH_column, int(15))
-				tmp27, err := lang.WithMeta(tmp25, tmp26.(lang.IPersistentMap))
+				tmp24 := lang.NewVector(tmp20, tmp23)
+				tmp25 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(234), kw_column, int(10), kw_end_DASH_line, int(234), kw_end_DASH_column, int(16))
+				tmp26, err := lang.WithMeta(tmp24, tmp25.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp28 := lang.NewVector(tmp24, tmp27)
-				tmp29 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(234), kw_column, int(10), kw_end_DASH_line, int(234), kw_end_DASH_column, int(16))
-				tmp30, err := lang.WithMeta(tmp28, tmp29.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp31 := lang.Apply3(tmp18, tmp21, tmp30, v17)
-				var v32 any = tmp31
-				_ = v32
+				tmp27 := lang.Apply3(tmp16, tmp17, tmp26, v15)
+				var v28 any = tmp27
+				_ = v28
 				// let binding "clauses"
-				tmp33 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp34 := lang.Apply3(tmp33, v32, int64(0), nil)
-				var v35 any = tmp34
-				_ = v35
+				tmp29 := checkDerefVar(var_clojure_DOT_core_nth)
+				tmp30 := lang.Apply3(tmp29, v28, int64(0), nil)
+				var v31 any = tmp30
+				_ = v31
 				// let binding "bindings"
-				tmp36 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp37 := lang.Apply3(tmp36, v32, int64(1), nil)
-				var v38 any = tmp37
-				_ = v38
+				tmp32 := checkDerefVar(var_clojure_DOT_core_nth)
+				tmp33 := lang.Apply3(tmp32, v28, int64(1), nil)
+				var v34 any = tmp33
+				_ = v34
 				// let binding "gch"
-				tmp39 := checkDerefVar(var_clojure_DOT_core_gensym)
-				tmp40 := lang.Apply1(tmp39, "ch")
-				var v41 any = tmp40
-				_ = v41
+				tmp35 := checkDerefVar(var_clojure_DOT_core_gensym)
+				tmp36 := lang.Apply1(tmp35, "ch")
+				var v37 any = tmp36
+				_ = v37
 				// let binding "gret"
-				tmp42 := checkDerefVar(var_clojure_DOT_core_gensym)
-				tmp43 := lang.Apply1(tmp42, "ret")
-				var v44 any = tmp43
-				_ = v44
-				tmp45 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp46 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp47 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp48 := lang.Apply1(tmp47, sym_clojure_DOT_core_SLASH_let)
-				tmp49 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp50 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp51 := checkDerefVar(var_clojure_DOT_core_vector)
-				tmp52 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp53 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp54 := checkDerefVar(var_clojure_DOT_core_mapcat)
-				tmp55 := checkDerefVar(var_clojure_DOT_core_identity)
-				tmp56 := lang.Apply2(tmp54, tmp55, v38)
-				tmp57 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp58 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp59 := checkDerefVar(var_clojure_DOT_core_vector)
-				tmp60 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp61 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp38 := checkDerefVar(var_clojure_DOT_core_gensym)
+				tmp39 := lang.Apply1(tmp38, "ret")
+				var v40 any = tmp39
+				_ = v40
+				tmp41 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp42 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp43 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp44 := lang.Apply1(tmp43, sym_clojure_DOT_core_SLASH_let)
+				tmp45 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp46 := checkDerefVar(var_clojure_DOT_core_apply)
+				tmp47 := checkDerefVar(var_clojure_DOT_core_vector)
+				tmp48 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp49 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp50 := checkDerefVar(var_clojure_DOT_core_mapcat)
+				tmp51 := checkDerefVar(var_clojure_DOT_core_identity)
+				tmp52 := lang.Apply2(tmp50, tmp51, v34)
+				tmp53 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp54 := checkDerefVar(var_clojure_DOT_core_apply)
+				tmp55 := checkDerefVar(var_clojure_DOT_core_vector)
+				tmp56 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp57 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp58 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp59 := lang.Apply1(tmp58, sym_val__0__auto__)
+				tmp60 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp61 := lang.Apply1(tmp60, v37)
 				tmp62 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp63 := lang.Apply1(tmp62, sym_val__0__auto__)
+				tmp63 := lang.Apply1(tmp62, kw_as)
 				tmp64 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp65 := lang.Apply1(tmp64, v41)
-				tmp66 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp67 := lang.Apply1(tmp66, kw_as)
-				tmp68 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp69 := lang.Apply1(tmp68, v44)
-				tmp70 := lang.Apply4(tmp61, tmp63, tmp65, tmp67, tmp69)
-				tmp71 := lang.Apply1(tmp60, tmp70)
-				tmp72 := lang.Apply2(tmp58, tmp59, tmp71)
-				tmp73 := lang.Apply1(tmp57, tmp72)
-				tmp74 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp75 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp76 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp77 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp78 := lang.Apply1(tmp77, v2)
-				tmp79 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp65 := lang.Apply1(tmp64, v40)
+				tmp66 := lang.Apply4(tmp57, tmp59, tmp61, tmp63, tmp65)
+				tmp67 := lang.Apply1(tmp56, tmp66)
+				tmp68 := lang.Apply2(tmp54, tmp55, tmp67)
+				tmp69 := lang.Apply1(tmp53, tmp68)
+				tmp70 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp71 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp72 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp73 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp74 := lang.Apply1(tmp73, v2)
+				tmp75 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp76 := checkDerefVar(var_clojure_DOT_core_apply)
+				tmp77 := checkDerefVar(var_clojure_DOT_core_vector)
+				tmp78 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp79 := checkDerefVar(var_clojure_DOT_core_concat)
 				tmp80 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp81 := checkDerefVar(var_clojure_DOT_core_vector)
-				tmp82 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp83 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp84 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp85 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp86 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp87 := checkDerefVar(var_clojure_DOT_core_first)
-				tmp88 := lang.Apply2(tmp86, tmp87, v35)
-				tmp89 := lang.Apply2(tmp84, tmp85, tmp88)
-				tmp90 := lang.Apply1(tmp83, tmp89)
-				tmp91 := lang.Apply1(tmp82, tmp90)
-				tmp92 := lang.Apply2(tmp80, tmp81, tmp91)
-				tmp93 := lang.Apply1(tmp79, tmp92)
-				tmp94 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp95 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp96 := lang.Apply2(tmp94, tmp95, v14)
-				tmp97 := lang.Apply3(tmp76, tmp78, tmp93, tmp96)
-				tmp98 := lang.Apply1(tmp75, tmp97)
-				tmp99 := lang.Apply1(tmp74, tmp98)
-				tmp100 := lang.Apply3(tmp53, tmp56, tmp73, tmp99)
-				tmp101 := lang.Apply1(tmp52, tmp100)
-				tmp102 := lang.Apply2(tmp50, tmp51, tmp101)
-				tmp103 := lang.Apply1(tmp49, tmp102)
-				tmp104 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp105 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp106 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp107 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp108 := lang.Apply1(tmp107, sym_clojure_DOT_core_SLASH_cond)
-				tmp109 := checkDerefVar(var_clojure_DOT_core_mapcat)
-				var tmp110 lang.FnFunc1
-				tmp110 = lang.FnFunc1(func(p0 any) any {
-					v111 := p0
-					_ = v111
-					var tmp112 any
+				tmp81 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp82 := checkDerefVar(var_clojure_DOT_core_map)
+				tmp83 := checkDerefVar(var_clojure_DOT_core_first)
+				tmp84 := lang.Apply2(tmp82, tmp83, v31)
+				tmp85 := lang.Apply2(tmp80, tmp81, tmp84)
+				tmp86 := lang.Apply1(tmp79, tmp85)
+				tmp87 := lang.Apply1(tmp78, tmp86)
+				tmp88 := lang.Apply2(tmp76, tmp77, tmp87)
+				tmp89 := lang.Apply1(tmp75, tmp88)
+				tmp90 := checkDerefVar(var_clojure_DOT_core_apply)
+				tmp91 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp92 := lang.Apply2(tmp90, tmp91, v12)
+				tmp93 := lang.Apply3(tmp72, tmp74, tmp89, tmp92)
+				tmp94 := lang.Apply1(tmp71, tmp93)
+				tmp95 := lang.Apply1(tmp70, tmp94)
+				tmp96 := lang.Apply3(tmp49, tmp52, tmp69, tmp95)
+				tmp97 := lang.Apply1(tmp48, tmp96)
+				tmp98 := lang.Apply2(tmp46, tmp47, tmp97)
+				tmp99 := lang.Apply1(tmp45, tmp98)
+				tmp100 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp101 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp102 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp103 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp104 := lang.Apply1(tmp103, sym_clojure_DOT_core_SLASH_cond)
+				tmp105 := checkDerefVar(var_clojure_DOT_core_mapcat)
+				var tmp106 lang.FnFunc1
+				tmp106 = lang.FnFunc1(func(p0 any) any {
+					v107 := p0
+					_ = v107
+					var tmp108 any
 					{ // let
-						// let binding "vec__735"
-						var v113 any = v111
-						_ = v113
+						// let binding "vec__729"
+						var v109 any = v107
+						_ = v109
 						// let binding "ports"
-						tmp114 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp115 := lang.Apply3(tmp114, v113, int64(0), nil)
-						var v116 any = tmp115
-						_ = v116
+						tmp110 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp111 := lang.Apply3(tmp110, v109, int64(0), nil)
+						var v112 any = tmp111
+						_ = v112
 						// let binding "expr"
-						tmp117 := checkDerefVar(var_clojure_DOT_core_nth)
-						tmp118 := lang.Apply3(tmp117, v113, int64(1), nil)
-						var v119 any = tmp118
-						_ = v119
-						tmp120 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp121 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp122 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp123 := lang.Apply1(tmp122, sym_clojure_DOT_core_SLASH_or)
-						tmp124 := checkDerefVar(var_clojure_DOT_core_map)
-						var tmp125 lang.FnFunc1
-						tmp125 = lang.FnFunc1(func(p0 any) any {
-							v126 := p0
-							_ = v126
+						tmp113 := checkDerefVar(var_clojure_DOT_core_nth)
+						tmp114 := lang.Apply3(tmp113, v109, int64(1), nil)
+						var v115 any = tmp114
+						_ = v115
+						tmp116 := checkDerefVar(var_clojure_DOT_core_seq)
+						tmp117 := checkDerefVar(var_clojure_DOT_core_concat)
+						tmp118 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp119 := lang.Apply1(tmp118, sym_clojure_DOT_core_SLASH_or)
+						tmp120 := checkDerefVar(var_clojure_DOT_core_map)
+						var tmp121 lang.FnFunc1
+						tmp121 = lang.FnFunc1(func(p0 any) any {
+							v122 := p0
+							_ = v122
+							tmp123 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp124 := checkDerefVar(var_clojure_DOT_core_concat)
+							tmp125 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp126 := lang.Apply1(tmp125, sym_clojure_DOT_core_SLASH__EQ_)
+							tmp127 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp128 := lang.Apply1(tmp127, v37)
+							tmp129 := checkDerefVar(var_clojure_DOT_core_list)
+							var tmp130 any
+							tmp131 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
+							tmp132 := lang.Apply1(tmp131, v122)
+							if lang.IsTruthy(tmp132) {
+								tmp133 := checkDerefVar(var_clojure_DOT_core_first)
+								tmp134 := lang.Apply1(tmp133, v122)
+								tmp130 = tmp134
+							} else {
+								tmp130 = v122
+							}
+							tmp135 := lang.Apply1(tmp129, tmp130)
+							tmp136 := lang.Apply3(tmp124, tmp126, tmp128, tmp135)
+							tmp137 := lang.Apply1(tmp123, tmp136)
+							return tmp137
+						})
+						tmp122 := lang.Apply2(tmp120, tmp121, v112)
+						tmp123 := lang.Apply2(tmp117, tmp119, tmp122)
+						tmp124 := lang.Apply1(tmp116, tmp123)
+						var tmp125 any
+						var tmp126 any
+						{ // let
+							// let binding "and__0__auto__"
+							tmp127 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
+							tmp128 := lang.Apply1(tmp127, v115)
+							var v129 any = tmp128
+							_ = v129
+							var tmp130 any
+							if lang.IsTruthy(v129) {
+								tmp131 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
+								tmp132 := checkDerefVar(var_clojure_DOT_core_first)
+								tmp133 := lang.Apply1(tmp132, v115)
+								tmp134 := lang.Apply1(tmp131, tmp133)
+								tmp130 = tmp134
+							} else {
+								tmp130 = v129
+							}
+							tmp126 = tmp130
+						} // end let
+						if lang.IsTruthy(tmp126) {
 							tmp127 := checkDerefVar(var_clojure_DOT_core_seq)
 							tmp128 := checkDerefVar(var_clojure_DOT_core_concat)
 							tmp129 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp130 := lang.Apply1(tmp129, sym_clojure_DOT_core_SLASH__EQ_)
+							tmp130 := lang.Apply1(tmp129, sym_clojure_DOT_core_SLASH_let)
 							tmp131 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp132 := lang.Apply1(tmp131, v41)
-							tmp133 := checkDerefVar(var_clojure_DOT_core_list)
-							var tmp134 any
-							tmp135 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-							tmp136 := lang.Apply1(tmp135, v126)
-							if lang.IsTruthy(tmp136) {
-								tmp137 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp138 := lang.Apply1(tmp137, v126)
-								tmp134 = tmp138
-							} else {
-								tmp134 = v126
-							}
-							tmp139 := lang.Apply1(tmp133, tmp134)
-							tmp140 := lang.Apply3(tmp128, tmp130, tmp132, tmp139)
-							tmp141 := lang.Apply1(tmp127, tmp140)
-							return tmp141
-						})
-						tmp126 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(241), kw_column, int(39), kw_end_DASH_line, int(242), kw_end_DASH_column, int(84))
-						tmp127, err := lang.WithMeta(tmp125, tmp126.(lang.IPersistentMap))
-						if err != nil {
-							panic(err)
-						}
-						tmp128 := lang.Apply2(tmp124, tmp127, v116)
-						tmp129 := lang.Apply2(tmp121, tmp123, tmp128)
-						tmp130 := lang.Apply1(tmp120, tmp129)
-						var tmp131 any
-						var tmp132 any
-						{ // let
-							// let binding "and__0__auto__"
-							tmp133 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
-							tmp134 := lang.Apply1(tmp133, v119)
-							var v135 any = tmp134
-							_ = v135
-							var tmp136 any
-							if lang.IsTruthy(v135) {
-								tmp137 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-								tmp138 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp139 := lang.Apply1(tmp138, v119)
-								tmp140 := lang.Apply1(tmp137, tmp139)
-								tmp136 = tmp140
-							} else {
-								tmp136 = v135
-							}
-							tmp132 = tmp136
-						} // end let
-						if lang.IsTruthy(tmp132) {
-							tmp133 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp134 := checkDerefVar(var_clojure_DOT_core_concat)
-							tmp135 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp136 := lang.Apply1(tmp135, sym_clojure_DOT_core_SLASH_let)
-							tmp137 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp138 := checkDerefVar(var_clojure_DOT_core_apply)
-							tmp139 := checkDerefVar(var_clojure_DOT_core_vector)
-							tmp140 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp141 := checkDerefVar(var_clojure_DOT_core_concat)
-							tmp142 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp143 := checkDerefVar(var_clojure_DOT_core_first)
-							tmp144 := lang.Apply1(tmp143, v119)
-							tmp145 := lang.Apply1(tmp142, tmp144)
-							tmp146 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp147 := lang.Apply1(tmp146, v44)
-							tmp148 := lang.Apply2(tmp141, tmp145, tmp147)
-							tmp149 := lang.Apply1(tmp140, tmp148)
-							tmp150 := lang.Apply2(tmp138, tmp139, tmp149)
-							tmp151 := lang.Apply1(tmp137, tmp150)
-							tmp152 := checkDerefVar(var_clojure_DOT_core_rest)
-							tmp153 := lang.Apply1(tmp152, v119)
-							tmp154 := lang.Apply3(tmp134, tmp136, tmp151, tmp153)
-							tmp155 := lang.Apply1(tmp133, tmp154)
-							tmp131 = tmp155
+							tmp132 := checkDerefVar(var_clojure_DOT_core_apply)
+							tmp133 := checkDerefVar(var_clojure_DOT_core_vector)
+							tmp134 := checkDerefVar(var_clojure_DOT_core_seq)
+							tmp135 := checkDerefVar(var_clojure_DOT_core_concat)
+							tmp136 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp137 := checkDerefVar(var_clojure_DOT_core_first)
+							tmp138 := lang.Apply1(tmp137, v115)
+							tmp139 := lang.Apply1(tmp136, tmp138)
+							tmp140 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp141 := lang.Apply1(tmp140, v40)
+							tmp142 := lang.Apply2(tmp135, tmp139, tmp141)
+							tmp143 := lang.Apply1(tmp134, tmp142)
+							tmp144 := lang.Apply2(tmp132, tmp133, tmp143)
+							tmp145 := lang.Apply1(tmp131, tmp144)
+							tmp146 := checkDerefVar(var_clojure_DOT_core_rest)
+							tmp147 := lang.Apply1(tmp146, v115)
+							tmp148 := lang.Apply3(tmp128, tmp130, tmp145, tmp147)
+							tmp149 := lang.Apply1(tmp127, tmp148)
+							tmp125 = tmp149
 						} else {
-							tmp131 = v119
+							tmp125 = v115
 						}
-						tmp156 := lang.NewVector(tmp130, tmp131)
-						tmp157 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(241), kw_column, int(21), kw_end_DASH_line, int(246), kw_end_DASH_column, int(29))
-						tmp158, err := lang.WithMeta(tmp156, tmp157.(lang.IPersistentMap))
+						tmp150 := lang.NewVector(tmp124, tmp125)
+						tmp151 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(241), kw_column, int(21), kw_end_DASH_line, int(246), kw_end_DASH_column, int(29))
+						tmp152, err := lang.WithMeta(tmp150, tmp151.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
 						}
-						tmp112 = tmp158
+						tmp108 = tmp152
 					} // end let
-					return tmp112
+					return tmp108
 				})
-				tmp111 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(240), kw_column, int(19), kw_end_DASH_line, int(246), kw_end_DASH_column, int(30))
-				tmp112, err := lang.WithMeta(tmp110, tmp111.(lang.IPersistentMap))
-				if err != nil {
-					panic(err)
-				}
-				tmp113 := lang.Apply2(tmp109, tmp112, v35)
-				tmp114 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp115 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp116 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp117 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp118 := lang.Apply1(tmp117, sym_clojure_DOT_core_SLASH__EQ_)
-				tmp119 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp120 := lang.Apply1(tmp119, v41)
-				tmp121 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp122 := lang.Apply1(tmp121, kw_default)
-				tmp123 := lang.Apply3(tmp116, tmp118, tmp120, tmp122)
-				tmp124 := lang.Apply1(tmp115, tmp123)
-				tmp125 := lang.Apply1(tmp114, tmp124)
-				tmp126 := checkDerefVar(var_clojure_DOT_core_list)
-				tmp127 := lang.Apply1(tmp126, sym_val__0__auto__)
-				tmp128 := lang.Apply4(tmp106, tmp108, tmp113, tmp125, tmp127)
-				tmp129 := lang.Apply1(tmp105, tmp128)
-				tmp130 := lang.Apply1(tmp104, tmp129)
-				tmp131 := lang.Apply3(tmp46, tmp48, tmp103, tmp130)
-				tmp132 := lang.Apply1(tmp45, tmp131)
-				tmp4 = tmp132
+				tmp107 := lang.Apply2(tmp105, tmp106, v31)
+				tmp108 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp109 := checkDerefVar(var_clojure_DOT_core_seq)
+				tmp110 := checkDerefVar(var_clojure_DOT_core_concat)
+				tmp111 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp112 := lang.Apply1(tmp111, sym_clojure_DOT_core_SLASH__EQ_)
+				tmp113 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp114 := lang.Apply1(tmp113, v37)
+				tmp115 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp116 := lang.Apply1(tmp115, kw_default)
+				tmp117 := lang.Apply3(tmp110, tmp112, tmp114, tmp116)
+				tmp118 := lang.Apply1(tmp109, tmp117)
+				tmp119 := lang.Apply1(tmp108, tmp118)
+				tmp120 := checkDerefVar(var_clojure_DOT_core_list)
+				tmp121 := lang.Apply1(tmp120, sym_val__0__auto__)
+				tmp122 := lang.Apply4(tmp102, tmp104, tmp107, tmp119, tmp121)
+				tmp123 := lang.Apply1(tmp101, tmp122)
+				tmp124 := lang.Apply1(tmp100, tmp123)
+				tmp125 := lang.Apply3(tmp42, tmp44, tmp99, tmp124)
+				tmp126 := lang.Apply1(tmp41, tmp125)
+				tmp4 = tmp126
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
+		aotDirectFn7 = tmp1
 		var_clojure_DOT_core_DOT_async_do_DASH_alt = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_do_DASH_alt.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion7 = var_clojure_DOT_core_DOT_async_do_DASH_alt.RootVersion()
+		var_clojure_DOT_core_DOT_async_do_DASH_alt.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(212), kw_column, int(7), kw_end_DASH_line, int(212), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_alts, sym_clauses)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// do-alts
 	{
-		tmp0 := sym_do_DASH_alts.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym_opts)), kw_doc, "returns derefable [val port] if immediate, nil if enqueued", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(165), kw_end_DASH_line, int(165), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_do_DASH_alts
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_)
-			tmp5 := lang.Apply1(tmp4, v2)
-			_ = tmp5
+			tmp4 := var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.RootVersion() == aotRootVersion4 && !var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.IsMacro()
+			var tmp5 any
+			if !tmp4 {
+				tmp5 = checkDerefVar(var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_)
+			}
 			var tmp6 any
+			if tmp4 {
+				tmp6 = aotDirectFn4(v2)
+			} else {
+				tmp6 = lang.Apply1(tmp5, v2)
+			}
+			_ = tmp6
+			var tmp7 any
 			{ // let
 				// let binding "ports"
-				tmp7 := checkDerefVar(var_clojure_DOT_core_vec)
-				tmp8 := lang.Apply1(tmp7, v2)
-				var v9 any = tmp8
-				_ = v9
+				tmp8 := checkDerefVar(var_clojure_DOT_core_vec)
+				tmp9 := lang.Apply1(tmp8, v2)
+				var v10 any = tmp9
+				_ = v10
 				// let binding "n"
-				tmp10 := checkDerefVar(var_clojure_DOT_core_count)
-				tmp11 := lang.Apply1(tmp10, v9)
-				var v12 any = tmp11
-				_ = v12
+				tmp11 := checkDerefVar(var_clojure_DOT_core_count)
+				tmp12 := lang.Apply1(tmp11, v10)
+				var v13 any = tmp12
+				_ = v13
 				// let binding "priority"
-				tmp13 := lang.Apply1(kw_priority, v3)
-				var v14 any = tmp13
-				_ = v14
+				tmp14 := lang.Apply1(kw_priority, v3)
+				var v15 any = tmp14
+				_ = v15
 				// let binding "selects"
-				tmp15 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp16 := checkDerefVar(var_clojure_DOT_core_DOT_async_port_DASH_case)
-				tmp17 := lang.Apply2(tmp15, tmp16, v9)
-				var v18 any = tmp17
-				_ = v18
+				tmp16 := checkDerefVar(var_clojure_DOT_core_map)
+				tmp17 := checkDerefVar(var_clojure_DOT_core_DOT_async_port_DASH_case)
+				tmp18 := lang.Apply2(tmp16, tmp17, v10)
+				var v19 any = tmp18
+				_ = v19
 				// let binding "selects"
-				var tmp19 any
-				tmp20 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
-				tmp21 := lang.Apply2(tmp20, v3, kw_default)
-				if lang.IsTruthy(tmp21) {
-					tmp22 := checkDerefVar(var_clojure_DOT_core_conj)
-					tmp23 := checkDerefVar(var_clojure_DOT_core_vec)
-					tmp24 := lang.Apply1(tmp23, v18)
-					tmp25 := checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
-					tmp26 := lang.Apply0(tmp25)
-					tmp27 := lang.Apply2(tmp22, tmp24, tmp26)
-					tmp19 = tmp27
+				var tmp20 any
+				tmp21 := checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
+				tmp22 := lang.Apply2(tmp21, v3, kw_default)
+				if lang.IsTruthy(tmp22) {
+					tmp23 := checkDerefVar(var_clojure_DOT_core_conj)
+					tmp24 := checkDerefVar(var_clojure_DOT_core_vec)
+					tmp25 := lang.Apply1(tmp24, v19)
+					tmp26 := var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_default_DASH_case.IsMacro()
+					var tmp27 any
+					if !tmp26 {
+						tmp27 = checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
+					}
+					var tmp28 any
+					if tmp26 {
+						tmp28 = aotDirectFn6()
+					} else {
+						tmp28 = lang.Apply0(tmp27)
+					}
+					tmp29 := lang.Apply2(tmp23, tmp25, tmp28)
+					tmp20 = tmp29
 				} else {
-					tmp19 = v18
+					tmp20 = v19
 				}
-				var v28 any = tmp19
-				_ = v28
+				var v30 any = tmp20
+				_ = v30
 				// let binding "def"
-				tmp29 := checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
-				tmp30 := lang.Apply0(tmp29)
-				var v31 any = tmp30
-				_ = v31
-				// let binding "vec__708"
-				tmp32 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp33 := lang.Apply2(tmp32, lang.Builtins["deref"], v28)
-				tmp34 := lang.Apply1(reflect.Select, tmp33)
-				var v35 any = tmp34
-				_ = v35
-				// let binding "chosen-idx"
-				tmp36 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp37 := lang.Apply3(tmp36, v35, int64(0), nil)
+				tmp31 := var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_default_DASH_case.IsMacro()
+				var tmp32 any
+				if !tmp31 {
+					tmp32 = checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
+				}
+				var tmp33 any
+				if tmp31 {
+					tmp33 = aotDirectFn6()
+				} else {
+					tmp33 = lang.Apply0(tmp32)
+				}
+				var v34 any = tmp33
+				_ = v34
+				// let binding "vec__702"
+				tmp35 := checkDerefVar(var_clojure_DOT_core_map)
+				tmp36 := lang.Apply2(tmp35, lang.Builtins["deref"], v30)
+				tmp37 := lang.Apply1(reflect.Select, tmp36)
 				var v38 any = tmp37
 				_ = v38
-				// let binding "val"
+				// let binding "chosen-idx"
 				tmp39 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp40 := lang.Apply3(tmp39, v35, int64(1), nil)
+				tmp40 := lang.Apply3(tmp39, v38, int64(0), nil)
 				var v41 any = tmp40
 				_ = v41
-				// let binding "ok"
+				// let binding "val"
 				tmp42 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp43 := lang.Apply3(tmp42, v35, int64(2), nil)
+				tmp43 := lang.Apply3(tmp42, v38, int64(1), nil)
 				var v44 any = tmp43
 				_ = v44
-				// let binding "chosen"
-				tmp45 := checkDerefVar(var_clojure_DOT_core_get)
-				tmp46 := lang.Apply2(tmp45, v9, v38)
+				// let binding "ok"
+				tmp45 := checkDerefVar(var_clojure_DOT_core_nth)
+				tmp46 := lang.Apply3(tmp45, v38, int64(2), nil)
 				var v47 any = tmp46
 				_ = v47
-				var tmp48 any
-				tmp49 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
-				tmp50 := lang.Apply1(tmp49, v47)
-				if lang.IsTruthy(tmp50) {
-					tmp51 := lang.Apply1(v47, int64(0))
-					tmp52 := lang.NewVector(true, tmp51)
-					tmp53 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(181), kw_column, int(24), kw_end_DASH_line, int(181), kw_end_DASH_column, int(40))
-					tmp54, err := lang.WithMeta(tmp52, tmp53.(lang.IPersistentMap))
+				// let binding "chosen"
+				tmp48, _ := lang.FieldOrMethod(runtime.RT, "Get")
+				if reflect.TypeOf(tmp48).Kind() != reflect.Func {
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
+				}
+				tmp49 := lang.Apply2(tmp48, v10, v41)
+				var v50 any = tmp49
+				_ = v50
+				var tmp51 any
+				tmp52 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
+				tmp53 := lang.Apply1(tmp52, v50)
+				if lang.IsTruthy(tmp53) {
+					tmp54 := lang.Apply1(v50, int64(0))
+					tmp55 := lang.NewVector(true, tmp54)
+					tmp56 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(181), kw_column, int(24), kw_end_DASH_line, int(181), kw_end_DASH_column, int(40))
+					tmp57, err := lang.WithMeta(tmp55, tmp56.(lang.IPersistentMap))
 					if err != nil {
 						panic(err)
 					}
-					tmp48 = tmp54
+					tmp51 = tmp57
 				} else {
-					var tmp55 any
-					tmp56 := checkDerefVar(var_clojure_DOT_core__EQ_)
-					tmp57 := lang.Apply2(tmp56, v12, v38)
-					if lang.IsTruthy(tmp57) {
-						tmp58 := lang.Apply1(kw_default, v3)
-						tmp59 := lang.NewVector(tmp58, kw_default)
-						tmp60 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(182), kw_column, int(24), kw_end_DASH_line, int(182), kw_end_DASH_column, int(49))
-						tmp61, err := lang.WithMeta(tmp59, tmp60.(lang.IPersistentMap))
+					var tmp58 any
+					tmp59 := checkDerefVar(var_clojure_DOT_core__EQ_)
+					tmp60 := lang.Apply2(tmp59, v13, v41)
+					if lang.IsTruthy(tmp60) {
+						tmp61 := lang.Apply1(kw_default, v3)
+						tmp62 := lang.NewVector(tmp61, kw_default)
+						tmp63 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(182), kw_column, int(24), kw_end_DASH_line, int(182), kw_end_DASH_column, int(49))
+						tmp64, err := lang.WithMeta(tmp62, tmp63.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
 						}
-						tmp55 = tmp61
+						tmp58 = tmp64
 					} else {
-						var tmp62 any
-						if lang.IsTruthy(kw_else) {
-							var tmp63 any
-							if lang.IsTruthy(v44) {
-								tmp64, ok := lang.FieldOrMethod(v41, "Interface")
-								if !ok {
-									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v41, "Interface")))
-								}
-								var tmp65 any
-								switch reflect.TypeOf(tmp64).Kind() {
-								case reflect.Func:
-									tmp65 = lang.Apply(tmp64, nil)
-								default:
-									tmp65 = tmp64
-								}
-								tmp63 = tmp65
-							} else {
+						var tmp65 any
+						if lang.IsTruthy(v47) {
+							tmp66, ok := lang.FieldOrMethod(v44, "Interface")
+							if !ok {
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v44, "Interface")))
 							}
-							tmp66 := lang.NewVector(tmp63, v47)
-							tmp67 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(183), kw_column, int(13), kw_end_DASH_line, int(183), kw_end_DASH_column, int(47))
-							tmp68, err := lang.WithMeta(tmp66, tmp67.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
+							var tmp67 any
+							switch reflect.TypeOf(tmp66).Kind() {
+							case reflect.Func:
+								tmp67 = lang.Apply(tmp66, nil)
+							default:
+								tmp67 = tmp66
 							}
-							tmp62 = tmp68
+							tmp65 = tmp67
 						} else {
 						}
-						tmp55 = tmp62
+						tmp68 := lang.NewVector(tmp65, v50)
+						tmp69 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(183), kw_column, int(13), kw_end_DASH_line, int(183), kw_end_DASH_column, int(47))
+						tmp70, err := lang.WithMeta(tmp68, tmp69.(lang.IPersistentMap))
+						if err != nil {
+							panic(err)
+						}
+						tmp58 = tmp70
 					}
-					tmp48 = tmp55
+					tmp51 = tmp58
 				}
-				tmp6 = tmp48
+				tmp7 = tmp51
 			} // end let
-			return tmp6
+			return tmp7
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
+		aotDirectFn8 = tmp1
 		var_clojure_DOT_core_DOT_async_do_DASH_alts = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_do_DASH_alts.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion8 = var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion()
+		var_clojure_DOT_core_DOT_async_do_DASH_alts.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym_opts)), kw_doc, "returns derefable [val port] if immediate, nil if enqueued", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(165), kw_end_DASH_line, int(165), kw_private, true)
+		})
 	}
 	// go
 	{
-		tmp0 := sym_go.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Asynchronously executes the body, returning immediately to the\n  calling thread. Additionally, any visible calls to <!, >! and alt!/alts!\n  channel operations within the body will block (if necessary) by\n  'parking' the calling thread rather than tying up an OS thread (or\n  the only JS thread when in ClojureScript). Upon completion of the\n  operation, the body will be resumed.\n\n  Unlike in Clojure or ClojureScript, go blocks may (either directly\n  or indirectly) perform operations that may block indefinitely, as go\n  blocks are run on goroutines, which relinquish the thread of control\n  when parked.\n\n  Returns a channel which will receive the result of the body when\n  completed", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(67), kw_end_DASH_line, int(67))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 2)
+		tmp0 := sym_go
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(2, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
-				restArgs := args[2:]
-				var v4 any
-				if len(restArgs) > 0 {
-					v4 = lang.NewList(restArgs...)
-				}
+				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp6 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -6606,33 +1923,32 @@ func LoadNS() {
 				tmp122 := lang.Apply4(tmp6, tmp8, tmp87, tmp103, tmp121)
 				tmp123 := lang.Apply1(tmp5, tmp122)
 				return tmp123
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+			}),
+			2,
+		)
 		var_clojure_DOT_core_DOT_async_go = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_go.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		var_clojure_DOT_core_DOT_async_go.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Asynchronously executes the body, returning immediately to the\n  calling thread. Additionally, any visible calls to <!, >! and alt!/alts!\n  channel operations within the body will block (if necessary) by\n  'parking' the calling thread rather than tying up an OS thread (or\n  the only JS thread when in ClojureScript). Upon completion of the\n  operation, the body will be resumed.\n\n  Unlike in Clojure or ClojureScript, go blocks may (either directly\n  or indirectly) perform operations that may block indefinitely, as go\n  blocks are run on goroutines, which relinquish the thread of control\n  when parked.\n\n  Returns a channel which will receive the result of the body when\n  completed", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(67), kw_end_DASH_line, int(67))
+		})
 	}
 	// go-loop
 	{
-		tmp0 := sym_go_DASH_loop.WithMeta(lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "Like (go (loop ...))", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(287), kw_end_DASH_line, int(287))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			default:
-				checkArityGTE(args, 3)
+		tmp0 := sym_go_DASH_loop
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(3, func(args []any, rest lang.ISeq) any {
 				v2 := args[0]
 				_ = v2
 				v3 := args[1]
 				_ = v3
 				v4 := args[2]
 				_ = v4
-				restArgs := args[3:]
-				var v5 any
-				if len(restArgs) > 0 {
-					v5 = lang.NewList(restArgs...)
-				}
+				var v5 any = rest
 				_ = v5
 				tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp7 := checkDerefVar(var_clojure_DOT_core_concat)
@@ -6651,17 +1967,17 @@ func LoadNS() {
 				tmp20 := lang.Apply2(tmp7, tmp9, tmp19)
 				tmp21 := lang.Apply1(tmp6, tmp20)
 				return tmp21
-			}
-		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
+			}),
+			3,
+		)
 		var_clojure_DOT_core_DOT_async_go_DASH_loop = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_go_DASH_loop.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		var_clojure_DOT_core_DOT_async_go_DASH_loop.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "Like (go (loop ...))", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(287), kw_end_DASH_line, int(287))
+		})
 	}
 	// offer!
 	{
-		tmp0 := sym_offer_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(143), kw_column, int(7), kw_end_DASH_line, int(143), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Puts a val into port if it's possible to do so immediately.\n   nil values are not allowed. Never blocks. Returns true if offer succeeds.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_offer_BANG_
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
@@ -6671,128 +1987,38 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "ret"
-				tmp5 := checkDerefVar(var_clojure_DOT_core_DOT_async_try_DASH_put)
-				tmp6 := lang.Apply2(tmp5, v2, v3)
-				var v7 any = tmp6
-				_ = v7
-				var tmp8 any
-				if lang.IsTruthy(v7) {
-					tmp8 = v7
+				tmp5 := var_clojure_DOT_core_DOT_async_try_DASH_put.RootVersion() == aotRootVersion13 && !var_clojure_DOT_core_DOT_async_try_DASH_put.IsMacro()
+				var tmp6 any
+				if !tmp5 {
+					tmp6 = checkDerefVar(var_clojure_DOT_core_DOT_async_try_DASH_put)
+				}
+				var tmp7 any
+				if tmp5 {
+					tmp7 = aotDirectFn13(v2, v3)
+				} else {
+					tmp7 = lang.Apply2(tmp6, v2, v3)
+				}
+				var v8 any = tmp7
+				_ = v8
+				var tmp9 any
+				if lang.IsTruthy(v8) {
+					tmp9 = v8
 				} else {
 				}
-				tmp4 = tmp8
+				tmp4 = tmp9
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
+		aotDirectFn9 = tmp1
 		var_clojure_DOT_core_DOT_async_offer_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_offer_BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// pipe
-	{
-		tmp0 := sym_pipe.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(292), kw_column, int(7), kw_end_DASH_line, int(292), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(sym_from, sym_to), lang.NewVector(sym_from, sym_to, sym_close_QMARK_)), kw_doc, "Takes elements from the from channel and supplies them to the to\n  channel. By default, the to channel will be closed when the from\n  channel closes, but can be determined by the close?  parameter. Will\n  stop consuming the from channel if the to channel closes", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc
-		tmp1 = lang.NewFnFunc(func(args ...any) any {
-			switch len(args) {
-			case 2:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_pipe)
-				tmp5 := lang.Apply3(tmp4, v2, v3, true)
-				return tmp5
-			case 3:
-				v2 := args[0]
-				_ = v2
-				v3 := args[1]
-				_ = v3
-				v4 := args[2]
-				_ = v4
-				var tmp5 any
-				{ // let
-					// let binding "c__0__auto__"
-					tmp6 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-					tmp7 := lang.Apply1(tmp6, int64(1))
-					var v8 any = tmp7
-					_ = v8
-					// let binding "f__1__auto__"
-					var tmp9 lang.FnFunc0
-					tmp9 = lang.FnFunc0(func() any {
-						var tmp10 any
-						{ // let
-							// let binding "res__2__auto__"
-							var tmp11 any
-							{ // let
-								for {
-									var tmp12 any
-									{ // let
-										// let binding "v"
-										tmp13 := checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
-										tmp14 := lang.Apply1(tmp13, v2)
-										var v15 any = tmp14
-										_ = v15
-										var tmp16 any
-										tmp17 := checkDerefVar(var_clojure_DOT_core_nil_QMARK_)
-										tmp18 := lang.Apply1(tmp17, v15)
-										if lang.IsTruthy(tmp18) {
-											var tmp19 any
-											if lang.IsTruthy(v4) {
-												tmp20 := checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
-												tmp21 := lang.Apply1(tmp20, v3)
-												tmp19 = tmp21
-											} else {
-											}
-											tmp16 = tmp19
-										} else {
-											var tmp22 any
-											tmp23 := checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
-											tmp24 := lang.Apply2(tmp23, v3, v15)
-											if lang.IsTruthy(tmp24) {
-												continue
-											} else {
-											}
-											tmp16 = tmp22
-										}
-										tmp12 = tmp16
-									} // end let
-									tmp11 = tmp12
-									break
-								}
-							} // end let
-							var v12 any = tmp11
-							_ = v12
-							tmp13 := checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
-							tmp14 := lang.Apply2(tmp13, v8, v12)
-							tmp10 = tmp14
-						} // end let
-						return tmp10
-					})
-					var v10 any = tmp9
-					_ = v10
-					go lang.Apply(v10, []any{})
-					tmp11 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
-					tmp12 := lang.Apply1(tmp11, v8)
-					tmp5 = tmp12
-				} // end let
-				_ = tmp5
-				return v3
-			default:
-				checkArity(args, -1)
-				panic("unreachable")
-			}
+		aotRootVersion9 = var_clojure_DOT_core_DOT_async_offer_BANG_.RootVersion()
+		var_clojure_DOT_core_DOT_async_offer_BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(143), kw_column, int(7), kw_end_DASH_line, int(143), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Puts a val into port if it's possible to do so immediately.\n   nil values are not allowed. Never blocks. Returns true if offer succeeds.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc)
-		var_clojure_DOT_core_DOT_async_pipe = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_pipe.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
 	}
 	// poll!
 	{
-		tmp0 := sym_poll_BANG_.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(150), kw_column, int(7), kw_end_DASH_line, int(150), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Takes a val from port if it's possible to do so immediately.\n   Never blocks. Returns value if successful, nil otherwise.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
+		tmp0 := sym_poll_BANG_
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -6800,41 +2026,51 @@ func LoadNS() {
 			var tmp3 any
 			{ // let
 				// let binding "res"
-				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_try_DASH_take)
-				tmp5 := lang.Apply1(tmp4, v2)
-				var v6 any = tmp5
-				_ = v6
-				// let binding "vec__705"
-				var v7 any = v6
+				tmp4 := var_clojure_DOT_core_DOT_async_try_DASH_take.RootVersion() == aotRootVersion14 && !var_clojure_DOT_core_DOT_async_try_DASH_take.IsMacro()
+				var tmp5 any
+				if !tmp4 {
+					tmp5 = checkDerefVar(var_clojure_DOT_core_DOT_async_try_DASH_take)
+				}
+				var tmp6 any
+				if tmp4 {
+					tmp6 = aotDirectFn14(v2)
+				} else {
+					tmp6 = lang.Apply1(tmp5, v2)
+				}
+				var v7 any = tmp6
 				_ = v7
+				// let binding "vec__699"
+				var v8 any = v7
+				_ = v8
 				// let binding "val"
-				tmp8 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp9 := lang.Apply3(tmp8, v7, int64(0), nil)
-				var v10 any = tmp9
-				_ = v10
+				tmp9 := checkDerefVar(var_clojure_DOT_core_nth)
+				tmp10 := lang.Apply3(tmp9, v8, int64(0), nil)
+				var v11 any = tmp10
+				_ = v11
 				// let binding "ok"
-				tmp11 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp12 := lang.Apply3(tmp11, v7, int64(1), nil)
-				var v13 any = tmp12
-				_ = v13
-				var tmp14 any
-				if lang.IsTruthy(v13) {
-					tmp14 = v10
+				tmp12 := checkDerefVar(var_clojure_DOT_core_nth)
+				tmp13 := lang.Apply3(tmp12, v8, int64(1), nil)
+				var v14 any = tmp13
+				_ = v14
+				var tmp15 any
+				if lang.IsTruthy(v14) {
+					tmp15 = v11
 				} else {
 				}
-				tmp3 = tmp14
+				tmp3 = tmp15
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
+		aotDirectFn10 = tmp1
 		var_clojure_DOT_core_DOT_async_poll_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_poll_BANG_.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion10 = var_clojure_DOT_core_DOT_async_poll_BANG_.RootVersion()
+		var_clojure_DOT_core_DOT_async_poll_BANG_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(150), kw_column, int(7), kw_end_DASH_line, int(150), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Takes a val from port if it's possible to do so immediately.\n   Never blocks. Returns value if successful, nil otherwise.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+		})
 	}
 	// port-case
 	{
-		tmp0 := sym_port_DASH_case.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port_DASH_or_DASH_put)), kw_doc, "Returns a *reflect.SelectCase for the given channel operation.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(106), kw_end_DASH_line, int(106), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_port_DASH_case
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -6872,21 +2108,22 @@ func LoadNS() {
 				var tmp11 any
 				if lang.IsTruthy(v8) {
 					tmp12 := lang.Apply1(v2, int64(1))
-					tmp13 := lang.Apply1(reflect.ValueOf, tmp12)
+					tmp13 := reflect.ValueOf(tmp12)
 					tmp11 = tmp13
 				} else {
 				}
 				var v14 any = tmp11
 				_ = v14
 				// let binding "select-case"
-				tmp15 := new(reflect.SelectCase)
-				var v16 any = tmp15
-				_ = v16
-				tmp17 := lang.Apply1(reflect.ValueOf, v10)
+				tmp15 := reflect.TypeOf((*reflect.SelectCase)(nil)).Elem()
+				tmp16 := reflect.New(tmp15).Interface()
+				var v17 any = tmp16
+				_ = v17
+				tmp18 := reflect.ValueOf(v10)
 				// set! host field
-				var tmp18 any
+				var tmp19 any
 				{
-					targetV := reflect.ValueOf(v16)
+					targetV := reflect.ValueOf(v17)
 					if targetV.Kind() == reflect.Ptr {
 						targetV = targetV.Elem()
 					}
@@ -6897,7 +2134,7 @@ func LoadNS() {
 					if !fieldVal.CanSet() {
 						panic(fmt.Errorf("cannot set field Chan"))
 					}
-					valV := reflect.ValueOf(tmp17)
+					valV := reflect.ValueOf(tmp18)
 					if !valV.IsValid() {
 						switch fieldVal.Kind() {
 						case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
@@ -6908,19 +2145,19 @@ func LoadNS() {
 					} else {
 						fieldVal.Set(valV)
 					}
-					tmp18 = tmp17
+					tmp19 = tmp18
 				}
-				_ = tmp18
-				var tmp19 any
+				_ = tmp19
+				var tmp20 any
 				if lang.IsTruthy(v8) {
-					tmp19 = reflect.SelectSend
+					tmp20 = reflect.SelectSend
 				} else {
-					tmp19 = reflect.SelectRecv
+					tmp20 = reflect.SelectRecv
 				}
 				// set! host field
-				var tmp20 any
+				var tmp21 any
 				{
-					targetV := reflect.ValueOf(v16)
+					targetV := reflect.ValueOf(v17)
 					if targetV.Kind() == reflect.Ptr {
 						targetV = targetV.Elem()
 					}
@@ -6931,7 +2168,7 @@ func LoadNS() {
 					if !fieldVal.CanSet() {
 						panic(fmt.Errorf("cannot set field Dir"))
 					}
-					valV := reflect.ValueOf(tmp19)
+					valV := reflect.ValueOf(tmp20)
 					if !valV.IsValid() {
 						switch fieldVal.Kind() {
 						case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
@@ -6942,15 +2179,15 @@ func LoadNS() {
 					} else {
 						fieldVal.Set(valV)
 					}
-					tmp20 = tmp19
+					tmp21 = tmp20
 				}
-				_ = tmp20
-				var tmp21 any
+				_ = tmp21
+				var tmp22 any
 				if lang.IsTruthy(v8) {
 					// set! host field
-					var tmp22 any
+					var tmp23 any
 					{
-						targetV := reflect.ValueOf(v16)
+						targetV := reflect.ValueOf(v17)
 						if targetV.Kind() == reflect.Ptr {
 							targetV = targetV.Elem()
 						}
@@ -6972,90 +2209,26 @@ func LoadNS() {
 						} else {
 							fieldVal.Set(valV)
 						}
-						tmp22 = v14
+						tmp23 = v14
 					}
-					tmp21 = tmp22
+					tmp22 = tmp23
 				} else {
 				}
-				_ = tmp21
-				tmp3 = v16
+				_ = tmp22
+				tmp3 = v17
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
+		aotDirectFn11 = tmp1
 		var_clojure_DOT_core_DOT_async_port_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_port_DASH_case.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
-	}
-	// timeout
-	{
-		tmp0 := sym_timeout.WithMeta(lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(91), kw_column, int(7), kw_end_DASH_line, int(91), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_msecs)), kw_doc, "Returns a channel that will close after msecs", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))).(*lang.Symbol)
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			var tmp3 any
-			{ // let
-				// let binding "ret"
-				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				tmp5 := lang.Apply0(tmp4)
-				var v6 any = tmp5
-				_ = v6
-				// let binding "after"
-				tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_)
-				tmp8 := lang.Apply1(lang.Builtins["int64"], time4.Millisecond)
-				tmp9 := lang.Apply2(tmp7, v2, tmp8)
-				tmp10 := lang.Apply1(time4.After, tmp9)
-				var v11 any = tmp10
-				_ = v11
-				var tmp12 any
-				{ // let
-					// let binding "c__0__auto__"
-					tmp13 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-					tmp14 := lang.Apply1(tmp13, int64(1))
-					var v15 any = tmp14
-					_ = v15
-					// let binding "f__1__auto__"
-					var tmp16 lang.FnFunc0
-					tmp16 = lang.FnFunc0(func() any {
-						var tmp17 any
-						{ // let
-							// let binding "res__2__auto__"
-							tmp18 := checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
-							tmp19 := lang.Apply1(tmp18, v11)
-							_ = tmp19
-							tmp20 := checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
-							tmp21 := lang.Apply1(tmp20, v6)
-							var v22 any = tmp21
-							_ = v22
-							tmp23 := checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
-							tmp24 := lang.Apply2(tmp23, v15, v22)
-							tmp17 = tmp24
-						} // end let
-						return tmp17
-					})
-					var v17 any = tmp16
-					_ = v17
-					go lang.Apply(v17, []any{})
-					tmp18 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
-					tmp19 := lang.Apply1(tmp18, v15)
-					tmp12 = tmp19
-				} // end let
-				_ = tmp12
-				tmp3 = v6
-			} // end let
-			return tmp3
+		aotRootVersion11 = var_clojure_DOT_core_DOT_async_port_DASH_case.RootVersion()
+		var_clojure_DOT_core_DOT_async_port_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port_DASH_or_DASH_put)), kw_doc, "Returns a *reflect.SelectCase for the given channel operation.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(106), kw_end_DASH_line, int(106), kw_private, true)
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
-		var_clojure_DOT_core_DOT_async_timeout = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_timeout.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
 	}
 	// try-put
 	{
-		tmp0 := sym_try_DASH_put.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Returns true if val was sent on the port, false if sending would\n  block", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(118), kw_end_DASH_line, int(118), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_try_DASH_put
 		var tmp1 lang.FnFunc2
 		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
@@ -7065,63 +2238,82 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "sc"
-				tmp5 := checkDerefVar(var_clojure_DOT_core_DOT_async_port_DASH_case)
-				tmp6 := lang.NewVector(v2, v3)
-				tmp7 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(122), kw_column, int(23), kw_end_DASH_line, int(122), kw_end_DASH_column, int(32))
-				tmp8, err := lang.WithMeta(tmp6, tmp7.(lang.IPersistentMap))
+				tmp5 := var_clojure_DOT_core_DOT_async_port_DASH_case.RootVersion() == aotRootVersion11 && !var_clojure_DOT_core_DOT_async_port_DASH_case.IsMacro()
+				var tmp6 any
+				if !tmp5 {
+					tmp6 = checkDerefVar(var_clojure_DOT_core_DOT_async_port_DASH_case)
+				}
+				tmp7 := lang.NewVector(v2, v3)
+				tmp8 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(122), kw_column, int(23), kw_end_DASH_line, int(122), kw_end_DASH_column, int(32))
+				tmp9, err := lang.WithMeta(tmp7, tmp8.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp9 := lang.Apply1(tmp5, tmp8)
-				var v10 any = tmp9
-				_ = v10
+				var tmp10 any
+				if tmp5 {
+					tmp10 = aotDirectFn11(tmp9)
+				} else {
+					tmp10 = lang.Apply1(tmp6, tmp9)
+				}
+				var v11 any = tmp10
+				_ = v11
 				// let binding "def"
-				tmp11 := checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
-				tmp12 := lang.Apply0(tmp11)
-				var v13 any = tmp12
-				_ = v13
-				// let binding "vec__699"
-				tmp14 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp15 := lang.NewVector(v10, v13)
-				tmp16 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(124), kw_column, int(55), kw_end_DASH_line, int(124), kw_end_DASH_column, int(62))
-				tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
+				tmp12 := var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_default_DASH_case.IsMacro()
+				var tmp13 any
+				if !tmp12 {
+					tmp13 = checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
+				}
+				var tmp14 any
+				if tmp12 {
+					tmp14 = aotDirectFn6()
+				} else {
+					tmp14 = lang.Apply0(tmp13)
+				}
+				var v15 any = tmp14
+				_ = v15
+				// let binding "vec__693"
+				tmp16 := checkDerefVar(var_clojure_DOT_core_map)
+				tmp17 := lang.NewVector(v11, v15)
+				tmp18 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(124), kw_column, int(55), kw_end_DASH_line, int(124), kw_end_DASH_column, int(62))
+				tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp18 := lang.Apply2(tmp14, lang.Builtins["deref"], tmp17)
-				tmp19 := lang.Apply1(reflect.Select, tmp18)
-				var v20 any = tmp19
-				_ = v20
+				tmp20 := lang.Apply2(tmp16, lang.Builtins["deref"], tmp19)
+				tmp21 := lang.Apply1(reflect.Select, tmp20)
+				var v22 any = tmp21
+				_ = v22
 				// let binding "chosen"
-				tmp21 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp22 := lang.Apply3(tmp21, v20, int64(0), nil)
-				var v23 any = tmp22
-				_ = v23
+				tmp23 := checkDerefVar(var_clojure_DOT_core_nth)
+				tmp24 := lang.Apply3(tmp23, v22, int64(0), nil)
+				var v25 any = tmp24
+				_ = v25
 				// let binding "val"
-				tmp24 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp25 := lang.Apply3(tmp24, v20, int64(1), nil)
-				var v26 any = tmp25
-				_ = v26
+				tmp26 := checkDerefVar(var_clojure_DOT_core_nth)
+				tmp27 := lang.Apply3(tmp26, v22, int64(1), nil)
+				var v28 any = tmp27
+				_ = v28
 				// let binding "ok"
-				tmp27 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp28 := lang.Apply3(tmp27, v20, int64(2), nil)
-				var v29 any = tmp28
-				_ = v29
-				tmp30 := checkDerefVar(var_clojure_DOT_core__EQ_)
-				tmp31 := lang.Apply2(tmp30, int64(0), v23)
-				tmp4 = tmp31
+				tmp29 := checkDerefVar(var_clojure_DOT_core_nth)
+				tmp30 := lang.Apply3(tmp29, v22, int64(2), nil)
+				var v31 any = tmp30
+				_ = v31
+				tmp32 := checkDerefVar(var_clojure_DOT_core__EQ_)
+				tmp33 := lang.Apply2(tmp32, int64(0), v25)
+				tmp4 = tmp33
 			} // end let
 			return tmp4
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc2)
+		aotDirectFn13 = tmp1
 		var_clojure_DOT_core_DOT_async_try_DASH_put = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_try_DASH_put.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion13 = var_clojure_DOT_core_DOT_async_try_DASH_put.RootVersion()
+		var_clojure_DOT_core_DOT_async_try_DASH_put.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Returns true if val was sent on the port, false if sending would\n  block", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(118), kw_end_DASH_line, int(118), kw_private, true)
+		})
 	}
 	// try-take
 	{
-		tmp0 := sym_try_DASH_take.WithMeta(lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Returns [val true] if val was received from the port, [nil false] if the channel was closed,\n  and nil if receiving would block.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(127), kw_end_DASH_line, int(127), kw_private, true)).(*lang.Symbol)
+		tmp0 := sym_try_DASH_take
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
@@ -7129,14 +2321,15 @@ func LoadNS() {
 			var tmp3 any
 			{ // let
 				// let binding "sc"
-				tmp4 := new(reflect.SelectCase)
-				var v5 any = tmp4
-				_ = v5
+				tmp4 := reflect.TypeOf((*reflect.SelectCase)(nil)).Elem()
+				tmp5 := reflect.New(tmp4).Interface()
+				var v6 any = tmp5
+				_ = v6
 				// let binding "_"
 				// set! host field
-				var tmp6 any
+				var tmp7 any
 				{
-					targetV := reflect.ValueOf(v5)
+					targetV := reflect.ValueOf(v6)
 					if targetV.Kind() == reflect.Ptr {
 						targetV = targetV.Elem()
 					}
@@ -7158,14 +2351,14 @@ func LoadNS() {
 					} else {
 						fieldVal.Set(valV)
 					}
-					tmp6 = reflect.SelectRecv
+					tmp7 = reflect.SelectRecv
 				}
-				_ = tmp6
-				tmp7 := lang.Apply1(reflect.ValueOf, v2)
+				_ = tmp7
+				tmp8 := reflect.ValueOf(v2)
 				// set! host field
-				var tmp8 any
+				var tmp9 any
 				{
-					targetV := reflect.ValueOf(v5)
+					targetV := reflect.ValueOf(v6)
 					if targetV.Kind() == reflect.Ptr {
 						targetV = targetV.Elem()
 					}
@@ -7176,7 +2369,7 @@ func LoadNS() {
 					if !fieldVal.CanSet() {
 						panic(fmt.Errorf("cannot set field Chan"))
 					}
-					valV := reflect.ValueOf(tmp7)
+					valV := reflect.ValueOf(tmp8)
 					if !valV.IsValid() {
 						switch fieldVal.Kind() {
 						case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
@@ -7187,19 +2380,20 @@ func LoadNS() {
 					} else {
 						fieldVal.Set(valV)
 					}
-					tmp8 = tmp7
+					tmp9 = tmp8
 				}
-				var v9 any = tmp8
-				_ = v9
+				var v10 any = tmp9
+				_ = v10
 				// let binding "def"
-				tmp10 := new(reflect.SelectCase)
-				var v11 any = tmp10
-				_ = v11
+				tmp11 := reflect.TypeOf((*reflect.SelectCase)(nil)).Elem()
+				tmp12 := reflect.New(tmp11).Interface()
+				var v13 any = tmp12
+				_ = v13
 				// let binding "_"
 				// set! host field
-				var tmp12 any
+				var tmp14 any
 				{
-					targetV := reflect.ValueOf(v11)
+					targetV := reflect.ValueOf(v13)
 					if targetV.Kind() == reflect.Ptr {
 						targetV = targetV.Elem()
 					}
@@ -7221,86 +2415,82 @@ func LoadNS() {
 					} else {
 						fieldVal.Set(valV)
 					}
-					tmp12 = reflect.SelectDefault
+					tmp14 = reflect.SelectDefault
 				}
-				var v13 any = tmp12
-				_ = v13
-				// let binding "vec__702"
-				tmp14 := checkDerefVar(var_clojure_DOT_core_map)
-				tmp15 := lang.NewVector(v5, v11)
-				tmp16 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(138), kw_column, int(55), kw_end_DASH_line, int(138), kw_end_DASH_column, int(62))
-				tmp17, err := lang.WithMeta(tmp15, tmp16.(lang.IPersistentMap))
+				var v15 any = tmp14
+				_ = v15
+				// let binding "vec__696"
+				tmp16 := checkDerefVar(var_clojure_DOT_core_map)
+				tmp17 := lang.NewVector(v6, v13)
+				tmp18 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(138), kw_column, int(55), kw_end_DASH_line, int(138), kw_end_DASH_column, int(62))
+				tmp19, err := lang.WithMeta(tmp17, tmp18.(lang.IPersistentMap))
 				if err != nil {
 					panic(err)
 				}
-				tmp18 := lang.Apply2(tmp14, lang.Builtins["deref"], tmp17)
-				tmp19 := lang.Apply1(reflect.Select, tmp18)
-				var v20 any = tmp19
-				_ = v20
+				tmp20 := lang.Apply2(tmp16, lang.Builtins["deref"], tmp19)
+				tmp21 := lang.Apply1(reflect.Select, tmp20)
+				var v22 any = tmp21
+				_ = v22
 				// let binding "chosen"
-				tmp21 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp22 := lang.Apply3(tmp21, v20, int64(0), nil)
-				var v23 any = tmp22
-				_ = v23
+				tmp23 := checkDerefVar(var_clojure_DOT_core_nth)
+				tmp24 := lang.Apply3(tmp23, v22, int64(0), nil)
+				var v25 any = tmp24
+				_ = v25
 				// let binding "val"
-				tmp24 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp25 := lang.Apply3(tmp24, v20, int64(1), nil)
-				var v26 any = tmp25
-				_ = v26
+				tmp26 := checkDerefVar(var_clojure_DOT_core_nth)
+				tmp27 := lang.Apply3(tmp26, v22, int64(1), nil)
+				var v28 any = tmp27
+				_ = v28
 				// let binding "ok"
-				tmp27 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp28 := lang.Apply3(tmp27, v20, int64(2), nil)
-				var v29 any = tmp28
-				_ = v29
-				var tmp30 any
-				tmp31 := checkDerefVar(var_clojure_DOT_core__EQ_)
-				tmp32 := lang.Apply2(tmp31, int64(1), v23)
-				if lang.IsTruthy(tmp32) {
+				tmp29 := checkDerefVar(var_clojure_DOT_core_nth)
+				tmp30 := lang.Apply3(tmp29, v22, int64(2), nil)
+				var v31 any = tmp30
+				_ = v31
+				var tmp32 any
+				tmp33 := checkDerefVar(var_clojure_DOT_core__EQ_)
+				tmp34 := lang.Apply2(tmp33, int64(1), v25)
+				if lang.IsTruthy(tmp34) {
 				} else {
-					var tmp33 any
-					if lang.IsTruthy(v29) {
-						tmp34, ok := lang.FieldOrMethod(v26, "Interface")
+					var tmp35 any
+					if lang.IsTruthy(v31) {
+						tmp36, ok := lang.FieldOrMethod(v28, "Interface")
 						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v26, "Interface")))
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v28, "Interface")))
 						}
-						var tmp35 any
-						switch reflect.TypeOf(tmp34).Kind() {
+						var tmp37 any
+						switch reflect.TypeOf(tmp36).Kind() {
 						case reflect.Func:
-							tmp35 = lang.Apply(tmp34, nil)
+							tmp37 = lang.Apply(tmp36, nil)
 						default:
-							tmp35 = tmp34
+							tmp37 = tmp36
 						}
-						tmp36 := lang.NewVector(tmp35, true)
-						tmp37 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(140), kw_column, int(14), kw_end_DASH_line, int(140), kw_end_DASH_column, int(36))
-						tmp38, err := lang.WithMeta(tmp36, tmp37.(lang.IPersistentMap))
+						tmp38 := lang.NewVector(tmp37, true)
+						tmp39 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(140), kw_column, int(14), kw_end_DASH_line, int(140), kw_end_DASH_column, int(36))
+						tmp40, err := lang.WithMeta(tmp38, tmp39.(lang.IPersistentMap))
 						if err != nil {
 							panic(err)
 						}
-						tmp33 = tmp38
+						tmp35 = tmp40
 					} else {
-						var tmp39 any
-						if lang.IsTruthy(kw_else) {
-							tmp40 := lang.NewVector(nil, false)
-							tmp41 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(141), kw_column, int(17), kw_end_DASH_line, int(141), kw_end_DASH_column, int(27))
-							tmp42, err := lang.WithMeta(tmp40, tmp41.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp39 = tmp42
-						} else {
+						tmp41 := lang.NewVector(nil, false)
+						tmp42 := lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(141), kw_column, int(17), kw_end_DASH_line, int(141), kw_end_DASH_column, int(27))
+						tmp43, err := lang.WithMeta(tmp41, tmp42.(lang.IPersistentMap))
+						if err != nil {
+							panic(err)
 						}
-						tmp33 = tmp39
+						tmp35 = tmp43
 					}
-					tmp30 = tmp33
+					tmp32 = tmp35
 				}
-				tmp3 = tmp30
+				tmp3 = tmp32
 			} // end let
 			return tmp3
 		})
-		tmp1 = tmp1.WithMeta(lang.NewMap(kw_rettag, nil)).(lang.FnFunc1)
+		aotDirectFn14 = tmp1
 		var_clojure_DOT_core_DOT_async_try_DASH_take = ns.InternWithValue(tmp0, tmp1, true)
-		if tmp0.Meta() != nil {
-			var_clojure_DOT_core_DOT_async_try_DASH_take.SetMeta(tmp0.Meta().(lang.IPersistentMap))
-		}
+		aotRootVersion14 = var_clojure_DOT_core_DOT_async_try_DASH_take.RootVersion()
+		var_clojure_DOT_core_DOT_async_try_DASH_take.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Returns [val true] if val was received from the port, [nil false] if the channel was closed,\n  and nil if receiving would block.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(127), kw_end_DASH_line, int(127), kw_private, true)
+		})
 	}
 }

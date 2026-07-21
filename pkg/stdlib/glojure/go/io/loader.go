@@ -342,7 +342,7 @@ func LoadNS() {
 								tmp8 := lang.Apply0(tmp7)
 								var v9 any = tmp8
 								_ = v9
-								// let binding "vec__385"
+								// let binding "vec__793"
 								var tmp10 any
 								tmp11 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
 								tmp12 := lang.Apply1(tmp11, v9)
@@ -369,22 +369,22 @@ func LoadNS() {
 								}
 								var v23 any = tmp10
 								_ = v23
-								// let binding "vec__388"
+								// let binding "vec__796"
 								tmp24 := checkDerefVar(var_clojure_DOT_core_nth)
 								tmp25 := lang.Apply3(tmp24, v23, int64(0), nil)
 								var v26 any = tmp25
 								_ = v26
-								// let binding "seq__389"
+								// let binding "seq__797"
 								tmp27 := checkDerefVar(var_clojure_DOT_core_seq)
 								tmp28 := lang.Apply1(tmp27, v26)
 								var v29 any = tmp28
 								_ = v29
-								// let binding "first__390"
+								// let binding "first__798"
 								tmp30 := checkDerefVar(var_clojure_DOT_core_first)
 								tmp31 := lang.Apply1(tmp30, v29)
 								var v32 any = tmp31
 								_ = v32
-								// let binding "seq__389"
+								// let binding "seq__797"
 								tmp33 := checkDerefVar(var_clojure_DOT_core_next)
 								tmp34 := lang.Apply1(tmp33, v29)
 								var v35 any = tmp34
@@ -437,7 +437,7 @@ func LoadNS() {
 					tmp7 := lang.Apply0(tmp6)
 					var v8 any = tmp7
 					_ = v8
-					// let binding "vec__379"
+					// let binding "vec__787"
 					var tmp9 any
 					tmp10 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
 					tmp11 := lang.Apply1(tmp10, v8)
@@ -464,22 +464,22 @@ func LoadNS() {
 					}
 					var v22 any = tmp9
 					_ = v22
-					// let binding "vec__382"
+					// let binding "vec__790"
 					tmp23 := checkDerefVar(var_clojure_DOT_core_nth)
 					tmp24 := lang.Apply3(tmp23, v22, int64(0), nil)
 					var v25 any = tmp24
 					_ = v25
-					// let binding "seq__383"
+					// let binding "seq__791"
 					tmp26 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp27 := lang.Apply1(tmp26, v25)
 					var v28 any = tmp27
 					_ = v28
-					// let binding "first__384"
+					// let binding "first__792"
 					tmp29 := checkDerefVar(var_clojure_DOT_core_first)
 					tmp30 := lang.Apply1(tmp29, v28)
 					var v31 any = tmp30
 					_ = v31
-					// let binding "seq__383"
+					// let binding "seq__791"
 					tmp32 := checkDerefVar(var_clojure_DOT_core_next)
 					tmp33 := lang.Apply1(tmp32, v28)
 					var v34 any = tmp33
@@ -573,7 +573,7 @@ func LoadNS() {
 					tmp11 := lang.Apply1(runtime.OpenURL, v1)
 					var v12 any = tmp11
 					_ = v12
-					// let binding "vec__364"
+					// let binding "vec__772"
 					var tmp13 any
 					tmp14 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
 					tmp15 := lang.Apply1(tmp14, v12)
@@ -600,22 +600,22 @@ func LoadNS() {
 					}
 					var v26 any = tmp13
 					_ = v26
-					// let binding "vec__367"
+					// let binding "vec__775"
 					tmp27 := checkDerefVar(var_clojure_DOT_core_nth)
 					tmp28 := lang.Apply3(tmp27, v26, int64(0), nil)
 					var v29 any = tmp28
 					_ = v29
-					// let binding "seq__368"
+					// let binding "seq__776"
 					tmp30 := checkDerefVar(var_clojure_DOT_core_seq)
 					tmp31 := lang.Apply1(tmp30, v29)
 					var v32 any = tmp31
 					_ = v32
-					// let binding "first__369"
+					// let binding "first__777"
 					tmp33 := checkDerefVar(var_clojure_DOT_core_first)
 					tmp34 := lang.Apply1(tmp33, v32)
 					var v35 any = tmp34
 					_ = v35
-					// let binding "seq__368"
+					// let binding "seq__776"
 					tmp36 := checkDerefVar(var_clojure_DOT_core_next)
 					tmp37 := lang.Apply1(tmp36, v32)
 					var v38 any = tmp37
@@ -670,7 +670,7 @@ func LoadNS() {
 			_ = v2
 			var tmp3 any
 			{ // let
-				// let binding "vec__370"
+				// let binding "vec__778"
 				tmp4 := lang.Apply1(url5.ParseRequestURI, v1)
 				var v5 any = tmp4
 				_ = v5
@@ -719,7 +719,7 @@ func LoadNS() {
 						tmp16 := lang.Apply1(os6.Open, v1)
 						var v17 any = tmp16
 						_ = v17
-						// let binding "vec__373"
+						// let binding "vec__781"
 						var tmp18 any
 						tmp19 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
 						tmp20 := lang.Apply1(tmp19, v17)
@@ -746,22 +746,22 @@ func LoadNS() {
 						}
 						var v31 any = tmp18
 						_ = v31
-						// let binding "vec__376"
+						// let binding "vec__784"
 						tmp32 := checkDerefVar(var_clojure_DOT_core_nth)
 						tmp33 := lang.Apply3(tmp32, v31, int64(0), nil)
 						var v34 any = tmp33
 						_ = v34
-						// let binding "seq__377"
+						// let binding "seq__785"
 						tmp35 := checkDerefVar(var_clojure_DOT_core_seq)
 						tmp36 := lang.Apply1(tmp35, v34)
 						var v37 any = tmp36
 						_ = v37
-						// let binding "first__378"
+						// let binding "first__786"
 						tmp38 := checkDerefVar(var_clojure_DOT_core_first)
 						tmp39 := lang.Apply1(tmp38, v37)
 						var v40 any = tmp39
 						_ = v40
-						// let binding "seq__377"
+						// let binding "seq__785"
 						tmp41 := checkDerefVar(var_clojure_DOT_core_next)
 						tmp42 := lang.Apply1(tmp41, v37)
 						var v43 any = tmp42
@@ -1396,7 +1396,7 @@ func LoadNS() {
 				tmp10 := lang.Apply2(io4.Copy, v7, v6)
 				var v11 any = tmp10
 				_ = v11
-				// let binding "vec__391"
+				// let binding "vec__799"
 				var tmp12 any
 				tmp13 := checkDerefVar(var_clojure_DOT_core_vector_QMARK_)
 				tmp14 := lang.Apply1(tmp13, v11)
@@ -1423,22 +1423,22 @@ func LoadNS() {
 				}
 				var v25 any = tmp12
 				_ = v25
-				// let binding "vec__394"
+				// let binding "vec__802"
 				tmp26 := checkDerefVar(var_clojure_DOT_core_nth)
 				tmp27 := lang.Apply3(tmp26, v25, int64(0), nil)
 				var v28 any = tmp27
 				_ = v28
-				// let binding "seq__395"
+				// let binding "seq__803"
 				tmp29 := checkDerefVar(var_clojure_DOT_core_seq)
 				tmp30 := lang.Apply1(tmp29, v28)
 				var v31 any = tmp30
 				_ = v31
-				// let binding "first__396"
+				// let binding "first__804"
 				tmp32 := checkDerefVar(var_clojure_DOT_core_first)
 				tmp33 := lang.Apply1(tmp32, v31)
 				var v34 any = tmp33
 				_ = v34
-				// let binding "seq__395"
+				// let binding "seq__803"
 				tmp35 := checkDerefVar(var_clojure_DOT_core_next)
 				tmp36 := lang.Apply1(tmp35, v31)
 				var v37 any = tmp36
