@@ -209,7 +209,7 @@ vet: $(GO)
 test: test-aot-runtime test-glj  # vet
 	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
 
-test-aot-runtime:
+test-aot-runtime: $(GO)
 	go test -tags glj_aot_runtime ./pkg/glj ./pkg/gljmain ./pkg/runtime
 
 test-glj: $(TEST-GLJ-TARGETS)

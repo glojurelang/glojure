@@ -79,6 +79,32 @@ func TestNamespaceReferAllSnapshotIsLazyAndStable(t *testing.T) {
 	}
 }
 
+func TestNamespaceUnmapPreservesSharedSnapshots(t *testing.T) {
+	source := NewNamespace(NewSymbol("unmap-source"))
+	sym := NewSymbol("shared")
+	shared := source.Intern(sym)
+	target := NewNamespace(NewSymbol("unmap-target"))
+	target.ReferAllSnapshot(source, nil)
+
+	target.Unmap(sym)
+	if got := target.GetMapping(sym); got != nil {
+		t.Fatalf("target mapping after unmap = %v, want nil", got)
+	}
+	if got := source.GetMapping(sym); got != shared {
+		t.Fatalf("source mapping after target unmap = %v, want %v", got, shared)
+	}
+
+	observer := NewNamespace(NewSymbol("unmap-observer"))
+	observer.ReferAllSnapshot(source, nil)
+	source.Unmap(sym)
+	if got := source.GetMapping(sym); got != nil {
+		t.Fatalf("source mapping after unmap = %v, want nil", got)
+	}
+	if got := observer.GetMapping(sym); got != shared {
+		t.Fatalf("captured snapshot changed after source unmap = %v, want %v", got, shared)
+	}
+}
+
 func TestNamespaceConcurrentIntern(t *testing.T) {
 	ns := NewNamespace(NewSymbol("test.namespace-concurrent-intern"))
 	const goroutines = 32

@@ -254,12 +254,24 @@ func (ns *Namespace) Unmap(sym *Symbol) {
 	if sym.Namespace() != "" {
 		panic(NewIllegalArgumentError("Can't unintern namespace-qualified symbol"))
 	}
-	mb := ns.mappingsBox()
-	for mb.val.(IPersistentMap).ContainsKey(sym) {
-		newMap := mb.val.(IPersistentMap).Without(sym)
-		ns.mappings.CompareAndSwap(mb, NewBox(newMap))
-		mb = ns.mappingsBox()
+
+	ns.mappingsMtx.Lock()
+	defer ns.mappingsMtx.Unlock()
+
+	key := sym.String()
+	if _, exists := ns.mappings[key]; exists {
+		ns.ensureMappingsMutableLocked()
+		delete(ns.mappings, key)
 	}
+	// Snapshot-backed references are not stored in mappings. Exclude the
+	// symbol from every snapshot so deleting a direct override cannot reveal
+	// an older referred mapping underneath it.
+	for i := range ns.referenceSnapshots {
+		if _, exists := ns.referenceSnapshots[i].mappings[key]; exists {
+			ns.referenceSnapshots[i].excluded[key] = struct{}{}
+		}
+	}
+	ns.mappingsSnapshot = nil
 }
 
 func (ns *Namespace) GetMapping(sym *Symbol) interface{} {
