@@ -203,6 +203,7 @@ func (g *Generator) aotExternalInvokeTarget(
 		return nil
 	}
 	arity := len(invoke.Args)
+	intrinsic := aotExternalIntrinsic(vr, arity)
 	if arity > 5 || !aotSupportsArity(codegenVarValue(vr), arity) {
 		return nil
 	}
@@ -212,9 +213,12 @@ func (g *Generator) aotExternalInvokeTarget(
 	}
 	index := len(g.aotExternalCallTargets)
 	target := &aotExternalCallTarget{
-		vr:    vr,
-		arity: arity,
-		fnVar: fmt.Sprintf("aotExternalFn%d", index),
+		vr:             vr,
+		arity:          arity,
+		fnVar:          fmt.Sprintf("aotExternalFn%d", index),
+		intrinsic:      intrinsic,
+		defaultVar:     fmt.Sprintf("aotExternalDefault%d", index),
+		rootVersionVar: fmt.Sprintf("aotExternalRootVersion%d", index),
 	}
 	g.allocVarVar(
 		vr.Namespace().Name().String(),
@@ -222,6 +226,82 @@ func (g *Generator) aotExternalInvokeTarget(
 	)
 	g.aotExternalCallTargets[key] = target
 	return target
+}
+
+func aotExternalIntrinsic(vr *lang.Var, arity int) string {
+	if vr.Namespace().Name().String() != "clojure.core" {
+		return ""
+	}
+	name := vr.Symbol().String()
+	switch {
+	case name == "assoc" && (arity == 3 || arity == 5):
+	case name == "count" && arity == 1:
+	case name == "cons" && arity == 2:
+	case name == "conj" && arity == 2:
+	case name == "empty?" && arity == 1:
+	case name == "first" && arity == 1:
+	case name == "get" && (arity == 2 || arity == 3):
+	case name == "next" && arity == 1:
+	case name == "nth" && (arity == 2 || arity == 3):
+	case name == "peek" && arity == 1:
+	case name == "pop" && arity == 1:
+	case name == "seq" && arity == 1:
+	default:
+		return ""
+	}
+	return name
+}
+
+func (g *Generator) aotExternalIntrinsicCall(
+	intrinsic string,
+	args []string,
+) string {
+	switch intrinsic {
+	case "assoc":
+		if len(args) == 3 {
+			return fmt.Sprintf("lang.Assoc(%s, %s, %s)", args[0], args[1], args[2])
+		}
+		return fmt.Sprintf(
+			"lang.Assoc(lang.Assoc(%s, %s, %s), %s, %s)",
+			args[0], args[1], args[2], args[3], args[4],
+		)
+	case "count":
+		return fmt.Sprintf("lang.Count(%s)", args[0])
+	case "cons":
+		return fmt.Sprintf("lang.NewCons(%s, %s)", args[0], args[1])
+	case "conj":
+		return fmt.Sprintf("lang.ConjAny(%s, %s)", args[0], args[1])
+	case "empty?":
+		return fmt.Sprintf("lang.IsEmpty(%s)", args[0])
+	case "first":
+		return fmt.Sprintf("lang.First(%s)", args[0])
+	case "get":
+		if len(args) == 2 {
+			return fmt.Sprintf("lang.Get(%s, %s)", args[0], args[1])
+		}
+		return fmt.Sprintf("lang.GetDefault(%s, %s, %s)", args[0], args[1], args[2])
+	case "next":
+		return fmt.Sprintf("lang.Next(%s)", args[0])
+	case "nth":
+		if len(args) == 2 {
+			return fmt.Sprintf(
+				"runtime.RT.Nth(%s, lang.IntCast(%s))",
+				args[0], args[1],
+			)
+		}
+		return fmt.Sprintf(
+			"runtime.RT.NthDefault(%s, lang.IntCast(%s), %s)",
+			args[0], args[1], args[2],
+		)
+	case "peek":
+		return fmt.Sprintf("runtime.RT.Peek(%s)", args[0])
+	case "pop":
+		return fmt.Sprintf("runtime.RT.Pop(%s)", args[0])
+	case "seq":
+		return fmt.Sprintf("lang.Seq(%s)", args[0])
+	default:
+		panic("unsupported AOT external intrinsic: " + intrinsic)
+	}
 }
 
 func (g *Generator) generateAOTExternalCacheAdapters() {

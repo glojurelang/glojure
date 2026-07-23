@@ -5,6 +5,9 @@
      (* (+ 2 3)
         (- 11 4))))
 
+(defn count-input [value]
+  (count value))
+
 (defn run []
   (loop [i 0
          total 0]

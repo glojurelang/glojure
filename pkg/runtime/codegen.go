@@ -91,9 +91,12 @@ type aotSpecializationTarget struct {
 }
 
 type aotExternalCallTarget struct {
-	vr    *lang.Var
-	arity int
-	fnVar string
+	vr             *lang.Var
+	arity          int
+	fnVar          string
+	intrinsic      string
+	defaultVar     string
+	rootVersionVar string
 }
 
 type aotExternalCallKey struct {
@@ -445,6 +448,16 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 			target.vr.Namespace().Name().String(),
 			target.vr.Symbol().String(),
 		)
+		if target.intrinsic != "" {
+			initBuf.WriteString(fmt.Sprintf(
+				"%s := runtime.IsDefaultCoreVar(%s)\n%s := %s.RootVersion()\n",
+				target.defaultVar,
+				varName,
+				target.rootVersionVar,
+				varName,
+			))
+			continue
+		}
 		initBuf.WriteString(fmt.Sprintf(
 			"%s := aotCacheFn%d(%s)\n",
 			target.fnVar,
@@ -1759,6 +1772,29 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 		return resultVar
 	}
 	if externalTarget != nil {
+		if externalTarget.intrinsic != "" {
+			varNode := invokeNode.Fn.Sub.(*ast.VarNode)
+			varID := g.allocVarVar(
+				varNode.Var.Namespace().Name().String(),
+				varNode.Var.Symbol().String(),
+			)
+			g.writef("var %s any\n", resultVar)
+			g.writef("if %s && %s.RootVersion() == %s {\n",
+				externalTarget.defaultVar,
+				varID,
+				externalTarget.rootVersionVar,
+			)
+			g.writef("%s = %s\n",
+				resultVar,
+				g.aotExternalIntrinsicCall(externalTarget.intrinsic, argExprs),
+			)
+			g.writef("} else {\n")
+			fallback := g.allocateTempVar()
+			g.writef("%s := checkDerefVar(%s)\n", fallback, varID)
+			g.generateApply(resultVar, fallback, argExprs, false)
+			g.writef("}\n")
+			return resultVar
+		}
 		g.writef("%s := %s(%s)\n",
 			resultVar,
 			externalTarget.fnVar,

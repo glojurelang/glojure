@@ -916,9 +916,10 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	}
 	recordDefaultCoreRoots(
 		core,
-		"*", "+", "dec", "even?", "filter", "identity", "inc", "map",
-		"neg?", "odd?", "pos?", "range", "reduce", "zero?",
-		"take",
+		"*", "+", "assoc", "cons", "conj", "count", "dec", "empty?",
+		"even?", "filter", "first", "get", "identity", "inc", "map",
+		"neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range",
+		"reduce", "seq", "take", "zero?",
 	)
 }
 
@@ -966,6 +967,14 @@ func installFixedArityCoreFunction(
 }
 
 func nativeMapv(fn, coll interface{}) interface{} {
+	if indexed, ok := coll.(lang.Indexed); ok {
+		values := make([]interface{}, indexed.Count())
+		for i := range values {
+			values[i] = lang.Apply1(fn, indexed.Nth(i))
+		}
+		return lang.NewVector(values...)
+	}
+
 	initial := lang.NewVector().AsTransient()
 	reducer := lang.FnFunc2(func(result, value interface{}) interface{} {
 		transient := result.(lang.ITransientCollection)

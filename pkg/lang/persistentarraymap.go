@@ -6,7 +6,7 @@ import (
 
 const (
 	hashmapThreshold   = 16
-	arrayMapInlineSize = 8
+	arrayMapInlineSize = hashmapThreshold - 2
 )
 
 type (

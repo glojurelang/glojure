@@ -44,6 +44,28 @@ func TestVectorPopConjRoundtrip(t *testing.T) {
 	}
 }
 
+func TestVectorSeqSupportsIndexedAccess(t *testing.T) {
+	seq := NewVector("a", "b", "c").Seq().Next().(Indexed)
+	if got := seq.Nth(0); got != "b" {
+		t.Fatalf("tail Nth(0) = %v, want b", got)
+	}
+	if got := seq.NthDefault(2, "missing"); got != "missing" {
+		t.Fatalf("tail NthDefault(2) = %v, want missing", got)
+	}
+}
+
+func TestCollectionHelpers(t *testing.T) {
+	if got := ConjAny(nil, "value"); !Equals(got, NewList("value")) {
+		t.Fatalf("ConjAny(nil, value) = %v, want (value)", got)
+	}
+	if !IsEmpty(nil) || !IsEmpty(NewVector()) {
+		t.Fatal("nil and empty vector should be empty")
+	}
+	if IsEmpty(NewVector("value")) {
+		t.Fatal("non-empty vector should not be empty")
+	}
+}
+
 // TestVectorPopSingleElement verifies that popping a single-element vector
 // returns emptyVector.
 func TestVectorPopSingleElement(t *testing.T) {
