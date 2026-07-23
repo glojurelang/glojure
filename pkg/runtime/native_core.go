@@ -914,12 +914,14 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	if mod := core.FindInternedVar(lang.NewSymbol("mod")); mod != nil {
 		mod.BindRoot(lang.FnFunc2(nativeMod))
 	}
-	recordDefaultCoreRoots(
-		core,
-		"*", "+", "assoc", "cons", "conj", "count", "dec", "empty?",
-		"even?", "filter", "first", "get", "identity", "inc", "map",
+}
+
+func recordOptimizableCoreRoots(core *lang.Namespace) {
+	recordDefaultCoreRoots(core,
+		"*", "+", "assoc", "atom", "cons", "conj", "count", "dec", "deref",
+		"empty?", "even?", "filter", "first", "get", "identity", "inc", "map",
 		"neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range",
-		"reduce", "seq", "take", "zero?",
+		"reduce", "reset!", "seq", "swap!", "take", "zero?",
 	)
 }
 

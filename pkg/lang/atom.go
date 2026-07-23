@@ -119,6 +119,10 @@ func (a *Atom) CompareAndSet(oldv, newv interface{}) bool {
 
 func (a *Atom) compareAndSetBox(old *Box, newv interface{}) bool {
 	// TODO: validate
+	if Identical(old.val, newv) &&
+		(a.watches == nil || a.watches.Count() == 0) {
+		return a.state.CompareAndSwap(old, old)
+	}
 	swapped := a.state.CompareAndSwap(old, NewBox(newv))
 	if swapped {
 		a.notifyWatches(old.val, newv)
@@ -128,10 +132,19 @@ func (a *Atom) compareAndSetBox(old *Box, newv interface{}) bool {
 
 func (a *Atom) Reset(newVal interface{}) interface{} {
 	// TODO: validate
-
-	old := a.state.Swap(NewBox(newVal))
-	a.notifyWatches(old.val, newVal)
-	return newVal
+	for {
+		old := a.state.Load()
+		if Identical(old.val, newVal) &&
+			(a.watches == nil || a.watches.Count() == 0) {
+			if a.state.CompareAndSwap(old, old) {
+				return newVal
+			}
+			continue
+		}
+		old = a.state.Swap(NewBox(newVal))
+		a.notifyWatches(old.val, newVal)
+		return newVal
+	}
 }
 
 func (a *Atom) Meta() IPersistentMap {

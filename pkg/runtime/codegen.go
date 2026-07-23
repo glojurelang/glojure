@@ -32,8 +32,9 @@ import (
 
 // varScope represents a variable allocation scope
 type varScope struct {
-	nextNum int
-	names   map[string]string // maps Clojure names to Go variable names
+	nextNum    int
+	names      map[string]string // maps Clojure names to Go variable names
+	localAtoms map[string]bool   // local atoms proven not to escape
 }
 
 // recurContext represents the context for a loop/recur form
@@ -1674,6 +1675,9 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 // generateInvoke generates code for an Invoke node
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
+	if result, ok := g.generateLocalAtomInvoke(invokeNode); ok {
+		return result
+	}
 	if plan := analyzeReducePipeline(invokeNode); plan != nil {
 		return g.generateAOTReducePipeline(invokeNode, plan)
 	}
@@ -2036,7 +2040,7 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	}
 
 	// Emit bindings directly to g.w
-	for _, binding := range letNode.Bindings {
+	for bindingIndex, binding := range letNode.Bindings {
 		bindingNode := binding.Sub.(*ast.BindingNode)
 		name := bindingNode.Name.Name()
 		init := bindingNode.Init
@@ -2045,9 +2049,25 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		g.writef("// let binding \"%s\"\n", name)
 
 		// Generate initialization code
-		initCode := g.generateASTNode(init)
+		var localAtomInit *ast.Node
+		if !isLoop {
+			localAtomInit = scalarReplaceableAtomInit(
+				bindingNode,
+				letNode.Bindings[bindingIndex+1:],
+				letNode.Body,
+			)
+		}
+		initCode := ""
+		if localAtomInit != nil {
+			initCode = g.generateASTNode(localAtomInit)
+		} else {
+			initCode = g.generateASTNode(init)
+		}
 		varName := g.allocateLocal(name)
 		g.writef("var %s any = %s\n", varName, initCode)
+		if localAtomInit != nil {
+			g.markLocalAtom(name)
+		}
 		g.writeAssign("_", varName) // Prevent unused variable warning
 
 		// Collect binding variables for loop
@@ -2759,8 +2779,9 @@ func (g *Generator) pushVarScope() {
 
 	// Push new scope onto the stack
 	g.varScopes = append(g.varScopes, varScope{
-		nextNum: nextNum,
-		names:   make(map[string]string),
+		nextNum:    nextNum,
+		names:      make(map[string]string),
+		localAtoms: make(map[string]bool),
 	})
 }
 
@@ -2869,6 +2890,20 @@ func (g *Generator) getLocal(name string) string {
 	}
 
 	panic(fmt.Sprintf("variable %s not found in any scope", name))
+}
+
+func (g *Generator) markLocalAtom(name string) {
+	g.varScopes[len(g.varScopes)-1].localAtoms[name] = true
+}
+
+func (g *Generator) getLocalAtom(name string) (string, bool) {
+	for i := len(g.varScopes) - 1; i >= 0; i-- {
+		scope := &g.varScopes[i]
+		if varName, ok := scope.names[name]; ok {
+			return varName, scope.localAtoms[name]
+		}
+	}
+	return "", false
 }
 
 // allocateTempVar allocates a fresh temporary variable without name tracking

@@ -204,7 +204,8 @@ func (g *Generator) aotExternalInvokeTarget(
 	}
 	arity := len(invoke.Args)
 	intrinsic := aotExternalIntrinsic(vr, arity)
-	if arity > 5 || !aotSupportsArity(codegenVarValue(vr), arity) {
+	if arity > 5 ||
+		(intrinsic == "" && !aotSupportsArity(codegenVarValue(vr), arity)) {
 		return nil
 	}
 	key := aotExternalCallKey{vr: vr, arity: arity}
@@ -236,11 +237,13 @@ func aotExternalIntrinsic(vr *lang.Var, arity int) string {
 	switch {
 	case name == "assoc" && (arity == 3 || arity == 5):
 	case name == "count" && arity == 1:
+	case name == "dec" && arity == 1:
 	case name == "cons" && arity == 2:
 	case name == "conj" && arity == 2:
 	case name == "empty?" && arity == 1:
 	case name == "first" && arity == 1:
 	case name == "get" && (arity == 2 || arity == 3):
+	case name == "inc" && arity == 1:
 	case name == "next" && arity == 1:
 	case name == "nth" && (arity == 2 || arity == 3):
 	case name == "peek" && arity == 1:
@@ -267,6 +270,8 @@ func (g *Generator) aotExternalIntrinsicCall(
 		)
 	case "count":
 		return fmt.Sprintf("lang.Count(%s)", args[0])
+	case "dec":
+		return fmt.Sprintf("lang.Numbers.Dec(%s)", args[0])
 	case "cons":
 		return fmt.Sprintf("lang.NewCons(%s, %s)", args[0], args[1])
 	case "conj":
@@ -280,6 +285,8 @@ func (g *Generator) aotExternalIntrinsicCall(
 			return fmt.Sprintf("lang.Get(%s, %s)", args[0], args[1])
 		}
 		return fmt.Sprintf("lang.GetDefault(%s, %s, %s)", args[0], args[1], args[2])
+	case "inc":
+		return fmt.Sprintf("lang.Numbers.Inc(%s)", args[0])
 	case "next":
 		return fmt.Sprintf("lang.Next(%s)", args[0])
 	case "nth":

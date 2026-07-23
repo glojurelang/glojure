@@ -205,6 +205,10 @@ func writeBenchmark(temp string, fixtures []fixture) {
 	source.WriteString("\tif got := lang.Apply1(countCaller, lang.NewVector(1, 2, 3)); !lang.Equals(got, int64(99)) {\n")
 	source.WriteString("\t\tt.Fatalf(\"direct core call ignored count redefinition: got %v, want 99\", got)\n")
 	source.WriteString("\t}\n")
+	source.WriteString("\tlocalCounter := constant_arithmeticNS.FindInternedVar(lang.NewSymbol(\"local-counter\")).Get().(lang.IFn)\n")
+	source.WriteString("\tif got := localCounter.Invoke(); !lang.Equals(got, int64(42)) {\n")
+	source.WriteString("\t\tt.Fatalf(\"scalar-replaced local atom = %v, want 42\", got)\n")
+	source.WriteString("\t}\n")
 	source.WriteString("}\n\n")
 	for _, fixture := range fixtures {
 		benchmarkName := exportedName(strings.TrimPrefix(fixture.nsName, "bench."))
