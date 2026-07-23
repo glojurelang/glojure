@@ -10,6 +10,21 @@ import (
 
 var boxedInt64Sink interface{}
 
+type testBlockingDeref struct {
+	value interface{}
+}
+
+func (d testBlockingDeref) Deref() interface{} {
+	return d.value
+}
+
+func (d testBlockingDeref) DerefWithTimeout(timeoutMS int64, timeoutValue interface{}) interface{} {
+	if timeoutMS == 42 {
+		return d.value
+	}
+	return timeoutValue
+}
+
 func TestScopeDefineReplacesEquivalentSymbol(t *testing.T) {
 	s := newScope()
 	first := lang.NewSymbol("value")
@@ -173,6 +188,83 @@ func TestNativeCoreSubtractApplyToPreservesArities(t *testing.T) {
 		}
 	}()
 	fn.ApplyTo(nil)
+}
+
+func TestNativeCoreStrPreservesNilAndStringConversion(t *testing.T) {
+	fn := nativeCoreStr{}
+	tests := []struct {
+		name string
+		got  interface{}
+		want string
+	}{
+		{"zero", fn.Invoke0(), ""},
+		{"nil", fn.Invoke1(nil), ""},
+		{"one", fn.Invoke1(int64(42)), "42"},
+		{"two", fn.Invoke2("value=", int64(42)), "value=42"},
+		{"variadic", fn.Invoke("a", nil, int64(42)), "a42"},
+		{"apply-to", fn.ApplyTo(lang.NewList("a", nil, int64(42))), "a42"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if test.got != test.want {
+				t.Fatalf("str result = %v, want %q", test.got, test.want)
+			}
+		})
+	}
+}
+
+func TestNativeCoreDerefUsesInterfacesAndFallback(t *testing.T) {
+	fallbackCalls := 0
+	fallback := lang.FnFunc(func(args ...interface{}) interface{} {
+		fallbackCalls++
+		return "fallback"
+	})
+	fn := nativeCoreDeref{fallback: fallback}
+	value := testBlockingDeref{value: "ready"}
+
+	if got := fn.Invoke1(value); got != "ready" {
+		t.Fatalf("one-arity deref = %v, want ready", got)
+	}
+	if got := fn.Invoke3(value, int64(42), "timeout"); got != "ready" {
+		t.Fatalf("timed deref = %v, want ready", got)
+	}
+	if got := fn.Invoke3(value, int64(7), "timeout"); got != "timeout" {
+		t.Fatalf("timed-out deref = %v, want timeout", got)
+	}
+	if got := fn.Invoke1(struct{}{}); got != "fallback" || fallbackCalls != 1 {
+		t.Fatalf("fallback deref = %v with %d calls", got, fallbackCalls)
+	}
+}
+
+func TestNativeCoreSwapUsesFixedAtomArities(t *testing.T) {
+	fallback := lang.FnFunc(func(args ...interface{}) interface{} {
+		t.Fatalf("unexpected swap! fallback: %v", args)
+		return nil
+	})
+	fn := nativeCoreSwap{fallback: fallback}
+	atom := lang.NewAtom(int64(1))
+	add1 := lang.FnFunc1(func(value interface{}) interface{} {
+		return lang.Numbers.Add(value, int64(1))
+	})
+	add := lang.FnFunc2(func(a, b interface{}) interface{} {
+		return lang.Numbers.Add(a, b)
+	})
+	add3 := lang.FnFunc3(func(a, b, c interface{}) interface{} {
+		return lang.Numbers.Add(lang.Numbers.Add(a, b), c)
+	})
+
+	if got := fn.Invoke2(atom, add1); got != int64(2) {
+		t.Fatalf("zero-extra-arg swap = %v, want 2", got)
+	}
+	if got := fn.Invoke3(atom, add, int64(3)); got != int64(5) {
+		t.Fatalf("one-extra-arg swap = %v, want 5", got)
+	}
+	if got := fn.Invoke4(atom, add3, int64(4), int64(5)); got != int64(14) {
+		t.Fatalf("two-extra-arg swap = %v, want 14", got)
+	}
+	if got := fn.ApplyTo(lang.NewList(atom, add, int64(6))); got != int64(20) {
+		t.Fatalf("ApplyTo swap = %v, want 20", got)
+	}
 }
 
 func TestNativeCoreRequireFastPathPreservesRuntimeSemantics(t *testing.T) {

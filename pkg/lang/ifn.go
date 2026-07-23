@@ -119,6 +119,7 @@ func (f FnFunc0) Invoke(args ...any) any {
 func (f FnFunc0) Invoke0() any { return f() }
 
 func (f FnFunc0) ApplyTo(args ISeq) any {
+	requireFixedSeqArity(args, 0)
 	return f()
 }
 
@@ -140,7 +141,8 @@ func (f FnFunc1) Invoke(args ...any) any {
 func (f FnFunc1) Invoke1(a0 any) any { return f(a0) }
 
 func (f FnFunc1) ApplyTo(args ISeq) any {
-	return f.Invoke(seqToSlice(args)...)
+	values := requireFixedSeqArity(args, 1)
+	return f(values[0])
 }
 
 func (f FnFunc1) Meta() IPersistentMap          { return nil }
@@ -161,7 +163,8 @@ func (f FnFunc2) Invoke(args ...any) any {
 func (f FnFunc2) Invoke2(a0, a1 any) any { return f(a0, a1) }
 
 func (f FnFunc2) ApplyTo(args ISeq) any {
-	return f.Invoke(seqToSlice(args)...)
+	values := requireFixedSeqArity(args, 2)
+	return f(values[0], values[1])
 }
 
 func (f FnFunc2) Meta() IPersistentMap          { return nil }
@@ -182,7 +185,8 @@ func (f FnFunc3) Invoke(args ...any) any {
 func (f FnFunc3) Invoke3(a0, a1, a2 any) any { return f(a0, a1, a2) }
 
 func (f FnFunc3) ApplyTo(args ISeq) any {
-	return f.Invoke(seqToSlice(args)...)
+	values := requireFixedSeqArity(args, 3)
+	return f(values[0], values[1], values[2])
 }
 
 func (f FnFunc3) Meta() IPersistentMap          { return nil }
@@ -203,8 +207,41 @@ func (f FnFunc4) Invoke(args ...any) any {
 func (f FnFunc4) Invoke4(a0, a1, a2, a3 any) any { return f(a0, a1, a2, a3) }
 
 func (f FnFunc4) ApplyTo(args ISeq) any {
-	return f.Invoke(seqToSlice(args)...)
+	values := requireFixedSeqArity(args, 4)
+	return f(values[0], values[1], values[2], values[3])
 }
 
 func (f FnFunc4) Meta() IPersistentMap          { return nil }
 func (f FnFunc4) WithMeta(_ IPersistentMap) any { return f }
+
+// requireFixedSeqArity reads up to four fixed arguments directly from an
+// ISeq. Unlike seqToSlice, the successful path does not allocate a variadic
+// argument slice. The full sequence is counted only on the exceptional path
+// so that Invoke and ApplyTo report the same arity error.
+func requireFixedSeqArity(args ISeq, expected int) [4]any {
+	var values [4]any
+	seq := args
+	for i := 0; i < expected; i++ {
+		if seq == nil {
+			panic(NewIllegalArgumentError(fmt.Sprintf(
+				"wrong number of arguments: expected %d, got %d",
+				expected,
+				i,
+			)))
+		}
+		values[i] = seq.First()
+		seq = seq.Next()
+	}
+	if seq != nil {
+		got := expected
+		for ; seq != nil; seq = seq.Next() {
+			got++
+		}
+		panic(NewIllegalArgumentError(fmt.Sprintf(
+			"wrong number of arguments: expected %d, got %d",
+			expected,
+			got,
+		)))
+	}
+	return values
+}

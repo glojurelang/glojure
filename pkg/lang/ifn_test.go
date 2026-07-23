@@ -100,6 +100,49 @@ func TestFnFunc4(t *testing.T) {
 	}
 }
 
+func TestFixedFnApplyToPreservesArity(t *testing.T) {
+	tests := []struct {
+		name string
+		fn   IFn
+		args ISeq
+		want interface{}
+	}{
+		{"zero", FnFunc0(func() any { return 0 }), nil, 0},
+		{"one", FnFunc1(func(a any) any { return a }), NewList(1), 1},
+		{"two", FnFunc2(func(a, b any) any { return a.(int) + b.(int) }), NewList(20, 22), 42},
+		{"three", FnFunc3(func(a, b, c any) any { return a.(int) + b.(int) + c.(int) }), NewList(10, 20, 12), 42},
+		{"four", FnFunc4(func(a, b, c, d any) any {
+			return a.(int) + b.(int) + c.(int) + d.(int)
+		}), NewList(10, 10, 11, 11), 42},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if got := test.fn.ApplyTo(test.args); got != test.want {
+				t.Fatalf("ApplyTo result = %v, want %v", got, test.want)
+			}
+		})
+	}
+
+	for _, test := range []struct {
+		name string
+		fn   IFn
+		args ISeq
+	}{
+		{"zero with one", FnFunc0(func() any { return nil }), NewList(1)},
+		{"one with zero", FnFunc1(func(any) any { return nil }), nil},
+		{"one with two", FnFunc1(func(any) any { return nil }), NewList(1, 2)},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			defer func() {
+				if recover() == nil {
+					t.Fatal("ApplyTo accepted the wrong arity")
+				}
+			}()
+			test.fn.ApplyTo(test.args)
+		})
+	}
+}
+
 // TestApply0 verifies Apply0 dispatches correctly.
 func TestApply0(t *testing.T) {
 	// FnFunc0 fast path — zero allocation

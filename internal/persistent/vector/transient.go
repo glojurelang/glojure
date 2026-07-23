@@ -7,6 +7,22 @@ import (
 
 // New returns a new Vector with the given elements.
 func New(elems ...interface{}) Vector {
+	// Most Clojure vectors are small enough to live entirely in the tail.
+	// Building those through a transient allocates a 32-element backing array,
+	// a transient wrapper, and an atomic edit marker regardless of their size.
+	// Construct the immutable tail directly while still copying the caller's
+	// variadic slice so later mutations cannot affect the vector.
+	if len(elems) <= tailMaxLen {
+		if len(elems) == 0 {
+			return Empty
+		}
+		tail := append([]interface{}(nil), elems...)
+		return &vector{
+			count: len(tail),
+			tail:  tail,
+		}
+	}
+
 	trans := NewTransient(&vector{})
 	for _, e := range elems {
 		trans.Conj(e)

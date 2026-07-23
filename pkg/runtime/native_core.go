@@ -118,6 +118,227 @@ func (fn nativeCoreSubtract) ApplyTo(args lang.ISeq) interface{} {
 	return result
 }
 
+// nativeCoreStr avoids constructing a persistent rest sequence and reflecting
+// through strings.Builder methods for ordinary string concatenation. It
+// preserves clojure.core/str's nil handling and ToString conversion.
+type nativeCoreStr struct{}
+
+func (nativeCoreStr) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 0:
+		return ""
+	case 1:
+		return nativeStrValue(args[0])
+	case 2:
+		return nativeStr2(args[0], args[1])
+	default:
+		var builder strings.Builder
+		for _, arg := range args {
+			if arg != nil {
+				builder.WriteString(lang.ToString(arg))
+			}
+		}
+		return builder.String()
+	}
+}
+
+func (nativeCoreStr) Invoke0() interface{} {
+	return ""
+}
+
+func (nativeCoreStr) Invoke1(value interface{}) interface{} {
+	return nativeStrValue(value)
+}
+
+func (nativeCoreStr) Invoke2(a, b interface{}) interface{} {
+	return nativeStr2(a, b)
+}
+
+func (nativeCoreStr) ApplyTo(args lang.ISeq) interface{} {
+	if args == nil {
+		return ""
+	}
+	var builder strings.Builder
+	for ; args != nil; args = args.Next() {
+		if value := args.First(); value != nil {
+			builder.WriteString(lang.ToString(value))
+		}
+	}
+	return builder.String()
+}
+
+func nativeStrValue(value interface{}) string {
+	if value == nil {
+		return ""
+	}
+	return lang.ToString(value)
+}
+
+func nativeStr2(a, b interface{}) string {
+	if a == nil {
+		return nativeStrValue(b)
+	}
+	if b == nil {
+		return lang.ToString(a)
+	}
+	var builder strings.Builder
+	builder.WriteString(lang.ToString(a))
+	builder.WriteString(lang.ToString(b))
+	return builder.String()
+}
+
+// nativeCoreDeref keeps the common reference path on the IDeref interface.
+// The compiled Clojure implementation remains the fallback for futures and
+// other values whose dereference operation is exposed through host interop.
+type nativeCoreDeref struct {
+	fallback lang.IFn
+}
+
+func (fn nativeCoreDeref) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 1:
+		return fn.Invoke1(args[0])
+	case 3:
+		return fn.Invoke3(args[0], args[1], args[2])
+	default:
+		return fn.fallback.Invoke(args...)
+	}
+}
+
+func (fn nativeCoreDeref) Invoke1(ref interface{}) interface{} {
+	if deref, ok := ref.(lang.IDeref); ok {
+		return deref.Deref()
+	}
+	return lang.Apply1(fn.fallback, ref)
+}
+
+func (fn nativeCoreDeref) Invoke3(ref, timeoutMS, timeoutValue interface{}) interface{} {
+	if deref, ok := ref.(lang.IBlockingDeref); ok {
+		return deref.DerefWithTimeout(lang.AsInt64(timeoutMS), timeoutValue)
+	}
+	return lang.Apply3(fn.fallback, ref, timeoutMS, timeoutValue)
+}
+
+func (fn nativeCoreDeref) ApplyTo(args lang.ISeq) interface{} {
+	if args == nil {
+		return fn.fallback.ApplyTo(nil)
+	}
+	ref := args.First()
+	args = args.Next()
+	if args == nil {
+		return fn.Invoke1(ref)
+	}
+	timeoutMS := args.First()
+	args = args.Next()
+	if args == nil {
+		return fn.fallback.Invoke(ref, timeoutMS)
+	}
+	timeoutValue := args.First()
+	if args.Next() == nil {
+		return fn.Invoke3(ref, timeoutMS, timeoutValue)
+	}
+	return fn.fallback.ApplyTo(lang.NewCons(ref, lang.NewCons(timeoutMS, args)))
+}
+
+type fixedAtomSwap0 interface {
+	Swap0(lang.IFn) interface{}
+}
+
+type fixedAtomSwap1 interface {
+	Swap1(lang.IFn, interface{}) interface{}
+}
+
+type fixedAtomSwap2 interface {
+	Swap2(lang.IFn, interface{}, interface{}) interface{}
+}
+
+// nativeCoreSwap dispatches directly to IAtom and uses optional fixed-arity
+// methods when available. This removes reflected bound-method calls and rest
+// sequence construction from ordinary swap! calls.
+type nativeCoreSwap struct {
+	fallback lang.IFn
+}
+
+func (fn nativeCoreSwap) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 2:
+		return fn.Invoke2(args[0], args[1])
+	case 3:
+		return fn.Invoke3(args[0], args[1], args[2])
+	case 4:
+		return fn.Invoke4(args[0], args[1], args[2], args[3])
+	default:
+		if len(args) < 2 {
+			return fn.fallback.Invoke(args...)
+		}
+		atom, ok := args[0].(lang.IAtom)
+		if !ok {
+			return fn.fallback.Invoke(args...)
+		}
+		return atom.Swap(args[1].(lang.IFn), lang.NewList(args[2:]...))
+	}
+}
+
+func (fn nativeCoreSwap) Invoke2(atom, f interface{}) interface{} {
+	if fixed, ok := atom.(fixedAtomSwap0); ok {
+		return fixed.Swap0(f.(lang.IFn))
+	}
+	if atom, ok := atom.(lang.IAtom); ok {
+		return atom.Swap(f.(lang.IFn), nil)
+	}
+	return lang.Apply2(fn.fallback, atom, f)
+}
+
+func (fn nativeCoreSwap) Invoke3(atom, f, x interface{}) interface{} {
+	if fixed, ok := atom.(fixedAtomSwap1); ok {
+		return fixed.Swap1(f.(lang.IFn), x)
+	}
+	if atom, ok := atom.(lang.IAtom); ok {
+		return atom.Swap(f.(lang.IFn), lang.NewList(x))
+	}
+	return lang.Apply3(fn.fallback, atom, f, x)
+}
+
+func (fn nativeCoreSwap) Invoke4(atom, f, x, y interface{}) interface{} {
+	if fixed, ok := atom.(fixedAtomSwap2); ok {
+		return fixed.Swap2(f.(lang.IFn), x, y)
+	}
+	if atom, ok := atom.(lang.IAtom); ok {
+		return atom.Swap(f.(lang.IFn), lang.NewList(x, y))
+	}
+	return lang.Apply4(fn.fallback, atom, f, x, y)
+}
+
+func (fn nativeCoreSwap) ApplyTo(args lang.ISeq) interface{} {
+	if args == nil {
+		return fn.fallback.ApplyTo(nil)
+	}
+	atom := args.First()
+	args = args.Next()
+	if args == nil {
+		return fn.fallback.Invoke(atom)
+	}
+	f := args.First()
+	rest := args.Next()
+	if rest == nil {
+		return fn.Invoke2(atom, f)
+	}
+	x := rest.First()
+	rest = rest.Next()
+	if rest == nil {
+		return fn.Invoke3(atom, f, x)
+	}
+	y := rest.First()
+	rest = rest.Next()
+	if rest == nil {
+		return fn.Invoke4(atom, f, x, y)
+	}
+	if atom, ok := atom.(lang.IAtom); ok {
+		return atom.Swap(f.(lang.IFn), lang.NewCons(x, lang.NewCons(y, rest)))
+	}
+	return fn.fallback.ApplyTo(lang.NewCons(atom, lang.NewCons(f, lang.NewCons(x, lang.NewCons(y, rest)))))
+}
+
 // nativeCoreApply keeps Clojure's public apply semantics while routing the
 // common fixed-leading-argument cases directly to the target function.
 type nativeCoreApply struct{}
@@ -377,6 +598,19 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	}
 	if subtract := core.FindInternedVar(lang.NewSymbol("-")); subtract != nil {
 		subtract.BindRoot(nativeCoreSubtract{})
+	}
+	if str := core.FindInternedVar(lang.NewSymbol("str")); str != nil {
+		str.BindRoot(nativeCoreStr{})
+	}
+	if deref := core.FindInternedVar(lang.NewSymbol("deref")); deref != nil {
+		if fallback, ok := deref.Get().(lang.IFn); ok {
+			deref.BindRoot(nativeCoreDeref{fallback: fallback})
+		}
+	}
+	if swap := core.FindInternedVar(lang.NewSymbol("swap!")); swap != nil {
+		if fallback, ok := swap.Get().(lang.IFn); ok {
+			swap.BindRoot(nativeCoreSwap{fallback: fallback})
+		}
 	}
 	if apply := core.FindInternedVar(lang.NewSymbol("apply")); apply != nil {
 		apply.BindRoot(nativeCoreApply{})

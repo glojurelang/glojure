@@ -162,6 +162,8 @@ func Apply2(fn interface{}, a0, a1 any) any {
 		return f(a0, a1)
 	case func(any, any) int64:
 		return f(a0, a1)
+	case func(reflect.Type, any) bool:
+		return f(a0.(reflect.Type), a1)
 	case FixedArityFn2:
 		return f.Invoke2(a0, a1)
 	case IFn:

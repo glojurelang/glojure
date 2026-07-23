@@ -28,7 +28,7 @@ func TestResolvedHostConstantsRetainTheirSymbols(t *testing.T) {
 			}
 		},
 	}
-	env := lang.NewMap(KWNS, nsSym).(Env)
+	env := lang.NewMap(lang.KWNS, nsSym).(Env)
 
 	fnNode, err := analyzer.analyzeSymbol(fnSym, env)
 	if err != nil {
@@ -179,11 +179,11 @@ func TestContainsResidualUnquote(t *testing.T) {
 	}
 }
 
-func TestRuntimeFunctionFormMeta(t *testing.T) {
+func TestRuntimeFormMeta(t *testing.T) {
 	userKey := lang.NewKeyword("user")
 	userValue := lang.NewKeyword("value")
 
-	if got := runtimeFunctionFormMeta(nil); got != nil {
+	if got := runtimeFormMeta(nil); got != nil {
 		t.Fatalf("nil metadata became %v", got)
 	}
 
@@ -194,13 +194,13 @@ func TestRuntimeFunctionFormMeta(t *testing.T) {
 		lang.KWEndLine, 11,
 		lang.KWEndColumn, 30,
 	)
-	if got := runtimeFunctionFormMeta(sourceMeta); got != nil {
+	if got := runtimeFormMeta(sourceMeta); got != nil {
 		t.Fatalf("source metadata became runtime metadata: %v", got)
 	}
 
 	mixed := lang.Assoc(sourceMeta, userKey, userValue).(lang.IPersistentMap)
 	want := lang.NewMap(userKey, userValue)
-	if got := runtimeFunctionFormMeta(mixed); !lang.Equals(got, want) {
+	if got := runtimeFormMeta(mixed); !lang.Equals(got, want) {
 		t.Fatalf("mixed metadata became %v, want %v", got, want)
 	}
 }

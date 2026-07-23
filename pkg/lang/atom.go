@@ -75,6 +75,39 @@ func (a *Atom) Swap(f IFn, args ISeq) interface{} {
 	}
 }
 
+// Swap0, Swap1, and Swap2 are fixed-arity counterparts to Swap. They avoid
+// constructing an argument sequence when callers already know the number of
+// additional arguments, while preserving Atom's compare-and-set retry loop.
+func (a *Atom) Swap0(f IFn) interface{} {
+	for {
+		old := a.state.Load().(Box)
+		nw := Apply1(f, old.val)
+		if a.CompareAndSet(old.val, nw) {
+			return nw
+		}
+	}
+}
+
+func (a *Atom) Swap1(f IFn, x interface{}) interface{} {
+	for {
+		old := a.state.Load().(Box)
+		nw := Apply2(f, old.val, x)
+		if a.CompareAndSet(old.val, nw) {
+			return nw
+		}
+	}
+}
+
+func (a *Atom) Swap2(f IFn, x, y interface{}) interface{} {
+	for {
+		old := a.state.Load().(Box)
+		nw := Apply3(f, old.val, x, y)
+		if a.CompareAndSet(old.val, nw) {
+			return nw
+		}
+	}
+}
+
 func (a *Atom) CompareAndSet(oldv, newv interface{}) bool {
 	// TODO: validate
 	swapped := a.state.CompareAndSwap(Box{val: oldv}, Box{val: newv})

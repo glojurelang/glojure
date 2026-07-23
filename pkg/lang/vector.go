@@ -40,14 +40,8 @@ var (
 )
 
 func NewVector(values ...any) *Vector {
-	vals := make([]any, len(values))
-	for i, v := range values {
-		vals[i] = v
-	}
-	vec := vector.New(vals...)
-
 	return &Vector{
-		vec: vec,
+		vec: vector.New(values...),
 	}
 }
 
