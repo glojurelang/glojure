@@ -97,12 +97,18 @@ func (k Keyword) Invoke(args ...interface{}) interface{} {
 	if len(args) == 0 || len(args) > 2 {
 		panic(fmt.Errorf("wrong number of args (%v) passed to: %v", len(args), k))
 	}
-	var defaultVal interface{} = nil
 	if len(args) == 2 {
-		defaultVal = args[1]
+		return k.Invoke2(args[0], args[1])
 	}
+	return k.Invoke1(args[0])
+}
 
-	assoc, ok := args[0].(Associative)
+func (k Keyword) Invoke1(coll interface{}) interface{} {
+	return k.Invoke2(coll, nil)
+}
+
+func (k Keyword) Invoke2(coll, defaultVal interface{}) interface{} {
+	assoc, ok := coll.(Associative)
 	if !ok {
 		return defaultVal
 	}

@@ -19,8 +19,8 @@ type (
 		meta atomic.Value
 
 		// TODO: populate this from meta in the right places
-		dynamic      bool
-		dynamicBound atomic.Bool
+		dynamic         bool
+		dynamicBindings atomic.Int64
 
 		// isMacroCached: 0=unknown, 1=false, 2=true
 		isMacroCached atomic.Int32
@@ -174,7 +174,7 @@ func (v *Var) BindRoot(root interface{}) {
 }
 
 func (v *Var) IsBound() bool {
-	return v.HasRoot() || v.dynamicBound.Load() && v.getDynamicBinding() != nil
+	return v.HasRoot() || v.dynamicBindings.Load() > 0 && v.getDynamicBinding() != nil
 }
 
 func (v *Var) getRoot() interface{} {
@@ -196,7 +196,7 @@ func (v *Var) RootVersion() *VarRootVersion {
 }
 
 func (v *Var) Get() interface{} {
-	if !v.dynamicBound.Load() {
+	if v.dynamicBindings.Load() == 0 {
 		return v.getRoot()
 	}
 	return v.Deref()
@@ -297,7 +297,7 @@ func (v *Var) Deref() interface{} {
 }
 
 func (v *Var) getDynamicBinding() *Box {
-	if !v.dynamicBound.Load() {
+	if v.dynamicBindings.Load() == 0 {
 		return nil
 	}
 	var storage *glStorage
@@ -442,8 +442,8 @@ func PushThreadBindings(bindings IPersistentMap) {
 			panic("cannot dynamically bind non-dynamic var: " + vr.String())
 		}
 		// TODO: validate
-		vr.dynamicBound.Store(true)
 		store[vr] = &Box{val: val}
+		vr.dynamicBindings.Add(1)
 	}
 }
 
@@ -453,14 +453,18 @@ func PopThreadBindings() {
 	storage := glsBindings[gid]
 	glsBindingsMtx.RUnlock()
 
+	popped := storage.bindings[len(storage.bindings)-1]
 	if len(storage.bindings) > 1 {
 		storage.bindings = storage.bindings[:len(storage.bindings)-1]
-		return
+	} else {
+		glsBindingsMtx.Lock()
+		delete(glsBindings, gid)
+		glsBindingsMtx.Unlock()
 	}
 
-	glsBindingsMtx.Lock()
-	delete(glsBindings, gid)
-	glsBindingsMtx.Unlock()
+	for vr := range popped {
+		vr.dynamicBindings.Add(-1)
+	}
 }
 
 func GetThreadBindings() IPersistentMap {
@@ -499,11 +503,26 @@ func ResetThreadBindingFrame(frame any) {
 	gid := getGoroutineID()
 	glsBindingsMtx.Lock()
 	defer glsBindingsMtx.Unlock()
+	old := glsBindings[gid]
+	adjustDynamicBindingCounts(old, -1)
 	if frame == nil {
 		delete(glsBindings, gid)
 		return
 	}
-	glsBindings[gid] = cloneGLStorage(frame.(*glStorage))
+	replacement := cloneGLStorage(frame.(*glStorage))
+	glsBindings[gid] = replacement
+	adjustDynamicBindingCounts(replacement, 1)
+}
+
+func adjustDynamicBindingCounts(storage *glStorage, delta int64) {
+	if storage == nil {
+		return
+	}
+	for _, bindings := range storage.bindings {
+		for vr := range bindings {
+			vr.dynamicBindings.Add(delta)
+		}
+	}
 }
 
 func cloneGLStorage(storage *glStorage) *glStorage {

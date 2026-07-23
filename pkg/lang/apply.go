@@ -112,6 +112,9 @@ func Apply0(fn interface{}) any {
 		return f()
 	case FnFunc:
 		return f()
+	case func():
+		f()
+		return nil
 	case FixedArityFn0:
 		return f.Invoke0()
 	case IFn:
@@ -138,6 +141,13 @@ func Apply1(fn interface{}, a0 any) any {
 		return f(a0)
 	case func(any) float64:
 		return f(a0)
+	case func(IPersistentMap):
+		if a0 == nil {
+			f(nil)
+		} else {
+			f(a0.(IPersistentMap))
+		}
+		return nil
 	case FixedArityFn1:
 		return f.Invoke1(a0)
 	case IFn:

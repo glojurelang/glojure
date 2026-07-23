@@ -157,6 +157,11 @@ func TestApply0(t *testing.T) {
 		t.Errorf("Apply0(FnFunc): expected %q, got %v", "fnfunc", got)
 	}
 
+	called := false
+	if got := Apply0(func() { called = true }); got != nil || !called {
+		t.Errorf("Apply0(func()): got %v, called = %v; want nil, true", got, called)
+	}
+
 	// nil panics
 	func() {
 		defer func() {
@@ -178,6 +183,12 @@ func TestApply1(t *testing.T) {
 	ff := FnFunc(func(args ...any) any { return args[0].(int) * 2 })
 	if got := Apply1(ff, 21); got != 42 {
 		t.Errorf("Apply1(FnFunc): expected 42, got %v", got)
+	}
+
+	m := NewMap(NewKeyword("answer"), int64(42))
+	var received IPersistentMap
+	if got := Apply1(func(value IPersistentMap) { received = value }, m); got != nil || received != m {
+		t.Errorf("Apply1(func(IPersistentMap)): got %v, received = %v; want nil, input map", got, received)
 	}
 }
 
