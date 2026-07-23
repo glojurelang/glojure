@@ -96,6 +96,26 @@ func TestGenerateResolvedHostClassValue(t *testing.T) {
 	}
 }
 
+func TestGenerateKeywordInvocationUsesDirectFixedArityCall(t *testing.T) {
+	var output bytes.Buffer
+	generator := NewGenerator(&output)
+	keyword := aotTestConst(lang.NewKeyword("answer"))
+	invoke := ast.MakeNode(ast.OpInvoke, nil)
+	invoke.Sub = &ast.InvokeNode{
+		Fn:   keyword,
+		Args: []*ast.Node{aotTestConst(nil), aotTestConst(int64(42))},
+	}
+
+	result := generator.generateASTNode(invoke)
+	generated := output.String()
+	if !strings.Contains(generated, ".Invoke2(nil, int64(42))") {
+		t.Fatalf("keyword invocation was not emitted directly: %s = %s", result, generated)
+	}
+	if strings.Contains(generated, "lang.Apply2") {
+		t.Fatalf("keyword invocation retained generic apply dispatch: %s", generated)
+	}
+}
+
 func TestDirectHostMethod(t *testing.T) {
 	target := &ast.Node{
 		Op: ast.OpConst,

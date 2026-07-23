@@ -24,6 +24,7 @@ type int64AOTAnalysis struct {
 	uncheckedHostCalls map[*ast.HostCallNode]bool
 	guardInt32Params   bool
 	guardInt32Loops    map[*ast.LetNode]bool
+	callees            map[*aotSpecializationTarget]struct{}
 }
 
 func analyzeInt64AOTFunction(
@@ -38,6 +39,7 @@ func analyzeInt64AOTFunction(
 		target:             target,
 		arity:              method.FixedArity,
 		uncheckedHostCalls: make(map[*ast.HostCallNode]bool),
+		callees:            make(map[*aotSpecializationTarget]struct{}),
 	}
 	analyzer := newInt64AOTAnalyzer(analysis, targets)
 	locals := make(map[*lang.Symbol]aotPrimitiveType, method.FixedArity)
@@ -63,6 +65,9 @@ func newInt64AOTAnalyzer(
 		markUsesSelf: func() {
 			analysis.usesSelf = true
 		},
+		markCallee: func(target *aotSpecializationTarget) {
+			analysis.callees[target] = struct{}{}
+		},
 		hasTypedTarget: func(target *aotSpecializationTarget) bool {
 			return target.int64Analysis != nil
 		},
@@ -73,6 +78,7 @@ type int64AOTEmitter struct {
 	g        *Generator
 	analysis *int64AOTAnalysis
 	helper   string
+	callees  map[*aotSpecializationTarget]string
 }
 
 func (g *Generator) generateInt64SpecializedFixedFn(
@@ -119,10 +125,17 @@ func (g *Generator) generateInt64SpecializedFixedFn(
 		g.writef("return 0, false\n")
 		g.writef("}\n")
 	}
+	callees := make(map[*aotSpecializationTarget]string, len(analysis.callees))
+	for _, callee := range sortedAOTTargets(analysis.callees) {
+		local := g.allocateTempVar()
+		g.writef("%s := %s\n", local, callee.int64FnVar)
+		callees[callee] = local
+	}
 	emitter := int64AOTEmitter{
 		g:        g,
 		analysis: analysis,
 		helper:   helper,
+		callees:  callees,
 	}
 	result := emitter.emitExpr(method.Body, locals)
 	g.writef("return %s, true\n", result)
@@ -444,7 +457,7 @@ func (e *int64AOTEmitter) emitInvoke(
 			varName, target.rootVersionVar)
 		e.g.writef("return 0, false\n")
 		e.g.writef("}\n")
-		helper = target.int64FnVar
+		helper = e.callees[target]
 	}
 	result := e.g.allocateTempVar()
 	ok := e.g.allocateTempVar()

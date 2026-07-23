@@ -21,6 +21,7 @@ type float64AOTAnalysis struct {
 	target   *aotSpecializationTarget
 	arity    int
 	usesSelf bool
+	callees  map[*aotSpecializationTarget]struct{}
 }
 
 func analyzeFloat64AOTFunction(
@@ -32,8 +33,9 @@ func analyzeFloat64AOTFunction(
 		return nil
 	}
 	analysis := &float64AOTAnalysis{
-		target: target,
-		arity:  method.FixedArity,
+		target:  target,
+		arity:   method.FixedArity,
+		callees: make(map[*aotSpecializationTarget]struct{}),
 	}
 	analyzer := newFloat64AOTAnalyzer(analysis, targets)
 	locals := make(map[*lang.Symbol]aotPrimitiveType, method.FixedArity)
@@ -60,6 +62,9 @@ func newFloat64AOTAnalyzer(
 		markUsesSelf: func() {
 			analysis.usesSelf = true
 		},
+		markCallee: func(target *aotSpecializationTarget) {
+			analysis.callees[target] = struct{}{}
+		},
 		hasTypedTarget: func(target *aotSpecializationTarget) bool {
 			return target.float64Analysis != nil
 		},
@@ -70,6 +75,7 @@ type float64AOTEmitter struct {
 	g        *Generator
 	analysis *float64AOTAnalysis
 	helper   string
+	callees  map[*aotSpecializationTarget]string
 }
 
 func (g *Generator) generateFloat64SpecializedFixedFn(
@@ -113,7 +119,15 @@ func (g *Generator) generateFloat64SpecializedFixedFn(
 		g.writef("return 0, false\n")
 		g.writef("}\n")
 	}
-	emitter := float64AOTEmitter{g: g, analysis: analysis, helper: helper}
+	callees := make(map[*aotSpecializationTarget]string, len(analysis.callees))
+	for _, callee := range sortedAOTTargets(analysis.callees) {
+		local := g.allocateTempVar()
+		g.writef("%s := %s\n", local, callee.float64FnVar)
+		callees[callee] = local
+	}
+	emitter := float64AOTEmitter{
+		g: g, analysis: analysis, helper: helper, callees: callees,
+	}
 	result := emitter.emitExpr(method.Body, locals)
 	g.writef("return %s, true\n", result)
 	g.writef("}\n")
@@ -439,7 +453,7 @@ func (e *float64AOTEmitter) emitInvoke(
 			varName, target.rootVersionVar)
 		e.g.writef("return 0, false\n")
 		e.g.writef("}\n")
-		helper = target.float64FnVar
+		helper = e.callees[target]
 	}
 	result := e.g.allocateTempVar()
 	ok := e.g.allocateTempVar()

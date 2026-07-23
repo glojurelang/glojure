@@ -30,6 +30,7 @@ type primitiveAOTAnalyzer struct {
 	allowFloat     bool
 	targets        map[*lang.Var]*aotSpecializationTarget
 	markUsesSelf   func()
+	markCallee     func(*aotSpecializationTarget)
 	hasTypedTarget func(*aotSpecializationTarget) bool
 }
 
@@ -230,6 +231,9 @@ func (a *primitiveAOTAnalyzer) invokeType(
 	if target := a.targets[vr]; target != nil &&
 		a.hasTypedTarget(target) &&
 		a.allType(invoke.Args, locals, target.arity, a.paramType) {
+		if a.markCallee != nil {
+			a.markCallee(target)
+		}
 		return a.resultType
 	}
 	if vr.String() == "#'clojure.core/=" && len(invoke.Args) == 2 {

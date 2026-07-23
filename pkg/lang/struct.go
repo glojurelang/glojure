@@ -2,7 +2,9 @@ package lang
 
 import (
 	"fmt"
+	"io"
 	"reflect"
+	"regexp"
 	"sync"
 	"unicode"
 )
@@ -166,6 +168,37 @@ func directProtocolMethod(v interface{}, name string) (IFn, bool) {
 			}), true
 		}
 	}
+	if re, ok := v.(*regexp.Regexp); ok {
+		switch name {
+		case "MatchString":
+			return FnFunc1(func(value any) any {
+				return re.MatchString(value.(string))
+			}), true
+		case "FindStringSubmatch":
+			return FnFunc1(func(value any) any {
+				return re.FindStringSubmatch(value.(string))
+			}), true
+		case "FindStringSubmatchIndex":
+			return FnFunc1(func(value any) any {
+				return re.FindStringSubmatchIndex(value.(string))
+			}), true
+		case "ReplaceAllString":
+			return FnFunc2(func(value, replacement any) any {
+				return re.ReplaceAllString(
+					value.(string),
+					replacement.(string),
+				)
+			}), true
+		case "Split":
+			return FnFunc2(func(value, count any) any {
+				return re.Split(value.(string), MustAsInt(count))
+			}), true
+		case "NumSubexp":
+			return FnFunc0(func() any { return re.NumSubexp() }), true
+		case "String":
+			return FnFunc0(func() any { return re.String() }), true
+		}
+	}
 	return nil, false
 }
 
@@ -213,6 +246,8 @@ func wrapGoFunc(fn interface{}) IFn {
 	// --- 1 arg, typed param ---
 	case func(string) string:
 		return FnFunc1(func(a any) any { return f(a.(string)) })
+	case func(string) *regexp.Regexp:
+		return FnFunc1(func(a any) any { return f(a.(string)) })
 	case func(string):
 		return FnFunc1(func(a any) any { f(a.(string)); return nil })
 	case func(IPersistentMap) any:
@@ -242,6 +277,26 @@ func wrapGoFunc(fn interface{}) IFn {
 	// --- 2 args, mixed typed ---
 	case func(any, int) any:
 		return FnFunc2(func(a, b any) any { return f(a, MustAsInt(b)) })
+	case func(string, string) bool:
+		return FnFunc2(func(a, b any) any {
+			return f(a.(string), b.(string))
+		})
+	case func(Conser, any) Conser:
+		return FnFunc2(func(a, b any) any { return f(asConser(a), b) })
+	case func(*regexp.Regexp, string) *RegexpMatcher:
+		return FnFunc2(func(a, b any) any {
+			return f(a.(*regexp.Regexp), b.(string))
+		})
+	case func([]string, string) string:
+		return FnFunc2(func(a, b any) any {
+			return f(asStringSlice(a), b.(string))
+		})
+	case func(io.Writer, any) io.Writer:
+		return FnFunc2(func(a, b any) any { return f(a.(io.Writer), b) })
+	case func(string, int) Char:
+		return FnFunc2(func(a, b any) any {
+			return f(a.(string), MustAsInt(b))
+		})
 
 	// --- 3 args ---
 	case func(any, any, any) any:
@@ -265,6 +320,15 @@ func wrapGoFunc(fn interface{}) IFn {
 				)))
 			}
 			return f(args[0], args[1], args[2:]...)
+		})
+	case func(string, ...any) string:
+		return FnFunc(func(args ...any) any {
+			if len(args) < 1 {
+				panic(NewIllegalArgumentError(
+					"wrong number of arguments: expected at least 1, got 0",
+				))
+			}
+			return f(args[0].(string), args[1:]...)
 		})
 	}
 

@@ -267,6 +267,25 @@ func TestNativeCoreSwapUsesFixedAtomArities(t *testing.T) {
 	}
 }
 
+func TestNativeCoreReduceUsesReductionInterfaces(t *testing.T) {
+	fallback := lang.FnFunc(func(args ...interface{}) interface{} {
+		t.Fatalf("unexpected reduce fallback: %v", args)
+		return nil
+	})
+	fn := nativeCoreReduce{fallback: fallback}
+	add := lang.FnFunc2(func(a, b interface{}) interface{} {
+		return lang.Numbers.Add(a, b)
+	})
+	values := lang.NewVector(int64(1), int64(2), int64(3))
+
+	if got := fn.Invoke2(add, values); got != int64(6) {
+		t.Fatalf("two-arity reduce = %v, want 6", got)
+	}
+	if got := fn.Invoke3(add, int64(4), values); got != int64(10) {
+		t.Fatalf("three-arity reduce = %v, want 10", got)
+	}
+}
+
 func TestNativeCoreRequireFastPathPreservesRuntimeSemantics(t *testing.T) {
 	ns := lang.NewNamespace(lang.NewSymbol("runtime.native-require-test"))
 	loadedRef := lang.NewRef(lang.NewSet())

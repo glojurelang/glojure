@@ -2,7 +2,9 @@ package lang
 
 import (
 	"fmt"
+	"io"
 	"reflect"
+	"regexp"
 )
 
 func CanApply(fn interface{}) bool {
@@ -141,6 +143,12 @@ func Apply1(fn interface{}, a0 any) any {
 		return f(a0)
 	case func(any) float64:
 		return f(a0)
+	case func(string) string:
+		return f(a0.(string))
+	case func(string) *regexp.Regexp:
+		return f(a0.(string))
+	case func(string, ...any) string:
+		return f(a0.(string))
 	case func(IPersistentMap):
 		if a0 == nil {
 			f(nil)
@@ -172,6 +180,20 @@ func Apply2(fn interface{}, a0, a1 any) any {
 		return f(a0, a1)
 	case func(any, any) int64:
 		return f(a0, a1)
+	case func(string, string) bool:
+		return f(a0.(string), a1.(string))
+	case func(Conser, any) Conser:
+		return f(asConser(a0), a1)
+	case func(*regexp.Regexp, string) *RegexpMatcher:
+		return f(a0.(*regexp.Regexp), a1.(string))
+	case func([]string, string) string:
+		return f(asStringSlice(a0), a1.(string))
+	case func(io.Writer, any) io.Writer:
+		return f(a0.(io.Writer), a1)
+	case func(string, int) Char:
+		return f(a0.(string), MustAsInt(a1))
+	case func(string, ...any) string:
+		return f(a0.(string), a1)
 	case func(reflect.Type, any) bool:
 		return f(a0.(reflect.Type), a1)
 	case FixedArityFn2:
@@ -190,6 +212,8 @@ func Apply3(fn interface{}, a0, a1, a2 any) any {
 		return f(a0, a1, a2)
 	case FnFunc:
 		return f(a0, a1, a2)
+	case func(string, ...any) string:
+		return f(a0.(string), a1, a2)
 	case FixedArityFn3:
 		return f.Invoke3(a0, a1, a2)
 	case IFn:
@@ -206,6 +230,8 @@ func Apply4(fn interface{}, a0, a1, a2, a3 any) any {
 		return f(a0, a1, a2, a3)
 	case FnFunc:
 		return f(a0, a1, a2, a3)
+	case func(string, ...any) string:
+		return f(a0.(string), a1, a2, a3)
 	case FixedArityFn4:
 		return f.Invoke4(a0, a1, a2, a3)
 	case IFn:
@@ -213,6 +239,31 @@ func Apply4(fn interface{}, a0, a1, a2, a3 any) any {
 	default:
 		return Apply(fn, []any{a0, a1, a2, a3})
 	}
+}
+
+func asStringSlice(value any) []string {
+	if values, ok := value.([]string); ok {
+		return values
+	}
+	if values, ok := value.(IPersistentVector); ok {
+		result := make([]string, values.Count())
+		for i := range result {
+			result[i] = values.Nth(i).(string)
+		}
+		return result
+	}
+	var result []string
+	for seq := Seq(value); seq != nil; seq = seq.Next() {
+		result = append(result, seq.First().(string))
+	}
+	return result
+}
+
+func asConser(value any) Conser {
+	if value == nil {
+		return nil
+	}
+	return value.(Conser)
 }
 
 func applyType(typ reflect.Type, args []interface{}) interface{} {

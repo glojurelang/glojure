@@ -37,3 +37,9 @@ func TestApplySeqRetainsGoFunctionFallback(t *testing.T) {
 		t.Fatalf("ApplySeq Go function result = %v, want 42", got)
 	}
 }
+
+func TestApply2PreservesNilForTypedInterfaceParameter(t *testing.T) {
+	if got := Apply2(Conj, nil, int64(3)); !Equals(got, NewList(int64(3))) {
+		t.Fatalf("Apply2(Conj, nil, 3) = %v, want (3)", got)
+	}
+}

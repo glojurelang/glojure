@@ -1,6 +1,7 @@
 package lang
 
 import (
+	"reflect"
 	"regexp"
 	"strings"
 	"testing"
@@ -105,5 +106,36 @@ func TestRegexpMatcherRegex(t *testing.T) {
 
 	if matcher.GroupInt(4) != nil {
 		t.Errorf("Expected submatch %v, got %q", nil, matcher.GroupInt(4))
+	}
+}
+
+func TestRegexpMatcherResolvesMethodsWithoutReflection(t *testing.T) {
+	matcher := NewRegexpMatcher(regexp.MustCompile(`(a)(b)`), "ab")
+
+	matches, ok := FieldOrMethod(matcher, "matches")
+	if !ok {
+		t.Fatal("matches method was not resolved")
+	}
+	if reflect.TypeOf(matches).Kind() != reflect.Func {
+		t.Fatalf("matches resolved to %T, want a direct function", matches)
+	}
+	if got := Apply0(matches); got != true {
+		t.Fatalf("matches returned %v, want true", got)
+	}
+
+	groupCount, ok := FieldOrMethod(matcher, "groupCount")
+	if !ok {
+		t.Fatal("groupCount method was not resolved")
+	}
+	if got := Apply0(groupCount); got != 2 {
+		t.Fatalf("groupCount returned %v, want 2", got)
+	}
+
+	groupInt, ok := FieldOrMethod(matcher, "groupInt")
+	if !ok {
+		t.Fatal("groupInt method was not resolved")
+	}
+	if got := Apply1(groupInt, int64(2)); got != "b" {
+		t.Fatalf("groupInt returned %v, want b", got)
 	}
 }

@@ -240,6 +240,42 @@ func (fn nativeCoreDeref) ApplyTo(args lang.ISeq) interface{} {
 	return fn.fallback.ApplyTo(lang.NewCons(ref, lang.NewCons(timeoutMS, args)))
 }
 
+// nativeCoreReduce dispatches directly to Glojure's reduction interfaces.
+// The compiled Clojure function remains the fallback for protocol extensions
+// on values that do not implement those interfaces.
+type nativeCoreReduce struct {
+	fallback lang.IFn
+}
+
+func (r nativeCoreReduce) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 2:
+		return r.Invoke2(args[0], args[1])
+	case 3:
+		return r.Invoke3(args[0], args[1], args[2])
+	default:
+		return r.fallback.Invoke(args...)
+	}
+}
+
+func (r nativeCoreReduce) Invoke2(fn, coll interface{}) interface{} {
+	if reducible, ok := coll.(lang.IReduce); ok {
+		return reducible.Reduce(fn.(lang.IFn))
+	}
+	return lang.Apply2(r.fallback, fn, coll)
+}
+
+func (r nativeCoreReduce) Invoke3(fn, initial, coll interface{}) interface{} {
+	if reducible, ok := coll.(lang.IReduceInit); ok {
+		return reducible.ReduceInit(fn.(lang.IFn), initial)
+	}
+	return lang.Apply3(r.fallback, fn, initial, coll)
+}
+
+func (r nativeCoreReduce) ApplyTo(args lang.ISeq) interface{} {
+	return r.Invoke(seqToSlice(args)...)
+}
+
 type fixedAtomSwap0 interface {
 	Swap0(lang.IFn) interface{}
 }
@@ -612,6 +648,11 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 			swap.BindRoot(nativeCoreSwap{fallback: fallback})
 		}
 	}
+	if reduce := core.FindInternedVar(lang.NewSymbol("reduce")); reduce != nil {
+		if fallback, ok := reduce.Get().(lang.IFn); ok {
+			reduce.BindRoot(nativeCoreReduce{fallback: fallback})
+		}
+	}
 	if apply := core.FindInternedVar(lang.NewSymbol("apply")); apply != nil {
 		apply.BindRoot(nativeCoreApply{})
 	}
@@ -708,6 +749,15 @@ func nativeMod(num, div interface{}) interface{} {
 }
 
 func nativeMapSeq(fn, coll interface{}) interface{} {
+	if seq, ok := coll.(lang.ISeq); ok {
+		_, lazy := seq.(*lang.LazySeq)
+		_, chunked := seq.(lang.IChunkedSeq)
+		if !lazy && !chunked {
+			if source := seq.Seq(); source != nil {
+				return lang.NewMappedSeq(fn, source)
+			}
+		}
+	}
 	return lang.NewLazySeq(func() interface{} {
 		seq := lang.Seq(coll)
 		if seq == nil {

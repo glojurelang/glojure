@@ -55,6 +55,16 @@ func TestVectorPopSingleElement(t *testing.T) {
 	}
 }
 
+func TestEmptyVectorConstructionDoesNotAllocate(t *testing.T) {
+	if got := testing.AllocsPerRun(1_000, func() {
+		if NewVector().Count() != 0 {
+			panic("non-empty vector")
+		}
+	}); got != 0 {
+		t.Fatalf("NewVector() allocated %v objects, want 0", got)
+	}
+}
+
 // TestSubVectorPopNoNesting verifies that repeated SubVector.Pop() does not
 // increase nesting depth — the result wraps the underlying vector, not self.
 func TestSubVectorPopNoNesting(t *testing.T) {

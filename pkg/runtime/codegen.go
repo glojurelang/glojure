@@ -90,6 +90,17 @@ type aotSpecializationTarget struct {
 	rootVersionVar  string
 }
 
+type aotExternalCallTarget struct {
+	vr    *lang.Var
+	arity int
+	fnVar string
+}
+
+type aotExternalCallKey struct {
+	vr    *lang.Var
+	arity int
+}
+
 // Generator handles the conversion of AST nodes to Go code
 type Generator struct {
 	originalWriter io.Writer
@@ -107,8 +118,10 @@ type Generator struct {
 
 	valueInits []*valueInit // map of value initializations
 
-	aotDeclarations bytes.Buffer
-	aotCallTargets  map[*lang.Var]*aotSpecializationTarget
+	aotDeclarations        bytes.Buffer
+	aotCallTargets         map[*lang.Var]*aotSpecializationTarget
+	aotExternalCallTargets map[aotExternalCallKey]*aotExternalCallTarget
+	aotNamespace           *lang.Namespace
 
 	// Fields for handling closures
 	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
@@ -143,17 +156,18 @@ var (
 // NewGenerator creates a new code generator
 func NewGenerator(w io.Writer) *Generator {
 	return &Generator{
-		originalWriter:  w,
-		currentWriter:   w,
-		varScopes:       []varScope{{nextNum: 0, names: make(map[string]string)}},
-		recurStack:      []recurContext{},
-		imports:         make(map[string]string),
-		varVariables:    make(map[varInfo]string),
-		symbolVariables: make(map[string]string),
-		kwVariables:     make(map[string]string),
-		liftedValues:    make(map[liftedKey]*liftedValue),
-		liftedCounter:   0,
-		aotCallTargets:  make(map[*lang.Var]*aotSpecializationTarget),
+		originalWriter:         w,
+		currentWriter:          w,
+		varScopes:              []varScope{{nextNum: 0, names: make(map[string]string)}},
+		recurStack:             []recurContext{},
+		imports:                make(map[string]string),
+		varVariables:           make(map[varInfo]string),
+		symbolVariables:        make(map[string]string),
+		kwVariables:            make(map[string]string),
+		liftedValues:           make(map[liftedKey]*liftedValue),
+		liftedCounter:          0,
+		aotCallTargets:         make(map[*lang.Var]*aotSpecializationTarget),
+		aotExternalCallTargets: make(map[aotExternalCallKey]*aotExternalCallTarget),
 	}
 }
 
@@ -164,6 +178,8 @@ func runtimeStateInitializer(vr *lang.Var) (string, bool) {
 
 // Generate takes a namespace and generates Go code that populates the same namespace
 func (g *Generator) Generate(ns *lang.Namespace) error {
+	g.aotNamespace = ns
+
 	// add lang import
 	g.addImport("github.com/glojurelang/glojure/pkg/lang")
 	g.addImport("github.com/glojurelang/glojure/pkg/runtime")
@@ -416,6 +432,28 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 	}
 
 	/////////////////////////////
+	// Roots of statically resolved calls to other namespaces
+	externalTargets := make([]*aotExternalCallTarget, 0, len(g.aotExternalCallTargets))
+	for _, target := range g.aotExternalCallTargets {
+		externalTargets = append(externalTargets, target)
+	}
+	sort.Slice(externalTargets, func(i, j int) bool {
+		return externalTargets[i].fnVar < externalTargets[j].fnVar
+	})
+	for _, target := range externalTargets {
+		varName := g.allocVarVar(
+			target.vr.Namespace().Name().String(),
+			target.vr.Symbol().String(),
+		)
+		initBuf.WriteString(fmt.Sprintf(
+			"%s := aotCacheFn%d(%s)\n",
+			target.fnVar,
+			target.arity,
+			varName,
+		))
+	}
+
+	/////////////////////////////
 	// Var and closed-over value inits
 
 	// NS boilerplate
@@ -487,6 +525,7 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 
 	// Closing brace for LoadNS
 	initBuf.WriteString("}\n")
+	g.generateAOTExternalCacheAdapters()
 
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -1634,9 +1673,16 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	// ISeq while avoiding reflection in lang.Apply.
 	var fnExpr string
 	directCall := false
+	directKeywordCall := false
 	aotTarget := g.aotInvokeTarget(invokeNode)
+	externalTarget := g.aotExternalInvokeTarget(invokeNode)
 	if invokeNode.Fn.Op == ast.OpConst {
 		value := invokeNode.Fn.Sub.(*ast.ConstNode).Value
+		if _, ok := value.(lang.Keyword); ok &&
+			(len(invokeNode.Args) == 1 || len(invokeNode.Args) == 2) {
+			fnExpr = g.generateValue(value)
+			directKeywordCall = true
+		}
 		if typ := reflect.TypeOf(value); typ != nil &&
 			typ.Kind() == reflect.Func &&
 			!typ.IsVariadic() &&
@@ -1655,7 +1701,8 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 			}
 		}
 	}
-	if !directCall && aotTarget == nil {
+	if !directCall && !directKeywordCall &&
+		aotTarget == nil && externalTarget == nil {
 		// Generate the general function expression before its arguments.
 		fnExpr = g.generateASTNode(invokeNode.Fn)
 	}
@@ -1692,6 +1739,15 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 		g.writef("%s := %s(%s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
 		return resultVar
 	}
+	if directKeywordCall {
+		g.writef("%s := %s.Invoke%d(%s)\n",
+			resultVar,
+			fnExpr,
+			len(argExprs),
+			strings.Join(argExprs, ", "),
+		)
+		return resultVar
+	}
 	if aotTarget != nil {
 		g.writef("var %s any\n", resultVar)
 		g.writef("if %s {\n", aotFast)
@@ -1700,6 +1756,14 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 		g.writef("} else {\n")
 		g.generateApply(resultVar, aotFallbackFn, argExprs, false)
 		g.writef("}\n")
+		return resultVar
+	}
+	if externalTarget != nil {
+		g.writef("%s := %s(%s)\n",
+			resultVar,
+			externalTarget.fnVar,
+			strings.Join(argExprs, ", "),
+		)
 		return resultVar
 	}
 
