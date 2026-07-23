@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"math"
+	"regexp"
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/ast"
@@ -201,6 +202,8 @@ func TestNativeCoreStrPreservesNilAndStringConversion(t *testing.T) {
 		{"nil", fn.Invoke1(nil), ""},
 		{"one", fn.Invoke1(int64(42)), "42"},
 		{"two", fn.Invoke2("value=", int64(42)), "value=42"},
+		{"three", fn.Invoke3("a", nil, int64(42)), "a42"},
+		{"five", fn.Invoke5("a", nil, int64(4), "2", nil), "a42"},
 		{"variadic", fn.Invoke("a", nil, int64(42)), "a42"},
 		{"apply-to", fn.ApplyTo(lang.NewList("a", nil, int64(42))), "a42"},
 	}
@@ -210,6 +213,114 @@ func TestNativeCoreStrPreservesNilAndStringConversion(t *testing.T) {
 				t.Fatalf("str result = %v, want %q", test.got, test.want)
 			}
 		})
+	}
+
+	value := interface{}("already-a-string")
+	if got := testing.AllocsPerRun(1_000, func() {
+		if fn.Invoke1(value) != value {
+			panic("str changed a string")
+		}
+	}); got != 0 {
+		t.Fatalf("one-argument string str allocated %v objects, want 0", got)
+	}
+}
+
+func TestNativeCoreRegexMatchPreservesClojureGroups(t *testing.T) {
+	find := nativeCoreRegexMatch{}
+	matches := nativeCoreRegexMatch{full: true}
+
+	if got := find.Invoke2(regexp.MustCompile(`b+`), "abbc"); got != "bb" {
+		t.Fatalf("re-find scalar = %v, want bb", got)
+	}
+	if got := matches.Invoke2(regexp.MustCompile(`a(b+)(c)?`), "abb"); !lang.Equals(
+		got,
+		lang.NewVector("abb", "bb", nil),
+	) {
+		t.Fatalf("re-matches groups = %v, want [abb bb nil]", got)
+	}
+	if got := matches.Invoke2(regexp.MustCompile(`b+`), "abbc"); got != nil {
+		t.Fatalf("partial re-matches = %v, want nil", got)
+	}
+}
+
+func TestNativeCoreGetInPreservesMissingAndNilValues(t *testing.T) {
+	fn := nativeCoreGetIn{}
+	value := lang.NewMap(
+		lang.NewKeyword("outer"), lang.NewMap(
+			lang.NewKeyword("value"), int64(42),
+			lang.NewKeyword("nil"), nil,
+		),
+	)
+	valuePath := lang.NewVector(lang.NewKeyword("outer"), lang.NewKeyword("value"))
+	nilPath := lang.NewVector(lang.NewKeyword("outer"), lang.NewKeyword("nil"))
+	missingPath := lang.NewVector(lang.NewKeyword("outer"), lang.NewKeyword("missing"))
+
+	if got := fn.Invoke2(value, valuePath); got != int64(42) {
+		t.Fatalf("nested value = %v, want 42", got)
+	}
+	if got := fn.Invoke3(value, nilPath, "missing"); got != nil {
+		t.Fatalf("present nil value = %v, want nil", got)
+	}
+	if got := fn.Invoke3(value, missingPath, "missing"); got != "missing" {
+		t.Fatalf("missing value = %v, want missing", got)
+	}
+	if got := fn.Invoke2(value, nil); got != value {
+		t.Fatalf("empty path = %v, want original value", got)
+	}
+}
+
+func TestNativeCoreAssocHandlesFixedAndVariadicPairs(t *testing.T) {
+	fn := nativeCoreAssoc{}
+	a, b := lang.NewKeyword("a"), lang.NewKeyword("b")
+
+	if got := fn.Invoke3(nil, a, int64(1)); !lang.Equals(
+		got,
+		lang.NewMap(a, int64(1)),
+	) {
+		t.Fatalf("fixed assoc = %v", got)
+	}
+	if got := fn.Invoke(nil, a, int64(1), b, int64(2)); !lang.Equals(
+		got,
+		lang.NewMap(a, int64(1), b, int64(2)),
+	) {
+		t.Fatalf("variadic assoc = %v", got)
+	}
+	if got := fn.ApplyTo(lang.NewList(nil, a, int64(1), b, int64(2))); !lang.Equals(
+		got,
+		lang.NewMap(a, int64(1), b, int64(2)),
+	) {
+		t.Fatalf("sequence assoc = %v", got)
+	}
+}
+
+func TestNativeStringPrimitives(t *testing.T) {
+	if got := (nativeStringIncludes{}).Invoke2("alpha_beta", "_"); got != true {
+		t.Fatalf("includes? = %v, want true", got)
+	}
+
+	fallbackCalls := 0
+	fallback := lang.FnFunc3(func(_, _, _ interface{}) interface{} {
+		fallbackCalls++
+		return "fallback"
+	})
+	replace := nativeStringReplace{fallback: fallback}
+	tests := []struct {
+		name string
+		got  interface{}
+		want interface{}
+	}{
+		{"string", replace.Invoke3("a-b-a", "a", "x"), "x-b-x"},
+		{"char", replace.Invoke3("a-b-a", lang.Char('a'), lang.Char('x')), "x-b-x"},
+		{"regexp", replace.Invoke3("ab12", regexp.MustCompile(`[0-9]+`), "x"), "abx"},
+		{"function fallback", replace.Invoke3("ab", regexp.MustCompile(`.`), fallback), "fallback"},
+	}
+	for _, test := range tests {
+		if test.got != test.want {
+			t.Errorf("%s replace = %v, want %v", test.name, test.got, test.want)
+		}
+	}
+	if fallbackCalls != 1 {
+		t.Fatalf("replace fallback called %d times, want 1", fallbackCalls)
 	}
 }
 

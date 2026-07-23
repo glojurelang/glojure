@@ -9,7 +9,8 @@ import (
 )
 
 type nsLoader struct {
-	load func()
+	resource string
+	load     func()
 
 	mu      sync.Mutex
 	cond    *sync.Cond
@@ -20,7 +21,8 @@ type nsLoader struct {
 var (
 	// nsLoaders is a map of namespace resource names to their loader
 	// functions. Used for pre-compiled namespaces.
-	nsLoaders = map[string]*nsLoader{}
+	nsLoaders                   = map[string]*nsLoader{}
+	nativeNamespaceInitializers = map[string]func(){}
 )
 
 func init() {
@@ -33,9 +35,16 @@ func RegisterNSLoader(nsResource string, loader func()) {
 	if _, exists := nsLoaders[nsResource]; exists {
 		panic("namespace loader already registered for " + nsResource)
 	}
-	entry := &nsLoader{load: loader}
+	entry := &nsLoader{resource: nsResource, load: loader}
 	entry.cond = sync.NewCond(&entry.mu)
 	nsLoaders[nsResource] = entry
+}
+
+func registerNativeNamespaceInitializer(nsResource string, initialize func()) {
+	if _, exists := nativeNamespaceInitializers[nsResource]; exists {
+		panic("native namespace initializer already registered for " + nsResource)
+	}
+	nativeNamespaceInitializers[nsResource] = initialize
 }
 
 // GetNSLoader retrieves the loader function for a namespace given its resource name.
@@ -92,5 +101,8 @@ func (l *nsLoader) run(lazy bool) {
 	}()
 
 	l.load()
+	if initialize := nativeNamespaceInitializers[l.resource]; initialize != nil {
+		initialize()
+	}
 	loaded = true
 }

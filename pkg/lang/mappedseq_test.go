@@ -1,6 +1,9 @@
 package lang
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestMappedSeqIsLazyAndCachesValues(t *testing.T) {
 	calls := 0
@@ -34,5 +37,27 @@ func TestMappedSeqIsLazyAndCachesValues(t *testing.T) {
 	}
 	if calls != 2 {
 		t.Fatalf("second mapped value ran %d total times, want 2", calls)
+	}
+}
+
+func TestMappedSeqConvertsDirectlyToStringSlice(t *testing.T) {
+	calls := 0
+	mapped := NewMappedSeq(FnFunc1(func(value any) any {
+		calls++
+		return value.(string) + "!"
+	}), NewVector("a", "b", "c").Seq())
+
+	got := asStringSlice(mapped)
+	if want := []string{"a!", "b!", "c!"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("mapped strings = %v, want %v", got, want)
+	}
+	if calls != 3 {
+		t.Fatalf("mapping ran %d times, want 3", calls)
+	}
+	if got := mapped.First(); got != "a!" {
+		t.Fatalf("cached first mapped value = %v, want a!", got)
+	}
+	if calls != 3 {
+		t.Fatalf("cached first value ran mapping again: %d calls", calls)
 	}
 }

@@ -1,6 +1,7 @@
 package runtime
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -128,7 +129,7 @@ func (nativeCoreStr) Invoke(args ...interface{}) interface{} {
 	case 0:
 		return ""
 	case 1:
-		return nativeStrValue(args[0])
+		return nativeStrAny(args[0])
 	case 2:
 		return nativeStr2(args[0], args[1])
 	default:
@@ -147,11 +148,25 @@ func (nativeCoreStr) Invoke0() interface{} {
 }
 
 func (nativeCoreStr) Invoke1(value interface{}) interface{} {
-	return nativeStrValue(value)
+	return nativeStrAny(value)
 }
 
 func (nativeCoreStr) Invoke2(a, b interface{}) interface{} {
 	return nativeStr2(a, b)
+}
+
+func (nativeCoreStr) Invoke3(a, b, c interface{}) interface{} {
+	return nativeStrValue(a) + nativeStrValue(b) + nativeStrValue(c)
+}
+
+func (nativeCoreStr) Invoke4(a, b, c, d interface{}) interface{} {
+	return nativeStrValue(a) + nativeStrValue(b) +
+		nativeStrValue(c) + nativeStrValue(d)
+}
+
+func (nativeCoreStr) Invoke5(a, b, c, d, e interface{}) interface{} {
+	return nativeStrValue(a) + nativeStrValue(b) +
+		nativeStrValue(c) + nativeStrValue(d) + nativeStrValue(e)
 }
 
 func (nativeCoreStr) ApplyTo(args lang.ISeq) interface{} {
@@ -174,6 +189,16 @@ func nativeStrValue(value interface{}) string {
 	return lang.ToString(value)
 }
 
+func nativeStrAny(value interface{}) interface{} {
+	if value == nil {
+		return ""
+	}
+	if _, ok := value.(string); ok {
+		return value
+	}
+	return lang.ToString(value)
+}
+
 func nativeStr2(a, b interface{}) string {
 	if a == nil {
 		return nativeStrValue(b)
@@ -181,10 +206,206 @@ func nativeStr2(a, b interface{}) string {
 	if b == nil {
 		return lang.ToString(a)
 	}
-	var builder strings.Builder
-	builder.WriteString(lang.ToString(a))
-	builder.WriteString(lang.ToString(b))
-	return builder.String()
+	return lang.ToString(a) + lang.ToString(b)
+}
+
+type nativeCoreRegexMatch struct {
+	full bool
+}
+
+func (fn nativeCoreRegexMatch) Invoke(args ...interface{}) interface{} {
+	if len(args) != 2 {
+		panic(lang.NewIllegalArgumentError("regex match expects 2 arguments"))
+	}
+	return fn.Invoke2(args[0], args[1])
+}
+
+func (fn nativeCoreRegexMatch) Invoke2(pattern, value interface{}) interface{} {
+	re := pattern.(*regexp.Regexp)
+	text := value.(string)
+	indices := re.FindStringSubmatchIndex(text)
+	if indices == nil ||
+		(fn.full && (indices[0] != 0 || indices[1] != len(text))) {
+		return nil
+	}
+	if re.NumSubexp() == 0 {
+		return text[indices[0]:indices[1]]
+	}
+	groups := make([]interface{}, len(indices)/2)
+	for i := range groups {
+		start, end := indices[2*i], indices[2*i+1]
+		if start >= 0 {
+			groups[i] = text[start:end]
+		}
+	}
+	return lang.NewVector(groups...)
+}
+
+func (fn nativeCoreRegexMatch) ApplyTo(args lang.ISeq) interface{} {
+	return fn.Invoke(seqToSlice(args)...)
+}
+
+type nativeCoreGetIn struct{}
+
+var nativeGetInNotFound = new(struct{ _ byte })
+
+func (nativeCoreGetIn) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 2:
+		return getIn(args[0], args[1], nil, false)
+	case 3:
+		return getIn(args[0], args[1], args[2], true)
+	default:
+		panic(lang.NewIllegalArgumentError("get-in expects 2 or 3 arguments"))
+	}
+}
+
+func (nativeCoreGetIn) Invoke2(value, keys interface{}) interface{} {
+	return getIn(value, keys, nil, false)
+}
+
+func (nativeCoreGetIn) Invoke3(value, keys, notFound interface{}) interface{} {
+	return getIn(value, keys, notFound, true)
+}
+
+func (nativeCoreGetIn) ApplyTo(args lang.ISeq) interface{} {
+	return nativeCoreGetIn{}.Invoke(seqToSlice(args)...)
+}
+
+func getIn(value, keys, notFound interface{}, distinguishMissing bool) interface{} {
+	if indexed, ok := keys.(lang.Indexed); ok {
+		for i := 0; i < indexed.Count(); i++ {
+			var found bool
+			value, found = getInKey(value, indexed.Nth(i), distinguishMissing)
+			if !found {
+				return notFound
+			}
+		}
+		return value
+	}
+	for seq := lang.Seq(keys); seq != nil; seq = seq.Next() {
+		var found bool
+		value, found = getInKey(value, seq.First(), distinguishMissing)
+		if !found {
+			return notFound
+		}
+	}
+	return value
+}
+
+func getInKey(value, key interface{}, distinguishMissing bool) (interface{}, bool) {
+	if !distinguishMissing {
+		return lang.Get(value, key), true
+	}
+	result := lang.GetDefault(value, key, nativeGetInNotFound)
+	return result, result != nativeGetInNotFound
+}
+
+type nativeCoreAssoc struct{}
+
+func (nativeCoreAssoc) Invoke(args ...interface{}) interface{} {
+	if len(args) < 3 || len(args)%2 == 0 {
+		panic(lang.NewIllegalArgumentError(
+			"assoc expects a collection followed by key/value pairs",
+		))
+	}
+	result := args[0]
+	for i := 1; i < len(args); i += 2 {
+		result = lang.Assoc(result, args[i], args[i+1])
+	}
+	return result
+}
+
+func (nativeCoreAssoc) Invoke3(coll, key, value interface{}) interface{} {
+	return lang.Assoc(coll, key, value)
+}
+
+func (nativeCoreAssoc) Invoke5(
+	coll, key1, value1, key2, value2 interface{},
+) interface{} {
+	return lang.Assoc(lang.Assoc(coll, key1, value1), key2, value2)
+}
+
+func (fn nativeCoreAssoc) ApplyTo(args lang.ISeq) interface{} {
+	if args == nil {
+		return fn.Invoke()
+	}
+	result := args.First()
+	args = args.Next()
+	pairs := 0
+	for args != nil {
+		key := args.First()
+		args = args.Next()
+		if args == nil {
+			panic(lang.NewIllegalArgumentError(
+				"assoc expects even number of arguments after map/vector, found odd number",
+			))
+		}
+		result = lang.Assoc(result, key, args.First())
+		pairs++
+		args = args.Next()
+	}
+	if pairs == 0 {
+		return fn.Invoke(result)
+	}
+	return result
+}
+
+type nativeStringIncludes struct{}
+
+func (nativeStringIncludes) Invoke(args ...interface{}) interface{} {
+	if len(args) != 2 {
+		panic(lang.NewIllegalArgumentError("includes? expects 2 arguments"))
+	}
+	return nativeStringIncludes{}.Invoke2(args[0], args[1])
+}
+
+func (nativeStringIncludes) Invoke2(value, substring interface{}) interface{} {
+	return strings.Contains(lang.ToString(value), substring.(string))
+}
+
+func (nativeStringIncludes) ApplyTo(args lang.ISeq) interface{} {
+	return nativeStringIncludes{}.Invoke(seqToSlice(args)...)
+}
+
+type nativeStringReplace struct {
+	fallback lang.IFn
+}
+
+func (fn nativeStringReplace) Invoke(args ...interface{}) interface{} {
+	if len(args) != 3 {
+		return fn.fallback.Invoke(args...)
+	}
+	return fn.Invoke3(args[0], args[1], args[2])
+}
+
+func (fn nativeStringReplace) Invoke3(value, match, replacement interface{}) interface{} {
+	if value == nil {
+		panic(lang.NewIllegalArgumentError("cannot call clojure.string function on nil"))
+	}
+	text := lang.ToString(value)
+	switch match := match.(type) {
+	case string:
+		if replacement, ok := replacement.(string); ok {
+			return strings.ReplaceAll(text, match, replacement)
+		}
+	case lang.Char:
+		switch replacement := replacement.(type) {
+		case string:
+			return strings.ReplaceAll(text, string(match), replacement)
+		case lang.Char:
+			return strings.ReplaceAll(text, string(match), string(replacement))
+		}
+	case *regexp.Regexp:
+		if replacement, ok := replacement.(string); ok {
+			return match.ReplaceAllString(text, replacement)
+		}
+	}
+	return lang.Apply3(fn.fallback, value, match, replacement)
+}
+
+func (fn nativeStringReplace) ApplyTo(args lang.ISeq) interface{} {
+	return fn.Invoke(seqToSlice(args)...)
 }
 
 // nativeCoreDeref keeps the common reference path on the IDeref interface.
@@ -638,6 +859,18 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	if str := core.FindInternedVar(lang.NewSymbol("str")); str != nil {
 		str.BindRoot(nativeCoreStr{})
 	}
+	if reFind := core.FindInternedVar(lang.NewSymbol("re-find")); reFind != nil {
+		reFind.BindRoot(nativeCoreRegexMatch{})
+	}
+	if reMatches := core.FindInternedVar(lang.NewSymbol("re-matches")); reMatches != nil {
+		reMatches.BindRoot(nativeCoreRegexMatch{full: true})
+	}
+	if getIn := core.FindInternedVar(lang.NewSymbol("get-in")); getIn != nil {
+		getIn.BindRoot(nativeCoreGetIn{})
+	}
+	if assoc := core.FindInternedVar(lang.NewSymbol("assoc")); assoc != nil {
+		assoc.BindRoot(nativeCoreAssoc{})
+	}
 	if deref := core.FindInternedVar(lang.NewSymbol("deref")); deref != nil {
 		if fallback, ok := deref.Get().(lang.IFn); ok {
 			deref.BindRoot(nativeCoreDeref{fallback: fallback})
@@ -687,6 +920,27 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 		"neg?", "odd?", "pos?", "range", "reduce", "zero?",
 		"take",
 	)
+}
+
+func init() {
+	if installNativeCoreOverrides {
+		registerNativeNamespaceInitializer("clojure/string", installNativeStringFunctions)
+	}
+}
+
+func installNativeStringFunctions() {
+	namespace := lang.FindNamespace(lang.NewSymbol("clojure.string"))
+	if namespace == nil {
+		return
+	}
+	if includes := namespace.FindInternedVar(lang.NewSymbol("includes?")); includes != nil {
+		includes.BindRoot(nativeStringIncludes{})
+	}
+	if replace := namespace.FindInternedVar(lang.NewSymbol("replace")); replace != nil {
+		if fallback, ok := replace.Get().(lang.IFn); ok {
+			replace.BindRoot(nativeStringReplace{fallback: fallback})
+		}
+	}
 }
 
 func installFixedArityCoreFunction(

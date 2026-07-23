@@ -109,6 +109,19 @@ func (s *mappedSeq) IsRealized() bool {
 	return s.realized.Load()
 }
 
+func (s *mappedSeq) asStringSlice() []string {
+	capacity := 0
+	if source, ok := s.source.(Counted); ok {
+		capacity = source.Count()
+	}
+	result := make([]string, 0, capacity)
+	result = append(result, s.First().(string))
+	for source := s.source.Next(); source != nil; source = source.Next() {
+		result = append(result, Apply1(s.fn, source.First()).(string))
+	}
+	return result
+}
+
 func (s *mappedSeq) Reduce(f IFn) any {
 	result := s.First()
 	for source := s.source.Next(); source != nil; source = source.Next() {

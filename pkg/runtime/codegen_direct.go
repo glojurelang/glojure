@@ -203,7 +203,7 @@ func (g *Generator) aotExternalInvokeTarget(
 		return nil
 	}
 	arity := len(invoke.Args)
-	if arity > 4 || !aotSupportsArity(codegenVarValue(vr), arity) {
+	if arity > 5 || !aotSupportsArity(codegenVarValue(vr), arity) {
 		return nil
 	}
 	key := aotExternalCallKey{vr: vr, arity: arity}
@@ -225,7 +225,7 @@ func (g *Generator) aotExternalInvokeTarget(
 }
 
 func (g *Generator) generateAOTExternalCacheAdapters() {
-	var arities [5]bool
+	var arities [6]bool
 	for _, target := range g.aotExternalCallTargets {
 		arities[target.arity] = true
 	}
@@ -297,6 +297,9 @@ func aotSupportsArity(value any, arity int) bool {
 		return ok
 	case 4:
 		_, ok := value.(lang.FixedArityFn4)
+		return ok
+	case 5:
+		_, ok := value.(lang.FixedArityFn5)
 		return ok
 	default:
 		return false

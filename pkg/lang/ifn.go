@@ -10,6 +10,9 @@ type FixedArityFn1 interface{ Invoke1(any) any }
 type FixedArityFn2 interface{ Invoke2(any, any) any }
 type FixedArityFn3 interface{ Invoke3(any, any, any) any }
 type FixedArityFn4 interface{ Invoke4(any, any, any, any) any }
+type FixedArityFn5 interface {
+	Invoke5(any, any, any, any, any) any
+}
 
 // FnFunc is a wrapped Go function that implements the IFn interface.
 type FnFunc func(args ...any) any
@@ -22,6 +25,7 @@ var (
 	_ IFn = FnFunc2(nil)
 	_ IFn = FnFunc3(nil)
 	_ IFn = FnFunc4(nil)
+	_ IFn = FnFunc5(nil)
 )
 
 func NewFnFunc(fn func(args ...any) any) FnFunc {
@@ -214,12 +218,36 @@ func (f FnFunc4) ApplyTo(args ISeq) any {
 func (f FnFunc4) Meta() IPersistentMap          { return nil }
 func (f FnFunc4) WithMeta(_ IPersistentMap) any { return f }
 
+// FnFunc5 is a five-argument function implementing IFn with no []any allocation.
+type FnFunc5 func(any, any, any, any, any) any
+
+func NewFnFunc5(fn func(any, any, any, any, any) any) FnFunc5 { return FnFunc5(fn) }
+
+func (f FnFunc5) Invoke(args ...any) any {
+	if len(args) != 5 {
+		panic(NewIllegalArgumentError(fmt.Sprintf("wrong number of arguments: expected 5, got %d", len(args))))
+	}
+	return f(args[0], args[1], args[2], args[3], args[4])
+}
+
+func (f FnFunc5) Invoke5(a0, a1, a2, a3, a4 any) any {
+	return f(a0, a1, a2, a3, a4)
+}
+
+func (f FnFunc5) ApplyTo(args ISeq) any {
+	values := requireFixedSeqArity(args, 5)
+	return f(values[0], values[1], values[2], values[3], values[4])
+}
+
+func (f FnFunc5) Meta() IPersistentMap          { return nil }
+func (f FnFunc5) WithMeta(_ IPersistentMap) any { return f }
+
 // requireFixedSeqArity reads up to four fixed arguments directly from an
 // ISeq. Unlike seqToSlice, the successful path does not allocate a variadic
 // argument slice. The full sequence is counted only on the exceptional path
 // so that Invoke and ApplyTo report the same arity error.
-func requireFixedSeqArity(args ISeq, expected int) [4]any {
-	var values [4]any
+func requireFixedSeqArity(args ISeq, expected int) [5]any {
+	var values [5]any
 	seq := args
 	for i := 0; i < expected; i++ {
 		if seq == nil {

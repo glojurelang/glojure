@@ -7,7 +7,7 @@ import "fmt"
 // variadic []any path while Invoke and ApplyTo preserve general IFn behavior.
 type ArityFn struct {
 	meta        IPersistentMap
-	fixed       [5]IFn
+	fixed       [6]IFn
 	fixedOther  map[int]IFn
 	maxFixed    int
 	variadic    IFn
@@ -20,7 +20,7 @@ func NewArityFn(
 	minVariadic int,
 ) ArityFn {
 	f := ArityFn{
-		fixed:       [5]IFn{fn0, fn1, fn2, fn3, fn4},
+		fixed:       [6]IFn{fn0, fn1, fn2, fn3, fn4},
 		variadic:    variadic,
 		minVariadic: minVariadic,
 	}
@@ -109,6 +109,13 @@ func (f ArityFn) Invoke4(a0, a1, a2, a3 any) any {
 	return f.Invoke(a0, a1, a2, a3)
 }
 
+func (f ArityFn) Invoke5(a0, a1, a2, a3, a4 any) any {
+	if method := f.fixed[5]; method != nil {
+		return Apply5(method, a0, a1, a2, a3, a4)
+	}
+	return f.Invoke(a0, a1, a2, a3, a4)
+}
+
 func (f ArityFn) ApplyTo(args ISeq) any {
 	original := args
 	limit := f.maxFixed + 1
@@ -144,4 +151,5 @@ var (
 	_ FixedArityFn2 = ArityFn{}
 	_ FixedArityFn3 = ArityFn{}
 	_ FixedArityFn4 = ArityFn{}
+	_ FixedArityFn5 = ArityFn{}
 )

@@ -241,11 +241,33 @@ func Apply4(fn interface{}, a0, a1, a2, a3 any) any {
 	}
 }
 
+// Apply5 dispatches a five-argument call without constructing an argument slice
+// when the target exposes a fixed five-argument method.
+func Apply5(fn interface{}, a0, a1, a2, a3, a4 any) any {
+	switch f := fn.(type) {
+	case FnFunc5:
+		return f(a0, a1, a2, a3, a4)
+	case FnFunc:
+		return f(a0, a1, a2, a3, a4)
+	case func(any, any, any, any, any) any:
+		return f(a0, a1, a2, a3, a4)
+	case FixedArityFn5:
+		return f.Invoke5(a0, a1, a2, a3, a4)
+	case IFn:
+		return f.Invoke(a0, a1, a2, a3, a4)
+	default:
+		return Apply(fn, []any{a0, a1, a2, a3, a4})
+	}
+}
+
 func asStringSlice(value any) []string {
 	if values, ok := value.([]string); ok {
 		return values
 	}
-	if values, ok := value.(IPersistentVector); ok {
+	if values, ok := value.(*mappedSeq); ok {
+		return values.asStringSlice()
+	}
+	if values, ok := value.(Indexed); ok {
 		result := make([]string, values.Count())
 		for i := range result {
 			result[i] = values.Nth(i).(string)

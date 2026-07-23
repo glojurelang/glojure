@@ -1209,12 +1209,12 @@ func (g *Generator) generateFn(fn *Fn) string {
 	astNode := fn.ASTNode()
 	fnNode := astNode.Sub.(*ast.FnNode)
 
-	// Determine if we can use a fixed-arity FnFuncN (0-4 args, single method,
+	// Determine if we can use a fixed-arity FnFuncN (0-5 args, single method,
 	// non-variadic). fixedArity == -1 means fall back to FnFunc.
 	fixedArity := -1
 	if len(fnNode.Methods) == 1 && !fnNode.IsVariadic {
 		mn := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		if mn.FixedArity <= 4 {
+		if mn.FixedArity <= 5 {
 			fixedArity = mn.FixedArity
 		}
 	}
@@ -1232,7 +1232,7 @@ func (g *Generator) generateFn(fn *Fn) string {
 	fnVar := g.allocateTempVar()
 
 	// Declare with the appropriate type.
-	// FnFuncN for 0-4 arg non-variadic single-arity functions eliminates
+	// FnFuncN for 0-5 arg non-variadic single-arity functions eliminates
 	// []any heap allocation at call sites that use ApplyN.
 	fnType := "lang.FnFunc"
 	if fixedArity >= 0 {
@@ -1266,9 +1266,9 @@ func (g *Generator) generateFn(fn *Fn) string {
 	}
 
 	if fixedArity >= 0 {
-		// Single-arity 0-4: emit FnFuncN with direct named params
+		// Single-arity 0-5: emit FnFuncN with direct named params
 		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		allParamNames := []string{"p0", "p1", "p2", "p3"}
+		allParamNames := []string{"p0", "p1", "p2", "p3", "p4"}
 		paramNames := allParamNames[:fixedArity]
 		if !g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
@@ -1359,8 +1359,8 @@ func (g *Generator) generateFn(fn *Fn) string {
 
 func (g *Generator) generateFixedMethodFn(methodNode *ast.FnMethodNode) {
 	arity := methodNode.FixedArity
-	if arity <= 4 {
-		allParamNames := []string{"p0", "p1", "p2", "p3"}
+	if arity <= 5 {
+		allParamNames := []string{"p0", "p1", "p2", "p3", "p4"}
 		paramNames := allParamNames[:arity]
 		sig := ""
 		if arity > 0 {
@@ -1794,6 +1794,8 @@ func (g *Generator) generateApply(
 		g.writef("%s %s lang.Apply3(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 	case 4:
 		g.writef("%s %s lang.Apply4(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
+	case 5:
+		g.writef("%s %s lang.Apply5(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 	default:
 		g.writef("%s %s lang.Apply(%s, []any{%s})\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 	}
