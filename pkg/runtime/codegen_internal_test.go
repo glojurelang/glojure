@@ -60,6 +60,22 @@ func TestGenerateNestedClosureCapturedAtLoadTime(t *testing.T) {
 	}
 }
 
+func TestGenerateMutableRuntimeValues(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+
+	if got, want := generator.generateValue(lang.NewVolatile(int64(7))),
+		"lang.NewVolatile(int64(7))"; got != want {
+		t.Fatalf("generated volatile = %q, want %q", got, want)
+	}
+
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.mutable-values"))
+	delay := lang.NewDelay(ns.Intern(lang.NewSymbol("delayed")))
+	got := generator.generateValue(delay)
+	if !strings.HasPrefix(got, "lang.NewDelay(") {
+		t.Fatalf("generated delay = %q, want lang.NewDelay expression", got)
+	}
+}
+
 func TestGenerateResolvedHostReference(t *testing.T) {
 	generator := NewGenerator(&bytes.Buffer{})
 	node := ast.MakeNode(ast.OpConst, nil)

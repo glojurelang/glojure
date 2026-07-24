@@ -333,27 +333,45 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	////////////////////////////////////////////////////////////////////////////////
 	// Generate lifted values at the beginning of init() if any
 	if len(g.liftedValues) > 0 {
-		// Sort by variable name for deterministic output
-		var sortedLifted []*liftedValue
-		for _, lifted := range g.liftedValues {
-			sortedLifted = append(sortedLifted, lifted)
-		}
-		sort.Slice(sortedLifted, func(i, j int) bool {
-			return sortedLifted[i].varName < sortedLifted[j].varName
-		})
+		generated := make(map[*liftedValue]bool)
+		for {
+			// Generating a lifted closure can discover more captured values.
+			// Drain them all, sorting each batch for deterministic output.
+			var sortedLifted []*liftedValue
+			for _, lifted := range g.liftedValues {
+				if !generated[lifted] {
+					sortedLifted = append(sortedLifted, lifted)
+				}
+			}
+			if len(sortedLifted) == 0 {
+				break
+			}
+			sort.Slice(sortedLifted, func(i, j int) bool {
+				return sortedLifted[i].varName < sortedLifted[j].varName
+			})
 
-		// Generate code for each lifted value
-		for _, lifted := range sortedLifted {
-			g.startNewValueInit(lifted.varName)
-			// Generate the value - this will write any needed initialization
-			g.writef("var %s any\n", lifted.varName)
-			g.pushVarScope()
-			g.writef("{\n")
-			valueCode := g.generateValue(lifted.value)
-			// Declare the lifted variable with the final value
-			g.writef("%s = %s\n", lifted.varName, valueCode)
-			g.writef("}\n")
-			g.popVarScope()
+			for _, lifted := range sortedLifted {
+				generated[lifted] = true
+				g.startNewValueInit(lifted.varName)
+				g.pushVarScope()
+				g.writef("{\n")
+				valueCode := g.generateValue(lifted.value)
+				// Declare the lifted variable with the final value
+				g.writef("%s = %s\n", lifted.varName, valueCode)
+				g.writef("}\n")
+				g.popVarScope()
+			}
+		}
+
+		// Declare every captured value before any initializer. Nested closures
+		// can introduce forward references and cycles while they are generated.
+		var names []string
+		for _, lifted := range g.liftedValues {
+			names = append(names, lifted.varName)
+		}
+		sort.Strings(names)
+		for _, name := range names {
+			nsBuf.WriteString(fmt.Sprintf("var %s any\n", name))
 		}
 	}
 
@@ -734,6 +752,14 @@ func (g *Generator) generateValue(value any) string {
 		return g.generateSetValue(v)
 	case *lang.MultiFn:
 		return g.generateMultiFn(v)
+	case *lang.Volatile:
+		return fmt.Sprintf("lang.NewVolatile(%s)", g.generateValue(v.Deref()))
+	case *lang.Delay:
+		fn := v.PendingFn()
+		if fn == nil {
+			panic("cannot generate an already-realized delay")
+		}
+		return fmt.Sprintf("lang.NewDelay(%s)", g.generateValue(fn))
 	case lang.Keyword:
 		if ns := v.Namespace(); ns != nil {
 			return g.allocKWVar(fmt.Sprintf("%s/%s", ns, v.Name()))

@@ -149,6 +149,16 @@ func TestFixedArityTwoFunctionUsesCompiledParameterSlots(t *testing.T) {
 	}
 }
 
+func TestFixedArityFunctionPreservesCapturedParameter(t *testing.T) {
+	got := ReadEval(`
+		(let [make-closure (fn [value] (fn [] value))
+		      closure (make-closure 42)]
+		  (closure))`)
+	if got != int64(42) {
+		t.Fatalf("captured parameter = %v, want 42", got)
+	}
+}
+
 func TestNativeCoreAddApplyToReducibleSequence(t *testing.T) {
 	args := lang.NewLongRange(0, 1_000, 1)
 
