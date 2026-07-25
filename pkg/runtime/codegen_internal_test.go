@@ -41,6 +41,25 @@ func TestGenerateStandardFileHandles(t *testing.T) {
 	}
 }
 
+func TestGenerateNestedClosureCapturedAtLoadTime(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.nested-capture"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn make-closure [keep]
+		  (fn [_]
+		    (let [finish (fn [] keep)]
+		      (finish))))
+		(def captured (make-closure true))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate nested captured closure: %v", err)
+	}
+}
+
 func TestGenerateResolvedHostReference(t *testing.T) {
 	generator := NewGenerator(&bytes.Buffer{})
 	node := ast.MakeNode(ast.OpConst, nil)

@@ -1159,7 +1159,12 @@ func (g *Generator) generateFnFunc(fn lang.FnFunc) string {
 func (g *Generator) generateFn(fn *Fn) string {
 	// Save and restore current environment
 	prevEnv := g.currentFnEnv
-	g.currentFnEnv = fn.GetEnvironment() // Set the captured environment for this function
+	// Runtime function values carry their captured environment. Functions
+	// constructed directly from nested AST nodes do not; in that case they
+	// inherit the environment of the function currently being generated.
+	if env := fn.GetEnvironment(); env != nil {
+		g.currentFnEnv = env
+	}
 	defer func() { g.currentFnEnv = prevEnv }()
 
 	astNode := fn.ASTNode()
