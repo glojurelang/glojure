@@ -24,6 +24,30 @@ func TestPrintBannerVersionPrefixes(t *testing.T) {
 	}
 }
 
+func TestColorSyntax(t *testing.T) {
+	input := `(defn greet [name]
+  (println "Hello," name :from 42 true)
+  ; comment
+  [})`
+	got := ColorSyntax([]rune(input), nil)
+
+	for _, want := range []string{
+		rainbowColors[0] + "(" + colorReset,
+		rainbowColors[1] + "[" + colorReset,
+		colorBoldYellow + "defn" + colorReset,
+		colorGreen + `"Hello,"` + colorReset,
+		colorCyan + ":from" + colorReset,
+		colorMagenta + "42" + colorReset,
+		colorMagenta + "true" + colorReset,
+		colorGray + "; comment" + colorReset,
+		colorMismatch + "}" + colorReset,
+	} {
+		if !strings.Contains(got, want) {
+			t.Errorf("ColorSyntax() missing %q in:\n%q", want, got)
+		}
+	}
+}
+
 func TestDecodeRemoteDocValue(t *testing.T) {
 	got := decodeRemoteDocValue(`"clojure.core/mapv\n([f coll])\n  Returns a vector"`)
 	want := "clojure.core/mapv\n([f coll])\n  Returns a vector"

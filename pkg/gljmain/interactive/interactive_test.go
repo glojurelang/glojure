@@ -1,6 +1,23 @@
 package interactive
 
-import "testing"
+import (
+	"bytes"
+	"strings"
+	"testing"
+)
+
+func TestColorForCapturedOutput(t *testing.T) {
+	var out bytes.Buffer
+	if err := color(strings.NewReader("(println 42)"), &out); err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(out.Bytes(), []byte("\x1b[")) {
+		t.Fatalf("color() output has no ANSI escapes: %q", out.String())
+	}
+	if !strings.Contains(out.String(), "\x1b[38;5;69mprintln\x1b[0m") {
+		t.Fatalf("color() did not color a core symbol: %q", out.String())
+	}
+}
 
 func TestParseServerArg(t *testing.T) {
 	tests := []struct {
