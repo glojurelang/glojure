@@ -39,6 +39,41 @@ func TestSmallMapAssocUsesIndependentInlineStorage(t *testing.T) {
 	runtime.KeepAlive(result)
 }
 
+func TestSmallMapWithMetaKeepsInlineStorageAlive(t *testing.T) {
+	key := NewKeyword("key")
+	meta := NewMap(NewKeyword("source"), "test").(IPersistentMap)
+
+	withMeta := func() *Map {
+		original := NewMap(key, "value").(*Map)
+		return original.WithMeta(meta).(*Map)
+	}()
+	runtime.GC()
+
+	if got := withMeta.ValAt(key); got != "value" {
+		t.Fatalf("value after WithMeta and GC = %v, want value", got)
+	}
+	if got := withMeta.Meta(); got != meta {
+		t.Fatalf("Meta() = %v, want %v", got, meta)
+	}
+}
+
+func TestMapAssocInvalidatesCachedHashes(t *testing.T) {
+	key := NewKeyword("key")
+	original := NewMap(key, int64(1)).(*Map)
+	original.Hash()
+	original.HashEq()
+
+	updated := original.Assoc(key, int64(2)).(*Map)
+	fresh := NewMap(key, int64(2)).(*Map)
+
+	if got, want := updated.Hash(), fresh.Hash(); got != want {
+		t.Fatalf("updated Hash() = %d, want %d", got, want)
+	}
+	if got, want := updated.HashEq(), fresh.HashEq(); got != want {
+		t.Fatalf("updated HashEq() = %d, want %d", got, want)
+	}
+}
+
 func TestKeywordMapsUseClojureArrayMapThreshold(t *testing.T) {
 	keyVals := make([]any, 0, arrayMapKeywordThreshold)
 	for i := 0; i < arrayMapKeywordThreshold/2; i++ {

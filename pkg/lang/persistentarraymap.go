@@ -17,7 +17,13 @@ type (
 		hash, hasheq uint32
 
 		keyVals []any
-		inline  [arrayMapInlineSize]any
+	}
+
+	// inlineMapStorage keeps small maps to one allocation without making every
+	// Map carry unused inline capacity. A pointer to Map keeps its owner alive.
+	inlineMapStorage struct {
+		Map
+		keyVals [arrayMapInlineSize]any
 	}
 
 	MapSeq struct {
@@ -81,14 +87,17 @@ func NewMap(keyVals ...any) IPersistentMap {
 		return NewPersistentHashMap(keyVals...)
 	}
 
-	m := &Map{}
-	if len(keyVals) <= len(m.inline) {
-		copy(m.inline[:], keyVals)
-		m.keyVals = m.inline[:len(keyVals)]
-	} else {
-		m.keyVals = append([]any(nil), keyVals...)
+	return newArrayMap(keyVals)
+}
+
+func newArrayMap(keyVals []any) *Map {
+	if len(keyVals) <= arrayMapInlineSize {
+		storage := &inlineMapStorage{}
+		copy(storage.keyVals[:], keyVals)
+		storage.Map.keyVals = storage.keyVals[:len(keyVals)]
+		return &storage.Map
 	}
-	return m
+	return &Map{keyVals: append([]any(nil), keyVals...)}
 }
 
 // canBePersistentArrayMap mirrors Clojure's PersistentArrayMap thresholds.
@@ -214,13 +223,9 @@ func (m *Map) EntryAt(k any) IMapEntry {
 }
 
 func (m *Map) clone() *Map {
-	cpy := *m
-	if len(m.keyVals) <= len(cpy.inline) {
-		cpy.keyVals = cpy.inline[:len(m.keyVals)]
-	} else {
-		cpy.keyVals = append([]any(nil), m.keyVals...)
-	}
-	return &cpy
+	cpy := newArrayMap(m.keyVals)
+	cpy.meta = m.meta
+	return cpy
 }
 
 func (m *Map) Assoc(k, v any) Associative {
@@ -288,9 +293,6 @@ func (m *Map) WithMeta(meta IPersistentMap) any {
 		return m
 	}
 	cpy := *m
-	if len(m.keyVals) <= len(cpy.inline) {
-		cpy.keyVals = cpy.inline[:len(m.keyVals)]
-	}
 	cpy.meta = meta
 	return &cpy
 }
