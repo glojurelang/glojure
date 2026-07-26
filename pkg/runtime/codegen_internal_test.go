@@ -288,6 +288,38 @@ func TestDirectTaggedHostCallUsesFormMetadata(t *testing.T) {
 	}
 }
 
+func TestDirectTaggedHostCallResolvesClojureLangAlias(t *testing.T) {
+	pkgmap.Set(
+		"github.com/glojurelang/glojure/pkg/lang.IChunk",
+		reflect.TypeFor[lang.IChunk](),
+	)
+	taggedName := lang.NewSymbol("chunk").WithMeta(
+		lang.NewMap(lang.KWTag, lang.NewSymbol("clojure.lang.IChunk")),
+	).(*lang.Symbol)
+	target := ast.MakeNode(ast.OpLocal, taggedName)
+	target.Sub = &ast.LocalNode{Name: taggedName}
+
+	generator := NewGenerator(&bytes.Buffer{})
+	method, receiver, args, ok := generator.directInferredHostCall(
+		target,
+		"chunk",
+		"nth",
+		[]string{"index"},
+	)
+	if !ok {
+		t.Fatal("clojure.lang.IChunk Nth call was not resolved directly")
+	}
+	if want := "Nth"; method != want {
+		t.Fatalf("method = %q, want %q", method, want)
+	}
+	if want := "chunk.(interface { Nth(int) any })"; receiver != want {
+		t.Fatalf("receiver = %q, want %q", receiver, want)
+	}
+	if want := []string{"lang.IntCast(index)"}; !reflect.DeepEqual(args, want) {
+		t.Fatalf("args = %v, want %v", args, want)
+	}
+}
+
 func TestDirectTaggedHostCallRequiresResolvableType(t *testing.T) {
 	target := ast.MakeNode(ast.OpLocal, lang.NewSymbol("value"))
 	target.Sub = &ast.LocalNode{Name: lang.NewSymbol("value")}

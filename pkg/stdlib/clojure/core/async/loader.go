@@ -541,7 +541,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async__GT__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion2 = var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async__GT__BANG_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(44), kw_column, int(7), kw_end_DASH_line, int(44), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "puts a val into port. nil values are not allowed. Will park if no buffer space is available.\n  Returns true, or throws if port is already closed.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(44), kw_column, int(7), kw_end_DASH_line, int(44), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "puts a val into port. nil values are not allowed. Will park if no buffer space is available.\n  Returns true, or throws if port is already closed.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// >!!
@@ -605,7 +605,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async__LT__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion0 = var_clojure_DOT_core_DOT_async__LT__BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async__LT__BANG_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(35), kw_column, int(7), kw_end_DASH_line, int(35), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "takes a val from port. Will return nil if closed. Will park if\n  nothing is available.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(35), kw_column, int(7), kw_end_DASH_line, int(35), kw_end_DASH_column, int(8), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "takes a val from port. Will return nil if closed. Will park if\n  nothing is available.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// <!!
@@ -720,7 +720,7 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_DOT_async_chan = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_async_chan.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(18), kw_column, int(7), kw_end_DASH_line, int(18), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_buf_DASH_or_DASH_n), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform, sym_ex_DASH_handler)), kw_doc, "Creates a channel with an optional buffer, an optional transducer\n  (like (map f), (filter p) etc or a composition thereof), and an\n  optional exception-handler.  If buf-or-n is a number, will create\n  and use a fixed buffer of that size. If a transducer is supplied a\n  buffer must be specified. ex-handler must be a fn of one argument -\n  if an exception occurs during transformation it will be called with\n  the Throwable as an argument, and any non-nil return value will be\n  placed in the channel.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(18), kw_column, int(7), kw_end_DASH_line, int(18), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_buf_DASH_or_DASH_n), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform, sym_ex_DASH_handler)), kw_doc, "Creates a channel with an optional buffer, an optional transducer\n  (like (map f), (filter p) etc or a composition thereof), and an\n  optional exception-handler.  If buf-or-n is a number, will create\n  and use a fixed buffer of that size. If a transducer is supplied a\n  buffer must be specified. ex-handler must be a fn of one argument -\n  if an exception occurs during transformation it will be called with\n  the Throwable as an argument, and any non-nil return value will be\n  placed in the channel.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// check-unique-ports!
@@ -783,7 +783,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion4 = var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(158), kw_column, int(8), kw_end_DASH_line, int(158), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_ports)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(158), kw_column, int(8), kw_end_DASH_line, int(158), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_ports)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// close!
@@ -800,7 +800,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async_close_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion5 = var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async_close_BANG_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_chan)), kw_doc, "Closes a channel. The channel will no longer accept any puts (they\n  will be ignored). Data in the channel remains available for taking,\n  until exhausted, after which takes will return nil. If there are any\n  pending takes, they will be dispatched with nil. Closing a closed\n  channel will throw an exception.\n\n  Logically closing happens after all puts have been\n  delivered. Therefore, any blocked or parked puts will remain\n  blocked/parked until a taker releases them.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_chan)), kw_doc, "Closes a channel. The channel will no longer accept any puts (they\n  will be ignored). Data in the channel remains available for taking,\n  until exhausted, after which takes will return nil. If there are any\n  pending takes, they will be dispatched with nil. Closing a closed\n  channel will throw an exception.\n\n  Logically closing happens after all puts have been\n  delivered. Therefore, any blocked or parked puts will remain\n  blocked/parked until a taker releases them.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// default-case
@@ -851,7 +851,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async_default_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion6 = var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion()
 		var_clojure_DOT_core_DOT_async_default_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(100), kw_column, int(8), kw_end_DASH_line, int(100), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(100), kw_column, int(8), kw_end_DASH_line, int(100), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// pipe
@@ -987,7 +987,7 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_DOT_async_pipe = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_async_pipe.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(292), kw_column, int(7), kw_end_DASH_line, int(292), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(sym_from, sym_to), lang.NewVector(sym_from, sym_to, sym_close_QMARK_)), kw_doc, "Takes elements from the from channel and supplies them to the to\n  channel. By default, the to channel will be closed when the from\n  channel closes, but can be determined by the close?  parameter. Will\n  stop consuming the from channel if the to channel closes", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(292), kw_column, int(7), kw_end_DASH_line, int(292), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(sym_from, sym_to), lang.NewVector(sym_from, sym_to, sym_close_QMARK_)), kw_doc, "Takes elements from the from channel and supplies them to the to\n  channel. By default, the to channel will be closed when the from\n  channel closes, but can be determined by the close?  parameter. Will\n  stop consuming the from channel if the to channel closes", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// port-case
@@ -1144,7 +1144,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async_port_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion11 = var_clojure_DOT_core_DOT_async_port_DASH_case.RootVersion()
 		var_clojure_DOT_core_DOT_async_port_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port_DASH_or_DASH_put)), kw_doc, "Returns a *reflect.SelectCase for the given channel operation.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(16), kw_column, int(8), kw_line, int(106), kw_end_DASH_line, int(106), kw_private, true)
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(106), kw_column, int(8), kw_end_DASH_line, int(106), kw_end_DASH_column, int(16), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_port_DASH_or_DASH_put)), kw_doc, "Returns a *reflect.SelectCase for the given channel operation.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// timeout
@@ -1236,7 +1236,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async_timeout = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion12 = var_clojure_DOT_core_DOT_async_timeout.RootVersion()
 		var_clojure_DOT_core_DOT_async_timeout.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(91), kw_column, int(7), kw_end_DASH_line, int(91), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_msecs)), kw_doc, "Returns a channel that will close after msecs", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(91), kw_column, int(7), kw_end_DASH_line, int(91), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_msecs)), kw_doc, "Returns a channel that will close after msecs", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// try-put
@@ -1324,7 +1324,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async_try_DASH_put = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion13 = var_clojure_DOT_core_DOT_async_try_DASH_put.RootVersion()
 		var_clojure_DOT_core_DOT_async_try_DASH_put.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Returns true if val was sent on the port, false if sending would\n  block", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(118), kw_end_DASH_line, int(118), kw_private, true)
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(118), kw_column, int(8), kw_end_DASH_line, int(118), kw_end_DASH_column, int(14), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Returns true if val was sent on the port, false if sending would\n  block", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// try-take
@@ -1504,7 +1504,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async_try_DASH_take = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion14 = var_clojure_DOT_core_DOT_async_try_DASH_take.RootVersion()
 		var_clojure_DOT_core_DOT_async_try_DASH_take.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Returns [val true] if val was received from the port, [nil false] if the channel was closed,\n  and nil if receiving would block.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(15), kw_column, int(8), kw_line, int(127), kw_end_DASH_line, int(127), kw_private, true)
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(127), kw_column, int(8), kw_end_DASH_line, int(127), kw_end_DASH_column, int(15), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Returns [val true] if val was received from the port, [nil false] if the channel was closed,\n  and nil if receiving would block.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// do-alts
@@ -1632,49 +1632,45 @@ func LoadNS() {
 				var v42 any = tmp40
 				_ = v42
 				// let binding "chosen"
-				tmp43, _ := lang.FieldOrMethod(runtime.RT, "Get")
-				if reflect.TypeOf(tmp43).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
-				}
-				tmp44 := lang.Apply2(tmp43, v9, v36)
-				var v45 any = tmp44
-				_ = v45
-				var tmp46 any
-				tmp47 := aotExternalFn8(v45)
-				if lang.IsTruthy(tmp47) {
-					tmp48 := lang.Apply1(v45, int64(0))
-					tmp49 := lang.NewVector(true, tmp48)
-					tmp46 = tmp49
+				tmp43 := runtime.RT.Get(v9, v36)
+				var v44 any = tmp43
+				_ = v44
+				var tmp45 any
+				tmp46 := aotExternalFn8(v44)
+				if lang.IsTruthy(tmp46) {
+					tmp47 := lang.Apply1(v44, int64(0))
+					tmp48 := lang.NewVector(true, tmp47)
+					tmp45 = tmp48
 				} else {
-					var tmp50 any
-					tmp51 := aotExternalFn29(v12, v36)
-					if lang.IsTruthy(tmp51) {
-						tmp52 := kw_default.Invoke1(v3)
-						tmp53 := lang.NewVector(tmp52, kw_default)
-						tmp50 = tmp53
+					var tmp49 any
+					tmp50 := aotExternalFn29(v12, v36)
+					if lang.IsTruthy(tmp50) {
+						tmp51 := kw_default.Invoke1(v3)
+						tmp52 := lang.NewVector(tmp51, kw_default)
+						tmp49 = tmp52
 					} else {
-						var tmp54 any
+						var tmp53 any
 						if lang.IsTruthy(v42) {
-							tmp55, ok := lang.FieldOrMethod(v39, "Interface")
+							tmp54, ok := lang.FieldOrMethod(v39, "Interface")
 							if !ok {
 								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v39, "Interface")))
 							}
-							var tmp56 any
-							switch reflect.TypeOf(tmp55).Kind() {
+							var tmp55 any
+							switch reflect.TypeOf(tmp54).Kind() {
 							case reflect.Func:
-								tmp56 = lang.Apply(tmp55, nil)
+								tmp55 = lang.Apply(tmp54, nil)
 							default:
-								tmp56 = tmp55
+								tmp55 = tmp54
 							}
-							tmp54 = tmp56
+							tmp53 = tmp55
 						} else {
 						}
-						tmp57 := lang.NewVector(tmp54, v45)
-						tmp50 = tmp57
+						tmp56 := lang.NewVector(tmp53, v44)
+						tmp49 = tmp56
 					}
-					tmp46 = tmp50
+					tmp45 = tmp49
 				}
-				tmp7 = tmp46
+				tmp7 = tmp45
 			} // end let
 			return tmp7
 		})
@@ -1682,7 +1678,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async_do_DASH_alts = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion8 = var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion()
 		var_clojure_DOT_core_DOT_async_do_DASH_alts.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym_opts)), kw_doc, "returns derefable [val port] if immediate, nil if enqueued", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(8), kw_line, int(165), kw_end_DASH_line, int(165), kw_private, true)
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(165), kw_column, int(8), kw_end_DASH_line, int(165), kw_end_DASH_column, int(14), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym_opts)), kw_doc, "returns derefable [val port] if immediate, nil if enqueued", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// offer!
@@ -1723,7 +1719,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async_offer_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion9 = var_clojure_DOT_core_DOT_async_offer_BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async_offer_BANG_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(143), kw_column, int(7), kw_end_DASH_line, int(143), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Puts a val into port if it's possible to do so immediately.\n   nil values are not allowed. Never blocks. Returns true if offer succeeds.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(143), kw_column, int(7), kw_end_DASH_line, int(143), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Puts a val into port if it's possible to do so immediately.\n   nil values are not allowed. Never blocks. Returns true if offer succeeds.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// poll!
@@ -1785,7 +1781,7 @@ func LoadNS() {
 		var_clojure_DOT_core_DOT_async_poll_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion10 = var_clojure_DOT_core_DOT_async_poll_BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async_poll_BANG_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(150), kw_column, int(7), kw_end_DASH_line, int(150), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Takes a val from port if it's possible to do so immediately.\n   Never blocks. Returns value if successful, nil otherwise.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(150), kw_column, int(7), kw_end_DASH_line, int(150), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Takes a val from port if it's possible to do so immediately.\n   Never blocks. Returns value if successful, nil otherwise.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// alts!
@@ -1876,7 +1872,7 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_DOT_async_alts_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_async_alts_BANG_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(185), kw_column, int(7), kw_end_DASH_line, int(185), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym__AMP_, lang.NewMap(kw_as, sym_opts))), kw_doc, "Completes at most one of several channel operations. Must ports is a\n  vector of channel endpoints, which can be either a channel to take\n  from or a vector of [channel-to-put-to val-to-put], in any\n  combination.  Takes will be made as if by <!, and puts will be made\n  as if by >!. Unless the :priority option is true, if more than one\n  port operation is ready a non-deterministic choice will be made. If\n  no operation is ready and a :default value is\n  supplied, [default-val :default] will be returned, otherwise alts!\n  will park until the first operation to become ready\n  completes. Returns [val port] of the completed operation, where val\n  is the value taken for takes, and true for puts.\n\n  opts are passed as :key val ... Supported options:\n\n  :default val - the value to use if none of the operations are immediately ready\n  :priority true - (default nil) when true, the operations will be tried in order.\n\n  Note: there is no guarantee that the port exps or val exprs will be\n  used, nor in what order should they be, so they should not be\n  depended upon for side effects.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(185), kw_column, int(7), kw_end_DASH_line, int(185), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym__AMP_, lang.NewMap(kw_as, sym_opts))), kw_doc, "Completes at most one of several channel operations. Must ports is a\n  vector of channel endpoints, which can be either a channel to take\n  from or a vector of [channel-to-put-to val-to-put], in any\n  combination.  Takes will be made as if by <!, and puts will be made\n  as if by >!. Unless the :priority option is true, if more than one\n  port operation is ready a non-deterministic choice will be made. If\n  no operation is ready and a :default value is\n  supplied, [default-val :default] will be returned, otherwise alts!\n  will park until the first operation to become ready\n  completes. Returns [val port] of the completed operation, where val\n  is the value taken for takes, and true for puts.\n\n  opts are passed as :key val ... Supported options:\n\n  :default val - the value to use if none of the operations are immediately ready\n  :priority true - (default nil) when true, the operations will be tried in order.\n\n  Note: there is no guarantee that the port exps or val exprs will be\n  used, nor in what order should they be, so they should not be\n  depended upon for side effects.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
 	}
 	// alts!!
@@ -2004,7 +2000,7 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_DOT_async_alt_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_async_alt_BANG_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_clauses)), kw_doc, "Makes a single choice between one of several channel operations,\n  as if by alts!, returning the value of the result expr corresponding\n  to the operation completed.\n\n  Each clause takes the form of:\n\n  channel-op[s] result-expr\n\n  where channel-ops is one of:\n\n  take-port - a single port to take\n  [take-port | [put-port put-val] ...] - a vector of ports as per alts!\n  :default | :priority - an option for alts!\n\n  and result-expr is either a list beginning with a vector, whereupon that\n  vector will be treated as a binding for the [val port] return of the\n  operation, else any other expression.\n\n  (alt!\n    [c t] ([val ch] (foo ch val))\n    x ([v] v)\n    [[out val]] :wrote\n    :default 42)\n\n  Each option may appear at most once. The choice and parking\n  characteristics are those of alts!.", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(14), kw_column, int(11), kw_line, int(250), kw_end_DASH_line, int(250))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(250), kw_column, int(11), kw_end_DASH_line, int(250), kw_end_DASH_column, int(14), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_clauses)), kw_doc, "Makes a single choice between one of several channel operations,\n  as if by alts!, returning the value of the result expr corresponding\n  to the operation completed.\n\n  Each clause takes the form of:\n\n  channel-op[s] result-expr\n\n  where channel-ops is one of:\n\n  take-port - a single port to take\n  [take-port | [put-port put-val] ...] - a vector of ports as per alts!\n  :default | :priority - an option for alts!\n\n  and result-expr is either a list beginning with a vector, whereupon that\n  vector will be treated as a binding for the [val port] return of the\n  operation, else any other expression.\n\n  (alt!\n    [c t] ([val ch] (foo ch val))\n    x ([v] v)\n    [[out val]] :wrote\n    :default 42)\n\n  Each option may appear at most once. The choice and parking\n  characteristics are those of alts!.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_macro, true)
 		})
 	}
 	// alt!!
@@ -2040,7 +2036,7 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_DOT_async_alt_BANG__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_async_alt_BANG__BANG_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(281), kw_column, int(11), kw_end_DASH_line, int(281), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_macro, true)
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(281), kw_column, int(11), kw_end_DASH_line, int(281), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_args)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_macro, true)
 		})
 	}
 	// do-alt
@@ -2787,7 +2783,7 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_DOT_async_go = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_async_go.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Asynchronously executes the body, returning immediately to the\n  calling thread. Additionally, any visible calls to <!, >! and alt!/alts!\n  channel operations within the body will block (if necessary) by\n  'parking' the calling thread rather than tying up an OS thread (or\n  the only JS thread when in ClojureScript). Upon completion of the\n  operation, the body will be resumed.\n\n  Unlike in Clojure or ClojureScript, go blocks may (either directly\n  or indirectly) perform operations that may block indefinitely, as go\n  blocks are run on goroutines, which relinquish the thread of control\n  when parked.\n\n  Returns a channel which will receive the result of the body when\n  completed", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(12), kw_column, int(11), kw_line, int(67), kw_end_DASH_line, int(67))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(67), kw_column, int(11), kw_end_DASH_line, int(67), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_body)), kw_doc, "Asynchronously executes the body, returning immediately to the\n  calling thread. Additionally, any visible calls to <!, >! and alt!/alts!\n  channel operations within the body will block (if necessary) by\n  'parking' the calling thread rather than tying up an OS thread (or\n  the only JS thread when in ClojureScript). Upon completion of the\n  operation, the body will be resumed.\n\n  Unlike in Clojure or ClojureScript, go blocks may (either directly\n  or indirectly) perform operations that may block indefinitely, as go\n  blocks are run on goroutines, which relinquish the thread of control\n  when parked.\n\n  Returns a channel which will receive the result of the body when\n  completed", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_macro, true)
 		})
 	}
 	// go-loop
@@ -2839,7 +2835,7 @@ func LoadNS() {
 		)
 		var_clojure_DOT_core_DOT_async_go_DASH_loop = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_DOT_async_go_DASH_loop.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "Like (go (loop ...))", kw_file, "clojure/core/async.glj", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_end_DASH_column, int(17), kw_column, int(11), kw_line, int(287), kw_end_DASH_line, int(287))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(287), kw_column, int(11), kw_end_DASH_line, int(287), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_bindings, sym__AMP_, sym_body)), kw_doc, "Like (go (loop ...))", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async), kw_macro, true)
 		})
 	}
 }

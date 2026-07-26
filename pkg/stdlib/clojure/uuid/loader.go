@@ -184,7 +184,7 @@ func LoadNS() {
 		var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion0 = var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader.RootVersion()
 		var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "clojure/uuid.glj", kw_line, int(11), kw_column, int(8), kw_end_DASH_line, int(11), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_uuid))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/uuid.glj", kw_line, int(11), kw_column, int(8), kw_end_DASH_line, int(11), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_uuid))
 		})
 	}
 }

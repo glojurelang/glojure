@@ -464,7 +464,7 @@ func LoadNS() {
 		var_clojure_DOT_walk_keywordize_DASH_keys = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion0 = var_clojure_DOT_walk_keywordize_DASH_keys.RootVersion()
 		var_clojure_DOT_walk_keywordize_DASH_keys.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from strings to keywords.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(94), kw_end_DASH_line, int(94))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(94), kw_column, int(7), kw_end_DASH_line, int(94), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from strings to keywords.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 	// macroexpand-all
@@ -505,7 +505,7 @@ func LoadNS() {
 		var_clojure_DOT_walk_macroexpand_DASH_all = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion1 = var_clojure_DOT_walk_macroexpand_DASH_all.RootVersion()
 		var_clojure_DOT_walk_macroexpand_DASH_all.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Recursively performs all possible macroexpansions in form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(126), kw_end_DASH_line, int(126))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(126), kw_column, int(7), kw_end_DASH_line, int(126), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Recursively performs all possible macroexpansions in form.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 	// postwalk
@@ -536,7 +536,7 @@ func LoadNS() {
 		var_clojure_DOT_walk_postwalk = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion2 = var_clojure_DOT_walk_postwalk.RootVersion()
 		var_clojure_DOT_walk_postwalk.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Performs a depth-first, post-order traversal of form.  Calls f on\n  each sub-form, uses f's return value in place of the original.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(14), kw_column, int(7), kw_line, int(53), kw_end_DASH_line, int(53))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(14), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Performs a depth-first, post-order traversal of form.  Calls f on\n  each sub-form, uses f's return value in place of the original.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 	// postwalk-demo
@@ -573,7 +573,7 @@ func LoadNS() {
 		var_clojure_DOT_walk_postwalk_DASH_demo = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion3 = var_clojure_DOT_walk_postwalk_DASH_demo.RootVersion()
 		var_clojure_DOT_walk_postwalk_DASH_demo.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of postwalk by printing each form as it is\n  walked.  Returns form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(19), kw_column, int(7), kw_line, int(80), kw_end_DASH_line, int(80))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(80), kw_column, int(7), kw_end_DASH_line, int(80), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of postwalk by printing each form as it is\n  walked.  Returns form.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 	// postwalk-replace
@@ -616,7 +616,7 @@ func LoadNS() {
 		var_clojure_DOT_walk_postwalk_DASH_replace = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion4 = var_clojure_DOT_walk_postwalk_DASH_replace.RootVersion()
 		var_clojure_DOT_walk_postwalk_DASH_replace.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the leaves of the tree first.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(22), kw_column, int(7), kw_line, int(118), kw_end_DASH_line, int(118))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(118), kw_column, int(7), kw_end_DASH_line, int(118), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the leaves of the tree first.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 	// stringify-keys
@@ -709,7 +709,7 @@ func LoadNS() {
 		var_clojure_DOT_walk_stringify_DASH_keys = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion8 = var_clojure_DOT_walk_stringify_DASH_keys.RootVersion()
 		var_clojure_DOT_walk_stringify_DASH_keys.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from keywords to strings.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(20), kw_column, int(7), kw_line, int(102), kw_end_DASH_line, int(102))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(102), kw_column, int(7), kw_end_DASH_line, int(102), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from keywords to strings.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 	// prewalk
@@ -742,7 +742,7 @@ func LoadNS() {
 		var_clojure_DOT_walk_prewalk = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion5 = var_clojure_DOT_walk_prewalk.RootVersion()
 		var_clojure_DOT_walk_prewalk.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Like postwalk, but does pre-order traversal.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(13), kw_column, int(7), kw_line, int(61), kw_end_DASH_line, int(61))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(61), kw_column, int(7), kw_end_DASH_line, int(61), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Like postwalk, but does pre-order traversal.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 	// prewalk-demo
@@ -779,7 +779,7 @@ func LoadNS() {
 		var_clojure_DOT_walk_prewalk_DASH_demo = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion6 = var_clojure_DOT_walk_prewalk_DASH_demo.RootVersion()
 		var_clojure_DOT_walk_prewalk_DASH_demo.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of prewalk by printing each form as it is\n  walked.  Returns form.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(18), kw_column, int(7), kw_line, int(87), kw_end_DASH_line, int(87))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(87), kw_column, int(7), kw_end_DASH_line, int(87), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of prewalk by printing each form as it is\n  walked.  Returns form.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 	// prewalk-replace
@@ -822,7 +822,7 @@ func LoadNS() {
 		var_clojure_DOT_walk_prewalk_DASH_replace = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion7 = var_clojure_DOT_walk_prewalk_DASH_replace.RootVersion()
 		var_clojure_DOT_walk_prewalk_DASH_replace.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the root of the tree first.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(21), kw_column, int(7), kw_line, int(110), kw_end_DASH_line, int(110))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(110), kw_column, int(7), kw_end_DASH_line, int(110), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the root of the tree first.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 	// walk
@@ -919,7 +919,7 @@ func LoadNS() {
 		var_clojure_DOT_walk_walk = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion9 = var_clojure_DOT_walk_walk.RootVersion()
 		var_clojure_DOT_walk_walk.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_inner, sym_outer, sym_form)), kw_doc, "Traverses form, an arbitrary data structure.  inner and outer are\n  functions.  Applies inner to each element of form, building up a\n  data structure of the same type, then applies outer to the result.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_file, "clojure/walk.glj", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(35), kw_end_DASH_line, int(35))
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(35), kw_column, int(7), kw_end_DASH_line, int(35), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(sym_inner, sym_outer, sym_form)), kw_doc, "Traverses form, an arbitrary data structure.  inner and outer are\n  functions.  Applies inner to each element of form, building up a\n  data structure of the same type, then applies outer to the result.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 }

@@ -330,21 +330,17 @@ func LoadNS() {
 				var v5 any = tmp4
 				_ = v5
 				// let binding "typ"
-				tmp6, _ := lang.FieldOrMethod(runtime.RT, "Get")
-				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
-				}
-				tmp7 := lang.Apply2(tmp6, lang.BuiltinTypes, v5)
-				var v8 any = tmp7
-				_ = v8
-				var tmp9 any
-				if lang.IsTruthy(v8) {
+				tmp6 := runtime.RT.Get(lang.BuiltinTypes, v5)
+				var v7 any = tmp6
+				_ = v7
+				var tmp8 any
+				if lang.IsTruthy(v7) {
 				} else {
-					tmp10 := lang.Apply2(fmt.Errorf, "unknown type %s", v5)
-					panic(tmp10)
+					tmp9 := lang.Apply2(fmt.Errorf, "unknown type %s", v5)
+					panic(tmp9)
 				}
-				_ = tmp9
-				tmp2 = v8
+				_ = tmp8
+				tmp2 = v7
 			} // end let
 			return tmp2
 		})
@@ -592,7 +588,7 @@ func LoadNS() {
 		var_glojure_DOT_go_DOT_types_from_DASH_string = ns.InternWithValue(tmp0, tmp1, true)
 		aotRootVersion0 = var_glojure_DOT_go_DOT_types_from_DASH_string.RootVersion()
 		var_glojure_DOT_go_DOT_types_from_DASH_string.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(92), kw_column, int(7), kw_end_DASH_line, int(92), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_typ)), kw_doc, "Returns a Go type from a go type expression.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
+			return lang.NewMapUniqueKeys(kw_file, "glojure/go/types.glj", kw_line, int(92), kw_column, int(7), kw_end_DASH_line, int(92), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_typ)), kw_doc, "Returns a Go type from a go type expression.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
 		})
 	}
 	// struct-field
@@ -766,7 +762,7 @@ func LoadNS() {
 		)
 		var_glojure_DOT_go_DOT_types_struct_DASH_field = ns.InternWithValue(tmp0, tmp1, true)
 		var_glojure_DOT_go_DOT_types_struct_DASH_field.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(6), kw_column, int(8), kw_end_DASH_line, int(6), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_type_DASH_ast), lang.NewVector(sym_type_DASH_ast, sym_name)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
+			return lang.NewMapUniqueKeys(kw_file, "glojure/go/types.glj", kw_line, int(6), kw_column, int(8), kw_end_DASH_line, int(6), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_type_DASH_ast), lang.NewVector(sym_type_DASH_ast, sym_name)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
 		})
 	}
 	{

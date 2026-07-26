@@ -456,7 +456,7 @@ func LoadNS() {
 		tmp1 := reflect.TypeOf([]uint8(nil))
 		var_glojure_DOT_go_DOT_io_byte_DASH_array_DASH_type = ns.InternWithValue(tmp0, tmp1, true)
 		var_glojure_DOT_go_DOT_io_byte_DASH_array_DASH_type.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_doc, "Type object for a Go primitive byte slice.", kw_private, true, kw_file, "glojure/go/io.glj", kw_line, int(16), kw_column, int(5), kw_end_DASH_line, int(19), kw_end_DASH_column, int(16), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
+			return lang.NewMapUniqueKeys(kw_doc, "Type object for a Go primitive byte slice.", kw_private, true, kw_file, "glojure/go/io.glj", kw_line, int(16), kw_column, int(5), kw_end_DASH_line, int(19), kw_end_DASH_column, int(16), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
 		})
 	}
 	// do-copy
@@ -595,7 +595,7 @@ func LoadNS() {
 		tmp1.AddMethod(lang.NewVector(tmp3, tmp4), tmp5)
 		var_glojure_DOT_go_DOT_io_do_DASH_copy = ns.InternWithValue(tmp0, tmp1, true)
 		var_glojure_DOT_go_DOT_io_do_DASH_copy.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_input, sym_output, sym_opts)), kw_doc, "Internal helper for copy", kw_file, "glojure/go/io.glj", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_end_DASH_column, int(9), kw_column, int(3), kw_line, int(296), kw_end_DASH_line, int(299), kw_private, true)
+			return lang.NewMapUniqueKeys(kw_doc, "Internal helper for copy", kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_input, sym_output, sym_opts)), kw_file, "glojure/go/io.glj", kw_line, int(296), kw_column, int(3), kw_end_DASH_line, int(299), kw_end_DASH_column, int(9), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
 		})
 	}
 	// make-input-stream
@@ -2215,7 +2215,7 @@ func LoadNS() {
 		)
 		var_glojure_DOT_go_DOT_io_copy = ns.InternWithValue(tmp0, tmp1, true)
 		var_glojure_DOT_go_DOT_io_copy.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_arglists, lang.NewList(lang.NewVector(sym_input, sym_output, sym__AMP_, sym_opts)), kw_doc, "Copies input to output.  Returns nil or throws IOException.\n  Input may be an InputStream, Reader, File, byte[], char[], or String.\n  Output may be an OutputStream, Writer, or File.\n\n  Options are key/value pairs and may be one of\n\n    :buffer-size  buffer size to use, default is 1024.\n    :encoding     encoding to use if converting between\n                  byte and char streams.   \n\n  Does not close any streams except those it opens itself \n  (on a File).", kw_file, "glojure/go/io.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_end_DASH_column, int(10), kw_column, int(7), kw_line, int(386), kw_end_DASH_line, int(386))
+			return lang.NewMapUniqueKeys(kw_file, "glojure/go/io.glj", kw_line, int(386), kw_column, int(7), kw_end_DASH_line, int(386), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(sym_input, sym_output, sym__AMP_, sym_opts)), kw_doc, "Copies input to output.  Returns nil or throws IOException.\n  Input may be an InputStream, Reader, File, byte[], char[], or String.\n  Output may be an OutputStream, Writer, or File.\n\n  Options are key/value pairs and may be one of\n\n    :buffer-size  buffer size to use, default is 1024.\n    :encoding     encoding to use if converting between\n                  byte and char streams.   \n\n  Does not close any streams except those it opens itself \n  (on a File).", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
 		})
 	}
 	// go-try!
@@ -2403,7 +2403,7 @@ func LoadNS() {
 					tmp115 = lang.Apply1(tmp116, tmp114)
 				}
 				tmp117 := lang.Apply1(tmp98, tmp115)
-				tmp118 := lang.Apply(tmp9, []any{tmp11, tmp16, tmp43, tmp95, tmp97, tmp117})
+				tmp118 := lang.Apply6(tmp9, tmp11, tmp16, tmp43, tmp95, tmp97, tmp117)
 				var tmp119 any
 				if aotExternalDefault10 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion10 {
 					tmp119 = lang.Seq(tmp118)
@@ -2457,7 +2457,7 @@ func LoadNS() {
 		)
 		var_glojure_DOT_go_DOT_io_go_DASH_try_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
 		var_glojure_DOT_go_DOT_io_go_DASH_try_BANG_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_macro, true, kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_call)), kw_file, "glojure/go/io.glj", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_end_DASH_column, int(27), kw_column, int(11), kw_line, int(21), kw_end_DASH_line, int(21), kw_private, true)
+			return lang.NewMapUniqueKeys(kw_private, true, kw_file, "glojure/go/io.glj", kw_line, int(21), kw_column, int(11), kw_end_DASH_line, int(21), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_call)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_macro, true)
 		})
 	}
 	// reader
@@ -2491,7 +2491,7 @@ func LoadNS() {
 		var_glojure_DOT_go_DOT_io_reader = ns.InternWithValue(tmp0, tmp1, true)
 		var_glojure_DOT_go_DOT_io_reader.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
-			return lang.NewMap(kw_tag, tmp2, kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_opts)), kw_doc, "Attempts to coerce its argument into an open io.Reader.\n\n   Default implementations are provided for Reader, BufferedReader,\n   InputStream, File, URI, URL, Socket, byte slices, rune slices,\n   and string.\n\n   If argument is a string, it tries to resolve it first as a URI, then\n   as a local file name.  URIs with a 'file' protocol are converted to\n   local file names.\n\n   Should be used inside with-open to ensure the io.Reader is properly\n   closed.", kw_file, "glojure/go/io.glj", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io), kw_end_DASH_column, int(23), kw_column, int(7), kw_line, int(89), kw_end_DASH_line, int(89))
+			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "glojure/go/io.glj", kw_line, int(89), kw_column, int(7), kw_end_DASH_line, int(89), kw_end_DASH_column, int(23), kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_opts)), kw_doc, "Attempts to coerce its argument into an open io.Reader.\n\n   Default implementations are provided for Reader, BufferedReader,\n   InputStream, File, URI, URL, Socket, byte slices, rune slices,\n   and string.\n\n   If argument is a string, it tries to resolve it first as a URI, then\n   as a local file name.  URIs with a 'file' protocol are converted to\n   local file names.\n\n   Should be used inside with-open to ensure the io.Reader is properly\n   closed.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
 		})
 	}
 }

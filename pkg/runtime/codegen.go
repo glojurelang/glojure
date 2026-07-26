@@ -2683,7 +2683,14 @@ func inferredHostType(target *ast.Node) (reflect.Type, bool) {
 	if tag == nil {
 		return nil, false
 	}
-	value, ok := pkgmap.Get(tag.FullName())
+	tagName := tag.FullName()
+	value, ok := pkgmap.Get(tagName)
+	if !ok && strings.HasPrefix(tagName, "clojure.lang.") {
+		value, ok = pkgmap.Get(
+			"github.com/glojurelang/glojure/pkg/lang." +
+				strings.TrimPrefix(tagName, "clojure.lang."),
+		)
+	}
 	if !ok {
 		return nil, false
 	}
