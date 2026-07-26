@@ -94,3 +94,45 @@ func ToSlice(x any) []any {
 	// Error with Clojure-style message
 	panic(NewIllegalArgumentError(fmt.Sprintf("Unable to convert: %T to Object[]", x)))
 }
+
+// SeqToTypedArray implements Clojure's one- and two-argument
+// clojure.lang.RT/seqToTypedArray overloads using Go slices.
+func SeqToTypedArray(args ...any) any {
+	if len(args) != 1 && len(args) != 2 {
+		panic(NewIllegalArgumentError(
+			fmt.Sprintf("seqToTypedArray expects 1 or 2 arguments, got %d", len(args)),
+		))
+	}
+
+	var typ reflect.Type
+	var values []any
+	if len(args) == 1 {
+		values = seqToSlice(Seq(args[0]))
+		if len(values) == 0 || values[0] == nil {
+			typ = BuiltinTypes["any"]
+		} else {
+			typ = reflect.TypeOf(values[0])
+		}
+	} else {
+		var ok bool
+		typ, ok = args[0].(reflect.Type)
+		if !ok {
+			panic(NewIllegalArgumentError(
+				fmt.Sprintf("array component type must be reflect.Type, got %T", args[0]),
+			))
+		}
+		values = seqToSlice(Seq(args[1]))
+	}
+
+	result := reflect.MakeSlice(reflect.SliceOf(typ), len(values), len(values))
+	for i, value := range values {
+		coerced, err := coerceGoValue(typ, value)
+		if err != nil {
+			panic(NewIllegalArgumentError(
+				fmt.Sprintf("cannot convert array element %d from %T to %s", i, value, typ),
+			))
+		}
+		result.Index(i).Set(coerced)
+	}
+	return result.Interface()
+}

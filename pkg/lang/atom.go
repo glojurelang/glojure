@@ -1,6 +1,9 @@
 package lang
 
-import "sync/atomic"
+import (
+	"sync"
+	"sync/atomic"
+)
 
 type (
 	Atom struct {
@@ -8,7 +11,9 @@ type (
 		initial Box
 		watches IPersistentMap
 
-		meta IPersistentMap
+		referenceMu sync.RWMutex
+		meta        IPersistentMap
+		validator   IFn
 	}
 )
 
@@ -36,8 +41,34 @@ func (a *Atom) Deref() interface{} {
 	return a.state.Load().val
 }
 
-func (a *Atom) SetValidator(vf IFn) { panic("not implemented") }
-func (a *Atom) Validator() IFn      { panic("not implemented") }
+func (a *Atom) SetValidator(vf IFn) {
+	if vf != nil && !IsTruthy(Apply1(vf, a.Deref())) {
+		panic(NewIllegalStateError("Invalid reference state"))
+	}
+	a.referenceMu.Lock()
+	a.validator = vf
+	a.referenceMu.Unlock()
+}
+
+func (a *Atom) Validator() IFn {
+	a.referenceMu.RLock()
+	defer a.referenceMu.RUnlock()
+	return a.validator
+}
+
+func (a *Atom) GetValidator() IFn {
+	return a.Validator()
+}
+
+func (a *Atom) validate(newVal any) {
+	a.referenceMu.RLock()
+	validator := a.validator
+	a.referenceMu.RUnlock()
+	if validator != nil && !IsTruthy(Apply1(validator, newVal)) {
+		panic(NewIllegalStateError("Invalid reference state"))
+	}
+}
+
 func (a *Atom) Watches() IPersistentMap {
 	return a.watches
 }
@@ -118,7 +149,7 @@ func (a *Atom) CompareAndSet(oldv, newv interface{}) bool {
 }
 
 func (a *Atom) compareAndSetBox(old *Box, newv interface{}) bool {
-	// TODO: validate
+	a.validate(newv)
 	if Identical(old.val, newv) &&
 		(a.watches == nil || a.watches.Count() == 0) {
 		return a.state.CompareAndSwap(old, old)
@@ -131,7 +162,7 @@ func (a *Atom) compareAndSetBox(old *Box, newv interface{}) bool {
 }
 
 func (a *Atom) Reset(newVal interface{}) interface{} {
-	// TODO: validate
+	a.validate(newVal)
 	for {
 		old := a.state.Load()
 		if Identical(old.val, newVal) &&
@@ -148,8 +179,22 @@ func (a *Atom) Reset(newVal interface{}) interface{} {
 }
 
 func (a *Atom) Meta() IPersistentMap {
-	if a.meta == nil {
-		return nil
-	}
+	a.referenceMu.RLock()
+	defer a.referenceMu.RUnlock()
 	return a.meta
+}
+
+func (a *Atom) AlterMeta(f IFn, args ISeq) IPersistentMap {
+	meta := f.ApplyTo(NewCons(a.Meta(), args))
+	if meta == nil {
+		return a.ResetMeta(nil)
+	}
+	return a.ResetMeta(meta.(IPersistentMap))
+}
+
+func (a *Atom) ResetMeta(meta IPersistentMap) IPersistentMap {
+	a.referenceMu.Lock()
+	a.meta = meta
+	a.referenceMu.Unlock()
+	return meta
 }

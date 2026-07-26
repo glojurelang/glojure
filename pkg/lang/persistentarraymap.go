@@ -1,16 +1,17 @@
 package lang
 
 import (
+	"errors"
 	"fmt"
 )
 
 const (
 	hashmapThreshold   = 16
-	arrayMapInlineSize = hashmapThreshold - 2
+	arrayMapInlineSize = hashmapThreshold
 )
 
 type (
-	// Map represents a map of glojure values.
+	// Map is Glojure's persistent array map.
 	Map struct {
 		meta         IPersistentMap
 		hash, hasheq uint32
@@ -76,10 +77,14 @@ func NewMap(keyVals ...any) IPersistentMap {
 		panic("invalid map. must have even number of inputs")
 	}
 
-	if len(keyVals) >= hashmapThreshold {
+	if len(keyVals) > hashmapThreshold {
 		return NewPersistentHashMap(keyVals...)
 	}
 
+	return newPersistentArrayMap(keyVals)
+}
+
+func newPersistentArrayMap(keyVals []any) *Map {
 	m := &Map{}
 	if len(keyVals) <= len(m.inline) {
 		copy(m.inline[:], keyVals)
@@ -90,8 +95,27 @@ func NewMap(keyVals ...any) IPersistentMap {
 	return m
 }
 
+func (m *Map) assocNew(k, v any) *Map {
+	result := &Map{meta: m.meta}
+	newLen := len(m.keyVals) + 2
+	if newLen <= len(result.inline) {
+		result.keyVals = result.inline[:newLen]
+	} else {
+		result.keyVals = make([]any, newLen)
+	}
+	copy(result.keyVals, m.keyVals)
+	result.keyVals[newLen-2] = k
+	result.keyVals[newLen-1] = v
+	return result
+}
+
+func (m *Map) shouldPromote() bool {
+	return len(m.keyVals) >= hashmapThreshold
+}
+
 func NewPersistentArrayMapAsIfByAssoc(init []any) IPersistentMap {
-	complexPath := (len(init) & 1) == 1
+	hasTrailing := (len(init) & 1) == 1
+	complexPath := hasTrailing
 	for i := 0; i < len(init) && !complexPath; i += 2 {
 		for j := 0; j < i; j += 2 {
 			if equalKey(init[i], init[j]) {
@@ -102,13 +126,28 @@ func NewPersistentArrayMapAsIfByAssoc(init []any) IPersistentMap {
 	}
 
 	if complexPath {
-		return newPersistentArrayMapAsIfByAssocComplexPath(init)
+		return newPersistentArrayMapAsIfByAssocComplexPath(init, hasTrailing)
 	}
 
-	return NewMap(init...)
+	return newPersistentArrayMap(init)
 }
 
-func newPersistentArrayMapAsIfByAssocComplexPath(init []any) IPersistentMap {
+func newPersistentArrayMapAsIfByAssocComplexPath(init []any, hasTrailing bool) IPersistentMap {
+	if hasTrailing {
+		trailing := emptyMap.Cons(init[len(init)-1]).(IPersistentMap)
+		seedCount := len(init) - 1
+		grown := make([]any, seedCount+trailing.Count()*2)
+		copy(grown, init[:seedCount])
+		i := seedCount
+		for seq := trailing.Seq(); seq != nil; seq = seq.Next() {
+			entry := seq.First().(IMapEntry)
+			grown[i] = entry.Key()
+			grown[i+1] = entry.Val()
+			i += 2
+		}
+		init = grown
+	}
+
 	n := 0
 	for i := 0; i < len(init); i += 2 {
 		duplicateKey := false
@@ -153,7 +192,29 @@ func newPersistentArrayMapAsIfByAssocComplexPath(init []any) IPersistentMap {
 		}
 		init = nodups
 	}
-	return NewMap(init...)
+	return newPersistentArrayMap(init)
+}
+
+func (m *Map) indexOf(key any) int {
+	if key, ok := key.(Keyword); ok {
+		return m.indexOfKeyword(key)
+	}
+
+	for i := 0; i < len(m.keyVals); i += 2 {
+		if Equiv(m.keyVals[i], key) {
+			return i
+		}
+	}
+	return -1
+}
+
+func (m *Map) indexOfKeyword(key Keyword) int {
+	for i := 0; i < len(m.keyVals); i += 2 {
+		if candidate, ok := m.keyVals[i].(Keyword); ok && key == candidate {
+			return i
+		}
+	}
+	return -1
 }
 
 func (m *Map) ValAt(key any) any {
@@ -161,35 +222,27 @@ func (m *Map) ValAt(key any) any {
 }
 
 func (m *Map) ValAtDefault(key, def any) any {
-	if kw, ok := key.(Keyword); ok {
-		return m.valAtKeyword(kw, def)
+	if key, ok := key.(Keyword); ok {
+		return m.valAtKeyword(key, def)
 	}
-
-	for i := 0; i < len(m.keyVals); i += 2 {
-		if Equiv(m.keyVals[i], key) {
-			return m.keyVals[i+1]
-		}
+	if i := m.indexOf(key); i >= 0 {
+		return m.keyVals[i+1]
 	}
 
 	return def
 }
 
 func (m *Map) valAtKeyword(key Keyword, def any) any {
-	for i := 0; i < len(m.keyVals); i += 2 {
-		if candidate, ok := m.keyVals[i].(Keyword); ok && key == candidate {
-			return m.keyVals[i+1]
-		}
+	if i := m.indexOfKeyword(key); i >= 0 {
+		return m.keyVals[i+1]
 	}
 	return def
 }
 
 func (m *Map) EntryAt(k any) IMapEntry {
-	for i := 0; i < len(m.keyVals); i += 2 {
-		if Equiv(m.keyVals[i], k) {
-			return NewMapEntry(m.keyVals[i], m.keyVals[i+1])
-		}
+	if i := m.indexOf(k); i >= 0 {
+		return NewMapEntry(m.keyVals[i], m.keyVals[i+1])
 	}
-
 	return nil
 }
 
@@ -204,34 +257,50 @@ func (m *Map) clone() *Map {
 }
 
 func (m *Map) Assoc(k, v any) Associative {
-	for i := 0; i < len(m.keyVals); i += 2 {
-		if Equiv(m.keyVals[i], k) {
-			newMap := m.clone()
-			newMap.keyVals[i+1] = v
-			return newMap
-		}
-	}
-	if len(m.keyVals) < hashmapThreshold {
+	if i := m.indexOf(k); i >= 0 {
 		newMap := m.clone()
-		newMap.keyVals = append(newMap.keyVals, k, v)
+		newMap.hash = 0
+		newMap.hasheq = 0
+		newMap.keyVals[i+1] = v
 		return newMap
+	}
+	if !m.shouldPromote() {
+		return m.assocNew(k, v)
 	}
 	newMap := NewPersistentHashMap(m.keyVals...).(*PersistentHashMap).WithMeta(m.meta).(Associative)
 	return newMap.Assoc(k, v)
 }
 
 func (m *Map) AssocEx(k, v any) IPersistentMap {
-	return apersistentmapAssocEx(m, k, v)
+	if m.indexOf(k) >= 0 {
+		panic(errors.New("key already present"))
+	}
+	if !m.shouldPromote() {
+		return m.assocNew(k, v)
+	}
+	newMap := NewPersistentHashMap(m.keyVals...).(*PersistentHashMap).WithMeta(m.meta).(IPersistentMap)
+	return newMap.AssocEx(k, v)
 }
 
 func (m *Map) Without(k any) IPersistentMap {
-	newKeyVals := make([]any, 0, len(m.keyVals))
-	for i := 0; i < len(m.keyVals); i += 2 {
-		if !Equiv(m.keyVals[i], k) {
-			newKeyVals = append(newKeyVals, m.keyVals[i], m.keyVals[i+1])
-		}
+	i := m.indexOf(k)
+	if i < 0 {
+		return m
 	}
-	return NewMap(newKeyVals...)
+	if len(m.keyVals) == 2 {
+		return emptyMap.WithMeta(m.meta).(IPersistentMap)
+	}
+
+	result := &Map{meta: m.meta}
+	newLen := len(m.keyVals) - 2
+	if newLen <= len(result.inline) {
+		result.keyVals = result.inline[:newLen]
+	} else {
+		result.keyVals = make([]any, newLen)
+	}
+	copy(result.keyVals, m.keyVals[:i])
+	copy(result.keyVals[i:], m.keyVals[i+2:])
+	return result
 }
 
 func (m *Map) Count() int {
@@ -284,7 +353,7 @@ func (m *Map) Cons(x any) Conser {
 }
 
 func (m *Map) ContainsKey(k any) bool {
-	return apersistentmapContainsKey(m, k)
+	return m.indexOf(k) >= 0
 }
 
 func (m *Map) Equiv(o any) bool {
@@ -331,8 +400,7 @@ func (m *Map) ReduceInit(f IFn, init any) any {
 }
 
 func (m *Map) AsTransient() ITransientCollection {
-	// TODO: implement transients
-	return &TransientMap{IPersistentMap: m}
+	return &TransientMap{IPersistentMap: m.clone()}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -379,18 +447,57 @@ func (m *TransientMap) ReduceInit(f IFn, init any) any {
 
 func (m *TransientMap) Conj(v any) Conjer {
 	m.ensureEditable()
-	m.IPersistentMap = m.IPersistentMap.Cons(v).(IPersistentMap)
+	switch v := v.(type) {
+	case IMapEntry:
+		m.Assoc(v.Key(), v.Val())
+	case IPersistentVector:
+		if v.Count() != 2 {
+			panic("vector arg to map conj must be a pair")
+		}
+		m.Assoc(MustNth(v, 0), MustNth(v, 1))
+	default:
+		for seq := Seq(v); seq != nil; seq = seq.Next() {
+			entry := seq.First().(IMapEntry)
+			m.Assoc(entry.Key(), entry.Val())
+		}
+	}
 	return m
 }
 
 func (m *TransientMap) Assoc(k, v any) Associative {
 	m.ensureEditable()
+	if arrayMap, ok := m.IPersistentMap.(*Map); ok {
+		if i := arrayMap.indexOf(k); i >= 0 {
+			arrayMap.keyVals[i+1] = v
+			arrayMap.hash = 0
+			arrayMap.hasheq = 0
+			return m
+		}
+		if !arrayMap.shouldPromote() {
+			arrayMap.keyVals = append(arrayMap.keyVals, k, v)
+			arrayMap.hash = 0
+			arrayMap.hasheq = 0
+			return m
+		}
+	}
 	m.IPersistentMap = m.IPersistentMap.Assoc(k, v).(IPersistentMap)
 	return m
 }
 
 func (m *TransientMap) Without(key any) IPersistentMap {
 	m.ensureEditable()
+	if arrayMap, ok := m.IPersistentMap.(*Map); ok {
+		if i := arrayMap.indexOf(key); i >= 0 {
+			newLen := len(arrayMap.keyVals) - 2
+			copy(arrayMap.keyVals[i:], arrayMap.keyVals[i+2:])
+			arrayMap.keyVals[newLen] = nil
+			arrayMap.keyVals[newLen+1] = nil
+			arrayMap.keyVals = arrayMap.keyVals[:newLen]
+			arrayMap.hash = 0
+			arrayMap.hasheq = 0
+		}
+		return m
+	}
 	m.IPersistentMap = m.IPersistentMap.Without(key).(IPersistentMap)
 	return m
 }
