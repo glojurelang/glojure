@@ -1,8 +1,56 @@
 package lang
 
 import (
+	"runtime"
 	"testing"
+	"unsafe"
 )
+
+func TestVectorInlineStorageIsSeparateFromLargeWrapper(t *testing.T) {
+	if got, withInline := unsafe.Sizeof(Vector{}), unsafe.Sizeof(inlineVectorStorage{}); got >= withInline {
+		t.Fatalf("Vector size = %d, want less than inline storage size %d", got, withInline)
+	}
+
+	large := NewVector(1, 2, 3, 4, 5)
+	if large.inline != nil {
+		t.Fatal("large vector retained inline storage")
+	}
+}
+
+func TestSmallVectorAssocUsesIndependentInlineStorage(t *testing.T) {
+	original := NewVector(1, 2, 3)
+	updated := original.AssocN(1, 20).(*Vector)
+	if got := original.Nth(1); got != 2 {
+		t.Fatalf("original value = %v, want 2", got)
+	}
+	if got := updated.Nth(1); got != 20 {
+		t.Fatalf("updated value = %v, want 20", got)
+	}
+
+	var result IPersistentVector
+	if got := testing.AllocsPerRun(1_000, func() {
+		result = original.AssocN(1, 20)
+	}); got != 1 {
+		t.Fatalf("small-vector assoc allocated %v objects per call, want 1", got)
+	}
+	runtime.KeepAlive(result)
+}
+
+func TestSmallVectorWithMetaKeepsInlineStorageAlive(t *testing.T) {
+	meta := NewMap(NewKeyword("source"), "test").(IPersistentMap)
+	withMeta := func() *Vector {
+		original := NewVector("value")
+		return original.WithMeta(meta).(*Vector)
+	}()
+	runtime.GC()
+
+	if got := withMeta.Nth(0); got != "value" {
+		t.Fatalf("value after WithMeta and GC = %v, want value", got)
+	}
+	if got := withMeta.Meta(); got != meta {
+		t.Fatalf("Meta() = %v, want %v", got, meta)
+	}
+}
 
 // TestVectorPopReturnsVector verifies that Vector.Pop returns a *Vector,
 // not a *SubVector.

@@ -15,9 +15,16 @@ type (
 		meta         IPersistentMap
 		hash, hasheq uint32
 
-		vec       vector.Vector
-		inlineLen uint8
-		inline    [vectorInlineSize]any
+		vec    vector.Vector
+		inline []any
+	}
+
+	// inlineVectorStorage keeps small vectors to one allocation without making
+	// every large Vector carry unused inline capacity. A pointer to Vector keeps
+	// its owner alive.
+	inlineVectorStorage struct {
+		Vector
+		values [vectorInlineSize]any
 	}
 
 	PersistentVector = Vector
@@ -48,13 +55,19 @@ func NewVector(values ...any) *Vector {
 		return emptyVector
 	}
 	if len(values) <= vectorInlineSize {
-		v := &Vector{inlineLen: uint8(len(values))}
-		copy(v.inline[:], values)
-		return v
+		return newInlineVector(nil, values)
 	}
 	return &Vector{
 		vec: vector.New(values...),
 	}
+}
+
+func newInlineVector(meta IPersistentMap, values []any) *Vector {
+	storage := &inlineVectorStorage{}
+	storage.Vector.meta = meta
+	storage.Vector.inline = storage.values[:len(values)]
+	copy(storage.Vector.inline, values)
+	return &storage.Vector
 }
 
 var (
@@ -69,7 +82,7 @@ func (v *Vector) xxx_sequential() {}
 
 func (v *Vector) Count() int {
 	if v.vec == nil {
-		return int(v.inlineLen)
+		return len(v.inline)
 	}
 	return v.vec.Len()
 }
@@ -82,15 +95,14 @@ func (v *Vector) Length() int {
 
 func (v *Vector) Cons(x any) Conser {
 	if v.vec == nil {
-		if v.inlineLen < vectorInlineSize {
-			result := *v
-			result.hash, result.hasheq = 0, 0
-			result.inline[result.inlineLen] = x
-			result.inlineLen++
-			return &result
+		if len(v.inline) < vectorInlineSize {
+			result := newInlineVector(v.meta, v.inline)
+			result.inline = result.inline[:len(v.inline)+1]
+			result.inline[len(v.inline)] = x
+			return result
 		}
 		values := make([]any, vectorInlineSize+1)
-		copy(values, v.inline[:])
+		copy(values, v.inline)
 		values[vectorInlineSize] = x
 		return &Vector{
 			meta: v.meta,
@@ -108,13 +120,12 @@ func (v *Vector) AssocN(i int, val any) IPersistentVector {
 		panic(NewIndexOutOfBoundsError())
 	}
 	if v.vec == nil {
-		if i == int(v.inlineLen) {
+		if i == len(v.inline) {
 			return v.Cons(val).(IPersistentVector)
 		}
-		result := *v
-		result.hash, result.hasheq = 0, 0
+		result := newInlineVector(v.meta, v.inline)
 		result.inline[i] = val
-		return &result
+		return result
 	}
 	return &Vector{meta: v.meta, vec: v.vec.Assoc(i, val)}
 }
@@ -171,7 +182,7 @@ func (v *Vector) ValAtDefault(k, def any) any {
 
 func (v *Vector) Nth(i int) any {
 	if v.vec == nil {
-		if i < 0 || i >= int(v.inlineLen) {
+		if i < 0 || i >= len(v.inline) {
 			panic(NewIndexOutOfBoundsError())
 		}
 		return v.inline[i]
@@ -253,11 +264,7 @@ func (v *Vector) Pop() IPersistentStack {
 		return emptyVector
 	}
 	if v.vec == nil {
-		result := *v
-		result.hash, result.hasheq = 0, 0
-		result.inlineLen--
-		result.inline[result.inlineLen] = nil
-		return &result
+		return newInlineVector(v.meta, v.inline[:len(v.inline)-1])
 	}
 	return &Vector{
 		meta: v.meta,
@@ -274,6 +281,11 @@ func (v *Vector) WithMeta(meta IPersistentMap) any {
 		return v
 	}
 
+	if v.vec == nil && len(v.inline) != 0 {
+		cpy := newInlineVector(meta, v.inline)
+		cpy.hash, cpy.hasheq = v.hash, v.hasheq
+		return cpy
+	}
 	cpy := *v
 	cpy.meta = meta
 	return &cpy
@@ -330,7 +342,7 @@ func (v *Vector) Drop(n int) Sequential {
 		return nil
 	}
 	if v.vec == nil {
-		result := NewVector(v.inline[n:v.inlineLen]...)
+		result := NewVector(v.inline[n:]...)
 		result.meta = v.meta
 		return result
 	}
@@ -342,7 +354,7 @@ func (v *Vector) Drop(n int) Sequential {
 func (v *Vector) AsTransient() ITransientCollection {
 	vec := v.vec
 	if vec == nil {
-		vec = vector.New(v.inline[:v.inlineLen]...)
+		vec = vector.New(v.inline...)
 	}
 	return &TransientVector{
 		vec: vector.NewTransient(vec),
