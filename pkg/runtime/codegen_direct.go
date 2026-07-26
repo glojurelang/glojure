@@ -25,9 +25,9 @@ func sortedAOTTargets(
 }
 
 // prepareAOTCallTargets allocates package-level call slots for ordinary
-// fixed-arity functions in the namespace. Generated callers can use the slot
-// while its Var retains the root seen by LoadNS, and fall back to Var dispatch
-// after a redefinition.
+// functions in the namespace. Generated callers can use the slot when their
+// arity is statically accepted while its Var retains the root seen by LoadNS,
+// and fall back to Var dispatch after a redefinition.
 func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 	for _, named := range vars {
 		vr := named.vr
@@ -42,11 +42,9 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 			continue
 		}
 		fnNode := fn.ASTNode().Sub.(*ast.FnNode)
-		if len(fnNode.Methods) != 1 || fnNode.IsVariadic {
-			continue
-		}
-		method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		if method.IsVariadic || method.FixedArity > 4 {
+		arityDispatch := len(fnNode.Methods) != 1 || fnNode.IsVariadic
+		directArities := directAOTFnArities(fnNode)
+		if !hasDirectAOTArity(directArities) {
 			continue
 		}
 
@@ -54,18 +52,25 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 		target := &aotSpecializationTarget{
 			vr:             vr,
 			fn:             fn,
-			arity:          method.FixedArity,
+			arityDispatch:  arityDispatch,
+			directArities:  directArities,
 			directFnVar:    fmt.Sprintf("aotDirectFn%d", index),
 			int64FnVar:     fmt.Sprintf("aotInt64Fn%d", index),
 			float64FnVar:   fmt.Sprintf("aotFloat64Fn%d", index),
 			rootVersionVar: fmt.Sprintf("aotRootVersion%d", index),
 		}
+		directType := "lang.ArityFn"
+		if !arityDispatch {
+			method := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
+			target.arity = method.FixedArity
+			directType = fmt.Sprintf("lang.FnFunc%d", target.arity)
+		}
 		g.aotCallTargets[vr] = target
 		fmt.Fprintf(
 			&g.aotDeclarations,
-			"var %s lang.FnFunc%d\nvar %s *lang.VarRootVersion\n",
+			"var %s %s\nvar %s *lang.VarRootVersion\n",
 			target.directFnVar,
-			target.arity,
+			directType,
 			target.rootVersionVar,
 		)
 	}
@@ -73,7 +78,8 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 		changed := false
 		for _, named := range vars {
 			target := g.aotCallTargets[named.vr]
-			if target == nil || target.int64Analysis != nil {
+			if target == nil || target.arityDispatch ||
+				target.arity > 4 || target.int64Analysis != nil {
 				continue
 			}
 			fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
@@ -95,7 +101,8 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 	}
 	for _, named := range vars {
 		target := g.aotCallTargets[named.vr]
-		if target == nil || target.int64Analysis == nil {
+		if target == nil || target.arityDispatch ||
+			target.int64Analysis == nil {
 			continue
 		}
 		fnNode := target.fn.ASTNode().Sub.(*ast.FnNode)
@@ -106,7 +113,8 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 		changed := false
 		for _, named := range vars {
 			target := g.aotCallTargets[named.vr]
-			if target == nil || target.int64Analysis != nil ||
+			if target == nil || target.arityDispatch ||
+				target.arity > 4 || target.int64Analysis != nil ||
 				target.float64Analysis != nil {
 				continue
 			}
@@ -162,6 +170,35 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 	}
 }
 
+func directAOTFnArities(fn *ast.FnNode) [21]bool {
+	var result [21]bool
+	for _, methodNode := range fn.Methods {
+		method := methodNode.Sub.(*ast.FnMethodNode)
+		if method.IsVariadic {
+			if method.FixedArity < 0 {
+				continue
+			}
+			for arity := method.FixedArity; arity < len(result); arity++ {
+				result[arity] = true
+			}
+			continue
+		}
+		if method.FixedArity >= 0 && method.FixedArity < len(result) {
+			result[method.FixedArity] = true
+		}
+	}
+	return result
+}
+
+func hasDirectAOTArity(arities [21]bool) bool {
+	for _, supported := range arities {
+		if supported {
+			return true
+		}
+	}
+	return false
+}
+
 func codegenVarValue(vr *lang.Var) any {
 	// Dynamic Vars are resolved against goroutine-local bindings. Reading from
 	// a fresh goroutine obtains the root value used to build an AOT loader.
@@ -179,7 +216,9 @@ func (g *Generator) aotInvokeTarget(
 		return nil
 	}
 	target := g.aotCallTargets[invoke.Fn.Sub.(*ast.VarNode).Var]
-	if target == nil || target.arity != len(invoke.Args) {
+	arity := len(invoke.Args)
+	if target == nil || arity >= len(target.directArities) ||
+		!target.directArities[arity] {
 		return nil
 	}
 	return target

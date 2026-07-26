@@ -18,28 +18,36 @@ var aotDirectFn2 lang.FnFunc2
 var aotRootVersion2 *lang.VarRootVersion
 var aotDirectFn3 lang.FnFunc2
 var aotRootVersion3 *lang.VarRootVersion
-var aotDirectFn4 lang.FnFunc1
+var aotDirectFn4 lang.ArityFn
 var aotRootVersion4 *lang.VarRootVersion
-var aotDirectFn5 lang.FnFunc1
+var aotDirectFn5 lang.ArityFn
 var aotRootVersion5 *lang.VarRootVersion
-var aotDirectFn6 lang.FnFunc0
+var aotDirectFn6 lang.ArityFn
 var aotRootVersion6 *lang.VarRootVersion
-var aotDirectFn7 lang.FnFunc2
+var aotDirectFn7 lang.FnFunc1
 var aotRootVersion7 *lang.VarRootVersion
-var aotDirectFn8 lang.FnFunc2
+var aotDirectFn8 lang.FnFunc1
 var aotRootVersion8 *lang.VarRootVersion
-var aotDirectFn9 lang.FnFunc2
+var aotDirectFn9 lang.FnFunc0
 var aotRootVersion9 *lang.VarRootVersion
-var aotDirectFn10 lang.FnFunc1
+var aotDirectFn10 lang.FnFunc2
 var aotRootVersion10 *lang.VarRootVersion
-var aotDirectFn11 lang.FnFunc1
+var aotDirectFn11 lang.FnFunc2
 var aotRootVersion11 *lang.VarRootVersion
-var aotDirectFn12 lang.FnFunc1
+var aotDirectFn12 lang.FnFunc2
 var aotRootVersion12 *lang.VarRootVersion
-var aotDirectFn13 lang.FnFunc2
+var aotDirectFn13 lang.ArityFn
 var aotRootVersion13 *lang.VarRootVersion
 var aotDirectFn14 lang.FnFunc1
 var aotRootVersion14 *lang.VarRootVersion
+var aotDirectFn15 lang.FnFunc1
+var aotRootVersion15 *lang.VarRootVersion
+var aotDirectFn16 lang.FnFunc1
+var aotRootVersion16 *lang.VarRootVersion
+var aotDirectFn17 lang.FnFunc2
+var aotRootVersion17 *lang.VarRootVersion
+var aotDirectFn18 lang.FnFunc1
+var aotRootVersion18 *lang.VarRootVersion
 
 func aotCacheFn0(vr *lang.Var) lang.FnFunc0 {
 	version := vr.RootVersion()
@@ -658,25 +666,52 @@ func LoadNS() {
 		var tmp1 lang.ArityFn
 		tmp1 = lang.NewArityFn(
 			lang.FnFunc0(func() any {
-				tmp2 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				tmp3 := lang.Apply1(tmp2, nil)
-				return tmp3
+				tmp2 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
+				var tmp3 any
+				if !tmp2 {
+					tmp3 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+				}
+				var tmp4 any
+				if tmp2 {
+					tmp4 = aotDirectFn6.Invoke1(nil)
+				} else {
+					tmp4 = lang.Apply1(tmp3, nil)
+				}
+				return tmp4
 			}),
 			lang.FnFunc1(func(p0 any) any {
 				v2 := p0
 				_ = v2
-				tmp3 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				tmp4 := lang.Apply2(tmp3, v2, nil)
-				return tmp4
+				tmp3 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
+				var tmp4 any
+				if !tmp3 {
+					tmp4 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+				}
+				var tmp5 any
+				if tmp3 {
+					tmp5 = aotDirectFn6.Invoke2(v2, nil)
+				} else {
+					tmp5 = lang.Apply2(tmp4, v2, nil)
+				}
+				return tmp5
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
 				_ = v2
 				v3 := p1
 				_ = v3
-				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				tmp5 := lang.Apply3(tmp4, v2, v3, nil)
-				return tmp5
+				tmp4 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
+				var tmp5 any
+				if !tmp4 {
+					tmp5 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+				}
+				var tmp6 any
+				if tmp4 {
+					tmp6 = aotDirectFn6.Invoke3(v2, v3, nil)
+				} else {
+					tmp6 = lang.Apply3(tmp5, v2, v3, nil)
+				}
+				return tmp6
 			}),
 			lang.FnFunc3(func(p0, p1, p2 any) any {
 				v2 := p0
@@ -718,7 +753,9 @@ func LoadNS() {
 			nil,
 			0,
 		)
+		aotDirectFn6 = tmp1
 		var_clojure_DOT_core_DOT_async_chan = ns.InternWithValue(tmp0, tmp1, true)
+		aotRootVersion6 = var_clojure_DOT_core_DOT_async_chan.RootVersion()
 		var_clojure_DOT_core_DOT_async_chan.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(18), kw_column, int(7), kw_end_DASH_line, int(18), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_buf_DASH_or_DASH_n), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform), lang.NewVector(sym_buf_DASH_or_DASH_n, sym_xform, sym_ex_DASH_handler)), kw_doc, "Creates a channel with an optional buffer, an optional transducer\n  (like (map f), (filter p) etc or a composition thereof), and an\n  optional exception-handler.  If buf-or-n is a number, will create\n  and use a fixed buffer of that size. If a transducer is supplied a\n  buffer must be specified. ex-handler must be a fn of one argument -\n  if an exception occurs during transformation it will be called with\n  the Throwable as an argument, and any non-nil return value will be\n  placed in the channel.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -779,9 +816,9 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		aotDirectFn4 = tmp1
+		aotDirectFn7 = tmp1
 		var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion4 = var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.RootVersion()
+		aotRootVersion7 = var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(158), kw_column, int(8), kw_end_DASH_line, int(158), kw_end_DASH_column, int(26), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_ports)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -796,9 +833,9 @@ func LoadNS() {
 			tmp3 := lang.Apply1(lang.Builtins["close"], v2)
 			return tmp3
 		})
-		aotDirectFn5 = tmp1
+		aotDirectFn8 = tmp1
 		var_clojure_DOT_core_DOT_async_close_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion5 = var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion()
+		aotRootVersion8 = var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async_close_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_chan)), kw_doc, "Closes a channel. The channel will no longer accept any puts (they\n  will be ignored). Data in the channel remains available for taking,\n  until exhausted, after which takes will return nil. If there are any\n  pending takes, they will be dispatched with nil. Closing a closed\n  channel will throw an exception.\n\n  Logically closing happens after all puts have been\n  delivered. Therefore, any blocked or parked puts will remain\n  blocked/parked until a taker releases them.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -847,9 +884,9 @@ func LoadNS() {
 			} // end let
 			return tmp2
 		})
-		aotDirectFn6 = tmp1
+		aotDirectFn9 = tmp1
 		var_clojure_DOT_core_DOT_async_default_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion6 = var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion()
+		aotRootVersion9 = var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion()
 		var_clojure_DOT_core_DOT_async_default_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(100), kw_column, int(8), kw_end_DASH_line, int(100), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector()), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -866,9 +903,18 @@ func LoadNS() {
 				_ = v2
 				v3 := p1
 				_ = v3
-				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_pipe)
-				tmp5 := lang.Apply3(tmp4, v2, v3, true)
-				return tmp5
+				tmp4 := var_clojure_DOT_core_DOT_async_pipe.RootVersion() == aotRootVersion13 && !var_clojure_DOT_core_DOT_async_pipe.IsMacro()
+				var tmp5 any
+				if !tmp4 {
+					tmp5 = checkDerefVar(var_clojure_DOT_core_DOT_async_pipe)
+				}
+				var tmp6 any
+				if tmp4 {
+					tmp6 = aotDirectFn13.Invoke3(v2, v3, true)
+				} else {
+					tmp6 = lang.Apply3(tmp5, v2, v3, true)
+				}
+				return tmp6
 			}),
 			lang.FnFunc3(func(p0, p1, p2 any) any {
 				v2 := p0
@@ -880,103 +926,112 @@ func LoadNS() {
 				var tmp5 any
 				{ // let
 					// let binding "c__0__auto__"
-					tmp6 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-					tmp7 := lang.Apply1(tmp6, int64(1))
-					var v8 any = tmp7
-					_ = v8
+					tmp6 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
+					var tmp7 any
+					if !tmp6 {
+						tmp7 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+					}
+					var tmp8 any
+					if tmp6 {
+						tmp8 = aotDirectFn6.Invoke1(int64(1))
+					} else {
+						tmp8 = lang.Apply1(tmp7, int64(1))
+					}
+					var v9 any = tmp8
+					_ = v9
 					// let binding "f__1__auto__"
-					var tmp9 lang.FnFunc0
-					tmp9 = lang.FnFunc0(func() any {
-						var tmp10 any
+					var tmp10 lang.FnFunc0
+					tmp10 = lang.FnFunc0(func() any {
+						var tmp11 any
 						{ // let
 							// let binding "res__2__auto__"
-							var tmp11 any
+							var tmp12 any
 							{ // let
 								for {
-									var tmp12 any
+									var tmp13 any
 									{ // let
 										// let binding "v"
-										tmp13 := var_clojure_DOT_core_DOT_async__LT__BANG_.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_async__LT__BANG_.IsMacro()
-										var tmp14 any
-										if !tmp13 {
-											tmp14 = checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
-										}
+										tmp14 := var_clojure_DOT_core_DOT_async__LT__BANG_.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_async__LT__BANG_.IsMacro()
 										var tmp15 any
-										if tmp13 {
-											tmp15 = aotDirectFn0(v2)
-										} else {
-											tmp15 = lang.Apply1(tmp14, v2)
+										if !tmp14 {
+											tmp15 = checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
 										}
-										var v16 any = tmp15
-										_ = v16
-										var tmp17 any
-										tmp18 := lang.Identical(v16, nil)
-										if lang.IsTruthy(tmp18) {
-											var tmp19 any
-											if lang.IsTruthy(v4) {
-												tmp20 := var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion() == aotRootVersion5 && !var_clojure_DOT_core_DOT_async_close_BANG_.IsMacro()
-												var tmp21 any
-												if !tmp20 {
-													tmp21 = checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
-												}
-												var tmp22 any
-												if tmp20 {
-													tmp22 = aotDirectFn5(v3)
-												} else {
-													tmp22 = lang.Apply1(tmp21, v3)
-												}
-												tmp19 = tmp22
-											} else {
-											}
-											tmp17 = tmp19
+										var tmp16 any
+										if tmp14 {
+											tmp16 = aotDirectFn0(v2)
 										} else {
-											var tmp23 any
-											tmp24 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
-											var tmp25 any
-											if !tmp24 {
-												tmp25 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
-											}
-											var tmp26 any
-											if tmp24 {
-												tmp26 = aotDirectFn2(v3, v16)
+											tmp16 = lang.Apply1(tmp15, v2)
+										}
+										var v17 any = tmp16
+										_ = v17
+										var tmp18 any
+										tmp19 := lang.Identical(v17, nil)
+										if lang.IsTruthy(tmp19) {
+											var tmp20 any
+											if lang.IsTruthy(v4) {
+												tmp21 := var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion() == aotRootVersion8 && !var_clojure_DOT_core_DOT_async_close_BANG_.IsMacro()
+												var tmp22 any
+												if !tmp21 {
+													tmp22 = checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
+												}
+												var tmp23 any
+												if tmp21 {
+													tmp23 = aotDirectFn8(v3)
+												} else {
+													tmp23 = lang.Apply1(tmp22, v3)
+												}
+												tmp20 = tmp23
 											} else {
-												tmp26 = lang.Apply2(tmp25, v3, v16)
 											}
-											if lang.IsTruthy(tmp26) {
+											tmp18 = tmp20
+										} else {
+											var tmp24 any
+											tmp25 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
+											var tmp26 any
+											if !tmp25 {
+												tmp26 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
+											}
+											var tmp27 any
+											if tmp25 {
+												tmp27 = aotDirectFn2(v3, v17)
+											} else {
+												tmp27 = lang.Apply2(tmp26, v3, v17)
+											}
+											if lang.IsTruthy(tmp27) {
 												continue
 											} else {
 											}
-											tmp17 = tmp23
+											tmp18 = tmp24
 										}
-										tmp12 = tmp17
+										tmp13 = tmp18
 									} // end let
-									tmp11 = tmp12
+									tmp12 = tmp13
 									break
 								}
 							} // end let
-							var v12 any = tmp11
-							_ = v12
-							tmp13 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
-							var tmp14 any
-							if !tmp13 {
-								tmp14 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
-							}
+							var v13 any = tmp12
+							_ = v13
+							tmp14 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
 							var tmp15 any
-							if tmp13 {
-								tmp15 = aotDirectFn2(v8, v12)
-							} else {
-								tmp15 = lang.Apply2(tmp14, v8, v12)
+							if !tmp14 {
+								tmp15 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
 							}
-							tmp10 = tmp15
+							var tmp16 any
+							if tmp14 {
+								tmp16 = aotDirectFn2(v9, v13)
+							} else {
+								tmp16 = lang.Apply2(tmp15, v9, v13)
+							}
+							tmp11 = tmp16
 						} // end let
-						return tmp10
+						return tmp11
 					})
-					var v10 any = tmp9
-					_ = v10
-					go lang.Apply(v10, []any{})
-					tmp11 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
-					tmp12 := lang.Apply1(tmp11, v8)
-					tmp5 = tmp12
+					var v11 any = tmp10
+					_ = v11
+					go lang.Apply(v11, []any{})
+					tmp12 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
+					tmp13 := lang.Apply1(tmp12, v9)
+					tmp5 = tmp13
 				} // end let
 				_ = tmp5
 				return v3
@@ -985,7 +1040,9 @@ func LoadNS() {
 			nil,
 			0,
 		)
+		aotDirectFn13 = tmp1
 		var_clojure_DOT_core_DOT_async_pipe = ns.InternWithValue(tmp0, tmp1, true)
+		aotRootVersion13 = var_clojure_DOT_core_DOT_async_pipe.RootVersion()
 		var_clojure_DOT_core_DOT_async_pipe.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(292), kw_column, int(7), kw_end_DASH_line, int(292), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(sym_from, sym_to), lang.NewVector(sym_from, sym_to, sym_close_QMARK_)), kw_doc, "Takes elements from the from channel and supplies them to the to\n  channel. By default, the to channel will be closed when the from\n  channel closes, but can be determined by the close?  parameter. Will\n  stop consuming the from channel if the to channel closes", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -1140,9 +1197,9 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		aotDirectFn11 = tmp1
+		aotDirectFn15 = tmp1
 		var_clojure_DOT_core_DOT_async_port_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion11 = var_clojure_DOT_core_DOT_async_port_DASH_case.RootVersion()
+		aotRootVersion15 = var_clojure_DOT_core_DOT_async_port_DASH_case.RootVersion()
 		var_clojure_DOT_core_DOT_async_port_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(106), kw_column, int(8), kw_end_DASH_line, int(106), kw_end_DASH_column, int(16), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_port_DASH_or_DASH_put)), kw_doc, "Returns a *reflect.SelectCase for the given channel operation.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -1157,84 +1214,102 @@ func LoadNS() {
 			var tmp3 any
 			{ // let
 				// let binding "ret"
-				tmp4 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				tmp5 := lang.Apply0(tmp4)
-				var v6 any = tmp5
-				_ = v6
+				tmp4 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
+				var tmp5 any
+				if !tmp4 {
+					tmp5 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+				}
+				var tmp6 any
+				if tmp4 {
+					tmp6 = aotDirectFn6.Invoke0()
+				} else {
+					tmp6 = lang.Apply0(tmp5)
+				}
+				var v7 any = tmp6
+				_ = v7
 				// let binding "after"
-				tmp7 := lang.Apply1(lang.Builtins["int64"], time4.Millisecond)
-				tmp8 := lang.Numbers.Multiply(v2, tmp7)
-				tmp9 := lang.Apply1(time4.After, tmp8)
-				var v10 any = tmp9
-				_ = v10
-				var tmp11 any
+				tmp8 := lang.Apply1(lang.Builtins["int64"], time4.Millisecond)
+				tmp9 := lang.Numbers.Multiply(v2, tmp8)
+				tmp10 := lang.Apply1(time4.After, tmp9)
+				var v11 any = tmp10
+				_ = v11
+				var tmp12 any
 				{ // let
 					// let binding "c__0__auto__"
-					tmp12 := checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-					tmp13 := lang.Apply1(tmp12, int64(1))
-					var v14 any = tmp13
-					_ = v14
-					// let binding "f__1__auto__"
-					var tmp15 lang.FnFunc0
-					tmp15 = lang.FnFunc0(func() any {
-						var tmp16 any
-						{ // let
-							// let binding "res__2__auto__"
-							tmp17 := var_clojure_DOT_core_DOT_async__LT__BANG_.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_async__LT__BANG_.IsMacro()
-							var tmp18 any
-							if !tmp17 {
-								tmp18 = checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
-							}
-							var tmp19 any
-							if tmp17 {
-								tmp19 = aotDirectFn0(v10)
-							} else {
-								tmp19 = lang.Apply1(tmp18, v10)
-							}
-							_ = tmp19
-							tmp20 := var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion() == aotRootVersion5 && !var_clojure_DOT_core_DOT_async_close_BANG_.IsMacro()
-							var tmp21 any
-							if !tmp20 {
-								tmp21 = checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
-							}
-							var tmp22 any
-							if tmp20 {
-								tmp22 = aotDirectFn5(v6)
-							} else {
-								tmp22 = lang.Apply1(tmp21, v6)
-							}
-							var v23 any = tmp22
-							_ = v23
-							tmp24 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
-							var tmp25 any
-							if !tmp24 {
-								tmp25 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
-							}
-							var tmp26 any
-							if tmp24 {
-								tmp26 = aotDirectFn2(v14, v23)
-							} else {
-								tmp26 = lang.Apply2(tmp25, v14, v23)
-							}
-							tmp16 = tmp26
-						} // end let
-						return tmp16
-					})
+					tmp13 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
+					var tmp14 any
+					if !tmp13 {
+						tmp14 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+					}
+					var tmp15 any
+					if tmp13 {
+						tmp15 = aotDirectFn6.Invoke1(int64(1))
+					} else {
+						tmp15 = lang.Apply1(tmp14, int64(1))
+					}
 					var v16 any = tmp15
 					_ = v16
-					go lang.Apply(v16, []any{})
-					tmp17 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
-					tmp18 := lang.Apply1(tmp17, v14)
-					tmp11 = tmp18
+					// let binding "f__1__auto__"
+					var tmp17 lang.FnFunc0
+					tmp17 = lang.FnFunc0(func() any {
+						var tmp18 any
+						{ // let
+							// let binding "res__2__auto__"
+							tmp19 := var_clojure_DOT_core_DOT_async__LT__BANG_.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_async__LT__BANG_.IsMacro()
+							var tmp20 any
+							if !tmp19 {
+								tmp20 = checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
+							}
+							var tmp21 any
+							if tmp19 {
+								tmp21 = aotDirectFn0(v11)
+							} else {
+								tmp21 = lang.Apply1(tmp20, v11)
+							}
+							_ = tmp21
+							tmp22 := var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion() == aotRootVersion8 && !var_clojure_DOT_core_DOT_async_close_BANG_.IsMacro()
+							var tmp23 any
+							if !tmp22 {
+								tmp23 = checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
+							}
+							var tmp24 any
+							if tmp22 {
+								tmp24 = aotDirectFn8(v7)
+							} else {
+								tmp24 = lang.Apply1(tmp23, v7)
+							}
+							var v25 any = tmp24
+							_ = v25
+							tmp26 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
+							var tmp27 any
+							if !tmp26 {
+								tmp27 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
+							}
+							var tmp28 any
+							if tmp26 {
+								tmp28 = aotDirectFn2(v16, v25)
+							} else {
+								tmp28 = lang.Apply2(tmp27, v16, v25)
+							}
+							tmp18 = tmp28
+						} // end let
+						return tmp18
+					})
+					var v18 any = tmp17
+					_ = v18
+					go lang.Apply(v18, []any{})
+					tmp19 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
+					tmp20 := lang.Apply1(tmp19, v16)
+					tmp12 = tmp20
 				} // end let
-				_ = tmp11
-				tmp3 = v6
+				_ = tmp12
+				tmp3 = v7
 			} // end let
 			return tmp3
 		})
-		aotDirectFn12 = tmp1
+		aotDirectFn16 = tmp1
 		var_clojure_DOT_core_DOT_async_timeout = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion12 = var_clojure_DOT_core_DOT_async_timeout.RootVersion()
+		aotRootVersion16 = var_clojure_DOT_core_DOT_async_timeout.RootVersion()
 		var_clojure_DOT_core_DOT_async_timeout.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(91), kw_column, int(7), kw_end_DASH_line, int(91), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_msecs)), kw_doc, "Returns a channel that will close after msecs", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -1251,7 +1326,7 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "sc"
-				tmp5 := var_clojure_DOT_core_DOT_async_port_DASH_case.RootVersion() == aotRootVersion11 && !var_clojure_DOT_core_DOT_async_port_DASH_case.IsMacro()
+				tmp5 := var_clojure_DOT_core_DOT_async_port_DASH_case.RootVersion() == aotRootVersion15 && !var_clojure_DOT_core_DOT_async_port_DASH_case.IsMacro()
 				var tmp6 any
 				if !tmp5 {
 					tmp6 = checkDerefVar(var_clojure_DOT_core_DOT_async_port_DASH_case)
@@ -1259,21 +1334,21 @@ func LoadNS() {
 				tmp7 := lang.NewVector(v2, v3)
 				var tmp8 any
 				if tmp5 {
-					tmp8 = aotDirectFn11(tmp7)
+					tmp8 = aotDirectFn15(tmp7)
 				} else {
 					tmp8 = lang.Apply1(tmp6, tmp7)
 				}
 				var v9 any = tmp8
 				_ = v9
 				// let binding "def"
-				tmp10 := var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_default_DASH_case.IsMacro()
+				tmp10 := var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion() == aotRootVersion9 && !var_clojure_DOT_core_DOT_async_default_DASH_case.IsMacro()
 				var tmp11 any
 				if !tmp10 {
 					tmp11 = checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
 				}
 				var tmp12 any
 				if tmp10 {
-					tmp12 = aotDirectFn6()
+					tmp12 = aotDirectFn9()
 				} else {
 					tmp12 = lang.Apply0(tmp11)
 				}
@@ -1320,9 +1395,9 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		aotDirectFn13 = tmp1
+		aotDirectFn17 = tmp1
 		var_clojure_DOT_core_DOT_async_try_DASH_put = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion13 = var_clojure_DOT_core_DOT_async_try_DASH_put.RootVersion()
+		aotRootVersion17 = var_clojure_DOT_core_DOT_async_try_DASH_put.RootVersion()
 		var_clojure_DOT_core_DOT_async_try_DASH_put.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(118), kw_column, int(8), kw_end_DASH_line, int(118), kw_end_DASH_column, int(14), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Returns true if val was sent on the port, false if sending would\n  block", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -1500,9 +1575,9 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		aotDirectFn14 = tmp1
+		aotDirectFn18 = tmp1
 		var_clojure_DOT_core_DOT_async_try_DASH_take = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion14 = var_clojure_DOT_core_DOT_async_try_DASH_take.RootVersion()
+		aotRootVersion18 = var_clojure_DOT_core_DOT_async_try_DASH_take.RootVersion()
 		var_clojure_DOT_core_DOT_async_try_DASH_take.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(127), kw_column, int(8), kw_end_DASH_line, int(127), kw_end_DASH_column, int(15), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Returns [val true] if val was received from the port, [nil false] if the channel was closed,\n  and nil if receiving would block.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -1516,14 +1591,14 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.RootVersion() == aotRootVersion4 && !var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.IsMacro()
+			tmp4 := var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.RootVersion() == aotRootVersion7 && !var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_.IsMacro()
 			var tmp5 any
 			if !tmp4 {
 				tmp5 = checkDerefVar(var_clojure_DOT_core_DOT_async_check_DASH_unique_DASH_ports_BANG_)
 			}
 			var tmp6 any
 			if tmp4 {
-				tmp6 = aotDirectFn4(v2)
+				tmp6 = aotDirectFn7(v2)
 			} else {
 				tmp6 = lang.Apply1(tmp5, v2)
 			}
@@ -1558,14 +1633,14 @@ func LoadNS() {
 				tmp19 := aotExternalFn28(v3, kw_default)
 				if lang.IsTruthy(tmp19) {
 					tmp20 := aotExternalFn27(v17)
-					tmp21 := var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_default_DASH_case.IsMacro()
+					tmp21 := var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion() == aotRootVersion9 && !var_clojure_DOT_core_DOT_async_default_DASH_case.IsMacro()
 					var tmp22 any
 					if !tmp21 {
 						tmp22 = checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
 					}
 					var tmp23 any
 					if tmp21 {
-						tmp23 = aotDirectFn6()
+						tmp23 = aotDirectFn9()
 					} else {
 						tmp23 = lang.Apply0(tmp22)
 					}
@@ -1583,14 +1658,14 @@ func LoadNS() {
 				var v26 any = tmp18
 				_ = v26
 				// let binding "def"
-				tmp27 := var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_default_DASH_case.IsMacro()
+				tmp27 := var_clojure_DOT_core_DOT_async_default_DASH_case.RootVersion() == aotRootVersion9 && !var_clojure_DOT_core_DOT_async_default_DASH_case.IsMacro()
 				var tmp28 any
 				if !tmp27 {
 					tmp28 = checkDerefVar(var_clojure_DOT_core_DOT_async_default_DASH_case)
 				}
 				var tmp29 any
 				if tmp27 {
-					tmp29 = aotDirectFn6()
+					tmp29 = aotDirectFn9()
 				} else {
 					tmp29 = lang.Apply0(tmp28)
 				}
@@ -1674,9 +1749,9 @@ func LoadNS() {
 			} // end let
 			return tmp7
 		})
-		aotDirectFn8 = tmp1
+		aotDirectFn11 = tmp1
 		var_clojure_DOT_core_DOT_async_do_DASH_alts = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion8 = var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion()
+		aotRootVersion11 = var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion()
 		var_clojure_DOT_core_DOT_async_do_DASH_alts.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(165), kw_column, int(8), kw_end_DASH_line, int(165), kw_end_DASH_column, int(14), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym_opts)), kw_doc, "returns derefable [val port] if immediate, nil if enqueued", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -1693,14 +1768,14 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "ret"
-				tmp5 := var_clojure_DOT_core_DOT_async_try_DASH_put.RootVersion() == aotRootVersion13 && !var_clojure_DOT_core_DOT_async_try_DASH_put.IsMacro()
+				tmp5 := var_clojure_DOT_core_DOT_async_try_DASH_put.RootVersion() == aotRootVersion17 && !var_clojure_DOT_core_DOT_async_try_DASH_put.IsMacro()
 				var tmp6 any
 				if !tmp5 {
 					tmp6 = checkDerefVar(var_clojure_DOT_core_DOT_async_try_DASH_put)
 				}
 				var tmp7 any
 				if tmp5 {
-					tmp7 = aotDirectFn13(v2, v3)
+					tmp7 = aotDirectFn17(v2, v3)
 				} else {
 					tmp7 = lang.Apply2(tmp6, v2, v3)
 				}
@@ -1715,9 +1790,9 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		aotDirectFn9 = tmp1
+		aotDirectFn12 = tmp1
 		var_clojure_DOT_core_DOT_async_offer_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion9 = var_clojure_DOT_core_DOT_async_offer_BANG_.RootVersion()
+		aotRootVersion12 = var_clojure_DOT_core_DOT_async_offer_BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async_offer_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(143), kw_column, int(7), kw_end_DASH_line, int(143), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_port, sym_val)), kw_doc, "Puts a val into port if it's possible to do so immediately.\n   nil values are not allowed. Never blocks. Returns true if offer succeeds.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -1732,14 +1807,14 @@ func LoadNS() {
 			var tmp3 any
 			{ // let
 				// let binding "res"
-				tmp4 := var_clojure_DOT_core_DOT_async_try_DASH_take.RootVersion() == aotRootVersion14 && !var_clojure_DOT_core_DOT_async_try_DASH_take.IsMacro()
+				tmp4 := var_clojure_DOT_core_DOT_async_try_DASH_take.RootVersion() == aotRootVersion18 && !var_clojure_DOT_core_DOT_async_try_DASH_take.IsMacro()
 				var tmp5 any
 				if !tmp4 {
 					tmp5 = checkDerefVar(var_clojure_DOT_core_DOT_async_try_DASH_take)
 				}
 				var tmp6 any
 				if tmp4 {
-					tmp6 = aotDirectFn14(v2)
+					tmp6 = aotDirectFn18(v2)
 				} else {
 					tmp6 = lang.Apply1(tmp5, v2)
 				}
@@ -1777,9 +1852,9 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		aotDirectFn10 = tmp1
+		aotDirectFn14 = tmp1
 		var_clojure_DOT_core_DOT_async_poll_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion10 = var_clojure_DOT_core_DOT_async_poll_BANG_.RootVersion()
+		aotRootVersion14 = var_clojure_DOT_core_DOT_async_poll_BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async_poll_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(150), kw_column, int(7), kw_end_DASH_line, int(150), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_port)), kw_doc, "Takes a val from port if it's possible to do so immediately.\n   Never blocks. Returns value if successful, nil otherwise.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -1853,14 +1928,14 @@ func LoadNS() {
 					// let binding "opts"
 					var v20 any = v19
 					_ = v20
-					tmp21 := var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion() == aotRootVersion8 && !var_clojure_DOT_core_DOT_async_do_DASH_alts.IsMacro()
+					tmp21 := var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion() == aotRootVersion11 && !var_clojure_DOT_core_DOT_async_do_DASH_alts.IsMacro()
 					var tmp22 any
 					if !tmp21 {
 						tmp22 = checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
 					}
 					var tmp23 any
 					if tmp21 {
-						tmp23 = aotDirectFn8(v2, v20)
+						tmp23 = aotDirectFn11(v2, v20)
 					} else {
 						tmp23 = lang.Apply2(tmp22, v2, v20)
 					}
@@ -1870,7 +1945,9 @@ func LoadNS() {
 			}),
 			1,
 		)
+		aotDirectFn4 = tmp1
 		var_clojure_DOT_core_DOT_async_alts_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
+		aotRootVersion4 = var_clojure_DOT_core_DOT_async_alts_BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async_alts_BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core/async.glj", kw_line, int(185), kw_column, int(7), kw_end_DASH_line, int(185), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_ports, sym__AMP_, lang.NewMap(kw_as, sym_opts))), kw_doc, "Completes at most one of several channel operations. Must ports is a\n  vector of channel endpoints, which can be either a channel to take\n  from or a vector of [channel-to-put-to val-to-put], in any\n  combination.  Takes will be made as if by <!, and puts will be made\n  as if by >!. Unless the :priority option is true, if more than one\n  port operation is ready a non-deterministic choice will be made. If\n  no operation is ready and a :default value is\n  supplied, [default-val :default] will be returned, otherwise alts!\n  will park until the first operation to become ready\n  completes. Returns [val port] of the completed operation, where val\n  is the value taken for takes, and true for puts.\n\n  opts are passed as :key val ... Supported options:\n\n  :default val - the value to use if none of the operations are immediately ready\n  :priority true - (default nil) when true, the operations will be tried in order.\n\n  Note: there is no guarantee that the port exps or val exprs will be\n  used, nor in what order should they be, so they should not be\n  depended upon for side effects.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -1944,14 +2021,14 @@ func LoadNS() {
 					// let binding "opts"
 					var v20 any = v19
 					_ = v20
-					tmp21 := var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion() == aotRootVersion8 && !var_clojure_DOT_core_DOT_async_do_DASH_alts.IsMacro()
+					tmp21 := var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion() == aotRootVersion11 && !var_clojure_DOT_core_DOT_async_do_DASH_alts.IsMacro()
 					var tmp22 any
 					if !tmp21 {
 						tmp22 = checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
 					}
 					var tmp23 any
 					if tmp21 {
-						tmp23 = aotDirectFn8(v2, v20)
+						tmp23 = aotDirectFn11(v2, v20)
 					} else {
 						tmp23 = lang.Apply2(tmp22, v2, v20)
 					}
@@ -1961,7 +2038,9 @@ func LoadNS() {
 			}),
 			1,
 		)
+		aotDirectFn5 = tmp1
 		var_clojure_DOT_core_DOT_async_alts_BANG__BANG_ = ns.InternWithValue(tmp0, tmp1, true)
+		aotRootVersion5 = var_clojure_DOT_core_DOT_async_alts_BANG__BANG_.RootVersion()
 		var_clojure_DOT_core_DOT_async_alts_BANG__BANG_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(210), kw_column, int(6), kw_end_DASH_line, int(210), kw_end_DASH_column, int(11), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})
@@ -1983,14 +2062,14 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-				tmp5 := var_clojure_DOT_core_DOT_async_do_DASH_alt.RootVersion() == aotRootVersion7 && !var_clojure_DOT_core_DOT_async_do_DASH_alt.IsMacro()
+				tmp5 := var_clojure_DOT_core_DOT_async_do_DASH_alt.RootVersion() == aotRootVersion10 && !var_clojure_DOT_core_DOT_async_do_DASH_alt.IsMacro()
 				var tmp6 any
 				if !tmp5 {
 					tmp6 = checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alt)
 				}
 				var tmp7 any
 				if tmp5 {
-					tmp7 = aotDirectFn7(sym_clojure_DOT_core_DOT_async_SLASH_alts_BANG_, v4)
+					tmp7 = aotDirectFn10(sym_clojure_DOT_core_DOT_async_SLASH_alts_BANG_, v4)
 				} else {
 					tmp7 = lang.Apply2(tmp6, sym_clojure_DOT_core_DOT_async_SLASH_alts_BANG_, v4)
 				}
@@ -2585,9 +2664,9 @@ func LoadNS() {
 			} // end let
 			return tmp4
 		})
-		aotDirectFn7 = tmp1
+		aotDirectFn10 = tmp1
 		var_clojure_DOT_core_DOT_async_do_DASH_alt = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion7 = var_clojure_DOT_core_DOT_async_do_DASH_alt.RootVersion()
+		aotRootVersion10 = var_clojure_DOT_core_DOT_async_do_DASH_alt.RootVersion()
 		var_clojure_DOT_core_DOT_async_do_DASH_alt.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "clojure/core/async.glj", kw_line, int(212), kw_column, int(7), kw_end_DASH_line, int(212), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_alts, sym_clauses)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core_DOT_async))
 		})

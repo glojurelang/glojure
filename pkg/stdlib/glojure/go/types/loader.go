@@ -14,6 +14,8 @@ import (
 
 var aotDirectFn0 lang.FnFunc1
 var aotRootVersion0 *lang.VarRootVersion
+var aotDirectFn1 lang.ArityFn
+var aotRootVersion1 *lang.VarRootVersion
 
 func aotCacheFn1(vr *lang.Var) lang.FnFunc1 {
 	version := vr.RootVersion()
@@ -600,9 +602,18 @@ func LoadNS() {
 			lang.FnFunc1(func(p0 any) any {
 				v2 := p0
 				_ = v2
-				tmp3 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-				tmp4 := lang.Apply2(tmp3, v2, nil)
-				return tmp4
+				tmp3 := var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion() == aotRootVersion1 && !var_glojure_DOT_go_DOT_types_struct_DASH_field.IsMacro()
+				var tmp4 any
+				if !tmp3 {
+					tmp4 = checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
+				}
+				var tmp5 any
+				if tmp3 {
+					tmp5 = aotDirectFn1.Invoke2(v2, nil)
+				} else {
+					tmp5 = lang.Apply2(tmp4, v2, nil)
+				}
+				return tmp5
 			}),
 			lang.FnFunc2(func(p0, p1 any) any {
 				v2 := p0
@@ -760,7 +771,9 @@ func LoadNS() {
 			nil,
 			0,
 		)
+		aotDirectFn1 = tmp1
 		var_glojure_DOT_go_DOT_types_struct_DASH_field = ns.InternWithValue(tmp0, tmp1, true)
+		aotRootVersion1 = var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion()
 		var_glojure_DOT_go_DOT_types_struct_DASH_field.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "glojure/go/types.glj", kw_line, int(6), kw_column, int(8), kw_end_DASH_line, int(6), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_type_DASH_ast), lang.NewVector(sym_type_DASH_ast, sym_name)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
 		})
@@ -1268,45 +1281,72 @@ func LoadNS() {
 							tmp24 = lang.Apply1(tmp25, v16)
 						}
 						if lang.IsTruthy(tmp24) {
-							tmp26 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-							tmp27 := lang.Apply1(tmp26, v19)
-							tmp28 := lang.NewVector(tmp27)
-							tmp23 = tmp28
-						} else {
-							var tmp29 any
-							var tmp30 any
-							if aotExternalDefault15 && var_clojure_DOT_core_count.RootVersion() == aotExternalRootVersion15 {
-								tmp30 = lang.Count(v16)
-							} else {
-								tmp31 := checkDerefVar(var_clojure_DOT_core_count)
-								tmp30 = lang.Apply1(tmp31, v16)
+							tmp26 := var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion() == aotRootVersion1 && !var_glojure_DOT_go_DOT_types_struct_DASH_field.IsMacro()
+							var tmp27 any
+							if !tmp26 {
+								tmp27 = checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
 							}
-							tmp32 := aotExternalFn6(int64(1), tmp30)
-							if lang.IsTruthy(tmp32) {
-								tmp33 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-								var tmp34 any
-								if aotExternalDefault7 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion7 {
-									tmp34 = lang.First(v16)
-								} else {
-									tmp35 := checkDerefVar(var_clojure_DOT_core_first)
-									tmp34 = lang.Apply1(tmp35, v16)
-								}
-								tmp36 := lang.Apply2(tmp33, v19, tmp34)
-								tmp37 := lang.NewVector(tmp36)
-								tmp29 = tmp37
+							var tmp28 any
+							if tmp26 {
+								tmp28 = aotDirectFn1.Invoke1(v19)
 							} else {
-								var tmp38 lang.FnFunc1
-								tmp38 = lang.FnFunc1(func(p0 any) any {
-									v39 := p0
-									_ = v39
-									tmp40 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-									tmp41 := lang.Apply2(tmp40, v19, v39)
-									return tmp41
-								})
-								tmp39 := aotExternalFn8(tmp38, v16)
-								tmp29 = tmp39
+								tmp28 = lang.Apply1(tmp27, v19)
 							}
+							tmp29 := lang.NewVector(tmp28)
 							tmp23 = tmp29
+						} else {
+							var tmp30 any
+							var tmp31 any
+							if aotExternalDefault15 && var_clojure_DOT_core_count.RootVersion() == aotExternalRootVersion15 {
+								tmp31 = lang.Count(v16)
+							} else {
+								tmp32 := checkDerefVar(var_clojure_DOT_core_count)
+								tmp31 = lang.Apply1(tmp32, v16)
+							}
+							tmp33 := aotExternalFn6(int64(1), tmp31)
+							if lang.IsTruthy(tmp33) {
+								tmp34 := var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion() == aotRootVersion1 && !var_glojure_DOT_go_DOT_types_struct_DASH_field.IsMacro()
+								var tmp35 any
+								if !tmp34 {
+									tmp35 = checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
+								}
+								var tmp36 any
+								if aotExternalDefault7 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion7 {
+									tmp36 = lang.First(v16)
+								} else {
+									tmp37 := checkDerefVar(var_clojure_DOT_core_first)
+									tmp36 = lang.Apply1(tmp37, v16)
+								}
+								var tmp38 any
+								if tmp34 {
+									tmp38 = aotDirectFn1.Invoke2(v19, tmp36)
+								} else {
+									tmp38 = lang.Apply2(tmp35, v19, tmp36)
+								}
+								tmp39 := lang.NewVector(tmp38)
+								tmp30 = tmp39
+							} else {
+								var tmp40 lang.FnFunc1
+								tmp40 = lang.FnFunc1(func(p0 any) any {
+									v41 := p0
+									_ = v41
+									tmp42 := var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion() == aotRootVersion1 && !var_glojure_DOT_go_DOT_types_struct_DASH_field.IsMacro()
+									var tmp43 any
+									if !tmp42 {
+										tmp43 = checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
+									}
+									var tmp44 any
+									if tmp42 {
+										tmp44 = aotDirectFn1.Invoke2(v19, v41)
+									} else {
+										tmp44 = lang.Apply2(tmp43, v19, v41)
+									}
+									return tmp44
+								})
+								tmp41 := aotExternalFn8(tmp40, v16)
+								tmp30 = tmp41
+							}
+							tmp23 = tmp30
 						}
 						tmp11 = tmp23
 					} // end let

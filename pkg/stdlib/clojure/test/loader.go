@@ -33,11 +33,11 @@ var aotDirectFn10 lang.FnFunc1
 var aotRootVersion10 *lang.VarRootVersion
 var aotDirectFn11 lang.FnFunc1
 var aotRootVersion11 *lang.VarRootVersion
-var aotDirectFn12 lang.FnFunc1
+var aotDirectFn12 lang.ArityFn
 var aotRootVersion12 *lang.VarRootVersion
 var aotDirectFn13 lang.FnFunc1
 var aotRootVersion13 *lang.VarRootVersion
-var aotDirectFn14 lang.FnFunc1
+var aotDirectFn14 lang.ArityFn
 var aotRootVersion14 *lang.VarRootVersion
 var aotDirectFn15 lang.FnFunc1
 var aotRootVersion15 *lang.VarRootVersion
@@ -45,10 +45,14 @@ var aotDirectFn16 lang.FnFunc1
 var aotRootVersion16 *lang.VarRootVersion
 var aotDirectFn17 lang.FnFunc1
 var aotRootVersion17 *lang.VarRootVersion
-var aotDirectFn18 lang.FnFunc0
+var aotDirectFn18 lang.FnFunc1
 var aotRootVersion18 *lang.VarRootVersion
 var aotDirectFn19 lang.FnFunc1
 var aotRootVersion19 *lang.VarRootVersion
+var aotDirectFn20 lang.FnFunc0
+var aotRootVersion20 *lang.VarRootVersion
+var aotDirectFn21 lang.FnFunc1
+var aotRootVersion21 *lang.VarRootVersion
 
 func aotCacheFn0(vr *lang.Var) lang.FnFunc0 {
 	version := vr.RootVersion()
@@ -1165,9 +1169,9 @@ func LoadNS() {
 			}
 			return tmp3
 		})
-		aotDirectFn13 = tmp1
+		aotDirectFn15 = tmp1
 		var_clojure_DOT_test_stacktrace_DASH_file_DASH_and_DASH_line = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion13 = var_clojure_DOT_test_stacktrace_DASH_file_DASH_and_DASH_line.RootVersion()
+		aotRootVersion15 = var_clojure_DOT_test_stacktrace_DASH_file_DASH_and_DASH_line.RootVersion()
 		var_clojure_DOT_test_stacktrace_DASH_file_DASH_and_DASH_line.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(343), kw_column, int(8), kw_end_DASH_line, int(343), kw_end_DASH_column, int(31), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_stacktrace)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -1198,9 +1202,9 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		aotDirectFn14 = tmp1
+		aotDirectFn16 = tmp1
 		var_clojure_DOT_test_successful_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion14 = var_clojure_DOT_test_successful_QMARK_.RootVersion()
+		aotRootVersion16 = var_clojure_DOT_test_successful_QMARK_.RootVersion()
 		var_clojure_DOT_test_successful_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(780), kw_column, int(7), kw_end_DASH_line, int(780), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_summary)), kw_doc, "Returns true if the given test summary indicates all tests\n  were successful, false otherwise.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -3484,14 +3488,14 @@ func LoadNS() {
 						tmp15 = lang.Apply1(tmp14, kw_fail)
 					}
 					_ = tmp15
-					tmp16 := var_clojure_DOT_test_testing_DASH_vars_DASH_str.RootVersion() == aotRootVersion19 && !var_clojure_DOT_test_testing_DASH_vars_DASH_str.IsMacro()
+					tmp16 := var_clojure_DOT_test_testing_DASH_vars_DASH_str.RootVersion() == aotRootVersion21 && !var_clojure_DOT_test_testing_DASH_vars_DASH_str.IsMacro()
 					var tmp17 any
 					if !tmp16 {
 						tmp17 = checkDerefVar(var_clojure_DOT_test_testing_DASH_vars_DASH_str)
 					}
 					var tmp18 any
 					if tmp16 {
-						tmp18 = aotDirectFn19(v5)
+						tmp18 = aotDirectFn21(v5)
 					} else {
 						tmp18 = lang.Apply1(tmp17, v5)
 					}
@@ -3507,14 +3511,14 @@ func LoadNS() {
 						tmp22 = lang.Apply1(tmp23, tmp21)
 					}
 					if lang.IsTruthy(tmp22) {
-						tmp24 := var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion() == aotRootVersion18 && !var_clojure_DOT_test_testing_DASH_contexts_DASH_str.IsMacro()
+						tmp24 := var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion() == aotRootVersion20 && !var_clojure_DOT_test_testing_DASH_contexts_DASH_str.IsMacro()
 						var tmp25 any
 						if !tmp24 {
 							tmp25 = checkDerefVar(var_clojure_DOT_test_testing_DASH_contexts_DASH_str)
 						}
 						var tmp26 any
 						if tmp24 {
-							tmp26 = aotDirectFn18()
+							tmp26 = aotDirectFn20()
 						} else {
 							tmp26 = lang.Apply0(tmp25)
 						}
@@ -3602,14 +3606,14 @@ func LoadNS() {
 						tmp16 = lang.Apply1(tmp15, kw_error)
 					}
 					_ = tmp16
-					tmp17 := var_clojure_DOT_test_testing_DASH_vars_DASH_str.RootVersion() == aotRootVersion19 && !var_clojure_DOT_test_testing_DASH_vars_DASH_str.IsMacro()
+					tmp17 := var_clojure_DOT_test_testing_DASH_vars_DASH_str.RootVersion() == aotRootVersion21 && !var_clojure_DOT_test_testing_DASH_vars_DASH_str.IsMacro()
 					var tmp18 any
 					if !tmp17 {
 						tmp18 = checkDerefVar(var_clojure_DOT_test_testing_DASH_vars_DASH_str)
 					}
 					var tmp19 any
 					if tmp17 {
-						tmp19 = aotDirectFn19(v6)
+						tmp19 = aotDirectFn21(v6)
 					} else {
 						tmp19 = lang.Apply1(tmp18, v6)
 					}
@@ -3625,14 +3629,14 @@ func LoadNS() {
 						tmp23 = lang.Apply1(tmp24, tmp22)
 					}
 					if lang.IsTruthy(tmp23) {
-						tmp25 := var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion() == aotRootVersion18 && !var_clojure_DOT_test_testing_DASH_contexts_DASH_str.IsMacro()
+						tmp25 := var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion() == aotRootVersion20 && !var_clojure_DOT_test_testing_DASH_contexts_DASH_str.IsMacro()
 						var tmp26 any
 						if !tmp25 {
 							tmp26 = checkDerefVar(var_clojure_DOT_test_testing_DASH_contexts_DASH_str)
 						}
 						var tmp27 any
 						if tmp25 {
-							tmp27 = aotDirectFn18()
+							tmp27 = aotDirectFn20()
 						} else {
 							tmp27 = lang.Apply0(tmp26)
 						}
@@ -3857,7 +3861,9 @@ func LoadNS() {
 			nil,
 			0,
 		)
+		aotDirectFn12 = tmp1
 		var_clojure_DOT_test_run_DASH_all_DASH_tests = ns.InternWithValue(tmp0, tmp1, true)
+		aotRootVersion12 = var_clojure_DOT_test_run_DASH_all_DASH_tests.RootVersion()
 		var_clojure_DOT_test_run_DASH_all_DASH_tests.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(771), kw_column, int(7), kw_end_DASH_line, int(771), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_re)), kw_doc, "Runs all tests in all namespaces; prints results.\n  Optional argument is a regular expression; only namespaces with\n  names matching the regular expression (with re-matches) will be\n  tested.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -3994,7 +4000,7 @@ func LoadNS() {
 							tmp18 = lang.Apply1(tmp16, tmp17)
 						}
 						_ = tmp18
-						tmp19 := var_clojure_DOT_test_test_DASH_vars.RootVersion() == aotRootVersion17 && !var_clojure_DOT_test_test_DASH_vars.IsMacro()
+						tmp19 := var_clojure_DOT_test_test_DASH_vars.RootVersion() == aotRootVersion19 && !var_clojure_DOT_test_test_DASH_vars.IsMacro()
 						var tmp20 any
 						if !tmp19 {
 							tmp20 = checkDerefVar(var_clojure_DOT_test_test_DASH_vars)
@@ -4002,7 +4008,7 @@ func LoadNS() {
 						tmp21 := lang.NewVector(v2)
 						var tmp22 any
 						if tmp19 {
-							tmp22 = aotDirectFn17(tmp21)
+							tmp22 = aotDirectFn19(tmp21)
 						} else {
 							tmp22 = lang.Apply1(tmp20, tmp21)
 						}
@@ -4051,9 +4057,9 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		aotDirectFn12 = tmp1
+		aotDirectFn13 = tmp1
 		var_clojure_DOT_test_run_DASH_test_DASH_var = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion12 = var_clojure_DOT_test_run_DASH_test_DASH_var.RootVersion()
+		aotRootVersion13 = var_clojure_DOT_test_run_DASH_test_DASH_var.RootVersion()
 		var_clojure_DOT_test_run_DASH_test_DASH_var.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(788), kw_column, int(7), kw_end_DASH_line, int(788), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Runs the tests for a single Var, with fixtures executed around the test, and summary output after.", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -4064,10 +4070,19 @@ func LoadNS() {
 		var tmp1 lang.ArityFn
 		tmp1 = lang.NewArityFn(
 			lang.FnFunc0(func() any {
-				tmp2 := checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
-				tmp3 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
-				tmp4 := lang.Apply1(tmp2, tmp3)
-				return tmp4
+				tmp2 := var_clojure_DOT_test_run_DASH_tests.RootVersion() == aotRootVersion14 && !var_clojure_DOT_test_run_DASH_tests.IsMacro()
+				var tmp3 any
+				if !tmp2 {
+					tmp3 = checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
+				}
+				tmp4 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
+				var tmp5 any
+				if tmp2 {
+					tmp5 = aotDirectFn14.Invoke1(tmp4)
+				} else {
+					tmp5 = lang.Apply1(tmp3, tmp4)
+				}
+				return tmp5
 			}),
 			nil,
 			nil,
@@ -4111,7 +4126,9 @@ func LoadNS() {
 			}),
 			0,
 		)
+		aotDirectFn14 = tmp1
 		var_clojure_DOT_test_run_DASH_tests = ns.InternWithValue(tmp0, tmp1, true)
+		aotRootVersion14 = var_clojure_DOT_test_run_DASH_tests.RootVersion()
 		var_clojure_DOT_test_run_DASH_tests.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(759), kw_column, int(7), kw_end_DASH_line, int(759), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_namespaces)), kw_doc, "Runs all tests in the given namespaces; prints results.\n  Defaults to current namespace if none given.  Returns a map\n  summarizing test results.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -4210,7 +4227,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := var_clojure_DOT_test_test_DASH_vars.RootVersion() == aotRootVersion17 && !var_clojure_DOT_test_test_DASH_vars.IsMacro()
+			tmp3 := var_clojure_DOT_test_test_DASH_vars.RootVersion() == aotRootVersion19 && !var_clojure_DOT_test_test_DASH_vars.IsMacro()
 			var tmp4 any
 			if !tmp3 {
 				tmp4 = checkDerefVar(var_clojure_DOT_test_test_DASH_vars)
@@ -4219,15 +4236,15 @@ func LoadNS() {
 			tmp6 := aotExternalFn48(tmp5)
 			var tmp7 any
 			if tmp3 {
-				tmp7 = aotDirectFn17(tmp6)
+				tmp7 = aotDirectFn19(tmp6)
 			} else {
 				tmp7 = lang.Apply1(tmp4, tmp6)
 			}
 			return tmp7
 		})
-		aotDirectFn15 = tmp1
+		aotDirectFn17 = tmp1
 		var_clojure_DOT_test_test_DASH_all_DASH_vars = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion15 = var_clojure_DOT_test_test_DASH_all_DASH_vars.RootVersion()
+		aotRootVersion17 = var_clojure_DOT_test_test_DASH_all_DASH_vars.RootVersion()
 		var_clojure_DOT_test_test_DASH_all_DASH_vars.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(728), kw_column, int(7), kw_end_DASH_line, int(728), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Calls test-vars on every var interned in the namespace, with fixtures.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -4294,14 +4311,14 @@ func LoadNS() {
 								} // end let
 								tmp24 = tmp25
 							} else {
-								tmp26 := var_clojure_DOT_test_test_DASH_all_DASH_vars.RootVersion() == aotRootVersion15 && !var_clojure_DOT_test_test_DASH_all_DASH_vars.IsMacro()
+								tmp26 := var_clojure_DOT_test_test_DASH_all_DASH_vars.RootVersion() == aotRootVersion17 && !var_clojure_DOT_test_test_DASH_all_DASH_vars.IsMacro()
 								var tmp27 any
 								if !tmp26 {
 									tmp27 = checkDerefVar(var_clojure_DOT_test_test_DASH_all_DASH_vars)
 								}
 								var tmp28 any
 								if tmp26 {
-									tmp28 = aotDirectFn15(v13)
+									tmp28 = aotDirectFn17(v13)
 								} else {
 									tmp28 = lang.Apply1(tmp27, v13)
 								}
@@ -4333,9 +4350,9 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		aotDirectFn16 = tmp1
+		aotDirectFn18 = tmp1
 		var_clojure_DOT_test_test_DASH_ns = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion16 = var_clojure_DOT_test_test_DASH_ns.RootVersion()
+		aotRootVersion18 = var_clojure_DOT_test_test_DASH_ns.RootVersion()
 		var_clojure_DOT_test_test_DASH_ns.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(734), kw_column, int(7), kw_end_DASH_line, int(734), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "If the namespace defines a function named test-ns-hook, calls that.\n  Otherwise, calls test-all-vars on the namespace.  'ns' is a\n  namespace object or a symbol.\n\n  Internally binds *report-counters* to a ref initialized to\n  *initial-report-counters*.  Returns the final, dereferenced state of\n  *report-counters*.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -4950,9 +4967,9 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		aotDirectFn17 = tmp1
+		aotDirectFn19 = tmp1
 		var_clojure_DOT_test_test_DASH_vars = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion17 = var_clojure_DOT_test_test_DASH_vars.RootVersion()
+		aotRootVersion19 = var_clojure_DOT_test_test_DASH_vars.RootVersion()
 		var_clojure_DOT_test_test_DASH_vars.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(714), kw_column, int(7), kw_end_DASH_line, int(714), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_vars)), kw_doc, "Groups vars by their namespace and runs test-var on them with\n  appropriate fixtures applied.", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -5037,9 +5054,9 @@ func LoadNS() {
 			tmp6 := aotExternalFn7(tmp2, tmp5)
 			return tmp6
 		})
-		aotDirectFn18 = tmp1
+		aotDirectFn20 = tmp1
 		var_clojure_DOT_test_testing_DASH_contexts_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion18 = var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion()
+		aotRootVersion20 = var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion()
 		var_clojure_DOT_test_testing_DASH_contexts_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(306), kw_column, int(7), kw_end_DASH_line, int(306), kw_end_DASH_column, int(26), kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a string representation of the current test context. Joins\n  strings in *testing-contexts* with spaces.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -5127,9 +5144,9 @@ func LoadNS() {
 			} // end let
 			return tmp3
 		})
-		aotDirectFn19 = tmp1
+		aotDirectFn21 = tmp1
 		var_clojure_DOT_test_testing_DASH_vars_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion19 = var_clojure_DOT_test_testing_DASH_vars_DASH_str.RootVersion()
+		aotRootVersion21 = var_clojure_DOT_test_testing_DASH_vars_DASH_str.RootVersion()
 		var_clojure_DOT_test_testing_DASH_vars_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(293), kw_column, int(7), kw_end_DASH_line, int(293), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Returns a string representation of the current test.  Renders names\n  in *testing-vars* as a list, then the source file and line of\n  current assertion.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})

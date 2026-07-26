@@ -83,6 +83,8 @@ type aotSpecializationTarget struct {
 	vr              *lang.Var
 	fn              *Fn
 	arity           int
+	arityDispatch   bool
+	directArities   [21]bool
 	directFnVar     string
 	int64FnVar      string
 	int64Analysis   *int64AOTAnalysis
@@ -1804,8 +1806,17 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	if aotTarget != nil {
 		g.writef("var %s any\n", resultVar)
 		g.writef("if %s {\n", aotFast)
-		g.writef("%s = %s(%s)\n",
-			resultVar, aotTarget.directFnVar, strings.Join(argExprs, ", "))
+		if aotTarget.arityDispatch {
+			g.writef("%s = %s.Invoke%d(%s)\n",
+				resultVar,
+				aotTarget.directFnVar,
+				len(argExprs),
+				strings.Join(argExprs, ", "),
+			)
+		} else {
+			g.writef("%s = %s(%s)\n",
+				resultVar, aotTarget.directFnVar, strings.Join(argExprs, ", "))
+		}
 		g.writef("} else {\n")
 		g.generateApply(resultVar, aotFallbackFn, argExprs, false)
 		g.writef("}\n")

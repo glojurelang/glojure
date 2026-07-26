@@ -12,6 +12,11 @@ import (
 	reflect "reflect"
 )
 
+var aotDirectFn0 lang.ArityFn
+var aotRootVersion0 *lang.VarRootVersion
+var aotDirectFn1 lang.ArityFn
+var aotRootVersion1 *lang.VarRootVersion
+
 func aotCacheFn1(vr *lang.Var) lang.FnFunc1 {
 	version := vr.RootVersion()
 	fn := checkDerefVar(vr)
@@ -2213,7 +2218,9 @@ func LoadNS() {
 			}),
 			2,
 		)
+		aotDirectFn0 = tmp1
 		var_glojure_DOT_go_DOT_io_copy = ns.InternWithValue(tmp0, tmp1, true)
+		aotRootVersion0 = var_glojure_DOT_go_DOT_io_copy.RootVersion()
 		var_glojure_DOT_go_DOT_io_copy.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "glojure/go/io.glj", kw_line, int(386), kw_column, int(7), kw_end_DASH_line, int(386), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(sym_input, sym_output, sym__AMP_, sym_opts)), kw_doc, "Copies input to output.  Returns nil or throws IOException.\n  Input may be an InputStream, Reader, File, byte[], char[], or String.\n  Output may be an OutputStream, Writer, or File.\n\n  Options are key/value pairs and may be one of\n\n    :buffer-size  buffer size to use, default is 1024.\n    :encoding     encoding to use if converting between\n                  byte and char streams.   \n\n  Does not close any streams except those it opens itself \n  (on a File).", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))
 		})
@@ -2488,7 +2495,9 @@ func LoadNS() {
 			}),
 			1,
 		)
+		aotDirectFn1 = tmp1
 		var_glojure_DOT_go_DOT_io_reader = ns.InternWithValue(tmp0, tmp1, true)
+		aotRootVersion1 = var_glojure_DOT_go_DOT_io_reader.RootVersion()
 		var_glojure_DOT_go_DOT_io_reader.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf((*io4.Reader)(nil)).Elem()
 			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "glojure/go/io.glj", kw_line, int(89), kw_column, int(7), kw_end_DASH_line, int(89), kw_end_DASH_column, int(23), kw_arglists, lang.NewList(lang.NewVector(sym_x, sym__AMP_, sym_opts)), kw_doc, "Attempts to coerce its argument into an open io.Reader.\n\n   Default implementations are provided for Reader, BufferedReader,\n   InputStream, File, URI, URL, Socket, byte slices, rune slices,\n   and string.\n\n   If argument is a string, it tries to resolve it first as a URI, then\n   as a local file name.  URIs with a 'file' protocol are converted to\n   local file names.\n\n   Should be used inside with-open to ensure the io.Reader is properly\n   closed.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_io))

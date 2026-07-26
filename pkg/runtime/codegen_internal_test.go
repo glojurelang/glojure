@@ -87,6 +87,49 @@ func TestGenerateFixedArityFunctionsThroughTwenty(t *testing.T) {
 	}
 }
 
+func TestGenerateDirectCallsForKnownFunctionArities(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.direct-known-arities"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn fixed
+		  [a b c d e f g h i j k l m n o p q r s t]
+		  t)
+		(defn choose
+		  ([x] x)
+		  ([x y] y))
+		(defn flexible
+		  ([x] x)
+		  ([x y & more] more))
+		(defn call-fixed []
+		  (fixed 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20))
+		(defn call-one [] (choose 1))
+		(defn call-two [] (choose 1 2))
+		(defn call-variadic [] (flexible 1 2 3))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate known function calls: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "lang.FnFunc20") ||
+		!strings.Contains(generated, "aotDirectFn") {
+		t.Fatalf("known arity-20 function did not receive a direct slot:\n%s", generated)
+	}
+	if got := strings.Count(generated, " lang.ArityFn\n"); got < 2 {
+		t.Fatalf("multi-arity functions received %d direct slots, want at least 2:\n%s",
+			got, generated)
+	}
+	for _, call := range []string{".Invoke1(", ".Invoke2(", ".Invoke3("} {
+		if !strings.Contains(generated, call) {
+			t.Fatalf("known function call omitted direct %s dispatch:\n%s",
+				call, generated)
+		}
+	}
+}
+
 func TestGenerateMutableRuntimeValues(t *testing.T) {
 	generator := NewGenerator(&bytes.Buffer{})
 
