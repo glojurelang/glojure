@@ -231,6 +231,9 @@ func (m *Map) clone() *Map {
 func (m *Map) Assoc(k, v any) Associative {
 	for i := 0; i < len(m.keyVals); i += 2 {
 		if Equiv(m.keyVals[i], k) {
+			if Identical(m.keyVals[i+1], v) {
+				return m
+			}
 			newMap := m.clone()
 			newMap.keyVals[i+1] = v
 			return newMap

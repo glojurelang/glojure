@@ -74,6 +74,25 @@ func TestMapAssocInvalidatesCachedHashes(t *testing.T) {
 	}
 }
 
+func TestMapAssocIdenticalValueReturnsOriginal(t *testing.T) {
+	key := NewKeyword("key")
+	value := []int{1, 2, 3}
+	original := NewMap(key, value).(*Map)
+
+	if got := original.Assoc(key, value); got != original {
+		t.Fatal("Assoc with an identical value did not return the original map")
+	}
+
+	equalValue := []int{1, 2, 3}
+	updated := original.Assoc(key, equalValue).(*Map)
+	if updated == original {
+		t.Fatal("Assoc with an equal but non-identical value returned the original map")
+	}
+	if got := updated.ValAt(key); !Identical(got, equalValue) {
+		t.Fatalf("updated value = %v, want the newly associated slice", got)
+	}
+}
+
 func TestKeywordMapsUseClojureArrayMapThreshold(t *testing.T) {
 	keyVals := make([]any, 0, arrayMapKeywordThreshold)
 	for i := 0; i < arrayMapKeywordThreshold/2; i++ {
