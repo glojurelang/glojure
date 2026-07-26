@@ -8,6 +8,10 @@ const (
 	arrayMapHashThreshold    = 16
 	arrayMapKeywordThreshold = 128
 	arrayMapInlineSize       = arrayMapHashThreshold - 2
+
+	// PersistentArrayMapInlineKeyValueCount lets the compiler preserve the
+	// one-allocation constructor for maps whose entries fit inline.
+	PersistentArrayMapInlineKeyValueCount = arrayMapInlineSize
 )
 
 type (
@@ -88,6 +92,29 @@ func NewMap(keyVals ...any) IPersistentMap {
 	}
 
 	return newArrayMap(keyVals)
+}
+
+// NewMapUniqueKeys constructs a map from compiler-owned key/value storage.
+// Like Clojure's RT.mapUniqueKeys, it may retain the variadic backing array
+// when the entries form a non-small persistent array map. Callers passing a
+// slice with ... must not mutate that slice afterward.
+func NewMapUniqueKeys(keyVals ...any) IPersistentMap {
+	if len(keyVals) == 0 {
+		return emptyMap
+	}
+
+	if len(keyVals)%2 != 0 {
+		panic("invalid map. must have even number of inputs")
+	}
+
+	if !canBePersistentArrayMap(keyVals) {
+		return NewPersistentHashMap(keyVals...)
+	}
+
+	if len(keyVals) <= arrayMapInlineSize {
+		return newArrayMap(keyVals)
+	}
+	return &Map{keyVals: keyVals}
 }
 
 func newArrayMap(keyVals []any) *Map {

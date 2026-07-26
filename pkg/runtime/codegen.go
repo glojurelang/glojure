@@ -1076,7 +1076,11 @@ func (g *Generator) generateRefValue(ref *lang.Ref) string {
 // generateMapValue generates Go code for a Clojure map
 func (g *Generator) generateMapValue(m lang.IPersistentMap) string {
 	var buf bytes.Buffer
-	buf.WriteString("lang.NewMap(")
+	if m.Count()*2 > lang.PersistentArrayMapInlineKeyValueCount {
+		buf.WriteString("lang.NewMapUniqueKeys(")
+	} else {
+		buf.WriteString("lang.NewMap(")
+	}
 
 	// Iterate through the map entries
 	for seq := m.Seq(); seq != nil; seq = seq.Next() {
@@ -2358,7 +2362,11 @@ func (g *Generator) generateMap(node *ast.Node) string {
 		keyValIds[2*i+1] = valId // value
 	}
 	mapId := g.allocateTempVar()
-	g.writef("%s := lang.NewMap(%s)\n", mapId, strings.Join(keyValIds, ", "))
+	constructor := "lang.NewMap"
+	if len(keyValIds) > lang.PersistentArrayMapInlineKeyValueCount {
+		constructor = "lang.NewMapUniqueKeys"
+	}
+	g.writef("%s := %s(%s)\n", mapId, constructor, strings.Join(keyValIds, ", "))
 
 	return mapId
 }

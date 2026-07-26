@@ -57,6 +57,27 @@ func TestSmallMapWithMetaKeepsInlineStorageAlive(t *testing.T) {
 	}
 }
 
+func TestNewMapUniqueKeysRetainsCompilerOwnedStorage(t *testing.T) {
+	keyVals := make([]any, arrayMapHashThreshold)
+	for i := 0; i < len(keyVals); i += 2 {
+		keyVals[i] = NewKeyword("k" + strconv.Itoa(i/2))
+		keyVals[i+1] = int64(i / 2)
+	}
+
+	m := NewMapUniqueKeys(keyVals...).(*Map)
+	if &m.keyVals[0] != &keyVals[0] {
+		t.Fatal("NewMapUniqueKeys copied compiler-owned key/value storage")
+	}
+
+	var result IPersistentMap
+	if got := testing.AllocsPerRun(1_000, func() {
+		result = NewMapUniqueKeys(keyVals...)
+	}); got != 1 {
+		t.Fatalf("owned-storage map construction allocated %v objects, want 1", got)
+	}
+	runtime.KeepAlive(result)
+}
+
 func TestMapAssocInvalidatesCachedHashes(t *testing.T) {
 	key := NewKeyword("key")
 	original := NewMap(key, int64(1)).(*Map)
