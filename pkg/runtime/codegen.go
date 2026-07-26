@@ -2473,6 +2473,22 @@ func (g *Generator) generateHostCall(node *ast.Node) string {
 		g.writef("%s := %s.%s(%s)\n", resultId, tgtId, directMethod, strings.Join(directArgs, ", "))
 		return resultId
 	}
+	if directMethod, receiver, directArgs, ok := g.directInferredHostCall(
+		tgt,
+		tgtId,
+		methodName,
+		argIds,
+	); ok {
+		resultId := g.allocateTempVar()
+		g.writef(
+			"%s := %s.%s(%s)\n",
+			resultId,
+			receiver,
+			directMethod,
+			strings.Join(directArgs, ", "),
+		)
+		return resultId
+	}
 
 	methodId := g.allocateTempVar()
 	g.writef("%s, _ := lang.FieldOrMethod(%s, %q)\n", methodId, tgtId, methodName)
@@ -2530,43 +2546,217 @@ func directHostCall(
 	if typ == nil {
 		return "", nil, false
 	}
+	method, receiverOffset, ok := directHostMethodForType(typ, name)
+	if !ok {
+		return "", nil, false
+	}
+	converted, ok := convertDirectHostArgs(
+		method,
+		receiverOffset,
+		args,
+		convertDirectHostArg,
+	)
+	if !ok {
+		return "", nil, false
+	}
+	return method.Name, converted, true
+}
+
+func convertDirectHostArg(paramType reflect.Type, arg string) (string, bool) {
+	switch paramType {
+	case reflect.TypeFor[any]():
+		return arg, true
+	case reflect.TypeFor[int]():
+		return "lang.IntCast(" + arg + ")", true
+	default:
+		// Keep the reflective path when codegen cannot preserve Glojure's
+		// host-argument coercion semantics.
+		return "", false
+	}
+}
+
+func directHostMethodForType(
+	typ reflect.Type,
+	name string,
+) (reflect.Method, int, bool) {
+	if typ == nil || name == "" {
+		return reflect.Method{}, 0, false
+	}
 	if name[0] >= 'a' && name[0] <= 'z' {
 		name = string(name[0]-'a'+'A') + name[1:]
 	}
 	method, ok := typ.MethodByName(name)
-	if !ok || method.Type.NumOut() != 1 {
-		return "", nil, false
+	receiverOffset := 1
+	if typ.Kind() == reflect.Interface {
+		receiverOffset = 0
 	}
-	fixedArgCount := method.Type.NumIn() - 1
+	if !ok && typ.Kind() != reflect.Pointer {
+		typ = reflect.PointerTo(typ)
+		method, ok = typ.MethodByName(name)
+		receiverOffset = 1
+	}
+	if !ok || method.Type.NumOut() != 1 {
+		return reflect.Method{}, 0, false
+	}
+	return method, receiverOffset, true
+}
+
+func convertDirectHostArgs(
+	method reflect.Method,
+	receiverOffset int,
+	args []string,
+	convert func(reflect.Type, string) (string, bool),
+) ([]string, bool) {
+	fixedArgCount := method.Type.NumIn() - receiverOffset
 	if method.Type.IsVariadic() {
 		fixedArgCount--
 		if len(args) < fixedArgCount {
-			return "", nil, false
+			return nil, false
 		}
 	} else if len(args) != fixedArgCount {
-		return "", nil, false
+		return nil, false
 	}
 
-	anyType := reflect.TypeFor[any]()
-	intType := reflect.TypeFor[int]()
 	converted := make([]string, len(args))
 	for i := range args {
-		paramType := anyType
+		var paramType reflect.Type
 		if i < fixedArgCount {
-			paramType = method.Type.In(i + 1)
+			paramType = method.Type.In(i + receiverOffset)
 		} else {
 			paramType = method.Type.In(method.Type.NumIn() - 1).Elem()
 		}
-		switch paramType {
-		case anyType:
-			converted[i] = args[i]
-		case intType:
-			converted[i] = "lang.IntCast(" + args[i] + ")"
-		default:
-			return "", nil, false
+		var ok bool
+		converted[i], ok = convert(paramType, args[i])
+		if !ok {
+			return nil, false
 		}
 	}
-	return method.Name, converted, true
+	return converted, true
+}
+
+func (g *Generator) directInferredHostCall(
+	target *ast.Node,
+	targetID string,
+	name string,
+	args []string,
+) (methodName, receiver string, converted []string, ok bool) {
+	typ, ok := inferredHostType(target)
+	if !ok {
+		return "", "", nil, false
+	}
+	method, receiverOffset, ok := directHostMethodForType(typ, name)
+	if !ok {
+		return "", "", nil, false
+	}
+	converted, ok = convertDirectHostArgs(
+		method,
+		receiverOffset,
+		args,
+		convertDirectHostArg,
+	)
+	if !ok {
+		return "", "", nil, false
+	}
+	interfaceExpr, ok := g.hostMethodInterfaceExpr(method, receiverOffset)
+	if !ok {
+		return "", "", nil, false
+	}
+	return method.Name,
+		fmt.Sprintf("%s.(%s)", targetID, interfaceExpr),
+		converted,
+		true
+}
+
+func inferredHostType(target *ast.Node) (reflect.Type, bool) {
+	var tag *lang.Symbol
+	if target != nil {
+		if withMeta, ok := target.Form.(lang.IMeta); ok {
+			tag, _ = lang.Get(withMeta.Meta(), lang.KWTag).(*lang.Symbol)
+		}
+		if tag == nil && target.Op == ast.OpLocal {
+			tag, _ = lang.Get(
+				target.Sub.(*ast.LocalNode).Name.Meta(),
+				lang.KWTag,
+			).(*lang.Symbol)
+		}
+	}
+	if tag == nil {
+		return nil, false
+	}
+	value, ok := pkgmap.Get(tag.FullName())
+	if !ok {
+		return nil, false
+	}
+	switch value := value.(type) {
+	case reflect.Type:
+		return value, true
+	case *lang.Class:
+		return value.Type, value.Type != nil
+	default:
+		return nil, false
+	}
+}
+
+func (g *Generator) hostMethodInterfaceExpr(
+	method reflect.Method,
+	receiverOffset int,
+) (string, bool) {
+	params := make([]string, 0, method.Type.NumIn()-receiverOffset)
+	for i := receiverOffset; i < method.Type.NumIn(); i++ {
+		paramType := method.Type.In(i)
+		variadic := method.Type.IsVariadic() && i == method.Type.NumIn()-1
+		if variadic {
+			paramType = paramType.Elem()
+		}
+		typeExpr, ok := g.goTypeExpr(paramType)
+		if !ok {
+			return "", false
+		}
+		if variadic {
+			typeExpr = "..." + typeExpr
+		}
+		params = append(params, typeExpr)
+	}
+	result, ok := g.goTypeExpr(method.Type.Out(0))
+	if !ok {
+		return "", false
+	}
+	return fmt.Sprintf(
+		"interface { %s(%s) %s }",
+		method.Name,
+		strings.Join(params, ", "),
+		result,
+	), true
+}
+
+func (g *Generator) goTypeExpr(typ reflect.Type) (string, bool) {
+	if typ == reflect.TypeFor[any]() {
+		return "any", true
+	}
+	if typ.Name() != "" {
+		if typ.PkgPath() == "" {
+			return typ.Name(), true
+		}
+		alias := g.addImportWithAlias(typ.PkgPath())
+		return alias + "." + typ.Name(), true
+	}
+	switch typ.Kind() {
+	case reflect.Pointer:
+		elem, ok := g.goTypeExpr(typ.Elem())
+		return "*" + elem, ok
+	case reflect.Slice:
+		elem, ok := g.goTypeExpr(typ.Elem())
+		return "[]" + elem, ok
+	case reflect.Map:
+		key, keyOK := g.goTypeExpr(typ.Key())
+		value, valueOK := g.goTypeExpr(typ.Elem())
+		return "map[" + key + "]" + value, keyOK && valueOK
+	case reflect.Interface:
+		if typ.NumMethod() == 0 {
+			return "any", true
+		}
+	}
+	return "", false
 }
 
 func (g *Generator) generateHostInterop(node *ast.Node) string {
@@ -2575,6 +2765,16 @@ func (g *Generator) generateHostInterop(node *ast.Node) string {
 	tgtId := g.generateASTNode(hostInteropNode.Target)
 
 	mOrF := hostInteropNode.MOrF.Name()
+	if directMethod, receiver, _, ok := g.directInferredHostCall(
+		hostInteropNode.Target,
+		tgtId,
+		mOrF,
+		nil,
+	); ok {
+		resultId := g.allocateTempVar()
+		g.writef("%s := %s.%s()\n", resultId, receiver, directMethod)
+		return resultId
+	}
 	mOrFId := g.allocateTempVar()
 	g.writef("%s, ok := lang.FieldOrMethod(%s, %q)\n", mOrFId, tgtId, mOrF)
 	g.writef("if !ok {\n")

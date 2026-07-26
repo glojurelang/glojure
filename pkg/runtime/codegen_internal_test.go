@@ -13,6 +13,7 @@ import (
 
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
+	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
 func TestGenerateNamedScalarValue(t *testing.T) {
@@ -215,6 +216,90 @@ func TestDirectHostCallConvertsIntegerArguments(t *testing.T) {
 
 	if method, _, ok := directHostCall(target, "Get", []string{"collection"}); ok {
 		t.Fatalf("undersupplied variadic call unexpectedly resolved directly as %q", method)
+	}
+}
+
+func TestDirectTaggedHostCallUsesInferredMethodSet(t *testing.T) {
+	const volatileType = "github.com:glojurelang:glojure:pkg:lang.Volatile"
+	pkgmap.Set(
+		"github.com/glojurelang/glojure/pkg/lang.Volatile",
+		reflect.TypeOf(lang.Volatile{}),
+	)
+	taggedName := lang.NewSymbol("value").WithMeta(
+		lang.NewMap(lang.KWTag, lang.NewSymbol(volatileType)),
+	).(*lang.Symbol)
+	form := lang.NewSymbol("value").WithMeta(
+		lang.NewMap(lang.KWLine, int64(1)),
+	)
+	target := ast.MakeNode(ast.OpLocal, form)
+	target.Sub = &ast.LocalNode{Name: taggedName}
+
+	generator := NewGenerator(&bytes.Buffer{})
+	method, receiver, args, ok := generator.directInferredHostCall(
+		target,
+		"value",
+		"reset",
+		[]string{"replacement"},
+	)
+	if !ok {
+		t.Fatal("tagged Volatile Reset call was not resolved directly")
+	}
+	if want := "Reset"; method != want {
+		t.Fatalf("method = %q, want %q", method, want)
+	}
+	if want := "value.(interface { Reset(any) any })"; receiver != want {
+		t.Fatalf("receiver = %q, want %q", receiver, want)
+	}
+	if want := []string{"replacement"}; !reflect.DeepEqual(args, want) {
+		t.Fatalf("args = %v, want %v", args, want)
+	}
+}
+
+func TestDirectTaggedHostCallUsesFormMetadata(t *testing.T) {
+	const derefType = "github.com:glojurelang:glojure:pkg:lang.IDeref"
+	pkgmap.Set(
+		"github.com/glojurelang/glojure/pkg/lang.IDeref",
+		reflect.TypeFor[lang.IDeref](),
+	)
+	form := lang.NewSymbol("value").WithMeta(
+		lang.NewMap(lang.KWTag, lang.NewSymbol(derefType)),
+	).(*lang.Symbol)
+	target := ast.MakeNode(ast.OpLocal, form)
+	target.Sub = &ast.LocalNode{Name: lang.NewSymbol("value")}
+
+	generator := NewGenerator(&bytes.Buffer{})
+	method, receiver, args, ok := generator.directInferredHostCall(
+		target,
+		"value",
+		"deref",
+		nil,
+	)
+	if !ok {
+		t.Fatal("tagged IDeref call was not resolved directly")
+	}
+	if want := "Deref"; method != want {
+		t.Fatalf("method = %q, want %q", method, want)
+	}
+	if want := "value.(interface { Deref() any })"; receiver != want {
+		t.Fatalf("receiver = %q, want %q", receiver, want)
+	}
+	if len(args) != 0 {
+		t.Fatalf("args = %v, want none", args)
+	}
+}
+
+func TestDirectTaggedHostCallRequiresResolvableType(t *testing.T) {
+	target := ast.MakeNode(ast.OpLocal, lang.NewSymbol("value"))
+	target.Sub = &ast.LocalNode{Name: lang.NewSymbol("value")}
+
+	generator := NewGenerator(&bytes.Buffer{})
+	if method, _, _, ok := generator.directInferredHostCall(
+		target,
+		"value",
+		"deref",
+		nil,
+	); ok {
+		t.Fatalf("untagged call unexpectedly resolved directly as %q", method)
 	}
 }
 
