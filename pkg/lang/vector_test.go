@@ -127,19 +127,17 @@ func TestNthStringASCII(t *testing.T) {
 	}
 }
 
-// TestNthStringMultibyte verifies Nth on multi-byte UTF-8 strings returns
-// runes (not bytes).
+// TestNthStringMultibyte verifies strings use byte-oriented indexing.
 func TestNthStringMultibyte(t *testing.T) {
 	s := "héllo" // 'é' is 2 bytes (U+00E9)
-	wantRunes := []rune(s)
-	for i, want := range wantRunes {
+	for i, want := range []byte(s) {
 		got, ok := Nth(s, i)
 		if !ok {
 			t.Errorf("Nth(%q, %d): ok=false, want true", s, i)
 			continue
 		}
-		if got != NewChar(want) {
-			t.Errorf("Nth(%q, %d) = %v, want %v", s, i, got, NewChar(want))
+		if got != NewChar(rune(want)) {
+			t.Errorf("Nth(%q, %d) = %v, want %v", s, i, got, NewChar(rune(want)))
 		}
 	}
 }
@@ -168,14 +166,13 @@ func TestCharAtASCII(t *testing.T) {
 	}
 }
 
-// TestCharAtMultibyte verifies CharAt on multi-byte UTF-8 strings.
+// TestCharAtMultibyte verifies CharAt uses byte-oriented indexing.
 func TestCharAtMultibyte(t *testing.T) {
 	s := "café"
-	wantRunes := []rune(s)
-	for i, want := range wantRunes {
+	for i, want := range []byte(s) {
 		got := CharAt(s, i)
-		if got != NewChar(want) {
-			t.Errorf("CharAt(%q, %d) = %v, want %v", s, i, got, NewChar(want))
+		if got != NewChar(rune(want)) {
+			t.Errorf("CharAt(%q, %d) = %v, want %v", s, i, got, NewChar(rune(want)))
 		}
 	}
 }

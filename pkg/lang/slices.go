@@ -62,12 +62,11 @@ func ToSlice(x any) []any {
 		return res
 	}
 
-	// Handle string - convert to character array
+	// Handle string - convert each byte to a character value.
 	if s, ok := x.(string); ok {
-		runes := []rune(s) // Important: use runes for proper Unicode handling
-		res := make([]any, len(runes))
-		for i, ch := range runes {
-			res[i] = NewChar(ch) // Convert each rune to Char
+		res := make([]any, len(s))
+		for i := 0; i < len(s); i++ {
+			res[i] = NewChar(rune(s[i]))
 		}
 		return res
 	}

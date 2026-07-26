@@ -3,7 +3,6 @@ package lang
 import (
 	"fmt"
 	"reflect"
-	"unicode/utf8"
 )
 
 // Nther is an interface for compound values whose elements can be
@@ -45,29 +44,10 @@ func Nth(x interface{}, n int) (interface{}, bool) {
 			x = x.Next()
 		}
 	case string:
-		if n < 0 {
+		if n < 0 || n >= len(x) {
 			return nil, false
 		}
-		// Walk bytes, using single-byte increment for ASCII and
-		// utf8.DecodeRuneInString only for multi-byte characters.
-		// This is effectively O(1) per rune for pure-ASCII input.
-		bytePos := 0
-		for i := 0; i < n; i++ {
-			if bytePos >= len(x) {
-				return nil, false
-			}
-			if x[bytePos] < 0x80 {
-				bytePos++
-			} else {
-				_, size := utf8.DecodeRuneInString(x[bytePos:])
-				bytePos += size
-			}
-		}
-		if bytePos >= len(x) {
-			return nil, false
-		}
-		r, _ := utf8.DecodeRuneInString(x[bytePos:])
-		return NewChar(r), true
+		return NewChar(rune(x[n])), true
 	}
 
 	if seq := Seq(x); seq != nil {
