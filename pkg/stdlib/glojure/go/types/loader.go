@@ -15,6 +15,87 @@ import (
 var aotDirectFn0 lang.FnFunc1
 var aotRootVersion0 *lang.VarRootVersion
 
+func aotCacheFn1(vr *lang.Var) lang.FnFunc1 {
+	version := vr.RootVersion()
+	fn := checkDerefVar(vr)
+	if direct, ok := fn.(lang.FnFunc1); ok {
+		return func(p0 any) any {
+			if vr.RootVersion() == version {
+				return direct(p0)
+			}
+			return lang.Apply1(checkDerefVar(vr), p0)
+		}
+	}
+	if fixed, ok := fn.(lang.FixedArityFn1); ok {
+		return func(p0 any) any {
+			if vr.RootVersion() == version {
+				return fixed.Invoke1(p0)
+			}
+			return lang.Apply1(checkDerefVar(vr), p0)
+		}
+	}
+	return func(p0 any) any {
+		if vr.RootVersion() == version {
+			return lang.Apply1(fn, p0)
+		}
+		return lang.Apply1(checkDerefVar(vr), p0)
+	}
+}
+
+func aotCacheFn2(vr *lang.Var) lang.FnFunc2 {
+	version := vr.RootVersion()
+	fn := checkDerefVar(vr)
+	if direct, ok := fn.(lang.FnFunc2); ok {
+		return func(p0 any, p1 any) any {
+			if vr.RootVersion() == version {
+				return direct(p0, p1)
+			}
+			return lang.Apply2(checkDerefVar(vr), p0, p1)
+		}
+	}
+	if fixed, ok := fn.(lang.FixedArityFn2); ok {
+		return func(p0 any, p1 any) any {
+			if vr.RootVersion() == version {
+				return fixed.Invoke2(p0, p1)
+			}
+			return lang.Apply2(checkDerefVar(vr), p0, p1)
+		}
+	}
+	return func(p0 any, p1 any) any {
+		if vr.RootVersion() == version {
+			return lang.Apply2(fn, p0, p1)
+		}
+		return lang.Apply2(checkDerefVar(vr), p0, p1)
+	}
+}
+
+func aotCacheFn3(vr *lang.Var) lang.FnFunc3 {
+	version := vr.RootVersion()
+	fn := checkDerefVar(vr)
+	if direct, ok := fn.(lang.FnFunc3); ok {
+		return func(p0 any, p1 any, p2 any) any {
+			if vr.RootVersion() == version {
+				return direct(p0, p1, p2)
+			}
+			return lang.Apply3(checkDerefVar(vr), p0, p1, p2)
+		}
+	}
+	if fixed, ok := fn.(lang.FixedArityFn3); ok {
+		return func(p0 any, p1 any, p2 any) any {
+			if vr.RootVersion() == version {
+				return fixed.Invoke3(p0, p1, p2)
+			}
+			return lang.Apply3(checkDerefVar(vr), p0, p1, p2)
+		}
+	}
+	return func(p0 any, p1 any, p2 any) any {
+		if vr.RootVersion() == version {
+			return lang.Apply3(fn, p0, p1, p2)
+		}
+		return lang.Apply3(checkDerefVar(vr), p0, p1, p2)
+	}
+}
+
 func init() {
 	runtime.RegisterNSLoader("glojure/go/types", LoadNS)
 }
@@ -121,6 +202,27 @@ func LoadNS() {
 	var_glojure_DOT_go_DOT_types_from_DASH_string := lang.InternVarName(sym_glojure_DOT_go_DOT_types, sym_from_DASH_string)
 	// var glojure.go.types/struct-field
 	var_glojure_DOT_go_DOT_types_struct_DASH_field := lang.InternVarName(sym_glojure_DOT_go_DOT_types, sym_struct_DASH_field)
+	aotExternalFn0 := aotCacheFn1(var_clojure_DOT_core_class)
+	aotExternalFn1 := aotCacheFn2(var_clojure_DOT_core_apply)
+	aotExternalFn10 := aotCacheFn1(var_clojure_DOT_core_last)
+	aotExternalFn11 := aotCacheFn2(var_clojure_DOT_core_instance_QMARK_)
+	aotExternalFn12 := aotCacheFn2(var_clojure_DOT_core_concat)
+	aotExternalFn13 := aotCacheFn1(var_clojure_DOT_core_butlast)
+	aotExternalDefault14 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_empty_QMARK_)
+	aotExternalRootVersion14 := var_clojure_DOT_core_empty_QMARK_.RootVersion()
+	aotExternalDefault15 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_count)
+	aotExternalRootVersion15 := var_clojure_DOT_core_count.RootVersion()
+	aotExternalDefault2 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_cons)
+	aotExternalRootVersion2 := var_clojure_DOT_core_cons.RootVersion()
+	aotExternalFn3 := aotCacheFn1(var_clojure_DOT_core_not)
+	aotExternalFn4 := aotCacheFn1(var_clojure_DOT_core_string_QMARK_)
+	aotExternalDefault5 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_nth)
+	aotExternalRootVersion5 := var_clojure_DOT_core_nth.RootVersion()
+	aotExternalFn6 := aotCacheFn2(var_clojure_DOT_core__EQ_)
+	aotExternalDefault7 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_first)
+	aotExternalRootVersion7 := var_clojure_DOT_core_first.RootVersion()
+	aotExternalFn8 := aotCacheFn2(var_clojure_DOT_core_map)
+	aotExternalFn9 := aotCacheFn2(var_clojure_DOT_core_repeat)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -201,6 +303,11 @@ func LoadNS() {
 		})
 	}
 	var closed0 any
+	var closed1 any
+	var closed2 any
+	var closed3 any
+	var closed4 any
+	var closed5 any
 	{
 		var tmp0 lang.FnFunc1
 		tmp0 = lang.FnFunc1(func(p0 any) any {
@@ -243,7 +350,425 @@ func LoadNS() {
 		})
 		closed0 = tmp0
 	}
-	var closed1 any
+	// ast->type
+	{
+		tmp0 := sym_ast_DASH__GT_type
+		var tmp2 lang.ArityFn
+		tmp2 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
+				v3 := args[0]
+				_ = v3
+				var v4 any = rest
+				_ = v4
+				tmp5 := aotExternalFn0(v3)
+				return tmp5
+			}),
+			1,
+		)
+		// MultiFn ast->type
+		tmp1 := lang.NewMultiFn("ast->type", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
+		tmp3 := reflect.TypeOf((*ast4.Ident)(nil))
+		var tmp4 lang.ArityFn
+		tmp4 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
+				v5 := args[0]
+				_ = v5
+				var v6 any = rest
+				_ = v6
+				var tmp7 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp7 = lang.NewCons(v5, v6)
+				} else {
+					tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp7 = lang.Apply2(tmp8, v5, v6)
+				}
+				tmp9 := aotExternalFn1(closed0, tmp7)
+				return tmp9
+			}),
+			1,
+		)
+		tmp1.AddMethod(tmp3, tmp4)
+		tmp5 := reflect.TypeOf((*ast4.ArrayType)(nil))
+		var tmp6 lang.ArityFn
+		tmp6 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
+				v7 := args[0]
+				_ = v7
+				var v8 any = rest
+				_ = v8
+				var tmp9 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp9 = lang.NewCons(v7, v8)
+				} else {
+					tmp10 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp9 = lang.Apply2(tmp10, v7, v8)
+				}
+				tmp11 := aotExternalFn1(closed1, tmp9)
+				return tmp11
+			}),
+			1,
+		)
+		tmp1.AddMethod(tmp5, tmp6)
+		tmp7 := reflect.TypeOf((*ast4.MapType)(nil))
+		var tmp8 lang.ArityFn
+		tmp8 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
+				v9 := args[0]
+				_ = v9
+				var v10 any = rest
+				_ = v10
+				var tmp11 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp11 = lang.NewCons(v9, v10)
+				} else {
+					tmp12 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp11 = lang.Apply2(tmp12, v9, v10)
+				}
+				tmp13 := aotExternalFn1(closed2, tmp11)
+				return tmp13
+			}),
+			1,
+		)
+		tmp1.AddMethod(tmp7, tmp8)
+		tmp9 := reflect.TypeOf((*ast4.ChanType)(nil))
+		var tmp10 lang.ArityFn
+		tmp10 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
+				v11 := args[0]
+				_ = v11
+				var v12 any = rest
+				_ = v12
+				var tmp13 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp13 = lang.NewCons(v11, v12)
+				} else {
+					tmp14 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp13 = lang.Apply2(tmp14, v11, v12)
+				}
+				tmp15 := aotExternalFn1(closed3, tmp13)
+				return tmp15
+			}),
+			1,
+		)
+		tmp1.AddMethod(tmp9, tmp10)
+		tmp11 := reflect.TypeOf((*ast4.FuncType)(nil))
+		var tmp12 lang.ArityFn
+		tmp12 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
+				v13 := args[0]
+				_ = v13
+				var v14 any = rest
+				_ = v14
+				var tmp15 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp15 = lang.NewCons(v13, v14)
+				} else {
+					tmp16 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp15 = lang.Apply2(tmp16, v13, v14)
+				}
+				tmp17 := aotExternalFn1(closed4, tmp15)
+				return tmp17
+			}),
+			1,
+		)
+		tmp1.AddMethod(tmp11, tmp12)
+		tmp13 := reflect.TypeOf((*ast4.StructType)(nil))
+		var tmp14 lang.ArityFn
+		tmp14 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
+				v15 := args[0]
+				_ = v15
+				var v16 any = rest
+				_ = v16
+				var tmp17 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp17 = lang.NewCons(v15, v16)
+				} else {
+					tmp18 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp17 = lang.Apply2(tmp18, v15, v16)
+				}
+				tmp19 := aotExternalFn1(closed5, tmp17)
+				return tmp19
+			}),
+			1,
+		)
+		tmp1.AddMethod(tmp13, tmp14)
+		var_glojure_DOT_go_DOT_types_ast_DASH__GT_type = ns.InternWithValue(tmp0, tmp1, true)
+		var_glojure_DOT_go_DOT_types_ast_DASH__GT_type.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(4), kw_column, int(4), kw_end_DASH_line, int(4), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
+		})
+	}
+	// from-string
+	{
+		tmp0 := sym_from_DASH_string
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			var tmp3 any
+			tmp4 := aotExternalFn4(v2)
+			tmp5 := aotExternalFn3(tmp4)
+			if lang.IsTruthy(tmp5) {
+				tmp6 := lang.Apply2(fmt.Errorf, "from-string: argument must be a string, got %T", v2)
+				panic(tmp6)
+			} else {
+			}
+			_ = tmp3
+			var tmp7 any
+			{ // let
+				// let binding "vec__805"
+				tmp8 := lang.Apply1(parser5.ParseExpr, v2)
+				var v9 any = tmp8
+				_ = v9
+				// let binding "ast"
+				var tmp10 any
+				if aotExternalDefault5 && var_clojure_DOT_core_nth.RootVersion() == aotExternalRootVersion5 {
+					tmp10 = runtime.RT.NthDefault(v9, lang.IntCast(int64(0)), nil)
+				} else {
+					tmp11 := checkDerefVar(var_clojure_DOT_core_nth)
+					tmp10 = lang.Apply3(tmp11, v9, int64(0), nil)
+				}
+				var v12 any = tmp10
+				_ = v12
+				// let binding "err"
+				var tmp13 any
+				if aotExternalDefault5 && var_clojure_DOT_core_nth.RootVersion() == aotExternalRootVersion5 {
+					tmp13 = runtime.RT.NthDefault(v9, lang.IntCast(int64(1)), nil)
+				} else {
+					tmp14 := checkDerefVar(var_clojure_DOT_core_nth)
+					tmp13 = lang.Apply3(tmp14, v9, int64(1), nil)
+				}
+				var v15 any = tmp13
+				_ = v15
+				var tmp16 any
+				if lang.IsTruthy(v15) {
+					tmp17 := lang.Apply3(fmt.Errorf, "from-string: invalid type string '%s': %w", v2, v15)
+					panic(tmp17)
+				} else {
+				}
+				_ = tmp16
+				tmp18 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+				tmp19 := lang.Apply1(tmp18, v12)
+				tmp7 = tmp19
+			} // end let
+			return tmp7
+		})
+		aotDirectFn0 = tmp1
+		var_glojure_DOT_go_DOT_types_from_DASH_string = ns.InternWithValue(tmp0, tmp1, true)
+		aotRootVersion0 = var_glojure_DOT_go_DOT_types_from_DASH_string.RootVersion()
+		var_glojure_DOT_go_DOT_types_from_DASH_string.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(92), kw_column, int(7), kw_end_DASH_line, int(92), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_typ)), kw_doc, "Returns a Go type from a go type expression.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
+		})
+	}
+	// struct-field
+	{
+		tmp0 := sym_struct_DASH_field
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			lang.FnFunc1(func(p0 any) any {
+				v2 := p0
+				_ = v2
+				tmp3 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
+				tmp4 := lang.Apply2(tmp3, v2, nil)
+				return tmp4
+			}),
+			lang.FnFunc2(func(p0, p1 any) any {
+				v2 := p0
+				_ = v2
+				v3 := p1
+				_ = v3
+				var tmp4 any
+				{ // let
+					// let binding "typ"
+					tmp5 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+					tmp6 := lang.Apply1(tmp5, v2)
+					var v7 any = tmp6
+					_ = v7
+					// let binding "name"
+					var tmp8 any
+					tmp9 := aotExternalFn6("", v3)
+					if lang.IsTruthy(tmp9) {
+					} else {
+						tmp8 = v3
+					}
+					var v10 any = tmp8
+					_ = v10
+					// let binding "anonymous"
+					tmp11 := lang.Identical(v10, nil)
+					var v12 any = tmp11
+					_ = v12
+					// let binding "name"
+					var tmp13 any
+					{ // let
+						// let binding "or__0__auto__"
+						var v14 any = v10
+						_ = v14
+						var tmp15 any
+						if lang.IsTruthy(v14) {
+							tmp15 = v14
+						} else {
+							tmp16, ok := lang.FieldOrMethod(v7, "Name")
+							if !ok {
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "Name")))
+							}
+							var tmp17 any
+							switch reflect.TypeOf(tmp16).Kind() {
+							case reflect.Func:
+								tmp17 = lang.Apply(tmp16, nil)
+							default:
+								tmp17 = tmp16
+							}
+							tmp15 = tmp17
+						}
+						tmp13 = tmp15
+					} // end let
+					var v14 any = tmp13
+					_ = v14
+					// let binding "sf"
+					tmp15 := reflect.TypeOf((*reflect.StructField)(nil)).Elem()
+					tmp16 := lang.Apply1(lang.Builtins["new"], tmp15)
+					var v17 any = tmp16
+					_ = v17
+					// set! host field
+					var tmp18 any
+					{
+						targetV := reflect.ValueOf(v17)
+						if targetV.Kind() == reflect.Ptr {
+							targetV = targetV.Elem()
+						}
+						fieldVal := targetV.FieldByName("Type")
+						if !fieldVal.IsValid() {
+							panic(fmt.Errorf("no such field Type"))
+						}
+						if !fieldVal.CanSet() {
+							panic(fmt.Errorf("cannot set field Type"))
+						}
+						valV := reflect.ValueOf(v7)
+						if !valV.IsValid() {
+							switch fieldVal.Kind() {
+							case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+								fieldVal.Set(reflect.Zero(fieldVal.Type()))
+							default:
+								panic(fmt.Errorf("cannot set field Type to nil"))
+							}
+						} else {
+							fieldVal.Set(valV)
+						}
+						tmp18 = v7
+					}
+					_ = tmp18
+					// set! host field
+					var tmp19 any
+					{
+						targetV := reflect.ValueOf(v17)
+						if targetV.Kind() == reflect.Ptr {
+							targetV = targetV.Elem()
+						}
+						fieldVal := targetV.FieldByName("Name")
+						if !fieldVal.IsValid() {
+							panic(fmt.Errorf("no such field Name"))
+						}
+						if !fieldVal.CanSet() {
+							panic(fmt.Errorf("cannot set field Name"))
+						}
+						valV := reflect.ValueOf(v14)
+						if !valV.IsValid() {
+							switch fieldVal.Kind() {
+							case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+								fieldVal.Set(reflect.Zero(fieldVal.Type()))
+							default:
+								panic(fmt.Errorf("cannot set field Name to nil"))
+							}
+						} else {
+							fieldVal.Set(valV)
+						}
+						tmp19 = v14
+					}
+					_ = tmp19
+					var tmp20 any
+					if lang.IsTruthy(v12) {
+						// set! host field
+						var tmp21 any
+						{
+							targetV := reflect.ValueOf(v17)
+							if targetV.Kind() == reflect.Ptr {
+								targetV = targetV.Elem()
+							}
+							fieldVal := targetV.FieldByName("Anonymous")
+							if !fieldVal.IsValid() {
+								panic(fmt.Errorf("no such field Anonymous"))
+							}
+							if !fieldVal.CanSet() {
+								panic(fmt.Errorf("cannot set field Anonymous"))
+							}
+							valV := reflect.ValueOf(true)
+							if !valV.IsValid() {
+								switch fieldVal.Kind() {
+								case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+									fieldVal.Set(reflect.Zero(fieldVal.Type()))
+								default:
+									panic(fmt.Errorf("cannot set field Anonymous to nil"))
+								}
+							} else {
+								fieldVal.Set(valV)
+							}
+							tmp21 = true
+						}
+						tmp20 = tmp21
+					} else {
+					}
+					_ = tmp20
+					tmp22 := lang.Apply1(lang.Builtins["deref"], v17)
+					tmp4 = tmp22
+				} // end let
+				return tmp4
+			}),
+			nil,
+			nil,
+			nil,
+			0,
+		)
+		var_glojure_DOT_go_DOT_types_struct_DASH_field = ns.InternWithValue(tmp0, tmp1, true)
+		var_glojure_DOT_go_DOT_types_struct_DASH_field.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(6), kw_column, int(8), kw_end_DASH_line, int(6), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_type_DASH_ast), lang.NewVector(sym_type_DASH_ast, sym_name)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
+		})
+	}
 	{
 		var tmp0 lang.FnFunc1
 		tmp0 = lang.FnFunc1(func(p0 any) any {
@@ -283,21 +808,26 @@ func LoadNS() {
 				_ = v10
 				var tmp11 any
 				if lang.IsTruthy(v5) {
-					tmp12 := checkDerefVar(var_clojure_DOT_core_first)
-					tmp13, ok := lang.FieldOrMethod(v5, "Value")
+					tmp12, ok := lang.FieldOrMethod(v5, "Value")
 					if !ok {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v5, "Value")))
 					}
-					var tmp14 any
-					switch reflect.TypeOf(tmp13).Kind() {
+					var tmp13 any
+					switch reflect.TypeOf(tmp12).Kind() {
 					case reflect.Func:
-						tmp14 = lang.Apply(tmp13, nil)
+						tmp13 = lang.Apply(tmp12, nil)
 					default:
-						tmp14 = tmp13
+						tmp13 = tmp12
 					}
-					tmp15 := lang.Apply1(strconv6.Atoi, tmp14)
-					tmp16 := lang.Apply1(tmp12, tmp15)
-					tmp17 := lang.Apply2(lang.Builtins["array-of"], tmp16, v10)
+					tmp14 := lang.Apply1(strconv6.Atoi, tmp13)
+					var tmp15 any
+					if aotExternalDefault7 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion7 {
+						tmp15 = lang.First(tmp14)
+					} else {
+						tmp16 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp15 = lang.Apply1(tmp16, tmp14)
+					}
+					tmp17 := lang.Apply2(lang.Builtins["array-of"], tmp15, v10)
 					tmp11 = tmp17
 				} else {
 					tmp18 := lang.Apply1(lang.Builtins["slice-of"], v10)
@@ -309,7 +839,6 @@ func LoadNS() {
 		})
 		closed1 = tmp0
 	}
-	var closed2 any
 	{
 		var tmp0 lang.FnFunc1
 		tmp0 = lang.FnFunc1(func(p0 any) any {
@@ -346,7 +875,6 @@ func LoadNS() {
 		})
 		closed2 = tmp0
 	}
-	var closed3 any
 	{
 		var tmp0 lang.FnFunc1
 		tmp0 = lang.FnFunc1(func(p0 any) any {
@@ -370,44 +898,41 @@ func LoadNS() {
 				_ = v5
 				// let binding "ctor"
 				var tmp6 any
-				tmp7 := checkDerefVar(var_clojure_DOT_core__EQ_)
-				tmp8 := lang.Apply2(tmp7, v5, ast4.SEND)
-				if lang.IsTruthy(tmp8) {
+				tmp7 := aotExternalFn6(v5, ast4.SEND)
+				if lang.IsTruthy(tmp7) {
 					tmp6 = lang.Builtins["chan<--of"]
 				} else {
-					var tmp9 any
-					tmp10 := checkDerefVar(var_clojure_DOT_core__EQ_)
-					tmp11 := lang.Apply2(tmp10, v5, ast4.RECV)
-					if lang.IsTruthy(tmp11) {
-						tmp9 = lang.Builtins["<-chan-of"]
+					var tmp8 any
+					tmp9 := aotExternalFn6(v5, ast4.RECV)
+					if lang.IsTruthy(tmp9) {
+						tmp8 = lang.Builtins["<-chan-of"]
 					} else {
-						tmp9 = lang.Builtins["chan-of"]
+						tmp8 = lang.Builtins["chan-of"]
 					}
-					tmp6 = tmp9
+					tmp6 = tmp8
 				}
-				var v12 any = tmp6
-				_ = v12
-				tmp13 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-				tmp14, ok := lang.FieldOrMethod(v1, "Value")
+				var v10 any = tmp6
+				_ = v10
+				tmp11 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+				tmp12, ok := lang.FieldOrMethod(v1, "Value")
 				if !ok {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v1, "Value")))
 				}
-				var tmp15 any
-				switch reflect.TypeOf(tmp14).Kind() {
+				var tmp13 any
+				switch reflect.TypeOf(tmp12).Kind() {
 				case reflect.Func:
-					tmp15 = lang.Apply(tmp14, nil)
+					tmp13 = lang.Apply(tmp12, nil)
 				default:
-					tmp15 = tmp14
+					tmp13 = tmp12
 				}
-				tmp16 := lang.Apply1(tmp13, tmp15)
-				tmp17 := lang.Apply1(v12, tmp16)
-				tmp2 = tmp17
+				tmp14 := lang.Apply1(tmp11, tmp13)
+				tmp15 := lang.Apply1(v10, tmp14)
+				tmp2 = tmp15
 			} // end let
 			return tmp2
 		})
 		closed3 = tmp0
 	}
-	var closed4 any
 	{
 		var tmp0 lang.FnFunc1
 		tmp0 = lang.FnFunc1(func(p0 any) any {
@@ -449,55 +974,52 @@ func LoadNS() {
 					_ = v6
 					var tmp7 any
 					if lang.IsTruthy(v6) {
-						tmp8 := checkDerefVar(var_clojure_DOT_core_apply)
-						tmp9 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp10 := checkDerefVar(var_clojure_DOT_core_map)
-						var tmp11 lang.FnFunc1
-						tmp11 = lang.FnFunc1(func(p0 any) any {
-							v12 := p0
-							_ = v12
-							tmp13 := checkDerefVar(var_clojure_DOT_core_repeat)
-							tmp14, ok := lang.FieldOrMethod(v12, "Names")
+						tmp8 := checkDerefVar(var_clojure_DOT_core_concat)
+						var tmp9 lang.FnFunc1
+						tmp9 = lang.FnFunc1(func(p0 any) any {
+							v10 := p0
+							_ = v10
+							tmp11, ok := lang.FieldOrMethod(v10, "Names")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v12, "Names")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v10, "Names")))
 							}
-							var tmp15 any
-							switch reflect.TypeOf(tmp14).Kind() {
+							var tmp12 any
+							switch reflect.TypeOf(tmp11).Kind() {
 							case reflect.Func:
-								tmp15 = lang.Apply(tmp14, nil)
+								tmp12 = lang.Apply(tmp11, nil)
 							default:
-								tmp15 = tmp14
+								tmp12 = tmp11
 							}
-							tmp16 := lang.Apply1(lang.Builtins["len"], tmp15)
-							tmp17 := lang.Numbers.Max(int64(1), tmp16)
-							tmp18, ok := lang.FieldOrMethod(v12, "Type")
+							tmp13 := lang.Apply1(lang.Builtins["len"], tmp12)
+							tmp14 := lang.Numbers.Max(int64(1), tmp13)
+							tmp15, ok := lang.FieldOrMethod(v10, "Type")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v12, "Type")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v10, "Type")))
 							}
-							var tmp19 any
-							switch reflect.TypeOf(tmp18).Kind() {
+							var tmp16 any
+							switch reflect.TypeOf(tmp15).Kind() {
 							case reflect.Func:
-								tmp19 = lang.Apply(tmp18, nil)
+								tmp16 = lang.Apply(tmp15, nil)
 							default:
-								tmp19 = tmp18
+								tmp16 = tmp15
 							}
-							tmp20 := lang.Apply2(tmp13, tmp17, tmp19)
-							return tmp20
+							tmp17 := aotExternalFn9(tmp14, tmp16)
+							return tmp17
 						})
-						tmp12, ok := lang.FieldOrMethod(v4, "List")
+						tmp10, ok := lang.FieldOrMethod(v4, "List")
 						if !ok {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "List")))
 						}
-						var tmp13 any
-						switch reflect.TypeOf(tmp12).Kind() {
+						var tmp11 any
+						switch reflect.TypeOf(tmp10).Kind() {
 						case reflect.Func:
-							tmp13 = lang.Apply(tmp12, nil)
+							tmp11 = lang.Apply(tmp10, nil)
 						default:
-							tmp13 = tmp12
+							tmp11 = tmp10
 						}
-						tmp14 := lang.Apply2(tmp10, tmp11, tmp13)
-						tmp15 := lang.Apply2(tmp8, tmp9, tmp14)
-						tmp7 = tmp15
+						tmp12 := aotExternalFn8(tmp9, tmp11)
+						tmp13 := aotExternalFn1(tmp8, tmp12)
+						tmp7 = tmp13
 					} else {
 						tmp7 = v6
 					}
@@ -506,158 +1028,141 @@ func LoadNS() {
 				var v6 any = tmp5
 				_ = v6
 				// let binding "last-param"
-				tmp7 := checkDerefVar(var_clojure_DOT_core_last)
-				tmp8 := lang.Apply1(tmp7, v6)
-				var v9 any = tmp8
-				_ = v9
+				tmp7 := aotExternalFn10(v6)
+				var v8 any = tmp7
+				_ = v8
 				// let binding "variadic"
-				tmp10 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-				tmp11 := reflect.TypeOf((*ast4.Ellipsis)(nil))
-				tmp12 := lang.Apply2(tmp10, tmp11, v9)
-				var v13 any = tmp12
-				_ = v13
+				tmp9 := reflect.TypeOf((*ast4.Ellipsis)(nil))
+				tmp10 := aotExternalFn11(tmp9, v8)
+				var v11 any = tmp10
+				_ = v11
 				// let binding "params"
-				var tmp14 any
-				tmp15 := checkDerefVar(var_clojure_DOT_core_not)
-				tmp16 := lang.Apply1(tmp15, v13)
-				if lang.IsTruthy(tmp16) {
-					tmp17 := checkDerefVar(var_clojure_DOT_core_map)
-					tmp18 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-					tmp19 := lang.Apply2(tmp17, tmp18, v6)
-					tmp14 = tmp19
+				var tmp12 any
+				tmp13 := aotExternalFn3(v11)
+				if lang.IsTruthy(tmp13) {
+					tmp14 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+					tmp15 := aotExternalFn8(tmp14, v6)
+					tmp12 = tmp15
 				} else {
-					tmp20 := checkDerefVar(var_clojure_DOT_core_concat)
-					tmp21 := checkDerefVar(var_clojure_DOT_core_map)
-					tmp22 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-					tmp23 := checkDerefVar(var_clojure_DOT_core_butlast)
-					tmp24 := lang.Apply1(tmp23, v6)
-					tmp25 := lang.Apply2(tmp21, tmp22, tmp24)
-					tmp26 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-					tmp27, ok := lang.FieldOrMethod(v9, "Elt")
+					tmp16 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+					tmp17 := aotExternalFn13(v6)
+					tmp18 := aotExternalFn8(tmp16, tmp17)
+					tmp19 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+					tmp20, ok := lang.FieldOrMethod(v8, "Elt")
 					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v9, "Elt")))
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "Elt")))
 					}
-					var tmp28 any
-					switch reflect.TypeOf(tmp27).Kind() {
+					var tmp21 any
+					switch reflect.TypeOf(tmp20).Kind() {
 					case reflect.Func:
-						tmp28 = lang.Apply(tmp27, nil)
+						tmp21 = lang.Apply(tmp20, nil)
 					default:
-						tmp28 = tmp27
+						tmp21 = tmp20
 					}
-					tmp29 := lang.Apply1(tmp26, tmp28)
-					tmp30 := lang.Apply1(lang.Builtins["slice-of"], tmp29)
-					tmp31 := lang.NewVector(tmp30)
-					tmp32 := lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(66), kw_column, int(28), kw_end_DASH_line, int(66), kw_end_DASH_column, int(72))
-					tmp33, err := lang.WithMeta(tmp31, tmp32.(lang.IPersistentMap))
-					if err != nil {
-						panic(err)
-					}
-					tmp34 := lang.Apply2(tmp20, tmp25, tmp33)
-					tmp14 = tmp34
+					tmp22 := lang.Apply1(tmp19, tmp21)
+					tmp23 := lang.Apply1(lang.Builtins["slice-of"], tmp22)
+					tmp24 := lang.NewVector(tmp23)
+					tmp25 := aotExternalFn12(tmp18, tmp24)
+					tmp12 = tmp25
 				}
-				var v35 any = tmp14
-				_ = v35
+				var v26 any = tmp12
+				_ = v26
 				// let binding "rl"
-				var tmp36 any
+				var tmp27 any
 				{ // let
 					// let binding "or__0__auto__"
-					tmp37, ok := lang.FieldOrMethod(v1, "Results")
+					tmp28, ok := lang.FieldOrMethod(v1, "Results")
 					if !ok {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v1, "Results")))
 					}
-					var tmp38 any
-					switch reflect.TypeOf(tmp37).Kind() {
+					var tmp29 any
+					switch reflect.TypeOf(tmp28).Kind() {
 					case reflect.Func:
-						tmp38 = lang.Apply(tmp37, nil)
+						tmp29 = lang.Apply(tmp28, nil)
 					default:
-						tmp38 = tmp37
+						tmp29 = tmp28
 					}
-					var v39 any = tmp38
-					_ = v39
-					var tmp40 any
-					if lang.IsTruthy(v39) {
-						tmp40 = v39
+					var v30 any = tmp29
+					_ = v30
+					var tmp31 any
+					if lang.IsTruthy(v30) {
+						tmp31 = v30
 					} else {
 					}
-					tmp36 = tmp40
+					tmp27 = tmp31
 				} // end let
-				var v37 any = tmp36
-				_ = v37
+				var v28 any = tmp27
+				_ = v28
 				// let binding "results"
-				var tmp38 any
+				var tmp29 any
 				{ // let
 					// let binding "and__0__auto__"
-					var v39 any = v37
-					_ = v39
-					var tmp40 any
-					if lang.IsTruthy(v39) {
-						tmp41 := checkDerefVar(var_clojure_DOT_core_map)
-						tmp42 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-						tmp43 := checkDerefVar(var_clojure_DOT_core_apply)
-						tmp44 := checkDerefVar(var_clojure_DOT_core_concat)
-						tmp45 := checkDerefVar(var_clojure_DOT_core_map)
-						var tmp46 lang.FnFunc1
-						tmp46 = lang.FnFunc1(func(p0 any) any {
-							v47 := p0
-							_ = v47
-							tmp48 := checkDerefVar(var_clojure_DOT_core_repeat)
-							tmp49, ok := lang.FieldOrMethod(v47, "Names")
+					var v30 any = v28
+					_ = v30
+					var tmp31 any
+					if lang.IsTruthy(v30) {
+						tmp32 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+						tmp33 := checkDerefVar(var_clojure_DOT_core_concat)
+						var tmp34 lang.FnFunc1
+						tmp34 = lang.FnFunc1(func(p0 any) any {
+							v35 := p0
+							_ = v35
+							tmp36, ok := lang.FieldOrMethod(v35, "Names")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v47, "Names")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v35, "Names")))
 							}
-							var tmp50 any
-							switch reflect.TypeOf(tmp49).Kind() {
+							var tmp37 any
+							switch reflect.TypeOf(tmp36).Kind() {
 							case reflect.Func:
-								tmp50 = lang.Apply(tmp49, nil)
+								tmp37 = lang.Apply(tmp36, nil)
 							default:
-								tmp50 = tmp49
+								tmp37 = tmp36
 							}
-							tmp51 := lang.Apply1(lang.Builtins["len"], tmp50)
-							tmp52 := lang.Numbers.Max(int64(1), tmp51)
-							tmp53, ok := lang.FieldOrMethod(v47, "Type")
+							tmp38 := lang.Apply1(lang.Builtins["len"], tmp37)
+							tmp39 := lang.Numbers.Max(int64(1), tmp38)
+							tmp40, ok := lang.FieldOrMethod(v35, "Type")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v47, "Type")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v35, "Type")))
 							}
-							var tmp54 any
-							switch reflect.TypeOf(tmp53).Kind() {
+							var tmp41 any
+							switch reflect.TypeOf(tmp40).Kind() {
 							case reflect.Func:
-								tmp54 = lang.Apply(tmp53, nil)
+								tmp41 = lang.Apply(tmp40, nil)
 							default:
-								tmp54 = tmp53
+								tmp41 = tmp40
 							}
-							tmp55 := lang.Apply2(tmp48, tmp52, tmp54)
-							return tmp55
+							tmp42 := aotExternalFn9(tmp39, tmp41)
+							return tmp42
 						})
-						tmp47, ok := lang.FieldOrMethod(v37, "List")
+						tmp35, ok := lang.FieldOrMethod(v28, "List")
 						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v37, "List")))
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v28, "List")))
 						}
-						var tmp48 any
-						switch reflect.TypeOf(tmp47).Kind() {
+						var tmp36 any
+						switch reflect.TypeOf(tmp35).Kind() {
 						case reflect.Func:
-							tmp48 = lang.Apply(tmp47, nil)
+							tmp36 = lang.Apply(tmp35, nil)
 						default:
-							tmp48 = tmp47
+							tmp36 = tmp35
 						}
-						tmp49 := lang.Apply2(tmp45, tmp46, tmp48)
-						tmp50 := lang.Apply2(tmp43, tmp44, tmp49)
-						tmp51 := lang.Apply2(tmp41, tmp42, tmp50)
-						tmp40 = tmp51
+						tmp37 := aotExternalFn8(tmp34, tmp36)
+						tmp38 := aotExternalFn1(tmp33, tmp37)
+						tmp39 := aotExternalFn8(tmp32, tmp38)
+						tmp31 = tmp39
 					} else {
-						tmp40 = v39
+						tmp31 = v30
 					}
-					tmp38 = tmp40
+					tmp29 = tmp31
 				} // end let
-				var v39 any = tmp38
-				_ = v39
-				tmp40 := lang.Apply3(lang.Builtins["func-of"], v35, v39, v13)
-				tmp2 = tmp40
+				var v30 any = tmp29
+				_ = v30
+				tmp31 := lang.Apply3(lang.Builtins["func-of"], v26, v30, v11)
+				tmp2 = tmp31
 			} // end let
 			return tmp2
 		})
 		closed4 = tmp0
 	}
-	var closed5 any
 	{
 		var tmp0 lang.FnFunc1
 		tmp0 = lang.FnFunc1(func(p0 any) any {
@@ -691,52 +1196,63 @@ func LoadNS() {
 				var v7 any = tmp6
 				_ = v7
 				// let binding "struct-fields"
-				tmp8 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp9 := checkDerefVar(var_clojure_DOT_core_concat)
-				tmp10 := checkDerefVar(var_clojure_DOT_core_map)
-				var tmp11 lang.FnFunc1
-				tmp11 = lang.FnFunc1(func(p0 any) any {
-					v12 := p0
-					_ = v12
-					var tmp13 any
+				tmp8 := checkDerefVar(var_clojure_DOT_core_concat)
+				var tmp9 lang.FnFunc1
+				tmp9 = lang.FnFunc1(func(p0 any) any {
+					v10 := p0
+					_ = v10
+					var tmp11 any
 					{ // let
 						// let binding "names"
-						tmp14 := checkDerefVar(var_clojure_DOT_core_map)
-						var tmp15 lang.FnFunc1
-						tmp15 = lang.FnFunc1(func(p0 any) any {
-							v16 := p0
-							_ = v16
-							tmp17, ok := lang.FieldOrMethod(v16, "Name")
+						var tmp12 lang.FnFunc1
+						tmp12 = lang.FnFunc1(func(p0 any) any {
+							v13 := p0
+							_ = v13
+							tmp14, ok := lang.FieldOrMethod(v13, "Name")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v16, "Name")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v13, "Name")))
 							}
-							var tmp18 any
-							switch reflect.TypeOf(tmp17).Kind() {
+							var tmp15 any
+							switch reflect.TypeOf(tmp14).Kind() {
 							case reflect.Func:
-								tmp18 = lang.Apply(tmp17, nil)
+								tmp15 = lang.Apply(tmp14, nil)
 							default:
-								tmp18 = tmp17
+								tmp15 = tmp14
 							}
-							return tmp18
+							return tmp15
 						})
-						tmp16, ok := lang.FieldOrMethod(v12, "Names")
+						tmp13, ok := lang.FieldOrMethod(v10, "Names")
 						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v12, "Names")))
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v10, "Names")))
 						}
-						var tmp17 any
-						switch reflect.TypeOf(tmp16).Kind() {
+						var tmp14 any
+						switch reflect.TypeOf(tmp13).Kind() {
 						case reflect.Func:
-							tmp17 = lang.Apply(tmp16, nil)
+							tmp14 = lang.Apply(tmp13, nil)
 						default:
-							tmp17 = tmp16
+							tmp14 = tmp13
 						}
-						tmp18 := lang.Apply2(tmp14, tmp15, tmp17)
+						tmp15 := aotExternalFn8(tmp12, tmp14)
+						var v16 any = tmp15
+						_ = v16
+						// let binding "type"
+						tmp17, ok := lang.FieldOrMethod(v10, "Type")
+						if !ok {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v10, "Type")))
+						}
+						var tmp18 any
+						switch reflect.TypeOf(tmp17).Kind() {
+						case reflect.Func:
+							tmp18 = lang.Apply(tmp17, nil)
+						default:
+							tmp18 = tmp17
+						}
 						var v19 any = tmp18
 						_ = v19
-						// let binding "type"
-						tmp20, ok := lang.FieldOrMethod(v12, "Type")
+						// let binding "tag"
+						tmp20, ok := lang.FieldOrMethod(v10, "Type")
 						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v12, "Type")))
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v10, "Type")))
 						}
 						var tmp21 any
 						switch reflect.TypeOf(tmp20).Kind() {
@@ -747,76 +1263,65 @@ func LoadNS() {
 						}
 						var v22 any = tmp21
 						_ = v22
-						// let binding "tag"
-						tmp23, ok := lang.FieldOrMethod(v12, "Type")
-						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v12, "Type")))
-						}
+						var tmp23 any
 						var tmp24 any
-						switch reflect.TypeOf(tmp23).Kind() {
-						case reflect.Func:
-							tmp24 = lang.Apply(tmp23, nil)
-						default:
-							tmp24 = tmp23
-						}
-						var v25 any = tmp24
-						_ = v25
-						var tmp26 any
-						tmp27 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
-						tmp28 := lang.Apply1(tmp27, v19)
-						if lang.IsTruthy(tmp28) {
-							tmp29 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-							tmp30 := lang.Apply1(tmp29, v22)
-							tmp31 := lang.NewVector(tmp30)
-							tmp32 := lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(85), kw_column, int(56), kw_end_DASH_line, int(85), kw_end_DASH_column, int(76))
-							tmp33, err := lang.WithMeta(tmp31, tmp32.(lang.IPersistentMap))
-							if err != nil {
-								panic(err)
-							}
-							tmp26 = tmp33
+						if aotExternalDefault14 && var_clojure_DOT_core_empty_QMARK_.RootVersion() == aotExternalRootVersion14 {
+							tmp24 = lang.IsEmpty(v16)
 						} else {
-							var tmp34 any
-							tmp35 := checkDerefVar(var_clojure_DOT_core__EQ_)
-							tmp36 := checkDerefVar(var_clojure_DOT_core_count)
-							tmp37 := lang.Apply1(tmp36, v19)
-							tmp38 := lang.Apply2(tmp35, int64(1), tmp37)
-							if lang.IsTruthy(tmp38) {
-								tmp39 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-								tmp40 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp41 := lang.Apply1(tmp40, v19)
-								tmp42 := lang.Apply2(tmp39, v22, tmp41)
-								tmp43 := lang.NewVector(tmp42)
-								tmp44 := lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(86), kw_column, int(61), kw_end_DASH_line, int(86), kw_end_DASH_column, int(95))
-								tmp45, err := lang.WithMeta(tmp43, tmp44.(lang.IPersistentMap))
-								if err != nil {
-									panic(err)
-								}
-								tmp34 = tmp45
-							} else {
-								tmp46 := checkDerefVar(var_clojure_DOT_core_map)
-								var tmp47 lang.FnFunc1
-								tmp47 = lang.FnFunc1(func(p0 any) any {
-									v48 := p0
-									_ = v48
-									tmp49 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-									tmp50 := lang.Apply2(tmp49, v22, v48)
-									return tmp50
-								})
-								tmp48 := lang.Apply2(tmp46, tmp47, v19)
-								tmp34 = tmp48
-							}
-							tmp26 = tmp34
+							tmp25 := checkDerefVar(var_clojure_DOT_core_empty_QMARK_)
+							tmp24 = lang.Apply1(tmp25, v16)
 						}
-						tmp13 = tmp26
+						if lang.IsTruthy(tmp24) {
+							tmp26 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
+							tmp27 := lang.Apply1(tmp26, v19)
+							tmp28 := lang.NewVector(tmp27)
+							tmp23 = tmp28
+						} else {
+							var tmp29 any
+							var tmp30 any
+							if aotExternalDefault15 && var_clojure_DOT_core_count.RootVersion() == aotExternalRootVersion15 {
+								tmp30 = lang.Count(v16)
+							} else {
+								tmp31 := checkDerefVar(var_clojure_DOT_core_count)
+								tmp30 = lang.Apply1(tmp31, v16)
+							}
+							tmp32 := aotExternalFn6(int64(1), tmp30)
+							if lang.IsTruthy(tmp32) {
+								tmp33 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
+								var tmp34 any
+								if aotExternalDefault7 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion7 {
+									tmp34 = lang.First(v16)
+								} else {
+									tmp35 := checkDerefVar(var_clojure_DOT_core_first)
+									tmp34 = lang.Apply1(tmp35, v16)
+								}
+								tmp36 := lang.Apply2(tmp33, v19, tmp34)
+								tmp37 := lang.NewVector(tmp36)
+								tmp29 = tmp37
+							} else {
+								var tmp38 lang.FnFunc1
+								tmp38 = lang.FnFunc1(func(p0 any) any {
+									v39 := p0
+									_ = v39
+									tmp40 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
+									tmp41 := lang.Apply2(tmp40, v19, v39)
+									return tmp41
+								})
+								tmp39 := aotExternalFn8(tmp38, v16)
+								tmp29 = tmp39
+							}
+							tmp23 = tmp29
+						}
+						tmp11 = tmp23
 					} // end let
-					return tmp13
+					return tmp11
 				})
-				tmp12 := lang.Apply2(tmp10, tmp11, v7)
-				tmp13 := lang.Apply2(tmp8, tmp9, tmp12)
-				var v14 any = tmp13
-				_ = v14
-				tmp15 := lang.Apply1(reflect.StructOf, v14)
-				tmp2 = tmp15
+				tmp10 := aotExternalFn8(tmp9, v7)
+				tmp11 := aotExternalFn1(tmp8, tmp10)
+				var v12 any = tmp11
+				_ = v12
+				tmp13 := lang.Apply1(reflect.StructOf, v12)
+				tmp2 = tmp13
 			} // end let
 			return tmp2
 		})
@@ -837,9 +1342,8 @@ func LoadNS() {
 				_ = v4
 				var v5 any = rest
 				_ = v5
-				tmp6 := checkDerefVar(var_clojure_DOT_core_class)
-				tmp7 := lang.Apply1(tmp6, v4)
-				return tmp7
+				tmp6 := aotExternalFn0(v4)
+				return tmp6
 			}),
 			1,
 		)
@@ -858,11 +1362,15 @@ func LoadNS() {
 				_ = v6
 				var v7 any = rest
 				_ = v7
-				tmp8 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp9 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp10 := lang.Apply2(tmp9, v6, v7)
-				tmp11 := lang.Apply2(tmp8, closed0, tmp10)
-				return tmp11
+				var tmp8 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp8 = lang.NewCons(v6, v7)
+				} else {
+					tmp9 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp8 = lang.Apply2(tmp9, v6, v7)
+				}
+				tmp10 := aotExternalFn1(closed0, tmp8)
+				return tmp10
 			}),
 			1,
 		)
@@ -880,11 +1388,15 @@ func LoadNS() {
 				_ = v8
 				var v9 any = rest
 				_ = v9
-				tmp10 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp11 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp12 := lang.Apply2(tmp11, v8, v9)
-				tmp13 := lang.Apply2(tmp10, closed1, tmp12)
-				return tmp13
+				var tmp10 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp10 = lang.NewCons(v8, v9)
+				} else {
+					tmp11 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp10 = lang.Apply2(tmp11, v8, v9)
+				}
+				tmp12 := aotExternalFn1(closed1, tmp10)
+				return tmp12
 			}),
 			1,
 		)
@@ -902,11 +1414,15 @@ func LoadNS() {
 				_ = v10
 				var v11 any = rest
 				_ = v11
-				tmp12 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp13 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp14 := lang.Apply2(tmp13, v10, v11)
-				tmp15 := lang.Apply2(tmp12, closed2, tmp14)
-				return tmp15
+				var tmp12 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp12 = lang.NewCons(v10, v11)
+				} else {
+					tmp13 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp12 = lang.Apply2(tmp13, v10, v11)
+				}
+				tmp14 := aotExternalFn1(closed2, tmp12)
+				return tmp14
 			}),
 			1,
 		)
@@ -924,11 +1440,15 @@ func LoadNS() {
 				_ = v12
 				var v13 any = rest
 				_ = v13
-				tmp14 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp15 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp16 := lang.Apply2(tmp15, v12, v13)
-				tmp17 := lang.Apply2(tmp14, closed3, tmp16)
-				return tmp17
+				var tmp14 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp14 = lang.NewCons(v12, v13)
+				} else {
+					tmp15 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp14 = lang.Apply2(tmp15, v12, v13)
+				}
+				tmp16 := aotExternalFn1(closed3, tmp14)
+				return tmp16
 			}),
 			1,
 		)
@@ -946,11 +1466,15 @@ func LoadNS() {
 				_ = v14
 				var v15 any = rest
 				_ = v15
-				tmp16 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp17 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp18 := lang.Apply2(tmp17, v14, v15)
-				tmp19 := lang.Apply2(tmp16, closed4, tmp18)
-				return tmp19
+				var tmp16 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp16 = lang.NewCons(v14, v15)
+				} else {
+					tmp17 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp16 = lang.Apply2(tmp17, v14, v15)
+				}
+				tmp18 := aotExternalFn1(closed4, tmp16)
+				return tmp18
 			}),
 			1,
 		)
@@ -968,11 +1492,15 @@ func LoadNS() {
 				_ = v16
 				var v17 any = rest
 				_ = v17
-				tmp18 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp19 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp20 := lang.Apply2(tmp19, v16, v17)
-				tmp21 := lang.Apply2(tmp18, closed5, tmp20)
-				return tmp21
+				var tmp18 any
+				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
+					tmp18 = lang.NewCons(v16, v17)
+				} else {
+					tmp19 := checkDerefVar(var_clojure_DOT_core_cons)
+					tmp18 = lang.Apply2(tmp19, v16, v17)
+				}
+				tmp20 := aotExternalFn1(closed5, tmp18)
+				return tmp20
 			}),
 			1,
 		)
@@ -981,395 +1509,6 @@ func LoadNS() {
 		var_glojure_DOT_go_DOT_types_AstType = ns.InternWithValue(tmp0, tmp1, true)
 		var_glojure_DOT_go_DOT_types_AstType.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(3), kw_column, int(14), kw_end_DASH_line, int(3), kw_end_DASH_column, int(20), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
-		})
-	}
-	// ast->type
-	{
-		tmp0 := sym_ast_DASH__GT_type
-		var tmp2 lang.ArityFn
-		tmp2 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v3 := args[0]
-				_ = v3
-				var v4 any = rest
-				_ = v4
-				tmp5 := checkDerefVar(var_clojure_DOT_core_class)
-				tmp6 := lang.Apply1(tmp5, v3)
-				return tmp6
-			}),
-			1,
-		)
-		// MultiFn ast->type
-		tmp1 := lang.NewMultiFn("ast->type", tmp2, kw_default, lang.FindOrCreateNamespace(sym_clojure_DOT_core).FindInternedVar(sym_global_DASH_hierarchy))
-		tmp3 := reflect.TypeOf((*ast4.Ident)(nil))
-		var tmp4 lang.ArityFn
-		tmp4 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v5 := args[0]
-				_ = v5
-				var v6 any = rest
-				_ = v6
-				tmp7 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp9 := lang.Apply2(tmp8, v5, v6)
-				tmp10 := lang.Apply2(tmp7, closed0, tmp9)
-				return tmp10
-			}),
-			1,
-		)
-		tmp1.AddMethod(tmp3, tmp4)
-		tmp5 := reflect.TypeOf((*ast4.ArrayType)(nil))
-		var tmp6 lang.ArityFn
-		tmp6 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v7 := args[0]
-				_ = v7
-				var v8 any = rest
-				_ = v8
-				tmp9 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp10 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp11 := lang.Apply2(tmp10, v7, v8)
-				tmp12 := lang.Apply2(tmp9, closed1, tmp11)
-				return tmp12
-			}),
-			1,
-		)
-		tmp1.AddMethod(tmp5, tmp6)
-		tmp7 := reflect.TypeOf((*ast4.MapType)(nil))
-		var tmp8 lang.ArityFn
-		tmp8 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v9 := args[0]
-				_ = v9
-				var v10 any = rest
-				_ = v10
-				tmp11 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp12 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp13 := lang.Apply2(tmp12, v9, v10)
-				tmp14 := lang.Apply2(tmp11, closed2, tmp13)
-				return tmp14
-			}),
-			1,
-		)
-		tmp1.AddMethod(tmp7, tmp8)
-		tmp9 := reflect.TypeOf((*ast4.ChanType)(nil))
-		var tmp10 lang.ArityFn
-		tmp10 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v11 := args[0]
-				_ = v11
-				var v12 any = rest
-				_ = v12
-				tmp13 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp14 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp15 := lang.Apply2(tmp14, v11, v12)
-				tmp16 := lang.Apply2(tmp13, closed3, tmp15)
-				return tmp16
-			}),
-			1,
-		)
-		tmp1.AddMethod(tmp9, tmp10)
-		tmp11 := reflect.TypeOf((*ast4.FuncType)(nil))
-		var tmp12 lang.ArityFn
-		tmp12 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v13 := args[0]
-				_ = v13
-				var v14 any = rest
-				_ = v14
-				tmp15 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp16 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp17 := lang.Apply2(tmp16, v13, v14)
-				tmp18 := lang.Apply2(tmp15, closed4, tmp17)
-				return tmp18
-			}),
-			1,
-		)
-		tmp1.AddMethod(tmp11, tmp12)
-		tmp13 := reflect.TypeOf((*ast4.StructType)(nil))
-		var tmp14 lang.ArityFn
-		tmp14 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v15 := args[0]
-				_ = v15
-				var v16 any = rest
-				_ = v16
-				tmp17 := checkDerefVar(var_clojure_DOT_core_apply)
-				tmp18 := checkDerefVar(var_clojure_DOT_core_cons)
-				tmp19 := lang.Apply2(tmp18, v15, v16)
-				tmp20 := lang.Apply2(tmp17, closed5, tmp19)
-				return tmp20
-			}),
-			1,
-		)
-		tmp1.AddMethod(tmp13, tmp14)
-		var_glojure_DOT_go_DOT_types_ast_DASH__GT_type = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_types_ast_DASH__GT_type.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(4), kw_column, int(4), kw_end_DASH_line, int(4), kw_end_DASH_column, int(12), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
-		})
-	}
-	// from-string
-	{
-		tmp0 := sym_from_DASH_string
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			var tmp3 any
-			tmp4 := checkDerefVar(var_clojure_DOT_core_not)
-			tmp5 := checkDerefVar(var_clojure_DOT_core_string_QMARK_)
-			tmp6 := lang.Apply1(tmp5, v2)
-			tmp7 := lang.Apply1(tmp4, tmp6)
-			if lang.IsTruthy(tmp7) {
-				tmp8 := lang.Apply2(fmt.Errorf, "from-string: argument must be a string, got %T", v2)
-				panic(tmp8)
-			} else {
-			}
-			_ = tmp3
-			var tmp9 any
-			{ // let
-				// let binding "vec__805"
-				tmp10 := lang.Apply1(parser5.ParseExpr, v2)
-				var v11 any = tmp10
-				_ = v11
-				// let binding "ast"
-				tmp12 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp13 := lang.Apply3(tmp12, v11, int64(0), nil)
-				var v14 any = tmp13
-				_ = v14
-				// let binding "err"
-				tmp15 := checkDerefVar(var_clojure_DOT_core_nth)
-				tmp16 := lang.Apply3(tmp15, v11, int64(1), nil)
-				var v17 any = tmp16
-				_ = v17
-				var tmp18 any
-				if lang.IsTruthy(v17) {
-					tmp19 := lang.Apply3(fmt.Errorf, "from-string: invalid type string '%s': %w", v2, v17)
-					panic(tmp19)
-				} else {
-				}
-				_ = tmp18
-				tmp20 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-				tmp21 := lang.Apply1(tmp20, v14)
-				tmp9 = tmp21
-			} // end let
-			return tmp9
-		})
-		aotDirectFn0 = tmp1
-		var_glojure_DOT_go_DOT_types_from_DASH_string = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_glojure_DOT_go_DOT_types_from_DASH_string.RootVersion()
-		var_glojure_DOT_go_DOT_types_from_DASH_string.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(92), kw_column, int(7), kw_end_DASH_line, int(92), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_typ)), kw_doc, "Returns a Go type from a go type expression.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
-		})
-	}
-	// struct-field
-	{
-		tmp0 := sym_struct_DASH_field
-		var tmp1 lang.ArityFn
-		tmp1 = lang.NewArityFn(
-			nil,
-			lang.FnFunc1(func(p0 any) any {
-				v2 := p0
-				_ = v2
-				tmp3 := checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-				tmp4 := lang.Apply2(tmp3, v2, nil)
-				return tmp4
-			}),
-			lang.FnFunc2(func(p0, p1 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				var tmp4 any
-				{ // let
-					// let binding "typ"
-					tmp5 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-					tmp6 := lang.Apply1(tmp5, v2)
-					var v7 any = tmp6
-					_ = v7
-					// let binding "name"
-					var tmp8 any
-					tmp9 := checkDerefVar(var_clojure_DOT_core__EQ_)
-					tmp10 := lang.Apply2(tmp9, "", v3)
-					if lang.IsTruthy(tmp10) {
-					} else {
-						tmp8 = v3
-					}
-					var v11 any = tmp8
-					_ = v11
-					// let binding "anonymous"
-					tmp12 := lang.Identical(v11, nil)
-					var v13 any = tmp12
-					_ = v13
-					// let binding "name"
-					var tmp14 any
-					{ // let
-						// let binding "or__0__auto__"
-						var v15 any = v11
-						_ = v15
-						var tmp16 any
-						if lang.IsTruthy(v15) {
-							tmp16 = v15
-						} else {
-							tmp17, ok := lang.FieldOrMethod(v7, "Name")
-							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "Name")))
-							}
-							var tmp18 any
-							switch reflect.TypeOf(tmp17).Kind() {
-							case reflect.Func:
-								tmp18 = lang.Apply(tmp17, nil)
-							default:
-								tmp18 = tmp17
-							}
-							tmp16 = tmp18
-						}
-						tmp14 = tmp16
-					} // end let
-					var v15 any = tmp14
-					_ = v15
-					// let binding "sf"
-					tmp16 := reflect.TypeOf((*reflect.StructField)(nil)).Elem()
-					tmp17 := lang.Apply1(lang.Builtins["new"], tmp16)
-					var v18 any = tmp17
-					_ = v18
-					// set! host field
-					var tmp19 any
-					{
-						targetV := reflect.ValueOf(v18)
-						if targetV.Kind() == reflect.Ptr {
-							targetV = targetV.Elem()
-						}
-						fieldVal := targetV.FieldByName("Type")
-						if !fieldVal.IsValid() {
-							panic(fmt.Errorf("no such field Type"))
-						}
-						if !fieldVal.CanSet() {
-							panic(fmt.Errorf("cannot set field Type"))
-						}
-						valV := reflect.ValueOf(v7)
-						if !valV.IsValid() {
-							switch fieldVal.Kind() {
-							case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
-								fieldVal.Set(reflect.Zero(fieldVal.Type()))
-							default:
-								panic(fmt.Errorf("cannot set field Type to nil"))
-							}
-						} else {
-							fieldVal.Set(valV)
-						}
-						tmp19 = v7
-					}
-					_ = tmp19
-					// set! host field
-					var tmp20 any
-					{
-						targetV := reflect.ValueOf(v18)
-						if targetV.Kind() == reflect.Ptr {
-							targetV = targetV.Elem()
-						}
-						fieldVal := targetV.FieldByName("Name")
-						if !fieldVal.IsValid() {
-							panic(fmt.Errorf("no such field Name"))
-						}
-						if !fieldVal.CanSet() {
-							panic(fmt.Errorf("cannot set field Name"))
-						}
-						valV := reflect.ValueOf(v15)
-						if !valV.IsValid() {
-							switch fieldVal.Kind() {
-							case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
-								fieldVal.Set(reflect.Zero(fieldVal.Type()))
-							default:
-								panic(fmt.Errorf("cannot set field Name to nil"))
-							}
-						} else {
-							fieldVal.Set(valV)
-						}
-						tmp20 = v15
-					}
-					_ = tmp20
-					var tmp21 any
-					if lang.IsTruthy(v13) {
-						// set! host field
-						var tmp22 any
-						{
-							targetV := reflect.ValueOf(v18)
-							if targetV.Kind() == reflect.Ptr {
-								targetV = targetV.Elem()
-							}
-							fieldVal := targetV.FieldByName("Anonymous")
-							if !fieldVal.IsValid() {
-								panic(fmt.Errorf("no such field Anonymous"))
-							}
-							if !fieldVal.CanSet() {
-								panic(fmt.Errorf("cannot set field Anonymous"))
-							}
-							valV := reflect.ValueOf(true)
-							if !valV.IsValid() {
-								switch fieldVal.Kind() {
-								case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
-									fieldVal.Set(reflect.Zero(fieldVal.Type()))
-								default:
-									panic(fmt.Errorf("cannot set field Anonymous to nil"))
-								}
-							} else {
-								fieldVal.Set(valV)
-							}
-							tmp22 = true
-						}
-						tmp21 = tmp22
-					} else {
-					}
-					_ = tmp21
-					tmp23 := lang.Apply1(lang.Builtins["deref"], v18)
-					tmp4 = tmp23
-				} // end let
-				return tmp4
-			}),
-			nil,
-			nil,
-			nil,
-			0,
-		)
-		var_glojure_DOT_go_DOT_types_struct_DASH_field = ns.InternWithValue(tmp0, tmp1, true)
-		var_glojure_DOT_go_DOT_types_struct_DASH_field.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMap(kw_file, "glojure/go/types.glj", kw_line, int(6), kw_column, int(8), kw_end_DASH_line, int(6), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_type_DASH_ast), lang.NewVector(sym_type_DASH_ast, sym_name)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
 		})
 	}
 }
