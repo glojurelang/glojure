@@ -164,6 +164,35 @@ func testPop(t *testing.T, v Vector) {
 	}
 }
 
+func TestPopSharesImmutableTail(t *testing.T) {
+	values := make([]any, 40)
+	for i := range values {
+		values[i] = i
+	}
+
+	original := New(values...).(*vector)
+	popped := original.Pop().(*vector)
+	if &popped.tail[0] != &original.tail[0] {
+		t.Fatal("Pop copied an immutable tail instead of sharing it")
+	}
+
+	updated := popped.Assoc(popped.Len()-1, "updated")
+	if got, _ := original.Index(original.Len() - 2); got != 38 {
+		t.Fatalf("updating popped vector changed original value to %v", got)
+	}
+	if got, _ := updated.Index(updated.Len() - 1); got != "updated" {
+		t.Fatalf("updated value = %v, want updated", got)
+	}
+
+	extended := popped.Conj("extended")
+	if got, _ := original.Index(original.Len() - 1); got != 39 {
+		t.Fatalf("extending popped vector changed original value to %v", got)
+	}
+	if got, _ := extended.Index(extended.Len() - 1); got != "extended" {
+		t.Fatalf("extended value = %v, want extended", got)
+	}
+}
+
 func TestSubVector(t *testing.T) {
 	v := Empty
 	for i := 0; i < 10; i++ {

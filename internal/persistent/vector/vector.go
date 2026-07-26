@@ -218,9 +218,10 @@ func (v *vector) Pop() Vector {
 		return Empty
 	}
 	if v.count-v.treeSize() > 1 {
-		newTail := make([]interface{}, len(v.tail)-1)
-		copy(newTail, v.tail)
-		return &vector{v.count - 1, v.height, v.root, newTail}
+		// Tails are immutable: Conj and Assoc always allocate before writing.
+		// The popped vector can therefore share the backing array and expose a
+		// shorter view instead of copying the remaining tail.
+		return &vector{v.count - 1, v.height, v.root, v.tail[:len(v.tail)-1]}
 	}
 	newTail := v.sliceFor(v.count - 2)
 	newRoot := v.popTail(v.height, v.root)
