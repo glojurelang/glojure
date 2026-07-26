@@ -15,7 +15,7 @@ type (
 		meta         IPersistentMap
 		hash, hasheq uint32
 
-		vec    vector.Vector
+		vec    vector.Persistent
 		inline []any
 	}
 
@@ -58,7 +58,7 @@ func NewVector(values ...any) *Vector {
 		return newInlineVector(nil, values)
 	}
 	return &Vector{
-		vec: vector.New(values...),
+		vec: vector.NewPersistent(values...),
 	}
 }
 
@@ -81,7 +81,7 @@ var (
 func (v *Vector) xxx_sequential() {}
 
 func (v *Vector) Count() int {
-	if v.vec == nil {
+	if v.vec.Len() == 0 {
 		return len(v.inline)
 	}
 	return v.vec.Len()
@@ -94,7 +94,7 @@ func (v *Vector) Length() int {
 }
 
 func (v *Vector) Cons(x any) Conser {
-	if v.vec == nil {
+	if v.vec.Len() == 0 {
 		if len(v.inline) < vectorInlineSize {
 			result := newInlineVector(v.meta, v.inline)
 			result.inline = result.inline[:len(v.inline)+1]
@@ -106,12 +106,12 @@ func (v *Vector) Cons(x any) Conser {
 		values[vectorInlineSize] = x
 		return &Vector{
 			meta: v.meta,
-			vec:  vector.New(values...),
+			vec:  vector.NewPersistent(values...),
 		}
 	}
 	return &Vector{
 		meta: v.meta,
-		vec:  v.vec.Conj(x),
+		vec:  v.vec.ConjValue(x),
 	}
 }
 
@@ -119,7 +119,7 @@ func (v *Vector) AssocN(i int, val any) IPersistentVector {
 	if i < 0 || i > v.Count() {
 		panic(NewIndexOutOfBoundsError())
 	}
-	if v.vec == nil {
+	if v.vec.Len() == 0 {
 		if i == len(v.inline) {
 			return v.Cons(val).(IPersistentVector)
 		}
@@ -127,7 +127,11 @@ func (v *Vector) AssocN(i int, val any) IPersistentVector {
 		result.inline[i] = val
 		return result
 	}
-	return &Vector{meta: v.meta, vec: v.vec.Assoc(i, val)}
+	result, ok := v.vec.AssocValue(i, val)
+	if !ok {
+		panic(NewIndexOutOfBoundsError())
+	}
+	return &Vector{meta: v.meta, vec: result}
 }
 
 func (v *Vector) ContainsKey(key any) bool {
@@ -181,7 +185,7 @@ func (v *Vector) ValAtDefault(k, def any) any {
 }
 
 func (v *Vector) Nth(i int) any {
-	if v.vec == nil {
+	if v.vec.Len() == 0 {
 		if i < 0 || i >= len(v.inline) {
 			panic(NewIndexOutOfBoundsError())
 		}
@@ -263,12 +267,16 @@ func (v *Vector) Pop() IPersistentStack {
 	if v.Count() == 1 {
 		return emptyVector
 	}
-	if v.vec == nil {
+	if v.vec.Len() == 0 {
 		return newInlineVector(v.meta, v.inline[:len(v.inline)-1])
+	}
+	result, ok := v.vec.PopValue()
+	if !ok {
+		panic("can't pop an empty vector")
 	}
 	return &Vector{
 		meta: v.meta,
-		vec:  v.vec.Pop(),
+		vec:  result,
 	}
 }
 
@@ -281,7 +289,7 @@ func (v *Vector) WithMeta(meta IPersistentMap) any {
 		return v
 	}
 
-	if v.vec == nil && len(v.inline) != 0 {
+	if v.vec.Len() == 0 && len(v.inline) != 0 {
 		cpy := newInlineVector(meta, v.inline)
 		cpy.hash, cpy.hasheq = v.hash, v.hasheq
 		return cpy
@@ -341,23 +349,23 @@ func (v *Vector) Drop(n int) Sequential {
 	if n >= v.Count() {
 		return nil
 	}
-	if v.vec == nil {
+	if v.vec.Len() == 0 {
 		result := NewVector(v.inline[n:]...)
 		result.meta = v.meta
 		return result
 	}
-	return &Vector{
-		vec: v.vec.SubVector(n, v.Count()),
-	}
+	return NewSubVector(v.meta, v, n, v.Count())
 }
 
 func (v *Vector) AsTransient() ITransientCollection {
-	vec := v.vec
-	if vec == nil {
-		vec = vector.New(v.inline...)
+	if v.vec.Len() == 0 {
+		vec := vector.NewPersistent(v.inline...)
+		return &TransientVector{
+			vec: vector.NewTransient(&vec),
+		}
 	}
 	return &TransientVector{
-		vec: vector.NewTransient(vec),
+		vec: vector.NewTransient(&v.vec),
 	}
 }
 
@@ -441,7 +449,7 @@ func (t *TransientVector) Persistent() IPersistentCollection {
 		}
 		return NewVector(values...)
 	}
-	return &Vector{vec: vec}
+	return &Vector{vec: *vec}
 }
 
 func (t *TransientVector) Count() int {

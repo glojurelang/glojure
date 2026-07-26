@@ -7,6 +7,17 @@ import (
 
 // New returns a new Vector with the given elements.
 func New(elems ...interface{}) Vector {
+	persistent := NewPersistent(elems...)
+	if persistent.count == 0 {
+		return Empty
+	}
+	return &persistent
+}
+
+// NewPersistent constructs a persistent vector value. Callers that embed the
+// state in a larger persistent collection can use the value directly and
+// avoid allocating a second wrapper object.
+func NewPersistent(elems ...interface{}) Persistent {
 	// Most Clojure vectors are small enough to live entirely in the tail.
 	// Building those through a transient allocates a 32-element backing array,
 	// a transient wrapper, and an atomic edit marker regardless of their size.
@@ -14,20 +25,20 @@ func New(elems ...interface{}) Vector {
 	// variadic slice so later mutations cannot affect the vector.
 	if len(elems) <= tailMaxLen {
 		if len(elems) == 0 {
-			return Empty
+			return Persistent{}
 		}
 		tail := append([]interface{}(nil), elems...)
-		return &vector{
+		return Persistent{
 			count: len(tail),
 			tail:  tail,
 		}
 	}
 
-	trans := NewTransient(&vector{})
+	trans := NewTransient(&Persistent{})
 	for _, e := range elems {
 		trans.Conj(e)
 	}
-	return trans.Persistent()
+	return *trans.Persistent()
 }
 
 type Transient struct {
@@ -41,7 +52,7 @@ type Transient struct {
 
 // NewTransient returns a new transient vector.
 func NewTransient(vi Vector) *Transient {
-	v := vi.(*vector)
+	v := vi.(*Persistent)
 	t := &Transient{
 		count:  v.count,
 		height: v.height,
@@ -164,9 +175,9 @@ func (t *Transient) pushTail(height uint, n, tail node) node {
 }
 
 // persistent returns a persistent vector from the transient vector.
-func (t *Transient) Persistent() *vector {
+func (t *Transient) Persistent() *Persistent {
 	t.persistent.Store(true)
-	return &vector{
+	return &Persistent{
 		count:  int(t.count),
 		height: t.height,
 		root:   t.root,

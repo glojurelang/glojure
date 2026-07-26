@@ -59,7 +59,7 @@ type Iterator interface {
 	Next()
 }
 
-type vector struct {
+type Persistent struct {
 	count int
 	// height of the tree structure, defined to be 0 when root is a leaf.
 	height uint
@@ -68,7 +68,7 @@ type vector struct {
 }
 
 // Empty is an empty Vector.
-var Empty Vector = &vector{}
+var Empty Vector = &Persistent{}
 
 // node is a node in the vector tree. It is always of the size nodeSize.
 type node *[nodeSize]interface{}
@@ -89,20 +89,20 @@ func nodeFromSlice(s []interface{}) node {
 }
 
 // Count returns the number of elements in a Vector.
-func (v *vector) Len() int {
+func (v *Persistent) Len() int {
 	return v.count
 }
 
 // treeSize returns the number of elements stored in the tree (as opposed to the
 // tail).
-func (v *vector) treeSize() int {
+func (v *Persistent) treeSize() int {
 	if v.count < tailMaxLen {
 		return 0
 	}
 	return ((v.count - 1) >> chunkBits) << chunkBits
 }
 
-func (v *vector) Index(i int) (interface{}, bool) {
+func (v *Persistent) Index(i int) (interface{}, bool) {
 	if i < 0 || i >= v.count {
 		return nil, false
 	}
@@ -121,7 +121,7 @@ func (v *vector) Index(i int) (interface{}, bool) {
 
 // sliceFor returns the slice where the i-th element is stored. The index must
 // be in bound.
-func (v *vector) sliceFor(i int) []interface{} {
+func (v *Persistent) sliceFor(i int) []interface{} {
 	if i >= v.treeSize() {
 		return v.tail
 	}
@@ -132,18 +132,28 @@ func (v *vector) sliceFor(i int) []interface{} {
 	return n[:]
 }
 
-func (v *vector) Assoc(i int, val interface{}) Vector {
-	if i < 0 || i > v.count {
+func (v *Persistent) Assoc(i int, val interface{}) Vector {
+	result, ok := v.AssocValue(i, val)
+	if !ok {
 		return nil
+	}
+	return &result
+}
+
+// AssocValue returns updated persistent state by value, avoiding a wrapper
+// allocation for callers that embed Persistent directly.
+func (v Persistent) AssocValue(i int, val interface{}) (Persistent, bool) {
+	if i < 0 || i > v.count {
+		return Persistent{}, false
 	} else if i == v.count {
-		return v.Conj(val)
+		return v.ConjValue(val), true
 	}
 	if i >= v.treeSize() {
 		newTail := append([]interface{}(nil), v.tail...)
 		newTail[i&chunkMask] = val
-		return &vector{v.count, v.height, v.root, newTail}
+		return Persistent{v.count, v.height, v.root, newTail}, true
 	}
-	return &vector{v.count, v.height, doAssoc(v.height, v.root, i, val), v.tail}
+	return Persistent{v.count, v.height, doAssoc(v.height, v.root, i, val), v.tail}, true
 }
 
 // doAssoc returns an almost identical tree, with the i-th element replaced by
@@ -159,13 +169,20 @@ func doAssoc(height uint, n node, i int, val interface{}) node {
 	return m
 }
 
-func (v *vector) Conj(val interface{}) Vector {
+func (v *Persistent) Conj(val interface{}) Vector {
+	result := v.ConjValue(val)
+	return &result
+}
+
+// ConjValue returns updated persistent state by value, avoiding a wrapper
+// allocation for callers that embed Persistent directly.
+func (v Persistent) ConjValue(val interface{}) Persistent {
 	// Room in tail?
 	if v.count-v.treeSize() < tailMaxLen {
 		newTail := make([]interface{}, len(v.tail)+1)
 		copy(newTail, v.tail)
 		newTail[len(v.tail)] = val
-		return &vector{v.count + 1, v.height, v.root, newTail}
+		return Persistent{v.count + 1, v.height, v.root, newTail}
 	}
 	// Full tail; push into tree.
 	tailNode := nodeFromSlice(v.tail)
@@ -181,11 +198,11 @@ func (v *vector) Conj(val interface{}) Vector {
 	} else {
 		newRoot = v.pushTail(v.height, v.root, tailNode)
 	}
-	return &vector{v.count + 1, newHeight, newRoot, []interface{}{val}}
+	return Persistent{v.count + 1, newHeight, newRoot, []interface{}{val}}
 }
 
 // pushTail returns a tree with tail appended.
-func (v *vector) pushTail(height uint, n node, tail node) node {
+func (v *Persistent) pushTail(height uint, n node, tail node) node {
 	if height == 0 {
 		return tail
 	}
@@ -210,18 +227,31 @@ func newPath(height uint, leaf node) node {
 	return ret
 }
 
-func (v *vector) Pop() Vector {
+func (v *Persistent) Pop() Vector {
+	result, ok := v.PopValue()
+	if !ok {
+		return nil
+	}
+	if result.count == 0 {
+		return Empty
+	}
+	return &result
+}
+
+// PopValue returns updated persistent state by value, avoiding a wrapper
+// allocation for callers that embed Persistent directly.
+func (v Persistent) PopValue() (Persistent, bool) {
 	switch v.count {
 	case 0:
-		return nil
+		return Persistent{}, false
 	case 1:
-		return Empty
+		return Persistent{}, true
 	}
 	if v.count-v.treeSize() > 1 {
 		// Tails are immutable: Conj and Assoc always allocate before writing.
 		// The popped vector can therefore share the backing array and expose a
 		// shorter view instead of copying the remaining tail.
-		return &vector{v.count - 1, v.height, v.root, v.tail[:len(v.tail)-1]}
+		return Persistent{v.count - 1, v.height, v.root, v.tail[:len(v.tail)-1]}, true
 	}
 	newTail := v.sliceFor(v.count - 2)
 	newRoot := v.popTail(v.height, v.root)
@@ -230,11 +260,11 @@ func (v *vector) Pop() Vector {
 		newRoot = newRoot[0].(node)
 		newHeight--
 	}
-	return &vector{v.count - 1, newHeight, newRoot, newTail}
+	return Persistent{v.count - 1, newHeight, newRoot, newTail}, true
 }
 
 // popTail returns a new tree with the last leaf removed.
-func (v *vector) popTail(level uint, n node) node {
+func (v *Persistent) popTail(level uint, n node) node {
 	idx := ((v.count - 2) >> (level * chunkBits)) & chunkMask
 	if level > 1 {
 		newChild := v.popTail(level-1, n[idx].(node))
@@ -259,23 +289,23 @@ func (v *vector) popTail(level uint, n node) node {
 	}
 }
 
-func (v *vector) SubVector(begin, end int) Vector {
+func (v *Persistent) SubVector(begin, end int) Vector {
 	if begin < 0 || begin > end || end > v.count {
 		return nil
 	}
 	return &subVector{v, begin, end}
 }
 
-func (v *vector) Iterator() Iterator {
+func (v *Persistent) Iterator() Iterator {
 	return newIterator(v)
 }
 
-func (v *vector) MarshalJSON() ([]byte, error) {
+func (v *Persistent) MarshalJSON() ([]byte, error) {
 	return marshalJSON(v.Iterator())
 }
 
 type subVector struct {
-	v     *vector
+	v     *Persistent
 	begin int
 	end   int
 }
@@ -328,7 +358,7 @@ func (s *subVector) MarshalJSON() ([]byte, error) {
 }
 
 type iterator struct {
-	v        *vector
+	v        *Persistent
 	treeSize int
 	index    int
 	end      int
@@ -344,11 +374,11 @@ func (e pathEntry) current() interface{} {
 	return e.node[e.index]
 }
 
-func newIterator(v *vector) *iterator {
+func newIterator(v *Persistent) *iterator {
 	return newIteratorWithRange(v, 0, v.Len())
 }
 
-func newIteratorWithRange(v *vector, begin, end int) *iterator {
+func newIteratorWithRange(v *Persistent, begin, end int) *iterator {
 	it := &iterator{v, v.treeSize(), begin, end, nil}
 	if it.index >= it.treeSize {
 		return it

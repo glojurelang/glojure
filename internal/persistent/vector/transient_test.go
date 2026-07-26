@@ -8,7 +8,7 @@ import (
 )
 
 func TestTransient(t *testing.T) {
-	trans := NewTransient(&vector{})
+	trans := NewTransient(&Persistent{})
 
 	const n = 10000
 
