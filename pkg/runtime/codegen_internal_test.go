@@ -60,6 +60,32 @@ func TestGenerateNestedClosureCapturedAtLoadTime(t *testing.T) {
 	}
 }
 
+func TestGenerateFixedArityFunctionsThroughTwenty(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.fixed-arity-twenty"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn fixed
+		  [a b c d e f g h i j k l m n o p q r s t]
+		  [a b c d e f g h i j k l m n o p q r s t])
+		(defn invoke [f]
+		  (f 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate fixed arity function: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "lang.FnFunc20") {
+		t.Fatalf("twenty-argument function did not use FnFunc20:\n%s", generated)
+	}
+	if !strings.Contains(generated, "lang.Apply20") {
+		t.Fatalf("dynamic twenty-argument call did not use Apply20:\n%s", generated)
+	}
+}
+
 func TestGenerateMutableRuntimeValues(t *testing.T) {
 	generator := NewGenerator(&bytes.Buffer{})
 

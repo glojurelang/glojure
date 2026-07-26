@@ -58,3 +58,20 @@ func TestApply5UsesFixedArityFunction(t *testing.T) {
 		t.Fatalf("Apply5 result = %v", got)
 	}
 }
+
+func TestApply9DoesNotAllocateForGeneratedFunction(t *testing.T) {
+	fn := FnFunc9(func(a0, a1, a2, a3, a4, a5, a6, a7, a8 any) any {
+		return a0.(int) + a1.(int) + a2.(int) + a3.(int) + a4.(int) +
+			a5.(int) + a6.(int) + a7.(int) + a8.(int)
+	})
+	if got := Apply9(fn, 1, 2, 3, 4, 5, 6, 7, 8, 9); got != 45 {
+		t.Fatalf("Apply9 result = %v, want 45", got)
+	}
+	if got := testing.AllocsPerRun(1_000, func() {
+		if Apply9(fn, 1, 2, 3, 4, 5, 6, 7, 8, 9) != 45 {
+			panic("unexpected result")
+		}
+	}); got != 0 {
+		t.Fatalf("Apply9 allocated %v objects per call, want 0", got)
+	}
+}

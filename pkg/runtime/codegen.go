@@ -1253,12 +1253,12 @@ func (g *Generator) generateFn(fn *Fn) string {
 	astNode := fn.ASTNode()
 	fnNode := astNode.Sub.(*ast.FnNode)
 
-	// Determine if we can use a fixed-arity FnFuncN (0-5 args, single method,
+	// Determine if we can use a fixed-arity FnFuncN (0-20 args, single method,
 	// non-variadic). fixedArity == -1 means fall back to FnFunc.
 	fixedArity := -1
 	if len(fnNode.Methods) == 1 && !fnNode.IsVariadic {
 		mn := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		if mn.FixedArity <= 5 {
+		if mn.FixedArity <= 20 {
 			fixedArity = mn.FixedArity
 		}
 	}
@@ -1276,7 +1276,7 @@ func (g *Generator) generateFn(fn *Fn) string {
 	fnVar := g.allocateTempVar()
 
 	// Declare with the appropriate type.
-	// FnFuncN for 0-5 arg non-variadic single-arity functions eliminates
+	// FnFuncN for supported non-variadic single-arity functions eliminates
 	// []any heap allocation at call sites that use ApplyN.
 	fnType := "lang.FnFunc"
 	if fixedArity >= 0 {
@@ -1310,10 +1310,9 @@ func (g *Generator) generateFn(fn *Fn) string {
 	}
 
 	if fixedArity >= 0 {
-		// Single-arity 0-5: emit FnFuncN with direct named params
+		// Supported single arity: emit FnFuncN with direct named params.
 		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		allParamNames := []string{"p0", "p1", "p2", "p3", "p4"}
-		paramNames := allParamNames[:fixedArity]
+		paramNames := fixedParamNames(fixedArity)
 		if !g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
 			sig := ""
@@ -1403,9 +1402,8 @@ func (g *Generator) generateFn(fn *Fn) string {
 
 func (g *Generator) generateFixedMethodFn(methodNode *ast.FnMethodNode) {
 	arity := methodNode.FixedArity
-	if arity <= 5 {
-		allParamNames := []string{"p0", "p1", "p2", "p3", "p4"}
-		paramNames := allParamNames[:arity]
+	if arity <= 20 {
+		paramNames := fixedParamNames(arity)
 		sig := ""
 		if arity > 0 {
 			sig = strings.Join(paramNames, ", ") + " any"
@@ -1420,6 +1418,14 @@ func (g *Generator) generateFixedMethodFn(methodNode *ast.FnMethodNode) {
 	g.writef("checkArity(args, %d)\n", arity)
 	g.generateFnMethod(methodNode, "args")
 	g.writef("}),\n")
+}
+
+func fixedParamNames(arity int) []string {
+	names := make([]string, arity)
+	for i := range names {
+		names[i] = fmt.Sprintf("p%d", i)
+	}
+	return names
 }
 
 func runtimeFunctionMeta(meta lang.IPersistentMap) lang.IPersistentMap {
@@ -1852,23 +1858,18 @@ func (g *Generator) generateApply(
 	if declare {
 		operator = ":="
 	}
-	n := len(argExprs)
-	switch n {
-	case 0:
+	arity := len(argExprs)
+	if arity == 0 {
 		g.writef("%s %s lang.Apply0(%s)\n", resultVar, operator, fnExpr)
-	case 1:
-		g.writef("%s %s lang.Apply1(%s, %s)\n", resultVar, operator, fnExpr, argExprs[0])
-	case 2:
-		g.writef("%s %s lang.Apply2(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
-	case 3:
-		g.writef("%s %s lang.Apply3(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
-	case 4:
-		g.writef("%s %s lang.Apply4(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
-	case 5:
-		g.writef("%s %s lang.Apply5(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
-	default:
-		g.writef("%s %s lang.Apply(%s, []any{%s})\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
+		return
 	}
+	if arity <= 20 {
+		g.writef("%s %s lang.Apply%d(%s, %s)\n",
+			resultVar, operator, arity, fnExpr, strings.Join(argExprs, ", "))
+		return
+	}
+	g.writef("%s %s lang.Apply(%s, []any{%s})\n",
+		resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 }
 
 // generateDo generates code for a Do node

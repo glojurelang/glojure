@@ -1,5 +1,7 @@
 package lang
 
+//go:generate go run gen_fixed_arities.go
+
 import "fmt"
 
 // FixedArityFnN are optional fast-call interfaces. IFn implementations can
@@ -242,7 +244,7 @@ func (f FnFunc5) ApplyTo(args ISeq) any {
 func (f FnFunc5) Meta() IPersistentMap          { return nil }
 func (f FnFunc5) WithMeta(_ IPersistentMap) any { return f }
 
-// requireFixedSeqArity reads up to four fixed arguments directly from an
+// requireFixedSeqArity reads up to five fixed arguments directly from an
 // ISeq. Unlike seqToSlice, the successful path does not allocate a variadic
 // argument slice. The full sequence is counted only on the exceptional path
 // so that Invoke and ApplyTo report the same arity error.
