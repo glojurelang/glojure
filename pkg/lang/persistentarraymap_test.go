@@ -2,6 +2,7 @@ package lang
 
 import (
 	"runtime"
+	"strconv"
 	"testing"
 )
 
@@ -36,4 +37,41 @@ func TestSmallMapAssocUsesIndependentInlineStorage(t *testing.T) {
 		t.Fatalf("small-map assoc allocated %v objects per call, want 1", got)
 	}
 	runtime.KeepAlive(result)
+}
+
+func TestKeywordMapsUseClojureArrayMapThreshold(t *testing.T) {
+	keyVals := make([]any, 0, arrayMapKeywordThreshold)
+	for i := 0; i < arrayMapKeywordThreshold/2; i++ {
+		keyVals = append(keyVals, NewKeyword("k"+strconv.Itoa(i)), int64(i))
+	}
+
+	m, ok := NewMap(keyVals...).(*Map)
+	if !ok {
+		t.Fatalf("keyword map at threshold has type %T, want *Map", NewMap(keyVals...))
+	}
+	if got := m.Count(); got != arrayMapKeywordThreshold/2 {
+		t.Fatalf("Count() = %d, want %d", got, arrayMapKeywordThreshold/2)
+	}
+
+	overflow := m.Assoc(NewKeyword("overflow"), int64(1))
+	if _, ok := overflow.(*PersistentHashMap); !ok {
+		t.Fatalf("keyword map above threshold has type %T, want *PersistentHashMap", overflow)
+	}
+}
+
+func TestNonKeywordMapUsesGeneralArrayMapThreshold(t *testing.T) {
+	keyVals := make([]any, 0, arrayMapHashThreshold+2)
+	for i := 0; i < arrayMapHashThreshold/2; i++ {
+		keyVals = append(keyVals, i, i)
+	}
+
+	m, ok := NewMap(keyVals...).(*Map)
+	if !ok {
+		t.Fatalf("map at threshold has type %T, want *Map", NewMap(keyVals...))
+	}
+
+	overflow := m.Assoc(arrayMapHashThreshold/2, true)
+	if _, ok := overflow.(*PersistentHashMap); !ok {
+		t.Fatalf("map above threshold has type %T, want *PersistentHashMap", overflow)
+	}
 }

@@ -5,8 +5,9 @@ import (
 )
 
 const (
-	hashmapThreshold   = 16
-	arrayMapInlineSize = hashmapThreshold - 2
+	arrayMapHashThreshold    = 16
+	arrayMapKeywordThreshold = 128
+	arrayMapInlineSize       = arrayMapHashThreshold - 2
 )
 
 type (
@@ -76,7 +77,7 @@ func NewMap(keyVals ...any) IPersistentMap {
 		panic("invalid map. must have even number of inputs")
 	}
 
-	if len(keyVals) >= hashmapThreshold {
+	if !canBePersistentArrayMap(keyVals) {
 		return NewPersistentHashMap(keyVals...)
 	}
 
@@ -88,6 +89,25 @@ func NewMap(keyVals ...any) IPersistentMap {
 		m.keyVals = append([]any(nil), keyVals...)
 	}
 	return m
+}
+
+// canBePersistentArrayMap mirrors Clojure's PersistentArrayMap thresholds.
+// Small maps stay array-backed regardless of key type. Larger maps may remain
+// array-backed when every key beyond the general threshold is a keyword,
+// whose identity comparison keeps linear lookup inexpensive.
+func canBePersistentArrayMap(keyVals []any) bool {
+	if len(keyVals) <= arrayMapHashThreshold {
+		return true
+	}
+	if len(keyVals) > arrayMapKeywordThreshold {
+		return false
+	}
+	for i := arrayMapHashThreshold; i < len(keyVals); i += 2 {
+		if _, ok := keyVals[i].(Keyword); !ok {
+			return false
+		}
+	}
+	return true
 }
 
 func NewPersistentArrayMapAsIfByAssoc(init []any) IPersistentMap {
@@ -211,7 +231,11 @@ func (m *Map) Assoc(k, v any) Associative {
 			return newMap
 		}
 	}
-	if len(m.keyVals) < hashmapThreshold {
+	threshold := arrayMapHashThreshold
+	if _, ok := k.(Keyword); ok {
+		threshold = arrayMapKeywordThreshold
+	}
+	if len(m.keyVals) < threshold {
 		newMap := m.clone()
 		newMap.keyVals = append(newMap.keyVals, k, v)
 		return newMap
