@@ -15,6 +15,7 @@ CLOJURE-DEPS += $(PERL)
 include $M/clojure.mk
 include $M/gh.mk
 include $M/clean.mk
+include $M/yamlscript.mk
 include $M/shell.mk
 
 CLOJURE-STDLIB-VERSION := clojure-$(CLOJURE-STDLIB-SOURCE-VERSION)
@@ -206,10 +207,14 @@ bin/%/glj.wasm: \
 vet: $(GO)
 	go vet ./...
 
-.PHONY: test test-aot-runtime
 # vet is disabled until we fix errors in generated code
 test: test-aot-runtime test-glj  # vet
 	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
+
+test-compare: $(YS)
+	@scripts/make-test-compare \
+	  '$(if $(with),$(with),origin/main)' '$(file)' \
+	  '$(if $(load),$(load),1.0)'
 
 test-aot-runtime: $(GO)
 	go test -tags glj_aot_runtime ./pkg/glj ./pkg/gljmain ./pkg/runtime
