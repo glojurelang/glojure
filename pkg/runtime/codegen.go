@@ -614,9 +614,9 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 	////////////////////////////////////////////////////////////////////////////////
 
 	// Prepare the final source
-	sourceBytes := []byte(g.header(mungeID(getLastNSPart(ns.Name().String())))) // File header with package and imports
-	sourceBytes = append(sourceBytes, g.aotDeclarations.Bytes()...)             // Package-level AOT call caches
-	sourceBytes = append(sourceBytes, initBuf.Bytes()...)                       // The complete init function
+	sourceBytes := []byte(g.header(mungePackageName(getLastNSPart(ns.Name().String())))) // File header with package and imports
+	sourceBytes = append(sourceBytes, g.aotDeclarations.Bytes()...)                      // Package-level AOT call caches
+	sourceBytes = append(sourceBytes, initBuf.Bytes()...)                                // The complete init function
 
 	// Format the generated code
 	formatted, err := format.Source(sourceBytes)
@@ -834,18 +834,20 @@ func (g *Generator) generateValue(value any) string {
 	case int64:
 		return fmt.Sprintf("int64(%d)", v)
 	case float64:
-		return fmt.Sprintf("float64(%g)", v)
+		return fmt.Sprintf("float64(%s)", g.generateFloatLiteral(v, 64))
 	case float32:
-		return fmt.Sprintf("float32(%g)", v)
+		return fmt.Sprintf("float32(%s)", g.generateFloatLiteral(float64(v), 32))
 	case time.Duration:
 		alias := g.addImportWithAlias("time")
 		return fmt.Sprintf("%s.Duration(%d)", alias, int64(v))
 	case *regexp.Regexp:
-		// Regex literals can appear inside hot functions. Reuse the process-wide
-		// immutable regexp instead of recompiling the same pattern per call.
-		return fmt.Sprintf("lang.CachedCompileRegexp(%#v)", v.String())
+		return fmt.Sprintf("%s.MustCompile(%#v)", g.addImportWithAlias("regexp"), v.String())
 	case *lang.BigDecimal:
 		return g.generateBigDecimalValue(v)
+	case *lang.BigInt:
+		return generateBigIntValue(v)
+	case *lang.Ratio:
+		return generateRatioValue(v)
 	case bool:
 		// return the boolean as a Go boolean literal
 		if v {
@@ -910,8 +912,9 @@ func (g *Generator) generateValue(value any) string {
 }
 
 // generateNamedScalarValue emits constants whose Go type has a name, such as
-// fs.FileMode. Host symbols resolve to their exact Go values during analysis,
-// so AOT generation must preserve both the scalar value and its named type.
+// fs.FileMode or uuid.UUID. Host symbols resolve to their exact Go values
+// during analysis, so AOT generation must preserve both the value and its
+// named type.
 func (g *Generator) generateNamedScalarValue(v reflect.Value) (string, bool) {
 	if !v.IsValid() || v.Type().Name() == "" {
 		return "", false
@@ -926,14 +929,71 @@ func (g *Generator) generateNamedScalarValue(v reflect.Value) (string, bool) {
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
 		return fmt.Sprintf("%s(%d)", typeName, v.Uint()), true
 	case reflect.Float32, reflect.Float64:
-		return fmt.Sprintf("%s(%g)", typeName, v.Float()), true
+		return fmt.Sprintf("%s(%s)", typeName, g.generateFloatLiteral(v.Float(), v.Type().Bits())), true
 	case reflect.Complex64, reflect.Complex128:
-		return fmt.Sprintf("%s(%g)", typeName, v.Complex()), true
+		bits := v.Type().Bits() / 2
+		value := v.Complex()
+		return fmt.Sprintf(
+			"%s(complex(%s, %s))",
+			typeName,
+			g.generateFloatLiteral(real(value), bits),
+			g.generateFloatLiteral(imag(value), bits),
+		), true
 	case reflect.String:
 		return fmt.Sprintf("%s(%q)", typeName, v.String()), true
+	case reflect.Array:
+		elements := make([]string, v.Len())
+		for i := range elements {
+			element, ok := g.generateScalarLiteral(v.Index(i))
+			if !ok {
+				return "", false
+			}
+			elements[i] = element
+		}
+		return fmt.Sprintf("%s{%s}", typeName, strings.Join(elements, ", ")), true
 	default:
 		return "", false
 	}
+}
+
+func (g *Generator) generateScalarLiteral(v reflect.Value) (string, bool) {
+	switch v.Kind() {
+	case reflect.Bool:
+		return fmt.Sprintf("%t", v.Bool()), true
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return fmt.Sprintf("%d", v.Int()), true
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return fmt.Sprintf("%d", v.Uint()), true
+	case reflect.Float32, reflect.Float64:
+		return g.generateFloatLiteral(v.Float(), v.Type().Bits()), true
+	case reflect.Complex64, reflect.Complex128:
+		bits := v.Type().Bits() / 2
+		value := v.Complex()
+		return fmt.Sprintf(
+			"complex(%s, %s)",
+			g.generateFloatLiteral(real(value), bits),
+			g.generateFloatLiteral(imag(value), bits),
+		), true
+	case reflect.String:
+		return fmt.Sprintf("%q", v.String()), true
+	default:
+		return "", false
+	}
+}
+
+// generateFloatLiteral uses ordinary Go literals when they preserve the value.
+// Go has no literal syntax for infinities, NaNs, or negative zero, so emit those
+// values from their exact IEEE-754 bit pattern.
+func (g *Generator) generateFloatLiteral(value float64, bits int) string {
+	if !math.IsNaN(value) && !math.IsInf(value, 0) && (value != 0 || !math.Signbit(value)) {
+		return fmt.Sprintf("%g", value)
+	}
+
+	alias := g.addImportWithAlias("math")
+	if bits == 32 {
+		return fmt.Sprintf("%s.Float32frombits(0x%08x)", alias, math.Float32bits(float32(value)))
+	}
+	return fmt.Sprintf("%s.Float64frombits(0x%016x)", alias, math.Float64bits(value))
 }
 
 // generateClassValue wraps the embedded reflect.Type in a fresh
@@ -1199,6 +1259,23 @@ func (g *Generator) generateBigDecimalValue(bd *lang.BigDecimal) string {
 `, resultId, bigAlias, bigAlias, hexAlias, hexBlob)
 
 	return resultId
+}
+
+func generateBigIntValue(value *lang.BigInt) string {
+	return fmt.Sprintf(
+		`func() *lang.BigInt { value, err := lang.NewBigInt(%q); if err != nil { panic(err) }; return value }()`,
+		value.String(),
+	)
+}
+
+func generateRatioValue(value *lang.Ratio) string {
+	numerator := lang.NewBigIntFromGoBigInt(value.Numerator())
+	denominator := lang.NewBigIntFromGoBigInt(value.Denominator())
+	return fmt.Sprintf(
+		"lang.NewRatioBigInt(%s, %s)",
+		generateBigIntValue(numerator),
+		generateBigIntValue(denominator),
+	)
 }
 
 // generateSetValue generates Go code for a Clojure set
@@ -1691,6 +1768,13 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 			default:
 				return g.generateGoExportedName(constNode.HostSymbol.FullName())
 			}
+		}
+		// A compiled Clojure regex is a constant object: repeated evaluation of
+		// one literal returns the same object, while two equal literal
+		// occurrences remain distinct. Lift by pointer identity to preserve
+		// both halves of that contract.
+		if _, ok := constNode.Value.(*regexp.Regexp); ok {
+			return g.liftValue(constNode.Value)
 		}
 		return g.generateValue(constNode.Value)
 	case ast.OpVector:
@@ -3264,17 +3348,19 @@ func (g *Generator) generateHostInterop(node *ast.Node) string {
 	return resultId
 }
 
-// generateMaybeHostForm generates code for a MaybeHostForm node
+// generateMaybeHostForm preserves the evaluator's late-bound host lookup.
+// Some portable Clojure forms use JVM-style class names that compatibility
+// bridges register only at runtime (for example clojure.lang.MapEntry/create).
 func (g *Generator) generateMaybeHostForm(node *ast.Node) string {
 	maybeHostNode := node.Sub.(*ast.MaybeHostFormNode)
-	class := maybeHostNode.Class
-	field := maybeHostNode.Field
-
-	// TODO: implement support for host forms or disallow entirely
-	//panic(fmt.Sprintf("unsupported form: %s/%s", maybeHostNode.Class, field))
-
-	fmt.Printf("skipping host form: %s/%s\n", class, field)
-	return "nil"
+	export := maybeHostNode.Class + "." + maybeHostNode.Field.Name()
+	resultID := g.allocateTempVar()
+	alias := g.addImportWithAlias("github.com/glojurelang/glojure/pkg/pkgmap")
+	g.writef("%s, ok := %s.Get(%q)\n", resultID, alias, export)
+	g.writef("if !ok {\n")
+	g.writef("  panic(lang.NewIllegalArgumentError(%q))\n", "unable to resolve host form: "+export)
+	g.writef("}\n")
+	return resultID
 }
 
 func (g *Generator) generateTheVar(node *ast.Node) string {
@@ -3604,6 +3690,24 @@ func (g *Generator) makeLiftedKey(value any) liftedKey {
 	}
 }
 
+func (g *Generator) liftValue(value any) string {
+	key := g.makeLiftedKey(value)
+	if lifted, ok := g.liftedValues[key]; ok {
+		return lifted.varName
+	}
+
+	varName := fmt.Sprintf("closed%d", g.liftedCounter)
+	g.liftedCounter++
+	g.liftedValues[key] = &liftedValue{
+		value:   value,
+		varName: varName,
+	}
+	if g.currentValueInit != nil && varName != g.currentValueInit.name {
+		g.currentValueInit.deps[varName] = struct{}{}
+	}
+	return varName
+}
+
 func (g *Generator) getLocal(name string) string {
 	// First check normal scopes
 	for i := len(g.varScopes) - 1; i >= 0; i-- {
@@ -3617,28 +3721,7 @@ func (g *Generator) getLocal(name string) string {
 	if g.currentFnEnv != nil {
 		// Look up in the environment using the new public method
 		if value, found := g.currentFnEnv.LookupLocal(name); found {
-			// Create a key for deduplication
-			key := g.makeLiftedKey(value)
-
-			// Check if already lifted
-			if lifted, ok := g.liftedValues[key]; ok {
-				return lifted.varName
-			}
-
-			// Create new lifted value
-			varName := fmt.Sprintf("closed%d", g.liftedCounter)
-			g.liftedCounter++
-			g.liftedValues[key] = &liftedValue{
-				value:   value,
-				varName: varName,
-			}
-
-			// Add as a dependency to the current value init if we're in one
-			if g.currentValueInit != nil && varName != g.currentValueInit.name {
-				g.currentValueInit.deps[varName] = struct{}{}
-			}
-
-			return varName
+			return g.liftValue(value)
 		}
 	}
 
@@ -3708,6 +3791,14 @@ func mungeID(name string) string {
 		}
 	}
 	return sb.String()
+}
+
+func mungePackageName(name string) string {
+	name = mungeID(name)
+	if !token.IsIdentifier(name) {
+		return "pkg_" + name
+	}
+	return name
 }
 
 func getLastNSPart(ns string) string {

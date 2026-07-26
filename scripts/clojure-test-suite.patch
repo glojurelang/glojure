@@ -1,0 +1,199 @@
+diff --git a/test-glojure.glj b/test-glojure.glj
+index c85a790..b4d351f 100644
+--- a/test-glojure.glj
++++ b/test-glojure.glj
+@@ -13,11 +13,19 @@
+   (let [base (last (clojure.string/split path #"/"))]
+     (first (clojure.string/split base #"\."))))
+ 
++(defn test-file->namespace [path]
++  (-> path
++      (clojure.string/replace #"^test/" "")
++      (clojure.string/replace #"\.cljc$" "")
++      (clojure.string/replace #"_" "-")
++      (clojure.string/replace #"/" ".")
++      symbol))
++
+ (defn load-test-file [path]
+   (try
+     (load-file path)
+-    true
++    nil
+     (catch go/any e
+-      false)))
++      e)))
+ 
+ (defn find-test-files []
+@@ -256,9 +264,27 @@
+-            load-results (into {}
+-                               (map (fn [f] [f (load-test-file f)]))
+-                               all-test-files)
++            load-results (binding [t/report original-report]
++                           (into []
++                                 (map (fn [f] [f (load-test-file f)]))
++                                 all-test-files))
++            load-errors (keep (fn [[path load-error]]
++                                (when load-error [path load-error]))
++                              load-results)
+             reader-skips (count-reader-conditional-skips all-test-files)
+             num-reader-skips (reduce + 0 (map :count reader-skips))]
+ 
++        (doseq [[path load-error] load-errors]
++          (binding [*out* os.Stderr]
++            (println "LOAD ERROR" path ":" (.Error load-error))))
++
++        ;; Do not leave tests defined before a load failure eligible to run.
++        (doseq [[path _] load-errors]
++          (remove-ns (test-file->namespace path)))
++
++        (fmt.Println
++         (str "LOAD ERROR SUMMARY: " (count load-errors) " of "
++              (count all-test-files) " files failed to load"
++              (when (some? (:expect-load-errors opts))
++                (str "; expected " (:expect-load-errors opts)))))
++
+         ;; Run tests based on whether a namespace was specified
+         (if (:test-ns opts)
+           (if-let [ns-sym (symbol (:test-ns opts))]
+@@ -266,7 +292,7 @@
+             (do
+               (println "Invalid namespace:" (:test-ns opts))
+               (os.Exit 1)))
+-          (t/run-all-tests))
++          (t/run-all-tests #"^clojure\.(core|string)-test\..*$"))
+ 
+         ;; Generate and write HTML report
+         (let [html-content (generate-html-report @test-results reader-skips)
+@@ -279,7 +305,8 @@
+         ;; Exit with appropriate code
+         (let [{:keys [test pass fail error]} (:summary @test-results)
+               expect-failures (:expect-failures opts)
+-              expect-errors (:expect-errors opts)]
++              expect-errors (:expect-errors opts)
++              expect-load-errors (:expect-load-errors opts)]
+           (fmt.Println (str "\nRan " test " tests containing " (+ pass fail error) " assertions."))
+           (fmt.Println (str fail " failures, " error " errors"
+                             (when (pos? num-reader-skips)
+@@ -289,10 +316,17 @@
+           (let [failures-match? (or (nil? expect-failures)
+                                     (= fail expect-failures))
+                 errors-match? (or (nil? expect-errors)
+-                                 (= error expect-errors))
+-                success? (if (or expect-failures expect-errors)
++                                  (= error expect-errors))
++                load-errors-match? (or (nil? expect-load-errors)
++                                       (= (count load-errors)
++                                          expect-load-errors))
++                success? (if (or (some? expect-failures)
++                                 (some? expect-errors)
++                                 (some? expect-load-errors))
+                           ;; If expectations are set, check they match
+-                          (and failures-match? errors-match?)
++                          (and failures-match?
++                               errors-match?
++                               load-errors-match?)
+                           ;; If no expectations, default behavior (zero failures/errors)
+                           (and (zero? fail) (zero? error)))]
+ 
+@@ -300,6 +334,10 @@
+               (fmt.Println (str "Expected " expect-failures " failures, got " fail)))
+             (when expect-errors
+               (fmt.Println (str "Expected " expect-errors " errors, got " error)))
++            (when (some? expect-load-errors)
++              (fmt.Println
++               (str "Expected " expect-load-errors " load errors, got "
++                    (count load-errors))))
+ 
+             (if success?
+               (os.Exit 0)
+@@ -321,6 +359,11 @@
+           (recur (drop 2 args)
+                  (assoc opts :expect-errors (first (strconv.Atoi (second args)))))
+ 
++          (= arg "--expect-load-errors")
++          (recur (drop 2 args)
++                 (assoc opts :expect-load-errors
++                        (first (strconv.Atoi (second args)))))
++
+           :else
+           (recur (rest args)
+                  (assoc opts :test-ns arg)))))))
+diff --git a/test/clojure/core_test/ancestors.cljc b/test/clojure/core_test/ancestors.cljc
+index d644e5c..a041476 100644
+--- a/test/clojure/core_test/ancestors.cljc
++++ b/test/clojure/core_test/ancestors.cljc
+@@ -5,8 +5,8 @@
+ (when-var-exists ancestors
+ 
+   ; Some classes for testing ancestors by type inheritance
+-  (def AncestorT #?(:cljs js/Object :lpy python/object :default Object))
+-  (def ChildT #?(:cljs :default :lpy basilisp.lang.set/PersistentSet :default clojure.lang.PersistentHashSet))
++  (def AncestorT #?(:cljs js/Object :lpy python/object :glj go/any :default Object))
++  (def ChildT #?(:cljs :default :lpy basilisp.lang.set/PersistentSet :glj github.com:glojurelang:glojure:pkg:lang.*Set :default clojure.lang.PersistentHashSet))
+ 
+   ; Some custom types for testing ancestors by type inheritance
+   (defprotocol TestAncestorsProtocol)
+diff --git a/test/clojure/core_test/mapcat.cljc b/test/clojure/core_test/mapcat.cljc
+index e1217ef..935812a 100644
+--- a/test/clojure/core_test/mapcat.cljc
++++ b/test/clojure/core_test/mapcat.cljc
+@@ -19,7 +19,7 @@
+     (testing "into with transducer"
+       (is (= [0 0 1 1 2 2] (into [] (mapcat #(repeat 2 %)) (range 3)))))
+     (testing "infinite input laziness"
+-      (is (= [0 0 1 1 2]  (take 5 (mapcat #(repeat 2 %) (range)))))))
++      (is (= [0 0 1 1 2]  (take 5 (mapcat #(repeat 2 %) (range))))))
+     (testing "empty collection input"
+       (is (= [] (mapcat identity []))))
+     (testing "single element producing empty sequence"
+@@ -38,7 +38,7 @@
+     (testing "one collection shorter than the other"
+       (is (= [2 4] (mapcat (fn [x y] [(* x y)]) [1 2] [2 2 2]))))
+     (testing "works lazily on infinite input"
+-      (is (= [0 1 2 3 4 5] (->> (mapcat (fn [x] [x]) (range)) (take 6))))))
++      (is (= [0 1 2 3 4 5] (->> (mapcat (fn [x] [x]) (range)) (take 6)))))
+     (testing "function sometimes returns []"
+       (is (= [1 3 5] (mapcat #(if (odd? %) [%] []) (range 1 6)))))
+     (testing "function sometimes returns nil"
+diff --git a/test/clojure/core_test/reduce.cljc b/test/clojure/core_test/reduce.cljc
+index 5d70cc4..39a7725 100644
+--- a/test/clojure/core_test/reduce.cljc
++++ b/test/clojure/core_test/reduce.cljc
+@@ -9,31 +9,37 @@
+               (#?(:clj Integer.
+                   :cljr identity
+                   :cljs js/Number.
++                  :glj go/int
+                   :lpy python/int) x))
+ 
+    :Integer #?(:clj Integer/TYPE
+                :cljr System.Int32
+                :cljs js/Number
++               :glj go/int
+                :lpy python/int)
+ 
+    :Long #?(:clj Long/TYPE
+             :cljr System.Int64
+             :cljs js/Number
++            :glj go/int64
+             :lpy python/int)
+ 
+    :Float #?(:clj Long/TYPE
+              :cljr System.Single
+              :cljs js/Number
++             :glj go/float32
+              :lpy python/float)
+ 
+    :Double #?(:clj Double/TYPE
+               :cljr System.Double
+               :cljs js/Number
++              :glj go/float64
+               :lpy python/float)
+ 
+    :Boolean #?(:clj Boolean/TYPE
+                :cljr System.Boolean
+                :cljs js/Boolean
++               :glj go/bool
+                :lpy python/bool)})
+ 
+ 

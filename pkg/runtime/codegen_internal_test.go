@@ -8,12 +8,14 @@ import (
 	"math"
 	"os"
 	"reflect"
+	"regexp"
 	"strings"
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
+	"github.com/google/uuid"
 )
 
 func TestGenerateNamedScalarValue(t *testing.T) {
@@ -25,6 +27,15 @@ func TestGenerateNamedScalarValue(t *testing.T) {
 	}
 	if got := generator.imports["io/fs"]; got != "fs0" {
 		t.Fatalf("io/fs import alias = %q, want %q", got, "fs0")
+	}
+
+	id := uuid.MustParse("f81d4fae-7dec-11d0-a765-00a0c91e6bf6")
+	got = generator.generateValue(id)
+	if !strings.HasPrefix(got, "uuid1.UUID{") {
+		t.Fatalf("generated uuid.UUID = %q", got)
+	}
+	if got := generator.imports["github.com/google/uuid"]; got != "uuid1" {
+		t.Fatalf("uuid import alias = %q, want %q", got, "uuid1")
 	}
 }
 
@@ -38,6 +49,86 @@ func TestGenerateStandardFileHandles(t *testing.T) {
 	} {
 		if got := generator.generateValue(handle); got != want {
 			t.Errorf("generated standard file handle = %q, want %q", got, want)
+		}
+	}
+}
+
+func TestGenerateArbitraryPrecisionConstants(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+
+	bigInt, err := lang.NewBigInt("123456789012345678901234567890")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := generator.generateValue(bigInt); !strings.Contains(
+		got,
+		`lang.NewBigInt("123456789012345678901234567890")`,
+	) {
+		t.Fatalf("generated BigInt = %q", got)
+	}
+
+	ratio := lang.NewRatioBigInt(
+		lang.NewBigIntFromInt64(-1),
+		lang.NewBigIntFromInt64(5),
+	)
+	got := generator.generateValue(ratio)
+	for _, want := range []string{`lang.NewBigInt("-1")`, `lang.NewBigInt("5")`} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("generated Ratio = %q, missing %q", got, want)
+		}
+	}
+}
+
+func TestGenerateNonFiniteFloatConstants(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+
+	for name, value := range map[string]float64{
+		"positive infinity": math.Inf(1),
+		"negative infinity": math.Inf(-1),
+		"not a number":      math.NaN(),
+		"negative zero":     math.Copysign(0, -1),
+	} {
+		got := generator.generateValue(value)
+		if !strings.Contains(got, "math0.Float64frombits(") {
+			t.Errorf("generated %s = %q, want exact IEEE-754 reconstruction", name, got)
+		}
+	}
+	if got := generator.imports["math"]; got != "math0" {
+		t.Fatalf("math import alias = %q, want %q", got, "math0")
+	}
+}
+
+func TestGenerateRegexConstantsPreserveOccurrenceIdentity(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+	first := regexp.MustCompile("same pattern")
+	second := regexp.MustCompile("same pattern")
+
+	constant := func(value *regexp.Regexp) *ast.Node {
+		node := ast.MakeNode(ast.OpConst, nil)
+		node.Sub = &ast.ConstNode{Value: value}
+		return node
+	}
+
+	firstName := generator.generateASTNode(constant(first))
+	if got := generator.generateASTNode(constant(first)); got != firstName {
+		t.Fatalf("same regex object generated as %q then %q", firstName, got)
+	}
+	if secondName := generator.generateASTNode(constant(second)); secondName == firstName {
+		t.Fatalf("distinct regex literals shared generated constant %q", firstName)
+	}
+	if got := generator.generateValue(first); !strings.Contains(got, ".MustCompile(") {
+		t.Fatalf("generated regex initializer = %q, want regexp.MustCompile", got)
+	}
+}
+
+func TestMungePackageNameAvoidsGoKeywords(t *testing.T) {
+	for input, want := range map[string]string{
+		"case":   "pkg_case",
+		"normal": "normal",
+		"1thing": "pkg_1thing",
+	} {
+		if got := mungePackageName(input); got != want {
+			t.Errorf("mungePackageName(%q) = %q, want %q", input, got, want)
 		}
 	}
 }
@@ -605,6 +696,27 @@ func TestGenerateResolvedHostReference(t *testing.T) {
 	}
 	if got, want := generator.imports["example.com/host"], "host0"; got != want {
 		t.Fatalf("host import alias = %q, want %q", got, want)
+	}
+}
+
+func TestGenerateLateBoundHostForm(t *testing.T) {
+	var output bytes.Buffer
+	generator := NewGenerator(&output)
+	node := ast.MakeNode(ast.OpMaybeHostForm, nil)
+	node.Sub = &ast.MaybeHostFormNode{
+		Class: "clojure.lang.MapEntry",
+		Field: lang.NewSymbol("create"),
+	}
+
+	result := generator.generateASTNode(node)
+	if result == "nil" {
+		t.Fatal("late-bound host form was discarded")
+	}
+	if got := output.String(); !strings.Contains(
+		got,
+		`Get("clojure.lang.MapEntry.create")`,
+	) {
+		t.Fatalf("generated host lookup = %q", got)
 	}
 }
 
