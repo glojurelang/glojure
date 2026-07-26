@@ -2,10 +2,30 @@ package runtime
 
 import (
 	"errors"
+	"reflect"
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/lang"
 )
+
+func TestResolveHostIncludesCoreNamespaceIntrinsics(t *testing.T) {
+	intrinsics := map[string]interface{}{
+		findNamespaceHostExport:      lang.FindNamespace,
+		pushThreadBindingsHostExport: lang.PushThreadBindings,
+		popThreadBindingsHostExport:  lang.PopThreadBindings,
+		lockingTransactionHostExport: lang.LockingTransaction,
+	}
+	for export, want := range intrinsics {
+		host, ok := resolveHost(lang.NewSymbol(export))
+		if !ok {
+			t.Fatalf("%s host export was not resolved", export)
+		}
+		if got := reflect.ValueOf(host).Pointer(); got != reflect.ValueOf(want).Pointer() {
+			t.Fatalf("%s host export = %x, want %x",
+				export, got, reflect.ValueOf(want).Pointer())
+		}
+	}
+}
 
 func TestEvalDirectInvokePreservesVarAndQuoteSemantics(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("runtime.direct-eval-test"))
