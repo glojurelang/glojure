@@ -232,7 +232,6 @@ test-aot: test-aot-runtime test-glj
 
 test-suite-aot: $(GO) $(STDLIB-TARGETS) generate aot $(TEST-SUITE-DIR)
 	cd $(TEST-SUITE-DIR) && git checkout $(TEST-SUITE-BRANCH)
-	scripts/patch-test-suite $(abspath $(TEST-SUITE-DIR))
 	TEST_SUITE_EXPECT_FAILURES=$(TEST-SUITE-EXPECT-FAILURES) \
 	TEST_SUITE_EXPECT_ERRORS=$(TEST-SUITE-EXPECT-ERRORS) \
 	TEST_SUITE_EXPECT_LOAD_ERRORS=$(TEST-SUITE-EXPECT-LOAD-ERRORS) \
@@ -245,7 +244,6 @@ $(TEST-SUITE-DIR):
 
 test-suite: $(GLJ-CMD) $(TEST-SUITE-DIR)
 	cd $(TEST-SUITE-DIR) && git checkout $(TEST-SUITE-BRANCH)
-	scripts/patch-test-suite $(abspath $(TEST-SUITE-DIR))
 	cd $(TEST-SUITE-DIR) && \
 	  $(abspath $<) $(TEST-SUITE-FILE) \
 	    $(if $(TEST-SUITE-EXPECT-FAILURES),--expect-failures $(TEST-SUITE-EXPECT-FAILURES)) \
