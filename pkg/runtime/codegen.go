@@ -2534,19 +2534,34 @@ func directHostCall(
 		name = string(name[0]-'a'+'A') + name[1:]
 	}
 	method, ok := typ.MethodByName(name)
-	if !ok || method.Type.IsVariadic() ||
-		method.Type.NumIn() != len(args)+1 || method.Type.NumOut() != 1 {
+	if !ok || method.Type.NumOut() != 1 {
 		return "", nil, false
 	}
+	fixedArgCount := method.Type.NumIn() - 1
+	if method.Type.IsVariadic() {
+		fixedArgCount--
+		if len(args) < fixedArgCount {
+			return "", nil, false
+		}
+	} else if len(args) != fixedArgCount {
+		return "", nil, false
+	}
+
 	anyType := reflect.TypeFor[any]()
 	intType := reflect.TypeFor[int]()
 	converted := make([]string, len(args))
-	for i := 1; i < method.Type.NumIn(); i++ {
-		switch method.Type.In(i) {
+	for i := range args {
+		paramType := anyType
+		if i < fixedArgCount {
+			paramType = method.Type.In(i + 1)
+		} else {
+			paramType = method.Type.In(method.Type.NumIn() - 1).Elem()
+		}
+		switch paramType {
 		case anyType:
-			converted[i-1] = args[i-1]
+			converted[i] = args[i]
 		case intType:
-			converted[i-1] = "lang.IntCast(" + args[i-1] + ")"
+			converted[i] = "lang.IntCast(" + args[i] + ")"
 		default:
 			return "", nil, false
 		}

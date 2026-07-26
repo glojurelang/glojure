@@ -199,6 +199,23 @@ func TestDirectHostCallConvertsIntegerArguments(t *testing.T) {
 	if got, want := args[1], "lang.IntCast(index)"; got != want {
 		t.Fatalf("index argument = %q, want %q", got, want)
 	}
+
+	for _, args := range [][]string{
+		{"collection", "key"},
+		{"collection", "key", "notFound"},
+	} {
+		method, converted, ok := directHostCall(target, "Get", args)
+		if !ok || method != "Get" {
+			t.Fatalf("directHostCall(Get, %d args) = %q, %v, %v", len(args), method, converted, ok)
+		}
+		if !reflect.DeepEqual(converted, args) {
+			t.Fatalf("directHostCall(Get) args = %v, want %v", converted, args)
+		}
+	}
+
+	if method, _, ok := directHostCall(target, "Get", []string{"collection"}); ok {
+		t.Fatalf("undersupplied variadic call unexpectedly resolved directly as %q", method)
+	}
 }
 
 func TestLoadedNamespacesUseFreshRuntimeState(t *testing.T) {
