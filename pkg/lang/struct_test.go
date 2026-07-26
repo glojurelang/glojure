@@ -175,6 +175,22 @@ func TestWrapGoFuncDirectRuntimeSignatures(t *testing.T) {
 	}
 }
 
+func TestMustHostCast(t *testing.T) {
+	vector := NewVector(int64(1))
+	if got := MustHostCast[IPersistentVector](vector); got != vector {
+		t.Fatalf("MustHostCast returned %v, want %v", got, vector)
+	}
+	if got := MustHostCast[IPersistentVector](nil); got != nil {
+		t.Fatalf("nil MustHostCast returned %v", got)
+	}
+	defer func() {
+		if recover() == nil {
+			t.Fatal("MustHostCast accepted an incompatible value")
+		}
+	}()
+	MustHostCast[IPersistentVector]("not a vector")
+}
+
 func TestTransientProtocolMethodsResolveDirectlyAndCache(t *testing.T) {
 	vector := NewVector(1, 2)
 	asTransient, ok := FieldOrMethod(vector, "AsTransient")

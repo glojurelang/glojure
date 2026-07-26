@@ -4042,12 +4042,8 @@ func LoadNS() {
 				_ = v1
 				v2 := p1
 				_ = v2
-				tmp3, _ := lang.FieldOrMethod(v1, "Reduce")
-				if reflect.TypeOf(tmp3).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Reduce is not a function")))
-				}
-				tmp4 := lang.Apply1(tmp3, v2)
-				return tmp4
+				tmp3 := v1.(interface{ Reduce(lang.IFn) any }).Reduce(lang.MustHostCast[lang.IFn](v2))
+				return tmp3
 			}),
 			lang.FnFunc3(func(p0, p1, p2 any) any {
 				v1 := p0
@@ -4056,12 +4052,8 @@ func LoadNS() {
 				_ = v2
 				v3 := p2
 				_ = v3
-				tmp4, _ := lang.FieldOrMethod(v1, "ReduceInit")
-				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReduceInit is not a function")))
-				}
-				tmp5 := lang.Apply2(tmp4, v2, v3)
-				return tmp5
+				tmp4 := v1.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v2), v3)
+				return tmp4
 			}),
 			nil,
 			nil,
@@ -4581,12 +4573,8 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5, _ := lang.FieldOrMethod(v2, "addWatch")
-			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("addWatch is not a function")))
-			}
-			tmp6 := lang.Apply2(tmp5, v3, v4)
-			return tmp6
+			tmp5 := v2.(interface{ AddWatch(any, lang.IFn) lang.IRef }).AddWatch(v3, lang.MustHostCast[lang.IFn](v4))
+			return tmp5
 		})
 		aotDirectFn22 = tmp1
 		var_clojure_DOT_core_add_DASH_watch = ns.InternWithValue(tmp0, tmp1, true)
@@ -4720,12 +4708,8 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(v2, "alterRoot")
-				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("alterRoot is not a function")))
-				}
-				tmp6 := lang.Apply2(tmp5, v3, v4)
-				return tmp6
+				tmp5 := v2.(interface{ AlterRoot(lang.IFn, lang.ISeq) any }).AlterRoot(lang.MustHostCast[lang.IFn](v3), lang.MustHostCast[lang.ISeq](v4))
+				return tmp5
 			}),
 			2,
 		)
@@ -5072,12 +5056,8 @@ func LoadNS() {
 				_ = v3
 				var v4 any = rest
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(v2, "Commute")
-				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Commute is not a function")))
-				}
-				tmp6 := lang.Apply2(tmp5, v3, v4)
-				return tmp6
+				tmp5 := v2.(interface{ Commute(lang.IFn, lang.ISeq) any }).Commute(lang.MustHostCast[lang.IFn](v3), lang.MustHostCast[lang.ISeq](v4))
+				return tmp5
 			}),
 			2,
 		)
@@ -8523,24 +8503,14 @@ func LoadNS() {
 			if !tmp3 {
 				tmp4 = checkDerefVar(var_clojure_DOT_core_contains_QMARK_)
 			}
-			tmp5, ok := lang.FieldOrMethod(runtime.Compiler, "specials")
-			if !ok {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", runtime.Compiler, "specials")))
-			}
+			tmp5 := runtime.Compiler.Specials()
 			var tmp6 any
-			switch reflect.TypeOf(tmp5).Kind() {
-			case reflect.Func:
-				tmp6 = lang.Apply(tmp5, nil)
-			default:
-				tmp6 = tmp5
-			}
-			var tmp7 any
 			if tmp3 {
-				tmp7 = aotDirectFn117(tmp6, v2)
+				tmp6 = aotDirectFn117(tmp5, v2)
 			} else {
-				tmp7 = lang.Apply2(tmp4, tmp6, v2)
+				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
-			return tmp7
+			return tmp6
 		})
 		aotDirectFn484 = tmp1
 		var_clojure_DOT_core_special_DASH_symbol_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -10150,12 +10120,8 @@ func LoadNS() {
 				_ = v3
 				v4 := p1
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(v3, "WithMeta")
-				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("WithMeta is not a function")))
-				}
-				tmp6 := lang.Apply1(tmp5, v4)
-				return tmp6
+				tmp5 := v3.(interface{ WithMeta(lang.IPersistentMap) any }).WithMeta(lang.MustHostCast[lang.IPersistentMap](v4))
+				return tmp5
 			})
 			v2 = tmp1
 			_ = v2
@@ -22285,55 +22251,51 @@ func LoadNS() {
 					} else {
 						tmp21 = lang.Apply1(tmp19, tmp20)
 					}
-					tmp22, _ := lang.FieldOrMethod(v2, "ReduceInit")
-					if reflect.TypeOf(tmp22).Kind() != reflect.Func {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReduceInit is not a function")))
-					}
-					tmp23 := lang.Apply2(tmp22, tmp17, tmp21)
-					var tmp24 any
+					tmp22 := v2.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](tmp17), tmp21)
+					var tmp23 any
 					if tmp15 {
-						tmp24 = aotDirectFn342(tmp23)
+						tmp23 = aotDirectFn342(tmp22)
 					} else {
-						tmp24 = lang.Apply1(tmp16, tmp23)
+						tmp23 = lang.Apply1(tmp16, tmp22)
 					}
-					tmp10 = tmp24
+					tmp10 = tmp23
 				} else {
-					tmp25 := var_clojure_DOT_core_persistent_BANG_.RootVersion() == aotRootVersion342 && !var_clojure_DOT_core_persistent_BANG_.IsMacro()
-					var tmp26 any
-					if !tmp25 {
-						tmp26 = checkDerefVar(var_clojure_DOT_core_persistent_BANG_)
+					tmp24 := var_clojure_DOT_core_persistent_BANG_.RootVersion() == aotRootVersion342 && !var_clojure_DOT_core_persistent_BANG_.IsMacro()
+					var tmp25 any
+					if !tmp24 {
+						tmp25 = checkDerefVar(var_clojure_DOT_core_persistent_BANG_)
 					}
-					tmp27 := var_clojure_DOT_core_reduce1.RootVersion() == aotRootVersion404 && !var_clojure_DOT_core_reduce1.IsMacro()
-					var tmp28 any
-					if !tmp27 {
-						tmp28 = checkDerefVar(var_clojure_DOT_core_reduce1)
+					tmp26 := var_clojure_DOT_core_reduce1.RootVersion() == aotRootVersion404 && !var_clojure_DOT_core_reduce1.IsMacro()
+					var tmp27 any
+					if !tmp26 {
+						tmp27 = checkDerefVar(var_clojure_DOT_core_reduce1)
 					}
-					tmp29 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
-					tmp30 := var_clojure_DOT_core_transient.RootVersion() == aotRootVersion521 && !var_clojure_DOT_core_transient.IsMacro()
-					var tmp31 any
-					if !tmp30 {
-						tmp31 = checkDerefVar(var_clojure_DOT_core_transient)
+					tmp28 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
+					tmp29 := var_clojure_DOT_core_transient.RootVersion() == aotRootVersion521 && !var_clojure_DOT_core_transient.IsMacro()
+					var tmp30 any
+					if !tmp29 {
+						tmp30 = checkDerefVar(var_clojure_DOT_core_transient)
 					}
-					tmp32 := lang.NewSet()
-					var tmp33 any
-					if tmp30 {
-						tmp33 = aotDirectFn521(tmp32)
+					tmp31 := lang.NewSet()
+					var tmp32 any
+					if tmp29 {
+						tmp32 = aotDirectFn521(tmp31)
 					} else {
-						tmp33 = lang.Apply1(tmp31, tmp32)
+						tmp32 = lang.Apply1(tmp30, tmp31)
+					}
+					var tmp33 any
+					if tmp26 {
+						tmp33 = aotDirectFn404.Invoke3(tmp28, tmp32, v2)
+					} else {
+						tmp33 = lang.Apply3(tmp27, tmp28, tmp32, v2)
 					}
 					var tmp34 any
-					if tmp27 {
-						tmp34 = aotDirectFn404.Invoke3(tmp29, tmp33, v2)
+					if tmp24 {
+						tmp34 = aotDirectFn342(tmp33)
 					} else {
-						tmp34 = lang.Apply3(tmp28, tmp29, tmp33, v2)
+						tmp34 = lang.Apply1(tmp25, tmp33)
 					}
-					var tmp35 any
-					if tmp25 {
-						tmp35 = aotDirectFn342(tmp34)
-					} else {
-						tmp35 = lang.Apply1(tmp26, tmp34)
-					}
-					tmp10 = tmp35
+					tmp10 = tmp34
 				}
 				tmp3 = tmp10
 			}
@@ -23948,12 +23910,8 @@ func LoadNS() {
 				_ = v3
 				v4 := p2
 				_ = v4
-				tmp5, _ := lang.FieldOrMethod(runtime.RT, "Subvec")
-				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Subvec is not a function")))
-				}
-				tmp6 := lang.Apply3(tmp5, v2, v3, v4)
-				return tmp6
+				tmp5 := runtime.RT.Subvec(lang.MustHostCast[lang.IPersistentVector](v2), v3, v4)
+				return tmp5
 			}),
 			nil,
 			nil,
@@ -53417,28 +53375,26 @@ func LoadNS() {
 				tmp11 := kw_meta.Invoke1(v9)
 				if lang.IsTruthy(tmp11) {
 					tmp12 := kw_meta.Invoke1(v9)
-					tmp13, _ := lang.FieldOrMethod(v2, "ResetMeta")
-					if reflect.TypeOf(tmp13).Kind() != reflect.Func {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("ResetMeta is not a function")))
-					}
-					tmp14 := lang.Apply1(tmp13, tmp12)
-					tmp10 = tmp14
+					tmp13 := v2.(interface {
+						ResetMeta(lang.IPersistentMap) lang.IPersistentMap
+					}).ResetMeta(lang.MustHostCast[lang.IPersistentMap](tmp12))
+					tmp10 = tmp13
 				} else {
 				}
 				_ = tmp10
-				var tmp15 any
-				tmp16 := kw_validator.Invoke1(v9)
-				if lang.IsTruthy(tmp16) {
-					tmp17 := kw_validator.Invoke1(v9)
-					tmp18, _ := lang.FieldOrMethod(v2, "setValidator")
-					if reflect.TypeOf(tmp18).Kind() != reflect.Func {
+				var tmp14 any
+				tmp15 := kw_validator.Invoke1(v9)
+				if lang.IsTruthy(tmp15) {
+					tmp16 := kw_validator.Invoke1(v9)
+					tmp17, _ := lang.FieldOrMethod(v2, "setValidator")
+					if reflect.TypeOf(tmp17).Kind() != reflect.Func {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("setValidator is not a function")))
 					}
-					tmp19 := lang.Apply1(tmp18, tmp17)
-					tmp15 = tmp19
+					tmp18 := lang.Apply1(tmp17, tmp16)
+					tmp14 = tmp18
 				} else {
 				}
-				_ = tmp15
+				_ = tmp14
 				tmp4 = v2
 			} // end let
 			return tmp4
@@ -66425,12 +66381,10 @@ func LoadNS() {
 											}),
 											1,
 										)
-										tmp59, _ := lang.FieldOrMethod(tmp57, "AddMethod")
-										if reflect.TypeOf(tmp59).Kind() != reflect.Func {
-											panic(lang.NewIllegalArgumentError(fmt.Sprintf("AddMethod is not a function")))
-										}
-										tmp60 := lang.Apply2(tmp59, v2, tmp58)
-										tmp41 = tmp60
+										tmp59 := tmp57.(interface {
+											AddMethod(any, lang.IFn) *lang.MultiFn
+										}).AddMethod(v2, lang.MustHostCast[lang.IFn](tmp58))
+										tmp41 = tmp59
 									} // end let
 									return tmp41
 								})
@@ -66720,12 +66674,10 @@ func LoadNS() {
 															}),
 															1,
 														)
-														tmp75, _ := lang.FieldOrMethod(tmp73, "AddMethod")
-														if reflect.TypeOf(tmp75).Kind() != reflect.Func {
-															panic(lang.NewIllegalArgumentError(fmt.Sprintf("AddMethod is not a function")))
-														}
-														tmp76 := lang.Apply2(tmp75, v2, tmp74)
-														tmp57 = tmp76
+														tmp75 := tmp73.(interface {
+															AddMethod(any, lang.IFn) *lang.MultiFn
+														}).AddMethod(v2, lang.MustHostCast[lang.IFn](tmp74))
+														tmp57 = tmp75
 													} // end let
 													return tmp57
 												})
@@ -71563,12 +71515,8 @@ func LoadNS() {
 										_ = v22
 										var tmp23 any
 										if lang.IsTruthy(v22) {
-											tmp24, _ := lang.FieldOrMethod(v3, "AssignableTo")
-											if reflect.TypeOf(tmp24).Kind() != reflect.Func {
-												panic(lang.NewIllegalArgumentError(fmt.Sprintf("AssignableTo is not a function")))
-											}
-											tmp25 := lang.Apply1(tmp24, v4)
-											tmp23 = tmp25
+											tmp24 := v3.(interface{ AssignableTo(reflect.Type) bool }).AssignableTo(lang.MustHostCast[reflect.Type](v4))
+											tmp23 = tmp24
 										} else {
 											tmp23 = v22
 										}
@@ -86041,12 +85989,8 @@ func LoadNS() {
 					}
 					return tmp24
 				})
-				tmp20, _ := lang.FieldOrMethod(lang.LockingTransaction, "RunInTransaction")
-				if reflect.TypeOf(tmp20).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("RunInTransaction is not a function")))
-				}
-				tmp21 := lang.Apply1(tmp20, tmp19)
-				tmp18 = tmp21
+				tmp20 := lang.LockingTransaction.RunInTransaction(lang.MustHostCast[lang.IFn](tmp19))
+				tmp18 = tmp20
 			} else {
 			}
 			return tmp18
@@ -86197,12 +86141,8 @@ func LoadNS() {
 				}
 				return tmp11
 			})
-			tmp6, _ := lang.FieldOrMethod(lang.LockingTransaction, "RunInTransaction")
-			if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("RunInTransaction is not a function")))
-			}
-			tmp7 := lang.Apply1(tmp6, tmp5)
-			return tmp7
+			tmp6 := lang.LockingTransaction.RunInTransaction(lang.MustHostCast[lang.IFn](tmp5))
+			return tmp6
 		})
 		aotDirectFn255 = tmp1
 		var_clojure_DOT_core_load_DASH_all = ns.InternWithValue(tmp0, tmp1, true)
@@ -93651,16 +93591,12 @@ func LoadNS() {
 					tmp8 = lang.Apply2(tmp6, tmp7, v3)
 				}
 				if lang.IsTruthy(tmp8) {
-					tmp9, _ := lang.FieldOrMethod(v3, "Reduce")
-					if reflect.TypeOf(tmp9).Kind() != reflect.Func {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("Reduce is not a function")))
-					}
-					tmp10 := lang.Apply1(tmp9, v2)
-					tmp4 = tmp10
+					tmp9 := v3.(interface{ Reduce(lang.IFn) any }).Reduce(lang.MustHostCast[lang.IFn](v2))
+					tmp4 = tmp9
 				} else {
-					tmp11 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
-					tmp12 := lang.Apply2(tmp11, v3, v2)
-					tmp4 = tmp12
+					tmp10 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
+					tmp11 := lang.Apply2(tmp10, v3, v2)
+					tmp4 = tmp11
 				}
 				return tmp4
 			}),
@@ -93685,16 +93621,12 @@ func LoadNS() {
 					tmp9 = lang.Apply2(tmp7, tmp8, v4)
 				}
 				if lang.IsTruthy(tmp9) {
-					tmp10, _ := lang.FieldOrMethod(v4, "ReduceInit")
-					if reflect.TypeOf(tmp10).Kind() != reflect.Func {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReduceInit is not a function")))
-					}
-					tmp11 := lang.Apply2(tmp10, v2, v3)
-					tmp5 = tmp11
+					tmp10 := v4.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v2), v3)
+					tmp5 = tmp10
 				} else {
-					tmp12 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
-					tmp13 := lang.Apply3(tmp12, v4, v2, v3)
-					tmp5 = tmp13
+					tmp11 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
+					tmp12 := lang.Apply3(tmp11, v4, v2, v3)
+					tmp5 = tmp12
 				}
 				return tmp5
 			}),
@@ -94147,21 +94079,17 @@ func LoadNS() {
 						tmp13 = lang.Apply2(tmp11, tmp12, v5)
 					}
 					if lang.IsTruthy(tmp13) {
-						tmp14, _ := lang.FieldOrMethod(v5, "ReduceInit")
-						if reflect.TypeOf(tmp14).Kind() != reflect.Func {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReduceInit is not a function")))
-						}
-						tmp15 := lang.Apply2(tmp14, v8, v4)
-						tmp9 = tmp15
+						tmp14 := v5.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v8), v4)
+						tmp9 = tmp14
 					} else {
-						tmp16 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
-						tmp17 := lang.Apply3(tmp16, v5, v8, v4)
-						tmp9 = tmp17
+						tmp15 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
+						tmp16 := lang.Apply3(tmp15, v5, v8, v4)
+						tmp9 = tmp16
 					}
-					var v18 any = tmp9
-					_ = v18
-					tmp19 := lang.Apply1(v8, v18)
-					tmp6 = tmp19
+					var v17 any = tmp9
+					_ = v17
+					tmp18 := lang.Apply1(v8, v17)
+					tmp6 = tmp18
 				} // end let
 				return tmp6
 			}),

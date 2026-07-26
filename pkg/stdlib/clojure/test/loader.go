@@ -3145,12 +3145,8 @@ func LoadNS() {
 					tmp11 := aotExternalFn24(tmp6, tmp7, tmp8, tmp10)
 					return tmp11
 				})
-				tmp6, _ := lang.FieldOrMethod(lang.LockingTransaction, "RunInTransaction")
-				if reflect.TypeOf(tmp6).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("RunInTransaction is not a function")))
-				}
-				tmp7 := lang.Apply1(tmp6, tmp5)
-				tmp3 = tmp7
+				tmp6 := lang.LockingTransaction.RunInTransaction(lang.MustHostCast[lang.IFn](tmp5))
+				tmp3 = tmp6
 			} else {
 			}
 			return tmp3

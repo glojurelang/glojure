@@ -2663,10 +2663,13 @@ func (g *Generator) directInferredHostCall(
 		method,
 		receiverOffset,
 		args,
-		convertDirectHostArg,
+		g.convertInferredDirectHostArg,
 	)
 	if !ok {
 		return "", "", nil, false
+	}
+	if target.Op == ast.OpConst {
+		return method.Name, targetID, converted, true
 	}
 	interfaceExpr, ok := g.hostMethodInterfaceExpr(method, receiverOffset)
 	if !ok {
@@ -2678,7 +2681,30 @@ func (g *Generator) directInferredHostCall(
 		true
 }
 
+func (g *Generator) convertInferredDirectHostArg(
+	paramType reflect.Type,
+	arg string,
+) (string, bool) {
+	if converted, ok := convertDirectHostArg(paramType, arg); ok {
+		return converted, true
+	}
+	if paramType.Kind() != reflect.Interface {
+		return "", false
+	}
+	typeExpr, ok := g.goTypeExpr(paramType)
+	if !ok {
+		return "", false
+	}
+	return fmt.Sprintf("lang.MustHostCast[%s](%s)", typeExpr, arg), true
+}
+
 func inferredHostType(target *ast.Node) (reflect.Type, bool) {
+	if target != nil && target.Op == ast.OpConst {
+		typ := reflect.TypeOf(target.Sub.(*ast.ConstNode).Value)
+		if typ != nil {
+			return typ, true
+		}
+	}
 	var tag *lang.Symbol
 	if target != nil {
 		if withMeta, ok := target.Form.(lang.IMeta); ok {

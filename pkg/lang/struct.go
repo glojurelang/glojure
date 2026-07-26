@@ -373,6 +373,21 @@ func wrapGoFunc(fn interface{}) IFn {
 	})
 }
 
+// MustHostCast performs the assignable interface conversion used by generated
+// direct host calls. A nil value becomes the zero value so nilable host
+// parameters retain the same behavior as reflective invocation.
+func MustHostCast[T any](value any) T {
+	if value == nil {
+		var zero T
+		return zero
+	}
+	result, ok := value.(T)
+	if !ok {
+		panic(fmt.Errorf("cannot assign %T to host parameter", value))
+	}
+	return result
+}
+
 func SetField(target interface{}, name string, val interface{}) error {
 	targetVal := reflect.ValueOf(target)
 

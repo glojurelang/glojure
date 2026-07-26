@@ -348,12 +348,8 @@ func LoadNS() {
 				_ = v1
 				v2 := p1
 				_ = v2
-				tmp3, _ := lang.FieldOrMethod(v1, "Reduce")
-				if reflect.TypeOf(tmp3).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Reduce is not a function")))
-				}
-				tmp4 := lang.Apply1(tmp3, v2)
-				return tmp4
+				tmp3 := v1.(interface{ Reduce(lang.IFn) any }).Reduce(lang.MustHostCast[lang.IFn](v2))
+				return tmp3
 			}),
 			lang.FnFunc3(func(p0, p1, p2 any) any {
 				v1 := p0
@@ -362,12 +358,8 @@ func LoadNS() {
 				_ = v2
 				v3 := p2
 				_ = v3
-				tmp4, _ := lang.FieldOrMethod(v1, "ReduceInit")
-				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReduceInit is not a function")))
-				}
-				tmp5 := lang.Apply2(tmp4, v2, v3)
-				return tmp5
+				tmp4 := v1.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v2), v3)
+				return tmp4
 			}),
 			nil,
 			nil,
@@ -1576,25 +1568,21 @@ func LoadNS() {
 			tmp6 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
 			tmp7 := aotExternalFn3(tmp6, v2)
 			if lang.IsTruthy(tmp7) {
-				tmp8, _ := lang.FieldOrMethod(v2, "ReduceInit")
-				if reflect.TypeOf(tmp8).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReduceInit is not a function")))
-				}
-				tmp9 := lang.Apply2(tmp8, v3, v4)
-				tmp5 = tmp9
+				tmp8 := v2.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v3), v4)
+				tmp5 = tmp8
 			} else {
-				tmp10 := var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.IsMacro()
+				tmp9 := var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.IsMacro()
+				var tmp10 any
+				if !tmp9 {
+					tmp10 = checkDerefVar(var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce)
+				}
 				var tmp11 any
-				if !tmp10 {
-					tmp11 = checkDerefVar(var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce)
-				}
-				var tmp12 any
-				if tmp10 {
-					tmp12 = aotDirectFn2(v2, v3, v4)
+				if tmp9 {
+					tmp11 = aotDirectFn2(v2, v3, v4)
 				} else {
-					tmp12 = lang.Apply3(tmp11, v2, v3, v4)
+					tmp11 = lang.Apply3(tmp10, v2, v3, v4)
 				}
-				tmp5 = tmp12
+				tmp5 = tmp11
 			}
 			return tmp5
 		})

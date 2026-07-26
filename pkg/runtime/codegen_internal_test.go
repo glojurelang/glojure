@@ -298,6 +298,38 @@ func TestDirectTaggedHostCallUsesInferredMethodSet(t *testing.T) {
 	}
 }
 
+func TestDirectKnownHostCallConvertsInterfaceArguments(t *testing.T) {
+	target := ast.MakeNode(ast.OpConst, nil)
+	target.Sub = &ast.ConstNode{Value: RT}
+
+	generator := NewGenerator(&bytes.Buffer{})
+	generator.addImport("github.com/glojurelang/glojure/pkg/lang")
+	generator.addImport("github.com/glojurelang/glojure/pkg/runtime")
+	method, receiver, args, ok := generator.directInferredHostCall(
+		target,
+		"runtime.RT",
+		"Subvec",
+		[]string{"vector", "start", "end"},
+	)
+	if !ok {
+		t.Fatal("known RT.Subvec call was not resolved directly")
+	}
+	if want := "Subvec"; method != want {
+		t.Fatalf("method = %q, want %q", method, want)
+	}
+	if want := "runtime.RT"; receiver != want {
+		t.Fatalf("receiver = %q, want %q", receiver, want)
+	}
+	wantArgs := []string{
+		"lang.MustHostCast[lang.IPersistentVector](vector)",
+		"start",
+		"end",
+	}
+	if !reflect.DeepEqual(args, wantArgs) {
+		t.Fatalf("args = %v, want %v", args, wantArgs)
+	}
+}
+
 func TestDirectTaggedHostCallUsesFormMetadata(t *testing.T) {
 	const derefType = "github.com:glojurelang:glojure:pkg:lang.IDeref"
 	pkgmap.Set(
