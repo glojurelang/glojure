@@ -1,0 +1,41 @@
+(ns glojure.test-glojure.array-map
+  (:use clojure.test))
+
+(deftest construction-preserves-order
+  (is (= [:a :b :c :d :e :f :g :h :i]
+         (vec
+           (keys
+             (array-map
+               :a 1 :b 2 :c 3 :d 4 :e 5 :f 6 :g 7 :h 8 :i 9)))))
+  (is (= ["a" "b" "c" "d" "e" "f" "g" "h" "i"]
+         (vec
+           (keys
+             (array-map
+               "a" 1 "b" 2 "c" 3 "d" 4 "e" 5
+               "f" 6 "g" 7 "h" 8 "i" 9))))))
+
+(deftest duplicate-keys-use-first-key-position-and-last-value
+  (is (= [[:a 3] [:b 2]]
+         (vec (array-map :a 1 :b 2 :a 3)))))
+
+(deftest dissoc-preserves-order
+  (is (= ["a" "b" "c" "d" "f" "g" "h" "i"]
+         (vec
+           (keys
+             (dissoc
+               (array-map
+                 "a" 1 "b" 2 "c" 3 "d" 4 "e" 5
+                 "f" 6 "g" 7 "h" 8 "i" 9)
+               "e"))))))
+
+(deftest transient-array-map-is-independent
+  (let [original (array-map :a 1 :b 2)
+        transient (transient original)
+        result (persistent!
+                 (dissoc!
+                   (assoc! transient :a 10 :c 3)
+                   :b))]
+    (is (= [[:a 1] [:b 2]] (vec original)))
+    (is (= [[:a 10] [:c 3]] (vec result)))))
+
+(run-tests)

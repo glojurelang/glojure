@@ -105,13 +105,27 @@ func TestAtomValidator(t *testing.T) {
 		t.Fatalf("validated Reset returned %v", got)
 	}
 
+	assertPanics(t, func() {
+		atom.Reset(int64(3))
+	})
+	if got := atom.Deref(); got != int64(4) {
+		t.Fatalf("rejected reset changed state to %v", got)
+	}
+
+	assertPanics(t, func() {
+		atom.SetValidator(FnFunc1(func(any) any { return false }))
+	})
+	if got := Apply1(atom.Validator(), int64(4)); got != true {
+		t.Fatal("rejected validator replaced the current validator")
+	}
+}
+
+func assertPanics(t *testing.T, fn func()) {
+	t.Helper()
 	defer func() {
 		if recover() == nil {
-			t.Fatal("validator accepted invalid state")
-		}
-		if got := atom.Deref(); got != int64(4) {
-			t.Fatalf("failed validation changed atom to %v", got)
+			t.Fatal("expected panic")
 		}
 	}()
-	atom.Reset(int64(3))
+	fn()
 }

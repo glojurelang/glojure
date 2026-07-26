@@ -204,8 +204,11 @@ func (a *Atom) Meta() IPersistentMap {
 }
 
 func (a *Atom) AlterMeta(f IFn, args ISeq) IPersistentMap {
-	meta := ApplySeq(f, NewCons(a.Meta(), args)).(IPersistentMap)
-	return a.ResetMeta(meta)
+	meta := ApplySeq(f, NewCons(a.Meta(), args))
+	if meta == nil {
+		return a.ResetMeta(nil)
+	}
+	return a.ResetMeta(meta.(IPersistentMap))
 }
 
 func (a *Atom) ResetMeta(meta IPersistentMap) IPersistentMap {

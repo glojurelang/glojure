@@ -13687,7 +13687,7 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			tmp3 := aotDirectFn447(v2)
-			tmp4 := lang.Apply1(nil, tmp3)
+			tmp4 := lang.Apply1(lang.SeqToTypedArray, tmp3)
 			return tmp4
 		})
 		aotDirectFn234Arity2 = lang.FnFunc2(func(p0, p1 any) any {
@@ -13696,7 +13696,7 @@ func LoadNS() {
 			v3 := p1
 			_ = v3
 			tmp4 := aotDirectFn447(v3)
-			tmp5 := lang.Apply2(nil, v2, tmp4)
+			tmp5 := lang.Apply2(lang.SeqToTypedArray, v2, tmp4)
 			return tmp5
 		})
 		tmp1 = lang.NewArityFn(
@@ -49407,11 +49407,21 @@ func LoadNS() {
 			_ = v59
 			v60 := p1
 			_ = v60
-			tmp61 := aotDirectFn490Arity1(v59)
-			tmp62 := lang.Apply2(lang.WriteWriter, v60, tmp61)
-			_ = tmp62
-			tmp63 := lang.Apply2(lang.WriteWriter, v60, "M")
-			return tmp63
+			tmp61, ok := lang.FieldOrMethod(v59, "StripTrailingZeros")
+			if !ok {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v59, "StripTrailingZeros")))
+			}
+			var tmp62 any
+			switch reflect.TypeOf(tmp61).Kind() {
+			case reflect.Func:
+				tmp62 = lang.Apply(tmp61, nil)
+			default:
+				tmp62 = tmp61
+			}
+			tmp63 := lang.Apply2(lang.WriteWriter, v60, tmp62)
+			_ = tmp63
+			tmp64 := lang.Apply2(lang.WriteWriter, v60, "M")
+			return tmp64
 		})
 		tmp1.AddMethod(tmp57, tmp58)
 		tmp59 := reflect.TypeOf((*lang.BigInt)(nil))

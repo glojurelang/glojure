@@ -192,13 +192,18 @@ func (s *KeywordMapShape) indexOf(key Keyword) int {
 }
 
 func newArrayMap(keyVals []any) *Map {
-	if len(keyVals) <= arrayMapInlineSize {
+	m := newArrayMapWithSize(len(keyVals))
+	copy(m.keyVals, keyVals)
+	return m
+}
+
+func newArrayMapWithSize(size int) *Map {
+	if size <= arrayMapInlineSize {
 		storage := &inlineMapStorage{}
-		copy(storage.keyVals[:], keyVals)
-		storage.Map.keyVals = storage.keyVals[:len(keyVals)]
+		storage.Map.keyVals = storage.keyVals[:size]
 		return &storage.Map
 	}
-	return &Map{keyVals: append([]any(nil), keyVals...)}
+	return &Map{keyVals: make([]any, size)}
 }
 
 // canBePersistentArrayMap mirrors Clojure's PersistentArrayMap thresholds.
@@ -221,7 +226,8 @@ func canBePersistentArrayMap(keyVals []any) bool {
 }
 
 func NewPersistentArrayMapAsIfByAssoc(init []any) IPersistentMap {
-	complexPath := (len(init) & 1) == 1
+	hasTrailing := (len(init) & 1) == 1
+	complexPath := hasTrailing
 	for i := 0; i < len(init) && !complexPath; i += 2 {
 		for j := 0; j < i; j += 2 {
 			if equalKey(init[i], init[j]) {
@@ -232,13 +238,28 @@ func NewPersistentArrayMapAsIfByAssoc(init []any) IPersistentMap {
 	}
 
 	if complexPath {
-		return newPersistentArrayMapAsIfByAssocComplexPath(init)
+		return newPersistentArrayMapAsIfByAssocComplexPath(init, hasTrailing)
 	}
 
-	return NewMap(init...)
+	return newArrayMap(init)
 }
 
-func newPersistentArrayMapAsIfByAssocComplexPath(init []any) IPersistentMap {
+func newPersistentArrayMapAsIfByAssocComplexPath(init []any, hasTrailing bool) IPersistentMap {
+	if hasTrailing {
+		trailing := emptyMap.Cons(init[len(init)-1]).(IPersistentMap)
+		seedCount := len(init) - 1
+		grown := make([]any, seedCount+trailing.Count()*2)
+		copy(grown, init[:seedCount])
+		i := seedCount
+		for seq := trailing.Seq(); seq != nil; seq = seq.Next() {
+			entry := seq.First().(IMapEntry)
+			grown[i] = entry.Key()
+			grown[i+1] = entry.Val()
+			i += 2
+		}
+		init = grown
+	}
+
 	n := 0
 	for i := 0; i < len(init); i += 2 {
 		duplicateKey := false
@@ -283,7 +304,7 @@ func newPersistentArrayMapAsIfByAssocComplexPath(init []any) IPersistentMap {
 		}
 		init = nodups
 	}
-	return NewMap(init...)
+	return newArrayMap(init)
 }
 
 func (m *Map) ValAt(key any) any {
@@ -479,13 +500,25 @@ func (m *Map) Without(k any) IPersistentMap {
 		}
 		return NewMapUniqueKeys(keyVals...).(IObj).WithMeta(m.meta).(IPersistentMap)
 	}
-	newKeyVals := make([]any, 0, len(m.keyVals))
+	remove := -1
 	for i := 0; i < len(m.keyVals); i += 2 {
-		if !Equiv(m.keyVals[i], k) {
-			newKeyVals = append(newKeyVals, m.keyVals[i], m.keyVals[i+1])
+		if Equiv(m.keyVals[i], k) {
+			remove = i
+			break
 		}
 	}
-	return NewMap(newKeyVals...).(IObj).WithMeta(m.meta).(IPersistentMap)
+	if remove < 0 {
+		return m
+	}
+	if len(m.keyVals) == 2 {
+		return emptyMap.WithMeta(m.meta).(IPersistentMap)
+	}
+
+	result := newArrayMapWithSize(len(m.keyVals) - 2)
+	result.meta = m.meta
+	copy(result.keyVals, m.keyVals[:remove])
+	copy(result.keyVals[remove:], m.keyVals[remove+2:])
+	return result
 }
 
 func (m *Map) Count() int {
@@ -596,8 +629,7 @@ func (m *Map) ReduceInit(f IFn, init any) any {
 }
 
 func (m *Map) AsTransient() ITransientCollection {
-	// TODO: implement transients
-	return &TransientMap{IPersistentMap: m}
+	return &TransientMap{IPersistentMap: m.clone()}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -650,12 +682,49 @@ func (m *TransientMap) Conj(v any) Conjer {
 
 func (m *TransientMap) Assoc(k, v any) Associative {
 	m.ensureEditable()
+	if arrayMap, ok := m.IPersistentMap.(*Map); ok && arrayMap.keywordShape == nil {
+		for i := 0; i < len(arrayMap.keyVals); i += 2 {
+			if Equiv(arrayMap.keyVals[i], k) {
+				arrayMap.keyVals[i+1] = v
+				arrayMap.hash = 0
+				arrayMap.hasheq = 0
+				return m
+			}
+		}
+
+		threshold := arrayMapHashThreshold
+		if _, ok := k.(Keyword); ok {
+			threshold = arrayMapKeywordThreshold
+		}
+		if len(arrayMap.keyVals) < threshold {
+			arrayMap.keyVals = append(arrayMap.keyVals, k, v)
+			arrayMap.hash = 0
+			arrayMap.hasheq = 0
+			return m
+		}
+	}
 	m.IPersistentMap = m.IPersistentMap.Assoc(k, v).(IPersistentMap)
 	return m
 }
 
 func (m *TransientMap) Without(key any) IPersistentMap {
 	m.ensureEditable()
+	if arrayMap, ok := m.IPersistentMap.(*Map); ok && arrayMap.keywordShape == nil {
+		for i := 0; i < len(arrayMap.keyVals); i += 2 {
+			if !Equiv(arrayMap.keyVals[i], key) {
+				continue
+			}
+			newLen := len(arrayMap.keyVals) - 2
+			copy(arrayMap.keyVals[i:], arrayMap.keyVals[i+2:])
+			arrayMap.keyVals[newLen] = nil
+			arrayMap.keyVals[newLen+1] = nil
+			arrayMap.keyVals = arrayMap.keyVals[:newLen]
+			arrayMap.hash = 0
+			arrayMap.hasheq = 0
+			break
+		}
+		return m
+	}
 	m.IPersistentMap = m.IPersistentMap.Without(key).(IPersistentMap)
 	return m
 }
