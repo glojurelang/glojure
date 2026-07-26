@@ -100,6 +100,49 @@ func TestFnFunc4(t *testing.T) {
 	}
 }
 
+func TestFixedFnApplyToPreservesArity(t *testing.T) {
+	tests := []struct {
+		name string
+		fn   IFn
+		args ISeq
+		want interface{}
+	}{
+		{"zero", FnFunc0(func() any { return 0 }), nil, 0},
+		{"one", FnFunc1(func(a any) any { return a }), NewList(1), 1},
+		{"two", FnFunc2(func(a, b any) any { return a.(int) + b.(int) }), NewList(20, 22), 42},
+		{"three", FnFunc3(func(a, b, c any) any { return a.(int) + b.(int) + c.(int) }), NewList(10, 20, 12), 42},
+		{"four", FnFunc4(func(a, b, c, d any) any {
+			return a.(int) + b.(int) + c.(int) + d.(int)
+		}), NewList(10, 10, 11, 11), 42},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if got := test.fn.ApplyTo(test.args); got != test.want {
+				t.Fatalf("ApplyTo result = %v, want %v", got, test.want)
+			}
+		})
+	}
+
+	for _, test := range []struct {
+		name string
+		fn   IFn
+		args ISeq
+	}{
+		{"zero with one", FnFunc0(func() any { return nil }), NewList(1)},
+		{"one with zero", FnFunc1(func(any) any { return nil }), nil},
+		{"one with two", FnFunc1(func(any) any { return nil }), NewList(1, 2)},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			defer func() {
+				if recover() == nil {
+					t.Fatal("ApplyTo accepted the wrong arity")
+				}
+			}()
+			test.fn.ApplyTo(test.args)
+		})
+	}
+}
+
 // TestApply0 verifies Apply0 dispatches correctly.
 func TestApply0(t *testing.T) {
 	// FnFunc0 fast path — zero allocation
@@ -112,6 +155,11 @@ func TestApply0(t *testing.T) {
 	ff := FnFunc(func(args ...any) any { return "fnfunc" })
 	if got := Apply0(ff); got != "fnfunc" {
 		t.Errorf("Apply0(FnFunc): expected %q, got %v", "fnfunc", got)
+	}
+
+	called := false
+	if got := Apply0(func() { called = true }); got != nil || !called {
+		t.Errorf("Apply0(func()): got %v, called = %v; want nil, true", got, called)
 	}
 
 	// nil panics
@@ -135,6 +183,12 @@ func TestApply1(t *testing.T) {
 	ff := FnFunc(func(args ...any) any { return args[0].(int) * 2 })
 	if got := Apply1(ff, 21); got != 42 {
 		t.Errorf("Apply1(FnFunc): expected 42, got %v", got)
+	}
+
+	m := NewMap(NewKeyword("answer"), int64(42))
+	var received IPersistentMap
+	if got := Apply1(func(value IPersistentMap) { received = value }, m); got != nil || received != m {
+		t.Errorf("Apply1(func(IPersistentMap)): got %v, received = %v; want nil, input map", got, received)
 	}
 }
 

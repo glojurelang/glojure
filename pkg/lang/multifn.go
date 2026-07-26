@@ -190,9 +190,12 @@ func (m *MultiFn) ApplyTo(args ISeq) any {
 }
 
 func (m *MultiFn) getMethod(dispatchVal any) IFn {
-	// TODO: cached hierarchy
-
+	m.mtx.Lock()
+	if m.cachedHierarchy != m.hierarchy.Deref() {
+		m.resetCache()
+	}
 	targetFn := m.methodCache.ValAt(dispatchVal)
+	m.mtx.Unlock()
 	if targetFn != nil {
 		return targetFn.(IFn)
 	}
@@ -232,17 +235,16 @@ func (m *MultiFn) findBestMethod(dispatchVal any) IFn {
 	m.mtx.RLock()
 	defer m.mtx.RUnlock()
 
-	// TODO: cached hierarchy
-
+	hierarchy := m.cachedHierarchy
 	var bestValue any
 	var bestEntry IMapEntry
 	for seq := Seq(m.methodTable); seq != nil; seq = seq.Next() {
 		entry := seq.First().(IMapEntry)
-		if m.isA(m.cachedHierarchy, dispatchVal, entry.Key()) {
-			if bestEntry == nil || m.dominates(m.cachedHierarchy, entry.Key(), bestEntry.Key()) {
+		if m.isA(hierarchy, dispatchVal, entry.Key()) {
+			if bestEntry == nil || m.dominates(hierarchy, entry.Key(), bestEntry.Key()) {
 				bestEntry = entry
 			}
-			if !m.dominates(m.hierarchy, bestEntry.Key(), entry.Key()) {
+			if !m.dominates(hierarchy, bestEntry.Key(), entry.Key()) {
 				panic(fmt.Errorf("Multiple methods in multimethod '%s' match dispatch value: %v -> %v and %v, and neither is preferred", m.name, dispatchVal, entry.Key(), bestEntry.Key()))
 			}
 		}
@@ -264,5 +266,5 @@ func (m *MultiFn) isA(h, x, y any) bool {
 }
 
 func (m *MultiFn) dominates(h, x, y any) bool {
-	return m.prefers(m.hierarchy, x, y) || m.isA(h, x, y)
+	return m.prefers(h, x, y) || m.isA(h, x, y)
 }

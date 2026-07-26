@@ -78,7 +78,7 @@ func Start(opts ...Option) {
 	rl.Config.Vars["menu-complete-display-prefix"] = true
 
 	rl.SyntaxHighlighter = func(line []rune) string {
-		return highlightSyntax(line, o.env)
+		return ColorSyntax(line, o.env)
 	}
 
 	// Ghost text: show the common prefix of all matching completions.
@@ -741,9 +741,9 @@ func isClojureCoreSym(env lang.Environment, token string) (result bool) {
 	return strings.HasPrefix(nsName, "clojure.")
 }
 
-// highlightSyntax returns an ANSI-colored version of the input line
+// ColorSyntax returns an ANSI-colored version of the input
 // for Clojure syntax highlighting.
-func highlightSyntax(line []rune, env lang.Environment) string {
+func ColorSyntax(line []rune, env lang.Environment) string {
 	var buf strings.Builder
 	buf.Grow(len(line) * 2)
 	i := 0
@@ -1049,7 +1049,7 @@ func replayEvaluatedForms(forms []string, rl *readline.Shell, o *options, evalFn
 		if strings.TrimSpace(expr) == "" {
 			continue
 		}
-		fmt.Fprintln(o.stdout, replPrompt(o)+highlightSyntax([]rune(expr), o.env))
+		fmt.Fprintln(o.stdout, replPrompt(o)+ColorSyntax([]rune(expr), o.env))
 		rl.History.WriteLine(expr)
 		evalReplInput(expr, o, evalFn)
 	}

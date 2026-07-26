@@ -24,6 +24,43 @@ func NewRegexpMatcher(re *regexp.Regexp, s string) *RegexpMatcher {
 	return &RegexpMatcher{re: re, s: s}
 }
 
+// ResolveFieldOrMethod keeps interop with the runtime-owned matcher on direct
+// fixed-arity calls. Matchers are short-lived, so resolving their bound Go
+// methods through reflection would otherwise allocate a method value and a
+// reflection adapter for every matcher.
+func (m *RegexpMatcher) ResolveFieldOrMethod(
+	name string,
+) (interface{}, bool) {
+	if len(name) > 0 && name[0] >= 'a' && name[0] <= 'z' {
+		name = string(name[0]-'a'+'A') + name[1:]
+	}
+	switch name {
+	case "Find":
+		return FnFunc0(func() any { return m.Find() }), true
+	case "GroupCount":
+		return FnFunc0(func() any { return m.GroupCount() }), true
+	case "Group":
+		return FnFunc0(func() any { return m.Group() }), true
+	case "GroupInt":
+		return FnFunc1(func(group any) any {
+			return m.GroupInt(MustAsInt(group))
+		}), true
+	case "Matches":
+		return FnFunc0(func() any { return m.Matches() }), true
+	case "AppendReplacement":
+		return FnFunc2(func(writer, replacement any) any {
+			return m.AppendReplacement(writer.(io.Writer), replacement.(string))
+		}), true
+	case "AppendTail":
+		return FnFunc1(func(writer any) any {
+			m.AppendTail(writer.(io.Writer))
+			return nil
+		}), true
+	default:
+		return nil, false
+	}
+}
+
 // Find attempts to find the next subsequence of the input sequence
 // that matches the pattern.
 func (m *RegexpMatcher) Find() bool {

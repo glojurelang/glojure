@@ -8,9 +8,32 @@ import (
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
 
-// Core numeric inline forms resolve this export during analysis. Keep the
-// compiler intrinsic independent of the large, optional Go export registry.
-const numbersHostExport = "github.com:glojurelang:glojure:pkg:lang.Numbers"
+// Core forms resolve these exports during analysis. Keep compiler intrinsics
+// independent of the large, optional Go export registry.
+const (
+	numbersHostExport            = "github.com:glojurelang:glojure:pkg:lang.Numbers"
+	findNamespaceHostExport      = "github.com:glojurelang:glojure:pkg:lang.FindNamespace"
+	pushThreadBindingsHostExport = "github.com:glojurelang:glojure:pkg:lang.PushThreadBindings"
+	popThreadBindingsHostExport  = "github.com:glojurelang:glojure:pkg:lang.PopThreadBindings"
+	lockingTransactionHostExport = "github.com:glojurelang:glojure:pkg:lang.LockingTransaction"
+)
+
+func resolveHost(sym *lang.Symbol) (interface{}, bool) {
+	switch sym.String() {
+	case numbersHostExport:
+		return lang.Numbers, true
+	case findNamespaceHostExport:
+		return lang.FindNamespace, true
+	case pushThreadBindingsHostExport:
+		return lang.PushThreadBindings, true
+	case popThreadBindingsHostExport:
+		return lang.PopThreadBindings, true
+	case lockingTransactionHostExport:
+		return lang.LockingTransaction, true
+	default:
+		return pkgmap.Get(sym.String())
+	}
+}
 
 func (env *environment) Macroexpand1(form interface{}) (interface{}, error) {
 	return env.macroexpand1(form, env.CurrentNamespace())
@@ -116,13 +139,7 @@ func (env *environment) evalInternalInNamespace(
 			return lang.NewSymbol(fmt.Sprintf("%s%d", prefix, num))
 		},
 		FindNamespace: lang.FindNamespace,
-		ResolveHost: func(sym *lang.Symbol) (interface{}, bool) {
-			export := sym.String()
-			if export == numbersHostExport {
-				return lang.Numbers, true
-			}
-			return pkgmap.Get(export)
-		},
+		ResolveHost:   resolveHost,
 	}
 	astNode, err := analyzer.Analyze(n, lang.NewMap(
 		lang.KWNS, currentNS.Name(),

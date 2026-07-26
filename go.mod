@@ -8,7 +8,6 @@ require (
 	github.com/gloathub/gojava v0.1.0
 	github.com/google/uuid v1.6.0
 	github.com/kylelemons/godebug v1.1.0
-	github.com/mitchellh/hashstructure/v2 v2.0.2
 	github.com/stretchr/testify v1.8.1
 	go4.org/intern v0.0.0-20220617035311-6925f38cc365
 	golang.org/x/sys v0.8.0

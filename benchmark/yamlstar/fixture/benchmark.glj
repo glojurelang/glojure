@@ -1,0 +1,56 @@
+(ns bench.yamlstar
+  (:refer-clojure :exclude [load])
+  (:require [yamlstar.api :as yaml]
+            [yamlstar.parser :as parser]))
+
+;; These are the four inputs from YAMLStar's own benchmark. Keeping them here,
+;; rather than generating them in the Go harness, makes the timed functions
+;; ordinary zero-argument Glojure code.
+(def scalar-input
+  "hello")
+
+(def mapping-input
+  "foo: 42")
+
+(def nested-input
+  (str "root:\n"
+       "  child1:\n"
+       "    key: value\n"
+       "  child2:\n"
+       "  - item1\n"
+       "  - item2\n"
+       "  - item3"))
+
+(def types-input
+  (str "string: hello\n"
+       "integer: 42\n"
+       "float: 3.14\n"
+       "bool: true\n"
+       "null_val: null"))
+
+(def expected-scalar
+  "hello")
+
+(def expected-mapping
+  {"foo" 42})
+
+(def expected-nested
+  {"root" {"child1" {"key" "value"}
+           "child2" ["item1" "item2" "item3"]}})
+
+(def expected-types
+  {"string" "hello"
+   "integer" 42
+   "float" 3.14
+   "bool" true
+   "null_val" nil})
+
+(defn parse-scalar [] (parser/parse scalar-input))
+(defn parse-mapping [] (parser/parse mapping-input))
+(defn parse-nested [] (parser/parse nested-input))
+(defn parse-types [] (parser/parse types-input))
+
+(defn load-scalar [] (yaml/load scalar-input))
+(defn load-mapping [] (yaml/load mapping-input))
+(defn load-nested [] (yaml/load nested-input))
+(defn load-types [] (yaml/load types-input))

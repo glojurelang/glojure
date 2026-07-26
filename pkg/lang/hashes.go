@@ -9,7 +9,6 @@ import (
 	"unsafe"
 
 	hash2 "bitbucket.org/pcastools/hash"
-	"github.com/mitchellh/hashstructure/v2"
 
 	"github.com/glojurelang/glojure/internal/murmur3"
 )
@@ -172,9 +171,17 @@ func uint32ToBytes(i uint32) []byte {
 }
 
 func hashString(s string) uint32 {
-	h, err := hashstructure.Hash(s, hashstructure.FormatV2, nil)
-	if err != nil {
-		panic(err)
+	// hashstructure's string path is FNV-1 64 followed by a uint32
+	// truncation. Compute that directly instead of allocating a hasher,
+	// reflection walker, options, and []byte copy for every string hash.
+	const (
+		offset64 = uint64(14695981039346656037)
+		prime64  = uint64(1099511628211)
+	)
+	h := offset64
+	for i := 0; i < len(s); i++ {
+		h *= prime64
+		h ^= uint64(s[i])
 	}
 	return uint32(h)
 }

@@ -1,0 +1,476 @@
+#!/usr/bin/env ys-0
+
+defn main(with='origin/main' file='' load=1.0):
+  validate-ref: with
+  when file.?:
+    validate-report-file: file
+  validate-load: load
+  root =: sh('git rev-parse --show-toplevel')
+  head =: sh('git rev-parse HEAD')
+  base =: sh("git rev-parse --verify \"$with^{commit}\"")
+  temp =: sh('mktemp -d /tmp/glojure-test-compare.XXXXXX')
+  head-dir =: temp + '/head'
+  base-dir =: temp + '/base'
+  ctx =:
+    M+:
+      :root root
+      :with with
+      :file file
+      :load-threshold load
+      :base base
+      :head head
+      :temp temp
+      :head-dir head-dir
+      :base-dir base-dir
+  status =:
+    try:
+      run-comparison: ctx
+      finally:
+        cleanup: root temp head-dir base-dir
+  when pos?(status):
+    System/exit: status
+
+defn- run-comparison(ctx):
+  root =: ctx.root
+  with =: ctx.with
+  file =: ctx.file
+  load-threshold =: ctx.load-threshold
+  base =: ctx.base
+  head =: ctx.head
+  temp =: ctx.temp
+  head-dir =: ctx.head-dir
+  base-dir =: ctx.base-dir
+  base-prepare-log =: temp + '/base-prepare.log'
+  head-prepare-log =: temp + '/head-prepare.log'
+  base-test-log =: temp + '/base-test.log'
+  head-test-log =: temp + '/head-test.log'
+  warn: "Creating worktrees for $with and HEAD"
+  add-worktree: root head-dir head
+  add-worktree: root base-dir base
+  warn: "Preparing dependencies for $with"
+  base-prepare-status =: prepare(base-dir base-prepare-log)
+  warn: 'Preparing dependencies for HEAD'
+  head-prepare-status =: prepare(head-dir head-prepare-log)
+  prepare-statuses =: +[base-prepare-status head-prepare-status]
+  when some(pos? prepare-statuses):
+    die: prepare-error(temp prepare-statuses)
+  warn: "Checking load before testing $with"
+  base-load =:
+    wait-for-load: load-threshold with
+  warn: "Running timed make test for $with"
+  base-result =:
+    run-test: base-dir base-test-log
+  warn: "$with make test finished in $time(base-result.seconds)"
+  warn: 'Checking load before testing HEAD'
+  head-load =:
+    wait-for-load: load-threshold 'HEAD'
+  warn: 'Running timed make test for HEAD'
+  head-result =:
+    run-test: head-dir head-test-log
+  warn: "HEAD make test finished in $time(head-result.seconds)"
+  warn: 'Collecting test inventory'
+  base-tests =: list-aot-tests(base-dir)
+  head-tests =: list-aot-tests(head-dir)
+  removed =: base-tests.remove(\(_.in?(head-tests)))
+  added =: head-tests.remove(\(_.in?(base-tests)))
+  report =:
+    make-report:
+      merge ctx:
+        M+:
+          :base-result base-result
+          :head-result head-result
+          :base-load base-load
+          :head-load head-load
+          :base-tests base-tests
+          :head-tests head-tests
+          :removed removed
+          :added added
+  warn: 'Printing comparison report'
+  when file.?:
+    report-file =: root + '/' + file
+    write report-file: report
+  print: report
+  max: base-result.status head-result.status
+
+defn- validate-ref(ref):
+  when-not re-matches(/[-A-Za-z0-9._\/@{}~^:]+/ ref):
+    die: "Invalid git revision: $ref"
+
+defn- validate-report-file(file):
+  when-not re-matches(/[-A-Za-z0-9_.]+\.md/ file):
+    die: "Invalid report filename: $file"
+
+defn- validate-load(load):
+  when-not number?(load):
+    die: "Invalid load threshold: $load"
+  when load <= 0:
+    die: "Load threshold must be greater than zero: $load"
+
+defn- sh(command):
+  command:bash-out:trim
+
+defn- command-status(command):
+  output =:
+    bash-out: |
+      set +e
+      (
+        set -e
+        $command
+      )
+      printf '%s\n' $?
+  I: output:trim
+
+defn- add-worktree(root dir commit):
+  sh: |
+    git -C "$root" worktree add --quiet --detach "$dir" "$commit"
+
+defn- prepare(work log):
+  version =:
+    sh: |
+      sed -n 's/^GO-VERSION ?= //p' "$work/Makefile"
+  go =: work + '/.cache/local/go-' + version + '/bin/go'
+  command-status: |
+    cd "$work"
+    GOCACHE="$work/.cache/go-build" \
+    GOPATH="$work/.cache/gopath" \
+      make -s build test/clojure-test-suite >"$log" 2>&1
+    GOCACHE="$work/.cache/go-build" \
+    GOPATH="$work/.cache/gopath" \
+      "$go" test -tags glj_aot_runtime \
+        ./pkg/glj ./pkg/gljmain ./pkg/runtime \
+        -run '^$' >>"$log" 2>&1
+
+defn- wait-for-load(threshold revision):
+  initial =: load-average()
+  start =: System/nanoTime()
+  result =:
+    loop current initial:
+      if current < threshold:
+        then:
+          seconds =:
+            (System/nanoTime() - start) / 1000000000.0
+          M+:
+            :load current
+            :seconds seconds
+        else:
+          warn: "Waiting to test $revision: load $current >= $threshold"
+          sleep: 5
+          recur: load-average()
+  warn: "Waiting to test $revision: load $(result.load) < $threshold"
+  =>: result
+
+defn- load-average():
+  F:
+    sh: |
+      if [[ -r /proc/loadavg ]]; then
+        cut -d' ' -f1 /proc/loadavg
+      else
+        uptime |
+          sed -E \
+            's/.*load averages?:[[:space:]]*([0-9.]+).*/\1/'
+      fi
+
+defn- run-test(work log):
+  start =: System/nanoTime()
+  status =:
+    command-status: |
+      cd "$work"
+      GOCACHE="$work/.cache/go-build" \
+      GOPATH="$work/.cache/gopath" \
+        make test >"$log" 2>&1
+  seconds =: (System/nanoTime() - start) / 1000000000.0
+  M+:
+    :status status
+    :seconds seconds
+    :fail-forms count-matches(log '^FAIL in ')
+
+defn- list-aot-tests(work):
+  version =:
+    sh: |
+      sed -n 's/^GO-VERSION ?= //p' "$work/Makefile"
+  go =: work + '/.cache/local/go-' + version + '/bin/go'
+  output =:
+    sh: |
+      set -o pipefail
+      cd "$work"
+      GOCACHE="$work/.cache/go-build" \
+      GOPATH="$work/.cache/gopath" \
+        "$go" test -tags glj_aot_runtime \
+          ./pkg/glj ./pkg/gljmain ./pkg/runtime \
+          -list '^Test' |
+        sed -n '/^Test/p' |
+        sort -u
+  if output.!: +[] output:lines
+
+defn- make-report(ctx):
+  root =: ctx.root
+  with =: ctx.with
+  base =: ctx.base
+  head =: ctx.head
+  base-result =: ctx.base-result
+  head-result =: ctx.head-result
+  base-load =: ctx.base-load
+  head-load =: ctx.head-load
+  base-tests =: ctx.base-tests
+  head-tests =: ctx.head-tests
+  removed =: ctx.removed
+  added =: ctx.added
+  temp =: ctx.temp
+  base-test-log =: temp + '/base-test.log'
+  head-test-log =: temp + '/head-test.log'
+  generated =: sh('date -u +%Y-%m-%dT%H:%M:%SZ')
+  load-threshold =: ctx.load-threshold
+  load-text =: load-report(ctx)
+  base-short =: base.take(12):join
+  head-short =: head.take(12):join
+  base-go =: go-test-count(root base)
+  head-go =: go-test-count(root head)
+  base-glj =: glj-test-count(root base)
+  head-glj =: glj-test-count(root head)
+  base-files =: tracked-test-file-count(root base)
+  head-files =: tracked-test-file-count(root head)
+  wiring =:
+    if same-test-wiring?(root base head): +'unchanged' 'changed'
+  deleted =: deleted-test-file-count(root base head)
+  removed-text =: test-list(removed)
+  added-text =: test-list(added)
+  base-tail =: failure-tail(base-result base-test-log)
+  head-tail =: failure-tail(head-result head-test-log)
+  diff =: head-result.seconds - base-result.seconds
+  base-status =: status(base-result.status)
+  head-status =: status(head-result.status)
+  base-time =: time(base-result.seconds)
+  head-time =: time(head-result.seconds)
+  base-fails =: base-result.fail-forms
+  head-fails =: head-result.fail-forms
+  base-aot =: base-tests.#
+  head-aot =: head-tests.#
+  aot-diff =: signed(head-aot - base-aot)
+  go-diff =: signed(head-go - base-go)
+  glj-diff =: signed(head-glj - base-glj)
+  file-diff =: signed(head-files - base-files)
+  revision-rows =: +
+    [["`$with`" "`$base-short`" base-status base-time base-fails]
+     ['`HEAD`' "`$head-short`" head-status head-time head-fails]]
+  revision-table =:
+    markdown-table:
+      +['Revision' 'Commit' 'Result'
+        'Full `make test` time' '`FAIL in` forms']
+      qw(left left left right right)
+      revision-rows
+  inventory-rows =: +
+    [['AOT Go tests run by `make test`'
+      base-aot head-aot aot-diff]
+     ['Repository Go test declarations'
+      base-go head-go go-diff]
+     ['Repository Glojure `deftest` forms'
+      base-glj head-glj glj-diff]
+     ['Tracked files under `test/`'
+      base-files head-files file-diff]]
+  inventory-table =:
+    markdown-table:
+      +['Inventory' "`$with`" '`HEAD`' 'Difference']
+      qw(left right right right)
+      inventory-rows
+  report =: |
+    # `make test` comparison
+
+    Generated: $generated
+
+    Dependencies and test binaries are prepared before timing.
+    $load-text
+
+    $revision-table
+
+    `HEAD` time minus `$with`: $(signed-time(diff))
+
+    ## Test inventory
+
+    $inventory-table
+
+    Makefile test wiring: **$wiring**
+
+    Deleted test files: **$deleted**
+
+    ### AOT tests removed from `$with`
+
+    $removed-text
+
+    ### AOT tests added in `HEAD`
+
+    $added-text$base-tail$head-tail
+  =>: report
+
+defn- markdown-table(headers alignments rows):
+  widths =:
+    map-indexed _ headers:
+      fn(index header):
+        column-width: index header rows
+  header =: markdown-row(headers widths alignments)
+  separators =: markdown-separators(widths alignments)
+  separator =: markdown-row(separators widths alignments)
+  body =: rows.map(\(markdown-row(_ widths alignments)))
+  join "\n": concat([header separator] body)
+
+defn- column-width(index header rows):
+  lengths =:
+    map _ rows:
+      fn(row):
+        cell =: row.$index:S
+        count: cell
+  apply max: concat([3 header.#] lengths)
+
+defn- markdown-separators(widths alignments):
+  map-indexed _ widths:
+    fn(index width):
+      if alignments.$index == 'right':
+        (width.-- * '-') +: ':'
+        width *: '-'
+
+defn- markdown-row(values widths alignments):
+  cells =:
+    map-indexed _ values:
+      fn(index value):
+        pad-cell: value widths.$index alignments.$index
+  format '| %s |': cells.join(' | ')
+
+defn- pad-cell(value width alignment):
+  text =: value:S
+  padding =: (width - text.#) * ' '
+  if alignment == 'right':
+    padding +: text
+    text +: padding
+
+defn- load-report(ctx):
+  threshold =: ctx.load-threshold
+  base-wait =: time(ctx.base-load.seconds)
+  head-wait =: time(ctx.head-load.seconds)
+  =>: |
+    Timed runs wait for the one-minute load average to be below
+    `$threshold`.
+
+    Timed-run start loads: `$(ctx.with)` $(ctx.base-load.load)
+    (waited $base-wait); `HEAD` $(ctx.head-load.load)
+    (waited $head-wait).
+
+defn- go-test-count(root commit):
+  output =:
+    sh: |
+      git -C "$root" grep -n -E \
+        '^func (Test|Benchmark|Example)[A-Za-z0-9_]*\(' \
+        "$commit" -- '*_test.go' |
+        wc -l
+  I: output
+
+defn- glj-test-count(root commit):
+  output =:
+    sh: |
+      git -C "$root" grep -n -E \
+        '^[[:space:]]*\(deftest[[:space:]]' \
+        "$commit" -- 'test/*.glj' 'test/**/*.glj' |
+        wc -l
+  I: output
+
+defn- tracked-test-file-count(root commit):
+  output =:
+    sh: |
+      git -C "$root" ls-tree -r --name-only "$commit" -- test |
+        wc -l
+  I: output
+
+defn- same-test-wiring?(root base head):
+  zero?:
+    command-status: |
+      diff -q \
+        <(
+          git -C "$root" show "$base:Makefile" |
+            awk '
+              /^(test|test-aot-runtime|test-glj|test-suite):/ {
+                target = 1
+                print
+                next
+              }
+              target && /^\t/ {
+                print
+                next
+              }
+              target {
+                target = 0
+              }
+            '
+        ) \
+        <(
+          git -C "$root" show "$head:Makefile" |
+            awk '
+              /^(test|test-aot-runtime|test-glj|test-suite):/ {
+                target = 1
+                print
+                next
+              }
+              target && /^\t/ {
+                print
+                next
+              }
+              target {
+                target = 0
+              }
+            '
+        ) >/dev/null
+
+defn- deleted-test-file-count(root base head):
+  output =:
+    sh: |
+      git -C "$root" diff --diff-filter=D --name-only \
+        "$base" "$head" -- '*_test.go' 'test/**' |
+        wc -l
+  I: output
+
+defn- count-matches(file pattern):
+  I: sh("grep -c \"$pattern\" \"$file\" || true")
+
+defn- test-list(tests):
+  if tests.?:
+    tests.map(\('- `' + _ + '`')).join("\n")
+    'None.'
+
+defn- status(code):
+  if code:zero?: +'**PASS**' '**FAIL**'
+
+defn- time(seconds):
+  format '%.2f s': seconds
+
+defn- signed-time(seconds):
+  format '%+.2f s': seconds
+
+defn- signed(number):
+  format '%+d': number
+
+defn- failure-tail(result log):
+  if result.status:zero?:
+    then: ''
+    else: |
+
+      ## Failure tail for `$(fs/basename(log))`
+
+      ```
+      $sh("tail -40 \"$log\"")
+      ```
+
+defn- prepare-error(temp statuses):
+  base =: statuses.0
+  head =: statuses.1
+  =>: "Failed to prepare comparison worktrees: \
+       base.status=$base, head.status=$head ($temp)"
+
+defn- cleanup(root temp head-dir base-dir):
+  bash-out: |
+    git -C "$root" worktree remove --force "$head-dir" \
+      >/dev/null 2>&1 || true
+    git -C "$root" worktree remove --force "$base-dir" \
+      >/dev/null 2>&1 || true
+    case "$temp" in
+      /tmp/glojure-test-compare.*)
+        chmod -R u+w "$temp" 2>/dev/null || true
+        rm -rf -- "$temp"
+        ;;
+    esac

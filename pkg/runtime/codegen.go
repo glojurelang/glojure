@@ -32,8 +32,9 @@ import (
 
 // varScope represents a variable allocation scope
 type varScope struct {
-	nextNum int
-	names   map[string]string // maps Clojure names to Go variable names
+	nextNum    int
+	names      map[string]string // maps Clojure names to Go variable names
+	localAtoms map[string]bool   // local atoms proven not to escape
 }
 
 // recurContext represents the context for a loop/recur form
@@ -90,6 +91,20 @@ type aotSpecializationTarget struct {
 	rootVersionVar  string
 }
 
+type aotExternalCallTarget struct {
+	vr             *lang.Var
+	arity          int
+	fnVar          string
+	intrinsic      string
+	defaultVar     string
+	rootVersionVar string
+}
+
+type aotExternalCallKey struct {
+	vr    *lang.Var
+	arity int
+}
+
 // Generator handles the conversion of AST nodes to Go code
 type Generator struct {
 	originalWriter io.Writer
@@ -107,8 +122,10 @@ type Generator struct {
 
 	valueInits []*valueInit // map of value initializations
 
-	aotDeclarations bytes.Buffer
-	aotCallTargets  map[*lang.Var]*aotSpecializationTarget
+	aotDeclarations        bytes.Buffer
+	aotCallTargets         map[*lang.Var]*aotSpecializationTarget
+	aotExternalCallTargets map[aotExternalCallKey]*aotExternalCallTarget
+	aotNamespace           *lang.Namespace
 
 	// Fields for handling closures
 	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
@@ -143,17 +160,18 @@ var (
 // NewGenerator creates a new code generator
 func NewGenerator(w io.Writer) *Generator {
 	return &Generator{
-		originalWriter:  w,
-		currentWriter:   w,
-		varScopes:       []varScope{{nextNum: 0, names: make(map[string]string)}},
-		recurStack:      []recurContext{},
-		imports:         make(map[string]string),
-		varVariables:    make(map[varInfo]string),
-		symbolVariables: make(map[string]string),
-		kwVariables:     make(map[string]string),
-		liftedValues:    make(map[liftedKey]*liftedValue),
-		liftedCounter:   0,
-		aotCallTargets:  make(map[*lang.Var]*aotSpecializationTarget),
+		originalWriter:         w,
+		currentWriter:          w,
+		varScopes:              []varScope{{nextNum: 0, names: make(map[string]string)}},
+		recurStack:             []recurContext{},
+		imports:                make(map[string]string),
+		varVariables:           make(map[varInfo]string),
+		symbolVariables:        make(map[string]string),
+		kwVariables:            make(map[string]string),
+		liftedValues:           make(map[liftedKey]*liftedValue),
+		liftedCounter:          0,
+		aotCallTargets:         make(map[*lang.Var]*aotSpecializationTarget),
+		aotExternalCallTargets: make(map[aotExternalCallKey]*aotExternalCallTarget),
 	}
 }
 
@@ -164,6 +182,8 @@ func runtimeStateInitializer(vr *lang.Var) (string, bool) {
 
 // Generate takes a namespace and generates Go code that populates the same namespace
 func (g *Generator) Generate(ns *lang.Namespace) error {
+	g.aotNamespace = ns
+
 	// add lang import
 	g.addImport("github.com/glojurelang/glojure/pkg/lang")
 	g.addImport("github.com/glojurelang/glojure/pkg/runtime")
@@ -313,27 +333,45 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	////////////////////////////////////////////////////////////////////////////////
 	// Generate lifted values at the beginning of init() if any
 	if len(g.liftedValues) > 0 {
-		// Sort by variable name for deterministic output
-		var sortedLifted []*liftedValue
-		for _, lifted := range g.liftedValues {
-			sortedLifted = append(sortedLifted, lifted)
-		}
-		sort.Slice(sortedLifted, func(i, j int) bool {
-			return sortedLifted[i].varName < sortedLifted[j].varName
-		})
+		generated := make(map[*liftedValue]bool)
+		for {
+			// Generating a lifted closure can discover more captured values.
+			// Drain them all, sorting each batch for deterministic output.
+			var sortedLifted []*liftedValue
+			for _, lifted := range g.liftedValues {
+				if !generated[lifted] {
+					sortedLifted = append(sortedLifted, lifted)
+				}
+			}
+			if len(sortedLifted) == 0 {
+				break
+			}
+			sort.Slice(sortedLifted, func(i, j int) bool {
+				return sortedLifted[i].varName < sortedLifted[j].varName
+			})
 
-		// Generate code for each lifted value
-		for _, lifted := range sortedLifted {
-			g.startNewValueInit(lifted.varName)
-			// Generate the value - this will write any needed initialization
-			g.writef("var %s any\n", lifted.varName)
-			g.pushVarScope()
-			g.writef("{\n")
-			valueCode := g.generateValue(lifted.value)
-			// Declare the lifted variable with the final value
-			g.writef("%s = %s\n", lifted.varName, valueCode)
-			g.writef("}\n")
-			g.popVarScope()
+			for _, lifted := range sortedLifted {
+				generated[lifted] = true
+				g.startNewValueInit(lifted.varName)
+				g.pushVarScope()
+				g.writef("{\n")
+				valueCode := g.generateValue(lifted.value)
+				// Declare the lifted variable with the final value
+				g.writef("%s = %s\n", lifted.varName, valueCode)
+				g.writef("}\n")
+				g.popVarScope()
+			}
+		}
+
+		// Declare every captured value before any initializer. Nested closures
+		// can introduce forward references and cycles while they are generated.
+		var names []string
+		for _, lifted := range g.liftedValues {
+			names = append(names, lifted.varName)
+		}
+		sort.Strings(names)
+		for _, name := range names {
+			nsBuf.WriteString(fmt.Sprintf("var %s any\n", name))
 		}
 	}
 
@@ -416,6 +454,38 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 	}
 
 	/////////////////////////////
+	// Roots of statically resolved calls to other namespaces
+	externalTargets := make([]*aotExternalCallTarget, 0, len(g.aotExternalCallTargets))
+	for _, target := range g.aotExternalCallTargets {
+		externalTargets = append(externalTargets, target)
+	}
+	sort.Slice(externalTargets, func(i, j int) bool {
+		return externalTargets[i].fnVar < externalTargets[j].fnVar
+	})
+	for _, target := range externalTargets {
+		varName := g.allocVarVar(
+			target.vr.Namespace().Name().String(),
+			target.vr.Symbol().String(),
+		)
+		if target.intrinsic != "" {
+			initBuf.WriteString(fmt.Sprintf(
+				"%s := runtime.IsDefaultCoreVar(%s)\n%s := %s.RootVersion()\n",
+				target.defaultVar,
+				varName,
+				target.rootVersionVar,
+				varName,
+			))
+			continue
+		}
+		initBuf.WriteString(fmt.Sprintf(
+			"%s := aotCacheFn%d(%s)\n",
+			target.fnVar,
+			target.arity,
+			varName,
+		))
+	}
+
+	/////////////////////////////
 	// Var and closed-over value inits
 
 	// NS boilerplate
@@ -487,6 +557,7 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 
 	// Closing brace for LoadNS
 	initBuf.WriteString("}\n")
+	g.generateAOTExternalCacheAdapters()
 
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -681,6 +752,14 @@ func (g *Generator) generateValue(value any) string {
 		return g.generateSetValue(v)
 	case *lang.MultiFn:
 		return g.generateMultiFn(v)
+	case *lang.Volatile:
+		return fmt.Sprintf("lang.NewVolatile(%s)", g.generateValue(v.Deref()))
+	case *lang.Delay:
+		fn := v.PendingFn()
+		if fn == nil {
+			panic("cannot generate an already-realized delay")
+		}
+		return fmt.Sprintf("lang.NewDelay(%s)", g.generateValue(fn))
 	case lang.Keyword:
 		if ns := v.Namespace(); ns != nil {
 			return g.allocKWVar(fmt.Sprintf("%s/%s", ns, v.Name()))
@@ -706,9 +785,9 @@ func (g *Generator) generateValue(value any) string {
 		alias := g.addImportWithAlias("time")
 		return fmt.Sprintf("%s.Duration(%d)", alias, int64(v))
 	case *regexp.Regexp:
-		alias := g.addImportWithAlias("regexp")
-		// Use MustCompile since we know the pattern is valid (it compiled successfully in the reader)
-		return fmt.Sprintf("%s.MustCompile(%#v)", alias, v.String())
+		// Regex literals can appear inside hot functions. Reuse the process-wide
+		// immutable regexp instead of recompiling the same pattern per call.
+		return fmt.Sprintf("lang.CachedCompileRegexp(%#v)", v.String())
 	case *lang.BigDecimal:
 		return g.generateBigDecimalValue(v)
 	case bool:
@@ -1170,12 +1249,12 @@ func (g *Generator) generateFn(fn *Fn) string {
 	astNode := fn.ASTNode()
 	fnNode := astNode.Sub.(*ast.FnNode)
 
-	// Determine if we can use a fixed-arity FnFuncN (0-4 args, single method,
+	// Determine if we can use a fixed-arity FnFuncN (0-5 args, single method,
 	// non-variadic). fixedArity == -1 means fall back to FnFunc.
 	fixedArity := -1
 	if len(fnNode.Methods) == 1 && !fnNode.IsVariadic {
 		mn := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		if mn.FixedArity <= 4 {
+		if mn.FixedArity <= 5 {
 			fixedArity = mn.FixedArity
 		}
 	}
@@ -1193,7 +1272,7 @@ func (g *Generator) generateFn(fn *Fn) string {
 	fnVar := g.allocateTempVar()
 
 	// Declare with the appropriate type.
-	// FnFuncN for 0-4 arg non-variadic single-arity functions eliminates
+	// FnFuncN for 0-5 arg non-variadic single-arity functions eliminates
 	// []any heap allocation at call sites that use ApplyN.
 	fnType := "lang.FnFunc"
 	if fixedArity >= 0 {
@@ -1227,9 +1306,9 @@ func (g *Generator) generateFn(fn *Fn) string {
 	}
 
 	if fixedArity >= 0 {
-		// Single-arity 0-4: emit FnFuncN with direct named params
+		// Single-arity 0-5: emit FnFuncN with direct named params
 		methodNode := fnNode.Methods[0].Sub.(*ast.FnMethodNode)
-		allParamNames := []string{"p0", "p1", "p2", "p3"}
+		allParamNames := []string{"p0", "p1", "p2", "p3", "p4"}
 		paramNames := allParamNames[:fixedArity]
 		if !g.generateInt64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) &&
 			!g.generateFloat64SpecializedFixedFn(fn, fnVar, methodNode, paramNames) {
@@ -1320,8 +1399,8 @@ func (g *Generator) generateFn(fn *Fn) string {
 
 func (g *Generator) generateFixedMethodFn(methodNode *ast.FnMethodNode) {
 	arity := methodNode.FixedArity
-	if arity <= 4 {
-		allParamNames := []string{"p0", "p1", "p2", "p3"}
+	if arity <= 5 {
+		allParamNames := []string{"p0", "p1", "p2", "p3", "p4"}
 		paramNames := allParamNames[:arity]
 		sig := ""
 		if arity > 0 {
@@ -1622,6 +1701,9 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 // generateInvoke generates code for an Invoke node
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
+	if result, ok := g.generateLocalAtomInvoke(invokeNode); ok {
+		return result
+	}
 	if plan := analyzeReducePipeline(invokeNode); plan != nil {
 		return g.generateAOTReducePipeline(invokeNode, plan)
 	}
@@ -1634,9 +1716,16 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	// ISeq while avoiding reflection in lang.Apply.
 	var fnExpr string
 	directCall := false
+	directKeywordCall := false
 	aotTarget := g.aotInvokeTarget(invokeNode)
+	externalTarget := g.aotExternalInvokeTarget(invokeNode)
 	if invokeNode.Fn.Op == ast.OpConst {
 		value := invokeNode.Fn.Sub.(*ast.ConstNode).Value
+		if _, ok := value.(lang.Keyword); ok &&
+			(len(invokeNode.Args) == 1 || len(invokeNode.Args) == 2) {
+			fnExpr = g.generateValue(value)
+			directKeywordCall = true
+		}
 		if typ := reflect.TypeOf(value); typ != nil &&
 			typ.Kind() == reflect.Func &&
 			!typ.IsVariadic() &&
@@ -1655,7 +1744,8 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 			}
 		}
 	}
-	if !directCall && aotTarget == nil {
+	if !directCall && !directKeywordCall &&
+		aotTarget == nil && externalTarget == nil {
 		// Generate the general function expression before its arguments.
 		fnExpr = g.generateASTNode(invokeNode.Fn)
 	}
@@ -1692,6 +1782,15 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 		g.writef("%s := %s(%s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
 		return resultVar
 	}
+	if directKeywordCall {
+		g.writef("%s := %s.Invoke%d(%s)\n",
+			resultVar,
+			fnExpr,
+			len(argExprs),
+			strings.Join(argExprs, ", "),
+		)
+		return resultVar
+	}
 	if aotTarget != nil {
 		g.writef("var %s any\n", resultVar)
 		g.writef("if %s {\n", aotFast)
@@ -1700,6 +1799,37 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 		g.writef("} else {\n")
 		g.generateApply(resultVar, aotFallbackFn, argExprs, false)
 		g.writef("}\n")
+		return resultVar
+	}
+	if externalTarget != nil {
+		if externalTarget.intrinsic != "" {
+			varNode := invokeNode.Fn.Sub.(*ast.VarNode)
+			varID := g.allocVarVar(
+				varNode.Var.Namespace().Name().String(),
+				varNode.Var.Symbol().String(),
+			)
+			g.writef("var %s any\n", resultVar)
+			g.writef("if %s && %s.RootVersion() == %s {\n",
+				externalTarget.defaultVar,
+				varID,
+				externalTarget.rootVersionVar,
+			)
+			g.writef("%s = %s\n",
+				resultVar,
+				g.aotExternalIntrinsicCall(externalTarget.intrinsic, argExprs),
+			)
+			g.writef("} else {\n")
+			fallback := g.allocateTempVar()
+			g.writef("%s := checkDerefVar(%s)\n", fallback, varID)
+			g.generateApply(resultVar, fallback, argExprs, false)
+			g.writef("}\n")
+			return resultVar
+		}
+		g.writef("%s := %s(%s)\n",
+			resultVar,
+			externalTarget.fnVar,
+			strings.Join(argExprs, ", "),
+		)
 		return resultVar
 	}
 
@@ -1730,6 +1860,8 @@ func (g *Generator) generateApply(
 		g.writef("%s %s lang.Apply3(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 	case 4:
 		g.writef("%s %s lang.Apply4(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
+	case 5:
+		g.writef("%s %s lang.Apply5(%s, %s)\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 	default:
 		g.writef("%s %s lang.Apply(%s, []any{%s})\n", resultVar, operator, fnExpr, strings.Join(argExprs, ", "))
 	}
@@ -1934,7 +2066,7 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	}
 
 	// Emit bindings directly to g.w
-	for _, binding := range letNode.Bindings {
+	for bindingIndex, binding := range letNode.Bindings {
 		bindingNode := binding.Sub.(*ast.BindingNode)
 		name := bindingNode.Name.Name()
 		init := bindingNode.Init
@@ -1943,9 +2075,25 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		g.writef("// let binding \"%s\"\n", name)
 
 		// Generate initialization code
-		initCode := g.generateASTNode(init)
+		var localAtomInit *ast.Node
+		if !isLoop {
+			localAtomInit = scalarReplaceableAtomInit(
+				bindingNode,
+				letNode.Bindings[bindingIndex+1:],
+				letNode.Body,
+			)
+		}
+		initCode := ""
+		if localAtomInit != nil {
+			initCode = g.generateASTNode(localAtomInit)
+		} else {
+			initCode = g.generateASTNode(init)
+		}
 		varName := g.allocateLocal(name)
 		g.writef("var %s any = %s\n", varName, initCode)
+		if localAtomInit != nil {
+			g.markLocalAtom(name)
+		}
 		g.writeAssign("_", varName) // Prevent unused variable warning
 
 		// Collect binding variables for loop
@@ -2657,8 +2805,9 @@ func (g *Generator) pushVarScope() {
 
 	// Push new scope onto the stack
 	g.varScopes = append(g.varScopes, varScope{
-		nextNum: nextNum,
-		names:   make(map[string]string),
+		nextNum:    nextNum,
+		names:      make(map[string]string),
+		localAtoms: make(map[string]bool),
 	})
 }
 
@@ -2767,6 +2916,20 @@ func (g *Generator) getLocal(name string) string {
 	}
 
 	panic(fmt.Sprintf("variable %s not found in any scope", name))
+}
+
+func (g *Generator) markLocalAtom(name string) {
+	g.varScopes[len(g.varScopes)-1].localAtoms[name] = true
+}
+
+func (g *Generator) getLocalAtom(name string) (string, bool) {
+	for i := len(g.varScopes) - 1; i >= 0; i-- {
+		scope := &g.varScopes[i]
+		if varName, ok := scope.names[name]; ok {
+			return varName, scope.localAtoms[name]
+		}
+	}
+	return "", false
 }
 
 // allocateTempVar allocates a fresh temporary variable without name tracking

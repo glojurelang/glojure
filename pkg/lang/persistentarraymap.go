@@ -6,7 +6,7 @@ import (
 
 const (
 	hashmapThreshold   = 16
-	arrayMapInlineSize = 8
+	arrayMapInlineSize = hashmapThreshold - 2
 )
 
 type (
@@ -162,12 +162,7 @@ func (m *Map) ValAt(key any) any {
 
 func (m *Map) ValAtDefault(key, def any) any {
 	if kw, ok := key.(Keyword); ok {
-		for i := 0; i < len(m.keyVals); i += 2 {
-			if kw == m.keyVals[i] {
-				return m.keyVals[i+1]
-			}
-		}
-		return def
+		return m.valAtKeyword(kw, def)
 	}
 
 	for i := 0; i < len(m.keyVals); i += 2 {
@@ -176,6 +171,15 @@ func (m *Map) ValAtDefault(key, def any) any {
 		}
 	}
 
+	return def
+}
+
+func (m *Map) valAtKeyword(key Keyword, def any) any {
+	for i := 0; i < len(m.keyVals); i += 2 {
+		if candidate, ok := m.keyVals[i].(Keyword); ok && key == candidate {
+			return m.keyVals[i+1]
+		}
+	}
 	return def
 }
 

@@ -2,7 +2,9 @@ package lang
 
 import (
 	"fmt"
+	"io"
 	"reflect"
+	"regexp"
 )
 
 func CanApply(fn interface{}) bool {
@@ -112,6 +114,9 @@ func Apply0(fn interface{}) any {
 		return f()
 	case FnFunc:
 		return f()
+	case func():
+		f()
+		return nil
 	case FixedArityFn0:
 		return f.Invoke0()
 	case IFn:
@@ -138,6 +143,19 @@ func Apply1(fn interface{}, a0 any) any {
 		return f(a0)
 	case func(any) float64:
 		return f(a0)
+	case func(string) string:
+		return f(a0.(string))
+	case func(string) *regexp.Regexp:
+		return f(a0.(string))
+	case func(string, ...any) string:
+		return f(a0.(string))
+	case func(IPersistentMap):
+		if a0 == nil {
+			f(nil)
+		} else {
+			f(a0.(IPersistentMap))
+		}
+		return nil
 	case FixedArityFn1:
 		return f.Invoke1(a0)
 	case IFn:
@@ -162,6 +180,22 @@ func Apply2(fn interface{}, a0, a1 any) any {
 		return f(a0, a1)
 	case func(any, any) int64:
 		return f(a0, a1)
+	case func(string, string) bool:
+		return f(a0.(string), a1.(string))
+	case func(Conser, any) Conser:
+		return f(asConser(a0), a1)
+	case func(*regexp.Regexp, string) *RegexpMatcher:
+		return f(a0.(*regexp.Regexp), a1.(string))
+	case func([]string, string) string:
+		return f(asStringSlice(a0), a1.(string))
+	case func(io.Writer, any) io.Writer:
+		return f(a0.(io.Writer), a1)
+	case func(string, int) Char:
+		return f(a0.(string), MustAsInt(a1))
+	case func(string, ...any) string:
+		return f(a0.(string), a1)
+	case func(reflect.Type, any) bool:
+		return f(a0.(reflect.Type), a1)
 	case FixedArityFn2:
 		return f.Invoke2(a0, a1)
 	case IFn:
@@ -178,6 +212,8 @@ func Apply3(fn interface{}, a0, a1, a2 any) any {
 		return f(a0, a1, a2)
 	case FnFunc:
 		return f(a0, a1, a2)
+	case func(string, ...any) string:
+		return f(a0.(string), a1, a2)
 	case FixedArityFn3:
 		return f.Invoke3(a0, a1, a2)
 	case IFn:
@@ -194,6 +230,8 @@ func Apply4(fn interface{}, a0, a1, a2, a3 any) any {
 		return f(a0, a1, a2, a3)
 	case FnFunc:
 		return f(a0, a1, a2, a3)
+	case func(string, ...any) string:
+		return f(a0.(string), a1, a2, a3)
 	case FixedArityFn4:
 		return f.Invoke4(a0, a1, a2, a3)
 	case IFn:
@@ -201,6 +239,53 @@ func Apply4(fn interface{}, a0, a1, a2, a3 any) any {
 	default:
 		return Apply(fn, []any{a0, a1, a2, a3})
 	}
+}
+
+// Apply5 dispatches a five-argument call without constructing an argument slice
+// when the target exposes a fixed five-argument method.
+func Apply5(fn interface{}, a0, a1, a2, a3, a4 any) any {
+	switch f := fn.(type) {
+	case FnFunc5:
+		return f(a0, a1, a2, a3, a4)
+	case FnFunc:
+		return f(a0, a1, a2, a3, a4)
+	case func(any, any, any, any, any) any:
+		return f(a0, a1, a2, a3, a4)
+	case FixedArityFn5:
+		return f.Invoke5(a0, a1, a2, a3, a4)
+	case IFn:
+		return f.Invoke(a0, a1, a2, a3, a4)
+	default:
+		return Apply(fn, []any{a0, a1, a2, a3, a4})
+	}
+}
+
+func asStringSlice(value any) []string {
+	if values, ok := value.([]string); ok {
+		return values
+	}
+	if values, ok := value.(*mappedSeq); ok {
+		return values.asStringSlice()
+	}
+	if values, ok := value.(Indexed); ok {
+		result := make([]string, values.Count())
+		for i := range result {
+			result[i] = values.Nth(i).(string)
+		}
+		return result
+	}
+	var result []string
+	for seq := Seq(value); seq != nil; seq = seq.Next() {
+		result = append(result, seq.First().(string))
+	}
+	return result
+}
+
+func asConser(value any) Conser {
+	if value == nil {
+		return nil
+	}
+	return value.(Conser)
 }
 
 func applyType(typ reflect.Type, args []interface{}) interface{} {

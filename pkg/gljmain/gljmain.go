@@ -23,6 +23,7 @@ type InteractiveCommands interface {
 	StartNREPL(arg string)
 	StartSREPL(arg string)
 	ConnectNREPL(args []string)
+	Color()
 }
 
 var registeredInteractiveCommands InteractiveCommands
@@ -56,6 +57,7 @@ Options:
   --nrepl[=VALUE]        Start nREPL server
   --nrepl-connect H:P    Connect REPL to nREPL server
   --srepl[=VALUE]        Start socket REPL server
+  --color                Syntax highlight stdin with ANSI colors
   -h, --help             Show this help message
   --version              Show version information
 
@@ -69,6 +71,7 @@ Examples:
   glj --nrepl=.nrepl-port       # Write port to file
   glj --srepl                   # Start socket REPL on random port
   glj --srepl=7777              # Start socket REPL on port 7777
+  glj --color < file.clj         # Syntax highlight Clojure code
   glj --version                 # Show version
   glj --help                    # Show this help
 
@@ -126,6 +129,9 @@ func Main(args []string) {
 		return
 	} else if args[0] == "--nrepl-connect" {
 		interactiveCommands().ConnectNREPL(args)
+		return
+	} else if args[0] == "--color" {
+		interactiveCommands().Color()
 		return
 	} else if args[0] == "-e" {
 		// Evaluate expression from command line

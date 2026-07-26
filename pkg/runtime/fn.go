@@ -172,7 +172,11 @@ func (fn *Fn) Invoke4(a0, a1, a2, a3 interface{}) interface{} {
 
 func (fn *Fn) invokeSingle1(a0 interface{}) interface{} {
 	frame := fn.acquireFrame()
-	defer fn.releaseFrame(frame)
+	defer func() {
+		if !frame.captured {
+			fn.releaseFrame(frame)
+		}
+	}()
 
 	if fn.singleLocal != nil {
 		frame.env.BindLocal(fn.singleLocal, fn)
@@ -187,7 +191,11 @@ func (fn *Fn) invokeSingle1(a0 interface{}) interface{} {
 
 func (fn *Fn) invokeSingle2(a0, a1 interface{}) interface{} {
 	frame := fn.acquireFrame()
-	defer fn.releaseFrame(frame)
+	defer func() {
+		if !frame.captured {
+			fn.releaseFrame(frame)
+		}
+	}()
 
 	if fn.singleLocal != nil {
 		frame.env.BindLocal(fn.singleLocal, fn)
@@ -203,7 +211,11 @@ func (fn *Fn) invokeSingle2(a0, a1 interface{}) interface{} {
 
 func (fn *Fn) invokeSingle3(a0, a1, a2 interface{}) interface{} {
 	frame := fn.acquireFrame()
-	defer fn.releaseFrame(frame)
+	defer func() {
+		if !frame.captured {
+			fn.releaseFrame(frame)
+		}
+	}()
 
 	if fn.singleLocal != nil {
 		frame.env.BindLocal(fn.singleLocal, fn)

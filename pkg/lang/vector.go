@@ -7,13 +7,17 @@ import (
 	"github.com/glojurelang/glojure/internal/persistent/vector"
 )
 
+const vectorInlineSize = 4
+
 // Vector is a vector of values.
 type (
 	Vector struct {
 		meta         IPersistentMap
 		hash, hasheq uint32
 
-		vec vector.Vector
+		vec       vector.Vector
+		inlineLen uint8
+		inline    [vectorInlineSize]any
 	}
 
 	PersistentVector = Vector
@@ -24,7 +28,7 @@ type (
 )
 
 var (
-	emptyVector = NewVector()
+	emptyVector = &Vector{}
 
 	_ APersistentVector   = (*Vector)(nil)
 	_ IObj                = (*Vector)(nil)
@@ -40,14 +44,16 @@ var (
 )
 
 func NewVector(values ...any) *Vector {
-	vals := make([]any, len(values))
-	for i, v := range values {
-		vals[i] = v
+	if len(values) == 0 {
+		return emptyVector
 	}
-	vec := vector.New(vals...)
-
+	if len(values) <= vectorInlineSize {
+		v := &Vector{inlineLen: uint8(len(values))}
+		copy(v.inline[:], values)
+		return v
+	}
 	return &Vector{
-		vec: vec,
+		vec: vector.New(values...),
 	}
 }
 
@@ -62,6 +68,9 @@ var (
 func (v *Vector) xxx_sequential() {}
 
 func (v *Vector) Count() int {
+	if v.vec == nil {
+		return int(v.inlineLen)
+	}
 	return v.vec.Len()
 }
 
@@ -72,6 +81,22 @@ func (v *Vector) Length() int {
 }
 
 func (v *Vector) Cons(x any) Conser {
+	if v.vec == nil {
+		if v.inlineLen < vectorInlineSize {
+			result := *v
+			result.hash, result.hasheq = 0, 0
+			result.inline[result.inlineLen] = x
+			result.inlineLen++
+			return &result
+		}
+		values := make([]any, vectorInlineSize+1)
+		copy(values, v.inline[:])
+		values[vectorInlineSize] = x
+		return &Vector{
+			meta: v.meta,
+			vec:  vector.New(values...),
+		}
+	}
 	return &Vector{
 		meta: v.meta,
 		vec:  v.vec.Conj(x),
@@ -81,6 +106,15 @@ func (v *Vector) Cons(x any) Conser {
 func (v *Vector) AssocN(i int, val any) IPersistentVector {
 	if i < 0 || i > v.Count() {
 		panic(NewIndexOutOfBoundsError())
+	}
+	if v.vec == nil {
+		if i == int(v.inlineLen) {
+			return v.Cons(val).(IPersistentVector)
+		}
+		result := *v
+		result.hash, result.hasheq = 0, 0
+		result.inline[i] = val
+		return &result
 	}
 	return &Vector{meta: v.meta, vec: v.vec.Assoc(i, val)}
 }
@@ -136,6 +170,12 @@ func (v *Vector) ValAtDefault(k, def any) any {
 }
 
 func (v *Vector) Nth(i int) any {
+	if v.vec == nil {
+		if i < 0 || i >= int(v.inlineLen) {
+			panic(NewIndexOutOfBoundsError())
+		}
+		return v.inline[i]
+	}
 	res, ok := v.vec.Index(i)
 	if !ok {
 		panic(NewIndexOutOfBoundsError())
@@ -212,6 +252,13 @@ func (v *Vector) Pop() IPersistentStack {
 	if v.Count() == 1 {
 		return emptyVector
 	}
+	if v.vec == nil {
+		result := *v
+		result.hash, result.hasheq = 0, 0
+		result.inlineLen--
+		result.inline[result.inlineLen] = nil
+		return &result
+	}
 	return &Vector{
 		meta: v.meta,
 		vec:  v.vec.Pop(),
@@ -282,14 +329,23 @@ func (v *Vector) Drop(n int) Sequential {
 	if n >= v.Count() {
 		return nil
 	}
+	if v.vec == nil {
+		result := NewVector(v.inline[n:v.inlineLen]...)
+		result.meta = v.meta
+		return result
+	}
 	return &Vector{
 		vec: v.vec.SubVector(n, v.Count()),
 	}
 }
 
 func (v *Vector) AsTransient() ITransientCollection {
+	vec := v.vec
+	if vec == nil {
+		vec = vector.New(v.inline[:v.inlineLen]...)
+	}
 	return &TransientVector{
-		vec: vector.NewTransient(v.vec),
+		vec: vector.NewTransient(vec),
 	}
 }
 
@@ -365,9 +421,15 @@ func (t *TransientVector) ValAtDefault(k, def any) any {
 }
 
 func (t *TransientVector) Persistent() IPersistentCollection {
-	return &Vector{
-		vec: t.vec.Persistent(),
+	vec := t.vec.Persistent()
+	if vec.Len() <= vectorInlineSize {
+		values := make([]any, vec.Len())
+		for i := range values {
+			values[i], _ = vec.Index(i)
+		}
+		return NewVector(values...)
 	}
+	return &Vector{vec: vec}
 }
 
 func (t *TransientVector) Count() int {

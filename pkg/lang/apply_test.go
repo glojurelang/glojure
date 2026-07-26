@@ -1,6 +1,9 @@
 package lang
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 type applyToRecorder struct {
 	args ISeq
@@ -35,5 +38,23 @@ func TestApplySeqRetainsGoFunctionFallback(t *testing.T) {
 
 	if got := ApplySeq(fn, args); got != int64(42) {
 		t.Fatalf("ApplySeq Go function result = %v, want 42", got)
+	}
+}
+
+func TestApply2PreservesNilForTypedInterfaceParameter(t *testing.T) {
+	if got := Apply2(Conj, nil, int64(3)); !Equals(got, NewList(int64(3))) {
+		t.Fatalf("Apply2(Conj, nil, 3) = %v, want (3)", got)
+	}
+}
+
+func TestApply5UsesFixedArityFunction(t *testing.T) {
+	fn := FnFunc5(func(a, b, c, d, e any) any {
+		return []any{a, b, c, d, e}
+	})
+	if got := Apply5(fn, 1, 2, 3, 4, 5).([]any); !reflect.DeepEqual(
+		got,
+		[]any{1, 2, 3, 4, 5},
+	) {
+		t.Fatalf("Apply5 result = %v", got)
 	}
 }

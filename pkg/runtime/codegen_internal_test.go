@@ -60,6 +60,22 @@ func TestGenerateNestedClosureCapturedAtLoadTime(t *testing.T) {
 	}
 }
 
+func TestGenerateMutableRuntimeValues(t *testing.T) {
+	generator := NewGenerator(&bytes.Buffer{})
+
+	if got, want := generator.generateValue(lang.NewVolatile(int64(7))),
+		"lang.NewVolatile(int64(7))"; got != want {
+		t.Fatalf("generated volatile = %q, want %q", got, want)
+	}
+
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.mutable-values"))
+	delay := lang.NewDelay(ns.Intern(lang.NewSymbol("delayed")))
+	got := generator.generateValue(delay)
+	if !strings.HasPrefix(got, "lang.NewDelay(") {
+		t.Fatalf("generated delay = %q, want lang.NewDelay expression", got)
+	}
+}
+
 func TestGenerateResolvedHostReference(t *testing.T) {
 	generator := NewGenerator(&bytes.Buffer{})
 	node := ast.MakeNode(ast.OpConst, nil)
@@ -93,6 +109,26 @@ func TestGenerateResolvedHostClassValue(t *testing.T) {
 	}
 	if _, ok := generator.imports["java.lang"]; ok {
 		t.Fatal("resolved host class generated a java.lang import")
+	}
+}
+
+func TestGenerateKeywordInvocationUsesDirectFixedArityCall(t *testing.T) {
+	var output bytes.Buffer
+	generator := NewGenerator(&output)
+	keyword := aotTestConst(lang.NewKeyword("answer"))
+	invoke := ast.MakeNode(ast.OpInvoke, nil)
+	invoke.Sub = &ast.InvokeNode{
+		Fn:   keyword,
+		Args: []*ast.Node{aotTestConst(nil), aotTestConst(int64(42))},
+	}
+
+	result := generator.generateASTNode(invoke)
+	generated := output.String()
+	if !strings.Contains(generated, ".Invoke2(nil, int64(42))") {
+		t.Fatalf("keyword invocation was not emitted directly: %s = %s", result, generated)
+	}
+	if strings.Contains(generated, "lang.Apply2") {
+		t.Fatalf("keyword invocation retained generic apply dispatch: %s", generated)
 	}
 }
 

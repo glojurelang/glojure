@@ -94,6 +94,40 @@ func TestThreadBindingFrameIsSnapshot(t *testing.T) {
 	<-done
 }
 
+func TestDynamicBindingCountTracksActiveFrames(t *testing.T) {
+	ns := FindOrCreateNamespace(NewSymbol("test.dynamic-binding-count"))
+	v := InternVarReplaceRoot(ns, NewSymbol("*value*"), "root").SetDynamic()
+
+	if got := v.dynamicBindings.Load(); got != 0 {
+		t.Fatalf("initial active binding count = %d, want 0", got)
+	}
+
+	PushThreadBindings(NewMap(v, "outer"))
+	if got := v.dynamicBindings.Load(); got != 1 {
+		t.Fatalf("outer active binding count = %d, want 1", got)
+	}
+	PushThreadBindings(NewMap(v, "inner"))
+	if got := v.dynamicBindings.Load(); got != 2 {
+		t.Fatalf("inner active binding count = %d, want 2", got)
+	}
+
+	PopThreadBindings()
+	if got := v.dynamicBindings.Load(); got != 1 {
+		t.Fatalf("count after inner pop = %d, want 1", got)
+	}
+	if got := v.Get(); got != "outer" {
+		t.Fatalf("value after inner pop = %v, want outer", got)
+	}
+
+	PopThreadBindings()
+	if got := v.dynamicBindings.Load(); got != 0 {
+		t.Fatalf("count after outer pop = %d, want 0", got)
+	}
+	if got := v.Get(); got != "root" {
+		t.Fatalf("value after all pops = %v, want root", got)
+	}
+}
+
 func TestVarLazyMeta(t *testing.T) {
 	ns := FindOrCreateNamespace(NewSymbol("test.lazy-meta"))
 	v := InternVarReplaceRoot(ns, NewSymbol("value"), nil)

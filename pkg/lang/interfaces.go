@@ -414,6 +414,13 @@ func Conj(coll Conser, x any) Conser {
 	return coll.Cons(x)
 }
 
+func ConjAny(coll, x any) Conser {
+	if coll == nil {
+		return Conj(nil, x)
+	}
+	return Conj(coll.(Conser), x)
+}
+
 // WithMeta returns a new value with the given metadata.
 func WithMeta(v any, meta IPersistentMap) (any, error) {
 	// TODO: just take an IObj
@@ -507,6 +514,13 @@ func Count(coll any) int {
 		count++
 	}
 	return count
+}
+
+func IsEmpty(coll any) bool {
+	if counted, ok := coll.(Counted); ok {
+		return counted.Count() == 0
+	}
+	return Seq(coll) == nil
 }
 
 func Keys(x any) ISeq {

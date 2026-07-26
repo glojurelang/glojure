@@ -1,6 +1,7 @@
 package runtime
 
 import (
+	"strings"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -59,5 +60,22 @@ func TestExplicitAOTNamespaceLoadCanReload(t *testing.T) {
 
 	if loads != 2 {
 		t.Fatalf("explicit loader ran %d times, want 2", loads)
+	}
+}
+
+func TestNativeNamespaceInitializerRunsAfterLoader(t *testing.T) {
+	const resource = "glojure/test/native-initializer"
+	var events []string
+	RegisterNSLoader(resource, func() {
+		events = append(events, "load")
+	})
+	registerNativeNamespaceInitializer(resource, func() {
+		events = append(events, "native")
+	})
+
+	GetNSLoader(resource)()
+
+	if got, want := strings.Join(events, ","), "load,native"; got != want {
+		t.Fatalf("namespace initialization order = %q, want %q", got, want)
 	}
 }

@@ -24,6 +24,13 @@ var (
 	keywordRegistryMu sync.RWMutex
 )
 
+// keywordLookup lets persistent maps accept a Keyword without first boxing it
+// into an interface value. Keyword invocation is a common map access path, and
+// boxing the value-form Keyword otherwise allocates once per lookup.
+type keywordLookup interface {
+	valAtKeyword(Keyword, any) any
+}
+
 func NewKeyword(s string) Keyword {
 	keywordRegistryMu.Lock()
 	keywordRegistry[s] = struct{}{}
@@ -97,22 +104,25 @@ func (k Keyword) Invoke(args ...interface{}) interface{} {
 	if len(args) == 0 || len(args) > 2 {
 		panic(fmt.Errorf("wrong number of args (%v) passed to: %v", len(args), k))
 	}
-	var defaultVal interface{} = nil
 	if len(args) == 2 {
-		defaultVal = args[1]
+		return k.Invoke2(args[0], args[1])
 	}
+	return k.Invoke1(args[0])
+}
 
-	assoc, ok := args[0].(Associative)
+func (k Keyword) Invoke1(coll interface{}) interface{} {
+	return k.Invoke2(coll, nil)
+}
+
+func (k Keyword) Invoke2(coll, defaultVal interface{}) interface{} {
+	if lookup, ok := coll.(keywordLookup); ok {
+		return lookup.valAtKeyword(k, defaultVal)
+	}
+	lookup, ok := coll.(ILookup)
 	if !ok {
 		return defaultVal
 	}
-
-	entry := assoc.EntryAt(k)
-	if entry == nil {
-		return defaultVal
-	}
-
-	return entry.Val()
+	return lookup.ValAtDefault(k, defaultVal)
 }
 
 func (k Keyword) ApplyTo(args ISeq) interface{} {

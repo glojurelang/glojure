@@ -4,7 +4,8 @@ import "sync/atomic"
 
 type (
 	Atom struct {
-		state   atomic.Value
+		state   atomic.Pointer[Box]
+		initial Box
 		watches IPersistentMap
 
 		meta IPersistentMap
@@ -17,8 +18,8 @@ var (
 )
 
 func NewAtom(val any) *Atom {
-	a := &Atom{}
-	a.state.Store(Box{val})
+	a := &Atom{initial: Box{val: val}}
+	a.state.Store(&a.initial)
 	a.watches = emptyMap
 	return a
 }
@@ -32,7 +33,7 @@ func NewAtomWithMeta(val any, meta IPersistentMap) *Atom {
 }
 
 func (a *Atom) Deref() interface{} {
-	return a.state.Load().(Box).val
+	return a.state.Load().val
 }
 
 func (a *Atom) SetValidator(vf IFn) { panic("not implemented") }
@@ -67,30 +68,83 @@ func (a *Atom) notifyWatches(oldVal, newVal interface{}) {
 
 func (a *Atom) Swap(f IFn, args ISeq) interface{} {
 	for {
-		old := a.state.Load().(Box)
+		old := a.state.Load()
 		nw := f.ApplyTo(NewCons(old.val, args))
-		if a.CompareAndSet(old.val, nw) {
+		if a.compareAndSetBox(old, nw) {
+			return nw
+		}
+	}
+}
+
+// Swap0, Swap1, and Swap2 are fixed-arity counterparts to Swap. They avoid
+// constructing an argument sequence when callers already know the number of
+// additional arguments, while preserving Atom's compare-and-set retry loop.
+func (a *Atom) Swap0(f IFn) interface{} {
+	for {
+		old := a.state.Load()
+		nw := Apply1(f, old.val)
+		if a.compareAndSetBox(old, nw) {
+			return nw
+		}
+	}
+}
+
+func (a *Atom) Swap1(f IFn, x interface{}) interface{} {
+	for {
+		old := a.state.Load()
+		nw := Apply2(f, old.val, x)
+		if a.compareAndSetBox(old, nw) {
+			return nw
+		}
+	}
+}
+
+func (a *Atom) Swap2(f IFn, x, y interface{}) interface{} {
+	for {
+		old := a.state.Load()
+		nw := Apply3(f, old.val, x, y)
+		if a.compareAndSetBox(old, nw) {
 			return nw
 		}
 	}
 }
 
 func (a *Atom) CompareAndSet(oldv, newv interface{}) bool {
+	old := a.state.Load()
+	if !Identical(old.val, oldv) {
+		return false
+	}
+	return a.compareAndSetBox(old, newv)
+}
+
+func (a *Atom) compareAndSetBox(old *Box, newv interface{}) bool {
 	// TODO: validate
-	swapped := a.state.CompareAndSwap(Box{val: oldv}, Box{val: newv})
+	if Identical(old.val, newv) &&
+		(a.watches == nil || a.watches.Count() == 0) {
+		return a.state.CompareAndSwap(old, old)
+	}
+	swapped := a.state.CompareAndSwap(old, NewBox(newv))
 	if swapped {
-		a.notifyWatches(oldv, newv)
+		a.notifyWatches(old.val, newv)
 	}
 	return swapped
 }
 
 func (a *Atom) Reset(newVal interface{}) interface{} {
-	old := a.state.Load().(Box)
 	// TODO: validate
-
-	a.state.Store(Box{newVal})
-	a.notifyWatches(old.val, newVal)
-	return newVal
+	for {
+		old := a.state.Load()
+		if Identical(old.val, newVal) &&
+			(a.watches == nil || a.watches.Count() == 0) {
+			if a.state.CompareAndSwap(old, old) {
+				return newVal
+			}
+			continue
+		}
+		old = a.state.Swap(NewBox(newVal))
+		a.notifyWatches(old.val, newVal)
+		return newVal
+	}
 }
 
 func (a *Atom) Meta() IPersistentMap {

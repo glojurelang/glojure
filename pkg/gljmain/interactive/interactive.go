@@ -14,6 +14,7 @@ import (
 	"syscall"
 
 	"github.com/glojurelang/glojure/pkg/gljmain"
+	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/nrepl"
 	"github.com/glojurelang/glojure/pkg/repl"
 	"github.com/glojurelang/glojure/pkg/srepl"
@@ -114,6 +115,24 @@ func (commands) ConnectNREPL(args []string) {
 	if value != "" {
 		fmt.Println(value)
 	}
+}
+
+func (commands) Color() {
+	if err := color(os.Stdin, os.Stdout); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func color(in io.Reader, out io.Writer) error {
+	input, err := io.ReadAll(in)
+	if err != nil {
+		return err
+	}
+	_, err = fmt.Fprint(
+		out,
+		repl.ColorSyntax([]rune(string(input)), lang.GlobalEnv),
+	)
+	return err
 }
 
 func waitForShutdown(message string, stop func()) {

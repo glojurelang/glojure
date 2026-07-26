@@ -13,6 +13,33 @@ import (
 var aotDirectFn0 lang.FnFunc1
 var aotRootVersion0 *lang.VarRootVersion
 
+func aotCacheFn1(vr *lang.Var) lang.FnFunc1 {
+	version := vr.RootVersion()
+	fn := checkDerefVar(vr)
+	if direct, ok := fn.(lang.FnFunc1); ok {
+		return func(p0 any) any {
+			if vr.RootVersion() == version {
+				return direct(p0)
+			}
+			return lang.Apply1(checkDerefVar(vr), p0)
+		}
+	}
+	if fixed, ok := fn.(lang.FixedArityFn1); ok {
+		return func(p0 any) any {
+			if vr.RootVersion() == version {
+				return fixed.Invoke1(p0)
+			}
+			return lang.Apply1(checkDerefVar(vr), p0)
+		}
+	}
+	return func(p0 any) any {
+		if vr.RootVersion() == version {
+			return lang.Apply1(fn, p0)
+		}
+		return lang.Apply1(checkDerefVar(vr), p0)
+	}
+}
+
 func init() {
 	runtime.RegisterNSLoader("clojure/uuid", LoadNS)
 }
@@ -55,6 +82,7 @@ func LoadNS() {
 	var_clojure_DOT_core_string_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_string_QMARK_)
 	// var clojure.uuid/default-uuid-reader
 	var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader := lang.InternVarName(sym_clojure_DOT_uuid, sym_default_DASH_uuid_DASH_reader)
+	aotExternalFn0 := aotCacheFn1(var_clojure_DOT_core_string_QMARK_)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -142,14 +170,13 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := checkDerefVar(var_clojure_DOT_core_string_QMARK_)
-			tmp5 := lang.Apply1(tmp4, v2)
-			if lang.IsTruthy(tmp5) {
-				tmp6 := lang.Apply1(uuid4.FromString, v2)
-				tmp3 = tmp6
+			tmp4 := aotExternalFn0(v2)
+			if lang.IsTruthy(tmp4) {
+				tmp5 := lang.Apply1(uuid4.FromString, v2)
+				tmp3 = tmp5
 			} else {
-				tmp7 := lang.Apply1(lang.NewIllegalArgumentError, "#uuid data reader expected string")
-				panic(tmp7)
+				tmp6 := lang.Apply1(lang.NewIllegalArgumentError, "#uuid data reader expected string")
+				panic(tmp6)
 			}
 			return tmp3
 		})

@@ -205,6 +205,15 @@ func (m *PersistentHashMap) ValAtDefault(key, notFound any) any {
 	return notFound
 }
 
+func (m *PersistentHashMap) valAtKeyword(key Keyword, notFound any) any {
+	if m.root != nil {
+		if value, found := findKeyword(m.root, 0, key.Hash(), key); found {
+			return value
+		}
+	}
+	return notFound
+}
+
 func (m *PersistentHashMap) Reduce(f IFn) any {
 	if m.Count() == 0 {
 		return f.Invoke()
@@ -741,6 +750,53 @@ func (n *HashCollisionNode) find(shift uint, hash uint32, key any) (foundKey, va
 
 func (n *HashCollisionNode) nodeSeq() ISeq {
 	return newNodeSeq(n.array, 0, nil)
+}
+
+func findKeyword(node Node, shift uint, hash uint32, key Keyword) (any, bool) {
+	switch node := node.(type) {
+	case *BitmapIndexedNode:
+		bit := bitpos(hash, shift)
+		if (node.bitmap & bit) == 0 {
+			return nil, false
+		}
+		idx := node.index(bit)
+		keyOrNull := node.array[2*idx]
+		valOrNode := node.array[2*idx+1]
+		if child, ok := valOrNode.(Node); ok {
+			return findKeyword(child, shift+5, hash, key)
+		}
+		candidate, ok := keyOrNull.(Keyword)
+		if ok && key == candidate {
+			return valOrNode, true
+		}
+		return nil, false
+
+	case *ArrayNode:
+		slot := node.array[mask(hash, shift)]
+		if slot == nil {
+			return nil, false
+		}
+		return findKeyword(slot.node, shift+5, hash, key)
+
+	case *HashCollisionNode:
+		if hash != node.hash {
+			return nil, false
+		}
+		for i := 0; i < 2*node.count; i += 2 {
+			candidate, ok := node.array[i].(Keyword)
+			if ok && key == candidate {
+				return node.array[i+1], true
+			}
+		}
+		return nil, false
+	}
+
+	// Node is closed over package-private methods, but retain the ordinary
+	// lookup as a correctness fallback if another implementation is added.
+	if _, value, found := node.find(shift, hash, key); found {
+		return value, true
+	}
+	return nil, false
 }
 
 ////////////////////////////////////////////////////////////////////////////////

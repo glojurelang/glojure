@@ -259,6 +259,13 @@ func (s *apvSeq) Nth(i int) any {
 	return s.v.Nth(s.i + i)
 }
 
+func (s *apvSeq) NthDefault(i int, def any) any {
+	if i < 0 || s.i+i >= s.v.Count() {
+		return def
+	}
+	return s.v.Nth(s.i + i)
+}
+
 func (s *apvSeq) Next() ISeq {
 	if s.i+1 >= s.v.Count() {
 		return nil

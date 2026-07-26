@@ -1878,9 +1878,7 @@ func (a *Analyzer) wrappingMeta(expr *ast.Node) (*ast.Node, error) {
 	if m, ok := form.(IMeta); ok {
 		meta = m.Meta()
 	}
-	if expr.Op == ast.OpFn {
-		meta = runtimeFunctionFormMeta(meta)
-	}
+	meta = runtimeFormMeta(meta)
 	if Seq(meta) == nil {
 		return expr, nil
 	}
@@ -1898,10 +1896,11 @@ func (a *Analyzer) wrappingMeta(expr *ast.Node) (*ast.Node, error) {
 	return n, nil
 }
 
-// Source locations on fn forms are compiler metadata, not metadata on the
-// resulting function value. Clojure retains explicitly supplied function
-// metadata while eliding these reader/compiler keys.
-func runtimeFunctionFormMeta(meta IPersistentMap) IPersistentMap {
+// Source locations attached by the reader are compiler metadata, not metadata
+// on the resulting runtime value. Clojure retains explicitly supplied
+// metadata while eliding these reader/compiler keys from functions and
+// collection literals alike.
+func runtimeFormMeta(meta IPersistentMap) IPersistentMap {
 	if meta == nil {
 		return nil
 	}

@@ -1,6 +1,7 @@
 package runtime
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/lang"
@@ -116,6 +117,483 @@ func (fn nativeCoreSubtract) ApplyTo(args lang.ISeq) interface{} {
 		result = fn.Invoke2(result, args.First())
 	}
 	return result
+}
+
+// nativeCoreStr avoids constructing a persistent rest sequence and reflecting
+// through strings.Builder methods for ordinary string concatenation. It
+// preserves clojure.core/str's nil handling and ToString conversion.
+type nativeCoreStr struct{}
+
+func (nativeCoreStr) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 0:
+		return ""
+	case 1:
+		return nativeStrAny(args[0])
+	case 2:
+		return nativeStr2(args[0], args[1])
+	default:
+		var builder strings.Builder
+		for _, arg := range args {
+			if arg != nil {
+				builder.WriteString(lang.ToString(arg))
+			}
+		}
+		return builder.String()
+	}
+}
+
+func (nativeCoreStr) Invoke0() interface{} {
+	return ""
+}
+
+func (nativeCoreStr) Invoke1(value interface{}) interface{} {
+	return nativeStrAny(value)
+}
+
+func (nativeCoreStr) Invoke2(a, b interface{}) interface{} {
+	return nativeStr2(a, b)
+}
+
+func (nativeCoreStr) Invoke3(a, b, c interface{}) interface{} {
+	return nativeStrValue(a) + nativeStrValue(b) + nativeStrValue(c)
+}
+
+func (nativeCoreStr) Invoke4(a, b, c, d interface{}) interface{} {
+	return nativeStrValue(a) + nativeStrValue(b) +
+		nativeStrValue(c) + nativeStrValue(d)
+}
+
+func (nativeCoreStr) Invoke5(a, b, c, d, e interface{}) interface{} {
+	return nativeStrValue(a) + nativeStrValue(b) +
+		nativeStrValue(c) + nativeStrValue(d) + nativeStrValue(e)
+}
+
+func (nativeCoreStr) ApplyTo(args lang.ISeq) interface{} {
+	if args == nil {
+		return ""
+	}
+	var builder strings.Builder
+	for ; args != nil; args = args.Next() {
+		if value := args.First(); value != nil {
+			builder.WriteString(lang.ToString(value))
+		}
+	}
+	return builder.String()
+}
+
+func nativeStrValue(value interface{}) string {
+	if value == nil {
+		return ""
+	}
+	return lang.ToString(value)
+}
+
+func nativeStrAny(value interface{}) interface{} {
+	if value == nil {
+		return ""
+	}
+	if _, ok := value.(string); ok {
+		return value
+	}
+	return lang.ToString(value)
+}
+
+func nativeStr2(a, b interface{}) string {
+	if a == nil {
+		return nativeStrValue(b)
+	}
+	if b == nil {
+		return lang.ToString(a)
+	}
+	return lang.ToString(a) + lang.ToString(b)
+}
+
+type nativeCoreRegexMatch struct {
+	full bool
+}
+
+func (fn nativeCoreRegexMatch) Invoke(args ...interface{}) interface{} {
+	if len(args) != 2 {
+		panic(lang.NewIllegalArgumentError("regex match expects 2 arguments"))
+	}
+	return fn.Invoke2(args[0], args[1])
+}
+
+func (fn nativeCoreRegexMatch) Invoke2(pattern, value interface{}) interface{} {
+	re := pattern.(*regexp.Regexp)
+	text := value.(string)
+	indices := re.FindStringSubmatchIndex(text)
+	if indices == nil ||
+		(fn.full && (indices[0] != 0 || indices[1] != len(text))) {
+		return nil
+	}
+	if re.NumSubexp() == 0 {
+		return text[indices[0]:indices[1]]
+	}
+	groups := make([]interface{}, len(indices)/2)
+	for i := range groups {
+		start, end := indices[2*i], indices[2*i+1]
+		if start >= 0 {
+			groups[i] = text[start:end]
+		}
+	}
+	return lang.NewVector(groups...)
+}
+
+func (fn nativeCoreRegexMatch) ApplyTo(args lang.ISeq) interface{} {
+	return fn.Invoke(seqToSlice(args)...)
+}
+
+type nativeCoreGetIn struct{}
+
+var nativeGetInNotFound = new(struct{ _ byte })
+
+func (nativeCoreGetIn) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 2:
+		return getIn(args[0], args[1], nil, false)
+	case 3:
+		return getIn(args[0], args[1], args[2], true)
+	default:
+		panic(lang.NewIllegalArgumentError("get-in expects 2 or 3 arguments"))
+	}
+}
+
+func (nativeCoreGetIn) Invoke2(value, keys interface{}) interface{} {
+	return getIn(value, keys, nil, false)
+}
+
+func (nativeCoreGetIn) Invoke3(value, keys, notFound interface{}) interface{} {
+	return getIn(value, keys, notFound, true)
+}
+
+func (nativeCoreGetIn) ApplyTo(args lang.ISeq) interface{} {
+	return nativeCoreGetIn{}.Invoke(seqToSlice(args)...)
+}
+
+func getIn(value, keys, notFound interface{}, distinguishMissing bool) interface{} {
+	if indexed, ok := keys.(lang.Indexed); ok {
+		for i := 0; i < indexed.Count(); i++ {
+			var found bool
+			value, found = getInKey(value, indexed.Nth(i), distinguishMissing)
+			if !found {
+				return notFound
+			}
+		}
+		return value
+	}
+	for seq := lang.Seq(keys); seq != nil; seq = seq.Next() {
+		var found bool
+		value, found = getInKey(value, seq.First(), distinguishMissing)
+		if !found {
+			return notFound
+		}
+	}
+	return value
+}
+
+func getInKey(value, key interface{}, distinguishMissing bool) (interface{}, bool) {
+	if !distinguishMissing {
+		return lang.Get(value, key), true
+	}
+	result := lang.GetDefault(value, key, nativeGetInNotFound)
+	return result, result != nativeGetInNotFound
+}
+
+type nativeCoreAssoc struct{}
+
+func (nativeCoreAssoc) Invoke(args ...interface{}) interface{} {
+	if len(args) < 3 || len(args)%2 == 0 {
+		panic(lang.NewIllegalArgumentError(
+			"assoc expects a collection followed by key/value pairs",
+		))
+	}
+	result := args[0]
+	for i := 1; i < len(args); i += 2 {
+		result = lang.Assoc(result, args[i], args[i+1])
+	}
+	return result
+}
+
+func (nativeCoreAssoc) Invoke3(coll, key, value interface{}) interface{} {
+	return lang.Assoc(coll, key, value)
+}
+
+func (nativeCoreAssoc) Invoke5(
+	coll, key1, value1, key2, value2 interface{},
+) interface{} {
+	return lang.Assoc(lang.Assoc(coll, key1, value1), key2, value2)
+}
+
+func (fn nativeCoreAssoc) ApplyTo(args lang.ISeq) interface{} {
+	if args == nil {
+		return fn.Invoke()
+	}
+	result := args.First()
+	args = args.Next()
+	pairs := 0
+	for args != nil {
+		key := args.First()
+		args = args.Next()
+		if args == nil {
+			panic(lang.NewIllegalArgumentError(
+				"assoc expects even number of arguments after map/vector, found odd number",
+			))
+		}
+		result = lang.Assoc(result, key, args.First())
+		pairs++
+		args = args.Next()
+	}
+	if pairs == 0 {
+		return fn.Invoke(result)
+	}
+	return result
+}
+
+type nativeStringIncludes struct{}
+
+func (nativeStringIncludes) Invoke(args ...interface{}) interface{} {
+	if len(args) != 2 {
+		panic(lang.NewIllegalArgumentError("includes? expects 2 arguments"))
+	}
+	return nativeStringIncludes{}.Invoke2(args[0], args[1])
+}
+
+func (nativeStringIncludes) Invoke2(value, substring interface{}) interface{} {
+	return strings.Contains(lang.ToString(value), substring.(string))
+}
+
+func (nativeStringIncludes) ApplyTo(args lang.ISeq) interface{} {
+	return nativeStringIncludes{}.Invoke(seqToSlice(args)...)
+}
+
+type nativeStringReplace struct {
+	fallback lang.IFn
+}
+
+func (fn nativeStringReplace) Invoke(args ...interface{}) interface{} {
+	if len(args) != 3 {
+		return fn.fallback.Invoke(args...)
+	}
+	return fn.Invoke3(args[0], args[1], args[2])
+}
+
+func (fn nativeStringReplace) Invoke3(value, match, replacement interface{}) interface{} {
+	if value == nil {
+		panic(lang.NewIllegalArgumentError("cannot call clojure.string function on nil"))
+	}
+	text := lang.ToString(value)
+	switch match := match.(type) {
+	case string:
+		if replacement, ok := replacement.(string); ok {
+			return strings.ReplaceAll(text, match, replacement)
+		}
+	case lang.Char:
+		switch replacement := replacement.(type) {
+		case string:
+			return strings.ReplaceAll(text, string(match), replacement)
+		case lang.Char:
+			return strings.ReplaceAll(text, string(match), string(replacement))
+		}
+	case *regexp.Regexp:
+		if replacement, ok := replacement.(string); ok {
+			return match.ReplaceAllString(text, replacement)
+		}
+	}
+	return lang.Apply3(fn.fallback, value, match, replacement)
+}
+
+func (fn nativeStringReplace) ApplyTo(args lang.ISeq) interface{} {
+	return fn.Invoke(seqToSlice(args)...)
+}
+
+// nativeCoreDeref keeps the common reference path on the IDeref interface.
+// The compiled Clojure implementation remains the fallback for futures and
+// other values whose dereference operation is exposed through host interop.
+type nativeCoreDeref struct {
+	fallback lang.IFn
+}
+
+func (fn nativeCoreDeref) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 1:
+		return fn.Invoke1(args[0])
+	case 3:
+		return fn.Invoke3(args[0], args[1], args[2])
+	default:
+		return fn.fallback.Invoke(args...)
+	}
+}
+
+func (fn nativeCoreDeref) Invoke1(ref interface{}) interface{} {
+	if deref, ok := ref.(lang.IDeref); ok {
+		return deref.Deref()
+	}
+	return lang.Apply1(fn.fallback, ref)
+}
+
+func (fn nativeCoreDeref) Invoke3(ref, timeoutMS, timeoutValue interface{}) interface{} {
+	if deref, ok := ref.(lang.IBlockingDeref); ok {
+		return deref.DerefWithTimeout(lang.AsInt64(timeoutMS), timeoutValue)
+	}
+	return lang.Apply3(fn.fallback, ref, timeoutMS, timeoutValue)
+}
+
+func (fn nativeCoreDeref) ApplyTo(args lang.ISeq) interface{} {
+	if args == nil {
+		return fn.fallback.ApplyTo(nil)
+	}
+	ref := args.First()
+	args = args.Next()
+	if args == nil {
+		return fn.Invoke1(ref)
+	}
+	timeoutMS := args.First()
+	args = args.Next()
+	if args == nil {
+		return fn.fallback.Invoke(ref, timeoutMS)
+	}
+	timeoutValue := args.First()
+	if args.Next() == nil {
+		return fn.Invoke3(ref, timeoutMS, timeoutValue)
+	}
+	return fn.fallback.ApplyTo(lang.NewCons(ref, lang.NewCons(timeoutMS, args)))
+}
+
+// nativeCoreReduce dispatches directly to Glojure's reduction interfaces.
+// The compiled Clojure function remains the fallback for protocol extensions
+// on values that do not implement those interfaces.
+type nativeCoreReduce struct {
+	fallback lang.IFn
+}
+
+func (r nativeCoreReduce) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 2:
+		return r.Invoke2(args[0], args[1])
+	case 3:
+		return r.Invoke3(args[0], args[1], args[2])
+	default:
+		return r.fallback.Invoke(args...)
+	}
+}
+
+func (r nativeCoreReduce) Invoke2(fn, coll interface{}) interface{} {
+	if reducible, ok := coll.(lang.IReduce); ok {
+		return reducible.Reduce(fn.(lang.IFn))
+	}
+	return lang.Apply2(r.fallback, fn, coll)
+}
+
+func (r nativeCoreReduce) Invoke3(fn, initial, coll interface{}) interface{} {
+	if reducible, ok := coll.(lang.IReduceInit); ok {
+		return reducible.ReduceInit(fn.(lang.IFn), initial)
+	}
+	return lang.Apply3(r.fallback, fn, initial, coll)
+}
+
+func (r nativeCoreReduce) ApplyTo(args lang.ISeq) interface{} {
+	return r.Invoke(seqToSlice(args)...)
+}
+
+type fixedAtomSwap0 interface {
+	Swap0(lang.IFn) interface{}
+}
+
+type fixedAtomSwap1 interface {
+	Swap1(lang.IFn, interface{}) interface{}
+}
+
+type fixedAtomSwap2 interface {
+	Swap2(lang.IFn, interface{}, interface{}) interface{}
+}
+
+// nativeCoreSwap dispatches directly to IAtom and uses optional fixed-arity
+// methods when available. This removes reflected bound-method calls and rest
+// sequence construction from ordinary swap! calls.
+type nativeCoreSwap struct {
+	fallback lang.IFn
+}
+
+func (fn nativeCoreSwap) Invoke(args ...interface{}) interface{} {
+	switch len(args) {
+	case 2:
+		return fn.Invoke2(args[0], args[1])
+	case 3:
+		return fn.Invoke3(args[0], args[1], args[2])
+	case 4:
+		return fn.Invoke4(args[0], args[1], args[2], args[3])
+	default:
+		if len(args) < 2 {
+			return fn.fallback.Invoke(args...)
+		}
+		atom, ok := args[0].(lang.IAtom)
+		if !ok {
+			return fn.fallback.Invoke(args...)
+		}
+		return atom.Swap(args[1].(lang.IFn), lang.NewList(args[2:]...))
+	}
+}
+
+func (fn nativeCoreSwap) Invoke2(atom, f interface{}) interface{} {
+	if fixed, ok := atom.(fixedAtomSwap0); ok {
+		return fixed.Swap0(f.(lang.IFn))
+	}
+	if atom, ok := atom.(lang.IAtom); ok {
+		return atom.Swap(f.(lang.IFn), nil)
+	}
+	return lang.Apply2(fn.fallback, atom, f)
+}
+
+func (fn nativeCoreSwap) Invoke3(atom, f, x interface{}) interface{} {
+	if fixed, ok := atom.(fixedAtomSwap1); ok {
+		return fixed.Swap1(f.(lang.IFn), x)
+	}
+	if atom, ok := atom.(lang.IAtom); ok {
+		return atom.Swap(f.(lang.IFn), lang.NewList(x))
+	}
+	return lang.Apply3(fn.fallback, atom, f, x)
+}
+
+func (fn nativeCoreSwap) Invoke4(atom, f, x, y interface{}) interface{} {
+	if fixed, ok := atom.(fixedAtomSwap2); ok {
+		return fixed.Swap2(f.(lang.IFn), x, y)
+	}
+	if atom, ok := atom.(lang.IAtom); ok {
+		return atom.Swap(f.(lang.IFn), lang.NewList(x, y))
+	}
+	return lang.Apply4(fn.fallback, atom, f, x, y)
+}
+
+func (fn nativeCoreSwap) ApplyTo(args lang.ISeq) interface{} {
+	if args == nil {
+		return fn.fallback.ApplyTo(nil)
+	}
+	atom := args.First()
+	args = args.Next()
+	if args == nil {
+		return fn.fallback.Invoke(atom)
+	}
+	f := args.First()
+	rest := args.Next()
+	if rest == nil {
+		return fn.Invoke2(atom, f)
+	}
+	x := rest.First()
+	rest = rest.Next()
+	if rest == nil {
+		return fn.Invoke3(atom, f, x)
+	}
+	y := rest.First()
+	rest = rest.Next()
+	if rest == nil {
+		return fn.Invoke4(atom, f, x, y)
+	}
+	if atom, ok := atom.(lang.IAtom); ok {
+		return atom.Swap(f.(lang.IFn), lang.NewCons(x, lang.NewCons(y, rest)))
+	}
+	return fn.fallback.ApplyTo(lang.NewCons(atom, lang.NewCons(f, lang.NewCons(x, lang.NewCons(y, rest)))))
 }
 
 // nativeCoreApply keeps Clojure's public apply semantics while routing the
@@ -378,6 +856,36 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	if subtract := core.FindInternedVar(lang.NewSymbol("-")); subtract != nil {
 		subtract.BindRoot(nativeCoreSubtract{})
 	}
+	if str := core.FindInternedVar(lang.NewSymbol("str")); str != nil {
+		str.BindRoot(nativeCoreStr{})
+	}
+	if reFind := core.FindInternedVar(lang.NewSymbol("re-find")); reFind != nil {
+		reFind.BindRoot(nativeCoreRegexMatch{})
+	}
+	if reMatches := core.FindInternedVar(lang.NewSymbol("re-matches")); reMatches != nil {
+		reMatches.BindRoot(nativeCoreRegexMatch{full: true})
+	}
+	if getIn := core.FindInternedVar(lang.NewSymbol("get-in")); getIn != nil {
+		getIn.BindRoot(nativeCoreGetIn{})
+	}
+	if assoc := core.FindInternedVar(lang.NewSymbol("assoc")); assoc != nil {
+		assoc.BindRoot(nativeCoreAssoc{})
+	}
+	if deref := core.FindInternedVar(lang.NewSymbol("deref")); deref != nil {
+		if fallback, ok := deref.Get().(lang.IFn); ok {
+			deref.BindRoot(nativeCoreDeref{fallback: fallback})
+		}
+	}
+	if swap := core.FindInternedVar(lang.NewSymbol("swap!")); swap != nil {
+		if fallback, ok := swap.Get().(lang.IFn); ok {
+			swap.BindRoot(nativeCoreSwap{fallback: fallback})
+		}
+	}
+	if reduce := core.FindInternedVar(lang.NewSymbol("reduce")); reduce != nil {
+		if fallback, ok := reduce.Get().(lang.IFn); ok {
+			reduce.BindRoot(nativeCoreReduce{fallback: fallback})
+		}
+	}
 	if apply := core.FindInternedVar(lang.NewSymbol("apply")); apply != nil {
 		apply.BindRoot(nativeCoreApply{})
 	}
@@ -406,12 +914,36 @@ func installNativeCoreFunctions(core *lang.Namespace) {
 	if mod := core.FindInternedVar(lang.NewSymbol("mod")); mod != nil {
 		mod.BindRoot(lang.FnFunc2(nativeMod))
 	}
-	recordDefaultCoreRoots(
-		core,
-		"*", "+", "dec", "even?", "filter", "identity", "inc", "map",
-		"neg?", "odd?", "pos?", "range", "reduce", "zero?",
-		"take",
+}
+
+func recordOptimizableCoreRoots(core *lang.Namespace) {
+	recordDefaultCoreRoots(core,
+		"*", "+", "assoc", "atom", "cons", "conj", "count", "dec", "deref",
+		"empty?", "even?", "filter", "first", "get", "identity", "inc", "map",
+		"neg?", "next", "nth", "odd?", "peek", "pop", "pos?", "range",
+		"reduce", "reset!", "seq", "swap!", "take", "zero?",
 	)
+}
+
+func init() {
+	if installNativeCoreOverrides {
+		registerNativeNamespaceInitializer("clojure/string", installNativeStringFunctions)
+	}
+}
+
+func installNativeStringFunctions() {
+	namespace := lang.FindNamespace(lang.NewSymbol("clojure.string"))
+	if namespace == nil {
+		return
+	}
+	if includes := namespace.FindInternedVar(lang.NewSymbol("includes?")); includes != nil {
+		includes.BindRoot(nativeStringIncludes{})
+	}
+	if replace := namespace.FindInternedVar(lang.NewSymbol("replace")); replace != nil {
+		if fallback, ok := replace.Get().(lang.IFn); ok {
+			replace.BindRoot(nativeStringReplace{fallback: fallback})
+		}
+	}
 }
 
 func installFixedArityCoreFunction(
@@ -437,6 +969,14 @@ func installFixedArityCoreFunction(
 }
 
 func nativeMapv(fn, coll interface{}) interface{} {
+	if indexed, ok := coll.(lang.Indexed); ok {
+		values := make([]interface{}, indexed.Count())
+		for i := range values {
+			values[i] = lang.Apply1(fn, indexed.Nth(i))
+		}
+		return lang.NewVector(values...)
+	}
+
 	initial := lang.NewVector().AsTransient()
 	reducer := lang.FnFunc2(func(result, value interface{}) interface{} {
 		transient := result.(lang.ITransientCollection)
@@ -474,6 +1014,15 @@ func nativeMod(num, div interface{}) interface{} {
 }
 
 func nativeMapSeq(fn, coll interface{}) interface{} {
+	if seq, ok := coll.(lang.ISeq); ok {
+		_, lazy := seq.(*lang.LazySeq)
+		_, chunked := seq.(lang.IChunkedSeq)
+		if !lazy && !chunked {
+			if source := seq.Seq(); source != nil {
+				return lang.NewMappedSeq(fn, source)
+			}
+		}
+	}
 	return lang.NewLazySeq(func() interface{} {
 		seq := lang.Seq(coll)
 		if seq == nil {

@@ -5,6 +5,16 @@
      (* (+ 2 3)
         (- 11 4))))
 
+(defn count-input [value]
+  (count value))
+
+(defn local-counter []
+  (let [state (atom 0)]
+    (swap! state inc)
+    (swap! state #(+ % 40))
+    (reset! state (+ @state 1))
+    @state))
+
 (defn run []
   (loop [i 0
          total 0]

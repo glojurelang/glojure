@@ -23,6 +23,12 @@ func NewDelay(fn IFn) *Delay {
 	}
 }
 
+// PendingFn returns the function for an unrealized delay. It returns nil once
+// the delay has been realized.
+func (d *Delay) PendingFn() IFn {
+	return d.fn
+}
+
 func (d *Delay) realize() {
 	l := d.mtx
 	if l == nil {
