@@ -14,65 +14,39 @@ import (
 )
 
 var aotDirectFn0 lang.FnFunc1
-var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.FnFunc1
-var aotRootVersion1 *lang.VarRootVersion
 var aotDirectFn2 lang.FnFunc1
-var aotRootVersion2 *lang.VarRootVersion
 var aotDirectFn3 lang.FnFunc2
-var aotRootVersion3 *lang.VarRootVersion
 var aotDirectFn4 lang.FnFunc2
-var aotRootVersion4 *lang.VarRootVersion
 var aotDirectFn5 lang.FnFunc2
-var aotRootVersion5 *lang.VarRootVersion
 var aotDirectFn6 lang.ArityFn
-var aotRootVersion6 *lang.VarRootVersion
 var aotDirectFn6Arity2 lang.FnFunc2
 var aotDirectFn6Arity3 lang.FnFunc3
 var aotDirectFn7 lang.ArityFn
-var aotRootVersion7 *lang.VarRootVersion
 var aotDirectFn7Arity1 lang.FnFunc1
 var aotDirectFn7Arity2 lang.FnFunc2
 var aotDirectFn8 lang.ArityFn
-var aotRootVersion8 *lang.VarRootVersion
 var aotDirectFn8Arity2 lang.FnFunc2
 var aotDirectFn8Arity3 lang.FnFunc3
 var aotDirectFn9 lang.FnFunc1
-var aotRootVersion9 *lang.VarRootVersion
 var aotDirectFn10 lang.FnFunc1
-var aotRootVersion10 *lang.VarRootVersion
 var aotDirectFn11 lang.FnFunc3
-var aotRootVersion11 *lang.VarRootVersion
 var aotDirectFn12 lang.FnFunc3
-var aotRootVersion12 *lang.VarRootVersion
 var aotDirectFn13 lang.FnFunc3
-var aotRootVersion13 *lang.VarRootVersion
 var aotDirectFn14 lang.FnFunc3
-var aotRootVersion14 *lang.VarRootVersion
 var aotDirectFn15 lang.FnFunc3
-var aotRootVersion15 *lang.VarRootVersion
 var aotDirectFn16 lang.FnFunc3
-var aotRootVersion16 *lang.VarRootVersion
 var aotDirectFn17 lang.FnFunc1
-var aotRootVersion17 *lang.VarRootVersion
 var aotDirectFn18 lang.ArityFn
-var aotRootVersion18 *lang.VarRootVersion
 var aotDirectFn18Arity2 lang.FnFunc2
 var aotDirectFn18Arity3 lang.FnFunc3
 var aotDirectFn19 lang.FnFunc1
-var aotRootVersion19 *lang.VarRootVersion
 var aotDirectFn20 lang.FnFunc2
-var aotRootVersion20 *lang.VarRootVersion
 var aotDirectFn21 lang.FnFunc1
-var aotRootVersion21 *lang.VarRootVersion
 var aotDirectFn22 lang.FnFunc1
-var aotRootVersion22 *lang.VarRootVersion
 var aotDirectFn23 lang.FnFunc1
-var aotRootVersion23 *lang.VarRootVersion
 var aotDirectFn24 lang.FnFunc1
-var aotRootVersion24 *lang.VarRootVersion
 var aotDirectFn25 lang.FnFunc1
-var aotRootVersion25 *lang.VarRootVersion
 
 func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
 	if vr.IsBound() {
@@ -535,9 +509,47 @@ func LoadNS() {
 		})
 		aotDirectFn0 = tmp1
 		var_clojure_DOT_string_blank_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_clojure_DOT_string_blank_QMARK_.RootVersion()
 		var_clojure_DOT_string_blank_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(236), kw_column, int(7), kw_end_DASH_line, int(236), kw_end_DASH_column, int(12), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "True if s is nil, empty, or contains only whitespace.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+		})
+	}
+	// capitalize
+	{
+		tmp0 := sym_capitalize
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			var tmp3 any
+			{ // let
+				// let binding "s"
+				tmp4 := aotDirectFn2(v2)
+				tmp5 := aotExternalFn3(tmp4)
+				var v6 any = tmp5
+				_ = v6
+				var tmp7 any
+				tmp8 := lang.Count(v6)
+				tmp9 := lang.Numbers.Lt(tmp8, int64(2))
+				if lang.IsTruthy(tmp9) {
+					tmp10 := lang.Apply1(strings5.ToUpper, v6)
+					tmp7 = tmp10
+				} else {
+					tmp11 := aotExternalFn5(v6, int64(0), int64(1))
+					tmp12 := lang.Apply1(strings5.ToUpper, tmp11)
+					tmp13 := aotExternalFn6(v6, int64(1))
+					tmp14 := lang.Apply1(strings5.ToLower, tmp13)
+					tmp15 := aotExternalFn4(tmp12, tmp14)
+					tmp7 = tmp15
+				}
+				tmp3 = tmp7
+			} // end let
+			return tmp3
+		})
+		aotDirectFn1 = tmp1
+		var_clojure_DOT_string_capitalize = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_string_capitalize.SetMetaLazy(func() lang.IPersistentMap {
+			tmp2 := reflect.TypeOf("")
+			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(171), kw_column, int(7), kw_end_DASH_line, int(171), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts first character of the string to upper-case, all other\n  characters to lower-case.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// check-string
@@ -559,7 +571,6 @@ func LoadNS() {
 		})
 		aotDirectFn2 = tmp1
 		var_clojure_DOT_string_check_DASH_string = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion2 = var_clojure_DOT_string_check_DASH_string.RootVersion()
 		var_clojure_DOT_string_check_DASH_string.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(17), kw_column, int(8), kw_end_DASH_line, int(17), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_maybe_DASH_s)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
@@ -587,7 +598,6 @@ func LoadNS() {
 		})
 		aotDirectFn3 = tmp1
 		var_clojure_DOT_string_ends_DASH_with_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion3 = var_clojure_DOT_string_ends_DASH_with_QMARK_.RootVersion()
 		var_clojure_DOT_string_ends_DASH_with_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(321), kw_column, int(7), kw_end_DASH_line, int(321), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s ends with substr.", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
@@ -794,7 +804,6 @@ func LoadNS() {
 		})
 		aotDirectFn4 = tmp1
 		var_clojure_DOT_string_escape = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion4 = var_clojure_DOT_string_escape.RootVersion()
 		var_clojure_DOT_string_escape.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
 			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(253), kw_column, int(7), kw_end_DASH_line, int(253), kw_end_DASH_column, int(23), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_cmap)), kw_doc, "Return a new string, using cmap to escape each character ch\n   from s as follows:\n\n   If (cmap ch) is nil, append ch to the new string.\n   If (cmap ch) is non-nil, append (str (cmap ch)) instead.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
@@ -815,7 +824,6 @@ func LoadNS() {
 		})
 		aotDirectFn5 = tmp1
 		var_clojure_DOT_string_includes_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion5 = var_clojure_DOT_string_includes_QMARK_.RootVersion()
 		var_clojure_DOT_string_includes_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(329), kw_column, int(7), kw_end_DASH_line, int(329), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s includes substr.", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
@@ -832,40 +840,30 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "s"
-				tmp5 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-				var tmp6 any
-				if !tmp5 {
-					tmp6 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-				}
-				var tmp7 any
-				if tmp5 {
-					tmp7 = aotDirectFn2(v2)
-				} else {
-					tmp7 = lang.Apply1(tmp6, v2)
-				}
-				var v8 any = tmp7
-				_ = v8
+				tmp5 := aotDirectFn2(v2)
+				var v6 any = tmp5
+				_ = v6
 				// let binding "result"
-				var tmp9 any
-				tmp10 := lang.IsInstance[lang.Char](v3)
-				if lang.IsTruthy(tmp10) {
-					tmp11 := lang.Apply1(lang.Builtins["rune"], v3)
-					tmp12 := lang.Apply2(strings5.IndexRune, v8, tmp11)
-					tmp9 = tmp12
+				var tmp7 any
+				tmp8 := lang.IsInstance[lang.Char](v3)
+				if lang.IsTruthy(tmp8) {
+					tmp9 := lang.Apply1(lang.Builtins["rune"], v3)
+					tmp10 := lang.Apply2(strings5.IndexRune, v6, tmp9)
+					tmp7 = tmp10
 				} else {
-					tmp13 := lang.Apply2(strings5.Index, v8, v3)
-					tmp9 = tmp13
+					tmp11 := lang.Apply2(strings5.Index, v6, v3)
+					tmp7 = tmp11
 				}
-				var v14 any = tmp9
-				_ = v14
-				var tmp15 any
-				tmp16 := aotExternalFn0(v14, int64(-1))
-				if lang.IsTruthy(tmp16) {
+				var v12 any = tmp7
+				_ = v12
+				var tmp13 any
+				tmp14 := aotExternalFn0(v12, int64(-1))
+				if lang.IsTruthy(tmp14) {
 				} else {
-					tmp17 := lang.Apply1(lang.Builtins["int64"], v14)
-					tmp15 = tmp17
+					tmp15 := lang.Apply1(lang.Builtins["int64"], v12)
+					tmp13 = tmp15
 				}
-				tmp4 = tmp15
+				tmp4 = tmp13
 			} // end let
 			return tmp4
 		})
@@ -886,41 +884,31 @@ func LoadNS() {
 				var v10 any = tmp9
 				_ = v10
 				// let binding "s"
-				tmp11 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-				var tmp12 any
-				if !tmp11 {
-					tmp12 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-				}
-				var tmp13 any
-				if tmp11 {
-					tmp13 = aotDirectFn2(v2)
-				} else {
-					tmp13 = lang.Apply1(tmp12, v2)
-				}
-				tmp14 := aotExternalFn6(tmp13, v10)
-				var v15 any = tmp14
-				_ = v15
+				tmp11 := aotDirectFn2(v2)
+				tmp12 := aotExternalFn6(tmp11, v10)
+				var v13 any = tmp12
+				_ = v13
 				// let binding "result"
-				var tmp16 any
-				tmp17 := lang.IsInstance[lang.Char](v3)
-				if lang.IsTruthy(tmp17) {
-					tmp18 := lang.Apply1(lang.Builtins["rune"], v3)
-					tmp19 := lang.Apply2(strings5.IndexRune, v15, tmp18)
-					tmp16 = tmp19
+				var tmp14 any
+				tmp15 := lang.IsInstance[lang.Char](v3)
+				if lang.IsTruthy(tmp15) {
+					tmp16 := lang.Apply1(lang.Builtins["rune"], v3)
+					tmp17 := lang.Apply2(strings5.IndexRune, v13, tmp16)
+					tmp14 = tmp17
 				} else {
-					tmp20 := lang.Apply2(strings5.Index, v15, v3)
-					tmp16 = tmp20
+					tmp18 := lang.Apply2(strings5.Index, v13, v3)
+					tmp14 = tmp18
 				}
-				var v21 any = tmp16
-				_ = v21
-				var tmp22 any
-				tmp23 := aotExternalFn0(v21, int64(-1))
-				if lang.IsTruthy(tmp23) {
+				var v19 any = tmp14
+				_ = v19
+				var tmp20 any
+				tmp21 := aotExternalFn0(v19, int64(-1))
+				if lang.IsTruthy(tmp21) {
 				} else {
-					tmp24 := lang.Numbers.Add(v21, v10)
-					tmp22 = tmp24
+					tmp22 := lang.Numbers.Add(v19, v10)
+					tmp20 = tmp22
 				}
-				tmp5 = tmp22
+				tmp5 = tmp20
 			} // end let
 			return tmp5
 		})
@@ -935,7 +923,6 @@ func LoadNS() {
 		)
 		aotDirectFn6 = tmp1
 		var_clojure_DOT_string_index_DASH_of = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion6 = var_clojure_DOT_string_index_DASH_of.RootVersion()
 		var_clojure_DOT_string_index_DASH_of.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(271), kw_column, int(7), kw_end_DASH_line, int(271), kw_end_DASH_column, int(14), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return index of value (string or char) in s, optionally searching\n  forward from from-index. Return nil if value not found.", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
@@ -952,32 +939,22 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "s"
-				tmp5 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-				var tmp6 any
-				if !tmp5 {
-					tmp6 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-				}
-				var tmp7 any
-				if tmp5 {
-					tmp7 = aotDirectFn2(v2)
-				} else {
-					tmp7 = lang.Apply1(tmp6, v2)
-				}
-				var v8 any = tmp7
-				_ = v8
+				tmp5 := aotDirectFn2(v2)
+				var v6 any = tmp5
+				_ = v6
 				// let binding "result"
-				tmp9 := aotExternalFn3(v3)
-				tmp10 := lang.Apply2(strings5.LastIndex, v8, tmp9)
-				var v11 any = tmp10
-				_ = v11
-				var tmp12 any
-				tmp13 := aotExternalFn0(v11, int64(-1))
-				if lang.IsTruthy(tmp13) {
+				tmp7 := aotExternalFn3(v3)
+				tmp8 := lang.Apply2(strings5.LastIndex, v6, tmp7)
+				var v9 any = tmp8
+				_ = v9
+				var tmp10 any
+				tmp11 := aotExternalFn0(v9, int64(-1))
+				if lang.IsTruthy(tmp11) {
 				} else {
-					tmp14 := lang.Apply1(lang.Builtins["int64"], v11)
-					tmp12 = tmp14
+					tmp12 := lang.Apply1(lang.Builtins["int64"], v9)
+					tmp10 = tmp12
 				}
-				tmp4 = tmp12
+				tmp4 = tmp10
 			} // end let
 			return tmp4
 		})
@@ -999,33 +976,23 @@ func LoadNS() {
 				var v11 any = tmp10
 				_ = v11
 				// let binding "s"
-				tmp12 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-				var tmp13 any
-				if !tmp12 {
-					tmp13 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-				}
-				var tmp14 any
-				if tmp12 {
-					tmp14 = aotDirectFn2(v2)
-				} else {
-					tmp14 = lang.Apply1(tmp13, v2)
-				}
-				tmp15 := aotExternalFn5(tmp14, int64(0), v11)
-				var v16 any = tmp15
-				_ = v16
+				tmp12 := aotDirectFn2(v2)
+				tmp13 := aotExternalFn5(tmp12, int64(0), v11)
+				var v14 any = tmp13
+				_ = v14
 				// let binding "result"
-				tmp17 := aotExternalFn3(v3)
-				tmp18 := lang.Apply2(strings5.LastIndex, v16, tmp17)
-				var v19 any = tmp18
-				_ = v19
-				var tmp20 any
-				tmp21 := aotExternalFn0(v19, int64(-1))
-				if lang.IsTruthy(tmp21) {
+				tmp15 := aotExternalFn3(v3)
+				tmp16 := lang.Apply2(strings5.LastIndex, v14, tmp15)
+				var v17 any = tmp16
+				_ = v17
+				var tmp18 any
+				tmp19 := aotExternalFn0(v17, int64(-1))
+				if lang.IsTruthy(tmp19) {
 				} else {
-					tmp22 := lang.Apply1(lang.Builtins["int64"], v19)
-					tmp20 = tmp22
+					tmp20 := lang.Apply1(lang.Builtins["int64"], v17)
+					tmp18 = tmp20
 				}
-				tmp5 = tmp20
+				tmp5 = tmp18
 			} // end let
 			return tmp5
 		})
@@ -1040,7 +1007,6 @@ func LoadNS() {
 		)
 		aotDirectFn8 = tmp1
 		var_clojure_DOT_string_last_DASH_index_DASH_of = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion8 = var_clojure_DOT_string_last_DASH_index_DASH_of.RootVersion()
 		var_clojure_DOT_string_last_DASH_index_DASH_of.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(295), kw_column, int(7), kw_end_DASH_line, int(295), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_value), lang.NewVector(sym_s, sym_value, sym_from_DASH_index)), kw_doc, "Return last index of value (string or char) in s, optionally\n  searching backward from from-index. Return nil if value not found.", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
@@ -1052,24 +1018,13 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-			var tmp4 any
-			if !tmp3 {
-				tmp4 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-			}
-			var tmp5 any
-			if tmp3 {
-				tmp5 = aotDirectFn2(v2)
-			} else {
-				tmp5 = lang.Apply1(tmp4, v2)
-			}
-			tmp6 := aotExternalFn3(tmp5)
-			tmp7 := lang.Apply1(strings5.ToLower, tmp6)
-			return tmp7
+			tmp3 := aotDirectFn2(v2)
+			tmp4 := aotExternalFn3(tmp3)
+			tmp5 := lang.Apply1(strings5.ToLower, tmp4)
+			return tmp5
 		})
 		aotDirectFn9 = tmp1
 		var_clojure_DOT_string_lower_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion9 = var_clojure_DOT_string_lower_DASH_case.RootVersion()
 		var_clojure_DOT_string_lower_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
 			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(188), kw_column, int(7), kw_end_DASH_line, int(188), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all lower-case.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
@@ -1082,26 +1037,81 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-			var tmp4 any
-			if !tmp3 {
-				tmp4 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-			}
-			var tmp5 any
-			if tmp3 {
-				tmp5 = aotDirectFn2(v2)
-			} else {
-				tmp5 = lang.Apply1(tmp4, v2)
-			}
-			tmp6 := lang.Apply3(strings5.ReplaceAll, tmp5, "$", "$$")
-			return tmp6
+			tmp3 := aotDirectFn2(v2)
+			tmp4 := lang.Apply3(strings5.ReplaceAll, tmp3, "$", "$$")
+			return tmp4
 		})
 		aotDirectFn10 = tmp1
 		var_clojure_DOT_string_re_DASH_quote_DASH_replacement = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion10 = var_clojure_DOT_string_re_DASH_quote_DASH_replacement.RootVersion()
 		var_clojure_DOT_string_re_DASH_quote_DASH_replacement.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
 			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(29), kw_column, int(7), kw_end_DASH_line, int(29), kw_end_DASH_column, int(37), kw_arglists, lang.NewList(lang.NewVector(sym_replacement)), kw_doc, "Given a replacement string that you wish to be a literal\n   replacement for a pattern match in replace or replace-first, do the\n   necessary escaping of special characters in the replacement.", kw_added, "1.5", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+		})
+	}
+	// replace
+	{
+		tmp0 := sym_replace
+		var tmp1 lang.FnFunc3
+		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			var tmp5 any
+			{ // let
+				// let binding "s"
+				tmp6 := aotDirectFn2(v2)
+				var v7 any = tmp6
+				_ = v7
+				var tmp8 any
+				tmp9 := lang.IsInstance[lang.Char](v3)
+				if lang.IsTruthy(tmp9) {
+					tmp10 := lang.Apply3(strings5.ReplaceAll, v7, v3, v4)
+					tmp8 = tmp10
+				} else {
+					var tmp11 any
+					tmp12 := aotExternalFn17(lang.Builtins["string"], v3)
+					if lang.IsTruthy(tmp12) {
+						tmp13 := lang.Apply3(strings5.ReplaceAll, v7, v3, v4)
+						tmp11 = tmp13
+					} else {
+						var tmp14 any
+						tmp15 := lang.IsInstance[*regexp6.Regexp](v3)
+						if lang.IsTruthy(tmp15) {
+							var tmp16 any
+							tmp17 := aotExternalFn17(lang.Builtins["string"], v4)
+							if lang.IsTruthy(tmp17) {
+								tmp18, _ := lang.FieldOrMethod(v3, "replaceAllString")
+								if reflect.TypeOf(tmp18).Kind() != reflect.Func {
+									panic(lang.NewIllegalArgumentError(fmt.Sprintf("replaceAllString is not a function")))
+								}
+								tmp19 := lang.Apply2(tmp18, v7, v4)
+								tmp16 = tmp19
+							} else {
+								tmp20 := aotDirectFn12(v7, v3, v4)
+								tmp16 = tmp20
+							}
+							tmp14 = tmp16
+						} else {
+							tmp21 := aotExternalFn4("Invalid match arg: ", v3)
+							tmp22 := lang.Apply1(lang.NewIllegalArgumentError, tmp21)
+							panic(tmp22)
+						}
+						tmp11 = tmp14
+					}
+					tmp8 = tmp11
+				}
+				tmp5 = tmp8
+			} // end let
+			return tmp5
+		})
+		aotDirectFn11 = tmp1
+		var_clojure_DOT_string_replace = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_string_replace.SetMetaLazy(func() lang.IPersistentMap {
+			tmp2 := reflect.TypeOf("")
+			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(52), kw_column, int(7), kw_end_DASH_line, int(52), kw_end_DASH_column, int(24), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces all instance of match with replacement in s.\n\n   match/replacement can be:\n\n   string / string\n   char / char\n   pattern / (string or function of match).\n\n   See also replace-first.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace \"Almost Pig Latin\" #\"\\b(\\w)(\\w+)\\b\" \"$2$1ay\")\n   -> \"lmostAay igPay atinLay\"", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// replace-by
@@ -1149,48 +1159,38 @@ func LoadNS() {
 							for {
 								var tmp17 any
 								if lang.IsTruthy(v16) {
-									tmp18 := var_clojure_DOT_string_re_DASH_quote_DASH_replacement.RootVersion() == aotRootVersion10 && !var_clojure_DOT_string_re_DASH_quote_DASH_replacement.IsMacro()
-									var tmp19 any
-									if !tmp18 {
-										tmp19 = checkDerefVar(var_clojure_DOT_string_re_DASH_quote_DASH_replacement)
-									}
-									tmp20 := aotExternalFn19(v7)
-									tmp21 := lang.Apply1(v4, tmp20)
-									var tmp22 any
-									if tmp18 {
-										tmp22 = aotDirectFn10(tmp21)
-									} else {
-										tmp22 = lang.Apply1(tmp19, tmp21)
-									}
-									tmp23, _ := lang.FieldOrMethod(v7, "appendReplacement")
-									if reflect.TypeOf(tmp23).Kind() != reflect.Func {
+									tmp18 := aotExternalFn19(v7)
+									tmp19 := lang.Apply1(v4, tmp18)
+									tmp20 := aotDirectFn10(tmp19)
+									tmp21, _ := lang.FieldOrMethod(v7, "appendReplacement")
+									if reflect.TypeOf(tmp21).Kind() != reflect.Func {
 										panic(lang.NewIllegalArgumentError(fmt.Sprintf("appendReplacement is not a function")))
 									}
-									tmp24 := lang.Apply2(tmp23, v14, tmp22)
-									_ = tmp24
-									tmp26, ok := lang.FieldOrMethod(v7, "find")
+									tmp22 := lang.Apply2(tmp21, v14, tmp20)
+									_ = tmp22
+									tmp24, ok := lang.FieldOrMethod(v7, "find")
 									if !ok {
 										panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "find")))
 									}
-									var tmp27 any
-									switch reflect.TypeOf(tmp26).Kind() {
+									var tmp25 any
+									switch reflect.TypeOf(tmp24).Kind() {
 									case reflect.Func:
-										tmp27 = lang.Apply(tmp26, nil)
+										tmp25 = lang.Apply(tmp24, nil)
 									default:
-										tmp27 = tmp26
+										tmp25 = tmp24
 									}
-									var tmp25 any = tmp27
-									v16 = tmp25
+									var tmp23 any = tmp25
+									v16 = tmp23
 									continue
 								} else {
-									tmp28, _ := lang.FieldOrMethod(v7, "appendTail")
-									if reflect.TypeOf(tmp28).Kind() != reflect.Func {
+									tmp26, _ := lang.FieldOrMethod(v7, "appendTail")
+									if reflect.TypeOf(tmp26).Kind() != reflect.Func {
 										panic(lang.NewIllegalArgumentError(fmt.Sprintf("appendTail is not a function")))
 									}
-									tmp29 := lang.Apply1(tmp28, v14)
-									_ = tmp29
-									tmp30 := lang.ToString(v14)
-									tmp17 = tmp30
+									tmp27 := lang.Apply1(tmp26, v14)
+									_ = tmp27
+									tmp28 := lang.ToString(v14)
+									tmp17 = tmp28
 								}
 								tmp15 = tmp17
 								break
@@ -1208,9 +1208,104 @@ func LoadNS() {
 		})
 		aotDirectFn12 = tmp1
 		var_clojure_DOT_string_replace_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion12 = var_clojure_DOT_string_replace_DASH_by.RootVersion()
 		var_clojure_DOT_string_replace_DASH_by.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(39), kw_column, int(8), kw_end_DASH_line, int(39), kw_end_DASH_column, int(17), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re, sym_f)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
+		})
+	}
+	// replace-first
+	{
+		tmp0 := sym_replace_DASH_first
+		var tmp1 lang.FnFunc3
+		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			var tmp5 any
+			{ // let
+				// let binding "s"
+				tmp6 := aotDirectFn2(v2)
+				var v7 any = tmp6
+				_ = v7
+				var tmp8 any
+				tmp9 := lang.IsInstance[lang.Char](v3)
+				if lang.IsTruthy(tmp9) {
+					tmp10 := aotDirectFn15(v7, v3, v4)
+					tmp8 = tmp10
+				} else {
+					var tmp11 any
+					tmp12 := aotExternalFn17(lang.Builtins["string"], v3)
+					if lang.IsTruthy(tmp12) {
+						tmp13 := lang.ToString(v3)
+						tmp14 := lang.ToString(v4)
+						tmp15 := aotDirectFn16(v7, tmp13, tmp14)
+						tmp11 = tmp15
+					} else {
+						var tmp16 any
+						tmp17 := lang.IsInstance[*regexp6.Regexp](v3)
+						if lang.IsTruthy(tmp17) {
+							var tmp18 any
+							tmp19 := aotExternalFn17(lang.Builtins["string"], v4)
+							if lang.IsTruthy(tmp19) {
+								var tmp20 any
+								{ // let
+									// let binding "done"
+									tmp21 := aotExternalFn20(false)
+									var v22 any = tmp21
+									_ = v22
+									var tmp23 lang.FnFunc1
+									tmp23 = lang.FnFunc1(func(p0 any) any {
+										v24 := p0
+										_ = v24
+										var tmp25 any
+										tmp26 := aotExternalFn21(v22)
+										if lang.IsTruthy(tmp26) {
+											tmp25 = v24
+										} else {
+											tmp27 := aotExternalFn22(v22, true)
+											_ = tmp27
+											tmp28, _ := lang.FieldOrMethod(v3, "ReplaceAllString")
+											if reflect.TypeOf(tmp28).Kind() != reflect.Func {
+												panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReplaceAllString is not a function")))
+											}
+											tmp29 := lang.Apply2(tmp28, v24, v4)
+											tmp25 = tmp29
+										}
+										return tmp25
+									})
+									tmp24, _ := lang.FieldOrMethod(v3, "ReplaceAllStringFunc")
+									if reflect.TypeOf(tmp24).Kind() != reflect.Func {
+										panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReplaceAllStringFunc is not a function")))
+									}
+									tmp25 := lang.Apply2(tmp24, v7, tmp23)
+									tmp20 = tmp25
+								} // end let
+								tmp18 = tmp20
+							} else {
+								tmp21 := aotDirectFn14(v7, v3, v4)
+								tmp18 = tmp21
+							}
+							tmp16 = tmp18
+						} else {
+							tmp22 := aotExternalFn4("Invalid match arg: ", v3)
+							tmp23 := lang.Apply1(lang.NewIllegalArgumentError, tmp22)
+							panic(tmp23)
+						}
+						tmp11 = tmp16
+					}
+					tmp8 = tmp11
+				}
+				tmp5 = tmp8
+			} // end let
+			return tmp5
+		})
+		aotDirectFn13 = tmp1
+		var_clojure_DOT_string_replace_DASH_first = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_string_replace_DASH_first.SetMetaLazy(func() lang.IPersistentMap {
+			tmp2 := reflect.TypeOf("")
+			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(114), kw_column, int(7), kw_end_DASH_line, int(114), kw_end_DASH_column, int(30), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces the first instance of match with replacement in s.\n\n   match/replacement can be:\n\n   char / char\n   string / string\n   pattern / (string or function of match).\n\n   See also replace.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace-first \"swap first two words\"\n                                 #\"(\\w+)(\\s+)(\\w+)\" \"$3$2$1\")\n   -> \"first swap two words\"", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// replace-first-by
@@ -1251,35 +1346,25 @@ func LoadNS() {
 						var v14 any = tmp13
 						_ = v14
 						// let binding "rep"
-						tmp15 := var_clojure_DOT_string_re_DASH_quote_DASH_replacement.RootVersion() == aotRootVersion10 && !var_clojure_DOT_string_re_DASH_quote_DASH_replacement.IsMacro()
-						var tmp16 any
-						if !tmp15 {
-							tmp16 = checkDerefVar(var_clojure_DOT_string_re_DASH_quote_DASH_replacement)
-						}
-						tmp17 := aotExternalFn19(v7)
-						tmp18 := lang.Apply1(v4, tmp17)
-						var tmp19 any
-						if tmp15 {
-							tmp19 = aotDirectFn10(tmp18)
-						} else {
-							tmp19 = lang.Apply1(tmp16, tmp18)
-						}
-						var v20 any = tmp19
-						_ = v20
-						tmp21, _ := lang.FieldOrMethod(v7, "appendReplacement")
-						if reflect.TypeOf(tmp21).Kind() != reflect.Func {
+						tmp15 := aotExternalFn19(v7)
+						tmp16 := lang.Apply1(v4, tmp15)
+						tmp17 := aotDirectFn10(tmp16)
+						var v18 any = tmp17
+						_ = v18
+						tmp19, _ := lang.FieldOrMethod(v7, "appendReplacement")
+						if reflect.TypeOf(tmp19).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("appendReplacement is not a function")))
 						}
-						tmp22 := lang.Apply2(tmp21, v14, v20)
-						_ = tmp22
-						tmp23, _ := lang.FieldOrMethod(v7, "appendTail")
-						if reflect.TypeOf(tmp23).Kind() != reflect.Func {
+						tmp20 := lang.Apply2(tmp19, v14, v18)
+						_ = tmp20
+						tmp21, _ := lang.FieldOrMethod(v7, "appendTail")
+						if reflect.TypeOf(tmp21).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("appendTail is not a function")))
 						}
-						tmp24 := lang.Apply1(tmp23, v14)
-						_ = tmp24
-						tmp25 := aotExternalFn3(v14)
-						tmp11 = tmp25
+						tmp22 := lang.Apply1(tmp21, v14)
+						_ = tmp22
+						tmp23 := aotExternalFn3(v14)
+						tmp11 = tmp23
 					} // end let
 					tmp8 = tmp11
 				} else {
@@ -1291,7 +1376,6 @@ func LoadNS() {
 		})
 		aotDirectFn14 = tmp1
 		var_clojure_DOT_string_replace_DASH_first_DASH_by = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion14 = var_clojure_DOT_string_replace_DASH_first_DASH_by.RootVersion()
 		var_clojure_DOT_string_replace_DASH_first_DASH_by.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(87), kw_column, int(8), kw_end_DASH_line, int(87), kw_end_DASH_column, int(23), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re, sym_f)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
@@ -1335,7 +1419,6 @@ func LoadNS() {
 		})
 		aotDirectFn15 = tmp1
 		var_clojure_DOT_string_replace_DASH_first_DASH_char = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion15 = var_clojure_DOT_string_replace_DASH_first_DASH_char.RootVersion()
 		var_clojure_DOT_string_replace_DASH_first_DASH_char.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(98), kw_column, int(8), kw_end_DASH_line, int(98), kw_end_DASH_column, int(25), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replace)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
@@ -1379,7 +1462,6 @@ func LoadNS() {
 		})
 		aotDirectFn16 = tmp1
 		var_clojure_DOT_string_replace_DASH_first_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion16 = var_clojure_DOT_string_replace_DASH_first_DASH_str.RootVersion()
 		var_clojure_DOT_string_replace_DASH_first_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(106), kw_column, int(8), kw_end_DASH_line, int(106), kw_end_DASH_column, int(24), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replace)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
@@ -1427,7 +1509,6 @@ func LoadNS() {
 		)
 		aotDirectFn18 = tmp1
 		var_clojure_DOT_string_split = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion18 = var_clojure_DOT_string_split.RootVersion()
 		var_clojure_DOT_string_split.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(194), kw_column, int(7), kw_end_DASH_line, int(194), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_re), lang.NewVector(sym_s, sym_re, sym_limit)), kw_doc, "Splits string on a regular expression.  Optional argument limit is\n  the maximum number of parts. Not lazy. Returns vector of the parts.\n  Trailing empty strings are not returned - pass limit of -1 to return all.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
@@ -1439,23 +1520,12 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := var_clojure_DOT_string_split.RootVersion() == aotRootVersion18 && !var_clojure_DOT_string_split.IsMacro()
-			var tmp4 any
-			if !tmp3 {
-				tmp4 = checkDerefVar(var_clojure_DOT_string_split)
-			}
-			tmp5 := aotExternalFn25("\\r?\\n")
-			var tmp6 any
-			if tmp3 {
-				tmp6 = aotDirectFn18Arity2(v2, tmp5)
-			} else {
-				tmp6 = lang.Apply2(tmp4, v2, tmp5)
-			}
-			return tmp6
+			tmp3 := aotExternalFn25("\\r?\\n")
+			tmp4 := aotDirectFn18Arity2(v2, tmp3)
+			return tmp4
 		})
 		aotDirectFn19 = tmp1
 		var_clojure_DOT_string_split_DASH_lines = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion19 = var_clojure_DOT_string_split_DASH_lines.RootVersion()
 		var_clojure_DOT_string_split_DASH_lines.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(204), kw_column, int(7), kw_end_DASH_line, int(204), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Splits s on \\n or \\r\\n. Trailing empty lines are not returned.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
@@ -1483,7 +1553,6 @@ func LoadNS() {
 		})
 		aotDirectFn20 = tmp1
 		var_clojure_DOT_string_starts_DASH_with_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion20 = var_clojure_DOT_string_starts_DASH_with_QMARK_.RootVersion()
 		var_clojure_DOT_string_starts_DASH_with_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/string.glj", kw_line, int(313), kw_column, int(7), kw_end_DASH_line, int(313), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_substr)), kw_doc, "True if s starts with substr.", kw_added, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
@@ -1500,7 +1569,6 @@ func LoadNS() {
 		})
 		aotDirectFn21 = tmp1
 		var_clojure_DOT_string_trim = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion21 = var_clojure_DOT_string_trim.RootVersion()
 		var_clojure_DOT_string_trim.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
 			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(211), kw_column, int(7), kw_end_DASH_line, int(211), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from both ends of string.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
@@ -1518,7 +1586,6 @@ func LoadNS() {
 		})
 		aotDirectFn22 = tmp1
 		var_clojure_DOT_string_trim_DASH_newline = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion22 = var_clojure_DOT_string_trim_DASH_newline.RootVersion()
 		var_clojure_DOT_string_trim_DASH_newline.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
 			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(229), kw_column, int(7), kw_end_DASH_line, int(229), kw_end_DASH_column, int(29), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes all trailing newline \\n or return \\r characters from\n  string.  Similar to Perl's chomp.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
@@ -1536,7 +1603,6 @@ func LoadNS() {
 		})
 		aotDirectFn23 = tmp1
 		var_clojure_DOT_string_triml = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion23 = var_clojure_DOT_string_triml.RootVersion()
 		var_clojure_DOT_string_triml.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
 			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(217), kw_column, int(7), kw_end_DASH_line, int(217), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the left side of string.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
@@ -1554,7 +1620,6 @@ func LoadNS() {
 		})
 		aotDirectFn24 = tmp1
 		var_clojure_DOT_string_trimr = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion24 = var_clojure_DOT_string_trimr.RootVersion()
 		var_clojure_DOT_string_trimr.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
 			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(223), kw_column, int(7), kw_end_DASH_line, int(223), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Removes whitespace from the right side of string.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
@@ -1567,301 +1632,16 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-			var tmp4 any
-			if !tmp3 {
-				tmp4 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-			}
-			var tmp5 any
-			if tmp3 {
-				tmp5 = aotDirectFn2(v2)
-			} else {
-				tmp5 = lang.Apply1(tmp4, v2)
-			}
-			tmp6 := aotExternalFn3(tmp5)
-			tmp7 := lang.Apply1(strings5.ToUpper, tmp6)
-			return tmp7
+			tmp3 := aotDirectFn2(v2)
+			tmp4 := aotExternalFn3(tmp3)
+			tmp5 := lang.Apply1(strings5.ToUpper, tmp4)
+			return tmp5
 		})
 		aotDirectFn25 = tmp1
 		var_clojure_DOT_string_upper_DASH_case = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion25 = var_clojure_DOT_string_upper_DASH_case.RootVersion()
 		var_clojure_DOT_string_upper_DASH_case.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
 			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(182), kw_column, int(7), kw_end_DASH_line, int(182), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts string to all upper-case.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
-		})
-	}
-	// capitalize
-	{
-		tmp0 := sym_capitalize
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			var tmp3 any
-			{ // let
-				// let binding "s"
-				tmp4 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-				var tmp5 any
-				if !tmp4 {
-					tmp5 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-				}
-				var tmp6 any
-				if tmp4 {
-					tmp6 = aotDirectFn2(v2)
-				} else {
-					tmp6 = lang.Apply1(tmp5, v2)
-				}
-				tmp7 := aotExternalFn3(tmp6)
-				var v8 any = tmp7
-				_ = v8
-				var tmp9 any
-				tmp10 := lang.Count(v8)
-				tmp11 := lang.Numbers.Lt(tmp10, int64(2))
-				if lang.IsTruthy(tmp11) {
-					tmp12 := lang.Apply1(strings5.ToUpper, v8)
-					tmp9 = tmp12
-				} else {
-					tmp13 := aotExternalFn5(v8, int64(0), int64(1))
-					tmp14 := lang.Apply1(strings5.ToUpper, tmp13)
-					tmp15 := aotExternalFn6(v8, int64(1))
-					tmp16 := lang.Apply1(strings5.ToLower, tmp15)
-					tmp17 := aotExternalFn4(tmp14, tmp16)
-					tmp9 = tmp17
-				}
-				tmp3 = tmp9
-			} // end let
-			return tmp3
-		})
-		aotDirectFn1 = tmp1
-		var_clojure_DOT_string_capitalize = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion1 = var_clojure_DOT_string_capitalize.RootVersion()
-		var_clojure_DOT_string_capitalize.SetMetaLazy(func() lang.IPersistentMap {
-			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(171), kw_column, int(7), kw_end_DASH_line, int(171), kw_end_DASH_column, int(27), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Converts first character of the string to upper-case, all other\n  characters to lower-case.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
-		})
-	}
-	// replace
-	{
-		tmp0 := sym_replace
-		var tmp1 lang.FnFunc3
-		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
-			v2 := p0
-			_ = v2
-			v3 := p1
-			_ = v3
-			v4 := p2
-			_ = v4
-			var tmp5 any
-			{ // let
-				// let binding "s"
-				tmp6 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-				var tmp7 any
-				if !tmp6 {
-					tmp7 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-				}
-				var tmp8 any
-				if tmp6 {
-					tmp8 = aotDirectFn2(v2)
-				} else {
-					tmp8 = lang.Apply1(tmp7, v2)
-				}
-				var v9 any = tmp8
-				_ = v9
-				var tmp10 any
-				tmp11 := lang.IsInstance[lang.Char](v3)
-				if lang.IsTruthy(tmp11) {
-					tmp12 := lang.Apply3(strings5.ReplaceAll, v9, v3, v4)
-					tmp10 = tmp12
-				} else {
-					var tmp13 any
-					tmp14 := aotExternalFn17(lang.Builtins["string"], v3)
-					if lang.IsTruthy(tmp14) {
-						tmp15 := lang.Apply3(strings5.ReplaceAll, v9, v3, v4)
-						tmp13 = tmp15
-					} else {
-						var tmp16 any
-						tmp17 := lang.IsInstance[*regexp6.Regexp](v3)
-						if lang.IsTruthy(tmp17) {
-							var tmp18 any
-							tmp19 := aotExternalFn17(lang.Builtins["string"], v4)
-							if lang.IsTruthy(tmp19) {
-								tmp20, _ := lang.FieldOrMethod(v3, "replaceAllString")
-								if reflect.TypeOf(tmp20).Kind() != reflect.Func {
-									panic(lang.NewIllegalArgumentError(fmt.Sprintf("replaceAllString is not a function")))
-								}
-								tmp21 := lang.Apply2(tmp20, v9, v4)
-								tmp18 = tmp21
-							} else {
-								tmp22 := var_clojure_DOT_string_replace_DASH_by.RootVersion() == aotRootVersion12 && !var_clojure_DOT_string_replace_DASH_by.IsMacro()
-								var tmp23 any
-								if !tmp22 {
-									tmp23 = checkDerefVar(var_clojure_DOT_string_replace_DASH_by)
-								}
-								var tmp24 any
-								if tmp22 {
-									tmp24 = aotDirectFn12(v9, v3, v4)
-								} else {
-									tmp24 = lang.Apply3(tmp23, v9, v3, v4)
-								}
-								tmp18 = tmp24
-							}
-							tmp16 = tmp18
-						} else {
-							tmp25 := aotExternalFn4("Invalid match arg: ", v3)
-							tmp26 := lang.Apply1(lang.NewIllegalArgumentError, tmp25)
-							panic(tmp26)
-						}
-						tmp13 = tmp16
-					}
-					tmp10 = tmp13
-				}
-				tmp5 = tmp10
-			} // end let
-			return tmp5
-		})
-		aotDirectFn11 = tmp1
-		var_clojure_DOT_string_replace = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion11 = var_clojure_DOT_string_replace.RootVersion()
-		var_clojure_DOT_string_replace.SetMetaLazy(func() lang.IPersistentMap {
-			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(52), kw_column, int(7), kw_end_DASH_line, int(52), kw_end_DASH_column, int(24), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces all instance of match with replacement in s.\n\n   match/replacement can be:\n\n   string / string\n   char / char\n   pattern / (string or function of match).\n\n   See also replace-first.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace \"Almost Pig Latin\" #\"\\b(\\w)(\\w+)\\b\" \"$2$1ay\")\n   -> \"lmostAay igPay atinLay\"", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
-		})
-	}
-	// replace-first
-	{
-		tmp0 := sym_replace_DASH_first
-		var tmp1 lang.FnFunc3
-		tmp1 = lang.FnFunc3(func(p0, p1, p2 any) any {
-			v2 := p0
-			_ = v2
-			v3 := p1
-			_ = v3
-			v4 := p2
-			_ = v4
-			var tmp5 any
-			{ // let
-				// let binding "s"
-				tmp6 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-				var tmp7 any
-				if !tmp6 {
-					tmp7 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-				}
-				var tmp8 any
-				if tmp6 {
-					tmp8 = aotDirectFn2(v2)
-				} else {
-					tmp8 = lang.Apply1(tmp7, v2)
-				}
-				var v9 any = tmp8
-				_ = v9
-				var tmp10 any
-				tmp11 := lang.IsInstance[lang.Char](v3)
-				if lang.IsTruthy(tmp11) {
-					tmp12 := var_clojure_DOT_string_replace_DASH_first_DASH_char.RootVersion() == aotRootVersion15 && !var_clojure_DOT_string_replace_DASH_first_DASH_char.IsMacro()
-					var tmp13 any
-					if !tmp12 {
-						tmp13 = checkDerefVar(var_clojure_DOT_string_replace_DASH_first_DASH_char)
-					}
-					var tmp14 any
-					if tmp12 {
-						tmp14 = aotDirectFn15(v9, v3, v4)
-					} else {
-						tmp14 = lang.Apply3(tmp13, v9, v3, v4)
-					}
-					tmp10 = tmp14
-				} else {
-					var tmp15 any
-					tmp16 := aotExternalFn17(lang.Builtins["string"], v3)
-					if lang.IsTruthy(tmp16) {
-						tmp17 := var_clojure_DOT_string_replace_DASH_first_DASH_str.RootVersion() == aotRootVersion16 && !var_clojure_DOT_string_replace_DASH_first_DASH_str.IsMacro()
-						var tmp18 any
-						if !tmp17 {
-							tmp18 = checkDerefVar(var_clojure_DOT_string_replace_DASH_first_DASH_str)
-						}
-						tmp19 := lang.ToString(v3)
-						tmp20 := lang.ToString(v4)
-						var tmp21 any
-						if tmp17 {
-							tmp21 = aotDirectFn16(v9, tmp19, tmp20)
-						} else {
-							tmp21 = lang.Apply3(tmp18, v9, tmp19, tmp20)
-						}
-						tmp15 = tmp21
-					} else {
-						var tmp22 any
-						tmp23 := lang.IsInstance[*regexp6.Regexp](v3)
-						if lang.IsTruthy(tmp23) {
-							var tmp24 any
-							tmp25 := aotExternalFn17(lang.Builtins["string"], v4)
-							if lang.IsTruthy(tmp25) {
-								var tmp26 any
-								{ // let
-									// let binding "done"
-									tmp27 := aotExternalFn20(false)
-									var v28 any = tmp27
-									_ = v28
-									var tmp29 lang.FnFunc1
-									tmp29 = lang.FnFunc1(func(p0 any) any {
-										v30 := p0
-										_ = v30
-										var tmp31 any
-										tmp32 := aotExternalFn21(v28)
-										if lang.IsTruthy(tmp32) {
-											tmp31 = v30
-										} else {
-											tmp33 := aotExternalFn22(v28, true)
-											_ = tmp33
-											tmp34, _ := lang.FieldOrMethod(v3, "ReplaceAllString")
-											if reflect.TypeOf(tmp34).Kind() != reflect.Func {
-												panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReplaceAllString is not a function")))
-											}
-											tmp35 := lang.Apply2(tmp34, v30, v4)
-											tmp31 = tmp35
-										}
-										return tmp31
-									})
-									tmp30, _ := lang.FieldOrMethod(v3, "ReplaceAllStringFunc")
-									if reflect.TypeOf(tmp30).Kind() != reflect.Func {
-										panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReplaceAllStringFunc is not a function")))
-									}
-									tmp31 := lang.Apply2(tmp30, v9, tmp29)
-									tmp26 = tmp31
-								} // end let
-								tmp24 = tmp26
-							} else {
-								tmp27 := var_clojure_DOT_string_replace_DASH_first_DASH_by.RootVersion() == aotRootVersion14 && !var_clojure_DOT_string_replace_DASH_first_DASH_by.IsMacro()
-								var tmp28 any
-								if !tmp27 {
-									tmp28 = checkDerefVar(var_clojure_DOT_string_replace_DASH_first_DASH_by)
-								}
-								var tmp29 any
-								if tmp27 {
-									tmp29 = aotDirectFn14(v9, v3, v4)
-								} else {
-									tmp29 = lang.Apply3(tmp28, v9, v3, v4)
-								}
-								tmp24 = tmp29
-							}
-							tmp22 = tmp24
-						} else {
-							tmp30 := aotExternalFn4("Invalid match arg: ", v3)
-							tmp31 := lang.Apply1(lang.NewIllegalArgumentError, tmp30)
-							panic(tmp31)
-						}
-						tmp15 = tmp22
-					}
-					tmp10 = tmp15
-				}
-				tmp5 = tmp10
-			} // end let
-			return tmp5
-		})
-		aotDirectFn13 = tmp1
-		var_clojure_DOT_string_replace_DASH_first = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion13 = var_clojure_DOT_string_replace_DASH_first.RootVersion()
-		var_clojure_DOT_string_replace_DASH_first.SetMetaLazy(func() lang.IPersistentMap {
-			tmp2 := reflect.TypeOf("")
-			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(114), kw_column, int(7), kw_end_DASH_line, int(114), kw_end_DASH_column, int(30), kw_arglists, lang.NewList(lang.NewVector(sym_s, sym_match, sym_replacement)), kw_doc, "Replaces the first instance of match with replacement in s.\n\n   match/replacement can be:\n\n   char / char\n   string / string\n   pattern / (string or function of match).\n\n   See also replace.\n\n   The replacement is literal (i.e. none of its characters are treated\n   specially) for all cases above except pattern / string.\n\n   For pattern / string, $1, $2, etc. in the replacement string are\n   substituted with the string that matched the corresponding\n   parenthesized group in the pattern.  If you wish your replacement\n   string r to be used literally, use (re-quote-replacement r) as the\n   replacement argument.  See also documentation for\n   java.util.regex.Matcher's appendReplacement method.\n\n   Example:\n   (glojure.string/replace-first \"swap first two words\"\n                                 #\"(\\w+)(\\s+)(\\w+)\" \"$3$2$1\")\n   -> \"first swap two words\"", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
 		})
 	}
 	// join
@@ -1897,7 +1677,6 @@ func LoadNS() {
 		)
 		aotDirectFn7 = tmp1
 		var_clojure_DOT_string_join = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion7 = var_clojure_DOT_string_join.RootVersion()
 		var_clojure_DOT_string_join.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
 			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(162), kw_column, int(7), kw_end_DASH_line, int(162), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_coll), lang.NewVector(sym_separator, sym_coll)), kw_doc, "Returns a string of all elements in coll, as returned by (seq coll),\n   separated by an optional separator.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))
@@ -1911,24 +1690,13 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			tmp3 := checkDerefVar(var_clojure_DOT_core_str)
-			tmp4 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-			var tmp5 any
-			if !tmp4 {
-				tmp5 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-			}
-			var tmp6 any
-			if tmp4 {
-				tmp6 = aotDirectFn2(v2)
-			} else {
-				tmp6 = lang.Apply1(tmp5, v2)
-			}
-			tmp7 := aotExternalFn24(tmp6)
-			tmp8 := aotExternalFn15(tmp3, tmp7)
-			return tmp8
+			tmp4 := aotDirectFn2(v2)
+			tmp5 := aotExternalFn24(tmp4)
+			tmp6 := aotExternalFn15(tmp3, tmp5)
+			return tmp6
 		})
 		aotDirectFn17 = tmp1
 		var_clojure_DOT_string_reverse = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion17 = var_clojure_DOT_string_reverse.RootVersion()
 		var_clojure_DOT_string_reverse.SetMetaLazy(func() lang.IPersistentMap {
 			tmp2 := reflect.TypeOf("")
 			return lang.NewMapUniqueKeys(kw_tag, tmp2, kw_file, "clojure/string.glj", kw_line, int(23), kw_column, int(7), kw_end_DASH_line, int(23), kw_end_DASH_column, int(24), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns s with its characters reversed.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_string))

@@ -84,6 +84,7 @@ type aotSpecializationTarget struct {
 	fn              *Fn
 	arity           int
 	arityDispatch   bool
+	directLinked    bool
 	directArities   [21]bool
 	directFnVar     string
 	directArityVars [21]string
@@ -132,7 +133,7 @@ type Generator struct {
 	aotCallTargets         map[*lang.Var]*aotSpecializationTarget
 	aotExternalCallTargets map[aotExternalCallKey]*aotExternalCallTarget
 	aotNamespace           *lang.Namespace
-	directLinkCore         bool
+	directLink             bool
 
 	// Fields for handling closures
 	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
@@ -169,7 +170,7 @@ func NewGenerator(w io.Writer) *Generator {
 	return newGenerator(w, true)
 }
 
-func newGenerator(w io.Writer, directLinkCore bool) *Generator {
+func newGenerator(w io.Writer, directLink bool) *Generator {
 	return &Generator{
 		originalWriter:         w,
 		currentWriter:          w,
@@ -184,7 +185,7 @@ func newGenerator(w io.Writer, directLinkCore bool) *Generator {
 		liftedCounter:          0,
 		aotCallTargets:         make(map[*lang.Var]*aotSpecializationTarget),
 		aotExternalCallTargets: make(map[aotExternalCallKey]*aotExternalCallTarget),
-		directLinkCore:         directLinkCore,
+		directLink:             directLink,
 	}
 }
 
@@ -1822,7 +1823,7 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	}
 
 	var aotFast, aotFallbackFn string
-	if aotTarget != nil {
+	if aotTarget != nil && !aotTarget.directLinked {
 		varNode := invokeNode.Fn.Sub.(*ast.VarNode)
 		varID := g.allocVarVar(
 			varNode.Var.Namespace().Name().String(),
@@ -1870,6 +1871,26 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 		return resultVar
 	}
 	if aotTarget != nil {
+		if aotTarget.directLinked {
+			if slot := aotTarget.directArityVars[len(argExprs)]; slot != "" {
+				g.writef("%s := %s(%s)\n",
+					resultVar,
+					slot,
+					strings.Join(argExprs, ", "),
+				)
+			} else if aotTarget.arityDispatch {
+				g.writef("%s := %s.Invoke%d(%s)\n",
+					resultVar,
+					aotTarget.directFnVar,
+					len(argExprs),
+					strings.Join(argExprs, ", "),
+				)
+			} else {
+				g.writef("%s := %s(%s)\n",
+					resultVar, aotTarget.directFnVar, strings.Join(argExprs, ", "))
+			}
+			return resultVar
+		}
 		if instanceCall, ok := g.staticInstanceCall(invokeNode, argExprs); ok {
 			g.writef("var %s any\n", resultVar)
 			g.writef("if %s {\n", aotFast)

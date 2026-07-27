@@ -14,9 +14,7 @@ import (
 )
 
 var aotDirectFn0 lang.FnFunc1
-var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.ArityFn
-var aotRootVersion1 *lang.VarRootVersion
 var aotDirectFn1Arity1 lang.FnFunc1
 var aotDirectFn1Arity2 lang.FnFunc2
 
@@ -511,7 +509,6 @@ func LoadNS() {
 		})
 		aotDirectFn0 = tmp1
 		var_glojure_DOT_go_DOT_types_from_DASH_string = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_glojure_DOT_go_DOT_types_from_DASH_string.RootVersion()
 		var_glojure_DOT_go_DOT_types_from_DASH_string.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "glojure/go/types.glj", kw_line, int(92), kw_column, int(7), kw_end_DASH_line, int(92), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_typ)), kw_doc, "Returns a Go type from a go type expression.", kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
 		})
@@ -523,18 +520,8 @@ func LoadNS() {
 		aotDirectFn1Arity1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion() == aotRootVersion1 && !var_glojure_DOT_go_DOT_types_struct_DASH_field.IsMacro()
-			var tmp4 any
-			if !tmp3 {
-				tmp4 = checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-			}
-			var tmp5 any
-			if tmp3 {
-				tmp5 = aotDirectFn1Arity2(v2, nil)
-			} else {
-				tmp5 = lang.Apply2(tmp4, v2, nil)
-			}
-			return tmp5
+			tmp3 := aotDirectFn1Arity2(v2, nil)
+			return tmp3
 		})
 		aotDirectFn1Arity2 = lang.FnFunc2(func(p0, p1 any) any {
 			v2 := p0
@@ -698,7 +685,6 @@ func LoadNS() {
 		)
 		aotDirectFn1 = tmp1
 		var_glojure_DOT_go_DOT_types_struct_DASH_field = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion1 = var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion()
 		var_glojure_DOT_go_DOT_types_struct_DASH_field.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "glojure/go/types.glj", kw_line, int(6), kw_column, int(8), kw_end_DASH_line, int(6), kw_end_DASH_column, int(19), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_type_DASH_ast), lang.NewVector(sym_type_DASH_ast, sym_name)), kw_ns, lang.FindOrCreateNamespace(sym_glojure_DOT_go_DOT_types))
 		})
@@ -1193,60 +1179,30 @@ func LoadNS() {
 						var tmp23 any
 						tmp24 := lang.IsEmpty(v16)
 						if lang.IsTruthy(tmp24) {
-							tmp25 := var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion() == aotRootVersion1 && !var_glojure_DOT_go_DOT_types_struct_DASH_field.IsMacro()
-							var tmp26 any
-							if !tmp25 {
-								tmp26 = checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-							}
-							var tmp27 any
-							if tmp25 {
-								tmp27 = aotDirectFn1Arity1(v19)
-							} else {
-								tmp27 = lang.Apply1(tmp26, v19)
-							}
-							tmp28 := lang.NewVector(tmp27)
-							tmp23 = tmp28
+							tmp25 := aotDirectFn1Arity1(v19)
+							tmp26 := lang.NewVector(tmp25)
+							tmp23 = tmp26
 						} else {
-							var tmp29 any
-							tmp30 := lang.Count(v16)
-							tmp31 := aotExternalFn6(int64(1), tmp30)
-							if lang.IsTruthy(tmp31) {
-								tmp32 := var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion() == aotRootVersion1 && !var_glojure_DOT_go_DOT_types_struct_DASH_field.IsMacro()
-								var tmp33 any
-								if !tmp32 {
-									tmp33 = checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-								}
-								tmp34 := lang.First(v16)
-								var tmp35 any
-								if tmp32 {
-									tmp35 = aotDirectFn1Arity2(v19, tmp34)
-								} else {
-									tmp35 = lang.Apply2(tmp33, v19, tmp34)
-								}
-								tmp36 := lang.NewVector(tmp35)
-								tmp29 = tmp36
+							var tmp27 any
+							tmp28 := lang.Count(v16)
+							tmp29 := aotExternalFn6(int64(1), tmp28)
+							if lang.IsTruthy(tmp29) {
+								tmp30 := lang.First(v16)
+								tmp31 := aotDirectFn1Arity2(v19, tmp30)
+								tmp32 := lang.NewVector(tmp31)
+								tmp27 = tmp32
 							} else {
-								var tmp37 lang.FnFunc1
-								tmp37 = lang.FnFunc1(func(p0 any) any {
-									v38 := p0
-									_ = v38
-									tmp39 := var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion() == aotRootVersion1 && !var_glojure_DOT_go_DOT_types_struct_DASH_field.IsMacro()
-									var tmp40 any
-									if !tmp39 {
-										tmp40 = checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-									}
-									var tmp41 any
-									if tmp39 {
-										tmp41 = aotDirectFn1Arity2(v19, v38)
-									} else {
-										tmp41 = lang.Apply2(tmp40, v19, v38)
-									}
-									return tmp41
+								var tmp33 lang.FnFunc1
+								tmp33 = lang.FnFunc1(func(p0 any) any {
+									v34 := p0
+									_ = v34
+									tmp35 := aotDirectFn1Arity2(v19, v34)
+									return tmp35
 								})
-								tmp38 := aotExternalFn8(tmp37, v16)
-								tmp29 = tmp38
+								tmp34 := aotExternalFn8(tmp33, v16)
+								tmp27 = tmp34
 							}
-							tmp23 = tmp29
+							tmp23 = tmp27
 						}
 						tmp11 = tmp23
 					} // end let

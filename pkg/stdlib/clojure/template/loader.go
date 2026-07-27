@@ -11,34 +11,6 @@ import (
 )
 
 var aotDirectFn0 lang.FnFunc3
-var aotRootVersion0 *lang.VarRootVersion
-
-func aotCacheFn2(vr *lang.Var) lang.FnFunc2 {
-	version := vr.RootVersion()
-	fn := checkDerefVar(vr)
-	if direct, ok := fn.(lang.FnFunc2); ok {
-		return func(p0 any, p1 any) any {
-			if vr.RootVersion() == version {
-				return direct(p0, p1)
-			}
-			return lang.Apply2(checkDerefVar(vr), p0, p1)
-		}
-	}
-	if fixed, ok := fn.(lang.FixedArityFn2); ok {
-		return func(p0 any, p1 any) any {
-			if vr.RootVersion() == version {
-				return fixed.Invoke2(p0, p1)
-			}
-			return lang.Apply2(checkDerefVar(vr), p0, p1)
-		}
-	}
-	return func(p0 any, p1 any) any {
-		if vr.RootVersion() == version {
-			return lang.Apply2(fn, p0, p1)
-		}
-		return lang.Apply2(checkDerefVar(vr), p0, p1)
-	}
-}
 
 func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
 	if vr.IsBound() {
@@ -159,7 +131,7 @@ func LoadNS() {
 	var_clojure_DOT_template_do_DASH_template := lang.InternVarName(sym_clojure_DOT_template, sym_do_DASH_template)
 	// var clojure.walk/postwalk-replace
 	var_clojure_DOT_walk_postwalk_DASH_replace := lang.InternVarName(sym_clojure_DOT_walk, sym_postwalk_DASH_replace)
-	aotExternalFn0 := aotCacheFn2(var_clojure_DOT_walk_postwalk_DASH_replace)
+	aotExternalFn0 := aotLinkFn2(var_clojure_DOT_walk_postwalk_DASH_replace)
 	aotExternalFn1 := aotLinkFn2(var_clojure_DOT_core_zipmap)
 	aotExternalFn4 := aotLinkFn2(var_clojure_DOT_core_concat)
 	aotExternalFn5 := aotLinkFn2(var_clojure_DOT_core_map)
@@ -261,7 +233,6 @@ func LoadNS() {
 		})
 		aotDirectFn0 = tmp1
 		var_clojure_DOT_template_apply_DASH_template = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_clojure_DOT_template_apply_DASH_template.RootVersion()
 		var_clojure_DOT_template_apply_DASH_template.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/template.glj", kw_line, int(30), kw_column, int(7), kw_end_DASH_line, int(30), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_argv, sym_expr, sym_values)), kw_doc, "For use in macros.  argv is an argument list, as in defn.  expr is\n  a quoted expression using the symbols in argv.  values is a sequence\n  of values to be used for the arguments.\n\n  apply-template will recursively replace argument symbols in expr\n  with their corresponding values, returning a modified expr.\n\n  Example: (apply-template '[x] '(+ x x) '[2])\n           ;=> (+ 2 2)", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_template))
 		})
@@ -299,18 +270,8 @@ func LoadNS() {
 					tmp12 = lang.FnFunc1(func(p0 any) any {
 						v13 := p0
 						_ = v13
-						tmp14 := var_clojure_DOT_template_apply_DASH_template.RootVersion() == aotRootVersion0 && !var_clojure_DOT_template_apply_DASH_template.IsMacro()
-						var tmp15 any
-						if !tmp14 {
-							tmp15 = checkDerefVar(var_clojure_DOT_template_apply_DASH_template)
-						}
-						var tmp16 any
-						if tmp14 {
-							tmp16 = aotDirectFn0(v4, v5, v13)
-						} else {
-							tmp16 = lang.Apply3(tmp15, v4, v5, v13)
-						}
-						return tmp16
+						tmp14 := aotDirectFn0(v4, v5, v13)
+						return tmp14
 					})
 					tmp13 := aotExternalFn6(v9, v6)
 					tmp14 := aotExternalFn5(tmp12, tmp13)

@@ -167,6 +167,31 @@ func TestGenerateDirectCallsForKnownFunctionArities(t *testing.T) {
 				call, generated)
 		}
 	}
+	if strings.Contains(generated, "RootVersion() ==") {
+		t.Fatalf("default direct linking retained a same-namespace Var guard:\n%s",
+			generated)
+	}
+}
+
+func TestInferredDirectLinkingCanBeDisabled(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.guarded-inferred-call"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn target [x] x)
+		(defn caller [x] (target x))`)
+
+	var output bytes.Buffer
+	if err := newGenerator(&output, false).Generate(ns); err != nil {
+		t.Fatalf("generate guarded inferred call: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "RootVersion() ==") {
+		t.Fatalf("disabled direct linking omitted same-namespace Var guard:\n%s",
+			generated)
+	}
 }
 
 func TestGenerateSharedStaticKeywordMapShapes(t *testing.T) {
@@ -280,7 +305,7 @@ func TestCoreDirectLinkingCanBeDisabled(t *testing.T) {
 	}
 }
 
-func TestCoreDirectLinkingUsesCompilerOptions(t *testing.T) {
+func TestDirectLinkingUsesCompilerOptions(t *testing.T) {
 	compilerOptions := lang.NSCore.FindInternedVar(
 		lang.NewSymbol("*compiler-options*"),
 	)
@@ -294,8 +319,8 @@ func TestCoreDirectLinkingUsesCompilerOptions(t *testing.T) {
 			lang.NewMap(lang.KWDirectLinking, false),
 		))
 		defer lang.PopThreadBindings()
-		if aotDirectLinkCoreEnabled() {
-			t.Fatal("{:direct-linking false} left core direct linking enabled")
+		if aotDirectLinkEnabled() {
+			t.Fatal("{:direct-linking false} left direct linking enabled")
 		}
 	})
 
@@ -305,8 +330,8 @@ func TestCoreDirectLinkingUsesCompilerOptions(t *testing.T) {
 			lang.NewMap(),
 		))
 		defer lang.PopThreadBindings()
-		if !aotDirectLinkCoreEnabled() {
-			t.Fatal("core direct linking is not enabled when the option is absent")
+		if !aotDirectLinkEnabled() {
+			t.Fatal("direct linking is not enabled when the option is absent")
 		}
 	})
 }
@@ -336,6 +361,25 @@ func TestCoreDirectLinkingHonorsRedefMetadata(t *testing.T) {
 	}
 	if strings.Contains(generated, "aotLinkFn1") {
 		t.Fatalf("^:redef core call received a direct-link adapter:\n%s", generated)
+	}
+}
+
+func TestInferredDirectLinkingHonorsRedefMetadata(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.redef-inferred-call"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn ^:redef target [x] x)
+		(defn caller [x] (target x))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate ^:redef inferred call: %v", err)
+	}
+	if generated := output.String(); !strings.Contains(generated, "RootVersion() ==") {
+		t.Fatalf("^:redef inferred call omitted its Var guard:\n%s", generated)
 	}
 }
 

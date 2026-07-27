@@ -11,52 +11,30 @@ import (
 )
 
 var aotDirectFn0 lang.FnFunc2
-var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.FnFunc2
-var aotRootVersion1 *lang.VarRootVersion
 var aotDirectFn2 lang.FnFunc2
-var aotRootVersion2 *lang.VarRootVersion
 var aotDirectFn3 lang.FnFunc2
-var aotRootVersion3 *lang.VarRootVersion
 var aotDirectFn4 lang.FnFunc1
-var aotRootVersion4 *lang.VarRootVersion
 var aotDirectFn5 lang.FnFunc1
-var aotRootVersion5 *lang.VarRootVersion
 var aotDirectFn6 lang.FnFunc2
-var aotRootVersion6 *lang.VarRootVersion
 var aotDirectFn7 lang.FnFunc1
-var aotRootVersion7 *lang.VarRootVersion
 var aotDirectFn8 lang.FnFunc1
-var aotRootVersion8 *lang.VarRootVersion
 var aotDirectFn9 lang.FnFunc1
-var aotRootVersion9 *lang.VarRootVersion
 var aotDirectFn10 lang.FnFunc1
-var aotRootVersion10 *lang.VarRootVersion
 var aotDirectFn11 lang.FnFunc1
-var aotRootVersion11 *lang.VarRootVersion
 var aotDirectFn12 lang.ArityFn
-var aotRootVersion12 *lang.VarRootVersion
 var aotDirectFn12Arity0 lang.FnFunc0
 var aotDirectFn12Arity1 lang.FnFunc1
 var aotDirectFn13 lang.FnFunc1
-var aotRootVersion13 *lang.VarRootVersion
 var aotDirectFn14 lang.ArityFn
-var aotRootVersion14 *lang.VarRootVersion
 var aotDirectFn14Arity0 lang.FnFunc0
 var aotDirectFn15 lang.FnFunc1
-var aotRootVersion15 *lang.VarRootVersion
 var aotDirectFn16 lang.FnFunc1
-var aotRootVersion16 *lang.VarRootVersion
 var aotDirectFn17 lang.FnFunc1
-var aotRootVersion17 *lang.VarRootVersion
 var aotDirectFn18 lang.FnFunc1
-var aotRootVersion18 *lang.VarRootVersion
 var aotDirectFn19 lang.FnFunc1
-var aotRootVersion19 *lang.VarRootVersion
 var aotDirectFn20 lang.FnFunc0
-var aotRootVersion20 *lang.VarRootVersion
 var aotDirectFn21 lang.FnFunc1
-var aotRootVersion21 *lang.VarRootVersion
 
 func aotLinkFn0(vr *lang.Var) lang.FnFunc0 {
 	if vr.IsBound() {
@@ -858,7 +836,6 @@ func LoadNS() {
 		})
 		aotDirectFn3 = tmp1
 		var_clojure_DOT_test_compose_DASH_fixtures = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion3 = var_clojure_DOT_test_compose_DASH_fixtures.RootVersion()
 		var_clojure_DOT_test_compose_DASH_fixtures.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(680), kw_column, int(7), kw_end_DASH_line, int(680), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_f1, sym_f2)), kw_doc, "Composes two fixture functions, creating a new fixture function\n  that combines their behavior.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -875,7 +852,6 @@ func LoadNS() {
 		})
 		aotDirectFn4 = tmp1
 		var_clojure_DOT_test_default_DASH_fixture = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion4 = var_clojure_DOT_test_default_DASH_fixture.RootVersion()
 		var_clojure_DOT_test_default_DASH_fixture.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(674), kw_column, int(8), kw_end_DASH_line, int(674), kw_end_DASH_column, int(22), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_f)), kw_doc, "The default, empty, fixture function.  Just calls its argument.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -951,7 +927,6 @@ func LoadNS() {
 		})
 		aotDirectFn6 = tmp1
 		var_clojure_DOT_test_file_DASH_and_DASH_line = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion6 = var_clojure_DOT_test_file_DASH_and_DASH_line.RootVersion()
 		var_clojure_DOT_test_file_DASH_and_DASH_line.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(334), kw_column, int(8), kw_end_DASH_line, int(334), kw_end_DASH_column, int(20), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_exception, sym_depth)), kw_deprecated, "1.8", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -1009,9 +984,88 @@ func LoadNS() {
 		})
 		aotDirectFn7 = tmp1
 		var_clojure_DOT_test_file_DASH_position = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion7 = var_clojure_DOT_test_file_DASH_position.RootVersion()
 		var_clojure_DOT_test_file_DASH_position.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(281), kw_column, int(7), kw_end_DASH_line, int(281), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_n)), kw_doc, "Returns a vector [filename line-number] for the nth call up the\n  stack.\n\n  Deprecated in 1.2: The information needed for test reporting is\n  now on :file and :line keys in the result map.", kw_added, "1.1", kw_deprecated, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+		})
+	}
+	// function?
+	{
+		tmp0 := sym_function_QMARK_
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			var tmp3 any
+			tmp4 := aotExternalFn18(v2)
+			if lang.IsTruthy(tmp4) {
+				var tmp5 any
+				{ // let
+					// let binding "temp__0__auto__"
+					tmp6 := aotExternalFn19(v2)
+					var v7 any = tmp6
+					_ = v7
+					var tmp8 any
+					if lang.IsTruthy(v7) {
+						var tmp9 any
+						{ // let
+							// let binding "v"
+							var v10 any = v7
+							_ = v10
+							var tmp11 any
+							{ // let
+								// let binding "temp__0__auto__"
+								tmp12 := aotDirectFn9(v10)
+								var v13 any = tmp12
+								_ = v13
+								var tmp14 any
+								if lang.IsTruthy(v13) {
+									var tmp15 any
+									{ // let
+										// let binding "value"
+										var v16 any = v13
+										_ = v16
+										var tmp17 any
+										{ // let
+											// let binding "and__0__auto__"
+											tmp18 := aotExternalFn20(v16)
+											var v19 any = tmp18
+											_ = v19
+											var tmp20 any
+											if lang.IsTruthy(v19) {
+												tmp21 := aotExternalFn22(v10)
+												tmp22 := kw_macro.Invoke1(tmp21)
+												tmp23 := aotExternalFn21(tmp22)
+												tmp20 = tmp23
+											} else {
+												tmp20 = v19
+											}
+											tmp17 = tmp20
+										} // end let
+										tmp15 = tmp17
+									} // end let
+									tmp14 = tmp15
+								} else {
+								}
+								tmp11 = tmp14
+							} // end let
+							tmp9 = tmp11
+						} // end let
+						tmp8 = tmp9
+					} else {
+					}
+					tmp5 = tmp8
+				} // end let
+				tmp3 = tmp5
+			} else {
+				tmp6 := aotExternalFn20(v2)
+				tmp3 = tmp6
+			}
+			return tmp3
+		})
+		aotDirectFn8 = tmp1
+		var_clojure_DOT_test_function_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_test_function_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(415), kw_column, int(7), kw_end_DASH_line, int(415), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if argument is a function or a symbol that resolves to\n  a function (not a macro).", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 	}
 	// get-possibly-unbound-var
@@ -1041,7 +1095,6 @@ func LoadNS() {
 		})
 		aotDirectFn9 = tmp1
 		var_clojure_DOT_test_get_DASH_possibly_DASH_unbound_DASH_var = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion9 = var_clojure_DOT_test_get_DASH_possibly_DASH_unbound_DASH_var.RootVersion()
 		var_clojure_DOT_test_get_DASH_possibly_DASH_unbound_DASH_var.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(408), kw_column, int(7), kw_end_DASH_line, int(408), kw_end_DASH_column, int(30), kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Like var-get but returns nil if the var is unbound.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -1060,9 +1113,67 @@ func LoadNS() {
 		})
 		aotDirectFn11 = tmp1
 		var_clojure_DOT_test_join_DASH_fixtures = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion11 = var_clojure_DOT_test_join_DASH_fixtures.RootVersion()
 		var_clojure_DOT_test_join_DASH_fixtures.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(687), kw_column, int(7), kw_end_DASH_line, int(687), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_fixtures)), kw_doc, "Composes a collection of fixtures, in order.  Always returns a valid\n  fixture function, even if the collection is empty.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+		})
+	}
+	// run-test-var
+	{
+		tmp0 := sym_run_DASH_test_DASH_var
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			var tmp3 any
+			{ // let
+				tmp4 := lang.InternVarName(sym_clojure_DOT_test, sym__STAR_report_DASH_counters_STAR_)
+				tmp5 := checkDerefVar(var_clojure_DOT_test__STAR_initial_DASH_report_DASH_counters_STAR_)
+				tmp6 := aotExternalFn43(tmp5)
+				tmp7 := aotExternalFn28(tmp4, tmp6)
+				tmp8 := aotExternalFn27(tmp7)
+				_ = tmp8
+				var tmp9 any
+				func() {
+					defer func() {
+						tmp10 := aotExternalFn29()
+						_ = tmp10
+					}()
+					var tmp11 any
+					{ // let
+						// let binding "ns-obj"
+						tmp12 := aotExternalFn22(v2)
+						tmp13 := kw_ns.Invoke1(tmp12)
+						var v14 any = tmp13
+						_ = v14
+						// let binding "summary"
+						tmp15 := lang.NewMap(kw_type, kw_begin_DASH_test_DASH_ns, kw_ns, v14)
+						tmp16 := aotDirectFn5(tmp15)
+						_ = tmp16
+						tmp17 := lang.NewVector(v2)
+						tmp18 := aotDirectFn19(tmp17)
+						_ = tmp18
+						tmp19 := lang.NewMap(kw_type, kw_end_DASH_test_DASH_ns, kw_ns, v14)
+						tmp20 := aotDirectFn5(tmp19)
+						_ = tmp20
+						tmp21 := checkDerefVar(var_clojure_DOT_test__STAR_report_DASH_counters_STAR_)
+						tmp22 := aotExternalFn45(tmp21)
+						tmp23 := lang.Assoc(tmp22, kw_type, kw_summary)
+						var v24 any = tmp23
+						_ = v24
+						tmp25 := aotDirectFn5(v24)
+						_ = tmp25
+						tmp11 = v24
+					} // end let
+					tmp9 = tmp11
+				}()
+				tmp3 = tmp9
+			} // end let
+			return tmp3
+		})
+		aotDirectFn13 = tmp1
+		var_clojure_DOT_test_run_DASH_test_DASH_var = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_test_run_DASH_test_DASH_var.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(788), kw_column, int(7), kw_end_DASH_line, int(788), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Runs the tests for a single Var, with fixtures executed around the test, and summary output after.", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 	}
 	// stacktrace-file-and-line
@@ -1115,7 +1226,6 @@ func LoadNS() {
 		})
 		aotDirectFn15 = tmp1
 		var_clojure_DOT_test_stacktrace_DASH_file_DASH_and_DASH_line = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion15 = var_clojure_DOT_test_stacktrace_DASH_file_DASH_and_DASH_line.RootVersion()
 		var_clojure_DOT_test_stacktrace_DASH_file_DASH_and_DASH_line.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(343), kw_column, int(8), kw_end_DASH_line, int(343), kw_end_DASH_column, int(31), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_stacktrace)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -1148,122 +1258,184 @@ func LoadNS() {
 		})
 		aotDirectFn16 = tmp1
 		var_clojure_DOT_test_successful_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion16 = var_clojure_DOT_test_successful_QMARK_.RootVersion()
 		var_clojure_DOT_test_successful_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(780), kw_column, int(7), kw_end_DASH_line, int(780), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_summary)), kw_doc, "Returns true if the given test summary indicates all tests\n  were successful, false otherwise.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 	}
-	// function?
+	// test-all-vars
 	{
-		tmp0 := sym_function_QMARK_
+		tmp0 := sym_test_DASH_all_DASH_vars
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			tmp3 := aotExternalFn49(v2)
+			tmp4 := aotExternalFn48(tmp3)
+			tmp5 := aotDirectFn19(tmp4)
+			return tmp5
+		})
+		aotDirectFn17 = tmp1
+		var_clojure_DOT_test_test_DASH_all_DASH_vars = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_test_test_DASH_all_DASH_vars.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(728), kw_column, int(7), kw_end_DASH_line, int(728), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Calls test-vars on every var interned in the namespace, with fixtures.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+		})
+	}
+	// test-ns
+	{
+		tmp0 := sym_test_DASH_ns
 		var tmp1 lang.FnFunc1
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := aotExternalFn18(v2)
-			if lang.IsTruthy(tmp4) {
-				var tmp5 any
-				{ // let
-					// let binding "temp__0__auto__"
-					tmp6 := aotExternalFn19(v2)
-					var v7 any = tmp6
-					_ = v7
-					var tmp8 any
-					if lang.IsTruthy(v7) {
-						var tmp9 any
+			{ // let
+				tmp4 := lang.InternVarName(sym_clojure_DOT_test, sym__STAR_report_DASH_counters_STAR_)
+				tmp5 := checkDerefVar(var_clojure_DOT_test__STAR_initial_DASH_report_DASH_counters_STAR_)
+				tmp6 := aotExternalFn43(tmp5)
+				tmp7 := aotExternalFn28(tmp4, tmp6)
+				tmp8 := aotExternalFn27(tmp7)
+				_ = tmp8
+				var tmp9 any
+				func() {
+					defer func() {
+						tmp10 := aotExternalFn29()
+						_ = tmp10
+					}()
+					var tmp11 any
+					{ // let
+						// let binding "ns-obj"
+						tmp12 := aotExternalFn50(v2)
+						var v13 any = tmp12
+						_ = v13
+						tmp14 := lang.NewMap(kw_type, kw_begin_DASH_test_DASH_ns, kw_ns, v13)
+						tmp15 := aotDirectFn5(tmp14)
+						_ = tmp15
+						var tmp16 any
 						{ // let
-							// let binding "v"
-							var v10 any = v7
-							_ = v10
-							var tmp11 any
-							{ // let
-								// let binding "temp__0__auto__"
-								tmp12 := var_clojure_DOT_test_get_DASH_possibly_DASH_unbound_DASH_var.RootVersion() == aotRootVersion9 && !var_clojure_DOT_test_get_DASH_possibly_DASH_unbound_DASH_var.IsMacro()
-								var tmp13 any
-								if !tmp12 {
-									tmp13 = checkDerefVar(var_clojure_DOT_test_get_DASH_possibly_DASH_unbound_DASH_var)
-								}
-								var tmp14 any
-								if tmp12 {
-									tmp14 = aotDirectFn9(v10)
-								} else {
-									tmp14 = lang.Apply1(tmp13, v10)
-								}
-								var v15 any = tmp14
-								_ = v15
-								var tmp16 any
-								if lang.IsTruthy(v15) {
-									var tmp17 any
-									{ // let
-										// let binding "value"
-										var v18 any = v15
-										_ = v18
-										var tmp19 any
-										{ // let
-											// let binding "and__0__auto__"
-											tmp20 := aotExternalFn20(v18)
-											var v21 any = tmp20
-											_ = v21
-											var tmp22 any
-											if lang.IsTruthy(v21) {
-												tmp23 := aotExternalFn22(v10)
-												tmp24 := kw_macro.Invoke1(tmp23)
-												tmp25 := aotExternalFn21(tmp24)
-												tmp22 = tmp25
-											} else {
-												tmp22 = v21
-											}
-											tmp19 = tmp22
-										} // end let
-										tmp17 = tmp19
-									} // end let
-									tmp16 = tmp17
-								} else {
-								}
-								tmp11 = tmp16
-							} // end let
-							tmp9 = tmp11
+							// let binding "temp__0__auto__"
+							tmp17 := aotExternalFn37(v13)
+							tmp18 := aotExternalFn53(tmp17)
+							tmp19 := aotExternalFn52(tmp18, "test-ns-hook")
+							tmp20 := aotExternalFn51(tmp19)
+							var v21 any = tmp20
+							_ = v21
+							var tmp22 any
+							if lang.IsTruthy(v21) {
+								var tmp23 any
+								{ // let
+									// let binding "v"
+									var v24 any = v21
+									_ = v24
+									tmp25 := aotExternalFn23(v24)
+									tmp26 := lang.Apply0(tmp25)
+									tmp23 = tmp26
+								} // end let
+								tmp22 = tmp23
+							} else {
+								tmp24 := aotDirectFn17(v13)
+								tmp22 = tmp24
+							}
+							tmp16 = tmp22
 						} // end let
-						tmp8 = tmp9
-					} else {
-					}
-					tmp5 = tmp8
-				} // end let
-				tmp3 = tmp5
-			} else {
-				tmp6 := aotExternalFn20(v2)
-				tmp3 = tmp6
-			}
+						_ = tmp16
+						tmp17 := lang.NewMap(kw_type, kw_end_DASH_test_DASH_ns, kw_ns, v13)
+						tmp18 := aotDirectFn5(tmp17)
+						tmp11 = tmp18
+					} // end let
+					_ = tmp11
+					tmp12 := checkDerefVar(var_clojure_DOT_test__STAR_report_DASH_counters_STAR_)
+					tmp13 := aotExternalFn45(tmp12)
+					tmp9 = tmp13
+				}()
+				tmp3 = tmp9
+			} // end let
 			return tmp3
 		})
-		aotDirectFn8 = tmp1
-		var_clojure_DOT_test_function_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion8 = var_clojure_DOT_test_function_QMARK_.RootVersion()
-		var_clojure_DOT_test_function_QMARK_.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(415), kw_column, int(7), kw_end_DASH_line, int(415), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Returns true if argument is a function or a symbol that resolves to\n  a function (not a macro).", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+		aotDirectFn18 = tmp1
+		var_clojure_DOT_test_test_DASH_ns = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_test_test_DASH_ns.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(734), kw_column, int(7), kw_end_DASH_line, int(734), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "If the namespace defines a function named test-ns-hook, calls that.\n  Otherwise, calls test-all-vars on the namespace.  'ns' is a\n  namespace object or a symbol.\n\n  Internally binds *report-counters* to a ref initialized to\n  *initial-report-counters*.  Returns the final, dereferenced state of\n  *report-counters*.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 	}
-	// add-ns-meta
+	// test-var
 	{
-		tmp0 := sym_add_DASH_ns_DASH_meta
-		var tmp1 lang.FnFunc2
-		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+		tmp0 := sym_test_DASH_var
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			v3 := p1
-			_ = v3
-			tmp4 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
-			tmp5 := checkDerefVar(var_clojure_DOT_core_assoc)
-			tmp6 := aotExternalFn0(tmp4, tmp5, v2, v3)
-			return tmp6
+			var tmp3 any
+			{ // let
+				// let binding "temp__0__auto__"
+				tmp4 := aotExternalFn22(v2)
+				tmp5 := kw_test.Invoke1(tmp4)
+				var v6 any = tmp5
+				_ = v6
+				var tmp7 any
+				if lang.IsTruthy(v6) {
+					var tmp8 any
+					{ // let
+						// let binding "t"
+						var v9 any = v6
+						_ = v9
+						var tmp10 any
+						{ // let
+							tmp11 := lang.InternVarName(sym_clojure_DOT_test, sym__STAR_testing_DASH_vars_STAR_)
+							tmp12 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_)
+							tmp13 := lang.ConjAny(tmp12, v2)
+							tmp14 := aotExternalFn28(tmp11, tmp13)
+							tmp15 := aotExternalFn27(tmp14)
+							_ = tmp15
+							var tmp16 any
+							func() {
+								defer func() {
+									tmp17 := aotExternalFn29()
+									_ = tmp17
+								}()
+								tmp18 := lang.NewMap(kw_type, kw_begin_DASH_test_DASH_var, kw_var, v2)
+								tmp19 := aotDirectFn5(tmp18)
+								_ = tmp19
+								tmp20 := aotDirectFn10(kw_test)
+								_ = tmp20
+								var tmp21 any
+								func() {
+									defer func() {
+										if r := recover(); r != nil {
+											if lang.CatchMatches(r, lang.Builtins["any"]) {
+												v22 := r
+												_ = v22
+												tmp23 := lang.NewMap(kw_type, kw_error, kw_message, "Uncaught exception, not in assertion.", kw_expected, nil, kw_actual, v22)
+												tmp24 := aotDirectFn5(tmp23)
+												tmp21 = tmp24
+											} else {
+												panic(r)
+											}
+										}
+									}()
+									tmp22 := lang.Apply0(v9)
+									tmp21 = tmp22
+								}()
+								_ = tmp21
+								tmp23 := lang.NewMap(kw_type, kw_end_DASH_test_DASH_var, kw_var, v2)
+								tmp24 := aotDirectFn5(tmp23)
+								tmp16 = tmp24
+							}()
+							tmp10 = tmp16
+						} // end let
+						tmp8 = tmp10
+					} // end let
+					tmp7 = tmp8
+				} else {
+				}
+				tmp3 = tmp7
+			} // end let
+			return tmp3
 		})
-		aotDirectFn0 = tmp1
-		var_clojure_DOT_test_add_DASH_ns_DASH_meta = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_clojure_DOT_test_add_DASH_ns_DASH_meta.RootVersion()
-		var_clojure_DOT_test_add_DASH_ns_DASH_meta.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(654), kw_column, int(8), kw_end_DASH_line, int(654), kw_end_DASH_column, int(18), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_key, sym_coll)), kw_doc, "Adds elements in coll to the current namespace metadata as the\n  value of key.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+		var_clojure_DOT_test_test_DASH_var = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_test_test_DASH_var.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(699), kw_column, int(7), kw_end_DASH_line, int(699), kw_end_DASH_column, int(14), kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "If v has a function in its :test metadata, calls that function,\n  with *testing-vars* bound to (conj *testing-vars* v).", kw_dynamic, true, kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
+		var_clojure_DOT_test_test_DASH_var.SetDynamic()
 	}
 	// use-fixtures
 	{
@@ -1298,18 +1470,8 @@ func LoadNS() {
 				_ = v4
 				var v5 any = rest
 				_ = v5
-				tmp6 := var_clojure_DOT_test_add_DASH_ns_DASH_meta.RootVersion() == aotRootVersion0 && !var_clojure_DOT_test_add_DASH_ns_DASH_meta.IsMacro()
-				var tmp7 any
-				if !tmp6 {
-					tmp7 = checkDerefVar(var_clojure_DOT_test_add_DASH_ns_DASH_meta)
-				}
-				var tmp8 any
-				if tmp6 {
-					tmp8 = aotDirectFn0(kw_clojure_DOT_test_SLASH_each_DASH_fixtures, v5)
-				} else {
-					tmp8 = lang.Apply2(tmp7, kw_clojure_DOT_test_SLASH_each_DASH_fixtures, v5)
-				}
-				return tmp8
+				tmp6 := aotDirectFn0(kw_clojure_DOT_test_SLASH_each_DASH_fixtures, v5)
+				return tmp6
 			}),
 			1,
 		)
@@ -1326,18 +1488,8 @@ func LoadNS() {
 				_ = v5
 				var v6 any = rest
 				_ = v6
-				tmp7 := var_clojure_DOT_test_add_DASH_ns_DASH_meta.RootVersion() == aotRootVersion0 && !var_clojure_DOT_test_add_DASH_ns_DASH_meta.IsMacro()
-				var tmp8 any
-				if !tmp7 {
-					tmp8 = checkDerefVar(var_clojure_DOT_test_add_DASH_ns_DASH_meta)
-				}
-				var tmp9 any
-				if tmp7 {
-					tmp9 = aotDirectFn0(kw_clojure_DOT_test_SLASH_once_DASH_fixtures, v6)
-				} else {
-					tmp9 = lang.Apply2(tmp8, kw_clojure_DOT_test_SLASH_once_DASH_fixtures, v6)
-				}
-				return tmp9
+				tmp7 := aotDirectFn0(kw_clojure_DOT_test_SLASH_once_DASH_fixtures, v6)
+				return tmp7
 			}),
 			1,
 		)
@@ -1345,6 +1497,26 @@ func LoadNS() {
 		var_clojure_DOT_test_use_DASH_fixtures = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_test_use_DASH_fixtures.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(661), kw_column, int(11), kw_end_DASH_line, int(661), kw_end_DASH_column, int(22), kw_added, "1.1", kw_doc, "Wrap test runs in a fixture function to perform setup and\n  teardown. Using a fixture-type of :each wraps every test\n  individually, while :once wraps the whole run in a single function.", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
+		})
+	}
+	// add-ns-meta
+	{
+		tmp0 := sym_add_DASH_ns_DASH_meta
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			tmp4 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
+			tmp5 := checkDerefVar(var_clojure_DOT_core_assoc)
+			tmp6 := aotExternalFn0(tmp4, tmp5, v2, v3)
+			return tmp6
+		})
+		aotDirectFn0 = tmp1
+		var_clojure_DOT_test_add_DASH_ns_DASH_meta = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_test_add_DASH_ns_DASH_meta.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(654), kw_column, int(8), kw_end_DASH_line, int(654), kw_end_DASH_column, int(18), kw_private, true, kw_arglists, lang.NewList(lang.NewVector(sym_key, sym_coll)), kw_doc, "Adds elements in coll to the current namespace metadata as the\n  value of key.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
 	}
 	// are
@@ -1567,7 +1739,6 @@ func LoadNS() {
 		})
 		aotDirectFn1 = tmp1
 		var_clojure_DOT_test_assert_DASH_any = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion1 = var_clojure_DOT_test_assert_DASH_any.RootVersion()
 		var_clojure_DOT_test_assert_DASH_any.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(446), kw_column, int(7), kw_end_DASH_line, int(446), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_form)), kw_doc, "Returns generic assertion code for any test, including macros, Java\n  method calls, or isolated symbols.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -1642,50 +1813,20 @@ func LoadNS() {
 				_ = v10
 				var tmp11 any
 				if lang.IsTruthy(v10) {
-					tmp12 := var_clojure_DOT_test_function_QMARK_.RootVersion() == aotRootVersion8 && !var_clojure_DOT_test_function_QMARK_.IsMacro()
-					var tmp13 any
-					if !tmp12 {
-						tmp13 = checkDerefVar(var_clojure_DOT_test_function_QMARK_)
-					}
-					tmp14 := lang.First(v6)
-					var tmp15 any
-					if tmp12 {
-						tmp15 = aotDirectFn8(tmp14)
-					} else {
-						tmp15 = lang.Apply1(tmp13, tmp14)
-					}
-					tmp11 = tmp15
+					tmp12 := lang.First(v6)
+					tmp13 := aotDirectFn8(tmp12)
+					tmp11 = tmp13
 				} else {
 					tmp11 = v10
 				}
 				tmp8 = tmp11
 			} // end let
 			if lang.IsTruthy(tmp8) {
-				tmp9 := var_clojure_DOT_test_assert_DASH_predicate.RootVersion() == aotRootVersion2 && !var_clojure_DOT_test_assert_DASH_predicate.IsMacro()
-				var tmp10 any
-				if !tmp9 {
-					tmp10 = checkDerefVar(var_clojure_DOT_test_assert_DASH_predicate)
-				}
-				var tmp11 any
-				if tmp9 {
-					tmp11 = aotDirectFn2(v5, v6)
-				} else {
-					tmp11 = lang.Apply2(tmp10, v5, v6)
-				}
-				tmp7 = tmp11
+				tmp9 := aotDirectFn2(v5, v6)
+				tmp7 = tmp9
 			} else {
-				tmp12 := var_clojure_DOT_test_assert_DASH_any.RootVersion() == aotRootVersion1 && !var_clojure_DOT_test_assert_DASH_any.IsMacro()
-				var tmp13 any
-				if !tmp12 {
-					tmp13 = checkDerefVar(var_clojure_DOT_test_assert_DASH_any)
-				}
-				var tmp14 any
-				if tmp12 {
-					tmp14 = aotDirectFn1(v5, v6)
-				} else {
-					tmp14 = lang.Apply2(tmp13, v5, v6)
-				}
-				tmp7 = tmp14
+				tmp10 := aotDirectFn1(v5, v6)
+				tmp7 = tmp10
 			}
 			return tmp7
 		})
@@ -2310,7 +2451,6 @@ func LoadNS() {
 		})
 		aotDirectFn2 = tmp1
 		var_clojure_DOT_test_assert_DASH_predicate = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion2 = var_clojure_DOT_test_assert_DASH_predicate.RootVersion()
 		var_clojure_DOT_test_assert_DASH_predicate.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(427), kw_column, int(7), kw_end_DASH_line, int(427), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_msg, sym_form)), kw_doc, "Returns generic assertion code for any functional predicate.  The\n  'expected' argument to 'report' will contains the original form, the\n  'actual' argument will contain the form with all its sub-forms\n  evaluated.  If the predicate returns false, the 'actual' form will\n  be wrapped in (not...).", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -2518,7 +2658,6 @@ func LoadNS() {
 		})
 		aotDirectFn5 = tmp1
 		var_clojure_DOT_test_do_DASH_report = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion5 = var_clojure_DOT_test_do_DASH_report.RootVersion()
 		var_clojure_DOT_test_do_DASH_report.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(350), kw_column, int(7), kw_end_DASH_line, int(350), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Add file and line information to a test result and call report.\n   If you are writing a custom assert-expr method, call this function\n   to pass test results to report.", kw_added, "1.2", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -2551,130 +2690,9 @@ func LoadNS() {
 		})
 		aotDirectFn10 = tmp1
 		var_clojure_DOT_test_inc_DASH_report_DASH_counter = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion10 = var_clojure_DOT_test_inc_DASH_report_DASH_counter.RootVersion()
 		var_clojure_DOT_test_inc_DASH_report_DASH_counter.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(313), kw_column, int(7), kw_end_DASH_line, int(313), kw_end_DASH_column, int(24), kw_arglists, lang.NewList(lang.NewVector(sym_name)), kw_doc, "Increments the named counter in *report-counters*, a ref to a map.\n  Does nothing if *report-counters* is nil.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
-	}
-	// test-var
-	{
-		tmp0 := sym_test_DASH_var
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			var tmp3 any
-			{ // let
-				// let binding "temp__0__auto__"
-				tmp4 := aotExternalFn22(v2)
-				tmp5 := kw_test.Invoke1(tmp4)
-				var v6 any = tmp5
-				_ = v6
-				var tmp7 any
-				if lang.IsTruthy(v6) {
-					var tmp8 any
-					{ // let
-						// let binding "t"
-						var v9 any = v6
-						_ = v9
-						var tmp10 any
-						{ // let
-							tmp11 := lang.InternVarName(sym_clojure_DOT_test, sym__STAR_testing_DASH_vars_STAR_)
-							tmp12 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_)
-							tmp13 := lang.ConjAny(tmp12, v2)
-							tmp14 := aotExternalFn28(tmp11, tmp13)
-							tmp15 := aotExternalFn27(tmp14)
-							_ = tmp15
-							var tmp16 any
-							func() {
-								defer func() {
-									tmp17 := aotExternalFn29()
-									_ = tmp17
-								}()
-								tmp18 := var_clojure_DOT_test_do_DASH_report.RootVersion() == aotRootVersion5 && !var_clojure_DOT_test_do_DASH_report.IsMacro()
-								var tmp19 any
-								if !tmp18 {
-									tmp19 = checkDerefVar(var_clojure_DOT_test_do_DASH_report)
-								}
-								tmp20 := lang.NewMap(kw_type, kw_begin_DASH_test_DASH_var, kw_var, v2)
-								var tmp21 any
-								if tmp18 {
-									tmp21 = aotDirectFn5(tmp20)
-								} else {
-									tmp21 = lang.Apply1(tmp19, tmp20)
-								}
-								_ = tmp21
-								tmp22 := var_clojure_DOT_test_inc_DASH_report_DASH_counter.RootVersion() == aotRootVersion10 && !var_clojure_DOT_test_inc_DASH_report_DASH_counter.IsMacro()
-								var tmp23 any
-								if !tmp22 {
-									tmp23 = checkDerefVar(var_clojure_DOT_test_inc_DASH_report_DASH_counter)
-								}
-								var tmp24 any
-								if tmp22 {
-									tmp24 = aotDirectFn10(kw_test)
-								} else {
-									tmp24 = lang.Apply1(tmp23, kw_test)
-								}
-								_ = tmp24
-								var tmp25 any
-								func() {
-									defer func() {
-										if r := recover(); r != nil {
-											if lang.CatchMatches(r, lang.Builtins["any"]) {
-												v26 := r
-												_ = v26
-												tmp27 := var_clojure_DOT_test_do_DASH_report.RootVersion() == aotRootVersion5 && !var_clojure_DOT_test_do_DASH_report.IsMacro()
-												var tmp28 any
-												if !tmp27 {
-													tmp28 = checkDerefVar(var_clojure_DOT_test_do_DASH_report)
-												}
-												tmp29 := lang.NewMap(kw_type, kw_error, kw_message, "Uncaught exception, not in assertion.", kw_expected, nil, kw_actual, v26)
-												var tmp30 any
-												if tmp27 {
-													tmp30 = aotDirectFn5(tmp29)
-												} else {
-													tmp30 = lang.Apply1(tmp28, tmp29)
-												}
-												tmp25 = tmp30
-											} else {
-												panic(r)
-											}
-										}
-									}()
-									tmp26 := lang.Apply0(v9)
-									tmp25 = tmp26
-								}()
-								_ = tmp25
-								tmp27 := var_clojure_DOT_test_do_DASH_report.RootVersion() == aotRootVersion5 && !var_clojure_DOT_test_do_DASH_report.IsMacro()
-								var tmp28 any
-								if !tmp27 {
-									tmp28 = checkDerefVar(var_clojure_DOT_test_do_DASH_report)
-								}
-								tmp29 := lang.NewMap(kw_type, kw_end_DASH_test_DASH_var, kw_var, v2)
-								var tmp30 any
-								if tmp27 {
-									tmp30 = aotDirectFn5(tmp29)
-								} else {
-									tmp30 = lang.Apply1(tmp28, tmp29)
-								}
-								tmp16 = tmp30
-							}()
-							tmp10 = tmp16
-						} // end let
-						tmp8 = tmp10
-					} // end let
-					tmp7 = tmp8
-				} else {
-				}
-				tmp3 = tmp7
-			} // end let
-			return tmp3
-		})
-		var_clojure_DOT_test_test_DASH_var = ns.InternWithValue(tmp0, tmp1, true)
-		var_clojure_DOT_test_test_DASH_var.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(699), kw_column, int(7), kw_end_DASH_line, int(699), kw_end_DASH_column, int(14), kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "If v has a function in its :test metadata, calls that function,\n  with *testing-vars* bound to (conj *testing-vars* v).", kw_dynamic, true, kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
-		})
-		var_clojure_DOT_test_test_DASH_var.SetDynamic()
 	}
 	// is
 	{
@@ -2803,18 +2821,8 @@ func LoadNS() {
 						tmp11 := aotExternalFn29()
 						_ = tmp11
 					}()
-					tmp12 := var_clojure_DOT_test_inc_DASH_report_DASH_counter.RootVersion() == aotRootVersion10 && !var_clojure_DOT_test_inc_DASH_report_DASH_counter.IsMacro()
-					var tmp13 any
-					if !tmp12 {
-						tmp13 = checkDerefVar(var_clojure_DOT_test_inc_DASH_report_DASH_counter)
-					}
-					var tmp14 any
-					if tmp12 {
-						tmp14 = aotDirectFn10(kw_pass)
-					} else {
-						tmp14 = lang.Apply1(tmp13, kw_pass)
-					}
-					tmp10 = tmp14
+					tmp12 := aotDirectFn10(kw_pass)
+					tmp10 = tmp12
 				}()
 				tmp5 = tmp10
 			} // end let
@@ -2852,81 +2860,51 @@ func LoadNS() {
 						tmp12 := aotExternalFn29()
 						_ = tmp12
 					}()
-					tmp13 := var_clojure_DOT_test_inc_DASH_report_DASH_counter.RootVersion() == aotRootVersion10 && !var_clojure_DOT_test_inc_DASH_report_DASH_counter.IsMacro()
-					var tmp14 any
-					if !tmp13 {
-						tmp14 = checkDerefVar(var_clojure_DOT_test_inc_DASH_report_DASH_counter)
-					}
-					var tmp15 any
-					if tmp13 {
-						tmp15 = aotDirectFn10(kw_fail)
-					} else {
-						tmp15 = lang.Apply1(tmp14, kw_fail)
-					}
+					tmp13 := aotDirectFn10(kw_fail)
+					_ = tmp13
+					tmp14 := aotDirectFn21(v5)
+					tmp15 := aotExternalFn31("\nFAIL in", tmp14)
 					_ = tmp15
-					tmp16 := var_clojure_DOT_test_testing_DASH_vars_DASH_str.RootVersion() == aotRootVersion21 && !var_clojure_DOT_test_testing_DASH_vars_DASH_str.IsMacro()
-					var tmp17 any
-					if !tmp16 {
-						tmp17 = checkDerefVar(var_clojure_DOT_test_testing_DASH_vars_DASH_str)
-					}
-					var tmp18 any
-					if tmp16 {
-						tmp18 = aotDirectFn21(v5)
-					} else {
-						tmp18 = lang.Apply1(tmp17, v5)
-					}
-					tmp19 := aotExternalFn31("\nFAIL in", tmp18)
-					_ = tmp19
-					var tmp20 any
-					tmp21 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_)
-					tmp22 := lang.IsSeqTruthy(tmp21)
-					if tmp22 {
-						tmp23 := var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion() == aotRootVersion20 && !var_clojure_DOT_test_testing_DASH_contexts_DASH_str.IsMacro()
-						var tmp24 any
-						if !tmp23 {
-							tmp24 = checkDerefVar(var_clojure_DOT_test_testing_DASH_contexts_DASH_str)
-						}
-						var tmp25 any
-						if tmp23 {
-							tmp25 = aotDirectFn20()
-						} else {
-							tmp25 = lang.Apply0(tmp24)
-						}
-						tmp26 := aotExternalFn32(tmp25)
-						tmp20 = tmp26
+					var tmp16 any
+					tmp17 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_)
+					tmp18 := lang.IsSeqTruthy(tmp17)
+					if tmp18 {
+						tmp19 := aotDirectFn20()
+						tmp20 := aotExternalFn32(tmp19)
+						tmp16 = tmp20
 					} else {
 					}
-					_ = tmp20
-					var tmp27 any
+					_ = tmp16
+					var tmp21 any
 					{ // let
 						// let binding "temp__0__auto__"
-						tmp28 := kw_message.Invoke1(v5)
-						var v29 any = tmp28
-						_ = v29
-						var tmp30 any
-						if lang.IsTruthy(v29) {
-							var tmp31 any
+						tmp22 := kw_message.Invoke1(v5)
+						var v23 any = tmp22
+						_ = v23
+						var tmp24 any
+						if lang.IsTruthy(v23) {
+							var tmp25 any
 							{ // let
 								// let binding "message"
-								var v32 any = v29
-								_ = v32
-								tmp33 := aotExternalFn32(v32)
-								tmp31 = tmp33
+								var v26 any = v23
+								_ = v26
+								tmp27 := aotExternalFn32(v26)
+								tmp25 = tmp27
 							} // end let
-							tmp30 = tmp31
+							tmp24 = tmp25
 						} else {
 						}
-						tmp27 = tmp30
+						tmp21 = tmp24
 					} // end let
-					_ = tmp27
-					tmp28 := kw_expected.Invoke1(v5)
-					tmp29 := aotExternalFn33(tmp28)
-					tmp30 := aotExternalFn31("expected:", tmp29)
-					_ = tmp30
-					tmp31 := kw_actual.Invoke1(v5)
-					tmp32 := aotExternalFn33(tmp31)
-					tmp33 := aotExternalFn31("  actual:", tmp32)
-					tmp11 = tmp33
+					_ = tmp21
+					tmp22 := kw_expected.Invoke1(v5)
+					tmp23 := aotExternalFn33(tmp22)
+					tmp24 := aotExternalFn31("expected:", tmp23)
+					_ = tmp24
+					tmp25 := kw_actual.Invoke1(v5)
+					tmp26 := aotExternalFn33(tmp25)
+					tmp27 := aotExternalFn31("  actual:", tmp26)
+					tmp11 = tmp27
 				}()
 				tmp6 = tmp11
 			} // end let
@@ -2964,108 +2942,78 @@ func LoadNS() {
 						tmp13 := aotExternalFn29()
 						_ = tmp13
 					}()
-					tmp14 := var_clojure_DOT_test_inc_DASH_report_DASH_counter.RootVersion() == aotRootVersion10 && !var_clojure_DOT_test_inc_DASH_report_DASH_counter.IsMacro()
-					var tmp15 any
-					if !tmp14 {
-						tmp15 = checkDerefVar(var_clojure_DOT_test_inc_DASH_report_DASH_counter)
-					}
-					var tmp16 any
-					if tmp14 {
-						tmp16 = aotDirectFn10(kw_error)
-					} else {
-						tmp16 = lang.Apply1(tmp15, kw_error)
-					}
+					tmp14 := aotDirectFn10(kw_error)
+					_ = tmp14
+					tmp15 := aotDirectFn21(v6)
+					tmp16 := aotExternalFn31("\nERROR in", tmp15)
 					_ = tmp16
-					tmp17 := var_clojure_DOT_test_testing_DASH_vars_DASH_str.RootVersion() == aotRootVersion21 && !var_clojure_DOT_test_testing_DASH_vars_DASH_str.IsMacro()
-					var tmp18 any
-					if !tmp17 {
-						tmp18 = checkDerefVar(var_clojure_DOT_test_testing_DASH_vars_DASH_str)
-					}
-					var tmp19 any
-					if tmp17 {
-						tmp19 = aotDirectFn21(v6)
-					} else {
-						tmp19 = lang.Apply1(tmp18, v6)
-					}
-					tmp20 := aotExternalFn31("\nERROR in", tmp19)
-					_ = tmp20
-					var tmp21 any
-					tmp22 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_)
-					tmp23 := lang.IsSeqTruthy(tmp22)
-					if tmp23 {
-						tmp24 := var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion() == aotRootVersion20 && !var_clojure_DOT_test_testing_DASH_contexts_DASH_str.IsMacro()
-						var tmp25 any
-						if !tmp24 {
-							tmp25 = checkDerefVar(var_clojure_DOT_test_testing_DASH_contexts_DASH_str)
-						}
-						var tmp26 any
-						if tmp24 {
-							tmp26 = aotDirectFn20()
-						} else {
-							tmp26 = lang.Apply0(tmp25)
-						}
-						tmp27 := aotExternalFn32(tmp26)
-						tmp21 = tmp27
+					var tmp17 any
+					tmp18 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_)
+					tmp19 := lang.IsSeqTruthy(tmp18)
+					if tmp19 {
+						tmp20 := aotDirectFn20()
+						tmp21 := aotExternalFn32(tmp20)
+						tmp17 = tmp21
 					} else {
 					}
-					_ = tmp21
-					var tmp28 any
+					_ = tmp17
+					var tmp22 any
 					{ // let
 						// let binding "temp__0__auto__"
-						tmp29 := kw_message.Invoke1(v6)
-						var v30 any = tmp29
-						_ = v30
-						var tmp31 any
-						if lang.IsTruthy(v30) {
-							var tmp32 any
+						tmp23 := kw_message.Invoke1(v6)
+						var v24 any = tmp23
+						_ = v24
+						var tmp25 any
+						if lang.IsTruthy(v24) {
+							var tmp26 any
 							{ // let
 								// let binding "message"
-								var v33 any = v30
-								_ = v33
-								tmp34 := aotExternalFn32(v33)
-								tmp32 = tmp34
+								var v27 any = v24
+								_ = v27
+								tmp28 := aotExternalFn32(v27)
+								tmp26 = tmp28
 							} // end let
-							tmp31 = tmp32
+							tmp25 = tmp26
 						} else {
 						}
-						tmp28 = tmp31
+						tmp22 = tmp25
 					} // end let
-					_ = tmp28
-					tmp29 := kw_expected.Invoke1(v6)
-					tmp30 := aotExternalFn33(tmp29)
-					tmp31 := aotExternalFn31("expected:", tmp30)
-					_ = tmp31
-					tmp32 := aotExternalFn34("  actual: ")
-					_ = tmp32
-					var tmp33 any
+					_ = tmp22
+					tmp23 := kw_expected.Invoke1(v6)
+					tmp24 := aotExternalFn33(tmp23)
+					tmp25 := aotExternalFn31("expected:", tmp24)
+					_ = tmp25
+					tmp26 := aotExternalFn34("  actual: ")
+					_ = tmp26
+					var tmp27 any
 					{ // let
 						// let binding "actual"
-						tmp34 := kw_actual.Invoke1(v6)
-						var v35 any = tmp34
-						_ = v35
-						var tmp36 any
-						tmp37 := aotExternalFn35(lang.Builtins["error"], v35)
-						if lang.IsTruthy(tmp37) {
-							tmp38, ok := lang.FieldOrMethod(v35, "Error")
+						tmp28 := kw_actual.Invoke1(v6)
+						var v29 any = tmp28
+						_ = v29
+						var tmp30 any
+						tmp31 := aotExternalFn35(lang.Builtins["error"], v29)
+						if lang.IsTruthy(tmp31) {
+							tmp32, ok := lang.FieldOrMethod(v29, "Error")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v35, "Error")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v29, "Error")))
 							}
-							var tmp39 any
-							switch reflect.TypeOf(tmp38).Kind() {
+							var tmp33 any
+							switch reflect.TypeOf(tmp32).Kind() {
 							case reflect.Func:
-								tmp39 = lang.Apply(tmp38, nil)
+								tmp33 = lang.Apply(tmp32, nil)
 							default:
-								tmp39 = tmp38
+								tmp33 = tmp32
 							}
-							tmp40 := aotExternalFn30(tmp39)
-							tmp36 = tmp40
+							tmp34 := aotExternalFn30(tmp33)
+							tmp30 = tmp34
 						} else {
-							tmp41 := aotExternalFn30(v35)
-							tmp36 = tmp41
+							tmp35 := aotExternalFn30(v29)
+							tmp30 = tmp35
 						}
-						tmp33 = tmp36
+						tmp27 = tmp30
 					} // end let
-					tmp12 = tmp33
+					tmp12 = tmp27
 				}()
 				tmp7 = tmp12
 			} // end let
@@ -3229,7 +3177,6 @@ func LoadNS() {
 		)
 		aotDirectFn12 = tmp1
 		var_clojure_DOT_test_run_DASH_all_DASH_tests = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion12 = var_clojure_DOT_test_run_DASH_all_DASH_tests.RootVersion()
 		var_clojure_DOT_test_run_DASH_all_DASH_tests.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(771), kw_column, int(7), kw_end_DASH_line, int(771), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym_re)), kw_doc, "Runs all tests in all namespaces; prints results.\n  Optional argument is a regular expression; only namespaces with\n  names matching the regular expression (with re-matches) will be\n  tested.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -3318,124 +3265,14 @@ func LoadNS() {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(804), kw_column, int(11), kw_end_DASH_line, int(804), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_test_DASH_symbol)), kw_doc, "Runs a single test.\n\n  Because the intent is to run a single test, there is no check for the namespace test-ns-hook.", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_macro, true)
 		})
 	}
-	// run-test-var
-	{
-		tmp0 := sym_run_DASH_test_DASH_var
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			var tmp3 any
-			{ // let
-				tmp4 := lang.InternVarName(sym_clojure_DOT_test, sym__STAR_report_DASH_counters_STAR_)
-				tmp5 := checkDerefVar(var_clojure_DOT_test__STAR_initial_DASH_report_DASH_counters_STAR_)
-				tmp6 := aotExternalFn43(tmp5)
-				tmp7 := aotExternalFn28(tmp4, tmp6)
-				tmp8 := aotExternalFn27(tmp7)
-				_ = tmp8
-				var tmp9 any
-				func() {
-					defer func() {
-						tmp10 := aotExternalFn29()
-						_ = tmp10
-					}()
-					var tmp11 any
-					{ // let
-						// let binding "ns-obj"
-						tmp12 := aotExternalFn22(v2)
-						tmp13 := kw_ns.Invoke1(tmp12)
-						var v14 any = tmp13
-						_ = v14
-						// let binding "summary"
-						tmp15 := var_clojure_DOT_test_do_DASH_report.RootVersion() == aotRootVersion5 && !var_clojure_DOT_test_do_DASH_report.IsMacro()
-						var tmp16 any
-						if !tmp15 {
-							tmp16 = checkDerefVar(var_clojure_DOT_test_do_DASH_report)
-						}
-						tmp17 := lang.NewMap(kw_type, kw_begin_DASH_test_DASH_ns, kw_ns, v14)
-						var tmp18 any
-						if tmp15 {
-							tmp18 = aotDirectFn5(tmp17)
-						} else {
-							tmp18 = lang.Apply1(tmp16, tmp17)
-						}
-						_ = tmp18
-						tmp19 := var_clojure_DOT_test_test_DASH_vars.RootVersion() == aotRootVersion19 && !var_clojure_DOT_test_test_DASH_vars.IsMacro()
-						var tmp20 any
-						if !tmp19 {
-							tmp20 = checkDerefVar(var_clojure_DOT_test_test_DASH_vars)
-						}
-						tmp21 := lang.NewVector(v2)
-						var tmp22 any
-						if tmp19 {
-							tmp22 = aotDirectFn19(tmp21)
-						} else {
-							tmp22 = lang.Apply1(tmp20, tmp21)
-						}
-						_ = tmp22
-						tmp23 := var_clojure_DOT_test_do_DASH_report.RootVersion() == aotRootVersion5 && !var_clojure_DOT_test_do_DASH_report.IsMacro()
-						var tmp24 any
-						if !tmp23 {
-							tmp24 = checkDerefVar(var_clojure_DOT_test_do_DASH_report)
-						}
-						tmp25 := lang.NewMap(kw_type, kw_end_DASH_test_DASH_ns, kw_ns, v14)
-						var tmp26 any
-						if tmp23 {
-							tmp26 = aotDirectFn5(tmp25)
-						} else {
-							tmp26 = lang.Apply1(tmp24, tmp25)
-						}
-						_ = tmp26
-						tmp27 := checkDerefVar(var_clojure_DOT_test__STAR_report_DASH_counters_STAR_)
-						tmp28 := aotExternalFn45(tmp27)
-						tmp29 := lang.Assoc(tmp28, kw_type, kw_summary)
-						var v30 any = tmp29
-						_ = v30
-						tmp31 := var_clojure_DOT_test_do_DASH_report.RootVersion() == aotRootVersion5 && !var_clojure_DOT_test_do_DASH_report.IsMacro()
-						var tmp32 any
-						if !tmp31 {
-							tmp32 = checkDerefVar(var_clojure_DOT_test_do_DASH_report)
-						}
-						var tmp33 any
-						if tmp31 {
-							tmp33 = aotDirectFn5(v30)
-						} else {
-							tmp33 = lang.Apply1(tmp32, v30)
-						}
-						_ = tmp33
-						tmp11 = v30
-					} // end let
-					tmp9 = tmp11
-				}()
-				tmp3 = tmp9
-			} // end let
-			return tmp3
-		})
-		aotDirectFn13 = tmp1
-		var_clojure_DOT_test_run_DASH_test_DASH_var = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion13 = var_clojure_DOT_test_run_DASH_test_DASH_var.RootVersion()
-		var_clojure_DOT_test_run_DASH_test_DASH_var.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(788), kw_column, int(7), kw_end_DASH_line, int(788), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_v)), kw_doc, "Runs the tests for a single Var, with fixtures executed around the test, and summary output after.", kw_added, "1.11", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
-		})
-	}
 	// run-tests
 	{
 		tmp0 := sym_run_DASH_tests
 		var tmp1 lang.ArityFn
 		aotDirectFn14Arity0 = lang.FnFunc0(func() any {
-			tmp2 := var_clojure_DOT_test_run_DASH_tests.RootVersion() == aotRootVersion14 && !var_clojure_DOT_test_run_DASH_tests.IsMacro()
-			var tmp3 any
-			if !tmp2 {
-				tmp3 = checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
-			}
-			tmp4 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
-			var tmp5 any
-			if tmp2 {
-				tmp5 = aotDirectFn14.Invoke1(tmp4)
-			} else {
-				tmp5 = lang.Apply1(tmp3, tmp4)
-			}
-			return tmp5
+			tmp2 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
+			tmp3 := aotDirectFn14.Invoke1(tmp2)
+			return tmp3
 		})
 		tmp1 = lang.NewArityFn(
 			aotDirectFn14Arity0,
@@ -3457,18 +3294,8 @@ func LoadNS() {
 					tmp9 := lang.Assoc(tmp8, kw_type, kw_summary)
 					var v10 any = tmp9
 					_ = v10
-					tmp11 := var_clojure_DOT_test_do_DASH_report.RootVersion() == aotRootVersion5 && !var_clojure_DOT_test_do_DASH_report.IsMacro()
-					var tmp12 any
-					if !tmp11 {
-						tmp12 = checkDerefVar(var_clojure_DOT_test_do_DASH_report)
-					}
-					var tmp13 any
-					if tmp11 {
-						tmp13 = aotDirectFn5(v10)
-					} else {
-						tmp13 = lang.Apply1(tmp12, v10)
-					}
-					_ = tmp13
+					tmp11 := aotDirectFn5(v10)
+					_ = tmp11
 					tmp3 = v10
 				} // end let
 				return tmp3
@@ -3477,7 +3304,6 @@ func LoadNS() {
 		)
 		aotDirectFn14 = tmp1
 		var_clojure_DOT_test_run_DASH_tests = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion14 = var_clojure_DOT_test_run_DASH_tests.RootVersion()
 		var_clojure_DOT_test_run_DASH_tests.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(759), kw_column, int(7), kw_end_DASH_line, int(759), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(), lang.NewVector(sym__AMP_, sym_namespaces)), kw_doc, "Runs all tests in the given namespaces; prints results.\n  Defaults to current namespace if none given.  Returns a map\n  summarizing test results.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -3545,143 +3371,6 @@ func LoadNS() {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(639), kw_column, int(11), kw_end_DASH_line, int(639), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_name, sym__AMP_, sym_body)), kw_doc, "Experimental.\n  Sets :test metadata of the named var to a fn with the given body.\n  The var must already exist.  Does not modify the value of the var.\n\n  When *load-tests* is false, set-test is ignored.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test), kw_macro, true)
 		})
 	}
-	// test-all-vars
-	{
-		tmp0 := sym_test_DASH_all_DASH_vars
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			tmp3 := var_clojure_DOT_test_test_DASH_vars.RootVersion() == aotRootVersion19 && !var_clojure_DOT_test_test_DASH_vars.IsMacro()
-			var tmp4 any
-			if !tmp3 {
-				tmp4 = checkDerefVar(var_clojure_DOT_test_test_DASH_vars)
-			}
-			tmp5 := aotExternalFn49(v2)
-			tmp6 := aotExternalFn48(tmp5)
-			var tmp7 any
-			if tmp3 {
-				tmp7 = aotDirectFn19(tmp6)
-			} else {
-				tmp7 = lang.Apply1(tmp4, tmp6)
-			}
-			return tmp7
-		})
-		aotDirectFn17 = tmp1
-		var_clojure_DOT_test_test_DASH_all_DASH_vars = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion17 = var_clojure_DOT_test_test_DASH_all_DASH_vars.RootVersion()
-		var_clojure_DOT_test_test_DASH_all_DASH_vars.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(728), kw_column, int(7), kw_end_DASH_line, int(728), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "Calls test-vars on every var interned in the namespace, with fixtures.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
-		})
-	}
-	// test-ns
-	{
-		tmp0 := sym_test_DASH_ns
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			var tmp3 any
-			{ // let
-				tmp4 := lang.InternVarName(sym_clojure_DOT_test, sym__STAR_report_DASH_counters_STAR_)
-				tmp5 := checkDerefVar(var_clojure_DOT_test__STAR_initial_DASH_report_DASH_counters_STAR_)
-				tmp6 := aotExternalFn43(tmp5)
-				tmp7 := aotExternalFn28(tmp4, tmp6)
-				tmp8 := aotExternalFn27(tmp7)
-				_ = tmp8
-				var tmp9 any
-				func() {
-					defer func() {
-						tmp10 := aotExternalFn29()
-						_ = tmp10
-					}()
-					var tmp11 any
-					{ // let
-						// let binding "ns-obj"
-						tmp12 := aotExternalFn50(v2)
-						var v13 any = tmp12
-						_ = v13
-						tmp14 := var_clojure_DOT_test_do_DASH_report.RootVersion() == aotRootVersion5 && !var_clojure_DOT_test_do_DASH_report.IsMacro()
-						var tmp15 any
-						if !tmp14 {
-							tmp15 = checkDerefVar(var_clojure_DOT_test_do_DASH_report)
-						}
-						tmp16 := lang.NewMap(kw_type, kw_begin_DASH_test_DASH_ns, kw_ns, v13)
-						var tmp17 any
-						if tmp14 {
-							tmp17 = aotDirectFn5(tmp16)
-						} else {
-							tmp17 = lang.Apply1(tmp15, tmp16)
-						}
-						_ = tmp17
-						var tmp18 any
-						{ // let
-							// let binding "temp__0__auto__"
-							tmp19 := aotExternalFn37(v13)
-							tmp20 := aotExternalFn53(tmp19)
-							tmp21 := aotExternalFn52(tmp20, "test-ns-hook")
-							tmp22 := aotExternalFn51(tmp21)
-							var v23 any = tmp22
-							_ = v23
-							var tmp24 any
-							if lang.IsTruthy(v23) {
-								var tmp25 any
-								{ // let
-									// let binding "v"
-									var v26 any = v23
-									_ = v26
-									tmp27 := aotExternalFn23(v26)
-									tmp28 := lang.Apply0(tmp27)
-									tmp25 = tmp28
-								} // end let
-								tmp24 = tmp25
-							} else {
-								tmp26 := var_clojure_DOT_test_test_DASH_all_DASH_vars.RootVersion() == aotRootVersion17 && !var_clojure_DOT_test_test_DASH_all_DASH_vars.IsMacro()
-								var tmp27 any
-								if !tmp26 {
-									tmp27 = checkDerefVar(var_clojure_DOT_test_test_DASH_all_DASH_vars)
-								}
-								var tmp28 any
-								if tmp26 {
-									tmp28 = aotDirectFn17(v13)
-								} else {
-									tmp28 = lang.Apply1(tmp27, v13)
-								}
-								tmp24 = tmp28
-							}
-							tmp18 = tmp24
-						} // end let
-						_ = tmp18
-						tmp19 := var_clojure_DOT_test_do_DASH_report.RootVersion() == aotRootVersion5 && !var_clojure_DOT_test_do_DASH_report.IsMacro()
-						var tmp20 any
-						if !tmp19 {
-							tmp20 = checkDerefVar(var_clojure_DOT_test_do_DASH_report)
-						}
-						tmp21 := lang.NewMap(kw_type, kw_end_DASH_test_DASH_ns, kw_ns, v13)
-						var tmp22 any
-						if tmp19 {
-							tmp22 = aotDirectFn5(tmp21)
-						} else {
-							tmp22 = lang.Apply1(tmp20, tmp21)
-						}
-						tmp11 = tmp22
-					} // end let
-					_ = tmp11
-					tmp12 := checkDerefVar(var_clojure_DOT_test__STAR_report_DASH_counters_STAR_)
-					tmp13 := aotExternalFn45(tmp12)
-					tmp9 = tmp13
-				}()
-				tmp3 = tmp9
-			} // end let
-			return tmp3
-		})
-		aotDirectFn18 = tmp1
-		var_clojure_DOT_test_test_DASH_ns = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion18 = var_clojure_DOT_test_test_DASH_ns.RootVersion()
-		var_clojure_DOT_test_test_DASH_ns.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(734), kw_column, int(7), kw_end_DASH_line, int(734), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_ns)), kw_doc, "If the namespace defines a function named test-ns-hook, calls that.\n  Otherwise, calls test-all-vars on the namespace.  'ns' is a\n  namespace object or a symbol.\n\n  Internally binds *report-counters* to a ref initialized to\n  *initial-report-counters*.  Returns the final, dereferenced state of\n  *report-counters*.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
-		})
-	}
 	// test-vars
 	{
 		tmp0 := sym_test_DASH_vars
@@ -3728,181 +3417,161 @@ func LoadNS() {
 							var tmp21 any
 							{ // let
 								// let binding "once-fixture-fn"
-								tmp22 := var_clojure_DOT_test_join_DASH_fixtures.RootVersion() == aotRootVersion11 && !var_clojure_DOT_test_join_DASH_fixtures.IsMacro()
-								var tmp23 any
-								if !tmp22 {
-									tmp23 = checkDerefVar(var_clojure_DOT_test_join_DASH_fixtures)
-								}
-								tmp24 := aotExternalFn22(v18)
-								tmp25 := kw_clojure_DOT_test_SLASH_once_DASH_fixtures.Invoke1(tmp24)
-								var tmp26 any
-								if tmp22 {
-									tmp26 = aotDirectFn11(tmp25)
-								} else {
-									tmp26 = lang.Apply1(tmp23, tmp25)
-								}
-								var v27 any = tmp26
-								_ = v27
+								tmp22 := aotExternalFn22(v18)
+								tmp23 := kw_clojure_DOT_test_SLASH_once_DASH_fixtures.Invoke1(tmp22)
+								tmp24 := aotDirectFn11(tmp23)
+								var v25 any = tmp24
+								_ = v25
 								// let binding "each-fixture-fn"
-								tmp28 := var_clojure_DOT_test_join_DASH_fixtures.RootVersion() == aotRootVersion11 && !var_clojure_DOT_test_join_DASH_fixtures.IsMacro()
-								var tmp29 any
-								if !tmp28 {
-									tmp29 = checkDerefVar(var_clojure_DOT_test_join_DASH_fixtures)
-								}
-								tmp30 := aotExternalFn22(v18)
-								tmp31 := kw_clojure_DOT_test_SLASH_each_DASH_fixtures.Invoke1(tmp30)
-								var tmp32 any
-								if tmp28 {
-									tmp32 = aotDirectFn11(tmp31)
-								} else {
-									tmp32 = lang.Apply1(tmp29, tmp31)
-								}
-								var v33 any = tmp32
-								_ = v33
-								var tmp34 lang.FnFunc0
-								tmp34 = lang.FnFunc0(func() any {
-									var tmp35 any
+								tmp26 := aotExternalFn22(v18)
+								tmp27 := kw_clojure_DOT_test_SLASH_each_DASH_fixtures.Invoke1(tmp26)
+								tmp28 := aotDirectFn11(tmp27)
+								var v29 any = tmp28
+								_ = v29
+								var tmp30 lang.FnFunc0
+								tmp30 = lang.FnFunc0(func() any {
+									var tmp31 any
 									{ // let
 										// let binding "seq_753"
-										tmp36 := lang.Seq(v20)
-										var v37 any = tmp36
-										_ = v37
+										tmp32 := lang.Seq(v20)
+										var v33 any = tmp32
+										_ = v33
 										// let binding "chunk_754"
-										var v38 any = nil
-										_ = v38
+										var v34 any = nil
+										_ = v34
 										// let binding "count_755"
-										var v39 any = int64(0)
-										_ = v39
+										var v35 any = int64(0)
+										_ = v35
 										// let binding "i_756"
-										var v40 any = int64(0)
-										_ = v40
+										var v36 any = int64(0)
+										_ = v36
 										for {
-											var tmp41 any
-											tmp42 := lang.Numbers.Lt(v40, v39)
-											if lang.IsTruthy(tmp42) {
-												var tmp43 any
+											var tmp37 any
+											tmp38 := lang.Numbers.Lt(v36, v35)
+											if lang.IsTruthy(tmp38) {
+												var tmp39 any
 												{ // let
 													// let binding "v"
-													tmp44 := v38.(interface{ Nth(int) any }).Nth(lang.IntCast(v40))
-													var v45 any = tmp44
-													_ = v45
-													var tmp46 any
-													tmp47 := aotExternalFn22(v45)
-													tmp48 := kw_test.Invoke1(tmp47)
-													if lang.IsTruthy(tmp48) {
-														var tmp49 lang.FnFunc0
-														tmp49 = lang.FnFunc0(func() any {
-															tmp50 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
-															tmp51 := lang.Apply1(tmp50, v45)
-															return tmp51
+													tmp40 := v34.(interface{ Nth(int) any }).Nth(lang.IntCast(v36))
+													var v41 any = tmp40
+													_ = v41
+													var tmp42 any
+													tmp43 := aotExternalFn22(v41)
+													tmp44 := kw_test.Invoke1(tmp43)
+													if lang.IsTruthy(tmp44) {
+														var tmp45 lang.FnFunc0
+														tmp45 = lang.FnFunc0(func() any {
+															tmp46 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
+															tmp47 := lang.Apply1(tmp46, v41)
+															return tmp47
 														})
-														tmp50 := lang.Apply1(v33, tmp49)
-														tmp46 = tmp50
+														tmp46 := lang.Apply1(v29, tmp45)
+														tmp42 = tmp46
 													} else {
 													}
-													_ = tmp46
-													var tmp51 any = v37
-													var tmp52 any = v38
-													var tmp53 any = v39
-													tmp55 := lang.Numbers.Unchecked_inc(v40)
-													var tmp54 any = tmp55
-													v37 = tmp51
-													v38 = tmp52
-													v39 = tmp53
-													v40 = tmp54
+													_ = tmp42
+													var tmp47 any = v33
+													var tmp48 any = v34
+													var tmp49 any = v35
+													tmp51 := lang.Numbers.Unchecked_inc(v36)
+													var tmp50 any = tmp51
+													v33 = tmp47
+													v34 = tmp48
+													v35 = tmp49
+													v36 = tmp50
 													continue
 												} // end let
-												tmp41 = tmp43
+												tmp37 = tmp39
 											} else {
-												var tmp44 any
+												var tmp40 any
 												{ // let
 													// let binding "temp__0__auto__"
-													tmp45 := lang.Seq(v37)
-													var v46 any = tmp45
-													_ = v46
-													var tmp47 any
-													if lang.IsTruthy(v46) {
-														var tmp48 any
+													tmp41 := lang.Seq(v33)
+													var v42 any = tmp41
+													_ = v42
+													var tmp43 any
+													if lang.IsTruthy(v42) {
+														var tmp44 any
 														{ // let
 															// let binding "seq_753"
-															var v49 any = v46
-															_ = v49
-															var tmp50 any
-															tmp51 := aotExternalFn58(v49)
-															if lang.IsTruthy(tmp51) {
-																var tmp52 any
+															var v45 any = v42
+															_ = v45
+															var tmp46 any
+															tmp47 := aotExternalFn58(v45)
+															if lang.IsTruthy(tmp47) {
+																var tmp48 any
 																{ // let
 																	// let binding "c__0__auto__"
-																	tmp53 := aotExternalFn59(v49)
-																	var v54 any = tmp53
-																	_ = v54
-																	tmp56 := aotExternalFn60(v49)
-																	var tmp55 any = tmp56
-																	var tmp57 any = v54
-																	tmp59 := lang.Count(v54)
-																	tmp60 := runtime.RT.IntCast(tmp59)
-																	var tmp58 any = tmp60
-																	tmp62 := runtime.RT.IntCast(int64(0))
-																	var tmp61 any = tmp62
-																	v37 = tmp55
-																	v38 = tmp57
-																	v39 = tmp58
-																	v40 = tmp61
+																	tmp49 := aotExternalFn59(v45)
+																	var v50 any = tmp49
+																	_ = v50
+																	tmp52 := aotExternalFn60(v45)
+																	var tmp51 any = tmp52
+																	var tmp53 any = v50
+																	tmp55 := lang.Count(v50)
+																	tmp56 := runtime.RT.IntCast(tmp55)
+																	var tmp54 any = tmp56
+																	tmp58 := runtime.RT.IntCast(int64(0))
+																	var tmp57 any = tmp58
+																	v33 = tmp51
+																	v34 = tmp53
+																	v35 = tmp54
+																	v36 = tmp57
 																	continue
 																} // end let
-																tmp50 = tmp52
+																tmp46 = tmp48
 															} else {
-																var tmp53 any
+																var tmp49 any
 																{ // let
 																	// let binding "v"
-																	tmp54 := lang.First(v49)
-																	var v55 any = tmp54
-																	_ = v55
-																	var tmp56 any
-																	tmp57 := aotExternalFn22(v55)
-																	tmp58 := kw_test.Invoke1(tmp57)
-																	if lang.IsTruthy(tmp58) {
-																		var tmp59 lang.FnFunc0
-																		tmp59 = lang.FnFunc0(func() any {
-																			tmp60 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
-																			tmp61 := lang.Apply1(tmp60, v55)
-																			return tmp61
+																	tmp50 := lang.First(v45)
+																	var v51 any = tmp50
+																	_ = v51
+																	var tmp52 any
+																	tmp53 := aotExternalFn22(v51)
+																	tmp54 := kw_test.Invoke1(tmp53)
+																	if lang.IsTruthy(tmp54) {
+																		var tmp55 lang.FnFunc0
+																		tmp55 = lang.FnFunc0(func() any {
+																			tmp56 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
+																			tmp57 := lang.Apply1(tmp56, v51)
+																			return tmp57
 																		})
-																		tmp60 := lang.Apply1(v33, tmp59)
-																		tmp56 = tmp60
+																		tmp56 := lang.Apply1(v29, tmp55)
+																		tmp52 = tmp56
 																	} else {
 																	}
-																	_ = tmp56
-																	tmp62 := lang.Next(v49)
-																	var tmp61 any = tmp62
-																	var tmp63 any = nil
-																	var tmp64 any = int64(0)
-																	var tmp65 any = int64(0)
-																	v37 = tmp61
-																	v38 = tmp63
-																	v39 = tmp64
-																	v40 = tmp65
+																	_ = tmp52
+																	tmp58 := lang.Next(v45)
+																	var tmp57 any = tmp58
+																	var tmp59 any = nil
+																	var tmp60 any = int64(0)
+																	var tmp61 any = int64(0)
+																	v33 = tmp57
+																	v34 = tmp59
+																	v35 = tmp60
+																	v36 = tmp61
 																	continue
 																} // end let
-																tmp50 = tmp53
+																tmp46 = tmp49
 															}
-															tmp48 = tmp50
+															tmp44 = tmp46
 														} // end let
-														tmp47 = tmp48
+														tmp43 = tmp44
 													} else {
 													}
-													tmp44 = tmp47
+													tmp40 = tmp43
 												} // end let
-												tmp41 = tmp44
+												tmp37 = tmp40
 											}
-											tmp35 = tmp41
+											tmp31 = tmp37
 											break
 										}
 									} // end let
-									return tmp35
+									return tmp31
 								})
-								tmp35 := lang.Apply1(v27, tmp34)
-								tmp21 = tmp35
+								tmp31 := lang.Apply1(v25, tmp30)
+								tmp21 = tmp31
 							} // end let
 							_ = tmp21
 							var tmp22 any = v8
@@ -3973,181 +3642,161 @@ func LoadNS() {
 											var tmp31 any
 											{ // let
 												// let binding "once-fixture-fn"
-												tmp32 := var_clojure_DOT_test_join_DASH_fixtures.RootVersion() == aotRootVersion11 && !var_clojure_DOT_test_join_DASH_fixtures.IsMacro()
-												var tmp33 any
-												if !tmp32 {
-													tmp33 = checkDerefVar(var_clojure_DOT_test_join_DASH_fixtures)
-												}
-												tmp34 := aotExternalFn22(v28)
-												tmp35 := kw_clojure_DOT_test_SLASH_once_DASH_fixtures.Invoke1(tmp34)
-												var tmp36 any
-												if tmp32 {
-													tmp36 = aotDirectFn11(tmp35)
-												} else {
-													tmp36 = lang.Apply1(tmp33, tmp35)
-												}
-												var v37 any = tmp36
-												_ = v37
+												tmp32 := aotExternalFn22(v28)
+												tmp33 := kw_clojure_DOT_test_SLASH_once_DASH_fixtures.Invoke1(tmp32)
+												tmp34 := aotDirectFn11(tmp33)
+												var v35 any = tmp34
+												_ = v35
 												// let binding "each-fixture-fn"
-												tmp38 := var_clojure_DOT_test_join_DASH_fixtures.RootVersion() == aotRootVersion11 && !var_clojure_DOT_test_join_DASH_fixtures.IsMacro()
-												var tmp39 any
-												if !tmp38 {
-													tmp39 = checkDerefVar(var_clojure_DOT_test_join_DASH_fixtures)
-												}
-												tmp40 := aotExternalFn22(v28)
-												tmp41 := kw_clojure_DOT_test_SLASH_each_DASH_fixtures.Invoke1(tmp40)
-												var tmp42 any
-												if tmp38 {
-													tmp42 = aotDirectFn11(tmp41)
-												} else {
-													tmp42 = lang.Apply1(tmp39, tmp41)
-												}
-												var v43 any = tmp42
-												_ = v43
-												var tmp44 lang.FnFunc0
-												tmp44 = lang.FnFunc0(func() any {
-													var tmp45 any
+												tmp36 := aotExternalFn22(v28)
+												tmp37 := kw_clojure_DOT_test_SLASH_each_DASH_fixtures.Invoke1(tmp36)
+												tmp38 := aotDirectFn11(tmp37)
+												var v39 any = tmp38
+												_ = v39
+												var tmp40 lang.FnFunc0
+												tmp40 = lang.FnFunc0(func() any {
+													var tmp41 any
 													{ // let
 														// let binding "seq_760"
-														tmp46 := lang.Seq(v30)
-														var v47 any = tmp46
-														_ = v47
+														tmp42 := lang.Seq(v30)
+														var v43 any = tmp42
+														_ = v43
 														// let binding "chunk_761"
-														var v48 any = nil
-														_ = v48
+														var v44 any = nil
+														_ = v44
 														// let binding "count_762"
-														var v49 any = int64(0)
-														_ = v49
+														var v45 any = int64(0)
+														_ = v45
 														// let binding "i_763"
-														var v50 any = int64(0)
-														_ = v50
+														var v46 any = int64(0)
+														_ = v46
 														for {
-															var tmp51 any
-															tmp52 := lang.Numbers.Lt(v50, v49)
-															if lang.IsTruthy(tmp52) {
-																var tmp53 any
+															var tmp47 any
+															tmp48 := lang.Numbers.Lt(v46, v45)
+															if lang.IsTruthy(tmp48) {
+																var tmp49 any
 																{ // let
 																	// let binding "v"
-																	tmp54 := v48.(interface{ Nth(int) any }).Nth(lang.IntCast(v50))
-																	var v55 any = tmp54
-																	_ = v55
-																	var tmp56 any
-																	tmp57 := aotExternalFn22(v55)
-																	tmp58 := kw_test.Invoke1(tmp57)
-																	if lang.IsTruthy(tmp58) {
-																		var tmp59 lang.FnFunc0
-																		tmp59 = lang.FnFunc0(func() any {
-																			tmp60 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
-																			tmp61 := lang.Apply1(tmp60, v55)
-																			return tmp61
+																	tmp50 := v44.(interface{ Nth(int) any }).Nth(lang.IntCast(v46))
+																	var v51 any = tmp50
+																	_ = v51
+																	var tmp52 any
+																	tmp53 := aotExternalFn22(v51)
+																	tmp54 := kw_test.Invoke1(tmp53)
+																	if lang.IsTruthy(tmp54) {
+																		var tmp55 lang.FnFunc0
+																		tmp55 = lang.FnFunc0(func() any {
+																			tmp56 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
+																			tmp57 := lang.Apply1(tmp56, v51)
+																			return tmp57
 																		})
-																		tmp60 := lang.Apply1(v43, tmp59)
-																		tmp56 = tmp60
+																		tmp56 := lang.Apply1(v39, tmp55)
+																		tmp52 = tmp56
 																	} else {
 																	}
-																	_ = tmp56
-																	var tmp61 any = v47
-																	var tmp62 any = v48
-																	var tmp63 any = v49
-																	tmp65 := lang.Numbers.Unchecked_inc(v50)
-																	var tmp64 any = tmp65
-																	v47 = tmp61
-																	v48 = tmp62
-																	v49 = tmp63
-																	v50 = tmp64
+																	_ = tmp52
+																	var tmp57 any = v43
+																	var tmp58 any = v44
+																	var tmp59 any = v45
+																	tmp61 := lang.Numbers.Unchecked_inc(v46)
+																	var tmp60 any = tmp61
+																	v43 = tmp57
+																	v44 = tmp58
+																	v45 = tmp59
+																	v46 = tmp60
 																	continue
 																} // end let
-																tmp51 = tmp53
+																tmp47 = tmp49
 															} else {
-																var tmp54 any
+																var tmp50 any
 																{ // let
 																	// let binding "temp__0__auto__"
-																	tmp55 := lang.Seq(v47)
-																	var v56 any = tmp55
-																	_ = v56
-																	var tmp57 any
-																	if lang.IsTruthy(v56) {
-																		var tmp58 any
+																	tmp51 := lang.Seq(v43)
+																	var v52 any = tmp51
+																	_ = v52
+																	var tmp53 any
+																	if lang.IsTruthy(v52) {
+																		var tmp54 any
 																		{ // let
 																			// let binding "seq_760"
-																			var v59 any = v56
-																			_ = v59
-																			var tmp60 any
-																			tmp61 := aotExternalFn58(v59)
-																			if lang.IsTruthy(tmp61) {
-																				var tmp62 any
+																			var v55 any = v52
+																			_ = v55
+																			var tmp56 any
+																			tmp57 := aotExternalFn58(v55)
+																			if lang.IsTruthy(tmp57) {
+																				var tmp58 any
 																				{ // let
 																					// let binding "c__0__auto__"
-																					tmp63 := aotExternalFn59(v59)
-																					var v64 any = tmp63
-																					_ = v64
-																					tmp66 := aotExternalFn60(v59)
-																					var tmp65 any = tmp66
-																					var tmp67 any = v64
-																					tmp69 := lang.Count(v64)
-																					tmp70 := runtime.RT.IntCast(tmp69)
-																					var tmp68 any = tmp70
-																					tmp72 := runtime.RT.IntCast(int64(0))
-																					var tmp71 any = tmp72
-																					v47 = tmp65
-																					v48 = tmp67
-																					v49 = tmp68
-																					v50 = tmp71
+																					tmp59 := aotExternalFn59(v55)
+																					var v60 any = tmp59
+																					_ = v60
+																					tmp62 := aotExternalFn60(v55)
+																					var tmp61 any = tmp62
+																					var tmp63 any = v60
+																					tmp65 := lang.Count(v60)
+																					tmp66 := runtime.RT.IntCast(tmp65)
+																					var tmp64 any = tmp66
+																					tmp68 := runtime.RT.IntCast(int64(0))
+																					var tmp67 any = tmp68
+																					v43 = tmp61
+																					v44 = tmp63
+																					v45 = tmp64
+																					v46 = tmp67
 																					continue
 																				} // end let
-																				tmp60 = tmp62
+																				tmp56 = tmp58
 																			} else {
-																				var tmp63 any
+																				var tmp59 any
 																				{ // let
 																					// let binding "v"
-																					tmp64 := lang.First(v59)
-																					var v65 any = tmp64
-																					_ = v65
-																					var tmp66 any
-																					tmp67 := aotExternalFn22(v65)
-																					tmp68 := kw_test.Invoke1(tmp67)
-																					if lang.IsTruthy(tmp68) {
-																						var tmp69 lang.FnFunc0
-																						tmp69 = lang.FnFunc0(func() any {
-																							tmp70 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
-																							tmp71 := lang.Apply1(tmp70, v65)
-																							return tmp71
+																					tmp60 := lang.First(v55)
+																					var v61 any = tmp60
+																					_ = v61
+																					var tmp62 any
+																					tmp63 := aotExternalFn22(v61)
+																					tmp64 := kw_test.Invoke1(tmp63)
+																					if lang.IsTruthy(tmp64) {
+																						var tmp65 lang.FnFunc0
+																						tmp65 = lang.FnFunc0(func() any {
+																							tmp66 := checkDerefVar(var_clojure_DOT_test_test_DASH_var)
+																							tmp67 := lang.Apply1(tmp66, v61)
+																							return tmp67
 																						})
-																						tmp70 := lang.Apply1(v43, tmp69)
-																						tmp66 = tmp70
+																						tmp66 := lang.Apply1(v39, tmp65)
+																						tmp62 = tmp66
 																					} else {
 																					}
-																					_ = tmp66
-																					tmp72 := lang.Next(v59)
-																					var tmp71 any = tmp72
-																					var tmp73 any = nil
-																					var tmp74 any = int64(0)
-																					var tmp75 any = int64(0)
-																					v47 = tmp71
-																					v48 = tmp73
-																					v49 = tmp74
-																					v50 = tmp75
+																					_ = tmp62
+																					tmp68 := lang.Next(v55)
+																					var tmp67 any = tmp68
+																					var tmp69 any = nil
+																					var tmp70 any = int64(0)
+																					var tmp71 any = int64(0)
+																					v43 = tmp67
+																					v44 = tmp69
+																					v45 = tmp70
+																					v46 = tmp71
 																					continue
 																				} // end let
-																				tmp60 = tmp63
+																				tmp56 = tmp59
 																			}
-																			tmp58 = tmp60
+																			tmp54 = tmp56
 																		} // end let
-																		tmp57 = tmp58
+																		tmp53 = tmp54
 																	} else {
 																	}
-																	tmp54 = tmp57
+																	tmp50 = tmp53
 																} // end let
-																tmp51 = tmp54
+																tmp47 = tmp50
 															}
-															tmp45 = tmp51
+															tmp41 = tmp47
 															break
 														}
 													} // end let
-													return tmp45
+													return tmp41
 												})
-												tmp45 := lang.Apply1(v37, tmp44)
-												tmp31 = tmp45
+												tmp41 := lang.Apply1(v35, tmp40)
+												tmp31 = tmp41
 											} // end let
 											_ = tmp31
 											tmp33 := lang.Next(v20)
@@ -4180,7 +3829,6 @@ func LoadNS() {
 		})
 		aotDirectFn19 = tmp1
 		var_clojure_DOT_test_test_DASH_vars = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion19 = var_clojure_DOT_test_test_DASH_vars.RootVersion()
 		var_clojure_DOT_test_test_DASH_vars.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(714), kw_column, int(7), kw_end_DASH_line, int(714), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_vars)), kw_doc, "Groups vars by their namespace and runs test-var on them with\n  appropriate fixtures applied.", kw_added, "1.6", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -4249,7 +3897,6 @@ func LoadNS() {
 		})
 		aotDirectFn20 = tmp1
 		var_clojure_DOT_test_testing_DASH_contexts_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion20 = var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion()
 		var_clojure_DOT_test_testing_DASH_contexts_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(306), kw_column, int(7), kw_end_DASH_line, int(306), kw_end_DASH_column, int(26), kw_arglists, lang.NewList(lang.NewVector()), kw_doc, "Returns a string representation of the current test context. Joins\n  strings in *testing-contexts* with spaces.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})
@@ -4321,7 +3968,6 @@ func LoadNS() {
 		})
 		aotDirectFn21 = tmp1
 		var_clojure_DOT_test_testing_DASH_vars_DASH_str = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion21 = var_clojure_DOT_test_testing_DASH_vars_DASH_str.RootVersion()
 		var_clojure_DOT_test_testing_DASH_vars_DASH_str.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/test.glj", kw_line, int(293), kw_column, int(7), kw_end_DASH_line, int(293), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Returns a string representation of the current test.  Renders names\n  in *testing-vars* as a list, then the source file and line of\n  current assertion.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_test))
 		})

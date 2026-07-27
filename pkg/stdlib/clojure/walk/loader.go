@@ -11,25 +11,15 @@ import (
 )
 
 var aotDirectFn0 lang.FnFunc1
-var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.FnFunc1
-var aotRootVersion1 *lang.VarRootVersion
 var aotDirectFn2 lang.FnFunc2
-var aotRootVersion2 *lang.VarRootVersion
 var aotDirectFn3 lang.FnFunc1
-var aotRootVersion3 *lang.VarRootVersion
 var aotDirectFn4 lang.FnFunc2
-var aotRootVersion4 *lang.VarRootVersion
 var aotDirectFn5 lang.FnFunc2
-var aotRootVersion5 *lang.VarRootVersion
 var aotDirectFn6 lang.FnFunc1
-var aotRootVersion6 *lang.VarRootVersion
 var aotDirectFn7 lang.FnFunc2
-var aotRootVersion7 *lang.VarRootVersion
 var aotDirectFn8 lang.FnFunc1
-var aotRootVersion8 *lang.VarRootVersion
 var aotDirectFn9 lang.FnFunc3
-var aotRootVersion9 *lang.VarRootVersion
 
 func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
 	if vr.IsBound() {
@@ -401,40 +391,29 @@ func LoadNS() {
 				})
 				var v5 any = tmp4
 				_ = v5
-				tmp6 := var_clojure_DOT_walk_postwalk.RootVersion() == aotRootVersion2 && !var_clojure_DOT_walk_postwalk.IsMacro()
-				var tmp7 any
-				if !tmp6 {
-					tmp7 = checkDerefVar(var_clojure_DOT_walk_postwalk)
-				}
-				var tmp8 lang.FnFunc1
-				tmp8 = lang.FnFunc1(func(p0 any) any {
-					v9 := p0
-					_ = v9
-					var tmp10 any
-					tmp11 := aotExternalFn3(v9)
-					if lang.IsTruthy(tmp11) {
-						tmp12 := lang.NewMap()
-						tmp13 := aotExternalFn5(v5, v9)
-						tmp14 := aotExternalFn4(tmp12, tmp13)
-						tmp10 = tmp14
+				var tmp6 lang.FnFunc1
+				tmp6 = lang.FnFunc1(func(p0 any) any {
+					v7 := p0
+					_ = v7
+					var tmp8 any
+					tmp9 := aotExternalFn3(v7)
+					if lang.IsTruthy(tmp9) {
+						tmp10 := lang.NewMap()
+						tmp11 := aotExternalFn5(v5, v7)
+						tmp12 := aotExternalFn4(tmp10, tmp11)
+						tmp8 = tmp12
 					} else {
-						tmp10 = v9
+						tmp8 = v7
 					}
-					return tmp10
+					return tmp8
 				})
-				var tmp9 any
-				if tmp6 {
-					tmp9 = aotDirectFn2(tmp8, v2)
-				} else {
-					tmp9 = lang.Apply2(tmp7, tmp8, v2)
-				}
-				tmp3 = tmp9
+				tmp7 := aotDirectFn2(tmp6, v2)
+				tmp3 = tmp7
 			} // end let
 			return tmp3
 		})
 		aotDirectFn0 = tmp1
 		var_clojure_DOT_walk_keywordize_DASH_keys = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion0 = var_clojure_DOT_walk_keywordize_DASH_keys.RootVersion()
 		var_clojure_DOT_walk_keywordize_DASH_keys.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(94), kw_column, int(7), kw_end_DASH_line, int(94), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from strings to keywords.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
@@ -446,36 +425,25 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := var_clojure_DOT_walk_prewalk.RootVersion() == aotRootVersion5 && !var_clojure_DOT_walk_prewalk.IsMacro()
-			var tmp4 any
-			if !tmp3 {
-				tmp4 = checkDerefVar(var_clojure_DOT_walk_prewalk)
-			}
-			var tmp5 lang.FnFunc1
-			tmp5 = lang.FnFunc1(func(p0 any) any {
-				v6 := p0
-				_ = v6
-				var tmp7 any
-				tmp8 := aotExternalFn6(v6)
-				if lang.IsTruthy(tmp8) {
-					tmp9 := aotExternalFn7(v6)
-					tmp7 = tmp9
+			var tmp3 lang.FnFunc1
+			tmp3 = lang.FnFunc1(func(p0 any) any {
+				v4 := p0
+				_ = v4
+				var tmp5 any
+				tmp6 := aotExternalFn6(v4)
+				if lang.IsTruthy(tmp6) {
+					tmp7 := aotExternalFn7(v4)
+					tmp5 = tmp7
 				} else {
-					tmp7 = v6
+					tmp5 = v4
 				}
-				return tmp7
+				return tmp5
 			})
-			var tmp6 any
-			if tmp3 {
-				tmp6 = aotDirectFn5(tmp5, v2)
-			} else {
-				tmp6 = lang.Apply2(tmp4, tmp5, v2)
-			}
-			return tmp6
+			tmp4 := aotDirectFn5(tmp3, v2)
+			return tmp4
 		})
 		aotDirectFn1 = tmp1
 		var_clojure_DOT_walk_macroexpand_DASH_all = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion1 = var_clojure_DOT_walk_macroexpand_DASH_all.RootVersion()
 		var_clojure_DOT_walk_macroexpand_DASH_all.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(126), kw_column, int(7), kw_end_DASH_line, int(126), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Recursively performs all possible macroexpansions in form.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
@@ -489,24 +457,13 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := var_clojure_DOT_walk_walk.RootVersion() == aotRootVersion9 && !var_clojure_DOT_walk_walk.IsMacro()
-			var tmp5 any
-			if !tmp4 {
-				tmp5 = checkDerefVar(var_clojure_DOT_walk_walk)
-			}
-			tmp6 := checkDerefVar(var_clojure_DOT_walk_postwalk)
-			tmp7 := aotExternalFn8(tmp6, v2)
-			var tmp8 any
-			if tmp4 {
-				tmp8 = aotDirectFn9(tmp7, v2, v3)
-			} else {
-				tmp8 = lang.Apply3(tmp5, tmp7, v2, v3)
-			}
-			return tmp8
+			tmp4 := checkDerefVar(var_clojure_DOT_walk_postwalk)
+			tmp5 := aotExternalFn8(tmp4, v2)
+			tmp6 := aotDirectFn9(tmp5, v2, v3)
+			return tmp6
 		})
 		aotDirectFn2 = tmp1
 		var_clojure_DOT_walk_postwalk = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion2 = var_clojure_DOT_walk_postwalk.RootVersion()
 		var_clojure_DOT_walk_postwalk.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(53), kw_column, int(7), kw_end_DASH_line, int(53), kw_end_DASH_column, int(14), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Performs a depth-first, post-order traversal of form.  Calls f on\n  each sub-form, uses f's return value in place of the original.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
@@ -518,32 +475,21 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := var_clojure_DOT_walk_postwalk.RootVersion() == aotRootVersion2 && !var_clojure_DOT_walk_postwalk.IsMacro()
-			var tmp4 any
-			if !tmp3 {
-				tmp4 = checkDerefVar(var_clojure_DOT_walk_postwalk)
-			}
-			var tmp5 lang.FnFunc1
-			tmp5 = lang.FnFunc1(func(p0 any) any {
-				v6 := p0
-				_ = v6
-				tmp7 := aotExternalFn9("Walked: ")
-				_ = tmp7
-				tmp8 := aotExternalFn10(v6)
-				_ = tmp8
-				return v6
+			var tmp3 lang.FnFunc1
+			tmp3 = lang.FnFunc1(func(p0 any) any {
+				v4 := p0
+				_ = v4
+				tmp5 := aotExternalFn9("Walked: ")
+				_ = tmp5
+				tmp6 := aotExternalFn10(v4)
+				_ = tmp6
+				return v4
 			})
-			var tmp6 any
-			if tmp3 {
-				tmp6 = aotDirectFn2(tmp5, v2)
-			} else {
-				tmp6 = lang.Apply2(tmp4, tmp5, v2)
-			}
-			return tmp6
+			tmp4 := aotDirectFn2(tmp3, v2)
+			return tmp4
 		})
 		aotDirectFn3 = tmp1
 		var_clojure_DOT_walk_postwalk_DASH_demo = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion3 = var_clojure_DOT_walk_postwalk_DASH_demo.RootVersion()
 		var_clojure_DOT_walk_postwalk_DASH_demo.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(80), kw_column, int(7), kw_end_DASH_line, int(80), kw_end_DASH_column, int(19), kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of postwalk by printing each form as it is\n  walked.  Returns form.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
@@ -557,38 +503,85 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := var_clojure_DOT_walk_postwalk.RootVersion() == aotRootVersion2 && !var_clojure_DOT_walk_postwalk.IsMacro()
-			var tmp5 any
-			if !tmp4 {
-				tmp5 = checkDerefVar(var_clojure_DOT_walk_postwalk)
-			}
-			var tmp6 lang.FnFunc1
-			tmp6 = lang.FnFunc1(func(p0 any) any {
-				v7 := p0
-				_ = v7
-				var tmp8 any
-				tmp9 := aotExternalFn11(v2, v7)
-				if lang.IsTruthy(tmp9) {
-					tmp10 := lang.Apply1(v2, v7)
-					tmp8 = tmp10
+			var tmp4 lang.FnFunc1
+			tmp4 = lang.FnFunc1(func(p0 any) any {
+				v5 := p0
+				_ = v5
+				var tmp6 any
+				tmp7 := aotExternalFn11(v2, v5)
+				if lang.IsTruthy(tmp7) {
+					tmp8 := lang.Apply1(v2, v5)
+					tmp6 = tmp8
 				} else {
-					tmp8 = v7
+					tmp6 = v5
 				}
-				return tmp8
+				return tmp6
 			})
-			var tmp7 any
-			if tmp4 {
-				tmp7 = aotDirectFn2(tmp6, v3)
-			} else {
-				tmp7 = lang.Apply2(tmp5, tmp6, v3)
-			}
-			return tmp7
+			tmp5 := aotDirectFn2(tmp4, v3)
+			return tmp5
 		})
 		aotDirectFn4 = tmp1
 		var_clojure_DOT_walk_postwalk_DASH_replace = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion4 = var_clojure_DOT_walk_postwalk_DASH_replace.RootVersion()
 		var_clojure_DOT_walk_postwalk_DASH_replace.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(118), kw_column, int(7), kw_end_DASH_line, int(118), kw_end_DASH_column, int(22), kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the leaves of the tree first.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
+		})
+	}
+	// prewalk-demo
+	{
+		tmp0 := sym_prewalk_DASH_demo
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			var tmp3 lang.FnFunc1
+			tmp3 = lang.FnFunc1(func(p0 any) any {
+				v4 := p0
+				_ = v4
+				tmp5 := aotExternalFn9("Walked: ")
+				_ = tmp5
+				tmp6 := aotExternalFn10(v4)
+				_ = tmp6
+				return v4
+			})
+			tmp4 := aotDirectFn5(tmp3, v2)
+			return tmp4
+		})
+		aotDirectFn6 = tmp1
+		var_clojure_DOT_walk_prewalk_DASH_demo = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_walk_prewalk_DASH_demo.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(87), kw_column, int(7), kw_end_DASH_line, int(87), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of prewalk by printing each form as it is\n  walked.  Returns form.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
+		})
+	}
+	// prewalk-replace
+	{
+		tmp0 := sym_prewalk_DASH_replace
+		var tmp1 lang.FnFunc2
+		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			var tmp4 lang.FnFunc1
+			tmp4 = lang.FnFunc1(func(p0 any) any {
+				v5 := p0
+				_ = v5
+				var tmp6 any
+				tmp7 := aotExternalFn11(v2, v5)
+				if lang.IsTruthy(tmp7) {
+					tmp8 := lang.Apply1(v2, v5)
+					tmp6 = tmp8
+				} else {
+					tmp6 = v5
+				}
+				return tmp6
+			})
+			tmp5 := aotDirectFn5(tmp4, v3)
+			return tmp5
+		})
+		aotDirectFn7 = tmp1
+		var_clojure_DOT_walk_prewalk_DASH_replace = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_walk_prewalk_DASH_replace.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(110), kw_column, int(7), kw_end_DASH_line, int(110), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the root of the tree first.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 	// stringify-keys
@@ -634,40 +627,29 @@ func LoadNS() {
 				})
 				var v5 any = tmp4
 				_ = v5
-				tmp6 := var_clojure_DOT_walk_postwalk.RootVersion() == aotRootVersion2 && !var_clojure_DOT_walk_postwalk.IsMacro()
-				var tmp7 any
-				if !tmp6 {
-					tmp7 = checkDerefVar(var_clojure_DOT_walk_postwalk)
-				}
-				var tmp8 lang.FnFunc1
-				tmp8 = lang.FnFunc1(func(p0 any) any {
-					v9 := p0
-					_ = v9
-					var tmp10 any
-					tmp11 := aotExternalFn3(v9)
-					if lang.IsTruthy(tmp11) {
-						tmp12 := lang.NewMap()
-						tmp13 := aotExternalFn5(v5, v9)
-						tmp14 := aotExternalFn4(tmp12, tmp13)
-						tmp10 = tmp14
+				var tmp6 lang.FnFunc1
+				tmp6 = lang.FnFunc1(func(p0 any) any {
+					v7 := p0
+					_ = v7
+					var tmp8 any
+					tmp9 := aotExternalFn3(v7)
+					if lang.IsTruthy(tmp9) {
+						tmp10 := lang.NewMap()
+						tmp11 := aotExternalFn5(v5, v7)
+						tmp12 := aotExternalFn4(tmp10, tmp11)
+						tmp8 = tmp12
 					} else {
-						tmp10 = v9
+						tmp8 = v7
 					}
-					return tmp10
+					return tmp8
 				})
-				var tmp9 any
-				if tmp6 {
-					tmp9 = aotDirectFn2(tmp8, v2)
-				} else {
-					tmp9 = lang.Apply2(tmp7, tmp8, v2)
-				}
-				tmp3 = tmp9
+				tmp7 := aotDirectFn2(tmp6, v2)
+				tmp3 = tmp7
 			} // end let
 			return tmp3
 		})
 		aotDirectFn8 = tmp1
 		var_clojure_DOT_walk_stringify_DASH_keys = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion8 = var_clojure_DOT_walk_stringify_DASH_keys.RootVersion()
 		var_clojure_DOT_walk_stringify_DASH_keys.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(102), kw_column, int(7), kw_end_DASH_line, int(102), kw_end_DASH_column, int(20), kw_arglists, lang.NewList(lang.NewVector(sym_m)), kw_doc, "Recursively transforms all map keys from keywords to strings.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
@@ -681,108 +663,17 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := var_clojure_DOT_walk_walk.RootVersion() == aotRootVersion9 && !var_clojure_DOT_walk_walk.IsMacro()
-			var tmp5 any
-			if !tmp4 {
-				tmp5 = checkDerefVar(var_clojure_DOT_walk_walk)
-			}
-			tmp6 := checkDerefVar(var_clojure_DOT_walk_prewalk)
-			tmp7 := aotExternalFn8(tmp6, v2)
-			tmp8 := checkDerefVar(var_clojure_DOT_core_identity)
-			tmp9 := lang.Apply1(v2, v3)
-			var tmp10 any
-			if tmp4 {
-				tmp10 = aotDirectFn9(tmp7, tmp8, tmp9)
-			} else {
-				tmp10 = lang.Apply3(tmp5, tmp7, tmp8, tmp9)
-			}
-			return tmp10
+			tmp4 := checkDerefVar(var_clojure_DOT_walk_prewalk)
+			tmp5 := aotExternalFn8(tmp4, v2)
+			tmp6 := checkDerefVar(var_clojure_DOT_core_identity)
+			tmp7 := lang.Apply1(v2, v3)
+			tmp8 := aotDirectFn9(tmp5, tmp6, tmp7)
+			return tmp8
 		})
 		aotDirectFn5 = tmp1
 		var_clojure_DOT_walk_prewalk = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion5 = var_clojure_DOT_walk_prewalk.RootVersion()
 		var_clojure_DOT_walk_prewalk.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(61), kw_column, int(7), kw_end_DASH_line, int(61), kw_end_DASH_column, int(13), kw_arglists, lang.NewList(lang.NewVector(sym_f, sym_form)), kw_doc, "Like postwalk, but does pre-order traversal.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
-		})
-	}
-	// prewalk-demo
-	{
-		tmp0 := sym_prewalk_DASH_demo
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			tmp3 := var_clojure_DOT_walk_prewalk.RootVersion() == aotRootVersion5 && !var_clojure_DOT_walk_prewalk.IsMacro()
-			var tmp4 any
-			if !tmp3 {
-				tmp4 = checkDerefVar(var_clojure_DOT_walk_prewalk)
-			}
-			var tmp5 lang.FnFunc1
-			tmp5 = lang.FnFunc1(func(p0 any) any {
-				v6 := p0
-				_ = v6
-				tmp7 := aotExternalFn9("Walked: ")
-				_ = tmp7
-				tmp8 := aotExternalFn10(v6)
-				_ = tmp8
-				return v6
-			})
-			var tmp6 any
-			if tmp3 {
-				tmp6 = aotDirectFn5(tmp5, v2)
-			} else {
-				tmp6 = lang.Apply2(tmp4, tmp5, v2)
-			}
-			return tmp6
-		})
-		aotDirectFn6 = tmp1
-		var_clojure_DOT_walk_prewalk_DASH_demo = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion6 = var_clojure_DOT_walk_prewalk_DASH_demo.RootVersion()
-		var_clojure_DOT_walk_prewalk_DASH_demo.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(87), kw_column, int(7), kw_end_DASH_line, int(87), kw_end_DASH_column, int(18), kw_arglists, lang.NewList(lang.NewVector(sym_form)), kw_doc, "Demonstrates the behavior of prewalk by printing each form as it is\n  walked.  Returns form.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
-		})
-	}
-	// prewalk-replace
-	{
-		tmp0 := sym_prewalk_DASH_replace
-		var tmp1 lang.FnFunc2
-		tmp1 = lang.FnFunc2(func(p0, p1 any) any {
-			v2 := p0
-			_ = v2
-			v3 := p1
-			_ = v3
-			tmp4 := var_clojure_DOT_walk_prewalk.RootVersion() == aotRootVersion5 && !var_clojure_DOT_walk_prewalk.IsMacro()
-			var tmp5 any
-			if !tmp4 {
-				tmp5 = checkDerefVar(var_clojure_DOT_walk_prewalk)
-			}
-			var tmp6 lang.FnFunc1
-			tmp6 = lang.FnFunc1(func(p0 any) any {
-				v7 := p0
-				_ = v7
-				var tmp8 any
-				tmp9 := aotExternalFn11(v2, v7)
-				if lang.IsTruthy(tmp9) {
-					tmp10 := lang.Apply1(v2, v7)
-					tmp8 = tmp10
-				} else {
-					tmp8 = v7
-				}
-				return tmp8
-			})
-			var tmp7 any
-			if tmp4 {
-				tmp7 = aotDirectFn5(tmp6, v3)
-			} else {
-				tmp7 = lang.Apply2(tmp5, tmp6, v3)
-			}
-			return tmp7
-		})
-		aotDirectFn7 = tmp1
-		var_clojure_DOT_walk_prewalk_DASH_replace = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion7 = var_clojure_DOT_walk_prewalk_DASH_replace.RootVersion()
-		var_clojure_DOT_walk_prewalk_DASH_replace.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(110), kw_column, int(7), kw_end_DASH_line, int(110), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_smap, sym_form)), kw_doc, "Recursively transforms form by replacing keys in smap with their\n  values.  Like clojure/replace but works on any data structure.  Does\n  replacement at the root of the tree first.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})
 	}
 	// walk
@@ -869,7 +760,6 @@ func LoadNS() {
 		})
 		aotDirectFn9 = tmp1
 		var_clojure_DOT_walk_walk = ns.InternWithValue(tmp0, tmp1, true)
-		aotRootVersion9 = var_clojure_DOT_walk_walk.RootVersion()
 		var_clojure_DOT_walk_walk.SetMetaLazy(func() lang.IPersistentMap {
 			return lang.NewMapUniqueKeys(kw_file, "clojure/walk.glj", kw_line, int(35), kw_column, int(7), kw_end_DASH_line, int(35), kw_end_DASH_column, int(10), kw_arglists, lang.NewList(lang.NewVector(sym_inner, sym_outer, sym_form)), kw_doc, "Traverses form, an arbitrary data structure.  inner and outer are\n  functions.  Applies inner to each element of form, building up a\n  data structure of the same type, then applies outer to the result.\n  Recognizes all Clojure data structures. Consumes seqs as with doall.", kw_added, "1.1", kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_walk))
 		})

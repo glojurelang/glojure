@@ -25,9 +25,10 @@ func sortedAOTTargets(
 }
 
 // prepareAOTCallTargets allocates package-level call slots for ordinary
-// functions in the namespace. Generated callers can use the slot when their
-// arity is statically accepted while its Var retains the root seen by LoadNS,
-// and fall back to Var dispatch after a redefinition.
+// functions in the namespace. With direct linking, inferred calls use these
+// slots without consulting the Var. When direct linking is disabled, or a Var
+// is marked ^:redef, generated callers guard the slot with the root seen by
+// LoadNS and fall back to Var dispatch after a redefinition.
 func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 	for _, named := range vars {
 		vr := named.vr
@@ -49,15 +50,22 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 		}
 
 		index := len(g.aotCallTargets)
+		directLinked := g.directLink &&
+			!RT.BooleanCast(lang.Get(vr.Meta(), lang.KWRedef))
+		rootVersionVar := ""
+		if !directLinked {
+			rootVersionVar = fmt.Sprintf("aotRootVersion%d", index)
+		}
 		target := &aotSpecializationTarget{
 			vr:             vr,
 			fn:             fn,
 			arityDispatch:  arityDispatch,
+			directLinked:   directLinked,
 			directArities:  directArities,
 			directFnVar:    fmt.Sprintf("aotDirectFn%d", index),
 			int64FnVar:     fmt.Sprintf("aotInt64Fn%d", index),
 			float64FnVar:   fmt.Sprintf("aotFloat64Fn%d", index),
-			rootVersionVar: fmt.Sprintf("aotRootVersion%d", index),
+			rootVersionVar: rootVersionVar,
 		}
 		directType := "lang.ArityFn"
 		if !arityDispatch {
@@ -66,13 +74,12 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 			directType = fmt.Sprintf("lang.FnFunc%d", target.arity)
 		}
 		g.aotCallTargets[vr] = target
-		fmt.Fprintf(
-			&g.aotDeclarations,
-			"var %s %s\nvar %s *lang.VarRootVersion\n",
-			target.directFnVar,
-			directType,
-			target.rootVersionVar,
-		)
+		fmt.Fprintf(&g.aotDeclarations, "var %s %s\n",
+			target.directFnVar, directType)
+		if target.rootVersionVar != "" {
+			fmt.Fprintf(&g.aotDeclarations,
+				"var %s *lang.VarRootVersion\n", target.rootVersionVar)
+		}
 		if arityDispatch {
 			for _, methodNode := range fnNode.Methods {
 				method := methodNode.Sub.(*ast.FnMethodNode)
@@ -247,9 +254,8 @@ func (g *Generator) aotInvokeTarget(
 }
 
 // aotExternalInvokeTarget prepares a statically resolved call into another
-// namespace. Calls to clojure.core are linked directly when enabled; other
-// calls retain a root-version guard and fall back to Var dispatch after a
-// redefinition. Dynamic and ^:redef Vars always retain runtime lookup.
+// namespace. Statically resolved calls are linked directly when enabled.
+// Dynamic and ^:redef Vars always retain runtime lookup.
 func (g *Generator) aotExternalInvokeTarget(
 	invoke *ast.InvokeNode,
 ) *aotExternalCallTarget {
@@ -274,8 +280,7 @@ func (g *Generator) aotExternalInvokeTarget(
 		return target
 	}
 	index := len(g.aotExternalCallTargets)
-	directLinked := g.directLinkCore &&
-		vr.Namespace().Name().String() == "clojure.core" &&
+	directLinked := g.directLink &&
 		!RT.BooleanCast(lang.Get(vr.Meta(), lang.KWRedef))
 	target := &aotExternalCallTarget{
 		vr:             vr,
