@@ -8,6 +8,7 @@ const (
 	arrayMapHashThreshold    = 16
 	arrayMapKeywordThreshold = 128
 	arrayMapInlineSize       = arrayMapHashThreshold - 2
+	keywordMapDeltaMax       = 8
 
 	// PersistentArrayMapInlineKeyValueCount lets the compiler preserve the
 	// one-allocation constructor for maps whose entries fit inline.
@@ -26,12 +27,23 @@ type (
 
 		keyVals      []any
 		keywordShape *KeywordMapShape
+		keywordDelta *keywordMapDelta
 	}
 
 	// KeywordMapShape is an immutable key layout shared by maps emitted from
 	// the same AOT keyword-map literal. Shaped maps store only their values.
 	KeywordMapShape struct {
 		keys []Keyword
+	}
+
+	// keywordMapDelta is a bounded immutable overlay on a shaped map's base
+	// values. It gives compiler-emitted keyword maps structural sharing on
+	// updates without imposing a trie on their fixed key layout.
+	keywordMapDelta struct {
+		prev  *keywordMapDelta
+		value any
+		index uint32
+		depth uint8
 	}
 
 	// inlineMapStorage keeps small maps to one allocation without making every
@@ -47,7 +59,7 @@ type (
 
 		keyVals []any
 		shape   *KeywordMapShape
-		values  []any
+		shaped  *Map
 		index   int
 	}
 	MapKeySeq struct {
@@ -279,7 +291,7 @@ func (m *Map) ValAtDefault(key, def any) any {
 func (m *Map) valAtKeyword(key Keyword, def any) any {
 	if m.keywordShape != nil {
 		if i := m.keywordShape.indexOf(key); i >= 0 {
-			return m.keyVals[i]
+			return m.keywordValueAt(i)
 		}
 		return def
 	}
@@ -291,6 +303,30 @@ func (m *Map) valAtKeyword(key Keyword, def any) any {
 	return def
 }
 
+func (m *Map) keywordValueAt(index int) any {
+	for delta := m.keywordDelta; delta != nil; delta = delta.prev {
+		if int(delta.index) == index {
+			return delta.value
+		}
+	}
+	return m.keyVals[index]
+}
+
+func (m *Map) materializedKeywordValues() []any {
+	values := append([]any(nil), m.keyVals...)
+	var deltas [keywordMapDeltaMax]*keywordMapDelta
+	count := 0
+	for delta := m.keywordDelta; delta != nil; delta = delta.prev {
+		deltas[count] = delta
+		count++
+	}
+	for i := count - 1; i >= 0; i-- {
+		delta := deltas[i]
+		values[delta.index] = delta.value
+	}
+	return values
+}
+
 func (m *Map) EntryAt(k any) IMapEntry {
 	if m.keywordShape != nil {
 		kw, ok := k.(Keyword)
@@ -298,7 +334,7 @@ func (m *Map) EntryAt(k any) IMapEntry {
 			return nil
 		}
 		if i := m.keywordShape.indexOf(kw); i >= 0 {
-			return NewMapEntry(kw, m.keyVals[i])
+			return NewMapEntry(kw, m.keywordValueAt(i))
 		}
 		return nil
 	}
@@ -315,7 +351,7 @@ func (m *Map) clone() *Map {
 	if m.keywordShape != nil {
 		return &Map{
 			meta:         m.meta,
-			keyVals:      append([]any(nil), m.keyVals...),
+			keyVals:      m.materializedKeywordValues(),
 			keywordShape: m.keywordShape,
 		}
 	}
@@ -328,8 +364,38 @@ func (m *Map) Assoc(k, v any) Associative {
 	if m.keywordShape != nil {
 		if kw, ok := k.(Keyword); ok {
 			if i := m.keywordShape.indexOf(kw); i >= 0 {
-				if Identical(m.keyVals[i], v) {
+				if Identical(m.keywordValueAt(i), v) {
 					return m
+				}
+				if m.keywordDelta != nil && int(m.keywordDelta.index) == i {
+					return &Map{
+						meta:         m.meta,
+						keyVals:      m.keyVals,
+						keywordShape: m.keywordShape,
+						keywordDelta: &keywordMapDelta{
+							prev:  m.keywordDelta.prev,
+							value: v,
+							index: uint32(i),
+							depth: m.keywordDelta.depth,
+						},
+					}
+				}
+				if m.keywordDelta == nil || m.keywordDelta.depth < keywordMapDeltaMax {
+					depth := uint8(1)
+					if m.keywordDelta != nil {
+						depth = m.keywordDelta.depth + 1
+					}
+					return &Map{
+						meta:         m.meta,
+						keyVals:      m.keyVals,
+						keywordShape: m.keywordShape,
+						keywordDelta: &keywordMapDelta{
+							prev:  m.keywordDelta,
+							value: v,
+							index: uint32(i),
+							depth: depth,
+						},
+					}
 				}
 				newMap := m.clone()
 				newMap.keyVals[i] = v
@@ -380,7 +446,7 @@ func (m *Map) Without(k any) IPersistentMap {
 		keyVals := make([]any, 0, (len(m.keyVals)-1)*2)
 		for i, key := range m.keywordShape.keys {
 			if i != remove {
-				keyVals = append(keyVals, key, m.keyVals[i])
+				keyVals = append(keyVals, key, m.keywordValueAt(i))
 			}
 		}
 		return NewMapUniqueKeys(keyVals...).(IObj).WithMeta(m.meta).(IPersistentMap)
@@ -408,7 +474,7 @@ func (m *Map) Seq() ISeq {
 		return nil
 	}
 	if m.keywordShape != nil {
-		return NewKeywordMapSeq(m.keywordShape, m.keyVals)
+		return newKeywordMapSeq(m)
 	}
 	return NewMapSeq(m.keyVals)
 }
@@ -416,7 +482,7 @@ func (m *Map) Seq() ISeq {
 func (m *Map) interleavedKeyVals(extraEntries int) []any {
 	keyVals := make([]any, 0, (len(m.keyVals)+extraEntries)*2)
 	for i, key := range m.keywordShape.keys {
-		keyVals = append(keyVals, key, m.keyVals[i])
+		keyVals = append(keyVals, key, m.keywordValueAt(i))
 	}
 	return keyVals
 }
@@ -584,11 +650,20 @@ func NewMapSeq(kvs []any) *MapSeq {
 	}
 }
 
+func newKeywordMapSeq(m *Map) *MapSeq {
+	if m == nil || m.keywordShape == nil || len(m.keyVals) == 0 {
+		return nil
+	}
+	return &MapSeq{shape: m.keywordShape, shaped: m}
+}
+
+// NewKeywordMapSeq constructs a sequence over an immutable shaped-map value
+// slice. Map.Seq uses newKeywordMapSeq so delta overlays remain visible.
 func NewKeywordMapSeq(shape *KeywordMapShape, values []any) *MapSeq {
 	if shape == nil || len(values) == 0 {
 		return nil
 	}
-	return &MapSeq{shape: shape, values: values}
+	return newKeywordMapSeq(&Map{keyVals: values, keywordShape: shape})
 }
 
 func (s *MapSeq) xxx_sequential() {}
@@ -618,7 +693,7 @@ func (s *MapSeq) First() any {
 	if s.shape != nil {
 		return &MapEntry{
 			key: s.shape.keys[s.index],
-			val: s.values[s.index],
+			val: s.shaped.keywordValueAt(s.index),
 		}
 	}
 	return &MapEntry{
@@ -629,12 +704,12 @@ func (s *MapSeq) First() any {
 
 func (s *MapSeq) Next() ISeq {
 	if s.shape != nil {
-		if s.index+1 >= len(s.values) {
+		if s.index+1 >= len(s.shaped.keyVals) {
 			return nil
 		}
 		return &MapSeq{
 			shape:  s.shape,
-			values: s.values,
+			shaped: s.shaped,
 			index:  s.index + 1,
 		}
 	}
@@ -660,7 +735,7 @@ func (s *MapSeq) Cons(o any) Conser {
 
 func (s *MapSeq) Count() int {
 	if s.shape != nil {
-		return len(s.values) - s.index
+		return len(s.shaped.keyVals) - s.index
 	}
 	return len(s.keyVals) / 2
 }
@@ -690,8 +765,8 @@ func (s *MapSeq) HashEq() uint32 {
 func (s *MapSeq) Reduce(f IFn) any {
 	if s.shape != nil {
 		acc := s.First()
-		for i := s.index + 1; i < len(s.values); i++ {
-			acc = f.Invoke(acc, NewMapEntry(s.shape.keys[i], s.values[i]))
+		for i := s.index + 1; i < len(s.shaped.keyVals); i++ {
+			acc = f.Invoke(acc, NewMapEntry(s.shape.keys[i], s.shaped.keywordValueAt(i)))
 			if IsReduced(acc) {
 				return acc.(IDeref).Deref()
 			}
@@ -714,8 +789,8 @@ func (s *MapSeq) Reduce(f IFn) any {
 func (s *MapSeq) ReduceInit(f IFn, init any) any {
 	if s.shape != nil {
 		acc := init
-		for i := s.index; i < len(s.values); i++ {
-			acc = f.Invoke(acc, NewMapEntry(s.shape.keys[i], s.values[i]))
+		for i := s.index; i < len(s.shaped.keyVals); i++ {
+			acc = f.Invoke(acc, NewMapEntry(s.shape.keys[i], s.shaped.keywordValueAt(i)))
 			if IsReduced(acc) {
 				return acc.(IDeref).Deref()
 			}
@@ -739,7 +814,7 @@ func (s *MapSeq) Drop(n int) Sequential {
 	if s.shape != nil {
 		return &MapSeq{
 			shape:  s.shape,
-			values: s.values,
+			shaped: s.shaped,
 			index:  s.index + n,
 		}
 	}

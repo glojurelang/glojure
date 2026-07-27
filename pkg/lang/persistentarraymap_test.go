@@ -155,6 +155,59 @@ func TestStaticKeywordMapBehavesLikePersistentMap(t *testing.T) {
 	}
 }
 
+func TestStaticKeywordMapDeltaCompactionRemainsPersistent(t *testing.T) {
+	names := make([]string, keywordMapDeltaMax+2)
+	values := make([]any, len(names))
+	for i := range names {
+		names[i] = "k" + strconv.Itoa(i)
+		values[i] = int64(i)
+	}
+	shape := NewKeywordMapShape(names...)
+	base := NewStaticKeywordMap(shape, values...).(*Map)
+	updated := base
+
+	for i := 0; i <= keywordMapDeltaMax; i++ {
+		updated = updated.Assoc(NewKeyword(names[i]), int64(100+i)).(*Map)
+	}
+	if updated.keywordDelta != nil {
+		t.Fatal("expected the bounded delta overlay to compact")
+	}
+	for i, name := range names {
+		want := int64(i)
+		if i <= keywordMapDeltaMax {
+			want = int64(100 + i)
+		}
+		if got := updated.ValAt(NewKeyword(name)); got != want {
+			t.Fatalf("updated value for %s = %v, want %v", name, got, want)
+		}
+		if got := base.ValAt(NewKeyword(name)); got != int64(i) {
+			t.Fatalf("base value for %s changed to %v", name, got)
+		}
+	}
+
+	replaced := base.Assoc(NewKeyword(names[0]), int64(10)).(*Map)
+	replacedAgain := replaced.Assoc(NewKeyword(names[0]), int64(20)).(*Map)
+	if got := replacedAgain.keywordDelta.depth; got != 1 {
+		t.Fatalf("same-slot delta depth = %d, want 1", got)
+	}
+	if got := replaced.ValAt(NewKeyword(names[0])); got != int64(10) {
+		t.Fatalf("replacing a delta changed its predecessor to %v", got)
+	}
+
+	i := 0
+	for seq := updated.Seq(); seq != nil; seq = seq.Next() {
+		entry := seq.First().(IMapEntry)
+		if entry.Key() != NewKeyword(names[i]) ||
+			entry.Val() != updated.ValAt(NewKeyword(names[i])) {
+			t.Fatalf("entry %d = %v", i, entry)
+		}
+		i++
+	}
+	if i != len(names) {
+		t.Fatalf("sequence contained %d entries, want %d", i, len(names))
+	}
+}
+
 func TestMapAssocInvalidatesCachedHashes(t *testing.T) {
 	key := NewKeyword("key")
 	original := NewMap(key, int64(1)).(*Map)
