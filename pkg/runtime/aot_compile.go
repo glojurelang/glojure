@@ -36,7 +36,7 @@ func generateNamespaceAOT(fsDir string, ns *lang.Namespace) {
 	}
 
 	var buf bytes.Buffer
-	gen := NewGenerator(&buf)
+	gen := newGenerator(&buf, aotDirectLinkCoreEnabled())
 	if err := gen.Generate(ns); err != nil {
 		_ = os.WriteFile(targetFile, buf.Bytes(), 0644)
 		panic(fmt.Errorf("failed to generate code for namespace %s: %w", ns.Name(), err))
@@ -44,4 +44,24 @@ func generateNamespaceAOT(fsDir string, ns *lang.Namespace) {
 	if err := os.WriteFile(targetFile, buf.Bytes(), 0644); err != nil {
 		panic(fmt.Errorf("failed to write generated code to %s: %w", targetFile, err))
 	}
+}
+
+func aotDirectLinkCoreEnabled() bool {
+	compilerOptions := lang.NSCore.FindInternedVar(
+		lang.NewSymbol("*compiler-options*"),
+	)
+	if compilerOptions == nil || !compilerOptions.IsBound() {
+		return true
+	}
+	options := compilerOptions.Get()
+	missing := &struct{}{}
+	value := lang.GetDefault(
+		options,
+		lang.KWDirectLinking,
+		missing,
+	)
+	if value == missing {
+		return true
+	}
+	return RT.BooleanCast(value)
 }

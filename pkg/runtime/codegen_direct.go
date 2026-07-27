@@ -246,10 +246,10 @@ func (g *Generator) aotInvokeTarget(
 	return target
 }
 
-// aotExternalInvokeTarget caches the root of a statically resolved call into
-// another namespace. Compiled calls use the root present when the namespace
-// loads while its version remains current, and fall back to Var dispatch after
-// a redefinition. Dynamic Vars always retain runtime lookup.
+// aotExternalInvokeTarget prepares a statically resolved call into another
+// namespace. Calls to clojure.core are linked directly when enabled; other
+// calls retain a root-version guard and fall back to Var dispatch after a
+// redefinition. Dynamic and ^:redef Vars always retain runtime lookup.
 func (g *Generator) aotExternalInvokeTarget(
 	invoke *ast.InvokeNode,
 ) *aotExternalCallTarget {
@@ -274,18 +274,24 @@ func (g *Generator) aotExternalInvokeTarget(
 		return target
 	}
 	index := len(g.aotExternalCallTargets)
+	directLinked := g.directLinkCore &&
+		vr.Namespace().Name().String() == "clojure.core" &&
+		!RT.BooleanCast(lang.Get(vr.Meta(), lang.KWRedef))
 	target := &aotExternalCallTarget{
 		vr:             vr,
 		arity:          arity,
 		fnVar:          fmt.Sprintf("aotExternalFn%d", index),
 		intrinsic:      intrinsic,
+		directLinked:   directLinked,
 		defaultVar:     fmt.Sprintf("aotExternalDefault%d", index),
 		rootVersionVar: fmt.Sprintf("aotExternalRootVersion%d", index),
 	}
-	g.allocVarVar(
-		vr.Namespace().Name().String(),
-		vr.Symbol().String(),
-	)
+	if intrinsic == "" || !directLinked {
+		g.allocVarVar(
+			vr.Namespace().Name().String(),
+			vr.Symbol().String(),
+		)
+	}
 	g.aotExternalCallTargets[key] = target
 	return target
 }
@@ -387,12 +393,19 @@ func (g *Generator) aotExternalIntrinsicCall(
 	}
 }
 
-func (g *Generator) generateAOTExternalCacheAdapters() {
-	var arities [6]bool
+func (g *Generator) generateAOTExternalAdapters() {
+	var cachedArities, linkedArities [6]bool
 	for _, target := range g.aotExternalCallTargets {
-		arities[target.arity] = true
+		if target.directLinked {
+			linkedArities[target.arity] = true
+		} else {
+			cachedArities[target.arity] = true
+		}
 	}
-	for arity, used := range arities {
+	if hasAOTAdapterArity(linkedArities) {
+		g.addImport("sync")
+	}
+	for arity, used := range cachedArities {
 		if !used {
 			continue
 		}
@@ -435,6 +448,59 @@ func (g *Generator) generateAOTExternalCacheAdapters() {
 			arity, aotAdapterArgs(args),
 			arity, aotAdapterArgs(args))
 	}
+	for arity, used := range linkedArities {
+		if !used {
+			continue
+		}
+		params := make([]string, arity)
+		args := make([]string, arity)
+		for i := range params {
+			args[i] = fmt.Sprintf("p%d", i)
+			params[i] = args[i] + " any"
+		}
+		paramList := strings.Join(params, ", ")
+		argList := strings.Join(args, ", ")
+		fmt.Fprintf(&g.aotDeclarations,
+			"func aotLinkFn%d(vr *lang.Var) lang.FnFunc%d {\n"+
+				"if vr.IsBound() { return aotLinkBoundFn%d(vr) }\n"+
+				"var once sync.Once\n"+
+				"var linked lang.FnFunc%d\n"+
+				"return func(%s) any {\n"+
+				"if !vr.IsBound() { return lang.Apply%d(checkDerefVar(vr)%s) }\n"+
+				"once.Do(func() { linked = aotLinkBoundFn%d(vr) })\n"+
+				"return linked(%s)\n"+
+				"}\n"+
+				"}\n\n"+
+				"func aotLinkBoundFn%d(vr *lang.Var) lang.FnFunc%d {\n"+
+				"fn := checkDerefVar(vr)\n",
+			arity, arity,
+			arity,
+			arity,
+			paramList,
+			arity, aotAdapterArgs(args),
+			arity,
+			argList,
+			arity, arity)
+		fmt.Fprintf(&g.aotDeclarations,
+			"if direct, ok := fn.(lang.FnFunc%d); ok { return direct }\n",
+			arity)
+		fmt.Fprintf(&g.aotDeclarations,
+			"if fixed, ok := fn.(lang.FixedArityFn%d); ok { return fixed.Invoke%d }\n",
+			arity, arity)
+		fmt.Fprintf(&g.aotDeclarations,
+			"return func(%s) any { return lang.Apply%d(fn%s) }\n"+
+				"}\n\n",
+			paramList, arity, aotAdapterArgs(args))
+	}
+}
+
+func hasAOTAdapterArity(arities [6]bool) bool {
+	for _, used := range arities {
+		if used {
+			return true
+		}
+	}
+	return false
 }
 
 func aotAdapterArgs(args []string) string {

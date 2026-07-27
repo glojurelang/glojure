@@ -7,6 +7,7 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
+	sync "sync"
 )
 
 var aotDirectFn0 lang.FnFunc3
@@ -22,58 +23,56 @@ var aotRootVersion3 *lang.VarRootVersion
 var aotDirectFn3Arity2 lang.FnFunc2
 var aotDirectFn3Arity3 lang.FnFunc3
 
-func aotCacheFn1(vr *lang.Var) lang.FnFunc1 {
-	version := vr.RootVersion()
-	fn := checkDerefVar(vr)
-	if direct, ok := fn.(lang.FnFunc1); ok {
-		return func(p0 any) any {
-			if vr.RootVersion() == version {
-				return direct(p0)
-			}
-			return lang.Apply1(checkDerefVar(vr), p0)
-		}
+func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
+	if vr.IsBound() {
+		return aotLinkBoundFn1(vr)
 	}
-	if fixed, ok := fn.(lang.FixedArityFn1); ok {
-		return func(p0 any) any {
-			if vr.RootVersion() == version {
-				return fixed.Invoke1(p0)
-			}
-			return lang.Apply1(checkDerefVar(vr), p0)
-		}
-	}
+	var once sync.Once
+	var linked lang.FnFunc1
 	return func(p0 any) any {
-		if vr.RootVersion() == version {
-			return lang.Apply1(fn, p0)
+		if !vr.IsBound() {
+			return lang.Apply1(checkDerefVar(vr), p0)
 		}
-		return lang.Apply1(checkDerefVar(vr), p0)
+		once.Do(func() { linked = aotLinkBoundFn1(vr) })
+		return linked(p0)
 	}
 }
 
-func aotCacheFn2(vr *lang.Var) lang.FnFunc2 {
-	version := vr.RootVersion()
+func aotLinkBoundFn1(vr *lang.Var) lang.FnFunc1 {
+	fn := checkDerefVar(vr)
+	if direct, ok := fn.(lang.FnFunc1); ok {
+		return direct
+	}
+	if fixed, ok := fn.(lang.FixedArityFn1); ok {
+		return fixed.Invoke1
+	}
+	return func(p0 any) any { return lang.Apply1(fn, p0) }
+}
+
+func aotLinkFn2(vr *lang.Var) lang.FnFunc2 {
+	if vr.IsBound() {
+		return aotLinkBoundFn2(vr)
+	}
+	var once sync.Once
+	var linked lang.FnFunc2
+	return func(p0 any, p1 any) any {
+		if !vr.IsBound() {
+			return lang.Apply2(checkDerefVar(vr), p0, p1)
+		}
+		once.Do(func() { linked = aotLinkBoundFn2(vr) })
+		return linked(p0, p1)
+	}
+}
+
+func aotLinkBoundFn2(vr *lang.Var) lang.FnFunc2 {
 	fn := checkDerefVar(vr)
 	if direct, ok := fn.(lang.FnFunc2); ok {
-		return func(p0 any, p1 any) any {
-			if vr.RootVersion() == version {
-				return direct(p0, p1)
-			}
-			return lang.Apply2(checkDerefVar(vr), p0, p1)
-		}
+		return direct
 	}
 	if fixed, ok := fn.(lang.FixedArityFn2); ok {
-		return func(p0 any, p1 any) any {
-			if vr.RootVersion() == version {
-				return fixed.Invoke2(p0, p1)
-			}
-			return lang.Apply2(checkDerefVar(vr), p0, p1)
-		}
+		return fixed.Invoke2
 	}
-	return func(p0 any, p1 any) any {
-		if vr.RootVersion() == version {
-			return lang.Apply2(fn, p0, p1)
-		}
-		return lang.Apply2(checkDerefVar(vr), p0, p1)
-	}
+	return func(p0 any, p1 any) any { return lang.Apply2(fn, p0, p1) }
 }
 
 func init() {
@@ -116,15 +115,12 @@ func LoadNS() {
 	sym_clojure_DOT_core_DOT_protocols := lang.NewSymbolUnchecked("clojure.core.protocols")
 	sym_coll := lang.NewSymbolUnchecked("coll")
 	sym_coll_DASH_reduce := lang.NewSymbolUnchecked("coll-reduce")
-	sym_cons := lang.NewSymbolUnchecked("cons")
 	sym_datafy := lang.NewSymbolUnchecked("datafy")
 	sym_deref := lang.NewSymbolUnchecked("deref")
 	sym_f := lang.NewSymbolUnchecked("f")
-	sym_first := lang.NewSymbolUnchecked("first")
 	sym_global_DASH_hierarchy := lang.NewSymbolUnchecked("global-hierarchy")
 	sym_identical_QMARK_ := lang.NewSymbolUnchecked("identical?")
 	sym_init := lang.NewSymbolUnchecked("init")
-	sym_instance_QMARK_ := lang.NewSymbolUnchecked("instance?")
 	sym_interface_DASH_or_DASH_naive_DASH_reduce := lang.NewSymbolUnchecked("interface-or-naive-reduce")
 	sym_internal_DASH_reduce := lang.NewSymbolUnchecked("internal-reduce")
 	sym_iter_DASH_reduce := lang.NewSymbolUnchecked("iter-reduce")
@@ -132,7 +128,6 @@ func LoadNS() {
 	sym_kv_DASH_reduce := lang.NewSymbolUnchecked("kv-reduce")
 	sym_naive_DASH_seq_DASH_reduce := lang.NewSymbolUnchecked("naive-seq-reduce")
 	sym_nav := lang.NewSymbolUnchecked("nav")
-	sym_next := lang.NewSymbolUnchecked("next")
 	sym_o := lang.NewSymbolUnchecked("o")
 	sym_s := lang.NewSymbolUnchecked("s")
 	sym_seq := lang.NewSymbolUnchecked("seq")
@@ -196,37 +191,17 @@ func LoadNS() {
 	var_clojure_DOT_core_chunked_DASH_seq_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_chunked_DASH_seq_QMARK_)
 	// var clojure.core/class
 	var_clojure_DOT_core_class := lang.InternVarName(sym_clojure_DOT_core, sym_class)
-	// var clojure.core/cons
-	var_clojure_DOT_core_cons := lang.InternVarName(sym_clojure_DOT_core, sym_cons)
 	// var clojure.core/deref
 	var_clojure_DOT_core_deref := lang.InternVarName(sym_clojure_DOT_core, sym_deref)
-	// var clojure.core/first
-	var_clojure_DOT_core_first := lang.InternVarName(sym_clojure_DOT_core, sym_first)
 	// var clojure.core/identical?
 	var_clojure_DOT_core_identical_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_identical_QMARK_)
-	// var clojure.core/instance?
-	var_clojure_DOT_core_instance_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_instance_QMARK_)
-	// var clojure.core/next
-	var_clojure_DOT_core_next := lang.InternVarName(sym_clojure_DOT_core, sym_next)
-	// var clojure.core/seq
-	var_clojure_DOT_core_seq := lang.InternVarName(sym_clojure_DOT_core, sym_seq)
-	aotExternalFn0 := aotCacheFn1(var_clojure_DOT_core_class)
-	aotExternalFn1 := aotCacheFn2(var_clojure_DOT_core_apply)
-	aotExternalFn10 := aotCacheFn1(var_clojure_DOT_core_chunk_DASH_next)
-	aotExternalFn11 := aotCacheFn2(var_clojure_DOT_core_identical_QMARK_)
-	aotExternalDefault2 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_cons)
-	aotExternalRootVersion2 := var_clojure_DOT_core_cons.RootVersion()
-	aotExternalDefault3 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_instance_QMARK_)
-	aotExternalRootVersion3 := var_clojure_DOT_core_instance_QMARK_.RootVersion()
-	aotExternalFn4 := aotCacheFn1(var_clojure_DOT_core_deref)
-	aotExternalDefault5 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_seq)
-	aotExternalRootVersion5 := var_clojure_DOT_core_seq.RootVersion()
-	aotExternalDefault6 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_first)
-	aotExternalRootVersion6 := var_clojure_DOT_core_first.RootVersion()
-	aotExternalDefault7 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_next)
-	aotExternalRootVersion7 := var_clojure_DOT_core_next.RootVersion()
-	aotExternalFn8 := aotCacheFn1(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
-	aotExternalFn9 := aotCacheFn1(var_clojure_DOT_core_chunk_DASH_first)
+	aotExternalFn0 := aotLinkFn1(var_clojure_DOT_core_class)
+	aotExternalFn1 := aotLinkFn2(var_clojure_DOT_core_apply)
+	aotExternalFn10 := aotLinkFn1(var_clojure_DOT_core_chunk_DASH_next)
+	aotExternalFn11 := aotLinkFn2(var_clojure_DOT_core_identical_QMARK_)
+	aotExternalFn4 := aotLinkFn1(var_clojure_DOT_core_deref)
+	aotExternalFn8 := aotLinkFn1(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
+	aotExternalFn9 := aotLinkFn1(var_clojure_DOT_core_chunk_DASH_first)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error
@@ -428,15 +403,9 @@ func LoadNS() {
 				_ = v5
 				var v6 any = rest
 				_ = v6
-				var tmp7 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp7 = lang.NewCons(v5, v6)
-				} else {
-					tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp7 = lang.Apply2(tmp8, v5, v6)
-				}
-				tmp9 := aotExternalFn1(closed5, tmp7)
-				return tmp9
+				tmp7 := lang.NewCons(v5, v6)
+				tmp8 := aotExternalFn1(closed5, tmp7)
+				return tmp8
 			}),
 			1,
 		)
@@ -537,15 +506,9 @@ func LoadNS() {
 				_ = v4
 				var v5 any = rest
 				_ = v5
-				var tmp6 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp6 = lang.NewCons(v4, v5)
-				} else {
-					tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp6 = lang.Apply2(tmp7, v4, v5)
-				}
-				tmp8 := aotExternalFn1(closed0, tmp6)
-				return tmp8
+				tmp6 := lang.NewCons(v4, v5)
+				tmp7 := aotExternalFn1(closed0, tmp6)
+				return tmp7
 			}),
 			1,
 		)
@@ -563,15 +526,9 @@ func LoadNS() {
 				_ = v6
 				var v7 any = rest
 				_ = v7
-				var tmp8 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp8 = lang.NewCons(v6, v7)
-				} else {
-					tmp9 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp8 = lang.Apply2(tmp9, v6, v7)
-				}
-				tmp10 := aotExternalFn1(closed1, tmp8)
-				return tmp10
+				tmp8 := lang.NewCons(v6, v7)
+				tmp9 := aotExternalFn1(closed1, tmp8)
+				return tmp9
 			}),
 			1,
 		)
@@ -589,15 +546,9 @@ func LoadNS() {
 				_ = v8
 				var v9 any = rest
 				_ = v9
-				var tmp10 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp10 = lang.NewCons(v8, v9)
-				} else {
-					tmp11 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp10 = lang.Apply2(tmp11, v8, v9)
-				}
-				tmp12 := aotExternalFn1(closed2, tmp10)
-				return tmp12
+				tmp10 := lang.NewCons(v8, v9)
+				tmp11 := aotExternalFn1(closed2, tmp10)
+				return tmp11
 			}),
 			1,
 		)
@@ -615,15 +566,9 @@ func LoadNS() {
 				_ = v10
 				var v11 any = rest
 				_ = v11
-				var tmp12 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp12 = lang.NewCons(v10, v11)
-				} else {
-					tmp13 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp12 = lang.Apply2(tmp13, v10, v11)
-				}
-				tmp14 := aotExternalFn1(closed3, tmp12)
-				return tmp14
+				tmp12 := lang.NewCons(v10, v11)
+				tmp13 := aotExternalFn1(closed3, tmp12)
+				return tmp13
 			}),
 			1,
 		)
@@ -641,15 +586,9 @@ func LoadNS() {
 				_ = v12
 				var v13 any = rest
 				_ = v13
-				var tmp14 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp14 = lang.NewCons(v12, v13)
-				} else {
-					tmp15 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp14 = lang.Apply2(tmp15, v12, v13)
-				}
-				tmp16 := aotExternalFn1(closed4, tmp14)
-				return tmp16
+				tmp14 := lang.NewCons(v12, v13)
+				tmp15 := aotExternalFn1(closed4, tmp14)
+				return tmp15
 			}),
 			1,
 		)
@@ -693,15 +632,9 @@ func LoadNS() {
 				_ = v4
 				var v5 any = rest
 				_ = v5
-				var tmp6 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp6 = lang.NewCons(v4, v5)
-				} else {
-					tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp6 = lang.Apply2(tmp7, v4, v5)
-				}
-				tmp8 := aotExternalFn1(closed5, tmp6)
-				return tmp8
+				tmp6 := lang.NewCons(v4, v5)
+				tmp7 := aotExternalFn1(closed5, tmp6)
+				return tmp7
 			}),
 			1,
 		)
@@ -745,15 +678,9 @@ func LoadNS() {
 				_ = v4
 				var v5 any = rest
 				_ = v5
-				var tmp6 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp6 = lang.NewCons(v4, v5)
-				} else {
-					tmp7 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp6 = lang.Apply2(tmp7, v4, v5)
-				}
-				tmp8 := aotExternalFn1(closed6, tmp6)
-				return tmp8
+				tmp6 := lang.NewCons(v4, v5)
+				tmp7 := aotExternalFn1(closed6, tmp6)
+				return tmp7
 			}),
 			1,
 		)
@@ -771,15 +698,9 @@ func LoadNS() {
 				_ = v6
 				var v7 any = rest
 				_ = v7
-				var tmp8 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp8 = lang.NewCons(v6, v7)
-				} else {
-					tmp9 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp8 = lang.Apply2(tmp9, v6, v7)
-				}
-				tmp10 := aotExternalFn1(closed7, tmp8)
-				return tmp10
+				tmp8 := lang.NewCons(v6, v7)
+				tmp9 := aotExternalFn1(closed7, tmp8)
+				return tmp9
 			}),
 			1,
 		)
@@ -797,15 +718,9 @@ func LoadNS() {
 				_ = v8
 				var v9 any = rest
 				_ = v9
-				var tmp10 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp10 = lang.NewCons(v8, v9)
-				} else {
-					tmp11 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp10 = lang.Apply2(tmp11, v8, v9)
-				}
-				tmp12 := aotExternalFn1(closed8, tmp10)
-				return tmp12
+				tmp10 := lang.NewCons(v8, v9)
+				tmp11 := aotExternalFn1(closed8, tmp10)
+				return tmp11
 			}),
 			1,
 		)
@@ -1069,60 +984,42 @@ func LoadNS() {
 			var tmp5 any
 			{ // let
 				// let binding "s"
-				var tmp6 any
-				if aotExternalDefault5 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion5 {
-					tmp6 = lang.Seq(v2)
-				} else {
-					tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp6 = lang.Apply1(tmp7, v2)
-				}
-				var v8 any = tmp6
-				_ = v8
+				tmp6 := lang.Seq(v2)
+				var v7 any = tmp6
+				_ = v7
 				// let binding "val"
-				var v9 any = v4
-				_ = v9
+				var v8 any = v4
+				_ = v8
 				for {
-					var tmp10 any
-					if lang.IsTruthy(v8) {
-						var tmp11 any
+					var tmp9 any
+					if lang.IsTruthy(v7) {
+						var tmp10 any
 						{ // let
 							// let binding "ret"
-							var tmp12 any
-							if aotExternalDefault6 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion6 {
-								tmp12 = lang.First(v8)
+							tmp11 := lang.First(v7)
+							tmp12 := lang.Apply2(v3, v8, tmp11)
+							var v13 any = tmp12
+							_ = v13
+							var tmp14 any
+							tmp15 := lang.IsReduced(v13)
+							if lang.IsTruthy(tmp15) {
+								tmp16 := aotExternalFn4(v13)
+								tmp14 = tmp16
 							} else {
-								tmp13 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp12 = lang.Apply1(tmp13, v8)
-							}
-							tmp14 := lang.Apply2(v3, v9, tmp12)
-							var v15 any = tmp14
-							_ = v15
-							var tmp16 any
-							tmp17 := lang.IsReduced(v15)
-							if lang.IsTruthy(tmp17) {
-								tmp18 := aotExternalFn4(v15)
-								tmp16 = tmp18
-							} else {
-								var tmp20 any
-								if aotExternalDefault7 && var_clojure_DOT_core_next.RootVersion() == aotExternalRootVersion7 {
-									tmp20 = lang.Next(v8)
-								} else {
-									tmp21 := checkDerefVar(var_clojure_DOT_core_next)
-									tmp20 = lang.Apply1(tmp21, v8)
-								}
-								var tmp19 any = tmp20
-								var tmp22 any = v15
+								tmp18 := lang.Next(v7)
+								var tmp17 any = tmp18
+								var tmp19 any = v13
+								v7 = tmp17
 								v8 = tmp19
-								v9 = tmp22
 								continue
 							}
-							tmp11 = tmp16
+							tmp10 = tmp14
 						} // end let
-						tmp10 = tmp11
+						tmp9 = tmp10
 					} else {
-						tmp10 = v9
+						tmp9 = v8
 					}
-					tmp5 = tmp10
+					tmp5 = tmp9
 					break
 				}
 			} // end let
@@ -1174,46 +1071,28 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "temp__0__auto__"
-				var tmp5 any
-				if aotExternalDefault5 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion5 {
-					tmp5 = lang.Seq(v2)
-				} else {
-					tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp5 = lang.Apply1(tmp6, v2)
-				}
-				var v7 any = tmp5
-				_ = v7
-				var tmp8 any
-				if lang.IsTruthy(v7) {
-					var tmp9 any
+				tmp5 := lang.Seq(v2)
+				var v6 any = tmp5
+				_ = v6
+				var tmp7 any
+				if lang.IsTruthy(v6) {
+					var tmp8 any
 					{ // let
 						// let binding "s"
-						var v10 any = v7
-						_ = v10
-						tmp11 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce)
-						var tmp12 any
-						if aotExternalDefault7 && var_clojure_DOT_core_next.RootVersion() == aotExternalRootVersion7 {
-							tmp12 = lang.Next(v10)
-						} else {
-							tmp13 := checkDerefVar(var_clojure_DOT_core_next)
-							tmp12 = lang.Apply1(tmp13, v10)
-						}
-						var tmp14 any
-						if aotExternalDefault6 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion6 {
-							tmp14 = lang.First(v10)
-						} else {
-							tmp15 := checkDerefVar(var_clojure_DOT_core_first)
-							tmp14 = lang.Apply1(tmp15, v10)
-						}
-						tmp16 := lang.Apply3(tmp11, tmp12, v3, tmp14)
-						tmp9 = tmp16
+						var v9 any = v6
+						_ = v9
+						tmp10 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce)
+						tmp11 := lang.Next(v9)
+						tmp12 := lang.First(v9)
+						tmp13 := lang.Apply3(tmp10, tmp11, v3, tmp12)
+						tmp8 = tmp13
 					} // end let
-					tmp8 = tmp9
+					tmp7 = tmp8
 				} else {
-					tmp10 := lang.Apply0(v3)
-					tmp8 = tmp10
+					tmp9 := lang.Apply0(v3)
+					tmp7 = tmp9
 				}
-				tmp4 = tmp8
+				tmp4 = tmp7
 			} // end let
 			return tmp4
 		})
@@ -1227,18 +1106,12 @@ func LoadNS() {
 			var tmp5 any
 			{ // let
 				// let binding "s"
-				var tmp6 any
-				if aotExternalDefault5 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion5 {
-					tmp6 = lang.Seq(v2)
-				} else {
-					tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp6 = lang.Apply1(tmp7, v2)
-				}
-				var v8 any = tmp6
-				_ = v8
-				tmp9 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce)
-				tmp10 := lang.Apply3(tmp9, v8, v3, v4)
-				tmp5 = tmp10
+				tmp6 := lang.Seq(v2)
+				var v7 any = tmp6
+				_ = v7
+				tmp8 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce)
+				tmp9 := lang.Apply3(tmp8, v7, v3, v4)
+				tmp5 = tmp9
 			} // end let
 			return tmp5
 		})
@@ -1439,15 +1312,9 @@ func LoadNS() {
 				_ = v5
 				var v6 any = rest
 				_ = v6
-				var tmp7 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp7 = lang.NewCons(v5, v6)
-				} else {
-					tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp7 = lang.Apply2(tmp8, v5, v6)
-				}
-				tmp9 := aotExternalFn1(closed0, tmp7)
-				return tmp9
+				tmp7 := lang.NewCons(v5, v6)
+				tmp8 := aotExternalFn1(closed0, tmp7)
+				return tmp8
 			}),
 			1,
 		)
@@ -1465,15 +1332,9 @@ func LoadNS() {
 				_ = v7
 				var v8 any = rest
 				_ = v8
-				var tmp9 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp9 = lang.NewCons(v7, v8)
-				} else {
-					tmp10 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp9 = lang.Apply2(tmp10, v7, v8)
-				}
-				tmp11 := aotExternalFn1(closed1, tmp9)
-				return tmp11
+				tmp9 := lang.NewCons(v7, v8)
+				tmp10 := aotExternalFn1(closed1, tmp9)
+				return tmp10
 			}),
 			1,
 		)
@@ -1491,15 +1352,9 @@ func LoadNS() {
 				_ = v9
 				var v10 any = rest
 				_ = v10
-				var tmp11 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp11 = lang.NewCons(v9, v10)
-				} else {
-					tmp12 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp11 = lang.Apply2(tmp12, v9, v10)
-				}
-				tmp13 := aotExternalFn1(closed2, tmp11)
-				return tmp13
+				tmp11 := lang.NewCons(v9, v10)
+				tmp12 := aotExternalFn1(closed2, tmp11)
+				return tmp12
 			}),
 			1,
 		)
@@ -1517,15 +1372,9 @@ func LoadNS() {
 				_ = v11
 				var v12 any = rest
 				_ = v12
-				var tmp13 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp13 = lang.NewCons(v11, v12)
-				} else {
-					tmp14 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp13 = lang.Apply2(tmp14, v11, v12)
-				}
-				tmp15 := aotExternalFn1(closed3, tmp13)
-				return tmp15
+				tmp13 := lang.NewCons(v11, v12)
+				tmp14 := aotExternalFn1(closed3, tmp13)
+				return tmp14
 			}),
 			1,
 		)
@@ -1543,15 +1392,9 @@ func LoadNS() {
 				_ = v13
 				var v14 any = rest
 				_ = v14
-				var tmp15 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp15 = lang.NewCons(v13, v14)
-				} else {
-					tmp16 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp15 = lang.Apply2(tmp16, v13, v14)
-				}
-				tmp17 := aotExternalFn1(closed4, tmp15)
-				return tmp17
+				tmp15 := lang.NewCons(v13, v14)
+				tmp16 := aotExternalFn1(closed4, tmp15)
+				return tmp16
 			}),
 			1,
 		)
@@ -1574,30 +1417,23 @@ func LoadNS() {
 			v4 := p2
 			_ = v4
 			var tmp5 any
-			tmp6 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
-			var tmp7 any
-			if aotExternalDefault3 && var_clojure_DOT_core_instance_QMARK_.RootVersion() == aotExternalRootVersion3 {
-				tmp7 = lang.IsInstance[lang.IReduceInit](v2)
+			tmp6 := lang.IsInstance[lang.IReduceInit](v2)
+			if lang.IsTruthy(tmp6) {
+				tmp7 := v2.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v3), v4)
+				tmp5 = tmp7
 			} else {
-				tmp8 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
-				tmp7 = lang.Apply2(tmp8, tmp6, v2)
-			}
-			if lang.IsTruthy(tmp7) {
-				tmp9 := v2.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v3), v4)
-				tmp5 = tmp9
-			} else {
-				tmp10 := var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.IsMacro()
-				var tmp11 any
-				if !tmp10 {
-					tmp11 = checkDerefVar(var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce)
+				tmp8 := var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.IsMacro()
+				var tmp9 any
+				if !tmp8 {
+					tmp9 = checkDerefVar(var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce)
 				}
-				var tmp12 any
-				if tmp10 {
-					tmp12 = aotDirectFn2(v2, v3, v4)
+				var tmp10 any
+				if tmp8 {
+					tmp10 = aotDirectFn2(v2, v3, v4)
 				} else {
-					tmp12 = lang.Apply3(tmp11, v2, v3, v4)
+					tmp10 = lang.Apply3(tmp9, v2, v3, v4)
 				}
-				tmp5 = tmp12
+				tmp5 = tmp10
 			}
 			return tmp5
 		})
@@ -1621,75 +1457,69 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "temp__0__auto__"
-				var tmp5 any
-				if aotExternalDefault5 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion5 {
-					tmp5 = lang.Seq(v1)
-				} else {
-					tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
-					tmp5 = lang.Apply1(tmp6, v1)
-				}
-				var v7 any = tmp5
-				_ = v7
-				var tmp8 any
-				if lang.IsTruthy(v7) {
-					var tmp9 any
+				tmp5 := lang.Seq(v1)
+				var v6 any = tmp5
+				_ = v6
+				var tmp7 any
+				if lang.IsTruthy(v6) {
+					var tmp8 any
 					{ // let
 						// let binding "s"
-						var v10 any = v7
-						_ = v10
-						var tmp11 any
-						tmp12 := aotExternalFn8(v10)
-						if lang.IsTruthy(tmp12) {
-							var tmp13 any
+						var v9 any = v6
+						_ = v9
+						var tmp10 any
+						tmp11 := aotExternalFn8(v9)
+						if lang.IsTruthy(tmp11) {
+							var tmp12 any
 							{ // let
 								// let binding "ret"
-								tmp14 := aotExternalFn9(v10)
-								tmp15, _ := lang.FieldOrMethod(tmp14, "ReduceInit")
-								if reflect.TypeOf(tmp15).Kind() != reflect.Func {
+								tmp13 := aotExternalFn9(v9)
+								tmp14, _ := lang.FieldOrMethod(tmp13, "ReduceInit")
+								if reflect.TypeOf(tmp14).Kind() != reflect.Func {
 									panic(lang.NewIllegalArgumentError(fmt.Sprintf("ReduceInit is not a function")))
 								}
-								tmp16 := lang.Apply2(tmp15, v2, v3)
-								var v17 any = tmp16
-								_ = v17
-								var tmp18 any
-								tmp19 := lang.IsReduced(v17)
-								if lang.IsTruthy(tmp19) {
-									tmp20 := aotExternalFn4(v17)
-									tmp18 = tmp20
+								tmp15 := lang.Apply2(tmp14, v2, v3)
+								var v16 any = tmp15
+								_ = v16
+								var tmp17 any
+								tmp18 := lang.IsReduced(v16)
+								if lang.IsTruthy(tmp18) {
+									tmp19 := aotExternalFn4(v16)
+									tmp17 = tmp19
 								} else {
-									tmp22 := aotExternalFn10(v10)
-									var tmp21 any = tmp22
-									var tmp23 any = v2
-									var tmp24 any = v17
-									v1 = tmp21
-									v2 = tmp23
-									v3 = tmp24
+									tmp21 := aotExternalFn10(v9)
+									var tmp20 any = tmp21
+									var tmp22 any = v2
+									var tmp23 any = v16
+									v1 = tmp20
+									v2 = tmp22
+									v3 = tmp23
 									goto recur_loop_2880
 								}
-								tmp13 = tmp18
+								tmp12 = tmp17
 							} // end let
-							tmp11 = tmp13
+							tmp10 = tmp12
 						} else {
-							tmp14 := var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce.IsMacro()
+							tmp13 := var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce.IsMacro()
+							var tmp14 any
+							if !tmp13 {
+								tmp14 = checkDerefVar(var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce)
+							}
 							var tmp15 any
-							if !tmp14 {
-								tmp15 = checkDerefVar(var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce)
-							}
-							var tmp16 any
-							if tmp14 {
-								tmp16 = aotDirectFn0(v10, v2, v3)
+							if tmp13 {
+								tmp15 = aotDirectFn0(v9, v2, v3)
 							} else {
-								tmp16 = lang.Apply3(tmp15, v10, v2, v3)
+								tmp15 = lang.Apply3(tmp14, v9, v2, v3)
 							}
-							tmp11 = tmp16
+							tmp10 = tmp15
 						}
-						tmp9 = tmp11
+						tmp8 = tmp10
 					} // end let
-					tmp8 = tmp9
+					tmp7 = tmp8
 				} else {
-					tmp8 = v3
+					tmp7 = v3
 				}
-				tmp4 = tmp8
+				tmp4 = tmp7
 			} // end let
 			return tmp4
 		})
@@ -1723,86 +1553,68 @@ func LoadNS() {
 					var tmp10 any
 					{ // let
 						// let binding "temp__0__auto__"
-						var tmp11 any
-						if aotExternalDefault5 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion5 {
-							tmp11 = lang.Seq(v7)
-						} else {
-							tmp12 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp11 = lang.Apply1(tmp12, v7)
-						}
-						var v13 any = tmp11
-						_ = v13
-						var tmp14 any
-						if lang.IsTruthy(v13) {
-							var tmp15 any
+						tmp11 := lang.Seq(v7)
+						var v12 any = tmp11
+						_ = v12
+						var tmp13 any
+						if lang.IsTruthy(v12) {
+							var tmp14 any
 							{ // let
 								// let binding "s"
-								var v16 any = v13
-								_ = v16
-								var tmp17 any
-								tmp18 := aotExternalFn0(v16)
-								tmp19 := aotExternalFn11(tmp18, v6)
-								if lang.IsTruthy(tmp19) {
-									var tmp20 any
+								var v15 any = v12
+								_ = v15
+								var tmp16 any
+								tmp17 := aotExternalFn0(v15)
+								tmp18 := aotExternalFn11(tmp17, v6)
+								if lang.IsTruthy(tmp18) {
+									var tmp19 any
 									{ // let
 										// let binding "ret"
-										var tmp21 any
-										if aotExternalDefault6 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion6 {
-											tmp21 = lang.First(v16)
+										tmp20 := lang.First(v15)
+										tmp21 := lang.Apply2(v8, v9, tmp20)
+										var v22 any = tmp21
+										_ = v22
+										var tmp23 any
+										tmp24 := lang.IsReduced(v22)
+										if lang.IsTruthy(tmp24) {
+											tmp25 := aotExternalFn4(v22)
+											tmp23 = tmp25
 										} else {
-											tmp22 := checkDerefVar(var_clojure_DOT_core_first)
-											tmp21 = lang.Apply1(tmp22, v16)
-										}
-										tmp23 := lang.Apply2(v8, v9, tmp21)
-										var v24 any = tmp23
-										_ = v24
-										var tmp25 any
-										tmp26 := lang.IsReduced(v24)
-										if lang.IsTruthy(tmp26) {
-											tmp27 := aotExternalFn4(v24)
-											tmp25 = tmp27
-										} else {
-											var tmp28 any = v6
-											var tmp30 any
-											if aotExternalDefault7 && var_clojure_DOT_core_next.RootVersion() == aotExternalRootVersion7 {
-												tmp30 = lang.Next(v16)
-											} else {
-												tmp31 := checkDerefVar(var_clojure_DOT_core_next)
-												tmp30 = lang.Apply1(tmp31, v16)
-											}
-											var tmp29 any = tmp30
-											var tmp32 any = v8
-											var tmp33 any = v24
-											v6 = tmp28
-											v7 = tmp29
-											v8 = tmp32
-											v9 = tmp33
+											var tmp26 any = v6
+											tmp28 := lang.Next(v15)
+											var tmp27 any = tmp28
+											var tmp29 any = v8
+											var tmp30 any = v22
+											v6 = tmp26
+											v7 = tmp27
+											v8 = tmp29
+											v9 = tmp30
 											continue
 										}
-										tmp20 = tmp25
+										tmp19 = tmp23
 									} // end let
-									tmp17 = tmp20
+									tmp16 = tmp19
 								} else {
-									tmp21 := var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce.IsMacro()
+									tmp20 := var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce.IsMacro()
+									var tmp21 any
+									if !tmp20 {
+										tmp21 = checkDerefVar(var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce)
+									}
 									var tmp22 any
-									if !tmp21 {
-										tmp22 = checkDerefVar(var_clojure_DOT_core_DOT_protocols_interface_DASH_or_DASH_naive_DASH_reduce)
-									}
-									var tmp23 any
-									if tmp21 {
-										tmp23 = aotDirectFn0(v16, v8, v9)
+									if tmp20 {
+										tmp22 = aotDirectFn0(v15, v8, v9)
 									} else {
-										tmp23 = lang.Apply3(tmp22, v16, v8, v9)
+										tmp22 = lang.Apply3(tmp21, v15, v8, v9)
 									}
-									tmp17 = tmp23
+									tmp16 = tmp22
 								}
-								tmp15 = tmp17
+								tmp14 = tmp16
 							} // end let
-							tmp14 = tmp15
+							tmp13 = tmp14
 						} else {
-							tmp14 = v9
+							tmp13 = v9
 						}
-						tmp10 = tmp14
+						tmp10 = tmp13
 					} // end let
 					tmp4 = tmp10
 					break
@@ -1846,15 +1658,9 @@ func LoadNS() {
 				_ = v5
 				var v6 any = rest
 				_ = v6
-				var tmp7 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp7 = lang.NewCons(v5, v6)
-				} else {
-					tmp8 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp7 = lang.Apply2(tmp8, v5, v6)
-				}
-				tmp9 := aotExternalFn1(closed6, tmp7)
-				return tmp9
+				tmp7 := lang.NewCons(v5, v6)
+				tmp8 := aotExternalFn1(closed6, tmp7)
+				return tmp8
 			}),
 			1,
 		)
@@ -1872,15 +1678,9 @@ func LoadNS() {
 				_ = v7
 				var v8 any = rest
 				_ = v8
-				var tmp9 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp9 = lang.NewCons(v7, v8)
-				} else {
-					tmp10 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp9 = lang.Apply2(tmp10, v7, v8)
-				}
-				tmp11 := aotExternalFn1(closed7, tmp9)
-				return tmp11
+				tmp9 := lang.NewCons(v7, v8)
+				tmp10 := aotExternalFn1(closed7, tmp9)
+				return tmp10
 			}),
 			1,
 		)
@@ -1898,15 +1698,9 @@ func LoadNS() {
 				_ = v9
 				var v10 any = rest
 				_ = v10
-				var tmp11 any
-				if aotExternalDefault2 && var_clojure_DOT_core_cons.RootVersion() == aotExternalRootVersion2 {
-					tmp11 = lang.NewCons(v9, v10)
-				} else {
-					tmp12 := checkDerefVar(var_clojure_DOT_core_cons)
-					tmp11 = lang.Apply2(tmp12, v9, v10)
-				}
-				tmp13 := aotExternalFn1(closed8, tmp11)
-				return tmp13
+				tmp11 := lang.NewCons(v9, v10)
+				tmp12 := aotExternalFn1(closed8, tmp11)
+				return tmp12
 			}),
 			1,
 		)

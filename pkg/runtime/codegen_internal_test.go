@@ -211,6 +211,125 @@ func TestGenerateSeqTruthinessWithoutSequenceAllocation(t *testing.T) {
 	if !strings.Contains(output.String(), "lang.IsSeqTruthy(") {
 		t.Fatalf("generated code did not specialize seq truthiness:\n%s", output.String())
 	}
+	if strings.Contains(output.String(), "aotExternalDefault") {
+		t.Fatalf("default core direct linking retained a Var guard:\n%s", output.String())
+	}
+}
+
+func TestCoreDirectLinkingCanBeDisabled(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.guarded-core-call"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn call-identity [x]
+		  (identity x))`)
+
+	for _, test := range []struct {
+		name       string
+		directLink bool
+		want       string
+		notWant    string
+	}{
+		{
+			name:       "default direct link",
+			directLink: true,
+			want:       "aotLinkFn1",
+			notWant:    "aotCacheFn1",
+		},
+		{
+			name:       "disabled",
+			directLink: false,
+			want:       "aotCacheFn1",
+			notWant:    "aotLinkFn1",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			var output bytes.Buffer
+			if err := newGenerator(&output, test.directLink).Generate(ns); err != nil {
+				t.Fatalf("generate core call: %v", err)
+			}
+			generated := output.String()
+			if !strings.Contains(generated, test.want) {
+				t.Fatalf("generated core call omitted %q:\n%s", test.want, generated)
+			}
+			if strings.Contains(generated, test.notWant) {
+				t.Fatalf("generated core call unexpectedly retained %q:\n%s",
+					test.notWant, generated)
+			}
+			if test.directLink {
+				for _, bootstrapGuard := range []string{
+					"if vr.IsBound()",
+					"var once sync.Once",
+				} {
+					if !strings.Contains(generated, bootstrapGuard) {
+						t.Fatalf("direct-link adapter omitted bootstrap guard %q:\n%s",
+							bootstrapGuard, generated)
+					}
+				}
+			}
+		})
+	}
+}
+
+func TestCoreDirectLinkingUsesCompilerOptions(t *testing.T) {
+	compilerOptions := lang.NSCore.FindInternedVar(
+		lang.NewSymbol("*compiler-options*"),
+	)
+	if compilerOptions == nil {
+		t.Fatal("clojure.core/*compiler-options* is not interned")
+	}
+
+	t.Run("explicit false", func(t *testing.T) {
+		lang.PushThreadBindings(lang.NewMap(
+			compilerOptions,
+			lang.NewMap(lang.KWDirectLinking, false),
+		))
+		defer lang.PopThreadBindings()
+		if aotDirectLinkCoreEnabled() {
+			t.Fatal("{:direct-linking false} left core direct linking enabled")
+		}
+	})
+
+	t.Run("absent", func(t *testing.T) {
+		lang.PushThreadBindings(lang.NewMap(
+			compilerOptions,
+			lang.NewMap(),
+		))
+		defer lang.PopThreadBindings()
+		if !aotDirectLinkCoreEnabled() {
+			t.Fatal("core direct linking is not enabled when the option is absent")
+		}
+	})
+}
+
+func TestCoreDirectLinkingHonorsRedefMetadata(t *testing.T) {
+	identity := lang.NSCore.FindInternedVar(lang.NewSymbol("identity"))
+	originalMeta := identity.Meta()
+	identity.SetMeta(originalMeta.Assoc(lang.KWRedef, true).(lang.IPersistentMap))
+	defer identity.SetMeta(originalMeta)
+
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.redef-core-call"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn call-redef-identity [x]
+		  (identity x))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate ^:redef core call: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "aotCacheFn1") {
+		t.Fatalf("^:redef core call was linked directly:\n%s", generated)
+	}
+	if strings.Contains(generated, "aotLinkFn1") {
+		t.Fatalf("^:redef core call received a direct-link adapter:\n%s", generated)
+	}
 }
 
 func TestGenerateMutableRuntimeValues(t *testing.T) {

@@ -8,36 +8,36 @@ import (
 	lang "github.com/glojurelang/glojure/pkg/lang"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
+	sync "sync"
 )
 
 var aotDirectFn0 lang.FnFunc1
 var aotRootVersion0 *lang.VarRootVersion
 
-func aotCacheFn1(vr *lang.Var) lang.FnFunc1 {
-	version := vr.RootVersion()
+func aotLinkFn1(vr *lang.Var) lang.FnFunc1 {
+	if vr.IsBound() {
+		return aotLinkBoundFn1(vr)
+	}
+	var once sync.Once
+	var linked lang.FnFunc1
+	return func(p0 any) any {
+		if !vr.IsBound() {
+			return lang.Apply1(checkDerefVar(vr), p0)
+		}
+		once.Do(func() { linked = aotLinkBoundFn1(vr) })
+		return linked(p0)
+	}
+}
+
+func aotLinkBoundFn1(vr *lang.Var) lang.FnFunc1 {
 	fn := checkDerefVar(vr)
 	if direct, ok := fn.(lang.FnFunc1); ok {
-		return func(p0 any) any {
-			if vr.RootVersion() == version {
-				return direct(p0)
-			}
-			return lang.Apply1(checkDerefVar(vr), p0)
-		}
+		return direct
 	}
 	if fixed, ok := fn.(lang.FixedArityFn1); ok {
-		return func(p0 any) any {
-			if vr.RootVersion() == version {
-				return fixed.Invoke1(p0)
-			}
-			return lang.Apply1(checkDerefVar(vr), p0)
-		}
+		return fixed.Invoke1
 	}
-	return func(p0 any) any {
-		if vr.RootVersion() == version {
-			return lang.Apply1(fn, p0)
-		}
-		return lang.Apply1(checkDerefVar(vr), p0)
-	}
+	return func(p0 any) any { return lang.Apply1(fn, p0) }
 }
 
 func init() {
@@ -82,7 +82,7 @@ func LoadNS() {
 	var_clojure_DOT_core_string_QMARK_ := lang.InternVarName(sym_clojure_DOT_core, sym_string_QMARK_)
 	// var clojure.uuid/default-uuid-reader
 	var_clojure_DOT_uuid_default_DASH_uuid_DASH_reader := lang.InternVarName(sym_clojure_DOT_uuid, sym_default_DASH_uuid_DASH_reader)
-	aotExternalFn0 := aotCacheFn1(var_clojure_DOT_core_string_QMARK_)
+	aotExternalFn0 := aotLinkFn1(var_clojure_DOT_core_string_QMARK_)
 	// reference fmt to avoid unused import error
 	_ = fmt.Printf
 	// reference reflect to avoid unused import error

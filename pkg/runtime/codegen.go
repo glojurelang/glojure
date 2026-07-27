@@ -99,6 +99,7 @@ type aotExternalCallTarget struct {
 	arity          int
 	fnVar          string
 	intrinsic      string
+	directLinked   bool
 	defaultVar     string
 	rootVersionVar string
 }
@@ -131,6 +132,7 @@ type Generator struct {
 	aotCallTargets         map[*lang.Var]*aotSpecializationTarget
 	aotExternalCallTargets map[aotExternalCallKey]*aotExternalCallTarget
 	aotNamespace           *lang.Namespace
+	directLinkCore         bool
 
 	// Fields for handling closures
 	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
@@ -164,6 +166,10 @@ var (
 
 // NewGenerator creates a new code generator
 func NewGenerator(w io.Writer) *Generator {
+	return newGenerator(w, true)
+}
+
+func newGenerator(w io.Writer, directLinkCore bool) *Generator {
 	return &Generator{
 		originalWriter:         w,
 		currentWriter:          w,
@@ -178,6 +184,7 @@ func NewGenerator(w io.Writer) *Generator {
 		liftedCounter:          0,
 		aotCallTargets:         make(map[*lang.Var]*aotSpecializationTarget),
 		aotExternalCallTargets: make(map[aotExternalCallKey]*aotExternalCallTarget),
+		directLinkCore:         directLinkCore,
 	}
 }
 
@@ -469,6 +476,9 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 		return externalTargets[i].fnVar < externalTargets[j].fnVar
 	})
 	for _, target := range externalTargets {
+		if target.intrinsic != "" && target.directLinked {
+			continue
+		}
 		varName := g.allocVarVar(
 			target.vr.Namespace().Name().String(),
 			target.vr.Symbol().String(),
@@ -483,11 +493,13 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 			))
 			continue
 		}
+		adapter := "Cache"
+		if target.directLinked {
+			adapter = "Link"
+		}
 		initBuf.WriteString(fmt.Sprintf(
-			"%s := aotCacheFn%d(%s)\n",
-			target.fnVar,
-			target.arity,
-			varName,
+			"%s := aot%sFn%d(%s)\n",
+			target.fnVar, adapter, target.arity, varName,
 		))
 	}
 
@@ -563,7 +575,7 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 
 	// Closing brace for LoadNS
 	initBuf.WriteString("}\n")
-	g.generateAOTExternalCacheAdapters()
+	g.generateAOTExternalAdapters()
 
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -1831,7 +1843,14 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 
 	// Generate the arguments
 	var argExprs []string
-	for _, arg := range invokeNode.Args {
+	skipInstanceType := externalTarget != nil &&
+		externalTarget.directLinked &&
+		externalTarget.intrinsic == "instance?"
+	for index, arg := range invokeNode.Args {
+		if skipInstanceType && index == 0 {
+			argExprs = append(argExprs, "")
+			continue
+		}
 		argExprs = append(argExprs, g.generateASTNode(arg))
 	}
 
@@ -1886,6 +1905,17 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	}
 	if externalTarget != nil {
 		if externalTarget.intrinsic != "" {
+			if externalTarget.directLinked {
+				g.writef("%s := %s\n",
+					resultVar,
+					g.aotExternalIntrinsicCall(
+						externalTarget.intrinsic,
+						invokeNode,
+						argExprs,
+					),
+				)
+				return resultVar
+			}
 			varNode := invokeNode.Fn.Sub.(*ast.VarNode)
 			varID := g.allocVarVar(
 				varNode.Var.Namespace().Name().String(),
@@ -2033,6 +2063,11 @@ func (g *Generator) generateTruthyTest(node *ast.Node) string {
 	}
 
 	arg := g.generateASTNode(invoke.Args[0])
+	if target.directLinked {
+		result := g.allocateTempVar()
+		g.writef("%s := lang.IsSeqTruthy(%s)\n", result, arg)
+		return result
+	}
 	varNode := invoke.Fn.Sub.(*ast.VarNode)
 	varID := g.allocVarVar(
 		varNode.Var.Namespace().Name().String(),
