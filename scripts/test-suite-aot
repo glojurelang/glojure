@@ -150,6 +150,7 @@ done
   printf '%s\n' ''
   printf '%s\n' 'func main() {'
   printf '%s\n' '  runtime.RT.Load("clojure/core/protocols")'
+  printf '%s\n' '  runtime.RT.Load("clojure/test")'
   for resource in "${resources[@]}"; do
     printf '  runtime.RT.Load("%s")\n' "$resource"
   done
