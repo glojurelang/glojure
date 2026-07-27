@@ -211,10 +211,16 @@ vet: $(GO)
 test: test-aot-runtime test-glj  # vet
 	($(MAKE) test-suite v=1 || $(MAKE) test-suite v=1) || $(MAKE) test-suite v=1
 
+TEST-COMPARE-LOAD := $(shell \
+	processors=$$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2); \
+	awk -v processors="$$processors" \
+	  'BEGIN { threshold = processors * 0.75; \
+	           print (threshold < 1 ? 1 : threshold) }')
+
 test-compare: $(YS)
 	@scripts/make-test-compare \
 	  '$(if $(with),$(with),origin/main)' '$(file)' \
-	  '$(if $(load),$(load),1.0)'
+	  '$(if $(load),$(load),$(TEST-COMPARE-LOAD))'
 
 test-aot-runtime: $(GO)
 	go test -tags glj_aot_runtime ./pkg/glj ./pkg/gljmain ./pkg/runtime
