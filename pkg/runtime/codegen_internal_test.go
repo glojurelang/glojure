@@ -165,6 +165,52 @@ func TestGenerateStaticInstanceCheck(t *testing.T) {
 	}
 }
 
+func TestGenerateStaticInstanceCheckForSameNamespaceDirectLink(t *testing.T) {
+	instanceVar := lang.NSCore.FindInternedVar(lang.NewSymbol("instance?"))
+	if instanceVar == nil {
+		t.Fatal("clojure.core/instance? is not interned")
+	}
+
+	var output bytes.Buffer
+	generator := newGenerator(&output, true)
+	generator.addImport("github.com/glojurelang/glojure/pkg/lang")
+	generator.currentWriter = &output
+	generator.aotNamespace = lang.NSCore
+	target := &aotSpecializationTarget{
+		vr:           instanceVar,
+		directLinked: true,
+		directFnVar:  "aotDirectFn0",
+	}
+	target.directArities[2] = true
+	generator.aotCallTargets[instanceVar] = target
+
+	vectorType := reflect.TypeOf((*lang.IPersistentVector)(nil)).Elem()
+	invoke := &ast.InvokeNode{
+		Fn: &ast.Node{
+			Op:  ast.OpVar,
+			Sub: &ast.VarNode{Var: instanceVar},
+		},
+		Args: []*ast.Node{
+			{Op: ast.OpConst, Sub: &ast.ConstNode{Value: vectorType}},
+			{Op: ast.OpConst, Sub: &ast.ConstNode{Value: nil}},
+		},
+	}
+	generator.generateInvokeDefault(invoke)
+
+	generated := output.String()
+	if !strings.Contains(
+		generated,
+		"lang.IsInstance[lang.IPersistentVector](nil)",
+	) {
+		t.Fatalf("same-namespace instance? did not use a type assertion:\n%s",
+			generated)
+	}
+	if strings.Contains(generated, "aotDirectFn0") {
+		t.Fatalf("same-namespace instance? retained function dispatch:\n%s",
+			generated)
+	}
+}
+
 func TestGenerateDirectCallsForKnownFunctionArities(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.direct-known-arities"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)

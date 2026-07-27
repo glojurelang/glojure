@@ -646,25 +646,25 @@ func LoadNS() {
 	aotExternalFn41 := aotLinkFn1(var_clojure_DOT_core_name)
 	aotExternalFn42 := aotLinkFn3(var_clojure_DOT_core_println)
 	aotExternalFn43 := aotLinkFn1(var_clojure_DOT_core_ref)
-	aotExternalFn45 := aotLinkFn1(var_clojure_DOT_core_deref)
-	aotExternalFn46 := aotLinkFn3(var_clojure_DOT_core_apply)
-	aotExternalFn47 := aotLinkFn2(var_clojure_DOT_core_map)
-	aotExternalFn48 := aotLinkFn1(var_clojure_DOT_core_vals)
-	aotExternalFn49 := aotLinkFn1(var_clojure_DOT_core_ns_DASH_interns)
+	aotExternalFn44 := aotLinkFn1(var_clojure_DOT_core_deref)
+	aotExternalFn45 := aotLinkFn3(var_clojure_DOT_core_apply)
+	aotExternalFn46 := aotLinkFn2(var_clojure_DOT_core_map)
+	aotExternalFn47 := aotLinkFn1(var_clojure_DOT_core_vals)
+	aotExternalFn48 := aotLinkFn1(var_clojure_DOT_core_ns_DASH_interns)
+	aotExternalFn49 := aotLinkFn1(var_clojure_DOT_core_the_DASH_ns)
 	aotExternalFn5 := aotLinkFn4(var_clojure_DOT_core_concat)
-	aotExternalFn50 := aotLinkFn1(var_clojure_DOT_core_the_DASH_ns)
-	aotExternalFn51 := aotLinkFn1(var_clojure_DOT_core_find_DASH_var)
-	aotExternalFn52 := aotLinkFn2(var_clojure_DOT_core_symbol)
-	aotExternalFn53 := aotLinkFn1(var_clojure_DOT_core_str)
-	aotExternalFn55 := aotLinkFn2(var_clojure_DOT_core_group_DASH_by)
-	aotExternalFn56 := aotLinkFn2(var_clojure_DOT_core_comp)
-	aotExternalFn58 := aotLinkFn1(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
-	aotExternalFn59 := aotLinkFn1(var_clojure_DOT_core_chunk_DASH_first)
+	aotExternalFn50 := aotLinkFn1(var_clojure_DOT_core_find_DASH_var)
+	aotExternalFn51 := aotLinkFn2(var_clojure_DOT_core_symbol)
+	aotExternalFn52 := aotLinkFn1(var_clojure_DOT_core_str)
+	aotExternalFn54 := aotLinkFn2(var_clojure_DOT_core_group_DASH_by)
+	aotExternalFn55 := aotLinkFn2(var_clojure_DOT_core_comp)
+	aotExternalFn57 := aotLinkFn1(var_clojure_DOT_core_chunked_DASH_seq_QMARK_)
+	aotExternalFn58 := aotLinkFn1(var_clojure_DOT_core_chunk_DASH_first)
+	aotExternalFn59 := aotLinkFn1(var_clojure_DOT_core_chunk_DASH_rest)
 	aotExternalFn6 := aotLinkFn2(var_clojure_DOT_core_concat)
-	aotExternalFn60 := aotLinkFn1(var_clojure_DOT_core_chunk_DASH_rest)
-	aotExternalFn62 := aotLinkFn2(var_clojure_DOT_core_interpose)
-	aotExternalFn63 := aotLinkFn1(var_clojure_DOT_core_reverse)
-	aotExternalFn64 := aotLinkFn1(var_clojure_DOT_core_to_DASH_array)
+	aotExternalFn61 := aotLinkFn2(var_clojure_DOT_core_interpose)
+	aotExternalFn62 := aotLinkFn1(var_clojure_DOT_core_reverse)
+	aotExternalFn63 := aotLinkFn1(var_clojure_DOT_core_to_DASH_array)
 	aotExternalFn7 := aotLinkFn2(var_clojure_DOT_core_apply)
 	aotExternalFn8 := aotLinkFn1(var_clojure_DOT_core_seq_QMARK_)
 	// reference fmt to avoid unused import error
@@ -1156,8 +1156,9 @@ func LoadNS() {
 						tmp20 := aotDirectFn5(tmp19)
 						_ = tmp20
 						tmp21 := checkDerefVar(var_clojure_DOT_test__STAR_report_DASH_counters_STAR_)
-						tmp22 := aotExternalFn45(tmp21)
-						tmp23 := lang.Assoc(tmp22, kw_type, kw_summary)
+						tmp22 := aotExternalFn44(tmp21)
+						var tmp23 any = tmp22
+						tmp23 = lang.Assoc(tmp23, kw_type, kw_summary)
 						var v24 any = tmp23
 						_ = v24
 						tmp25 := aotDirectFn5(v24)
@@ -1269,8 +1270,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := aotExternalFn49(v2)
-			tmp4 := aotExternalFn48(tmp3)
+			tmp3 := aotExternalFn48(v2)
+			tmp4 := aotExternalFn47(tmp3)
 			tmp5 := aotDirectFn19(tmp4)
 			return tmp5
 		})
@@ -1304,7 +1305,7 @@ func LoadNS() {
 					var tmp11 any
 					{ // let
 						// let binding "ns-obj"
-						tmp12 := aotExternalFn50(v2)
+						tmp12 := aotExternalFn49(v2)
 						var v13 any = tmp12
 						_ = v13
 						tmp14 := lang.NewMap(kw_type, kw_begin_DASH_test_DASH_ns, kw_ns, v13)
@@ -1314,9 +1315,9 @@ func LoadNS() {
 						{ // let
 							// let binding "temp__0__auto__"
 							tmp17 := aotExternalFn37(v13)
-							tmp18 := aotExternalFn53(tmp17)
-							tmp19 := aotExternalFn52(tmp18, "test-ns-hook")
-							tmp20 := aotExternalFn51(tmp19)
+							tmp18 := aotExternalFn52(tmp17)
+							tmp19 := aotExternalFn51(tmp18, "test-ns-hook")
+							tmp20 := aotExternalFn50(tmp19)
 							var v21 any = tmp20
 							_ = v21
 							var tmp22 any
@@ -1344,7 +1345,7 @@ func LoadNS() {
 					} // end let
 					_ = tmp11
 					tmp12 := checkDerefVar(var_clojure_DOT_test__STAR_report_DASH_counters_STAR_)
-					tmp13 := aotExternalFn45(tmp12)
+					tmp13 := aotExternalFn44(tmp12)
 					tmp9 = tmp13
 				}()
 				tmp3 = tmp9
@@ -3289,9 +3290,10 @@ func LoadNS() {
 					tmp4 := checkDerefVar(var_clojure_DOT_core_merge_DASH_with)
 					tmp5 := checkDerefVar(var_clojure_DOT_core__PLUS_)
 					tmp6 := checkDerefVar(var_clojure_DOT_test_test_DASH_ns)
-					tmp7 := aotExternalFn47(tmp6, v2)
-					tmp8 := aotExternalFn46(tmp4, tmp5, tmp7)
-					tmp9 := lang.Assoc(tmp8, kw_type, kw_summary)
+					tmp7 := aotExternalFn46(tmp6, v2)
+					tmp8 := aotExternalFn45(tmp4, tmp5, tmp7)
+					var tmp9 any = tmp8
+					tmp9 = lang.Assoc(tmp9, kw_type, kw_summary)
 					var v10 any = tmp9
 					_ = v10
 					tmp11 := aotDirectFn5(v10)
@@ -3382,8 +3384,8 @@ func LoadNS() {
 			{ // let
 				// let binding "seq_746"
 				tmp4 := checkDerefVar(var_clojure_DOT_core_meta)
-				tmp5 := aotExternalFn56(kw_ns, tmp4)
-				tmp6 := aotExternalFn55(tmp5, v2)
+				tmp5 := aotExternalFn55(kw_ns, tmp4)
+				tmp6 := aotExternalFn54(tmp5, v2)
 				tmp7 := lang.Seq(tmp6)
 				var v8 any = tmp7
 				_ = v8
@@ -3497,15 +3499,15 @@ func LoadNS() {
 															var v45 any = v42
 															_ = v45
 															var tmp46 any
-															tmp47 := aotExternalFn58(v45)
+															tmp47 := aotExternalFn57(v45)
 															if lang.IsTruthy(tmp47) {
 																var tmp48 any
 																{ // let
 																	// let binding "c__0__auto__"
-																	tmp49 := aotExternalFn59(v45)
+																	tmp49 := aotExternalFn58(v45)
 																	var v50 any = tmp49
 																	_ = v50
-																	tmp52 := aotExternalFn60(v45)
+																	tmp52 := aotExternalFn59(v45)
 																	var tmp51 any = tmp52
 																	var tmp53 any = v50
 																	tmp55 := lang.Count(v50)
@@ -3601,15 +3603,15 @@ func LoadNS() {
 									var v20 any = v17
 									_ = v20
 									var tmp21 any
-									tmp22 := aotExternalFn58(v20)
+									tmp22 := aotExternalFn57(v20)
 									if lang.IsTruthy(tmp22) {
 										var tmp23 any
 										{ // let
 											// let binding "c__0__auto__"
-											tmp24 := aotExternalFn59(v20)
+											tmp24 := aotExternalFn58(v20)
 											var v25 any = tmp24
 											_ = v25
-											tmp27 := aotExternalFn60(v20)
+											tmp27 := aotExternalFn59(v20)
 											var tmp26 any = tmp27
 											var tmp28 any = v25
 											tmp30 := lang.Count(v25)
@@ -3722,15 +3724,15 @@ func LoadNS() {
 																			var v55 any = v52
 																			_ = v55
 																			var tmp56 any
-																			tmp57 := aotExternalFn58(v55)
+																			tmp57 := aotExternalFn57(v55)
 																			if lang.IsTruthy(tmp57) {
 																				var tmp58 any
 																				{ // let
 																					// let binding "c__0__auto__"
-																					tmp59 := aotExternalFn59(v55)
+																					tmp59 := aotExternalFn58(v55)
 																					var v60 any = tmp59
 																					_ = v60
-																					tmp62 := aotExternalFn60(v55)
+																					tmp62 := aotExternalFn59(v55)
 																					var tmp61 any = tmp62
 																					var tmp63 any = v60
 																					tmp65 := lang.Count(v60)
@@ -3890,8 +3892,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc0(func() any {
 			tmp2 := checkDerefVar(var_clojure_DOT_core_str)
 			tmp3 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_)
-			tmp4 := aotExternalFn63(tmp3)
-			tmp5 := aotExternalFn62(" ", tmp4)
+			tmp4 := aotExternalFn62(tmp3)
+			tmp5 := aotExternalFn61(" ", tmp4)
 			tmp6 := aotExternalFn7(tmp2, tmp5)
 			return tmp6
 		})
@@ -3920,7 +3922,7 @@ func LoadNS() {
 					var tmp7 any
 					tmp8 := lang.Next(v4)
 					if lang.IsTruthy(tmp8) {
-						tmp9 := aotExternalFn64(v4)
+						tmp9 := aotExternalFn63(v4)
 						tmp10 := lang.Apply1(lang.NewPersistentArrayMapAsIfByAssoc, tmp9)
 						tmp7 = tmp10
 					} else {
@@ -3959,8 +3961,8 @@ func LoadNS() {
 					return tmp24
 				})
 				tmp22 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_)
-				tmp23 := aotExternalFn47(tmp21, tmp22)
-				tmp24 := aotExternalFn63(tmp23)
+				tmp23 := aotExternalFn46(tmp21, tmp22)
+				tmp24 := aotExternalFn62(tmp23)
 				tmp25 := lang.Apply6(tmp20, tmp24, " (", v17, ":", v19, ")")
 				tmp3 = tmp25
 			} // end let

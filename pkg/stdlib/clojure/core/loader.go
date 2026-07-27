@@ -6083,20 +6083,19 @@ func LoadNS() {
 			v4 := p2
 			_ = v4
 			var tmp5 any
-			tmp6 := reflect.TypeOf((*lang.ITransientCollection)(nil)).Elem()
-			tmp7 := aotDirectFn225(tmp6, v2)
-			if lang.IsTruthy(tmp7) {
+			tmp6 := lang.IsInstance[lang.ITransientCollection](v2)
+			if lang.IsTruthy(tmp6) {
 			} else {
-				tmp8 := lang.Apply1(lang.NewIllegalArgumentError, "assoc! expects a transient collection")
-				panic(tmp8)
+				tmp7 := lang.Apply1(lang.NewIllegalArgumentError, "assoc! expects a transient collection")
+				panic(tmp7)
 			}
 			_ = tmp5
-			tmp9, _ := lang.FieldOrMethod(v2, "Assoc")
-			if reflect.TypeOf(tmp9).Kind() != reflect.Func {
+			tmp8, _ := lang.FieldOrMethod(v2, "Assoc")
+			if reflect.TypeOf(tmp8).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Assoc is not a function")))
 			}
-			tmp10 := lang.Apply2(tmp9, v3, v4)
-			return tmp10
+			tmp9 := lang.Apply2(tmp8, v3, v4)
+			return tmp9
 		})
 		tmp1 = lang.NewArityFn(
 			nil,
@@ -6187,10 +6186,12 @@ func LoadNS() {
 				if lang.IsTruthy(v14) {
 					tmp16 := runtime.RT.Get(v2, v13)
 					tmp17 := aotDirectFn49(tmp16, v14, v4)
-					tmp18 := aotDirectFn47Arity3(v2, v13, tmp17)
+					var tmp18 any = v2
+					tmp18 = lang.Assoc(tmp18, v13, tmp17)
 					tmp15 = tmp18
 				} else {
-					tmp19 := aotDirectFn47Arity3(v2, v13, v4)
+					var tmp19 any = v2
+					tmp19 = lang.Assoc(tmp19, v13, v4)
 					tmp15 = tmp19
 				}
 				tmp5 = tmp15
@@ -6210,9 +6211,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.Associative)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.Associative](v2)
+			return tmp3
 		})
 		aotDirectFn50 = tmp1
 		var_clojure_DOT_core_associative_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -6720,56 +6720,54 @@ func LoadNS() {
 						tmp9 = tmp11
 					} else {
 						var tmp12 any
-						tmp13 := reflect.TypeOf((*lang.BigInt)(nil))
-						tmp14 := aotDirectFn225(tmp13, v2)
-						if lang.IsTruthy(tmp14) {
-							tmp15 := v2.(interface{ ToBigDecimal() *lang.BigDecimal }).ToBigDecimal()
-							tmp12 = tmp15
+						tmp13 := lang.IsInstance[*lang.BigInt](v2)
+						if lang.IsTruthy(tmp13) {
+							tmp14 := v2.(interface{ ToBigDecimal() *lang.BigDecimal }).ToBigDecimal()
+							tmp12 = tmp14
 						} else {
-							var tmp16 any
-							tmp17 := reflect.TypeOf((*big6.Int)(nil))
-							tmp18 := aotDirectFn225(tmp17, v2)
-							if lang.IsTruthy(tmp18) {
-								tmp19 := lang.Apply1(lang.NewBigDecimalFromBigInt, v2)
-								tmp16 = tmp19
+							var tmp15 any
+							tmp16 := lang.IsInstance[*big6.Int](v2)
+							if lang.IsTruthy(tmp16) {
+								tmp17 := lang.Apply1(lang.NewBigDecimalFromBigInt, v2)
+								tmp15 = tmp17
 							} else {
-								var tmp20 any
-								tmp21 := aotDirectFn323(v2)
-								if lang.IsTruthy(tmp21) {
-									tmp22 := aotDirectFn264(v2)
-									tmp23 := lang.Apply1(lang.NewBigDecimalFromInt64, tmp22)
-									tmp20 = tmp23
+								var tmp18 any
+								tmp19 := aotDirectFn323(v2)
+								if lang.IsTruthy(tmp19) {
+									tmp20 := aotDirectFn264(v2)
+									tmp21 := lang.Apply1(lang.NewBigDecimalFromInt64, tmp20)
+									tmp18 = tmp21
 								} else {
-									var tmp24 any
+									var tmp22 any
 									{ // let
 										// let binding "result"
-										tmp25 := aotDirectFn490Arity1(v2)
-										tmp26 := lang.Apply1(lang.NewBigDecimal, tmp25)
+										tmp23 := aotDirectFn490Arity1(v2)
+										tmp24 := lang.Apply1(lang.NewBigDecimal, tmp23)
+										var v25 any = tmp24
+										_ = v25
+										// let binding "v"
+										tmp26 := aotDirectFn183(v25)
 										var v27 any = tmp26
 										_ = v27
-										// let binding "v"
-										tmp28 := aotDirectFn183(v27)
+										// let binding "err"
+										tmp28 := aotDirectFn442(v25)
 										var v29 any = tmp28
 										_ = v29
-										// let binding "err"
-										tmp30 := aotDirectFn442(v27)
-										var v31 any = tmp30
-										_ = v31
-										var tmp32 any
-										if lang.IsTruthy(v31) {
-											tmp33 := aotDirectFn490.Invoke3("Cannot convert ", v2, " to BigDecimal")
-											tmp34 := lang.Apply1(lang.NewError, tmp33)
-											panic(tmp34)
+										var tmp30 any
+										if lang.IsTruthy(v29) {
+											tmp31 := aotDirectFn490.Invoke3("Cannot convert ", v2, " to BigDecimal")
+											tmp32 := lang.Apply1(lang.NewError, tmp31)
+											panic(tmp32)
 										} else {
-											tmp32 = v29
+											tmp30 = v27
 										}
-										tmp24 = tmp32
+										tmp22 = tmp30
 									} // end let
-									tmp20 = tmp24
+									tmp18 = tmp22
 								}
-								tmp16 = tmp20
+								tmp15 = tmp18
 							}
-							tmp12 = tmp16
+							tmp12 = tmp15
 						}
 						tmp9 = tmp12
 					}
@@ -6794,106 +6792,104 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := reflect.TypeOf((*lang.BigInt)(nil))
-			tmp5 := aotDirectFn225(tmp4, v2)
-			if lang.IsTruthy(tmp5) {
+			tmp4 := lang.IsInstance[*lang.BigInt](v2)
+			if lang.IsTruthy(tmp4) {
 				tmp3 = v2
 			} else {
-				var tmp6 any
-				tmp7 := reflect.TypeOf((*big6.Int)(nil))
-				tmp8 := aotDirectFn225(tmp7, v2)
-				if lang.IsTruthy(tmp8) {
-					tmp9 := lang.Apply1(lang.NewBigIntFromGoBigInt, v2)
-					tmp6 = tmp9
+				var tmp5 any
+				tmp6 := lang.IsInstance[*big6.Int](v2)
+				if lang.IsTruthy(tmp6) {
+					tmp7 := lang.Apply1(lang.NewBigIntFromGoBigInt, v2)
+					tmp5 = tmp7
 				} else {
-					var tmp10 any
-					tmp11 := aotDirectFn127(v2)
-					if lang.IsTruthy(tmp11) {
-						tmp12 := v2.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
-						tmp13 := aotDirectFn57(tmp12)
-						tmp10 = tmp13
+					var tmp8 any
+					tmp9 := aotDirectFn127(v2)
+					if lang.IsTruthy(tmp9) {
+						tmp10 := v2.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
+						tmp11 := aotDirectFn57(tmp10)
+						tmp8 = tmp11
 					} else {
-						var tmp14 any
-						tmp15 := aotDirectFn188(v2)
-						if lang.IsTruthy(tmp15) {
-							var tmp16 any
+						var tmp12 any
+						tmp13 := aotDirectFn188(v2)
+						if lang.IsTruthy(tmp13) {
+							var tmp14 any
 							{ // let
 								// let binding "result"
-								tmp17 := aotDirectFn146(v2)
-								tmp18 := lang.Apply1(lang.BigIntStringFromFloat64, tmp17)
-								tmp19 := lang.Apply1(lang.NewBigInt, tmp18)
+								tmp15 := aotDirectFn146(v2)
+								tmp16 := lang.Apply1(lang.BigIntStringFromFloat64, tmp15)
+								tmp17 := lang.Apply1(lang.NewBigInt, tmp16)
+								var v18 any = tmp17
+								_ = v18
+								// let binding "v"
+								tmp19 := aotDirectFn183(v18)
 								var v20 any = tmp19
 								_ = v20
-								// let binding "v"
-								tmp21 := aotDirectFn183(v20)
+								// let binding "err"
+								tmp21 := aotDirectFn442(v18)
 								var v22 any = tmp21
 								_ = v22
-								// let binding "err"
-								tmp23 := aotDirectFn442(v20)
-								var v24 any = tmp23
-								_ = v24
-								var tmp25 any
-								if lang.IsTruthy(v24) {
-									tmp26 := aotDirectFn490.Invoke3("Cannot convert ", v2, " to BigInt")
-									tmp27 := lang.Apply1(lang.NewError, tmp26)
-									panic(tmp27)
+								var tmp23 any
+								if lang.IsTruthy(v22) {
+									tmp24 := aotDirectFn490.Invoke3("Cannot convert ", v2, " to BigInt")
+									tmp25 := lang.Apply1(lang.NewError, tmp24)
+									panic(tmp25)
 								} else {
-									tmp25 = v22
+									tmp23 = v20
 								}
-								tmp16 = tmp25
+								tmp14 = tmp23
 							} // end let
-							tmp14 = tmp16
+							tmp12 = tmp14
 						} else {
-							var tmp17 any
-							tmp18 := aotDirectFn386(v2)
-							if lang.IsTruthy(tmp18) {
-								tmp19 := v2.(interface{ BigIntegerValue() *big6.Int }).BigIntegerValue()
-								tmp20 := aotDirectFn57(tmp19)
-								tmp17 = tmp20
+							var tmp15 any
+							tmp16 := aotDirectFn386(v2)
+							if lang.IsTruthy(tmp16) {
+								tmp17 := v2.(interface{ BigIntegerValue() *big6.Int }).BigIntegerValue()
+								tmp18 := aotDirectFn57(tmp17)
+								tmp15 = tmp18
 							} else {
-								var tmp21 any
-								tmp22 := aotDirectFn323(v2)
-								if lang.IsTruthy(tmp22) {
-									tmp23 := aotDirectFn264(v2)
-									tmp24 := lang.Apply1(lang.NewBigIntFromInt64, tmp23)
-									tmp21 = tmp24
+								var tmp19 any
+								tmp20 := aotDirectFn323(v2)
+								if lang.IsTruthy(tmp20) {
+									tmp21 := aotDirectFn264(v2)
+									tmp22 := lang.Apply1(lang.NewBigIntFromInt64, tmp21)
+									tmp19 = tmp22
 								} else {
-									var tmp25 any
+									var tmp23 any
 									{ // let
 										// let binding "result"
-										tmp26 := aotDirectFn490Arity1(v2)
-										tmp27 := lang.Apply1(lang.NewBigInt, tmp26)
+										tmp24 := aotDirectFn490Arity1(v2)
+										tmp25 := lang.Apply1(lang.NewBigInt, tmp24)
+										var v26 any = tmp25
+										_ = v26
+										// let binding "v"
+										tmp27 := aotDirectFn183(v26)
 										var v28 any = tmp27
 										_ = v28
-										// let binding "v"
-										tmp29 := aotDirectFn183(v28)
+										// let binding "err"
+										tmp29 := aotDirectFn442(v26)
 										var v30 any = tmp29
 										_ = v30
-										// let binding "err"
-										tmp31 := aotDirectFn442(v28)
-										var v32 any = tmp31
-										_ = v32
-										var tmp33 any
-										if lang.IsTruthy(v32) {
-											tmp34 := aotDirectFn490.Invoke3("Cannot convert ", v2, " to BigInt")
-											tmp35 := lang.Apply1(lang.NewError, tmp34)
-											panic(tmp35)
+										var tmp31 any
+										if lang.IsTruthy(v30) {
+											tmp32 := aotDirectFn490.Invoke3("Cannot convert ", v2, " to BigInt")
+											tmp33 := lang.Apply1(lang.NewError, tmp32)
+											panic(tmp33)
 										} else {
-											tmp33 = v30
+											tmp31 = v28
 										}
-										tmp25 = tmp33
+										tmp23 = tmp31
 									} // end let
-									tmp21 = tmp25
+									tmp19 = tmp23
 								}
-								tmp17 = tmp21
+								tmp15 = tmp19
 							}
-							tmp14 = tmp17
+							tmp12 = tmp15
 						}
-						tmp10 = tmp14
+						tmp8 = tmp12
 					}
-					tmp6 = tmp10
+					tmp5 = tmp8
 				}
-				tmp3 = tmp6
+				tmp3 = tmp5
 			}
 			return tmp3
 		})
@@ -6912,92 +6908,90 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := reflect.TypeOf((*big6.Int)(nil))
-			tmp5 := aotDirectFn225(tmp4, v2)
-			if lang.IsTruthy(tmp5) {
+			tmp4 := lang.IsInstance[*big6.Int](v2)
+			if lang.IsTruthy(tmp4) {
 				tmp3 = v2
 			} else {
-				var tmp6 any
-				tmp7 := reflect.TypeOf((*lang.BigInt)(nil))
-				tmp8 := aotDirectFn225(tmp7, v2)
-				if lang.IsTruthy(tmp8) {
-					tmp9 := v2.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
-					tmp6 = tmp9
+				var tmp5 any
+				tmp6 := lang.IsInstance[*lang.BigInt](v2)
+				if lang.IsTruthy(tmp6) {
+					tmp7 := v2.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
+					tmp5 = tmp7
 				} else {
-					var tmp10 any
-					tmp11 := aotDirectFn127(v2)
-					if lang.IsTruthy(tmp11) {
-						tmp12 := v2.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
-						tmp10 = tmp12
+					var tmp8 any
+					tmp9 := aotDirectFn127(v2)
+					if lang.IsTruthy(tmp9) {
+						tmp10 := v2.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
+						tmp8 = tmp10
 					} else {
-						var tmp13 any
-						tmp14 := aotDirectFn188(v2)
-						if lang.IsTruthy(tmp14) {
-							tmp15 := aotDirectFn146(v2)
-							tmp16 := lang.Apply1(lang.NewBigDecimalFromFloat64, tmp15)
-							tmp17, ok := lang.FieldOrMethod(tmp16, "toBigInteger")
+						var tmp11 any
+						tmp12 := aotDirectFn188(v2)
+						if lang.IsTruthy(tmp12) {
+							tmp13 := aotDirectFn146(v2)
+							tmp14 := lang.Apply1(lang.NewBigDecimalFromFloat64, tmp13)
+							tmp15, ok := lang.FieldOrMethod(tmp14, "toBigInteger")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp16, "toBigInteger")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp14, "toBigInteger")))
 							}
-							var tmp18 any
-							switch reflect.TypeOf(tmp17).Kind() {
+							var tmp16 any
+							switch reflect.TypeOf(tmp15).Kind() {
 							case reflect.Func:
-								tmp18 = lang.Apply(tmp17, nil)
+								tmp16 = lang.Apply(tmp15, nil)
 							default:
-								tmp18 = tmp17
+								tmp16 = tmp15
 							}
-							tmp13 = tmp18
+							tmp11 = tmp16
 						} else {
-							var tmp19 any
-							tmp20 := aotDirectFn386(v2)
-							if lang.IsTruthy(tmp20) {
-								tmp21 := v2.(interface{ BigIntegerValue() *big6.Int }).BigIntegerValue()
-								tmp19 = tmp21
+							var tmp17 any
+							tmp18 := aotDirectFn386(v2)
+							if lang.IsTruthy(tmp18) {
+								tmp19 := v2.(interface{ BigIntegerValue() *big6.Int }).BigIntegerValue()
+								tmp17 = tmp19
 							} else {
-								var tmp22 any
-								tmp23 := aotDirectFn323(v2)
-								if lang.IsTruthy(tmp23) {
-									tmp24 := aotDirectFn264(v2)
-									tmp25 := lang.Apply1(big6.NewInt, tmp24)
-									tmp22 = tmp25
+								var tmp20 any
+								tmp21 := aotDirectFn323(v2)
+								if lang.IsTruthy(tmp21) {
+									tmp22 := aotDirectFn264(v2)
+									tmp23 := lang.Apply1(big6.NewInt, tmp22)
+									tmp20 = tmp23
 								} else {
-									var tmp26 any
+									var tmp24 any
 									{ // let
 										// let binding "result"
-										tmp27 := aotDirectFn490Arity1(v2)
-										tmp28 := lang.Apply1(lang.NewBigInt, tmp27)
+										tmp25 := aotDirectFn490Arity1(v2)
+										tmp26 := lang.Apply1(lang.NewBigInt, tmp25)
+										var v27 any = tmp26
+										_ = v27
+										// let binding "v"
+										tmp28 := aotDirectFn183(v27)
 										var v29 any = tmp28
 										_ = v29
-										// let binding "v"
-										tmp30 := aotDirectFn183(v29)
+										// let binding "err"
+										tmp30 := aotDirectFn442(v27)
 										var v31 any = tmp30
 										_ = v31
-										// let binding "err"
-										tmp32 := aotDirectFn442(v29)
-										var v33 any = tmp32
-										_ = v33
-										var tmp34 any
-										if lang.IsTruthy(v33) {
-											tmp35 := aotDirectFn490.Invoke3("Cannot convert ", v2, " to BigInteger")
-											tmp36 := lang.Apply1(lang.NewError, tmp35)
-											panic(tmp36)
+										var tmp32 any
+										if lang.IsTruthy(v31) {
+											tmp33 := aotDirectFn490.Invoke3("Cannot convert ", v2, " to BigInteger")
+											tmp34 := lang.Apply1(lang.NewError, tmp33)
+											panic(tmp34)
 										} else {
-											tmp37 := v31.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
-											tmp34 = tmp37
+											tmp35 := v29.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
+											tmp32 = tmp35
 										}
-										tmp26 = tmp34
+										tmp24 = tmp32
 									} // end let
-									tmp22 = tmp26
+									tmp20 = tmp24
 								}
-								tmp19 = tmp22
+								tmp17 = tmp20
 							}
-							tmp13 = tmp19
+							tmp11 = tmp17
 						}
-						tmp10 = tmp13
+						tmp8 = tmp11
 					}
-					tmp6 = tmp10
+					tmp5 = tmp8
 				}
-				tmp3 = tmp6
+				tmp3 = tmp5
 			}
 			return tmp3
 		})
@@ -7451,9 +7445,8 @@ func LoadNS() {
 			tmp1 = lang.FnFunc1(func(p0 any) any {
 				v3 := p0
 				_ = v3
-				tmp4 := reflect.TypeOf(lang.NewChar(0))
-				tmp5 := aotDirectFn225(tmp4, v3)
-				return tmp5
+				tmp4 := lang.IsInstance[lang.Char](v3)
+				return tmp4
 			})
 			v2 = tmp1
 			_ = v2
@@ -7599,9 +7592,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.IChunkedSeq)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.IChunkedSeq](v2)
+			return tmp3
 		})
 		aotDirectFn99 = tmp1
 		var_clojure_DOT_core_chunked_DASH_seq_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -7639,9 +7631,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*reflect.Type)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[reflect.Type](v2)
+			return tmp3
 		})
 		aotDirectFn101 = tmp1
 		var_clojure_DOT_core_class_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -7673,9 +7664,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.IPersistentCollection](v2)
+			return tmp3
 		})
 		aotDirectFn103 = tmp1
 		var_clojure_DOT_core_coll_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -8210,9 +8200,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.Counted)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.Counted](v2)
+			return tmp3
 		})
 		aotDirectFn119 = tmp1
 		var_clojure_DOT_core_counted_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -8318,9 +8307,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.BigDecimal)(nil))
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[*lang.BigDecimal](v2)
+			return tmp3
 		})
 		aotDirectFn127 = tmp1
 		var_clojure_DOT_core_decimal_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -8433,7 +8421,8 @@ func LoadNS() {
 				var v5 any = rest
 				_ = v5
 				tmp6 := aotDirectFn285(v4)
-				tmp7 := aotDirectFn47Arity3(tmp6, kw_private, true)
+				var tmp7 any = tmp6
+				tmp7 = lang.Assoc(tmp7, kw_private, true)
 				tmp8 := aotDirectFn569(v4, tmp7)
 				tmp9 := aotDirectFn252Arity3(sym_clojure_DOT_core_SLASH_defn, tmp8, v5)
 				return tmp9
@@ -8452,9 +8441,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.Delay)(nil))
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[*lang.Delay](v2)
+			return tmp3
 		})
 		aotDirectFn129 = tmp1
 		var_clojure_DOT_core_delay_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -8505,14 +8493,13 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := reflect.TypeOf((*lang.IDeref)(nil)).Elem()
-			tmp5 := aotDirectFn225(tmp4, v2)
-			if lang.IsTruthy(tmp5) {
-				tmp6 := v2.(interface{ Deref() any }).Deref()
-				tmp3 = tmp6
+			tmp4 := lang.IsInstance[lang.IDeref](v2)
+			if lang.IsTruthy(tmp4) {
+				tmp5 := v2.(interface{ Deref() any }).Deref()
+				tmp3 = tmp5
 			} else {
-				tmp7 := aotDirectFn134Arity1(v2)
-				tmp3 = tmp7
+				tmp6 := aotDirectFn134Arity1(v2)
+				tmp3 = tmp6
 			}
 			return tmp3
 		})
@@ -8524,18 +8511,17 @@ func LoadNS() {
 			v4 := p2
 			_ = v4
 			var tmp5 any
-			tmp6 := reflect.TypeOf((*lang.IBlockingDeref)(nil)).Elem()
-			tmp7 := aotDirectFn225(tmp6, v2)
-			if lang.IsTruthy(tmp7) {
-				tmp8, _ := lang.FieldOrMethod(v2, "DerefWithTimeout")
-				if reflect.TypeOf(tmp8).Kind() != reflect.Func {
+			tmp6 := lang.IsInstance[lang.IBlockingDeref](v2)
+			if lang.IsTruthy(tmp6) {
+				tmp7, _ := lang.FieldOrMethod(v2, "DerefWithTimeout")
+				if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("DerefWithTimeout is not a function")))
 				}
-				tmp9 := lang.Apply2(tmp8, v3, v4)
-				tmp5 = tmp9
+				tmp8 := lang.Apply2(tmp7, v3, v4)
+				tmp5 = tmp8
 			} else {
-				tmp10 := aotDirectFn134Arity3(v2, v3, v4)
-				tmp5 = tmp10
+				tmp9 := aotDirectFn134Arity3(v2, v3, v4)
+				tmp5 = tmp9
 			}
 			return tmp5
 		})
@@ -8567,19 +8553,18 @@ func LoadNS() {
 				var tmp4 any
 				{ // let
 					// let binding "and__0__auto__"
-					tmp5 := reflect.TypeOf((*lang.IPending)(nil)).Elem()
-					tmp6 := aotDirectFn225(tmp5, v2)
-					var v7 any = tmp6
-					_ = v7
-					var tmp8 any
-					if lang.IsTruthy(v7) {
-						tmp9 := v2.(interface{ IsRealized() bool }).IsRealized()
-						tmp10 := aotDirectFn304(tmp9)
-						tmp8 = tmp10
+					tmp5 := lang.IsInstance[lang.IPending](v2)
+					var v6 any = tmp5
+					_ = v6
+					var tmp7 any
+					if lang.IsTruthy(v6) {
+						tmp8 := v2.(interface{ IsRealized() bool }).IsRealized()
+						tmp9 := aotDirectFn304(tmp8)
+						tmp7 = tmp9
 					} else {
-						tmp8 = v7
+						tmp7 = v6
 					}
-					tmp4 = tmp8
+					tmp4 = tmp7
 				} // end let
 				var v5 any = tmp4
 				_ = v5
@@ -8630,18 +8615,17 @@ func LoadNS() {
 						var tmp19 any
 						{ // let
 							// let binding "and__0__auto__"
-							tmp20 := reflect.TypeOf((*lang.Agent)(nil))
-							tmp21 := aotDirectFn225(tmp20, v2)
-							var v22 any = tmp21
-							_ = v22
-							var tmp23 any
-							if lang.IsTruthy(v22) {
-								tmp24 := aotDirectFn24(v2)
-								tmp23 = tmp24
+							tmp20 := lang.IsInstance[*lang.Agent](v2)
+							var v21 any = tmp20
+							_ = v21
+							var tmp22 any
+							if lang.IsTruthy(v21) {
+								tmp23 := aotDirectFn24(v2)
+								tmp22 = tmp23
 							} else {
-								tmp23 = v22
+								tmp22 = v21
 							}
-							tmp19 = tmp23
+							tmp19 = tmp22
 						} // end let
 						tmp18 = tmp19
 					}
@@ -8896,7 +8880,8 @@ func LoadNS() {
 						tmp36 := lang.Apply1(v29, v28)
 						tmp37 := aotDirectFn115(v28, tmp36)
 						tmp38 := aotDirectFn404Arity3(tmp33, tmp35, tmp37)
-						tmp39 := aotDirectFn47Arity3(v31, v32, tmp38)
+						var tmp39 any = v31
+						tmp39 = lang.Assoc(tmp39, v32, tmp38)
 						return tmp39
 					})
 					tmp31 := lang.Apply1(v27, v26)
@@ -8938,7 +8923,8 @@ func LoadNS() {
 						tmp41 := lang.NewSet()
 						tmp42 := runtime.RT.Get(v19, v3, tmp41)
 						tmp43 := aotDirectFn113Arity2(tmp42, v4)
-						tmp44 := aotDirectFn47Arity3(tmp40, v3, tmp43)
+						var tmp44 any = tmp40
+						tmp44 = lang.Assoc(tmp44, v3, tmp43)
 						tmp45 := kw_ancestors.Invoke1(v2)
 						tmp46 := lang.Apply5(v25, tmp45, v3, v21, v4, v23)
 						tmp47 := kw_descendants.Invoke1(v2)
@@ -9063,20 +9049,19 @@ func LoadNS() {
 			v3 := p1
 			_ = v3
 			var tmp4 any
-			tmp5 := reflect.TypeOf((*lang.TransientSet)(nil))
-			tmp6 := aotDirectFn225(tmp5, v2)
-			if lang.IsTruthy(tmp6) {
+			tmp5 := lang.IsInstance[*lang.TransientSet](v2)
+			if lang.IsTruthy(tmp5) {
 			} else {
-				tmp7 := lang.Apply1(lang.NewIllegalArgumentError, "disj! expects a transient set")
-				panic(tmp7)
+				tmp6 := lang.Apply1(lang.NewIllegalArgumentError, "disj! expects a transient set")
+				panic(tmp6)
 			}
 			_ = tmp4
-			tmp8, _ := lang.FieldOrMethod(v2, "Disjoin")
-			if reflect.TypeOf(tmp8).Kind() != reflect.Func {
+			tmp7, _ := lang.FieldOrMethod(v2, "Disjoin")
+			if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("Disjoin is not a function")))
 			}
-			tmp9 := lang.Apply1(tmp8, v3)
-			return tmp9
+			tmp8 := lang.Apply1(tmp7, v3)
+			return tmp8
 		})
 		tmp1 = lang.NewArityFn(
 			nil,
@@ -9197,20 +9182,19 @@ func LoadNS() {
 			v3 := p1
 			_ = v3
 			var tmp4 any
-			tmp5 := reflect.TypeOf((*lang.TransientMap)(nil))
-			tmp6 := aotDirectFn225(tmp5, v2)
-			if lang.IsTruthy(tmp6) {
+			tmp5 := lang.IsInstance[*lang.TransientMap](v2)
+			if lang.IsTruthy(tmp5) {
 			} else {
-				tmp7 := lang.Apply1(lang.NewIllegalArgumentError, "dissoc! expects a transient map")
-				panic(tmp7)
+				tmp6 := lang.Apply1(lang.NewIllegalArgumentError, "dissoc! expects a transient map")
+				panic(tmp6)
 			}
 			_ = tmp4
-			tmp8, _ := lang.FieldOrMethod(v2, "without")
-			if reflect.TypeOf(tmp8).Kind() != reflect.Func {
+			tmp7, _ := lang.FieldOrMethod(v2, "without")
+			if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("without is not a function")))
 			}
-			tmp9 := lang.Apply1(tmp8, v3)
-			return tmp9
+			tmp8 := lang.Apply1(tmp7, v3)
+			return tmp8
 		})
 		tmp1 = lang.NewArityFn(
 			nil,
@@ -9776,98 +9760,97 @@ func LoadNS() {
 			v3 := p1
 			_ = v3
 			var tmp4 any
-			tmp5 := reflect.TypeOf((*lang.IDrop)(nil)).Elem()
-			tmp6 := aotDirectFn225(tmp5, v3)
-			if lang.IsTruthy(tmp6) {
-				var tmp7 any
+			tmp5 := lang.IsInstance[lang.IDrop](v3)
+			if lang.IsTruthy(tmp5) {
+				var tmp6 any
 				{ // let
 					// let binding "or__0__auto__"
-					var tmp8 any
-					tmp9 := lang.Numbers.IsPos(v2)
-					if lang.IsTruthy(tmp9) {
-						var tmp10 any
-						tmp11 := aotDirectFn228(v2)
-						if lang.IsTruthy(tmp11) {
-							tmp10 = v2
+					var tmp7 any
+					tmp8 := lang.Numbers.IsPos(v2)
+					if lang.IsTruthy(tmp8) {
+						var tmp9 any
+						tmp10 := aotDirectFn228(v2)
+						if lang.IsTruthy(tmp10) {
+							tmp9 = v2
 						} else {
-							tmp12 := lang.Apply1(nil, v2)
-							tmp10 = tmp12
+							tmp11 := lang.Apply1(nil, v2)
+							tmp9 = tmp11
 						}
-						tmp13 := v3.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp10))
-						tmp8 = tmp13
+						tmp12 := v3.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp9))
+						tmp7 = tmp12
 					} else {
-						tmp14 := aotDirectFn447(v3)
-						tmp8 = tmp14
+						tmp13 := aotDirectFn447(v3)
+						tmp7 = tmp13
 					}
-					var v15 any = tmp8
-					_ = v15
-					var tmp16 any
-					if lang.IsTruthy(v15) {
-						tmp16 = v15
+					var v14 any = tmp7
+					_ = v14
+					var tmp15 any
+					if lang.IsTruthy(v14) {
+						tmp15 = v14
 					} else {
-						tmp16 = lang.NewList()
+						tmp15 = lang.NewList()
 					}
-					tmp7 = tmp16
+					tmp6 = tmp15
 				} // end let
-				tmp4 = tmp7
+				tmp4 = tmp6
 			} else {
-				var tmp8 any
+				var tmp7 any
 				{ // let
 					// let binding "step"
-					var tmp9 lang.FnFunc2
-					tmp9 = lang.FnFunc2(func(p0, p1 any) any {
-						v10 := p0
+					var tmp8 lang.FnFunc2
+					tmp8 = lang.FnFunc2(func(p0, p1 any) any {
+						v9 := p0
+						_ = v9
+						v10 := p1
 						_ = v10
-						v11 := p1
-						_ = v11
 					recur_loop_2142:
-						var tmp12 any
+						var tmp11 any
 						{ // let
 							// let binding "s"
-							tmp13 := aotDirectFn447(v11)
-							var v14 any = tmp13
-							_ = v14
+							tmp12 := aotDirectFn447(v10)
+							var v13 any = tmp12
+							_ = v13
+							var tmp14 any
 							var tmp15 any
-							var tmp16 any
 							{ // let
 								// let binding "and__0__auto__"
-								tmp17 := lang.Numbers.IsPos(v10)
-								var v18 any = tmp17
-								_ = v18
-								var tmp19 any
-								if lang.IsTruthy(v18) {
-									tmp19 = v14
+								tmp16 := lang.Numbers.IsPos(v9)
+								var v17 any = tmp16
+								_ = v17
+								var tmp18 any
+								if lang.IsTruthy(v17) {
+									tmp18 = v13
 								} else {
-									tmp19 = v18
+									tmp18 = v17
 								}
-								tmp16 = tmp19
+								tmp15 = tmp18
 							} // end let
-							if lang.IsTruthy(tmp16) {
-								tmp18 := lang.Numbers.Dec(v10)
-								var tmp17 any = tmp18
-								tmp20 := aotDirectFn432(v14)
-								var tmp19 any = tmp20
-								v10 = tmp17
-								v11 = tmp19
+							if lang.IsTruthy(tmp15) {
+								tmp17 := lang.Numbers.Dec(v9)
+								var tmp16 any = tmp17
+								tmp19 := aotDirectFn432(v13)
+								var tmp18 any = tmp19
+								v9 = tmp16
+								v10 = tmp18
 								goto recur_loop_2142
 							} else {
-								tmp15 = v14
+								tmp14 = v13
 							}
-							tmp12 = tmp15
+							tmp11 = tmp14
 						} // end let
-						return tmp12
+						return tmp11
 					})
-					var v10 any = tmp9
-					_ = v10
-					var tmp11 lang.FnFunc0
-					tmp11 = lang.FnFunc0(func() any {
-						tmp12 := lang.Apply2(v10, v2, v3)
-						return tmp12
+					var v9 any = tmp8
+					_ = v9
+					var tmp10 lang.FnFunc0
+					tmp10 = lang.FnFunc0(func() any {
+						tmp11 := lang.Apply2(v9, v2, v3)
+						return tmp11
 					})
-					tmp12 := lang.Apply1(lang.NewLazySeq, tmp11)
-					tmp8 = tmp12
+					tmp11 := lang.Apply1(lang.NewLazySeq, tmp10)
+					tmp7 = tmp11
 				} // end let
-				tmp4 = tmp8
+				tmp4 = tmp7
 			}
 			return tmp4
 		})
@@ -10165,13 +10148,12 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
-			tmp5 := aotDirectFn225(tmp4, v2)
-			if lang.IsTruthy(tmp5) {
-				tmp6 := v2.(interface {
+			tmp4 := lang.IsInstance[lang.IPersistentCollection](v2)
+			if lang.IsTruthy(tmp4) {
+				tmp5 := v2.(interface {
 					Empty() lang.IPersistentCollection
 				}).Empty()
-				tmp3 = tmp6
+				tmp3 = tmp5
 			} else {
 			}
 			return tmp3
@@ -11975,7 +11957,8 @@ func LoadNS() {
 							tmp17 := aotDirectFn244(tmp16)
 							tmp18 := aotDirectFn183(v9)
 							tmp19 := aotDirectFn556(tmp18)
-							tmp20 := aotDirectFn47Arity3(v7, tmp17, tmp19)
+							var tmp20 any = v7
+							tmp20 = lang.Assoc(tmp20, tmp17, tmp19)
 							var tmp15 any = tmp20
 							tmp22 := aotDirectFn299(v9)
 							var tmp21 any = tmp22
@@ -13130,9 +13113,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.IFn)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.IFn](v2)
+			return tmp3
 		})
 		aotDirectFn218 = tmp1
 		var_clojure_DOT_core_ifn_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -13582,20 +13564,19 @@ func LoadNS() {
 			v3 := p1
 			_ = v3
 			var tmp4 any
-			tmp5 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
-			tmp6 := aotDirectFn225(tmp5, v2)
-			if lang.IsTruthy(tmp6) {
-				tmp7 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
-				tmp8 := aotDirectFn521(v2)
-				tmp9 := aotDirectFn402Arity3(tmp7, tmp8, v3)
-				tmp10 := aotDirectFn342(tmp9)
-				tmp11 := aotDirectFn285(v2)
-				tmp12 := aotDirectFn569(tmp10, tmp11)
-				tmp4 = tmp12
+			tmp5 := lang.IsInstance[lang.IEditableCollection](v2)
+			if lang.IsTruthy(tmp5) {
+				tmp6 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
+				tmp7 := aotDirectFn521(v2)
+				tmp8 := aotDirectFn402Arity3(tmp6, tmp7, v3)
+				tmp9 := aotDirectFn342(tmp8)
+				tmp10 := aotDirectFn285(v2)
+				tmp11 := aotDirectFn569(tmp9, tmp10)
+				tmp4 = tmp11
 			} else {
-				tmp13 := checkDerefVar(var_clojure_DOT_core_conj)
-				tmp14 := aotDirectFn402Arity3(tmp13, v2, v3)
-				tmp4 = tmp14
+				tmp12 := checkDerefVar(var_clojure_DOT_core_conj)
+				tmp13 := aotDirectFn402Arity3(tmp12, v2, v3)
+				tmp4 = tmp13
 			}
 			return tmp4
 		})
@@ -13607,50 +13588,49 @@ func LoadNS() {
 			v4 := p2
 			_ = v4
 			var tmp5 any
-			tmp6 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
-			tmp7 := aotDirectFn225(tmp6, v2)
-			if lang.IsTruthy(tmp7) {
-				var tmp8 any
+			tmp6 := lang.IsInstance[lang.IEditableCollection](v2)
+			if lang.IsTruthy(tmp6) {
+				var tmp7 any
 				{ // let
 					// let binding "tm"
-					tmp9 := aotDirectFn285(v2)
-					var v10 any = tmp9
-					_ = v10
+					tmp8 := aotDirectFn285(v2)
+					var v9 any = tmp8
+					_ = v9
 					// let binding "rf"
-					var tmp11 lang.ArityFn
-					tmp11 = lang.NewArityFn(
+					var tmp10 lang.ArityFn
+					tmp10 = lang.NewArityFn(
 						nil,
 						lang.FnFunc1(func(p0 any) any {
-							v12 := p0
-							_ = v12
-							tmp13 := aotDirectFn342(v12)
-							tmp14 := aotDirectFn569(tmp13, v10)
-							return tmp14
+							v11 := p0
+							_ = v11
+							tmp12 := aotDirectFn342(v11)
+							tmp13 := aotDirectFn569(tmp12, v9)
+							return tmp13
 						}),
 						lang.FnFunc2(func(p0, p1 any) any {
-							v12 := p0
+							v11 := p0
+							_ = v11
+							v12 := p1
 							_ = v12
-							v13 := p1
-							_ = v13
-							tmp14 := aotDirectFn114Arity2(v12, v13)
-							return tmp14
+							tmp13 := aotDirectFn114Arity2(v11, v12)
+							return tmp13
 						}),
 						nil,
 						nil,
 						nil,
 						0,
 					)
-					var v12 any = tmp11
-					_ = v12
-					tmp13 := aotDirectFn521(v2)
-					tmp14 := aotDirectFn520Arity4(v3, v12, tmp13, v4)
-					tmp8 = tmp14
+					var v11 any = tmp10
+					_ = v11
+					tmp12 := aotDirectFn521(v2)
+					tmp13 := aotDirectFn520Arity4(v3, v11, tmp12, v4)
+					tmp7 = tmp13
 				} // end let
-				tmp5 = tmp8
+				tmp5 = tmp7
 			} else {
-				tmp9 := checkDerefVar(var_clojure_DOT_core_conj)
-				tmp10 := aotDirectFn520Arity4(v3, tmp9, v2, v4)
-				tmp5 = tmp10
+				tmp8 := checkDerefVar(var_clojure_DOT_core_conj)
+				tmp9 := aotDirectFn520Arity4(v3, tmp8, v2, v4)
+				tmp5 = tmp9
 			}
 			return tmp5
 		})
@@ -13679,18 +13659,17 @@ func LoadNS() {
 			v3 := p1
 			_ = v3
 			var tmp4 any
-			tmp5 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
-			tmp6 := aotDirectFn225(tmp5, v2)
-			if lang.IsTruthy(tmp6) {
-				tmp7 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
-				tmp8 := aotDirectFn521(v2)
-				tmp9 := aotDirectFn404Arity3(tmp7, tmp8, v3)
-				tmp10 := aotDirectFn342(tmp9)
-				tmp4 = tmp10
+			tmp5 := lang.IsInstance[lang.IEditableCollection](v2)
+			if lang.IsTruthy(tmp5) {
+				tmp6 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
+				tmp7 := aotDirectFn521(v2)
+				tmp8 := aotDirectFn404Arity3(tmp6, tmp7, v3)
+				tmp9 := aotDirectFn342(tmp8)
+				tmp4 = tmp9
 			} else {
-				tmp11 := checkDerefVar(var_clojure_DOT_core_conj)
-				tmp12 := aotDirectFn404Arity3(tmp11, v2, v3)
-				tmp4 = tmp12
+				tmp10 := checkDerefVar(var_clojure_DOT_core_conj)
+				tmp11 := aotDirectFn404Arity3(tmp10, v2, v3)
+				tmp4 = tmp11
 			}
 			return tmp4
 		})
@@ -14858,9 +14837,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.Keyword](v2)
+			return tmp3
 		})
 		aotDirectFn247 = tmp1
 		var_clojure_DOT_core_keyword_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -15217,9 +15195,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.IPersistentList)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.IPersistentList](v2)
+			return tmp3
 		})
 		aotDirectFn253 = tmp1
 		var_clojure_DOT_core_list_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -15788,7 +15765,8 @@ func LoadNS() {
 											} else {
 											}
 											_ = tmp56
-											tmp60 := aotDirectFn47Arity3(v39, v44, v55)
+											var tmp60 any = v39
+											tmp60 = lang.Assoc(tmp60, v44, v55)
 											tmp53 = tmp60
 										} // end let
 										tmp41 = tmp53
@@ -16281,9 +16259,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.MapEntry)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.MapEntry](v2)
+			return tmp3
 		})
 		aotDirectFn272 = tmp1
 		var_clojure_DOT_core_map_DASH_entry_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -16493,9 +16470,8 @@ func LoadNS() {
 			tmp1 = lang.FnFunc1(func(p0 any) any {
 				v3 := p0
 				_ = v3
-				tmp4 := reflect.TypeOf((*lang.IPersistentMap)(nil)).Elem()
-				tmp5 := aotDirectFn225(tmp4, v3)
-				return tmp5
+				tmp4 := lang.IsInstance[lang.IPersistentMap](v3)
+				return tmp4
 			})
 			v2 = tmp1
 			_ = v2
@@ -17367,7 +17343,8 @@ func LoadNS() {
 						tmp26 := aotDirectFn447(tmp25)
 						var v27 any = tmp26
 						_ = v27
-						tmp28 := aotDirectFn47Arity3(v10, v11, v27)
+						var tmp28 any = v10
+						tmp28 = lang.Assoc(tmp28, v11, v27)
 						tmp13 = tmp28
 					} // end let
 					return tmp13
@@ -17401,7 +17378,8 @@ func LoadNS() {
 							tmp23 := aotDirectFn174(v19)
 							tmp24 := aotDirectFn183(v19)
 							tmp25 := aotDirectFn442(tmp24)
-							tmp26 := aotDirectFn47Arity3(v12, tmp23, tmp25)
+							var tmp26 any = v12
+							tmp26 = lang.Assoc(tmp26, tmp23, tmp25)
 							tmp20 = tmp26
 						} else {
 							tmp27 := lang.Apply3(v10, v12, v17, v19)
@@ -17488,10 +17466,12 @@ func LoadNS() {
 								if lang.IsTruthy(tmp17) {
 									tmp18 := runtime.RT.Get(v9, v13)
 									tmp19 := lang.Apply2(v2, tmp18, v15)
-									tmp20 := aotDirectFn47Arity3(v9, v13, tmp19)
+									var tmp20 any = v9
+									tmp20 = lang.Assoc(tmp20, v13, tmp19)
 									tmp16 = tmp20
 								} else {
-									tmp21 := aotDirectFn47Arity3(v9, v13, v15)
+									var tmp21 any = v9
+									tmp21 = lang.Assoc(tmp21, v13, v15)
 									tmp16 = tmp21
 								}
 								tmp11 = tmp16
@@ -17553,21 +17533,20 @@ func LoadNS() {
 				v3 := p0
 				_ = v3
 				var tmp4 any
-				tmp5 := reflect.TypeOf((*lang.IMeta)(nil)).Elem()
-				tmp6 := aotDirectFn225(tmp5, v3)
-				if lang.IsTruthy(tmp6) {
-					tmp7, ok := lang.FieldOrMethod(v3, "Meta")
+				tmp5 := lang.IsInstance[lang.IMeta](v3)
+				if lang.IsTruthy(tmp5) {
+					tmp6, ok := lang.FieldOrMethod(v3, "Meta")
 					if !ok {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v3, "Meta")))
 					}
-					var tmp8 any
-					switch reflect.TypeOf(tmp7).Kind() {
+					var tmp7 any
+					switch reflect.TypeOf(tmp6).Kind() {
 					case reflect.Func:
-						tmp8 = lang.Apply(tmp7, nil)
+						tmp7 = lang.Apply(tmp6, nil)
 					default:
-						tmp8 = tmp7
+						tmp7 = tmp6
 					}
-					tmp4 = tmp8
+					tmp4 = tmp7
 				} else {
 				}
 				return tmp4
@@ -19287,69 +19266,68 @@ func LoadNS() {
 			v3 := p1
 			_ = v3
 			var tmp4 any
-			tmp5 := reflect.TypeOf((*lang.IDrop)(nil)).Elem()
-			tmp6 := aotDirectFn225(tmp5, v2)
-			if lang.IsTruthy(tmp6) {
-				var tmp7 any
-				tmp8 := lang.Numbers.IsPos(v3)
-				if lang.IsTruthy(tmp8) {
-					var tmp9 any
-					tmp10 := aotDirectFn228(v3)
-					if lang.IsTruthy(tmp10) {
-						tmp9 = v3
+			tmp5 := lang.IsInstance[lang.IDrop](v2)
+			if lang.IsTruthy(tmp5) {
+				var tmp6 any
+				tmp7 := lang.Numbers.IsPos(v3)
+				if lang.IsTruthy(tmp7) {
+					var tmp8 any
+					tmp9 := aotDirectFn228(v3)
+					if lang.IsTruthy(tmp9) {
+						tmp8 = v3
 					} else {
-						tmp11 := lang.Apply1(nil, v3)
-						tmp9 = tmp11
+						tmp10 := lang.Apply1(nil, v3)
+						tmp8 = tmp10
 					}
-					tmp12 := v2.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp9))
-					tmp7 = tmp12
+					tmp11 := v2.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp8))
+					tmp6 = tmp11
 				} else {
-					tmp13 := aotDirectFn447(v2)
-					tmp7 = tmp13
+					tmp12 := aotDirectFn447(v2)
+					tmp6 = tmp12
 				}
-				tmp4 = tmp7
+				tmp4 = tmp6
 			} else {
-				var tmp14 any
+				var tmp13 any
 				{ // let
 					// let binding "n"
-					var v15 any = v3
-					_ = v15
+					var v14 any = v3
+					_ = v14
 					// let binding "xs"
-					tmp16 := aotDirectFn447(v2)
-					var v17 any = tmp16
-					_ = v17
+					tmp15 := aotDirectFn447(v2)
+					var v16 any = tmp15
+					_ = v16
 					for {
+						var tmp17 any
 						var tmp18 any
-						var tmp19 any
 						{ // let
 							// let binding "and__0__auto__"
-							var v20 any = v17
-							_ = v20
-							var tmp21 any
-							if lang.IsTruthy(v20) {
-								tmp22 := lang.Numbers.IsPos(v15)
-								tmp21 = tmp22
+							var v19 any = v16
+							_ = v19
+							var tmp20 any
+							if lang.IsTruthy(v19) {
+								tmp21 := lang.Numbers.IsPos(v14)
+								tmp20 = tmp21
 							} else {
-								tmp21 = v20
+								tmp20 = v19
 							}
-							tmp19 = tmp21
+							tmp18 = tmp20
 						} // end let
-						if lang.IsTruthy(tmp19) {
-							tmp21 := lang.Numbers.Dec(v15)
-							var tmp20 any = tmp21
-							tmp23 := aotDirectFn299(v17)
-							var tmp22 any = tmp23
-							v15 = tmp20
-							v17 = tmp22
+						if lang.IsTruthy(tmp18) {
+							tmp20 := lang.Numbers.Dec(v14)
+							var tmp19 any = tmp20
+							tmp22 := aotDirectFn299(v16)
+							var tmp21 any = tmp22
+							v14 = tmp19
+							v16 = tmp21
 							continue
 						} else {
-							tmp18 = v17
+							tmp17 = v16
 						}
-						tmp14 = tmp18
+						tmp13 = tmp17
 						break
 					}
 				} // end let
-				tmp4 = tmp14
+				tmp4 = tmp13
 			}
 			return tmp4
 		})
@@ -19375,86 +19353,85 @@ func LoadNS() {
 				{ // let
 					// let binding "or__0__auto__"
 					var tmp7 any
-					tmp8 := reflect.TypeOf((*lang.IDrop)(nil)).Elem()
-					tmp9 := aotDirectFn225(tmp8, v2)
-					if lang.IsTruthy(tmp9) {
-						var tmp10 any
-						tmp11 := aotDirectFn228(v3)
-						if lang.IsTruthy(tmp11) {
-							tmp10 = v3
+					tmp8 := lang.IsInstance[lang.IDrop](v2)
+					if lang.IsTruthy(tmp8) {
+						var tmp9 any
+						tmp10 := aotDirectFn228(v3)
+						if lang.IsTruthy(tmp10) {
+							tmp9 = v3
 						} else {
-							tmp12 := lang.Apply1(nil, v3)
-							tmp10 = tmp12
+							tmp11 := lang.Apply1(nil, v3)
+							tmp9 = tmp11
 						}
-						tmp13 := v2.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp10))
-						tmp7 = tmp13
+						tmp12 := v2.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp9))
+						tmp7 = tmp12
 					} else {
-						var tmp14 any
+						var tmp13 any
 						{ // let
 							// let binding "n"
-							var v15 any = v3
-							_ = v15
+							var v14 any = v3
+							_ = v14
 							// let binding "xs"
-							var v16 any = v2
-							_ = v16
+							var v15 any = v2
+							_ = v15
 							for {
-								var tmp17 any
+								var tmp16 any
 								{ // let
 									// let binding "temp__0__auto__"
-									var tmp18 any
+									var tmp17 any
 									{ // let
 										// let binding "and__0__auto__"
-										tmp19 := lang.Numbers.IsPos(v15)
-										var v20 any = tmp19
-										_ = v20
-										var tmp21 any
-										if lang.IsTruthy(v20) {
-											tmp22 := aotDirectFn447(v16)
-											tmp21 = tmp22
+										tmp18 := lang.Numbers.IsPos(v14)
+										var v19 any = tmp18
+										_ = v19
+										var tmp20 any
+										if lang.IsTruthy(v19) {
+											tmp21 := aotDirectFn447(v15)
+											tmp20 = tmp21
 										} else {
-											tmp21 = v20
+											tmp20 = v19
 										}
-										tmp18 = tmp21
+										tmp17 = tmp20
 									} // end let
-									var v19 any = tmp18
-									_ = v19
-									var tmp20 any
-									if lang.IsTruthy(v19) {
-										var tmp21 any
+									var v18 any = tmp17
+									_ = v18
+									var tmp19 any
+									if lang.IsTruthy(v18) {
+										var tmp20 any
 										{ // let
 											// let binding "xs"
-											var v22 any = v19
-											_ = v22
-											tmp24 := lang.Numbers.Dec(v15)
-											var tmp23 any = tmp24
-											tmp26 := aotDirectFn432(v22)
-											var tmp25 any = tmp26
-											v15 = tmp23
-											v16 = tmp25
+											var v21 any = v18
+											_ = v21
+											tmp23 := lang.Numbers.Dec(v14)
+											var tmp22 any = tmp23
+											tmp25 := aotDirectFn432(v21)
+											var tmp24 any = tmp25
+											v14 = tmp22
+											v15 = tmp24
 											continue
 										} // end let
-										tmp20 = tmp21
+										tmp19 = tmp20
 									} else {
-										tmp22 := aotDirectFn447(v16)
-										tmp20 = tmp22
+										tmp21 := aotDirectFn447(v15)
+										tmp19 = tmp21
 									}
-									tmp17 = tmp20
+									tmp16 = tmp19
 								} // end let
-								tmp14 = tmp17
+								tmp13 = tmp16
 								break
 							}
 						} // end let
-						tmp7 = tmp14
+						tmp7 = tmp13
 					}
-					var v15 any = tmp7
-					_ = v15
-					var tmp16 any
-					if lang.IsTruthy(v15) {
-						tmp16 = v15
+					var v14 any = tmp7
+					_ = v14
+					var tmp15 any
+					if lang.IsTruthy(v14) {
+						tmp15 = v14
 					} else {
-						tmp16 = lang.NewList()
+						tmp15 = lang.NewList()
 					}
-					tmp6 = tmp16
+					tmp6 = tmp15
 				} // end let
 				tmp4 = tmp6
 			} else {
@@ -21055,26 +21032,25 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := reflect.TypeOf((*lang.ITransientVector)(nil)).Elem()
-			tmp5 := aotDirectFn225(tmp4, v2)
-			if lang.IsTruthy(tmp5) {
+			tmp4 := lang.IsInstance[lang.ITransientVector](v2)
+			if lang.IsTruthy(tmp4) {
 			} else {
-				tmp6 := lang.Apply1(lang.NewIllegalArgumentError, "pop! expects a transient vector")
-				panic(tmp6)
+				tmp5 := lang.Apply1(lang.NewIllegalArgumentError, "pop! expects a transient vector")
+				panic(tmp5)
 			}
 			_ = tmp3
-			tmp7, ok := lang.FieldOrMethod(v2, "pop")
+			tmp6, ok := lang.FieldOrMethod(v2, "pop")
 			if !ok {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v2, "pop")))
 			}
-			var tmp8 any
-			switch reflect.TypeOf(tmp7).Kind() {
+			var tmp7 any
+			switch reflect.TypeOf(tmp6).Kind() {
 			case reflect.Func:
-				tmp8 = lang.Apply(tmp7, nil)
+				tmp7 = lang.Apply(tmp6, nil)
 			default:
-				tmp8 = tmp7
+				tmp7 = tmp6
 			}
-			return tmp8
+			return tmp7
 		})
 		aotDirectFn345 = tmp1
 		var_clojure_DOT_core_pop_BANG_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -22060,13 +22036,12 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := reflect.TypeOf((*lang.IAtom)(nil)).Elem()
-			tmp5 := aotDirectFn225(tmp4, v2)
-			if lang.IsTruthy(tmp5) {
-				tmp6 := aotDirectFn132Arity1(v2)
-				tmp7 := kw_on_DASH_interface.Invoke1(tmp6)
-				tmp8 := runtime.RT.BooleanCast(tmp7)
-				tmp3 = tmp8
+			tmp4 := lang.IsInstance[lang.IAtom](v2)
+			if lang.IsTruthy(tmp4) {
+				tmp5 := aotDirectFn132Arity1(v2)
+				tmp6 := kw_on_DASH_interface.Invoke1(tmp5)
+				tmp7 := runtime.RT.BooleanCast(tmp6)
+				tmp3 = tmp7
 			} else {
 				tmp3 = false
 			}
@@ -22483,9 +22458,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.Ratio)(nil))
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[*lang.Ratio](v2)
+			return tmp3
 		})
 		aotDirectFn386 = tmp1
 		var_clojure_DOT_core_ratio_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -22722,13 +22696,12 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := reflect.TypeOf((*regexp12.Regexp)(nil))
-			tmp5 := aotDirectFn225(tmp4, v2)
-			if lang.IsTruthy(tmp5) {
+			tmp4 := lang.IsInstance[*regexp12.Regexp](v2)
+			if lang.IsTruthy(tmp4) {
 				tmp3 = v2
 			} else {
-				tmp6 := lang.Apply1(lang.CachedCompileRegexp, v2)
-				tmp3 = tmp6
+				tmp5 := lang.Apply1(lang.CachedCompileRegexp, v2)
+				tmp3 = tmp5
 			}
 			return tmp3
 		})
@@ -23458,10 +23431,9 @@ func LoadNS() {
 						_ = v25
 						var tmp26 any
 						if lang.IsTruthy(v25) {
-							tmp27 := reflect.TypeOf((*lang.Sequential)(nil)).Elem()
-							tmp28 := aotDirectFn225(tmp27, v22)
-							tmp29 := aotDirectFn304(tmp28)
-							tmp26 = tmp29
+							tmp27 := lang.IsInstance[lang.Sequential](v22)
+							tmp28 := aotDirectFn304(tmp27)
+							tmp26 = tmp28
 						} else {
 							tmp26 = v25
 						}
@@ -24097,7 +24069,8 @@ func LoadNS() {
 								var v15 any = v12
 								_ = v15
 								tmp16 := aotDirectFn556(v15)
-								tmp17 := aotDirectFn47Arity3(v7, v8, tmp16)
+								var tmp17 any = v7
+								tmp17 = lang.Assoc(tmp17, v8, tmp16)
 								tmp14 = tmp17
 							} // end let
 							tmp13 = tmp14
@@ -24414,9 +24387,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.Reversible)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.Reversible](v2)
+			return tmp3
 		})
 		aotDirectFn436 = tmp1
 		var_clojure_DOT_core_reversible_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -24715,9 +24687,8 @@ func LoadNS() {
 			tmp1 = lang.FnFunc1(func(p0 any) any {
 				v3 := p0
 				_ = v3
-				tmp4 := reflect.TypeOf((*lang.ISeq)(nil)).Elem()
-				tmp5 := aotDirectFn225(tmp4, v3)
-				return tmp5
+				tmp4 := lang.IsInstance[lang.ISeq](v3)
+				return tmp4
 			})
 			v2 = tmp1
 			_ = v2
@@ -25148,9 +25119,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.Sequential)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.Sequential](v2)
+			return tmp3
 		})
 		aotDirectFn453 = tmp1
 		var_clojure_DOT_core_sequential_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -25172,22 +25142,21 @@ func LoadNS() {
 				tmp3 = tmp5
 			} else {
 				var tmp6 any
-				tmp7 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
-				tmp8 := aotDirectFn225(tmp7, v2)
-				if lang.IsTruthy(tmp8) {
-					tmp9 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
-					tmp10 := lang.NewSet()
-					tmp11 := aotDirectFn521(tmp10)
-					tmp12 := v2.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](tmp9), tmp11)
-					tmp13 := aotDirectFn342(tmp12)
-					tmp6 = tmp13
+				tmp7 := lang.IsInstance[lang.IReduceInit](v2)
+				if lang.IsTruthy(tmp7) {
+					tmp8 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
+					tmp9 := lang.NewSet()
+					tmp10 := aotDirectFn521(tmp9)
+					tmp11 := v2.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](tmp8), tmp10)
+					tmp12 := aotDirectFn342(tmp11)
+					tmp6 = tmp12
 				} else {
-					tmp14 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
-					tmp15 := lang.NewSet()
-					tmp16 := aotDirectFn521(tmp15)
-					tmp17 := aotDirectFn404Arity3(tmp14, tmp16, v2)
-					tmp18 := aotDirectFn342(tmp17)
-					tmp6 = tmp18
+					tmp13 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
+					tmp14 := lang.NewSet()
+					tmp15 := aotDirectFn521(tmp14)
+					tmp16 := aotDirectFn404Arity3(tmp13, tmp15, v2)
+					tmp17 := aotDirectFn342(tmp16)
+					tmp6 = tmp17
 				}
 				tmp3 = tmp6
 			}
@@ -25302,9 +25271,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.IPersistentSet)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.IPersistentSet](v2)
+			return tmp3
 		})
 		aotDirectFn461 = tmp1
 		var_clojure_DOT_core_set_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -25639,53 +25607,53 @@ func LoadNS() {
 						var v14 any = tmp13
 						_ = v14
 						var tmp15 any
-						tmp16 := reflect.TypeOf((*lang.Symbol)(nil))
-						tmp17 := aotDirectFn225(tmp16, v14)
-						if lang.IsTruthy(tmp17) {
-							var tmp18 any
-							tmp19 := v14.(interface{ Name() string }).Name()
-							tmp20 := lang.Apply2(strings8.Index, tmp19, ".")
-							tmp21 := lang.Equiv(tmp20, int64(-1))
-							if lang.IsTruthy(tmp21) {
-								var tmp22 any
-								tmp23 := lang.Equals(nil, nil)
-								if lang.IsTruthy(tmp23) {
-									var tmp24 any
+						tmp16 := lang.IsInstance[*lang.Symbol](v14)
+						if lang.IsTruthy(tmp16) {
+							var tmp17 any
+							tmp18 := v14.(interface{ Name() string }).Name()
+							tmp19 := lang.Apply2(strings8.Index, tmp18, ".")
+							tmp20 := lang.Equiv(tmp19, int64(-1))
+							if lang.IsTruthy(tmp20) {
+								var tmp21 any
+								tmp22 := lang.Equals(nil, nil)
+								if lang.IsTruthy(tmp22) {
+									var tmp23 any
 									{ // let
 										// let binding "c"
-										var v25 any = nil
-										_ = v25
-										var tmp26 any
-										if lang.IsTruthy(v25) {
-											tmp27, ok := lang.FieldOrMethod(v25, "Name")
+										var v24 any = nil
+										_ = v24
+										var tmp25 any
+										if lang.IsTruthy(v24) {
+											tmp26, ok := lang.FieldOrMethod(v24, "Name")
 											if !ok {
-												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v25, "Name")))
+												panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v24, "Name")))
 											}
-											var tmp28 any
-											switch reflect.TypeOf(tmp27).Kind() {
+											var tmp27 any
+											switch reflect.TypeOf(tmp26).Kind() {
 											case reflect.Func:
-												tmp28 = lang.Apply(tmp27, nil)
+												tmp27 = lang.Apply(tmp26, nil)
 											default:
-												tmp28 = tmp27
+												tmp27 = tmp26
 											}
-											tmp29 := lang.Apply1(lang.NewSymbol, tmp28)
-											tmp30 := aotDirectFn47Arity3(v12, kw_tag, tmp29)
-											tmp31 := aotDirectFn569(v9, tmp30)
-											tmp26 = tmp31
+											tmp28 := lang.Apply1(lang.NewSymbol, tmp27)
+											var tmp29 any = v12
+											tmp29 = lang.Assoc(tmp29, kw_tag, tmp28)
+											tmp30 := aotDirectFn569(v9, tmp29)
+											tmp25 = tmp30
 										} else {
-											tmp26 = v9
+											tmp25 = v9
 										}
-										tmp24 = tmp26
+										tmp23 = tmp25
 									} // end let
-									tmp22 = tmp24
+									tmp21 = tmp23
 								} else {
-									tmp22 = v9
+									tmp21 = v9
 								}
-								tmp18 = tmp22
+								tmp17 = tmp21
 							} else {
-								tmp18 = v9
+								tmp17 = v9
 							}
-							tmp15 = tmp18
+							tmp15 = tmp17
 						} else {
 							tmp15 = v9
 						}
@@ -26837,9 +26805,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.Sorted)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.Sorted](v2)
+			return tmp3
 		})
 		aotDirectFn483 = tmp1
 		var_clojure_DOT_core_sorted_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -27101,20 +27068,19 @@ func LoadNS() {
 			v3 := p1
 			_ = v3
 			var tmp4 any
-			tmp5 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
-			tmp6 := aotDirectFn225(tmp5, v2)
-			if lang.IsTruthy(tmp6) {
-				tmp7 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
-				tmp8 := aotDirectFn521(v2)
-				tmp9 := aotDirectFn492Arity3(tmp7, tmp8, v3)
-				tmp10 := aotDirectFn342(tmp9)
-				tmp11 := aotDirectFn285(v2)
-				tmp12 := aotDirectFn569(tmp10, tmp11)
-				tmp4 = tmp12
+			tmp5 := lang.IsInstance[lang.IEditableCollection](v2)
+			if lang.IsTruthy(tmp5) {
+				tmp6 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
+				tmp7 := aotDirectFn521(v2)
+				tmp8 := aotDirectFn492Arity3(tmp6, tmp7, v3)
+				tmp9 := aotDirectFn342(tmp8)
+				tmp10 := aotDirectFn285(v2)
+				tmp11 := aotDirectFn569(tmp9, tmp10)
+				tmp4 = tmp11
 			} else {
-				tmp13 := checkDerefVar(var_clojure_DOT_core_conj)
-				tmp14 := aotDirectFn492Arity3(tmp13, v2, v3)
-				tmp4 = tmp14
+				tmp12 := checkDerefVar(var_clojure_DOT_core_conj)
+				tmp13 := aotDirectFn492Arity3(tmp12, v2, v3)
+				tmp4 = tmp13
 			}
 			return tmp4
 		})
@@ -27126,20 +27092,19 @@ func LoadNS() {
 			v4 := p2
 			_ = v4
 			var tmp5 any
-			tmp6 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
-			tmp7 := aotDirectFn225(tmp6, v2)
-			if lang.IsTruthy(tmp7) {
-				tmp8 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
-				tmp9 := aotDirectFn521(v2)
-				tmp10 := aotDirectFn494Arity4(v3, tmp8, tmp9, v4)
-				tmp11 := aotDirectFn342(tmp10)
-				tmp12 := aotDirectFn285(v2)
-				tmp13 := aotDirectFn569(tmp11, tmp12)
-				tmp5 = tmp13
+			tmp6 := lang.IsInstance[lang.IEditableCollection](v2)
+			if lang.IsTruthy(tmp6) {
+				tmp7 := checkDerefVar(var_clojure_DOT_core_conj_BANG_)
+				tmp8 := aotDirectFn521(v2)
+				tmp9 := aotDirectFn494Arity4(v3, tmp7, tmp8, v4)
+				tmp10 := aotDirectFn342(tmp9)
+				tmp11 := aotDirectFn285(v2)
+				tmp12 := aotDirectFn569(tmp10, tmp11)
+				tmp5 = tmp12
 			} else {
-				tmp14 := checkDerefVar(var_clojure_DOT_core_conj)
-				tmp15 := aotDirectFn494Arity4(v3, tmp14, v2, v4)
-				tmp5 = tmp15
+				tmp13 := checkDerefVar(var_clojure_DOT_core_conj)
+				tmp14 := aotDirectFn494Arity4(v3, tmp13, v2, v4)
+				tmp5 = tmp14
 			}
 			return tmp5
 		})
@@ -27620,23 +27585,21 @@ func LoadNS() {
 					tmp5 = tmp7
 				} else {
 					var tmp8 any
-					tmp9 := reflect.TypeOf((*lang.Var)(nil))
-					tmp10 := aotDirectFn225(tmp9, v2)
-					if lang.IsTruthy(tmp10) {
-						tmp11 := v2.(interface{ ToSymbol() *lang.Symbol }).ToSymbol()
-						tmp8 = tmp11
+					tmp9 := lang.IsInstance[*lang.Var](v2)
+					if lang.IsTruthy(tmp9) {
+						tmp10 := v2.(interface{ ToSymbol() *lang.Symbol }).ToSymbol()
+						tmp8 = tmp10
 					} else {
-						var tmp12 any
-						tmp13 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
-						tmp14 := aotDirectFn225(tmp13, v2)
-						if lang.IsTruthy(tmp14) {
-							tmp15 := v2.(interface{ Sym() *lang.Symbol }).Sym()
-							tmp12 = tmp15
+						var tmp11 any
+						tmp12 := lang.IsInstance[lang.Keyword](v2)
+						if lang.IsTruthy(tmp12) {
+							tmp13 := v2.(interface{ Sym() *lang.Symbol }).Sym()
+							tmp11 = tmp13
 						} else {
-							tmp16 := lang.Apply1(lang.NewIllegalArgumentError, "no conversion to symbol")
-							panic(tmp16)
+							tmp14 := lang.Apply1(lang.NewIllegalArgumentError, "no conversion to symbol")
+							panic(tmp14)
 						}
-						tmp8 = tmp12
+						tmp8 = tmp11
 					}
 					tmp5 = tmp8
 				}
@@ -27675,9 +27638,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.Symbol)(nil))
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[*lang.Symbol](v2)
+			return tmp3
 		})
 		aotDirectFn506 = tmp1
 		var_clojure_DOT_core_symbol_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -28183,28 +28145,27 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := reflect.TypeOf((*lang.Namespace)(nil))
-			tmp5 := aotDirectFn225(tmp4, v2)
-			if lang.IsTruthy(tmp5) {
+			tmp4 := lang.IsInstance[*lang.Namespace](v2)
+			if lang.IsTruthy(tmp4) {
 				tmp3 = v2
 			} else {
-				var tmp6 any
+				var tmp5 any
 				{ // let
 					// let binding "or__0__auto__"
-					tmp7 := aotDirectFn181(v2)
-					var v8 any = tmp7
-					_ = v8
-					var tmp9 any
-					if lang.IsTruthy(v8) {
-						tmp9 = v8
+					tmp6 := aotDirectFn181(v2)
+					var v7 any = tmp6
+					_ = v7
+					var tmp8 any
+					if lang.IsTruthy(v7) {
+						tmp8 = v7
 					} else {
-						tmp10 := aotDirectFn490.Invoke3("No namespace: ", v2, " found")
-						tmp11 := lang.Apply1(lang.NewError, tmp10)
-						panic(tmp11)
+						tmp9 := aotDirectFn490.Invoke3("No namespace: ", v2, " found")
+						tmp10 := lang.Apply1(lang.NewError, tmp9)
+						panic(tmp10)
 					}
-					tmp6 = tmp9
+					tmp5 = tmp8
 				} // end let
-				tmp3 = tmp6
+				tmp3 = tmp5
 			}
 			return tmp3
 		})
@@ -29663,7 +29624,8 @@ func LoadNS() {
 				var tmp14 any
 				tmp15 := aotDirectFn306(v13)
 				if lang.IsTruthy(tmp15) {
-					tmp16 := aotDirectFn47Arity3(v7, v3, v13)
+					var tmp16 any = v7
+					tmp16 = lang.Assoc(tmp16, v3, v13)
 					tmp14 = tmp16
 				} else {
 					tmp17 := aotDirectFn140Arity2(v7, v3)
@@ -29827,7 +29789,8 @@ func LoadNS() {
 			_ = v4
 			tmp5 := runtime.RT.Get(v2, v3)
 			tmp6 := lang.Apply1(v4, tmp5)
-			tmp7 := aotDirectFn47Arity3(v2, v3, tmp6)
+			var tmp7 any = v2
+			tmp7 = lang.Assoc(tmp7, v3, tmp6)
 			return tmp7
 		})
 		aotDirectFn549Arity4 = lang.FnFunc4(func(p0, p1, p2, p3 any) any {
@@ -29841,7 +29804,8 @@ func LoadNS() {
 			_ = v5
 			tmp6 := runtime.RT.Get(v2, v3)
 			tmp7 := lang.Apply2(v4, tmp6, v5)
-			tmp8 := aotDirectFn47Arity3(v2, v3, tmp7)
+			var tmp8 any = v2
+			tmp8 = lang.Assoc(tmp8, v3, tmp7)
 			return tmp8
 		})
 		aotDirectFn549Arity5 = lang.FnFunc5(func(p0, p1, p2, p3, p4 any) any {
@@ -29857,7 +29821,8 @@ func LoadNS() {
 			_ = v6
 			tmp7 := runtime.RT.Get(v2, v3)
 			tmp8 := lang.Apply3(v4, tmp7, v5, v6)
-			tmp9 := aotDirectFn47Arity3(v2, v3, tmp8)
+			var tmp9 any = v2
+			tmp9 = lang.Assoc(tmp9, v3, tmp8)
 			return tmp9
 		})
 		aotDirectFn549Arity6 = lang.FnFunc6(func(p0, p1, p2, p3, p4, p5 any) any {
@@ -29875,7 +29840,8 @@ func LoadNS() {
 			_ = v7
 			tmp8 := runtime.RT.Get(v2, v3)
 			tmp9 := lang.Apply4(v4, tmp8, v5, v6, v7)
-			tmp10 := aotDirectFn47Arity3(v2, v3, tmp9)
+			var tmp10 any = v2
+			tmp10 = lang.Assoc(tmp10, v3, tmp9)
 			return tmp10
 		})
 		tmp1 = lang.NewArityFnMethods(
@@ -29902,7 +29868,8 @@ func LoadNS() {
 				_ = v8
 				tmp9 := runtime.RT.Get(v2, v3)
 				tmp10 := aotDirectFn35.Invoke6(v4, tmp9, v5, v6, v7, v8)
-				tmp11 := aotDirectFn47Arity3(v2, v3, tmp10)
+				var tmp11 any = v2
+				tmp11 = lang.Assoc(tmp11, v3, tmp10)
 				return tmp11
 			}),
 			6,
@@ -29974,12 +29941,14 @@ func LoadNS() {
 								if lang.IsTruthy(v22) {
 									tmp24 := runtime.RT.Get(v9, v21)
 									tmp25 := lang.Apply4(v8, tmp24, v22, v11, v12)
-									tmp26 := aotDirectFn47Arity3(v9, v21, tmp25)
+									var tmp26 any = v9
+									tmp26 = lang.Assoc(tmp26, v21, tmp25)
 									tmp23 = tmp26
 								} else {
 									tmp27 := runtime.RT.Get(v9, v21)
 									tmp28 := aotDirectFn35Arity3(v11, tmp27, v12)
-									tmp29 := aotDirectFn47Arity3(v9, v21, tmp28)
+									var tmp29 any = v9
+									tmp29 = lang.Assoc(tmp29, v21, tmp28)
 									tmp23 = tmp29
 								}
 								tmp13 = tmp23
@@ -30068,21 +30037,20 @@ func LoadNS() {
 				return tmp9
 			})
 			var tmp5 any
-			tmp6 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
-			tmp7 := aotDirectFn225(tmp6, v2)
-			if lang.IsTruthy(tmp7) {
-				tmp8 := aotDirectFn521(v2)
-				tmp5 = tmp8
+			tmp6 := lang.IsInstance[lang.IEditableCollection](v2)
+			if lang.IsTruthy(tmp6) {
+				tmp7 := aotDirectFn521(v2)
+				tmp5 = tmp7
 			} else {
-				tmp9 := lang.NewMap()
-				tmp10 := aotDirectFn521(tmp9)
-				tmp5 = tmp10
+				tmp8 := lang.NewMap()
+				tmp9 := aotDirectFn521(tmp8)
+				tmp5 = tmp9
 			}
-			tmp11 := aotDirectFn403(tmp4, tmp5, v2)
-			tmp12 := aotDirectFn342(tmp11)
-			tmp13 := aotDirectFn285(v2)
-			tmp14 := aotDirectFn569(tmp12, tmp13)
-			return tmp14
+			tmp10 := aotDirectFn403(tmp4, tmp5, v2)
+			tmp11 := aotDirectFn342(tmp10)
+			tmp12 := aotDirectFn285(v2)
+			tmp13 := aotDirectFn569(tmp11, tmp12)
+			return tmp13
 		})
 		aotDirectFn552 = tmp1
 		var_clojure_DOT_core_update_DASH_vals = ns.InternWithValue(tmp0, tmp1, true)
@@ -30097,9 +30065,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*url14.URL)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[url14.URL](v2)
+			return tmp3
 		})
 		aotDirectFn553 = tmp1
 		var_clojure_DOT_core_uri_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -30114,9 +30081,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf([16]uint8{})
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[uuid10.UUID](v2)
+			return tmp3
 		})
 		aotDirectFn555 = tmp1
 		var_clojure_DOT_core_uuid_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -30197,9 +30163,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.Var)(nil))
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[*lang.Var](v2)
+			return tmp3
 		})
 		aotDirectFn560 = tmp1
 		var_clojure_DOT_core_var_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -30248,19 +30213,18 @@ func LoadNS() {
 			tmp4 := aotDirectFn564(v2)
 			if lang.IsTruthy(tmp4) {
 				var tmp5 any
-				tmp6 := reflect.TypeOf((*lang.IObj)(nil)).Elem()
-				tmp7 := aotDirectFn225(tmp6, v2)
-				if lang.IsTruthy(tmp7) {
-					tmp8 := aotDirectFn569(v2, nil)
-					tmp5 = tmp8
+				tmp6 := lang.IsInstance[lang.IObj](v2)
+				if lang.IsTruthy(tmp6) {
+					tmp7 := aotDirectFn569(v2, nil)
+					tmp5 = tmp7
 				} else {
-					tmp9 := lang.CreateLazilyPersistentVector(v2)
-					tmp5 = tmp9
+					tmp8 := lang.CreateLazilyPersistentVector(v2)
+					tmp5 = tmp8
 				}
 				tmp3 = tmp5
 			} else {
-				tmp10 := lang.CreateLazilyPersistentVector(v2)
-				tmp3 = tmp10
+				tmp9 := lang.CreateLazilyPersistentVector(v2)
+				tmp3 = tmp9
 			}
 			return tmp3
 		})
@@ -30395,9 +30359,8 @@ func LoadNS() {
 			tmp1 = lang.FnFunc1(func(p0 any) any {
 				v3 := p0
 				_ = v3
-				tmp4 := reflect.TypeOf((*lang.IPersistentVector)(nil)).Elem()
-				tmp5 := aotDirectFn225(tmp4, v3)
-				return tmp5
+				tmp4 := lang.IsInstance[lang.IPersistentVector](v3)
+				return tmp4
 			})
 			v2 = tmp1
 			_ = v2
@@ -30432,9 +30395,8 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := reflect.TypeOf((*lang.Volatile)(nil)).Elem()
-			tmp4 := aotDirectFn225(tmp3, v2)
-			return tmp4
+			tmp3 := lang.IsInstance[lang.Volatile](v2)
+			return tmp3
 		})
 		aotDirectFn566 = tmp1
 		var_clojure_DOT_core_volatile_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -36761,7 +36723,8 @@ func LoadNS() {
 										tmp67 := lang.Apply1(lang.NewIllegalArgumentError, tmp66)
 										panic(tmp67)
 									} else {
-										tmp68 := aotDirectFn47Arity3(v61, v62, v63)
+										var tmp68 any = v61
+										tmp68 = lang.Assoc(tmp68, v62, v63)
 										tmp64 = tmp68
 									}
 									return tmp64
@@ -38884,7 +38847,8 @@ func LoadNS() {
 					// let binding "m"
 					var tmp32 any
 					if lang.IsTruthy(v11) {
-						tmp33 := aotDirectFn47Arity3(v22, kw_doc, v11)
+						var tmp33 any = v22
+						tmp33 = lang.Assoc(tmp33, kw_doc, v11)
 						tmp32 = tmp33
 					} else {
 						tmp32 = v22
@@ -39048,182 +39012,181 @@ func LoadNS() {
 					var v6 any = rest
 					_ = v6
 					var tmp7 any
-					tmp8 := reflect.TypeOf((*lang.Symbol)(nil))
-					tmp9 := aotDirectFn225(tmp8, v5)
-					if lang.IsTruthy(tmp9) {
+					tmp8 := lang.IsInstance[*lang.Symbol](v5)
+					if lang.IsTruthy(tmp8) {
 					} else {
-						tmp10 := lang.Apply1(lang.NewIllegalArgumentError, "First argument to defn must be a symbol")
-						panic(tmp10)
+						tmp9 := lang.Apply1(lang.NewIllegalArgumentError, "First argument to defn must be a symbol")
+						panic(tmp9)
 					}
 					_ = tmp7
-					var tmp11 any
+					var tmp10 any
 					{ // let
 						// let binding "m"
-						var tmp12 any
-						tmp13 := aotDirectFn183(v6)
-						tmp14 := aotDirectFn495(tmp13)
-						if lang.IsTruthy(tmp14) {
-							tmp15 := aotDirectFn183(v6)
-							tmp16 := lang.NewMap(kw_doc, tmp15)
-							tmp12 = tmp16
+						var tmp11 any
+						tmp12 := aotDirectFn183(v6)
+						tmp13 := aotDirectFn495(tmp12)
+						if lang.IsTruthy(tmp13) {
+							tmp14 := aotDirectFn183(v6)
+							tmp15 := lang.NewMap(kw_doc, tmp14)
+							tmp11 = tmp15
 						} else {
-							tmp17 := lang.NewMap()
-							tmp12 = tmp17
+							tmp16 := lang.NewMap()
+							tmp11 = tmp16
 						}
-						var v18 any = tmp12
-						_ = v18
+						var v17 any = tmp11
+						_ = v17
 						// let binding "fdecl"
-						var tmp19 any
-						tmp20 := aotDirectFn183(v6)
-						tmp21 := aotDirectFn495(tmp20)
-						if lang.IsTruthy(tmp21) {
-							tmp22 := aotDirectFn299(v6)
-							tmp19 = tmp22
+						var tmp18 any
+						tmp19 := aotDirectFn183(v6)
+						tmp20 := aotDirectFn495(tmp19)
+						if lang.IsTruthy(tmp20) {
+							tmp21 := aotDirectFn299(v6)
+							tmp18 = tmp21
 						} else {
-							tmp19 = v6
+							tmp18 = v6
 						}
-						var v23 any = tmp19
-						_ = v23
+						var v22 any = tmp18
+						_ = v22
 						// let binding "m"
-						var tmp24 any
-						tmp25 := aotDirectFn183(v23)
-						tmp26 := aotDirectFn274(tmp25)
-						if lang.IsTruthy(tmp26) {
-							tmp27 := aotDirectFn183(v23)
-							tmp28 := aotDirectFn113Arity2(v18, tmp27)
-							tmp24 = tmp28
+						var tmp23 any
+						tmp24 := aotDirectFn183(v22)
+						tmp25 := aotDirectFn274(tmp24)
+						if lang.IsTruthy(tmp25) {
+							tmp26 := aotDirectFn183(v22)
+							tmp27 := aotDirectFn113Arity2(v17, tmp26)
+							tmp23 = tmp27
 						} else {
-							tmp24 = v18
+							tmp23 = v17
 						}
-						var v29 any = tmp24
-						_ = v29
+						var v28 any = tmp23
+						_ = v28
 						// let binding "fdecl"
-						var tmp30 any
-						tmp31 := aotDirectFn183(v23)
-						tmp32 := aotDirectFn274(tmp31)
-						if lang.IsTruthy(tmp32) {
-							tmp33 := aotDirectFn299(v23)
-							tmp30 = tmp33
+						var tmp29 any
+						tmp30 := aotDirectFn183(v22)
+						tmp31 := aotDirectFn274(tmp30)
+						if lang.IsTruthy(tmp31) {
+							tmp32 := aotDirectFn299(v22)
+							tmp29 = tmp32
 						} else {
-							tmp30 = v23
+							tmp29 = v22
 						}
-						var v34 any = tmp30
-						_ = v34
+						var v33 any = tmp29
+						_ = v33
 						// let binding "fdecl"
-						var tmp35 any
-						tmp36 := aotDirectFn183(v34)
-						tmp37 := aotDirectFn564(tmp36)
-						if lang.IsTruthy(tmp37) {
-							tmp38 := checkDerefVar(var_clojure_DOT_core_list)
-							tmp39 := lang.Apply1(tmp38, v34)
-							tmp35 = tmp39
+						var tmp34 any
+						tmp35 := aotDirectFn183(v33)
+						tmp36 := aotDirectFn564(tmp35)
+						if lang.IsTruthy(tmp36) {
+							tmp37 := checkDerefVar(var_clojure_DOT_core_list)
+							tmp38 := lang.Apply1(tmp37, v33)
+							tmp34 = tmp38
 						} else {
-							tmp35 = v34
+							tmp34 = v33
 						}
-						var v40 any = tmp35
-						_ = v40
+						var v39 any = tmp34
+						_ = v39
 						// let binding "m"
-						var tmp41 any
-						tmp42 := aotDirectFn248(v40)
-						tmp43 := aotDirectFn274(tmp42)
-						if lang.IsTruthy(tmp43) {
-							tmp44 := aotDirectFn248(v40)
-							tmp45 := aotDirectFn113Arity2(v29, tmp44)
-							tmp41 = tmp45
+						var tmp40 any
+						tmp41 := aotDirectFn248(v39)
+						tmp42 := aotDirectFn274(tmp41)
+						if lang.IsTruthy(tmp42) {
+							tmp43 := aotDirectFn248(v39)
+							tmp44 := aotDirectFn113Arity2(v28, tmp43)
+							tmp40 = tmp44
 						} else {
-							tmp41 = v29
+							tmp40 = v28
 						}
-						var v46 any = tmp41
-						_ = v46
+						var v45 any = tmp40
+						_ = v45
 						// let binding "fdecl"
-						var tmp47 any
-						tmp48 := aotDirectFn248(v40)
-						tmp49 := aotDirectFn274(tmp48)
-						if lang.IsTruthy(tmp49) {
-							tmp50 := aotDirectFn78(v40)
-							tmp47 = tmp50
+						var tmp46 any
+						tmp47 := aotDirectFn248(v39)
+						tmp48 := aotDirectFn274(tmp47)
+						if lang.IsTruthy(tmp48) {
+							tmp49 := aotDirectFn78(v39)
+							tmp46 = tmp49
 						} else {
-							tmp47 = v40
+							tmp46 = v39
 						}
-						var v51 any = tmp47
-						_ = v51
+						var v50 any = tmp46
+						_ = v50
 						// let binding "m"
-						tmp52 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp53 := aotDirectFn469(v51)
-						tmp54 := lang.Apply2(tmp52, sym_quote, tmp53)
-						tmp55 := lang.NewMap(kw_arglists, tmp54)
-						tmp56 := aotDirectFn113Arity2(tmp55, v46)
-						var v57 any = tmp56
-						_ = v57
+						tmp51 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp52 := aotDirectFn469(v50)
+						tmp53 := lang.Apply2(tmp51, sym_quote, tmp52)
+						tmp54 := lang.NewMap(kw_arglists, tmp53)
+						tmp55 := aotDirectFn113Arity2(tmp54, v45)
+						var v56 any = tmp55
+						_ = v56
 						// let binding "m"
-						var tmp58 any
+						var tmp57 any
 						{ // let
 							// let binding "inline"
-							tmp59 := kw_inline.Invoke1(v57)
-							var v60 any = tmp59
-							_ = v60
+							tmp58 := kw_inline.Invoke1(v56)
+							var v59 any = tmp58
+							_ = v59
 							// let binding "ifn"
-							tmp61 := aotDirectFn183(v60)
-							var v62 any = tmp61
-							_ = v62
+							tmp60 := aotDirectFn183(v59)
+							var v61 any = tmp60
+							_ = v61
 							// let binding "iname"
-							tmp63 := aotDirectFn442(v60)
-							var v64 any = tmp63
-							_ = v64
+							tmp62 := aotDirectFn442(v59)
+							var v63 any = tmp62
+							_ = v63
+							var tmp64 any
 							var tmp65 any
-							var tmp66 any
-							tmp67 := lang.Equiv(sym_fn, v62)
-							if lang.IsTruthy(tmp67) {
-								var tmp68 any
-								tmp69 := reflect.TypeOf((*lang.Symbol)(nil))
-								tmp70 := aotDirectFn225(tmp69, v64)
-								if lang.IsTruthy(tmp70) {
-									tmp68 = false
-								} else {
-									tmp68 = true
-								}
-								tmp66 = tmp68
-							} else {
-							}
+							tmp66 := lang.Equiv(sym_fn, v61)
 							if lang.IsTruthy(tmp66) {
-								tmp71 := v5.(interface{ Name() string }).Name()
-								tmp72 := lang.Apply2(lang.ConcatStrings, tmp71, "__inliner")
-								tmp73 := lang.Apply1(lang.NewSymbol, tmp72)
-								tmp74 := aotDirectFn299(v60)
-								tmp75 := aotDirectFn115(tmp73, tmp74)
-								tmp76 := aotDirectFn115(v62, tmp75)
-								tmp77 := aotDirectFn47Arity3(v57, kw_inline, tmp76)
-								tmp65 = tmp77
+								var tmp67 any
+								tmp68 := lang.IsInstance[*lang.Symbol](v63)
+								if lang.IsTruthy(tmp68) {
+									tmp67 = false
+								} else {
+									tmp67 = true
+								}
+								tmp65 = tmp67
 							} else {
-								tmp65 = v57
 							}
-							tmp58 = tmp65
+							if lang.IsTruthy(tmp65) {
+								tmp69 := v5.(interface{ Name() string }).Name()
+								tmp70 := lang.Apply2(lang.ConcatStrings, tmp69, "__inliner")
+								tmp71 := lang.Apply1(lang.NewSymbol, tmp70)
+								tmp72 := aotDirectFn299(v59)
+								tmp73 := aotDirectFn115(tmp71, tmp72)
+								tmp74 := aotDirectFn115(v61, tmp73)
+								var tmp75 any = v56
+								tmp75 = lang.Assoc(tmp75, kw_inline, tmp74)
+								tmp64 = tmp75
+							} else {
+								tmp64 = v56
+							}
+							tmp57 = tmp64
 						} // end let
-						var v59 any = tmp58
-						_ = v59
+						var v58 any = tmp57
+						_ = v58
 						// let binding "m"
-						var tmp60 any
-						tmp61 := aotDirectFn285(v5)
-						if lang.IsTruthy(tmp61) {
-							tmp62 := aotDirectFn285(v5)
-							tmp60 = tmp62
+						var tmp59 any
+						tmp60 := aotDirectFn285(v5)
+						if lang.IsTruthy(tmp60) {
+							tmp61 := aotDirectFn285(v5)
+							tmp59 = tmp61
 						} else {
-							tmp63 := lang.NewMap()
-							tmp60 = tmp63
+							tmp62 := lang.NewMap()
+							tmp59 = tmp62
 						}
-						tmp64 := aotDirectFn113Arity2(tmp60, v59)
-						var v65 any = tmp64
-						_ = v65
-						tmp66 := checkDerefVar(var_clojure_DOT_core_list)
-						tmp67 := aotDirectFn569(v5, v65)
-						tmp68 := aotDirectFn115(sym_clojure_DOT_core_SLASH_fn, v51)
-						tmp69 := kw_tag.Invoke1(v65)
-						tmp70 := lang.NewMap(kw_rettag, tmp69)
-						tmp71 := aotDirectFn569(tmp68, tmp70)
-						tmp72 := lang.Apply3(tmp66, sym_def, tmp67, tmp71)
-						tmp11 = tmp72
+						tmp63 := aotDirectFn113Arity2(tmp59, v58)
+						var v64 any = tmp63
+						_ = v64
+						tmp65 := checkDerefVar(var_clojure_DOT_core_list)
+						tmp66 := aotDirectFn569(v5, v64)
+						tmp67 := aotDirectFn115(sym_clojure_DOT_core_SLASH_fn, v50)
+						tmp68 := kw_tag.Invoke1(v64)
+						tmp69 := lang.NewMap(kw_rettag, tmp68)
+						tmp70 := aotDirectFn569(tmp67, tmp69)
+						tmp71 := lang.Apply3(tmp65, sym_def, tmp66, tmp70)
+						tmp10 = tmp71
 					} // end let
-					return tmp11
+					return tmp10
 				}),
 				3,
 			)
@@ -40005,7 +39968,8 @@ func LoadNS() {
 																tmp121 := aotDirectFn246Arity2(tmp119, tmp120)
 																return tmp121
 															})
-															tmp118 := aotDirectFn47Arity3(v106, v107, tmp117)
+															var tmp118 any = v106
+															tmp118 = lang.Assoc(tmp118, v107, tmp117)
 															tmp115 = tmp118
 														} else {
 															var tmp119 any
@@ -40035,14 +39999,16 @@ func LoadNS() {
 																	tmp127 := lang.Apply2(tmp123, sym_quote, tmp126)
 																	return tmp127
 																})
-																tmp122 := aotDirectFn47Arity3(v106, v107, tmp121)
+																var tmp122 any = v106
+																tmp122 = lang.Assoc(tmp122, v107, tmp121)
 																tmp119 = tmp122
 															} else {
 																var tmp123 any
 																tmp124 := aotDirectFn9Arity2(v114, "strs")
 																if lang.IsTruthy(tmp124) {
 																	tmp125 := checkDerefVar(var_clojure_DOT_core_str)
-																	tmp126 := aotDirectFn47Arity3(v106, v107, tmp125)
+																	var tmp126 any = v106
+																	tmp126 = lang.Assoc(tmp126, v107, tmp125)
 																	tmp123 = tmp126
 																} else {
 																	tmp123 = v106
@@ -40078,7 +40044,8 @@ func LoadNS() {
 													_ = v115
 													tmp116 := aotDirectFn556(v112)
 													tmp117 := lang.Apply1(tmp116, v115)
-													tmp118 := aotDirectFn47Arity3(v114, v115, tmp117)
+													var tmp118 any = v114
+													tmp118 = lang.Assoc(tmp118, v115, tmp117)
 													return tmp118
 												})
 												tmp114 := aotDirectFn244(v112)
@@ -40112,48 +40079,47 @@ func LoadNS() {
 													_ = v114
 													// let binding "local"
 													var tmp115 any
-													tmp116 := reflect.TypeOf((*lang.Named)(nil)).Elem()
-													tmp117 := aotDirectFn225(tmp116, v111)
-													if lang.IsTruthy(tmp117) {
-														tmp118 := aotDirectFn292(v111)
-														tmp119 := aotDirectFn505Arity2(nil, tmp118)
-														tmp120 := aotDirectFn285(v111)
-														tmp121 := aotDirectFn569(tmp119, tmp120)
-														tmp115 = tmp121
+													tmp116 := lang.IsInstance[lang.Named](v111)
+													if lang.IsTruthy(tmp116) {
+														tmp117 := aotDirectFn292(v111)
+														tmp118 := aotDirectFn505Arity2(nil, tmp117)
+														tmp119 := aotDirectFn285(v111)
+														tmp120 := aotDirectFn569(tmp118, tmp119)
+														tmp115 = tmp120
 													} else {
 														tmp115 = v111
 													}
-													var v122 any = tmp115
-													_ = v122
+													var v121 any = tmp115
+													_ = v121
 													// let binding "bv"
-													var tmp123 any
-													tmp124 := aotDirectFn117(v25, v122)
-													if lang.IsTruthy(tmp124) {
-														tmp125 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp126 := lang.Apply1(v25, v122)
-														tmp127 := lang.Apply4(tmp125, sym_clojure_DOT_core_SLASH_get, v20, v114, tmp126)
-														tmp123 = tmp127
+													var tmp122 any
+													tmp123 := aotDirectFn117(v25, v121)
+													if lang.IsTruthy(tmp123) {
+														tmp124 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp125 := lang.Apply1(v25, v121)
+														tmp126 := lang.Apply4(tmp124, sym_clojure_DOT_core_SLASH_get, v20, v114, tmp125)
+														tmp122 = tmp126
 													} else {
-														tmp128 := checkDerefVar(var_clojure_DOT_core_list)
-														tmp129 := lang.Apply3(tmp128, sym_clojure_DOT_core_SLASH_get, v20, v114)
-														tmp123 = tmp129
+														tmp127 := checkDerefVar(var_clojure_DOT_core_list)
+														tmp128 := lang.Apply3(tmp127, sym_clojure_DOT_core_SLASH_get, v20, v114)
+														tmp122 = tmp128
 													}
-													var v130 any = tmp123
-													_ = v130
-													var tmp132 any
-													tmp133 := aotDirectFn215(v111)
-													if lang.IsTruthy(tmp133) {
-														tmp134 := aotDirectFn113.Invoke3(v103, v122, v130)
-														tmp132 = tmp134
+													var v129 any = tmp122
+													_ = v129
+													var tmp131 any
+													tmp132 := aotDirectFn215(v111)
+													if lang.IsTruthy(tmp132) {
+														tmp133 := aotDirectFn113.Invoke3(v103, v121, v129)
+														tmp131 = tmp133
 													} else {
-														tmp135 := lang.Apply3(v7, v103, v111, v130)
-														tmp132 = tmp135
+														tmp134 := lang.Apply3(v7, v103, v111, v129)
+														tmp131 = tmp134
 													}
-													var tmp131 any = tmp132
-													tmp137 := aotDirectFn299(v105)
-													var tmp136 any = tmp137
-													v103 = tmp131
-													v105 = tmp136
+													var tmp130 any = tmp131
+													tmp136 := aotDirectFn299(v105)
+													var tmp135 any = tmp136
+													v103 = tmp130
+													v105 = tmp135
 													continue
 												} // end let
 												tmp106 = tmp108
@@ -41888,11 +41854,11 @@ func LoadNS() {
 							var tmp35 any
 							tmp36 := aotDirectFn247(v32)
 							if lang.IsTruthy(tmp36) {
-								tmp37 := aotDirectFn344(v27)
+								tmp37 := runtime.PrepareReplaceLast(v27)
 								tmp38 := aotDirectFn341(v27)
 								tmp39 := lang.NewVector(v32, v34)
 								tmp40 := aotDirectFn113Arity2(tmp38, tmp39)
-								tmp41 := aotDirectFn113Arity2(tmp37, tmp40)
+								tmp41 := tmp37.Finish(tmp40)
 								tmp35 = tmp41
 							} else {
 								tmp42 := lang.NewVector(v32, v34)
@@ -46423,19 +46389,18 @@ func LoadNS() {
 					var tmp9 any
 					{ // let
 						// let binding "and__0__auto__"
-						tmp10 := reflect.TypeOf((*lang.Var)(nil))
-						tmp11 := aotDirectFn225(tmp10, v8)
-						var v12 any = tmp11
-						_ = v12
-						var tmp13 any
-						if lang.IsTruthy(v12) {
-							tmp14 := v8.(interface{ Namespace() *lang.Namespace }).Namespace()
-							tmp15 := aotDirectFn9Arity2(v5, tmp14)
-							tmp13 = tmp15
+						tmp10 := lang.IsInstance[*lang.Var](v8)
+						var v11 any = tmp10
+						_ = v11
+						var tmp12 any
+						if lang.IsTruthy(v11) {
+							tmp13 := v8.(interface{ Namespace() *lang.Namespace }).Namespace()
+							tmp14 := aotDirectFn9Arity2(v5, tmp13)
+							tmp12 = tmp14
 						} else {
-							tmp13 = v12
+							tmp12 = v11
 						}
-						tmp9 = tmp13
+						tmp9 = tmp12
 					} // end let
 					return tmp9
 				})
@@ -46472,33 +46437,32 @@ func LoadNS() {
 					var tmp9 any
 					{ // let
 						// let binding "and__0__auto__"
-						tmp10 := reflect.TypeOf((*lang.Var)(nil))
-						tmp11 := aotDirectFn225(tmp10, v8)
-						var v12 any = tmp11
-						_ = v12
-						var tmp13 any
-						if lang.IsTruthy(v12) {
-							var tmp14 any
+						tmp10 := lang.IsInstance[*lang.Var](v8)
+						var v11 any = tmp10
+						_ = v11
+						var tmp12 any
+						if lang.IsTruthy(v11) {
+							var tmp13 any
 							{ // let
 								// let binding "and__0__auto__"
-								tmp15 := v8.(interface{ Namespace() *lang.Namespace }).Namespace()
-								tmp16 := aotDirectFn9Arity2(v5, tmp15)
-								var v17 any = tmp16
-								_ = v17
-								var tmp18 any
-								if lang.IsTruthy(v17) {
-									tmp19 := v8.(interface{ IsPublic() bool }).IsPublic()
-									tmp18 = tmp19
+								tmp14 := v8.(interface{ Namespace() *lang.Namespace }).Namespace()
+								tmp15 := aotDirectFn9Arity2(v5, tmp14)
+								var v16 any = tmp15
+								_ = v16
+								var tmp17 any
+								if lang.IsTruthy(v16) {
+									tmp18 := v8.(interface{ IsPublic() bool }).IsPublic()
+									tmp17 = tmp18
 								} else {
-									tmp18 = v17
+									tmp17 = v16
 								}
-								tmp14 = tmp18
+								tmp13 = tmp17
 							} // end let
-							tmp13 = tmp14
+							tmp12 = tmp13
 						} else {
-							tmp13 = v12
+							tmp12 = v11
 						}
-						tmp9 = tmp13
+						tmp9 = tmp12
 					} // end let
 					return tmp9
 				})
@@ -46535,19 +46499,18 @@ func LoadNS() {
 					var tmp9 any
 					{ // let
 						// let binding "and__0__auto__"
-						tmp10 := reflect.TypeOf((*lang.Var)(nil))
-						tmp11 := aotDirectFn225(tmp10, v8)
-						var v12 any = tmp11
-						_ = v12
-						var tmp13 any
-						if lang.IsTruthy(v12) {
-							tmp14 := v8.(interface{ Namespace() *lang.Namespace }).Namespace()
-							tmp15 := aotDirectFn308Arity2(v5, tmp14)
-							tmp13 = tmp15
+						tmp10 := lang.IsInstance[*lang.Var](v8)
+						var v11 any = tmp10
+						_ = v11
+						var tmp12 any
+						if lang.IsTruthy(v11) {
+							tmp13 := v8.(interface{ Namespace() *lang.Namespace }).Namespace()
+							tmp14 := aotDirectFn308Arity2(v5, tmp13)
+							tmp12 = tmp14
 						} else {
-							tmp13 = v12
+							tmp12 = v11
 						}
-						tmp9 = tmp13
+						tmp9 = tmp12
 					} // end let
 					return tmp9
 				})
@@ -46659,7 +46622,8 @@ func LoadNS() {
 						tmp11 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
 						tmp12 := aotDirectFn299(v6)
 						tmp13 := aotDirectFn512Arity2(tmp11, tmp12)
-						tmp14 := aotDirectFn47Arity3(v5, tmp10, tmp13)
+						var tmp14 any = v5
+						tmp14 = lang.Assoc(tmp14, tmp10, tmp13)
 						var tmp9 any = tmp14
 						tmp16 := checkDerefVar(var_clojure_DOT_core_seq_QMARK_)
 						tmp17 := aotDirectFn299(v6)
@@ -48780,23 +48744,22 @@ func LoadNS() {
 			v18 := p1
 			_ = v18
 			var tmp19 any
-			tmp20 := reflect.TypeOf((*lang.IObj)(nil)).Elem()
-			tmp21 := aotDirectFn225(tmp20, v17)
-			if lang.IsTruthy(tmp21) {
-				tmp22 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
-				var tmp23 lang.FnFunc1
-				tmp23 = lang.FnFunc1(func(p0 any) any {
-					v24 := p0
-					_ = v24
-					tmp25 := aotDirectFn140Arity2(v24, kw_type)
-					return tmp25
+			tmp20 := lang.IsInstance[lang.IObj](v17)
+			if lang.IsTruthy(tmp20) {
+				tmp21 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
+				var tmp22 lang.FnFunc1
+				tmp22 = lang.FnFunc1(func(p0 any) any {
+					v23 := p0
+					_ = v23
+					tmp24 := aotDirectFn140Arity2(v23, kw_type)
+					return tmp24
 				})
-				tmp24 := aotDirectFn561.Invoke2(v17, tmp23)
-				tmp25 := lang.Apply2(tmp22, tmp24, v18)
-				tmp19 = tmp25
+				tmp23 := aotDirectFn561.Invoke2(v17, tmp22)
+				tmp24 := lang.Apply2(tmp21, tmp23, v18)
+				tmp19 = tmp24
 			} else {
-				tmp26 := aotDirectFn364(v17, v18)
-				tmp19 = tmp26
+				tmp25 := aotDirectFn364(v17, v18)
+				tmp19 = tmp25
 			}
 			return tmp19
 		})
@@ -49502,48 +49465,47 @@ func LoadNS() {
 			v4 := p2
 			_ = v4
 			var tmp5 any
-			tmp6 := reflect.TypeOf((*lang.IMeta)(nil)).Elem()
-			tmp7 := aotDirectFn225(tmp6, v2)
-			if lang.IsTruthy(tmp7) {
-				tmp8 := aotDirectFn360(v2, v4)
-				tmp5 = tmp8
+			tmp6 := lang.IsInstance[lang.IMeta](v2)
+			if lang.IsTruthy(tmp6) {
+				tmp7 := aotDirectFn360(v2, v4)
+				tmp5 = tmp7
 			} else {
 			}
 			_ = tmp5
-			tmp9 := lang.Apply2(lang.WriteWriter, v4, "#object[")
-			_ = tmp9
-			var tmp10 any
+			tmp8 := lang.Apply2(lang.WriteWriter, v4, "#object[")
+			_ = tmp8
+			var tmp9 any
 			{ // let
 				// let binding "c"
-				tmp11 := aotDirectFn100(v2)
-				var v12 any = tmp11
-				_ = v12
-				tmp13, ok := lang.FieldOrMethod(v12, "Name")
+				tmp10 := aotDirectFn100(v2)
+				var v11 any = tmp10
+				_ = v11
+				tmp12, ok := lang.FieldOrMethod(v11, "Name")
 				if !ok {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v12, "Name")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v11, "Name")))
 				}
-				var tmp14 any
-				switch reflect.TypeOf(tmp13).Kind() {
+				var tmp13 any
+				switch reflect.TypeOf(tmp12).Kind() {
 				case reflect.Func:
-					tmp14 = lang.Apply(tmp13, nil)
+					tmp13 = lang.Apply(tmp12, nil)
 				default:
-					tmp14 = tmp13
+					tmp13 = tmp12
 				}
-				tmp15 := lang.Apply2(lang.WriteWriter, v4, tmp14)
-				tmp10 = tmp15
+				tmp14 := lang.Apply2(lang.WriteWriter, v4, tmp13)
+				tmp9 = tmp14
 			} // end let
+			_ = tmp9
+			tmp10 := lang.Apply2(lang.WriteWriter, v4, " ")
 			_ = tmp10
-			tmp11 := lang.Apply2(lang.WriteWriter, v4, " ")
-			_ = tmp11
-			tmp12 := lang.IdentityHash(v2)
-			tmp13 := aotDirectFn195.Invoke2("0x%x ", tmp12)
-			tmp14 := lang.Apply2(lang.WriteWriter, v4, tmp13)
-			_ = tmp14
-			tmp15 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
-			tmp16 := lang.Apply2(tmp15, v3, v4)
-			_ = tmp16
-			tmp17 := lang.Apply2(lang.WriteWriter, v4, "]")
-			return tmp17
+			tmp11 := lang.IdentityHash(v2)
+			tmp12 := aotDirectFn195.Invoke2("0x%x ", tmp11)
+			tmp13 := lang.Apply2(lang.WriteWriter, v4, tmp12)
+			_ = tmp13
+			tmp14 := checkDerefVar(var_clojure_DOT_core_print_DASH_method)
+			tmp15 := lang.Apply2(tmp14, v3, v4)
+			_ = tmp15
+			tmp16 := lang.Apply2(lang.WriteWriter, v4, "]")
+			return tmp16
 		})
 		aotDirectFn366 = tmp1
 		var_clojure_DOT_core_print_DASH_tagged_DASH_object = ns.InternWithValue(tmp0, tmp1, true)
@@ -50741,15 +50703,14 @@ func LoadNS() {
 			v3 := p1
 			_ = v3
 			var tmp4 any
-			tmp5 := reflect.TypeOf((*lang.IReduce)(nil)).Elem()
-			tmp6 := aotDirectFn225(tmp5, v3)
-			if lang.IsTruthy(tmp6) {
-				tmp7 := v3.(interface{ Reduce(lang.IFn) any }).Reduce(lang.MustHostCast[lang.IFn](v2))
-				tmp4 = tmp7
+			tmp5 := lang.IsInstance[lang.IReduce](v3)
+			if lang.IsTruthy(tmp5) {
+				tmp6 := v3.(interface{ Reduce(lang.IFn) any }).Reduce(lang.MustHostCast[lang.IFn](v2))
+				tmp4 = tmp6
 			} else {
-				tmp8 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
-				tmp9 := lang.Apply2(tmp8, v3, v2)
-				tmp4 = tmp9
+				tmp7 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
+				tmp8 := lang.Apply2(tmp7, v3, v2)
+				tmp4 = tmp8
 			}
 			return tmp4
 		})
@@ -50761,15 +50722,14 @@ func LoadNS() {
 			v4 := p2
 			_ = v4
 			var tmp5 any
-			tmp6 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
-			tmp7 := aotDirectFn225(tmp6, v4)
-			if lang.IsTruthy(tmp7) {
-				tmp8 := v4.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v2), v3)
-				tmp5 = tmp8
+			tmp6 := lang.IsInstance[lang.IReduceInit](v4)
+			if lang.IsTruthy(tmp6) {
+				tmp7 := v4.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v2), v3)
+				tmp5 = tmp7
 			} else {
-				tmp9 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
-				tmp10 := lang.Apply3(tmp9, v4, v2, v3)
-				tmp5 = tmp10
+				tmp8 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
+				tmp9 := lang.Apply3(tmp8, v4, v2, v3)
+				tmp5 = tmp9
 			}
 			return tmp5
 		})
@@ -50910,20 +50870,19 @@ func LoadNS() {
 				_ = v8
 				// let binding "ret"
 				var tmp9 any
-				tmp10 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
-				tmp11 := aotDirectFn225(tmp10, v5)
-				if lang.IsTruthy(tmp11) {
-					tmp12 := v5.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v8), v4)
-					tmp9 = tmp12
+				tmp10 := lang.IsInstance[lang.IReduceInit](v5)
+				if lang.IsTruthy(tmp10) {
+					tmp11 := v5.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v8), v4)
+					tmp9 = tmp11
 				} else {
-					tmp13 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
-					tmp14 := lang.Apply3(tmp13, v5, v8, v4)
-					tmp9 = tmp14
+					tmp12 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_coll_DASH_reduce)
+					tmp13 := lang.Apply3(tmp12, v5, v8, v4)
+					tmp9 = tmp13
 				}
-				var v15 any = tmp9
-				_ = v15
-				tmp16 := lang.Apply1(v8, v15)
-				tmp6 = tmp16
+				var v14 any = tmp9
+				_ = v14
+				tmp15 := lang.Apply1(v8, v14)
+				tmp6 = tmp15
 			} // end let
 			return tmp6
 		})

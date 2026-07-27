@@ -1964,9 +1964,15 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 
 	// Generate the arguments
 	var argExprs []string
-	skipInstanceType := externalTarget != nil &&
-		externalTarget.directLinked &&
-		externalTarget.intrinsic == "instance?"
+	_, staticInstance := g.staticInstanceCall(
+		invokeNode,
+		[]string{"", "value"},
+	)
+	skipInstanceType := staticInstance &&
+		((aotTarget != nil && aotTarget.directLinked) ||
+			(externalTarget != nil &&
+				externalTarget.directLinked &&
+				externalTarget.intrinsic == "instance?"))
 	for index, arg := range invokeNode.Args {
 		if skipInstanceType && index == 0 {
 			argExprs = append(argExprs, "")
@@ -2004,6 +2010,10 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	}
 	if aotTarget != nil {
 		if aotTarget.directLinked {
+			if instanceCall, ok := g.staticInstanceCall(invokeNode, argExprs); ok {
+				g.writef("%s := %s\n", resultVar, instanceCall)
+				return resultVar
+			}
 			if slot := aotTarget.directArityVars[len(argExprs)]; slot != "" {
 				g.writef("%s := %s(%s)\n",
 					resultVar,
@@ -3732,7 +3742,10 @@ func (g *Generator) allocKWVar(kw string) string {
 
 var (
 	runtimeOwnedVars = map[string]bool{
-		"in-ns": true,
+		// NewEnvironment supplies these roots outside the stdlib loader.
+		"defrecord": true,
+		"in-ns":     true,
+		"record?":   true,
 	}
 
 	wellKnownFunctions = map[uintptr]string{
