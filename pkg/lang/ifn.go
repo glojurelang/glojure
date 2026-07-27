@@ -4,6 +4,18 @@ package lang
 
 import "fmt"
 
+// FnValue marks values created to represent Clojure functions. It is narrower
+// than IFn: keywords and collections can be invoked, but are not functions.
+type FnValue interface {
+	IsFnValue()
+}
+
+// IsFn reports whether value represents a Clojure function.
+func IsFn(value any) bool {
+	_, ok := value.(FnValue)
+	return ok
+}
+
 // FixedArityFnN are optional fast-call interfaces. IFn implementations can
 // provide them to avoid constructing a variadic argument slice at hot call
 // sites while retaining Invoke for general application.
@@ -50,6 +62,8 @@ func (f FnFunc) WithMeta(meta IPersistentMap) any {
 	// no-op
 	return f
 }
+
+func (FnFunc) IsFnValue() {}
 
 // VariadicFn keeps the ordinary variadic Go call path while allowing ApplyTo
 // to pass an argument sequence to a Clojure variadic method without realizing
@@ -110,6 +124,8 @@ func (f VariadicFn) WithMeta(meta IPersistentMap) any {
 	return copy
 }
 
+func (VariadicFn) IsFnValue() {}
+
 // FnFunc0 is a zero-argument function implementing IFn with no []any allocation.
 type FnFunc0 func() any
 
@@ -131,6 +147,7 @@ func (f FnFunc0) ApplyTo(args ISeq) any {
 
 func (f FnFunc0) Meta() IPersistentMap          { return nil }
 func (f FnFunc0) WithMeta(_ IPersistentMap) any { return f }
+func (FnFunc0) IsFnValue()                      {}
 
 // FnFunc1 is a one-argument function implementing IFn with no []any allocation.
 type FnFunc1 func(any) any
@@ -153,6 +170,7 @@ func (f FnFunc1) ApplyTo(args ISeq) any {
 
 func (f FnFunc1) Meta() IPersistentMap          { return nil }
 func (f FnFunc1) WithMeta(_ IPersistentMap) any { return f }
+func (FnFunc1) IsFnValue()                      {}
 
 // FnFunc2 is a two-argument function implementing IFn with no []any allocation.
 type FnFunc2 func(any, any) any
@@ -175,6 +193,7 @@ func (f FnFunc2) ApplyTo(args ISeq) any {
 
 func (f FnFunc2) Meta() IPersistentMap          { return nil }
 func (f FnFunc2) WithMeta(_ IPersistentMap) any { return f }
+func (FnFunc2) IsFnValue()                      {}
 
 // FnFunc3 is a three-argument function implementing IFn with no []any allocation.
 type FnFunc3 func(any, any, any) any
@@ -197,6 +216,7 @@ func (f FnFunc3) ApplyTo(args ISeq) any {
 
 func (f FnFunc3) Meta() IPersistentMap          { return nil }
 func (f FnFunc3) WithMeta(_ IPersistentMap) any { return f }
+func (FnFunc3) IsFnValue()                      {}
 
 // FnFunc4 is a four-argument function implementing IFn with no []any allocation.
 type FnFunc4 func(any, any, any, any) any
@@ -219,6 +239,7 @@ func (f FnFunc4) ApplyTo(args ISeq) any {
 
 func (f FnFunc4) Meta() IPersistentMap          { return nil }
 func (f FnFunc4) WithMeta(_ IPersistentMap) any { return f }
+func (FnFunc4) IsFnValue()                      {}
 
 // FnFunc5 is a five-argument function implementing IFn with no []any allocation.
 type FnFunc5 func(any, any, any, any, any) any
@@ -243,6 +264,7 @@ func (f FnFunc5) ApplyTo(args ISeq) any {
 
 func (f FnFunc5) Meta() IPersistentMap          { return nil }
 func (f FnFunc5) WithMeta(_ IPersistentMap) any { return f }
+func (FnFunc5) IsFnValue()                      {}
 
 // requireFixedSeqArity reads up to five fixed arguments directly from an
 // ISeq. Unlike seqToSlice, the successful path does not allocate a variadic

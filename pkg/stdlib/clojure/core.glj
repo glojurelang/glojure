@@ -6274,14 +6274,7 @@ fails, attempts to require sym's namespace and retries."
   "Returns true if x implements Fn, i.e. is an object created via fn."
   {:added "1.0"
    :static true}
-  [x] (or (instance? github.com:glojurelang:glojure:pkg:runtime.*Fn x)
-          (instance? github.com:glojurelang:glojure:pkg:lang.FnFunc x)
-          (instance? github.com:glojurelang:glojure:pkg:lang.FnFunc0 x)
-          (instance? github.com:glojurelang:glojure:pkg:lang.FnFunc1 x)
-          (instance? github.com:glojurelang:glojure:pkg:lang.FnFunc2 x)
-          (instance? github.com:glojurelang:glojure:pkg:lang.FnFunc3 x)
-          (instance? github.com:glojurelang:glojure:pkg:lang.FnFunc4 x)
-          (instance? github.com:glojurelang:glojure:pkg:lang.ArityFn x)))
+  [x] (github.com:glojurelang:glojure:pkg:lang.IsFn x))
 
 
 (defn associative?

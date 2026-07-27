@@ -7,6 +7,24 @@ import (
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
+// Native core implementations stand in for ordinary Clojure function values.
+// Keep them distinguishable from other callable IFn values such as keywords,
+// collections, Vars, and MultiFns.
+func (nativeCoreAdd) IsFnValue()        {}
+func (nativeCoreSubtract) IsFnValue()   {}
+func (nativeCoreStr) IsFnValue()        {}
+func (nativeCoreRegexMatch) IsFnValue() {}
+func (nativeCoreGetIn) IsFnValue()      {}
+func (nativeCoreAssoc) IsFnValue()      {}
+func (nativeStringIncludes) IsFnValue() {}
+func (nativeStringReplace) IsFnValue()  {}
+func (nativeCoreDeref) IsFnValue()      {}
+func (nativeCoreReduce) IsFnValue()     {}
+func (nativeCoreSwap) IsFnValue()       {}
+func (nativeCoreApply) IsFnValue()      {}
+func (nativeCoreUpdateIn) IsFnValue()   {}
+func (nativeCoreRequire) IsFnValue()    {}
+
 // nativeCoreAdd preserves clojure.core/+'s public arities while giving
 // reducers a fixed-arity entry point that avoids a variadic dispatch on every
 // element.

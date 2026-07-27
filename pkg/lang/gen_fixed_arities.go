@@ -91,6 +91,7 @@ func main() {
 		fmt.Fprintln(&out)
 		fmt.Fprintf(&out, "func (f FnFunc%d) Meta() IPersistentMap { return nil }\n", arity)
 		fmt.Fprintf(&out, "func (f FnFunc%d) WithMeta(_ IPersistentMap) any { return f }\n\n", arity)
+		fmt.Fprintf(&out, "func (FnFunc%d) IsFnValue() {}\n\n", arity)
 
 		fmt.Fprintf(&out, "func Apply%d(fn interface{}, %s) any {\n", arity, typedParams)
 		fmt.Fprintln(&out, "\tswitch f := fn.(type) {")

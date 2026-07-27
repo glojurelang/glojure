@@ -143,6 +143,8 @@ func (f ArityFn) WithMeta(meta IPersistentMap) any {
 	return copy
 }
 
+func (ArityFn) IsFnValue() {}
+
 var (
 	_ IFn           = ArityFn{}
 	_ IObj          = ArityFn{}
