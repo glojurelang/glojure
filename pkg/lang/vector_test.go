@@ -18,8 +18,8 @@ func TestSmallVectorAssocUsesIndependentPersistentStorage(t *testing.T) {
 	var result IPersistentVector
 	if got := testing.AllocsPerRun(1_000, func() {
 		result = original.AssocN(1, 20)
-	}); got != 2 {
-		t.Fatalf("small-vector assoc allocated %v objects per call, want 2", got)
+	}); got != 3 {
+		t.Fatalf("small-vector assoc allocated %v objects per call, want 3", got)
 	}
 	runtime.KeepAlive(result)
 }

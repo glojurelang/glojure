@@ -64,9 +64,14 @@ type Persistent struct {
 	// height of the tree structure, defined to be 0 when root is a leaf.
 	height    uint
 	root      node
-	tail      []interface{}
+	tail      *tailBase
 	tailDelta *tailEntry
 }
+
+// tailBase is the immutable slice descriptor shared by persistent vector
+// versions. Keeping one pointer in Persistent mirrors Clojure's tail-array
+// reference instead of copying a three-word Go slice header into every value.
+type tailBase []interface{}
 
 // tailEntry records an immutable append after the tail's base slice. Keeping
 // at most 32 linked deltas avoids copying the whole persistent-vector tail on
@@ -139,13 +144,29 @@ func (v *Persistent) tailLen() int {
 	return v.count - v.treeSize()
 }
 
+func newTailBase(values []interface{}) *tailBase {
+	if len(values) == 0 {
+		return nil
+	}
+	base := tailBase(values)
+	return &base
+}
+
+func (v *Persistent) baseTail() []interface{} {
+	if v.tail == nil {
+		return nil
+	}
+	return []interface{}(*v.tail)
+}
+
 func (v *Persistent) tailAt(i int) interface{} {
-	if i < len(v.tail) {
-		return v.tail[i]
+	base := v.baseTail()
+	if i < len(base) {
+		return base[i]
 	}
 	entry := v.tailDelta
-	deltaLen := v.tailLen() - len(v.tail)
-	for steps := deltaLen - 1 - (i - len(v.tail)); steps > 0; steps-- {
+	deltaLen := v.tailLen() - len(base)
+	for steps := deltaLen - 1 - (i - len(base)); steps > 0; steps-- {
 		entry = entry.prev
 	}
 	return entry.value
@@ -153,9 +174,10 @@ func (v *Persistent) tailAt(i int) interface{} {
 
 func (v *Persistent) tailSlice() []interface{} {
 	result := make([]interface{}, v.tailLen())
-	copy(result, v.tail)
+	base := v.baseTail()
+	copy(result, base)
 	entry := v.tailDelta
-	for i := len(result) - 1; i >= len(v.tail); i-- {
+	for i := len(result) - 1; i >= len(base); i-- {
 		result[i] = entry.value
 		entry = entry.prev
 	}
@@ -164,9 +186,10 @@ func (v *Persistent) tailSlice() []interface{} {
 
 func (v *Persistent) tailNode() node {
 	var result [nodeSize]interface{}
-	copy(result[:], v.tail)
+	base := v.baseTail()
+	copy(result[:], base)
 	entry := v.tailDelta
-	for i := v.tailLen() - 1; i >= len(v.tail); i-- {
+	for i := v.tailLen() - 1; i >= len(base); i-- {
 		result[i] = entry.value
 		entry = entry.prev
 	}
@@ -196,7 +219,7 @@ func (v Persistent) AssocValue(i int, val interface{}) (Persistent, bool) {
 			count:  v.count,
 			height: v.height,
 			root:   v.root,
-			tail:   newTail,
+			tail:   newTailBase(newTail),
 		}, true
 	}
 	return Persistent{
@@ -324,11 +347,12 @@ func (v Persistent) PopValue() (Persistent, bool) {
 		}
 		// Constructor-owned base tails are immutable and can expose a shorter
 		// view without copying.
+		base := v.baseTail()
 		return Persistent{
 			count:  v.count - 1,
 			height: v.height,
 			root:   v.root,
-			tail:   v.tail[:len(v.tail)-1],
+			tail:   newTailBase(base[:len(base)-1]),
 		}, true
 	}
 	newTail := v.sliceFor(v.count - 2)
@@ -342,7 +366,7 @@ func (v Persistent) PopValue() (Persistent, bool) {
 		count:  v.count - 1,
 		height: newHeight,
 		root:   newRoot,
-		tail:   newTail,
+		tail:   newTailBase(newTail),
 	}, true
 }
 

@@ -172,7 +172,7 @@ func TestPopSharesImmutableTail(t *testing.T) {
 
 	original := New(values...).(*Persistent)
 	popped := original.Pop().(*Persistent)
-	if &popped.tail[0] != &original.tail[0] {
+	if &popped.baseTail()[0] != &original.baseTail()[0] {
 		t.Fatal("Pop copied an immutable tail instead of sharing it")
 	}
 

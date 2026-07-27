@@ -30,7 +30,7 @@ func NewPersistent(elems ...interface{}) Persistent {
 		tail := append([]interface{}(nil), elems...)
 		return Persistent{
 			count: len(tail),
-			tail:  tail,
+			tail:  newTailBase(tail),
 		}
 	}
 
@@ -59,9 +59,10 @@ func NewTransient(vi Vector) *Transient {
 		root:   v.root,
 		tail:   make([]interface{}, nodeSize),
 	}
-	copy(t.tail, v.tail)
+	base := v.baseTail()
+	copy(t.tail, base)
 	entry := v.tailDelta
-	for i := v.tailLen() - 1; i >= len(v.tail); i-- {
+	for i := v.tailLen() - 1; i >= len(base); i-- {
 		t.tail[i] = entry.value
 		entry = entry.prev
 	}
@@ -184,7 +185,7 @@ func (t *Transient) Persistent() *Persistent {
 		count:  int(t.count),
 		height: t.height,
 		root:   t.root,
-		tail:   t.tail[:uint(t.count)-t.tailoff()],
+		tail:   newTailBase(t.tail[:uint(t.count)-t.tailoff()]),
 	}
 }
 
