@@ -138,6 +138,7 @@ func NewEnvironment(opts ...EvalOption) lang.Environment {
 
 	// Set the glojure version
 	core := lang.FindNamespace(lang.NewSymbol("clojure.core"))
+	installDefrecord(core)
 	if installNativeCoreOverrides {
 		installNativeCoreFunctions(core)
 	}

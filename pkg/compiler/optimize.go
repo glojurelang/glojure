@@ -37,6 +37,10 @@ func NewDefaultOptimizer(options OptimizationOptions) *Optimizer {
 	if options.DirectLinking {
 		passes = append(passes, fuseReplaceLastPass{})
 	}
+	passes = append(passes, lowerKeywordLookupPass{})
+	if options.DirectLinking {
+		passes = append(passes, lowerAssocPass{})
+	}
 	return NewOptimizer(passes...)
 }
 
@@ -138,4 +142,72 @@ func isDirectCoreCall(invoke *ast.InvokeNode, name string) bool {
 	return ns != nil &&
 		ns.Name().String() == "clojure.core" &&
 		vr.Symbol().String() == name
+}
+
+type lowerKeywordLookupPass struct{}
+
+func (lowerKeywordLookupPass) Name() string {
+	return "lower-keyword-lookup"
+}
+
+func (lowerKeywordLookupPass) Optimize(root *ast.Node) (*ast.Node, error) {
+	return ast.Transform(root, func(node *ast.Node) (*ast.Node, error) {
+		invoke, ok := node.Sub.(*ast.InvokeNode)
+		if !ok || (len(invoke.Args) != 1 && len(invoke.Args) != 2) ||
+			invoke.Fn.Op != ast.OpConst {
+			return node, nil
+		}
+		keyword, ok := invoke.Fn.Sub.(*ast.ConstNode).Value.(lang.Keyword)
+		if !ok {
+			return node, nil
+		}
+		lowered := ast.MakeNode(ast.OpKeywordLookup, node.Form)
+		lowered.Env = node.Env
+		lowered.RawForms = node.RawForms
+		lookup := &ast.KeywordLookupNode{
+			Meta:    invoke.Meta,
+			Keyword: keyword,
+			Target:  invoke.Args[0],
+		}
+		if len(invoke.Args) == 2 {
+			lookup.Default = invoke.Args[1]
+		}
+		lowered.Sub = lookup
+		return lowered, nil
+	})
+}
+
+type lowerAssocPass struct{}
+
+func (lowerAssocPass) Name() string {
+	return "lower-assoc"
+}
+
+func (lowerAssocPass) Optimize(root *ast.Node) (*ast.Node, error) {
+	return ast.Transform(root, func(node *ast.Node) (*ast.Node, error) {
+		invoke, ok := node.Sub.(*ast.InvokeNode)
+		if !ok || len(invoke.Args) < 3 || len(invoke.Args)%2 == 0 ||
+			!isDirectCoreCall(invoke, "assoc") {
+			return node, nil
+		}
+		lowered := ast.MakeNode(ast.OpAssoc, node.Form)
+		lowered.Env = node.Env
+		lowered.RawForms = node.RawForms
+		assoc := &ast.AssocNode{
+			Meta:   invoke.Meta,
+			Target: invoke.Args[0],
+			Entries: make(
+				[]ast.AssocEntry,
+				(len(invoke.Args)-1)/2,
+			),
+		}
+		for i := range assoc.Entries {
+			assoc.Entries[i] = ast.AssocEntry{
+				Key: invoke.Args[1+i*2],
+				Val: invoke.Args[2+i*2],
+			}
+		}
+		lowered.Sub = assoc
+		return lowered, nil
+	})
 }

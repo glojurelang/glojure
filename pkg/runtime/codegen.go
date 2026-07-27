@@ -111,6 +111,31 @@ type aotExternalCallKey struct {
 	intrinsic string
 }
 
+type aotKeywordLookupHelper struct {
+	name    string
+	keyword string
+}
+
+type aotKeywordAssocHelper struct {
+	name     string
+	keywords []string
+}
+
+type aotRecordType struct {
+	index        int
+	descriptor   *lang.RecordType
+	descriptorGo string
+	typeName     string
+	constructor  string
+	mapFactory   string
+	fieldNames   []string
+}
+
+type aotRecordCallTarget struct {
+	record  *aotRecordType
+	fromMap bool
+}
+
 // Generator handles the conversion of AST nodes to Go code
 type Generator struct {
 	originalWriter io.Writer
@@ -126,6 +151,9 @@ type Generator struct {
 	symbolVariables        map[string]string  // set of all generated symbols to minimize allocations
 	kwVariables            map[string]string  // set of all generated keywords to minimize allocations
 	keywordMapConstructors map[string]string  // co-allocating constructors for those layouts
+	keywordLookupHelpers   map[string]*aotKeywordLookupHelper
+	keywordAssocHelpers    map[string]*aotKeywordAssocHelper
+	aotRecordTypes         map[*lang.RecordType]*aotRecordType
 
 	valueInits []*valueInit // map of value initializations
 
@@ -181,6 +209,9 @@ func newGenerator(w io.Writer, directLink bool) *Generator {
 		symbolVariables:        make(map[string]string),
 		kwVariables:            make(map[string]string),
 		keywordMapConstructors: make(map[string]string),
+		keywordLookupHelpers:   make(map[string]*aotKeywordLookupHelper),
+		keywordAssocHelpers:    make(map[string]*aotKeywordAssocHelper),
+		aotRecordTypes:         make(map[*lang.RecordType]*aotRecordType),
 		liftedValues:           make(map[liftedKey]*liftedValue),
 		liftedCounter:          0,
 		aotCallTargets:         make(map[*lang.Var]*aotSpecializationTarget),
@@ -332,6 +363,7 @@ func (g *Generator) Generate(ns *lang.Namespace) error {
 	sort.Slice(internedVars, func(i, j int) bool {
 		return internedVars[i].name.String() < internedVars[j].name.String()
 	})
+	g.prepareAOTRecordTypes(internedVars)
 	g.prepareAOTCallTargets(internedVars)
 	for _, nv := range internedVars {
 		if isRuntimeOwnedVar(nv.vr) {
@@ -576,6 +608,7 @@ runtime.RegisterNSLoader(` + fmt.Sprintf("%q", rootResourceName) + `, LoadNS)
 
 	// Closing brace for LoadNS
 	initBuf.WriteString("}\n")
+	g.generateAOTKeywordHelpers()
 	g.generateAOTExternalAdapters()
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -717,6 +750,10 @@ func (g *Generator) generateVar(nsVariableName string, name *lang.Symbol, vr *la
 // returns the variable name or constant expression for the value
 func (g *Generator) generateValue(value any) string {
 	switch v := value.(type) {
+	case *lang.RecordType:
+		return g.allocAOTRecordType(v).descriptorGo
+	case *lang.RecordConstructor:
+		return g.generateRecordConstructorValue(v)
 	case *lang.Class:
 		return g.generateClassValue(v)
 	case reflect.Type:
@@ -1676,6 +1713,76 @@ func (g *Generator) generateASTNode(node *ast.Node) (res string) {
 		return g.generateIf(node)
 	case ast.OpInvoke:
 		return g.generateInvoke(node)
+	case ast.OpKeywordLookup:
+		lookup := node.Sub.(*ast.KeywordLookupNode)
+		target := g.generateASTNode(lookup.Target)
+		result := g.allocateTempVar()
+		if g.aotRecordHasField(keywordName(lookup.Keyword)) {
+			fallback := "nil"
+			if lookup.Default != nil {
+				fallback = g.generateASTNode(lookup.Default)
+			}
+			helper := g.allocKeywordLookupHelper(keywordName(lookup.Keyword))
+			g.writef(
+				"%s := %s(%s, %s)\n",
+				result,
+				helper,
+				target,
+				fallback,
+			)
+		} else {
+			keyword := g.generateValue(lookup.Keyword)
+			if lookup.Default == nil {
+				g.writef("%s := %s.Invoke1(%s)\n", result, keyword, target)
+			} else {
+				fallback := g.generateASTNode(lookup.Default)
+				g.writef(
+					"%s := %s.Invoke2(%s, %s)\n",
+					result,
+					keyword,
+					target,
+					fallback,
+				)
+			}
+		}
+		return result
+	case ast.OpAssoc:
+		assoc := node.Sub.(*ast.AssocNode)
+		target := g.generateASTNode(assoc.Target)
+		staticNames, staticKeys := staticKeywordMapNames(keysFromAssoc(assoc))
+		useRecordHelper := staticKeys && g.aotRecordHasFields(staticNames)
+		keys := make([]string, len(assoc.Entries))
+		values := make([]string, len(assoc.Entries))
+		for i, entry := range assoc.Entries {
+			if !useRecordHelper {
+				keys[i] = g.generateASTNode(entry.Key)
+			}
+			values[i] = g.generateASTNode(entry.Val)
+		}
+		if useRecordHelper {
+			helper := g.allocKeywordAssocHelper(staticNames)
+			result := g.allocateTempVar()
+			g.writef(
+				"%s := %s(%s, %s)\n",
+				result,
+				helper,
+				target,
+				strings.Join(values, ", "),
+			)
+			return result
+		}
+		result := g.allocateTempVar()
+		g.writef("var %s any = %s\n", result, target)
+		for i := range keys {
+			g.writef(
+				"%s = lang.Assoc(%s, %s, %s)\n",
+				result,
+				result,
+				keys[i],
+				values[i],
+			)
+		}
+		return result
 	case ast.OpReplaceLast:
 		replace := node.Sub.(*ast.ReplaceLastNode)
 		collection := g.generateASTNode(replace.Collection)
@@ -1798,8 +1905,12 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	var fnExpr string
 	directCall := false
 	directKeywordCall := false
+	recordTarget := g.aotRecordInvokeTarget(invokeNode)
 	aotTarget := g.aotInvokeTarget(invokeNode)
-	externalTarget := g.aotExternalInvokeTarget(invokeNode)
+	var externalTarget *aotExternalCallTarget
+	if recordTarget == nil {
+		externalTarget = g.aotExternalInvokeTarget(invokeNode)
+	}
 	if invokeNode.Fn.Op == ast.OpConst {
 		value := invokeNode.Fn.Sub.(*ast.ConstNode).Value
 		if _, ok := value.(lang.Keyword); ok &&
@@ -1825,7 +1936,7 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 			}
 		}
 	}
-	if !directCall && !directKeywordCall &&
+	if !directCall && !directKeywordCall && recordTarget == nil &&
 		aotTarget == nil && externalTarget == nil {
 		// Generate the general function expression before its arguments.
 		fnExpr = g.generateASTNode(invokeNode.Fn)
@@ -1866,6 +1977,18 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 
 	// Allocate a result variable for the invocation
 	resultVar := g.allocateTempVar()
+	if recordTarget != nil {
+		factory := recordTarget.record.constructor
+		if recordTarget.fromMap {
+			factory = recordTarget.record.mapFactory
+		}
+		g.writef("%s := %s(%s)\n",
+			resultVar,
+			factory,
+			strings.Join(argExprs, ", "),
+		)
+		return resultVar
+	}
 	if directCall {
 		g.writef("%s := %s(%s)\n", resultVar, fnExpr, strings.Join(argExprs, ", "))
 		return resultVar
@@ -2612,6 +2735,21 @@ func staticKeywordMapNames(keys []*ast.Node) ([]string, bool) {
 		}
 	}
 	return names, true
+}
+
+func keysFromAssoc(assoc *ast.AssocNode) []*ast.Node {
+	keys := make([]*ast.Node, len(assoc.Entries))
+	for i := range assoc.Entries {
+		keys[i] = assoc.Entries[i].Key
+	}
+	return keys
+}
+
+func keywordName(keyword lang.Keyword) string {
+	if ns := keyword.Namespace(); ns != nil {
+		return fmt.Sprintf("%s/%s", ns, keyword.Name())
+	}
+	return keyword.Name()
 }
 
 func (g *Generator) allocKeywordMapConstructor(names []string) string {

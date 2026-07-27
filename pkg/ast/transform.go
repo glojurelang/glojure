@@ -102,6 +102,24 @@ func transformChildren(node *Node, fn func(*Node) (*Node, error)) error {
 			return err
 		}
 		return transformNodes(sub.Args, fn)
+	case *KeywordLookupNode:
+		if err := transformNode(&sub.Target, fn); err != nil {
+			return err
+		}
+		return transformNode(&sub.Default, fn)
+	case *AssocNode:
+		if err := transformNode(&sub.Target, fn); err != nil {
+			return err
+		}
+		for i := range sub.Entries {
+			if err := transformNode(&sub.Entries[i].Key, fn); err != nil {
+				return err
+			}
+			if err := transformNode(&sub.Entries[i].Val, fn); err != nil {
+				return err
+			}
+		}
+		return nil
 	case *ReplaceLastNode:
 		if err := transformNode(&sub.Collection, fn); err != nil {
 			return err

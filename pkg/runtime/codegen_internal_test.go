@@ -87,6 +87,58 @@ func TestGenerateFixedArityFunctionsThroughTwenty(t *testing.T) {
 	}
 }
 
+func TestGenerateConcreteRecordTypeAndDirectOperations(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.record"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defrecord Point [x y])
+		(defn move [point x y]
+		  (assoc point :x x :y y))
+		(defn x-coordinate [point]
+		  (:x point))
+		(defn label [value]
+		  (:label value))
+		(defn tag [value tag]
+		  (assoc value :tag tag))
+		(defn origin []
+		  (->Point 0 0))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate record: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"type aotRecord0Point struct",
+		"func aotRecordNew0(",
+		"case *aotRecord0Point:",
+		"return value.f0",
+		"case *aotRecord0Point:",
+		"result.f0 = v0",
+		"result.f1 = v1",
+		":= aotRecordNew0(",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("generated record omitted %q:\n%s", expected, generated)
+		}
+	}
+	if strings.Contains(generated, "type aotKeywordMap") {
+		t.Fatalf("record generation revived arbitrary map specialization:\n%s",
+			generated)
+	}
+	if got := strings.Count(generated, "func aotKeywordLookup"); got != 1 {
+		t.Fatalf("generated %d record lookup helpers, want 1:\n%s",
+			got, generated)
+	}
+	if got := strings.Count(generated, "func aotKeywordAssoc"); got != 1 {
+		t.Fatalf("generated %d record assoc helpers, want 1:\n%s",
+			got, generated)
+	}
+}
+
 func TestGenerateStaticInstanceCheck(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.static-instance"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)

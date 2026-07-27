@@ -101,6 +101,10 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 		return env.EvalASTLetFn(n)
 	case ast.OpInvoke:
 		return env.EvalASTInvoke(n)
+	case ast.OpKeywordLookup:
+		return env.EvalASTKeywordLookup(n)
+	case ast.OpAssoc:
+		return env.EvalASTAssoc(n)
 	case ast.OpReplaceLast:
 		return env.EvalASTReplaceLast(n)
 	case ast.OpQuote:
@@ -136,6 +140,72 @@ func (env *environment) EvalAST(x interface{}) (ret interface{}, err error) {
 	default:
 		panic(fmt.Errorf("unimplemented op: %d. Form: %s", n.Op, lang.ToString(n.Form)))
 	}
+}
+
+func (env *environment) EvalASTKeywordLookup(
+	n *ast.Node,
+) (res interface{}, err error) {
+	lookup := n.Sub.(*ast.KeywordLookupNode)
+	defer env.recoverOptimizedInvoke(
+		lookup.Meta,
+		n.Form,
+		&res,
+		&err,
+	)
+	target, err := env.EvalAST(lookup.Target)
+	if err != nil {
+		return nil, err
+	}
+	if lookup.Default == nil {
+		return lookup.Keyword.Invoke1(target), nil
+	}
+	fallback, err := env.EvalAST(lookup.Default)
+	if err != nil {
+		return nil, err
+	}
+	return lookup.Keyword.Invoke2(target, fallback), nil
+}
+
+func (env *environment) EvalASTAssoc(
+	n *ast.Node,
+) (res interface{}, err error) {
+	assoc := n.Sub.(*ast.AssocNode)
+	defer env.recoverOptimizedInvoke(
+		assoc.Meta,
+		n.Form,
+		&res,
+		&err,
+	)
+	target, err := env.EvalAST(assoc.Target)
+	if err != nil {
+		return nil, err
+	}
+	keys := make([]any, len(assoc.Entries))
+	values := make([]any, len(assoc.Entries))
+	for i, entry := range assoc.Entries {
+		keys[i], err = env.EvalAST(entry.Key)
+		if err != nil {
+			return nil, err
+		}
+		values[i], err = env.EvalAST(entry.Val)
+		if err != nil {
+			return nil, err
+		}
+	}
+	result := target
+	for i := range keys {
+		result = lang.Assoc(result, keys[i], values[i])
+	}
+	return result, nil
+}
+
+func (env *environment) recoverOptimizedInvoke(
+	meta lang.IPersistentMap,
+	form interface{},
+	res *interface{},
+	err *error,
+) {
+	env.recoverInvokeForm(recover(), meta, form, res, err)
 }
 
 func (env *environment) EvalASTReplaceLast(

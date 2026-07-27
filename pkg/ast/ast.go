@@ -99,6 +99,24 @@ type (
 		Args []*Node
 	}
 
+	KeywordLookupNode struct {
+		Meta    lang.IPersistentMap
+		Keyword lang.Keyword
+		Target  *Node
+		Default *Node
+	}
+
+	AssocEntry struct {
+		Key *Node
+		Val *Node
+	}
+
+	AssocNode struct {
+		Meta    lang.IPersistentMap
+		Target  *Node
+		Entries []AssocEntry
+	}
+
 	// ReplaceLastNode is the backend-neutral form of
 	// (conj (pop collection) value). Collection must be prepared (including
 	// validating pop) before Value is evaluated.
@@ -240,6 +258,8 @@ const (
 	OpLetFn
 	OpLoop
 	OpInvoke
+	OpKeywordLookup
+	OpAssoc
 	OpReplaceLast
 	OpQuote
 	OpVar
