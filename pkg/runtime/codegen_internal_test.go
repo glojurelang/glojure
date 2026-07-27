@@ -292,6 +292,101 @@ func TestInferredDirectLinkingCanBeDisabled(t *testing.T) {
 	}
 }
 
+func TestGenerateDirectLinkedRecursiveInt64Function(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.direct-recursive-int64"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn fib [n]
+		  (if (<= n 1)
+		    n
+		    (+ (fib (- n 1)) (fib (- n 2)))))
+		(defn run [] (fib 10))`)
+
+	t.Run("default direct link", func(t *testing.T) {
+		var output bytes.Buffer
+		if err := NewGenerator(&output).Generate(ns); err != nil {
+			t.Fatalf("generate direct-linked recursive function: %v", err)
+		}
+		if generated := output.String(); strings.Contains(
+			generated,
+			"RootVersion() !=",
+		) {
+			t.Fatalf(
+				"direct-linked recursive specialization retained a Var guard:\n%s",
+				generated,
+			)
+		}
+	})
+
+	t.Run("disabled", func(t *testing.T) {
+		var output bytes.Buffer
+		if err := newGenerator(&output, false).Generate(ns); err != nil {
+			t.Fatalf("generate guarded recursive function: %v", err)
+		}
+		if generated := output.String(); !strings.Contains(
+			generated,
+			"RootVersion() !=",
+		) {
+			t.Fatalf(
+				"guarded recursive specialization omitted its Var guard:\n%s",
+				generated,
+			)
+		}
+	})
+}
+
+func TestGenerateDirectLinkedFloat64Callee(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.direct-float64-callee"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn polynomial [x]
+		  (+ (* x x) 1.0))
+		(defn caller [x]
+		  (polynomial x))`)
+
+	t.Run("default direct link", func(t *testing.T) {
+		var output bytes.Buffer
+		if err := NewGenerator(&output).Generate(ns); err != nil {
+			t.Fatalf("generate direct-linked float64 callee: %v", err)
+		}
+		if generated := output.String(); strings.Contains(
+			generated,
+			"RootVersion() !=",
+		) {
+			t.Fatalf(
+				"direct-linked float64 specialization retained a Var guard:\n%s",
+				generated,
+			)
+		}
+	})
+
+	t.Run("disabled", func(t *testing.T) {
+		var output bytes.Buffer
+		if err := newGenerator(&output, false).Generate(ns); err != nil {
+			t.Fatalf("generate guarded float64 callee: %v", err)
+		}
+		if generated := output.String(); !strings.Contains(
+			generated,
+			"RootVersion() !=",
+		) {
+			t.Fatalf(
+				"guarded float64 specialization omitted its Var guard:\n%s",
+				generated,
+			)
+		}
+	})
+}
+
 func TestGenerateSharedStaticKeywordMapShapes(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.static-keyword-maps"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)
