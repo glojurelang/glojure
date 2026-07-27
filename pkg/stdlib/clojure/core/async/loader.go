@@ -24,6 +24,10 @@ var aotDirectFn5 lang.ArityFn
 var aotRootVersion5 *lang.VarRootVersion
 var aotDirectFn6 lang.ArityFn
 var aotRootVersion6 *lang.VarRootVersion
+var aotDirectFn6Arity0 lang.FnFunc0
+var aotDirectFn6Arity1 lang.FnFunc1
+var aotDirectFn6Arity2 lang.FnFunc2
+var aotDirectFn6Arity3 lang.FnFunc3
 var aotDirectFn7 lang.FnFunc1
 var aotRootVersion7 *lang.VarRootVersion
 var aotDirectFn8 lang.FnFunc1
@@ -38,6 +42,8 @@ var aotDirectFn12 lang.FnFunc2
 var aotRootVersion12 *lang.VarRootVersion
 var aotDirectFn13 lang.ArityFn
 var aotRootVersion13 *lang.VarRootVersion
+var aotDirectFn13Arity2 lang.FnFunc2
+var aotDirectFn13Arity3 lang.FnFunc3
 var aotDirectFn14 lang.FnFunc1
 var aotRootVersion14 *lang.VarRootVersion
 var aotDirectFn15 lang.FnFunc1
@@ -664,91 +670,95 @@ func LoadNS() {
 	{
 		tmp0 := sym_chan
 		var tmp1 lang.ArityFn
+		aotDirectFn6Arity0 = lang.FnFunc0(func() any {
+			tmp2 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
+			var tmp3 any
+			if !tmp2 {
+				tmp3 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+			}
+			var tmp4 any
+			if tmp2 {
+				tmp4 = aotDirectFn6Arity1(nil)
+			} else {
+				tmp4 = lang.Apply1(tmp3, nil)
+			}
+			return tmp4
+		})
+		aotDirectFn6Arity1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			tmp3 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
+			var tmp4 any
+			if !tmp3 {
+				tmp4 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+			}
+			var tmp5 any
+			if tmp3 {
+				tmp5 = aotDirectFn6Arity2(v2, nil)
+			} else {
+				tmp5 = lang.Apply2(tmp4, v2, nil)
+			}
+			return tmp5
+		})
+		aotDirectFn6Arity2 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			tmp4 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
+			var tmp5 any
+			if !tmp4 {
+				tmp5 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+			}
+			var tmp6 any
+			if tmp4 {
+				tmp6 = aotDirectFn6Arity3(v2, v3, nil)
+			} else {
+				tmp6 = lang.Apply3(tmp5, v2, v3, nil)
+			}
+			return tmp6
+		})
+		aotDirectFn6Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			var tmp5 any
+			if lang.IsTruthy(v3) {
+			} else {
+			}
+			_ = tmp5
+			var tmp6 any
+			if lang.IsTruthy(v3) {
+				tmp7 := lang.Apply1(fmt.Errorf, "xform and ex-handler not yet supported")
+				panic(tmp7)
+			} else {
+			}
+			_ = tmp6
+			tmp8 := lang.Apply1(lang.Builtins["chan-of"], lang.Builtins["any"])
+			var tmp9 any
+			{ // let
+				// let binding "or__0__auto__"
+				var v10 any = v2
+				_ = v10
+				var tmp11 any
+				if lang.IsTruthy(v10) {
+					tmp11 = v10
+				} else {
+					tmp11 = int64(0)
+				}
+				tmp9 = tmp11
+			} // end let
+			tmp10 := lang.Apply2(lang.Builtins["make"], tmp8, tmp9)
+			return tmp10
+		})
 		tmp1 = lang.NewArityFn(
-			lang.FnFunc0(func() any {
-				tmp2 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
-				var tmp3 any
-				if !tmp2 {
-					tmp3 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				}
-				var tmp4 any
-				if tmp2 {
-					tmp4 = aotDirectFn6.Invoke1(nil)
-				} else {
-					tmp4 = lang.Apply1(tmp3, nil)
-				}
-				return tmp4
-			}),
-			lang.FnFunc1(func(p0 any) any {
-				v2 := p0
-				_ = v2
-				tmp3 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
-				var tmp4 any
-				if !tmp3 {
-					tmp4 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				}
-				var tmp5 any
-				if tmp3 {
-					tmp5 = aotDirectFn6.Invoke2(v2, nil)
-				} else {
-					tmp5 = lang.Apply2(tmp4, v2, nil)
-				}
-				return tmp5
-			}),
-			lang.FnFunc2(func(p0, p1 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				tmp4 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
-				var tmp5 any
-				if !tmp4 {
-					tmp5 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-				}
-				var tmp6 any
-				if tmp4 {
-					tmp6 = aotDirectFn6.Invoke3(v2, v3, nil)
-				} else {
-					tmp6 = lang.Apply3(tmp5, v2, v3, nil)
-				}
-				return tmp6
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				v4 := p2
-				_ = v4
-				var tmp5 any
-				if lang.IsTruthy(v3) {
-				} else {
-				}
-				_ = tmp5
-				var tmp6 any
-				if lang.IsTruthy(v3) {
-					tmp7 := lang.Apply1(fmt.Errorf, "xform and ex-handler not yet supported")
-					panic(tmp7)
-				} else {
-				}
-				_ = tmp6
-				tmp8 := lang.Apply1(lang.Builtins["chan-of"], lang.Builtins["any"])
-				var tmp9 any
-				{ // let
-					// let binding "or__0__auto__"
-					var v10 any = v2
-					_ = v10
-					var tmp11 any
-					if lang.IsTruthy(v10) {
-						tmp11 = v10
-					} else {
-						tmp11 = int64(0)
-					}
-					tmp9 = tmp11
-				} // end let
-				tmp10 := lang.Apply2(lang.Builtins["make"], tmp8, tmp9)
-				return tmp10
-			}),
+			aotDirectFn6Arity0,
+			aotDirectFn6Arity1,
+			aotDirectFn6Arity2,
+			aotDirectFn6Arity3,
 			nil,
 			nil,
 			0,
@@ -895,147 +905,149 @@ func LoadNS() {
 	{
 		tmp0 := sym_pipe
 		var tmp1 lang.ArityFn
+		aotDirectFn13Arity2 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			tmp4 := var_clojure_DOT_core_DOT_async_pipe.RootVersion() == aotRootVersion13 && !var_clojure_DOT_core_DOT_async_pipe.IsMacro()
+			var tmp5 any
+			if !tmp4 {
+				tmp5 = checkDerefVar(var_clojure_DOT_core_DOT_async_pipe)
+			}
+			var tmp6 any
+			if tmp4 {
+				tmp6 = aotDirectFn13Arity3(v2, v3, true)
+			} else {
+				tmp6 = lang.Apply3(tmp5, v2, v3, true)
+			}
+			return tmp6
+		})
+		aotDirectFn13Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			var tmp5 any
+			{ // let
+				// let binding "c__0__auto__"
+				tmp6 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
+				var tmp7 any
+				if !tmp6 {
+					tmp7 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
+				}
+				var tmp8 any
+				if tmp6 {
+					tmp8 = aotDirectFn6Arity1(int64(1))
+				} else {
+					tmp8 = lang.Apply1(tmp7, int64(1))
+				}
+				var v9 any = tmp8
+				_ = v9
+				// let binding "f__1__auto__"
+				var tmp10 lang.FnFunc0
+				tmp10 = lang.FnFunc0(func() any {
+					var tmp11 any
+					{ // let
+						// let binding "res__2__auto__"
+						var tmp12 any
+						{ // let
+							for {
+								var tmp13 any
+								{ // let
+									// let binding "v"
+									tmp14 := var_clojure_DOT_core_DOT_async__LT__BANG_.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_async__LT__BANG_.IsMacro()
+									var tmp15 any
+									if !tmp14 {
+										tmp15 = checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
+									}
+									var tmp16 any
+									if tmp14 {
+										tmp16 = aotDirectFn0(v2)
+									} else {
+										tmp16 = lang.Apply1(tmp15, v2)
+									}
+									var v17 any = tmp16
+									_ = v17
+									var tmp18 any
+									tmp19 := lang.Identical(v17, nil)
+									if lang.IsTruthy(tmp19) {
+										var tmp20 any
+										if lang.IsTruthy(v4) {
+											tmp21 := var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion() == aotRootVersion8 && !var_clojure_DOT_core_DOT_async_close_BANG_.IsMacro()
+											var tmp22 any
+											if !tmp21 {
+												tmp22 = checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
+											}
+											var tmp23 any
+											if tmp21 {
+												tmp23 = aotDirectFn8(v3)
+											} else {
+												tmp23 = lang.Apply1(tmp22, v3)
+											}
+											tmp20 = tmp23
+										} else {
+										}
+										tmp18 = tmp20
+									} else {
+										var tmp24 any
+										tmp25 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
+										var tmp26 any
+										if !tmp25 {
+											tmp26 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
+										}
+										var tmp27 any
+										if tmp25 {
+											tmp27 = aotDirectFn2(v3, v17)
+										} else {
+											tmp27 = lang.Apply2(tmp26, v3, v17)
+										}
+										if lang.IsTruthy(tmp27) {
+											continue
+										} else {
+										}
+										tmp18 = tmp24
+									}
+									tmp13 = tmp18
+								} // end let
+								tmp12 = tmp13
+								break
+							}
+						} // end let
+						var v13 any = tmp12
+						_ = v13
+						tmp14 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
+						var tmp15 any
+						if !tmp14 {
+							tmp15 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
+						}
+						var tmp16 any
+						if tmp14 {
+							tmp16 = aotDirectFn2(v9, v13)
+						} else {
+							tmp16 = lang.Apply2(tmp15, v9, v13)
+						}
+						tmp11 = tmp16
+					} // end let
+					return tmp11
+				})
+				var v11 any = tmp10
+				_ = v11
+				go lang.Apply(v11, []any{})
+				tmp12 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
+				tmp13 := lang.Apply1(tmp12, v9)
+				tmp5 = tmp13
+			} // end let
+			_ = tmp5
+			return v3
+		})
 		tmp1 = lang.NewArityFn(
 			nil,
 			nil,
-			lang.FnFunc2(func(p0, p1 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				tmp4 := var_clojure_DOT_core_DOT_async_pipe.RootVersion() == aotRootVersion13 && !var_clojure_DOT_core_DOT_async_pipe.IsMacro()
-				var tmp5 any
-				if !tmp4 {
-					tmp5 = checkDerefVar(var_clojure_DOT_core_DOT_async_pipe)
-				}
-				var tmp6 any
-				if tmp4 {
-					tmp6 = aotDirectFn13.Invoke3(v2, v3, true)
-				} else {
-					tmp6 = lang.Apply3(tmp5, v2, v3, true)
-				}
-				return tmp6
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				v4 := p2
-				_ = v4
-				var tmp5 any
-				{ // let
-					// let binding "c__0__auto__"
-					tmp6 := var_clojure_DOT_core_DOT_async_chan.RootVersion() == aotRootVersion6 && !var_clojure_DOT_core_DOT_async_chan.IsMacro()
-					var tmp7 any
-					if !tmp6 {
-						tmp7 = checkDerefVar(var_clojure_DOT_core_DOT_async_chan)
-					}
-					var tmp8 any
-					if tmp6 {
-						tmp8 = aotDirectFn6.Invoke1(int64(1))
-					} else {
-						tmp8 = lang.Apply1(tmp7, int64(1))
-					}
-					var v9 any = tmp8
-					_ = v9
-					// let binding "f__1__auto__"
-					var tmp10 lang.FnFunc0
-					tmp10 = lang.FnFunc0(func() any {
-						var tmp11 any
-						{ // let
-							// let binding "res__2__auto__"
-							var tmp12 any
-							{ // let
-								for {
-									var tmp13 any
-									{ // let
-										// let binding "v"
-										tmp14 := var_clojure_DOT_core_DOT_async__LT__BANG_.RootVersion() == aotRootVersion0 && !var_clojure_DOT_core_DOT_async__LT__BANG_.IsMacro()
-										var tmp15 any
-										if !tmp14 {
-											tmp15 = checkDerefVar(var_clojure_DOT_core_DOT_async__LT__BANG_)
-										}
-										var tmp16 any
-										if tmp14 {
-											tmp16 = aotDirectFn0(v2)
-										} else {
-											tmp16 = lang.Apply1(tmp15, v2)
-										}
-										var v17 any = tmp16
-										_ = v17
-										var tmp18 any
-										tmp19 := lang.Identical(v17, nil)
-										if lang.IsTruthy(tmp19) {
-											var tmp20 any
-											if lang.IsTruthy(v4) {
-												tmp21 := var_clojure_DOT_core_DOT_async_close_BANG_.RootVersion() == aotRootVersion8 && !var_clojure_DOT_core_DOT_async_close_BANG_.IsMacro()
-												var tmp22 any
-												if !tmp21 {
-													tmp22 = checkDerefVar(var_clojure_DOT_core_DOT_async_close_BANG_)
-												}
-												var tmp23 any
-												if tmp21 {
-													tmp23 = aotDirectFn8(v3)
-												} else {
-													tmp23 = lang.Apply1(tmp22, v3)
-												}
-												tmp20 = tmp23
-											} else {
-											}
-											tmp18 = tmp20
-										} else {
-											var tmp24 any
-											tmp25 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
-											var tmp26 any
-											if !tmp25 {
-												tmp26 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
-											}
-											var tmp27 any
-											if tmp25 {
-												tmp27 = aotDirectFn2(v3, v17)
-											} else {
-												tmp27 = lang.Apply2(tmp26, v3, v17)
-											}
-											if lang.IsTruthy(tmp27) {
-												continue
-											} else {
-											}
-											tmp18 = tmp24
-										}
-										tmp13 = tmp18
-									} // end let
-									tmp12 = tmp13
-									break
-								}
-							} // end let
-							var v13 any = tmp12
-							_ = v13
-							tmp14 := var_clojure_DOT_core_DOT_async__GT__BANG_.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_async__GT__BANG_.IsMacro()
-							var tmp15 any
-							if !tmp14 {
-								tmp15 = checkDerefVar(var_clojure_DOT_core_DOT_async__GT__BANG_)
-							}
-							var tmp16 any
-							if tmp14 {
-								tmp16 = aotDirectFn2(v9, v13)
-							} else {
-								tmp16 = lang.Apply2(tmp15, v9, v13)
-							}
-							tmp11 = tmp16
-						} // end let
-						return tmp11
-					})
-					var v11 any = tmp10
-					_ = v11
-					go lang.Apply(v11, []any{})
-					tmp12 := lang.Apply1(lang.Builtins["<-chan-of"], lang.Builtins["any"])
-					tmp13 := lang.Apply1(tmp12, v9)
-					tmp5 = tmp13
-				} // end let
-				_ = tmp5
-				return v3
-			}),
+			aotDirectFn13Arity2,
+			aotDirectFn13Arity3,
 			nil,
 			nil,
 			0,
@@ -1221,7 +1233,7 @@ func LoadNS() {
 				}
 				var tmp6 any
 				if tmp4 {
-					tmp6 = aotDirectFn6.Invoke0()
+					tmp6 = aotDirectFn6Arity0()
 				} else {
 					tmp6 = lang.Apply0(tmp5)
 				}
@@ -1243,7 +1255,7 @@ func LoadNS() {
 					}
 					var tmp15 any
 					if tmp13 {
-						tmp15 = aotDirectFn6.Invoke1(int64(1))
+						tmp15 = aotDirectFn6Arity1(int64(1))
 					} else {
 						tmp15 = lang.Apply1(tmp14, int64(1))
 					}

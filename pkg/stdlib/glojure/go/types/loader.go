@@ -16,6 +16,8 @@ var aotDirectFn0 lang.FnFunc1
 var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.ArityFn
 var aotRootVersion1 *lang.VarRootVersion
+var aotDirectFn1Arity1 lang.FnFunc1
+var aotDirectFn1Arity2 lang.FnFunc2
 
 func aotCacheFn1(vr *lang.Var) lang.FnFunc1 {
 	version := vr.RootVersion()
@@ -597,175 +599,177 @@ func LoadNS() {
 	{
 		tmp0 := sym_struct_DASH_field
 		var tmp1 lang.ArityFn
+		aotDirectFn1Arity1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			tmp3 := var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion() == aotRootVersion1 && !var_glojure_DOT_go_DOT_types_struct_DASH_field.IsMacro()
+			var tmp4 any
+			if !tmp3 {
+				tmp4 = checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
+			}
+			var tmp5 any
+			if tmp3 {
+				tmp5 = aotDirectFn1Arity2(v2, nil)
+			} else {
+				tmp5 = lang.Apply2(tmp4, v2, nil)
+			}
+			return tmp5
+		})
+		aotDirectFn1Arity2 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			var tmp4 any
+			{ // let
+				// let binding "typ"
+				tmp5 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+				tmp6 := lang.Apply1(tmp5, v2)
+				var v7 any = tmp6
+				_ = v7
+				// let binding "name"
+				var tmp8 any
+				tmp9 := aotExternalFn6("", v3)
+				if lang.IsTruthy(tmp9) {
+				} else {
+					tmp8 = v3
+				}
+				var v10 any = tmp8
+				_ = v10
+				// let binding "anonymous"
+				tmp11 := lang.Identical(v10, nil)
+				var v12 any = tmp11
+				_ = v12
+				// let binding "name"
+				var tmp13 any
+				{ // let
+					// let binding "or__0__auto__"
+					var v14 any = v10
+					_ = v14
+					var tmp15 any
+					if lang.IsTruthy(v14) {
+						tmp15 = v14
+					} else {
+						tmp16, ok := lang.FieldOrMethod(v7, "Name")
+						if !ok {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "Name")))
+						}
+						var tmp17 any
+						switch reflect.TypeOf(tmp16).Kind() {
+						case reflect.Func:
+							tmp17 = lang.Apply(tmp16, nil)
+						default:
+							tmp17 = tmp16
+						}
+						tmp15 = tmp17
+					}
+					tmp13 = tmp15
+				} // end let
+				var v14 any = tmp13
+				_ = v14
+				// let binding "sf"
+				tmp15 := reflect.TypeOf((*reflect.StructField)(nil)).Elem()
+				tmp16 := lang.Apply1(lang.Builtins["new"], tmp15)
+				var v17 any = tmp16
+				_ = v17
+				// set! host field
+				var tmp18 any
+				{
+					targetV := reflect.ValueOf(v17)
+					if targetV.Kind() == reflect.Ptr {
+						targetV = targetV.Elem()
+					}
+					fieldVal := targetV.FieldByName("Type")
+					if !fieldVal.IsValid() {
+						panic(fmt.Errorf("no such field Type"))
+					}
+					if !fieldVal.CanSet() {
+						panic(fmt.Errorf("cannot set field Type"))
+					}
+					valV := reflect.ValueOf(v7)
+					if !valV.IsValid() {
+						switch fieldVal.Kind() {
+						case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+							fieldVal.Set(reflect.Zero(fieldVal.Type()))
+						default:
+							panic(fmt.Errorf("cannot set field Type to nil"))
+						}
+					} else {
+						fieldVal.Set(valV)
+					}
+					tmp18 = v7
+				}
+				_ = tmp18
+				// set! host field
+				var tmp19 any
+				{
+					targetV := reflect.ValueOf(v17)
+					if targetV.Kind() == reflect.Ptr {
+						targetV = targetV.Elem()
+					}
+					fieldVal := targetV.FieldByName("Name")
+					if !fieldVal.IsValid() {
+						panic(fmt.Errorf("no such field Name"))
+					}
+					if !fieldVal.CanSet() {
+						panic(fmt.Errorf("cannot set field Name"))
+					}
+					valV := reflect.ValueOf(v14)
+					if !valV.IsValid() {
+						switch fieldVal.Kind() {
+						case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+							fieldVal.Set(reflect.Zero(fieldVal.Type()))
+						default:
+							panic(fmt.Errorf("cannot set field Name to nil"))
+						}
+					} else {
+						fieldVal.Set(valV)
+					}
+					tmp19 = v14
+				}
+				_ = tmp19
+				var tmp20 any
+				if lang.IsTruthy(v12) {
+					// set! host field
+					var tmp21 any
+					{
+						targetV := reflect.ValueOf(v17)
+						if targetV.Kind() == reflect.Ptr {
+							targetV = targetV.Elem()
+						}
+						fieldVal := targetV.FieldByName("Anonymous")
+						if !fieldVal.IsValid() {
+							panic(fmt.Errorf("no such field Anonymous"))
+						}
+						if !fieldVal.CanSet() {
+							panic(fmt.Errorf("cannot set field Anonymous"))
+						}
+						valV := reflect.ValueOf(true)
+						if !valV.IsValid() {
+							switch fieldVal.Kind() {
+							case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+								fieldVal.Set(reflect.Zero(fieldVal.Type()))
+							default:
+								panic(fmt.Errorf("cannot set field Anonymous to nil"))
+							}
+						} else {
+							fieldVal.Set(valV)
+						}
+						tmp21 = true
+					}
+					tmp20 = tmp21
+				} else {
+				}
+				_ = tmp20
+				tmp22 := lang.Apply1(lang.Builtins["deref"], v17)
+				tmp4 = tmp22
+			} // end let
+			return tmp4
+		})
 		tmp1 = lang.NewArityFn(
 			nil,
-			lang.FnFunc1(func(p0 any) any {
-				v2 := p0
-				_ = v2
-				tmp3 := var_glojure_DOT_go_DOT_types_struct_DASH_field.RootVersion() == aotRootVersion1 && !var_glojure_DOT_go_DOT_types_struct_DASH_field.IsMacro()
-				var tmp4 any
-				if !tmp3 {
-					tmp4 = checkDerefVar(var_glojure_DOT_go_DOT_types_struct_DASH_field)
-				}
-				var tmp5 any
-				if tmp3 {
-					tmp5 = aotDirectFn1.Invoke2(v2, nil)
-				} else {
-					tmp5 = lang.Apply2(tmp4, v2, nil)
-				}
-				return tmp5
-			}),
-			lang.FnFunc2(func(p0, p1 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				var tmp4 any
-				{ // let
-					// let binding "typ"
-					tmp5 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-					tmp6 := lang.Apply1(tmp5, v2)
-					var v7 any = tmp6
-					_ = v7
-					// let binding "name"
-					var tmp8 any
-					tmp9 := aotExternalFn6("", v3)
-					if lang.IsTruthy(tmp9) {
-					} else {
-						tmp8 = v3
-					}
-					var v10 any = tmp8
-					_ = v10
-					// let binding "anonymous"
-					tmp11 := lang.Identical(v10, nil)
-					var v12 any = tmp11
-					_ = v12
-					// let binding "name"
-					var tmp13 any
-					{ // let
-						// let binding "or__0__auto__"
-						var v14 any = v10
-						_ = v14
-						var tmp15 any
-						if lang.IsTruthy(v14) {
-							tmp15 = v14
-						} else {
-							tmp16, ok := lang.FieldOrMethod(v7, "Name")
-							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "Name")))
-							}
-							var tmp17 any
-							switch reflect.TypeOf(tmp16).Kind() {
-							case reflect.Func:
-								tmp17 = lang.Apply(tmp16, nil)
-							default:
-								tmp17 = tmp16
-							}
-							tmp15 = tmp17
-						}
-						tmp13 = tmp15
-					} // end let
-					var v14 any = tmp13
-					_ = v14
-					// let binding "sf"
-					tmp15 := reflect.TypeOf((*reflect.StructField)(nil)).Elem()
-					tmp16 := lang.Apply1(lang.Builtins["new"], tmp15)
-					var v17 any = tmp16
-					_ = v17
-					// set! host field
-					var tmp18 any
-					{
-						targetV := reflect.ValueOf(v17)
-						if targetV.Kind() == reflect.Ptr {
-							targetV = targetV.Elem()
-						}
-						fieldVal := targetV.FieldByName("Type")
-						if !fieldVal.IsValid() {
-							panic(fmt.Errorf("no such field Type"))
-						}
-						if !fieldVal.CanSet() {
-							panic(fmt.Errorf("cannot set field Type"))
-						}
-						valV := reflect.ValueOf(v7)
-						if !valV.IsValid() {
-							switch fieldVal.Kind() {
-							case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
-								fieldVal.Set(reflect.Zero(fieldVal.Type()))
-							default:
-								panic(fmt.Errorf("cannot set field Type to nil"))
-							}
-						} else {
-							fieldVal.Set(valV)
-						}
-						tmp18 = v7
-					}
-					_ = tmp18
-					// set! host field
-					var tmp19 any
-					{
-						targetV := reflect.ValueOf(v17)
-						if targetV.Kind() == reflect.Ptr {
-							targetV = targetV.Elem()
-						}
-						fieldVal := targetV.FieldByName("Name")
-						if !fieldVal.IsValid() {
-							panic(fmt.Errorf("no such field Name"))
-						}
-						if !fieldVal.CanSet() {
-							panic(fmt.Errorf("cannot set field Name"))
-						}
-						valV := reflect.ValueOf(v14)
-						if !valV.IsValid() {
-							switch fieldVal.Kind() {
-							case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
-								fieldVal.Set(reflect.Zero(fieldVal.Type()))
-							default:
-								panic(fmt.Errorf("cannot set field Name to nil"))
-							}
-						} else {
-							fieldVal.Set(valV)
-						}
-						tmp19 = v14
-					}
-					_ = tmp19
-					var tmp20 any
-					if lang.IsTruthy(v12) {
-						// set! host field
-						var tmp21 any
-						{
-							targetV := reflect.ValueOf(v17)
-							if targetV.Kind() == reflect.Ptr {
-								targetV = targetV.Elem()
-							}
-							fieldVal := targetV.FieldByName("Anonymous")
-							if !fieldVal.IsValid() {
-								panic(fmt.Errorf("no such field Anonymous"))
-							}
-							if !fieldVal.CanSet() {
-								panic(fmt.Errorf("cannot set field Anonymous"))
-							}
-							valV := reflect.ValueOf(true)
-							if !valV.IsValid() {
-								switch fieldVal.Kind() {
-								case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
-									fieldVal.Set(reflect.Zero(fieldVal.Type()))
-								default:
-									panic(fmt.Errorf("cannot set field Anonymous to nil"))
-								}
-							} else {
-								fieldVal.Set(valV)
-							}
-							tmp21 = true
-						}
-						tmp20 = tmp21
-					} else {
-					}
-					_ = tmp20
-					tmp22 := lang.Apply1(lang.Builtins["deref"], v17)
-					tmp4 = tmp22
-				} // end let
-				return tmp4
-			}),
+			aotDirectFn1Arity1,
+			aotDirectFn1Arity2,
 			nil,
 			nil,
 			nil,
@@ -1288,7 +1292,7 @@ func LoadNS() {
 							}
 							var tmp28 any
 							if tmp26 {
-								tmp28 = aotDirectFn1.Invoke1(v19)
+								tmp28 = aotDirectFn1Arity1(v19)
 							} else {
 								tmp28 = lang.Apply1(tmp27, v19)
 							}
@@ -1319,7 +1323,7 @@ func LoadNS() {
 								}
 								var tmp38 any
 								if tmp34 {
-									tmp38 = aotDirectFn1.Invoke2(v19, tmp36)
+									tmp38 = aotDirectFn1Arity2(v19, tmp36)
 								} else {
 									tmp38 = lang.Apply2(tmp35, v19, tmp36)
 								}
@@ -1337,7 +1341,7 @@ func LoadNS() {
 									}
 									var tmp44 any
 									if tmp42 {
-										tmp44 = aotDirectFn1.Invoke2(v19, v41)
+										tmp44 = aotDirectFn1Arity2(v19, v41)
 									} else {
 										tmp44 = lang.Apply2(tmp43, v19, v41)
 									}

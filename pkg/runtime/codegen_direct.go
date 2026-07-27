@@ -73,6 +73,28 @@ func (g *Generator) prepareAOTCallTargets(vars []namedVar) {
 			directType,
 			target.rootVersionVar,
 		)
+		if arityDispatch {
+			for _, methodNode := range fnNode.Methods {
+				method := methodNode.Sub.(*ast.FnMethodNode)
+				if method.IsVariadic ||
+					method.FixedArity < 0 ||
+					method.FixedArity >= len(target.directArityVars) {
+					continue
+				}
+				slot := fmt.Sprintf(
+					"%sArity%d",
+					target.directFnVar,
+					method.FixedArity,
+				)
+				target.directArityVars[method.FixedArity] = slot
+				fmt.Fprintf(
+					&g.aotDeclarations,
+					"var %s lang.FnFunc%d\n",
+					slot,
+					method.FixedArity,
+				)
+			}
+		}
 	}
 	for {
 		changed := false

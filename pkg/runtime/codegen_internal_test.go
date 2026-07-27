@@ -122,7 +122,20 @@ func TestGenerateDirectCallsForKnownFunctionArities(t *testing.T) {
 		t.Fatalf("multi-arity functions received %d direct slots, want at least 2:\n%s",
 			got, generated)
 	}
-	for _, call := range []string{".Invoke1(", ".Invoke2(", ".Invoke3("} {
+	for _, declaration := range []string{
+		"Arity1 lang.FnFunc1",
+		"Arity2 lang.FnFunc2",
+	} {
+		if !strings.Contains(generated, declaration) {
+			t.Fatalf("known overload omitted typed slot %q:\n%s",
+				declaration, generated)
+		}
+	}
+	for _, call := range []string{
+		"Arity1(int64(1))",
+		"Arity2(int64(1), int64(2))",
+		".Invoke3(",
+	} {
 		if !strings.Contains(generated, call) {
 			t.Fatalf("known function call omitted direct %s dispatch:\n%s",
 				call, generated)

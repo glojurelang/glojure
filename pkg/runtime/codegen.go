@@ -86,6 +86,7 @@ type aotSpecializationTarget struct {
 	arityDispatch   bool
 	directArities   [21]bool
 	directFnVar     string
+	directArityVars [21]string
 	int64FnVar      string
 	int64Analysis   *int64AOTAnalysis
 	float64FnVar    string
@@ -1342,12 +1343,37 @@ func (g *Generator) generateFn(fn *Fn) string {
 			}
 		}
 
+		target := g.specializationTarget
+		if target != nil && target.fn == fn {
+			for _, method := range fnNode.Methods {
+				methodNode := method.Sub.(*ast.FnMethodNode)
+				if methodNode.IsVariadic ||
+					methodNode.FixedArity < 0 ||
+					methodNode.FixedArity >= len(target.directArityVars) {
+					continue
+				}
+				slot := target.directArityVars[methodNode.FixedArity]
+				if slot == "" {
+					continue
+				}
+				g.writef("%s = ", slot)
+				g.generateFixedMethodFnValue(methodNode)
+				g.writef("\n")
+			}
+		}
+
 		if smallFixed {
 			g.writef("%s = lang.NewArityFn(\n", fnVar)
-			for _, methodNode := range fixedMethods {
+			for arity, methodNode := range fixedMethods {
 				if methodNode == nil {
 					g.writef("nil,\n")
 					continue
+				}
+				if target != nil && target.fn == fn {
+					if slot := target.directArityVars[arity]; slot != "" {
+						g.writef("%s,\n", slot)
+						continue
+					}
 				}
 				g.generateFixedMethodFn(methodNode)
 			}
@@ -1359,10 +1385,23 @@ func (g *Generator) generateFn(fn *Fn) string {
 					continue
 				}
 				g.writef("%d: ", arity)
+				if target != nil && target.fn == fn {
+					if slot := target.directArityVars[arity]; slot != "" {
+						g.writef("%s,\n", slot)
+						continue
+					}
+				}
 				g.generateFixedMethodFn(methodNode)
 			}
 			for _, methodNode := range fixedOther {
 				g.writef("%d: ", methodNode.FixedArity)
+				if target != nil && target.fn == fn &&
+					methodNode.FixedArity < len(target.directArityVars) {
+					if slot := target.directArityVars[methodNode.FixedArity]; slot != "" {
+						g.writef("%s,\n", slot)
+						continue
+					}
+				}
 				g.generateFixedMethodFn(methodNode)
 			}
 			g.writef("},\n")
@@ -1405,6 +1444,11 @@ func (g *Generator) generateFn(fn *Fn) string {
 }
 
 func (g *Generator) generateFixedMethodFn(methodNode *ast.FnMethodNode) {
+	g.generateFixedMethodFnValue(methodNode)
+	g.writef(",\n")
+}
+
+func (g *Generator) generateFixedMethodFnValue(methodNode *ast.FnMethodNode) {
 	arity := methodNode.FixedArity
 	if arity <= 20 {
 		paramNames := fixedParamNames(arity)
@@ -1414,14 +1458,14 @@ func (g *Generator) generateFixedMethodFn(methodNode *ast.FnMethodNode) {
 		}
 		g.writef("lang.FnFunc%d(func(%s) any {\n", arity, sig)
 		g.generateFnMethodFixed(methodNode, paramNames)
-		g.writef("}),\n")
+		g.writef("})")
 		return
 	}
 
 	g.writef("lang.NewFnFunc(func(args ...any) any {\n")
 	g.writef("checkArity(args, %d)\n", arity)
 	g.generateFnMethod(methodNode, "args")
-	g.writef("}),\n")
+	g.writef("})")
 }
 
 func fixedParamNames(arity int) []string {
@@ -1808,7 +1852,13 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	if aotTarget != nil {
 		g.writef("var %s any\n", resultVar)
 		g.writef("if %s {\n", aotFast)
-		if aotTarget.arityDispatch {
+		if slot := aotTarget.directArityVars[len(argExprs)]; slot != "" {
+			g.writef("%s = %s(%s)\n",
+				resultVar,
+				slot,
+				strings.Join(argExprs, ", "),
+			)
+		} else if aotTarget.arityDispatch {
 			g.writef("%s = %s.Invoke%d(%s)\n",
 				resultVar,
 				aotTarget.directFnVar,

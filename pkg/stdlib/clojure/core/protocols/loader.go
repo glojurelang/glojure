@@ -13,10 +13,14 @@ var aotDirectFn0 lang.FnFunc3
 var aotRootVersion0 *lang.VarRootVersion
 var aotDirectFn1 lang.ArityFn
 var aotRootVersion1 *lang.VarRootVersion
+var aotDirectFn1Arity2 lang.FnFunc2
+var aotDirectFn1Arity3 lang.FnFunc3
 var aotDirectFn2 lang.FnFunc3
 var aotRootVersion2 *lang.VarRootVersion
 var aotDirectFn3 lang.ArityFn
 var aotRootVersion3 *lang.VarRootVersion
+var aotDirectFn3Arity2 lang.FnFunc2
+var aotDirectFn3Arity3 lang.FnFunc3
 
 func aotCacheFn1(vr *lang.Var) lang.FnFunc1 {
 	version := vr.RootVersion()
@@ -814,202 +818,204 @@ func LoadNS() {
 	{
 		tmp0 := sym_iter_DASH_reduce
 		var tmp1 lang.ArityFn
-		tmp1 = lang.NewArityFn(
-			nil,
-			nil,
-			lang.FnFunc2(func(p0, p1 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				var tmp4 any
-				{ // let
-					// let binding "iter"
-					tmp5, ok := lang.FieldOrMethod(v2, "iterator")
-					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v2, "iterator")))
-					}
-					var tmp6 any
-					switch reflect.TypeOf(tmp5).Kind() {
-					case reflect.Func:
-						tmp6 = lang.Apply(tmp5, nil)
-					default:
-						tmp6 = tmp5
-					}
-					var v7 any = tmp6
-					_ = v7
-					var tmp8 any
-					tmp9, ok := lang.FieldOrMethod(v7, "hasNext")
-					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "hasNext")))
-					}
-					var tmp10 any
-					switch reflect.TypeOf(tmp9).Kind() {
-					case reflect.Func:
-						tmp10 = lang.Apply(tmp9, nil)
-					default:
-						tmp10 = tmp9
-					}
-					if lang.IsTruthy(tmp10) {
-						var tmp11 any
-						{ // let
-							// let binding "ret"
-							tmp12, ok := lang.FieldOrMethod(v7, "next")
-							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "next")))
-							}
-							var tmp13 any
-							switch reflect.TypeOf(tmp12).Kind() {
-							case reflect.Func:
-								tmp13 = lang.Apply(tmp12, nil)
-							default:
-								tmp13 = tmp12
-							}
-							var v14 any = tmp13
-							_ = v14
-							for {
-								var tmp15 any
-								tmp16, ok := lang.FieldOrMethod(v7, "hasNext")
-								if !ok {
-									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "hasNext")))
-								}
-								var tmp17 any
-								switch reflect.TypeOf(tmp16).Kind() {
-								case reflect.Func:
-									tmp17 = lang.Apply(tmp16, nil)
-								default:
-									tmp17 = tmp16
-								}
-								if lang.IsTruthy(tmp17) {
-									var tmp18 any
-									{ // let
-										// let binding "ret"
-										tmp19, ok := lang.FieldOrMethod(v7, "next")
-										if !ok {
-											panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "next")))
-										}
-										var tmp20 any
-										switch reflect.TypeOf(tmp19).Kind() {
-										case reflect.Func:
-											tmp20 = lang.Apply(tmp19, nil)
-										default:
-											tmp20 = tmp19
-										}
-										tmp21 := lang.Apply2(v3, v14, tmp20)
-										var v22 any = tmp21
-										_ = v22
-										var tmp23 any
-										tmp24 := lang.IsReduced(v22)
-										if lang.IsTruthy(tmp24) {
-											tmp25 := aotExternalFn4(v22)
-											tmp23 = tmp25
-										} else {
-											var tmp26 any = v22
-											v14 = tmp26
-											continue
-										}
-										tmp18 = tmp23
-									} // end let
-									tmp15 = tmp18
-								} else {
-									tmp15 = v14
-								}
-								tmp11 = tmp15
-								break
-							}
-						} // end let
-						tmp8 = tmp11
-					} else {
-						tmp12 := lang.Apply0(v3)
-						tmp8 = tmp12
-					}
-					tmp4 = tmp8
-				} // end let
-				return tmp4
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				v4 := p2
-				_ = v4
-				var tmp5 any
-				{ // let
-					// let binding "iter"
-					tmp6, ok := lang.FieldOrMethod(v2, "iterator")
-					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v2, "iterator")))
-					}
-					var tmp7 any
-					switch reflect.TypeOf(tmp6).Kind() {
-					case reflect.Func:
-						tmp7 = lang.Apply(tmp6, nil)
-					default:
-						tmp7 = tmp6
-					}
-					var v8 any = tmp7
-					_ = v8
-					var tmp9 any
+		aotDirectFn1Arity2 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			var tmp4 any
+			{ // let
+				// let binding "iter"
+				tmp5, ok := lang.FieldOrMethod(v2, "iterator")
+				if !ok {
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v2, "iterator")))
+				}
+				var tmp6 any
+				switch reflect.TypeOf(tmp5).Kind() {
+				case reflect.Func:
+					tmp6 = lang.Apply(tmp5, nil)
+				default:
+					tmp6 = tmp5
+				}
+				var v7 any = tmp6
+				_ = v7
+				var tmp8 any
+				tmp9, ok := lang.FieldOrMethod(v7, "hasNext")
+				if !ok {
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "hasNext")))
+				}
+				var tmp10 any
+				switch reflect.TypeOf(tmp9).Kind() {
+				case reflect.Func:
+					tmp10 = lang.Apply(tmp9, nil)
+				default:
+					tmp10 = tmp9
+				}
+				if lang.IsTruthy(tmp10) {
+					var tmp11 any
 					{ // let
 						// let binding "ret"
-						var v10 any = v4
-						_ = v10
+						tmp12, ok := lang.FieldOrMethod(v7, "next")
+						if !ok {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "next")))
+						}
+						var tmp13 any
+						switch reflect.TypeOf(tmp12).Kind() {
+						case reflect.Func:
+							tmp13 = lang.Apply(tmp12, nil)
+						default:
+							tmp13 = tmp12
+						}
+						var v14 any = tmp13
+						_ = v14
 						for {
-							var tmp11 any
-							tmp12, ok := lang.FieldOrMethod(v8, "hasNext")
+							var tmp15 any
+							tmp16, ok := lang.FieldOrMethod(v7, "hasNext")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "hasNext")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "hasNext")))
 							}
-							var tmp13 any
-							switch reflect.TypeOf(tmp12).Kind() {
+							var tmp17 any
+							switch reflect.TypeOf(tmp16).Kind() {
 							case reflect.Func:
-								tmp13 = lang.Apply(tmp12, nil)
+								tmp17 = lang.Apply(tmp16, nil)
 							default:
-								tmp13 = tmp12
+								tmp17 = tmp16
 							}
-							if lang.IsTruthy(tmp13) {
-								var tmp14 any
+							if lang.IsTruthy(tmp17) {
+								var tmp18 any
 								{ // let
 									// let binding "ret"
-									tmp15, ok := lang.FieldOrMethod(v8, "next")
+									tmp19, ok := lang.FieldOrMethod(v7, "next")
 									if !ok {
-										panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "next")))
+										panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "next")))
 									}
-									var tmp16 any
-									switch reflect.TypeOf(tmp15).Kind() {
+									var tmp20 any
+									switch reflect.TypeOf(tmp19).Kind() {
 									case reflect.Func:
-										tmp16 = lang.Apply(tmp15, nil)
+										tmp20 = lang.Apply(tmp19, nil)
 									default:
-										tmp16 = tmp15
+										tmp20 = tmp19
 									}
-									tmp17 := lang.Apply2(v3, v10, tmp16)
-									var v18 any = tmp17
-									_ = v18
-									var tmp19 any
-									tmp20 := lang.IsReduced(v18)
-									if lang.IsTruthy(tmp20) {
-										tmp21 := aotExternalFn4(v18)
-										tmp19 = tmp21
+									tmp21 := lang.Apply2(v3, v14, tmp20)
+									var v22 any = tmp21
+									_ = v22
+									var tmp23 any
+									tmp24 := lang.IsReduced(v22)
+									if lang.IsTruthy(tmp24) {
+										tmp25 := aotExternalFn4(v22)
+										tmp23 = tmp25
 									} else {
-										var tmp22 any = v18
-										v10 = tmp22
+										var tmp26 any = v22
+										v14 = tmp26
 										continue
 									}
-									tmp14 = tmp19
+									tmp18 = tmp23
 								} // end let
-								tmp11 = tmp14
+								tmp15 = tmp18
 							} else {
-								tmp11 = v10
+								tmp15 = v14
 							}
-							tmp9 = tmp11
+							tmp11 = tmp15
 							break
 						}
 					} // end let
-					tmp5 = tmp9
+					tmp8 = tmp11
+				} else {
+					tmp12 := lang.Apply0(v3)
+					tmp8 = tmp12
+				}
+				tmp4 = tmp8
+			} // end let
+			return tmp4
+		})
+		aotDirectFn1Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			var tmp5 any
+			{ // let
+				// let binding "iter"
+				tmp6, ok := lang.FieldOrMethod(v2, "iterator")
+				if !ok {
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v2, "iterator")))
+				}
+				var tmp7 any
+				switch reflect.TypeOf(tmp6).Kind() {
+				case reflect.Func:
+					tmp7 = lang.Apply(tmp6, nil)
+				default:
+					tmp7 = tmp6
+				}
+				var v8 any = tmp7
+				_ = v8
+				var tmp9 any
+				{ // let
+					// let binding "ret"
+					var v10 any = v4
+					_ = v10
+					for {
+						var tmp11 any
+						tmp12, ok := lang.FieldOrMethod(v8, "hasNext")
+						if !ok {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "hasNext")))
+						}
+						var tmp13 any
+						switch reflect.TypeOf(tmp12).Kind() {
+						case reflect.Func:
+							tmp13 = lang.Apply(tmp12, nil)
+						default:
+							tmp13 = tmp12
+						}
+						if lang.IsTruthy(tmp13) {
+							var tmp14 any
+							{ // let
+								// let binding "ret"
+								tmp15, ok := lang.FieldOrMethod(v8, "next")
+								if !ok {
+									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "next")))
+								}
+								var tmp16 any
+								switch reflect.TypeOf(tmp15).Kind() {
+								case reflect.Func:
+									tmp16 = lang.Apply(tmp15, nil)
+								default:
+									tmp16 = tmp15
+								}
+								tmp17 := lang.Apply2(v3, v10, tmp16)
+								var v18 any = tmp17
+								_ = v18
+								var tmp19 any
+								tmp20 := lang.IsReduced(v18)
+								if lang.IsTruthy(tmp20) {
+									tmp21 := aotExternalFn4(v18)
+									tmp19 = tmp21
+								} else {
+									var tmp22 any = v18
+									v10 = tmp22
+									continue
+								}
+								tmp14 = tmp19
+							} // end let
+							tmp11 = tmp14
+						} else {
+							tmp11 = v10
+						}
+						tmp9 = tmp11
+						break
+					}
 				} // end let
-				return tmp5
-			}),
+				tmp5 = tmp9
+			} // end let
+			return tmp5
+		})
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			aotDirectFn1Arity2,
+			aotDirectFn1Arity3,
 			nil,
 			nil,
 			0,
@@ -1159,85 +1165,87 @@ func LoadNS() {
 	{
 		tmp0 := sym_seq_DASH_reduce
 		var tmp1 lang.ArityFn
+		aotDirectFn3Arity2 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			var tmp4 any
+			{ // let
+				// let binding "temp__0__auto__"
+				var tmp5 any
+				if aotExternalDefault5 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion5 {
+					tmp5 = lang.Seq(v2)
+				} else {
+					tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp5 = lang.Apply1(tmp6, v2)
+				}
+				var v7 any = tmp5
+				_ = v7
+				var tmp8 any
+				if lang.IsTruthy(v7) {
+					var tmp9 any
+					{ // let
+						// let binding "s"
+						var v10 any = v7
+						_ = v10
+						tmp11 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce)
+						var tmp12 any
+						if aotExternalDefault7 && var_clojure_DOT_core_next.RootVersion() == aotExternalRootVersion7 {
+							tmp12 = lang.Next(v10)
+						} else {
+							tmp13 := checkDerefVar(var_clojure_DOT_core_next)
+							tmp12 = lang.Apply1(tmp13, v10)
+						}
+						var tmp14 any
+						if aotExternalDefault6 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion6 {
+							tmp14 = lang.First(v10)
+						} else {
+							tmp15 := checkDerefVar(var_clojure_DOT_core_first)
+							tmp14 = lang.Apply1(tmp15, v10)
+						}
+						tmp16 := lang.Apply3(tmp11, tmp12, v3, tmp14)
+						tmp9 = tmp16
+					} // end let
+					tmp8 = tmp9
+				} else {
+					tmp10 := lang.Apply0(v3)
+					tmp8 = tmp10
+				}
+				tmp4 = tmp8
+			} // end let
+			return tmp4
+		})
+		aotDirectFn3Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			var tmp5 any
+			{ // let
+				// let binding "s"
+				var tmp6 any
+				if aotExternalDefault5 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion5 {
+					tmp6 = lang.Seq(v2)
+				} else {
+					tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
+					tmp6 = lang.Apply1(tmp7, v2)
+				}
+				var v8 any = tmp6
+				_ = v8
+				tmp9 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce)
+				tmp10 := lang.Apply3(tmp9, v8, v3, v4)
+				tmp5 = tmp10
+			} // end let
+			return tmp5
+		})
 		tmp1 = lang.NewArityFn(
 			nil,
 			nil,
-			lang.FnFunc2(func(p0, p1 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				var tmp4 any
-				{ // let
-					// let binding "temp__0__auto__"
-					var tmp5 any
-					if aotExternalDefault5 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion5 {
-						tmp5 = lang.Seq(v2)
-					} else {
-						tmp6 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp5 = lang.Apply1(tmp6, v2)
-					}
-					var v7 any = tmp5
-					_ = v7
-					var tmp8 any
-					if lang.IsTruthy(v7) {
-						var tmp9 any
-						{ // let
-							// let binding "s"
-							var v10 any = v7
-							_ = v10
-							tmp11 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce)
-							var tmp12 any
-							if aotExternalDefault7 && var_clojure_DOT_core_next.RootVersion() == aotExternalRootVersion7 {
-								tmp12 = lang.Next(v10)
-							} else {
-								tmp13 := checkDerefVar(var_clojure_DOT_core_next)
-								tmp12 = lang.Apply1(tmp13, v10)
-							}
-							var tmp14 any
-							if aotExternalDefault6 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion6 {
-								tmp14 = lang.First(v10)
-							} else {
-								tmp15 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp14 = lang.Apply1(tmp15, v10)
-							}
-							tmp16 := lang.Apply3(tmp11, tmp12, v3, tmp14)
-							tmp9 = tmp16
-						} // end let
-						tmp8 = tmp9
-					} else {
-						tmp10 := lang.Apply0(v3)
-						tmp8 = tmp10
-					}
-					tmp4 = tmp8
-				} // end let
-				return tmp4
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				v4 := p2
-				_ = v4
-				var tmp5 any
-				{ // let
-					// let binding "s"
-					var tmp6 any
-					if aotExternalDefault5 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion5 {
-						tmp6 = lang.Seq(v2)
-					} else {
-						tmp7 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp6 = lang.Apply1(tmp7, v2)
-					}
-					var v8 any = tmp6
-					_ = v8
-					tmp9 := checkDerefVar(var_clojure_DOT_core_DOT_protocols_internal_DASH_reduce)
-					tmp10 := lang.Apply3(tmp9, v8, v3, v4)
-					tmp5 = tmp10
-				} // end let
-				return tmp5
-			}),
+			aotDirectFn3Arity2,
+			aotDirectFn3Arity3,
 			nil,
 			nil,
 			0,
@@ -1266,7 +1274,7 @@ func LoadNS() {
 				}
 				var tmp5 any
 				if tmp3 {
-					tmp5 = aotDirectFn3.Invoke2(v1, v2)
+					tmp5 = aotDirectFn3Arity2(v1, v2)
 				} else {
 					tmp5 = lang.Apply2(tmp4, v1, v2)
 				}
@@ -1286,7 +1294,7 @@ func LoadNS() {
 				}
 				var tmp6 any
 				if tmp4 {
-					tmp6 = aotDirectFn3.Invoke3(v1, v2, v3)
+					tmp6 = aotDirectFn3Arity3(v1, v2, v3)
 				} else {
 					tmp6 = lang.Apply3(tmp5, v1, v2, v3)
 				}
@@ -1315,7 +1323,7 @@ func LoadNS() {
 				}
 				var tmp5 any
 				if tmp3 {
-					tmp5 = aotDirectFn3.Invoke2(v1, v2)
+					tmp5 = aotDirectFn3Arity2(v1, v2)
 				} else {
 					tmp5 = lang.Apply2(tmp4, v1, v2)
 				}
@@ -1335,7 +1343,7 @@ func LoadNS() {
 				}
 				var tmp6 any
 				if tmp4 {
-					tmp6 = aotDirectFn3.Invoke3(v1, v2, v3)
+					tmp6 = aotDirectFn3Arity3(v1, v2, v3)
 				} else {
 					tmp6 = lang.Apply3(tmp5, v1, v2, v3)
 				}
@@ -1364,7 +1372,7 @@ func LoadNS() {
 				}
 				var tmp5 any
 				if tmp3 {
-					tmp5 = aotDirectFn3.Invoke2(v1, v2)
+					tmp5 = aotDirectFn3Arity2(v1, v2)
 				} else {
 					tmp5 = lang.Apply2(tmp4, v1, v2)
 				}
@@ -1384,7 +1392,7 @@ func LoadNS() {
 				}
 				var tmp6 any
 				if tmp4 {
-					tmp6 = aotDirectFn3.Invoke3(v1, v2, v3)
+					tmp6 = aotDirectFn3Arity3(v1, v2, v3)
 				} else {
 					tmp6 = lang.Apply3(tmp5, v1, v2, v3)
 				}

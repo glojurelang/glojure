@@ -35,10 +35,13 @@ var aotDirectFn11 lang.FnFunc1
 var aotRootVersion11 *lang.VarRootVersion
 var aotDirectFn12 lang.ArityFn
 var aotRootVersion12 *lang.VarRootVersion
+var aotDirectFn12Arity0 lang.FnFunc0
+var aotDirectFn12Arity1 lang.FnFunc1
 var aotDirectFn13 lang.FnFunc1
 var aotRootVersion13 *lang.VarRootVersion
 var aotDirectFn14 lang.ArityFn
 var aotRootVersion14 *lang.VarRootVersion
+var aotDirectFn14Arity0 lang.FnFunc0
 var aotDirectFn15 lang.FnFunc1
 var aotRootVersion15 *lang.VarRootVersion
 var aotDirectFn16 lang.FnFunc1
@@ -3832,31 +3835,33 @@ func LoadNS() {
 	{
 		tmp0 := sym_run_DASH_all_DASH_tests
 		var tmp1 lang.ArityFn
+		aotDirectFn12Arity0 = lang.FnFunc0(func() any {
+			tmp2 := checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
+			tmp3 := aotExternalFn38()
+			tmp4 := aotExternalFn7(tmp2, tmp3)
+			return tmp4
+		})
+		aotDirectFn12Arity1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			tmp3 := checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
+			var tmp4 lang.FnFunc1
+			tmp4 = lang.FnFunc1(func(p0 any) any {
+				v5 := p0
+				_ = v5
+				tmp6 := aotExternalFn37(v5)
+				tmp7 := aotExternalFn41(tmp6)
+				tmp8 := aotExternalFn40(v2, tmp7)
+				return tmp8
+			})
+			tmp5 := aotExternalFn38()
+			tmp6 := aotExternalFn39(tmp4, tmp5)
+			tmp7 := aotExternalFn7(tmp3, tmp6)
+			return tmp7
+		})
 		tmp1 = lang.NewArityFn(
-			lang.FnFunc0(func() any {
-				tmp2 := checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
-				tmp3 := aotExternalFn38()
-				tmp4 := aotExternalFn7(tmp2, tmp3)
-				return tmp4
-			}),
-			lang.FnFunc1(func(p0 any) any {
-				v2 := p0
-				_ = v2
-				tmp3 := checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
-				var tmp4 lang.FnFunc1
-				tmp4 = lang.FnFunc1(func(p0 any) any {
-					v5 := p0
-					_ = v5
-					tmp6 := aotExternalFn37(v5)
-					tmp7 := aotExternalFn41(tmp6)
-					tmp8 := aotExternalFn40(v2, tmp7)
-					return tmp8
-				})
-				tmp5 := aotExternalFn38()
-				tmp6 := aotExternalFn39(tmp4, tmp5)
-				tmp7 := aotExternalFn7(tmp3, tmp6)
-				return tmp7
-			}),
+			aotDirectFn12Arity0,
+			aotDirectFn12Arity1,
 			nil,
 			nil,
 			nil,
@@ -4070,22 +4075,23 @@ func LoadNS() {
 	{
 		tmp0 := sym_run_DASH_tests
 		var tmp1 lang.ArityFn
+		aotDirectFn14Arity0 = lang.FnFunc0(func() any {
+			tmp2 := var_clojure_DOT_test_run_DASH_tests.RootVersion() == aotRootVersion14 && !var_clojure_DOT_test_run_DASH_tests.IsMacro()
+			var tmp3 any
+			if !tmp2 {
+				tmp3 = checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
+			}
+			tmp4 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
+			var tmp5 any
+			if tmp2 {
+				tmp5 = aotDirectFn14.Invoke1(tmp4)
+			} else {
+				tmp5 = lang.Apply1(tmp3, tmp4)
+			}
+			return tmp5
+		})
 		tmp1 = lang.NewArityFn(
-			lang.FnFunc0(func() any {
-				tmp2 := var_clojure_DOT_test_run_DASH_tests.RootVersion() == aotRootVersion14 && !var_clojure_DOT_test_run_DASH_tests.IsMacro()
-				var tmp3 any
-				if !tmp2 {
-					tmp3 = checkDerefVar(var_clojure_DOT_test_run_DASH_tests)
-				}
-				tmp4 := checkDerefVar(var_clojure_DOT_core__STAR_ns_STAR_)
-				var tmp5 any
-				if tmp2 {
-					tmp5 = aotDirectFn14.Invoke1(tmp4)
-				} else {
-					tmp5 = lang.Apply1(tmp3, tmp4)
-				}
-				return tmp5
-			}),
+			aotDirectFn14Arity0,
 			nil,
 			nil,
 			nil,

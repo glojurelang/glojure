@@ -26,10 +26,16 @@ var aotDirectFn5 lang.FnFunc2
 var aotRootVersion5 *lang.VarRootVersion
 var aotDirectFn6 lang.ArityFn
 var aotRootVersion6 *lang.VarRootVersion
+var aotDirectFn6Arity2 lang.FnFunc2
+var aotDirectFn6Arity3 lang.FnFunc3
 var aotDirectFn7 lang.ArityFn
 var aotRootVersion7 *lang.VarRootVersion
+var aotDirectFn7Arity1 lang.FnFunc1
+var aotDirectFn7Arity2 lang.FnFunc2
 var aotDirectFn8 lang.ArityFn
 var aotRootVersion8 *lang.VarRootVersion
+var aotDirectFn8Arity2 lang.FnFunc2
+var aotDirectFn8Arity3 lang.FnFunc3
 var aotDirectFn9 lang.FnFunc1
 var aotRootVersion9 *lang.VarRootVersion
 var aotDirectFn10 lang.FnFunc1
@@ -50,6 +56,8 @@ var aotDirectFn17 lang.FnFunc1
 var aotRootVersion17 *lang.VarRootVersion
 var aotDirectFn18 lang.ArityFn
 var aotRootVersion18 *lang.VarRootVersion
+var aotDirectFn18Arity2 lang.FnFunc2
+var aotDirectFn18Arity3 lang.FnFunc3
 var aotDirectFn19 lang.FnFunc1
 var aotRootVersion19 *lang.VarRootVersion
 var aotDirectFn20 lang.FnFunc2
@@ -874,117 +882,119 @@ func LoadNS() {
 	{
 		tmp0 := sym_index_DASH_of
 		var tmp1 lang.ArityFn
+		aotDirectFn6Arity2 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			var tmp4 any
+			{ // let
+				// let binding "s"
+				tmp5 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
+				var tmp6 any
+				if !tmp5 {
+					tmp6 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
+				}
+				var tmp7 any
+				if tmp5 {
+					tmp7 = aotDirectFn2(v2)
+				} else {
+					tmp7 = lang.Apply1(tmp6, v2)
+				}
+				var v8 any = tmp7
+				_ = v8
+				// let binding "result"
+				var tmp9 any
+				tmp10 := reflect.TypeOf(lang.NewChar(0))
+				tmp11 := aotExternalFn13(tmp10, v3)
+				if lang.IsTruthy(tmp11) {
+					tmp12 := lang.Apply1(lang.Builtins["rune"], v3)
+					tmp13 := lang.Apply2(strings5.IndexRune, v8, tmp12)
+					tmp9 = tmp13
+				} else {
+					tmp14 := lang.Apply2(strings5.Index, v8, v3)
+					tmp9 = tmp14
+				}
+				var v15 any = tmp9
+				_ = v15
+				var tmp16 any
+				tmp17 := aotExternalFn0(v15, int64(-1))
+				if lang.IsTruthy(tmp17) {
+				} else {
+					tmp18 := lang.Apply1(lang.Builtins["int64"], v15)
+					tmp16 = tmp18
+				}
+				tmp4 = tmp16
+			} // end let
+			return tmp4
+		})
+		aotDirectFn6Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			var tmp5 any
+			{ // let
+				// let binding "from-index"
+				var tmp6 any
+				if aotExternalDefault1 && var_clojure_DOT_core_count.RootVersion() == aotExternalRootVersion1 {
+					tmp6 = lang.Count(v2)
+				} else {
+					tmp7 := checkDerefVar(var_clojure_DOT_core_count)
+					tmp6 = lang.Apply1(tmp7, v2)
+				}
+				tmp8 := aotExternalFn14(v4)
+				tmp9 := lang.Numbers.Max(int64(0), tmp8)
+				tmp10 := lang.Numbers.Min(tmp6, tmp9)
+				var v11 any = tmp10
+				_ = v11
+				// let binding "s"
+				tmp12 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
+				var tmp13 any
+				if !tmp12 {
+					tmp13 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
+				}
+				var tmp14 any
+				if tmp12 {
+					tmp14 = aotDirectFn2(v2)
+				} else {
+					tmp14 = lang.Apply1(tmp13, v2)
+				}
+				tmp15 := aotExternalFn6(tmp14, v11)
+				var v16 any = tmp15
+				_ = v16
+				// let binding "result"
+				var tmp17 any
+				tmp18 := reflect.TypeOf(lang.NewChar(0))
+				tmp19 := aotExternalFn13(tmp18, v3)
+				if lang.IsTruthy(tmp19) {
+					tmp20 := lang.Apply1(lang.Builtins["rune"], v3)
+					tmp21 := lang.Apply2(strings5.IndexRune, v16, tmp20)
+					tmp17 = tmp21
+				} else {
+					tmp22 := lang.Apply2(strings5.Index, v16, v3)
+					tmp17 = tmp22
+				}
+				var v23 any = tmp17
+				_ = v23
+				var tmp24 any
+				tmp25 := aotExternalFn0(v23, int64(-1))
+				if lang.IsTruthy(tmp25) {
+				} else {
+					tmp26 := lang.Numbers.Add(v23, v11)
+					tmp24 = tmp26
+				}
+				tmp5 = tmp24
+			} // end let
+			return tmp5
+		})
 		tmp1 = lang.NewArityFn(
 			nil,
 			nil,
-			lang.FnFunc2(func(p0, p1 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				var tmp4 any
-				{ // let
-					// let binding "s"
-					tmp5 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-					var tmp6 any
-					if !tmp5 {
-						tmp6 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-					}
-					var tmp7 any
-					if tmp5 {
-						tmp7 = aotDirectFn2(v2)
-					} else {
-						tmp7 = lang.Apply1(tmp6, v2)
-					}
-					var v8 any = tmp7
-					_ = v8
-					// let binding "result"
-					var tmp9 any
-					tmp10 := reflect.TypeOf(lang.NewChar(0))
-					tmp11 := aotExternalFn13(tmp10, v3)
-					if lang.IsTruthy(tmp11) {
-						tmp12 := lang.Apply1(lang.Builtins["rune"], v3)
-						tmp13 := lang.Apply2(strings5.IndexRune, v8, tmp12)
-						tmp9 = tmp13
-					} else {
-						tmp14 := lang.Apply2(strings5.Index, v8, v3)
-						tmp9 = tmp14
-					}
-					var v15 any = tmp9
-					_ = v15
-					var tmp16 any
-					tmp17 := aotExternalFn0(v15, int64(-1))
-					if lang.IsTruthy(tmp17) {
-					} else {
-						tmp18 := lang.Apply1(lang.Builtins["int64"], v15)
-						tmp16 = tmp18
-					}
-					tmp4 = tmp16
-				} // end let
-				return tmp4
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				v4 := p2
-				_ = v4
-				var tmp5 any
-				{ // let
-					// let binding "from-index"
-					var tmp6 any
-					if aotExternalDefault1 && var_clojure_DOT_core_count.RootVersion() == aotExternalRootVersion1 {
-						tmp6 = lang.Count(v2)
-					} else {
-						tmp7 := checkDerefVar(var_clojure_DOT_core_count)
-						tmp6 = lang.Apply1(tmp7, v2)
-					}
-					tmp8 := aotExternalFn14(v4)
-					tmp9 := lang.Numbers.Max(int64(0), tmp8)
-					tmp10 := lang.Numbers.Min(tmp6, tmp9)
-					var v11 any = tmp10
-					_ = v11
-					// let binding "s"
-					tmp12 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-					var tmp13 any
-					if !tmp12 {
-						tmp13 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-					}
-					var tmp14 any
-					if tmp12 {
-						tmp14 = aotDirectFn2(v2)
-					} else {
-						tmp14 = lang.Apply1(tmp13, v2)
-					}
-					tmp15 := aotExternalFn6(tmp14, v11)
-					var v16 any = tmp15
-					_ = v16
-					// let binding "result"
-					var tmp17 any
-					tmp18 := reflect.TypeOf(lang.NewChar(0))
-					tmp19 := aotExternalFn13(tmp18, v3)
-					if lang.IsTruthy(tmp19) {
-						tmp20 := lang.Apply1(lang.Builtins["rune"], v3)
-						tmp21 := lang.Apply2(strings5.IndexRune, v16, tmp20)
-						tmp17 = tmp21
-					} else {
-						tmp22 := lang.Apply2(strings5.Index, v16, v3)
-						tmp17 = tmp22
-					}
-					var v23 any = tmp17
-					_ = v23
-					var tmp24 any
-					tmp25 := aotExternalFn0(v23, int64(-1))
-					if lang.IsTruthy(tmp25) {
-					} else {
-						tmp26 := lang.Numbers.Add(v23, v11)
-						tmp24 = tmp26
-					}
-					tmp5 = tmp24
-				} // end let
-				return tmp5
-			}),
+			aotDirectFn6Arity2,
+			aotDirectFn6Arity3,
 			nil,
 			nil,
 			0,
@@ -1000,100 +1010,102 @@ func LoadNS() {
 	{
 		tmp0 := sym_last_DASH_index_DASH_of
 		var tmp1 lang.ArityFn
+		aotDirectFn8Arity2 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			var tmp4 any
+			{ // let
+				// let binding "s"
+				tmp5 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
+				var tmp6 any
+				if !tmp5 {
+					tmp6 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
+				}
+				var tmp7 any
+				if tmp5 {
+					tmp7 = aotDirectFn2(v2)
+				} else {
+					tmp7 = lang.Apply1(tmp6, v2)
+				}
+				var v8 any = tmp7
+				_ = v8
+				// let binding "result"
+				tmp9 := aotExternalFn3(v3)
+				tmp10 := lang.Apply2(strings5.LastIndex, v8, tmp9)
+				var v11 any = tmp10
+				_ = v11
+				var tmp12 any
+				tmp13 := aotExternalFn0(v11, int64(-1))
+				if lang.IsTruthy(tmp13) {
+				} else {
+					tmp14 := lang.Apply1(lang.Builtins["int64"], v11)
+					tmp12 = tmp14
+				}
+				tmp4 = tmp12
+			} // end let
+			return tmp4
+		})
+		aotDirectFn8Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			var tmp5 any
+			{ // let
+				// let binding "from-index"
+				var tmp6 any
+				if aotExternalDefault1 && var_clojure_DOT_core_count.RootVersion() == aotExternalRootVersion1 {
+					tmp6 = lang.Count(v2)
+				} else {
+					tmp7 := checkDerefVar(var_clojure_DOT_core_count)
+					tmp6 = lang.Apply1(tmp7, v2)
+				}
+				tmp8 := aotExternalFn14(v4)
+				tmp9 := lang.Numbers.Inc(tmp8)
+				tmp10 := lang.Numbers.Max(int64(0), tmp9)
+				tmp11 := lang.Numbers.Min(tmp6, tmp10)
+				var v12 any = tmp11
+				_ = v12
+				// let binding "s"
+				tmp13 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
+				var tmp14 any
+				if !tmp13 {
+					tmp14 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
+				}
+				var tmp15 any
+				if tmp13 {
+					tmp15 = aotDirectFn2(v2)
+				} else {
+					tmp15 = lang.Apply1(tmp14, v2)
+				}
+				tmp16 := aotExternalFn5(tmp15, int64(0), v12)
+				var v17 any = tmp16
+				_ = v17
+				// let binding "result"
+				tmp18 := aotExternalFn3(v3)
+				tmp19 := lang.Apply2(strings5.LastIndex, v17, tmp18)
+				var v20 any = tmp19
+				_ = v20
+				var tmp21 any
+				tmp22 := aotExternalFn0(v20, int64(-1))
+				if lang.IsTruthy(tmp22) {
+				} else {
+					tmp23 := lang.Apply1(lang.Builtins["int64"], v20)
+					tmp21 = tmp23
+				}
+				tmp5 = tmp21
+			} // end let
+			return tmp5
+		})
 		tmp1 = lang.NewArityFn(
 			nil,
 			nil,
-			lang.FnFunc2(func(p0, p1 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				var tmp4 any
-				{ // let
-					// let binding "s"
-					tmp5 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-					var tmp6 any
-					if !tmp5 {
-						tmp6 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-					}
-					var tmp7 any
-					if tmp5 {
-						tmp7 = aotDirectFn2(v2)
-					} else {
-						tmp7 = lang.Apply1(tmp6, v2)
-					}
-					var v8 any = tmp7
-					_ = v8
-					// let binding "result"
-					tmp9 := aotExternalFn3(v3)
-					tmp10 := lang.Apply2(strings5.LastIndex, v8, tmp9)
-					var v11 any = tmp10
-					_ = v11
-					var tmp12 any
-					tmp13 := aotExternalFn0(v11, int64(-1))
-					if lang.IsTruthy(tmp13) {
-					} else {
-						tmp14 := lang.Apply1(lang.Builtins["int64"], v11)
-						tmp12 = tmp14
-					}
-					tmp4 = tmp12
-				} // end let
-				return tmp4
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				v4 := p2
-				_ = v4
-				var tmp5 any
-				{ // let
-					// let binding "from-index"
-					var tmp6 any
-					if aotExternalDefault1 && var_clojure_DOT_core_count.RootVersion() == aotExternalRootVersion1 {
-						tmp6 = lang.Count(v2)
-					} else {
-						tmp7 := checkDerefVar(var_clojure_DOT_core_count)
-						tmp6 = lang.Apply1(tmp7, v2)
-					}
-					tmp8 := aotExternalFn14(v4)
-					tmp9 := lang.Numbers.Inc(tmp8)
-					tmp10 := lang.Numbers.Max(int64(0), tmp9)
-					tmp11 := lang.Numbers.Min(tmp6, tmp10)
-					var v12 any = tmp11
-					_ = v12
-					// let binding "s"
-					tmp13 := var_clojure_DOT_string_check_DASH_string.RootVersion() == aotRootVersion2 && !var_clojure_DOT_string_check_DASH_string.IsMacro()
-					var tmp14 any
-					if !tmp13 {
-						tmp14 = checkDerefVar(var_clojure_DOT_string_check_DASH_string)
-					}
-					var tmp15 any
-					if tmp13 {
-						tmp15 = aotDirectFn2(v2)
-					} else {
-						tmp15 = lang.Apply1(tmp14, v2)
-					}
-					tmp16 := aotExternalFn5(tmp15, int64(0), v12)
-					var v17 any = tmp16
-					_ = v17
-					// let binding "result"
-					tmp18 := aotExternalFn3(v3)
-					tmp19 := lang.Apply2(strings5.LastIndex, v17, tmp18)
-					var v20 any = tmp19
-					_ = v20
-					var tmp21 any
-					tmp22 := aotExternalFn0(v20, int64(-1))
-					if lang.IsTruthy(tmp22) {
-					} else {
-						tmp23 := lang.Apply1(lang.Builtins["int64"], v20)
-						tmp21 = tmp23
-					}
-					tmp5 = tmp21
-				} // end let
-				return tmp5
-			}),
+			aotDirectFn8Arity2,
+			aotDirectFn8Arity3,
 			nil,
 			nil,
 			0,
@@ -1454,37 +1466,39 @@ func LoadNS() {
 	{
 		tmp0 := sym_split
 		var tmp1 lang.ArityFn
+		aotDirectFn18Arity2 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			tmp4, _ := lang.FieldOrMethod(v3, "split")
+			if reflect.TypeOf(tmp4).Kind() != reflect.Func {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("split is not a function")))
+			}
+			tmp5 := lang.Apply2(tmp4, v2, int64(-1))
+			tmp6 := lang.CreateOwningLazilyPersistentVector(tmp5)
+			return tmp6
+		})
+		aotDirectFn18Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			tmp5, _ := lang.FieldOrMethod(v3, "split")
+			if reflect.TypeOf(tmp5).Kind() != reflect.Func {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("split is not a function")))
+			}
+			tmp6 := lang.Apply2(tmp5, v2, v4)
+			tmp7 := lang.CreateOwningLazilyPersistentVector(tmp6)
+			return tmp7
+		})
 		tmp1 = lang.NewArityFn(
 			nil,
 			nil,
-			lang.FnFunc2(func(p0, p1 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				tmp4, _ := lang.FieldOrMethod(v3, "split")
-				if reflect.TypeOf(tmp4).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("split is not a function")))
-				}
-				tmp5 := lang.Apply2(tmp4, v2, int64(-1))
-				tmp6 := lang.CreateOwningLazilyPersistentVector(tmp5)
-				return tmp6
-			}),
-			lang.FnFunc3(func(p0, p1, p2 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				v4 := p2
-				_ = v4
-				tmp5, _ := lang.FieldOrMethod(v3, "split")
-				if reflect.TypeOf(tmp5).Kind() != reflect.Func {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("split is not a function")))
-				}
-				tmp6 := lang.Apply2(tmp5, v2, v4)
-				tmp7 := lang.CreateOwningLazilyPersistentVector(tmp6)
-				return tmp7
-			}),
+			aotDirectFn18Arity2,
+			aotDirectFn18Arity3,
 			nil,
 			nil,
 			0,
@@ -1511,7 +1525,7 @@ func LoadNS() {
 			tmp5 := aotExternalFn24("\\r?\\n")
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn18.Invoke2(v2, tmp5)
+				tmp6 = aotDirectFn18Arity2(v2, tmp5)
 			} else {
 				tmp6 = lang.Apply2(tmp4, v2, tmp5)
 			}
@@ -1942,26 +1956,28 @@ func LoadNS() {
 	{
 		tmp0 := sym_join
 		var tmp1 lang.ArityFn
+		aotDirectFn7Arity1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			tmp3 := checkDerefVar(var_clojure_DOT_core_str)
+			tmp4 := aotExternalFn15(tmp3, v2)
+			return tmp4
+		})
+		aotDirectFn7Arity2 = lang.FnFunc2(func(p0, p1 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			tmp4 := checkDerefVar(var_clojure_DOT_core_str)
+			tmp5 := aotExternalFn16(tmp4, v3)
+			tmp6 := aotExternalFn3(v2)
+			tmp7 := lang.Apply2(strings5.Join, tmp5, tmp6)
+			return tmp7
+		})
 		tmp1 = lang.NewArityFn(
 			nil,
-			lang.FnFunc1(func(p0 any) any {
-				v2 := p0
-				_ = v2
-				tmp3 := checkDerefVar(var_clojure_DOT_core_str)
-				tmp4 := aotExternalFn15(tmp3, v2)
-				return tmp4
-			}),
-			lang.FnFunc2(func(p0, p1 any) any {
-				v2 := p0
-				_ = v2
-				v3 := p1
-				_ = v3
-				tmp4 := checkDerefVar(var_clojure_DOT_core_str)
-				tmp5 := aotExternalFn16(tmp4, v3)
-				tmp6 := aotExternalFn3(v2)
-				tmp7 := lang.Apply2(strings5.Join, tmp5, tmp6)
-				return tmp7
-			}),
+			aotDirectFn7Arity1,
+			aotDirectFn7Arity2,
 			nil,
 			nil,
 			nil,
