@@ -59,8 +59,11 @@ func NewTransient(vi Vector) *Transient {
 		root:   v.root,
 		tail:   make([]interface{}, nodeSize),
 	}
-	for i := 0; i < len(v.tail); i++ {
-		t.tail[i] = v.tail[i]
+	copy(t.tail, v.tail)
+	entry := v.tailDelta
+	for i := v.tailLen() - 1; i >= len(v.tail); i-- {
+		t.tail[i] = entry.value
+		entry = entry.prev
 	}
 	return t
 }

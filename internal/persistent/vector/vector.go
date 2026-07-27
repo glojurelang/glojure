@@ -62,9 +62,18 @@ type Iterator interface {
 type Persistent struct {
 	count int
 	// height of the tree structure, defined to be 0 when root is a leaf.
-	height uint
-	root   node
-	tail   []interface{}
+	height    uint
+	root      node
+	tail      []interface{}
+	tailDelta *tailEntry
+}
+
+// tailEntry records an immutable append after the tail's base slice. Keeping
+// at most 32 linked deltas avoids copying the whole persistent-vector tail on
+// every Conj while retaining a compact slice for vectors built in bulk.
+type tailEntry struct {
+	value interface{}
+	prev  *tailEntry
 }
 
 // Empty is an empty Vector.
@@ -80,12 +89,6 @@ func newNode() node {
 func clone(n node) node {
 	a := *n
 	return node(&a)
-}
-
-func nodeFromSlice(s []interface{}) node {
-	var n [nodeSize]interface{}
-	copy(n[:], s)
-	return &n
 }
 
 // Count returns the number of elements in a Vector.
@@ -110,7 +113,7 @@ func (v *Persistent) Index(i int) (interface{}, bool) {
 	// The following is very similar to sliceFor, but is implemented separately
 	// to avoid unnecessary copying.
 	if i >= v.treeSize() {
-		return v.tail[i&chunkMask], true
+		return v.tailAt(i - v.treeSize()), true
 	}
 	n := v.root
 	for shift := v.height * chunkBits; shift > 0; shift -= chunkBits {
@@ -123,13 +126,51 @@ func (v *Persistent) Index(i int) (interface{}, bool) {
 // be in bound.
 func (v *Persistent) sliceFor(i int) []interface{} {
 	if i >= v.treeSize() {
-		return v.tail
+		return v.tailSlice()
 	}
 	n := v.root
 	for shift := v.height * chunkBits; shift > 0; shift -= chunkBits {
 		n = n[(i>>shift)&chunkMask].(node)
 	}
 	return n[:]
+}
+
+func (v *Persistent) tailLen() int {
+	return v.count - v.treeSize()
+}
+
+func (v *Persistent) tailAt(i int) interface{} {
+	if i < len(v.tail) {
+		return v.tail[i]
+	}
+	entry := v.tailDelta
+	deltaLen := v.tailLen() - len(v.tail)
+	for steps := deltaLen - 1 - (i - len(v.tail)); steps > 0; steps-- {
+		entry = entry.prev
+	}
+	return entry.value
+}
+
+func (v *Persistent) tailSlice() []interface{} {
+	result := make([]interface{}, v.tailLen())
+	copy(result, v.tail)
+	entry := v.tailDelta
+	for i := len(result) - 1; i >= len(v.tail); i-- {
+		result[i] = entry.value
+		entry = entry.prev
+	}
+	return result
+}
+
+func (v *Persistent) tailNode() node {
+	var result [nodeSize]interface{}
+	copy(result[:], v.tail)
+	entry := v.tailDelta
+	for i := v.tailLen() - 1; i >= len(v.tail); i-- {
+		result[i] = entry.value
+		entry = entry.prev
+	}
+	return &result
 }
 
 func (v *Persistent) Assoc(i int, val interface{}) Vector {
@@ -149,11 +190,22 @@ func (v Persistent) AssocValue(i int, val interface{}) (Persistent, bool) {
 		return v.ConjValue(val), true
 	}
 	if i >= v.treeSize() {
-		newTail := append([]interface{}(nil), v.tail...)
+		newTail := v.tailSlice()
 		newTail[i&chunkMask] = val
-		return Persistent{v.count, v.height, v.root, newTail}, true
+		return Persistent{
+			count:  v.count,
+			height: v.height,
+			root:   v.root,
+			tail:   newTail,
+		}, true
 	}
-	return Persistent{v.count, v.height, doAssoc(v.height, v.root, i, val), v.tail}, true
+	return Persistent{
+		count:     v.count,
+		height:    v.height,
+		root:      doAssoc(v.height, v.root, i, val),
+		tail:      v.tail,
+		tailDelta: v.tailDelta,
+	}, true
 }
 
 // doAssoc returns an almost identical tree, with the i-th element replaced by
@@ -179,13 +231,19 @@ func (v *Persistent) Conj(val interface{}) Vector {
 func (v Persistent) ConjValue(val interface{}) Persistent {
 	// Room in tail?
 	if v.count-v.treeSize() < tailMaxLen {
-		newTail := make([]interface{}, len(v.tail)+1)
-		copy(newTail, v.tail)
-		newTail[len(v.tail)] = val
-		return Persistent{v.count + 1, v.height, v.root, newTail}
+		return Persistent{
+			count:  v.count + 1,
+			height: v.height,
+			root:   v.root,
+			tail:   v.tail,
+			tailDelta: &tailEntry{
+				value: val,
+				prev:  v.tailDelta,
+			},
+		}
 	}
 	// Full tail; push into tree.
-	tailNode := nodeFromSlice(v.tail)
+	tailNode := v.tailNode()
 	newHeight := v.height
 	var newRoot node
 
@@ -198,7 +256,14 @@ func (v Persistent) ConjValue(val interface{}) Persistent {
 	} else {
 		newRoot = v.pushTail(v.height, v.root, tailNode)
 	}
-	return Persistent{v.count + 1, newHeight, newRoot, []interface{}{val}}
+	return Persistent{
+		count:  v.count + 1,
+		height: newHeight,
+		root:   newRoot,
+		tailDelta: &tailEntry{
+			value: val,
+		},
+	}
 }
 
 // pushTail returns a tree with tail appended.
@@ -248,10 +313,23 @@ func (v Persistent) PopValue() (Persistent, bool) {
 		return Persistent{}, true
 	}
 	if v.count-v.treeSize() > 1 {
-		// Tails are immutable: Conj and Assoc always allocate before writing.
-		// The popped vector can therefore share the backing array and expose a
-		// shorter view instead of copying the remaining tail.
-		return Persistent{v.count - 1, v.height, v.root, v.tail[:len(v.tail)-1]}, true
+		if v.tailDelta != nil {
+			return Persistent{
+				count:     v.count - 1,
+				height:    v.height,
+				root:      v.root,
+				tail:      v.tail,
+				tailDelta: v.tailDelta.prev,
+			}, true
+		}
+		// Constructor-owned base tails are immutable and can expose a shorter
+		// view without copying.
+		return Persistent{
+			count:  v.count - 1,
+			height: v.height,
+			root:   v.root,
+			tail:   v.tail[:len(v.tail)-1],
+		}, true
 	}
 	newTail := v.sliceFor(v.count - 2)
 	newRoot := v.popTail(v.height, v.root)
@@ -260,7 +338,12 @@ func (v Persistent) PopValue() (Persistent, bool) {
 		newRoot = newRoot[0].(node)
 		newHeight--
 	}
-	return Persistent{v.count - 1, newHeight, newRoot, newTail}, true
+	return Persistent{
+		count:  v.count - 1,
+		height: newHeight,
+		root:   newRoot,
+		tail:   newTail,
+	}, true
 }
 
 // popTail returns a new tree with the last leaf removed.
@@ -396,7 +479,7 @@ func newIteratorWithRange(v *Persistent, begin, end int) *iterator {
 
 func (it *iterator) Elem() interface{} {
 	if it.index >= it.treeSize {
-		return it.v.tail[it.index-it.treeSize]
+		return it.v.tailAt(it.index - it.treeSize)
 	}
 	return it.path[len(it.path)-1].current()
 }

@@ -193,6 +193,47 @@ func TestPopSharesImmutableTail(t *testing.T) {
 	}
 }
 
+func TestBulkTailAndConjDeltasRemainPersistent(t *testing.T) {
+	values := make([]any, 12)
+	for i := range values {
+		values[i] = i
+	}
+	base := NewPersistent(values...)
+	extended := base
+	for i := len(values); i < 40; i++ {
+		extended = extended.ConjValue(i)
+	}
+
+	for i := 0; i < len(values); i++ {
+		if got, _ := base.Index(i); got != i {
+			t.Fatalf("base[%d] = %v, want %d", i, got, i)
+		}
+	}
+	for i := 0; i < 40; i++ {
+		if got, _ := extended.Index(i); got != i {
+			t.Fatalf("extended[%d] = %v, want %d", i, got, i)
+		}
+	}
+
+	updated := extended.Assoc(39, "updated")
+	if got, _ := extended.Index(39); got != 39 {
+		t.Fatalf("assoc changed original tail value to %v", got)
+	}
+	if got, _ := updated.Index(39); got != "updated" {
+		t.Fatalf("updated tail value = %v, want updated", got)
+	}
+
+	transient := NewTransient(&extended)
+	transient.Assoc(39, "transient").Conj(40).Pop()
+	persisted := transient.Persistent()
+	if got, _ := persisted.Index(39); got != "transient" {
+		t.Fatalf("persistent transient tail value = %v, want transient", got)
+	}
+	if got, _ := extended.Index(39); got != 39 {
+		t.Fatalf("transient changed original tail value to %v", got)
+	}
+}
+
 func TestSubVector(t *testing.T) {
 	v := Empty
 	for i := 0; i < 10; i++ {
