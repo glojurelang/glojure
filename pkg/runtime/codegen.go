@@ -1911,8 +1911,8 @@ func (g *Generator) generateIf(node *ast.Node) string {
 
 	// Emit the if statement to g.w
 	g.writef("var %s any\n", resultVar)
-	testExpr := g.generateASTNode(ifNode.Test)
-	g.writef("if lang.IsTruthy(%s) {\n", testExpr)
+	testExpr := g.generateTruthyTest(ifNode.Test)
+	g.writef("if %s {\n", testExpr)
 	thenExpr := g.generateASTNode(ifNode.Then)
 	g.writeAssign(resultVar, thenExpr)
 	g.writef("} else {\n")
@@ -1926,6 +1926,41 @@ func (g *Generator) generateIf(node *ast.Node) string {
 
 	// Return the r-value
 	return resultVar
+}
+
+func (g *Generator) generateTruthyTest(node *ast.Node) string {
+	if node.Op != ast.OpInvoke {
+		return fmt.Sprintf("lang.IsTruthy(%s)", g.generateASTNode(node))
+	}
+	invoke := node.Sub.(*ast.InvokeNode)
+	target := g.aotExternalInvokeTarget(invoke)
+	if target == nil || target.intrinsic != "seq" {
+		return fmt.Sprintf("lang.IsTruthy(%s)", g.generateASTNode(node))
+	}
+
+	arg := g.generateASTNode(invoke.Args[0])
+	varNode := invoke.Fn.Sub.(*ast.VarNode)
+	varID := g.allocVarVar(
+		varNode.Var.Namespace().Name().String(),
+		varNode.Var.Symbol().String(),
+	)
+	result := g.allocateTempVar()
+	g.writef("var %s bool\n", result)
+	g.writef("if %s && %s.RootVersion() == %s {\n",
+		target.defaultVar,
+		varID,
+		target.rootVersionVar,
+	)
+	g.writef("%s = lang.IsSeqTruthy(%s)\n", result, arg)
+	g.writef("} else {\n")
+	fallback := g.allocateTempVar()
+	g.writef("%s := checkDerefVar(%s)\n", fallback, varID)
+	fallbackResult := g.allocateTempVar()
+	g.writef("var %s any\n", fallbackResult)
+	g.generateApply(fallbackResult, fallback, []string{arg}, false)
+	g.writef("%s = lang.IsTruthy(%s)\n", result, fallbackResult)
+	g.writef("}\n")
+	return result
 }
 
 func (g *Generator) generateCase(node *ast.Node) string {

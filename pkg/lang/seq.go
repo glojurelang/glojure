@@ -101,6 +101,31 @@ func Seq(x interface{}) ISeq {
 	panic(fmt.Errorf("can't convert %T to ISeq", x))
 }
 
+// IsSeqTruthy reports whether seq would return a non-nil value, avoiding a
+// sequence wrapper for collections whose emptiness is directly observable.
+func IsSeqTruthy(x any) bool {
+	switch x := x.(type) {
+	case nil:
+		return false
+	case *EmptyList:
+		return false
+	case Counted:
+		if _, ok := any(x).(Seqable); ok {
+			return x.Count() != 0
+		}
+		return Seq(x) != nil
+	case string:
+		return len(x) != 0
+	}
+
+	value := reflect.ValueOf(x)
+	switch value.Kind() {
+	case reflect.Slice, reflect.Array, reflect.Map:
+		return value.Len() != 0
+	}
+	return Seq(x) != nil
+}
+
 func seqToSlice(s ISeq) []interface{} {
 	var res []interface{}
 	for seq := Seq(s); seq != nil; seq = seq.Next() {

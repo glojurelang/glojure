@@ -1117,55 +1117,57 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			var tmp4 any
+			var tmp4 bool
 			if aotExternalDefault4 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion4 {
-				tmp4 = lang.Seq(v2)
+				tmp4 = lang.IsSeqTruthy(v2)
 			} else {
 				tmp5 := checkDerefVar(var_clojure_DOT_core_seq)
-				tmp4 = lang.Apply1(tmp5, v2)
-			}
-			if lang.IsTruthy(tmp4) {
 				var tmp6 any
+				tmp6 = lang.Apply1(tmp5, v2)
+				tmp4 = lang.IsTruthy(tmp6)
+			}
+			if tmp4 {
+				var tmp7 any
 				{ // let
 					// let binding "s"
-					var tmp7 any
+					var tmp8 any
 					if aotExternalDefault9 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion9 {
-						tmp7 = lang.First(v2)
+						tmp8 = lang.First(v2)
 					} else {
-						tmp8 := checkDerefVar(var_clojure_DOT_core_first)
-						tmp7 = lang.Apply1(tmp8, v2)
+						tmp9 := checkDerefVar(var_clojure_DOT_core_first)
+						tmp8 = lang.Apply1(tmp9, v2)
 					}
-					var v9 any = tmp7
-					_ = v9
-					tmp10, ok := lang.FieldOrMethod(v9, "getFileName")
+					var v10 any = tmp8
+					_ = v10
+					tmp11, ok := lang.FieldOrMethod(v10, "getFileName")
 					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v9, "getFileName")))
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v10, "getFileName")))
 					}
-					var tmp11 any
-					switch reflect.TypeOf(tmp10).Kind() {
+					var tmp12 any
+					switch reflect.TypeOf(tmp11).Kind() {
 					case reflect.Func:
-						tmp11 = lang.Apply(tmp10, nil)
+						tmp12 = lang.Apply(tmp11, nil)
 					default:
-						tmp11 = tmp10
+						tmp12 = tmp11
 					}
-					tmp12, ok := lang.FieldOrMethod(v9, "getLineNumber")
+					tmp13, ok := lang.FieldOrMethod(v10, "getLineNumber")
 					if !ok {
-						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v9, "getLineNumber")))
+						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v10, "getLineNumber")))
 					}
-					var tmp13 any
-					switch reflect.TypeOf(tmp12).Kind() {
+					var tmp14 any
+					switch reflect.TypeOf(tmp13).Kind() {
 					case reflect.Func:
-						tmp13 = lang.Apply(tmp12, nil)
+						tmp14 = lang.Apply(tmp13, nil)
 					default:
-						tmp13 = tmp12
+						tmp14 = tmp13
 					}
-					tmp14 := lang.NewMap(kw_file, tmp11, kw_line, tmp13)
-					tmp6 = tmp14
+					tmp15 := lang.NewMap(kw_file, tmp12, kw_line, tmp14)
+					tmp7 = tmp15
 				} // end let
-				tmp3 = tmp6
-			} else {
-				tmp7 := lang.NewMap(kw_file, nil, kw_line, nil)
 				tmp3 = tmp7
+			} else {
+				tmp8 := lang.NewMap(kw_file, nil, kw_line, nil)
+				tmp3 = tmp8
 			}
 			return tmp3
 		})
@@ -3499,60 +3501,62 @@ func LoadNS() {
 					_ = tmp19
 					var tmp20 any
 					tmp21 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_)
-					var tmp22 any
+					var tmp22 bool
 					if aotExternalDefault4 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion4 {
-						tmp22 = lang.Seq(tmp21)
+						tmp22 = lang.IsSeqTruthy(tmp21)
 					} else {
 						tmp23 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp22 = lang.Apply1(tmp23, tmp21)
+						var tmp24 any
+						tmp24 = lang.Apply1(tmp23, tmp21)
+						tmp22 = lang.IsTruthy(tmp24)
 					}
-					if lang.IsTruthy(tmp22) {
-						tmp24 := var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion() == aotRootVersion20 && !var_clojure_DOT_test_testing_DASH_contexts_DASH_str.IsMacro()
-						var tmp25 any
-						if !tmp24 {
-							tmp25 = checkDerefVar(var_clojure_DOT_test_testing_DASH_contexts_DASH_str)
-						}
+					if tmp22 {
+						tmp25 := var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion() == aotRootVersion20 && !var_clojure_DOT_test_testing_DASH_contexts_DASH_str.IsMacro()
 						var tmp26 any
-						if tmp24 {
-							tmp26 = aotDirectFn20()
-						} else {
-							tmp26 = lang.Apply0(tmp25)
+						if !tmp25 {
+							tmp26 = checkDerefVar(var_clojure_DOT_test_testing_DASH_contexts_DASH_str)
 						}
-						tmp27 := aotExternalFn32(tmp26)
-						tmp20 = tmp27
+						var tmp27 any
+						if tmp25 {
+							tmp27 = aotDirectFn20()
+						} else {
+							tmp27 = lang.Apply0(tmp26)
+						}
+						tmp28 := aotExternalFn32(tmp27)
+						tmp20 = tmp28
 					} else {
 					}
 					_ = tmp20
-					var tmp28 any
+					var tmp29 any
 					{ // let
 						// let binding "temp__0__auto__"
-						tmp29 := kw_message.Invoke1(v5)
-						var v30 any = tmp29
-						_ = v30
-						var tmp31 any
-						if lang.IsTruthy(v30) {
-							var tmp32 any
+						tmp30 := kw_message.Invoke1(v5)
+						var v31 any = tmp30
+						_ = v31
+						var tmp32 any
+						if lang.IsTruthy(v31) {
+							var tmp33 any
 							{ // let
 								// let binding "message"
-								var v33 any = v30
-								_ = v33
-								tmp34 := aotExternalFn32(v33)
-								tmp32 = tmp34
+								var v34 any = v31
+								_ = v34
+								tmp35 := aotExternalFn32(v34)
+								tmp33 = tmp35
 							} // end let
-							tmp31 = tmp32
+							tmp32 = tmp33
 						} else {
 						}
-						tmp28 = tmp31
+						tmp29 = tmp32
 					} // end let
-					_ = tmp28
-					tmp29 := kw_expected.Invoke1(v5)
-					tmp30 := aotExternalFn33(tmp29)
-					tmp31 := aotExternalFn31("expected:", tmp30)
-					_ = tmp31
-					tmp32 := kw_actual.Invoke1(v5)
-					tmp33 := aotExternalFn33(tmp32)
-					tmp34 := aotExternalFn31("  actual:", tmp33)
-					tmp11 = tmp34
+					_ = tmp29
+					tmp30 := kw_expected.Invoke1(v5)
+					tmp31 := aotExternalFn33(tmp30)
+					tmp32 := aotExternalFn31("expected:", tmp31)
+					_ = tmp32
+					tmp33 := kw_actual.Invoke1(v5)
+					tmp34 := aotExternalFn33(tmp33)
+					tmp35 := aotExternalFn31("  actual:", tmp34)
+					tmp11 = tmp35
 				}()
 				tmp6 = tmp11
 			} // end let
@@ -3617,87 +3621,89 @@ func LoadNS() {
 					_ = tmp20
 					var tmp21 any
 					tmp22 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_contexts_STAR_)
-					var tmp23 any
+					var tmp23 bool
 					if aotExternalDefault4 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion4 {
-						tmp23 = lang.Seq(tmp22)
+						tmp23 = lang.IsSeqTruthy(tmp22)
 					} else {
 						tmp24 := checkDerefVar(var_clojure_DOT_core_seq)
-						tmp23 = lang.Apply1(tmp24, tmp22)
+						var tmp25 any
+						tmp25 = lang.Apply1(tmp24, tmp22)
+						tmp23 = lang.IsTruthy(tmp25)
 					}
-					if lang.IsTruthy(tmp23) {
-						tmp25 := var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion() == aotRootVersion20 && !var_clojure_DOT_test_testing_DASH_contexts_DASH_str.IsMacro()
-						var tmp26 any
-						if !tmp25 {
-							tmp26 = checkDerefVar(var_clojure_DOT_test_testing_DASH_contexts_DASH_str)
-						}
+					if tmp23 {
+						tmp26 := var_clojure_DOT_test_testing_DASH_contexts_DASH_str.RootVersion() == aotRootVersion20 && !var_clojure_DOT_test_testing_DASH_contexts_DASH_str.IsMacro()
 						var tmp27 any
-						if tmp25 {
-							tmp27 = aotDirectFn20()
-						} else {
-							tmp27 = lang.Apply0(tmp26)
+						if !tmp26 {
+							tmp27 = checkDerefVar(var_clojure_DOT_test_testing_DASH_contexts_DASH_str)
 						}
-						tmp28 := aotExternalFn32(tmp27)
-						tmp21 = tmp28
+						var tmp28 any
+						if tmp26 {
+							tmp28 = aotDirectFn20()
+						} else {
+							tmp28 = lang.Apply0(tmp27)
+						}
+						tmp29 := aotExternalFn32(tmp28)
+						tmp21 = tmp29
 					} else {
 					}
 					_ = tmp21
-					var tmp29 any
+					var tmp30 any
 					{ // let
 						// let binding "temp__0__auto__"
-						tmp30 := kw_message.Invoke1(v6)
-						var v31 any = tmp30
-						_ = v31
-						var tmp32 any
-						if lang.IsTruthy(v31) {
-							var tmp33 any
+						tmp31 := kw_message.Invoke1(v6)
+						var v32 any = tmp31
+						_ = v32
+						var tmp33 any
+						if lang.IsTruthy(v32) {
+							var tmp34 any
 							{ // let
 								// let binding "message"
-								var v34 any = v31
-								_ = v34
-								tmp35 := aotExternalFn32(v34)
-								tmp33 = tmp35
+								var v35 any = v32
+								_ = v35
+								tmp36 := aotExternalFn32(v35)
+								tmp34 = tmp36
 							} // end let
-							tmp32 = tmp33
+							tmp33 = tmp34
 						} else {
 						}
-						tmp29 = tmp32
+						tmp30 = tmp33
 					} // end let
-					_ = tmp29
-					tmp30 := kw_expected.Invoke1(v6)
-					tmp31 := aotExternalFn33(tmp30)
-					tmp32 := aotExternalFn31("expected:", tmp31)
-					_ = tmp32
-					tmp33 := aotExternalFn34("  actual: ")
+					_ = tmp30
+					tmp31 := kw_expected.Invoke1(v6)
+					tmp32 := aotExternalFn33(tmp31)
+					tmp33 := aotExternalFn31("expected:", tmp32)
 					_ = tmp33
-					var tmp34 any
+					tmp34 := aotExternalFn34("  actual: ")
+					_ = tmp34
+					var tmp35 any
 					{ // let
 						// let binding "actual"
-						tmp35 := kw_actual.Invoke1(v6)
-						var v36 any = tmp35
-						_ = v36
-						var tmp37 any
-						tmp38 := aotExternalFn35(lang.Builtins["error"], v36)
-						if lang.IsTruthy(tmp38) {
-							tmp39, ok := lang.FieldOrMethod(v36, "Error")
+						tmp36 := kw_actual.Invoke1(v6)
+						var v37 any = tmp36
+						_ = v37
+						var tmp38 any
+						tmp39 := aotExternalFn35(lang.Builtins["error"], v37)
+						if lang.IsTruthy(tmp39) {
+							tmp40, ok := lang.FieldOrMethod(v37, "Error")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v36, "Error")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v37, "Error")))
 							}
-							var tmp40 any
-							switch reflect.TypeOf(tmp39).Kind() {
+							var tmp41 any
+							switch reflect.TypeOf(tmp40).Kind() {
 							case reflect.Func:
-								tmp40 = lang.Apply(tmp39, nil)
+								tmp41 = lang.Apply(tmp40, nil)
 							default:
-								tmp40 = tmp39
+								tmp41 = tmp40
 							}
-							tmp41 := aotExternalFn30(tmp40)
-							tmp37 = tmp41
+							tmp42 := aotExternalFn30(tmp41)
+							tmp38 = tmp42
 						} else {
-							tmp42 := aotExternalFn30(v36)
-							tmp37 = tmp42
+							tmp43 := aotExternalFn30(v37)
+							tmp38 = tmp43
 						}
-						tmp34 = tmp37
+						tmp35 = tmp38
 					} // end let
-					tmp12 = tmp34
+					tmp12 = tmp35
 				}()
 				tmp7 = tmp12
 			} // end let
@@ -5087,25 +5093,27 @@ func LoadNS() {
 						tmp7 = tmp11
 					} else {
 						var tmp12 any
-						var tmp13 any
+						var tmp13 bool
 						if aotExternalDefault4 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion4 {
-							tmp13 = lang.Seq(v4)
+							tmp13 = lang.IsSeqTruthy(v4)
 						} else {
 							tmp14 := checkDerefVar(var_clojure_DOT_core_seq)
-							tmp13 = lang.Apply1(tmp14, v4)
-						}
-						if lang.IsTruthy(tmp13) {
 							var tmp15 any
+							tmp15 = lang.Apply1(tmp14, v4)
+							tmp13 = lang.IsTruthy(tmp15)
+						}
+						if tmp13 {
+							var tmp16 any
 							if aotExternalDefault9 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion9 {
-								tmp15 = lang.First(v4)
+								tmp16 = lang.First(v4)
 							} else {
-								tmp16 := checkDerefVar(var_clojure_DOT_core_first)
-								tmp15 = lang.Apply1(tmp16, v4)
+								tmp17 := checkDerefVar(var_clojure_DOT_core_first)
+								tmp16 = lang.Apply1(tmp17, v4)
 							}
-							tmp12 = tmp15
+							tmp12 = tmp16
 						} else {
-							tmp17 := lang.Apply0(lang.NewMap)
-							tmp12 = tmp17
+							tmp18 := lang.Apply0(lang.NewMap)
+							tmp12 = tmp18
 						}
 						tmp7 = tmp12
 					}
@@ -5113,30 +5121,30 @@ func LoadNS() {
 				} else {
 					tmp5 = v4
 				}
-				var v18 any = tmp5
-				_ = v18
+				var v19 any = tmp5
+				_ = v19
 				// let binding "file"
-				tmp19 := runtime.RT.Get(v18, kw_file)
-				var v20 any = tmp19
-				_ = v20
+				tmp20 := runtime.RT.Get(v19, kw_file)
+				var v21 any = tmp20
+				_ = v21
 				// let binding "line"
-				tmp21 := runtime.RT.Get(v18, kw_line)
-				var v22 any = tmp21
-				_ = v22
-				tmp23 := checkDerefVar(var_clojure_DOT_core_str)
-				var tmp24 lang.FnFunc1
-				tmp24 = lang.FnFunc1(func(p0 any) any {
-					v25 := p0
-					_ = v25
-					tmp26 := aotExternalFn22(v25)
-					tmp27 := kw_name.Invoke1(tmp26)
-					return tmp27
+				tmp22 := runtime.RT.Get(v19, kw_line)
+				var v23 any = tmp22
+				_ = v23
+				tmp24 := checkDerefVar(var_clojure_DOT_core_str)
+				var tmp25 lang.FnFunc1
+				tmp25 = lang.FnFunc1(func(p0 any) any {
+					v26 := p0
+					_ = v26
+					tmp27 := aotExternalFn22(v26)
+					tmp28 := kw_name.Invoke1(tmp27)
+					return tmp28
 				})
-				tmp25 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_)
-				tmp26 := aotExternalFn47(tmp24, tmp25)
-				tmp27 := aotExternalFn63(tmp26)
-				tmp28 := lang.Apply6(tmp23, tmp27, " (", v20, ":", v22, ")")
-				tmp3 = tmp28
+				tmp26 := checkDerefVar(var_clojure_DOT_test__STAR_testing_DASH_vars_STAR_)
+				tmp27 := aotExternalFn47(tmp25, tmp26)
+				tmp28 := aotExternalFn63(tmp27)
+				tmp29 := lang.Apply6(tmp24, tmp28, " (", v21, ":", v23, ")")
+				tmp3 = tmp29
 			} // end let
 			return tmp3
 		})

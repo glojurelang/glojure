@@ -155,6 +155,25 @@ func TestGenerateSharedStaticKeywordMapShapes(t *testing.T) {
 	}
 }
 
+func TestGenerateSeqTruthinessWithoutSequenceAllocation(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.seq-truthiness"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn has-items? [xs]
+		  (if (seq xs) true false))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate seq truthiness: %v", err)
+	}
+	if !strings.Contains(output.String(), "lang.IsSeqTruthy(") {
+		t.Fatalf("generated code did not specialize seq truthiness:\n%s", output.String())
+	}
+}
+
 func TestGenerateMutableRuntimeValues(t *testing.T) {
 	generator := NewGenerator(&bytes.Buffer{})
 

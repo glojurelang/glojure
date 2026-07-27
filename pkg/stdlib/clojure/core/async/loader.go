@@ -1897,25 +1897,27 @@ func LoadNS() {
 							tmp8 = tmp12
 						} else {
 							var tmp13 any
-							var tmp14 any
+							var tmp14 bool
 							if aotExternalDefault1 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion1 {
-								tmp14 = lang.Seq(v5)
+								tmp14 = lang.IsSeqTruthy(v5)
 							} else {
 								tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
-								tmp14 = lang.Apply1(tmp15, v5)
-							}
-							if lang.IsTruthy(tmp14) {
 								var tmp16 any
+								tmp16 = lang.Apply1(tmp15, v5)
+								tmp14 = lang.IsTruthy(tmp16)
+							}
+							if tmp14 {
+								var tmp17 any
 								if aotExternalDefault6 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion6 {
-									tmp16 = lang.First(v5)
+									tmp17 = lang.First(v5)
 								} else {
-									tmp17 := checkDerefVar(var_clojure_DOT_core_first)
-									tmp16 = lang.Apply1(tmp17, v5)
+									tmp18 := checkDerefVar(var_clojure_DOT_core_first)
+									tmp17 = lang.Apply1(tmp18, v5)
 								}
-								tmp13 = tmp16
+								tmp13 = tmp17
 							} else {
-								tmp18 := lang.Apply0(lang.NewMap)
-								tmp13 = tmp18
+								tmp19 := lang.Apply0(lang.NewMap)
+								tmp13 = tmp19
 							}
 							tmp8 = tmp13
 						}
@@ -1923,23 +1925,23 @@ func LoadNS() {
 					} else {
 						tmp6 = v5
 					}
-					var v19 any = tmp6
-					_ = v19
-					// let binding "opts"
-					var v20 any = v19
+					var v20 any = tmp6
 					_ = v20
-					tmp21 := var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion() == aotRootVersion11 && !var_clojure_DOT_core_DOT_async_do_DASH_alts.IsMacro()
-					var tmp22 any
-					if !tmp21 {
-						tmp22 = checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
-					}
+					// let binding "opts"
+					var v21 any = v20
+					_ = v21
+					tmp22 := var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion() == aotRootVersion11 && !var_clojure_DOT_core_DOT_async_do_DASH_alts.IsMacro()
 					var tmp23 any
-					if tmp21 {
-						tmp23 = aotDirectFn11(v2, v20)
-					} else {
-						tmp23 = lang.Apply2(tmp22, v2, v20)
+					if !tmp22 {
+						tmp23 = checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
 					}
-					tmp4 = tmp23
+					var tmp24 any
+					if tmp22 {
+						tmp24 = aotDirectFn11(v2, v21)
+					} else {
+						tmp24 = lang.Apply2(tmp23, v2, v21)
+					}
+					tmp4 = tmp24
 				} // end let
 				return tmp4
 			}),
@@ -1990,25 +1992,27 @@ func LoadNS() {
 							tmp8 = tmp12
 						} else {
 							var tmp13 any
-							var tmp14 any
+							var tmp14 bool
 							if aotExternalDefault1 && var_clojure_DOT_core_seq.RootVersion() == aotExternalRootVersion1 {
-								tmp14 = lang.Seq(v5)
+								tmp14 = lang.IsSeqTruthy(v5)
 							} else {
 								tmp15 := checkDerefVar(var_clojure_DOT_core_seq)
-								tmp14 = lang.Apply1(tmp15, v5)
-							}
-							if lang.IsTruthy(tmp14) {
 								var tmp16 any
+								tmp16 = lang.Apply1(tmp15, v5)
+								tmp14 = lang.IsTruthy(tmp16)
+							}
+							if tmp14 {
+								var tmp17 any
 								if aotExternalDefault6 && var_clojure_DOT_core_first.RootVersion() == aotExternalRootVersion6 {
-									tmp16 = lang.First(v5)
+									tmp17 = lang.First(v5)
 								} else {
-									tmp17 := checkDerefVar(var_clojure_DOT_core_first)
-									tmp16 = lang.Apply1(tmp17, v5)
+									tmp18 := checkDerefVar(var_clojure_DOT_core_first)
+									tmp17 = lang.Apply1(tmp18, v5)
 								}
-								tmp13 = tmp16
+								tmp13 = tmp17
 							} else {
-								tmp18 := lang.Apply0(lang.NewMap)
-								tmp13 = tmp18
+								tmp19 := lang.Apply0(lang.NewMap)
+								tmp13 = tmp19
 							}
 							tmp8 = tmp13
 						}
@@ -2016,23 +2020,23 @@ func LoadNS() {
 					} else {
 						tmp6 = v5
 					}
-					var v19 any = tmp6
-					_ = v19
-					// let binding "opts"
-					var v20 any = v19
+					var v20 any = tmp6
 					_ = v20
-					tmp21 := var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion() == aotRootVersion11 && !var_clojure_DOT_core_DOT_async_do_DASH_alts.IsMacro()
-					var tmp22 any
-					if !tmp21 {
-						tmp22 = checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
-					}
+					// let binding "opts"
+					var v21 any = v20
+					_ = v21
+					tmp22 := var_clojure_DOT_core_DOT_async_do_DASH_alts.RootVersion() == aotRootVersion11 && !var_clojure_DOT_core_DOT_async_do_DASH_alts.IsMacro()
 					var tmp23 any
-					if tmp21 {
-						tmp23 = aotDirectFn11(v2, v20)
-					} else {
-						tmp23 = lang.Apply2(tmp22, v2, v20)
+					if !tmp22 {
+						tmp23 = checkDerefVar(var_clojure_DOT_core_DOT_async_do_DASH_alts)
 					}
-					tmp4 = tmp23
+					var tmp24 any
+					if tmp22 {
+						tmp24 = aotDirectFn11(v2, v21)
+					} else {
+						tmp24 = lang.Apply2(tmp23, v2, v21)
+					}
+					tmp4 = tmp24
 				} // end let
 				return tmp4
 			}),
