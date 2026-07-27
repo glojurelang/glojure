@@ -239,7 +239,15 @@ func stringRuneByteRange(s string, start, end int) (byteStart, byteEnd int, ok b
 
 	if limit <= len(s) {
 		ascii := true
-		for i := 0; i < limit; i++ {
+		i := 0
+		for ; i+8 <= limit; i += 8 {
+			if s[i]|s[i+1]|s[i+2]|s[i+3]|
+				s[i+4]|s[i+5]|s[i+6]|s[i+7] >= utf8.RuneSelf {
+				ascii = false
+				break
+			}
+		}
+		for ; ascii && i < limit; i++ {
 			if s[i] >= utf8.RuneSelf {
 				ascii = false
 				break

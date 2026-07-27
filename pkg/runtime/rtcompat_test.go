@@ -35,6 +35,16 @@ func TestSubsUsesCharacterOffsets(t *testing.T) {
 	}
 }
 
+func TestSubsFindsUnicodeAfterASCIIBlock(t *testing.T) {
+	const s = "abcdefgh🙂z"
+	if got := RT.SubsEnd(s, 8, 9); got != "🙂" {
+		t.Fatalf("got %q, want emoji", got)
+	}
+	if got := RT.Subs(s, 9); got != "z" {
+		t.Fatalf("got %q, want z", got)
+	}
+}
+
 func BenchmarkSubsASCII(b *testing.B) {
 	s := strings.Repeat("abcdefghij", 1000)
 	b.ReportAllocs()
