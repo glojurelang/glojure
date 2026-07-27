@@ -625,17 +625,17 @@ func LoadNS() {
 				_ = v10
 				var tmp11 any
 				{ // let
-					// let binding "seq_364"
+					// let binding "seq_732"
 					tmp12 := lang.Seq(v2)
 					var v13 any = tmp12
 					_ = v13
-					// let binding "chunk_365"
+					// let binding "chunk_733"
 					var v14 any = nil
 					_ = v14
-					// let binding "count_366"
+					// let binding "count_734"
 					var v15 any = int64(0)
 					_ = v15
-					// let binding "i_367"
+					// let binding "i_735"
 					var v16 any = int64(0)
 					_ = v16
 					for {
@@ -697,7 +697,7 @@ func LoadNS() {
 								if lang.IsTruthy(v22) {
 									var tmp24 any
 									{ // let
-										// let binding "seq_364"
+										// let binding "seq_732"
 										var v25 any = v22
 										_ = v25
 										var tmp26 any

@@ -5,6 +5,7 @@ package walk
 import (
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
+	pkgmap4 "github.com/glojurelang/glojure/pkg/pkgmap"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
 	reflect "reflect"
 	sync "sync"
@@ -701,58 +702,62 @@ func LoadNS() {
 				var tmp13 any
 				tmp14 := lang.IsInstance[lang.IMapEntry](v4)
 				if lang.IsTruthy(tmp14) {
-					tmp15 := aotExternalFn19(v4)
-					tmp16 := lang.Apply1(v2, tmp15)
-					tmp17 := aotExternalFn20(v4)
-					tmp18 := lang.Apply1(v2, tmp17)
-					tmp19 := lang.Apply2(nil, tmp16, tmp18)
-					tmp20 := lang.Apply1(v3, tmp19)
-					tmp13 = tmp20
-				} else {
-					var tmp21 any
-					tmp22 := aotExternalFn6(v4)
-					if lang.IsTruthy(tmp22) {
-						tmp23 := aotExternalFn5(v2, v4)
-						tmp24 := aotExternalFn21(tmp23)
-						tmp25 := aotExternalFn17(v4)
-						tmp26 := aotExternalFn15(tmp24, tmp25)
-						tmp27 := lang.Apply1(v3, tmp26)
-						tmp21 = tmp27
-					} else {
-						var tmp28 any
-						tmp29 := lang.IsInstance[lang.IRecord](v4)
-						if lang.IsTruthy(tmp29) {
-							var tmp30 lang.FnFunc2
-							tmp30 = lang.FnFunc2(func(p0, p1 any) any {
-								v31 := p0
-								_ = v31
-								v32 := p1
-								_ = v32
-								tmp33 := lang.Apply1(v2, v32)
-								tmp34 := lang.ConjAny(v31, tmp33)
-								return tmp34
-							})
-							tmp31 := aotExternalFn22(tmp30, v4, v4)
-							tmp32 := lang.Apply1(v3, tmp31)
-							tmp28 = tmp32
-						} else {
-							var tmp33 any
-							tmp34 := aotExternalFn24(v4)
-							if lang.IsTruthy(tmp34) {
-								tmp35 := aotExternalFn25(v4)
-								tmp36 := aotExternalFn5(v2, v4)
-								tmp37 := aotExternalFn4(tmp35, tmp36)
-								tmp38 := lang.Apply1(v3, tmp37)
-								tmp33 = tmp38
-							} else {
-								tmp39 := lang.Apply1(v3, v4)
-								tmp33 = tmp39
-							}
-							tmp28 = tmp33
-						}
-						tmp21 = tmp28
+					tmp15, ok := pkgmap4.Get("clojure.lang.MapEntry.create")
+					if !ok {
+						panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.MapEntry.create"))
 					}
+					tmp16 := aotExternalFn19(v4)
+					tmp17 := lang.Apply1(v2, tmp16)
+					tmp18 := aotExternalFn20(v4)
+					tmp19 := lang.Apply1(v2, tmp18)
+					tmp20 := lang.Apply2(tmp15, tmp17, tmp19)
+					tmp21 := lang.Apply1(v3, tmp20)
 					tmp13 = tmp21
+				} else {
+					var tmp22 any
+					tmp23 := aotExternalFn6(v4)
+					if lang.IsTruthy(tmp23) {
+						tmp24 := aotExternalFn5(v2, v4)
+						tmp25 := aotExternalFn21(tmp24)
+						tmp26 := aotExternalFn17(v4)
+						tmp27 := aotExternalFn15(tmp25, tmp26)
+						tmp28 := lang.Apply1(v3, tmp27)
+						tmp22 = tmp28
+					} else {
+						var tmp29 any
+						tmp30 := lang.IsInstance[lang.IRecord](v4)
+						if lang.IsTruthy(tmp30) {
+							var tmp31 lang.FnFunc2
+							tmp31 = lang.FnFunc2(func(p0, p1 any) any {
+								v32 := p0
+								_ = v32
+								v33 := p1
+								_ = v33
+								tmp34 := lang.Apply1(v2, v33)
+								tmp35 := lang.ConjAny(v32, tmp34)
+								return tmp35
+							})
+							tmp32 := aotExternalFn22(tmp31, v4, v4)
+							tmp33 := lang.Apply1(v3, tmp32)
+							tmp29 = tmp33
+						} else {
+							var tmp34 any
+							tmp35 := aotExternalFn24(v4)
+							if lang.IsTruthy(tmp35) {
+								tmp36 := aotExternalFn25(v4)
+								tmp37 := aotExternalFn5(v2, v4)
+								tmp38 := aotExternalFn4(tmp36, tmp37)
+								tmp39 := lang.Apply1(v3, tmp38)
+								tmp34 = tmp39
+							} else {
+								tmp40 := lang.Apply1(v3, v4)
+								tmp34 = tmp40
+							}
+							tmp29 = tmp34
+						}
+						tmp22 = tmp29
+					}
+					tmp13 = tmp22
 				}
 				tmp5 = tmp13
 			}

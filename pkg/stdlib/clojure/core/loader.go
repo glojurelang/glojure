@@ -3,22 +3,23 @@
 package core
 
 import (
-	errors5 "errors"
+	errors6 "errors"
 	fmt "fmt"
 	lang "github.com/glojurelang/glojure/pkg/lang"
+	pkgmap5 "github.com/glojurelang/glojure/pkg/pkgmap"
 	runtime "github.com/glojurelang/glojure/pkg/runtime"
-	uuid10 "github.com/google/uuid"
+	uuid11 "github.com/google/uuid"
 	math4 "math"
-	big6 "math/big"
-	rand13 "math/rand"
-	url14 "net/url"
+	big7 "math/big"
+	rand14 "math/rand"
+	url15 "net/url"
 	reflect "reflect"
-	regexp12 "regexp"
-	runtime11 "runtime"
-	strconv9 "strconv"
-	strings8 "strings"
+	regexp13 "regexp"
+	runtime12 "runtime"
+	strconv10 "strconv"
+	strings9 "strings"
 	sync "sync"
-	time7 "time"
+	time8 "time"
 )
 
 var aotDirectFn0 lang.ArityFn
@@ -5173,8 +5174,12 @@ func LoadNS() {
 			_ = v2
 			tmp3 := aotDirectFn369.Invoke1("WARNING: add-classpath is deprecated")
 			_ = tmp3
-			tmp4 := lang.Apply1(nil, v2)
-			return tmp4
+			tmp4, ok := pkgmap5.Get("clojure.lang.RT.addURL")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.addURL"))
+			}
+			tmp5 := lang.Apply1(tmp4, v2)
+			return tmp5
 		})
 		aotDirectFn21 = tmp1
 		var_clojure_DOT_core_add_DASH_classpath = ns.InternWithValue(tmp0, tmp1, true)
@@ -5544,13 +5549,17 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := runtime.RT.BooleanCast(v4)
-			tmp6, _ := lang.FieldOrMethod(nil, "setBoolean")
-			if reflect.TypeOf(tmp6).Kind() != reflect.Func {
+			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
+			}
+			tmp6 := runtime.RT.BooleanCast(v4)
+			tmp7, _ := lang.FieldOrMethod(tmp5, "setBoolean")
+			if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("setBoolean is not a function")))
 			}
-			tmp7 := lang.Apply3(tmp6, v2, v3, tmp5)
-			_ = tmp7
+			tmp8 := lang.Apply3(tmp7, v2, v3, tmp6)
+			_ = tmp8
 			return v4
 		})
 		tmp1 = lang.NewArityFn(
@@ -5592,13 +5601,17 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := runtime.RT.ByteCast(v4)
-			tmp6, _ := lang.FieldOrMethod(nil, "setByte")
-			if reflect.TypeOf(tmp6).Kind() != reflect.Func {
+			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
+			}
+			tmp6 := runtime.RT.ByteCast(v4)
+			tmp7, _ := lang.FieldOrMethod(tmp5, "setByte")
+			if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("setByte is not a function")))
 			}
-			tmp7 := lang.Apply3(tmp6, v2, v3, tmp5)
-			_ = tmp7
+			tmp8 := lang.Apply3(tmp7, v2, v3, tmp6)
+			_ = tmp8
 			return v4
 		})
 		tmp1 = lang.NewArityFn(
@@ -5640,13 +5653,17 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := runtime.RT.CharCast(v4)
-			tmp6, _ := lang.FieldOrMethod(nil, "setChar")
-			if reflect.TypeOf(tmp6).Kind() != reflect.Func {
+			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
+			}
+			tmp6 := runtime.RT.CharCast(v4)
+			tmp7, _ := lang.FieldOrMethod(tmp5, "setChar")
+			if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("setChar is not a function")))
 			}
-			tmp7 := lang.Apply3(tmp6, v2, v3, tmp5)
-			_ = tmp7
+			tmp8 := lang.Apply3(tmp7, v2, v3, tmp6)
+			_ = tmp8
 			return v4
 		})
 		tmp1 = lang.NewArityFn(
@@ -5688,13 +5705,17 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := aotDirectFn146(v4)
-			tmp6, _ := lang.FieldOrMethod(nil, "setDouble")
-			if reflect.TypeOf(tmp6).Kind() != reflect.Func {
+			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
+			}
+			tmp6 := aotDirectFn146(v4)
+			tmp7, _ := lang.FieldOrMethod(tmp5, "setDouble")
+			if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("setDouble is not a function")))
 			}
-			tmp7 := lang.Apply3(tmp6, v2, v3, tmp5)
-			_ = tmp7
+			tmp8 := lang.Apply3(tmp7, v2, v3, tmp6)
+			_ = tmp8
 			return v4
 		})
 		tmp1 = lang.NewArityFn(
@@ -5736,13 +5757,17 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := aotDirectFn186(v4)
-			tmp6, _ := lang.FieldOrMethod(nil, "setFloat")
-			if reflect.TypeOf(tmp6).Kind() != reflect.Func {
+			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
+			}
+			tmp6 := aotDirectFn186(v4)
+			tmp7, _ := lang.FieldOrMethod(tmp5, "setFloat")
+			if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("setFloat is not a function")))
 			}
-			tmp7 := lang.Apply3(tmp6, v2, v3, tmp5)
-			_ = tmp7
+			tmp8 := lang.Apply3(tmp7, v2, v3, tmp6)
+			_ = tmp8
 			return v4
 		})
 		tmp1 = lang.NewArityFn(
@@ -5784,13 +5809,17 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := runtime.RT.IntCast(v4)
-			tmp6, _ := lang.FieldOrMethod(nil, "setInt")
-			if reflect.TypeOf(tmp6).Kind() != reflect.Func {
+			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
+			}
+			tmp6 := runtime.RT.IntCast(v4)
+			tmp7, _ := lang.FieldOrMethod(tmp5, "setInt")
+			if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("setInt is not a function")))
 			}
-			tmp7 := lang.Apply3(tmp6, v2, v3, tmp5)
-			_ = tmp7
+			tmp8 := lang.Apply3(tmp7, v2, v3, tmp6)
+			_ = tmp8
 			return v4
 		})
 		tmp1 = lang.NewArityFn(
@@ -5832,13 +5861,17 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := aotDirectFn264(v4)
-			tmp6, _ := lang.FieldOrMethod(nil, "setLong")
-			if reflect.TypeOf(tmp6).Kind() != reflect.Func {
+			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
+			}
+			tmp6 := aotDirectFn264(v4)
+			tmp7, _ := lang.FieldOrMethod(tmp5, "setLong")
+			if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("setLong is not a function")))
 			}
-			tmp7 := lang.Apply3(tmp6, v2, v3, tmp5)
-			_ = tmp7
+			tmp8 := lang.Apply3(tmp7, v2, v3, tmp6)
+			_ = tmp8
 			return v4
 		})
 		tmp1 = lang.NewArityFn(
@@ -5880,13 +5913,17 @@ func LoadNS() {
 			_ = v3
 			v4 := p2
 			_ = v4
-			tmp5 := aotDirectFn464(v4)
-			tmp6, _ := lang.FieldOrMethod(nil, "setShort")
-			if reflect.TypeOf(tmp6).Kind() != reflect.Func {
+			tmp5, ok := pkgmap5.Get("clojure.core.Array")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.Array"))
+			}
+			tmp6 := aotDirectFn464(v4)
+			tmp7, _ := lang.FieldOrMethod(tmp5, "setShort")
+			if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("setShort is not a function")))
 			}
-			tmp7 := lang.Apply3(tmp6, v2, v3, tmp5)
-			_ = tmp7
+			tmp8 := lang.Apply3(tmp7, v2, v3, tmp6)
+			_ = tmp8
 			return v4
 		})
 		tmp1 = lang.NewArityFn(
@@ -6267,228 +6304,18 @@ func LoadNS() {
 				var v2 any = rest
 				_ = v2
 				var tmp3 any
-				tmp4 := lang.Apply0(nil)
-				if lang.IsTruthy(tmp4) {
-					panic("unimplemented: new with non-constant class type")
-				} else {
-					var tmp5 any
-					tmp6 := checkDerefVar(var_clojure_DOT_core__STAR_agent_STAR_)
-					if lang.IsTruthy(tmp6) {
-						tmp7 := lang.Apply1(errors5.New, "Can't await in agent action")
-						panic(tmp7)
-					} else {
-					}
-					_ = tmp5
-					var tmp8 any
-					{ // let
-						// let binding "latch"
-						var v10 any = nil
-						_ = v10
-						// let binding "count-down"
-						var tmp11 lang.FnFunc1
-						tmp11 = lang.FnFunc1(func(p0 any) any {
-							v12 := p0
-							_ = v12
-							tmp13, _ := lang.FieldOrMethod(v10, "countDown")
-							if reflect.TypeOf(tmp13).Kind() != reflect.Func {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("countDown is not a function")))
-							}
-							tmp14 := lang.Apply0(tmp13)
-							_ = tmp14
-							return v12
-						})
-						var v12 any = tmp11
-						_ = v12
-						var tmp13 any
-						{ // let
-							// let binding "seq_364"
-							tmp14 := aotDirectFn447(v2)
-							var v15 any = tmp14
-							_ = v15
-							// let binding "chunk_365"
-							var v16 any = nil
-							_ = v16
-							// let binding "count_366"
-							var v17 any = int64(0)
-							_ = v17
-							// let binding "i_367"
-							var v18 any = int64(0)
-							_ = v18
-							for {
-								var tmp19 any
-								tmp20 := lang.Numbers.Lt(v18, v17)
-								if lang.IsTruthy(tmp20) {
-									var tmp21 any
-									{ // let
-										// let binding "agent"
-										tmp22 := v16.(interface{ Nth(int) any }).Nth(lang.IntCast(v18))
-										var v23 any = tmp22
-										_ = v23
-										tmp24 := aotDirectFn444.Invoke2(v23, v12)
-										_ = tmp24
-										var tmp25 any = v15
-										var tmp26 any = v16
-										var tmp27 any = v17
-										tmp29 := lang.Numbers.Unchecked_inc(v18)
-										var tmp28 any = tmp29
-										v15 = tmp25
-										v16 = tmp26
-										v17 = tmp27
-										v18 = tmp28
-										continue
-									} // end let
-									tmp19 = tmp21
-								} else {
-									var tmp22 any
-									{ // let
-										// let binding "temp__0__auto__"
-										tmp23 := aotDirectFn447(v15)
-										var v24 any = tmp23
-										_ = v24
-										var tmp25 any
-										if lang.IsTruthy(v24) {
-											var tmp26 any
-											{ // let
-												// let binding "seq_364"
-												var v27 any = v24
-												_ = v27
-												var tmp28 any
-												tmp29 := aotDirectFn99(v27)
-												if lang.IsTruthy(tmp29) {
-													var tmp30 any
-													{ // let
-														// let binding "c__0__auto__"
-														tmp31 := aotDirectFn96(v27)
-														var v32 any = tmp31
-														_ = v32
-														tmp34 := aotDirectFn98(v27)
-														var tmp33 any = tmp34
-														var tmp35 any = v32
-														tmp37 := aotDirectFn118(v32)
-														tmp38 := runtime.RT.IntCast(tmp37)
-														var tmp36 any = tmp38
-														tmp40 := runtime.RT.IntCast(int64(0))
-														var tmp39 any = tmp40
-														v15 = tmp33
-														v16 = tmp35
-														v17 = tmp36
-														v18 = tmp39
-														continue
-													} // end let
-													tmp28 = tmp30
-												} else {
-													var tmp31 any
-													{ // let
-														// let binding "agent"
-														tmp32 := aotDirectFn183(v27)
-														var v33 any = tmp32
-														_ = v33
-														tmp34 := aotDirectFn444.Invoke2(v33, v12)
-														_ = tmp34
-														tmp36 := aotDirectFn299(v27)
-														var tmp35 any = tmp36
-														var tmp37 any = nil
-														var tmp38 any = int64(0)
-														var tmp39 any = int64(0)
-														v15 = tmp35
-														v16 = tmp37
-														v17 = tmp38
-														v18 = tmp39
-														continue
-													} // end let
-													tmp28 = tmp31
-												}
-												tmp26 = tmp28
-											} // end let
-											tmp25 = tmp26
-										} else {
-										}
-										tmp22 = tmp25
-									} // end let
-									tmp19 = tmp22
-								}
-								tmp13 = tmp19
-								break
-							}
-						} // end let
-						_ = tmp13
-						tmp14, _ := lang.FieldOrMethod(v10, "await")
-						if reflect.TypeOf(tmp14).Kind() != reflect.Func {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("await is not a function")))
-						}
-						tmp15 := lang.Apply0(tmp14)
-						tmp8 = tmp15
-					} // end let
-					tmp3 = tmp8
+				tmp4, ok := pkgmap5.Get("clojure.lang.LockingTransaction.isRunning")
+				if !ok {
+					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.LockingTransaction.isRunning"))
 				}
-				return tmp3
-			}),
-			0,
-		)
-		aotDirectFn52 = tmp1
-		var_clojure_DOT_core_await = ns.InternWithValue(tmp0, tmp1, true)
-		var_clojure_DOT_core_await.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(3289), kw_column, int(7), kw_end_DASH_line, int(3289), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_agents)), kw_doc, "Blocks the current thread (indefinitely!) until all actions\n  dispatched thus far, from this thread or agent, to the agent(s) have\n  occurred.  Will block on failed agents.  Will never return if\n  a failed agent is restarted with :clear-actions true or shutdown-agents was called.", kw_added, "1.0", kw_static, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
-		})
-	}
-	// await1
-	{
-		tmp0 := sym_await1
-		var tmp1 lang.FnFunc1
-		tmp1 = lang.FnFunc1(func(p0 any) any {
-			v2 := p0
-			_ = v2
-			var tmp3 any
-			tmp4, ok := lang.FieldOrMethod(v2, "getQueueCount")
-			if !ok {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v2, "getQueueCount")))
-			}
-			var tmp5 any
-			switch reflect.TypeOf(tmp4).Kind() {
-			case reflect.Func:
-				tmp5 = lang.Apply(tmp4, nil)
-			default:
-				tmp5 = tmp4
-			}
-			tmp6 := lang.Numbers.IsPos(tmp5)
-			if lang.IsTruthy(tmp6) {
-				tmp7 := aotDirectFn52.Invoke1(v2)
-				tmp3 = tmp7
-			} else {
-			}
-			_ = tmp3
-			return v2
-		})
-		aotDirectFn54 = tmp1
-		var_clojure_DOT_core_await1 = ns.InternWithValue(tmp0, tmp1, true)
-		var_clojure_DOT_core_await1.SetMetaLazy(func() lang.IPersistentMap {
-			return lang.NewMapUniqueKeys(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(3306), kw_column, int(7), kw_end_DASH_line, int(3306), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
-		})
-	}
-	// await-for
-	{
-		tmp0 := sym_await_DASH_for
-		var tmp1 lang.ArityFn
-		tmp1 = lang.NewArityFn(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
-				v2 := args[0]
-				_ = v2
-				var v3 any = rest
-				_ = v3
-				var tmp4 any
-				tmp5 := lang.Apply0(nil)
+				tmp5 := lang.Apply0(tmp4)
 				if lang.IsTruthy(tmp5) {
 					panic("unimplemented: new with non-constant class type")
 				} else {
 					var tmp6 any
 					tmp7 := checkDerefVar(var_clojure_DOT_core__STAR_agent_STAR_)
 					if lang.IsTruthy(tmp7) {
-						tmp8 := lang.Apply1(errors5.New, "Can't await in agent action")
+						tmp8 := lang.Apply1(errors6.New, "Can't await in agent action")
 						panic(tmp8)
 					} else {
 					}
@@ -6515,17 +6342,17 @@ func LoadNS() {
 						_ = v13
 						var tmp14 any
 						{ // let
-							// let binding "seq_368"
-							tmp15 := aotDirectFn447(v3)
+							// let binding "seq_364"
+							tmp15 := aotDirectFn447(v2)
 							var v16 any = tmp15
 							_ = v16
-							// let binding "chunk_369"
+							// let binding "chunk_365"
 							var v17 any = nil
 							_ = v17
-							// let binding "count_370"
+							// let binding "count_366"
 							var v18 any = int64(0)
 							_ = v18
-							// let binding "i_371"
+							// let binding "i_367"
 							var v19 any = int64(0)
 							_ = v19
 							for {
@@ -6563,7 +6390,7 @@ func LoadNS() {
 										if lang.IsTruthy(v25) {
 											var tmp27 any
 											{ // let
-												// let binding "seq_368"
+												// let binding "seq_364"
 												var v28 any = v25
 												_ = v28
 												var tmp29 any
@@ -6626,25 +6453,243 @@ func LoadNS() {
 							}
 						} // end let
 						_ = tmp14
-						tmp15, ok := lang.FieldOrMethod(nil, "MILLISECONDS")
+						tmp15, _ := lang.FieldOrMethod(v11, "await")
+						if reflect.TypeOf(tmp15).Kind() != reflect.Func {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("await is not a function")))
+						}
+						tmp16 := lang.Apply0(tmp15)
+						tmp9 = tmp16
+					} // end let
+					tmp3 = tmp9
+				}
+				return tmp3
+			}),
+			0,
+		)
+		aotDirectFn52 = tmp1
+		var_clojure_DOT_core_await = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_core_await.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(3289), kw_column, int(7), kw_end_DASH_line, int(3289), kw_end_DASH_column, int(11), kw_arglists, lang.NewList(lang.NewVector(sym__AMP_, sym_agents)), kw_doc, "Blocks the current thread (indefinitely!) until all actions\n  dispatched thus far, from this thread or agent, to the agent(s) have\n  occurred.  Will block on failed agents.  Will never return if\n  a failed agent is restarted with :clear-actions true or shutdown-agents was called.", kw_added, "1.0", kw_static, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
+		})
+	}
+	// await1
+	{
+		tmp0 := sym_await1
+		var tmp1 lang.FnFunc1
+		tmp1 = lang.FnFunc1(func(p0 any) any {
+			v2 := p0
+			_ = v2
+			var tmp3 any
+			tmp4, ok := lang.FieldOrMethod(v2, "getQueueCount")
+			if !ok {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v2, "getQueueCount")))
+			}
+			var tmp5 any
+			switch reflect.TypeOf(tmp4).Kind() {
+			case reflect.Func:
+				tmp5 = lang.Apply(tmp4, nil)
+			default:
+				tmp5 = tmp4
+			}
+			tmp6 := lang.Numbers.IsPos(tmp5)
+			if lang.IsTruthy(tmp6) {
+				tmp7 := aotDirectFn52.Invoke1(v2)
+				tmp3 = tmp7
+			} else {
+			}
+			_ = tmp3
+			return v2
+		})
+		aotDirectFn54 = tmp1
+		var_clojure_DOT_core_await1 = ns.InternWithValue(tmp0, tmp1, true)
+		var_clojure_DOT_core_await1.SetMetaLazy(func() lang.IPersistentMap {
+			return lang.NewMapUniqueKeys(kw_static, true, kw_file, "clojure/core.glj", kw_line, int(3306), kw_column, int(7), kw_end_DASH_line, int(3306), kw_end_DASH_column, int(21), kw_arglists, lang.NewList(lang.NewVector(sym_a)), kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
+		})
+	}
+	// await-for
+	{
+		tmp0 := sym_await_DASH_for
+		var tmp1 lang.ArityFn
+		tmp1 = lang.NewArityFn(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			lang.NewVariadicFn(1, func(args []any, rest lang.ISeq) any {
+				v2 := args[0]
+				_ = v2
+				var v3 any = rest
+				_ = v3
+				var tmp4 any
+				tmp5, ok := pkgmap5.Get("clojure.lang.LockingTransaction.isRunning")
+				if !ok {
+					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.LockingTransaction.isRunning"))
+				}
+				tmp6 := lang.Apply0(tmp5)
+				if lang.IsTruthy(tmp6) {
+					panic("unimplemented: new with non-constant class type")
+				} else {
+					var tmp7 any
+					tmp8 := checkDerefVar(var_clojure_DOT_core__STAR_agent_STAR_)
+					if lang.IsTruthy(tmp8) {
+						tmp9 := lang.Apply1(errors6.New, "Can't await in agent action")
+						panic(tmp9)
+					} else {
+					}
+					_ = tmp7
+					var tmp10 any
+					{ // let
+						// let binding "latch"
+						var v12 any = nil
+						_ = v12
+						// let binding "count-down"
+						var tmp13 lang.FnFunc1
+						tmp13 = lang.FnFunc1(func(p0 any) any {
+							v14 := p0
+							_ = v14
+							tmp15, _ := lang.FieldOrMethod(v12, "countDown")
+							if reflect.TypeOf(tmp15).Kind() != reflect.Func {
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("countDown is not a function")))
+							}
+							tmp16 := lang.Apply0(tmp15)
+							_ = tmp16
+							return v14
+						})
+						var v14 any = tmp13
+						_ = v14
+						var tmp15 any
+						{ // let
+							// let binding "seq_368"
+							tmp16 := aotDirectFn447(v3)
+							var v17 any = tmp16
+							_ = v17
+							// let binding "chunk_369"
+							var v18 any = nil
+							_ = v18
+							// let binding "count_370"
+							var v19 any = int64(0)
+							_ = v19
+							// let binding "i_371"
+							var v20 any = int64(0)
+							_ = v20
+							for {
+								var tmp21 any
+								tmp22 := lang.Numbers.Lt(v20, v19)
+								if lang.IsTruthy(tmp22) {
+									var tmp23 any
+									{ // let
+										// let binding "agent"
+										tmp24 := v18.(interface{ Nth(int) any }).Nth(lang.IntCast(v20))
+										var v25 any = tmp24
+										_ = v25
+										tmp26 := aotDirectFn444.Invoke2(v25, v14)
+										_ = tmp26
+										var tmp27 any = v17
+										var tmp28 any = v18
+										var tmp29 any = v19
+										tmp31 := lang.Numbers.Unchecked_inc(v20)
+										var tmp30 any = tmp31
+										v17 = tmp27
+										v18 = tmp28
+										v19 = tmp29
+										v20 = tmp30
+										continue
+									} // end let
+									tmp21 = tmp23
+								} else {
+									var tmp24 any
+									{ // let
+										// let binding "temp__0__auto__"
+										tmp25 := aotDirectFn447(v17)
+										var v26 any = tmp25
+										_ = v26
+										var tmp27 any
+										if lang.IsTruthy(v26) {
+											var tmp28 any
+											{ // let
+												// let binding "seq_368"
+												var v29 any = v26
+												_ = v29
+												var tmp30 any
+												tmp31 := aotDirectFn99(v29)
+												if lang.IsTruthy(tmp31) {
+													var tmp32 any
+													{ // let
+														// let binding "c__0__auto__"
+														tmp33 := aotDirectFn96(v29)
+														var v34 any = tmp33
+														_ = v34
+														tmp36 := aotDirectFn98(v29)
+														var tmp35 any = tmp36
+														var tmp37 any = v34
+														tmp39 := aotDirectFn118(v34)
+														tmp40 := runtime.RT.IntCast(tmp39)
+														var tmp38 any = tmp40
+														tmp42 := runtime.RT.IntCast(int64(0))
+														var tmp41 any = tmp42
+														v17 = tmp35
+														v18 = tmp37
+														v19 = tmp38
+														v20 = tmp41
+														continue
+													} // end let
+													tmp30 = tmp32
+												} else {
+													var tmp33 any
+													{ // let
+														// let binding "agent"
+														tmp34 := aotDirectFn183(v29)
+														var v35 any = tmp34
+														_ = v35
+														tmp36 := aotDirectFn444.Invoke2(v35, v14)
+														_ = tmp36
+														tmp38 := aotDirectFn299(v29)
+														var tmp37 any = tmp38
+														var tmp39 any = nil
+														var tmp40 any = int64(0)
+														var tmp41 any = int64(0)
+														v17 = tmp37
+														v18 = tmp39
+														v19 = tmp40
+														v20 = tmp41
+														continue
+													} // end let
+													tmp30 = tmp33
+												}
+												tmp28 = tmp30
+											} // end let
+											tmp27 = tmp28
+										} else {
+										}
+										tmp24 = tmp27
+									} // end let
+									tmp21 = tmp24
+								}
+								tmp15 = tmp21
+								break
+							}
+						} // end let
+						_ = tmp15
+						tmp16, ok := lang.FieldOrMethod(nil, "MILLISECONDS")
 						if !ok {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", nil, "MILLISECONDS")))
 						}
-						var tmp16 any
-						switch reflect.TypeOf(tmp15).Kind() {
+						var tmp17 any
+						switch reflect.TypeOf(tmp16).Kind() {
 						case reflect.Func:
-							tmp16 = lang.Apply(tmp15, nil)
+							tmp17 = lang.Apply(tmp16, nil)
 						default:
-							tmp16 = tmp15
+							tmp17 = tmp16
 						}
-						tmp17, _ := lang.FieldOrMethod(v11, "await")
-						if reflect.TypeOf(tmp17).Kind() != reflect.Func {
+						tmp18, _ := lang.FieldOrMethod(v12, "await")
+						if reflect.TypeOf(tmp18).Kind() != reflect.Func {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("await is not a function")))
 						}
-						tmp18 := lang.Apply2(tmp17, v2, tmp16)
-						tmp9 = tmp18
+						tmp19 := lang.Apply2(tmp18, v2, tmp17)
+						tmp10 = tmp19
 					} // end let
-					tmp4 = tmp9
+					tmp4 = tmp10
 				}
 				return tmp4
 			}),
@@ -6726,7 +6771,7 @@ func LoadNS() {
 							tmp12 = tmp14
 						} else {
 							var tmp15 any
-							tmp16 := lang.IsInstance[*big6.Int](v2)
+							tmp16 := lang.IsInstance[*big7.Int](v2)
 							if lang.IsTruthy(tmp16) {
 								tmp17 := lang.Apply1(lang.NewBigDecimalFromBigInt, v2)
 								tmp15 = tmp17
@@ -6797,7 +6842,7 @@ func LoadNS() {
 				tmp3 = v2
 			} else {
 				var tmp5 any
-				tmp6 := lang.IsInstance[*big6.Int](v2)
+				tmp6 := lang.IsInstance[*big7.Int](v2)
 				if lang.IsTruthy(tmp6) {
 					tmp7 := lang.Apply1(lang.NewBigIntFromGoBigInt, v2)
 					tmp5 = tmp7
@@ -6805,7 +6850,7 @@ func LoadNS() {
 					var tmp8 any
 					tmp9 := aotDirectFn127(v2)
 					if lang.IsTruthy(tmp9) {
-						tmp10 := v2.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
+						tmp10 := v2.(interface{ ToBigInteger() *big7.Int }).ToBigInteger()
 						tmp11 := aotDirectFn57(tmp10)
 						tmp8 = tmp11
 					} else {
@@ -6843,7 +6888,7 @@ func LoadNS() {
 							var tmp15 any
 							tmp16 := aotDirectFn386(v2)
 							if lang.IsTruthy(tmp16) {
-								tmp17 := v2.(interface{ BigIntegerValue() *big6.Int }).BigIntegerValue()
+								tmp17 := v2.(interface{ BigIntegerValue() *big7.Int }).BigIntegerValue()
 								tmp18 := aotDirectFn57(tmp17)
 								tmp15 = tmp18
 							} else {
@@ -6908,20 +6953,20 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := lang.IsInstance[*big6.Int](v2)
+			tmp4 := lang.IsInstance[*big7.Int](v2)
 			if lang.IsTruthy(tmp4) {
 				tmp3 = v2
 			} else {
 				var tmp5 any
 				tmp6 := lang.IsInstance[*lang.BigInt](v2)
 				if lang.IsTruthy(tmp6) {
-					tmp7 := v2.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
+					tmp7 := v2.(interface{ ToBigInteger() *big7.Int }).ToBigInteger()
 					tmp5 = tmp7
 				} else {
 					var tmp8 any
 					tmp9 := aotDirectFn127(v2)
 					if lang.IsTruthy(tmp9) {
-						tmp10 := v2.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
+						tmp10 := v2.(interface{ ToBigInteger() *big7.Int }).ToBigInteger()
 						tmp8 = tmp10
 					} else {
 						var tmp11 any
@@ -6945,14 +6990,14 @@ func LoadNS() {
 							var tmp17 any
 							tmp18 := aotDirectFn386(v2)
 							if lang.IsTruthy(tmp18) {
-								tmp19 := v2.(interface{ BigIntegerValue() *big6.Int }).BigIntegerValue()
+								tmp19 := v2.(interface{ BigIntegerValue() *big7.Int }).BigIntegerValue()
 								tmp17 = tmp19
 							} else {
 								var tmp20 any
 								tmp21 := aotDirectFn323(v2)
 								if lang.IsTruthy(tmp21) {
 									tmp22 := aotDirectFn264(v2)
-									tmp23 := lang.Apply1(big6.NewInt, tmp22)
+									tmp23 := lang.Apply1(big7.NewInt, tmp22)
 									tmp20 = tmp23
 								} else {
 									var tmp24 any
@@ -6976,7 +7021,7 @@ func LoadNS() {
 											tmp34 := lang.Apply1(lang.NewError, tmp33)
 											panic(tmp34)
 										} else {
-											tmp35 := v29.(interface{ ToBigInteger() *big6.Int }).ToBigInteger()
+											tmp35 := v29.(interface{ ToBigInteger() *big7.Int }).ToBigInteger()
 											tmp32 = tmp35
 										}
 										tmp24 = tmp32
@@ -6998,7 +7043,7 @@ func LoadNS() {
 		aotDirectFn58 = tmp1
 		var_clojure_DOT_core_biginteger = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_biginteger.SetMetaLazy(func() lang.IPersistentMap {
-			tmp2 := reflect.TypeOf((*big6.Int)(nil))
+			tmp2 := reflect.TypeOf((*big7.Int)(nil))
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(3681), kw_column, int(7), kw_end_DASH_line, int(3681), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector(sym_x)), kw_doc, "Coerce to BigInteger", kw_tag, tmp2, kw_added, "1.0", kw_static, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
@@ -7337,8 +7382,12 @@ func LoadNS() {
 				default:
 					tmp7 = tmp6
 				}
-				tmp8 := aotDirectFn9Arity2(tmp7, nil)
-				tmp3 = tmp8
+				tmp8, ok := pkgmap5.Get("Byte.TYPE")
+				if !ok {
+					panic(lang.NewIllegalArgumentError("unable to resolve host form: Byte.TYPE"))
+				}
+				tmp9 := aotDirectFn9Arity2(tmp7, tmp8)
+				tmp3 = tmp9
 			}
 			return tmp3
 		})
@@ -8475,13 +8524,13 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := v2.(interface{ Denominator() *big6.Int }).Denominator()
+			tmp3 := v2.(interface{ Denominator() *big7.Int }).Denominator()
 			return tmp3
 		})
 		aotDirectFn131 = tmp1
 		var_clojure_DOT_core_denominator = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_denominator.SetMetaLazy(func() lang.IPersistentMap {
-			tmp2 := reflect.TypeOf((*big6.Int)(nil))
+			tmp2 := reflect.TypeOf((*big7.Int)(nil))
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(3627), kw_column, int(7), kw_end_DASH_line, int(3627), kw_end_DASH_column, int(17), kw_arglists, lang.NewList(lang.NewVector(sym_r)), kw_doc, "Returns the denominator part of a Ratio.", kw_tag, tmp2, kw_added, "1.2", kw_static, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
@@ -8698,7 +8747,7 @@ func LoadNS() {
 				if reflect.TypeOf(tmp7).Kind() != reflect.Func {
 					panic(lang.NewIllegalArgumentError(fmt.Sprintf("Get is not a function")))
 				}
-				tmp8 := lang.Apply2(tmp7, v3, time7.Millisecond)
+				tmp8 := lang.Apply2(tmp7, v3, time8.Millisecond)
 				tmp5 = tmp8
 			}()
 			return tmp5
@@ -9773,24 +9822,28 @@ func LoadNS() {
 						if lang.IsTruthy(tmp10) {
 							tmp9 = v2
 						} else {
-							tmp11 := lang.Apply1(nil, v2)
-							tmp9 = tmp11
+							tmp11, ok := pkgmap5.Get("Math.ceil")
+							if !ok {
+								panic(lang.NewIllegalArgumentError("unable to resolve host form: Math.ceil"))
+							}
+							tmp12 := lang.Apply1(tmp11, v2)
+							tmp9 = tmp12
 						}
-						tmp12 := v3.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp9))
-						tmp7 = tmp12
-					} else {
-						tmp13 := aotDirectFn447(v3)
+						tmp13 := v3.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp9))
 						tmp7 = tmp13
-					}
-					var v14 any = tmp7
-					_ = v14
-					var tmp15 any
-					if lang.IsTruthy(v14) {
-						tmp15 = v14
 					} else {
-						tmp15 = lang.NewList()
+						tmp14 := aotDirectFn447(v3)
+						tmp7 = tmp14
 					}
-					tmp6 = tmp15
+					var v15 any = tmp7
+					_ = v15
+					var tmp16 any
+					if lang.IsTruthy(v15) {
+						tmp16 = v15
+					} else {
+						tmp16 = lang.NewList()
+					}
+					tmp6 = tmp16
 				} // end let
 				tmp4 = tmp6
 			} else {
@@ -10242,8 +10295,12 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply1(nil, v2)
-			return tmp3
+			tmp3, ok := pkgmap5.Get("clojure.lang.EnumerationSeq.create")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.EnumerationSeq.create"))
+			}
+			tmp4 := lang.Apply1(tmp3, v2)
+			return tmp4
 		})
 		aotDirectFn161 = tmp1
 		var_clojure_DOT_core_enumeration_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
@@ -11385,7 +11442,7 @@ func LoadNS() {
 								if lang.IsTruthy(tmp21) {
 								} else {
 									tmp22 := aotDirectFn490.Invoke2(v17, " is not a protocol")
-									tmp23 := lang.Apply1(errors5.New, tmp22)
+									tmp23 := lang.Apply1(errors6.New, tmp22)
 									panic(tmp23)
 								}
 								_ = tmp20
@@ -11508,7 +11565,7 @@ func LoadNS() {
 												if lang.IsTruthy(tmp31) {
 												} else {
 													tmp32 := aotDirectFn490.Invoke2(v27, " is not a protocol")
-													tmp33 := lang.Apply1(errors5.New, tmp32)
+													tmp33 := lang.Apply1(errors6.New, tmp32)
 													panic(tmp33)
 												}
 												_ = tmp30
@@ -12059,17 +12116,25 @@ func LoadNS() {
 				var tmp5 any
 				tmp6 := aotDirectFn506(v2)
 				if lang.IsTruthy(tmp6) {
-					tmp7 := lang.Apply1(nil, v2)
-					tmp5 = tmp7
+					tmp7, ok := pkgmap5.Get("clojure.lang.Keyword.find")
+					if !ok {
+						panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Keyword.find"))
+					}
+					tmp8 := lang.Apply1(tmp7, v2)
+					tmp5 = tmp8
 				} else {
-					var tmp8 any
-					tmp9 := aotDirectFn495(v2)
-					if lang.IsTruthy(tmp9) {
-						tmp10 := lang.Apply1(nil, v2)
-						tmp8 = tmp10
+					var tmp9 any
+					tmp10 := aotDirectFn495(v2)
+					if lang.IsTruthy(tmp10) {
+						tmp11, ok := pkgmap5.Get("clojure.lang.Keyword.find")
+						if !ok {
+							panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Keyword.find"))
+						}
+						tmp12 := lang.Apply1(tmp11, v2)
+						tmp9 = tmp12
 					} else {
 					}
-					tmp5 = tmp8
+					tmp5 = tmp9
 				}
 				tmp3 = tmp5
 			}
@@ -12080,8 +12145,12 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply2(nil, v2, v3)
-			return tmp4
+			tmp4, ok := pkgmap5.Get("clojure.lang.Keyword.find")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Keyword.find"))
+			}
+			tmp5 := lang.Apply2(tmp4, v2, v3)
+			return tmp5
 		})
 		tmp1 = lang.NewArityFn(
 			nil,
@@ -12997,8 +13066,12 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply1(nil, v2)
-			return tmp3
+			tmp3, ok := pkgmap5.Get("clojure.lang.Murmur3.hashOrdered")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Murmur3.hashOrdered"))
+			}
+			tmp4 := lang.Apply1(tmp3, v2)
+			return tmp4
 		})
 		aotDirectFn212 = tmp1
 		var_clojure_DOT_core_hash_DASH_ordered_DASH_coll = ns.InternWithValue(tmp0, tmp1, true)
@@ -13041,8 +13114,12 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply1(nil, v2)
-			return tmp3
+			tmp3, ok := pkgmap5.Get("clojure.lang.Murmur3.hashUnordered")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Murmur3.hashUnordered"))
+			}
+			tmp4 := lang.Apply1(tmp3, v2)
+			return tmp4
 		})
 		aotDirectFn214 = tmp1
 		var_clojure_DOT_core_hash_DASH_unordered_DASH_coll = ns.InternWithValue(tmp0, tmp1, true)
@@ -13973,8 +14050,12 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply1(nil, v2)
-			return tmp3
+			tmp3, ok := pkgmap5.Get("clojure.lang.RT.chunkIteratorSeq")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.chunkIteratorSeq"))
+			}
+			tmp4 := lang.Apply1(tmp3, v2)
+			return tmp4
 		})
 		aotDirectFn240 = tmp1
 		var_clojure_DOT_core_iterator_DASH_seq = ns.InternWithValue(tmp0, tmp1, true)
@@ -15321,7 +15402,7 @@ func LoadNS() {
 								{ // let
 									// let binding "path"
 									var tmp15 any
-									tmp16 := lang.Apply2(strings8.HasPrefix, v13, "/")
+									tmp16 := lang.Apply2(strings9.HasPrefix, v13, "/")
 									if lang.IsTruthy(tmp16) {
 										tmp15 = v13
 									} else {
@@ -15365,7 +15446,7 @@ func LoadNS() {
 													tmp38 := aotDirectFn346()
 													_ = tmp38
 												}()
-												tmp39 := lang.Apply2(strings8.TrimPrefix, v21, "/")
+												tmp39 := lang.Apply2(strings9.TrimPrefix, v21, "/")
 												tmp40, _ := lang.FieldOrMethod(runtime.RT, "Load")
 												if reflect.TypeOf(tmp40).Kind() != reflect.Func {
 													panic(lang.NewIllegalArgumentError(fmt.Sprintf("Load is not a function")))
@@ -15441,7 +15522,7 @@ func LoadNS() {
 												{ // let
 													// let binding "path"
 													var tmp25 any
-													tmp26 := lang.Apply2(strings8.HasPrefix, v23, "/")
+													tmp26 := lang.Apply2(strings9.HasPrefix, v23, "/")
 													if lang.IsTruthy(tmp26) {
 														tmp25 = v23
 													} else {
@@ -15485,7 +15566,7 @@ func LoadNS() {
 																	tmp48 := aotDirectFn346()
 																	_ = tmp48
 																}()
-																tmp49 := lang.Apply2(strings8.TrimPrefix, v31, "/")
+																tmp49 := lang.Apply2(strings9.TrimPrefix, v31, "/")
 																tmp50, _ := lang.FieldOrMethod(runtime.RT, "Load")
 																if reflect.TypeOf(tmp50).Kind() != reflect.Func {
 																	panic(lang.NewIllegalArgumentError(fmt.Sprintf("Load is not a function")))
@@ -15607,182 +15688,169 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "rdr"
-				tmp5, ok := lang.FieldOrMethod(v3, "openStream")
-				if !ok {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v3, "openStream")))
-				}
-				var tmp6 any
-				switch reflect.TypeOf(tmp5).Kind() {
-				case reflect.Func:
-					tmp6 = lang.Apply(tmp5, nil)
-				default:
-					tmp6 = tmp5
-				}
-				tmp7 := lang.Apply2(nil, tmp6, "UTF-8")
-				tmp8 := lang.Apply1(nil, tmp7)
-				var v9 any = tmp8
-				_ = v9
-				var tmp10 any
+				var v6 any = nil
+				_ = v6
+				var tmp7 any
 				func() {
 					defer func() {
-						tmp11, ok := lang.FieldOrMethod(v9, "close")
+						tmp8, ok := lang.FieldOrMethod(v6, "close")
 						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v9, "close")))
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v6, "close")))
 						}
-						var tmp12 any
-						switch reflect.TypeOf(tmp11).Kind() {
+						var tmp9 any
+						switch reflect.TypeOf(tmp8).Kind() {
 						case reflect.Func:
-							tmp12 = lang.Apply(tmp11, nil)
+							tmp9 = lang.Apply(tmp8, nil)
 						default:
-							tmp12 = tmp11
+							tmp9 = tmp8
 						}
-						_ = tmp12
+						_ = tmp9
 					}()
-					var tmp13 any
+					var tmp10 any
 					{ // let
-						tmp14 := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_file_STAR_)
-						tmp15, ok := lang.FieldOrMethod(v3, "getFile")
+						tmp11 := lang.InternVarName(sym_clojure_DOT_core, sym__STAR_file_STAR_)
+						tmp12, ok := lang.FieldOrMethod(v3, "getFile")
 						if !ok {
 							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v3, "getFile")))
 						}
-						var tmp16 any
-						switch reflect.TypeOf(tmp15).Kind() {
+						var tmp13 any
+						switch reflect.TypeOf(tmp12).Kind() {
 						case reflect.Func:
-							tmp16 = lang.Apply(tmp15, nil)
+							tmp13 = lang.Apply(tmp12, nil)
 						default:
-							tmp16 = tmp15
+							tmp13 = tmp12
 						}
-						tmp17 := aotDirectFn211.Invoke2(tmp14, tmp16)
-						tmp18 := aotDirectFn375(tmp17)
-						_ = tmp18
-						var tmp19 any
+						tmp14 := aotDirectFn211.Invoke2(tmp11, tmp13)
+						tmp15 := aotDirectFn375(tmp14)
+						_ = tmp15
+						var tmp16 any
 						func() {
 							defer func() {
-								tmp20 := aotDirectFn346()
-								_ = tmp20
+								tmp17 := aotDirectFn346()
+								_ = tmp17
 							}()
-							var tmp21 any
+							var tmp18 any
 							{ // let
 								// let binding "read-opts"
-								var tmp22 any
-								tmp23, ok := lang.FieldOrMethod(v3, "getPath")
+								var tmp19 any
+								tmp20, ok := lang.FieldOrMethod(v3, "getPath")
 								if !ok {
 									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v3, "getPath")))
 								}
-								var tmp24 any
-								switch reflect.TypeOf(tmp23).Kind() {
+								var tmp21 any
+								switch reflect.TypeOf(tmp20).Kind() {
 								case reflect.Func:
-									tmp24 = lang.Apply(tmp23, nil)
+									tmp21 = lang.Apply(tmp20, nil)
 								default:
-									tmp24 = tmp23
+									tmp21 = tmp20
 								}
-								tmp25, _ := lang.FieldOrMethod(tmp24, "endsWith")
-								if reflect.TypeOf(tmp25).Kind() != reflect.Func {
+								tmp22, _ := lang.FieldOrMethod(tmp21, "endsWith")
+								if reflect.TypeOf(tmp22).Kind() != reflect.Func {
 									panic(lang.NewIllegalArgumentError(fmt.Sprintf("endsWith is not a function")))
 								}
-								tmp26 := lang.Apply1(tmp25, "cljc")
-								if lang.IsTruthy(tmp26) {
-									tmp27 := lang.NewMap(kw_eof, nil, kw_read_DASH_cond, kw_allow)
-									tmp22 = tmp27
+								tmp23 := lang.Apply1(tmp22, "cljc")
+								if lang.IsTruthy(tmp23) {
+									tmp24 := lang.NewMap(kw_eof, nil, kw_read_DASH_cond, kw_allow)
+									tmp19 = tmp24
 								} else {
-									tmp28 := lang.NewMap(kw_eof, nil)
-									tmp22 = tmp28
+									tmp25 := lang.NewMap(kw_eof, nil)
+									tmp19 = tmp25
 								}
-								var v29 any = tmp22
-								_ = v29
+								var v26 any = tmp19
+								_ = v26
 								// let binding "new-mappings"
-								tmp30 := aotDirectFn395Arity2(v29, v9)
-								var v31 any = tmp30
-								_ = v31
-								var tmp32 any
-								tmp33 := aotDirectFn274(v31)
-								tmp34 := aotDirectFn304(tmp33)
-								if lang.IsTruthy(tmp34) {
-									tmp35 := aotDirectFn490Arity1("Not a valid data-reader map")
-									tmp36 := lang.NewMap(kw_url, v3)
-									tmp37 := aotDirectFn170Arity2(tmp35, tmp36)
-									panic(tmp37)
+								tmp27 := aotDirectFn395Arity2(v26, v6)
+								var v28 any = tmp27
+								_ = v28
+								var tmp29 any
+								tmp30 := aotDirectFn274(v28)
+								tmp31 := aotDirectFn304(tmp30)
+								if lang.IsTruthy(tmp31) {
+									tmp32 := aotDirectFn490Arity1("Not a valid data-reader map")
+									tmp33 := lang.NewMap(kw_url, v3)
+									tmp34 := aotDirectFn170Arity2(tmp32, tmp33)
+									panic(tmp34)
 								} else {
 								}
-								_ = tmp32
-								var tmp38 lang.FnFunc2
-								tmp38 = lang.FnFunc2(func(p0, p1 any) any {
-									v39 := p0
-									_ = v39
-									v40 := p1
-									_ = v40
-									var tmp41 any
+								_ = tmp29
+								var tmp35 lang.FnFunc2
+								tmp35 = lang.FnFunc2(func(p0, p1 any) any {
+									v36 := p0
+									_ = v36
+									v37 := p1
+									_ = v37
+									var tmp38 any
 									{ // let
 										// let binding "vec__683"
-										var v42 any = v40
-										_ = v42
+										var v39 any = v37
+										_ = v39
 										// let binding "k"
-										tmp43 := aotDirectFn319Arity3(v42, int64(0), nil)
-										var v44 any = tmp43
-										_ = v44
+										tmp40 := aotDirectFn319Arity3(v39, int64(0), nil)
+										var v41 any = tmp40
+										_ = v41
 										// let binding "v"
-										tmp45 := aotDirectFn319Arity3(v42, int64(1), nil)
-										var v46 any = tmp45
-										_ = v46
-										var tmp47 any
-										tmp48 := aotDirectFn506(v44)
-										tmp49 := aotDirectFn304(tmp48)
-										if lang.IsTruthy(tmp49) {
-											tmp50 := aotDirectFn490Arity1("Invalid form in data-reader file")
-											tmp51 := lang.NewMap(kw_url, v3, kw_form, v44)
-											tmp52 := aotDirectFn170Arity2(tmp50, tmp51)
-											panic(tmp52)
+										tmp42 := aotDirectFn319Arity3(v39, int64(1), nil)
+										var v43 any = tmp42
+										_ = v43
+										var tmp44 any
+										tmp45 := aotDirectFn506(v41)
+										tmp46 := aotDirectFn304(tmp45)
+										if lang.IsTruthy(tmp46) {
+											tmp47 := aotDirectFn490Arity1("Invalid form in data-reader file")
+											tmp48 := lang.NewMap(kw_url, v3, kw_form, v41)
+											tmp49 := aotDirectFn170Arity2(tmp47, tmp48)
+											panic(tmp49)
 										} else {
 										}
-										_ = tmp47
-										var tmp53 any
+										_ = tmp44
+										var tmp50 any
 										{ // let
 											// let binding "v-var"
-											tmp54 := aotDirectFn124(v46)
-											var v55 any = tmp54
-											_ = v55
-											var tmp56 any
-											var tmp57 any
+											tmp51 := aotDirectFn124(v43)
+											var v52 any = tmp51
+											_ = v52
+											var tmp53 any
+											var tmp54 any
 											{ // let
 												// let binding "and__0__auto__"
-												tmp58 := aotDirectFn117(v2, v44)
-												var v59 any = tmp58
-												_ = v59
-												var tmp60 any
-												if lang.IsTruthy(v59) {
-													tmp61 := lang.Apply1(v2, v44)
-													tmp62 := aotDirectFn308Arity2(tmp61, v55)
-													tmp60 = tmp62
+												tmp55 := aotDirectFn117(v2, v41)
+												var v56 any = tmp55
+												_ = v56
+												var tmp57 any
+												if lang.IsTruthy(v56) {
+													tmp58 := lang.Apply1(v2, v41)
+													tmp59 := aotDirectFn308Arity2(tmp58, v52)
+													tmp57 = tmp59
 												} else {
-													tmp60 = v59
+													tmp57 = v56
 												}
-												tmp57 = tmp60
+												tmp54 = tmp57
 											} // end let
-											if lang.IsTruthy(tmp57) {
-												tmp58 := lang.NewMap(kw_url, v3, kw_conflict, v44, kw_mappings, v39)
-												tmp59 := aotDirectFn170Arity2("Conflicting data-reader mapping", tmp58)
-												panic(tmp59)
+											if lang.IsTruthy(tmp54) {
+												tmp55 := lang.NewMap(kw_url, v3, kw_conflict, v41, kw_mappings, v36)
+												tmp56 := aotDirectFn170Arity2("Conflicting data-reader mapping", tmp55)
+												panic(tmp56)
 											} else {
 											}
-											_ = tmp56
-											var tmp60 any = v39
-											tmp60 = lang.Assoc(tmp60, v44, v55)
-											tmp53 = tmp60
+											_ = tmp53
+											var tmp57 any = v36
+											tmp57 = lang.Assoc(tmp57, v41, v52)
+											tmp50 = tmp57
 										} // end let
-										tmp41 = tmp53
+										tmp38 = tmp50
 									} // end let
-									return tmp41
+									return tmp38
 								})
-								tmp39 := aotDirectFn402Arity3(tmp38, v2, v31)
-								tmp21 = tmp39
+								tmp36 := aotDirectFn402Arity3(tmp35, v2, v28)
+								tmp18 = tmp36
 							} // end let
-							tmp19 = tmp21
+							tmp16 = tmp18
 						}()
-						tmp13 = tmp19
+						tmp10 = tmp16
 					} // end let
-					tmp10 = tmp13
+					tmp7 = tmp10
 				}()
-				tmp4 = tmp10
+				tmp4 = tmp7
 			} // end let
 			return tmp4
 		})
@@ -15909,12 +15977,10 @@ func LoadNS() {
 			var tmp3 any
 			{ // let
 				// let binding "rdr"
-				tmp4 := lang.Apply1(nil, v2)
-				tmp5 := lang.Apply1(nil, tmp4)
-				var v6 any = tmp5
-				_ = v6
-				tmp7 := aotDirectFn261(v6)
-				tmp3 = tmp7
+				var v5 any = nil
+				_ = v5
+				tmp6 := aotDirectFn261(v5)
+				tmp3 = tmp6
 			} // end let
 			return tmp3
 		})
@@ -17917,8 +17983,12 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply2(nil, v2, v3)
-			return tmp4
+			tmp4, ok := pkgmap5.Get("clojure.lang.Murmur3.mixCollHash")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Murmur3.mixCollHash"))
+			}
+			tmp5 := lang.Apply2(tmp4, v2, v3)
+			return tmp5
 		})
 		aotDirectFn289 = tmp1
 		var_clojure_DOT_core_mix_DASH_collection_DASH_hash = ns.InternWithValue(tmp0, tmp1, true)
@@ -19276,58 +19346,62 @@ func LoadNS() {
 					if lang.IsTruthy(tmp9) {
 						tmp8 = v3
 					} else {
-						tmp10 := lang.Apply1(nil, v3)
-						tmp8 = tmp10
+						tmp10, ok := pkgmap5.Get("Math.ceil")
+						if !ok {
+							panic(lang.NewIllegalArgumentError("unable to resolve host form: Math.ceil"))
+						}
+						tmp11 := lang.Apply1(tmp10, v3)
+						tmp8 = tmp11
 					}
-					tmp11 := v2.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp8))
-					tmp6 = tmp11
-				} else {
-					tmp12 := aotDirectFn447(v2)
+					tmp12 := v2.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp8))
 					tmp6 = tmp12
+				} else {
+					tmp13 := aotDirectFn447(v2)
+					tmp6 = tmp13
 				}
 				tmp4 = tmp6
 			} else {
-				var tmp13 any
+				var tmp14 any
 				{ // let
 					// let binding "n"
-					var v14 any = v3
-					_ = v14
+					var v15 any = v3
+					_ = v15
 					// let binding "xs"
-					tmp15 := aotDirectFn447(v2)
-					var v16 any = tmp15
-					_ = v16
+					tmp16 := aotDirectFn447(v2)
+					var v17 any = tmp16
+					_ = v17
 					for {
-						var tmp17 any
 						var tmp18 any
+						var tmp19 any
 						{ // let
 							// let binding "and__0__auto__"
-							var v19 any = v16
-							_ = v19
-							var tmp20 any
-							if lang.IsTruthy(v19) {
-								tmp21 := lang.Numbers.IsPos(v14)
-								tmp20 = tmp21
+							var v20 any = v17
+							_ = v20
+							var tmp21 any
+							if lang.IsTruthy(v20) {
+								tmp22 := lang.Numbers.IsPos(v15)
+								tmp21 = tmp22
 							} else {
-								tmp20 = v19
+								tmp21 = v20
 							}
-							tmp18 = tmp20
+							tmp19 = tmp21
 						} // end let
-						if lang.IsTruthy(tmp18) {
-							tmp20 := lang.Numbers.Dec(v14)
-							var tmp19 any = tmp20
-							tmp22 := aotDirectFn299(v16)
-							var tmp21 any = tmp22
-							v14 = tmp19
-							v16 = tmp21
+						if lang.IsTruthy(tmp19) {
+							tmp21 := lang.Numbers.Dec(v15)
+							var tmp20 any = tmp21
+							tmp23 := aotDirectFn299(v17)
+							var tmp22 any = tmp23
+							v15 = tmp20
+							v17 = tmp22
 							continue
 						} else {
-							tmp17 = v16
+							tmp18 = v17
 						}
-						tmp13 = tmp17
+						tmp14 = tmp18
 						break
 					}
 				} // end let
-				tmp4 = tmp13
+				tmp4 = tmp14
 			}
 			return tmp4
 		})
@@ -19360,78 +19434,82 @@ func LoadNS() {
 						if lang.IsTruthy(tmp10) {
 							tmp9 = v3
 						} else {
-							tmp11 := lang.Apply1(nil, v3)
-							tmp9 = tmp11
+							tmp11, ok := pkgmap5.Get("Math.ceil")
+							if !ok {
+								panic(lang.NewIllegalArgumentError("unable to resolve host form: Math.ceil"))
+							}
+							tmp12 := lang.Apply1(tmp11, v3)
+							tmp9 = tmp12
 						}
-						tmp12 := v2.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp9))
-						tmp7 = tmp12
+						tmp13 := v2.(interface{ Drop(int) lang.Sequential }).Drop(lang.IntCast(tmp9))
+						tmp7 = tmp13
 					} else {
-						var tmp13 any
+						var tmp14 any
 						{ // let
 							// let binding "n"
-							var v14 any = v3
-							_ = v14
-							// let binding "xs"
-							var v15 any = v2
+							var v15 any = v3
 							_ = v15
+							// let binding "xs"
+							var v16 any = v2
+							_ = v16
 							for {
-								var tmp16 any
+								var tmp17 any
 								{ // let
 									// let binding "temp__0__auto__"
-									var tmp17 any
+									var tmp18 any
 									{ // let
 										// let binding "and__0__auto__"
-										tmp18 := lang.Numbers.IsPos(v14)
-										var v19 any = tmp18
-										_ = v19
-										var tmp20 any
-										if lang.IsTruthy(v19) {
-											tmp21 := aotDirectFn447(v15)
-											tmp20 = tmp21
+										tmp19 := lang.Numbers.IsPos(v15)
+										var v20 any = tmp19
+										_ = v20
+										var tmp21 any
+										if lang.IsTruthy(v20) {
+											tmp22 := aotDirectFn447(v16)
+											tmp21 = tmp22
 										} else {
-											tmp20 = v19
+											tmp21 = v20
 										}
-										tmp17 = tmp20
+										tmp18 = tmp21
 									} // end let
-									var v18 any = tmp17
-									_ = v18
-									var tmp19 any
-									if lang.IsTruthy(v18) {
-										var tmp20 any
+									var v19 any = tmp18
+									_ = v19
+									var tmp20 any
+									if lang.IsTruthy(v19) {
+										var tmp21 any
 										{ // let
 											// let binding "xs"
-											var v21 any = v18
-											_ = v21
-											tmp23 := lang.Numbers.Dec(v14)
-											var tmp22 any = tmp23
-											tmp25 := aotDirectFn432(v21)
-											var tmp24 any = tmp25
-											v14 = tmp22
-											v15 = tmp24
+											var v22 any = v19
+											_ = v22
+											tmp24 := lang.Numbers.Dec(v15)
+											var tmp23 any = tmp24
+											tmp26 := aotDirectFn432(v22)
+											var tmp25 any = tmp26
+											v15 = tmp23
+											v16 = tmp25
 											continue
 										} // end let
-										tmp19 = tmp20
+										tmp20 = tmp21
 									} else {
-										tmp21 := aotDirectFn447(v15)
-										tmp19 = tmp21
+										tmp22 := aotDirectFn447(v16)
+										tmp20 = tmp22
 									}
-									tmp16 = tmp19
+									tmp17 = tmp20
 								} // end let
-								tmp13 = tmp16
+								tmp14 = tmp17
 								break
 							}
 						} // end let
-						tmp7 = tmp13
+						tmp7 = tmp14
 					}
-					var v14 any = tmp7
-					_ = v14
-					var tmp15 any
-					if lang.IsTruthy(v14) {
-						tmp15 = v14
+					var v15 any = tmp7
+					_ = v15
+					var tmp16 any
+					if lang.IsTruthy(v15) {
+						tmp16 = v15
 					} else {
-						tmp15 = lang.NewList()
+						tmp16 = lang.NewList()
 					}
-					tmp6 = tmp15
+					tmp6 = tmp16
 				} // end let
 				tmp4 = tmp6
 			} else {
@@ -19509,13 +19587,13 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := v2.(interface{ Numerator() *big6.Int }).Numerator()
+			tmp3 := v2.(interface{ Numerator() *big7.Int }).Numerator()
 			return tmp3
 		})
 		aotDirectFn324 = tmp1
 		var_clojure_DOT_core_numerator = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_numerator.SetMetaLazy(func() lang.IPersistentMap {
-			tmp2 := reflect.TypeOf((*big6.Int)(nil))
+			tmp2 := reflect.TypeOf((*big7.Int)(nil))
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(3619), kw_column, int(7), kw_end_DASH_line, int(3619), kw_end_DASH_column, int(15), kw_arglists, lang.NewList(lang.NewVector(sym_r)), kw_doc, "Returns the numerator part of a Ratio.", kw_tag, tmp2, kw_added, "1.2", kw_static, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
@@ -19688,7 +19766,7 @@ func LoadNS() {
 				var tmp5 any
 				{ // let
 					// let binding "result__3647__auto__"
-					tmp6 := lang.Apply2(strconv9.ParseFloat, v2, int64(64))
+					tmp6 := lang.Apply2(strconv10.ParseFloat, v2, int64(64))
 					var v7 any = tmp6
 					_ = v7
 					var tmp8 any
@@ -19727,7 +19805,7 @@ func LoadNS() {
 				var tmp5 any
 				{ // let
 					// let binding "result__3646__auto__"
-					tmp6 := lang.Apply3(strconv9.ParseInt, v2, int64(10), int64(64))
+					tmp6 := lang.Apply3(strconv10.ParseInt, v2, int64(10), int64(64))
 					var v7 any = tmp6
 					_ = v7
 					var tmp8 any
@@ -19779,7 +19857,7 @@ func LoadNS() {
 					var tmp7 any
 					{ // let
 						// let binding "vec__686"
-						tmp8 := lang.Apply1(uuid10.Parse, v2)
+						tmp8 := lang.Apply1(uuid11.Parse, v2)
 						var v9 any = tmp8
 						_ = v9
 						// let binding "uuid"
@@ -22305,7 +22383,7 @@ func LoadNS() {
 		tmp0 := sym_rand
 		var tmp1 lang.ArityFn
 		aotDirectFn380Arity0 = lang.FnFunc0(func() any {
-			tmp2 := rand13.Float64()
+			tmp2 := rand14.Float64()
 			return tmp2
 		})
 		aotDirectFn380Arity1 = lang.FnFunc1(func(p0 any) any {
@@ -22422,7 +22500,7 @@ func LoadNS() {
 			var tmp2 any
 			{ // let
 				// let binding "result"
-				tmp3 := lang.Apply0(uuid10.NewRandom)
+				tmp3 := lang.Apply0(uuid11.NewRandom)
 				var v4 any = tmp3
 				_ = v4
 				// let binding "v"
@@ -22696,7 +22774,7 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			var tmp3 any
-			tmp4 := lang.IsInstance[*regexp12.Regexp](v2)
+			tmp4 := lang.IsInstance[*regexp13.Regexp](v2)
 			if lang.IsTruthy(tmp4) {
 				tmp3 = v2
 			} else {
@@ -22708,7 +22786,7 @@ func LoadNS() {
 		aotDirectFn393 = tmp1
 		var_clojure_DOT_core_re_DASH_pattern = ns.InternWithValue(tmp0, tmp1, true)
 		var_clojure_DOT_core_re_DASH_pattern.SetMetaLazy(func() lang.IPersistentMap {
-			tmp2 := reflect.TypeOf((*regexp12.Regexp)(nil))
+			tmp2 := reflect.TypeOf((*regexp13.Regexp)(nil))
 			return lang.NewMapUniqueKeys(kw_file, "clojure/core.glj", kw_line, int(4913), kw_column, int(7), kw_end_DASH_line, int(4913), kw_end_DASH_column, int(16), kw_arglists, lang.NewList(lang.NewVector(sym_s)), kw_doc, "Returns an instance of java.util.regex.Pattern, for use, e.g. in\n  re-matcher.", kw_tag, tmp2, kw_added, "1.0", kw_static, true, kw_ns, lang.FindOrCreateNamespace(sym_clojure_DOT_core))
 		})
 	}
@@ -22807,8 +22885,12 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply2(nil, v2, v3)
-			return tmp4
+			tmp4, ok := pkgmap5.Get("clojure.lang.ReaderConditional.create")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.ReaderConditional.create"))
+			}
+			tmp5 := lang.Apply2(tmp4, v2, v3)
+			return tmp5
 		})
 		aotDirectFn399 = tmp1
 		var_clojure_DOT_core_reader_DASH_conditional = ns.InternWithValue(tmp0, tmp1, true)
@@ -23343,7 +23425,7 @@ func LoadNS() {
 							tmp8 = v7
 						} else {
 							tmp9 := aotDirectFn490.Invoke2("No namespace: ", v2)
-							tmp10 := lang.Apply1(errors5.New, tmp9)
+							tmp10 := lang.Apply1(errors6.New, tmp9)
 							panic(tmp10)
 						}
 						tmp5 = tmp8
@@ -23440,7 +23522,7 @@ func LoadNS() {
 						tmp24 = tmp26
 					} // end let
 					if lang.IsTruthy(tmp24) {
-						tmp25 := lang.Apply1(errors5.New, ":only/:refer value must be a sequential collection of symbols")
+						tmp25 := lang.Apply1(errors6.New, ":only/:refer value must be a sequential collection of symbols")
 						panic(tmp25)
 					} else {
 					}
@@ -23690,8 +23772,12 @@ func LoadNS() {
 		tmp0 := sym_release_DASH_pending_DASH_sends
 		var tmp1 lang.FnFunc0
 		tmp1 = lang.FnFunc0(func() any {
-			tmp2 := lang.Apply0(nil)
-			return tmp2
+			tmp2, ok := pkgmap5.Get("clojure.lang.Agent.releasePendingSends")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Agent.releasePendingSends"))
+			}
+			tmp3 := lang.Apply0(tmp2)
+			return tmp3
 		})
 		aotDirectFn414 = tmp1
 		var_clojure_DOT_core_release_DASH_pending_DASH_sends = ns.InternWithValue(tmp0, tmp1, true)
@@ -24409,7 +24495,7 @@ func LoadNS() {
 				tmp4 := aotDirectFn438(v2)
 				var v5 any = tmp4
 				_ = v5
-				tmp6 := lang.Apply2(strings8.LastIndex, v5, "/")
+				tmp6 := lang.Apply2(strings9.LastIndex, v5, "/")
 				tmp7 := aotDirectFn499Arity3(v5, int64(0), tmp6)
 				tmp3 = tmp7
 			} // end let
@@ -24429,8 +24515,8 @@ func LoadNS() {
 			v2 := p0
 			_ = v2
 			tmp3 := aotDirectFn292(v2)
-			tmp4 := lang.Apply3(strings8.ReplaceAll, tmp3, "-", "_")
-			tmp5 := lang.Apply3(strings8.ReplaceAll, tmp4, ".", "/")
+			tmp4 := lang.Apply3(strings9.ReplaceAll, tmp3, "-", "_")
+			tmp5 := lang.Apply3(strings9.ReplaceAll, tmp4, ".", "/")
 			tmp6 := aotDirectFn490.Invoke2(lang.NewChar(47), tmp5)
 			return tmp6
 		})
@@ -24738,262 +24824,259 @@ func LoadNS() {
 				if lang.IsTruthy(tmp6) {
 					tmp5 = v2
 				} else {
-					tmp7 := runtime.RT.IntCast(v2)
-					tmp8 := lang.Apply1(nil, tmp7)
-					tmp5 = tmp8
 				}
-				var v9 any = tmp5
-				_ = v9
+				var v8 any = tmp5
+				_ = v8
 				// let binding "NIL"
-				tmp10 := lang.Apply1(reflect.StructOf, nil)
-				tmp11 := lang.Apply1(reflect.New, tmp10)
-				tmp12, ok := lang.FieldOrMethod(tmp11, "Interface")
+				tmp9 := lang.Apply1(reflect.StructOf, nil)
+				tmp10 := lang.Apply1(reflect.New, tmp9)
+				tmp11, ok := lang.FieldOrMethod(tmp10, "Interface")
 				if !ok {
-					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp11, "Interface")))
+					panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp10, "Interface")))
 				}
-				var tmp13 any
-				switch reflect.TypeOf(tmp12).Kind() {
+				var tmp12 any
+				switch reflect.TypeOf(tmp11).Kind() {
 				case reflect.Func:
-					tmp13 = lang.Apply(tmp12, nil)
+					tmp12 = lang.Apply(tmp11, nil)
 				default:
-					tmp13 = tmp12
+					tmp12 = tmp11
 				}
-				var v14 any = tmp13
-				_ = v14
+				var v13 any = tmp12
+				_ = v13
 				// let binding "agt"
-				var tmp15 lang.FnFunc0
-				tmp15 = lang.FnFunc0(func() any {
+				var tmp14 lang.FnFunc0
+				tmp14 = lang.FnFunc0(func() any {
 					return v3
 				})
-				tmp16 := lang.Apply1(lang.NewLazySeq, tmp15)
-				tmp17 := aotDirectFn23.Invoke1(tmp16)
-				var v18 any = tmp17
-				_ = v18
+				tmp15 := lang.Apply1(lang.NewLazySeq, tmp14)
+				tmp16 := aotDirectFn23.Invoke1(tmp15)
+				var v17 any = tmp16
+				_ = v17
 				// let binding "log-error"
-				var tmp19 lang.FnFunc2
-				tmp19 = lang.FnFunc2(func(p0, p1 any) any {
-					v20 := p0
+				var tmp18 lang.FnFunc2
+				tmp18 = lang.FnFunc2(func(p0, p1 any) any {
+					v19 := p0
+					_ = v19
+					v20 := p1
 					_ = v20
-					v21 := p1
-					_ = v21
-					var tmp22 any
-					tmp23, _ := lang.FieldOrMethod(v20, "offer")
-					if reflect.TypeOf(tmp23).Kind() != reflect.Func {
+					var tmp21 any
+					tmp22, _ := lang.FieldOrMethod(v19, "offer")
+					if reflect.TypeOf(tmp22).Kind() != reflect.Func {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("offer is not a function")))
 					}
-					tmp24 := lang.Apply1(tmp23, v20)
-					if lang.IsTruthy(tmp24) {
-						panic(v21)
+					tmp23 := lang.Apply1(tmp22, v19)
+					if lang.IsTruthy(tmp23) {
+						panic(v20)
 					} else {
-						tmp22 = v21
+						tmp21 = v20
 					}
-					return tmp22
+					return tmp21
 				})
-				var v20 any = tmp19
-				_ = v20
+				var v19 any = tmp18
+				_ = v19
 				// let binding "fill"
-				var tmp21 lang.FnFunc1
-				tmp21 = lang.FnFunc1(func(p0 any) any {
-					v22 := p0
-					_ = v22
-					var tmp23 any
-					if lang.IsTruthy(v22) {
-						var tmp24 any
-						tmp25 := aotDirectFn225(nil, v22)
-						if lang.IsTruthy(tmp25) {
-							tmp26 := lang.Apply2(v20, v9, v22)
-							tmp24 = tmp26
+				var tmp20 lang.FnFunc1
+				tmp20 = lang.FnFunc1(func(p0 any) any {
+					v21 := p0
+					_ = v21
+					var tmp22 any
+					if lang.IsTruthy(v21) {
+						var tmp23 any
+						tmp24 := aotDirectFn225(nil, v21)
+						if lang.IsTruthy(tmp24) {
+							tmp25 := lang.Apply2(v19, v8, v21)
+							tmp23 = tmp25
 						} else {
-							var tmp27 any
+							var tmp26 any
 							func() {
 								defer func() {
 									if r := recover(); r != nil {
 										if lang.CatchMatches(r, lang.Builtins["any"]) {
-											v28 := r
-											_ = v28
-											tmp29 := lang.Apply2(v20, v9, v28)
-											tmp27 = tmp29
+											v27 := r
+											_ = v27
+											tmp28 := lang.Apply2(v19, v8, v27)
+											tmp26 = tmp28
 										} else {
 											panic(r)
 										}
 									}
 								}()
-								var tmp28 any
+								var tmp27 any
 								{ // let
 									// let binding "G__452"
-									tmp29 := aotDirectFn447(v22)
-									var v30 any = tmp29
-									_ = v30
+									tmp28 := aotDirectFn447(v21)
+									var v29 any = tmp28
+									_ = v29
 									// let binding "vec__453"
-									var v31 any = v30
-									_ = v31
+									var v30 any = v29
+									_ = v30
 									// let binding "seq__454"
-									tmp32 := aotDirectFn447(v31)
-									var v33 any = tmp32
-									_ = v33
+									tmp31 := aotDirectFn447(v30)
+									var v32 any = tmp31
+									_ = v32
 									// let binding "first__455"
-									tmp34 := aotDirectFn183(v33)
-									var v35 any = tmp34
-									_ = v35
+									tmp33 := aotDirectFn183(v32)
+									var v34 any = tmp33
+									_ = v34
 									// let binding "seq__454"
-									tmp36 := aotDirectFn299(v33)
-									var v37 any = tmp36
-									_ = v37
+									tmp35 := aotDirectFn299(v32)
+									var v36 any = tmp35
+									_ = v36
 									// let binding "x"
-									var v38 any = v35
-									_ = v38
+									var v37 any = v34
+									_ = v37
 									// let binding "xs"
-									var v39 any = v37
-									_ = v39
+									var v38 any = v36
+									_ = v38
 									// let binding "s"
-									var v40 any = v31
-									_ = v40
-									var tmp41 any
+									var v39 any = v30
+									_ = v39
+									var tmp40 any
 									{ // let
 										// let binding "G__452"
-										var v42 any = v30
-										_ = v42
+										var v41 any = v29
+										_ = v41
 										for {
-											var tmp43 any
+											var tmp42 any
 											{ // let
 												// let binding "vec__456"
-												var v44 any = v42
-												_ = v44
+												var v43 any = v41
+												_ = v43
 												// let binding "seq__457"
-												tmp45 := aotDirectFn447(v44)
-												var v46 any = tmp45
-												_ = v46
+												tmp44 := aotDirectFn447(v43)
+												var v45 any = tmp44
+												_ = v45
 												// let binding "first__458"
-												tmp47 := aotDirectFn183(v46)
-												var v48 any = tmp47
-												_ = v48
+												tmp46 := aotDirectFn183(v45)
+												var v47 any = tmp46
+												_ = v47
 												// let binding "seq__457"
-												tmp49 := aotDirectFn299(v46)
-												var v50 any = tmp49
-												_ = v50
+												tmp48 := aotDirectFn299(v45)
+												var v49 any = tmp48
+												_ = v49
 												// let binding "x"
-												var v51 any = v48
-												_ = v51
+												var v50 any = v47
+												_ = v50
 												// let binding "xs"
-												var v52 any = v50
-												_ = v52
+												var v51 any = v49
+												_ = v51
 												// let binding "s"
-												var v53 any = v44
-												_ = v53
-												var tmp54 any
-												if lang.IsTruthy(v53) {
+												var v52 any = v43
+												_ = v52
+												var tmp53 any
+												if lang.IsTruthy(v52) {
+													var tmp54 any
 													var tmp55 any
-													var tmp56 any
-													tmp57 := lang.Identical(v51, nil)
-													if lang.IsTruthy(tmp57) {
-														tmp56 = v14
+													tmp56 := lang.Identical(v50, nil)
+													if lang.IsTruthy(tmp56) {
+														tmp55 = v13
 													} else {
-														tmp56 = v51
+														tmp55 = v50
 													}
-													tmp58, _ := lang.FieldOrMethod(v9, "offer")
-													if reflect.TypeOf(tmp58).Kind() != reflect.Func {
+													tmp57, _ := lang.FieldOrMethod(v8, "offer")
+													if reflect.TypeOf(tmp57).Kind() != reflect.Func {
 														panic(lang.NewIllegalArgumentError(fmt.Sprintf("offer is not a function")))
 													}
-													tmp59 := lang.Apply1(tmp58, tmp56)
-													if lang.IsTruthy(tmp59) {
-														var tmp60 any = v52
-														v42 = tmp60
+													tmp58 := lang.Apply1(tmp57, tmp55)
+													if lang.IsTruthy(tmp58) {
+														var tmp59 any = v51
+														v41 = tmp59
 														continue
 													} else {
-														tmp55 = v53
+														tmp54 = v52
 													}
-													tmp54 = tmp55
+													tmp53 = tmp54
 												} else {
-													var tmp61 any
-													tmp62, _ := lang.FieldOrMethod(v9, "offer")
-													if reflect.TypeOf(tmp62).Kind() != reflect.Func {
+													var tmp60 any
+													tmp61, _ := lang.FieldOrMethod(v8, "offer")
+													if reflect.TypeOf(tmp61).Kind() != reflect.Func {
 														panic(lang.NewIllegalArgumentError(fmt.Sprintf("offer is not a function")))
 													}
-													tmp63 := lang.Apply1(tmp62, v9)
-													if lang.IsTruthy(tmp63) {
+													tmp62 := lang.Apply1(tmp61, v8)
+													if lang.IsTruthy(tmp62) {
 													} else {
-														tmp61 = lang.NewList()
+														tmp60 = lang.NewList()
 													}
-													tmp54 = tmp61
+													tmp53 = tmp60
 												}
-												tmp43 = tmp54
+												tmp42 = tmp53
 											} // end let
-											tmp41 = tmp43
+											tmp40 = tmp42
 											break
 										}
 									} // end let
-									tmp28 = tmp41
+									tmp27 = tmp40
 								} // end let
-								tmp27 = tmp28
+								tmp26 = tmp27
 							}()
-							tmp24 = tmp27
+							tmp23 = tmp26
 						}
-						tmp23 = tmp24
+						tmp22 = tmp23
 					} else {
 					}
-					return tmp23
+					return tmp22
 				})
-				var v22 any = tmp21
-				_ = v22
+				var v21 any = tmp20
+				_ = v21
 				// let binding "drain"
-				var tmp23 lang.FnFunc0
+				var tmp22 lang.FnFunc0
 				{ // function drain
-					var v24 lang.FnFunc0
-					tmp23 = lang.FnFunc0(func() any {
-						var tmp25 lang.FnFunc0
-						tmp25 = lang.FnFunc0(func() any {
-							var tmp26 any
+					var v23 lang.FnFunc0
+					tmp22 = lang.FnFunc0(func() any {
+						var tmp24 lang.FnFunc0
+						tmp24 = lang.FnFunc0(func() any {
+							var tmp25 any
 							{ // let
 								// let binding "x"
-								tmp27, ok := lang.FieldOrMethod(v9, "take")
+								tmp26, ok := lang.FieldOrMethod(v8, "take")
 								if !ok {
-									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v9, "take")))
+									panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "take")))
 								}
-								var tmp28 any
-								switch reflect.TypeOf(tmp27).Kind() {
+								var tmp27 any
+								switch reflect.TypeOf(tmp26).Kind() {
 								case reflect.Func:
-									tmp28 = lang.Apply(tmp27, nil)
+									tmp27 = lang.Apply(tmp26, nil)
 								default:
-									tmp28 = tmp27
+									tmp27 = tmp26
 								}
-								var v29 any = tmp28
-								_ = v29
-								var tmp30 any
-								tmp31 := aotDirectFn216(v29, v9)
-								if lang.IsTruthy(tmp31) {
-									tmp32 := aotDirectFn132Arity1(v18)
-									_ = tmp32
+								var v28 any = tmp27
+								_ = v28
+								var tmp29 any
+								tmp30 := aotDirectFn216(v28, v8)
+								if lang.IsTruthy(tmp30) {
+									tmp31 := aotDirectFn132Arity1(v17)
+									_ = tmp31
 								} else {
-									tmp33 := aotDirectFn445.Invoke2(v18, v22)
+									tmp32 := aotDirectFn445.Invoke2(v17, v21)
+									_ = tmp32
+									tmp33 := aotDirectFn414()
 									_ = tmp33
-									tmp34 := aotDirectFn414()
-									_ = tmp34
-									var tmp35 any
-									tmp36 := aotDirectFn216(v29, v14)
-									if lang.IsTruthy(tmp36) {
+									var tmp34 any
+									tmp35 := aotDirectFn216(v28, v13)
+									if lang.IsTruthy(tmp35) {
 									} else {
-										tmp35 = v29
+										tmp34 = v28
 									}
-									tmp37 := lang.Apply0(v24)
-									tmp38 := aotDirectFn115(tmp35, tmp37)
-									tmp30 = tmp38
+									tmp36 := lang.Apply0(v23)
+									tmp37 := aotDirectFn115(tmp34, tmp36)
+									tmp29 = tmp37
 								}
-								tmp26 = tmp30
+								tmp25 = tmp29
 							} // end let
-							return tmp26
+							return tmp25
 						})
-						tmp26 := lang.Apply1(lang.NewLazySeq, tmp25)
-						return tmp26
+						tmp25 := lang.Apply1(lang.NewLazySeq, tmp24)
+						return tmp25
 					})
-					v24 = tmp23
-					_ = v24
+					v23 = tmp22
+					_ = v23
 				}
-				var v24 any = tmp23
-				_ = v24
-				tmp25 := aotDirectFn445.Invoke2(v18, v22)
-				_ = tmp25
-				tmp26 := lang.Apply0(v24)
-				tmp4 = tmp26
+				var v23 any = tmp22
+				_ = v23
+				tmp24 := aotDirectFn445.Invoke2(v17, v21)
+				_ = tmp24
+				tmp25 := lang.Apply0(v23)
+				tmp4 = tmp25
 			} // end let
 			return tmp4
 		})
@@ -25050,18 +25133,30 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "or__0__auto__"
-				tmp5 := lang.Apply1(nil, v3)
-				tmp6 := lang.Apply2(nil, v2, tmp5)
-				tmp7 := lang.Apply1(nil, tmp6)
-				var v8 any = tmp7
-				_ = v8
-				var tmp9 any
-				if lang.IsTruthy(v8) {
-					tmp9 = v8
-				} else {
-					tmp9 = lang.NewList()
+				tmp5, ok := pkgmap5.Get("clojure.lang.RT.chunkIteratorSeq")
+				if !ok {
+					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.chunkIteratorSeq"))
 				}
-				tmp4 = tmp9
+				tmp6, ok := pkgmap5.Get("clojure.lang.TransformerIterator.create")
+				if !ok {
+					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.TransformerIterator.create"))
+				}
+				tmp7, ok := pkgmap5.Get("clojure.lang.RT.iter")
+				if !ok {
+					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.iter"))
+				}
+				tmp8 := lang.Apply1(tmp7, v3)
+				tmp9 := lang.Apply2(tmp6, v2, tmp8)
+				tmp10 := lang.Apply1(tmp5, tmp9)
+				var v11 any = tmp10
+				_ = v11
+				var tmp12 any
+				if lang.IsTruthy(v11) {
+					tmp12 = v11
+				} else {
+					tmp12 = lang.NewList()
+				}
+				tmp4 = tmp12
 			} // end let
 			return tmp4
 		})
@@ -25081,26 +25176,38 @@ func LoadNS() {
 				var tmp5 any
 				{ // let
 					// let binding "or__0__auto__"
-					var tmp6 lang.FnFunc1
-					tmp6 = lang.FnFunc1(func(p0 any) any {
-						v7 := p0
-						_ = v7
-						tmp8 := lang.Apply1(nil, v7)
-						return tmp8
-					})
-					tmp7 := aotDirectFn115(v3, v4)
-					tmp8 := aotDirectFn271Arity2(tmp6, tmp7)
-					tmp9 := lang.Apply2(nil, v2, tmp8)
-					tmp10 := lang.Apply1(nil, tmp9)
-					var v11 any = tmp10
-					_ = v11
-					var tmp12 any
-					if lang.IsTruthy(v11) {
-						tmp12 = v11
-					} else {
-						tmp12 = lang.NewList()
+					tmp6, ok := pkgmap5.Get("clojure.lang.RT.chunkIteratorSeq")
+					if !ok {
+						panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.chunkIteratorSeq"))
 					}
-					tmp5 = tmp12
+					tmp7, ok := pkgmap5.Get("clojure.lang.TransformerIterator.createMulti")
+					if !ok {
+						panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.TransformerIterator.createMulti"))
+					}
+					var tmp8 lang.FnFunc1
+					tmp8 = lang.FnFunc1(func(p0 any) any {
+						v9 := p0
+						_ = v9
+						tmp10, ok := pkgmap5.Get("clojure.lang.RT.iter")
+						if !ok {
+							panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.iter"))
+						}
+						tmp11 := lang.Apply1(tmp10, v9)
+						return tmp11
+					})
+					tmp9 := aotDirectFn115(v3, v4)
+					tmp10 := aotDirectFn271Arity2(tmp8, tmp9)
+					tmp11 := lang.Apply2(tmp7, v2, tmp10)
+					tmp12 := lang.Apply1(tmp6, tmp11)
+					var v13 any = tmp12
+					_ = v13
+					var tmp14 any
+					if lang.IsTruthy(v13) {
+						tmp14 = v13
+					} else {
+						tmp14 = lang.NewList()
+					}
+					tmp5 = tmp14
 				} // end let
 				return tmp5
 			}),
@@ -25611,7 +25718,7 @@ func LoadNS() {
 						if lang.IsTruthy(tmp16) {
 							var tmp17 any
 							tmp18 := v14.(interface{ Name() string }).Name()
-							tmp19 := lang.Apply2(strings8.Index, tmp18, ".")
+							tmp19 := lang.Apply2(strings9.Index, tmp18, ".")
 							tmp20 := lang.Equiv(tmp19, int64(-1))
 							if lang.IsTruthy(tmp20) {
 								var tmp21 any
@@ -26851,30 +26958,34 @@ func LoadNS() {
 				var tmp5 any
 				{ // let
 					// let binding "w"
-					tmp6 := aotDirectFn35Arity3(nil, v2, v4)
-					var v7 any = tmp6
-					_ = v7
-					var tmp8 any
+					tmp6, ok := pkgmap5.Get("gio.writer")
+					if !ok {
+						panic(lang.NewIllegalArgumentError("unable to resolve host form: gio.writer"))
+					}
+					tmp7 := aotDirectFn35Arity3(tmp6, v2, v4)
+					var v8 any = tmp7
+					_ = v8
+					var tmp9 any
 					func() {
 						defer func() {
-							tmp9, ok := lang.FieldOrMethod(v7, "close")
+							tmp10, ok := lang.FieldOrMethod(v8, "close")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v7, "close")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "close")))
 							}
-							var tmp10 any
-							switch reflect.TypeOf(tmp9).Kind() {
+							var tmp11 any
+							switch reflect.TypeOf(tmp10).Kind() {
 							case reflect.Func:
-								tmp10 = lang.Apply(tmp9, nil)
+								tmp11 = lang.Apply(tmp10, nil)
 							default:
-								tmp10 = tmp9
+								tmp11 = tmp10
 							}
-							_ = tmp10
+							_ = tmp11
 						}()
-						tmp11 := aotDirectFn490Arity1(v3)
-						tmp12 := lang.Apply2(lang.WriteWriter, v7, tmp11)
-						tmp8 = tmp12
+						tmp12 := aotDirectFn490Arity1(v3)
+						tmp13 := lang.Apply2(lang.WriteWriter, v8, tmp12)
+						tmp9 = tmp13
 					}()
-					tmp5 = tmp8
+					tmp5 = tmp9
 				} // end let
 				return tmp5
 			}),
@@ -27043,7 +27154,7 @@ func LoadNS() {
 					}
 					return tmp7
 				})
-				tmp5 := reflect.TypeOf((*strings8.Builder)(nil)).Elem()
+				tmp5 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
 				tmp6 := reflect.New(tmp5).Interface()
 				tmp7 := aotDirectFn115(v2, v3)
 				tmp8 := lang.Apply2(tmp4, tmp6, tmp7)
@@ -27132,30 +27243,13 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4, ok := lang.FieldOrMethod(v3, "iterator")
+			tmp4, ok := pkgmap5.Get("clojure.core.protocols.iterator-reduce!")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.protocols.iterator-reduce!"))
+			}
+			tmp5, ok := lang.FieldOrMethod(v3, "iterator")
 			if !ok {
 				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v3, "iterator")))
-			}
-			var tmp5 any
-			switch reflect.TypeOf(tmp4).Kind() {
-			case reflect.Func:
-				tmp5 = lang.Apply(tmp4, nil)
-			default:
-				tmp5 = tmp4
-			}
-			tmp6 := lang.Apply2(nil, tmp5, v2)
-			return tmp6
-		})
-		aotDirectFn492Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
-			v2 := p0
-			_ = v2
-			v3 := p1
-			_ = v3
-			v4 := p2
-			_ = v4
-			tmp5, ok := lang.FieldOrMethod(v4, "iterator")
-			if !ok {
-				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "iterator")))
 			}
 			var tmp6 any
 			switch reflect.TypeOf(tmp5).Kind() {
@@ -27164,8 +27258,33 @@ func LoadNS() {
 			default:
 				tmp6 = tmp5
 			}
-			tmp7 := lang.Apply3(nil, tmp6, v2, v3)
+			tmp7 := lang.Apply2(tmp4, tmp6, v2)
 			return tmp7
+		})
+		aotDirectFn492Arity3 = lang.FnFunc3(func(p0, p1, p2 any) any {
+			v2 := p0
+			_ = v2
+			v3 := p1
+			_ = v3
+			v4 := p2
+			_ = v4
+			tmp5, ok := pkgmap5.Get("clojure.core.protocols.iterator-reduce!")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.core.protocols.iterator-reduce!"))
+			}
+			tmp6, ok := lang.FieldOrMethod(v4, "iterator")
+			if !ok {
+				panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v4, "iterator")))
+			}
+			var tmp7 any
+			switch reflect.TypeOf(tmp6).Kind() {
+			case reflect.Func:
+				tmp7 = lang.Apply(tmp6, nil)
+			default:
+				tmp7 = tmp6
+			}
+			tmp8 := lang.Apply3(tmp5, tmp7, v2, v3)
+			return tmp8
 		})
 		tmp1 = lang.NewArityFn(
 			nil,
@@ -27664,8 +27783,12 @@ func LoadNS() {
 			_ = v2
 			v3 := p1
 			_ = v3
-			tmp4 := lang.Apply2(nil, v2, v3)
-			return tmp4
+			tmp4, ok := pkgmap5.Get("clojure.lang.TaggedLiteral.create")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.TaggedLiteral.create"))
+			}
+			tmp5 := lang.Apply2(tmp4, v2, v3)
+			return tmp5
 		})
 		aotDirectFn507 = tmp1
 		var_clojure_DOT_core_tagged_DASH_literal = ns.InternWithValue(tmp0, tmp1, true)
@@ -28294,30 +28417,38 @@ func LoadNS() {
 						tmp22 := lang.Apply1(tmp21, v20)
 						_ = tmp22
 						tmp23 := checkDerefVar(var_clojure_DOT_core__STAR_file_STAR_)
-						tmp24, ok := lang.FieldOrMethod(nil, "Deref")
+						tmp24, ok := pkgmap5.Get("clojure.lang.Compiler.LINE")
 						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", nil, "Deref")))
+							panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Compiler.LINE"))
 						}
-						var tmp25 any
-						switch reflect.TypeOf(tmp24).Kind() {
-						case reflect.Func:
-							tmp25 = lang.Apply(tmp24, nil)
-						default:
-							tmp25 = tmp24
-						}
-						tmp26, ok := lang.FieldOrMethod(nil, "Deref")
+						tmp25, ok := lang.FieldOrMethod(tmp24, "Deref")
 						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", nil, "Deref")))
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp24, "Deref")))
 						}
-						var tmp27 any
-						switch reflect.TypeOf(tmp26).Kind() {
+						var tmp26 any
+						switch reflect.TypeOf(tmp25).Kind() {
 						case reflect.Func:
-							tmp27 = lang.Apply(tmp26, nil)
+							tmp26 = lang.Apply(tmp25, nil)
 						default:
-							tmp27 = tmp26
+							tmp26 = tmp25
 						}
-						tmp28 := lang.Apply4(lang.NewCompilerError, tmp23, tmp25, tmp27, v11)
-						panic(tmp28)
+						tmp27, ok := pkgmap5.Get("clojure.lang.Compiler.COLUMN")
+						if !ok {
+							panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Compiler.COLUMN"))
+						}
+						tmp28, ok := lang.FieldOrMethod(tmp27, "Deref")
+						if !ok {
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", tmp27, "Deref")))
+						}
+						var tmp29 any
+						switch reflect.TypeOf(tmp28).Kind() {
+						case reflect.Func:
+							tmp29 = lang.Apply(tmp28, nil)
+						default:
+							tmp29 = tmp28
+						}
+						tmp30 := lang.Apply4(lang.NewCompilerError, tmp23, tmp26, tmp29, v11)
+						panic(tmp30)
 					} // end let
 					tmp5 = tmp6
 				} else {
@@ -30065,7 +30196,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.IsInstance[url14.URL](v2)
+			tmp3 := lang.IsInstance[url15.URL](v2)
 			return tmp3
 		})
 		aotDirectFn553 = tmp1
@@ -30081,7 +30212,7 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.IsInstance[uuid10.UUID](v2)
+			tmp3 := lang.IsInstance[uuid11.UUID](v2)
 			return tmp3
 		})
 		aotDirectFn555 = tmp1
@@ -39738,7 +39869,7 @@ func LoadNS() {
 														} else {
 															var tmp50 any
 															if lang.IsTruthy(v31) {
-																tmp51 := lang.Apply1(errors5.New, "Unsupported binding form, only :as can follow & parameter")
+																tmp51 := lang.Apply1(errors6.New, "Unsupported binding form, only :as can follow & parameter")
 																panic(tmp51)
 															} else {
 																var tmp53 any
@@ -40156,7 +40287,7 @@ func LoadNS() {
 										tmp23 = tmp25
 									} else {
 										tmp26 := aotDirectFn490.Invoke2("Unsupported binding form: ", v9)
-										tmp27 := lang.Apply1(errors5.New, tmp26)
+										tmp27 := lang.Apply1(errors6.New, tmp26)
 										panic(tmp27)
 									}
 									tmp20 = tmp23
@@ -43575,8 +43706,12 @@ func LoadNS() {
 		tmp1 = lang.FnFunc1(func(p0 any) any {
 			v2 := p0
 			_ = v2
-			tmp3 := lang.Apply1(nil, v2)
-			return tmp3
+			tmp3, ok := pkgmap5.Get("Double.isInfinite")
+			if !ok {
+				panic(lang.NewIllegalArgumentError("unable to resolve host form: Double.isInfinite"))
+			}
+			tmp4 := lang.Apply1(tmp3, v2)
+			return tmp4
 		})
 		aotDirectFn222 = tmp1
 		var_clojure_DOT_core_infinite_QMARK_ = ns.InternWithValue(tmp0, tmp1, true)
@@ -44371,7 +44506,7 @@ func LoadNS() {
 					if lang.IsTruthy(v6) {
 						tmp8 := aotDirectFn292(v3)
 						tmp9 := runtime.RT.IntCast(lang.NewChar(46))
-						tmp10 := lang.Apply2(strings8.Index, tmp8, tmp9)
+						tmp10 := lang.Apply2(strings9.Index, tmp8, tmp9)
 						tmp11 := lang.Numbers.IsPos(tmp10)
 						tmp7 = tmp11
 					} else {
@@ -46659,7 +46794,7 @@ func LoadNS() {
 			var tmp4 any
 			{ // let
 				// let binding "n"
-				tmp5 := lang.Apply0(runtime11.NumCPU)
+				tmp5 := lang.Apply0(runtime12.NumCPU)
 				tmp6 := lang.Numbers.Add(int64(2), tmp5)
 				var v7 any = tmp6
 				_ = v7
@@ -47390,8 +47525,12 @@ func LoadNS() {
 				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_send_DASH_via)
-				tmp6 := aotDirectFn35Arity5(tmp5, nil, v2, v3, v4)
-				return tmp6
+				tmp6, ok := pkgmap5.Get("clojure.lang.Agent.pooledExecutor")
+				if !ok {
+					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Agent.pooledExecutor"))
+				}
+				tmp7 := aotDirectFn35Arity5(tmp5, tmp6, v2, v3, v4)
+				return tmp7
 			}),
 			2,
 		)
@@ -47419,8 +47558,12 @@ func LoadNS() {
 				var v4 any = rest
 				_ = v4
 				tmp5 := checkDerefVar(var_clojure_DOT_core_send_DASH_via)
-				tmp6 := aotDirectFn35Arity5(tmp5, nil, v2, v3, v4)
-				return tmp6
+				tmp6, ok := pkgmap5.Get("clojure.lang.Agent.soloExecutor")
+				if !ok {
+					panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.Agent.soloExecutor"))
+				}
+				tmp7 := aotDirectFn35Arity5(tmp5, tmp6, v2, v3, v4)
+				return tmp7
 			}),
 			2,
 		)
@@ -47446,32 +47589,36 @@ func LoadNS() {
 				var tmp3 any
 				{ // let
 					// let binding "lockee__0__auto__"
-					var v4 any = nil
-					_ = v4
-					var tmp5 any
+					tmp4, ok := pkgmap5.Get("clojure.lang.RT.REQUIRE_LOCK")
+					if !ok {
+						panic(lang.NewIllegalArgumentError("unable to resolve host form: clojure.lang.RT.REQUIRE_LOCK"))
+					}
+					var v5 any = tmp4
+					_ = v5
+					var tmp6 any
 					func() {
-						var tmp6 any
+						var tmp7 any
 						{ // let
 							// let binding "locklocal__1__auto__"
-							var v7 any = v4
-							_ = v7
-							tmp8 := lang.Apply1(nil, v7)
-							_ = tmp8
-							var tmp9 any
+							var v8 any = v5
+							_ = v8
+							tmp9 := lang.Apply1(nil, v8)
+							_ = tmp9
+							var tmp10 any
 							func() {
 								defer func() {
-									tmp10 := lang.Apply1(nil, v7)
-									_ = tmp10
+									tmp11 := lang.Apply1(nil, v8)
+									_ = tmp11
 								}()
-								tmp11 := checkDerefVar(var_clojure_DOT_core_require)
-								tmp12 := aotDirectFn35Arity2(tmp11, v2)
-								tmp9 = tmp12
+								tmp12 := checkDerefVar(var_clojure_DOT_core_require)
+								tmp13 := aotDirectFn35Arity2(tmp12, v2)
+								tmp10 = tmp13
 							}()
-							tmp6 = tmp9
+							tmp7 = tmp10
 						} // end let
-						tmp5 = tmp6
+						tmp6 = tmp7
 					}()
-					tmp3 = tmp5
+					tmp3 = tmp6
 				} // end let
 				return tmp3
 			}),
@@ -48254,7 +48401,7 @@ func LoadNS() {
 				var tmp3 any
 				{ // let
 					// let binding "s__0__auto__"
-					tmp4 := reflect.TypeOf((*strings8.Builder)(nil)).Elem()
+					tmp4 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
 					tmp5 := reflect.New(tmp4).Interface()
 					var v6 any = tmp5
 					_ = v6
@@ -48348,7 +48495,7 @@ func LoadNS() {
 				var tmp3 any
 				{ // let
 					// let binding "s__0__auto__"
-					tmp4 := reflect.TypeOf((*strings8.Builder)(nil)).Elem()
+					tmp4 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
 					tmp5 := reflect.New(tmp4).Interface()
 					var v6 any = tmp5
 					_ = v6
@@ -48436,7 +48583,7 @@ func LoadNS() {
 				var tmp3 any
 				{ // let
 					// let binding "s__0__auto__"
-					tmp4 := reflect.TypeOf((*strings8.Builder)(nil)).Elem()
+					tmp4 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
 					tmp5 := reflect.New(tmp4).Interface()
 					var v6 any = tmp5
 					_ = v6
@@ -48530,7 +48677,7 @@ func LoadNS() {
 				var tmp3 any
 				{ // let
 					// let binding "s__0__auto__"
-					tmp4 := reflect.TypeOf((*strings8.Builder)(nil)).Elem()
+					tmp4 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
 					tmp5 := reflect.New(tmp4).Interface()
 					var v6 any = tmp5
 					_ = v6
@@ -49076,7 +49223,7 @@ func LoadNS() {
 			return tmp43
 		})
 		tmp1.AddMethod(tmp37, tmp38)
-		tmp39 := reflect.TypeOf((*regexp12.Regexp)(nil))
+		tmp39 := reflect.TypeOf((*regexp13.Regexp)(nil))
 		var tmp40 lang.FnFunc2
 		tmp40 = lang.FnFunc2(func(p0, p1 any) any {
 			v41 := p0
@@ -50254,7 +50401,7 @@ func LoadNS() {
 			return tmp37
 		})
 		tmp1.AddMethod(tmp32, tmp33)
-		tmp34 := reflect.TypeOf((*regexp12.Regexp)(nil))
+		tmp34 := reflect.TypeOf((*regexp13.Regexp)(nil))
 		var tmp35 lang.FnFunc2
 		tmp35 = lang.FnFunc2(func(p0, p1 any) any {
 			v36 := p0
@@ -50801,7 +50948,7 @@ func LoadNS() {
 					var v6 any = tmp5
 					_ = v6
 					// let binding "sw"
-					tmp7 := reflect.TypeOf((*strings8.Builder)(nil)).Elem()
+					tmp7 := reflect.TypeOf((*strings9.Builder)(nil)).Elem()
 					tmp8 := reflect.New(tmp7).Interface()
 					var v9 any = tmp8
 					_ = v9
