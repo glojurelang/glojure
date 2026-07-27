@@ -216,7 +216,8 @@ func LoadNS() {
 	aotExternalFn11 := aotCacheFn2(var_clojure_DOT_core_identical_QMARK_)
 	aotExternalDefault2 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_cons)
 	aotExternalRootVersion2 := var_clojure_DOT_core_cons.RootVersion()
-	aotExternalFn3 := aotCacheFn2(var_clojure_DOT_core_instance_QMARK_)
+	aotExternalDefault3 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_instance_QMARK_)
+	aotExternalRootVersion3 := var_clojure_DOT_core_instance_QMARK_.RootVersion()
 	aotExternalFn4 := aotCacheFn1(var_clojure_DOT_core_deref)
 	aotExternalDefault5 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_seq)
 	aotExternalRootVersion5 := var_clojure_DOT_core_seq.RootVersion()
@@ -1574,23 +1575,29 @@ func LoadNS() {
 			_ = v4
 			var tmp5 any
 			tmp6 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
-			tmp7 := aotExternalFn3(tmp6, v2)
-			if lang.IsTruthy(tmp7) {
-				tmp8 := v2.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v3), v4)
-				tmp5 = tmp8
+			var tmp7 any
+			if aotExternalDefault3 && var_clojure_DOT_core_instance_QMARK_.RootVersion() == aotExternalRootVersion3 {
+				tmp7 = lang.IsInstance[lang.IReduceInit](v2)
 			} else {
-				tmp9 := var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.IsMacro()
-				var tmp10 any
-				if !tmp9 {
-					tmp10 = checkDerefVar(var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce)
-				}
+				tmp8 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+				tmp7 = lang.Apply2(tmp8, tmp6, v2)
+			}
+			if lang.IsTruthy(tmp7) {
+				tmp9 := v2.(interface{ ReduceInit(lang.IFn, any) any }).ReduceInit(lang.MustHostCast[lang.IFn](v3), v4)
+				tmp5 = tmp9
+			} else {
+				tmp10 := var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.RootVersion() == aotRootVersion2 && !var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce.IsMacro()
 				var tmp11 any
-				if tmp9 {
-					tmp11 = aotDirectFn2(v2, v3, v4)
-				} else {
-					tmp11 = lang.Apply3(tmp10, v2, v3, v4)
+				if !tmp10 {
+					tmp11 = checkDerefVar(var_clojure_DOT_core_DOT_protocols_naive_DASH_seq_DASH_reduce)
 				}
-				tmp5 = tmp11
+				var tmp12 any
+				if tmp10 {
+					tmp12 = aotDirectFn2(v2, v3, v4)
+				} else {
+					tmp12 = lang.Apply3(tmp11, v2, v3, v4)
+				}
+				tmp5 = tmp12
 			}
 			return tmp5
 		})

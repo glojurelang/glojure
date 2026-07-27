@@ -264,12 +264,12 @@ func (g *Generator) aotExternalInvokeTarget(
 		return nil
 	}
 	arity := len(invoke.Args)
-	intrinsic := aotExternalIntrinsic(vr, arity)
+	intrinsic := g.aotExternalIntrinsic(vr, invoke)
 	if arity > 5 ||
 		(intrinsic == "" && !aotSupportsArity(codegenVarValue(vr), arity)) {
 		return nil
 	}
-	key := aotExternalCallKey{vr: vr, arity: arity}
+	key := aotExternalCallKey{vr: vr, arity: arity, intrinsic: intrinsic}
 	if target := g.aotExternalCallTargets[key]; target != nil {
 		return target
 	}
@@ -290,11 +290,15 @@ func (g *Generator) aotExternalInvokeTarget(
 	return target
 }
 
-func aotExternalIntrinsic(vr *lang.Var, arity int) string {
+func (g *Generator) aotExternalIntrinsic(
+	vr *lang.Var,
+	invoke *ast.InvokeNode,
+) string {
 	if vr.Namespace().Name().String() != "clojure.core" {
 		return ""
 	}
 	name := vr.Symbol().String()
+	arity := len(invoke.Args)
 	switch {
 	case name == "assoc" && (arity == 3 || arity == 5):
 	case name == "count" && arity == 1:
@@ -305,6 +309,10 @@ func aotExternalIntrinsic(vr *lang.Var, arity int) string {
 	case name == "first" && arity == 1:
 	case name == "get" && (arity == 2 || arity == 3):
 	case name == "inc" && arity == 1:
+	case name == "instance?" && arity == 2:
+		if _, ok := g.staticInstanceCall(invoke, []string{"", "value"}); !ok {
+			return ""
+		}
 	case name == "next" && arity == 1:
 	case name == "nth" && (arity == 2 || arity == 3):
 	case name == "peek" && arity == 1:
@@ -318,6 +326,7 @@ func aotExternalIntrinsic(vr *lang.Var, arity int) string {
 
 func (g *Generator) aotExternalIntrinsicCall(
 	intrinsic string,
+	invoke *ast.InvokeNode,
 	args []string,
 ) string {
 	switch intrinsic {
@@ -348,6 +357,12 @@ func (g *Generator) aotExternalIntrinsicCall(
 		return fmt.Sprintf("lang.GetDefault(%s, %s, %s)", args[0], args[1], args[2])
 	case "inc":
 		return fmt.Sprintf("lang.Numbers.Inc(%s)", args[0])
+	case "instance?":
+		call, ok := g.staticInstanceCall(invoke, args)
+		if !ok {
+			panic("static instance? intrinsic lost its target type")
+		}
+		return call
 	case "next":
 		return fmt.Sprintf("lang.Next(%s)", args[0])
 	case "nth":

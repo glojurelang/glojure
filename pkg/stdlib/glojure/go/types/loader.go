@@ -209,7 +209,8 @@ func LoadNS() {
 	aotExternalFn0 := aotCacheFn1(var_clojure_DOT_core_class)
 	aotExternalFn1 := aotCacheFn2(var_clojure_DOT_core_apply)
 	aotExternalFn10 := aotCacheFn1(var_clojure_DOT_core_last)
-	aotExternalFn11 := aotCacheFn2(var_clojure_DOT_core_instance_QMARK_)
+	aotExternalDefault11 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_instance_QMARK_)
+	aotExternalRootVersion11 := var_clojure_DOT_core_instance_QMARK_.RootVersion()
 	aotExternalFn12 := aotCacheFn2(var_clojure_DOT_core_concat)
 	aotExternalFn13 := aotCacheFn1(var_clojure_DOT_core_butlast)
 	aotExternalDefault14 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_empty_QMARK_)
@@ -1046,131 +1047,137 @@ func LoadNS() {
 				_ = v8
 				// let binding "variadic"
 				tmp9 := reflect.TypeOf((*ast4.Ellipsis)(nil))
-				tmp10 := aotExternalFn11(tmp9, v8)
-				var v11 any = tmp10
-				_ = v11
-				// let binding "params"
-				var tmp12 any
-				tmp13 := aotExternalFn3(v11)
-				if lang.IsTruthy(tmp13) {
-					tmp14 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-					tmp15 := aotExternalFn8(tmp14, v6)
-					tmp12 = tmp15
+				var tmp10 any
+				if aotExternalDefault11 && var_clojure_DOT_core_instance_QMARK_.RootVersion() == aotExternalRootVersion11 {
+					tmp10 = lang.IsInstance[*ast4.Ellipsis](v8)
 				} else {
-					tmp16 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-					tmp17 := aotExternalFn13(v6)
-					tmp18 := aotExternalFn8(tmp16, tmp17)
-					tmp19 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-					tmp20, ok := lang.FieldOrMethod(v8, "Elt")
+					tmp11 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+					tmp10 = lang.Apply2(tmp11, tmp9, v8)
+				}
+				var v12 any = tmp10
+				_ = v12
+				// let binding "params"
+				var tmp13 any
+				tmp14 := aotExternalFn3(v12)
+				if lang.IsTruthy(tmp14) {
+					tmp15 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+					tmp16 := aotExternalFn8(tmp15, v6)
+					tmp13 = tmp16
+				} else {
+					tmp17 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+					tmp18 := aotExternalFn13(v6)
+					tmp19 := aotExternalFn8(tmp17, tmp18)
+					tmp20 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+					tmp21, ok := lang.FieldOrMethod(v8, "Elt")
 					if !ok {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v8, "Elt")))
 					}
-					var tmp21 any
-					switch reflect.TypeOf(tmp20).Kind() {
+					var tmp22 any
+					switch reflect.TypeOf(tmp21).Kind() {
 					case reflect.Func:
-						tmp21 = lang.Apply(tmp20, nil)
+						tmp22 = lang.Apply(tmp21, nil)
 					default:
-						tmp21 = tmp20
+						tmp22 = tmp21
 					}
-					tmp22 := lang.Apply1(tmp19, tmp21)
-					tmp23 := lang.Apply1(lang.Builtins["slice-of"], tmp22)
-					tmp24 := lang.NewVector(tmp23)
-					tmp25 := aotExternalFn12(tmp18, tmp24)
-					tmp12 = tmp25
+					tmp23 := lang.Apply1(tmp20, tmp22)
+					tmp24 := lang.Apply1(lang.Builtins["slice-of"], tmp23)
+					tmp25 := lang.NewVector(tmp24)
+					tmp26 := aotExternalFn12(tmp19, tmp25)
+					tmp13 = tmp26
 				}
-				var v26 any = tmp12
-				_ = v26
+				var v27 any = tmp13
+				_ = v27
 				// let binding "rl"
-				var tmp27 any
+				var tmp28 any
 				{ // let
 					// let binding "or__0__auto__"
-					tmp28, ok := lang.FieldOrMethod(v1, "Results")
+					tmp29, ok := lang.FieldOrMethod(v1, "Results")
 					if !ok {
 						panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v1, "Results")))
 					}
-					var tmp29 any
-					switch reflect.TypeOf(tmp28).Kind() {
+					var tmp30 any
+					switch reflect.TypeOf(tmp29).Kind() {
 					case reflect.Func:
-						tmp29 = lang.Apply(tmp28, nil)
+						tmp30 = lang.Apply(tmp29, nil)
 					default:
-						tmp29 = tmp28
+						tmp30 = tmp29
 					}
-					var v30 any = tmp29
-					_ = v30
-					var tmp31 any
-					if lang.IsTruthy(v30) {
-						tmp31 = v30
+					var v31 any = tmp30
+					_ = v31
+					var tmp32 any
+					if lang.IsTruthy(v31) {
+						tmp32 = v31
 					} else {
 					}
-					tmp27 = tmp31
+					tmp28 = tmp32
 				} // end let
-				var v28 any = tmp27
-				_ = v28
+				var v29 any = tmp28
+				_ = v29
 				// let binding "results"
-				var tmp29 any
+				var tmp30 any
 				{ // let
 					// let binding "and__0__auto__"
-					var v30 any = v28
-					_ = v30
-					var tmp31 any
-					if lang.IsTruthy(v30) {
-						tmp32 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
-						tmp33 := checkDerefVar(var_clojure_DOT_core_concat)
-						var tmp34 lang.FnFunc1
-						tmp34 = lang.FnFunc1(func(p0 any) any {
-							v35 := p0
-							_ = v35
-							tmp36, ok := lang.FieldOrMethod(v35, "Names")
+					var v31 any = v29
+					_ = v31
+					var tmp32 any
+					if lang.IsTruthy(v31) {
+						tmp33 := checkDerefVar(var_glojure_DOT_go_DOT_types_ast_DASH__GT_type)
+						tmp34 := checkDerefVar(var_clojure_DOT_core_concat)
+						var tmp35 lang.FnFunc1
+						tmp35 = lang.FnFunc1(func(p0 any) any {
+							v36 := p0
+							_ = v36
+							tmp37, ok := lang.FieldOrMethod(v36, "Names")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v35, "Names")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v36, "Names")))
 							}
-							var tmp37 any
-							switch reflect.TypeOf(tmp36).Kind() {
+							var tmp38 any
+							switch reflect.TypeOf(tmp37).Kind() {
 							case reflect.Func:
-								tmp37 = lang.Apply(tmp36, nil)
+								tmp38 = lang.Apply(tmp37, nil)
 							default:
-								tmp37 = tmp36
+								tmp38 = tmp37
 							}
-							tmp38 := lang.Apply1(lang.Builtins["len"], tmp37)
-							tmp39 := lang.Numbers.Max(int64(1), tmp38)
-							tmp40, ok := lang.FieldOrMethod(v35, "Type")
+							tmp39 := lang.Apply1(lang.Builtins["len"], tmp38)
+							tmp40 := lang.Numbers.Max(int64(1), tmp39)
+							tmp41, ok := lang.FieldOrMethod(v36, "Type")
 							if !ok {
-								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v35, "Type")))
+								panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v36, "Type")))
 							}
-							var tmp41 any
-							switch reflect.TypeOf(tmp40).Kind() {
+							var tmp42 any
+							switch reflect.TypeOf(tmp41).Kind() {
 							case reflect.Func:
-								tmp41 = lang.Apply(tmp40, nil)
+								tmp42 = lang.Apply(tmp41, nil)
 							default:
-								tmp41 = tmp40
+								tmp42 = tmp41
 							}
-							tmp42 := aotExternalFn9(tmp39, tmp41)
-							return tmp42
+							tmp43 := aotExternalFn9(tmp40, tmp42)
+							return tmp43
 						})
-						tmp35, ok := lang.FieldOrMethod(v28, "List")
+						tmp36, ok := lang.FieldOrMethod(v29, "List")
 						if !ok {
-							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v28, "List")))
+							panic(lang.NewIllegalArgumentError(fmt.Sprintf("no such field or method on %T: %s", v29, "List")))
 						}
-						var tmp36 any
-						switch reflect.TypeOf(tmp35).Kind() {
+						var tmp37 any
+						switch reflect.TypeOf(tmp36).Kind() {
 						case reflect.Func:
-							tmp36 = lang.Apply(tmp35, nil)
+							tmp37 = lang.Apply(tmp36, nil)
 						default:
-							tmp36 = tmp35
+							tmp37 = tmp36
 						}
-						tmp37 := aotExternalFn8(tmp34, tmp36)
-						tmp38 := aotExternalFn1(tmp33, tmp37)
-						tmp39 := aotExternalFn8(tmp32, tmp38)
-						tmp31 = tmp39
+						tmp38 := aotExternalFn8(tmp35, tmp37)
+						tmp39 := aotExternalFn1(tmp34, tmp38)
+						tmp40 := aotExternalFn8(tmp33, tmp39)
+						tmp32 = tmp40
 					} else {
-						tmp31 = v30
+						tmp32 = v31
 					}
-					tmp29 = tmp31
+					tmp30 = tmp32
 				} // end let
-				var v30 any = tmp29
-				_ = v30
-				tmp31 := lang.Apply3(lang.Builtins["func-of"], v26, v30, v11)
-				tmp2 = tmp31
+				var v31 any = tmp30
+				_ = v31
+				tmp32 := lang.Apply3(lang.Builtins["func-of"], v27, v31, v12)
+				tmp2 = tmp32
 			} // end let
 			return tmp2
 		})

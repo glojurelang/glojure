@@ -104,8 +104,9 @@ type aotExternalCallTarget struct {
 }
 
 type aotExternalCallKey struct {
-	vr    *lang.Var
-	arity int
+	vr        *lang.Var
+	arity     int
+	intrinsic string
 }
 
 // Generator handles the conversion of AST nodes to Go code
@@ -1850,6 +1851,15 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 		return resultVar
 	}
 	if aotTarget != nil {
+		if instanceCall, ok := g.staticInstanceCall(invokeNode, argExprs); ok {
+			g.writef("var %s any\n", resultVar)
+			g.writef("if %s {\n", aotFast)
+			g.writef("%s = %s\n", resultVar, instanceCall)
+			g.writef("} else {\n")
+			g.generateApply(resultVar, aotFallbackFn, argExprs, false)
+			g.writef("}\n")
+			return resultVar
+		}
 		g.writef("var %s any\n", resultVar)
 		g.writef("if %s {\n", aotFast)
 		if slot := aotTarget.directArityVars[len(argExprs)]; slot != "" {
@@ -1889,7 +1899,11 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 			)
 			g.writef("%s = %s\n",
 				resultVar,
-				g.aotExternalIntrinsicCall(externalTarget.intrinsic, argExprs),
+				g.aotExternalIntrinsicCall(
+					externalTarget.intrinsic,
+					invokeNode,
+					argExprs,
+				),
 			)
 			g.writef("} else {\n")
 			fallback := g.allocateTempVar()
@@ -1909,6 +1923,36 @@ func (g *Generator) generateInvokeDefault(invokeNode *ast.InvokeNode) string {
 	// Emit the invocation using fixed-arity Apply for 0-4 args to avoid []any alloc.
 	g.generateApply(resultVar, fnExpr, argExprs, true)
 	return resultVar
+}
+
+func staticInstanceType(invoke *ast.InvokeNode) (reflect.Type, bool) {
+	if len(invoke.Args) != 2 ||
+		invoke.Fn.Op != ast.OpVar ||
+		invoke.Args[0].Op != ast.OpConst {
+		return nil, false
+	}
+	vr := invoke.Fn.Sub.(*ast.VarNode).Var
+	if vr.Namespace().Name().String() != "clojure.core" ||
+		vr.Symbol().String() != "instance?" {
+		return nil, false
+	}
+	typ, ok := invoke.Args[0].Sub.(*ast.ConstNode).Value.(reflect.Type)
+	return typ, ok && typ != nil
+}
+
+func (g *Generator) staticInstanceCall(
+	invoke *ast.InvokeNode,
+	args []string,
+) (string, bool) {
+	typ, ok := staticInstanceType(invoke)
+	if !ok || len(args) != 2 {
+		return "", false
+	}
+	typeExpr, ok := g.goTypeExpr(typ)
+	if !ok {
+		return "", false
+	}
+	return fmt.Sprintf("lang.IsInstance[%s](%s)", typeExpr, args[1]), true
 }
 
 func (g *Generator) generateApply(

@@ -87,6 +87,32 @@ func TestGenerateFixedArityFunctionsThroughTwenty(t *testing.T) {
 	}
 }
 
+func TestGenerateStaticInstanceCheck(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.static-instance"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn vector-value? [x]
+		  (instance? github.com:glojurelang:glojure:pkg:lang.IPersistentVector x))
+		(defn dynamic-instance? [t x]
+		  (instance? t x))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate static instance check: %v", err)
+	}
+	generated := output.String()
+	const directCheck = "lang.IsInstance[lang.IPersistentVector]"
+	if !strings.Contains(generated, directCheck) {
+		t.Fatalf("known instance? target did not use a type assertion:\n%s", generated)
+	}
+	if got := strings.Count(generated, directCheck); got != 1 {
+		t.Fatalf("generated %d static vector checks, want 1:\n%s", got, generated)
+	}
+}
+
 func TestGenerateDirectCallsForKnownFunctionArities(t *testing.T) {
 	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.direct-known-arities"))
 	ns.ReferAllSnapshot(lang.NSCore, nil)

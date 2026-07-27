@@ -278,7 +278,8 @@ func LoadNS() {
 	aotExternalFn15 := aotCacheFn2(var_clojure_DOT_core_with_DASH_meta)
 	aotExternalFn16 := aotCacheFn2(var_clojure_DOT_core_apply)
 	aotExternalFn17 := aotCacheFn1(var_clojure_DOT_core_meta)
-	aotExternalFn18 := aotCacheFn2(var_clojure_DOT_core_instance_QMARK_)
+	aotExternalDefault18 := runtime.IsDefaultCoreVar(var_clojure_DOT_core_instance_QMARK_)
+	aotExternalRootVersion18 := var_clojure_DOT_core_instance_QMARK_.RootVersion()
 	aotExternalFn19 := aotCacheFn1(var_clojure_DOT_core_key)
 	aotExternalFn2 := aotCacheFn1(var_clojure_DOT_core_keyword)
 	aotExternalFn20 := aotCacheFn1(var_clojure_DOT_core_val)
@@ -849,67 +850,79 @@ func LoadNS() {
 			} else {
 				var tmp13 any
 				tmp14 := reflect.TypeOf((*lang.IMapEntry)(nil)).Elem()
-				tmp15 := aotExternalFn18(tmp14, v4)
-				if lang.IsTruthy(tmp15) {
-					tmp16 := aotExternalFn19(v4)
-					tmp17 := lang.Apply1(v2, tmp16)
-					tmp18 := aotExternalFn20(v4)
-					tmp19 := lang.Apply1(v2, tmp18)
-					tmp20 := lang.Apply2(nil, tmp17, tmp19)
-					tmp21 := lang.Apply1(v3, tmp20)
-					tmp13 = tmp21
+				var tmp15 any
+				if aotExternalDefault18 && var_clojure_DOT_core_instance_QMARK_.RootVersion() == aotExternalRootVersion18 {
+					tmp15 = lang.IsInstance[lang.IMapEntry](v4)
 				} else {
-					var tmp22 any
-					tmp23 := aotExternalFn6(v4)
-					if lang.IsTruthy(tmp23) {
-						tmp24 := aotExternalFn5(v2, v4)
-						tmp25 := aotExternalFn21(tmp24)
-						tmp26 := aotExternalFn17(v4)
-						tmp27 := aotExternalFn15(tmp25, tmp26)
-						tmp28 := lang.Apply1(v3, tmp27)
-						tmp22 = tmp28
-					} else {
-						var tmp29 any
-						tmp30 := reflect.TypeOf((*lang.IRecord)(nil)).Elem()
-						tmp31 := aotExternalFn18(tmp30, v4)
-						if lang.IsTruthy(tmp31) {
-							var tmp32 lang.FnFunc2
-							tmp32 = lang.FnFunc2(func(p0, p1 any) any {
-								v33 := p0
-								_ = v33
-								v34 := p1
-								_ = v34
-								tmp35 := lang.Apply1(v2, v34)
-								var tmp36 any
-								if aotExternalDefault23 && var_clojure_DOT_core_conj.RootVersion() == aotExternalRootVersion23 {
-									tmp36 = lang.ConjAny(v33, tmp35)
-								} else {
-									tmp37 := checkDerefVar(var_clojure_DOT_core_conj)
-									tmp36 = lang.Apply2(tmp37, v33, tmp35)
-								}
-								return tmp36
-							})
-							tmp33 := aotExternalFn22(tmp32, v4, v4)
-							tmp34 := lang.Apply1(v3, tmp33)
-							tmp29 = tmp34
-						} else {
-							var tmp35 any
-							tmp36 := aotExternalFn24(v4)
-							if lang.IsTruthy(tmp36) {
-								tmp37 := aotExternalFn25(v4)
-								tmp38 := aotExternalFn5(v2, v4)
-								tmp39 := aotExternalFn4(tmp37, tmp38)
-								tmp40 := lang.Apply1(v3, tmp39)
-								tmp35 = tmp40
-							} else {
-								tmp41 := lang.Apply1(v3, v4)
-								tmp35 = tmp41
-							}
-							tmp29 = tmp35
-						}
-						tmp22 = tmp29
-					}
+					tmp16 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+					tmp15 = lang.Apply2(tmp16, tmp14, v4)
+				}
+				if lang.IsTruthy(tmp15) {
+					tmp17 := aotExternalFn19(v4)
+					tmp18 := lang.Apply1(v2, tmp17)
+					tmp19 := aotExternalFn20(v4)
+					tmp20 := lang.Apply1(v2, tmp19)
+					tmp21 := lang.Apply2(nil, tmp18, tmp20)
+					tmp22 := lang.Apply1(v3, tmp21)
 					tmp13 = tmp22
+				} else {
+					var tmp23 any
+					tmp24 := aotExternalFn6(v4)
+					if lang.IsTruthy(tmp24) {
+						tmp25 := aotExternalFn5(v2, v4)
+						tmp26 := aotExternalFn21(tmp25)
+						tmp27 := aotExternalFn17(v4)
+						tmp28 := aotExternalFn15(tmp26, tmp27)
+						tmp29 := lang.Apply1(v3, tmp28)
+						tmp23 = tmp29
+					} else {
+						var tmp30 any
+						tmp31 := reflect.TypeOf((*lang.IRecord)(nil)).Elem()
+						var tmp32 any
+						if aotExternalDefault18 && var_clojure_DOT_core_instance_QMARK_.RootVersion() == aotExternalRootVersion18 {
+							tmp32 = lang.IsInstance[lang.IRecord](v4)
+						} else {
+							tmp33 := checkDerefVar(var_clojure_DOT_core_instance_QMARK_)
+							tmp32 = lang.Apply2(tmp33, tmp31, v4)
+						}
+						if lang.IsTruthy(tmp32) {
+							var tmp34 lang.FnFunc2
+							tmp34 = lang.FnFunc2(func(p0, p1 any) any {
+								v35 := p0
+								_ = v35
+								v36 := p1
+								_ = v36
+								tmp37 := lang.Apply1(v2, v36)
+								var tmp38 any
+								if aotExternalDefault23 && var_clojure_DOT_core_conj.RootVersion() == aotExternalRootVersion23 {
+									tmp38 = lang.ConjAny(v35, tmp37)
+								} else {
+									tmp39 := checkDerefVar(var_clojure_DOT_core_conj)
+									tmp38 = lang.Apply2(tmp39, v35, tmp37)
+								}
+								return tmp38
+							})
+							tmp35 := aotExternalFn22(tmp34, v4, v4)
+							tmp36 := lang.Apply1(v3, tmp35)
+							tmp30 = tmp36
+						} else {
+							var tmp37 any
+							tmp38 := aotExternalFn24(v4)
+							if lang.IsTruthy(tmp38) {
+								tmp39 := aotExternalFn25(v4)
+								tmp40 := aotExternalFn5(v2, v4)
+								tmp41 := aotExternalFn4(tmp39, tmp40)
+								tmp42 := lang.Apply1(v3, tmp41)
+								tmp37 = tmp42
+							} else {
+								tmp43 := lang.Apply1(v3, v4)
+								tmp37 = tmp43
+							}
+							tmp30 = tmp37
+						}
+						tmp23 = tmp30
+					}
+					tmp13 = tmp23
 				}
 				tmp5 = tmp13
 			}

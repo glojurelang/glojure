@@ -33,6 +33,14 @@ func HasType(t reflect.Type, v interface{}) bool {
 	}
 }
 
+// IsInstance performs the same assignability check as HasType when the target
+// type is known at compile time. AOT code can use a Go type assertion instead
+// of reflect.Type.AssignableTo.
+func IsInstance[T any](v interface{}) bool {
+	_, ok := v.(T)
+	return ok
+}
+
 func TypeOf(v interface{}) reflect.Type {
 	return reflect.TypeOf(v)
 }

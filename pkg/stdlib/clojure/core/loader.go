@@ -6654,7 +6654,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.Keyword](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -6763,7 +6763,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.IPersistentList)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.IPersistentList](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -6883,7 +6883,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.MapEntry)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.MapEntry](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -6913,7 +6913,7 @@ func LoadNS() {
 				tmp6 := reflect.TypeOf((*lang.IPersistentMap)(nil)).Elem()
 				var tmp7 any
 				if tmp4 {
-					tmp7 = aotDirectFn225(tmp6, v3)
+					tmp7 = lang.IsInstance[lang.IPersistentMap](v3)
 				} else {
 					tmp7 = lang.Apply2(tmp5, tmp6, v3)
 				}
@@ -6963,7 +6963,7 @@ func LoadNS() {
 				tmp7 := reflect.TypeOf((*lang.IMeta)(nil)).Elem()
 				var tmp8 any
 				if tmp5 {
-					tmp8 = aotDirectFn225(tmp7, v3)
+					tmp8 = lang.IsInstance[lang.IMeta](v3)
 				} else {
 					tmp8 = lang.Apply2(tmp6, tmp7, v3)
 				}
@@ -7372,7 +7372,7 @@ func LoadNS() {
 			tmp6 := reflect.TypeOf((*lang.ITransientVector)(nil)).Elem()
 			var tmp7 any
 			if tmp4 {
-				tmp7 = aotDirectFn225(tmp6, v2)
+				tmp7 = lang.IsInstance[lang.ITransientVector](v2)
 			} else {
 				tmp7 = lang.Apply2(tmp5, tmp6, v2)
 			}
@@ -7656,7 +7656,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.Ratio)(nil))
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[*lang.Ratio](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -7722,7 +7722,7 @@ func LoadNS() {
 			tmp6 := reflect.TypeOf((*regexp12.Regexp)(nil))
 			var tmp7 any
 			if tmp4 {
-				tmp7 = aotDirectFn225(tmp6, v2)
+				tmp7 = lang.IsInstance[*regexp12.Regexp](v2)
 			} else {
 				tmp7 = lang.Apply2(tmp5, tmp6, v2)
 			}
@@ -8244,7 +8244,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.Reversible)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.Reversible](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -8361,7 +8361,7 @@ func LoadNS() {
 				tmp6 := reflect.TypeOf((*lang.ISeq)(nil)).Elem()
 				var tmp7 any
 				if tmp4 {
-					tmp7 = aotDirectFn225(tmp6, v3)
+					tmp7 = lang.IsInstance[lang.ISeq](v3)
 				} else {
 					tmp7 = lang.Apply2(tmp5, tmp6, v3)
 				}
@@ -8409,7 +8409,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.Sequential)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.Sequential](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -8538,7 +8538,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.IPersistentSet)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.IPersistentSet](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -8825,7 +8825,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.Sorted)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.Sorted](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -9474,7 +9474,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.Symbol)(nil))
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[*lang.Symbol](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -9786,7 +9786,7 @@ func LoadNS() {
 			tmp6 := reflect.TypeOf((*lang.Namespace)(nil))
 			var tmp7 any
 			if tmp4 {
-				tmp7 = aotDirectFn225(tmp6, v2)
+				tmp7 = lang.IsInstance[*lang.Namespace](v2)
 			} else {
 				tmp7 = lang.Apply2(tmp5, tmp6, v2)
 			}
@@ -9977,7 +9977,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*url14.URL)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[url14.URL](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -10005,7 +10005,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf([16]uint8{})
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[uuid10.UUID](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -10103,7 +10103,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.Var)(nil))
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[*lang.Var](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -10310,7 +10310,7 @@ func LoadNS() {
 				tmp6 := reflect.TypeOf((*lang.IPersistentVector)(nil)).Elem()
 				var tmp7 any
 				if tmp4 {
-					tmp7 = aotDirectFn225(tmp6, v3)
+					tmp7 = lang.IsInstance[lang.IPersistentVector](v3)
 				} else {
 					tmp7 = lang.Apply2(tmp5, tmp6, v3)
 				}
@@ -10359,7 +10359,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.Volatile)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.Volatile](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -10864,7 +10864,7 @@ func LoadNS() {
 			tmp8 := reflect.TypeOf((*lang.ITransientCollection)(nil)).Elem()
 			var tmp9 any
 			if tmp6 {
-				tmp9 = aotDirectFn225(tmp8, v2)
+				tmp9 = lang.IsInstance[lang.ITransientCollection](v2)
 			} else {
 				tmp9 = lang.Apply2(tmp7, tmp8, v2)
 			}
@@ -11103,7 +11103,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.Associative)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.Associative](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -11219,7 +11219,7 @@ func LoadNS() {
 				tmp6 := reflect.TypeOf(lang.NewChar(0))
 				var tmp7 any
 				if tmp4 {
-					tmp7 = aotDirectFn225(tmp6, v3)
+					tmp7 = lang.IsInstance[lang.Char](v3)
 				} else {
 					tmp7 = lang.Apply2(tmp5, tmp6, v3)
 				}
@@ -11250,7 +11250,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.IChunkedSeq)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.IChunkedSeq](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -11278,7 +11278,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*reflect.Type)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[reflect.Type](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -11306,7 +11306,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.IPersistentCollection](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -12087,7 +12087,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.Counted)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.Counted](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -12328,7 +12328,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.BigDecimal)(nil))
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[*lang.BigDecimal](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -12534,7 +12534,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.Delay)(nil))
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[*lang.Delay](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -12563,7 +12563,7 @@ func LoadNS() {
 			tmp6 := reflect.TypeOf((*lang.IDeref)(nil)).Elem()
 			var tmp7 any
 			if tmp4 {
-				tmp7 = aotDirectFn225(tmp6, v2)
+				tmp7 = lang.IsInstance[lang.IDeref](v2)
 			} else {
 				tmp7 = lang.Apply2(tmp5, tmp6, v2)
 			}
@@ -12602,7 +12602,7 @@ func LoadNS() {
 			tmp8 := reflect.TypeOf((*lang.IBlockingDeref)(nil)).Elem()
 			var tmp9 any
 			if tmp6 {
-				tmp9 = aotDirectFn225(tmp8, v2)
+				tmp9 = lang.IsInstance[lang.IBlockingDeref](v2)
 			} else {
 				tmp9 = lang.Apply2(tmp7, tmp8, v2)
 			}
@@ -12772,7 +12772,7 @@ func LoadNS() {
 			tmp7 := reflect.TypeOf((*lang.TransientSet)(nil))
 			var tmp8 any
 			if tmp5 {
-				tmp8 = aotDirectFn225(tmp7, v2)
+				tmp8 = lang.IsInstance[*lang.TransientSet](v2)
 			} else {
 				tmp8 = lang.Apply2(tmp6, tmp7, v2)
 			}
@@ -12978,7 +12978,7 @@ func LoadNS() {
 			tmp7 := reflect.TypeOf((*lang.TransientMap)(nil))
 			var tmp8 any
 			if tmp5 {
-				tmp8 = aotDirectFn225(tmp7, v2)
+				tmp8 = lang.IsInstance[*lang.TransientMap](v2)
 			} else {
 				tmp8 = lang.Apply2(tmp6, tmp7, v2)
 			}
@@ -13624,7 +13624,7 @@ func LoadNS() {
 			tmp7 := reflect.TypeOf((*lang.IDrop)(nil)).Elem()
 			var tmp8 any
 			if tmp5 {
-				tmp8 = aotDirectFn225(tmp7, v3)
+				tmp8 = lang.IsInstance[lang.IDrop](v3)
 			} else {
 				tmp8 = lang.Apply2(tmp6, tmp7, v3)
 			}
@@ -14010,7 +14010,7 @@ func LoadNS() {
 			tmp6 := reflect.TypeOf((*lang.IPersistentCollection)(nil)).Elem()
 			var tmp7 any
 			if tmp4 {
-				tmp7 = aotDirectFn225(tmp6, v2)
+				tmp7 = lang.IsInstance[lang.IPersistentCollection](v2)
 			} else {
 				tmp7 = lang.Apply2(tmp5, tmp6, v2)
 			}
@@ -15918,7 +15918,7 @@ func LoadNS() {
 			tmp5 := reflect.TypeOf((*lang.IFn)(nil)).Elem()
 			var tmp6 any
 			if tmp3 {
-				tmp6 = aotDirectFn225(tmp5, v2)
+				tmp6 = lang.IsInstance[lang.IFn](v2)
 			} else {
 				tmp6 = lang.Apply2(tmp4, tmp5, v2)
 			}
@@ -18950,7 +18950,7 @@ func LoadNS() {
 			tmp7 := reflect.TypeOf((*lang.IDrop)(nil)).Elem()
 			var tmp8 any
 			if tmp5 {
-				tmp8 = aotDirectFn225(tmp7, v2)
+				tmp8 = lang.IsInstance[lang.IDrop](v2)
 			} else {
 				tmp8 = lang.Apply2(tmp6, tmp7, v2)
 			}
@@ -19089,7 +19089,7 @@ func LoadNS() {
 					tmp10 := reflect.TypeOf((*lang.IDrop)(nil)).Elem()
 					var tmp11 any
 					if tmp8 {
-						tmp11 = aotDirectFn225(tmp10, v2)
+						tmp11 = lang.IsInstance[lang.IDrop](v2)
 					} else {
 						tmp11 = lang.Apply2(tmp9, tmp10, v2)
 					}
@@ -20399,7 +20399,7 @@ func LoadNS() {
 			tmp6 := reflect.TypeOf((*lang.IAtom)(nil)).Elem()
 			var tmp7 any
 			if tmp4 {
-				tmp7 = aotDirectFn225(tmp6, v2)
+				tmp7 = lang.IsInstance[lang.IAtom](v2)
 			} else {
 				tmp7 = lang.Apply2(tmp5, tmp6, v2)
 			}
@@ -22463,7 +22463,7 @@ func LoadNS() {
 				tmp13 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
 				var tmp14 any
 				if tmp11 {
-					tmp14 = aotDirectFn225(tmp13, v2)
+					tmp14 = lang.IsInstance[lang.IReduceInit](v2)
 				} else {
 					tmp14 = lang.Apply2(tmp12, tmp13, v2)
 				}
@@ -23919,7 +23919,7 @@ func LoadNS() {
 			tmp7 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
 			var tmp8 any
 			if tmp5 {
-				tmp8 = aotDirectFn225(tmp7, v2)
+				tmp8 = lang.IsInstance[lang.IEditableCollection](v2)
 			} else {
 				tmp8 = lang.Apply2(tmp6, tmp7, v2)
 			}
@@ -24014,7 +24014,7 @@ func LoadNS() {
 			tmp8 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
 			var tmp9 any
 			if tmp6 {
-				tmp9 = aotDirectFn225(tmp8, v2)
+				tmp9 = lang.IsInstance[lang.IEditableCollection](v2)
 			} else {
 				tmp9 = lang.Apply2(tmp7, tmp8, v2)
 			}
@@ -24215,7 +24215,7 @@ func LoadNS() {
 					tmp15 := reflect.TypeOf((*lang.Var)(nil))
 					var tmp16 any
 					if tmp13 {
-						tmp16 = aotDirectFn225(tmp15, v2)
+						tmp16 = lang.IsInstance[*lang.Var](v2)
 					} else {
 						tmp16 = lang.Apply2(tmp14, tmp15, v2)
 					}
@@ -24232,7 +24232,7 @@ func LoadNS() {
 						tmp21 := reflect.TypeOf((*lang.Keyword)(nil)).Elem()
 						var tmp22 any
 						if tmp19 {
-							tmp22 = aotDirectFn225(tmp21, v2)
+							tmp22 = lang.IsInstance[lang.Keyword](v2)
 						} else {
 							tmp22 = lang.Apply2(tmp20, tmp21, v2)
 						}
@@ -26849,7 +26849,7 @@ func LoadNS() {
 				tmp10 := reflect.TypeOf((*lang.IObj)(nil)).Elem()
 				var tmp11 any
 				if tmp8 {
-					tmp11 = aotDirectFn225(tmp10, v2)
+					tmp11 = lang.IsInstance[lang.IObj](v2)
 				} else {
 					tmp11 = lang.Apply2(tmp9, tmp10, v2)
 				}
@@ -33474,7 +33474,7 @@ func LoadNS() {
 						tmp23 := reflect.TypeOf((*lang.BigInt)(nil))
 						var tmp24 any
 						if tmp21 {
-							tmp24 = aotDirectFn225(tmp23, v2)
+							tmp24 = lang.IsInstance[*lang.BigInt](v2)
 						} else {
 							tmp24 = lang.Apply2(tmp22, tmp23, v2)
 						}
@@ -33491,7 +33491,7 @@ func LoadNS() {
 							tmp29 := reflect.TypeOf((*big6.Int)(nil))
 							var tmp30 any
 							if tmp27 {
-								tmp30 = aotDirectFn225(tmp29, v2)
+								tmp30 = lang.IsInstance[*big6.Int](v2)
 							} else {
 								tmp30 = lang.Apply2(tmp28, tmp29, v2)
 							}
@@ -33629,7 +33629,7 @@ func LoadNS() {
 			tmp6 := reflect.TypeOf((*lang.BigInt)(nil))
 			var tmp7 any
 			if tmp4 {
-				tmp7 = aotDirectFn225(tmp6, v2)
+				tmp7 = lang.IsInstance[*lang.BigInt](v2)
 			} else {
 				tmp7 = lang.Apply2(tmp5, tmp6, v2)
 			}
@@ -33645,7 +33645,7 @@ func LoadNS() {
 				tmp11 := reflect.TypeOf((*big6.Int)(nil))
 				var tmp12 any
 				if tmp9 {
-					tmp12 = aotDirectFn225(tmp11, v2)
+					tmp12 = lang.IsInstance[*big6.Int](v2)
 				} else {
 					tmp12 = lang.Apply2(tmp10, tmp11, v2)
 				}
@@ -33918,7 +33918,7 @@ func LoadNS() {
 			tmp6 := reflect.TypeOf((*big6.Int)(nil))
 			var tmp7 any
 			if tmp4 {
-				tmp7 = aotDirectFn225(tmp6, v2)
+				tmp7 = lang.IsInstance[*big6.Int](v2)
 			} else {
 				tmp7 = lang.Apply2(tmp5, tmp6, v2)
 			}
@@ -33934,7 +33934,7 @@ func LoadNS() {
 				tmp11 := reflect.TypeOf((*lang.BigInt)(nil))
 				var tmp12 any
 				if tmp9 {
-					tmp12 = aotDirectFn225(tmp11, v2)
+					tmp12 = lang.IsInstance[*lang.BigInt](v2)
 				} else {
 					tmp12 = lang.Apply2(tmp10, tmp11, v2)
 				}
@@ -39647,7 +39647,7 @@ func LoadNS() {
 					tmp7 := reflect.TypeOf((*lang.IPending)(nil)).Elem()
 					var tmp8 any
 					if tmp5 {
-						tmp8 = aotDirectFn225(tmp7, v2)
+						tmp8 = lang.IsInstance[lang.IPending](v2)
 					} else {
 						tmp8 = lang.Apply2(tmp6, tmp7, v2)
 					}
@@ -39760,7 +39760,7 @@ func LoadNS() {
 							tmp28 := reflect.TypeOf((*lang.Agent)(nil))
 							var tmp29 any
 							if tmp26 {
-								tmp29 = aotDirectFn225(tmp28, v2)
+								tmp29 = lang.IsInstance[*lang.Agent](v2)
 							} else {
 								tmp29 = lang.Apply2(tmp27, tmp28, v2)
 							}
@@ -44679,7 +44679,7 @@ func LoadNS() {
 			tmp7 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
 			var tmp8 any
 			if tmp5 {
-				tmp8 = aotDirectFn225(tmp7, v2)
+				tmp8 = lang.IsInstance[lang.IEditableCollection](v2)
 			} else {
 				tmp8 = lang.Apply2(tmp6, tmp7, v2)
 			}
@@ -49397,7 +49397,7 @@ func LoadNS() {
 						tmp16 := reflect.TypeOf((*lang.Var)(nil))
 						var tmp17 any
 						if tmp14 {
-							tmp17 = aotDirectFn225(tmp16, v12)
+							tmp17 = lang.IsInstance[*lang.Var](v12)
 						} else {
 							tmp17 = lang.Apply2(tmp15, tmp16, v12)
 						}
@@ -49497,7 +49497,7 @@ func LoadNS() {
 						tmp16 := reflect.TypeOf((*lang.Var)(nil))
 						var tmp17 any
 						if tmp14 {
-							tmp17 = aotDirectFn225(tmp16, v12)
+							tmp17 = lang.IsInstance[*lang.Var](v12)
 						} else {
 							tmp17 = lang.Apply2(tmp15, tmp16, v12)
 						}
@@ -49611,7 +49611,7 @@ func LoadNS() {
 						tmp16 := reflect.TypeOf((*lang.Var)(nil))
 						var tmp17 any
 						if tmp14 {
-							tmp17 = aotDirectFn225(tmp16, v12)
+							tmp17 = lang.IsInstance[*lang.Var](v12)
 						} else {
 							tmp17 = lang.Apply2(tmp15, tmp16, v12)
 						}
@@ -52377,7 +52377,7 @@ func LoadNS() {
 							tmp41 := reflect.TypeOf((*lang.Sequential)(nil)).Elem()
 							var tmp42 any
 							if tmp39 {
-								tmp42 = aotDirectFn225(tmp41, v32)
+								tmp42 = lang.IsInstance[lang.Sequential](v32)
 							} else {
 								tmp42 = lang.Apply2(tmp40, tmp41, v32)
 							}
@@ -65164,7 +65164,7 @@ func LoadNS() {
 													tmp182 := reflect.TypeOf((*lang.Named)(nil)).Elem()
 													var tmp183 any
 													if tmp180 {
-														tmp183 = aotDirectFn225(tmp182, v171)
+														tmp183 = lang.IsInstance[lang.Named](v171)
 													} else {
 														tmp183 = lang.Apply2(tmp181, tmp182, v171)
 													}
@@ -76956,7 +76956,7 @@ func LoadNS() {
 						tmp20 := reflect.TypeOf((*lang.Symbol)(nil))
 						var tmp21 any
 						if tmp18 {
-							tmp21 = aotDirectFn225(tmp20, v16)
+							tmp21 = lang.IsInstance[*lang.Symbol](v16)
 						} else {
 							tmp21 = lang.Apply2(tmp19, tmp20, v16)
 						}
@@ -80169,7 +80169,7 @@ func LoadNS() {
 					tmp10 := reflect.TypeOf((*lang.Symbol)(nil))
 					var tmp11 any
 					if tmp8 {
-						tmp11 = aotDirectFn225(tmp10, v5)
+						tmp11 = lang.IsInstance[*lang.Symbol](v5)
 					} else {
 						tmp11 = lang.Apply2(tmp9, tmp10, v5)
 					}
@@ -80566,7 +80566,7 @@ func LoadNS() {
 								tmp125 := reflect.TypeOf((*lang.Symbol)(nil))
 								var tmp126 any
 								if tmp123 {
-									tmp126 = aotDirectFn225(tmp125, v118)
+									tmp126 = lang.IsInstance[*lang.Symbol](v118)
 								} else {
 									tmp126 = lang.Apply2(tmp124, tmp125, v118)
 								}
@@ -84657,7 +84657,7 @@ func LoadNS() {
 			tmp7 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
 			var tmp8 any
 			if tmp5 {
-				tmp8 = aotDirectFn225(tmp7, v2)
+				tmp8 = lang.IsInstance[lang.IEditableCollection](v2)
 			} else {
 				tmp8 = lang.Apply2(tmp6, tmp7, v2)
 			}
@@ -84752,7 +84752,7 @@ func LoadNS() {
 			tmp8 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
 			var tmp9 any
 			if tmp6 {
-				tmp9 = aotDirectFn225(tmp8, v2)
+				tmp9 = lang.IsInstance[lang.IEditableCollection](v2)
 			} else {
 				tmp9 = lang.Apply2(tmp7, tmp8, v2)
 			}
@@ -91480,7 +91480,7 @@ func LoadNS() {
 			tmp22 := reflect.TypeOf((*lang.IObj)(nil)).Elem()
 			var tmp23 any
 			if tmp20 {
-				tmp23 = aotDirectFn225(tmp22, v17)
+				tmp23 = lang.IsInstance[lang.IObj](v17)
 			} else {
 				tmp23 = lang.Apply2(tmp21, tmp22, v17)
 			}
@@ -92752,7 +92752,7 @@ func LoadNS() {
 			tmp8 := reflect.TypeOf((*lang.IMeta)(nil)).Elem()
 			var tmp9 any
 			if tmp6 {
-				tmp9 = aotDirectFn225(tmp8, v2)
+				tmp9 = lang.IsInstance[lang.IMeta](v2)
 			} else {
 				tmp9 = lang.Apply2(tmp7, tmp8, v2)
 			}
@@ -94023,7 +94023,7 @@ func LoadNS() {
 			tmp7 := reflect.TypeOf((*lang.IReduce)(nil)).Elem()
 			var tmp8 any
 			if tmp5 {
-				tmp8 = aotDirectFn225(tmp7, v3)
+				tmp8 = lang.IsInstance[lang.IReduce](v3)
 			} else {
 				tmp8 = lang.Apply2(tmp6, tmp7, v3)
 			}
@@ -94053,7 +94053,7 @@ func LoadNS() {
 			tmp8 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
 			var tmp9 any
 			if tmp6 {
-				tmp9 = aotDirectFn225(tmp8, v4)
+				tmp9 = lang.IsInstance[lang.IReduceInit](v4)
 			} else {
 				tmp9 = lang.Apply2(tmp7, tmp8, v4)
 			}
@@ -94302,7 +94302,7 @@ func LoadNS() {
 			tmp14 := reflect.TypeOf((*lang.IEditableCollection)(nil)).Elem()
 			var tmp15 any
 			if tmp12 {
-				tmp15 = aotDirectFn225(tmp14, v2)
+				tmp15 = lang.IsInstance[lang.IEditableCollection](v2)
 			} else {
 				tmp15 = lang.Apply2(tmp13, tmp14, v2)
 			}
@@ -94512,7 +94512,7 @@ func LoadNS() {
 				tmp12 := reflect.TypeOf((*lang.IReduceInit)(nil)).Elem()
 				var tmp13 any
 				if tmp10 {
-					tmp13 = aotDirectFn225(tmp12, v5)
+					tmp13 = lang.IsInstance[lang.IReduceInit](v5)
 				} else {
 					tmp13 = lang.Apply2(tmp11, tmp12, v5)
 				}
