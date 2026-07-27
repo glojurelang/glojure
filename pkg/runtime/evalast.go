@@ -1097,14 +1097,24 @@ func (env *environment) EvalASTNew(n *ast.Node) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	if len(newNode.Args) > 0 {
-		return nil, errors.New("new with args unsupported")
+	args := make([]any, len(newNode.Args))
+	for i, arg := range newNode.Args {
+		args[i], err = env.EvalAST(arg)
+		if err != nil {
+			return nil, err
+		}
 	}
-	classValTyp, ok := classVal.(reflect.Type)
-	if !ok {
+	switch classVal := classVal.(type) {
+	case *lang.RecordType:
+		return lang.NewRecord(classVal, args...), nil
+	case reflect.Type:
+		if len(args) > 0 {
+			return nil, errors.New("new with args unsupported")
+		}
+		return reflect.New(classVal).Interface(), nil
+	default:
 		return nil, fmt.Errorf("new value must be a reflect.Type, got %T", classVal)
 	}
-	return reflect.New(classValTyp).Interface(), nil
 }
 
 func (env *environment) EvalASTTry(n *ast.Node) (res interface{}, err error) {

@@ -408,6 +408,17 @@ func (a *Analyzer) parse(form interface{}, env Env) (*ast.Node, error) {
 	if !ok {
 		return a.parseInvoke(form, env)
 	}
+	if opSym.Namespace() == "" && len(opSym.Name()) > 1 &&
+		strings.HasSuffix(opSym.Name(), ".") {
+		class := NewSymbol(strings.TrimSuffix(opSym.Name(), "."))
+		return a.parseNew(
+			NewCons(
+				NewSymbol("new"),
+				NewCons(class, Rest(form)),
+			),
+			env,
+		)
+	}
 
 	switch opSym.FullName() {
 	case "do":

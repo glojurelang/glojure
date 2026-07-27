@@ -104,7 +104,7 @@ func TestGenerateConcreteRecordTypeAndDirectOperations(t *testing.T) {
 		(defn tag [value tag]
 		  (assoc value :tag tag))
 		(defn origin []
-		  (->Point 0 0))`)
+		  (Point. 0 0))`)
 
 	var output bytes.Buffer
 	if err := NewGenerator(&output).Generate(ns); err != nil {

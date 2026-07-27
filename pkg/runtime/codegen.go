@@ -3361,10 +3361,42 @@ func (g *Generator) generateSetBang(node *ast.Node) string {
 func (g *Generator) generateNew(node *ast.Node) string {
 	newNode := node.Sub.(*ast.NewNode)
 
+	if newNode.Class.Op == ast.OpVar {
+		vr := newNode.Class.Sub.(*ast.VarNode).Var
+		if recordType, ok := codegenVarValue(vr).(*lang.RecordType); ok {
+			record := g.allocAOTRecordType(recordType)
+			args := make([]string, len(newNode.Args))
+			for i, arg := range newNode.Args {
+				args[i] = g.generateASTNode(arg)
+			}
+			resultID := g.allocateTempVar()
+			g.writef("%s := %s(%s)\n",
+				resultID,
+				record.constructor,
+				strings.Join(args, ", "),
+			)
+			return resultID
+		}
+	}
+
 	// the interpreter is more lax; it allows for expressions that evaluate to a type
 	// here we assume the class is a constant type. clojure's new form is similar
 	switch sub := newNode.Class.Sub.(type) {
 	case *ast.ConstNode:
+		if recordType, ok := sub.Value.(*lang.RecordType); ok {
+			record := g.allocAOTRecordType(recordType)
+			args := make([]string, len(newNode.Args))
+			for i, arg := range newNode.Args {
+				args[i] = g.generateASTNode(arg)
+			}
+			resultID := g.allocateTempVar()
+			g.writef("%s := %s(%s)\n",
+				resultID,
+				record.constructor,
+				strings.Join(args, ", "),
+			)
+			return resultID
+		}
 		class, ok := sub.Value.(reflect.Type)
 		if !ok {
 			fmt.Printf("Warning: glojure codegen only supports new with constant class types. Got %T\n", sub.Value)

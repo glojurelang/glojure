@@ -17,7 +17,7 @@ func TestDefrecordCreatesRecordConstructors(t *testing.T) {
 	result := ReadEval(`
 		(ns runtime.defrecord-test)
 		(defrecord Point [x y])
-		(let [point (->Point 1 2)
+		(let [point (Point. 1 2)
 		      moved (assoc point :x 3)
 		      tagged (assoc moved :tag :origin)]
 		  [(record? point)

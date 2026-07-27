@@ -485,7 +485,7 @@ func (m *Map) Without(k any) IPersistentMap {
 			newKeyVals = append(newKeyVals, m.keyVals[i], m.keyVals[i+1])
 		}
 	}
-	return NewMap(newKeyVals...)
+	return NewMap(newKeyVals...).(IObj).WithMeta(m.meta).(IPersistentMap)
 }
 
 func (m *Map) Count() int {

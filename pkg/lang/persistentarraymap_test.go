@@ -92,6 +92,19 @@ func TestSmallMapWithMetaKeepsInlineStorageAlive(t *testing.T) {
 	}
 }
 
+func TestSmallMapWithoutPreservesMetadata(t *testing.T) {
+	meta := NewMap(NewKeyword("source"), "test").(IPersistentMap)
+	original := NewMap(
+		NewKeyword("a"), int64(1),
+		NewKeyword("b"), int64(2),
+	).(IObj).WithMeta(meta).(*Map)
+
+	removed := original.Without(NewKeyword("a"))
+	if got := removed.(IMeta).Meta(); got != meta {
+		t.Fatalf("metadata after removal = %v, want %v", got, meta)
+	}
+}
+
 func TestNewMapUniqueKeysRetainsCompilerOwnedStorage(t *testing.T) {
 	keyVals := make([]any, arrayMapHashThreshold)
 	for i := 0; i < len(keyVals); i += 2 {
