@@ -7,24 +7,13 @@ import (
 	"github.com/glojurelang/glojure/internal/persistent/vector"
 )
 
-const vectorInlineSize = 4
-
 // Vector is a vector of values.
 type (
 	Vector struct {
 		meta         IPersistentMap
 		hash, hasheq uint32
 
-		vec    vector.Persistent
-		inline []any
-	}
-
-	// inlineVectorStorage keeps small vectors to one allocation without making
-	// every large Vector carry unused inline capacity. A pointer to Vector keeps
-	// its owner alive.
-	inlineVectorStorage struct {
-		Vector
-		values [vectorInlineSize]any
+		vec vector.Persistent
 	}
 
 	PersistentVector = Vector
@@ -54,20 +43,9 @@ func NewVector(values ...any) *Vector {
 	if len(values) == 0 {
 		return emptyVector
 	}
-	if len(values) <= vectorInlineSize {
-		return newInlineVector(nil, values)
-	}
 	return &Vector{
 		vec: vector.NewPersistent(values...),
 	}
-}
-
-func newInlineVector(meta IPersistentMap, values []any) *Vector {
-	storage := &inlineVectorStorage{}
-	storage.Vector.meta = meta
-	storage.Vector.inline = storage.values[:len(values)]
-	copy(storage.Vector.inline, values)
-	return &storage.Vector
 }
 
 var (
@@ -81,9 +59,6 @@ var (
 func (v *Vector) xxx_sequential() {}
 
 func (v *Vector) Count() int {
-	if v.vec.Len() == 0 {
-		return len(v.inline)
-	}
 	return v.vec.Len()
 }
 
@@ -94,21 +69,6 @@ func (v *Vector) Length() int {
 }
 
 func (v *Vector) Cons(x any) Conser {
-	if v.vec.Len() == 0 {
-		if len(v.inline) < vectorInlineSize {
-			result := newInlineVector(v.meta, v.inline)
-			result.inline = result.inline[:len(v.inline)+1]
-			result.inline[len(v.inline)] = x
-			return result
-		}
-		values := make([]any, vectorInlineSize+1)
-		copy(values, v.inline)
-		values[vectorInlineSize] = x
-		return &Vector{
-			meta: v.meta,
-			vec:  vector.NewPersistent(values...),
-		}
-	}
 	return &Vector{
 		meta: v.meta,
 		vec:  v.vec.ConjValue(x),
@@ -118,14 +78,6 @@ func (v *Vector) Cons(x any) Conser {
 func (v *Vector) AssocN(i int, val any) IPersistentVector {
 	if i < 0 || i > v.Count() {
 		panic(NewIndexOutOfBoundsError())
-	}
-	if v.vec.Len() == 0 {
-		if i == len(v.inline) {
-			return v.Cons(val).(IPersistentVector)
-		}
-		result := newInlineVector(v.meta, v.inline)
-		result.inline[i] = val
-		return result
 	}
 	result, ok := v.vec.AssocValue(i, val)
 	if !ok {
@@ -185,12 +137,6 @@ func (v *Vector) ValAtDefault(k, def any) any {
 }
 
 func (v *Vector) Nth(i int) any {
-	if v.vec.Len() == 0 {
-		if i < 0 || i >= len(v.inline) {
-			panic(NewIndexOutOfBoundsError())
-		}
-		return v.inline[i]
-	}
 	res, ok := v.vec.Index(i)
 	if !ok {
 		panic(NewIndexOutOfBoundsError())
@@ -267,9 +213,6 @@ func (v *Vector) Pop() IPersistentStack {
 	if v.Count() == 1 {
 		return emptyVector
 	}
-	if v.vec.Len() == 0 {
-		return newInlineVector(v.meta, v.inline[:len(v.inline)-1])
-	}
 	result, ok := v.vec.PopValue()
 	if !ok {
 		panic("can't pop an empty vector")
@@ -289,11 +232,6 @@ func (v *Vector) WithMeta(meta IPersistentMap) any {
 		return v
 	}
 
-	if v.vec.Len() == 0 && len(v.inline) != 0 {
-		cpy := newInlineVector(meta, v.inline)
-		cpy.hash, cpy.hasheq = v.hash, v.hasheq
-		return cpy
-	}
 	cpy := *v
 	cpy.meta = meta
 	return &cpy
@@ -349,21 +287,10 @@ func (v *Vector) Drop(n int) Sequential {
 	if n >= v.Count() {
 		return nil
 	}
-	if v.vec.Len() == 0 {
-		result := NewVector(v.inline[n:]...)
-		result.meta = v.meta
-		return result
-	}
 	return NewSubVector(v.meta, v, n, v.Count())
 }
 
 func (v *Vector) AsTransient() ITransientCollection {
-	if v.vec.Len() == 0 {
-		vec := vector.NewPersistent(v.inline...)
-		return &TransientVector{
-			vec: vector.NewTransient(&vec),
-		}
-	}
 	return &TransientVector{
 		vec: vector.NewTransient(&v.vec),
 	}
@@ -442,12 +369,8 @@ func (t *TransientVector) ValAtDefault(k, def any) any {
 
 func (t *TransientVector) Persistent() IPersistentCollection {
 	vec := t.vec.Persistent()
-	if vec.Len() <= vectorInlineSize {
-		values := make([]any, vec.Len())
-		for i := range values {
-			values[i], _ = vec.Index(i)
-		}
-		return NewVector(values...)
+	if vec.Len() == 0 {
+		return emptyVector
 	}
 	return &Vector{vec: *vec}
 }

@@ -3,21 +3,9 @@ package lang
 import (
 	"runtime"
 	"testing"
-	"unsafe"
 )
 
-func TestVectorInlineStorageIsSeparateFromLargeWrapper(t *testing.T) {
-	if got, withInline := unsafe.Sizeof(Vector{}), unsafe.Sizeof(inlineVectorStorage{}); got >= withInline {
-		t.Fatalf("Vector size = %d, want less than inline storage size %d", got, withInline)
-	}
-
-	large := NewVector(1, 2, 3, 4, 5)
-	if large.inline != nil {
-		t.Fatal("large vector retained inline storage")
-	}
-}
-
-func TestSmallVectorAssocUsesIndependentInlineStorage(t *testing.T) {
+func TestSmallVectorAssocUsesIndependentPersistentStorage(t *testing.T) {
 	original := NewVector(1, 2, 3)
 	updated := original.AssocN(1, 20).(*Vector)
 	if got := original.Nth(1); got != 2 {
@@ -30,8 +18,8 @@ func TestSmallVectorAssocUsesIndependentInlineStorage(t *testing.T) {
 	var result IPersistentVector
 	if got := testing.AllocsPerRun(1_000, func() {
 		result = original.AssocN(1, 20)
-	}); got != 1 {
-		t.Fatalf("small-vector assoc allocated %v objects per call, want 1", got)
+	}); got != 2 {
+		t.Fatalf("small-vector assoc allocated %v objects per call, want 2", got)
 	}
 	runtime.KeepAlive(result)
 }
