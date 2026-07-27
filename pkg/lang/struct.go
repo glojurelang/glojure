@@ -297,6 +297,10 @@ func wrapGoFunc(fn interface{}) IFn {
 		return FnFunc2(func(a, b any) any {
 			return f(a.(string), MustAsInt(b))
 		})
+	case func(string, int) string:
+		return FnFunc2(func(a, b any) any {
+			return f(a.(string), MustAsInt(b))
+		})
 
 	// --- 3 args ---
 	case func(any, any, any) any:
@@ -305,6 +309,10 @@ func wrapGoFunc(fn interface{}) IFn {
 		return FnFunc3(func(a, b, c any) any { return f(a, MustAsInt(b), c) })
 	case func(any, any, any):
 		return FnFunc3(func(a, b, c any) any { f(a, b, c); return nil })
+	case func(string, int, int) string:
+		return FnFunc3(func(a, b, c any) any {
+			return f(a.(string), MustAsInt(b), MustAsInt(c))
+		})
 
 	// --- 4 args ---
 	case func(any, any, any, any) any:

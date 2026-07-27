@@ -157,6 +157,18 @@ func TestWrapGoFuncDirectRuntimeSignatures(t *testing.T) {
 			"value",
 		},
 		{
+			"string slice from",
+			func(s string, start int) string { return s[start:] },
+			[]any{"abcd", int64(2)},
+			"cd",
+		},
+		{
+			"string slice range",
+			func(s string, start, end int) string { return s[start:end] },
+			[]any{"abcd", int64(1), int64(3)},
+			"bc",
+		},
+		{
 			"variadic arguments",
 			func(a, b any, rest ...any) any { return len(rest) + MustAsInt(a) + MustAsInt(b) },
 			[]any{1, 2, 3, 4},
@@ -172,6 +184,19 @@ func TestWrapGoFuncDirectRuntimeSignatures(t *testing.T) {
 				t.Errorf("got %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func TestWrapGoFuncStringSliceSignaturesUseFixedArity(t *testing.T) {
+	if _, ok := wrapGoFunc(func(s string, start int) string {
+		return s[start:]
+	}).(FnFunc2); !ok {
+		t.Fatal("two-argument string slice did not use FnFunc2")
+	}
+	if _, ok := wrapGoFunc(func(s string, start, end int) string {
+		return s[start:end]
+	}).(FnFunc3); !ok {
+		t.Fatal("three-argument string slice did not use FnFunc3")
 	}
 }
 
