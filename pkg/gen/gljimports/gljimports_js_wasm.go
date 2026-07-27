@@ -905,6 +905,7 @@ func RegisterImports(_register func(string, interface{})) {
 	_register("github.com/glojurelang/glojure/pkg/lang.RuneFromCharLiteral", github_com_glojurelang_glojure_pkg_lang.RuneFromCharLiteral)
 	_register("github.com/glojurelang/glojure/pkg/lang.SafeMerge", github_com_glojurelang_glojure_pkg_lang.SafeMerge)
 	_register("github.com/glojurelang/glojure/pkg/lang.Seq", github_com_glojurelang_glojure_pkg_lang.Seq)
+	_register("github.com/glojurelang/glojure/pkg/lang.SeqToTypedArray", github_com_glojurelang_glojure_pkg_lang.SeqToTypedArray)
 	_register("github.com/glojurelang/glojure/pkg/lang.Seqable", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Seqable)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.Sequential", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Sequential)(nil)).Elem())
 	_register("github.com/glojurelang/glojure/pkg/lang.Set", reflect.TypeOf((*github_com_glojurelang_glojure_pkg_lang.Set)(nil)).Elem())
