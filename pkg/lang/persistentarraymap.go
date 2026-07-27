@@ -12,6 +12,10 @@ const (
 	// PersistentArrayMapInlineKeyValueCount lets the compiler preserve the
 	// one-allocation constructor for maps whose entries fit inline.
 	PersistentArrayMapInlineKeyValueCount = arrayMapInlineSize
+
+	// PersistentArrayMapMaxKeywordKeyValueCount is the largest keyword-only
+	// literal that should use the linear persistent-array-map representation.
+	PersistentArrayMapMaxKeywordKeyValueCount = arrayMapKeywordThreshold
 )
 
 type (
@@ -20,7 +24,14 @@ type (
 		meta         IPersistentMap
 		hash, hasheq uint32
 
-		keyVals []any
+		keyVals      []any
+		keywordShape *KeywordMapShape
+	}
+
+	// KeywordMapShape is an immutable key layout shared by maps emitted from
+	// the same AOT keyword-map literal. Shaped maps store only their values.
+	KeywordMapShape struct {
+		keys []Keyword
 	}
 
 	// inlineMapStorage keeps small maps to one allocation without making every
@@ -35,6 +46,9 @@ type (
 		hash, hasheq uint32
 
 		keyVals []any
+		shape   *KeywordMapShape
+		values  []any
+		index   int
 	}
 	MapKeySeq struct {
 		meta         IPersistentMap
@@ -115,6 +129,35 @@ func NewMapUniqueKeys(keyVals ...any) IPersistentMap {
 		return newArrayMap(keyVals)
 	}
 	return &Map{keyVals: keyVals}
+}
+
+func NewKeywordMapShape(names ...string) *KeywordMapShape {
+	keys := make([]Keyword, len(names))
+	for i, name := range names {
+		keys[i] = NewKeyword(name)
+	}
+	return &KeywordMapShape{keys: keys}
+}
+
+// NewStaticKeywordMap constructs a persistent map whose immutable keyword
+// layout is shared with other maps from the same AOT literal.
+func NewStaticKeywordMap(shape *KeywordMapShape, values ...any) IPersistentMap {
+	if shape == nil || len(shape.keys) != len(values) {
+		panic("invalid static keyword map shape")
+	}
+	if len(values) == 0 {
+		return emptyMap
+	}
+	return &Map{keyVals: values, keywordShape: shape}
+}
+
+func (s *KeywordMapShape) indexOf(key Keyword) int {
+	for i, candidate := range s.keys {
+		if candidate == key {
+			return i
+		}
+	}
+	return -1
 }
 
 func newArrayMap(keyVals []any) *Map {
@@ -220,6 +263,9 @@ func (m *Map) ValAtDefault(key, def any) any {
 	if kw, ok := key.(Keyword); ok {
 		return m.valAtKeyword(kw, def)
 	}
+	if m.keywordShape != nil {
+		return def
+	}
 
 	for i := 0; i < len(m.keyVals); i += 2 {
 		if Equiv(m.keyVals[i], key) {
@@ -231,6 +277,12 @@ func (m *Map) ValAtDefault(key, def any) any {
 }
 
 func (m *Map) valAtKeyword(key Keyword, def any) any {
+	if m.keywordShape != nil {
+		if i := m.keywordShape.indexOf(key); i >= 0 {
+			return m.keyVals[i]
+		}
+		return def
+	}
 	for i := 0; i < len(m.keyVals); i += 2 {
 		if candidate, ok := m.keyVals[i].(Keyword); ok && key == candidate {
 			return m.keyVals[i+1]
@@ -240,6 +292,16 @@ func (m *Map) valAtKeyword(key Keyword, def any) any {
 }
 
 func (m *Map) EntryAt(k any) IMapEntry {
+	if m.keywordShape != nil {
+		kw, ok := k.(Keyword)
+		if !ok {
+			return nil
+		}
+		if i := m.keywordShape.indexOf(kw); i >= 0 {
+			return NewMapEntry(kw, m.keyVals[i])
+		}
+		return nil
+	}
 	for i := 0; i < len(m.keyVals); i += 2 {
 		if Equiv(m.keyVals[i], k) {
 			return NewMapEntry(m.keyVals[i], m.keyVals[i+1])
@@ -250,12 +312,34 @@ func (m *Map) EntryAt(k any) IMapEntry {
 }
 
 func (m *Map) clone() *Map {
+	if m.keywordShape != nil {
+		return &Map{
+			meta:         m.meta,
+			keyVals:      append([]any(nil), m.keyVals...),
+			keywordShape: m.keywordShape,
+		}
+	}
 	cpy := newArrayMap(m.keyVals)
 	cpy.meta = m.meta
 	return cpy
 }
 
 func (m *Map) Assoc(k, v any) Associative {
+	if m.keywordShape != nil {
+		if kw, ok := k.(Keyword); ok {
+			if i := m.keywordShape.indexOf(kw); i >= 0 {
+				if Identical(m.keyVals[i], v) {
+					return m
+				}
+				newMap := m.clone()
+				newMap.keyVals[i] = v
+				return newMap
+			}
+		}
+		keyVals := m.interleavedKeyVals(1)
+		keyVals = append(keyVals, k, v)
+		return NewMapUniqueKeys(keyVals...).(IObj).WithMeta(m.meta).(Associative)
+	}
 	for i := 0; i < len(m.keyVals); i += 2 {
 		if Equiv(m.keyVals[i], k) {
 			if Identical(m.keyVals[i+1], v) {
@@ -284,6 +368,23 @@ func (m *Map) AssocEx(k, v any) IPersistentMap {
 }
 
 func (m *Map) Without(k any) IPersistentMap {
+	if m.keywordShape != nil {
+		kw, ok := k.(Keyword)
+		if !ok {
+			return m
+		}
+		remove := m.keywordShape.indexOf(kw)
+		if remove < 0 {
+			return m
+		}
+		keyVals := make([]any, 0, (len(m.keyVals)-1)*2)
+		for i, key := range m.keywordShape.keys {
+			if i != remove {
+				keyVals = append(keyVals, key, m.keyVals[i])
+			}
+		}
+		return NewMapUniqueKeys(keyVals...).(IObj).WithMeta(m.meta).(IPersistentMap)
+	}
 	newKeyVals := make([]any, 0, len(m.keyVals))
 	for i := 0; i < len(m.keyVals); i += 2 {
 		if !Equiv(m.keyVals[i], k) {
@@ -294,6 +395,9 @@ func (m *Map) Without(k any) IPersistentMap {
 }
 
 func (m *Map) Count() int {
+	if m.keywordShape != nil {
+		return len(m.keyVals)
+	}
 	return len(m.keyVals) / 2
 }
 
@@ -303,7 +407,18 @@ func (m *Map) Seq() ISeq {
 	if len(m.keyVals) == 0 {
 		return nil
 	}
+	if m.keywordShape != nil {
+		return NewKeywordMapSeq(m.keywordShape, m.keyVals)
+	}
 	return NewMapSeq(m.keyVals)
+}
+
+func (m *Map) interleavedKeyVals(extraEntries int) []any {
+	keyVals := make([]any, 0, (len(m.keyVals)+extraEntries)*2)
+	for i, key := range m.keywordShape.keys {
+		keyVals = append(keyVals, key, m.keyVals[i])
+	}
+	return keyVals
 }
 
 func (m *Map) Empty() IPersistentCollection {
@@ -469,6 +584,13 @@ func NewMapSeq(kvs []any) *MapSeq {
 	}
 }
 
+func NewKeywordMapSeq(shape *KeywordMapShape, values []any) *MapSeq {
+	if shape == nil || len(values) == 0 {
+		return nil
+	}
+	return &MapSeq{shape: shape, values: values}
+}
+
 func (s *MapSeq) xxx_sequential() {}
 
 func (s *MapSeq) Meta() IPersistentMap {
@@ -493,6 +615,12 @@ func (s *MapSeq) Seq() ISeq {
 }
 
 func (s *MapSeq) First() any {
+	if s.shape != nil {
+		return &MapEntry{
+			key: s.shape.keys[s.index],
+			val: s.values[s.index],
+		}
+	}
 	return &MapEntry{
 		key: s.keyVals[0],
 		val: s.keyVals[1],
@@ -500,6 +628,16 @@ func (s *MapSeq) First() any {
 }
 
 func (s *MapSeq) Next() ISeq {
+	if s.shape != nil {
+		if s.index+1 >= len(s.values) {
+			return nil
+		}
+		return &MapSeq{
+			shape:  s.shape,
+			values: s.values,
+			index:  s.index + 1,
+		}
+	}
 	if len(s.keyVals) <= 2 {
 		return nil
 	}
@@ -521,6 +659,9 @@ func (s *MapSeq) Cons(o any) Conser {
 }
 
 func (s *MapSeq) Count() int {
+	if s.shape != nil {
+		return len(s.values) - s.index
+	}
 	return len(s.keyVals) / 2
 }
 
@@ -547,6 +688,16 @@ func (s *MapSeq) HashEq() uint32 {
 }
 
 func (s *MapSeq) Reduce(f IFn) any {
+	if s.shape != nil {
+		acc := s.First()
+		for i := s.index + 1; i < len(s.values); i++ {
+			acc = f.Invoke(acc, NewMapEntry(s.shape.keys[i], s.values[i]))
+			if IsReduced(acc) {
+				return acc.(IDeref).Deref()
+			}
+		}
+		return acc
+	}
 	if len(s.keyVals) == 0 {
 		return f.Invoke()
 	}
@@ -561,6 +712,16 @@ func (s *MapSeq) Reduce(f IFn) any {
 }
 
 func (s *MapSeq) ReduceInit(f IFn, init any) any {
+	if s.shape != nil {
+		acc := init
+		for i := s.index; i < len(s.values); i++ {
+			acc = f.Invoke(acc, NewMapEntry(s.shape.keys[i], s.values[i]))
+			if IsReduced(acc) {
+				return acc.(IDeref).Deref()
+			}
+		}
+		return acc
+	}
 	acc := init
 	for i := 0; i < len(s.keyVals); i += 2 {
 		acc = f.Invoke(acc, NewMapEntry(s.keyVals[i], s.keyVals[i+1]))
@@ -574,6 +735,13 @@ func (s *MapSeq) ReduceInit(f IFn, init any) any {
 func (s *MapSeq) Drop(n int) Sequential {
 	if n >= s.Count() {
 		return nil
+	}
+	if s.shape != nil {
+		return &MapSeq{
+			shape:  s.shape,
+			values: s.values,
+			index:  s.index + n,
+		}
 	}
 	return NewMapSeq(s.keyVals[n*2:])
 }

@@ -130,6 +130,31 @@ func TestGenerateDirectCallsForKnownFunctionArities(t *testing.T) {
 	}
 }
 
+func TestGenerateSharedStaticKeywordMapShapes(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.static-keyword-maps"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn state-one [value]
+		  {:a value, :b 2, :c 3, :d 4, :e 5, :f 6, :g 7, :h 8, :i 9})
+		(defn state-two [value]
+		  {:a value, :b 2, :c 3, :d 4, :e 5, :f 6, :g 7, :h 8, :i 9})`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate static keyword maps: %v", err)
+	}
+	generated := output.String()
+	if got := strings.Count(generated, "lang.NewKeywordMapShape("); got != 1 {
+		t.Fatalf("generated %d keyword map shapes, want 1:\n%s", got, generated)
+	}
+	if got := strings.Count(generated, "lang.NewStaticKeywordMap("); got != 2 {
+		t.Fatalf("generated %d static keyword maps, want 2:\n%s", got, generated)
+	}
+}
+
 func TestGenerateMutableRuntimeValues(t *testing.T) {
 	generator := NewGenerator(&bytes.Buffer{})
 

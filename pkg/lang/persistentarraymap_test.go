@@ -78,6 +78,83 @@ func TestNewMapUniqueKeysRetainsCompilerOwnedStorage(t *testing.T) {
 	runtime.KeepAlive(result)
 }
 
+func TestStaticKeywordMapBehavesLikePersistentMap(t *testing.T) {
+	names := []string{"a", "b", "c", "d", "e", "f", "g", "h", "i"}
+	shape := NewKeywordMapShape(names...)
+	values := []any{
+		int64(1), int64(2), int64(3),
+		int64(4), int64(5), int64(6),
+		int64(7), int64(8), int64(9),
+	}
+	shaped := NewStaticKeywordMap(shape, values...).(*Map)
+
+	if got := shaped.Count(); got != len(values) {
+		t.Fatalf("Count() = %d, want %d", got, len(values))
+	}
+	for i, name := range names {
+		if got := shaped.ValAt(NewKeyword(name)); got != values[i] {
+			t.Fatalf("value for %s = %v, want %v", name, got, values[i])
+		}
+	}
+	if got := shaped.ValAt("a"); got != nil {
+		t.Fatalf("non-keyword lookup = %v, want nil", got)
+	}
+
+	updated := shaped.Assoc(NewKeyword("e"), int64(50)).(*Map)
+	if got := updated.ValAt(NewKeyword("e")); got != int64(50) {
+		t.Fatalf("updated value = %v, want 50", got)
+	}
+	if got := shaped.ValAt(NewKeyword("e")); got != int64(5) {
+		t.Fatalf("original value changed to %v", got)
+	}
+
+	expanded := shaped.Assoc(NewKeyword("j"), int64(10)).(IPersistentMap)
+	if expanded.Count() != 10 || expanded.ValAt(NewKeyword("j")) != int64(10) {
+		t.Fatalf("expanded map = %v", expanded)
+	}
+	removed := shaped.Without(NewKeyword("e"))
+	if removed.Count() != 8 || removed.ContainsKey(NewKeyword("e")) {
+		t.Fatalf("map after remove = %v", removed)
+	}
+
+	var ordinaryArgs []any
+	for i, name := range names {
+		ordinaryArgs = append(ordinaryArgs, NewKeyword(name), values[i])
+	}
+	ordinary := NewMap(ordinaryArgs...)
+	if !Equals(shaped, ordinary) || !Equals(ordinary, shaped) {
+		t.Fatalf("shaped and ordinary maps differ: %v != %v", shaped, ordinary)
+	}
+	if shaped.Hash() != ordinary.(Hasher).Hash() ||
+		shaped.HashEq() != ordinary.(IHashEq).HashEq() {
+		t.Fatalf("shaped and ordinary map hashes differ")
+	}
+
+	meta := NewMap(NewKeyword("source"), "test").(IPersistentMap)
+	withMeta := shaped.WithMeta(meta).(*Map)
+	if withMeta.Meta() != meta {
+		t.Fatalf("metadata was not retained")
+	}
+	if got := withMeta.Assoc(NewKeyword("j"), int64(10)).(IMeta).Meta(); got != meta {
+		t.Fatalf("metadata after expansion = %v, want %v", got, meta)
+	}
+	if got := withMeta.Without(NewKeyword("e")).(IMeta).Meta(); got != meta {
+		t.Fatalf("metadata after removal = %v, want %v", got, meta)
+	}
+
+	i := 0
+	for seq := shaped.Seq(); seq != nil; seq = seq.Next() {
+		entry := seq.First().(IMapEntry)
+		if entry.Key() != NewKeyword(names[i]) || entry.Val() != values[i] {
+			t.Fatalf("entry %d = %v", i, entry)
+		}
+		i++
+	}
+	if i != len(values) {
+		t.Fatalf("sequence contained %d entries, want %d", i, len(values))
+	}
+}
+
 func TestMapAssocInvalidatesCachedHashes(t *testing.T) {
 	key := NewKeyword("key")
 	original := NewMap(key, int64(1)).(*Map)
