@@ -16,6 +16,13 @@ type (
 		vec vector.Persistent
 	}
 
+	// vectorUpdateStorage co-allocates a vector version with the immutable tail
+	// entry created by Cons.
+	vectorUpdateStorage struct {
+		Vector
+		tail vector.TailStorage
+	}
+
 	PersistentVector = Vector
 
 	TransientVector struct {
@@ -69,10 +76,10 @@ func (v *Vector) Length() int {
 }
 
 func (v *Vector) Cons(x any) Conser {
-	return &Vector{
-		meta: v.meta,
-		vec:  v.vec.ConjValue(x),
-	}
+	storage := &vectorUpdateStorage{}
+	storage.meta = v.meta
+	storage.vec = v.vec.ConjValueInto(x, &storage.tail)
+	return &storage.Vector
 }
 
 func (v *Vector) AssocN(i int, val any) IPersistentVector {

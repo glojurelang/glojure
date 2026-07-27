@@ -24,13 +24,13 @@ func TestSmallVectorAssocUsesIndependentPersistentStorage(t *testing.T) {
 	runtime.KeepAlive(result)
 }
 
-func TestLargeVectorConsAllocatesOnlyResultAndTail(t *testing.T) {
+func TestLargeVectorConsCoallocatesResultAndTail(t *testing.T) {
 	original := NewVector(1, 2, 3, 4, 5)
 	var result Conser
 	if got := testing.AllocsPerRun(1_000, func() {
 		result = original.Cons(6)
-	}); got != 2 {
-		t.Fatalf("large-vector cons allocated %v objects per call, want 2", got)
+	}); got != 1 {
+		t.Fatalf("large-vector cons allocated %v objects per call, want 1", got)
 	}
 	runtime.KeepAlive(result)
 }

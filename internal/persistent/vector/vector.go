@@ -81,6 +81,13 @@ type tailEntry struct {
 	prev  *tailEntry
 }
 
+// TailStorage reserves space for one immutable tail append. It lets wrappers
+// that embed Persistent co-allocate their newest tail entry with the wrapper
+// while keeping the tail representation private to this package.
+type TailStorage struct {
+	entry tailEntry
+}
+
 // Empty is an empty Vector.
 var Empty Vector = &Persistent{}
 
@@ -252,17 +259,27 @@ func (v *Persistent) Conj(val interface{}) Vector {
 // ConjValue returns updated persistent state by value, avoiding a wrapper
 // allocation for callers that embed Persistent directly.
 func (v Persistent) ConjValue(val interface{}) Persistent {
+	storage := &TailStorage{}
+	return v.ConjValueInto(val, storage)
+}
+
+// ConjValueInto returns updated persistent state using caller-owned storage
+// for the newest tail entry. The storage must remain alive as long as the
+// returned vector or a vector derived from it remains reachable.
+func (v Persistent) ConjValueInto(val interface{}, storage *TailStorage) Persistent {
+	storage.entry = tailEntry{
+		value: val,
+		prev:  v.tailDelta,
+	}
+
 	// Room in tail?
 	if v.count-v.treeSize() < tailMaxLen {
 		return Persistent{
-			count:  v.count + 1,
-			height: v.height,
-			root:   v.root,
-			tail:   v.tail,
-			tailDelta: &tailEntry{
-				value: val,
-				prev:  v.tailDelta,
-			},
+			count:     v.count + 1,
+			height:    v.height,
+			root:      v.root,
+			tail:      v.tail,
+			tailDelta: &storage.entry,
 		}
 	}
 	// Full tail; push into tree.
@@ -279,13 +296,14 @@ func (v Persistent) ConjValue(val interface{}) Persistent {
 	} else {
 		newRoot = v.pushTail(v.height, v.root, tailNode)
 	}
+	// The old tail now lives in the tree, so the first entry in the new tail
+	// must not retain its delta chain.
+	storage.entry.prev = nil
 	return Persistent{
-		count:  v.count + 1,
-		height: newHeight,
-		root:   newRoot,
-		tailDelta: &tailEntry{
-			value: val,
-		},
+		count:     v.count + 1,
+		height:    newHeight,
+		root:      newRoot,
+		tailDelta: &storage.entry,
 	}
 }
 
