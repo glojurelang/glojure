@@ -1,0 +1,33 @@
+(ns glojure.test-glojure.transients
+  (:use clojure.test))
+
+(deftest transient-map-operations
+  (let [source (into {} (map (fn [n] [n (* n n)]) (range 512)))
+        editable (transient source)
+        edited (reduce (fn [m n]
+                         (cond
+                           (zero? (mod n 4)) (dissoc! m n)
+                           (= 1 (mod n 4)) (assoc! m n (- n))
+                           :else m))
+                       editable
+                       (range 512))
+        result (persistent! (assoc! edited nil :nil-value))]
+    (is (= 385 (count result)))
+    (is (= :nil-value (get result nil)))
+    (is (not (contains? result 0)))
+    (is (= -1 (get result 1)))
+    (is (= 4 (get result 2)))
+    (is (= (* 511 511) (get source 511)))
+    (is (= 0 (get source 0)))
+    (is (thrown? go/any (assoc! editable :late true)))
+    (is (thrown? go/any (count editable)))
+    (is (thrown? go/any (persistent! editable)))))
+
+(deftest transient-map-conj-and-array-promotion
+  (let [editable (reduce conj! (transient {}) (map (fn [n] [n n]) (range 32)))
+        result (persistent! (conj! editable [:answer 42]))]
+    (is (= 33 (count result)))
+    (is (= 31 (get result 31)))
+    (is (= 42 (:answer result)))))
+
+(run-tests)

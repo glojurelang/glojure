@@ -54,6 +54,8 @@ type (
 	Node interface {
 		assoc(shift uint, hash uint32, key any, val any, addedLeaf *Box) Node
 		without(shift uint, hash uint32, key any) Node
+		assocTransient(edit *transientMapEdit, shift uint, hash uint32, key any, val any, addedLeaf *Box) Node
+		withoutTransient(edit *transientMapEdit, shift uint, hash uint32, key any, removedLeaf *Box) Node
 		find(shift uint, hash uint32, key any) (foundKey, value any, found bool)
 		nodeSeq() ISeq
 		iter() MapIterator
@@ -87,13 +89,14 @@ type (
 )
 
 var (
-	_ APersistentMap = (*PersistentHashMap)(nil)
-	_ IPersistentMap = (*PersistentHashMap)(nil)
-	_ IMeta          = (*PersistentHashMap)(nil)
-	_ IObj           = (*PersistentHashMap)(nil)
-	_ IFn            = (*PersistentHashMap)(nil)
-	_ IReduce        = (*PersistentHashMap)(nil)
-	_ IReduceInit    = (*PersistentHashMap)(nil)
+	_ APersistentMap      = (*PersistentHashMap)(nil)
+	_ IPersistentMap      = (*PersistentHashMap)(nil)
+	_ IMeta               = (*PersistentHashMap)(nil)
+	_ IObj                = (*PersistentHashMap)(nil)
+	_ IFn                 = (*PersistentHashMap)(nil)
+	_ IReduce             = (*PersistentHashMap)(nil)
+	_ IReduceInit         = (*PersistentHashMap)(nil)
+	_ IEditableCollection = (*PersistentHashMap)(nil)
 
 	emptyPersistentHashMap = &PersistentHashMap{}
 
@@ -279,6 +282,10 @@ func (m *PersistentHashMap) Hash() uint32 {
 
 func (m *PersistentHashMap) HashEq() uint32 {
 	return apersistentmapHashEq(&m.hasheq, m)
+}
+
+func (m *PersistentHashMap) AsTransient() ITransientCollection {
+	return newTransientHashMap(m)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -754,6 +761,9 @@ func (n *HashCollisionNode) nodeSeq() ISeq {
 
 func findKeyword(node Node, shift uint, hash uint32, key Keyword) (any, bool) {
 	switch node := node.(type) {
+	case *transientBitmapIndexedNode:
+		return findKeyword(&node.BitmapIndexedNode, shift, hash, key)
+
 	case *BitmapIndexedNode:
 		bit := bitpos(hash, shift)
 		if (node.bitmap & bit) == 0 {
@@ -771,12 +781,18 @@ func findKeyword(node Node, shift uint, hash uint32, key Keyword) (any, bool) {
 		}
 		return nil, false
 
+	case *transientArrayNode:
+		return findKeyword(&node.ArrayNode, shift, hash, key)
+
 	case *ArrayNode:
 		slot := node.array[mask(hash, shift)]
 		if slot == nil {
 			return nil, false
 		}
 		return findKeyword(slot.node, shift+5, hash, key)
+
+	case *transientHashCollisionNode:
+		return findKeyword(&node.HashCollisionNode, shift, hash, key)
 
 	case *HashCollisionNode:
 		if hash != node.hash {

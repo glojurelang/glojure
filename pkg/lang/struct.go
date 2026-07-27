@@ -161,6 +161,18 @@ func directProtocolMethod(v interface{}, name string) (IFn, bool) {
 				return transient.Persistent()
 			}), true
 		}
+	case "Assoc":
+		if transient, ok := v.(ITransientAssociative); ok {
+			return FnFunc2(func(key, value any) any {
+				return transient.Assoc(key, value)
+			}), true
+		}
+	case "Without":
+		if transient, ok := v.(ITransientMap); ok {
+			return FnFunc1(func(key any) any {
+				return transient.Without(key)
+			}), true
+		}
 	case "AsTransient":
 		if editable, ok := v.(IEditableCollection); ok {
 			return FnFunc0(func() any {

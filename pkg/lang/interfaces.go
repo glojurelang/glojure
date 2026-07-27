@@ -196,6 +196,8 @@ type (
 	ITransientMap interface {
 		ITransientAssociative
 		Counted
+
+		Without(any) ITransientMap
 	}
 
 	IEditableCollection interface {
