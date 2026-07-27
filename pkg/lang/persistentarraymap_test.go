@@ -194,6 +194,16 @@ func TestStaticKeywordMapDeltaCompactionRemainsPersistent(t *testing.T) {
 		t.Fatalf("replacing a delta changed its predecessor to %v", got)
 	}
 
+	key := any(NewKeyword(names[1]))
+	value := any(int64(200))
+	var result Associative
+	if got := testing.AllocsPerRun(1_000, func() {
+		result = base.Assoc(key, value)
+	}); got != 1 {
+		t.Fatalf("shaped-map assoc allocated %v objects per call, want 1", got)
+	}
+	runtime.KeepAlive(result)
+
 	i := 0
 	for seq := updated.Seq(); seq != nil; seq = seq.Next() {
 		entry := seq.First().(IMapEntry)

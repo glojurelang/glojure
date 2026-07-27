@@ -46,6 +46,14 @@ type (
 		depth uint8
 	}
 
+	// keywordMapUpdateStorage co-allocates a shaped-map version with its newest
+	// immutable delta. The embedded Map points into its owning allocation, as
+	// inlineMapStorage does for small array maps.
+	keywordMapUpdateStorage struct {
+		Map
+		delta keywordMapDelta
+	}
+
 	// inlineMapStorage keeps small maps to one allocation without making every
 	// Map carry unused inline capacity. A pointer to Map keeps its owner alive.
 	inlineMapStorage struct {
@@ -360,6 +368,29 @@ func (m *Map) clone() *Map {
 	return cpy
 }
 
+func newKeywordMapUpdate(
+	m *Map,
+	prev *keywordMapDelta,
+	value any,
+	index int,
+	depth uint8,
+) *Map {
+	storage := &keywordMapUpdateStorage{}
+	storage.delta = keywordMapDelta{
+		prev:  prev,
+		value: value,
+		index: uint32(index),
+		depth: depth,
+	}
+	storage.Map = Map{
+		meta:         m.meta,
+		keyVals:      m.keyVals,
+		keywordShape: m.keywordShape,
+		keywordDelta: &storage.delta,
+	}
+	return &storage.Map
+}
+
 func (m *Map) Assoc(k, v any) Associative {
 	if m.keywordShape != nil {
 		if kw, ok := k.(Keyword); ok {
@@ -368,34 +399,20 @@ func (m *Map) Assoc(k, v any) Associative {
 					return m
 				}
 				if m.keywordDelta != nil && int(m.keywordDelta.index) == i {
-					return &Map{
-						meta:         m.meta,
-						keyVals:      m.keyVals,
-						keywordShape: m.keywordShape,
-						keywordDelta: &keywordMapDelta{
-							prev:  m.keywordDelta.prev,
-							value: v,
-							index: uint32(i),
-							depth: m.keywordDelta.depth,
-						},
-					}
+					return newKeywordMapUpdate(
+						m,
+						m.keywordDelta.prev,
+						v,
+						i,
+						m.keywordDelta.depth,
+					)
 				}
 				if m.keywordDelta == nil || m.keywordDelta.depth < keywordMapDeltaMax {
 					depth := uint8(1)
 					if m.keywordDelta != nil {
 						depth = m.keywordDelta.depth + 1
 					}
-					return &Map{
-						meta:         m.meta,
-						keyVals:      m.keyVals,
-						keywordShape: m.keywordShape,
-						keywordDelta: &keywordMapDelta{
-							prev:  m.keywordDelta,
-							value: v,
-							index: uint32(i),
-							depth: depth,
-						},
-					}
+					return newKeywordMapUpdate(m, m.keywordDelta, v, i, depth)
 				}
 				newMap := m.clone()
 				newMap.keyVals[i] = v
