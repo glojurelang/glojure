@@ -6,6 +6,41 @@ import (
 	"testing"
 )
 
+type testStaticKeywordMapStorage struct {
+	Map
+	values [9]any
+}
+
+func newTestStaticKeywordMap(shape *KeywordMapShape, value any) *Map {
+	storage := &testStaticKeywordMapStorage{}
+	storage.values = [9]any{value, 2, 3, 4, 5, 6, 7, 8, 9}
+	return InitStaticKeywordMap(&storage.Map, shape, storage.values[:])
+}
+
+func TestStaticKeywordMapStorageCoallocatesMapAndValues(t *testing.T) {
+	shape := NewKeywordMapShape("a", "b", "c", "d", "e", "f", "g", "h", "i")
+	var result *Map
+	if got := testing.AllocsPerRun(1_000, func() {
+		result = newTestStaticKeywordMap(shape, 1)
+	}); got != 1 {
+		t.Fatalf("static keyword map allocated %v objects per call, want 1", got)
+	}
+	if got := result.ValAt(NewKeyword("i")); got != 9 {
+		t.Fatalf("co-allocated map value = %v, want 9", got)
+	}
+	runtime.KeepAlive(result)
+
+	meta := NewMap(NewKeyword("source"), "test").(IPersistentMap)
+	withMeta := func() *Map {
+		original := newTestStaticKeywordMap(shape, 1)
+		return original.WithMeta(meta).(*Map)
+	}()
+	runtime.GC()
+	if got := withMeta.ValAt(NewKeyword("i")); got != 9 {
+		t.Fatalf("co-allocated map value after WithMeta and GC = %v, want 9", got)
+	}
+}
+
 func TestSmallMapAssocUsesIndependentInlineStorage(t *testing.T) {
 	keys := []Keyword{
 		NewKeyword("a"),

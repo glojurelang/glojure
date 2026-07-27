@@ -171,6 +171,17 @@ func NewStaticKeywordMap(shape *KeywordMapShape, values ...any) IPersistentMap {
 	return &Map{keyVals: values, keywordShape: shape}
 }
 
+// InitStaticKeywordMap initializes compiler-owned map storage. The values
+// slice must remain immutable and reachable for the lifetime of m.
+func InitStaticKeywordMap(m *Map, shape *KeywordMapShape, values []any) *Map {
+	if m == nil || shape == nil || len(shape.keys) != len(values) || len(values) == 0 {
+		panic("invalid static keyword map storage")
+	}
+	m.keyVals = values
+	m.keywordShape = shape
+	return m
+}
+
 func (s *KeywordMapShape) indexOf(key Keyword) int {
 	for i, candidate := range s.keys {
 		if candidate == key {

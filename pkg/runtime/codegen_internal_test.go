@@ -189,8 +189,15 @@ func TestGenerateSharedStaticKeywordMapShapes(t *testing.T) {
 	if got := strings.Count(generated, "lang.NewKeywordMapShape("); got != 1 {
 		t.Fatalf("generated %d keyword map shapes, want 1:\n%s", got, generated)
 	}
-	if got := strings.Count(generated, "lang.NewStaticKeywordMap("); got != 2 {
-		t.Fatalf("generated %d static keyword maps, want 2:\n%s", got, generated)
+	if got := strings.Count(generated, "aotKeywordMapNew0("); got != 3 {
+		t.Fatalf("generated keyword map constructor occurred %d times, want 3:\n%s",
+			got, generated)
+	}
+	if got := strings.Count(generated, "aotKeywordMapStorage0 struct"); got != 1 {
+		t.Fatalf("generated %d keyword map storage types, want 1:\n%s", got, generated)
+	}
+	if strings.Contains(generated, "lang.NewStaticKeywordMap(") {
+		t.Fatalf("generated static keyword maps retained variadic storage:\n%s", generated)
 	}
 }
 

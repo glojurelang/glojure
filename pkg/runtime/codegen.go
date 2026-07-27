@@ -120,11 +120,11 @@ type Generator struct {
 	varScopes  []varScope     // stack of variable scopes
 	recurStack []recurContext // stack of recur contexts for nested loops
 
-	imports          map[string]string  // set of imported packages with their aliases
-	varVariables     map[varInfo]string // map of vars to their Go variable names
-	symbolVariables  map[string]string  // set of all generated symbols to minimize allocations
-	kwVariables      map[string]string  // set of all generated keywords to minimize allocations
-	keywordMapShapes map[string]string  // shared layouts for static keyword-map literals
+	imports                map[string]string  // set of imported packages with their aliases
+	varVariables           map[varInfo]string // map of vars to their Go variable names
+	symbolVariables        map[string]string  // set of all generated symbols to minimize allocations
+	kwVariables            map[string]string  // set of all generated keywords to minimize allocations
+	keywordMapConstructors map[string]string  // co-allocating constructors for those layouts
 
 	valueInits []*valueInit // map of value initializations
 
@@ -179,7 +179,7 @@ func newGenerator(w io.Writer, directLinkCore bool) *Generator {
 		varVariables:           make(map[varInfo]string),
 		symbolVariables:        make(map[string]string),
 		kwVariables:            make(map[string]string),
-		keywordMapShapes:       make(map[string]string),
+		keywordMapConstructors: make(map[string]string),
 		liftedValues:           make(map[liftedKey]*liftedValue),
 		liftedCounter:          0,
 		aotCallTargets:         make(map[*lang.Var]*aotSpecializationTarget),
@@ -2537,10 +2537,10 @@ func (g *Generator) generateMap(node *ast.Node) string {
 			for i, value := range mapNode.Vals {
 				valueIDs[i] = g.generateASTNode(value)
 			}
-			shape := g.allocKeywordMapShape(names)
+			constructor := g.allocKeywordMapConstructor(names)
 			mapID := g.allocateTempVar()
-			g.writef("%s := lang.NewStaticKeywordMap(%s, %s)\n",
-				mapID, shape, strings.Join(valueIDs, ", "))
+			g.writef("%s := %s(%s)\n",
+				mapID, constructor, strings.Join(valueIDs, ", "))
 			return mapID
 		}
 	}
@@ -2584,23 +2584,52 @@ func staticKeywordMapNames(keys []*ast.Node) ([]string, bool) {
 	return names, true
 }
 
-func (g *Generator) allocKeywordMapShape(names []string) string {
+func (g *Generator) allocKeywordMapConstructor(names []string) string {
 	key := strings.Join(names, "\x00")
-	if shape, ok := g.keywordMapShapes[key]; ok {
-		return shape
+	if constructor, ok := g.keywordMapConstructors[key]; ok {
+		return constructor
 	}
-	shape := fmt.Sprintf("aotKeywordMapShape%d", len(g.keywordMapShapes))
+	index := len(g.keywordMapConstructors)
+	shape := fmt.Sprintf("aotKeywordMapShape%d", index)
+	constructor := fmt.Sprintf("aotKeywordMapNew%d", index)
+	storage := fmt.Sprintf("aotKeywordMapStorage%d", index)
 	quoted := make([]string, len(names))
+	params := make([]string, len(names))
+	values := make([]string, len(names))
 	for i, name := range names {
 		quoted[i] = fmt.Sprintf("%q", name)
+		params[i] = fmt.Sprintf("v%d any", i)
+		values[i] = fmt.Sprintf("v%d", i)
 	}
 	fmt.Fprintf(&g.aotDeclarations,
-		"var %s = lang.NewKeywordMapShape(%s)\n",
+		`var %s = lang.NewKeywordMapShape(%s)
+type %s struct {
+	lang.Map
+	values [%d]any
+}
+func %s(%s) *lang.Map {
+	storage := &%s{}
+	storage.values = [%d]any{%s}
+	return lang.InitStaticKeywordMap(
+		&storage.Map,
+		%s,
+		storage.values[:],
+	)
+}
+`,
 		shape,
 		strings.Join(quoted, ", "),
+		storage,
+		len(names),
+		constructor,
+		strings.Join(params, ", "),
+		storage,
+		len(names),
+		strings.Join(values, ", "),
+		shape,
 	)
-	g.keywordMapShapes[key] = shape
-	return shape
+	g.keywordMapConstructors[key] = constructor
+	return constructor
 }
 
 func (g *Generator) generateSet(node *ast.Node) string {
