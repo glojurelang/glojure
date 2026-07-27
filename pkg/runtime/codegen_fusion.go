@@ -6,16 +6,17 @@ import (
 	"strings"
 
 	"github.com/glojurelang/glojure/pkg/ast"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
 func (g *Generator) generateAOTReducePipeline(
 	invoke *ast.InvokeNode,
-	plan *reducePipelinePlan,
+	plan *compiler.IRPipelinePlan,
 ) string {
-	guards := make([]string, 0, len(plan.guardVars))
-	seen := make(map[*lang.Var]bool, len(plan.guardVars))
-	for _, vr := range plan.guardVars {
+	guards := make([]string, 0, len(plan.GuardVars))
+	seen := make(map[*lang.Var]bool, len(plan.GuardVars))
+	for _, vr := range plan.GuardVars {
 		if seen[vr] {
 			continue
 		}
@@ -33,22 +34,27 @@ func (g *Generator) generateAOTReducePipeline(
 	result := g.allocateTempVar()
 	g.writef("var %s any\n", result)
 	g.writef("if %s {\n", strings.Join(guards, " && "))
-	reducer := g.generateASTNode(plan.reducer)
-	initial := g.generateASTNode(plan.initial)
-	for _, transform := range plan.transforms {
-		callback := g.generateASTNode(transform.callback)
-		g.writef("_ = %s\n", callback)
+	reducer := g.generateASTNode(plan.Reducer)
+	initial := g.generateASTNode(plan.Initial)
+	for _, stage := range plan.Stages {
+		if stage.Callback != nil {
+			callback := g.generateASTNode(stage.Callback)
+			g.writef("_ = %s\n", callback)
+		}
 	}
-	source := g.generateASTNode(plan.source)
+	source := g.generateASTNode(plan.Source)
 	g.writef("_ = %s\n", reducer)
 	g.writef("%s = runtime.ReduceInt64Pipeline(\n", result)
 	g.writef("%s, %s,\n", initial, source)
 	g.writef("[]runtime.ReducePipelineTransformKind{\n")
-	for _, transform := range plan.transforms {
-		g.writef("%s,\n", aotPipelineTransformName(transform.kind))
+	for _, stage := range plan.Stages {
+		if stage.Kind == compiler.IRPipelineMap ||
+			stage.Kind == compiler.IRPipelineFilter {
+			g.writef("%s,\n", aotPipelineTransformName(stage.Primitive))
+		}
 	}
 	g.writef("},\n")
-	g.writef("%d,\n", plan.takeLimit)
+	g.writef("%d,\n", plan.TakeLimit)
 	g.writef(")\n")
 	g.writef("} else {\n")
 	fallback := g.generateInvokeDefault(invoke)
@@ -57,7 +63,7 @@ func (g *Generator) generateAOTReducePipeline(
 	return result
 }
 
-func aotPipelineTransformName(kind ReducePipelineTransformKind) string {
+func aotPipelineTransformName(kind compiler.IRPipelinePrimitive) string {
 	switch kind {
 	case ReducePipelineMapIdentity:
 		return "runtime.ReducePipelineMapIdentity"

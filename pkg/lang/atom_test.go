@@ -129,3 +129,24 @@ func assertPanics(t *testing.T, fn func()) {
 	}()
 	fn()
 }
+
+func TestAtomSwapFuncPreservesSwapAndWatchSemantics(t *testing.T) {
+	atom := NewAtom(int64(1))
+	var oldValue, newValue any
+	atom.AddWatch("watch", FnFunc4(func(_, _ref, old, new any) any {
+		oldValue = old
+		newValue = new
+		return nil
+	}))
+
+	result := atom.SwapFunc(func(value any) any {
+		return value.(int64) + 1
+	})
+	if result != int64(2) || atom.Deref() != int64(2) {
+		t.Fatalf("SwapFunc result/state = %v/%v, want 2/2",
+			result, atom.Deref())
+	}
+	if oldValue != int64(1) || newValue != int64(2) {
+		t.Fatalf("watch values = %v/%v, want 1/2", oldValue, newValue)
+	}
+}

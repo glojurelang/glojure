@@ -42,10 +42,16 @@ type (
 		// counter for gensym (symbol generator)
 		symCounter int32
 
-		stdout io.Writer
-		stderr io.Writer
+		stdout  io.Writer
+		stderr  io.Writer
+		astDump *astDumpState
 
 		loadPath []string
+	}
+
+	astDumpState struct {
+		mu     sync.Mutex
+		writer io.Writer
 	}
 )
 
@@ -56,6 +62,7 @@ func newEnvironment(ctx context.Context, stdout, stderr io.Writer) *environment 
 		loopPlans: &sync.Map{},
 		stdout:    stdout,
 		stderr:    stderr,
+		astDump:   &astDumpState{},
 	}
 	coreNS := lang.NSCore
 

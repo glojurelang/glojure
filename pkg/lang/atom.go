@@ -159,6 +159,19 @@ func (a *Atom) Swap2(f IFn, x, y interface{}) interface{} {
 	}
 }
 
+// SwapFunc is the direct Go-callback counterpart to Swap0. Compiled code uses
+// it when a swap! callback is a non-escaping function literal, avoiding an IFn
+// wrapper while retaining retry, watch, and identity semantics.
+func (a *Atom) SwapFunc(f func(interface{}) interface{}) interface{} {
+	for {
+		old := a.state.Load()
+		nw := f(old.val)
+		if a.compareAndSetBox(old, nw) {
+			return nw
+		}
+	}
+}
+
 func (a *Atom) CompareAndSet(oldv, newv interface{}) bool {
 	old := a.state.Load()
 	if !Identical(old.val, oldv) {

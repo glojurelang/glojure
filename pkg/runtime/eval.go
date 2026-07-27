@@ -2,7 +2,9 @@ package runtime
 
 import (
 	"fmt"
+	"io"
 
+	"github.com/glojurelang/glojure/pkg/ast"
 	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
@@ -87,6 +89,9 @@ func (env *environment) applyMacro(fn lang.IFn, form lang.ISeq) (interface{}, er
 }
 
 func (env *environment) Eval(n interface{}) (interface{}, error) {
+	if env.astDumpEnabled() {
+		return env.evalInternalInNamespace(n, env.CurrentNamespace())
+	}
 	if directSelfEvaluating(n) {
 		return n, nil
 	}
@@ -122,6 +127,17 @@ func (env *environment) evalInternalInNamespace(
 	n interface{},
 	currentNS *lang.Namespace,
 ) (interface{}, error) {
+	astNode, err := env.analyzeInternalInNamespace(n, currentNS)
+	if err != nil {
+		return nil, err
+	}
+	return env.EvalAST(astNode)
+}
+
+func (env *environment) analyzeInternalInNamespace(
+	n interface{},
+	currentNS *lang.Namespace,
+) (*ast.Node, error) {
 	analyzer := &compiler.Analyzer{
 		Macroexpand1: func(form interface{}) (interface{}, error) {
 			return env.macroexpand1(form, currentNS)
@@ -144,13 +160,76 @@ func (env *environment) evalInternalInNamespace(
 			DirectLinking: directLinkEnabled(),
 		}),
 	}
-	astNode, err := analyzer.Analyze(n, lang.NewMap(
+	node, err := analyzer.Analyze(n, lang.NewMap(
 		lang.KWNS, currentNS.Name(),
 	))
 	if err != nil {
 		return nil, err
 	}
-	return env.EvalAST(astNode)
+	if err := env.dumpAST(node); err != nil {
+		return nil, err
+	}
+	return node, nil
+}
+
+// EvalWithASTDump analyzes form, writes the post-optimization AST, and
+// evaluates that exact tree. It is intended for compiler diagnostics.
+func EvalWithASTDump(form interface{}, w io.Writer) (interface{}, error) {
+	env, ok := lang.GlobalEnv.(*environment)
+	if !ok {
+		return nil, fmt.Errorf("runtime: AST dumping requires the Glojure environment")
+	}
+	node, err := env.analyzeInternalInNamespace(form, env.CurrentNamespace())
+	if err != nil {
+		return nil, err
+	}
+	if err := ast.Dump(w, node); err != nil {
+		return nil, err
+	}
+	return env.EvalAST(node)
+}
+
+// SetASTDumpWriter enables post-optimization AST dumping for all evaluations
+// in the global Glojure environment, including forms loaded recursively.
+// Passing nil disables dumping. The returned function restores the old writer.
+func SetASTDumpWriter(w io.Writer) (func(), error) {
+	env, ok := lang.GlobalEnv.(*environment)
+	if !ok {
+		return nil, fmt.Errorf("runtime: AST dumping requires the Glojure environment")
+	}
+	if env.astDump == nil {
+		env.astDump = &astDumpState{}
+	}
+	env.astDump.mu.Lock()
+	old := env.astDump.writer
+	env.astDump.writer = w
+	env.astDump.mu.Unlock()
+	return func() {
+		env.astDump.mu.Lock()
+		env.astDump.writer = old
+		env.astDump.mu.Unlock()
+	}, nil
+}
+
+func (env *environment) astDumpEnabled() bool {
+	if env.astDump == nil {
+		return false
+	}
+	env.astDump.mu.Lock()
+	defer env.astDump.mu.Unlock()
+	return env.astDump.writer != nil
+}
+
+func (env *environment) dumpAST(node *ast.Node) error {
+	if env.astDump == nil {
+		return nil
+	}
+	env.astDump.mu.Lock()
+	defer env.astDump.mu.Unlock()
+	if env.astDump.writer == nil {
+		return nil
+	}
+	return ast.Dump(env.astDump.writer, node)
 }
 
 func (env *environment) evalDirectInvoke(

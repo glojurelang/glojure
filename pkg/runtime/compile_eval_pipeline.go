@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"github.com/glojurelang/glojure/pkg/ast"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
@@ -9,23 +10,26 @@ func (c threadedEvalCompiler) compileReducePipeline(
 	node *ast.Node,
 	invoke *ast.InvokeNode,
 ) evalFn {
-	plan := analyzeReducePipeline(invoke)
-	if plan == nil {
+	plan := compiler.AnalyzePipeline(node)
+	if plan == nil || plan.Lowering != compiler.IRPipelineReduceInt64 {
 		return nil
 	}
-	initial, ok := int64ConstValue(plan.initial)
+	initial, ok := int64ConstValue(plan.Initial)
 	if !ok {
 		return nil
 	}
-	source := c.compile(plan.source)
+	source := c.compile(plan.Source)
 	if source == nil {
 		return nil
 	}
-	transforms := make([]ReducePipelineTransformKind, len(plan.transforms))
-	for i, transform := range plan.transforms {
-		transforms[i] = transform.kind
+	var transforms []ReducePipelineTransformKind
+	for _, stage := range plan.Stages {
+		if stage.Kind == compiler.IRPipelineMap ||
+			stage.Kind == compiler.IRPipelineFilter {
+			transforms = append(transforms, stage.Primitive)
+		}
 	}
-	guards := append([]*lang.Var(nil), plan.guardVars...)
+	guards := append([]*lang.Var(nil), plan.GuardVars...)
 
 	return func(env *environment) (result interface{}, err error) {
 		for _, vr := range guards {
@@ -42,7 +46,7 @@ func (c threadedEvalCompiler) compileReducePipeline(
 			initial,
 			coll,
 			transforms,
-			plan.takeLimit,
+			plan.TakeLimit,
 		), nil
 	}
 }

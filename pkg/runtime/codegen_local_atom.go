@@ -242,6 +242,41 @@ func (g *Generator) generateImmediateFnInvoke(
 	return result, true
 }
 
+func (g *Generator) generateImmediateFnBody(
+	fn *ast.Node,
+	args []string,
+) (string, bool) {
+	if fn == nil || fn.Op != ast.OpFn {
+		return "", false
+	}
+	fnNode := fn.Sub.(*ast.FnNode)
+	if fnNode.Local != nil {
+		return "", false
+	}
+	var method *ast.FnMethodNode
+	for _, candidate := range fnNode.Methods {
+		candidateMethod := candidate.Sub.(*ast.FnMethodNode)
+		if !candidateMethod.IsVariadic &&
+			candidateMethod.FixedArity == len(args) {
+			method = candidateMethod
+			break
+		}
+	}
+	if method == nil || astContainsOp(method.Body, ast.OpRecur) {
+		return "", false
+	}
+
+	g.pushVarScope()
+	defer g.popVarScope()
+	for i, param := range method.Params {
+		paramNode := param.Sub.(*ast.BindingNode)
+		local := g.allocateLocal(paramNode.Name.Name())
+		g.writef("var %s any = %s\n", local, args[i])
+		g.writeAssign("_", local)
+	}
+	return g.generateASTNode(method.Body), true
+}
+
 func astContainsOp(node *ast.Node, operation ast.NodeOp) bool {
 	found := false
 	var walkNode func(*ast.Node)

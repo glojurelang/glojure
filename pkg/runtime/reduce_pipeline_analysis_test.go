@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/ast"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 )
 
@@ -21,24 +22,31 @@ func TestAnalyzeLetGoMapFilterPipeline(t *testing.T) {
 		Get().(*Fn)
 	body := fn.ASTNode().Sub.(*ast.FnNode).
 		Methods[0].Sub.(*ast.FnMethodNode).Body
-	reduce := body.Sub.(*ast.DoNode).Ret.Sub.(*ast.InvokeNode)
-	plan := analyzeReducePipeline(reduce)
-	if plan == nil {
+	reduce := body.Sub.(*ast.DoNode).Ret
+	plan := compiler.AnalyzePipeline(reduce)
+	if plan == nil || plan.Lowering != compiler.IRPipelineReduceInt64 {
 		t.Fatal("let-go map/filter workload was not recognized")
 	}
-	if plan.takeLimit != 100 {
-		t.Fatalf("take limit = %d, want 100", plan.takeLimit)
+	if plan.TakeLimit != 100 {
+		t.Fatalf("take limit = %d, want 100", plan.TakeLimit)
 	}
 	want := []ReducePipelineTransformKind{
 		ReducePipelineMapSquare,
 		ReducePipelineFilterEven,
 	}
-	if len(plan.transforms) != len(want) {
-		t.Fatalf("transform count = %d, want %d", len(plan.transforms), len(want))
+	var transforms []ReducePipelineTransformKind
+	for _, stage := range plan.Stages {
+		if stage.Kind == compiler.IRPipelineMap ||
+			stage.Kind == compiler.IRPipelineFilter {
+			transforms = append(transforms, stage.Primitive)
+		}
 	}
-	for i, transform := range plan.transforms {
-		if transform.kind != want[i] {
-			t.Fatalf("transform %d = %v, want %v", i, transform.kind, want[i])
+	if len(transforms) != len(want) {
+		t.Fatalf("transform count = %d, want %d", len(transforms), len(want))
+	}
+	for i, transform := range transforms {
+		if transform != want[i] {
+			t.Fatalf("transform %d = %v, want %v", i, transform, want[i])
 		}
 	}
 }
@@ -82,8 +90,9 @@ func TestReducePipelineRejectsTakeBelowFilter(t *testing.T) {
 		Get().(*Fn)
 	body := fn.ASTNode().Sub.(*ast.FnNode).
 		Methods[0].Sub.(*ast.FnMethodNode).Body
-	reduce := body.Sub.(*ast.DoNode).Ret.Sub.(*ast.InvokeNode)
-	if plan := analyzeReducePipeline(reduce); plan != nil {
+	reduce := body.Sub.(*ast.DoNode).Ret
+	if plan := compiler.AnalyzePipeline(reduce); plan != nil &&
+		plan.Lowering == compiler.IRPipelineReduceInt64 {
 		t.Fatal("pipeline moved an inner take past an outer filter")
 	}
 }

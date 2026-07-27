@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/glojurelang/glojure/pkg/ast"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 	"github.com/google/uuid"
@@ -253,6 +254,47 @@ func TestGenerateStaticInstanceCheck(t *testing.T) {
 	}
 	if got := strings.Count(generated, directCheck); got != 1 {
 		t.Fatalf("generated %d static vector checks, want 1:\n%s", got, generated)
+	}
+}
+
+func TestGenerateStaticInstanceCheckForJVMClass(t *testing.T) {
+	instanceVar := lang.NSCore.FindInternedVar(lang.NewSymbol("instance?"))
+	if instanceVar == nil {
+		t.Fatal("clojure.core/instance? is not interned")
+	}
+
+	var output bytes.Buffer
+	generator := newGenerator(&output, true)
+	generator.addImport("github.com/glojurelang/glojure/pkg/lang")
+	generator.currentWriter = &output
+	invoke := &ast.InvokeNode{
+		Fn: &ast.Node{
+			Op:  ast.OpVar,
+			Sub: &ast.VarNode{Var: instanceVar},
+		},
+		Args: []*ast.Node{
+			{
+				Op: ast.OpConst,
+				Sub: &ast.ConstNode{
+					Value: lang.NewClass(
+						reflect.TypeOf(false),
+						"java.lang.Boolean",
+					),
+				},
+			},
+			{Op: ast.OpConst, Sub: &ast.ConstNode{Value: true}},
+		},
+	}
+
+	call, ok := generator.staticInstanceCall(invoke, []string{"", "value"})
+	if !ok {
+		t.Fatal("JVM class did not produce a static instance check")
+	}
+	if call != "lang.IsInstance[bool](value)" {
+		t.Fatalf("static instance check = %q, want bool type", call)
+	}
+	if strings.Contains(output.String(), "java.lang") {
+		t.Fatalf("JVM class produced an invalid Go import:\n%s", output.String())
 	}
 }
 
@@ -507,6 +549,245 @@ func TestGenerateSharedStaticKeywordMapShapes(t *testing.T) {
 	}
 	if strings.Contains(generated, "lang.NewStaticKeywordMap(") {
 		t.Fatalf("generated static keyword maps retained variadic storage:\n%s", generated)
+	}
+}
+
+func TestGenerateTypedIRFixedGetIn(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(lang.NewSymbol("codegen.typed-ir-get-in"))
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn callback [receiver name]
+		  (get-in receiver [:callbacks name]))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate fixed get-in: %v", err)
+	}
+	generated := output.String()
+	if got := strings.Count(generated, "lang.Get("); got < 2 {
+		t.Fatalf("fixed get-in emitted %d direct lookups, want at least 2:\n%s",
+			got, generated)
+	}
+	if strings.Contains(generated, "lang.NewVector(kw_callbacks") {
+		t.Fatalf("fixed get-in retained its path vector:\n%s", generated)
+	}
+}
+
+func TestGenerateTypedIRFixedGetInNeedsDirectLinking(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.typed-ir-get-in-guarded"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn callback [receiver name]
+		  (get-in receiver [:callbacks name]))`)
+
+	var output bytes.Buffer
+	if err := newGenerator(&output, false).Generate(ns); err != nil {
+		t.Fatalf("generate guarded fixed get-in: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, "lang.NewVector(kw_callbacks") {
+		t.Fatalf("disabled direct linking incorrectly fused get-in:\n%s", generated)
+	}
+}
+
+func TestGenerateTypedIRFixedGetInEvaluatesAllKeysBeforeLookup(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.typed-ir-get-in-order"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn callback [receiver]
+		  (get-in receiver [[1] [2]]))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate ordered fixed get-in: %v", err)
+	}
+	generated := output.String()
+	firstKey := strings.Index(generated, "lang.NewVector(int64(1))")
+	secondKey := strings.Index(generated, "lang.NewVector(int64(2))")
+	firstLookup := strings.Index(generated, "lang.Get(")
+	if firstKey < 0 || secondKey < 0 || firstLookup < 0 ||
+		firstLookup < firstKey || firstLookup < secondKey {
+		t.Fatalf("lookup ran before every path expression was evaluated:\n%s",
+			generated)
+	}
+}
+
+func TestGenerateTypedIRSmallKeywordMapShape(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.typed-ir-small-keyword-map"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn result [a b c]
+		  {:try a, :got b, :not c})`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate small keyword map: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(
+		generated,
+		`lang.NewKeywordMapShape("try", "got", "not")`,
+	) {
+		t.Fatalf("small keyword map did not receive a fixed shape:\n%s", generated)
+	}
+	if !strings.Contains(generated, "aotKeywordMapStorage0 struct") {
+		t.Fatalf("small keyword map omitted co-allocated storage:\n%s", generated)
+	}
+}
+
+func TestGenerateTypedIRNonEscapingSwapCallback(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.typed-ir-direct-swap"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(defn update-state [state captured]
+		  (swap! state (fn [old] [old captured])))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate non-escaping swap callback: %v", err)
+	}
+	generated := output.String()
+	if !strings.Contains(generated, ".SwapFunc(func(") {
+		t.Fatalf("swap! callback retained its IFn wrapper:\n%s", generated)
+	}
+	if !strings.Contains(generated, "runtime.DirectSwap0(") {
+		t.Fatalf("swap! callback omitted the generic IAtom fallback:\n%s",
+			generated)
+	}
+}
+
+func TestGenerateTypedIRConfinedStringStack(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.typed-ir-string-stack"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(require '[clojure.string :as str])
+		(defn joined []
+		  (let [tail (str "tail")
+		        parts (atom [])]
+		    (swap! parts #(cons tail %))
+		    (str/join "__" (cons "head" @parts))))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate confined string stack: %v", err)
+	}
+	generated := output.String()
+	for _, expected := range []string{
+		"[]string",
+		" = append(",
+		".Join(",
+	} {
+		if !strings.Contains(generated, expected) {
+			t.Fatalf("string-stack fusion omitted %q:\n%s", expected, generated)
+		}
+	}
+	if strings.Contains(generated, "lang.NewCons(") {
+		t.Fatalf("string-stack fusion retained cons allocation:\n%s", generated)
+	}
+}
+
+func TestGenerateTypedIRDoesNotFuseObservableStringStackResult(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.typed-ir-observable-string-stack"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(require '[clojure.string :as str])
+		(defn joined []
+		  (let [parts (atom [])]
+		    (swap! parts #(cons "tail" %))
+		    [(swap! parts #(cons "visible" %))
+		     (str/join "__" (cons "head" @parts))]))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate observable string stack: %v", err)
+	}
+	if strings.Contains(output.String(), ".Join(") {
+		t.Fatalf("observable swap! result was incorrectly fused:\n%s",
+			output.String())
+	}
+}
+
+func TestGenerateTypedIRDoesNotFuseCapturedStringStack(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.typed-ir-captured-string-stack"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(require '[clojure.string :as str])
+		(defn joined []
+		  (let [parts (atom [])]
+		    (swap! parts #(cons "tail" %))
+		    ((fn [] @parts))
+		    (str/join "__" (cons "head" @parts))))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate captured string stack: %v", err)
+	}
+	if strings.Contains(output.String(), ".Join(") {
+		t.Fatalf("captured atom was incorrectly fused:\n%s",
+			output.String())
+	}
+}
+
+func TestGenerateTypedIRDoesNotFuseNonStringStackValues(t *testing.T) {
+	ns := lang.FindOrCreateNamespace(
+		lang.NewSymbol("codegen.typed-ir-dynamic-string-stack"),
+	)
+	ns.ReferAllSnapshot(lang.NSCore, nil)
+	lang.PushThreadBindings(lang.NewMap(lang.VarCurrentNS, ns))
+	defer lang.PopThreadBindings()
+
+	ReadEval(`
+		(require '[clojure.string :as str])
+		(defn joined [value]
+		  (let [parts (atom [])]
+		    (swap! parts #(cons value %))
+		    (str/join "__" (cons "head" @parts))))`)
+
+	var output bytes.Buffer
+	if err := NewGenerator(&output).Generate(ns); err != nil {
+		t.Fatalf("generate dynamic string stack: %v", err)
+	}
+	if strings.Contains(output.String(), ".Join(") {
+		t.Fatalf("dynamic stack value was incorrectly coerced early:\n%s",
+			output.String())
 	}
 }
 
@@ -1367,27 +1648,28 @@ func TestAnalyzeReducePipeline(t *testing.T) {
 		aotTestVar(coreVar("+")),
 		aotTestInt(0),
 		mapCall,
-	).Sub.(*ast.InvokeNode)
+	)
 
-	plan := analyzeReducePipeline(reduce)
-	if plan == nil {
+	plan := compiler.AnalyzePipeline(reduce)
+	if plan == nil || plan.Lowering != compiler.IRPipelineReduceInt64 {
 		t.Fatal("safe integer range pipeline was not fused")
 	}
 	want := []ReducePipelineTransformKind{
 		ReducePipelineFilterOdd,
 		ReducePipelineMapInc,
 	}
-	if len(plan.transforms) != len(want) {
-		t.Fatalf("transform count = %d, want %d", len(plan.transforms), len(want))
+	if len(plan.Stages) != len(want) {
+		t.Fatalf("transform count = %d, want %d", len(plan.Stages), len(want))
 	}
-	for i, transform := range plan.transforms {
-		if transform.kind != want[i] {
-			t.Fatalf("transform %d = %v, want %v", i, transform.kind, want[i])
+	for i, stage := range plan.Stages {
+		if stage.Primitive != want[i] {
+			t.Fatalf("transform %d = %v, want %v", i, stage.Primitive, want[i])
 		}
 	}
 
 	rangeCall.Sub.(*ast.InvokeNode).Args[0] = aotTestLocal(lang.NewSymbol("n"))
-	if plan := analyzeReducePipeline(reduce); plan != nil {
+	if plan := compiler.AnalyzePipeline(reduce); plan != nil &&
+		plan.Lowering == compiler.IRPipelineReduceInt64 {
 		t.Fatal("pipeline with an unproven range bound was fused")
 	}
 }

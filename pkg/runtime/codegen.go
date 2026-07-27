@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"github.com/glojurelang/glojure/pkg/ast"
+	"github.com/glojurelang/glojure/pkg/compiler"
 	"github.com/glojurelang/glojure/pkg/lang"
 	"github.com/glojurelang/glojure/pkg/pkgmap"
 )
@@ -32,9 +33,10 @@ import (
 
 // varScope represents a variable allocation scope
 type varScope struct {
-	nextNum    int
-	names      map[string]string // maps Clojure names to Go variable names
-	localAtoms map[string]bool   // local atoms proven not to escape
+	nextNum           int
+	names             map[string]string // maps Clojure names to Go variable names
+	localAtoms        map[string]bool   // local atoms proven not to escape
+	localStringStacks map[string]bool   // confined string stacks
 }
 
 // recurContext represents the context for a loop/recur form
@@ -167,6 +169,7 @@ type Generator struct {
 	liftedValues  map[liftedKey]*liftedValue // Dedupe by composite key
 	liftedCounter int                        // Counter for closed0, closed1...
 	currentFnEnv  lang.Environment           // Current function's captured env
+	currentIR     *compiler.TypedIR          // typed facts for the current AST
 
 	// specializationTarget is non-nil only while generating the root function
 	// value for a Var. Nested function literals retain the generic code path.
@@ -1375,15 +1378,20 @@ func (g *Generator) generateFnFunc(fn lang.FnFunc) string {
 func (g *Generator) generateFn(fn *Fn) string {
 	// Save and restore current environment
 	prevEnv := g.currentFnEnv
+	prevIR := g.currentIR
 	// Runtime function values carry their captured environment. Functions
 	// constructed directly from nested AST nodes do not; in that case they
 	// inherit the environment of the function currently being generated.
 	if env := fn.GetEnvironment(); env != nil {
 		g.currentFnEnv = env
 	}
-	defer func() { g.currentFnEnv = prevEnv }()
+	defer func() {
+		g.currentFnEnv = prevEnv
+		g.currentIR = prevIR
+	}()
 
 	astNode := fn.ASTNode()
+	g.currentIR = compiler.BuildTypedIR(astNode)
 	fnNode := astNode.Sub.(*ast.FnNode)
 
 	// Determine if we can use a fixed-arity FnFuncN (0-20 args, single method,
@@ -1973,10 +1981,20 @@ func (g *Generator) generateVarDeref(node *ast.Node) string {
 // generateInvoke generates code for an Invoke node
 func (g *Generator) generateInvoke(node *ast.Node) string {
 	invokeNode := node.Sub.(*ast.InvokeNode)
+	if result, ok := g.generateIRGetIn(node); ok {
+		return result
+	}
+	if result, ok := g.generateIRStringStack(node); ok {
+		return result
+	}
 	if result, ok := g.generateLocalAtomInvoke(invokeNode); ok {
 		return result
 	}
-	if plan := analyzeReducePipeline(invokeNode); plan != nil {
+	if result, ok := g.generateIRSwap(node); ok {
+		return result
+	}
+	if plan := g.currentIR.Facts(node).Pipeline; plan != nil &&
+		plan.Lowering == compiler.IRPipelineReduceInt64 {
 		return g.generateAOTReducePipeline(invokeNode, plan)
 	}
 	return g.generateInvokeDefault(invokeNode)
@@ -2213,7 +2231,11 @@ func staticInstanceType(invoke *ast.InvokeNode) (reflect.Type, bool) {
 		vr.Symbol().String() != "instance?" {
 		return nil, false
 	}
-	typ, ok := invoke.Args[0].Sub.(*ast.ConstNode).Value.(reflect.Type)
+	value := invoke.Args[0].Sub.(*ast.ConstNode).Value
+	if class, ok := value.(*lang.Class); ok {
+		return class.Type, class.Type != nil
+	}
+	typ, ok := value.(reflect.Type)
 	return typ, ok && typ != nil
 }
 
@@ -2495,7 +2517,7 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 	}
 
 	// Emit bindings directly to g.w
-	for bindingIndex, binding := range letNode.Bindings {
+	for _, binding := range letNode.Bindings {
 		bindingNode := binding.Sub.(*ast.BindingNode)
 		name := bindingNode.Name.Name()
 		init := bindingNode.Init
@@ -2504,13 +2526,18 @@ func (g *Generator) generateLet(node *ast.Node, isLoop bool) string {
 		g.writef("// let binding \"%s\"\n", name)
 
 		// Generate initialization code
+		bindingFacts := g.currentIR.BindingFacts(binding)
+		if bindingFacts.StringStack {
+			varName := g.allocateLocal(name)
+			g.writef("var %s []string\n", varName)
+			g.markLocalStringStack(name)
+			g.writeAssign("_", varName)
+			continue
+		}
+
 		var localAtomInit *ast.Node
 		if !isLoop {
-			localAtomInit = scalarReplaceableAtomInit(
-				bindingNode,
-				letNode.Bindings[bindingIndex+1:],
-				letNode.Body,
-			)
+			localAtomInit = g.irScalarAtomInit(binding)
 		}
 		initCode := ""
 		if localAtomInit != nil {
@@ -2777,9 +2804,10 @@ func (g *Generator) generateMap(node *ast.Node) string {
 	mapNode := node.Sub.(*ast.MapNode)
 
 	keyValueCount := len(mapNode.Keys) * 2
-	if keyValueCount > lang.PersistentArrayMapInlineKeyValueCount &&
+	facts := g.currentIR.Facts(node)
+	if len(mapNode.Keys) >= 3 &&
 		keyValueCount <= lang.PersistentArrayMapMaxKeywordKeyValueCount {
-		if names, ok := staticKeywordMapNames(mapNode.Keys); ok {
+		if names, ok := irStaticKeywordMapNames(facts); ok {
 			valueIDs := make([]string, len(mapNode.Vals))
 			for i, value := range mapNode.Vals {
 				valueIDs[i] = g.generateASTNode(value)
@@ -3618,9 +3646,10 @@ func (g *Generator) pushVarScope() {
 
 	// Push new scope onto the stack
 	g.varScopes = append(g.varScopes, varScope{
-		nextNum:    nextNum,
-		names:      make(map[string]string),
-		localAtoms: make(map[string]bool),
+		nextNum:           nextNum,
+		names:             make(map[string]string),
+		localAtoms:        make(map[string]bool),
+		localStringStacks: make(map[string]bool),
 	})
 }
 
@@ -3737,6 +3766,20 @@ func (g *Generator) getLocalAtom(name string) (string, bool) {
 		scope := &g.varScopes[i]
 		if varName, ok := scope.names[name]; ok {
 			return varName, scope.localAtoms[name]
+		}
+	}
+	return "", false
+}
+
+func (g *Generator) markLocalStringStack(name string) {
+	g.varScopes[len(g.varScopes)-1].localStringStacks[name] = true
+}
+
+func (g *Generator) getLocalStringStack(name string) (string, bool) {
+	for i := len(g.varScopes) - 1; i >= 0; i-- {
+		scope := &g.varScopes[i]
+		if varName, ok := scope.names[name]; ok {
+			return varName, scope.localStringStacks[name]
 		}
 	}
 	return "", false

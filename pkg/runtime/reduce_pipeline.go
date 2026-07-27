@@ -1,19 +1,22 @@
 package runtime
 
-import "github.com/glojurelang/glojure/pkg/lang"
+import (
+	"github.com/glojurelang/glojure/pkg/compiler"
+	"github.com/glojurelang/glojure/pkg/lang"
+)
 
-type ReducePipelineTransformKind uint8
+type ReducePipelineTransformKind = compiler.IRPipelinePrimitive
 
 const (
-	ReducePipelineMapIdentity ReducePipelineTransformKind = iota
-	ReducePipelineMapInc
-	ReducePipelineMapDec
-	ReducePipelineMapSquare
-	ReducePipelineFilterOdd
-	ReducePipelineFilterEven
-	ReducePipelineFilterPos
-	ReducePipelineFilterNeg
-	ReducePipelineFilterZero
+	ReducePipelineMapIdentity = compiler.IRPipelineMapIdentity
+	ReducePipelineMapInc      = compiler.IRPipelineMapInc
+	ReducePipelineMapDec      = compiler.IRPipelineMapDec
+	ReducePipelineMapSquare   = compiler.IRPipelineMapSquare
+	ReducePipelineFilterOdd   = compiler.IRPipelineFilterOdd
+	ReducePipelineFilterEven  = compiler.IRPipelineFilterEven
+	ReducePipelineFilterPos   = compiler.IRPipelineFilterPos
+	ReducePipelineFilterNeg   = compiler.IRPipelineFilterNeg
+	ReducePipelineFilterZero  = compiler.IRPipelineFilterZero
 )
 
 type int64PipelineReducer struct {

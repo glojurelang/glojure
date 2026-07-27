@@ -54,6 +54,7 @@ Usage: glj [options] [file]
 
 Options:
   -e <expr>              Evaluate expression from command line
+  --dump-ast             Dump each post-optimization AST to stderr
   --nrepl[=VALUE]        Start nREPL server
   --nrepl-connect H:P    Connect REPL to nREPL server
   --srepl[=VALUE]        Start socket REPL server
@@ -64,6 +65,7 @@ Options:
 Examples:
   glj                           # Start REPL
   glj -e "(+ 1 2)"              # Evaluate expression
+  glj --dump-ast -e "(+ 1 2)"   # Dump the AST, then evaluate
   glj script.glj                # Run script file
   glj --nrepl                   # Start nREPL on random port
   glj --nrepl=7888              # Start nREPL on port 7888
@@ -86,6 +88,16 @@ func Main(args []string) {
 		}
 	}
 
+	dumpAST := len(args) > 0 && args[0] == "--dump-ast"
+	if dumpAST {
+		args = args[1:]
+		restore, err := runtime.SetASTDumpWriter(os.Stderr)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer restore()
+	}
+
 	if len(args) == 0 {
 		// Check if stdin is a terminal
 		fi, _ := os.Stdin.Stat()
@@ -106,7 +118,7 @@ func Main(args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
-				result, err := env.Eval(val)
+				result, err := eval(env, val)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -157,7 +169,7 @@ func Main(args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			result, err := env.Eval(val)
+			result, err := eval(env, val)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -191,10 +203,14 @@ func Main(args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			_, err = env.Eval(val)
+			_, err = eval(env, val)
 			if err != nil {
 				log.Fatal(err)
 			}
 		}
 	}
+}
+
+func eval(env lang.Environment, form interface{}) (interface{}, error) {
+	return env.Eval(form)
 }
